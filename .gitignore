@@ -1,0 +1,20 @@
+# Build trees
+cmake-build/
+Testing/
+
+# Generated databases and release artifacts — reproducible from the HGM
+# data project's release packages (tools/build_spine.py, tools/build_reference_db.py)
+build/
+data/*.gz
+data/*.json
+data/*.tsv
+data/extracted/
+
+# The user's own data — never versioned
+progress.db
+progress.db-*
+library/
+analyses/
+
+# macOS noise
+.DS_Store
