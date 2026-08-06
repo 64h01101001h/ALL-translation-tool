@@ -148,10 +148,13 @@ display toggles, not through invention.
       a876cb8): name search with clickable results, recently-opened list,
       "search the Library" button in the Search pane, OCR Stage 1 hand-off
       ("Send to OCR…" + library/ocr_out/ convention).
+- [x] Prebuilt library full-text index (2026-08-06): allcore::LibraryIndex
+      (SQLite FTS5, line-per-row, incremental by mtime/size, purge on
+      delete), Library "Update search index" button, Search pane auto-uses
+      the index when targeting the library; .act/.inc/.ace now searchable
+      in both indexed and live modes; libindex_smoke 12 checks.
 - [ ] Library deepening, remaining: filter by collection / verification
-      status / language (decoder-driven), list-view mode, and a prebuilt
-      full-text index over installed collections (Gofer file search is
-      currently a live scan — fine for folders, slow for a whole Kangyur).
+      status / language (decoder-driven), list-view mode.
 
 ## Done highlights (details in README / memory)
 

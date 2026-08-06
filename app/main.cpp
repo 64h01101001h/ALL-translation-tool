@@ -51,6 +51,7 @@
 #include "allcore/engines.h"
 #include "allcore/gofer.h"
 #include "allcore/lattice.h"
+#include "allcore/libindex.h"
 #include "allcore/particles.h"
 #include "allcore/progress.h"
 #include "allcore/qc.h"
@@ -832,13 +833,31 @@ static QWidget* makeSearchPane(allcore::Spine& spine,
     status->setWordWrap(true);
     layout->addWidget(status);
 
-    auto runSearch = [&spine, box, courseBox, dirBox, results, status] {
+    auto runSearch = [&spine, box, courseBox, dirBox, results, status,
+                      libraryRoot] {
         const std::string q = box->text().trimmed().toStdString();
         if (q.empty()) return;
         const QString dir = dirBox->text().trimmed();
         if (!dir.isEmpty()) {
             try {
-                auto hits = allcore::goferSearchFiles(dir.toStdString(), q, 60);
+                // the library has a prebuilt index — use it when targeting
+                // the library root (token/phrase semantics, like the corpus)
+                std::vector<allcore::FileGoferHit> hits;
+                const QString ixPath = dir + "/.index.db";
+                if (!libraryRoot.isEmpty() &&
+                    QDir(dir) == QDir(libraryRoot) &&
+                    QFileInfo::exists(ixPath)) {
+                    allcore::LibraryIndex ix(ixPath.toStdString());
+                    hits = ix.search(q, 60);
+                    status->setText(
+                        QString("searched the library INDEX (%1 files, %2 "
+                                "lines) — rebuild it from the Library pane "
+                                "after installing new texts.")
+                            .arg(ix.fileCount())
+                            .arg(ix.lineCount()));
+                } else {
+                    hits = allcore::goferSearchFiles(dir.toStdString(), q, 60);
+                }
                 QString h;
                 if (hits.empty()) h = "<i>no matches in files</i>";
                 for (const auto& hit : hits) {
@@ -2143,9 +2162,11 @@ public:
         auto* installBtn = new QPushButton("Install collection ZIP…");
         auto* importBtn = new QPushButton("Import my materials…");
         auto* ocrBtn = new QPushButton("Send to OCR…");
+        auto* indexBtn = new QPushButton("Update search index");
         row->addWidget(installBtn);
         row->addWidget(importBtn);
         row->addWidget(ocrBtn);
+        row->addWidget(indexBtn);
         search_ = new QLineEdit;
         search_->setPlaceholderText("find in library by name… (Enter)");
         row->addWidget(search_, 1);
@@ -2181,6 +2202,7 @@ public:
         connect(installBtn, &QPushButton::clicked, [this] { installZip(); });
         connect(importBtn, &QPushButton::clicked, [this] { importFiles(); });
         connect(ocrBtn, &QPushButton::clicked, [this] { sendToOcr(); });
+        connect(indexBtn, &QPushButton::clicked, [this] { updateIndex(); });
         connect(search_, &QLineEdit::returnPressed, [this] { searchNames(); });
         connect(tree_->selectionModel(), &QItemSelectionModel::currentChanged,
                 [this](const QModelIndex& ix, const QModelIndex&) {
@@ -2287,6 +2309,32 @@ private:
         h += "<div style='margin-top:6px;color:#777'><small>double-click to "
              "open in the Overlay</small></div>";
         info_->setHtml(h);
+    }
+
+    void updateIndex() {
+        info_->setHtml("<i>indexing the library… (first run over a full "
+                       "collection can take a while)</i>");
+        QCoreApplication::processEvents();
+        try {
+            allcore::LibraryIndex ix((libRoot_ + "/.index.db").toStdString());
+            auto st = ix.update(libRoot_.toStdString());
+            info_->setHtml(
+                QString("<b>Search index up to date.</b><br>%1 added · %2 "
+                        "updated · %3 removed · %4 unchanged<br>%5 file(s), "
+                        "%6 line(s) indexed.<br><small>The Search pane's "
+                        "\"search the Library\" now answers from this index "
+                        "instantly.</small>")
+                    .arg(st.added)
+                    .arg(st.updated)
+                    .arg(st.removed)
+                    .arg(st.unchanged)
+                    .arg(ix.fileCount())
+                    .arg(ix.lineCount()));
+        } catch (const std::exception& ex) {
+            info_->setHtml(QString("<b style='color:#b00'>indexing failed:"
+                                   "</b> %1")
+                               .arg(QString::fromUtf8(ex.what()).toHtmlEscaped()));
+        }
     }
 
     void logOpen(const QString& path) {

@@ -20,6 +20,7 @@ add_library(allcore STATIC
   src/verse.cpp
   src/wilsonparse.cpp
   src/tibexport.cpp
+  src/libindex.cpp
   src/gofer.cpp
   src/acip_ewts.cpp
   src/pron_engine.cpp
@@ -103,6 +104,10 @@ add_test(NAME verse_smoke COMMAND verse_smoke)
 add_executable(tibexport_smoke tests/tibexport_smoke.cpp)
 target_link_libraries(tibexport_smoke PRIVATE allcore)
 add_test(NAME tibexport_smoke COMMAND tibexport_smoke)
+
+add_executable(libindex_smoke tests/libindex_smoke.cpp)
+target_link_libraries(libindex_smoke PRIVATE allcore)
+add_test(NAME libindex_smoke COMMAND libindex_smoke)
 
 add_executable(qc_smoke tests/qc_smoke.cpp)
 target_link_libraries(qc_smoke PRIVATE allcore)
