@@ -206,6 +206,19 @@ std::vector<std::pair<std::string, long long>> Progress::topMisses(
     return out;
 }
 
+std::vector<std::string> Progress::recentKeys(const std::string& kind,
+                                              int limit) const {
+    std::vector<std::string> out;
+    Stmt s(db_,
+           "SELECT key FROM events WHERE kind=? GROUP BY key "
+           "ORDER BY MAX(ts) DESC, MAX(id) DESC LIMIT ?");
+    sqlite3_bind_text(s.p, 1, kind.c_str(), -1, SQLITE_TRANSIENT);
+    sqlite3_bind_int(s.p, 2, limit);
+    while (sqlite3_step(s.p) == SQLITE_ROW)
+        out.push_back(reinterpret_cast<const char*>(sqlite3_column_text(s.p, 0)));
+    return out;
+}
+
 double Progress::coverage(const std::vector<std::string>& wylie_words) const {
     if (wylie_words.empty()) return 0.0;
     long known = 0;

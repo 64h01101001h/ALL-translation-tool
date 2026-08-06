@@ -63,6 +63,11 @@ public:
     // first — the learner's weak spots, named.
     std::vector<std::pair<std::string, long long>> topMisses(int limit) const;
 
+    // Most recent distinct event keys of one kind (newest first) — powers
+    // e.g. the Library pane's recently-opened list (kind "openfile").
+    std::vector<std::string> recentKeys(const std::string& kind,
+                                        int limit) const;
+
 private:
     sqlite3* db_ = nullptr;
 };

@@ -40,6 +40,8 @@
 #include <QTreeView>
 #include <QProcess>
 #include <QDirIterator>
+#include <QDesktopServices>
+#include <QUrl>
 
 #include <functional>
 #include <QDateTime>
@@ -791,7 +793,8 @@ private:
 };
 
 // ---- Search pane: Gofer grammar over the corpus ----------------------------
-static QWidget* makeSearchPane(allcore::Spine& spine) {
+static QWidget* makeSearchPane(allcore::Spine& spine,
+                               const QString& libraryRoot = QString()) {
     auto* pane = new QWidget;
     auto* layout = new QVBoxLayout(pane);
 
@@ -812,6 +815,13 @@ static QWidget* makeSearchPane(allcore::Spine& spine) {
     dirBox->setPlaceholderText(
         "…or a folder of raw ACIP files (leave empty to search the corpus)");
     row2->addWidget(dirBox, 1);
+    // one-click file-tree search over the installed library
+    if (!libraryRoot.isEmpty() && QDir(libraryRoot).exists()) {
+        auto* libBtn = new QPushButton("search the Library");
+        QObject::connect(libBtn, &QPushButton::clicked,
+                         [dirBox, libraryRoot] { dirBox->setText(libraryRoot); });
+        row2->addWidget(libBtn);
+    }
     layout->addLayout(row2);
 
     auto* results = new QTextBrowser;
@@ -2115,10 +2125,13 @@ private:
 // sortable tree; ACIP file names decode to their catalog provenance.
 class LibraryPane : public QWidget {
 public:
-    LibraryPane(const QString& root, std::function<void(const QString&)> open)
-        : libRoot_(root + "/library"), open_(std::move(open)) {
+    LibraryPane(const QString& root, allcore::Progress* progress,
+                std::function<void(const QString&)> open)
+        : libRoot_(root + "/library"), progress_(progress),
+          open_(std::move(open)) {
         QDir().mkpath(libRoot_);
         QDir().mkpath(libRoot_ + "/my_materials");
+        QDir().mkpath(libRoot_ + "/ocr_out");
         auto* layout = new QVBoxLayout(this);
         layout->addWidget(new QLabel(
             "<b>Library</b> — install the ACIP collections (download the "
@@ -2129,9 +2142,13 @@ public:
         auto* row = new QHBoxLayout;
         auto* installBtn = new QPushButton("Install collection ZIP…");
         auto* importBtn = new QPushButton("Import my materials…");
+        auto* ocrBtn = new QPushButton("Send to OCR…");
         row->addWidget(installBtn);
         row->addWidget(importBtn);
-        row->addStretch();
+        row->addWidget(ocrBtn);
+        search_ = new QLineEdit;
+        search_->setPlaceholderText("find in library by name… (Enter)");
+        row->addWidget(search_, 1);
         layout->addLayout(row);
 
         auto* split = new QSplitter(Qt::Horizontal);
@@ -2145,7 +2162,17 @@ public:
         tree_->setColumnWidth(0, 260);
         split->addWidget(tree_);
         info_ = new QTextBrowser;
-        info_->setOpenExternalLinks(true);
+        info_->setOpenLinks(false);
+        connect(info_, &QTextBrowser::anchorClicked, [this](const QUrl& u) {
+            const QString s = u.toString();
+            if (s.startsWith("openfile:")) {
+                const QString p = s.mid(9);
+                logOpen(p);
+                if (open_) open_(p);
+            } else if (s.startsWith("http")) {
+                QDesktopServices::openUrl(u);
+            }
+        });
         split->addWidget(info_);
         split->setStretchFactor(0, 2);
         split->setStretchFactor(1, 1);
@@ -2153,14 +2180,20 @@ public:
 
         connect(installBtn, &QPushButton::clicked, [this] { installZip(); });
         connect(importBtn, &QPushButton::clicked, [this] { importFiles(); });
+        connect(ocrBtn, &QPushButton::clicked, [this] { sendToOcr(); });
+        connect(search_, &QLineEdit::returnPressed, [this] { searchNames(); });
         connect(tree_->selectionModel(), &QItemSelectionModel::currentChanged,
                 [this](const QModelIndex& ix, const QModelIndex&) {
                     showInfo(model_->filePath(ix));
                 });
         connect(tree_, &QTreeView::doubleClicked, [this](const QModelIndex& ix) {
             const QString p = model_->filePath(ix);
-            if (QFileInfo(p).isFile() && open_) open_(p);
+            if (QFileInfo(p).isFile() && open_) {
+                logOpen(p);
+                open_(p);
+            }
         });
+        showRecents();
     }
 
 private:
@@ -2256,11 +2289,96 @@ private:
         info_->setHtml(h);
     }
 
+    void logOpen(const QString& path) {
+        if (progress_)
+            progress_->recordDrill("openfile", path.toStdString(), true,
+                                   (long long)time(nullptr));
+    }
+
+    static QString fileLink(const QString& path, const QString& base) {
+        QString label = path;
+        if (label.startsWith(base)) label = label.mid(base.size() + 1);
+        return "<a href='openfile:" + path.toHtmlEscaped() + "'>" +
+               label.toHtmlEscaped() + "</a>";
+    }
+
+    void showRecents() {
+        if (!progress_) return;
+        auto rec = progress_->recentKeys("openfile", 10);
+        if (rec.empty()) return;
+        QString h = "<b>Recently opened</b><br>";
+        for (const auto& r : rec) {
+            const QString p = QString::fromStdString(r);
+            if (QFileInfo::exists(p)) h += fileLink(p, libRoot_) + "<br>";
+        }
+        info_->setHtml(h);
+    }
+
+    void searchNames() {
+        const QString q = search_->text().trimmed();
+        if (q.isEmpty()) { showRecents(); return; }
+        QString h = "<b>Name matches for “" + q.toHtmlEscaped() + "”</b><br>";
+        int found = 0;
+        QDirIterator it(libRoot_, QDir::Files, QDirIterator::Subdirectories);
+        while (it.hasNext() && found < 60) {
+            it.next();
+            if (it.fileName().contains(q, Qt::CaseInsensitive)) {
+                h += fileLink(it.filePath(), libRoot_) + "<br>";
+                ++found;
+            }
+        }
+        h += found ? QString("<small>%1 match(es)%2</small>")
+                         .arg(found)
+                         .arg(found == 60 ? " (capped)" : "")
+                   : "<i>no matches</i>";
+        h += "<div style='margin-top:6px'><small>content search: use the "
+             "Search pane — its folder box points at the library.</small>"
+             "</div>";
+        info_->setHtml(h);
+    }
+
+    void sendToOcr() {
+        // hand-off to BDRC's open-source Tibetan OCR app (docs/OCR_DESIGN.md
+        // stage 1): open the app if installed, else the download page; OCR
+        // text output belongs in library/ocr_out/ where it is browsable and
+        // importable like any material
+        const QString sel = model_->filePath(tree_->currentIndex());
+        QString app;
+        for (const QString& cand :
+             QDir("/Applications").entryList(QDir::Dirs)) {
+            if (cand.contains("OCR", Qt::CaseInsensitive) &&
+                cand.contains("Tib", Qt::CaseInsensitive))
+                app = "/Applications/" + cand;
+        }
+        QString h = "<b>Send to OCR</b><br>";
+        if (!app.isEmpty()) {
+            QStringList args = {app};
+            if (!sel.isEmpty() && QFileInfo(sel).isFile()) args << sel;
+            QProcess::startDetached("/usr/bin/open", args.size() > 1
+                                                        ? QStringList{"-a", app, sel}
+                                                        : QStringList{app});
+            h += "launched " + QFileInfo(app).fileName().toHtmlEscaped() +
+                 (sel.isEmpty() ? "" : " with the selected file") + ".<br>";
+        } else {
+            h += "BDRC's free offline Tibetan OCR app is not installed. "
+                 "Download it here: <a href='https://buda-base.github.io/"
+                 "tibetan-ocr-app/'>buda-base.github.io/tibetan-ocr-app</a> "
+                 "(5 script-style models incl. Woodblock).<br>";
+        }
+        h += "<small>Save OCR text output into <b>library/ocr_out/</b> — "
+             "OCR-derived text is review material until verified (rule 3); "
+             "run it through the Overlay's spellcheck as first-pass QC."
+             "</small>";
+        info_->setHtml(h);
+    }
+
     QString libRoot_;
+    allcore::Progress* progress_ = nullptr;
     std::function<void(const QString&)> open_;
     QFileSystemModel* model_ = nullptr;
     QTreeView* tree_ = nullptr;
     QTextBrowser* info_ = nullptr;
+    QLineEdit* search_ = nullptr;
 };
 
 }  // namespace
@@ -2320,13 +2438,13 @@ int main(int argc, char** argv) {
     tabs.addTab(new TrainerPane(spine), "Trainer");
     tabs.addTab(new DrillsPane(spine, progress), "Drills");
     tabs.addTab(new DraftPane(spine, progress), "Draft");
-    tabs.addTab(new LibraryPane(root,
+    tabs.addTab(new LibraryPane(root, progress,
                                 [&tabs, overlay](const QString& path) {
                                     overlay->openFile(path);
                                     tabs.setCurrentIndex(0);
                                 }),
                 "Library");
-    tabs.addTab(makeSearchPane(spine), "Search");
+    tabs.addTab(makeSearchPane(spine, root + "/library"), "Search");
     tabs.addTab(makeConvertPane(), "Convert");
     tabs.addTab(makeLookupPane(spine, refdict), "Lookup");
     tabs.resize(1180, 760);

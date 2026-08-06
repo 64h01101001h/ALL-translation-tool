@@ -68,6 +68,14 @@ int main() {
     const double cov = p.coverage({"bden pa", "'phags pa", "nam mkha'"});
     CHECK(cov > 0.6 && cov < 0.7, "coverage: 2 of 3 words known");
 
+    // recent keys (newest first, distinct)
+    p.recordDrill("openfile", "/a.txt", true, t0 + 70);
+    p.recordDrill("openfile", "/b.txt", true, t0 + 71);
+    p.recordDrill("openfile", "/a.txt", true, t0 + 72);
+    auto rec = p.recentKeys("openfile", 5);
+    CHECK(rec.size() == 2 && rec[0] == "/a.txt" && rec[1] == "/b.txt",
+          "recentKeys: distinct, newest first");
+
     // miss taxonomy
     p.recordDrill("miss:order:verb-position", "seg:1", false, t0 + 60);
     p.recordDrill("miss:order:verb-position", "seg:2", false, t0 + 61);
