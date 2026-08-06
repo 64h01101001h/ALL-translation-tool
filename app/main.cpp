@@ -1029,8 +1029,9 @@ static QWidget* makeConvertPane() {
 // ---- Trainer pane: progressive-reveal reading tutor (docs/TRAINER_DESIGN.md)
 class TrainerPane : public QWidget {
 public:
-    explicit TrainerPane(allcore::Spine& spine)
-        : spine_(spine), index_(spine) {
+    explicit TrainerPane(allcore::Spine& spine,
+                         allcore::Progress* progress = nullptr)
+        : spine_(spine), progress_(progress), index_(spine) {
         auto* layout = new QVBoxLayout(this);
         layout->addWidget(new QLabel(
             "<b>Translation Trainer</b> — paste a passage, try to read it "
@@ -1072,6 +1073,25 @@ private:
         clauses_ = allcore::refineClauses(
             doc_, allcore::splitClauses(doc_.tokens, doc_.barrier_after));
         selClause_ = selChunk_ = -1;
+        // "readable for you": how much of this text's dictionary vocabulary
+        // the learner's own deck already covers (local progress data)
+        coverageNote_.clear();
+        if (progress_) {
+            std::vector<std::string> words;
+            for (const auto& e : doc_.entries)
+                if (!e.hgm_gloss.empty()) words.push_back(e.wylie);
+            std::sort(words.begin(), words.end());
+            words.erase(std::unique(words.begin(), words.end()), words.end());
+            if (!words.empty()) {
+                const double cov = progress_->coverage(words);
+                coverageNote_ = QString(
+                    "<div style='color:#4A3FBF'><small>readable for you? "
+                    "your deck covers ~%1%% of this text's %2 dictionary "
+                    "words — words you click join the deck.</small></div>")
+                                    .arg((int)(cov * 100.0 + 0.5))
+                                    .arg(words.size());
+            }
+        }
         render();
     }
 
@@ -1115,7 +1135,7 @@ private:
         const bool glossOn = reveal_[3]->isChecked();
         const bool answerOn = reveal_[4]->isChecked();
         const bool parseOn = reveal_[5]->isChecked();
-        QString h;
+        QString h = coverageNote_;
         int cn = 0;
         for (const auto& cl : clauses_) {
             ++cn;
@@ -1307,9 +1327,11 @@ private:
     }
 
     allcore::Spine& spine_;
+    allcore::Progress* progress_ = nullptr;
     allcore::HeadwordIndex index_;
     allcore::OverlayDoc doc_;
     std::vector<allcore::Clause> clauses_;
+    QString coverageNote_;
     QPlainTextEdit* input_ = nullptr;
     QTextBrowser* view_ = nullptr;
     QCheckBox* reveal_[6] = {};
@@ -2171,6 +2193,25 @@ public:
         search_->setPlaceholderText("find in library by name… (Enter)");
         row->addWidget(search_, 1);
         layout->addLayout(row);
+        // decoder-driven filters: browse the library by what the ACIP file
+        // names themselves declare (collection, verification level, language)
+        auto* frow = new QHBoxLayout;
+        colFilter_ = new QComboBox;
+        colFilter_->addItems({"any collection", "Kangyur", "Tengyur",
+                              "Sungbum", "Reference", "Graphics"});
+        statusFilter_ = new QComboBox;
+        statusFilter_->addItems({"any status", "high (L/M/N/F)",
+                                 "mid (C/D/E)", "raw (A/B)", "incomplete"});
+        langFilter_ = new QComboBox;
+        langFilter_->addItems({"any language", "Tibetan", "English",
+                               "Sanskrit", "mixed"});
+        for (auto* cb : {colFilter_, statusFilter_, langFilter_}) {
+            frow->addWidget(cb);
+            connect(cb, &QComboBox::currentIndexChanged,
+                    [this](int) { searchNames(); });
+        }
+        frow->addStretch();
+        layout->addLayout(frow);
 
         auto* split = new QSplitter(Qt::Horizontal);
         model_ = new QFileSystemModel(this);
@@ -2362,18 +2403,69 @@ private:
         info_->setHtml(h);
     }
 
+    bool passesFilters(const QString& path) const {
+        const int ci = colFilter_->currentIndex();
+        const int si = statusFilter_->currentIndex();
+        const int li = langFilter_->currentIndex();
+        if (ci == 0 && si == 0 && li == 0) return true;
+        auto info = allcore::decodeAcipFilename(path.toStdString());
+        if (!info.recognized) return false;   // filters imply catalog files
+        if (ci > 0 &&
+            QString::fromStdString(info.collection)
+                    .indexOf(colFilter_->currentText(), 0,
+                             Qt::CaseInsensitive) < 0)
+            return false;
+        if (si > 0) {
+            const QString st = QString::fromStdString(info.status);
+            switch (si) {
+                case 1:
+                    if (!st.contains("typo") && !st.contains("statistical") &&
+                        !st.contains("proofreading"))
+                        return false;
+                    break;
+                case 2:
+                    if (!st.contains("automated comparison")) return false;
+                    break;
+                case 3:
+                    if (!st.contains("typing")) return false;
+                    break;
+                case 4:
+                    if (!info.incomplete) return false;
+                    break;
+            }
+        }
+        if (li > 0 &&
+            QString::fromStdString(info.language)
+                    .indexOf(langFilter_->currentText(), 0,
+                             Qt::CaseInsensitive) < 0)
+            return false;
+        return true;
+    }
+
     void searchNames() {
         const QString q = search_->text().trimmed();
-        if (q.isEmpty()) { showRecents(); return; }
-        QString h = "<b>Name matches for “" + q.toHtmlEscaped() + "”</b><br>";
+        const bool filtered = colFilter_->currentIndex() ||
+                              statusFilter_->currentIndex() ||
+                              langFilter_->currentIndex();
+        if (q.isEmpty() && !filtered) { showRecents(); return; }
+        QString h = filtered
+            ? "<b>Filtered browse</b> <small>(" +
+                  colFilter_->currentText() + " · " +
+                  statusFilter_->currentText() + " · " +
+                  langFilter_->currentText() +
+                  (q.isEmpty() ? "" : " · name “" + q.toHtmlEscaped() + "”") +
+                  ")</small><br>"
+            : "<b>Name matches for “" + q.toHtmlEscaped() + "”</b><br>";
         int found = 0;
         QDirIterator it(libRoot_, QDir::Files, QDirIterator::Subdirectories);
         while (it.hasNext() && found < 60) {
             it.next();
-            if (it.fileName().contains(q, Qt::CaseInsensitive)) {
-                h += fileLink(it.filePath(), libRoot_) + "<br>";
-                ++found;
-            }
+            if (!q.isEmpty() &&
+                !it.fileName().contains(q, Qt::CaseInsensitive))
+                continue;
+            if (!passesFilters(it.fileName())) continue;
+            h += fileLink(it.filePath(), libRoot_) + "<br>";
+            ++found;
         }
         h += found ? QString("<small>%1 match(es)%2</small>")
                          .arg(found)
@@ -2427,6 +2519,9 @@ private:
     QTreeView* tree_ = nullptr;
     QTextBrowser* info_ = nullptr;
     QLineEdit* search_ = nullptr;
+    QComboBox* colFilter_ = nullptr;
+    QComboBox* statusFilter_ = nullptr;
+    QComboBox* langFilter_ = nullptr;
 };
 
 }  // namespace
@@ -2483,7 +2578,7 @@ int main(int argc, char** argv) {
     auto* overlay = new OverlayPane(spine, checker, refdict, progress);
     tabs.addTab(overlay, "Overlay");
     tabs.addTab(new AnalysisPane(spine, tplPath, root + "/analyses"), "Analysis");
-    tabs.addTab(new TrainerPane(spine), "Trainer");
+    tabs.addTab(new TrainerPane(spine, progress), "Trainer");
     tabs.addTab(new DrillsPane(spine, progress), "Drills");
     tabs.addTab(new DraftPane(spine, progress), "Draft");
     tabs.addTab(new LibraryPane(root, progress,

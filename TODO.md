@@ -153,8 +153,9 @@ display toggles, not through invention.
       delete), Library "Update search index" button, Search pane auto-uses
       the index when targeting the library; .act/.inc/.ace now searchable
       in both indexed and live modes; libindex_smoke 12 checks.
-- [ ] Library deepening, remaining: filter by collection / verification
-      status / language (decoder-driven), list-view mode.
+- [x] Library filters (2026-08-06): decoder-driven browse by collection /
+      verification status / language, combinable with the name search.
+- [ ] Library deepening, remaining: list-view mode (low priority).
 
 ## Done highlights (details in README / memory)
 
