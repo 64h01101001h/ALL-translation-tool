@@ -144,10 +144,14 @@ display toggles, not through invention.
       watched ocr_out folder w/ ocr-derived tags; Stage 2 = embedded ONNX
       pipeline + Scan pane (license check first). OCR output always tagged,
       review-flagged, never corpus-bound without verification.
-- [ ] Library browsing deepening: name/content search within the library,
-      filter by collection/status/language, list & column view modes,
-      recently-opened, and full-text indexing of installed collections into
-      the Gofer file-tree search by default.
+- [x] Library browsing deepening (first tranche, 2026-08-06, commit
+      a876cb8): name search with clickable results, recently-opened list,
+      "search the Library" button in the Search pane, OCR Stage 1 hand-off
+      ("Send to OCR…" + library/ocr_out/ convention).
+- [ ] Library deepening, remaining: filter by collection / verification
+      status / language (decoder-driven), list-view mode, and a prebuilt
+      full-text index over installed collections (Gofer file search is
+      currently a live scan — fine for folders, slow for a whole Kangyur).
 
 ## Done highlights (details in README / memory)
 
