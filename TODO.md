@@ -44,7 +44,10 @@ display toggles, not through invention.
 - [ ] "ACIP Standards for Simplified Tibetan and Sanskrit Pronunciation" doc —
       validates/replaces the provisional Sanskrit pronunciation style.
 - [ ] Adam's reference Xcode projects for the overall tool vision.
-- [ ] Word on git init (suggested; awaiting his go-ahead).
+- [x] Git init — done 2026-08-06 at Adam's "next most logical step":
+      initial commit 686d148, 103 files; generated DBs/artifacts/user data
+      ignored (all rebuild from releases). Optional next: a private GitHub
+      remote for backup (needs Adam's say-so — pushing publishes).
 
 ## Waiting on the data project (Cowork sessions)
 
