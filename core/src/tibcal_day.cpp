@@ -202,4 +202,61 @@ KckDay kckModernKarana(long year, long month, long tshes) {
     return out;
 }
 
+long julianDay(long D, long M, long Y) {
+    int gregorian;
+    if (Y > 1582) gregorian = 1;
+    else if (Y < 1582) gregorian = 0;
+    else if (M > 10) gregorian = 1;
+    else if (M < 10) gregorian = 0;
+    else gregorian = (D >= 15) ? 1 : 0;
+    if (gregorian)
+        return D + (1461 * (Y + 4800 + (M - 14) / 12)) / 4 +
+               (367 * (M - 2 - 12 * ((M - 14) / 12))) / 12 -
+               (3 * ((Y + 4900 + (M - 14) / 12) / 100)) / 4 - 32075;
+    return 367 * Y - (7 * (Y + 5001 + (M - 9) / 7)) / 4 +
+           (275 * M) / 9 + D + 1729777;
+}
+
+WesternDate westernFromJd(long jd) {
+    // standard inverse of the ESAA formula (Gregorian; valid for the
+    // epoch range 2009+ this engine serves)
+    long l = jd + 68569;
+    const long n = (4 * l) / 146097;
+    l = l - (146097 * n + 3) / 4;
+    const long i = (4000 * (l + 1)) / 1461001;
+    l = l - (1461 * i) / 4 + 31;
+    const long j = (80 * l) / 2447;
+    WesternDate w;
+    w.day = l - (2447 * j) / 80;
+    l = j / 11;
+    w.month = j + 2 - 12 * l;
+    w.year = 100 * (n - 49) + i + l;
+    return w;
+}
+
+std::vector<KckMatch> kckFromJulianDay(long jd) {
+    std::vector<KckMatch> out;
+    // locate candidate months by mean rate (~30.44 civil days per
+    // true month of 30 lunar days), then scan exactly
+    const long approx = (jd - 2454887) * 64 / 63 / 30;   // ~true months
+    for (long cm = approx - 2; cm <= approx + 2; ++cm) {
+        if (cm < 0) continue;
+        // invert zla0 -> (year, month): find a with a + (2a+55)/65 == cm
+        for (long a = cm - (cm / 32) - 2; a <= cm + 1; ++a) {
+            if (a < 0) continue;
+            if (a + (2 * a + 55) / 65 != cm) continue;
+            const long year = 2009 + (a + 1) / 12;   // month back-calc
+            const long month = (a + 1) % 12 + 1;
+            // re-derive exactly as forward does
+            for (long tt = 1; tt <= 30; ++tt) {
+                auto d = kckModernKarana(year, month, tt);
+                if (d.valid && d.jd == jd)
+                    out.push_back({year, month, tt, d});
+            }
+            break;
+        }
+    }
+    return out;
+}
+
 }  // namespace allcore

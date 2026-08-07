@@ -62,7 +62,33 @@ int main(int argc, char** argv) {
         std::printf("  [FAIL] pre-epoch date claimed valid\n");
         return 1;
     }
-    std::printf("%s\n", pass == total ? "TIBCAL_DAY SMOKE OK"
-                                      : "TIBCAL_DAY SMOKE FAILED");
-    return pass == total ? 0 : 1;
+    // western-date round trip + inverse on every fixture
+    std::ifstream f2(argv[1]);
+    int rt = 0, rtot = 0, invOk = 0;
+    while (std::getline(f2, line)) {
+        if (line.empty() || line[0] == '#') continue;
+        std::istringstream in(line);
+        std::string ys, ms, ts, z0s, z1s, gs, ns, js;
+        std::getline(in, ys, '\t'); std::getline(in, ms, '\t');
+        std::getline(in, ts, '\t'); std::getline(in, z0s, '\t');
+        std::getline(in, z1s, '\t'); std::getline(in, gs, '\t');
+        std::getline(in, ns, '\t'); std::getline(in, js, '\t');
+        ++rtot;
+        const long jd = std::stol(js);
+        auto w = allcore::westernFromJd(jd);
+        if (allcore::julianDay(w.day, w.month, w.year) == jd) ++rt;
+        auto inv = allcore::kckFromJulianDay(jd);
+        for (auto& m : inv)
+            if (m.year == std::stol(ys) && m.month == std::stol(ms) &&
+                m.tshes == std::stol(ts))
+                ++invOk;
+    }
+    std::printf("%d/%d western round-trips; %d/%d inverse lookups "
+                "recover the fixture date\n", rt, rtot, invOk, rtot);
+    const bool ok2 = (rt == rtot && invOk == rtot);
+
+    std::printf("%s\n", (pass == total && ok2)
+                             ? "TIBCAL_DAY SMOKE OK"
+                             : "TIBCAL_DAY SMOKE FAILED");
+    return (pass == total && ok2) ? 0 : 1;
 }

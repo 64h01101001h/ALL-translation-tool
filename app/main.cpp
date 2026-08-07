@@ -85,6 +85,7 @@
 #include "allcore/wilsonparse.h"
 #include "allcore/terminology.h"
 #include "allcore/tibcal.h"
+#include "allcore/tibcal_day.h"
 #include "allcore/tibexport.h"
 
 // What an entry card shows — the Overlay's display toggles feed this; other
@@ -1567,8 +1568,8 @@ static QWidget* makeConvertPane() {
     calRow->addWidget(new QLabel("<b>Colophon year</b>"));
     auto* calIn = new QLineEdit;
     calIn->setPlaceholderText(
-        "1357   ·   me bya   ·   fire bird 6   (element animal "
-        "[rabjung])");
+        "1357 · me bya · fire bird 6 · tshes month year (3 8 2011) · "
+        "2011-08-31");
     calRow->addWidget(calIn, 1);
     auto* calOut = new QLabel;
     calOut->setWordWrap(true);
@@ -1577,6 +1578,83 @@ static QWidget* makeConvertPane() {
     QObject::connect(calIn, &QLineEdit::textChanged, [calIn, calOut] {
         const QString q = calIn->text().trimmed();
         if (q.isEmpty()) { calOut->clear(); return; }
+        // western calendar date (ISO): -> Tibetan date(s)
+        if (q.contains('-') && q.count('-') == 2) {
+            const auto p = q.split('-');
+            bool ok1, ok2, ok3;
+            const long Y = p[0].toLong(&ok1), M = p[1].toLong(&ok2),
+                       D = p[2].toLong(&ok3);
+            if (ok1 && ok2 && ok3) {
+                const long jd = allcore::julianDay(D, M, Y);
+                const auto ms = allcore::kckFromJulianDay(jd);
+                if (ms.empty()) {
+                    calOut->setText(
+                        "no lunar day carries this date — an omitted "
+                        "(chad) day, or outside the Modern Karana "
+                        "epoch (2009 onward)");
+                    return;
+                }
+                QStringList parts;
+                for (const auto& m : ms)
+                    parts << QString("tshes <b>%1</b>, month %2, %3")
+                                 .arg(m.tshes)
+                                 .arg(m.month)
+                                 .arg(m.year);
+                calOut->setText(
+                    parts.join(" · ") +
+                    QString(" <small>(JD %1%2)</small>")
+                        .arg(jd)
+                        .arg(ms.size() > 1 ? " — a duplicated (lhag) "
+                                             "lunar day"
+                                           : ""));
+                return;
+            }
+        }
+        // full Tibetan date: tshes month year -> western
+        {
+            const auto p = q.split(' ', Qt::SkipEmptyParts);
+            if (p.size() == 3) {
+                bool ok1, ok2, ok3;
+                const long tt = p[0].toLong(&ok1),
+                           mm = p[1].toLong(&ok2),
+                           yy = p[2].toLong(&ok3);
+                if (ok1 && ok2 && ok3 && yy > 100) {
+                    const auto d = allcore::kckModernKarana(yy, mm, tt);
+                    if (!d.valid) {
+                        calOut->setText(
+                            "before the Modern Karana epoch (2009) — "
+                            "this engine refuses rather than guesses");
+                        return;
+                    }
+                    static const char* kDays[7] = {
+                        "Saturday", "Sunday",   "Monday", "Tuesday",
+                        "Wednesday", "Thursday", "Friday"};
+                    const auto w = allcore::westernFromJd(d.jd);
+                    calOut->setText(
+                        QString("tshes %1, month %2, %3 = <b>%4, "
+                                "%5-%6-%7</b> <small>(JD %8 · zla-dag "
+                                "%9;%10 · gza-dag %11;%12,%13,%14,%15 — "
+                                "76/76 verified against Henning's "
+                                "original)</small>")
+                            .arg(tt)
+                            .arg(mm)
+                            .arg(yy)
+                            .arg(kDays[d.gza[0] % 7])
+                            .arg(w.year)
+                            .arg(w.month, 2, 10, QChar('0'))
+                            .arg(w.day, 2, 10, QChar('0'))
+                            .arg(d.jd)
+                            .arg(d.zla0)
+                            .arg(d.zla1)
+                            .arg(d.gza[0])
+                            .arg(d.gza[1])
+                            .arg(d.gza[2])
+                            .arg(d.gza[3])
+                            .arg(d.gza[4]));
+                    return;
+                }
+            }
+        }
         bool isYear = false;
         const int g = q.toInt(&isYear);
         if (isYear && g > 0) {

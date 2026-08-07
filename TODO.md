@@ -271,9 +271,12 @@ display toggles, not through invention.
       transcription of T2/UTILS radix arithmetic + T4 driver order;
       23rd suite: ALL 76 fixtures match the original program's own
       outputs EXACTLY on every quantity; pre-epoch dates honestly
-      invalid). REMAINING: Convert-pane UI for full dates; the
-      intercalary-month state machine (adj_zla) for month-sequence
-      display; the documented KCK-vs-published-Phugpa question.
+      invalid). Full-date UI SHIPPED
+      2026-08-07 (Convert pane: tshes month year ↔ ISO western date;
+      chad/lhag honesty; inverse + western round-trip proven 76/76 in
+      the battery). REMAINING: adj_zla intercalary state machine for
+      month-sequence display; the documented KCK-vs-published-Phugpa
+      question.
 - [ ] **rKTs abbreviations DB (6,000+ bskungs yig) + canonical IDs** —
       deterministic abbreviation expansion for input-center texts;
       verify the data dump's license first (unclear).

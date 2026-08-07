@@ -17,6 +17,7 @@
 // Phugpa almanacs is a separate, documented question.
 
 #include <array>
+#include <vector>
 
 namespace allcore {
 
@@ -32,5 +33,18 @@ struct KckDay {
 // tshes (1..30), Tibetan month (1..12), western year the Tibetan year
 // begins in — Modern Karana epoch (2009 onward).
 KckDay kckModernKarana(long year, long month, long tshes);
+
+// Gregorian (proleptic-correct incl. the 1582 changeover, ported from
+// gregd2jul) -> Julian day at noon
+long julianDay(long day, long month, long year);
+// Julian day -> Gregorian {day, month, year} (ported jul2date logic)
+struct WesternDate { long day = 0, month = 0, year = 0; };
+WesternDate westernFromJd(long jd);
+
+// inverse: all Tibetan dates whose gza-dag day falls on this Julian
+// day. 0 results = an omitted (chad) lunar day; 2 = a duplicated
+// (lhag) one — both real calendar phenomena, reported honestly.
+struct KckMatch { long year, month, tshes; KckDay day; };
+std::vector<KckMatch> kckFromJulianDay(long jd);
 
 }  // namespace allcore
