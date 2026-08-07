@@ -163,9 +163,18 @@ display toggles, not through invention.
       pres|past|fut|imp [sources]" under the grammar toggle — display
       only, NEVER parse-binding (parse stays on dictionary tense
       evidence).
-- [ ] **pyewts diff-oracle** — run our 26,318 ground-truth pairs +
-      dictionary through the ecosystem-standard converter, classify
-      divergences (validation harness only; our engines stay canonical).
+- [x] **pyewts diff-oracle** — RUN 2026-08-07 over all 105,634
+      dictionary pairs (tools/pyewts_oracle.py; harness only, engines
+      stay canonical). Verdict: 91.4% exact agreement; of the rest,
+      7,398 are the master's ⟨wylie⟩ honesty flags (our engine refuses,
+      pyewts converts blindly — even literal hyphens inside Tibetan
+      output; our philosophy validated), 459 formatting conventions
+      (comma/slash/ellipsis), 83 IAST-flavored wylie (we convert, they
+      can't), 13 independently-confirmed source-defect candidates
+      (data/extracted/pyewts_defect_candidates.json → FOR THE DATA
+      PROJECT), leaving 1,141 letter-level divergences (1.08% —
+      matching the battery's documented ~1.12% source-defect rate).
+      Rerun per release as a permanent cross-check.
 - [ ] **diff-match-patch (C++/Qt, Apache-2.0) + antx logic** → the
       input-center double-keying proofreading pane (roadmap item A).
 - [ ] **Tibetan collation** — try ICU/CLDR (official rules since 2021)
