@@ -367,6 +367,27 @@ public:
         loadDoc();
         auto info = allcore::decodeAcipFilename(fn.toStdString());
         setScanTarget(info, fn);
+        // OCR outputs are review material until verified (OCR_DESIGN):
+        // banner + first-pass QC via the syllable-legality layer
+        if (fn.contains("/ocr_out/") && checker_) {
+            int bad = 0, tot = 0;
+            for (const auto& t : doc_.tokens) {
+                bool alpha = false;
+                for (char ch : t)
+                    alpha |= std::isalpha((unsigned char)ch) != 0;
+                if (!alpha) continue;
+                ++tot;
+                if (!checker_->legalWylie(allcore::acipToEwts(t))) ++bad;
+            }
+            hint_->setText(
+                QString("⚠ OCR-DERIVED — unverified review material. "
+                        "First-pass QC: %1 of %2 syllables fail the "
+                        "legality check (red waves below). Verify before "
+                        "any further use.\n")
+                        .arg(bad)
+                        .arg(tot) +
+                hint_->text());
+        }
         if (info.recognized)
             hint_->setText(
                 QString("%1 · text %2 · %3\n")
@@ -3225,6 +3246,10 @@ private:
                     QString("%1 KB · %2<br>")
                         .arg(fi.size() / 1024)
                         .arg(fi.lastModified().toString("yyyy-MM-dd"));
+        if (path.contains("/ocr_out/"))
+            h += "<div style='color:#B26B00'><b>ocr-derived</b> — "
+                 "unverified review material; opening it runs the "
+                 "syllable-legality first-pass QC</div>";
         auto acip = allcore::decodeAcipFilename(path.toStdString());
         if (acip.recognized) {
             h += "<div style='margin-top:4px;color:#4A3FBF'>" +
