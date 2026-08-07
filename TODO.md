@@ -239,11 +239,14 @@ display toggles, not through invention.
       first: the TM GitHub README says BY-NC-ND 3.0 while 84000's
       terms-of-use says CC BY 4.0 — confirm from the files/84000
       before ingesting.
-- [ ] **Tibetan calendar engine** — port Henning's MIT C code
-      (kalacakra.org) / Janson's mathematics into allcore + battery vs
-      the online converters → colophon-date helper (rabjung +
-      element-animal year → Gregorian, Phugpa & Tsurphu). Cheap, fully
-      deterministic, new capability.
+- [~] **Tibetan calendar engine** — YEAR LEVEL SHIPPED 2026-08-07
+      (allcore tibcal, 60-cycle arithmetic pinned to five documented
+      anchors incl. Tsongkapa's own 1357 fire-bird / 1419 earth-pig;
+      Convert-pane colophon helper works both directions; pre-1027
+      honest). Henning's MIT KCK sources banked in
+      third_party/kck_henning. REMAINING: day-level Phugpa/Tsurphu
+      month+tshes conversion (Janson's mathematics as spec, KCK as
+      reference, online converters as battery oracles).
 - [ ] **rKTs abbreviations DB (6,000+ bskungs yig) + canonical IDs** —
       deterministic abbreviation expansion for input-center texts;
       verify the data dump's license first (unclear).

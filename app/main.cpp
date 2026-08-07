@@ -82,6 +82,7 @@
 #include "allcore/verse.h"
 #include "allcore/wilsonparse.h"
 #include "allcore/terminology.h"
+#include "allcore/tibcal.h"
 #include "allcore/tibexport.h"
 
 // What an entry card shows — the Overlay's display toggles feed this; other
@@ -1525,6 +1526,79 @@ static QWidget* makeSearchPane(allcore::Spine& spine,
 static QWidget* makeConvertPane() {
     auto* pane = new QWidget;
     auto* layout = new QVBoxLayout(pane);
+
+    // colophon-date helper (allcore tibcal): year ⇄ element-animal
+    auto* calRow = new QHBoxLayout;
+    calRow->addWidget(new QLabel("<b>Colophon year</b>"));
+    auto* calIn = new QLineEdit;
+    calIn->setPlaceholderText(
+        "1357   ·   me bya   ·   fire bird 6   (element animal "
+        "[rabjung])");
+    calRow->addWidget(calIn, 1);
+    auto* calOut = new QLabel;
+    calOut->setWordWrap(true);
+    layout->addLayout(calRow);
+    layout->addWidget(calOut);
+    QObject::connect(calIn, &QLineEdit::textChanged, [calIn, calOut] {
+        const QString q = calIn->text().trimmed();
+        if (q.isEmpty()) { calOut->clear(); return; }
+        bool isYear = false;
+        const int g = q.toInt(&isYear);
+        if (isYear && g > 0) {
+            const auto y = allcore::tibetanYear(g);
+            if (y.rabjung == 0) {
+                calOut->setText(
+                    QString("%1 is before the first rabjung (1027) — "
+                            "no cycle designation.")
+                        .arg(g));
+                return;
+            }
+            calOut->setText(
+                QString("<b>%1</b> begins the Tibetan year "
+                        "<b>%2-%3%4</b> (%5 %6) — rabjung %7, year "
+                        "%8 of 60. <small>Losar falls in Feb/Mar; "
+                        "early-year western dates may belong to the "
+                        "previous Tibetan year.</small>")
+                    .arg(g)
+                    .arg(QString::fromStdString(y.element_en),
+                         QString::fromStdString(y.animal_en),
+                         y.female ? " (female)" : " (male)",
+                         QString::fromStdString(y.element_wylie),
+                         QString::fromStdString(y.animal_wylie))
+                    .arg(y.rabjung)
+                    .arg(y.year_in_cycle));
+            return;
+        }
+        const QStringList parts =
+            q.split(' ', Qt::SkipEmptyParts);
+        if (parts.size() < 2) {
+            calOut->setText("<i>enter a western year, or: element "
+                            "animal [rabjung]</i>");
+            return;
+        }
+        const int rj =
+            parts.size() > 2 ? parts[2].toInt() : 0;
+        const auto years = allcore::yearsFor(
+            parts[0].toStdString(), parts[1].toStdString(), rj);
+        if (years.empty()) {
+            calOut->setText(
+                "<i>no such element-animal combination" +
+                QString(rj ? " in that rabjung" : "") +
+                " (parity: each element pairs with only half the "
+                "animals)</i>");
+            return;
+        }
+        QStringList ys;
+        for (size_t i = 0; i < years.size() && i < 20; ++i) {
+            const auto y = allcore::tibetanYear(years[i]);
+            ys << QString("<b>%1</b> (rabjung %2)")
+                      .arg(years[i])
+                      .arg(y.rabjung);
+        }
+        calOut->setText(ys.join(" · ") +
+                        (years.size() > 20 ? " …" : ""));
+    });
+
     layout->addWidget(new QLabel(
         "<b>Input</b> (ACIP, EWTS wylie, or Sanskrit IAST — auto-detected)"));
     auto* input = new QPlainTextEdit;
