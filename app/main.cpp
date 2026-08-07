@@ -7,6 +7,8 @@
 #include <QLabel>
 #include <QLineEdit>
 #include <QNetworkAccessManager>
+#include <QPainter>
+#include <QPen>
 #include <QRegularExpression>
 #include <QNetworkReply>
 #include <QNetworkRequest>
@@ -927,18 +929,32 @@ private:
 
     void syncFolioToCursor() {
         if (folioUrl_.isEmpty()) return;
-        const QString upto =
-            input_->toPlainText().left(input_->textCursor().position());
+        const QString all = input_->toPlainText();
+        const int pos = input_->textCursor().position();
         QRegularExpression re("@0*(\\d+)([AB])");
         QString folio;
-        auto it = re.globalMatch(upto);
+        int folioEnd = -1;
+        auto it = re.globalMatch(all.left(pos));
         while (it.hasNext()) {
             const auto m = it.next();
             folio = m.captured(1) + m.captured(2).toLower();
+            folioEnd = m.capturedEnd();
         }
-        if (!folio.isEmpty() && folio != curFolio_ &&
-            folioUrl_.contains(folio))
+        if (folio.isEmpty()) return;
+        // line within the folio side: the input centers preserved the
+        // woodblock's own line breaks, so newline counting is exact
+        curLine_ = 1 + (int)all.mid(folioEnd, pos - folioEnd).count('\n');
+        const auto next = re.match(all, pos);
+        const int sideEnd =
+            next.hasMatch() ? next.capturedStart() : all.size();
+        curLineTotal_ =
+            1 + (int)all.mid(folioEnd, sideEnd - folioEnd)
+                    .trimmed()
+                    .count('\n');
+        if (folio != curFolio_ && folioUrl_.contains(folio))
             showFolio(folio);
+        else if (folio == curFolio_ && !basePx_.isNull())
+            setScanPixmap(basePx_, curFolio_);
     }
 
     void stepFolio(int d) {
@@ -992,16 +1008,38 @@ private:
     }
 
     void setScanPixmap(const QPixmap& px, const QString& folio) {
+        basePx_ = px;
+        QPixmap shown = px;
+        QString lineNote;
+        if (curLine_ > 0 && curLineTotal_ >= curLine_ &&
+            curLineTotal_ > 1) {
+            // approximate band: woodblock lines are regular, but the
+            // division is uniform arithmetic — labeled approximate
+            shown = px.copy();
+            QPainter p(&shown);
+            const int y0 = px.height() * (curLine_ - 1) / curLineTotal_;
+            const int y1 = px.height() * curLine_ / curLineTotal_;
+            p.fillRect(0, y0, px.width(), y1 - y0,
+                       QColor(255, 190, 0, 55));
+            p.setPen(QPen(QColor(230, 150, 0, 180), 2));
+            p.drawLine(0, y0, px.width(), y0);
+            p.drawLine(0, y1, px.width(), y1);
+            p.end();
+            lineNote = QString(" · line %1/%2 (approximate band)")
+                           .arg(curLine_)
+                           .arg(curLineTotal_);
+        }
         const int w = qMax(300, input_->width() - 12);
-        scanImg_->setPixmap(px.width() > w
-                                ? px.scaledToWidth(w,
-                                                   Qt::SmoothTransformation)
-                                : px);
+        scanImg_->setPixmap(
+            shown.width() > w
+                ? shown.scaledToWidth(w, Qt::SmoothTransformation)
+                : shown);
         scanImg_->show();
         scanCap_->setText(
-            QString("<b>folio %1</b> · %2×%3 · Buddhist Digital Resource "
-                    "Center%4")
+            QString("<b>folio %1</b>%2 · %3×%4 · Buddhist Digital "
+                    "Resource Center%5")
                 .arg(folio)
+                .arg(lineNote)
                 .arg(px.width())
                 .arg(px.height())
                 .arg(scanLicense_.contains("publicdomain")
@@ -1017,6 +1055,8 @@ private:
     QLabel* scanCap_ = nullptr;
     QWidget* scanNav_ = nullptr;
     QString scanWork_, scanCache_, curFolio_, scanLicense_;
+    QPixmap basePx_;
+    int curLine_ = 0, curLineTotal_ = 0;
     QMap<QString, QString> folioUrl_;
     QStringList folioOrder_, pendingManifests_;
     QComboBox* scriptMode_ = nullptr;
