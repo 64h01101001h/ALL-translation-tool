@@ -62,6 +62,7 @@
 #include "allcore/refdict.h"
 #include "allcore/sanskrit.h"
 #include "allcore/spellcheck.h"
+#include "allcore/quotation.h"
 #include "allcore/spine.h"
 #include "allcore/outline.h"
 #include "allcore/verse.h"
@@ -1855,6 +1856,14 @@ public:
         srcCol->addWidget(outlineBtn);
         auto* verseBtn = new QPushButton("Verse meter");
         srcCol->addWidget(verseBtn);
+        auto* quoteBtn = new QPushButton("Detect quotations");
+        quoteBtn->setToolTip(
+            "Finds passages that exactly match corpus segments (7+ "
+            "syllables) — attested quotations, never inferred. Matched "
+            "works recommend their published bibliography entries.");
+        srcCol->addWidget(quoteBtn);
+        QObject::connect(quoteBtn, &QPushButton::clicked,
+                         [this] { detectQuotes(); });
         tl->addLayout(srcCol, 1);
         clauseView_ = new QTextBrowser;
         clauseView_->setOpenLinks(false);
@@ -2299,6 +2308,57 @@ private:
             "[NOTE: " + n.lemma + ": " + n.text + " — reused from " +
             n.source + ", n." + QString::number(n.note) + "]");
         draft_->setFocus();
+    }
+
+    void detectQuotes() {
+        const std::string src = source_->toPlainText().toStdString();
+        if (src.empty()) {
+            report_->setHtml("<i>paste the source text first</i>");
+            return;
+        }
+        loadNotesBank();
+        // heuristic-free input typing: ACIP is uppercase by standard
+        bool isAcip = false;
+        for (char c : src)
+            if (c >= 'A' && c <= 'Z') { isAcip = true; break; }
+        const auto qs =
+            allcore::detectQuotations(spine_, src, isAcip, 7);
+        QString h =
+            "<b>Quotation detection</b> <small>(exact corpus match over "
+            "7+ syllables — attested, never inferred; lesser overlaps "
+            "belong to the concordance)</small><br>";
+        if (qs.empty()) {
+            h += "<i>no attested quotations found</i>";
+            report_->setHtml(h);
+            return;
+        }
+        for (const auto& q : qs) {
+            h += QString("<div style='margin:8px 0'><b>%1</b> segment #%2 "
+                         "(%3 syllables attested)<br><small>%4</small><br>"
+                         "<small><i>published English:</i> %5</small>")
+                     .arg(QString::fromStdString(q.course).toHtmlEscaped())
+                     .arg(q.seq)
+                     .arg(q.syllable_count)
+                     .arg(QString::fromStdString(q.matched_wylie)
+                              .toHtmlEscaped())
+                     .arg(QString::fromStdString(q.english)
+                              .left(220)
+                              .toHtmlEscaped());
+            // a matched work recommends its published bibliography
+            // entries: match course id against the bank's ACIP refs
+            const QString cq =
+                QString::fromStdString(q.course).toUpper();
+            for (int i = 0; i < (int)bibBank_.size(); ++i) {
+                if (!bibBank_[i].acipRefs.isEmpty() && cq.size() >= 6 &&
+                    bibBank_[i].acipRefs.toUpper().contains(cq))
+                    h += QString("<br><a href='bib:%1'>[insert "
+                                 "bibliography entry %2]</a>")
+                             .arg(i)
+                             .arg(bibBank_[i].id.toHtmlEscaped());
+            }
+            h += "</div>";
+        }
+        report_->setHtml(h);
     }
 
     void insertBibEntry(int ix) {

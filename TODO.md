@@ -38,12 +38,15 @@ display toggles, not through invention.
       — REMAINING: rerun the three apparatus tools per new release;
       confirm STD-008 in GMR's own words for the record; dedupe/merge
       notes covering the same lemma across volumes.
-- [ ] **Quotation detection → auto-recommend citations + bibliography
-      entries** (Adam, 2026-08-06): deterministic — passages that
-      string-match corpus segments (37,807, source-tagged) are attested
-      quotations; the matched work's ACIP number keys the published
-      bibliography entry for one-click insertion. Design:
-      docs/APPARATUS_DESIGN.md §2.
+- [x] **Quotation detection → auto-recommend citations + bibliography
+      entries** (Adam, 2026-08-06) — SHIPPED 2026-08-06: allcore
+      detectQuotations (exact corpus match ≥7 syllables, greedy-longest,
+      attested-only; quotation_smoke proves detection/attribution/
+      below-threshold silence/ACIP path); Draft pane "Detect quotations"
+      lists matches w/ published English + one-click published
+      bibliography entries when the course id matches the bank's ACIP
+      refs. LATER: cross-segment-boundary extension; footnote-lemma
+      recommendations from quoted spans.
 - [ ] **Scan follow-along** (Adam, 2026-08-06): on opening a recognized
       text, recommend the BDRC scans; map our @folio markers to IIIF
       scan images (one-time user calibration of the front-matter offset
