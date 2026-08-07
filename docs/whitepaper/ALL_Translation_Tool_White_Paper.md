@@ -14,10 +14,12 @@ analyzing grammar, drafting a translation, checking that draft, and
 training the next generation of translators. It is built around one
 central treasure: the dictionary of English equivalents established by
 Geshe Michael Roach across decades of teaching and translation, together
-with a parallel corpus of 37,807 Tibetan--English segments drawn from
+with a parallel corpus of 40,762 Tibetan--English segments drawn from
 more than sixty of his courses and works --- including, as of August
-2026, three newly ingested published volumes: A Song of My Spiritual
-Life, The Other Side of Emptiness, and The Sixty Verses of Nagarjuna.
+2026, three newly ingested published volumes (A Song of My Spiritual
+Life, The Other Side of Emptiness, and The Sixty Verses of Nagarjuna)
+and nearly three thousand paired Tibetan--English titles of canonical
+works from the Project's own master catalogs.
 
 The software is written as a fast, self-contained program for the Mac
 (with Windows and Linux planned for the input centers). Everything
@@ -57,11 +59,12 @@ machine.
                                       quality (curated / glossary /
                                       provisional)
 
-  Parallel corpus                     37,807 aligned Tibetan--English
-                                      segments from 60+ sources and
-                                      published volumes --- the evidence
-                                      base and the "answer key" for all
-                                      training exercises
+  Parallel corpus                     40,762 aligned Tibetan--English
+                                      segments from 60+ sources,
+                                      published volumes, and the
+                                      Project's catalog titles --- the
+                                      evidence base and the "answer key"
+                                      for all training exercises
 
   Lokesh Chandra layer                79,305 Sanskrit-linked entries;
                                       88,973 headwords with IAST Sanskrit
@@ -70,6 +73,13 @@ machine.
                                       tools (multi-scholar compilations),
                                       kept strictly local as labeled
                                       reference --- never redistributed
+
+  Attestation layers                  449,000+ word forms from the Monlam
+                                      Grand Dictionary project and a
+                                      2,491-row verb-paradigm database
+                                      (both openly licensed) --- shown
+                                      only as labeled reference, never
+                                      binding
   ----------------------------------- -----------------------------------
 
 **4. Conversion engines --- and how they are proven**
@@ -113,7 +123,12 @@ shaded, with nested phrases shown inside longer ones. Clicking a word
 shows its entry, its occurrences in the corpus with Geshe Michael's
 actual translations, and reference definitions. Spelling errors get a
 red underline; grammatical particles that disagree with the classical
-suffix rules get a gentle review mark. A Display panel lets each reader
+suffix rules get a gentle review mark. Even a word the dictionary does
+not know is not left blank: it is checked against nearly half a million
+attested word forms, so the reader learns at a glance whether it is a
+real word awaiting an entry or a probable typo; and verbs show their
+full tense paradigm from an openly-licensed verb database --- both
+clearly marked as reference, never as the master's voice. A Display panel lets each reader
 choose their own information density --- text as Tibetan script, ACIP,
 or Wylie, with separate switches for phonetics, definitions, corpus
 usage, grammar marks, and each reference layer --- and remembers the
@@ -195,8 +210,9 @@ banner-labeled as machine output.
 The Draft bench also carries the shared apparatus, described in section
 6 below: one search box over every published footnote and bibliography
 entry, one-click reuse with the citation attached, a composer that
-assembles new bibliography entries in the house format exactly, and
-quotation detection --- when the text being translated quotes a work
+assembles new bibliography entries in the house format exactly ---
+filling itself in from the Project's catalog for 1,846 known works by
+their ACIP number --- and quotation detection --- when the text being translated quotes a work
 that exists in the corpus, the app finds the quotation, shows how the
 master already rendered those lines, and offers the published
 bibliography entry and any published footnotes on that passage. A
@@ -215,7 +231,9 @@ level, language --- with direct links to the original scans on BDRC
 where the catalogs align. Name search, filters by collection and
 verification status, and a recently-opened list make a
 hundred-thousand-page canon feel close at hand; a prebuilt search
-index answers library-wide queries instantly. Scanned texts can be
+index answers library-wide queries instantly; and a flat list view
+lays the whole shelf out as one sortable catalog table --- now showing
+each work's English title wherever the Project's catalogs record one. Scanned texts can be
 handed to BDRC's free Tibetan OCR application, and anything that comes
 back is treated with the Project's own discipline: OCR output is
 tagged as unverified review material, and opening it runs an immediate
@@ -283,18 +301,43 @@ worked examples.
 
 **8. Verification**
 
-The application carries sixteen automated test suites --- batteries for
+The application carries eighteen automated test suites --- batteries for
 every engine, grammar calibrations against the full corpus,
 exercise-generator checks, and end-to-end smoke tests --- all of which
 must pass before any change ships. Where a result cannot be verified
 mechanically, the interface says so rather than implying certainty.
 
+The script engine has now also been cross-examined by an outside
+witness: an independent open-source converter, run over all 105,634
+dictionary entries. The two agree exactly on 91.4% --- and nearly every
+disagreement is a place where this tool's engine refuses to guess at
+defective input while the other converts it blindly, a direct
+vindication of the never-guess rule. The comparison also surfaced
+thirteen genuine defects in the source data, now reported back to the
+dictionary project for correction.
+
 **9. The road ahead**
 
-- The ACIP Master Catalog: once supplied, every work in the three
-  collections carrying both a Tibetan and an English title feeds the
-  corpus and dictionary, the bibliography composer fills itself in,
-  and the Library shows every text's English title.
+- The Master Catalog harvest is in: 2,955 paired titles now feed the
+  corpus, the bibliography composer fills itself in, and the Library
+  shows English titles. One ruling remains --- whether the catalog's
+  English titles stand as Geshe Michael's own binding equivalents (he
+  directed the cataloging) or as a labeled reference layer.
+
+- The compilation of Geshe Michael's translation standards continues:
+  eleven sourced standards so far, mined from the published volumes'
+  own notes and prefaces --- several already running as software
+  features (the technical-spelling apparatus, italicized name-parts in
+  export) --- with a prepared review sheet so proposed footnotes can be
+  approved in his own sessions, never in the software.
+
+- A completed worldwide survey of open Tibetan software and data now
+  gives the project a vetted, license-checked menu of integrations:
+  next is a proven word-segmentation engine (port under way), then a
+  classical calendar engine for dating colophons. The survey also
+  confirmed that several of this tool's layers --- the verse meter,
+  the grammar rule engine, the Science of the Dots --- exist nowhere
+  else in the field.
 
 - The input-center formatter: converting raw input-center documents to
   finished Tibetan Unicode, once the conversion standards document is
@@ -302,9 +345,6 @@ mechanically, the interface says so rather than implying certainty.
 
 - Embedded Tibetan OCR (BDRC's open models, license permitting), which
   also unlocks word-level scan following.
-
-- The continuing compilation of Geshe Michael's translation standards,
-  each integrated into the software as it is gathered.
 
 - Windows and Linux builds for the input centers.
 
