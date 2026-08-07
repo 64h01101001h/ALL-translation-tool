@@ -55,7 +55,9 @@ display toggles, not through invention.
       than designed); the woodblock page tracks the cursor's @folio
       marker, with prev/next, disk cache (library/scan_cache/), license
       line shown (public domain mark), browser-link fallback when
-      offline. LATER: line-band highlight from ACIP line structure;
+      offline. Line-band highlight SHIPPED same day (exact newline
+      arithmetic on the file's preserved line structure; uniform band
+      placement labeled approximate). LATER:
       word-level after coordinate OCR (user option); Sungbum once a
       BUDA mapping exists (SPARQL title search, user-confirmed).
 - [ ] **Bibliographies: collect + standardize + automate** (Adam

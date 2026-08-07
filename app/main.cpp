@@ -2619,6 +2619,24 @@ private:
                      .arg(QString::fromStdString(q.english)
                               .left(220)
                               .toHtmlEscaped());
+            // published footnotes whose lemma appears in the segment's
+            // published English are offered too (official tier only)
+            int recs = 0;
+            for (int i = 0; i < (int)notesBank_.size() && recs < 3; ++i) {
+                const auto& n = notesBank_[i];
+                if (n.lemma.size() < 5 ||
+                    !QString::fromStdString(q.english)
+                         .contains(n.lemma, Qt::CaseInsensitive))
+                    continue;
+                ++recs;
+                h += QString("<br><a href='note:%1'>[insert footnote: "
+                             "%2]</a> <small style='color:#777'>(%3, "
+                             "n.%4)</small>")
+                         .arg(i)
+                         .arg(n.lemma.toHtmlEscaped())
+                         .arg(n.source.toHtmlEscaped())
+                         .arg(n.note);
+            }
             // a matched work recommends its published bibliography
             // entries: match course id against the bank's ACIP refs
             const QString cq =
