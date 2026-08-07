@@ -96,8 +96,15 @@ display toggles, not through invention.
       gloss miners over the new segments (deliberately not run — v0.27
       restraint), then the next full release package.
 - [ ] An intact copy of the ACIP Release IV manual if available — the
-      "ACIP Tibetan Input Code Standards" chart pages (153–160) are empty
-      image placeholders in the current PDF.
+      current PDF is missing BOTH the "ACIP Tibetan Input Code
+      Standards" chart pages (153–160, empty placeholders) AND the
+      entire printed appendix catalogs (verified 2026-08-07: the
+      APPENDICES title page is followed only by two chart pages, then
+      end of file). Equivalent ask: the Release IV CD-ROM's
+      Acipdocs/Briefcat (WordPerfect) or Rtf abbreviated-catalog files
+      (manual p. 83) — the ingested ACIP Catalog.TXT appears to be the
+      same lineage (same field set), so this is confirmation +
+      possible Sanskrit-title column, not new ground.
 - [ ] **Mixed Nuts style sheets / style guide** — Adam will get it from the
       team's editor and upload it here; then extend the translation-prep
       formatter and Draft workspace to assist/enforce its rules
