@@ -104,7 +104,7 @@ fails its battery does not ship. Current results:
   (ACIP Release IV, pp. 173--178) --- 51 of the standard's 52
   pure-Tibetan chart examples reproduce exactly.
 
-**5. A tour of the eight panes**
+**5. A tour of the nine panes**
 
 **Overlay --- read with the dictionary underneath**
 
@@ -124,6 +124,23 @@ shad punctuation), and a translation-prep formatter that reproduces
 Geshe Michael's demonstrated Mixed Nuts workflow --- flowing the raw
 input, breaking paragraphs at double shads, and moving input-operator
 brackets into folio-tagged notes.
+
+For texts of the Derge or Lhasa Kangyur and the Derge Tengyur, one more
+button appears: *Follow along in scans.* The original woodblock page
+images, served by the Buddhist Digital Resource Center from its public
+archive, display directly beneath the text --- and they turn their own
+pages: as the cursor moves through the input, the scan follows the
+folio marker at the cursor, with the current line marked by a soft
+band (the input centers preserved the carving's own line breaks, so
+the line is known exactly; only the band's position on the image is
+approximate, and it says so). The folio-to-image mapping is BDRC's own
+catalog labeling --- nothing is guessed --- and pages are cached so a
+text revisited costs nothing. Texts outside those catalogs (the
+Sungbum, for instance) are linked by a title search against BDRC's
+database: the query is pre-filled from the text's own opening line,
+the translator confirms the right edition from the candidates --- the
+match is never asserted automatically --- and the confirmed link is
+remembered.
 
 **Analysis --- the eighteen-section passage analysis**
 
@@ -175,6 +192,37 @@ flags broken lines. An optional AI "back-check" produces a coverage diff
 (omissions and additions only --- it is forbidden to retranslate) and is
 banner-labeled as machine output.
 
+The Draft bench also carries the shared apparatus, described in section
+6 below: one search box over every published footnote and bibliography
+entry, one-click reuse with the citation attached, a composer that
+assembles new bibliography entries in the house format exactly, and
+quotation detection --- when the text being translated quotes a work
+that exists in the corpus, the app finds the quotation, shows how the
+master already rendered those lines, and offers the published
+bibliography entry and any published footnotes on that passage. A
+draft can be exported as a rich-text file in which marked name-parts
+become true italics, following the published convention for names
+woven into verse.
+
+**Library --- the translator's own shelf**
+
+The user's text collection lives here: the complete ACIP Kangyur,
+Tengyur, and Sungbum install from the Asian Legacy Library's own
+archive files; personal materials import alongside (Word documents
+convert automatically). A browsable tree decodes every catalog file
+name into its provenance --- collection, text number, verification
+level, language --- with direct links to the original scans on BDRC
+where the catalogs align. Name search, filters by collection and
+verification status, and a recently-opened list make a
+hundred-thousand-page canon feel close at hand; a prebuilt search
+index answers library-wide queries instantly. Scanned texts can be
+handed to BDRC's free Tibetan OCR application, and anything that comes
+back is treated with the Project's own discipline: OCR output is
+tagged as unverified review material, and opening it runs an immediate
+first-pass quality check that counts and marks every syllable failing
+the classical legality rules --- nothing is smoothed, everything is
+flagged.
+
 **Search --- the Gofer grammar, restored**
 
 The classic search grammar lives on: exact phrases, OR, and
@@ -193,7 +241,27 @@ Sanskrit codes, Devanagari, and classical IPA.
 One search across the master dictionary (tier-labeled), the reference
 layers, and English-to-Tibetan reverse lookup.
 
-**6. The grammar layer**
+**6. The shared apparatus --- work performed once is never redone**
+
+Geshe Michael has directed that footnotes created in the released Mixed
+Nuts translations can and should be reused by translators as the same
+topics come up. The application makes that directive a working system,
+under a strict two-tier rule: **the official apparatus contains only
+what has been published and fully approved** --- today, 344 footnotes
+and 138 bibliography entries extracted from the three released volumes
+--- and is compiled into two centralized MAIN documents that regenerate
+automatically whenever a new volume is released. They are never edited
+by hand and never fed from working drafts. Notes a translator proposes
+along the way wait in a clearly-marked pending queue; there is no
+"approve" button in the software, because approval is an act of the
+publishing process, not of the app. Every reuse carries its source
+citation, so borrowed scholarship stays attributed; and because the
+published bibliography entries embed the Project's own catalog
+numbers, a detected quotation, its citation, its bibliography entry,
+and its published footnotes all connect to one another --- and to the
+original woodblock scans --- through one deterministic chain.
+
+**7. The grammar layer**
 
 A deterministic grammar engine, built as rule tables after the framework
 of Wilson's Translating Buddhism from Tibetan, underlies the Trainer and
@@ -213,25 +281,32 @@ of the Dots" --- a designation for every syllable-separating dot (S, C
 with its case number, NOM, SP, V, VB) that reproduces the book's own
 worked examples.
 
-**7. Verification**
+**8. Verification**
 
-The application carries fourteen automated test suites --- batteries for
+The application carries sixteen automated test suites --- batteries for
 every engine, grammar calibrations against the full corpus,
 exercise-generator checks, and end-to-end smoke tests --- all of which
 must pass before any change ships. Where a result cannot be verified
 mechanically, the interface says so rather than implying certainty.
 
-**8. The road ahead**
+**9. The road ahead**
+
+- The ACIP Master Catalog: once supplied, every work in the three
+  collections carrying both a Tibetan and an English title feeds the
+  corpus and dictionary, the bibliography composer fills itself in,
+  and the Library shows every text's English title.
 
 - The input-center formatter: converting raw input-center documents to
   finished Tibetan Unicode, once the conversion standards document is
   supplied.
 
-- Windows and Linux builds for the input centers.
+- Embedded Tibetan OCR (BDRC's open models, license permitting), which
+  also unlocks word-level scan following.
 
-- Deeper training: difficulty-ramped daily practice,
-  translate-then-compare workbenches, and register studies across the
-  corpus.
+- The continuing compilation of Geshe Michael's translation standards,
+  each integrated into the software as it is gathered.
+
+- Windows and Linux builds for the input centers.
 
 *Prepared with reverence for the lineage of translation this tool exists
 to serve.*
