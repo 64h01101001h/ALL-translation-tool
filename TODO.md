@@ -29,11 +29,29 @@ display toggles, not through invention.
       be reused; never redo performed work):
       — DONE: notes bank v1 (344 endnotes extracted from the three
       volumes; Draft-pane search + cited insertion).
-      — REMAINING: add each newly released volume to the bank (rerun
-      tools/extract_mixed_nuts_notes.py); same reuse treatment for
-      bibliography entries (structured extraction of the volumes' B-lists);
+      — DONE 2026-08-06: bibliography bank (138 published entries, 118
+      w/ ACIP catalog numbers); centralized MAIN documents
+      (docs/apparatus/MAIN_FOOTNOTES.md + MAIN_BIBLIOGRAPHY.md, official
+      tier = published + GMR-approved ONLY, regenerated per release via
+      tools/build_main_apparatus.py); pending queue in the Draft pane
+      (Propose footnote — candidates clearly PENDING, never mixed in).
+      — REMAINING: rerun the three apparatus tools per new release;
       confirm STD-008 in GMR's own words for the record; dedupe/merge
       notes covering the same lemma across volumes.
+- [ ] **Quotation detection → auto-recommend citations + bibliography
+      entries** (Adam, 2026-08-06): deterministic — passages that
+      string-match corpus segments (37,807, source-tagged) are attested
+      quotations; the matched work's ACIP number keys the published
+      bibliography entry for one-click insertion. Design:
+      docs/APPARATUS_DESIGN.md §2.
+- [ ] **Scan follow-along** (Adam, 2026-08-06): on opening a recognized
+      text, recommend the BDRC scans; map our @folio markers to IIIF
+      scan images (one-time user calibration of the front-matter offset
+      — no guessing), show the woodblock page as the translator moves
+      through the text; line-band highlight from ACIP line structure;
+      word-level only after coordinate OCR (optional). OCR of downloaded
+      scans stays a user option, not a default. Design:
+      docs/APPARATUS_DESIGN.md §3.
 - [ ] **Bibliographies: collect + standardize + automate** (Adam
       2026-08-06): bring in already-composed bibliography collections
       (first source available now — the three volumes' own bibliographies,

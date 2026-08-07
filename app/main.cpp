@@ -1874,10 +1874,20 @@ public:
         draftCol->addWidget(checkBtn);
         notesSearch_ = new QLineEdit;
         notesSearch_->setPlaceholderText(
-            "search the shared notes bank (GMR: reuse released footnotes)…");
+            "search the shared apparatus: footnotes + bibliography "
+            "(GMR: reuse released work)…");
         draftCol->addWidget(notesSearch_);
         QObject::connect(notesSearch_, &QLineEdit::returnPressed,
                          [this] { searchNotesBank(); });
+        auto* proposeBtn =
+            new QPushButton("Propose footnote (pending GMR approval)");
+        proposeBtn->setToolTip(
+            "Saves the selected draft text as a CANDIDATE note. Candidates "
+            "stay in the pending queue — the official MAIN apparatus only "
+            "ever contains published, GMR-approved notes.");
+        draftCol->addWidget(proposeBtn);
+        QObject::connect(proposeBtn, &QPushButton::clicked,
+                         [this] { proposeNote(); });
         aiBtn_ = new QPushButton("AI back-check (API, labeled AI)");
         if (qgetenv("ANTHROPIC_API_KEY").isEmpty()) {
             aiBtn_->setEnabled(false);
@@ -1892,6 +1902,10 @@ public:
                              const QString s = u.toString();
                              if (s.startsWith("note:"))
                                  insertNote(s.mid(5).toInt());
+                             else if (s.startsWith("bib:"))
+                                 insertBibEntry(s.mid(4).toInt());
+                             else if (s.startsWith("cand:"))
+                                 insertCandidate(s.mid(5).toInt());
                          });
         bl->addWidget(report_, 1);
         split->addWidget(bottom);
@@ -2126,37 +2140,56 @@ private:
     void loadNotesBank() {
         if (notesLoaded_) return;
         notesLoaded_ = true;
-        QFile f(QCoreApplication::applicationDirPath() +
-                "/../../../../../data/extracted/mixed_nuts_notes.json");
-        if (!f.exists())
-            f.setFileName(QDir::currentPath() +
-                          "/data/extracted/mixed_nuts_notes.json");
-        if (!f.open(QIODevice::ReadOnly)) return;
-        const auto arr =
-            QJsonDocument::fromJson(f.readAll()).array();
-        for (const auto& v : arr) {
-            const auto o = v.toObject();
-            notesBank_.push_back({o["source"].toString(),
-                                  o["note"].toInt(),
-                                  o["lemma"].toString(),
-                                  o["text"].toString()});
+        QFile f(dataFile("extracted/mixed_nuts_notes.json"));
+        if (f.open(QIODevice::ReadOnly)) {
+            for (const auto& v :
+                 QJsonDocument::fromJson(f.readAll()).array()) {
+                const auto o = v.toObject();
+                notesBank_.push_back({o["source"].toString(),
+                                      o["note"].toInt(),
+                                      o["lemma"].toString(),
+                                      o["text"].toString()});
+            }
         }
+        QFile fb(dataFile("extracted/mixed_nuts_bibliography.json"));
+        if (fb.open(QIODevice::ReadOnly)) {
+            for (const auto& v :
+                 QJsonDocument::fromJson(fb.readAll()).array()) {
+                const auto o = v.toObject();
+                QStringList refs;
+                for (const auto& r : o["acip_refs"].toArray())
+                    refs << r.toString();
+                bibBank_.push_back({o["id"].toString(),
+                                    o["source"].toString(),
+                                    o["text"].toString(),
+                                    refs.join(", ")});
+            }
+        }
+        loadCandidates();
+    }
+
+    QString dataFile(const char* name) const {
+        QString p = QCoreApplication::applicationDirPath() +
+                    "/../../../../../data/" + name;
+        if (QFile::exists(p)) return p;
+        return QDir::currentPath() + "/data/" + name;
     }
 
     void searchNotesBank() {
         loadNotesBank();
         const QString q = notesSearch_->text().trimmed();
         if (q.isEmpty()) return;
-        if (notesBank_.empty()) {
-            report_->setHtml("<i>notes bank not found — run "
-                             "tools/extract_mixed_nuts_notes.py</i>");
+        if (notesBank_.empty() && bibBank_.empty()) {
+            report_->setHtml("<i>apparatus banks not found — run "
+                             "tools/extract_mixed_nuts_notes.py and "
+                             "tools/extract_mixed_nuts_bibliography.py</i>");
             return;
         }
-        QString h = "<b>Shared notes bank</b> <small>(GMR: released "
-                    "footnotes can and should be reused — insertions carry "
-                    "their citation)</small><br>";
+        QString h = "<b>Shared apparatus</b> <small>(official tier: "
+                    "published + GMR-approved only; insertions carry their "
+                    "citation)</small><br>";
         int found = 0;
-        for (int i = 0; i < (int)notesBank_.size() && found < 12; ++i) {
+        for (int i = 0; i < (int)notesBank_.size() && found < 10; ++i) {
             const auto& n = notesBank_[i];
             if (!n.lemma.contains(q, Qt::CaseInsensitive) &&
                 !n.text.contains(q, Qt::CaseInsensitive))
@@ -2171,8 +2204,92 @@ private:
                      .arg(n.note)
                      .arg(n.text.left(220).toHtmlEscaped());
         }
-        if (!found) h += "<i>no matching notes</i>";
+        int bibFound = 0;
+        for (int i = 0; i < (int)bibBank_.size() && bibFound < 8; ++i) {
+            const auto& b = bibBank_[i];
+            if (!b.text.contains(q, Qt::CaseInsensitive) &&
+                !b.acipRefs.contains(q, Qt::CaseInsensitive))
+                continue;
+            ++bibFound;
+            h += QString("<div style='margin:6px 0'><a href='bib:%1'>"
+                         "[insert entry]</a> <b>bibliography %2</b> "
+                         "<small style='color:#777'>(%3%4)</small><br>"
+                         "<small>%5</small></div>")
+                     .arg(i)
+                     .arg(b.id.toHtmlEscaped())
+                     .arg(b.source.toHtmlEscaped())
+                     .arg(b.acipRefs.isEmpty()
+                              ? QString()
+                              : " · ACIP " + b.acipRefs.toHtmlEscaped())
+                     .arg(b.text.left(220).toHtmlEscaped());
+        }
+        int candFound = 0;
+        for (int i = 0; i < (int)candBank_.size() && candFound < 5; ++i) {
+            const auto& n = candBank_[i];
+            if (!n.lemma.contains(q, Qt::CaseInsensitive) &&
+                !n.text.contains(q, Qt::CaseInsensitive))
+                continue;
+            ++candFound;
+            h += QString("<div style='margin:6px 0;border-left:3px solid "
+                         "#c80;padding-left:6px'><a href='cand:%1'>"
+                         "[insert]</a> <b>%2</b> <b style='color:#c80'>"
+                         "⚠ PENDING — not GMR-approved</b><br>"
+                         "<small>%3</small></div>")
+                     .arg(i)
+                     .arg(n.lemma.toHtmlEscaped())
+                     .arg(n.text.left(220).toHtmlEscaped());
+        }
+        if (!found && !bibFound && !candFound)
+            h += "<i>no matching apparatus</i>";
         report_->setHtml(h);
+    }
+
+    void loadCandidates() {
+        candBank_.clear();
+        QFile f(dataFile("candidate_notes.json"));
+        if (!f.open(QIODevice::ReadOnly)) return;
+        for (const auto& v : QJsonDocument::fromJson(f.readAll()).array()) {
+            const auto o = v.toObject();
+            candBank_.push_back({o["proposed"].toString(), 0,
+                                 o["lemma"].toString(),
+                                 o["text"].toString()});
+        }
+    }
+
+    void proposeNote() {
+        const QString sel = draft_->textCursor().selectedText().trimmed();
+        if (sel.isEmpty()) {
+            report_->setHtml("<i>select the note text in the draft first "
+                             "(lemma: text…)</i>");
+            return;
+        }
+        QString lemma = sel.section(':', 0, 0).trimmed();
+        QString text = sel.section(':', 1).trimmed();
+        if (text.isEmpty()) { lemma = sel.left(40); text = sel; }
+        QFile f(dataFile("candidate_notes.json"));
+        QJsonArray arr;
+        if (f.open(QIODevice::ReadOnly)) {
+            arr = QJsonDocument::fromJson(f.readAll()).array();
+            f.close();
+        }
+        QJsonObject o;
+        o["lemma"] = lemma;
+        o["text"] = text;
+        o["proposed"] = QDateTime::currentDateTime().toString(Qt::ISODate);
+        o["status"] = "pending GMR approval";
+        arr.append(o);
+        if (f.open(QIODevice::WriteOnly)) {
+            f.write(QJsonDocument(arr).toJson());
+            f.close();
+        }
+        loadCandidates();
+        report_->setHtml(
+            QString("<b>Candidate saved</b> — <b>%1</b> is now in the "
+                    "pending queue (%2 candidates). It stays PENDING until "
+                    "published in a released volume and 100%% approved by "
+                    "GMR; only then does it enter the MAIN apparatus.")
+                .arg(lemma.toHtmlEscaped())
+                .arg(candBank_.size()));
     }
 
     void insertNote(int ix) {
@@ -2181,6 +2298,24 @@ private:
         draft_->textCursor().insertText(
             "[NOTE: " + n.lemma + ": " + n.text + " — reused from " +
             n.source + ", n." + QString::number(n.note) + "]");
+        draft_->setFocus();
+    }
+
+    void insertBibEntry(int ix) {
+        if (ix < 0 || ix >= (int)bibBank_.size()) return;
+        const auto& b = bibBank_[ix];
+        draft_->textCursor().insertText(
+            "[BIBLIOGRAPHY: " + b.text + " — entry " + b.id +
+            " as published in " + b.source + "]");
+        draft_->setFocus();
+    }
+
+    void insertCandidate(int ix) {
+        if (ix < 0 || ix >= (int)candBank_.size()) return;
+        const auto& n = candBank_[ix];
+        draft_->textCursor().insertText(
+            "[NOTE — PENDING, not GMR-approved: " + n.lemma + ": " +
+            n.text + "]");
         draft_->setFocus();
     }
 
@@ -2320,7 +2455,15 @@ private:
         QString lemma;
         QString text;
     };
+    struct BibEntry {
+        QString id;
+        QString source;
+        QString text;
+        QString acipRefs;
+    };
     std::vector<BankNote> notesBank_;
+    std::vector<BibEntry> bibBank_;
+    std::vector<BankNote> candBank_;   // pending tier — never official
     bool notesLoaded_ = false;
     QLineEdit* notesSearch_ = nullptr;
     QPushButton* aiBtn_ = nullptr;
