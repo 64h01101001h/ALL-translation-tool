@@ -170,8 +170,41 @@ display toggles, not through invention.
 - [ ] **84000 TM: link-out only** — CC BY-NC-ND forbids ingestion
       without permission; concordance "view on 84000.co" links are safe.
       Consider writing 84000 for permission.
+- [ ] **84000 glossary + translation memory** — CC BY 4.0 VERIFIED
+      (glossary/TM/metadata; the translations are BY-NC-ND, different
+      asset). Import as a provenance-tagged reference wave: glossary →
+      Lookup layer, TM → concordance comparanda (never HGM tier).
+      Biggest license-clean data win of the whole survey. ⚠ Resolve
+      first: the TM GitHub README says BY-NC-ND 3.0 while 84000's
+      terms-of-use says CC BY 4.0 — confirm from the files/84000
+      before ingesting.
+- [ ] **Tibetan calendar engine** — port Henning's MIT C code
+      (kalacakra.org) / Janson's mathematics into allcore + battery vs
+      the online converters → colophon-date helper (rabjung +
+      element-animal year → Gregorian, Phugpa & Tsurphu). Cheap, fully
+      deterministic, new capability.
+- [ ] **rKTs abbreviations DB (6,000+ bskungs yig) + canonical IDs** —
+      deterministic abbreviation expansion for input-center texts;
+      verify the data dump's license first (unclear).
+- [ ] **THL kmaps place/subject lookup** — user-initiated JSON lookup
+      from the Overlay for place/person names (21k+ gazetteer; no-auth
+      API; bundling license unclear so lookup-only).
+- [ ] **Mahavyutpatti TEI (DILA)** — offline Skt⇄Tib table beside the
+      Sanskrit converter.
+- [ ] **Bundle fonts** — Noto Serif Tibetan (OFL) + BabelStone Tibetan
+      (free); run the Sanskrit-stack battery against both.
+- [ ] **Lotsawa House** — CC BY-NC: write them for bulk/permission;
+      prayer-register corpus for register warnings.
+- [ ] Link-out-only tier: Bibliotheca Polyglotta, Adarsha, WTS Munich,
+      Dharmamitra (optional labeled AI aid at most), RY/Waldo/Valby
+      (permission via Tsadra first).
 - [ ] Red-flag list (no license / restrictive): see survey doc — never
       ship any of it without resolution.
+- [ ] Survey's negative findings = our opportunities: no Tibetan
+      verse-meter tool, no honorific-register data (beyond Monlam
+      markings), no sum-cu-pa rule engines exist anywhere — our verse
+      pane + Wilson tables lead the field; a zhe-sa honorific layer
+      from Monlam data would be another first.
 
 ## Build queue
 

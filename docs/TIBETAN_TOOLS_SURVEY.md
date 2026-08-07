@@ -1,8 +1,8 @@
 # Tibetan tools survey — integration candidates
-*(Part 1: GitHub ecosystem, surveyed 2026-08-07 by background agent at
-Adam's request. Part 2 — the wider internet — appended when its survey
-returns. Licenses were verified via GitHub API/README where possible;
-"license unclear" is stated, never guessed.)*
+*(Part 1: GitHub ecosystem; Part 2: the wider internet — both surveyed
+2026-08-07 by background agents at Adam's request. Licenses were
+verified at the source where possible; "license unclear" is stated,
+never guessed.)*
 
 ## Tier 1 — high value
 
@@ -94,3 +94,100 @@ iamironrabbit Monlam dump (NOASSERTION).
 3. C++ Botok port for real word segmentation in the Overlay.
 4. diff-match-patch C++/Qt + antx logic for the proofreading pane.
 5. Test ICU/CLDR Tibetan collation from Qt.
+
+
+---
+
+# Part 2 — beyond GitHub (web services, academic projects, data)
+
+## Tier 1 — high value
+
+1. **84000 glossary + translation memory** (84000.co · scholar.84000.co)
+   — trilingual glossary of all published sutra translations + 
+   sentence-aligned Ti–En TMX ("-v4" files manually corrected to
+   99–100%). **License VERIFIED: glossary, metadata, and translation
+   memory are CC BY 4.0** (the translations themselves are BY-NC-ND —
+   different asset). Import once, fully offline, provenance-tagged as
+   reference comparanda (never HGM equivalents — rule 1). The
+   best-licensed large aligned Ti–En resource in existence.
+   ⚠ DISCREPANCY to resolve before ingesting: the GitHub TM repo's
+   README (part 1, item 14) says CC BY-NC-ND 3.0, while 84000's
+   current terms-of-use page (verified here) says CC BY 4.0 for
+   glossary/TM. The terms page is likely newer, but confirm against
+   the downloaded files' own license statements — or simply ask
+   84000 — before any ingestion.
+2. **Tibetan calendar mathematics** — Henning's kalacakra.org
+   open-source calendar programs (**MIT-licensed C**, verified) +
+   Janson's "Tibetan Calendar Mathematics" paper; online converters
+   (THL, Lotsawa House) usable as validation oracles. Port to a C++
+   allcore engine + battery → colophon-date helper (rabjung cycle +
+   element-animal year → Gregorian ranges, Phugpa & Tsurphu). Pure
+   arithmetic, fully deterministic, fills a real gap.
+3. **rKTs — Resources for Kanjur & Tanjur Studies** (rkts.org, Vienna;
+   site unreachable during survey, data dump exists on GitHub
+   brunogml/rKTs, license unclear — verify) — catalogues of 100+
+   Kanjurs/Tanjurs, canonical text IDs cross-referenced to BDRC and
+   84000, and a **6,000+ entry Tibetan abbreviations (bskungs yig)
+   database** — natural deterministic expansion feature for
+   input-center texts.
+4. **THL kmaps gazetteers** (places.kmaps.virginia.edu, 21,000+ places;
+   subjects too) — multilingual place records (Tibetan, Wylie, THL
+   phonetics, Chinese, coordinates) with a no-auth JSON API. License
+   for bundling unclear → user-initiated online lookup ("look up this
+   place name") fits our policy exactly.
+5. **Fonts (verified free)** — bundle **Noto Serif Tibetan** (OFL) +
+   **BabelStone Tibetan** (free; widest Sanskrit-stack coverage); test
+   the Sanskrit-stack battery output in both. Jomolhari (OFL) has
+   known CoreText quirks — Qt's bundled HarfBuzz sidesteps them
+   (validates our Qt choice). Monlam Bodyig license unclear — skip.
+
+## Tier 2 — medium
+
+6. **Mahavyutpatti via DILA glossaries** (glossaries.dila.edu.tw) —
+   9,565 Skt-Tib-Eng-Chi entries, **TEI XML downloadable**; the
+   canonical companion to our Sanskrit converter → offline Skt⇄Tib
+   table in Lookup/Convert. Per-glossary rights vary (Hopkins there is
+   copyrighted; Mahavyutpatti itself is a 9th-century text).
+7. **Lotsawa House** — 6,000+ practice-register translations, texts
+   **CC BY-NC 4.0 (verified), metadata CC0**. Exactly the liturgical
+   register our bsod-nams warnings care about. NC → ask them for bulk
+   access/permission (they cooperate; already feed OpenPecha).
+8. **SOAS TIDC POS lexicon** (Zenodo 574876) — hand-tagged Classical
+   Tibetan POS lexicon; check the record's CC license; deterministic
+   parser enrichment.
+9. **Dharmamitra / DharmaNexus** (Berkeley/Tsadra) — strongest ML
+   option in the field (MT, semantic search, intertextuality); service
+   only → at most a clearly-labeled optional AI aid, like our
+   Analysis pane.
+10. **Bibliotheca Polyglotta** (Oslo) — uniquely fine Skt–Tib–En
+    alignment; no export, license unclear → link-out only.
+11. **WTS Munich** (Bavarian Academy) — most rigorous scholarly
+    dictionary, open online, letters A–N, German; link-out only.
+
+## Tier 3 — low / situational
+
+Adarsha (no API, redundant w/ BDRC — link-out) · RY wiki / Ives Waldo /
+Jim Valby (content-rich, license-poor: permission via Tsadra before
+shipping ANY of it) · Nitartha/Padmakara/FPMT (nothing importable) ·
+GRETIL/SARIT (Sanskrit side; only if Skt–Tib display lands) · MonlamAI
+services (no API docs/terms) · external input methods (macOS Wylie
+keyboard partly broken; our in-app conversion is strictly better — don't
+bundle IMEs).
+
+## Notable negative findings (opportunities, not integrations)
+- **No computational Tibetan verse-meter tool exists anywhere** — our
+  verse pane is already novel; keep investing there.
+- **No machine-readable honorific-register source exists** except
+  honorific markings inside Monlam entries (Apache-2.0 lexicon data) —
+  a zhe-sa layer would be another first.
+- **Sum cu pa / rtags 'jug exist only as texts, not data** — our
+  Wilson rule tables are ahead of the field.
+
+## Part-2 shortlist (value × license safety × fit)
+1. 84000 glossary+TM (CC BY, verified) — import as new source wave
+2. Henning calendar C code (MIT, verified) — port + battery
+3. Monlam lexica (Apache-2.0) — segmentation/spellcheck/honorifics
+4. rKTs abbreviations + catalog IDs — after license verification
+5. THL kmaps — on-demand lookup integration
+6. Mahavyutpatti TEI — Sanskrit pane table
+7. Fonts: Noto Serif Tibetan + BabelStone — bundle now
