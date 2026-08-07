@@ -2914,6 +2914,19 @@ private:
         form->addRow("Tibetan title", tt);
         form->addRow("ACIP number", ac);
         form->addRow("Folios", fo);
+        auto* fillBtn = new QPushButton(
+            "Auto-fill from catalog (by ACIP number — review result)");
+        fillBtn->setToolTip(
+            "Fills Tibetan title, author, dates, and a draft English "
+            "title from the ACIP catalog (v29 title wave). Wylie comes "
+            "from the canonical converter in plain lowercase — house "
+            "technical-spelling hyphens and capitals are yours to "
+            "apply.");
+        form->addRow(fillBtn);
+        QObject::connect(fillBtn, &QPushButton::clicked,
+                         [this, ep, au, dt, et, tt, ac] {
+                             autoFillBib(ep, au, dt, et, tt, ac);
+                         });
         auto* hyBtn = new QPushButton(
             "Pair-hyphenate author (STD-002 helper — review result)");
         form->addRow(hyBtn);
@@ -2970,6 +2983,40 @@ private:
             "[BIBLIOGRAPHY — NEW ENTRY, house format (STD-007), "
             "pending publication: " + entry + "]");
         draft_->setFocus();
+    }
+
+    void loadCatalogWorks() {
+        if (worksLoaded_) return;
+        worksLoaded_ = true;
+        QFile f(dataFile("extracted/catalog_works.json"));
+        if (!f.open(QIODevice::ReadOnly)) return;
+        worksDoc_ = QJsonDocument::fromJson(f.readAll()).object();
+    }
+
+    void autoFillBib(QLineEdit* ep, QLineEdit* au, QLineEdit* dt,
+                     QLineEdit* et, QLineEdit* tt, QLineEdit* ac) {
+        loadCatalogWorks();
+        QRegularExpression re("^([A-Za-z]+)0*(\\d+)");
+        const auto m = re.match(ac->text().trimmed());
+        if (!m.hasMatch()) return;
+        const auto w = worksDoc_[m.captured(1).toUpper() + m.captured(2)]
+                           .toObject();
+        if (w.isEmpty()) {
+            ac->setToolTip("no catalog record for this number");
+            return;
+        }
+        (void)ep;
+        auto toWylie = [](const QJsonValue& v) {
+            return QString::fromStdString(
+                       allcore::acipToEwts(v.toString().toStdString()))
+                .trimmed();
+        };
+        if (au->text().isEmpty() && !w["author"].toString().isEmpty())
+            au->setText(toWylie(w["author"]));
+        if (dt->text().isEmpty()) dt->setText(w["dates"].toString());
+        if (et->text().isEmpty()) et->setText(w["eng"].toString());
+        if (tt->text().isEmpty() && !w["tib"].toString().isEmpty())
+            tt->setText(toWylie(w["tib"]));
     }
 
     void insertBibEntry(int ix) {
@@ -3135,6 +3182,8 @@ private:
     std::vector<BankNote> notesBank_;
     std::vector<BibEntry> bibBank_;
     std::vector<BankNote> candBank_;   // pending tier — never official
+    QJsonObject worksDoc_;
+    bool worksLoaded_ = false;
     bool notesLoaded_ = false;
     QLineEdit* notesSearch_ = nullptr;
     QPushButton* aiBtn_ = nullptr;
