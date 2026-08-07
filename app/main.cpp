@@ -3218,10 +3218,10 @@ public:
         auto* stack = new QStackedWidget;
         stack->addWidget(tree_);
         list_ = new QTableWidget;
-        list_->setColumnCount(6);
+        list_->setColumnCount(7);
         list_->setHorizontalHeaderLabels(
-            {"File", "Collection", "No.", "Verification", "Language",
-             "KB"});
+            {"File", "Collection", "No.", "English title (catalog)",
+             "Verification", "Language", "KB"});
         list_->setEditTriggers(QAbstractItemView::NoEditTriggers);
         list_->setSelectionBehavior(QAbstractItemView::SelectRows);
         list_->setSortingEnabled(true);
@@ -3286,6 +3286,25 @@ public:
     }
 
 private:
+    // catalog-number → published catalog English title (v29 title wave)
+    QString englishTitle(const QString& fileName) {
+        if (!titlesLoaded_) {
+            titlesLoaded_ = true;
+            QFile f(QFileInfo(libRoot_).path() +
+                    "/data/extracted/catalog_titles.json");
+            if (f.open(QIODevice::ReadOnly)) {
+                const auto o =
+                    QJsonDocument::fromJson(f.readAll()).object();
+                for (auto it = o.begin(); it != o.end(); ++it)
+                    titles_[it.key()] = it.value().toString();
+            }
+        }
+        QRegularExpression re("^([A-Za-z]+)0*(\\d+)");
+        const auto m = re.match(fileName);
+        if (!m.hasMatch()) return QString();
+        return titles_.value(m.captured(1).toUpper() + m.captured(2));
+    }
+
     void fillList() {
         list_->setSortingEnabled(false);
         list_->setRowCount(0);
@@ -3317,14 +3336,17 @@ private:
                              : -1);
             list_->setItem(r, 2, num);
             list_->setItem(r, 3,
+                           new QTableWidgetItem(englishTitle(
+                               fi.fileName())));
+            list_->setItem(r, 4,
                            new QTableWidgetItem(QString::fromStdString(
                                a.status)));
-            list_->setItem(r, 4,
+            list_->setItem(r, 5,
                            new QTableWidgetItem(QString::fromStdString(
                                a.language)));
             auto* kb = new QTableWidgetItem;
             kb->setData(Qt::EditRole, (int)(fi.size() / 1024));
-            list_->setItem(r, 5, kb);
+            list_->setItem(r, 6, kb);
         }
         list_->setSortingEnabled(true);
         list_->resizeColumnsToContents();
@@ -3400,6 +3422,11 @@ private:
                  "unverified review material; opening it runs the "
                  "syllable-legality first-pass QC</div>";
         auto acip = allcore::decodeAcipFilename(path.toStdString());
+        const QString etitle = englishTitle(fi.fileName());
+        if (!etitle.isEmpty())
+            h += "<div style='margin-top:2px'><i>" + etitle.toHtmlEscaped() +
+                 "</i> <small style='color:#777'>(catalog title)</small>"
+                 "</div>";
         if (acip.recognized) {
             h += "<div style='margin-top:4px;color:#4A3FBF'>" +
                  QString::fromStdString(acip.collection).toHtmlEscaped() +
@@ -3598,6 +3625,8 @@ private:
     QTreeView* tree_ = nullptr;
     QTableWidget* list_ = nullptr;
     QStackedWidget* stack_ = nullptr;
+    QHash<QString, QString> titles_;
+    bool titlesLoaded_ = false;
     QTextBrowser* info_ = nullptr;
     QLineEdit* search_ = nullptr;
     QComboBox* colFilter_ = nullptr;

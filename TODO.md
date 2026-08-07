@@ -14,16 +14,20 @@ display toggles, not through invention.
 
 ## Waiting on Adam (prompt him when the task starts)
 
-- [ ] **Collection title pairs → corpus/dictionary** (Adam 2026-08-06;
-      docs/TITLES_INGEST_DESIGN.md): isolate every Kangyur/Tengyur/Sungbum
-      work with BOTH Tibetan and English titles and ingest the pairs.
-      Best source = the ACIP Master Catalog spreadsheet — **Adam to upload
-      it** (or install the collection ZIPs for inventory). One decision
-      needed from Adam/data project first: are catalog English titles
-      binding-tier (HGM's English) or a labeled reference layer? Corpus-
-      side ingestion is safe either way (course TITLES, full provenance).
-      Bonus after ingest: the Library shows English titles for installed
-      files by catalog number.
+- [~] **Collection title pairs → corpus/dictionary** (Adam 2026-08-06;
+      docs/TITLES_INGEST_DESIGN.md) — CORPUS SIDE DONE 2026-08-07: the
+      catalogs were already on disk in the Thursday meeting folder
+      (ACIP Catalog.TXT 2,587 pairs · 00. KANGYUR CATALOG.xlsx 184 ·
+      New Master Catalog 5 18 26.xlsx Sheet2 130). v0.29 corpus wave:
+      +2,955 title segments (TITLK 349 / TITLT 359 / TITLS 2,091 /
+      TITLR 156), corpus 37,807 → 40,762, 802 skips logged, full
+      provenance (catalog_no + catalog_source); HANDOFF.md wave note;
+      app spine rebuilt, 16/16. Library now shows catalog English
+      titles (info panel + list-view column, 1,899 numbers joined).
+      REMAINING — **the tier ruling is Adam's**: are catalog English
+      titles binding HGM English (→ dictionary-side attestation) or a
+      labeled reference layer? Also: confirm the Thursday-folder
+      catalogs are the current/authoritative versions.
 - [ ] **Footnote & bibliography reuse program** (GMR directive via Adam,
       2026-08-06 — STD-008: released Mixed Nuts footnotes can and should
       be reused; never redo performed work):
