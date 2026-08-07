@@ -23,6 +23,7 @@ add_library(allcore STATIC
   src/quotation.cpp
   src/verbstems.cpp
   src/lexicon.cpp
+  src/tibcal.cpp
   src/libindex.cpp
   src/gofer.cpp
   src/acip_ewts.cpp
@@ -121,6 +122,10 @@ add_test(NAME lexicon_smoke
          COMMAND lexicon_smoke
                  ${CMAKE_SOURCE_DIR}/data/extracted/monlam_lexicon_1.txt
                  ${CMAKE_SOURCE_DIR}/data/extracted/monlam_lexicon_2.txt)
+
+add_executable(tibcal_smoke tests/tibcal_smoke.cpp)
+target_link_libraries(tibcal_smoke PRIVATE allcore)
+add_test(NAME tibcal_smoke COMMAND tibcal_smoke)
 
 add_executable(tibexport_smoke tests/tibexport_smoke.cpp)
 target_link_libraries(tibexport_smoke PRIVATE allcore)
