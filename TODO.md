@@ -176,7 +176,10 @@ display toggles, not through invention.
       editions without ID-encoded Tohoku (KX, TS), title-based candidate
       search for Sungbum works (fuzzy — user-confirmed, never auto-
       asserted), in-app IIIF scan viewer beside the e-text, and the OCR
-      pipeline consuming the same IIIF images.
+      pipeline consuming the same IIIF images. NOTE (Adam 2026-08-06):
+      BDRC is Wylie/EWTS (bo-x-ewts); our names are ACIP — every
+      name-based BDRC query converts through acipToEwts first (exact,
+      battery-proven); never send raw ACIP to a BDRC endpoint.
 - [ ] Library deepening, remaining: list-view mode (low priority).
 
 ## Done highlights (details in README / memory)

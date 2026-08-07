@@ -23,6 +23,20 @@ Tohoku numbers on its work records. So the chain is:
 - **library.bdrc.io** — the human-facing library; `show/bdr:<ID>` pages
   are the right "View on BDRC" browser target.
 
+## Transliteration boundary (Adam's note, 2026-08-06)
+**BDRC works in Wylie (EWTS — their language tag is `bo-x-ewts`); our file
+names and texts are ACIP.** Every name-based interaction with BDRC must
+therefore cross the boundary through the battery-proven converter:
+
+    our ACIP  →  allcore::acipToEwts  →  EWTS  →  BUDA query (bo-x-ewts)
+
+This is already exact machinery (100.000% verified on all 37,807 corpus
+conversions), so the cross-reference costs nothing — the rule is simply:
+NEVER send raw ACIP to a BDRC endpoint; convert first. (The Tohoku-number
+links shipped in stage 1 sidestep this entirely — numbers need no
+transliteration — but the Sungbum title search and any SPARQL name lookup
+depend on it.)
+
 ## Build plan
 1. **Probe (first step, small):** live-test the templated queries /
    SPARQL for "work by Tohoku number" against a handful of knowns
