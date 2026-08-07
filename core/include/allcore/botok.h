@@ -18,6 +18,9 @@
 #pragma once
 
 #include <functional>
+#include <map>
+#include <memory>
+#include <optional>
 #include <string>
 #include <unordered_map>
 #include <vector>
@@ -170,6 +173,168 @@ private:
 // ChunkTokenizer: make_chunks + readable — the coarse syllable/punct pass.
 std::vector<std::pair<std::string, std::string>> chunkTokenize(
     const CharTable& table, const std::string& utf8Text);
+
+// Human-readable CharMark enum name ("CONS", "TSEK", ...).
+const char* charMarkName(int mark);
+
+// ======================= increment 2: trie + tokenizer =======================
+// Port sources: botok/tries/basictrie.py, botok/tries/trie.py (in-memory
+// logic only — no pickling/dialect packs), botok/textunits/sylcomponents.py
+// + bosyl.py (SylComponents.json banked at data/botok/),
+// botok/third_party/has_skrt_syl.py (char classes expanded to codepoint
+// ranges via sre_parse — see botok_trie.cpp), botok/tokenizers/token.py +
+// tokenize.py.
+
+// one sense entry (a Python dict with these possible keys; absent = nullopt)
+struct Sense {
+    std::optional<std::string> pos, lemma, sense;
+    std::optional<long> freq;
+    std::optional<bool> affixed;
+};
+
+struct Affixation {
+    int len = 0;
+    std::string type;
+    bool aa = false;
+};
+
+// a trie node's user data (the Python node.data dict, minus the '_' slot)
+struct NodeData {
+    bool hasSenses = false;
+    std::vector<Sense> senses;
+    bool hasAffixation = false;
+    Affixation affixation;
+    bool skrt = false;       // present-and-true only when set
+    bool hasFormFreq = false;
+    long formFreq = 0;
+};
+
+class TrieNode {
+public:
+    bool leaf = false;
+    NodeData data;
+    std::map<std::string, std::unique_ptr<TrieNode>> children;  // syl -> node
+    bool canWalk() const { return !children.empty(); }
+    bool isMatch() const { return leaf; }
+};
+
+// data patch for BasicTrie::add (Python's dict.update semantics)
+struct DataPatch {
+    std::optional<Affixation> affixation;
+    std::optional<bool> skrt;
+};
+
+class BasicTrie {
+public:
+    BasicTrie() : head_(new TrieNode()) {}
+    TrieNode* head() { return head_.get(); }
+
+    // word = list of cleaned syllables (UTF-8, no tsek)
+    void add(const std::vector<std::string>& word, const DataPatch* data = nullptr);
+    TrieNode* walk(const std::string& syl, TrieNode* current) const;
+    // add_data with a sense dict / a form-frequency int
+    bool addData(const std::vector<std::string>& word, const Sense& sense);
+    bool addData(const std::vector<std::string>& word, long formFreq);
+    bool deactivate(const std::vector<std::string>& word, bool rev = false);
+
+    static bool isDiffMeaning(const Sense& m1, const Sense& m2);
+    static bool addMeaning(std::vector<Sense>& meanings, const Sense& meaning);
+
+private:
+    std::unique_ptr<TrieNode> head_;
+};
+
+// SylComponents (syllable anatomy from SylComponents.json) + BoSyl affixes.
+class BoSyl {
+public:
+    // dir must contain SylComponents.json
+    explicit BoSyl(const std::string& dir);
+
+    struct Parts {
+        enum Kind { NotWellFormed, Single, Multiple } kind = NotWellFormed;
+        std::u32string root, suffix;  // when Single
+    };
+    Parts getParts(const std::u32string& syl) const;
+    // empty = None (no unambiguous mingzhi)
+    std::u32string getMingzhi(const std::u32string& syl) const;
+    // "dadrag", "thame", the syllable itself, or "" (= Python None)
+    std::u32string getInfo(const std::u32string& syl) const;
+    bool isThame(const std::u32string& syl) const;
+    bool isAffixable(const std::u32string& syl) const;
+    // affixed forms in botok's fixed order; empty = not affixable
+    std::vector<std::pair<std::u32string, Affixation>> getAllAffixed(
+        const std::u32string& syl) const;
+
+private:
+    std::vector<std::u32string> dadrag_, suffixes_, csuffixes_, exceptions_;
+    std::map<std::u32string, std::string> roots_;        // root -> class
+    std::map<std::u32string, std::u32string> mingzhis_;  // root -> mingzhi
+    std::vector<std::u32string> ambiguous_;              // list-valued: mingzhi-less
+};
+
+// has_skrt_syl port (third_party): any syllable matching the Sanskrit regexes
+bool hasSkrtSyl(const std::u32string& word);
+
+// Trie: BasicTrie + affix inflection (in-memory; no dialect packs/pickles)
+class Trie : public BasicTrie {
+public:
+    Trie(const CharTable& table, const BoSyl& bosyl)
+        : table_(table), bosyl_(bosyl) {}
+
+    void inflectNModifyTrie(const std::string& word, bool deactivate = false,
+                            bool skrt = false);
+    // line = "form\tpos\tlemma\tsense\tfreq" (or comma-separated / bare form)
+    void inflectNAddData(const std::string& line);
+    void addNonInflectible(const std::string& word);
+
+private:
+    struct Inflected {
+        std::vector<std::string> syls;  // UTF-8 cleaned syllables
+        std::optional<Affixation> affixation;
+    };
+    const std::vector<Inflected>* getInflected(const std::string& word);
+
+    const CharTable& table_;
+    const BoSyl& bosyl_;
+    std::map<std::string, std::vector<Inflected>> tmpInflected_;
+};
+
+// Token (tokenizers/token.py, the fields Tokenize fills)
+struct BotokToken {
+    std::string text;
+    std::vector<std::string> charTypes;   // CharMark names
+    std::string chunkType;                // ChunkMark name
+    int start = 0;
+    int len = 0;
+    bool hasSyls = false;
+    std::vector<std::vector<int>> sylsIdx;             // token-relative
+    std::vector<std::pair<int, int>> sylsStartEnd;     // token-relative {start,end}
+    NodeData data;   // senses/affixation/skrt/formFreq (copied after injection)
+    bool skrt = false;
+};
+
+// Tokenize (tokenizers/tokenize.py): maximal match with backtracking
+class Tokenize {
+public:
+    explicit Tokenize(Trie& trie) : trie_(trie) {}
+    std::vector<BotokToken> tokenize(ChunkFramework& preProcessed,
+                                     const std::vector<TokChunk>& chunks);
+
+private:
+    int addFoundWordOrNonWord(int cIdx, const std::map<int, TrieNode*>& matchData,
+                              const std::vector<int>& syls,
+                              std::vector<BotokToken>& tokens) const;
+    BotokToken chunksToToken(const std::vector<int>& syls, NodeData* data,
+                             const char* ttype) const;
+    BotokToken createToken(int ttype, int start, int length,
+                           const std::vector<std::vector<int>>* sylChars,
+                           const std::vector<std::pair<int, int>>& sylStartEnd,
+                           NodeData* data) const;
+
+    Trie& trie_;
+    ChunkFramework* pre_ = nullptr;
+    const std::vector<TokChunk>* chunks_ = nullptr;
+};
 
 }  // namespace botok
 }  // namespace allcore

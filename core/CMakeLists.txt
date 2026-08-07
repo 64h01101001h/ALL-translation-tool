@@ -32,6 +32,8 @@ add_library(allcore STATIC
   src/spellcheck.cpp
   src/refdict.cpp
   src/botok_chunks.cpp
+  src/botok_trie.cpp
+  src/botok_tokenize.cpp
 )
 target_include_directories(allcore PUBLIC include)
 
@@ -146,3 +148,11 @@ target_link_libraries(botok_smoke PRIVATE allcore)
 add_test(NAME botok_smoke
          COMMAND botok_smoke ${CMAKE_SOURCE_DIR}/data/botok
                  ${CMAKE_SOURCE_DIR}/build/botok_syls_reference.tsv)
+
+add_executable(botok_tok_smoke tests/botok_tok_smoke.cpp)
+target_link_libraries(botok_tok_smoke PRIVATE allcore)
+add_test(NAME botok_tok_smoke
+         COMMAND botok_tok_smoke ${CMAKE_SOURCE_DIR}/data/botok
+                 ${CMAKE_SOURCE_DIR}/build/botok_tok_scenarios.txt
+                 ${CMAKE_SOURCE_DIR}/build/hgm_spine_v27_2.db
+                 ${CMAKE_SOURCE_DIR}/build/botok_tok_corpus.tsv)

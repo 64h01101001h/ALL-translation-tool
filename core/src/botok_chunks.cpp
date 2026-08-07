@@ -84,6 +84,31 @@ const char* chunkMarkName(int mark) {
     }
 }
 
+const char* charMarkName(int mark) {
+    switch (mark) {
+        case CONS: return "CONS";
+        case SUB_CONS: return "SUB_CONS";
+        case VOW: return "VOW";
+        case TSEK: return "TSEK";
+        case NORMAL_PUNCT: return "NORMAL_PUNCT";
+        case SPECIAL_PUNCT: return "SPECIAL_PUNCT";
+        case NUMERAL: return "NUMERAL";
+        case SYMBOL: return "SYMBOL";
+        case IN_SYL_MARK: return "IN_SYL_MARK";
+        case NON_BO_NON_SKRT: return "NON_BO_NON_SKRT";
+        case SKRT_CONS: return "SKRT_CONS";
+        case SKRT_SUB_CONS: return "SKRT_SUB_CONS";
+        case SKRT_VOW: return "SKRT_VOW";
+        case SKRT_LONG_VOW: return "SKRT_LONG_VOW";
+        case CJK: return "CJK";
+        case LATIN: return "LATIN";
+        case OTHER: return "OTHER";
+        case TRANSPARENT: return "TRANSPARENT";
+        case NFC: return "NFC";
+        default: return "?";
+    }
+}
+
 // ---------------------------------------------------------------- CharTable
 
 static int charMarkValue(const std::string& name) {

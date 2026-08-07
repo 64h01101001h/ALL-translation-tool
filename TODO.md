@@ -154,9 +154,22 @@ display toggles, not through invention.
       diff-oracle — get_syls identical on all 105,546 distinct spine
       Tibetan strings (tools/build_botok_reference.py, regenerate per
       release).
-      — REMAINING: increment 2 trie + maximal-match tokenizer
-      (basictrie/tokenize + affix split), increment 3 Overlay wiring
-      with our lexicon + Monlam lists.
+      — INCREMENT 2 SHIPPED 2026-08-07: trie + maximal-match tokenizer
+      (BasicTrie/Trie w/ affix inflection via SylComponents+BoSyl —
+      SylComponents.json banked; has_skrt_syl char classes expanded to
+      exact codepoint ranges via sre_parse; Tokenize w/ non-max
+      backtracking and upstream's in-place pos-injection side effect
+      preserved). Battery (20th suite, botok_tok_smoke): scenario ops
+      replayed verbatim vs oracle (upstream test operations incl.
+      deactivate/skrt/bare-form-data quirk/injection persistence) +
+      corpus scale: trie from all 105,546 spine words, inputs = corpus
+      segments via canonical ewts_unicode, token streams identical
+      field-for-field (tools/build_botok_tok_reference.py; segments the
+      canonical engine refuses to convert are counted and skipped,
+      never approximated).
+      — REMAINING: increment 3 — affixed-particle SPLIT layer
+      (modifytokens/splitaffixed) if wanted for display, and Overlay
+      wiring: segmenter lexicon = spine + Monlam lists, tier-labeled.
 - [~] **Monlam word lists** — BANKED + FIRST INTEGRATION 2026-08-07
       (Apache-2.0 verified; 107,108 + 342,340 unique forms; allcore
       RefLexicon, 18th suite proves the real conversion path matches
