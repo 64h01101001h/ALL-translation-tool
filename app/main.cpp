@@ -10,6 +10,7 @@
 #include <QNetworkAccessManager>
 #include <QDialog>
 #include <QDialogButtonBox>
+#include <QFontDatabase>
 #include <QFormLayout>
 #include <QListWidget>
 #include <QStackedWidget>
@@ -659,6 +660,19 @@ private:
         tokBeg_.clear();
         tokEnd_.clear();
         const int mode = scriptMode_->currentIndex();   // 0 script, 1 ACIP, 2 wylie
+        // Tibetan script renders in the bundled Noto Serif Tibetan
+        // when available; ACIP/wylie stay in the default face
+        {
+            QFont f = view_->font();
+            if (mode == 0 &&
+                QFontDatabase::hasFamily("Noto Serif Tibetan"))
+                f.setFamilies({"Noto Serif Tibetan"});
+            else
+                f.setFamilies(QFontDatabase::systemFont(
+                                  QFontDatabase::GeneralFont)
+                                  .families());
+            view_->setFont(f);
+        }
         QString text;
         for (size_t i = 0; i < doc_.tokens.size(); ++i) {
             QString disp;
@@ -3964,6 +3978,10 @@ static QString findDataRoot() {
 int main(int argc, char** argv) {
     QApplication app(argc, argv);
     const QString root = findDataRoot();
+    // bundled Tibetan font (Noto Serif Tibetan, OFL — data/fonts/):
+    // consistent complex-stack shaping regardless of system fonts
+    QFontDatabase::addApplicationFont(root +
+                                      "/data/fonts/NotoSerifTibetan.ttf");
     QString dbPath = argc > 1 ? argv[1] : root + "/build/hgm_spine_v27_2.db";
     QString tplPath = argc > 2 ? argv[2]
                                : root + "/docs/analysis/PASSAGE_ANALYSIS_TEMPLATE.md";

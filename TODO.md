@@ -260,8 +260,13 @@ display toggles, not through invention.
       API; bundling license unclear so lookup-only).
 - [ ] **Mahavyutpatti TEI (DILA)** — offline Skt⇄Tib table beside the
       Sanskrit converter.
-- [ ] **Bundle fonts** — Noto Serif Tibetan (OFL) + BabelStone Tibetan
-      (free); run the Sanskrit-stack battery against both.
+- [~] **Bundle fonts** — Noto Serif Tibetan SHIPPED 2026-08-07 (OFL
+      verified, variable font all weights, banked with OFL.txt in
+      data/fonts/; registered at startup; the Overlay's Tibetan-script
+      mode prefers it, ACIP/wylie stay in the default face, graceful
+      if missing). REMAINING: BabelStone Tibetan (verify its exact
+      license text first) for exotic Sanskrit stacks; visual pass of
+      the Sanskrit-stack battery output in both faces.
 - [ ] **Lotsawa House** — CC BY-NC: write them for bulk/permission;
       prayer-register corpus for register warnings.
 - [ ] Link-out-only tier: Bibliotheca Polyglotta, Adarsha, WTS Munich,
