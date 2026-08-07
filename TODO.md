@@ -258,9 +258,17 @@ display toggles, not through invention.
       anchors incl. Tsongkapa's own 1357 fire-bird / 1419 earth-pig;
       Convert-pane colophon helper works both directions; pre-1027
       honest). Henning's MIT KCK sources banked in
-      third_party/kck_henning. REMAINING: day-level Phugpa/Tsurphu
-      month+tshes conversion (Janson's mathematics as spec, KCK as
-      reference, online converters as battery oracles).
+      third_party/kck_henning. ORACLE HARNESS READY
+      2026-08-07: Henning's original 2011 C compiles and RUNS on
+      macOS/clang (third_party/kck_henning/build_macos.sh + DOS-header
+      shims; sources untouched save void→int main); 76 reference
+      fixtures captured (kck_fixtures.json: tshes/month/year → zla-dag,
+      gza-dag, nyi-dag, daybreak, spyi zhag, Julian day, western date —
+      every intermediate diffable; sweep even caught a duplicated lunar
+      day, JD delta 0). REMAINING: the port itself (T2/T3 arithmetic →
+      allcore, diff-proven per stage against the fixtures; note KCK =
+      Kalacakra karana — published-Phugpa deltas are a separate,
+      documented question).
 - [ ] **rKTs abbreviations DB (6,000+ bskungs yig) + canonical IDs** —
       deterministic abbreviation expansion for input-center texts;
       verify the data dump's license first (unclear).
