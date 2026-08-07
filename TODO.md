@@ -222,8 +222,13 @@ display toggles, not through invention.
       diff-proofread canon beside the HGM corpus.
 - [ ] **py-tiblegenc** (Apache-2.0) — legacy-font→Unicode rescue for
       input-center documents; external tool first, port maps later.
-- [ ] **lucene-bo affix rules** (Apache-2.0) — inflected-form matching
-      in FTS5 search; stemming-data repo as battery.
+- [~] **lucene-bo affix rules** — ENGINE + LOOKUP SHIPPED 2026-08-07
+      (allcore affixnorm: faithful TibAffixedFilter port, battery
+      through our own converters incl. the needsAA guard; wylie-level
+      projection defined BY the unicode port; Lookup pane: po'i finds
+      po with a labeled "affixed particle stripped" note). REMAINING:
+      corpus/library FTS query expansion (phrase semantics make it
+      non-trivial — design needed).
 - [ ] **Steinert public dictionary CSVs** — Lookup-pane layers AFTER
       per-dictionary license review (code is GPL — data only).
 - [ ] **bophono** (MIT) — optional non-GMR phonetics schemes toggle
