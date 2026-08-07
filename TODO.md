@@ -140,10 +140,23 @@ display toggles, not through invention.
 ## your findings into the todo list", 2026-08-07; full report w/
 ## licenses: docs/TIBETAN_TOOLS_SURVEY.md; internet-wide part 2 pending)
 
-- [ ] **Botok C++ port** — deterministic trie/maximal-match word
+- [~] **Botok C++ port** — deterministic trie/maximal-match word
       segmentation (Apache-2.0), port-and-prove with its own test suite
       as battery; lexicon = ours + Monlam lists. The Overlay's missing
       segmentation backbone.
+      — INCREMENT 1 SHIPPED 2026-08-07: the chunking layer
+      (charcategories + BoString + ChunkFramework + Chunks/TokChunks +
+      ChunkTokenizer) in allcore/botok (UTF-32 internal, every upstream
+      quirk preserved and commented); char table + Apache-2.0 license
+      banked at data/botok/. Battery (19th suite): expected values
+      GENERATED from the live Python oracle over botok's own test
+      inputs (upstream pytest run green first), plus corpus-scale
+      diff-oracle — get_syls identical on all 105,546 distinct spine
+      Tibetan strings (tools/build_botok_reference.py, regenerate per
+      release).
+      — REMAINING: increment 2 trie + maximal-match tokenizer
+      (basictrie/tokenize + affix split), increment 3 Overlay wiring
+      with our lexicon + Monlam lists.
 - [~] **Monlam word lists** — BANKED + FIRST INTEGRATION 2026-08-07
       (Apache-2.0 verified; 107,108 + 342,340 unique forms; allcore
       RefLexicon, 18th suite proves the real conversion path matches

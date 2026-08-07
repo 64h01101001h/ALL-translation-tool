@@ -30,6 +30,7 @@ add_library(allcore STATIC
   src/ewts_unicode.cpp
   src/spellcheck.cpp
   src/refdict.cpp
+  src/botok_chunks.cpp
 )
 target_include_directories(allcore PUBLIC include)
 
@@ -134,3 +135,9 @@ target_link_libraries(qc_smoke PRIVATE allcore)
 add_test(NAME qc_smoke
          COMMAND qc_smoke ${CMAKE_SOURCE_DIR}/build/hgm_spine_v27_2.db
                  ${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/analysis598.md)
+
+add_executable(botok_smoke tests/botok_smoke.cpp)
+target_link_libraries(botok_smoke PRIVATE allcore)
+add_test(NAME botok_smoke
+         COMMAND botok_smoke ${CMAKE_SOURCE_DIR}/data/botok
+                 ${CMAKE_SOURCE_DIR}/build/botok_syls_reference.tsv)

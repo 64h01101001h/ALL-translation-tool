@@ -55,7 +55,7 @@ dictionaries from their original binaries: `tools/extract_hypercontext_dic.py`,
 
     ctest --test-dir cmake-build
 
-7 suites, ~170k verified data points. The engine batteries enforce founding
+19 suites, ~500k verified data points. The engine batteries enforce founding
 rule 2 (a port that fails its battery does not ship): `acipToEwts` must match
 all 35,601 corpus conversions (100.000%), `wylieToUnicode` must hit the
 canonical 99.03% on 26,318 ground-truth pairs, `pronounce` must be identical
@@ -64,8 +64,10 @@ Sanskrit converter must pass the official standard-doc examples and be
 identical to the Python engine on all 79,452 distinct Lokesh Chandra IAST
 terms (including failing on exactly the same malformed inputs), the
 Devanagari→IAST engine must round-trip exactly over all 73,437 LC Devanagari
-renderings, and the indexed overlay lattice must equal the reference
-implementation span-for-span.
+renderings, the Botok chunker port must be identical to the Python botok
+oracle on its own upstream test battery AND on every distinct spine Tibetan
+string (105,546/105,546), and the indexed overlay lattice must equal the
+reference implementation span-for-span.
 
 Regenerate the pronunciation reference after a spine rebuild:
 
@@ -84,6 +86,12 @@ Regenerate the pronunciation reference after a spine rebuild:
 Regenerate the Sanskrit reference after an LC-extract update:
 
     python3 tools/build_sanskrit_reference.py
+
+Regenerate the Botok syllable reference after a spine rebuild (needs
+`pip3 install --user botok` — harness-only, like the pyewts oracle):
+
+    python3 tools/build_botok_reference.py build/hgm_spine_v27_2.db \
+        build/botok_syls_reference.tsv
 
 ## Repository map
 
