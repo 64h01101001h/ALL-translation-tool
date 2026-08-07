@@ -2324,6 +2324,14 @@ public:
         draftCol->addWidget(notesSearch_);
         QObject::connect(notesSearch_, &QLineEdit::returnPressed,
                          [this] { searchNotesBank(); });
+        auto* rtfBtn = new QPushButton("Export draft (RTF, *italics*)…");
+        rtfBtn->setToolTip(
+            "Writes the draft as RTF for the publishing workflow. Text "
+            "between *asterisks* becomes italic — STD-004: name-parts "
+            "woven into a verse are italicized in the English.");
+        draftCol->addWidget(rtfBtn);
+        QObject::connect(rtfBtn, &QPushButton::clicked,
+                         [this] { exportRtf(); });
         auto* composeBib = new QPushButton("Compose bibliography entry…");
         composeBib->setToolTip(
             "Assembles an entry in the published house format (STD-007). "
@@ -2821,6 +2829,60 @@ private:
             h += "</div>";
         }
         report_->setHtml(h);
+    }
+
+    void exportRtf() {
+        const QString text = draft_->toPlainText();
+        if (text.trimmed().isEmpty()) {
+            report_->setHtml("<i>nothing to export</i>");
+            return;
+        }
+        const QString fn = QFileDialog::getSaveFileName(
+            this, "Export draft as RTF", "draft.rtf", "RTF (*.rtf)");
+        if (fn.isEmpty()) return;
+        QString body;
+        bool italic = false;
+        int italicRuns = 0;
+        const auto u16 = text.utf16();
+        for (int i = 0; i < text.size(); ++i) {
+            const QChar c = text.at(i);
+            if (c == '*') {
+                body += italic ? "}" : "{\\i ";
+                if (!italic) ++italicRuns;
+                italic = !italic;
+                continue;
+            }
+            if (c == '\\' || c == '{' || c == '}') {
+                body += '\\';
+                body += c;
+            } else if (c == '\n') {
+                body += "\\par\n";
+            } else if (u16[i] < 128) {
+                body += c;
+            } else {
+                body += "\\u" + QString::number((short)u16[i]) + "?";
+            }
+        }
+        if (italic) body += "}";   // unclosed marker: close, then warn
+        QFile f(fn);
+        if (!f.open(QIODevice::WriteOnly)) {
+            report_->setHtml("<i>could not write " + fn.toHtmlEscaped() +
+                             "</i>");
+            return;
+        }
+        f.write(("{\\rtf1\\ansi\\deff0{\\fonttbl{\\f0 Times New "
+                 "Roman;}}\\f0\\fs24\n" +
+                 body + "\n}")
+                    .toUtf8());
+        f.close();
+        report_->setHtml(
+            QString("<b>Exported</b> %1 — %2 italic run%3 (STD-004)%4")
+                .arg(QFileInfo(fn).fileName().toHtmlEscaped())
+                .arg(italicRuns)
+                .arg(italicRuns == 1 ? "" : "s")
+                .arg(italic ? " · <b style='color:#B26B00'>warning: an "
+                              "asterisk was left unclosed</b>"
+                            : ""));
     }
 
     void composeBibDialog() {

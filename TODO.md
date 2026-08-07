@@ -211,9 +211,12 @@ display toggles, not through invention.
 - [ ] **Tibetan OCR for pecha scans** (docs/OCR_DESIGN.md; Adam 2026-08-06,
       "eventually"): base = BDRC's open-source tibetan-ocr-app models
       (5 script styles incl. Woodblock). Stage 0 = document the manual
-      BDRC-app → Import workflow; Stage 1 = Library "Send to OCR" hand-off +
-      watched ocr_out folder w/ ocr-derived tags; Stage 2 = embedded ONNX
-      pipeline + Scan pane (license check first). OCR output always tagged,
+      BDRC-app → Import workflow; Stage 1 COMPLETE 2026-08-06 (Library
+      "Send to OCR" hand-off; ocr_out live-watched by the tree; files
+      there tagged ocr-derived in the info panel; opening one banners it
+      and runs the syllable-legality first-pass QC with a fail count);
+      Stage 2 = embedded ONNX pipeline + Scan pane (license check
+      first). OCR output always tagged,
       review-flagged, never corpus-bound without verification.
 - [x] Library browsing deepening (first tranche, 2026-08-06, commit
       a876cb8): name search with clickable results, recently-opened list,

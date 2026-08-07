@@ -93,8 +93,11 @@ at double shads → verses one line each → brackets to folio-tagged notes —
 > When a lama's name is tucked into the syllables of a verse (the
 > classical device), the name-parts are ITALICIZED in the English — "in
 > Tibetan, a small 'x' mark would typically be carved under them."
-> *App integration:* print-export / Draft formatting note; FUTURE —
-> italics support in the print pipeline.
+> *App integration:* SHIPPED 2026-08-06 — the Draft pane's "Export
+> draft (RTF, *italics*)…": text between *asterisks* becomes true
+> italics in an RTF the publishing workflow opens directly (verified by
+> textutil round-trip: italics render, Tibetan Unicode survives
+> exactly); unclosed asterisks are warned about, never guessed shut.
 **Integration hooks ready:** the Mixed Nuts prep formatter; the print
 export; the sa bcad outline extractor.
 
