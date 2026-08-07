@@ -23,4 +23,11 @@ namespace allcore {
 // no affix rule applies)
 std::string stripAffixedParticles(const std::string& syllable_unicode);
 
+// wylie-level convenience: strips the same particles from the final
+// syllable of a wylie word by suffix comparison, accepting the strip
+// only when the unicode port agrees (the unicode rules ARE the
+// authority — this is a projection, not a second rule set). Returns
+// the input unchanged when no strip applies.
+std::string stripAffixedParticlesWylie(const std::string& wylie_word);
+
 }  // namespace allcore

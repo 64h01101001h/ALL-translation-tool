@@ -76,6 +76,7 @@
 #include "allcore/spellcheck.h"
 #include "allcore/quotation.h"
 #include "allcore/spine.h"
+#include "allcore/affixnorm.h"
 #include "allcore/lexicon.h"
 #include "allcore/verbstems.h"
 #include "allcore/outline.h"
@@ -145,6 +146,26 @@ static QWidget* makeLookupPane(allcore::Spine& spine, allcore::RefDict* ref) {
         auto entries = spine.lookup(raw);
         if (entries.empty()) entries = spine.headwordSearch('"' + raw + '"', 10);
         QString h;
+        // affix-stripping fallback (lucene-bo rules): po'i finds po
+        if (entries.empty()) {
+            bool upper = false;
+            for (char c : raw) upper |= (c >= 'A' && c <= 'Z');
+            const std::string wy = upper ? allcore::acipToEwts(raw) : raw;
+            const std::string base =
+                allcore::stripAffixedParticlesWylie(wy);
+            if (base != wy) {
+                entries = spine.lookup(base);
+                if (!entries.empty())
+                    h += QString("<div style='color:#1E6B4E;font-size:"
+                                 "12px'>no entry for \u201c%1\u201d — "
+                                 "showing <b>%2</b> (affixed particle "
+                                 "stripped)</div>")
+                             .arg(QString::fromStdString(wy)
+                                      .toHtmlEscaped(),
+                                  QString::fromStdString(base)
+                                      .toHtmlEscaped());
+            }
+        }
         if (entries.empty()) h = "<i>no HGM match</i>";
         for (const auto& e : entries) h += entryHtml(e);
 

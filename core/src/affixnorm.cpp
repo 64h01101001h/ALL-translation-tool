@@ -1,5 +1,7 @@
 #include "allcore/affixnorm.h"
 
+#include "allcore/engines.h"
+
 #include <vector>
 
 namespace allcore {
@@ -132,6 +134,40 @@ std::string stripAffixedParticles(const std::string& syl) {
         len = len - 1;
 
     return encode(b, len);
+}
+
+std::string stripAffixedParticlesWylie(const std::string& w) {
+    static const char* kSuff[] = {"'i'o", "'i'am", "'i'ang", "'o'am",
+                                  "'o'ang", "'is",  "'i",    "'o",
+                                  "'am",   "'ang",  "'ur",   "'us"};
+    for (const char* suf : kSuff) {
+        const size_t n = std::string(suf).size();
+        if (w.size() <= n || w.compare(w.size() - n, n, suf) != 0)
+            continue;
+        // candidate strip — the unicode port decides (incl. the
+        // needsAA guard and the 'ur/'us keep-final-letter rule)
+        const std::string last =
+            w.find(' ') == std::string::npos
+                ? w
+                : w.substr(w.rfind(' ') + 1);
+        const auto [u, ok] = wylieToUnicode(last);
+        if (!ok) return w;
+        const std::string stripped = stripAffixedParticles(u);
+        if (stripped == u) return w;   // port says: no strip (dga'i …)
+        // project back: find the wylie prefix whose conversion equals
+        // the stripped unicode
+        for (size_t cut = w.size() - 1; cut > 0; --cut) {
+            const std::string candWord = w.substr(0, cut);
+            const std::string candLast =
+                candWord.find(' ') == std::string::npos
+                    ? candWord
+                    : candWord.substr(candWord.rfind(' ') + 1);
+            const auto [cu, cok] = wylieToUnicode(candLast);
+            if (cok && cu == stripped) return candWord;
+        }
+        return w;
+    }
+    return w;
 }
 
 }  // namespace allcore

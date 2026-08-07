@@ -56,6 +56,20 @@ int main() {
     CHECK(allcore::stripAffixedParticles("abc") == "abc",
           "non-Tibetan text passes through");
 
+    // wylie projection: defined by the unicode port, so they must agree
+    using allcore::stripAffixedParticlesWylie;
+    CHECK(stripAffixedParticlesWylie("po'i") == "po",
+          "wylie: po'i -> po");
+    CHECK(stripAffixedParticlesWylie("sems dpa'i") == "sems dpa'",
+          "wylie: sems dpa'i -> sems dpa' (root 'a kept)");
+    CHECK(stripAffixedParticlesWylie("dga'i") == "dga'",
+          "wylie: dga'i -> dga' (guard projected)");
+    CHECK(stripAffixedParticlesWylie("byang chub kyi") ==
+              "byang chub kyi",
+          "wylie: no affix -> unchanged");
+    CHECK(stripAffixedParticlesWylie("de'ang") == "de",
+          "wylie: de'ang -> de");
+
     std::printf("%s (%d failures)\n",
                 failures ? "AFFIXNORM SMOKE FAILED" : "AFFIXNORM SMOKE OK",
                 failures);
