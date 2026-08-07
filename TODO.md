@@ -34,6 +34,17 @@ display toggles, not through invention.
       formatter and Draft workspace to assist/enforce its rules
       (docs/standards/MIXED_NUTS_PRELIMINARY_FORMATTING.md holds the
       workflow gleaned from GMR's demonstration video).
+- [ ] **HGM translation standards — gather & compile** (Adam, 2026-08-06):
+      collect translation standards from Geshe Michael himself and the
+      Mixed Nuts translators (Gibson Chang, Nicholas Lashaw, AN, the
+      editor); every entry sourced (who/when/medium), never composed.
+      Receiving scaffold ready at docs/standards/
+      HGM_TRANSLATION_STANDARDS.md with six categories each pre-mapped to
+      its app integration hook (terminology checker, register warnings,
+      Draft workspace, Sanskrit/pron engines, prep formatter, apparatus
+      conventions). Integrate each standard into the app as acquired.
+      First mining source available now: the three ingested volumes'
+      front matter / translator notes.
 
 - [ ] **Input-center conversion standards** — Adam will upload the standards
       for turning raw input documents (as received from the input centers)
