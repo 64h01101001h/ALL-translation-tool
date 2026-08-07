@@ -18,7 +18,7 @@ Each entry follows this form:
 
 ### 1. Terminology
 *(binding equivalents, preferred renderings, terms never to translate)*
-— nothing compiled yet —
+— nothing compiled yet beyond the dictionary itself —
 **Integration hooks ready:** the Draft pane's terminology checker (flags
 non-HGM renderings, mixed renderings, collapsed distinctions); the tier
 system (curated > glossary > provisional); the corpus concordance.
@@ -33,14 +33,48 @@ differently — the bsod nams principle)*
 ### 3. Voice & style
 *(sentence rhythm, plain-English principles, how literal is too literal,
 handling of Tibetan syntax in English)*
-— nothing compiled yet —
+
+> **STD-005** · voice & style · source: *Sixty Verses* (tr. Lashaw w/ GMR,
+> ©2023), endnote 60
+> Epithets referring to a specific person are capitalized: "Realized One"
+> is capitalized when it refers to Arya Nagarjuna.
+> *App integration:* style note for the Draft workspace; no enforcement
+> (style stays human).
 **Integration hooks ready:** the Draft workspace (side-by-side anchoring);
 AI back-check instructed to diff, never to restyle.
 
 ### 4. Names, mantras, and Sanskrit
 *(when to Sanskritize vs. translate vs. transliterate; pronunciation
 spellings for readers)*
-— nothing compiled yet —
+
+> **STD-001** · names · source: *A Song of My Spiritual Life* (tr. Chang
+> w/ GMR, ©2025), endnote 1
+> Tibetan names in running text are written in English PRONUNCIATION
+> spelling — "Je Tsongkapa" — explicitly: "This is … the correct way to
+> write our author's name in English pronunciation. Other ways of doing
+> it are confusing transcription with pronunciation."
+> *App integration:* ALREADY ALIGNED — the pronunciation engine (GMR card
+> conventions) produces exactly these spellings.
+
+> **STD-002** · names/apparatus · source: SSL preface & endnotes; *Sixty
+> Verses* endnotes (recurring form)
+> The technical transliteration is supplied alongside, in the form
+> "(technical spelling nyams-mgur)" — running text stays in pronunciation
+> spelling; the Wylie appears as labeled apparatus (nyams-mgur, Lam-rim
+> bsdus-don, dgag-bya, Blo-bzang grags-pa).
+> *App integration:* the Convert pane produces both forms today; FUTURE —
+> a Draft helper that inserts "(technical spelling: …)" from a selected
+> term automatically.
+
+> **STD-003** · Sanskrit · source: *Sixty Verses* (tr. Lashaw w/ GMR,
+> ©2023), endnote 62
+> Sanskrit passages are presented twice: "the full technical
+> transcription of the line with traditional diacritical marks; and then
+> … the closest normal English pronunciation, broken out into separate
+> words as far as possible," for readers who are not Sanskrit scholars.
+> *App integration:* ALREADY ALIGNED — the Convert pane's IAST +
+> simplified-pronunciation pair (per the ACIP standard) is exactly this
+> dual presentation.
 **Integration hooks ready:** the Sanskrit converter (IAST/ACIP styles,
 simplified pronunciation per the ACIP standard); the pronunciation engine
 (GMR card conventions).
@@ -51,13 +85,28 @@ references, footnote conventions)*
 — partially known from the preliminary-formatting video (banked at
 docs/standards/MIXED_NUTS_PRELIMINARY_FORMATTING.md): flow → re-paragraph
 at double shads → verses one line each → brackets to folio-tagged notes —
+
+> **STD-004** · formatting · source: *A Song of My Spiritual Life* (tr.
+> Chang w/ GMR, ©2025), endnote 5
+> When a lama's name is tucked into the syllables of a verse (the
+> classical device), the name-parts are ITALICIZED in the English — "in
+> Tibetan, a small 'x' mark would typically be carved under them."
+> *App integration:* print-export / Draft formatting note; FUTURE —
+> italics support in the print pipeline.
 **Integration hooks ready:** the Mixed Nuts prep formatter; the print
 export; the sa bcad outline extractor.
 
 ### 6. Apparatus & honesty
 *(how to mark uncertainty, variants, damaged readings, translator
 insertions)*
-— nothing compiled yet —
+
+> **STD-006** · apparatus · source: *Sixty Verses* (tr. Lashaw w/ GMR,
+> ©2023), endnote 62
+> Where the Sanskrit source is incomplete, inserted fragments are
+> declared as insertions and their source edition is cited (bibliography
+> entry named). Translator supplements are never silent.
+> *App integration:* matches the project's own ⟨…⟩/flag discipline;
+> FUTURE — a Draft convention for marking translator insertions.
 **Integration hooks ready:** bracket/note conventions in the prep
 formatter; ⟨…⟩ failure marks; provisional labeling throughout.
 
@@ -67,6 +116,6 @@ formatter; ⟨…⟩ failure marks; provisional labeling throughout.
 - [ ] Collect from Mixed Nuts translators (Gibson Chang, Nicholas Lashaw,
       AN, and the team's editor) — including the style sheets already
       promised from the editor (see TODO).
-- [ ] Mine the three ingested volumes' front matter / translator notes for
-      stated conventions (they are in the corpus staging already).
+- [x] Mine the three ingested volumes' front matter / translator notes —
+      first six sourced entries compiled 2026-08-06 (STD-001…006).
 - [ ] Each acquisition → entries here → integration ticket in TODO.
