@@ -96,7 +96,26 @@ std::vector<QuotationMatch> detectQuotations(const Spine& spine,
             ++i;
         }
     }
-    return matches;
+    // merge across segment boundaries: consecutive lines of the same
+    // course matched back-to-back in the passage are ONE quotation
+    std::vector<QuotationMatch> merged;
+    for (auto& m : matches) {
+        if (!merged.empty()) {
+            auto& p = merged.back();
+            if (p.course == m.course && m.seq == p.seq + 1 &&
+                m.start_syllable ==
+                    p.start_syllable + p.syllable_count) {
+                p.seq = m.seq;   // range end; start stays reported first
+                p.syllable_count += m.syllable_count;
+                p.matched_wylie += " / " + m.matched_wylie;
+                if (!m.english.empty())
+                    p.english += (p.english.empty() ? "" : " ") + m.english;
+                continue;
+            }
+        }
+        merged.push_back(m);
+    }
+    return merged;
 }
 
 }  // namespace allcore

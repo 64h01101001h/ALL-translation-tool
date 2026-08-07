@@ -45,8 +45,13 @@ display toggles, not through invention.
       below-threshold silence/ACIP path); Draft pane "Detect quotations"
       lists matches w/ published English + one-click published
       bibliography entries when the course id matches the bank's ACIP
-      refs. LATER: cross-segment-boundary extension; footnote-lemma
-      recommendations from quoted spans.
+      refs. Footnote-lemma recommendations from quoted spans SHIPPED
+      2026-08-06 (official notes whose lemma appears in the matched
+      segment's published English ride along with the match).
+      Cross-segment merge SHIPPED 2026-08-06: consecutive lines of the
+      same course matched back-to-back merge into one whole-span
+      quotation; the battery seeds a pair whose boundary phrase exists
+      in NO single segment, forcing the merge path.
 - [x] **Scan follow-along v1** (Adam, 2026-08-06) — SHIPPED 2026-08-06:
       opening a recognized Derge/Lhasa Kangyur or Derge Tengyur text arms
       "Follow along in scans (bdr:MW…)" in the Overlay; BDRC's IIIF

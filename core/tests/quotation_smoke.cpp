@@ -87,6 +87,61 @@ int main(int argc, char** argv) {
         }
     }
 
+    // 5. a quotation spanning two consecutive corpus lines yields ONE
+    //    match covering the whole span (cross-segment merge). The seed
+    //    pair is chosen so that NO single segment contains the line
+    //    boundary — the merge path is the only way to one match.
+    {
+        auto sylsOf = [](const std::string& w) {
+            std::vector<std::string> v;
+            std::string cur;
+            for (char c : w + " ") {
+                if (c == ' ') {
+                    if (!cur.empty()) v.push_back(cur);
+                    cur.clear();
+                } else {
+                    cur += c;
+                }
+            }
+            return v;
+        };
+        allcore::CorpusSegment a, b;
+        for (long long id = 1; id + 1 < spine.corpusMaxId() && a.id == 0;
+             ++id) {
+            auto s1 = spine.corpusSegmentById(id);
+            auto s2 = spine.corpusSegmentById(id + 1);
+            if (!s1.id || !s2.id || s1.course != s2.course ||
+                s2.seq != s1.seq + 1)
+                continue;
+            auto v1 = sylsOf(s1.wylie), v2 = sylsOf(s2.wylie);
+            if (v1.size() < 8 || v2.size() < 8) continue;
+            std::string boundary = "\"";
+            for (size_t k = v1.size() - 4; k < v1.size(); ++k)
+                boundary += v1[k] + " ";
+            for (size_t k = 0; k < 3; ++k)
+                boundary += v2[k] + (k == 2 ? "" : " ");
+            boundary += "\"";
+            if (spine.corpusSearch(boundary, "", 1).empty()) {
+                a = s1;
+                b = s2;
+            }
+        }
+        CHECK(a.id != 0,
+              "found a consecutive pair whose boundary is in no single "
+              "segment");
+        if (a.id != 0) {
+            const int total = (int)(sylsOf(a.wylie).size() +
+                                    sylsOf(b.wylie).size());
+            auto m = allcore::detectQuotations(
+                spine, a.wylie + " " + b.wylie, false, 7);
+            CHECK(m.size() == 1 && m[0].start_syllable == 0 &&
+                      m[0].syllable_count == total &&
+                      m[0].course == a.course && m[0].seq == b.seq,
+                  "boundary-spanning quotation merges into one "
+                  "whole-span match");
+        }
+    }
+
     std::printf("%s (%d failures)\n",
                 failures ? "QUOTATION SMOKE FAILED" : "QUOTATION SMOKE OK",
                 failures);

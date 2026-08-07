@@ -941,7 +941,7 @@ private:
                 QString(QUrl::toPercentEncoding(q->text().trimmed())) +
                 "%22&LG_NAME=bo-x-ewts&I_LIM=20&format=json";
             auto* rep = nam_.get(QNetworkRequest(QUrl(url)));
-            QObject::connect(rep, &QNetworkReply::finished, [&, rep] {
+            QObject::connect(rep, &QNetworkReply::finished, &dlg, [&, rep] {
                 rep->deleteLater();
                 list->clear();
                 if (rep->error() != QNetworkReply::NoError) {
