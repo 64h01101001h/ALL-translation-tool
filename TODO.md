@@ -136,6 +136,43 @@ display toggles, not through invention.
       stronger — 100.000% identical to the Python oracle on all 79,452 LC
       terms).
 
+## Integration menu — Tibetan tools survey (Adam: "scour… and put
+## your findings into the todo list", 2026-08-07; full report w/
+## licenses: docs/TIBETAN_TOOLS_SURVEY.md; internet-wide part 2 pending)
+
+- [ ] **Botok C++ port** — deterministic trie/maximal-match word
+      segmentation (Apache-2.0), port-and-prove with its own test suite
+      as battery; lexicon = ours + Monlam lists. The Overlay's missing
+      segmentation backbone.
+- [ ] **Monlam word lists** (Apache-2.0: ~107k + ~367k forms) →
+      segmenter lexicon + word-level spellcheck layer. Lists only —
+      Monlam definitions are NOT open.
+- [ ] **CC0 verbs database** (tibetan-nlp, 4-stem tables) → Wilson
+      parser stem evidence. Import immediately — license-clean.
+- [ ] **pyewts diff-oracle** — run our 26,318 ground-truth pairs +
+      dictionary through the ecosystem-standard converter, classify
+      divergences (validation harness only; our engines stay canonical).
+- [ ] **diff-match-patch (C++/Qt, Apache-2.0) + antx logic** → the
+      input-center double-keying proofreading pane (roadmap item A).
+- [ ] **Tibetan collation** — try ICU/CLDR (official rules since 2021)
+      from Qt; fallback tibetan-sort-js/Apache Java collator. Needed for
+      any sorted headword view.
+- [ ] **eKangyur/eTengyur PD corpora** (Esukhia/OpenPecha) — citable
+      diff-proofread canon beside the HGM corpus.
+- [ ] **py-tiblegenc** (Apache-2.0) — legacy-font→Unicode rescue for
+      input-center documents; external tool first, port maps later.
+- [ ] **lucene-bo affix rules** (Apache-2.0) — inflected-form matching
+      in FTS5 search; stemming-data repo as battery.
+- [ ] **Steinert public dictionary CSVs** — Lookup-pane layers AFTER
+      per-dictionary license review (code is GPL — data only).
+- [ ] **bophono** (MIT) — optional non-GMR phonetics schemes toggle
+      (GMR convention stays binding). Only if requested.
+- [ ] **84000 TM: link-out only** — CC BY-NC-ND forbids ingestion
+      without permission; concordance "view on 84000.co" links are safe.
+      Consider writing 84000 for permission.
+- [ ] Red-flag list (no license / restrictive): see survey doc — never
+      ship any of it without resolution.
+
 ## Build queue
 
 - [x] Battery H: the official pronunciation-chart pairs as a permanent C++
