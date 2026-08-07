@@ -130,6 +130,9 @@ add_executable(tibcal_smoke tests/tibcal_smoke.cpp)
 target_link_libraries(tibcal_smoke PRIVATE allcore)
 add_test(NAME tibcal_smoke COMMAND tibcal_smoke)
 
+add_executable(wynorm tools_wynorm.cpp)
+target_link_libraries(wynorm PRIVATE allcore)
+
 add_executable(affixnorm_smoke tests/affixnorm_smoke.cpp)
 target_link_libraries(affixnorm_smoke PRIVATE allcore)
 add_test(NAME affixnorm_smoke COMMAND affixnorm_smoke)

@@ -83,7 +83,7 @@ CREATE TABLE corpus_segments (
 CREATE INDEX idx_corpus_course ON corpus_segments(course, seq);
 
 CREATE VIRTUAL TABLE corpus_fts USING fts5(
-  wylie, english, acip,
+  wylie, english, acip, wylie_norm,
   content='', tokenize="unicode61 tokenchars ''''"
 );
 
@@ -150,6 +150,29 @@ def build():
     with gzip.open(CORPUS, 'rt', encoding='utf-8') as f:
         corpus = json.load(f)
     print(f'inserting {len(corpus):,} corpus segments …')
+    # affix-normalized wylie via the C++ authority (allcore affixnorm,
+    # exposed as the wynorm CLI) — stored only where it differs, so
+    # searches match po against po'i without a python re-implementation
+    norms = [''] * len(corpus)
+    wynorm = ROOT / 'cmake-build' / 'core' / 'wynorm'
+    if wynorm.exists():
+        import subprocess
+        lines = '\n'.join((s.get('wylie') or '').replace('\n', ' ')
+                          for s in corpus)
+        out = subprocess.run([str(wynorm)], input=lines, text=True,
+                             capture_output=True, check=True).stdout
+        outl = out.split('\n')
+        for i, s in enumerate(corpus):
+            w = (s.get('wylie') or '').replace('\n', ' ')
+            n = outl[i] if i < len(outl) else ''
+            if n and n != w.strip() and ' '.join(w.split()) != n:
+                norms[i] = n
+        print(f'  wylie_norm differs on {sum(1 for n in norms if n):,} '
+              'segments (affix-tolerant search)')
+    else:
+        print('  NOTE: wynorm CLI not built — wylie_norm column empty '
+              '(searches stay exact); build the app first for '
+              'affix-tolerant search')
     seq_by_course = {}
     crows, c_fts = [], []
     for i, s in enumerate(corpus, start=1):
@@ -159,9 +182,9 @@ def build():
         crows.append((i, course, seq, s.get('acip'), s.get('wylie'),
                       s.get('english'), json.dumps(s, ensure_ascii=False)))
         c_fts.append((i, s.get('wylie') or '', s.get('english') or '',
-                      s.get('acip') or ''))
+                      s.get('acip') or '', norms[i - 1]))
     con.executemany('INSERT INTO corpus_segments VALUES (?,?,?,?,?,?,?)', crows)
-    con.executemany('INSERT INTO corpus_fts(rowid,wylie,english,acip) VALUES (?,?,?,?)', c_fts)
+    con.executemany('INSERT INTO corpus_fts(rowid,wylie,english,acip,wylie_norm) VALUES (?,?,?,?,?)', c_fts)
 
     print(f'loading {REVERSE.name} …')
     rev = json.load(open(REVERSE, encoding='utf-8'))

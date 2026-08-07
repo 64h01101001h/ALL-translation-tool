@@ -226,9 +226,15 @@ display toggles, not through invention.
       (allcore affixnorm: faithful TibAffixedFilter port, battery
       through our own converters incl. the needsAA guard; wylie-level
       projection defined BY the unicode port; Lookup pane: po'i finds
-      po with a labeled "affixed particle stripped" note). REMAINING:
-      corpus/library FTS query expansion (phrase semantics make it
-      non-trivial — design needed).
+      po with a labeled "affixed particle stripped" note). FTS DONE
+      2026-08-07 the clean way — not query expansion but an INDEX-side
+      wylie_norm column in corpus_fts (built by the C++ authority via
+      the wynorm CLI at spine-build time; 30,046/40,762 segments carry
+      affixed forms; FTS matches all columns by default so every
+      existing search became affix-tolerant with zero API change;
+      measured: "bden pa" +87 segments, po +1,587; 22/22 suites on the
+      rebuilt spine). Library file-tree index (libindex) could gain
+      the same column later if wanted.
 - [ ] **Steinert public dictionary CSVs** — Lookup-pane layers AFTER
       per-dictionary license review (code is GPL — data only).
 - [ ] **bophono** (MIT) — optional non-GMR phonetics schemes toggle
