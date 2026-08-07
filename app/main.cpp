@@ -11,6 +11,9 @@
 #include <QDialogButtonBox>
 #include <QFormLayout>
 #include <QListWidget>
+#include <QStackedWidget>
+#include <QTableWidget>
+#include <QHeaderView>
 #include <QPainter>
 #include <QPen>
 #include <QRegularExpression>
@@ -3168,9 +3171,15 @@ public:
         auto* installBtn = new QPushButton("Install collection ZIP…");
         auto* importBtn = new QPushButton("Import my materials…");
         auto* ocrBtn = new QPushButton("Send to OCR…");
+        auto* viewBtn = new QPushButton("List view");
+        viewBtn->setCheckable(true);
+        viewBtn->setToolTip(
+            "Flat catalog table of every file — sort by catalog number, "
+            "verification level, or language across all folders.");
         auto* indexBtn = new QPushButton("Update search index");
         row->addWidget(installBtn);
         row->addWidget(importBtn);
+        row->addWidget(viewBtn);
         row->addWidget(ocrBtn);
         row->addWidget(indexBtn);
         search_ = new QLineEdit;
@@ -3206,7 +3215,20 @@ public:
         tree_->setSortingEnabled(true);
         tree_->sortByColumn(0, Qt::AscendingOrder);
         tree_->setColumnWidth(0, 260);
-        split->addWidget(tree_);
+        auto* stack = new QStackedWidget;
+        stack->addWidget(tree_);
+        list_ = new QTableWidget;
+        list_->setColumnCount(6);
+        list_->setHorizontalHeaderLabels(
+            {"File", "Collection", "No.", "Verification", "Language",
+             "KB"});
+        list_->setEditTriggers(QAbstractItemView::NoEditTriggers);
+        list_->setSelectionBehavior(QAbstractItemView::SelectRows);
+        list_->setSortingEnabled(true);
+        list_->verticalHeader()->setVisible(false);
+        stack->addWidget(list_);
+        stack_ = stack;
+        split->addWidget(stack);
         info_ = new QTextBrowser;
         info_->setOpenLinks(false);
         connect(info_, &QTextBrowser::anchorClicked, [this](const QUrl& u) {
@@ -3224,6 +3246,26 @@ public:
         split->setStretchFactor(1, 1);
         layout->addWidget(split, 1);
 
+        connect(viewBtn, &QPushButton::toggled, [this](bool on) {
+            stack_->setCurrentIndex(on ? 1 : 0);
+            if (on) fillList();
+        });
+        connect(list_, &QTableWidget::cellDoubleClicked,
+                [this](int r, int) {
+                    const QString p =
+                        list_->item(r, 0)->data(Qt::UserRole).toString();
+                    if (!p.isEmpty() && open_) {
+                        logOpen(p);
+                        open_(p);
+                    }
+                });
+        connect(list_, &QTableWidget::currentCellChanged,
+                [this](int r, int, int, int) {
+                    if (r >= 0 && list_->item(r, 0))
+                        showInfo(list_->item(r, 0)
+                                     ->data(Qt::UserRole)
+                                     .toString());
+                });
         connect(installBtn, &QPushButton::clicked, [this] { installZip(); });
         connect(importBtn, &QPushButton::clicked, [this] { importFiles(); });
         connect(ocrBtn, &QPushButton::clicked, [this] { sendToOcr(); });
@@ -3244,6 +3286,51 @@ public:
     }
 
 private:
+    void fillList() {
+        list_->setSortingEnabled(false);
+        list_->setRowCount(0);
+        QDirIterator it(libRoot_, QDir::Files,
+                        QDirIterator::Subdirectories);
+        while (it.hasNext()) {
+            const QString p = it.next();
+            const QFileInfo fi(p);
+            if (fi.fileName().startsWith('.')) continue;
+            const auto a = allcore::decodeAcipFilename(p.toStdString());
+            const int r = list_->rowCount();
+            list_->insertRow(r);
+            auto* name = new QTableWidgetItem(fi.fileName());
+            name->setData(Qt::UserRole, p);
+            list_->setItem(r, 0, name);
+            list_->setItem(
+                r, 1,
+                new QTableWidgetItem(
+                    a.recognized
+                        ? QString::fromStdString(a.collection)
+                        : (p.contains("/ocr_out/") ? "ocr-derived"
+                           : p.contains("/my_materials/")
+                               ? "my materials"
+                               : "")));
+            auto* num = new QTableWidgetItem;
+            num->setData(Qt::EditRole,
+                         a.recognized
+                             ? QString::fromStdString(a.number).toInt()
+                             : -1);
+            list_->setItem(r, 2, num);
+            list_->setItem(r, 3,
+                           new QTableWidgetItem(QString::fromStdString(
+                               a.status)));
+            list_->setItem(r, 4,
+                           new QTableWidgetItem(QString::fromStdString(
+                               a.language)));
+            auto* kb = new QTableWidgetItem;
+            kb->setData(Qt::EditRole, (int)(fi.size() / 1024));
+            list_->setItem(r, 5, kb);
+        }
+        list_->setSortingEnabled(true);
+        list_->resizeColumnsToContents();
+        list_->setColumnWidth(0, qMin(list_->columnWidth(0), 220));
+    }
+
     void installZip() {
         const QString zip = QFileDialog::getOpenFileName(
             this, "Install collection ZIP", QString(), "ZIP archives (*.zip)");
@@ -3509,6 +3596,8 @@ private:
     std::function<void(const QString&)> open_;
     QFileSystemModel* model_ = nullptr;
     QTreeView* tree_ = nullptr;
+    QTableWidget* list_ = nullptr;
+    QStackedWidget* stack_ = nullptr;
     QTextBrowser* info_ = nullptr;
     QLineEdit* search_ = nullptr;
     QComboBox* colFilter_ = nullptr;

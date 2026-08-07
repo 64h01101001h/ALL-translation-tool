@@ -248,7 +248,11 @@ display toggles, not through invention.
       BDRC is Wylie/EWTS (bo-x-ewts); our names are ACIP — every
       name-based BDRC query converts through acipToEwts first (exact,
       battery-proven); never send raw ACIP to a BDRC endpoint.
-- [ ] Library deepening, remaining: list-view mode (low priority).
+- [x] **List-view mode** — SHIPPED 2026-08-07: the Library's "List
+      view" toggle shows a flat sortable catalog table (file, collection,
+      number, verification, language, size) across all folders; numeric
+      sort on catalog number, double-click opens, selection drives the
+      info panel; ocr_out and my_materials labeled.
 
 ## Done highlights (details in README / memory)
 
