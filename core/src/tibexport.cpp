@@ -117,6 +117,19 @@ TibetanExportResult exportTibetanUnicode(const std::string& acip_document,
     return res;
 }
 
+std::string bdrcScanUrl(const AcipFileInfo& info) {
+    if (!info.recognized || info.number.empty()) return "";
+    const char* base = nullptr;
+    if (info.collection == "Kangyur (Derge edition)") base = "MW22084_";
+    else if (info.collection == "Kangyur (Lhasa edition)") base = "MW26071_";
+    else if (info.collection == "Tengyur (Derge edition)") base = "MW23703_";
+    else return "";   // Sungbum/Reference/etc.: no Tohoku mapping — honest ""
+    // BUDA zero-pads to four digits
+    std::string n = info.number;
+    while (n.size() < 4) n = "0" + n;
+    return "https://library.bdrc.io/show/bdr:" + std::string(base) + n;
+}
+
 TranslationPrep formatForTranslation(const std::string& acip_document) {
     TranslationPrep prep;
     std::string& out = prep.text;

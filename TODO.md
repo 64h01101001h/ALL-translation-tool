@@ -155,6 +155,17 @@ display toggles, not through invention.
       in both indexed and live modes; libindex_smoke 12 checks.
 - [x] Library filters (2026-08-06): decoder-driven browse by collection /
       verification status / language, combinable with the name search.
+- [x] **BDRC scan auto-linking, stage 1** (Adam 2026-08-06; docs/
+      BDRC_LINKING_DESIGN.md): live-probed BUDA — Derge/Lhasa outline IDs
+      encode Tohoku numbers directly (bdr:MW23703_4210 = Pramanavarttika
+      verified); deterministic bdrcScanUrl (KD→MW22084, KL→MW26071,
+      TD→MW23703) + "view the original scans on BDRC" link in the Library
+      info panel. *Shipped 2026-08-06.*
+- [ ] BDRC linking, remaining: templated-query/SPARQL fallback for
+      editions without ID-encoded Tohoku (KX, TS), title-based candidate
+      search for Sungbum works (fuzzy — user-confirmed, never auto-
+      asserted), in-app IIIF scan viewer beside the e-text, and the OCR
+      pipeline consuming the same IIIF images.
 - [ ] Library deepening, remaining: list-view mode (low priority).
 
 ## Done highlights (details in README / memory)

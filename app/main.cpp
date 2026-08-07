@@ -2399,6 +2399,10 @@ private:
                  (acip.status.empty() ? "" : " · ") +
                  QString::fromStdString(acip.language).toHtmlEscaped();
             if (acip.incomplete) h += " · <b>INCOMPLETE</b>";
+            const std::string scan = allcore::bdrcScanUrl(acip);
+            if (!scan.empty())
+                h += "<br><a href='" + QString::fromStdString(scan) +
+                     "'>view the original scans on BDRC</a>";
             h += "</div>";
         }
         // text preview for reasonable files

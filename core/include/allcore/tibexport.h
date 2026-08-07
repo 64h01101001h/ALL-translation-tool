@@ -47,6 +47,17 @@ struct AcipFileInfo {
 // Decode an ACIP file name like "S5977MA1.ACT" or "KD0001E2.INC".
 AcipFileInfo decodeAcipFilename(const std::string& filename);
 
+// The BDRC scans page for a decoded catalog file, or "" when the collection
+// has no deterministic mapping. Kangyur/Tengyur ACIP numbers are Tohoku
+// numbers, and BUDA's Derge/Lhasa outline IDs encode them directly
+// (verified live 2026-08-06: bdr:MW23703_4210 = tshad ma rnam 'grel =
+// Tohoku 4210; docs/BDRC_LINKING_DESIGN.md):
+//   KD → bdr:MW22084_<n>   (Derge Kangyur)
+//   KL → bdr:MW26071_<n>   (Lhasa Kangyur)
+//   TD → bdr:MW23703_<n>   (Derge Tengyur)
+// Pure string mapping — no network; the link opens in the user's browser.
+std::string bdrcScanUrl(const AcipFileInfo& info);
+
 // ---- Mixed Nuts preliminary formatting (GMR's demonstrated workflow) -------
 // Prepares a raw ACIP input file for the translation team, replicating the
 // steps Geshe Michael demonstrated on "Destroying the Darkness" (9/26/20

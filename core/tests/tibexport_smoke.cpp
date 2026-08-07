@@ -63,6 +63,19 @@ int main() {
     auto f4 = allcore::decodeAcipFilename("notes.txt");
     CHECK(!f4.recognized, "non-ACIP names are not force-decoded");
 
+    // ---- BDRC scan links (deterministic Tohoku mapping) ----
+    CHECK(allcore::bdrcScanUrl(allcore::decodeAcipFilename("TD4210E.ACT")) ==
+              "https://library.bdrc.io/show/bdr:MW23703_4210",
+          "TD4210 links to the Derge Tengyur scans (Pramanavarttika)");
+    CHECK(allcore::bdrcScanUrl(allcore::decodeAcipFilename("KD0001A.ACT")) ==
+              "https://library.bdrc.io/show/bdr:MW22084_0001",
+          "KD0001 links to the Derge Kangyur, zero-padded");
+    CHECK(allcore::bdrcScanUrl(allcore::decodeAcipFilename("KL0001A.ACT")) ==
+              "https://library.bdrc.io/show/bdr:MW26071_0001",
+          "KL0001 links to the Lhasa Kangyur");
+    CHECK(allcore::bdrcScanUrl(f1).empty(),
+          "Sungbum has no Tohoku mapping — honest empty link");
+
     // ---- Mixed Nuts preliminary formatting ----
     {
         auto p = allcore::formatForTranslation(
