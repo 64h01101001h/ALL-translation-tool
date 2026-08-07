@@ -73,6 +73,12 @@ public:
     std::optional<ClozeDrill> makeCloze(std::mt19937& rng) const;
     std::optional<ParticleDrill> makeParticle(std::mt19937& rng) const;
 
+    // A level-appropriate segment for free-form exercises (the
+    // translate-and-compare workbench draws these directly).
+    CorpusSegment pickSegment(std::mt19937& rng) const {
+        return randomSegment(rng);
+    }
+
 private:
     CorpusSegment randomSegment(std::mt19937& rng) const;
     CorpusSegment uniformSegment(std::mt19937& rng) const;

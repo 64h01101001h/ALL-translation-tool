@@ -1357,7 +1357,8 @@ public:
         mode_ = new QComboBox;
         mode_->addItems({"Chunk order", "Cloze (fill the blank)",
                          "Particle choice", "Parallel reading",
-                         "Vocabulary review (SRS)"});
+                         "Vocabulary review (SRS)",
+                         "Translate & compare"});
         row->addWidget(mode_);
         auto* newBtn = new QPushButton("New drill");
         row->addWidget(newBtn);
@@ -1382,6 +1383,12 @@ public:
         answerRow_ = new QWidget;
         answerRow_->setLayout(new QVBoxLayout);
         layout->addWidget(answerRow_);
+        transDraft_ = new QPlainTextEdit;
+        transDraft_->setPlaceholderText(
+            "your translation — write it before revealing HGM's…");
+        transDraft_->setMaximumHeight(110);
+        transDraft_->setVisible(false);
+        layout->addWidget(transDraft_);
         auto* row2 = new QHBoxLayout;
         input_ = new QLineEdit;
         input_->setPlaceholderText("your order, e.g.  C A B  (chunk-order drills)");
@@ -1397,6 +1404,7 @@ public:
         QObject::connect(mode_, &QComboBox::currentIndexChanged, [this](int m) {
             course_->setVisible(m == 3);
             input_->setVisible(m == 0);
+            transDraft_->setVisible(m == 5);
             newDrill();
         });
         QObject::connect(script_, &QCheckBox::toggled, [this] { renderQuestion(); });
@@ -1475,6 +1483,7 @@ private:
         cloze_.reset();
         part_.reset();
         vocab_.clear();
+        trans_ = allcore::CorpusSegment{};
         const int m = mode_->currentIndex();
         if (m == 0) {
             order_ = factory_.makeOrder(rng_);
@@ -1501,6 +1510,10 @@ private:
                 revealed_ = false;
             }
             if (readPos_ >= readSegs_.size()) readPos_ = 0;
+        } else if (m == 5) {
+            // translate & compare: a level-appropriate unseen segment
+            trans_ = factory_.pickSegment(rng_);
+            transDraft_->clear();
         } else if (m == 4) {
             // SRS review: next due word from the learner's own deck
             if (progress_) {
@@ -1552,6 +1565,14 @@ private:
                  "[" + QString::fromStdString(s.course) + ":" +
                  QString::number(s.seq) + "]</div><hr>" +
                  "<div style='font-size:20px'>" + disp(s.acip) + "</div>";
+        } else if (m == 5 && trans_.id) {
+            h += "<div style='color:#555'>Translate this yourself below — "
+                 "then Check reveals HGM's own rendering and a terminology "
+                 "diff. Nothing grades your style; the master's version "
+                 "teaches. [" + QString::fromStdString(trans_.course) + ":" +
+                 QString::number(trans_.seq) + "]</div><hr>" +
+                 "<div style='font-size:20px'>" + disp(trans_.acip) +
+                 "</div>";
         } else if (m == 4) {
             if (vocab_.empty()) {
                 h += "<div style='color:#3B7A3B'>Nothing due for review — "
@@ -1647,6 +1668,47 @@ private:
                 progress_->recordSegmentRead(s.id, true,
                                              (long long)time(nullptr));
             revealed_ = true;
+        } else if (m == 5 && trans_.id) {
+            h += "<div style='background:#EEF6EE;padding:6px'><b>HGM:</b> " +
+                 QString::fromStdString(trans_.english).toHtmlEscaped() +
+                 "</div>";
+            const std::string draft = transDraft_->toPlainText().toStdString();
+            if (!draft.empty()) {
+                auto rep = allcore::checkTerminology(spine_, index_,
+                                                     trans_.acip, draft);
+                int matched = 0;
+                QString un;
+                for (const auto& t : rep.terms) {
+                    if (!t.matched.empty()) { ++matched; continue; }
+                    if (un.count('\n') < 6) {
+                        QString gl;
+                        int shown = 0;
+                        for (const auto& g : t.glosses) {
+                            if (shown++ >= 2) break;
+                            gl += (shown > 1 ? " · " : "") +
+                                  QString::fromStdString(g).toHtmlEscaped();
+                        }
+                        un += "<br><small>○ <b>" +
+                              QString::fromStdString(t.wylie).toHtmlEscaped() +
+                              "</b> — HGM has: " + gl + "</small>";
+                    }
+                }
+                h += QString("<div style='margin-top:4px'><small>terminology: "
+                             "%1 of %2 terms matched an HGM equivalent in "
+                             "your draft</small>%3</div>")
+                         .arg(matched)
+                         .arg(rep.terms.size())
+                         .arg(un);
+                if (progress_)
+                    progress_->recordDrill(
+                        "translate", std::to_string(trans_.id),
+                        rep.terms.empty() ||
+                            matched * 2 >= (int)rep.terms.size(),
+                        (long long)time(nullptr));
+            } else {
+                h += "<small style='color:#777'>write your translation above "
+                     "before checking — the comparison is the exercise.</small>";
+            }
         } else if (m == 4 && !vocab_.empty()) {
             const int pick = pickedRadio();
             auto es = spine_.lookup(vocab_);
@@ -1738,6 +1800,8 @@ private:
     allcore::DrillFactory factory_;
     std::mt19937 rng_;
     std::string vocab_;
+    allcore::CorpusSegment trans_;
+    QPlainTextEdit* transDraft_ = nullptr;
     bool revealed_ = false;
     QLabel* stats_ = nullptr;
     std::optional<allcore::OrderDrill> order_;

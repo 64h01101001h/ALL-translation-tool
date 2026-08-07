@@ -34,8 +34,19 @@ models in-process (they ship as ONNX; ONNX Runtime links cleanly into our
 C++ core): line detection → per-line recognition → Tibetan Unicode →
 unicode→wylie→ACIP through our proven converters. A Scan pane shows the
 page image with recognized lines side by side; low-confidence lines and
-spellcheck-flagged syllables get the review treatment. **License check on
-the models/app repo is step one of this stage.**
+spellcheck-flagged syllables get the review treatment.
+
+**License check (done 2026-08-06):**
+- The app/pipeline CODE is **MIT-licensed** — we may incorporate, modify,
+  and redistribute it inside our application freely, preserving the license
+  text and attribution. Fully compatible with our codebase.
+- The MODELS are distributed "open access" via BDRC/OpenPecha HuggingFace,
+  but the repo page states no explicit model license. Two clean paths:
+  (a) the app downloads models from BDRC's own release at first use
+  (user-initiated fetch — no redistribution question at all), or
+  (b) confirm bundling rights with BDRC directly — an easy ask given that
+  the Asian Legacy Library is itself credited among the training-data
+  sources. Verify the HuggingFace model cards either way before bundling.
 
 ## Honesty rules for OCR (non-negotiable, inherited)
 - OCR output is ALWAYS tagged `ocr-derived` with model + confidence; it
