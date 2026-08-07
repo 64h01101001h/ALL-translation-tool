@@ -1,3 +1,5 @@
+#include "allcore/affixnorm.h"
+#include "allcore/engines.h"
 #include "allcore/libindex.h"
 
 #include <sqlite3.h>
@@ -73,10 +75,38 @@ LibraryIndex::LibraryIndex(const std::string& db_path) {
          "  id INTEGER PRIMARY KEY,"
          "  file_id INTEGER NOT NULL,"
          "  line_no INTEGER NOT NULL,"
-         "  text TEXT NOT NULL);"
+         "  text TEXT NOT NULL,"
+         "  text_norm TEXT NOT NULL DEFAULT '');"
          "CREATE INDEX IF NOT EXISTS lines_file ON lines(file_id, line_no);"
          "CREATE VIRTUAL TABLE IF NOT EXISTS lines_fts USING fts5("
-         "  text, content='lines', content_rowid='id');");
+         "  text, text_norm, content='lines', content_rowid='id');");
+    // schema migration: indexes built before the affix-normalized
+    // column are derived data — drop and let update() rebuild
+    bool hasNorm = false;
+    {
+        Stmt ti(db_, "PRAGMA table_info(lines)");
+        while (sqlite3_step(ti.p) == SQLITE_ROW) {
+            const auto* n = sqlite3_column_text(ti.p, 1);
+            if (n && std::string((const char*)n) == "text_norm")
+                hasNorm = true;
+        }
+    }
+    if (!hasNorm) {
+        exec(db_,
+             "DROP TABLE IF EXISTS lines_fts;"
+             "DROP TABLE IF EXISTS lines;"
+             "DROP TABLE IF EXISTS files;");
+        exec(db_,
+             "CREATE TABLE files (path TEXT PRIMARY KEY,"
+             "  mtime INTEGER NOT NULL, size INTEGER NOT NULL,"
+             "  nlines INTEGER NOT NULL);"
+             "CREATE TABLE lines (id INTEGER PRIMARY KEY,"
+             "  file_id INTEGER NOT NULL, line_no INTEGER NOT NULL,"
+             "  text TEXT NOT NULL, text_norm TEXT NOT NULL DEFAULT '');"
+             "CREATE INDEX lines_file ON lines(file_id, line_no);"
+             "CREATE VIRTUAL TABLE lines_fts USING fts5("
+             "  text, text_norm, content='lines', content_rowid='id');");
+    }
 }
 
 LibraryIndex::~LibraryIndex() { sqlite3_close(db_); }
@@ -114,8 +144,9 @@ LibraryIndex::UpdateStats LibraryIndex::update(const std::string& root) {
         }
         for (auto& [id, p] : gone) {
             Stmt d1(db_,
-                    "INSERT INTO lines_fts(lines_fts, rowid, text) "
-                    "SELECT 'delete', id, text FROM lines WHERE file_id=?");
+                    "INSERT INTO lines_fts(lines_fts, rowid, text, text_norm) "
+                    "SELECT 'delete', id, text, text_norm FROM lines "
+                    "WHERE file_id=?");
             sqlite3_bind_int64(d1.p, 1, id);
             sqlite3_step(d1.p);
             Stmt d2(db_, "DELETE FROM lines WHERE file_id=?");
@@ -145,8 +176,9 @@ LibraryIndex::UpdateStats LibraryIndex::update(const std::string& root) {
         }
         if (id >= 0) {
             Stmt d1(db_,
-                    "INSERT INTO lines_fts(lines_fts, rowid, text) "
-                    "SELECT 'delete', id, text FROM lines WHERE file_id=?");
+                    "INSERT INTO lines_fts(lines_fts, rowid, text, text_norm) "
+                    "SELECT 'delete', id, text, text_norm FROM lines "
+                    "WHERE file_id=?");
             sqlite3_bind_int64(d1.p, 1, id);
             sqlite3_step(d1.p);
             Stmt d2(db_, "DELETE FROM lines WHERE file_id=?");
@@ -183,19 +215,48 @@ LibraryIndex::UpdateStats LibraryIndex::update(const std::string& root) {
             sqlite3_step(up.p);
         }
         Stmt li(db_,
-                "INSERT INTO lines (file_id, line_no, text) VALUES (?,?,?)");
+                "INSERT INTO lines (file_id, line_no, text, text_norm) "
+                "VALUES (?,?,?,?)");
         Stmt lf(db_,
-                "INSERT INTO lines_fts(rowid, text) VALUES (?,?)");
+                "INSERT INTO lines_fts(rowid, text, text_norm) "
+                "VALUES (?,?,?)");
         for (size_t n = 0; n < lines.size(); ++n) {
+            // affix-normalized shadow (same authority as the corpus
+            // spine): per token ACIP -> ewts -> strip; stored only
+            // when some token actually changed
+            std::string norm;
+            {
+                std::string tok;
+                bool changed = false;
+                std::string built;
+                for (char c : lines[n] + " ") {
+                    if (c == ' ' || c == '\t' || c == ',' || c == '/') {
+                        if (!tok.empty()) {
+                            const std::string wy = acipToEwts(tok);
+                            const std::string st =
+                                stripAffixedParticlesWylie(wy);
+                            if (!built.empty()) built += ' ';
+                            built += st;
+                            changed |= (st != wy);
+                            tok.clear();
+                        }
+                    } else {
+                        tok += c;
+                    }
+                }
+                if (changed) norm = built;
+            }
             sqlite3_reset(li.p);
             sqlite3_bind_int64(li.p, 1, id);
             sqlite3_bind_int64(li.p, 2, (long long)n + 1);
             sqlite3_bind_text(li.p, 3, lines[n].c_str(), -1, SQLITE_TRANSIENT);
+            sqlite3_bind_text(li.p, 4, norm.c_str(), -1, SQLITE_TRANSIENT);
             sqlite3_step(li.p);
             const long long rowid = sqlite3_last_insert_rowid(db_);
             sqlite3_reset(lf.p);
             sqlite3_bind_int64(lf.p, 1, rowid);
             sqlite3_bind_text(lf.p, 2, lines[n].c_str(), -1, SQLITE_TRANSIENT);
+            sqlite3_bind_text(lf.p, 3, norm.c_str(), -1, SQLITE_TRANSIENT);
             sqlite3_step(lf.p);
         }
     }

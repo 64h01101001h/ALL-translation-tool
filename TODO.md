@@ -233,8 +233,11 @@ display toggles, not through invention.
       affixed forms; FTS matches all columns by default so every
       existing search became affix-tolerant with zero API change;
       measured: "bden pa" +87 segments, po +1,587; 22/22 suites on the
-      rebuilt spine). Library file-tree index (libindex) could gain
-      the same column later if wanted.
+      rebuilt spine). Library index gained the same
+      column 2026-08-07 (per-token ACIP→ewts→strip at index time, same
+      authority; external-content FTS delete-sync updated for both
+      columns; pre-norm indexes migrate by one-time rebuild; battery:
+      BDEN PA'I line answers a bden pa search).
 - [ ] **Steinert public dictionary CSVs** — Lookup-pane layers AFTER
       per-dictionary license review (code is GPL — data only).
 - [ ] **bophono** (MIT) — optional non-GMR phonetics schemes toggle

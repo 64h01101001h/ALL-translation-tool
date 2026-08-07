@@ -27,7 +27,7 @@ int main() {
     fs::create_directories(root / "kangyur");
     write(root / "kangyur" / "KL0001MA.ACT",
           "BDEN PA BZHI NI\nSDUG BSNGAL DANG\nKUN 'BYUNG DANG\n'GOG PA DANG "
-          "LAM MO\n");
+          "LAM MO\nBDEN PA'I DON LA\n");
     write(root / "notes.txt",
           "line one\nBDEN PA appears here\nfar away\nfar away\nSDUG BSNGAL "
           "here\n");
@@ -38,19 +38,28 @@ int main() {
     auto st = ix.update(root.string());
     CHECK(st.added == 2 && st.removed == 0,
           "initial update indexes the two eligible files (.pdf skipped)");
-    CHECK(ix.fileCount() == 2 && ix.lineCount() == 9,
+    CHECK(ix.fileCount() == 2 && ix.lineCount() == 10,
           "file and line counts recorded");
 
     auto hits = ix.search("\"bden pa\"");
-    CHECK(hits.size() == 2, "phrase found in both files");
+    CHECK(hits.size() == 3, "phrase found in both files (3 windows — "
+                            "incl. the affixed line's own)");
+    // affix tolerance: the BDEN PA'I line matches a bden pa search via
+    // the normalized column (same authority as the corpus spine)
+    bool affixLine = false;
+    for (auto& h : hits)
+        for (auto& l : h.lines)
+            affixLine |= (l.find("PA'I DON") != std::string::npos);
+    CHECK(affixLine, "BDEN PA'I line found by the bden pa search");
     bool actHit = false;
     for (auto& h : hits) actHit |= h.file.find("KL0001MA.ACT") != std::string::npos;
     CHECK(actHit, ".ACT collection files are searchable");
 
     auto near1 = ix.search("\"BDEN PA\" NEAR/3 \"SDUG BSNGAL\"");
     auto near2 = ix.search("\"BDEN PA\" NEAR/1 \"SDUG BSNGAL\"");
-    CHECK(near1.size() == 2 && near2.size() == 1,
-          "NEAR windows honor the line bound per file");
+    CHECK(near1.size() == 3 && near2.size() == 1,
+          "NEAR windows honor the line bound per file (affixed line "
+          "joins the /3 window)");
     CHECK(!near1[0].lines.empty(), "hit windows are hydrated with line text");
 
     auto orHits = ix.search("\"KUN 'BYUNG\" OR \"far away\"");
