@@ -14,6 +14,17 @@ display toggles, not through invention.
 
 ## Waiting on Adam (prompt him when the task starts)
 
+- [ ] **Collection title pairs → corpus/dictionary** (Adam 2026-08-06;
+      docs/TITLES_INGEST_DESIGN.md): isolate every Kangyur/Tengyur/Sungbum
+      work with BOTH Tibetan and English titles and ingest the pairs.
+      Best source = the ACIP Master Catalog spreadsheet — **Adam to upload
+      it** (or install the collection ZIPs for inventory). One decision
+      needed from Adam/data project first: are catalog English titles
+      binding-tier (HGM's English) or a labeled reference layer? Corpus-
+      side ingestion is safe either way (course TITLES, full provenance).
+      Bonus after ingest: the Library shows English titles for installed
+      files by catalog number.
+
 - [x] **Three new GMR translation volumes** — received readable copies
       2026-08-06 and staged with a provenance/ingestion README at
       `~/Desktop/HGM DICTIONARY - TRANSLATION APP/Input/GMR_volumes_2026-08/`
