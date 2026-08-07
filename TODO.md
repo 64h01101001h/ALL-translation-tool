@@ -60,15 +60,14 @@ display toggles, not through invention.
       placement labeled approximate). LATER:
       word-level after coordinate OCR (user option); Sungbum once a
       BUDA mapping exists (SPARQL title search, user-confirmed).
-- [ ] **Bibliographies: collect + standardize + automate** (Adam
-      2026-08-06): bring in already-composed bibliography collections
-      (first source available now — the three volumes' own bibliographies,
-      B-numbered house format compiled as STD-007); standardize creation
-      on that format; then automate: a generator assembling entries from
-      author + titles + folios + ACIP number (joins the title-pairs
-      catalog work and hgmTechnicalSpelling), with BDRC links as a bonus
-      column. Extraction of the three volumes' bibliographies into a
-      structured collection = good first implementation step.
+- [~] **Bibliographies: collect + standardize + automate** (Adam
+      2026-08-06): COLLECTED (138 published entries extracted → bank +
+      MAIN_BIBLIOGRAPHY.md) · STANDARDIZED + AUTOMATED assembly
+      2026-08-06 (allcore composeBibliographyEntry, exact B3 battery;
+      Draft-pane compose dialog w/ live preview, STD-002 helper, BDRC
+      link from ACIP number, pending-publication label). REMAINING:
+      auto-fill from the Master Catalog title pairs when uploaded;
+      other already-composed collections as Adam supplies them.
 
 - [x] **Three new GMR translation volumes** — received readable copies
       2026-08-06 and staged with a provenance/ingestion README at

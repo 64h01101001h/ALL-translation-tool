@@ -7,6 +7,9 @@
 #include <QLabel>
 #include <QLineEdit>
 #include <QNetworkAccessManager>
+#include <QDialog>
+#include <QDialogButtonBox>
+#include <QFormLayout>
 #include <QPainter>
 #include <QPen>
 #include <QRegularExpression>
@@ -2163,6 +2166,14 @@ public:
         draftCol->addWidget(notesSearch_);
         QObject::connect(notesSearch_, &QLineEdit::returnPressed,
                          [this] { searchNotesBank(); });
+        auto* composeBib = new QPushButton("Compose bibliography entry…");
+        composeBib->setToolTip(
+            "Assembles an entry in the published house format (STD-007). "
+            "Fields are used exactly as typed — enter technical "
+            "spelling as it should print.");
+        draftCol->addWidget(composeBib);
+        QObject::connect(composeBib, &QPushButton::clicked,
+                         [this] { composeBibDialog(); });
         auto* proposeBtn =
             new QPushButton("Propose footnote (pending GMR approval)");
         proposeBtn->setToolTip(
@@ -2652,6 +2663,90 @@ private:
             h += "</div>";
         }
         report_->setHtml(h);
+    }
+
+    void composeBibDialog() {
+        QDialog dlg(this);
+        dlg.setWindowTitle("Compose bibliography entry (STD-007)");
+        auto* form = new QFormLayout(&dlg);
+        auto* ep = new QLineEdit;
+        auto* au = new QLineEdit;
+        auto* dt = new QLineEdit;
+        auto* et = new QLineEdit;
+        auto* tt = new QLineEdit;
+        auto* ac = new QLineEdit;
+        auto* fo = new QLineEdit;
+        ep->setPlaceholderText("Co-ne bla-ma (optional)");
+        au->setPlaceholderText("Grags-pa bshad-sgrub — technical spelling");
+        dt->setPlaceholderText("1675-1748 / c. 200AD (optional)");
+        et->setPlaceholderText("A Brief Clarification of Heart: …");
+        tt->setPlaceholderText(
+            "Lam-rim bsdus-don gyi tsig-'grel … (optional)");
+        ac->setPlaceholderText("S00184 / TD04158 (optional)");
+        fo->setPlaceholderText("1a-11a (optional)");
+        form->addRow("Epithets", ep);
+        form->addRow("Author", au);
+        form->addRow("Dates", dt);
+        form->addRow("English title", et);
+        form->addRow("Tibetan title", tt);
+        form->addRow("ACIP number", ac);
+        form->addRow("Folios", fo);
+        auto* hyBtn = new QPushButton(
+            "Pair-hyphenate author (STD-002 helper — review result)");
+        form->addRow(hyBtn);
+        auto* preview = new QLabel;
+        preview->setWordWrap(true);
+        preview->setStyleSheet("QLabel{background:#00000010;padding:6px}");
+        form->addRow(preview);
+        auto* scanLink = new QLabel;
+        form->addRow(scanLink);
+        auto assemble = [=] {
+            allcore::BibliographyFields f;
+            f.epithets = ep->text().trimmed().toStdString();
+            f.author = au->text().trimmed().toStdString();
+            f.dates = dt->text().trimmed().toStdString();
+            f.english_title = et->text().trimmed().toStdString();
+            f.tibetan_title = tt->text().trimmed().toStdString();
+            f.acip_number = ac->text().trimmed().toStdString();
+            f.folios = fo->text().trimmed().toStdString();
+            return f;
+        };
+        auto refresh = [=] {
+            preview->setText(QString::fromStdString(
+                allcore::composeBibliographyEntry(assemble())));
+            const auto info = allcore::decodeAcipFilename(
+                ac->text().trimmed().toStdString() + ".ACT");
+            const auto url = allcore::bdrcScanUrl(info);
+            scanLink->setText(
+                url.empty() ? ""
+                            : "scans: " + QString::fromStdString(url));
+        };
+        for (auto* w : {ep, au, dt, et, tt, ac, fo})
+            QObject::connect(w, &QLineEdit::textChanged, refresh);
+        QObject::connect(hyBtn, &QPushButton::clicked, [au, refresh] {
+            au->setText(QString::fromStdString(allcore::hgmTechnicalSpelling(
+                au->text().trimmed().toStdString())));
+            refresh();
+        });
+        auto* buttons = new QDialogButtonBox;
+        auto* insertB =
+            buttons->addButton("Insert into draft", QDialogButtonBox::AcceptRole);
+        buttons->addButton(QDialogButtonBox::Cancel);
+        form->addRow(buttons);
+        QObject::connect(buttons, &QDialogButtonBox::accepted, &dlg,
+                         &QDialog::accept);
+        QObject::connect(buttons, &QDialogButtonBox::rejected, &dlg,
+                         &QDialog::reject);
+        (void)insertB;
+        refresh();
+        if (dlg.exec() != QDialog::Accepted) return;
+        const QString entry = QString::fromStdString(
+            allcore::composeBibliographyEntry(assemble()));
+        if (entry == ".") return;
+        draft_->textCursor().insertText(
+            "[BIBLIOGRAPHY — NEW ENTRY, house format (STD-007), "
+            "pending publication: " + entry + "]");
+        draft_->setFocus();
     }
 
     void insertBibEntry(int ix) {

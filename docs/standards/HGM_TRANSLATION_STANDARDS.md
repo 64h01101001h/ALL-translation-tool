@@ -128,11 +128,17 @@ formatter; ⟨…⟩ failure marks; provisional labeling throughout.
 > tsig-'grel snying-po mdor-bsdus gsal-ba, ACIP S00184), ff. 1a-11a.
 > Sections: works originally in Sanskrit · in Tibetan · in English ·
 > the Diamond Cutter Classics series.
-> *App integration:* FUTURE — a bibliography generator: entries embed
-> ACIP catalog numbers, so author + titles + folios can be assembled
-> automatically from the catalog/title-pair data (see
-> docs/TITLES_INGEST_DESIGN.md) and rendered in exactly this format;
-> technical spellings via hgmTechnicalSpelling (STD-002, shipped).
+> *App integration:* PARTIALLY SHIPPED 2026-08-06 — allcore
+> composeBibliographyEntry assembles the house format exactly (battery:
+> reproduces published B3 verbatim); Draft pane "Compose bibliography
+> entry…" dialog with live preview, optional STD-002 pair-hyphenation
+> helper for author names (explicit button, result reviewed — lexical
+> hyphenation in titles is NOT derivable, so fields print as typed),
+> BDRC scan link derived from the ACIP number (five-digit catalog refs
+> now normalize to BUDA's four digits), insertion labeled "NEW ENTRY …
+> pending publication" (STD-008 tier discipline). FUTURE: auto-fill
+> author/titles/folios from the catalog/title-pair data once Adam
+> uploads the Master Catalog (docs/TITLES_INGEST_DESIGN.md).
 
 ### 8. Footnote reuse (GMR directive)
 

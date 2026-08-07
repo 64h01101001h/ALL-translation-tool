@@ -65,6 +65,22 @@ std::string hgmTechnicalSpelling(const std::string& wylie);
 // Pure string mapping — no network; the link opens in the user's browser.
 std::string bdrcScanUrl(const AcipFileInfo& info);
 
+// STD-007 house bibliography entry, assembled exactly as published:
+//   (Epithets) Author, dates. English Title (Tibetan title in technical
+//   spelling, ACIP S#####), ff. 1a-11a.
+// Pure assembly: every field is used verbatim (house technical spelling
+// is entered, not derived — lexical hyphenation is not guessable).
+struct BibliographyFields {
+    std::string epithets;             // without parentheses; optional
+    std::string author;               // technical spelling as published
+    std::string dates;                // "1675-1748"; optional
+    std::string english_title;        // full title with subtitles
+    std::string tibetan_title;        // technical spelling; optional
+    std::string acip_number;          // "S00184"; optional
+    std::string folios;               // "1a-11a"; optional
+};
+std::string composeBibliographyEntry(const BibliographyFields& f);
+
 // ---- Mixed Nuts preliminary formatting (GMR's demonstrated workflow) -------
 // Prepares a raw ACIP input file for the translation team, replicating the
 // steps Geshe Michael demonstrated on "Destroying the Darkness" (9/26/20

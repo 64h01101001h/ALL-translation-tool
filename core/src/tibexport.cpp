@@ -146,10 +146,31 @@ std::string bdrcScanUrl(const AcipFileInfo& info) {
     else if (info.collection == "Kangyur (Lhasa edition)") base = "MW26071_";
     else if (info.collection == "Tengyur (Derge edition)") base = "MW23703_";
     else return "";   // Sungbum/Reference/etc.: no Tohoku mapping — honest ""
-    // BUDA zero-pads to four digits
+    // BUDA uses exactly four digits: strip leading zeros first (catalog
+    // refs can be five-digit, e.g. TD04158 = Tohoku 4158), then pad
     std::string n = info.number;
+    while (n.size() > 1 && n[0] == '0') n.erase(0, 1);
     while (n.size() < 4) n = "0" + n;
     return "https://library.bdrc.io/show/bdr:" + std::string(base) + n;
+}
+
+std::string composeBibliographyEntry(const BibliographyFields& f) {
+    std::string out;
+    if (!f.epithets.empty()) out += "(" + f.epithets + ") ";
+    out += f.author;
+    if (!f.dates.empty()) out += ", " + f.dates;
+    out += ". " + f.english_title;
+    if (!f.tibetan_title.empty() || !f.acip_number.empty()) {
+        out += " (";
+        out += f.tibetan_title;
+        if (!f.acip_number.empty())
+            out += (f.tibetan_title.empty() ? "ACIP " : ", ACIP ") +
+                   f.acip_number;
+        out += ")";
+    }
+    if (!f.folios.empty()) out += ", ff. " + f.folios;
+    out += ".";
+    return out;
 }
 
 TranslationPrep formatForTranslation(const std::string& acip_document) {

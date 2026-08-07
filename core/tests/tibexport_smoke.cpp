@@ -90,6 +90,44 @@ int main() {
     CHECK(allcore::hgmTechnicalSpelling("bden pa bzhi") == "bden-pa bzhi",
           "technical spelling: odd trailing syllable stands alone");
 
+    // ---- STD-007 bibliography entry composer ----
+    {
+        allcore::BibliographyFields f;
+        f.epithets = "Co-ne bla-ma";
+        f.author = "Grags-pa bshad-sgrub";
+        f.dates = "1675-1748";
+        f.english_title =
+            "A Brief Clarification of Heart: A Word-by-Word Commentary "
+            "to \u201cAn Abbreviated Presentation of the Steps to the "
+            "Path\u201d";
+        f.tibetan_title =
+            "Lam-rim bsdus-don gyi tsig-'grel snying-po mdor-bsdus "
+            "gsal-ba";
+        f.acip_number = "S00184";
+        f.folios = "1a-11a";
+        CHECK(allcore::composeBibliographyEntry(f) ==
+                  "(Co-ne bla-ma) Grags-pa bshad-sgrub, 1675-1748. "
+                  "A Brief Clarification of Heart: A Word-by-Word "
+                  "Commentary to \u201cAn Abbreviated Presentation of "
+                  "the Steps to the Path\u201d (Lam-rim bsdus-don gyi "
+                  "tsig-'grel snying-po mdor-bsdus gsal-ba, "
+                  "ACIP S00184), ff. 1a-11a.",
+              "composer reproduces published B3 exactly");
+        allcore::BibliographyFields g;
+        g.author = "N\u0101g\u0101rjuna (Tib: Klu-sgrub)";
+        g.dates = "c. 200AD";
+        g.english_title = "The String of Precious Jewels";
+        g.acip_number = "TD04158";
+        CHECK(allcore::composeBibliographyEntry(g) ==
+                  "N\u0101g\u0101rjuna (Tib: Klu-sgrub), c. 200AD. "
+                  "The String of Precious Jewels (ACIP TD04158).",
+              "composer: optional fields omitted cleanly");
+    }
+    // five-digit catalog refs normalize to BUDA's four digits
+    CHECK(allcore::bdrcScanUrl(allcore::decodeAcipFilename("TD04158.ACT")) ==
+              "https://library.bdrc.io/show/bdr:MW23703_4158",
+          "TD04158 (five-digit catalog ref) links as Tohoku 4158");
+
     // ---- Mixed Nuts preliminary formatting ----
     {
         auto p = allcore::formatForTranslation(

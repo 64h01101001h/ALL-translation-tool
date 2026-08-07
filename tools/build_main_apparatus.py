@@ -53,6 +53,22 @@ def main():
                 "volumes. Reuse per GMR's directive: any of these can and "
                 "should be reused as their topics come up — always with "
                 "the citation given here.\n\n")
+        # cross-volume lemma index: the same topic annotated in more
+        # than one released volume — prime reuse candidates
+        lem = {}
+        for n in notes:
+            lem.setdefault(n["lemma"].strip().lower(), []).append(n)
+        shared = {k: v for k, v in lem.items()
+                  if len({x["source"] for x in v}) > 1}
+        if shared:
+            f.write("## Lemmas annotated in more than one volume "
+                    f"({len(shared)})\n\n")
+            for k in sorted(shared):
+                refs = "; ".join(
+                    f"{x['source'].split(' (')[0]} n.{x['note']}"
+                    for x in shared[k])
+                f.write(f"- **{shared[k][0]['lemma']}** \u2014 {refs}\n")
+            f.write("\n")
         for src, ns in by_src.items():
             f.write(f"## {src} ({len(ns)} notes)\n\n")
             for n in sorted(ns, key=lambda x: x["note"]):
