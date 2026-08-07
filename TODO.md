@@ -167,9 +167,21 @@ display toggles, not through invention.
       field-for-field (tools/build_botok_tok_reference.py; segments the
       canonical engine refuses to convert are counted and skipped,
       never approximated).
-      — REMAINING: increment 3 — affixed-particle SPLIT layer
-      (modifytokens/splitaffixed) if wanted for display, and Overlay
-      wiring: segmenter lexicon = spine + Monlam lists, tier-labeled.
+      — INCREMENT 3 v1 SHIPPED 2026-08-07: allcore::botok::Segmenter
+      facade (lexicon-fed trie + tokenize; word = cleaned syllables
+      reach a lexicon leaf — checked against the trie, since pos labels
+      can't distinguish matched from backtracked) + Overlay Display
+      toggle "Botok segmentation (reference)" (default off, persisted):
+      click card shows the clicked CLAUSE segmented into words, lexicon
+      = HGM dictionary headwords via the battery-proven conversion
+      chain (lazy one-time build, timing shown), out-of-lexicon runs
+      ⟨bracketed⟩, non-Tibetan grayed — labeled reference display only,
+      spans stay lattice-bound. Facade checks in botok_tok_smoke.
+      — REMAINING: Monlam lists as segmenter lexicon (needs a compact
+      trie — current node layout would be ~GB-scale at 449k words ×
+      affix inflection; deferred honestly), affixed-particle SPLIT
+      display layer (modifytokens/splitaffixed), possible deeper
+      Overlay integration with Adam's direction.
 - [~] **Monlam word lists** — BANKED + FIRST INTEGRATION 2026-08-07
       (Apache-2.0 verified; 107,108 + 342,340 unique forms; allcore
       RefLexicon, 18th suite proves the real conversion path matches

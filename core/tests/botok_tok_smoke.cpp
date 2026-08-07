@@ -188,6 +188,28 @@ int main(int argc, char** argv) {
         CHECK(allOk && compared >= 10, "scenario token streams identical to oracle");
     }
 
+    // ---- Segmenter facade ---------------------------------------------------
+    {
+        Segmenter seg(argv[1]);
+        seg.addWord("བཀྲ་ཤིས་");
+        seg.addWord("བདེ་ལེགས་");
+        seg.addWord("མཐའ་");
+        auto words = seg.segment("བཀྲ་ཤིས་བདེ་ལེགས། ཀཀ abc མཐའི་མཐའ།");
+        CHECK(words.size() == 8, "segmenter: token count");
+        auto is = [&](size_t i, const char* text, bool tib, bool word) {
+            return i < words.size() && words[i].text == text &&
+                   words[i].tibetan == tib && words[i].word == word;
+        };
+        CHECK(is(0, "བཀྲ་ཤིས་", true, true), "segmenter: word 1 matched");
+        CHECK(is(1, "བདེ་ལེགས", true, true), "segmenter: word 2 matched");
+        CHECK(is(2, "། ", false, false), "segmenter: punct not a word");
+        CHECK(is(3, "ཀཀ ", true, false), "segmenter: OOV marked non-word");
+        CHECK(is(4, "abc ", false, false), "segmenter: latin not tibetan");
+        CHECK(is(5, "མཐའི་", true, true), "segmenter: affixed form matched");
+        CHECK(is(6, "མཐའ", true, true), "segmenter: base form matched");
+        CHECK(is(7, "།", false, false), "segmenter: final shad");
+    }
+
     // ---- corpus-scale battery ----------------------------------------------
     if (argc >= 5) {
         Trie trie(table, bosyl);

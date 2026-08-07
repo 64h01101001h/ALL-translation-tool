@@ -216,5 +216,36 @@ BotokToken Tokenize::createToken(
     return token;
 }
 
+// ------------------------------------------------------------------ Segmenter
+
+std::vector<SegWord> Segmenter::segment(const std::string& unicodeText) {
+    ChunkFramework cf(table_, u8to32(unicodeText));
+    auto chunks = cf.serveSylsToTrie();
+    Tokenize tok(trie_);
+    std::vector<SegWord> out;
+    for (const BotokToken& t : tok.tokenize(cf, chunks)) {
+        SegWord w;
+        w.text = t.text;
+        w.tibetan = t.chunkType == "TEXT";
+        if (w.tibetan && t.hasSyls) {
+            // word iff the cleaned syllables reach a lexicon leaf — checked
+            // against the trie directly (pos labels can't distinguish a
+            // matched-lexicon token from a backtracked non-word)
+            std::u32string text32 = u8to32(t.text);
+            TrieNode* node = nullptr;
+            bool ok = true;
+            for (const auto& syl : t.sylsIdx) {
+                std::u32string s32;
+                for (int i : syl) s32.push_back(text32[i]);
+                node = trie_.walk(u32to8(s32), node);
+                if (!node) { ok = false; break; }
+            }
+            w.word = ok && node && node->isMatch();
+        }
+        out.push_back(std::move(w));
+    }
+    return out;
+}
+
 }  // namespace botok
 }  // namespace allcore

@@ -3,6 +3,7 @@
 // Pane 2 "Analysis": passage → engine pre-pass → Claude API (streamed) →
 //                    rendered report → machine QC panel.
 #include <QApplication>
+#include <QElapsedTimer>
 #include <QHBoxLayout>
 #include <QLabel>
 #include <QLineEdit>
@@ -60,6 +61,7 @@
 #include <QDateTime>
 
 #include "allcore/analysis.h"
+#include "allcore/botok.h"
 #include "allcore/drills.h"
 #include "allcore/engines.h"
 #include "allcore/gofer.h"
@@ -587,6 +589,8 @@ public:
         showHopkins_ = mkToggle("hopkins", "Hopkins reference", false);
         showRefs_ = mkToggle("refs", "reference dictionaries (LC/TD/THL)",
                              true);
+        showSeg_ = mkToggle("segmentation", "Botok segmentation (reference)",
+                            false);
         hint_ = new QLabel("Click a shaded word to see its context; click again "
                            "to cycle outward through the containing phrases.");
         hint_->setWordWrap(true);
@@ -764,6 +768,7 @@ private:
                                     ? allcore::classifyParticle(doc_.tokens[tok])
                                     : nullptr) {
                 context_->setHtml(
+                    segmentationHtml(tok) +
                     QString("<b>%1</b> — grammatical particle<br>%2<br>"
                             "<small style='color:#555'>paradigm: %3</small>")
                         .arg(QString::fromUtf8(p->wylie).toHtmlEscaped(),
@@ -787,8 +792,8 @@ private:
                                     .arg(QString::fromStdString(att)
                                              .toHtmlEscaped());
                 }
-                context_->setHtml("<i>no dictionary span here</i>" +
-                                  extra);
+                context_->setHtml(segmentationHtml(tok) +
+                                  "<i>no dictionary span here</i>" + extra);
             }
             return;
         }
@@ -809,7 +814,8 @@ private:
         view_->setExtraSelections({sel});
 
         // breadcrumb of the nesting chain + entry + corpus count
-        QString h = "<div style='color:#555;font-size:12px'>nesting: ";
+        QString h = segmentationHtml(tok);
+        h += "<div style='color:#555;font-size:12px'>nesting: ";
         for (size_t i = 0; i < at.size(); ++i) {
             const auto& s = doc_.spans[at[i]];
             QString w = QString::fromStdString(doc_.entries[s.entry_ix].wylie).toHtmlEscaped();
@@ -1319,9 +1325,82 @@ private:
     QCheckBox* showSanskrit_ = nullptr;
     QCheckBox* showHopkins_ = nullptr;
     QCheckBox* showRefs_ = nullptr;
+    QCheckBox* showSeg_ = nullptr;
+    std::unique_ptr<allcore::botok::Segmenter> segmenter_;
+    bool segTried_ = false;
+    QString segInfo_;
     bool loading_ = false;
     int lastTok_ = -1;
     int cycle_ = 0;
+
+    // Botok segmenter: lazy one-time lexicon build (HGM dictionary headwords
+    // through the battery-proven conversion chain). Reference display only —
+    // the Overlay's spans stay dictionary-lattice-bound.
+    void ensureSegmenter() {
+        if (segTried_) return;
+        segTried_ = true;
+        QElapsedTimer timer;
+        timer.start();
+        try {
+            auto seg = std::make_unique<allcore::botok::Segmenter>(
+                (dataRoot_ + "/data/botok").toStdString());
+            for (const auto& [id, acip] : spine_.allAcipHeadwords()) {
+                auto [uni, ok] =
+                    allcore::wylieToUnicode(allcore::acipToEwts(acip));
+                if (ok) seg->addWord(uni);
+            }
+            segmenter_ = std::move(seg);
+            segInfo_ = QString("%1 words, built in %2s")
+                           .arg(segmenter_->wordCount())
+                           .arg(timer.elapsed() / 1000.0, 0, 'f', 1);
+        } catch (const std::exception& e) {
+            segInfo_ = QString("unavailable: %1").arg(e.what());
+        }
+    }
+
+    QString segmentationHtml(int tok) {
+        if (!showSeg_ || !showSeg_->isChecked()) return {};
+        ensureSegmenter();
+        if (!segmenter_)
+            return "<div style='color:#B4540A;font-size:12px'>Botok "
+                   "segmentation " + segInfo_.toHtmlEscaped() + "</div>";
+        // the clicked token's clause (between barriers)
+        int beg = tok;
+        while (beg > 0 && !doc_.barrier_after[beg - 1]) --beg;
+        int end = tok;
+        while (end + 1 < (int)doc_.tokens.size() && !doc_.barrier_after[end])
+            ++end;
+        std::string uni;
+        for (int i = beg; i <= end; ++i) {
+            auto [u, ok] =
+                allcore::wylieToUnicode(allcore::acipToEwts(doc_.tokens[i]));
+            if (!ok)
+                return "<div style='color:#B4540A;font-size:12px'>Botok "
+                       "segmentation skipped: unconvertible token in this "
+                       "clause</div>";
+            if (!uni.empty()) uni += "་";
+            uni += u;
+        }
+        QString h =
+            "<div style='font-size:12px'><span style='color:#555'>Botok "
+            "segmentation <i>(Apache-2.0 port, reference only — lexicon: HGM "
+            "dictionary headwords, " + segInfo_.toHtmlEscaped() +
+            ")</i>:</span><br><span style='font-size:15px'>";
+        bool first = true;
+        for (const auto& w : segmenter_->segment(uni)) {
+            QString txt = QString::fromStdString(w.text).toHtmlEscaped();
+            if (!first) h += " <span style='color:#AAA'>·</span> ";
+            first = false;
+            if (w.tibetan && w.word)
+                h += "<span style='color:#1E4E6B'>" + txt + "</span>";
+            else if (w.tibetan)  // honest: not in the lexicon
+                h += "<span style='color:#B4540A'>⟨" + txt + "⟩</span>";
+            else
+                h += "<span style='color:#888'>" + txt + "</span>";
+        }
+        h += "</span></div><hr>";
+        return h;
+    }
 };
 
 // ---- Search pane: Gofer grammar over the corpus ----------------------------

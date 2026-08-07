@@ -336,5 +336,36 @@ private:
     const std::vector<TokChunk>* chunks_ = nullptr;
 };
 
+// Segmenter — the app-facing facade: a lexicon-fed Trie + Tokenize behind
+// one call. REFERENCE ONLY in the UI: segmentation output is displayed as
+// a labeled layer and never drives the Overlay's dictionary-bound spans.
+struct SegWord {
+    std::string text;     // the token's surface text (UTF-8, incl. tsheks)
+    bool tibetan = false; // TEXT chunk (vs punct/latin/other)
+    bool word = false;    // the cleaned syllables reach a lexicon leaf
+};
+
+class Segmenter {
+public:
+    // dataDir = data/botok (char table + SylComponents.json)
+    explicit Segmenter(const std::string& dataDir)
+        : table_(dataDir), bosyl_(dataDir), trie_(table_, bosyl_) {}
+
+    // unicodeWord: Tibetan-script word; all affixed forms enter the trie
+    void addWord(const std::string& unicodeWord) {
+        trie_.inflectNModifyTrie(unicodeWord);
+        ++words_;
+    }
+    size_t wordCount() const { return words_; }
+
+    std::vector<SegWord> segment(const std::string& unicodeText);
+
+private:
+    CharTable table_;
+    BoSyl bosyl_;
+    Trie trie_;
+    size_t words_ = 0;
+};
+
 }  // namespace botok
 }  // namespace allcore
