@@ -18,7 +18,18 @@ Each entry follows this form:
 
 ### 1. Terminology
 *(binding equivalents, preferred renderings, terms never to translate)*
-— nothing compiled yet beyond the dictionary itself —
+
+> **STD-011** · terminology · source: *The Other Side of Emptiness* (tr.
+> Chang w/ GMR, ©2026), commentary discussion of mental seeds
+> Prefer "mental seed" over the loanword "karma": "this poor word
+> 'karma' is so abused in our modern world that perhaps we should just
+> let him take a rest, and use the expression 'mental seed'
+> instead—since that's all we are ever really talking about, when we
+> use the word 'karma.'"
+> *App integration:* style advisory for the Draft workspace (the
+> dictionary layer remains the binding authority; this records the
+> published preference in the translators' own words).
+
 **Integration hooks ready:** the Draft pane's terminology checker (flags
 non-HGM renderings, mixed renderings, collapsed distinctions); the tier
 system (curated > glossary > provisional); the corpus concordance.
@@ -112,6 +123,36 @@ insertions)*
 > entry named). Translator supplements are never silent.
 > *App integration:* matches the project's own ⟨…⟩/flag discipline;
 > FUTURE — a Draft convention for marking translator insertions.
+
+> **STD-009** · sources & editions · source: *The Sixty Verses of
+> Nagarjuna* (tr. Lashaw w/ GMR, ©2023), colophon notes to the combined
+> root text and endnote 243
+> Declare the edition of every source used. The volume takes the root
+> text from the Derge Tengyur ("we have used the straight Derge
+> Tengyur version in the combined root text"), RETAINS the commentary's
+> own differing embedded root verses because they may descend from a
+> different early translation ("we have retained his version of the
+> root text, which appears to be a different translation from the
+> Sanskrit"), and where editions differ, states which reading was
+> adopted and why (n.243: "we have used the version found in the Derge
+> edition of the Tengyur, which seems to make more sense"). The
+> Sanskrit editions consulted are named in full in the bibliography.
+> *App integration:* aligned with the project's provenance rule; the
+> bibliography composer carries edition statements verbatim; FUTURE —
+> a Draft note convention for variant readings ("Derge reads X; the
+> commentary embeds Y; we follow …").
+
+> **STD-010** · apparatus/honesty · source: *A Song of My Spiritual
+> Life* (tr. Chang w/ GMR, ©2025), endnotes 28 and 48
+> Homonym and spelling variants are DECLARED, never silently
+> normalized: when the root text spells a word with a homonym (bsten-pa
+> "rely upon" vs. brtan-pa "firm", n.28; so-sor rtog-pa vs. so-sor
+> rtogs-pa, n.48), the note gives both readings, the evidence (the
+> Sanskrit original where available — pratyavekṣa, n.48 — and standard
+> usage), and the meaning adopted.
+> *App integration:* ALREADY ALIGNED — rule 3 (never guess) and the
+> spellcheck layer's review flags embody this; the notes bank makes
+> the published examples reusable as models.
 **Integration hooks ready:** bracket/note conventions in the prep
 formatter; ⟨…⟩ failure marks; provisional labeling throughout.
 
