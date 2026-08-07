@@ -21,6 +21,7 @@ add_library(allcore STATIC
   src/wilsonparse.cpp
   src/tibexport.cpp
   src/quotation.cpp
+  src/verbstems.cpp
   src/libindex.cpp
   src/gofer.cpp
   src/acip_ewts.cpp
@@ -106,6 +107,11 @@ add_executable(quotation_smoke tests/quotation_smoke.cpp)
 target_link_libraries(quotation_smoke PRIVATE allcore)
 add_test(NAME quotation_smoke
          COMMAND quotation_smoke ${CMAKE_SOURCE_DIR}/build/hgm_spine_v27_2.db)
+
+add_executable(verbstems_smoke tests/verbstems_smoke.cpp)
+target_link_libraries(verbstems_smoke PRIVATE allcore)
+add_test(NAME verbstems_smoke
+         COMMAND verbstems_smoke ${CMAKE_SOURCE_DIR}/data/extracted/verb_stems.tsv)
 
 add_executable(tibexport_smoke tests/tibexport_smoke.cpp)
 target_link_libraries(tibexport_smoke PRIVATE allcore)

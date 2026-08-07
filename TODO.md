@@ -147,8 +147,15 @@ display toggles, not through invention.
 - [ ] **Monlam word lists** (Apache-2.0: ~107k + ~367k forms) →
       segmenter lexicon + word-level spellcheck layer. Lists only —
       Monlam definitions are NOT open.
-- [ ] **CC0 verbs database** (tibetan-nlp, 4-stem tables) → Wilson
-      parser stem evidence. Import immediately — license-clean.
+- [x] **CC0 verbs database** — INTEGRATED 2026-08-07: 2,491 paradigm
+      rows / 3,676 distinct stems banked (tools/import_verbs_db.py →
+      verb_stems.tsv; misaligned cells flagged+skipped, ༼X༽ variants
+      expanded); allcore VerbStems (17th suite: byas=past, byed=present
+      via our own converters, bad cell proven absent); Overlay click
+      card shows "Verbs DB (CC0 — reference only): past stem of
+      pres|past|fut|imp [sources]" under the grammar toggle — display
+      only, NEVER parse-binding (parse stays on dictionary tense
+      evidence).
 - [ ] **pyewts diff-oracle** — run our 26,318 ground-truth pairs +
       dictionary through the ecosystem-standard converter, classify
       divergences (validation harness only; our engines stay canonical).

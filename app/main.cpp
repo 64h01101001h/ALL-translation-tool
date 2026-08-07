@@ -74,6 +74,7 @@
 #include "allcore/spellcheck.h"
 #include "allcore/quotation.h"
 #include "allcore/spine.h"
+#include "allcore/verbstems.h"
 #include "allcore/outline.h"
 #include "allcore/verse.h"
 #include "allcore/wilsonparse.h"
@@ -408,7 +409,8 @@ public:
         : spine_(spine), checker_(checker), ref_(ref), progress_(progress),
           index_(spine),
           scanCache_(root.isEmpty() ? QString()
-                                    : root + "/library/scan_cache") {
+                                    : root + "/library/scan_cache"),
+          dataRoot_(root) {
         auto* outer = new QVBoxLayout(this);
         auto* split = new QSplitter(Qt::Horizontal);
 
@@ -813,6 +815,44 @@ private:
                               .toHtmlEscaped());
         }
         if (showGrammar_->isChecked()) h += agreementHtml(tok);
+        // CC0 verbs-database: labeled reference comparanda, display only
+        if (showGrammar_->isChecked()) {
+            if (!verbStemsTried_) {
+                verbStemsTried_ = true;
+                verbStems_.load((dataRoot_ +
+                                 "/data/extracted/verb_stems.tsv")
+                                    .toStdString());
+            }
+            const auto& tokTxt = doc_.tokens[tok];
+            auto [uni, okc] = allcore::wylieToUnicode(
+                allcore::acipToEwts(tokTxt));
+            if (okc) {
+                const auto hits = verbStems_.lookup(uni);
+                if (!hits.empty()) {
+                    QString vh =
+                        "<div style='margin-top:6px;color:#1E6B4E;"
+                        "font-size:12px'><b>Verbs DB</b> "
+                        "<small>(tibetan-nlp, CC0 — reference "
+                        "only)</small>: ";
+                    for (size_t i = 0; i < hits.size() && i < 3; ++i) {
+                        if (i) vh += " · ";
+                        vh += QString::fromStdString(hits[i].roles)
+                                  .toHtmlEscaped() +
+                              " stem of " +
+                              QString::fromStdString(hits[i].paradigm)
+                                  .toHtmlEscaped() +
+                              (hits[i].sources.empty()
+                                   ? QString()
+                                   : " [" +
+                                         QString::fromStdString(
+                                             hits[i].sources)
+                                             .toHtmlEscaped() +
+                                         "]");
+                    }
+                    h += vh + "</div>";
+                }
+            }
+        }
         auto segs = showCorpus_->isChecked()
                         ? spine_.corpusSearch('"' + e.wylie + '"', "", 3)
                         : std::vector<allcore::CorpusSegment>{};
@@ -1218,6 +1258,9 @@ private:
     QLabel* scanCap_ = nullptr;
     QWidget* scanNav_ = nullptr;
     QString scanWork_, scanCache_, curFolio_, scanLicense_, fileKey_;
+    QString dataRoot_;
+    allcore::VerbStems verbStems_;
+    bool verbStemsTried_ = false;
     bool titleSearchMode_ = false;
     QPixmap basePx_;
     int curLine_ = 0, curLineTotal_ = 0;
