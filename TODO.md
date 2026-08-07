@@ -47,14 +47,17 @@ display toggles, not through invention.
       bibliography entries when the course id matches the bank's ACIP
       refs. LATER: cross-segment-boundary extension; footnote-lemma
       recommendations from quoted spans.
-- [ ] **Scan follow-along** (Adam, 2026-08-06): on opening a recognized
-      text, recommend the BDRC scans; map our @folio markers to IIIF
-      scan images (one-time user calibration of the front-matter offset
-      — no guessing), show the woodblock page as the translator moves
-      through the text; line-band highlight from ACIP line structure;
-      word-level only after coordinate OCR (optional). OCR of downloaded
-      scans stays a user option, not a default. Design:
-      docs/APPARATUS_DESIGN.md §3.
+- [x] **Scan follow-along v1** (Adam, 2026-08-06) — SHIPPED 2026-08-06:
+      opening a recognized Derge/Lhasa Kangyur or Derge Tengyur text arms
+      "Follow along in scans (bdr:MW…)" in the Overlay; BDRC's IIIF
+      manifest labels its canvases with folio sides ("94a"/"94b") so the
+      @folio↔image mapping is BDRC's own — NO calibration needed (better
+      than designed); the woodblock page tracks the cursor's @folio
+      marker, with prev/next, disk cache (library/scan_cache/), license
+      line shown (public domain mark), browser-link fallback when
+      offline. LATER: line-band highlight from ACIP line structure;
+      word-level after coordinate OCR (user option); Sungbum once a
+      BUDA mapping exists (SPARQL title search, user-confirmed).
 - [ ] **Bibliographies: collect + standardize + automate** (Adam
       2026-08-06): bring in already-composed bibliography collections
       (first source available now — the three volumes' own bibliographies,

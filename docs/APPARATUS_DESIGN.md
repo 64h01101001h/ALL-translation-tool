@@ -73,12 +73,16 @@ Design:
 1. **Offer, don't push**: on opening a recognized K/T file in the
    Overlay pane, show "Scans of this text are on BDRC — open / follow
    along" (we already show the scan link; this extends it).
-2. **Folio → image mapping**: scan volumes start with front matter, so
-   image index = folio-side index + per-volume offset. The offset is NOT
-   guessable → the user calibrates once per text ("this image = folio
-   1a"), stored with the file; every other folio then maps exactly
-   (@012B = images offset + 2·12 − 1 + 1 side arithmetic). Calibration is
-   deterministic user input, not a heuristic.
+2. **Folio → image mapping**: RESOLVED BETTER THAN DESIGNED
+   (verified 2026-08-06 against MW23703_4210): BDRC's IIIF presentation
+   manifests label every canvas with its folio side ("94a", "94b") in
+   the label array (@language en), and the wvo: manifest is already
+   sliced to the work within its volume. So @094A maps to the canvas
+   labeled "94a" directly — BDRC's own mapping, no user calibration
+   needed. Chain: collection wio:bdr:MW… → manifests[] → canvases →
+   {folio label, image URL}. License field observed: public domain mark.
+   The calibration mechanism below stays documented as the fallback for
+   any archive whose manifests lack folio labels.
 3. **Follow-along pane**: as the cursor moves through the ACIP text, the
    current `@folio` marker selects the scan image (fetched via IIIF,
    cached locally). Line-level following: ACIP files preserve the

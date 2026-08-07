@@ -7,6 +7,7 @@
 #include <QLabel>
 #include <QLineEdit>
 #include <QNetworkAccessManager>
+#include <QRegularExpression>
 #include <QNetworkReply>
 #include <QNetworkRequest>
 #include <QPlainTextEdit>
@@ -359,6 +360,7 @@ public:
         input_->setPlainText(QString::fromUtf8(f.readAll()));
         loadDoc();
         auto info = allcore::decodeAcipFilename(fn.toStdString());
+        setScanTarget(info);
         if (info.recognized)
             hint_->setText(
                 QString("%1 · text %2 · %3\n")
@@ -371,9 +373,12 @@ public:
     }
 
     OverlayPane(allcore::Spine& spine, allcore::SyllableChecker* checker,
-                allcore::RefDict* ref, allcore::Progress* progress)
+                allcore::RefDict* ref, allcore::Progress* progress,
+                const QString& root = QString())
         : spine_(spine), checker_(checker), ref_(ref), progress_(progress),
-          index_(spine) {
+          index_(spine),
+          scanCache_(root.isEmpty() ? QString()
+                                    : root + "/library/scan_cache") {
         auto* outer = new QVBoxLayout(this);
         auto* split = new QSplitter(Qt::Horizontal);
 
@@ -387,6 +392,38 @@ public:
         ll->addWidget(open);
         auto* load = new QPushButton("Load into overlay");
         ll->addWidget(load);
+        scanBtn_ = new QPushButton("Follow along in scans (BDRC)");
+        scanBtn_->setEnabled(false);
+        scanBtn_->setToolTip(
+            "Opens the woodblock scans of this text from BDRC and keeps "
+            "the page in step with the @folio marker at your cursor. "
+            "Folio\u2194image mapping comes from BDRC's own IIIF manifest "
+            "labels — nothing is guessed.");
+        ll->addWidget(scanBtn_);
+        connect(scanBtn_, &QPushButton::clicked, [this] { followScans(); });
+        scanCap_ = new QLabel;
+        scanCap_->setWordWrap(true);
+        scanCap_->hide();
+        ll->addWidget(scanCap_);
+        scanImg_ = new QLabel;
+        scanImg_->setScaledContents(false);
+        scanImg_->setAlignment(Qt::AlignCenter);
+        scanImg_->hide();
+        ll->addWidget(scanImg_);
+        auto* nav = new QWidget;
+        auto* navl = new QHBoxLayout(nav);
+        navl->setContentsMargins(0, 0, 0, 0);
+        auto* prevB = new QPushButton("◀ folio");
+        auto* nextB = new QPushButton("folio ▶");
+        navl->addWidget(prevB);
+        navl->addWidget(nextB);
+        scanNav_ = nav;
+        scanNav_->hide();
+        ll->addWidget(nav);
+        connect(prevB, &QPushButton::clicked, [this] { stepFolio(-1); });
+        connect(nextB, &QPushButton::clicked, [this] { stepFolio(+1); });
+        connect(input_, &QPlainTextEdit::cursorPositionChanged,
+                [this] { syncFolioToCursor(); });
         connect(open, &QPushButton::clicked, [this] {
             const QString fn = QFileDialog::getOpenFileName(
                 this, "Open ACIP document", QString(),
@@ -398,6 +435,7 @@ public:
                 loadDoc();
                 // ACIP file nomenclature: show the file's own provenance
                 auto info = allcore::decodeAcipFilename(fn.toStdString());
+                setScanTarget(info);
                 if (info.recognized)
                     hint_->setText(
                         QString("%1 · text %2%3%4 · %5 — %6")
@@ -783,7 +821,204 @@ private:
     QPlainTextEdit* input_ = nullptr;
     QTextEdit* view_ = nullptr;
     QTextBrowser* context_ = nullptr;
+    // ---- BDRC scan follow-along (APPARATUS_DESIGN §3) ----------------
+    void setScanTarget(const allcore::AcipFileInfo& info) {
+        scanWork_.clear();
+        folioUrl_.clear();
+        folioOrder_.clear();
+        curFolio_.clear();
+        scanImg_->hide(); scanCap_->hide(); scanNav_->hide();
+        const std::string url = allcore::bdrcScanUrl(info);
+        auto pos = url.rfind("bdr:");
+        if (pos != std::string::npos)
+            scanWork_ = QString::fromStdString(url.substr(pos));
+        scanBtn_->setEnabled(!scanWork_.isEmpty());
+        scanBtn_->setText(scanWork_.isEmpty()
+                              ? "Follow along in scans (BDRC)"
+                              : "Follow along in scans (" + scanWork_ + ")");
+    }
+
+    void followScans() {
+        if (scanWork_.isEmpty()) return;
+        scanCap_->setText("<i>fetching the scan outline from BDRC…</i>");
+        scanCap_->show();
+        const QUrl u("https://iiifpres.bdrc.io/collection/wio:" + scanWork_);
+        auto* rep = nam_.get(QNetworkRequest(u));
+        connect(rep, &QNetworkReply::finished, [this, rep] {
+            rep->deleteLater();
+            if (rep->error() != QNetworkReply::NoError) {
+                scanCap_->setText("BDRC unreachable: " + rep->errorString() +
+                                  " — <a href='https://library.bdrc.io/show/" +
+                                  scanWork_ + "'>open in the browser</a>");
+                scanCap_->setOpenExternalLinks(true);
+                return;
+            }
+            const auto o = QJsonDocument::fromJson(rep->readAll()).object();
+            QString lic = o["license"].toString();
+            scanLicense_ = lic;
+            QStringList manifests;
+            for (const auto& m : o["manifests"].toArray())
+                manifests << m.toObject()["@id"].toString();
+            if (manifests.isEmpty()) {
+                scanCap_->setText("BDRC lists no scan volumes for " +
+                                  scanWork_);
+                return;
+            }
+            pendingManifests_ = manifests;
+            fetchNextManifest();
+        });
+    }
+
+    void fetchNextManifest() {
+        if (pendingManifests_.isEmpty()) {
+            scanCap_->setText(
+                QString("Scans: Buddhist Digital Resource Center · %1 "
+                        "folio sides mapped%2. Move the cursor in the "
+                        "document — the page follows its @folio marker.")
+                    .arg(folioOrder_.size())
+                    .arg(scanLicense_.contains("publicdomain")
+                             ? " · public domain"
+                             : ""));
+            scanNav_->show();
+            syncFolioToCursor();
+            if (curFolio_.isEmpty() && !folioOrder_.isEmpty())
+                showFolio(folioOrder_.front());
+            return;
+        }
+        const QUrl u(pendingManifests_.takeFirst());
+        auto* rep = nam_.get(QNetworkRequest(u));
+        connect(rep, &QNetworkReply::finished, [this, rep] {
+            rep->deleteLater();
+            if (rep->error() == QNetworkReply::NoError) {
+                const auto man =
+                    QJsonDocument::fromJson(rep->readAll()).object();
+                for (const auto& sq : man["sequences"].toArray()) {
+                    for (const auto& cv :
+                         sq.toObject()["canvases"].toArray()) {
+                        const auto c = cv.toObject();
+                        QString folio;
+                        for (const auto& lb : c["label"].toArray()) {
+                            const auto l = lb.toObject();
+                            const QString v = l["@value"].toString();
+                            // BDRC's own folio label: "94a" / "94b"
+                            if (l["@language"].toString() == "en" &&
+                                QRegularExpression("^\\d+[ab]$")
+                                    .match(v)
+                                    .hasMatch())
+                                folio = v;
+                        }
+                        if (folio.isEmpty()) continue;
+                        const auto imgs = c["images"].toArray();
+                        if (imgs.isEmpty()) continue;
+                        const QString iurl = imgs.first()
+                                                 .toObject()["resource"]
+                                                 .toObject()["@id"]
+                                                 .toString();
+                        if (!iurl.isEmpty() && !folioUrl_.contains(folio)) {
+                            folioUrl_[folio] = iurl;
+                            folioOrder_ << folio;
+                        }
+                    }
+                }
+            }
+            fetchNextManifest();
+        });
+    }
+
+    void syncFolioToCursor() {
+        if (folioUrl_.isEmpty()) return;
+        const QString upto =
+            input_->toPlainText().left(input_->textCursor().position());
+        QRegularExpression re("@0*(\\d+)([AB])");
+        QString folio;
+        auto it = re.globalMatch(upto);
+        while (it.hasNext()) {
+            const auto m = it.next();
+            folio = m.captured(1) + m.captured(2).toLower();
+        }
+        if (!folio.isEmpty() && folio != curFolio_ &&
+            folioUrl_.contains(folio))
+            showFolio(folio);
+    }
+
+    void stepFolio(int d) {
+        int ix = folioOrder_.indexOf(curFolio_);
+        ix = (ix < 0) ? 0 : ix + d;
+        if (ix >= 0 && ix < folioOrder_.size()) showFolio(folioOrder_[ix]);
+    }
+
+    void showFolio(const QString& folio) {
+        curFolio_ = folio;
+        const QString url = folioUrl_.value(folio);
+        scanCap_->setText(QString("<b>folio %1</b> · BDRC scan").arg(folio));
+        scanCap_->show();
+        if (!scanCache_.isEmpty()) {
+            QDir().mkpath(scanCache_);
+            const QString fn = scanCache_ + "/" +
+                               QString(url).replace(
+                                   QRegularExpression("[^A-Za-z0-9._-]"),
+                                   "_");
+            if (QFile::exists(fn)) {
+                QPixmap px(fn);
+                if (!px.isNull()) { setScanPixmap(px, folio); return; }
+            }
+            fetchScan(url, fn, folio);
+        } else {
+            fetchScan(url, QString(), folio);
+        }
+    }
+
+    void fetchScan(const QString& url, const QString& cacheFn,
+                   const QString& folio) {
+        auto* rep = nam_.get(QNetworkRequest(QUrl(url)));
+        connect(rep, &QNetworkReply::finished,
+                [this, rep, cacheFn, folio] {
+                    rep->deleteLater();
+                    if (rep->error() != QNetworkReply::NoError) {
+                        scanCap_->setText("folio " + folio +
+                                          ": image fetch failed (" +
+                                          rep->errorString() + ")");
+                        return;
+                    }
+                    const QByteArray data = rep->readAll();
+                    if (!cacheFn.isEmpty()) {
+                        QFile f(cacheFn);
+                        if (f.open(QIODevice::WriteOnly)) f.write(data);
+                    }
+                    QPixmap px;
+                    if (px.loadFromData(data) && folio == curFolio_)
+                        setScanPixmap(px, folio);
+                });
+    }
+
+    void setScanPixmap(const QPixmap& px, const QString& folio) {
+        const int w = qMax(300, input_->width() - 12);
+        scanImg_->setPixmap(px.width() > w
+                                ? px.scaledToWidth(w,
+                                                   Qt::SmoothTransformation)
+                                : px);
+        scanImg_->show();
+        scanCap_->setText(
+            QString("<b>folio %1</b> · %2×%3 · Buddhist Digital Resource "
+                    "Center%4")
+                .arg(folio)
+                .arg(px.width())
+                .arg(px.height())
+                .arg(scanLicense_.contains("publicdomain")
+                         ? " · public domain"
+                         : ""));
+    }
+
     QLabel* hint_ = nullptr;
+    // scan follow-along state
+    QNetworkAccessManager nam_;
+    QPushButton* scanBtn_ = nullptr;
+    QLabel* scanImg_ = nullptr;
+    QLabel* scanCap_ = nullptr;
+    QWidget* scanNav_ = nullptr;
+    QString scanWork_, scanCache_, curFolio_, scanLicense_;
+    QMap<QString, QString> folioUrl_;
+    QStringList folioOrder_, pendingManifests_;
     QComboBox* scriptMode_ = nullptr;
     QCheckBox* showPhon_ = nullptr;
     QCheckBox* showGloss_ = nullptr;
@@ -2955,7 +3190,7 @@ int main(int argc, char** argv) {
     tabs.setWindowTitle(
         QString("ALL Translation Tool — HGM v%1")
             .arg(QString::fromStdString(spine.metaValue("release_version"))));
-    auto* overlay = new OverlayPane(spine, checker, refdict, progress);
+    auto* overlay = new OverlayPane(spine, checker, refdict, progress, root);
     tabs.addTab(overlay, "Overlay");
     tabs.addTab(new AnalysisPane(spine, tplPath, root + "/analyses"), "Analysis");
     tabs.addTab(new TrainerPane(spine, progress), "Trainer");
