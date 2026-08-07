@@ -24,6 +24,7 @@ add_library(allcore STATIC
   src/verbstems.cpp
   src/lexicon.cpp
   src/tibcal.cpp
+  src/affixnorm.cpp
   src/libindex.cpp
   src/gofer.cpp
   src/acip_ewts.cpp
@@ -128,6 +129,10 @@ add_test(NAME lexicon_smoke
 add_executable(tibcal_smoke tests/tibcal_smoke.cpp)
 target_link_libraries(tibcal_smoke PRIVATE allcore)
 add_test(NAME tibcal_smoke COMMAND tibcal_smoke)
+
+add_executable(affixnorm_smoke tests/affixnorm_smoke.cpp)
+target_link_libraries(affixnorm_smoke PRIVATE allcore)
+add_test(NAME affixnorm_smoke COMMAND affixnorm_smoke)
 
 add_executable(tibexport_smoke tests/tibexport_smoke.cpp)
 target_link_libraries(tibexport_smoke PRIVATE allcore)
