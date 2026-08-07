@@ -117,6 +117,28 @@ TibetanExportResult exportTibetanUnicode(const std::string& acip_document,
     return res;
 }
 
+std::string hgmTechnicalSpelling(const std::string& wylie) {
+    // split into syllables, join in hyphenated pairs
+    std::vector<std::string> syl;
+    std::string cur;
+    for (char c : wylie + " ") {
+        if (c == ' ') {
+            if (!cur.empty()) syl.push_back(cur);
+            cur.clear();
+        } else {
+            cur += c;
+        }
+    }
+    std::string out;
+    for (size_t i = 0; i < syl.size(); ++i) {
+        if (i == 0) {}
+        else if (i % 2 == 1) out += '-';   // second of a pair
+        else out += ' ';                    // new pair
+        out += syl[i];
+    }
+    return out;
+}
+
 std::string bdrcScanUrl(const AcipFileInfo& info) {
     if (!info.recognized || info.number.empty()) return "";
     const char* base = nullptr;

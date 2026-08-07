@@ -76,6 +76,20 @@ int main() {
     CHECK(allcore::bdrcScanUrl(f1).empty(),
           "Sungbum has no Tohoku mapping — honest empty link");
 
+    // ---- STD-002 technical-spelling apparatus form ----
+    CHECK(allcore::hgmTechnicalSpelling("nyams mgur") == "nyams-mgur",
+          "technical spelling: pair hyphenated (nyams-mgur)");
+    CHECK(allcore::hgmTechnicalSpelling("lam rim bsdus don") ==
+              "lam-rim bsdus-don",
+          "technical spelling: pairs separated by spaces");
+    CHECK(allcore::hgmTechnicalSpelling("blo bzang grags pa") ==
+              "blo-bzang grags-pa",
+          "technical spelling: four-syllable name");
+    CHECK(allcore::hgmTechnicalSpelling("chos") == "chos",
+          "technical spelling: single syllable unchanged");
+    CHECK(allcore::hgmTechnicalSpelling("bden pa bzhi") == "bden-pa bzhi",
+          "technical spelling: odd trailing syllable stands alone");
+
     // ---- Mixed Nuts preliminary formatting ----
     {
         auto p = allcore::formatForTranslation(

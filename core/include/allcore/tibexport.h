@@ -47,6 +47,13 @@ struct AcipFileInfo {
 // Decode an ACIP file name like "S5977MA1.ACT" or "KD0001E2.INC".
 AcipFileInfo decodeAcipFilename(const std::string& filename);
 
+// STD-002 (docs/standards/HGM_TRANSLATION_STANDARDS.md): the published
+// volumes cite Wylie as "(technical spelling nyams-mgur)" — syllables
+// hyphenated in pairs, space between pairs, exactly as in every observed
+// example (nyams-mgur · Lam-rim bsdus-don · Blo-bzang grags-pa · dgag-bya).
+// This renders a wylie headword in that apparatus form.
+std::string hgmTechnicalSpelling(const std::string& wylie);
+
 // The BDRC scans page for a decoded catalog file, or "" when the collection
 // has no deterministic mapping. Kangyur/Tengyur ACIP numbers are Tohoku
 // numbers, and BUDA's Derge/Lhasa outline IDs encode them directly

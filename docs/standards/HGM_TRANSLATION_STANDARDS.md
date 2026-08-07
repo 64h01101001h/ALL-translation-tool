@@ -62,9 +62,11 @@ spellings for readers)*
 > "(technical spelling nyams-mgur)" — running text stays in pronunciation
 > spelling; the Wylie appears as labeled apparatus (nyams-mgur, Lam-rim
 > bsdus-don, dgag-bya, Blo-bzang grags-pa).
-> *App integration:* the Convert pane produces both forms today; FUTURE —
-> a Draft helper that inserts "(technical spelling: …)" from a selected
-> term automatically.
+> *App integration:* SHIPPED 2026-08-06 — every term in the Draft pane's
+> anchors panel carries a "[+ technical spelling]" link that inserts
+> "pronunciation (technical spelling: hyphen-paired-wylie)" at the draft
+> cursor (allcore::hgmTechnicalSpelling, tested against the volumes' own
+> examples).
 
 > **STD-003** · Sanskrit · source: *Sixty Verses* (tr. Lashaw w/ GMR,
 > ©2023), endnote 62

@@ -1896,7 +1896,26 @@ public:
         QObject::connect(anchors_, &QTextBrowser::anchorClicked,
                          [this](const QUrl& u) {
                              auto s = u.toString();
-                             if (s.startsWith("t:"))
+                             if (s.startsWith("ts:")) {
+                                 // STD-002: insert the apparatus form at the
+                                 // draft cursor — pronunciation spelling +
+                                 // "(technical spelling: …)"
+                                 const std::string wylie =
+                                     s.mid(3).toStdString();
+                                 std::string pron;
+                                 auto es = spine_.lookup(wylie);
+                                 if (!es.empty()) pron = es.front().pronunciation;
+                                 QString ins =
+                                     (pron.empty()
+                                          ? ""
+                                          : QString::fromStdString(pron) + " ") +
+                                     "(technical spelling: " +
+                                     QString::fromStdString(
+                                         allcore::hgmTechnicalSpelling(wylie)) +
+                                     ")";
+                                 draft_->textCursor().insertText(ins);
+                                 draft_->setFocus();
+                             } else if (s.startsWith("t:"))
                                  showConcordance(s.mid(2).toStdString());
                              else if (s == "back" && lastClause_ >= 0)
                                  showAnchors(lastClause_);
@@ -1966,7 +1985,9 @@ private:
             const auto& e = doc_.entries[doc_.spans[ix].entry_ix];
             QString w = QString::fromStdString(e.wylie).toHtmlEscaped();
             h += "<div style='margin:4px 0'><a href='t:" + w +
-                 "'><b>" + w + "</b></a>";
+                 "'><b>" + w + "</b></a> <a href='ts:" + w +
+                 "' style='font-size:11px;color:#7A5A00'>[+ technical "
+                 "spelling]</a>";
             QString tier = e.provisional()
                 ? " <span style='color:#b00;font-size:11px'>[PROVISIONAL]"
                   "</span>"
