@@ -24,6 +24,16 @@ display toggles, not through invention.
       side ingestion is safe either way (course TITLES, full provenance).
       Bonus after ingest: the Library shows English titles for installed
       files by catalog number.
+- [ ] **Footnote & bibliography reuse program** (GMR directive via Adam,
+      2026-08-06 — STD-008: released Mixed Nuts footnotes can and should
+      be reused; never redo performed work):
+      — DONE: notes bank v1 (344 endnotes extracted from the three
+      volumes; Draft-pane search + cited insertion).
+      — REMAINING: add each newly released volume to the bank (rerun
+      tools/extract_mixed_nuts_notes.py); same reuse treatment for
+      bibliography entries (structured extraction of the volumes' B-lists);
+      confirm STD-008 in GMR's own words for the record; dedupe/merge
+      notes covering the same lemma across volumes.
 - [ ] **Bibliographies: collect + standardize + automate** (Adam
       2026-08-06): bring in already-composed bibliography collections
       (first source available now — the three volumes' own bibliographies,

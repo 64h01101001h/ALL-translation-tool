@@ -41,6 +41,9 @@
 #include <QProcess>
 #include <QDirIterator>
 #include <QDesktopServices>
+#include <QJsonArray>
+#include <QJsonDocument>
+#include <QJsonObject>
 #include <QUrl>
 
 #include <functional>
@@ -1869,6 +1872,12 @@ public:
         draftCol->addWidget(draft_);
         auto* checkBtn = new QPushButton("Check terminology");
         draftCol->addWidget(checkBtn);
+        notesSearch_ = new QLineEdit;
+        notesSearch_->setPlaceholderText(
+            "search the shared notes bank (GMR: reuse released footnotes)…");
+        draftCol->addWidget(notesSearch_);
+        QObject::connect(notesSearch_, &QLineEdit::returnPressed,
+                         [this] { searchNotesBank(); });
         aiBtn_ = new QPushButton("AI back-check (API, labeled AI)");
         if (qgetenv("ANTHROPIC_API_KEY").isEmpty()) {
             aiBtn_->setEnabled(false);
@@ -1877,6 +1886,13 @@ public:
         draftCol->addWidget(aiBtn_);
         bl->addLayout(draftCol, 1);
         report_ = new QTextBrowser;
+        report_->setOpenLinks(false);
+        QObject::connect(report_, &QTextBrowser::anchorClicked,
+                         [this](const QUrl& u) {
+                             const QString s = u.toString();
+                             if (s.startsWith("note:"))
+                                 insertNote(s.mid(5).toInt());
+                         });
         bl->addWidget(report_, 1);
         split->addWidget(bottom);
         layout->addWidget(split, 1);
@@ -2105,6 +2121,69 @@ private:
         report_->setHtml(h);
     }
 
+    // STD-008: the shared footnote bank — released Mixed Nuts notes are
+    // meant for reuse; every insertion carries its source citation
+    void loadNotesBank() {
+        if (notesLoaded_) return;
+        notesLoaded_ = true;
+        QFile f(QCoreApplication::applicationDirPath() +
+                "/../../../../../data/extracted/mixed_nuts_notes.json");
+        if (!f.exists())
+            f.setFileName(QDir::currentPath() +
+                          "/data/extracted/mixed_nuts_notes.json");
+        if (!f.open(QIODevice::ReadOnly)) return;
+        const auto arr =
+            QJsonDocument::fromJson(f.readAll()).array();
+        for (const auto& v : arr) {
+            const auto o = v.toObject();
+            notesBank_.push_back({o["source"].toString(),
+                                  o["note"].toInt(),
+                                  o["lemma"].toString(),
+                                  o["text"].toString()});
+        }
+    }
+
+    void searchNotesBank() {
+        loadNotesBank();
+        const QString q = notesSearch_->text().trimmed();
+        if (q.isEmpty()) return;
+        if (notesBank_.empty()) {
+            report_->setHtml("<i>notes bank not found — run "
+                             "tools/extract_mixed_nuts_notes.py</i>");
+            return;
+        }
+        QString h = "<b>Shared notes bank</b> <small>(GMR: released "
+                    "footnotes can and should be reused — insertions carry "
+                    "their citation)</small><br>";
+        int found = 0;
+        for (int i = 0; i < (int)notesBank_.size() && found < 12; ++i) {
+            const auto& n = notesBank_[i];
+            if (!n.lemma.contains(q, Qt::CaseInsensitive) &&
+                !n.text.contains(q, Qt::CaseInsensitive))
+                continue;
+            ++found;
+            h += QString("<div style='margin:6px 0'><a href='note:%1'>"
+                         "[insert]</a> <b>%2</b> <small style='color:#777'>"
+                         "(%3, n.%4)</small><br><small>%5</small></div>")
+                     .arg(i)
+                     .arg(n.lemma.toHtmlEscaped())
+                     .arg(n.source.toHtmlEscaped())
+                     .arg(n.note)
+                     .arg(n.text.left(220).toHtmlEscaped());
+        }
+        if (!found) h += "<i>no matching notes</i>";
+        report_->setHtml(h);
+    }
+
+    void insertNote(int ix) {
+        if (ix < 0 || ix >= (int)notesBank_.size()) return;
+        const auto& n = notesBank_[ix];
+        draft_->textCursor().insertText(
+            "[NOTE: " + n.lemma + ": " + n.text + " — reused from " +
+            n.source + ", n." + QString::number(n.note) + "]");
+        draft_->setFocus();
+    }
+
     void aiCheck() {
         const std::string src = source_->toPlainText().toStdString();
         const std::string dr = draft_->toPlainText().toStdString();
@@ -2235,6 +2314,15 @@ private:
     QTextBrowser* clauseView_ = nullptr;
     QTextBrowser* anchors_ = nullptr;
     QTextBrowser* report_ = nullptr;
+    struct BankNote {
+        QString source;
+        int note = 0;
+        QString lemma;
+        QString text;
+    };
+    std::vector<BankNote> notesBank_;
+    bool notesLoaded_ = false;
+    QLineEdit* notesSearch_ = nullptr;
     QPushButton* aiBtn_ = nullptr;
     QNetworkAccessManager net_;
     QNetworkReply* aiReply_ = nullptr;

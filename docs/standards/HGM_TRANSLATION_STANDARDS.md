@@ -134,6 +134,22 @@ formatter; ⟨…⟩ failure marks; provisional labeling throughout.
 > docs/TITLES_INGEST_DESIGN.md) and rendered in exactly this format;
 > technical spellings via hgmTechnicalSpelling (STD-002, shipped).
 
+### 8. Footnote reuse (GMR directive)
+
+> **STD-008** · apparatus/workflow · source: Geshe Michael Roach, as
+> reported by Adam Andrade, 2026-08-06 (this session) — *to be confirmed
+> in GMR's own words when gathered*
+> Any footnote created in any RELEASED Mixed Nuts translation can and
+> should be REUSED by translators as the same topics come up — work
+> already performed is never performed twice.
+> *App integration:* SHIPPED 2026-08-06 — the shared notes bank:
+> tools/extract_mixed_nuts_notes.py extracts every endnote from the
+> released volumes (344 notes: SSL 53 · OSE 28 · SVN 263) into
+> data/extracted/mixed_nuts_notes.json; the Draft pane's notes-bank
+> search finds notes by lemma or content and inserts them at the draft
+> cursor WITH their source citation ("reused from …, n.N") — reuse stays
+> attributed. Regenerate the bank whenever a new volume is released.
+
 ## Gathering plan (Adam)
 - [ ] Ask Geshe Michael directly for standing translation principles
       (recordings or writing).
