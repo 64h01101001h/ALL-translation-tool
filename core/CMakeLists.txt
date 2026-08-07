@@ -24,6 +24,7 @@ add_library(allcore STATIC
   src/verbstems.cpp
   src/lexicon.cpp
   src/tibcal.cpp
+  src/tibcal_day.cpp
   src/affixnorm.cpp
   src/libindex.cpp
   src/gofer.cpp
@@ -136,6 +137,12 @@ target_link_libraries(wynorm PRIVATE allcore)
 add_executable(affixnorm_smoke tests/affixnorm_smoke.cpp)
 target_link_libraries(affixnorm_smoke PRIVATE allcore)
 add_test(NAME affixnorm_smoke COMMAND affixnorm_smoke)
+
+add_executable(tibcal_day_smoke tests/tibcal_day_smoke.cpp)
+target_link_libraries(tibcal_day_smoke PRIVATE allcore)
+add_test(NAME tibcal_day_smoke
+         COMMAND tibcal_day_smoke
+                 ${CMAKE_SOURCE_DIR}/third_party/kck_henning/kck_fixtures.tsv)
 
 add_executable(tibexport_smoke tests/tibexport_smoke.cpp)
 target_link_libraries(tibexport_smoke PRIVATE allcore)

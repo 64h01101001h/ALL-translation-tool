@@ -265,10 +265,15 @@ display toggles, not through invention.
       fixtures captured (kck_fixtures.json: tshes/month/year → zla-dag,
       gza-dag, nyi-dag, daybreak, spyi zhag, Julian day, western date —
       every intermediate diffable; sweep even caught a duplicated lunar
-      day, JD delta 0). REMAINING: the port itself (T2/T3 arithmetic →
-      allcore, diff-proven per stage against the fixtures; note KCK =
-      Kalacakra karana — published-Phugpa deltas are a separate,
-      documented question).
+      day, JD delta 0). PORT SHIPPED 2026-08-07
+      (allcore tibcal_day: kckModernKarana(year, month, tshes) →
+      zla-dag, gza-dag, nyi-dag, spyi zhag, Julian day; faithful
+      transcription of T2/UTILS radix arithmetic + T4 driver order;
+      23rd suite: ALL 76 fixtures match the original program's own
+      outputs EXACTLY on every quantity; pre-epoch dates honestly
+      invalid). REMAINING: Convert-pane UI for full dates; the
+      intercalary-month state machine (adj_zla) for month-sequence
+      display; the documented KCK-vs-published-Phugpa question.
 - [ ] **rKTs abbreviations DB (6,000+ bskungs yig) + canonical IDs** —
       deterministic abbreviation expansion for input-center texts;
       verify the data dump's license first (unclear).
