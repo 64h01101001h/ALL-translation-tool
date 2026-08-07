@@ -74,6 +74,7 @@
 #include "allcore/spellcheck.h"
 #include "allcore/quotation.h"
 #include "allcore/spine.h"
+#include "allcore/lexicon.h"
 #include "allcore/verbstems.h"
 #include "allcore/outline.h"
 #include "allcore/verse.h"
@@ -770,7 +771,24 @@ private:
                              QString::fromUtf8(p->group).toHtmlEscaped()) +
                     agreementHtml(tok));
             } else {
-                context_->setHtml("<i>no dictionary span here</i>");
+                QString extra;
+                auto [u1, ok1] = allcore::wylieToUnicode(
+                    allcore::acipToEwts(doc_.tokens[tok]));
+                if (ok1) {
+                    loadLexicon();
+                    const auto att = lexicon_.attested(u1);
+                    if (!att.empty())
+                        extra = QString(
+                                    "<br><small style='color:#1E6B4E'>"
+                                    "not in the HGM dictionary, but "
+                                    "attested in the %1 word list "
+                                    "<i>(Apache-2.0, reference)</i>"
+                                    "</small>")
+                                    .arg(QString::fromStdString(att)
+                                             .toHtmlEscaped());
+                }
+                context_->setHtml("<i>no dictionary span here</i>" +
+                                  extra);
             }
             return;
         }
@@ -815,6 +833,18 @@ private:
                               .toHtmlEscaped());
         }
         if (showGrammar_->isChecked()) h += agreementHtml(tok);
+        // Monlam word-list attestation: labeled reference, display only
+        {
+            loadLexicon();
+            auto [uw, okw] = allcore::wylieToUnicode(e.wylie);
+            const auto att = okw ? lexicon_.attested(uw) : std::string();
+            if (!att.empty())
+                h += QString("<div style='color:#1E6B4E;font-size:12px'>"
+                             "attested in the %1 word list <i>(Apache-"
+                             "2.0, reference)</i></div>")
+                         .arg(QString::fromStdString(att)
+                                  .toHtmlEscaped());
+        }
         // CC0 verbs-database: labeled reference comparanda, display only
         if (showGrammar_->isChecked()) {
             if (!verbStemsTried_) {
@@ -1261,6 +1291,21 @@ private:
     QString dataRoot_;
     allcore::VerbStems verbStems_;
     bool verbStemsTried_ = false;
+    allcore::RefLexicon lexicon_;
+    bool lexiconTried_ = false;
+
+    void loadLexicon() {
+        if (lexiconTried_) return;
+        lexiconTried_ = true;
+        lexicon_.load((dataRoot_ +
+                       "/data/extracted/monlam_lexicon_1.txt")
+                          .toStdString(),
+                      "Monlam Dictionary");
+        lexicon_.load((dataRoot_ +
+                       "/data/extracted/monlam_lexicon_2.txt")
+                          .toStdString(),
+                      "Monlam Grand Dictionary");
+    }
     bool titleSearchMode_ = false;
     QPixmap basePx_;
     int curLine_ = 0, curLineTotal_ = 0;

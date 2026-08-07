@@ -144,9 +144,16 @@ display toggles, not through invention.
       segmentation (Apache-2.0), port-and-prove with its own test suite
       as battery; lexicon = ours + Monlam lists. The Overlay's missing
       segmentation backbone.
-- [ ] **Monlam word lists** (Apache-2.0: ~107k + ~367k forms) →
-      segmenter lexicon + word-level spellcheck layer. Lists only —
-      Monlam definitions are NOT open.
+- [~] **Monlam word lists** — BANKED + FIRST INTEGRATION 2026-08-07
+      (Apache-2.0 verified; 107,108 + 342,340 unique forms; allcore
+      RefLexicon, 18th suite proves the real conversion path matches
+      the lists' storage form exactly): Overlay click card shows
+      "attested in the Monlam (Grand) Dictionary word list (reference)"
+      for known spans AND for words the HGM dictionary doesn't have —
+      real-word vs possible-typo signal, display only. REMAINING: use
+      as the segmenter lexicon when the Botok port lands; word-level
+      spellcheck pass in loadDoc (bulk, needs perf care). Definitions
+      are NOT open — lists only.
 - [x] **CC0 verbs database** — INTEGRATED 2026-08-07: 2,491 paradigm
       rows / 3,676 distinct stems banked (tools/import_verbs_db.py →
       verb_stems.tsv; misaligned cells flagged+skipped, ༼X༽ variants
