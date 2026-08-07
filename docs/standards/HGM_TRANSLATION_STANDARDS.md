@@ -112,6 +112,28 @@ insertions)*
 **Integration hooks ready:** bracket/note conventions in the prep
 formatter; ⟨…⟩ failure marks; provisional labeling throughout.
 
+### 7. Bibliography
+*(entry format, section organization, citation of ACIP numbers)*
+
+> **STD-007** · bibliography · source: *A Song of My Spiritual Life* (tr.
+> Chang w/ GMR, ©2025; bibliography edited by AN per the working file
+> name), bibliography section, entries B1–…
+> House entry format for Tibetan works, as published:
+> `B<n> · (Epithets/alternate names) Author in technical spelling
+> (dates). English Title: Subtitle ("Quoted source work" if any)
+> (Tibetan title in technical spelling, ACIP S#####), ff. <folio range>.`
+> Example (B3): (Co-ne bla-ma) Grags-pa bshad-sgrub, 1675-1748. A Brief
+> Clarification of Heart: A Word-by-Word Commentary to "An Abbreviated
+> Presentation of the Steps to the Path" (Lam-rim bsdus-don gyi
+> tsig-'grel snying-po mdor-bsdus gsal-ba, ACIP S00184), ff. 1a-11a.
+> Sections: works originally in Sanskrit · in Tibetan · in English ·
+> the Diamond Cutter Classics series.
+> *App integration:* FUTURE — a bibliography generator: entries embed
+> ACIP catalog numbers, so author + titles + folios can be assembled
+> automatically from the catalog/title-pair data (see
+> docs/TITLES_INGEST_DESIGN.md) and rendered in exactly this format;
+> technical spellings via hgmTechnicalSpelling (STD-002, shipped).
+
 ## Gathering plan (Adam)
 - [ ] Ask Geshe Michael directly for standing translation principles
       (recordings or writing).

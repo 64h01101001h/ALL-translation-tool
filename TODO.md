@@ -24,6 +24,15 @@ display toggles, not through invention.
       side ingestion is safe either way (course TITLES, full provenance).
       Bonus after ingest: the Library shows English titles for installed
       files by catalog number.
+- [ ] **Bibliographies: collect + standardize + automate** (Adam
+      2026-08-06): bring in already-composed bibliography collections
+      (first source available now — the three volumes' own bibliographies,
+      B-numbered house format compiled as STD-007); standardize creation
+      on that format; then automate: a generator assembling entries from
+      author + titles + folios + ACIP number (joins the title-pairs
+      catalog work and hgmTechnicalSpelling), with BDRC links as a bonus
+      column. Extraction of the three volumes' bibliographies into a
+      structured collection = good first implementation step.
 
 - [x] **Three new GMR translation volumes** — received readable copies
       2026-08-06 and staged with a provenance/ingestion README at
