@@ -47,8 +47,11 @@ handling of Tibetan syntax in English)*
 
 > **STD-005** · voice & style · source: *Sixty Verses* (tr. Lashaw w/ GMR,
 > ©2023), endnote 60
-> Epithets referring to a specific person are capitalized: "Realized One"
-> is capitalized when it refers to Arya Nagarjuna.
+> Epithets referring to a specific person are capitalized. In the
+> volume's own words: "We are using 'realized one' as a translation of
+> the Sanskrit word arya … he is often referred to simply as 'The
+> Arya,' which is why we will be capitalizing 'Realized One' when it
+> refers to him."
 > *App integration:* style note for the Draft workspace; no enforcement
 > (style stays human).
 **Integration hooks ready:** the Draft workspace (side-by-side anchoring);
@@ -149,7 +152,10 @@ insertions)*
 > "rely upon" vs. brtan-pa "firm", n.28; so-sor rtog-pa vs. so-sor
 > rtogs-pa, n.48), the note gives both readings, the evidence (the
 > Sanskrit original where available — pratyavekṣa, n.48 — and standard
-> usage), and the meaning adopted.
+> usage), and the meaning adopted. Further attested examples: SSL n.33
+> ("spelled rin-cen, which is a rare but acceptable variant for the
+> nearly ubiquitous rin-chen") and *Sixty Verses* n.134 (school name
+> given with its Tibetan spelling, rNam-rig-pa).
 > *App integration:* ALREADY ALIGNED — rule 3 (never guess) and the
 > spellcheck layer's review flags embody this; the notes bank makes
 > the published examples reusable as models.
