@@ -58,8 +58,13 @@ display toggles, not through invention.
       offline. Line-band highlight SHIPPED same day (exact newline
       arithmetic on the file's preserved line structure; uniform band
       placement labeled approximate). LATER:
-      word-level after coordinate OCR (user option); Sungbum once a
-      BUDA mapping exists (SPARQL title search, user-confirmed).
+      word-level after coordinate OCR (user option). Sungbum SHIPPED
+      2026-08-06 via title search: BLMP Lucene template on
+      purl.bdrc.io (verified live), query pre-filled from the file's
+      own opening line via acipToEwts, candidates listed, USER confirms
+      (never auto-asserted), link persisted in library/bdrc_links.json,
+      then folio follow-along as normal (chosen edition's own folio
+      labels).
 - [~] **Bibliographies: collect + standardize + automate** (Adam
       2026-08-06): COLLECTED (138 published entries extracted → bank +
       MAIN_BIBLIOGRAPHY.md) · STANDARDIZED + AUTOMATED assembly

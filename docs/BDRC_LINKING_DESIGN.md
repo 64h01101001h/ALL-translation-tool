@@ -55,7 +55,14 @@ depend on it.)
    the OCR pipeline (docs/OCR_DESIGN.md) consuming those same IIIF images.
    Sungbum texts lack Tohoku numbers; matching those needs title-based
    search (BUDA name query templates) — flagged fuzzy, user-confirmed,
-   never auto-asserted.
+   never auto-asserted. SHIPPED 2026-08-06: the lds-pdi template that
+   works is `BLMP` (params L_NAME quoted-Lucene, LG_NAME=bo-x-ewts,
+   I_LIM; GET /query/table/BLMP…&format=json; returns s=resource URI +
+   lit=matched literal; filter ids to MW*). Overlay pane: unmapped
+   files arm "Find scans on BDRC (title search)…" — query pre-filled
+   from the file's opening line via acipToEwts, user picks from the
+   candidate list, mapping saved to library/bdrc_links.json, folio
+   follow-along proceeds on the chosen edition.
 
 ## Sources
 - https://github.com/buda-base/lds-pdi (+ its API.md)

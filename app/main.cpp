@@ -10,6 +10,7 @@
 #include <QDialog>
 #include <QDialogButtonBox>
 #include <QFormLayout>
+#include <QListWidget>
 #include <QPainter>
 #include <QPen>
 #include <QRegularExpression>
@@ -365,7 +366,7 @@ public:
         input_->setPlainText(QString::fromUtf8(f.readAll()));
         loadDoc();
         auto info = allcore::decodeAcipFilename(fn.toStdString());
-        setScanTarget(info);
+        setScanTarget(info, fn);
         if (info.recognized)
             hint_->setText(
                 QString("%1 · text %2 · %3\n")
@@ -405,7 +406,10 @@ public:
             "Folio\u2194image mapping comes from BDRC's own IIIF manifest "
             "labels — nothing is guessed.");
         ll->addWidget(scanBtn_);
-        connect(scanBtn_, &QPushButton::clicked, [this] { followScans(); });
+        connect(scanBtn_, &QPushButton::clicked, [this] {
+            if (titleSearchMode_) titleSearchDialog();
+            else followScans();
+        });
         scanCap_ = new QLabel;
         scanCap_->setWordWrap(true);
         scanCap_->hide();
@@ -440,7 +444,7 @@ public:
                 loadDoc();
                 // ACIP file nomenclature: show the file's own provenance
                 auto info = allcore::decodeAcipFilename(fn.toStdString());
-                setScanTarget(info);
+                setScanTarget(info, fn);
                 if (info.recognized)
                     hint_->setText(
                         QString("%1 · text %2%3%4 · %5 — %6")
@@ -827,8 +831,10 @@ private:
     QTextEdit* view_ = nullptr;
     QTextBrowser* context_ = nullptr;
     // ---- BDRC scan follow-along (APPARATUS_DESIGN §3) ----------------
-    void setScanTarget(const allcore::AcipFileInfo& info) {
+    void setScanTarget(const allcore::AcipFileInfo& info,
+                       const QString& fileName = QString()) {
         scanWork_.clear();
+        fileKey_ = QFileInfo(fileName).fileName();
         folioUrl_.clear();
         folioOrder_.clear();
         curFolio_.clear();
@@ -837,10 +843,140 @@ private:
         auto pos = url.rfind("bdr:");
         if (pos != std::string::npos)
             scanWork_ = QString::fromStdString(url.substr(pos));
-        scanBtn_->setEnabled(!scanWork_.isEmpty());
-        scanBtn_->setText(scanWork_.isEmpty()
-                              ? "Follow along in scans (BDRC)"
-                              : "Follow along in scans (" + scanWork_ + ")");
+        // no deterministic mapping (Sungbum etc.): use a saved,
+        // user-confirmed link if one exists
+        if (scanWork_.isEmpty() && !fileKey_.isEmpty()) {
+            QFile f(linksFile());
+            if (f.open(QIODevice::ReadOnly)) {
+                const auto o =
+                    QJsonDocument::fromJson(f.readAll()).object();
+                scanWork_ = o[fileKey_].toString();
+            }
+        }
+        titleSearchMode_ = scanWork_.isEmpty();
+        scanBtn_->setEnabled(titleSearchMode_ ? !fileKey_.isEmpty() : true);
+        scanBtn_->setText(
+            titleSearchMode_
+                ? "Find scans on BDRC (title search)…"
+                : "Follow along in scans (" + scanWork_ + ")");
+    }
+
+    QString linksFile() const {
+        return scanCache_.isEmpty()
+                   ? QString()
+                   : QFileInfo(scanCache_).path() + "/bdrc_links.json";
+    }
+
+    // pre-fill for the title query: the text's own opening line,
+    // through the canonical ACIP→EWTS converter (transliteration rule)
+    QString deriveTitleQuery() const {
+        QString head = input_->toPlainText().left(400);
+        head.replace(QRegularExpression("@[A-Za-z0-9]+"), " ");
+        head.replace(QRegularExpression("\\[[^\\]]*\\]"), " ");
+        head.replace(QRegularExpression("[*,;/]"), " ");
+        head = head.simplified();
+        QStringList syl = head.split(' ', Qt::SkipEmptyParts);
+        // drop the standard opening frame words if present
+        while (!syl.isEmpty() &&
+               (syl.first().compare("BZHUGS", Qt::CaseInsensitive) == 0))
+            break;
+        QStringList take;
+        for (const auto& t : syl) {
+            if (t.compare("BZHUGS", Qt::CaseInsensitive) == 0) break;
+            take << t;
+            if (take.size() >= 12) break;
+        }
+        return QString::fromStdString(
+                   allcore::acipToEwts(take.join(' ').toStdString()))
+            .trimmed();
+    }
+
+    void titleSearchDialog() {
+        QDialog dlg(this);
+        dlg.setWindowTitle("Find scans on BDRC by title");
+        auto* v = new QVBoxLayout(&dlg);
+        v->addWidget(new QLabel(
+            "No catalog mapping exists for this file, so the scans must "
+            "be found by TITLE SEARCH and confirmed by you — the match "
+            "is never asserted automatically. Scans follow the edition "
+            "you choose; its folio numbers are that edition's own."));
+        auto* q = new QLineEdit(deriveTitleQuery());
+        v->addWidget(q);
+        auto* go = new QPushButton("Search BDRC");
+        v->addWidget(go);
+        auto* list = new QListWidget;
+        v->addWidget(list, 1);
+        auto* use = new QPushButton("Use selected (saves the link)");
+        use->setEnabled(false);
+        v->addWidget(use);
+        QObject::connect(list, &QListWidget::itemSelectionChanged,
+                         [&] { use->setEnabled(!list->selectedItems()
+                                                    .isEmpty()); });
+        auto runSearch = [&] {
+            list->clear();
+            list->addItem("searching…");
+            const QString url =
+                "https://purl.bdrc.io/query/table/BLMP?L_NAME=%22" +
+                QString(QUrl::toPercentEncoding(q->text().trimmed())) +
+                "%22&LG_NAME=bo-x-ewts&I_LIM=20&format=json";
+            auto* rep = nam_.get(QNetworkRequest(QUrl(url)));
+            QObject::connect(rep, &QNetworkReply::finished, [&, rep] {
+                rep->deleteLater();
+                list->clear();
+                if (rep->error() != QNetworkReply::NoError) {
+                    list->addItem("BDRC unreachable: " +
+                                  rep->errorString());
+                    return;
+                }
+                const auto d =
+                    QJsonDocument::fromJson(rep->readAll()).object();
+                const auto rows = d["results"]
+                                      .toObject()["bindings"]
+                                      .toArray();
+                for (const auto& rv : rows) {
+                    const auto r = rv.toObject();
+                    const QString id = r["s"]
+                                           .toObject()["value"]
+                                           .toString()
+                                           .section('/', -1);
+                    if (!id.startsWith("MW")) continue;
+                    const QString lit =
+                        r["lit"].toObject()["value"].toString();
+                    auto* it = new QListWidgetItem(
+                        lit + "   [bdr:" + id + "]");
+                    it->setData(Qt::UserRole, "bdr:" + id);
+                    list->addItem(it);
+                }
+                if (!list->count())
+                    list->addItem("no instances matched — edit the "
+                                  "title and search again");
+            });
+        };
+        QObject::connect(go, &QPushButton::clicked, runSearch);
+        QObject::connect(q, &QLineEdit::returnPressed, runSearch);
+        QObject::connect(use, &QPushButton::clicked, &dlg,
+                         &QDialog::accept);
+        runSearch();
+        if (dlg.exec() != QDialog::Accepted ||
+            list->selectedItems().isEmpty())
+            return;
+        scanWork_ =
+            list->selectedItems().first()->data(Qt::UserRole).toString();
+        if (scanWork_.isEmpty()) return;
+        // persist the user-confirmed link
+        QFile f(linksFile());
+        QJsonObject o;
+        if (f.open(QIODevice::ReadOnly)) {
+            o = QJsonDocument::fromJson(f.readAll()).object();
+            f.close();
+        }
+        o[fileKey_] = scanWork_;
+        QDir().mkpath(QFileInfo(linksFile()).path());
+        if (f.open(QIODevice::WriteOnly))
+            f.write(QJsonDocument(o).toJson());
+        titleSearchMode_ = false;
+        scanBtn_->setText("Follow along in scans (" + scanWork_ + ")");
+        followScans();
     }
 
     void followScans() {
@@ -1057,7 +1193,8 @@ private:
     QLabel* scanImg_ = nullptr;
     QLabel* scanCap_ = nullptr;
     QWidget* scanNav_ = nullptr;
-    QString scanWork_, scanCache_, curFolio_, scanLicense_;
+    QString scanWork_, scanCache_, curFolio_, scanLicense_, fileKey_;
+    bool titleSearchMode_ = false;
     QPixmap basePx_;
     int curLine_ = 0, curLineTotal_ = 0;
     QMap<QString, QString> folioUrl_;
