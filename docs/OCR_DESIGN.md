@@ -69,6 +69,23 @@ Pramanavarttika fixtures (tools/build_ocr_reference.py; PySide6 shimmed
 IDENTICAL 8 line bands; sparse title 94a = 99.9%, 3 bands; residue is
 cv2 fixed-point vs float rounding at glyph edges.
 
+**Increment B plan (settled 2026-08-07, GATED ON DISK SPACE):** the
+line-BUILDING stage (mask → rotation angle → contours → Line bboxes →
+reading-order sort → per-line images, canonical line_detection.py) is
+wall-to-wall OpenCV: findContours/minAreaRect/approxPolyDP/warpAffine/
+dilate/drawContours. Decision: allocr will LINK OpenCV C++ — the same
+native code the canonical cv2 calls, so the geometry stage is
+bit-identical by construction rather than approximated by hand-rolled
+equivalents (the increment-A tolerance batteries then tighten to exact
+for this stage). BLOCKED 2026-08-07: brew opencv (~400MB w/ deps)
+cannot be responsibly installed with the data volume at 100% (892MB
+free); likewise the CTC recognition models (BDRC/Woodblock etc.,
+100-300MB each). Both resume the moment Adam clears disk space. The
+CTC increment then follows: OCRModel port (pad_ocr_line/_prepare/
+_pre_pad/greedy CTC decode with each model's charset from
+model_config.json), oracle = canonical pipeline text output per line,
+then Unicode via OUR proven chain + syllable-legality QC.
+
 **Stage 2 build plan (remaining):**
 1. Dependency: onnxruntime (brew; C++ API) — linked by a NEW `allocr`
    target, never allcore (ML stays out of the deterministic core).
