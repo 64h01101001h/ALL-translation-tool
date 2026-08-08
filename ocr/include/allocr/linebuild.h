@@ -32,6 +32,11 @@ struct OcrLine {
 struct LineImage {
     int w = 0, h = 0;
     std::vector<uint8_t> rgb;         // interleaved, extracted line strip
+    // page-x for each line-strip column: mask_n_crop removes EVERY
+    // all-zero column ([UPSTREAM QUIRK], interior gaps squeeze out), so
+    // strip x is nonlinear vs the page — this is the exact inverse map,
+    // in deskewed-page coordinates (drives word-level follow-along)
+    std::vector<int> colMap;
 };
 
 struct PageLines {

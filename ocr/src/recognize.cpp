@@ -135,7 +135,8 @@ TextRecognizer::~TextRecognizer() = default;
 
 const std::string& TextRecognizer::encoder() const { return impl_->cfg.encoder; }
 
-std::string TextRecognizer::recognize(const LineImage& line, bool prePad) const {
+std::string TextRecognizer::recognize(const LineImage& line, bool prePad,
+                                      std::vector<WordSpan>* wordsOut) const {
     const auto& cfg = impl_->cfg;
     if (line.w <= 0 || line.h <= 0) return "";
     cv::Mat img(line.h, line.w, CV_8UC3,
@@ -245,6 +246,10 @@ std::string TextRecognizer::recognize(const LineImage& line, bool prePad) const 
     struct Beam {
         std::string text, wordPart, lastChar;
         float score = 0.0f;   // numpy-2 weak promotion keeps float32
+        // pyctcdecode frame tracking (text_frames / part_frames):
+        // committed (word, frameBeg, frameEnd) triples + the open part
+        std::vector<std::tuple<std::string, int, int>> words;
+        int partBeg = -1, partEnd = -1;   // NULL_FRAMES = (-1, -1)
     };
     auto mergeTokens = [](const std::string& a, const std::string& b) {
         if (b.empty()) return a;
@@ -278,11 +283,16 @@ std::string TextRecognizer::recognize(const LineImage& line, bool prePad) const 
             auto it = merged.find(key);
             if (it == merged.end()) {
                 merged.emplace(key, std::move(b));
-            } else {  // _sum_log_scores (math.log/exp on float32 inputs)
+            } else {  // _sum_log_scores (math.log/exp on float32 inputs);
+                      // _merge_beams overwrites frames with the LAST
+                      // beam's (dict re-assignment) — mirror that
                 float s1 = it->second.score, s2 = b.score;
                 it->second.score = static_cast<float>(
                     s1 >= s2 ? s1 + std::log(1 + std::exp(double(s2) - s1))
                              : s2 + std::log(1 + std::exp(double(s1) - s2)));
+                it->second.words = std::move(b.words);
+                it->second.partBeg = b.partBeg;
+                it->second.partEnd = b.partEnd;
             }
         };
         for (int64_t v = 0; v < V; ++v) {
@@ -293,13 +303,20 @@ std::string TextRecognizer::recognize(const LineImage& line, bool prePad) const 
                 nb.score += lp[v];
                 if (b.lastChar == ch) {
                     nb.lastChar = ch;                 // same token: collapse
+                    nb.partEnd = static_cast<int>(t) + 1;   // extend frames
                 } else if (ch == " ") {
                     nb.text = mergeTokens(b.text, b.wordPart);
+                    if (!b.wordPart.empty())          // commit part_frames
+                        nb.words.emplace_back(b.wordPart, b.partBeg,
+                                              b.partEnd);
                     nb.wordPart.clear();              // word boundary
                     nb.lastChar = ch;
+                    nb.partBeg = nb.partEnd = -1;     // NULL_FRAMES
                 } else {
                     nb.wordPart += ch;                // continue the word
                     nb.lastChar = ch;
+                    if (b.partBeg < 0) nb.partBeg = static_cast<int>(t);
+                    nb.partEnd = static_cast<int>(t) + 1;
                 }
                 addBeam(std::move(nb));
             }
@@ -315,27 +332,82 @@ std::string TextRecognizer::recognize(const LineImage& line, bool prePad) const 
         if (next.size() > 100) next.resize(100);
         beams = std::move(next);
     }
-    // finalize: flush word parts, merge, take the best
-    std::map<std::string, float> finals;
+    // finalize: flush word parts (+ their part_frames), merge (frames
+    // last-wins, scores log-summed, as _merge_beams), take the best
+    struct Final {
+        float score;
+        std::vector<std::tuple<std::string, int, int>> words;
+    };
+    std::map<std::string, Final> finals;
     for (const Beam& b : beams) {
         const std::string full = mergeTokens(b.text, b.wordPart);
+        auto fw = b.words;
+        if (!b.wordPart.empty())
+            fw.emplace_back(b.wordPart, b.partBeg, b.partEnd);
         auto it = finals.find(full);
         if (it == finals.end()) {
-            finals.emplace(full, b.score);
+            finals.emplace(full, Final{b.score, std::move(fw)});
         } else {
-            float s1 = it->second, s2 = b.score;
-            it->second = static_cast<float>(
+            float s1 = it->second.score, s2 = b.score;
+            it->second.score = static_cast<float>(
                 s1 >= s2 ? s1 + std::log(1 + std::exp(double(s2) - s1))
                          : s2 + std::log(1 + std::exp(double(s1) - s2)));
+            it->second.words = std::move(fw);
         }
     }
     std::string text;
     float bestScore = -1e30f;
-    for (const auto& [t2, s] : finals)
-        if (s > bestScore) {
-            bestScore = s;
+    const std::vector<std::tuple<std::string, int, int>>* bestWords = nullptr;
+    for (const auto& [t2, f] : finals)
+        if (f.score > bestScore) {
+            bestScore = f.score;
             text = t2;
+            bestWords = &f.words;
         }
+    if (wordsOut && bestWords) {
+        // map CTC frames -> model-input x -> pre-padded-image x -> strip x.
+        // Inverse of the pad chain above; whichever branch ran, its
+        // parameters are still in scope conceptually — recompute them.
+        const int preOff = prePad ? line.h : 0;      // white pre-pad width
+        const int imgCols = line.w + 2 * preOff;
+        const int imgRows = line.h;
+        const double wr2 = static_cast<double>(cfg.inputWidth) / imgCols;
+        const double hr2 = static_cast<double>(cfg.inputHeight) / imgRows;
+        const double framePx =
+            static_cast<double>(cfg.inputWidth) / static_cast<double>(T);
+        auto toStripX = [&](double inputX) {
+            double x;
+            if (wr2 <= hr2) {                        // pad_to_width branch
+                x = inputX * imgCols / cfg.inputWidth - preOff;
+            } else {                                 // pad_to_height branch
+                const double ratio =
+                    static_cast<double>(cfg.inputHeight) / imgRows;
+                const int tmpCols = static_cast<int>(imgCols * ratio);
+                const int middle = (cfg.inputWidth - tmpCols) / 2;
+                x = (inputX - middle) / ratio - preOff;
+            }
+            return std::min(std::max(x, 0.0),
+                            static_cast<double>(line.w));
+        };
+        wordsOut->clear();
+        for (const auto& [w2, fb, fe] : *bestWords) {
+            WordSpan ws;
+            // same '§' -> ' ' surface replacement as the line text
+            for (size_t i = 0; i < w2.size();) {
+                if (w2.compare(i, 2, "\xC2\xA7") == 0) {
+                    ws.text += ' ';
+                    i += 2;
+                } else {
+                    ws.text += w2[i++];
+                }
+            }
+            ws.frameBeg = fb;
+            ws.frameEnd = fe;
+            ws.x0 = toStripX(fb * framePx);
+            ws.x1 = toStripX(fe * framePx);
+            wordsOut->push_back(std::move(ws));
+        }
+    }
     // canonical ctc_decode(): strip the vocab-space channel entirely
     {
         std::string noSpace;

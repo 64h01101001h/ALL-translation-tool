@@ -108,7 +108,12 @@ def main() -> int:
             logits = np.squeeze(logits)
             if logits.shape[0] == len(decoder.ctc_vocab):
                 logits = np.transpose(logits, axes=[1, 0])
-            return decoder.ctc_decode(logits)
+            # word-level frame spans: pyctcdecode's own text_frames from
+            # decode_beams (the canonical decoder computes these; decode()
+            # just drops them) — drives the follow-along oracle
+            beams = decoder.ctc_decoder.decode_beams(logits)
+            frames = beams[0][2] if beams else []   # [(word, (beg, end))]
+            return decoder.ctc_decode(logits), frames
 
     for path in sorted(glob.glob(os.path.join(REPO,
                                               "ocr/tests/fixtures/*.png"))):
@@ -170,12 +175,19 @@ def main() -> int:
 
         if ocr_session is not None:
             with open(os.path.join(out_dir, name + ".ocr.tsv"), "w",
-                      encoding="utf-8") as f:
+                      encoding="utf-8") as f, \
+                 open(os.path.join(out_dir, name + ".words.tsv"), "w",
+                      encoding="utf-8") as wf:
                 for i, li in enumerate(line_images):
-                    text = run_ocr_line(li).strip().replace("§", " ")
+                    raw, frames = run_ocr_line(li)
+                    text = raw.strip().replace("§", " ")
                     f.write(f"{i}\t{text}\n")
+                    for word, (fb, fe) in frames:
+                        wf.write(f"{i}\t{word.replace('§', ' ')}\t"
+                                 f"{fb}\t{fe}\n")
                     if i < 2:
-                        print(f"    ocr[{i}]: {text[:60]}")
+                        print(f"    ocr[{i}]: {text[:60]} "
+                              f"({len(frames)} word spans)")
     return 0
 
 

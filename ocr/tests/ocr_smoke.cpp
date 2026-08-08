@@ -9,7 +9,9 @@
 // hardest case, per the stage-2 spike).
 #include <cstdio>
 #include <fstream>
+#include <map>
 #include <string>
+#include <tuple>
 #include <vector>
 
 #include "allocr/linedet.h"
@@ -190,11 +192,56 @@ int main(int argc, char** argv) {
                         wantText.push_back(
                             tab == std::string::npos ? "" : tl.substr(tab + 1));
                     }
+                    // canonical word spans (pyctcdecode text_frames):
+                    // line -> [(word, beg, end)]
+                    std::map<int, std::vector<std::tuple<std::string, int,
+                                                         int>>> wantWords;
+                    {
+                        std::ifstream wf(base + ".words.tsv");
+                        std::string wl;
+                        while (std::getline(wf, wl)) {
+                            size_t t1 = wl.find('\t');
+                            size_t t2 = wl.rfind('\t');
+                            size_t t3 = wl.rfind('\t', t2 - 1);
+                            if (t1 == std::string::npos || t3 <= t1) continue;
+                            wantWords[std::stoi(wl.substr(0, t1))]
+                                .emplace_back(
+                                    wl.substr(t1 + 1, t3 - t1 - 1),
+                                    std::stoi(wl.substr(t3 + 1,
+                                                        t2 - t3 - 1)),
+                                    std::stoi(wl.substr(t2 + 1)));
+                        }
+                    }
                     long okLines = 0, totLines = 0;
+                    long wordLinesOk = 0, wordLinesTried = 0;
                     for (size_t i = 0;
                          i < pl.images.size() && i < wantText.size(); ++i) {
-                        std::string got = rec.recognize(pl.images[i]);
+                        std::vector<allocr::WordSpan> words;
+                        std::string got =
+                            rec.recognize(pl.images[i], true, &words);
                         ++totLines;
+                        // word spans compared on text-identical lines only
+                        // (a near-tie flip changes the beam, hence frames)
+                        if (got == wantText[i] &&
+                            wantWords.count(static_cast<int>(i))) {
+                            ++wordLinesTried;
+                            const auto& want = wantWords[static_cast<int>(i)];
+                            bool same = want.size() == words.size();
+                            for (size_t k = 0; same && k < want.size(); ++k) {
+                                const auto& [ww, wb, we] = want[k];
+                                same = ww == words[k].text &&
+                                       wb == words[k].frameBeg &&
+                                       we == words[k].frameEnd &&
+                                       words[k].x0 <= words[k].x1 &&
+                                       words[k].x1 <=
+                                           double(pl.images[i].w);
+                            }
+                            if (same) ++wordLinesOk;
+                            else
+                                std::printf("    word spans differ on line "
+                                            "%zu (%zu vs %zu words)\n", i,
+                                            words.size(), want.size());
+                        }
                         if (got == wantText[i]) ++okLines;
                         else {
                             std::printf("    ocr line %zu differs:\n"
@@ -230,6 +277,13 @@ int main(int argc, char** argv) {
                           (std::string(c.name) +
                            ": recognized text matches the canonical "
                            "(<=1 near-tie line)").c_str());
+                    std::printf("  %s: word spans %ld/%ld text-identical "
+                                "lines exact\n",
+                                c.name, wordLinesOk, wordLinesTried);
+                    CHECK(wordLinesOk == wordLinesTried,
+                          (std::string(c.name) +
+                           ": word frame spans match pyctcdecode's "
+                           "text_frames exactly").c_str());
                 }
             }
         }

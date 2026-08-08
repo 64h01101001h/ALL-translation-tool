@@ -5337,7 +5337,21 @@ public:
         scroll->setWidget(pageView_);
         scroll->setWidgetResizable(true);
         split->addWidget(scroll);
+        scroll_ = scroll;
         results_ = new QTextBrowser;
+        results_->setOpenLinks(false);
+        connect(results_, &QTextBrowser::anchorClicked, [this](const QUrl& u) {
+            const QStringList p = u.toString().split(':');
+            if (p.size() != 3 || p[0] != "w") return;
+            const int li = p[1].toInt(), wi = p[2].toInt();
+            if (li < 0 || li >= int(words_.size()) || wi < 0 ||
+                wi >= int(words_[li].size()))
+                return;
+            drawPage(li, wi);
+            const auto& l = pl_.lines[li];
+            scroll_->ensureVisible(pageX(size_t(li), words_[li][wi].x0),
+                                   l.y + l.h / 2, 120, 120);
+        });
         split->addWidget(results_);
         split->setStretchFactor(0, 1);
         split->setStretchFactor(1, 1);
@@ -5398,6 +5412,52 @@ private:
         return true;
     }
 
+    // map a word's strip-x to deskewed-page x through the line's colMap
+    // (mask_n_crop squeezes interior gaps — the map is the exact inverse)
+    int pageX(size_t line, double stripX) const {
+        const auto& cm = pl_.images[line].colMap;
+        if (cm.empty()) return pl_.lines[line].x + int(stripX);
+        const int ix = std::min(std::max(int(std::lround(stripX)), 0),
+                                int(cm.size()) - 1);
+        return cm[ix];
+    }
+
+    // deskewed page with line boxes + word boxes; optional highlight
+    void drawPage(int hlLine, int hlWord) {
+        if (pl_.deskewedRgb.empty()) return;
+        QImage page(pl_.deskewedRgb.data(), pl_.width, pl_.height,
+                    pl_.width * 3, QImage::Format_RGB888);
+        QImage annotated = page.copy();
+        {
+            QPainter p(&annotated);
+            p.setPen(QPen(QColor(0x7F, 0x77, 0xDD), 2));
+            for (const auto& l : pl_.lines)
+                p.drawRect(l.x, l.y, l.w, l.h);
+            for (size_t i = 0; i < words_.size(); ++i) {
+                const auto& l = pl_.lines[i];
+                for (size_t k = 0; k < words_[i].size(); ++k) {
+                    const auto& ws = words_[i][k];
+                    const int x0 = pageX(i, ws.x0), x1 = pageX(i, ws.x1);
+                    if (int(i) == hlLine && int(k) == hlWord) {
+                        p.fillRect(QRect(x0, l.y, std::max(x1 - x0, 2),
+                                         l.h),
+                                   QColor(0xE8, 0x9C, 0x30, 110));
+                        p.setPen(QPen(QColor(0xB4, 0x54, 0x0A), 2));
+                        p.drawRect(x0, l.y, std::max(x1 - x0, 2), l.h);
+                        p.setPen(QPen(QColor(0x7F, 0x77, 0xDD), 2));
+                    } else {
+                        p.setPen(QPen(QColor(0x62, 0xA8, 0x62, 150), 1));
+                        p.drawRect(x0, l.y + l.h - 6,
+                                   std::max(x1 - x0, 2), 5);
+                        p.setPen(QPen(QColor(0x7F, 0x77, 0xDD), 2));
+                    }
+                }
+            }
+        }
+        pageView_->setPixmap(QPixmap::fromImage(annotated));
+        pageView_->adjustSize();
+    }
+
     void runOcr() {
         if (img_.isNull() || !ensureModels()) return;
         results_->setHtml("<i>detecting lines…</i>");
@@ -5410,29 +5470,20 @@ private:
                       rgb.begin() + static_cast<size_t>(y) * w * 3);
         auto mask = det_->detect(rgb.data(), w, h);
         const double zero = 0.0;
-        auto pl = allocr::buildLines(
+        pl_ = allocr::buildLines(
             rgb.data(), w, h, mask, 2.5, 4.0, true,
             deskewOverride_->isChecked() ? &zero : nullptr);
-
-        // deskewed page with line boxes
-        QImage page(pl.deskewedRgb.data(), pl.width, pl.height,
-                    pl.width * 3, QImage::Format_RGB888);
-        QImage annotated = page.copy();
-        {
-            QPainter p(&annotated);
-            p.setPen(QPen(QColor(0x7F, 0x77, 0xDD), 2));
-            for (const auto& l : pl.lines)
-                p.drawRect(l.x, l.y, l.w, l.h);
-        }
-        pageView_->setPixmap(QPixmap::fromImage(annotated));
-        pageView_->adjustSize();
+        auto& pl = pl_;
+        words_.assign(pl.images.size(), {});
+        drawPage(-1, -1);
 
         // recognize each line; convert via OUR chain; syllable QC
         lastWylie_.clear();
         QString htmlOut =
             QString("<div style='color:#555;font-size:12px'>deskew %1° "
                     "%2 · %3 line(s) · every line OCR-DERIVED (review "
-                    "before use)</div>")
+                    "before use) · click a word to see it on the page "
+                    "(word boxes: pyctcdecode frame spans)</div>")
                 .arg(pl.angle, 0, 'f', 2)
                 .arg(deskewOverride_->isChecked()
                          ? "<b>(override — deviation)</b>"
@@ -5445,7 +5496,8 @@ private:
                                   .arg(i + 1)
                                   .arg(pl.images.size()));
             QCoreApplication::processEvents();
-            const std::string wylie = rec_->recognize(pl.images[i]);
+            const std::string wylie =
+                rec_->recognize(pl.images[i], true, &words_[i]);
             lastWylie_.push_back(wylie);
             auto [uni, ok] = allcore::wylieToUnicode(wylie);
             int bad = 0, toks = 0;
@@ -5461,6 +5513,21 @@ private:
                 if (checker_ && !checker_->legalWylie(tok)) ++bad;
             }
             flagged += bad;
+            // wylie rendered as clickable per-word anchors (follow-along:
+            // clicking highlights the word's frame-span box on the page)
+            QString wylieHtml;
+            if (!words_[i].empty()) {
+                for (size_t k = 0; k < words_[i].size(); ++k)
+                    wylieHtml +=
+                        QString("<a href='w:%1:%2' style='text-decoration:"
+                                "none;color:#1E4E6B'>%3</a>")
+                            .arg(i)
+                            .arg(k)
+                            .arg(QString::fromStdString(words_[i][k].text)
+                                     .toHtmlEscaped());
+            } else {
+                wylieHtml = QString::fromStdString(wylie).toHtmlEscaped();
+            }
             htmlOut += QString(
                            "<div style='margin:6px 0'><b>%1.</b> "
                            "<span style='font-family:monospace'>%2</span>"
@@ -5468,7 +5535,7 @@ private:
                            "<small style='color:%4'> %5/%6 syllable(s) "
                            "fail legality</small></div>")
                            .arg(i + 1)
-                           .arg(QString::fromStdString(wylie).toHtmlEscaped())
+                           .arg(wylieHtml)
                            .arg(QString::fromStdString(uni).toHtmlEscaped())
                            .arg(bad ? "#B4540A" : "#3B7A3B")
                            .arg(bad)
@@ -5636,11 +5703,14 @@ private:
     std::unique_ptr<allocr::LineDetector> det_;
     std::unique_ptr<allocr::TextRecognizer> rec_;
     QLabel* pageView_ = nullptr;
+    QScrollArea* scroll_ = nullptr;
     QTextBrowser* results_ = nullptr;
     QPushButton* run_ = nullptr;
     QPushButton* save_ = nullptr;
     QCheckBox* deskewOverride_ = nullptr;
     std::vector<std::string> lastWylie_;
+    allocr::PageLines pl_;                            // last processed page
+    std::vector<std::vector<allocr::WordSpan>> words_;  // per line
 };
 #endif  // ALL_HAVE_OCR
 

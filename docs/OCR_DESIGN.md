@@ -157,6 +157,13 @@ models produce download instructions, never a crash.
    detected lines, per-line recognition w/ confidence, everything
    marked ocr-derived; feeds the existing ocr_out review flow; also
    unlocks word-level scan follow-along coordinates.
+   [DONE 2026-08-08 incl. word level: the beam port now carries
+   pyctcdecode's text_frames (word → CTC frame span → strip x via the
+   pad-chain inverse → page x via LineImage::colMap, the retained-column
+   map that inverts mask_n_crop's interior-gap squeeze). Oracle:
+   build_ocr_reference.py dumps decode_beams()[0][2] to *.words.tsv;
+   ocr_smoke diffs word text + frames EXACTLY on every text-identical
+   line. Scan pane: green word underboxes, click-a-word highlight.]
 
 **Original license check (2026-08-06):**
 - The app/pipeline CODE is **MIT-licensed** — we may incorporate, modify,

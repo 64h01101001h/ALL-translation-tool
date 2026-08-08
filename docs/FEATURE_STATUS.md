@@ -89,13 +89,27 @@ sections, QC'd, auto-saved)
   Real-canon check: KL0009I1 yields bampos of ~10k syllables each
   (definition says 9,000) and correctly flags the source's own skipped
   `bam po bzhi pa`
-- ⬜ **Spotlight federated search** (wysearch idea)
-- ⬜ **Batch-volume OCR** (Than Grove pattern) · **word-level scan
-  follow-along** (needs OCR coordinates)
+- ✅ **Spotlight federated search** (wysearch idea) — Search pane
+  "Search this Mac (Spotlight)": mdfind probes with the query as typed
+  plus its Tibetan-unicode conversions (both proven chains)
+- ✅ **Batch-volume OCR** (Than Grove pattern) — Scan pane "Batch
+  folder…": whole folder → headered OCR-DERIVED per-page files with
+  progress, legality counts, loud failures
+- ✅ **Word-level OCR coordinates + follow-along** — pyctcdecode's own
+  `text_frames` ported into the beam (proven byte-exact vs the oracle
+  on every text-identical line); `LineImage::colMap` inverts
+  mask_n_crop's interior-gap squeeze back to page x; Scan pane draws
+  per-word boxes and clicking any recognized word highlights it on the
+  page. (Overlay BDRC-scan wiring stays open — needs OCR on the BDRC
+  image itself.)
+- ✅ **Style-face registration** — the five inactive files in
+  ~/Library/Fonts (chos-rgyal, yig-chung, calligraphic, TCRC Youtso,
+  Tib-US) registered per-session by app + font_smoke; 64/64 coverage;
+  in the typeface combo
 - ⬜ **Live composing editor** (Jskad idea — waits for the input-center
-  formatter) · ⬜ style-face registration (Yigchung etc.) ·
-  ⬜ Jomolhari bundling · ⬜ letter-level contraction fusions (sher
-  phyin) · ⬜ Old-Tibetan affixnorm rules (remote session's thread)
+  formatter) · ⬜ Jomolhari bundling · ⬜ letter-level contraction
+  fusions (sher phyin) · ⬜ Old-Tibetan affixnorm rules (remote
+  session's thread)
 
 ## Externally gated
 

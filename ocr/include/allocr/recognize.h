@@ -21,6 +21,16 @@
 
 namespace allocr {
 
+// A decoded word with its CTC frame span and its x-range on the line
+// strip (pyctcdecode's own text_frames tracking — the canonical decoder
+// computes these; the BDRC app just discards them). x is in LINE-STRIP
+// pixels; LineImage::colMap maps strip x back to deskewed-page x.
+struct WordSpan {
+    std::string text;                 // word as decoded ('§' -> ' ' applied)
+    int frameBeg = -1, frameEnd = -1; // CTC frame indices [beg, end)
+    double x0 = 0.0, x1 = 0.0;        // strip-x range
+};
+
 class TextRecognizer {
 public:
     // modelDir must hold model_config.json + the ONNX file it names
@@ -29,8 +39,10 @@ public:
 
     // line: an extracted line image (interleaved RGB). Returns the
     // recognized text in the model's encoding (Wylie), stripped, with
-    // the canonical '§' -> ' ' replacement applied.
-    std::string recognize(const LineImage& line, bool prePad = true) const;
+    // the canonical '§' -> ' ' replacement applied. wordsOut (optional)
+    // receives the best beam's word spans (see WordSpan).
+    std::string recognize(const LineImage& line, bool prePad = true,
+                          std::vector<WordSpan>* wordsOut = nullptr) const;
 
     const std::string& encoder() const;  // e.g. "wylie"
 

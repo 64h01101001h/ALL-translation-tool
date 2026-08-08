@@ -177,8 +177,10 @@ std::vector<RawLine> groupLineChunks(
 
 // mask_n_crop: zero outside the mask, then remove EVERY all-zero row and
 // column ([UPSTREAM QUIRK]: interior gaps squeeze out too, not just the
-// borders — np.delete semantics preserved).
-Mat maskAndCrop(const Mat& image, const Mat& mask) {
+// borders — np.delete semantics preserved). colsOut (optional) receives
+// the retained source-column indices — the exact strip-x -> page-x map.
+Mat maskAndCrop(const Mat& image, const Mat& mask,
+                std::vector<int>* colsOut = nullptr) {
     Mat masked;
     cv::bitwise_and(image, image, masked, mask);
     std::vector<int> rows, cols;
@@ -209,11 +211,12 @@ Mat maskAndCrop(const Mat& image, const Mat& mask) {
                     masked.ptr<uint8_t>(rows[ry])[cols[rx] *
                                                       masked.channels() +
                                                   c];
+    if (colsOut) *colsOut = std::move(cols);
     return out;
 }
 
 Mat extractLine(const Mat& image, const Mat& mask, int bboxH,
-                double kFactor) {
+                double kFactor, std::vector<int>* colsOut = nullptr) {
     const int kSize = static_cast<int>(bboxH * kFactor);
     Mat kernel = cv::getStructuringElement(
         cv::MORPH_RECT,
@@ -221,18 +224,19 @@ Mat extractLine(const Mat& image, const Mat& mask, int bboxH,
                  std::max(static_cast<int>(kSize * kFactor), 1)));
     Mat dilated;
     cv::dilate(mask, dilated, kernel, cv::Point(-1, -1), 1);
-    return maskAndCrop(image, dilated);
+    return maskAndCrop(image, dilated, colsOut);
 }
 
 Mat getLineImage(const Mat& image, const Mat& mask, int bboxH,
-                 double bboxTolerance, double kFactor, double& adaptedK) {
+                 double bboxTolerance, double kFactor, double& adaptedK,
+                 std::vector<int>* colsOut = nullptr) {
     double k = kFactor;
-    Mat line = extractLine(image, mask, bboxH, k);
+    Mat line = extractLine(image, mask, bboxH, k, colsOut);
     int attempts = 0;
     while (line.rows > bboxH * bboxTolerance && attempts < 10) {
         k -= 0.1;
         if (k <= 0.1) break;
-        line = extractLine(image, mask, bboxH, k);
+        line = extractLine(image, mask, bboxH, k, colsOut);
         ++attempts;
     }
     adaptedK = k;
@@ -307,10 +311,12 @@ PageLines buildLines(const uint8_t* rgb, int w, int h, const Mask& mask,
         cv::drawContours(tmpMask, one, -1, cv::Scalar(255, 255, 255),
                          cv::FILLED);
         double adaptedK = currentK;
+        std::vector<int> colMap;
         Mat li = getLineImage(rotImg, tmpMask, l.bbox.height, bboxTolerance,
-                              currentK, adaptedK);
+                              currentK, adaptedK, &colMap);
         if (currentK != adaptedK) currentK = adaptedK;
         LineImage lim;
+        lim.colMap = std::move(colMap);
         lim.w = li.cols;
         lim.h = li.rows;
         lim.rgb.assign(li.data, li.data + static_cast<size_t>(li.total()) *
