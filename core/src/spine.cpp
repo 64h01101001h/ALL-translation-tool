@@ -277,6 +277,34 @@ long long Spine::corpusMaxId() const {
     return 0;
 }
 
+std::vector<Entry> Spine::lookupByPronunciation(const std::string& query,
+                                                int limit) const {
+    std::string fold;
+    for (char c : query) {
+        if (c >= 'a' && c <= 'z') fold += c;
+        else if (c >= 'A' && c <= 'Z') fold += (char)(c - 'A' + 'a');
+    }
+    std::vector<Entry> out;
+    if (fold.empty()) return out;
+    auto run = [&](const char* sql, const std::string& arg) {
+        Stmt q(db_, sql);
+        sqlite3_bind_text(q.p, 1, arg.c_str(), -1, SQLITE_TRANSIENT);
+        sqlite3_bind_int(q.p, 2, limit - (int)out.size());
+        while (sqlite3_step(q.p) == SQLITE_ROW && (int)out.size() < limit) {
+            auto e = entryById(sqlite3_column_int64(q.p, 0));
+            bool dup = false;
+            for (auto& x : out) dup |= (x.id == e.id);
+            if (!dup && e.id) out.push_back(std::move(e));
+        }
+    };
+    run("SELECT entry_id FROM pron_index WHERE fold=? LIMIT ?", fold);
+    if ((int)out.size() < limit)
+        run("SELECT entry_id FROM pron_index WHERE fold LIKE ? "
+            "ORDER BY length(fold) LIMIT ?",
+            fold + "%");
+    return out;
+}
+
 std::vector<std::string> Spine::corpusCourses() const {
     std::vector<std::string> out;
     Stmt s(db_, "SELECT DISTINCT course FROM corpus_segments ORDER BY course");

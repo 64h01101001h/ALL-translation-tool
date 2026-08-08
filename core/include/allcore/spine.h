@@ -90,6 +90,13 @@ public:
     // Distinct course ids, sorted.
     std::vector<std::string> corpusCourses() const;
 
+    // pronunciation search (GMR convention): the query is folded to
+    // lowercase letters and matched exactly, then by prefix —
+    // "jangchub" or "jang chub" finds byang chub. Deterministic fold,
+    // no phonetic guessing.
+    std::vector<Entry> lookupByPronunciation(const std::string& query,
+                                             int limit = 10) const;
+
     // Single corpus segment by id (id 0 on miss) and the highest segment id —
     // together they give seedable random access for the drill generator.
     CorpusSegment corpusSegmentById(long long id) const;

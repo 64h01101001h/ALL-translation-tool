@@ -88,6 +88,12 @@ CREATE VIRTUAL TABLE corpus_fts USING fts5(
 );
 
 -- release reverse index (english phrase -> entries), kept as shipped
+CREATE TABLE pron_index (
+  fold TEXT NOT NULL,                -- pronunciation, lowercased, letters only
+  entry_id INTEGER NOT NULL
+);
+CREATE INDEX idx_pron_fold ON pron_index(fold);
+
 CREATE TABLE reverse_index (
   english TEXT NOT NULL,
   wylie TEXT NOT NULL,
@@ -187,6 +193,16 @@ def build():
                       s.get('acip') or '', norms[i - 1]))
     con.executemany('INSERT INTO corpus_segments VALUES (?,?,?,?,?,?,?)', crows)
     con.executemany('INSERT INTO corpus_fts(rowid,wylie,english,acip,wylie_norm) VALUES (?,?,?,?,?)', c_fts)
+
+    print('building pronunciation fold index …')
+    prows = []
+    for i, e in enumerate(entries, start=1):
+        p = (e.get('pronunciation') or '')
+        fold = ''.join(ch for ch in p.lower() if ch.isalpha())
+        if fold:
+            prows.append((fold, i))
+    con.executemany('INSERT INTO pron_index VALUES (?,?)', prows)
+    print(f'  {len(prows):,} folds')
 
     print(f'loading {REVERSE.name} …')
     rev = json.load(open(REVERSE, encoding='utf-8'))

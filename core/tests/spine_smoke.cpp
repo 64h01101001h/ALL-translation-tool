@@ -85,6 +85,19 @@ int main(int argc, char** argv) {
     auto near = spine.corpusSearch("NEAR(byang sems, 5)", "", 5);
     CHECK(!near.empty(), "corpus NEAR(byang sems, 5)");
 
+    // pronunciation search (GMR convention, deterministic fold)
+    {
+        auto p1 = spine.lookupByPronunciation("sunam");
+        CHECK(!p1.empty() && p1.front().wylie == "bsod nams",
+              "pron 'sunam' -> bsod nams");
+        auto p2 = spine.lookupByPronunciation("Jang Chub");
+        bool hit = false;
+        for (auto& e : p2) hit |= (e.wylie == "byang chub");
+        CHECK(hit, "pron 'Jang Chub' (spaced, cased) -> byang chub");
+        CHECK(spine.lookupByPronunciation("zzzqqq").empty(),
+              "nonsense pronunciation finds nothing");
+    }
+
     std::printf("%s (%d failure%s)\n", failures ? "SMOKE FAILED" : "SMOKE OK",
                 failures, failures == 1 ? "" : "s");
     return failures ? 1 : 0;

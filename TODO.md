@@ -315,10 +315,15 @@ display toggles, not through invention.
       points + future OCR text. Wired: wynorm + spine (38,556 folded
       segments; byed +7,334, pa +7,221) + libindex v3 (969k
       fold-reachable lines). Documented skips: TibEwtsFilter +
-      SyllableTokenizer (covered natively). REMAINING: phonetics
-      family as its own feature (pronunciation search over the spine's
-      GMR pronunciations); app-side wiring when the lane frees
-      (Lookup fallback fold + updateIndex lemma path).
+      SyllableTokenizer (covered natively). Pronunciation search
+      SHIPPED 2026-08-07 (spine pron_index fold table over all 105,634
+      GMR pronunciations; Spine::lookupByPronunciation exact+prefix;
+      battery: sunam→bsod nams, spaced/cased input, nonsense silent;
+      Lookup pane fallback labeled "matched by pronunciation") — OUR
+      deterministic expression of the phonetics family; upstream's
+      English-speller folding tiers (ee→i etc.) remain optional later
+      lenience. REMAINING app-side: updateIndex lemma path + Lookup
+      affix-fold alignment.
       Affix rules detail:
       (allcore affixnorm: faithful TibAffixedFilter port, battery
       through our own converters incl. the needsAA guard; wylie-level

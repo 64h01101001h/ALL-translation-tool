@@ -234,6 +234,19 @@ static QWidget* makeLookupPane(allcore::Spine& spine, allcore::RefDict* ref) {
                                       .toHtmlEscaped());
             }
         }
+        // pronunciation fallback (GMR convention): 'jangchub' finds
+        // byang chub — deterministic fold, labeled
+        bool viaPron = false;
+        if (entries.empty()) {
+            entries = spine.lookupByPronunciation(raw, 8);
+            viaPron = !entries.empty();
+        }
+        if (viaPron)
+            h += "<div style='color:#1E6B4E;font-size:12px'>matched by "
+                 "<b>pronunciation</b> (GMR convention) — no exact "
+                 "headword for \u201c" +
+                 QString::fromStdString(raw).toHtmlEscaped() +
+                 "\u201d</div>";
         if (entries.empty()) h = "<i>no HGM match</i>";
         for (const auto& e : entries) h += entryHtml(e);
 
