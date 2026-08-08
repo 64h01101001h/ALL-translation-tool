@@ -5442,6 +5442,192 @@ private:
 // proven lattice, links persist per text, and the harvest exports as
 // PENDING alignment candidates for the data project (rule 1: these are
 // the TRANSLATOR'S OWN attestations, clearly tiered, never auto-bound).
+// ---- Review pane: translator oversight (roadmap; leadership-doc
+// recommendation #2) — the reviewer's side-by-side view over a
+// FINISHED draft: register-sensitive terms, provisional-tier reliance,
+// unmatched equivalents, collapsed distinctions, and sense-spread
+// attention flags. Everything is review GUIDANCE — flags, never
+// verdicts; the checker matches against HGM's glosses and never
+// composes English (rule 1).
+class ReviewPane : public QWidget {
+public:
+    ReviewPane(allcore::Spine& spine) : spine_(spine), index_(spine) {
+        auto* outer = new QVBoxLayout(this);
+        outer->addWidget(new QLabel(
+            "<b>Review (oversight)</b> — paste the Tibetan source and the "
+            "finished English draft under review, then Run review. Flags "
+            "guide the reviewer's attention; nothing is auto-corrected."));
+        auto* row = new QHBoxLayout;
+        auto* openSrc = new QPushButton("Open source…");
+        auto* openDraft = new QPushButton("Open draft…");
+        auto* runB = new QPushButton("Run review");
+        row->addWidget(openSrc);
+        row->addWidget(openDraft);
+        row->addWidget(runB);
+        row->addStretch();
+        outer->addLayout(row);
+        auto* split = new QSplitter(Qt::Horizontal);
+        src_ = new QPlainTextEdit;
+        src_->setPlaceholderText("Tibetan source (ACIP)…");
+        draft_ = new QPlainTextEdit;
+        draft_->setPlaceholderText("The finished English draft…");
+        split->addWidget(src_);
+        split->addWidget(draft_);
+        outer->addWidget(split, 1);
+        report_ = new QTextBrowser;
+        outer->addWidget(report_, 1);
+        auto openInto = [this](QPlainTextEdit* into) {
+            const QString f = QFileDialog::getOpenFileName(
+                this, "Open file", QString(),
+                "Text (*.txt *.act *.inc *.md);;All files (*)");
+            if (f.isEmpty()) return;
+            QFile qf(f);
+            if (qf.open(QIODevice::ReadOnly))
+                into->setPlainText(QString::fromUtf8(qf.readAll()));
+        };
+        connect(openSrc, &QPushButton::clicked,
+                [openInto, this] { openInto(src_); });
+        connect(openDraft, &QPushButton::clicked,
+                [openInto, this] { openInto(draft_); });
+        connect(runB, &QPushButton::clicked, [this] { review(); });
+    }
+
+private:
+    void review() {
+        const std::string source = src_->toPlainText().toStdString();
+        const std::string draft = draft_->toPlainText().toStdString();
+        if (source.empty() || draft.empty()) {
+            report_->setHtml("<i>both the source and the draft are "
+                             "needed</i>");
+            return;
+        }
+        report_->setHtml("<i>reviewing…</i>");
+        QCoreApplication::processEvents();
+        auto rep = allcore::checkTerminology(spine_, index_, source, draft);
+
+        int provisionalUsed = 0, unmatched = 0;
+        QString regHtml, provHtml, unmHtml, spreadHtml;
+        int spreadShown = 0;
+        for (const auto& t : rep.terms) {
+            // distinct gloss alternatives (sense spread)
+            std::set<std::string> alts;
+            for (const auto& g : t.glosses) {
+                std::string low;
+                for (char c : g)
+                    low += (char)std::tolower((unsigned char)c);
+                alts.insert(low);
+            }
+            const bool registerMarked = [&] {
+                for (const auto& g : t.glosses)
+                    if (g.find("register)") != std::string::npos)
+                        return true;
+                return false;
+            }();
+            if (registerMarked) {
+                regHtml += "<div style='margin:4px 0'><b>" +
+                           QString::fromStdString(t.wylie)
+                               .toHtmlEscaped() +
+                           "</b> — established senses differ by "
+                           "register: <i>";
+                QString gl;
+                for (const auto& g : t.glosses) {
+                    if (!gl.isEmpty()) gl += " · ";
+                    gl += QString::fromStdString(g).toHtmlEscaped();
+                }
+                regHtml += gl + "</i> — confirm the rendering matches "
+                           "this text's register.</div>";
+            }
+            if (t.provisional && !t.matched.empty()) {
+                ++provisionalUsed;
+                provHtml += "<div style='margin:3px 0'><b>" +
+                            QString::fromStdString(t.wylie)
+                                .toHtmlEscaped() +
+                            "</b> rendered “" +
+                            QString::fromStdString(t.matched.front())
+                                .toHtmlEscaped() +
+                            "” — this equivalent is <span style='color:"
+                            "#b00'>PROVISIONAL</span> tier; verify "
+                            "against the corpus.</div>";
+            }
+            if (t.matched.empty()) {
+                ++unmatched;
+                if (unmatched <= 12)
+                    unmHtml += "<div style='margin:2px 0'><b>" +
+                               QString::fromStdString(t.wylie)
+                                   .toHtmlEscaped() +
+                               "</b> ×" + QString::number(t.occurrences) +
+                               " — none of HGM's equivalents (<i>" +
+                               QString::fromStdString(
+                                   t.glosses.empty() ? ""
+                                                     : t.glosses.front())
+                                   .toHtmlEscaped() +
+                               "…</i>) appear in the draft. May be a "
+                               "legitimate choice — worth a look.</div>";
+            } else if (alts.size() >= 3 && spreadShown < 10) {
+                ++spreadShown;
+                spreadHtml += "<div style='margin:2px 0'><b>" +
+                              QString::fromStdString(t.wylie)
+                                  .toHtmlEscaped() +
+                              "</b> has " +
+                              QString::number(alts.size()) +
+                              " established senses — confirm “" +
+                              QString::fromStdString(t.matched.front())
+                                  .toHtmlEscaped() +
+                              "” is the right one here.</div>";
+            }
+        }
+        QString sharedHtml;
+        for (const auto& s : rep.shared) {
+            QString ws;
+            for (const auto& w : s.term_wylies) {
+                if (!ws.isEmpty()) ws += ", ";
+                ws += QString::fromStdString(w).toHtmlEscaped();
+            }
+            sharedHtml += "<div style='margin:3px 0'>“" +
+                          QString::fromStdString(s.english)
+                              .toHtmlEscaped() +
+                          "” serves <b>" + ws +
+                          "</b> — a distinction may have collapsed."
+                          "</div>";
+        }
+
+        QString h = QString(
+            "<div><b>Reviewer's report</b> — %1 term(s) anchored · %2 "
+            "unmatched · %3 provisional-supported · %4 shared-English "
+            "collapse(s)</div><div style='color:#777;font-size:12px'>"
+            "flags are attention guidance, not errors; the reviewer "
+            "decides</div><hr>")
+                        .arg(rep.terms.size())
+                        .arg(unmatched)
+                        .arg(provisionalUsed)
+                        .arg(rep.shared.size());
+        if (!regHtml.isEmpty())
+            h += "<div style='color:#8C2F2B'><b>Register-sensitive "
+                 "terms</b></div>" + regHtml + "<hr>";
+        if (!provHtml.isEmpty())
+            h += "<div><b>Renderings resting on PROVISIONAL glosses"
+                 "</b></div>" + provHtml + "<hr>";
+        if (!sharedHtml.isEmpty())
+            h += "<div><b>Possible collapsed distinctions</b></div>" +
+                 sharedHtml + "<hr>";
+        if (!unmHtml.isEmpty())
+            h += "<div><b>Terms without an HGM equivalent in the draft"
+                 "</b> <small>(first 12)</small></div>" + unmHtml +
+                 "<hr>";
+        if (!spreadHtml.isEmpty())
+            h += "<div><b>Sense-spread attention</b> <small>(3+ "
+                 "established senses; first 10)</small></div>" +
+                 spreadHtml;
+        report_->setHtml(h);
+    }
+
+    allcore::Spine& spine_;
+    allcore::HeadwordIndex index_;
+    QPlainTextEdit* src_ = nullptr;
+    QPlainTextEdit* draft_ = nullptr;
+    QTextBrowser* report_ = nullptr;
+};
+
 class AlignPane : public QWidget {
 public:
     AlignPane(allcore::Spine& spine, const QString& root)
@@ -7024,6 +7210,7 @@ int main(int argc, char** argv) {
                 "Trainer");
     tabs.addTab(new DrillsPane(spine, progress), "Drills");
     tabs.addTab(new DraftPane(spine, progress), "Draft");
+    tabs.addTab(new ReviewPane(spine), "Review");
     tabs.addTab(new AlignPane(spine, root), "Align");
     tabs.addTab(new InputPane(checker, root), "Input");
     tabs.addTab(new LibraryPane(root, progress,
