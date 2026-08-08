@@ -14,6 +14,14 @@ display toggles, not through invention.
 
 ## Waiting on Adam (prompt him when the task starts)
 
+- [ ] **Send the two license-unblock emails** (drafted 2026-08-07,
+      ready to personalize in docs/drafts/): EMAIL_84000_license.md
+      (resolves the CC-BY-4.0 vs BY-NC-ND discrepancy — unlocks the
+      best-licensed aligned Ti–En dataset in existence) and
+      EMAIL_BDRC_ocr_models.md (model-weights license — unlocks OCR
+      stage 2 and word-level scan following). Each is one reply away
+      from a major integration.
+
 - [~] **Collection title pairs → corpus/dictionary** (Adam 2026-08-06;
       docs/TITLES_INGEST_DESIGN.md) — CORPUS SIDE DONE 2026-08-07: the
       catalogs were already on disk in the Thursday meeting folder
@@ -134,7 +142,12 @@ display toggles, not through invention.
       Draft workspace, Sanskrit/pron engines, prep formatter, apparatus
       conventions). Integrate each standard into the app as acquired.
       First mining source available now: the three ingested volumes'
-      front matter / translator notes.
+      front matter / translator notes. STATUS 2026-08-07: eleven
+      sourced standards compiled (STD-001…011; the volumes' prose is
+      mined dry under two pattern families); the pending-queue review
+      sheet generator shipped (tools/build_pending_review.py →
+      data/PENDING_REVIEW.md/.docx) so candidates can be brought to a
+      GMR session.
 
 - [ ] **Input-center conversion standards** — Adam will upload the standards
       for turning raw input documents (as received from the input centers)
@@ -151,6 +164,16 @@ display toggles, not through invention.
       remote for backup (needs Adam's say-so — pushing publishes).
 
 ## Waiting on the data project (Cowork sessions)
+
+- [ ] Review the 13 pyewts source-defect candidates
+      (Handoff/data/qc_pyewts_defect_candidates_2026_08.json, filed
+      2026-08-07 w/ HANDOFF QC note; standout: bsgrub bya stored with
+      the Tibetan of bsgrub byed). Source check each before
+      correcting.
+- [ ] The pending attestation recount now also covers the three title/
+      subject waves (v0.29 +2,955 · v0.30 +1,055 · v0.31 +367;
+      corpus 42,184) and should honor the v0.29-addendum flags
+      (85 truncated "…" titles, 7 "@" uncertainty marks).
 
 - [ ] Bank the LC pair-selection script behind the historical 92.2%/4,582-pair
       sanskrit battery (for the record; the C++ port is already proven
@@ -327,6 +350,36 @@ display toggles, not through invention.
       from Monlam data would be another first.
 
 ## Build queue
+
+- [ ] **White paper v5** — v4 predates most of 2026-08-07: the three
+      catalog/subject corpus waves (42,184 segments), the calendar
+      engine (year + day level, 76/76 oracle-proven, Convert-pane
+      dates both directions), the affix program (Lookup fallback +
+      affix-tolerant search everywhere), Botok segmentation in the
+      Overlay, five reference layers, bundled font, list view,
+      pending-review sheet. Refresh both .md and .docx when the dust
+      settles (coordinate: phone session authored v4).
+- [ ] **Release 6 zip — unexplored assets** (found 2026-08-07 in
+      Adam's Dropbox, acip-release6-wylie.zip): (a)
+      ACIP_Master_Catalog.html at the archive root — inspect: may be
+      the full Master Catalog incl. Sanskrit titles/subjects; (b)
+      enghtml author trees — English-spelled author names per text
+      (candidate author-name pairs); (c) flat/ — the full Release 6
+      wylie text corpus (_T.TXT per work): candidate Library install
+      source predating the ZIP downloads.
+- [ ] **Composer pending-bibliography bank** — "Compose bibliography
+      entry…" inserts with a pending label but doesn't yet SAVE
+      candidates the way "Propose footnote" does; add
+      candidate_bib.json + include in tools/build_pending_review.py
+      (which currently formats footnote candidates only).
+- [ ] **affixnorm: Old-Tibetan rules** (da-drag strip, medial འ) —
+      present in lucene-bo's TibAffixedFilter behind convertOldTib,
+      deliberately not ported 2026-08-07; port if Old-Tibetan
+      material ever enters the library.
+- [ ] **Calendar month view** — with adj_zla (intercalary bookkeeping)
+      ported, a Convert-pane month table could show a full Tibetan
+      month with its chad/lhag days marked — the engine already
+      detects them via the inverse lookup.
 
 - [x] Battery H: the official pronunciation-chart pairs as a permanent C++
       battery — pure-Tibetan 50/51 asserted, Sanskrit-in-Tibetan informative.
