@@ -30,9 +30,14 @@ display toggles, not through invention.
       Tibetan subjects (1,155 paths, 34 top-level) in
       sungbum_subjects.json; Library shows subject + English title;
       catalog_titles join now 2,352 numbers. Subjects are
-      TIBETAN-ONLY — English pairing awaits the Master Catalog's
-      empty Subject Category column or the collection ZIPs' folder
-      names (install ZIPs to check the folder-name convention).
+      TIBETAN-ONLY in that source. v0.31 WAVE same day: the English
+      pairing was in Adam's own Dropbox — the ACIP Release 6 web
+      edition's subject browser names every node bilingually
+      (Vowed_Morality--'DUL_BA): +367 unique subject-pair segments
+      (course SUBJ), corpus 42,184; 1,424 works (incl. 322 Derge
+      Tengyur) carry subject memberships shown in the Library. LATER:
+      set-correspondence cross-check of R6 English subjects vs the
+      Sungbum catalog's Tibetan-only hierarchies.
       REMAINING — **the tier ruling is Adam's**: are catalog English
       titles binding HGM English (→ dictionary-side attestation) or a
       labeled reference layer? Also: confirm the Thursday-folder
