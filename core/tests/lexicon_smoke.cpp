@@ -39,6 +39,20 @@ int main(int argc, char** argv) {
     CHECK(lex.attested(u("kag dag kag")).empty(),
           "invented phrase is unattested");
 
+    // regression (2026-08-07): list 1 ships as UTF-16LE — the old byte-wise
+    // reader banked it as garbage, so its 15,349 list-1-only forms never
+    // attested. ཀ་ཀ་ནི is in list 1 ONLY: it must attest, with list 1's
+    // label alone (this catches the label-prefix blind spot too — "Monlam"
+    // is a prefix of both labels).
+    CHECK(lex.attested("ཀ་ཀ་ནི") == "Monlam Dictionary",
+          "list-1-only word attests with exactly list 1's label");
+    CHECK(lex.attested("word").empty(), "the UTF-16 file's header line is not banked");
+
+    // eachWord visits both lists
+    size_t n = 0;
+    lex.eachWord([&](const std::string&) { ++n; });
+    CHECK(n == lex.size(), "eachWord visits every banked form");
+
     std::printf("%s (%d failures)\n",
                 failures ? "LEXICON SMOKE FAILED" : "LEXICON SMOKE OK",
                 failures);
