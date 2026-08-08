@@ -87,8 +87,95 @@ int main(int argc, char** argv) {
                 "recover the fixture date\n", rt, rtot, invOk, rtot);
     const bool ok2 = (rt == rtot && invOk == rtot);
 
-    std::printf("%s\n", (pass == total && ok2)
+    // ---- year battery: every month header + every day of the
+    // original's printed years (argv[2] = kck_year_fixtures.tsv) ----
+    bool ok3 = true;
+    if (argc > 2) {
+        std::ifstream fy(argv[2]);
+        std::string ln;
+        long curYear = 0;
+        std::vector<allcore::KckMonth> months;
+        int mOk = 0, mTot = 0, dOk = 0, dTot = 0;
+        struct DayRow { long y, ix, tt, jd; };
+        std::vector<DayRow> dayRows;
+        while (std::getline(fy, ln)) {
+            if (ln.empty() || ln[0] == '#') continue;
+            std::istringstream in(ln);
+            std::string kind;
+            in >> kind;
+            if (kind == "MONTH") {
+                long y, ix, disp, ical;
+                std::string el, gen, an;
+                in >> y >> ix >> disp >> ical >> el >> gen >> an;
+                if (y != curYear) {
+                    curYear = y;
+                    months = allcore::kckYearMonths(y);
+                }
+                ++mTot;
+                if (ix < (long)months.size()) {
+                    const auto& m = months[ix];
+                    if (m.display_month == disp &&
+                        (long)m.intercalary == ical &&
+                        m.element_en == el && m.animal_en == an &&
+                        m.female == (gen == "female"))
+                        ++mOk;
+                    else
+                        std::printf("  [FAIL] month %ld/%ld: got %d%s "
+                                    "%s-%s\n",
+                                    y, ix, m.display_month,
+                                    m.intercalary ? "i" : "",
+                                    m.element_en.c_str(),
+                                    m.animal_en.c_str());
+                }
+            } else if (kind == "DAY") {
+                long y, ix, tt, dd, mm, yy;
+                in >> y >> ix >> tt >> dd >> mm >> yy;
+                dayRows.push_back({y, ix, tt,
+                                   allcore::julianDay(dd, mm, yy)});
+            }
+        }
+        // group day rows: a tshes printed TWICE is a duplicated
+        // (lhag) lunar day — the engine's single JD is the pair's
+        // second member, and the first must be exactly JD-1
+        int lhag = 0;
+        for (size_t i = 0; i < dayRows.size();) {
+            const auto& r = dayRows[i];
+            size_t j = i + 1;
+            while (j < dayRows.size() && dayRows[j].y == r.y &&
+                   dayRows[j].ix == r.ix && dayRows[j].tt == r.tt)
+                ++j;
+            const long lastJd = dayRows[j - 1].jd;
+            ++dTot;
+            if (r.y != curYear) {
+                curYear = r.y;
+                months = allcore::kckYearMonths(r.y);
+            }
+            bool ok = false;
+            if (r.ix < (long)months.size()) {
+                auto day = allcore::kckDayForTrueMonth(
+                    months[r.ix].true_month, r.tt);
+                ok = day.valid && day.jd == lastJd;
+                if (ok && j - i == 2) {
+                    ok = (dayRows[i].jd == lastJd - 1);
+                    ++lhag;
+                }
+            }
+            if (ok)
+                ++dOk;
+            else
+                std::printf("  [FAIL] %ld m#%ld tshes %ld\n", r.y,
+                            r.ix, r.tt);
+            i = j;
+        }
+        std::printf("%d/%d month headers, %d/%d days match the "
+                    "original's printed years (%d doubled lhag days "
+                    "verified as pairs)\n", mOk, mTot, dOk, dTot,
+                    lhag);
+        ok3 = (mOk == mTot && dOk == dTot && mTot > 0);
+    }
+
+    std::printf("%s\n", (pass == total && ok2 && ok3)
                              ? "TIBCAL_DAY SMOKE OK"
                              : "TIBCAL_DAY SMOKE FAILED");
-    return (pass == total && ok2) ? 0 : 1;
+    return (pass == total && ok2 && ok3) ? 0 : 1;
 }

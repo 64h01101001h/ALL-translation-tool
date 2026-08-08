@@ -391,15 +391,18 @@ display toggles, not through invention.
       present in lucene-bo's TibAffixedFilter behind convertOldTib,
       deliberately not ported 2026-08-07; port if Old-Tibetan
       material ever enters the library.
-- [ ] **Calendar month view** — with adj_zla (intercalary bookkeeping)
-      ported, a Convert-pane month table could show a full Tibetan
-      month with its chad/lhag days marked — the engine already
-      detects them via the inverse lookup. FIXTURES READY 2026-08-07:
-      full-year outputs from the original's print mode banked
-      (third_party/kck_henning/kc_2010.txt + kc_2012.txt — 2012 holds
-      the intercalary: regular 3 [sa ga], then "3 (Intercalary)", then
-      4; month element-animal names + mansions included). Print-mode
-      driving: menu 2, start year, finish year on separate lines.
+- [x] **Calendar month view** — SHIPPED 2026-08-07, fixtures-first:
+      allcore kckYearMonths (intercalary enumeration + month names
+      ported from T4.C incl. the male-year m11/12 exception and the
+      tsurlug animal indexing; cycanim reconstructed from code +
+      fixtures) + kckDayForTrueMonth (the only route to an intercalary
+      month's days). Battery: 25/25 month headers and 721/721 days
+      match the original's printed years kc_2010+kc_2012, with all 17
+      doubled lhag days verified as exact JD-1 pairs. Convert pane:
+      "2012 months" lists the year (ᵢ marks intercalary), "2012 m3i"
+      tables an intercalary month's 30 days with chad/lhag notes.
+      Fixture generators banked (gen_kck_year_fixtures.py; print-mode
+      driving: menu 2, start/finish year on separate lines).
 
 - [x] Battery H: the official pronunciation-chart pairs as a permanent C++
       battery — pure-Tibetan 50/51 asserted, Sanskrit-in-Tibetan informative.

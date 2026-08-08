@@ -47,4 +47,25 @@ WesternDate westernFromJd(long jd);
 struct KckMatch { long year, month, tshes; KckDay day; };
 std::vector<KckMatch> kckFromJulianDay(long jd);
 
+// day computed directly from the TRUE month count (zla0) — the only
+// way to reach an intercalary month's days (kckModernKarana's
+// (year, month) always resolves to the regular sibling)
+KckDay kckDayForTrueMonth(long true_month, long tshes);
+
+// the months of a Tibetan year with the original's display
+// convention: an intercalation appears as "(display m) intercalary"
+// BEFORE regular month m (fixture kc_2012: 3, 3-intercalary, 4).
+// Month names: animals are fixed to the display month (1 = Tiger);
+// elements advance one step per pair continuously across years —
+// both proven against the banked full-year fixtures.
+struct KckMonth {
+    int display_month = 0;      // 1..12
+    bool intercalary = false;
+    long true_month = 0;        // zla0 — feed to kckDayForTrueMonth
+    std::string element_en;
+    std::string animal_en;
+    bool female = false;
+};
+std::vector<KckMonth> kckYearMonths(long year);
+
 }  // namespace allcore

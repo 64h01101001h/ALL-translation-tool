@@ -93,17 +93,12 @@ constexpr L5 kNyifac1{7, 44, 0, 0, 0};   // nyi ma skyes khyim (T3.C)
 
 }  // namespace
 
-KckDay kckModernKarana(long year, long month, long tshes) {
+KckDay kckDayForTrueMonth(long true_month, long tshes) {
     KckDay out;
-
-    // ---- zla_dag: true month --------------------------------------
-    const long yr = year - kEpochYear;
-    const long a = 12 * yr + month - kEpochMonth;
-    if (a < 0) return out;   // the original refuses pre-epoch dates
-    const long b = 2 * a + kIcalInd;
-    out.zla1 = b % 65;
-    out.zla0 = a + b / 65;
-    const long curMth = out.zla0;
+    if (true_month < 0) return out;
+    out.zla0 = true_month;
+    out.zla1 = -1;   // not derived from a (year, month) request
+    const long curMth = true_month;
 
     // ---- monthly means + anomaly ----------------------------------
     const L5 gzadru =
@@ -199,6 +194,79 @@ KckDay kckModernKarana(long year, long month, long tshes) {
         out.jd = spizag + kSpzJ;
     }
     out.valid = true;
+    return out;
+}
+
+KckDay kckModernKarana(long year, long month, long tshes) {
+    // zla_dag from (year, month), then the shared true-month path
+    const long yr = year - kEpochYear;
+    const long a = 12 * yr + month - kEpochMonth;
+    if (a < 0) return {};   // the original refuses pre-epoch dates
+    const long b = 2 * a + kIcalInd;
+    KckDay out = kckDayForTrueMonth(a + b / 65, tshes);
+    out.zla1 = b % 65;
+    return out;
+}
+
+// ---- month enumeration + names (T4.C, tsurlug==1 path) -------------
+namespace {
+// ORDER IS: "Fire", "Earth", "Iron", "Water", "Wood" (T4.C comment)
+const char* kMElem[5] = {"Fire", "Earth", "Iron", "Water", "Wood"};
+// cycanim reconstructed exactly from mt_animx=(m+10)%12 against the
+// fixture months (kc_2010/kc_2012): index 11 = Tiger (month 1)
+const char* kMAnim[12] = {"Rabbit", "Dragon", "Snake",  "Horse",
+                          "Sheep",  "Monkey", "Bird",   "Dog",
+                          "Pig",    "Mouse",  "Ox",     "Tiger"};
+
+void monthName(long ty, long mthnum, KckMonth& m) {
+    const long yrElem = (ty / 2 - 3) % 5;
+    const int yrGender = (int)(ty % 2);   // 1 = female, odd CE
+    m.animal_en = kMAnim[(mthnum + 10) % 12];
+    long e = -1;
+    const long g = yrGender;
+    const long ye = yrElem;
+    if ((ye == 4 && g == 0) || (ye == 1 && g == 1))
+        e = 0 + (mthnum - 1) / 2;
+    if ((ye == 4 && g == 1) || (ye == 2 && g == 0))
+        e = 1 + (mthnum - 1) / 2;
+    if ((ye == 0 && g == 0) || (ye == 2 && g == 1))
+        e = 2 + (mthnum - 1) / 2;
+    if ((ye == 1 && g == 0) || (ye == 3 && g == 1))
+        e = 4 + (mthnum - 1) / 2;
+    if ((ye == 0 && g == 1) || (ye == 3 && g == 0))
+        e = 3 + (mthnum - 1) / 2;
+    if (yrGender == 0 && (mthnum == 11 || mthnum == 12))
+        e = ye + (mthnum + 1) / 2;   // the male-year exception (T4.C)
+    m.element_en = kMElem[e % 5];
+    m.female = ((mthnum + 1) % 2) == 1;
+}
+}  // namespace
+
+std::vector<KckMonth> kckYearMonths(long year) {
+    std::vector<KckMonth> out;
+    for (long tm = 1; tm <= 12; ++tm) {
+        const long a = 12 * (year - kEpochYear) + tm - kEpochMonth;
+        if (a < 0) continue;
+        const long b = 2 * a + kIcalInd;
+        const long zla1 = b % 65;
+        const long zla0 = a + b / 65;
+        if (zla1 == 0 || zla1 == 1) {
+            // intercalary first (previous display number), then the
+            // regular month — the original's print order (kc_2012)
+            KckMonth mi;
+            mi.display_month = (int)(tm - 1 == 0 ? 12 : tm - 1);
+            mi.intercalary = true;
+            mi.true_month = zla0 - 1;
+            monthName(year, mi.display_month, mi);
+            out.push_back(mi);
+        }
+        KckMonth m;
+        m.display_month = (int)tm;
+        m.intercalary = false;
+        m.true_month = zla0;
+        monthName(year, m.display_month, m);
+        out.push_back(m);
+    }
     return out;
 }
 

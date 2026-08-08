@@ -145,7 +145,8 @@ add_executable(tibcal_day_smoke tests/tibcal_day_smoke.cpp)
 target_link_libraries(tibcal_day_smoke PRIVATE allcore)
 add_test(NAME tibcal_day_smoke
          COMMAND tibcal_day_smoke
-                 ${CMAKE_SOURCE_DIR}/third_party/kck_henning/kck_fixtures.tsv)
+                 ${CMAKE_SOURCE_DIR}/third_party/kck_henning/kck_fixtures.tsv
+                 ${CMAKE_SOURCE_DIR}/third_party/kck_henning/kck_year_fixtures.tsv)
 
 add_executable(tibexport_smoke tests/tibexport_smoke.cpp)
 target_link_libraries(tibexport_smoke PRIVATE allcore)

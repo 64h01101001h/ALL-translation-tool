@@ -1568,8 +1568,8 @@ static QWidget* makeConvertPane() {
     calRow->addWidget(new QLabel("<b>Colophon year</b>"));
     auto* calIn = new QLineEdit;
     calIn->setPlaceholderText(
-        "1357 · me bya · fire bird 6 · tshes month year (3 8 2011) · "
-        "2011-08-31");
+        "1357 · me bya · fire bird 6 · 3 8 2011 · 2011-08-31 · "
+        "2012 months · 2012 m3i");
     calRow->addWidget(calIn, 1);
     auto* calOut = new QLabel;
     calOut->setWordWrap(true);
@@ -1608,6 +1608,82 @@ static QWidget* makeConvertPane() {
                                              "lunar day"
                                            : ""));
                 return;
+            }
+        }
+        // month list: "YYYY months" — the year's months with names
+        // and intercalation (proven 25/25 vs the original's years)
+        {
+            const auto p = q.split(' ', Qt::SkipEmptyParts);
+            if (p.size() == 2 && p[1].compare("months",
+                                              Qt::CaseInsensitive) == 0) {
+                bool oky = false;
+                const long y = p[0].toLong(&oky);
+                if (oky && y >= 2009) {
+                    QStringList ms;
+                    for (const auto& m : allcore::kckYearMonths(y))
+                        ms << QString("%1%2 %3-%4%5")
+                                  .arg(m.display_month)
+                                  .arg(m.intercalary ? "ᵢ" : "")
+                                  .arg(QString::fromStdString(
+                                      m.element_en))
+                                  .arg(QString::fromStdString(
+                                      m.animal_en))
+                                  .arg(m.female ? " (f)" : " (m)");
+                    calOut->setText(
+                        ms.join(" · ") +
+                        " <small>(ᵢ = intercalary; type e.g. \u201c" +
+                        QString::number(y) +
+                        " m3\u201d for the month's days)</small>");
+                    return;
+                }
+            }
+            // month table: "YYYY mN" or "YYYY mNi" (intercalary)
+            if (p.size() == 2 && p[1].startsWith('m') &&
+                p[1].size() >= 2) {
+                bool oky = false, okm = false;
+                const long y = p[0].toLong(&oky);
+                QString mm = p[1].mid(1);
+                const bool wantIcal = mm.endsWith('i');
+                if (wantIcal) mm.chop(1);
+                const long mno = mm.toLong(&okm);
+                if (oky && okm && y >= 2009 && mno >= 1 && mno <= 12) {
+                    long cm = -1;
+                    for (const auto& m : allcore::kckYearMonths(y))
+                        if (m.display_month == mno &&
+                            m.intercalary == wantIcal)
+                            cm = m.true_month;
+                    if (cm < 0) {
+                        calOut->setText(wantIcal
+                                            ? "no intercalary month "
+                                              "with that number this "
+                                              "year"
+                                            : "month not found");
+                        return;
+                    }
+                    QStringList rows;
+                    long prevJd = -1;
+                    for (long tt = 1; tt <= 30; ++tt) {
+                        auto d = allcore::kckDayForTrueMonth(cm, tt);
+                        auto w = allcore::westernFromJd(d.jd);
+                        QString note;
+                        if (prevJd >= 0 && d.jd == prevJd)
+                            note = " ⟨chad — shares the civil day⟩";
+                        else if (prevJd >= 0 && d.jd == prevJd + 2)
+                            note = " ⟨lhag — spans two civil days⟩";
+                        rows << QString("%1: %2-%3-%4%5")
+                                    .arg(tt)
+                                    .arg(w.year)
+                                    .arg(w.month, 2, 10, QChar('0'))
+                                    .arg(w.day, 2, 10, QChar('0'))
+                                    .arg(note);
+                        prevJd = d.jd;
+                    }
+                    calOut->setText(
+                        rows.join(" · ") +
+                        " <small>(dates verified 721/721 against the "
+                        "original program's printed years)</small>");
+                    return;
+                }
             }
         }
         // full Tibetan date: tshes month year -> western
