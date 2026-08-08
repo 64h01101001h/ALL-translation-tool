@@ -110,6 +110,24 @@ If BDRC fixes upstream, re-run the oracle and the port follows. A
 clearly-labeled opt-in "corrected deskew" mode in OUR Scan pane is a
 possible deviation — Adam's call, never silent.
 
+**Increment C SHIPPED (2026-08-07): CTC RECOGNITION IN C++.**
+allocr::TextRecognizer — config-driven (each model's own
+model_config.json: charset, input 3200×100, layer names, wylie encoder);
+line prep per OCRInference verbatim (white pre-pad, aspect-preserving
+black pad, resize, canonical binarize, [-1,1] normalize with the
+canonical float64-then-cast); decoding is a faithful C++ port of
+pyctcdecode's no-LM beam search (the canonical app's decoder, Apache-2.0
+— beam 100, prune −10, token-min −5, per-frame float32 log-softmax
+matching numpy-2 weak promotion, log-sum-exp beam merging; the model's
+blank decodes through the space channel exactly as the canonical vocab
+construction does). Battery: per-line text vs the canonical pipeline on
+the fixtures — 10/12 lines BYTE-IDENTICAL including 6/7 on the clean
+dense folio (real Pramanavarttika wylie: "de tsam du//zad pa min nam
+khyed la der//…"); the ≤1-per-fixture residue is cross-runtime
+onnxruntime logit low-bits flipping razor-thin timesteps, every diff
+printed. Woodblock model (26MB) at library/ocr_models/BDRC_Woodblock/
+(gitignored; re-download from HF).
+
 **Stage 2 build plan (remaining):**
 1. Dependency: onnxruntime (brew; C++ API) — linked by a NEW `allocr`
    target, never allcore (ML stays out of the deterministic core).

@@ -25,7 +25,7 @@ find_package(OpenCV QUIET COMPONENTS core imgproc OPTIONAL_COMPONENTS geometry
              PATHS /opt/homebrew/opt/opencv /usr/local/opt/opencv)
 if(OpenCV_FOUND)
   message(STATUS "allocr: OpenCV ${OpenCV_VERSION} — line building enabled")
-  target_sources(allocr PRIVATE src/linebuild.cpp)
+  target_sources(allocr PRIVATE src/linebuild.cpp src/recognize.cpp)
   target_include_directories(allocr PRIVATE ${OpenCV_INCLUDE_DIRS})
   target_link_libraries(allocr PUBLIC ${OpenCV_LIBS})
   target_compile_definitions(allocr PUBLIC ALLOCR_HAVE_OPENCV)
@@ -38,4 +38,5 @@ target_link_libraries(ocr_smoke PRIVATE allocr)
 add_test(NAME ocr_smoke
          COMMAND ocr_smoke
                  ${CMAKE_SOURCE_DIR}/library/ocr_models/BDRC_PhotiLines/PhotiLines.onnx
-                 ${CMAKE_SOURCE_DIR}/build/ocr_ref)
+                 ${CMAKE_SOURCE_DIR}/build/ocr_ref
+                 ${CMAKE_SOURCE_DIR}/library/ocr_models/BDRC_Woodblock)
