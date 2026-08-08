@@ -145,3 +145,107 @@ of our own library index.
 4. The section-gloss table (§8) and collection codes (§6) as UI
    reference data.
 5. The pursuit of the lost MySQL dumps (§10).
+
+---
+
+# ACIPMaintenance addendum (2026-08-08 — the 17,364-LOC parent app)
+
+23 operations; the satellite tools above are literally its vendored
+workers. Author "VenPhil"/Philip Baker, 2013–2015. NEW knowledge only:
+
+## The definitive catalog-number grammar (CatalogNumber.m — supersedes
+## ParseFileName.m)
+- Extension → language: TB = act/inc/txt/alt/aat/at1/at2/apt/bk!/raw;
+  EN = ace/ine; MX = acm (NB: MX absent from the app's own language
+  vocabulary — internal inconsistency).
+- Letter→hundreds sub-number table hardcoded A=100 … T=290 (step 10),
+  + trailing digit as ones.
+- Special case: `R0002<letters>` = THE GREAT DICTIONARY; the letters
+  are the sub-number (mostly Tibetan alphabet letters), chk 'E'.
+- INC/INE extension OR suffix 'I' ⇒ bIncomplete; suffix I is rewritten
+  to chk-level E.
+- Canonical rendering: `PP%05d[-%03d|-<s>](<chk-lowercase><LANG>)` e.g.
+  TD01109-003(eTB). CreateNewCatnosWorker's makeCatNo2 ALSO appends a
+  media-type suffix inside the parenthetical: pdf/scan/rtf/aud/vid/doc
+  (X transliteration = empty) → S00123-004(etbpdf).
+- newCatNo is a bulk RE-DERIVATION from legacy catalogNumber (not an
+  allocator); catRef allocation = controldata.nNextCatRef counter.
+- Collection from first letter: k→KG s→SB t→TG r→RDCT.
+- `.wNN` work numbers recognized in sub-position; sub delimiters `.-`.
+- baseCatNo backfill truncates at '('; catalog numbers beginning `CR`
+  legitimately lack a parenthetical (tolerated exception).
+- Tengyur = TD + 5 digits; the "real" range is bounded as
+  `> 'TD01100' AND < 'TD09999'` in verification workers.
+
+## IAST → Tibetanized-ACIP table (ExtractSanskritTitlesWorker.m)
+Retroflex = base+`%` (ṭ→t%, ḍ→d%, ṇ→n%, ṣ→s%, ṛ→r%); ṅ→n*, ñ→n~,
+ṃ/ṁ→m%, ḥ→:, long vowels via # (ā→a#, ī→i#, ū→u#, ai→e#), ṝ→r%#,
+ś→sh. Handles combining marks AND precomposed forms. Comparandum for
+our sanskrit engine (which is battery-proven; this one is not).
+
+## Subject taxonomy machinery
+- TWO parallel taxonomies in the DB: gmrPathStructure (GMR's subject
+  tree) AND nyingpoPathStructure (Nyingpo's) — plus subjItems
+  (flattened term list) and subjItems2 (old→new SYNONYM/normalization
+  map with bAccessed audit flag).
+- Directory levels encode `<TibSubject>_<EngSubject>`, either half may
+  hold /-separated alternates; multi-subject membership joined by ';'.
+- SubjectTree = the browse table (one row per text×subject);
+  engSortKey/tibSortKeyRoman are placeholder copies (never computed).
+- SECRECY RULE: any text whose Tibetan subject path starts with RGYUD
+  (tantra) is auto-flagged bSecret.
+
+## Authors authority file (AuthorsMaintenanceWindowController.m)
+authors table: Primary Name-Tibetan/-Sanskrit/-English + Primary Name
+Language, Other Names-* (semicolon-multivalued), Dates, Date-Begin/End,
+Translated by, Translator of, bAuthor, bTranslator, Notes. Three flat
+per-language index tables rebuilt wholesale (one row per name variant).
+The whole authority file serializes to JSON into WebTables
+(EngAuthors/TibAuthors/AuthorsInfo) — how the ACIP website got its
+data. Century-bucket date grammar (procDates/getCentury): fl./b./c./
+d./Late/ranges; buckets 0=5thC BCE … 25=21stC CE; empty ⇒ 0–25.
+KNOWN BUG: the JSON serializer SWAPS the Tibetan and English
+other-names keys (Sanskrit correct).
+
+## GMR Sungbum pipeline (ImportFromDropboxWorker.m, 2602 LOC)
+- Layout: old/ (input) → new/Sungbum_Tibetan/ + new/Sungbum_English/
+  (twin mirrored subject trees; a text is written into BOTH under its
+  own language's title) + newNoTtl/ + heldFiles/ quarantines.
+- Filename payload: `<catNo>_<TibTitle>_<EngTitle>_<Author>.txt`;
+  target names `<catNo>_<title>.txt`; truncation marker is `---`
+  because "..." are file name separators; sidecar .rtf meta-files
+  carry over-long title tails.
+- Match decision matrix: catNo/chk-level match × title match →
+  exact/higher-chk (clone via template)/lower-chk/no-match/
+  byte-counts-disagree; BYTE-COUNT TOLERANCE = 2.5%; failures are
+  HELD, never dropped. Title matching strips ZHES BYA BA / CES BYA BA
+  and prefix-matches truncated DB titles ending "...".
+- Provenance: createdBy/modifiedBy = 'GMR' (vs 'ACIP'), status RC,
+  inGMRSubjTree flag.
+- Review loop: side-by-side FILE vs DB text, per-side re-normalize
+  (concat+verify), DiffMerge.app launched for manual reconciliation;
+  outcomes Update/Add/Different-Texts/Corrupted.
+- BZHUGS end-of-text guard: a BZHUGS hit past 70% of the text length
+  (or title >400 chars) is treated as the colophon, not the title.
+- Sungbum volume inventory (BuildSBTable): reconciles the DGE LUGS
+  GSUNG 'BUM archive listing vs a DB list through authorsndxtib.
+
+## New tables (beyond the earlier survey)
+WebTables (JSON blobs, single-row, updates have NO WHERE clause!),
+subjItems/subjItems2, SubjectTree (+legacy SubjTreeEnglish/Tibetan),
+sungbums (author/vol/src AR|DB), gmr/nyingpo/sungbumPathStructure,
+sungbumPathStructureResults (~55-column audit/triage table — the
+richest processing-provenance record in the toolchain). aciptbl full
+~110-column list captured (adds bRel4/5/6 release flags, volNdx,
+availableScans, nTotFolios, bSplit, parent*Ndx, engTranslations,
+inGMRSubjTree/inNyingpoSubjTree/inGMRSubjectStructure…).
+
+## Bugs/caveats found (do not port blindly)
+- WebTables UPDATE with no WHERE; AddTextDataController builds its
+  UPDATE, logs it, and NEVER EXECUTES it; RebuildSubjTreeWorker reads
+  subjItems2 but inserts into subjItems; makeTextFName reads title1
+  uninitialized on one path; authors JSON key swap (above); test
+  #defines wired to production.
+- Controlled vocabularies (languages, entity, status, media, century
+  buckets) captured in §4 of the agent report — candidates for our
+  Library decoder's display strings.
