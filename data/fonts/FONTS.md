@@ -64,6 +64,10 @@ in this order (only those present are listed):**
   Tib-US Unicode (tibusrfa2.ttf). All five probed at full working-set
   coverage (64/64) and appended to the typeface combo + battery.
 
-**Worth adding someday (not installed):** Jomolhari (OFL — the beloved
-classic dbu-can; bundleable), Monlam Uni and the Qomolangma series
-(popular in Tibetan communities; check licenses before bundling).
+**Worth adding someday (not installed):** ~~Jomolhari~~ — BUNDLED
+2026-08-08: `Jomolhari-Regular.ttf` (Chris Fynn, OFL **1.0** — license
+banked as `Jomolhari-OFL.txt`; fetched from google/fonts ofl tree),
+63/63 working-set coverage, registered at app start, third bundled
+face in the combo + font battery. Still someday: Monlam Uni and the
+Qomolangma series (popular in Tibetan communities; check licenses
+before bundling).

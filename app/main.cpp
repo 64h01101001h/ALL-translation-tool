@@ -768,6 +768,7 @@ public:
             static const char* kVetted[] = {
                 "SambhotaDege",          // Adam's preferred (Sambhota Dege)
                 "Noto Serif Tibetan",    // the modern default (bundled, OFL)
+                "Jomolhari",             // classic dbu-can (bundled, OFL)
                 "TibetanMachineUnicode", // THL's scholarly standard
                 "BabelStone Tibetan Slim", // widest rare-stack coverage (bundled)
                 "TibetanClassicUnicode",
@@ -5735,6 +5736,10 @@ int main(int argc, char** argv) {
                                       "/data/fonts/NotoSerifTibetan.ttf");
     QFontDatabase::addApplicationFont(
         root + "/data/fonts/BabelStoneTibetanSlim.ttf");
+    // Jomolhari (Chris Fynn, OFL 1.0 — bundled): the beloved classic
+    // dbu-can bookface, modeled on early Kangyur manuscript letterforms
+    QFontDatabase::addApplicationFont(root +
+                                      "/data/fonts/Jomolhari-Regular.ttf");
     // Style faces present as FILES on this machine but not active in Font
     // Book (data/fonts/FONTS.md): register per-session from Adam's own
     // disk — display variety (chos-rgyal, yig-chung cursive, calligraphic),
