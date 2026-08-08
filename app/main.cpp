@@ -9,6 +9,7 @@
 #include <QInputDialog>
 #include <QListView>
 #include <QScrollArea>
+#include <QShortcut>
 #include <QStringListModel>
 #include <QTextStream>
 #include <QLabel>
@@ -4690,6 +4691,319 @@ private:
 
 // Find the project data root: works from terminal (cwd) AND from Finder
 // (walk up from the .app bundle looking for build/hgm_spine_v27_2.db).
+// ---- Align pane: Hypercontext's authoring half, modernized ---------------
+// The original Hypercontext (tutorial.hyp, Adam's own fork) was an
+// ALIGNMENT tool: click a Tibetan span (look-ahead word-finder), click its
+// English, spacebar to link — nested sublinks for titles/phrases — and the
+// hypertexted files fed the dictionary. Here: the word-finder is the
+// proven lattice, links persist per text, and the harvest exports as
+// PENDING alignment candidates for the data project (rule 1: these are
+// the TRANSLATOR'S OWN attestations, clearly tiered, never auto-bound).
+class AlignPane : public QWidget {
+public:
+    AlignPane(allcore::Spine& spine, const QString& root)
+        : spine_(spine), root_(root), index_(spine) {
+        auto* outer = new QVBoxLayout(this);
+        outer->addWidget(new QLabel(
+            "<b>Align (hypertext)</b> — the Hypercontext workflow: click a "
+            "Tibetan word (click again to cycle the word-finder), select its "
+            "English, press <b>space</b> or Link. Sublinks inside longer "
+            "links show green. Links save per text; the harvest exports as "
+            "PENDING candidates for the dictionary project."));
+        auto* row = new QHBoxLayout;
+        auto* open = new QPushButton("Open ACIP file…");
+        row->addWidget(open);
+        auto* load = new QPushButton("Load pasted texts");
+        row->addWidget(load);
+        linkBtn_ = new QPushButton("Link (space)");
+        linkBtn_->setEnabled(false);
+        row->addWidget(linkBtn_);
+        auto* unlink = new QPushButton("Delete last link");
+        row->addWidget(unlink);
+        auto* exportBtn = new QPushButton("Export aligned pairs (PENDING)…");
+        row->addWidget(exportBtn);
+        row->addStretch();
+        outer->addLayout(row);
+
+        auto* split = new QSplitter(Qt::Horizontal);
+        tib_ = new QTextEdit;
+        tib_->setPlaceholderText("Tibetan (ACIP) — paste here, then Load");
+        eng_ = new QTextEdit;
+        eng_->setPlaceholderText("English translation — paste here, then Load");
+        split->addWidget(tib_);
+        split->addWidget(eng_);
+        outer->addWidget(split, 2);
+        links_ = new QTextBrowser;
+        links_->setOpenLinks(false);
+        links_->setMaximumHeight(150);
+        outer->addWidget(links_);
+
+        auto* sc = new QShortcut(QKeySequence(Qt::Key_Space), this);
+        sc->setContext(Qt::WidgetWithChildrenShortcut);
+        connect(sc, &QShortcut::activated, [this] { makeLink(); });
+        connect(linkBtn_, &QPushButton::clicked, [this] { makeLink(); });
+        connect(open, &QPushButton::clicked, [this] {
+            const QString f = QFileDialog::getOpenFileName(
+                this, "Open ACIP file", root_ + "/library");
+            if (f.isEmpty()) return;
+            QFile qf(f);
+            if (!qf.open(QIODevice::ReadOnly)) return;
+            tib_->setPlainText(QString::fromUtf8(qf.readAll()));
+            docFile_ = f;
+            loadTexts();
+        });
+        connect(load, &QPushButton::clicked, [this] {
+            if (docFile_.isEmpty()) docFile_ = "untitled";
+            loadTexts();
+        });
+        connect(unlink, &QPushButton::clicked, [this] {
+            if (linksList_.empty()) return;
+            linksList_.pop_back();
+            saveLinks();
+            repaint_();
+        });
+        connect(exportBtn, &QPushButton::clicked, [this] { exportPairs(); });
+        connect(tib_, &QTextEdit::cursorPositionChanged, [this] {
+            if (loading_ || doc_.tokens.empty()) return;
+            onTibClick();
+        });
+        connect(links_, &QTextBrowser::anchorClicked, [this](const QUrl& u) {
+            const QString s = u.toString();
+            if (s.startsWith("del:")) {
+                const int i = s.mid(4).toInt();
+                if (i >= 0 && i < (int)linksList_.size()) {
+                    linksList_.erase(linksList_.begin() + i);
+                    saveLinks();
+                    repaint_();
+                }
+            }
+        });
+    }
+
+private:
+    struct Link {
+        int tibBeg = 0, tibEnd = 0;   // token span [beg, end)
+        std::string wylie;
+        int engBeg = 0, engEnd = 0;   // char range in the English text
+        std::string english;
+    };
+
+    QString linksPath() const {
+        if (docFile_.isEmpty() || docFile_ == "untitled") return {};
+        return root_ + "/library/links/" +
+               QFileInfo(docFile_).completeBaseName() + ".tsv";
+    }
+
+    void loadTexts() {
+        doc_ = allcore::buildOverlay(spine_, index_,
+                                     tib_->toPlainText().toStdString());
+        // fixed-layout ACIP rendering with per-token positions
+        loading_ = true;
+        QString text;
+        tokBeg_.clear();
+        tokEnd_.clear();
+        for (size_t i = 0; i < doc_.tokens.size(); ++i) {
+            tokBeg_.push_back(text.size());
+            text += QString::fromStdString(doc_.tokens[i]);
+            tokEnd_.push_back(text.size());
+            text += doc_.barrier_after[i] ? ",  " : " ";
+        }
+        tib_->setPlainText(text);
+        tib_->setReadOnly(true);
+        eng_->setReadOnly(true);
+        loading_ = false;
+        // load persisted links
+        linksList_.clear();
+        const QString p = linksPath();
+        if (!p.isEmpty()) {
+            QFile f(p);
+            if (f.open(QIODevice::ReadOnly | QIODevice::Text)) {
+                while (!f.atEnd()) {
+                    const QStringList c =
+                        QString::fromUtf8(f.readLine()).trimmed().split('\t');
+                    if (c.size() < 6 || c[0].startsWith('#')) continue;
+                    Link l;
+                    l.tibBeg = c[0].toInt();
+                    l.tibEnd = c[1].toInt();
+                    l.wylie = c[2].toStdString();
+                    l.engBeg = c[3].toInt();
+                    l.engEnd = c[4].toInt();
+                    l.english = c[5].toStdString();
+                    linksList_.push_back(l);
+                }
+            }
+        }
+        lastTok_ = -1;
+        cycle_ = 0;
+        selBeg_ = selEnd_ = -1;
+        repaint_();
+    }
+
+    void onTibClick() {
+        const int pos = tib_->textCursor().position();
+        int tok = -1;
+        for (size_t i = 0; i < tokBeg_.size(); ++i)
+            if (pos >= tokBeg_[i] && pos <= tokEnd_[i]) { tok = (int)i; break; }
+        if (tok < 0) return;
+        auto at = doc_.spansAt(tok);
+        if (tok == lastTok_) cycle_ = (cycle_ + 1) % (int)(at.size() + 1);
+        else cycle_ = 0;
+        lastTok_ = tok;
+        if (!at.empty() && cycle_ < (int)at.size()) {
+            const auto& sp = doc_.spans[at[cycle_]];
+            selBeg_ = sp.beg;
+            selEnd_ = sp.end;
+        } else {  // bare token (the word-finder found nothing / cycled past)
+            selBeg_ = tok;
+            selEnd_ = tok + 1;
+        }
+        linkBtn_->setEnabled(true);
+        repaint_();
+    }
+
+    static QColor linkColor(bool nested) {
+        return nested ? QColor(0x9E, 0xD9, 0xA0) : QColor(0xAB, 0xCD, 0xEF);
+    }
+
+    void repaint_() {
+        // permanent link tints + current selection, via extraSelections
+        QList<QTextEdit::ExtraSelection> tsel, esel;
+        for (size_t i = 0; i < linksList_.size(); ++i) {
+            const Link& l = linksList_[i];
+            bool nested = false;
+            for (const Link& o : linksList_)
+                if (&o != &l && l.tibBeg >= o.tibBeg && l.tibEnd <= o.tibEnd)
+                    nested = true;
+            if (l.tibBeg < (int)tokBeg_.size() &&
+                l.tibEnd <= (int)tokEnd_.size() && l.tibEnd > l.tibBeg) {
+                QTextEdit::ExtraSelection s;
+                s.cursor = QTextCursor(tib_->document());
+                s.cursor.setPosition(tokBeg_[l.tibBeg]);
+                s.cursor.setPosition(tokEnd_[l.tibEnd - 1],
+                                     QTextCursor::KeepAnchor);
+                s.format.setBackground(linkColor(nested));
+                tsel << s;
+            }
+            QTextEdit::ExtraSelection s2;
+            s2.cursor = QTextCursor(eng_->document());
+            s2.cursor.setPosition(l.engBeg);
+            s2.cursor.setPosition(std::min(l.engEnd,
+                                           (int)eng_->toPlainText().size()),
+                                  QTextCursor::KeepAnchor);
+            s2.format.setBackground(linkColor(nested));
+            esel << s2;
+        }
+        if (selBeg_ >= 0 && selBeg_ < (int)tokBeg_.size() && selEnd_ > selBeg_) {
+            QTextEdit::ExtraSelection s;
+            s.cursor = QTextCursor(tib_->document());
+            s.cursor.setPosition(tokBeg_[selBeg_]);
+            s.cursor.setPosition(tokEnd_[selEnd_ - 1], QTextCursor::KeepAnchor);
+            s.format.setBackground(QColor(0xC9, 0xA9, 0xE9));  // purple
+            tsel << s;
+        }
+        tib_->setExtraSelections(tsel);
+        eng_->setExtraSelections(esel);
+        // links list
+        QString h = QString("<b>%1 link(s)</b> — ").arg(linksList_.size());
+        for (size_t i = 0; i < linksList_.size(); ++i)
+            h += QString("<span style='white-space:nowrap'>[%1 = %2 "
+                         "<a href='del:%3'>×</a>]</span>  ")
+                     .arg(QString::fromStdString(linksList_[i].wylie)
+                              .toHtmlEscaped(),
+                          QString::fromStdString(linksList_[i].english)
+                              .left(40)
+                              .toHtmlEscaped())
+                     .arg(i);
+        links_->setHtml(h);
+    }
+
+    void makeLink() {
+        if (selBeg_ < 0 || doc_.tokens.empty()) return;
+        const QTextCursor ec = eng_->textCursor();
+        if (!ec.hasSelection()) {
+            links_->setHtml("<i>select the matching English first, then "
+                            "space/Link</i>");
+            return;
+        }
+        Link l;
+        l.tibBeg = selBeg_;
+        l.tibEnd = selEnd_;
+        std::string wy;
+        for (int t = selBeg_; t < selEnd_; ++t) {
+            if (!wy.empty()) wy += " ";
+            wy += allcore::acipToEwts(doc_.tokens[t]);
+        }
+        l.wylie = wy;
+        l.engBeg = ec.selectionStart();
+        l.engEnd = ec.selectionEnd();
+        l.english = ec.selectedText().toStdString();
+        linksList_.push_back(l);
+        saveLinks();
+        selBeg_ = selEnd_ = -1;
+        linkBtn_->setEnabled(false);
+        repaint_();
+    }
+
+    void saveLinks() {
+        const QString p = linksPath();
+        if (p.isEmpty()) return;
+        QDir().mkpath(QFileInfo(p).path());
+        QFile f(p);
+        if (!f.open(QIODevice::WriteOnly | QIODevice::Text)) return;
+        QTextStream ts(&f);
+        ts << "# align links for " << QFileInfo(docFile_).fileName()
+           << " — tibBeg tibEnd wylie engBeg engEnd english (translator's "
+              "own; PENDING tier)\n";
+        for (const Link& l : linksList_)
+            ts << l.tibBeg << "\t" << l.tibEnd << "\t"
+               << QString::fromStdString(l.wylie) << "\t" << l.engBeg << "\t"
+               << l.engEnd << "\t"
+               << QString::fromStdString(l.english).replace('\t', ' ')
+               << "\n";
+    }
+
+    void exportPairs() {
+        if (linksList_.empty()) return;
+        QDir().mkpath(root_ + "/data/candidate_alignments");
+        const QString base = docFile_ == "untitled"
+                                 ? "untitled"
+                                 : QFileInfo(docFile_).completeBaseName();
+        const QString out = QFileDialog::getSaveFileName(
+            this, "Export aligned pairs",
+            root_ + "/data/candidate_alignments/" + base + "-pairs.tsv",
+            "TSV (*.tsv)");
+        if (out.isEmpty()) return;
+        QFile f(out);
+        if (!f.open(QIODevice::WriteOnly | QIODevice::Text)) return;
+        QTextStream ts(&f);
+        ts << "# PENDING alignment candidates (translator-authored in the "
+              "Align pane) — for the data project's review; never "
+              "auto-ingested\n# source: "
+           << docFile_ << "\n";
+        for (const Link& l : linksList_)
+            ts << QString::fromStdString(l.wylie) << "\t"
+               << QString::fromStdString(l.english).replace('\t', ' ')
+               << "\n";
+        links_->setHtml(links_->toHtml() +
+                        "<div style='color:#3B7A3B'>exported " +
+                        QString::number(linksList_.size()) + " pair(s) to " +
+                        out.toHtmlEscaped() + "</div>");
+    }
+
+    allcore::Spine& spine_;
+    QString root_, docFile_;
+    allcore::HeadwordIndex index_;
+    allcore::OverlayDoc doc_;
+    std::vector<int> tokBeg_, tokEnd_;
+    std::vector<Link> linksList_;
+    QTextEdit* tib_ = nullptr;
+    QTextEdit* eng_ = nullptr;
+    QTextBrowser* links_ = nullptr;
+    QPushButton* linkBtn_ = nullptr;
+    bool loading_ = false;
+    int lastTok_ = -1, cycle_ = 0, selBeg_ = -1, selEnd_ = -1;
+};
+
 #ifdef ALL_HAVE_OCR
 // ---- Scan pane: OCR stage 2 in the app (OCR_DESIGN.md) --------------------
 // The proven allocr pipeline end to end: line detection (PhotiLines) →
@@ -5017,6 +5331,7 @@ int main(int argc, char** argv) {
                 "Trainer");
     tabs.addTab(new DrillsPane(spine, progress), "Drills");
     tabs.addTab(new DraftPane(spine, progress), "Draft");
+    tabs.addTab(new AlignPane(spine, root), "Align");
     tabs.addTab(new LibraryPane(root, progress,
                                 [&tabs, overlay](const QString& path) {
                                     overlay->openFile(path);
