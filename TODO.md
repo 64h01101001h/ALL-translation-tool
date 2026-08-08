@@ -413,13 +413,18 @@ display toggles, not through invention.
       exact-only honesty). In-app: Convert pane answers Sanskrit AND
       Tibetan inputs with the MVP block; Lookup matches show Sanskrit
       + MVP number — labeled reference, never HGM-tier.
-- [~] **Bundle fonts** — Noto Serif Tibetan SHIPPED 2026-08-07 (OFL
+- [x] **Bundle fonts** — Noto Serif Tibetan SHIPPED 2026-08-07 (OFL
       verified, variable font all weights, banked with OFL.txt in
       data/fonts/; registered at startup; the Overlay's Tibetan-script
       mode prefers it, ACIP/wylie stay in the default face, graceful
-      if missing). REMAINING: BabelStone Tibetan (verify its exact
-      license text first) for exotic Sanskrit stacks; visual pass of
-      the Sanskrit-stack battery output in both faces.
+      if missing). BabelStone Tibetan Slim ADDED same day: OFL 1.1
+      verified BOTH on the site and embedded in the font's own name
+      table (v10.011; data/fonts/FONTS.md records provenance);
+      registered at startup; the Display panel now has a typeface
+      combo (Noto / BabelStone / system, persisted) — BabelStone's
+      wide rare-stack + bskungs-yig coverage pairs with the
+      abbreviations layer. LATER (nice-to-have): visual pass of the
+      Sanskrit-stack battery output in both faces.
 - [ ] **Lotsawa House** — CC BY-NC: write them for bulk/permission;
       prayer-register corpus for register warnings.
 - [ ] Link-out-only tier: Bibliotheca Polyglotta, Adarsha, WTS Munich,

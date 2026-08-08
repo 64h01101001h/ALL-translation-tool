@@ -708,6 +708,19 @@ public:
         scriptMode_->setCurrentIndex(
             settings.value("overlay/scriptMode", 0).toInt());
         scriptRow->addWidget(scriptMode_, 1);
+        // Tibetan typeface for script mode: both bundled faces are OFL
+        // (data/fonts/FONTS.md); falls back gracefully if missing
+        tibFont_ = new QComboBox;
+        tibFont_->addItems({"Noto Serif Tibetan", "BabelStone Tibetan Slim",
+                            "system"});
+        tibFont_->setCurrentIndex(
+            settings.value("overlay/tibFont", 0).toInt());
+        scriptRow->addWidget(tibFont_);
+        connect(tibFont_, &QComboBox::currentIndexChanged, [this](int ix) {
+            QSettings s("ALL", "TranslationTool");
+            s.setValue("overlay/tibFont", ix);
+            if (!doc_.tokens.empty()) loadDoc();
+        });
         ll->addLayout(scriptRow);
         auto mkToggle = [&](const char* key, const QString& label,
                             bool defOn) {
@@ -786,9 +799,13 @@ private:
         // when available; ACIP/wylie stay in the default face
         {
             QFont f = view_->font();
-            if (mode == 0 &&
-                QFontDatabase::hasFamily("Noto Serif Tibetan"))
-                f.setFamilies({"Noto Serif Tibetan"});
+            const QString want =
+                tibFont_ && tibFont_->currentIndex() == 1
+                    ? QStringLiteral("BabelStone Tibetan Slim")
+                    : QStringLiteral("Noto Serif Tibetan");
+            if (mode == 0 && tibFont_ && tibFont_->currentIndex() != 2 &&
+                QFontDatabase::hasFamily(want))
+                f.setFamilies({want});
             else
                 f.setFamilies(QFontDatabase::systemFont(
                                   QFontDatabase::GeneralFont)
@@ -1579,6 +1596,7 @@ private:
     QMap<QString, QString> folioUrl_;
     QStringList folioOrder_, pendingManifests_;
     QComboBox* scriptMode_ = nullptr;
+    QComboBox* tibFont_ = nullptr;
     QCheckBox* showPhon_ = nullptr;
     QCheckBox* showGloss_ = nullptr;
     QCheckBox* showCorpus_ = nullptr;
@@ -4467,6 +4485,8 @@ int main(int argc, char** argv) {
     // consistent complex-stack shaping regardless of system fonts
     QFontDatabase::addApplicationFont(root +
                                       "/data/fonts/NotoSerifTibetan.ttf");
+    QFontDatabase::addApplicationFont(
+        root + "/data/fonts/BabelStoneTibetanSlim.ttf");
     QString dbPath = argc > 1 ? argv[1] : root + "/build/hgm_spine_v27_2.db";
     QString tplPath = argc > 2 ? argv[2]
                                : root + "/docs/analysis/PASSAGE_ANALYSIS_TEMPLATE.md";
