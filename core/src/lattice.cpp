@@ -1,3 +1,4 @@
+#include "allcore/engines.h"
 #include "allcore/lattice.h"
 
 #include <algorithm>
@@ -68,10 +69,62 @@ std::vector<int> OverlayDoc::coverDepth(int cap) const {
     return d;
 }
 
+namespace {
+// nesting depth in O(n log n): spans arrive sorted (beg asc, longer
+// first), so every EARLIER span already has beg <= s.beg. A span
+// contains s iff additionally end >= s.end and it is strictly longer;
+// with begs sorted, any earlier span with end >= s.end is strictly
+// longer unless it is the identical (beg, end) — identical duplicates
+// are adjacent in the sort and subtracted. Count of earlier ends
+// >= s.end via a Fenwick tree over end positions. The old pairwise
+// scan was quadratic and took minutes on canon-sized files.
+void computeDepths(std::vector<OverlaySpan>& spans, int n_tokens) {
+    if (spans.empty()) return;
+    std::vector<int> fen(n_tokens + 2, 0);
+    auto add = [&](int pos) {
+        for (int x = pos + 1; x <= n_tokens + 1; x += x & -x) fen[x] += 1;
+    };
+    auto prefix = [&](int pos) {   // count of inserted ends <= pos
+        int r = 0;
+        for (int x = pos + 1; x > 0; x -= x & -x) r += fen[x];
+        return r;
+    };
+    int inserted = 0;
+    size_t runStart = 0;
+    for (size_t i = 0; i < spans.size(); ++i) {
+        auto& s = spans[i];
+        if (i > 0 && !(spans[i - 1].beg == s.beg &&
+                       spans[i - 1].end == s.end))
+            runStart = i;
+        const int endsGE = inserted - prefix(s.end - 1);
+        const int dupPriors = (int)(i - runStart);
+        s.depth = endsGE - dupPriors;
+        add(s.end);
+        ++inserted;
+    }
+}
+}  // namespace
+
+namespace {
+// matching happens in wylie; ACIP tokens (defined uppercase) convert
+// through the proven engine, wylie tokens pass through untouched
+std::vector<std::string> normTokens(const std::vector<std::string>& toks) {
+    std::vector<std::string> norm;
+    norm.reserve(toks.size());
+    for (const auto& t : toks) {
+        bool upper = false;
+        for (char c : t) upper |= (c >= 'A' && c <= 'Z');
+        norm.push_back(upper ? acipToEwts(t) : t);
+    }
+    return norm;
+}
+}  // namespace
+
 OverlayDoc buildOverlay(const Spine& spine, const std::string& acip_document,
                         int max_phrase_syllables) {
     OverlayDoc doc;
     tokenizeDocument(acip_document, doc.tokens, doc.barrier_after);
+    const auto norm = normTokens(doc.tokens);
     const int n = (int)doc.tokens.size();
     std::map<long long, int> entry_ix;
 
@@ -96,7 +149,7 @@ OverlayDoc buildOverlay(const Spine& spine, const std::string& acip_document,
             std::string cand;
             for (int t = i; t < i + len; ++t) {
                 if (t > i) cand += ' ';
-                cand += doc.tokens[t];
+                cand += norm[t];
             }
             auto hits = spine.lookup(cand);
             if (!hits.empty()) {
@@ -105,7 +158,7 @@ OverlayDoc buildOverlay(const Spine& spine, const std::string& acip_document,
             }
             // fused-ending split on the window's LAST syllable (Wilson particle
             // layer): PA'I → PA + 'i, PAS → PA + s, PAR → PA + r
-            const std::string& last = doc.tokens[i + len - 1];
+            const std::string& last = norm[i + len - 1];
             if (auto split = splitFusedEnding(last)) {
                 std::string cand2 =
                     cand.substr(0, cand.size() - (last.size() - split->base.size()));
@@ -122,36 +175,41 @@ OverlayDoc buildOverlay(const Spine& spine, const std::string& acip_document,
         if (a.beg != b.beg) return a.beg < b.beg;
         return (a.end - a.beg) > (b.end - b.beg);
     });
-    // nesting depth = number of strictly containing spans
-    for (auto& s : doc.spans) {
-        s.depth = 0;
-        for (const auto& t : doc.spans) {
-            if (&t == &s) continue;
-            const bool contains = t.beg <= s.beg && s.end <= t.end &&
-                                  (t.end - t.beg) > (s.end - s.beg);
-            if (contains) ++s.depth;
-        }
-    }
+    computeDepths(doc.spans, n);
     return doc;
 }
 
 HeadwordIndex::HeadwordIndex(const Spine& spine) {
+    // keys in WYLIE (the canonical matching space): ACIP headwords go
+    // through the proven converter once at build time, so documents in
+    // either script match after the same per-token normalization
     for (auto& [id, acip] : spine.allAcipHeadwords()) {
         Cand c;
         c.entry_id = id;
-        std::istringstream in(acip);
+        std::istringstream in(acipToEwts(acip));
         std::string t;
         while (in >> t) c.tokens.push_back(t);
         if (c.tokens.empty()) continue;
-        buckets_[c.tokens.front()].push_back(std::move(c));
+        if (c.tokens.size() == 1) {
+            single_.emplace(c.tokens[0], id);   // first wins on dups
+        } else {
+            multi_[c.tokens[0]][c.tokens[1]].push_back(std::move(c));
+        }
         ++n_;
     }
 }
 
-const std::vector<HeadwordIndex::Cand>* HeadwordIndex::bucket(
-    const std::string& first_token) const {
-    auto it = buckets_.find(first_token);
-    return it == buckets_.end() ? nullptr : &it->second;
+const long long* HeadwordIndex::single(const std::string& tok) const {
+    auto it = single_.find(tok);
+    return it == single_.end() ? nullptr : &it->second;
+}
+
+const std::vector<HeadwordIndex::Cand>* HeadwordIndex::pair(
+    const std::string& t1, const std::string& t2) const {
+    auto i1 = multi_.find(t1);
+    if (i1 == multi_.end()) return nullptr;
+    auto i2 = i1->second.find(t2);
+    return i2 == i1->second.end() ? nullptr : &i2->second;
 }
 
 OverlayDoc buildOverlay(const Spine& spine, const HeadwordIndex& index,
@@ -159,6 +217,7 @@ OverlayDoc buildOverlay(const Spine& spine, const HeadwordIndex& index,
                         int max_phrase_syllables) {
     OverlayDoc doc;
     tokenizeDocument(acip_document, doc.tokens, doc.barrier_after);
+    const auto norm = normTokens(doc.tokens);
     const int n = (int)doc.tokens.size();
     std::map<long long, int> entry_ix;
     auto internEntry = [&](long long id) {
@@ -170,7 +229,6 @@ OverlayDoc buildOverlay(const Spine& spine, const HeadwordIndex& index,
         return ix;
     };
     for (int i = 0; i < n; ++i) {
-        const auto* bucket = index.bucket(doc.tokens[i]);
         // per length: first exact candidate wins; fused-ending match only used
         // when no exact exists at that (i, len) — mirrors the SQL path exactly
         struct Best {
@@ -179,46 +237,65 @@ OverlayDoc buildOverlay(const Spine& spine, const HeadwordIndex& index,
             std::string clitic;
         };
         std::map<int, Best> best;
-        static const std::vector<HeadwordIndex::Cand> kEmpty;
-        for (const auto& cand : bucket ? *bucket : kEmpty) {
-            const int len = (int)cand.tokens.size();
-            if (len > max_phrase_syllables || i + len > n) continue;
-            bool barrier = false;
-            for (int t = i; t < i + len - 1; ++t) barrier |= doc.barrier_after[t];
-            if (barrier) continue;
-            bool okPrefix = true;
-            for (int k = 0; k + 1 < len && okPrefix; ++k)
-                okPrefix = (doc.tokens[i + k] == cand.tokens[k]);
-            if (!okPrefix) continue;
-            const std::string& dl = doc.tokens[i + len - 1];
-            const std::string& cl = cand.tokens[len - 1];
-            Best& b = best[len];
-            if (dl == cl) {
-                if (!b.exact) b.exact = cand.entry_id;
-                continue;
-            }
-            if (!b.clit && dl.size() > cl.size() &&
-                dl.compare(0, cl.size(), cl) == 0) {
-                if (auto ending = fusedEndingIf(cl, dl.substr(cl.size()))) {
-                    b.clit = cand.entry_id;
-                    b.clitic = *ending;
-                }
+        // singles: exact by hash, fused via the stripped base
+        if (const auto* id = index.single(norm[i]))
+            best[1].exact = *id;
+        else if (auto split = splitFusedEnding(norm[i])) {
+            if (const auto* bid = index.single(split->base)) {
+                best[1].clit = *bid;
+                best[1].clitic = split->ending;
             }
         }
-        // single-syllable fused-ending match lives in the STRIPPED base's
-        // bucket (PA'I → candidates under "PA"), which the primary key never
-        // scans
-        if (auto split = splitFusedEnding(doc.tokens[i])) {
-            if (const auto* bb = index.bucket(split->base)) {
-                for (const auto& cand : *bb) {
-                    if (cand.tokens.size() != 1 || cand.tokens[0] != split->base)
-                        continue;
-                    Best& b = best[1];
-                    if (!b.clit && !b.exact) {
+        // phrases: candidates share their first TWO tokens with the
+        // document (only the last token may differ, by a fused ending)
+        auto scanPair = [&](const std::string& t2, bool t2isBase) {
+            const auto* cands = index.pair(norm[i], t2);
+            if (!cands || i + 1 >= n) return;
+            for (const auto& cand : *cands) {
+                const int len = (int)cand.tokens.size();
+                if (len > max_phrase_syllables || i + len > n) continue;
+                if (t2isBase && len != 2) continue;
+                bool barrier = false;
+                for (int t = i; t < i + len - 1; ++t)
+                    barrier |= doc.barrier_after[t];
+                if (barrier) continue;
+                bool okPrefix = true;
+                for (int k = 2; k + 1 < len && okPrefix; ++k)
+                    okPrefix = (norm[i + k] == cand.tokens[k]);
+                if (!okPrefix) continue;
+                const std::string& dl = norm[i + len - 1];
+                const std::string& cl = cand.tokens[len - 1];
+                Best& b = best[len];
+                if (dl == cl) {
+                    if (!b.exact) b.exact = cand.entry_id;
+                    continue;
+                }
+                if (!b.clit && dl.size() > cl.size() &&
+                    dl.compare(0, cl.size(), cl) == 0) {
+                    if (auto ending =
+                            fusedEndingIf(cl, dl.substr(cl.size()))) {
                         b.clit = cand.entry_id;
-                        b.clitic = split->ending;
+                        b.clitic = *ending;
                     }
-                    break;
+                }
+            }
+        };
+        if (i + 1 < n && !doc.barrier_after[i]) {
+            scanPair(norm[i + 1], false);
+            // a two-token phrase whose SECOND token carries the fused
+            // ending is keyed under its bare form
+            if (auto split2 = splitFusedEnding(norm[i + 1])) {
+                const auto* cands = index.pair(norm[i], split2->base);
+                if (cands) {
+                    for (const auto& cand : *cands) {
+                        if (cand.tokens.size() != 2) continue;
+                        Best& b = best[2];
+                        if (!b.exact && !b.clit) {
+                            b.clit = cand.entry_id;
+                            b.clitic = split2->ending;
+                        }
+                        break;
+                    }
                 }
             }
         }
@@ -236,15 +313,7 @@ OverlayDoc buildOverlay(const Spine& spine, const HeadwordIndex& index,
         if (a.beg != b.beg) return a.beg < b.beg;
         return (a.end - a.beg) > (b.end - b.beg);
     });
-    for (auto& s : doc.spans) {
-        s.depth = 0;
-        for (const auto& t : doc.spans) {
-            if (&t == &s) continue;
-            const bool contains = t.beg <= s.beg && s.end <= t.end &&
-                                  (t.end - t.beg) > (s.end - s.beg);
-            if (contains) ++s.depth;
-        }
-    }
+    computeDepths(doc.spans, n);
     return doc;
 }
 

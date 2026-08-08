@@ -8,6 +8,7 @@
 #pragma once
 
 #include <map>
+#include <unordered_map>
 #include <string>
 #include <vector>
 
@@ -59,11 +60,19 @@ public:
         std::vector<std::string> tokens;
         long long entry_id;
     };
-    const std::vector<Cand>* bucket(const std::string& first_token) const;
     size_t size() const { return n_; }
 
+    // tiered for canon-scale documents: single-syllable headwords by
+    // exact token (O(1)), phrases by their first TWO tokens — common
+    // syllables like pa/ba no longer force thousand-candidate scans
+    const long long* single(const std::string& tok) const;
+    const std::vector<Cand>* pair(const std::string& t1,
+                                  const std::string& t2) const;
+
 private:
-    std::map<std::string, std::vector<Cand>> buckets_;
+    std::unordered_map<std::string, long long> single_;
+    std::unordered_map<std::string,
+        std::unordered_map<std::string, std::vector<Cand>>> multi_;
     size_t n_ = 0;
 };
 

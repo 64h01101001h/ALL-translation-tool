@@ -84,7 +84,8 @@ const Ending kEndings[] = {
 bool endsInVowel(const std::string& stem) {
     if (stem.empty()) return false;
     const char c = stem.back();
-    return c == 'A' || c == 'E' || c == 'I' || c == 'O' || c == 'U';
+    return c == 'A' || c == 'E' || c == 'I' || c == 'O' || c == 'U' ||
+           c == 'a' || c == 'e' || c == 'i' || c == 'o' || c == 'u';
 }
 
 }  // namespace
@@ -95,15 +96,21 @@ const ParticleInfo* classifyParticle(const std::string& acip_token) {
     return nullptr;
 }
 
-std::optional<FusedSplit> splitFusedEnding(const std::string& acip_token) {
+std::optional<FusedSplit> splitFusedEnding(const std::string& token) {
+    // ACIP tokens carry uppercase endings, wylie tokens lowercase —
+    // the two suffix sets are case-disjoint, so one pass over each is
+    // unambiguous
     for (const auto& e : kEndings) {
-        const size_t n = std::strlen(e.acip);
-        if (acip_token.size() <= n ||
-            acip_token.compare(acip_token.size() - n, n, e.acip) != 0)
-            continue;
-        std::string base = acip_token.substr(0, acip_token.size() - n);
-        if (e.needs_open_stem && !endsInVowel(base)) return std::nullopt;
-        return FusedSplit{std::move(base), e.wylie, e.function};
+        for (const char* suf : {e.acip, e.wylie}) {
+            const size_t n = std::strlen(suf);
+            if (token.size() <= n ||
+                token.compare(token.size() - n, n, suf) != 0)
+                continue;
+            std::string base = token.substr(0, token.size() - n);
+            if (e.needs_open_stem && !endsInVowel(base))
+                return std::nullopt;
+            return FusedSplit{std::move(base), e.wylie, e.function};
+        }
     }
     return std::nullopt;
 }
@@ -111,7 +118,7 @@ std::optional<FusedSplit> splitFusedEnding(const std::string& acip_token) {
 std::optional<std::string> fusedEndingIf(const std::string& base,
                                          const std::string& rest) {
     for (const auto& e : kEndings) {
-        if (rest != e.acip) continue;
+        if (rest != e.acip && rest != e.wylie) continue;
         if (e.needs_open_stem && !endsInVowel(base)) return std::nullopt;
         return std::string(e.wylie);
     }
