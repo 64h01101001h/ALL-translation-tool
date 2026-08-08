@@ -3,7 +3,7 @@
 *A complete working environment for Tibetan texts and their translation*
 
 Asian Legacy Library · Asian Classics Input Project --- White Paper,
-August 2026 (v7)
+August 2026 (v8)
 
 **1. Purpose**
 
@@ -114,10 +114,18 @@ machine.
                                       Geshe Michael teaches (SKABS 'DIR
                                       spoken "kamdir") applied across
                                       the dictionary as a derived,
-                                      review-pending class; and an
-                                      honorific (zhe sa) register with
-                                      a high-honorific level awaiting
-                                      his marking
+                                      review-pending class of 206 forms
+                                      --- and verified never to
+                                      contradict the dictionary's own
+                                      attested pronunciations, which
+                                      are internally consistent at
+                                      every such juncture; and an
+                                      honorific (zhe sa) register whose
+                                      terms wear their badge, with the
+                                      ordinary word beside them, in
+                                      every pane of the application ---
+                                      with a high-honorific level
+                                      awaiting his marking
   ----------------------------------- -----------------------------------
 
 **4. Conversion engines --- and how they are proven**
