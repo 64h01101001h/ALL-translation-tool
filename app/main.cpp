@@ -64,6 +64,7 @@
 #include <functional>
 #include <QDateTime>
 
+#include "allcore/abbr.h"
 #include "allcore/analysis.h"
 #include "allcore/botok.h"
 #include "allcore/drills.h"
@@ -1009,8 +1010,9 @@ private:
                     agreementHtml(tok));
             } else {
                 QString extra;
-                auto [u1, ok1] = allcore::wylieToUnicode(
-                    allcore::acipToEwts(doc_.tokens[tok]));
+                const std::string tokWylie =
+                    allcore::acipToEwts(doc_.tokens[tok]);
+                auto [u1, ok1] = allcore::wylieToUnicode(tokWylie);
                 if (ok1) {
                     loadLexicon();
                     const auto att = lexicon_.attested(u1);
@@ -1024,6 +1026,29 @@ private:
                                     .arg(QString::fromStdString(att)
                                              .toHtmlEscaped());
                 }
+                // bskungs yig: a known orthographic abbreviation — the
+                // companion to the red wave (legal abbreviation, not a typo)
+                if (!abbrTried_) {
+                    abbrTried_ = true;
+                    abbr_.load((dataRoot_ +
+                                "/data/abbreviations/tibschol_abbr.csv")
+                                   .toStdString());
+                }
+                auto hits = abbr_.byWylie(tokWylie);
+                if (hits.empty() && ok1) hits = abbr_.byUnicode(u1);
+                for (const auto* a : hits)
+                    extra += QString(
+                                 "<br><small style='color:#7A3B5E'>"
+                                 "orthographic abbreviation (bskungs yig): "
+                                 "<b>%1</b> = %2 <span style='font-size:15px'>"
+                                 "%3</span> <i>(TibSchol table / rKTs, CC0 — "
+                                 "reference; not a typo)</i></small>")
+                                 .arg(QString::fromStdString(a->abbrWylie)
+                                          .toHtmlEscaped(),
+                                      QString::fromStdString(a->expWylie)
+                                          .toHtmlEscaped(),
+                                      QString::fromStdString(a->expUnicode)
+                                          .toHtmlEscaped());
                 context_->setHtml(segmentationHtml(tok) +
                                   "<i>no dictionary span here</i>" + extra);
             }
@@ -1563,6 +1588,8 @@ private:
     QCheckBox* showRefs_ = nullptr;
     QCheckBox* showSeg_ = nullptr;
     QCheckBox* showAttest_ = nullptr;
+    allcore::AbbrTable abbr_;
+    bool abbrTried_ = false;
     std::unique_ptr<allcore::botok::SegTrie> segmenter_;
     bool segTried_ = false;
     QString segInfo_;

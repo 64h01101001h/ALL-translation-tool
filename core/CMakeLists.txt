@@ -36,6 +36,7 @@ add_library(allcore STATIC
   src/refdict.cpp
   src/mvp.cpp
   src/poslex.cpp
+  src/abbr.cpp
   src/botok_chunks.cpp
   src/botok_trie.cpp
   src/botok_tokenize.cpp
@@ -196,3 +197,9 @@ target_link_libraries(poslex_smoke PRIVATE allcore)
 add_test(NAME poslex_smoke
          COMMAND poslex_smoke ${CMAKE_SOURCE_DIR}/data/soas_pos/classical-lexicon.txt
                  ${CMAKE_SOURCE_DIR}/build/hgm_spine_v27_2.db)
+
+add_executable(abbr_smoke tests/abbr_smoke.cpp)
+target_link_libraries(abbr_smoke PRIVATE allcore)
+add_test(NAME abbr_smoke
+         COMMAND abbr_smoke ${CMAKE_SOURCE_DIR}/data/abbreviations/tibschol_abbr.csv
+                 ${CMAKE_SOURCE_DIR}/data/spellcheck)

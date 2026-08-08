@@ -379,9 +379,23 @@ display toggles, not through invention.
       the battery). REMAINING: adj_zla intercalary state machine for
       month-sequence display; the documented KCK-vs-published-Phugpa
       question.
-- [ ] **rKTs abbreviations DB (6,000+ bskungs yig) + canonical IDs** —
-      deterministic abbreviation expansion for input-center texts;
-      verify the data dump's license first (unclear).
+- [~] **Abbreviations (bskungs yig)** — FIRST TABLE SHIPPED 2026-08-07:
+      the ERC TibSchol abbreviations table (CC0 1.0 verified, 136
+      manuscript-attested forms; banked at data/abbreviations/ with
+      license + provenance; the project's reference request honored in
+      the UI label). allcore::AbbrTable (28th suite: khyadr→khyad par
+      both lookup directions, stacked-vowel ku+ob, and the red-wave
+      companionship — the squeezed form legally FAILS ordinary
+      syllable rules, so the Overlay card now explains it as an
+      abbreviation, not a typo). Overlay no-span click card shows the
+      expansion (labeled, display only, never auto-expanded).
+      SCOPE CLARIFIED FROM WILSON'S BOOK (App.2 re-read 2026-08-07):
+      his OM dot marks the SURVIVING dot inside a SYLLABIC contraction
+      (bsdus tshig: རྣམ་ཤེས for རྣམ་པར་ཤེས་པ) — a different animal
+      from these orthographic squeezes (where the dot disappears).
+      REMAINING: the rKTs 3,000+ list (license still unverified —
+      would grow this table) and a bsdus-tshig table for the OM dot
+      proper.
 - [ ] **THL kmaps place/subject lookup** — user-initiated JSON lookup
       from the Overlay for place/person names (21k+ gazetteer; no-auth
       API; bundling license unclear so lookup-only).
