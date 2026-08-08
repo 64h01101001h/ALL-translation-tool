@@ -128,6 +128,18 @@ onnxruntime logit low-bits flipping razor-thin timesteps, every diff
 printed. Woodblock model (26MB) at library/ocr_models/BDRC_Woodblock/
 (gitignored; re-download from HF).
 
+**Increment D SHIPPED (2026-08-07): THE SCAN PANE.** 10th tab (built
+only when allocr exists — app links it conditionally): open a scan →
+LineDetector + buildLines + TextRecognizer → deskewed page with line
+boxes, per-line Wylie + Tibetan script via OUR converter, per-line
+syllable-legality QC counts, BDRC credit + CC BY-NC note in the banner,
+everything marked OCR-DERIVED. "Save to ocr_out…" writes a headered
+.txt into library/ocr_out/ — the existing review flow (tags, Overlay
+banner, first-pass QC) takes over. The deskew-override toggle is the
+documented opt-in deviation for the upstream angle bug (buildLines
+grew an explicit forceAngle parameter; canonical default). Missing
+models produce download instructions, never a crash.
+
 **Stage 2 build plan (remaining):**
 1. Dependency: onnxruntime (brew; C++ API) — linked by a NEW `allocr`
    target, never allcore (ML stays out of the deterministic core).

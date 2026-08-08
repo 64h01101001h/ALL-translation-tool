@@ -242,12 +242,13 @@ Mat getLineImage(const Mat& image, const Mat& mask, int bboxH,
 }  // namespace
 
 PageLines buildLines(const uint8_t* rgb, int w, int h, const Mask& mask,
-                     double kFactor, double bboxTolerance, bool mergeLines) {
+                     double kFactor, double bboxTolerance, bool mergeLines,
+                     const double* forceAngle) {
     Mat image(h, w, CV_8UC3, const_cast<uint8_t*>(rgb));
     Mat m(mask.h, mask.w, CV_8UC1, const_cast<uint8_t*>(mask.data.data()));
 
-    // build_raw_line_data
-    const double angle = rotationAngle(m);
+    // build_raw_line_data (forceAngle = labeled deviation, see header)
+    const double angle = forceAngle ? *forceAngle : rotationAngle(m);
     Mat rotMask = rotateFromAngle(m, angle);
     Mat rotImg = rotateFromAngle(image, angle);
     std::vector<std::vector<cv::Point>> contours;

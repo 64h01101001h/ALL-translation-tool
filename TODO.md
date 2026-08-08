@@ -639,8 +639,11 @@ display toggles, not through invention.
       "Send to OCR" hand-off; ocr_out live-watched by the tree; files
       there tagged ocr-derived in the info panel; opening one banners it
       and runs the syllable-legality first-pass QC with a fail count);
-      Stage 2 = embedded ONNX pipeline + Scan pane (license check
-      first). OCR output always tagged,
+      Stage 2 COMPLETE 2026-08-07 (permission recorded; increments A-D:
+      line detection oracle-proven, line building exact via OpenCV,
+      CTC recognition = faithful pyctcdecode-beam port, Scan pane w/
+      per-line QC + ocr_out hand-off + labeled deskew-override
+      deviation; upstream deskew bug documented for BDRC). OCR output always tagged,
       review-flagged, never corpus-bound without verification.
 - [x] Library browsing deepening (first tranche, 2026-08-06, commit
       a876cb8): name search with clickable results, recently-opened list,

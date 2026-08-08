@@ -5,6 +5,12 @@ qt_add_executable(ALLTranslationTool
 )
 find_package(Qt6 COMPONENTS Network REQUIRED)
 target_link_libraries(ALLTranslationTool PRIVATE allcore Qt6::Widgets Qt6::Network)
+# the Scan pane needs allocr (onnxruntime + OpenCV); optional — the app
+# builds without it and simply omits the pane
+if(TARGET allocr)
+  target_link_libraries(ALLTranslationTool PRIVATE allocr)
+  target_compile_definitions(ALLTranslationTool PRIVATE ALL_HAVE_OCR)
+endif()
 set_target_properties(ALLTranslationTool PROPERTIES
   MACOSX_BUNDLE ON
 )

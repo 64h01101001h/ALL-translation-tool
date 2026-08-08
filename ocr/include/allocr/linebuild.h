@@ -44,9 +44,12 @@ struct PageLines {
 
 // image: interleaved RGB; mask: the LineDetector output (same w/h).
 // kFactor/bboxTolerance/mergeLines follow run_ocr's defaults (2.5 / 4.0 /
-// true).
+// true). forceAngle (optional): override the estimated page rotation —
+// an OPT-IN deviation from the canonical pipeline (whose deskew math
+// mis-fires under modern OpenCV; see OCR_DESIGN.md) — callers must label
+// its use; nullptr = canonical behavior.
 PageLines buildLines(const uint8_t* rgb, int w, int h, const Mask& mask,
                      double kFactor = 2.5, double bboxTolerance = 4.0,
-                     bool mergeLines = true);
+                     bool mergeLines = true, const double* forceAngle = nullptr);
 
 }  // namespace allocr

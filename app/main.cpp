@@ -7,7 +7,9 @@
 #include <QElapsedTimer>
 #include <QHBoxLayout>
 #include <QListView>
+#include <QScrollArea>
 #include <QStringListModel>
+#include <QTextStream>
 #include <QLabel>
 #include <QLineEdit>
 #include <QNetworkAccessManager>
@@ -66,6 +68,10 @@
 
 #include "allcore/abbr.h"
 #include "allcore/analysis.h"
+#ifdef ALL_HAVE_OCR
+#include "allocr/linebuild.h"
+#include "allocr/recognize.h"
+#endif
 #include "allcore/contractions.h"
 #include "allcore/botok.h"
 #include "allcore/drills.h"
@@ -4538,6 +4544,231 @@ private:
 
 // Find the project data root: works from terminal (cwd) AND from Finder
 // (walk up from the .app bundle looking for build/hgm_spine_v27_2.db).
+#ifdef ALL_HAVE_OCR
+// ---- Scan pane: OCR stage 2 in the app (OCR_DESIGN.md) --------------------
+// The proven allocr pipeline end to end: line detection (PhotiLines) →
+// line building → CTC recognition (Woodblock) → OUR unicode chain +
+// syllable-legality QC. Everything ocr-derived is labeled and review-
+// gated; output feeds library/ocr_out/ (the existing review flow).
+class ScanPane : public QWidget {
+public:
+    ScanPane(allcore::SyllableChecker* checker, const QString& root)
+        : checker_(checker), root_(root) {
+        auto* outer = new QVBoxLayout(this);
+        auto* banner = new QLabel(
+            "<b>Scan → text (OCR)</b> — models by the Buddhist Digital "
+            "Resource Center (CC BY-NC 4.0, used with BDRC's permission). "
+            "<span style='color:#B4540A'>All output is OCR-DERIVED review "
+            "material: verify before any other use; it is never "
+            "corpus-bound.</span>");
+        banner->setWordWrap(true);
+        outer->addWidget(banner);
+        auto* row = new QHBoxLayout;
+        auto* open = new QPushButton("Open scan image…");
+        row->addWidget(open);
+        deskewOverride_ = new QCheckBox(
+            "override deskew to 0° (DEVIATION from the BDRC pipeline — "
+            "workaround for its angle bug on straight pages)");
+        row->addWidget(deskewOverride_);
+        run_ = new QPushButton("Run OCR");
+        run_->setEnabled(false);
+        row->addWidget(run_);
+        save_ = new QPushButton("Save to ocr_out…");
+        save_->setEnabled(false);
+        row->addWidget(save_);
+        row->addStretch();
+        outer->addLayout(row);
+        auto* split = new QSplitter(Qt::Vertical);
+        auto* scroll = new QScrollArea;
+        pageView_ = new QLabel("open a scan image (PNG/JPG/TIFF)");
+        pageView_->setAlignment(Qt::AlignCenter);
+        scroll->setWidget(pageView_);
+        scroll->setWidgetResizable(true);
+        split->addWidget(scroll);
+        results_ = new QTextBrowser;
+        split->addWidget(results_);
+        split->setStretchFactor(0, 1);
+        split->setStretchFactor(1, 1);
+        outer->addWidget(split, 1);
+
+        connect(open, &QPushButton::clicked, [this] { openImage(); });
+        connect(run_, &QPushButton::clicked, [this] { runOcr(); });
+        connect(save_, &QPushButton::clicked, [this] { saveOut(); });
+    }
+
+private:
+    void openImage() {
+        const QString f = QFileDialog::getOpenFileName(
+            this, "Open scan image", root_ + "/library",
+            "Images (*.png *.jpg *.jpeg *.tif *.tiff)");
+        if (f.isEmpty()) return;
+        QImage img(f);
+        if (img.isNull()) {
+            results_->setHtml("<i>cannot read that image</i>");
+            return;
+        }
+        img_ = img.convertToFormat(QImage::Format_RGB888);
+        file_ = f;
+        pageView_->setPixmap(QPixmap::fromImage(img_));
+        pageView_->adjustSize();
+        run_->setEnabled(true);
+        save_->setEnabled(false);
+        results_->setHtml("<i>ready — Run OCR</i>");
+    }
+
+    bool ensureModels() {
+        if (det_ && rec_) return true;
+        const QString lineModel =
+            root_ + "/library/ocr_models/BDRC_PhotiLines/PhotiLines.onnx";
+        const QString ocrDir = root_ + "/library/ocr_models/BDRC_Woodblock";
+        if (!QFile::exists(lineModel) ||
+            !QFile::exists(ocrDir + "/OCRModel.onnx")) {
+            results_->setHtml(
+                "<b>models missing.</b> Download from Hugging Face "
+                "(huggingface.co/BDRC — CC BY-NC 4.0):<br>"
+                "· PhotiLines.onnx + config.json → "
+                "library/ocr_models/BDRC_PhotiLines/<br>"
+                "· OCRModel.onnx + model_config.json → "
+                "library/ocr_models/BDRC_Woodblock/");
+            return false;
+        }
+        try {
+            det_ = std::make_unique<allocr::LineDetector>(
+                lineModel.toStdString());
+            rec_ = std::make_unique<allocr::TextRecognizer>(
+                ocrDir.toStdString());
+        } catch (const std::exception& e) {
+            results_->setHtml(QString("<b>model load failed:</b> %1")
+                                  .arg(QString::fromUtf8(e.what())
+                                           .toHtmlEscaped()));
+            return false;
+        }
+        return true;
+    }
+
+    void runOcr() {
+        if (img_.isNull() || !ensureModels()) return;
+        results_->setHtml("<i>detecting lines…</i>");
+        QCoreApplication::processEvents();
+        // QImage rows are 4-byte aligned — repack tightly
+        const int w = img_.width(), h = img_.height();
+        std::vector<uint8_t> rgb(static_cast<size_t>(w) * h * 3);
+        for (int y = 0; y < h; ++y)
+            std::copy(img_.constScanLine(y), img_.constScanLine(y) + w * 3,
+                      rgb.begin() + static_cast<size_t>(y) * w * 3);
+        auto mask = det_->detect(rgb.data(), w, h);
+        const double zero = 0.0;
+        auto pl = allocr::buildLines(
+            rgb.data(), w, h, mask, 2.5, 4.0, true,
+            deskewOverride_->isChecked() ? &zero : nullptr);
+
+        // deskewed page with line boxes
+        QImage page(pl.deskewedRgb.data(), pl.width, pl.height,
+                    pl.width * 3, QImage::Format_RGB888);
+        QImage annotated = page.copy();
+        {
+            QPainter p(&annotated);
+            p.setPen(QPen(QColor(0x7F, 0x77, 0xDD), 2));
+            for (const auto& l : pl.lines)
+                p.drawRect(l.x, l.y, l.w, l.h);
+        }
+        pageView_->setPixmap(QPixmap::fromImage(annotated));
+        pageView_->adjustSize();
+
+        // recognize each line; convert via OUR chain; syllable QC
+        lastWylie_.clear();
+        QString htmlOut =
+            QString("<div style='color:#555;font-size:12px'>deskew %1° "
+                    "%2 · %3 line(s) · every line OCR-DERIVED (review "
+                    "before use)</div>")
+                .arg(pl.angle, 0, 'f', 2)
+                .arg(deskewOverride_->isChecked()
+                         ? "<b>(override — deviation)</b>"
+                         : "(BDRC pipeline)")
+                .arg(pl.lines.size());
+        int flagged = 0;
+        for (size_t i = 0; i < pl.images.size(); ++i) {
+            results_->setHtml(htmlOut +
+                              QString("<i>recognizing line %1/%2…</i>")
+                                  .arg(i + 1)
+                                  .arg(pl.images.size()));
+            QCoreApplication::processEvents();
+            const std::string wylie = rec_->recognize(pl.images[i]);
+            lastWylie_.push_back(wylie);
+            auto [uni, ok] = allcore::wylieToUnicode(wylie);
+            int bad = 0, toks = 0;
+            std::stringstream ss(wylie);
+            std::string tok;
+            while (ss >> tok) {
+                bool alpha = !tok.empty();
+                for (char c2 : tok)
+                    alpha &= (std::isalpha(static_cast<unsigned char>(c2)) ||
+                              c2 == '\'' || c2 == '+');
+                if (!alpha) continue;
+                ++toks;
+                if (checker_ && !checker_->legalWylie(tok)) ++bad;
+            }
+            flagged += bad;
+            htmlOut += QString(
+                           "<div style='margin:6px 0'><b>%1.</b> "
+                           "<span style='font-family:monospace'>%2</span>"
+                           "<br><span style='font-size:20px'>%3</span>"
+                           "<small style='color:%4'> %5/%6 syllable(s) "
+                           "fail legality</small></div>")
+                           .arg(i + 1)
+                           .arg(QString::fromStdString(wylie).toHtmlEscaped())
+                           .arg(QString::fromStdString(uni).toHtmlEscaped())
+                           .arg(bad ? "#B4540A" : "#3B7A3B")
+                           .arg(bad)
+                           .arg(toks);
+            (void)ok;
+        }
+        htmlOut += QString("<div style='color:#555;font-size:12px'>total "
+                           "legality flags: %1 — OCR output is review "
+                           "material (models: BDRC, CC BY-NC 4.0)</div>")
+                       .arg(flagged);
+        results_->setHtml(htmlOut);
+        save_->setEnabled(!lastWylie_.empty());
+    }
+
+    void saveOut() {
+        if (lastWylie_.empty()) return;
+        QDir().mkpath(root_ + "/library/ocr_out");
+        const QString base = QFileInfo(file_).completeBaseName();
+        const QString out = QFileDialog::getSaveFileName(
+            this, "Save OCR text",
+            root_ + "/library/ocr_out/" + base + "-ocr.txt",
+            "Text (*.txt)");
+        if (out.isEmpty()) return;
+        QFile f(out);
+        if (!f.open(QIODevice::WriteOnly | QIODevice::Text)) return;
+        QTextStream ts(&f);
+        ts << "# OCR-DERIVED (unverified review material) — source: "
+           << QFileInfo(file_).fileName()
+           << " — models: BDRC (CC BY-NC 4.0, with permission)\n";
+        for (const auto& w2 : lastWylie_)
+            ts << QString::fromStdString(w2) << "\n";
+        results_->setHtml(results_->toHtml() +
+                          "<div style='color:#3B7A3B'>saved to " +
+                          out.toHtmlEscaped() +
+                          " — opening it in the Overlay runs the ocr-derived "
+                          "banner + first-pass QC</div>");
+    }
+
+    allcore::SyllableChecker* checker_ = nullptr;
+    QString root_, file_;
+    QImage img_;
+    std::unique_ptr<allocr::LineDetector> det_;
+    std::unique_ptr<allocr::TextRecognizer> rec_;
+    QLabel* pageView_ = nullptr;
+    QTextBrowser* results_ = nullptr;
+    QPushButton* run_ = nullptr;
+    QPushButton* save_ = nullptr;
+    QCheckBox* deskewOverride_ = nullptr;
+    std::vector<std::string> lastWylie_;
+};
+#endif  // ALL_HAVE_OCR
+
 static QString findDataRoot() {
     QStringList cands = {QDir::currentPath()};
     QDir d(QCoreApplication::applicationDirPath());
@@ -4649,6 +4880,9 @@ int main(int argc, char** argv) {
     tabs.addTab(makeSearchPane(spine, root + "/library"), "Search");
     tabs.addTab(makeConvertPane(mvp), "Convert");
     tabs.addTab(makeLookupPane(spine, refdict, mvp), "Lookup");
+#ifdef ALL_HAVE_OCR
+    tabs.addTab(new ScanPane(checker, root), "Scan");
+#endif
     tabs.resize(1180, 760);
     tabs.show();
     return app.exec();
