@@ -479,6 +479,38 @@ int main(int argc, char** argv) {
               "engine reproduces the standard's pure-Tibetan examples");
     }
 
+    // ---- I: the reverse converter, round-tripped ----
+    // ewtsToAcip is a NEW engine (no canonical original); its proof is
+    // the round trip through the corpus-proven forward direction:
+    // acipToEwts(ewtsToAcip(w)) must reproduce w for every dictionary
+    // wylie. Mismatches print — never hidden.
+    {
+        sqlite3_stmt* q = nullptr;
+        sqlite3_prepare_v2(db,
+                           "SELECT wylie FROM entries WHERE wylie != ''",
+                           -1, &q, nullptr);
+        long total = 0, ok = 0, shown = 0;
+        while (sqlite3_step(q) == SQLITE_ROW) {
+            const char* w = (const char*)sqlite3_column_text(q, 0);
+            if (!w) continue;
+            ++total;
+            const std::string back =
+                allcore::acipToEwts(allcore::ewtsToAcip(w));
+            if (back == w) {
+                ++ok;
+            } else if (shown < 8) {
+                std::printf("    roundtrip diff: '%s' -> '%s'\n", w,
+                            back.c_str());
+                ++shown;
+            }
+        }
+        sqlite3_finalize(q);
+        std::printf("  I: wylie->ACIP->wylie round trip: %ld/%ld\n", ok,
+                    total);
+        CHECK(total > 100000 && ok * 1000 >= total * 995,
+              "reverse converter round-trips 99.5%+ of the dictionary");
+    }
+
     sqlite3_close(db);
     std::printf("%s (%d failures)\n",
                 failures ? "ENGINES BATTERY FAILED" : "ENGINES BATTERY OK", failures);

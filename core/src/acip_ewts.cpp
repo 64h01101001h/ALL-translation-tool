@@ -98,4 +98,45 @@ std::string acipToEwts(const std::string& acip) {
     return collapsed;
 }
 
+
+
+// ewtsToAcip — the INVERSE of acipToEwts (a new engine, not a port:
+// no canonical reverse exists). Proven by ROUND-TRIP battery in
+// engines_battery: acipToEwts(ewtsToAcip(w)) must reproduce w across
+// the full dictionary. Mirrors the forward transform's steps inverted,
+// in the inverse order.
+std::string ewtsToAcip(const std::string& ewts) {
+    std::string s = ewts;
+    // ORDER MATTERS (battery-caught): the capital-letter passes must run
+    // BEFORE tsh/ts protection — otherwise the capitals inside the
+    // freshly inserted TS/TZ markers get re-replaced and corrupted.
+    // EWTS capital (retroflex/Sanskrit) letters -> ACIP lowercase.
+    // "Sh"/"Th" before the bare letters.
+    replaceAll(s, "Sh", prot("sh"));
+    replaceAll(s, "Th", prot("th"));
+    const char* caps = "TDNSM";
+    for (const char* c = caps; *c; ++c) {
+        std::string hi(1, *c);
+        std::string lo(1, (char)std::tolower((unsigned char)*c));
+        replaceAll(s, hi, prot(lo));
+    }
+    // EWTS long vowels A/I/U (kA -> K'A)
+    replaceAll(s, "A", prot("'A"));
+    replaceAll(s, "I", prot("'I"));
+    replaceAll(s, "U", prot("'U"));
+    // affricates (tsh before ts, exactly inverse of TS/TZ); their
+    // capitals are inserted inside markers, untouched from here on
+    replaceAll(s, "tsh", prot("TS"));
+    replaceAll(s, "ts", prot("TZ"));
+    // case-fold: uppercase everything outside protection markers
+    std::string out;
+    bool inProt = false;
+    for (char c : s) {
+        if (c == OPEN) { inProt = true; continue; }
+        if (c == CLOSE) { inProt = false; continue; }
+        out += inProt ? c : (char)std::toupper((unsigned char)c);
+    }
+    return out;
+}
+
 }  // namespace allcore

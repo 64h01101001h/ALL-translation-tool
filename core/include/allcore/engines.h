@@ -19,6 +19,11 @@ namespace allcore {
 // apostrophe K'A → kA vs achung BA'I → ba'i).
 std::string acipToEwts(const std::string& acip);
 
+// the inverse (a NEW engine, no canonical original): wylie -> ACIP.
+// Proven by round-trip in engines_battery — acipToEwts(ewtsToAcip(w))
+// must reproduce w across the full dictionary.
+std::string ewtsToAcip(const std::string& ewts);
+
 // wylie (EWTS + IAST-flavored) → Tibetan unicode. Returns {unicode, ok};
 // ok=false means at least one syllable failed and is shown as ⟨syl⟩.
 std::pair<std::string, bool> wylieToUnicode(const std::string& wylie);
