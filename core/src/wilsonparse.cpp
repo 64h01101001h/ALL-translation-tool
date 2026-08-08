@@ -2,7 +2,9 @@
 
 #include <algorithm>
 
+#include "allcore/engines.h"
 #include "allcore/particles.h"
+#include "allcore/poslex.h"
 #include "allcore/verbclass.h"
 
 namespace allcore {
@@ -91,7 +93,8 @@ bool verbEvidenceTok(const OverlayDoc& doc, int t) {
 }  // namespace
 
 std::vector<ClauseParse> wilsonParse(const Spine& spine, const OverlayDoc& doc,
-                                     const std::vector<Clause>& clauses) {
+                                     const std::vector<Clause>& clauses,
+                                     const PosLexicon* pos) {
     std::vector<ClauseParse> out;
     for (const auto& cl : clauses) {
         ClauseParse cp;
@@ -379,8 +382,30 @@ std::vector<ClauseParse> wilsonParse(const Spine& spine, const OverlayDoc& doc,
                            us[nu].category.rfind("verbal noun", 0) == 0) {
                     d.label = "NOM";   // nominative right before the verb
                 } else {
-                    // two bare nominals: NOM vs NA/NN/APP needs POS data
+                    // two bare nominals: NOM vs NA/NN/APP needs POS data.
+                    // With the SOAS hand-tagged lexicon (CC BY 4.0) the NA
+                    // case resolves on an UNAMBIGUOUS adjective tag, and a
+                    // noun-noun pair narrows to NN|APP (apposition remains
+                    // undecidable from POS alone). Evidence is named;
+                    // anything ambiguous stays undetermined.
                     d.label = "NOM|NA|NN|APP (undetermined)";
+                    if (pos) {
+                        auto uniOf = [](const std::string& acip) {
+                            auto [u, ok] = wylieToUnicode(acipToEwts(acip));
+                            return ok ? u : std::string();
+                        };
+                        const std::string nextUni = uniOf(us[nu].text);
+                        if (!nextUni.empty() && pos->unambiguousAdj(nextUni)) {
+                            d.label = "NA (adjective — SOAS lexicon)";
+                        } else {
+                            const std::string curUni = uniOf(cur.text);
+                            if (!curUni.empty() && !nextUni.empty() &&
+                                pos->unambiguousNoun(curUni) &&
+                                pos->unambiguousNoun(nextUni))
+                                d.label = "NN|APP (both nouns — SOAS lexicon; "
+                                          "apposition undecidable)";
+                        }
+                    }
                 }
                 cp.dots.push_back(std::move(d));
             }

@@ -489,10 +489,21 @@ display toggles, not through invention.
       auxiliary verb phrases; postposition constructions; ambiguity guards
       (shes/de licensing); the Science of the Dots (S · C n · NOM · SP · V ·
       VB per tsheg — reproduces Wilson's own diagrams; Trainer layer ⑥).
-      REMAINING: OM contraction dots (needs an abbreviation table), VOC
-      (interjection list), ADV (adverbial-identity detection), UP understood-
-      particle inference, NA/NN/APP disambiguation (needs POS data — only
-      with a real source, never heuristic).
+      NA/NN/APP: the real POS source ARRIVED 2026-08-07 — the SOAS
+      "Tibetan in Digital Communication" hand-tagged Classical Tibetan
+      lexicon (CC BY 4.0, Zenodo 574876; banked at data/soas_pos/ with
+      attribution). allcore::PosLexicon (27th suite; with/without-tsheg
+      rows unioned so ambiguity is never hidden — 13,107 forms) wired
+      into wilsonParse as an optional evidence layer: an UNAMBIGUOUS
+      adj tag on the second nominal resolves "NA (adjective — SOAS
+      lexicon)"; two unambiguous nouns narrow to "NN|APP (apposition
+      undecidable)"; anything ambiguous stays undetermined, and
+      without the lexicon the dot reads exactly as before (battery
+      asserts both behaviors). VOC shipped earlier (interjection list).
+      REMAINING: OM contraction dots (needs an abbreviation table —
+      the rKTs bskungs-yig DB would supply it, license pending), ADV
+      (adverbial-identity detection — SOAS adv.* tags could serve,
+      same evidence-labeled pattern), UP understood-particle inference.
 
 - [x] **Translation Trainer v1** (docs/TRAINER_DESIGN.md): clause splitter,
       phrase chunker, verb spotter (HGM tenses + "to …" glosses),

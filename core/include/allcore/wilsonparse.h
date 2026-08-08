@@ -45,9 +45,15 @@ struct ClauseParse {
     std::vector<DotMark> dots;
 };
 
+class PosLexicon;  // allcore/poslex.h — SOAS hand-tagged POS data
+
 // Parse a loaded document clause by clause (clauses come pre-refined).
+// pos (optional): the SOAS POS lexicon — consulted ONLY where Wilson's
+// rules require POS data (the NOM vs NA/NN/APP dot between two bare
+// nominals), unambiguous tags only, evidence named in the label.
 std::vector<ClauseParse> wilsonParse(const Spine& spine,
                                      const OverlayDoc& doc,
-                                     const std::vector<Clause>& clauses);
+                                     const std::vector<Clause>& clauses,
+                                     const PosLexicon* pos = nullptr);
 
 }  // namespace allcore

@@ -35,6 +35,7 @@ add_library(allcore STATIC
   src/spellcheck.cpp
   src/refdict.cpp
   src/mvp.cpp
+  src/poslex.cpp
   src/botok_chunks.cpp
   src/botok_trie.cpp
   src/botok_tokenize.cpp
@@ -189,3 +190,9 @@ add_executable(mvp_smoke tests/mvp_smoke.cpp)
 target_link_libraries(mvp_smoke PRIVATE allcore)
 add_test(NAME mvp_smoke
          COMMAND mvp_smoke ${CMAKE_SOURCE_DIR}/data/extracted/mahavyutpatti.tsv)
+
+add_executable(poslex_smoke tests/poslex_smoke.cpp)
+target_link_libraries(poslex_smoke PRIVATE allcore)
+add_test(NAME poslex_smoke
+         COMMAND poslex_smoke ${CMAKE_SOURCE_DIR}/data/soas_pos/classical-lexicon.txt
+                 ${CMAKE_SOURCE_DIR}/build/hgm_spine_v27_2.db)

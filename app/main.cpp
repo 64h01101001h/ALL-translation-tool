@@ -71,6 +71,7 @@
 #include "allcore/gofer.h"
 #include "allcore/lattice.h"
 #include "allcore/mvp.h"
+#include "allcore/poslex.h"
 #include "allcore/libindex.h"
 #include "allcore/particles.h"
 #include "allcore/progress.h"
@@ -2124,8 +2125,9 @@ static QWidget* makeConvertPane(allcore::Mvp* mvp) {
 class TrainerPane : public QWidget {
 public:
     explicit TrainerPane(allcore::Spine& spine,
-                         allcore::Progress* progress = nullptr)
-        : spine_(spine), progress_(progress), index_(spine) {
+                         allcore::Progress* progress = nullptr,
+                         allcore::PosLexicon* pos = nullptr)
+        : spine_(spine), progress_(progress), pos_(pos), index_(spine) {
         auto* layout = new QVBoxLayout(this);
         layout->addWidget(new QLabel(
             "<b>Translation Trainer</b> — paste a passage, try to read it "
@@ -2360,7 +2362,7 @@ private:
                 h += "</div>";
             }
             if (parseOn) {
-                auto parses = allcore::wilsonParse(spine_, doc_, {cl});
+                auto parses = allcore::wilsonParse(spine_, doc_, {cl}, pos_);
                 if (!parses.empty()) {
                     h += "<div style='margin-top:6px;padding:6px;background:"
                          "#F4F8F4'><small style='color:#3B7A3B'><b>full parse "
@@ -2422,6 +2424,7 @@ private:
 
     allcore::Spine& spine_;
     allcore::Progress* progress_ = nullptr;
+    allcore::PosLexicon* pos_ = nullptr;
     allcore::HeadwordIndex index_;
     allcore::OverlayDoc doc_;
     std::vector<allcore::Clause> clauses_;
@@ -4466,6 +4469,16 @@ int main(int argc, char** argv) {
             mvp = &m;
     }
 
+    // the SOAS POS lexicon (CC BY 4.0) — optional; consulted only where
+    // Wilson's rules require POS data, evidence-labeled
+    allcore::PosLexicon* poslex = nullptr;
+    {
+        static allcore::PosLexicon pl;
+        if (pl.load((root + "/data/soas_pos/classical-lexicon.txt")
+                        .toStdString()))
+            poslex = &pl;
+    }
+
     // the learner's own progress/SRS data — local file, optional
     allcore::Progress* progress = nullptr;
     try {
@@ -4480,7 +4493,7 @@ int main(int argc, char** argv) {
     auto* overlay = new OverlayPane(spine, checker, refdict, progress, root);
     tabs.addTab(overlay, "Overlay");
     tabs.addTab(new AnalysisPane(spine, tplPath, root + "/analyses"), "Analysis");
-    tabs.addTab(new TrainerPane(spine, progress), "Trainer");
+    tabs.addTab(new TrainerPane(spine, progress, poslex), "Trainer");
     tabs.addTab(new DrillsPane(spine, progress), "Drills");
     tabs.addTab(new DraftPane(spine, progress), "Draft");
     tabs.addTab(new LibraryPane(root, progress,
