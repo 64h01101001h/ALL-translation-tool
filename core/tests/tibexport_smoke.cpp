@@ -62,6 +62,25 @@ int main() {
           "TD4211L: Derge Tengyur, L status");
     auto f4 = allcore::decodeAcipFilename("notes.txt");
     CHECK(!f4.recognized, "non-ACIP names are not force-decoded");
+    // toolchain grammar upgrades (ACIPMaintenance CatalogNumber.m):
+    CHECK(f1.subNumber == "101",
+          "S5977MA1: letter-hundreds sub-number A1 = 101");
+    auto f5 = allcore::decodeAcipFilename("S0300E12.ACT");
+    CHECK(f5.recognized && f5.subNumber == "12",
+          "plain-digit sub-number: 12");
+    auto f6 = allcore::decodeAcipFilename("R0002KHA.ACT");
+    CHECK(f6.recognized &&
+              f6.collection == "Reference — The Great Dictionary" &&
+              f6.subNumber.find("KHA") != std::string::npos,
+          "R0002KHA: the Great Dictionary, alphabet volume KHA");
+    auto f7 = allcore::decodeAcipFilename("S0107E.INE");
+    CHECK(f7.recognized && f7.incomplete &&
+              f7.language.find("English") != std::string::npos,
+          ".INE = incomplete English");
+    auto f8 = allcore::decodeAcipFilename("KL0009E.AT1");
+    CHECK(f8.recognized &&
+              f8.language.find("Tibetan") != std::string::npos,
+          ".AT1 = Tibetan working file (toolchain extension table)");
 
     // ---- BDRC scan links (deterministic Tohoku mapping) ----
     CHECK(allcore::bdrcScanUrl(allcore::decodeAcipFilename("TD4210E.ACT")) ==

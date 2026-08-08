@@ -332,13 +332,42 @@ AcipFileInfo decodeAcipFilename(const std::string& filename) {
             info.part.pop_back();
         }
     }
-    // extension → language / state
+    // R0002 + letters = THE GREAT DICTIONARY (CatalogNumber.m special
+    // case): the letters are the sub-number, "mostly the letters of the
+    // Tibetan alphabet"
+    if (info.collection == "Reference Materials" && info.number == "0002" &&
+        !info.part.empty()) {
+        info.collection = "Reference — The Great Dictionary";
+        info.subNumber = info.part + " (alphabet volume)";
+    } else if (!info.part.empty()) {
+        // decode the sub-number per the toolchain grammar: 1-2 plain
+        // digits = 1-99; letter A-T + digit = letter-hundreds
+        // (A=100 … T=290 step 10, plus the ones digit)
+        const std::string& p = info.part;
+        bool allDigits = true;
+        for (char c : p) allDigits &= std::isdigit((unsigned char)c) != 0;
+        if (allDigits && p.size() <= 2) {
+            info.subNumber = std::to_string(std::stoi(p));
+        } else if (p.size() >= 1 && p[0] >= 'A' && p[0] <= 'T' &&
+                   (p.size() == 1 ||
+                    (p.size() == 2 && std::isdigit((unsigned char)p[1])))) {
+            int v = 100 + (p[0] - 'A') * 10;
+            if (p.size() == 2) v += p[1] - '0';
+            info.subNumber = std::to_string(v);
+        }
+    }
+    // extension → language / state (per the toolchain's own table:
+    // CatalogNumber.m — TB also covers TXT/ALT/AAT/AT1/AT2/APT/BK!/RAW)
     if (ext == "ACT") info.language = "Tibetan (approved for release)";
     else if (ext == "ACE") info.language = "English (approved for release)";
     else if (ext == "ACS") info.language = "Sanskrit (approved for release)";
     else if (ext == "ACM") info.language = "mixed languages (approved)";
-    else if (ext == "INC") { info.language = "text lacking 4+ lines"; info.incomplete = true; }
-    else if (ext == "RAW") info.language = "unproofread (obsolete RAW)";
+    else if (ext == "INC") { info.language = "Tibetan (text lacking 4+ lines)"; info.incomplete = true; }
+    else if (ext == "INE") { info.language = "English (incomplete)"; info.incomplete = true; }
+    else if (ext == "RAW") info.language = "Tibetan (unproofread RAW)";
+    else if (ext == "TXT" || ext == "ALT" || ext == "AAT" ||
+             ext == "AT1" || ext == "AT2" || ext == "APT" || ext == "BK!")
+        info.language = "Tibetan (" + ext + " working file)";
     else if (!ext.empty()) info.language = ext;
     info.recognized = true;
     return info;

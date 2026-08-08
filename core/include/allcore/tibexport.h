@@ -38,9 +38,14 @@ struct AcipFileInfo {
     std::string collection;     // "Kangyur (Lhasa edition)", "Sungbum", …
     std::string number;         // the 4-digit Tohoku/ACIP catalog core
     std::string status;         // human reading of the verification letter
-    std::string part;           // trailing part/volume designation
+    std::string part;           // trailing part/volume designation (raw)
+    std::string subNumber;      // decoded sub-number when the part
+                                // encodes one: plain digits 1-99, or the
+                                // toolchain's letter-hundreds scheme
+                                // (A=100 … T=290, +ones digit —
+                                // CatalogNumber.m, ACIPMaintenance)
     std::string language;       // from the extension (Tibetan/English/…)
-    bool incomplete = false;    // INC extension or I status
+    bool incomplete = false;    // INC/INE extension or I status
     bool partial = false;       // trailing P = purposely partial input
 };
 

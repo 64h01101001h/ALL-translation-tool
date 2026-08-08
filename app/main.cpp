@@ -5120,6 +5120,11 @@ private:
                  " · text " + QString::fromStdString(acip.number);
             if (!acip.part.empty())
                 h += " part " + QString::fromStdString(acip.part);
+            if (!acip.subNumber.empty())
+                h += " <small style='color:#777'>(sub-number " +
+                     QString::fromStdString(acip.subNumber)
+                         .toHtmlEscaped() +
+                     ", toolchain grammar)</small>";
             h += "<br>" + QString::fromStdString(acip.status).toHtmlEscaped() +
                  (acip.status.empty() ? "" : " · ") +
                  QString::fromStdString(acip.language).toHtmlEscaped();
