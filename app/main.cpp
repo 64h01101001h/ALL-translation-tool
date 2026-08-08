@@ -19,6 +19,8 @@
 #include <QDialogButtonBox>
 #include <QFontDatabase>
 #include <QFormLayout>
+#include <QGroupBox>
+#include <QMessageBox>
 #include <QListWidget>
 #include <QStackedWidget>
 #include <QTableWidget>
@@ -102,6 +104,7 @@
 #include "allcore/hypfile.h"
 #include "allcore/whitney.h"
 #include "allcore/colloquial.h"
+#include "allcore/proposals.h"
 #include "allcore/verse.h"
 #include "allcore/wilsonparse.h"
 #include "allcore/terminology.h"
@@ -7182,6 +7185,374 @@ static QString findDataRoot() {
     return QDir::currentPath();
 }
 
+// ---- The in-house proposal & approval channel (Adam's design) ------
+// Translators PROPOSE terms and notes; the authority (Geshe Michael,
+// or Adam as second admin) APPROVES. Identity is provenance, not a
+// login: a name + role set once in QSettings; the store is a folder
+// of TSV files that a shared Dropbox syncs. Register approvals apply
+// in-app; dictionary/corpus approvals export as a candidates package
+// for the data project (the app never mutates the corpus).
+
+static QString g_userName;
+static bool g_isAdmin = false;
+static QString g_proposalsDir;
+
+static QString isoToday() {
+    return QDateTime::currentDateTime().toString("yyyy-MM-dd");
+}
+
+// establish identity once (or when changed via the Propose pane)
+static void loadIdentity() {
+    QSettings s("ALL", "TranslationTool");
+    g_userName = s.value("team/name").toString();
+    g_isAdmin = s.value("team/admin", false).toBool();
+    g_proposalsDir = s.value("team/proposalsDir").toString();
+}
+
+// a small helper any card can call to file a proposal with evidence
+static void fileProposal(QWidget* parent, allcore::ProposalKind kind,
+                         const QString& wylie, const QString& value,
+                         const QString& field, const QString& evidence) {
+    if (g_proposalsDir.isEmpty() || g_userName.isEmpty()) {
+        QMessageBox::information(
+            parent, "Set up proposals",
+            "First set your name and the shared proposals folder in the "
+            "Propose tab (one-time setup).");
+        return;
+    }
+    allcore::ProposalStore store(g_proposalsDir.toStdString());
+    store.load();
+    store.propose(kind, g_userName.toStdString(), wylie.toStdString(),
+                  value.toStdString(), field.toStdString(),
+                  evidence.toStdString(), isoToday().toStdString());
+    if (store.save())
+        QMessageBox::information(
+            parent, "Proposed",
+            "Filed for review — it will appear in the authority's "
+            "Approval list. Thank you.");
+    else
+        QMessageBox::warning(parent, "Could not save",
+                             "The proposals folder could not be written.");
+}
+
+class ProposePane : public QWidget {
+public:
+    ProposePane() {
+        auto* outer = new QVBoxLayout(this);
+        outer->addWidget(new QLabel(
+            "<b>Propose</b> — offer a term, marking, pronunciation, or "
+            "note for the authority to approve. Your name is recorded "
+            "for provenance; nothing is a login."));
+
+        // identity setup
+        auto* idBox = new QGroupBox("Who you are (one-time)");
+        auto* idl = new QFormLayout(idBox);
+        name_ = new QLineEdit(g_userName);
+        idl->addRow("Your name", name_);
+        admin_ = new QCheckBox("I am an authority (can approve) — "
+                               "Geshe Michael / Adam only");
+        admin_->setChecked(g_isAdmin);
+        idl->addRow("", admin_);
+        auto* dirRow = new QHBoxLayout;
+        dir_ = new QLineEdit(g_proposalsDir);
+        dir_->setPlaceholderText(
+            "shared proposals folder (e.g. a Dropbox path)…");
+        auto* pick = new QPushButton("Choose…");
+        dirRow->addWidget(dir_, 1);
+        dirRow->addWidget(pick);
+        auto* dirW = new QWidget;
+        dirW->setLayout(dirRow);
+        idl->addRow("Proposals folder", dirW);
+        auto* saveId = new QPushButton("Save identity");
+        idl->addRow("", saveId);
+        outer->addWidget(idBox);
+        connect(pick, &QPushButton::clicked, [this] {
+            const QString d = QFileDialog::getExistingDirectory(
+                this, "Shared proposals folder (Dropbox-synced is ideal)");
+            if (!d.isEmpty()) dir_->setText(d);
+        });
+        connect(saveId, &QPushButton::clicked, [this] {
+            QSettings s("ALL", "TranslationTool");
+            s.setValue("team/name", name_->text().trimmed());
+            s.setValue("team/admin", admin_->isChecked());
+            s.setValue("team/proposalsDir", dir_->text().trimmed());
+            loadIdentity();
+            QMessageBox::information(
+                this, "Saved",
+                admin_->isChecked()
+                    ? "Identity saved. The Approval tab is now available "
+                      "(restart to show it)."
+                    : "Identity saved.");
+        });
+
+        // the proposal form
+        auto* box = new QGroupBox("Make a proposal");
+        auto* fl = new QFormLayout(box);
+        kind_ = new QComboBox;
+        kind_->addItem("Honorific term (↔ ordinary)",
+                       int(allcore::ProposalKind::Honorific));
+        kind_->addItem("HIGH honorific marking",
+                       int(allcore::ProposalKind::HighHonorific));
+        kind_->addItem("Pronunciation exception",
+                       int(allcore::ProposalKind::Pronunciation));
+        kind_->addItem("Abbreviation / contraction candidate",
+                       int(allcore::ProposalKind::Abbreviation));
+        kind_->addItem("Rendering for a word (→ dictionary)",
+                       int(allcore::ProposalKind::WordRendering));
+        kind_->addItem("Rendering for a phrase/clause (→ dictionary)",
+                       int(allcore::ProposalKind::PhraseRendering));
+        kind_->addItem("Note about a passage",
+                       int(allcore::ProposalKind::Note));
+        fl->addRow("Kind", kind_);
+        wylie_ = new QLineEdit;
+        wylie_->setPlaceholderText("the Tibetan (ACIP or wylie)");
+        fl->addRow("Tibetan", wylie_);
+        value_ = new QLineEdit;
+        value_->setPlaceholderText(
+            "proposed English / pronunciation / expansion");
+        fl->addRow("Proposed", value_);
+        field_ = new QLineEdit;
+        field_->setPlaceholderText(
+            "optional: ordinary form, domain, or note");
+        fl->addRow("Secondary", field_);
+        evidence_ = new QPlainTextEdit;
+        evidence_->setPlaceholderText(
+            "evidence — where you saw it, the passage, why…");
+        evidence_->setMaximumHeight(90);
+        fl->addRow("Evidence", evidence_);
+        auto* submit = new QPushButton("File proposal for review");
+        fl->addRow("", submit);
+        outer->addWidget(box);
+        outer->addStretch();
+        connect(submit, &QPushButton::clicked, [this] {
+            if (wylie_->text().trimmed().isEmpty() &&
+                evidence_->toPlainText().trimmed().isEmpty()) {
+                QMessageBox::information(this, "Nothing to propose",
+                                         "Add the Tibetan or a note.");
+                return;
+            }
+            loadIdentity();
+            fileProposal(
+                this,
+                allcore::ProposalKind(kind_->currentData().toInt()),
+                wylie_->text().trimmed(), value_->text().trimmed(),
+                field_->text().trimmed(),
+                evidence_->toPlainText().trimmed());
+            wylie_->clear();
+            value_->clear();
+            field_->clear();
+            evidence_->clear();
+        });
+    }
+
+private:
+    QLineEdit* name_;
+    QCheckBox* admin_;
+    QLineEdit* dir_;
+    QComboBox* kind_;
+    QLineEdit* wylie_;
+    QLineEdit* value_;
+    QLineEdit* field_;
+    QPlainTextEdit* evidence_;
+};
+
+// The authority's pane — visible only in the admin role. Approve
+// applies register items in-app (writing the register file, tiered
+// "approved — <approver>, <date>") and marks dictionary items for the
+// export package. Every ruling stamps provenance.
+class ApprovalPane : public QWidget {
+public:
+    ApprovalPane(const QString& root) : root_(root) {
+        auto* outer = new QVBoxLayout(this);
+        outer->addWidget(new QLabel(
+            "<b>Approval</b> — the authority's queue. Register approvals "
+            "(honorific, pronunciation, abbreviation) apply in the app "
+            "immediately, tiered as approved with your name and the "
+            "date. Dictionary/corpus approvals are collected for the "
+            "data project's next release — the app never edits the "
+            "corpus itself."));
+        auto* row = new QHBoxLayout;
+        auto* refresh = new QPushButton("Refresh queue");
+        auto* exportB = new QPushButton("Export approved dictionary "
+                                        "candidates…");
+        row->addWidget(refresh);
+        row->addWidget(exportB);
+        row->addStretch();
+        outer->addLayout(row);
+        list_ = new QTextBrowser;
+        list_->setOpenLinks(false);
+        outer->addWidget(list_, 1);
+        connect(refresh, &QPushButton::clicked, [this] { rebuild(); });
+        connect(exportB, &QPushButton::clicked, [this] { exportApproved(); });
+        connect(list_, &QTextBrowser::anchorClicked,
+                [this](const QUrl& u) { onAction(u.toString()); });
+        rebuild();
+    }
+
+private:
+    void rebuild() {
+        loadIdentity();
+        if (g_proposalsDir.isEmpty()) {
+            list_->setHtml("<i>set the proposals folder in the Propose "
+                           "tab first</i>");
+            return;
+        }
+        allcore::ProposalStore store(g_proposalsDir.toStdString());
+        store.load();
+        QString h = QString("<div><b>%1 pending</b> · signed in as %2</div>"
+                            "<hr>")
+                        .arg(store.pendingCount())
+                        .arg(g_userName.isEmpty() ? "(unnamed)"
+                                                  : g_userName);
+        int shown = 0;
+        for (const auto& p : store.all()) {
+            if (p.status != allcore::ProposalStatus::Pending) continue;
+            ++shown;
+            h += "<div style='margin:8px 0;padding:6px;border:1px solid "
+                 "#DDD'>";
+            h += "<b>" +
+                 QString(allcore::Proposal::kindName(p.kind)).toUpper() +
+                 "</b>" +
+                 (p.isRegister()
+                      ? " <span style='color:#1E6B4E'>(applies in-app)</span>"
+                      : " <span style='color:#8C2F2B'>(→ data project)"
+                        "</span>");
+            h += "<br><b>" + QString::fromStdString(p.wylie).toHtmlEscaped() +
+                 "</b>";
+            if (!p.value.empty())
+                h += " → “" +
+                     QString::fromStdString(p.value).toHtmlEscaped() + "”";
+            if (!p.field.empty())
+                h += " <small>[" +
+                     QString::fromStdString(p.field).toHtmlEscaped() +
+                     "]</small>";
+            if (!p.evidence.empty())
+                h += "<br><small style='color:#555'>" +
+                     QString::fromStdString(p.evidence)
+                         .left(300)
+                         .toHtmlEscaped() +
+                     "</small>";
+            h += "<br><small style='color:#999'>proposed by " +
+                 QString::fromStdString(p.proposer).toHtmlEscaped() +
+                 " · " + QString::fromStdString(p.created).toHtmlEscaped() +
+                 "</small>";
+            const QString id = QString::fromStdString(p.id);
+            h += "<br><a href='approve:" + id +
+                 "'>✓ Approve</a> &nbsp; <a href='decline:" + id +
+                 "'>✗ Decline</a> &nbsp; <a href='defer:" + id +
+                 "'>⏸ Defer</a></div>";
+        }
+        if (!shown) h += "<i>nothing pending — the queue is clear.</i>";
+        list_->setHtml(h);
+    }
+
+    void onAction(const QString& s) {
+        const int c = s.indexOf(':');
+        if (c < 0) return;
+        const QString verb = s.left(c), id = s.mid(c + 1);
+        allcore::ProposalStatus st;
+        if (verb == "approve") st = allcore::ProposalStatus::Approved;
+        else if (verb == "decline") st = allcore::ProposalStatus::Declined;
+        else if (verb == "defer") st = allcore::ProposalStatus::Deferred;
+        else return;
+        QString comment;
+        if (st != allcore::ProposalStatus::Deferred) {
+            bool ok = false;
+            comment = QInputDialog::getText(
+                this,
+                verb == "approve" ? "Approve" : "Decline",
+                "Optional note:", QLineEdit::Normal, "", &ok);
+            if (!ok) return;
+        }
+        allcore::ProposalStore store(g_proposalsDir.toStdString());
+        store.load();
+        // find it to know whether to apply in-app before we rule
+        const allcore::Proposal* target = nullptr;
+        for (const auto& p : store.all())
+            if (p.id == id.toStdString()) target = &p;
+        if (!target) { rebuild(); return; }
+        if (st == allcore::ProposalStatus::Approved && target->isRegister())
+            applyRegister(*target);
+        store.rule(id.toStdString(), st,
+                   g_userName.isEmpty() ? "authority"
+                                        : g_userName.toStdString(),
+                   comment.toStdString(), isoToday().toStdString());
+        store.save();
+        rebuild();
+    }
+
+    // register approvals write straight into the app's register files,
+    // appended with the approved tier + provenance
+    void applyRegister(const allcore::Proposal& p) {
+        QString path, line;
+        if (p.kind == allcore::ProposalKind::Honorific ||
+            p.kind == allcore::ProposalKind::HighHonorific) {
+            path = root_ + "/data/honorifics/honorific_register.tsv";
+            const QString level =
+                p.kind == allcore::ProposalKind::HighHonorific ? "high"
+                                                               : "honorific";
+            // honorific_wylie \t ordinary \t domain \t level
+            line = QString::fromStdString(p.wylie) + "\t" +
+                   QString::fromStdString(p.field) + "\t" +
+                   QString::fromStdString(p.value) + "\t" + level;
+        } else if (p.kind == allcore::ProposalKind::Pronunciation) {
+            path = root_ + "/data/pron_colloquial/colloquial_pron.tsv";
+            // colloquial \t wylie \t gmr_pron \t class
+            line = QString::fromStdString(p.value) + "\t" +
+                   QString::fromStdString(p.wylie) + "\t\tapproved";
+        } else if (p.kind == allcore::ProposalKind::Abbreviation) {
+            path = root_ + "/data/abbreviations/approved_abbreviations.tsv";
+        }
+        if (path.isEmpty()) return;
+        QFile f(path);
+        if (f.open(QIODevice::Append | QIODevice::Text)) {
+            QTextStream ts(&f);
+            ts << line << "\t# approved by "
+               << (g_userName.isEmpty() ? "authority" : g_userName) << " "
+               << isoToday() << "\n";
+        }
+    }
+
+    void exportApproved() {
+        allcore::ProposalStore store(g_proposalsDir.toStdString());
+        store.load();
+        const QString out = QFileDialog::getSaveFileName(
+            this, "Export approved dictionary candidates",
+            root_ + "/data/candidate_alignments/approved_terms.tsv",
+            "TSV (*.tsv)");
+        if (out.isEmpty()) return;
+        QFile f(out);
+        if (!f.open(QIODevice::WriteOnly | QIODevice::Text)) return;
+        QTextStream ts(&f);
+        ts << "# APPROVED dictionary/corpus candidates for the data "
+              "project — approved in-app, never auto-ingested\n";
+        ts << "# kind\twylie\tvalue\tevidence\tapprover\truled\n";
+        int n = 0;
+        for (const auto& p : store.all()) {
+            if (p.status != allcore::ProposalStatus::Approved ||
+                p.isRegister())
+                continue;
+            ts << allcore::Proposal::kindName(p.kind) << "\t"
+               << QString::fromStdString(p.wylie) << "\t"
+               << QString::fromStdString(p.value) << "\t"
+               << QString::fromStdString(p.evidence).replace('\t', ' ')
+                      .replace('\n', ' ')
+               << "\t" << QString::fromStdString(p.approver) << "\t"
+               << QString::fromStdString(p.ruled) << "\n";
+            ++n;
+        }
+        list_->setHtml(list_->toHtml() +
+                       QString("<div style='color:#1E6B4E'>exported %1 "
+                               "approved dictionary candidate(s) to %2"
+                               "</div>")
+                           .arg(n)
+                           .arg(out.toHtmlEscaped()));
+    }
+
+    QString root_;
+    QTextBrowser* list_ = nullptr;
+};
+
 int main(int argc, char** argv) {
     QApplication app(argc, argv);
     const QString root = findDataRoot();
@@ -7332,6 +7703,12 @@ int main(int argc, char** argv) {
 #ifdef ALL_HAVE_OCR
     tabs.addTab(new ScanPane(checker, root), "Scan");
 #endif
+    // the in-house proposal & approval channel: everyone can Propose;
+    // the Approval tab shows only for an authority (Geshe Michael /
+    // Adam), gated on the identity role
+    loadIdentity();
+    tabs.addTab(new ProposePane(), "Propose");
+    if (g_isAdmin) tabs.addTab(new ApprovalPane(root), "Approval");
     tabs.resize(1180, 760);
     tabs.show();
     return app.exec();
