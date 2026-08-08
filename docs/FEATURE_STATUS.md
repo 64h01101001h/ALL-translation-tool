@@ -115,10 +115,22 @@ sections, QC'd, auto-saved)
   ~/Library/Fonts (chos-rgyal, yig-chung, calligraphic, TCRC Youtso,
   Tib-US) registered per-session by app + font_smoke; 64/64 coverage;
   in the typeface combo
+- ✅ **Letter-level contraction fusions** (2026-08-08) — "fused" class
+  in the derived register: onset+vowel + next first consonant (sher ←
+  shes rab, myang ← mya ngan, phar ← pha rol, rdor ← rdo rje); 9
+  pairs, exact-gloss-only, corpus-attested
+- ✅ **Jomolhari + Monlam Bodyig bundled** (2026-08-08) — OFL 1.0 /
+  1.1 verified and banked; 4 bundled faces now. Qomolangma recorded
+  DO-NOT-BUNDLE (non-commercial-only license)
+- ✅ **.hyp importer** (2026-08-08) — `allcore::parseHypFile` (33rd
+  suite, proven on Adam's own tutorial.hyp: all 15 numbered links,
+  the `<!…>` note, `<t$>` escapes, zero unknown tags); Align pane
+  "Import .hyp…" maps char spans → token spans (sub-syllable links
+  widened and counted, unmappable skipped and counted — never
+  guessed); links land in the normal library/links flow
 - ⬜ **Live composing editor** (Jskad idea — waits for the input-center
-  formatter) · ⬜ Jomolhari bundling · ⬜ letter-level contraction
-  fusions (sher phyin) · ⬜ Old-Tibetan affixnorm rules (remote
-  session's thread)
+  formatter) · ⬜ Old-Tibetan affixnorm rules (remote session's
+  thread)
 
 ## Externally gated
 

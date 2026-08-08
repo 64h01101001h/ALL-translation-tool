@@ -98,6 +98,7 @@
 #include "allcore/lexicon.h"
 #include "allcore/verbstems.h"
 #include "allcore/outline.h"
+#include "allcore/hypfile.h"
 #include "allcore/verse.h"
 #include "allcore/wilsonparse.h"
 #include "allcore/terminology.h"
@@ -5182,6 +5183,14 @@ public:
         auto* row = new QHBoxLayout;
         auto* open = new QPushButton("Open ACIP file…");
         row->addWidget(open);
+        auto* hypBtn = new QPushButton("Import .hyp…");
+        hypBtn->setToolTip(
+            "Import a legacy Hypercontext hypertexted file: both texts "
+            "and every numbered link come in as Align-pane links "
+            "(sub-syllable links are widened to whole syllables and "
+            "counted).");
+        row->addWidget(hypBtn);
+        connect(hypBtn, &QPushButton::clicked, [this] { importHyp(); });
         auto* load = new QPushButton("Load pasted texts");
         row->addWidget(load);
         linkBtn_ = new QPushButton("Link (space)");
@@ -5411,6 +5420,113 @@ private:
         selBeg_ = selEnd_ = -1;
         linkBtn_->setEnabled(false);
         repaint_();
+    }
+
+    // Import a legacy Hypercontext .hyp file (allcore::parseHypFile,
+    // proven on tutorial.hyp): texts split by script, numbered links
+    // become Align links. Token mapping is honest — sub-syllable links
+    // widen to whole tokens (counted), unmappable links are skipped
+    // (counted), never guessed.
+    void importHyp() {
+        const QString fn = QFileDialog::getOpenFileName(
+            this, "Import Hypercontext file", QString(),
+            "Hypercontext (*.hyp);;All files (*)");
+        if (fn.isEmpty()) return;
+        QFile qf(fn);
+        if (!qf.open(QIODevice::ReadOnly)) return;
+        const auto hyp =
+            allcore::parseHypFile(qf.readAll().toStdString());
+        if (hyp.tibetan.empty()) {
+            links_->setHtml("<b>no Tibetan text in that .hyp file</b>");
+            return;
+        }
+        tib_->setReadOnly(false);
+        tib_->setPlainText(QString::fromStdString(hyp.tibetan));
+        eng_->setPlainText(QString::fromStdString(hyp.english));
+        docFile_ = fn;
+        loadTexts();
+        // token -> byte range in the .hyp Tibetan text (in-order find;
+        // ACIP is plain ASCII so byte alignment is exact)
+        const std::string& raw = hyp.tibetan;
+        std::vector<int> rb, re2;
+        size_t cur = 0;
+        bool mapOk = true;
+        for (const auto& tok : doc_.tokens) {
+            const size_t p = raw.find(tok, cur);
+            if (p == std::string::npos) {
+                mapOk = false;
+                break;
+            }
+            rb.push_back(static_cast<int>(p));
+            re2.push_back(static_cast<int>(p + tok.size()));
+            cur = p + tok.size();
+        }
+        int imported = 0, widened = 0, skippedN = 0;
+        if (mapOk) {
+            linksList_.clear();
+            for (const auto& hl : hyp.links) {
+                int t0 = -1, t1 = -1;
+                for (size_t i = 0; i < rb.size(); ++i)
+                    if (re2[i] > hl.tibBeg && rb[i] < hl.tibEnd) {
+                        if (t0 < 0) t0 = static_cast<int>(i);
+                        t1 = static_cast<int>(i) + 1;
+                    }
+                if (t0 < 0) {
+                    ++skippedN;
+                    continue;
+                }
+                if (rb[t0] < hl.tibBeg || re2[t1 - 1] > hl.tibEnd)
+                    ++widened;   // sub-syllable link -> whole token(s)
+                Link l;
+                l.tibBeg = t0;
+                l.tibEnd = t1;
+                std::string wy;
+                for (int t = t0; t < t1; ++t) {
+                    if (!wy.empty()) wy += " ";
+                    wy += allcore::acipToEwts(doc_.tokens[t]);
+                }
+                l.wylie = wy;
+                // byte offsets -> QString (UTF-16) positions
+                l.engBeg = QString::fromUtf8(hyp.english.c_str(),
+                                             hl.engBeg).size();
+                l.engEnd = QString::fromUtf8(hyp.english.c_str(),
+                                             hl.engEnd).size();
+                l.english = hyp.english.substr(
+                    hl.engBeg, hl.engEnd - hl.engBeg);
+                linksList_.push_back(std::move(l));
+                ++imported;
+            }
+            saveLinks();
+        }
+        repaint_();
+        links_->setHtml(
+            QString("<div><b>.hyp import:</b> %1 — %2 link(s) imported"
+                    "%3%4%5%6%7</div>")
+                .arg(QFileInfo(fn).fileName().toHtmlEscaped())
+                .arg(imported)
+                .arg(widened
+                         ? QString(" · %1 sub-syllable link(s) widened "
+                                   "to whole syllables").arg(widened)
+                         : QString())
+                .arg(skippedN
+                         ? QString(" · <span style='color:#B4540A'>%1 "
+                                   "unmappable, skipped</span>")
+                               .arg(skippedN)
+                         : QString())
+                .arg(hyp.onesided.empty()
+                         ? QString()
+                         : QString(" · <span style='color:#B4540A'>%1 "
+                                   "one-sided link id(s) ignored</span>")
+                               .arg(hyp.onesided.size()))
+                .arg(hyp.notes.empty()
+                         ? QString()
+                         : QString(" · %1 note(s) in the file")
+                               .arg(hyp.notes.size()))
+                .arg(mapOk ? QString()
+                           : " · <span style='color:#B00020'><b>token "
+                             "mapping failed — links not imported"
+                             "</b></span>") +
+            links_->toHtml());
     }
 
     void saveLinks() {
