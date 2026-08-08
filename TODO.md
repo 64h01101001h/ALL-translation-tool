@@ -423,7 +423,13 @@ display toggles, not through invention.
       registered at startup; the Display panel now has a typeface
       combo (Noto / BabelStone / system, persisted) — BabelStone's
       wide rare-stack + bskungs-yig coverage pairs with the
-      abbreviations layer. LATER (nice-to-have): visual pass of the
+      abbreviations layer. SAMBHOTADEGE PREFERRED (Adam 2026-08-07):
+      the system-installed SambhotaDege heads the combo and is the
+      default when present, and the app-wide font falls back
+      per-character to it so inline Tibetan in EVERY pane uses it;
+      never bundled (not ours to redistribute) — OFL faces stand in
+      when absent. Setting now persisted by family name
+      (overlay/tibFontFamily). LATER (nice-to-have): visual pass of the
       Sanskrit-stack battery output in both faces.
 - [ ] **Lotsawa House** — CC BY-NC: write them for bulk/permission;
       prayer-register corpus for register warnings.

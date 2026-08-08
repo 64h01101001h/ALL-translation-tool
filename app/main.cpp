@@ -708,17 +708,28 @@ public:
         scriptMode_->setCurrentIndex(
             settings.value("overlay/scriptMode", 0).toInt());
         scriptRow->addWidget(scriptMode_, 1);
-        // Tibetan typeface for script mode: both bundled faces are OFL
-        // (data/fonts/FONTS.md); falls back gracefully if missing
+        // Tibetan typeface for script mode: SambhotaDege first when the
+        // system has it (Adam's preference), then the bundled OFL faces
+        // (data/fonts/FONTS.md); persisted by family name, graceful if a
+        // face goes missing
         tibFont_ = new QComboBox;
-        tibFont_->addItems({"Noto Serif Tibetan", "BabelStone Tibetan Slim",
-                            "system"});
-        tibFont_->setCurrentIndex(
-            settings.value("overlay/tibFont", 0).toInt());
+        {
+            QStringList opts;
+            if (QFontDatabase::hasFamily("SambhotaDege"))
+                opts << "SambhotaDege";
+            opts << "Noto Serif Tibetan" << "BabelStone Tibetan Slim"
+                 << "system";
+            tibFont_->addItems(opts);
+            const QString saved =
+                settings.value("overlay/tibFontFamily", opts.first())
+                    .toString();
+            const int ix = tibFont_->findText(saved);
+            if (ix >= 0) tibFont_->setCurrentIndex(ix);
+        }
         scriptRow->addWidget(tibFont_);
-        connect(tibFont_, &QComboBox::currentIndexChanged, [this](int ix) {
+        connect(tibFont_, &QComboBox::currentIndexChanged, [this](int) {
             QSettings s("ALL", "TranslationTool");
-            s.setValue("overlay/tibFont", ix);
+            s.setValue("overlay/tibFontFamily", tibFont_->currentText());
             if (!doc_.tokens.empty()) loadDoc();
         });
         ll->addLayout(scriptRow);
@@ -799,11 +810,9 @@ private:
         // when available; ACIP/wylie stay in the default face
         {
             QFont f = view_->font();
-            const QString want =
-                tibFont_ && tibFont_->currentIndex() == 1
-                    ? QStringLiteral("BabelStone Tibetan Slim")
-                    : QStringLiteral("Noto Serif Tibetan");
-            if (mode == 0 && tibFont_ && tibFont_->currentIndex() != 2 &&
+            const QString want = tibFont_ ? tibFont_->currentText()
+                                          : QStringLiteral("system");
+            if (mode == 0 && want != "system" &&
                 QFontDatabase::hasFamily(want))
                 f.setFamilies({want});
             else
@@ -4487,6 +4496,21 @@ int main(int argc, char** argv) {
                                       "/data/fonts/NotoSerifTibetan.ttf");
     QFontDatabase::addApplicationFont(
         root + "/data/fonts/BabelStoneTibetanSlim.ttf");
+    // Prefer SambhotaDege for Tibetan wherever it appears (Adam's request,
+    // 2026-08-07): the app-wide font keeps the system face for Latin and
+    // falls back per-character to the preferred Tibetan family — so every
+    // pane's inline Tibetan (cards, trainer, drills, lookup) picks it up.
+    // System-installed only; never bundled (not ours to redistribute).
+    {
+        QFont appFont = app.font();
+        QStringList fams = appFont.families();
+        if (fams.isEmpty()) fams << appFont.family();
+        fams << (QFontDatabase::hasFamily("SambhotaDege")
+                     ? QStringLiteral("SambhotaDege")
+                     : QStringLiteral("Noto Serif Tibetan"));
+        appFont.setFamilies(fams);
+        app.setFont(appFont);
+    }
     QString dbPath = argc > 1 ? argv[1] : root + "/build/hgm_spine_v27_2.db";
     QString tplPath = argc > 2 ? argv[2]
                                : root + "/docs/analysis/PASSAGE_ANALYSIS_TEMPLATE.md";
