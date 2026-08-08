@@ -100,6 +100,7 @@
 #include "allcore/outline.h"
 #include "allcore/hypfile.h"
 #include "allcore/whitney.h"
+#include "allcore/colloquial.h"
 #include "allcore/verse.h"
 #include "allcore/wilsonparse.h"
 #include "allcore/terminology.h"
@@ -198,7 +199,8 @@ static QString mvpHtml(const std::vector<const allcore::MvpEntry*>& hits) {
 
 static QWidget* makeLookupPane(allcore::Spine& spine, allcore::RefDict* ref,
                                allcore::Mvp* mvp,
-                               allcore::WhitneyRoots* whitney = nullptr) {
+                               allcore::WhitneyRoots* whitney = nullptr,
+                               allcore::ColloquialPron* colloq = nullptr) {
     auto* pane = new QWidget;
     auto* outer = new QHBoxLayout(pane);
     auto* split = new QSplitter(Qt::Horizontal);
@@ -271,7 +273,7 @@ static QWidget* makeLookupPane(allcore::Spine& spine, allcore::RefDict* ref,
                      });
 
     QObject::connect(box, &QLineEdit::returnPressed, [&spine, ref, mvp,
-                                                      whitney, box,
+                                                      whitney, colloq, box,
                                                       results] {
         const std::string raw = box->text().trimmed().toStdString();
         if (raw.empty()) return;
@@ -311,6 +313,41 @@ static QWidget* makeLookupPane(allcore::Spine& spine, allcore::RefDict* ref,
                  "headword for \u201c" +
                  QString::fromStdString(raw).toHtmlEscaped() +
                  "\u201d</div>";
+        // colloquial register fallback: community spellings (gonpa,
+        // tulku\u2026) and the HGM prenasal forms (kamdir) \u2014 the register
+        // only WIDENS lookup, GMR stays canonical
+        if (entries.empty() && colloq) {
+            for (const auto* ce : colloq->byColloquial(raw)) {
+                auto hits = spine.lookup(ce->wylie);
+                bool any = false;
+                for (auto& e : hits) {
+                    bool dup = false;
+                    for (auto& x : entries) dup |= x.id == e.id;
+                    if (!dup) {
+                        entries.push_back(std::move(e));
+                        any = true;
+                    }
+                }
+                if (any)
+                    h += QString("<div style='color:#1E6B4E;font-size:"
+                                 "12px'>matched by <b>colloquial "
+                                 "pronunciation</b> (%1: %2 = %3%4)"
+                                 "</div>")
+                             .arg(ce->cls == "prenasal-derived"
+                                      ? "prenasal rule, derived"
+                                      : "community usage register")
+                             .arg(QString::fromStdString(ce->colloquial)
+                                      .toHtmlEscaped())
+                             .arg(QString::fromStdString(ce->wylie)
+                                      .toHtmlEscaped())
+                             .arg(ce->gmrPron.empty()
+                                      ? QString()
+                                      : "; GMR convention: " +
+                                            QString::fromStdString(
+                                                ce->gmrPron)
+                                                .toHtmlEscaped());
+            }
+        }
         if (entries.empty()) h = "<i>no HGM match</i>";
         for (const auto& e : entries) h += entryHtml(e);
 
@@ -6280,6 +6317,16 @@ int main(int argc, char** argv) {
             whitney = &w;
     }
 
+    // the colloquial pronunciation register (community spellings +
+    // HGM prenasal-rule forms; data/pron_colloquial) — optional
+    allcore::ColloquialPron* colloq = nullptr;
+    {
+        static allcore::ColloquialPron cp;
+        if (cp.load((root + "/data/pron_colloquial/colloquial_pron.tsv")
+                        .toStdString()))
+            colloq = &cp;
+    }
+
     // the SOAS POS lexicon (CC BY 4.0) — optional; consulted only where
     // Wilson's rules require POS data, evidence-labeled
     allcore::PosLexicon* poslex = nullptr;
@@ -6326,7 +6373,8 @@ int main(int argc, char** argv) {
                 "Library");
     tabs.addTab(makeSearchPane(spine, root + "/library"), "Search");
     tabs.addTab(makeConvertPane(mvp, whitney), "Convert");
-    tabs.addTab(makeLookupPane(spine, refdict, mvp, whitney), "Lookup");
+    tabs.addTab(makeLookupPane(spine, refdict, mvp, whitney, colloq),
+                "Lookup");
 #ifdef ALL_HAVE_OCR
     tabs.addTab(new ScanPane(checker, root), "Scan");
 #endif

@@ -782,3 +782,26 @@ display toggles, not through invention.
   all four canonical engines ported + battery-proven, Wilson particle layer
   (fused splits + suffix-agreement diagnostics), spellcheck, Gofer search
   (corpus + file trees), reference dictionaries, analysis pipeline + QC.
+
+## Registers (Adam's requests, 2026-08-08)
+
+- [x] **Colloquial pronunciation register** — STARTED 2026-08-08
+      (data/pron_colloquial/, 35th suite): 58 community spellings
+      (gonpa/tulku/chenrezig/chorten…), all spine-verified; Lookup
+      fallback accepts them, labeled, GMR stays canonical.
+- [x] **Prenasal rule class** — HGM (via Adam): SKABS 'DIR = "kamdir";
+      -b(s) nasalizes to m before 'a-chung syllables. Engine covers
+      vowel-final (gendun/kangyur) but not -b(s); master itself attests
+      kyamdro. 164 forms DERIVED with juncture-count guard (2 ambiguous
+      skipped; 'b-cluster junctures left for review) — PENDING HGM/Adam
+      REVIEW; engine untouched.
+- [x] **Honorific (zhe sa) register** — STARTED 2026-08-08
+      (data/honorifics/, 27 spine-verified pairs, level column with
+      "high" available). HGM glosses mark honorifics in only ONE entry
+      — levels need human marking. UI badge + oversight warnings =
+      next increments.
+- [ ] **INCOMING (Adam, 2026-08-08): a series of books/PDFs on the
+      honorific + high-honorific registers and numerous Tibetan
+      grammar books** — when supplied: mine for register rows
+      (attestation-tier per source), mark high-honorific levels,
+      and consider a grammar-references layer alongside Wilson.

@@ -19,6 +19,7 @@ add_library(allcore STATIC
   src/outline.cpp
   src/hypfile.cpp
   src/whitney.cpp
+  src/colloquial.cpp
   src/verse.cpp
   src/wilsonparse.cpp
   src/tibexport.cpp
@@ -125,6 +126,14 @@ target_link_libraries(whitney_smoke PRIVATE allcore)
 add_test(NAME whitney_smoke
          COMMAND whitney_smoke
                  ${CMAKE_SOURCE_DIR}/data/whitney/whitney_roots.tsv)
+
+add_executable(colloquial_smoke tests/colloquial_smoke.cpp)
+target_link_libraries(colloquial_smoke PRIVATE allcore)
+add_test(NAME colloquial_smoke
+         COMMAND colloquial_smoke
+                 ${CMAKE_SOURCE_DIR}/data/pron_colloquial/colloquial_pron.tsv
+                 ${CMAKE_SOURCE_DIR}/data/honorifics/honorific_register.tsv
+                 ${CMAKE_SOURCE_DIR}/build/hgm_spine_v27_2.db)
 
 add_executable(verse_smoke tests/verse_smoke.cpp)
 target_link_libraries(verse_smoke PRIVATE allcore)
