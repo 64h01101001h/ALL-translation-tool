@@ -61,9 +61,13 @@ bool WhitneyRoots::load(const std::string& tsvPath) {
         r.homonym = cols[2];
         r.meaning = cols[3];
         if (cols.size() > 4) r.classes = cols[4];
-        if (cols.size() > 5) r.grammarSecs = cols[5];
-        if (cols.size() > 6) r.dcsClasses = cols[6];
-        if (cols.size() > 7) r.notes = cols[7];
+        if (cols.size() > 5) r.classUncertain = cols[5];
+        if (cols.size() > 6) r.ppp = cols[6];
+        if (cols.size() > 7) r.grammarSecs = cols[7];
+        if (cols.size() > 8) r.dcsClasses = cols[8];
+        if (cols.size() > 9) r.mwId = cols[9];
+        if (cols.size() > 10) r.senses = cols[10];
+        if (cols.size() > 11) r.notes = cols[11];
         byFolded_[foldIast(r.root)].push_back(
             static_cast<int>(entries_.size()));
         entries_.push_back(std::move(r));

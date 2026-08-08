@@ -36,17 +36,40 @@ int main(int argc, char** argv) {
     auto kr = w.byRoot("kṛ");
     CHECK(kr.size() >= 3, "kṛ homonyms distinct (3 entries)");
     bool make = false, scatter = false;
+    const allcore::WhitneyRoot* kr1 = nullptr;
+    const allcore::WhitneyRoot* kr2 = nullptr;
     for (const auto* r : kr) {
-        if (r->homonym == "1" && r->meaning == "make") make = true;
-        if (r->homonym == "2" && r->meaning == "scatter") scatter = true;
+        if (r->homonym == "1" && r->meaning == "make") {
+            make = true;
+            kr1 = r;
+        }
+        if (r->homonym == "2" && r->meaning == "scatter") {
+            scatter = true;
+            kr2 = r;
+        }
     }
     CHECK(make && scatter, "1 kṛ = make, 2 kṛ = scatter (Whitney's "
                            "numbering preserved)");
     CHECK(!kr.empty() && !kr[0]->grammarSecs.empty(),
           "kṛ carries Grammar-1879 section citations");
+    // per-homonym classes from the machine hub (the acid test that
+    // rejected the form-level table)
+    CHECK(kr1 && kr1->classes.find("VIII") != std::string::npos,
+          "1 kṛ class list includes VIII (karoti)");
+    CHECK(kr2 && kr2->classes == "VI" &&
+              kr2->classes != kr1->classes,
+          "2 kṛ class VI — homonyms carry DIFFERENT classes");
+    CHECK(kr1 && kr1->ppp == "kṛtá",
+          "accented PPP banked: 1 kṛ -> kṛtá");
+    CHECK(kr1 && !kr1->mwId.empty(),
+          "MW crosswalk id present for 1 kṛ");
 
     auto gam = w.byRoot("gam");
     CHECK(gam.size() == 1 && gam[0]->meaning == "go", "gam = go");
+    CHECK(gam.size() == 1 && gam[0]->ppp == "gatá", "gam ppp gatá");
+    auto bhu2 = w.byRoot("bhū");
+    CHECK(bhu2.size() == 1 && bhu2[0]->ppp == "bhūtá",
+          "bhū ppp bhūtá");
 
     auto scat = w.byMeaning("scatter");
     bool hasKr = false;

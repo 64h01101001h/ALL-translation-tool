@@ -389,16 +389,32 @@ static QWidget* makeLookupPane(allcore::Spine& spine, allcore::RefDict* ref,
                              QString::fromStdString(r->meaning)
                                  .toHtmlEscaped() +
                              "”";
-                        if (!r->classes.empty() && r->classes != "—")
+                        if (!r->classes.empty())
                             h += " · class " +
                                  QString::fromStdString(r->classes)
+                                     .replace("|", "·")
+                                     .toHtmlEscaped();
+                        if (!r->classUncertain.empty())
+                            h += " <small style='color:#777'>(also? " +
+                                 QString::fromStdString(r->classUncertain)
+                                     .replace("|", "·")
                                      .toHtmlEscaped() +
-                                 " <small style='color:#777'>(as "
-                                 "digitized, form-level)</small>";
+                                 ")</small>";
+                        if (!r->ppp.empty())
+                            h += " · ppp <b>" +
+                                 QString::fromStdString(r->ppp)
+                                     .toHtmlEscaped() +
+                                 "</b>";
                         if (!r->dcsClasses.empty() &&
                             r->dcsClasses != "—")
                             h += " · <small style='color:#777'>corpus: " +
                                  QString::fromStdString(r->dcsClasses)
+                                     .toHtmlEscaped() +
+                                 "</small>";
+                        if (!r->senses.empty())
+                            h += "<br><small style='color:#555'>MW: " +
+                                 QString::fromStdString(r->senses)
+                                     .left(140)
                                      .toHtmlEscaped() +
                                  "</small>";
                         if (!r->grammarSecs.empty() &&
@@ -2382,7 +2398,8 @@ static QWidget* makeSearchPane(allcore::Spine& spine,
 }
 
 // ---- Convert pane: ACIP/wylie → everything, via the battery-proven ports ----
-static QWidget* makeConvertPane(allcore::Mvp* mvp) {
+static QWidget* makeConvertPane(allcore::Mvp* mvp,
+                                allcore::WhitneyRoots* whitney = nullptr) {
     auto* pane = new QWidget;
     auto* layout = new QVBoxLayout(pane);
 
@@ -2620,7 +2637,7 @@ static QWidget* makeConvertPane(allcore::Mvp* mvp) {
     auto* out = new QTextBrowser;
     layout->addWidget(out, 2);
 
-    auto convert = [input, out, mvp] {
+    auto convert = [input, out, mvp, whitney] {
         const QString raw = input->toPlainText().trimmed();
         if (raw.isEmpty()) { out->clear(); return; }
         // Devanagari input → IAST first, then the full Sanskrit card
@@ -2689,6 +2706,47 @@ static QWidget* makeConvertPane(allcore::Mvp* mvp) {
             }
             h += "</table>";
             if (mvp) h += mvpHtml(mvp->byIast(t));
+            // Whitney roots: annotate any input token that IS a root
+            // form (no stemming — inflected words are not guessed at)
+            if (whitney) {
+                QString wh;
+                std::stringstream ts2(t);
+                std::string tok2;
+                std::set<std::string> seen2;
+                while (ts2 >> tok2) {
+                    if (!seen2.insert(tok2).second) continue;
+                    for (const auto* r : whitney->byRoot(tok2)) {
+                        wh += "<div style='margin:3px 0'><b>";
+                        if (!r->homonym.empty())
+                            wh += QString::fromStdString(r->homonym) +
+                                  " ";
+                        wh += "√" +
+                              QString::fromStdString(r->root)
+                                  .toHtmlEscaped() +
+                              "</b> “" +
+                              QString::fromStdString(r->meaning)
+                                  .toHtmlEscaped() +
+                              "”";
+                        if (!r->classes.empty())
+                            wh += " · class " +
+                                  QString::fromStdString(r->classes)
+                                      .replace("|", "·")
+                                      .toHtmlEscaped();
+                        if (!r->ppp.empty())
+                            wh += " · ppp <b>" +
+                                  QString::fromStdString(r->ppp)
+                                      .toHtmlEscaped() +
+                                  "</b>";
+                        wh += "</div>";
+                    }
+                }
+                if (!wh.isEmpty())
+                    h += "<div style='color:#4A3A7A;margin-top:6px'><b>"
+                         "Whitney — Roots (1885)</b> <small>(exact root "
+                         "form in the input; reference only)</small>"
+                         "</div>" +
+                         wh;
+            }
             out->setHtml(h);
             return;
         }
@@ -6224,7 +6282,7 @@ int main(int argc, char** argv) {
                                 }),
                 "Library");
     tabs.addTab(makeSearchPane(spine, root + "/library"), "Search");
-    tabs.addTab(makeConvertPane(mvp), "Convert");
+    tabs.addTab(makeConvertPane(mvp, whitney), "Convert");
     tabs.addTab(makeLookupPane(spine, refdict, mvp, whitney), "Lookup");
 #ifdef ALL_HAVE_OCR
     tabs.addTab(new ScanPane(checker, root), "Scan");

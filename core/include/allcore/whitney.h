@@ -20,13 +20,18 @@ namespace allcore {
 
 struct WhitneyRoot {
     int id = 0;
-    std::string root;         // IAST
-    std::string homonym;      // "1"/"2"/… or empty
-    std::string meaning;      // Whitney's gloss (verbatim incl. his (?))
-    std::string classes;      // form-level, as digitized — label it
-    std::string grammarSecs;  // §§ into the 1879 Grammar (✦ specific,
-                              // ⚠ exception markers preserved)
-    std::string dcsClasses;   // DCS corpus classes (comparanda)
+    std::string root;           // IAST
+    std::string homonym;        // "1"/"2"/… or empty
+    std::string meaning;        // Whitney's gloss (verbatim incl. his (?))
+    std::string classes;        // PER-HOMONYM, from the machine hub
+                                // (verified: 1 kṛ I|II|V|VIII, 2 kṛ VI)
+    std::string classUncertain; // additional candidate classes
+    std::string ppp;            // past passive participle, accented (kṛtá)
+    std::string grammarSecs;    // §§ into the 1879 Grammar (✦ specific,
+                                // ⚠ exception markers preserved)
+    std::string dcsClasses;     // DCS corpus classes (comparanda)
+    std::string mwId;           // Monier-Williams entry id (crosswalk)
+    std::string senses;         // MW/Apte sense citations
     std::string notes;
 };
 

@@ -16,21 +16,29 @@ Apache-2.0; underlying works public domain — Whitney d. 1894):
                                   digitization's class column and DCS
                                   corpus classes
 
+  src/roots.csv                   the repo's machine hub (crosswalk/):
+                                  PER-HOMONYM classes (verified: 1 kṛ
+                                  I|II|V|VIII, 2 kṛ VI), accented PPP
+                                  forms (kṛtá), class_uncertain
+                                  candidates, MW ids and sense
+                                  citations — supersedes the form-level
+                                  citations-table class column
+
 DATA-QUALITY DECISIONS (verified against the sources 2026-08-08):
-- The repo's class-PP table has column-bleed corruption in its PPP
-  column (e.g. rows 106-108) — NOT banked; the layer ships without
-  principal-part forms until a clean source is verified.
-- Class attribution in the citations table is FORM-level: homonyms
-  written identically (Whitney's 1 kṛ make / 2 kṝ scatter both appear
-  as "kṛ") share one class row. Banked, but the app labels the column
-  "as digitized (form-level)" — never as Whitney's own per-homonym
-  assignment. The DCS corpus-class column rides along as comparanda.
+- The repo's class-PP *display table* has column-bleed corruption —
+  never used. Classes/PPP come from crosswalk/roots.csv, which passes
+  the kṛ-homonym acid test.
+- The numbered master (937 roots) stays the spine; roots.csv (930)
+  enriches it by whitney_no. Missing hub rows just leave fields empty.
+- class_uncertain holds ADDITIONAL candidate classes, shown as such.
 
 Writes data/whitney/whitney_roots.tsv:
-  id  root  homonym  meaning  classes  grammar_secs  dcs_classes  notes
+  id  root  homonym  meaning  classes  class_uncertain  ppp
+  grammar_secs  dcs_classes  mw_id  senses  notes
 
 Usage: python3 tools/build_whitney.py
 """
+import csv
 import os
 import re
 import sys
@@ -87,25 +95,42 @@ def main() -> int:
                 "notes": cols[5],
             }
 
+    # 3. the machine hub: per-homonym classes, PPP, MW links, senses
+    hub = {}
+    with open(os.path.join(SRC, "roots.csv"), encoding="utf-8") as f:
+        for r in csv.DictReader(f):
+            try:
+                hub[int(r["whitney_no"])] = r
+            except (ValueError, KeyError):
+                continue
+
     mismatch = 0
+    hub_mismatch = 0
     with open(OUT, "w", encoding="utf-8") as out:
         out.write("# Whitney root layer — see data/whitney/README.md "
                   "for provenance and caveats\n")
-        out.write("# id\troot\thomonym\tmeaning\tclasses(form-level)\t"
-                  "grammar_secs\tdcs_classes\tnotes\n")
+        out.write("# id\troot\thomonym\tmeaning\tclasses\t"
+                  "class_uncertain\tppp\tgrammar_secs\tdcs_classes\t"
+                  "mw_id\tsenses\tnotes\n")
         for i in sorted(master):
             m = master[i]
             c = cites.get(i, {})
+            hb = hub.get(i, {})
             if c and c.get("table_root") != m["root"]:
                 mismatch += 1
+            if hb and hb.get("root_iast") != m["root"]:
+                hub_mismatch += 1
             row = [str(i), m["root"], m["homonym"], m["meaning"],
-                   c.get("classes", ""), c.get("secs", ""),
-                   c.get("dcs", ""), c.get("notes", "")]
+                   hb.get("class", ""), hb.get("class_uncertain", ""),
+                   hb.get("ppp", ""), c.get("secs", ""),
+                   c.get("dcs", ""), hb.get("mw_id", ""),
+                   hb.get("senses", ""), c.get("notes", "")]
             out.write("\t".join(x.replace("\t", " ") for x in row) + "\n")
 
     print(f"{len(master)} roots -> {OUT}")
-    print(f"citation rows: {len(cites)}; root-form mismatches vs "
-          f"master: {mismatch}")
+    print(f"citation rows: {len(cites)}; hub rows: {len(hub)}; "
+          f"root-form mismatches — citations: {mismatch}, "
+          f"hub: {hub_mismatch}")
     return 0
 
 

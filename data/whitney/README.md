@@ -30,16 +30,18 @@ reference layer in the Lookup pane:
   (roots + meanings).
 - `src/Whitney_Grammar_Citations.md` — the Grammar §§ table.
 
-## Data-quality caveats (verified 2026-08-08 — honor rule 3)
+## Data-quality history (honor rule 3)
 
-- **No principal-part (PPP) forms banked**: the upstream class-PP table
-  has column-bleed corruption (rows 106–108 et al.). Add PPP only when
-  a clean source is verified.
-- **Class column is FORM-level**: homonyms written identically share
-  one row upstream (Whitney's 1 kṛ "make" vs 2 kṝ "scatter" conflate
-  under "kṛ"), so per-homonym class attribution is NOT trustworthy;
-  the app labels the column "as digitized (form-level)" and shows the
-  DCS corpus classes beside it as comparanda.
+- v1 (2026-08-08 morning) shipped WITHOUT classes-as-authoritative or
+  PPP: the repo's *display* class-PP table has column-bleed corruption
+  and form-level homonym conflation.
+- v2 (same day) upgraded from the repo's machine hub
+  (`src/roots.csv`, crosswalk/): PER-HOMONYM classes that pass the
+  kṛ acid test (1 kṛ I|II|V|VIII incl. karoti's VIII; 2 kṛ VI),
+  accented PPP forms (kṛtá/gatá/bhūtá; 475 roots), class_uncertain
+  candidate lists (shown as "also?"), MW entry ids (562) and MW/Apte
+  sense citations (622). The master (937 roots) stays the spine; hub
+  rows enrich by whitney_no with a zero-mismatch root-form check.
 - Whitney's own annotations are preserved verbatim: "(?)" doubtful
   roots, "see √X" cross-references.
 
