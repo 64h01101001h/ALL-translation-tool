@@ -59,12 +59,19 @@ machine.
                                       quality (curated / glossary /
                                       provisional)
 
-  Parallel corpus                     40,762 aligned Tibetan--English
+  Parallel corpus                     42,199 aligned Tibetan--English
                                       segments from 60+ sources,
-                                      published volumes, and the
-                                      Project's catalog titles --- the
+                                      published volumes, the Project's
+                                      catalog titles, its bilingual
+                                      subject headings, and
+                                      join-verified author names --- the
                                       evidence base and the "answer key"
                                       for all training exercises
+
+  Installed text library              the complete ACIP Release 6
+                                      corpus: 2,716 texts, 8.68 million
+                                      lines, fully search-indexed on
+                                      the user's own machine
 
   Lokesh Chandra layer                79,305 Sanskrit-linked entries;
                                       88,973 headwords with IAST Sanskrit
@@ -113,6 +120,35 @@ fails its battery does not ship. Current results:
 - Simplified pronunciation: validated against the Project's own standard
   (ACIP Release IV, pp. 173--178) --- 51 of the standard's 52
   pure-Tibetan chart examples reproduce exactly.
+
+- The Tibetan calendar: the traditional Modern Karana arithmetic ---
+  true month, true weekday, true sun, and the general day count ---
+  ported from Edward Henning's authoritative open-source
+  implementation and proven against the original program running
+  beside it: 76 of 76 spot fixtures, then every month header (25/25)
+  and every day (721/721) of two complete printed years, with all 17
+  doubled lunar days verified as exact pairs. Year designations
+  (rabjung, element-animal) are computed independently and agree with
+  the ported formulas.
+
+- Word segmentation: a faithful port of the openly-licensed botok
+  tokenizer (the ecosystem standard, and deterministic --- a trie over
+  a lexicon, not machine learning), proven token-for-token against the
+  original across the full corpus, feeding a clearly-labeled reference
+  layer in the reading pane.
+
+- Affixed-particle normalization: the rules behind the Buddhist
+  Digital Resource Center's own search engine, ported so that a search
+  for a bare word also finds its case-built forms --- everywhere: the
+  dictionary lookup, the corpus, and the installed library --- while
+  words whose final letter belongs to the root are never over-stripped.
+
+- An independent cross-check: the ecosystem's standard converter was
+  run over all 105,634 dictionary entries as a diff-oracle. It agreed
+  with our engine on 91.4% exactly; nearly all the rest are entries
+  where OUR side refuses to guess (the master's honesty flags) while
+  the other converter mangles blindly --- and 13 genuine source
+  defects it exposed were filed for correction.
 
 **5. A tour of the nine panes**
 
@@ -301,7 +337,7 @@ worked examples.
 
 **8. Verification**
 
-The application carries eighteen automated test suites --- batteries for
+The application carries twenty-three automated test suites --- batteries for
 every engine, grammar calibrations against the full corpus,
 exercise-generator checks, and end-to-end smoke tests --- all of which
 must pass before any change ships. Where a result cannot be verified
@@ -315,6 +351,18 @@ defective input while the other converts it blindly, a direct
 vindication of the never-guess rule. The comparison also surfaced
 thirteen genuine defects in the source data, now reported back to the
 dictionary project for correction.
+
+**8a. Time itself**
+
+The Convert pane now answers the translator's dating questions in
+every direction: a western year yields its full Tibetan designation
+(element, animal, rabjung cycle); an element-animal pair yields its
+years; a full Tibetan date (lunar day, month, year) yields the western
+weekday and date --- and the reverse --- with the calendar's own
+irregularities honored rather than smoothed: doubled and omitted lunar
+days are named as such, intercalary months appear in their correct
+place with their correct names, and dates before the epoch are refused
+rather than approximated.
 
 **9. The road ahead**
 
