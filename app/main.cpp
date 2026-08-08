@@ -3709,6 +3709,24 @@ private:
                 for (auto it = o.begin(); it != o.end(); ++it)
                     subjects_[it.key()] = it.value().toString();
             }
+            // ACIP Release 6 subject memberships (bilingual names,
+            // covers Tengyur too)
+            QFile fr(QFileInfo(libRoot_).path() +
+                     "/data/extracted/r6_work_subjects.json");
+            if (fr.open(QIODevice::ReadOnly)) {
+                const auto o =
+                    QJsonDocument::fromJson(fr.readAll()).object();
+                for (auto it = o.begin(); it != o.end(); ++it) {
+                    QStringList ss;
+                    for (const auto& v : it.value().toArray()) {
+                        QString n = v.toString();
+                        n.replace("--", " — ").replace('_', ' ');
+                        ss << n;
+                    }
+                    if (!ss.isEmpty())
+                        r6subjects_[it.key()] = ss.join(" · ");
+                }
+            }
         }
         QRegularExpression re("^([A-Za-z]+)0*(\\d+)");
         const auto m = re.match(fileName);
@@ -3850,6 +3868,15 @@ private:
                      subj.toHtmlEscaped() +
                      "</span> <small style='color:#777'>(subject, "
                      "Sungbum catalog)</small></div>";
+            const QString r6 =
+                m.hasMatch() ? r6subjects_.value(m.captured(1).toUpper() +
+                                                 m.captured(2))
+                             : QString();
+            if (!r6.isEmpty())
+                h += "<div style='font-size:12px'>" +
+                     r6.toHtmlEscaped() +
+                     " <small style='color:#777'>(subject, ACIP "
+                     "Release 6)</small></div>";
         }
         if (acip.recognized) {
             h += "<div style='margin-top:4px;color:#4A3FBF'>" +
@@ -4051,6 +4078,7 @@ private:
     QStackedWidget* stack_ = nullptr;
     QHash<QString, QString> titles_;
     QHash<QString, QString> subjects_;
+    QHash<QString, QString> r6subjects_;
     bool titlesLoaded_ = false;
     QTextBrowser* info_ = nullptr;
     QLineEdit* search_ = nullptr;
