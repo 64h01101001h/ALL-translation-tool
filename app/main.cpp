@@ -1970,6 +1970,12 @@ private:
             return nullptr;
         }
         folioOcrBusy_ = false;
+        // each FolioOcr holds the full deskewed page plus line strips —
+        // several MB; cap the cache so a long reading session doesn't
+        // accumulate the whole volume in memory
+        while (folioOcr_.size() >= 4 &&
+               folioOcr_.find(folio) == folioOcr_.end())
+            folioOcr_.erase(folioOcr_.begin());
         auto [ins, ok] = folioOcr_.emplace(folio, std::move(fo));
         (void)ok;
         return &ins->second;
@@ -2406,13 +2412,17 @@ static QWidget* makeSearchPane(allcore::Spine& spine,
             const QString u = QString::fromStdString(uni);
             if (!variants.contains(u)) variants << u;
         }
+        status->setText("asking Spotlight…");
+        QCoreApplication::processEvents();
         QStringList found;   // ordered, deduplicated
         for (const QString& term : variants) {
             QProcess p;
             p.start("/usr/bin/mdfind",
                     {"-literal", QString("kMDItemTextContent == \"*%1*\"cd")
                                      .arg(term)});
-            if (!p.waitForFinished(10000)) { p.kill(); continue; }
+            // bounded: a cold Spotlight index can stall — 6s per term
+            // keeps the worst case short (the UI notes the wait above)
+            if (!p.waitForFinished(6000)) { p.kill(); continue; }
             const QStringList lines =
                 QString::fromUtf8(p.readAllStandardOutput())
                     .split('\n', Qt::SkipEmptyParts);
@@ -6106,6 +6116,16 @@ private:
         spellSels_.clear();
         if (checker_) {
             const QString text = editor_->toPlainText();
+            // full-document re-scan per keystroke: fine at page scale,
+            // pathological on a pasted book — guard and say so
+            if (text.size() > 200000) {
+                status_->setText(
+                    "live spellcheck paused (document over 200k "
+                    "characters — the Overlay's checker handles full "
+                    "texts)");
+                editor_->setExtraSelections(diffSels_);
+                return;
+            }
             int tokBeg = -1;
             auto isTok = [](QChar ch) {
                 return ch.isLetter() || ch == '\'' || ch == '+';
@@ -6143,6 +6163,16 @@ private:
         if (!qf.open(QIODevice::ReadOnly)) return;
         const QString partner = QString::fromUtf8(qf.readAll());
         const QString mine = editor_->toPlainText();
+        // diff cost grows with divergence; keep the correction pass at
+        // block scale (the input workflow compares blocks, not volumes)
+        if (mine.size() > 500000 || partner.size() > 500000) {
+            status_->setText(
+                "compare is for input blocks — one of these texts is "
+                "over 500k characters; split it first");
+            return;
+        }
+        status_->setText("comparing…");
+        QCoreApplication::processEvents();
         diff_match_patch dmp;
         auto diffs = dmp.diff_main(mine, partner);
         dmp.diff_cleanupSemantic(diffs);
