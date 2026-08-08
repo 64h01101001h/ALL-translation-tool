@@ -379,14 +379,14 @@ display toggles, not through invention.
       tokenchars the corpus uses (pa'i split as [pa,i]; schema v2
       aligns tokenizers, migrates old indexes once). Verified: 5,287
       lines match "bden pa" only via true affix normalization.
-      REMAINING: teng.html/kang.html by-TITLE trees as a pairs source
-      for works the TXT lacks (English title from tree + Tibetan
-      title from the file's own header).
-- [ ] **Composer pending-bibliography bank** — "Compose bibliography
-      entry…" inserts with a pending label but doesn't yet SAVE
-      candidates the way "Propose footnote" does; add
-      candidate_bib.json + include in tools/build_pending_review.py
-      (which currently formats footnote candidates only).
+      CLOSED 2026-08-07: the by-title trees hold 359 titles — every
+      one already paired via the Brief Catalog waves (0 new). The
+      Release 6 archive is fully harvested.
+- [x] **Composer pending-bibliography bank** — SHIPPED 2026-08-07:
+      "Save as candidate (pending GMR approval)" in the compose
+      dialog → data/candidate_bib.json; the review sheet
+      (build_pending_review.py) now formats both footnote and
+      bibliography candidates with decision checkboxes.
 - [ ] **affixnorm: Old-Tibetan rules** (da-drag strip, medial འ) —
       present in lucene-bo's TibAffixedFilter behind convertOldTib,
       deliberately not ported 2026-08-07; port if Old-Tibetan

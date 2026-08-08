@@ -3321,6 +3321,36 @@ private:
         auto* buttons = new QDialogButtonBox;
         auto* insertB =
             buttons->addButton("Insert into draft", QDialogButtonBox::AcceptRole);
+        auto* candB = buttons->addButton(
+            "Save as candidate (pending GMR approval)",
+            QDialogButtonBox::ActionRole);
+        QObject::connect(candB, &QPushButton::clicked, [this, assemble] {
+            const auto f = assemble();
+            const QString entry = QString::fromStdString(
+                allcore::composeBibliographyEntry(f));
+            if (entry == ".") return;
+            QFile fj(dataFile("candidate_bib.json"));
+            QJsonArray arr;
+            if (fj.open(QIODevice::ReadOnly)) {
+                arr = QJsonDocument::fromJson(fj.readAll()).array();
+                fj.close();
+            }
+            QJsonObject o;
+            o["entry"] = entry;
+            o["acip_no"] = QString::fromStdString(f.acip_number);
+            o["proposed"] =
+                QDateTime::currentDateTime().toString(Qt::ISODate);
+            o["status"] = "pending GMR approval";
+            arr.append(o);
+            if (fj.open(QIODevice::WriteOnly)) {
+                fj.write(QJsonDocument(arr).toJson());
+                fj.close();
+            }
+            report_->setHtml(
+                "<b>Bibliography candidate saved</b> — pending until "
+                "published and approved; it appears in the review "
+                "sheet (tools/build_pending_review.py).");
+        });
         buttons->addButton(QDialogButtonBox::Cancel);
         form->addRow(buttons);
         QObject::connect(buttons, &QDialogButtonBox::accepted, &dlg,
