@@ -65,6 +65,7 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QUrl>
+#include <QProgressDialog>
 
 #include <functional>
 #include <QDateTime>
@@ -773,6 +774,13 @@ public:
                 "Kailasa",               // Apple system face
                 "Kokonor",               // Apple system face
                 "Microsoft Himalaya",    // the Windows default
+                // style faces registered per-session from this machine's
+                // font files (main(); never bundled) — display variety
+                "TibetanChogyalUnicode",      // chos-rgyal
+                "TibetanYigchung",            // yig-chung cursive
+                "TibetanCalligraphicUnicode",
+                "TCRC Youtso Unicode",
+                "Tib-US Unicode",
             };
             QStringList opts;
             for (const char* f2 : kVetted)
@@ -1954,15 +1962,90 @@ static QWidget* makeSearchPane(allcore::Spine& spine,
                          [dirBox, libraryRoot] { dirBox->setText(libraryRoot); });
         row2->addWidget(libBtn);
     }
+    // federated search of the user's own machine (the wysearch idea from
+    // the ACIP Development survey): Spotlight already indexes every text,
+    // PDF, and Word file on the Mac — probe it with the query as typed
+    // PLUS its Tibetan-unicode conversions, since files on disk may be in
+    // wylie, ACIP, or Tibetan script
+    auto* macBtn = new QPushButton("Search this Mac (Spotlight)");
+    macBtn->setToolTip(
+        "Ask macOS Spotlight for documents anywhere on this machine "
+        "containing the query — searched as typed, and (when it converts) "
+        "as Tibetan unicode via the proven wylie and ACIP chains.");
+    row2->addWidget(macBtn);
     layout->addLayout(row2);
 
     auto* results = new QTextBrowser;
+    results->setOpenLinks(false);   // anchors handled below, never navigated
     layout->addWidget(results);
     auto* status = new QLabel(
         "Terms are phrases (quote or just type). OR = either. NEAR/N = both "
         "within N lines of the same source. Parentheses group.");
     status->setWordWrap(true);
     layout->addWidget(status);
+    QObject::connect(macBtn, &QPushButton::clicked, [box, results, status] {
+        // strip Gofer operators — Spotlight gets plain phrases
+        QString raw = box->text().trimmed();
+        raw.replace(QRegularExpression("\\bOR\\b|NEAR/\\d+|[()\"]"), " ");
+        raw = raw.simplified();
+        if (raw.isEmpty()) {
+            status->setText("type a query first (plain words work best "
+                            "for Spotlight)");
+            return;
+        }
+        QStringList variants{raw};
+        if (auto [uni, ok] =
+                allcore::wylieToUnicode(raw.toLower().toStdString());
+            ok)
+            variants << QString::fromStdString(uni);
+        if (auto [uni, ok] = allcore::wylieToUnicode(
+                allcore::acipToEwts(raw.toUpper().toStdString()));
+            ok) {
+            const QString u = QString::fromStdString(uni);
+            if (!variants.contains(u)) variants << u;
+        }
+        QStringList found;   // ordered, deduplicated
+        for (const QString& term : variants) {
+            QProcess p;
+            p.start("/usr/bin/mdfind",
+                    {"-literal", QString("kMDItemTextContent == \"*%1*\"cd")
+                                     .arg(term)});
+            if (!p.waitForFinished(10000)) { p.kill(); continue; }
+            const QStringList lines =
+                QString::fromUtf8(p.readAllStandardOutput())
+                    .split('\n', Qt::SkipEmptyParts);
+            for (const QString& f : lines) {
+                if (found.contains(f)) continue;
+                found << f;
+                if (found.size() >= 60) break;
+            }
+            if (found.size() >= 60) break;
+        }
+        QString h = "<div><b>FROM THIS MAC (Spotlight)</b> — searched as: ";
+        for (const QString& v : variants)
+            h += "<code>" + v.toHtmlEscaped() + "</code> ";
+        h += "</div><hr>";
+        if (found.isEmpty())
+            h += "<i>Spotlight found no documents (its index skips "
+                 "unindexed volumes and some file types)</i>";
+        for (const QString& f : found) {
+            const QFileInfo fi(f);
+            h += "<div style='margin:3px 0'><a href='" +
+                 QUrl::fromLocalFile(f).toString() + "'>" +
+                 fi.fileName().toHtmlEscaped() + "</a> <small "
+                 "style='color:#777'>" +
+                 fi.path().toHtmlEscaped() + "</small></div>";
+        }
+        results->setHtml(h);
+        status->setText(QString("%1 document(s) on this machine — click "
+                                "to open in the default app")
+                            .arg(found.size()));
+    });
+    QObject::connect(results, &QTextBrowser::anchorClicked,
+                     [](const QUrl& u) {
+                         if (u.isLocalFile() || u.scheme().startsWith("http"))
+                             QDesktopServices::openUrl(u);
+                     });
 
     auto runSearch = [&spine, box, courseBox, dirBox, results, status,
                       libraryRoot] {
@@ -5237,8 +5320,16 @@ public:
         save_ = new QPushButton("Save to ocr_out…");
         save_->setEnabled(false);
         row->addWidget(save_);
+        auto* batchBtn = new QPushButton("Batch folder…");
+        batchBtn->setToolTip(
+            "OCR every page image in a folder (a scanned volume) — one "
+            "-ocr.txt per page into library/ocr_out/<folder>/, all "
+            "headered OCR-DERIVED. The Than Grove batch-volume pattern "
+            "from the ACIP Development survey.");
+        row->addWidget(batchBtn);
         row->addStretch();
         outer->addLayout(row);
+        connect(batchBtn, &QPushButton::clicked, [this] { batchFolder(); });
         auto* split = new QSplitter(Qt::Vertical);
         auto* scroll = new QScrollArea;
         pageView_ = new QLabel("open a scan image (PNG/JPG/TIFF)");
@@ -5392,6 +5483,129 @@ private:
         save_->setEnabled(!lastWylie_.empty());
     }
 
+    // Batch-volume OCR (Than Grove's OCRProcessing pattern): every page
+    // image in a folder → one headered -ocr.txt per page under
+    // library/ocr_out/<folder>/. Same canonical pipeline as single-page,
+    // same review-material rule on every output.
+    void batchFolder() {
+        if (!ensureModels()) return;
+        const QString dir = QFileDialog::getExistingDirectory(
+            this, "Folder of page scans", root_ + "/library");
+        if (dir.isEmpty()) return;
+        QStringList imgs;
+        for (const QString& e : QDir(dir).entryList(
+                 {"*.png", "*.jpg", "*.jpeg", "*.tif", "*.tiff"},
+                 QDir::Files, QDir::Name))
+            imgs << dir + "/" + e;
+        if (imgs.isEmpty()) {
+            results_->setHtml("<i>no page images in that folder</i>");
+            return;
+        }
+        const QString outDir =
+            root_ + "/library/ocr_out/" + QFileInfo(dir).fileName();
+        QDir().mkpath(outDir);
+        QProgressDialog prog(
+            QString("Batch OCR — %1 page(s)").arg(imgs.size()), "Stop", 0,
+            imgs.size(), this);
+        prog.setWindowModality(Qt::WindowModal);
+        prog.setMinimumDuration(0);
+        int done = 0, pagesOk = 0, failed = 0;
+        long lineCount = 0, flagCount = 0;
+        QString detail;
+        for (const QString& f : imgs) {
+            prog.setValue(done++);
+            prog.setLabelText(QFileInfo(f).fileName());
+            QCoreApplication::processEvents();
+            if (prog.wasCanceled()) break;
+            QImage img(f);
+            if (img.isNull()) {
+                ++failed;
+                detail += "<div style='color:#B00020'>unreadable: " +
+                          QFileInfo(f).fileName().toHtmlEscaped() + "</div>";
+                continue;
+            }
+            img = img.convertToFormat(QImage::Format_RGB888);
+            const int w = img.width(), h = img.height();
+            std::vector<uint8_t> rgb(static_cast<size_t>(w) * h * 3);
+            for (int y = 0; y < h; ++y)
+                std::copy(img.constScanLine(y),
+                          img.constScanLine(y) + w * 3,
+                          rgb.begin() + static_cast<size_t>(y) * w * 3);
+            try {
+                auto mask = det_->detect(rgb.data(), w, h);
+                const double zero = 0.0;
+                auto pl = allocr::buildLines(
+                    rgb.data(), w, h, mask, 2.5, 4.0, true,
+                    deskewOverride_->isChecked() ? &zero : nullptr);
+                int pageFlags = 0;
+                QStringList wylieLines;
+                for (const auto& li : pl.images) {
+                    const std::string wylie = rec_->recognize(li);
+                    wylieLines << QString::fromStdString(wylie);
+                    std::stringstream ss(wylie);
+                    std::string tok;
+                    while (ss >> tok) {
+                        bool alpha = !tok.empty();
+                        for (char c2 : tok)
+                            alpha &= (std::isalpha(
+                                          static_cast<unsigned char>(c2)) ||
+                                      c2 == '\'' || c2 == '+');
+                        if (alpha && checker_ && !checker_->legalWylie(tok))
+                            ++pageFlags;
+                    }
+                }
+                const QString out = outDir + "/" +
+                                    QFileInfo(f).completeBaseName() +
+                                    "-ocr.txt";
+                QFile of(out);
+                if (of.open(QIODevice::WriteOnly | QIODevice::Text)) {
+                    QTextStream ts(&of);
+                    ts << "# OCR-DERIVED (unverified review material) — "
+                          "source: "
+                       << QFileInfo(f).fileName()
+                       << " — models: BDRC (CC BY-NC 4.0, with "
+                          "permission)\n";
+                    for (const QString& w2 : wylieLines) ts << w2 << "\n";
+                }
+                ++pagesOk;
+                lineCount += static_cast<long>(wylieLines.size());
+                flagCount += pageFlags;
+                detail += QString("<div>%1 — %2 line(s)%3</div>")
+                              .arg(QFileInfo(f).fileName().toHtmlEscaped())
+                              .arg(wylieLines.size())
+                              .arg(pageFlags
+                                       ? QString(" · <span style='color:"
+                                                 "#B4540A'>%1 legality "
+                                                 "flag(s)</span>")
+                                             .arg(pageFlags)
+                                       : QString());
+            } catch (const std::exception& e) {
+                ++failed;
+                detail += "<div style='color:#B00020'>failed: " +
+                          QFileInfo(f).fileName().toHtmlEscaped() + " — " +
+                          QString::fromUtf8(e.what()).toHtmlEscaped() +
+                          "</div>";
+            }
+        }
+        prog.setValue(imgs.size());
+        results_->setHtml(
+            QString("<div><b>Batch OCR</b> — %1/%2 page(s) written to "
+                    "%3 · %4 line(s) · %5 syllable legality flag(s) · "
+                    "%6 failure(s)%7</div>"
+                    "<div style='color:#B4540A'>every file is OCR-DERIVED "
+                    "review material (models: BDRC, CC BY-NC 4.0)</div>"
+                    "<hr>")
+                .arg(pagesOk)
+                .arg(imgs.size())
+                .arg(outDir.toHtmlEscaped())
+                .arg(lineCount)
+                .arg(flagCount)
+                .arg(failed)
+                .arg(done < imgs.size() ? " · <b>stopped early</b>"
+                                        : QString()) +
+            detail);
+    }
+
     void saveOut() {
         if (lastWylie_.empty()) return;
         QDir().mkpath(root_ + "/library/ocr_out");
@@ -5451,6 +5665,18 @@ int main(int argc, char** argv) {
                                       "/data/fonts/NotoSerifTibetan.ttf");
     QFontDatabase::addApplicationFont(
         root + "/data/fonts/BabelStoneTibetanSlim.ttf");
+    // Style faces present as FILES on this machine but not active in Font
+    // Book (data/fonts/FONTS.md): register per-session from Adam's own
+    // disk — display variety (chos-rgyal, yig-chung cursive, calligraphic),
+    // never bundled. All five probed at full working-set coverage.
+    for (const char* styleFile :
+         {"tibusrfa2.ttf", "TibetanChosgyalUni_2014-12-23-shipped.ttf",
+          "TibetanCalligraphicUnicode.1.0.ttf", "TibetanSambhotaYigchung.ttf",
+          "TibetanUnicode.ttf"}) {
+        const QString p =
+            QDir::homePath() + "/Library/Fonts/" + styleFile;
+        if (QFileInfo::exists(p)) QFontDatabase::addApplicationFont(p);
+    }
     // Prefer SambhotaDege for Tibetan wherever it appears (Adam's request,
     // 2026-08-07): the app-wide font keeps the system face for Latin and
     // falls back per-character to the preferred Tibetan family — so every

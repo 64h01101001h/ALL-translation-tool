@@ -56,10 +56,13 @@ in this order (only those present are listed):**
   codepoints; not Tibetan typography.
 - *HypercontextTibetan.ttf* (Adam's old app) — custom glyph encoding
   keyed by ACIP.kt, superseded by Unicode faces + our converter.
-- Font FILES present but not active as families (TibetanChosgyalUni,
-  TibetanSambhotaYigchung, TibetanCalligraphicUnicode, TibetanUnicode,
-  tibusrfa2) — style faces (yig-chung cursive, calligraphic, chos-rgyal)
-  that could be activated/registered later if wanted for display variety.
+- ~~Font FILES present but not active as families~~ — ACTIVATED
+  2026-08-08: the app (and font_smoke) now registers the five style-face
+  files per-session from `~/Library/Fonts` when present, never bundled:
+  TibetanChogyalUnicode (chos-rgyal), TibetanYigchung (cursive),
+  TibetanCalligraphicUnicode, TCRC Youtso Unicode (TibetanUnicode.ttf),
+  Tib-US Unicode (tibusrfa2.ttf). All five probed at full working-set
+  coverage (64/64) and appended to the typeface combo + battery.
 
 **Worth adding someday (not installed):** Jomolhari (OFL — the beloved
 classic dbu-can; bundleable), Monlam Uni and the Qomolangma series

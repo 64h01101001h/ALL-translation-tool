@@ -5,6 +5,7 @@
 // faces must always pass in full; each additional vetted face is
 // asserted only when installed (reported either way). A face vanishing
 // or regressing fails loudly.
+#include <QDir>
 #include <QFontDatabase>
 #include <QGuiApplication>
 #include <QFileInfo>
@@ -91,6 +92,17 @@ int main(int argc, char** argv) {
         const char* name;
         bool bundled;  // must always be present and complete
     };
+    // style faces the app registers per-session from this machine's font
+    // files (never bundled) — same registration here so their coverage is
+    // regression-tested; absent files are simply skipped
+    for (const char* styleFile :
+         {"tibusrfa2.ttf", "TibetanChosgyalUni_2014-12-23-shipped.ttf",
+          "TibetanCalligraphicUnicode.1.0.ttf",
+          "TibetanSambhotaYigchung.ttf", "TibetanUnicode.ttf"}) {
+        const QString p = QDir::homePath() + "/Library/Fonts/" + styleFile;
+        if (QFileInfo::exists(p)) QFontDatabase::addApplicationFont(p);
+    }
+
     const Face vetted[] = {
         {"Noto Serif Tibetan", true},
         {"BabelStone Tibetan Slim", true},
@@ -100,6 +112,11 @@ int main(int argc, char** argv) {
         {"Kailasa", false},
         {"Kokonor", false},
         {"Microsoft Himalaya", false},
+        {"TibetanChogyalUnicode", false},
+        {"TibetanYigchung", false},
+        {"TibetanCalligraphicUnicode", false},
+        {"TCRC Youtso Unicode", false},
+        {"Tib-US Unicode", false},
     };
     for (const Face& face : vetted) {
         if (!QFontDatabase::hasFamily(face.name)) {

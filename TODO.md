@@ -507,10 +507,27 @@ display toggles, not through invention.
       markers, per-bampo spans ~10k syllables (definition: 9,000),
       and the source's own skipped `bam po bzhi pa` correctly
       flagged. 13 new outline_smoke checks.
+- [x] **wysearch's Spotlight idea** — SHIPPED 2026-08-08: Search
+      pane "Search this Mac (Spotlight)" — mdfind -literal
+      kMDItemTextContent probes with the query as typed PLUS its
+      Tibetan-unicode conversions (wylie chain + ACIP chain, both
+      proven engines); Gofer operators stripped; 60-hit cap;
+      results open in the default app. Both probe forms verified
+      live against real files on this machine.
+- [x] **OCRProcessing's batch-volume pattern** — SHIPPED 2026-08-08:
+      Scan pane "Batch folder…" — every page image in a folder
+      through the same canonical pipeline → one headered
+      OCR-DERIVED -ocr.txt per page under library/ocr_out/<folder>/,
+      QProgressDialog with Stop, per-page line + legality-flag
+      counts, failures listed loudly, early-stop reported.
+- [x] **Style-face registration** — SHIPPED 2026-08-08: the five
+      inactive style-face FILES in ~/Library/Fonts (chos-rgyal,
+      yig-chung, calligraphic, TCRC Youtso, Tib-US) registered
+      per-session by app + font_smoke (never bundled), probed
+      64/64 working-set coverage, appended to typeface combo +
+      battery.
 - [ ] **Catalog-toolchain mining** (MakeGMRCatalog & co.) with the
-      data project; **wysearch's Spotlight idea** (search the user's
-      own machine); **OCRProcessing's batch-volume pattern** for a
-      Scan-pane batch mode; three more Wylie converters (NetWylie/
+      data project; three more Wylie converters (NetWylie/
       wylie.js/Lingua::BO) as extra diff-oracles.
 
 ## Build queue
