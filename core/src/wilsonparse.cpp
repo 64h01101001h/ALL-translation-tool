@@ -2,6 +2,7 @@
 
 #include <algorithm>
 
+#include "allcore/contractions.h"
 #include "allcore/engines.h"
 #include "allcore/particles.h"
 #include "allcore/poslex.h"
@@ -94,7 +95,8 @@ bool verbEvidenceTok(const OverlayDoc& doc, int t) {
 
 std::vector<ClauseParse> wilsonParse(const Spine& spine, const OverlayDoc& doc,
                                      const std::vector<Clause>& clauses,
-                                     const PosLexicon* pos) {
+                                     const PosLexicon* pos,
+                                     const Contractions* contractions) {
     std::vector<ClauseParse> out;
     for (const auto& cl : clauses) {
         ClauseParse cp;
@@ -345,6 +347,19 @@ std::vector<ClauseParse> wilsonParse(const Spine& spine, const OverlayDoc& doc,
                 const auto& cur = us[cu];
                 if (nu == cu) {
                     d.label = "S";   // within one word / particle / phrase
+                    // OM: the surviving dot inside a registered syllabic
+                    // contraction (bsdus tshig) — the derived register is
+                    // attestation-only (both forms glossed HGM entries);
+                    // labeled with the expansion and its tier
+                    if (contractions && cur.end - cur.beg == 2 &&
+                        t == cur.beg) {
+                        auto exps = contractions->expansions(
+                            acipToEwts(cur.text));
+                        if (!exps.empty())
+                            d.label = "OM (contraction of " +
+                                      exps.front()->longWylie +
+                                      " — derived register)";
+                    }
                 } else if (cur.category.rfind("interjection", 0) == 0) {
                     d.label = "VOC";
                 } else if (nu >= 0 && isCase(us[nu].category)) {

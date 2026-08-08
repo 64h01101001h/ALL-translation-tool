@@ -66,6 +66,7 @@
 
 #include "allcore/abbr.h"
 #include "allcore/analysis.h"
+#include "allcore/contractions.h"
 #include "allcore/botok.h"
 #include "allcore/drills.h"
 #include "allcore/engines.h"
@@ -1166,6 +1167,27 @@ private:
                          .arg(QString::fromStdString(att)
                                   .toHtmlEscaped());
         }
+        // bsdus tshig: a registered syllabic contraction — expansion shown
+        // with its derived tier (the OM-dot register, Adam 2026-08-07)
+        if (showGrammar_->isChecked()) {
+            if (!contrTried_) {
+                contrTried_ = true;
+                contr_.load((dataRoot_ + "/data/extracted/bsdus_tshig.tsv")
+                                .toStdString());
+            }
+            for (const auto* c : contr_.expansions(e.wylie))
+                h += QString("<div style='color:#7A3B5E;font-size:12px'>"
+                             "bsdus tshig <i>(derived register, %1/%2)</i>: "
+                             "contraction of <b>%3</b> — dropped %4; shared "
+                             "gloss “%5”</div>")
+                         .arg(QString::fromStdString(c->cls).toHtmlEscaped(),
+                              QString::fromStdString(c->glossKind)
+                                  .toHtmlEscaped(),
+                              QString::fromStdString(c->longWylie)
+                                  .toHtmlEscaped(),
+                              QString::fromStdString(c->dropped).toHtmlEscaped(),
+                              QString::fromStdString(c->gloss).toHtmlEscaped());
+        }
         // CC0 verbs-database: labeled reference comparanda, display only
         if (showGrammar_->isChecked()) {
             if (!verbStemsTried_) {
@@ -1649,6 +1671,8 @@ private:
     QCheckBox* showAttest_ = nullptr;
     allcore::AbbrTable abbr_;
     bool abbrTried_ = false;
+    allcore::Contractions contr_;
+    bool contrTried_ = false;
     std::unique_ptr<allcore::botok::SegTrie> segmenter_;
     bool segTried_ = false;
     QString segInfo_;
@@ -2212,8 +2236,10 @@ class TrainerPane : public QWidget {
 public:
     explicit TrainerPane(allcore::Spine& spine,
                          allcore::Progress* progress = nullptr,
-                         allcore::PosLexicon* pos = nullptr)
-        : spine_(spine), progress_(progress), pos_(pos), index_(spine) {
+                         allcore::PosLexicon* pos = nullptr,
+                         allcore::Contractions* contractions = nullptr)
+        : spine_(spine), progress_(progress), pos_(pos),
+          contractions_(contractions), index_(spine) {
         auto* layout = new QVBoxLayout(this);
         layout->addWidget(new QLabel(
             "<b>Translation Trainer</b> — paste a passage, try to read it "
@@ -2448,7 +2474,8 @@ private:
                 h += "</div>";
             }
             if (parseOn) {
-                auto parses = allcore::wilsonParse(spine_, doc_, {cl}, pos_);
+                auto parses =
+                    allcore::wilsonParse(spine_, doc_, {cl}, pos_, contractions_);
                 if (!parses.empty()) {
                     h += "<div style='margin-top:6px;padding:6px;background:"
                          "#F4F8F4'><small style='color:#3B7A3B'><b>full parse "
@@ -2511,6 +2538,7 @@ private:
     allcore::Spine& spine_;
     allcore::Progress* progress_ = nullptr;
     allcore::PosLexicon* pos_ = nullptr;
+    allcore::Contractions* contractions_ = nullptr;
     allcore::HeadwordIndex index_;
     allcore::OverlayDoc doc_;
     std::vector<allcore::Clause> clauses_;
@@ -4585,6 +4613,15 @@ int main(int argc, char** argv) {
             poslex = &pl;
     }
 
+    // the derived bsdus-tshig register (attestation-only; docs/
+    // BSDUS_TSHIG_REGISTER.md is the review doc) — optional
+    allcore::Contractions* contractions = nullptr;
+    {
+        static allcore::Contractions ct;
+        if (ct.load((root + "/data/extracted/bsdus_tshig.tsv").toStdString()))
+            contractions = &ct;
+    }
+
     // the learner's own progress/SRS data — local file, optional
     allcore::Progress* progress = nullptr;
     try {
@@ -4599,7 +4636,8 @@ int main(int argc, char** argv) {
     auto* overlay = new OverlayPane(spine, checker, refdict, progress, root);
     tabs.addTab(overlay, "Overlay");
     tabs.addTab(new AnalysisPane(spine, tplPath, root + "/analyses"), "Analysis");
-    tabs.addTab(new TrainerPane(spine, progress, poslex), "Trainer");
+    tabs.addTab(new TrainerPane(spine, progress, poslex, contractions),
+                "Trainer");
     tabs.addTab(new DrillsPane(spine, progress), "Drills");
     tabs.addTab(new DraftPane(spine, progress), "Draft");
     tabs.addTab(new LibraryPane(root, progress,

@@ -37,6 +37,7 @@ add_library(allcore STATIC
   src/mvp.cpp
   src/poslex.cpp
   src/abbr.cpp
+  src/contractions.cpp
   src/botok_chunks.cpp
   src/botok_trie.cpp
   src/botok_tokenize.cpp
@@ -203,3 +204,9 @@ target_link_libraries(abbr_smoke PRIVATE allcore)
 add_test(NAME abbr_smoke
          COMMAND abbr_smoke ${CMAKE_SOURCE_DIR}/data/abbreviations/tibschol_abbr.csv
                  ${CMAKE_SOURCE_DIR}/data/spellcheck)
+
+add_executable(contractions_smoke tests/contractions_smoke.cpp)
+target_link_libraries(contractions_smoke PRIVATE allcore)
+add_test(NAME contractions_smoke
+         COMMAND contractions_smoke ${CMAKE_SOURCE_DIR}/data/extracted/bsdus_tshig.tsv
+                 ${CMAKE_SOURCE_DIR}/build/hgm_spine_v27_2.db)

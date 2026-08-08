@@ -547,9 +547,31 @@ display toggles, not through invention.
       khrims | phung po via 4 corpus hits of tshul khrims kyi phung
       po). Evidence order at the pair dot: NA(SOAS adj) > UP(attested)
       > NN|APP(SOAS nouns) > undetermined.
-      REMAINING: OM only (needs a bsdus-tshig syllabic-contraction
-      table with a clear license — rKTs candidate). Eleven of twelve
-      dot designations now implemented.
+      OM SHIPPED 2026-08-07 (Adam's request: "a list or register to
+      hold abbreviations as would be denoted by the OM dots"): the
+      bsdus-tshig register is DERIVED FROM THE HGM DICTIONARY ITSELF —
+      attestation only: 182 pairs where BOTH forms are glossed
+      entries, the contraction follows Wilson's drop pattern with a
+      required MID drop (the omission the OM dot stands for — a
+      tail-only drop like ma yin/ma yin pa is excluded by rule), and
+      the glosses agree; corpus counts ride as evidence
+      (tools/derive_bsdus_tshig.py → data/extracted/bsdus_tshig.tsv,
+      regenerate per release; human review doc
+      docs/BSDUS_TSHIG_REGISTER.md — DERIVED tier, top ranks are the
+      textbook set: stong nyid, bla med, theg chen, rnam shes,
+      rten 'brel, 'jam dbyangs, grub mtha'). allcore::Contractions
+      (29th suite) + wilsonParse: a registered 2-syllable unit's
+      internal dot reads "OM (contraction of rnam par shes pa —
+      derived register)" — the battery reproduces Wilson's own p.570
+      OM illustration (rnam shes mi rtag pa yin) and asserts the
+      honest S default without the register. Overlay span card shows
+      the expansion under the grammar toggle.
+      **ALL TWELVE DOT DESIGNATIONS NOW IMPLEMENTED** (S · OM · NA ·
+      NN · APP · VB · V · ADV · NOM · VOC · C-with-number · UP · SP).
+      LATER: grow the register from rKTs' 3,000+ list when its host
+      answers and its license verifies; letter-level fusions (sher
+      phyin ← shes rab kyi pha rol tu phyin pa) need squeeze rules
+      beyond the drop pattern.
 
 - [x] **Translation Trainer v1** (docs/TRAINER_DESIGN.md): clause splitter,
       phrase chunker, verb spotter (HGM tenses + "to …" glosses),
