@@ -482,13 +482,31 @@ display toggles, not through invention.
       register + pass in full, each installed vetted face asserted,
       absent faces reported-skipped. (Gotcha: addApplicationFont
       needs an ABSOLUTE path under the offscreen platform.)
-- [ ] **UTFC legacy-font rescue** (Universal Tibetan Font Converter,
-      GPL v3 — EXTERNAL-TOOL lane only): 12 legacy fonts incl. both
-      Sambhotas, TibetanMachine(Web), LTibetan — the input-center
-      legacy-document answer, already on disk.
-- [ ] **Bampo/shloka structural layer** (critical-kangyur
-      segmentation-units.md definitions; ACIP texts carry BAM PO
-      markers) beside the sa-bcad extractor.
+- [x] **UTFC legacy-font rescue** — SHIPPED 2026-08-07 (GPL v3 kept
+      as an EXTERNAL PROCESS, never linked): tools/setup_utfc.sh
+      compiles Converter.c (one shim: malloc.h → stdlib.h) into
+      build/utfc/utfc; Library pane "Legacy font rescue (UTFC)…"
+      picks source encoding from the 16 shipped tables (TMW, TM,
+      LTibetan, Old/NewSambhota, Fz, Hg, …), runs the binary with
+      cwd = UTFC-master (its .tbl lookups are cwd-relative,
+      QSettings utfc/dir), normalizes the UTF-16LE output to UTF-8
+      as my_materials/<base>.utfc.txt, labels it utfc-derived, and
+      warns when no tsheg appears (wrong-encoding tell). Verified
+      live: ACIP "BSOD NAMS KYI TSOGS," → བསོད་ནམས་ཀྱི་ཚོགས།
+- [x] **Bampo/shloka structural layer** — SHIPPED 2026-08-07:
+      allcore::extractStructure (outline.h) finds explicit BAM PO +
+      numbered LE'U markers in both cases with the ordinal grammar
+      the canon actually uses (dang po / N pa / bare N / bcu-teens /
+      bco lnga·brgyad / decade pairs ± rtsa / nyer- and
+      zhe-style contractions / brgya dang N / slar-bsdu closes);
+      out-of-sequence numbers flagged irregular, unparsed ordinals
+      kept raw with number 0 (rule 3). Syllable-derived shloka
+      (÷30) and bampo (÷9000) figures are labeled ESTIMATES.
+      Draft-pane "Structural units (bam po / le'u)" report.
+      Real-canon validation on KL0009I1 (PoW 25k, Lhasa): 26
+      markers, per-bampo spans ~10k syllables (definition: 9,000),
+      and the source's own skipped `bam po bzhi pa` correctly
+      flagged. 13 new outline_smoke checks.
 - [ ] **Catalog-toolchain mining** (MakeGMRCatalog & co.) with the
       data project; **wysearch's Spotlight idea** (search the user's
       own machine); **OCRProcessing's batch-volume pattern** for a

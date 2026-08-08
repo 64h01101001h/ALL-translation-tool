@@ -68,14 +68,27 @@ sections, QC'd, auto-saved)
 
 ## Not yet built (the honest list)
 
-- ⬜ **Per-text glossary** (Ven. Phil's ancestor feature; survey ②) —
-  next recommended build
-- ⬜ **Saved searches** (Gofer had them; survey ③)
-- ⬜ **Acipcode.txt converter-completeness battery** (survey ①)
-- 🟡 **Font render test** — coverage scoring done as a probe (8 faces
-  vetted); not yet a banked ctest suite
-- ⬜ **UTFC legacy-font rescue lane** (external tool; survey ⑤)
-- ⬜ **Bampo/shloka structural layer** (survey ⑥)
+- ✅ **Per-text glossary** (Ven. Phil's ancestor feature; survey ②) —
+  Overlay `gloss:` anchors + `library/glossaries/<text>.tsv`
+- ✅ **Saved searches** (Gofer had them; survey ③) — Search pane,
+  QSettings-persisted
+- ✅ **Acipcode.txt converter-completeness battery** (survey ①) —
+  `acipcodes_smoke`, 100.0% of 411 codes via proven engines
+- ✅ **Font render test suite** (survey ④) — `font_smoke` ctest:
+  bundled faces must fully cover the Hypercontext syllable corpus
+- ✅ **UTFC legacy-font rescue lane** (survey ⑤) — `tools/setup_utfc.sh`
+  builds the GPL binary (external process, never linked); Library-pane
+  "Legacy font rescue (UTFC)…" converts TMW/TM/LTibetan/Sambhota-era
+  documents to Unicode, UTF-8-normalized into `my_materials/`, output
+  labeled utfc-derived
+- ✅ **Bampo/shloka structural layer** (survey ⑥) —
+  `allcore::extractStructure`: explicit BAM PO + numbered LE'U markers
+  (both cases, compound/contracted ordinals incl. bco/nyer/zhe-style;
+  out-of-sequence flagged, unparsed kept raw), 30-syllable shloka /
+  300-shloka bampo ESTIMATES; Draft-pane "Structural units" report.
+  Real-canon check: KL0009I1 yields bampos of ~10k syllables each
+  (definition says 9,000) and correctly flags the source's own skipped
+  `bam po bzhi pa`
 - ⬜ **Spotlight federated search** (wysearch idea)
 - ⬜ **Batch-volume OCR** (Than Grove pattern) · **word-level scan
   follow-along** (needs OCR coordinates)

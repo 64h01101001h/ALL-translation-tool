@@ -1,5 +1,8 @@
 #include "allcore/outline.h"
 
+#include <algorithm>
+#include <utility>
+
 namespace allcore {
 
 namespace {
@@ -161,6 +164,194 @@ OutlineNode extractOutline(const std::vector<std::string>& tokens,
         }
     }
     return root;
+}
+
+namespace {
+
+// uppercase (marker files come in both cases) and strip the slar-bsdu
+// final 'O written on closing ordinals: PO'O → PO, PA'O → PA
+std::string upstrip(std::string t) {
+    for (char& c : t)
+        if (c >= 'a' && c <= 'z') c -= 32;
+    if (t.size() > 2 && t.compare(t.size() - 2, 2, "'O") == 0)
+        t.erase(t.size() - 2);
+    return t;
+}
+
+// decade word pairs in compound ordinals (nyi shu / sum cu …)
+int decadeOf(const std::string& a, const std::string& b) {
+    if (a == "NYI" && b == "SHU") return 20;
+    if (a == "SUM" && (b == "CU" || b == "BCU")) return 30;
+    if (a == "BZHI" && b == "BCU") return 40;
+    if (a == "LNGA" && b == "BCU") return 50;
+    if (a == "DRUG" && (b == "CU" || b == "BCU")) return 60;
+    if (a == "BDUN" && (b == "CU" || b == "BCU")) return 70;
+    if (a == "BRGYAD" && (b == "CU" || b == "BCU")) return 80;
+    if (a == "DGU" && b == "BCU") return 90;
+    return 0;
+}
+
+// per-decade connector particles, which the canon also uses ALONE as
+// decade contractions ("bam po zhe gsum" = 43, KL4568 dkar chag)
+int connectorDecade(const std::string& t) {
+    if (t == "SO") return 30;
+    if (t == "ZHE") return 40;
+    if (t == "NGA") return 50;
+    if (t == "RE") return 60;
+    if (t == "DON") return 70;
+    if (t == "GYA") return 80;
+    if (t == "GO") return 90;
+    return 0;
+}
+
+// slar-bsdu echo written as its own token after a bare number
+// ("bam po gcig go", KL0021)
+bool slarBsduTok(const std::string& t) {
+    return t == "GO" || t == "NGO" || t == "'O" || t == "TO" ||
+           t == "DO" || t == "NO" || t == "BO" || t == "MO" ||
+           t == "RO" || t == "LO" || t == "SO";
+}
+
+// parse a marker ordinal starting at tokens[j] (clause-bounded at `end`),
+// covering the forms attested in the ACIP canon files: dang po / N pa /
+// bare N / bcu N / bco lnga(brgyad) / decade pairs with and without
+// rtsa-style connectors / nyer contractions / connector-decades /
+// brgya dang N. Returns {value, tokens consumed}; {0, 0} = no parse
+// (caller keeps the raw text — rule 3, never guess).
+std::pair<int, int> parseMarkerOrdinal(const std::vector<std::string>& toks,
+                                       int j, int end) {
+    auto at = [&](int k) {
+        return k < end ? upstrip(toks[k]) : std::string();
+    };
+    // optional trailing PA/PO after k tokens of a value
+    auto withPa = [&](int val, int j0, int used) -> std::pair<int, int> {
+        const std::string nxt = at(j0 + used);
+        if (nxt == "PA" || nxt == "PO") return {val, used + 1};
+        return {val, used};
+    };
+    const std::string a = at(j), b = at(j + 1);
+    if (a.empty()) return {0, 0};
+    if (a == "DANG" && b == "PO") return {1, 2};            // dang po = 1st
+    if (a == "BCO" && (b == "LNGA" || b == "BRGYAD"))       // bco lnga = 15
+        return withPa(b == "LNGA" ? 15 : 18, j, 2);
+    if (a == "BCU") {                                       // bcu [N] [pa]
+        if (int u = unitOf(b)) return withPa(10 + u, j, 2);
+        return withPa(10, j, 1);
+    }
+    if (int d = decadeOf(a, b)) {                           // nyi shu … sum cu …
+        int k = j + 2;
+        const std::string c = at(k);
+        if (c == "RTSA" || connectorDecade(c))              // nyi shu rtsa gcig
+            if (int u = unitOf(at(k + 1))) return withPa(d + u, j, 4);
+        if (int u = unitOf(c)) return withPa(d + u, j, 3);  // nyi shu gcig
+        return withPa(d, j, 2);                             // nyi shu [pa]
+    }
+    if (a == "NYER") {                                      // nyer gnyis = 22
+        if (int u = unitOf(b)) return withPa(20 + u, j, 2);
+        return withPa(20, j, 1);
+    }
+    if (int d = connectorDecade(a))                         // zhe gsum = 43
+        if (int u = unitOf(b)) return withPa(d + u, j, 2);
+    if (a == "BRGYA") {                                     // brgya [dang N]
+        if (b == "DANG") {
+            auto [v, used] = parseMarkerOrdinal(toks, j + 2, end);
+            if (v > 0 && v < 100) return {100 + v, 2 + used};
+        }
+        return withPa(100, j, 1);
+    }
+    if (int u = unitOf(a)) {                                // gcig [pa|go] …
+        if (b == "PA" || b == "PO") return {u, 2};
+        if (slarBsduTok(b)) return {u, 2};                  // gcig go = 1
+        return {u, 1};                                      // bare "drug"
+    }
+    return {0, 0};
+}
+
+}  // namespace
+
+TextStructure extractStructure(const std::vector<std::string>& tokens,
+                               const std::vector<bool>& barrier_after) {
+    TextStructure st;
+    const int n = (int)tokens.size();
+    // a text syllable: has letters, is not a page/folio reference
+    // (@012A style) or numbered token
+    auto isSyllable = [](const std::string& t) {
+        bool alpha = false;
+        for (char c : t) {
+            if (c == '@' || (c >= '0' && c <= '9')) return false;
+            if ((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z')) alpha = true;
+        }
+        return alpha;
+    };
+    // clause window from `from` to the next barrier (markers are often
+    // clause-initial, so the boundary BEFORE `from` must not stop the scan)
+    auto clauseEnd = [&](int from) {
+        int e = from;
+        while (e < n && !(e > from && barrier_after[e - 1])) ++e;
+        return e;
+    };
+    for (int t = 0; t < n; ++t)
+        if (isSyllable(tokens[t])) ++st.syllables;
+
+    int prevBampo = 0, prevChapter = 0;
+    for (int t = 0; t < n; ++t) {
+        // BAM PO markers (BAM and PO must share a clause; both cases —
+        // the canon files come uppercase and lowercase)
+        if (t + 1 < n && upstrip(tokens[t]) == "BAM" &&
+            upstrip(tokens[t + 1]) == "PO" && !barrier_after[t]) {
+            const int end = clauseEnd(t);
+            StructMarker m;
+            m.tok = t;
+            auto [val, used] = parseMarkerOrdinal(tokens, t + 2, end);
+            m.number = val;
+            m.label = joinTokens(tokens, t,
+                                 std::min(end, t + 2 + (used ? used : 3)));
+            if (val > 0) {
+                m.irregular = prevBampo > 0 && val != prevBampo + 1;
+                prevBampo = val;
+            }
+            st.bampos.push_back(std::move(m));
+            t += 1 + used;
+            continue;
+        }
+        // LE'U chapter markers — recorded only with a parsed ordinal
+        // (bare le'u mentions in prose are references, not divisions)
+        if (upstrip(tokens[t]) == "LE'U") {
+            const int end = clauseEnd(t);
+            int j = t + 1;
+            if (j < end && (upstrip(tokens[j]) == "STE" ||
+                            upstrip(tokens[j]) == "TE")) ++j;
+            auto [val, used] = parseMarkerOrdinal(tokens, j, end);
+            if (val > 0) {
+                StructMarker m;
+                m.tok = t;
+                m.number = val;
+                m.label = joinTokens(tokens, t, j + used);
+                m.irregular = prevChapter > 0 && val != prevChapter + 1;
+                prevChapter = val;
+                st.chapters.push_back(std::move(m));
+                t = j + used - 1;
+            }
+        }
+    }
+
+    // per-bampo syllable spans (marker → next marker / end of text)
+    for (size_t i = 0; i < st.bampos.size(); ++i) {
+        const int beg = st.bampos[i].tok;
+        const int end2 =
+            i + 1 < st.bampos.size() ? st.bampos[i + 1].tok : n;
+        long s = 0;
+        for (int t = beg; t < end2; ++t)
+            if (isSyllable(tokens[t])) ++s;
+        st.bampos[i].syllables = s;
+    }
+    if (!st.bampos.empty()) {
+        long s = 0;
+        for (int t = 0; t < st.bampos[0].tok; ++t)
+            if (isSyllable(tokens[t])) ++s;
+        st.preamble_syllables = s;
+    }
+    return st;
 }
 
 }  // namespace allcore

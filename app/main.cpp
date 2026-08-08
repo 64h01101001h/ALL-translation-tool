@@ -58,6 +58,7 @@
 #include <QFileSystemModel>
 #include <QTreeView>
 #include <QProcess>
+#include <QStringDecoder>
 #include <QDirIterator>
 #include <QDesktopServices>
 #include <QJsonArray>
@@ -3214,6 +3215,12 @@ public:
         srcCol->addWidget(loadBtn);
         auto* outlineBtn = new QPushButton("Extract outline (sa bcad)");
         srcCol->addWidget(outlineBtn);
+        auto* structBtn = new QPushButton("Structural units (bam po / le'u)");
+        structBtn->setToolTip(
+            "Explicit BAM PO and numbered LE'U markers written in the text "
+            "(authoritative), plus a syllable-derived shloka/bampo ESTIMATE "
+            "(30-syllable prose shloka, 300-shloka bampo).");
+        srcCol->addWidget(structBtn);
         auto* verseBtn = new QPushButton("Verse meter");
         srcCol->addWidget(verseBtn);
         auto* quoteBtn = new QPushButton("Detect quotations");
@@ -3299,6 +3306,8 @@ public:
         QObject::connect(loadBtn, &QPushButton::clicked, [this] { load(); });
         QObject::connect(outlineBtn, &QPushButton::clicked,
                          [this] { outline(); });
+        QObject::connect(structBtn, &QPushButton::clicked,
+                         [this] { structuralUnits(); });
         QObject::connect(verseBtn, &QPushButton::clicked, [this] { verse(); });
         QObject::connect(aiBtn_, &QPushButton::clicked, [this] { aiCheck(); });
         QObject::connect(checkBtn, &QPushButton::clicked, [this] { check(); });
@@ -3491,6 +3500,70 @@ private:
         dump(root, 0);
         if (total == 0)
             h += "<i>no sa bcad markers found in this text</i>";
+        report_->setHtml(h);
+    }
+
+    // Canonical structural units (survey ⑥): explicit BAM PO / LE'U
+    // markers are authoritative; the shloka/bampo numbers derived from
+    // syllable counts are ESTIMATES (segmentation-units.md: shloka = 30
+    // syllables of prose or 4 verse lines; bampo = 300 shlokas) and are
+    // labeled as such — never presented as counts.
+    void structuralUnits() {
+        std::vector<std::string> toks;
+        std::vector<bool> bars;
+        allcore::tokenizeDocument(source_->toPlainText().toStdString(), toks,
+                                  bars);
+        auto st = allcore::extractStructure(toks, bars);
+        QString h = "<div><b>Structural units — bam po / le'u</b></div>";
+        h += QString("<div style='color:#555'>%1 syllables · shloka "
+                     "<i>estimate</i> %2 · bampo <i>estimate</i> %3 "
+                     "<small style='color:#777'>(30-syllable prose shloka, "
+                     "300-shloka bampo — edition-dependent estimates, not "
+                     "counts)</small></div><hr>")
+                 .arg(st.syllables)
+                 .arg(st.shlokaEstimate(), 0, 'f', 1)
+                 .arg(st.bampoEstimate(), 0, 'f', 2);
+        if (!st.bampos.empty()) {
+            h += QString("<div><b>%1 explicit bam po marker(s)</b> "
+                         "(written in the text — authoritative)</div>")
+                     .arg(st.bampos.size());
+            if (st.preamble_syllables > 0)
+                h += QString("<div style='color:#777'>preamble before "
+                             "first marker: %1 syllables</div>")
+                         .arg(st.preamble_syllables);
+            for (const auto& m : st.bampos)
+                h += QString("<div style='margin-left:14px'>%1%2 "
+                             "<small style='color:#777'>%3 syllables"
+                             "</small>%4</div>")
+                         .arg(m.number > 0
+                                  ? QString("<b>bam po %1</b>").arg(m.number)
+                                  : "<b>bam po ?</b>")
+                         .arg(QString(" — <i>%1</i>")
+                                  .arg(QString::fromStdString(m.label)
+                                           .toHtmlEscaped()))
+                         .arg(m.syllables)
+                         .arg(m.irregular
+                                  ? " <span style='color:#B4540A'>[out of "
+                                    "sequence — gap or omission in the "
+                                    "source]</span>"
+                                  : "");
+        } else {
+            h += "<div><i>no explicit bam po markers in this text</i></div>";
+        }
+        if (!st.chapters.empty()) {
+            h += QString("<hr><div><b>%1 numbered le'u (chapter) "
+                         "colophon(s)</b></div>")
+                     .arg(st.chapters.size());
+            for (const auto& m : st.chapters)
+                h += QString("<div style='margin-left:14px'><b>le'u %1</b> "
+                             "— <i>%2</i>%3</div>")
+                         .arg(m.number)
+                         .arg(QString::fromStdString(m.label).toHtmlEscaped())
+                         .arg(m.irregular
+                                  ? " <span style='color:#B4540A'>[out of "
+                                    "sequence]</span>"
+                                  : "");
+        }
         report_->setHtml(h);
     }
 
@@ -4174,6 +4247,12 @@ public:
         auto* installBtn = new QPushButton("Install collection ZIP…");
         auto* importBtn = new QPushButton("Import my materials…");
         auto* ocrBtn = new QPushButton("Send to OCR…");
+        auto* utfcBtn = new QPushButton("Legacy font rescue (UTFC)…");
+        utfcBtn->setToolTip(
+            "Convert a document typed in a pre-Unicode Tibetan font "
+            "encoding (TibetanMachineWeb, LTibetan, Sambhota…) to "
+            "Unicode text, via the Universal Tibetan Font Converter — "
+            "run as a separate external tool (GPL v3, never linked).");
         auto* viewBtn = new QPushButton("List view");
         viewBtn->setCheckable(true);
         viewBtn->setToolTip(
@@ -4184,6 +4263,7 @@ public:
         row->addWidget(importBtn);
         row->addWidget(viewBtn);
         row->addWidget(ocrBtn);
+        row->addWidget(utfcBtn);
         row->addWidget(indexBtn);
         search_ = new QLineEdit;
         search_->setPlaceholderText("find in library by name… (Enter)");
@@ -4272,6 +4352,7 @@ public:
         connect(installBtn, &QPushButton::clicked, [this] { installZip(); });
         connect(importBtn, &QPushButton::clicked, [this] { importFiles(); });
         connect(ocrBtn, &QPushButton::clicked, [this] { sendToOcr(); });
+        connect(utfcBtn, &QPushButton::clicked, [this] { convertLegacy(); });
         connect(indexBtn, &QPushButton::clicked, [this] { updateIndex(); });
         connect(search_, &QLineEdit::returnPressed, [this] { searchNames(); });
         connect(tree_->selectionModel(), &QItemSelectionModel::currentChanged,
@@ -4437,6 +4518,126 @@ private:
         }
         info_->setHtml("<b>Imported into library/my_materials/:</b><br>" +
                        report.join("<br>").toHtmlEscaped());
+    }
+
+    // Legacy-font rescue lane: the Universal Tibetan Font Converter
+    // (Tashi Tsering / Trace Foundation, GPL v3) run as an EXTERNAL
+    // PROCESS — never linked into the app (GPL isolation; survey Tier 1).
+    // Rescues documents typed in pre-Unicode font encodings — exactly
+    // the TibetanMachineWeb/LTibetan/Sambhota faces the font survey
+    // found installed here as custom-encoded legacy fonts.
+    void convertLegacy() {
+        const QString root = QFileInfo(libRoot_).path();
+        const QString bin = root + "/build/utfc/utfc";
+        if (!QFileInfo::exists(bin)) {
+            info_->setHtml(
+                "<b>UTFC not built yet.</b><br>Run <code>sh "
+                "tools/setup_utfc.sh</code> once in the project folder — "
+                "it compiles the Universal Tibetan Font Converter from "
+                "the UTFC-master sources (GPL v3; kept as a separate "
+                "external tool, never linked into this app).");
+            return;
+        }
+        // the binary looks up its .tbl mapping tables relative to cwd,
+        // so it must run inside the UTFC source folder
+        QSettings st("ALL", "TranslationTool");
+        QString utfcDir = st.value("utfc/dir").toString();
+        if (utfcDir.isEmpty() || !QFileInfo::exists(utfcDir + "/Converter.c")) {
+            QFile f(root + "/build/utfc/utfc_dir.txt");
+            if (f.open(QIODevice::ReadOnly))
+                utfcDir = QString::fromUtf8(f.readAll()).trimmed();
+        }
+        if (!QFileInfo::exists(utfcDir + "/Converter.c")) {
+            utfcDir = QFileDialog::getExistingDirectory(
+                this, "Locate the UTFC-master folder (conversion tables)");
+            if (utfcDir.isEmpty()) return;
+        }
+        st.setValue("utfc/dir", utfcDir);
+        const QString src = QFileDialog::getOpenFileName(
+            this, "Legacy document to rescue", QString(),
+            "Text documents (*.txt *.rtf);;All files (*)");
+        if (src.isEmpty()) return;
+        // source encodings UTFC ships tables for (Converter.c
+        // EncodingNames[], IDs 1–16; 0 = Unicode is the target)
+        const QStringList encs = {
+            "TMW — TibetanMachineWeb (THL)",
+            "TM — TibetanMachine (old THL)",
+            "LTibetan — LTibetan/Larashi",
+            "OldSambhota — Sambhota Jinkhyi",
+            "NewSambhota — Sambhota Dege etc.",
+            "ACIP — ACIP transcription",
+            "Wylie — classic Wylie",
+            "THDLWylie — THL extended Wylie",
+            "LCWylie — Lokesh Chandra Wylie",
+            "TCRCBodYig — TCRC Bod-Yig",
+            "Fz — Founder (PRC)",
+            "Hg — Huaguang (PRC)",
+            "Bzd — Beijing Zangwen Duo",
+            "Ty — Tongyong",
+            "NS — Namsel",
+            "Jamyang"};
+        bool ok = false;
+        QString enc = QInputDialog::getItem(
+            this, "Source encoding",
+            "Which legacy font/encoding is the document typed in?\n"
+            "(If unsure and the font on the old machine was "
+            "\"TibetanMachineWeb1–9\", pick TMW.)",
+            encs, 0, false, &ok);
+        if (!ok) return;
+        enc = enc.section(QChar(0x2014), 0, 0).trimmed();
+        enc = enc.section(' ', 0, 0);
+        const QFileInfo fi(src);
+        const QString dest = libRoot_ + "/my_materials";
+        const QString mid = dest + "/" + fi.completeBaseName() + ".utfc16";
+        QProcess p;
+        p.setWorkingDirectory(utfcDir);
+        p.start(bin, {src, mid, enc, "Unicode", "UnicodeTXT", "none"});
+        p.waitForFinished(300000);
+        const QString plog = QString::fromUtf8(p.readAllStandardOutput()) +
+                             QString::fromUtf8(p.readAllStandardError());
+        if (!QFileInfo::exists(mid) || QFileInfo(mid).size() == 0 ||
+            !plog.contains("Done")) {
+            QFile::remove(mid);
+            info_->setHtml("<b>UTFC conversion failed.</b> Its output:"
+                           "<br><pre>" + plog.toHtmlEscaped() + "</pre>");
+            return;
+        }
+        // UTFC's UnicodeTXT output is UTF-16LE with BOM → normalize UTF-8
+        QString text;
+        {
+            QFile f(mid);
+            f.open(QIODevice::ReadOnly);
+            QStringDecoder dec(QStringDecoder::Utf16LE);
+            text = dec(f.readAll());
+        }
+        QFile::remove(mid);
+        if (!text.isEmpty() && text.front() == QChar(0xFEFF))
+            text.remove(0, 1);
+        const QString target =
+            dest + "/" + fi.completeBaseName() + ".utfc.txt";
+        {
+            QFile f(target);
+            f.open(QIODevice::WriteOnly | QIODevice::Truncate);
+            f.write(text.toUtf8());
+        }
+        info_->setHtml(
+            "<b>Rescued to Unicode:</b> <a href='openfile:" + target +
+            "'>" + QFileInfo(target).fileName().toHtmlEscaped() +
+            "</a><br>" +
+            QString("%1 characters · source encoding %2 · converter: "
+                    "UTFC (Trace Foundation)<br>")
+                .arg(text.size())
+                .arg(enc.toHtmlEscaped()) +
+            "<div style='color:#B26B00'><b>utfc-derived</b> — "
+            "machine-converted from a legacy font encoding; review "
+            "before treating as canonical. Wrong-encoding guesses "
+            "produce garbage, not silent errors — if it looks wrong, "
+            "re-run with another source encoding.</div>" +
+            (text.contains(QChar(0x0F0B))
+                 ? QString()
+                 : "<div style='color:#B00020'><b>warning:</b> no "
+                   "Tibetan tsheg found in the output — the source "
+                   "encoding chosen is probably wrong.</div>"));
     }
 
     void showInfo(const QString& path) {
