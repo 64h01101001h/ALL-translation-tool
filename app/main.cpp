@@ -681,6 +681,9 @@ public:
                              true);
         showSeg_ = mkToggle("segmentation", "Botok segmentation (reference)",
                             false);
+        showAttest_ = mkToggle("attestation",
+                               "unattested-word hints (segmenter + Monlam)",
+                               false);
         hint_ = new QLabel("Click a shaded word to see its context; click again "
                            "to cycle outward through the containing phrases.");
         hint_->setWordWrap(true);
@@ -769,7 +772,70 @@ private:
         loading_ = true;
         view_->setPlainText(text);
         auto depth = doc_.coverDepth(3);
-        int spellFlags = 0, agreeFlags = 0;
+        int spellFlags = 0, agreeFlags = 0, attestFlags = 0;
+        // word-level attestation pass (toggle): maximal runs of tokens the
+        // dictionary lattice does NOT cover (and that are not grammatical
+        // particles) are segmented by the proven segmenter over the
+        // HGM + Monlam lexicon; only segmenter-OOV words are hinted —
+        // never single syllables of words the lexicon does know.
+        std::vector<bool> unattested(doc_.tokens.size(), false);
+        if (showAttest_->isChecked()) {
+            ensureSegmenter();
+            if (segmenter_) {
+                size_t i = 0;
+                const size_t n = doc_.tokens.size();
+                while (i < n) {
+                    if (depth[i] > 0 ||
+                        allcore::classifyParticle(doc_.tokens[i])) {
+                        ++i;
+                        continue;
+                    }
+                    // extend the uncovered run
+                    size_t j = i;
+                    std::vector<std::string> unis;
+                    bool convOk = true;
+                    while (j < n && depth[j] == 0 &&
+                           !allcore::classifyParticle(doc_.tokens[j])) {
+                        auto [u, ok] = allcore::wylieToUnicode(
+                            allcore::acipToEwts(doc_.tokens[j]));
+                        if (!ok) { convOk = false; break; }
+                        unis.push_back(u);
+                        bool barrier = doc_.barrier_after[j];
+                        ++j;
+                        if (barrier) break;
+                    }
+                    if (!convOk || unis.empty()) { i = j + (convOk ? 0 : 1); continue; }
+                    std::string run;
+                    for (const auto& u : unis) {
+                        if (!run.empty()) run += "་";
+                        run += u;
+                    }
+                    // map segmenter words back to tokens by syllable count
+                    size_t tokIx = i;
+                    for (const auto& w : segmenter_->segment(run)) {
+                        if (!w.tibetan) continue;
+                        // syllables in this word = tsheg-separated pieces
+                        int syls = 0;
+                        bool inSyl = false;
+                        for (const QChar qc : QString::fromStdString(w.text)) {
+                            if (qc == QChar(0x0F0B) || qc == QChar(' ')) {
+                                inSyl = false;
+                            } else if (!inSyl) {
+                                inSyl = true;
+                                ++syls;
+                            }
+                        }
+                        for (int s = 0; s < syls && tokIx < j; ++s, ++tokIx) {
+                            if (!w.word) {
+                                unattested[tokIx] = true;
+                                ++attestFlags;
+                            }
+                        }
+                    }
+                    i = j;
+                }
+            }
+        }
         QTextCursor cur(view_->document());
         for (size_t i = 0; i < doc_.tokens.size(); ++i) {
             QTextCharFormat fmt;
@@ -805,6 +871,13 @@ private:
                     }
                 }
             }
+            // unattested-word hint: slate dash-dot on segmenter-OOV runs
+            // (reference signal only; spellcheck red below overrides)
+            if (unattested[i]) {
+                fmt.setUnderlineStyle(QTextCharFormat::DashDotLine);
+                fmt.setUnderlineColor(QColor(0x5B, 0x7C, 0x99));
+                touched = true;
+            }
             // spellcheck: red wave underline on illegal syllables (item 5)
             if (checker_ &&
                 !checker_->legalWylie(allcore::acipToEwts(doc_.tokens[i]))) {
@@ -820,14 +893,19 @@ private:
         }
         loading_ = false;
         lastTok_ = -1;
+        QString attestNote =
+            showAttest_->isChecked()
+                ? QString(" · %1 unattested-word hint(s)").arg(attestFlags)
+                : QString();
         hint_->setText(QString("%1 tokens · %2 spans · %3 entries · %4 spelling "
-                               "flag(s) · %5 particle-agreement flag(s) — click "
+                               "flag(s) · %5 particle-agreement flag(s)%6 — click "
                                "any shaded word.")
                            .arg(doc_.tokens.size())
                            .arg(doc_.spans.size())
                            .arg(doc_.entries.size())
                            .arg(spellFlags)
-                           .arg(agreeFlags));
+                           .arg(agreeFlags)
+                           .arg(attestNote));
         context_->clear();
     }
 
@@ -1433,6 +1511,7 @@ private:
     QCheckBox* showHopkins_ = nullptr;
     QCheckBox* showRefs_ = nullptr;
     QCheckBox* showSeg_ = nullptr;
+    QCheckBox* showAttest_ = nullptr;
     std::unique_ptr<allcore::botok::SegTrie> segmenter_;
     bool segTried_ = false;
     QString segInfo_;

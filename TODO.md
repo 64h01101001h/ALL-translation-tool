@@ -14,13 +14,12 @@ display toggles, not through invention.
 
 ## Waiting on Adam (prompt him when the task starts)
 
-- [ ] **Send the two license-unblock emails** (drafted 2026-08-07,
-      ready to personalize in docs/drafts/): EMAIL_84000_license.md
-      (resolves the CC-BY-4.0 vs BY-NC-ND discrepancy — unlocks the
-      best-licensed aligned Ti–En dataset in existence) and
-      EMAIL_BDRC_ocr_models.md (model-weights license — unlocks OCR
-      stage 2 and word-level scan following). Each is one reply away
-      from a major integration.
+- [ ] **Send the 84000 license email** (drafted, docs/drafts/
+      EMAIL_84000_license.md — resolves the CC-BY-4.0 vs BY-NC-ND
+      discrepancy; unlocks the best-licensed aligned Ti–En dataset in
+      existence). ✅ BDRC OCR: Adam reports BDRC gave the OK
+      (2026-08-07) — stage 2 UNBLOCKED; save the written confirmation
+      to docs/licenses/ when available.
 
 - [~] **Collection title pairs → corpus/dictionary** (Adam 2026-08-06;
       docs/TITLES_INGEST_DESIGN.md) — CORPUS SIDE DONE 2026-08-07: the
@@ -244,7 +243,7 @@ display toggles, not through invention.
       Battery: mtha'i→mtha' (aa restored) + der→de+r (no aa).
       **THE BOTOK PROGRAM IS COMPLETE** — remaining only: possible
       deeper Overlay integration with Adam's direction.
-- [~] **Monlam word lists** — BANKED + FIRST INTEGRATION 2026-08-07
+- [x] **Monlam word lists** — BANKED + FIRST INTEGRATION 2026-08-07
       (Apache-2.0 verified; 107,108 + 342,340 unique forms; allcore
       RefLexicon, 18th suite proves the real conversion path matches
       the lists' storage form exactly): Overlay click card shows
@@ -253,8 +252,14 @@ display toggles, not through invention.
       real-word vs possible-typo signal, display only. SEGMENTER
       LEXICON DONE 2026-08-07 (Botok increment 4: both lists feed the
       compact SegTrie; UTF-16 list-1 loader bug fixed en route).
-      REMAINING: word-level spellcheck pass in loadDoc (bulk, needs
-      perf care). Definitions are NOT open — lists only.
+      WORD-LEVEL PASS DONE 2026-08-07: Overlay toggle "unattested-word
+      hints" — maximal lattice-UNCOVERED, non-particle runs are
+      segmented by the proven SegTrie over HGM + Monlam; only
+      segmenter-OOV words get the slate dash-dot hint (single
+      syllables of known words are never flagged; mapping back to
+      tokens by syllable count; conversion failures skip the run
+      honestly; count in the hint line). THE MONLAM ITEM IS COMPLETE.
+      Definitions are NOT open — lists only.
 - [x] **CC0 verbs database** — INTEGRATED 2026-08-07: 2,491 paradigm
       rows / 3,676 distinct stems banked (tools/import_verbs_db.py →
       verb_stems.tsv; misaligned cells flagged+skipped, ༼X༽ variants
@@ -297,7 +302,13 @@ display toggles, not through invention.
       diff-proofread canon beside the HGM corpus.
 - [ ] **py-tiblegenc** (Apache-2.0) — legacy-font→Unicode rescue for
       input-center documents; external tool first, port maps later.
-- [~] **lucene-bo affix rules** — ENGINE + LOOKUP SHIPPED 2026-08-07
+- [~] **lucene-bo** — Adam approved full inclusion 2026-08-07
+      ("Lucene is good to include"). Affix rules ENGINE + LOOKUP
+      SHIPPED 2026-08-07 (below); APPROVED NEXT: the analyzer's
+      remaining filters — TibPattFilter (spelling-pattern
+      normalization), TibSyllableLemmatizer, phonetics folding — as
+      further search-tolerance layers, same port-and-prove treatment.
+      Affix rules detail:
       (allcore affixnorm: faithful TibAffixedFilter port, battery
       through our own converters incl. the needsAA guard; wylie-level
       projection defined BY the unicode port; Lookup pane: po'i finds
