@@ -283,6 +283,24 @@ display toggles, not through invention.
       PROJECT), leaving 1,141 letter-level divergences (1.08% —
       matching the battery's documented ~1.12% source-defect rate).
       Rerun per release as a permanent cross-check.
+- [x] **THL wylie.js diff-oracle** (second oracle) — RUN 2026-08-08
+      over the same 105,634 pairs (tools/thl_wylie_oracle.py +
+      thl_wylie_runner.js driving Espel's wylie.js from the ACIP dev
+      folder via node; harness only). Verdict: 91.37% exact — WITHIN
+      0.03% OF PYEWTS with identical class counts (7,398 ⟨wylie⟩
+      flags, 83 IAST, 13 defect candidates), 1,135 letter-level after
+      NFC. KEY ADDITION: comparison is NFC-normalized — the master
+      stores precomposed DHA/DDHA (U+0F52 …, composition-excluded so
+      NFC decomposes them), THL emits base+0FB7; canonically equal,
+      7 pairs recovered. Two independent codebases now bracket the
+      same ~1.1% master-side residue: our engine's divergences from
+      strict EWTS are data variants, not conversion errors. Remaining
+      sample classes: Sanskrit stack conventions (gupta = པྟ vs པཏ),
+      final-cluster stacking (rgold), au-diphthong (kau = ཀཽ vs the
+      master's double-o defect ཀོོ), and wylie↔tibetan field
+      mismatches (rab tu / kun tu) — all dictionary-side findings.
+      (NetWylie's Wylie.java skipped: same Espel lineage as wylie.js,
+      a third run of the same algorithm adds nothing.)
 - [ ] **diff-match-patch (C++/Qt, Apache-2.0) + antx logic** → the
       input-center double-keying proofreading pane (roadmap item A).
 - [x] **Tibetan collation** — SHIPPED 2026-08-07 via QCollator("bo")
