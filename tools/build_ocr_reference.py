@@ -50,6 +50,10 @@ def main() -> int:
         sys.modules["PySide6"] = pyside
     from BDRC.Utils import (binarize, normalize, preprocess_image,
                             sigmoid, stitch_predictions, tile_image)
+    from BDRC.line_detection import (build_line_data, build_raw_line_data,
+                                     extract_line_images,
+                                     filter_line_contours,
+                                     sort_lines_by_threshold2)
 
     model = os.path.join(REPO,
                          "library/ocr_models/BDRC_PhotiLines/PhotiLines.onnx")
@@ -93,6 +97,28 @@ def main() -> int:
         fg = int((mask > 0).sum())
         print(f"{name}: {w}x{h}, mask foreground {fg} px "
               f"({100.0 * fg / (w * h):.1f}%)")
+
+        # ---- increment B: canonical line building on the SAME mask ------
+        # (run_ocr defaults: k_factor 2.5, bbox_tolerance 4.0, merge_lines)
+        rot_img, rot_mask, contours, angle = build_raw_line_data(image, mask)
+        gray_rot_mask = cv2.cvtColor(rot_mask, cv2.COLOR_RGB2GRAY)
+        filtered = filter_line_contours(rot_mask, contours)
+        line_data = [build_line_data(x) for x in filtered]
+        sorted_lines, thr = sort_lines_by_threshold2(rot_mask, line_data)
+        line_images = extract_line_images(rot_img, sorted_lines, 2.5, 4.0)
+        with open(os.path.join(out_dir, name + ".lines.tsv"), "w") as f:
+            f.write(f"angle\t{angle}\nthreshold\t{thr}\n")
+            for ln in sorted_lines:
+                f.write(f"line\t{ln.bbox.x}\t{ln.bbox.y}\t{ln.bbox.w}\t"
+                        f"{ln.bbox.h}\t{ln.center[0]}\t{ln.center[1]}\n")
+        for i, li in enumerate(line_images):
+            lh, lw = li.shape[:2]
+            with open(os.path.join(out_dir, f"{name}.line{i}.ppm"),
+                      "wb") as f:
+                f.write(b"P6\n%d %d\n255\n" % (lw, lh))
+                f.write(li.astype(np.uint8).tobytes())
+        print(f"  lines: {len(sorted_lines)} (angle {angle:.3f}, "
+              f"threshold {thr})")
     return 0
 
 

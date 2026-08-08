@@ -13,6 +13,9 @@
 #include <vector>
 
 #include "allocr/linedet.h"
+#ifdef ALLOCR_HAVE_OPENCV
+#include "allocr/linebuild.h"
+#endif
 
 static int failures = 0;
 #define CHECK(cond, msg)                                        \
@@ -97,6 +100,81 @@ int main(int argc, char** argv) {
         CHECK(bands.size() == wantBands.size(),
               (std::string(c.name) + ": band count equals the canonical mask")
                   .c_str());
+
+#ifdef ALLOCR_HAVE_OPENCV
+        // ---- increment B: line building on the SAME canonical mask ------
+        // (isolated from increment A's tolerances; geometry is the same
+        // OpenCV native code the canonical cv2 ran)
+        {
+            std::ifstream lf(base + ".lines.tsv");
+            if (!lf) {
+                std::printf("  [FAIL] %s: lines.tsv missing — rerun the "
+                            "oracle tool\n", c.name);
+                ++failures;
+            } else {
+                double wantAngle = 0, wantThr = 0;
+                struct WantLine { int x, y, w, h, cx, cy; };
+                std::vector<WantLine> wantLines;
+                std::string key;
+                while (lf >> key) {
+                    if (key == "angle") lf >> wantAngle;
+                    else if (key == "threshold") lf >> wantThr;
+                    else if (key == "line") {
+                        WantLine wl{};
+                        lf >> wl.x >> wl.y >> wl.w >> wl.h >> wl.cx >> wl.cy;
+                        wantLines.push_back(wl);
+                    }
+                }
+                auto pl = allocr::buildLines(in.data.data(), in.w, in.h, wm);
+                std::printf("  %s: angle %.3f (want %.3f), %zu line(s) "
+                            "(want %zu)\n", c.name, pl.angle, wantAngle,
+                            pl.lines.size(), wantLines.size());
+                CHECK(std::abs(pl.angle - wantAngle) < 0.05,
+                      (std::string(c.name) + ": deskew angle matches").c_str());
+                CHECK(pl.lines.size() == wantLines.size(),
+                      (std::string(c.name) + ": line count matches").c_str());
+                bool bboxOk = pl.lines.size() == wantLines.size();
+                for (size_t i = 0; bboxOk && i < pl.lines.size(); ++i) {
+                    const auto& g = pl.lines[i];
+                    const auto& w2 = wantLines[i];
+                    bboxOk = std::abs(g.x - w2.x) <= 1 &&
+                             std::abs(g.y - w2.y) <= 1 &&
+                             std::abs(g.w - w2.w) <= 2 &&
+                             std::abs(g.h - w2.h) <= 2;
+                    if (!bboxOk)
+                        std::printf("    line %zu bbox: got %d,%d %dx%d want "
+                                    "%d,%d %dx%d\n", i, g.x, g.y, g.w, g.h,
+                                    w2.x, w2.y, w2.w, w2.h);
+                }
+                CHECK(bboxOk, (std::string(c.name) +
+                               ": line bboxes match the canonical").c_str());
+                // line images: dimensions + pixel agreement per line
+                bool imgOk = true;
+                for (size_t i = 0; i < pl.images.size(); ++i) {
+                    Pnm li = readPnm(base + ".line" + std::to_string(i) +
+                                     ".ppm");
+                    if (li.w == 0) { imgOk = false; break; }
+                    if (li.w != pl.images[i].w || li.h != pl.images[i].h) {
+                        std::printf("    line %zu image: got %dx%d want "
+                                    "%dx%d\n", i, pl.images[i].w,
+                                    pl.images[i].h, li.w, li.h);
+                        imgOk = false;
+                        break;
+                    }
+                    size_t sameB = 0, tot = li.data.size();
+                    for (size_t b = 0; b < tot; ++b)
+                        sameB += li.data[b] == pl.images[i].rgb[b];
+                    double pctB = 100.0 * sameB / tot;
+                    if (pctB < 99.9) {
+                        std::printf("    line %zu pixels: %.3f%%\n", i, pctB);
+                        imgOk = false;
+                    }
+                }
+                CHECK(imgOk, (std::string(c.name) +
+                              ": extracted line images match").c_str());
+            }
+        }
+#endif
     }
 
     std::printf("ocr_smoke: %s (%d failures)\n",

@@ -86,6 +86,30 @@ _pre_pad/greedy CTC decode with each model's charset from
 model_config.json), oracle = canonical pipeline text output per line,
 then Unicode via OUR proven chain + syllable-legality QC.
 
+**Increment B SHIPPED (2026-08-07, disk cleared by Adam): LINE BUILDING
+IN C++, EXACT.** allocr::buildLines links OpenCV 5 C++ (brew; the new
+`geometry` module carries contourArea/minAreaRect in v5) — the same
+native code the canonical cv2 calls — and ports line_detection.py
+verbatim: rotation-angle estimate → deskew → contours → filter →
+approxPolyDP line data → slice-threshold reading-order sort →
+convex-hull chunk merge → adaptive per-line extraction (every upstream
+quirk preserved: the x_steps*step slice offset, median//n threshold,
+dead adaptive-grouping offsets omitted with note, interior-gap-squeezing
+mask_n_crop). Battery: on the canonical masks, angle matches to the
+millidegree, line counts/bboxes/extracted line images all match
+(99.9%+ pixels).
+
+**UPSTREAM FINDING (report to BDRC):** the canonical deskew
+(get_rotation_angle_from_lines) was written for the pre-4.5 cv2
+minAreaRect angle convention; under modern OpenCV (the app's
+requirements.txt pins NO versions, so fresh installs get this) it
+computes wrong page angles on straight pages — our dense fixture gets
+-51.4°, merging 8 real lines into 2 rotated mega-lines. Our port
+reproduces this EXACTLY (rule 2: port the file, never fix it silently).
+If BDRC fixes upstream, re-run the oracle and the port follows. A
+clearly-labeled opt-in "corrected deskew" mode in OUR Scan pane is a
+possible deviation — Adam's call, never silent.
+
 **Stage 2 build plan (remaining):**
 1. Dependency: onnxruntime (brew; C++ API) — linked by a NEW `allocr`
    target, never allcore (ML stays out of the deterministic core).

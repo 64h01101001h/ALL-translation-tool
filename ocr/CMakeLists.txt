@@ -19,6 +19,20 @@ add_library(allocr STATIC
 target_include_directories(allocr PUBLIC include PRIVATE ${ONNXRUNTIME_INCLUDE})
 target_link_libraries(allocr PUBLIC ${ONNXRUNTIME_LIB})
 
+# increment B (line building) links OpenCV C++ — the same native code the
+# canonical cv2 calls, so the geometry stage is bit-identical.
+find_package(OpenCV QUIET COMPONENTS core imgproc OPTIONAL_COMPONENTS geometry
+             PATHS /opt/homebrew/opt/opencv /usr/local/opt/opencv)
+if(OpenCV_FOUND)
+  message(STATUS "allocr: OpenCV ${OpenCV_VERSION} — line building enabled")
+  target_sources(allocr PRIVATE src/linebuild.cpp)
+  target_include_directories(allocr PRIVATE ${OpenCV_INCLUDE_DIRS})
+  target_link_libraries(allocr PUBLIC ${OpenCV_LIBS})
+  target_compile_definitions(allocr PUBLIC ALLOCR_HAVE_OPENCV)
+else()
+  message(STATUS "allocr: OpenCV not found — line building skipped")
+endif()
+
 add_executable(ocr_smoke tests/ocr_smoke.cpp)
 target_link_libraries(ocr_smoke PRIVATE allocr)
 add_test(NAME ocr_smoke
