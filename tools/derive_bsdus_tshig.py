@@ -15,6 +15,14 @@ A pair (short, long) enters the register only when ALL of:
      flagged "end-truncated" (dge bshes <- dge ba'i bshes gnyen);
   4. the glosses agree (shared alternative, or one contains the other,
      >= 5 chars).
+
+LETTER-LEVEL FUSIONS (the sher-phyin class, added 2026-08-08): a
+contraction whose FIRST syllable is itself fused from the long form's
+first two syllables at the letter level — onset+vowel of syllable one
+plus the first consonant of syllable two (shes rab -> sh+e+r = sher;
+rdo rje -> rdo+r = rdor). These drop content syllables freely (sher
+phyin <- shes rab kyi PHA ROL tu phyin pa), so the admission bar is
+strictest: EXACT gloss-alternative equality only, class "fused".
 Corpus counts for both forms ride along as evidence. Everything is
 DERIVED tier: the register document is for human review; the app labels
 any use of it as such.
@@ -40,6 +48,48 @@ DROPPABLE = {
     # nominal endings
     "pa", "ba", "po", "bo", "mo", "ma", "pa'i", "ba'i", "po'i", "mo'i",
 }
+
+
+# wylie consonant tokens, longest-first for greedy parsing
+CONS = sorted(["tsh", "dz", "zh", "sh", "ch", "kh", "th", "ph", "ts",
+               "ng", "ny", "k", "g", "c", "j", "t", "d", "n", "p", "b",
+               "m", "w", "z", "'", "y", "r", "l", "s", "h"],
+              key=len, reverse=True)
+VOWELS = "aeiou"
+
+
+def split_syl(s):
+    """(prevowel-cluster, vowel, coda) or None if not plain wylie."""
+    i, pre = 0, ""
+    while i < len(s):
+        for c in CONS:
+            if s.startswith(c, i):
+                pre += c
+                i += len(c)
+                break
+        else:
+            break
+    if i < len(s) and s[i] in VOWELS:
+        return pre, s[i], s[i + 1:]
+    return None
+
+
+def first_cons(s):
+    for c in CONS:
+        if s.startswith(c):
+            return c
+    return None
+
+
+def fused_form(x1, x2):
+    """The letter-level fusion of two syllables, or None.
+    onset+vowel of x1 + first consonant of x2: shes rab -> sher."""
+    sp = split_syl(x1)
+    fc = first_cons(x2)
+    if not sp or not fc:
+        return None
+    fused = sp[0] + sp[1] + fc
+    return fused if fused != x1 else None
 
 
 def norm_glosses(raw):
@@ -95,6 +145,17 @@ def main() -> int:
         syls = w.split()
         if 3 <= len(syls) <= 6:
             by_first.setdefault(syls[0], []).append((w, syls))
+
+    # fusion index: long forms keyed by the letter-level fusion of their
+    # first two syllables (sher <- shes rab …). Long fusion targets run
+    # to 8+ syllables (shes rab kyi pha rol tu phyin pa)
+    by_fusion = {}
+    for w in glossed:
+        syls = w.split()
+        if 3 <= len(syls) <= 10:
+            f = fused_form(syls[0], syls[1])
+            if f:
+                by_fusion.setdefault(f, []).append((w, syls))
 
     def corpus_count(phrase):
         try:
@@ -155,8 +216,33 @@ def main() -> int:
                 "long_n": corpus_count(long),
             })
 
+        # letter-level fusion class: first syllable of the short is the
+        # fusion of the long's first two; second syllable appears later.
+        # Content drops are inherent here, so EXACT gloss equality only.
+        for long, l_syls in by_fusion.get(s1, []):
+            if long == short:
+                continue
+            try:
+                k = l_syls.index(s2, 2)
+            except ValueError:
+                continue
+            kind, evidence = gloss_match(sorted(s_alts),
+                                         sorted(glossed[long]))
+            if kind != "exact":
+                continue
+            results.append({
+                "short": short, "long": long,
+                "dropped": "(fused: {} {} -> {}) {}".format(
+                    l_syls[0], l_syls[1], s1,
+                    " ".join(l_syls[2:k] + l_syls[k + 1:]) or "-"),
+                "class": "fused", "gloss_kind": kind,
+                "gloss": evidence,
+                "short_n": corpus_count(short),
+                "long_n": corpus_count(long),
+            })
+
     # rank: clean+exact first, then by combined corpus evidence
-    order = {"clean": 0, "end-truncated": 1}
+    order = {"clean": 0, "end-truncated": 1, "fused": 2}
     results.sort(key=lambda r: (order[r["class"]],
                                 0 if r["gloss_kind"] == "exact" else 1,
                                 -(max(r["short_n"], 0) + max(r["long_n"], 0)),
@@ -183,7 +269,12 @@ every pair below has BOTH forms as HGM dictionary entries WITH glosses;
 the contraction follows Wilson's drop pattern (particles and nominal
 endings omitted — or, in the *end-truncated* class, a trailing content
 word, admitted only on exact gloss equality); and the two entries'
-glosses agree. Corpus counts are shown as further evidence. Regenerate
+glosses agree. The *fused* class (added 2026-08-08) covers letter-level
+fusions whose first syllable squeezes the long form's first two
+syllables into one — onset+vowel plus the next syllable's first
+consonant (ཤེར ← ཤེས་རབ, མྱང ← མྱ་ངན, ཕར ← ཕ་རོལ, རྡོར ← རྡོ་རྗེ);
+content drops are inherent there, so admission is exact-gloss only.
+Corpus counts are shown as further evidence. Regenerate
 per release: `python3 tools/derive_bsdus_tshig.py`.
 
 **Tier: DERIVED (provisional).** This is a review document — nothing

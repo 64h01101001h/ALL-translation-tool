@@ -9,7 +9,12 @@ every pair below has BOTH forms as HGM dictionary entries WITH glosses;
 the contraction follows Wilson's drop pattern (particles and nominal
 endings omitted — or, in the *end-truncated* class, a trailing content
 word, admitted only on exact gloss equality); and the two entries'
-glosses agree. Corpus counts are shown as further evidence. Regenerate
+glosses agree. The *fused* class (added 2026-08-08) covers letter-level
+fusions whose first syllable squeezes the long form's first two
+syllables into one — onset+vowel plus the next syllable's first
+consonant (ཤེར ← ཤེས་རབ, མྱང ← མྱ་ངན, ཕར ← ཕ་རོལ, རྡོར ← རྡོ་རྗེ);
+content drops are inherent there, so admission is exact-gloss only.
+Corpus counts are shown as further evidence. Regenerate
 per release: `python3 tools/derive_bsdus_tshig.py`.
 
 **Tier: DERIVED (provisional).** This is a review document — nothing
@@ -200,5 +205,14 @@ here is asserted as HGM's own judgment; in the app every use is labeled
 | rtsa shes | rtsa ba shes rab | ba rab | end-truncated | exact: “root text on wisdom” | 9 / 16 |
 | rjes 'jug | rjes su 'jug byed | su byed | end-truncated | exact: “continuation” | 15 / 6 |
 | kham zas | kham gyi zas ni | gyi ni | end-truncated | exact: “solid food” | 12 / 2 |
+| phar phyin | pha rol tu phyin | (fused: pha rol -> phar) tu | fused | exact: “perfection of wisdom” | 212 / 264 |
+| phar phyin | pha rol tu phyin pa | (fused: pha rol -> phar) tu pa | fused | exact: “perfections” | 212 / 172 |
+| myang 'das | mya ngan las 'das pa | (fused: mya ngan -> myang) las pa | fused | exact: “nirvana” | 166 / 88 |
+| myang 'das | mya ngan 'das | (fused: mya ngan -> myang) - | fused | exact: “nirvana” | 166 / 74 |
+| sher phyin | shes rab kyi pha rol tu phyin pa | (fused: shes rab -> sher) kyi pha rol tu pa | fused | exact: “perfection of wisdom” | 108 / 117 |
+| phar phyin | pha rol tu phyin par | (fused: pha rol -> phar) tu par | fused | exact: “perfection of wisdom” | 212 / 8 |
+| phar phyin | pha rol tu phyin pa'i theg pa | (fused: pha rol -> phar) tu pa'i theg pa | fused | exact: “way of the perfections” | 212 / 8 |
+| phar phyin | pha rol tu phyin pa'i spyod pa | (fused: pha rol -> phar) tu pa'i spyod pa | fused | exact: “perfections” | 212 / 5 |
+| rdor bzlas | rdo rje bzlas pa | (fused: rdo rje -> rdor) pa | fused | exact: “recitation of the diamonds” | 39 / 11 |
 
-182 pairs derived.
+191 pairs derived.

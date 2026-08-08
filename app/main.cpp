@@ -769,6 +769,7 @@ public:
                 "SambhotaDege",          // Adam's preferred (Sambhota Dege)
                 "Noto Serif Tibetan",    // the modern default (bundled, OFL)
                 "Jomolhari",             // classic dbu-can (bundled, OFL)
+                "Monlam-Bodyig",         // community favorite (bundled, OFL)
                 "TibetanMachineUnicode", // THL's scholarly standard
                 "BabelStone Tibetan Slim", // widest rare-stack coverage (bundled)
                 "TibetanClassicUnicode",
@@ -5740,6 +5741,10 @@ int main(int argc, char** argv) {
     // dbu-can bookface, modeled on early Kangyur manuscript letterforms
     QFontDatabase::addApplicationFont(root +
                                       "/data/fonts/Jomolhari-Regular.ttf");
+    // Monlam Bodyig (Lobsang Monlam / monlamit.com, OFL 1.1 — bundled):
+    // the UI face most widely used in the Tibetan community
+    QFontDatabase::addApplicationFont(
+        root + "/data/fonts/MonlamBodyig-Regular.ttf");
     // Style faces present as FILES on this machine but not active in Font
     // Book (data/fonts/FONTS.md): register per-session from Adam's own
     // disk — display variety (chos-rgyal, yig-chung cursive, calligraphic),

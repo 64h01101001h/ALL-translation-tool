@@ -63,6 +63,9 @@ int main(int argc, char** argv) {
     CHECK(QFontDatabase::addApplicationFont(
               fontsDir + "/Jomolhari-Regular.ttf") >= 0,
           "Jomolhari registers");
+    CHECK(QFontDatabase::addApplicationFont(
+              fontsDir + "/MonlamBodyig-Regular.ttf") >= 0,
+          "Monlam Bodyig registers");
 
     std::set<uint> cps;
     {
@@ -110,6 +113,7 @@ int main(int argc, char** argv) {
         {"Noto Serif Tibetan", true},
         {"BabelStone Tibetan Slim", true},
         {"Jomolhari", true},
+        {"Monlam-Bodyig", true},
         {"SambhotaDege", false},
         {"TibetanMachineUnicode", false},
         {"TibetanClassicUnicode", false},

@@ -45,6 +45,23 @@ int main(int argc, char** argv) {
           "ma yin NOT registered (tail-only drop is no contraction)");
     CHECK(reg.expansions("kag dag").empty(), "unknown form empty");
 
+    // letter-level fusions (2026-08-08): first syllable fused from the
+    // long form's first two (onset+vowel + next first consonant),
+    // admitted on exact gloss only
+    auto sherOk = false;
+    for (const auto* c : reg.expansions("sher phyin"))
+        if (c->longWylie == "shes rab kyi pha rol tu phyin pa" &&
+            c->cls == "fused" && c->glossKind == "exact")
+            sherOk = true;
+    CHECK(sherOk, "sher phyin -> shes rab kyi pha rol tu phyin pa "
+                  "(fused: shes rab -> sher)");
+    auto myangOk = false;
+    for (const auto* c : reg.expansions("myang 'das"))
+        if (c->cls == "fused") myangOk = true;
+    CHECK(myangOk, "myang 'das (mya ngan -> myang) fused class present");
+    CHECK(!reg.expansions("phar phyin").empty(),
+          "phar phyin (pha rol -> phar) registered");
+
     // Wilson's own OM example: the first dot of rnam shes mi rtag pa yin
     {
         allcore::Spine spine(argv[2]);

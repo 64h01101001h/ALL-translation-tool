@@ -68,6 +68,12 @@ in this order (only those present are listed):**
 2026-08-08: `Jomolhari-Regular.ttf` (Chris Fynn, OFL **1.0** — license
 banked as `Jomolhari-OFL.txt`; fetched from google/fonts ofl tree),
 63/63 working-set coverage, registered at app start, third bundled
-face in the combo + font battery. Still someday: Monlam Uni and the
-Qomolangma series (popular in Tibetan communities; check licenses
-before bundling).
+face in the combo + font battery. ~~Monlam~~ — BUNDLED 2026-08-08:
+`MonlamBodyig-Regular.ttf` (family "Monlam-Bodyig"; Lobsang Monlam /
+monlamit.com, **OFL 1.1** verified from the official MonlamIT GitHub
+LICENSE — banked as `MonlamBodyig-OFL.txt`), 63/63 coverage, fourth
+bundled face. **Qomolangma series (yalasoo): DO NOT BUNDLE** — probed
+2026-08-08: free for NON-COMMERCIAL use only; commercial use requires
+written permission from yalasoo. If Adam installs them locally the
+curated combo could list them like SambhotaDege (register-if-present),
+but they must never ship with the app.
