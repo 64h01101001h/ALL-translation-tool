@@ -28,6 +28,8 @@ public:
     bool unambiguousAdj(const std::string& unicodeWord) const;
     // non-empty and every tag is a noun tag (n.count / n.mass / n.prop)
     bool unambiguousNoun(const std::string& unicodeWord) const;
+    // non-empty and every tag is an adverb tag (adv.*)
+    bool unambiguousAdv(const std::string& unicodeWord) const;
 
 private:
     const std::set<std::string>* find(const std::string& w) const;

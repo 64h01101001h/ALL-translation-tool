@@ -500,10 +500,12 @@ display toggles, not through invention.
       undecidable)"; anything ambiguous stays undetermined, and
       without the lexicon the dot reads exactly as before (battery
       asserts both behaviors). VOC shipped earlier (interjection list).
+      ADV shipped same day: an UNAMBIGUOUS SOAS adv.* tag on the
+      pre-verb unit resolves "ADV (adverb — SOAS lexicon)" (battery:
+      kha sang | bstan; 164 adverbs across 5 subtags).
       REMAINING: OM contraction dots (needs an abbreviation table —
-      the rKTs bskungs-yig DB would supply it, license pending), ADV
-      (adverbial-identity detection — SOAS adv.* tags could serve,
-      same evidence-labeled pattern), UP understood-particle inference.
+      the rKTs bskungs-yig DB would supply it, license pending), UP
+      understood-particle inference.
 
 - [x] **Translation Trainer v1** (docs/TRAINER_DESIGN.md): clause splitter,
       phrase chunker, verb spotter (HGM tenses + "to …" glosses),

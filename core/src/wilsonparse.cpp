@@ -381,6 +381,13 @@ std::vector<ClauseParse> wilsonParse(const Spine& spine, const OverlayDoc& doc,
                            us[nu].category == "negation particle" ||
                            us[nu].category.rfind("verbal noun", 0) == 0) {
                     d.label = "NOM";   // nominative right before the verb
+                    // ADV needs POS data: an UNAMBIGUOUS adverb tag (SOAS)
+                    // on the pre-verb unit resolves the adverb dot
+                    if (pos) {
+                        auto [u, ok] = wylieToUnicode(acipToEwts(cur.text));
+                        if (ok && pos->unambiguousAdv(u))
+                            d.label = "ADV (adverb — SOAS lexicon)";
+                    }
                 } else {
                     // two bare nominals: NOM vs NA/NN/APP needs POS data.
                     // With the SOAS hand-tagged lexicon (CC BY 4.0) the NA

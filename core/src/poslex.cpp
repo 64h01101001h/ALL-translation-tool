@@ -65,6 +65,14 @@ bool PosLexicon::unambiguousAdj(const std::string& w) const {
     return s && s->size() == 1 && *s->begin() == "adj";
 }
 
+bool PosLexicon::unambiguousAdv(const std::string& w) const {
+    const auto* s = find(w);
+    if (!s || s->empty()) return false;
+    for (const auto& t : *s)
+        if (t.rfind("adv", 0) != 0) return false;
+    return true;
+}
+
 bool PosLexicon::unambiguousNoun(const std::string& w) const {
     const auto* s = find(w);
     if (!s || s->empty()) return false;

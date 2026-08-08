@@ -70,6 +70,19 @@ int main(int argc, char** argv) {
                     plainUndet = true;
         CHECK(plainUndet, "without POS data the dot stays undetermined");
         (void)sawUndet;
+
+        // ADV: an unambiguous adverb before the verb (kha sang = yesterday)
+        CHECK(pos.unambiguousAdv(u("kha sang")), "kha sang: unambiguous adv");
+        auto d2 = allcore::buildOverlay(spine, index, "KHA SANG BSTAN");
+        auto c2 = allcore::refineClauses(
+            d2, allcore::splitClauses(d2.tokens, d2.barrier_after));
+        auto p2 = allcore::wilsonParse(spine, d2, c2, &pos);
+        bool sawAdv = false;
+        for (const auto& cp : p2)
+            for (const auto& d : cp.dots)
+                if (d.label.find("ADV (adverb") != std::string::npos)
+                    sawAdv = true;
+        CHECK(sawAdv, "kha sang | bstan: ADV dot resolved via SOAS");
     }
 
     std::printf("poslex_smoke: %s (%d failures)\n",
