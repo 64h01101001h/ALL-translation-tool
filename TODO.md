@@ -385,8 +385,20 @@ display toggles, not through invention.
 - [ ] **THL kmaps place/subject lookup** — user-initiated JSON lookup
       from the Overlay for place/person names (21k+ gazetteer; no-auth
       API; bundling license unclear so lookup-only).
-- [ ] **Mahavyutpatti TEI (DILA)** — offline Skt⇄Tib table beside the
-      Sanskrit converter.
+- [x] **Mahavyutpatti TEI (DILA)** — SHIPPED 2026-08-07: license
+      verified CC BY-SA 3.0 (DILA/DDBC site statement; attribution in
+      data/mahavyutpatti/README.md). Source TEI P5 zip BANKED in-repo
+      (DILA's site was refusing connections — copy retrieved from the
+      Internet Archive capture of the original download, SHA-1
+      recorded; refresh from DILA if it returns).
+      tools/extract_mahavyutpatti.py → all 9,379 entries (IAST +
+      Devanāgarī + Wylie + Tibetan script + Chinese, chapter heads,
+      standard MVP numbers; DDBC's own editorial additions carry a
+      {ddbc} marker, never silently merged). allcore::Mvp (26th suite:
+      sangs rgyas ↔ buddhaḥ both directions, case-fold, {ddbc} marker,
+      exact-only honesty). In-app: Convert pane answers Sanskrit AND
+      Tibetan inputs with the MVP block; Lookup matches show Sanskrit
+      + MVP number — labeled reference, never HGM-tier.
 - [~] **Bundle fonts** — Noto Serif Tibetan SHIPPED 2026-08-07 (OFL
       verified, variable font all weights, banked with OFL.txt in
       data/fonts/; registered at startup; the Overlay's Tibetan-script

@@ -70,6 +70,7 @@
 #include "allcore/engines.h"
 #include "allcore/gofer.h"
 #include "allcore/lattice.h"
+#include "allcore/mvp.h"
 #include "allcore/libindex.h"
 #include "allcore/particles.h"
 #include "allcore/progress.h"
@@ -137,7 +138,31 @@ static QString entryHtml(const allcore::Entry& e,
     return h;
 }
 
-static QWidget* makeLookupPane(allcore::Spine& spine, allcore::RefDict* ref) {
+static QString mvpHtml(const std::vector<const allcore::MvpEntry*>& hits) {
+    if (hits.empty()) return {};
+    QString h = "<hr><div style='color:#4A3B7A'><b>Mahāvyutpatti</b> "
+                "<small>(DILA TEI, CC BY-SA 3.0 — the classical 9th-century "
+                "Skt⇄Tib glossary; reference only)</small></div>";
+    for (const auto* e : hits) {
+        QString tib;
+        for (const auto& t : e->tibetan)
+            tib += (tib.isEmpty() ? "" : " · ") +
+                   QString::fromStdString(t).toHtmlEscaped();
+        QString wy;
+        for (const auto& w : e->wylie)
+            wy += (wy.isEmpty() ? "" : " · ") +
+                  QString::fromStdString(w).toHtmlEscaped();
+        h += QString("<div style='margin:5px 0'><b>MVP %1</b> · %2 "
+                     "<span style='font-size:18px'>%3</span> · %4</div>")
+                 .arg(e->key)
+                 .arg(QString::fromStdString(e->iast).toHtmlEscaped(),
+                      tib, wy);
+    }
+    return h;
+}
+
+static QWidget* makeLookupPane(allcore::Spine& spine, allcore::RefDict* ref,
+                               allcore::Mvp* mvp) {
     auto* pane = new QWidget;
     auto* outer = new QHBoxLayout(pane);
     auto* split = new QSplitter(Qt::Horizontal);
@@ -208,7 +233,8 @@ static QWidget* makeLookupPane(allcore::Spine& spine, allcore::RefDict* ref) {
                          QMetaObject::invokeMethod(box, "returnPressed");
                      });
 
-    QObject::connect(box, &QLineEdit::returnPressed, [&spine, ref, box, results] {
+    QObject::connect(box, &QLineEdit::returnPressed, [&spine, ref, mvp, box,
+                                                      results] {
         const std::string raw = box->text().trimmed().toStdString();
         if (raw.empty()) return;
         auto entries = spine.lookup(raw);
@@ -277,6 +303,17 @@ static QWidget* makeLookupPane(allcore::Spine& spine, allcore::RefDict* ref) {
                          "</div>";
                 }
             }
+        }
+        // Mahāvyutpatti: classical Skt⇄Tib reference (exact wylie match)
+        if (mvp) {
+            std::string wylie = raw;
+            if (!entries.empty()) wylie = entries.front().wylie;
+            else {
+                bool upper = false;
+                for (char c : raw) upper |= (c >= 'A' && c <= 'Z');
+                if (upper) wylie = allcore::acipToEwts(raw);
+            }
+            h += mvpHtml(mvp->byWylie(wylie));
         }
         // English reverse lookup (release reverse index, binding layer)
         {
@@ -1741,7 +1778,7 @@ static QWidget* makeSearchPane(allcore::Spine& spine,
 }
 
 // ---- Convert pane: ACIP/wylie → everything, via the battery-proven ports ----
-static QWidget* makeConvertPane() {
+static QWidget* makeConvertPane(allcore::Mvp* mvp) {
     auto* pane = new QWidget;
     auto* layout = new QVBoxLayout(pane);
 
@@ -1979,7 +2016,7 @@ static QWidget* makeConvertPane() {
     auto* out = new QTextBrowser;
     layout->addWidget(out, 2);
 
-    auto convert = [input, out] {
+    auto convert = [input, out, mvp] {
         const QString raw = input->toPlainText().trimmed();
         if (raw.isEmpty()) { out->clear(); return; }
         // Devanagari input → IAST first, then the full Sanskrit card
@@ -2047,6 +2084,7 @@ static QWidget* makeConvertPane() {
                      "the FPMT transliteration standard</i></td></tr>";
             }
             h += "</table>";
+            if (mvp) h += mvpHtml(mvp->byIast(t));
             out->setHtml(h);
             return;
         }
@@ -2075,6 +2113,7 @@ static QWidget* makeConvertPane() {
         h += "<tr><td><b>phonetics</b></td><td style='font-size:18px'>" +
              QString::fromStdString(pron).toHtmlEscaped() + "</td></tr>";
         h += "</table>";
+        if (mvp) h += mvpHtml(mvp->byWylie(wylie));
         out->setHtml(h);
     };
     QObject::connect(input, &QPlainTextEdit::textChanged, convert);
@@ -4419,6 +4458,14 @@ int main(int argc, char** argv) {
         refdict = &rd;
     } catch (const std::exception&) {}
 
+    // the Mahāvyutpatti reference table (DILA TEI, CC BY-SA 3.0) — optional
+    allcore::Mvp* mvp = nullptr;
+    {
+        static allcore::Mvp m;
+        if (m.load((root + "/data/extracted/mahavyutpatti.tsv").toStdString()))
+            mvp = &m;
+    }
+
     // the learner's own progress/SRS data — local file, optional
     allcore::Progress* progress = nullptr;
     try {
@@ -4443,8 +4490,8 @@ int main(int argc, char** argv) {
                                 }),
                 "Library");
     tabs.addTab(makeSearchPane(spine, root + "/library"), "Search");
-    tabs.addTab(makeConvertPane(), "Convert");
-    tabs.addTab(makeLookupPane(spine, refdict), "Lookup");
+    tabs.addTab(makeConvertPane(mvp), "Convert");
+    tabs.addTab(makeLookupPane(spine, refdict, mvp), "Lookup");
     tabs.resize(1180, 760);
     tabs.show();
     return app.exec();

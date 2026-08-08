@@ -34,6 +34,7 @@ add_library(allcore STATIC
   src/ewts_unicode.cpp
   src/spellcheck.cpp
   src/refdict.cpp
+  src/mvp.cpp
   src/botok_chunks.cpp
   src/botok_trie.cpp
   src/botok_tokenize.cpp
@@ -183,3 +184,8 @@ add_test(NAME botok_tok_smoke
                  ${CMAKE_SOURCE_DIR}/build/botok_tok_scenarios.txt
                  ${CMAKE_SOURCE_DIR}/build/hgm_spine_v27_2.db
                  ${CMAKE_SOURCE_DIR}/build/botok_tok_corpus.tsv)
+
+add_executable(mvp_smoke tests/mvp_smoke.cpp)
+target_link_libraries(mvp_smoke PRIVATE allcore)
+add_test(NAME mvp_smoke
+         COMMAND mvp_smoke ${CMAKE_SOURCE_DIR}/data/extracted/mahavyutpatti.tsv)
