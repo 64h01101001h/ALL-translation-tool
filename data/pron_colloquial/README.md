@@ -46,6 +46,14 @@ DERIVED per HGM's stated rule — pending HGM/Adam review; the engine
 itself stays untouched (its battery is the GMR-convention ground
 truth).
 
+Consistency check (2026-08-08): across every juncture bigram in the
+master, ZERO cases exist where the same bigram is nasalized in one
+entry and not in another — the master's pronunciations are internally
+coherent (kyamdro vs kyabdroy differ because the following syllables
+differ: 'gro vs 'gro'i). The derived forms therefore never contradict
+a master-attested pronunciation of the same pair; they only fill the
+junctures the master renders un-nasalized.
+
 ## How the app uses it
 
 Lookup pane fallback chain: exact headword → affix-stripped →
