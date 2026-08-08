@@ -7,6 +7,7 @@
 #include <QElapsedTimer>
 #include <QHBoxLayout>
 #include <QInputDialog>
+#include <QTextDocumentFragment>
 #include <QListView>
 #include <QScrollArea>
 #include <QShortcut>
@@ -105,6 +106,13 @@
 #include "allcore/whitney.h"
 #include "allcore/colloquial.h"
 #include "allcore/proposals.h"
+
+// the in-house proposal channel (defined before main; forward-declared
+// here so the panes above can offer "propose from card")
+static void loadIdentity();
+static void fileProposal(QWidget* parent, allcore::ProposalKind kind,
+                         const QString& wylie, const QString& value,
+                         const QString& field, const QString& evidence);
 #include "allcore/verse.h"
 #include "allcore/wilsonparse.h"
 #include "allcore/terminology.h"
@@ -1097,6 +1105,8 @@ public:
                             cycle_ = 0;
                             onClick();
                         }
+                    } else if (s.startsWith("propose:")) {
+                        proposeFromCard(s.mid(8));
                     } else if (s.startsWith("http")) {
                         QDesktopServices::openUrl(u);
                     }
@@ -2183,6 +2193,76 @@ private:
                 line.mid(tab + 1).trimmed().toStdString();
         }
     }
+    // propose a term to the authority straight from its card, with the
+    // surrounding passage auto-captured as evidence (proposal channel
+    // v2). The kind is chosen by the proposer; the term and evidence
+    // come pre-filled so it takes one dialog, not a form re-entry.
+    void proposeFromCard(const QString& wylieHtml) {
+        const QString wylie =
+            QTextDocumentFragment::fromHtml(wylieHtml).toPlainText();
+        // category
+        const QStringList kinds = {
+            "Honorific term (↔ ordinary)",
+            "HIGH honorific marking",
+            "Pronunciation exception",
+            "Abbreviation / contraction candidate",
+            "Rendering for this word (→ dictionary)",
+            "Note about this passage"};
+        bool ok = false;
+        const QString choice = QInputDialog::getItem(
+            this, "Propose to the authority",
+            "What are you proposing for “" + wylie + "”?", kinds, 0, false,
+            &ok);
+        if (!ok) return;
+        allcore::ProposalKind kind = allcore::ProposalKind::WordRendering;
+        if (choice.startsWith("Honorific"))
+            kind = allcore::ProposalKind::Honorific;
+        else if (choice.startsWith("HIGH"))
+            kind = allcore::ProposalKind::HighHonorific;
+        else if (choice.startsWith("Pronunciation"))
+            kind = allcore::ProposalKind::Pronunciation;
+        else if (choice.startsWith("Abbreviation"))
+            kind = allcore::ProposalKind::Abbreviation;
+        else if (choice.startsWith("Note"))
+            kind = allcore::ProposalKind::Note;
+        // the proposed value
+        QString value;
+        if (kind != allcore::ProposalKind::Note) {
+            value = QInputDialog::getText(
+                this,
+                "Proposed value",
+                kind == allcore::ProposalKind::Pronunciation
+                    ? "Proposed pronunciation:"
+                    : (kind == allcore::ProposalKind::Honorific
+                           ? "Ordinary counterpart (or leave blank):"
+                           : "Proposed English / expansion:"),
+                QLineEdit::Normal, "", &ok);
+            if (!ok) return;
+        }
+        // evidence: the sentence around the cursor in the source
+        QString evidence;
+        if (input_) {
+            const QString all = input_->toPlainText();
+            const int pos = input_->textCursor().position();
+            int b = pos, e = pos;
+            for (int n = 0; b > 0 && all[b - 1] != '\n'; --b) {}
+            for (; e < all.size() && all[e] != '\n'; ++e) {}
+            evidence = all.mid(b, e - b).trimmed().left(300);
+        }
+        if (!docFile_.isEmpty())
+            evidence += "  [" + QFileInfo(docFile_).fileName() + "]";
+        // honorific: the term itself is the honorific, the value is the
+        // ordinary counterpart (matching the register file's columns)
+        QString field;
+        if (kind == allcore::ProposalKind::Honorific ||
+            kind == allcore::ProposalKind::HighHonorific) {
+            field = value;   // ordinary form goes in the secondary slot
+            value.clear();
+        }
+        loadIdentity();
+        fileProposal(this, kind, wylie, value, field, evidence);
+    }
+
     void saveGlossaryEntry(const std::string& wylie, const std::string& gloss) {
         const QString p = glossaryPath();
         if (p.isEmpty()) return;
@@ -2205,6 +2285,11 @@ private:
                                 it == glossary_.end()
                                     ? "＋ add to this text's glossary"
                                     : "edit");
+        // propose-from-card (proposal channel v2): offer this term to
+        // the authority, evidence auto-captured from the open passage
+        edit += QString(" &nbsp;·&nbsp; <a href='propose:%1'>propose to "
+                        "the authority…</a>")
+                    .arg(QString::fromStdString(wylie).toHtmlEscaped());
         if (it == glossary_.end())
             return docFile_.isEmpty()
                        ? QString()

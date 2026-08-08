@@ -64,12 +64,15 @@ differently:
 
 ## Roadmap (v2 and beyond)
 
-1. **Propose from context** — a small "Propose…" action directly on
-   the Overlay/Lookup entry cards, pre-filling the form with the term
-   and auto-capturing the surrounding passage as evidence. (v1
-   centralizes proposing in the Propose tab; the contextual action is
-   the natural next increment — it means threading a proposal anchor
-   through the card browsers.)
+1. ~~Propose from context~~ — DONE 2026-08-08: the Overlay entry
+   card carries a "propose to the authority…" link beside its
+   glossary action. One click asks the kind (honorific / high
+   honorific / pronunciation / abbreviation / word rendering / note),
+   the proposed value, and files it — with the term pre-filled and
+   the **surrounding source line auto-captured as evidence** (plus the
+   file name). Honorific proposals correctly route the ordinary
+   counterpart into the register's secondary column. Still to extend
+   to the Lookup card (same anchor pattern).
 2. **Approved-register regeneration** — fold approved rows into the
    canonical register TSVs at release time rather than appending live,
    so the derivation tools and the approved additions stay one file.
