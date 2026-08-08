@@ -197,10 +197,28 @@ static QString mvpHtml(const std::vector<const allcore::MvpEntry*>& hits) {
     return h;
 }
 
+// honorific register rows: wylie -> (ordinary, domain, level)
+using HonorificMap = std::map<std::string, std::array<QString, 3>>;
+
+static HonorificMap loadHonorifics(const QString& path) {
+    HonorificMap m;
+    QFile f(path);
+    if (!f.open(QIODevice::ReadOnly | QIODevice::Text)) return m;
+    while (!f.atEnd()) {
+        const QString line = QString::fromUtf8(f.readLine()).trimmed();
+        if (line.isEmpty() || line.startsWith('#')) continue;
+        const QStringList c = line.split('\t');
+        if (c.size() < 4) continue;
+        m[c[0].toStdString()] = {c[1], c[2], c[3]};
+    }
+    return m;
+}
+
 static QWidget* makeLookupPane(allcore::Spine& spine, allcore::RefDict* ref,
                                allcore::Mvp* mvp,
                                allcore::WhitneyRoots* whitney = nullptr,
-                               allcore::ColloquialPron* colloq = nullptr) {
+                               allcore::ColloquialPron* colloq = nullptr,
+                               const HonorificMap* honorifics = nullptr) {
     auto* pane = new QWidget;
     auto* outer = new QHBoxLayout(pane);
     auto* split = new QSplitter(Qt::Horizontal);
@@ -273,7 +291,8 @@ static QWidget* makeLookupPane(allcore::Spine& spine, allcore::RefDict* ref,
                      });
 
     QObject::connect(box, &QLineEdit::returnPressed, [&spine, ref, mvp,
-                                                      whitney, colloq, box,
+                                                      whitney, colloq,
+                                                      honorifics, box,
                                                       results] {
         const std::string raw = box->text().trimmed().toStdString();
         if (raw.empty()) return;
@@ -349,7 +368,29 @@ static QWidget* makeLookupPane(allcore::Spine& spine, allcore::RefDict* ref,
             }
         }
         if (entries.empty()) h = "<i>no HGM match</i>";
-        for (const auto& e : entries) h += entryHtml(e);
+        for (const auto& e : entries) {
+            h += entryHtml(e);
+            // honorific register badge (data/honorifics — curated seed)
+            if (honorifics) {
+                auto it = honorifics->find(e.wylie);
+                if (it != honorifics->end()) {
+                    const auto& [ord, dom, lvl] = it->second;
+                    h += "<div style='margin:-4px 0 8px 0'><span style='"
+                         "background:#EADFF7;color:#4A2A6B;padding:1px "
+                         "7px;border-radius:8px;font-size:12px'>" +
+                         QString(lvl == "high" ? "HIGH honorific"
+                                               : "honorific") +
+                         " (zhe sa — register)</span>" +
+                         (ord.isEmpty()
+                              ? QString()
+                              : " <small style='color:#555'>ordinary: "
+                                "<b>" + ord.toHtmlEscaped() +
+                                "</b></small>") +
+                         " <small style='color:#777'>" +
+                         dom.toHtmlEscaped() + "</small></div>";
+                }
+            }
+        }
 
         if (ref) {
             // resolve to wylie for the reference layers (they key on wylie)
@@ -6373,7 +6414,10 @@ int main(int argc, char** argv) {
                 "Library");
     tabs.addTab(makeSearchPane(spine, root + "/library"), "Search");
     tabs.addTab(makeConvertPane(mvp, whitney), "Convert");
-    tabs.addTab(makeLookupPane(spine, refdict, mvp, whitney, colloq),
+    static const HonorificMap honorifics = loadHonorifics(
+        root + "/data/honorifics/honorific_register.tsv");
+    tabs.addTab(makeLookupPane(spine, refdict, mvp, whitney, colloq,
+                               honorifics.empty() ? nullptr : &honorifics),
                 "Lookup");
 #ifdef ALL_HAVE_OCR
     tabs.addTab(new ScanPane(checker, root), "Scan");
