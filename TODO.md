@@ -517,9 +517,19 @@ display toggles, not through invention.
       ADV shipped same day: an UNAMBIGUOUS SOAS adv.* tag on the
       pre-verb unit resolves "ADV (adverb — SOAS lexicon)" (battery:
       kha sang | bstan; 164 adverbs across 5 subtags).
-      REMAINING: OM contraction dots (needs an abbreviation table —
-      the rKTs bskungs-yig DB would supply it, license pending), UP
-      understood-particle inference.
+      UP SHIPPED same day (attested-only, per Wilson p.573 verbatim —
+      "the dot where the case-marking particle would normally have
+      been seen"; his preferred label = the case number): between two
+      bare nominals, the genitive family (kyi/gyi/gi/yi/'i) + dang are
+      probed against OUR OWN dictionary entries and corpus; an
+      attested uncontracted form resolves "UP (6 — understood kyi;
+      attested uncontracted: …)" naming the evidence (battery: tshul
+      khrims | phung po via 4 corpus hits of tshul khrims kyi phung
+      po). Evidence order at the pair dot: NA(SOAS adj) > UP(attested)
+      > NN|APP(SOAS nouns) > undetermined.
+      REMAINING: OM only (needs a bsdus-tshig syllabic-contraction
+      table with a clear license — rKTs candidate). Eleven of twelve
+      dot designations now implemented.
 
 - [x] **Translation Trainer v1** (docs/TRAINER_DESIGN.md): clause splitter,
       phrase chunker, verb spotter (HGM tenses + "to …" glosses),

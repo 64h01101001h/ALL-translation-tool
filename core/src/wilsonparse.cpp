@@ -389,29 +389,68 @@ std::vector<ClauseParse> wilsonParse(const Spine& spine, const OverlayDoc& doc,
                             d.label = "ADV (adverb — SOAS lexicon)";
                     }
                 } else {
-                    // two bare nominals: NOM vs NA/NN/APP needs POS data.
-                    // With the SOAS hand-tagged lexicon (CC BY 4.0) the NA
-                    // case resolves on an UNAMBIGUOUS adjective tag, and a
-                    // noun-noun pair narrows to NN|APP (apposition remains
-                    // undecidable from POS alone). Evidence is named;
-                    // anything ambiguous stays undetermined.
+                    // two bare nominals: NOM vs NA/NN/APP/UP needs evidence.
+                    // Order of evidence (each named in the label):
+                    //   1. NA on an UNAMBIGUOUS SOAS adjective tag;
+                    //   2. UP when OUR OWN dictionary/corpus attests the
+                    //      uncontracted form with a case particle between
+                    //      the two words (Wilson p.573: "the dot where the
+                    //      case-marking particle would normally have been
+                    //      seen"; his preferred label = the case number);
+                    //   3. NN|APP narrowing on unambiguous SOAS noun tags.
+                    // Anything unattested/ambiguous stays undetermined.
                     d.label = "NOM|NA|NN|APP (undetermined)";
-                    if (pos) {
-                        auto uniOf = [](const std::string& acip) {
-                            auto [u, ok] = wylieToUnicode(acipToEwts(acip));
-                            return ok ? u : std::string();
+                    auto uniOf = [](const std::string& acip) {
+                        auto [u, ok] = wylieToUnicode(acipToEwts(acip));
+                        return ok ? u : std::string();
+                    };
+                    const std::string nextUni = uniOf(us[nu].text);
+                    bool resolved = false;
+                    if (pos && !nextUni.empty() &&
+                        pos->unambiguousAdj(nextUni)) {
+                        d.label = "NA (adjective — SOAS lexicon)";
+                        resolved = true;
+                    }
+                    if (!resolved) {
+                        // UP probe: try the case particles Wilson's examples
+                        // drop (genitive family + dang), attested-only
+                        const std::string curW = acipToEwts(cur.text);
+                        const std::string nextW = acipToEwts(us[nu].text);
+                        struct Cand { const char* part; const char* label; };
+                        static const Cand kCands[] = {
+                            {"kyi", "6"}, {"gyi", "6"}, {"gi", "6"},
+                            {"yi", "6"},  {"'i", "6"},  {"dang", "SP"},
                         };
-                        const std::string nextUni = uniOf(us[nu].text);
-                        if (!nextUni.empty() && pos->unambiguousAdj(nextUni)) {
-                            d.label = "NA (adjective — SOAS lexicon)";
-                        } else {
-                            const std::string curUni = uniOf(cur.text);
-                            if (!curUni.empty() && !nextUni.empty() &&
-                                pos->unambiguousNoun(curUni) &&
-                                pos->unambiguousNoun(nextUni))
-                                d.label = "NN|APP (both nouns — SOAS lexicon; "
-                                          "apposition undecidable)";
+                        for (const auto& c : kCands) {
+                            std::string phrase =
+                                std::string(c.part) == "'i"
+                                    ? curW + "'i " + nextW
+                                    : curW + " " + c.part + " " + nextW;
+                            bool attested = !spine.lookup(phrase).empty();
+                            long corpusN = 0;
+                            if (!attested) {
+                                auto segs = spine.corpusSearch(
+                                    "\"" + phrase + "\"", "", 3);
+                                corpusN = static_cast<long>(segs.size());
+                                attested = corpusN > 0;
+                            }
+                            if (attested) {
+                                d.label = "UP (" + std::string(c.label) +
+                                          " — understood " + c.part +
+                                          "; attested uncontracted: " +
+                                          phrase + ")";
+                                resolved = true;
+                                break;
+                            }
                         }
+                    }
+                    if (!resolved && pos) {
+                        const std::string curUni = uniOf(cur.text);
+                        if (!curUni.empty() && !nextUni.empty() &&
+                            pos->unambiguousNoun(curUni) &&
+                            pos->unambiguousNoun(nextUni))
+                            d.label = "NN|APP (both nouns — SOAS lexicon; "
+                                      "apposition undecidable)";
                     }
                 }
                 cp.dots.push_back(std::move(d));

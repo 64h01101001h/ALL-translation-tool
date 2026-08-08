@@ -71,6 +71,22 @@ int main(int argc, char** argv) {
         CHECK(plainUndet, "without POS data the dot stays undetermined");
         (void)sawUndet;
 
+        // UP: Wilson's understood-particle dot, attested-only (p.573 —
+        // resolved because OUR corpus attests the uncontracted form
+        // "tshul khrims kyi phung po"; no POS lexicon needed)
+        auto d3 = allcore::buildOverlay(spine, index, "TSHUL KHRIMS PHUNG PO");
+        auto c3 = allcore::refineClauses(
+            d3, allcore::splitClauses(d3.tokens, d3.barrier_after));
+        auto p3 = allcore::wilsonParse(spine, d3, c3);
+        bool sawUp = false;
+        for (const auto& cp : p3)
+            for (const auto& d : cp.dots)
+                if (d.label.find("UP (6") != std::string::npos &&
+                    d.label.find("attested uncontracted") != std::string::npos)
+                    sawUp = true;
+        CHECK(sawUp,
+              "tshul khrims | phung po: UP (6) dot resolved by attestation");
+
         // ADV: an unambiguous adverb before the verb (kha sang = yesterday)
         CHECK(pos.unambiguousAdv(u("kha sang")), "kha sang: unambiguous adv");
         auto d2 = allcore::buildOverlay(spine, index, "KHA SANG BSTAN");
