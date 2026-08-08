@@ -128,6 +128,16 @@ sections, QC'd, auto-saved)
   "Import .hyp…" maps char spans → token spans (sub-syllable links
   widened and counted, unmappable skipped and counted — never
   guessed); links land in the normal library/links flow
+- ✅ **Whitney reference layer** (Adam's request, 2026-08-08) — both
+  preeminent works: the 937 roots of *Roots, Verb-Forms and Primary
+  Derivatives* (1885) with homonym numbers, meanings, per-homonym
+  classes, accented PPP; per-root §§ citations + topical ranges into
+  the *Sanskrit Grammar* (1879) with ✦/⚠ markers; MW ids/senses +
+  SLP1-keyed Cologne MW deep-links (verified live); archive.org PD
+  Grammar link-out. Lookup matches by root, past participle
+  (gata→gam), or English meaning; Convert pane annotates exact root
+  forms. Works PD; digitization Apache-2.0 (gasyoun/WhitneyRoots),
+  banked with license; 34th suite whitney_smoke
 - ⬜ **Live composing editor** (Jskad idea — waits for the input-center
   formatter) · ⬜ Old-Tibetan affixnorm rules (remote session's
   thread)
