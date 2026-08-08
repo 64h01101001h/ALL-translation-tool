@@ -122,6 +122,8 @@ struct EntryDisplay {
 // once in main(), consulted by every entry card in every pane
 using HonorificMap = std::map<std::string, std::array<QString, 3>>;
 static const HonorificMap* g_honorifics = nullptr;
+// the colloquial/prenasal register, for the cards' "also heard" line
+static const allcore::ColloquialPron* g_colloquial = nullptr;
 
 static QString entryHtml(const allcore::Entry& e,
                          const EntryDisplay& d = EntryDisplay{}) {
@@ -148,6 +150,25 @@ static QString entryHtml(const allcore::Entry& e,
     if (d.phonetics && !e.pronunciation.empty()) {
         h += "<br>pron: " + QString::fromStdString(e.pronunciation).toHtmlEscaped();
         if (e.pronunciation_card_attested) h += " ⟪card⟫";
+        // registered variants: community spellings and the prenasal
+        // (kamdir) forms — labeled by class, never replacing the
+        // GMR-convention pron above
+        if (g_colloquial) {
+            QString also;
+            for (const auto* v : g_colloquial->byWylie(e.wylie)) {
+                if (!also.isEmpty()) also += " · ";
+                also += QString::fromStdString(v->colloquial)
+                            .toHtmlEscaped() +
+                        (v->cls == "prenasal-derived"
+                             ? " <span style='color:#999'>(prenasal, "
+                               "derived)</span>"
+                             : " <span style='color:#999'>(community)"
+                               "</span>");
+            }
+            if (!also.isEmpty())
+                h += "<br><small style='color:#666'>also heard: " +
+                     also + "</small>";
+        }
     }
     if (d.glosses) {
         for (const auto& g : e.hgm_gloss) {
@@ -5858,6 +5879,27 @@ public:
         auto* row = new QHBoxLayout;
         auto* openScanB = new QPushButton("Open scan…");
         row->addWidget(openScanB);
+        auto* openFolderB = new QPushButton("Open scan folder…");
+        openFolderB->setToolTip(
+            "The block workflow: open a whole folder of page scans and "
+            "work through them in order — each page's typing saves to "
+            "its own file in library/input_work/<folder>/ and reloads "
+            "when you return to the page.");
+        row->addWidget(openFolderB);
+        prevPageB_ = new QPushButton("◀ page");
+        nextPageB_ = new QPushButton("page ▶");
+        pageLbl_ = new QLabel;
+        prevPageB_->setEnabled(false);
+        nextPageB_->setEnabled(false);
+        row->addWidget(prevPageB_);
+        row->addWidget(pageLbl_);
+        row->addWidget(nextPageB_);
+        connect(openFolderB, &QPushButton::clicked,
+                [this] { openFolder(); });
+        connect(prevPageB_, &QPushButton::clicked,
+                [this] { gotoPage(pageIx_ - 1); });
+        connect(nextPageB_, &QPushButton::clicked,
+                [this] { gotoPage(pageIx_ + 1); });
         followBox_ = new QCheckBox("scan follows cursor");
         followBox_->setChecked(true);
         row->addWidget(followBox_);
@@ -6147,6 +6189,71 @@ private:
                       .arg(QFileInfo(f).fileName()));
     }
 
+    // ---- the block workflow: a folder of pages, typed in order ----
+    void openFolder() {
+        const QString dir = QFileDialog::getExistingDirectory(
+            this, "Folder of page scans", root_ + "/library");
+        if (dir.isEmpty()) return;
+        pages_.clear();
+        for (const QString& e : QDir(dir).entryList(
+                 {"*.png", "*.jpg", "*.jpeg", "*.tif", "*.tiff"},
+                 QDir::Files, QDir::Name))
+            pages_ << dir + "/" + e;
+        if (pages_.isEmpty()) {
+            status_->setText("no page images in that folder");
+            return;
+        }
+        workDir_ = root_ + "/library/input_work/" +
+                   QFileInfo(dir).fileName();
+        QDir().mkpath(workDir_);
+        pageIx_ = -1;
+        gotoPage(0);
+        status_->setText(
+            QString("%1 page(s) — typing saves per page into %2; use "
+                    "◀ ▶ to move through the block")
+                .arg(pages_.size())
+                .arg(workDir_));
+    }
+
+    QString pageTextFile(int ix) const {
+        return workDir_ +
+               QString("/page_%1_%2.txt")
+                   .arg(ix + 1, 3, 10, QChar('0'))
+                   .arg(QFileInfo(pages_[ix]).completeBaseName());
+    }
+
+    void gotoPage(int ix) {
+        if (ix < 0 || ix >= pages_.size()) return;
+        // save the current page's typing before moving
+        if (pageIx_ >= 0 && pageIx_ < pages_.size()) {
+            QFile f(pageTextFile(pageIx_));
+            if (f.open(QIODevice::WriteOnly | QIODevice::Text))
+                f.write(editor_->toPlainText().toUtf8());
+        }
+        pageIx_ = ix;
+        base_ = QPixmap(pages_[ix]);
+        scanFile_ = pages_[ix];
+#ifdef ALL_HAVE_OCR
+        bands_.clear();
+#endif
+        curBand_ = -1;
+        render();
+        // load this page's typing, if any
+        QFile f(pageTextFile(ix));
+        editor_->setPlainText(
+            f.open(QIODevice::ReadOnly | QIODevice::Text)
+                ? QString::fromUtf8(f.readAll())
+                : QString());
+        pageLbl_->setText(QString("page %1/%2").arg(ix + 1)
+                              .arg(pages_.size()));
+        prevPageB_->setEnabled(ix > 0);
+        nextPageB_->setEnabled(ix + 1 < pages_.size());
+        status_->setText(QString("%1 (%2) — %3")
+                             .arg(QFileInfo(pages_[ix]).fileName())
+                             .arg(pageLbl_->text())
+                             .arg(bandNote()));
+    }
+
     // insert the next @dddX folio marker (ACIP spec: column 1,
     // 3-digit zero-padded, sides A -> B -> next number's A)
     void nextFolio() {
@@ -6175,6 +6282,35 @@ private:
 
     void save() {
         QDir().mkpath(root_ + "/library/input_work");
+        // block mode: flush the current page, then export the whole
+        // block combined in page order
+        if (!pages_.isEmpty() && pageIx_ >= 0) {
+            gotoPage(pageIx_);   // persists the current page's text
+            const QString out = QFileDialog::getSaveFileName(
+                this, "Export combined block",
+                workDir_ + "-combined.txt", "Text (*.txt)");
+            if (out.isEmpty()) return;
+            QFile f(out);
+            if (!f.open(QIODevice::WriteOnly | QIODevice::Text)) return;
+            int nonEmpty = 0;
+            for (int i = 0; i < pages_.size(); ++i) {
+                QFile pf(pageTextFile(i));
+                if (pf.open(QIODevice::ReadOnly | QIODevice::Text)) {
+                    const QByteArray t = pf.readAll();
+                    if (!t.trimmed().isEmpty()) {
+                        f.write(t);
+                        if (!t.endsWith('\n')) f.write("\n");
+                        ++nonEmpty;
+                    }
+                }
+            }
+            status_->setText(
+                QString("combined %1 typed page(s) of %2 into %3")
+                    .arg(nonEmpty)
+                    .arg(pages_.size())
+                    .arg(out));
+            return;
+        }
         const QString base =
             scanFile_.isEmpty() ? "input"
                                 : QFileInfo(scanFile_).completeBaseName();
@@ -6200,6 +6336,13 @@ private:
     QLabel* status_ = nullptr;
     QList<QTextEdit::ExtraSelection> spellSels_, diffSels_;
     int curBand_ = -1;
+    // block workflow state
+    QStringList pages_;
+    int pageIx_ = -1;
+    QString workDir_;
+    QPushButton* prevPageB_ = nullptr;
+    QPushButton* nextPageB_ = nullptr;
+    QLabel* pageLbl_ = nullptr;
 #ifdef ALL_HAVE_OCR
     std::unique_ptr<allocr::LineDetector> det_;
     std::vector<allocr::OcrLine> bands_;
@@ -6732,8 +6875,10 @@ int main(int argc, char** argv) {
     {
         static allcore::ColloquialPron cp;
         if (cp.load((root + "/data/pron_colloquial/colloquial_pron.tsv")
-                        .toStdString()))
+                        .toStdString())) {
             colloq = &cp;
+            g_colloquial = &cp;
+        }
     }
 
     // the SOAS POS lexicon (CC BY 4.0) — optional; consulted only where

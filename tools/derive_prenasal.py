@@ -146,11 +146,14 @@ def main() -> int:
     rx_other = re.compile(
         r"(\S*(?:[aeiou]|[^bn\s]g|[aeiou]gs|[aeiou][slr]|[aeiou]d)) "
         r"(" + A + r"[dgbj]\S*)")
-    n_def = 0
+    n_letter = n_fmt = 0
+    strip = lambda s: s.replace("-", "").replace(" ", "")
     with open(DEFECTS, "w", encoding="utf-8") as f:
         f.write("# stored pronunciation differs from the canonical "
                 "engine at a prenasal juncture — data-project review\n")
-        f.write("# wylie\tstored\tengine\n")
+        f.write("# class: letter-diff = real letters differ · "
+                "formatting-only = hyphen/space layout only\n")
+        f.write("# wylie\tstored\tengine\tclass\n")
         for wylie, stored in rows:
             if not rx_other.search(wylie):
                 continue
@@ -159,9 +162,16 @@ def main() -> int:
             except Exception:
                 continue
             if engine != stored:
-                f.write(f"{wylie}\t{stored}\t{engine}\n")
-                n_def += 1
-    print(f"defect candidates (stored != engine, other classes): {n_def}")
+                cls = ("formatting-only"
+                       if strip(engine) == strip(stored)
+                       else "letter-diff")
+                if cls == "letter-diff":
+                    n_letter += 1
+                else:
+                    n_fmt += 1
+                f.write(f"{wylie}\t{stored}\t{engine}\t{cls}\n")
+    print(f"defect candidates: {n_letter} letter-diff · "
+          f"{n_fmt} formatting-only")
     print(f"-> {DEFECTS}")
     return 0
 

@@ -33,11 +33,21 @@ bool ColloquialPron::load(const std::string& tsvPath) {
         e.wylie = cols[1];
         if (cols.size() > 2) e.gmrPron = cols[2];
         if (cols.size() > 3) e.cls = cols[3];
-        ix_[foldPron(e.colloquial)].push_back(
-            static_cast<int>(entries_.size()));
+        const int ix = static_cast<int>(entries_.size());
+        ix_[foldPron(e.colloquial)].push_back(ix);
+        byWylie_[e.wylie].push_back(ix);
         entries_.push_back(std::move(e));
     }
     return !entries_.empty();
+}
+
+std::vector<const ColloquialEntry*> ColloquialPron::byWylie(
+    const std::string& wylie) const {
+    std::vector<const ColloquialEntry*> out;
+    auto it = byWylie_.find(wylie);
+    if (it != byWylie_.end())
+        for (int ix : it->second) out.push_back(&entries_[ix]);
+    return out;
 }
 
 std::vector<const ColloquialEntry*> ColloquialPron::byColloquial(

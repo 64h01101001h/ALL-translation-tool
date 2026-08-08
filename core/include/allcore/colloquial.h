@@ -26,10 +26,14 @@ public:
     // case-folded, letters-only match (same fold as the pron index)
     std::vector<const ColloquialEntry*> byColloquial(
         const std::string& query) const;
+    // all registered variants for a dictionary headword
+    std::vector<const ColloquialEntry*> byWylie(
+        const std::string& wylie) const;
 
 private:
     std::vector<ColloquialEntry> entries_;
     std::map<std::string, std::vector<int>> ix_;
+    std::map<std::string, std::vector<int>> byWylie_;
 };
 
 }  // namespace allcore
