@@ -36,7 +36,43 @@ unicode→wylie→ACIP through our proven converters. A Scan pane shows the
 page image with recognized lines side by side; low-confidence lines and
 spellcheck-flagged syllables get the review treatment.
 
-**License check (done 2026-08-06):**
+**License status — RESOLVED (2026-08-07):** Adam reports BDRC has
+given the okay for our OCR usage (models included). Action: save the
+written confirmation into `docs/licenses/BDRC_OCR_permission.*` when
+available — the project records permissions the way it records
+standards: the actual words, who, when. Stage 2 is now unblocked.
+
+**Stage 2 spike (2026-08-07, same day as permission): FIRST INFERENCE
+RAN.** BDRC/PhotiLines (line detection, 90MB ONNX, CC BY-NC 4.0 on the
+HF card) downloaded to `library/ocr_models/BDRC_PhotiLines/` and run
+via onnxruntime (python, as the pipeline probe) on our cached
+Pramanavarttika folio 94a: input NCHW RGB, 512-patch tiling per the
+app's own preprocessing (BDRC/Inference.py), logits → sigmoid → mask;
+the model traces the title line's glyphs even on a 676px microfilm
+title page (the hardest case — sparse ornate folio). Model inventory
+on HF (author=BDRC): Photi/PhotiLines (layout/lines), Woodblock,
+DergeTenjur, LhasaKanjur, LithangKanjur, GoogleBooks_{E,C,T},
+Norbuketaka_{E,C}, ScriptClassifier.
+
+**Stage 2 build plan (concrete):**
+1. Dependency: onnxruntime (brew; C++ API) — linked by a NEW `allocr`
+   target, never allcore (ML stays out of the deterministic core).
+2. Model manager: first-run download from HF into
+   `library/ocr_models/<repo>/` with license + BDRC credit shown
+   (permission on record: docs/licenses/BDRC_OCR_permission.md).
+3. Pipeline port from BDRC/Inference.py (MIT): patch-512 tiling →
+   LineDetection mask → line extraction (contour/row bands) → CTC
+   recognition (charset from each model's config) → Tibetan Unicode →
+   our proven unicode→wylie/ACIP chain + syllable-legality QC pass.
+4. Oracle: the BDRC app itself runs locally (python) — capture its
+   text output on fixture folios; the C++ port diffs against it
+   (same discipline as every other port).
+5. UI (after the app-file lane is free): Scan pane — page image,
+   detected lines, per-line recognition w/ confidence, everything
+   marked ocr-derived; feeds the existing ocr_out review flow; also
+   unlocks word-level scan follow-along coordinates.
+
+**Original license check (2026-08-06):**
 - The app/pipeline CODE is **MIT-licensed** — we may incorporate, modify,
   and redistribute it inside our application freely, preserving the license
   text and attribution. Fully compatible with our codebase.
