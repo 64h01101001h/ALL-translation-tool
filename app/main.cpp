@@ -3701,6 +3701,14 @@ private:
                 for (auto it = o.begin(); it != o.end(); ++it)
                     titles_[it.key()] = it.value().toString();
             }
+            QFile fs(QFileInfo(libRoot_).path() +
+                     "/data/extracted/sungbum_subjects.json");
+            if (fs.open(QIODevice::ReadOnly)) {
+                const auto o =
+                    QJsonDocument::fromJson(fs.readAll()).object();
+                for (auto it = o.begin(); it != o.end(); ++it)
+                    subjects_[it.key()] = it.value().toString();
+            }
         }
         QRegularExpression re("^([A-Za-z]+)0*(\\d+)");
         const auto m = re.match(fileName);
@@ -3830,6 +3838,19 @@ private:
             h += "<div style='margin-top:2px'><i>" + etitle.toHtmlEscaped() +
                  "</i> <small style='color:#777'>(catalog title)</small>"
                  "</div>";
+        {
+            QRegularExpression re("^([A-Za-z]+)0*(\\d+)");
+            const auto m = re.match(fi.fileName());
+            const QString subj =
+                m.hasMatch() ? subjects_.value(m.captured(1).toUpper() +
+                                               m.captured(2))
+                             : QString();
+            if (!subj.isEmpty())
+                h += "<div><span style='font-size:13px'>" +
+                     subj.toHtmlEscaped() +
+                     "</span> <small style='color:#777'>(subject, "
+                     "Sungbum catalog)</small></div>";
+        }
         if (acip.recognized) {
             h += "<div style='margin-top:4px;color:#4A3FBF'>" +
                  QString::fromStdString(acip.collection).toHtmlEscaped() +
@@ -4029,6 +4050,7 @@ private:
     QTableWidget* list_ = nullptr;
     QStackedWidget* stack_ = nullptr;
     QHash<QString, QString> titles_;
+    QHash<QString, QString> subjects_;
     bool titlesLoaded_ = false;
     QTextBrowser* info_ = nullptr;
     QLineEdit* search_ = nullptr;

@@ -24,6 +24,15 @@ display toggles, not through invention.
       provenance (catalog_no + catalog_source); HANDOFF.md wave note;
       app spine rebuilt, 16/16. Library now shows catalog English
       titles (info panel + list-view column, 1,899 numbers joined).
+      v0.30 WAVE 2026-08-07 (Adam: all title translations + subject
+      headings): ༠༠ Sungbum Catalog.xlsx → +1,055 NEW pairs (1,837
+      deduped vs v0.29), corpus 41,817; 2,416 texts → hierarchical
+      Tibetan subjects (1,155 paths, 34 top-level) in
+      sungbum_subjects.json; Library shows subject + English title;
+      catalog_titles join now 2,352 numbers. Subjects are
+      TIBETAN-ONLY — English pairing awaits the Master Catalog's
+      empty Subject Category column or the collection ZIPs' folder
+      names (install ZIPs to check the folder-name convention).
       REMAINING — **the tier ruling is Adam's**: are catalog English
       titles binding HGM English (→ dictionary-side attestation) or a
       labeled reference layer? Also: confirm the Thursday-folder

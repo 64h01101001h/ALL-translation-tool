@@ -6,7 +6,7 @@ Roadmap item 1. The app IMPORTS a release; this builder is the importer.
 Provenance rule: every entry's complete source JSON is preserved verbatim in
 entries.raw — the relational columns are a query surface, never a replacement.
 
-Inputs  (data/):  hgm_dictionary_v27_2.json.gz · full_parallel_corpus_v29.json.gz
+Inputs  (data/):  hgm_dictionary_v27_2.json.gz · full_parallel_corpus_v30.json.gz
                   hgm_reverse_index_v27_2.json
 Output  (build/): hgm_spine_v27_2.db
 """
@@ -17,7 +17,7 @@ ROOT = Path(__file__).resolve().parent.parent
 DATA = ROOT / 'data'
 BUILD = ROOT / 'build'
 MASTER = DATA / 'hgm_dictionary_v27_2.json.gz'
-CORPUS = DATA / 'full_parallel_corpus_v29.json.gz'
+CORPUS = DATA / 'full_parallel_corpus_v30.json.gz'
 REVERSE = DATA / 'hgm_reverse_index_v27_2.json'
 DB = BUILD / 'hgm_spine_v27_2.db'
 
