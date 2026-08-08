@@ -241,6 +241,10 @@ std::vector<SegWord> Segmenter::segment(const std::string& unicodeText) {
                 if (!node) { ok = false; break; }
             }
             w.word = ok && node && node->isMatch();
+            if (w.word && node->data.hasAffixation) {
+                w.affixType = node->data.affixation.type;
+                w.affixAa = node->data.affixation.aa;
+            }
         }
         out.push_back(std::move(w));
     }

@@ -194,6 +194,17 @@ int main(int argc, char** argv) {
         seg.addWord("བཀྲ་ཤིས་");
         seg.addWord("བདེ་ལེགས་");
         seg.addWord("མཐའ་");
+        // the compact trie must agree word-for-word (incl. affix info)
+        SegTrie compact(argv[1]);
+        compact.addWord("བཀྲ་ཤིས་");
+        compact.addWord("བདེ་ལེགས་");
+        compact.addWord("མཐའ་");
+        const char* inp = "བཀྲ་ཤིས་བདེ་ལེགས། ཀཀ abc མཐའི་མཐའ།";
+        CHECK(seg.segment(inp) == compact.segment(inp),
+              "SegTrie == ported Segmenter on the facade scenario");
+        auto cw = compact.segment(inp);
+        CHECK(cw.size() == 8 && cw[5].affixType == "gi" && cw[5].affixAa,
+              "SegTrie affix info: mtha'i = gi affix with aa");
         auto words = seg.segment("བཀྲ་ཤིས་བདེ་ལེགས། ཀཀ abc མཐའི་མཐའ།");
         CHECK(words.size() == 8, "segmenter: token count");
         auto is = [&](size_t i, const char* text, bool tib, bool word) {
@@ -212,6 +223,7 @@ int main(int argc, char** argv) {
 
     // ---- corpus-scale battery ----------------------------------------------
     if (argc >= 5) {
+        {  // scoped: the big ported trie frees before the equivalence pass
         Trie trie(table, bosyl);
         sqlite3* db = nullptr;
         CHECK(sqlite3_open_v2(argv[3], &db, SQLITE_OPEN_READONLY, nullptr) ==
@@ -257,6 +269,66 @@ int main(int argc, char** argv) {
                     total ? 100.0 * match / total : 0.0);
         CHECK(total > 0 && match == total,
               "corpus-scale token streams identical to oracle");
+        }  // ported trie freed
+
+        // ---- SegTrie corpus equivalence: compact path == ported path ------
+        {
+            Segmenter ported(argv[1]);
+            SegTrie compact(argv[1]);
+            sqlite3* db = nullptr;
+            sqlite3_open_v2(argv[3], &db, SQLITE_OPEN_READONLY, nullptr);
+            sqlite3_stmt* s = nullptr;
+            sqlite3_prepare_v2(
+                db,
+                "SELECT DISTINCT tibetan FROM entries WHERE tibetan IS NOT "
+                "NULL AND tibetan != '' ORDER BY tibetan",
+                -1, &s, nullptr);
+            while (sqlite3_step(s) == SQLITE_ROW) {
+                const char* w =
+                    reinterpret_cast<const char*>(sqlite3_column_text(s, 0));
+                ported.addWord(w);
+                compact.addWord(w);
+            }
+            sqlite3_finalize(s);
+            sqlite3_close(db);
+            std::printf("  SegTrie: %zu words, %zu nodes, %zu edges "
+                        "(~%.0f MB flat)\n",
+                        compact.wordCount(), compact.nodeCount(),
+                        compact.edgeCount(),
+                        (compact.nodeCount() * 2.0 +
+                         compact.edgeCount() * 24.0) / 1e6);
+
+            std::ifstream ref(argv[4]);
+            std::string line;
+            long total = 0, same = 0, shown = 0;
+            while (std::getline(ref, line)) {
+                size_t tab = line.find('\t');
+                if (tab == std::string::npos) continue;
+                std::string input = line.substr(0, tab);
+                auto a = ported.segment(input);
+                auto b = compact.segment(input);
+                ++total;
+                if (a == b) ++same;
+                else if (shown++ < 3) {
+                    std::printf("    seg diff on: %.60s...\n", input.c_str());
+                    for (size_t i = 0; i < a.size() || i < b.size(); ++i) {
+                        if (i < a.size())
+                            std::printf("      ported [%zu] '%s' t%d w%d %s\n",
+                                        i, a[i].text.c_str(), a[i].tibetan,
+                                        a[i].word, a[i].affixType.c_str());
+                        if (i < b.size())
+                            std::printf("      compact[%zu] '%s' t%d w%d %s\n",
+                                        i, b[i].text.c_str(), b[i].tibetan,
+                                        b[i].word, b[i].affixType.c_str());
+                    }
+                }
+            }
+            std::printf("  SegTrie corpus equivalence: %ld/%ld = %.3f%%\n",
+                        same, total, total ? 100.0 * same / total : 0.0);
+            CHECK(total > 0 && same == total,
+                  "SegTrie segmentation identical to the ported path at "
+                  "corpus scale");
+        }
     }
 
     std::printf("botok_tok_smoke: %s (%d failures)\n",

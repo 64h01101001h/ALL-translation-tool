@@ -343,6 +343,13 @@ struct SegWord {
     std::string text;     // the token's surface text (UTF-8, incl. tsheks)
     bool tibetan = false; // TEXT chunk (vs punct/latin/other)
     bool word = false;    // the cleaned syllables reach a lexicon leaf
+    // when the matched leaf is an inflected (affixed) lexicon form:
+    std::string affixType;  // "gi", "gis", "la", ... (empty = base form)
+    bool affixAa = false;   // the host lost a final འ to take the affix
+    bool operator==(const SegWord& o) const {
+        return text == o.text && tibetan == o.tibetan && word == o.word &&
+               affixType == o.affixType && affixAa == o.affixAa;
+    }
 };
 
 class Segmenter {
@@ -366,6 +373,46 @@ private:
     Trie trie_;
     size_t words_ = 0;
 };
+
+// SegTrie — the memory-lean segmentation trie for app-scale lexica
+// (spine headwords + the 449k Monlam forms × affix inflection would be
+// GB-scale in the ported TrieNode layout). Structure: interned syllable
+// ids, one flat edge hash map, two bytes of flags per node (leaf +
+// affix-type + aa). Segmentation runs the SAME maximal-match walk as the
+// ported Tokenize, minus node-data bookkeeping (which cannot affect
+// boundaries); the battery proves SegTrie::segment == Segmenter::segment
+// word-for-word at corpus scale, so the ported path remains the anchor.
+class SegTrie {
+public:
+    SegTrie(const std::string& dataDir)
+        : table_(dataDir), bosyl_(dataDir) {
+        nodes_.push_back(0);  // root
+    }
+
+    void addWord(const std::string& unicodeWord);  // word + all affixed forms
+    std::vector<SegWord> segment(const std::string& unicodeText) const;
+
+    size_t wordCount() const { return words_; }
+    size_t nodeCount() const { return nodes_.size(); }
+    size_t edgeCount() const { return edges_.size(); }
+
+private:
+    static constexpr uint32_t kNoNode = 0xFFFFFFFFu;
+    uint32_t walkSyl(const std::string& syl, uint32_t node) const;
+    void add(const std::vector<std::string>& syls, int affixTypeIdx, bool aa);
+
+    CharTable table_;
+    BoSyl bosyl_;
+    std::unordered_map<std::string, uint32_t> sylIds_;
+    std::unordered_map<uint64_t, uint32_t> edges_;  // (parent<<24|sylId) -> child
+    // per node: bit0 leaf · bits1-4 affix type (0 none, 1..11 botok order) ·
+    // bit5 aa
+    std::vector<uint16_t> nodes_;
+    size_t words_ = 0;
+};
+
+// affix-type names in botok's fixed order (1-based index into this table)
+const char* segAffixTypeName(int idx);
 
 }  // namespace botok
 }  // namespace allcore

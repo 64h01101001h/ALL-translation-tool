@@ -1367,32 +1367,39 @@ private:
     QCheckBox* showHopkins_ = nullptr;
     QCheckBox* showRefs_ = nullptr;
     QCheckBox* showSeg_ = nullptr;
-    std::unique_ptr<allcore::botok::Segmenter> segmenter_;
+    std::unique_ptr<allcore::botok::SegTrie> segmenter_;
     bool segTried_ = false;
     QString segInfo_;
     bool loading_ = false;
     int lastTok_ = -1;
     int cycle_ = 0;
 
-    // Botok segmenter: lazy one-time lexicon build (HGM dictionary headwords
-    // through the battery-proven conversion chain). Reference display only —
-    // the Overlay's spans stay dictionary-lattice-bound.
+    // Botok segmenter: lazy one-time lexicon build — HGM dictionary headwords
+    // (battery-proven conversion chain) + the Monlam word lists, in the
+    // compact SegTrie (proven segmentation-identical to the ported path at
+    // corpus scale). Reference display only — the Overlay's spans stay
+    // dictionary-lattice-bound.
     void ensureSegmenter() {
         if (segTried_) return;
         segTried_ = true;
         QElapsedTimer timer;
         timer.start();
         try {
-            auto seg = std::make_unique<allcore::botok::Segmenter>(
+            auto seg = std::make_unique<allcore::botok::SegTrie>(
                 (dataRoot_ + "/data/botok").toStdString());
             for (const auto& [id, acip] : spine_.allAcipHeadwords()) {
                 auto [uni, ok] =
                     allcore::wylieToUnicode(allcore::acipToEwts(acip));
                 if (ok) seg->addWord(uni);
             }
+            size_t hgmWords = seg->wordCount();
+            loadLexicon();
+            lexicon_.eachWord(
+                [&seg](const std::string& w) { seg->addWord(w); });
             segmenter_ = std::move(seg);
-            segInfo_ = QString("%1 words, built in %2s")
-                           .arg(segmenter_->wordCount())
+            segInfo_ = QString("%1 HGM + %2 Monlam forms, built in %3s")
+                           .arg(hgmWords)
+                           .arg(segmenter_->wordCount() - hgmWords)
                            .arg(timer.elapsed() / 1000.0, 0, 'f', 1);
         } catch (const std::exception& e) {
             segInfo_ = QString("unavailable: %1").arg(e.what());
@@ -1424,20 +1431,26 @@ private:
         }
         QString h =
             "<div style='font-size:12px'><span style='color:#555'>Botok "
-            "segmentation <i>(Apache-2.0 port, reference only — lexicon: HGM "
-            "dictionary headwords, " + segInfo_.toHtmlEscaped() +
+            "segmentation <i>(Apache-2.0 port, reference only — lexicon: " +
+            segInfo_.toHtmlEscaped() +
             ")</i>:</span><br><span style='font-size:15px'>";
         bool first = true;
         for (const auto& w : segmenter_->segment(uni)) {
             QString txt = QString::fromStdString(w.text).toHtmlEscaped();
             if (!first) h += " <span style='color:#AAA'>·</span> ";
             first = false;
-            if (w.tibetan && w.word)
+            if (w.tibetan && w.word) {
                 h += "<span style='color:#1E4E6B'>" + txt + "</span>";
-            else if (w.tibetan)  // honest: not in the lexicon
+                if (!w.affixType.empty())  // matched through an affixed form
+                    h += QString("<small style='color:#7A5A00'>+%1%2</small>")
+                             .arg(QString::fromStdString(w.affixType)
+                                      .toHtmlEscaped(),
+                                  w.affixAa ? QStringLiteral("·འ") : QString());
+            } else if (w.tibetan) {  // honest: not in the lexicon
                 h += "<span style='color:#B4540A'>⟨" + txt + "⟩</span>";
-            else
+            } else {
                 h += "<span style='color:#888'>" + txt + "</span>";
+            }
         }
         h += "</span></div><hr>";
         return h;

@@ -221,21 +221,36 @@ display toggles, not through invention.
       chain (lazy one-time build, timing shown), out-of-lexicon runs
       ⟨bracketed⟩, non-Tibetan grayed — labeled reference display only,
       spans stay lattice-bound. Facade checks in botok_tok_smoke.
-      — REMAINING: Monlam lists as segmenter lexicon (needs a compact
-      trie — current node layout would be ~GB-scale at 449k words ×
-      affix inflection; deferred honestly), affixed-particle SPLIT
-      display layer (modifytokens/splitaffixed), possible deeper
-      Overlay integration with Adam's direction.
+      — INCREMENT 4 SHIPPED 2026-08-07 (COMPACT TRIE + FULL LEXICON):
+      allcore::botok::SegTrie — interned syllable ids, one flat edge
+      map, 2 bytes of flags per node (leaf + affix-type + aa); the
+      SAME maximal-match walk minus node-data bookkeeping. Proven by
+      cross-battery: SegTrie::segment == ported Segmenter::segment
+      word-for-word (incl. affix info) on all 40,758 corpus segments
+      (100.000%); memory ~20 MB at 105k words (vs hundreds of MB in
+      the ported node layout — the ported path stays the oracle
+      anchor). Overlay segmenter lexicon is now HGM headwords + BOTH
+      Monlam lists (RefLexicon::eachWord), and matched affixed forms
+      show their affix tag (+gi, +gis, ·འ for lost a-chung). En route:
+      REAL BUG fixed — monlam_lexicon_1.txt is UTF-16LE and the old
+      byte-wise RefLexicon reader banked it as garbage (its 15,349
+      list-1-only forms could never attest; the old smoke's label
+      check was blind because "Monlam" prefixes both labels);
+      normalized on load + regression-locked (list-1-only ka ka ni).
+      — REMAINING: affixed-particle SPLIT display layer
+      (modifytokens/splitaffixed), possible deeper Overlay integration
+      with Adam's direction.
 - [~] **Monlam word lists** — BANKED + FIRST INTEGRATION 2026-08-07
       (Apache-2.0 verified; 107,108 + 342,340 unique forms; allcore
       RefLexicon, 18th suite proves the real conversion path matches
       the lists' storage form exactly): Overlay click card shows
       "attested in the Monlam (Grand) Dictionary word list (reference)"
       for known spans AND for words the HGM dictionary doesn't have —
-      real-word vs possible-typo signal, display only. REMAINING: use
-      as the segmenter lexicon when the Botok port lands; word-level
-      spellcheck pass in loadDoc (bulk, needs perf care). Definitions
-      are NOT open — lists only.
+      real-word vs possible-typo signal, display only. SEGMENTER
+      LEXICON DONE 2026-08-07 (Botok increment 4: both lists feed the
+      compact SegTrie; UTF-16 list-1 loader bug fixed en route).
+      REMAINING: word-level spellcheck pass in loadDoc (bulk, needs
+      perf care). Definitions are NOT open — lists only.
 - [x] **CC0 verbs database** — INTEGRATED 2026-08-07: 2,491 paradigm
       rows / 3,676 distinct stems banked (tools/import_verbs_db.py →
       verb_stems.tsv; misaligned cells flagged+skipped, ༼X༽ variants

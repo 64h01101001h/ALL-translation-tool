@@ -36,6 +36,7 @@ add_library(allcore STATIC
   src/botok_chunks.cpp
   src/botok_trie.cpp
   src/botok_tokenize.cpp
+  src/botok_segtrie.cpp
 )
 target_include_directories(allcore PUBLIC include)
 
