@@ -344,9 +344,13 @@ display toggles, not through invention.
       per-dictionary license review (code is GPL — data only).
 - [ ] **bophono** (MIT) — optional non-GMR phonetics schemes toggle
       (GMR convention stays binding). Only if requested.
-- [ ] **84000 TM: link-out only** — CC BY-NC-ND forbids ingestion
-      without permission; concordance "view on 84000.co" links are safe.
-      Consider writing 84000 for permission.
+- [x] **84000 TM: link-out only** — SHIPPED 2026-08-07 as part of the
+      link-out tier: the Lookup pane and the Draft concordance carry a
+      "search elsewhere (external sites, links only)" row — 84000,
+      BDRC etexts, Bibliotheca Polyglotta, Lotsawa House — every URL
+      format verified live before shipping; nothing ingested, so
+      restrictive licenses are never touched. (The full-TM ingest
+      still waits on the 84000 license email.)
 - [ ] **84000 glossary + translation memory** — CC BY 4.0 VERIFIED
       (glossary/TM/metadata; the translations are BY-NC-ND, different
       asset). Import as a provenance-tagged reference wave: glossary →
@@ -433,9 +437,14 @@ display toggles, not through invention.
       Sanskrit-stack battery output in both faces.
 - [ ] **Lotsawa House** — CC BY-NC: write them for bulk/permission;
       prayer-register corpus for register warnings.
-- [ ] Link-out-only tier: Bibliotheca Polyglotta, Adarsha, WTS Munich,
-      Dharmamitra (optional labeled AI aid at most), RY/Waldo/Valby
-      (permission via Tsadra first).
+- [~] Link-out-only tier — Bibliotheca Polyglotta + Lotsawa House
+      SHIPPED 2026-08-07 (with 84000 + BDRC etexts, above). Adarsha
+      OMITTED: its new site (adarshah.org) broke the old search URL
+      formats — recheck later. THL kmaps lookup BLOCKED upstream
+      (probed 2026-08-07: search endpoints 500, searchterm ignored,
+      SOLR index host NXDOMAIN). Remaining: WTS Munich, Dharmamitra
+      (optional labeled AI aid at most), RY/Waldo/Valby (permission
+      via Tsadra first).
 - [ ] Red-flag list (no license / restrictive): see survey doc — never
       ship any of it without resolution.
 - [ ] Survey's negative findings = our opportunities: no Tibetan

@@ -140,6 +140,26 @@ static QString entryHtml(const allcore::Entry& e,
     return h;
 }
 
+// Link-out tier (survey): external sites searched for a term — links only,
+// no ingestion, so restrictive licenses (BY-NC-ND etc.) are never touched.
+// Every URL format verified live 2026-08-07; Adarsha omitted (its new site
+// broke the old search URLs — recheck later).
+static QString linkOutHtml(const std::string& wylie) {
+    const QString q = QString::fromUtf8(
+        QUrl::toPercentEncoding(QString::fromStdString(wylie)));
+    QString h =
+        "<div style='color:#777;font-size:11px;margin-top:6px'>search "
+        "elsewhere <i>(external sites, links only)</i>: ";
+    h += "<a href='https://84000.co/search?query=" + q + "'>84000</a> · ";
+    h += "<a href='https://library.bdrc.io/search?q=%22" + q +
+         "%22~1&lg=bo-x-ewts&t=Etext'>BDRC etexts</a> · ";
+    h += "<a href='https://www2.hf.uio.no/polyglotta/index.php?page=search&q=" +
+         q + "'>Bibliotheca Polyglotta</a> · ";
+    h += "<a href='https://www.lotsawahouse.org/search?q=" + q +
+         "'>Lotsawa House</a></div>";
+    return h;
+}
+
 static QString mvpHtml(const std::vector<const allcore::MvpEntry*>& hits) {
     if (hits.empty()) return {};
     QString h = "<hr><div style='color:#4A3B7A'><b>Mahāvyutpatti</b> "
@@ -189,6 +209,7 @@ static QWidget* makeLookupPane(allcore::Spine& spine, allcore::RefDict* ref,
     auto* box = new QLineEdit;
     box->setPlaceholderText("wylie · Tibetan · ACIP headword…");
     auto* results = new QTextBrowser;
+    results->setOpenExternalLinks(true);  // link-out tier opens the browser
     layout->addWidget(box);
     layout->addWidget(results);
     split->addWidget(left);
@@ -316,6 +337,17 @@ static QWidget* makeLookupPane(allcore::Spine& spine, allcore::RefDict* ref,
                 if (upper) wylie = allcore::acipToEwts(raw);
             }
             h += mvpHtml(mvp->byWylie(wylie));
+        }
+        // link-out tier: external searches for the resolved term
+        {
+            std::string wylie = raw;
+            if (!entries.empty()) wylie = entries.front().wylie;
+            else {
+                bool upper = false;
+                for (char c : raw) upper |= (c >= 'A' && c <= 'Z');
+                if (upper) wylie = allcore::acipToEwts(raw);
+            }
+            h += linkOutHtml(wylie);
         }
         // English reverse lookup (release reverse index, binding layer)
         {
@@ -3121,6 +3153,8 @@ public:
                                  showConcordance(s.mid(2).toStdString());
                              else if (s == "back" && lastClause_ >= 0)
                                  showAnchors(lastClause_);
+                             else if (s.startsWith("http"))
+                                 QDesktopServices::openUrl(u);  // link-out tier
                          });
     }
 
@@ -3233,6 +3267,7 @@ private:
                  QString::fromStdString(s.english).left(200).toHtmlEscaped() +
                  "</div>";
         }
+        h += linkOutHtml(wylie);
         anchors_->setHtml(h);
     }
 
