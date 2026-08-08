@@ -753,11 +753,26 @@ public:
         // face goes missing
         tibFont_ = new QComboBox;
         {
+            // curated Tibetan faces (fonts survey, data/fonts/FONTS.md):
+            // Adam's preference first, then the vetted Unicode faces in
+            // popularity order — only those actually present. Fake
+            // Tibetan-declarers (Katari/Phosphate/Songti) and the legacy
+            // custom-encoded TibetanMachineWeb family are excluded by
+            // construction.
+            static const char* kVetted[] = {
+                "SambhotaDege",          // Adam's preferred (Sambhota Dege)
+                "Noto Serif Tibetan",    // the modern default (bundled, OFL)
+                "TibetanMachineUnicode", // THL's scholarly standard
+                "BabelStone Tibetan Slim", // widest rare-stack coverage (bundled)
+                "TibetanClassicUnicode",
+                "Kailasa",               // Apple system face
+                "Kokonor",               // Apple system face
+                "Microsoft Himalaya",    // the Windows default
+            };
             QStringList opts;
-            if (QFontDatabase::hasFamily("SambhotaDege"))
-                opts << "SambhotaDege";
-            opts << "Noto Serif Tibetan" << "BabelStone Tibetan Slim"
-                 << "system";
+            for (const char* f2 : kVetted)
+                if (QFontDatabase::hasFamily(f2)) opts << f2;
+            opts << "system";
             tibFont_->addItems(opts);
             const QString saved =
                 settings.value("overlay/tibFontFamily", opts.first())

@@ -24,3 +24,43 @@ ACIP/Wylie stay in the system face).
   and EMBEDDED in the font's own name table (retrieved 2026-08-07).
   Notable for very wide coverage of rare stacks and bskungs-yig
   contractions — pairs well with the abbreviations layer.
+
+## Fonts survey (2026-08-07, Adam: "collect all the Tibetan fonts and
+## choose the most widely used")
+
+Every candidate family on this machine plus the bundled faces was
+scored for coverage against the full Tibetan-block codepoint usage of
+Adam's own 1,973-syllable ACIP↔Unicode table (from his hypercontext
+development work) plus his syllables-that-fail-to-render list.
+
+**Vetted Unicode faces (all 63/63 coverage) — the app's typeface combo,
+in this order (only those present are listed):**
+
+| face | why it matters |
+|---|---|
+| SambhotaDege | Adam's preferred face (system-installed; never bundled) |
+| Noto Serif Tibetan | the modern cross-platform default (Google; bundled, OFL) |
+| TibetanMachineUnicode | THL's long-time scholarly standard (installed) |
+| BabelStone Tibetan Slim | widest rare-stack + bskungs-yig coverage (bundled, OFL) |
+| TibetanClassicUnicode | installed classic face |
+| Kailasa | Apple's system Tibetan (every Mac) |
+| Kokonor | Apple system alternate |
+| Microsoft Himalaya | the Windows default (relevant for the input-center builds) |
+
+**Excluded, with reasons:**
+- *TibetanMachineWeb 0–9* — the pre-Unicode THL fonts, custom glyph
+  encodings (0/63 coverage). Documents typed in them are exactly what
+  the UTFC legacy-font rescue lane converts (Uni2TMW/TMW2Uni tables).
+- *Katari, Phosphate* — declare Tibetan support, cover none of it.
+- *Songti SC/TC, STSong* — Chinese faces whose cmaps include Tibetan
+  codepoints; not Tibetan typography.
+- *HypercontextTibetan.ttf* (Adam's old app) — custom glyph encoding
+  keyed by ACIP.kt, superseded by Unicode faces + our converter.
+- Font FILES present but not active as families (TibetanChosgyalUni,
+  TibetanSambhotaYigchung, TibetanCalligraphicUnicode, TibetanUnicode,
+  tibusrfa2) — style faces (yig-chung cursive, calligraphic, chos-rgyal)
+  that could be activated/registered later if wanted for display variety.
+
+**Worth adding someday (not installed):** Jomolhari (OFL — the beloved
+classic dbu-can; bundleable), Monlam Uni and the Qomolangma series
+(popular in Tibetan communities; check licenses before bundling).

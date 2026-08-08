@@ -113,3 +113,31 @@ THL dicts), the folder holds substantially more. Ranked by value.
    ④ font render-test from Adam's failure list → ⑤ UTFC external-tool
    lane for legacy documents → ⑥ bampo/shloka structural layer →
    ⑦ catalog-toolchain mining (with the data project).
+
+## Addendum: archives inspected (2026-08-07, Adam's request)
+
+Every `.zip`/`.dmg` under the folder was opened and inspected:
+
+- **`thl-dicts.zip`** — the THL dictionary payload; already extracted
+  and integrated (Lookup reference layers). Nothing new.
+- **`UTFC-master.zip`** — identical to the extracted `UTFC-master/`
+  directory (the legacy-font converter, Tier-1 find above).
+- **`WP-Filebase-master.zip`** — a WordPress file-download-manager
+  plugin (2015), evidently for the old ACIP download site. No app
+  value; historical only.
+- **`hypercontext.dmg`** (×2, in Adam's hypercontext-master) — Adam's
+  BUILT Hypercontext app. Contents: the binary, `ACIP.kt` (the ACIP →
+  glyph-index keying table for the custom font), and
+  `HypercontextTibetan.ttf` (custom glyph encoding, not Unicode —
+  superseded by the Unicode faces + our converter; the .kt table
+  documents the old encoding if a Hypercontext-era file ever needs
+  rescuing).
+- wxWidgets sample zips (doc.zip/test.zip/pages.zip) — toolkit test
+  data; irrelevant.
+
+## Addendum: fonts survey
+
+Done same day — see `data/fonts/FONTS.md` (vetted 8-face list wired
+into the app's typeface combo; TibetanMachineWeb 0–9 identified as the
+legacy custom-encoded family the UTFC rescue lane exists for; fake
+Tibetan-declarers excluded; style faces present-but-inactive noted).
