@@ -3,7 +3,7 @@
 *A complete working environment for Tibetan texts and their translation*
 
 Asian Legacy Library · Asian Classics Input Project --- White Paper,
-August 2026
+August 2026 (v7)
 
 **1. Purpose**
 
@@ -93,6 +93,31 @@ machine.
                                       (both openly licensed) --- shown
                                       only as labeled reference, never
                                       binding
+
+  Scholarly reference layers          the Mahāvyutpatti (9,379 classical
+                                      Sanskrit--Tibetan equivalences);
+                                      a hand-tagged classical
+                                      part-of-speech lexicon (13,107
+                                      forms); a manuscript-abbreviation
+                                      table; and William Dwight
+                                      Whitney's two preeminent Sanskrit
+                                      works --- all 937 roots of the
+                                      1885 Roots with per-root section
+                                      citations into the 1879 Grammar
+                                      --- every layer license-verified
+                                      and clearly labeled comparanda
+
+  The Project's own registers         a growing register of community
+                                      pronunciations (gonpa, tulku,
+                                      chenrezig...) beside the strict
+                                      convention; the prenasal rule
+                                      Geshe Michael teaches (SKABS 'DIR
+                                      spoken "kamdir") applied across
+                                      the dictionary as a derived,
+                                      review-pending class; and an
+                                      honorific (zhe sa) register with
+                                      a high-honorific level awaiting
+                                      his marking
   ----------------------------------- -----------------------------------
 
 **4. Conversion engines --- and how they are proven**
@@ -156,7 +181,7 @@ fails its battery does not ship. Current results:
   the other converter mangles blindly --- and 13 genuine source
   defects it exposed were filed for correction.
 
-**5. A tour of the nine panes**
+**5. A tour of the fourteen panes**
 
 **Overlay --- read with the dictionary underneath**
 
@@ -197,7 +222,11 @@ Sungbum, for instance) are linked by a title search against BDRC's
 database: the query is pre-filled from the text's own opening line,
 the translator confirms the right edition from the candidates --- the
 match is never asserted automatically --- and the confirmed link is
-remembered.
+remembered. And the following now reaches the single word: an opt-in
+button reads the woodblock image itself with the embedded text
+recognition described below and draws a box around the very word under
+the cursor --- the recognition is used only to locate, never as text,
+and when it cannot find the word it says so.
 
 **Analysis --- the eighteen-section passage analysis**
 
@@ -275,13 +304,53 @@ verification status, and a recently-opened list make a
 hundred-thousand-page canon feel close at hand; a prebuilt search
 index answers library-wide queries instantly; and a flat list view
 lays the whole shelf out as one sortable catalog table --- now showing
-each work's English title wherever the Project's catalogs record one. Scanned texts can be
-handed to BDRC's free Tibetan OCR application, and anything that comes
-back is treated with the Project's own discipline: OCR output is
-tagged as unverified review material, and opening it runs an immediate
-first-pass quality check that counts and marks every syllable failing
-the classical legality rules --- nothing is smoothed, everything is
-flagged.
+each work's English title wherever the Project's catalogs record one. A
+legacy-font rescue lane converts documents typed in the pre-Unicode
+Tibetan fonts (TibetanMachineWeb, Sambhota and their kin) to proper
+Unicode through the Trace Foundation's converter, run as a separate
+external tool and honestly labeled.
+
+**Scan --- Tibetan OCR, embedded and proven**
+
+Text recognition now lives inside the application: the Buddhist
+Digital Resource Center's open models (used with BDRC's permission,
+and credited wherever output appears) run locally, line detection and
+recognition both proven line-for-line against BDRC's own program
+running beside them. A page scan opens, its lines are found and read,
+and every recognized line is shown in transliteration and Tibetan
+script with an immediate first-pass quality check that counts and
+marks every syllable failing the classical legality rules --- nothing
+is smoothed, everything is flagged, and all output is tagged
+unverified review material that never enters the corpus. A whole
+folder of page scans --- a scanned volume --- processes in one batch.
+Every recognized word carries its exact position on the page, so
+clicking a word in the reading lights it up on the woodblock.
+
+**Align --- the Hypercontext workflow, reborn**
+
+The Project's original Hypercontext tool --- the program whose
+hypertexted files fed the first dictionary building --- lives again:
+click a Tibetan word (the word-finder cycles through the possible
+lengths), select its English, press space, and the pair is linked;
+sublinks nest inside longer links in their own color. Links save per
+text, and the harvest exports as clearly-PENDING candidate pairs for
+the dictionary project --- translator-authored attestations, never
+auto-ingested. Legacy .hyp files from the original era import
+directly, proven against the original tutorial file itself.
+
+**Input --- the input-center workstation**
+
+The software the input centers were meant to have --- the ACE lineage,
+recovered from its original author and rebuilt --- is now a pane: the
+page scan above, the typing area below, and the scan follows the
+typist's cursor line by line (exactly, when the line detector has run;
+approximately, in the original program's manner, when it has not).
+Illegal syllables underline in red as they are typed; a folio-marker
+button inserts the next @-marker per the Project's own specification;
+and the double-keying discipline is built in --- compare your file
+against your partner's and every discrepancy lights up, to be
+corrected until the two files match exactly, which has always been
+the rule.
 
 **Search --- the Gofer grammar, restored**
 
@@ -299,7 +368,15 @@ Sanskrit codes, Devanagari, and classical IPA.
 **Lookup --- the stacked dictionary**
 
 One search across the master dictionary (tier-labeled), the reference
-layers, and English-to-Tibetan reverse lookup.
+layers, and English-to-Tibetan reverse lookup --- and the search meets
+the searcher halfway: a community spelling like *gonpa* or *tulku*
+finds the entry (labeled as the colloquial register's work, with the
+strict convention shown beside it); honorific terms wear their zhe-sa
+badge with the ordinary word as cross-reference; a Sanskrit root or
+even its past participle opens Whitney's entry with his meanings, verb
+classes, and the exact sections of his Grammar --- one click reaching
+the public-domain scan of the Grammar itself or the corresponding
+Monier-Williams entry.
 
 **6. The shared apparatus --- work performed once is never redone**
 
@@ -343,15 +420,17 @@ worked examples.
 
 **8. Verification**
 
-The application carries twenty-three automated test suites --- batteries for
-every engine, grammar calibrations against the full corpus,
+The application carries thirty-six automated test suites --- batteries
+for every engine, grammar calibrations against the full corpus,
 exercise-generator checks, and end-to-end smoke tests --- all of which
 must pass before any change ships. Where a result cannot be verified
 mechanically, the interface says so rather than implying certainty.
 
-The script engine has now also been cross-examined by an outside
-witness: an independent open-source converter, run over all 105,634
-dictionary entries. The two agree exactly on 91.4% --- and nearly every
+The script engine has now also been cross-examined by two outside
+witnesses: two independent open-source converters --- the ecosystem's
+Python standard and the reference implementation the whole field
+descends from --- each run over all 105,634 dictionary entries, and
+agreeing with each other to within three hundredths of a percent. The two agree exactly on 91.4% --- and nearly every
 disagreement is a place where this tool's engine refuses to guess at
 defective input while the other converts it blindly, a direct
 vindication of the never-guess rule. The comparison also surfaced
@@ -385,20 +464,19 @@ rather than approximated.
   export) --- with a prepared review sheet so proposed footnotes can be
   approved in his own sessions, never in the software.
 
-- A completed worldwide survey of open Tibetan software and data now
-  gives the project a vetted, license-checked menu of integrations:
-  next is a proven word-segmentation engine (port under way), then a
-  classical calendar engine for dating colophons. The survey also
-  confirmed that several of this tool's layers --- the verse meter,
-  the grammar rule engine, the Science of the Dots --- exist nowhere
-  else in the field.
+- The registers grow under review: the prenasal pronunciation class
+  (206 derived forms awaiting Geshe Michael's confirmation), the
+  honorific register's high-honorific markings, and the reference
+  books on honorific usage and grammar now being gathered.
 
 - The input-center formatter: converting raw input-center documents to
   finished Tibetan Unicode, once the conversion standards document is
-  supplied.
+  supplied --- with the new Input pane already carrying the typing,
+  checking, and double-keying half of that workflow.
 
-- Embedded Tibetan OCR (BDRC's open models, license permitting), which
-  also unlocks word-level scan following.
+- Cataloging has been deliberately set aside as its own future
+  project; the knowledge mined from the Project's original cataloging
+  toolchain is banked and waiting for it.
 
 - Windows and Linux builds for the input centers.
 
