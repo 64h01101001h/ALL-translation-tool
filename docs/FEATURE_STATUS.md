@@ -100,8 +100,17 @@ sections, QC'd, auto-saved)
   on every text-identical line); `LineImage::colMap` inverts
   mask_n_crop's interior-gap squeeze back to page x; Scan pane draws
   per-word boxes and clicking any recognized word highlights it on the
-  page. (Overlay BDRC-scan wiring stays open — needs OCR on the BDRC
-  image itself.)
+  page.
+- ✅ **Overlay word-locate on BDRC scans** (2026-08-08) — opt-in
+  "locate word (OCR)" button in the follow-along nav: runs the
+  canonical pipeline on the cached BDRC folio (deskew forced 0° so
+  boxes stay in the original image — labeled deviation), matches the
+  cursor's token (ACIP→wylie, or lowercase wylie as-is) against
+  recognized line text (expected line first), highlights the covering
+  word boxes on the woodblock. OCR is a LOCATOR only — its text is
+  never surfaced. Per-folio results cached in-session. Matcher math
+  verified on the Pramanavarttika fixture ("khyed" → line 0,
+  x 230–267/2002).
 - ✅ **Style-face registration** — the five inactive files in
   ~/Library/Fonts (chos-rgyal, yig-chung, calligraphic, TCRC Youtso,
   Tib-US) registered per-session by app + font_smoke; 64/64 coverage;

@@ -88,9 +88,12 @@ display toggles, not through invention.
       offline. Line-band highlight SHIPPED same day (exact newline
       arithmetic on the file's preserved line structure; uniform band
       placement labeled approximate). WORD-LEVEL COORDINATES SHIPPED
-      2026-08-08 in the Scan pane (OCR word spans below); wiring them
-      into the BDRC-scan follow-along stays LATER (needs an OCR run
-      against the BDRC scan itself — user option). Sungbum SHIPPED
+      2026-08-08 in the Scan pane (OCR word spans below); OVERLAY
+      WORD-LOCATE SHIPPED same day — opt-in "locate word (OCR)" nav
+      button OCRs the cached BDRC folio (deskew forced 0°, labeled)
+      and boxes the cursor's word on the woodblock; locator only,
+      text never surfaced; matcher verified on the PV fixture.
+      Sungbum SHIPPED
       2026-08-06 via title search: BLMP Lucene template on
       purl.bdrc.io (verified live), query pre-filled from the file's
       own opening line via acipToEwts, candidates listed, USER confirms

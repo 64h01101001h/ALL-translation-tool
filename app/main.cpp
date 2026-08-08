@@ -642,6 +642,21 @@ public:
         auto* nextB = new QPushButton("folio ▶");
         navl->addWidget(prevB);
         navl->addWidget(nextB);
+#ifdef ALL_HAVE_OCR
+        wordLocB_ = new QPushButton("locate word (OCR)");
+        wordLocB_->setCheckable(true);
+        wordLocB_->setToolTip(
+            "Run OCR on this folio scan (BDRC models, CC BY-NC, with "
+            "permission) and highlight the cursor's word on the "
+            "woodblock itself. Deskew is disabled here so highlight "
+            "coordinates stay in the original image (a labeled deviation "
+            "from the BDRC pipeline). OCR output is used only to LOCATE "
+            "— never as text.");
+        navl->addWidget(wordLocB_);
+        connect(wordLocB_, &QPushButton::toggled, [this](bool) {
+            if (!basePx_.isNull()) setScanPixmap(basePx_, curFolio_);
+        });
+#endif
         scanNav_ = nav;
         scanNav_->hide();
         ll->addWidget(nav);
@@ -1584,6 +1599,27 @@ private:
             folioEnd = m.capturedEnd();
         }
         if (folio.isEmpty()) return;
+        // the ACIP token under the cursor, as wylie (drives word-locate)
+        {
+            auto isTok = [](QChar c) {
+                return c.isLetter() || c == '\'' || c == '+';
+            };
+            int b = pos, e = pos;
+            while (b > 0 && isTok(all[b - 1])) --b;
+            while (e < all.size() && isTok(all[e])) ++e;
+            const QString tok = all.mid(b, e - b);
+            bool hasLower = false;
+            for (QChar c : tok) hasLower |= c.isLower();
+            // lowercase files (Lhasa _inc etc.) are already wylie;
+            // uppercase ACIP goes through the proven converter
+            curWordWylie_ = tok.isEmpty()
+                                ? QString()
+                                : hasLower
+                                      ? tok.toLower()
+                                      : QString::fromStdString(
+                                            allcore::acipToEwts(
+                                                tok.toStdString()));
+        }
         // line within the folio side: the input centers preserved the
         // woodblock's own line breaks, so newline counting is exact
         curLine_ = 1 + (int)all.mid(folioEnd, pos - folioEnd).count('\n');
@@ -1652,6 +1688,86 @@ private:
                 });
     }
 
+#ifdef ALL_HAVE_OCR
+    // per-folio OCR (word-locate lane): the canonical pipeline with
+    // deskew FORCED to 0° — a labeled deviation — so line/word boxes
+    // stay in the original image's coordinate space. Used to LOCATE
+    // the cursor word on the woodblock; the recognized text itself is
+    // never surfaced as text (review-material rule stands).
+    struct FolioOcr {
+        allocr::PageLines pl;
+        std::vector<std::vector<allocr::WordSpan>> words;
+        std::vector<std::string> lineText;
+    };
+
+    bool ensureFolioOcrModels() {
+        if (fdet_ && frec_) return true;
+        const QString lm = dataRoot_ +
+            "/library/ocr_models/BDRC_PhotiLines/PhotiLines.onnx";
+        const QString od = dataRoot_ + "/library/ocr_models/BDRC_Woodblock";
+        if (!QFile::exists(lm) || !QFile::exists(od + "/OCRModel.onnx"))
+            return false;
+        try {
+            fdet_ = std::make_unique<allocr::LineDetector>(lm.toStdString());
+            frec_ = std::make_unique<allocr::TextRecognizer>(od.toStdString());
+        } catch (const std::exception&) {
+            return false;
+        }
+        return true;
+    }
+
+    const FolioOcr* folioOcrFor(const QString& folio) {
+        auto it = folioOcr_.find(folio);
+        if (it != folioOcr_.end()) return &it->second;
+        if (folioOcrBusy_ || basePx_.isNull()) return nullptr;
+        if (!ensureFolioOcrModels()) {
+            scanCap_->setText(scanCap_->text() +
+                              " · word-locate needs the OCR models "
+                              "(see the Scan pane)");
+            return nullptr;
+        }
+        folioOcrBusy_ = true;
+        scanCap_->setText("folio " + folio +
+                          ": running OCR to locate words…");
+        QCoreApplication::processEvents();
+        FolioOcr fo;
+        QImage img = basePx_.toImage().convertToFormat(QImage::Format_RGB888);
+        const int w = img.width(), h = img.height();
+        std::vector<uint8_t> rgb(static_cast<size_t>(w) * h * 3);
+        for (int y = 0; y < h; ++y)
+            std::copy(img.constScanLine(y), img.constScanLine(y) + w * 3,
+                      rgb.begin() + static_cast<size_t>(y) * w * 3);
+        try {
+            auto mask = fdet_->detect(rgb.data(), w, h);
+            const double zero = 0.0;   // labeled deviation (see tooltip)
+            fo.pl = allocr::buildLines(rgb.data(), w, h, mask, 2.5, 4.0,
+                                       true, &zero);
+            fo.words.resize(fo.pl.images.size());
+            for (size_t i = 0; i < fo.pl.images.size(); ++i) {
+                fo.lineText.push_back(
+                    frec_->recognize(fo.pl.images[i], true, &fo.words[i]));
+                QCoreApplication::processEvents();
+            }
+        } catch (const std::exception&) {
+            folioOcrBusy_ = false;
+            return nullptr;
+        }
+        folioOcrBusy_ = false;
+        auto [ins, ok] = folioOcr_.emplace(folio, std::move(fo));
+        (void)ok;
+        return &ins->second;
+    }
+
+    // strip-x -> original-image x via the line's colMap
+    static int folioPageX(const FolioOcr& fo, size_t line, double x) {
+        const auto& cm = fo.pl.images[line].colMap;
+        if (cm.empty()) return fo.pl.lines[line].x + int(x);
+        const int ix = std::min(std::max(int(std::lround(x)), 0),
+                                int(cm.size()) - 1);
+        return cm[ix];
+    }
+#endif
+
     void setScanPixmap(const QPixmap& px, const QString& folio) {
         basePx_ = px;
         QPixmap shown = px;
@@ -1674,6 +1790,64 @@ private:
                            .arg(curLine_)
                            .arg(curLineTotal_);
         }
+#ifdef ALL_HAVE_OCR
+        if (wordLocB_ && wordLocB_->isChecked() &&
+            !curWordWylie_.isEmpty()) {
+            const FolioOcr* fo = folioOcrFor(folio);
+            if (fo && !fo->pl.lines.empty()) {
+                // QPixmap is implicitly shared; QPainter detaches `shown`
+                QPainter p(&shown);
+                const std::string needle =
+                    curWordWylie_.toLower().toStdString();
+                // search the follow-along's expected line first, then all
+                std::vector<size_t> order;
+                if (curLine_ >= 1 &&
+                    curLine_ <= (int)fo->lineText.size())
+                    order.push_back(size_t(curLine_ - 1));
+                for (size_t i = 0; i < fo->lineText.size(); ++i)
+                    if (order.empty() || i != order[0]) order.push_back(i);
+                int hits = 0;
+                for (size_t oi = 0; oi < order.size() && !hits; ++oi) {
+                    const size_t li = order[oi];
+                    const std::string& text = fo->lineText[li];
+                    // char offset -> covering word via prefix lengths
+                    std::vector<size_t> pref{0};
+                    for (const auto& ws : fo->words[li])
+                        pref.push_back(pref.back() + ws.text.size());
+                    for (size_t at = text.find(needle);
+                         at != std::string::npos;
+                         at = text.find(needle, at + 1)) {
+                        size_t k0 = 0, k1 = 0;
+                        for (size_t k = 0; k + 1 < pref.size(); ++k) {
+                            if (pref[k] <= at && at < pref[k + 1]) k0 = k;
+                            if (pref[k] < at + needle.size() &&
+                                at + needle.size() <= pref[k + 1])
+                                k1 = k;
+                        }
+                        const int x0 =
+                            folioPageX(*fo, li, fo->words[li][k0].x0);
+                        const int x1 =
+                            folioPageX(*fo, li, fo->words[li][k1].x1);
+                        const auto& l = fo->pl.lines[li];
+                        p.fillRect(QRect(x0, l.y, std::max(x1 - x0, 3),
+                                         l.h),
+                                   QColor(0xE8, 0x50, 0x20, 90));
+                        p.setPen(QPen(QColor(0xB4, 0x2A, 0x0A), 3));
+                        p.drawRect(x0, l.y, std::max(x1 - x0, 3), l.h);
+                        ++hits;
+                    }
+                }
+                p.end();
+                lineNote += hits
+                    ? QString(" · “%1” located ×%2 (OCR word boxes — "
+                              "locator only)")
+                          .arg(curWordWylie_)
+                          .arg(hits)
+                    : QString(" · “%1” not found by OCR on this side")
+                          .arg(curWordWylie_);
+            }
+        }
+#endif
         const int w = qMax(300, input_->width() - 12);
         scanImg_->setPixmap(
             shown.width() > w
@@ -1701,6 +1875,15 @@ private:
     QWidget* scanNav_ = nullptr;
     QString scanWork_, scanCache_, curFolio_, scanLicense_, fileKey_;
     int fetchEpoch_ = 0;
+    QString curWordWylie_;   // ACIP token at cursor, as wylie
+#ifdef ALL_HAVE_OCR
+    // word-locate lane (OCR used as a LOCATOR only)
+    QPushButton* wordLocB_ = nullptr;
+    std::unique_ptr<allocr::LineDetector> fdet_;
+    std::unique_ptr<allocr::TextRecognizer> frec_;
+    std::map<QString, FolioOcr> folioOcr_;
+    bool folioOcrBusy_ = false;
+#endif
     QString dataRoot_;
     allcore::VerbStems verbStems_;
     bool verbStemsTried_ = false;
