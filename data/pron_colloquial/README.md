@@ -9,8 +9,20 @@ community forms.
 
 ## colloquial_pron.tsv
 
-Columns: `colloquial · wylie · gmr_pron`. Multiple community spellings
-of one term are separate rows (thangka/tanka/thanka).
+Columns: `colloquial · wylie · gmr_pron · class`. Three classes:
+- **community** (curated seed): the spellings the dharma world writes
+  (gonpa, tulku, chenrezig…);
+- **prenasal-derived**: HGM's kamdir rule applied by syllable-aligned
+  derivation (see below);
+- **hgm-attested** (mined 2026-08-08, tools/mine_anglicizations.py):
+  Geshe Michael's OWN published anglicizations, harvested from the
+  corpus English aligned against the very segments whose Tibetan
+  carries the term — Lobsang (pron losang), Ganden (genden), Tengyur
+  (tenngyur), Kriya (triya)… the highest attestation tier the
+  register can hold: his own usage, frequency ≥ 2, edit-bounded
+  against the pron, function-word and possessive noise filtered.
+Multiple community spellings of one term are separate rows
+(thangka/tanka/thanka).
 
 **Admission rule (rule 3 — attestation, never invention):**
 1. the community spelling is standard published usage (the anglicized
