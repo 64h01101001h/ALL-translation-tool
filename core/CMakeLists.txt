@@ -18,6 +18,7 @@ add_library(allcore STATIC
   src/terminology.cpp
   src/outline.cpp
   src/hypfile.cpp
+  src/whitney.cpp
   src/verse.cpp
   src/wilsonparse.cpp
   src/tibexport.cpp
@@ -118,6 +119,12 @@ target_link_libraries(hyp_smoke PRIVATE allcore)
 add_test(NAME hyp_smoke
          COMMAND hyp_smoke
                  ${CMAKE_SOURCE_DIR}/data/hypercontext_legacy/tutorial.hyp)
+
+add_executable(whitney_smoke tests/whitney_smoke.cpp)
+target_link_libraries(whitney_smoke PRIVATE allcore)
+add_test(NAME whitney_smoke
+         COMMAND whitney_smoke
+                 ${CMAKE_SOURCE_DIR}/data/whitney/whitney_roots.tsv)
 
 add_executable(verse_smoke tests/verse_smoke.cpp)
 target_link_libraries(verse_smoke PRIVATE allcore)

@@ -1,0 +1,73 @@
+// whitney_smoke — the Whitney reference layer (Roots 1885 + Grammar
+// 1879 citations; data/whitney/README.md for provenance and the
+// form-level class caveat).
+#include <cstdio>
+#include <string>
+
+#include "allcore/whitney.h"
+
+static int failures = 0;
+#define CHECK(cond, msg)                                        \
+    do {                                                        \
+        if (cond) std::printf("  [PASS] %s\n", msg);            \
+        else { std::printf("  [FAIL] %s\n", msg); ++failures; } \
+    } while (0)
+
+int main(int argc, char** argv) {
+    if (argc < 2) {
+        std::fprintf(stderr, "usage: whitney_smoke <whitney_roots.tsv>\n");
+        return 2;
+    }
+    allcore::WhitneyRoots w;
+    CHECK(w.load(argv[1]), "layer loads");
+    std::printf("  %zu roots\n", w.size());
+    CHECK(w.size() >= 930, "930+ roots (Whitney lists 938)");
+
+    CHECK(allcore::foldIast("bhū") == "bhu", "fold: bhū -> bhu");
+    CHECK(allcore::foldIast("kṛṣ") == "krs", "fold: kṛṣ -> krs");
+    CHECK(allcore::foldIast("aṃh") == "amh", "fold: aṃh -> amh");
+
+    auto bhu = w.byRoot("bhū");
+    CHECK(bhu.size() == 1 && bhu[0]->meaning == "be",
+          "byRoot exact: bhū = be");
+    CHECK(w.byRoot("bhu").size() == 1,
+          "byRoot folded: plain 'bhu' finds bhū");
+
+    auto kr = w.byRoot("kṛ");
+    CHECK(kr.size() >= 3, "kṛ homonyms distinct (3 entries)");
+    bool make = false, scatter = false;
+    for (const auto* r : kr) {
+        if (r->homonym == "1" && r->meaning == "make") make = true;
+        if (r->homonym == "2" && r->meaning == "scatter") scatter = true;
+    }
+    CHECK(make && scatter, "1 kṛ = make, 2 kṛ = scatter (Whitney's "
+                           "numbering preserved)");
+    CHECK(!kr.empty() && !kr[0]->grammarSecs.empty(),
+          "kṛ carries Grammar-1879 section citations");
+
+    auto gam = w.byRoot("gam");
+    CHECK(gam.size() == 1 && gam[0]->meaning == "go", "gam = go");
+
+    auto scat = w.byMeaning("scatter");
+    bool hasKr = false;
+    for (const auto* r : scat) hasKr |= r->root == "kṛ";
+    CHECK(hasKr, "byMeaning('scatter') reaches 2 kṛ");
+    CHECK(w.byMeaning("be").size() > 0 &&
+              w.byMeaning("be")[0]->meaning.find("be") !=
+                  std::string::npos,
+          "byMeaning whole-word: 'be' matches 'be', not every 'bend'");
+    bool bendLeak = false;
+    for (const auto* r : w.byMeaning("be"))
+        if (r->meaning == "bend") bendLeak = true;
+    CHECK(!bendLeak, "whole-word match excludes 'bend' for 'be'");
+
+    // Whitney's own annotations survive verbatim
+    auto hur = w.byRoot("hur");
+    CHECK(hur.size() == 1 &&
+              hur[0]->meaning.find("see √hvṛ") != std::string::npos,
+          "cross-reference roots kept (hur: see √hvṛ)");
+
+    std::printf("whitney_smoke: %s (%d failures)\n",
+                failures ? "FAIL" : "ALL PASS", failures);
+    return failures ? 1 : 0;
+}

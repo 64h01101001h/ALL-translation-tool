@@ -99,6 +99,7 @@
 #include "allcore/verbstems.h"
 #include "allcore/outline.h"
 #include "allcore/hypfile.h"
+#include "allcore/whitney.h"
 #include "allcore/verse.h"
 #include "allcore/wilsonparse.h"
 #include "allcore/terminology.h"
@@ -196,7 +197,8 @@ static QString mvpHtml(const std::vector<const allcore::MvpEntry*>& hits) {
 }
 
 static QWidget* makeLookupPane(allcore::Spine& spine, allcore::RefDict* ref,
-                               allcore::Mvp* mvp) {
+                               allcore::Mvp* mvp,
+                               allcore::WhitneyRoots* whitney = nullptr) {
     auto* pane = new QWidget;
     auto* outer = new QHBoxLayout(pane);
     auto* split = new QSplitter(Qt::Horizontal);
@@ -268,7 +270,8 @@ static QWidget* makeLookupPane(allcore::Spine& spine, allcore::RefDict* ref,
                          QMetaObject::invokeMethod(box, "returnPressed");
                      });
 
-    QObject::connect(box, &QLineEdit::returnPressed, [&spine, ref, mvp, box,
+    QObject::connect(box, &QLineEdit::returnPressed, [&spine, ref, mvp,
+                                                      whitney, box,
                                                       results] {
         const std::string raw = box->text().trimmed().toStdString();
         if (raw.empty()) return;
@@ -349,6 +352,73 @@ static QWidget* makeLookupPane(allcore::Spine& spine, allcore::RefDict* ref,
                 if (upper) wylie = allcore::acipToEwts(raw);
             }
             h += mvpHtml(mvp->byWylie(wylie));
+        }
+        // Whitney reference layer (Roots 1885 + Grammar 1879 citations;
+        // public domain, digitization Apache-2.0 — data/whitney/):
+        // Latin queries only — try as an IAST root, else as an English
+        // meaning word. Reference comparanda, never HGM equivalents.
+        {
+            bool hasAlpha = false;
+            for (unsigned char c : raw)
+                hasAlpha |= std::isalpha(c) != 0;
+            bool hasTibetan = false;   // U+0F00–U+0FFF = E0 BC/BD/BE/BF …
+            for (size_t i = 0; i + 2 < raw.size(); ++i)
+                if ((unsigned char)raw[i] == 0xE0 &&
+                    ((unsigned char)raw[i + 1] & 0xFC) == 0xBC)
+                    hasTibetan = true;
+            if (whitney && hasAlpha && !hasTibetan) {
+                auto roots = whitney->byRoot(raw);
+                const bool byRootHit = !roots.empty();
+                if (roots.empty() && raw.find(' ') == std::string::npos)
+                    roots = whitney->byMeaning(raw, 8);
+                if (!roots.empty()) {
+                    h += "<hr><div style='color:#4A3A7A'><b>Whitney — "
+                         "Roots, Verb-Forms and Primary Derivatives "
+                         "(1885)</b> <small>(public-domain reference; "
+                         "matched by " +
+                         QString(byRootHit ? "root" : "English meaning") +
+                         ")</small></div>";
+                    for (const auto* r : roots) {
+                        h += "<div style='margin:6px 0'><b>";
+                        if (!r->homonym.empty())
+                            h += QString::fromStdString(r->homonym) + " ";
+                        h += "√" +
+                             QString::fromStdString(r->root)
+                                 .toHtmlEscaped() +
+                             "</b> “" +
+                             QString::fromStdString(r->meaning)
+                                 .toHtmlEscaped() +
+                             "”";
+                        if (!r->classes.empty() && r->classes != "—")
+                            h += " · class " +
+                                 QString::fromStdString(r->classes)
+                                     .toHtmlEscaped() +
+                                 " <small style='color:#777'>(as "
+                                 "digitized, form-level)</small>";
+                        if (!r->dcsClasses.empty() &&
+                            r->dcsClasses != "—")
+                            h += " · <small style='color:#777'>corpus: " +
+                                 QString::fromStdString(r->dcsClasses)
+                                     .toHtmlEscaped() +
+                                 "</small>";
+                        if (!r->grammarSecs.empty() &&
+                            r->grammarSecs != "—")
+                            h += "<br><small style='color:#555'>Sanskrit "
+                                 "Grammar (1879) " +
+                                 QString::fromStdString(r->grammarSecs)
+                                     .left(160)
+                                     .toHtmlEscaped() +
+                                 " <span style='color:#777'>(✦ "
+                                 "specific · ⚠ exception)"
+                                 "</span></small>";
+                        h += "</div>";
+                    }
+                    h += "<div style='font-size:11px;color:#777'>read "
+                         "the Grammar itself: <a href='https://archive."
+                         "org/details/sanskritgrammari00whituoft'>"
+                         "archive.org scan (public domain)</a></div>";
+                }
+            }
         }
         // link-out tier: external searches for the resolved term
         {
@@ -6100,6 +6170,15 @@ int main(int argc, char** argv) {
             mvp = &m;
     }
 
+    // the Whitney layer (Roots 1885 + Grammar 1879 citations; public
+    // domain, digitization Apache-2.0) — optional reference comparanda
+    allcore::WhitneyRoots* whitney = nullptr;
+    {
+        static allcore::WhitneyRoots w;
+        if (w.load((root + "/data/whitney/whitney_roots.tsv").toStdString()))
+            whitney = &w;
+    }
+
     // the SOAS POS lexicon (CC BY 4.0) — optional; consulted only where
     // Wilson's rules require POS data, evidence-labeled
     allcore::PosLexicon* poslex = nullptr;
@@ -6146,7 +6225,7 @@ int main(int argc, char** argv) {
                 "Library");
     tabs.addTab(makeSearchPane(spine, root + "/library"), "Search");
     tabs.addTab(makeConvertPane(mvp), "Convert");
-    tabs.addTab(makeLookupPane(spine, refdict, mvp), "Lookup");
+    tabs.addTab(makeLookupPane(spine, refdict, mvp, whitney), "Lookup");
 #ifdef ALL_HAVE_OCR
     tabs.addTab(new ScanPane(checker, root), "Scan");
 #endif
