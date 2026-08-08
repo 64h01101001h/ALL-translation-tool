@@ -90,9 +90,22 @@ bool endsInVowel(const std::string& stem) {
 
 }  // namespace
 
-const ParticleInfo* classifyParticle(const std::string& acip_token) {
+namespace {
+// within the particle/suffix domain, wylie and ACIP differ only by
+// letter case (no TS/TZ-class letters occur in this closed set), so an
+// uppercase fold makes both scripts exact here
+std::string upAcip(const std::string& t) {
+    std::string u = t;
+    for (auto& c : u)
+        if (c >= 'a' && c <= 'z') c = (char)(c - 'a' + 'A');
+    return u;
+}
+}  // namespace
+
+const ParticleInfo* classifyParticle(const std::string& token) {
+    const std::string t = upAcip(token);
     for (const auto& p : kParticles)
-        if (acip_token == p.acip) return &p.info;
+        if (t == p.acip) return &p.info;
     return nullptr;
 }
 
@@ -243,13 +256,14 @@ std::string lowercased(const std::string& s) {
 
 }  // namespace
 
-AgreementResult checkAgreement(const std::string& prev_acip,
-                               const std::string& particle_acip) {
+AgreementResult checkAgreement(const std::string& prev_token,
+                               const std::string& particle_token) {
+    const std::string particle_acip = upAcip(particle_token);
     const Variant* v = nullptr;
     for (const auto& x : kVariants)
         if (particle_acip == x.acip) { v = &x; break; }
     if (!v) return {};
-    const Sfx s = suffixClassOf(prev_acip);
+    const Sfx s = suffixClassOf(upAcip(prev_token));
     if (s == Sfx::Unknown) return {};
     AgreementResult r;
     r.expected = expectedVariant(v->family, s);

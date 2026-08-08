@@ -15,6 +15,23 @@ static int failures = 0;
         else { std::printf("  [FAIL] %s\n", msg); ++failures; } \
     } while (0)
 
+static void particleScriptParity(int& failures) {
+    // the grammar layer must read both scripts (wylie docs are first-
+    // class since the Release 6 install)
+    auto* pA = allcore::classifyParticle("KYI");
+    auto* pW = allcore::classifyParticle("kyi");
+    CHECK(pA && pW && std::string(pA->function) == pW->function,
+          "classifyParticle: KYI == kyi");
+    auto aA = allcore::checkAgreement("RNAM", "KYI");
+    auto aW = allcore::checkAgreement("rnam", "kyi");
+    CHECK(aA.verdict == aW.verdict && aA.expected == aW.expected &&
+              !aW.expected.empty(),
+          "checkAgreement: script parity (rnam+kyi -> gyi expected)");
+    CHECK(allcore::checkAgreement("rnam", "gyi").verdict ==
+              allcore::Agreement::Agrees,
+          "wylie agreeing pair accepted");
+}
+
 int main(int argc, char** argv) {
     if (argc < 2) {
         std::fprintf(stderr, "usage: lattice_smoke <spine.db>\n");
@@ -156,6 +173,8 @@ int main(int argc, char** argv) {
     auto docC = allcore::buildOverlay(spine, index, "'PHAGS PAS MED PAR");
     CHECK(sig(doc5) == sig(docC),
           "indexed lattice == SQL lattice on fused -s / -r forms");
+
+    particleScriptParity(failures);
 
     std::printf("%s (%d failures)\n",
                 failures ? "LATTICE SMOKE FAILED" : "LATTICE SMOKE OK", failures);
