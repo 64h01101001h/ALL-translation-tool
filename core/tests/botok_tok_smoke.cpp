@@ -205,6 +205,17 @@ int main(int argc, char** argv) {
         auto cw = compact.segment(inp);
         CHECK(cw.size() == 8 && cw[5].affixType == "gi" && cw[5].affixAa,
               "SegTrie affix info: mtha'i = gi affix with aa");
+        CHECK(segWordBaseForm(cw[5]) == "མཐའ" &&
+              segWordAffixSurface(cw[5]) == "འི",
+              "affix split display: mtha'i = mtha' + 'i (aa restored)");
+        // non-aa host: der = de + r (la don), base keeps its own final
+        SegTrie compact2(argv[1]);
+        compact2.addWord("དེ་");
+        auto dw = compact2.segment("དེར།");
+        CHECK(dw.size() == 2 && dw[0].word && dw[0].affixType == "la" &&
+              !dw[0].affixAa && segWordBaseForm(dw[0]) == "དེ" &&
+              segWordAffixSurface(dw[0]) == "ར",
+              "affix split display: der = de + r, no aa");
         auto words = seg.segment("བཀྲ་ཤིས་བདེ་ལེགས། ཀཀ abc མཐའི་མཐའ།");
         CHECK(words.size() == 8, "segmenter: token count");
         auto is = [&](size_t i, const char* text, bool tib, bool word) {

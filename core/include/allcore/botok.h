@@ -414,5 +414,12 @@ private:
 // affix-type names in botok's fixed order (1-based index into this table)
 const char* segAffixTypeName(int idx);
 
+// the affixed word's base (host) form — the splitaffixed idea as display
+// info: strips the affix codepoints and restores a lost final འ (aa).
+// "" when the SegWord carries no affix.
+std::string segWordBaseForm(const SegWord& w);
+// the affix's own surface form ("འི", "ར", ...); "" when none
+std::string segWordAffixSurface(const SegWord& w);
+
 }  // namespace botok
 }  // namespace allcore

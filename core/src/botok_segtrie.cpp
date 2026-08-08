@@ -23,6 +23,31 @@ static int affixTypeIndex(const std::string& type) {
     return 0;
 }
 
+// affix surfaces, same 1-based order as segAffixTypeName (BoSyl's table)
+static const char32_t* kAffixSurface[] = {
+    U"",     U"ར",    U"ས",    U"འི",   U"འམ",   U"འང",
+    U"འོ",   U"འིའོ", U"འིའམ", U"འིའང", U"འོའམ", U"འོའང"};
+
+std::string segWordAffixSurface(const SegWord& w) {
+    if (w.affixType.empty()) return "";
+    int idx = affixTypeIndex(w.affixType);
+    return idx ? u32to8(kAffixSurface[idx]) : "";
+}
+
+std::string segWordBaseForm(const SegWord& w) {
+    if (w.affixType.empty()) return "";
+    int idx = affixTypeIndex(w.affixType);
+    if (!idx) return "";
+    std::u32string t = u8to32(w.text);
+    // drop trailing tsheks/spaces, then the affix codepoints, restore འ
+    while (!t.empty() && (t.back() == U'་' || t.back() == U' ')) t.pop_back();
+    size_t alen = std::u32string(kAffixSurface[idx]).size();
+    if (t.size() < alen) return "";
+    t.resize(t.size() - alen);
+    if (w.affixAa) t.push_back(U'འ');
+    return u32to8(t);
+}
+
 uint32_t SegTrie::walkSyl(const std::string& syl, uint32_t node) const {
     auto sit = sylIds_.find(syl);
     if (sit == sylIds_.end()) return kNoNode;

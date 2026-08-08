@@ -1441,11 +1441,18 @@ private:
             first = false;
             if (w.tibetan && w.word) {
                 h += "<span style='color:#1E4E6B'>" + txt + "</span>";
-                if (!w.affixType.empty())  // matched through an affixed form
-                    h += QString("<small style='color:#7A5A00'>+%1%2</small>")
-                             .arg(QString::fromStdString(w.affixType)
+                if (!w.affixType.empty())  // matched through an affixed form:
+                    // show the split (base + particle), splitaffixed-style
+                    h += QString("<small style='color:#7A5A00'> = %1 + %2 "
+                                 "(%3)</small>")
+                             .arg(QString::fromStdString(
+                                      allcore::botok::segWordBaseForm(w))
                                       .toHtmlEscaped(),
-                                  w.affixAa ? QStringLiteral("·འ") : QString());
+                                  QString::fromStdString(
+                                      allcore::botok::segWordAffixSurface(w))
+                                      .toHtmlEscaped(),
+                                  QString::fromStdString(w.affixType)
+                                      .toHtmlEscaped());
             } else if (w.tibetan) {  // honest: not in the lexicon
                 h += "<span style='color:#B4540A'>⟨" + txt + "⟩</span>";
             } else {

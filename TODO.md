@@ -237,9 +237,13 @@ display toggles, not through invention.
       list-1-only forms could never attest; the old smoke's label
       check was blind because "Monlam" prefixes both labels);
       normalized on load + regression-locked (list-1-only ka ka ni).
-      — REMAINING: affixed-particle SPLIT display layer
-      (modifytokens/splitaffixed), possible deeper Overlay integration
-      with Adam's direction.
+      — AFFIX-SPLIT DISPLAY SHIPPED 2026-08-07 (splitaffixed adapted
+      as display info, not stream mutation): segWordBaseForm/
+      segWordAffixSurface strip the affix codepoints and restore a
+      lost final འ; the Overlay card shows "མཐའི = མཐའ + འི (gi)".
+      Battery: mtha'i→mtha' (aa restored) + der→de+r (no aa).
+      **THE BOTOK PROGRAM IS COMPLETE** — remaining only: possible
+      deeper Overlay integration with Adam's direction.
 - [~] **Monlam word lists** — BANKED + FIRST INTEGRATION 2026-08-07
       (Apache-2.0 verified; 107,108 + 342,340 unique forms; allcore
       RefLexicon, 18th suite proves the real conversion path matches
