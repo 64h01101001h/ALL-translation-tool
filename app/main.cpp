@@ -970,6 +970,7 @@ private:
     // ---- BDRC scan follow-along (APPARATUS_DESIGN §3) ----------------
     void setScanTarget(const allcore::AcipFileInfo& info,
                        const QString& fileName = QString()) {
+        ++fetchEpoch_;   // invalidates any in-flight scan fetches
         scanWork_.clear();
         fileKey_ = QFileInfo(fileName).fileName();
         folioUrl_.clear();
@@ -1013,10 +1014,6 @@ private:
         head.replace(QRegularExpression("[*,;/]"), " ");
         head = head.simplified();
         QStringList syl = head.split(' ', Qt::SkipEmptyParts);
-        // drop the standard opening frame words if present
-        while (!syl.isEmpty() &&
-               (syl.first().compare("BZHUGS", Qt::CaseInsensitive) == 0))
-            break;
         QStringList take;
         for (const auto& t : syl) {
             if (t.compare("BZHUGS", Qt::CaseInsensitive) == 0) break;
@@ -1122,8 +1119,10 @@ private:
         scanCap_->show();
         const QUrl u("https://iiifpres.bdrc.io/collection/wio:" + scanWork_);
         auto* rep = nam_.get(QNetworkRequest(u));
-        connect(rep, &QNetworkReply::finished, [this, rep] {
+        const int epoch = fetchEpoch_;
+        connect(rep, &QNetworkReply::finished, [this, rep, epoch] {
             rep->deleteLater();
+            if (epoch != fetchEpoch_) return;   // a newer file took over
             if (rep->error() != QNetworkReply::NoError) {
                 scanCap_->setText("BDRC unreachable: " + rep->errorString() +
                                   " — <a href='https://library.bdrc.io/show/" +
@@ -1165,8 +1164,10 @@ private:
         }
         const QUrl u(pendingManifests_.takeFirst());
         auto* rep = nam_.get(QNetworkRequest(u));
-        connect(rep, &QNetworkReply::finished, [this, rep] {
+        const int epoch = fetchEpoch_;
+        connect(rep, &QNetworkReply::finished, [this, rep, epoch] {
             rep->deleteLater();
+            if (epoch != fetchEpoch_) return;
             if (rep->error() == QNetworkReply::NoError) {
                 const auto man =
                     QJsonDocument::fromJson(rep->readAll()).object();
@@ -1263,9 +1264,11 @@ private:
     void fetchScan(const QString& url, const QString& cacheFn,
                    const QString& folio) {
         auto* rep = nam_.get(QNetworkRequest(QUrl(url)));
+        const int epoch = fetchEpoch_;
         connect(rep, &QNetworkReply::finished,
-                [this, rep, cacheFn, folio] {
+                [this, rep, cacheFn, folio, epoch] {
                     rep->deleteLater();
+                    if (epoch != fetchEpoch_) return;
                     if (rep->error() != QNetworkReply::NoError) {
                         scanCap_->setText("folio " + folio +
                                           ": image fetch failed (" +
@@ -1331,6 +1334,7 @@ private:
     QLabel* scanCap_ = nullptr;
     QWidget* scanNav_ = nullptr;
     QString scanWork_, scanCache_, curFolio_, scanLicense_, fileKey_;
+    int fetchEpoch_ = 0;
     QString dataRoot_;
     allcore::VerbStems verbStems_;
     bool verbStemsTried_ = false;

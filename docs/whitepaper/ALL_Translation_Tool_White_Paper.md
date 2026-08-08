@@ -14,7 +14,7 @@ analyzing grammar, drafting a translation, checking that draft, and
 training the next generation of translators. It is built around one
 central treasure: the dictionary of English equivalents established by
 Geshe Michael Roach across decades of teaching and translation, together
-with a parallel corpus of 40,762 Tibetan--English segments drawn from
+with a parallel corpus of 42,199 Tibetan--English segments drawn from
 more than sixty of his courses and works --- including, as of August
 2026, three newly ingested published volumes (A Song of My Spiritual
 Life, The Other Side of Emptiness, and The Sixty Verses of Nagarjuna)
