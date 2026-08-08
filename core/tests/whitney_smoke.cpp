@@ -63,6 +63,8 @@ int main(int argc, char** argv) {
           "accented PPP banked: 1 kṛ -> kṛtá");
     CHECK(kr1 && !kr1->mwId.empty(),
           "MW crosswalk id present for 1 kṛ");
+    CHECK(kr1 && kr1->slp1 == "kf",
+          "SLP1 deep-link key banked (kṛ -> kf)");
 
     auto gam = w.byRoot("gam");
     CHECK(gam.size() == 1 && gam[0]->meaning == "go", "gam = go");

@@ -417,6 +417,16 @@ static QWidget* makeLookupPane(allcore::Spine& spine, allcore::RefDict* ref,
                                      .left(140)
                                      .toHtmlEscaped() +
                                  "</small>";
+                        // link-out: Cologne MW display, SLP1-keyed
+                        // (URL format verified live 2026-08-08)
+                        if (!r->mwId.empty() && !r->slp1.empty())
+                            h += " <small><a href='https://"
+                                 "sanskrit-lexicon.uni-koeln.de/scans/"
+                                 "MWScan/2020/web/webtc/getword.php?"
+                                 "key=" +
+                                 QString::fromStdString(r->slp1)
+                                     .toHtmlEscaped() +
+                                 "&filter=roman'>MW entry →</a></small>";
                         if (!r->grammarSecs.empty() &&
                             r->grammarSecs != "—")
                             h += "<br><small style='color:#555'>Sanskrit "

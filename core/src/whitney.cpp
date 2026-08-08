@@ -68,6 +68,7 @@ bool WhitneyRoots::load(const std::string& tsvPath) {
         if (cols.size() > 9) r.mwId = cols[9];
         if (cols.size() > 10) r.senses = cols[10];
         if (cols.size() > 11) r.notes = cols[11];
+        if (cols.size() > 12) r.slp1 = cols[12];
         byFolded_[foldIast(r.root)].push_back(
             static_cast<int>(entries_.size()));
         entries_.push_back(std::move(r));

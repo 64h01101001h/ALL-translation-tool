@@ -33,6 +33,7 @@ struct WhitneyRoot {
     std::string mwId;           // Monier-Williams entry id (crosswalk)
     std::string senses;         // MW/Apte sense citations
     std::string notes;
+    std::string slp1;           // SLP1 form (Cologne deep-link key)
 };
 
 class WhitneyRoots {

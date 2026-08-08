@@ -34,7 +34,7 @@ DATA-QUALITY DECISIONS (verified against the sources 2026-08-08):
 
 Writes data/whitney/whitney_roots.tsv:
   id  root  homonym  meaning  classes  class_uncertain  ppp
-  grammar_secs  dcs_classes  mw_id  senses  notes
+  grammar_secs  dcs_classes  mw_id  senses  notes  slp1
 
 Usage: python3 tools/build_whitney.py
 """
@@ -111,7 +111,7 @@ def main() -> int:
                   "for provenance and caveats\n")
         out.write("# id\troot\thomonym\tmeaning\tclasses\t"
                   "class_uncertain\tppp\tgrammar_secs\tdcs_classes\t"
-                  "mw_id\tsenses\tnotes\n")
+                  "mw_id\tsenses\tnotes\tslp1\n")
         for i in sorted(master):
             m = master[i]
             c = cites.get(i, {})
@@ -124,7 +124,8 @@ def main() -> int:
                    hb.get("class", ""), hb.get("class_uncertain", ""),
                    hb.get("ppp", ""), c.get("secs", ""),
                    c.get("dcs", ""), hb.get("mw_id", ""),
-                   hb.get("senses", ""), c.get("notes", "")]
+                   hb.get("senses", ""), c.get("notes", ""),
+                   hb.get("root_slp1", "")]
             out.write("\t".join(x.replace("\t", " ") for x in row) + "\n")
 
     print(f"{len(master)} roots -> {OUT}")
