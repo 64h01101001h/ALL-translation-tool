@@ -5922,6 +5922,17 @@ public:
             "recognized.");
         row->addWidget(bandsB);
         connect(bandsB, &QPushButton::clicked, [this] { detectBands(); });
+        auto* prefillB = new QPushButton("Pre-fill from OCR (draft)");
+        prefillB->setToolTip(
+            "OCR-assisted input: recognize this page (BDRC Woodblock "
+            "model, CC BY-NC, with permission) and fill the EMPTY "
+            "editor with the draft in ACIP for you to CORRECT against "
+            "the scan — every syllable the spellchecker doubts is "
+            "underlined. The draft is ocr-derived: correcting it is "
+            "your typing pass; the double-keying comparison against "
+            "your partner still applies unchanged.");
+        row->addWidget(prefillB);
+        connect(prefillB, &QPushButton::clicked, [this] { prefill(); });
 #endif
         auto* zoomL = new QLabel("zoom");
         row->addWidget(zoomL);
@@ -6077,6 +6088,70 @@ private:
                                  "exact lines (typed line N = scan line "
                                  "N, per the input convention)")
                              .arg(bands_.size()));
+    }
+
+    // OCR-assisted input: recognize the page and fill the EMPTY editor
+    // with the ACIP draft for the operator to CORRECT. The draft is
+    // ocr-derived; correcting it is the typing pass, and double-keying
+    // against the partner applies unchanged on top.
+    void prefill() {
+        if (base_.isNull()) {
+            status_->setText("open a scan first");
+            return;
+        }
+        if (!editor_->toPlainText().trimmed().isEmpty()) {
+            status_->setText(
+                "the editor already has typing — pre-fill only starts "
+                "from an empty page (it never overwrites your work)");
+            return;
+        }
+        const QString od = root_ + "/library/ocr_models/BDRC_Woodblock";
+        if (!QFile::exists(od + "/OCRModel.onnx")) {
+            status_->setText("recognition model missing (see the Scan "
+                             "pane for download instructions)");
+            return;
+        }
+        if (bands_.empty()) detectBands();
+        if (bands_.empty()) return;
+        try {
+            if (!rec_)
+                rec_ = std::make_unique<allocr::TextRecognizer>(
+                    od.toStdString());
+            // rebuild the full line strips for recognition
+            QImage img =
+                base_.toImage().convertToFormat(QImage::Format_RGB888);
+            const int w = img.width(), h = img.height();
+            std::vector<uint8_t> rgb(size_t(w) * h * 3);
+            for (int y = 0; y < h; ++y)
+                std::copy(img.constScanLine(y),
+                          img.constScanLine(y) + w * 3,
+                          rgb.begin() + size_t(y) * w * 3);
+            auto mask = det_->detect(rgb.data(), w, h);
+            const double zero = 0.0;
+            auto pl = allocr::buildLines(rgb.data(), w, h, mask, 2.5,
+                                         4.0, true, &zero);
+            QStringList lines;
+            for (size_t i = 0; i < pl.images.size(); ++i) {
+                status_->setText(QString("recognizing line %1/%2…")
+                                     .arg(i + 1)
+                                     .arg(pl.images.size()));
+                QCoreApplication::processEvents();
+                const std::string wy = rec_->recognize(pl.images[i]);
+                // wylie -> ACIP via the round-trip-proven reverse
+                lines << QString::fromStdString(
+                    allcore::ewtsToAcip(wy));
+            }
+            editor_->setPlainText(lines.join("\n"));
+        } catch (const std::exception& e) {
+            status_->setText(QString("pre-fill failed: %1").arg(e.what()));
+            return;
+        }
+        status_->setText(
+            QString("OCR draft filled: %1 line(s), ocr-derived — "
+                    "CORRECT it against the scan (doubtful syllables "
+                    "are underlined); the double-keying pass vs your "
+                    "partner applies as always")
+                .arg(bands_.size()));
     }
 #endif
 
@@ -6375,6 +6450,7 @@ private:
     QLabel* pageLbl_ = nullptr;
 #ifdef ALL_HAVE_OCR
     std::unique_ptr<allocr::LineDetector> det_;
+    std::unique_ptr<allocr::TextRecognizer> rec_;
     std::vector<allocr::OcrLine> bands_;
 #endif
 };
