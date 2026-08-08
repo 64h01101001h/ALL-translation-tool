@@ -1,9 +1,6 @@
 # The ALL Translation Tool
 ## A Complete Overview: Every Function, Its Design, and the Vision Ahead
 
-*Prepared August 2026 for Holy Geshe Michael Roach and the Director of
-the Asian Legacy Library, at the request of Adam Andrade.*
-
 ---
 
 ## Why this document
