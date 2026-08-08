@@ -71,7 +71,13 @@ machine.
   Installed text library              the complete ACIP Release 6
                                       corpus: 2,716 texts, 8.68 million
                                       lines, fully search-indexed on
-                                      the user's own machine
+                                      the user's own machine --- and
+                                      readable: any text in the canon,
+                                      including a full 1.6MB volume,
+                                      opens in the reading pane fully
+                                      dictionary-shaded in under half
+                                      a second, whether the file is in
+                                      ACIP or scholarly transliteration
 
   Lokesh Chandra layer                79,305 Sanskrit-linked entries;
                                       88,973 headwords with IAST Sanskrit
