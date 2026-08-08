@@ -16,6 +16,11 @@ std::string foldIast(const std::string& s) {
         {"ṅ", 'n'}, {"ñ", 'n'}, {"ṇ", 'n'},   // ṅ ñ ṇ
         {"ṭ", 't'}, {"ḍ", 'd'},                    // ṭ ḍ
         {"ś", 's'}, {"ṣ", 's'},                    // ś ṣ
+        // Vedic accent marks on the hub's PPP forms (gatá, bhūtá)
+        {"á", 'a'}, {"é", 'e'}, {"í", 'i'},   // acute
+        {"ó", 'o'}, {"ú", 'u'},
+        {"à", 'a'}, {"è", 'e'}, {"ì", 'i'},   // grave
+        {"ò", 'o'}, {"ù", 'u'},
     };
     std::string out;
     out.reserve(s.size());
@@ -69,8 +74,10 @@ bool WhitneyRoots::load(const std::string& tsvPath) {
         if (cols.size() > 10) r.senses = cols[10];
         if (cols.size() > 11) r.notes = cols[11];
         if (cols.size() > 12) r.slp1 = cols[12];
-        byFolded_[foldIast(r.root)].push_back(
-            static_cast<int>(entries_.size()));
+        if (cols.size() > 13) r.sectionRefs = cols[13];
+        const int ix = static_cast<int>(entries_.size());
+        byFolded_[foldIast(r.root)].push_back(ix);
+        if (!r.ppp.empty()) byPpp_[foldIast(r.ppp)].push_back(ix);
         entries_.push_back(std::move(r));
     }
     return !entries_.empty();
@@ -81,6 +88,15 @@ std::vector<const WhitneyRoot*> WhitneyRoots::byRoot(
     std::vector<const WhitneyRoot*> out;
     auto it = byFolded_.find(foldIast(iast));
     if (it != byFolded_.end())
+        for (int ix : it->second) out.push_back(&entries_[ix]);
+    return out;
+}
+
+std::vector<const WhitneyRoot*> WhitneyRoots::byPpp(
+    const std::string& form) const {
+    std::vector<const WhitneyRoot*> out;
+    auto it = byPpp_.find(foldIast(form));
+    if (it != byPpp_.end())
         for (int ix : it->second) out.push_back(&entries_[ix]);
     return out;
 }

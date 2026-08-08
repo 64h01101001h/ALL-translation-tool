@@ -368,16 +368,20 @@ static QWidget* makeLookupPane(allcore::Spine& spine, allcore::RefDict* ref,
                     hasTibetan = true;
             if (whitney && hasAlpha && !hasTibetan) {
                 auto roots = whitney->byRoot(raw);
-                const bool byRootHit = !roots.empty();
-                if (roots.empty() && raw.find(' ') == std::string::npos)
+                QString matchKind = "root";
+                if (roots.empty()) {   // past participle: gata -> gam
+                    roots = whitney->byPpp(raw);
+                    if (!roots.empty()) matchKind = "past participle";
+                }
+                if (roots.empty() && raw.find(' ') == std::string::npos) {
                     roots = whitney->byMeaning(raw, 8);
+                    if (!roots.empty()) matchKind = "English meaning";
+                }
                 if (!roots.empty()) {
                     h += "<hr><div style='color:#4A3A7A'><b>Whitney — "
                          "Roots, Verb-Forms and Primary Derivatives "
                          "(1885)</b> <small>(public-domain reference; "
-                         "matched by " +
-                         QString(byRootHit ? "root" : "English meaning") +
-                         ")</small></div>";
+                         "matched by " + matchKind + ")</small></div>";
                     for (const auto* r : roots) {
                         h += "<div style='margin:6px 0'><b>";
                         if (!r->homonym.empty())
@@ -437,6 +441,30 @@ static QWidget* makeLookupPane(allcore::Spine& spine, allcore::RefDict* ref,
                                  " <span style='color:#777'>(✦ "
                                  "specific · ⚠ exception)"
                                  "</span></small>";
+                        if (!r->sectionRefs.empty()) {
+                            // topical ranges: perfect:781-823|… → a
+                            // compact by-topic index into the Grammar
+                            QString topics;
+                            const QStringList parts =
+                                QString::fromStdString(r->sectionRefs)
+                                    .split('|');
+                            int shown = 0;
+                            for (const QString& p2 : parts) {
+                                if (shown++ >= 6) {
+                                    topics += QString("· +%1 more ")
+                                                  .arg(parts.size() - 6);
+                                    break;
+                                }
+                                QString t2 = p2;
+                                t2.replace(':', " §§");
+                                t2.replace('_', ' ');
+                                topics += t2.toHtmlEscaped() + " · ";
+                            }
+                            if (!topics.isEmpty())
+                                h += "<br><small style='color:#777'>"
+                                     "Grammar by topic: " +
+                                     topics + "</small>";
+                        }
                         h += "</div>";
                     }
                     h += "<div style='font-size:11px;color:#777'>read "

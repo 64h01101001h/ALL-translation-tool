@@ -34,6 +34,8 @@ struct WhitneyRoot {
     std::string senses;         // MW/Apte sense citations
     std::string notes;
     std::string slp1;           // SLP1 form (Cologne deep-link key)
+    std::string sectionRefs;    // topical Grammar ranges
+                                // (perfect:781-823|aor_is:898-911|…)
 };
 
 class WhitneyRoots {
@@ -46,10 +48,13 @@ public:
     // English meaning word search (whole-word, case-folded)
     std::vector<const WhitneyRoot*> byMeaning(const std::string& word,
                                               int limit = 12) const;
+    // past-participle reverse lookup (gata / gatá -> gam)
+    std::vector<const WhitneyRoot*> byPpp(const std::string& form) const;
 
 private:
     std::vector<WhitneyRoot> entries_;
     std::map<std::string, std::vector<int>> byFolded_;
+    std::map<std::string, std::vector<int>> byPpp_;
 };
 
 // IAST → plain-ASCII fold (ā→a, ṛ/ṝ→r, ś/ṣ→s, ṃ→m, ḥ→h, ṅ/ñ/ṇ→n, …)

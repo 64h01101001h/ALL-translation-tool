@@ -65,6 +65,18 @@ int main(int argc, char** argv) {
           "MW crosswalk id present for 1 kṛ");
     CHECK(kr1 && kr1->slp1 == "kf",
           "SLP1 deep-link key banked (kṛ -> kf)");
+    CHECK(allcore::foldIast("gatá") == "gata",
+          "accent fold: gatá -> gata");
+    auto ppp = w.byPpp("gata");
+    bool pppGam = false;
+    for (const auto* r : ppp) pppGam |= r->root == "gam";
+    CHECK(pppGam, "byPpp reverse: plain 'gata' finds gam");
+    CHECK(!w.byPpp("krta").empty(),
+          "byPpp folded: 'krta' finds kṛtá");
+    auto bhu3 = w.byRoot("bhū");
+    CHECK(bhu3.size() == 1 && !bhu3[0]->sectionRefs.empty() &&
+              bhu3[0]->sectionRefs.find("perfect") != std::string::npos,
+          "topical Grammar ranges banked (bhū has perfect:…)");
 
     auto gam = w.byRoot("gam");
     CHECK(gam.size() == 1 && gam[0]->meaning == "go", "gam = go");
