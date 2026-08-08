@@ -304,10 +304,21 @@ display toggles, not through invention.
       input-center documents; external tool first, port maps later.
 - [~] **lucene-bo** — Adam approved full inclusion 2026-08-07
       ("Lucene is good to include"). Affix rules ENGINE + LOOKUP
-      SHIPPED 2026-08-07 (below); APPROVED NEXT: the analyzer's
-      remaining filters — TibPattFilter (spelling-pattern
-      normalization), TibSyllableLemmatizer, phonetics folding — as
-      further search-tolerance layers, same port-and-prove treatment.
+      SHIPPED 2026-08-07 (below); INTEGRATED 2026-08-07 per
+      Adam ("integrate what we need to integrate"): allcore searchnorm
+      (25th suite) — PaBa fold (post-strip, upstream semantics);
+      verb-lemma fold from OUR CC0 bank (1,697 unambiguous folds, 373
+      ambiguous skipped; full table round-trips through our converter
+      — pyewts bootstrap-only); normalizeTibetanUnicode (TibCharFilter
+      strict+lenient maps, reorder, Old-Tib merged-syllable splits 1-3
+      as upstream defaults, Sanskrit ts→c folds) for unicode entry
+      points + future OCR text. Wired: wynorm + spine (38,556 folded
+      segments; byed +7,334, pa +7,221) + libindex v3 (969k
+      fold-reachable lines). Documented skips: TibEwtsFilter +
+      SyllableTokenizer (covered natively). REMAINING: phonetics
+      family as its own feature (pronunciation search over the spine's
+      GMR pronunciations); app-side wiring when the lane frees
+      (Lookup fallback fold + updateIndex lemma path).
       Affix rules detail:
       (allcore affixnorm: faithful TibAffixedFilter port, battery
       through our own converters incl. the needsAA guard; wylie-level

@@ -26,6 +26,7 @@ add_library(allcore STATIC
   src/tibcal.cpp
   src/tibcal_day.cpp
   src/affixnorm.cpp
+  src/searchnorm.cpp
   src/libindex.cpp
   src/gofer.cpp
   src/acip_ewts.cpp
@@ -137,6 +138,12 @@ target_link_libraries(libindex_cli PRIVATE allcore)
 
 add_executable(wynorm tools_wynorm.cpp)
 target_link_libraries(wynorm PRIVATE allcore)
+
+add_executable(searchnorm_smoke tests/searchnorm_smoke.cpp)
+target_link_libraries(searchnorm_smoke PRIVATE allcore)
+add_test(NAME searchnorm_smoke
+         COMMAND searchnorm_smoke
+                 ${CMAKE_SOURCE_DIR}/data/extracted/verb_lemmas.tsv)
 
 add_executable(affixnorm_smoke tests/affixnorm_smoke.cpp)
 target_link_libraries(affixnorm_smoke PRIVATE allcore)

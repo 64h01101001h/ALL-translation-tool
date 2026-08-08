@@ -159,7 +159,9 @@ def build():
         import subprocess
         lines = '\n'.join((s.get('wylie') or '').replace('\n', ' ')
                           for s in corpus)
-        out = subprocess.run([str(wynorm)], input=lines, text=True,
+        lemmas = ROOT / 'data' / 'extracted' / 'verb_lemmas.tsv'
+        cmd = [str(wynorm)] + ([str(lemmas)] if lemmas.exists() else [])
+        out = subprocess.run(cmd, input=lines, text=True,
                              capture_output=True, check=True).stdout
         outl = out.split('\n')
         for i, s in enumerate(corpus):

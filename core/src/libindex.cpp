@@ -1,4 +1,4 @@
-#include "allcore/affixnorm.h"
+#include "allcore/searchnorm.h"
 #include "allcore/engines.h"
 #include "allcore/libindex.h"
 
@@ -109,8 +109,8 @@ LibraryIndex::LibraryIndex(const std::string& db_path) {
              "  text, text_norm, content='lines', content_rowid='id',"
              "  tokenize=\"unicode61 tokenchars ''''\");");
     }
-    // schema v2: tokenizer aligned with corpus FTS (apostrophe is a
-    // token char — pa'i is one syllable). Older indexes rebuild once.
+    // schema v3: tokenizer aligned with corpus FTS + search fold
+    // extended (pa/ba + verb lemma). Older indexes rebuild once.
     {
         long ver = 0;
         {
@@ -118,7 +118,7 @@ LibraryIndex::LibraryIndex(const std::string& db_path) {
             if (sqlite3_step(v.p) == SQLITE_ROW)
                 ver = sqlite3_column_int64(v.p, 0);
         }
-        if (ver < 2) {
+        if (ver < 3) {
             exec(db_,
                  "DROP TABLE IF EXISTS lines_fts;"
                  "DELETE FROM lines; DELETE FROM files;");
@@ -127,7 +127,7 @@ LibraryIndex::LibraryIndex(const std::string& db_path) {
                  "  text, text_norm, content='lines',"
                  "  content_rowid='id',"
                  "  tokenize=\"unicode61 tokenchars ''''\");");
-            exec(db_, "PRAGMA user_version=2");
+            exec(db_, "PRAGMA user_version=3");
         }
     }
 }
@@ -264,8 +264,7 @@ LibraryIndex::UpdateStats LibraryIndex::update(const std::string& root) {
                                 upper |= (ch >= 'A' && ch <= 'Z');
                             const std::string wy =
                                 upper ? acipToEwts(tok) : tok;
-                            const std::string st =
-                                stripAffixedParticlesWylie(wy);
+                            const std::string st = searchFoldWylie(wy);
                             if (!built.empty()) built += ' ';
                             built += st;
                             changed |= (st != wy);
