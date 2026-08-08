@@ -55,7 +55,7 @@ dictionaries from their original binaries: `tools/extract_hypercontext_dic.py`,
 
     ctest --test-dir cmake-build
 
-29 suites, ~600k verified data points. The engine batteries enforce founding
+30 suites, ~600k verified data points. The engine batteries enforce founding
 rule 2 (a port that fails its battery does not ship): `acipToEwts` must match
 all 42,199 corpus conversions (100.000%), `wylieToUnicode` must hit the
 canonical 99.03% on 26,318 ground-truth pairs, `pronounce` must be identical
@@ -92,6 +92,12 @@ Regenerate the pronunciation reference after a spine rebuild:
 Regenerate the Sanskrit reference after an LC-extract update:
 
     python3 tools/build_sanskrit_reference.py
+
+Regenerate the OCR line-detection oracle (needs a clone of BDRC's
+tibetan-ocr-app + `pip install onnxruntime opencv-python-headless scipy
+thin-plate-spline` in a Python 3.10+ venv):
+
+    python3 tools/build_ocr_reference.py <path-to-tibetan-ocr-app>
 
 Regenerate the Mahāvyutpatti table from the banked TEI (source +
 license: data/mahavyutpatti/README.md):

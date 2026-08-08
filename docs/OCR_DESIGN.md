@@ -54,7 +54,22 @@ on HF (author=BDRC): Photi/PhotiLines (layout/lines), Woodblock,
 DergeTenjur, LhasaKanjur, LithangKanjur, GoogleBooks_{E,C,T},
 Norbuketaka_{E,C}, ScriptClassifier.
 
-**Stage 2 build plan (concrete):**
+**Stage 2 increment A SHIPPED (2026-08-07, Adam: "start integrating the
+OCR functionality"): LINE DETECTION IN C++.** New `allocr` target
+(`ocr/`, links brew onnxruntime; skipped gracefully when absent; ML
+never enters allcore). `allocr::LineDetector` ports the canonical chain
+verbatim — clamp-resize, pad-255 to patch multiples, 512-tiling,
+PER-TILE adaptive-Gaussian binarize (cv2 semantics: fixed-point luma,
+ksize-51 sigma-8 replicate-border kernel, mean−C compare), normalize,
+NCHW, ONNX, sigmoid, threshold 0.9, stitch, crop, resize-to-original —
+plus row-band line extraction. Battery `ocr_smoke` (30th suite) diffs
+against the CANONICAL python pipeline run on two banked public-domain
+Pramanavarttika fixtures (tools/build_ocr_reference.py; PySide6 shimmed
+— the oracle needs no Qt): dense folio 99a = 98.6% pixel agreement with
+IDENTICAL 8 line bands; sparse title 94a = 99.9%, 3 bands; residue is
+cv2 fixed-point vs float rounding at glyph edges.
+
+**Stage 2 build plan (remaining):**
 1. Dependency: onnxruntime (brew; C++ API) — linked by a NEW `allocr`
    target, never allcore (ML stays out of the deterministic core).
 2. Model manager: first-run download from HF into

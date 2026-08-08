@@ -8,6 +8,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 enable_testing()
 
 add_subdirectory(core)
+add_subdirectory(ocr)
 
 # The Qt 6 app shell is optional so the core + batteries always build.
 find_package(Qt6 COMPONENTS Widgets QUIET)
