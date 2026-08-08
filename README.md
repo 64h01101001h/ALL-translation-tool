@@ -56,7 +56,7 @@ dictionaries from their original binaries: `tools/extract_hypercontext_dic.py`,
 
     ctest --test-dir cmake-build
 
-30 suites, ~600k verified data points. The engine batteries enforce founding
+32 suites, ~600k verified data points. The engine batteries enforce founding
 rule 2 (a port that fails its battery does not ship): `acipToEwts` must match
 all 42,199 corpus conversions (100.000%), `wylieToUnicode` must hit the
 canonical 99.03% on 26,318 ground-truth pairs, `pronounce` must be identical

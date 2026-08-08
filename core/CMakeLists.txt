@@ -210,3 +210,8 @@ target_link_libraries(contractions_smoke PRIVATE allcore)
 add_test(NAME contractions_smoke
          COMMAND contractions_smoke ${CMAKE_SOURCE_DIR}/data/extracted/bsdus_tshig.tsv
                  ${CMAKE_SOURCE_DIR}/build/hgm_spine_v27_2.db)
+
+add_executable(acipcodes_smoke tests/acipcodes_smoke.cpp)
+target_link_libraries(acipcodes_smoke PRIVATE allcore)
+add_test(NAME acipcodes_smoke
+         COMMAND acipcodes_smoke ${CMAKE_SOURCE_DIR}/data/acip_codes/Acipcode.txt)

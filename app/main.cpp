@@ -6,6 +6,7 @@
 #include <QCollator>
 #include <QElapsedTimer>
 #include <QHBoxLayout>
+#include <QInputDialog>
 #include <QListView>
 #include <QScrollArea>
 #include <QStringListModel>
@@ -552,6 +553,8 @@ public:
         QFile f(fn);
         if (!f.open(QIODevice::ReadOnly)) return;
         input_->setPlainText(QString::fromUtf8(f.readAll()));
+        docFile_ = fn;
+        loadGlossary();
         loadDoc();
         auto info = allcore::decodeAcipFilename(fn.toStdString());
         setScanTarget(info, fn);
@@ -824,6 +827,33 @@ public:
         view_->setReadOnly(true);
         view_->setFontPointSize(15);
         context_ = new QTextBrowser;
+        context_->setOpenLinks(false);
+        connect(context_, &QTextBrowser::anchorClicked,
+                [this](const QUrl& u) {
+                    const QString s = u.toString();
+                    if (s.startsWith("gloss:")) {
+                        const std::string wylie = s.mid(6).toStdString();
+                        auto it = glossary_.find(wylie);
+                        bool ok = false;
+                        const QString g = QInputDialog::getText(
+                            this, "Per-text glossary",
+                            QString::fromStdString(wylie) + " =",
+                            QLineEdit::Normal,
+                            it == glossary_.end()
+                                ? QString()
+                                : QString::fromStdString(it->second),
+                            &ok);
+                        if (ok && !g.trimmed().isEmpty()) {
+                            saveGlossaryEntry(wylie,
+                                              g.trimmed().toStdString());
+                            lastTok_ = -1;   // re-show the card fresh
+                            cycle_ = 0;
+                            onClick();
+                        }
+                    } else if (s.startsWith("http")) {
+                        QDesktopServices::openUrl(u);
+                    }
+                });
         right->addWidget(view_);
         right->addWidget(context_);
         right->setStretchFactor(0, 3);
@@ -1130,6 +1160,7 @@ private:
                                       QString::fromStdString(a->expUnicode)
                                           .toHtmlEscaped());
                 context_->setHtml(segmentationHtml(tok) +
+                                  glossaryHtml(tokWylie) +
                                   "<i>no dictionary span here</i>" + extra);
             }
             return;
@@ -1160,6 +1191,8 @@ private:
             h += (int(i) == cycle_ ? "<b>" + w + "</b>" : w);
         }
         h += QString(" &nbsp;(click again to cycle)</div><hr>");
+        // the per-text glossary outranks the general dictionary here
+        h += glossaryHtml(e.wylie);
         EntryDisplay disp;
         disp.phonetics = showPhon_->isChecked();
         disp.glosses = showGloss_->isChecked();
@@ -1694,12 +1727,75 @@ private:
     bool abbrTried_ = false;
     allcore::Contractions contr_;
     bool contrTried_ = false;
+    QString docFile_;
+    std::map<std::string, std::string> glossary_;
     std::unique_ptr<allcore::botok::SegTrie> segmenter_;
     bool segTried_ = false;
     QString segInfo_;
     bool loading_ = false;
     int lastTok_ = -1;
     int cycle_ = 0;
+
+    // ---- per-text glossary (Ven. Phil's Translation Tool + Hypercontext
+    // "FROM THIS GLOSSARY:" — the ancestor feature; Adam approved
+    // 2026-08-07). A plain TSV per opened text at
+    // library/glossaries/<basename>.tsv (wylie <TAB> gloss, # comments,
+    // human-editable); glossary glosses OUTRANK the general dictionary in
+    // the click card, clearly labeled as the translator's own.
+    QString glossaryPath() const {
+        if (docFile_.isEmpty()) return {};
+        return dataRoot_ + "/library/glossaries/" +
+               QFileInfo(docFile_).completeBaseName() + ".tsv";
+    }
+    void loadGlossary() {
+        glossary_.clear();
+        const QString p = glossaryPath();
+        if (p.isEmpty()) return;
+        QFile f(p);
+        if (!f.open(QIODevice::ReadOnly | QIODevice::Text)) return;
+        while (!f.atEnd()) {
+            const QString line = QString::fromUtf8(f.readLine()).trimmed();
+            if (line.isEmpty() || line.startsWith('#')) continue;
+            const int tab = line.indexOf('\t');
+            if (tab <= 0) continue;
+            glossary_[line.left(tab).trimmed().toStdString()] =
+                line.mid(tab + 1).trimmed().toStdString();
+        }
+    }
+    void saveGlossaryEntry(const std::string& wylie, const std::string& gloss) {
+        const QString p = glossaryPath();
+        if (p.isEmpty()) return;
+        QDir().mkpath(QFileInfo(p).path());
+        glossary_[wylie] = gloss;
+        QFile f(p);
+        if (!f.open(QIODevice::WriteOnly | QIODevice::Text)) return;
+        QTextStream ts(&f);
+        ts << "# per-text glossary for " << QFileInfo(docFile_).fileName()
+           << " — wylie <TAB> gloss; the translator's own, binding for "
+              "this text's display\n";
+        for (const auto& [w, g] : glossary_)
+            ts << QString::fromStdString(w) << "\t"
+               << QString::fromStdString(g) << "\n";
+    }
+    QString glossaryHtml(const std::string& wylie) const {
+        auto it = glossary_.find(wylie);
+        QString edit = QString("<a href='gloss:%1'>%2</a>")
+                           .arg(QString::fromStdString(wylie).toHtmlEscaped(),
+                                it == glossary_.end()
+                                    ? "＋ add to this text's glossary"
+                                    : "edit");
+        if (it == glossary_.end())
+            return docFile_.isEmpty()
+                       ? QString()
+                       : "<div style='font-size:11px;color:#999'>" + edit +
+                             "</div>";
+        return QString("<div style='background:#EAF6EF;padding:4px 7px;"
+                       "border-radius:6px;margin:3px 0'><b>FROM THIS TEXT'S "
+                       "GLOSSARY:</b> %1 <small style='color:#555'>"
+                       "(the translator's own — outranks the general "
+                       "dictionary here)</small> <small>%2</small></div>")
+            .arg(QString::fromStdString(it->second).toHtmlEscaped(), edit);
+    }
 
     // Botok segmenter: lazy one-time lexicon build — HGM dictionary headwords
     // (battery-proven conversion chain) + the Monlam word lists, in the
@@ -1807,6 +1903,41 @@ static QWidget* makeSearchPane(allcore::Spine& spine,
         courseBox->addItem(QString::fromStdString(c), QString::fromStdString(c));
     row->addWidget(box, 1);
     row->addWidget(courseBox);
+    // saved searches (Gofer's own SavedSearches feature, restored — Adam
+    // approved 2026-08-07): named queries persisted across sessions
+    auto* savedBox = new QComboBox;
+    savedBox->setPlaceholderText("saved searches…");
+    savedBox->setMinimumWidth(150);
+    {
+        QSettings settings("ALL", "TranslationTool");
+        const QStringList saved =
+            settings.value("search/saved").toStringList();
+        for (const QString& s : saved) {
+            const int sep = s.indexOf('\x1f');
+            if (sep > 0)
+                savedBox->addItem(s.left(sep), s.mid(sep + 1));
+        }
+    }
+    auto* saveBtn = new QPushButton("Save…");
+    row->addWidget(savedBox);
+    row->addWidget(saveBtn);
+    QObject::connect(savedBox, &QComboBox::activated, [savedBox, box](int ix) {
+        box->setText(savedBox->itemData(ix).toString());
+    });
+    QObject::connect(saveBtn, &QPushButton::clicked, [pane, box, savedBox] {
+        const QString q = box->text().trimmed();
+        if (q.isEmpty()) return;
+        bool ok = false;
+        const QString name = QInputDialog::getText(
+            pane, "Save search", "Name for this query:", QLineEdit::Normal,
+            q.left(30), &ok);
+        if (!ok || name.trimmed().isEmpty()) return;
+        savedBox->addItem(name.trimmed(), q);
+        QSettings settings("ALL", "TranslationTool");
+        QStringList saved = settings.value("search/saved").toStringList();
+        saved << name.trimmed() + QChar('\x1f') + q;
+        settings.setValue("search/saved", saved);
+    });
     layout->addLayout(row);
 
     auto* row2 = new QHBoxLayout;

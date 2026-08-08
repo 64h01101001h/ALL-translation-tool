@@ -454,21 +454,34 @@ display toggles, not through invention.
       from Monlam data would be another first.
 
 ## ACIP Development folder finds (survey 2026-08-07 —
-## docs/ACIP_DEV_FOLDER_SURVEY.md; Adam: "scan for anything useful")
+## docs/ACIP_DEV_FOLDER_SURVEY.md) — **ADAM APPROVED THE SIX
+## 2026-08-07** ("yes, add these 6 things to the list"): per-text
+## glossary · saved searches · Acipcode battery · font render suite ·
+## UTFC lane · bampo/shloka layer
 
-- [ ] **Acipcode.txt → converter-completeness battery** — the full
-      ACIP stack-code inventory incl. the Sambhota-extension section
-      (= the substance of the missing Release IV chart pages); bank +
-      assert every code converts or is flagged as a Sanskrit stack.
-- [ ] **Per-text glossary** (Ven. Phil's Translation Tool + the
-      Hypercontext "FROM THIS GLOSSARY:" design): import/build a
-      glossary scoped to the open text; outranks the general
-      dictionary in the Overlay card; Draft-pane editing.
-- [ ] **Saved searches** in the Search pane (Gofer's own
-      SavedSearches.cpp had them; trivial persistence).
-- [ ] **Font render-test battery** from Adam's own
-      syllablesThatFailToRender list (hypercontext-master) + his
-      1,973-pair syllable-table as an extra converter fixture.
+- [x] **Acipcode.txt → converter-completeness battery** — SHIPPED
+      2026-08-07 (31st suite, acipcodes_smoke): banked at
+      data/acip_codes/ with provenance; all 411 alphabetic codes
+      parsed (363 core + 48 Sambhota extensions), **100.0% handled**:
+      379 by the native ACIP→EWTS→Unicode chain, 32 by the Sanskrit
+      converter, ZERO unhandled — the converters are provably
+      complete against the official inventory.
+- [x] **Per-text glossary** — SHIPPED 2026-08-07: TSV per opened text
+      at library/glossaries/<basename>.tsv (human-editable); the
+      Overlay click card shows "FROM THIS TEXT'S GLOSSARY:" ABOVE the
+      general dictionary (clearly labeled as the translator's own);
+      ＋add/edit links in every card via QInputDialog; loads on
+      openFile.
+- [x] **Saved searches** — SHIPPED 2026-08-07: Search pane combo +
+      Save… button, named queries persisted in QSettings
+      (search/saved), pick to refill the query box.
+- [x] **Font render-test battery** — SHIPPED 2026-08-07 (32nd suite,
+      font_smoke): Adam's 1,973-pair syllable table + fail-to-render
+      list banked at data/hypercontext_legacy/; corpus = their full
+      Tibetan-block codepoint set; the two bundled faces must always
+      register + pass in full, each installed vetted face asserted,
+      absent faces reported-skipped. (Gotcha: addApplicationFont
+      needs an ABSOLUTE path under the offscreen platform.)
 - [ ] **UTFC legacy-font rescue** (Universal Tibetan Font Converter,
       GPL v3 — EXTERNAL-TOOL lane only): 12 legacy fonts incl. both
       Sambhotas, TibetanMachine(Web), LTibetan — the input-center
