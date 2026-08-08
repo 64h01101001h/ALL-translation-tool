@@ -59,6 +59,7 @@
 #include <QTreeView>
 #include <QProcess>
 #include <QStringDecoder>
+#include <QTextBlock>
 #include <QDirIterator>
 #include <QDesktopServices>
 #include <QJsonArray>
@@ -5838,6 +5839,347 @@ private:
     int lastTok_ = -1, cycle_ = 0, selBeg_ = -1, selEnd_ = -1;
 };
 
+// ---- Input pane: the input-center workflow — ACE reborn -------------------
+// Aaron Cram's ACIP input-center module (acip-support, Apache-2.0;
+// docs/ACE_RECOVERY.md) rebuilt on our stack: scan above, ACIP editor
+// below, caret-linked scan scroll (ACE's proportional mode, upgraded to
+// exact OCR line bands when models are present), live syllable-legality
+// underlines, and the double-keying comparison (vendored google
+// diff-match-patch, Apache-2.0) that the correction pass ran "until the
+// text input by both input operators match exactly".
+#include "thirdparty/diff_match_patch.h"
+
+class InputPane : public QWidget {
+public:
+    InputPane(allcore::SyllableChecker* checker, const QString& root)
+        : checker_(checker), root_(root) {
+        auto* outer = new QVBoxLayout(this);
+        auto* banner = new QLabel(
+            "<b>Input (type from scan)</b> — the input-center workflow "
+            "(ACE reborn; Aaron Cram's acip-support design, Apache-2.0). "
+            "Open the page scan, type the ACIP below; the scan follows "
+            "your cursor. Compare against your partner's file to run the "
+            "double-keying correction pass.");
+        banner->setWordWrap(true);
+        outer->addWidget(banner);
+
+        auto* row = new QHBoxLayout;
+        auto* openScanB = new QPushButton("Open scan…");
+        row->addWidget(openScanB);
+        followBox_ = new QCheckBox("scan follows cursor");
+        followBox_->setChecked(true);
+        row->addWidget(followBox_);
+#ifdef ALL_HAVE_OCR
+        auto* bandsB = new QPushButton("Detect lines (OCR)");
+        bandsB->setToolTip(
+            "Run line detection on the scan (BDRC PhotiLines model) so "
+            "cursor-following jumps to the EXACT line band instead of "
+            "ACE's proportional estimate. Detection only — no text is "
+            "recognized.");
+        row->addWidget(bandsB);
+        connect(bandsB, &QPushButton::clicked, [this] { detectBands(); });
+#endif
+        auto* zoomL = new QLabel("zoom");
+        row->addWidget(zoomL);
+        zoom_ = new QSlider(Qt::Horizontal);
+        zoom_->setRange(25, 200);
+        zoom_->setValue(100);
+        zoom_->setMaximumWidth(120);
+        row->addWidget(zoom_);
+        auto* partnerB = new QPushButton("Compare with partner file…");
+        row->addWidget(partnerB);
+        auto* saveB = new QPushButton("Save…");
+        row->addWidget(saveB);
+        row->addStretch();
+        outer->addLayout(row);
+
+        auto* split = new QSplitter(Qt::Vertical);
+        scroll_ = new QScrollArea;
+        scanImg_ = new QLabel("open a page scan (PNG/JPG/TIFF)");
+        scanImg_->setAlignment(Qt::AlignCenter);
+        scroll_->setWidget(scanImg_);
+        scroll_->setWidgetResizable(true);
+        split->addWidget(scroll_);
+        editor_ = new QPlainTextEdit;
+        editor_->setPlaceholderText(
+            "Type the ACIP transliteration here, one line per woodblock "
+            "line…");
+        split->addWidget(editor_);
+        split->setStretchFactor(0, 7);
+        split->setStretchFactor(1, 3);
+        outer->addWidget(split, 1);
+        status_ = new QLabel;
+        status_->setWordWrap(true);
+        outer->addWidget(status_);
+
+        connect(openScanB, &QPushButton::clicked, [this] { openScan(); });
+        connect(partnerB, &QPushButton::clicked, [this] { compare(); });
+        connect(saveB, &QPushButton::clicked, [this] { save(); });
+        connect(zoom_, &QSlider::valueChanged, [this](int) { render(); });
+        connect(editor_, &QPlainTextEdit::cursorPositionChanged,
+                [this] { follow(); });
+        connect(editor_, &QPlainTextEdit::textChanged,
+                [this] { spellcheck(); });
+    }
+
+private:
+    void openScan() {
+        const QString f = QFileDialog::getOpenFileName(
+            this, "Open page scan", root_ + "/library",
+            "Images (*.png *.jpg *.jpeg *.tif *.tiff)");
+        if (f.isEmpty()) return;
+        base_ = QPixmap(f);
+        if (base_.isNull()) {
+            status_->setText("cannot read that image");
+            return;
+        }
+        scanFile_ = f;
+#ifdef ALL_HAVE_OCR
+        bands_.clear();
+#endif
+        curBand_ = -1;
+        render();
+        status_->setText(QString("%1 · %2×%3 — type below; the scan "
+                                 "follows your cursor (%4)")
+                             .arg(QFileInfo(f).fileName())
+                             .arg(base_.width())
+                             .arg(base_.height())
+                             .arg(bandNote()));
+    }
+
+    QString bandNote() const {
+#ifdef ALL_HAVE_OCR
+        if (!bands_.empty())
+            return QString("exact OCR line bands, %1 line(s)")
+                .arg(bands_.size());
+#endif
+        return "proportional — ACE mode, approximate";
+    }
+
+    void render() {
+        if (base_.isNull()) return;
+        const double z = zoom_->value() / 100.0;
+        QPixmap shown = base_.scaled(
+            int(base_.width() * z), int(base_.height() * z),
+            Qt::KeepAspectRatio, Qt::SmoothTransformation);
+        QPainter p(&shown);
+#ifdef ALL_HAVE_OCR
+        for (size_t i = 0; i < bands_.size(); ++i) {
+            const auto& b = bands_[i];
+            const QRect r(int(b.x * z), int(b.y * z), int(b.w * z),
+                          int(b.h * z));
+            if (int(i) == curBand_) {
+                p.fillRect(r, QColor(255, 190, 0, 60));
+                p.setPen(QPen(QColor(230, 150, 0), 2));
+            } else {
+                p.setPen(QPen(QColor(0x7F, 0x77, 0xDD, 120), 1));
+            }
+            p.drawRect(r);
+        }
+#endif
+        p.end();
+        scanImg_->setPixmap(shown);
+        scanImg_->adjustSize();
+    }
+
+#ifdef ALL_HAVE_OCR
+    void detectBands() {
+        if (base_.isNull()) {
+            status_->setText("open a scan first");
+            return;
+        }
+        const QString lm = root_ +
+            "/library/ocr_models/BDRC_PhotiLines/PhotiLines.onnx";
+        if (!QFile::exists(lm)) {
+            status_->setText("line model missing (see the Scan pane for "
+                             "download instructions)");
+            return;
+        }
+        status_->setText("detecting lines…");
+        QCoreApplication::processEvents();
+        try {
+            if (!det_)
+                det_ = std::make_unique<allocr::LineDetector>(
+                    lm.toStdString());
+            QImage img =
+                base_.toImage().convertToFormat(QImage::Format_RGB888);
+            const int w = img.width(), h = img.height();
+            std::vector<uint8_t> rgb(size_t(w) * h * 3);
+            for (int y = 0; y < h; ++y)
+                std::copy(img.constScanLine(y),
+                          img.constScanLine(y) + w * 3,
+                          rgb.begin() + size_t(y) * w * 3);
+            auto mask = det_->detect(rgb.data(), w, h);
+            const double zero = 0.0;   // original-image coordinates
+            auto pl = allocr::buildLines(rgb.data(), w, h, mask, 2.5, 4.0,
+                                         true, &zero);
+            bands_.clear();
+            for (const auto& l : pl.lines) bands_.push_back(l);
+        } catch (const std::exception& e) {
+            status_->setText(QString("line detection failed: %1")
+                                 .arg(e.what()));
+            return;
+        }
+        render();
+        status_->setText(QString("%1 line band(s) — cursor now follows "
+                                 "exact lines (typed line N = scan line "
+                                 "N, per the input convention)")
+                             .arg(bands_.size()));
+    }
+#endif
+
+    void follow() {
+        if (base_.isNull() || !followBox_->isChecked()) return;
+        const QTextCursor c = editor_->textCursor();
+        const int line = c.blockNumber();
+        const int total = std::max(editor_->document()->blockCount(), 1);
+        const int col = c.positionInBlock();
+        const double z = zoom_->value() / 100.0;
+#ifdef ALL_HAVE_OCR
+        if (!bands_.empty()) {
+            const int i =
+                std::min(line, int(bands_.size()) - 1);
+            if (i != curBand_) {
+                curBand_ = i;
+                render();
+            }
+            const auto& b = bands_[size_t(i)];
+            const int lineLen =
+                std::max(int(c.block().text().size()), 1);
+            const int x = int((b.x + b.w * std::min(1.0,
+                              double(col) / lineLen)) * z);
+            scroll_->ensureVisible(x, int((b.y + b.h / 2) * z), 160, 120);
+            return;
+        }
+#endif
+        // ACE's proportional mode (acip-support ScanPanel CARET mode) —
+        // approximate by design, labeled in the banner
+        const int y = int(base_.height() * z * line / total);
+        const int x = int(base_.width() * z *
+                          std::min(1.0, col / 80.0));
+        scroll_->ensureVisible(x, y, 160, 120);
+    }
+
+    void spellcheck() {
+        spellSels_.clear();
+        if (checker_) {
+            const QString text = editor_->toPlainText();
+            int tokBeg = -1;
+            auto isTok = [](QChar ch) {
+                return ch.isLetter() || ch == '\'' || ch == '+';
+            };
+            for (int i = 0; i <= text.size(); ++i) {
+                const bool in = i < text.size() && isTok(text[i]);
+                if (in && tokBeg < 0) tokBeg = i;
+                if (!in && tokBeg >= 0) {
+                    const QString tok = text.mid(tokBeg, i - tokBeg);
+                    if (!checker_->legalWylie(allcore::acipToEwts(
+                            tok.toStdString()))) {
+                        QTextEdit::ExtraSelection sel;
+                        sel.cursor = QTextCursor(editor_->document());
+                        sel.cursor.setPosition(tokBeg);
+                        sel.cursor.setPosition(
+                            i, QTextCursor::KeepAnchor);
+                        sel.format.setUnderlineStyle(
+                            QTextCharFormat::WaveUnderline);
+                        sel.format.setUnderlineColor(QColor(0xC0281C));
+                        spellSels_.push_back(sel);
+                    }
+                    tokBeg = -1;
+                }
+            }
+        }
+        editor_->setExtraSelections(spellSels_ + diffSels_);
+    }
+
+    void compare() {
+        const QString f = QFileDialog::getOpenFileName(
+            this, "Partner's input file", root_ + "/library",
+            "Text (*.txt *.act *.inc);;All files (*)");
+        if (f.isEmpty()) return;
+        QFile qf(f);
+        if (!qf.open(QIODevice::ReadOnly)) return;
+        const QString partner = QString::fromUtf8(qf.readAll());
+        const QString mine = editor_->toPlainText();
+        diff_match_patch dmp;
+        auto diffs = dmp.diff_main(mine, partner);
+        dmp.diff_cleanupSemantic(diffs);
+        diffSels_.clear();
+        int minePos = 0, nDisc = 0;
+        for (const auto& d : diffs) {
+            if (d.operation == DELETE) {
+                // in my text, not the partner's
+                QTextEdit::ExtraSelection sel;
+                sel.cursor = QTextCursor(editor_->document());
+                sel.cursor.setPosition(minePos);
+                sel.cursor.setPosition(
+                    minePos + int(d.text.length()),
+                    QTextCursor::KeepAnchor);
+                sel.format.setBackground(QColor(0xF5, 0xC0, 0x66, 150));
+                diffSels_.push_back(sel);
+                ++nDisc;
+            } else if (d.operation == INSERT) {
+                // in the partner's text, missing here: mark the seam
+                QTextEdit::ExtraSelection sel;
+                sel.cursor = QTextCursor(editor_->document());
+                sel.cursor.setPosition(std::max(minePos - 1, 0));
+                sel.cursor.setPosition(
+                    std::min(minePos + 1,
+                             int(editor_->toPlainText().size())),
+                    QTextCursor::KeepAnchor);
+                sel.format.setBackground(QColor(0x9E, 0xD9, 0xA0, 150));
+                diffSels_.push_back(sel);
+                ++nDisc;
+            }
+            if (d.operation != INSERT) minePos += int(d.text.length());
+        }
+        editor_->setExtraSelections(spellSels_ + diffSels_);
+        status_->setText(
+            nDisc == 0
+                ? QString("double-keying PASS — your text and %1 match "
+                          "exactly")
+                      .arg(QFileInfo(f).fileName())
+                : QString("%1 discrepancy region(s) vs %2 — orange = "
+                          "here only, green seam = partner has extra "
+                          "text there. Correct until the texts match "
+                          "exactly (the input-center rule).")
+                      .arg(nDisc)
+                      .arg(QFileInfo(f).fileName()));
+    }
+
+    void save() {
+        QDir().mkpath(root_ + "/library/input_work");
+        const QString base =
+            scanFile_.isEmpty() ? "input"
+                                : QFileInfo(scanFile_).completeBaseName();
+        const QString out = QFileDialog::getSaveFileName(
+            this, "Save input work",
+            root_ + "/library/input_work/" + base + ".txt",
+            "Text (*.txt)");
+        if (out.isEmpty()) return;
+        QFile f(out);
+        if (!f.open(QIODevice::WriteOnly | QIODevice::Text)) return;
+        f.write(editor_->toPlainText().toUtf8());
+        status_->setText("saved " + out);
+    }
+
+    allcore::SyllableChecker* checker_ = nullptr;
+    QString root_, scanFile_;
+    QPixmap base_;
+    QLabel* scanImg_ = nullptr;
+    QScrollArea* scroll_ = nullptr;
+    QPlainTextEdit* editor_ = nullptr;
+    QCheckBox* followBox_ = nullptr;
+    QSlider* zoom_ = nullptr;
+    QLabel* status_ = nullptr;
+    QList<QTextEdit::ExtraSelection> spellSels_, diffSels_;
+    int curBand_ = -1;
+#ifdef ALL_HAVE_OCR
+    std::unique_ptr<allocr::LineDetector> det_;
+    std::vector<allocr::OcrLine> bands_;
+#endif
+};
+
 #ifdef ALL_HAVE_OCR
 // ---- Scan pane: OCR stage 2 in the app (OCR_DESIGN.md) --------------------
 // The proven allocr pipeline end to end: line detection (PhotiLines) →
@@ -6406,6 +6748,7 @@ int main(int argc, char** argv) {
     tabs.addTab(new DrillsPane(spine, progress), "Drills");
     tabs.addTab(new DraftPane(spine, progress), "Draft");
     tabs.addTab(new AlignPane(spine, root), "Align");
+    tabs.addTab(new InputPane(checker, root), "Input");
     tabs.addTab(new LibraryPane(root, progress,
                                 [&tabs, overlay](const QString& path) {
                                     overlay->openFile(path);

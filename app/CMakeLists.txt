@@ -2,6 +2,7 @@ qt_standard_project_setup()
 
 qt_add_executable(ALLTranslationTool
   main.cpp
+  thirdparty/diff_match_patch.cpp
 )
 find_package(Qt6 COMPONENTS Network REQUIRED)
 target_link_libraries(ALLTranslationTool PRIVATE allcore Qt6::Widgets Qt6::Network)
@@ -20,6 +21,10 @@ qt_add_executable(allanalyze
   analyze_cli.cpp
 )
 target_link_libraries(allanalyze PRIVATE allcore Qt6::Core Qt6::Network)
+
+qt_add_executable(dmp_smoke dmp_smoke.cpp thirdparty/diff_match_patch.cpp)
+target_link_libraries(dmp_smoke PRIVATE Qt6::Core)
+add_test(NAME dmp_smoke COMMAND dmp_smoke)
 
 qt_add_executable(collation_smoke collation_smoke.cpp)
 target_link_libraries(collation_smoke PRIVATE Qt6::Core)
