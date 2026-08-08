@@ -394,7 +394,12 @@ display toggles, not through invention.
 - [ ] **Calendar month view** — with adj_zla (intercalary bookkeeping)
       ported, a Convert-pane month table could show a full Tibetan
       month with its chad/lhag days marked — the engine already
-      detects them via the inverse lookup.
+      detects them via the inverse lookup. FIXTURES READY 2026-08-07:
+      full-year outputs from the original's print mode banked
+      (third_party/kck_henning/kc_2010.txt + kc_2012.txt — 2012 holds
+      the intercalary: regular 3 [sa ga], then "3 (Intercalary)", then
+      4; month element-animal names + mansions included). Print-mode
+      driving: menu 2, start year, finish year on separate lines.
 
 - [x] Battery H: the official pronunciation-chart pairs as a permanent C++
       battery — pure-Tibetan 50/51 asserted, Sanskrit-in-Tibetan informative.
