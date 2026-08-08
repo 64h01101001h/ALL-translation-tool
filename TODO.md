@@ -453,6 +453,35 @@ display toggles, not through invention.
       pane + Wilson tables lead the field; a zhe-sa honorific layer
       from Monlam data would be another first.
 
+## ACIP Development folder finds (survey 2026-08-07 —
+## docs/ACIP_DEV_FOLDER_SURVEY.md; Adam: "scan for anything useful")
+
+- [ ] **Acipcode.txt → converter-completeness battery** — the full
+      ACIP stack-code inventory incl. the Sambhota-extension section
+      (= the substance of the missing Release IV chart pages); bank +
+      assert every code converts or is flagged as a Sanskrit stack.
+- [ ] **Per-text glossary** (Ven. Phil's Translation Tool + the
+      Hypercontext "FROM THIS GLOSSARY:" design): import/build a
+      glossary scoped to the open text; outranks the general
+      dictionary in the Overlay card; Draft-pane editing.
+- [ ] **Saved searches** in the Search pane (Gofer's own
+      SavedSearches.cpp had them; trivial persistence).
+- [ ] **Font render-test battery** from Adam's own
+      syllablesThatFailToRender list (hypercontext-master) + his
+      1,973-pair syllable-table as an extra converter fixture.
+- [ ] **UTFC legacy-font rescue** (Universal Tibetan Font Converter,
+      GPL v3 — EXTERNAL-TOOL lane only): 12 legacy fonts incl. both
+      Sambhotas, TibetanMachine(Web), LTibetan — the input-center
+      legacy-document answer, already on disk.
+- [ ] **Bampo/shloka structural layer** (critical-kangyur
+      segmentation-units.md definitions; ACIP texts carry BAM PO
+      markers) beside the sa-bcad extractor.
+- [ ] **Catalog-toolchain mining** (MakeGMRCatalog & co.) with the
+      data project; **wysearch's Spotlight idea** (search the user's
+      own machine); **OCRProcessing's batch-volume pattern** for a
+      Scan-pane batch mode; three more Wylie converters (NetWylie/
+      wylie.js/Lingua::BO) as extra diff-oracles.
+
 ## Build queue
 
 - [ ] **White paper v5** — v4 predates most of 2026-08-07: the three
