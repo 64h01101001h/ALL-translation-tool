@@ -359,14 +359,17 @@ display toggles, not through invention.
       Overlay, five reference layers, bundled font, list view,
       pending-review sheet. Refresh both .md and .docx when the dust
       settles (coordinate: phone session authored v4).
-- [ ] **Release 6 zip — unexplored assets** (found 2026-08-07 in
-      Adam's Dropbox, acip-release6-wylie.zip): (a)
-      ACIP_Master_Catalog.html at the archive root — inspect: may be
-      the full Master Catalog incl. Sanskrit titles/subjects; (b)
-      enghtml author trees — English-spelled author names per text
-      (candidate author-name pairs); (c) flat/ — the full Release 6
-      wylie text corpus (_T.TXT per work): candidate Library install
-      source predating the ZIP downloads.
+- [~] **Release 6 zip — unexplored assets** (Adam's Dropbox,
+      acip-release6-wylie.zip): (a) ACIP_Master_Catalog.html INSPECTED
+      2026-08-07 — it is the Brief Catalog, record-identical to the
+      ingested TXT (2,875; lineage proven, no Sanskrit column); (b)
+      author trees HARVESTED — v0.32 wave: English×Tibetan author
+      pairs by catalog-number join (≥2 works, ≥80% consistent) → 15
+      pairs (course AUTH; 32 thin/conflicted excluded+logged), corpus
+      42,199; (c) REMAINING: flat/ — the full Release 6 wylie text
+      corpus (_T.TXT per work): candidate Library install source;
+      also the Tengyur author tree (teng.html is small — check
+      whether a fuller Tengyur-by-author page exists).
 - [ ] **Composer pending-bibliography bank** — "Compose bibliography
       entry…" inserts with a pending label but doesn't yet SAVE
       candidates the way "Propose footnote" does; add
