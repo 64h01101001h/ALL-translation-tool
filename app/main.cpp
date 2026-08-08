@@ -3730,8 +3730,9 @@ private:
 // it never composes English (rule 1).
 class DraftPane : public QWidget {
 public:
-    DraftPane(allcore::Spine& spine, allcore::Progress* progress)
-        : spine_(spine), progress_(progress), index_(spine) {
+    DraftPane(allcore::Spine& spine, allcore::Progress* progress,
+              const QString& root = QString())
+        : spine_(spine), progress_(progress), index_(spine), root_(root) {
         auto* layout = new QVBoxLayout(this);
         auto* row = new QHBoxLayout;
         row->addWidget(new QLabel(
@@ -3766,6 +3767,17 @@ public:
             "syllables) — attested quotations, never inferred. Matched "
             "works recommend their published bibliography entries.");
         srcCol->addWidget(quoteBtn);
+        auto* memBtn = new QPushButton("Phrase memory");
+        memBtn->setToolTip(
+            "How has this phrase been rendered before? Select Tibetan "
+            "in the source and press: every corpus segment containing "
+            "it (HGM's own renderings, binding) plus any matches from "
+            "the Align pane's harvest (translator-authored, PENDING — "
+            "labeled). The beginnings of a Project translation memory, "
+            "built only from attested work.");
+        srcCol->addWidget(memBtn);
+        QObject::connect(memBtn, &QPushButton::clicked,
+                         [this] { phraseMemory(); });
         QObject::connect(quoteBtn, &QPushButton::clicked,
                          [this] { detectQuotes(); });
         tl->addLayout(srcCol, 1);
@@ -4720,8 +4732,99 @@ private:
         report_->setHtml(h);
     }
 
+    // ---- phrase memory (leadership rec #3): every prior rendering of
+    // a selected phrase — HGM corpus (binding) + Align harvest (PENDING)
+    void phraseMemory() {
+        QString sel = source_->textCursor().selectedText().trimmed();
+        sel.replace(QChar(0x2029), ' ');   // paragraph separators
+        if (sel.isEmpty()) {
+            anchors_->setHtml("<i>select a Tibetan phrase in the source "
+                              "first, then Phrase memory</i>");
+            return;
+        }
+        bool upper = false;
+        for (QChar c : sel) upper |= c.isUpper();
+        const std::string wy =
+            upper ? allcore::acipToEwts(sel.toStdString())
+                  : sel.toLower().toStdString();
+        QString h = "<div><b>Phrase memory</b> — “" +
+                    QString::fromStdString(wy).toHtmlEscaped() +
+                    "”</div><hr>";
+        // 1. the corpus: HGM's own renderings (binding layer)
+        auto segs = spine_.corpusSearch('"' + wy + '"', "", 12);
+        if (!segs.empty()) {
+            h += QString("<div><b>HGM corpus</b> — %1 segment(s) "
+                         "containing the phrase</div>")
+                     .arg(segs.size());
+            for (const auto& s : segs)
+                h += "<div style='margin:5px 0'><small>[" +
+                     QString::fromStdString(s.course) + ":" +
+                     QString::number(s.seq) + "]</small><br><i>" +
+                     QString::fromStdString(s.wylie)
+                         .left(180)
+                         .toHtmlEscaped() +
+                     "</i><br>" +
+                     QString::fromStdString(s.english)
+                         .left(240)
+                         .toHtmlEscaped() +
+                     "</div>";
+        } else {
+            h += "<div><i>no corpus segment contains this exact "
+                 "phrase</i></div>";
+        }
+        // 2. the Align harvest: translator-authored pairs (PENDING)
+        int harvestHits = 0;
+        QString hh;
+        if (!root_.isEmpty()) {
+            const std::string needle = " " + wy + " ";
+            for (const QString& dir :
+                 {root_ + "/library/links",
+                  root_ + "/data/candidate_alignments"}) {
+                for (const QString& fn : QDir(dir).entryList(
+                         {"*.tsv"}, QDir::Files)) {
+                    QFile f(dir + "/" + fn);
+                    if (!f.open(QIODevice::ReadOnly | QIODevice::Text))
+                        continue;
+                    while (!f.atEnd() && harvestHits < 12) {
+                        const QString line =
+                            QString::fromUtf8(f.readLine()).trimmed();
+                        if (line.isEmpty() || line.startsWith('#'))
+                            continue;
+                        const QStringList c = line.split('\t');
+                        // links: tibBeg tibEnd wylie engBeg engEnd eng
+                        // pairs: wylie eng
+                        QString lw, le;
+                        if (c.size() >= 6) { lw = c[2]; le = c[5]; }
+                        else if (c.size() == 2) { lw = c[0]; le = c[1]; }
+                        else continue;
+                        const std::string hay =
+                            " " + lw.toStdString() + " ";
+                        if (hay.find(needle) == std::string::npos &&
+                            lw.toStdString() != wy)
+                            continue;
+                        ++harvestHits;
+                        hh += "<div style='margin:4px 0'><i>" +
+                              lw.toHtmlEscaped() + "</i> — “" +
+                              le.toHtmlEscaped() +
+                              "” <small style='color:#777'>(" +
+                              fn.toHtmlEscaped() + ")</small></div>";
+                    }
+                }
+            }
+        }
+        if (harvestHits)
+            h += QString("<hr><div><b>Align harvest</b> — %1 "
+                         "translator-authored pair(s) <span style='"
+                         "color:#B4540A'>(PENDING tier — not yet "
+                         "reviewed into the dictionary)</span></div>")
+                     .arg(harvestHits) +
+                 hh;
+        anchors_->setHtml(h);
+    }
+
     allcore::Spine& spine_;
     allcore::Progress* progress_ = nullptr;
+    QString root_;
     allcore::HeadwordIndex index_;
     allcore::OverlayDoc doc_;
     std::vector<allcore::Clause> clauses_;
@@ -7209,7 +7312,7 @@ int main(int argc, char** argv) {
     tabs.addTab(new TrainerPane(spine, progress, poslex, contractions),
                 "Trainer");
     tabs.addTab(new DrillsPane(spine, progress), "Drills");
-    tabs.addTab(new DraftPane(spine, progress), "Draft");
+    tabs.addTab(new DraftPane(spine, progress, root), "Draft");
     tabs.addTab(new ReviewPane(spine), "Review");
     tabs.addTab(new AlignPane(spine, root), "Align");
     tabs.addTab(new InputPane(checker, root), "Input");
