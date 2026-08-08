@@ -12,6 +12,24 @@ remain optional and clearly labeled, never part of the deterministic core.
 the translator as the data genuinely supports — richness through layers and
 display toggles, not through invention.
 
+## SCOPE DECISION (Adam, 2026-08-08): cataloging is SIDELINED
+
+A separate in-house cataloging tool/app will be created as its own
+project in the future. All cataloging-tool discussion and
+implementation is sidelined HERE from this date. What this means:
+
+- SIDELINED (banked knowledge kept for the future project):
+  catalog-toolchain follow-ups (ACIPMaintenance deep dives, further
+  MakeGMRCatalog/MakeDergeCatalog mining), the ACIP MySQL dump hunt
+  (aciptbl ~110 cols), acip-support's org.asianclassics.center.catalog
+  module, any catalog-editing/catalog-building features in this app.
+  docs/CATALOG_TOOLCHAIN_SURVEY.md and docs/ACE_RECOVERY.md remain the
+  handoff dossiers for that future project.
+- STAYS IN SCOPE here (serves translators, not cataloging): the
+  Library pane's catalog DISPLAY (decoder, titles, subjects,
+  verification levels), the Input pane build (#30 — input centers,
+  not cataloging), OCR, registers, and everything else.
+
 ## Waiting on Adam (prompt him when the task starts)
 
 - [ ] **Send the 84000 license email** (drafted, docs/drafts/
