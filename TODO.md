@@ -366,10 +366,22 @@ display toggles, not through invention.
       author trees HARVESTED — v0.32 wave: English×Tibetan author
       pairs by catalog-number join (≥2 works, ≥80% consistent) → 15
       pairs (course AUTH; 32 thin/conflicted excluded+logged), corpus
-      42,199; (c) REMAINING: flat/ — the full Release 6 wylie text
-      corpus (_T.TXT per work): candidate Library install source;
-      also the Tengyur author tree (teng.html is small — check
-      whether a fuller Tengyur-by-author page exists).
+      42,199; (c) flat/ INSTALLED 2026-08-07: 2,723
+      files → library/acip_release6/ (355MB; one true-corruption file
+      quarantined as .corrupt, one benign CRC warning kept); library
+      index rebuilt: 2,716 files, 8.68M lines, ~97s (headless
+      libindex_cli shipped for scripted installs). The install
+      surfaced and fixed three real defects: wylieToUnicode could
+      THROW on exotic raw tokens (now flags ⟨…⟩, never throws —
+      engine boundary contract); libindex norm ran ACIP→EWTS on
+      already-wylie files (mangled case; now uppercase-detected —
+      ACIP is defined uppercase); lines_fts lacked the apostrophe
+      tokenchars the corpus uses (pa'i split as [pa,i]; schema v2
+      aligns tokenizers, migrates old indexes once). Verified: 5,287
+      lines match "bden pa" only via true affix normalization.
+      REMAINING: teng.html/kang.html by-TITLE trees as a pairs source
+      for works the TXT lacks (English title from tree + Tibetan
+      title from the file's own header).
 - [ ] **Composer pending-bibliography bank** — "Compose bibliography
       entry…" inserts with a pending label but doesn't yet SAVE
       candidates the way "Propose footnote" does; add

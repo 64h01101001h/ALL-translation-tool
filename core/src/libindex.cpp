@@ -79,7 +79,8 @@ LibraryIndex::LibraryIndex(const std::string& db_path) {
          "  text_norm TEXT NOT NULL DEFAULT '');"
          "CREATE INDEX IF NOT EXISTS lines_file ON lines(file_id, line_no);"
          "CREATE VIRTUAL TABLE IF NOT EXISTS lines_fts USING fts5("
-         "  text, text_norm, content='lines', content_rowid='id');");
+         "  text, text_norm, content='lines', content_rowid='id',"
+         "  tokenize=\"unicode61 tokenchars ''''\");");
     // schema migration: indexes built before the affix-normalized
     // column are derived data — drop and let update() rebuild
     bool hasNorm = false;
@@ -105,7 +106,29 @@ LibraryIndex::LibraryIndex(const std::string& db_path) {
              "  text TEXT NOT NULL, text_norm TEXT NOT NULL DEFAULT '');"
              "CREATE INDEX lines_file ON lines(file_id, line_no);"
              "CREATE VIRTUAL TABLE lines_fts USING fts5("
-             "  text, text_norm, content='lines', content_rowid='id');");
+             "  text, text_norm, content='lines', content_rowid='id',"
+             "  tokenize=\"unicode61 tokenchars ''''\");");
+    }
+    // schema v2: tokenizer aligned with corpus FTS (apostrophe is a
+    // token char — pa'i is one syllable). Older indexes rebuild once.
+    {
+        long ver = 0;
+        {
+            Stmt v(db_, "PRAGMA user_version");
+            if (sqlite3_step(v.p) == SQLITE_ROW)
+                ver = sqlite3_column_int64(v.p, 0);
+        }
+        if (ver < 2) {
+            exec(db_,
+                 "DROP TABLE IF EXISTS lines_fts;"
+                 "DELETE FROM lines; DELETE FROM files;");
+            exec(db_,
+                 "CREATE VIRTUAL TABLE lines_fts USING fts5("
+                 "  text, text_norm, content='lines',"
+                 "  content_rowid='id',"
+                 "  tokenize=\"unicode61 tokenchars ''''\");");
+            exec(db_, "PRAGMA user_version=2");
+        }
     }
 }
 
@@ -232,7 +255,15 @@ LibraryIndex::UpdateStats LibraryIndex::update(const std::string& root) {
                 for (char c : lines[n] + " ") {
                     if (c == ' ' || c == '\t' || c == ',' || c == '/') {
                         if (!tok.empty()) {
-                            const std::string wy = acipToEwts(tok);
+                            // ACIP is defined uppercase; a token with
+                            // no uppercase letters is already wylie
+                            // (e.g. the Release 6 wylie edition) and
+                            // must not be re-converted
+                            bool upper = false;
+                            for (char ch : tok)
+                                upper |= (ch >= 'A' && ch <= 'Z');
+                            const std::string wy =
+                                upper ? acipToEwts(tok) : tok;
                             const std::string st =
                                 stripAffixedParticlesWylie(wy);
                             if (!built.empty()) built += ' ';

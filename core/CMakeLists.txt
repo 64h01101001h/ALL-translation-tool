@@ -131,6 +131,9 @@ add_executable(tibcal_smoke tests/tibcal_smoke.cpp)
 target_link_libraries(tibcal_smoke PRIVATE allcore)
 add_test(NAME tibcal_smoke COMMAND tibcal_smoke)
 
+add_executable(libindex_cli tools_libindex.cpp)
+target_link_libraries(libindex_cli PRIVATE allcore)
+
 add_executable(wynorm tools_wynorm.cpp)
 target_link_libraries(wynorm PRIVATE allcore)
 

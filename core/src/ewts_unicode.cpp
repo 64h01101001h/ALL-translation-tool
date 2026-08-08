@@ -311,7 +311,23 @@ bool sylToUni(const string& syl, string& out) {
 
 }  // namespace
 
+namespace {
+std::pair<std::string, bool> wylieToUnicodeInner(const std::string& wylie);
+}  // namespace
+
 std::pair<std::string, bool> wylieToUnicode(const std::string& wylie) {
+    // contract: flag, never throw. Exotic raw-input tokens (Release 6
+    // RAW files etc.) can reach table lookups no dictionary input ever
+    // hits; per rule 3 those are flagged failures, not crashes.
+    try {
+        return wylieToUnicodeInner(wylie);
+    } catch (const std::exception&) {
+        return {"â¨" + wylie + "â©", false};
+    }
+}
+
+namespace {
+std::pair<std::string, bool> wylieToUnicodeInner(const std::string& wylie) {
     string w = normIast(wylie);
     // trim
     size_t b = w.find_first_not_of(" \t\r\n");
@@ -374,5 +390,7 @@ std::pair<std::string, bool> wylieToUnicode(const std::string& wylie) {
     size_t je = joined.find_last_not_of(' ');
     return {joined.substr(jb, je - jb + 1), ok};
 }
+}  // namespace
+
 
 }  // namespace allcore
