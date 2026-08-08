@@ -14,3 +14,7 @@ qt_add_executable(allanalyze
   analyze_cli.cpp
 )
 target_link_libraries(allanalyze PRIVATE allcore Qt6::Core Qt6::Network)
+
+qt_add_executable(collation_smoke collation_smoke.cpp)
+target_link_libraries(collation_smoke PRIVATE Qt6::Core)
+add_test(NAME collation_smoke COMMAND collation_smoke)

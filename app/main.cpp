@@ -3,8 +3,11 @@
 // Pane 2 "Analysis": passage → engine pre-pass → Claude API (streamed) →
 //                    rendered report → machine QC panel.
 #include <QApplication>
+#include <QCollator>
 #include <QElapsedTimer>
 #include <QHBoxLayout>
+#include <QListView>
+#include <QStringListModel>
 #include <QLabel>
 #include <QLineEdit>
 #include <QNetworkAccessManager>
@@ -136,12 +139,75 @@ static QString entryHtml(const allcore::Entry& e,
 
 static QWidget* makeLookupPane(allcore::Spine& spine, allcore::RefDict* ref) {
     auto* pane = new QWidget;
-    auto* layout = new QVBoxLayout(pane);
+    auto* outer = new QHBoxLayout(pane);
+    auto* split = new QSplitter(Qt::Horizontal);
+    outer->addWidget(split);
+
+    // left: alphabetical browse in Tibetan dictionary order (ICU/CLDR "bo"
+    // rules — collation_smoke pins the traditional properties)
+    auto* left = new QWidget;
+    auto* leftL = new QVBoxLayout(left);
+    auto* browseBtn =
+        new QPushButton("Browse the dictionary (Tibetan order)");
+    auto* browseList = new QListView;
+    browseList->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    auto* browseModel = new QStringListModel(browseList);
+    browseList->setModel(browseModel);
+    leftL->addWidget(browseBtn);
+    leftL->addWidget(browseList);
+    auto browseWylie = std::make_shared<QStringList>();  // row -> wylie
+
+    auto* right = new QWidget;
+    auto* layout = new QVBoxLayout(right);
     auto* box = new QLineEdit;
     box->setPlaceholderText("wylie · Tibetan · ACIP headword…");
     auto* results = new QTextBrowser;
     layout->addWidget(box);
     layout->addWidget(results);
+    split->addWidget(left);
+    split->addWidget(right);
+    split->setStretchFactor(0, 1);
+    split->setStretchFactor(1, 2);
+
+    QObject::connect(browseBtn, &QPushButton::clicked, [&spine, browseBtn,
+                                                        browseModel,
+                                                        browseWylie] {
+        if (!browseWylie->isEmpty()) return;  // built once
+        browseBtn->setEnabled(false);
+        browseBtn->setText("sorting the dictionary…");
+        QCoreApplication::processEvents();
+        // (display unicode, sort key from it; wylie kept for the click)
+        struct Row { QString uni; QString wylie; QCollatorSortKey key; };
+        QCollator bo(QLocale("bo"));
+        std::vector<Row> rows;
+        for (const auto& [id, acip] : spine.allAcipHeadwords()) {
+            const std::string wylie = allcore::acipToEwts(acip);
+            auto [uni, ok] = allcore::wylieToUnicode(wylie);
+            QString wy = QString::fromStdString(wylie);
+            QString un = ok ? QString::fromStdString(uni) : wy;
+            rows.push_back(Row{un, wy, bo.sortKey(un)});
+        }
+        std::sort(rows.begin(), rows.end(),
+                  [](const Row& a, const Row& b) { return a.key < b.key; });
+        QStringList display;
+        display.reserve((int)rows.size());
+        for (const auto& r : rows) {
+            display << r.uni;
+            *browseWylie << r.wylie;
+        }
+        browseModel->setStringList(display);
+        browseBtn->setText(
+            QString("%1 headwords, Tibetan dictionary order").arg(rows.size()));
+    });
+    QObject::connect(browseList, &QListView::clicked,
+                     [box, browseWylie](const QModelIndex& ix) {
+                         if (ix.row() < 0 || ix.row() >= browseWylie->size())
+                             return;
+                         box->setText(browseWylie->at(ix.row()));
+                         // invoke the signal to run the normal lookup path
+                         QMetaObject::invokeMethod(box, "returnPressed");
+                     });
+
     QObject::connect(box, &QLineEdit::returnPressed, [&spine, ref, box, results] {
         const std::string raw = box->text().trimmed().toStdString();
         if (raw.empty()) return;

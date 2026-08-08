@@ -278,9 +278,21 @@ display toggles, not through invention.
       Rerun per release as a permanent cross-check.
 - [ ] **diff-match-patch (C++/Qt, Apache-2.0) + antx logic** → the
       input-center double-keying proofreading pane (roadmap item A).
-- [ ] **Tibetan collation** — try ICU/CLDR (official rules since 2021)
-      from Qt; fallback tibetan-sort-js/Apache Java collator. Needed for
-      any sorted headword view.
+- [x] **Tibetan collation** — SHIPPED 2026-08-07 via QCollator("bo")
+      (brew Qt's ICU carries the CLDR Tibetan rules — probed first:
+      REAL tailoring, e.g. ཀྵ inside the ka section against codepoint
+      order, and full traditional root-letter sections — དཀའ/བཀའ sort
+      under KA before ཁ). collation_smoke (24th suite, Qt6::Core)
+      pins the traditional scheme pairwise: 30-letter alphabet, vowel
+      order a-i-u-e-o, suffixes in alphabet order before vowels,
+      bare→subjoined(incl ཀྵ)→prefixed→double-prefixed, multi-syllable
+      splits, and the anti-codepoint tailoring witness — an ICU/Qt
+      upgrade that changes ordering fails loudly. Lookup pane gained
+      "Browse the dictionary (Tibetan order)": all headwords sorted by
+      QCollatorSortKey (lazy, count shown), click = normal lookup.
+      NOTE: Monlam's own list files are only ~80% in this order
+      (Sanskrit-diacritic interleaving differs) — measured, not used
+      as a fixture. No port needed; tibetan-sort-js fallback unused.
 - [ ] **eKangyur/eTengyur PD corpora** (Esukhia/OpenPecha) — citable
       diff-proofread canon beside the HGM corpus.
 - [ ] **py-tiblegenc** (Apache-2.0) — legacy-font→Unicode rescue for
