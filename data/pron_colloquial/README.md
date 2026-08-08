@@ -35,16 +35,18 @@ kabdir). The master's own data attests the m-form: **skyabs 'gro is
 stored as "kyamdro"** (87 entries already carry nasal forms at these
 junctures).
 
-Derivation: every entry whose wylie matches `b(s) + ' + d/g/b/j` and
-whose stored pron still has the b/p cluster gets a derived m-form
-(kabdir → kamdir), with a juncture-count guard — entries where wylie
-junctures and pron cluster sites disagree are SKIPPED (2 rows), never
-guessed. The 'b-cluster junctures (-b(s) before 'bum/'bul-type
-syllables, bb/pb → mb) were derived in a second guarded pass
-(+42 rows, 0 ambiguous, 2026-08-08). Tier:
-DERIVED per HGM's stated rule — pending HGM/Adam review; the engine
-itself stays untouched (its battery is the GMR-convention ground
-truth).
+Derivation (tools/derive_prenasal.py — supersedes the first two ad-hoc
+passes, whose site-count guard could transform a cluster at the WRONG
+juncture; corrected same day): each juncture is located by PREFIX
+PRONUNCIATION through the canonical engine (allowing the b/p voicing
+alternation at the prefix edge), only entries whose stored pron equals
+the engine's are transformed, and the WORD-INTERNAL condition is
+enforced — the master and engine both apply prenasal sandhi only
+inside a phonological word, so junctures at pron word boundaries are
+regular and skipped (44 such). Result: 205 aligned m-forms; 4 curated
+prons skipped; 0 unstable alignments. Tier: DERIVED per HGM's stated
+rule — pending HGM/Adam review; the engine itself stays untouched (its
+battery is the GMR-convention ground truth).
 
 ## The four prenasal systems (mapped 2026-08-08, prompted by Adam's
 ## n-vs-m question)
