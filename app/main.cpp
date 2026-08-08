@@ -5886,6 +5886,14 @@ public:
         zoom_->setValue(100);
         zoom_->setMaximumWidth(120);
         row->addWidget(zoom_);
+        auto* folioB = new QPushButton("@ next folio");
+        folioB->setToolTip(
+            "Insert the next folio marker per the ACIP spec (@ in "
+            "column 1, 3-digit zero-padded, side A then B): after "
+            "@001A comes @001B, then @002A. Starts at @001A in an "
+            "empty document.");
+        row->addWidget(folioB);
+        connect(folioB, &QPushButton::clicked, [this] { nextFolio(); });
         auto* partnerB = new QPushButton("Compare with partner file…");
         row->addWidget(partnerB);
         auto* saveB = new QPushButton("Save…");
@@ -6145,6 +6153,32 @@ private:
                           "exactly (the input-center rule).")
                       .arg(nDisc)
                       .arg(QFileInfo(f).fileName()));
+    }
+
+    // insert the next @dddX folio marker (ACIP spec: column 1,
+    // 3-digit zero-padded, sides A -> B -> next number's A)
+    void nextFolio() {
+        const QString text = editor_->toPlainText();
+        QRegularExpression re("@0*(\\d+)([AB])");
+        int num = 0;
+        QChar side = 'B';   // so an empty doc starts at 001A
+        auto it = re.globalMatch(text);
+        while (it.hasNext()) {
+            const auto m = it.next();
+            num = m.captured(1).toInt();
+            side = m.captured(2)[0];
+        }
+        QString marker;
+        if (side == 'A')
+            marker = QString("@%1B").arg(num, 3, 10, QChar('0'));
+        else
+            marker = QString("@%1A").arg(num + 1, 3, 10, QChar('0'));
+        QTextCursor c = editor_->textCursor();
+        // the spec puts @ in column 1: open a fresh line when needed
+        const bool atLineStart = c.positionInBlock() == 0;
+        c.insertText((atLineStart ? "" : "\n") + marker + "\n");
+        editor_->setTextCursor(c);
+        editor_->setFocus();
     }
 
     void save() {

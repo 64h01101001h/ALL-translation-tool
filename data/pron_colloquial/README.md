@@ -39,8 +39,9 @@ Derivation: every entry whose wylie matches `b(s) + ' + d/g/b/j` and
 whose stored pron still has the b/p cluster gets a derived m-form
 (kabdir → kamdir), with a juncture-count guard — entries where wylie
 junctures and pron cluster sites disagree are SKIPPED (2 rows), never
-guessed. Known limitation: junctures before 'b whose pron shows
-bb/pb clusters are not yet transformed (left for review). Tier:
+guessed. The 'b-cluster junctures (-b(s) before 'bum/'bul-type
+syllables, bb/pb → mb) were derived in a second guarded pass
+(+42 rows, 0 ambiguous, 2026-08-08). Tier:
 DERIVED per HGM's stated rule — pending HGM/Adam review; the engine
 itself stays untouched (its battery is the GMR-convention ground
 truth).
