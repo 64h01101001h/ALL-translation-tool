@@ -1,5 +1,14 @@
 # The prenasal register — review sheet for Geshe Michael
 
+> **UPDATE 2026-08-09 — review now happens in the app.** All 205
+> derived forms are seeded as pending pronunciation proposals in
+> `data/proposals/` (machine provenance, evidence attached). Point the
+> app's Propose-tab folder there (or copy `proposals.tsv` into the
+> team's shared Dropbox proposals folder) and the Approval pane shows
+> the queue — first item is HGM's own kamdir. Approve upgrades the
+> register row to class `approved` in place; Decline removes the
+> derived row. This sheet remains as the printable reference.
+
 **The rule as stated (via Adam, 2026-08-08): SKABS 'DIR is pronounced
 "kamdir"** — a syllable-final -b(s) becomes **m** before a following
 'a-chung syllable, keeping its own labial place regardless of what

@@ -7788,12 +7788,64 @@ private:
         if (!target) { rebuild(); return; }
         if (st == allcore::ProposalStatus::Approved && target->isRegister())
             applyRegister(*target);
+        // declining a machine-derived pronunciation removes its derived
+        // register row (only the prenasal-derived class — community and
+        // hgm-attested rows are never touched by a ruling)
+        if (st == allcore::ProposalStatus::Declined &&
+            target->kind == allcore::ProposalKind::Pronunciation)
+            upgradeColloquialRow(
+                root_ + "/data/pron_colloquial/colloquial_pron.tsv",
+                *target, "");
         store.rule(id.toStdString(), st,
                    g_userName.isEmpty() ? "authority"
                                         : g_userName.toStdString(),
                    comment.toStdString(), isoToday().toStdString());
         store.save();
         rebuild();
+    }
+
+    // Find a colloquial-register row matching the proposal (colloquial
+    // + wylie, class prenasal-derived) and either upgrade its class
+    // (newClass = "approved") or remove it (newClass empty, on
+    // decline). Returns true if a row was found and rewritten. Only
+    // the machine-derived class is ever touched.
+    bool upgradeColloquialRow(const QString& path,
+                              const allcore::Proposal& p,
+                              const QString& newClass) {
+        QFile f(path);
+        if (!f.open(QIODevice::ReadOnly | QIODevice::Text)) return false;
+        QStringList lines;
+        bool hit = false;
+        const QString colloq = QString::fromStdString(p.value);
+        const QString wylie = QString::fromStdString(p.wylie);
+        while (!f.atEnd()) {
+            QString line = QString::fromUtf8(f.readLine());
+            while (line.endsWith('\n') || line.endsWith('\r'))
+                line.chop(1);
+            const QStringList c = line.split('\t');
+            if (!line.startsWith('#') && c.size() >= 4 &&
+                c[0] == colloq && c[1] == wylie &&
+                c[3].startsWith("prenasal-derived")) {
+                hit = true;
+                if (newClass.isEmpty()) continue;   // decline: drop row
+                lines << c[0] + "\t" + c[1] + "\t" + c[2] + "\t" +
+                             newClass + "\t# ruled by " +
+                             (g_userName.isEmpty() ? "authority"
+                                                   : g_userName) +
+                             " " + isoToday();
+            } else {
+                lines << line;
+            }
+        }
+        f.close();
+        if (!hit) return false;
+        QFile out(path);
+        if (!out.open(QIODevice::WriteOnly | QIODevice::Truncate |
+                      QIODevice::Text))
+            return false;
+        QTextStream ts(&out);
+        for (const QString& l : lines) ts << l << "\n";
+        return true;
     }
 
     // register approvals write straight into the app's register files,
@@ -7811,7 +7863,11 @@ private:
                    QString::fromStdString(p.field) + "\t" +
                    QString::fromStdString(p.value) + "\t" + level;
         } else if (p.kind == allcore::ProposalKind::Pronunciation) {
+            // a machine-derived row for the same form may already exist
+            // (the seeded prenasal review): upgrade it IN PLACE to
+            // approved rather than appending a duplicate
             path = root_ + "/data/pron_colloquial/colloquial_pron.tsv";
+            if (upgradeColloquialRow(path, p, "approved")) return;
             // colloquial \t wylie \t gmr_pron \t class
             line = QString::fromStdString(p.value) + "\t" +
                    QString::fromStdString(p.wylie) + "\t\tapproved";
