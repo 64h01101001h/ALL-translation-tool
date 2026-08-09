@@ -76,8 +76,12 @@ differently:
 2. **Approved-register regeneration** — fold approved rows into the
    canonical register TSVs at release time rather than appending live,
    so the derivation tools and the approved additions stay one file.
-3. **Notification counts** — a pending-count badge on the Approval tab
-   so the authority sees at a glance when the queue has grown.
-4. **Signed decisions archive** — the ruling history is already
-   preserved in the store; a read-only "Rulings" view would make that
-   record browsable as the scholarly artifact it becomes over time.
+3. ~~Notification counts~~ — DONE 2026-08-09: the Approval tab reads
+   "Approval (N)" and updates live after each ruling.
+4. ~~Signed decisions archive~~ — DONE 2026-08-09: the Approval pane's
+   **Rulings archive** shows every decision newest-first — who
+   proposed, who ruled, when, and the comment. And the loop closes on
+   the proposer's side too: the Propose pane's **"My proposals — what
+   happened?"** shows each of your own proposals with its status and
+   the authority's comment, so an answer never disappears into a
+   folder.

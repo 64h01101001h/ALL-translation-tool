@@ -7551,7 +7551,18 @@ public:
         auto* submit = new QPushButton("File proposal for review");
         fl->addRow("", submit);
         outer->addWidget(box);
+
+        // the feedback half of the loop: what became of what I offered
+        auto* mineBtn = new QPushButton("My proposals — what happened?");
+        mineBtn->setToolTip(
+            "Every proposal you have filed, with its current status and "
+            "the authority's comment when there is one.");
+        outer->addWidget(mineBtn);
+        mine_ = new QTextBrowser;
+        mine_->setVisible(false);
+        outer->addWidget(mine_, 1);
         outer->addStretch();
+        connect(mineBtn, &QPushButton::clicked, [this] { showMine(); });
         connect(submit, &QPushButton::clicked, [this] {
             if (wylie_->text().trimmed().isEmpty() &&
                 evidence_->toPlainText().trimmed().isEmpty()) {
@@ -7574,6 +7585,64 @@ public:
     }
 
 private:
+    void showMine() {
+        loadIdentity();
+        mine_->setVisible(true);
+        if (g_proposalsDir.isEmpty() || g_userName.isEmpty()) {
+            mine_->setHtml("<i>set your name and the proposals folder "
+                           "above first</i>");
+            return;
+        }
+        allcore::ProposalStore store(g_proposalsDir.toStdString());
+        store.load();
+        QString h;
+        int n = 0;
+        // newest first — the store appends in order
+        const auto& all = store.all();
+        for (auto it = all.rbegin(); it != all.rend(); ++it) {
+            const auto& p = *it;
+            if (p.proposer != g_userName.toStdString()) continue;
+            ++n;
+            static const char* colors[] = {"#B4540A", "#1E6B4E",
+                                           "#8C2F2B", "#777777"};
+            const char* col = colors[int(p.status)];
+            h += QString("<div style='margin:6px 0'>"
+                         "<span style='color:%1'><b>%2</b></span> · "
+                         "%3 <b>%4</b>%5 <small style='color:#999'>"
+                         "(%6)</small>%7</div>")
+                     .arg(col)
+                     .arg(QString(allcore::Proposal::statusName(p.status))
+                              .toUpper())
+                     .arg(allcore::Proposal::kindName(p.kind))
+                     .arg(QString::fromStdString(p.wylie).toHtmlEscaped())
+                     .arg(p.value.empty()
+                              ? QString()
+                              : " → “" +
+                                    QString::fromStdString(p.value)
+                                        .toHtmlEscaped() + "”")
+                     .arg(QString::fromStdString(p.created))
+                     .arg(p.ruled.empty()
+                              ? QString()
+                              : QString("<br><small>ruled by %1, %2%3"
+                                        "</small>")
+                                    .arg(QString::fromStdString(p.approver)
+                                             .toHtmlEscaped())
+                                    .arg(QString::fromStdString(p.ruled))
+                                    .arg(p.comment.empty()
+                                             ? QString()
+                                             : ": <i>" +
+                                                   QString::fromStdString(
+                                                       p.comment)
+                                                       .toHtmlEscaped() +
+                                                   "</i>"));
+        }
+        mine_->setHtml(
+            n ? QString("<div><b>%1 proposal(s) by %2</b></div><hr>")
+                        .arg(n)
+                        .arg(g_userName) + h
+              : "<i>you have not filed any proposals yet</i>");
+    }
+
     QLineEdit* name_;
     QCheckBox* admin_;
     QLineEdit* dir_;
@@ -7582,6 +7651,7 @@ private:
     QLineEdit* value_;
     QLineEdit* field_;
     QPlainTextEdit* evidence_;
+    QTextBrowser* mine_ = nullptr;
 };
 
 // The authority's pane — visible only in the admin role. Approve
@@ -7603,8 +7673,14 @@ public:
         auto* refresh = new QPushButton("Refresh queue");
         auto* exportB = new QPushButton("Export approved dictionary "
                                         "candidates…");
+        auto* archiveB = new QPushButton("Rulings archive");
+        archiveB->setToolTip(
+            "The read-only record of every decision — who proposed, who "
+            "ruled, when, and the comment. Over the years, a record of "
+            "the authority's own judgments.");
         row->addWidget(refresh);
         row->addWidget(exportB);
+        row->addWidget(archiveB);
         row->addStretch();
         outer->addLayout(row);
         list_ = new QTextBrowser;
@@ -7612,6 +7688,7 @@ public:
         outer->addWidget(list_, 1);
         connect(refresh, &QPushButton::clicked, [this] { rebuild(); });
         connect(exportB, &QPushButton::clicked, [this] { exportApproved(); });
+        connect(archiveB, &QPushButton::clicked, [this] { showArchive(); });
         connect(list_, &QTextBrowser::anchorClicked,
                 [this](const QUrl& u) { onAction(u.toString()); });
         rebuild();
@@ -7749,6 +7826,53 @@ private:
                << (g_userName.isEmpty() ? "authority" : g_userName) << " "
                << isoToday() << "\n";
         }
+    }
+
+    // the read-only decisions record: every ruled proposal, newest
+    // first — the scholarly artifact the store accumulates over time
+    void showArchive() {
+        allcore::ProposalStore store(g_proposalsDir.toStdString());
+        store.load();
+        QString h = "<div><b>Rulings archive</b> — every decision, "
+                    "newest first (read-only)</div><hr>";
+        int n = 0;
+        const auto& all = store.all();
+        for (auto it = all.rbegin(); it != all.rend(); ++it) {
+            const auto& p = *it;
+            if (p.status == allcore::ProposalStatus::Pending) continue;
+            ++n;
+            const bool app = p.status == allcore::ProposalStatus::Approved;
+            h += QString("<div style='margin:7px 0;padding:5px;"
+                         "border-left:3px solid %1'>"
+                         "<b style='color:%1'>%2</b> · %3 <b>%4</b>%5"
+                         "<br><small style='color:#777'>proposed by %6 "
+                         "(%7) · ruled by <b>%8</b>, %9%10</small></div>")
+                     .arg(app ? "#1E6B4E"
+                              : p.status ==
+                                        allcore::ProposalStatus::Declined
+                                    ? "#8C2F2B"
+                                    : "#999999")
+                     .arg(QString(allcore::Proposal::statusName(p.status))
+                              .toUpper())
+                     .arg(allcore::Proposal::kindName(p.kind))
+                     .arg(QString::fromStdString(p.wylie).toHtmlEscaped())
+                     .arg(p.value.empty()
+                              ? QString()
+                              : " → “" +
+                                    QString::fromStdString(p.value)
+                                        .toHtmlEscaped() + "”")
+                     .arg(QString::fromStdString(p.proposer).toHtmlEscaped())
+                     .arg(QString::fromStdString(p.created))
+                     .arg(QString::fromStdString(p.approver).toHtmlEscaped())
+                     .arg(QString::fromStdString(p.ruled))
+                     .arg(p.comment.empty()
+                              ? QString()
+                              : " — <i>" +
+                                    QString::fromStdString(p.comment)
+                                        .toHtmlEscaped() + "</i>");
+        }
+        if (!n) h += "<i>no rulings yet</i>";
+        list_->setHtml(h);
     }
 
     void exportApproved() {
