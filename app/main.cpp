@@ -73,6 +73,7 @@
 
 #include <functional>
 #include <QDateTime>
+#include <QStandardPaths>
 
 #include "allcore/abbr.h"
 #include "allcore/analysis.h"
@@ -7371,15 +7372,44 @@ private:
 };
 #endif  // ALL_HAVE_OCR
 
+static bool isDataRoot(const QString& c) {
+    return QFileInfo::exists(c + "/build/hgm_spine_v27_2.db");
+}
+
+// Locate the data folder. Development: the repo checkout (walk up from
+// the build dir). Distribution: an "ALL Tool Data" folder beside the
+// .app (the DMG layout), a previously chosen folder remembered in
+// QSettings, or Application Support. Last resort: ask once, remember.
 static QString findDataRoot() {
+    QSettings s("ALL", "TranslationTool");
+    const QString saved = s.value("app/dataRoot").toString();
+    if (!saved.isEmpty() && isDataRoot(saved)) return saved;
+
     QStringList cands = {QDir::currentPath()};
     QDir d(QCoreApplication::applicationDirPath());
     for (int i = 0; i < 7; ++i) {
         cands << d.absolutePath();
+        cands << d.absolutePath() + "/ALL Tool Data";   // beside the .app
         if (!d.cdUp()) break;
     }
+    cands << QStandardPaths::writableLocation(
+                 QStandardPaths::AppDataLocation);      // Application Support
     for (const auto& c : cands)
-        if (QFileInfo::exists(c + "/build/hgm_spine_v27_2.db")) return c;
+        if (isDataRoot(c)) return c;
+
+    // not found — ask once and remember (a distributed copy whose data
+    // folder was moved). Refusing leaves the app to report the missing
+    // spine exactly as before; nothing is guessed.
+    QMessageBox::information(
+        nullptr, "Locate the data folder",
+        "The ALL Tool Data folder (containing build/hgm_spine_…db) was "
+        "not found next to the application. Please choose it.");
+    const QString picked = QFileDialog::getExistingDirectory(
+        nullptr, "Choose the ALL Tool Data folder");
+    if (!picked.isEmpty() && isDataRoot(picked)) {
+        s.setValue("app/dataRoot", picked);
+        return picked;
+    }
     return QDir::currentPath();
 }
 

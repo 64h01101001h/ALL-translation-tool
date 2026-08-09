@@ -525,11 +525,20 @@ a skeptic who trusts nothing but the output.
    the importer stands ready.
 7. **Windows and Linux builds** for the input centers — the code was
    kept cross-platform-clean from the first commit; this is packaging
-   work, not construction.
+   work, not construction. *The macOS half is done: a one-command
+   installer image (the application plus its data folder, dragged
+   anywhere together) so every team member — and the authority's own
+   copy with its Approval queue — installs in one gesture. The
+   Windows and Linux halves await machines of those platforms.*
 8. **A release validator** — one command that takes each new
    dictionary release and runs every battery, oracle, register, and
    index, emitting a report — so the data project can ship and the
-   tool can absorb without ceremony.
+   tool can absorb without ceremony. *Done: the validator now gates
+   every release five ways — structure, provenance vocabulary,
+   no-data-shrink, an engine spot-battery against the release's own
+   ground truth, and corpus integrity — proven to pass the genuine
+   release and to catch a deliberately corrupted one. The installer
+   itself refuses to package anything that fails this gate.*
 
 ## The larger vision
 
