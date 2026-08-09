@@ -47,11 +47,12 @@ any feature is:
 
 # PART I — EVERY FUNCTION THE APPLICATION PROVIDES
 
-The application is one window with twelve working areas ("panes"),
-built on one shared core. Everything except two clearly-marked AI
-features runs fully offline — a deliberate choice, so that the tool
-serves equally in New York, in a monastery library, or at an input
-center with no reliable connection.
+The application is one window with fifteen working areas ("panes") —
+fourteen for everyone, and one more that appears only for an authority
+(described last) — built on one shared core. Everything except two
+clearly-marked AI features runs fully offline — a deliberate choice,
+so that the tool serves equally in New York, in a monastery library,
+or at an input center with no reliable connection.
 
 ## 1. Overlay — reading with the dictionary underneath
 
@@ -186,7 +187,23 @@ tool. An optional AI back-check produces a coverage report only —
 omissions and additions — and is forbidden by construction to
 retranslate.
 
-## 6. Align — the dictionary-building workflow, reborn
+## 6. Review — the overseer's bench
+
+Where Draft serves the translator, Review serves the senior translator
+who checks another's work. The Tibetan source and the finished English
+draft sit side by side, and one button produces a reviewer's report
+that guides attention without ever issuing a verdict: terms whose
+established senses differ by register (a warning to confirm the
+rendering fits this text's register); renderings that rest on
+provisional-tier glosses; source terms none of whose established
+equivalents appear in the draft (which may be a deliberate choice —
+worth a look); one English word serving two different Tibetan terms (a
+distinction may have collapsed); and terms carrying three or more
+established senses, asking the reviewer to confirm the one chosen. Rule
+one holds here as everywhere: the checker only matches against Geshe
+Michael's own glosses; it never composes English.
+
+## 7. Align — the dictionary-building workflow, reborn
 
 The Project's original Hypercontext program — the tool whose
 hypertexted files fed the first dictionary building — lives again.
@@ -201,7 +218,7 @@ directly, verified against the original tutorial file itself. Every
 translator working in this pane is quietly extending the dictionary
 for everyone who follows.
 
-## 7. Input — the input-center workstation
+## 8. Input — the input-center workstation
 
 The software the input centers were always meant to have. Its lineage
 is the Project's own: the ACE system built for ACIP years ago was
@@ -222,7 +239,7 @@ partner's, and every discrepancy lights up — down to a single dropped
 letter — to be corrected until the two files match exactly, which has
 always been the rule.
 
-## 8. Library — the preserved canon, close at hand
+## 9. Library — the preserved canon, close at hand
 
 The complete ACIP Release 6 collection installs from the Library's own
 archive files: 2,716 texts, 8.68 million lines, fully search-indexed
@@ -238,7 +255,7 @@ the 1990s are rescued to proper Tibetan script through a dedicated
 conversion lane. A flat catalog view lays the entire shelf out as one
 sortable table.
 
-## 9. Search — the classic grammar, restored
+## 10. Search — the classic grammar, restored
 
 The Project's beloved Gofer search grammar lives on: exact phrases,
 OR, and NEAR-within-N-lines, over the corpus, over any folder of raw
@@ -248,7 +265,7 @@ asks the computer's own index for any document containing the term —
 searched as typed *and* as Tibetan script, through the proven
 converters.
 
-## 10. Convert — every writing system, and time itself
+## 11. Convert — every writing system, and time itself
 
 Type in any of the four systems — ACIP, scholarly Wylie, Sanskrit
 IAST, or Devanagari; the pane detects which — and receive every
@@ -263,7 +280,7 @@ full Tibetan designation, element-animal pair to its years, complete
 Tibetan date to western weekday and back — with the traditional
 calendar's own irregularities honored rather than smoothed.
 
-## 11. Lookup — the stacked dictionary
+## 12. Lookup — the stacked dictionary
 
 One search box, many doors. Exact headword in any script; a fallback
 that strips affixed particles (searching *po'i* finds *po*); a
@@ -280,7 +297,7 @@ corresponding Monier-Williams entry or the Grammar itself. Honorific
 terms wear their badge with the ordinary word beside them. And the
 entire dictionary can be browsed in true Tibetan alphabetical order.
 
-## 12. Scan — Tibetan text recognition, embedded and proven
+## 13. Scan — Tibetan text recognition, embedded and proven
 
 Text recognition runs inside the application: the Buddhist Digital
 Resource Center's open models (used with BDRC's permission, credited
@@ -295,6 +312,41 @@ the woodblock. A whole scanned volume processes in one batch. And the
 Project's discipline governs all of it: OCR output is tagged
 unverified review material, is never smoothed, and never enters the
 corpus.
+
+## 14. Propose — offering terms to the authority
+
+Every team member can propose. While reading, the card for any word
+carries a quiet "propose to the authority" action, and a dedicated
+Propose pane offers the same by form: an honorific or high-honorific
+word or verb, a pronunciation exception, an abbreviation candidate, a
+rendering for a word or phrase, or a note about a passage. The proposal
+is filed with its evidence — the surrounding passage is captured
+automatically — and the proposer's name, recorded for provenance. This
+is deliberately not a login: a name and role set once, so that within
+a trusted in-house team the attribution and the audit trail are honest,
+without accounts or a server. The proposals live as small files in a
+shared folder — pointed at the Project's own Dropbox, the whole team's
+queue synchronizes with no infrastructure, offline-capable and fully
+traceable.
+
+## 15. Approval — the authority's queue
+
+This pane appears only for an authority — Geshe Michael, or Adam as a
+second administrator. It shows the pending proposals, each with its
+evidence and its proposer, and offers three rulings: approve, decline,
+or defer, with an optional note; the tab itself carries a count so a
+growing queue is visible at a glance. The boundary that protects the
+data is enforced here in the software itself. Register proposals —
+honorific, high-honorific, pronunciation, abbreviation — apply in the
+application the moment they are approved, written into the register
+with the approved tier and a record of who approved them and when.
+Dictionary and corpus proposals — renderings and notes — are approved
+in the same way but are never written into the corpus by the app;
+instead the authority exports them as a signed package of approved
+candidates for the data project to weigh into the next release. Same
+effortless approval; the master data keeps its single pipeline, and
+every ruling is preserved — over the years, a record of the authority's
+own judgments.
 
 ## The machinery beneath (what every pane stands on)
 
@@ -320,7 +372,7 @@ corpus.
   and labeled: from the Mahāvyutpatti to Whitney to the Project's own
   growing registers of community pronunciation, the prenasal rule
   Geshe Michael teaches, and the honorifics.
-- **Thirty-six automated test batteries** run before any change ships.
+- **Thirty-seven automated test batteries** run before any change ships.
 
 ---
 

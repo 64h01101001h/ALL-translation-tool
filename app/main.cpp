@@ -7529,6 +7529,16 @@ private:
         }
         if (!shown) h += "<i>nothing pending — the queue is clear.</i>";
         list_->setHtml(h);
+        // keep the tab label's pending count current after each ruling
+        if (auto* tw = qobject_cast<QTabWidget*>(
+                parentWidget() ? parentWidget()->parentWidget() : nullptr)) {
+            const int ix = tw->indexOf(this);
+            if (ix >= 0)
+                tw->setTabText(ix, store.pendingCount()
+                                       ? QString("Approval (%1)")
+                                             .arg(store.pendingCount())
+                                       : QString("Approval"));
+        }
     }
 
     void onAction(const QString& s) {
@@ -7793,7 +7803,18 @@ int main(int argc, char** argv) {
     // Adam), gated on the identity role
     loadIdentity();
     tabs.addTab(new ProposePane(), "Propose");
-    if (g_isAdmin) tabs.addTab(new ApprovalPane(root), "Approval");
+    if (g_isAdmin) {
+        // the authority sees the pending count on the tab at a glance
+        size_t pending = 0;
+        if (!g_proposalsDir.isEmpty()) {
+            allcore::ProposalStore st(g_proposalsDir.toStdString());
+            st.load();
+            pending = st.pendingCount();
+        }
+        tabs.addTab(new ApprovalPane(root),
+                    pending ? QString("Approval (%1)").arg(pending)
+                            : QString("Approval"));
+    }
     tabs.resize(1180, 760);
     tabs.show();
     return app.exec();

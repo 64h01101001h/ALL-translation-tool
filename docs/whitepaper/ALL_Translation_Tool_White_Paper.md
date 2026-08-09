@@ -189,7 +189,7 @@ fails its battery does not ship. Current results:
   the other converter mangles blindly --- and 13 genuine source
   defects it exposed were filed for correction.
 
-**5. A tour of the twelve panes**
+**5. A tour of the fifteen panes**
 
 **Overlay --- read with the dictionary underneath**
 
