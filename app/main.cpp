@@ -1142,7 +1142,16 @@ private:
         }
     }
 
+    // token -> EWTS: ACIP documents convert; wylie documents are
+    // already EWTS (docIsWylie_ set per load by the battery-covered
+    // detector). Fixes lowercase-wylie files garbling in script mode.
+    std::string tokEwts(const std::string& tok) const {
+        return docIsWylie_ ? tok : allcore::acipToEwts(tok);
+    }
+
     void loadDoc() {
+        docIsWylie_ =
+            allcore::looksLikeWylie(input_->toPlainText().toStdString());
         doc_ = allcore::buildOverlay(spine_, index_,
                                      input_->toPlainText().toStdString());
         tokBeg_.clear();
@@ -1170,13 +1179,15 @@ private:
                 // ACIP → EWTS → unicode through the battery-proven ports;
                 // failures render as ⟨wylie⟩ markers, never guessed
                 auto [u, ok] =
-                    allcore::wylieToUnicode(allcore::acipToEwts(doc_.tokens[i]));
+                    allcore::wylieToUnicode(tokEwts(doc_.tokens[i]));
                 disp = QString::fromStdString(u);
                 if (disp.isEmpty()) disp = QString::fromStdString(doc_.tokens[i]);
             } else if (mode == 2) {
-                disp = QString::fromStdString(allcore::acipToEwts(doc_.tokens[i]));
+                disp = QString::fromStdString(tokEwts(doc_.tokens[i]));
             } else {
-                disp = QString::fromStdString(doc_.tokens[i]);
+                disp = QString::fromStdString(
+                    docIsWylie_ ? allcore::ewtsToAcip(doc_.tokens[i])
+                                : doc_.tokens[i]);
             }
             tokBeg_.push_back(text.size());
             text += disp;
@@ -1217,7 +1228,7 @@ private:
                     while (j < n && depth[j] == 0 &&
                            !allcore::classifyParticle(doc_.tokens[j])) {
                         auto [u, ok] = allcore::wylieToUnicode(
-                            allcore::acipToEwts(doc_.tokens[j]));
+                            tokEwts(doc_.tokens[j]));
                         if (!ok) { convOk = false; break; }
                         unis.push_back(u);
                         bool barrier = doc_.barrier_after[j];
@@ -1300,7 +1311,7 @@ private:
             }
             // spellcheck: red wave underline on illegal syllables (item 5)
             if (checker_ &&
-                !checker_->legalWylie(allcore::acipToEwts(doc_.tokens[i]))) {
+                !checker_->legalWylie(tokEwts(doc_.tokens[i]))) {
                 fmt.setUnderlineStyle(QTextCharFormat::WaveUnderline);
                 fmt.setUnderlineColor(QColor(0xE2, 0x4B, 0x4A));
                 touched = true;
@@ -1378,8 +1389,7 @@ private:
                     agreementHtml(tok));
             } else {
                 QString extra;
-                const std::string tokWylie =
-                    allcore::acipToEwts(doc_.tokens[tok]);
+                const std::string tokWylie = tokEwts(doc_.tokens[tok]);
                 auto [u1, ok1] = allcore::wylieToUnicode(tokWylie);
                 if (ok1) {
                     loadLexicon();
@@ -1509,8 +1519,7 @@ private:
                                     .toStdString());
             }
             const auto& tokTxt = doc_.tokens[tok];
-            auto [uni, okc] = allcore::wylieToUnicode(
-                allcore::acipToEwts(tokTxt));
+            auto [uni, okc] = allcore::wylieToUnicode(tokEwts(tokTxt));
             if (okc) {
                 const auto hits = verbStems_.lookup(uni);
                 if (!hits.empty()) {
@@ -2160,6 +2169,7 @@ private:
     allcore::Contractions contr_;
     bool contrTried_ = false;
     QString docFile_;
+    bool docIsWylie_ = false;
     std::map<std::string, std::string> glossary_;
     std::unique_ptr<allcore::botok::SegTrie> segmenter_;
     bool segTried_ = false;
@@ -8148,15 +8158,13 @@ int main(int argc, char** argv) {
             excerpt.remove(QChar(')'));
             excerpt.truncate(excerpt.lastIndexOf('\n'));
             // keep pure-ASCII lines only (drop stray unicode
-            // annotations), and hand the Overlay what it expects:
-            // ACIP, via the round-trip-proven ewtsToAcip
+            // annotations); the raw wylie goes in as-is — the Overlay
+            // now detects the transliteration itself
             QStringList clean;
             for (const QString& ln : excerpt.split('\n')) {
                 bool ascii = !ln.trimmed().isEmpty();
                 for (QChar ch : ln) ascii &= ch.unicode() < 128;
-                if (ascii)
-                    clean << QString::fromStdString(
-                        allcore::ewtsToAcip(ln.toStdString()));
+                if (ascii) clean << ln;
             }
             excerpt = clean.join('\n');
             const QString tmp = QDir::tempPath() + "/S0134I_inc_t.txt";

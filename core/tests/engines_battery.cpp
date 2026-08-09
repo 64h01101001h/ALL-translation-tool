@@ -511,6 +511,24 @@ int main(int argc, char** argv) {
               "reverse converter round-trips 99.5%+ of the dictionary");
     }
 
+    // ---- J: transliteration detection (ACIP vs wylie) ----
+    {
+        CHECK(!allcore::looksLikeWylie(
+                  "SKABS 'DIR DNGOS SU BSTAN PA'I MTSHAN NYID,"),
+              "J: plain ACIP is not wylie");
+        CHECK(!allcore::looksLikeWylie(
+                  "GYA GAR SKAD DU, ka nA ma pra dznyA pA ra mi tA, "
+                  "BOD SKAD DU SHES RAB KYI PHA ROL TU PHYIN PA,"),
+              "J: ACIP with a lowercase Sanskrit passage is still ACIP");
+        CHECK(allcore::looksLikeWylie(
+                  "blo sbyong snyan brgyud chen mo'i 'khrid yig "
+                  "gzhan phan nyi ma zhes bya ba bzhugs so"),
+              "J: lowercase wylie is wylie");
+        CHECK(allcore::looksLikeWylie(
+                  "bdag dang mkha' mnyam Sems can, SGRUB"),
+              "J: a stray uppercase word does not flip a wylie doc");
+    }
+
     sqlite3_close(db);
     std::printf("%s (%d failures)\n",
                 failures ? "ENGINES BATTERY FAILED" : "ENGINES BATTERY OK", failures);

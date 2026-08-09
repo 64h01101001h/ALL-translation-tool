@@ -139,4 +139,15 @@ std::string ewtsToAcip(const std::string& ewts) {
     return out;
 }
 
+bool looksLikeWylie(const std::string& text) {
+    size_t upper = 0, lower = 0;
+    for (unsigned char c : text) {
+        if (c >= 'A' && c <= 'Z') ++upper;
+        else if (c >= 'a' && c <= 'z') ++lower;
+    }
+    // ACIP body text is uppercase-dominant even with lowercase
+    // Sanskrit passages mixed in; wylie is lowercase throughout
+    return lower > upper;
+}
+
 }  // namespace allcore

@@ -24,6 +24,13 @@ std::string acipToEwts(const std::string& acip);
 // must reproduce w across the full dictionary.
 std::string ewtsToAcip(const std::string& ewts);
 
+// Is this document wylie (EWTS) rather than ACIP? ACIP writes its
+// letters uppercase (lowercase appears only in Sanskrit passages and
+// special marks), wylie is lowercase throughout — so the dominant case
+// of the alphabetic characters decides. Used by the Overlay to route
+// per-token conversion; battery-covered in engines_battery.
+bool looksLikeWylie(const std::string& text);
+
 // wylie (EWTS + IAST-flavored) → Tibetan unicode. Returns {unicode, ok};
 // ok=false means at least one syllable failed and is shown as ⟨syl⟩.
 std::pair<std::string, bool> wylieToUnicode(const std::string& wylie);
