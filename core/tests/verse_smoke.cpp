@@ -44,6 +44,47 @@ int main() {
     auto s = allcore::analyzeVerse("KA BA DANG NI BUM PA DANG,\nKA BA DANG NI BUM PA DANG,");
     CHECK(!s.is_verse, "two lines are too few to call verse");
 
+    // ---- stanza grouping for reading-order guidance ----
+    // four seven-syllable lines with no explicit boundary = one shloka
+    {
+        const std::string src =
+            "KA BA DANG NI BUM PA DANG,\n"
+            "SEMS CAN THAMS CAD BDE BA DANG,\n"
+            "KA BA DANG NI BUM PA DANG,\n"
+            "SEMS CAN THAMS CAD BDE BA DANG,";
+        auto v = allcore::analyzeVerse(src);
+        auto st = allcore::groupStanzas(v, src);
+        CHECK(st.size() == 1 && st[0].lines.size() == 4,
+              "four lines, no shad boundary -> one 4-line shloka");
+        CHECK(st[0].first_line == 1 && st[0].last_line == 4,
+              "the shloka spans lines 1-4");
+    }
+    // eight lines -> two shlokas by the 4-line rule
+    {
+        std::string eight;
+        for (int i = 0; i < 8; ++i) eight += "KA BA DANG NI BUM PA DANG,\n";
+        auto v = allcore::analyzeVerse(eight);
+        auto st = allcore::groupStanzas(v, eight);
+        CHECK(st.size() == 2 && st[0].lines.size() == 4 &&
+                  st[1].lines.size() == 4,
+              "eight lines -> two 4-line stanzas");
+    }
+    // explicit double-shad boundaries win over the 4-line default
+    {
+        const std::string src2 =
+            "KA BA DANG NI BUM PA DANG,\n"
+            "SEMS CAN THAMS CAD BDE BA DANG//\n"
+            "KA BA DANG NI BUM PA DANG,\n"
+            "SEMS CAN THAMS CAD BDE BA DANG,\n"
+            "KA BA DANG NI BUM PA DANG//";
+        auto v = allcore::analyzeVerse(src2);
+        auto st = allcore::groupStanzas(v, src2);
+        CHECK(st.size() == 2, "double-shad closes group the reading units");
+        CHECK(st.size() == 2 && st[0].lines.size() == 2 &&
+                  st[1].lines.size() == 3,
+              "shad boundaries override the 4-line default (2 then 3)");
+    }
+
     std::printf("%s (%d failures)\n",
                 failures ? "VERSE SMOKE FAILED" : "VERSE SMOKE OK", failures);
     return failures ? 1 : 0;

@@ -29,4 +29,26 @@ struct VerseReport {
 
 VerseReport analyzeVerse(const std::string& acip);
 
+// ---- reading-order guidance for verse (docs/PEDAGOGY_ROADMAP.md) ----
+// The load-bearing fact for a verse reader: classical verse does NOT
+// read line by line. The meter forces the poet to displace words from
+// their prose positions and to DROP case particles that the reader must
+// supply (Wilson's "understood particle"). So the unit of reading is the
+// stanza, assembled and then read by the prose rules. A shloka is four
+// verse lines (tshig bcad kyi rkang pa bzhi); many stanzas are also
+// closed by a double shad. This groups a verse report's lines into those
+// reading units — deterministic: by explicit shad-closed groups when
+// present, else by the meter's natural 4-line shloka.
+
+struct VerseStanza {
+    int first_line = 0, last_line = 0;   // 1-based, inclusive
+    std::vector<std::string> lines;      // the ACIP lines, in order
+    bool regular = true;                 // all lines share the meter
+};
+
+// raw_acip is the original source (the report's line texts are cleaned
+// of trailing shads, so boundary detection needs the raw lines).
+std::vector<VerseStanza> groupStanzas(const VerseReport& report,
+                                      const std::string& raw_acip);
+
 }  // namespace allcore

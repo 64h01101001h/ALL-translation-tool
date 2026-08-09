@@ -3849,6 +3849,17 @@ public:
         srcCol->addWidget(structBtn);
         auto* verseBtn = new QPushButton("Verse meter");
         srcCol->addWidget(verseBtn);
+        auto* verseReadBtn = new QPushButton("Verse reading order");
+        verseReadBtn->setToolTip(
+            "Verse does not read line by line: the meter forces the "
+            "poet to displace words and drop understood particles, so "
+            "the reading unit is the STANZA. This groups the lines into "
+            "shlokas (four verse lines, or the poet's own double-shad "
+            "closes) and applies the verb-first reading order to each "
+            "stanza as a whole.");
+        srcCol->addWidget(verseReadBtn);
+        QObject::connect(verseReadBtn, &QPushButton::clicked,
+                         [this] { verseReading(); });
         auto* quoteBtn = new QPushButton("Detect quotations");
         quoteBtn->setToolTip(
             "Finds passages that exactly match corpus segments (7+ "
@@ -4230,6 +4241,108 @@ private:
                      .arg(l.number)
                      .arg(l.syllables)
                      .arg(QString::fromStdString(l.text).toHtmlEscaped());
+        report_->setHtml(h);
+    }
+
+    // Verse reading order (leadership rec #4): verse reads by the
+    // STANZA, not the line — the meter displaces words and drops
+    // understood particles. Group into shlokas, then run the verb-first
+    // reading plan over each assembled stanza.
+    void verseReading() {
+        const std::string src = source_->toPlainText().toStdString();
+        auto v = allcore::analyzeVerse(src);
+        QString h = "<div><b>Verse reading order</b></div>";
+        if (!v.is_verse) {
+            h += "<div style='color:#777'>no dominant meter — this reads "
+                 "as prose; use the Trainer's reading order instead.</div>";
+            report_->setHtml(h);
+            return;
+        }
+        auto stanzas = allcore::groupStanzas(v, src);
+        h += QString("<div style='color:#3B7A3B'>%1-syllable verse · %2 "
+                     "reading unit(s)</div><div style='color:#777;"
+                     "font-size:11px'>Read each stanza as ONE unit, not "
+                     "line by line: the meter moves words out of their "
+                     "prose order, and case particles are often dropped "
+                     "(understood) to fit — supply them as you "
+                     "assemble.</div><hr>")
+                     .arg(v.meter)
+                     .arg(stanzas.size());
+        int sn = 0;
+        for (const auto& st : stanzas) {
+            ++sn;
+            h += QString("<div style='margin-top:8px'><b>Stanza %1</b> "
+                         "<small style='color:#777'>(lines %2–%3%4)"
+                         "</small></div>")
+                     .arg(sn)
+                     .arg(st.first_line)
+                     .arg(st.last_line)
+                     .arg(st.regular ? "" : ", irregular");
+            // assemble the stanza's lines into one span and read it
+            std::string joined;
+            for (const auto& ln : st.lines) {
+                if (!joined.empty()) joined += " ";
+                joined += ln;
+            }
+            allcore::OverlayDoc doc =
+                allcore::buildOverlay(spine_, index_, joined);
+            auto clauses = allcore::refineClauses(
+                doc, allcore::splitClauses(doc.tokens, doc.barrier_after));
+            if (clauses.empty()) continue;
+            // read the whole stanza's chunks: treat it as one reading span
+            allcore::Clause whole;
+            whole.beg = 0;
+            whole.end = (int)doc.tokens.size();
+            auto chunks = allcore::chunkClause(doc, whole);
+            auto verb = allcore::spotVerb(doc, chunks);
+            auto plan = allcore::planReading(chunks, verb);
+            if (verb.chunk >= 0)
+                h += QString("<div style='margin-left:10px'>verb: <b>%1</b>"
+                             "%2</div>")
+                         .arg(QString::fromStdString(verb.wylie)
+                                  .toHtmlEscaped())
+                         .arg(verb.confident
+                                  ? ""
+                                  : " <small style='color:#B4540A'>"
+                                    "(unverified — no tense evidence)"
+                                    "</small>");
+            // ordered chunks
+            std::vector<std::pair<int, QString>> ordered;
+            int drops = 0;
+            for (size_t ci = 0; ci < chunks.size(); ++ci) {
+                const auto& c = chunks[ci];
+                QString txt;
+                for (int t = c.beg; t < c.end; ++t) {
+                    if (!txt.isEmpty()) txt += " ";
+                    txt += QString::fromStdString(doc.tokens[t]);
+                }
+                // a nominal chunk with no case marker inside a metered
+                // line = a likely understood (dropped) particle
+                if (c.marker.empty() && std::string(c.role) != "predicate" &&
+                    ci + 1 < chunks.size())
+                    ++drops;
+                const int ord = ci < plan.size() ? plan[ci].order : 0;
+                ordered.push_back({ord ? ord : 99,
+                                   txt.toHtmlEscaped() +
+                                       (ord ? "" :
+                                        " <small style='color:#999'>"
+                                        "(reads with the next)</small>")});
+            }
+            std::stable_sort(ordered.begin(), ordered.end(),
+                             [](auto& a, auto& b) { return a.first < b.first; });
+            h += "<div style='margin-left:10px'>reading order: ";
+            for (size_t i = 0; i < ordered.size(); ++i) {
+                if (i) h += " → ";
+                h += ordered[i].second;
+            }
+            h += "</div>";
+            if (drops > 0)
+                h += QString("<div style='margin-left:10px;color:#8C2F2B;"
+                             "font-size:12px'>~%1 case particle(s) likely "
+                             "understood (dropped for meter) — supply the "
+                             "relationship as you read</div>")
+                         .arg(drops);
+        }
         report_->setHtml(h);
     }
 
