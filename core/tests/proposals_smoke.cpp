@@ -6,6 +6,10 @@
 #include <cstdlib>
 #include <string>
 
+#include <fstream>
+#include <sstream>
+
+#include "allcore/colloquial.h"
 #include "allcore/proposals.h"
 
 static int failures = 0;
@@ -77,6 +81,61 @@ int main(int argc, char** argv) {
               "approval persists with approver + date");
         CHECK(after.pendingCount() == 1,
               "one still pending after one approval");
+    }
+
+    // ---- the authority's ruling applied to the register file ----
+    {
+        const std::string reg = dir + "/ruling_register.tsv";
+        auto write = [&] {
+            std::ofstream f(reg, std::ios::trunc);
+            f << "# colloquial\twylie\tgmr_pron\tclass\n"
+                 "tulku\tsprul sku\ttrulku\tcommunity\n"
+                 "kamdir\tskabs 'dir\tkap-dir\tprenasal-derived\n"
+                 "kyamdro\tskyabs 'gro\tkyap-dro\tprenasal-derived\n"
+                 "gendun\tdge 'dun\tgendun\thgm-attested\n";
+        };
+        auto slurp = [&] {
+            std::ifstream f(reg);
+            std::stringstream ss;
+            ss << f.rdbuf();
+            return ss.str();
+        };
+        write();
+        // approve: in-place class upgrade with the ruler's stamp
+        CHECK(allcore::applyPronunciationRuling(
+                  reg, "kamdir", "skabs 'dir", true, "Geshe Michael",
+                  "2026-08-09"),
+              "approve finds the derived row");
+        std::string s1 = slurp();
+        CHECK(s1.find("kamdir\tskabs 'dir\tkap-dir\tapproved\t# ruled "
+                      "by Geshe Michael 2026-08-09") != std::string::npos,
+              "approve upgrades class in place, stamped");
+        CHECK(s1.find("prenasal-derived\n") != std::string::npos,
+              "the other derived row is untouched");
+        CHECK(s1.find("community") != std::string::npos &&
+                  s1.find("hgm-attested") != std::string::npos,
+              "community and hgm-attested rows survive verbatim");
+        // decline: the derived row is removed
+        CHECK(allcore::applyPronunciationRuling(
+                  reg, "kyamdro", "skyabs 'gro", false, "Adam",
+                  "2026-08-09"),
+              "decline finds the derived row");
+        std::string s2 = slurp();
+        CHECK(s2.find("kyamdro") == std::string::npos,
+              "declined derived row is removed");
+        // protected classes are structurally untouchable
+        CHECK(!allcore::applyPronunciationRuling(
+                  reg, "tulku", "sprul sku", false, "x", "2026-08-09"),
+              "a community row cannot be removed by a ruling");
+        CHECK(!allcore::applyPronunciationRuling(
+                  reg, "gendun", "dge 'dun", true, "x", "2026-08-09"),
+              "an hgm-attested row cannot be re-classed by a ruling");
+        // novel form: no match, file byte-identical
+        std::string before = slurp();
+        CHECK(!allcore::applyPronunciationRuling(
+                  reg, "nowhere", "med pa", true, "x", "2026-08-09"),
+              "a novel form returns false (caller appends fresh)");
+        CHECK(slurp() == before, "a miss leaves the file byte-identical");
     }
 
     CHECK(allcore::tsvUnescape(allcore::tsvEscape("a\tb\\c\nd")) ==

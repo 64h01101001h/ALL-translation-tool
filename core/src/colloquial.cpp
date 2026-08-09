@@ -59,4 +59,47 @@ std::vector<const ColloquialEntry*> ColloquialPron::byColloquial(
     return out;
 }
 
+bool applyPronunciationRuling(const std::string& tsvPath,
+                              const std::string& colloquial,
+                              const std::string& wylie,
+                              bool approve,
+                              const std::string& ruler,
+                              const std::string& isoDate) {
+    std::ifstream in(tsvPath);
+    if (!in) return false;
+    std::vector<std::string> lines;
+    bool hit = false;
+    std::string line;
+    while (std::getline(in, line)) {
+        if (!line.empty() && line.back() == '\r') line.pop_back();
+        if (!line.empty() && line[0] != '#') {
+            // split the 4 columns (class may carry a trailing comment)
+            std::vector<std::string> c;
+            std::string cur;
+            for (char ch : line) {
+                if (ch == '\t') { c.push_back(cur); cur.clear(); }
+                else cur += ch;
+            }
+            c.push_back(cur);
+            if (c.size() >= 4 && c[0] == colloquial && c[1] == wylie &&
+                c[3].rfind("prenasal-derived", 0) == 0) {
+                hit = true;
+                if (!approve) continue;   // decline: drop the derived row
+                lines.push_back(c[0] + "\t" + c[1] + "\t" + c[2] +
+                                "\tapproved\t# ruled by " +
+                                (ruler.empty() ? "authority" : ruler) +
+                                " " + isoDate);
+                continue;
+            }
+        }
+        lines.push_back(line);
+    }
+    in.close();
+    if (!hit) return false;
+    std::ofstream out(tsvPath, std::ios::trunc);
+    if (!out) return false;
+    for (const auto& l : lines) out << l << "\n";
+    return true;
+}
+
 }  // namespace allcore

@@ -36,4 +36,21 @@ private:
     std::map<std::string, std::vector<int>> byWylie_;
 };
 
+// ---- the authority's ruling applied to the register file ----------
+// Approving a pronunciation proposal whose form exists as a
+// machine-derived row upgrades that row's class to "approved" in
+// place (stamped "# ruled by <ruler> <date>"); declining removes the
+// derived row. ONLY the prenasal-derived class is ever touched —
+// community and hgm-attested rows are structurally untouchable by
+// rulings. Returns true if a matching derived row was found and the
+// file rewritten; false leaves the file byte-identical (the caller
+// then appends a fresh approved row for a novel form, or does nothing
+// on decline).
+bool applyPronunciationRuling(const std::string& tsvPath,
+                              const std::string& colloquial,
+                              const std::string& wylie,
+                              bool approve,
+                              const std::string& ruler,
+                              const std::string& isoDate);
+
 }  // namespace allcore
