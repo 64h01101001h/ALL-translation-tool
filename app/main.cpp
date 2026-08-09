@@ -7424,6 +7424,7 @@ static QString findDataRoot() {
 static QString g_userName;
 static bool g_isAdmin = false;
 static QString g_proposalsDir;
+static bool g_identityPinned = false;   // screenshot mode: keep seeds
 
 static QString isoToday() {
     return QDateTime::currentDateTime().toString("yyyy-MM-dd");
@@ -7431,6 +7432,7 @@ static QString isoToday() {
 
 // establish identity once (or when changed via the Propose pane)
 static void loadIdentity() {
+    if (g_identityPinned) return;
     QSettings s("ALL", "TranslationTool");
     g_userName = s.value("team/name").toString();
     g_isAdmin = s.value("team/admin", false).toBool();
@@ -7981,7 +7983,9 @@ int main(int argc, char** argv) {
         appFont.setFamilies(fams);
         app.setFont(appFont);
     }
-    QString dbPath = argc > 1 ? argv[1] : root + "/build/hgm_spine_v27_2.db";
+    QString dbPath = (argc > 1 && argv[1][0] != '-')
+                         ? argv[1]
+                         : root + "/build/hgm_spine_v27_2.db";
     QString tplPath = argc > 2 ? argv[2]
                                : root + "/docs/analysis/PASSAGE_ANALYSIS_TEMPLATE.md";
 
@@ -8091,6 +8095,19 @@ int main(int argc, char** argv) {
     // the Approval tab shows only for an authority (Geshe Michael /
     // Adam), gated on the identity role
     loadIdentity();
+    // --screenshots <dir>: render every pane to PNGs and exit (demo /
+    // documentation mode). Shows the Approval queue too, pointed at
+    // the seeded proposals — session-only, nothing persisted.
+    const QStringList cliArgs = QCoreApplication::arguments();
+    const int shotIx = cliArgs.indexOf("--screenshots");
+    const bool shotMode = shotIx >= 0 && shotIx + 1 < cliArgs.size();
+    if (shotMode) {
+        g_isAdmin = true;
+        if (g_proposalsDir.isEmpty())
+            g_proposalsDir = root + "/data/proposals";
+        if (g_userName.isEmpty()) g_userName = "Adam";
+        g_identityPinned = true;   // panes reload identity; keep seeds
+    }
     tabs.addTab(new ProposePane(), "Propose");
     if (g_isAdmin) {
         // the authority sees the pending count on the tab at a glance
@@ -8106,5 +8123,71 @@ int main(int argc, char** argv) {
     }
     tabs.resize(1180, 760);
     tabs.show();
+    if (shotMode) {
+        const QString outDir = cliArgs.at(shotIx + 1);
+        QDir().mkpath(outDir);
+        // open a real text in the Overlay so the flagship pane shows
+        // its shading, not an empty editor (the Diamond Cutter)
+        // Only the first screenful is visible in a capture, and the
+        // offscreen platform lacks lazy text layout (every char-format
+        // change re-shapes the whole Tibetan document through
+        // HarfBuzz — quadratic). So load just the opening of the
+        // Diamond Cutter: identical screenshot, instant.
+        const QString demo = root + "/library/acip_release6/S0134I_inc_t.txt";
+        printf("[shot] opening demo text…\n"); fflush(stdout);
+        QFile df(demo);
+        if (df.open(QIODevice::ReadOnly)) {
+            QString excerpt = QString::fromUtf8(df.read(6000));
+            // demo cleanliness: drop the editorial apparatus (bracket
+            // comments, parens, page/section markers) so the capture
+            // shows the reading experience, not the input-format
+            // housekeeping the honest markers would flag
+            excerpt.remove(QRegularExpression("\\[[^\\]]*\\]"));
+            excerpt.remove(QRegularExpression("@#*[0-9A-Za-z.]*"));
+            excerpt.remove(QChar('('));
+            excerpt.remove(QChar(')'));
+            excerpt.truncate(excerpt.lastIndexOf('\n'));
+            // keep pure-ASCII lines only (drop stray unicode
+            // annotations), and hand the Overlay what it expects:
+            // ACIP, via the round-trip-proven ewtsToAcip
+            QStringList clean;
+            for (const QString& ln : excerpt.split('\n')) {
+                bool ascii = !ln.trimmed().isEmpty();
+                for (QChar ch : ln) ascii &= ch.unicode() < 128;
+                if (ascii)
+                    clean << QString::fromStdString(
+                        allcore::ewtsToAcip(ln.toStdString()));
+            }
+            excerpt = clean.join('\n');
+            const QString tmp = QDir::tempPath() + "/S0134I_inc_t.txt";
+            QFile tf(tmp);
+            if (tf.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
+                tf.write(excerpt.toUtf8());
+                tf.close();
+                overlay->openFile(tmp);
+            }
+        }
+        printf("[shot] demo open; %d tabs\n", tabs.count()); fflush(stdout);
+        for (int i = 0; i < tabs.count(); ++i) {
+            printf("[shot] tab %d %s\n", i,
+                   tabs.tabText(i).toUtf8().constData());
+            fflush(stdout);
+            tabs.setCurrentIndex(i);
+            QCoreApplication::processEvents();
+            QString name = tabs.tabText(i).toLower();
+            name.replace(QRegularExpression("[^a-z]+"), "-");
+            name.remove(QRegularExpression("-+$"));
+            const QString file = QString("%1/%2-%3.png")
+                                     .arg(outDir)
+                                     .arg(i + 1, 2, 10, QChar('0'))
+                                     .arg(name);
+            if (!tabs.grab().save(file))
+                fprintf(stderr, "screenshot failed: %s\n",
+                        file.toUtf8().constData());
+            else
+                printf("wrote %s\n", file.toUtf8().constData());
+        }
+        return 0;
+    }
     return app.exec();
 }
