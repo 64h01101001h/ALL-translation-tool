@@ -1310,9 +1310,12 @@ public:
         ll->addWidget(hint_);
 
         auto* right = new QSplitter(Qt::Vertical);
-        view_ = new QTextEdit;
+        // QPlainTextEdit: LAZY per-block layout — a full volume's
+        // setPlainText was paying whole-document layout in QTextEdit
+        // (~3s on 1.2MB; final hotspot of the Library-open fix)
+        view_ = new QPlainTextEdit;
         view_->setReadOnly(true);
-        view_->setFontPointSize(15);
+        { QFont vf = view_->font(); vf.setPointSize(15); view_->setFont(vf); }
         context_ = new QTextBrowser;
         context_->setOpenLinks(false);
         connect(context_, &QTextBrowser::anchorClicked,
@@ -1360,7 +1363,7 @@ public:
             s.setValue("overlay/scriptMode", m);
             if (!doc_.tokens.empty()) loadDoc();
         });
-        connect(view_, &QTextEdit::cursorPositionChanged, [this] { onClick(); });
+        connect(view_, &QPlainTextEdit::cursorPositionChanged, [this] { onClick(); });
     }
 
 private:
@@ -1419,9 +1422,15 @@ private:
             view_->setFont(f);
         }
         QString text;
+        text.reserve((int)(input_->toPlainText().size() * 2));
+        std::unordered_map<std::string, QString> dispCache;
+        dispCache.reserve(4096);
         for (size_t i = 0; i < doc_.tokens.size(); ++i) {
+            auto cached = dispCache.find(doc_.tokens[i]);
             QString disp;
-            if (mode == 0) {
+            if (cached != dispCache.end()) {
+                disp = cached->second;
+            } else if (mode == 0) {
                 // ACIP → EWTS → unicode through the battery-proven ports;
                 // failures render as ⟨wylie⟩ markers, never guessed
                 auto [u, ok] =
@@ -1435,6 +1444,8 @@ private:
                     docIsWylie_ ? allcore::ewtsToAcip(doc_.tokens[i])
                                 : doc_.tokens[i]);
             }
+            if (cached == dispCache.end())
+                dispCache.emplace(doc_.tokens[i], disp);
             tokBeg_.push_back(text.size());
             text += disp;
             tokEnd_.push_back(text.size());
@@ -1566,6 +1577,8 @@ private:
         const size_t nTok = doc_.tokens.size();
         struct TokFmt { QRgb bg = 0; int ul = 0; QRgb ulc = 0; };
         std::vector<TokFmt> tf(nTok);
+        std::unordered_map<std::string, bool> legalCache;
+        legalCache.reserve(4096);
         for (size_t i = 0; i < nTok; ++i) {
             TokFmt f;
             if (depth[i] > 0) {
@@ -1589,11 +1602,20 @@ private:
                 f.ul = QTextCharFormat::DashDotLine;
                 f.ulc = qRgb(0x5B, 0x7C, 0x99);
             }
-            if (checker_ &&
-                !checker_->legalWylie(tokEwts(doc_.tokens[i]))) {
-                f.ul = QTextCharFormat::WaveUnderline;
-                f.ulc = qRgb(0xE2, 0x4B, 0x4A);
-                ++spellFlags;
+            if (checker_) {
+                auto lc = legalCache.find(doc_.tokens[i]);
+                bool legal;
+                if (lc != legalCache.end()) {
+                    legal = lc->second;
+                } else {
+                    legal = checker_->legalWylie(tokEwts(doc_.tokens[i]));
+                    legalCache.emplace(doc_.tokens[i], legal);
+                }
+                if (!legal) {
+                    f.ul = QTextCharFormat::WaveUnderline;
+                    f.ulc = qRgb(0xE2, 0x4B, 0x4A);
+                    ++spellFlags;
+                }
             }
             tf[i] = f;
         }
@@ -1696,9 +1718,13 @@ private:
     }
 
     int tokenAt(int charPos) const {
-        for (size_t i = 0; i < tokBeg_.size(); ++i)
-            if (charPos >= tokBeg_[i] && charPos <= tokEnd_[i]) return (int)i;
-        return -1;
+        // binary search — this runs on every click/cursor move, and a
+        // linear scan over 300k tokens made interaction sluggish
+        auto it = std::upper_bound(tokBeg_.begin(), tokBeg_.end(),
+                                   charPos);
+        if (it == tokBeg_.begin()) return -1;
+        const size_t i = (it - tokBeg_.begin()) - 1;
+        return (charPos <= tokEnd_[i]) ? (int)i : -1;
     }
 
     void onClick() {
@@ -1941,7 +1967,7 @@ private:
     allcore::OverlayDoc doc_;
     std::vector<int> tokBeg_, tokEnd_;
     QPlainTextEdit* input_ = nullptr;
-    QTextEdit* view_ = nullptr;
+    QPlainTextEdit* view_ = nullptr;
     QTextBrowser* context_ = nullptr;
     // ---- BDRC scan follow-along (APPARATUS_DESIGN §3) ----------------
     void setScanTarget(const allcore::AcipFileInfo& info,
