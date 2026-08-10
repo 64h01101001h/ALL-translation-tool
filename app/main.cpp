@@ -8289,6 +8289,15 @@ public:
             "The read-only record of every decision — who proposed, who "
             "ruled, when, and the comment. Over the years, a record of "
             "the authority's own judgments.");
+        filter_ = new QComboBox;
+        filter_->addItem("All kinds", "");
+        filter_->addItem("Pronunciations", "pronunciation");
+        filter_->addItem("Honorifics", "honorific");
+        filter_->addItem("HIGH honorifics", "high-honorific");
+        filter_->addItem("Humilifics", "humilific");
+        filter_->addItem("Double honorifics", "double-honorific");
+        filter_->addItem("Words / phrases / notes", "export");
+        row->addWidget(filter_);
         row->addWidget(refresh);
         row->addWidget(exportB);
         row->addWidget(archiveB);
@@ -8298,6 +8307,8 @@ public:
         list_->setOpenLinks(false);
         outer->addWidget(list_, 1);
         connect(refresh, &QPushButton::clicked, [this] { rebuild(); });
+        connect(filter_, &QComboBox::currentIndexChanged,
+                [this] { rebuild(); });
         connect(exportB, &QPushButton::clicked, [this] { exportApproved(); });
         connect(archiveB, &QPushButton::clicked, [this] { showArchive(); });
         connect(list_, &QTextBrowser::anchorClicked,
@@ -8320,6 +8331,15 @@ public:
               "seeded prenasal queue lists kamdir");
         check(t.contains("Approve") && t.contains("Decline"),
               "ruling actions offered");
+        check(filter_ && filter_->count() >= 6,
+              "kind filter offers the taxonomy");
+        check(t.contains("pronunciation"),
+              "per-kind counts shown in the session overview");
+        filter_->setCurrentIndex(2);   // Honorifics
+        const QString th = list_->toPlainText();
+        check(!th.contains("kamdir"),
+              "filter hides other kinds (no pronunciations)");
+        filter_->setCurrentIndex(0);
         // export path against a throwaway store with one approved item
         {
             const QString saveDir = g_proposalsDir;
@@ -8357,16 +8377,43 @@ private:
                            "tab first</i>");
             return;
         }
+        // a 200+ item ruling session must not lose its place: keep the
+        // scroll position across the refresh that follows each ruling
+        const int scrollAt =
+            list_->verticalScrollBar() ? list_->verticalScrollBar()->value()
+                                       : 0;
         allcore::ProposalStore store(g_proposalsDir.toStdString());
         store.load();
-        QString h = QString("<div><b>%1 pending</b> · signed in as %2</div>"
-                            "<hr>")
+        // per-kind pending counts for the session overview
+        std::map<std::string, int> byKind;
+        for (const auto& p : store.all())
+            if (p.status == allcore::ProposalStatus::Pending)
+                ++byKind[allcore::Proposal::kindName(p.kind)];
+        QString counts;
+        for (const auto& [k, n] : byKind)
+            counts += QString("%1 %2 · ")
+                          .arg(n)
+                          .arg(QString::fromStdString(k));
+        const QString want =
+            filter_ ? filter_->currentData().toString() : QString();
+        QString h = QString("<div><b>%1 pending</b> · signed in as %2"
+                            "</div><div style='color:#777;font-size:12px'>"
+                            "%3</div><hr>")
                         .arg(store.pendingCount())
                         .arg(g_userName.isEmpty() ? "(unnamed)"
-                                                  : g_userName);
+                                                  : g_userName)
+                        .arg(counts);
         int shown = 0;
         for (const auto& p : store.all()) {
             if (p.status != allcore::ProposalStatus::Pending) continue;
+            const QString kindName = allcore::Proposal::kindName(p.kind);
+            if (!want.isEmpty()) {
+                if (want == "export") {
+                    if (p.isRegister()) continue;
+                } else if (kindName != want) {
+                    continue;
+                }
+            }
             ++shown;
             h += "<div style='margin:8px 0;padding:6px;border:1px solid "
                  "#DDD'>";
@@ -8402,8 +8449,14 @@ private:
                  "'>✗ Decline</a> &nbsp; <a href='defer:" + id +
                  "'>⏸ Defer</a></div>";
         }
-        if (!shown) h += "<i>nothing pending — the queue is clear.</i>";
+        if (!shown)
+            h += want.isEmpty()
+                     ? QString("<i>nothing pending — the queue is "
+                               "clear.</i>")
+                     : QString("<i>nothing pending in this kind.</i>");
         list_->setHtml(h);
+        if (list_->verticalScrollBar())
+            list_->verticalScrollBar()->setValue(scrollAt);
         // keep the tab label's pending count current after each ruling
         if (auto* tw = qobject_cast<QTabWidget*>(
                 parentWidget() ? parentWidget()->parentWidget() : nullptr)) {
@@ -8600,6 +8653,7 @@ private:
 
     QString root_;
     QTextBrowser* list_ = nullptr;
+    QComboBox* filter_ = nullptr;
 };
 
 int main(int argc, char** argv) {
