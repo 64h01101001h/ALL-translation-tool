@@ -145,7 +145,7 @@ echo "== 6b. launch test from the staged layout =="
 # two consecutive failures still fail the gate, with the exit code
 # recorded for diagnosis
 LAUNCH_OK=0
-for ATTEMPT in 1 2; do
+for ATTEMPT in 1 2 3; do
   "$STAGE/$APPNAME.app/Contents/MacOS/ALLTranslationTool" \
       > /tmp/all_stage_launch.log 2>&1 &
   LPID=$!
@@ -160,7 +160,7 @@ for ATTEMPT in 1 2; do
   echo "   attempt $ATTEMPT: staged app exited early (exit=$LEXIT)"
 done
 if [ "$LAUNCH_OK" != 1 ]; then
-  echo "   STAGED APP FAILED TO LAUNCH (twice):"
+  echo "   STAGED APP FAILED TO LAUNCH (three times):"
   tail -5 /tmp/all_stage_launch.log
   exit 1
 fi

@@ -11064,5 +11064,36 @@ int main(int argc, char** argv) {
         }
         return 0;
     }
+    // ---- lifecycle log (2026-08-10): an intermittent clean-exit-0
+    // at startup was observed on staged Release builds — no crash
+    // report, no output, unreproducible under observation. These
+    // three lines make any future silent death explain itself in
+    // ~/Library/Logs/ALLTranslationTool-lifecycle.log.
+    {
+        static const QString lifePath =
+            QDir::home().filePath(
+                "Library/Logs/ALLTranslationTool-lifecycle.log");
+        auto lifeLog = [](const QString& msg) {
+            QFile f(lifePath);
+            if (f.open(QIODevice::Append)) {
+                f.write((QDateTime::currentDateTime()
+                             .toString(Qt::ISODateWithMs) +
+                         "  " + msg + "\n")
+                            .toUtf8());
+            }
+        };
+        lifeLog(QString("startup ok \u2014 entering event loop (pid %1)")
+                    .arg(QCoreApplication::applicationPid()));
+        QObject::connect(&app, &QGuiApplication::lastWindowClosed,
+                         [lifeLog] { lifeLog("lastWindowClosed fired"); });
+        QObject::connect(&app, &QCoreApplication::aboutToQuit,
+                         [lifeLog, &win] {
+                             lifeLog(QString("aboutToQuit \u2014 window "
+                                             "visible=%1 active=%2")
+                                         .arg(win.isVisible())
+                                         .arg(QApplication::activeWindow()
+                                                  != nullptr));
+                         });
+    }
     return app.exec();
 }
