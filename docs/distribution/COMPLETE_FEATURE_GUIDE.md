@@ -39,8 +39,8 @@ inside each, a second row holds its panes — seventeen in all:
 
 Paths in this guide are written as **Workflow → Pane** ("Translate →
 Draft" means: click the Translate tab, then the Draft tab inside it).
-Every pane's functions are *also* in the menu bar — one dropdown per
-pane, reachable no matter which tab is in front — and on a Mac the
+The menu bar mirrors this structure exactly — one menu per workflow,
+one submenu per pane, every function inside — and on a Mac the
 system Help search finds any menu item and points an arrow at it.
 
 ---
@@ -458,8 +458,9 @@ folder (mirrors the Propose pane's setup — change either place); and
 a data-folder override, normally left empty. Data-folder and
 authority-role changes take effect on the next launch.
 
-**Menus.** One dropdown per pane carries every one of its functions
-— the menu bar reaches everything no matter which tab is in front.
+**Menus.** The menu bar mirrors the window: one menu per workflow
+group, one submenu per pane, every function inside — reachable no
+matter which tab is in front.
 
 **Help** (Help menu → "ALL Tool Help & Tutorials…", or ⌘?): a
 searchable window with a tutorial chapter for every pane. Type any

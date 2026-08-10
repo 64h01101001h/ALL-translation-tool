@@ -10731,11 +10731,55 @@ int main(int argc, char** argv) {
         };
     }
 
-    // ---- the menu bar (Adam's request): every pane's functionality
-    // from dropdowns. Built GENERICALLY from the panes themselves —
-    // each button becomes an action (raise the pane, then click it),
-    // each display toggle a checkable item synced both ways — so
-    // future pane features appear here with no menu maintenance.
+    // ---- the menu bar MIRRORS THE GUI (Adam, 2026-08-10): one menu
+    // per workflow group, one submenu per pane — the same structure
+    // as the tabs, so anything found in the window is found in the
+    // same place in the menus. Actions are still derived GENERICALLY
+    // from the panes' own buttons and toggles (raise the pane, then
+    // click), so future features appear with no menu maintenance.
+    for (int gi = 0; gi < tabs.count(); ++gi) {
+        auto* g = qobject_cast<QTabWidget*>(tabs.widget(gi));
+        if (!g) continue;
+        QMenu* gm = win.menuBar()->addMenu(tabs.tabText(gi));
+        for (int pi = 0; pi < g->count(); ++pi) {
+            QWidget* pane = g->widget(pi);
+            QMenu* menu = gm->addMenu(g->tabText(pi));
+            QAction* go = menu->addAction("Show pane");
+            QObject::connect(go, &QAction::triggered, [pane] {
+                if (g_raisePane) g_raisePane(pane);
+            });
+            const auto btns = pane->findChildren<QPushButton*>();
+            bool sep = false;
+            for (QPushButton* b : btns) {
+                const QString label = b->text().trimmed();
+                if (label.isEmpty()) continue;
+                if (!sep) { menu->addSeparator(); sep = true; }
+                QAction* a = menu->addAction(label);
+                if (!b->toolTip().isEmpty())
+                    a->setToolTip(b->toolTip());
+                QObject::connect(a, &QAction::triggered, [pane, b] {
+                    if (g_raisePane) g_raisePane(pane);
+                    b->click();
+                });
+            }
+            const auto checks = pane->findChildren<QCheckBox*>();
+            bool csep = false;
+            for (QCheckBox* c : checks) {
+                if (c->text().trimmed().isEmpty()) continue;
+                if (!csep) { menu->addSeparator(); csep = true; }
+                QAction* a = menu->addAction(c->text());
+                a->setCheckable(true);
+                a->setChecked(c->isChecked());
+                QObject::connect(a, &QAction::toggled, [c](bool on) {
+                    if (c->isChecked() != on) c->setChecked(on);
+                });
+                QObject::connect(c, &QCheckBox::toggled, [a](bool on) {
+                    if (a->isChecked() != on) a->setChecked(on);
+                });
+            }
+        }
+    }
+
     {
         QMenu* view = win.menuBar()->addMenu("View");
         QAction* night = view->addAction("Night mode");
@@ -10754,42 +10798,6 @@ int main(int argc, char** argv) {
             SettingsDialog dlg(applyNight, &win);
             dlg.exec();
         });
-    }
-    for (size_t mi = 0; mi < flatPanes.size(); ++mi) {
-        QWidget* pane = flatPanes[mi].w;
-        QMenu* menu = win.menuBar()->addMenu(flatPanes[mi].title);
-        QAction* go = menu->addAction("Show pane");
-        QObject::connect(go, &QAction::triggered, [pane] {
-            if (g_raisePane) g_raisePane(pane);
-        });
-        const auto btns = pane->findChildren<QPushButton*>();
-        bool sep = false;
-        for (QPushButton* b : btns) {
-            const QString label = b->text().trimmed();
-            if (label.isEmpty()) continue;
-            if (!sep) { menu->addSeparator(); sep = true; }
-            QAction* a = menu->addAction(label);
-            if (!b->toolTip().isEmpty()) a->setToolTip(b->toolTip());
-            QObject::connect(a, &QAction::triggered, [pane, b] {
-                if (g_raisePane) g_raisePane(pane);
-                b->click();
-            });
-        }
-        const auto checks = pane->findChildren<QCheckBox*>();
-        bool csep = false;
-        for (QCheckBox* c : checks) {
-            if (c->text().trimmed().isEmpty()) continue;
-            if (!csep) { menu->addSeparator(); csep = true; }
-            QAction* a = menu->addAction(c->text());
-            a->setCheckable(true);
-            a->setChecked(c->isChecked());
-            QObject::connect(a, &QAction::toggled, [c](bool on) {
-                if (c->isChecked() != on) c->setChecked(on);
-            });
-            QObject::connect(c, &QCheckBox::toggled, [a](bool on) {
-                if (a->isChecked() != on) a->setChecked(on);
-            });
-        }
     }
 
     // Help menu: searchable help + tutorials (and macOS's own
@@ -10905,21 +10913,25 @@ int main(int argc, char** argv) {
                        .arg(found ? "PASS" : "FAIL");
             if (!found) ++fails;
         }
-        // the menu bar mirrors every pane
+        // the menu bar mirrors the GUI: group menus + View + Help
         {
             const auto menus = win.menuBar()->actions();
-            // View + one per pane + Help
-            bool ok = menus.size() == (int)flatPanes.size() + 2;
+            bool ok = menus.size() == tabs.count() + 2;
             int overlayActions = 0;
-            if (menus.size() > 1 && menus.at(1)->menu())
-                overlayActions = menus.at(1)->menu()->actions().size();
-            log << QString("  [%1] MenuBar: one menu per pane (%2)")
+            if (!menus.isEmpty() && menus.first()->menu()) {
+                const auto subs = menus.first()->menu()->actions();
+                if (!subs.isEmpty() && subs.first()->menu())
+                    overlayActions =
+                        subs.first()->menu()->actions().size();
+            }
+            log << QString("  [%1] MenuBar: mirrors the workflow "
+                           "groups (%2 menus)")
                        .arg(ok ? "PASS" : "FAIL")
                        .arg(menus.size());
             if (!ok) ++fails;
             const bool rich = overlayActions > 8;
-            log << QString("  [%1] MenuBar: Overlay menu carries its "
-                           "actions (%2)")
+            log << QString("  [%1] MenuBar: Read > Overlay submenu "
+                           "carries its actions (%2)")
                        .arg(rich ? "PASS" : "FAIL")
                        .arg(overlayActions);
             if (!rich) ++fails;

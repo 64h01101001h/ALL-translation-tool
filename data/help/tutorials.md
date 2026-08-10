@@ -31,9 +31,11 @@ tool never guesses — failures are flagged, provisional material LOOKS
 provisional (amber-tinted shading). (3) Nothing enters the official
 data without approval — proposals wait in the Approval queue.
 
-**Finding anything.** Every pane also has its own dropdown in the
-MENU BAR — the menus reach every function no matter which tab is in
-front. On a Mac, open Help and TYPE INTO THE SEARCH BOX — the system
+**Finding anything.** The MENU BAR mirrors the window exactly: one
+menu per workflow tab (Read, Translate, Research, Learn, Input,
+Community), one submenu per pane, every function inside — so
+anything you can find in the window is in the same place in the
+menus, from anywhere. On a Mac, open Help and TYPE INTO THE SEARCH BOX — the system
 finds any menu item and points an arrow at it. This Help window's own
 search (below) additionally finds every button and toggle with a
 how-to, and tells you which workflow tab it lives under.
@@ -385,6 +387,17 @@ Everything the app remembers, in one dialog:
 ## Suggested Workflows
 
 Recipes for putting the panes together. Each step names its tab path.
+
+**Where do I start?** Pick the line that sounds like you:
+
+- *First time in the app* → "Read a text" below — five minutes, and
+  it shows the heart of the tool.
+- *You translate* → "Translate a text end to end."
+- *You check others' drafts* → "Check someone else's finished
+  draft."
+- *You study* → "Study session (a student's hour)."
+- *You type at an input center* → "Input-center day (ACE reborn)."
+- *You are the authority* → "Team proposal cycle.
 
 **Read a text (the daily bread).** Read → Library → double-click the
 text → it opens shaded in the Overlay → set "text as" to Tibetan
