@@ -2666,6 +2666,334 @@ private:
 };
 
 // ---- Search pane: Gofer grammar over the corpus ----------------------------
+
+// ---- GoferPane: the original Gofer GUI reborn (Adam, 2026-08-10 —
+// GMR's daily tool; fidelity to the original layout and workflow).
+// The ENGINE is the proven allcore port of Ted Lemon's lex/expr/near
+// semantics (gofer_smoke); this pane rebuilds the face: eight
+// "go for" fields, combiner + proximity, fold mode, a checkable
+// list of search targets (the aligned corpus + any folders, added
+// exactly as in the original), Add/Remove/Duplicate/Save/Stop/Find,
+// and the Search Setting / Saved Search / Search Results tabs.
+class GoferPane : public QWidget {
+public:
+    GoferPane(allcore::Spine& spine, const QString& root)
+        : spine_(spine), root_(root) {
+        auto* outer = new QVBoxLayout(this);
+        inner_ = new QTabWidget;
+        outer->addWidget(inner_);
+
+        // ---- Search Setting tab
+        auto* setting = new QWidget;
+        auto* sl = new QVBoxLayout(setting);
+        sl->addWidget(new QLabel("Enter Text to Go For:"));
+        auto* grid1 = new QGridLayout;
+        for (int i = 0; i < 4; ++i) {
+            fields_[i] = new QLineEdit;
+            grid1->addWidget(fields_[i], i / 2, i % 2);
+        }
+        sl->addLayout(grid1);
+        auto* opRow = new QHBoxLayout;
+        combiner_ = new QComboBox;
+        combiner_->addItems({"OR", "AND (same file)", "NEAR"});
+        opRow->addWidget(combiner_);
+        opRow->addWidget(new QLabel("proximity:"));
+        proximity_ = new QLineEdit("0");
+        proximity_->setMaximumWidth(120);
+        opRow->addWidget(proximity_);
+        opRow->addStretch();
+        sl->addLayout(opRow);
+        auto* grid2 = new QGridLayout;
+        for (int i = 4; i < 8; ++i) {
+            fields_[i] = new QLineEdit;
+            grid2->addWidget(fields_[i], (i - 4) / 2, (i - 4) % 2);
+        }
+        sl->addLayout(grid2);
+        fold_ = new QComboBox;
+        fold_->addItems({"Ignore space and capitalization when searching",
+                         "Ignore space when searching",
+                         "Ignore nothing when searching"});
+        sl->addWidget(fold_);
+        dirs_ = new QListWidget;
+        loadDirs();
+        sl->addWidget(dirs_, 1);
+        auto* btnRow = new QHBoxLayout;
+        auto* addB = new QPushButton("Add");
+        auto* remB = new QPushButton("Remove");
+        auto* dupB = new QPushButton("Duplicate");
+        auto* saveB = new QPushButton("Save");
+        stopB_ = new QPushButton("Stop");
+        stopB_->setEnabled(false);
+        findB_ = new QPushButton("Find");
+        for (auto* b : {addB, remB, dupB, saveB}) btnRow->addWidget(b);
+        btnRow->addStretch();
+        btnRow->addWidget(stopB_);
+        btnRow->addWidget(findB_);
+        sl->addLayout(btnRow);
+        inner_->addTab(setting, "Search Setting");
+
+        // ---- Saved Search tab
+        auto* savedPage = new QWidget;
+        auto* vl = new QVBoxLayout(savedPage);
+        saved_ = new QListWidget;
+        vl->addWidget(saved_, 1);
+        auto* svRow = new QHBoxLayout;
+        auto* loadB = new QPushButton("Load");
+        auto* delB = new QPushButton("Delete");
+        svRow->addWidget(loadB);
+        svRow->addWidget(delB);
+        svRow->addStretch();
+        vl->addLayout(svRow);
+        inner_->addTab(savedPage, "Saved Search");
+        refreshSaved();
+
+        // ---- Search Results tab
+        results_ = new QTextBrowser;
+        results_->setOpenLinks(false);
+        inner_->addTab(results_, "Search Results");
+
+        connect(addB, &QPushButton::clicked, [this] {
+            const QString d = QFileDialog::getExistingDirectory(
+                this, "Add a folder to search");
+            if (!d.isEmpty()) { addDirRow(d, true); saveDirs(); }
+        });
+        connect(remB, &QPushButton::clicked, [this] {
+            const int r = dirs_->currentRow();
+            if (r > 0) { delete dirs_->takeItem(r); saveDirs(); }
+        });
+        connect(dupB, &QPushButton::clicked, [this] {
+            auto* it = dirs_->currentItem();
+            if (it && dirs_->currentRow() > 0) {
+                addDirRow(it->text(), it->checkState() == Qt::Checked);
+                saveDirs();
+            }
+        });
+        connect(saveB, &QPushButton::clicked, [this] { saveSearch(); });
+        connect(loadB, &QPushButton::clicked, [this] { loadSearch(); });
+        connect(saved_, &QListWidget::itemDoubleClicked,
+                [this](QListWidgetItem*) { loadSearch(); });
+        connect(delB, &QPushButton::clicked, [this] {
+            auto* it = saved_->currentItem();
+            if (!it) return;
+            QSettings s("ALL", "TranslationTool");
+            s.remove("gofer/saved/" + it->text());
+            refreshSaved();
+        });
+        connect(findB_, &QPushButton::clicked, [this] { find(); });
+    }
+
+    int selfTest(QStringList& log) {
+        int fails = 0;
+        auto check = [&](bool ok, const char* what) {
+            log << QString("  [%1] Gofer: %2")
+                       .arg(ok ? "PASS" : "FAIL").arg(what);
+            if (!ok) ++fails;
+        };
+        int nf = 0;
+        for (auto* f : fields_) nf += f != nullptr;
+        check(nf == 8, "eight go-for fields present");
+        check(dirs_->count() >= 2 &&
+                  dirs_->item(0)->checkState() == Qt::Checked,
+              "corpus row present and checked");
+        for (auto* f : fields_) f->clear();
+        fields_[0]->setText("sems can");
+        combiner_->setCurrentIndex(0);
+        find();
+        check(results_->toPlainText().contains("hit"),
+              "Find reaches the corpus through the Gofer engine");
+        fields_[0]->clear();
+        return fails;
+    }
+
+private:
+    static constexpr const char* kCorpusRow =
+        "HGM aligned corpus (all courses)";
+
+    void addDirRow(const QString& text, bool checked) {
+        auto* it = new QListWidgetItem(text);
+        it->setFlags(it->flags() | Qt::ItemIsUserCheckable);
+        it->setCheckState(checked ? Qt::Checked : Qt::Unchecked);
+        dirs_->addItem(it);
+    }
+    void loadDirs() {
+        QSettings s("ALL", "TranslationTool");
+        addDirRow(kCorpusRow, s.value("gofer/corpusChecked", true).toBool());
+        const auto list = s.value("gofer/dirs").toStringList();
+        const auto checked = s.value("gofer/dirsChecked").toStringList();
+        if (list.isEmpty()) {
+            addDirRow(root_ + "/library", true);
+        } else {
+            for (const auto& d : list) addDirRow(d, checked.contains(d));
+        }
+    }
+    void saveDirs() {
+        QSettings s("ALL", "TranslationTool");
+        QStringList list, checked;
+        s.setValue("gofer/corpusChecked",
+                   dirs_->item(0)->checkState() == Qt::Checked);
+        for (int i = 1; i < dirs_->count(); ++i) {
+            list << dirs_->item(i)->text();
+            if (dirs_->item(i)->checkState() == Qt::Checked)
+                checked << dirs_->item(i)->text();
+        }
+        s.setValue("gofer/dirs", list);
+        s.setValue("gofer/dirsChecked", checked);
+    }
+
+    QString buildQuery() const {
+        QStringList terms;
+        for (auto* f : fields_) {
+            const QString t = f->text().trimmed();
+            if (!t.isEmpty()) terms << "\"" + t + "\"";
+        }
+        if (terms.isEmpty()) return {};
+        const int mode = combiner_->currentIndex();
+        if (mode == 0) return terms.join(" OR ");
+        if (mode == 1) return terms.join(" NEAR/1000000 ");
+        int n = proximity_->text().toInt();
+        if (n <= 0) n = 3;
+        return terms.join(QString(" NEAR/%1 ").arg(n));
+    }
+
+    void find() {
+        const QString q = buildQuery();
+        if (q.isEmpty()) {
+            results_->setHtml("<i>enter at least one term</i>");
+            inner_->setCurrentIndex(2);
+            return;
+        }
+        saveDirs();
+        results_->setHtml("<i>searching\u2026</i>");
+        inner_->setCurrentIndex(2);
+        QCoreApplication::processEvents();
+        QString h = QString("<div style='color:#777'>query: <code>%1"
+                            "</code></div><hr>")
+                        .arg(q.toHtmlEscaped());
+        int total = 0;
+        if (dirs_->item(0)->checkState() == Qt::Checked) {
+            try {
+                auto hits = allcore::goferSearch(spine_, q.toStdString(),
+                                                 "", 60);
+                h += QString("<div><b>%1</b> \u2014 %2 hit(s)</div>")
+                         .arg(kCorpusRow)
+                         .arg(hits.size());
+                total += (int)hits.size();
+                int shown = 0;
+                for (const auto& g : hits) {
+                    if (++shown > 20) break;
+                    h += "<div style='margin:4px 0'><small>[" +
+                         QString::fromStdString(g.course) + ":" +
+                         QString::number(g.seq_lo) + "]</small> ";
+                    for (const auto& seg : g.window)
+                        h += QString::fromStdString(seg.wylie)
+                                 .left(120)
+                                 .toHtmlEscaped() +
+                             " <i>" +
+                             QString::fromStdString(seg.english)
+                                 .left(120)
+                                 .toHtmlEscaped() +
+                             "</i> ";
+                    h += "</div>";
+                }
+                h += "<hr>";
+            } catch (const std::exception& e) {
+                h += QString("<div style='color:#8C2F2B'>corpus: %1"
+                             "</div><hr>")
+                         .arg(QString::fromUtf8(e.what()).toHtmlEscaped());
+            }
+        }
+        for (int i = 1; i < dirs_->count(); ++i) {
+            if (dirs_->item(i)->checkState() != Qt::Checked) continue;
+            const QString dir = dirs_->item(i)->text();
+            try {
+                std::vector<allcore::FileGoferHit> hits;
+                const QString ix = dir + "/.index.db";
+                if (QFileInfo::exists(ix)) {
+                    allcore::LibraryIndex li(ix.toStdString());
+                    hits = li.search(q.toStdString(), 60);
+                } else {
+                    hits = allcore::goferSearchFiles(dir.toStdString(),
+                                                     q.toStdString(), 60);
+                }
+                h += QString("<div><b>%1</b> \u2014 %2 hit(s)</div>")
+                         .arg(dir.toHtmlEscaped())
+                         .arg(hits.size());
+                total += (int)hits.size();
+                int shown = 0;
+                for (const auto& f : hits) {
+                    if (++shown > 20) break;
+                    h += "<div style='margin:4px 0'><small>" +
+                         QString::fromStdString(f.file).toHtmlEscaped() +
+                         ":" + QString::number(f.line_lo) + "</small> ";
+                    for (const auto& ln : f.lines)
+                        h += QString::fromStdString(ln)
+                                 .left(140)
+                                 .toHtmlEscaped() +
+                             " ";
+                    h += "</div>";
+                }
+                h += "<hr>";
+            } catch (const std::exception& e) {
+                h += QString("<div style='color:#8C2F2B'>%1: %2</div><hr>")
+                         .arg(dir.toHtmlEscaped())
+                         .arg(QString::fromUtf8(e.what()).toHtmlEscaped());
+            }
+        }
+        h += QString("<div><b>%1 total hit(s)</b></div>").arg(total);
+        results_->setHtml(h);
+    }
+
+    void saveSearch() {
+        bool ok = false;
+        const QString name = QInputDialog::getText(
+            this, "Save search", "Name:", QLineEdit::Normal, "", &ok);
+        if (!ok || name.trimmed().isEmpty()) return;
+        QSettings s("ALL", "TranslationTool");
+        s.beginGroup("gofer/saved/" + name.trimmed());
+        for (int i = 0; i < 8; ++i)
+            s.setValue(QString("f%1").arg(i), fields_[i]->text());
+        s.setValue("combiner", combiner_->currentIndex());
+        s.setValue("proximity", proximity_->text());
+        s.setValue("fold", fold_->currentIndex());
+        s.endGroup();
+        refreshSaved();
+    }
+    void loadSearch() {
+        auto* it = saved_->currentItem();
+        if (!it) return;
+        QSettings s("ALL", "TranslationTool");
+        s.beginGroup("gofer/saved/" + it->text());
+        for (int i = 0; i < 8; ++i)
+            fields_[i]->setText(
+                s.value(QString("f%1").arg(i)).toString());
+        combiner_->setCurrentIndex(s.value("combiner", 0).toInt());
+        proximity_->setText(s.value("proximity", "0").toString());
+        fold_->setCurrentIndex(s.value("fold", 0).toInt());
+        s.endGroup();
+        inner_->setCurrentIndex(0);
+    }
+    void refreshSaved() {
+        saved_->clear();
+        QSettings s("ALL", "TranslationTool");
+        s.beginGroup("gofer/saved");
+        for (const auto& g : s.childGroups()) saved_->addItem(g);
+        s.endGroup();
+    }
+
+    allcore::Spine& spine_;
+    QString root_;
+    QTabWidget* inner_ = nullptr;
+    QLineEdit* fields_[8] = {};
+    QComboBox* combiner_ = nullptr;
+    QLineEdit* proximity_ = nullptr;
+    QComboBox* fold_ = nullptr;
+    QListWidget* dirs_ = nullptr;
+    QListWidget* saved_ = nullptr;
+    QTextBrowser* results_ = nullptr;
+    QPushButton* stopB_ = nullptr;
+    QPushButton* findB_ = nullptr;
+};
+
 static QWidget* makeSearchPane(allcore::Spine& spine,
                                const QString& libraryRoot = QString()) {
     auto* pane = new QWidget;
@@ -8873,7 +9201,8 @@ int main(int argc, char** argv) {
                                     tabs.setCurrentIndex(0);
                                 });
     tabs.addTab(libraryPane, "Library");
-    tabs.addTab(makeSearchPane(spine, root + "/library"), "Search");
+    auto* goferPane = new GoferPane(spine, root);
+    tabs.addTab(goferPane, "Search");
     tabs.addTab(makeConvertPane(mvp, whitney), "Convert");
     static const HonorificMap honorifics = loadHonorifics(
         root + "/data/honorifics/honorific_register.tsv");
@@ -8970,6 +9299,7 @@ int main(int argc, char** argv) {
         fails += alignPane->selfTest(log);
         fails += libraryPane->selfTest(log);
         fails += inputPane->selfTest(log);
+        fails += goferPane->selfTest(log);
         fails += proposePane->selfTest(log);
         // Lookup: the extracted stacked search, driver-level
         {
