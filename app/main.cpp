@@ -1676,6 +1676,13 @@ private:
             showAttest_->isChecked()
                 ? QString(" · %1 unattested-word hint(s)").arg(attestFlags)
                 : QString();
+        if (!doc_.tokens.empty() && doc_.spans.empty())
+            hint_->setText(QString("%1 tokens, but NO dictionary "
+                                   "matches — is this Tibetan "
+                                   "transliteration? (English or "
+                                   "unknown text shows no shading)")
+                               .arg(doc_.tokens.size()));
+        else
         hint_->setText(QString("%1 tokens · %2 spans · %3 entries · %4 spelling "
                                "flag(s) · %5 particle-agreement flag(s)%6 — click "
                                "any shaded word.")
@@ -9858,6 +9865,24 @@ int main(int argc, char** argv) {
     win.setMinimumSize(640, 480);
     win.resize(1180, 760);
     win.show();
+    const int pasteIx = cliArgs.indexOf("--pasteprobe");
+    if (pasteIx >= 0 && pasteIx + 1 < cliArgs.size()) {
+        for (auto* b : overlay->findChildren<QPushButton*>())
+            if (b->text() == "Load into overlay") {
+                for (auto* e : overlay->findChildren<QPlainTextEdit*>()) {
+                    e->setPlainText(cliArgs.at(pasteIx + 1));
+                    break;
+                }
+                QElapsedTimer t;
+                t.start();
+                b->click();
+                printf("[paste] loaded in %lld ms\n", t.elapsed());
+                fflush(stdout);
+                return 0;
+            }
+        printf("[paste] BUTTON NOT FOUND\n");
+        return 1;
+    }
     const int probeIx = cliArgs.indexOf("--openprobe");
     if (probeIx >= 0 && probeIx + 1 < cliArgs.size()) {
         QElapsedTimer t;
