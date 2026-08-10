@@ -139,15 +139,29 @@ echo "== 6b. launch test from the staged layout =="
 # the app must come up from the distribution layout itself (data found
 # beside the .app), on the real cocoa platform — the bundle ships no
 # offscreen plugin, exactly like a user's machine
-"$STAGE/$APPNAME.app/Contents/MacOS/ALLTranslationTool" \
-    > /tmp/all_stage_launch.log 2>&1 &
-LPID=$!
-sleep 8
-if kill -0 $LPID 2>/dev/null; then
-  kill $LPID
-  echo "   staged app launches and finds its data"
-else
-  echo "   STAGED APP FAILED TO LAUNCH:"; tail -5 /tmp/all_stage_launch.log
+# two attempts: a clean-exit flake was observed once under packaging
+# load (2026-08-10, exit 0, no output, no crash report, unreproducible
+# 5/5 afterward) — one retry absorbs a transient environment hiccup;
+# two consecutive failures still fail the gate, with the exit code
+# recorded for diagnosis
+LAUNCH_OK=0
+for ATTEMPT in 1 2; do
+  "$STAGE/$APPNAME.app/Contents/MacOS/ALLTranslationTool" \
+      > /tmp/all_stage_launch.log 2>&1 &
+  LPID=$!
+  sleep 8
+  if kill -0 $LPID 2>/dev/null; then
+    kill $LPID
+    echo "   staged app launches and finds its data (attempt $ATTEMPT)"
+    LAUNCH_OK=1
+    break
+  fi
+  wait $LPID; LEXIT=$?
+  echo "   attempt $ATTEMPT: staged app exited early (exit=$LEXIT)"
+done
+if [ "$LAUNCH_OK" != 1 ]; then
+  echo "   STAGED APP FAILED TO LAUNCH (twice):"
+  tail -5 /tmp/all_stage_launch.log
   exit 1
 fi
 
