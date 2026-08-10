@@ -9172,6 +9172,50 @@ int main(int argc, char** argv) {
         progress = &pr;
     } catch (const std::exception&) {}
 
+    // Night mode (default on; View menu toggles, remembered):
+    // dark chrome via Fusion + palette, while the READING surfaces
+    // (text views and cards) stay manuscript-cream so the phrase
+    // shading and every card color read exactly as designed —
+    // night chrome, paper page.
+    QSettings nightSettings("ALL", "TranslationTool");
+    const bool nightOn =
+        nightSettings.value("app/nightMode", true).toBool();
+    auto applyNight = [&app](bool on) {
+        if (on) {
+            QApplication::setStyle("Fusion");
+            QPalette p;
+            const QColor bg(0x2A, 0x28, 0x25), base(0x33, 0x30, 0x2C),
+                text(0xE8, 0xE2, 0xD5), hi(0x8C, 0x5A, 0x52);
+            p.setColor(QPalette::Window, bg);
+            p.setColor(QPalette::WindowText, text);
+            p.setColor(QPalette::Base, base);
+            p.setColor(QPalette::AlternateBase, bg);
+            p.setColor(QPalette::Text, text);
+            p.setColor(QPalette::Button, bg);
+            p.setColor(QPalette::ButtonText, text);
+            p.setColor(QPalette::ToolTipBase, base);
+            p.setColor(QPalette::ToolTipText, text);
+            p.setColor(QPalette::Highlight, hi);
+            p.setColor(QPalette::HighlightedText, Qt::white);
+            p.setColor(QPalette::PlaceholderText,
+                       QColor(0x8F, 0x89, 0x7C));
+            p.setColor(QPalette::Disabled, QPalette::Text,
+                       QColor(0x77, 0x72, 0x68));
+            p.setColor(QPalette::Disabled, QPalette::ButtonText,
+                       QColor(0x77, 0x72, 0x68));
+            app.setPalette(p);
+            app.setStyleSheet(
+                "QTextBrowser, QPlainTextEdit { background: #FAF6EE; "
+                "color: #2B2118; }"
+                "QLineEdit { background: #3A3733; color: #E8E2D5; }");
+        } else {
+            QApplication::setStyle(QString());
+            app.setPalette(QPalette());
+            app.setStyleSheet("");
+        }
+    };
+    if (nightOn) applyNight(true);
+
     QMainWindow win;
     auto* tabsPtr = new QTabWidget;   // owned by the main window
     QTabWidget& tabs = *tabsPtr;
@@ -9249,6 +9293,17 @@ int main(int argc, char** argv) {
     // each button becomes an action (raise the pane, then click it),
     // each display toggle a checkable item synced both ways — so
     // future pane features appear here with no menu maintenance.
+    {
+        QMenu* view = win.menuBar()->addMenu("View");
+        QAction* night = view->addAction("Night mode");
+        night->setCheckable(true);
+        night->setChecked(nightOn);
+        QObject::connect(night, &QAction::toggled, [&, applyNight](bool on) {
+            applyNight(on);
+            QSettings s("ALL", "TranslationTool");
+            s.setValue("app/nightMode", on);
+        });
+    }
     for (int mi = 0; mi < tabs.count(); ++mi) {
         QWidget* pane = tabs.widget(mi);
         QMenu* menu = win.menuBar()->addMenu(tabs.tabText(mi));
@@ -9350,10 +9405,11 @@ int main(int argc, char** argv) {
         // the menu bar mirrors every pane
         {
             const auto menus = win.menuBar()->actions();
-            bool ok = menus.size() == tabs.count();
+            // View + one per pane
+            bool ok = menus.size() == tabs.count() + 1;
             int overlayActions = 0;
-            if (!menus.isEmpty() && menus.first()->menu())
-                overlayActions = menus.first()->menu()->actions().size();
+            if (menus.size() > 1 && menus.at(1)->menu())
+                overlayActions = menus.at(1)->menu()->actions().size();
             log << QString("  [%1] MenuBar: one menu per pane (%2)")
                        .arg(ok ? "PASS" : "FAIL")
                        .arg(menus.size());
