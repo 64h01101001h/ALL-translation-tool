@@ -1133,13 +1133,20 @@ public:
     }
 
 private:
-    static QColor washColor(int depth) {
-        switch (depth) {
-            case 0: return QColor(0, 0, 0, 0);
-            case 1: return QColor(0xEE, 0xED, 0xFE);
-            case 2: return QColor(0xCE, 0xCB, 0xF6);
-            default: return QColor(0xAF, 0xA9, 0xEC);
-        }
+    // Phrase shading: adjacent top-level phrases cycle through soft
+    // hues (so boundaries read by color, not by gaps), and nesting
+    // darkens within the phrase's own hue. Index 0..4 = mint, powder
+    // blue, lavender, peach, rose.
+    static QColor washColor(int hue, int depth) {
+        if (depth <= 0) return QColor(0, 0, 0, 0);
+        static const QColor base[5] = {
+            QColor(0xD9, 0xEF, 0xDA), QColor(0xD8, 0xE9, 0xF7),
+            QColor(0xF1, 0xF0, 0xFB),   // the singles' whisper-neutral
+            QColor(0xFA, 0xE8, 0xD8), QColor(0xF7, 0xE3, 0xEA)};
+        QColor c = base[((hue % 5) + 5) % 5];
+        if (depth == 2) return c.darker(108);
+        if (depth >= 3) return c.darker(118);
+        return c;
     }
 
     // token -> EWTS: ACIP documents convert; wylie documents are
@@ -1203,6 +1210,35 @@ private:
         loading_ = true;
         view_->setPlainText(text);
         auto depth = doc_.coverDepth(3);
+        // assign each token its OUTERMOST covering span (longest), then
+        // cycle the wash hue whenever that phrase changes — adjacent
+        // phrases get different colors and read without gaps
+        std::vector<int> outerSpan(doc_.tokens.size(), -1);
+        std::vector<int> outerLen(doc_.tokens.size(), 0);
+        for (int si = 0; si < (int)doc_.spans.size(); ++si) {
+            const auto& sp = doc_.spans[si];
+            const int len = sp.end - sp.beg;
+            for (int t = sp.beg; t < sp.end && t < (int)outerSpan.size();
+                 ++t)
+                if (len > outerLen[t]) { outerLen[t] = len; outerSpan[t] = si; }
+        }
+        // single-word matches keep one quiet neutral (lavender); the
+        // cycling hues are reserved for MULTI-syllable phrases, so long
+        // dictionary phrases pop as solid color runs against a calm
+        // page instead of every word advancing the palette
+        std::vector<int> tokHue(doc_.tokens.size(), 2);
+        {
+            static const int cycle[4] = {0, 1, 3, 4};
+            int hue = -1, last = -2;
+            for (size_t t = 0; t < outerSpan.size(); ++t) {
+                if (outerLen[t] <= 1) continue;   // stays lavender
+                if (outerSpan[t] != last) {
+                    last = outerSpan[t];
+                    ++hue;
+                }
+                tokHue[t] = cycle[hue % 4];
+            }
+        }
         int spellFlags = 0, agreeFlags = 0, attestFlags = 0;
         // word-level attestation pass (toggle): maximal runs of tokens the
         // dictionary lattice does NOT cover (and that are not grammatical
@@ -1272,7 +1308,7 @@ private:
             QTextCharFormat fmt;
             bool touched = false;
             if (depth[i] > 0) {
-                fmt.setBackground(washColor(depth[i]));
+                fmt.setBackground(washColor(tokHue[i], depth[i]));
                 touched = true;
                 // provisional innermost gloss → dashed amber underline
                 auto at = doc_.spansAt((int)i);
@@ -1317,10 +1353,23 @@ private:
                 touched = true;
                 ++spellFlags;
             }
-            if (!touched) continue;
-            cur.setPosition(tokBeg_[i]);
-            cur.setPosition(tokEnd_[i], QTextCursor::KeepAnchor);
-            cur.setCharFormat(fmt);
+            if (touched) {
+                cur.setPosition(tokBeg_[i]);
+                cur.setPosition(tokEnd_[i], QTextCursor::KeepAnchor);
+                cur.setCharFormat(fmt);
+            }
+            // continuous runs: the trailing tsheg/space inherits this
+            // token's wash when the next token is shaded too (never
+            // across a clause barrier) — no white gaps inside phrases
+            if (depth[i] > 0 && i + 1 < doc_.tokens.size() &&
+                depth[i + 1] > 0 && !doc_.barrier_after[i] &&
+                tokEnd_[i] < tokBeg_[i + 1]) {
+                QTextCharFormat sep;
+                sep.setBackground(washColor(tokHue[i], depth[i]));
+                cur.setPosition(tokEnd_[i]);
+                cur.setPosition(tokBeg_[i + 1], QTextCursor::KeepAnchor);
+                cur.setCharFormat(sep);
+            }
         }
         loading_ = false;
         lastTok_ = -1;
