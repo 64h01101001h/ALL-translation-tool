@@ -108,6 +108,12 @@ DATA="$STAGE/ALL Tool Data"
 mkdir -p "$DATA/build" "$DATA/docs/analysis" "$DATA/library"
 cp "$ROOT/build/hgm_spine_v27_2.db" "$DATA/build/"
 cp "$ROOT/build/reference.db" "$DATA/build/" 2>/dev/null || true
+# OCR models ship in the team DMG (BDRC, CC BY-NC 4.0, used with
+# BDRC's permission — credited in the Scan pane wherever output
+# appears). Omitting them left packaged apps showing the
+# download-it-yourself fallback (found by Adam, 2026-08-10).
+[[ -d "$ROOT/library/ocr_models" ]] && \
+  cp -R "$ROOT/library/ocr_models" "$DATA/library/ocr_models"
 # runtime data folders the panes read (enumerated from the code)
 for d in fonts honorifics pron_colloquial abbreviations extracted \
          botok spellcheck soas_pos whitney candidate_alignments; do
