@@ -9521,6 +9521,119 @@ private:
 // like the menu bar, so new features are searchable with zero help
 // maintenance. Every hit says where the feature lives and can raise
 // the pane.
+
+// ---- SettingsDialog (Adam, 2026-08-10): one place for everything the
+// app remembers, grouped and explained. Values live in QSettings —
+// this dialog only reads/writes the same keys the panes use.
+class SettingsDialog : public QDialog {
+public:
+    SettingsDialog(std::function<void(bool)> applyNight, QWidget* parent)
+        : QDialog(parent), applyNight_(applyNight) {
+        setWindowTitle("Settings");
+        resize(560, 520);
+        setStyleSheet(
+            "QDialog { background: #F1EBDD; }"
+            "QGroupBox { font-weight: 600; color: #8C2F2B;"
+            "  border: 1px solid #C9B992; border-radius: 8px;"
+            "  margin-top: 12px; padding-top: 8px;"
+            "  background: #FAF6EE; }"
+            "QGroupBox::title { subcontrol-origin: margin;"
+            "  left: 10px; padding: 0 4px; }"
+            "QLabel, QCheckBox { color: #2B2118; }"
+            "QLineEdit { background: #FFFFFF; color: #2B2118;"
+            "  border: 1px solid #C9B992; border-radius: 6px;"
+            "  padding: 5px 8px; }");
+        QSettings st("ALL", "TranslationTool");
+        auto* outer = new QVBoxLayout(this);
+
+        auto* appearance = new QGroupBox("Appearance");
+        auto* al = new QFormLayout(appearance);
+        night_ = new QCheckBox("Night mode (dark chrome, cream pages)");
+        night_->setChecked(st.value("app/nightMode", true).toBool());
+        al->addRow(night_);
+        outer->addWidget(appearance);
+
+        auto* reading = new QGroupBox("Reading");
+        auto* rl = new QFormLayout(reading);
+        script_ = new QComboBox;
+        script_->addItems({"Tibetan script", "ACIP", "Wylie"});
+        script_->setCurrentIndex(
+            st.value("overlay/scriptMode", 1).toInt());
+        rl->addRow("Overlay displays text as", script_);
+        outer->addWidget(reading);
+
+        auto* team = new QGroupBox("Team & proposals");
+        auto* tl = new QFormLayout(team);
+        name_ = new QLineEdit(st.value("team/name").toString());
+        tl->addRow("Your name (provenance)", name_);
+        admin_ = new QCheckBox(
+            "Authority role (Geshe Michael / Adam) \u2014 shows the "
+            "Approval pane");
+        admin_->setChecked(st.value("team/admin", false).toBool());
+        tl->addRow(admin_);
+        dir_ = new QLineEdit(st.value("team/proposalsDir").toString());
+        auto* pick = new QPushButton("Choose\u2026");
+        auto* dr = new QHBoxLayout;
+        dr->addWidget(dir_, 1);
+        dr->addWidget(pick);
+        auto* dw = new QWidget;
+        dw->setLayout(dr);
+        tl->addRow("Shared proposals folder", dw);
+        connect(pick, &QPushButton::clicked, [this] {
+            const QString d = QFileDialog::getExistingDirectory(
+                this, "Shared proposals folder (the team Dropbox)");
+            if (!d.isEmpty()) dir_->setText(d);
+        });
+        outer->addWidget(team);
+
+        auto* data = new QGroupBox("Data");
+        auto* dl = new QFormLayout(data);
+        dataRoot_ = new QLineEdit(st.value("app/dataRoot").toString());
+        dataRoot_->setPlaceholderText(
+            "auto-detected \u2014 set only to override");
+        dl->addRow("Data folder override", dataRoot_);
+        dl->addRow(new QLabel(
+            "<small style='color:#5C4F40'>Changes to the data folder "
+            "or the authority role take effect on the next "
+            "launch.</small>"));
+        outer->addWidget(data);
+        outer->addStretch();
+
+        auto* row = new QHBoxLayout;
+        row->addStretch();
+        auto* cancel = new QPushButton("Cancel");
+        auto* save = new QPushButton("Save");
+        save->setDefault(true);
+        row->addWidget(cancel);
+        row->addWidget(save);
+        outer->addLayout(row);
+        connect(cancel, &QPushButton::clicked, this, &QDialog::reject);
+        connect(save, &QPushButton::clicked, [this] {
+            QSettings s2("ALL", "TranslationTool");
+            s2.setValue("app/nightMode", night_->isChecked());
+            s2.setValue("overlay/scriptMode", script_->currentIndex());
+            s2.setValue("team/name", name_->text().trimmed());
+            s2.setValue("team/admin", admin_->isChecked());
+            s2.setValue("team/proposalsDir", dir_->text().trimmed());
+            if (dataRoot_->text().trimmed().isEmpty())
+                s2.remove("app/dataRoot");
+            else
+                s2.setValue("app/dataRoot", dataRoot_->text().trimmed());
+            if (applyNight_) applyNight_(night_->isChecked());
+            accept();
+        });
+    }
+
+private:
+    std::function<void(bool)> applyNight_;
+    QCheckBox* night_ = nullptr;
+    QComboBox* script_ = nullptr;
+    QLineEdit* name_ = nullptr;
+    QCheckBox* admin_ = nullptr;
+    QLineEdit* dir_ = nullptr;
+    QLineEdit* dataRoot_ = nullptr;
+};
+
 class HelpWindow : public QDialog {
 public:
     HelpWindow(QTabWidget* tabs, const QString& root, QWidget* parent)
@@ -9658,6 +9771,7 @@ public:
         return results_->count();
     }
     int chapterCount() const { return chapters_.size(); }
+    void openChapter(const QString& title) { showChapter(title); }
 
 private:
     struct Ctl { QString label, pane, tip; int tab; };
@@ -10053,6 +10167,14 @@ int main(int argc, char** argv) {
             QSettings s("ALL", "TranslationTool");
             s.setValue("app/nightMode", on);
         });
+        view->addSeparator();
+        QAction* prefs = view->addAction("Settings\u2026");
+        prefs->setMenuRole(QAction::PreferencesRole);   // macOS: app menu
+        prefs->setShortcut(QKeySequence::Preferences);
+        QObject::connect(prefs, &QAction::triggered, [&, applyNight] {
+            SettingsDialog dlg(applyNight, &win);
+            dlg.exec();
+        });
     }
     for (size_t mi = 0; mi < flatPanes.size(); ++mi) {
         QWidget* pane = flatPanes[mi].w;
@@ -10103,6 +10225,14 @@ int main(int argc, char** argv) {
             helpWin->show();
             helpWin->raise();
             helpWin->activateWindow();
+        });
+        QAction* wf = helpMenu->addAction("Suggested Workflows…");
+        QObject::connect(wf, &QAction::triggered, [&] {
+            if (!helpWin) helpWin = new HelpWindow(&tabs, root, &win);
+            helpWin->show();
+            helpWin->raise();
+            helpWin->activateWindow();
+            helpWin->openChapter("Suggested Workflows");
         });
     }
 
@@ -10172,6 +10302,12 @@ int main(int argc, char** argv) {
         {
             HelpWindow hw(&tabs, root, nullptr);
             const bool chapters = hw.chapterCount() >= 16;
+            {
+                const bool wfHit = hw.hitCount("Suggested Workflows") >= 1;
+                log << QString("  [%1] Help: Suggested Workflows chapter "
+                               "present").arg(wfHit ? "PASS" : "FAIL");
+                if (!wfHit) fails++;
+            }
             log << QString("  [%1] Help: tutorial chapters for every "
                            "pane (%2)")
                        .arg(chapters ? "PASS" : "FAIL")

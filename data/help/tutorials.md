@@ -2,11 +2,27 @@
 
 ## Getting Started
 
-**What this app is.** One window, sixteen working areas ("panes"), one
-shared dictionary: 105,634 entries anchored to Geshe Michael Roach's
-English, plus his aligned corpus of 42,000+ passages. Everything runs
-offline except two clearly-marked features (the Analysis pane's AI
-report, and the woodblock images from BDRC).
+**What this app is.** One window, six workflow tabs, sixteen working
+areas ("panes"), one shared dictionary: 105,634 entries anchored to
+Geshe Michael Roach's English, plus his aligned corpus of tens of
+thousands of passages. Everything runs offline except two
+clearly-marked features (the Analysis pane's AI report, and the
+woodblock images from BDRC).
+
+**How the window is organized.** The top row of tabs are the six
+WORKFLOWS; inside each, a second row holds its panes:
+
+- **Read** — Overlay (the flagship reader) and Library (the canon).
+- **Translate** — Draft (the bench), Review (checking a draft),
+  Align (building tomorrow's dictionary).
+- **Research** — Search (Gofer), Lookup, Sanskrit, Convert, Analysis.
+- **Learn** — Trainer (progressive reading) and Drills (exercises).
+- **Input** — Input (ACE reborn) and Scan (text recognition).
+- **Community** — Propose (the team's channel) and Approval (the
+  authority's queue).
+
+So "Read → Library" means: click the Read tab, then the Library tab
+inside it.
 
 **The three rules the app lives by.** (1) Geshe Michael's English is
 the binding layer — everything else is labeled reference. (2) The
@@ -14,23 +30,27 @@ tool never guesses — failures are flagged, provisional material LOOKS
 provisional (amber-tinted shading). (3) Nothing enters the official
 data without approval — proposals wait in the Approval queue.
 
-**Finding anything.** Every pane's functions are also in the MENU BAR
-(one dropdown per pane). On a Mac, open Help and TYPE INTO THE SEARCH
-BOX — the system finds any menu item and points an arrow at it. This
-Help window's own search (below) additionally finds every button and
-toggle with a how-to.
+**Finding anything.** Every pane also has its own dropdown in the
+MENU BAR — the menus reach every function no matter which tab is in
+front. On a Mac, open Help and TYPE INTO THE SEARCH BOX — the system
+finds any menu item and points an arrow at it. This Help window's own
+search (below) additionally finds every button and toggle with a
+how-to, and tells you which workflow tab it lives under.
 
-**The typical first session.** Library tab → double-click a text →
+**The typical first session.** Read → Library → double-click a text →
 it opens in the Overlay, shaded → click any colored word → read its
 card → switch "text as" to Tibetan script to see it in native script.
 
 ## Overlay
 
+*Where: Read → Overlay.*
+
 **What it's for.** Reading a Tibetan text with the dictionary
 underneath — the flagship pane.
 
 **Loading text — two ways.**
-1. *From the Library* (easiest): Library tab → double-click any text.
+1. *From the Library* (easiest): Read → Library → double-click any
+   text — the app switches to the Overlay for you.
 2. *Paste*: click the SMALL editable box at top-left (under
    "Document (ACIP)"), paste ACIP or wylie — the app auto-detects
    which — then press "Load into overlay". The BIG right-hand area is
@@ -43,7 +63,7 @@ are a faint lavender; provisional (machine-aligned) glosses show an
 amber-leaning tint — that tint is a warning, not a decoration. Red
 wavy underline = spelling fails the classical syllable rules. Dotted
 amber = a particle disagreeing with the preceding suffix (a review
-hint, never auto-corrected). A full volume opens in about two
+hint, never auto-corrected). A full volume opens in a couple of
 seconds; shading finishes silently if the text is huge.
 
 **The card.** Click any shaded word: the panel below the display
@@ -61,27 +81,33 @@ passage auto-attached as evidence.
 same shading, three scripts. Typeface picker for script mode. Each
 reference layer toggles on/off; your choices are remembered.
 
-**Scans.** "Find scans on BDRC…" opens the original woodblock images
-under the text; the pages turn following your cursor. "locate word
-(OCR)" draws a box around the very word under your cursor on the
-woodblock (recognition is used only to locate, never as text).
+**SCANS (left column, under its gold heading).** "Find scans on
+BDRC…" opens the original woodblock images under the text; the pages
+turn following your cursor. "locate word (OCR)" draws a box around
+the very word under your cursor on the woodblock (recognition is used
+only to locate, never as text).
 
-**Publishing utilities.** "Export print Tibetan (Unicode)…" produces
-print-ready script. "Prepare for translation (Mixed Nuts)…" runs the
-demonstrated translation-preparation format.
+**FORMAT & EXPORT (left column, under its gold heading).** "Export
+print Tibetan (Unicode)…" produces print-ready script. "Prepare for
+translation (Mixed Nuts)…" runs the demonstrated
+translation-preparation format.
 
 ## Library
+
+*Where: Read → Library.*
 
 **What it's for.** The preserved canon on your disk — 2,700+ texts of
 ACIP Release 6 plus your own folders.
 
 **Use.** Browse the tree or the table (catalog identities decoded
 from the filenames: collection, number, verification level).
-Double-click a text → it opens in the Overlay. The tree remembers
-which folders you had open, across restarts. The table sorts by any
-column.
+Double-click a text → it opens in the Overlay (the app switches tabs
+for you). The tree remembers which folders you had open, across
+restarts. The table sorts by any column.
 
 ## Analysis
+
+*Where: Research → Analysis.*
 
 **What it's for.** The full eighteen-section grammatical analysis of
 a passage. The deterministic engine extracts everything verifiable
@@ -93,6 +119,8 @@ banner-labeled AI, always.
 analyses folder.
 
 ## Trainer
+
+*Where: Learn → Trainer.*
 
 **What it's for.** Learning to read, layer by layer — the pedagogy
 pane.
@@ -110,6 +138,8 @@ every syllable dot named per the Science of the Dots.
 
 ## Drills
 
+*Where: Learn → Drills.*
+
 **What it's for.** Exercises that write themselves from the corpus —
 every answer is Geshe Michael's own text.
 
@@ -121,6 +151,8 @@ the next one. Progress is tracked per word and adapts.
 
 ## Draft
 
+*Where: Translate → Draft.*
+
 **What it's for.** The working translator's bench.
 
 **Use.** Paste the source → "Load source". Click any clause in the
@@ -130,13 +162,21 @@ term's entry chipped in the SAME color — which English goes with
 which Tibetan reads by color. Click a term for its corpus
 concordance. Select Tibetan and press "Phrase memory" to see every
 prior rendering (his corpus, binding; plus Align-pane harvests,
-labeled PENDING). Other tools: outline (sa bcad), structural units
-(bam po), verse meter, VERSE READING ORDER (stanza-by-stanza with the
-verb named), quotation detection (exact corpus matches), "Check
-terminology" against your English draft, footnote proposals (pending
-GMR), bibliography composer, RTF export.
+labeled PENDING).
+
+**STRUCTURE tools (under the gold heading).** Outline (sa bcad),
+structural units (bam po), verse meter, VERSE READING ORDER
+(stanza-by-stanza with the verb named).
+
+**EVIDENCE tools.** Quotation detection (exact corpus matches),
+"Check terminology" against your English draft.
+
+**PUBLISH tools.** Footnote proposals (pending GMR), bibliography
+composer, RTF export.
 
 ## Review
+
+*Where: Translate → Review.*
 
 **What it's for.** A senior translator checking someone else's draft.
 
@@ -151,6 +191,8 @@ and published footnotes that apply — reuse, don't rewrite.
 
 ## Align
 
+*Where: Translate → Align.*
+
 **What it's for.** Building tomorrow's dictionary — align Tibetan
 with English, harvest translator-authored pairs.
 
@@ -160,6 +202,8 @@ and its English counterpart, link them; links save per text. Import
 pairs — always labeled PENDING until approved.
 
 ## Input
+
+*Where: Input → Input.*
 
 **What it's for.** The input-center workstation — ACE reborn.
 
@@ -173,6 +217,8 @@ partner has extra; correct until they match exactly. Save exports
 the block.
 
 ## Search (Gofer)
+
+*Where: Research → Search.*
 
 **What it's for.** Geshe Michael's daily search tool, reborn — same
 algorithms, original layout.
@@ -190,6 +236,8 @@ Save stores the whole search by name in the Saved Search tab
 
 ## Convert
 
+*Where: Research → Convert.*
+
 **What it's for.** Every writing system, and time itself.
 
 **Use.** Type or paste in the input — ACIP, wylie, or IAST Sanskrit,
@@ -200,6 +248,8 @@ The colophon-year calculator converts Tibetan calendar years.
 tesseract install; instructions appear if missing).
 
 ## Lookup
+
+*Where: Research → Lookup.*
 
 **What it's for.** The stacked multi-dictionary.
 
@@ -213,6 +263,8 @@ the bottom files a proposal for the searched term.
 
 ## Sanskrit
 
+*Where: Research → Sanskrit.*
+
 **What it's for.** The whole Sanskrit stack in one workbench.
 
 **Use.** Enter IAST (pramāṇa), Devanagari, or ACIP input-code
@@ -225,6 +277,8 @@ recognizes a Devanagari image into the same pipeline.
 
 ## Scan
 
+*Where: Input → Scan.*
+
 **What it's for.** Tibetan text recognition on woodblock images —
 embedded, proven, honest.
 
@@ -235,12 +289,15 @@ trusted as text. Batch mode processes a volume folder.
 
 ## Propose
 
+*Where: Community → Propose.*
+
 **What it's for.** The team's channel to the authority.
 
 **Use.** One-time setup at the top: your name, whether you are an
 authority (Geshe Michael / Adam only), and the shared proposals
-folder (point it at the team Dropbox). Then propose: pick the kind —
-honorific, HIGH honorific, humilific, double honorific,
+folder (point it at the team Dropbox) — the same three settings also
+live in Settings (View menu → Settings…). Then propose: pick the
+kind — honorific, HIGH honorific, humilific, double honorific,
 pronunciation exception, abbreviation, word/phrase rendering, note —
 enter the Tibetan, the proposed value, and evidence, and file it.
 Proposals also file from any entry card ("propose to the
@@ -249,6 +306,8 @@ happened?" shows each of yours with its status and the authority's
 comment.
 
 ## Approval
+
+*Where: Community → Approval.*
 
 **What it's for.** The authority's queue (visible only with the
 authority role). Every proposal, ruled one by one — nothing enters
@@ -266,6 +325,78 @@ sitting (e.g. just the 2 HIGH honorifics); the list keeps your
 scroll position between rulings. "Rulings archive" is the permanent
 record of every decision.
 
+## Settings
+
+*Where: the View menu → Settings… (on a Mac it also appears in the
+app menu, ⌘,).*
+
+Everything the app remembers, in one dialog:
+
+- **Appearance** — Night mode (dark chrome, cream reading pages).
+  Same switch as View → Night mode; applies immediately.
+- **Reading** — what the Overlay displays text as by default
+  (Tibetan script / ACIP / Wylie).
+- **Team & proposals** — your name (stamped on proposals for
+  provenance), the authority role (shows the Approval pane), and the
+  shared proposals folder (the team Dropbox). These mirror the setup
+  fields at the top of the Propose pane — change them in either
+  place.
+- **Data** — a data-folder override, normally left empty
+  (auto-detected). Data-folder and authority-role changes take
+  effect on the next launch.
+
+## Suggested Workflows
+
+Recipes for putting the panes together. Each step names its tab path.
+
+**Read a text (the daily bread).** Read → Library → double-click the
+text → it opens shaded in the Overlay → set "text as" to Tibetan
+script → read; click anything shaded for its card → for a hard word,
+"Propose to the authority…" right from the card, evidence attached.
+When you want the carving itself: SCANS → "Find scans on BDRC…".
+
+**Translate a text end to end.**
+1. Read it first in the Overlay (Read).
+2. Translate → Draft: load the source, work clause by clause with
+   the color-linked anchors; "Phrase memory" before you invent any
+   rendering — Geshe Michael may already have one.
+3. Research → Search (Gofer): NEAR-search terms you're unsure of, to
+   see his English in context.
+4. Translate → Draft → EVIDENCE: "Check terminology" against your
+   English; PUBLISH: footnotes and bibliography, then RTF export.
+5. Hand the draft to a senior: Translate → Review — register
+   warnings, honorific advisories, provisional-gloss cautions.
+
+**Check someone else's finished draft.** Translate → Review: Tibetan
+left, English right, press Review — then walk the advisories with
+the Overlay open in Read for any passage you want to see in context.
+
+**Study session (a student's hour).** Learn → Trainer: paste today's
+passage, attempt it bare, reveal layer by layer down to the Wilson
+parse → Learn → Drills: ten minutes of generated exercises → finish
+by reading the same passage in the Overlay with scans following.
+
+**Hunt a term across everything.** Research → Lookup for the stacked
+dictionary view → Research → Search (Gofer) with NEAR to see it used
+in the corpus and the published footnotes → in the Overlay, click it
+anywhere it appears shaded for the course-by-course concordance.
+
+**Input-center day (ACE reborn).** Input → Input: "Open scan
+folder…", type beside the scan, "Pre-fill from OCR" only on empty
+pages → "Compare with partner's file…" for the double-keying diff →
+correct until clean → Save. Batch recognition of a whole volume
+lives in Input → Scan (always review material, never trusted text).
+
+**Team proposal cycle.** Anyone: Community → Propose (or "propose to
+the authority…" from any card) → the authority: Community → Approval,
+filter by kind, rule one category per sitting → proposers check "My
+proposals — what happened?".
+
+**Sanskrit deep-dive.** Research → Sanskrit: enter IAST or
+input-code → Analyze → Whitney root, Mahavyutpatti bridge, scripts
+cascade. Quick conversions (and colophon years) live in Research →
+Convert.
+
 ## Concepts
 
 **Tiers.** curated (hand-verified) > glossary (from his glossaries) >
@@ -281,8 +412,8 @@ community, hgm-attested, prenasal-derived (pending ruling), approved.
 item carries who approved it and when; every mined fact carries its
 source and page.
 
-**Night mode.** View menu → Night mode: dark chrome, cream reading
-pages. Remembered.
+**Night mode.** View menu → Night mode (or Settings): dark chrome,
+cream reading pages. Remembered.
 
 **Self-test.** If anything misbehaves: run the app from Terminal with
-`--selftest` — 66 checks print PASS/FAIL and localize the problem.
+`--selftest` — 70 checks print PASS/FAIL and localize the problem.
