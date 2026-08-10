@@ -3,7 +3,10 @@ qt_standard_project_setup()
 qt_add_executable(ALLTranslationTool
   main.cpp
   thirdparty/diff_match_patch.cpp
+  AppIcon.icns
 )
+set_source_files_properties(AppIcon.icns PROPERTIES
+  MACOSX_PACKAGE_LOCATION "Resources")
 find_package(Qt6 COMPONENTS Network REQUIRED)
 target_link_libraries(ALLTranslationTool PRIVATE allcore Qt6::Widgets Qt6::Network)
 # the Scan pane needs allocr (onnxruntime + OpenCV); optional — the app
@@ -14,6 +17,7 @@ if(TARGET allocr)
 endif()
 set_target_properties(ALLTranslationTool PROPERTIES
   MACOSX_BUNDLE ON
+  MACOSX_BUNDLE_ICON_FILE AppIcon.icns
 )
 
 find_package(Qt6 COMPONENTS Network REQUIRED)
