@@ -74,6 +74,7 @@
 #include <functional>
 #include <QDateTime>
 #include <QStandardPaths>
+#include <QStyleHints>
 #include <QMainWindow>
 #include <QMenuBar>
 #include <QMenu>
@@ -3226,6 +3227,189 @@ static QWidget* makeSearchPane(allcore::Spine& spine,
 }
 
 // ---- Convert pane: ACIP/wylie → everything, via the battery-proven ports ----
+
+// ---- SanskritPane: the whole Sanskrit stack in one workbench
+// (Adam, 2026-08-10) — every notation, Whitney's roots, the
+// Mahavyutpatti bridge to Tibetan, and Devanagari OCR.
+class SanskritPane : public QWidget {
+public:
+    SanskritPane(allcore::Mvp* mvp, allcore::WhitneyRoots* whitney)
+        : mvp_(mvp), whitney_(whitney) {
+        auto* l = new QVBoxLayout(this);
+        l->addWidget(new QLabel(
+            "<b>Sanskrit workbench</b> — IAST, Devanagari, or ACIP "
+            "input-code (a#/n%) auto-detected. Every notation, "
+            "Whitney's roots, and the Mah\u0101vyutpatti bridge."));
+        auto* row = new QHBoxLayout;
+        in_ = new QLineEdit;
+        in_->setPlaceholderText(
+            "prama\u0304n\u0323a \u00b7 \u0928\u092e\u0903 \u00b7 "
+            "prama#n%a \u00b7 root: bh\u016b");
+        row->addWidget(in_, 1);
+        auto* go = new QPushButton("Analyze");
+        row->addWidget(go);
+        auto* ocr = new QPushButton("Sanskrit OCR\u2026");
+        ocr->setToolTip("Recognize a Devanagari image (tesseract + san "
+                        "model, optional install) \u2014 review "
+                        "material, never trusted text");
+        row->addWidget(ocr);
+        l->addLayout(row);
+        out_ = new QTextBrowser;
+        out_->setOpenExternalLinks(true);
+        l->addWidget(out_, 1);
+        connect(go, &QPushButton::clicked, [this] { analyze(); });
+        connect(in_, &QLineEdit::returnPressed, [this] { analyze(); });
+        connect(ocr, &QPushButton::clicked, [this] { runOcr(); });
+    }
+
+    int selfTest(QStringList& log) {
+        int fails = 0;
+        auto check = [&](bool ok, const char* what) {
+            log << QString("  [%1] Sanskrit: %2")
+                       .arg(ok ? "PASS" : "FAIL").arg(what);
+            if (!ok) ++fails;
+        };
+        in_->setText(QString::fromUtf8("pram\u0101\u1e47a"));
+        analyze();
+        const QString t = out_->toPlainText();
+        check(t.contains("prama#n%a"), "input-code style renders");
+        check(out_->toHtml().contains(QString::fromUtf8("\u092A")) ||
+                  t.contains(QString::fromUtf8("\u092A")),
+              "Devanagari renders");
+        if (whitney_) {
+            in_->setText(QString::fromUtf8("bh\u016b"));
+            analyze();
+            check(out_->toPlainText().contains("Whitney"),
+                  "Whitney roots reachable");
+        }
+        in_->clear();
+        return fails;
+    }
+
+private:
+    void analyze() {
+        const QString raw = in_->text().trimmed();
+        if (raw.isEmpty()) return;
+        std::string iast = raw.toStdString();
+        bool hasDeva = false;
+        for (QChar c : raw)
+            hasDeva |= (c.unicode() >= 0x0900 && c.unicode() <= 0x097F);
+        QString note;
+        if (hasDeva) {
+            auto [ia, ok] = allcore::devanagariToIast(iast);
+            iast = ia;
+            if (!ok) note = " <small>(partial Devanagari decode)</small>";
+        } else if (raw.contains('#') || raw.contains('%') ||
+                   raw.contains('~')) {
+            iast = allcore::inputcodeToIast(iast);
+            note = " <small>(from ACIP input-code)</small>";
+        }
+        auto row = [](const QString& k, const QString& v) {
+            return "<tr><td style='color:#777;padding-right:12px'>" + k +
+                   "</td><td>" + v + "</td></tr>";
+        };
+        auto [acip, aok] = allcore::iastToAcip(iast);
+        auto [tib, tok2] = allcore::iastToTibetan(iast);
+        auto [deva, dok] = allcore::iastToDevanagari(iast);
+        auto [ipa, iok] = allcore::iastToIpa(iast);
+        QString h = "<div><b>" +
+                    QString::fromStdString(iast).toHtmlEscaped() +
+                    "</b>" + note + "</div><table>";
+        h += row("input-code",
+                 QString::fromStdString(allcore::iastToInputcode(iast))
+                     .toHtmlEscaped());
+        h += row("next-letter",
+                 QString::fromStdString(allcore::iastToNextletter(iast))
+                     .toHtmlEscaped());
+        h += row("Tibetanized ACIP",
+                 QString::fromStdString(acip).toHtmlEscaped() +
+                     (aok ? "" : " \u26a0"));
+        h += row("Tibetan script",
+                 "<span style='font-size:20px'>" +
+                     QString::fromStdString(tib).toHtmlEscaped() +
+                     "</span>" + (tok2 ? "" : " \u26a0"));
+        h += row("Devanagari",
+                 "<span style='font-size:18px'>" +
+                     QString::fromStdString(deva).toHtmlEscaped() +
+                     "</span>" + (dok ? "" : " \u26a0"));
+        h += row("IPA", QString::fromStdString(ipa).toHtmlEscaped() +
+                            (iok ? "" : " \u26a0"));
+        h += "</table>";
+        // Whitney: exact root, then PPP reverse, then meaning search
+        if (whitney_) {
+            auto roots = whitney_->byRoot(iast);
+            if (roots.empty()) roots = whitney_->byPpp(iast);
+            if (!roots.empty()) {
+                h += "<hr><div style='color:#5A3B22'><b>Whitney, roots "
+                     "(1885)</b> <small>(reference)</small></div>";
+                int n = 0;
+                for (const auto* r : roots) {
+                    if (++n > 6) break;
+                    h += "<div style='margin:3px 0'><b>" +
+                         QString::fromStdString(r->root).toHtmlEscaped() +
+                         "</b> \u2014 " +
+                         QString::fromStdString(r->meaning)
+                             .toHtmlEscaped() +
+                         "</div>";
+                }
+            }
+        }
+        if (mvp_) {
+            auto hits = mvp_->byIast(iast);
+            h += mvpHtml(hits);
+        }
+        const QString q = QString::fromUtf8(QUrl::toPercentEncoding(
+            QString::fromStdString(iast)));
+        h += "<div style='color:#777;font-size:11px;margin-top:8px'>"
+             "search elsewhere: <a href='https://www.sanskrit-lexicon."
+             "uni-koeln.de/scans/MWScan/2020/web/webtc/indexcaller.php?"
+             "key=" + q + "&input=SLP1&output=IAST'>Monier-Williams "
+             "(Cologne)</a></div>";
+        out_->setHtml(h);
+    }
+
+    void runOcr() {
+        QString tess = QStandardPaths::findExecutable("tesseract");
+        if (tess.isEmpty())
+            for (const char* c : {"/opt/homebrew/bin/tesseract",
+                                  "/usr/local/bin/tesseract"})
+                if (QFileInfo::exists(c)) { tess = c; break; }
+        const bool hasSan =
+            !tess.isEmpty() &&
+            QFileInfo::exists("/opt/homebrew/share/tessdata/"
+                              "san.traineddata");
+        if (!hasSan) {
+            out_->setHtml("<div style='color:#8C2F2B'>needs tesseract + "
+                          "san.traineddata (see Convert pane note)</div>");
+            return;
+        }
+        const QString img = QFileDialog::getOpenFileName(
+            this, "Devanagari image", QString(),
+            "Images (*.png *.jpg *.jpeg *.tif *.tiff)");
+        if (img.isEmpty()) return;
+        QProcess p;
+        p.start(tess, {img, "stdout", "-l", "san"});
+        p.waitForFinished(60000);
+        const QString deva =
+            QString::fromUtf8(p.readAllStandardOutput()).trimmed();
+        if (deva.isEmpty()) {
+            out_->setHtml("<div style='color:#8C2F2B'>nothing "
+                          "recognized</div>");
+            return;
+        }
+        in_->setText(deva);
+        analyze();
+        out_->setHtml("<div style='background:#FDEEDC;padding:6px'>"
+                      "\u26A0 OCR-DERIVED \u2014 review material</div>" +
+                      out_->toHtml());
+    }
+
+    allcore::Mvp* mvp_;
+    allcore::WhitneyRoots* whitney_;
+    QLineEdit* in_ = nullptr;
+    QTextBrowser* out_ = nullptr;
+};
+
 static QWidget* makeConvertPane(allcore::Mvp* mvp,
                                 allcore::WhitneyRoots* whitney = nullptr) {
     auto* pane = new QWidget;
@@ -9181,38 +9365,15 @@ int main(int argc, char** argv) {
     const bool nightOn =
         nightSettings.value("app/nightMode", true).toBool();
     auto applyNight = [&app](bool on) {
-        if (on) {
-            QApplication::setStyle("Fusion");
-            QPalette p;
-            const QColor bg(0x2A, 0x28, 0x25), base(0x33, 0x30, 0x2C),
-                text(0xE8, 0xE2, 0xD5), hi(0x8C, 0x5A, 0x52);
-            p.setColor(QPalette::Window, bg);
-            p.setColor(QPalette::WindowText, text);
-            p.setColor(QPalette::Base, base);
-            p.setColor(QPalette::AlternateBase, bg);
-            p.setColor(QPalette::Text, text);
-            p.setColor(QPalette::Button, bg);
-            p.setColor(QPalette::ButtonText, text);
-            p.setColor(QPalette::ToolTipBase, base);
-            p.setColor(QPalette::ToolTipText, text);
-            p.setColor(QPalette::Highlight, hi);
-            p.setColor(QPalette::HighlightedText, Qt::white);
-            p.setColor(QPalette::PlaceholderText,
-                       QColor(0x8F, 0x89, 0x7C));
-            p.setColor(QPalette::Disabled, QPalette::Text,
-                       QColor(0x77, 0x72, 0x68));
-            p.setColor(QPalette::Disabled, QPalette::ButtonText,
-                       QColor(0x77, 0x72, 0x68));
-            app.setPalette(p);
-            app.setStyleSheet(
-                "QTextBrowser, QPlainTextEdit { background: #FAF6EE; "
-                "color: #2B2118; }"
-                "QLineEdit { background: #3A3733; color: #E8E2D5; }");
-        } else {
-            QApplication::setStyle(QString());
-            app.setPalette(QPalette());
-            app.setStyleSheet("");
-        }
+        // native macOS dark appearance — no style swap, so window
+        // resize/decorations stay untouched; reading surfaces stay
+        // manuscript-cream (night chrome, paper page)
+        app.styleHints()->setColorScheme(on ? Qt::ColorScheme::Dark
+                                            : Qt::ColorScheme::Light);
+        app.setStyleSheet(
+            on ? "QTextBrowser, QPlainTextEdit { background: #FAF6EE; "
+                 "color: #2B2118; }"
+               : "");
     };
     if (nightOn) applyNight(true);
 
@@ -9253,6 +9414,8 @@ int main(int argc, char** argv) {
     if (!honorifics.empty()) g_honorifics = &honorifics;
     tabs.addTab(makeLookupPane(spine, refdict, mvp, whitney, colloq),
                 "Lookup");
+    auto* sanskritPane = new SanskritPane(mvp, whitney);
+    tabs.addTab(sanskritPane, "Sanskrit");
 #ifdef ALL_HAVE_OCR
     tabs.addTab(new ScanPane(checker, root), "Scan");
 #endif
@@ -9355,6 +9518,7 @@ int main(int argc, char** argv) {
         fails += libraryPane->selfTest(log);
         fails += inputPane->selfTest(log);
         fails += goferPane->selfTest(log);
+        fails += sanskritPane->selfTest(log);
         fails += proposePane->selfTest(log);
         // Lookup: the extracted stacked search, driver-level
         {
@@ -9436,6 +9600,12 @@ int main(int argc, char** argv) {
                fails ? "FAIL" : "ALL PASS", fails);
         return fails ? 1 : 0;
     }
+    // let the window shrink freely: the 15-tab bar must not pin a
+    // wide minimum, and the central widget must be allowed to compress
+    tabs.tabBar()->setUsesScrollButtons(true);
+    tabs.tabBar()->setElideMode(Qt::ElideRight);
+    tabs.setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
+    win.setMinimumSize(640, 480);
     win.resize(1180, 760);
     win.show();
     if (shotMode) {
