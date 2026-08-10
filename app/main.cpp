@@ -6237,6 +6237,12 @@ public:
         review();
         check(report_->toPlainText().contains("sems can"),
               "unmatched established term is surfaced");
+        // honorific in the source raises the register-of-respect note
+        src_->setPlainText("GZIGS PA");
+        draft_->setPlainText("he saw it");
+        review();
+        check(report_->toPlainText().contains("honorific"),
+              "honorific source term raises the respect advisory");
         src_->clear();
         draft_->clear();
         return fails;
@@ -6254,6 +6260,54 @@ private:
         report_->setHtml("<i>reviewing…</i>");
         QCoreApplication::processEvents();
         auto rep = allcore::checkTerminology(spine_, index_, source, draft);
+
+        // honorific register advisory: terms of respect in the source
+        // deserve English that carries the dignity — surfaced for the
+        // reviewer's judgment, never auto-resolved
+        QString honHtml;
+        if (g_honorifics) {
+            // scan the source tokens directly (unigram + bigram): the
+            // register keys on the honorific stem, which a longer
+            // matched dictionary term can hide
+            std::vector<std::string> toks;
+            std::vector<bool> bars;
+            allcore::tokenizeDocument(source, toks, bars);
+            std::vector<std::string> wy;
+            wy.reserve(toks.size());
+            for (const auto& t : toks)
+                wy.push_back(allcore::tokenToEwts(t));
+            std::set<std::string> seen;
+            std::vector<std::string> cands;
+            for (size_t i = 0; i < wy.size(); ++i) {
+                cands.push_back(wy[i]);
+                if (i + 1 < wy.size() && !bars[i])
+                    cands.push_back(wy[i] + " " + wy[i + 1]);
+            }
+            for (const auto& c : cands) {
+                auto it = g_honorifics->find(c);
+                if (it == g_honorifics->end() ||
+                    !seen.insert(c).second)
+                    continue;
+                const auto& [ordinary, domain, level] = it->second;
+                honHtml += "<div style='margin:4px 0'><b>" +
+                           QString::fromStdString(c).toHtmlEscaped() +
+                           "</b> — " +
+                           (level == "high"
+                                ? QString("<b>HIGH honorific</b>")
+                                : QString("honorific")) +
+                           (ordinary.isEmpty()
+                                ? QString()
+                                : " (ordinary: " +
+                                      ordinary.toHtmlEscaped() + ")") +
+                           (domain.isEmpty()
+                                ? QString()
+                                : " <small style='color:#777'>" +
+                                      domain.toHtmlEscaped() +
+                                      "</small>") +
+                           " — check that the English carries the "
+                           "register of respect</div>";
+            }
+        }
 
         int provisionalUsed = 0, unmatched = 0;
         QString regHtml, provHtml, unmHtml, spreadHtml;
@@ -6354,6 +6408,10 @@ private:
         if (!regHtml.isEmpty())
             h += "<div style='color:#8C2F2B'><b>Register-sensitive "
                  "terms</b></div>" + regHtml + "<hr>";
+        if (!honHtml.isEmpty())
+            h += QString("<div style='color:#7A5A00'><b>⚑ honorific "
+                         "terms in the source (zhe sa)</b></div>") +
+                 honHtml + "<hr>";
         if (!provHtml.isEmpty())
             h += "<div><b>Renderings resting on PROVISIONAL glosses"
                  "</b></div>" + provHtml + "<hr>";

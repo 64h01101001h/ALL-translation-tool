@@ -78,6 +78,7 @@ by nature.)
 | Report renders; register-sensitive flag fires | selftest: bsod nams source + "merit" draft → register warning present | selftest | ✅ |
 | Provisional-tier caution | selftest: crafted provisional match flagged | selftest | ✅ |
 | Unmatched-term listing | selftest: term absent from draft appears in report | selftest | ✅ |
+| Honorific-register advisory (zhe sa in the source) | selftest: gzigs source raises the respect note | selftest | ✅ |
 
 ## 7. Align
 
