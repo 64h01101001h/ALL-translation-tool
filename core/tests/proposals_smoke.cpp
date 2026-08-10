@@ -162,6 +162,16 @@ int main(int argc, char** argv) {
               "double-honorific routes to the register lane");
     }
 
+    CHECK(std::string(allcore::Proposal::kindName(
+              allcore::Proposal::kindFromName("spelling"))) == "spelling",
+          "spelling kind round-trips");
+    {
+        allcore::Proposal p;
+        p.kind = allcore::ProposalKind::Spelling;
+        CHECK(!p.isRegister(),
+              "spelling routes to the export lane (app never edits texts)");
+    }
+
     std::printf("proposals_smoke: %s (%d failures)\n",
                 failures ? "FAIL" : "ALL PASS", failures);
     return failures ? 1 : 0;

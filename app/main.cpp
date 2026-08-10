@@ -119,6 +119,11 @@ static void loadIdentity();
 static void fileProposal(QWidget* parent, allcore::ProposalKind kind,
                          const QString& wylie, const QString& value,
                          const QString& field, const QString& evidence);
+// batch spelling flags from the Overlay's spelling-doubts panel; rows
+// are {wylie, value, field, evidence}. Returns count filed, -1 on
+// failure (the helper explains the failure to the user itself).
+static int fileSpellingProposals(QWidget* parent,
+                                 const QList<QStringList>& rows);
 #include "allcore/verse.h"
 #include "allcore/wilsonparse.h"
 #include "allcore/terminology.h"
@@ -139,6 +144,11 @@ struct EntryDisplay {
 // once in main(), consulted by every entry card in every pane
 using HonorificMap = std::map<std::string, std::array<QString, 3>>;
 static const HonorificMap* g_honorifics = nullptr;
+
+// spelling forms the authority has ruled VALID (a DECLINED spelling
+// flag means "this form is fine") — the Overlay legality check treats
+// them as legal. Loaded from the proposal store once per launch.
+static const std::set<std::string>* g_spellingValid = nullptr;
 
 // The published apparatus (GMR-approved, mined from released books):
 // 344 footnotes keyed by English lemma + 138 bibliography entries.
@@ -932,6 +942,11 @@ public:
         loadDoc();
         check(hint_->text().contains("1 spelling"),
               "illegal syllable raises one spellcheck flag");
+        spellToggle_->setChecked(true);   // opens + populates the panel
+        check(spellList_->rowCount() == 1 &&
+                  spellList_->item(0, 1)->text() == "1",
+              "spelling-doubts panel lists the doubted form");
+        spellToggle_->setChecked(false);
 
         // ---- robustness: hostile input must never crash, and the
         // token bookkeeping must stay consistent. ACIP display mode:
@@ -1089,6 +1104,59 @@ public:
         ll->addWidget(open);
         auto* load = new QPushButton("Load into overlay");
         ll->addWidget(load);
+auto* secRev = new QLabel("<span style='color:#9A7A33;font-size:10px;letter-spacing:2px;font-weight:600'>REVIEW</span>");
+        secRev->setContentsMargins(0, 8, 0, 0);
+        ll->addWidget(secRev);
+        spellToggle_ = new QCheckBox("Show spelling doubts");
+        spellToggle_->setToolTip(
+            "Open a small list of every syllable in this text that "
+            "fails the classical legality rules \u2014 likely "
+            "input-operator errors. Click a row to jump to it in the "
+            "text; file checked rows for the authority's ruling.");
+        ll->addWidget(spellToggle_);
+        spellPanel_ = new QWidget;
+        spellPanel_->setVisible(false);
+        spellPanel_->setMaximumHeight(230);
+        {
+            auto* spv = new QVBoxLayout(spellPanel_);
+            spv->setContentsMargins(0, 0, 0, 0);
+            spv->setSpacing(4);
+            spellList_ = new QTableWidget(0, 3);
+            spellList_->setHorizontalHeaderLabels(
+                {"Form", "\u00d7", "Wylie"});
+            spellList_->verticalHeader()->setVisible(false);
+            spellList_->setEditTriggers(
+                QAbstractItemView::NoEditTriggers);
+            spellList_->setSelectionBehavior(
+                QAbstractItemView::SelectRows);
+            spellList_->horizontalHeader()->setStretchLastSection(true);
+            spv->addWidget(spellList_);
+            auto* spRow = new QHBoxLayout;
+            auto* spAll = new QPushButton("Check all");
+            spAll->setToolTip(
+                "Check every doubted form in the list at once.");
+            auto* spFile = new QPushButton("File for ruling");
+            spFile->setToolTip(
+                "File the checked forms into the authority's Approval "
+                "queue as potential input errors, with their context "
+                "attached as evidence.");
+            spRow->addWidget(spAll);
+            spRow->addWidget(spFile);
+            spv->addLayout(spRow);
+            connect(spAll, &QPushButton::clicked, [this] {
+                for (int r = 0; r < spellList_->rowCount(); ++r)
+                    spellList_->item(r, 0)->setCheckState(Qt::Checked);
+            });
+            connect(spFile, &QPushButton::clicked,
+                    [this] { fileCheckedSpellHits(); });
+            connect(spellList_, &QTableWidget::cellClicked,
+                    [this](int r, int) { jumpToSpellHit(r); });
+        }
+        ll->addWidget(spellPanel_);
+        connect(spellToggle_, &QCheckBox::toggled, [this](bool on) {
+            spellPanel_->setVisible(on);
+            if (on) rebuildSpellPanel();
+        });
 auto* secScan = new QLabel("<span style='color:#9A7A33;font-size:10px;letter-spacing:2px;font-weight:600'>SCANS</span>");
         secScan->setContentsMargins(0, 8, 0, 0);
         ll->addWidget(secScan);
@@ -1632,7 +1700,10 @@ private:
                 if (lc != legalCache.end()) {
                     legal = lc->second;
                 } else {
-                    legal = checker_->legalWylie(tokEwts(doc_.tokens[i]));
+                    const std::string ew = tokEwts(doc_.tokens[i]);
+                    legal = checker_->legalWylie(ew) ||
+                            (g_spellingValid &&
+                             g_spellingValid->count(ew) > 0);
                     legalCache.emplace(doc_.tokens[i], legal);
                 }
                 if (!legal) {
@@ -1739,7 +1810,125 @@ private:
                            .arg(agreeFlags)
                            .arg(attestNote));
         context_->clear();
+        if (spellToggle_ && spellToggle_->isChecked())
+            rebuildSpellPanel();
     }
+
+    // The spelling-doubts layer: the same legality check that draws
+    // the red waves, but as a working LIST — one row per distinct
+    // doubted form with count, occurrences, and first context. Forms
+    // the authority has ruled valid (declined flags) are excluded.
+    struct SpellHit {
+        QString form, ewts, context;
+        int count = 0;
+        std::vector<int> toks;   // token indices of every occurrence
+    };
+    std::vector<SpellHit> collectSpellHits() const {
+        std::vector<SpellHit> out;
+        if (!checker_) return out;
+        std::map<std::string, size_t> ix;
+        for (size_t i = 0; i < doc_.tokens.size(); ++i) {
+            const std::string& t = doc_.tokens[i];
+            bool alpha = false;
+            for (char ch : t)
+                alpha |= std::isalpha((unsigned char)ch) != 0;
+            if (!alpha) continue;
+            const std::string ew = tokEwts(t);
+            if (checker_->legalWylie(ew)) continue;
+            if (g_spellingValid && g_spellingValid->count(ew)) continue;
+            auto f = ix.find(t);
+            if (f != ix.end()) {
+                out[f->second].count++;
+                out[f->second].toks.push_back((int)i);
+                continue;
+            }
+            QString ctx;
+            const size_t b = i >= 3 ? i - 3 : 0;
+            const size_t e = std::min(doc_.tokens.size(), i + 4);
+            for (size_t j = b; j < e; ++j) {
+                if (!ctx.isEmpty()) ctx += ' ';
+                ctx += (j == i)
+                    ? "[" + QString::fromStdString(doc_.tokens[j]) + "]"
+                    : QString::fromStdString(doc_.tokens[j]);
+            }
+            ix.emplace(t, out.size());
+            out.push_back({QString::fromStdString(t),
+                           QString::fromStdString(ew), ctx, 1,
+                           {(int)i}});
+        }
+        return out;
+    }
+
+    void rebuildSpellPanel() {
+        spellHits_ = collectSpellHits();
+        spellCycle_.assign(spellHits_.size(), 0);
+        spellList_->setRowCount((int)spellHits_.size());
+        for (int r = 0; r < (int)spellHits_.size(); ++r) {
+            auto* c0 = new QTableWidgetItem(spellHits_[r].form);
+            c0->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable |
+                         Qt::ItemIsUserCheckable);
+            c0->setCheckState(Qt::Unchecked);
+            c0->setToolTip(spellHits_[r].context);
+            spellList_->setItem(r, 0, c0);
+            spellList_->setItem(
+                r, 1,
+                new QTableWidgetItem(
+                    QString::number(spellHits_[r].count)));
+            auto* c2 = new QTableWidgetItem(spellHits_[r].ewts);
+            c2->setToolTip(spellHits_[r].context);
+            spellList_->setItem(r, 2, c2);
+        }
+        spellList_->resizeColumnsToContents();
+    }
+
+    void jumpToSpellHit(int row) {
+        // click a row → the text scrolls to the doubted syllable,
+        // selected; click again → the next occurrence, cycling
+        if (row < 0 || row >= (int)spellHits_.size()) return;
+        const auto& toks = spellHits_[row].toks;
+        if (toks.empty()) return;
+        int& cyc = spellCycle_[row];
+        const int tok = toks[cyc % (int)toks.size()];
+        ++cyc;
+        if (tok < 0 || tok >= (int)tokBeg_.size()) return;
+        QTextCursor c(view_->document());
+        c.setPosition(tokBeg_[tok]);
+        c.setPosition(tokEnd_[tok], QTextCursor::KeepAnchor);
+        view_->setTextCursor(c);
+        view_->ensureCursorVisible();
+    }
+
+    void fileCheckedSpellHits() {
+        QList<QStringList> rows;
+        const QString base = docFile_.isEmpty()
+            ? QString("pasted text")
+            : QFileInfo(docFile_).fileName();
+        for (int r = 0; r < spellList_->rowCount() &&
+                        r < (int)spellHits_.size(); ++r)
+            if (spellList_->item(r, 0)->checkState() == Qt::Checked)
+                rows.push_back(
+                    {spellHits_[r].ewts,
+                     QString("possible input error \u2014 fails "
+                             "syllable legality (seen %1\u00d7 as "
+                             "\u201c%2\u201d)")
+                         .arg(spellHits_[r].count)
+                         .arg(spellHits_[r].form),
+                     base, spellHits_[r].context});
+        if (rows.isEmpty()) {
+            QMessageBox::information(
+                this, "Nothing checked",
+                "Check at least one doubted form first (the checkbox "
+                "on its row).");
+            return;
+        }
+        fileSpellingProposals(this, rows);
+    }
+
+    QCheckBox* spellToggle_ = nullptr;
+    QWidget* spellPanel_ = nullptr;
+    QTableWidget* spellList_ = nullptr;
+    std::vector<SpellHit> spellHits_;
+    std::vector<int> spellCycle_;
 
     int tokenAt(int charPos) const {
         // binary search — this runs on every click/cursor move, and a
@@ -8902,6 +9091,35 @@ static void fileProposal(QWidget* parent, allcore::ProposalKind kind,
                              "The proposals folder could not be written.");
 }
 
+static int fileSpellingProposals(QWidget* parent,
+                                 const QList<QStringList>& rows) {
+    if (g_proposalsDir.isEmpty() || g_userName.isEmpty()) {
+        QMessageBox::information(
+            parent, "Set up proposals",
+            "First set your name and the shared proposals folder in the "
+            "Propose tab or in Settings (one-time setup).");
+        return -1;
+    }
+    allcore::ProposalStore store(g_proposalsDir.toStdString());
+    store.load();
+    for (const auto& r : rows)
+        store.propose(allcore::ProposalKind::Spelling,
+                      g_userName.toStdString(), r[0].toStdString(),
+                      r[1].toStdString(), r[2].toStdString(),
+                      r[3].toStdString(), isoToday().toStdString());
+    if (!store.save()) {
+        QMessageBox::warning(parent, "Could not save",
+                             "The proposals folder could not be written.");
+        return -1;
+    }
+    QMessageBox::information(
+        parent, "Filed",
+        QString("%1 spelling flag(s) filed for the authority's ruling "
+                "\u2014 they will appear in the Approval queue.")
+            .arg(rows.size()));
+    return (int)rows.size();
+}
+
 class ProposePane : public QWidget {
 public:
     ProposePane() {
@@ -9153,6 +9371,7 @@ public:
         filter_->addItem("HIGH honorifics", "high-honorific");
         filter_->addItem("Humilifics", "humilific");
         filter_->addItem("Double honorifics", "double-honorific");
+        filter_->addItem("Spelling flags", "spelling");
         filter_->addItem("Words / phrases / notes", "export");
         row->addWidget(filter_);
         row->addWidget(refresh);
@@ -10083,6 +10302,18 @@ int main(int argc, char** argv) {
     // the Approval tab shows only for an authority (Geshe Michael /
     // Adam), gated on the identity role
     loadIdentity();
+    // spelling forms the authority ruled valid (declined spelling
+    // flags in the shared store) — the Overlay stops doubting them
+    static std::set<std::string> spellingValid;
+    if (!g_proposalsDir.isEmpty()) {
+        allcore::ProposalStore pstore(g_proposalsDir.toStdString());
+        if (pstore.load())
+            for (const auto& p : pstore.all())
+                if (p.kind == allcore::ProposalKind::Spelling &&
+                    p.status == allcore::ProposalStatus::Declined)
+                    spellingValid.insert(p.wylie);
+    }
+    g_spellingValid = &spellingValid;
     // --screenshots <dir>: render every pane to PNGs and exit (demo /
     // documentation mode). Shows the Approval queue too, pointed at
     // the seeded proposals — session-only, nothing persisted.

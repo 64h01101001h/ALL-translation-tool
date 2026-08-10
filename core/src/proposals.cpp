@@ -16,6 +16,7 @@ const char* Proposal::kindName(ProposalKind k) {
         case ProposalKind::WordRendering: return "word";
         case ProposalKind::PhraseRendering: return "phrase";
         case ProposalKind::Note: return "note";
+        case ProposalKind::Spelling: return "spelling";
         default: return "unknown";
     }
 }
@@ -30,6 +31,7 @@ ProposalKind Proposal::kindFromName(const std::string& s) {
     if (s == "word") return ProposalKind::WordRendering;
     if (s == "phrase") return ProposalKind::PhraseRendering;
     if (s == "note") return ProposalKind::Note;
+    if (s == "spelling") return ProposalKind::Spelling;
     return ProposalKind::Unknown;
 }
 

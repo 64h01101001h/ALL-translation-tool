@@ -81,6 +81,19 @@ passage auto-attached as evidence.
 same shading, three scripts. Typeface picker for script mode. Each
 reference layer toggles on/off; your choices are remembered.
 
+**REVIEW (left column, under its gold heading).** "Show spelling
+doubts" opens a small list of every syllable in the text that fails
+the classical legality rules — the same doubts the red waves mark,
+gathered as a working list: one row per distinct form with its count.
+Click a row and the text jumps to that syllable, selected; click
+again for the next occurrence. Most doubts are input-operator errors:
+check the rows you want ruled on and press "File for ruling" — each
+goes into the authority's Approval queue with its context attached as
+evidence. When the authority APPROVES a flag, it is a confirmed error
+(exported for the input teams — the app never edits the texts); when
+the authority DECLINES one, the form has been ruled VALID, and the
+app stops doubting it everywhere, for the whole team.
+
 **SCANS (left column, under its gold heading).** "Find scans on
 BDRC…" opens the original woodblock images under the text; the pages
 turn following your cursor. "locate word (OCR)" draws a box around
@@ -323,7 +336,10 @@ approved dictionary candidates…") for the data project — the app
 never edits the corpus. Filter by kind to take one category per
 sitting (e.g. just the 2 HIGH honorifics); the list keeps your
 scroll position between rulings. "Rulings archive" is the permanent
-record of every decision.
+record of every decision. Spelling flags (from the Overlay's
+"Show spelling doubts" list) have their own filter: APPROVE confirms
+the input error for export to the input teams; DECLINE rules the
+form valid — the app stops doubting it from the next launch on.
 
 ## Settings
 
@@ -386,6 +402,9 @@ folder…", type beside the scan, "Pre-fill from OCR" only on empty
 pages → "Compare with partner's file…" for the double-keying diff →
 correct until clean → Save. Batch recognition of a whole volume
 lives in Input → Scan (always review material, never trusted text).
+Finish the day in Read → Overlay: open the finished text, turn on
+REVIEW → "Show spelling doubts", and file the genuine doubts for the
+authority's ruling.
 
 **Team proposal cycle.** Anyone: Community → Propose (or "propose to
 the authority…" from any card) → the authority: Community → Approval,
@@ -416,4 +435,4 @@ source and page.
 cream reading pages. Remembered.
 
 **Self-test.** If anything misbehaves: run the app from Terminal with
-`--selftest` — 70 checks print PASS/FAIL and localize the problem.
+`--selftest` — 71 checks print PASS/FAIL and localize the problem.
