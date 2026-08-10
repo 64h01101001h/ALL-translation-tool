@@ -139,6 +139,12 @@ std::string ewtsToAcip(const std::string& ewts) {
     return out;
 }
 
+std::string tokenToEwts(const std::string& tok) {
+    bool upper = false;
+    for (char c : tok) upper |= (c >= 'A' && c <= 'Z');
+    return upper ? acipToEwts(tok) : tok;
+}
+
 bool looksLikeWylie(const std::string& text) {
     size_t upper = 0, lower = 0;
     for (unsigned char c : text) {

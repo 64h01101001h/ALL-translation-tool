@@ -50,7 +50,7 @@ TibetanExportResult exportTibetanUnicode(const std::string& acip_document,
                 t += tok[i++];
             }
         }
-        auto [u, ok] = wylieToUnicode(acipToEwts(t));
+        auto [u, ok] = wylieToUnicode(tokenToEwts(t));
         ++res.syllables;
         if (ok && !u.empty()) {
             out += u;

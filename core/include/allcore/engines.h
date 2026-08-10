@@ -31,6 +31,12 @@ std::string ewtsToAcip(const std::string& ewts);
 // per-token conversion; battery-covered in engines_battery.
 bool looksLikeWylie(const std::string& text);
 
+// Per-token variant: convert a token to EWTS if it carries ACIP's
+// uppercase letters, pass wylie through untouched. The lattice has
+// always normalized this way (why matching worked for wylie docs);
+// promoted here so display/export paths share the exact idiom.
+std::string tokenToEwts(const std::string& tok);
+
 // wylie (EWTS + IAST-flavored) → Tibetan unicode. Returns {unicode, ok};
 // ok=false means at least one syllable failed and is shown as ⟨syl⟩.
 std::pair<std::string, bool> wylieToUnicode(const std::string& wylie);

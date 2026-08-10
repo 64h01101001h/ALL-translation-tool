@@ -527,6 +527,12 @@ int main(int argc, char** argv) {
         CHECK(allcore::looksLikeWylie(
                   "bdag dang mkha' mnyam Sems can, SGRUB"),
               "J: a stray uppercase word does not flip a wylie doc");
+        CHECK(allcore::tokenToEwts("SKABS") == "skabs",
+              "J: tokenToEwts converts an ACIP token");
+        CHECK(allcore::tokenToEwts("skabs") == "skabs",
+              "J: tokenToEwts passes a wylie token through");
+        CHECK(allcore::tokenToEwts("BRTZON") == "brtson",
+              "J: tokenToEwts handles ACIP TZ");
     }
 
     sqlite3_close(db);

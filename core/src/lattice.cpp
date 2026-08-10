@@ -112,9 +112,7 @@ std::vector<std::string> normTokens(const std::vector<std::string>& toks) {
     std::vector<std::string> norm;
     norm.reserve(toks.size());
     for (const auto& t : toks) {
-        bool upper = false;
-        for (char c : t) upper |= (c >= 'A' && c <= 'Z');
-        norm.push_back(upper ? acipToEwts(t) : t);
+        norm.push_back(tokenToEwts(t));
     }
     return norm;
 }

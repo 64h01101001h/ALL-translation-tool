@@ -3065,7 +3065,13 @@ public:
     }
 
 private:
+    std::string tokEwts(const std::string& tok) const {
+        return docIsWylie_ ? tok : allcore::acipToEwts(tok);
+    }
+
     void loadDoc() {
+        docIsWylie_ =
+            allcore::looksLikeWylie(input_->toPlainText().toStdString());
         doc_ = allcore::buildOverlay(spine_, index_,
                                      input_->toPlainText().toStdString());
         clauses_ = allcore::refineClauses(
@@ -3112,7 +3118,7 @@ private:
         for (int t = beg; t < end; ++t) {
             const std::string& tok = doc_.tokens[t];
             if (script) {
-                auto [u, ok] = allcore::wylieToUnicode(allcore::acipToEwts(tok));
+                auto [u, ok] = allcore::wylieToUnicode(tokEwts(tok));
                 QString disp = QString::fromStdString(u);
                 if (disp.isEmpty()) disp = QString::fromStdString(tok);
                 if (t > beg) s += QString::fromUtf8("་");
@@ -3303,7 +3309,7 @@ private:
                 std::string wylie;
                 for (int t = cl.beg; t < cl.end; ++t) {
                     if (t > cl.beg) wylie += ' ';
-                    wylie += allcore::acipToEwts(doc_.tokens[t]);
+                    wylie += tokEwts(doc_.tokens[t]);
                 }
                 auto segs = spine_.corpusSearch('"' + wylie + '"', "", 2);
                 if (!segs.empty()) {
@@ -3331,6 +3337,7 @@ private:
     allcore::Contractions* contractions_ = nullptr;
     allcore::HeadwordIndex index_;
     allcore::OverlayDoc doc_;
+    bool docIsWylie_ = false;
     std::vector<allcore::Clause> clauses_;
     QString coverageNote_;
     QPlainTextEdit* input_ = nullptr;
@@ -4008,7 +4015,13 @@ public:
     }
 
 private:
+    std::string tokEwts(const std::string& tok) const {
+        return docIsWylie_ ? tok : allcore::acipToEwts(tok);
+    }
+
     void load() {
+        docIsWylie_ =
+            allcore::looksLikeWylie(source_->toPlainText().toStdString());
         doc_ = allcore::buildOverlay(spine_, index_,
                                      source_->toPlainText().toStdString());
         clauses_ = allcore::refineClauses(
@@ -5039,6 +5052,7 @@ private:
     QString root_;
     allcore::HeadwordIndex index_;
     allcore::OverlayDoc doc_;
+    bool docIsWylie_ = false;
     std::vector<allcore::Clause> clauses_;
     int lastClause_ = -1;
     QPlainTextEdit* source_ = nullptr;
@@ -6046,7 +6060,13 @@ private:
                QFileInfo(docFile_).completeBaseName() + ".tsv";
     }
 
+    std::string tokEwts(const std::string& tok) const {
+        return docIsWylie_ ? tok : allcore::acipToEwts(tok);
+    }
+
     void loadTexts() {
+        docIsWylie_ =
+            allcore::looksLikeWylie(tib_->toPlainText().toStdString());
         doc_ = allcore::buildOverlay(spine_, index_,
                                      tib_->toPlainText().toStdString());
         // fixed-layout ACIP rendering with per-token positions
@@ -6183,7 +6203,7 @@ private:
         std::string wy;
         for (int t = selBeg_; t < selEnd_; ++t) {
             if (!wy.empty()) wy += " ";
-            wy += allcore::acipToEwts(doc_.tokens[t]);
+            wy += tokEwts(doc_.tokens[t]);
         }
         l.wylie = wy;
         l.engBeg = ec.selectionStart();
@@ -6257,7 +6277,7 @@ private:
                 std::string wy;
                 for (int t = t0; t < t1; ++t) {
                     if (!wy.empty()) wy += " ";
-                    wy += allcore::acipToEwts(doc_.tokens[t]);
+                    wy += tokEwts(doc_.tokens[t]);
                 }
                 l.wylie = wy;
                 // byte offsets -> QString (UTF-16) positions
@@ -6353,6 +6373,7 @@ private:
     QString root_, docFile_;
     allcore::HeadwordIndex index_;
     allcore::OverlayDoc doc_;
+    bool docIsWylie_ = false;
     std::vector<int> tokBeg_, tokEnd_;
     std::vector<Link> linksList_;
     QTextEdit* tib_ = nullptr;

@@ -354,7 +354,7 @@ std::vector<ClauseParse> wilsonParse(const Spine& spine, const OverlayDoc& doc,
                     if (contractions && cur.end - cur.beg == 2 &&
                         t == cur.beg) {
                         auto exps = contractions->expansions(
-                            acipToEwts(cur.text));
+                            tokenToEwts(cur.text));
                         if (!exps.empty())
                             d.label = "OM (contraction of " +
                                       exps.front()->longWylie +
@@ -399,7 +399,7 @@ std::vector<ClauseParse> wilsonParse(const Spine& spine, const OverlayDoc& doc,
                     // ADV needs POS data: an UNAMBIGUOUS adverb tag (SOAS)
                     // on the pre-verb unit resolves the adverb dot
                     if (pos) {
-                        auto [u, ok] = wylieToUnicode(acipToEwts(cur.text));
+                        auto [u, ok] = wylieToUnicode(tokenToEwts(cur.text));
                         if (ok && pos->unambiguousAdv(u))
                             d.label = "ADV (adverb — SOAS lexicon)";
                     }
@@ -416,7 +416,7 @@ std::vector<ClauseParse> wilsonParse(const Spine& spine, const OverlayDoc& doc,
                     // Anything unattested/ambiguous stays undetermined.
                     d.label = "NOM|NA|NN|APP (undetermined)";
                     auto uniOf = [](const std::string& acip) {
-                        auto [u, ok] = wylieToUnicode(acipToEwts(acip));
+                        auto [u, ok] = wylieToUnicode(tokenToEwts(acip));
                         return ok ? u : std::string();
                     };
                     const std::string nextUni = uniOf(us[nu].text);
