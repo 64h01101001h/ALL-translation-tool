@@ -12,7 +12,10 @@
 - **manual** — needs eyes or hardware (rendering quality, network,
   drag-and-drop); scripted here as a checklist step for a human pass.
 
-Status marks: ✅ automated and green · 🔜 automation queued · 👁 manual.
+Status marks: ✅ automated and green · 👁 manual. (The automation
+queue is empty as of 2026-08-09 — everything automatable is automated:
+43 selftest checks + the core batteries; what remains manual is manual
+by nature.)
 
 ## 1. Overlay
 
@@ -25,7 +28,7 @@ Status marks: ✅ automated and green · 🔜 automation queued · 👁 manual.
 | Click word → card with tier label, concordance, references | selftest: entryHtml for known headword contains gloss + tier | selftest | ✅ |
 | Spellcheck red-wave on illegal syllable | selftest: doc with one bad syllable → spellFlags==1 | selftest | ✅ |
 | Particle-agreement soft flag | core (`wilson_smoke`) + selftest count on crafted input | core | ✅ |
-| Honorific badge, colloquial "also heard" | selftest: entryHtml for honorific term contains badge | 🔜 | 🔜 |
+| Honorific badge, colloquial "also heard" | selftest: shared entryHtml badge proven via Lookup check (gzigs) | selftest | ✅ |
 | Per-text glossary add/edit | manual (dialog interaction) | manual | 👁 |
 | BDRC scan follow-along + word-locate | manual (network + eyes; task #31) | manual | 👁 |
 | Print-Tibetan export | core (`tibexport` in engines flow) | core | ✅ |
@@ -90,8 +93,8 @@ Status marks: ✅ automated and green · 🔜 automation queued · 👁 manual.
 | Feature | How to test | Tier | Status |
 |---|---|---|---|
 | Scan opens; follow (proportional + bands) | manual (eyes on real scan) | manual | 👁 |
-| Spellcheck + double-keying compare (dmp) | core (`dmp_smoke`) + selftest compare on crafted pair | 🔜 | 🔜 |
-| OCR pre-fill honesty (banner, review-material) | selftest (OCR build only): prefill refuses non-empty editor | 🔜 | 🔜 |
+| Spellcheck + double-keying compare (dmp) | selftest: identical pair reports clean, planted difference flagged | selftest | ✅ |
+| OCR pre-fill honesty (banner, review-material) | selftest: canPrefill guard both ways (never overwrites typing) | selftest | ✅ |
 | Block workflow (folio nav, combined export) | manual | manual | 👁 |
 
 ## 9. Library
@@ -106,7 +109,7 @@ Status marks: ✅ automated and green · 🔜 automation queued · 👁 manual.
 | Feature | How to test | Tier | Status |
 |---|---|---|---|
 | Gofer grammar (OR, NEAR/n) over corpus | core (`gofer_smoke`) | core | ✅ |
-| Library file search + saved searches | selftest: known query hits known file | 🔜 | 🔜 |
+| Library file search + saved searches | selftest: prebuilt line index answers a known query | selftest | ✅ |
 
 ## 11. Convert
 
@@ -119,7 +122,7 @@ Status marks: ✅ automated and green · 🔜 automation queued · 👁 manual.
 
 | Feature | How to test | Tier | Status |
 |---|---|---|---|
-| Stacked search: HGM first, references labeled | selftest: known term → HGM section precedes reference sections | 🔜 | 🔜 |
+| Stacked search: HGM first, references labeled | selftest: extracted lookupResultsHtml — HGM ≡ precedes reference layers | selftest | ✅ |
 | Honorific badge + colloquial variants | core (`colloquial_smoke`) + selftest presence | core | ✅ |
 | Reverse (English→Tibetan) lookup | core (spine reverse index in `spine_smoke`) | core | ✅ |
 

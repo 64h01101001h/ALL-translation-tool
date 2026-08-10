@@ -263,6 +263,283 @@ static HonorificMap loadHonorifics(const QString& path) {
     return m;
 }
 
+// The Lookup pane's whole stacked search, extracted for the
+// selftest: HGM binding layer first, reference layers labeled,
+// honorific badges, colloquial variants, link-outs.
+static QString lookupResultsHtml(allcore::Spine& spine,
+                                 allcore::RefDict* ref,
+                                 allcore::Mvp* mvp,
+                                 allcore::WhitneyRoots* whitney,
+                                 allcore::ColloquialPron* colloq,
+                                 const std::string& raw) {
+    auto entries = spine.lookup(raw);
+    if (entries.empty()) entries = spine.headwordSearch('"' + raw + '"', 10);
+    QString h;
+    // affix-stripping fallback (lucene-bo rules): po'i finds po
+    if (entries.empty()) {
+        bool upper = false;
+        for (char c : raw) upper |= (c >= 'A' && c <= 'Z');
+        const std::string wy = upper ? allcore::acipToEwts(raw) : raw;
+        const std::string base =
+            allcore::stripAffixedParticlesWylie(wy);
+        if (base != wy) {
+            entries = spine.lookup(base);
+            if (!entries.empty())
+                h += QString("<div style='color:#1E6B4E;font-size:"
+                             "12px'>no entry for \u201c%1\u201d — "
+                             "showing <b>%2</b> (affixed particle "
+                             "stripped)</div>")
+                         .arg(QString::fromStdString(wy)
+                                  .toHtmlEscaped(),
+                              QString::fromStdString(base)
+                                  .toHtmlEscaped());
+        }
+    }
+    // pronunciation fallback (GMR convention): 'jangchub' finds
+    // byang chub — deterministic fold, labeled
+    bool viaPron = false;
+    if (entries.empty()) {
+        entries = spine.lookupByPronunciation(raw, 8);
+        viaPron = !entries.empty();
+    }
+    if (viaPron)
+        h += "<div style='color:#1E6B4E;font-size:12px'>matched by "
+             "<b>pronunciation</b> (GMR convention) — no exact "
+             "headword for \u201c" +
+             QString::fromStdString(raw).toHtmlEscaped() +
+             "\u201d</div>";
+    // colloquial register fallback: community spellings (gonpa,
+    // tulku\u2026) and the HGM prenasal forms (kamdir) \u2014 the register
+    // only WIDENS lookup, GMR stays canonical
+    if (entries.empty() && colloq) {
+        for (const auto* ce : colloq->byColloquial(raw)) {
+            auto hits = spine.lookup(ce->wylie);
+            bool any = false;
+            for (auto& e : hits) {
+                bool dup = false;
+                for (auto& x : entries) dup |= x.id == e.id;
+                if (!dup) {
+                    entries.push_back(std::move(e));
+                    any = true;
+                }
+            }
+            if (any)
+                h += QString("<div style='color:#1E6B4E;font-size:"
+                             "12px'>matched by <b>colloquial "
+                             "pronunciation</b> (%1: %2 = %3%4)"
+                             "</div>")
+                         .arg(ce->cls == "prenasal-derived"
+                                  ? "prenasal rule, derived"
+                                  : "community usage register")
+                         .arg(QString::fromStdString(ce->colloquial)
+                                  .toHtmlEscaped())
+                         .arg(QString::fromStdString(ce->wylie)
+                                  .toHtmlEscaped())
+                         .arg(ce->gmrPron.empty()
+                                  ? QString()
+                                  : "; GMR convention: " +
+                                        QString::fromStdString(
+                                            ce->gmrPron)
+                                            .toHtmlEscaped());
+        }
+    }
+    if (entries.empty()) h = "<i>no HGM match</i>";
+    // (honorific badges render inside entryHtml, every pane alike)
+    for (const auto& e : entries) h += entryHtml(e);
+
+    if (ref) {
+        // resolve to wylie for the reference layers (they key on wylie)
+        std::string wylie = raw;
+        if (!entries.empty()) wylie = entries.front().wylie;
+        else {
+            // uppercase input = ACIP
+            bool upper = false;
+            for (char c : raw) upper |= (c >= 'A' && c <= 'Z');
+            if (upper) wylie = allcore::acipToEwts(raw);
+        }
+        auto refs = ref->lookup(wylie);
+        if (!refs.empty()) {
+            h += "<hr><div style='color:#993C1D'><b>Reference layers</b> "
+                 "<small>(unlicensed compilations — local lookup only, "
+                 "never for release data)</small></div>";
+            for (const auto& r : refs) {
+                h += "<div style='margin:8px 0'><span style='background:"
+                     "#FAEEDA;color:#633806;padding:1px 7px;border-radius:8px;"
+                     "font-size:12px'>" +
+                     QString::fromStdString(r.layer).toHtmlEscaped() +
+                     "</span> " +
+                     QString::fromStdString(r.definition)
+                         .left(500)
+                         .toHtmlEscaped() +
+                     "</div>";
+            }
+        }
+    }
+    // Mahāvyutpatti: classical Skt⇄Tib reference (exact wylie match)
+    if (mvp) {
+        std::string wylie = raw;
+        if (!entries.empty()) wylie = entries.front().wylie;
+        else {
+            bool upper = false;
+            for (char c : raw) upper |= (c >= 'A' && c <= 'Z');
+            if (upper) wylie = allcore::acipToEwts(raw);
+        }
+        h += mvpHtml(mvp->byWylie(wylie));
+    }
+    // Whitney reference layer (Roots 1885 + Grammar 1879 citations;
+    // public domain, digitization Apache-2.0 — data/whitney/):
+    // Latin queries only — try as an IAST root, else as an English
+    // meaning word. Reference comparanda, never HGM equivalents.
+    {
+        bool hasAlpha = false;
+        for (unsigned char c : raw)
+            hasAlpha |= std::isalpha(c) != 0;
+        bool hasTibetan = false;   // U+0F00–U+0FFF = E0 BC/BD/BE/BF …
+        for (size_t i = 0; i + 2 < raw.size(); ++i)
+            if ((unsigned char)raw[i] == 0xE0 &&
+                ((unsigned char)raw[i + 1] & 0xFC) == 0xBC)
+                hasTibetan = true;
+        if (whitney && hasAlpha && !hasTibetan) {
+            auto roots = whitney->byRoot(raw);
+            QString matchKind = "root";
+            if (roots.empty()) {   // past participle: gata -> gam
+                roots = whitney->byPpp(raw);
+                if (!roots.empty()) matchKind = "past participle";
+            }
+            if (roots.empty() && raw.find(' ') == std::string::npos) {
+                roots = whitney->byMeaning(raw, 8);
+                if (!roots.empty()) matchKind = "English meaning";
+            }
+            if (!roots.empty()) {
+                h += "<hr><div style='color:#4A3A7A'><b>Whitney — "
+                     "Roots, Verb-Forms and Primary Derivatives "
+                     "(1885)</b> <small>(public-domain reference; "
+                     "matched by " + matchKind + ")</small></div>";
+                for (const auto* r : roots) {
+                    h += "<div style='margin:6px 0'><b>";
+                    if (!r->homonym.empty())
+                        h += QString::fromStdString(r->homonym) + " ";
+                    h += "√" +
+                         QString::fromStdString(r->root)
+                             .toHtmlEscaped() +
+                         "</b> “" +
+                         QString::fromStdString(r->meaning)
+                             .toHtmlEscaped() +
+                         "”";
+                    if (!r->classes.empty())
+                        h += " · class " +
+                             QString::fromStdString(r->classes)
+                                 .replace("|", "·")
+                                 .toHtmlEscaped();
+                    if (!r->classUncertain.empty())
+                        h += " <small style='color:#777'>(also? " +
+                             QString::fromStdString(r->classUncertain)
+                                 .replace("|", "·")
+                                 .toHtmlEscaped() +
+                             ")</small>";
+                    if (!r->ppp.empty())
+                        h += " · ppp <b>" +
+                             QString::fromStdString(r->ppp)
+                                 .toHtmlEscaped() +
+                             "</b>";
+                    if (!r->dcsClasses.empty() &&
+                        r->dcsClasses != "—")
+                        h += " · <small style='color:#777'>corpus: " +
+                             QString::fromStdString(r->dcsClasses)
+                                 .toHtmlEscaped() +
+                             "</small>";
+                    if (!r->senses.empty())
+                        h += "<br><small style='color:#555'>MW: " +
+                             QString::fromStdString(r->senses)
+                                 .left(140)
+                                 .toHtmlEscaped() +
+                             "</small>";
+                    // link-out: Cologne MW display, SLP1-keyed
+                    // (URL format verified live 2026-08-08)
+                    if (!r->mwId.empty() && !r->slp1.empty())
+                        h += " <small><a href='https://"
+                             "sanskrit-lexicon.uni-koeln.de/scans/"
+                             "MWScan/2020/web/webtc/getword.php?"
+                             "key=" +
+                             QString::fromStdString(r->slp1)
+                                 .toHtmlEscaped() +
+                             "&filter=roman'>MW entry →</a></small>";
+                    if (!r->grammarSecs.empty() &&
+                        r->grammarSecs != "—")
+                        h += "<br><small style='color:#555'>Sanskrit "
+                             "Grammar (1879) " +
+                             QString::fromStdString(r->grammarSecs)
+                                 .left(160)
+                                 .toHtmlEscaped() +
+                             " <span style='color:#777'>(✦ "
+                             "specific · ⚠ exception)"
+                             "</span></small>";
+                    if (!r->sectionRefs.empty()) {
+                        // topical ranges: perfect:781-823|… → a
+                        // compact by-topic index into the Grammar
+                        QString topics;
+                        const QStringList parts =
+                            QString::fromStdString(r->sectionRefs)
+                                .split('|');
+                        int shown = 0;
+                        for (const QString& p2 : parts) {
+                            if (shown++ >= 6) {
+                                topics += QString("· +%1 more ")
+                                              .arg(parts.size() - 6);
+                                break;
+                            }
+                            QString t2 = p2;
+                            t2.replace(':', " §§");
+                            t2.replace('_', ' ');
+                            topics += t2.toHtmlEscaped() + " · ";
+                        }
+                        if (!topics.isEmpty())
+                            h += "<br><small style='color:#777'>"
+                                 "Grammar by topic: " +
+                                 topics + "</small>";
+                    }
+                    h += "</div>";
+                }
+                h += "<div style='font-size:11px;color:#777'>read "
+                     "the Grammar itself: <a href='https://archive."
+                     "org/details/sanskritgrammari00whituoft'>"
+                     "archive.org scan (public domain)</a></div>";
+            }
+        }
+    }
+    // link-out tier: external searches for the resolved term
+    {
+        std::string wylie = raw;
+        if (!entries.empty()) wylie = entries.front().wylie;
+        else {
+            bool upper = false;
+            for (char c : raw) upper |= (c >= 'A' && c <= 'Z');
+            if (upper) wylie = allcore::acipToEwts(raw);
+        }
+        h += linkOutHtml(wylie);
+    }
+    // English reverse lookup (release reverse index, binding layer)
+    {
+        std::string eng = raw;
+        for (auto& c : eng) c = (char)std::tolower((unsigned char)c);
+        auto rev = spine.reverseIndex(eng);
+        if (!rev.empty()) {
+            h += "<hr><div><b>English \u2192 Tibetan</b> <small>(HGM reverse "
+                 "index)</small></div>";
+            for (const auto& r : rev) {
+                QString tier = r.tier == "auto-aligned"
+                    ? "<span style='color:#b00'>PROVISIONAL</span>"
+                    : QString::fromStdString("HGM (" + r.tier + ")");
+                h += "<div style='margin:5px 0'><b>" +
+                     QString::fromStdString(r.wylie).toHtmlEscaped() + "</b> \u00b7 " +
+                     QString::fromStdString(r.pronunciation).toHtmlEscaped() +
+                     " &nbsp;<small>[" + tier + "]</small></div>";
+            }
+        }
+    }
+    return h;
+}
+
 static QWidget* makeLookupPane(allcore::Spine& spine, allcore::RefDict* ref,
                                allcore::Mvp* mvp,
                                allcore::WhitneyRoots* whitney = nullptr,
@@ -343,272 +620,8 @@ static QWidget* makeLookupPane(allcore::Spine& spine, allcore::RefDict* ref,
                                                       results] {
         const std::string raw = box->text().trimmed().toStdString();
         if (raw.empty()) return;
-        auto entries = spine.lookup(raw);
-        if (entries.empty()) entries = spine.headwordSearch('"' + raw + '"', 10);
-        QString h;
-        // affix-stripping fallback (lucene-bo rules): po'i finds po
-        if (entries.empty()) {
-            bool upper = false;
-            for (char c : raw) upper |= (c >= 'A' && c <= 'Z');
-            const std::string wy = upper ? allcore::acipToEwts(raw) : raw;
-            const std::string base =
-                allcore::stripAffixedParticlesWylie(wy);
-            if (base != wy) {
-                entries = spine.lookup(base);
-                if (!entries.empty())
-                    h += QString("<div style='color:#1E6B4E;font-size:"
-                                 "12px'>no entry for \u201c%1\u201d — "
-                                 "showing <b>%2</b> (affixed particle "
-                                 "stripped)</div>")
-                             .arg(QString::fromStdString(wy)
-                                      .toHtmlEscaped(),
-                                  QString::fromStdString(base)
-                                      .toHtmlEscaped());
-            }
-        }
-        // pronunciation fallback (GMR convention): 'jangchub' finds
-        // byang chub — deterministic fold, labeled
-        bool viaPron = false;
-        if (entries.empty()) {
-            entries = spine.lookupByPronunciation(raw, 8);
-            viaPron = !entries.empty();
-        }
-        if (viaPron)
-            h += "<div style='color:#1E6B4E;font-size:12px'>matched by "
-                 "<b>pronunciation</b> (GMR convention) — no exact "
-                 "headword for \u201c" +
-                 QString::fromStdString(raw).toHtmlEscaped() +
-                 "\u201d</div>";
-        // colloquial register fallback: community spellings (gonpa,
-        // tulku\u2026) and the HGM prenasal forms (kamdir) \u2014 the register
-        // only WIDENS lookup, GMR stays canonical
-        if (entries.empty() && colloq) {
-            for (const auto* ce : colloq->byColloquial(raw)) {
-                auto hits = spine.lookup(ce->wylie);
-                bool any = false;
-                for (auto& e : hits) {
-                    bool dup = false;
-                    for (auto& x : entries) dup |= x.id == e.id;
-                    if (!dup) {
-                        entries.push_back(std::move(e));
-                        any = true;
-                    }
-                }
-                if (any)
-                    h += QString("<div style='color:#1E6B4E;font-size:"
-                                 "12px'>matched by <b>colloquial "
-                                 "pronunciation</b> (%1: %2 = %3%4)"
-                                 "</div>")
-                             .arg(ce->cls == "prenasal-derived"
-                                      ? "prenasal rule, derived"
-                                      : "community usage register")
-                             .arg(QString::fromStdString(ce->colloquial)
-                                      .toHtmlEscaped())
-                             .arg(QString::fromStdString(ce->wylie)
-                                      .toHtmlEscaped())
-                             .arg(ce->gmrPron.empty()
-                                      ? QString()
-                                      : "; GMR convention: " +
-                                            QString::fromStdString(
-                                                ce->gmrPron)
-                                                .toHtmlEscaped());
-            }
-        }
-        if (entries.empty()) h = "<i>no HGM match</i>";
-        // (honorific badges render inside entryHtml, every pane alike)
-        for (const auto& e : entries) h += entryHtml(e);
-
-        if (ref) {
-            // resolve to wylie for the reference layers (they key on wylie)
-            std::string wylie = raw;
-            if (!entries.empty()) wylie = entries.front().wylie;
-            else {
-                // uppercase input = ACIP
-                bool upper = false;
-                for (char c : raw) upper |= (c >= 'A' && c <= 'Z');
-                if (upper) wylie = allcore::acipToEwts(raw);
-            }
-            auto refs = ref->lookup(wylie);
-            if (!refs.empty()) {
-                h += "<hr><div style='color:#993C1D'><b>Reference layers</b> "
-                     "<small>(unlicensed compilations — local lookup only, "
-                     "never for release data)</small></div>";
-                for (const auto& r : refs) {
-                    h += "<div style='margin:8px 0'><span style='background:"
-                         "#FAEEDA;color:#633806;padding:1px 7px;border-radius:8px;"
-                         "font-size:12px'>" +
-                         QString::fromStdString(r.layer).toHtmlEscaped() +
-                         "</span> " +
-                         QString::fromStdString(r.definition)
-                             .left(500)
-                             .toHtmlEscaped() +
-                         "</div>";
-                }
-            }
-        }
-        // Mahāvyutpatti: classical Skt⇄Tib reference (exact wylie match)
-        if (mvp) {
-            std::string wylie = raw;
-            if (!entries.empty()) wylie = entries.front().wylie;
-            else {
-                bool upper = false;
-                for (char c : raw) upper |= (c >= 'A' && c <= 'Z');
-                if (upper) wylie = allcore::acipToEwts(raw);
-            }
-            h += mvpHtml(mvp->byWylie(wylie));
-        }
-        // Whitney reference layer (Roots 1885 + Grammar 1879 citations;
-        // public domain, digitization Apache-2.0 — data/whitney/):
-        // Latin queries only — try as an IAST root, else as an English
-        // meaning word. Reference comparanda, never HGM equivalents.
-        {
-            bool hasAlpha = false;
-            for (unsigned char c : raw)
-                hasAlpha |= std::isalpha(c) != 0;
-            bool hasTibetan = false;   // U+0F00–U+0FFF = E0 BC/BD/BE/BF …
-            for (size_t i = 0; i + 2 < raw.size(); ++i)
-                if ((unsigned char)raw[i] == 0xE0 &&
-                    ((unsigned char)raw[i + 1] & 0xFC) == 0xBC)
-                    hasTibetan = true;
-            if (whitney && hasAlpha && !hasTibetan) {
-                auto roots = whitney->byRoot(raw);
-                QString matchKind = "root";
-                if (roots.empty()) {   // past participle: gata -> gam
-                    roots = whitney->byPpp(raw);
-                    if (!roots.empty()) matchKind = "past participle";
-                }
-                if (roots.empty() && raw.find(' ') == std::string::npos) {
-                    roots = whitney->byMeaning(raw, 8);
-                    if (!roots.empty()) matchKind = "English meaning";
-                }
-                if (!roots.empty()) {
-                    h += "<hr><div style='color:#4A3A7A'><b>Whitney — "
-                         "Roots, Verb-Forms and Primary Derivatives "
-                         "(1885)</b> <small>(public-domain reference; "
-                         "matched by " + matchKind + ")</small></div>";
-                    for (const auto* r : roots) {
-                        h += "<div style='margin:6px 0'><b>";
-                        if (!r->homonym.empty())
-                            h += QString::fromStdString(r->homonym) + " ";
-                        h += "√" +
-                             QString::fromStdString(r->root)
-                                 .toHtmlEscaped() +
-                             "</b> “" +
-                             QString::fromStdString(r->meaning)
-                                 .toHtmlEscaped() +
-                             "”";
-                        if (!r->classes.empty())
-                            h += " · class " +
-                                 QString::fromStdString(r->classes)
-                                     .replace("|", "·")
-                                     .toHtmlEscaped();
-                        if (!r->classUncertain.empty())
-                            h += " <small style='color:#777'>(also? " +
-                                 QString::fromStdString(r->classUncertain)
-                                     .replace("|", "·")
-                                     .toHtmlEscaped() +
-                                 ")</small>";
-                        if (!r->ppp.empty())
-                            h += " · ppp <b>" +
-                                 QString::fromStdString(r->ppp)
-                                     .toHtmlEscaped() +
-                                 "</b>";
-                        if (!r->dcsClasses.empty() &&
-                            r->dcsClasses != "—")
-                            h += " · <small style='color:#777'>corpus: " +
-                                 QString::fromStdString(r->dcsClasses)
-                                     .toHtmlEscaped() +
-                                 "</small>";
-                        if (!r->senses.empty())
-                            h += "<br><small style='color:#555'>MW: " +
-                                 QString::fromStdString(r->senses)
-                                     .left(140)
-                                     .toHtmlEscaped() +
-                                 "</small>";
-                        // link-out: Cologne MW display, SLP1-keyed
-                        // (URL format verified live 2026-08-08)
-                        if (!r->mwId.empty() && !r->slp1.empty())
-                            h += " <small><a href='https://"
-                                 "sanskrit-lexicon.uni-koeln.de/scans/"
-                                 "MWScan/2020/web/webtc/getword.php?"
-                                 "key=" +
-                                 QString::fromStdString(r->slp1)
-                                     .toHtmlEscaped() +
-                                 "&filter=roman'>MW entry →</a></small>";
-                        if (!r->grammarSecs.empty() &&
-                            r->grammarSecs != "—")
-                            h += "<br><small style='color:#555'>Sanskrit "
-                                 "Grammar (1879) " +
-                                 QString::fromStdString(r->grammarSecs)
-                                     .left(160)
-                                     .toHtmlEscaped() +
-                                 " <span style='color:#777'>(✦ "
-                                 "specific · ⚠ exception)"
-                                 "</span></small>";
-                        if (!r->sectionRefs.empty()) {
-                            // topical ranges: perfect:781-823|… → a
-                            // compact by-topic index into the Grammar
-                            QString topics;
-                            const QStringList parts =
-                                QString::fromStdString(r->sectionRefs)
-                                    .split('|');
-                            int shown = 0;
-                            for (const QString& p2 : parts) {
-                                if (shown++ >= 6) {
-                                    topics += QString("· +%1 more ")
-                                                  .arg(parts.size() - 6);
-                                    break;
-                                }
-                                QString t2 = p2;
-                                t2.replace(':', " §§");
-                                t2.replace('_', ' ');
-                                topics += t2.toHtmlEscaped() + " · ";
-                            }
-                            if (!topics.isEmpty())
-                                h += "<br><small style='color:#777'>"
-                                     "Grammar by topic: " +
-                                     topics + "</small>";
-                        }
-                        h += "</div>";
-                    }
-                    h += "<div style='font-size:11px;color:#777'>read "
-                         "the Grammar itself: <a href='https://archive."
-                         "org/details/sanskritgrammari00whituoft'>"
-                         "archive.org scan (public domain)</a></div>";
-                }
-            }
-        }
-        // link-out tier: external searches for the resolved term
-        {
-            std::string wylie = raw;
-            if (!entries.empty()) wylie = entries.front().wylie;
-            else {
-                bool upper = false;
-                for (char c : raw) upper |= (c >= 'A' && c <= 'Z');
-                if (upper) wylie = allcore::acipToEwts(raw);
-            }
-            h += linkOutHtml(wylie);
-        }
-        // English reverse lookup (release reverse index, binding layer)
-        {
-            std::string eng = raw;
-            for (auto& c : eng) c = (char)std::tolower((unsigned char)c);
-            auto rev = spine.reverseIndex(eng);
-            if (!rev.empty()) {
-                h += "<hr><div><b>English \u2192 Tibetan</b> <small>(HGM reverse "
-                     "index)</small></div>";
-                for (const auto& r : rev) {
-                    QString tier = r.tier == "auto-aligned"
-                        ? "<span style='color:#b00'>PROVISIONAL</span>"
-                        : QString::fromStdString("HGM (" + r.tier + ")");
-                    h += "<div style='margin:5px 0'><b>" +
-                         QString::fromStdString(r.wylie).toHtmlEscaped() + "</b> \u00b7 " +
-                         QString::fromStdString(r.pronunciation).toHtmlEscaped() +
-                         " &nbsp;<small>[" + tier + "]</small></div>";
-                }
-            }
-        }
-        results->setHtml(h);
+        results->setHtml(lookupResultsHtml(spine, ref, mvp, whitney,
+                                           colloq, raw));
     });
     return pane;
 }
@@ -6797,6 +6810,28 @@ public:
                 [this] { spellcheck(); });
     }
 
+    int selfTest(QStringList& log) {
+        int fails = 0;
+        auto check = [&](bool ok, const char* what) {
+            log << QString("  [%1] Input: %2")
+                       .arg(ok ? "PASS" : "FAIL").arg(what);
+            if (!ok) ++fails;
+        };
+        editor_->setPlainText("SEMS CAN THAMS CAD BDE BA DANG,");
+        compareWith("SEMS CAN THAMS CAD BDE BA DANG,");
+        check(status_->text().contains("match exactly"),
+              "identical double-keying reports clean");
+        compareWith("SEMS CAN THAMS CAD BDE MA DANG,");
+        check(status_->text().contains("1") ||
+                  status_->text().contains("discrep"),
+              "planted difference is flagged");
+        check(!canPrefill(),
+              "pre-fill refuses a non-empty editor (never overwrites)");
+        editor_->clear();
+        check(canPrefill(), "pre-fill allowed on an empty page");
+        return fails;
+    }
+
 private:
     void openScan() {
         const QString f = QFileDialog::getOpenFileName(
@@ -6906,12 +6941,18 @@ private:
     // with the ACIP draft for the operator to CORRECT. The draft is
     // ocr-derived; correcting it is the typing pass, and double-keying
     // against the partner applies unchanged on top.
+    // pre-fill only ever starts from an empty page (never overwrites
+    // typing) — the guard is a named predicate so the selftest pins it
+    bool canPrefill() const {
+        return editor_->toPlainText().trimmed().isEmpty();
+    }
+
     void prefill() {
         if (base_.isNull()) {
             status_->setText("open a scan first");
             return;
         }
-        if (!editor_->toPlainText().trimmed().isEmpty()) {
+        if (!canPrefill()) {
             status_->setText(
                 "the editor already has typing — pre-fill only starts "
                 "from an empty page (it never overwrites your work)");
@@ -7048,7 +7089,11 @@ private:
         if (f.isEmpty()) return;
         QFile qf(f);
         if (!qf.open(QIODevice::ReadOnly)) return;
-        const QString partner = QString::fromUtf8(qf.readAll());
+        compareWith(QString::fromUtf8(qf.readAll()));
+    }
+
+    // the double-keying diff itself, dialog-free (selftest-covered)
+    void compareWith(const QString& partner) {
         const QString mine = editor_->toPlainText();
         // diff cost grows with divergence; keep the correction pass at
         // block scale (the input workflow compares blocks, not volumes)
@@ -7095,15 +7140,13 @@ private:
         editor_->setExtraSelections(spellSels_ + diffSels_);
         status_->setText(
             nDisc == 0
-                ? QString("double-keying PASS — your text and %1 match "
-                          "exactly")
-                      .arg(QFileInfo(f).fileName())
-                : QString("%1 discrepancy region(s) vs %2 — orange = "
-                          "here only, green seam = partner has extra "
-                          "text there. Correct until the texts match "
+                ? QString("double-keying PASS — your text and the "
+                          "partner file match exactly")
+                : QString("%1 discrepancy region(s) — orange = here "
+                          "only, green seam = partner has extra text "
+                          "there. Correct until the texts match "
                           "exactly (the input-center rule).")
-                      .arg(nDisc)
-                      .arg(QFileInfo(f).fileName()));
+                      .arg(nDisc));
     }
 
     // ---- the block workflow: a folder of pages, typed in order ----
@@ -8474,7 +8517,8 @@ int main(int argc, char** argv) {
     tabs.addTab(reviewPane, "Review");
     auto* alignPane = new AlignPane(spine, root);
     tabs.addTab(alignPane, "Align");
-    tabs.addTab(new InputPane(checker, root), "Input");
+    auto* inputPane = new InputPane(checker, root);
+    tabs.addTab(inputPane, "Input");
     auto* libraryPane = new LibraryPane(root, progress,
                                 [&tabs, overlay](const QString& path) {
                                     overlay->openFile(path);
@@ -8535,7 +8579,48 @@ int main(int argc, char** argv) {
         fails += reviewPane->selfTest(log);
         fails += alignPane->selfTest(log);
         fails += libraryPane->selfTest(log);
+        fails += inputPane->selfTest(log);
         fails += proposePane->selfTest(log);
+        // Lookup: the extracted stacked search, driver-level
+        {
+            auto lk = [&](bool ok, const char* what) {
+                log << QString("  [%1] Lookup: %2")
+                           .arg(ok ? "PASS" : "FAIL").arg(what);
+                if (!ok) ++fails;
+            };
+            const QString h = lookupResultsHtml(spine, refdict, mvp,
+                                                whitney, colloq,
+                                                "sems can");
+            lk(h.contains(QString::fromUtf8("≡")),
+               "known term returns HGM equivalents");
+            const int hgmAt = h.indexOf(QString::fromUtf8("≡"));
+            int refAt = h.indexOf("Chandra");
+            if (refAt < 0) refAt = h.indexOf("Hopkins");
+            lk(refAt < 0 || hgmAt < refAt,
+               "HGM binding layer precedes reference layers");
+            const QString hh = lookupResultsHtml(spine, refdict, mvp,
+                                                 whitney, colloq,
+                                                 "gzigs");
+            lk(hh.toLower().contains("honorific"),
+               "honorific term carries its badge");
+        }
+        // Search: the library's prebuilt line index, driver-level
+        {
+            auto sk = [&](bool ok, const char* what) {
+                log << QString("  [%1] Search: %2")
+                           .arg(ok ? "PASS" : "FAIL").arg(what);
+                if (!ok) ++fails;
+            };
+            const QString ix = root + "/library/.index.db";
+            if (QFileInfo::exists(ix)) {
+                allcore::LibraryIndex li(ix.toStdString());
+                auto hits = li.search("sems can", 5);
+                sk(!hits.empty(),
+                   "library index answers a known query");
+            } else {
+                sk(true, "library index absent — skipped");
+            }
+        }
         {
             ApprovalPane ap(root);
             fails += ap.selfTest(log);
