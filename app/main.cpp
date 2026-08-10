@@ -1089,7 +1089,10 @@ public:
         ll->addWidget(open);
         auto* load = new QPushButton("Load into overlay");
         ll->addWidget(load);
-        scanBtn_ = new QPushButton("Follow along in scans (BDRC)");
+auto* secScan = new QLabel("<span style='color:#9A7A33;font-size:10px;letter-spacing:2px;font-weight:600'>SCANS</span>");
+        secScan->setContentsMargins(0, 8, 0, 0);
+        ll->addWidget(secScan);
+                scanBtn_ = new QPushButton("Follow along in scans (BDRC)");
         scanBtn_->setEnabled(false);
         scanBtn_->setToolTip(
             "Opens the woodblock scans of this text from BDRC and keeps "
@@ -1168,7 +1171,10 @@ public:
                         "\n" + hint_->text());
             }
         });
-        auto* prepBtn = new QPushButton("Prepare for translation (Mixed Nuts)…");
+auto* secFmt = new QLabel("<span style='color:#9A7A33;font-size:10px;letter-spacing:2px;font-weight:600'>FORMAT &amp; EXPORT</span>");
+        secFmt->setContentsMargins(0, 8, 0, 0);
+        ll->addWidget(secFmt);
+                auto* prepBtn = new QPushButton("Prepare for translation (Mixed Nuts)…");
         ll->addWidget(prepBtn);
         connect(prepBtn, &QPushButton::clicked, [this] {
             const std::string src = input_->toPlainText().toStdString();
@@ -4938,9 +4944,12 @@ public:
         srcCol->addWidget(source_);
         auto* loadBtn = new QPushButton("Load source");
         srcCol->addWidget(loadBtn);
-        auto* outlineBtn = new QPushButton("Extract outline (sa bcad)");
+auto* secStruct = new QLabel("<span style='color:#9A7A33;font-size:10px;letter-spacing:2px;font-weight:600'>STRUCTURE</span>");
+        secStruct->setContentsMargins(0, 8, 0, 0);
+        srcCol->addWidget(secStruct);
+                auto* outlineBtn = new QPushButton("Extract outline (sa bcad)");
         srcCol->addWidget(outlineBtn);
-        auto* structBtn = new QPushButton("Structural units (bam po / le'u)");
+                auto* structBtn = new QPushButton("Structural units (bam po / le'u)");
         structBtn->setToolTip(
             "Explicit BAM PO and numbered LE'U markers written in the text "
             "(authoritative), plus a syllable-derived shloka/bampo ESTIMATE "
@@ -4959,7 +4968,10 @@ public:
         srcCol->addWidget(verseReadBtn);
         QObject::connect(verseReadBtn, &QPushButton::clicked,
                          [this] { verseReading(); });
-        auto* quoteBtn = new QPushButton("Detect quotations");
+auto* secEvid = new QLabel("<span style='color:#9A7A33;font-size:10px;letter-spacing:2px;font-weight:600'>EVIDENCE</span>");
+        secEvid->setContentsMargins(0, 8, 0, 0);
+        srcCol->addWidget(secEvid);
+                auto* quoteBtn = new QPushButton("Detect quotations");
         quoteBtn->setToolTip(
             "Finds passages that exactly match corpus segments (7+ "
             "syllables) — attested quotations, never inferred. Matched "
@@ -5002,7 +5014,10 @@ public:
         draftCol->addWidget(notesSearch_);
         QObject::connect(notesSearch_, &QLineEdit::returnPressed,
                          [this] { searchNotesBank(); });
-        auto* rtfBtn = new QPushButton("Export draft (RTF, *italics*)…");
+auto* secPub = new QLabel("<span style='color:#9A7A33;font-size:10px;letter-spacing:2px;font-weight:600'>PUBLISH</span>");
+        secPub->setContentsMargins(0, 8, 0, 0);
+        draftCol->addWidget(secPub);
+                auto* rtfBtn = new QPushButton("Export draft (RTF, *italics*)…");
         rtfBtn->setToolTip(
             "Writes the draft as RTF for the publishing workflow. Text "
             "between *asterisks* becomes italic — STD-004: name-parts "
@@ -8839,6 +8854,10 @@ static QString findDataRoot() {
 // in-app; dictionary/corpus approvals export as a candidates package
 // for the data project (the app never mutates the corpus).
 
+// set after the pane groups are built; raises any pane through the
+// two-level navigation
+static std::function<void(QWidget*)> g_raisePane;
+
 static QString g_userName;
 static bool g_isAdmin = false;
 static QString g_proposalsDir;
@@ -9507,17 +9526,56 @@ public:
     HelpWindow(QTabWidget* tabs, const QString& root, QWidget* parent)
         : QDialog(parent), tabs_(tabs) {
         setWindowTitle("ALL Tool Help & Tutorials");
-        resize(980, 640);
+        resize(1020, 680);
+        // the manuscript identity: cream page, maroon heads, gold
+        // accents — the same design language as the leadership docs
+        setStyleSheet(
+            "QDialog { background: #F1EBDD; }"
+            "QLineEdit { background: #FFFFFF; color: #2B2118;"
+            "  border: 1px solid #C9B992; border-radius: 8px;"
+            "  padding: 9px 14px; font-size: 15px; }"
+            "QListWidget { background: #FAF6EE; color: #2B2118;"
+            "  border: 1px solid #C9B992; border-radius: 8px;"
+            "  padding: 6px; font-size: 13px; outline: none; }"
+            "QListWidget::item { padding: 7px 8px; border-radius: 5px; }"
+            "QListWidget::item:selected { background: #8C2F2B;"
+            "  color: #FAF6EE; }"
+            "QTextBrowser { background: #FAF6EE; color: #2B2118;"
+            "  border: 1px solid #C9B992; border-radius: 8px;"
+            "  padding: 18px; }"
+            "QSplitter::handle { background: transparent; }");
         auto* outer = new QVBoxLayout(this);
+        outer->setContentsMargins(16, 14, 16, 16);
+        outer->setSpacing(10);
+        auto* title = new QLabel(
+            "<span style='color:#9A7A33; letter-spacing:2px;"
+            " font-size:11px'>ASIAN LEGACY LIBRARY</span><br>"
+            "<span style='color:#8C2F2B; font-size:22px;"
+            " font-weight:600'>Help &amp; Tutorials</span>");
+        outer->addWidget(title);
         search_ = new QLineEdit;
         search_->setPlaceholderText(
             "Search any feature, button, pane, or topic\u2026");
         outer->addWidget(search_);
         auto* split = new QSplitter;
         results_ = new QListWidget;
-        results_->setMinimumWidth(280);
+        results_->setMinimumWidth(290);
         body_ = new QTextBrowser;
         body_->setOpenLinks(false);
+        body_->document()->setDefaultStyleSheet(
+            "h1, h2 { color: #8C2F2B; }"
+            "h2 { font-size: 21px; margin-bottom: 4px; }"
+            "h3 { color: #5A3B22; }"
+            "a { color: #9A7A33; }"
+            "strong { color: #5A3B22; }"
+            "p, li { font-size: 14px; line-height: 1.45; }"
+            "code { background: #F1EBDD; }");
+        {
+            QFont bf = body_->font();
+            bf.setFamilies({"Iowan Old Style", "Palatino", "Georgia"});
+            bf.setPointSize(14);
+            body_->setFont(bf);
+        }
         split->addWidget(results_);
         split->addWidget(body_);
         split->setStretchFactor(1, 1);
@@ -9536,22 +9594,36 @@ public:
                 chapterOrder_ << title;
             }
         }
-        // auto-index every control in every pane
-        for (int i = 0; i < tabs_->count(); ++i) {
-            const QString pane = tabs_->tabText(i);
-            QWidget* w = tabs_->widget(i);
+        // auto-index every control in every pane — two-level aware:
+        // top tabs are GROUPS holding inner pane tabs
+        auto indexPane = [this](QWidget* w, const QString& pane,
+                                int loc) {
             for (auto* b : w->findChildren<QPushButton*>())
                 if (!b->text().trimmed().isEmpty())
                     controls_.push_back(
-                        {b->text(), pane, b->toolTip(), i});
+                        {b->text(), pane, b->toolTip(), loc});
             for (auto* c : w->findChildren<QCheckBox*>())
                 if (!c->text().trimmed().isEmpty())
                     controls_.push_back(
-                        {c->text(), pane, c->toolTip(), i});
+                        {c->text(), pane, c->toolTip(), loc});
             for (auto* cb : w->findChildren<QComboBox*>())
                 for (int k = 0; k < cb->count(); ++k)
                     controls_.push_back(
-                        {cb->itemText(k), pane, cb->toolTip(), i});
+                        {cb->itemText(k), pane, cb->toolTip(), loc});
+        };
+        for (int i = 0; i < tabs_->count(); ++i) {
+            if (auto* inner =
+                    qobject_cast<QTabWidget*>(tabs_->widget(i))) {
+                for (int j = 0; j < inner->count(); ++j) {
+                    locs_.push_back({i, inner, j});
+                    indexPane(inner->widget(j), inner->tabText(j),
+                              (int)locs_.size() - 1);
+                }
+            } else {
+                locs_.push_back({i, nullptr, -1});
+                indexPane(tabs_->widget(i), tabs_->tabText(i),
+                          (int)locs_.size() - 1);
+            }
         }
         connect(search_, &QLineEdit::textChanged,
                 [this](const QString& q) { doSearch(q); });
@@ -9561,7 +9633,13 @@ public:
                 [this](const QUrl& u) {
                     const QString a = u.toString();
                     if (a.startsWith("pane:")) {
-                        tabs_->setCurrentIndex(a.mid(5).toInt());
+                        const int k = a.mid(5).toInt();
+                        if (k >= 0 && k < (int)locs_.size()) {
+                            tabs_->setCurrentIndex(locs_[k].outer);
+                            if (locs_[k].inner)
+                                locs_[k].inner->setCurrentIndex(
+                                    locs_[k].ii);
+                        }
                         raise();
                     } else if (a.startsWith("chapter:")) {
                         showChapter(a.mid(8));
@@ -9583,6 +9661,7 @@ public:
 
 private:
     struct Ctl { QString label, pane, tip; int tab; };
+    struct Loc { int outer; QTabWidget* inner; int ii; };
 
     void doSearch(const QString& q) {
         results_->clear();
@@ -9660,6 +9739,7 @@ private:
     QMap<QString, QString> chapters_;
     QStringList chapterOrder_;
     std::vector<Ctl> controls_;
+    std::vector<Loc> locs_;
     std::vector<std::pair<int, QString>> rows_;
 };
 
@@ -9830,9 +9910,9 @@ int main(int argc, char** argv) {
     auto* inputPane = new InputPane(checker, root);
     tabs.addTab(inputPane, "Input");
     auto* libraryPane = new LibraryPane(root, progress,
-                                [&tabs, overlay](const QString& path) {
+                                [overlay](const QString& path) {
                                     overlay->openFile(path);
-                                    tabs.setCurrentIndex(0);
+                                    if (g_raisePane) g_raisePane(overlay);
                                 });
     tabs.addTab(libraryPane, "Library");
     auto* goferPane = new GoferPane(spine, root);
@@ -9917,9 +9997,46 @@ int main(int argc, char** argv) {
                     pending ? QString("Approval (%1)").arg(pending)
                             : QString("Approval"));
     }
-    // Library sits beside Overlay (Adam, 2026-08-10): the reading
-    // room next to the reading pane
-    tabs.tabBar()->moveTab(tabs.indexOf(libraryPane), 1);
+    // ---- two-level navigation (Adam, 2026-08-10): six workflow
+    // groups, each an inner tab row; panes reparented untouched
+    struct FlatPane { QWidget* w; QString title; QTabWidget* inner; };
+    static std::vector<FlatPane> flatPanes;
+    {
+        std::vector<std::pair<QWidget*, QString>> all;
+        for (int i = 0; i < tabs.count(); ++i)
+            all.push_back({tabs.widget(i), tabs.tabText(i)});
+        while (tabs.count()) tabs.removeTab(0);
+        auto mkGroup = [&](const QString& gname,
+                           std::initializer_list<const char*> names) {
+            auto* g = new QTabWidget;
+            g->setDocumentMode(true);
+            for (const char* want : names)
+                for (auto& [w, t] : all)
+                    if (t == want ||
+                        t.startsWith(QString(want) + " ("))
+                        {
+                            g->addTab(w, t);
+                            flatPanes.push_back({w, t, g});
+                        }
+            if (g->count()) tabs.addTab(g, gname);
+            else delete g;
+        };
+        mkGroup("Read", {"Overlay", "Library"});
+        mkGroup("Translate", {"Draft", "Review", "Align"});
+        mkGroup("Research",
+                {"Search", "Lookup", "Sanskrit", "Convert", "Analysis"});
+        mkGroup("Learn", {"Trainer", "Drills"});
+        mkGroup("Input", {"Input", "Scan"});
+        mkGroup("Community", {"Propose", "Approval"});
+        g_raisePane = [&tabs](QWidget* w) {
+            for (auto& f : flatPanes)
+                if (f.w == w) {
+                    tabs.setCurrentWidget(f.inner);
+                    f.inner->setCurrentWidget(w);
+                    return;
+                }
+        };
+    }
 
     // ---- the menu bar (Adam's request): every pane's functionality
     // from dropdowns. Built GENERICALLY from the panes themselves —
@@ -9937,12 +10054,12 @@ int main(int argc, char** argv) {
             s.setValue("app/nightMode", on);
         });
     }
-    for (int mi = 0; mi < tabs.count(); ++mi) {
-        QWidget* pane = tabs.widget(mi);
-        QMenu* menu = win.menuBar()->addMenu(tabs.tabText(mi));
+    for (size_t mi = 0; mi < flatPanes.size(); ++mi) {
+        QWidget* pane = flatPanes[mi].w;
+        QMenu* menu = win.menuBar()->addMenu(flatPanes[mi].title);
         QAction* go = menu->addAction("Show pane");
-        QObject::connect(go, &QAction::triggered, [&tabs, pane] {
-            tabs.setCurrentWidget(pane);
+        QObject::connect(go, &QAction::triggered, [pane] {
+            if (g_raisePane) g_raisePane(pane);
         });
         const auto btns = pane->findChildren<QPushButton*>();
         bool sep = false;
@@ -9952,8 +10069,8 @@ int main(int argc, char** argv) {
             if (!sep) { menu->addSeparator(); sep = true; }
             QAction* a = menu->addAction(label);
             if (!b->toolTip().isEmpty()) a->setToolTip(b->toolTip());
-            QObject::connect(a, &QAction::triggered, [&tabs, pane, b] {
-                tabs.setCurrentWidget(pane);
+            QObject::connect(a, &QAction::triggered, [pane, b] {
+                if (g_raisePane) g_raisePane(pane);
                 b->click();
             });
         }
@@ -10076,7 +10193,7 @@ int main(int argc, char** argv) {
         {
             const auto menus = win.menuBar()->actions();
             // View + one per pane + Help
-            bool ok = menus.size() == tabs.count() + 2;
+            bool ok = menus.size() == (int)flatPanes.size() + 2;
             int overlayActions = 0;
             if (menus.size() > 1 && menus.at(1)->menu())
                 overlayActions = menus.at(1)->menu()->actions().size();
@@ -10094,8 +10211,10 @@ int main(int argc, char** argv) {
         // the authority's tab badge carries the pending count
         {
             bool badge = false;
-            for (int k = 0; k < tabs.count(); ++k)
-                if (tabs.tabText(k).startsWith("Approval (")) badge = true;
+            for (auto& f : flatPanes)
+                if (f.inner->tabText(f.inner->indexOf(f.w))
+                        .startsWith("Approval ("))
+                    badge = true;
             log << QString("  [%1] Approval: tab badge shows pending "
                            "count").arg(badge ? "PASS" : "FAIL");
             if (!badge) ++fails;
@@ -10196,13 +10315,13 @@ int main(int argc, char** argv) {
             }
         }
         printf("[shot] demo open; %d tabs\n", tabs.count()); fflush(stdout);
-        for (int i = 0; i < tabs.count(); ++i) {
-            printf("[shot] tab %d %s\n", i,
-                   tabs.tabText(i).toUtf8().constData());
+        for (size_t i = 0; i < flatPanes.size(); ++i) {
+            printf("[shot] tab %zu %s\n", i,
+                   flatPanes[i].title.toUtf8().constData());
             fflush(stdout);
-            tabs.setCurrentIndex(i);
+            if (g_raisePane) g_raisePane(flatPanes[i].w);
             QCoreApplication::processEvents();
-            QString name = tabs.tabText(i).toLower();
+            QString name = flatPanes[i].title.toLower();
             name.replace(QRegularExpression("[^a-z]+"), "-");
             name.remove(QRegularExpression("-+$"));
             const QString file = QString("%1/%2-%3.png")
