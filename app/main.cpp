@@ -74,6 +74,9 @@
 #include <functional>
 #include <QDateTime>
 #include <QStandardPaths>
+#include <QMainWindow>
+#include <QMenuBar>
+#include <QMenu>
 
 #include "allcore/abbr.h"
 #include "allcore/analysis.h"
@@ -8695,8 +8698,11 @@ int main(int argc, char** argv) {
         progress = &pr;
     } catch (const std::exception&) {}
 
-    QTabWidget tabs;
-    tabs.setWindowTitle(
+    QMainWindow win;
+    auto* tabsPtr = new QTabWidget;   // owned by the main window
+    QTabWidget& tabs = *tabsPtr;
+    win.setCentralWidget(tabsPtr);
+    win.setWindowTitle(
         QString("ALL Translation Tool — HGM v%1")
             .arg(QString::fromStdString(spine.metaValue("release_version"))));
     auto* overlay = new OverlayPane(spine, checker, refdict, progress, root);
@@ -8763,6 +8769,48 @@ int main(int argc, char** argv) {
                     pending ? QString("Approval (%1)").arg(pending)
                             : QString("Approval"));
     }
+    // ---- the menu bar (Adam's request): every pane's functionality
+    // from dropdowns. Built GENERICALLY from the panes themselves —
+    // each button becomes an action (raise the pane, then click it),
+    // each display toggle a checkable item synced both ways — so
+    // future pane features appear here with no menu maintenance.
+    for (int mi = 0; mi < tabs.count(); ++mi) {
+        QWidget* pane = tabs.widget(mi);
+        QMenu* menu = win.menuBar()->addMenu(tabs.tabText(mi));
+        QAction* go = menu->addAction("Show pane");
+        QObject::connect(go, &QAction::triggered, [&tabs, pane] {
+            tabs.setCurrentWidget(pane);
+        });
+        const auto btns = pane->findChildren<QPushButton*>();
+        bool sep = false;
+        for (QPushButton* b : btns) {
+            const QString label = b->text().trimmed();
+            if (label.isEmpty()) continue;
+            if (!sep) { menu->addSeparator(); sep = true; }
+            QAction* a = menu->addAction(label);
+            if (!b->toolTip().isEmpty()) a->setToolTip(b->toolTip());
+            QObject::connect(a, &QAction::triggered, [&tabs, pane, b] {
+                tabs.setCurrentWidget(pane);
+                b->click();
+            });
+        }
+        const auto checks = pane->findChildren<QCheckBox*>();
+        bool csep = false;
+        for (QCheckBox* c : checks) {
+            if (c->text().trimmed().isEmpty()) continue;
+            if (!csep) { menu->addSeparator(); csep = true; }
+            QAction* a = menu->addAction(c->text());
+            a->setCheckable(true);
+            a->setChecked(c->isChecked());
+            QObject::connect(a, &QAction::toggled, [c](bool on) {
+                if (c->isChecked() != on) c->setChecked(on);
+            });
+            QObject::connect(c, &QCheckBox::toggled, [a](bool on) {
+                if (a->isChecked() != on) a->setChecked(on);
+            });
+        }
+    }
+
     // --selftest: suite 38 — the real panes exercised against the
     // real spine, offscreen; nonzero exit on any failure (ctest)
     if (selfTestMode) {
@@ -8823,6 +8871,24 @@ int main(int argc, char** argv) {
             ApprovalPane ap(root);
             fails += ap.selfTest(log);
         }
+        // the menu bar mirrors every pane
+        {
+            const auto menus = win.menuBar()->actions();
+            bool ok = menus.size() == tabs.count();
+            int overlayActions = 0;
+            if (!menus.isEmpty() && menus.first()->menu())
+                overlayActions = menus.first()->menu()->actions().size();
+            log << QString("  [%1] MenuBar: one menu per pane (%2)")
+                       .arg(ok ? "PASS" : "FAIL")
+                       .arg(menus.size());
+            if (!ok) ++fails;
+            const bool rich = overlayActions > 8;
+            log << QString("  [%1] MenuBar: Overlay menu carries its "
+                           "actions (%2)")
+                       .arg(rich ? "PASS" : "FAIL")
+                       .arg(overlayActions);
+            if (!rich) ++fails;
+        }
         // the authority's tab badge carries the pending count
         {
             bool badge = false;
@@ -8838,8 +8904,8 @@ int main(int argc, char** argv) {
                fails ? "FAIL" : "ALL PASS", fails);
         return fails ? 1 : 0;
     }
-    tabs.resize(1180, 760);
-    tabs.show();
+    win.resize(1180, 760);
+    win.show();
     if (shotMode) {
         const QString outDir = cliArgs.at(shotIx + 1);
         QDir().mkpath(outDir);
