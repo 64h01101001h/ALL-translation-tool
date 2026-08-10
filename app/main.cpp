@@ -4063,6 +4063,14 @@ public:
                          });
     }
 
+    // demo/screenshot hook: load a text and open the first clause's
+    // color-linked anchors
+    void demo(const QString& text) {
+        source_->setPlainText(text);
+        load();
+        if (!clauses_.empty()) showAnchors(0);
+    }
+
 private:
     std::string tokEwts(const std::string& tok) const {
         return docIsWylie_ ? tok : allcore::acipToEwts(tok);
@@ -4126,13 +4134,67 @@ private:
     void showAnchors(int ci) {
         if (ci < 0 || ci >= (int)clauses_.size()) return;
         lastClause_ = ci;
+        const auto terms = termSpans(clauses_[ci]);
+        // color link (GMR course-material style): the k-th anchored
+        // term and its gloss entry share one hue — which English goes
+        // with which Tibetan reads by color
+        static const char* hues[4] = {"#D9EFDA", "#D8E9F7", "#FAE8D8",
+                                      "#F7E3EA"};
+        auto hueOf = [&](int spanIx) -> const char* {
+            for (size_t k = 0; k < terms.size(); ++k)
+                if (terms[k] == spanIx) return hues[k % 4];
+            return nullptr;
+        };
         QString h = QString("<div style='color:#777'>anchors — clause %1"
-                            "</div><hr>").arg(ci + 1);
-        for (int ix : termSpans(clauses_[ci])) {
+                            "</div>").arg(ci + 1);
+        // the clause itself in script, terms banded in their hues
+        {
+            const auto& cl = clauses_[ci];
+            QString line;
+            for (int t = cl.beg; t < cl.end; ++t) {
+                // the innermost-of-the-maximal terms covering t
+                const char* hue = nullptr;
+                bool opens = false, closes = false;
+                for (size_t k = 0; k < terms.size(); ++k) {
+                    const auto& sp = doc_.spans[terms[k]];
+                    if (sp.beg <= t && t < sp.end) {
+                        hue = hues[k % 4];
+                        opens = (t == sp.beg);
+                        closes = (t == sp.end - 1);
+                        break;
+                    }
+                }
+                auto [u, okc] =
+                    allcore::wylieToUnicode(tokEwts(doc_.tokens[t]));
+                QString disp = okc && !u.empty()
+                                   ? QString::fromStdString(u)
+                                   : QString::fromStdString(doc_.tokens[t])
+                                         .toHtmlEscaped();
+                const QString tsheg = QString::fromUtf8("་");
+                if (hue) {
+                    if (opens)
+                        line += QString("<span style='background:%1'>")
+                                    .arg(hue);
+                    line += disp;
+                    line += closes ? QString("</span>") + tsheg
+                                   : tsheg;
+                } else {
+                    line += disp + tsheg;
+                }
+            }
+            h += "<div style='font-size:20px;margin:6px 0'>" + line +
+                 "</div>";
+        }
+        h += "<hr>";
+        for (int ix : terms) {
             const auto& e = doc_.entries[doc_.spans[ix].entry_ix];
             QString w = QString::fromStdString(e.wylie).toHtmlEscaped();
+            const char* hue = hueOf(ix);
             h += "<div style='margin:4px 0'><a href='t:" + w +
-                 "'><b>" + w + "</b></a> <a href='ts:" + w +
+                 QString("'><b style='background:%1;padding:1px 4px;"
+                         "border-radius:3px'>")
+                     .arg(hue ? hue : "transparent") +
+                 w + "</b></a> <a href='ts:" + w +
                  "' style='font-size:11px;color:#7A5A00'>[+ technical "
                  "spelling]</a>";
             QString tier = e.provisional()
@@ -8151,7 +8213,8 @@ int main(int argc, char** argv) {
     tabs.addTab(new TrainerPane(spine, progress, poslex, contractions),
                 "Trainer");
     tabs.addTab(new DrillsPane(spine, progress), "Drills");
-    tabs.addTab(new DraftPane(spine, progress, root), "Draft");
+    auto* draftPane = new DraftPane(spine, progress, root);
+    tabs.addTab(draftPane, "Draft");
     tabs.addTab(new ReviewPane(spine), "Review");
     tabs.addTab(new AlignPane(spine, root), "Align");
     tabs.addTab(new InputPane(checker, root), "Input");
@@ -8243,6 +8306,7 @@ int main(int argc, char** argv) {
                 tf.write(excerpt.toUtf8());
                 tf.close();
                 overlay->openFile(tmp);
+                draftPane->demo(excerpt);
             }
         }
         printf("[shot] demo open; %d tabs\n", tabs.count()); fflush(stdout);
