@@ -1004,6 +1004,24 @@ public:
                        "guard skipped";
             }
         }
+        // widget-level open ceiling: the FULL pipeline (openFile ->
+        // loadDoc -> lazy layout) on the largest volume — this is the
+        // check that would have caught the Library-open hang
+        {
+            QFile v(selfTestRoot_ +
+                    "/library/acip_release6/TD3811I_inc_t.txt");
+            if (v.exists()) {
+                QElapsedTimer t;
+                t.start();
+                openFile(v.fileName());
+                const qint64 ms = t.elapsed();
+                log << QString("  [info] Overlay: 1.2MB volume "
+                               "openFile in %1 ms")
+                           .arg(ms);
+                check(ms < 20000,
+                      "full-volume openFile under the widget ceiling");
+            }
+        }
         input_->clear();
         loadDoc();
         return fails;
@@ -9896,6 +9914,7 @@ int main(int argc, char** argv) {
         for (auto* b : overlay->findChildren<QPushButton*>())
             if (b->text() == "Load into overlay") {
                 for (auto* e : overlay->findChildren<QPlainTextEdit*>()) {
+                    if (e->isReadOnly()) continue;   // that's the view
                     e->setPlainText(cliArgs.at(pasteIx + 1));
                     break;
                 }
@@ -9903,6 +9922,16 @@ int main(int argc, char** argv) {
                 t.start();
                 b->click();
                 printf("[paste] loaded in %lld ms\n", t.elapsed());
+                for (auto* pv : overlay->findChildren<QPlainTextEdit*>())
+                    if (pv->isReadOnly())
+                        printf("[paste] view chars=%d\n",
+                               (int)pv->toPlainText().size());
+                for (auto* lb : overlay->findChildren<QLabel*>()) {
+                    const QString t2 = lb->text();
+                    if (t2.contains("tokens"))
+                        printf("[paste] hint: %s\n",
+                               t2.left(120).toUtf8().constData());
+                }
                 fflush(stdout);
                 return 0;
             }
