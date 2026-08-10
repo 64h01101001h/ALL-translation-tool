@@ -9511,7 +9511,12 @@ int main(int argc, char** argv) {
     static std::vector<ApparatusNote> appNotes;
     static std::vector<ApparatusBib> appBib;
     {
-        QFile nf(root + "/data/extracted/mixed_nuts_notes.json");
+        // the unified apparatus store (task #57) supersedes the
+        // mixed-nuts pair; fall back to the mined files if absent
+        QString notesPath = root + "/data/extracted/apparatus_notes.json";
+        if (!QFileInfo::exists(notesPath))
+            notesPath = root + "/data/extracted/mixed_nuts_notes.json";
+        QFile nf(notesPath);
         if (nf.open(QIODevice::ReadOnly))
             for (const auto& v :
                  QJsonDocument::fromJson(nf.readAll()).array()) {
@@ -9519,9 +9524,15 @@ int main(int argc, char** argv) {
                 appNotes.push_back({o["lemma"].toString(),
                                     o["text"].toString(),
                                     o["source"].toString(),
-                                    o["note"].toInt()});
+                                    o.contains("num")
+                                        ? o["num"].toInt()
+                                        : o["note"].toInt()});
             }
-        QFile bf(root + "/data/extracted/mixed_nuts_bibliography.json");
+        QString bibPath =
+            root + "/data/extracted/apparatus_bibliography.json";
+        if (!QFileInfo::exists(bibPath))
+            bibPath = root + "/data/extracted/mixed_nuts_bibliography.json";
+        QFile bf(bibPath);
         if (bf.open(QIODevice::ReadOnly))
             for (const auto& v :
                  QJsonDocument::fromJson(bf.readAll()).array()) {
@@ -9576,6 +9587,10 @@ int main(int argc, char** argv) {
                     pending ? QString("Approval (%1)").arg(pending)
                             : QString("Approval"));
     }
+    // Library sits beside Overlay (Adam, 2026-08-10): the reading
+    // room next to the reading pane
+    tabs.tabBar()->moveTab(tabs.indexOf(libraryPane), 1);
+
     // ---- the menu bar (Adam's request): every pane's functionality
     // from dropdowns. Built GENERICALLY from the panes themselves —
     // each button becomes an action (raise the pane, then click it),
