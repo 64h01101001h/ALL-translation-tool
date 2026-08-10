@@ -859,7 +859,8 @@ class OverlayPane : public QWidget {
 public:
     // open a file into the overlay (used by the Library pane's browser)
     // --selftest: exercise this pane's wiring against the real spine
-    int selfTest(QStringList& log) {
+    int selfTest(QStringList& log, const QString& root) {
+        selfTestRoot_ = root;
         int fails = 0;
         auto check = [&](bool ok, const char* what) {
             log << QString("  [%1] Overlay: %2")
@@ -895,6 +896,78 @@ public:
         loadDoc();
         check(hint_->text().contains("1 spelling"),
               "illegal syllable raises one spellcheck flag");
+
+        // ---- robustness: hostile input must never crash, and the
+        // token bookkeeping must stay consistent. ACIP display mode:
+        // the offscreen platform lacks lazy text layout, so script
+        // mode on large inputs is quadratic (a test-harness artifact,
+        // not an app behavior — the small cases above cover script)
+        scriptMode_->setCurrentIndex(1);
+        auto consistent = [&] {
+            return tokBeg_.size() == doc_.tokens.size() &&
+                   tokEnd_.size() == doc_.tokens.size();
+        };
+        const struct { const char* name; const char* text; } hostile[] = {
+            {"empty document", ""},
+            {"punctuation only", ",,,///;;;   ,,,"},
+            {"emoji and symbols", "\U0001F64F \u2764 \u262F test \U0001F304"},
+            {"raw Tibetan script pasted",
+             "\u0F66\u0F7A\u0F58\u0F66\u0F0B\u0F45\u0F53\u0F0B"
+             "\u0F50\u0F58\u0F66\u0F0B\u0F45\u0F51\u0F0D"},
+            {"mixed transliterations",
+             "SEMS CAN thams cad BDE ba dang LDAN par"},
+            {"lone 'a chungs and shads", "' '' ' / // '"},
+        };
+        for (const auto& hcase : hostile) {
+            input_->setPlainText(QString::fromUtf8(hcase.text));
+            loadDoc();
+            check(consistent(),
+                  (QString("survives ") + hcase.name).toUtf8().constData());
+        }
+        {
+            // a large single line through the full pane path (the
+            // offscreen platform lays out per format change, so the
+            // widget-level case stays at tens of kilobytes; the
+            // megabyte case runs against the engine core below)
+            QString big;
+            big.reserve(70000);
+            for (int k = 0; k < 4000; ++k) big += "SEMS CAN BDE BA ";
+            input_->setPlainText(big);
+            loadDoc();
+            check(consistent(), "survives a 64k single line");
+        }
+
+        // ---- performance regression guard on the ENGINE CORE: a
+        // full canonical volume through buildOverlay (tokenize +
+        // lattice + spans) — the algorithmic path a regression would
+        // hit. Display timing is a GUI concern (viewport-lazy there,
+        // pathological offscreen), covered by the manual checklist.
+        {
+            QFile v(selfTestRoot_ +
+                    "/library/acip_release6/TD10199_T.TXT");
+            if (v.open(QIODevice::ReadOnly)) {
+                const std::string vol =
+                    QString::fromUtf8(v.readAll()).toStdString();
+                QElapsedTimer t;
+                t.start();
+                auto vdoc = allcore::buildOverlay(spine_, index_, vol);
+                const qint64 ms = t.elapsed();
+                log << QString("  [info] Overlay: full volume "
+                               "(%1 tokens, %2 spans) through "
+                               "buildOverlay in %3 ms")
+                           .arg(vdoc.tokens.size())
+                           .arg(vdoc.spans.size())
+                           .arg(ms);
+                check(vdoc.tokens.size() > 100000,
+                      "full volume tokenizes at scale");
+                check(ms < 15000,
+                      "full-volume engine pass under the regression "
+                      "ceiling");
+            } else {
+                log << "  [info] Overlay: volume file absent — perf "
+                       "guard skipped";
+            }
+        }
         input_->clear();
         loadDoc();
         return fails;
@@ -2338,6 +2411,7 @@ private:
     bool contrTried_ = false;
     QString docFile_;
     bool docIsWylie_ = false;
+    QString selfTestRoot_;
     std::map<std::string, std::string> glossary_;
     std::unique_ptr<allcore::botok::SegTrie> segmenter_;
     bool segTried_ = false;
@@ -8636,7 +8710,7 @@ int main(int argc, char** argv) {
     if (selfTestMode) {
         QStringList log;
         int fails = 0;
-        fails += overlay->selfTest(log);
+        fails += overlay->selfTest(log, root);
         fails += trainerPane->selfTest(log);
         fails += drillsPane->selfTest(log);
         fails += draftPane->selfTest(log);

@@ -150,6 +150,17 @@ by nature.)
 | Export approved candidates | selftest: writeApprovedExport → APPROVED header + ruled row | selftest | ✅ |
 | Pending badge on tab | selftest: tab text "Approval (N)" asserted | selftest | ✅ |
 
+## Robustness & performance (selftest wave 4)
+
+| Check | Result |
+|---|---|
+| Hostile inputs: empty, punctuation-only, emoji, raw Tibetan script, mixed transliterations, lone 'a-chungs, 64k single line | ✅ all survive; token bookkeeping consistent |
+| Full-volume engine pass (TD10199, 344,940 tokens / 472,112 spans through buildOverlay) | ✅ 424 ms measured; 15 s regression ceiling enforced |
+
+*(Display-layer timing on large documents is a GUI concern — the real
+app lays out per viewport; the offscreen test platform does not — so
+it belongs to the manual checklist, step 1.)*
+
 ## The manual checklist (run before any release hand-off)
 
 1. Open a Kangyur volume in Overlay; script mode; check shading reads
