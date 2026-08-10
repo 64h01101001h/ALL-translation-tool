@@ -3127,12 +3127,75 @@ static QWidget* makeConvertPane(allcore::Mvp* mvp,
 
     layout->addWidget(new QLabel(
         "<b>Input</b> (ACIP, EWTS wylie, or Sanskrit IAST — auto-detected)"));
+    // Sanskrit OCR (optional capability, like the Tibetan OCR model):
+    // enabled when tesseract + the san traineddata are installed.
+    // Output is REVIEW MATERIAL — recognized Devanagari lands in the
+    // input for the proven converter chain (→ IAST, Whitney), never
+    // trusted as text.
+    auto* saOcrBtn = new QPushButton(
+        "Sanskrit OCR — recognize a Devanagari image\u2026");
+    layout->addWidget(saOcrBtn);
     auto* input = new QPlainTextEdit;
     input->setPlaceholderText(
         "BSOD NAMS   ·   bsod nams   ·   SNGA DRO'I KA BA …   ·   pramāṇa");
     layout->addWidget(input, 1);
     auto* out = new QTextBrowser;
     layout->addWidget(out, 2);
+    QObject::connect(saOcrBtn, &QPushButton::clicked, [pane, input, out] {
+        QString tess = QStandardPaths::findExecutable("tesseract");
+        if (tess.isEmpty())
+            for (const char* c : {"/opt/homebrew/bin/tesseract",
+                                  "/usr/local/bin/tesseract"})
+                if (QFileInfo::exists(c)) { tess = c; break; }
+        const bool hasSan =
+            !tess.isEmpty() &&
+            (QFileInfo::exists(QFileInfo(tess).path() +
+                               "/../share/tessdata/san.traineddata") ||
+             QFileInfo::exists("/opt/homebrew/share/tessdata/"
+                               "san.traineddata"));
+        if (!hasSan) {
+            out->setHtml(
+                "<div style='color:#8C2F2B'>Sanskrit OCR needs the "
+                "tesseract engine with the Sanskrit model:<br>"
+                "<code>brew install tesseract</code> and place "
+                "<code>san.traineddata</code> (tessdata_best, Apache-2.0) "
+                "in the tessdata folder. Recognition stays optional — "
+                "the converter works without it.</div>");
+            return;
+        }
+        const QString img = QFileDialog::getOpenFileName(
+            pane, "Devanagari image", QString(),
+            "Images (*.png *.jpg *.jpeg *.tif *.tiff)");
+        if (img.isEmpty()) return;
+        out->setHtml("<i>recognizing\u2026</i>");
+        QCoreApplication::processEvents();
+        QProcess p;
+        p.start(tess, {img, "stdout", "-l", "san"});
+        p.waitForFinished(60000);
+        const QString deva =
+            QString::fromUtf8(p.readAllStandardOutput()).trimmed();
+        if (deva.isEmpty()) {
+            out->setHtml("<div style='color:#8C2F2B'>nothing "
+                         "recognized</div>");
+            return;
+        }
+        // review-material banner + feed the proven converter
+        input->setPlainText(deva);
+        auto [ia, ok] = allcore::devanagariToIast(deva.toStdString());
+        out->setHtml(
+            "<div style='background:#FDEEDC;padding:6px'>\u26A0 "
+            "OCR-DERIVED \u2014 unverified review material. Verify "
+            "against the image before any further use.</div>"
+            "<div style='margin-top:6px'><b>Devanagari (recognized):"
+            "</b><br>" + deva.toHtmlEscaped() +
+            "</div><div style='margin-top:6px'><b>IAST"
+            "</b>" + QString(ok ? "" : " <small>(partial \u2014 some "
+                                       "signs unconverted)</small>") +
+            ":<br>" + QString::fromStdString(ia).toHtmlEscaped() +
+            "</div><div style='color:#777;font-size:11px;margin-top:6px'>"
+            "edit the input above and convert as usual for the full "
+            "chain (ACIP styles, Tibetan, Whitney roots).</div>");
+    });
 
     auto convert = [input, out, mvp, whitney] {
         const QString raw = input->toPlainText().trimmed();
