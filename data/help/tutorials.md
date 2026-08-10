@@ -63,7 +63,9 @@ are a faint lavender; provisional (machine-aligned) glosses show an
 amber-leaning tint — that tint is a warning, not a decoration. Red
 wavy underline = spelling fails the classical syllable rules. Dotted
 amber = a particle disagreeing with the preceding suffix (a review
-hint, never auto-corrected). A full volume opens in a couple of
+hint, never auto-corrected). The display follows the source file's
+own line breaks and blank lines, so the shaded text reads
+congruently with the original. A full volume opens in a couple of
 seconds; shading finishes silently if the text is huge.
 
 **The card.** Click any shaded word: the panel below the display
@@ -435,4 +437,4 @@ source and page.
 cream reading pages. Remembered.
 
 **Self-test.** If anything misbehaves: run the app from Terminal with
-`--selftest` — 71 checks print PASS/FAIL and localize the problem.
+`--selftest` — 72 checks print PASS/FAIL and localize the problem.

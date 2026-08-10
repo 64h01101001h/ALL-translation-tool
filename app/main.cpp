@@ -947,6 +947,10 @@ public:
                   spellList_->item(0, 1)->text() == "1",
               "spelling-doubts panel lists the doubted form");
         spellToggle_->setChecked(false);
+        input_->setPlainText("GANG ZAG ,\n\nBDEN PA ,");
+        loadDoc();
+        check(view_->toPlainText().count('\n') == 2,
+              "display mirrors the source's line breaks");
 
         // ---- robustness: hostile input must never crash, and the
         // token bookkeeping must stay consistent. ACIP display mode:
@@ -1513,6 +1517,43 @@ private:
                                   .families());
             view_->setFont(f);
         }
+        // Mirror the source's line structure (Adam, 2026-08-10): the
+        // input box keeps the ACIP file's returns; the display follows
+        // them, so the shading reads congruently with the source
+        // instead of one endless run. Counted by tokenizing each
+        // source line with the same tokenizer; if the counts do not
+        // reconcile with the document's tokens, fall back to the
+        // continuous layout rather than guessing line ends.
+        std::vector<int> nlAfter(doc_.tokens.size(), 0);
+        {
+            const std::string raw = input_->toPlainText().toStdString();
+            size_t tokIdx = 0, pos = 0;
+            long prevLast = -1;
+            int blanks = 0;
+            while (pos <= raw.size()) {
+                const size_t e = raw.find('\n', pos);
+                const std::string line = raw.substr(
+                    pos, e == std::string::npos ? std::string::npos
+                                                : e - pos);
+                std::vector<std::string> ltoks;
+                std::vector<bool> lbar;
+                allcore::tokenizeDocument(line, ltoks, lbar);
+                if (ltoks.empty()) {
+                    ++blanks;
+                } else {
+                    if (prevLast >= 0 &&
+                        prevLast < (long)nlAfter.size())
+                        nlAfter[prevLast] = 1 + blanks;
+                    blanks = 0;
+                    tokIdx += ltoks.size();
+                    prevLast = (long)tokIdx - 1;
+                }
+                if (e == std::string::npos) break;
+                pos = e + 1;
+            }
+            if (tokIdx != doc_.tokens.size())
+                std::fill(nlAfter.begin(), nlAfter.end(), 0);
+        }
         QString text;
         text.reserve((int)(input_->toPlainText().size() * 2));
         std::unordered_map<std::string, QString> dispCache;
@@ -1547,6 +1588,10 @@ private:
             } else {
                 if (doc_.barrier_after[i]) text += mode == 2 ? " /" : ",";
                 text += " ";
+            }
+            if (nlAfter[i] > 0) {
+                while (text.endsWith(' ')) text.chop(1);
+                for (int k = 0; k < nlAfter[i]; ++k) text += '\n';
             }
         }
         loading_ = true;
