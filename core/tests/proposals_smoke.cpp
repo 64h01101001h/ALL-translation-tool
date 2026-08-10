@@ -145,6 +145,22 @@ int main(int argc, char** argv) {
               allcore::Proposal::kindFromName("high-honorific"))) ==
               "high-honorific",
           "kind name round-trips");
+    CHECK(std::string(allcore::Proposal::kindName(
+              allcore::Proposal::kindFromName("humilific"))) ==
+              "humilific",
+          "humilific kind round-trips");
+    CHECK(std::string(allcore::Proposal::kindName(
+              allcore::Proposal::kindFromName("double-honorific"))) ==
+              "double-honorific",
+          "double-honorific kind round-trips");
+    {
+        allcore::Proposal p;
+        p.kind = allcore::ProposalKind::Humilific;
+        CHECK(p.isRegister(), "humilific routes to the register lane");
+        p.kind = allcore::ProposalKind::DoubleHonorific;
+        CHECK(p.isRegister(),
+              "double-honorific routes to the register lane");
+    }
 
     std::printf("proposals_smoke: %s (%d failures)\n",
                 failures ? "FAIL" : "ALL PASS", failures);

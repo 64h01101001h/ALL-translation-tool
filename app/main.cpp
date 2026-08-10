@@ -153,7 +153,10 @@ static QString entryHtml(const allcore::Entry& e,
             const auto& [ord, dom, lvl] = it->second;
             h += " <span style='background:#EADFF7;color:#4A2A6B;"
                  "padding:1px 7px;border-radius:8px;font-size:11px'>" +
-                 QString(lvl == "high" ? "HIGH honorific" : "honorific") +
+                 QString(lvl == "high" ? "HIGH honorific"
+                         : lvl == "humilific" ? "humilific"
+                         : lvl == "double" ? "double honorific"
+                                           : "honorific") +
                  " (zhe sa)</span>";
             if (!ord.isEmpty())
                 h += " <small style='color:#555'>ordinary: <b>" +
@@ -587,7 +590,9 @@ static void proposeTermDialog(QWidget* parent, const QString& wylie,
     }
     QString field;
     if (kind == allcore::ProposalKind::Honorific ||
-        kind == allcore::ProposalKind::HighHonorific) {
+        kind == allcore::ProposalKind::HighHonorific ||
+        kind == allcore::ProposalKind::Humilific ||
+        kind == allcore::ProposalKind::DoubleHonorific) {
         field = value;
         value.clear();
     }
@@ -2511,7 +2516,9 @@ private:
         // ordinary counterpart (matching the register file's columns)
         QString field;
         if (kind == allcore::ProposalKind::Honorific ||
-            kind == allcore::ProposalKind::HighHonorific) {
+            kind == allcore::ProposalKind::HighHonorific ||
+            kind == allcore::ProposalKind::Humilific ||
+            kind == allcore::ProposalKind::DoubleHonorific) {
             field = value;   // ordinary form goes in the secondary slot
             value.clear();
         }
@@ -6297,7 +6304,11 @@ private:
                            "</b> — " +
                            (level == "high"
                                 ? QString("<b>HIGH honorific</b>")
-                                : QString("honorific")) +
+                                : level == "humilific"
+                                    ? QString("humilific")
+                                    : level == "double"
+                                        ? QString("double honorific")
+                                        : QString("honorific")) +
                            (ordinary.isEmpty()
                                 ? QString()
                                 : " (ordinary: " +
@@ -8086,6 +8097,10 @@ public:
                        int(allcore::ProposalKind::Honorific));
         kind_->addItem("HIGH honorific marking",
                        int(allcore::ProposalKind::HighHonorific));
+        kind_->addItem("Humilific (self-lowering) form",
+                       int(allcore::ProposalKind::Humilific));
+        kind_->addItem("DOUBLE honorific (subject + recipient)",
+                       int(allcore::ProposalKind::DoubleHonorific));
         kind_->addItem("Pronunciation exception",
                        int(allcore::ProposalKind::Pronunciation));
         kind_->addItem("Abbreviation / contraction candidate",
@@ -8453,11 +8468,16 @@ private:
     void applyRegister(const allcore::Proposal& p) {
         QString path, line;
         if (p.kind == allcore::ProposalKind::Honorific ||
-            p.kind == allcore::ProposalKind::HighHonorific) {
+            p.kind == allcore::ProposalKind::HighHonorific ||
+            p.kind == allcore::ProposalKind::Humilific ||
+            p.kind == allcore::ProposalKind::DoubleHonorific) {
             path = root_ + "/data/honorifics/honorific_register.tsv";
             const QString level =
                 p.kind == allcore::ProposalKind::HighHonorific ? "high"
-                                                               : "honorific";
+                : p.kind == allcore::ProposalKind::Humilific ? "humilific"
+                : p.kind == allcore::ProposalKind::DoubleHonorific
+                    ? "double"
+                    : "honorific";
             // honorific_wylie \t ordinary \t domain \t level
             line = QString::fromStdString(p.wylie) + "\t" +
                    QString::fromStdString(p.field) + "\t" +

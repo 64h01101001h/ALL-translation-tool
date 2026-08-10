@@ -24,6 +24,8 @@ namespace allcore {
 enum class ProposalKind {
     Honorific,       // honorific ↔ ordinary pair (register, app-native)
     HighHonorific,   // high-honorific marking (register, app-native)
+    Humilific,       // humilific: self-lowering forms (register)
+    DoubleHonorific, // both subject and recipient honored (register)
     Pronunciation,   // a pronunciation exception (register, app-native)
     Abbreviation,    // a bsdus-tshig / bskungs-yig candidate (register)
     WordRendering,   // English for a word (dictionary — export)
@@ -54,6 +56,8 @@ struct Proposal {
     bool isRegister() const {
         return kind == ProposalKind::Honorific ||
                kind == ProposalKind::HighHonorific ||
+               kind == ProposalKind::Humilific ||
+               kind == ProposalKind::DoubleHonorific ||
                kind == ProposalKind::Pronunciation ||
                kind == ProposalKind::Abbreviation;
     }

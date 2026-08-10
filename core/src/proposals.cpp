@@ -9,6 +9,8 @@ const char* Proposal::kindName(ProposalKind k) {
     switch (k) {
         case ProposalKind::Honorific: return "honorific";
         case ProposalKind::HighHonorific: return "high-honorific";
+        case ProposalKind::Humilific: return "humilific";
+        case ProposalKind::DoubleHonorific: return "double-honorific";
         case ProposalKind::Pronunciation: return "pronunciation";
         case ProposalKind::Abbreviation: return "abbreviation";
         case ProposalKind::WordRendering: return "word";
@@ -21,6 +23,8 @@ const char* Proposal::kindName(ProposalKind k) {
 ProposalKind Proposal::kindFromName(const std::string& s) {
     if (s == "honorific") return ProposalKind::Honorific;
     if (s == "high-honorific") return ProposalKind::HighHonorific;
+    if (s == "humilific") return ProposalKind::Humilific;
+    if (s == "double-honorific") return ProposalKind::DoubleHonorific;
     if (s == "pronunciation") return ProposalKind::Pronunciation;
     if (s == "abbreviation") return ProposalKind::Abbreviation;
     if (s == "word") return ProposalKind::WordRendering;
