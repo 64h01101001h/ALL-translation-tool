@@ -74,6 +74,7 @@
 #include <functional>
 #include <QDateTime>
 #include <QStandardPaths>
+#include <QTimer>
 #include <QStyleHints>
 #include <QMainWindow>
 #include <QMenuBar>
@@ -1367,15 +1368,23 @@ private:
     // hues (so boundaries read by color, not by gaps), and nesting
     // darkens within the phrase's own hue. Index 0..4 = mint, powder
     // blue, lavender, peach, rose.
-    static QColor washColor(int hue, int depth) {
+    static QColor washColor(int hue, int depth, bool provisional = false) {
         if (depth <= 0) return QColor(0, 0, 0, 0);
         static const QColor base[5] = {
             QColor(0xD9, 0xEF, 0xDA), QColor(0xD8, 0xE9, 0xF7),
             QColor(0xF1, 0xF0, 0xFB),   // the singles' whisper-neutral
             QColor(0xFA, 0xE8, 0xD8), QColor(0xF7, 0xE3, 0xEA)};
         QColor c = base[((hue % 5) + 5) % 5];
-        if (depth == 2) return c.darker(108);
-        if (depth >= 3) return c.darker(118);
+        if (depth == 2) c = c.darker(108);
+        else if (depth >= 3) c = c.darker(118);
+        if (provisional) {
+            // provisional MUST look provisional (rule 2) — an amber
+            // lean of the wash, tint not underline, so large volumes
+            // format as merged runs instead of per-token ops
+            c = QColor((c.red() * 2 + 0xE8) / 3,
+                       (c.green() * 2 + 0xC9) / 3,
+                       (c.blue() * 2 + 0x8A) / 3);
+        }
         return c;
     }
 
@@ -1445,12 +1454,22 @@ private:
         // phrases get different colors and read without gaps
         std::vector<int> outerSpan(doc_.tokens.size(), -1);
         std::vector<int> outerLen(doc_.tokens.size(), 0);
+        // innermost (shortest) covering span + phrase membership,
+        // precomputed in the same pass: the per-token spansAt() scans
+        // here were O(tokens x spans) — the Library-open hang on full
+        // volumes (2026-08-10, caught by stack sample)
+        std::vector<int> innerSpan(doc_.tokens.size(), -1);
+        std::vector<int> innerLen(doc_.tokens.size(), INT_MAX);
+        std::vector<char> inPhrase_(doc_.tokens.size(), 0);
         for (int si = 0; si < (int)doc_.spans.size(); ++si) {
             const auto& sp = doc_.spans[si];
             const int len = sp.end - sp.beg;
             for (int t = sp.beg; t < sp.end && t < (int)outerSpan.size();
-                 ++t)
+                 ++t) {
                 if (len > outerLen[t]) { outerLen[t] = len; outerSpan[t] = si; }
+                if (len < innerLen[t]) { innerLen[t] = len; innerSpan[t] = si; }
+                if (len > 1) inPhrase_[t] = 1;
+            }
         }
         // single-word matches keep one quiet neutral (lavender); the
         // cycling hues are reserved for MULTI-syllable phrases, so long
@@ -1534,73 +1553,123 @@ private:
             }
         }
         QTextCursor cur(view_->document());
-        for (size_t i = 0; i < doc_.tokens.size(); ++i) {
-            QTextCharFormat fmt;
-            bool touched = false;
+        // one edit block for the whole pass: ~10^5 per-token format
+        // ops otherwise each trigger a relayout — minutes for a full
+        // volume (the Library-open hang, 2026-08-10)
+        view_->setUpdatesEnabled(false);
+        cur.beginEditBlock();
+        // Pass 1 — compute each token's full format key, then emit
+        // MERGED RUNS (adjacent tokens + colored separators with an
+        // identical format become one setCharFormat call): Qt pays
+        // an engine invalidation per call, so runs — not tokens —
+        // are what make full volumes open fast (2026-08-10).
+        const size_t nTok = doc_.tokens.size();
+        struct TokFmt { QRgb bg = 0; int ul = 0; QRgb ulc = 0; };
+        std::vector<TokFmt> tf(nTok);
+        for (size_t i = 0; i < nTok; ++i) {
+            TokFmt f;
             if (depth[i] > 0) {
-                fmt.setBackground(washColor(tokHue[i], depth[i]));
-                touched = true;
-                // provisional innermost gloss → dashed amber underline
-                auto at = doc_.spansAt((int)i);
-                if (!at.empty() &&
-                    doc_.entries[doc_.spans[at.front()].entry_ix].provisional()) {
-                    fmt.setUnderlineStyle(QTextCharFormat::DashUnderline);
-                    fmt.setUnderlineColor(QColor(0xBA, 0x75, 0x17));
+                const bool prov =
+                    innerSpan[i] >= 0 &&
+                    doc_.entries[doc_.spans[innerSpan[i]].entry_ix]
+                        .provisional();
+                f.bg = washColor(tokHue[i], depth[i], prov).rgba();
+            }
+            if (showGrammar_->isChecked() && i > 0 &&
+                !doc_.barrier_after[i - 1] && !inPhrase_[i]) {
+                auto ag = allcore::checkAgreement(doc_.tokens[i - 1],
+                                                  doc_.tokens[i]);
+                if (ag.verdict == allcore::Agreement::Disagrees) {
+                    f.ul = QTextCharFormat::DotLine;
+                    f.ulc = qRgb(0xD9, 0x77, 0x06);
+                    ++agreeFlags;
                 }
             }
-            // Wilson suffix-agreement diagnostic: dotted amber underline on a
-            // variant particle that disagrees with the preceding suffix.
-            // Particles inside a longer matched phrase are skipped — the
-            // dictionary already vouches for those. (Soft flag: spellcheck red
-            // below intentionally overrides it.)
-            if (showGrammar_->isChecked() && i > 0 && !doc_.barrier_after[i - 1]) {
-                bool inPhrase = false;
-                for (int sx : doc_.spansAt((int)i))
-                    inPhrase |= (doc_.spans[sx].end - doc_.spans[sx].beg > 1);
-                if (!inPhrase) {
-                    auto ag = allcore::checkAgreement(doc_.tokens[i - 1],
-                                                     doc_.tokens[i]);
-                    if (ag.verdict == allcore::Agreement::Disagrees) {
-                        fmt.setUnderlineStyle(QTextCharFormat::DotLine);
-                        fmt.setUnderlineColor(QColor(0xD9, 0x77, 0x06));
-                        touched = true;
-                        ++agreeFlags;
-                    }
-                }
-            }
-            // unattested-word hint: slate dash-dot on segmenter-OOV runs
-            // (reference signal only; spellcheck red below overrides)
             if (unattested[i]) {
-                fmt.setUnderlineStyle(QTextCharFormat::DashDotLine);
-                fmt.setUnderlineColor(QColor(0x5B, 0x7C, 0x99));
-                touched = true;
+                f.ul = QTextCharFormat::DashDotLine;
+                f.ulc = qRgb(0x5B, 0x7C, 0x99);
             }
-            // spellcheck: red wave underline on illegal syllables (item 5)
             if (checker_ &&
                 !checker_->legalWylie(tokEwts(doc_.tokens[i]))) {
-                fmt.setUnderlineStyle(QTextCharFormat::WaveUnderline);
-                fmt.setUnderlineColor(QColor(0xE2, 0x4B, 0x4A));
-                touched = true;
+                f.ul = QTextCharFormat::WaveUnderline;
+                f.ulc = qRgb(0xE2, 0x4B, 0x4A);
                 ++spellFlags;
             }
-            if (touched) {
-                cur.setPosition(tokBeg_[i]);
-                cur.setPosition(tokEnd_[i], QTextCursor::KeepAnchor);
-                cur.setCharFormat(fmt);
-            }
-            // continuous runs: the trailing tsheg/space inherits this
-            // token's wash when the next token is shaded too (never
-            // across a clause barrier) — no white gaps inside phrases
-            if (depth[i] > 0 && i + 1 < doc_.tokens.size() &&
-                depth[i + 1] > 0 && !doc_.barrier_after[i] &&
-                tokEnd_[i] < tokBeg_[i + 1]) {
-                QTextCharFormat sep;
-                sep.setBackground(washColor(tokHue[i], depth[i]));
-                cur.setPosition(tokEnd_[i]);
-                cur.setPosition(tokBeg_[i + 1], QTextCursor::KeepAnchor);
-                cur.setCharFormat(sep);
-            }
+            tf[i] = f;
         }
+        auto sepColored = [&](size_t i) {
+            // the tsheg after token i inherits its wash (no white
+            // gaps inside phrases; never across a clause barrier)
+            return depth[i] > 0 && i + 1 < nTok && depth[i + 1] > 0 &&
+                   !doc_.barrier_after[i] && tokEnd_[i] < tokBeg_[i + 1];
+        };
+        struct Run { int beg; int end; QRgb bg; int ul; QRgb ulc; };
+        std::vector<Run> runs;
+        runs.reserve(4096);
+        size_t i = 0;
+        while (i < nTok) {
+            const TokFmt f = tf[i];
+            if (!f.bg && !f.ul) { ++i; continue; }
+            size_t j = i;
+            // extend the run while the next token has the identical
+            // format AND the separator between them carries the same
+            // background (colored sep needs f.bg; plain-gap merging
+            // would paint the gap, so only merge across colored seps
+            // or zero-width gaps)
+            while (j + 1 < nTok && tf[j + 1].bg == f.bg &&
+                   tf[j + 1].ul == f.ul && tf[j + 1].ulc == f.ulc &&
+                   (tokEnd_[j] == tokBeg_[j + 1] ||
+                    (sepColored(j) && f.bg && !f.ul)))
+                ++j;
+            const int endPos = sepColored(j) ? tokBeg_[j + 1]
+                                             : tokEnd_[j];
+            runs.push_back({tokBeg_[i], endPos, f.bg, f.ul, f.ulc});
+            i = j + 1;
+        }
+        // progressive apply: the first slice lands before the text
+        // appears (covers several screens); the rest is applied in
+        // background slices so a full volume OPENS INSTANTLY instead
+        // of stalling on ~10^5 format ops (2026-08-10)
+        ++formatGen_;
+        const int gen = formatGen_;
+        auto applySlice = [this](size_t from, size_t to,
+                                 const std::vector<Run>& rs) {
+            QTextCursor c(view_->document());
+            c.beginEditBlock();
+            for (size_t k = from; k < to && k < rs.size(); ++k) {
+                QTextCharFormat fmt;
+                if (rs[k].bg)
+                    fmt.setBackground(QColor::fromRgba(rs[k].bg));
+                if (rs[k].ul) {
+                    fmt.setUnderlineStyle(
+                        QTextCharFormat::UnderlineStyle(rs[k].ul));
+                    fmt.setUnderlineColor(QColor::fromRgb(rs[k].ulc));
+                }
+                c.setPosition(rs[k].beg);
+                c.setPosition(rs[k].end, QTextCursor::KeepAnchor);
+                c.setCharFormat(fmt);
+            }
+            c.endEditBlock();
+        };
+        const size_t kFirst = 4000, kSlice = 6000;
+        applySlice(0, kFirst, runs);
+        if (runs.size() > kFirst) {
+            auto rest = std::make_shared<std::vector<Run>>(
+                runs.begin() + kFirst, runs.end());
+            auto cont = std::make_shared<std::function<void(size_t)>>();
+            *cont = [this, gen, rest, applySlice, cont,
+                     kSlice](size_t at) {
+                if (gen != formatGen_) return;   // doc reloaded
+                applySlice(at, at + kSlice, *rest);
+                if (at + kSlice < rest->size())
+                    QTimer::singleShot(0, view_, [cont, at, kSlice] {
+                        (*cont)(at + kSlice);
+                    });
+            };
+            QTimer::singleShot(0, view_, [cont] { (*cont)(0); });
+        }
+        cur.endEditBlock();
+        view_->setUpdatesEnabled(true);
         loading_ = false;
         lastTok_ = -1;
         QString attestNote =
@@ -2450,6 +2519,7 @@ private:
     QString docFile_;
     bool docIsWylie_ = false;
     QString selfTestRoot_;
+    int formatGen_ = 0;
     std::map<std::string, std::string> glossary_;
     std::unique_ptr<allcore::botok::SegTrie> segmenter_;
     bool segTried_ = false;
@@ -6217,6 +6287,46 @@ public:
         tree_->setSortingEnabled(true);
         tree_->sortByColumn(0, Qt::AscendingOrder);
         tree_->setColumnWidth(0, 260);
+        // remember which folders were open across restarts (Adam,
+        // 2026-08-10): persist expanded paths, restore on load
+        {
+            QSettings st("ALL", "TranslationTool");
+            for (const QString& p :
+                 st.value("library/expanded").toStringList())
+                if (QFileInfo::exists(p))
+                    tree_->expand(model_->index(p));
+            auto persist = [this] {
+                QSettings s2("ALL", "TranslationTool");
+                QStringList open = s2.value("library/expanded")
+                                       .toStringList();
+                // rebuild from live state of known + new paths
+                QStringList out;
+                for (const QString& p : open)
+                    if (tree_->isExpanded(model_->index(p)))
+                        out << p;
+                s2.setValue("library/expanded", out);
+            };
+            connect(tree_, &QTreeView::expanded,
+                    [this](const QModelIndex& ix) {
+                        QSettings s2("ALL", "TranslationTool");
+                        QStringList open =
+                            s2.value("library/expanded").toStringList();
+                        const QString p = model_->filePath(ix);
+                        if (!open.contains(p)) {
+                            open << p;
+                            s2.setValue("library/expanded", open);
+                        }
+                    });
+            connect(tree_, &QTreeView::collapsed,
+                    [this](const QModelIndex& ix) {
+                        QSettings s2("ALL", "TranslationTool");
+                        QStringList open =
+                            s2.value("library/expanded").toStringList();
+                        open.removeAll(model_->filePath(ix));
+                        s2.setValue("library/expanded", open);
+                    });
+            Q_UNUSED(persist);
+        }
         auto* stack = new QStackedWidget;
         stack->addWidget(tree_);
         list_ = new QTableWidget;
@@ -9748,6 +9858,15 @@ int main(int argc, char** argv) {
     win.setMinimumSize(640, 480);
     win.resize(1180, 760);
     win.show();
+    const int probeIx = cliArgs.indexOf("--openprobe");
+    if (probeIx >= 0 && probeIx + 1 < cliArgs.size()) {
+        QElapsedTimer t;
+        t.start();
+        overlay->openFile(cliArgs.at(probeIx + 1));
+        printf("[probe] openFile completed in %lld ms\n", t.elapsed());
+        fflush(stdout);
+        return 0;
+    }
     if (shotMode) {
         const QString outDir = cliArgs.at(shotIx + 1);
         QDir().mkpath(outDir);
