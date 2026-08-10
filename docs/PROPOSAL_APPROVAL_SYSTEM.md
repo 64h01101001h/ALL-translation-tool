@@ -71,8 +71,10 @@ differently:
    the proposed value, and files it — with the term pre-filled and
    the **surrounding source line auto-captured as evidence** (plus the
    file name). Honorific proposals correctly route the ordinary
-   counterpart into the register's secondary column. Still to extend
-   to the Lookup card (same anchor pattern).
+   counterpart into the register's secondary column. Extended to the Lookup card 2026-08-09: every
+   dictionary lookup ends with "propose to the authority…" — kind
+   picker, proposed value, filed with the lookup context as evidence
+   (selftest-covered).
 2. **Approved-register regeneration** — fold approved rows into the
    canonical register TSVs at release time rather than appending live,
    so the derivation tools and the approved additions stay one file.

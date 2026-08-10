@@ -372,7 +372,11 @@ own judgments.
   and labeled: from the Mahāvyutpatti to Whitney to the Project's own
   growing registers of community pronunciation, the prenasal rule
   Geshe Michael teaches, and the honorifics.
-- **Thirty-seven automated test batteries** run before any change ships.
+- **Thirty-eight automated test batteries** run before any change
+  ships — including the application's own self-test: forty-four
+  checks that construct the real panes against the real dictionary
+  and prove their behavior, from clause-splitting to the approval
+  queue.
 
 ---
 

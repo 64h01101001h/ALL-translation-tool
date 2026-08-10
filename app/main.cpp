@@ -537,7 +537,59 @@ static QString lookupResultsHtml(allcore::Spine& spine,
             }
         }
     }
+    // the proposal channel, reachable while looking things up
+    h += QString("<div style='margin-top:8px;font-size:12px'>"
+                 "<a href='propose:%1'>propose to the authority\u2026"
+                 "</a></div>")
+             .arg(QString::fromStdString(raw).toHtmlEscaped());
+
     return h;
+}
+
+// propose a term to the authority from anywhere a card shows it —
+// kind picker + proposed value, filed through the shared channel
+static void proposeTermDialog(QWidget* parent, const QString& wylie,
+                              const QString& evidence) {
+    const QStringList kinds = {
+        "Honorific term (\u2194 ordinary)", "HIGH honorific marking",
+        "Pronunciation exception", "Abbreviation / contraction candidate",
+        "Rendering for this word (\u2192 dictionary)",
+        "Note about this term"};
+    bool ok = false;
+    const QString choice = QInputDialog::getItem(
+        parent, "Propose to the authority",
+        "What are you proposing for \u201c" + wylie + "\u201d?", kinds, 0,
+        false, &ok);
+    if (!ok) return;
+    allcore::ProposalKind kind = allcore::ProposalKind::WordRendering;
+    if (choice.startsWith("Honorific")) kind = allcore::ProposalKind::Honorific;
+    else if (choice.startsWith("HIGH"))
+        kind = allcore::ProposalKind::HighHonorific;
+    else if (choice.startsWith("Pronunciation"))
+        kind = allcore::ProposalKind::Pronunciation;
+    else if (choice.startsWith("Abbreviation"))
+        kind = allcore::ProposalKind::Abbreviation;
+    else if (choice.startsWith("Note")) kind = allcore::ProposalKind::Note;
+    QString value;
+    if (kind != allcore::ProposalKind::Note) {
+        value = QInputDialog::getText(
+            parent, "Proposed value",
+            kind == allcore::ProposalKind::Pronunciation
+                ? "Proposed pronunciation:"
+                : (kind == allcore::ProposalKind::Honorific
+                       ? "Ordinary counterpart (or leave blank):"
+                       : "Proposed English / expansion:"),
+            QLineEdit::Normal, "", &ok);
+        if (!ok) return;
+    }
+    QString field;
+    if (kind == allcore::ProposalKind::Honorific ||
+        kind == allcore::ProposalKind::HighHonorific) {
+        field = value;
+        value.clear();
+    }
+    loadIdentity();
+    fileProposal(parent, kind, wylie, value, field, evidence);
 }
 
 static QWidget* makeLookupPane(allcore::Spine& spine, allcore::RefDict* ref,
@@ -569,6 +621,18 @@ static QWidget* makeLookupPane(allcore::Spine& spine, allcore::RefDict* ref,
     box->setPlaceholderText("wylie · Tibetan · ACIP headword…");
     auto* results = new QTextBrowser;
     results->setOpenExternalLinks(true);  // link-out tier opens the browser
+    QObject::connect(
+        results, &QTextBrowser::anchorClicked,
+        [pane, box](const QUrl& u) {
+            const QString s = u.toString();
+            if (s.startsWith("propose:")) {
+                proposeTermDialog(
+                    pane, s.mid(8),
+                    "looked up in the dictionary (Lookup pane)");
+                // re-run the search: the browser navigated away on click
+                QMetaObject::invokeMethod(box, "returnPressed");
+            }
+        });
     layout->addWidget(box);
     layout->addWidget(results);
     split->addWidget(left);
@@ -8603,6 +8667,8 @@ int main(int argc, char** argv) {
                                                  "gzigs");
             lk(hh.toLower().contains("honorific"),
                "honorific term carries its badge");
+            lk(h.contains("propose:"),
+               "propose-to-the-authority action offered");
         }
         // Search: the library's prebuilt line index, driver-level
         {
