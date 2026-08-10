@@ -1195,7 +1195,10 @@ public:
         scriptMode_ = new QComboBox;
         scriptMode_->addItems({"Tibetan script", "ACIP", "Wylie"});
         scriptMode_->setCurrentIndex(
-            settings.value("overlay/scriptMode", 0).toInt());
+            // default: ACIP transliteration — the input centers'
+            // native script (Adam, 2026-08-10); Tibetan script and
+            // wylie stay one click away, remembered per user
+            settings.value("overlay/scriptMode", 1).toInt());
         scriptRow->addWidget(scriptMode_, 1);
         // Tibetan typeface for script mode: SambhotaDege first when the
         // system has it (Adam's preference), then the bundled OFL faces
