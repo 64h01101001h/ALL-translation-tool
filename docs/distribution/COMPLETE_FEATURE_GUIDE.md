@@ -26,12 +26,12 @@ you will see restated pane by pane, because they are the design:
    wait in the Approval queue for the authority's ruling.
 
 **The six workflows.** The window's top row holds six workflow tabs;
-inside each, a second row holds its panes — sixteen in all:
+inside each, a second row holds its panes — seventeen in all:
 
 | Workflow | Panes | In one phrase |
 |---|---|---|
 | **Read** | Overlay, Library | the canon, read with the dictionary underneath |
-| **Translate** | Draft, Review, Align | the bench, the overseer, the dictionary-builder |
+| **Translate** | Manuscript, Draft, Review, Align | the page, the bench, the overseer, the dictionary-builder |
 | **Research** | Search, Lookup, Sanskrit, Convert, Analysis | find, look up, convert, analyze |
 | **Learn** | Trainer, Drills | the apprenticeship, instrumented |
 | **Input** | Input, Scan | the input-center workstation and recognition |
@@ -150,6 +150,25 @@ million lines in under two minutes).
 ---
 
 ## 3. TRANSLATE
+
+### 3.0 Manuscript — the writing surface
+
+*Translate → Manuscript. The manuscript itself, with the corpus one
+keystroke away.*
+
+Write in the big editor — **B / I / U** and the size control apply
+to the selection, and pasted Tibetan script keeps its shape. **Save
+as…** names the manuscript (stored losslessly as .html); after that
+it autosaves every minute, **Save** is always there, and **Export
+RTF…** produces a file for Word or Pages. The pane reopens your
+last manuscript on launch.
+
+The **search sidebar** (toggle it with "Search sidebar") speaks the
+full Gofer grammar — `bden pa`, `stong OR bden`, `"sdug bsngal"
+NEAR/5 "bden pa"` — over the aligned corpus. Every hit shows the
+master's English in bold beside the Tibetan, and **insert** places
+that English at your cursor: matched from his corpus, never
+composed.
 
 ### 3.1 Draft — the working translator's bench
 
@@ -571,5 +590,5 @@ window's search finds any control by name and shows where it lives.
 
 ---
 
-*Sixteen panes, one principle: the machine may match the master's
+*Seventeen panes, one principle: the machine may match the master's
 English — it may never compose it.*

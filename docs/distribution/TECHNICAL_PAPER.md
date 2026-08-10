@@ -22,7 +22,7 @@ the Tibetan calendar, OCR post-processing, and every algorithm in the
 product. It has no UI dependency and no network access.
 
 **The application** is a single-file Qt 6 Widgets program
-(`app/main.cpp`) — sixteen panes organized in six workflow groups
+(`app/main.cpp`) — seventeen panes organized in six workflow groups
 (§8), containing no logic that is not presentation. Qt 6 was chosen
 deliberately: it bundles HarfBuzz, giving correct complex-script
 shaping for Tibetan stacks out of the box, and it keeps the code
@@ -238,16 +238,18 @@ in the UI:
 
 All network calls live in the app layer; `allcore` cannot make one.
 
-## 8. The UI layer: sixteen panes, six workflows
+## 8. The UI layer: seventeen panes, six workflows
 
 The single window presents six workflow tabs, each holding its
-panes — sixteen working areas in all:
+panes — seventeen working areas in all:
 
 - **Read** — *Overlay* (the flagship reader: dictionary-shaded text
   in ACIP, wylie, or Tibetan script, click-for-card, BDRC scan
   follow-along) and *Library* (the canon on disk, catalog identities
   decoded from filenames).
-- **Translate** — *Draft* (the translator's bench: color-linked
+- **Translate** — *Manuscript* (rich-text writing surface with a
+  Gofer corpus-search sidebar; lossless HTML storage, RTF export),
+  *Draft* (the translator's bench: color-linked
   clause anchors, phrase memory, terminology check, apparatus
   tools, RTF export), *Review* (advisory-only checking of a
   finished draft), *Align* (harvesting translator-authored pairs,

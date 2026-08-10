@@ -61,6 +61,8 @@
 #include <QFileSystemModel>
 #include <QTreeView>
 #include <QProcess>
+#include <QSpinBox>
+#include <QTime>
 #include <QStringDecoder>
 #include <QTextBlock>
 #include <QDirIterator>
@@ -9786,6 +9788,304 @@ private:
 // maintenance. Every hit says where the feature lives and can raise
 // the pane.
 
+
+// ---- ManuscriptPane (task #56, Adam's post-demo Tier 1): the
+// translator's writing surface — a rich-text manuscript editor with
+// the Gofer search grammar in a sidebar, so the corpus is one
+// keystroke away while writing. Files are HTML (lossless round-trip
+// through Qt); RTF export goes through macOS textutil.
+class ManuscriptPane : public QWidget {
+public:
+    ManuscriptPane(const allcore::Spine& spine, QWidget* parent = nullptr)
+        : QWidget(parent), spine_(spine) {
+        auto* outer = new QVBoxLayout(this);
+        auto* bar = new QHBoxLayout;
+        auto* openB = new QPushButton("Open manuscript\u2026");
+        openB->setToolTip("Open a manuscript file (.html) saved from "
+                          "this pane.");
+        auto* saveB = new QPushButton("Save");
+        saveB->setToolTip("Save the manuscript. Autosaves every "
+                          "minute once a file exists.");
+        auto* saveAsB = new QPushButton("Save as\u2026");
+        auto* rtfB = new QPushButton("Export RTF\u2026");
+        rtfB->setToolTip("Export the manuscript as RTF for Word or "
+                         "Pages (via the Mac's own converter).");
+        boldB_ = new QPushButton("B");
+        boldB_->setCheckable(true);
+        boldB_->setFixedWidth(28);
+        boldB_->setToolTip("Bold (applies to the selection)");
+        italB_ = new QPushButton("I");
+        italB_->setCheckable(true);
+        italB_->setFixedWidth(28);
+        italB_->setToolTip("Italic (applies to the selection)");
+        undB_ = new QPushButton("U");
+        undB_->setCheckable(true);
+        undB_->setFixedWidth(28);
+        undB_->setToolTip("Underline (applies to the selection)");
+        sizeSpin_ = new QSpinBox;
+        sizeSpin_->setRange(9, 48);
+        sizeSpin_->setValue(14);
+        sizeSpin_->setToolTip("Font size (applies to the selection)");
+        auto* sideToggle = new QCheckBox("Search sidebar");
+        sideToggle->setChecked(true);
+        sideToggle->setToolTip(
+            "Show or hide the Gofer corpus search beside the "
+            "manuscript.");
+        bar->addWidget(openB);
+        bar->addWidget(saveB);
+        bar->addWidget(saveAsB);
+        bar->addWidget(rtfB);
+        bar->addSpacing(12);
+        bar->addWidget(boldB_);
+        bar->addWidget(italB_);
+        bar->addWidget(undB_);
+        bar->addWidget(sizeSpin_);
+        bar->addStretch();
+        bar->addWidget(sideToggle);
+        outer->addLayout(bar);
+
+        auto* split = new QSplitter;
+        editor_ = new QTextEdit;
+        editor_->setAcceptRichText(true);
+        {
+            QFont f = editor_->font();
+            f.setPointSize(14);
+            editor_->setFont(f);
+        }
+        editor_->setPlaceholderText(
+            "The manuscript. Write here \u2014 paste Tibetan script "
+            "from the Overlay or Convert panes and it keeps its "
+            "shape. Search the corpus in the sidebar; \u201cinsert\u201d "
+            "places the master's English at your cursor.");
+        split->addWidget(editor_);
+
+        side_ = new QWidget;
+        auto* sv = new QVBoxLayout(side_);
+        sv->setContentsMargins(0, 0, 0, 0);
+        query_ = new QLineEdit;
+        query_->setPlaceholderText(
+            "Gofer: bden pa \u00b7 stong OR bden \u00b7 \"sdug "
+            "bsngal\" NEAR/5 \"bden pa\"");
+        auto* findB = new QPushButton("Find in corpus");
+        findB->setToolTip(
+            "Search the aligned corpus with the Gofer grammar (OR, "
+            "NEAR/N). Results show the master's English beside the "
+            "Tibetan.");
+        results_ = new QTextBrowser;
+        results_->setOpenLinks(false);
+        sv->addWidget(query_);
+        sv->addWidget(findB);
+        sv->addWidget(results_, 1);
+        split->addWidget(side_);
+        split->setStretchFactor(0, 3);
+        split->setStretchFactor(1, 2);
+        outer->addWidget(split, 1);
+        status_ = new QLabel("No file \u2014 Save as\u2026 to name the "
+                             "manuscript.");
+        status_->setStyleSheet("color:#777;font-size:11px");
+        outer->addWidget(status_);
+
+        connect(sideToggle, &QCheckBox::toggled, side_,
+                &QWidget::setVisible);
+        connect(openB, &QPushButton::clicked, [this] {
+            const QString fn = QFileDialog::getOpenFileName(
+                this, "Open manuscript", QString(),
+                "Manuscript (*.html)");
+            if (!fn.isEmpty()) openFile(fn);
+        });
+        connect(saveB, &QPushButton::clicked, [this] { save(); });
+        connect(saveAsB, &QPushButton::clicked, [this] { saveAs(); });
+        connect(rtfB, &QPushButton::clicked, [this] { exportRtf(); });
+        auto applyFmt = [this](auto set) {
+            QTextCursor c = editor_->textCursor();
+            QTextCharFormat f;
+            set(f);
+            c.mergeCharFormat(f);
+            editor_->mergeCurrentCharFormat(f);
+        };
+        connect(boldB_, &QPushButton::toggled, [applyFmt](bool on) {
+            applyFmt([on](QTextCharFormat& f) {
+                f.setFontWeight(on ? QFont::Bold : QFont::Normal);
+            });
+        });
+        connect(italB_, &QPushButton::toggled, [applyFmt](bool on) {
+            applyFmt([on](QTextCharFormat& f) { f.setFontItalic(on); });
+        });
+        connect(undB_, &QPushButton::toggled, [applyFmt](bool on) {
+            applyFmt(
+                [on](QTextCharFormat& f) { f.setFontUnderline(on); });
+        });
+        connect(sizeSpin_, &QSpinBox::valueChanged, [applyFmt](int v) {
+            applyFmt([v](QTextCharFormat& f) {
+                f.setFontPointSize(v);
+            });
+        });
+        connect(editor_, &QTextEdit::textChanged,
+                [this] { dirty_ = true; });
+        connect(findB, &QPushButton::clicked, [this] { find(); });
+        connect(query_, &QLineEdit::returnPressed, [this] { find(); });
+        connect(results_, &QTextBrowser::anchorClicked,
+                [this](const QUrl& u) {
+                    const QString a = u.toString();
+                    if (!a.startsWith("ins:")) return;
+                    const int ix = a.mid(4).toInt();
+                    if (ix >= 0 && ix < (int)inserts_.size())
+                        editor_->textCursor().insertText(inserts_[ix]);
+                });
+
+        // autosave once a minute when named and dirty
+        auto* t = new QTimer(this);
+        t->setInterval(60 * 1000);
+        connect(t, &QTimer::timeout, [this] {
+            if (dirty_ && !path_.isEmpty()) save();
+        });
+        t->start();
+        // reopen last manuscript
+        const QString last = QSettings("ALL", "TranslationTool")
+                                 .value("manuscript/lastFile")
+                                 .toString();
+        if (!last.isEmpty() && QFile::exists(last)) openFile(last);
+    }
+
+    void openFile(const QString& fn) {
+        QFile f(fn);
+        if (!f.open(QIODevice::ReadOnly)) return;
+        editor_->setHtml(QString::fromUtf8(f.readAll()));
+        path_ = fn;
+        dirty_ = false;
+        QSettings("ALL", "TranslationTool")
+            .setValue("manuscript/lastFile", fn);
+        status_->setText(QFileInfo(fn).fileName());
+    }
+
+    bool save() {
+        if (path_.isEmpty()) return saveAs();
+        QFile f(path_);
+        if (!f.open(QIODevice::WriteOnly)) {
+            status_->setText("Could not write " + path_);
+            return false;
+        }
+        f.write(editor_->toHtml().toUtf8());
+        dirty_ = false;
+        status_->setText(QFileInfo(path_).fileName() + " \u2014 saved " +
+                         QTime::currentTime().toString("HH:mm"));
+        return true;
+    }
+
+    bool saveAs() {
+        QString fn = QFileDialog::getSaveFileName(
+            this, "Save manuscript", QString(), "Manuscript (*.html)");
+        if (fn.isEmpty()) return false;
+        if (!fn.endsWith(".html")) fn += ".html";
+        path_ = fn;
+        QSettings("ALL", "TranslationTool")
+            .setValue("manuscript/lastFile", fn);
+        return save();
+    }
+
+    void exportRtf() {
+        if (path_.isEmpty() && !saveAs()) return;
+        if (dirty_) save();
+        QString fn = QFileDialog::getSaveFileName(
+            this, "Export RTF", QString(), "Rich Text (*.rtf)");
+        if (fn.isEmpty()) return;
+        if (!fn.endsWith(".rtf")) fn += ".rtf";
+        QProcess p;
+        p.start("textutil", {"-convert", "rtf", path_, "-output", fn});
+        p.waitForFinished(15000);
+        status_->setText(p.exitCode() == 0
+                             ? "Exported " + QFileInfo(fn).fileName()
+                             : "RTF export failed \u2014 is this a Mac?");
+    }
+
+    void find() {
+        const QString q = query_->text().trimmed();
+        if (q.isEmpty()) return;
+        QString h;
+        inserts_.clear();
+        try {
+            const auto hits =
+                allcore::goferSearch(spine_, q.toStdString(), "", 30);
+            h += QString("<p><b>%1</b> window(s)</p>").arg(hits.size());
+            for (const auto& hit : hits) {
+                h += "<div style='margin:6px 0;padding:4px;border-top:"
+                     "1px solid #CCC'><i>" +
+                     QString::fromStdString(hit.course).toHtmlEscaped() +
+                     "</i><br>";
+                for (const auto& seg : hit.window) {
+                    const QString eng =
+                        QString::fromStdString(seg.english);
+                    h += QString::fromStdString(seg.wylie)
+                             .toHtmlEscaped() +
+                         "<br><b>" + eng.toHtmlEscaped() + "</b> ";
+                    h += QString("<a href='ins:%1'>insert</a><br>")
+                             .arg(inserts_.size());
+                    inserts_.push_back(eng);
+                }
+                h += "</div>";
+            }
+        } catch (const std::exception& e) {
+            h = QString("<p>Query not understood: %1</p>")
+                    .arg(QString::fromUtf8(e.what()).toHtmlEscaped());
+        }
+        results_->setHtml(h);
+    }
+
+    int selfTest(QStringList& log) {
+        int fails = 0;
+        auto check = [&](bool ok, const char* what) {
+            log << QString("  [%1] Manuscript: %2")
+                       .arg(ok ? "PASS" : "FAIL")
+                       .arg(what);
+            if (!ok) ++fails;
+        };
+        editor_->clear();
+        editor_->insertPlainText("the four truths");
+        editor_->selectAll();
+        boldB_->setChecked(true);
+        check(editor_->textCursor().charFormat().fontWeight() >=
+                  QFont::Bold,
+              "bold applies to the selection");
+        boldB_->setChecked(false);
+        query_->setText("bden pa");
+        find();
+        check(results_->toPlainText().contains("bden"),
+              "Gofer sidebar reaches the corpus");
+        const QString tmp =
+            QDir::temp().filePath("all_manuscript_selftest.html");
+        path_ = tmp;
+        editor_->clear();
+        editor_->insertPlainText("round trip");
+        const bool saved = save();
+        editor_->clear();
+        openFile(tmp);
+        check(saved &&
+                  editor_->toPlainText().contains("round trip"),
+              "manuscript saves and reopens");
+        QFile::remove(tmp);
+        path_.clear();
+        editor_->clear();
+        QSettings("ALL", "TranslationTool")
+            .remove("manuscript/lastFile");
+        return fails;
+    }
+
+private:
+    const allcore::Spine& spine_;
+    QTextEdit* editor_ = nullptr;
+    QWidget* side_ = nullptr;
+    QLineEdit* query_ = nullptr;
+    QTextBrowser* results_ = nullptr;
+    QLabel* status_ = nullptr;
+    QPushButton* boldB_ = nullptr;
+    QPushButton* italB_ = nullptr;
+    QPushButton* undB_ = nullptr;
+    QSpinBox* sizeSpin_ = nullptr;
+    QString path_;
+    bool dirty_ = false;
+    std::vector<QString> inserts_;
+};
+
 // ---- SettingsDialog (Adam, 2026-08-10): one place for everything the
 // app remembers, grouped and explained. Values live in QSettings —
 // this dialog only reads/writes the same keys the panes use.
@@ -10281,6 +10581,8 @@ int main(int argc, char** argv) {
     tabs.addTab(drillsPane, "Drills");
     auto* draftPane = new DraftPane(spine, progress, root);
     tabs.addTab(draftPane, "Draft");
+    auto* manuscriptPane = new ManuscriptPane(spine);
+    tabs.addTab(manuscriptPane, "Manuscript");
     auto* reviewPane = new ReviewPane(spine);
     tabs.addTab(reviewPane, "Review");
     auto* alignPane = new AlignPane(spine, root);
@@ -10412,7 +10714,8 @@ int main(int argc, char** argv) {
             else delete g;
         };
         mkGroup("Read", {"Overlay", "Library"});
-        mkGroup("Translate", {"Draft", "Review", "Align"});
+        mkGroup("Translate",
+                {"Manuscript", "Draft", "Review", "Align"});
         mkGroup("Research",
                 {"Search", "Lookup", "Sanskrit", "Convert", "Analysis"});
         mkGroup("Learn", {"Trainer", "Drills"});
@@ -10521,6 +10824,7 @@ int main(int argc, char** argv) {
         fails += trainerPane->selfTest(log);
         fails += drillsPane->selfTest(log);
         fails += draftPane->selfTest(log);
+        fails += manuscriptPane->selfTest(log);
         fails += reviewPane->selfTest(log);
         fails += alignPane->selfTest(log);
         fails += libraryPane->selfTest(log);

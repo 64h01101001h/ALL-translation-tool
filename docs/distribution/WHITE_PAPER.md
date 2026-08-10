@@ -63,10 +63,10 @@ is every time he has ever rendered those words — nothing more.
 Where the corpus holds no answer, the software says so honestly
 rather than manufacturing one.
 
-## 3. What the tool is: one window, six workflows, sixteen panes
+## 3. What the tool is: one window, six workflows, seventeen panes
 
 The application is one window. Across the top run six workflow
-tabs; inside each, a second row holds its working areas — sixteen
+tabs; inside each, a second row holds its working areas — seventeen
 panes in all, sharing one dictionary of 105,634 entries, 12,004 of
 them carrying Geshe Michael's English in tiered quality (curated,
 glossary, provisional).
@@ -94,7 +94,10 @@ Center's public archive, display beneath the text and turn their
 own pages as the cursor moves. The student sits with the digital
 text and the actual carving of it — anywhere on earth.
 
-**Translate** holds the Draft bench, the Review pane, and Align.
+**Translate** holds the Manuscript, the Draft bench, the Review
+pane, and Align. The Manuscript is the writing surface itself — a
+rich-text editor with the Gofer corpus search in a sidebar, so the
+master's attested English is one keystroke away while writing.
 In Draft, the source text splits into clauses; each clause shows
 its established terms banded in color, with each term's English
 chipped in the same color, so which English goes with which Tibetan
@@ -318,7 +321,7 @@ from a student's first hour to a translation checked end to end.
 
 ---
 
-Sixteen panes, one principle: the machine may match the master's
+Seventeen panes, one principle: the machine may match the master's
 English — it may never compose it.
 
 *Prepared with reverence for the lineage of translation this tool

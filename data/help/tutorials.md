@@ -2,8 +2,8 @@
 
 ## Getting Started
 
-**What this app is.** One window, six workflow tabs, sixteen working
-areas ("panes"), one shared dictionary: 105,634 entries anchored to
+**What this app is.** One window, six workflow tabs, seventeen
+working areas ("panes"), one shared dictionary: 105,634 entries anchored to
 Geshe Michael Roach's English, plus his aligned corpus of tens of
 thousands of passages. Everything runs offline except two
 clearly-marked features (the Analysis pane's AI report, and the
@@ -13,8 +13,9 @@ woodblock images from BDRC).
 WORKFLOWS; inside each, a second row holds its panes:
 
 - **Read** — Overlay (the flagship reader) and Library (the canon).
-- **Translate** — Draft (the bench), Review (checking a draft),
-  Align (building tomorrow's dictionary).
+- **Translate** — Manuscript (the writing surface), Draft (the
+  bench), Review (checking a draft), Align (building tomorrow's
+  dictionary).
 - **Research** — Search (Gofer), Lookup, Sanskrit, Convert, Analysis.
 - **Learn** — Trainer (progressive reading) and Drills (exercises).
 - **Input** — Input (ACE reborn) and Scan (text recognition).
@@ -163,6 +164,24 @@ clause; fill the blank given his English; choose the correct particle
 variant (explained from the classical tables); parallel reading
 (reveal his English only when needed); review. "New drill" generates
 the next one. Progress is tracked per word and adapts.
+
+## Manuscript
+
+*Where: Translate → Manuscript.*
+
+**What it's for.** The writing surface — the manuscript itself, with
+the corpus one keystroke away.
+
+**Use.** Write in the big editor: bold / italic / underline and font
+size apply to the selection; pasted Tibetan script keeps its shape.
+"Save as…" names the manuscript (saved losslessly as .html); after
+that it autosaves every minute and "Export RTF…" produces a file for
+Word or Pages. The SEARCH SIDEBAR speaks the full Gofer grammar
+(bden pa · stong OR bden · "sdug bsngal" NEAR/5 "bden pa") over the
+aligned corpus; every result shows the master's English beside the
+Tibetan, and "insert" places that English at your cursor — matched
+from his corpus, never composed. The pane reopens your last
+manuscript on launch.
 
 ## Draft
 
@@ -382,7 +401,10 @@ When you want the carving itself: SCANS → "Find scans on BDRC…".
    see his English in context.
 4. Translate → Draft → EVIDENCE: "Check terminology" against your
    English; PUBLISH: footnotes and bibliography, then RTF export.
-5. Hand the draft to a senior: Translate → Review — register
+5. Write the running prose in Translate → Manuscript — the Gofer
+   sidebar keeps the corpus beside the page, and "insert" places
+   his attested English at the cursor.
+6. Hand the draft to a senior: Translate → Review — register
    warnings, honorific advisories, provisional-gloss cautions.
 
 **Check someone else's finished draft.** Translate → Review: Tibetan
