@@ -9494,6 +9494,175 @@ private:
     QComboBox* filter_ = nullptr;
 };
 
+
+// ---- HelpWindow (Adam, 2026-08-10): searchable help + tutorials.
+// Two sources, one search: hand-written chapters (data/help/
+// tutorials.md, one ## chapter per pane) and an AUTO-INDEX of every
+// button/toggle in the app with its tooltip and location — derived
+// like the menu bar, so new features are searchable with zero help
+// maintenance. Every hit says where the feature lives and can raise
+// the pane.
+class HelpWindow : public QDialog {
+public:
+    HelpWindow(QTabWidget* tabs, const QString& root, QWidget* parent)
+        : QDialog(parent), tabs_(tabs) {
+        setWindowTitle("ALL Tool Help & Tutorials");
+        resize(980, 640);
+        auto* outer = new QVBoxLayout(this);
+        search_ = new QLineEdit;
+        search_->setPlaceholderText(
+            "Search any feature, button, pane, or topic\u2026");
+        outer->addWidget(search_);
+        auto* split = new QSplitter;
+        results_ = new QListWidget;
+        results_->setMinimumWidth(280);
+        body_ = new QTextBrowser;
+        body_->setOpenLinks(false);
+        split->addWidget(results_);
+        split->addWidget(body_);
+        split->setStretchFactor(1, 1);
+        outer->addWidget(split, 1);
+
+        // chapters from tutorials.md
+        QFile f(root + "/data/help/tutorials.md");
+        if (f.open(QIODevice::ReadOnly)) {
+            const QString md = QString::fromUtf8(f.readAll());
+            for (const QString& part : md.split("\n## ")) {
+                const int nl = part.indexOf('\n');
+                if (nl < 0) continue;
+                QString title = part.left(nl).trimmed();
+                title.remove(QRegularExpression("^#+\\s*"));
+                chapters_[title] = "## " + part;
+                chapterOrder_ << title;
+            }
+        }
+        // auto-index every control in every pane
+        for (int i = 0; i < tabs_->count(); ++i) {
+            const QString pane = tabs_->tabText(i);
+            QWidget* w = tabs_->widget(i);
+            for (auto* b : w->findChildren<QPushButton*>())
+                if (!b->text().trimmed().isEmpty())
+                    controls_.push_back(
+                        {b->text(), pane, b->toolTip(), i});
+            for (auto* c : w->findChildren<QCheckBox*>())
+                if (!c->text().trimmed().isEmpty())
+                    controls_.push_back(
+                        {c->text(), pane, c->toolTip(), i});
+            for (auto* cb : w->findChildren<QComboBox*>())
+                for (int k = 0; k < cb->count(); ++k)
+                    controls_.push_back(
+                        {cb->itemText(k), pane, cb->toolTip(), i});
+        }
+        connect(search_, &QLineEdit::textChanged,
+                [this](const QString& q) { doSearch(q); });
+        connect(results_, &QListWidget::currentRowChanged,
+                [this](int r) { showResult(r); });
+        connect(body_, &QTextBrowser::anchorClicked,
+                [this](const QUrl& u) {
+                    const QString a = u.toString();
+                    if (a.startsWith("pane:")) {
+                        tabs_->setCurrentIndex(a.mid(5).toInt());
+                        raise();
+                    } else if (a.startsWith("chapter:")) {
+                        showChapter(a.mid(8));
+                    } else if (a.startsWith("http")) {
+                        QDesktopServices::openUrl(u);
+                    }
+                });
+        doSearch("");   // initial: the chapter list
+    }
+
+    int indexSize() const {
+        return (int)controls_.size() + chapters_.size();
+    }
+    int hitCount(const QString& q) {
+        doSearch(q);
+        return results_->count();
+    }
+    int chapterCount() const { return chapters_.size(); }
+
+private:
+    struct Ctl { QString label, pane, tip; int tab; };
+
+    void doSearch(const QString& q) {
+        results_->clear();
+        rows_.clear();
+        const QString needle = q.trimmed();
+        if (needle.isEmpty()) {
+            for (const auto& t : chapterOrder_) {
+                results_->addItem("\U0001F4D6 " + t);
+                rows_.push_back({-1, t});
+            }
+            body_->setMarkdown(
+                chapters_.value("Getting Started",
+                                "Welcome. Pick a chapter."));
+            return;
+        }
+        // chapters whose title or text match
+        for (const auto& t : chapterOrder_)
+            if (t.contains(needle, Qt::CaseInsensitive) ||
+                chapters_[t].contains(needle, Qt::CaseInsensitive)) {
+                results_->addItem("\U0001F4D6 " + t);
+                rows_.push_back({-1, t});
+            }
+        // controls whose label/tooltip/pane match
+        for (int i = 0; i < (int)controls_.size(); ++i) {
+            const auto& c = controls_[i];
+            if (c.label.contains(needle, Qt::CaseInsensitive) ||
+                c.tip.contains(needle, Qt::CaseInsensitive) ||
+                c.pane.contains(needle, Qt::CaseInsensitive)) {
+                results_->addItem(c.label + "  \u2014  " + c.pane);
+                rows_.push_back({i, QString()});
+            }
+        }
+        if (!results_->count())
+            body_->setHtml("<i>no matches \u2014 try another word, "
+                           "or browse the chapters (clear the "
+                           "search)</i>");
+        else
+            results_->setCurrentRow(0);
+    }
+
+    void showResult(int r) {
+        if (r < 0 || r >= (int)rows_.size()) return;
+        const auto& row = rows_[r];
+        if (row.first < 0) { showChapter(row.second); return; }
+        const auto& c = controls_[row.first];
+        QString h = "<h2>" + c.label.toHtmlEscaped() + "</h2>";
+        h += "<p>Located in the <b>" + c.pane.toHtmlEscaped() +
+             "</b> pane \u2014 <a href='pane:" +
+             QString::number(c.tab) + "'>open that pane now</a>.</p>";
+        if (!c.tip.isEmpty())
+            h += "<p>" + c.tip.toHtmlEscaped() + "</p>";
+        QString chapterName;
+        for (const auto& t : chapterOrder_)
+            if (c.pane.startsWith(t.left(6))) chapterName = t;
+        if (!chapterName.isEmpty())
+            h += "<p><a href='chapter:" + chapterName +
+                 "'>Read the full " + chapterName.toHtmlEscaped() +
+                 " tutorial \u2192</a></p>";
+        h += "<p style='color:#777'>Tip: every button is also in the "
+             "menu bar under its pane\u2019s menu \u2014 and the "
+             "Mac\u2019s Help-menu search can point an arrow at "
+             "it.</p>";
+        body_->setHtml(h);
+    }
+
+    void showChapter(const QString& name) {
+        if (chapters_.contains(name))
+            body_->setMarkdown(chapters_[name]);
+    }
+
+    QTabWidget* tabs_;
+    QLineEdit* search_ = nullptr;
+    QListWidget* results_ = nullptr;
+    QTextBrowser* body_ = nullptr;
+    QMap<QString, QString> chapters_;
+    QStringList chapterOrder_;
+    std::vector<Ctl> controls_;
+    std::vector<std::pair<int, QString>> rows_;
+};
+
 int main(int argc, char** argv) {
     QApplication app(argc, argv);
     const QString root = findDataRoot();
@@ -9805,6 +9974,21 @@ int main(int argc, char** argv) {
         }
     }
 
+    // Help menu: searchable help + tutorials (and macOS's own
+    // Help-search finds every derived menu item)
+    HelpWindow* helpWin = nullptr;
+    {
+        QMenu* helpMenu = win.menuBar()->addMenu("Help");
+        QAction* h = helpMenu->addAction("ALL Tool Help && Tutorials\u2026");
+        h->setShortcut(QKeySequence::HelpContents);
+        QObject::connect(h, &QAction::triggered, [&] {
+            if (!helpWin) helpWin = new HelpWindow(&tabs, root, &win);
+            helpWin->show();
+            helpWin->raise();
+            helpWin->activateWindow();
+        });
+    }
+
     // --selftest: suite 38 — the real panes exercised against the
     // real spine, offscreen; nonzero exit on any failure (ctest)
     if (selfTestMode) {
@@ -9867,11 +10051,32 @@ int main(int argc, char** argv) {
             ApprovalPane ap(root);
             fails += ap.selfTest(log);
         }
+        // the help system: chapters + auto-index + search
+        {
+            HelpWindow hw(&tabs, root, nullptr);
+            const bool chapters = hw.chapterCount() >= 16;
+            log << QString("  [%1] Help: tutorial chapters for every "
+                           "pane (%2)")
+                       .arg(chapters ? "PASS" : "FAIL")
+                       .arg(hw.chapterCount());
+            if (!chapters) ++fails;
+            const bool indexed = hw.indexSize() > 150;
+            log << QString("  [%1] Help: feature auto-index built "
+                           "(%2 entries)")
+                       .arg(indexed ? "PASS" : "FAIL")
+                       .arg(hw.indexSize());
+            if (!indexed) ++fails;
+            const bool found = hw.hitCount("Load into overlay") >= 1;
+            log << QString("  [%1] Help: search finds a feature by "
+                           "name")
+                       .arg(found ? "PASS" : "FAIL");
+            if (!found) ++fails;
+        }
         // the menu bar mirrors every pane
         {
             const auto menus = win.menuBar()->actions();
-            // View + one per pane
-            bool ok = menus.size() == tabs.count() + 1;
+            // View + one per pane + Help
+            bool ok = menus.size() == tabs.count() + 2;
             int overlayActions = 0;
             if (menus.size() > 1 && menus.at(1)->menu())
                 overlayActions = menus.at(1)->menu()->actions().size();
