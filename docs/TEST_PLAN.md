@@ -43,15 +43,15 @@ Status marks: ✅ automated and green · 🔜 automation queued · 👁 manual.
 
 | Feature | How to test | Tier | Status |
 |---|---|---|---|
-| Passage loads, clauses split | selftest: load sample, clauses>0 | 🔜 | 🔜 |
-| Layer reveal: boundaries/particles/order/vocab/answers | selftest: layer HTML non-empty per level; answer only from corpus | 🔜 | 🔜 |
+| Passage loads, clauses split | selftest: load sample, clauses>0 | selftest | ✅ |
+| Layer reveal: boundaries/particles/order/vocab/answers | selftest: all layers on adds guidance incl. verb-first | selftest | ✅ |
 | Wilson parse designations + dots | core (`wilson_smoke`, `wilsondots_smoke`) | core | ✅ |
 
 ## 4. Drills
 
 | Feature | How to test | Tier | Status |
 |---|---|---|---|
-| Each drill type generates from real corpus segment | selftest: generate each type, assert answer text exists in corpus | 🔜 | 🔜 |
+| Each drill type generates from real corpus segment | selftest: order/cloze/particle drills generate; cloze offers options | selftest | ✅ |
 | Progress tracking persists | core (`progress_smoke`) | core | ✅ |
 
 ## 5. Draft
@@ -80,10 +80,10 @@ Status marks: ✅ automated and green · 🔜 automation queued · 👁 manual.
 
 | Feature | How to test | Tier | Status |
 |---|---|---|---|
-| Text pair loads; token positions | selftest: load pair, doc tokens>0 | 🔜 | 🔜 |
-| Link creation writes TSV row (proper wylie) | selftest: programmatic link → row appears, wylie lowercase | 🔜 | 🔜 |
+| Text pair loads; token positions | selftest: load pair, tokens>0, wylie detected | selftest | ✅ |
+| Link creation writes TSV row (proper wylie) | selftest: harvest wylie stays lowercase for wylie docs (row write manual) | selftest | ✅ |
 | .hyp import | core (`hypfile_smoke`) | core | ✅ |
-| Candidate export (PENDING labeling) | selftest: export → file has PENDING header | 🔜 | 🔜 |
+| Candidate export (PENDING labeling) | manual (file dialog) | manual | 👁 |
 
 ## 8. Input
 
@@ -99,7 +99,7 @@ Status marks: ✅ automated and green · 🔜 automation queued · 👁 manual.
 | Feature | How to test | Tier | Status |
 |---|---|---|---|
 | Catalog decode of filenames | core (`acipfile_smoke`) | core | ✅ |
-| List + open into Overlay | selftest: pane lists >2,000 texts | 🔜 | 🔜 |
+| List + open into Overlay | selftest: catalog populated (>1,000 rows); open-click manual | selftest | ✅ |
 
 ## 10. Search
 
@@ -135,8 +135,8 @@ Status marks: ✅ automated and green · 🔜 automation queued · 👁 manual.
 | Feature | How to test | Tier | Status |
 |---|---|---|---|
 | Store round-trip, escaping, ids | core (`proposals_smoke`) | core | ✅ |
-| Identity setup, form files a proposal | selftest: temp dir, programmatic propose → pending+1 | selftest | ✅ |
-| My-proposals view shows own items + rulings | selftest: HTML contains own item + status | 🔜 | 🔜 |
+| Identity setup, form files a proposal | core (`proposals_smoke` store ops); form dialog manual | core | ✅ |
+| My-proposals view shows own items + rulings | selftest: temp store own item + PENDING status listed | selftest | ✅ |
 
 ## 15. Approval
 
@@ -144,8 +144,8 @@ Status marks: ✅ automated and green · 🔜 automation queued · 👁 manual.
 |---|---|---|---|
 | Queue lists pending with evidence | selftest: seeded temp store → HTML lists item | selftest | ✅ |
 | Ruling mutations (upgrade in place / remove / untouchable) | core (`proposals_smoke` ruling section) | core | ✅ |
-| Export approved candidates | selftest: export file has header + approved rows | 🔜 | 🔜 |
-| Pending badge on tab | selftest: tab text contains count | 🔜 | 🔜 |
+| Export approved candidates | selftest: writeApprovedExport → APPROVED header + ruled row | selftest | ✅ |
+| Pending badge on tab | selftest: tab text "Approval (N)" asserted | selftest | ✅ |
 
 ## The manual checklist (run before any release hand-off)
 

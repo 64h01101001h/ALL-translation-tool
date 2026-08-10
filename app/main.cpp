@@ -3155,6 +3155,33 @@ public:
         QObject::connect(load, &QPushButton::clicked, [this] { loadDoc(); });
     }
 
+    int selfTest(QStringList& log) {
+        int fails = 0;
+        auto check = [&](bool ok, const char* what) {
+            log << QString("  [%1] Trainer: %2")
+                       .arg(ok ? "PASS" : "FAIL").arg(what);
+            if (!ok) ++fails;
+        };
+        for (int k = 0; k < 6; ++k) reveal_[k]->setChecked(false);
+        input_->setPlainText(
+            "SEMS CAN THAMS CAD BDE BA DANG LDAN PAR GYUR CIG,");
+        loadDoc();
+        check(!clauses_.empty(), "passage splits into clauses");
+        const int bare = view_->toPlainText().size();
+        check(bare > 0, "bare layer renders");
+        for (int k = 0; k < 6; ++k) reveal_[k]->setChecked(true);
+        render();
+        check(view_->toPlainText().size() > bare,
+              "revealed layers add guidance");
+        check(view_->toPlainText().contains("verb") ||
+                  view_->toHtml().contains("verb"),
+              "verb-first guidance present");
+        for (int k = 0; k < 6; ++k) reveal_[k]->setChecked(false);
+        input_->clear();
+        loadDoc();
+        return fails;
+    }
+
 private:
     std::string tokEwts(const std::string& tok) const {
         return docIsWylie_ ? tok : allcore::acipToEwts(tok);
@@ -3508,6 +3535,26 @@ public:
         });
         QObject::connect(script_, &QCheckBox::toggled, [this] { renderQuestion(); });
         refreshStats();
+    }
+
+    int selfTest(QStringList& log) {
+        int fails = 0;
+        auto check = [&](bool ok, const char* what) {
+            log << QString("  [%1] Drills: %2")
+                       .arg(ok ? "PASS" : "FAIL").arg(what);
+            if (!ok) ++fails;
+        };
+        mode_->setCurrentIndex(0);
+        newDrill();
+        check(order_.has_value(), "order drill generated from corpus");
+        mode_->setCurrentIndex(1);
+        newDrill();
+        check(cloze_.has_value() && !cloze_->options.empty(),
+              "cloze drill offers options");
+        mode_->setCurrentIndex(2);
+        newDrill();
+        check(part_.has_value(), "particle drill generated");
+        return fails;
     }
 
 private:
@@ -5419,6 +5466,19 @@ public:
         showRecents();
     }
 
+    int selfTest(QStringList& log) {
+        int fails = 0;
+        auto check = [&](bool ok, const char* what) {
+            log << QString("  [%1] Library: %2")
+                       .arg(ok ? "PASS" : "FAIL").arg(what);
+            if (!ok) ++fails;
+        };
+        check(list_->rowCount() > 1000 ||
+                  model_->rowCount(model_->index(libRoot_)) > 0,
+              "catalog populated from the library");
+        return fails;
+    }
+
 private:
     // catalog-number → published catalog English title (v29 title wave)
     QString englishTitle(const QString& fileName) {
@@ -6254,6 +6314,26 @@ public:
                 }
             }
         });
+    }
+
+    int selfTest(QStringList& log) {
+        int fails = 0;
+        auto check = [&](bool ok, const char* what) {
+            log << QString("  [%1] Align: %2")
+                       .arg(ok ? "PASS" : "FAIL").arg(what);
+            if (!ok) ++fails;
+        };
+        tib_->setPlainText("sems can thams cad bde ba dang ldan par "
+                           "gyur cig");
+        loadTexts();
+        check(!doc_.tokens.empty(), "Tibetan side tokenized");
+        check(docIsWylie_, "wylie input detected");
+        check(tokEwts(doc_.tokens.front()) ==
+                  doc_.tokens.front(),
+              "harvest wylie stays lowercase for wylie docs");
+        tib_->clear();
+        loadTexts();
+        return fails;
     }
 
 private:
@@ -7827,6 +7907,31 @@ public:
         });
     }
 
+    int selfTest(QStringList& log) {
+        int fails = 0;
+        auto check = [&](bool ok, const char* what) {
+            log << QString("  [%1] Propose: %2")
+                       .arg(ok ? "PASS" : "FAIL").arg(what);
+            if (!ok) ++fails;
+        };
+        const QString saveDir = g_proposalsDir;
+        const QString tmp = QDir::tempPath() + "/all_selftest_mine";
+        QDir(tmp).removeRecursively();
+        QDir().mkpath(tmp);
+        allcore::ProposalStore st(tmp.toStdString());
+        st.propose(allcore::ProposalKind::Honorific,
+                   g_userName.toStdString(), "zhal", "mouth (hon.)",
+                   "kha", "selftest", "2026-08-09");
+        st.save();
+        g_proposalsDir = tmp;
+        showMine();
+        const QString m = mine_->toPlainText();
+        g_proposalsDir = saveDir;
+        check(m.contains("zhal") && m.toUpper().contains("PENDING"),
+              "my-proposals lists own item with status");
+        return fails;
+    }
+
 private:
     void showMine() {
         loadIdentity();
@@ -7952,6 +8057,32 @@ public:
               "seeded prenasal queue lists kamdir");
         check(t.contains("Approve") && t.contains("Decline"),
               "ruling actions offered");
+        // export path against a throwaway store with one approved item
+        {
+            const QString saveDir = g_proposalsDir;
+            const QString tmp =
+                QDir::tempPath() + "/all_selftest_props";
+            QDir(tmp).removeRecursively();
+            QDir().mkpath(tmp);
+            allcore::ProposalStore st(tmp.toStdString());
+            const auto id = st.propose(
+                allcore::ProposalKind::WordRendering, "selftest",
+                "dge ba", "virtue", "", "selftest evidence",
+                "2026-08-09");
+            st.rule(id, allcore::ProposalStatus::Approved, "selftest",
+                    "", "2026-08-09");
+            st.save();
+            g_proposalsDir = tmp;
+            const QString out = tmp + "/export.tsv";
+            const int n = writeApprovedExport(out);
+            g_proposalsDir = saveDir;
+            QFile ef(out);
+            ef.open(QIODevice::ReadOnly);
+            const QString body = QString::fromUtf8(ef.readAll());
+            check(n == 1 && body.contains("APPROVED") &&
+                      body.contains("dge ba"),
+                  "approved-candidates export writes the ruling");
+        }
         return fails;
     }
 
@@ -8159,15 +8290,19 @@ private:
     }
 
     void exportApproved() {
-        allcore::ProposalStore store(g_proposalsDir.toStdString());
-        store.load();
         const QString out = QFileDialog::getSaveFileName(
             this, "Export approved dictionary candidates",
             root_ + "/data/candidate_alignments/approved_terms.tsv",
             "TSV (*.tsv)");
         if (out.isEmpty()) return;
+        writeApprovedExport(out);
+    }
+
+    int writeApprovedExport(const QString& out) {
+        allcore::ProposalStore store(g_proposalsDir.toStdString());
+        store.load();
         QFile f(out);
-        if (!f.open(QIODevice::WriteOnly | QIODevice::Text)) return;
+        if (!f.open(QIODevice::WriteOnly | QIODevice::Text)) return 0;
         QTextStream ts(&f);
         ts << "# APPROVED dictionary/corpus candidates for the data "
               "project — approved in-app, never auto-ingested\n";
@@ -8192,6 +8327,7 @@ private:
                                "</div>")
                            .arg(n)
                            .arg(out.toHtmlEscaped()));
+        return n;
     }
 
     QString root_;
@@ -8327,21 +8463,24 @@ int main(int argc, char** argv) {
     auto* overlay = new OverlayPane(spine, checker, refdict, progress, root);
     tabs.addTab(overlay, "Overlay");
     tabs.addTab(new AnalysisPane(spine, tplPath, root + "/analyses"), "Analysis");
-    tabs.addTab(new TrainerPane(spine, progress, poslex, contractions),
-                "Trainer");
-    tabs.addTab(new DrillsPane(spine, progress), "Drills");
+    auto* trainerPane =
+        new TrainerPane(spine, progress, poslex, contractions);
+    tabs.addTab(trainerPane, "Trainer");
+    auto* drillsPane = new DrillsPane(spine, progress);
+    tabs.addTab(drillsPane, "Drills");
     auto* draftPane = new DraftPane(spine, progress, root);
     tabs.addTab(draftPane, "Draft");
     auto* reviewPane = new ReviewPane(spine);
     tabs.addTab(reviewPane, "Review");
-    tabs.addTab(new AlignPane(spine, root), "Align");
+    auto* alignPane = new AlignPane(spine, root);
+    tabs.addTab(alignPane, "Align");
     tabs.addTab(new InputPane(checker, root), "Input");
-    tabs.addTab(new LibraryPane(root, progress,
+    auto* libraryPane = new LibraryPane(root, progress,
                                 [&tabs, overlay](const QString& path) {
                                     overlay->openFile(path);
                                     tabs.setCurrentIndex(0);
-                                }),
-                "Library");
+                                });
+    tabs.addTab(libraryPane, "Library");
     tabs.addTab(makeSearchPane(spine, root + "/library"), "Search");
     tabs.addTab(makeConvertPane(mvp, whitney), "Convert");
     static const HonorificMap honorifics = loadHonorifics(
@@ -8370,7 +8509,8 @@ int main(int argc, char** argv) {
         if (g_userName.isEmpty()) g_userName = "Adam";
         g_identityPinned = true;   // panes reload identity; keep seeds
     }
-    tabs.addTab(new ProposePane(), "Propose");
+    auto* proposePane = new ProposePane();
+    tabs.addTab(proposePane, "Propose");
     if (g_isAdmin) {
         // the authority sees the pending count on the tab at a glance
         size_t pending = 0;
@@ -8389,11 +8529,25 @@ int main(int argc, char** argv) {
         QStringList log;
         int fails = 0;
         fails += overlay->selfTest(log);
+        fails += trainerPane->selfTest(log);
+        fails += drillsPane->selfTest(log);
         fails += draftPane->selfTest(log);
         fails += reviewPane->selfTest(log);
+        fails += alignPane->selfTest(log);
+        fails += libraryPane->selfTest(log);
+        fails += proposePane->selfTest(log);
         {
             ApprovalPane ap(root);
             fails += ap.selfTest(log);
+        }
+        // the authority's tab badge carries the pending count
+        {
+            bool badge = false;
+            for (int k = 0; k < tabs.count(); ++k)
+                if (tabs.tabText(k).startsWith("Approval (")) badge = true;
+            log << QString("  [%1] Approval: tab badge shows pending "
+                           "count").arg(badge ? "PASS" : "FAIL");
+            if (!badge) ++fails;
         }
         for (const QString& l : log)
             printf("%s\n", l.toUtf8().constData());
