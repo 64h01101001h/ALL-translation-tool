@@ -138,6 +138,14 @@ struct EntryDisplay {
 // once in main(), consulted by every entry card in every pane
 using HonorificMap = std::map<std::string, std::array<QString, 3>>;
 static const HonorificMap* g_honorifics = nullptr;
+
+// The published apparatus (GMR-approved, mined from released books):
+// 344 footnotes keyed by English lemma + 138 bibliography entries.
+// Loaded once; flags terms wherever they appear.
+struct ApparatusNote { QString lemma, text, source; int num = 0; };
+struct ApparatusBib { QString source, section, id, text; };
+static const std::vector<ApparatusNote>* g_appNotes = nullptr;
+static const std::vector<ApparatusBib>* g_appBib = nullptr;
 // the colloquial/prenasal register, for the cards' "also heard" line
 static const allcore::ColloquialPron* g_colloquial = nullptr;
 
@@ -148,6 +156,24 @@ static QString entryHtml(const allcore::Entry& e,
     h += "<span style='font-size:22px'>" +
          QString::fromStdString(e.tibetan).toHtmlEscaped() + "</span> ";
     h += "<b>" + QString::fromStdString(e.wylie).toHtmlEscaped() + "</b>";
+    if (g_appNotes && !e.hgm_gloss.empty()) {
+        for (const auto& note : *g_appNotes) {
+            bool hit = false;
+            for (const auto& g : e.hgm_gloss)
+                if (!note.lemma.isEmpty() &&
+                    QString::fromStdString(g).contains(note.lemma,
+                                                       Qt::CaseInsensitive))
+                    hit = true;
+            if (hit) {
+                h += "<div style='background:#F3EDDF;padding:2px 6px;"
+                     "border-radius:4px;margin:2px 0;font-size:11px'>"
+                     "\U0001F4CE dealt with in published footnote " +
+                     QString::number(note.num) + " \u2014 <i>" +
+                     note.source.toHtmlEscaped() + "</i></div>";
+                break;
+            }
+        }
+    }
     if (g_honorifics) {
         auto it = g_honorifics->find(e.wylie);
         if (it != g_honorifics->end()) {
@@ -2760,11 +2786,11 @@ public:
         });
         connect(remB, &QPushButton::clicked, [this] {
             const int r = dirs_->currentRow();
-            if (r > 0) { delete dirs_->takeItem(r); saveDirs(); }
+            if (r > 1) { delete dirs_->takeItem(r); saveDirs(); }
         });
         connect(dupB, &QPushButton::clicked, [this] {
             auto* it = dirs_->currentItem();
-            if (it && dirs_->currentRow() > 0) {
+            if (it && dirs_->currentRow() > 1) {
                 addDirRow(it->text(), it->checkState() == Qt::Checked);
                 saveDirs();
             }
@@ -2809,6 +2835,8 @@ public:
 private:
     static constexpr const char* kCorpusRow =
         "HGM aligned corpus (all courses)";
+    static constexpr const char* kApparatusRow =
+        "Published apparatus (footnotes + bibliography)";
 
     void addDirRow(const QString& text, bool checked) {
         auto* it = new QListWidgetItem(text);
@@ -2819,6 +2847,8 @@ private:
     void loadDirs() {
         QSettings s("ALL", "TranslationTool");
         addDirRow(kCorpusRow, s.value("gofer/corpusChecked", true).toBool());
+        addDirRow(kApparatusRow,
+                  s.value("gofer/apparatusChecked", true).toBool());
         const auto list = s.value("gofer/dirs").toStringList();
         const auto checked = s.value("gofer/dirsChecked").toStringList();
         if (list.isEmpty()) {
@@ -2832,7 +2862,9 @@ private:
         QStringList list, checked;
         s.setValue("gofer/corpusChecked",
                    dirs_->item(0)->checkState() == Qt::Checked);
-        for (int i = 1; i < dirs_->count(); ++i) {
+        s.setValue("gofer/apparatusChecked",
+                   dirs_->item(1)->checkState() == Qt::Checked);
+        for (int i = 2; i < dirs_->count(); ++i) {
             list << dirs_->item(i)->text();
             if (dirs_->item(i)->checkState() == Qt::Checked)
                 checked << dirs_->item(i)->text();
@@ -2903,7 +2935,52 @@ private:
                          .arg(QString::fromUtf8(e.what()).toHtmlEscaped());
             }
         }
-        for (int i = 1; i < dirs_->count(); ++i) {
+        if (dirs_->item(1)->checkState() == Qt::Checked &&
+            (g_appNotes || g_appBib)) {
+            QStringList terms;
+            for (auto* f : fields_) {
+                const QString t = f->text().trimmed();
+                if (!t.isEmpty()) terms << t;
+            }
+            const bool anyMode = combiner_->currentIndex() == 0;
+            auto matches = [&](const QString& hay) {
+                int found = 0;
+                for (const auto& t : terms)
+                    if (hay.contains(t, Qt::CaseInsensitive)) ++found;
+                return anyMode ? found > 0
+                               : found == (int)terms.size();
+            };
+            int n = 0;
+            QString ah;
+            if (g_appNotes)
+                for (const auto& note : *g_appNotes) {
+                    if (!matches(note.lemma + " " + note.text)) continue;
+                    if (++n <= 20)
+                        ah += "<div style='margin:4px 0'><b>note " +
+                              QString::number(note.num) + "</b> — " +
+                              note.lemma.toHtmlEscaped() + " <small>(" +
+                              note.source.toHtmlEscaped() +
+                              ")</small><br>" +
+                              note.text.left(200).toHtmlEscaped() +
+                              "</div>";
+                }
+            if (g_appBib)
+                for (const auto& b : *g_appBib) {
+                    if (!matches(b.source + " " + b.text)) continue;
+                    if (++n <= 40)
+                        ah += "<div style='margin:4px 0'><b>" +
+                              b.id.toHtmlEscaped() + "</b> " +
+                              b.text.left(220).toHtmlEscaped() +
+                              " <small>(" + b.source.toHtmlEscaped() +
+                              ")</small></div>";
+                }
+            h += QString("<div><b>%1</b> — %2 hit(s)</div>")
+                     .arg(kApparatusRow)
+                     .arg(n) +
+                 ah + "<hr>";
+            total += n;
+        }
+        for (int i = 2; i < dirs_->count(); ++i) {
             if (dirs_->item(i)->checkState() != Qt::Checked) continue;
             const QString dir = dirs_->item(i)->text();
             try {
@@ -6907,6 +6984,23 @@ private:
             }
         }
 
+        QString noteHtml;
+        if (g_appNotes) {
+            const QString d = QString::fromStdString(draft);
+            int shown = 0;
+            for (const auto& note : *g_appNotes) {
+                if (note.lemma.size() < 4 ||
+                    !d.contains(note.lemma, Qt::CaseInsensitive))
+                    continue;
+                if (++shown > 8) break;
+                noteHtml += "<div style='margin:4px 0'><b>" +
+                            note.lemma.toHtmlEscaped() +
+                            "</b> — published footnote " +
+                            QString::number(note.num) + " <small>(" +
+                            note.source.toHtmlEscaped() +
+                            ")</small></div>";
+            }
+        }
         int provisionalUsed = 0, unmatched = 0;
         QString regHtml, provHtml, unmHtml, spreadHtml;
         int spreadShown = 0;
@@ -7006,6 +7100,11 @@ private:
         if (!regHtml.isEmpty())
             h += "<div style='color:#8C2F2B'><b>Register-sensitive "
                  "terms</b></div>" + regHtml + "<hr>";
+        if (!noteHtml.isEmpty())
+            h += QString("<div style='color:#5A3B22'><b>published "
+                         "footnotes apply (reuse, don't rewrite)</b>"
+                         "</div>") +
+                 noteHtml + "<hr>";
         if (!honHtml.isEmpty())
             h += QString("<div style='color:#7A5A00'><b>⚑ honorific "
                          "terms in the source (zhe sa)</b></div>") +
@@ -9409,6 +9508,32 @@ int main(int argc, char** argv) {
     auto* goferPane = new GoferPane(spine, root);
     tabs.addTab(goferPane, "Search");
     tabs.addTab(makeConvertPane(mvp, whitney), "Convert");
+    static std::vector<ApparatusNote> appNotes;
+    static std::vector<ApparatusBib> appBib;
+    {
+        QFile nf(root + "/data/extracted/mixed_nuts_notes.json");
+        if (nf.open(QIODevice::ReadOnly))
+            for (const auto& v :
+                 QJsonDocument::fromJson(nf.readAll()).array()) {
+                const auto o = v.toObject();
+                appNotes.push_back({o["lemma"].toString(),
+                                    o["text"].toString(),
+                                    o["source"].toString(),
+                                    o["note"].toInt()});
+            }
+        QFile bf(root + "/data/extracted/mixed_nuts_bibliography.json");
+        if (bf.open(QIODevice::ReadOnly))
+            for (const auto& v :
+                 QJsonDocument::fromJson(bf.readAll()).array()) {
+                const auto o = v.toObject();
+                appBib.push_back({o["source"].toString(),
+                                  o["section"].toString(),
+                                  o["id"].toString(),
+                                  o["text"].toString()});
+            }
+        if (!appNotes.empty()) g_appNotes = &appNotes;
+        if (!appBib.empty()) g_appBib = &appBib;
+    }
     static const HonorificMap honorifics = loadHonorifics(
         root + "/data/honorifics/honorific_register.tsv");
     if (!honorifics.empty()) g_honorifics = &honorifics;
