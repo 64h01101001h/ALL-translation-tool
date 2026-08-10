@@ -2465,6 +2465,8 @@ private:
         const QStringList kinds = {
             "Honorific term (↔ ordinary)",
             "HIGH honorific marking",
+            "Humilific (self-lowering) form",
+            "DOUBLE honorific (subject + recipient)",
             "Pronunciation exception",
             "Abbreviation / contraction candidate",
             "Rendering for this word (→ dictionary)",
@@ -2480,6 +2482,10 @@ private:
             kind = allcore::ProposalKind::Honorific;
         else if (choice.startsWith("HIGH"))
             kind = allcore::ProposalKind::HighHonorific;
+        else if (choice.startsWith("Humilific"))
+            kind = allcore::ProposalKind::Humilific;
+        else if (choice.startsWith("DOUBLE"))
+            kind = allcore::ProposalKind::DoubleHonorific;
         else if (choice.startsWith("Pronunciation"))
             kind = allcore::ProposalKind::Pronunciation;
         else if (choice.startsWith("Abbreviation"))
