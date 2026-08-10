@@ -36,3 +36,8 @@ add_test(NAME font_smoke
          COMMAND font_smoke ${CMAKE_SOURCE_DIR}/data/fonts
                  ${CMAKE_SOURCE_DIR}/data/hypercontext_legacy/syllable-table-with-unicode.txt
                  ${CMAKE_SOURCE_DIR}/data/hypercontext_legacy/syllablesThatFailToRender_testFile_HyperContext.txt)
+
+# suite 38: the app's own pane-level selftest (docs/TEST_PLAN.md)
+add_test(NAME app_selftest COMMAND ALLTranslationTool --selftest)
+set_tests_properties(app_selftest PROPERTIES
+  ENVIRONMENT "QT_QPA_PLATFORM=offscreen" TIMEOUT 300)

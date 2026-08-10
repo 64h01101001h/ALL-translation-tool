@@ -781,6 +781,48 @@ private:
 class OverlayPane : public QWidget {
 public:
     // open a file into the overlay (used by the Library pane's browser)
+    // --selftest: exercise this pane's wiring against the real spine
+    int selfTest(QStringList& log) {
+        int fails = 0;
+        auto check = [&](bool ok, const char* what) {
+            log << QString("  [%1] Overlay: %2")
+                       .arg(ok ? "PASS" : "FAIL")
+                       .arg(what);
+            if (!ok) ++fails;
+        };
+        const QString acip =
+            "SEMS CAN THAMS CAD BDE BA DANG LDAN PAR GYUR CIG,";
+        scriptMode_->setCurrentIndex(0);
+        input_->setPlainText(acip);
+        loadDoc();
+        check(!docIsWylie_, "ACIP sample detected as ACIP");
+        const size_t nTok = doc_.tokens.size();
+        check(nTok >= 8, "tokens parsed");
+        check(!doc_.spans.empty(), "dictionary spans found");
+        check(!doc_.entries.empty(), "entries resolved");
+        check(!view_->toPlainText().contains(QChar(0x27E8)),
+              "script conversion clean (no failure markers)");
+        bool glossed = false;
+        for (const auto& e : doc_.entries)
+            if (e.wylie == "sems can" && !e.hgm_gloss.empty())
+                glossed = true;
+        check(glossed, "known term carries an HGM gloss");
+        input_->setPlainText(acip.toLower());
+        loadDoc();
+        check(docIsWylie_, "lowercase sample detected as wylie");
+        check(doc_.tokens.size() == nTok,
+              "wylie tokenization matches ACIP");
+        check(!view_->toPlainText().contains(QChar(0x27E8)),
+              "wylie script conversion clean");
+        input_->setPlainText("SEMS CAN QQZ BDE BA,");
+        loadDoc();
+        check(hint_->text().contains("1 spelling"),
+              "illegal syllable raises one spellcheck flag");
+        input_->clear();
+        loadDoc();
+        return fails;
+    }
+
     void openFile(const QString& fn) {
         QFile f(fn);
         if (!f.open(QIODevice::ReadOnly)) return;
@@ -4071,6 +4113,37 @@ public:
         if (!clauses_.empty()) showAnchors(0);
     }
 
+    int selfTest(QStringList& log) {
+        int fails = 0;
+        auto check = [&](bool ok, const char* what) {
+            log << QString("  [%1] Draft: %2")
+                       .arg(ok ? "PASS" : "FAIL")
+                       .arg(what);
+            if (!ok) ++fails;
+        };
+        demo("/ /blo sbyong snyan brgyud chen mo'i 'khrid yig "
+             "/sems can thams cad bde ba dang ldan par gyur cig /");
+        check(!clauses_.empty(), "clauses split");
+        const QString a = anchors_->toHtml().toLower();
+        check(a.contains("d9efda") || a.contains("d8e9f7") ||
+                  a.contains("fae8d8") || a.contains("f7e3ea"),
+              "anchor hue bands render");
+        check(anchors_->toPlainText().contains(QString::fromUtf8("≡")),
+              "HGM glosses listed");
+        showConcordance("sems can");
+        check(anchors_->toPlainText().contains("corpus hit"),
+              "term concordance reaches the corpus");
+        source_->setPlainText("sems can thams cad");
+        QTextCursor c(source_->document());
+        c.select(QTextCursor::Document);
+        source_->setTextCursor(c);
+        phraseMemory();
+        check(anchors_->toPlainText().contains("HGM corpus"),
+              "phrase memory finds corpus renderings");
+        source_->clear();
+        return fails;
+    }
+
 private:
     std::string tokEwts(const std::string& tok) const {
         return docIsWylie_ ? tok : allcore::acipToEwts(tok);
@@ -5930,6 +6003,32 @@ public:
         connect(openDraft, &QPushButton::clicked,
                 [openInto, this] { openInto(draft_); });
         connect(runB, &QPushButton::clicked, [this] { review(); });
+    }
+
+    int selfTest(QStringList& log) {
+        int fails = 0;
+        auto check = [&](bool ok, const char* what) {
+            log << QString("  [%1] Review: %2")
+                       .arg(ok ? "PASS" : "FAIL")
+                       .arg(what);
+            if (!ok) ++fails;
+        };
+        // register-sensitive term with a matched rendering
+        src_->setPlainText("BSOD NAMS");
+        draft_->setPlainText("this merit is dedicated");
+        review();
+        const QString r1 = report_->toPlainText().toLower();
+        check(r1.contains("register"),
+              "register-sensitive term raises the register warning");
+        // established term absent from the draft is surfaced
+        src_->setPlainText("SEMS CAN THAMS CAD");
+        draft_->setPlainText("every single one of them");
+        review();
+        check(report_->toPlainText().contains("sems can"),
+              "unmatched established term is surfaced");
+        src_->clear();
+        draft_->clear();
+        return fails;
     }
 
 private:
@@ -7838,6 +7937,24 @@ public:
         rebuild();
     }
 
+    int selfTest(QStringList& log) {
+        int fails = 0;
+        auto check = [&](bool ok, const char* what) {
+            log << QString("  [%1] Approval: %2")
+                       .arg(ok ? "PASS" : "FAIL")
+                       .arg(what);
+            if (!ok) ++fails;
+        };
+        rebuild();   // read-only against the seeded proposals store
+        const QString t = list_->toPlainText();
+        check(t.contains("pending"), "queue renders the pending count");
+        check(t.contains("kamdir"),
+              "seeded prenasal queue lists kamdir");
+        check(t.contains("Approve") && t.contains("Decline"),
+              "ruling actions offered");
+        return fails;
+    }
+
 private:
     void rebuild() {
         loadIdentity();
@@ -8215,7 +8332,8 @@ int main(int argc, char** argv) {
     tabs.addTab(new DrillsPane(spine, progress), "Drills");
     auto* draftPane = new DraftPane(spine, progress, root);
     tabs.addTab(draftPane, "Draft");
-    tabs.addTab(new ReviewPane(spine), "Review");
+    auto* reviewPane = new ReviewPane(spine);
+    tabs.addTab(reviewPane, "Review");
     tabs.addTab(new AlignPane(spine, root), "Align");
     tabs.addTab(new InputPane(checker, root), "Input");
     tabs.addTab(new LibraryPane(root, progress,
@@ -8244,7 +8362,8 @@ int main(int argc, char** argv) {
     const QStringList cliArgs = QCoreApplication::arguments();
     const int shotIx = cliArgs.indexOf("--screenshots");
     const bool shotMode = shotIx >= 0 && shotIx + 1 < cliArgs.size();
-    if (shotMode) {
+    const bool selfTestMode = cliArgs.contains("--selftest");
+    if (shotMode || selfTestMode) {
         g_isAdmin = true;
         if (g_proposalsDir.isEmpty())
             g_proposalsDir = root + "/data/proposals";
@@ -8263,6 +8382,24 @@ int main(int argc, char** argv) {
         tabs.addTab(new ApprovalPane(root),
                     pending ? QString("Approval (%1)").arg(pending)
                             : QString("Approval"));
+    }
+    // --selftest: suite 38 — the real panes exercised against the
+    // real spine, offscreen; nonzero exit on any failure (ctest)
+    if (selfTestMode) {
+        QStringList log;
+        int fails = 0;
+        fails += overlay->selfTest(log);
+        fails += draftPane->selfTest(log);
+        fails += reviewPane->selfTest(log);
+        {
+            ApprovalPane ap(root);
+            fails += ap.selfTest(log);
+        }
+        for (const QString& l : log)
+            printf("%s\n", l.toUtf8().constData());
+        printf("app selftest: %s (%d failure(s))\n",
+               fails ? "FAIL" : "ALL PASS", fails);
+        return fails ? 1 : 0;
     }
     tabs.resize(1180, 760);
     tabs.show();
