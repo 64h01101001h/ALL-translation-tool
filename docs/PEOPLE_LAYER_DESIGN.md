@@ -31,6 +31,22 @@ highlighting directive).*
    BDRC API code is Apache-2.0; record exact DATA license terms in
    data/licenses/ at harvest time.
 
+## Harvest groundwork (2026-08-11)
+
+- **The harvest set is bounded and local:** `data/extracted/
+  catalog_works.json` = 1,846 works with `author` (ACIP name),
+  `author_eng`, `dates` — **266 distinct authors**. That is the
+  register's seed population.
+- **Name→P-id resolution, routes still to verify** (in order):
+  (1) the library.bdrc.io search backend (find its current API —
+  autosuggest.bdrc.io is dead, /lib/general 500s);
+  (2) traverse work records: our works' TSK/S numbers appear in
+  BDRC instance records (the scan feature already finds volumes by
+  text) → creator P-ids, the most provenance-solid route;
+  (3) getAssociatedLabels template; (4) ask BDRC directly.
+- Resolution must be exact-name or human-reviewed — homonymous
+  lamas are never auto-merged (design rule above).
+
 ## Design
 
 **Scope rule: start from OUR library, not from all of BDRC.** The
