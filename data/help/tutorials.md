@@ -81,7 +81,10 @@ provisional), Geshe Michael's actual corpus renderings course by
 course, reference definitions clearly marked as references, Sanskrit
 equivalences (Mahavyutpatti), honorific badge with the ordinary
 counterpart, community pronunciations ("also heard"), published
-footnotes that deal with this term, your own per-text glossary
+footnotes that deal with this term, timecoded links to Geshe
+Michael TEACHING the term in recorded classes (machine-located from
+captions — the recording is the authority; non-English sessions
+tagged), your own per-text glossary
 (editable in place), and links out to 84000/BDRC/Lotsawa House.
 "Propose to the authority…" on the card files a proposal with the
 passage auto-attached as evidence.
@@ -492,4 +495,4 @@ source and page.
 cream reading pages. Remembered.
 
 **Self-test.** If anything misbehaves: run the app from Terminal with
-`--selftest` — 80 checks print PASS/FAIL and localize the problem.
+`--selftest` — 81 checks print PASS/FAIL and localize the problem.

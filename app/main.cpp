@@ -160,6 +160,43 @@ static const HonorificMap* g_honorifics = nullptr;
 using IdiomMap = std::map<std::string, std::pair<QString, QString>>;
 static const IdiomMap* g_idioms = nullptr;
 
+// teaching moments (#63, Adam-authorized 2026-08-11): normalized HGM
+// gloss -> up to 5 timecoded links to Geshe Michael's recorded
+// classes (DCC YouTube). Captions were the FINDING AID only; every
+// link opens the recording, which is the authority.
+struct TeachingMoment {
+    QString title, url, lang, snippet;
+    int t = 0;
+};
+using TeachingMap = std::map<std::string, std::vector<TeachingMoment>>;
+static const TeachingMap* g_teaching = nullptr;
+
+// normalization MUST mirror tools/build_teaching_index.py terms.txt
+static std::string teachingKey(std::string g) {
+    std::string t;
+    bool inParen = false;
+    for (char c : g) {
+        if (c == '(') inParen = true;
+        else if (c == ')') inParen = false;
+        else if (!inParen) t += (char)std::tolower((unsigned char)c);
+    }
+    std::string u;
+    for (char c : t)
+        u += (std::isalpha((unsigned char)c) || c == ' ' || c == '-' ||
+              c == '\'')
+                 ? c
+                 : ' ';
+    std::istringstream is(u);
+    std::string w, out;
+    bool first = true;
+    while (is >> w) {
+        if (first && w == "to") { first = false; continue; }
+        first = false;
+        out += (out.empty() ? "" : " ") + w;
+    }
+    return out;
+}
+
 // spelling forms the authority has ruled VALID (a DECLINED spelling
 // flag means "this form is fine") — the Overlay legality check treats
 // them as legal. Loaded from the proposal store once per launch.
@@ -227,6 +264,41 @@ static QString entryHtml(const allcore::Entry& e,
                      .arg(approved ? "#2C5B2E" : "#6E5A1E")
                      .arg(it->second.second.toHtmlEscaped())
                      .arg(approved ? "" : " (proposed)");
+        }
+    }
+    if (g_teaching && !e.hgm_gloss.empty()) {
+        std::vector<const TeachingMoment*> ms;
+        std::set<QString> seen;
+        for (const auto& g : e.hgm_gloss) {
+            auto it = g_teaching->find(teachingKey(g));
+            if (it == g_teaching->end()) continue;
+            for (const auto& m : it->second)
+                if (!seen.count(m.url) && ms.size() < 3) {
+                    seen.insert(m.url);
+                    ms.push_back(&m);
+                }
+        }
+        if (!ms.empty()) {
+            h += "<div style='margin-top:6px;font-size:12px'>"
+                 "<span style='color:#7C2D26;font-weight:600'>Geshe "
+                 "Michael teaching this term</span> <i "
+                 "style='color:#888'>(machine-located from class "
+                 "captions \u2014 the recording is the "
+                 "authority)</i><br>";
+            for (const auto* m : ms) {
+                const int mm = m->t / 60, ss = m->t % 60;
+                h += QString("\u25B6 <a href='%1' title=\"%2\">%3</a>"
+                             " @%4:%5%6<br>")
+                         .arg(m->url,
+                              m->snippet.toHtmlEscaped(),
+                              m->title.left(60).toHtmlEscaped())
+                         .arg(mm)
+                         .arg(ss, 2, 10, QChar('0'))
+                         .arg(m->lang == "ENG" || m->lang == "?"
+                                  ? QString()
+                                  : " <b>[" + m->lang + "]</b>");
+            }
+            h += "</div>";
         }
     }
     if (!e.tibetan_source.empty())
@@ -11079,6 +11151,26 @@ int main(int argc, char** argv) {
         }
         if (!idioms.empty()) g_idioms = &idioms;
     }
+    static TeachingMap teaching;
+    {
+        QFile f(root + "/data/teaching/teaching_moments_card.json");
+        if (f.open(QIODevice::ReadOnly)) {
+            const auto doc = QJsonDocument::fromJson(f.readAll());
+            const auto terms = doc.object().value("terms").toObject();
+            for (auto it = terms.begin(); it != terms.end(); ++it) {
+                auto& vec = teaching[it.key().toStdString()];
+                for (const auto& v : it.value().toArray()) {
+                    const auto o = v.toObject();
+                    vec.push_back({o.value("title").toString(),
+                                   o.value("url").toString(),
+                                   o.value("lang").toString(),
+                                   o.value("snippet").toString(),
+                                   o.value("t").toInt()});
+                }
+            }
+        }
+        if (!teaching.empty()) g_teaching = &teaching;
+    }
     tabs.addTab(makeLookupPane(spine, refdict, mvp, whitney, colloq),
                 "Lookup");
     auto* sanskritPane = new SanskritPane(mvp, whitney);
@@ -11363,6 +11455,18 @@ int main(int argc, char** argv) {
                            "(%2 proposed)")
                        .arg(ok ? "PASS" : "FAIL")
                        .arg(g_idioms ? (int)g_idioms->size() : 0);
+            if (!ok) ++fails;
+        }
+        {
+            const bool ok = g_teaching && g_teaching->size() > 1000 &&
+                            g_teaching->count("emptiness") &&
+                            !g_teaching->at("emptiness").empty() &&
+                            g_teaching->at("emptiness")[0].url.contains(
+                                "youtube.com");
+            log << QString("  [%1] Teaching: moments index loaded "
+                           "(%2 terms)")
+                       .arg(ok ? "PASS" : "FAIL")
+                       .arg(g_teaching ? (int)g_teaching->size() : 0);
             if (!ok) ++fails;
         }
         {
