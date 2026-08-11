@@ -77,3 +77,14 @@ Every installation can self-diagnose: run the app binary with
 `--selftest` from Terminal — 54 checks against the installed data,
 per-check PASS/FAIL. Ask the user to send the output; it localizes
 the failure layer immediately.
+
+
+## Full-library open sweep (2026-08-11)
+
+Every text in the shipped library — all 2,716 files of ACIP
+Release 6 — opened through the real Overlay pipeline (tokenize,
+match, convert, spellcheck, display build) via `--openprobe`,
+90-second timeout per file. **Result: 2,716/2,716 opened, zero
+failures, zero timeouts; slowest file 1.78 s** (R0007A1_E.TXT).
+The release ships with the statement: every text in the library
+opens.
