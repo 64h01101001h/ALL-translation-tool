@@ -1333,6 +1333,7 @@ public:
         ll->addWidget(new QLabel("<b>Document (ACIP)</b>"));
         input_ = new QPlainTextEdit;
         input_->setPlaceholderText("Paste an ACIP document…");
+        input_->setMinimumHeight(90);
         ll->addWidget(input_, 1);
         auto* open = new QPushButton("Open ACIP file…");
         ll->addWidget(open);
@@ -1765,7 +1766,17 @@ auto* secFmt = new QLabel("<span style='color:#9A7A33;font-size:10px;letter-spac
         right->setStretchFactor(0, 3);
         right->setStretchFactor(1, 2);
 
-        split->addWidget(left);
+        // the control column outgrew short windows — widgets were
+        // being crushed (squashed input box, clipped headings and
+        // folio buttons; Adam's screenshot, 2026-08-11). Scroll
+        // instead of squeeze: nothing compresses below natural size.
+        auto* leftScroll = new QScrollArea;
+        leftScroll->setWidget(left);
+        leftScroll->setWidgetResizable(true);
+        leftScroll->setFrameShape(QFrame::NoFrame);
+        leftScroll->setHorizontalScrollBarPolicy(
+            Qt::ScrollBarAlwaysOff);
+        split->addWidget(leftScroll);
         split->addWidget(right);
         split->setStretchFactor(0, 1);
         split->setStretchFactor(1, 3);
