@@ -11780,8 +11780,7 @@ int main(int argc, char** argv) {
             add("<div style='font-size:13px;margin-top:4px'>for "
                 "<b>Geshe Michael Roach</b>"
                 "<span style='color:#9A7A33'> \u00b7 </span>"
-                "the Asian Legacy Library <span style='color:#6E5F4B'>"
-                "(formerly Asian Classics Input Project)</span>"
+                "the Asian Legacy Library"
                 "<span style='color:#9A7A33'> \u00b7 </span>"
                 "Diamond Cutter Classics</div>");
             add("<div style='color:#9A7A33;font-size:13px;"
