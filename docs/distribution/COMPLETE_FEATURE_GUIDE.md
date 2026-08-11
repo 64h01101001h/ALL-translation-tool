@@ -121,6 +121,19 @@ open text; **Use selected** saves the link for next time.
 conventions. **Prepare for translation (Mixed Nuts)…** reproduces
 Geshe Michael's demonstrated translation-preparation format.
 
+**Teachings and references on every card.** Entry cards now carry:
+a **"Geshe Michael teaching this term"** section — timecoded links
+into his recorded classes (machine-located from class captions; the
+recording is the authority; non-English sessions tagged); a **"He
+says this word"** tier locating moments where he speaks the Tibetan
+itself (phonetic match on his own convention — candidates,
+homophones share moments); and a **"Das 1902 · ~p.N"** link opening
+Sarat Chandra Das's dictionary inside the app at approximately the
+entry's page (public domain, clearly a reference). And in REVIEW:
+**"Teachings for this text…"** sweeps every term the loaded text
+contains and reports where he taught each one — the translator's
+companion sheet.
+
 *Try this now:* Read → Library, double-click **S0134**. When it opens
 shaded, switch "text as" to Tibetan script, click **sems can**, and
 read his renderings course by course. Then turn on "Show spelling
@@ -393,6 +406,13 @@ which has always been the rule. **Save…** exports the block.
 
 *Input → Scan.*
 
+**"mark illustration candidates"** outlines folio regions not
+covered by detected text lines — where woodblock miniatures live —
+and **"Illustration gallery…"** runs that search across a whole
+folder, showing the crops as a gallery (save them named by source
+page). Candidates only, never claimed complete. The Overlay's SCANS
+column offers the same gallery over a linked volume's cached pages.
+
 **Open scan image…** then **Run OCR**: lines are detected and
 recognized with BDRC's open models running locally (used with
 permission, credited wherever output appears). Every line renders in
@@ -469,7 +489,7 @@ tab it lives under — clicking takes you there. "Suggested
 Workflows…" in the Help menu opens the recipes chapter directly.
 
 **Self-test.** If anything misbehaves, run the app from Terminal
-with `--selftest`: 80 checks print PASS/FAIL and localize the
+with `--selftest`: 84 checks print PASS/FAIL and localize the
 problem. (thirty-eight automated test batteries also run before any change to
 the software ships.)
 
@@ -584,7 +604,7 @@ item carries who approved it and when; every mined fact carries its
 source and page. The app imports versioned data releases and never
 edits them.
 
-**Troubleshooting.** Run `--selftest` from Terminal (80 checks,
+**Troubleshooting.** Run `--selftest` from Terminal (84 checks,
 localizing any problem). The menu bar reaches every function if a
 pane misbehaves; switching tabs and back re-renders. The Help
 window's search finds any control by name and shows where it lives.

@@ -86,3 +86,24 @@ automated batteries: 38 ctest suites plus the app's own 80-check
   style guide, the catalog-English tier ruling, Steinert license
   review, Lotsawa House bulk permission, BDRC's written OCR
   confirmation. Full register: `docs/FEATURE_STATUS.md`.
+
+
+## Added after the initial notes (August 11)
+
+- **Teaching moments**: entry cards link to Geshe Michael teaching
+  the term in recorded classes — timecoded, machine-located from
+  class captions (Diamond Cutter Classics channel, harvested with
+  authorization), with a spoken-Tibetan tier matched on his own
+  pronunciation convention. "Teachings for this text…" (Overlay →
+  REVIEW) reports every taught term in a loaded text.
+- **Das 1902 in-app**: every card links to Sarat Chandra Das's
+  dictionary, opening inside the app at approximately the entry's
+  page (from the team's own bookmarked PDF; public domain).
+- **Woodblock illustration gallery**: single-folio overlay, whole-
+  folder gallery with crop export, and cached-volume search from
+  the Overlay.
+- **Idioms register**: proposed/approved idiom badges on cards;
+  idiom proposal kind; Approval filter.
+- Spelling doubts refined (folio markers and dictionary-attested
+  forms excluded); full-library open sweep recorded (2,716/2,716);
+  self-test now 84 checks.
