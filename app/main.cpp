@@ -11414,6 +11414,12 @@ int main(int argc, char** argv) {
         t.start();
         overlay->openFile(cliArgs.at(probeIx + 1));
         printf("[probe] openFile completed in %lld ms\n", t.elapsed());
+        for (auto* lb : overlay->findChildren<QLabel*>()) {
+            const QString hh = lb->text();
+            if (hh.contains("tokens"))
+                printf("[probe] hint: %s\n",
+                       hh.toUtf8().constData());
+        }
         fflush(stdout);
         return 0;
     }
