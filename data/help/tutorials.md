@@ -329,6 +329,9 @@ trusted as text. Batch mode processes a volume folder. "mark
 illustration candidates" outlines regions not covered by detected
 text lines — side panels and large gaps, where woodblock miniatures
 live — machine-found candidates, never claimed complete.
+"Illustration gallery…" runs the same search across a whole folder
+of pages and shows the crops as a gallery (double-click for full
+size; "Save crops…" exports them named by source page).
 
 ## Propose
 
