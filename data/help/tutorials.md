@@ -85,7 +85,10 @@ footnotes that deal with this term, timecoded links to Geshe
 Michael TEACHING the term in recorded classes (machine-located from
 captions — the recording is the authority; non-English sessions
 tagged), your own per-text glossary
-(editable in place), and links out to 84000/BDRC/Lotsawa House.
+(editable in place), and links out to 84000/BDRC/Lotsawa House, and a "Das 1902"
+reference link that opens Sarat Chandra Das's dictionary INSIDE the
+app at (approximately) the entry's page — public domain, clearly a
+reference, never HGM material.
 "Propose to the authority…" on the card files a proposal with the
 passage auto-attached as evidence.
 
@@ -495,4 +498,4 @@ source and page.
 cream reading pages. Remembered.
 
 **Self-test.** If anything misbehaves: run the app from Terminal with
-`--selftest` — 81 checks print PASS/FAIL and localize the problem.
+`--selftest` — 82 checks print PASS/FAIL and localize the problem.

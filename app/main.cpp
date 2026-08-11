@@ -61,6 +61,11 @@
 #include <QFileSystemModel>
 #include <QTreeView>
 #include <QProcess>
+#ifdef ALL_HAVE_QTPDF
+#include <QPdfDocument>
+#include <QPdfView>
+#include <QPdfPageNavigator>
+#endif
 #include <QSpinBox>
 #include <QTime>
 #include <QStringDecoder>
@@ -171,6 +176,27 @@ struct TeachingMoment {
 using TeachingMap = std::map<std::string, std::vector<TeachingMoment>>;
 static const TeachingMap* g_teaching = nullptr;
 
+// Das (1902) reference layer (#61): syllable-onset -> PDF page from
+// the team's own bookmarked copy (public-domain text). Reference
+// comparanda only, never HGM material.
+static std::vector<std::pair<std::string, int>>* g_dasSections =
+    nullptr;
+static QString g_dasPdfPath;
+static int dasPageFor(const std::string& wylie) {
+    if (!g_dasSections || g_dasSections->empty()) return -1;
+    std::string syl = wylie.substr(0, wylie.find(' '));
+    int best = -1;
+    size_t bestLen = 0;
+    for (const auto& [onset, page] : *g_dasSections)
+        if (syl.compare(0, onset.size(), onset) == 0 &&
+            onset.size() > bestLen) {
+            bestLen = onset.size();
+            best = page;
+        }
+    return best;
+}
+static void showDasPage(QWidget* parent, int page);
+
 // normalization MUST mirror tools/build_teaching_index.py terms.txt
 static std::string teachingKey(std::string g) {
     std::string t;
@@ -265,6 +291,13 @@ static QString entryHtml(const allcore::Entry& e,
                      .arg(it->second.second.toHtmlEscaped())
                      .arg(approved ? "" : " (proposed)");
         }
+    }
+    if (g_dasSections && !e.wylie.empty()) {
+        const int pg = dasPageFor(e.wylie);
+        if (pg > 0)
+            h += QString(" <a href='das:%1' style='font-size:11px'>"
+                         "Das 1902 \u00b7 ~p.%1 (reference)</a>")
+                     .arg(pg);
     }
     if (g_teaching && !e.hgm_gloss.empty()) {
         std::vector<const TeachingMoment*> ms;
@@ -773,7 +806,10 @@ static QWidget* makeLookupPane(allcore::Spine& spine, allcore::RefDict* ref,
         results, &QTextBrowser::anchorClicked,
         [pane, box](const QUrl& u) {
             const QString s = u.toString();
-            if (s.startsWith("propose:")) {
+            if (s.startsWith("das:")) {
+                showDasPage(pane, s.mid(4).toInt());
+                QMetaObject::invokeMethod(box, "returnPressed");
+            } else if (s.startsWith("propose:")) {
                 proposeTermDialog(
                     pane, s.mid(8),
                     "looked up in the dictionary (Lookup pane)");
@@ -1616,6 +1652,10 @@ auto* secFmt = new QLabel("<span style='color:#9A7A33;font-size:10px;letter-spac
         connect(context_, &QTextBrowser::anchorClicked,
                 [this](const QUrl& u) {
                     const QString s = u.toString();
+                    if (s.startsWith("das:")) {
+                        showDasPage(this, s.mid(4).toInt());
+                        return;
+                    }
                     if (s.startsWith("gloss:")) {
                         const std::string wylie = s.mid(6).toStdString();
                         auto it = glossary_.find(wylie);
@@ -9595,6 +9635,61 @@ static void fileProposal(QWidget* parent, allcore::ProposalKind kind,
                              "The proposals folder could not be written.");
 }
 
+static void showDasPage(QWidget* parent, int page) {
+#ifdef ALL_HAVE_QTPDF
+    if (g_dasPdfPath.isEmpty() || !QFile::exists(g_dasPdfPath)) {
+        QMessageBox::information(
+            parent, "Das dictionary",
+            "The Das (1902) PDF is not in the data folder "
+            "(data/das/das_1902_bookmarked.pdf).");
+        return;
+    }
+    auto* dlg = new QDialog(parent);
+    dlg->setAttribute(Qt::WA_DeleteOnClose);
+    dlg->setWindowTitle(
+        QString("Das, A Tibetan-English Dictionary (1902) \u2014 "
+                "p.%1 \u00b7 public domain \u00b7 reference")
+            .arg(page));
+    dlg->resize(820, 900);
+    auto* v = new QVBoxLayout(dlg);
+    auto* doc = new QPdfDocument(dlg);
+    doc->load(g_dasPdfPath);
+    auto* view = new QPdfView(dlg);
+    view->setDocument(doc);
+    view->setPageMode(QPdfView::PageMode::MultiPage);
+    view->setZoomMode(QPdfView::ZoomMode::FitToWidth);
+    v->addWidget(view, 1);
+    auto* row = new QHBoxLayout;
+    auto* back = new QPushButton("\u25C0 page");
+    auto* fwd = new QPushButton("page \u25B6");
+    auto* closeB = new QPushButton("Close");
+    row->addWidget(back);
+    row->addWidget(fwd);
+    row->addStretch();
+    row->addWidget(closeB);
+    v->addLayout(row);
+    auto* nav = view->pageNavigator();
+    QObject::connect(back, &QPushButton::clicked, [nav] {
+        if (nav->currentPage() > 0)
+            nav->jump(nav->currentPage() - 1, {});
+    });
+    QObject::connect(fwd, &QPushButton::clicked, [nav, doc] {
+        if (nav->currentPage() + 1 < doc->pageCount())
+            nav->jump(nav->currentPage() + 1, {});
+    });
+    QObject::connect(closeB, &QPushButton::clicked, dlg,
+                     &QDialog::accept);
+    dlg->show();
+    QTimer::singleShot(300, dlg, [nav, page, doc] {
+        if (page - 1 < doc->pageCount()) nav->jump(page - 1, {});
+    });
+#else
+    QMessageBox::information(parent, "Das dictionary",
+                             "This build lacks Qt PDF support.");
+    (void)page;
+#endif
+}
+
 static int fileSpellingProposals(QWidget* parent,
                                  const QList<QStringList>& rows) {
     if (g_proposalsDir.isEmpty() || g_userName.isEmpty()) {
@@ -11171,6 +11266,24 @@ int main(int argc, char** argv) {
         }
         if (!teaching.empty()) g_teaching = &teaching;
     }
+    static std::vector<std::pair<std::string, int>> dasSections;
+    {
+        QFile f(root + "/data/extracted/das_pages.json");
+        if (f.open(QIODevice::ReadOnly)) {
+            const auto doc = QJsonDocument::fromJson(f.readAll());
+            for (const auto& v :
+                 doc.object().value("sections").toArray()) {
+                const auto o = v.toObject();
+                dasSections.push_back(
+                    {o.value("onset").toString().toStdString(),
+                     o.value("pdf_page").toInt()});
+            }
+        }
+        if (!dasSections.empty()) {
+            g_dasSections = &dasSections;
+            g_dasPdfPath = root + "/data/das/das_1902_bookmarked.pdf";
+        }
+    }
     tabs.addTab(makeLookupPane(spine, refdict, mvp, whitney, colloq),
                 "Lookup");
     auto* sanskritPane = new SanskritPane(mvp, whitney);
@@ -11455,6 +11568,19 @@ int main(int argc, char** argv) {
                            "(%2 proposed)")
                        .arg(ok ? "PASS" : "FAIL")
                        .arg(g_idioms ? (int)g_idioms->size() : 0);
+            if (!ok) ++fails;
+        }
+        {
+            const bool ok = g_dasSections &&
+                            g_dasSections->size() >= 800 &&
+                            dasPageFor("khyab pa") > 0 &&
+                            dasPageFor("khyab pa") >
+                                dasPageFor("ka ba");
+            log << QString("  [%1] Das: onset map loaded (%2 "
+                           "sections), khyab beyond ka")
+                       .arg(ok ? "PASS" : "FAIL")
+                       .arg(g_dasSections
+                                ? (int)g_dasSections->size() : 0);
             if (!ok) ++fails;
         }
         {

@@ -112,6 +112,9 @@ cp "$ROOT/build/reference.db" "$DATA/build/" 2>/dev/null || true
 # BDRC's permission — credited in the Scan pane wherever output
 # appears). Omitting them left packaged apps showing the
 # download-it-yourself fallback (found by Adam, 2026-08-10).
+mkdir -p "$DATA/data/das"
+cp "$ROOT/data/das/das_1902_bookmarked.pdf" "$DATA/data/das/" \
+   2>/dev/null || true
 mkdir -p "$DATA/data/teaching"
 cp "$ROOT/data/teaching/teaching_moments_card.json" \
    "$ROOT/data/teaching/PROVENANCE.md" "$DATA/data/teaching/" \

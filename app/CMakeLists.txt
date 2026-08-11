@@ -8,7 +8,12 @@ qt_add_executable(ALLTranslationTool
 set_source_files_properties(AppIcon.icns PROPERTIES
   MACOSX_PACKAGE_LOCATION "Resources")
 find_package(Qt6 COMPONENTS Network REQUIRED)
+find_package(Qt6 COMPONENTS Pdf PdfWidgets QUIET)
 target_link_libraries(ALLTranslationTool PRIVATE allcore Qt6::Widgets Qt6::Network)
+if(Qt6Pdf_FOUND)
+  target_link_libraries(ALLTranslationTool PRIVATE Qt6::Pdf Qt6::PdfWidgets)
+  target_compile_definitions(ALLTranslationTool PRIVATE ALL_HAVE_QTPDF)
+endif()
 # the Scan pane needs allocr (onnxruntime + OpenCV); optional — the app
 # builds without it and simply omits the pane
 if(TARGET allocr)
