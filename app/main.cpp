@@ -1144,6 +1144,19 @@ public:
               "folio markers and dictionary-attested forms are not "
               "doubted");
         {
+            // double-click must not auto-select (the line-highlight
+            // bug): a synthetic double-click leaves no selection
+            QMouseEvent dbl(QEvent::MouseButtonDblClick,
+                            QPointF(5, 5), QPointF(5, 5),
+                            Qt::LeftButton, Qt::LeftButton,
+                            Qt::NoModifier);
+            QCoreApplication::sendEvent(view_->viewport(), &dbl);
+            check(!view_->textCursor().hasSelection() ||
+                      view_->textCursor().selectedText().length() <
+                          40,
+                  "double-click does not select the line");
+        }
+        {
             shadeMode_->setCurrentIndex(0);   // GMR click mode
             input_->setPlainText("'PHAGS PA'I BDEN PA BZHI");
             loadDoc();
@@ -1708,6 +1721,10 @@ auto* secFmt = new QLabel("<span style='color:#9A7A33;font-size:10px;letter-spac
         // (~3s on 1.2MB; final hotspot of the Library-open fix)
         view_ = new QPlainTextEdit;
         view_->setReadOnly(true);
+        // rapid clicks must WALK THE PHRASE CHAIN, never trigger
+        // Qt's double-click word-select / triple-click line-select
+        // (the whole line lit up after cycling — Adam, 2026-08-11)
+        view_->viewport()->installEventFilter(this);
         { QFont vf = view_->font(); vf.setPointSize(15); view_->setFont(vf); }
         context_ = new QTextBrowser;
         context_->setOpenLinks(false);
@@ -2405,6 +2422,15 @@ private:
                  "vocabulary (yet \u2014 the corpus grows as more "
                  "classes are indexed).</i>";
         return h;
+    }
+
+    bool eventFilter(QObject* w, QEvent* ev) override {
+        if (view_ && w == view_->viewport() &&
+            ev->type() == QEvent::MouseButtonDblClick) {
+            onClick();      // count it as one more step of the chain
+            return true;    // and swallow the auto-selection
+        }
+        return QWidget::eventFilter(w, ev);
     }
 
     int tokenAt(int charPos) const {
