@@ -196,6 +196,9 @@ end to end exactly as written)
   triple-click — FIXED (dd68ef4, guard check 85)
 - 2026-08-11 · Overlay · control column crushed in short windows —
   FIXED (8569dd7, scroll area)
+- 2026-08-11 · Draft · same crush class found by the new fit sweep
+  (823px demand) — FIXED (scroll area); permanent guard: every pane
+  must fit an 800px window (selftest check 86)
 
 # CURATION RULINGS
 *(pane · what stays / what pares / format decision)*

@@ -5709,7 +5709,17 @@ auto* secEvid = new QLabel("<span style='color:#9A7A33;font-size:10px;letter-spa
                          [this] { phraseMemory(); });
         QObject::connect(quoteBtn, &QPushButton::clicked,
                          [this] { detectQuotes(); });
-        tl->addLayout(srcCol, 1);
+        // same crush class as the Overlay column (fit sweep,
+        // 2026-08-11): the source column demands >800px — scroll,
+        // never squeeze
+        auto* srcWrap = new QWidget;
+        srcWrap->setLayout(srcCol);
+        auto* srcScroll = new QScrollArea;
+        srcScroll->setWidget(srcWrap);
+        srcScroll->setWidgetResizable(true);
+        srcScroll->setFrameShape(QFrame::NoFrame);
+        srcScroll->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+        tl->addWidget(srcScroll, 1);
         clauseView_ = new QTextBrowser;
         clauseView_->setOpenLinks(false);
         tl->addWidget(clauseView_, 1);
@@ -11842,6 +11852,25 @@ int main(int argc, char** argv) {
             log << QString("  [%1] Night: reading surfaces cream in "
                            "all modes").arg(cream ? "PASS" : "FAIL");
             if (!cream) ++fails;
+        }
+        // every pane must FIT a small laptop window (the Overlay
+        // squeeze bug is a class: any pane demanding more height
+        // than ~800px will crush its widgets the same way)
+        {
+            int worst = 0; QString worstName;
+            for (auto& f : flatPanes) {
+                const int h = f.w->minimumSizeHint().height();
+                log << QString("  [info] fit: %1 needs %2 px")
+                           .arg(f.title).arg(h);
+                if (h > worst) { worst = h; worstName = f.title; }
+            }
+            const bool ok = worst <= 800;
+            log << QString("  [%1] Fit: every pane fits an 800px "
+                           "window (worst: %2 at %3 px)")
+                       .arg(ok ? "PASS" : "FAIL")
+                       .arg(worstName)
+                       .arg(worst);
+            if (!ok) ++fails;
         }
         // the menu bar mirrors the GUI: group menus + View + Help
         {
