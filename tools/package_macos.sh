@@ -171,6 +171,11 @@ if [ "$LAUNCH_OK" != 1 ]; then
   exit 1
 fi
 
+# every release carries the open-source & data notices (Adam,
+# 2026-08-11) — same commit discipline as the code
+cp "$ROOT/docs/distribution/OPEN_SOURCE_NOTICES.md" \
+   "$STAGE/OPEN_SOURCE_NOTICES.md"
+
 echo "== 7. DMG =="
 mkdir -p "$DIST"
 DMG="$DIST/ALL-Translation-Tool-$VERSION.dmg"
