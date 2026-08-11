@@ -238,6 +238,8 @@ static std::string teachingKey(std::string g) {
 // flag means "this form is fine") — the Overlay legality check treats
 // them as legal. Loaded from the proposal store once per launch.
 static const std::set<std::string>* g_spellingValid = nullptr;
+// spine pointer for the About box's data-release line
+static const allcore::Spine* g_spineForAbout = nullptr;
 
 // The published apparatus (GMR-approved, mined from released books):
 // 344 footnotes keyed by English lemma + 138 bibliography entries.
@@ -1152,6 +1154,14 @@ public:
                   !hint_->text().contains("1 spelling"),
               "folio markers and dictionary-attested forms are not "
               "doubted");
+        {
+            const bool ok =
+                QStringLiteral(ALL_APP_VERSION).count('.') == 2;
+            log << QString("  [%1] About: app version wired (%2)")
+                       .arg(ok ? "PASS" : "FAIL")
+                       .arg(QStringLiteral(ALL_APP_VERSION));
+            if (!ok) ++fails;
+        }
         {
             // anchor payloads survive spaces (the installed-layout
             // path '/Applications/ALL Translation Tool/...' broke
@@ -11401,8 +11411,10 @@ int main(int argc, char** argv) {
     auto* tabsPtr = new QTabWidget;   // owned by the main window
     QTabWidget& tabs = *tabsPtr;
     win.setCentralWidget(tabsPtr);
+    g_spineForAbout = &spine;
     win.setWindowTitle(
-        QString("ALL Translation Tool — HGM v%1")
+        QString("ALL Translation Tool %1 — HGM v%2")
+            .arg(QStringLiteral(ALL_APP_VERSION))
             .arg(QString::fromStdString(spine.metaValue("release_version"))));
     auto* overlay = new OverlayPane(spine, checker, refdict, progress, root);
     tabs.addTab(overlay, "Overlay");
@@ -11696,6 +11708,41 @@ int main(int argc, char** argv) {
             applyNight(on);
             QSettings s("ALL", "TranslationTool");
             s.setValue("app/nightMode", on);
+        });
+        view->addSeparator();
+        QAction* about = view->addAction("About ALL Translation Tool");
+        about->setMenuRole(QAction::AboutRole);   // macOS: app menu
+        QObject::connect(about, &QAction::triggered, [&win] {
+            QMessageBox::about(
+                &win, "About ALL Translation Tool",
+                QString(
+                    "<h3>ALL Translation Tool</h3>"
+                    "<p>Version %1 \u00b7 HGM data release %2</p>"
+                    "<p><b>Created by Adam Derick Andrade</b><br>"
+                    "(Loppun Pawo, a.k.a. StaticSky)<br>"
+                    "for the Asian Legacy Library \u00b7 Asian "
+                    "Classics Input Project</p>"
+                    "<p><i>The mission: to turn the preserved "
+                    "library of Tibet into translations, and "
+                    "students into translators \u2014 with Geshe "
+                    "Michael Roach's English as the binding layer. "
+                    "The machine may match the master's English; it "
+                    "may never compose it. Everything essential runs "
+                    "on your own machine, and every claim on screen "
+                    "says whether it is attested, derived, or "
+                    "provisional.</i></p>"
+                    "<p>Contact: <a href='mailto:"
+                    "adam.derick.andrade@gmail.com'>"
+                    "adam.derick.andrade@gmail.com</a></p>"
+                    "<p><small>Third-party components and data "
+                    "sources are credited in OPEN_SOURCE_NOTICES, "
+                    "shipped with every release.</small></p>")
+                    .arg(QStringLiteral(ALL_APP_VERSION),
+                         QString::fromStdString(
+                             g_spineForAbout
+                                 ? g_spineForAbout->metaValue(
+                                       "release_version")
+                                 : std::string("?"))));
         });
         view->addSeparator();
         QAction* prefs = view->addAction("Settings\u2026");

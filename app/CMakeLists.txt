@@ -9,6 +9,8 @@ set_source_files_properties(AppIcon.icns PROPERTIES
   MACOSX_PACKAGE_LOCATION "Resources")
 find_package(Qt6 COMPONENTS Network REQUIRED)
 find_package(Qt6 COMPONENTS Pdf PdfWidgets QUIET)
+file(STRINGS "${CMAKE_SOURCE_DIR}/VERSION" ALL_APP_VERSION LIMIT_COUNT 1)
+add_compile_definitions(ALL_APP_VERSION="${ALL_APP_VERSION}")
 target_link_libraries(ALLTranslationTool PRIVATE allcore Qt6::Widgets Qt6::Network)
 if(Qt6Pdf_FOUND)
   target_link_libraries(ALLTranslationTool PRIVATE Qt6::Pdf Qt6::PdfWidgets)

@@ -89,3 +89,11 @@ startup, lastWindowClosed, and aboutToQuit with timestamps, so a
 silent exit-0 explains itself. Then `/tmp/all_stage_launch.log` from
 the packaging launch test, then `DYLD_PRINT_LIBRARIES` per
 docs/PACKAGING.md.
+
+
+## Version bump (every release)
+
+1. Edit `VERSION` at the repo root — every update increments it
+   (patch for fixes, minor for features). The About box, window
+   title, and DMG filename all read from it.
+2. Update RELEASE_NOTES for the new number.

@@ -19,10 +19,8 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 BUILD="$ROOT/cmake-build-release"
 DIST="$ROOT/dist"
-VERSION=$(python3 -c "
-import gzip, json
-m = json.load(gzip.open('$ROOT/data/hgm_dictionary_v27_2.json.gz','rt'))
-print(m['meta']['version'])")
+APPVER=$(head -1 "$ROOT/VERSION")
+VERSION="$APPVER"
 APPNAME="ALL Translation Tool"
 STAGE="$DIST/stage"
 QTBIN="$(dirname "$(which qmake6 2>/dev/null || echo /opt/homebrew/opt/qt/bin/qmake)")"
