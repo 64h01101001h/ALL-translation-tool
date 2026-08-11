@@ -88,3 +88,10 @@ match, convert, spellcheck, display build) via `--openprobe`,
 failures, zero timeouts; slowest file 1.78 s** (R0007A1_E.TXT).
 The release ships with the statement: every text in the library
 opens.
+
+## Library health census (2026-08-11)
+
+Full-collection census (11,700 files incl. kangyur/tengyur/sungbum):
+all open; Tibetan corpus 204.6M tokens, 2.11% spelling-doubt rate,
+184.6K agreement flags. Priority list for input review:
+docs/LIBRARY_CENSUS.md.
