@@ -1356,13 +1356,19 @@ public:
         auto* outer = new QVBoxLayout(this);
         auto* split = new QSplitter(Qt::Horizontal);
 
-        auto* left = new QWidget;
-        auto* ll = new QVBoxLayout(left);
-        ll->addWidget(new QLabel("<b>Document (ACIP)</b>"));
+        // the document box lives ABOVE a draggable divider (Adam,
+        // 2026-08-11): drag to size it; the controls scroll below
+        auto* inputBox = new QWidget;
+        auto* ibl = new QVBoxLayout(inputBox);
+        ibl->setContentsMargins(0, 0, 0, 0);
+        ibl->addWidget(new QLabel("<b>Document (ACIP)</b>"));
         input_ = new QPlainTextEdit;
         input_->setPlaceholderText("Paste an ACIP document…");
-        input_->setMinimumHeight(90);
-        ll->addWidget(input_, 1);
+        input_->setMinimumHeight(60);
+        ibl->addWidget(input_, 1);
+        auto* left = new QWidget;
+        auto* ll = new QVBoxLayout(left);
+        ll->setContentsMargins(0, 4, 0, 0);
         auto* open = new QPushButton("Open ACIP file…");
         ll->addWidget(open);
         auto* load = new QPushButton("Load into overlay");
@@ -1805,7 +1811,24 @@ auto* secFmt = new QLabel("<span style='color:#9A7A33;font-size:10px;letter-spac
         leftScroll->setFrameShape(QFrame::NoFrame);
         leftScroll->setHorizontalScrollBarPolicy(
             Qt::ScrollBarAlwaysOff);
-        split->addWidget(leftScroll);
+        auto* leftSplit = new QSplitter(Qt::Vertical);
+        leftSplit->addWidget(inputBox);
+        leftSplit->addWidget(leftScroll);
+        leftSplit->setStretchFactor(0, 0);
+        leftSplit->setStretchFactor(1, 1);
+        {
+            QSettings st("ALL", "TranslationTool");
+            const auto saved =
+                st.value("overlay/inputSplit").toByteArray();
+            if (!saved.isEmpty()) leftSplit->restoreState(saved);
+            else leftSplit->setSizes({140, 600});
+        }
+        connect(leftSplit, &QSplitter::splitterMoved, [leftSplit] {
+            QSettings("ALL", "TranslationTool")
+                .setValue("overlay/inputSplit",
+                          leftSplit->saveState());
+        });
+        split->addWidget(leftSplit);
         split->addWidget(right);
         split->setStretchFactor(0, 1);
         split->setStretchFactor(1, 3);
