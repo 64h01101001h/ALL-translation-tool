@@ -175,6 +175,8 @@ struct TeachingMoment {
 };
 using TeachingMap = std::map<std::string, std::vector<TeachingMoment>>;
 static const TeachingMap* g_teaching = nullptr;
+// spoken-Tibetan tier: WYLIE -> moments where he SAYS the word
+static const TeachingMap* g_teachingTib = nullptr;
 
 // Das (1902) reference layer (#61): syllable-onset -> PDF page from
 // the team's own bookmarked copy (public-domain text). Reference
@@ -330,6 +332,30 @@ static QString entryHtml(const allcore::Entry& e,
                          .arg(m->lang == "ENG" || m->lang == "?"
                                   ? QString()
                                   : " <b>[" + m->lang + "]</b>");
+            }
+            h += "</div>";
+        }
+    }
+    if (g_teachingTib && !e.wylie.empty()) {
+        auto it = g_teachingTib->find(e.wylie);
+        if (it != g_teachingTib->end() && !it->second.empty()) {
+            h += "<div style='margin-top:4px;font-size:12px'>"
+                 "<span style='color:#7C2D26;font-weight:600'>He says "
+                 "this word</span> <i style='color:#888'>(phonetic "
+                 "match on his own convention \u2014 candidates; "
+                 "homophones share moments)</i><br>";
+            int shown = 0;
+            for (const auto& m : it->second) {
+                if (++shown > 2) break;
+                h += QString("\u25B6 <a href='%1' title=\"%2\">%3</a>"
+                             " @%4:%5%6<br>")
+                         .arg(m.url, m.snippet.toHtmlEscaped(),
+                              m.title.left(60).toHtmlEscaped())
+                         .arg(m.t / 60)
+                         .arg(m.t % 60, 2, 10, QChar('0'))
+                         .arg(m.lang == "ENG" || m.lang == "?"
+                                  ? QString()
+                                  : " <b>[" + m.lang + "]</b>");
             }
             h += "</div>";
         }
@@ -11265,6 +11291,25 @@ int main(int argc, char** argv) {
             }
         }
         if (!teaching.empty()) g_teaching = &teaching;
+        static TeachingMap teachingTib;
+        QFile f2(root + "/data/teaching/teaching_moments_card.json");
+        if (f2.open(QIODevice::ReadOnly)) {
+            const auto doc = QJsonDocument::fromJson(f2.readAll());
+            const auto tt =
+                doc.object().value("tibetan_terms").toObject();
+            for (auto it = tt.begin(); it != tt.end(); ++it) {
+                auto& vec = teachingTib[it.key().toStdString()];
+                for (const auto& v : it.value().toArray()) {
+                    const auto o = v.toObject();
+                    vec.push_back({o.value("title").toString(),
+                                   o.value("url").toString(),
+                                   o.value("lang").toString(),
+                                   o.value("snippet").toString(),
+                                   o.value("t").toInt()});
+                }
+            }
+        }
+        if (!teachingTib.empty()) g_teachingTib = &teachingTib;
     }
     static std::vector<std::pair<std::string, int>> dasSections;
     {
@@ -11589,6 +11634,15 @@ int main(int argc, char** argv) {
                             !g_teaching->at("emptiness").empty() &&
                             g_teaching->at("emptiness")[0].url.contains(
                                 "youtube.com");
+            const bool tibOk = g_teachingTib &&
+                               g_teachingTib->size() > 500 &&
+                               g_teachingTib->count("dge bshes");
+            log << QString("  [%1] Teaching: spoken-Tibetan tier "
+                           "loaded (%2 headwords)")
+                       .arg(tibOk ? "PASS" : "FAIL")
+                       .arg(g_teachingTib
+                                ? (int)g_teachingTib->size() : 0);
+            if (!tibOk) ++fails;
             log << QString("  [%1] Teaching: moments index loaded "
                            "(%2 terms)")
                        .arg(ok ? "PASS" : "FAIL")
