@@ -2298,11 +2298,32 @@ private:
     // #64 stage D (v1): every matched entry in the loaded text with
     // its teaching moments, in text order — the translator's
     // companion sheet. Context-fit ranking is the next increment.
+    // #64 stage D (v2): every matched entry in the loaded text with
+    // its teaching moments — moments RANKED BY CONTEXT FIT: a moment
+    // whose snippet mentions other terms of this same text outranks
+    // one that merely uses the word. Machine-located candidates; the
+    // recordings are the authority.
     QString teachingsReportHtml() const {
+        // the text's own vocabulary, as normalized gloss keys
+        std::set<std::string> docKeys;
+        for (const auto& e : doc_.entries)
+            for (const auto& g : e.hgm_gloss)
+                docKeys.insert(teachingKey(g));
+        auto contextScore = [&docKeys](const QString& snippet,
+                                       const std::string& self) {
+            const std::string low = snippet.toLower().toStdString();
+            int score = 0;
+            for (const auto& k : docKeys)
+                if (k != self && k.size() >= 5 &&
+                    low.find(k) != std::string::npos)
+                    ++score;
+            return score;
+        };
         QString h =
             "<i style='color:#888'>Candidates located from class "
-            "captions; click a link and the recording itself "
-            "teaches.</i><hr>";
+            "captions, ranked by context fit (moments mentioning "
+            "other terms of this text rank first); click a link and "
+            "the recording itself teaches.</i><hr>";
         int shown = 0;
         std::set<std::string> done;
         for (const auto& e : doc_.entries) {
@@ -2310,30 +2331,43 @@ private:
             done.insert(e.wylie);
             QString sec;
             if (g_teaching) {
+                std::vector<const TeachingMoment*> cand;
                 std::set<QString> seen;
+                std::string selfKey;
                 for (const auto& g : e.hgm_gloss) {
-                    auto it = g_teaching->find(teachingKey(g));
+                    const std::string k = teachingKey(g);
+                    if (selfKey.empty()) selfKey = k;
+                    auto it = g_teaching->find(k);
                     if (it == g_teaching->end()) continue;
-                    for (const auto& m : it->second) {
-                        if (seen.size() >= 2 || seen.count(m.url))
-                            continue;
-                        seen.insert(m.url);
-                        sec += QString(
-                                   "&nbsp;&nbsp;\u25B6 <a href='%1'>"
-                                   "%2</a> @%3:%4%5<br>")
-                                   .arg(m.url,
-                                        m.title.left(56)
-                                            .toHtmlEscaped())
-                                   .arg(m.t / 60)
-                                   .arg(m.t % 60, 2, 10, QChar('0'))
-                                   .arg((m.lang == "ENG" ||
-                                                 m.lang == "?"
-                                             ? QString()
-                                             : " [" + m.lang + "]") +
-                                        (m.src == "TKB"
-                                             ? " (lam rim)"
-                                             : QString()));
-                    }
+                    for (const auto& m : it->second)
+                        if (!seen.count(m.url)) {
+                            seen.insert(m.url);
+                            cand.push_back(&m);
+                        }
+                }
+                std::stable_sort(
+                    cand.begin(), cand.end(),
+                    [&](const TeachingMoment* a,
+                        const TeachingMoment* b) {
+                        return contextScore(a->snippet, selfKey) >
+                               contextScore(b->snippet, selfKey);
+                    });
+                int n = 0;
+                for (const auto* mp : cand) {
+                    if (++n > 2) break;
+                    const auto& m = *mp;
+                    sec += QString(
+                               "&nbsp;&nbsp;\u25B6 <a href='%1'>"
+                               "%2</a> @%3:%4%5<br>")
+                               .arg(m.url,
+                                    m.title.left(56).toHtmlEscaped())
+                               .arg(m.t / 60)
+                               .arg(m.t % 60, 2, 10, QChar('0'))
+                               .arg((m.lang == "ENG" || m.lang == "?"
+                                         ? QString()
+                                         : " [" + m.lang + "]") +
+                                    (m.src == "TKB" ? " (lam rim)"
+                                                    : QString()));
                 }
             }
             if (g_teachingTib) {
