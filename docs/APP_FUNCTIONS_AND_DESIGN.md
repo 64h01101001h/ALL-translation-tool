@@ -47,8 +47,10 @@ any feature is:
 
 # PART I — EVERY FUNCTION THE APPLICATION PROVIDES
 
-The application is one window with fifteen working areas ("panes") —
-fourteen for everyone, and one more that appears only for an authority
+The application is one window with seventeen working areas ("panes"),
+grouped into six workflow tabs — Read, Translate, Research, Learn,
+Input, Community, the menu bar mirroring the groups — sixteen panes
+for everyone, and one more that appears only for an authority
 (described last) — built on one shared core. Everything except two
 clearly-marked AI features runs fully offline — a deliberate choice,
 so that the tool serves equally in New York, in a monastery library,
@@ -57,10 +59,13 @@ or at an input center with no reliable connection.
 ## 1. Overlay — reading with the dictionary underneath
 
 Open any text from the preserved library — ACIP transliteration or
-scholarly Wylie, the program detects which — and it appears with every
-word and phrase the dictionary knows gently shaded, nested phrases
-shown within longer ones. A complete canonical volume opens fully
-shaded in under half a second.
+scholarly Wylie, the program detects which. Per Geshe Michael's own
+directive the text opens clean: click any word and the longest phrase
+the dictionary knows at that spot lights up, each further click
+stepping down to the next shorter phrase within. The all-matches view
+— every word and phrase the dictionary knows gently shaded, nested
+phrases shown within longer ones — remains one toggle away, and a
+complete canonical volume shades fully in under half a second.
 
 Clicking any word opens its card: the dictionary entry with its
 quality tier honestly labeled (curated, glossary, or provisional);
@@ -153,7 +158,18 @@ terms found their equivalents in the student's draft. Nothing grades
 style; the master's version teaches. Missed skills are named; progress
 stays in a local file that belongs to the student.
 
-## 5. Draft — the working translator's bench
+## 5. Manuscript — the writing surface
+
+The manuscript itself, with the corpus one keystroke away: a
+rich-text editor (pasted Tibetan script keeps its shape) that saves
+losslessly, autosaves every minute once named, and exports RTF for
+Word or Pages. A search sidebar speaks the full Gofer grammar over
+the aligned corpus; every result shows the master's English beside
+the Tibetan, and one click places that English at the cursor —
+matched from his corpus, never composed. The pane reopens your last
+manuscript on launch.
+
+## 6. Draft — the working translator's bench
 
 The source text splits into clauses; each clause shows its verified
 term anchors; each term opens the full concordance of how the master
@@ -172,8 +188,8 @@ shloka reckoning shown as the labeled estimate it is; and a verse
 meter check that names the meter and flags broken lines.
 
 It also carries the shared apparatus, under Geshe Michael's directive
-that **work performed once is never redone**: every footnote (344) and
-bibliography entry (138) from the released Mixed Nuts volumes,
+that **work performed once is never redone**: every footnote (2,234)
+and bibliography entry (705) from the released Mixed Nuts volumes,
 searchable and insertable with citation attached; a bibliography
 composer in the exact house format, filling itself in from the
 Project's catalog for over 1,800 known works; and quotation detection
@@ -187,7 +203,7 @@ tool. An optional AI back-check produces a coverage report only —
 omissions and additions — and is forbidden by construction to
 retranslate.
 
-## 6. Review — the overseer's bench
+## 7. Review — the overseer's bench
 
 Where Draft serves the translator, Review serves the senior translator
 who checks another's work. The Tibetan source and the finished English
@@ -203,7 +219,7 @@ established senses, asking the reviewer to confirm the one chosen. Rule
 one holds here as everywhere: the checker only matches against Geshe
 Michael's own glosses; it never composes English.
 
-## 7. Align — the dictionary-building workflow, reborn
+## 8. Align — the dictionary-building workflow, reborn
 
 The Project's original Hypercontext program — the tool whose
 hypertexted files fed the first dictionary building — lives again.
@@ -218,7 +234,7 @@ directly, verified against the original tutorial file itself. Every
 translator working in this pane is quietly extending the dictionary
 for everyone who follows.
 
-## 8. Input — the input-center workstation
+## 9. Input — the input-center workstation
 
 The software the input centers were always meant to have. Its lineage
 is the Project's own: the ACE system built for ACIP years ago was
@@ -239,7 +255,7 @@ partner's, and every discrepancy lights up — down to a single dropped
 letter — to be corrected until the two files match exactly, which has
 always been the rule.
 
-## 9. Library — the preserved canon, close at hand
+## 10. Library — the preserved canon, close at hand
 
 The complete ACIP Release 6 collection installs from the Library's own
 archive files: 2,716 texts, 8.68 million lines, fully search-indexed
@@ -255,7 +271,7 @@ the 1990s are rescued to proper Tibetan script through a dedicated
 conversion lane. A flat catalog view lays the entire shelf out as one
 sortable table.
 
-## 10. Search — the classic grammar, restored
+## 11. Search — the classic grammar, restored
 
 The Project's beloved Gofer search grammar lives on: exact phrases,
 OR, and NEAR-within-N-lines, over the corpus, over any folder of raw
@@ -265,7 +281,7 @@ asks the computer's own index for any document containing the term —
 searched as typed *and* as Tibetan script, through the proven
 converters.
 
-## 11. Convert — every writing system, and time itself
+## 12. Convert — every writing system, and time itself
 
 Type in any of the four systems — ACIP, scholarly Wylie, Sanskrit
 IAST, or Devanagari; the pane detects which — and receive every
@@ -280,7 +296,7 @@ full Tibetan designation, element-animal pair to its years, complete
 Tibetan date to western weekday and back — with the traditional
 calendar's own irregularities honored rather than smoothed.
 
-## 12. Lookup — the stacked dictionary
+## 13. Lookup — the stacked dictionary
 
 One search box, many doors. Exact headword in any script; a fallback
 that strips affixed particles (searching *po'i* finds *po*); a
@@ -297,7 +313,17 @@ corresponding Monier-Williams entry or the Grammar itself. Honorific
 terms wear their badge with the ordinary word beside them. And the
 entire dictionary can be browsed in true Tibetan alphabetical order.
 
-## 13. Scan — Tibetan text recognition, embedded and proven
+## 14. Sanskrit — the whole Sanskrit stack in one workbench
+
+Enter IAST, Devanagari, or ACIP input-code — auto-detected — and the
+full cascade renders: input-code, next-letter style, Tibetanized
+ACIP, Tibetan script, Devanagari, IPA. Then Whitney's root analyses
+(with past-participle reverse lookup — *gata* finds *gam*), the
+Mahāvyutpatti bridge to classical Tibetan, and the Monier-Williams
+link-out; Sanskrit OCR reads a Devanagari image into the same
+pipeline.
+
+## 15. Scan — Tibetan text recognition, embedded and proven
 
 Text recognition runs inside the application: the Buddhist Digital
 Resource Center's open models (used with BDRC's permission, credited
@@ -313,7 +339,7 @@ Project's discipline governs all of it: OCR output is tagged
 unverified review material, is never smoothed, and never enters the
 corpus.
 
-## 14. Propose — offering terms to the authority
+## 16. Propose — offering terms to the authority
 
 Every team member can propose. While reading, the card for any word
 carries a quiet "propose to the authority" action, and a dedicated
@@ -329,7 +355,7 @@ shared folder — pointed at the Project's own Dropbox, the whole team's
 queue synchronizes with no infrastructure, offline-capable and fully
 traceable.
 
-## 15. Approval — the authority's queue
+## 17. Approval — the authority's queue
 
 This pane appears only for an authority — Geshe Michael, or Adam as a
 second administrator. It shows the pending proposals, each with its
@@ -373,7 +399,7 @@ own judgments.
   growing registers of community pronunciation, the prenasal rule
   Geshe Michael teaches, and the honorifics.
 - **Thirty-eight automated test batteries** run before any change
-  ships — including the application's own self-test: forty-four
+  ships — including the application's own self-test: eighty
   checks that construct the real panes against the real dictionary
   and prove their behavior, from clause-splitting to the approval
   queue.

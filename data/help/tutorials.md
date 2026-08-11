@@ -483,4 +483,4 @@ source and page.
 cream reading pages. Remembered.
 
 **Self-test.** If anything misbehaves: run the app from Terminal with
-`--selftest` — 78 checks print PASS/FAIL and localize the problem.
+`--selftest` — 80 checks print PASS/FAIL and localize the problem.

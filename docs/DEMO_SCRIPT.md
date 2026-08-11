@@ -1,5 +1,9 @@
 # The 15-Minute Demo — script for tonight
 
+> *Preserved as delivered 2026-08-07. Tab paths predate the six-group
+> navigation of 2026-08-10; see `data/help/tutorials.md` for current
+> paths.*
+
 *For Adam, presenting to ~550 students and sponsors at Geshe Michael's
 request. Arc: from the preserved library, to the trained translator,
 to the master's living voice. Every click below is rehearsable.*

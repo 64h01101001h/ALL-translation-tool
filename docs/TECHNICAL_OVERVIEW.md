@@ -1,5 +1,5 @@
 # ALL Translation Tool — Technical Overview
-*Under the hood, for developers. Current as of 2026-08-07 (23 test
+*Under the hood, for developers. Current as of 2026-08-11 (38 test
 suites, corpus v32). Companion documents: `README.md` (user-facing
 pane guide), `ALL_TRANSLATION_TOOL_ROADMAP.md` (master plan),
 `TODO.md` (live ledger), `docs/whitepaper/` (the non-technical story),
@@ -10,11 +10,13 @@ and the design docs referenced per subsystem below.*
 A C++20 static library (**`allcore`**, `core/`) owns everything
 deterministic: SQLite/FTS5 data access, the ported conversion engines,
 the grammar layer, search, and every algorithm. A single-file **Qt 6
-Widgets** app (`app/main.cpp`) is a thin UI over it — ten panes, no
+Widgets** app (`app/main.cpp`) is a thin UI over it — seventeen panes
+in six workflow tabs (Read / Translate / Research / Learn / Input /
+Community, mirrored by the menu bar), no
 logic that isn't presentation, permission-gated network calls only in
 the app layer. Python lives in `tools/` for data preparation and
 validation harnesses only; nothing Python runs at app runtime. Build
-is CMake; `ctest` runs 23 suites; the app is
+is CMake; `ctest` runs 38 suites; the app is
 `cmake-build/app/ALLTranslationTool.app`.
 
 ```
@@ -56,9 +58,9 @@ tools/build_spine.py ──► build/hgm_spine_v27_2.db          │
 ```
 core/include/allcore/*.h   public API, one header per subsystem
 core/src/*.cpp             implementations
-core/tests/*_smoke.cpp     the 23 batteries (see §6)
+core/tests/*_smoke.cpp     the 38 batteries (see §6)
 core/tools_*.cpp           headless CLIs: wynorm, libindex_cli
-app/main.cpp               the whole UI (~4.5k lines, pane classes)
+app/main.cpp               the whole UI (~11k lines, pane classes)
 tools/*.py                 data prep + oracles (never runtime)
 data/                      gitignored payloads; data/extracted/ =
                            regenerable banks (regeneration commands
@@ -269,10 +271,11 @@ wave has a HANDOFF.md note, and QC side-products are filed there too
 
 Apache-2.0: Monlam word lists, lucene-bo rules, botok. CC0: verbs DB.
 MIT: KCK, pyewts. OFL: Noto Serif Tibetan (bundled with license).
-PD: BDRC scan images (shown with attribution). **Never ship without
-resolution**: 84000 TM (license discrepancy — email drafted), Steinert
-dictionary payloads (per-dictionary), BDRC OCR model weights (email
-drafted), RY/Waldo/Valby, rKTs dump. Full survey with per-item status:
+PD: BDRC scan images (shown with attribution). CC BY-NC 4.0: BDRC OCR
+models (bundled in the DMG, used with BDRC's permission). **Never ship
+without resolution**: 84000 TM (license discrepancy — email drafted),
+Steinert dictionary payloads (per-dictionary), RY/Waldo/Valby, rKTs
+dump. Full survey with per-item status:
 `docs/TIBETAN_TOOLS_SURVEY.md`.
 
 ## 16. Developer workflows
@@ -298,7 +301,6 @@ drafted), RY/Waldo/Valby, rKTs dump. Full survey with per-item status:
 
 Day-level calendar is Modern Karana (epoch 2009+; KCK computes the
 Kalacakra karana — correspondence with published Phugpa almanacs is a
-documented open question). Old-Tibetan affix rules unported. Word-level
-scan following awaits coordinate OCR (model license pending). Wilson
+documented open question). Old-Tibetan affix rules unported. Wilson
 dots OM/ADV/UP remainder is data-gated. The tier ruling on catalog
 English (binding vs reference) is Adam's to make.
