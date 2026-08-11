@@ -62,17 +62,17 @@ underneath.*
    read-only display; you cannot paste there. **Open ACIP file…**
    opens a file directly.
 
-**Reading the display.** Every word or phrase the dictionary knows is
-shaded: multi-syllable phrases carry solid color bands (adjacent
-phrases differ by color, nested phrases show within longer ones);
-single-word matches are a faint lavender; provisional
-(machine-aligned) glosses show an amber-leaning tint — a warning,
-not a decoration. Red wavy underline = the syllable fails the
-classical legality rules. Dotted amber = a particle disagreeing with
-the preceding suffix per the classical tables (a review hint, never
-an auto-correction). A complete canonical volume opens in about two
-seconds; on a huge text the shading finishes silently in the
-background while you read.
+**Reading the display.** Per Geshe Michael's direction the text
+opens CLEAN. Click any word: the LONGEST phrase the dictionary knows
+at that spot highlights in gold (amber-leaning when the entry is
+provisional); click again to step down to the next shorter phrase
+inside, dropping a particle at a time. The Display panel's "shading"
+control also offers ALL MATCHES — the coverage view where every
+known word and phrase is washed in color, nested and tier-tinted.
+In both modes: red wavy underline = the syllable fails the classical
+legality rules; dotted amber = a particle disagreeing with the
+preceding suffix (a review hint, never an auto-correction). A
+complete canonical volume opens in about two seconds.
 
 **The card.** Click any shaded word and the panel below shows its
 entry: the quality tier (curated / glossary / provisional); **the
@@ -469,7 +469,7 @@ tab it lives under — clicking takes you there. "Suggested
 Workflows…" in the Help menu opens the recipes chapter directly.
 
 **Self-test.** If anything misbehaves, run the app from Terminal
-with `--selftest`: 77 checks print PASS/FAIL and localize the
+with `--selftest`: 78 checks print PASS/FAIL and localize the
 problem. (thirty-eight automated test batteries also run before any change to
 the software ships.)
 
@@ -584,7 +584,7 @@ item carries who approved it and when; every mined fact carries its
 source and page. The app imports versioned data releases and never
 edits them.
 
-**Troubleshooting.** Run `--selftest` from Terminal (77 checks,
+**Troubleshooting.** Run `--selftest` from Terminal (78 checks,
 localizing any problem). The menu bar reaches every function if a
 pane misbehaves; switching tabs and back re-renders. The Help
 window's search finds any control by name and shows where it lives.

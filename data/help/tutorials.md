@@ -59,17 +59,21 @@ underneath — the flagship pane.
    which — then press "Load into overlay". The BIG right-hand area is
    the read-only display; you cannot paste there.
 
-**Reading the display.** Every word or phrase the dictionary knows is
-shaded. Multi-syllable phrases carry solid color bands (mint, blue,
-peach, rose — adjacent phrases differ by color); single-word matches
-are a faint lavender; provisional (machine-aligned) glosses show an
-amber-leaning tint — that tint is a warning, not a decoration. Red
-wavy underline = spelling fails the classical syllable rules. Dotted
-amber = a particle disagreeing with the preceding suffix (a review
-hint, never auto-corrected). The display follows the source file's
-own line breaks and blank lines, so the shaded text reads
-congruently with the original. A full volume opens in a couple of
-seconds; shading finishes silently if the text is huge.
+**Reading the display.** Per Geshe Michael's direction, the text
+opens CLEAN — no shading. Click any word, and the LONGEST phrase the
+dictionary knows at that spot lights up in gold (amber-leaning if
+the entry is provisional); click again and it steps down to the next
+shorter phrase inside — dropping a particle at a time — until the
+single word. The card below follows every step. The Display panel's
+"shading" control also offers ALL MATCHES: the coverage view, where
+every known word and phrase is washed in color (adjacent phrases
+differ by hue, nested phrases within longer ones, provisional
+glosses amber-tinted — that tint is a warning, not a decoration).
+In both modes: red wavy underline = spelling fails the classical
+syllable rules; dotted amber = a particle disagreeing with the
+preceding suffix (a review hint, never auto-corrected). The display
+follows the source file's own line breaks and blank lines. A full
+volume opens in a couple of seconds.
 
 **The card.** Click any shaded word: the panel below the display
 shows its dictionary entry — the quality tier (curated / glossary /
@@ -401,8 +405,9 @@ Recipes for putting the panes together. Each step names its tab path.
 - *You are the authority* → "Team proposal cycle.
 
 **Read a text (the daily bread).** Read → Library → double-click the
-text → it opens shaded in the Overlay → set "text as" to Tibetan
-script → read; click anything shaded for its card → for a hard word,
+text → it opens clean in the Overlay → set "text as" to Tibetan
+script → read; click any word and the longest known phrase lights up
+with its card → for a hard word,
 "Propose to the authority…" right from the card, evidence attached.
 When you want the carving itself: SCANS → "Find scans on BDRC…".
 
@@ -478,4 +483,4 @@ source and page.
 cream reading pages. Remembered.
 
 **Self-test.** If anything misbehaves: run the app from Terminal with
-`--selftest` — 77 checks print PASS/FAIL and localize the problem.
+`--selftest` — 78 checks print PASS/FAIL and localize the problem.

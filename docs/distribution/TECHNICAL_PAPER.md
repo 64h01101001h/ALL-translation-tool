@@ -243,9 +243,10 @@ All network calls live in the app layer; `allcore` cannot make one.
 The single window presents six workflow tabs, each holding its
 panes — seventeen working areas in all:
 
-- **Read** — *Overlay* (the flagship reader: dictionary-shaded text
-  in ACIP, wylie, or Tibetan script, click-for-card, BDRC scan
-  follow-along) and *Library* (the canon on disk, catalog identities
+- **Read** — *Overlay* (the flagship reader: click-to-highlight of
+  the longest dictionary phrase with step-down cycling — GMR's
+  directive — or the full coverage wash; ACIP, wylie, or Tibetan
+  script; click-for-card; BDRC scan follow-along) and *Library* (the canon on disk, catalog identities
   decoded from filenames).
 - **Translate** — *Manuscript* (rich-text writing surface with a
   Gofer corpus-search sidebar; lossless HTML storage, RTF export),
@@ -289,7 +290,7 @@ across the full data on every run.
 
 **The 38th suite is the application testing itself.** Run with
 `--selftest`, the app constructs its real panes offscreen against
-the real spine and exercises them programmatically — 77 checks
+the real spine and exercises them programmatically — 78 checks
 asserting actual pane state: the Overlay loads and shades a
 document, a known headword's card contains its gloss and tier, the
 Review pane raises the register warning on a crafted input, the

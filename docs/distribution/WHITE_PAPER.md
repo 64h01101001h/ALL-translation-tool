@@ -76,9 +76,12 @@ preserved canon on your own disk — 2,716 texts and 8.68 million
 lines of the complete ACIP Release 6, browsable as a tree that
 decodes every catalog file name into its provenance, alongside your
 own imported materials. Double-click any text and it opens in the
-Overlay, the flagship reader: every word and phrase the dictionary
-knows is shaded, nested phrases inside longer ones; clicking a word
-opens its card — the entry with its quality tier, Geshe Michael's
+Overlay, the flagship reader. At Geshe Michael's own direction the
+text opens clean: click any word and the longest phrase the
+dictionary knows there lights up — click again and it steps down,
+particle by particle, to the shorter phrases within. (A coverage
+view that washes every known word and phrase in color remains one
+click away.) Clicking a word opens its card — the entry with its quality tier, Geshe Michael's
 actual corpus renderings course by course, reference definitions
 honestly marked as references, honorific badges, community
 pronunciations. Spelling that fails the classical syllable rules is
@@ -275,7 +278,7 @@ the 52 pure-Tibetan examples in the Project's own published
 standard; the traditional Tibetan calendar was proven against two
 complete printed years, every month and every day. In all, the
 application carries 38 automated test suites that must pass before
-any change ships, and any user can run its built-in self-test — 77
+any change ships, and any user can run its built-in self-test — 78
 checks that print pass or fail and localize any problem. Where a
 result cannot be verified mechanically, the interface says so
 rather than implying certainty.

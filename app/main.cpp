@@ -971,6 +971,27 @@ public:
                   spellList_->item(0, 1)->text() == "1",
               "spelling-doubts panel lists the doubted form");
         spellToggle_->setChecked(false);
+        {
+            shadeMode_->setCurrentIndex(0);   // GMR click mode
+            input_->setPlainText("'PHAGS PA'I BDEN PA BZHI");
+            loadDoc();
+            int bden = -1;
+            for (size_t i = 0; i < doc_.tokens.size(); ++i)
+                if (doc_.tokens[i] == "BDEN") bden = (int)i;
+            bool ok = bden >= 0;
+            if (ok) {
+                QTextCursor c(view_->document());
+                c.setPosition(tokBeg_[bden]);
+                view_->setTextCursor(c);   // triggers onClick
+                const auto sels = view_->extraSelections();
+                ok = !sels.empty() &&
+                     sels[0].cursor.selectionStart() == tokBeg_[0] &&
+                     sels[0].cursor.selectionEnd() >=
+                         tokEnd_[doc_.tokens.size() - 1];
+            }
+            check(ok, "click mode highlights the LONGEST phrase "
+                      "first (GMR directive)");
+        }
         input_->setPlainText("GANG ZAG ,\n\nBDEN PA ,");
         loadDoc();
         check(view_->toPlainText().count('\n') == 2,
@@ -1348,6 +1369,28 @@ auto* secFmt = new QLabel("<span style='color:#9A7A33;font-size:10px;letter-spac
             // wylie stay one click away, remembered per user
             settings.value("overlay/scriptMode", 1).toInt());
         scriptRow->addWidget(scriptMode_, 1);
+        auto* shadeRow = new QHBoxLayout;
+        shadeRow->addWidget(new QLabel("shading"));
+        shadeMode_ = new QComboBox;
+        // GMR's directive (class of 2026-08-10, via Adam): the page
+        // opens CLEAN; clicking finds and highlights the LONGEST
+        // known phrase, backing off to shorter ones on each click.
+        // The full always-shaded wash stays one click away as the
+        // coverage/QC view.
+        shadeMode_->addItems(
+            {"on click (longest phrase first)", "all matches (wash)"});
+        shadeMode_->setToolTip(
+            "How dictionary matches show. ON CLICK (the default, per "
+            "Geshe Michael's direction): the text opens clean; click "
+            "any word and the longest phrase the dictionary knows "
+            "there is highlighted \u2014 click again to step down to "
+            "the shorter phrases inside it. ALL MATCHES: every known "
+            "word and phrase is washed with color, nested and "
+            "tier-tinted \u2014 the coverage view.");
+        shadeMode_->setCurrentIndex(
+            settings.value("overlay/shading", 0).toInt());
+        shadeRow->addWidget(shadeMode_, 1);
+        ll->addLayout(shadeRow);
         // Tibetan typeface for script mode: SambhotaDege first when the
         // system has it (Adam's preference), then the bundled OFL faces
         // (data/fonts/FONTS.md); persisted by family name, graceful if a
@@ -1481,6 +1524,11 @@ auto* secFmt = new QLabel("<span style='color:#9A7A33;font-size:10px;letter-spac
         connect(scriptMode_, &QComboBox::currentIndexChanged, [this](int m) {
             QSettings s("ALL", "TranslationTool");
             s.setValue("overlay/scriptMode", m);
+            if (!doc_.tokens.empty()) loadDoc();
+        });
+        connect(shadeMode_, &QComboBox::currentIndexChanged, [this](int m) {
+            QSettings s("ALL", "TranslationTool");
+            s.setValue("overlay/shading", m);
             if (!doc_.tokens.empty()) loadDoc();
         });
         connect(view_, &QPlainTextEdit::cursorPositionChanged, [this] { onClick(); });
@@ -1742,7 +1790,9 @@ private:
         legalCache.reserve(4096);
         for (size_t i = 0; i < nTok; ++i) {
             TokFmt f;
-            if (depth[i] > 0) {
+            const bool washAll =
+                !shadeMode_ || shadeMode_->currentIndex() == 1;
+            if (washAll && depth[i] > 0) {
                 const bool prov =
                     innerSpan[i] >= 0 &&
                     doc_.entries[doc_.spans[innerSpan[i]].entry_ix]
@@ -1786,6 +1836,8 @@ private:
         auto sepColored = [&](size_t i) {
             // the tsheg after token i inherits its wash (no white
             // gaps inside phrases; never across a clause barrier)
+            if (shadeMode_ && shadeMode_->currentIndex() == 0)
+                return false;
             return depth[i] > 0 && i + 1 < nTok && depth[i + 1] > 0 &&
                    !doc_.barrier_after[i] && tokEnd_[i] < tokBeg_[i + 1];
         };
@@ -2096,6 +2148,11 @@ private:
             }
             return;
         }
+        const bool clickMode =
+            shadeMode_ && shadeMode_->currentIndex() == 0;
+        if (clickMode)
+            std::reverse(at.begin(), at.end());   // longest first,
+                                                  // backing off shorter
         if (tok == lastTok_) cycle_ = (cycle_ + 1) % (int)at.size();
         else cycle_ = 0;
         lastTok_ = tok;
@@ -2109,7 +2166,12 @@ private:
         sel.cursor = QTextCursor(view_->document());
         sel.cursor.setPosition(tokBeg_[span.beg]);
         sel.cursor.setPosition(tokEnd_[span.end - 1], QTextCursor::KeepAnchor);
-        sel.format.setBackground(QColor(0x7F, 0x77, 0xDD, 110));
+        if (clickMode)
+            sel.format.setBackground(
+                e.provisional() ? QColor(0xE8, 0xC9, 0x8A, 190)
+                                : QColor(0xE9, 0xC4, 0x6A, 170));
+        else
+            sel.format.setBackground(QColor(0x7F, 0x77, 0xDD, 110));
         view_->setExtraSelections({sel});
 
         // breadcrumb of the nesting chain + entry + corpus count
@@ -2121,7 +2183,9 @@ private:
             h += (i ? " ‹ " : "");
             h += (int(i) == cycle_ ? "<b>" + w + "</b>" : w);
         }
-        h += QString(" &nbsp;(click again to cycle)</div><hr>");
+        h += QString(" &nbsp;(click again to %1)</div><hr>")
+                 .arg(clickMode ? "step down to the shorter phrase"
+                                : "cycle");
         // the per-text glossary outranks the general dictionary here
         h += glossaryHtml(e.wylie);
         EntryDisplay disp;
@@ -2817,6 +2881,7 @@ private:
     QMap<QString, QString> folioUrl_;
     QStringList folioOrder_, pendingManifests_;
     QComboBox* scriptMode_ = nullptr;
+    QComboBox* shadeMode_ = nullptr;
     QComboBox* tibFont_ = nullptr;
     QCheckBox* showPhon_ = nullptr;
     QCheckBox* showGloss_ = nullptr;
