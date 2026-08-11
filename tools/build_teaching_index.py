@@ -108,6 +108,27 @@ if __name__ == "__main__":
                 print(f"  {h['title'][:60]}")
                 print(f"    @{m}:{s:02d}  {h['url']}")
                 print(f"    \"{h['snippet'][:110]}\"")
+    elif "--card" in sys.argv:
+        # slim app-facing file: top 5 per term, ENG first
+        d = json.load(open(os.path.join(ROOT,
+                           "data/teaching/teaching_moments.json")))
+        slim = {}
+        for t, v in d["terms"].items():
+            if not v: continue
+            seen, keep = set(), []
+            for h in v:
+                if h["video"] in seen: continue
+                seen.add(h["video"])
+                keep.append({k: h.get(k, "?") for k in
+                             ("title", "url", "t", "lang", "snippet")})
+                if len(keep) == 5: break
+            slim[t] = keep
+        out = os.path.join(ROOT,
+                           "data/teaching/teaching_moments_card.json")
+        json.dump({"meta": d["meta"], "terms": slim},
+                  open(out, "w"), ensure_ascii=False)
+        print(len(slim), "terms ->", out,
+              round(os.path.getsize(out) / 1e6, 1), "MB")
     elif "--full" in sys.argv:
         terms = [l.strip() for l in
                  open(os.path.join(ROOT, "data/teaching/terms.txt"))
