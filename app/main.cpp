@@ -131,6 +131,17 @@ static void fileProposal(QWidget* parent, allcore::ProposalKind kind,
 // handlers must decode or paths/wylie/titles arrive mangled
 // ('%20'). Found via Adam's installed copy: '/Applications/ALL
 // Translation Tool/...' broke every recently-opened link.
+// dotted-version compare for Check for Updates (0.9.0 < 0.10.0)
+static bool versionLess(const QString& a, const QString& b) {
+    const auto pa = a.split('.'), pb = b.split('.');
+    for (int i = 0; i < qMax(pa.size(), pb.size()); ++i) {
+        const int x = i < pa.size() ? pa[i].toInt() : 0;
+        const int y = i < pb.size() ? pb[i].toInt() : 0;
+        if (x != y) return x < y;
+    }
+    return false;
+}
+
 static QString anchorPayload(const QString& href, int prefixLen) {
     return QUrl::fromPercentEncoding(href.mid(prefixLen).toUtf8());
 }
@@ -1154,6 +1165,15 @@ public:
                   !hint_->text().contains("1 spelling"),
               "folio markers and dictionary-attested forms are not "
               "doubted");
+        {
+            const bool vc = versionLess("0.9.0", "0.10.0") &&
+                            !versionLess("1.0.0", "0.9.9") &&
+                            !versionLess("0.9.0", "0.9.0");
+            log << QString("  [%1] Updates: version comparison "
+                           "orders correctly")
+                       .arg(vc ? "PASS" : "FAIL");
+            if (!vc) ++fails;
+        }
         {
             const bool ok =
                 QStringLiteral(ALL_APP_VERSION).count('.') == 2;
@@ -10980,6 +11000,19 @@ public:
 
         auto* data = new QGroupBox("Data");
         auto* dl = new QFormLayout(data);
+        updDir_ = new QLineEdit(st.value("app/updatesDir").toString());
+        auto* updPick = new QPushButton("Choose\u2026");
+        auto* ur = new QHBoxLayout;
+        ur->addWidget(updDir_, 1);
+        ur->addWidget(updPick);
+        auto* uw = new QWidget;
+        uw->setLayout(ur);
+        dl->addRow("Team updates folder", uw);
+        connect(updPick, &QPushButton::clicked, [this] {
+            const QString d = QFileDialog::getExistingDirectory(
+                this, "Team updates folder (where new DMGs arrive)");
+            if (!d.isEmpty()) updDir_->setText(d);
+        });
         dataRoot_ = new QLineEdit(st.value("app/dataRoot").toString());
         dataRoot_->setPlaceholderText(
             "auto-detected \u2014 set only to override");
@@ -11007,6 +11040,7 @@ public:
             s2.setValue("team/name", name_->text().trimmed());
             s2.setValue("team/admin", admin_->isChecked());
             s2.setValue("team/proposalsDir", dir_->text().trimmed());
+            s2.setValue("app/updatesDir", updDir_->text().trimmed());
             if (dataRoot_->text().trimmed().isEmpty())
                 s2.remove("app/dataRoot");
             else
@@ -11024,6 +11058,7 @@ private:
     QCheckBox* admin_ = nullptr;
     QLineEdit* dir_ = nullptr;
     QLineEdit* dataRoot_ = nullptr;
+    QLineEdit* updDir_ = nullptr;
 };
 
 class HelpWindow : public QDialog {
@@ -11808,6 +11843,59 @@ int main(int argc, char** argv) {
                 "sources are credited in OPEN_SOURCE_NOTICES, "
                 "shipped with every release.</div>");
             dlg->show();
+        });
+        QAction* upd = view->addAction("Check for Updates\u2026");
+        upd->setMenuRole(QAction::ApplicationSpecificRole);
+        QObject::connect(upd, &QAction::triggered, [&win] {
+            QSettings st("ALL", "TranslationTool");
+            QString dir = st.value("app/updatesDir").toString();
+            if (dir.isEmpty() || !QDir(dir).exists()) {
+                if (QMessageBox::question(
+                        &win, "Check for Updates",
+                        "Updates are distributed by the ALL team as "
+                        "DMGs in a shared folder (e.g. the team "
+                        "Dropbox).\n\nChoose that folder now? It "
+                        "will be remembered.") != QMessageBox::Yes)
+                    return;
+                dir = QFileDialog::getExistingDirectory(
+                    &win, "Team updates folder");
+                if (dir.isEmpty()) return;
+                st.setValue("app/updatesDir", dir);
+            }
+            QString best, bestFile;
+            static const QRegularExpression re(
+                "ALL-Translation-Tool-([0-9.]+)\\.dmg");
+            for (const QString& f :
+                 QDir(dir).entryList({"*.dmg"}, QDir::Files)) {
+                const auto m = re.match(f);
+                if (m.hasMatch() &&
+                    (best.isEmpty() ||
+                     versionLess(best, m.captured(1)))) {
+                    best = m.captured(1);
+                    bestFile = f;
+                }
+            }
+            const QString cur = QStringLiteral(ALL_APP_VERSION);
+            if (!best.isEmpty() && versionLess(cur, best)) {
+                if (QMessageBox::information(
+                        &win, "Update available",
+                        QString("Version %1 is available (you are "
+                                "running %2).\n\n%3\n\nOpen the "
+                                "updates folder?")
+                            .arg(best, cur, bestFile),
+                        QMessageBox::Open | QMessageBox::Cancel) ==
+                    QMessageBox::Open)
+                    QDesktopServices::openUrl(
+                        QUrl::fromLocalFile(dir));
+            } else {
+                QMessageBox::information(
+                    &win, "Up to date",
+                    QString("You are running version %1 \u2014 the "
+                            "newest in the team folder%2.")
+                        .arg(cur,
+                             best.isEmpty() ? " (no DMGs found there)"
+                                            : ""));
+            }
         });
         view->addSeparator();
         QAction* prefs = view->addAction("Settings\u2026");
