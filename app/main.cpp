@@ -126,6 +126,9 @@ static void fileProposal(QWidget* parent, allcore::ProposalKind kind,
 // failure (the helper explains the failure to the user itself).
 static int fileSpellingProposals(QWidget* parent,
                                  const QList<QStringList>& rows);
+// #62 illustration-candidate geometry (defined before ScanPane)
+static std::vector<QRect> illustrationCandidates(
+    int w, int h, const std::vector<QRect>& lines);
 #include "allcore/verse.h"
 #include "allcore/wilsonparse.h"
 #include "allcore/terminology.h"
@@ -971,6 +974,24 @@ public:
                   spellList_->item(0, 1)->text() == "1",
               "spelling-doubts panel lists the doubted form");
         spellToggle_->setChecked(false);
+        {
+            // #62 logic: a left side-panel and a big inter-line gap
+            // are found; a fully-texted page yields no candidates
+            std::vector<QRect> tight = {{50, 10, 900, 40},
+                                        {50, 60, 900, 40}};
+            std::vector<QRect> art = {{300, 10, 650, 40},
+                                      {300, 200, 650, 40}};
+            const auto none = illustrationCandidates(1000, 250, tight);
+            const auto some = illustrationCandidates(1000, 250, art);
+            bool leftPanel = false, gap = false;
+            for (const auto& r : some) {
+                if (r.left() == 0 && r.width() == 300) leftPanel = true;
+                if (r.top() == 49 && r.height() == 151) gap = true;
+            }
+            check(none.empty() && leftPanel && gap,
+                  "illustration candidates: side panel + gap found, "
+                  "clean page yields none");
+        }
         input_->setPlainText("@04B ,GDAB ,");
         loadDoc();
         check(collectSpellHits().empty() &&
@@ -8727,6 +8748,47 @@ private:
 // line building → CTC recognition (Woodblock) → OUR unicode chain +
 // syllable-legality QC. Everything ocr-derived is labeled and review-
 // gated; output feeds library/ocr_out/ (the existing review flow).
+// ---- #62 woodblock illustration candidates (logic layer; UI next
+// increment): regions of a folio NOT covered by detected text lines,
+// big enough to be art. Pure geometry — testable without models.
+// Returns candidate rects: side panels beyond the text envelope and
+// vertical gaps taller than 2x the median line height. CANDIDATES
+// only, labeled so wherever shown; never claimed complete.
+static std::vector<QRect> illustrationCandidates(
+    int w, int h, const std::vector<QRect>& lines) {
+    std::vector<QRect> out;
+    if (w <= 0 || h <= 0 || lines.empty()) return out;
+    int minX = w, maxX = 0, minY = h, maxY = 0;
+    std::vector<int> hs;
+    for (const auto& r : lines) {
+        minX = std::min(minX, r.left());
+        maxX = std::max(maxX, r.right());
+        minY = std::min(minY, r.top());
+        maxY = std::max(maxY, r.bottom());
+        hs.push_back(r.height());
+    }
+    std::sort(hs.begin(), hs.end());
+    const int med = hs[hs.size() / 2];
+    // side panels (where miniatures live on first/last folios)
+    if (minX > w / 8)
+        out.push_back(QRect(0, minY, minX, maxY - minY));
+    if (w - maxX > w / 8)
+        out.push_back(QRect(maxX, minY, w - maxX, maxY - minY));
+    // vertical gaps between consecutive lines
+    std::vector<QRect> sorted = lines;
+    std::sort(sorted.begin(), sorted.end(),
+              [](const QRect& a, const QRect& b) {
+                  return a.top() < b.top();
+              });
+    for (size_t i = 1; i < sorted.size(); ++i) {
+        const int gap = sorted[i].top() - sorted[i - 1].bottom();
+        if (gap > 2 * med)
+            out.push_back(QRect(minX, sorted[i - 1].bottom(),
+                                maxX - minX, gap));
+    }
+    return out;
+}
+
 class ScanPane : public QWidget {
 public:
     ScanPane(allcore::SyllableChecker* checker, const QString& root)
