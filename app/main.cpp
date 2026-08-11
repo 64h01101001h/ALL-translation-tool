@@ -971,6 +971,12 @@ public:
                   spellList_->item(0, 1)->text() == "1",
               "spelling-doubts panel lists the doubted form");
         spellToggle_->setChecked(false);
+        input_->setPlainText("@04B ,GDAB ,");
+        loadDoc();
+        check(collectSpellHits().empty() &&
+                  !hint_->text().contains("1 spelling"),
+              "folio markers and dictionary-attested forms are not "
+              "doubted");
         {
             shadeMode_->setCurrentIndex(0);   // GMR click mode
             input_->setPlainText("'PHAGS PA'I BDEN PA BZHI");
@@ -1813,7 +1819,13 @@ private:
                 f.ul = QTextCharFormat::DashDotLine;
                 f.ulc = qRgb(0x5B, 0x7C, 0x99);
             }
-            if (checker_) {
+            // spelling doubt only for tokens the dictionary does
+            // NOT cover (a matched span attests the spelling as the
+            // curated dictionary writes it — e.g. gdab, a gap in the
+            // CC0 rule data) and never for @folio markers (structure,
+            // not spelling). Adam's screenshot, 2026-08-11.
+            if (checker_ && depth[i] == 0 &&
+                !doc_.tokens[i].empty() && doc_.tokens[i][0] != '@') {
                 auto lc = legalCache.find(doc_.tokens[i]);
                 bool legal;
                 if (lc != legalCache.end()) {
@@ -1947,9 +1959,13 @@ private:
     std::vector<SpellHit> collectSpellHits() const {
         std::vector<SpellHit> out;
         if (!checker_) return out;
+        const auto depth = doc_.coverDepth(1);
         std::map<std::string, size_t> ix;
         for (size_t i = 0; i < doc_.tokens.size(); ++i) {
             const std::string& t = doc_.tokens[i];
+            if (!t.empty() && t[0] == '@') continue;   // folio marker
+            if (i < depth.size() && depth[i] > 0)
+                continue;   // dictionary-attested spelling
             bool alpha = false;
             for (char ch : t)
                 alpha |= std::isalpha((unsigned char)ch) != 0;
