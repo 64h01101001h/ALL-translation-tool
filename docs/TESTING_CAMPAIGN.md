@@ -199,6 +199,10 @@ end to end exactly as written)
 - 2026-08-11 · Draft · same crush class found by the new fit sweep
   (823px demand) — FIXED (scroll area); permanent guard: every pane
   must fit an 800px window (selftest check 86)
+- 2026-08-11 · Library · recently-opened links dead in the installed
+  copy — QUrl percent-encoded the spaces in '/Applications/ALL
+  Translation Tool/…'; ALL text-carrying anchors (openfile, gloss,
+  propose, Help chapters) now decode payloads — FIXED (guard 87)
 
 # CURATION RULINGS
 *(pane · what stays / what pares / format decision)*

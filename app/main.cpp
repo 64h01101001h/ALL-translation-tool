@@ -126,6 +126,15 @@ static void loadIdentity();
 static void fileProposal(QWidget* parent, allcore::ProposalKind kind,
                          const QString& wylie, const QString& value,
                          const QString& field, const QString& evidence);
+// Custom-scheme anchors (openfile:, gloss:, propose:, chapter:)
+// carry TEXT with spaces — QUrl percent-encodes them on click, so
+// handlers must decode or paths/wylie/titles arrive mangled
+// ('%20'). Found via Adam's installed copy: '/Applications/ALL
+// Translation Tool/...' broke every recently-opened link.
+static QString anchorPayload(const QString& href, int prefixLen) {
+    return QUrl::fromPercentEncoding(href.mid(prefixLen).toUtf8());
+}
+
 // batch spelling flags from the Overlay's spelling-doubts panel; rows
 // are {wylie, value, field, evidence}. Returns count filed, -1 on
 // failure (the helper explains the failure to the user itself).
@@ -841,7 +850,7 @@ static QWidget* makeLookupPane(allcore::Spine& spine, allcore::RefDict* ref,
                 QMetaObject::invokeMethod(box, "returnPressed");
             } else if (s.startsWith("propose:")) {
                 proposeTermDialog(
-                    pane, s.mid(8),
+                    pane, anchorPayload(s, 8),
                     "looked up in the dictionary (Lookup pane)");
                 // re-run the search: the browser navigated away on click
                 QMetaObject::invokeMethod(box, "returnPressed");
@@ -1143,6 +1152,15 @@ public:
                   !hint_->text().contains("1 spelling"),
               "folio markers and dictionary-attested forms are not "
               "doubted");
+        {
+            // anchor payloads survive spaces (the installed-layout
+            // path '/Applications/ALL Translation Tool/...' broke
+            // recently-opened links via QUrl percent-encoding)
+            const QUrl u(QString("openfile:/tmp/a b/c d.txt"));
+            check(anchorPayload(u.toString(), 9) ==
+                      "/tmp/a b/c d.txt",
+                  "custom-scheme anchors decode spacey payloads");
+        }
         {
             // double-click must not auto-select (the line-highlight
             // bug): a synthetic double-click leaves no selection
@@ -1737,7 +1755,8 @@ auto* secFmt = new QLabel("<span style='color:#9A7A33;font-size:10px;letter-spac
                         return;
                     }
                     if (s.startsWith("gloss:")) {
-                        const std::string wylie = s.mid(6).toStdString();
+                        const std::string wylie =
+                            anchorPayload(s, 6).toStdString();
                         auto it = glossary_.find(wylie);
                         bool ok = false;
                         const QString g = QInputDialog::getText(
@@ -1756,7 +1775,7 @@ auto* secFmt = new QLabel("<span style='color:#9A7A33;font-size:10px;letter-spac
                             onClick();
                         }
                     } else if (s.startsWith("propose:")) {
-                        proposeFromCard(s.mid(8));
+                        proposeFromCard(anchorPayload(s, 8));
                     } else if (s.startsWith("http")) {
                         QDesktopServices::openUrl(u);
                     }
@@ -7141,7 +7160,7 @@ public:
         connect(info_, &QTextBrowser::anchorClicked, [this](const QUrl& u) {
             const QString s = u.toString();
             if (s.startsWith("openfile:")) {
-                const QString p = s.mid(9);
+                const QString p = anchorPayload(s, 9);
                 logOpen(p);
                 if (open_) open_(p);
             } else if (s.startsWith("http")) {
@@ -11095,7 +11114,7 @@ public:
                         }
                         raise();
                     } else if (a.startsWith("chapter:")) {
-                        showChapter(a.mid(8));
+                        showChapter(anchorPayload(a, 8));
                     } else if (a.startsWith("http")) {
                         QDesktopServices::openUrl(u);
                     }
