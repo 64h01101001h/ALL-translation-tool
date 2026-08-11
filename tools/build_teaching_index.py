@@ -13,8 +13,10 @@ Usage:
 import json, re, sys, glob, os
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-CAPS = os.path.join(ROOT, "data/teaching/dcc_captions")
-VIDS = json.load(open(os.path.join(ROOT, "data/teaching/dcc_videos.json")))
+SOURCES = [("DCC", "data/teaching/dcc_captions",
+            "data/teaching/dcc_videos.json"),
+           ("TKB", "data/teaching/tkb_captions",
+            "data/teaching/tkb_videos.json")]
 
 TS = re.compile(r"(\d+):(\d\d):(\d\d)\.(\d\d\d) -->")
 TAG = re.compile(r"<[^>]+>")
@@ -75,13 +77,19 @@ def load_phonetics():
     return m
 
 def index(terms, per_term_cap=None):
-    # one caption file per video: prefer manual .en.vtt over -orig/auto
+    # one caption file per video per source: prefer manual .en.vtt
     byvid = {}
-    for f in sorted(glob.glob(CAPS + "/*.vtt")):
-        vid = video_id(f)
-        cur = byvid.get(vid)
-        if cur is None or (".en.vtt" in f and ".en.vtt" not in cur):
-            byvid[vid] = f
+    titles = {}
+    for src, capdir, vidfile in SOURCES:
+        vp = os.path.join(ROOT, vidfile)
+        vmap = json.load(open(vp)) if os.path.exists(vp) else {}
+        for f in sorted(glob.glob(os.path.join(ROOT, capdir, "*.vtt"))):
+            vid = video_id(f)
+            cur = byvid.get(vid)
+            if cur is None or (".en.vtt" in f and
+                               ".en.vtt" not in cur[0]):
+                byvid[vid] = (f, src)
+                titles[vid] = vmap.get(vid, {}).get("title", "")
     termset = set(terms)
     maxw = max(len(t.split()) for t in terms)
     out = {t: [] for t in terms}
@@ -90,8 +98,8 @@ def index(terms, per_term_cap=None):
     wordre = re.compile(r"[a-z\-']+")
     LANG = re.compile(r"\b(ENG|VIE|CHN|SPA|GER|RUS|UKR|POR|FRA|CZE)\b",
                       re.I)
-    for vid, f in sorted(byvid.items()):
-        title = VIDS.get(vid, {}).get("title", "")
+    for vid, (f, src) in sorted(byvid.items()):
+        title = titles.get(vid, "")
         m = LANG.search(title)
         lang = (m.group(1).upper() if m else "?")
         seen_min = {}
@@ -110,7 +118,7 @@ def index(terms, per_term_cap=None):
                         tibseen[(wy, vid)] = sec
                         tib.setdefault(wy, []).append({
                             "video": vid, "title": title, "t": sec,
-                            "lang": lang,
+                            "lang": lang, "src": src,
                             "url": "https://www.youtube.com/watch?v="
                                    f"{vid}&t={sec}s",
                             "snippet": txt[:160],
@@ -123,7 +131,7 @@ def index(terms, per_term_cap=None):
                         seen_min[cand] = sec
                         out[cand].append({
                             "video": vid, "title": title, "t": sec,
-                            "lang": lang,
+                            "lang": lang, "src": src,
                             "url": f"https://www.youtube.com/watch?v={vid}&t={sec}s",
                             "snippet": txt[:160],
                             "source": "DCC YouTube captions "
@@ -175,7 +183,7 @@ if __name__ == "__main__":
                 if h["video"] in seen: continue
                 seen.add(h["video"])
                 keep.append({k: h.get(k, "?") for k in
-                             ("title", "url", "t", "lang", "snippet")})
+                             ("title", "url", "t", "lang", "src", "snippet")})
                 if len(keep) == 5: break
             slim[t] = keep
         out = os.path.join(ROOT,
@@ -187,7 +195,7 @@ if __name__ == "__main__":
                 if h["video"] in seen: continue
                 seen.add(h["video"])
                 keep.append({k: h.get(k, "?") for k in
-                             ("title", "url", "t", "lang", "snippet")})
+                             ("title", "url", "t", "lang", "src", "snippet")})
                 if len(keep) == 3: break
             if keep: tslim[wy] = keep
         json.dump({"meta": d["meta"], "terms": slim,
