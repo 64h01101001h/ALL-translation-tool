@@ -98,10 +98,25 @@ def index(terms, per_term_cap=None):
     wordre = re.compile(r"[a-z\-']+")
     LANG = re.compile(r"\b(ENG|VIE|CHN|SPA|GER|RUS|UKR|POR|FRA|CZE)\b",
                       re.I)
+    # TKB titles carry no ENG/VIE prefixes — detect language from
+    # title words. Non-English TKB classes are EXCLUDED entirely:
+    # their "English" caption track is machine-TRANSLATED and its
+    # snippets would mislead (Adam's rule, 2026-08-11).
+    TKB_FOREIGN = re.compile(
+        r"\b(clase|curso|sesi\u00f3n|parte|lecci\u00f3n|"
+        r"\u0437\u0430\u043d\u044f\u0442\u0438\u0435|"
+        r"\u043a\u0443\u0440\u0441|"
+        r"bu\u1ed5i|l\u1edbp|b\u00e0i|"
+        r"kurs|lektion|einheit|le\u00e7on|"
+        r"[\u4e00-\u9fff\u0400-\u04ff])", re.I)
+    skipped_foreign = 0
     for vid, (f, src) in sorted(byvid.items()):
         title = titles.get(vid, "")
         m = LANG.search(title)
         lang = (m.group(1).upper() if m else "?")
+        if src == "TKB" and TKB_FOREIGN.search(title):
+            skipped_foreign += 1
+            continue
         seen_min = {}
         for sec, txt in cues(f):
             ws = wordre.findall(txt.lower())
@@ -168,6 +183,9 @@ def index(terms, per_term_cap=None):
         if len(v) > 30:
             step = len(v) / 30
             tib[wy] = [v[int(i * step)] for i in range(30)]
+    if skipped_foreign:
+        print(f"  [excluded {skipped_foreign} non-English TKB videos "
+              "(auto-translated captions are not evidence)]")
     return out, tib, len(byvid)
 
 if __name__ == "__main__":
