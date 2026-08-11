@@ -41,8 +41,8 @@ search (below) additionally finds every button and toggle with a
 how-to, and tells you which workflow tab it lives under.
 
 **The typical first session.** Read → Library → double-click a text →
-it opens in the Overlay, shaded → click any colored word → read its
-card → switch "text as" to Tibetan script to see it in native script.
+it opens clean in the Overlay → click any word: the longest known
+phrase lights up, card below → switch "text as" to Tibetan script to see it in native script.
 
 ## Overlay
 
