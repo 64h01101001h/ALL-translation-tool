@@ -10551,16 +10551,21 @@ int main(int argc, char** argv) {
     QSettings nightSettings("ALL", "TranslationTool");
     const bool nightOn =
         nightSettings.value("app/nightMode", true).toBool();
+    // Reading surfaces are manuscript-cream ALWAYS — day, night, and
+    // regardless of the macOS system appearance. Previously the cream
+    // rule applied only when the app's own night toggle was on, so a
+    // system-dark Mac with the toggle off rendered dark pages under
+    // the light-tuned phrase washes: light text on light color bands
+    // (Adam's screenshot, 2026-08-10). Night mode darkens the CHROME
+    // only — night chrome, paper page.
+    app.setStyleSheet(
+        "QTextEdit, QTextBrowser, QPlainTextEdit { "
+        "background: #FAF6EE; color: #2B2118; }");
     auto applyNight = [&app](bool on) {
         // native macOS dark appearance — no style swap, so window
-        // resize/decorations stay untouched; reading surfaces stay
-        // manuscript-cream (night chrome, paper page)
+        // resize/decorations stay untouched
         app.styleHints()->setColorScheme(on ? Qt::ColorScheme::Dark
                                             : Qt::ColorScheme::Light);
-        app.setStyleSheet(
-            on ? "QTextBrowser, QPlainTextEdit { background: #FAF6EE; "
-                 "color: #2B2118; }"
-               : "");
     };
     if (nightOn) applyNight(true);
 
@@ -10912,6 +10917,13 @@ int main(int argc, char** argv) {
                            "name")
                        .arg(found ? "PASS" : "FAIL");
             if (!found) ++fails;
+        }
+        {
+            const bool cream =
+                qApp->styleSheet().contains("#FAF6EE");
+            log << QString("  [%1] Night: reading surfaces cream in "
+                           "all modes").arg(cream ? "PASS" : "FAIL");
+            if (!cream) ++fails;
         }
         // the menu bar mirrors the GUI: group menus + View + Help
         {
