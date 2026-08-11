@@ -275,7 +275,7 @@ the 52 pure-Tibetan examples in the Project's own published
 standard; the traditional Tibetan calendar was proven against two
 complete printed years, every month and every day. In all, the
 application carries 38 automated test suites that must pass before
-any change ships, and any user can run its built-in self-test — 72
+any change ships, and any user can run its built-in self-test — 77
 checks that print pass or fail and localize any problem. Where a
 result cannot be verified mechanically, the interface says so
 rather than implying certainty.

@@ -31,6 +31,9 @@ enum class ProposalKind {
     WordRendering,   // English for a word (dictionary — export)
     PhraseRendering, // English for a phrase/clause (dictionary — export)
     Note,            // free note about a passage (export)
+    Idiom,           // idiom / fixed-expression candidate for the
+                     //   idioms register (export — the banked list
+                     //   updates from rulings, app never edits data)
     Spelling,        // doubted spelling / input error (export;
                      //   a DECLINED flag = ruled valid, and the
                      //   app stops doubting that form)

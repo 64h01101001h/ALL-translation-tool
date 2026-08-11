@@ -147,6 +147,13 @@ struct EntryDisplay {
 using HonorificMap = std::map<std::string, std::array<QString, 3>>;
 static const HonorificMap* g_honorifics = nullptr;
 
+// the idioms register (Adam, 2026-08-10): wylie -> (status, evidence).
+// Marks WHICH strings are idioms/fixed expressions — English stays
+// the dictionary's (rule 1). Grows via Propose (kind: idiom) + the
+// authority's ruling; proposed entries LOOK proposed.
+using IdiomMap = std::map<std::string, std::pair<QString, QString>>;
+static const IdiomMap* g_idioms = nullptr;
+
 // spelling forms the authority has ruled VALID (a DECLINED spelling
 // flag means "this form is fine") — the Overlay legality check treats
 // them as legal. Loaded from the proposal store once per launch.
@@ -201,6 +208,19 @@ static QString entryHtml(const allcore::Entry& e,
             if (!ord.isEmpty())
                 h += " <small style='color:#555'>ordinary: <b>" +
                      ord.toHtmlEscaped() + "</b></small>";
+        }
+    }
+    if (g_idioms) {
+        auto it = g_idioms->find(e.wylie);
+        if (it != g_idioms->end()) {
+            const bool approved = it->second.first == "approved";
+            h += QString(" <span style='background:%1;color:%2;"
+                         "padding:1px 7px;border-radius:8px;"
+                         "font-size:11px' title='%3'>IDIOM%4</span>")
+                     .arg(approved ? "#DDEBDC" : "#F2E8CF")
+                     .arg(approved ? "#2C5B2E" : "#6E5A1E")
+                     .arg(it->second.second.toHtmlEscaped())
+                     .arg(approved ? "" : " (proposed)");
         }
     }
     if (!e.tibetan_source.empty())
@@ -600,7 +620,7 @@ static void proposeTermDialog(QWidget* parent, const QString& wylie,
         "Honorific term (\u2194 ordinary)", "HIGH honorific marking",
         "Pronunciation exception", "Abbreviation / contraction candidate",
         "Rendering for this word (\u2192 dictionary)",
-        "Note about this term"};
+        "Idiom / fixed expression", "Note about this term"};
     bool ok = false;
     const QString choice = QInputDialog::getItem(
         parent, "Propose to the authority",
@@ -615,6 +635,8 @@ static void proposeTermDialog(QWidget* parent, const QString& wylie,
         kind = allcore::ProposalKind::Pronunciation;
     else if (choice.startsWith("Abbreviation"))
         kind = allcore::ProposalKind::Abbreviation;
+    else if (choice.startsWith("Idiom"))
+        kind = allcore::ProposalKind::Idiom;
     else if (choice.startsWith("Note")) kind = allcore::ProposalKind::Note;
     QString value;
     if (kind != allcore::ProposalKind::Note) {
@@ -2863,6 +2885,7 @@ private:
             "Pronunciation exception",
             "Abbreviation / contraction candidate",
             "Rendering for this word (→ dictionary)",
+            "Idiom / fixed expression",
             "Note about this passage"};
         bool ok = false;
         const QString choice = QInputDialog::getItem(
@@ -2883,6 +2906,8 @@ private:
             kind = allcore::ProposalKind::Pronunciation;
         else if (choice.startsWith("Abbreviation"))
             kind = allcore::ProposalKind::Abbreviation;
+        else if (choice.startsWith("Idiom"))
+            kind = allcore::ProposalKind::Idiom;
         else if (choice.startsWith("Note"))
             kind = allcore::ProposalKind::Note;
         // the proposed value
@@ -9237,6 +9262,8 @@ public:
                        int(allcore::ProposalKind::WordRendering));
         kind_->addItem("Rendering for a phrase/clause (→ dictionary)",
                        int(allcore::ProposalKind::PhraseRendering));
+        kind_->addItem("Idiom / fixed expression",
+                       int(allcore::ProposalKind::Idiom));
         kind_->addItem("Note about a passage",
                        int(allcore::ProposalKind::Note));
         fl->addRow("Kind", kind_);
@@ -9419,6 +9446,7 @@ public:
         filter_->addItem("Humilifics", "humilific");
         filter_->addItem("Double honorifics", "double-honorific");
         filter_->addItem("Spelling flags", "spelling");
+        filter_->addItem("Idioms", "idiom");
         filter_->addItem("Words / phrases / notes", "export");
         row->addWidget(filter_);
         row->addWidget(refresh);
@@ -10643,6 +10671,21 @@ int main(int argc, char** argv) {
     static const HonorificMap honorifics = loadHonorifics(
         root + "/data/honorifics/honorific_register.tsv");
     if (!honorifics.empty()) g_honorifics = &honorifics;
+    static IdiomMap idioms;
+    {
+        QFile f(root + "/data/idioms/idioms.json");
+        if (f.open(QIODevice::ReadOnly)) {
+            const auto doc = QJsonDocument::fromJson(f.readAll());
+            for (const auto& v :
+                 doc.object().value("idioms").toArray()) {
+                const auto o = v.toObject();
+                idioms[o.value("wylie").toString().toStdString()] = {
+                    o.value("status").toString(),
+                    o.value("evidence").toString()};
+            }
+        }
+        if (!idioms.empty()) g_idioms = &idioms;
+    }
     tabs.addTab(makeLookupPane(spine, refdict, mvp, whitney, colloq),
                 "Lookup");
     auto* sanskritPane = new SanskritPane(mvp, whitney);
@@ -10917,6 +10960,16 @@ int main(int argc, char** argv) {
                            "name")
                        .arg(found ? "PASS" : "FAIL");
             if (!found) ++fails;
+        }
+        {
+            const bool ok = g_idioms && g_idioms->size() >= 5 &&
+                            g_idioms->count("dper na") &&
+                            g_idioms->at("dper na").first == "proposed";
+            log << QString("  [%1] Idioms: register banked and loaded "
+                           "(%2 proposed)")
+                       .arg(ok ? "PASS" : "FAIL")
+                       .arg(g_idioms ? (int)g_idioms->size() : 0);
+            if (!ok) ++fails;
         }
         {
             const bool cream =

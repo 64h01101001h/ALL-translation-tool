@@ -172,6 +172,15 @@ int main(int argc, char** argv) {
               "spelling routes to the export lane (app never edits texts)");
     }
 
+    CHECK(std::string(allcore::Proposal::kindName(
+              allcore::Proposal::kindFromName("idiom"))) == "idiom",
+          "idiom kind round-trips");
+    {
+        allcore::Proposal p;
+        p.kind = allcore::ProposalKind::Idiom;
+        CHECK(!p.isRegister(), "idiom routes to the export lane");
+    }
+
     std::printf("proposals_smoke: %s (%d failures)\n",
                 failures ? "FAIL" : "ALL PASS", failures);
     return failures ? 1 : 0;

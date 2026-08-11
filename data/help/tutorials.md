@@ -334,7 +334,8 @@ authority (Geshe Michael / Adam only), and the shared proposals
 folder (point it at the team Dropbox) — the same three settings also
 live in Settings (View menu → Settings…). Then propose: pick the
 kind — honorific, HIGH honorific, humilific, double honorific,
-pronunciation exception, abbreviation, word/phrase rendering, note —
+pronunciation exception, abbreviation, word/phrase rendering, idiom /
+fixed expression, note —
 enter the Tibetan, the proposed value, and evidence, and file it.
 Proposals also file from any entry card ("propose to the
 authority…") with the passage auto-attached. "My proposals — what
@@ -464,6 +465,11 @@ general honorific (H), HIGH honorific (for high lamas and dignitaries
 of oneself), and double honorific. Pronunciations carry classes:
 community, hgm-attested, prenasal-derived (pending ruling), approved.
 
+**Idioms.** The idioms register marks which strings are idioms or
+fixed expressions — an IDIOM badge on their cards (amber while
+proposed, green once the authority approves). The English stays the
+dictionary's. Propose new ones with kind "Idiom / fixed expression".
+
 **Provenance.** Everything machine-derived says so; every approved
 item carries who approved it and when; every mined fact carries its
 source and page.
@@ -472,4 +478,4 @@ source and page.
 cream reading pages. Remembered.
 
 **Self-test.** If anything misbehaves: run the app from Terminal with
-`--selftest` — 72 checks print PASS/FAIL and localize the problem.
+`--selftest` — 77 checks print PASS/FAIL and localize the problem.

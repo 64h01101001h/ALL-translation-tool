@@ -469,7 +469,7 @@ tab it lives under — clicking takes you there. "Suggested
 Workflows…" in the Help menu opens the recipes chapter directly.
 
 **Self-test.** If anything misbehaves, run the app from Terminal
-with `--selftest`: 72 checks print PASS/FAIL and localize the
+with `--selftest`: 77 checks print PASS/FAIL and localize the
 problem. (thirty-eight automated test batteries also run before any change to
 the software ships.)
 
@@ -584,7 +584,7 @@ item carries who approved it and when; every mined fact carries its
 source and page. The app imports versioned data releases and never
 edits them.
 
-**Troubleshooting.** Run `--selftest` from Terminal (72 checks,
+**Troubleshooting.** Run `--selftest` from Terminal (77 checks,
 localizing any problem). The menu bar reaches every function if a
 pane misbehaves; switching tabs and back re-renders. The Help
 window's search finds any control by name and shows where it lives.

@@ -115,7 +115,7 @@ cp "$ROOT/build/reference.db" "$DATA/build/" 2>/dev/null || true
 [[ -d "$ROOT/library/ocr_models" ]] && \
   cp -R "$ROOT/library/ocr_models" "$DATA/library/ocr_models"
 # runtime data folders the panes read (enumerated from the code)
-for d in fonts honorifics pron_colloquial abbreviations extracted \
+for d in fonts honorifics pron_colloquial abbreviations extracted idioms \
          botok spellcheck soas_pos whitney candidate_alignments; do
   [[ -d "$ROOT/data/$d" ]] && cp -R "$ROOT/data/$d" "$DATA/data-$d.tmp" \
       && mkdir -p "$DATA/data" && mv "$DATA/data-$d.tmp" "$DATA/data/$d"
