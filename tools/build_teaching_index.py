@@ -142,10 +142,22 @@ def index(terms, per_term_cap=None):
     # frequency are dropped; every term is capped, sampled evenly.
     for t in out:
         out[t].sort(key=lambda h: (h.get("lang") != "ENG",))
-    CONV = 2500
+    # prune v2: a frequency threshold killed 'emptiness' — dharma
+    # vocabulary IS high-frequency in this corpus. Discourse filler
+    # is named explicitly instead.
+    CONV_WORDS = set("""right think thought because about going gonna
+        something someone anything everything nothing really actually
+        kinda kind little people okay maybe pretty basically probably
+        exactly totally different question answer example course
+        minute minutes today tomorrow yesterday everybody somebody
+        anybody thank thanks please welcome sorry great awesome
+        interesting important trying start started stop stopped
+        talk talking said says saying tell telling told means meaning
+        want wanted look looking looked come coming came leave point
+        first second third next last thing where there their""".split())
     CAP = per_term_cap or 60
     for t in list(out):
-        if " " not in t and len(out[t]) > CONV:
+        if " " not in t and t in CONV_WORDS:
             out[t] = []
         elif len(out[t]) > CAP:
             v = out[t]
