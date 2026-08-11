@@ -107,7 +107,10 @@ app stops doubting it everywhere, for the whole team.
 BDRC…" opens the original woodblock images under the text; the pages
 turn following your cursor. "locate word (OCR)" draws a box around
 the very word under your cursor on the woodblock (recognition is used
-only to locate, never as text).
+only to locate, never as text). "Illustration gallery (cached
+scans)" searches this volume's already-downloaded pages for
+woodblock miniatures and diagrams — candidates only; pages cache as
+you view them.
 
 **FORMAT & EXPORT (left column, under its gold heading).** "Export
 print Tibetan (Unicode)…" produces print-ready script. "Prepare for

@@ -129,6 +129,9 @@ static int fileSpellingProposals(QWidget* parent,
 // #62 illustration-candidate geometry (defined before ScanPane)
 static std::vector<QRect> illustrationCandidates(
     int w, int h, const std::vector<QRect>& lines);
+static void runIllustrationGallery(QWidget* parent, const QString& root,
+                                   const QStringList& paths,
+                                   const QString& title);
 #include "allcore/verse.h"
 #include "allcore/wilsonparse.h"
 #include "allcore/terminology.h"
@@ -1314,6 +1317,36 @@ auto* secScan = new QLabel("<span style='color:#9A7A33;font-size:10px;letter-spa
                                                          : info.status)) +
                         "\n" + hint_->text());
             }
+        });
+auto* illusVolBtn = new QPushButton("Illustration gallery (cached scans)");
+        illusVolBtn->setToolTip(
+            "Search this text's already-downloaded woodblock pages "
+            "(the scan cache) for illustration candidates and show "
+            "them as a gallery. Candidates only \u2014 pages you have "
+            "not viewed are not searched.");
+        ll->addWidget(illusVolBtn);
+        connect(illusVolBtn, &QPushButton::clicked, [this, root] {
+            if (scanCache_.isEmpty() || scanWork_.isEmpty()) {
+                QMessageBox::information(
+                    this, "No linked volume",
+                    "Link a scan volume first (SCANS \u2192 Follow "
+                    "along / Search BDRC).");
+                return;
+            }
+            QStringList paths;
+            for (const QString& f :
+                 QDir(scanCache_).entryList(QDir::Files))
+                if (f.contains(scanWork_)) paths << scanCache_ + "/" + f;
+            if (paths.isEmpty()) {
+                QMessageBox::information(
+                    this, "No cached pages",
+                    "No pages of this volume are in the scan cache "
+                    "yet \u2014 pages cache as you view them in "
+                    "Follow along.");
+                return;
+            }
+            runIllustrationGallery(this, root, paths,
+                                   scanWork_ + " cached pages");
         });
 auto* secFmt = new QLabel("<span style='color:#9A7A33;font-size:10px;letter-spacing:2px;font-weight:600'>FORMAT &amp; EXPORT</span>");
         secFmt->setContentsMargins(0, 8, 0, 0);
@@ -8789,6 +8822,129 @@ static std::vector<QRect> illustrationCandidates(
     return out;
 }
 
+// shared gallery runner (#62): detect lines on each image, compute
+// candidate regions, show crops. Used by the Scan pane (any folder)
+// and the Overlay (the linked volume's cached scans).
+static void runIllustrationGallery(QWidget* parent, const QString& root,
+                                   const QStringList& paths,
+                                   const QString& title) {
+    const QString lm =
+        root + "/library/ocr_models/BDRC_PhotiLines/PhotiLines.onnx";
+    if (!QFile::exists(lm)) {
+        QMessageBox::information(
+            parent, "Model missing",
+            "The line-detection model is not installed (see the Scan "
+            "pane's model note).");
+        return;
+    }
+    std::unique_ptr<allocr::LineDetector> det;
+    try {
+        det = std::make_unique<allocr::LineDetector>(lm.toStdString());
+    } catch (const std::exception& e) {
+        QMessageBox::warning(parent, "Model failed", e.what());
+        return;
+    }
+    QProgressDialog prog("Scanning pages for illustration "
+                         "candidates\u2026",
+                         "Stop", 0, paths.size(), parent);
+    prog.setWindowModality(Qt::WindowModal);
+    struct Crop { QImage img; QString from; };
+    std::vector<Crop> crops;
+    int done = 0;
+    for (const QString& path : paths) {
+        prog.setValue(done++);
+        QCoreApplication::processEvents();
+        if (prog.wasCanceled()) break;
+        QImage img(path);
+        if (img.isNull()) continue;
+        img = img.convertToFormat(QImage::Format_RGB888);
+        const int w = img.width(), h = img.height();
+        std::vector<uint8_t> rgb(size_t(w) * h * 3);
+        for (int y = 0; y < h; ++y)
+            std::copy(img.constScanLine(y), img.constScanLine(y) + w * 3,
+                      rgb.begin() + size_t(y) * w * 3);
+        try {
+            auto mask = det->detect(rgb.data(), w, h);
+            const double zero = 0.0;
+            auto pl = allocr::buildLines(rgb.data(), w, h, mask, 2.5,
+                                         4.0, true, &zero);
+            std::vector<QRect> lrects;
+            for (const auto& l : pl.lines)
+                lrects.push_back(QRect(l.x, l.y, l.w, l.h));
+            for (const auto& r : illustrationCandidates(w, h, lrects))
+                crops.push_back({img.copy(r), QFileInfo(path).fileName()});
+        } catch (const std::exception&) {
+            continue;
+        }
+    }
+    prog.setValue(paths.size());
+    if (crops.empty()) {
+        QMessageBox::information(
+            parent, "Illustration gallery",
+            "No candidates found (candidates only \u2014 a miniature "
+            "the geometry cannot see is not disproven).");
+        return;
+    }
+    QDialog dlg(parent);
+    dlg.setWindowTitle(QString("%1 \u2014 %2 region(s), machine-found, "
+                               "review material")
+                           .arg(title)
+                           .arg(crops.size()));
+    dlg.resize(900, 600);
+    auto* v = new QVBoxLayout(&dlg);
+    auto* list = new QListWidget;
+    list->setViewMode(QListView::IconMode);
+    list->setIconSize(QSize(220, 160));
+    list->setResizeMode(QListView::Adjust);
+    for (const auto& c : crops) {
+        auto* it = new QListWidgetItem(
+            QIcon(QPixmap::fromImage(c.img).scaled(
+                220, 160, Qt::KeepAspectRatio,
+                Qt::SmoothTransformation)),
+            c.from);
+        list->addItem(it);
+    }
+    v->addWidget(list, 1);
+    auto* rowb = new QHBoxLayout;
+    auto* saveB = new QPushButton("Save crops\u2026");
+    auto* closeB = new QPushButton("Close");
+    rowb->addStretch();
+    rowb->addWidget(saveB);
+    rowb->addWidget(closeB);
+    v->addLayout(rowb);
+    QObject::connect(closeB, &QPushButton::clicked, &dlg,
+                     &QDialog::accept);
+    QObject::connect(
+        list, &QListWidget::itemDoubleClicked,
+        [&](QListWidgetItem* it) {
+            const int ix = list->row(it);
+            QDialog full(&dlg);
+            full.setWindowTitle(crops[ix].from + " \u2014 candidate crop");
+            auto* fv = new QVBoxLayout(&full);
+            auto* lbl = new QLabel;
+            lbl->setPixmap(QPixmap::fromImage(crops[ix].img.scaled(
+                1000, 700, Qt::KeepAspectRatio,
+                Qt::SmoothTransformation)));
+            fv->addWidget(lbl);
+            full.exec();
+        });
+    QObject::connect(saveB, &QPushButton::clicked, [&] {
+        const QString out = QFileDialog::getExistingDirectory(
+            &dlg, "Save crops into folder");
+        if (out.isEmpty()) return;
+        int n = 0;
+        for (const auto& c : crops)
+            c.img.save(QString("%1/%2-illus%3.png")
+                           .arg(out, QFileInfo(c.from).completeBaseName())
+                           .arg(++n));
+        QMessageBox::information(
+            &dlg, "Saved",
+            QString("%1 crop(s) saved \u2014 named by source page.")
+                .arg(n));
+    });
+    dlg.exec();
+}
+
 class ScanPane : public QWidget {
 public:
     ScanPane(allcore::SyllableChecker* checker, const QString& root)
@@ -9244,15 +9400,6 @@ private:
     QPushButton* run_ = nullptr;
     QPushButton* save_ = nullptr;
     void illusGallery() {
-        const QString lm =
-            root_ + "/library/ocr_models/BDRC_PhotiLines/PhotiLines.onnx";
-        if (!QFile::exists(lm)) {
-            QMessageBox::information(
-                this, "Model missing",
-                "The line-detection model is not installed (see the "
-                "Scan pane's model note).");
-            return;
-        }
         const QString dir = QFileDialog::getExistingDirectory(
             this, "Folder of page scans");
         if (dir.isEmpty()) return;
@@ -9265,116 +9412,10 @@ private:
                                      "No page images in that folder.");
             return;
         }
-        try {
-            if (!det_)
-                det_ = std::make_unique<allocr::LineDetector>(
-                    lm.toStdString());
-        } catch (const std::exception& e) {
-            QMessageBox::warning(this, "Model failed", e.what());
-            return;
-        }
-        QProgressDialog prog("Scanning pages for illustration "
-                             "candidates\u2026",
-                             "Stop", 0, files.size(), this);
-        prog.setWindowModality(Qt::WindowModal);
-        struct Crop { QImage img; QString from; };
-        std::vector<Crop> crops;
-        int done = 0;
-        for (const QString& fn : files) {
-            prog.setValue(done++);
-            QCoreApplication::processEvents();
-            if (prog.wasCanceled()) break;
-            QImage img(dir + "/" + fn);
-            if (img.isNull()) continue;
-            img = img.convertToFormat(QImage::Format_RGB888);
-            const int w = img.width(), h = img.height();
-            std::vector<uint8_t> rgb(size_t(w) * h * 3);
-            for (int y = 0; y < h; ++y)
-                std::copy(img.constScanLine(y),
-                          img.constScanLine(y) + w * 3,
-                          rgb.begin() + size_t(y) * w * 3);
-            try {
-                auto mask = det_->detect(rgb.data(), w, h);
-                const double zero = 0.0;
-                auto pl = allocr::buildLines(rgb.data(), w, h, mask,
-                                             2.5, 4.0, true, &zero);
-                std::vector<QRect> lrects;
-                for (const auto& l : pl.lines)
-                    lrects.push_back(QRect(l.x, l.y, l.w, l.h));
-                for (const auto& r :
-                     illustrationCandidates(w, h, lrects))
-                    crops.push_back({img.copy(r), fn});
-            } catch (const std::exception&) {
-                continue;   // page skipped; gallery title shows count
-            }
-        }
-        prog.setValue(files.size());
-        if (crops.empty()) {
-            QMessageBox::information(
-                this, "Illustration gallery",
-                "No candidates found in this folder (candidates "
-                "only \u2014 a miniature the geometry cannot see is "
-                "not disproven).");
-            return;
-        }
-        QDialog dlg(this);
-        dlg.setWindowTitle(
-            QString("Illustration candidates \u2014 %1 region(s), "
-                    "machine-found, review material")
-                .arg(crops.size()));
-        dlg.resize(900, 600);
-        auto* v = new QVBoxLayout(&dlg);
-        auto* list = new QListWidget;
-        list->setViewMode(QListView::IconMode);
-        list->setIconSize(QSize(220, 160));
-        list->setResizeMode(QListView::Adjust);
-        for (const auto& c : crops) {
-            list->addItem(new QListWidgetItem(
-                QIcon(QPixmap::fromImage(c.img).scaled(
-                    220, 160, Qt::KeepAspectRatio,
-                    Qt::SmoothTransformation)),
-                c.from));
-        }
-        v->addWidget(list, 1);
-        auto* rowb = new QHBoxLayout;
-        auto* saveB = new QPushButton("Save crops\u2026");
-        auto* closeB = new QPushButton("Close");
-        rowb->addStretch();
-        rowb->addWidget(saveB);
-        rowb->addWidget(closeB);
-        v->addLayout(rowb);
-        connect(closeB, &QPushButton::clicked, &dlg, &QDialog::accept);
-        connect(list, &QListWidget::itemDoubleClicked,
-                [&](QListWidgetItem* it) {
-                    const int ix = list->row(it);
-                    QDialog full(&dlg);
-                    full.setWindowTitle(crops[ix].from +
-                                        " \u2014 candidate crop");
-                    auto* fv = new QVBoxLayout(&full);
-                    auto* lbl = new QLabel;
-                    lbl->setPixmap(QPixmap::fromImage(
-                        crops[ix].img.scaled(1000, 700,
-                                             Qt::KeepAspectRatio,
-                                             Qt::SmoothTransformation)));
-                    fv->addWidget(lbl);
-                    full.exec();
-                });
-        connect(saveB, &QPushButton::clicked, [&] {
-            const QString out = QFileDialog::getExistingDirectory(
-                &dlg, "Save crops into folder");
-            if (out.isEmpty()) return;
-            int n = 0;
-            for (const auto& c : crops)
-                c.img.save(QString("%1/%2-illus%3.png")
-                               .arg(out,
-                                    QFileInfo(c.from).completeBaseName())
-                               .arg(++n));
-            QMessageBox::information(
-                &dlg, "Saved",
-                QString("%1 crop(s) saved \u2014 named by source "
-                        "page.").arg(n));
-        });
-        dlg.exec();
+        QStringList paths;
+        for (const QString& f : files) paths << dir + "/" + f;
+        runIllustrationGallery(this, root_, paths,
+                               "Illustration candidates");
     }
 
     QCheckBox* deskewOverride_ = nullptr;
