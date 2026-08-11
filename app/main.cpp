@@ -8812,6 +8812,17 @@ public:
         run_ = new QPushButton("Run OCR");
         run_->setEnabled(false);
         row->addWidget(run_);
+        illusToggle_ = new QCheckBox("mark illustration candidates");
+        illusToggle_->setToolTip(
+            "Outline regions of the folio NOT covered by detected "
+            "text lines \u2014 side panels and large gaps, where "
+            "woodblock miniatures and diagrams live. CANDIDATES "
+            "only, machine-found from the line geometry; never "
+            "claimed complete.");
+        row->addWidget(illusToggle_);
+        connect(illusToggle_, &QCheckBox::toggled, [this] {
+            if (!pl_.lines.empty()) drawPage(-1, -1);
+        });
         save_ = new QPushButton("Save to ocr_out…");
         save_->setEnabled(false);
         row->addWidget(save_);
@@ -8947,6 +8958,26 @@ private:
                         p.setPen(QPen(QColor(0x7F, 0x77, 0xDD), 2));
                     }
                 }
+            }
+        }
+        if (illusToggle_ && illusToggle_->isChecked()) {
+            std::vector<QRect> lrects;
+            lrects.reserve(pl_.lines.size());
+            for (const auto& l : pl_.lines)
+                lrects.push_back(QRect(l.x, l.y, l.w, l.h));
+            const auto cands = illustrationCandidates(
+                pl_.width, pl_.height, lrects);
+            QPainter p(&annotated);
+            p.setPen(QPen(QColor(0xB8, 0x86, 0x1B), 4));
+            QFont f = p.font();
+            f.setPointSize(18);
+            f.setBold(true);
+            p.setFont(f);
+            for (const auto& r : cands) {
+                p.drawRect(r);
+                p.drawText(r.adjusted(8, 8, 0, 0).topLeft() +
+                               QPoint(0, 24),
+                           "image? (candidate)");
             }
         }
         pageView_->setPixmap(QPixmap::fromImage(annotated));
@@ -9203,6 +9234,7 @@ private:
     QPushButton* run_ = nullptr;
     QPushButton* save_ = nullptr;
     QCheckBox* deskewOverride_ = nullptr;
+    QCheckBox* illusToggle_ = nullptr;
     std::vector<std::string> lastWylie_;
     allocr::PageLines pl_;                            // last processed page
     std::vector<std::vector<allocr::WordSpan>> words_;  // per line

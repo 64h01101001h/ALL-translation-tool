@@ -325,7 +325,10 @@ embedded, proven, honest.
 **Use.** Open a page image → lines are detected and recognized (BDRC
 Woodblock model). Output is ALWAYS review material — banner-marked,
 first-pass checked against the syllable-legality rules, never
-trusted as text. Batch mode processes a volume folder.
+trusted as text. Batch mode processes a volume folder. "mark
+illustration candidates" outlines regions not covered by detected
+text lines — side panels and large gaps, where woodblock miniatures
+live — machine-found candidates, never claimed complete.
 
 ## Propose
 
