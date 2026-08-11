@@ -170,7 +170,7 @@ static const IdiomMap* g_idioms = nullptr;
 // classes (DCC YouTube). Captions were the FINDING AID only; every
 // link opens the recording, which is the authority.
 struct TeachingMoment {
-    QString title, url, lang, snippet;
+    QString title, url, lang, src, snippet;
     int t = 0;
 };
 using TeachingMap = std::map<std::string, std::vector<TeachingMoment>>;
@@ -353,9 +353,13 @@ static QString entryHtml(const allcore::Entry& e,
                               m.title.left(60).toHtmlEscaped())
                          .arg(m.t / 60)
                          .arg(m.t % 60, 2, 10, QChar('0'))
-                         .arg(m.lang == "ENG" || m.lang == "?"
-                                  ? QString()
-                                  : " <b>[" + m.lang + "]</b>");
+                         .arg((m.lang == "ENG" || m.lang == "?"
+                                   ? QString()
+                                   : " <b>[" + m.lang + "]</b>") +
+                              (m.src == "TKB"
+                                   ? " <i style='color:#7C2D26'>"
+                                     "\u00b7 lam rim</i>"
+                                   : QString()));
             }
             h += "</div>";
         }
@@ -2322,10 +2326,13 @@ private:
                                             .toHtmlEscaped())
                                    .arg(m.t / 60)
                                    .arg(m.t % 60, 2, 10, QChar('0'))
-                                   .arg(m.lang == "ENG" ||
-                                                m.lang == "?"
-                                            ? QString()
-                                            : " [" + m.lang + "]");
+                                   .arg((m.lang == "ENG" ||
+                                                 m.lang == "?"
+                                             ? QString()
+                                             : " [" + m.lang + "]") +
+                                        (m.src == "TKB"
+                                             ? " (lam rim)"
+                                             : QString()));
                     }
                 }
             }
@@ -11392,6 +11399,7 @@ int main(int argc, char** argv) {
                     vec.push_back({o.value("title").toString(),
                                    o.value("url").toString(),
                                    o.value("lang").toString(),
+                                   o.value("src").toString(),
                                    o.value("snippet").toString(),
                                    o.value("t").toInt()});
                 }
@@ -11411,6 +11419,7 @@ int main(int argc, char** argv) {
                     vec.push_back({o.value("title").toString(),
                                    o.value("url").toString(),
                                    o.value("lang").toString(),
+                                   o.value("src").toString(),
                                    o.value("snippet").toString(),
                                    o.value("t").toInt()});
                 }
