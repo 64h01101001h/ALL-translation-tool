@@ -10364,6 +10364,31 @@ public:
     }
     int chapterCount() const { return chapters_.size(); }
     void openChapter(const QString& title) { showChapter(title); }
+    // the Workflows window opens listing EVERY workflow by name
+    // (Adam, 2026-08-10); clicking one jumps the page to it
+    void openWorkflows() {
+        const QString ch = "Suggested Workflows";
+        showChapter(ch);
+        search_->clear();
+        results_->clear();
+        rows_.clear();
+        results_->addItem("\U0001F4D6 " + ch + " (all)");
+        rows_.push_back({-1, ch});
+        static const QRegularExpression re("^\\*\\*(.+?)\\*\\*");
+        for (const QString& raw : chapters_.value(ch).split('\n')) {
+            const auto m = re.match(raw.trimmed());
+            if (!m.hasMatch()) continue;
+            QString t = m.captured(1).trimmed();
+            if (t.endsWith('.')) t.chop(1);
+            if (t.startsWith("Where do I start")) continue;
+            results_->addItem("\u25B8 " + t);
+            rows_.push_back({-2, t});
+        }
+    }
+    int openWorkflowsCount() {
+        openWorkflows();
+        return results_->count();
+    }
 
 private:
     struct Ctl { QString label, pane, tip; int tab; };
@@ -10411,6 +10436,14 @@ private:
     void showResult(int r) {
         if (r < 0 || r >= (int)rows_.size()) return;
         const auto& row = rows_[r];
+        if (row.first == -2) {
+            showChapter("Suggested Workflows");
+            QTextCursor c = body_->textCursor();
+            c.movePosition(QTextCursor::Start);
+            body_->setTextCursor(c);
+            body_->find(row.second);
+            return;
+        }
         if (row.first < 0) { showChapter(row.second); return; }
         const auto& c = controls_[row.first];
         QString h = "<h2>" + c.label.toHtmlEscaped() + "</h2>";
@@ -10867,7 +10900,7 @@ int main(int argc, char** argv) {
             helpWin->show();
             helpWin->raise();
             helpWin->activateWindow();
-            helpWin->openChapter("Suggested Workflows");
+            helpWin->openWorkflows();
         });
     }
 
@@ -10939,7 +10972,8 @@ int main(int argc, char** argv) {
             HelpWindow hw(&tabs, root, nullptr);
             const bool chapters = hw.chapterCount() >= 16;
             {
-                const bool wfHit = hw.hitCount("Suggested Workflows") >= 1;
+                const bool wfHit = hw.hitCount("Suggested Workflows") >= 1 &&
+                               hw.openWorkflowsCount() >= 7;
                 log << QString("  [%1] Help: Suggested Workflows chapter "
                                "present").arg(wfHit ? "PASS" : "FAIL");
                 if (!wfHit) fails++;
