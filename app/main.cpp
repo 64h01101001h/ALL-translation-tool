@@ -1129,6 +1129,10 @@ public:
                   "illustration candidates: side panel + gap found, "
                   "clean page yields none");
         }
+        input_->setPlainText("BDEN PA , SDUG BSNGAL ,");
+        loadDoc();
+        check(teachingsReportHtml().contains("youtube.com"),
+              "teachings-for-this-text report reaches the corpus");
         input_->setPlainText("@04B ,GDAB ,");
         loadDoc();
         check(collectSpellHits().empty() &&
@@ -1366,6 +1370,34 @@ auto* secRev = new QLabel("<span style='color:#9A7A33;font-size:10px;letter-spac
                     [this](int r, int) { jumpToSpellHit(r); });
         }
         ll->addWidget(spellPanel_);
+        auto* teachBtn = new QPushButton("Teachings for this text\u2026");
+        teachBtn->setToolTip(
+            "Sweep every term this text contains and list where "
+            "Geshe Michael taught each one \u2014 timecoded links "
+            "into the recorded classes, both by his English and by "
+            "the spoken Tibetan. Machine-located candidates; the "
+            "recordings are the authority.");
+        ll->addWidget(teachBtn);
+        connect(teachBtn, &QPushButton::clicked, [this] {
+            if (doc_.tokens.empty()) {
+                QMessageBox::information(this, "Teachings",
+                                         "Load a document first.");
+                return;
+            }
+            const QString html = teachingsReportHtml();
+            auto* dlg = new QDialog(this);
+            dlg->setAttribute(Qt::WA_DeleteOnClose);
+            dlg->setWindowTitle(
+                "Teachings for this text \u2014 machine-located; "
+                "the recordings are the authority");
+            dlg->resize(760, 640);
+            auto* v = new QVBoxLayout(dlg);
+            auto* b = new QTextBrowser;
+            b->setOpenExternalLinks(true);
+            b->setHtml(html);
+            v->addWidget(b);
+            dlg->show();
+        });
         connect(spellToggle_, &QCheckBox::toggled, [this](bool on) {
             spellPanel_->setVisible(on);
             if (on) rebuildSpellPanel();
@@ -2258,6 +2290,81 @@ private:
     QTableWidget* spellList_ = nullptr;
     std::vector<SpellHit> spellHits_;
     std::vector<int> spellCycle_;
+
+    // #64 stage D (v1): every matched entry in the loaded text with
+    // its teaching moments, in text order — the translator's
+    // companion sheet. Context-fit ranking is the next increment.
+    QString teachingsReportHtml() const {
+        QString h =
+            "<i style='color:#888'>Candidates located from class "
+            "captions; click a link and the recording itself "
+            "teaches.</i><hr>";
+        int shown = 0;
+        std::set<std::string> done;
+        for (const auto& e : doc_.entries) {
+            if (done.count(e.wylie)) continue;
+            done.insert(e.wylie);
+            QString sec;
+            if (g_teaching) {
+                std::set<QString> seen;
+                for (const auto& g : e.hgm_gloss) {
+                    auto it = g_teaching->find(teachingKey(g));
+                    if (it == g_teaching->end()) continue;
+                    for (const auto& m : it->second) {
+                        if (seen.size() >= 2 || seen.count(m.url))
+                            continue;
+                        seen.insert(m.url);
+                        sec += QString(
+                                   "&nbsp;&nbsp;\u25B6 <a href='%1'>"
+                                   "%2</a> @%3:%4%5<br>")
+                                   .arg(m.url,
+                                        m.title.left(56)
+                                            .toHtmlEscaped())
+                                   .arg(m.t / 60)
+                                   .arg(m.t % 60, 2, 10, QChar('0'))
+                                   .arg(m.lang == "ENG" ||
+                                                m.lang == "?"
+                                            ? QString()
+                                            : " [" + m.lang + "]");
+                    }
+                }
+            }
+            if (g_teachingTib) {
+                auto it = g_teachingTib->find(e.wylie);
+                if (it != g_teachingTib->end() &&
+                    !it->second.empty()) {
+                    const auto& m = it->second.front();
+                    sec += QString("&nbsp;&nbsp;\u25B6 <a href='%1'>"
+                                   "%2</a> @%3:%4 <i style="
+                                   "'color:#888'>(he says the "
+                                   "word)</i><br>")
+                               .arg(m.url,
+                                    m.title.left(56).toHtmlEscaped())
+                               .arg(m.t / 60)
+                               .arg(m.t % 60, 2, 10, QChar('0'));
+                }
+            }
+            if (sec.isEmpty()) continue;
+            QString gloss;
+            if (!e.hgm_gloss.empty())
+                gloss = " \u2014 " +
+                        QString::fromStdString(e.hgm_gloss.front())
+                            .toHtmlEscaped();
+            h += "<b>" +
+                 QString::fromStdString(e.wylie).toHtmlEscaped() +
+                 "</b><small style='color:#555'>" + gloss +
+                 "</small><br>" + sec;
+            if (++shown >= 300) {
+                h += "<i>\u2026 report capped at 300 terms</i>";
+                break;
+            }
+        }
+        if (!shown)
+            h += "<i>No teaching moments found for this text's "
+                 "vocabulary (yet \u2014 the corpus grows as more "
+                 "classes are indexed).</i>";
+        return h;
+    }
 
     int tokenAt(int charPos) const {
         // binary search — this runs on every click/cursor move, and a
