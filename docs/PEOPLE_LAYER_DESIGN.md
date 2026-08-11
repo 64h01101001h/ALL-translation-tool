@@ -20,7 +20,12 @@ highlighting directive).*
    never copy them. (treasuryoflives.org/terms)
 4. **ToL API is Cloudflare-gated for scripts** (browser fine) — so
    the app links users to ToL pages; harvesting goes through BDRC.
-5. **Bulk access:** `ldspdi.bdrc.io/queries` hosts registered SPARQL
+5. **Persons_all is capped at 500 rows** (verified 2026-08-11:
+   numResults=500 regardless of pageSize) — NOT a full-dump route.
+   Harvest therefore goes per-person: resolve our catalog's author
+   names / work records to P-ids, then fetch each person's JSON
+   (proven rich). Original note:
+5b. **Bulk access:** `ldspdi.bdrc.io/queries` hosts registered SPARQL
    templates; a `Persons_all` template exists (HTTP 200). Fallback:
    per-person JSON fetch for the bounded author set (see below).
    BDRC API code is Apache-2.0; record exact DATA license terms in
