@@ -44,6 +44,36 @@ def cues(path):
 def video_id(path):
     return os.path.basename(path).split(".")[0]
 
+def load_phonetics():
+    """wylie -> GMR-convention phonetics (pron_reference.tsv);
+    collapsed-joined key -> [wylie]. Spoken-Tibetan stage C: exact
+    equality on collapsed caption word n-grams (variants like
+    'Jang chub' match 'jangchub'; substring fakes cannot)."""
+    import collections
+    m = collections.defaultdict(list)
+    path = os.path.join(ROOT, "build/pron_reference.tsv")
+    if not os.path.exists(path):
+        return m
+    for line in open(path, encoding="utf-8"):
+        parts = line.rstrip("\n").split("\t")
+        if len(parts) != 2: continue
+        wylie, p = parts
+        key = re.sub(r"[^a-z]", "", p.lower())
+        if len(key) >= 5:
+            m[key].append(wylie)
+    # collision guard: a phonetic that IS an English word (minute,
+    # during, karma, share...) cannot serve as spoken-Tibetan
+    # evidence — the English-gloss tier covers loanwords like karma
+    try:
+        eng = {w.strip().lower() for w in
+               open("/usr/share/dict/words", encoding="utf-8")}
+        for k in list(m):
+            if k in eng:
+                del m[k]
+    except OSError:
+        pass
+    return m
+
 def index(terms, per_term_cap=None):
     # one caption file per video: prefer manual .en.vtt over -orig/auto
     byvid = {}
@@ -55,6 +85,8 @@ def index(terms, per_term_cap=None):
     termset = set(terms)
     maxw = max(len(t.split()) for t in terms)
     out = {t: [] for t in terms}
+    phon = load_phonetics()
+    tib, tibseen = {}, {}
     wordre = re.compile(r"[a-z\-']+")
     LANG = re.compile(r"\b(ENG|VIE|CHN|SPA|GER|RUS|UKR|POR|FRA|CZE)\b",
                       re.I)
@@ -65,7 +97,25 @@ def index(terms, per_term_cap=None):
         seen_min = {}
         for sec, txt in cues(f):
             ws = wordre.findall(txt.lower())
+            cw = [re.sub(r"[^a-z]", "", w) for w in ws]
             for i in range(len(ws)):
+                # spoken Tibetan: collapsed word-group equality, 1-3
+                joined = ""
+                for n in range(1, 4):
+                    if i + n > len(cw): break
+                    joined += cw[i + n - 1]
+                    for wy in phon.get(joined, ()):
+                        if sec - tibseen.get((wy, vid), -100) < 60:
+                            continue
+                        tibseen[(wy, vid)] = sec
+                        tib.setdefault(wy, []).append({
+                            "video": vid, "title": title, "t": sec,
+                            "lang": lang,
+                            "url": "https://www.youtube.com/watch?v="
+                                   f"{vid}&t={sec}s",
+                            "snippet": txt[:160],
+                            "source": "spoken Tibetan (phonetic "
+                                      "match, machine-located)"})
                 for n in range(1, maxw + 1):
                     if i + n > len(ws): break
                     cand = " ".join(ws[i:i + n])
@@ -93,12 +143,17 @@ def index(terms, per_term_cap=None):
             v = out[t]
             step = len(v) / CAP
             out[t] = [v[int(i * step)] for i in range(CAP)]
-    return out, len(byvid)
+    for wy in list(tib):
+        v = tib[wy]
+        if len(v) > 30:
+            step = len(v) / 30
+            tib[wy] = [v[int(i * step)] for i in range(30)]
+    return out, tib, len(byvid)
 
 if __name__ == "__main__":
     if "--sample" in sys.argv:
         terms = sys.argv[sys.argv.index("--sample") + 1].split(",")
-        idx, nf = index(terms)
+        idx, tib, nf = index(terms)
         print(f"[{nf} caption files scanned]")
         for t in terms:
             hits = idx[t]
@@ -125,7 +180,18 @@ if __name__ == "__main__":
             slim[t] = keep
         out = os.path.join(ROOT,
                            "data/teaching/teaching_moments_card.json")
-        json.dump({"meta": d["meta"], "terms": slim},
+        tslim = {}
+        for wy, v in d.get("tibetan_terms", {}).items():
+            seen, keep = set(), []
+            for h in v:
+                if h["video"] in seen: continue
+                seen.add(h["video"])
+                keep.append({k: h.get(k, "?") for k in
+                             ("title", "url", "t", "lang", "snippet")})
+                if len(keep) == 3: break
+            if keep: tslim[wy] = keep
+        json.dump({"meta": d["meta"], "terms": slim,
+                   "tibetan_terms": tslim},
                   open(out, "w"), ensure_ascii=False)
         print(len(slim), "terms ->", out,
               round(os.path.getsize(out) / 1e6, 1), "MB")
@@ -133,11 +199,15 @@ if __name__ == "__main__":
         terms = [l.strip() for l in
                  open(os.path.join(ROOT, "data/teaching/terms.txt"))
                  if l.strip()]
-        idx, nf = index(terms)
+        idx, tib, nf = index(terms)
         out = os.path.join(ROOT, "data/teaching/teaching_moments.json")
         json.dump({"meta": {"files": nf,
                             "note": "machine-located candidates; the "
                                     "recording is the authority"},
-                   "terms": idx}, open(out, "w"), ensure_ascii=False)
+                   "terms": idx, "tibetan_terms": tib},
+                  open(out, "w"), ensure_ascii=False)
         total = sum(len(v) for v in idx.values())
-        print(f"{nf} files, {len(terms)} terms, {total} moments -> {out}")
+        ttotal = sum(len(v) for v in tib.values())
+        print(f"{nf} files, {len(terms)} terms, {total} moments, "
+              f"{len(tib)} spoken-Tibetan terms / {ttotal} moments "
+              f"-> {out}")
