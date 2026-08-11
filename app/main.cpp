@@ -11736,42 +11736,79 @@ int main(int argc, char** argv) {
         QAction* about = view->addAction("About ALL Translation Tool");
         about->setMenuRole(QAction::AboutRole);   // macOS: app menu
         QObject::connect(about, &QAction::triggered, [&win] {
-            QMessageBox::about(
-                &win, "About ALL Translation Tool",
-                QString(
-                    "<h3>ALL Translation Tool</h3>"
-                    "<p>Version %1 \u00b7 HGM data release %2</p>"
-                    "<p><b>Created by Adam Derick Andrade</b><br>"
-                    "(Loppun Pawo, a.k.a. StaticSky)<br>"
-                    "for the Asian Legacy Library \u00b7 Asian "
-                    "Classics Input Project</p>"
-                    "<p><i>The mission: to turn the preserved "
-                    "library of Tibet into translations, and "
-                    "students into translators \u2014 with Geshe "
-                    "Michael Roach's English as the binding layer. "
-                    "The machine may match the master's English; it "
-                    "may never compose it. Everything essential runs "
-                    "on your own machine, and every claim on screen "
-                    "says whether it is attested, derived, or "
-                    "provisional.</i></p>"
-                    "<p><small>Developed in C++20 with Qt %3 "
-                    "(running on Qt %4), on a deterministic core "
-                    "proven against 38 automated test batteries."
-                    "</small></p>"
-                    "<p>Contact: <a href='mailto:"
-                    "adam.derick.andrade@gmail.com'>"
-                    "adam.derick.andrade@gmail.com</a></p>"
-                    "<p><small>Third-party components and data "
-                    "sources are credited in OPEN_SOURCE_NOTICES, "
-                    "shipped with every release.</small></p>")
+            auto* dlg = new QDialog(&win);
+            dlg->setAttribute(Qt::WA_DeleteOnClose);
+            dlg->setWindowTitle("About ALL Translation Tool");
+            dlg->setFixedWidth(520);
+            dlg->setStyleSheet(
+                "QDialog { background: #FAF6EE; }"
+                "QLabel { color: #2B2118; background: transparent; }");
+            auto* v = new QVBoxLayout(dlg);
+            v->setContentsMargins(36, 30, 36, 24);
+            v->setSpacing(6);
+            auto add = [&](const QString& html) {
+                auto* l = new QLabel(html);
+                l->setWordWrap(true);
+                l->setAlignment(Qt::AlignHCenter);
+                l->setTextInteractionFlags(
+                    Qt::TextBrowserInteraction);
+                l->setOpenExternalLinks(true);
+                v->addWidget(l);
+                return l;
+            };
+            add("<div style='font-family:\"Iowan Old Style\",Georgia,"
+                "serif;font-size:24px;color:#7C2D26;font-weight:600'>"
+                "ALL Translation Tool</div>");
+            add(QString("<div style='font-size:12px;color:#6E5F4B;"
+                        "letter-spacing:1px'>VERSION %1 &nbsp;"
+                        "\u00b7&nbsp; HGM DATA v%2</div>")
                     .arg(QStringLiteral(ALL_APP_VERSION),
                          QString::fromStdString(
                              g_spineForAbout
                                  ? g_spineForAbout->metaValue(
                                        "release_version")
-                                 : std::string("?")),
-                         QStringLiteral(QT_VERSION_STR),
-                         QString::fromLatin1(qVersion())));
+                                 : std::string("?"))));
+            add("<div style='color:#9A7A33;font-size:13px;"
+                "letter-spacing:3px;margin-top:10px'>"
+                "\u2022 &nbsp;\u2022&nbsp; \u2022</div>");
+            add("<div style='font-size:15px;margin-top:6px'>"
+                "Created by <b style='color:#7C2D26'>Adam Derick "
+                "Andrade</b></div>");
+            add("<div style='font-size:13px;font-style:italic;"
+                "color:#6E5F4B'>(Loppun Pawo, a.k.a. "
+                "StaticSky)</div>");
+            add("<div style='font-size:13px;margin-top:4px'>for "
+                "<b>Geshe Michael Roach</b>"
+                "<span style='color:#9A7A33'> \u00b7 </span>"
+                "the Asian Legacy Library <span style='color:#6E5F4B'>"
+                "(formerly Asian Classics Input Project)</span>"
+                "<span style='color:#9A7A33'> \u00b7 </span>"
+                "Diamond Cutter Classics</div>");
+            add("<div style='color:#9A7A33;font-size:13px;"
+                "letter-spacing:3px;margin-top:8px'>"
+                "\u2022 &nbsp;\u2022&nbsp; \u2022</div>");
+            add("<div style='font-family:\"Iowan Old Style\",Georgia,"
+                "serif;font-style:italic;font-size:13px;"
+                "margin-top:6px;line-height:1.5'>To turn the "
+                "preserved library of Tibet into translations, and "
+                "students into translators \u2014 with Geshe "
+                "Michael Roach\u2019s English as the binding layer. "
+                "The machine may match the master\u2019s English; "
+                "it may never compose it.</div>");
+            add(QString("<div style='font-size:11px;color:#6E5F4B;"
+                        "margin-top:12px'>Developed in C++20 with "
+                        "Qt %1 \u00b7 38 automated test batteries "
+                        "\u00b7 runs fully offline</div>")
+                    .arg(QString::fromLatin1(qVersion())));
+            add("<div style='font-size:12px;margin-top:8px'>"
+                "Contact: <a style='color:#7C2D26' href='mailto:"
+                "adam.derick.andrade@gmail.com'>"
+                "adam.derick.andrade@gmail.com</a></div>");
+            add("<div style='font-size:10px;color:#8A7A62;"
+                "margin-top:6px'>Third-party components and data "
+                "sources are credited in OPEN_SOURCE_NOTICES, "
+                "shipped with every release.</div>");
+            dlg->show();
         });
         view->addSeparator();
         QAction* prefs = view->addAction("Settings\u2026");
