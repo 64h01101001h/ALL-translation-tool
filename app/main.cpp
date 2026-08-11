@@ -11754,6 +11754,10 @@ int main(int argc, char** argv) {
                     "on your own machine, and every claim on screen "
                     "says whether it is attested, derived, or "
                     "provisional.</i></p>"
+                    "<p><small>Developed in C++20 with Qt %3 "
+                    "(running on Qt %4), on a deterministic core "
+                    "proven against 38 automated test batteries."
+                    "</small></p>"
                     "<p>Contact: <a href='mailto:"
                     "adam.derick.andrade@gmail.com'>"
                     "adam.derick.andrade@gmail.com</a></p>"
@@ -11765,7 +11769,9 @@ int main(int argc, char** argv) {
                              g_spineForAbout
                                  ? g_spineForAbout->metaValue(
                                        "release_version")
-                                 : std::string("?"))));
+                                 : std::string("?")),
+                         QStringLiteral(QT_VERSION_STR),
+                         QString::fromLatin1(qVersion())));
         });
         view->addSeparator();
         QAction* prefs = view->addAction("Settings\u2026");
