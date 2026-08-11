@@ -44,6 +44,8 @@ Version: 0.27.2 · August 2026
 | Buddhist canonical texts (ACIP Releases) | ACIP's own preserved corpus | the Library |
 | Fonts (bundled Tibetan faces) | SIL OFL (each face's license banked in data/fonts/FONTS.md) | Tibetan script display |
 
+| Teaching-moments index (Diamond Cutter Classics + The Knowledge Base YouTube channels) | Geshe Michael Roach's own organizations' teachings, harvested captions-only with ALL's authorization (data/teaching/PROVENANCE.md); links open the original recordings | timecoded "teaching this term" links on entry cards; machine-located, labeled |
+
 ## The dictionary and corpus
 
 The HGM dictionary, aligned corpus, registers, and published
