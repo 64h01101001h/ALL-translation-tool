@@ -643,14 +643,20 @@ implementation is sidelined HERE from this date. What this means:
       GMR-phonetics interlinear; selftest writes+verifies a PDF).
 - [ ] **PECHA MAKER → TRUE PRODUCTION TOOL** (Adam, 2026-08-12:
       "super rudimentary as of now… focus on getting it ready for
-      full production and deployment"). The v2+ program:
-      translation interlinear where corpus-attested; margin title
-      (ya-yig) + volume letter; dbu-can title page + framing
-      ornaments; per-side syllable budget tuned against real
+      full production and deployment").
+      **v2 TRANCHE SHIPPED 2026-08-12:** translation interlinear
+      where corpus-attested (verbatim match from the aligned
+      corpus, never composed — selftest proves it end-to-end);
+      ornamental title folio (1a, text begins 1b); margin title
+      (ya-yig) + volume letter in the rotated recto margin; yig-mgo
+      head mark; rule-weight furniture (Fine/Classic/Bold);
+      imposition two-up on A4/US Letter with cut marks + side
+      labels; all options persisted (QSettings pecha/*). Internals:
+      QPicture-per-side recording (NB: QPicture replay rescales by
+      device-DPI ratio — record at the picture's own logicalDpi).
+      **v3 remaining:** per-side syllable budget tuned against real
       woodblock prints; head-letter (dbu khyud) and double-shad
-      conventions; verse lineation awareness; page furniture
-      options (rules weight, margins) as saved presets; imposition
-      (two-up on A4/letter w/ cut marks) for office printers;
+      conventions; verse lineation awareness; margin presets;
       cover/label sheet; batch mode (whole Library folder → pecha
       set); QA pass comparing against traditional prints.
 - [ ] **PRINT PARTNERSHIP — Vimala Treasures** (Adam, 2026-08-12):

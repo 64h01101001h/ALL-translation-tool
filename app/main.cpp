@@ -22,6 +22,7 @@
 #include <QTextStream>
 #include <QLabel>
 #include <QLineEdit>
+#include <QPicture>
 #include <QNetworkAccessManager>
 #include <QDialog>
 #include <QDialogButtonBox>
@@ -1397,18 +1398,83 @@ public:
             const QString tmp =
                 QDir::temp().filePath("all_selftest_pecha.pdf");
             QFile::remove(tmp);
-            const int sides =
-                pechaWritePdf(tmp, 420, 90, 7, true,
-                              "Noto Serif Tibetan");
+            OverlayPane::PechaOpts po;
+            po.interPhon = true;
+            po.interEng = true;
+            po.family = "Noto Serif Tibetan";
+            po.title = "byang chub lam gyi rim pa";
+            po.titleFolio = true;
+            po.marginTitle = "lam rim";
+            po.volLetter = "ka";
+            po.layout = 1;   // two-up A4 imposition, cut marks
+            const int sides = pechaWritePdf(tmp, po);
             QFile pf(tmp);
-            bool ok = sides >= 1 && pf.open(QIODevice::ReadOnly);
+            bool ok = sides >= 2 && pf.open(QIODevice::ReadOnly);
             if (ok) {
                 const QByteArray head = pf.read(5);
                 ok = head.startsWith("%PDF") &&
                      pf.size() > 2000;
             }
-            check(ok, "Pecha maker writes a framed folio PDF "
-                      "(interlinear)");
+            check(ok, "Pecha maker v2: title folio + ya-yig + "
+                      "imposed two-up PDF with interlinears");
+        }
+        // the English interlinear MATCHES, never composes: find a
+        // barrier-free attested corpus segment, render its ACIP as
+        // a pecha, and prove the published English landed verbatim
+        {
+            allcore::CorpusSegment pick;
+            for (const auto& course : spine_.corpusCourses()) {
+                for (const auto& s :
+                     spine_.corpusWindow(course, 0, 400)) {
+                    if (s.english.empty() || s.acip.empty())
+                        continue;
+                    const QString w =
+                        QString::fromStdString(s.wylie);
+                    if (w.contains(',') || w.contains('/') ||
+                        w.size() > 70 || w.size() < 12)
+                        continue;
+                    pick = s;
+                    break;
+                }
+                if (pick.id) break;
+            }
+            bool ok = pick.id != 0;
+            if (ok) {
+                input_->setPlainText(
+                    QString::fromStdString(pick.acip));
+                const QString tmp = QDir::temp().filePath(
+                    "all_selftest_pecha_eng.pdf");
+                QFile::remove(tmp);
+                OverlayPane::PechaOpts po;
+                po.interEng = true;
+                po.family = "Noto Serif Tibetan";
+                ok = pechaWritePdf(tmp, po) >= 1;
+#ifdef ALL_HAVE_QTPDF
+                if (ok) {
+                    QPdfDocument pdoc;
+                    pdoc.load(tmp);
+                    ok = pdoc.status() ==
+                         QPdfDocument::Status::Ready;
+                    QString all;
+                    for (int i = 0; ok && i < pdoc.pageCount();
+                         ++i)
+                        all += pdoc.getAllText(i).text();
+                    // the longest word of the published English
+                    // must be present verbatim in the pecha
+                    QString wordPick;
+                    for (const QString& wd :
+                         QString::fromStdString(pick.english)
+                             .split(QRegularExpression("[^A-Za-z]+"),
+                                    Qt::SkipEmptyParts))
+                        if (wd.size() > wordPick.size())
+                            wordPick = wd;
+                    ok = ok && !wordPick.isEmpty() &&
+                         all.contains(wordPick);
+                }
+#endif
+            }
+            check(ok, "Pecha maker: English interlinear is "
+                      "corpus-attested (matched, never composed)");
         }
         // wylie source files show as ACIP in the Document box
         // (Adam's finding: the Release 6 wylie edition rendered
@@ -4030,48 +4096,92 @@ public:
         return h;
     }
 
-    int pechaWritePdf(const QString& fn, double wMM, double hMM,
-                      int linesPerSide, bool interlinear,
-                      const QString& family) {
+    // ---- Pecha Maker v2 (Adam, 2026-08-12: "get it ready for
+    // full production") — title folio, ya-yig margin title +
+    // volume letter, yig-mgo head mark, rule-weight furniture,
+    // office-printer imposition, and an English interlinear that
+    // appears ONLY where the corpus attests the exact segment
+    // (rule 1: matched, never composed). ------------------------
+    struct PechaOpts {
+        double wMM = 420, hMM = 90;  // folio side size
+        int lines = 7;               // text lines per side
+        bool interPhon = false;      // GMR phonetics under segments
+        bool interEng = false;       // corpus-attested English only
+        QString family;              // Tibetan typeface
+        QString title;               // ornamental title-folio text
+        QString marginTitle;         // ya-yig (short margin title)
+        QString volLetter;           // volume letter (ka, kha, …)
+        bool titleFolio = false;     // ornamental folio 1a
+        bool headMarks = true;       // yig-mgo at the text head
+        int ruleWeight = 1;          // 0 fine · 1 classic · 2 bold
+        int layout = 0;              // 0 native · 1 A4 two-up ·
+                                     // 2 US-Letter two-up
+    };
+
+    // margin/title fields typed in wylie become Tibetan through
+    // the battery-proven chain; unicode passes through untouched.
+    static QString tibetanizeField(const QString& s) {
+        const QString t = s.trimmed();
+        if (t.isEmpty()) return t;
+        for (QChar c : t)
+            if (c.unicode() >= 0x0F00 && c.unicode() <= 0x0FFF)
+                return t;
+        auto [u, ok] = allcore::wylieToUnicode(t.toStdString());
+        return ok ? QString::fromStdString(u) : t;
+    }
+
+    int pechaWritePdf(const QString& fn, const PechaOpts& o) {
         const std::string src = input_->toPlainText().toStdString();
         if (src.empty()) return 0;
         auto res = allcore::exportTibetanUnicode(src);
         QString text = QString::fromStdString(res.unicode);
         // pecha reflows: markers out, breaks become spaces
-        static const QRegularExpression marker("@\S+");
+        static const QRegularExpression marker("@\\S+");
         text.replace(marker, " ");
         text.replace('\n', ' ');
         text = text.simplified();
         if (text.isEmpty()) return 0;
+        const QString yigMgo = QString::fromUtf8("༄༅། །");
 
-        QPdfWriter pdf(fn);
-        pdf.setPageSize(QPageSize(QSizeF(wMM, hMM),
-                                  QPageSize::Millimeter, "pecha"));
-        pdf.setPageMargins(QMarginsF(0, 0, 0, 0));
-        pdf.setResolution(300);
-        QPainter p(&pdf);
-        if (!p.isActive()) return 0;
-        const double mm = pdf.width() / wMM;
-        const QRectF outer(8 * mm, 5 * mm, pdf.width() - 16 * mm,
-                           pdf.height() - 10 * mm);
+        // folio sides are recorded as pictures at native size, so
+        // one rendering serves both native sheets and imposition.
+        // QPicture replay rescales by the device-DPI ratio, so the
+        // recording must use the picture's OWN logical DPI — not
+        // the PDF's — for true physical size on replay.
+        QPicture probe;
+        const double mm = probe.logicalDpiX() / 25.4;
+        const double W = o.wMM * mm, H = o.hMM * mm;
+        const QRectF outer(8 * mm, 5 * mm, W - 16 * mm,
+                           H - 10 * mm);
         const QRectF inner = outer.adjusted(1.6 * mm, 1.6 * mm,
                                             -1.6 * mm, -1.6 * mm);
         const QRectF textR = inner.adjusted(7 * mm, 2.5 * mm,
                                             -7 * mm, -2.5 * mm);
-        const double lineH = textR.height() / linesPerSide;
-        QFont tf(family.isEmpty() ? QString("Noto Serif Tibetan")
-                                  : family);
+        const double lineH = textR.height() / o.lines;
+        const double rw = o.ruleWeight == 0   ? 0.6
+                          : o.ruleWeight == 2 ? 1.6
+                                              : 1.0;
+        QFont tf(o.family.isEmpty() ? QString("Noto Serif Tibetan")
+                                    : o.family);
         tf.setPixelSize(int(lineH * 0.52));
         QFont pf = QFont();
         pf.setPixelSize(int(lineH * 0.30));
+        QFont ef("Times New Roman");
+        ef.setItalic(true);
+        ef.setPixelSize(int(lineH * 0.30));
+
+        const QString yaYig = tibetanizeField(o.marginTitle);
+        const QString vol = tibetanizeField(o.volLetter);
+        QList<QPicture> sidePics;
+        QPicture pic;
+        QPainter p;
         int folio = 1;
         bool sideA = true;
-        int sides = 0;
-        double y = textR.top();
+        double y = 0;
         auto drawChrome = [&] {
-            p.setPen(QPen(Qt::black, 0.45 * mm));
+            p.setPen(QPen(Qt::black, 0.45 * mm * rw));
             p.drawRect(outer);
-            p.setPen(QPen(Qt::black, 0.18 * mm));
+            p.setPen(QPen(Qt::black, 0.18 * mm * rw));
             p.drawRect(inner);
             if (sideA) {
                 p.save();
@@ -4079,25 +4189,65 @@ public:
                             outer.center().y());
                 p.rotate(-90);
                 QFont ff(tf);
-                ff.setPixelSize(int(lineH * 0.34));
+                ff.setPixelSize(int(lineH * 0.50));
                 p.setFont(ff);
+                p.setPen(Qt::black);
                 p.drawText(QRectF(-outer.height() / 2, -3 * mm,
                                   outer.height(), 6 * mm),
                            Qt::AlignCenter, tibDigits(folio));
+                // traditional recto margin furniture: the ya-yig
+                // toward the top edge, the volume letter below
+                QFont mf(tf);
+                mf.setPixelSize(int(lineH * 0.38));
+                p.setFont(mf);
+                if (!yaYig.isEmpty())
+                    p.drawText(
+                        QRectF(8 * mm, -3 * mm,
+                               outer.height() / 2 - 12 * mm,
+                               6 * mm),
+                        Qt::AlignVCenter | Qt::AlignLeft, yaYig);
+                if (!vol.isEmpty())
+                    p.drawText(
+                        QRectF(-outer.height() / 2 + 4 * mm,
+                               -3 * mm,
+                               outer.height() / 2 - 12 * mm,
+                               6 * mm),
+                        Qt::AlignVCenter | Qt::AlignRight, vol);
                 p.restore();
             }
         };
-        auto newSide = [&] {
-            if (sides) {
-                pdf.newPage();
-                sideA = !sideA;
-                if (sideA) ++folio;
-            }
-            ++sides;
+        auto beginSide = [&] {
+            pic = QPicture();
+            p.begin(&pic);
             drawChrome();
             y = textR.top();
         };
-        newSide();
+        auto endSide = [&] {
+            p.end();
+            sidePics.append(pic);
+        };
+        auto newSide = [&] {
+            endSide();
+            sideA = !sideA;
+            if (sideA) ++folio;
+            beginSide();
+        };
+        beginSide();
+        // ornamental title folio (1a) — the text begins on 1b
+        const QString tTitle = tibetanizeField(o.title);
+        if (o.titleFolio && !tTitle.isEmpty()) {
+            p.setPen(QPen(Qt::black, 0.18 * mm * rw));
+            const QRectF deco = textR.adjusted(6 * mm, 1.2 * mm,
+                                               -6 * mm, -1.2 * mm);
+            p.drawRect(deco);
+            p.drawRect(deco.adjusted(0.9 * mm, 0.9 * mm, -0.9 * mm,
+                                     -0.9 * mm));
+            QFont bigf(tf);
+            bigf.setPixelSize(int(textR.height() * 0.28));
+            p.setFont(bigf);
+            p.drawText(deco, Qt::AlignCenter, yigMgo + tTitle);
+            newSide();
+        }
         auto flow = [&](const QString& t, const QFont& f,
                         double advance, const QColor& col) {
             QTextLayout tl(t, f);
@@ -4105,8 +4255,6 @@ public:
             to.setWrapMode(QTextOption::WrapAtWordBoundaryOrAnywhere);
             tl.setTextOption(to);
             tl.beginLayout();
-            p.setPen(col);
-            p.setFont(f);
             while (true) {
                 QTextLine line = tl.createLine();
                 if (!line.isValid()) break;
@@ -4114,22 +4262,46 @@ public:
                 line.setPosition(QPointF(0, 0));
                 if (y + advance > textR.bottom() + 0.5) newSide();
                 p.setPen(col);
+                p.setFont(f);
                 line.draw(&p, QPointF(textR.left(), y));
                 y += advance;
             }
             tl.endLayout();
         };
-        if (!interlinear) {
-            flow(text, tf, lineH, Qt::black);
+        // English appears ONLY when the corpus holds this exact
+        // segment — matched from published translation, never
+        // composed (rule 1)
+        auto attestedEnglish = [&](const QString& wy) -> QString {
+            auto norm = [](QString s) {
+                s = s.toLower();
+                static const QRegularExpression junk(
+                    "[^a-z0-9'+.-]+");
+                s.replace(junk, " ");
+                return s.simplified();
+            };
+            const QString key = norm(wy);
+            if (key.isEmpty()) return QString();
+            auto segs = spine_.corpusSearch(
+                '"' + key.toStdString() + '"', "", 3);
+            for (const auto& s : segs)
+                if (!s.english.empty() &&
+                    norm(QString::fromStdString(s.wylie)) == key)
+                    return QString::fromStdString(s.english);
+            return QString();
+        };
+        if (!o.interPhon && !o.interEng) {
+            flow((o.headMarks ? yigMgo : QString()) + text, tf,
+                 lineH, Qt::black);
         } else {
-            // per barrier group: Tibetan line(s), then the GMR
-            // phonetics beneath, both through the proven engines
+            // per barrier group: Tibetan, then phonetics and/or
+            // corpus-attested English beneath, engines throughout
             const std::string raw =
                 input_->toPlainText().toStdString();
             std::vector<std::string> toks;
             std::vector<bool> bars;
             allcore::tokenizeDocument(raw, toks, bars);
             size_t g0 = 0;
+            bool firstGroup = true;
             const QString tsheg = QString::fromUtf8("་");
             while (g0 < toks.size()) {
                 size_t g1 = g0;
@@ -4146,18 +4318,102 @@ public:
                     wy += QString::fromStdString(w) + " ";
                 }
                 tib += QString::fromUtf8("། ");
+                if (firstGroup && o.headMarks) tib = yigMgo + tib;
+                firstGroup = false;
                 flow(tib, tf, lineH, Qt::black);
-                const std::string pron =
-                    allcore::pronounce(wy.trimmed().toStdString());
-                if (!pron.empty())
-                    flow(QString::fromStdString(pron), pf,
-                         lineH * 0.5, QColor(0x55, 0x4A, 0x3A));
+                if (o.interPhon) {
+                    const std::string pron = allcore::pronounce(
+                        wy.trimmed().toStdString());
+                    if (!pron.empty())
+                        flow(QString::fromStdString(pron), pf,
+                             lineH * 0.5, QColor(0x55, 0x4A, 0x3A));
+                }
+                if (o.interEng) {
+                    const QString eng =
+                        attestedEnglish(wy.trimmed());
+                    if (!eng.isEmpty())
+                        flow(eng, ef, lineH * 0.5,
+                             QColor(0x2A, 0x45, 0x63));
+                }
                 y += lineH * 0.15;
                 g0 = g1;
             }
         }
-        p.end();
-        return sides;
+        endSide();
+        if (sidePics.isEmpty()) return 0;
+
+        // output: native sheets, or two-up imposition with cut
+        // marks for office printers
+        QPdfWriter pdf(fn);
+        pdf.setResolution(300);
+        if (o.layout == 0) {
+            pdf.setPageSize(QPageSize(QSizeF(o.wMM, o.hMM),
+                                      QPageSize::Millimeter,
+                                      "pecha"));
+            pdf.setPageMargins(QMarginsF(0, 0, 0, 0));
+            QPainter out(&pdf);
+            if (!out.isActive()) return 0;
+            for (int i = 0; i < sidePics.size(); ++i) {
+                if (i) pdf.newPage();
+                out.drawPicture(0, 0, sidePics[i]);
+            }
+            out.end();
+        } else {
+            const QSizeF pg = o.layout == 1
+                                  ? QSizeF(297, 210)
+                                  : QSizeF(279.4, 215.9);
+            pdf.setPageSize(QPageSize(pg, QPageSize::Millimeter,
+                                      "pecha imposition"));
+            pdf.setPageMargins(QMarginsF(0, 0, 0, 0));
+            QPainter out(&pdf);
+            if (!out.isActive()) return 0;
+            const double omm = pdf.width() / pg.width();
+            // dimensionless shrink so two sides + margins fit
+            const double s =
+                qMin(1.0, qMin((pg.width() - 24.0) / o.wMM,
+                               (pg.height() - 24.0) /
+                                   (2 * o.hMM)));
+            const double sw = o.wMM * s * omm;
+            const double sh = o.hMM * s * omm;
+            const double x0 = (pdf.width() - sw) / 2;
+            const double gap = (pdf.height() - 2 * sh) / 3.0;
+            QFont lf;
+            lf.setPixelSize(int(3 * omm));
+            for (int i = 0; i < sidePics.size(); ++i) {
+                const int slot = i % 2;
+                if (i && !slot) pdf.newPage();
+                const double x1 = x0 + sw;
+                const double y0 = gap + slot * (sh + gap);
+                const double y1 = y0 + sh;
+                out.setPen(QPen(Qt::black, 0.15 * omm));
+                const double t0 = 2 * omm, t1 = 6 * omm;
+                auto tick = [&](double x, double yy, int dx,
+                                int dy) {
+                    out.drawLine(QPointF(x + dx * t0, yy),
+                                 QPointF(x + dx * t1, yy));
+                    out.drawLine(QPointF(x, yy + dy * t0),
+                                 QPointF(x, yy + dy * t1));
+                };
+                tick(x0, y0, -1, -1);
+                tick(x1, y0, +1, -1);
+                tick(x0, y1, -1, +1);
+                tick(x1, y1, +1, +1);
+                out.save();
+                out.translate(x0, y0);
+                out.scale(s, s);
+                out.drawPicture(0, 0, sidePics[i]);
+                out.restore();
+                out.setFont(lf);
+                out.setPen(QColor(0x99, 0x99, 0x99));
+                out.drawText(
+                    QPointF(x0, y1 + 4.5 * omm),
+                    QString("side %1 of %2 — cut on the marks")
+                        .arg(i + 1)
+                        .arg(sidePics.size()));
+            }
+            out.end();
+        }
+        return sidePics.size();
     }
 
     QString pechaExport() {
@@ -4168,6 +4424,7 @@ public:
                 "made from the Document box.");
             return QString();
         }
+        QSettings st("ALL", "TranslationTool");
         QDialog dlg(this);
         dlg.setWindowTitle("Make pecha (PDF)");
         auto* v = new QVBoxLayout(&dlg);
@@ -4175,21 +4432,133 @@ public:
         preset->addItems({"Traditional pecha (42 × 9 cm)",
                           "Wide pecha (45 × 10 cm)",
                           "A4 landscape"});
+        preset->setCurrentIndex(
+            qBound(0, st.value("pecha/preset", 0).toInt(), 2));
         auto* lines = new QSpinBox;
         lines->setRange(5, 9);
-        lines->setValue(7);
+        lines->setValue(
+            qBound(5, st.value("pecha/lines", 7).toInt(), 9));
+        auto* rulesC = new QComboBox;
+        rulesC->addItems(
+            {"Fine rules", "Classic rules", "Bold rules"});
+        rulesC->setToolTip(
+            "Frame-line weight — the page furniture. Classic "
+            "matches common woodblock prints; Fine suits small "
+            "personal copies; Bold suits large-format sheets.");
+        rulesC->setCurrentIndex(
+            qBound(0, st.value("pecha/rules", 1).toInt(), 2));
+        auto* layoutC = new QComboBox;
+        layoutC->addItems(
+            {"Native folio sheets (print shop / cutter)",
+             "Two-up on A4 with cut marks (office printer)",
+             "Two-up on US Letter with cut marks"});
+        layoutC->setToolTip(
+            "Native writes each folio side at true size for a "
+            "print shop. Two-up scales two sides onto one office "
+            "sheet, with corner cut marks to trim on.");
+        layoutC->setCurrentIndex(
+            qBound(0, st.value("pecha/layout", 0).toInt(), 2));
+        auto* titleE =
+            new QLineEdit(st.value("pecha/title").toString());
+        titleE->setPlaceholderText(
+            "title for the ornamental first folio — wylie or "
+            "Tibetan (e.g. byang chub lam gyi rim pa)");
+        auto* titleFolio = new QCheckBox(
+            "ornamental title folio (1a) — the text begins on 1b");
+        titleFolio->setChecked(
+            st.value("pecha/titleFolio", false).toBool());
+        auto* marginT =
+            new QLineEdit(st.value("pecha/marginTitle").toString());
+        marginT->setPlaceholderText(
+            "margin title (ya-yig) — short title on every recto");
+        auto* volL =
+            new QLineEdit(st.value("pecha/volLetter").toString());
+        volL->setPlaceholderText("volume letter (ka, kha, …)");
+        volL->setMaximumWidth(170);
+        auto* heads = new QCheckBox(
+            QString::fromUtf8("head mark ༄༅། ། at the head of the "
+                              "text (yig mgo)"));
+        heads->setChecked(
+            st.value("pecha/headMarks", true).toBool());
         auto* inter = new QCheckBox(
             "phonetics line under each segment (GMR convention)");
+        inter->setChecked(
+            st.value("pecha/interPhon", false).toBool());
+        auto* interE = new QCheckBox(
+            "English line where the corpus attests the exact "
+            "segment — matched, never composed");
+        interE->setToolTip(
+            "The English under a segment appears only when that "
+            "whole segment exists in the aligned corpus of "
+            "published translations. Segments without an attested "
+            "parallel show no English at all — nothing is ever "
+            "machine-composed.");
+        interE->setChecked(
+            st.value("pecha/interEng", false).toBool());
         auto* row1 = new QHBoxLayout;
         row1->addWidget(new QLabel("page"));
         row1->addWidget(preset, 1);
         auto* row2 = new QHBoxLayout;
         row2->addWidget(new QLabel("lines per side"));
         row2->addWidget(lines);
-        row2->addStretch();
+        row2->addSpacing(12);
+        row2->addWidget(rulesC, 1);
+        auto* row3 = new QHBoxLayout;
+        row3->addWidget(new QLabel("print layout"));
+        row3->addWidget(layoutC, 1);
+        auto* row4 = new QHBoxLayout;
+        row4->addWidget(marginT, 1);
+        row4->addWidget(volL);
         v->addLayout(row1);
         v->addLayout(row2);
+        v->addLayout(row3);
+        v->addWidget(titleE);
+        v->addWidget(titleFolio);
+        v->addLayout(row4);
+        v->addWidget(heads);
         v->addWidget(inter);
+        v->addWidget(interE);
+        auto buildOpts = [&]() {
+            PechaOpts o;
+            if (preset->currentIndex() == 1) {
+                o.wMM = 450;
+                o.hMM = 100;
+            }
+            if (preset->currentIndex() == 2) {
+                o.wMM = 297;
+                o.hMM = 210;
+            }
+            o.lines = lines->value();
+            o.interPhon = inter->isChecked();
+            o.interEng = interE->isChecked();
+            o.family =
+                tibFont_ && tibFont_->currentText() != "system"
+                    ? tibFont_->currentText()
+                    : QString("Noto Serif Tibetan");
+            o.title = titleE->text();
+            o.titleFolio = titleFolio->isChecked();
+            o.marginTitle = marginT->text();
+            o.volLetter = volL->text();
+            o.headMarks = heads->isChecked();
+            o.ruleWeight = rulesC->currentIndex();
+            o.layout = layoutC->currentIndex();
+            return o;
+        };
+        auto persist = [&] {
+            QSettings s2("ALL", "TranslationTool");
+            s2.setValue("pecha/preset", preset->currentIndex());
+            s2.setValue("pecha/lines", lines->value());
+            s2.setValue("pecha/rules", rulesC->currentIndex());
+            s2.setValue("pecha/layout", layoutC->currentIndex());
+            s2.setValue("pecha/title", titleE->text());
+            s2.setValue("pecha/titleFolio",
+                        titleFolio->isChecked());
+            s2.setValue("pecha/marginTitle", marginT->text());
+            s2.setValue("pecha/volLetter", volL->text());
+            s2.setValue("pecha/headMarks", heads->isChecked());
+            s2.setValue("pecha/interPhon", inter->isChecked());
+            s2.setValue("pecha/interEng", interE->isChecked());
+        };
         auto* btnRow = new QHBoxLayout;
         auto* prev = new QPushButton("Preview…");
         prev->setToolTip(
@@ -4202,27 +4571,13 @@ public:
         btnRow->addWidget(go);
         v->addLayout(btnRow);
         connect(prev, &QPushButton::clicked,
-                [this, &dlg, preset, lines, inter] {
-                    double pw = 420, ph = 90;
-                    if (preset->currentIndex() == 1) {
-                        pw = 450;
-                        ph = 100;
-                    }
-                    if (preset->currentIndex() == 2) {
-                        pw = 297;
-                        ph = 210;
-                    }
-                    const QString fam =
-                        tibFont_ &&
-                                tibFont_->currentText() != "system"
-                            ? tibFont_->currentText()
-                            : QString("Noto Serif Tibetan");
+                [this, &dlg, &buildOpts, &persist] {
+                    persist();
                     const QString tmp = QDir::temp().filePath(
                         "all_pecha_preview.pdf");
                     QFile::remove(tmp);
-                    const int sides = pechaWritePdf(
-                        tmp, pw, ph, lines->value(),
-                        inter->isChecked(), fam);
+                    const int sides =
+                        pechaWritePdf(tmp, buildOpts());
                     if (!sides) {
                         QMessageBox::information(
                             &dlg, "Pecha preview",
@@ -4257,27 +4612,30 @@ public:
                 });
         connect(go, &QPushButton::clicked, &dlg, &QDialog::accept);
         if (dlg.exec() != QDialog::Accepted) return QString();
+        persist();
         const QString fn = QFileDialog::getSaveFileName(
             this, "Save pecha", "pecha.pdf", "PDF (*.pdf)");
         if (fn.isEmpty()) return QString();
-        double w = 420, h = 90;
-        if (preset->currentIndex() == 1) { w = 450; h = 100; }
-        if (preset->currentIndex() == 2) { w = 297; h = 210; }
-        const QString fam =
-            tibFont_ && tibFont_->currentText() != "system"
-                ? tibFont_->currentText()
-                : QString("Noto Serif Tibetan");
-        const int sides = pechaWritePdf(fn, w, h, lines->value(),
-                                        inter->isChecked(), fam);
-        return sides
-                ? QString("<b>Pecha written</b>: %1 folio side(s) "
-                          "→ %2<br><small>script through the "
-                          "battery-proven chain; failed syllables "
-                          "appear as ⟨wylie⟩, never guessed.</small>")
-                      .arg(sides)
-                      .arg(fn.toHtmlEscaped())
-                : QString("<b>Pecha failed</b> — empty document or "
-                          "unwritable file.");
+        const PechaOpts o = buildOpts();
+        const int sides = pechaWritePdf(fn, o);
+        if (!sides)
+            return QString("<b>Pecha failed</b> — empty document "
+                           "or unwritable file.");
+        QString h = QString("<b>Pecha written</b>: %1 folio "
+                            "side(s) → %2")
+                        .arg(sides)
+                        .arg(fn.toHtmlEscaped());
+        if (o.layout)
+            h += QString("<br>imposed two-up on %1 sheet(s) with "
+                         "cut marks.")
+                     .arg((sides + 1) / 2);
+        h += "<br><small>script through the battery-proven chain; "
+             "failed syllables appear as ⟨wylie⟩, never guessed";
+        if (o.interEng)
+            h += "; English lines are corpus-attested matches "
+                 "only — never composed";
+        h += ".</small>";
+        return h;
     }
 
 

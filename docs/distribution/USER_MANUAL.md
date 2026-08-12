@@ -491,21 +491,42 @@ crash-free:
 1. Load any text (Library double-click or paste) and press the
    button under FORMAT & EXPORT.
 2. Choose the page — **traditional pecha (42 × 9 cm)**, wide
-   (45 × 10 cm), or A4 landscape — and the lines per side (5–9;
-   seven is the classical look).
-3. Optionally check **phonetics line under each segment** — every
-   segment gets its pronunciation beneath it in Geshe Michael's
-   convention, through the same battery-proven engine as the cards.
-4. **Preview…** shows the whole pecha in the viewer before you
-   commit; **Make PDF…** writes it.
+   (45 × 10 cm), or A4 landscape — the lines per side (5–9; seven
+   is the classical look), and the **rule weight** (Fine, Classic,
+   Bold — the page furniture).
+3. Choose the **print layout**: native folio sheets at true size
+   for a print shop, or **two-up on A4 / US Letter with cut
+   marks** — two folio sides per office sheet, corner ticks to
+   trim on, each side labeled.
+4. Optionally give the pecha its traditional dress:
+   - **Ornamental title folio (1a)** — type the title in wylie or
+     Tibetan; it is set centered in a double ornamental frame on
+     the first side, and the text begins on 1b, as in a woodblock
+     print.
+   - **Margin title (ya-yig)** and **volume letter** — a short
+     title and the volume letter (ka, kha, …) join the folio
+     numeral in the rotated recto margin.
+   - **Head mark ༄༅། ། (yig mgo)** opens the text.
+5. Optionally check the interlinear lines:
+   - **Phonetics under each segment** — Geshe Michael's
+     convention, through the same battery-proven engine as the
+     cards.
+   - **English where the corpus attests the exact segment** — a
+     segment gets its English beneath it ONLY when that whole
+     segment exists in the aligned corpus of published
+     translations. The line is a verbatim match; nothing is ever
+     machine-composed, and unattested segments simply show no
+     English. (A selftest proves this end-to-end on every build.)
+6. **Preview…** shows the whole pecha in the viewer before you
+   commit; **Make PDF…** writes it. All options are remembered
+   for next time.
 
 Every folio side is framed with the traditional double rule and
 carries its Tibetan folio numeral, rotated on the recto margin as
 in a woodblock print. The script runs through the battery-proven
 conversion chain in your chosen typeface; any syllable the engine
 cannot convert appears as ⟨wylie⟩ — flagged, never guessed. The
-PDF prints at 300 dpi on any printer that takes custom paper
-sizes, or two-up on A4/letter for cutting.
+PDF prints at 300 dpi.
 
 ### Resuming work
 

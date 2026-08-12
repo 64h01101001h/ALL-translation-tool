@@ -244,10 +244,16 @@ in the Overlay (or Library double-click) first.
 **Use.** "Make
 pecha (PDF)…" turns the loaded document into an authentic
 long-format pecha: framed folio sides (traditional 42×9 cm, wide,
-or A4), rotated Tibetan folio numerals, your chosen typeface, and
-an optional phonetics line under each segment — a printable PDF
-through the battery-proven script chain (failures appear as
-⟨wylie⟩, never guessed). "Export
+or A4), rotated Tibetan folio numerals, an ornamental title folio
+(1a), margin title (ya-yig) + volume letter, the ༄༅། ། head mark,
+Fine/Classic/Bold rule weights, your chosen typeface, and optional
+interlinears — phonetics in Geshe Michael's convention, and
+English ONLY where the corpus attests the exact segment (matched
+verbatim from published translation, never composed). Print
+native folio sheets, or two-up on A4/US Letter with cut marks for
+an office printer. All through the battery-proven script chain
+(failures appear as ⟨wylie⟩, never guessed); options are
+remembered. "Export
 print Tibetan (Unicode)…" produces print-ready script. "Prepare for
 translation (Mixed Nuts)…" runs the demonstrated
 translation-preparation format.
