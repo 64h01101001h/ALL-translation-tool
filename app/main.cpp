@@ -199,6 +199,15 @@ static const HonorificMap* g_honorifics = nullptr;
 using IdiomMap = std::map<std::string, std::pair<QString, QString>>;
 static const IdiomMap* g_idioms = nullptr;
 
+// the ALL Working Glossary (Adam, 2026-08-12): AI-drafted glosses
+// for terms with NO HGM equivalent, synthesized only from reference
+// comparanda — its own tier, never Geshe Michael's English
+struct AiGloss {
+    QString gloss, model, date, grounded, status;
+};
+using AiGlossMap = std::map<std::string, AiGloss>;
+static const AiGlossMap* g_aiGlossary = nullptr;
+
 // teaching moments (#63, Adam-authorized 2026-08-11): normalized HGM
 // gloss -> up to 5 timecoded links to Geshe Michael's recorded
 // classes (DCC YouTube). Captions were the FINDING AID only; every
@@ -433,9 +442,35 @@ static QString entryHtml(const allcore::Entry& e,
             h += "<br>≡ " + QString::fromStdString(g).toHtmlEscaped() +
                  " &nbsp;<small>[" + tier + "]</small>";
         }
-        if (e.hgm_gloss.empty())
+        if (e.hgm_gloss.empty()) {
             h += "<br><i>(no HGM equivalent — " +
                  QString::fromStdString(e.status).toHtmlEscaped() + ")</i>";
+            // the ALL Working Glossary (Adam, 2026-08-12): an
+            // AI-drafted gloss may exist for HGM-less terms —
+            // synthesized ONLY from reference comparanda (never
+            // Geshe Michael's English), unmistakably bannered,
+            // and shown ONLY where HGM is silent
+            if (g_aiGlossary) {
+                auto it = g_aiGlossary->find(e.wylie);
+                if (it != g_aiGlossary->end()) {
+                    h += "<div style='background:#EDE9F5;"
+                         "border-left:3px solid #7A5EA8;"
+                         "padding:3px 8px;margin:3px 0;"
+                         "border-radius:4px'>"
+                         "<small style='color:#4A2A6B;"
+                         "letter-spacing:1px'>ALL WORKING GLOSSARY "
+                         "— AI-DRAFTED, PROVISIONAL · not Geshe "
+                         "Michael's English</small><br>≡ " +
+                         it->second.gloss.toHtmlEscaped() +
+                         " <small style='color:#777'>[" +
+                         it->second.model.toHtmlEscaped() + " · " +
+                         it->second.date.toHtmlEscaped() +
+                         " · from " +
+                         it->second.grounded.toHtmlEscaped() +
+                         "]</small></div>";
+                }
+            }
+        }
     }
     if (d.sanskrit && !e.sanskrit_reference.empty())
         h += "<br><small style='color:#666'>sanskrit (reference): " +
@@ -13361,6 +13396,31 @@ int main(int argc, char** argv) {
                 }
     }
     g_pronApproved = &pronApproved;
+    // the ALL Working Glossary (AI-provisional tier)
+    static AiGlossMap aiGlossary;
+    {
+        QFile f(root + "/data/ai_glossary/ai_glossary.json");
+        if (f.open(QIODevice::ReadOnly)) {
+            const auto o = QJsonDocument::fromJson(f.readAll())
+                               .object()
+                               .value("entries")
+                               .toObject();
+            for (auto it = o.begin(); it != o.end(); ++it) {
+                const auto e = it.value().toObject();
+                QStringList gr;
+                for (const auto& g :
+                     e.value("grounded_in").toArray())
+                    gr << g.toString();
+                aiGlossary[it.key().toStdString()] = AiGloss{
+                    e.value("gloss").toString(),
+                    e.value("model").toString(),
+                    e.value("date").toString(),
+                    gr.join("+"),
+                    e.value("status").toString()};
+            }
+        }
+        if (!aiGlossary.empty()) g_aiGlossary = &aiGlossary;
+    }
     // --screenshots <dir>: render every pane to PNGs and exit (demo /
     // documentation mode). Shows the Approval queue too, pointed at
     // the seeded proposals — session-only, nothing persisted.
