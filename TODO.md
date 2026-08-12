@@ -600,6 +600,14 @@ implementation is sidelined HERE from this date. What this means:
       Overlay, five reference layers, bundled font, list view,
       pending-review sheet. Refresh both .md and .docx when the dust
       settles (coordinate: phone session authored v4).
+- [x] **RELEASE 6 RETIRED (Adam, 2026-08-12)**: "we don't need to
+      rely on the ACIP release 6 files at all — the Kangyur, Tengyur,
+      and Sungbum .zip files (manually installed) are the latest
+      public releases of our database." library/acip_release6 moved
+      to Trash; dev library index rebuilt (8,986 files, 14.08M
+      lines); docs truth-passed. The harvest HISTORY below stands
+      (title pairs, author trees, subject browser — all ingested to
+      the corpus before retirement).
 - [~] **Release 6 zip — unexplored assets** (Adam's Dropbox,
       acip-release6-wylie.zip): (a) ACIP_Master_Catalog.html INSPECTED
       2026-08-07 — it is the Brief Catalog, record-identical to the

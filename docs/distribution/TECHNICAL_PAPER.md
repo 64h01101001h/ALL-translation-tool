@@ -100,9 +100,11 @@ Contents, at the current corpus release (v32):
 
 A second index, the **library index**, applies the same FTS5 schema
 (same tokenizer, per-line granularity, incremental by path/mtime/
-size) to everything under the user's `library/` folder — the 2,716
-texts of ACIP Release 6 plus the user's own materials; a full build
-indexes 8.68 million lines in about 97 seconds.
+size) to everything under the user's `library/` folder — the 8,986
+texts of the current public Kangyur, Tengyur, and Sungbum releases
+plus the user's own materials (the Release 6 wylie edition was
+retired 2026-08-12 — the collection ZIPs are the canonical public
+releases); a full build indexes 14.1 million lines in minutes.
 
 Two derived registers ride beside the spine, each rebuilt by its
 own tool with provenance recorded: the **teaching index** (n-gram

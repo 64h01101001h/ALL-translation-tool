@@ -41,7 +41,7 @@ they are the same settings in both places. Enter:
 ## Your first ten minutes
 
 1. Click the **Read** tab, then **Library** inside it. The preserved
-   canon — 2,700+ texts — is already there.
+   canon — nearly 9,000 texts of the current public releases — is already there.
 2. **Double-click any text.** It opens in the Overlay, the flagship
    reader, clean and unshaded.
 3. **Click any word.** The longest phrase the dictionary knows at

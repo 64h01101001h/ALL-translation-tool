@@ -72,8 +72,8 @@ them carrying Geshe Michael's English in tiered quality (curated,
 glossary, provisional).
 
 **Read** holds the Overlay and the Library. The Library is the
-preserved canon on your own disk — 2,716 texts and 8.68 million
-lines of the complete ACIP Release 6, browsable as a tree that
+preserved canon on your own disk — 8,986 texts and 14 million
+lines of the current public Kangyur, Tengyur, and Sungbum releases, browsable as a tree that
 decodes every catalog file name into its provenance, alongside your
 own imported materials. Double-click any text and it opens in the
 Overlay, the flagship reader. At Geshe Michael's own direction the

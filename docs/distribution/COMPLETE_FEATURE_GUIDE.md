@@ -141,8 +141,8 @@ doubts" and see what the legality layer doubts in a real input file.
 
 ### 2.2 Library — the preserved canon
 
-*Read → Library. 2,716 texts and 8.68 million lines of ACIP Release
-6, plus your own materials, on your own disk.*
+*Read → Library. 8,986 texts and 14.1 million lines of the current
+public Kangyur, Tengyur, and Sungbum releases, plus your own materials, on your own disk.*
 
 Browse the folder tree or the flat **List view** (a sortable
 catalog: every filename decoded into collection, text number,
@@ -157,8 +157,8 @@ own texts (Word documents convert automatically). **Legacy font
 rescue (UTFC)…** converts documents typed in pre-Unicode Tibetan
 fonts of the 1990s to proper Tibetan script. **Send to OCR…** routes
 a scan to the Scan pane. **Update search index** refreshes the
-full-text index the Search pane uses (a full build indexes all 8.68
-million lines in under two minutes).
+full-text index the Search pane uses (a full build indexes all 14.1
+million lines in a few minutes).
 
 ---
 

@@ -157,8 +157,8 @@ translation-preparation format.
 
 *Where: Read → Library.*
 
-**What it's for.** The preserved canon on your disk — 2,700+ texts of
-ACIP Release 6 plus your own folders.
+**What it's for.** The preserved canon on your disk — current public Kangyur,
+Tengyur, and Sungbum releases (8,986 texts) plus your own folders.
 
 **Use.** Browse the tree or the table (catalog identities decoded
 from the filenames: collection, number, verification level).

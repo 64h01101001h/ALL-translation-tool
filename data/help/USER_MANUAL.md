@@ -491,7 +491,8 @@ app reopens exactly there.
 ## Library
 
 *Where: Read → Library. The preserved canon on your own disk —
-2,716 texts and 8.68 million lines of ACIP Release 6, plus your
+8,986 texts and 14.1 million lines of the current public
+Kangyur, Tengyur, and Sungbum releases, plus your
 own materials.*
 
 ### The layout
@@ -608,7 +609,7 @@ abandons cleanly.
 - **Update search index** — refreshes the full-text index that
   Research → Search's "search the Library" uses. The report counts
   files added / updated / removed / unchanged; a full build
-  indexes all 8.68 million lines in under two minutes, and after
+  indexes all 14.1 million lines in under two minutes, and after
   it the Search pane answers from the index instantly.
 
 
@@ -1091,11 +1092,11 @@ saved search. Saved searches persist across restarts.
 Two more reaches, both in the Search Setting tab's source list:
 
 - **The library folder row** (checked by default) searches your
-  installed Library (the 2,700+ texts of ACIP Release 6). The
+  installed Library (the current public collection releases (8,986 texts)). The
   Library carries a prebuilt full-text index, so answers come back
   instantly instead of file-crawling; after you install new texts,
   refresh the index with **Read → Library → Update search index**
-  (a full rebuild of all 8.68 million lines takes under two
+  (a full rebuild of all 14.1 million lines takes under two
   minutes).
 - **This Mac (Spotlight)** — an opt-in source row — extends the
   hunt to everything on the machine: every text, PDF, and Word
