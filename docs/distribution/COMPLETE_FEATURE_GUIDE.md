@@ -274,10 +274,11 @@ Duplicate** manage the folder list exactly as the original Gofer
 did, and it persists. **Find** runs the search (**Stop** interrupts);
 results land in the Search Results tab with hits per target.
 **Save** stores the whole search by name in the Saved Search tab —
-double-click to reload. **search the Library** uses the prebuilt
-index for instant folder answers; **Search this Mac (Spotlight)**
-extends the hunt to everything on the machine, searching as typed
-*and* as Tibetan script through the proven converters.
+double-click to reload. The library folder row uses the prebuilt
+index for instant answers; the opt-in **This Mac (Spotlight)**
+source row extends the hunt to everything on the machine,
+searching each term as typed *and* as Tibetan script through the
+proven converters — results open in their own application.
 
 *Try this now:* terms `sdug bsngal` and `bden pa`, combiner NEAR,
 proximity 5, target the corpus → Find. His English arrives beside
@@ -604,10 +605,19 @@ item carries who approved it and when; every mined fact carries its
 source and page. The app imports versioned data releases and never
 edits them.
 
-**Troubleshooting.** Run `--selftest` from Terminal (89 checks,
-localizing any problem). The menu bar reaches every function if a
-pane misbehaves; switching tabs and back re-renders. The Help
-window's search finds any control by name and shows where it lives.
+**Troubleshooting.** Help → Troubleshooting holds the whole kit:
+Show Logs / Show Data Folder in Finder, Copy Installation Info,
+**Generate Diagnostic Report…** (a full health report written to
+the Desktop — attach it to any bug report), **Report a Problem…**
+(a pre-addressed email with the template filled in), **Storage…**
+(cache sizes with safe clears), Verbose Logging, and Reset
+Settings…. From Terminal, `--selftest` runs 96 checks localizing
+any problem, and `--sweep <Pane>` click-tests every control on a
+pane. The menu bar reaches every function if a pane misbehaves.
+The Help window opens onto a browse list of every chapter and
+every control in the app — and the complete **User Manual** lives
+there too (Help → User Manual…), every pane, every control, click
+by click.
 
 ---
 
