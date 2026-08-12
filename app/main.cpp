@@ -6,6 +6,8 @@
 #include <QCollator>
 #include <QElapsedTimer>
 #include <QEventLoop>
+#include <QPdfWriter>
+#include <QPageSize>
 #include <QClipboard>
 #include <QStorageInfo>
 #include <QHBoxLayout>
@@ -210,6 +212,14 @@ struct AiGloss {
 };
 using AiGlossMap = std::map<std::string, AiGloss>;
 static const AiGlossMap* g_aiGlossary = nullptr;
+
+// the 84000 glossary layer (CC BY 4.0 per 84000's own Terms of Use
+// table; data/84000/README.md) — reference only, never HGM
+struct G84000 {
+    QStringList glosses, defs, skts;
+};
+using G84000Map = std::map<std::string, G84000>;
+static const G84000Map* g_84000 = nullptr;
 
 // teaching moments (#63, Adam-authorized 2026-08-11): normalized HGM
 // gloss -> up to 5 timecoded links to Geshe Michael's recorded
@@ -520,6 +530,43 @@ static QString entryHtml(const allcore::Entry& e,
         h += "<br><small style='color:#666'>Hopkins (reference only): " +
              QString::fromStdString(e.hopkins_reference).left(200).toHtmlEscaped() +
              "</small>";
+    if (d.hopkins && g_84000) {
+        auto it = g_84000->find(e.wylie);
+        if (it != g_84000->end()) {
+            const G84000& g = it->second;
+            QString b = "<div style='background:#E8F1EE;"
+                        "border-left:3px solid #2E7D66;"
+                        "padding:3px 8px;margin:3px 0;"
+                        "border-radius:4px'><small style="
+                        "'color:#1E5748;letter-spacing:1px'>"
+                        "84000 GLOSSARY (CC BY 4.0) — reference "
+                        "only</small>";
+            for (const QString& x : g.glosses)
+                b += "<br>≡ " + x.toHtmlEscaped();
+            for (QString x : g.defs) {
+                // keep the entity link to 84000, clickable
+                static const QRegularExpression lk(
+                    "\(Original glossary entry: (https[^)\s]+)\)");
+                const auto m = lk.match(x);
+                QString url;
+                if (m.hasMatch()) {
+                    url = m.captured(1);
+                    x.remove(m.captured(0));
+                }
+                b += "<br><small>" +
+                     x.trimmed().left(400).toHtmlEscaped() +
+                     (url.isEmpty()
+                          ? QString()
+                          : " <a href='" + url + "'>[84000]</a>") +
+                     "</small>";
+            }
+            for (const QString& x : g.skts)
+                b += "<br><small style='color:#666'>sanskrit: " +
+                     x.left(160).toHtmlEscaped() + "</small>";
+            b += "</div>";
+            h += b;
+        }
+    }
     h += "</div>";
     return h;
 }
@@ -1307,6 +1354,40 @@ public:
             g_pronApproved = saved;
             scriptMode_->setCurrentIndex(0);
         }
+        // the 84000 glossary layer answers a canonical term
+        {
+            bool ok = g_84000 != nullptr;
+            if (ok) {
+                auto it = g_84000->find("byang chub sems dpa'");
+                ok = it != g_84000->end() &&
+                     !it->second.glosses.isEmpty();
+            }
+            check(ok, "84000 glossary layer loaded (CC BY, "
+                      "bodhisattva present)");
+        }
+        // the Pecha Maker writes real folio sides
+        {
+            input_->setPlainText(
+                "SEMS CAN THAMS CAD BDE BA DANG LDAN PAR GYUR "
+                "CIG, SDUG BSNGAL DANG BRAL BAR GYUR CIG, "
+                "SANGS RGYAS KYI BSTAN PA DAR ZHING RGYAS PAR "
+                "GYUR CIG,");
+            const QString tmp =
+                QDir::temp().filePath("all_selftest_pecha.pdf");
+            QFile::remove(tmp);
+            const int sides =
+                pechaWritePdf(tmp, 420, 90, 7, true,
+                              "Noto Serif Tibetan");
+            QFile pf(tmp);
+            bool ok = sides >= 1 && pf.open(QIODevice::ReadOnly);
+            if (ok) {
+                const QByteArray head = pf.read(5);
+                ok = head.startsWith("%PDF") &&
+                     pf.size() > 2000;
+            }
+            check(ok, "Pecha maker writes a framed folio PDF "
+                      "(interlinear)");
+        }
         // wylie source files show as ACIP in the Document box
         // (Adam's finding: the Release 6 wylie edition rendered
         // lowercase in a box labeled ACIP)
@@ -2034,6 +2115,15 @@ auto* secFmt = new QLabel("<span style='color:#9A7A33;font-size:10px;letter-spac
                     .arg(prep.paragraphs)
                     .arg(prep.notes.size()));
         });
+        auto* pechaBtn = new QPushButton("Make pecha (PDF)…");
+        pechaBtn->setToolTip(
+            "The loaded document as an authentic long-format pecha: "
+            "framed folio sides, Tibetan folio numerals, your chosen "
+            "typeface, optional phonetics interlinear — a printable "
+            "PDF through the battery-proven script chain.");
+        ll->addWidget(pechaBtn);
+        connect(pechaBtn, &QPushButton::clicked,
+                [this] { pechaExport(); });
         auto* exportBtn = new QPushButton("Export print Tibetan (Unicode)…");
         ll->addWidget(exportBtn);
         connect(exportBtn, &QPushButton::clicked, [this] {
@@ -3933,6 +4023,207 @@ private:
                              drawBand(r);
                          });
         dlg->show();
+    }
+
+    // ---- the Pecha Maker (Adam, 2026-08-12 — the TibetDoc
+    // workflow, rebuilt native): the loaded document as an
+    // authentic long-format pecha PDF — framed folio sides,
+    // rotated Tibetan folio numerals, the battery-proven script
+    // chain, optional GMR-phonetics interlinear. Returns folio
+    // sides written (0 = failed).
+    static QString tibDigits(int n) {
+        QString s = QString::number(n), out;
+        for (QChar c : s)
+            out += QChar(0x0F20 + (c.unicode() - '0'));
+        return out;
+    }
+
+    int pechaWritePdf(const QString& fn, double wMM, double hMM,
+                      int linesPerSide, bool interlinear,
+                      const QString& family) {
+        const std::string src = input_->toPlainText().toStdString();
+        if (src.empty()) return 0;
+        auto res = allcore::exportTibetanUnicode(src);
+        QString text = QString::fromStdString(res.unicode);
+        // pecha reflows: markers out, breaks become spaces
+        static const QRegularExpression marker("@\S+");
+        text.replace(marker, " ");
+        text.replace('\n', ' ');
+        text = text.simplified();
+        if (text.isEmpty()) return 0;
+
+        QPdfWriter pdf(fn);
+        pdf.setPageSize(QPageSize(QSizeF(wMM, hMM),
+                                  QPageSize::Millimeter, "pecha"));
+        pdf.setPageMargins(QMarginsF(0, 0, 0, 0));
+        pdf.setResolution(300);
+        QPainter p(&pdf);
+        if (!p.isActive()) return 0;
+        const double mm = pdf.width() / wMM;
+        const QRectF outer(8 * mm, 5 * mm, pdf.width() - 16 * mm,
+                           pdf.height() - 10 * mm);
+        const QRectF inner = outer.adjusted(1.6 * mm, 1.6 * mm,
+                                            -1.6 * mm, -1.6 * mm);
+        const QRectF textR = inner.adjusted(7 * mm, 2.5 * mm,
+                                            -7 * mm, -2.5 * mm);
+        const double lineH = textR.height() / linesPerSide;
+        QFont tf(family.isEmpty() ? QString("Noto Serif Tibetan")
+                                  : family);
+        tf.setPixelSize(int(lineH * 0.52));
+        QFont pf = QFont();
+        pf.setPixelSize(int(lineH * 0.30));
+        int folio = 1;
+        bool sideA = true;
+        int sides = 0;
+        double y = textR.top();
+        auto drawChrome = [&] {
+            p.setPen(QPen(Qt::black, 0.45 * mm));
+            p.drawRect(outer);
+            p.setPen(QPen(Qt::black, 0.18 * mm));
+            p.drawRect(inner);
+            if (sideA) {
+                p.save();
+                p.translate(outer.left() + 4.2 * mm,
+                            outer.center().y());
+                p.rotate(-90);
+                QFont ff(tf);
+                ff.setPixelSize(int(lineH * 0.34));
+                p.setFont(ff);
+                p.drawText(QRectF(-outer.height() / 2, -3 * mm,
+                                  outer.height(), 6 * mm),
+                           Qt::AlignCenter, tibDigits(folio));
+                p.restore();
+            }
+        };
+        auto newSide = [&] {
+            if (sides) {
+                pdf.newPage();
+                sideA = !sideA;
+                if (sideA) ++folio;
+            }
+            ++sides;
+            drawChrome();
+            y = textR.top();
+        };
+        newSide();
+        auto flow = [&](const QString& t, const QFont& f,
+                        double advance, const QColor& col) {
+            QTextLayout tl(t, f);
+            QTextOption to;
+            to.setWrapMode(QTextOption::WrapAtWordBoundaryOrAnywhere);
+            tl.setTextOption(to);
+            tl.beginLayout();
+            p.setPen(col);
+            p.setFont(f);
+            while (true) {
+                QTextLine line = tl.createLine();
+                if (!line.isValid()) break;
+                line.setLineWidth(textR.width());
+                line.setPosition(QPointF(0, 0));
+                if (y + advance > textR.bottom() + 0.5) newSide();
+                p.setPen(col);
+                line.draw(&p, QPointF(textR.left(), y));
+                y += advance;
+            }
+            tl.endLayout();
+        };
+        if (!interlinear) {
+            flow(text, tf, lineH, Qt::black);
+        } else {
+            // per barrier group: Tibetan line(s), then the GMR
+            // phonetics beneath, both through the proven engines
+            const std::string raw =
+                input_->toPlainText().toStdString();
+            std::vector<std::string> toks;
+            std::vector<bool> bars;
+            allcore::tokenizeDocument(raw, toks, bars);
+            size_t g0 = 0;
+            const QString tsheg = QString::fromUtf8("་");
+            while (g0 < toks.size()) {
+                size_t g1 = g0;
+                while (g1 + 1 < toks.size() && !bars[g1]) ++g1;
+                ++g1;
+                QString tib, wy;
+                for (size_t t = g0; t < g1; ++t) {
+                    const std::string w =
+                        allcore::tokenToEwts(toks[t]);
+                    auto [u, ok] = allcore::wylieToUnicode(w);
+                    tib += (ok ? QString::fromStdString(u)
+                               : QString::fromStdString(toks[t])) +
+                           tsheg;
+                    wy += QString::fromStdString(w) + " ";
+                }
+                tib += QString::fromUtf8("། ");
+                flow(tib, tf, lineH, Qt::black);
+                const std::string pron =
+                    allcore::pronounce(wy.trimmed().toStdString());
+                if (!pron.empty())
+                    flow(QString::fromStdString(pron), pf,
+                         lineH * 0.5, QColor(0x55, 0x4A, 0x3A));
+                y += lineH * 0.15;
+                g0 = g1;
+            }
+        }
+        p.end();
+        return sides;
+    }
+
+    void pechaExport() {
+        if (input_->toPlainText().trimmed().isEmpty()) {
+            QMessageBox::information(
+                this, "Pecha maker",
+                "Load or paste a document first — the pecha is "
+                "made from the Document box.");
+            return;
+        }
+        QDialog dlg(this);
+        dlg.setWindowTitle("Make pecha (PDF)");
+        auto* v = new QVBoxLayout(&dlg);
+        auto* preset = new QComboBox;
+        preset->addItems({"Traditional pecha (42 × 9 cm)",
+                          "Wide pecha (45 × 10 cm)",
+                          "A4 landscape"});
+        auto* lines = new QSpinBox;
+        lines->setRange(5, 9);
+        lines->setValue(7);
+        auto* inter = new QCheckBox(
+            "phonetics line under each segment (GMR convention)");
+        auto* row1 = new QHBoxLayout;
+        row1->addWidget(new QLabel("page"));
+        row1->addWidget(preset, 1);
+        auto* row2 = new QHBoxLayout;
+        row2->addWidget(new QLabel("lines per side"));
+        row2->addWidget(lines);
+        row2->addStretch();
+        v->addLayout(row1);
+        v->addLayout(row2);
+        v->addWidget(inter);
+        auto* go = new QPushButton("Make PDF…");
+        v->addWidget(go);
+        connect(go, &QPushButton::clicked, &dlg, &QDialog::accept);
+        if (dlg.exec() != QDialog::Accepted) return;
+        const QString fn = QFileDialog::getSaveFileName(
+            this, "Save pecha", "pecha.pdf", "PDF (*.pdf)");
+        if (fn.isEmpty()) return;
+        double w = 420, h = 90;
+        if (preset->currentIndex() == 1) { w = 450; h = 100; }
+        if (preset->currentIndex() == 2) { w = 297; h = 210; }
+        const QString fam =
+            tibFont_ && tibFont_->currentText() != "system"
+                ? tibFont_->currentText()
+                : QString("Noto Serif Tibetan");
+        const int sides = pechaWritePdf(fn, w, h, lines->value(),
+                                        inter->isChecked(), fam);
+        context_->setHtml(
+            sides
+                ? QString("<b>Pecha written</b>: %1 folio side(s) "
+                          "→ %2<br><small>script through the "
+                          "battery-proven chain; failed syllables "
+                          "appear as ⟨wylie⟩, never guessed.</small>")
+                      .arg(sides)
+                      .arg(fn.toHtmlEscaped())
+                : QString("<b>Pecha failed</b> — empty document or "
+                          "unwritable file."));
     }
 
     void stepFolio(int d) {
@@ -13484,6 +13775,29 @@ int main(int argc, char** argv) {
             }
         }
         if (!aiGlossary.empty()) g_aiGlossary = &aiGlossary;
+    }
+    // the 84000 glossary layer (CC BY 4.0; data/84000/README.md)
+    static G84000Map g84000;
+    {
+        QFile f(root + "/data/84000/g84000.json");
+        if (f.open(QIODevice::ReadOnly)) {
+            const auto o = QJsonDocument::fromJson(f.readAll())
+                               .object()
+                               .value("entries")
+                               .toObject();
+            for (auto it = o.begin(); it != o.end(); ++it) {
+                const auto e = it.value().toObject();
+                G84000 g;
+                for (const auto& v : e.value("g").toArray())
+                    g.glosses << v.toString();
+                for (const auto& v : e.value("d").toArray())
+                    g.defs << v.toString();
+                for (const auto& v : e.value("k").toArray())
+                    g.skts << v.toString();
+                g84000[it.key().toStdString()] = g;
+            }
+        }
+        if (!g84000.empty()) g_84000 = &g84000;
     }
     // --screenshots <dir>: render every pane to PNGs and exit (demo /
     // documentation mode). Shows the Approval queue too, pointed at
