@@ -16,6 +16,7 @@
 #include <QShortcut>
 #include <QKeyEvent>
 #include <QStringListModel>
+#include <QCompleter>
 #include <QTextStream>
 #include <QLabel>
 #include <QLineEdit>
@@ -9682,8 +9683,9 @@ private:
 
 class InputPane : public QWidget {
 public:
-    InputPane(allcore::SyllableChecker* checker, const QString& root)
-        : checker_(checker), root_(root) {
+    InputPane(allcore::SyllableChecker* checker, const QString& root,
+              const allcore::Spine* spine = nullptr)
+        : checker_(checker), root_(root), spine_(spine) {
         auto* outer = new QVBoxLayout(this);
         auto* banner = new QLabel(
             "<b>Input (type from scan)</b> — the input-center workflow "
@@ -9712,6 +9714,22 @@ public:
         row->addWidget(prevPageB_);
         row->addWidget(pageLbl_);
         row->addWidget(nextPageB_);
+        predictToggle_ = new QCheckBox("Predictive typing");
+        predictToggle_->setToolTip(
+            "Complete the syllable or word you are typing from the "
+            "dictionary's own ACIP headwords — a deterministic "
+            "inventory, nothing invented. Tab or Enter accepts, "
+            "Escape dismisses. Saves keystrokes on every syllable.");
+        predictToggle_->setChecked(
+            QSettings("ALL", "TranslationTool")
+                .value("input/predict", false)
+                .toBool());
+        connect(predictToggle_, &QCheckBox::toggled, [this](bool on) {
+            QSettings("ALL", "TranslationTool")
+                .setValue("input/predict", on);
+            if (on) buildPredict();
+        });
+        row->addWidget(predictToggle_);
         connect(openFolderB, &QPushButton::clicked,
                 [this] { openFolder(); });
         connect(prevPageB_, &QPushButton::clicked,
@@ -9776,6 +9794,26 @@ public:
             "Type the ACIP transliteration here, one line per woodblock "
             "line…");
         split->addWidget(editor_);
+        // predictive ACIP typing (Adam's wow round #13): the current
+        // token completes from the dictionary's own ACIP headwords —
+        // deterministic inventory, keystrokes saved on every syllable.
+        // Opt-in, persisted; Tab/Enter accepts, Escape dismisses.
+        comp_ = new QCompleter(this);
+        compModel_ = new QStringListModel(comp_);
+        comp_->setModel(compModel_);
+        comp_->setWidget(editor_);
+        comp_->setCompletionMode(QCompleter::PopupCompletion);
+        comp_->setCaseSensitivity(Qt::CaseSensitive);
+        comp_->setMaxVisibleItems(8);
+        connect(comp_, QOverload<const QString&>::of(
+                           &QCompleter::activated),
+                [this](const QString& full) {
+                    QTextCursor c = editor_->textCursor();
+                    const int n = comp_->completionPrefix().size();
+                    c.movePosition(QTextCursor::Left,
+                                   QTextCursor::KeepAnchor, n);
+                    c.insertText(full + " ");
+                });
         split->setStretchFactor(0, 7);
         split->setStretchFactor(1, 3);
         outer->addWidget(split, 1);
@@ -9790,7 +9828,55 @@ public:
         connect(editor_, &QPlainTextEdit::cursorPositionChanged,
                 [this] { follow(); });
         connect(editor_, &QPlainTextEdit::textChanged,
-                [this] { spellcheck(); });
+                [this] { spellcheck(); predict(); });
+        if (predictToggle_->isChecked()) buildPredict();
+    }
+
+    void buildPredict() {
+        if (predictBuilt_ || !spine_) return;
+        predictBuilt_ = true;
+        std::set<QString> words;
+        for (const auto& [id, acip] : spine_->allAcipHeadwords()) {
+            const QString a =
+                QString::fromStdString(acip).trimmed();
+            if (a.isEmpty()) continue;
+            words.insert(a);
+            const int sp = a.indexOf(' ');
+            if (sp > 0) words.insert(a.left(sp));
+        }
+        compModel_->setStringList(
+            QStringList(words.begin(), words.end()));
+        comp_->setModelSorting(
+            QCompleter::CaseSensitivelySortedModel);
+    }
+
+    void predict() {
+        if (!predictToggle_->isChecked() || !predictBuilt_) return;
+        const QTextCursor c = editor_->textCursor();
+        const QString text = editor_->toPlainText();
+        const int pos = c.position();
+        int b = pos;
+        auto isTok = [](QChar ch) {
+            return (ch >= 'A' && ch <= 'Z') ||
+                   (ch >= '0' && ch <= '9') || ch == '\'' ||
+                   ch == '+' || ch == '-';
+        };
+        while (b > 0 && isTok(text[b - 1])) --b;
+        const QString tok = text.mid(b, pos - b);
+        if (tok.size() < 2) {
+            comp_->popup()->hide();
+            return;
+        }
+        comp_->setCompletionPrefix(tok);
+        if (comp_->completionCount() == 0 ||
+            (comp_->completionCount() == 1 &&
+             comp_->currentCompletion() == tok)) {
+            comp_->popup()->hide();
+            return;
+        }
+        QRect r = editor_->cursorRect();
+        r.setWidth(comp_->popup()->sizeHintForColumn(0) + 24);
+        comp_->complete(r);
     }
 
     int selfTest(QStringList& log) {
@@ -9812,6 +9898,14 @@ public:
               "pre-fill refuses a non-empty editor (never overwrites)");
         editor_->clear();
         check(canPrefill(), "pre-fill allowed on an empty page");
+        // predictive typing: the dictionary inventory completes a
+        // known prefix
+        buildPredict();
+        comp_->setCompletionPrefix("BSOD NAM");
+        check(predictBuilt_ && comp_->completionCount() >= 1 &&
+                  comp_->currentCompletion().startsWith("BSOD NAM"),
+              "predictive typing completes BSOD NAM from the "
+              "dictionary");
         return fails;
     }
 
@@ -10286,6 +10380,12 @@ private:
     QPushButton* prevPageB_ = nullptr;
     QPushButton* nextPageB_ = nullptr;
     QLabel* pageLbl_ = nullptr;
+    // predictive ACIP typing (#13)
+    const allcore::Spine* spine_ = nullptr;
+    QCompleter* comp_ = nullptr;
+    QStringListModel* compModel_ = nullptr;
+    QCheckBox* predictToggle_ = nullptr;
+    bool predictBuilt_ = false;
 #ifdef ALL_HAVE_OCR
     std::unique_ptr<allocr::LineDetector> det_;
     std::unique_ptr<allocr::TextRecognizer> rec_;
@@ -13089,7 +13189,7 @@ int main(int argc, char** argv) {
     tabs.addTab(reviewPane, "Review");
     auto* alignPane = new AlignPane(spine, root);
     tabs.addTab(alignPane, "Align");
-    auto* inputPane = new InputPane(checker, root);
+    auto* inputPane = new InputPane(checker, root, &spine);
     tabs.addTab(inputPane, "Input");
     auto* libraryPane = new LibraryPane(root, progress,
                                 [overlay](const QString& path) {

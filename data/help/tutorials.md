@@ -322,6 +322,11 @@ runs the double-keying diff: orange = only in yours, green seam =
 partner has extra; correct until they match exactly. Save exports
 the block.
 
+
+**Predictive typing** (checkbox in the toolbar, remembered):
+complete the syllable or word you are typing from the dictionary's
+own ACIP headwords — a deterministic inventory, nothing invented.
+Tab or Enter accepts, Escape dismisses.
 ## Search (Gofer)
 
 *Where: Research → Search.*
