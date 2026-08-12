@@ -1,5 +1,8 @@
 # Draft — to 84000 (translation memory / glossary licensing)
-*(for Adam to review, personalize, and send; contact via 84000.co)*
+*(GMAIL DRAFT CREATED 2026-08-12 (id r3174838383265114892, to
+info@84000.co) with the verified Terms-of-Use-table citations and
+the data-partnership registration ask — ready for Adam to send.
+The text below is the earlier repo version, kept for history.)*
 
 Subject: License clarification: glossary + translation-memory data
 
