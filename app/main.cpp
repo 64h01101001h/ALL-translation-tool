@@ -5722,7 +5722,7 @@ public:
         banner->setWordWrap(true);
         v->addWidget(banner);
         status_ = new QLabel;
-        status_->setStyleSheet("color:#7A5A00;font-size:13px");
+        status_->setStyleSheet("color:#9A7A33;font-size:13px");
         v->addWidget(status_);
         auto mk = [&](const QString& title, const QString& what) {
             auto* b = new QPushButton(title);
@@ -5730,7 +5730,7 @@ public:
             v->addWidget(b);
             auto* d = new QLabel(what);
             d->setWordWrap(true);
-            d->setStyleSheet("color:#666;font-size:12px;"
+            d->setStyleSheet("color:#8A8A8A;font-size:12px;"
                              "margin-bottom:6px");
             v->addWidget(d);
             return b;
@@ -5807,7 +5807,9 @@ public:
         banner->setWordWrap(true);
         v->addWidget(banner);
         doc_ = new QLabel;
-        doc_->setStyleSheet("color:#7A5A00;font-size:13px");
+        // #9A7A33 = the app's gold eyebrow tone — readable on the
+        // dark and light chrome alike (night-mode audit 2026-08-12)
+        doc_->setStyleSheet("color:#9A7A33;font-size:13px");
         v->addWidget(doc_);
         auto mk = [&](const QString& title, const QString& what) {
             auto* b = new QPushButton(title);
@@ -5815,7 +5817,7 @@ public:
             v->addWidget(b);
             auto* d = new QLabel(what);
             d->setWordWrap(true);
-            d->setStyleSheet("color:#666;font-size:12px;"
+            d->setStyleSheet("color:#8A8A8A;font-size:12px;"
                              "margin-bottom:6px");
             v->addWidget(d);
             return b;
@@ -5845,6 +5847,11 @@ public:
             "shad rules; anything the engine cannot convert is "
             "flagged ⟨wylie⟩, never guessed.");
         results_ = new QTextBrowser;
+        results_->setHtml(
+            "<i style='color:#8A8A8A'>Results appear here. Load a "
+            "text in Read → Overlay, then choose an action above — "
+            "or run the batch lane on a whole folder without "
+            "loading anything.</i>");
         v->addWidget(results_, 1);
         connect(prepB, &QPushButton::clicked, [this] {
             if (!guard()) return;
