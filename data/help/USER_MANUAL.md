@@ -64,6 +64,7 @@ app: Help menu → ALL Tool Help & Tutorials.*
   - 16.6 Night mode
   - 16.7 Session restore — the app reopens where you left off
   - 16.8 The self-test (--selftest)
+  - 16.9 Help → Troubleshooting
 
 
 # PART ONE — READ & TRANSLATE
@@ -2410,10 +2411,16 @@ shortcut, ⌘? on a Mac) opens the searchable Help window: a search
 box across the top, a results list on the left, the reading page
 on the right.
 
-- **With the search box empty**, the left list shows every
-  tutorial **chapter** (marked 📖) — one per pane, plus Getting
-  Started, Suggested Workflows, and Concepts. Click a chapter to
-  read it.
+- **With the search box empty**, the left list is the full browse
+  index: every tutorial **chapter** (marked 📖) — one per pane,
+  plus Getting Started, Suggested Workflows, and Concepts —
+  followed by **every control in the app, grouped under its pane's
+  gold heading**. When you don't know a feature's name, scroll:
+  the whole tool is on this list. Click a chapter to read it, or a
+  control to see what it does and jump to its pane.
+- **This User Manual** also lives here: chapters prefixed
+  "Manual: " (Help menu → "User Manual…" filters straight to
+  them).
 - **Type anything** — "Search any feature, button, pane, or
   topic…" — and the list fills with matching chapters *and*
   matching **controls**: every button, checkbox, and dropdown
@@ -2481,3 +2488,25 @@ change to the software ships.)
 *End of Part Three — and of the manual. Seventeen panes, one
 principle: the machine may match the master's English — it may
 never compose it.*
+
+
+## 16.9 Help → Troubleshooting
+
+Everything a tester needs to file a useful finding in one click:
+
+- **Show Logs in Finder** — reveals the lifecycle log (launches,
+  quits, and — with Verbose Logging on — every pane switch).
+- **Show Data Folder in Finder** — opens the ALL Tool Data folder.
+- **Copy Installation Info** — one-line version/platform summary
+  to the clipboard.
+- **Generate Diagnostic Report…** — writes a full report to the
+  Desktop (versions, data-file health, disk space, settings, log
+  tail) and reveals it; attach it to any bug report.
+- **Report a Problem…** — opens a pre-addressed email with a
+  what-happened template and your installation info filled in.
+- **Storage…** — cache sizes with safe clear buttons (woodblock
+  scan cache; library search index, rebuildable). Your texts and
+  OCR output are never touched.
+- **Verbose Logging** — adds pane switches to the lifecycle log.
+- **Reset Settings…** — all preferences back to defaults, with
+  confirmation; texts and data untouched; next launch.
