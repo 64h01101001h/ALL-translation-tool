@@ -207,6 +207,11 @@ end to end exactly as written)
   and wiped the card (slow + card disappears) — card-only toggles
   now re-render the card in place; doc-affecting ones (grammar,
   hints) rebuild then restore the card — FIXED (guard 92)
+- 2026-08-12 · Library · recents STILL dead for Tibetan filenames —
+  apostrophes (DPA'I) terminated single-quoted href attributes; all
+  link payloads now percent-encoded at construction — FIXED (guard 94)
+- 2026-08-12 · Overlay · session restore added: same file, same
+  scroll, same cursor on relaunch (guard 93)
 
 # CURATION RULINGS
 *(pane · what stays / what pares / format decision)*

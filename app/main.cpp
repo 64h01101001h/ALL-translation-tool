@@ -142,6 +142,13 @@ static bool versionLess(const QString& a, const QString& b) {
     return false;
 }
 
+// encode a payload for an href attribute: apostrophes in Tibetan
+// names/filenames ("...DPA'I...") were TERMINATING single-quoted
+// attributes — dead links (Adam's finding, 2026-08-12).
+static QString anchorEnc(const QString& payload) {
+    return QString::fromLatin1(QUrl::toPercentEncoding(payload));
+}
+
 static QString anchorPayload(const QString& href, int prefixLen) {
     return QUrl::fromPercentEncoding(href.mid(prefixLen).toUtf8());
 }
@@ -151,6 +158,8 @@ static QString anchorPayload(const QString& href, int prefixLen) {
 // failure (the helper explains the failure to the user itself).
 static int fileSpellingProposals(QWidget* parent,
                                  const QList<QStringList>& rows);
+static QString anchorEnc(const QString& payload);
+static QString anchorPayload(const QString& href, int prefixLen);
 // #62 illustration-candidate geometry (defined before ScanPane)
 static std::vector<QRect> illustrationCandidates(
     int w, int h, const std::vector<QRect>& lines);
@@ -770,7 +779,7 @@ static QString lookupResultsHtml(allcore::Spine& spine,
     h += QString("<div style='margin-top:8px;font-size:12px'>"
                  "<a href='propose:%1'>propose to the authority\u2026"
                  "</a></div>")
-             .arg(QString::fromStdString(raw).toHtmlEscaped());
+             .arg(anchorEnc(QString::fromStdString(raw)));
 
     return h;
 }
@@ -1160,6 +1169,31 @@ public:
         check(teachingsReportHtml().contains("youtube.com"),
               "teachings-for-this-text report reaches the corpus");
         {
+            // apostrophe filename survives the anchor round-trip
+            const QString ap = "/tmp/DPA'I TEST.txt";
+            const QString enc = anchorEnc(ap);
+            check(!enc.contains('\'') &&
+                      anchorPayload("openfile:" + enc, 9) == ap,
+                  "apostrophe filenames survive link round-trip");
+        }
+        {
+            // session restore reopens the remembered file
+            const QString tmp =
+                QDir::temp().filePath("all_session_test.txt");
+            { QFile f(tmp); f.open(QIODevice::WriteOnly);
+              f.write("BDEN PA ,"); }
+            QSettings st("ALL", "TranslationTool");
+            const auto keep = st.value("overlay/lastFile");
+            st.setValue("overlay/lastFile", tmp);
+            st.setValue("overlay/lastScroll", 0);
+            st.setValue("overlay/lastCursor", 0);
+            restoreSession();
+            check(docFile_ == tmp,
+                  "session restore reopens the remembered file");
+            st.setValue("overlay/lastFile", keep);
+            QFile::remove(tmp);
+        }
+        {
             // display toggles must NOT wipe the card or rebuild the
             // document (Adam's finding)
             input_->setPlainText("BDEN PA ,");
@@ -1346,6 +1380,8 @@ public:
         if (!f.open(QIODevice::ReadOnly)) return;
         input_->setPlainText(QString::fromUtf8(f.readAll()));
         docFile_ = fn;
+        QSettings("ALL", "TranslationTool")
+            .setValue("overlay/lastFile", fn);
         loadGlossary();
         loadDoc();
         auto info = allcore::decodeAcipFilename(fn.toStdString());
@@ -1899,6 +1935,8 @@ auto* secFmt = new QLabel("<span style='color:#9A7A33;font-size:10px;letter-spac
             if (!doc_.tokens.empty()) loadDoc();
         });
         connect(view_, &QPlainTextEdit::cursorPositionChanged, [this] { onClick(); });
+        connect(qApp, &QCoreApplication::aboutToQuit,
+                [this] { saveSession(); });
     }
 
 private:
@@ -2379,6 +2417,40 @@ private:
         spellList_->resizeColumnsToContents();
     }
 
+public:
+    // session restore (Adam, 2026-08-12): the translator resumes
+    // exactly where they left off — same file, same scroll, same
+    // cursor. Saved on quit and after every open; restored on
+    // normal launch only (never in selftest/probe runs).
+    void saveSession() const {
+        if (docFile_.isEmpty()) return;
+        QSettings st("ALL", "TranslationTool");
+        st.setValue("overlay/lastFile", docFile_);
+        st.setValue("overlay/lastScroll",
+                    view_->verticalScrollBar()->value());
+        st.setValue("overlay/lastCursor",
+                    view_->textCursor().position());
+    }
+
+    void restoreSession() {
+        QSettings st("ALL", "TranslationTool");
+        const QString f = st.value("overlay/lastFile").toString();
+        if (f.isEmpty() || !QFile::exists(f)) return;
+        openFile(f);
+        const int scroll = st.value("overlay/lastScroll").toInt();
+        const int cur = st.value("overlay/lastCursor").toInt();
+        // after the first progressive-format slice settles
+        QTimer::singleShot(400, this, [this, scroll, cur] {
+            view_->verticalScrollBar()->setValue(scroll);
+            if (cur > 0 && cur < view_->document()->characterCount()) {
+                QTextCursor c(view_->document());
+                c.setPosition(cur);
+                view_->setTextCursor(c);
+            }
+        });
+    }
+
+private:
     void refreshCard() {
         if (lastTok_ < 0 || lastTok_ >= (int)tokBeg_.size()) return;
         cardRefresh_ = true;
@@ -3548,7 +3620,7 @@ private:
     QString glossaryHtml(const std::string& wylie) const {
         auto it = glossary_.find(wylie);
         QString edit = QString("<a href='gloss:%1'>%2</a>")
-                           .arg(QString::fromStdString(wylie).toHtmlEscaped(),
+                           .arg(anchorEnc(QString::fromStdString(wylie)),
                                 it == glossary_.end()
                                     ? "＋ add to this text's glossary"
                                     : "edit");
@@ -3556,7 +3628,7 @@ private:
         // the authority, evidence auto-captured from the open passage
         edit += QString(" &nbsp;·&nbsp; <a href='propose:%1'>propose to "
                         "the authority…</a>")
-                    .arg(QString::fromStdString(wylie).toHtmlEscaped());
+                    .arg(anchorEnc(QString::fromStdString(wylie)));
         if (it == glossary_.end())
             return docFile_.isEmpty()
                        ? QString()
@@ -7589,7 +7661,8 @@ private:
             f.write(text.toUtf8());
         }
         info_->setHtml(
-            "<b>Rescued to Unicode:</b> <a href='openfile:" + target +
+            "<b>Rescued to Unicode:</b> <a href='openfile:" +
+            anchorEnc(target) +
             "'>" + QFileInfo(target).fileName().toHtmlEscaped() +
             "</a><br>" +
             QString("%1 characters · source encoding %2 · converter: "
@@ -7709,7 +7782,7 @@ private:
                     }
                     h += (n > 1 ? ", " : QString()) +
                          "<a href='openfile:" +
-                         fileByWork_[k].toHtmlEscaped() + "'>" + k +
+                         anchorEnc(fileByWork_[k]) + "'>" + k +
                          "</a>";
                 }
                 h += "</div>";
@@ -7836,7 +7909,7 @@ private:
     static QString fileLink(const QString& path, const QString& base) {
         QString label = path;
         if (label.startsWith(base)) label = label.mid(base.size() + 1);
-        return "<a href='openfile:" + path.toHtmlEscaped() + "'>" +
+        return "<a href='openfile:" + anchorEnc(path) + "'>" +
                label.toHtmlEscaped() + "</a>";
     }
 
@@ -12325,6 +12398,7 @@ int main(int argc, char** argv) {
     tabs.setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
     win.setMinimumSize(640, 480);
     win.resize(1180, 760);
+    overlay->restoreSession();   // resume where the translator was
     win.show();
     const int pasteIx = cliArgs.indexOf("--pasteprobe");
     if (pasteIx >= 0 && pasteIx + 1 < cliArgs.size()) {

@@ -40,6 +40,9 @@ finds any menu item and points an arrow at it. This Help window's own
 search (below) additionally finds every button and toggle with a
 how-to, and tells you which workflow tab it lives under.
 
+**Resuming work.** The Overlay reopens where you left off — same
+text, same place, same cursor — whenever the app restarts.
+
 **The typical first session.** Read → Library → double-click a text →
 it opens clean in the Overlay → click any word: the longest known
 phrase lights up, card below → switch "text as" to Tibetan script to see it in native script.
