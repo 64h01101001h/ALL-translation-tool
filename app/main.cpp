@@ -11918,7 +11918,8 @@ int main(int argc, char** argv) {
     const int shotIx = cliArgs.indexOf("--screenshots");
     const bool shotMode = shotIx >= 0 && shotIx + 1 < cliArgs.size();
     const bool selfTestMode = cliArgs.contains("--selftest");
-    if (shotMode || selfTestMode) {
+    const bool sweepMode = cliArgs.contains("--sweep");
+    if (shotMode || selfTestMode || sweepMode) {
         g_isAdmin = true;
         if (g_proposalsDir.isEmpty())
             g_proposalsDir = root + "/data/proposals";
@@ -12429,7 +12430,8 @@ int main(int argc, char** argv) {
             QDir::temp().filePath("all_sweep_proposals");
         QWidget* pane = nullptr;
         for (auto& fp : flatPanes)
-            if (fp.title == target) {
+            if (fp.title == target ||
+                fp.title.startsWith(target + " (")) {
                 pane = fp.w;
                 if (g_raisePane) g_raisePane(fp.w);
             }
@@ -12485,11 +12487,23 @@ int main(int argc, char** argv) {
             dialogsSeen.clear();
             ++n;
         };
+        // known long-runners a sweep must not trigger (each is
+        // covered by its own battery/selftest instead)
+        const QStringList stallGuard = {
+            "Update search index",   // minutes-long full rebuild
+        };
         for (auto* b : pane->findChildren<QPushButton*>()) {
             if (b->text().trimmed().isEmpty()) continue;
             if (!b->isEnabled()) {
                 printf("[SKIP] button   %s   · disabled in this "
                        "state\n",
+                       qPrintable(b->text()));
+                fflush(stdout);
+                continue;
+            }
+            if (stallGuard.contains(b->text())) {
+                printf("[SKIP] button   %s   · long-running; "
+                       "covered by its own battery\n",
                        qPrintable(b->text()));
                 fflush(stdout);
                 continue;

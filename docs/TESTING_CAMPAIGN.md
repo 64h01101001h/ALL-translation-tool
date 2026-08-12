@@ -249,6 +249,15 @@ end to end exactly as written)
   guidance dialogs). Sweep is repeatable per pane; heavier panes
   need per-button stall guards before sweeping (Library's index
   rebuild would block minutes).
+- 2026-08-12 · ALL PANES · sweep extended app-wide (stall guard for
+  "Update search index"; authority mode enabled for sweeps so the
+  Approval pane exists, its store redirected to a temp dir; pane
+  matcher accepts the Approval tab's pending-count badge). Result:
+  17/17 panes, 112+ controls exercised, 0 crashes. Analysis's
+  Analyze button correctly self-disables without ANTHROPIC_API_KEY
+  (guard working as designed). Low control counts on Lookup /
+  Convert / Sanskrit are genuine — those panes are typed-input
+  driven, not button driven.
 
 # CURATION RULINGS
 *(pane · what stays / what pares / format decision)*
