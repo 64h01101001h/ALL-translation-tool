@@ -3939,15 +3939,20 @@ public:
         });
         connect(remB, &QPushButton::clicked, [this] {
             const int r = dirs_->currentRow();
-            if (r > 1) { delete dirs_->takeItem(r); saveDirs(); }
+            if (r >= kFirstDirRow) { delete dirs_->takeItem(r); saveDirs(); }
         });
         connect(dupB, &QPushButton::clicked, [this] {
             auto* it = dirs_->currentItem();
-            if (it && dirs_->currentRow() > 1) {
+            if (it && dirs_->currentRow() >= kFirstDirRow) {
                 addDirRow(it->text(), it->checkState() == Qt::Checked);
                 saveDirs();
             }
         });
+        connect(results_, &QTextBrowser::anchorClicked,
+                [](const QUrl& u) {
+                    if (u.isLocalFile())
+                        QDesktopServices::openUrl(u);
+                });
         connect(saveB, &QPushButton::clicked, [this] { saveSearch(); });
         connect(loadB, &QPushButton::clicked, [this] { loadSearch(); });
         connect(saved_, &QListWidget::itemDoubleClicked,
@@ -3972,9 +3977,11 @@ public:
         int nf = 0;
         for (auto* f : fields_) nf += f != nullptr;
         check(nf == 8, "eight go-for fields present");
-        check(dirs_->count() >= 2 &&
+        check(dirs_->count() >= kFirstDirRow &&
                   dirs_->item(0)->checkState() == Qt::Checked,
               "corpus row present and checked");
+        check(dirs_->item(2)->text() == kSpotlightRow,
+              "Spotlight source row present (opt-in)");
         for (auto* f : fields_) f->clear();
         fields_[0]->setText("sems can");
         combiner_->setCurrentIndex(0);
@@ -3990,6 +3997,8 @@ private:
         "HGM aligned corpus (all courses)";
     static constexpr const char* kApparatusRow =
         "Published apparatus (footnotes + bibliography)";
+    static constexpr const char* kSpotlightRow =
+        "This Mac (Spotlight — files open in their own app)";
 
     void addDirRow(const QString& text, bool checked) {
         auto* it = new QListWidgetItem(text);
@@ -3997,11 +4006,25 @@ private:
         it->setCheckState(checked ? Qt::Checked : Qt::Unchecked);
         dirs_->addItem(it);
     }
+    // fixed source rows 0..2 (corpus, apparatus, Spotlight); user
+    // folders follow from row kFirstDirRow
+    static constexpr int kFirstDirRow = 3;
+
     void loadDirs() {
         QSettings s("ALL", "TranslationTool");
         addDirRow(kCorpusRow, s.value("gofer/corpusChecked", true).toBool());
         addDirRow(kApparatusRow,
                   s.value("gofer/apparatusChecked", true).toBool());
+        // Spotlight federated search (the wysearch idea) — merged in
+        // from the superseded search pane 2026-08-12; opt-in scope
+        addDirRow(kSpotlightRow,
+                  s.value("gofer/spotlightChecked", false).toBool());
+        dirs_->item(2)->setToolTip(
+            "Ask macOS Spotlight for documents anywhere on this "
+            "machine containing your terms — searched as typed "
+            "and (when they convert) as Tibetan unicode via the "
+            "proven wylie and ACIP chains. Results open in the "
+            "default app; NEAR has no meaning outside the corpus.");
         const auto list = s.value("gofer/dirs").toStringList();
         const auto checked = s.value("gofer/dirsChecked").toStringList();
         if (list.isEmpty()) {
@@ -4017,7 +4040,9 @@ private:
                    dirs_->item(0)->checkState() == Qt::Checked);
         s.setValue("gofer/apparatusChecked",
                    dirs_->item(1)->checkState() == Qt::Checked);
-        for (int i = 2; i < dirs_->count(); ++i) {
+        s.setValue("gofer/spotlightChecked",
+                   dirs_->item(2)->checkState() == Qt::Checked);
+        for (int i = kFirstDirRow; i < dirs_->count(); ++i) {
             list << dirs_->item(i)->text();
             if (dirs_->item(i)->checkState() == Qt::Checked)
                 checked << dirs_->item(i)->text();
@@ -4133,7 +4158,61 @@ private:
                  ah + "<hr>";
             total += n;
         }
-        for (int i = 2; i < dirs_->count(); ++i) {
+        if (dirs_->item(2)->checkState() == Qt::Checked) {
+            // Spotlight federated probe (wysearch idea, merged from
+            // the superseded pane): each term as typed + its
+            // Tibetan-unicode conversions through the proven chains
+            QStringList probes;
+            for (auto* f : fields_) {
+                const QString t = f->text().trimmed();
+                if (t.isEmpty()) continue;
+                probes << t;
+                if (auto [uni, ok] = allcore::wylieToUnicode(
+                        t.toLower().toStdString());
+                    ok)
+                    probes << QString::fromStdString(uni);
+                if (auto [uni, ok] = allcore::wylieToUnicode(
+                        allcore::acipToEwts(t.toUpper().toStdString()));
+                    ok)
+                    probes << QString::fromStdString(uni);
+            }
+            probes.removeDuplicates();
+            QStringList found;
+            for (const QString& term : probes) {
+                QProcess p;
+                p.start("/usr/bin/mdfind",
+                        {"-literal",
+                         QString("kMDItemTextContent == \"*%1*\"cd")
+                             .arg(term)});
+                // bounded: a cold Spotlight index can stall
+                if (!p.waitForFinished(6000)) { p.kill(); continue; }
+                for (const QString& f :
+                     QString::fromUtf8(p.readAllStandardOutput())
+                         .split('\n', Qt::SkipEmptyParts)) {
+                    if (!found.contains(f)) found << f;
+                    if (found.size() >= 40) break;
+                }
+                if (found.size() >= 40) break;
+            }
+            h += QString("<div><b>%1</b> — %2 document(s); "
+                         "searched as: ")
+                     .arg(kSpotlightRow)
+                     .arg(found.size());
+            for (const QString& v : probes)
+                h += "<code>" + v.toHtmlEscaped() + "</code> ";
+            h += "</div>";
+            for (const QString& f : found) {
+                const QFileInfo fi(f);
+                h += "<div style='margin:3px 0'><a href='" +
+                     QUrl::fromLocalFile(f).toString() + "'>" +
+                     fi.fileName().toHtmlEscaped() +
+                     "</a> <small style='color:#777'>" +
+                     fi.path().toHtmlEscaped() + "</small></div>";
+            }
+            h += "<hr>";
+            total += found.size();
+        }
+        for (int i = kFirstDirRow; i < dirs_->count(); ++i) {
             if (dirs_->item(i)->checkState() != Qt::Checked) continue;
             const QString dir = dirs_->item(i)->text();
             try {
@@ -4225,240 +4304,6 @@ private:
     QPushButton* findB_ = nullptr;
 };
 
-// NOTE (campaign, 2026-08-12): UNWIRED. Superseded by GoferPane
-// as the shipped Search tab. Holds the Spotlight "Search this
-// Mac" + Library-index buttons not yet in Gofer; kept for a
-// future merge into GoferPane, NOT dead — see TESTING_CAMPAIGN.
-[[maybe_unused]] static QWidget* makeSearchPane(allcore::Spine& spine,
-                               const QString& libraryRoot = QString()) {
-    auto* pane = new QWidget;
-    auto* layout = new QVBoxLayout(pane);
-
-    auto* row = new QHBoxLayout;
-    auto* box = new QLineEdit;
-    box->setPlaceholderText(
-        "Gofer query…   e.g.  \"kun rdzob bden pa\" NEAR/3 \"don dam bden pa\"   ·   stong OR bden");
-    auto* courseBox = new QComboBox;
-    courseBox->addItem("all courses", "");
-    for (const auto& c : spine.corpusCourses())
-        courseBox->addItem(QString::fromStdString(c), QString::fromStdString(c));
-    row->addWidget(box, 1);
-    row->addWidget(courseBox);
-    // saved searches (Gofer's own SavedSearches feature, restored — Adam
-    // approved 2026-08-07): named queries persisted across sessions
-    auto* savedBox = new QComboBox;
-    savedBox->setPlaceholderText("saved searches…");
-    savedBox->setMinimumWidth(150);
-    {
-        QSettings settings("ALL", "TranslationTool");
-        const QStringList saved =
-            settings.value("search/saved").toStringList();
-        for (const QString& s : saved) {
-            const int sep = s.indexOf('\x1f');
-            if (sep > 0)
-                savedBox->addItem(s.left(sep), s.mid(sep + 1));
-        }
-    }
-    auto* saveBtn = new QPushButton("Save…");
-    row->addWidget(savedBox);
-    row->addWidget(saveBtn);
-    QObject::connect(savedBox, &QComboBox::activated, [savedBox, box](int ix) {
-        box->setText(savedBox->itemData(ix).toString());
-    });
-    QObject::connect(saveBtn, &QPushButton::clicked, [pane, box, savedBox] {
-        const QString q = box->text().trimmed();
-        if (q.isEmpty()) return;
-        bool ok = false;
-        const QString name = QInputDialog::getText(
-            pane, "Save search", "Name for this query:", QLineEdit::Normal,
-            q.left(30), &ok);
-        if (!ok || name.trimmed().isEmpty()) return;
-        savedBox->addItem(name.trimmed(), q);
-        QSettings settings("ALL", "TranslationTool");
-        QStringList saved = settings.value("search/saved").toStringList();
-        saved << name.trimmed() + QChar('\x1f') + q;
-        settings.setValue("search/saved", saved);
-    });
-    layout->addLayout(row);
-
-    auto* row2 = new QHBoxLayout;
-    auto* dirBox = new QLineEdit;
-    dirBox->setPlaceholderText(
-        "…or a folder of raw ACIP files (leave empty to search the corpus)");
-    row2->addWidget(dirBox, 1);
-    // one-click file-tree search over the installed library
-    if (!libraryRoot.isEmpty() && QDir(libraryRoot).exists()) {
-        auto* libBtn = new QPushButton("search the Library");
-        QObject::connect(libBtn, &QPushButton::clicked,
-                         [dirBox, libraryRoot] { dirBox->setText(libraryRoot); });
-        row2->addWidget(libBtn);
-    }
-    // federated search of the user's own machine (the wysearch idea from
-    // the ACIP Development survey): Spotlight already indexes every text,
-    // PDF, and Word file on the Mac — probe it with the query as typed
-    // PLUS its Tibetan-unicode conversions, since files on disk may be in
-    // wylie, ACIP, or Tibetan script
-    auto* macBtn = new QPushButton("Search this Mac (Spotlight)");
-    macBtn->setToolTip(
-        "Ask macOS Spotlight for documents anywhere on this machine "
-        "containing the query — searched as typed, and (when it converts) "
-        "as Tibetan unicode via the proven wylie and ACIP chains.");
-    row2->addWidget(macBtn);
-    layout->addLayout(row2);
-
-    auto* results = new QTextBrowser;
-    results->setOpenLinks(false);   // anchors handled below, never navigated
-    layout->addWidget(results);
-    auto* status = new QLabel(
-        "Terms are phrases (quote or just type). OR = either. NEAR/N = both "
-        "within N lines of the same source. Parentheses group.");
-    status->setWordWrap(true);
-    layout->addWidget(status);
-    QObject::connect(macBtn, &QPushButton::clicked, [box, results, status] {
-        // strip Gofer operators — Spotlight gets plain phrases
-        QString raw = box->text().trimmed();
-        raw.replace(QRegularExpression("\\bOR\\b|NEAR/\\d+|[()\"]"), " ");
-        raw = raw.simplified();
-        if (raw.isEmpty()) {
-            status->setText("type a query first (plain words work best "
-                            "for Spotlight)");
-            return;
-        }
-        QStringList variants{raw};
-        if (auto [uni, ok] =
-                allcore::wylieToUnicode(raw.toLower().toStdString());
-            ok)
-            variants << QString::fromStdString(uni);
-        if (auto [uni, ok] = allcore::wylieToUnicode(
-                allcore::acipToEwts(raw.toUpper().toStdString()));
-            ok) {
-            const QString u = QString::fromStdString(uni);
-            if (!variants.contains(u)) variants << u;
-        }
-        status->setText("asking Spotlight…");
-        QCoreApplication::processEvents();
-        QStringList found;   // ordered, deduplicated
-        for (const QString& term : variants) {
-            QProcess p;
-            p.start("/usr/bin/mdfind",
-                    {"-literal", QString("kMDItemTextContent == \"*%1*\"cd")
-                                     .arg(term)});
-            // bounded: a cold Spotlight index can stall — 6s per term
-            // keeps the worst case short (the UI notes the wait above)
-            if (!p.waitForFinished(6000)) { p.kill(); continue; }
-            const QStringList lines =
-                QString::fromUtf8(p.readAllStandardOutput())
-                    .split('\n', Qt::SkipEmptyParts);
-            for (const QString& f : lines) {
-                if (found.contains(f)) continue;
-                found << f;
-                if (found.size() >= 60) break;
-            }
-            if (found.size() >= 60) break;
-        }
-        QString h = "<div><b>FROM THIS MAC (Spotlight)</b> — searched as: ";
-        for (const QString& v : variants)
-            h += "<code>" + v.toHtmlEscaped() + "</code> ";
-        h += "</div><hr>";
-        if (found.isEmpty())
-            h += "<i>Spotlight found no documents (its index skips "
-                 "unindexed volumes and some file types)</i>";
-        for (const QString& f : found) {
-            const QFileInfo fi(f);
-            h += "<div style='margin:3px 0'><a href='" +
-                 QUrl::fromLocalFile(f).toString() + "'>" +
-                 fi.fileName().toHtmlEscaped() + "</a> <small "
-                 "style='color:#777'>" +
-                 fi.path().toHtmlEscaped() + "</small></div>";
-        }
-        results->setHtml(h);
-        status->setText(QString("%1 document(s) on this machine — click "
-                                "to open in the default app")
-                            .arg(found.size()));
-    });
-    QObject::connect(results, &QTextBrowser::anchorClicked,
-                     [](const QUrl& u) {
-                         if (u.isLocalFile() || u.scheme().startsWith("http"))
-                             QDesktopServices::openUrl(u);
-                     });
-
-    auto runSearch = [&spine, box, courseBox, dirBox, results, status,
-                      libraryRoot] {
-        const std::string q = box->text().trimmed().toStdString();
-        if (q.empty()) return;
-        const QString dir = dirBox->text().trimmed();
-        if (!dir.isEmpty()) {
-            try {
-                // the library has a prebuilt index — use it when targeting
-                // the library root (token/phrase semantics, like the corpus)
-                std::vector<allcore::FileGoferHit> hits;
-                const QString ixPath = dir + "/.index.db";
-                if (!libraryRoot.isEmpty() &&
-                    QDir(dir) == QDir(libraryRoot) &&
-                    QFileInfo::exists(ixPath)) {
-                    allcore::LibraryIndex ix(ixPath.toStdString());
-                    hits = ix.search(q, 60);
-                    status->setText(
-                        QString("searched the library INDEX (%1 files, %2 "
-                                "lines) — rebuild it from the Library pane "
-                                "after installing new texts.")
-                            .arg(ix.fileCount())
-                            .arg(ix.lineCount()));
-                } else {
-                    hits = allcore::goferSearchFiles(dir.toStdString(), q, 60);
-                }
-                QString h;
-                if (hits.empty()) h = "<i>no matches in files</i>";
-                for (const auto& hit : hits) {
-                    h += "<div style='margin-bottom:12px'><b>" +
-                         QString::fromStdString(hit.file).toHtmlEscaped() + ":" +
-                         QString::number(hit.line_lo) +
-                         (hit.line_hi != hit.line_lo
-                              ? "–" + QString::number(hit.line_hi)
-                              : QString()) +
-                         "</b>";
-                    for (const auto& l : hit.lines)
-                        h += "<br>" + QString::fromStdString(l).left(300).toHtmlEscaped();
-                    h += "</div>";
-                }
-                results->setHtml(h);
-                status->setText(QString("%1 file hit window(s)").arg(hits.size()));
-            } catch (const std::exception& ex) {
-                status->setText(QString("file search error: %1").arg(ex.what()));
-            }
-            return;
-        }
-        try {
-            auto hits = allcore::goferSearch(
-                spine, q, courseBox->currentData().toString().toStdString(), 60);
-            QString h;
-            if (hits.empty()) h = "<i>no matches</i>";
-            for (const auto& hit : hits) {
-                h += "<div style='margin-bottom:12px'><b>[" +
-                     QString::fromStdString(hit.course) + ":" +
-                     QString::number(hit.seq_lo) +
-                     (hit.seq_hi != hit.seq_lo
-                          ? "–" + QString::number(hit.seq_hi)
-                          : QString()) +
-                     "]</b>";
-                for (const auto& s : hit.window) {
-                    h += "<br><i>" +
-                         QString::fromStdString(s.wylie).left(240).toHtmlEscaped() +
-                         "</i><br>" +
-                         QString::fromStdString(s.english).left(300).toHtmlEscaped();
-                }
-                h += "</div>";
-            }
-            results->setHtml(h);
-            status->setText(QString("%1 hit window(s)").arg(hits.size()));
-        } catch (const std::exception& ex) {
-            status->setText(QString("query error: %1").arg(ex.what()));
-        }
-    };
-    QObject::connect(box, &QLineEdit::returnPressed, runSearch);
-    QObject::connect(courseBox, &QComboBox::activated, runSearch);
-    return pane;
-}
 
 // ---- Convert pane: ACIP/wylie → everything, via the battery-proven ports ----
 

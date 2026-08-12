@@ -217,6 +217,13 @@ end to end exactly as written)
   the Search tab. Not a bug, but those two features are unreachable.
   CURATION DECISION NEEDED: merge the two buttons into GoferPane, or
   drop them. Marked [[maybe_unused]] meanwhile.
+  → RESOLVED 2026-08-12 (merge, per the recommendation Adam waved
+  on): Spotlight is now an opt-in source ROW in GoferPane's own
+  target list ("This Mac (Spotlight)"), each term probed as typed +
+  as Tibetan unicode, results clickable; the Library-index button
+  was already redundant (GoferPane's library folder row uses the
+  index). The superseded makeSearchPane deleted (234 lines).
+  Selftest guards the row; manual + tutorials corrected to match.
 
 # CURATION RULINGS
 *(pane · what stays / what pares / format decision)*

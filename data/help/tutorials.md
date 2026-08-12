@@ -293,8 +293,11 @@ combiner: OR (any term), AND (all terms in the same file), or NEAR
 with a proximity (all terms within N lines). Check the targets to
 search: the HGM ALIGNED CORPUS (his translations beside the Tibetan),
 the PUBLISHED APPARATUS (all 2,234 footnotes + 705 bibliography
-entries), and any folders — Add / Remove / Duplicate manage the
-folder list exactly as in the original Gofer, and it persists. Press
+entries), THIS MAC (Spotlight — opt-in: every indexed document on
+the machine, each term searched as typed and as Tibetan script;
+results open in their own app), and any folders — Add / Remove /
+Duplicate manage the folder list exactly as in the original Gofer,
+and it persists. Press
 Find; results appear in the Search Results tab with hits per target.
 Save stores the whole search by name in the Saved Search tab
 (double-click to reload).

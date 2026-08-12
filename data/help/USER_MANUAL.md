@@ -981,23 +981,26 @@ saved search. Saved searches persist across restarts.
 
 ### Searching the Library, and searching the whole Mac
 
-Two more reaches, both restated from honest sources:
+Two more reaches, both in the Search Setting tab's source list:
 
-- **search the Library** points the folder search at your installed
-  Library (the 2,700+ texts of ACIP Release 6). The Library carries
-  a prebuilt full-text index, so answers come back instantly instead
-  of file-crawling; after you install new texts, refresh the index
-  with **Read → Library → Update search index** (a full rebuild of
-  all 8.68 million lines takes under two minutes).
-- **Search this Mac (Spotlight)** extends the hunt to everything on
-  the machine — every text, PDF, and Word file macOS has indexed.
-  Your query is stripped to plain phrases and searched *as typed*
-  AND *as Tibetan script*, converted through the proven wylie and
-  ACIP chains, since files on disk may be in any of the three. The
-  results list the matching documents with their locations; click
-  one to open it in its default application. (If Spotlight's index
-  skips a volume or file type, the pane says so rather than
-  pretending completeness.)
+- **The library folder row** (checked by default) searches your
+  installed Library (the 2,700+ texts of ACIP Release 6). The
+  Library carries a prebuilt full-text index, so answers come back
+  instantly instead of file-crawling; after you install new texts,
+  refresh the index with **Read → Library → Update search index**
+  (a full rebuild of all 8.68 million lines takes under two
+  minutes).
+- **This Mac (Spotlight)** — an opt-in source row — extends the
+  hunt to everything on the machine: every text, PDF, and Word
+  file macOS has indexed. Each of your terms is searched *as
+  typed* AND *as Tibetan script*, converted through the proven
+  wylie and ACIP chains, since files on disk may be in any of the
+  three. (NEAR has no meaning outside the corpus, so Spotlight
+  simply looks for each term.) The results list the matching
+  documents with their locations; click one to open it in its
+  default application. (If Spotlight's index skips a volume or
+  file type, the pane says so rather than pretending
+  completeness.)
 
 ---
 
