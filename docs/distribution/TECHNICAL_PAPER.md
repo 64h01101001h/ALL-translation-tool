@@ -104,6 +104,18 @@ size) to everything under the user's `library/` folder — the 2,716
 texts of ACIP Release 6 plus the user's own materials; a full build
 indexes 8.68 million lines in about 97 seconds.
 
+Two derived registers ride beside the spine, each rebuilt by its
+own tool with provenance recorded: the **teaching index** (n-gram
+matches of dictionary terms against the timed captions of Geshe
+Michael's own recorded courses, harvested with authorization,
+machine-caption text labeled as such, links always opening the
+original recordings) and the **persons register** (184 of 265
+catalog authors resolved to Buddhist Digital Resource Center
+person records across three deterministic passes — quoted label
+search, paged phrase-window retrieval with full-label-set
+verification, and Sanskrit-label fold-equality — homonym
+candidates all kept, unresolved names listed, nothing guessed).
+
 ## 3. The engine ports and their validation batteries
 
 The conversion engines — transliteration, script, pronunciation,
@@ -300,6 +312,21 @@ engine pass stays under an enforced regression ceiling. Each check
 prints PASS/FAIL and the process exits nonzero on any failure — so
 the self-test runs in the packaging gate (§11), and a user can run
 it from Terminal to localize a problem.
+
+**A third level arrived with the release campaign: the mechanized
+click-through.** Run with `--sweep <Pane>`, the app loads a real
+passage offscreen and exercises every control on the named pane —
+every enabled button clicked, every checkbox toggled and restored,
+every combo cycled — while a 250 ms reaper records and dismisses
+any modal dialog that appears. Sweeps run in authority mode with
+the proposal store redirected to a temporary directory, so they
+can never write team state. The current build sweeps all seventeen
+panes, 112+ controls, crash-free; the in-app self-test now stands
+at 96 checks. What the sweep proves is deliberately narrow —
+coherence under interaction, not behavioral truth, which stays
+with the batteries and the self-test — but it is exactly the class
+of proof a click-by-click human pass would otherwise spend hours
+re-establishing after every change.
 
 The written test plan (`docs/TEST_PLAN.md`) classifies every feature
 of every pane into three tiers — core battery, self-test, or
