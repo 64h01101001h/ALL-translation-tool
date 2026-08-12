@@ -35,7 +35,7 @@ app: Help menu → ALL Tool Help & Tutorials.*
   - 12.6 Pre-fill from OCR (draft) — and its deliberate refusal
   - 12.7 Compare with partner file… — the double-keying diff
   - 12.8 Save… — exporting the work
-- **CHAPTER 13 — THE SCAN PANE (Input → Scan)**
+- **CHAPTER 13 — THE OCR PANE (Input → OCR)**
   - 13.1 The toolbar, control by control
   - 13.2 One-time setup: the models
   - 13.3 Tutorial: recognize a page
@@ -396,7 +396,7 @@ companion sheet: print-worthy preparation for translating the
 text. Terms with no located moments say so honestly — the index
 grows as more classes are indexed.
 
-### SCANS (left column, under the gold SCANS heading)
+### SCANS (the viewer lives here; the one-shot tools moved to Read → Scans)
 
 This is the one Overlay feature that touches the network (BDRC's
 public image servers).
@@ -466,7 +466,7 @@ of the document box and watch the folio image turn to follow your
 cursor. Press **locate word (OCR)** and the word at your cursor is
 boxed on the carving.
 
-### FORMAT & EXPORT (left column, under the gold heading)
+### FORMAT & EXPORT — MOVED: these tools now live in Read → Export
 
 - **Prepare for translation (Mixed Nuts)…** — runs Geshe Michael's
   demonstrated translation-preparation format on the loaded text:
@@ -621,9 +621,9 @@ abandons cleanly.
 - **Import my materials…** — brings your own texts into
   `library/my_materials` (.docx, .txt, .acip, .act, .md, .rtf;
   Word documents convert automatically).
-- **Send to OCR…** — routes a scan image to the Input → Scan pane
+- **Maintenance… → Send to OCR** — routes a scan image to the Input → Scan pane
   for recognition.
-- **Legacy font rescue (UTFC)…** — converts documents typed in
+- **Maintenance… → Legacy font rescue (UTFC)** — converts documents typed in
   pre-Unicode Tibetan fonts of the 1990s (TibetanMachineWeb,
   LTibetan, Sambhota…) to proper Unicode Tibetan, via the
   Universal Tibetan Font Converter run as a separate external
@@ -632,7 +632,7 @@ abandons cleanly.
   appears in the output the app warns you the source encoding was
   probably wrong (wrong guesses produce garbage, not silent
   errors).
-- **Update search index** — refreshes the full-text index that
+- **Maintenance… → Update search index** — refreshes the full-text index that
   Research → Search's "search the Library" uses. The report counts
   files added / updated / removed / unchanged; a full build
   indexes all 14.1 million lines in under two minutes, and after
@@ -716,6 +716,8 @@ Two levels split by a draggable divider:
   terminology**, the apparatus search box, and the PUBLISH tools
   under their gold heading; (2) the report panel where results
   render.
+
+> **The ladder (2026-08-12):** the Draft is the WORKBENCH — understand and gather evidence; press **Send to Manuscript →** to carry your draft to the writing surface, where the PUBLISH tools (bibliography, footnotes) now live.
 
 ### Loading and working clause by clause
 
@@ -1993,7 +1995,7 @@ untouched; the combined file is the deliverable.
 
 ---
 
-# CHAPTER 13 — THE SCAN PANE (Input → Scan)
+# CHAPTER 13 — THE OCR PANE (Input → OCR)
 
 **What it's for.** Tibetan text recognition on woodblock page
 images — embedded, proven, and honest about itself. The models are
