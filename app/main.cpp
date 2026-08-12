@@ -4112,7 +4112,11 @@ private:
     QPushButton* findB_ = nullptr;
 };
 
-static QWidget* makeSearchPane(allcore::Spine& spine,
+// NOTE (campaign, 2026-08-12): UNWIRED. Superseded by GoferPane
+// as the shipped Search tab. Holds the Spotlight "Search this
+// Mac" + Library-index buttons not yet in Gofer; kept for a
+// future merge into GoferPane, NOT dead — see TESTING_CAMPAIGN.
+[[maybe_unused]] static QWidget* makeSearchPane(allcore::Spine& spine,
                                const QString& libraryRoot = QString()) {
     auto* pane = new QWidget;
     auto* layout = new QVBoxLayout(pane);

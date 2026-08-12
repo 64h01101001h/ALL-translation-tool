@@ -212,6 +212,11 @@ end to end exactly as written)
   link payloads now percent-encoded at construction — FIXED (guard 94)
 - 2026-08-12 · Overlay · session restore added: same file, same
   scroll, same cursor on relaunch (guard 93)
+- 2026-08-12 · Research/Search · makeSearchPane (Spotlight "Search
+  this Mac" + Library-index search) is UNWIRED — GoferPane ships as
+  the Search tab. Not a bug, but those two features are unreachable.
+  CURATION DECISION NEEDED: merge the two buttons into GoferPane, or
+  drop them. Marked [[maybe_unused]] meanwhile.
 
 # CURATION RULINGS
 *(pane · what stays / what pares / format decision)*
