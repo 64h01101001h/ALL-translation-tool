@@ -7281,6 +7281,8 @@ public:
             check(ph.contains("treasuryoflives") ||
                       ph.contains("bdrc.io"),
                   "person links resolve for a Tsongkhapa work");
+            check(ph.contains("openfile:"),
+                  "author's other works link into the Library");
         }
         return fails;
     }
@@ -7617,6 +7619,52 @@ private:
                          "'>Treasury of Lives biography</a>";
             }
         }
+        // their works in YOUR library — local files only, each a
+        // click from opening in the Overlay
+        if (!author.isEmpty()) {
+            if (fileByWork_.isEmpty()) {
+                QDirIterator it(libRoot_,
+                                {"*.txt", "*.TXT", "*.acip"},
+                                QDir::Files,
+                                QDirIterator::Subdirectories);
+                static const QRegularExpression keyRe(
+                    "^([A-Za-z]+)0*(\\d+)");
+                while (it.hasNext()) {
+                    it.next();
+                    const auto m = keyRe.match(it.fileName());
+                    if (m.hasMatch()) {
+                        const QString k = m.captured(1).toUpper() +
+                                          m.captured(2);
+                        if (!fileByWork_.contains(k))
+                            fileByWork_[k] = it.filePath();
+                    }
+                }
+            }
+            QStringList sibs;
+            for (auto it = authorByWork_.begin();
+                 it != authorByWork_.end(); ++it)
+                if (it.value() == author && it.key() != workKey &&
+                    fileByWork_.contains(it.key()))
+                    sibs << it.key();
+            if (!sibs.isEmpty()) {
+                std::sort(sibs.begin(), sibs.end());
+                h += "<div style='font-size:12px;margin-top:2px'>"
+                     "Their works in your Library: ";
+                int n = 0;
+                for (const QString& k : sibs) {
+                    if (++n > 10) {
+                        h += QString(" \u2026 and %1 more")
+                                 .arg(sibs.size() - 10);
+                        break;
+                    }
+                    h += (n > 1 ? ", " : QString()) +
+                         "<a href='openfile:" +
+                         fileByWork_[k].toHtmlEscaped() + "'>" + k +
+                         "</a>";
+                }
+                h += "</div>";
+            }
+        }
         h += "</div>";
         return h;
     }
@@ -7867,6 +7915,7 @@ private:
     bool personsLoaded_ = false;
     QMap<QString, QString> authorByWork_;
     QMap<QString, QJsonObject> personsByAuthor_;
+    QMap<QString, QString> fileByWork_;
     allcore::Progress* progress_ = nullptr;
     std::function<void(const QString&)> open_;
     QFileSystemModel* model_ = nullptr;
