@@ -2016,7 +2016,6 @@ auto* secScan = new QLabel("<span style='color:#9A7A33;font-size:10px;letter-spa
         shadeMode_->setCurrentIndex(
             settings.value("overlay/shading", 0).toInt());
         shadeRow->addWidget(shadeMode_, 1);
-        ll->addLayout(shadeRow);
         // Tibetan typeface for script mode: SambhotaDege first when the
         // system has it (Adam's preference), then the bundled OFL faces
         // (data/fonts/FONTS.md); persisted by family name, graceful if a
@@ -2066,6 +2065,7 @@ auto* secScan = new QLabel("<span style='color:#9A7A33;font-size:10px;letter-spa
             if (!doc_.tokens.empty()) loadDoc();
         });
         ll->addLayout(scriptRow);
+        ll->addLayout(shadeRow);
         // card-only toggles re-render the CURRENT card in place —
         // instant, cycle position kept. Only toggles that change the
         // DOCUMENT display (grammar marks, unattested hints) rebuild,

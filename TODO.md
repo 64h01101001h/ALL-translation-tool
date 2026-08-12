@@ -602,8 +602,12 @@ implementation is sidelined HERE from this date. What this means:
 - [ ] **Geshe Chodrak lane**: verify d. 1972 (PD-2023 math), hunt
       the etext (BDRC/Monlam/THL), then AI-translate definitions
       ("AI-translated from a PD native definition" tier).
-- [ ] **Jäschke 1881 (PD)**: evaluate Steinert's Jaeschke_Scan
-      (3.9MB — text or index?); ingest if text.
+- [~] **Jäschke 1881 (PD)** — EVALUATED 2026-08-12: Steinert's
+      Jaeschke_Scan = headword→page INDEX (154,112 rows), not text;
+      index is Steinert's compilation (his pending license email
+      covers it, same as ChandraDas_Scan). The 1881 text is PD on
+      archive.org → "Jäschke at-page" layer needs the PDF (ask
+      Adam before the download) + index license or our own map.
 - [ ] **Das text**: PKTC license answer → else DSAL Chicago terms →
       else the input-center OCR digitization project.
 - [ ] **Steinert per-dictionary license verification** queue:
