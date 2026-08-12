@@ -5819,6 +5819,33 @@ public:
         srcCol->addWidget(source_);
         auto* loadBtn = new QPushButton("Load source");
         srcCol->addWidget(loadBtn);
+        // the Evidence Ribbon (Adam's wow round, 2026-08-12): once a
+        // source is loaded, the evidence FOLLOWS THE CURSOR — click
+        // or arrow into any clause and its anchors, scaffold,
+        // parallels, and quotation status appear with zero clicks
+        evTimer_ = new QTimer(this);
+        evTimer_->setSingleShot(true);
+        evTimer_->setInterval(350);
+        connect(evTimer_, &QTimer::timeout, [this] {
+            if (clauses_.empty()) return;
+            std::vector<std::string> toks;
+            std::vector<bool> bars;
+            allcore::tokenizeDocument(
+                source_->toPlainText()
+                    .left(source_->textCursor().position())
+                    .toStdString(),
+                toks, bars);
+            const int ix = toks.empty() ? 0 : (int)toks.size() - 1;
+            for (size_t c = 0; c < clauses_.size(); ++c)
+                if (ix >= clauses_[c].beg &&
+                    (ix < clauses_[c].end ||
+                     c + 1 == clauses_.size())) {
+                    if ((int)c != lastClause_) showAnchors((int)c);
+                    break;
+                }
+        });
+        connect(source_, &QPlainTextEdit::cursorPositionChanged,
+                [this] { evTimer_->start(); });
 auto* secStruct = new QLabel("<span style='color:#9A7A33;font-size:10px;letter-spacing:2px;font-weight:600'>STRUCTURE</span>");
         secStruct->setContentsMargins(0, 8, 0, 0);
         srcCol->addWidget(secStruct);
@@ -6023,6 +6050,12 @@ auto* secPub = new QLabel("<span style='color:#9A7A33;font-size:10px;letter-spac
         showConcordance("sems can");
         check(anchors_->toPlainText().contains("corpus hit"),
               "term concordance reaches the corpus");
+        // Evidence Ribbon: the reading-order scaffold rides along
+        demo("/ /blo sbyong snyan brgyud chen mo'i 'khrid yig "
+             "/sems can thams cad bde ba dang ldan par gyur cig /");
+        if (!clauses_.empty()) showAnchors((int)clauses_.size() - 1);
+        check(anchors_->toPlainText().contains("scaffold"),
+              "Evidence Ribbon scaffold renders for a clause");
         source_->setPlainText("sems can thams cad");
         QTextCursor c(source_->document());
         c.select(QTextCursor::Document);
@@ -6173,6 +6206,138 @@ private:
                      "</small><br>";
             }
             h += "</div>";
+        }
+        // ---- the Evidence Ribbon extras (2026-08-12): scaffold,
+        // clause parallels, quotation status — evidence with zero
+        // clicks, all deterministic, nothing composed
+        const auto& cl = clauses_[ci];
+        {
+            // scaffold: the master's attested glosses arranged in
+            // Wilson reading order; the translator completes it
+            auto chunks = allcore::chunkClause(doc_, cl);
+            auto verb = allcore::spotVerb(doc_, chunks);
+            auto plan = allcore::planReading(chunks, verb);
+            std::map<int, int> orderOf;
+            for (const auto& p : plan) orderOf[p.chunk] = p.order;
+            auto chipFor = [&](const allcore::Chunk& ch) -> QString {
+                int best = -1, bw = 0;
+                for (size_t s = 0; s < doc_.spans.size(); ++s) {
+                    const auto& sp = doc_.spans[s];
+                    if (sp.beg >= ch.beg && sp.end <= ch.end) {
+                        const auto& e = doc_.entries[sp.entry_ix];
+                        if (!e.hgm_gloss.empty() &&
+                            sp.end - sp.beg > bw) {
+                            bw = sp.end - sp.beg;
+                            best = (int)s;
+                        }
+                    }
+                }
+                if (best >= 0) {
+                    const auto& e =
+                        doc_.entries[doc_.spans[best].entry_ix];
+                    return QString("<span style='background:#EFE7D2;"
+                                   "padding:1px 5px;border-radius:3px'>") +
+                           QString::fromStdString(e.hgm_gloss.front())
+                               .toHtmlEscaped() +
+                           (e.provisional()
+                                ? "<small style='color:#b00'>?</small>"
+                                : "") +
+                           "</span>";
+                }
+                QString w;
+                for (int t = ch.beg; t < ch.end; ++t)
+                    w += QString::fromStdString(
+                             tokEwts(doc_.tokens[t])) + " ";
+                return QString::fromUtf8("⟨") +
+                       w.trimmed().toHtmlEscaped() +
+                       QString::fromUtf8("⟩");
+            };
+            std::vector<std::pair<int, int>> steps;
+            for (const auto& p : plan)
+                if (p.order > 0) steps.push_back({p.order, p.chunk});
+            std::sort(steps.begin(), steps.end());
+            if (!steps.empty()) {
+                QStringList parts;
+                for (const auto& [o, cix] : steps) {
+                    QString pre;
+                    for (int b = cix - 1;
+                         b >= 0 && orderOf.count(b) && orderOf[b] == 0;
+                         --b)
+                        pre = chipFor(chunks[b]) + " + " + pre;
+                    QString piece = "<span style='white-space:nowrap'>" +
+                                    pre + chipFor(chunks[cix]);
+                    if (chunks[cix].role && *chunks[cix].role)
+                        piece += " <small style='color:#777'>" +
+                                 QString(chunks[cix].role)
+                                     .toHtmlEscaped() +
+                                 "</small>";
+                    piece += "</span>";
+                    parts << piece;
+                }
+                h += "<hr><div><b>scaffold</b> <small style="
+                     "'color:#777'>— attested glosses in Wilson "
+                     "reading order; arrange and complete yourself "
+                     "(nothing composed; ⟨…⟩ unattested, "
+                     "<span style='color:#b00'>?</span> provisional)"
+                     "</small></div><div style='margin:4px 0'>" +
+                     parts.join(" &nbsp;→&nbsp; ") + "</div>";
+            }
+        }
+        {
+            // exact clause parallel: has the master translated this
+            // very clause?
+            QString cw;
+            for (int t = cl.beg; t < cl.end; ++t)
+                cw += QString::fromStdString(tokEwts(doc_.tokens[t])) +
+                      " ";
+            const std::string q = cw.trimmed().toStdString();
+            if (!q.empty()) {
+                try {
+                    auto segs =
+                        spine_.corpusSearch('"' + q + '"', "", 3);
+                    if (!segs.empty()) {
+                        h += "<div style='margin-top:6px'><b>the "
+                             "master has translated this clause</b>"
+                             "</div>";
+                        int shown = 0;
+                        for (const auto& s : segs) {
+                            if (shown++ >= 2) break;
+                            h += "<div style='margin:3px 0'><small>[" +
+                                 QString::fromStdString(s.course) +
+                                 ":" + QString::number(s.seq) +
+                                 "]</small> " +
+                                 QString::fromStdString(s.english)
+                                     .left(220)
+                                     .toHtmlEscaped() +
+                                 "</div>";
+                        }
+                    }
+                } catch (const std::exception&) {
+                    // FTS syntax edge on exotic clause text: the
+                    // ribbon stays silent rather than wrong
+                }
+            }
+        }
+        {
+            // quotation status: does this clause quote the canon?
+            QString ca;
+            for (int t = cl.beg; t < cl.end; ++t)
+                ca += QString::fromStdString(doc_.tokens[t]) + " ";
+            // ACIP is defined uppercase; lowercase source is wylie
+            bool hasLower = false;
+            for (QChar c : ca) hasLower |= c.isLower();
+            auto qm = allcore::detectQuotations(
+                spine_, ca.trimmed().toStdString(), !hasLower, 7);
+            for (const auto& m : qm) {
+                h += "<div style='margin-top:4px;color:#5A3B22'>"
+                     "<b>quotation</b> — attested in [" +
+                     QString::fromStdString(m.course) + ":" +
+                     QString::number(m.seq) + "] · " +
+                     QString::fromStdString(m.english)
+                         .left(180)
+                         .toHtmlEscaped() +
+                     "</div>";
+            }
         }
         anchors_->setHtml(h);
     }
@@ -7129,6 +7294,7 @@ private:
     bool docIsWylie_ = false;
     std::vector<allcore::Clause> clauses_;
     int lastClause_ = -1;
+    QTimer* evTimer_ = nullptr;   // Evidence Ribbon debounce
     QPlainTextEdit* source_ = nullptr;
     QPlainTextEdit* draft_ = nullptr;
     QTextBrowser* clauseView_ = nullptr;

@@ -229,6 +229,15 @@ concordance. Select Tibetan and press "Phrase memory" to see every
 prior rendering (his corpus, binding; plus Align-pane harvests,
 labeled PENDING).
 
+**The evidence follows your cursor.** Once a source is loaded, just
+click or arrow into any clause of the source box — the anchors
+panel fills for that clause with zero clicks: its terms, a
+SCAFFOLD of the master's attested glosses arranged in Wilson
+reading order (labeled; ⟨…⟩ marks unattested pieces, ? marks
+provisional — nothing is ever composed for you), a note when the
+master has translated that exact clause (with his English), and a
+quotation alert when the clause quotes the canon.
+
 **STRUCTURE tools (under the gold heading).** Outline (sa bcad),
 structural units (bam po), verse meter, VERSE READING ORDER
 (stanza-by-stanza with the verb named).

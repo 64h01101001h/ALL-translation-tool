@@ -643,6 +643,28 @@ press Load source, click the second clause. The anchors panel
 shows *sems can* banded in one hue with its English chip in the
 same hue. Click *sems can* to see its corpus concordance.
 
+
+### The Evidence Ribbon — the evidence follows your cursor
+
+Once a source is loaded you never need to click a clause row again:
+click or arrow **into any clause of the source box itself** and the
+anchors panel fills for that clause automatically —
+
+- its established terms, color-banded as always;
+- a **scaffold**: the master's attested glosses arranged in
+  Wilson reading order, ready to arrange and complete. ⟨…⟩ marks a
+  chunk with no attested gloss; a red **?** marks a provisional
+  one. The scaffold arranges the master's own words — it never
+  composes English for you;
+- **"the master has translated this clause"** with his published
+  English, whenever the exact clause exists in the aligned corpus;
+- a **quotation** alert with source and published English when the
+  clause quotes the canon (seven syllables or more, attested only).
+
+Everything in the ribbon is deterministic evidence — the same
+anchors, corpus, and quotation machinery as the buttons, now
+arriving unasked, about the clause you are working on.
+
 ### Phrase memory — before you invent any rendering
 
 1. Select any Tibetan in the source box.
