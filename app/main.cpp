@@ -3020,13 +3020,18 @@ private:
         }
         if (t < 0 || t >= n) t = fallback;
         if (t < 0 || t >= n) return;
+        // fresh longest-first state BEFORE moving the cursor —
+        // setTextCursor fires onClick through cursorPositionChanged,
+        // and a second direct call would step the nest down a level
+        cycle_ = 0;
+        lastTok_ = -1;
+        const bool moves =
+            view_->textCursor().position() != tokBeg_[t];
         QTextCursor c = view_->textCursor();
         c.setPosition(tokBeg_[t]);
         view_->setTextCursor(c);
         view_->ensureCursorVisible();
-        cycle_ = 0;
-        lastTok_ = -1;   // fresh longest-first at the new stop
-        onClick();
+        if (!moves) onClick();   // same position: signal won't fire
         if (lastTok_ < 0) lastTok_ = t;   // particle stop: keep the
                                           // walk alive
     }
