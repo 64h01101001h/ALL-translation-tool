@@ -968,6 +968,10 @@ static void proposeTermDialog(QWidget* parent, const QString& wylie,
 }
 
 static std::function<void(QWidget*)> g_raisePane;
+// sweep mode opens no native OS panels — the sweep reaper can
+// reject QDialogs but not NSOpenPanel, so dialog-opening lanes
+// short-circuit when this is set (main() sets it for --sweep)
+static bool g_sweepActive = false;
 // cross-pane query hooks for the Hunt palette (⌘K): set where each
 // pane is built, called only from user actions
 static std::function<void(const QString&)> g_lookupQuery;
@@ -1476,6 +1480,46 @@ public:
             check(ok, "Pecha maker: English interlinear is "
                       "corpus-attested (matched, never composed)");
         }
+        // batch lane: a folder of mixed ACIP + wylie texts becomes
+        // a pecha set (wylie converts through the proven engine)
+        {
+            QDir tmpRoot(QDir::temp());
+            const QString inD =
+                tmpRoot.filePath("all_selftest_pecha_in");
+            const QString outD =
+                tmpRoot.filePath("all_selftest_pecha_out");
+            QDir().mkpath(inD);
+            QDir().mkpath(outD);
+            for (const QString& old :
+                 QDir(outD).entryList(QDir::Files))
+                QFile::remove(QDir(outD).filePath(old));
+            auto writeF = [&](const QString& n, const char* body) {
+                QFile f(QDir(inD).filePath(n));
+                f.open(QIODevice::WriteOnly);
+                f.write(body);
+            };
+            writeF("a_acip.txt",
+                   "SEMS CAN THAMS CAD BDE BA DANG LDAN PAR GYUR "
+                   "CIG,");
+            writeF("b_acip.act",
+                   "SANGS RGYAS KYI BSTAN PA DAR ZHING RGYAS PAR "
+                   "GYUR CIG,");
+            writeF("c_wylie.txt",
+                   "sems can thams cad sdug bsngal dang bral bar "
+                   "gyur cig/");
+            const QString html = pechaBatchDirs(inD, outD);
+            const QStringList made = QDir(outD).entryList(
+                {"*.pecha.pdf"}, QDir::Files);
+            bool ok = made.size() == 3 &&
+                      html.contains("3 of 3");
+            for (const QString& m : made) {
+                QFile pf(QDir(outD).filePath(m));
+                ok = ok && pf.open(QIODevice::ReadOnly) &&
+                     pf.read(5).startsWith("%PDF");
+            }
+            check(ok, "Pecha batch: folder of ACIP + wylie texts "
+                      "→ 3 pecha PDFs");
+        }
         // wylie source files show as ACIP in the Document box
         // (Adam's finding: the Release 6 wylie edition rendered
         // lowercase in a box labeled ACIP)
@@ -1741,55 +1785,7 @@ public:
             // file on disk is never touched.
             QString raw = QString::fromUtf8(f.readAll());
             if (allcore::looksLikeWylie(raw.toStdString())) {
-                QString out;
-                out.reserve(raw.size());
-                QString tok;
-                bool inComment = false;
-                auto flush = [&] {
-                    if (tok.isEmpty()) return;
-                    if (inComment || tok.startsWith('[') ||
-                        tok.contains('#')) {
-                        out += tok;   // comments/markers verbatim
-                    } else if (tok.startsWith('@')) {
-                        out += tok.toUpper();   // folio marker
-                    } else {
-                        // detach trailing shads, convert the core
-                        QString core = tok, shads;
-                        while (core.endsWith('/')) {
-                            shads += ',';
-                            core.chop(1);
-                        }
-                        QString lead;
-                        while (core.startsWith('/')) {
-                            lead += ',';
-                            core.remove(0, 1);
-                        }
-                        if (core.isEmpty()) {
-                            out += lead + shads;
-                        } else {
-                            const std::string a = allcore::ewtsToAcip(
-                                core.toStdString());
-                            out += lead +
-                                   (a.empty()
-                                        ? core
-                                        : QString::fromStdString(a)) +
-                                   shads;
-                        }
-                    }
-                    if (tok.startsWith('[')) inComment = true;
-                    if (tok.contains(']')) inComment = false;
-                    tok.clear();
-                };
-                for (QChar c : raw) {
-                    if (c == ' ' || c == '\n' || c == '\t') {
-                        flush();
-                        out += c;
-                    } else {
-                        tok += c;
-                    }
-                }
-                flush();
-                input_->setPlainText(out);
+                input_->setPlainText(wylieDocToAcip(raw));
                 wasWylieFile_ = true;
             } else {
                 input_->setPlainText(raw);
@@ -4113,10 +4109,68 @@ public:
         QString volLetter;           // volume letter (ka, kha, …)
         bool titleFolio = false;     // ornamental folio 1a
         bool headMarks = true;       // yig-mgo at the text head
+        bool classicalOpening = true;   // first two text sides at
+                                        // 5 lines (Degé convention
+                                        // per THL's catalog docs)
         int ruleWeight = 1;          // 0 fine · 1 classic · 2 bold
         int layout = 0;              // 0 native · 1 A4 two-up ·
                                      // 2 US-Letter two-up
     };
+
+    // whole wylie document → ACIP, token-wise through the
+    // round-trip-proven reverse engine — markers and comments
+    // preserved, failed tokens kept verbatim (never guessed).
+    // Shared by the Overlay's file-open and the pecha batch lane.
+    static QString wylieDocToAcip(const QString& raw) {
+        QString out;
+        out.reserve(raw.size());
+        QString tok;
+        bool inComment = false;
+        auto flush = [&] {
+            if (tok.isEmpty()) return;
+            if (inComment || tok.startsWith('[') ||
+                tok.contains('#')) {
+                out += tok;   // comments/markers verbatim
+            } else if (tok.startsWith('@')) {
+                out += tok.toUpper();   // folio marker
+            } else {
+                // detach trailing shads, convert the core
+                QString core = tok, shads;
+                while (core.endsWith('/')) {
+                    shads += ',';
+                    core.chop(1);
+                }
+                QString lead;
+                while (core.startsWith('/')) {
+                    lead += ',';
+                    core.remove(0, 1);
+                }
+                if (core.isEmpty()) {
+                    out += lead + shads;
+                } else {
+                    const std::string a = allcore::ewtsToAcip(
+                        core.toStdString());
+                    out += lead +
+                           (a.empty() ? core
+                                      : QString::fromStdString(a)) +
+                           shads;
+                }
+            }
+            if (tok.startsWith('[')) inComment = true;
+            if (tok.contains(']')) inComment = false;
+            tok.clear();
+        };
+        for (QChar c : raw) {
+            if (c == ' ' || c == '\n' || c == '\t') {
+                flush();
+                out += c;
+            } else {
+                tok += c;
+            }
+        }
+        flush();
+        return out;
+    }
 
     // margin/title fields typed in wylie become Tibetan through
     // the battery-proven chain; unicode passes through untouched.
@@ -4131,7 +4185,12 @@ public:
     }
 
     int pechaWritePdf(const QString& fn, const PechaOpts& o) {
-        const std::string src = input_->toPlainText().toStdString();
+        return pechaWritePdfText(input_->toPlainText().toStdString(),
+                                 fn, o);
+    }
+
+    int pechaWritePdfText(const std::string& src, const QString& fn,
+                          const PechaOpts& o) {
         if (src.empty()) return 0;
         auto res = allcore::exportTibetanUnicode(src);
         QString text = QString::fromStdString(res.unicode);
@@ -4157,18 +4216,18 @@ public:
                                             -1.6 * mm, -1.6 * mm);
         const QRectF textR = inner.adjusted(7 * mm, 2.5 * mm,
                                             -7 * mm, -2.5 * mm);
-        const double lineH = textR.height() / o.lines;
+        // lineH is per-side: the classical opening (THL's Degé
+        // catalog docs: first two text sides carry 5 lines, with
+        // proportionally larger letters) re-measures each side
+        double lineH = textR.height() / o.lines;
         const double rw = o.ruleWeight == 0   ? 0.6
                           : o.ruleWeight == 2 ? 1.6
                                               : 1.0;
         QFont tf(o.family.isEmpty() ? QString("Noto Serif Tibetan")
                                     : o.family);
-        tf.setPixelSize(int(lineH * 0.52));
         QFont pf = QFont();
-        pf.setPixelSize(int(lineH * 0.30));
         QFont ef("Times New Roman");
         ef.setItalic(true);
-        ef.setPixelSize(int(lineH * 0.30));
 
         const QString yaYig = tibetanizeField(o.marginTitle);
         const QString vol = tibetanizeField(o.volLetter);
@@ -4216,9 +4275,19 @@ public:
                 p.restore();
             }
         };
+        const QString tTitle = tibetanizeField(o.title);
+        bool titlePending = o.titleFolio && !tTitle.isEmpty();
+        int textSides = 0;
         auto beginSide = [&] {
             pic = QPicture();
             p.begin(&pic);
+            int L = o.lines;
+            if (!titlePending) {
+                if (o.classicalOpening && textSides < 2)
+                    L = qMin(5, o.lines);
+                ++textSides;
+            }
+            lineH = textR.height() / L;
             drawChrome();
             y = textR.top();
         };
@@ -4234,8 +4303,7 @@ public:
         };
         beginSide();
         // ornamental title folio (1a) — the text begins on 1b
-        const QString tTitle = tibetanizeField(o.title);
-        if (o.titleFolio && !tTitle.isEmpty()) {
+        if (titlePending) {
             p.setPen(QPen(Qt::black, 0.18 * mm * rw));
             const QRectF deco = textR.adjusted(6 * mm, 1.2 * mm,
                                                -6 * mm, -1.2 * mm);
@@ -4246,27 +4314,50 @@ public:
             bigf.setPixelSize(int(textR.height() * 0.28));
             p.setFont(bigf);
             p.drawText(deco, Qt::AlignCenter, yigMgo + tTitle);
+            titlePending = false;
             newSide();
         }
-        auto flow = [&](const QString& t, const QFont& f,
-                        double advance, const QColor& col) {
-            QTextLayout tl(t, f);
-            QTextOption to;
-            to.setWrapMode(QTextOption::WrapAtWordBoundaryOrAnywhere);
-            tl.setTextOption(to);
-            tl.beginLayout();
-            while (true) {
-                QTextLine line = tl.createLine();
-                if (!line.isValid()) break;
-                line.setLineWidth(textR.width());
-                line.setPosition(QPointF(0, 0));
-                if (y + advance > textR.bottom() + 0.5) newSide();
-                p.setPen(col);
-                p.setFont(f);
-                line.draw(&p, QPointF(textR.left(), y));
-                y += advance;
+        // flow re-lays its text out whenever a side fills, so the
+        // per-side lineH (classical opening) resizes letters and
+        // line breaks correctly across the transition
+        auto flow = [&](const QString& whole, const QFont& proto,
+                        double fscale, double factor,
+                        const QColor& col) {
+            QString t = whole;
+            while (!t.isEmpty()) {
+                QFont f(proto);
+                f.setPixelSize(int(lineH * fscale));
+                QTextLayout tl(t, f);
+                QTextOption to;
+                to.setWrapMode(
+                    QTextOption::WrapAtWordBoundaryOrAnywhere);
+                tl.setTextOption(to);
+                tl.beginLayout();
+                int consumed = 0;
+                bool sideFull = false;
+                while (true) {
+                    QTextLine line = tl.createLine();
+                    if (!line.isValid()) break;
+                    line.setLineWidth(textR.width());
+                    line.setPosition(QPointF(0, 0));
+                    const double adv = lineH * factor;
+                    if (y + adv > textR.bottom() + 0.5) {
+                        sideFull = true;
+                        consumed = line.textStart();
+                        break;
+                    }
+                    p.setPen(col);
+                    p.setFont(f);
+                    line.draw(&p, QPointF(textR.left(), y));
+                    y += adv;
+                    consumed =
+                        line.textStart() + line.textLength();
+                }
+                tl.endLayout();
+                if (!sideFull) break;
+                newSide();
+                t = t.mid(consumed);
             }
-            tl.endLayout();
         };
         // English appears ONLY when the corpus holds this exact
         // segment — matched from published translation, never
@@ -4291,15 +4382,13 @@ public:
         };
         if (!o.interPhon && !o.interEng) {
             flow((o.headMarks ? yigMgo : QString()) + text, tf,
-                 lineH, Qt::black);
+                 0.52, 1.0, Qt::black);
         } else {
             // per barrier group: Tibetan, then phonetics and/or
             // corpus-attested English beneath, engines throughout
-            const std::string raw =
-                input_->toPlainText().toStdString();
             std::vector<std::string> toks;
             std::vector<bool> bars;
-            allcore::tokenizeDocument(raw, toks, bars);
+            allcore::tokenizeDocument(src, toks, bars);
             size_t g0 = 0;
             bool firstGroup = true;
             const QString tsheg = QString::fromUtf8("་");
@@ -4320,19 +4409,19 @@ public:
                 tib += QString::fromUtf8("། ");
                 if (firstGroup && o.headMarks) tib = yigMgo + tib;
                 firstGroup = false;
-                flow(tib, tf, lineH, Qt::black);
+                flow(tib, tf, 0.52, 1.0, Qt::black);
                 if (o.interPhon) {
                     const std::string pron = allcore::pronounce(
                         wy.trimmed().toStdString());
                     if (!pron.empty())
                         flow(QString::fromStdString(pron), pf,
-                             lineH * 0.5, QColor(0x55, 0x4A, 0x3A));
+                             0.30, 0.5, QColor(0x55, 0x4A, 0x3A));
                 }
                 if (o.interEng) {
                     const QString eng =
                         attestedEnglish(wy.trimmed());
                     if (!eng.isEmpty())
-                        flow(eng, ef, lineH * 0.5,
+                        flow(eng, ef, 0.30, 0.5,
                              QColor(0x2A, 0x45, 0x63));
                 }
                 y += lineH * 0.15;
@@ -4431,9 +4520,10 @@ public:
         auto* preset = new QComboBox;
         preset->addItems({"Traditional pecha (42 × 9 cm)",
                           "Wide pecha (45 × 10 cm)",
-                          "A4 landscape"});
+                          "A4 landscape",
+                          "Degé woodblock (68 × 10 cm)"});
         preset->setCurrentIndex(
-            qBound(0, st.value("pecha/preset", 0).toInt(), 2));
+            qBound(0, st.value("pecha/preset", 0).toInt(), 3));
         auto* lines = new QSpinBox;
         lines->setRange(5, 9);
         lines->setValue(
@@ -4480,6 +4570,16 @@ public:
                               "text (yig mgo)"));
         heads->setChecked(
             st.value("pecha/headMarks", true).toBool());
+        auto* classical = new QCheckBox(
+            "classical opening — the first two text sides carry "
+            "5 lines with larger letters (Degé convention)");
+        classical->setToolTip(
+            "In the great woodblock editions the opening sides of "
+            "a volume are set at 5 lines, then the text settles "
+            "into its regular count — documented in THL's Degé "
+            "cataloging standards.");
+        classical->setChecked(
+            st.value("pecha/classicalOpening", true).toBool());
         auto* inter = new QCheckBox(
             "phonetics line under each segment (GMR convention)");
         inter->setChecked(
@@ -4516,6 +4616,7 @@ public:
         v->addWidget(titleFolio);
         v->addLayout(row4);
         v->addWidget(heads);
+        v->addWidget(classical);
         v->addWidget(inter);
         v->addWidget(interE);
         auto buildOpts = [&]() {
@@ -4527,6 +4628,10 @@ public:
             if (preset->currentIndex() == 2) {
                 o.wMM = 297;
                 o.hMM = 210;
+            }
+            if (preset->currentIndex() == 3) {
+                o.wMM = 680;   // Degé folio ≈ 680 × 100 mm (THL)
+                o.hMM = 100;
             }
             o.lines = lines->value();
             o.interPhon = inter->isChecked();
@@ -4540,6 +4645,7 @@ public:
             o.marginTitle = marginT->text();
             o.volLetter = volL->text();
             o.headMarks = heads->isChecked();
+            o.classicalOpening = classical->isChecked();
             o.ruleWeight = rulesC->currentIndex();
             o.layout = layoutC->currentIndex();
             return o;
@@ -4547,6 +4653,8 @@ public:
         auto persist = [&] {
             QSettings s2("ALL", "TranslationTool");
             s2.setValue("pecha/preset", preset->currentIndex());
+            s2.setValue("pecha/classicalOpening",
+                        classical->isChecked());
             s2.setValue("pecha/lines", lines->value());
             s2.setValue("pecha/rules", rulesC->currentIndex());
             s2.setValue("pecha/layout", layoutC->currentIndex());
@@ -4636,6 +4744,118 @@ public:
                  "only — never composed";
         h += ".</small>";
         return h;
+    }
+
+    // saved pecha options (the Make-pecha dialog persists these) —
+    // the batch lane renders whole folders with them
+    PechaOpts pechaOptsFromSettings() const {
+        QSettings st("ALL", "TranslationTool");
+        PechaOpts o;
+        const int preset =
+            qBound(0, st.value("pecha/preset", 0).toInt(), 3);
+        if (preset == 1) { o.wMM = 450; o.hMM = 100; }
+        if (preset == 2) { o.wMM = 297; o.hMM = 210; }
+        if (preset == 3) { o.wMM = 680; o.hMM = 100; }
+        o.lines = qBound(5, st.value("pecha/lines", 7).toInt(), 9);
+        o.interPhon = st.value("pecha/interPhon", false).toBool();
+        o.interEng = st.value("pecha/interEng", false).toBool();
+        o.family = tibFont_ && tibFont_->currentText() != "system"
+                       ? tibFont_->currentText()
+                       : QString("Noto Serif Tibetan");
+        o.headMarks = st.value("pecha/headMarks", true).toBool();
+        o.classicalOpening =
+            st.value("pecha/classicalOpening", true).toBool();
+        o.ruleWeight =
+            qBound(0, st.value("pecha/rules", 1).toInt(), 2);
+        o.layout =
+            qBound(0, st.value("pecha/layout", 0).toInt(), 2);
+        // per-text dress (title folio, ya-yig, volume letter) is
+        // deliberately left off in batch — a saved title would be
+        // wrong on every other text
+        return o;
+    }
+
+    QString pechaBatchDirs(const QString& inDir,
+                           const QString& outDir) {
+        QDir in(inDir);
+        const QStringList files = in.entryList(
+            {"*.txt", "*.act", "*.acip", "*.TXT", "*.ACT",
+             "*.ACIP"},
+            QDir::Files, QDir::Name);
+        if (files.isEmpty())
+            return QString("<b>Batch pecha</b>: no text files "
+                           "(*.txt, *.act, *.acip) found in %1.")
+                .arg(inDir.toHtmlEscaped());
+        const PechaOpts o = pechaOptsFromSettings();
+        QProgressDialog prog("Making pechas…", "Stop", 0,
+                             files.size(), this);
+        prog.setWindowModality(Qt::WindowModal);
+        prog.setMinimumDuration(0);
+        int done = 0, made = 0, sidesTotal = 0;
+        QStringList failed;
+        for (const QString& fname : files) {
+            prog.setValue(done);
+            prog.setLabelText(fname);
+            QCoreApplication::processEvents();
+            if (prog.wasCanceled()) break;
+            QFile f(in.filePath(fname));
+            if (!f.open(QIODevice::ReadOnly)) {
+                failed << fname;
+                ++done;
+                continue;
+            }
+            QString raw = QString::fromUtf8(f.readAll());
+            if (allcore::looksLikeWylie(raw.toStdString()))
+                raw = wylieDocToAcip(raw);
+            const QString outFn = QDir(outDir).filePath(
+                QFileInfo(fname).completeBaseName() +
+                ".pecha.pdf");
+            const int sides =
+                pechaWritePdfText(raw.toStdString(), outFn, o);
+            if (sides) {
+                ++made;
+                sidesTotal += sides;
+            } else {
+                failed << fname;
+            }
+            ++done;
+        }
+        prog.setValue(files.size());
+        QString h =
+            QString("<b>Batch pecha</b>: %1 of %2 text(s) → pecha "
+                    "PDFs in %3 (%4 folio sides total).")
+                .arg(made)
+                .arg(files.size())
+                .arg(outDir.toHtmlEscaped())
+                .arg(sidesTotal);
+        if (done < files.size())
+            h += QString("<br>stopped early — %1 file(s) not "
+                         "attempted.")
+                     .arg(files.size() - done);
+        if (!failed.isEmpty())
+            h += "<br><small>failed (unreadable or empty): " +
+                 failed.join(", ").toHtmlEscaped() + "</small>";
+        h += "<br><small>rendered with the saved pecha options; "
+             "per-text dress (title folio, margin title) is off "
+             "in batch — set those per text via Make pecha. "
+             "Failed syllables appear as ⟨wylie⟩, never "
+             "guessed.</small>";
+        return h;
+    }
+
+    QString pechaBatch() {
+        if (g_sweepActive)
+            return "<i>sweep mode — the folder pickers stay "
+                   "closed (native panels cannot be reaped); the "
+                   "batch lane is proven by its selftest.</i>";
+        const QString inDir = QFileDialog::getExistingDirectory(
+            this,
+            "Choose the folder of texts (ACIP or wylie files)");
+        if (inDir.isEmpty()) return QString();
+        const QString outDir = QFileDialog::getExistingDirectory(
+            this, "Choose the output folder for the pecha PDFs");
+        if (outDir.isEmpty()) return QString();
+        return pechaBatchDirs(inDir, outDir);
     }
 
 
@@ -5611,6 +5831,14 @@ public:
             "rotated Tibetan folio numerals, your typeface, "
             "optional phonetics interlinear — preview before "
             "saving.");
+        auto* batchB = mk(
+            "Batch: folder of texts → pecha set…",
+            "Every text file (*.txt, *.act, *.acip — ACIP or "
+            "wylie) in a chosen folder becomes its own pecha PDF "
+            "in an output folder, using the saved Make-pecha "
+            "options (page, rules, layout, interlinears). "
+            "Per-text dress (title folio, margin title) stays "
+            "off in batch. Needs no loaded document.");
         auto* printB = mk(
             "Export print Tibetan (Unicode)…",
             "Clean print-ready Tibetan Unicode with the classical "
@@ -5625,6 +5853,13 @@ public:
         connect(pechaB, &QPushButton::clicked, [this] {
             if (!guard()) return;
             results_->setHtml(overlay_->pechaExport());
+        });
+        connect(batchB, &QPushButton::clicked, [this] {
+            // deliberately no guard() — batch reads a folder, not
+            // the loaded document
+            const QString h = overlay_ ? overlay_->pechaBatch()
+                                       : QString();
+            if (!h.isEmpty()) results_->setHtml(h);
         });
         connect(printB, &QPushButton::clicked, [this] {
             if (!guard()) return;
@@ -14838,6 +15073,7 @@ int main(int argc, char** argv) {
     const bool shotMode = shotIx >= 0 && shotIx + 1 < cliArgs.size();
     const bool selfTestMode = cliArgs.contains("--selftest");
     const bool sweepMode = cliArgs.contains("--sweep");
+    g_sweepActive = sweepMode;
     if (shotMode || selfTestMode || sweepMode) {
         g_isAdmin = true;
         if (g_proposalsDir.isEmpty())
