@@ -619,9 +619,25 @@ implementation is sidelined HERE from this date. What this means:
       (traditional 42×9 / wide / A4; double-rule frames; rotated
       Tibetan folio numerals; battery-proven script chain; optional
       GMR-phonetics interlinear; selftest writes+verifies a PDF).
-- [ ] Pecha v2: translation interlinear where corpus-attested;
-      margin title (ya-yig); dbu-can title page; per-side syllable
-      budget tuning against real prints.
+- [ ] **PECHA MAKER → TRUE PRODUCTION TOOL** (Adam, 2026-08-12:
+      "super rudimentary as of now… focus on getting it ready for
+      full production and deployment"). The v2+ program:
+      translation interlinear where corpus-attested; margin title
+      (ya-yig) + volume letter; dbu-can title page + framing
+      ornaments; per-side syllable budget tuned against real
+      woodblock prints; head-letter (dbu khyud) and double-shad
+      conventions; verse lineation awareness; page furniture
+      options (rules weight, margins) as saved presets; imposition
+      (two-up on A4/letter w/ cut marks) for office printers;
+      cover/label sheet; batch mode (whole Library folder → pecha
+      set); QA pass comparing against traditional prints.
+- [ ] **PRINT PARTNERSHIP — Vimala Treasures** (Adam, 2026-08-12):
+      partner/work with vimalatreasures.org (they print +
+      distribute BDRC texts:
+      vimalatreasures.org/collections/the-buddhist-digital-resource-
+      center-bdrc) so texts/pechas produced by the tool can be
+      PRINTED properly on request — the Pecha Maker's output as
+      their input. Outreach draft when the pecha tool matures.
 - [ ] TibetDoc search-locations view: per-FILE hit counts across
       chosen locations + open-at-first-hit (Gofer extension).
 - [ ] In-document lookup popup (TibetDoc's dictionary window):

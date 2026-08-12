@@ -1944,145 +1944,6 @@ auto* secScan = new QLabel("<span style='color:#9A7A33;font-size:10px;letter-spa
                         "\n" + hint_->text());
             }
         });
-auto* illusVolBtn = new QPushButton("Illustration gallery (cached scans)");
-        illusVolBtn->setToolTip(
-            "Search this text's already-downloaded woodblock pages "
-            "(the scan cache) for illustration candidates and show "
-            "them as a gallery. Candidates only \u2014 pages you have "
-            "not viewed are not searched.");
-        ll->addWidget(illusVolBtn);
-        connect(illusVolBtn, &QPushButton::clicked, [this, root] {
-            if (scanCache_.isEmpty() || scanWork_.isEmpty()) {
-                QMessageBox::information(
-                    this, "No linked volume",
-                    "Link a scan volume first (SCANS \u2192 Follow "
-                    "along / Search BDRC).");
-                return;
-            }
-            // the volume's own cache folder; a page can be present
-            // at both view resolution (full/max) and sweep
-            // resolution \u2014 keep one per image, preferring full
-            QMap<QString, QString> byKey;
-            const QString dir = volCacheDir();
-            for (const QString& f : QDir(dir).entryList(QDir::Files)) {
-                const QString key = f.section("_full_", 0, 0);
-                if (!byKey.contains(key) || f.contains("_full_max_"))
-                    byKey[key] = dir + "/" + f;
-            }
-            const QStringList paths = byKey.values();
-            if (paths.isEmpty()) {
-                QMessageBox::information(
-                    this, "No cached pages",
-                    "No pages of this volume are in the scan cache "
-                    "yet \u2014 pages cache as you view them in "
-                    "Follow along, or fetch them all with "
-                    "\u201cIllustration gallery (whole volume)\u2026\u201d.");
-                return;
-            }
-            runIllustrationGallery(this, root, paths,
-                                   scanWork_ + " cached pages");
-        });
-        auto* fourBtn = new QPushButton("Four-layer view (this folio)\u2026");
-        fourBtn->setToolTip(
-            "The folio you are reading in four synchronized layers: "
-            "the woodblock scan, its OCR reading (labeled review "
-            "material), the e-text lines as keyed, and the master's "
-            "published English where a line is attested in the "
-            "corpus. Click a row to light its band on the carving.");
-        ll->addWidget(fourBtn);
-        connect(fourBtn, &QPushButton::clicked,
-                [this] { fourLayerView(); });
-        auto* illusWholeBtn =
-            new QPushButton("Illustration gallery (whole volume)\u2026");
-        illusWholeBtn->setToolTip(
-            "Fetch every folio side of the linked scan volume from "
-            "BDRC (reduced size, cached under the volume's own "
-            "folder), then search all of them for illustration "
-            "candidates. Pages already cached are not refetched. "
-            "Candidates only \u2014 never claimed complete.");
-        ll->addWidget(illusWholeBtn);
-        connect(illusWholeBtn, &QPushButton::clicked, [this, root] {
-            if (scanCache_.isEmpty() || scanWork_.isEmpty() ||
-                folioUrl_.isEmpty()) {
-                QMessageBox::information(
-                    this, "No linked volume",
-                    "Link a scan volume first (SCANS \u2192 Follow "
-                    "along / Search BDRC) and let the folio outline "
-                    "load.");
-                return;
-            }
-            const QString dir = volCacheDir();
-            QDir().mkpath(dir);
-            auto underscored = [](QString s) {
-                return s.replace(
-                    QRegularExpression("[^A-Za-z0-9._-]"), "_");
-            };
-            QStringList paths;
-            int fetchFails = 0;
-            bool stopped = false;
-            QProgressDialog prog(
-                QString("Fetching %1 folio sides from BDRC\u2026")
-                    .arg(folioOrder_.size()),
-                "Stop", 0, folioOrder_.size(), this);
-            prog.setWindowModality(Qt::WindowModal);
-            int done = 0;
-            for (const QString& folio : folioOrder_) {
-                prog.setValue(done++);
-                QCoreApplication::processEvents();
-                if (prog.wasCanceled()) { stopped = true; break; }
-                const QString url = folioUrl_.value(folio);
-                // a full-resolution copy from Follow along serves
-                const QString fullFn = dir + "/" + underscored(url);
-                if (QFile::exists(fullFn)) { paths << fullFn; continue; }
-                // reduced width is plenty for line-gap geometry
-                QString rurl = url;
-                rurl.replace("/full/max/", "/full/1600,/");
-                const QString rFn = dir + "/" + underscored(rurl);
-                if (QFile::exists(rFn)) { paths << rFn; continue; }
-                QEventLoop loop;
-                auto* rep = nam_.get(QNetworkRequest(QUrl(rurl)));
-                connect(rep, &QNetworkReply::finished, &loop,
-                        &QEventLoop::quit);
-                connect(&prog, &QProgressDialog::canceled, &loop,
-                        &QEventLoop::quit);
-                loop.exec();
-                if (prog.wasCanceled()) {
-                    rep->abort();
-                    rep->deleteLater();
-                    stopped = true;
-                    break;
-                }
-                if (rep->error() == QNetworkReply::NoError) {
-                    QFile f(rFn);
-                    if (f.open(QIODevice::WriteOnly)) {
-                        f.write(rep->readAll());
-                        paths << rFn;
-                    } else
-                        ++fetchFails;
-                } else
-                    ++fetchFails;
-                rep->deleteLater();
-            }
-            prog.setValue(folioOrder_.size());
-            if (paths.isEmpty()) {
-                QMessageBox::information(
-                    this, "Illustration gallery",
-                    QString("No pages fetched (%1 failure(s)) \u2014 "
-                            "is BDRC reachable?")
-                        .arg(fetchFails));
-                return;
-            }
-            QString title = scanWork_ + " whole volume";
-            if (stopped)
-                title += QString(" (stopped early \u2014 %1 of %2 "
-                                 "pages)")
-                             .arg(paths.size())
-                             .arg(folioOrder_.size());
-            else if (fetchFails)
-                title += QString(" (%1 page(s) failed to fetch)")
-                             .arg(fetchFails);
-            runIllustrationGallery(this, root, paths, title);
-        });
         // ---- display toggles: the reader chooses their information density;
         // choices persist across sessions ----
         QSettings settings("ALL", "TranslationTool");
@@ -3040,20 +2901,47 @@ private:
     // whose snippet mentions other terms of this same text outranks
     // one that merely uses the word. Machine-located candidates; the
     // recordings are the authority.
+public:
     QString teachingsReportHtml() const {
-        // the text's own vocabulary, as normalized gloss keys
-        std::set<std::string> docKeys;
+        // the text's own vocabulary, as normalized gloss keys.
+        // SPEED (Adam's finding, 2026-08-12): scoring used to run
+        // INSIDE the sort comparator and substring-search every doc
+        // key per comparison — billions of ops on a volume. Now:
+        // keys live in a hash set, each snippet is normalized ONCE
+        // and scored by its own 1..3-word windows (a few hundred
+        // hash lookups), and scores are memoized before sorting.
+        std::unordered_set<std::string> docKeys;
         for (const auto& e : doc_.entries)
-            for (const auto& g : e.hgm_gloss)
-                docKeys.insert(teachingKey(g));
+            for (const auto& g : e.hgm_gloss) {
+                const std::string k = teachingKey(g);
+                if (k.size() >= 5) docKeys.insert(k);
+            }
         auto contextScore = [&docKeys](const QString& snippet,
                                        const std::string& self) {
-            const std::string low = snippet.toLower().toStdString();
+            // snippet words, teachingKey-normalized
+            std::vector<std::string> w;
+            std::string cur;
+            for (QChar qc : snippet) {
+                const char c = (char)std::tolower(qc.toLatin1());
+                if (std::isalpha((unsigned char)c) || c == '\'' ||
+                    c == '-') {
+                    cur += c;
+                } else if (!cur.empty()) {
+                    w.push_back(cur);
+                    cur.clear();
+                }
+            }
+            if (!cur.empty()) w.push_back(cur);
             int score = 0;
-            for (const auto& k : docKeys)
-                if (k != self && k.size() >= 5 &&
-                    low.find(k) != std::string::npos)
-                    ++score;
+            for (size_t i = 0; i < w.size(); ++i) {
+                std::string win;
+                for (size_t len = 1; len <= 3 && i + len <= w.size();
+                     ++len) {
+                    if (len > 1) win += ' ';
+                    win += w[i + len - 1];
+                    if (win != self && docKeys.count(win)) ++score;
+                }
+            }
             return score;
         };
         QString h =
@@ -3082,13 +2970,20 @@ private:
                             cand.push_back(&m);
                         }
                 }
-                std::stable_sort(
-                    cand.begin(), cand.end(),
-                    [&](const TeachingMoment* a,
-                        const TeachingMoment* b) {
-                        return contextScore(a->snippet, selfKey) >
-                               contextScore(b->snippet, selfKey);
-                    });
+                // memoize scores, then sort by them
+                std::vector<std::pair<int, const TeachingMoment*>>
+                    scored;
+                scored.reserve(cand.size());
+                for (const auto* mp : cand)
+                    scored.push_back(
+                        {contextScore(mp->snippet, selfKey), mp});
+                std::stable_sort(scored.begin(), scored.end(),
+                                 [](const auto& a, const auto& b) {
+                                     return a.first > b.first;
+                                 });
+                cand.clear();
+                for (const auto& [sc, mp] : scored)
+                    cand.push_back(mp);
                 int n = 0;
                 for (const auto* mp : cand) {
                     if (++n > 2) break;
@@ -3143,6 +3038,8 @@ private:
                  "classes are indexed).</i>";
         return h;
     }
+private:
+
 
     bool eventFilter(QObject* w, QEvent* ev) override {
         if (view_ && w == view_->viewport() &&
@@ -3793,6 +3690,7 @@ private:
             setScanPixmap(basePx_, curFolio_);
     }
 
+public:
     // ---- the Four-Layer Page (Adam's wow round, 2026-08-12): one
     // folio, four synchronized layers — scan · OCR · e-text ·
     // attested English — row-aligned, click a row to light its band
@@ -4284,6 +4182,145 @@ public:
                       .arg(fn.toHtmlEscaped())
                 : QString("<b>Pecha failed</b> — empty document or "
                           "unwritable file.");
+    }
+
+
+    // scan utilities, callable from the Scans pane (Adam's reorg,
+    // 2026-08-12); root captured at construction
+    void galleryCached() {
+            if (scanCache_.isEmpty() || scanWork_.isEmpty()) {
+                QMessageBox::information(
+                    this, "No linked volume",
+                    "Link a scan volume first (SCANS \u2192 Follow "
+                    "along / Search BDRC).");
+                return;
+            }
+            // the volume's own cache folder; a page can be present
+            // at both view resolution (full/max) and sweep
+            // resolution \u2014 keep one per image, preferring full
+            QMap<QString, QString> byKey;
+            const QString dir = volCacheDir();
+            for (const QString& f : QDir(dir).entryList(QDir::Files)) {
+                const QString key = f.section("_full_", 0, 0);
+                if (!byKey.contains(key) || f.contains("_full_max_"))
+                    byKey[key] = dir + "/" + f;
+            }
+            const QStringList paths = byKey.values();
+            if (paths.isEmpty()) {
+                QMessageBox::information(
+                    this, "No cached pages",
+                    "No pages of this volume are in the scan cache "
+                    "yet \u2014 pages cache as you view them in "
+                    "Follow along, or fetch them all with "
+                    "\u201cIllustration gallery (whole volume)\u2026\u201d.");
+                return;
+            }
+            runIllustrationGallery(this, dataRoot_, paths,
+                               scanWork_ + " cached pages");
+    }
+
+    void galleryWholeVolume() {
+            if (scanCache_.isEmpty() || scanWork_.isEmpty() ||
+                folioUrl_.isEmpty()) {
+                QMessageBox::information(
+                    this, "No linked volume",
+                    "Link a scan volume first (SCANS \u2192 Follow "
+                    "along / Search BDRC) and let the folio outline "
+                    "load.");
+                return;
+            }
+            const QString dir = volCacheDir();
+            QDir().mkpath(dir);
+            auto underscored = [](QString s) {
+                return s.replace(
+                    QRegularExpression("[^A-Za-z0-9._-]"), "_");
+            };
+            QStringList paths;
+            int fetchFails = 0;
+            bool stopped = false;
+            QProgressDialog prog(
+                QString("Fetching %1 folio sides from BDRC\u2026")
+                    .arg(folioOrder_.size()),
+                "Stop", 0, folioOrder_.size(), this);
+            prog.setWindowModality(Qt::WindowModal);
+            int done = 0;
+            for (const QString& folio : folioOrder_) {
+                prog.setValue(done++);
+                QCoreApplication::processEvents();
+                if (prog.wasCanceled()) { stopped = true; break; }
+                const QString url = folioUrl_.value(folio);
+                // a full-resolution copy from Follow along serves
+                const QString fullFn = dir + "/" + underscored(url);
+                if (QFile::exists(fullFn)) { paths << fullFn; continue; }
+                // reduced width is plenty for line-gap geometry
+                QString rurl = url;
+                rurl.replace("/full/max/", "/full/1600,/");
+                const QString rFn = dir + "/" + underscored(rurl);
+                if (QFile::exists(rFn)) { paths << rFn; continue; }
+                QEventLoop loop;
+                auto* rep = nam_.get(QNetworkRequest(QUrl(rurl)));
+                connect(rep, &QNetworkReply::finished, &loop,
+                        &QEventLoop::quit);
+                connect(&prog, &QProgressDialog::canceled, &loop,
+                        &QEventLoop::quit);
+                loop.exec();
+                if (prog.wasCanceled()) {
+                    rep->abort();
+                    rep->deleteLater();
+                    stopped = true;
+                    break;
+                }
+                if (rep->error() == QNetworkReply::NoError) {
+                    QFile f(rFn);
+                    if (f.open(QIODevice::WriteOnly)) {
+                        f.write(rep->readAll());
+                        paths << rFn;
+                    } else
+                        ++fetchFails;
+                } else
+                    ++fetchFails;
+                rep->deleteLater();
+            }
+            prog.setValue(folioOrder_.size());
+            if (paths.isEmpty()) {
+                QMessageBox::information(
+                    this, "Illustration gallery",
+                    QString("No pages fetched (%1 failure(s)) \u2014 "
+                            "is BDRC reachable?")
+                        .arg(fetchFails));
+                return;
+            }
+            QString title = scanWork_ + " whole volume";
+            if (stopped)
+                title += QString(" (stopped early \u2014 %1 of %2 "
+                                 "pages)")
+                             .arg(paths.size())
+                             .arg(folioOrder_.size());
+            else if (fetchFails)
+                title += QString(" (%1 page(s) failed to fetch)")
+                             .arg(fetchFails);
+            runIllustrationGallery(this, dataRoot_, paths, title);
+    }
+
+    void scansAction() {
+        // arm follow-along / open the title search, then land the
+        // reader where the page tracks the cursor
+        if (titleSearchMode_) titleSearchDialog();
+        else followScans();
+        if (g_raisePane) g_raisePane(this);
+    }
+
+    QString scansStatus() const {
+        QString d = documentLabel();
+        if (d.isEmpty()) return "no document loaded";
+        QString t = "document: " + d;
+        t += scanWork_.isEmpty()
+                 ? QString(" · no scan volume linked")
+                 : " · linked: " + scanWork_ +
+                       (curFolio_.isEmpty()
+                            ? QString()
+                            : " · folio " + curFolio_);
+        return t;
     }
 
 private:
@@ -4853,6 +4890,92 @@ private:
 // list of search targets (the aligned corpus + any folders, added
 // exactly as in the original), Add/Remove/Duplicate/Save/Stop/Find,
 // and the Search Setting / Saved Search / Search Results tabs.
+// ---- ScansPane (Adam, 2026-08-12): the woodblock utilities in
+// their own Read-group pane. The follow-along VIEWER stays in the
+// Overlay (its point is tracking the reading cursor); this pane
+// holds the one-shot scan tools, bound to the same state.
+class ScansPane : public QWidget {
+public:
+    explicit ScansPane(OverlayPane* overlay) : overlay_(overlay) {
+        auto* v = new QVBoxLayout(this);
+        auto* banner = new QLabel(
+            "<b>Scans</b> — the woodblock tools for the document "
+            "loaded in the Overlay: link the BDRC scans, sweep for "
+            "illustrations, and open the four-layer view. The page "
+            "that follows your cursor lives in the Overlay itself.");
+        banner->setWordWrap(true);
+        v->addWidget(banner);
+        status_ = new QLabel;
+        status_->setStyleSheet("color:#7A5A00;font-size:13px");
+        v->addWidget(status_);
+        auto mk = [&](const QString& title, const QString& what) {
+            auto* b = new QPushButton(title);
+            b->setMinimumHeight(34);
+            v->addWidget(b);
+            auto* d = new QLabel(what);
+            d->setWordWrap(true);
+            d->setStyleSheet("color:#666;font-size:12px;"
+                             "margin-bottom:6px");
+            v->addWidget(d);
+            return b;
+        };
+        auto* linkB = mk(
+            "Find scans on BDRC / follow along…",
+            "Link this text to its woodblock scans (recognized "
+            "canon texts link by catalog number; anything else by "
+            "title search, you confirm). Arms the follow-along "
+            "viewer and returns you to the Overlay.");
+        auto* fourB = mk(
+            "Four-layer view (this folio)…",
+            "The folio you are reading in four synchronized "
+            "layers: scan · OCR (review material) · e-text · the "
+            "master's attested English; click a row to light its "
+            "band on the carving.");
+        auto* cacheB = mk(
+            "Illustration gallery (cached scans)",
+            "Search the pages you have already viewed for "
+            "woodblock miniatures and diagrams — candidates only, "
+            "never claimed complete.");
+        auto* wholeB = mk(
+            "Illustration gallery (whole volume)…",
+            "Fetch every folio side of the linked volume (reduced "
+            "size, cached, with progress and Stop) and sweep them "
+            "all for illustrations.");
+        v->addStretch();
+        connect(linkB, &QPushButton::clicked,
+                [this] { overlay_->scansAction(); });
+        connect(fourB, &QPushButton::clicked,
+                [this] { overlay_->fourLayerView(); });
+        connect(cacheB, &QPushButton::clicked,
+                [this] { overlay_->galleryCached(); });
+        connect(wholeB, &QPushButton::clicked,
+                [this] { overlay_->galleryWholeVolume(); });
+    }
+
+    int selfTest(QStringList& log) {
+        int fails = 0;
+        refresh();
+        const bool ok = !status_->text().isEmpty();
+        log << QString("  [%1] Scans: pane bound to the Overlay's "
+                       "scan state (%2)")
+                   .arg(ok ? "PASS" : "FAIL")
+                   .arg(status_->text().left(60));
+        if (!ok) ++fails;
+        return fails;
+    }
+
+protected:
+    void showEvent(QShowEvent* e) override {
+        refresh();
+        QWidget::showEvent(e);
+    }
+
+private:
+    void refresh() { status_->setText(overlay_->scansStatus()); }
+    OverlayPane* overlay_ = nullptr;
+    QLabel* status_ = nullptr;
+};
+
 // ---- ExportPane (Adam, 2026-08-12): FORMAT & EXPORT promoted to
 // its own Read-group pane — the publishing station. Operates on the
 // document loaded in the Overlay; the reading column stays lean.
@@ -13801,6 +13924,8 @@ int main(int argc, char** argv) {
             .arg(QString::fromStdString(spine.metaValue("release_version"))));
     auto* overlay = new OverlayPane(spine, checker, refdict, progress, root);
     tabs.addTab(overlay, "Overlay");
+    auto* scansPane = new ScansPane(overlay);
+    tabs.addTab(scansPane, "Scans");
     auto* exportPane = new ExportPane(overlay);
     tabs.addTab(exportPane, "Export");
     tabs.addTab(new AnalysisPane(spine, tplPath, root + "/analyses"), "Analysis");
@@ -14103,7 +14228,7 @@ int main(int argc, char** argv) {
             if (g->count()) tabs.addTab(g, gname);
             else delete g;
         };
-        mkGroup("Read", {"Overlay", "Library", "Export"});
+        mkGroup("Read", {"Overlay", "Library", "Scans", "Export"});
         mkGroup("Translate",
                 {"Manuscript", "Draft", "Review", "Align"});
         mkGroup("Research",
@@ -14700,6 +14825,19 @@ int main(int argc, char** argv) {
         return md.isEmpty() ? 1 : 0;
     }
 
+    // --teachbench <file>: load a document and time the teachings
+    // report (the perf guard for Adam's slow-loading finding)
+    const int tbIx = cliArgs.indexOf("--teachbench");
+    if (tbIx >= 0 && tbIx + 1 < cliArgs.size()) {
+        overlay->openFile(cliArgs[tbIx + 1]);
+        QElapsedTimer et;
+        et.start();
+        const QString html = overlay->teachingsReportHtml();
+        printf("[teachings report: %lld ms, %lld chars]\n",
+               (long long)et.elapsed(), (long long)html.size());
+        return html.isEmpty() ? 1 : 0;
+    }
+
     // --selftest: suite 38 — the real panes exercised against the
     // real spine, offscreen; nonzero exit on any failure (ctest)
     if (selfTestMode) {
@@ -14707,6 +14845,7 @@ int main(int argc, char** argv) {
         int fails = 0;
         fails += overlay->selfTest(log, root);
         fails += exportPane->selfTest(log);
+        fails += scansPane->selfTest(log);
         fails += trainerPane->selfTest(log);
         fails += drillsPane->selfTest(log);
         fails += draftPane->selfTest(log);

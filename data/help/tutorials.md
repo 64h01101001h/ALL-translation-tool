@@ -137,22 +137,6 @@ evidence. When the authority APPROVES a flag, it is a confirmed error
 the authority DECLINES one, the form has been ruled VALID, and the
 app stops doubting it everywhere, for the whole team.
 
-**SCANS (left column, under its gold heading).** "Find scans on
-BDRC…" opens the original woodblock images under the text; the pages
-turn following your cursor. "locate word (OCR)" draws a box around
-the very word under your cursor on the woodblock (recognition is used
-only to locate, never as text). "Illustration gallery (cached
-scans)" searches this volume's already-downloaded pages for
-woodblock miniatures and diagrams — candidates only; pages cache as
-you view them. "Illustration gallery (whole volume)…" fetches every
-folio side of the linked volume from BDRC (reduced size, cached,
-with progress and Stop) and searches them all. "Four-layer view
-(this folio)…" shows the folio you are reading in four synchronized
-layers — the woodblock scan, its OCR reading (labeled review
-material), the e-text lines as keyed, and the master's published
-English where a line is attested — click a row and its band lights
-on the carving.
-
 ## Library
 
 *Where: Read → Library.*
@@ -220,6 +204,32 @@ clause; fill the blank given his English; choose the correct particle
 variant (explained from the classical tables); parallel reading
 (reveal his English only when needed); review. "New drill" generates
 the next one. Progress is tracked per word and adapts.
+
+**SCANS (left column).** "Follow along in scans" (for recognized
+canon texts, or armed by the Scans pane's title search) opens the
+woodblock images under the text; the pages turn following your
+cursor, and "locate word (OCR)" boxes the very word under your
+cursor on the carving. The one-shot scan tools live in Read →
+Scans.
+
+
+## Scans
+
+*Where: Read → Scans.*
+
+**What it's for.** The woodblock tools for the document loaded in
+the Overlay — the page-follows-cursor viewer itself lives in the
+Overlay; this pane holds the one-shot actions.
+
+**Use.** "Find scans on BDRC / follow along…" links the text to its
+scans (canon texts by catalog number; anything else by title
+search, you confirm) and returns you to the Overlay with the viewer
+armed. "Four-layer view (this folio)…" shows the folio as scan ·
+OCR · e-text · attested English, row-aligned, click-to-band.
+"Illustration gallery (cached scans)" searches viewed pages for
+miniatures and diagrams; "(whole volume)…" fetches every folio side
+(reduced, cached, progress + Stop) and sweeps them all — candidates
+only, never claimed complete.
 
 ## Export
 
