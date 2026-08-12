@@ -843,6 +843,9 @@ static std::function<void(QWidget*)> g_raisePane;
 // pane is built, called only from user actions
 static std::function<void(const QString&)> g_lookupQuery;
 static std::function<void(const QString&)> g_goferQuery;
+// Translator's Survey (Library info panel link → dialog; the
+// implementation lives beside HuntPalette where the spine is bound)
+static std::function<void(const QString&)> g_surveyFile;
 
 static QWidget* makeLookupPane(allcore::Spine& spine, allcore::RefDict* ref,
                                allcore::Mvp* mvp,
@@ -7653,6 +7656,8 @@ public:
                 const QString p = anchorPayload(s, 9);
                 logOpen(p);
                 if (open_) open_(p);
+            } else if (s.startsWith("survey:")) {
+                if (g_surveyFile) g_surveyFile(anchorPayload(s, 7));
             } else if (s.startsWith("http")) {
                 QDesktopServices::openUrl(u);
             }
@@ -8118,6 +8123,11 @@ private:
             h += "<div style='color:#B26B00'><b>ocr-derived</b> — "
                  "unverified review material; opening it runs the "
                  "syllable-legality first-pass QC</div>";
+        h += "<div style='margin:3px 0'><a href='survey:" +
+             anchorEnc(path) +
+             "'>Translator's survey…</a> <small style='color:#777'>"
+             "(coverage · unknown vocabulary · quotations · "
+             "structure · difficulty)</small></div>";
         auto acip = allcore::decodeAcipFilename(path.toStdString());
         const QString etitle = englishTitle(fi.fileName());
         if (!etitle.isEmpty())
@@ -12186,6 +12196,188 @@ private:
 };
 static HuntPalette* g_hunt = nullptr;
 
+// ---- the Translator's Survey (Adam's wow round, 2026-08-12): one
+// click on a Library text answers the questions a translator or a
+// team lead asks BEFORE starting: how much does the dictionary
+// already cover (by tier, provisional visible), what vocabulary is
+// unknown, does the text quote the canon (with the published
+// English), what is its outline, structure, and form. Everything
+// deterministic; the difficulty figure is labeled an ESTIMATE with
+// its formula shown.
+static QString translatorSurveyMarkdown(allcore::Spine& spine,
+                                        const QString& path,
+                                        QWidget* parent) {
+    QFile f(path);
+    if (!f.open(QIODevice::ReadOnly)) return QString();
+    const std::string raw = QString::fromUtf8(f.readAll()).toStdString();
+    QProgressDialog prog("Surveying the text…", "Stop", 0, 4, parent);
+    prog.setWindowModality(Qt::WindowModal);
+    prog.setMinimumDuration(400);
+    auto step = [&](int n, const char* what) {
+        prog.setValue(n);
+        prog.setLabelText(what);
+        QCoreApplication::processEvents();
+        return !prog.wasCanceled();
+    };
+    if (!step(0, "Matching the dictionary against every token…"))
+        return QString();
+    static std::unique_ptr<allcore::HeadwordIndex> ix;
+    if (!ix) ix = std::make_unique<allcore::HeadwordIndex>(spine);
+    const auto doc = allcore::buildOverlay(spine, *ix, raw);
+    const int n = (int)doc.tokens.size();
+    if (!n) return QString();
+    // per-token tier attribution via the innermost covering span
+    long covered = 0, curated = 0, glossary = 0, prov = 0, refOnly = 0;
+    std::map<std::string, int> unknown;
+    const auto depth = doc.coverDepth(1);
+    for (int t = 0; t < n; ++t) {
+        if (!depth[t]) {
+            ++unknown[doc.tokens[t]];
+            continue;
+        }
+        ++covered;
+        const auto at = doc.spansAt(t);
+        const auto& e = doc.entries[doc.spans[at.front()].entry_ix];
+        if (e.tier == "curated") ++curated;
+        else if (e.tier == "glossary") ++glossary;
+        else if (e.provisional()) ++prov;
+        else ++refOnly;
+    }
+    if (!step(1, "Hunting canonical quotations…")) return QString();
+    std::vector<allcore::QuotationMatch> quotes;
+    try {
+        quotes = allcore::detectQuotations(spine, raw, true, 7);
+    } catch (const std::exception&) {
+    }
+    if (!step(2, "Reading the outline and structure…"))
+        return QString();
+    auto st = allcore::extractStructure(doc.tokens, doc.barrier_after);
+    auto outline = allcore::extractOutline(doc.tokens,
+                                           doc.barrier_after);
+    int outlineNodes = 0;
+    std::function<void(const allcore::OutlineNode&)> cnt =
+        [&](const allcore::OutlineNode& nd) {
+            outlineNodes += (int)nd.children.size();
+            for (const auto& c : nd.children) cnt(c);
+        };
+    cnt(outline);
+    if (!step(3, "Measuring the meter…")) return QString();
+    auto verse = allcore::analyzeVerse(raw);
+    prog.setValue(4);
+
+    const QFileInfo fi(path);
+    auto pct = [n](long k) {
+        return QString::number(100.0 * k / n, 'f', 1) + "%";
+    };
+    QString m;
+    m += "# TRANSLATOR'S SURVEY — " + fi.fileName() + "\n\n";
+    m += QString("Tokens: %1 · quotations found: %2 · outline "
+                 "nodes: %3\n\n")
+             .arg(n)
+             .arg(quotes.size())
+             .arg(outlineNodes);
+    m += "## Dictionary coverage (per token, innermost span)\n\n";
+    m += "- covered: " + pct(covered) + "\n";
+    m += "  - curated: " + pct(curated) + "\n";
+    m += "  - glossary: " + pct(glossary) + "\n";
+    m += "  - PROVISIONAL (auto-aligned — amber): " + pct(prov) +
+         "\n";
+    m += "  - reference-layer only (no HGM gloss): " + pct(refOnly) +
+         "\n";
+    m += "- uncovered: " + pct(n - covered) + "\n\n";
+    {
+        std::vector<std::pair<int, std::string>> top;
+        for (const auto& [w, c] : unknown) top.push_back({c, w});
+        std::sort(top.rbegin(), top.rend());
+        m += "## Top unknown forms\n\n";
+        int shown = 0;
+        for (const auto& [c, w] : top) {
+            if (shown++ >= 15) break;
+            m += QString("- %1 ×%2\n")
+                     .arg(QString::fromStdString(w))
+                     .arg(c);
+        }
+        if (top.empty()) m += "(none — full coverage)\n";
+        m += "\n";
+    }
+    if (!quotes.empty()) {
+        m += "## Canonical quotations (attested, ≥7 syllables)\n\n";
+        int shown = 0;
+        for (const auto& q : quotes) {
+            if (shown++ >= 12) break;
+            m += QString("- [%1:%2] %3\n")
+                     .arg(QString::fromStdString(q.course))
+                     .arg(q.seq)
+                     .arg(QString::fromStdString(q.english)
+                              .left(120));
+        }
+        if ((int)quotes.size() > 12)
+            m += QString("- … and %1 more\n")
+                     .arg(quotes.size() - 12);
+        m += "\n";
+    }
+    m += "## Structure\n\n";
+    m += QString("- explicit markers: %1 bam po · %2 le'u\n")
+             .arg(st.bampos.size())
+             .arg(st.chapters.size());
+    m += QString("- size ESTIMATE (30-syllable shloka rule): %1 "
+                 "shloka ≈ %2 bam po\n")
+             .arg(QString::number(st.shlokaEstimate(), 'f', 0),
+                  QString::number(st.bampoEstimate(), 'f', 2));
+    m += verse.is_verse
+             ? QString("- form: VERSE, dominant meter %1 syllables "
+                       "(%2 irregular line(s))\n\n")
+                   .arg(verse.meter)
+                   .arg(verse.irregular_count)
+             : QString("- form: prose (no dominant meter)\n\n");
+    m += "## Difficulty ESTIMATE (formula shown, judge for "
+         "yourself)\n\n";
+    const double score =
+        100.0 * (n - covered) / n + 50.0 * prov / n;
+    m += QString("- uncovered%% + half·provisional%% = %1 → %2\n")
+             .arg(QString::number(score, 'f', 1))
+             .arg(score < 12 ? "LIGHT (well-trodden vocabulary)"
+                  : score < 30
+                      ? "MODERATE (some new ground)"
+                      : "HEAVY (substantial unattested vocabulary)");
+    return m;
+}
+
+static void showTranslatorSurvey(QWidget* parent,
+                                 allcore::Spine& spine,
+                                 const QString& path) {
+    const QString md = translatorSurveyMarkdown(spine, path, parent);
+    if (md.isEmpty()) return;
+    auto* dlg = new QDialog(parent);
+    dlg->setAttribute(Qt::WA_DeleteOnClose);
+    dlg->setWindowTitle("Translator's survey — " +
+                        QFileInfo(path).fileName());
+    dlg->resize(760, 640);
+    auto* v = new QVBoxLayout(dlg);
+    auto* view = new QTextBrowser;
+    view->setMarkdown(md);
+    v->addWidget(view, 1);
+    auto* row = new QHBoxLayout;
+    auto* saveB = new QPushButton("Save as Markdown…");
+    auto* closeB = new QPushButton("Close");
+    row->addStretch();
+    row->addWidget(saveB);
+    row->addWidget(closeB);
+    v->addLayout(row);
+    QObject::connect(closeB, &QPushButton::clicked, dlg,
+                     &QDialog::accept);
+    QObject::connect(saveB, &QPushButton::clicked, [dlg, md, path] {
+        const QString fn = QFileDialog::getSaveFileName(
+            dlg, "Save survey",
+            QFileInfo(path).completeBaseName() + "-survey.md",
+            "Markdown (*.md)");
+        if (fn.isEmpty()) return;
+        QFile f(fn);
+        if (f.open(QIODevice::WriteOnly)) f.write(md.toUtf8());
+    });
+    dlg->show();
+}
+
 int main(int argc, char** argv) {
     QApplication app(argc, argv);
     const QString root = findDataRoot();
@@ -12336,6 +12528,9 @@ int main(int argc, char** argv) {
 
     QMainWindow win;
     g_hunt = new HuntPalette(spine, &win);
+    g_surveyFile = [&win, &spine](const QString& p) {
+        showTranslatorSurvey(&win, spine, p);
+    };
     auto* tabsPtr = new QTabWidget;   // owned by the main window
     QTabWidget& tabs = *tabsPtr;
     win.setCentralWidget(tabsPtr);
@@ -13214,6 +13409,28 @@ int main(int argc, char** argv) {
         }
         // the Hunt palette answers across sources
         if (g_hunt) fails += g_hunt->selfTest(log);
+        // the Translator's Survey measures a known passage
+        {
+            const QString tmp =
+                QDir::temp().filePath("all_survey_fixture.txt");
+            QFile tf(tmp);
+            if (tf.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
+                tf.write("SEMS CAN THAMS CAD BDE BA DANG LDAN PAR "
+                         "GYUR CIG, SDUG BSNGAL DANG QQZWX BRAL BAR "
+                         "GYUR CIG,\n");
+                tf.close();
+            }
+            const QString md =
+                translatorSurveyMarkdown(spine, tmp, nullptr);
+            const bool ok = md.contains("TRANSLATOR'S SURVEY") &&
+                            md.contains("covered:") &&
+                            md.contains("QQZWX") &&
+                            md.contains("ESTIMATE");
+            log << QString("  [%1] Survey: coverage, unknowns, and "
+                           "estimates render for a fixture")
+                       .arg(ok ? "PASS" : "FAIL");
+            if (!ok) ++fails;
+        }
         // the help system: chapters + auto-index + search
         {
             HelpWindow hw(&tabs, root, nullptr);

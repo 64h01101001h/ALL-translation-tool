@@ -521,6 +521,29 @@ filtered browse instead. Clear everything and the panel returns to
 - Files from `ocr_out` carry the amber **ocr-derived** warning —
   unverified review material.
 
+
+### The Translator's survey
+
+The info panel's **Translator's survey…** link answers the
+questions asked before a translation is assigned or begun — from
+the text itself, deterministically:
+
+- **Dictionary coverage** per token, by tier: curated, glossary,
+  PROVISIONAL (amber), reference-only, uncovered.
+- **Top unknown forms** with counts — the vocabulary work ahead.
+- **Canonical quotations** (seven syllables or more, attested
+  only) with the master's published English.
+- **Structure**: explicit bam po / le'u markers, plus the
+  30-syllable-shloka size ESTIMATE, labeled as such.
+- **Form**: verse (with dominant meter and irregular-line count)
+  or prose.
+- **A difficulty ESTIMATE with its formula printed** — uncovered%
+  plus half the provisional% — so you can weigh it yourself.
+
+**Save as Markdown…** writes the report for a team lead's
+assignment discussion. A full volume takes a few seconds; Stop
+abandons cleanly.
+
 ### The maintenance buttons
 
 - **Install collection ZIP…** — installs the canon. Download the

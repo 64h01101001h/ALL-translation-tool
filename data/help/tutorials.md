@@ -153,7 +153,13 @@ for you). The tree remembers which folders you had open, across
 restarts. The table sorts by any column. Selecting a catalog text
 shows its AUTHOR with links to the person's BDRC record and, where
 one exists, their Treasury of Lives biography — homonym candidates
-are all listed for you to disambiguate, never auto-merged. The
+are all listed for you to disambiguate, never auto-merged. The info
+panel's "Translator's survey…" link measures the selected text
+before you commit to it: dictionary coverage by tier (provisional
+visible), the top unknown forms, canonical quotations with the
+published English, outline and structural markers, verse or prose,
+and a difficulty ESTIMATE with its formula shown — savable as
+Markdown for a team lead's assignment call. The
 author's other works in your Library are listed too — each a click
 from opening.
 
