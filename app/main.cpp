@@ -4198,8 +4198,71 @@ private:
         v->addLayout(row1);
         v->addLayout(row2);
         v->addWidget(inter);
+        auto* btnRow = new QHBoxLayout;
+        auto* prev = new QPushButton("Preview…");
+        prev->setToolTip(
+            "See the pecha before saving — renders the whole "
+            "document with the current options into a temporary "
+            "PDF and opens it in the viewer.");
         auto* go = new QPushButton("Make PDF…");
-        v->addWidget(go);
+        btnRow->addWidget(prev);
+        btnRow->addStretch();
+        btnRow->addWidget(go);
+        v->addLayout(btnRow);
+        connect(prev, &QPushButton::clicked,
+                [this, &dlg, preset, lines, inter] {
+                    double pw = 420, ph = 90;
+                    if (preset->currentIndex() == 1) {
+                        pw = 450;
+                        ph = 100;
+                    }
+                    if (preset->currentIndex() == 2) {
+                        pw = 297;
+                        ph = 210;
+                    }
+                    const QString fam =
+                        tibFont_ &&
+                                tibFont_->currentText() != "system"
+                            ? tibFont_->currentText()
+                            : QString("Noto Serif Tibetan");
+                    const QString tmp = QDir::temp().filePath(
+                        "all_pecha_preview.pdf");
+                    QFile::remove(tmp);
+                    const int sides = pechaWritePdf(
+                        tmp, pw, ph, lines->value(),
+                        inter->isChecked(), fam);
+                    if (!sides) {
+                        QMessageBox::information(
+                            &dlg, "Pecha preview",
+                            "Nothing to preview — is the document "
+                            "empty?");
+                        return;
+                    }
+#ifdef ALL_HAVE_QTPDF
+                    auto* pd = new QDialog(&dlg);
+                    pd->setAttribute(Qt::WA_DeleteOnClose);
+                    pd->setWindowTitle(
+                        QString("Pecha preview — %1 folio side(s)")
+                            .arg(sides));
+                    const QRect scr =
+                        screen() ? screen()->availableGeometry()
+                                 : QRect(0, 0, 1280, 800);
+                    pd->resize(qMin(1200, scr.width() - 80),
+                               qMin(700, scr.height() - 80));
+                    auto* pv = new QVBoxLayout(pd);
+                    auto* doc2 = new QPdfDocument(pd);
+                    doc2->load(tmp);
+                    auto* view2 = new QPdfView(pd);
+                    view2->setDocument(doc2);
+                    view2->setPageMode(QPdfView::PageMode::MultiPage);
+                    view2->setZoomMode(QPdfView::ZoomMode::FitToWidth);
+                    pv->addWidget(view2, 1);
+                    pd->show();
+#else
+                    QDesktopServices::openUrl(
+                        QUrl::fromLocalFile(tmp));
+#endif
+                });
         connect(go, &QPushButton::clicked, &dlg, &QDialog::accept);
         if (dlg.exec() != QDialog::Accepted) return;
         const QString fn = QFileDialog::getSaveFileName(

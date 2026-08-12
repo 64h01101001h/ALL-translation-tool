@@ -481,6 +481,32 @@ boxed on the carving.
   converter could not prove is wrapped in visible markers instead
   of being silently approximated, and the first few are listed.
 
+
+### The Pecha Maker
+
+**Make pecha (PDF)…** turns the loaded document into an authentic
+long-format pecha — the TibetDoc workflow, rebuilt native and
+crash-free:
+
+1. Load any text (Library double-click or paste) and press the
+   button under FORMAT & EXPORT.
+2. Choose the page — **traditional pecha (42 × 9 cm)**, wide
+   (45 × 10 cm), or A4 landscape — and the lines per side (5–9;
+   seven is the classical look).
+3. Optionally check **phonetics line under each segment** — every
+   segment gets its pronunciation beneath it in Geshe Michael's
+   convention, through the same battery-proven engine as the cards.
+4. **Preview…** shows the whole pecha in the viewer before you
+   commit; **Make PDF…** writes it.
+
+Every folio side is framed with the traditional double rule and
+carries its Tibetan folio numeral, rotated on the recto margin as
+in a woodblock print. The script runs through the battery-proven
+conversion chain in your chosen typeface; any syllable the engine
+cannot convert appears as ⟨wylie⟩ — flagged, never guessed. The
+PDF prints at 300 dpi on any printer that takes custom paper
+sizes, or two-up on A4/letter for cutting.
+
 ### Resuming work
 
 The Overlay restores your session on every normal launch: same
