@@ -9943,7 +9943,13 @@ static void showDasPage(QWidget* parent, int page) {
         QString("Das, A Tibetan-English Dictionary (1902) \u2014 "
                 "p.%1 \u00b7 public domain \u00b7 reference")
             .arg(page));
-    dlg->resize(820, 900);
+    // fit the screen it opens on (the 800px budget applies to
+    // dialogs too — 900px overflowed small laptops)
+    const QRect scr = parent->screen()
+                          ? parent->screen()->availableGeometry()
+                          : QRect(0, 0, 1280, 800);
+    dlg->resize(qMin(820, scr.width() - 80),
+                qMin(880, scr.height() - 60));
     auto* v = new QVBoxLayout(dlg);
     auto* doc = new QPdfDocument(dlg);
     doc->load(g_dasPdfPath);
