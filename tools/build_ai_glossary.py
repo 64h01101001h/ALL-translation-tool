@@ -107,11 +107,16 @@ def main():
             if len(t) >= 4 and len(by_skt_tok[t]) < 40:
                 by_skt_tok[t].append(wylie)
 
+    done = set()
+    if os.path.exists(OUT):
+        done = set(json.load(open(OUT)).get("entries", {}).keys())
     cands = []
     for wylie, raw in rows:
         d = all_entries[wylie]
         if d.get("hgm_gloss"):
             continue
+        if wylie in done and "--refresh" not in sys.argv:
+            continue   # already drafted; --refresh regenerates
         skt = (d.get("sanskrit") or "").strip()
         hop = (d.get("hopkins_english") or "").strip()
         if not skt and not hop:
