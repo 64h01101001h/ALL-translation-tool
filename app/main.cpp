@@ -5,6 +5,7 @@
 #include <QApplication>
 #include <QCollator>
 #include <QElapsedTimer>
+#include <QEventLoop>
 #include <QHBoxLayout>
 #include <QInputDialog>
 #include <QTextDocumentFragment>
@@ -1624,20 +1625,119 @@ auto* illusVolBtn = new QPushButton("Illustration gallery (cached scans)");
                     "along / Search BDRC).");
                 return;
             }
-            QStringList paths;
-            for (const QString& f :
-                 QDir(scanCache_).entryList(QDir::Files))
-                if (f.contains(scanWork_)) paths << scanCache_ + "/" + f;
+            // the volume's own cache folder; a page can be present
+            // at both view resolution (full/max) and sweep
+            // resolution \u2014 keep one per image, preferring full
+            QMap<QString, QString> byKey;
+            const QString dir = volCacheDir();
+            for (const QString& f : QDir(dir).entryList(QDir::Files)) {
+                const QString key = f.section("_full_", 0, 0);
+                if (!byKey.contains(key) || f.contains("_full_max_"))
+                    byKey[key] = dir + "/" + f;
+            }
+            const QStringList paths = byKey.values();
             if (paths.isEmpty()) {
                 QMessageBox::information(
                     this, "No cached pages",
                     "No pages of this volume are in the scan cache "
                     "yet \u2014 pages cache as you view them in "
-                    "Follow along.");
+                    "Follow along, or fetch them all with "
+                    "\u201cIllustration gallery (whole volume)\u2026\u201d.");
                 return;
             }
             runIllustrationGallery(this, root, paths,
                                    scanWork_ + " cached pages");
+        });
+        auto* illusWholeBtn =
+            new QPushButton("Illustration gallery (whole volume)\u2026");
+        illusWholeBtn->setToolTip(
+            "Fetch every folio side of the linked scan volume from "
+            "BDRC (reduced size, cached under the volume's own "
+            "folder), then search all of them for illustration "
+            "candidates. Pages already cached are not refetched. "
+            "Candidates only \u2014 never claimed complete.");
+        ll->addWidget(illusWholeBtn);
+        connect(illusWholeBtn, &QPushButton::clicked, [this, root] {
+            if (scanCache_.isEmpty() || scanWork_.isEmpty() ||
+                folioUrl_.isEmpty()) {
+                QMessageBox::information(
+                    this, "No linked volume",
+                    "Link a scan volume first (SCANS \u2192 Follow "
+                    "along / Search BDRC) and let the folio outline "
+                    "load.");
+                return;
+            }
+            const QString dir = volCacheDir();
+            QDir().mkpath(dir);
+            auto underscored = [](QString s) {
+                return s.replace(
+                    QRegularExpression("[^A-Za-z0-9._-]"), "_");
+            };
+            QStringList paths;
+            int fetchFails = 0;
+            bool stopped = false;
+            QProgressDialog prog(
+                QString("Fetching %1 folio sides from BDRC\u2026")
+                    .arg(folioOrder_.size()),
+                "Stop", 0, folioOrder_.size(), this);
+            prog.setWindowModality(Qt::WindowModal);
+            int done = 0;
+            for (const QString& folio : folioOrder_) {
+                prog.setValue(done++);
+                QCoreApplication::processEvents();
+                if (prog.wasCanceled()) { stopped = true; break; }
+                const QString url = folioUrl_.value(folio);
+                // a full-resolution copy from Follow along serves
+                const QString fullFn = dir + "/" + underscored(url);
+                if (QFile::exists(fullFn)) { paths << fullFn; continue; }
+                // reduced width is plenty for line-gap geometry
+                QString rurl = url;
+                rurl.replace("/full/max/", "/full/1600,/");
+                const QString rFn = dir + "/" + underscored(rurl);
+                if (QFile::exists(rFn)) { paths << rFn; continue; }
+                QEventLoop loop;
+                auto* rep = nam_.get(QNetworkRequest(QUrl(rurl)));
+                connect(rep, &QNetworkReply::finished, &loop,
+                        &QEventLoop::quit);
+                connect(&prog, &QProgressDialog::canceled, &loop,
+                        &QEventLoop::quit);
+                loop.exec();
+                if (prog.wasCanceled()) {
+                    rep->abort();
+                    rep->deleteLater();
+                    stopped = true;
+                    break;
+                }
+                if (rep->error() == QNetworkReply::NoError) {
+                    QFile f(rFn);
+                    if (f.open(QIODevice::WriteOnly)) {
+                        f.write(rep->readAll());
+                        paths << rFn;
+                    } else
+                        ++fetchFails;
+                } else
+                    ++fetchFails;
+                rep->deleteLater();
+            }
+            prog.setValue(folioOrder_.size());
+            if (paths.isEmpty()) {
+                QMessageBox::information(
+                    this, "Illustration gallery",
+                    QString("No pages fetched (%1 failure(s)) \u2014 "
+                            "is BDRC reachable?")
+                        .arg(fetchFails));
+                return;
+            }
+            QString title = scanWork_ + " whole volume";
+            if (stopped)
+                title += QString(" (stopped early \u2014 %1 of %2 "
+                                 "pages)")
+                             .arg(paths.size())
+                             .arg(folioOrder_.size());
+            else if (fetchFails)
+                title += QString(" (%1 page(s) failed to fetch)")
+                             .arg(fetchFails);
+            runIllustrationGallery(this, root, paths, title);
         });
 auto* secFmt = new QLabel("<span style='color:#9A7A33;font-size:10px;letter-spacing:2px;font-weight:600'>FORMAT &amp; EXPORT</span>");
         secFmt->setContentsMargins(0, 8, 0, 0);
@@ -3195,14 +3295,25 @@ private:
         if (ix >= 0 && ix < folioOrder_.size()) showFolio(folioOrder_[ix]);
     }
 
+    // one cache folder per linked volume: the image URLs BDRC serves
+    // carry only the image-group id (bdr:I1490…), never the work id,
+    // so a flat cache cannot be filtered by work — verified live
+    // 2026-08-12 (the old contains(scanWork_) gallery filter matched
+    // nothing, ever)
+    QString volCacheDir() const {
+        QString w = scanWork_;
+        w.replace(QRegularExpression("[^A-Za-z0-9._-]"), "_");
+        return scanCache_ + "/" + w;
+    }
+
     void showFolio(const QString& folio) {
         curFolio_ = folio;
         const QString url = folioUrl_.value(folio);
         scanCap_->setText(QString("<b>folio %1</b> · BDRC scan").arg(folio));
         scanCap_->show();
         if (!scanCache_.isEmpty()) {
-            QDir().mkpath(scanCache_);
-            const QString fn = scanCache_ + "/" +
+            QDir().mkpath(volCacheDir());
+            const QString fn = volCacheDir() + "/" +
                                QString(url).replace(
                                    QRegularExpression("[^A-Za-z0-9._-]"),
                                    "_");

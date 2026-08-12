@@ -400,6 +400,13 @@ are searched (pages cache as you view them in Follow along). If no
 volume is linked yet, the app tells you to link one first (Follow
 along / Search BDRC).
 
+**Illustration gallery (whole volume)…** — the same candidate
+search over the ENTIRE linked volume: every folio side BDRC lists
+is fetched (reduced size, cached under the volume's own folder,
+with a progress bar and a Stop button; already-cached pages are
+not refetched), then all of them are searched. Fetch failures and
+early stops are reported in the gallery title, never hidden.
+
 *Worked example:* Read → Library → double-click **KD0016** (the
 Diamond Cutter). Press **Follow along in scans (BDRC)** — the
 woodblock pages open beneath the text. Click into different parts

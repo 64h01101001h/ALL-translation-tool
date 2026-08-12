@@ -125,7 +125,9 @@ the very word under your cursor on the woodblock (recognition is used
 only to locate, never as text). "Illustration gallery (cached
 scans)" searches this volume's already-downloaded pages for
 woodblock miniatures and diagrams — candidates only; pages cache as
-you view them.
+you view them. "Illustration gallery (whole volume)…" fetches every
+folio side of the linked volume from BDRC (reduced size, cached,
+with progress and Stop) and searches them all.
 
 **FORMAT & EXPORT (left column, under its gold heading).** "Export
 print Tibetan (Unicode)…" produces print-ready script. "Prepare for
