@@ -140,7 +140,10 @@ ACIP Release 6 plus your own folders.
 from the filenames: collection, number, verification level).
 Double-click a text → it opens in the Overlay (the app switches tabs
 for you). The tree remembers which folders you had open, across
-restarts. The table sorts by any column.
+restarts. The table sorts by any column. Selecting a catalog text
+shows its AUTHOR with links to the person's BDRC record and, where
+one exists, their Treasury of Lives biography — homonym candidates
+are all listed for you to disambiguate, never auto-merged.
 
 ## Analysis
 

@@ -7220,6 +7220,7 @@ public:
                 QDesktopServices::openUrl(u);
             }
         });
+        info_->setOpenExternalLinks(false);
         split->addWidget(info_);
         split->setStretchFactor(0, 2);
         split->setStretchFactor(1, 1);
@@ -7275,6 +7276,12 @@ public:
         check(list_->rowCount() > 1000 ||
                   model_->rowCount(model_->index(libRoot_)) > 0,
               "catalog populated from the library");
+        {
+            const QString ph = personHtml("S5271");
+            check(ph.contains("treasuryoflives") ||
+                      ph.contains("bdrc.io"),
+                  "person links resolve for a Tsongkhapa work");
+        }
         return fails;
     }
 
@@ -7549,6 +7556,71 @@ private:
                    "encoding chosen is probably wrong.</div>"));
     }
 
+    // People layer (#59): work number -> author -> BDRC persons +
+    // Treasury of Lives biography links. Homonym candidates are ALL
+    // shown; the reader disambiguates, never the machine.
+    void loadPersons() {
+        if (personsLoaded_) return;
+        personsLoaded_ = true;
+        QFile wf(libRoot_ + "/../data/extracted/catalog_works.json");
+        QString base = libRoot_ + "/..";
+        if (!wf.exists()) {
+            base = QFileInfo(libRoot_).path();
+            wf.setFileName(base + "/data/extracted/catalog_works.json");
+        }
+        if (wf.open(QIODevice::ReadOnly)) {
+            const auto o =
+                QJsonDocument::fromJson(wf.readAll()).object();
+            for (auto it = o.begin(); it != o.end(); ++it)
+                authorByWork_[it.key()] =
+                    it.value().toObject().value("author").toString();
+        }
+        QFile pf(base + "/data/extracted/persons_bdrc.json");
+        if (pf.open(QIODevice::ReadOnly)) {
+            const auto a = QJsonDocument::fromJson(pf.readAll())
+                               .object().value("authors").toObject();
+            for (auto it = a.begin(); it != a.end(); ++it)
+                personsByAuthor_[it.key()] =
+                    it.value().toObject();
+        }
+    }
+
+    QString personHtml(const QString& workKey) {
+        loadPersons();
+        const QString author = authorByWork_.value(workKey);
+        if (author.isEmpty()) return {};
+        QString h;
+        const auto p = personsByAuthor_.value(author);
+        h += "<div style='margin-top:4px'><b>" +
+             author.toHtmlEscaped() + "</b>";
+        const QString dates = p.value("dates").toString();
+        if (!dates.isEmpty())
+            h += " <small style='color:#777'>(" +
+                 dates.toHtmlEscaped() + ")</small>";
+        h += " <small style='color:#777'>(author)</small>";
+        const auto cands = p.value("candidates").toArray();
+        if (!cands.isEmpty()) {
+            if (cands.size() > 1)
+                h += " <small style='color:#8a6d1a'>" +
+                     QString::number(cands.size()) +
+                     " candidates \u2014 homonyms, you "
+                     "disambiguate:</small>";
+            for (const auto& cv : cands) {
+                const auto c = cv.toObject();
+                const QString pid = c.value("pid").toString();
+                const QString tol = c.value("tol").toString();
+                h += "<br>&nbsp;&nbsp;\u2022 <a href='https://"
+                     "library.bdrc.io/show/bdr:" + pid + "'>" + pid +
+                     " at BDRC</a>";
+                if (!tol.isEmpty())
+                    h += " \u00b7 <a href='" + tol +
+                         "'>Treasury of Lives biography</a>";
+            }
+        }
+        h += "</div>";
+        return h;
+    }
+
     void showInfo(const QString& path) {
         const QFileInfo fi(path);
         if (!fi.isFile()) { info_->clear(); return; }
@@ -7587,6 +7659,13 @@ private:
                      r6.toHtmlEscaped() +
                      " <small style='color:#777'>(subject, ACIP "
                      "Release 6)</small></div>";
+        }
+        {
+            QRegularExpression re2("^([A-Za-z]+)0*(\\d+)");
+            const auto m2 = re2.match(fi.fileName());
+            if (m2.hasMatch())
+                h += personHtml(m2.captured(1).toUpper() +
+                                m2.captured(2));
         }
         if (acip.recognized) {
             h += "<div style='margin-top:4px;color:#4A3FBF'>" +
@@ -7785,6 +7864,9 @@ private:
     }
 
     QString libRoot_;
+    bool personsLoaded_ = false;
+    QMap<QString, QString> authorByWork_;
+    QMap<QString, QJsonObject> personsByAuthor_;
     allcore::Progress* progress_ = nullptr;
     std::function<void(const QString&)> open_;
     QFileSystemModel* model_ = nullptr;
