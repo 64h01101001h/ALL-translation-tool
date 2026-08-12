@@ -1165,6 +1165,24 @@ public:
                   spellList_->item(0, 1)->text() == "1",
               "spelling-doubts panel lists the doubted form");
         spellToggle_->setChecked(false);
+        // arrow-key reading: click the first phrase, then → walks
+        // the highlight forward, ← walks it back
+        {
+            input_->setPlainText(
+                "SEMS CAN THAMS CAD BDE BA DANG LDAN PAR GYUR CIG,");
+            loadDoc();
+            QTextCursor c = view_->textCursor();
+            c.setPosition(tokBeg_.empty() ? 0 : tokBeg_[0]);
+            view_->setTextCursor(c);
+            onClick();
+            const int first = lastTok_;
+            navPhrase(+1);
+            const int second = lastTok_;
+            navPhrase(-1);
+            check(first >= 0 && second > first &&
+                      !view_->extraSelections().isEmpty(),
+                  "arrow-key reading walks the phrase highlight");
+        }
         {
             // #62 logic: a left side-panel and a big inter-line gap
             // are found; a fully-texted page yields no candidates
@@ -1977,6 +1995,7 @@ auto* secFmt = new QLabel("<span style='color:#9A7A33;font-size:10px;letter-spac
         // Qt's double-click word-select / triple-click line-select
         // (the whole line lit up after cycling — Adam, 2026-08-11)
         view_->viewport()->installEventFilter(this);
+        view_->installEventFilter(this);   // arrow-key reading
         { QFont vf = view_->font(); vf.setPointSize(15); view_->setFont(vf); }
         context_ = new QTextBrowser;
         context_->setOpenLinks(false);
@@ -2756,7 +2775,79 @@ private:
             onClick();      // count it as one more step of the chain
             return true;    // and swallow the auto-selection
         }
+        // keyboard reading (Adam, 2026-08-12): once a phrase is lit,
+        // ← → walk the text phrase by phrase (longest-first at each
+        // stop, like clicking); ↓ steps down the nesting chain in
+        // place, ↑ steps back up. Until something is highlighted the
+        // arrows keep their normal caret behavior.
+        if (view_ && w == view_ && ev->type() == QEvent::KeyPress &&
+            lastTok_ >= 0 && !doc_.tokens.empty()) {
+            auto* k = static_cast<QKeyEvent*>(ev);
+            if (k->modifiers() == Qt::NoModifier) {
+                switch (k->key()) {
+                    case Qt::Key_Right:
+                        navPhrase(+1);
+                        return true;
+                    case Qt::Key_Left:
+                        navPhrase(-1);
+                        return true;
+                    case Qt::Key_Down:
+                        onClick();   // one more step down the nest
+                        return true;
+                    case Qt::Key_Up: {
+                        auto at = doc_.spansAt(lastTok_);
+                        if ((int)at.size() > 1) {
+                            cycle_ = (cycle_ + (int)at.size() - 2) %
+                                     (int)at.size();
+                            onClick();
+                        }
+                        return true;
+                    }
+                    default:
+                        break;
+                }
+            }
+        }
         return QWidget::eventFilter(w, ev);
+    }
+
+    // step the active highlight to the previous/next phrase in the
+    // text: from the current span's edge, land on the nearest token
+    // the dictionary knows (falling back to the adjacent token so
+    // the walk never dead-ends), then light the longest phrase there
+    void navPhrase(int dir) {
+        if (lastTok_ < 0 || doc_.tokens.empty()) return;
+        auto at = doc_.spansAt(lastTok_);
+        int beg = lastTok_, end = lastTok_ + 1;
+        if (!at.empty()) {
+            const bool clickMode =
+                shadeMode_ && shadeMode_->currentIndex() == 0;
+            auto ordered = at;
+            if (clickMode)
+                std::reverse(ordered.begin(), ordered.end());
+            const auto& sp =
+                doc_.spans[ordered[cycle_ % (int)ordered.size()]];
+            beg = sp.beg;
+            end = sp.end;
+        }
+        const int n = (int)doc_.tokens.size();
+        int t = dir > 0 ? end : beg - 1;
+        int fallback = -1;
+        for (; t >= 0 && t < n; t += dir) {
+            if (fallback < 0) fallback = t;
+            if (!doc_.spansAt(t).empty()) break;
+        }
+        if (t < 0 || t >= n) t = fallback;
+        if (t < 0 || t >= n) return;
+        QTextCursor c = view_->textCursor();
+        c.setPosition(tokBeg_[t]);
+        view_->setTextCursor(c);
+        view_->ensureCursorVisible();
+        cycle_ = 0;
+        lastTok_ = -1;   // fresh longest-first at the new stop
+        onClick();
+        if (lastTok_ < 0) lastTok_ = t;   // particle stop: keep the
+                                          // walk alive
     }
 
     int tokenAt(int charPos) const {
@@ -2897,7 +2988,8 @@ private:
             h += (i ? " ‹ " : "");
             h += (int(i) == cycle_ ? "<b>" + w + "</b>" : w);
         }
-        h += QString(" &nbsp;(click again to %1)</div><hr>")
+        h += QString(" &nbsp;(click again to %1 · ← → walk the "
+                     "text · ↑ ↓ climb the nest)</div><hr>")
                  .arg(clickMode ? "step down to the shorter phrase"
                                 : "cycle");
         // the per-text glossary outranks the general dictionary here

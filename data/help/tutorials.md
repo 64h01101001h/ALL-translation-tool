@@ -76,6 +76,11 @@ single word. The card below follows every step. The Display panel's
 every known word and phrase is washed in color (adjacent phrases
 differ by hue, nested phrases within longer ones, provisional
 glosses amber-tinted — that tint is a warning, not a decoration).
+**Read with the keyboard**: once a phrase is lit, ← and → walk
+the highlight through the text phrase by phrase (longest known
+phrase at each stop, exactly like clicking), ↓ steps down the
+nesting chain in place, ↑ climbs back up — the card follows every
+move. Until something is highlighted the arrows behave normally.
 In both modes: red wavy underline = spelling fails the classical
 syllable rules; dotted amber = a particle disagreeing with the
 preceding suffix (a review hint, never auto-corrected). The display

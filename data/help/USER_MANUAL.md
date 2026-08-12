@@ -182,6 +182,25 @@ line never lights up by accident.
 The display follows the source file's own line breaks and blank
 lines — the text is never re-flowed.
 
+
+### Reading with the keyboard
+
+Once any phrase is lit, the arrow keys become the reading
+controls:
+
+- **→ / ←** — walk the highlight through the text, phrase by
+  phrase: at each stop the longest phrase the dictionary knows
+  lights up, exactly as if you had clicked there. Stops with no
+  dictionary phrase (bare particles) still show their card and the
+  walk continues.
+- **↓** — step down the nesting chain in place (same as clicking
+  again).
+- **↑** — climb back up to the longer phrase.
+
+The card follows every move, and the view scrolls to keep the
+highlight visible. Until something is highlighted, the arrows keep
+their ordinary text-caret behavior.
+
 ### The Display panel (left column, under "Display")
 
 Every choice here is remembered across sessions.
