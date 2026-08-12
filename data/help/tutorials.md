@@ -153,17 +153,6 @@ material), the e-text lines as keyed, and the master's published
 English where a line is attested — click a row and its band lights
 on the carving.
 
-**FORMAT & EXPORT (left column, under its gold heading).** "Make
-pecha (PDF)…" turns the loaded document into an authentic
-long-format pecha: framed folio sides (traditional 42×9 cm, wide,
-or A4), rotated Tibetan folio numerals, your chosen typeface, and
-an optional phonetics line under each segment — a printable PDF
-through the battery-proven script chain (failures appear as
-⟨wylie⟩, never guessed). "Export
-print Tibetan (Unicode)…" produces print-ready script. "Prepare for
-translation (Mixed Nuts)…" runs the demonstrated
-translation-preparation format.
-
 ## Library
 
 *Where: Read → Library.*
@@ -231,6 +220,27 @@ clause; fill the blank given his English; choose the correct particle
 variant (explained from the classical tables); parallel reading
 (reveal his English only when needed); review. "New drill" generates
 the next one. Progress is tracked per word and adapts.
+
+## Export
+
+*Where: Read → Export.*
+
+**What it's for.** The publishing station — everything that turns
+the document loaded in the Overlay into an output: the Mixed Nuts
+translation-prep format, an authentic pecha PDF, or print Tibetan
+Unicode. The pane shows which document it is working on; load one
+in the Overlay (or Library double-click) first.
+
+**Use.** "Make
+pecha (PDF)…" turns the loaded document into an authentic
+long-format pecha: framed folio sides (traditional 42×9 cm, wide,
+or A4), rotated Tibetan folio numerals, your chosen typeface, and
+an optional phonetics line under each segment — a printable PDF
+through the battery-proven script chain (failures appear as
+⟨wylie⟩, never guessed). "Export
+print Tibetan (Unicode)…" produces print-ready script. "Prepare for
+translation (Mixed Nuts)…" runs the demonstrated
+translation-preparation format.
 
 ## Manuscript
 

@@ -2083,82 +2083,6 @@ auto* illusVolBtn = new QPushButton("Illustration gallery (cached scans)");
                              .arg(fetchFails);
             runIllustrationGallery(this, root, paths, title);
         });
-auto* secFmt = new QLabel("<span style='color:#9A7A33;font-size:10px;letter-spacing:2px;font-weight:600'>FORMAT &amp; EXPORT</span>");
-        secFmt->setContentsMargins(0, 8, 0, 0);
-        ll->addWidget(secFmt);
-                auto* prepBtn = new QPushButton("Prepare for translation (Mixed Nuts)…");
-        ll->addWidget(prepBtn);
-        connect(prepBtn, &QPushButton::clicked, [this] {
-            const std::string src = input_->toPlainText().toStdString();
-            if (src.empty()) return;
-            auto prep = allcore::formatForTranslation(src);
-            std::string outText = prep.text;
-            if (!prep.notes.empty()) {
-                outText += "\n\n---- NOTES (input-operator brackets) ----\n";
-                for (size_t i = 0; i < prep.notes.size(); ++i)
-                    outText += "[" + std::to_string(i + 1) + "] " +
-                               prep.notes[i] + "\n";
-            }
-            const QString fn = QFileDialog::getSaveFileName(
-                this, "Save translation-prep text", "translation_prep.txt",
-                "Text files (*.txt)");
-            if (!fn.isEmpty()) {
-                QFile f(fn);
-                if (f.open(QIODevice::WriteOnly))
-                    f.write(QByteArray::fromStdString(outText));
-            }
-            context_->setHtml(
-                QString("<b>Translation prep (GMR workflow)</b>: %1 "
-                        "paragraphs at double shads, %2 bracket note(s) "
-                        "folio-tagged. Verse lineation + house style follow "
-                        "the Mixed Nuts style guide (pending upload).")
-                    .arg(prep.paragraphs)
-                    .arg(prep.notes.size()));
-        });
-        auto* pechaBtn = new QPushButton("Make pecha (PDF)…");
-        pechaBtn->setToolTip(
-            "The loaded document as an authentic long-format pecha: "
-            "framed folio sides, Tibetan folio numerals, your chosen "
-            "typeface, optional phonetics interlinear — a printable "
-            "PDF through the battery-proven script chain.");
-        ll->addWidget(pechaBtn);
-        connect(pechaBtn, &QPushButton::clicked,
-                [this] { pechaExport(); });
-        auto* exportBtn = new QPushButton("Export print Tibetan (Unicode)…");
-        ll->addWidget(exportBtn);
-        connect(exportBtn, &QPushButton::clicked, [this] {
-            const std::string src = input_->toPlainText().toStdString();
-            if (src.empty()) return;
-            auto res = allcore::exportTibetanUnicode(src);
-            const QString fn = QFileDialog::getSaveFileName(
-                this, "Save print Tibetan", "tibetan_unicode.txt",
-                "Text files (*.txt)");
-            if (!fn.isEmpty()) {
-                QFile f(fn);
-                if (f.open(QIODevice::WriteOnly))
-                    f.write(QByteArray::fromStdString(res.unicode));
-            }
-            QString h = QString("<b>Print export</b>: %1 syllables, "
-                                "%2 flagged ⟨…⟩ (never guessed).")
-                            .arg(res.syllables)
-                            .arg(res.failures);
-            if (!res.failed.empty()) {
-                h += "<br><small>flagged: ";
-                int shown = 0;
-                for (const auto& s : res.failed) {
-                    if (shown++ >= 12) { h += "…"; break; }
-                    h += QString::fromStdString(s).toHtmlEscaped() + " ";
-                }
-                h += "</small>";
-            }
-            h += "<div style='font-size:20px;margin-top:6px'>" +
-                 QString::fromStdString(res.unicode)
-                     .left(600)
-                     .toHtmlEscaped()
-                     .replace("\n", "<br>") +
-                 "</div>";
-            context_->setHtml(h);
-        });
         // ---- display toggles: the reader chooses their information density;
         // choices persist across sessions ----
         QSettings settings("ALL", "TranslationTool");
@@ -4038,6 +3962,80 @@ private:
         return out;
     }
 
+public:
+    // document accessors for the Export pane (Adam, 2026-08-12:
+    // FORMAT & EXPORT moved to its own Read-group pane)
+    bool hasDocument() const {
+        return !input_->toPlainText().trimmed().isEmpty();
+    }
+    QString documentLabel() const {
+        if (!docFile_.isEmpty()) return QFileInfo(docFile_).fileName();
+        return hasDocument() ? QString("pasted document (unsaved)")
+                             : QString();
+    }
+
+    QString prepareForTranslation() {
+        const std::string src = input_->toPlainText().toStdString();
+        if (src.empty()) return QString();
+        auto prep = allcore::formatForTranslation(src);
+        std::string outText = prep.text;
+        if (!prep.notes.empty()) {
+            outText += "\n\n---- NOTES (input-operator brackets) ----\n";
+            for (size_t i = 0; i < prep.notes.size(); ++i)
+                outText += "[" + std::to_string(i + 1) + "] " +
+                           prep.notes[i] + "\n";
+        }
+        const QString fn = QFileDialog::getSaveFileName(
+            this, "Save translation-prep text", "translation_prep.txt",
+            "Text files (*.txt)");
+        if (!fn.isEmpty()) {
+            QFile f(fn);
+            if (f.open(QIODevice::WriteOnly))
+                f.write(QByteArray::fromStdString(outText));
+        }
+        return QString("<b>Translation prep (GMR workflow)</b>: %1 "
+                       "paragraphs at double shads, %2 bracket note(s) "
+                       "folio-tagged. Verse lineation + house style "
+                       "follow the Mixed Nuts style guide (pending "
+                       "upload).")
+            .arg(prep.paragraphs)
+            .arg(prep.notes.size());
+    }
+
+    QString exportPrintTibetan() {
+        const std::string src = input_->toPlainText().toStdString();
+        if (src.empty()) return QString();
+        auto res = allcore::exportTibetanUnicode(src);
+        const QString fn = QFileDialog::getSaveFileName(
+            this, "Save print Tibetan", "tibetan_unicode.txt",
+            "Text files (*.txt)");
+        if (!fn.isEmpty()) {
+            QFile f(fn);
+            if (f.open(QIODevice::WriteOnly))
+                f.write(QByteArray::fromStdString(res.unicode));
+        }
+        QString h = QString("<b>Print export</b>: %1 syllables, "
+                            "%2 flagged ⟨…⟩ (never guessed).")
+                        .arg(res.syllables)
+                        .arg(res.failures);
+        if (!res.failed.empty()) {
+            h += "<br><small>flagged: ";
+            int shown = 0;
+            for (const auto& x : res.failed) {
+                if (shown++ >= 12) { h += "…"; break; }
+                h += QString::fromStdString(x).toHtmlEscaped() + " ";
+            }
+            h += "</small>";
+        }
+        h += "<div style='font-size:20px;margin-top:6px'>" +
+             QString::fromStdString(res.unicode)
+                 .left(600)
+                 .toHtmlEscaped()
+                 .replace("\n", "<br>") +
+             "</div>";
+        return h;
+    }
+
     int pechaWritePdf(const QString& fn, double wMM, double hMM,
                       int linesPerSide, bool interlinear,
                       const QString& family) {
@@ -4168,13 +4166,13 @@ private:
         return sides;
     }
 
-    void pechaExport() {
+    QString pechaExport() {
         if (input_->toPlainText().trimmed().isEmpty()) {
             QMessageBox::information(
                 this, "Pecha maker",
                 "Load or paste a document first — the pecha is "
                 "made from the Document box.");
-            return;
+            return QString();
         }
         QDialog dlg(this);
         dlg.setWindowTitle("Make pecha (PDF)");
@@ -4264,10 +4262,10 @@ private:
 #endif
                 });
         connect(go, &QPushButton::clicked, &dlg, &QDialog::accept);
-        if (dlg.exec() != QDialog::Accepted) return;
+        if (dlg.exec() != QDialog::Accepted) return QString();
         const QString fn = QFileDialog::getSaveFileName(
             this, "Save pecha", "pecha.pdf", "PDF (*.pdf)");
-        if (fn.isEmpty()) return;
+        if (fn.isEmpty()) return QString();
         double w = 420, h = 90;
         if (preset->currentIndex() == 1) { w = 450; h = 100; }
         if (preset->currentIndex() == 2) { w = 297; h = 210; }
@@ -4277,8 +4275,7 @@ private:
                 : QString("Noto Serif Tibetan");
         const int sides = pechaWritePdf(fn, w, h, lines->value(),
                                         inter->isChecked(), fam);
-        context_->setHtml(
-            sides
+        return sides
                 ? QString("<b>Pecha written</b>: %1 folio side(s) "
                           "→ %2<br><small>script through the "
                           "battery-proven chain; failed syllables "
@@ -4286,9 +4283,10 @@ private:
                       .arg(sides)
                       .arg(fn.toHtmlEscaped())
                 : QString("<b>Pecha failed</b> — empty document or "
-                          "unwritable file."));
+                          "unwritable file.");
     }
 
+private:
     void stepFolio(int d) {
         int ix = folioOrder_.indexOf(curFolio_);
         ix = (ix < 0) ? 0 : ix + d;
@@ -4855,6 +4853,107 @@ private:
 // list of search targets (the aligned corpus + any folders, added
 // exactly as in the original), Add/Remove/Duplicate/Save/Stop/Find,
 // and the Search Setting / Saved Search / Search Results tabs.
+// ---- ExportPane (Adam, 2026-08-12): FORMAT & EXPORT promoted to
+// its own Read-group pane — the publishing station. Operates on the
+// document loaded in the Overlay; the reading column stays lean.
+class ExportPane : public QWidget {
+public:
+    explicit ExportPane(OverlayPane* overlay) : overlay_(overlay) {
+        auto* v = new QVBoxLayout(this);
+        auto* banner = new QLabel(
+            "<b>Export & Format</b> — publish the document that is "
+            "loaded in the Overlay: the input-center prep format, an "
+            "authentic pecha, or print Tibetan Unicode. Load a text "
+            "in Read → Overlay (or Library double-click) first.");
+        banner->setWordWrap(true);
+        v->addWidget(banner);
+        doc_ = new QLabel;
+        doc_->setStyleSheet("color:#7A5A00;font-size:13px");
+        v->addWidget(doc_);
+        auto mk = [&](const QString& title, const QString& what) {
+            auto* b = new QPushButton(title);
+            b->setMinimumHeight(34);
+            v->addWidget(b);
+            auto* d = new QLabel(what);
+            d->setWordWrap(true);
+            d->setStyleSheet("color:#666;font-size:12px;"
+                             "margin-bottom:6px");
+            v->addWidget(d);
+            return b;
+        };
+        auto* prepB = mk(
+            "Prepare for translation (Mixed Nuts)…",
+            "The demonstrated GMR workflow: paragraphs at double "
+            "shads, bracket notes folio-tagged, saved as a prep "
+            "text for the translation bench.");
+        auto* pechaB = mk(
+            "Make pecha (PDF)…",
+            "An authentic long-format pecha: framed folio sides, "
+            "rotated Tibetan folio numerals, your typeface, "
+            "optional phonetics interlinear — preview before "
+            "saving.");
+        auto* printB = mk(
+            "Export print Tibetan (Unicode)…",
+            "Clean print-ready Tibetan Unicode with the classical "
+            "shad rules; anything the engine cannot convert is "
+            "flagged ⟨wylie⟩, never guessed.");
+        results_ = new QTextBrowser;
+        v->addWidget(results_, 1);
+        connect(prepB, &QPushButton::clicked, [this] {
+            if (!guard()) return;
+            results_->setHtml(overlay_->prepareForTranslation());
+        });
+        connect(pechaB, &QPushButton::clicked, [this] {
+            if (!guard()) return;
+            results_->setHtml(overlay_->pechaExport());
+        });
+        connect(printB, &QPushButton::clicked, [this] {
+            if (!guard()) return;
+            results_->setHtml(overlay_->exportPrintTibetan());
+        });
+    }
+
+    int selfTest(QStringList& log) {
+        int fails = 0;
+        refresh();
+        const bool ok = doc_ != nullptr && results_ != nullptr;
+        log << QString("  [%1] Export: pane wired to the Overlay's "
+                       "document (%2)")
+                   .arg(ok ? "PASS" : "FAIL")
+                   .arg(doc_->text().isEmpty() ? "no doc"
+                                               : doc_->text());
+        if (!ok) ++fails;
+        return fails;
+    }
+
+protected:
+    void showEvent(QShowEvent* e) override {
+        refresh();
+        QWidget::showEvent(e);
+    }
+
+private:
+    bool guard() {
+        refresh();
+        if (overlay_ && overlay_->hasDocument()) return true;
+        results_->setHtml(
+            "<i>No document loaded — open a text in Read → "
+            "Overlay (or double-click one in the Library) "
+            "first.</i>");
+        return false;
+    }
+    void refresh() {
+        if (!overlay_) return;
+        const QString d = overlay_->documentLabel();
+        doc_->setText(d.isEmpty()
+                          ? "working document: none loaded"
+                          : "working document: " + d);
+    }
+    OverlayPane* overlay_ = nullptr;
+    QLabel* doc_ = nullptr;
+    QTextBrowser* results_ = nullptr;
+};
+
 class GoferPane : public QWidget {
 public:
     GoferPane(allcore::Spine& spine, const QString& root)
@@ -13300,28 +13399,115 @@ static QString translatorSurveyMarkdown(allcore::Spine& spine,
     const auto doc = allcore::buildOverlay(spine, *ix, raw);
     const int n = (int)doc.tokens.size();
     if (!n) return QString();
-    // per-token tier attribution via the innermost covering span
+    // per-token tier attribution via the innermost covering span —
+    // ONE sweep over the span list (the per-token spansAt() call was
+    // quadratic on canon volumes; Adam's finding, 2026-08-12)
     long covered = 0, curated = 0, glossary = 0, prov = 0, refOnly = 0;
     std::map<std::string, int> unknown;
-    const auto depth = doc.coverDepth(1);
+    std::vector<int> innerEntry(n, -1), innerLen(n, INT_MAX);
+    for (const auto& sp : doc.spans) {
+        const int len = sp.end - sp.beg;
+        for (int t = sp.beg; t < sp.end && t < n; ++t)
+            if (len < innerLen[t]) {
+                innerLen[t] = len;
+                innerEntry[t] = sp.entry_ix;
+            }
+    }
     for (int t = 0; t < n; ++t) {
-        if (!depth[t]) {
+        if (innerEntry[t] < 0) {
             ++unknown[doc.tokens[t]];
             continue;
         }
         ++covered;
-        const auto at = doc.spansAt(t);
-        const auto& e = doc.entries[doc.spans[at.front()].entry_ix];
+        const auto& e = doc.entries[innerEntry[t]];
         if (e.tier == "curated") ++curated;
         else if (e.tier == "glossary") ++glossary;
         else if (e.provisional()) ++prov;
         else ++refOnly;
     }
     if (!step(1, "Hunting canonical quotations…")) return QString();
-    std::vector<allcore::QuotationMatch> quotes;
-    try {
-        quotes = allcore::detectQuotations(spine, raw, true, 7);
-    } catch (const std::exception&) {
+    // inverted quotation scan (the per-position FTS probe fired tens
+    // of thousands of queries on a volume): build the document's
+    // 7-gram set once in memory, then test every corpus segment
+    // against it — no FTS at all. Reported standard: corpus segments
+    // of >=7 syllables whose FULL text appears verbatim.
+    struct SurveyQuote {
+        std::string course, english;
+        int seq = 0;
+    };
+    std::vector<SurveyQuote> quotes;
+    {
+        std::vector<std::string> dsyl;
+        dsyl.reserve(n);
+        for (const auto& t : doc.tokens) {
+            const std::string w = allcore::tokenToEwts(t);
+            std::string cur;
+            for (char c : w) {
+                if (c == ' ') {
+                    if (!cur.empty()) {
+                        dsyl.push_back(cur);
+                        cur.clear();
+                    }
+                } else {
+                    cur += (char)std::tolower((unsigned char)c);
+                }
+            }
+            if (!cur.empty()) dsyl.push_back(cur);
+        }
+        std::string joined = " ";
+        for (const auto& x : dsyl) joined += x + " ";
+        std::unordered_set<std::string> grams;
+        grams.reserve(dsyl.size());
+        for (size_t i = 0; i + 7 <= dsyl.size(); ++i) {
+            std::string g;
+            for (int k = 0; k < 7; ++k) {
+                if (k) g += ' ';
+                g += dsyl[i + k];
+            }
+            grams.insert(g);
+        }
+        const auto courses = spine.corpusCourses();
+        int ci = 0;
+        for (const auto& course : courses) {
+            if (course == "TITLK" || course == "TITLT" ||
+                course == "TITLS" || course == "TITLR" ||
+                course == "SUBJ" || course == "AUTH")
+                continue;
+            prog.setLabelText(
+                QString("Hunting canonical quotations… (%1/%2)")
+                    .arg(++ci)
+                    .arg(courses.size()));
+            QCoreApplication::processEvents();
+            if (prog.wasCanceled()) return QString();
+            for (const auto& seg :
+                 spine.corpusWindow(course, 0, 1 << 30)) {
+                // normalize the segment the same way
+                std::vector<std::string> ssyl;
+                std::string cur;
+                for (char c : seg.wylie) {
+                    if (c == ' ' || c == '\t' || c == '\n') {
+                        if (!cur.empty()) {
+                            ssyl.push_back(cur);
+                            cur.clear();
+                        }
+                    } else {
+                        cur += (char)std::tolower((unsigned char)c);
+                    }
+                }
+                if (!cur.empty()) ssyl.push_back(cur);
+                if ((int)ssyl.size() < 7) continue;
+                std::string g;
+                for (int k = 0; k < 7; ++k) {
+                    if (k) g += ' ';
+                    g += ssyl[k];
+                }
+                if (!grams.count(g)) continue;
+                std::string full = " ";
+                for (const auto& x : ssyl) full += x + " ";
+                if (joined.find(full) == std::string::npos) continue;
+                quotes.push_back({course, seg.english, seg.seq});
+            }
+        }
     }
     if (!step(2, "Reading the outline and structure…"))
         return QString();
@@ -13375,7 +13561,7 @@ static QString translatorSurveyMarkdown(allcore::Spine& spine,
         m += "\n";
     }
     if (!quotes.empty()) {
-        m += "## Canonical quotations (attested, ≥7 syllables)\n\n";
+        m += "## Canonical quotations (corpus segments of ≥7 syllables appearing verbatim)\n\n";
         int shown = 0;
         for (const auto& q : quotes) {
             if (shown++ >= 12) break;
@@ -13615,6 +13801,8 @@ int main(int argc, char** argv) {
             .arg(QString::fromStdString(spine.metaValue("release_version"))));
     auto* overlay = new OverlayPane(spine, checker, refdict, progress, root);
     tabs.addTab(overlay, "Overlay");
+    auto* exportPane = new ExportPane(overlay);
+    tabs.addTab(exportPane, "Export");
     tabs.addTab(new AnalysisPane(spine, tplPath, root + "/analyses"), "Analysis");
     auto* trainerPane =
         new TrainerPane(spine, progress, poslex, contractions);
@@ -13915,7 +14103,7 @@ int main(int argc, char** argv) {
             if (g->count()) tabs.addTab(g, gname);
             else delete g;
         };
-        mkGroup("Read", {"Overlay", "Library"});
+        mkGroup("Read", {"Overlay", "Library", "Export"});
         mkGroup("Translate",
                 {"Manuscript", "Draft", "Review", "Align"});
         mkGroup("Research",
@@ -14499,12 +14687,26 @@ int main(int argc, char** argv) {
         return 0;
     }
 
+    // --survey <file>: the Translator's Survey, scriptable (also
+    // the performance harness that guards Adam's speed finding)
+    const int surveyIx = cliArgs.indexOf("--survey");
+    if (surveyIx >= 0 && surveyIx + 1 < cliArgs.size()) {
+        QElapsedTimer et;
+        et.start();
+        const QString md = translatorSurveyMarkdown(
+            spine, cliArgs[surveyIx + 1], nullptr);
+        printf("%s\n[survey took %lld ms]\n",
+               md.toUtf8().constData(), (long long)et.elapsed());
+        return md.isEmpty() ? 1 : 0;
+    }
+
     // --selftest: suite 38 — the real panes exercised against the
     // real spine, offscreen; nonzero exit on any failure (ctest)
     if (selfTestMode) {
         QStringList log;
         int fails = 0;
         fails += overlay->selfTest(log, root);
+        fails += exportPane->selfTest(log);
         fails += trainerPane->selfTest(log);
         fails += drillsPane->selfTest(log);
         fails += draftPane->selfTest(log);
