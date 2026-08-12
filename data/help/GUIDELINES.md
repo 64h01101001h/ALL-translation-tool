@@ -112,9 +112,18 @@ The schemes in daily use, and the tool's conventions:
   layer).
 - **Protocol**: convert with the engines, never by hand; when a
   scheme cannot express something, flag rather than improvise.
-- *The full published EWTS specification (THL reference) is being
-  captured by the survey and will be summarized here with its
-  source pages.*
+- **The EWTS specification is captured in full** (v2.0, Germano;
+  all sixteen rules, all charts, and the complete 246-entry
+  Unicode↔EWTS character map with usage notes) in
+  docs/research/THL/language_tools.md, together with THL's
+  normative Standard Tibetan Stacks list — the reference behind
+  the `+` explicit-stack rules. Any future engine question about
+  an edge of EWTS is settled against that capture, not from
+  memory.
+- **Font licensing** (for shipping type): Tibetan Machine Uni is
+  GPL; Jomolhari is SIL Open Font License — the OFL font is the
+  safe embed, the GPL font is fine to *use* but its license terms
+  govern redistribution.
 
 ## Pronunciation systems
 
@@ -133,8 +142,13 @@ treats pronunciation as derived data with an authority lane:
   reviewed, approved; never silently.
 - **THL Simplified Phonetic Transcription** (Germano & Tournadre):
   the scholarly standard for Standard Tibetan, planned as an
-  additional display mode — port-and-prove from THL's published
-  rules, with THL's own converter as oracle, never approximated.
+  additional display mode. Its published rules are now captured
+  COMPLETE in docs/research/THL/language_tools.md — the
+  30-consonant mapping, all sixteen special rules with examples,
+  the exceptional-pronunciation classes, the 33-example battery,
+  and the 19-word exception list — so the port can be proven
+  rule-for-rule against the standard's own examples, with THL's
+  live converter as a second oracle. Never approximated.
 - **ACIP pronunciation standard**: banked at
   docs/standards/ACIP_PRONUNCIATION_STANDARD.md (Catalog Release
   IV, pp. 173–178); engine agreement 51/52 on pure Tibetan.
