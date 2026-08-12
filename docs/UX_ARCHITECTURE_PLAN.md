@@ -131,15 +131,29 @@ With these moves:
 
 Each phase ships pressed and selftested before the next begins.
 
-## 4. Gates awaiting Adam
+## 4. Gates — consultant rulings EXECUTED (2026-08-12), Adam's
+## ratification pending ("LET'S HIT THIS, THEN REVISIT")
 
-- **A. Translate ladder or merge?** Ladder (Workbench → Manuscript)
-  vs Manuscript-inside-Draft. *Recommendation: ladder.*
-- **B. Rename Input's "Scan" pane to "OCR"?* Recommendation: yes.*
-- **C. Calendar: labeled section inside Convert, or its own "Dates"
-  pane? *Recommendation: labeled section first; pane only if usage
-  proves it.*
-- **D. Display regroup style: inline labeled groups vs "Display…"
-  popover. *Recommendation: inline groups (fewer clicks).*
-- **E. Text reports pane (survey + teachings + structure) — now,
-  later, or never? *Recommendation: later; revisit after Phase 5.*
+Adam converted Phase 0 to consultant authority ("you are the
+expert… bring your expertise"). Rulings made, shipped in Phases
+1–5; each is reversible if he overrules:
+
+- **A. Translate ladder — RULED: ladder.** Draft is the Workbench
+  (understand + gather evidence); publish tools live with
+  Manuscript. Path reads Workbench → Manuscript → Review → Export.
+- **B. OCR rename — RULED: yes.** Input group = Input · OCR; the
+  Read group keeps "Scans" for woodblocks. Collision dissolved.
+- **C. Calendar — RULED: labeled "Dates" section inside Convert**
+  with its own gold eyebrow; promotes to a pane only if usage
+  proves it.
+- **D. Display regroup — RULED: inline labeled groups** (SCRIPT ·
+  CARD LAYERS · DOCUMENT MARKS, gold eyebrows) — fewer clicks than
+  a popover, settings preserved key-for-key.
+- **E. Text reports pane — RULED: later.** Survey + Teachings stay
+  one click from reading on the Overlay; revisit after the joint
+  walkthrough if the REVIEW section outgrows itself.
+
+Remaining for Adam: ratify A–E (or overrule any), the Phase 6
+joint walkthrough (T/K/F campaign), and the night-mode audit
+(needs his live dark-mode screenshots — offscreen renders paint
+light chrome).
