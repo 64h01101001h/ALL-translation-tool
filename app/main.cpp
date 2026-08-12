@@ -6107,6 +6107,61 @@ auto* secEvid = new QLabel("<span style='color:#9A7A33;font-size:10px;letter-spa
         draft_ = new QPlainTextEdit;
         draft_->setPlaceholderText("Your English draft…");
         draftCol->addWidget(draft_);
+        // the terminology live-guard (Adam's wow round, 2026-08-12):
+        // a spellcheck for terminology — as you type, the same
+        // checker the button runs updates a quiet status line
+        termLive_ = new QLabel;
+        termLive_->setStyleSheet("font-size:11px;color:#777");
+        termLive_->setWordWrap(true);
+        draftCol->addWidget(termLive_);
+        termTimer_ = new QTimer(this);
+        termTimer_->setSingleShot(true);
+        termTimer_->setInterval(1500);
+        connect(draft_, &QPlainTextEdit::textChanged,
+                [this] { termTimer_->start(); });
+        connect(termTimer_, &QTimer::timeout, [this] {
+            const std::string src =
+                source_->toPlainText().toStdString();
+            const std::string dr =
+                draft_->toPlainText().toStdString();
+            if (src.empty() || dr.size() < 20) {
+                termLive_->clear();
+                return;
+            }
+            auto rep =
+                allcore::checkTerminology(spine_, index_, src, dr);
+            int unmatched = 0;
+            QString first;
+            for (const auto& t : rep.terms)
+                if (t.matched.empty()) {
+                    if (!unmatched)
+                        first = QString::fromStdString(t.wylie);
+                    ++unmatched;
+                }
+            if (!unmatched && rep.shared.empty()) {
+                termLive_->setStyleSheet(
+                    "font-size:11px;color:#3B7A3B");
+                termLive_->setText(
+                    "✓ every established term is rendered; no "
+                    "shared-English collapses");
+            } else {
+                termLive_->setStyleSheet(
+                    "font-size:11px;color:#B26B00");
+                QString t;
+                if (unmatched)
+                    t += QString("⚠ %1 established term(s) not yet "
+                                 "rendered (first: %2)")
+                             .arg(unmatched)
+                             .arg(first);
+                if (!rep.shared.empty())
+                    t += QString("%1⚠ %2 shared-English "
+                                 "collapse(s)")
+                             .arg(t.isEmpty() ? "" : " · ")
+                             .arg(rep.shared.size());
+                t += " — press Check terminology for the detail";
+                termLive_->setText(t);
+            }
+        });
         auto* checkBtn = new QPushButton("Check terminology");
         draftCol->addWidget(checkBtn);
         notesSearch_ = new QLineEdit;
@@ -6253,6 +6308,19 @@ auto* secPub = new QLabel("<span style='color:#9A7A33;font-size:10px;letter-spac
         phraseMemory();
         check(anchors_->toPlainText().contains("HGM corpus"),
               "phrase memory finds corpus renderings");
+        // terminology live-guard: an unrendered established term
+        // warns quietly as you type
+        demo("SEMS CAN THAMS CAD BDE BA DANG LDAN PAR GYUR CIG,");
+        draft_->setPlainText(
+            "may all of them be endowed with happiness");
+        termTimer_->start(0);
+        QCoreApplication::processEvents(QEventLoop::AllEvents, 60);
+        QCoreApplication::processEvents(QEventLoop::AllEvents, 60);
+        check(termLive_->text().contains("not yet rendered") ||
+                  termLive_->text().contains("collapse") ||
+                  termLive_->text().contains("every established"),
+              "terminology live-guard reports as you type");
+        draft_->clear();
         source_->clear();
         return fails;
     }
@@ -7485,6 +7553,8 @@ private:
     std::vector<allcore::Clause> clauses_;
     int lastClause_ = -1;
     QTimer* evTimer_ = nullptr;   // Evidence Ribbon debounce
+    QLabel* termLive_ = nullptr;  // terminology live-guard line
+    QTimer* termTimer_ = nullptr;
     QPlainTextEdit* source_ = nullptr;
     QPlainTextEdit* draft_ = nullptr;
     QTextBrowser* clauseView_ = nullptr;

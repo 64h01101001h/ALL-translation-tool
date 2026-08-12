@@ -249,6 +249,13 @@ provisional — nothing is ever composed for you), a note when the
 master has translated that exact clause (with his English), and a
 quotation alert when the clause quotes the canon.
 
+**The live terminology guard.** As you type your English, a quiet
+line under the draft box keeps score: green when every established
+term of the source is rendered, amber when terms are still
+unrendered or one English word is covering two different Tibetan
+terms — with "Check terminology" one press away for the detail.
+Advisory only, never auto-corrected.
+
 **STRUCTURE tools (under the gold heading).** Outline (sa bcad),
 structural units (bam po), verse meter, VERSE READING ORDER
 (stanza-by-stanza with the verb named).

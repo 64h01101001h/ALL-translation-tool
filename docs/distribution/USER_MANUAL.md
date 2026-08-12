@@ -699,6 +699,17 @@ Everything in the ribbon is deterministic evidence — the same
 anchors, corpus, and quotation machinery as the buttons, now
 arriving unasked, about the clause you are working on.
 
+
+### The live terminology guard
+
+As you type in the draft box, a quiet status line underneath keeps
+score — the same deterministic checker as **Check terminology**,
+running on a typing pause: **green** when every established term
+in the source has a rendering in your English and no two Tibetan
+terms share one English word; **amber** with counts (and the first
+offender) when something needs attention. Advisory only — nothing
+is ever auto-corrected; the full detail stays one press away.
+
 ### Phrase memory — before you invent any rendering
 
 1. Select any Tibetan in the source box.
