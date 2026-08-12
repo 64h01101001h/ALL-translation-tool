@@ -613,6 +613,24 @@ implementation is sidelined HERE from this date. What this means:
 - [ ] NEVER lane: Tshigdzod Chenmo, Golden Mirror, Dungkar et al.
       without licenses; no paraphrase of copyrighted dictionaries.
 
+## IN-APP COLLECTION UPDATES (Adam, 2026-08-12 — "strongly suggest")
+
+- [ ] **Check asianlegacylibrary.org for updates from inside the
+      app**: a Library-pane action (and/or startup check) that
+      probes the ALL website's library page for the current
+      Kangyur/Tengyur/Sungbum collection releases, compares against
+      the installed manifest (record installed release/version at
+      install time), and reports what's new.
+- [ ] **Load the .zip files directly from the website**: download
+      chosen collection ZIPs in-app (progress + resume + checksum),
+      then feed the existing Install-collection pipeline — no
+      browser round-trip. Needs: a probe of the site's actual
+      download URL structure (and ideally a small manifest/JSON the
+      website team could publish — one static file would make this
+      robust forever; raise with the web team).
+- [ ] Same mechanism later for data releases (spine) alongside the
+      team-folder Check-for-Updates that exists for the app itself.
+
 ## PECHA MAKER + TibetDoc workflows (Adam, 2026-08-12)
 
 - [x] **Pecha Maker v1** — SHIPPED: Overlay FORMAT & EXPORT → PDF

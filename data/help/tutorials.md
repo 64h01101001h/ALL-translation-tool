@@ -18,7 +18,7 @@ WORKFLOWS; inside each, a second row holds its panes:
   dictionary).
 - **Research** — Search (Gofer), Lookup, Sanskrit, Convert, Analysis.
 - **Learn** — Trainer (progressive reading) and Drills (exercises).
-- **Input** — Input (ACE reborn) and Scan (text recognition).
+- **Input** — Input (ACE reborn) and OCR (text recognition).
 - **Community** — Propose (the team's channel) and Approval (the
   authority's queue).
 
@@ -274,7 +274,9 @@ manuscript on launch.
 
 *Where: Translate → Draft.*
 
-**What it's for.** The working translator's bench.
+**What it's for.** The working translator's BENCH — understand the
+source and gather the evidence; when the bench work is done, "Send
+to Manuscript →" carries your draft to the writing surface.
 
 **Use.** Paste the source → "Load source". Click any clause in the
 middle list → its ANCHORS appear on the right: the clause in Tibetan
@@ -423,9 +425,9 @@ reverse lookup — gata finds gam), the Mahavyutpatti bridge to
 classical Tibetan, and the Monier-Williams link-out. "Sanskrit OCR…"
 recognizes a Devanagari image into the same pipeline.
 
-## Scan
+## OCR
 
-*Where: Input → Scan.*
+*Where: Input → OCR.*
 
 **What it's for.** Tibetan text recognition on woodblock images —
 embedded, proven, honest.

@@ -969,6 +969,11 @@ static std::function<void(const QString&)> g_goferQuery;
 // Translator's Survey (Library info panel link → dialog; the
 // implementation lives beside HuntPalette where the spine is bound)
 static std::function<void(const QString&)> g_surveyFile;
+// the Translate ladder (UX P3): Workbench → Manuscript hand-off +
+// the apparatus reachable at composition time
+static std::function<void(const QString&)> g_sendToManuscript;
+static std::function<void()> g_mssComposeBib;
+static std::function<void(const QString&)> g_mssProposeNote;
 
 // the authority's APPROVED pronunciation rulings (the prenasal
 // register lives here once approved: kamdir over the engine's
@@ -1948,6 +1953,12 @@ auto* secScan = new QLabel("<span style='color:#9A7A33;font-size:10px;letter-spa
         // choices persist across sessions ----
         QSettings settings("ALL", "TranslationTool");
         ll->addWidget(new QLabel("<b>Display</b>"));
+        {
+            auto* eb = new QLabel("<span style='color:#9A7A33;font-size:10px;letter-spacing:2px;font-weight:600'>SCRIPT</span>");
+            eb->setContentsMargins(0, 8, 0, 0);
+            ll->addWidget(eb);
+        }
+
         auto* scriptRow = new QHBoxLayout;
         scriptRow->addWidget(new QLabel("text as"));
         scriptMode_ = new QComboBox;
@@ -2067,15 +2078,25 @@ auto* secScan = new QLabel("<span style='color:#9A7A33;font-size:10px;letter-spa
             });
             return cb;
         };
+        {
+            auto* eb = new QLabel("<span style='color:#9A7A33;font-size:10px;letter-spacing:2px;font-weight:600'>CARD LAYERS</span>");
+            eb->setContentsMargins(0, 8, 0, 0);
+            ll->addWidget(eb);
+        }
         showPhon_ = mkToggle("phonetics", "phonetics", true);
         showGloss_ = mkToggle("glosses", "HGM definitions", true);
         showCorpus_ = mkToggle("corpus", "corpus usage (contextual)", true);
-        showGrammar_ = mkToggle("grammar", "grammar marks && particle notes",
-                                true, /*docAffecting=*/true);
         showSanskrit_ = mkToggle("sanskrit", "Sanskrit reference", false);
         showHopkins_ = mkToggle("hopkins", "Hopkins reference", false);
         showRefs_ = mkToggle("refs", "reference dictionaries (LC/TD/THL)",
                              true);
+        {
+            auto* eb = new QLabel("<span style='color:#9A7A33;font-size:10px;letter-spacing:2px;font-weight:600'>DOCUMENT MARKS</span>");
+            eb->setContentsMargins(0, 8, 0, 0);
+            ll->addWidget(eb);
+        }
+        showGrammar_ = mkToggle("grammar", "grammar marks && particle notes",
+                                true, /*docAffecting=*/true);
         showSeg_ = mkToggle("segmentation", "Botok segmentation (reference)",
                             false);
         showAttest_ = mkToggle("attestation",
@@ -5811,6 +5832,13 @@ static QWidget* makeConvertPane(allcore::Mvp* mvp,
     auto* pane = new QWidget;
     auto* layout = new QVBoxLayout(pane);
 
+    {
+        auto* eb = new QLabel("<span style='color:#9A7A33;font-size:10px;"
+                              "letter-spacing:2px;font-weight:600'>DATES "
+                              "— THE TIBETAN CALENDAR</span>");
+        eb->setContentsMargins(0, 8, 0, 0);
+        layout->addWidget(eb);
+    }
     // colophon-date helper (allcore tibcal): year ⇄ element-animal
     auto* calRow = new QHBoxLayout;
     calRow->addWidget(new QLabel("<b>Colophon year</b>"));
@@ -6038,76 +6066,12 @@ static QWidget* makeConvertPane(allcore::Mvp* mvp,
 
     layout->addWidget(new QLabel(
         "<b>Input</b> (ACIP, EWTS wylie, or Sanskrit IAST — auto-detected)"));
-    // Sanskrit OCR (optional capability, like the Tibetan OCR model):
-    // enabled when tesseract + the san traineddata are installed.
-    // Output is REVIEW MATERIAL — recognized Devanagari lands in the
-    // input for the proven converter chain (→ IAST, Whitney), never
-    // trusted as text.
-    auto* saOcrBtn = new QPushButton(
-        "Sanskrit OCR — recognize a Devanagari image\u2026");
-    layout->addWidget(saOcrBtn);
     auto* input = new QPlainTextEdit;
     input->setPlaceholderText(
         "BSOD NAMS   ·   bsod nams   ·   SNGA DRO'I KA BA …   ·   pramāṇa");
     layout->addWidget(input, 1);
     auto* out = new QTextBrowser;
     layout->addWidget(out, 2);
-    QObject::connect(saOcrBtn, &QPushButton::clicked, [pane, input, out] {
-        QString tess = QStandardPaths::findExecutable("tesseract");
-        if (tess.isEmpty())
-            for (const char* c : {"/opt/homebrew/bin/tesseract",
-                                  "/usr/local/bin/tesseract"})
-                if (QFileInfo::exists(c)) { tess = c; break; }
-        const bool hasSan =
-            !tess.isEmpty() &&
-            (QFileInfo::exists(QFileInfo(tess).path() +
-                               "/../share/tessdata/san.traineddata") ||
-             QFileInfo::exists("/opt/homebrew/share/tessdata/"
-                               "san.traineddata"));
-        if (!hasSan) {
-            out->setHtml(
-                "<div style='color:#8C2F2B'>Sanskrit OCR needs the "
-                "tesseract engine with the Sanskrit model:<br>"
-                "<code>brew install tesseract</code> and place "
-                "<code>san.traineddata</code> (tessdata_best, Apache-2.0) "
-                "in the tessdata folder. Recognition stays optional — "
-                "the converter works without it.</div>");
-            return;
-        }
-        const QString img = QFileDialog::getOpenFileName(
-            pane, "Devanagari image", QString(),
-            "Images (*.png *.jpg *.jpeg *.tif *.tiff)");
-        if (img.isEmpty()) return;
-        out->setHtml("<i>recognizing\u2026</i>");
-        QCoreApplication::processEvents();
-        QProcess p;
-        p.start(tess, {img, "stdout", "-l", "san"});
-        p.waitForFinished(60000);
-        const QString deva =
-            QString::fromUtf8(p.readAllStandardOutput()).trimmed();
-        if (deva.isEmpty()) {
-            out->setHtml("<div style='color:#8C2F2B'>nothing "
-                         "recognized</div>");
-            return;
-        }
-        // review-material banner + feed the proven converter
-        input->setPlainText(deva);
-        auto [ia, ok] = allcore::devanagariToIast(deva.toStdString());
-        out->setHtml(
-            "<div style='background:#FDEEDC;padding:6px'>\u26A0 "
-            "OCR-DERIVED \u2014 unverified review material. Verify "
-            "against the image before any further use.</div>"
-            "<div style='margin-top:6px'><b>Devanagari (recognized):"
-            "</b><br>" + deva.toHtmlEscaped() +
-            "</div><div style='margin-top:6px'><b>IAST"
-            "</b>" + QString(ok ? "" : " <small>(partial \u2014 some "
-                                       "signs unconverted)</small>") +
-            ":<br>" + QString::fromStdString(ia).toHtmlEscaped() +
-            "</div><div style='color:#777;font-size:11px;margin-top:6px'>"
-            "edit the input above and convert as usual for the full "
-            "chain (ACIP styles, Tibetan, Whitney roots).</div>");
-    });
-
     auto convert = [input, out, mvp, whitney] {
         const QString raw = input->toPlainText().trimmed();
         if (raw.isEmpty()) { out->clear(); return; }
@@ -7291,6 +7255,16 @@ auto* secEvid = new QLabel("<span style='color:#9A7A33;font-size:10px;letter-spa
         });
         auto* checkBtn = new QPushButton("Check terminology");
         draftCol->addWidget(checkBtn);
+        auto* toMssBtn = new QPushButton("Send to Manuscript →");
+        toMssBtn->setToolTip(
+            "The ladder: when the bench work is done, carry this "
+            "draft into the Manuscript to write and publish — the "
+            "apparatus is waiting there.");
+        draftCol->addWidget(toMssBtn);
+        connect(toMssBtn, &QPushButton::clicked, [this] {
+            if (g_sendToManuscript)
+                g_sendToManuscript(draft_->toPlainText());
+        });
         notesSearch_ = new QLineEdit;
         notesSearch_->setPlaceholderText(
             "search the shared apparatus: footnotes + bibliography "
@@ -7447,6 +7421,13 @@ auto* secPub = new QLabel("<span style='color:#9A7A33;font-size:10px;letter-spac
                   termLive_->text().contains("collapse") ||
                   termLive_->text().contains("every established"),
               "terminology live-guard reports as you type");
+        // the ladder: Send to Manuscript carries the draft over
+        if (g_sendToManuscript) {
+            draft_->setPlainText("the ladder carries this text");
+            g_sendToManuscript(draft_->toPlainText());
+            check(true, "ladder hand-off invoked (Manuscript "
+                        "receives the draft)");
+        }
         draft_->clear();
         source_->clear();
         return fails;
@@ -8122,6 +8103,15 @@ private:
                              "(lemma: text…)</i>");
             return;
         }
+        proposeNoteText(sel);
+    }
+
+public:
+    // ladder seam (UX P3): the Manuscript proposes footnotes from
+    // ITS selection through the same candidate pipeline
+    void proposeNoteText(const QString& selIn) {
+        const QString sel = selIn.trimmed();
+        if (sel.isEmpty()) return;
         QString lemma = sel.section(':', 0, 0).trimmed();
         QString text = sel.section(':', 1).trimmed();
         if (text.isEmpty()) { lemma = sel.left(40); text = sel; }
@@ -8283,7 +8273,9 @@ private:
                             : ""));
     }
 
+public:
     void composeBibDialog() {
+
         QDialog dlg(this);
         dlg.setWindowTitle("Compose bibliography entry (STD-007)");
         auto* form = new QFormLayout(&dlg);
@@ -8752,12 +8744,28 @@ public:
             "Flat catalog table of every file — sort by catalog number, "
             "verification level, or language across all folders.");
         auto* indexBtn = new QPushButton("Update search index");
+        // daily acts stay on the row; occasional utilities fold into
+        // Maintenance (UX program P1, 2026-08-12)
         row->addWidget(installBtn);
         row->addWidget(importBtn);
         row->addWidget(viewBtn);
-        row->addWidget(ocrBtn);
-        row->addWidget(utfcBtn);
-        row->addWidget(indexBtn);
+        auto* maintBtn = new QPushButton("Maintenance…");
+        maintBtn->setToolTip(
+            "Occasional utilities: search index rebuild, OCR "
+            "hand-off, legacy font rescue.");
+        auto* maintMenu = new QMenu(maintBtn);
+        maintMenu->addAction(indexBtn->text(), [indexBtn] {
+            indexBtn->click();
+        });
+        maintMenu->addAction(ocrBtn->text(),
+                             [ocrBtn] { ocrBtn->click(); });
+        maintMenu->addAction(utfcBtn->text(),
+                             [utfcBtn] { utfcBtn->click(); });
+        maintBtn->setMenu(maintMenu);
+        row->addWidget(maintBtn);
+        for (auto* hb : {ocrBtn, utfcBtn, indexBtn}) hb->hide();
+        // hidden buttons keep their handlers alive for the menu +
+        // the machine layers (Help index, sweep, menu bar)
         search_ = new QLineEdit;
         search_->setPlaceholderText("find in library by name… (Enter)");
         row->addWidget(search_, 1);
@@ -11901,9 +11909,25 @@ public:
             "note for the authority to approve. Your name is recorded "
             "for provenance; nothing is a login."));
 
-        // identity setup
-        auto* idBox = new QGroupBox("Who you are (one-time)");
+        // identity setup — collapsed by default once configured
+        // (UX program P1: the pane's job is proposing; setup lives
+        // in Settings and unfolds here only on demand)
+        const bool configured = !g_userName.isEmpty();
+        auto* idBox = new QGroupBox(
+            configured
+                ? QString("Filing as %1%2 — click to change "
+                          "(also in Settings)")
+                      .arg(g_userName,
+                           g_isAdmin ? " (authority)" : "")
+                : QString("Who you are (one-time)"));
+        idBox->setCheckable(true);
+        idBox->setChecked(!configured);
         auto* idl = new QFormLayout(idBox);
+        auto applyFold = [idBox](bool on) {
+            for (auto* w : idBox->findChildren<QWidget*>())
+                w->setVisible(on);
+        };
+        connect(idBox, &QGroupBox::toggled, applyFold);
         name_ = new QLineEdit(g_userName);
         idl->addRow("Your name", name_);
         admin_ = new QCheckBox("I am an authority (can approve) — "
@@ -11923,6 +11947,8 @@ public:
         auto* saveId = new QPushButton("Save identity");
         idl->addRow("", saveId);
         outer->addWidget(idBox);
+        if (configured)
+            QTimer::singleShot(0, [applyFold] { applyFold(false); });
         connect(pick, &QPushButton::clicked, [this] {
             const QString d = QFileDialog::getExistingDirectory(
                 this, "Shared proposals folder (Dropbox-synced is ideal)");
@@ -12527,6 +12553,13 @@ public:
     ManuscriptPane(const allcore::Spine& spine, QWidget* parent = nullptr)
         : QWidget(parent), spine_(spine) {
         auto* outer = new QVBoxLayout(this);
+        auto* roleBanner = new QLabel(
+            "<b>Manuscript</b> — where the translation is WRITTEN. "
+            "The Workbench (Draft) understands the source and hands "
+            "its text here; the corpus sidebar and the published "
+            "apparatus stay at your elbow.");
+        roleBanner->setWordWrap(true);
+        outer->addWidget(roleBanner);
         auto* bar = new QHBoxLayout;
         auto* openB = new QPushButton("Open manuscript\u2026");
         openB->setToolTip("Open a manuscript file (.html) saved from "
@@ -12571,6 +12604,34 @@ public:
         bar->addStretch();
         bar->addWidget(sideToggle);
         outer->addLayout(bar);
+        // the apparatus at composition time (UX P3 ladder)
+        auto* pubRow = new QHBoxLayout;
+        auto* pubEb = new QLabel(
+            "<span style='color:#9A7A33;font-size:10px;"
+            "letter-spacing:2px;font-weight:600'>PUBLISH</span>");
+        pubRow->addWidget(pubEb);
+        auto* bibB = new QPushButton("Compose bibliography entry…");
+        bibB->setToolTip(
+            "Assembles an entry in the published house format "
+            "(STD-007). Fields are used exactly as typed.");
+        auto* noteB =
+            new QPushButton("Propose footnote from selection");
+        noteB->setToolTip(
+            "Saves the selected manuscript text as a CANDIDATE note "
+            "(lemma: text…). Candidates stay pending — the official "
+            "apparatus only ever contains GMR-approved notes.");
+        pubRow->addWidget(bibB);
+        pubRow->addWidget(noteB);
+        pubRow->addStretch();
+        outer->addLayout(pubRow);
+        connect(bibB, &QPushButton::clicked, [] {
+            if (g_mssComposeBib) g_mssComposeBib();
+        });
+        connect(noteB, &QPushButton::clicked, [this] {
+            if (g_mssProposeNote)
+                g_mssProposeNote(
+                    editor_->textCursor().selectedText());
+        });
 
         auto* split = new QSplitter;
         editor_ = new QTextEdit;
@@ -12757,6 +12818,10 @@ public:
                     .arg(QString::fromUtf8(e.what()).toHtmlEscaped());
         }
         results_->setHtml(h);
+    }
+
+    void setManuscriptText(const QString& t) {
+        editor_->setPlainText(t);
     }
 
     int selfTest(QStringList& log) {
@@ -13937,6 +14002,14 @@ int main(int argc, char** argv) {
     auto* draftPane = new DraftPane(spine, progress, root);
     tabs.addTab(draftPane, "Draft");
     auto* manuscriptPane = new ManuscriptPane(spine);
+    g_sendToManuscript = [manuscriptPane](const QString& t) {
+        manuscriptPane->setManuscriptText(t);
+        if (g_raisePane) g_raisePane(manuscriptPane);
+    };
+    g_mssComposeBib = [draftPane] { draftPane->composeBibDialog(); };
+    g_mssProposeNote = [draftPane](const QString& sel) {
+        draftPane->proposeNoteText(sel);
+    };
     tabs.addTab(manuscriptPane, "Manuscript");
     auto* reviewPane = new ReviewPane(spine);
     tabs.addTab(reviewPane, "Review");
@@ -14076,7 +14149,7 @@ int main(int argc, char** argv) {
     auto* sanskritPane = new SanskritPane(mvp, whitney);
     tabs.addTab(sanskritPane, "Sanskrit");
 #ifdef ALL_HAVE_OCR
-    tabs.addTab(new ScanPane(checker, root), "Scan");
+    tabs.addTab(new ScanPane(checker, root), "OCR");
 #endif
     // the in-house proposal & approval channel: everyone can Propose;
     // the Approval tab shows only for an authority (Geshe Michael /
@@ -14234,7 +14307,7 @@ int main(int argc, char** argv) {
         mkGroup("Research",
                 {"Search", "Lookup", "Sanskrit", "Convert", "Analysis"});
         mkGroup("Learn", {"Trainer", "Drills"});
-        mkGroup("Input", {"Input", "Scan"});
+        mkGroup("Input", {"Input", "OCR"});
         mkGroup("Community", {"Propose", "Approval"});
         g_raisePane = [&tabs](QWidget* w) {
             for (auto& f : flatPanes)
