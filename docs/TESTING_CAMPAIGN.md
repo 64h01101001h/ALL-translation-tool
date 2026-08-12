@@ -17,15 +17,29 @@ applied. Findings log at the bottom.*
 
 
 ## Overlay
+*(machine pass 2026-08-12: --sweep 26/26 controls crash-free +
+selftest behavior guards; T marked only where behavior is genuinely
+machine-verified — K/F are Adam's calls)*
 
 - [ ] T · [ ] K · [ ] F — What it's for
-- [ ] T · [ ] K · [ ] F — Loading text — two ways
-- [ ] T · [ ] K · [ ] F — Reading the display
-- [ ] T · [ ] K · [ ] F — The card
-- [ ] T · [ ] K · [ ] F — Display panel (left)
-- [ ] T · [ ] K · [ ] F — REVIEW (left column, under its gold heading)
+- [x] T · [ ] K · [ ] F — Loading text — two ways *(selftest:
+  ACIP + wylie detection, openFile, full-volume ceiling guard)*
+- [x] T · [ ] K · [ ] F — Reading the display *(selftest: GMR click
+  mode incl. 5-token longest-phrase check, script modes, line
+  mirroring; sweep: shading combo cycled)*
+- [x] T · [ ] K · [ ] F — The card *(selftest: gloss/tier content
+  checks; toggle-restore guard 92)*
+- [x] T · [ ] K · [ ] F — Display panel (left) *(sweep: all 9
+  toggles + typeface/script combos; instant-toggle guards)*
+- [x] T · [ ] K · [ ] F — REVIEW (left column, under its gold heading)
+  *(selftest: spelling doubts list + File-for-ruling lane, teachings
+  report; sweep: all buttons)*
 - [ ] T · [ ] K · [ ] F — SCANS (left column, under its gold heading)
-- [ ] T · [ ] K · [ ] F — FORMAT & EXPORT (left column, under its gold heading)
+  *(sweep: crash-free with graceful empty states; BDRC network
+  behavior needs a linked volume — human pass)*
+- [x] T · [ ] K · [ ] F — FORMAT & EXPORT (left column, under its
+  gold heading) *(tibexport + prep formatter battery-proven in
+  ctest; sweep: dialogs open/dismiss clean)*
 
 ## Library
 
