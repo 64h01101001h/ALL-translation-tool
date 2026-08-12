@@ -12,6 +12,7 @@
 
 #include <string>
 #include <utility>
+#include <vector>
 
 namespace allcore {
 
@@ -44,5 +45,19 @@ std::pair<std::string, bool> wylieToUnicode(const std::string& wylie);
 // wylie → GMR-convention phonetics (word-segmented per the printed cards).
 //   ← engines/pron_engine.py::pronounce
 std::string pronounce(const std::string& wylie);
+
+// pronounce with the engine's OWN word segmentation surfaced: each
+// word carries its pron and the half-open syllable span [syl_beg,
+// syl_end) it consumed from the normalized whitespace-split input.
+// ADDITIVE view of the same canonical logic — joining the non-empty
+// prons with spaces is IDENTICAL to pronounce() (asserted across the
+// full reference dump in the battery). Empty prons are kept so every
+// input syllable stays accounted for (display fallback decides).
+struct PronSegWord {
+    std::string pron;
+    int syl_beg = 0;
+    int syl_end = 0;
+};
+std::vector<PronSegWord> pronounceSegmented(const std::string& wylie);
 
 }  // namespace allcore

@@ -1183,6 +1183,21 @@ public:
                       !view_->extraSelections().isEmpty(),
                   "arrow-key reading walks the phrase highlight");
         }
+        // pronunciation display mode: whole text in the GMR
+        // convention, engine-segmented (bsod nams = sunam class)
+        {
+            scriptMode_->setCurrentIndex(3);
+            input_->setPlainText(
+                "SEMS CAN THAMS CAD BDE BA DANG LDAN PAR GYUR CIG,");
+            loadDoc();
+            const QString pron = view_->toPlainText();
+            check(pron.contains("semchen") &&
+                      pron.contains("gyurchik"),
+                  "pronunciation mode renders convention words");
+            check(!pron.contains(QChar(0x27E8)),
+                  "pronunciation mode clean on the sample");
+            scriptMode_->setCurrentIndex(0);
+        }
         {
             // #62 logic: a left side-panel and a big inter-line gap
             // are found; a fully-texted page yields no candidates
@@ -1859,7 +1874,16 @@ auto* secFmt = new QLabel("<span style='color:#9A7A33;font-size:10px;letter-spac
         auto* scriptRow = new QHBoxLayout;
         scriptRow->addWidget(new QLabel("text as"));
         scriptMode_ = new QComboBox;
-        scriptMode_->addItems({"Tibetan script", "ACIP", "Wylie"});
+        scriptMode_->addItems({"Tibetan script", "ACIP", "Wylie",
+                               "Pronunciation (GMR)"});
+        scriptMode_->setItemData(
+            3,
+            "The whole text as Geshe Michael-convention phonetics — "
+            "the same battery-proven engine as the cards, with its "
+            "own word segmentation (syllables that merge into one "
+            "spoken word render once, junctions correct). A THL-"
+            "scheme option is planned.",
+            Qt::ToolTipRole);
         scriptMode_->setCurrentIndex(
             // default: ACIP transliteration — the input centers'
             // native script (Adam, 2026-08-10); Tibetan script and
@@ -2178,11 +2202,126 @@ private:
             if (tokIdx != doc_.tokens.size())
                 std::fill(nlAfter.begin(), nlAfter.end(), 0);
         }
+        // mode 3 — Pronunciation (GMR): rendered per barrier group so
+        // the engine's word segmentation and junction sandhi are the
+        // convention's own (per-syllable calls would deviate: bsod
+        // nams is "sunam", skabs 'dir is "kabdir"). A spoken word
+        // renders once at its FIRST source token; the word's other
+        // tokens map zero-width so spans and clicks stay coherent.
+        // Non-letter tokens (folio markers, numbers) pass through raw;
+        // an empty engine result renders ⟨wylie⟩, never dropped.
+        std::vector<QString> pronDisp;
+        if (mode == 3) {
+            pronDisp.assign(doc_.tokens.size(), QString());
+            auto sylCount = [](const std::string& w) {
+                // mirrors the engine's input normalization ('+' splits,
+                // '/' drops, middle dot splits) — guarded by battery C
+                int n = 0;
+                bool in = false;
+                for (size_t i = 0; i < w.size(); ++i) {
+                    unsigned char c = w[i];
+                    bool sep = (c == '+' || c == ' ' || c == '\t');
+                    if (c == 0xC2 && i + 1 < w.size() &&
+                        (unsigned char)w[i + 1] == 0xB7) {
+                        sep = true;
+                        ++i;
+                    }
+                    if (c == '/') continue;
+                    if (sep) {
+                        in = false;
+                    } else if (!in) {
+                        in = true;
+                        ++n;
+                    }
+                }
+                return n;
+            };
+            auto plainLetters = [](const std::string& t) {
+                for (unsigned char c : t)
+                    if (!std::isalpha(c) && c != '\'' && c != '+' &&
+                        c != '-')
+                        return false;
+                return !t.empty();
+            };
+            size_t g0 = 0;
+            while (g0 < doc_.tokens.size()) {
+                size_t g1 = g0;
+                while (g1 + 1 < doc_.tokens.size() &&
+                       !doc_.barrier_after[g1])
+                    ++g1;
+                ++g1;   // [g0, g1) is one barrier group
+                std::string joined;
+                std::vector<int> tokSylBeg;   // per group token
+                std::vector<size_t> feedTok;  // group tokens fed
+                int syl = 0;
+                for (size_t t = g0; t < g1; ++t) {
+                    const std::string& raw = doc_.tokens[t];
+                    if (!plainLetters(raw)) {
+                        pronDisp[t] = QString::fromStdString(raw);
+                        continue;
+                    }
+                    const std::string w = tokEwts(raw);
+                    const int k = sylCount(w);
+                    if (k == 0) {
+                        pronDisp[t] = QString::fromStdString(raw);
+                        continue;
+                    }
+                    tokSylBeg.push_back(syl);
+                    feedTok.push_back(t);
+                    syl += k;
+                    if (!joined.empty()) joined += ' ';
+                    joined += w;
+                }
+                if (!joined.empty()) {
+                    for (const auto& wd :
+                         allcore::pronounceSegmented(joined)) {
+                        // first fed token whose syllables start the word
+                        size_t owner = feedTok.front();
+                        for (size_t j = 0; j < tokSylBeg.size(); ++j)
+                            if (tokSylBeg[j] == wd.syl_beg) {
+                                owner = feedTok[j];
+                                break;
+                            }
+                        if (!wd.pron.empty()) {
+                            pronDisp[owner] =
+                                QString::fromStdString(wd.pron);
+                        } else {
+                            QString fb;
+                            for (size_t j = 0; j < tokSylBeg.size();
+                                 ++j)
+                                if (tokSylBeg[j] >= wd.syl_beg &&
+                                    tokSylBeg[j] < wd.syl_end)
+                                    fb += QString::fromStdString(
+                                              tokEwts(doc_.tokens
+                                                          [feedTok[j]])) +
+                                          " ";
+                            pronDisp[owner] = QString::fromUtf8("⟨") +
+                                              fb.trimmed() +
+                                              QString::fromUtf8("⟩");
+                        }
+                    }
+                }
+                g0 = g1;
+            }
+        }
         QString text;
         text.reserve((int)(input_->toPlainText().size() * 2));
         std::unordered_map<std::string, QString> dispCache;
         dispCache.reserve(4096);
         for (size_t i = 0; i < doc_.tokens.size(); ++i) {
+            if (mode == 3) {
+                tokBeg_.push_back(text.size());
+                text += pronDisp[i];
+                tokEnd_.push_back(text.size());
+                if (doc_.barrier_after[i]) text += ",";
+                if (!pronDisp[i].isEmpty() || doc_.barrier_after[i])
+                    text += " ";
+                if (nlAfter[i] > 0) {
+                    while (text.endsWith(' ')) text.chop(1);
+                    for (int k = 0; k < nlAfter[i]; ++k) text += '\n';
+                }
+                continue;
+            }
             auto cached = dispCache.find(doc_.tokens[i]);
             QString disp;
             if (cached != dispCache.end()) {

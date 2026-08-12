@@ -106,8 +106,13 @@ reference, never HGM material.
 "Propose to the authority…" on the card files a proposal with the
 passage auto-attached as evidence.
 
-**Display panel (left).** "text as": ACIP / Tibetan script / Wylie —
-same shading, three scripts. Typeface picker for script mode. Each
+**Display panel (left).** "text as": Tibetan script / ACIP / Wylie /
+Pronunciation (GMR) — same shading and clicking in every mode. The
+pronunciation mode renders the whole text in Geshe Michael's
+convention through the battery-proven engine, with its own word
+segmentation: syllables that merge into one spoken word render once
+(bsod nams = sunam, skabs 'dir = kabdir), junctions correct; a THL-
+scheme option is planned. Typeface picker for script mode. Each
 reference layer toggles on/off; your choices are remembered.
 
 **REVIEW (left column, under its gold heading).** "Show spelling

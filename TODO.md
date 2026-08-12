@@ -35,7 +35,15 @@ implementation is sidelined HERE from this date. What this means:
 - [ ] **Send the 84000 license email** (drafted, docs/drafts/
       EMAIL_84000_license.md — resolves the CC-BY-4.0 vs BY-NC-ND
       discrepancy; unlocks the best-licensed aligned Ti–En dataset in
-      existence). ✅ BDRC OCR: Adam reports BDRC gave the OK
+      existence). VERIFIED 2026-08-12 from their canonical
+      all-data/Terms_of_Use.md (rev. 2023-06-14): the license TABLE
+      says RDF metadata = CC-BY, **translation memory = CC-BY**,
+      glossaries = CC-BY; translations = CC-BY-ND. The TM repo
+      README still carries old BY-NC-ND 3.0 boilerplate — that's
+      the contradiction to cite. NOTE their terms also ask data
+      partnerships to REGISTER a written agreement (info@84000.co)
+      — the email should both cite the table and register the
+      partnership. ✅ BDRC OCR: Adam reports BDRC gave the OK
       (2026-08-07) — stage 2 UNBLOCKED; save the written confirmation
       to docs/licenses/ when available.
 
@@ -383,8 +391,13 @@ implementation is sidelined HERE from this date. What this means:
       BDEN PA'I line answers a bden pa search).
 - [ ] **Steinert public dictionary CSVs** — Lookup-pane layers AFTER
       per-dictionary license review (code is GPL — data only).
-- [ ] **bophono** (MIT) — optional non-GMR phonetics schemes toggle
-      (GMR convention stays binding). Only if requested.
+- [~] **bophono** (MIT) — optional non-GMR phonetics schemes toggle
+      (GMR convention stays binding). REQUESTED by Adam 2026-08-12:
+      a THL-scheme option beside the new Pronunciation (GMR) display
+      mode. Plan: implement from THL's own published Simplified
+      Phonemic Transcription standard (thlib.org), validated against
+      bophono as an independent oracle (the pyewts/wylie.js diff
+      pattern) — port-and-prove, never approximate.
 - [x] **84000 TM: link-out only** — SHIPPED 2026-08-07 as part of the
       link-out tier: the Lookup pane and the Draft concordance carry a
       "search elsewhere (external sites, links only)" row — 84000,

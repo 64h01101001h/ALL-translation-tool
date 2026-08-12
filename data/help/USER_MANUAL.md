@@ -248,6 +248,18 @@ rebuild the display — and they restore your card afterward.
 Below the toggles a hint line reminds you: "Click a shaded word to
 see its context; click again to cycle."
 
+
+Choosing **Pronunciation (GMR)** renders the ENTIRE text as
+phonetics in Geshe Michael's convention — the same battery-proven
+engine the cards use, applied with its own word segmentation, so
+syllables that merge into one spoken word render once (*bsod
+nams* = **sunam**, never "so nam"; *skabs 'dir* = **kabdir**) and
+junction sound changes are correct. Clicking and the arrow keys
+work exactly as in the other modes (a merged word answers for its
+first syllable). Anything the engine cannot pronounce appears in
+⟨angle brackets⟩ rather than being dropped or guessed. A THL-scheme
+pronunciation option is planned as a follow-up.
+
 ### The card — what you get when you click
 
 The panel below the display shows the entry for the current step

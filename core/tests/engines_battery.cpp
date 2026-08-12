@@ -204,7 +204,7 @@ int main(int argc, char** argv) {
             std::printf("  C: reference file %s missing — SKIPPED\n", argv[2]);
             ++failures;
         } else {
-            long total = 0, match = 0;
+            long total = 0, match = 0, segMiss = 0;
             char line[4096];
             std::vector<std::pair<std::string, std::string>> misses;
             while (std::fgets(line, sizeof line, f)) {
@@ -218,6 +218,30 @@ int main(int argc, char** argv) {
                 const std::string got = allcore::pronounce(wylie);
                 if (got == want) ++match;
                 else if (misses.size() < 6) misses.emplace_back(wylie, got + " != " + want);
+                // the segmented view must be the SAME engine: joined
+                // non-empty prons identical, spans a contiguous
+                // partition from zero
+                {
+                    const auto segd = allcore::pronounceSegmented(wylie);
+                    std::string joined;
+                    int expectBeg = 0;
+                    bool spansOk = true;
+                    for (const auto& sw : segd) {
+                        if (sw.syl_beg != expectBeg ||
+                            sw.syl_end < sw.syl_beg)
+                            spansOk = false;
+                        expectBeg = sw.syl_end;
+                        if (sw.pron.empty()) continue;
+                        if (!joined.empty()) joined += ' ';
+                        joined += sw.pron;
+                    }
+                    if (joined != got || !spansOk) {
+                        ++segMiss;
+                        if (segMiss <= 3)
+                            std::printf("     seg-miss: %.60s\n",
+                                        wylie.c_str());
+                    }
+                }
             }
             std::fclose(f);
             const double rate = total ? 100.0 * match / total : 0;
@@ -227,6 +251,7 @@ int main(int argc, char** argv) {
                 std::printf("     miss: %.40s | %.70s\n", w.c_str(), d.c_str());
             CHECK(total > 100000, "battery C covers the full dictionary");
             CHECK(match == total, "pronounce is IDENTICAL to the canonical engine");
+            CHECK(segMiss == 0, "pronounceSegmented joins back to pronounce with contiguous spans");
         }
     }
 

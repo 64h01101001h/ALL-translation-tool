@@ -355,7 +355,10 @@ string pronWord(const vector<string>& wsyls) {
 
 }  // namespace
 
-std::string pronounce(const std::string& wylie) {
+namespace {
+// pronounce()'s input normalization, shared verbatim with the
+// segmented view below
+vector<string> normalizeSyls(const std::string& wylie) {
     string w;
     w.reserve(wylie.size());
     for (size_t i = 0; i < wylie.size(); ++i) {
@@ -382,13 +385,32 @@ std::string pronounce(const std::string& wylie) {
         }
     }
     if (!cur.empty()) syls.push_back(cur);
+    return syls;
+}
+}  // namespace
 
+std::string pronounce(const std::string& wylie) {
     string out;
-    for (const auto& word : segment(syls)) {
+    for (const auto& word : segment(normalizeSyls(wylie))) {
         const string p = pronWord(word);
         if (p.empty()) continue;
         if (!out.empty()) out += ' ';
         out += p;
+    }
+    return out;
+}
+
+std::vector<PronSegWord> pronounceSegmented(const std::string& wylie) {
+    std::vector<PronSegWord> out;
+    int consumed = 0;
+    for (const auto& word : segment(normalizeSyls(wylie))) {
+        PronSegWord w;
+        w.pron = pronWord(word);
+        w.syl_beg = consumed;
+        consumed += (int)word.size();
+        w.syl_end = consumed;
+        out.push_back(w);   // empty prons kept: every syllable stays
+                            // accounted for
     }
     return out;
 }
