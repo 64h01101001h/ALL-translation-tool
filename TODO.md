@@ -590,6 +590,44 @@ implementation is sidelined HERE from this date. What this means:
       data project; three more Wylie converters (NetWylie/
       wylie.js/Lingua::BO) as extra diff-oracles.
 
+## THE DICTIONARY PROGRAM (Adam, 2026-08-12 — docs/DICTIONARY_STRATEGY.md)
+
+- [x] **84000 glossary layer** — SHIPPED 2026-08-12 (24,576 terms,
+      CC-BY per 84000's own ToU table; via Steinert's public CSV
+      mirror; green banner, entity links, never HGM).
+- [~] **ALL Working Glossary (AI tier)** — scaffolding + deep-entry
+      form shipped; 45-entry pilot done. NEXT: scale batches (cost
+      gate with Adam), Propose/Approval promotion lane, per-term
+      suppression audit.
+- [ ] **Geshe Chodrak lane**: verify d. 1972 (PD-2023 math), hunt
+      the etext (BDRC/Monlam/THL), then AI-translate definitions
+      ("AI-translated from a PD native definition" tier).
+- [ ] **Jäschke 1881 (PD)**: evaluate Steinert's Jaeschke_Scan
+      (3.9MB — text or index?); ingest if text.
+- [ ] **Das text**: PKTC license answer → else DSAL Chicago terms →
+      else the input-center OCR digitization project.
+- [ ] **Steinert per-dictionary license verification** queue:
+      Hopkins family (UMA terms), ITLR, TibTermProject, Berzin;
+      RY/Waldo/Valby via Tsadra permission.
+- [ ] **Negi Tib-Skt**: CIHTS licensing inquiry.
+- [ ] NEVER lane: Tshigdzod Chenmo, Golden Mirror, Dungkar et al.
+      without licenses; no paraphrase of copyrighted dictionaries.
+
+## PECHA MAKER + TibetDoc workflows (Adam, 2026-08-12)
+
+- [x] **Pecha Maker v1** — SHIPPED: Overlay FORMAT & EXPORT → PDF
+      (traditional 42×9 / wide / A4; double-rule frames; rotated
+      Tibetan folio numerals; battery-proven script chain; optional
+      GMR-phonetics interlinear; selftest writes+verifies a PDF).
+- [ ] Pecha v2: translation interlinear where corpus-attested;
+      margin title (ya-yig); dbu-can title page; per-side syllable
+      budget tuning against real prints.
+- [ ] TibetDoc search-locations view: per-FILE hit counts across
+      chosen locations + open-at-first-hit (Gofer extension).
+- [ ] In-document lookup popup (TibetDoc's dictionary window):
+      select a word in Manuscript/Draft/Input → floating card
+      (entryHtml) + ⌘D shortcut; the popup follows lookups.
+
 ## Build queue
 
 - [ ] **White paper v5** — v4 predates most of 2026-08-07: the three
