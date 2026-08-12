@@ -341,7 +341,10 @@ Duplicate manage the folder list exactly as in the original Gofer,
 and it persists. Press
 Find; results appear in the Search Results tab with hits per target.
 Save stores the whole search by name in the Saved Search tab
-(double-click to reload).
+(double-click to reload). "Citation web…" opens the map of which
+works quote which: every exact Tibetan passage shared between two
+courses of the corpus, with the master's published English from
+both sides — attested reuse only, rebuilt per corpus release.
 
 ## Convert
 

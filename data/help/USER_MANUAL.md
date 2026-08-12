@@ -1087,6 +1087,19 @@ with all eight boxes, the combiner, the proximity, and the fold mode
 restored — press Find and it runs. **Delete** removes the selected
 saved search. Saved searches persist across restarts.
 
+
+### The Citation web
+
+**Citation web…** answers a question scholars usually spend months
+on: which works quote which? Every exact Tibetan passage shared
+between two courses of the aligned corpus becomes an edge — the
+list shows every connected pair with its shared-passage count;
+click a pair to read examples with the master's published English
+from both sides. Attested reuse only (no fuzzy matching, seven
+syllables or more), rebuilt from the corpus per release. The
+heaviest edges are discoveries in themselves: a commentary and its
+root text, a prayer book and the sadhana it feeds.
+
 ### Searching the Library, and searching the whole Mac
 
 Two more reaches, both in the Search Setting tab's source list:

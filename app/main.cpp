@@ -4464,7 +4464,17 @@ public:
         stopB_ = new QPushButton("Stop");
         stopB_->setEnabled(false);
         findB_ = new QPushButton("Find");
-        for (auto* b : {addB, remB, dupB, saveB}) btnRow->addWidget(b);
+        auto* citB = new QPushButton("Citation web…");
+        citB->setToolTip(
+            "Which works quote which: every exact Tibetan passage "
+            "shared between two courses of the aligned corpus, with "
+            "the master's published English from both sides. "
+            "Attested reuse only — no fuzzy matching; rebuilt per "
+            "corpus release.");
+        connect(citB, &QPushButton::clicked,
+                [this] { showCitationWeb(); });
+        for (auto* b : {addB, remB, dupB, saveB, citB})
+            btnRow->addWidget(b);
         btnRow->addStretch();
         btnRow->addWidget(stopB_);
         btnRow->addWidget(findB_);
@@ -4534,6 +4544,80 @@ public:
         find();
     }
 
+    // the Citation Web (Adam's wow round #10): which works quote
+    // which — exact shared passages across courses, attested only,
+    // batch-built per release by tools/build_citation_web.py
+    int loadCitationWeb() {
+        if (!citEdges_.isEmpty()) return citEdges_.size();
+        QFile f(root_ + "/data/extracted/citation_web.json");
+        if (!f.open(QIODevice::ReadOnly)) return 0;
+        const auto doc = QJsonDocument::fromJson(f.readAll());
+        citEdges_ = doc.object().value("edges").toArray();
+        return citEdges_.size();
+    }
+
+    void showCitationWeb() {
+        if (!loadCitationWeb()) {
+            QMessageBox::information(
+                this, "Citation web",
+                "citation_web.json is not in this installation's "
+                "data folder — it is generated per corpus release "
+                "by tools/build_citation_web.py.");
+            return;
+        }
+        auto* dlg = new QDialog(this);
+        dlg->setAttribute(Qt::WA_DeleteOnClose);
+        dlg->setWindowTitle(
+            QString("Citation web — %1 connected pairs of works "
+                    "(exact shared passages, attested only)")
+                .arg(citEdges_.size()));
+        dlg->resize(980, 620);
+        auto* h = new QHBoxLayout(dlg);
+        auto* list = new QListWidget;
+        list->setMinimumWidth(330);
+        auto* view = new QTextBrowser;
+        h->addWidget(list);
+        h->addWidget(view, 1);
+        for (const auto& v : citEdges_) {
+            const auto e = v.toObject();
+            list->addItem(QString("%1  ↔  %2   — %3 shared")
+                              .arg(e.value("a").toString(),
+                                   e.value("b").toString())
+                              .arg(e.value("count").toInt()));
+        }
+        auto show = [this, view](int row) {
+            if (row < 0 || row >= citEdges_.size()) return;
+            const auto e = citEdges_[row].toObject();
+            const QString a = e.value("a").toString();
+            const QString b = e.value("b").toString();
+            QString html =
+                QString("<h3>%1 ↔ %2</h3><div>%3 shared passage(s) "
+                        "— the same Tibetan line appearing in both "
+                        "works. Examples (up to 5):</div><hr>")
+                    .arg(a.toHtmlEscaped(), b.toHtmlEscaped())
+                    .arg(e.value("count").toInt());
+            for (const auto& xv : e.value("examples").toArray()) {
+                const auto x = xv.toObject();
+                html +=
+                    "<div style='margin:8px 0'><i>" +
+                    x.value("wylie").toString().toHtmlEscaped() +
+                    "</i><br><b>" + a.toHtmlEscaped() + ":" +
+                    QString::number(x.value("seq_a").toInt()) +
+                    "</b> " +
+                    x.value("english_a").toString().toHtmlEscaped() +
+                    "<br><b>" + b.toHtmlEscaped() + ":" +
+                    QString::number(x.value("seq_b").toInt()) +
+                    "</b> " +
+                    x.value("english_b").toString().toHtmlEscaped() +
+                    "</div>";
+            }
+            view->setHtml(html);
+        };
+        QObject::connect(list, &QListWidget::currentRowChanged, show);
+        if (list->count()) list->setCurrentRow(0);
+        dlg->show();
+    }
+
     int selfTest(QStringList& log) {
         int fails = 0;
         auto check = [&](bool ok, const char* what) {
@@ -4549,6 +4633,8 @@ public:
               "corpus row present and checked");
         check(dirs_->item(2)->text() == kSpotlightRow,
               "Spotlight source row present (opt-in)");
+        check(loadCitationWeb() > 100,
+              "Citation web loads (edges from the batch build)");
         for (auto* f : fields_) f->clear();
         fields_[0]->setText("sems can");
         combiner_->setCurrentIndex(0);
@@ -4867,6 +4953,7 @@ private:
     QListWidget* dirs_ = nullptr;
     QListWidget* saved_ = nullptr;
     QTextBrowser* results_ = nullptr;
+    QJsonArray citEdges_;   // Citation Web edges (lazy-loaded)
     QPushButton* stopB_ = nullptr;
     QPushButton* findB_ = nullptr;
 };
