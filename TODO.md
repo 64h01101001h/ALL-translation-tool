@@ -394,10 +394,16 @@ implementation is sidelined HERE from this date. What this means:
 - [~] **bophono** (MIT) — optional non-GMR phonetics schemes toggle
       (GMR convention stays binding). REQUESTED by Adam 2026-08-12:
       a THL-scheme option beside the new Pronunciation (GMR) display
-      mode. Plan: implement from THL's own published Simplified
-      Phonemic Transcription standard (thlib.org), validated against
-      bophono as an independent oracle (the pyewts/wylie.js diff
-      pattern) — port-and-prove, never approximate.
+      mode. RECON 2026-08-12: bophono = Esukhia/bophono (MIT, cloned
+      to scratchpad) — emits Tournadre-MST IPA etc., NOT the THL
+      romanization itself; needs per-word segmentation (pairs with
+      pybo/botok — we have the botok port). REFINED PLAN: implement
+      the THL Simplified Phonemic Transcription from THL's own
+      published standard (Germano & Tournadre 2003, thlib.org),
+      oracle = THL's own online converter sampled live for the
+      diff-battery, bophono MST IPA as a phonological cross-check;
+      display mode joins the existing "text as" combo beside
+      Pronunciation (GMR). Port-and-prove, never approximate.
 - [x] **84000 TM: link-out only** — SHIPPED 2026-08-07 as part of the
       link-out tier: the Lookup pane and the Draft concordance carry a
       "search elsewhere (external sites, links only)" row — 84000,
