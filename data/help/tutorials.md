@@ -51,6 +51,10 @@ phrase lights up, card below → switch "text as" to Tibetan script to see it in
 **What it's for.** Reading a Tibetan text with the dictionary
 underneath — the flagship pane.
 
+**The document box is yours to size** — drag the divider beneath it
+for a bigger pasting surface or more reading room; the height is
+remembered.
+
 **Loading text — two ways.**
 1. *From the Library* (easiest): Read → Library → double-click any
    text — the app switches to the Overlay for you.
@@ -498,6 +502,10 @@ source and page.
 
 **Night mode.** View menu → Night mode (or Settings): dark chrome,
 cream reading pages. Remembered.
+
+**The app menu.** About (creator, mission, versions), Check for
+Updates… (scans the team's shared DMG folder — set it once, or in
+Settings → Data), and Settings (⌘,).
 
 **Self-test.** If anything misbehaves: run the app from Terminal with
 `--selftest` — 83 checks print PASS/FAIL and localize the problem.

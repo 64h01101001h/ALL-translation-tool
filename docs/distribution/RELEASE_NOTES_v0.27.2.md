@@ -106,4 +106,4 @@ automated batteries: 38 ctest suites plus the app's own 80-check
   idiom proposal kind; Approval filter.
 - Spelling doubts refined (folio markers and dictionary-attested
   forms excluded); full-library open sweep recorded (2,716/2,716);
-  self-test now 84 checks.
+  self-test now 89 checks.

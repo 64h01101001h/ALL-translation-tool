@@ -290,7 +290,7 @@ across the full data on every run.
 
 **The 38th suite is the application testing itself.** Run with
 `--selftest`, the app constructs its real panes offscreen against
-the real spine and exercises them programmatically — 84 checks
+the real spine and exercises them programmatically — 89 checks
 asserting actual pane state: the Overlay loads and shades a
 document, a known headword's card contains its gloss and tier, the
 Review pane raises the register warning on a crafted input, the

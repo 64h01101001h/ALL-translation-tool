@@ -44,7 +44,7 @@ Utilities → Terminal) and paste:
     "/Applications/ALL Translation Tool.app/Contents/MacOS/ALL Translation Tool" --selftest
 
 (If the app lives somewhere other than Applications, adjust the
-path.) **84 checks** print PASS or FAIL, one per line, covering the
+path.) **89 checks** print PASS or FAIL, one per line, covering the
 data spine, every engine, and every pane's plumbing — the first FAIL
 line names the broken piece, which localizes the problem
 immediately. Include that output when reporting an issue.
