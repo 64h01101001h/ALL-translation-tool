@@ -1159,6 +1159,23 @@ public:
         loadDoc();
         check(teachingsReportHtml().contains("youtube.com"),
               "teachings-for-this-text report reaches the corpus");
+        {
+            // display toggles must NOT wipe the card or rebuild the
+            // document (Adam's finding)
+            input_->setPlainText("BDEN PA ,");
+            loadDoc();
+            QTextCursor c(view_->document());
+            c.setPosition(tokBeg_[0] + 1);   // inside the token —
+            view_->setTextCursor(c);         // guarantees the signal
+            const QString before = context_->toPlainText();
+            QElapsedTimer tt; tt.start();
+            showPhon_->toggle();
+            const bool fast = tt.elapsed() < 300;
+            check(!context_->toPlainText().isEmpty() &&
+                      !before.isEmpty() && fast,
+                  "card survives display toggles instantly");
+            showPhon_->toggle();   // restore
+        }
         input_->setPlainText("@04B ,GDAB ,");
         loadDoc();
         check(collectSpellHits().empty() &&
@@ -1738,16 +1755,32 @@ auto* secFmt = new QLabel("<span style='color:#9A7A33;font-size:10px;letter-spac
             if (!doc_.tokens.empty()) loadDoc();
         });
         ll->addLayout(scriptRow);
+        // card-only toggles re-render the CURRENT card in place —
+        // instant, cycle position kept. Only toggles that change the
+        // DOCUMENT display (grammar marks, unattested hints) rebuild,
+        // and they restore the card afterward. (Adam's finding: every
+        // toggle was rebuilding the full document and wiping the
+        // card, 2026-08-12.)
         auto mkToggle = [&](const char* key, const QString& label,
-                            bool defOn) {
+                            bool defOn, bool docAffecting = false) {
             auto* cb = new QCheckBox(label);
             cb->setChecked(settings.value(QString("overlay/") + key, defOn)
                                .toBool());
             ll->addWidget(cb);
-            connect(cb, &QCheckBox::toggled, [this, key](bool on) {
+            connect(cb, &QCheckBox::toggled,
+                    [this, key, docAffecting](bool on) {
                 QSettings s("ALL", "TranslationTool");
                 s.setValue(QString("overlay/") + key, on);
-                if (!doc_.tokens.empty()) loadDoc();
+                if (doc_.tokens.empty()) return;
+                if (!docAffecting) {
+                    refreshCard();
+                    return;
+                }
+                const int tok = lastTok_, cyc = cycle_;
+                loadDoc();
+                lastTok_ = tok;
+                cycle_ = cyc;
+                refreshCard();
             });
             return cb;
         };
@@ -1755,7 +1788,7 @@ auto* secFmt = new QLabel("<span style='color:#9A7A33;font-size:10px;letter-spac
         showGloss_ = mkToggle("glosses", "HGM definitions", true);
         showCorpus_ = mkToggle("corpus", "corpus usage (contextual)", true);
         showGrammar_ = mkToggle("grammar", "grammar marks && particle notes",
-                                true);
+                                true, /*docAffecting=*/true);
         showSanskrit_ = mkToggle("sanskrit", "Sanskrit reference", false);
         showHopkins_ = mkToggle("hopkins", "Hopkins reference", false);
         showRefs_ = mkToggle("refs", "reference dictionaries (LC/TD/THL)",
@@ -1764,7 +1797,7 @@ auto* secFmt = new QLabel("<span style='color:#9A7A33;font-size:10px;letter-spac
                             false);
         showAttest_ = mkToggle("attestation",
                                "unattested-word hints (segmenter + Monlam)",
-                               false);
+                               false, /*docAffecting=*/true);
         hint_ = new QLabel("Click a shaded word to see its context; click again "
                            "to cycle outward through the containing phrases.");
         hint_->setWordWrap(true);
@@ -2346,6 +2379,16 @@ private:
         spellList_->resizeColumnsToContents();
     }
 
+    void refreshCard() {
+        if (lastTok_ < 0 || lastTok_ >= (int)tokBeg_.size()) return;
+        cardRefresh_ = true;
+        QTextCursor c(view_->document());
+        c.setPosition(tokBeg_[lastTok_]);
+        view_->setTextCursor(c);   // fires onClick via the signal
+        onClick();                 // and directly, in case unchanged
+        cardRefresh_ = false;
+    }
+
     void jumpToSpellHit(int row) {
         // click a row → the text scrolls to the doubted syllable,
         // selected; click again → the next occurrence, cycling
@@ -2618,8 +2661,14 @@ private:
         if (clickMode)
             std::reverse(at.begin(), at.end());   // longest first,
                                                   // backing off shorter
-        if (tok == lastTok_) cycle_ = (cycle_ + 1) % (int)at.size();
-        else cycle_ = 0;
+        if (tok == lastTok_) {
+            if (!cardRefresh_)
+                cycle_ = (cycle_ + 1) % (int)at.size();
+            else if (cycle_ >= (int)at.size())
+                cycle_ = 0;
+        } else {
+            cycle_ = 0;
+        }
         lastTok_ = tok;
         const auto& span = doc_.spans[at[cycle_]];
         const auto& e = doc_.entries[span.entry_ix];
@@ -3348,6 +3397,7 @@ private:
     QComboBox* scriptMode_ = nullptr;
     QComboBox* shadeMode_ = nullptr;
     QComboBox* tibFont_ = nullptr;
+    bool cardRefresh_ = false;
     QCheckBox* showPhon_ = nullptr;
     QCheckBox* showGloss_ = nullptr;
     QCheckBox* showCorpus_ = nullptr;

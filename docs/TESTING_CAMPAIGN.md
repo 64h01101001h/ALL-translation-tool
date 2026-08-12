@@ -203,6 +203,10 @@ end to end exactly as written)
   copy — QUrl percent-encoded the spaces in '/Applications/ALL
   Translation Tool/…'; ALL text-carrying anchors (openfile, gloss,
   propose, Help chapters) now decode payloads — FIXED (guard 87)
+- 2026-08-12 · Overlay · display toggles rebuilt the whole document
+  and wiped the card (slow + card disappears) — card-only toggles
+  now re-render the card in place; doc-affecting ones (grammar,
+  hints) rebuild then restore the card — FIXED (guard 92)
 
 # CURATION RULINGS
 *(pane · what stays / what pares / format decision)*
