@@ -950,3 +950,25 @@ implementation is sidelined HERE from this date. What this means:
       grammar books** — when supplied: mine for register rows
       (attestation-tier per source), mark high-honorific levels,
       and consider a grammar-references layer alongside Wilson.
+
+## GMR RECORDINGS ARCHIVE (Adam, 2026-08-12)
+- [~] **Master recordings inventory** — every known recording of
+      Geshe Michael Roach, audio + video: YouTube, The Knowledge
+      Base, personal collections. STARTED 2026-08-12:
+      "~/Documents/GMR Recordings Tracker.xlsx" seeded with 3,633
+      recordings (2,901 The Knowledge Base + 732 Diamond Cutter
+      Classics, from our caption-harvest metadata; 2,440 with
+      captions captured), + "Leads and Unpublished" sheet +
+      self-updating Summary. Next: Jamie Plant server inventory
+      (below); personal-collection drive (pair with the GMR
+      Translations drop folder); possible extra seeds in Adam's
+      own ~/Documents YouTube-links spreadsheets (Fall 2022 /
+      Winter 2021 DCC link sheets spotted 2026-08-12).
+- [ ] **Jamie Plant / Knowledge Base server access** — ask for
+      (read-only) server access to document unpublished/unreleased
+      holdings ("things he has that no one else has"). Draft ready
+      (Gmail draft r-8606637541006616502, recipient BLANK — Adam
+      must confirm the address; best guess jamie@
+      diamondcutterinstitute.com from GMR's publishing list);
+      calendar reminder set 2026-08-13 09:00 Denver. On access:
+      inventory → Leads sheet → All Recordings rows.
