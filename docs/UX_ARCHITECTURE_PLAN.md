@@ -131,12 +131,13 @@ With these moves:
 
 Each phase ships pressed and selftested before the next begins.
 
-## 4. Gates — consultant rulings EXECUTED (2026-08-12), Adam's
-## ratification pending ("LET'S HIT THIS, THEN REVISIT")
+## 4. Gates — consultant rulings EXECUTED and RATIFIED
+## (Adam approved all five, 2026-08-12: "I approve your 5
+## executed rulings")
 
 Adam converted Phase 0 to consultant authority ("you are the
-expert… bring your expertise"). Rulings made, shipped in Phases
-1–5; each is reversible if he overrules:
+expert… bring your expertise"); rulings shipped in Phases 1–5 and
+ratified. The architecture below is now settled:
 
 - **A. Translate ladder — RULED: ladder.** Draft is the Workbench
   (understand + gather evidence); publish tools live with

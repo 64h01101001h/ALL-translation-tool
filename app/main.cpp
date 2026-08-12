@@ -13670,6 +13670,11 @@ public:
         loadChapters(root + "/data/help/tutorials.md", "", false);
         loadChapters(root + "/data/help/USER_MANUAL.md", "Manual: ",
                      true);
+        // Working-with-Tibetan guidelines & protocols (Adam,
+        // 2026-08-12: the THL knowledge sweep, brought in-app) —
+        // per-medium chapters, "Guidelines: " prefix
+        loadChapters(root + "/data/help/GUIDELINES.md",
+                     "Guidelines: ", true);
         // auto-index every control in every pane — two-level aware:
         // top tabs are GROUPS holding inner pane tabs
         auto indexPane = [this](QWidget* w, const QString& pane,
@@ -15649,6 +15654,16 @@ int main(int argc, char** argv) {
                        .arg(manual ? "PASS" : "FAIL")
                        .arg(hw.chapterCount());
             if (!manual) ++fails;
+            // Working-with-Tibetan guidelines ride along too
+            const bool guide =
+                hw.hasChapter("Guidelines: Print & pecha work") &&
+                hw.hasChapter(
+                    "Guidelines: Pronunciation systems") &&
+                hw.hitCount("Guidelines: ") >= 7;
+            log << QString("  [%1] Help: Working-with-Tibetan "
+                           "guidelines loaded")
+                       .arg(guide ? "PASS" : "FAIL");
+            if (!guide) ++fails;
             // the browse view: everything visible before any search
             const int browse = hw.hitCount("");
             const bool browseOk = browse > 250;

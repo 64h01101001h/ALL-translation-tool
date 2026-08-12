@@ -404,6 +404,24 @@ implementation is sidelined HERE from this date. What this means:
       diff-battery, bophono MST IPA as a phonological cross-check;
       display mode joins the existing "text as" combo beside
       Pronunciation (GMR). Port-and-prove, never approximate.
+- [~] **THL FULL-SITE KNOWLEDGE SWEEP** (Adam, 2026-08-12: "read
+      the entirety of the Tibetan & Himalayan Library's website…
+      everything useful to have in your back pocket" — documents,
+      resources, digital-Tibetan practice, and especially their
+      guidance on formatting Tibetan texts and pechas for print).
+      Program: sweep thlib.org section by section (THL Toolbox =
+      digitization/format/catalog standards; transliteration EWTS
+      spec; THL Simplified Phonetics standard; fonts + input
+      tools; catalogs incl. Kangyur/Tengyur; place/person
+      gazetteers; TEI/XML markup practice; A/V + image
+      collections; licensing per resource) → banked notes in
+      docs/research/THL/ + synthesis docs/research/THL_KNOWLEDGE.md.
+      Feeds: Pecha Maker v3 QA (their print-formatting docs), THL
+      phonetics engine (item above), catalog cross-linking, future
+      resource integrations (licensing lanes noted per item).
+      STARTED 2026-08-12: four parallel research agents launched
+      (Toolbox/standards · language tools · collections/catalogs ·
+      knowledge-map/tech infrastructure).
 - [x] **84000 TM: link-out only** — SHIPPED 2026-08-07 as part of the
       link-out tier: the Lookup pane and the Draft concordance carry a
       "search elsewhere (external sites, links only)" row — 84000,
