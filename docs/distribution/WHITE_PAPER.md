@@ -95,7 +95,16 @@ one more button appears: *Follow along in scans* — the original
 woodblock page images, served from the Buddhist Digital Resource
 Center's public archive, display beneath the text and turn their
 own pages as the cursor moves. The student sits with the digital
-text and the actual carving of it — anywhere on earth.
+text and the actual carving of it — anywhere on earth. Those same
+woodblock pages can be swept for what the text alone cannot show:
+every folio of a volume searched for miniatures and diagrams, the
+candidates gathered into a gallery of crops with their page
+provenance. Selecting a text in the Library now names its author
+as a person, not a string — the author's other works one click
+away, with links out to the Buddhist Digital Resource Center's
+person record and a Treasury of Lives biography where one exists.
+And the reader's place is kept: close the app mid-folio and it
+reopens exactly there — same text, same scroll, same cursor.
 
 **Translate** holds the Manuscript, the Draft bench, the Review
 pane, and Align. The Manuscript is the writing surface itself — a
@@ -127,7 +136,14 @@ apparatus (all 2,234 footnotes and 705 bibliography entries), and
 any folders on disk. Lookup is the stacked multi-dictionary: his
 entry first and binding, then each reference layer labeled, with
 English-to-Tibetan reverse lookup and traditional Tibetan-order
-browsing. Sanskrit is a whole workbench: enter IAST, Devanagari, or
+browsing. Where a term was taught aloud, the card links the moment
+— *Geshe Michael teaching this term*, timecoded into the original
+recordings of his own courses, and where the spoken word itself is
+heard, that too; the recordings remain the authority, the links
+only open them. Chandra Das's classic dictionary opens inside the
+app at the right page. An opt-in search row extends Gofer's reach
+to every document this Mac has indexed, each term probed as typed
+and as Tibetan script. Sanskrit is a whole workbench: enter IAST, Devanagari, or
 ACIP input-code and receive the full cascade of scripts plus
 Whitney's root analyses and the Mahāvyutpatti bridge to classical
 Tibetan. Convert renders any input in every writing system at once
@@ -283,6 +299,22 @@ checks that print pass or fail and localize any problem. Where a
 result cannot be verified mechanically, the interface says so
 rather than implying certainty.
 
+The same honesty governs how the tool is tested. Every ported
+engine answers to its original's validation battery — thirty-eight
+suites run on every build, and a port that fails its battery does
+not ship. The application then tests itself: nearly a hundred
+in-app checks exercise the real panes against the real dictionary,
+and a mechanized click-through presses every button, toggle, and
+menu on every pane and proves the app stays coherent. For the
+human side, an eighteen-thousand-word User Manual — every pane,
+every control, click by click — ships inside the Help window,
+whose opening view now lists the entire tool: every chapter, every
+control, grouped by pane, findable by scrolling when its name is
+unknown. And when something does go wrong in the field, one menu
+writes a complete diagnostic report — versions, data health, the
+app's own log — and another opens a pre-addressed problem report,
+so a tester's finding arrives ready to act on.
+
 ## 8. What comes next
 
 - **The registers grow under review.** A class of
@@ -303,6 +335,19 @@ rather than implying certainty.
 - **One ruling on catalog titles.** Whether the master catalogs'
   English titles stand as Geshe Michael's own binding equivalents
   or as a labeled reference layer awaits his decision.
+- **The Das dictionary, searchable.** The Project's own licensed
+  electronic Sarat Chandra Das (purchased 2019) awaits re-download;
+  it will replace the page-image viewer with a fully searchable
+  layer.
+- **The remaining author names.** A letter to the Buddhist Digital
+  Resource Center asks their help matching the last catalog authors
+  to their person records; the app already resolves 184 of 265
+  deterministically, every candidate verified against BDRC's own
+  labels and never guessed.
+- **The teaching index grows.** The harvest of Geshe Michael's
+  recorded courses continues (rate limits, not rights, set the
+  pace), and a pilot will transcribe the Project's own audio
+  archive with the same provenance discipline.
 - **Windows and Linux builds** for the input centers.
 - Cataloging has been deliberately set aside as its own future
   project; the knowledge mined from the Project's original
