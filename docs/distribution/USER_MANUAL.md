@@ -260,6 +260,15 @@ first syllable). Anything the engine cannot pronounce appears in
 ⟨angle brackets⟩ rather than being dropped or guessed. A THL-scheme
 pronunciation option is planned as a follow-up.
 
+**Approved rulings override the engine.** When the authority
+approves a pronunciation proposal (the 205-row prenasal register is
+seeded in the Approval queue — its first row is Geshe Michael's own
+*kamdir* for *skabs 'dir*), the ruling becomes a live layer over
+the engine: the display says **kamdir** where the engine alone
+would say *kabdir*, from the next launch. The canonical engine is
+never modified — rulings are data, each with who ruled and when.
+
+
 ### The card — what you get when you click
 
 The panel below the display shows the entry for the current step

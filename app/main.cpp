@@ -847,6 +847,23 @@ static std::function<void(const QString&)> g_goferQuery;
 // implementation lives beside HuntPalette where the spine is bound)
 static std::function<void(const QString&)> g_surveyFile;
 
+// the authority's APPROVED pronunciation rulings (the prenasal
+// register lives here once approved: kamdir over the engine's
+// kabdir) — word-wylie -> ruled pronunciation, loaded at startup
+// from the shared proposal store. The canonical engine is never
+// modified; rulings apply as a labeled layer above it.
+static const std::map<std::string, std::string>* g_pronApproved =
+    nullptr;
+
+// pronounce a word through the engine, then apply the authority's
+// ruling when one exists for exactly this word
+static std::string pronWithRulings(const std::string& word_wylie,
+                                   const std::string& engine_pron) {
+    if (!g_pronApproved) return engine_pron;
+    auto it = g_pronApproved->find(word_wylie);
+    return it == g_pronApproved->end() ? engine_pron : it->second;
+}
+
 static QWidget* makeLookupPane(allcore::Spine& spine, allcore::RefDict* ref,
                                allcore::Mvp* mvp,
                                allcore::WhitneyRoots* whitney = nullptr,
@@ -1196,6 +1213,18 @@ public:
                   "pronunciation mode renders convention words");
             check(!pron.contains(QChar(0x27E8)),
                   "pronunciation mode clean on the sample");
+            // an approved ruling overrides the engine (the prenasal
+            // register's approval path: kamdir over kabdir)
+            static const std::map<std::string, std::string> ruled = {
+                {"skabs 'dir", "kamdir"}};
+            const auto* saved = g_pronApproved;
+            g_pronApproved = &ruled;
+            input_->setPlainText("SKABS 'DIR");
+            loadDoc();
+            check(view_->toPlainText().contains("kamdir"),
+                  "approved pronunciation ruling overrides the "
+                  "engine (kamdir)");
+            g_pronApproved = saved;
             scriptMode_->setCurrentIndex(0);
         }
         {
@@ -2213,11 +2242,11 @@ private:
         std::vector<QString> pronDisp;
         if (mode == 3) {
             pronDisp.assign(doc_.tokens.size(), QString());
-            auto sylCount = [](const std::string& w) {
+            auto sylsOf = [](const std::string& w) {
                 // mirrors the engine's input normalization ('+' splits,
                 // '/' drops, middle dot splits) — guarded by battery C
-                int n = 0;
-                bool in = false;
+                std::vector<std::string> out;
+                std::string cur;
                 for (size_t i = 0; i < w.size(); ++i) {
                     unsigned char c = w[i];
                     bool sep = (c == '+' || c == ' ' || c == '\t');
@@ -2228,13 +2257,16 @@ private:
                     }
                     if (c == '/') continue;
                     if (sep) {
-                        in = false;
-                    } else if (!in) {
-                        in = true;
-                        ++n;
+                        if (!cur.empty()) {
+                            out.push_back(cur);
+                            cur.clear();
+                        }
+                    } else {
+                        cur += (char)std::tolower(c);
                     }
                 }
-                return n;
+                if (!cur.empty()) out.push_back(cur);
+                return out;
             };
             auto plainLetters = [](const std::string& t) {
                 for (unsigned char c : t)
@@ -2253,7 +2285,7 @@ private:
                 std::string joined;
                 std::vector<int> tokSylBeg;   // per group token
                 std::vector<size_t> feedTok;  // group tokens fed
-                int syl = 0;
+                std::vector<std::string> sylsVec;  // normalized syls
                 for (size_t t = g0; t < g1; ++t) {
                     const std::string& raw = doc_.tokens[t];
                     if (!plainLetters(raw)) {
@@ -2261,14 +2293,14 @@ private:
                         continue;
                     }
                     const std::string w = tokEwts(raw);
-                    const int k = sylCount(w);
-                    if (k == 0) {
+                    const auto ks = sylsOf(w);
+                    if (ks.empty()) {
                         pronDisp[t] = QString::fromStdString(raw);
                         continue;
                     }
-                    tokSylBeg.push_back(syl);
+                    tokSylBeg.push_back((int)sylsVec.size());
                     feedTok.push_back(t);
-                    syl += k;
+                    for (const auto& s : ks) sylsVec.push_back(s);
                     if (!joined.empty()) joined += ' ';
                     joined += w;
                 }
@@ -2283,8 +2315,18 @@ private:
                                 break;
                             }
                         if (!wd.pron.empty()) {
-                            pronDisp[owner] =
-                                QString::fromStdString(wd.pron);
+                            // the authority's approved rulings (the
+                            // prenasal register: kamdir over kabdir)
+                            // apply as a layer over the engine
+                            std::string key;
+                            for (int s = wd.syl_beg;
+                                 s < wd.syl_end &&
+                                 s < (int)sylsVec.size();
+                                 ++s)
+                                key += (key.empty() ? "" : " ") +
+                                       sylsVec[s];
+                            pronDisp[owner] = QString::fromStdString(
+                                pronWithRulings(key, wd.pron));
                         } else {
                             QString fb;
                             for (size_t j = 0; j < tokSylBeg.size();
@@ -13008,6 +13050,26 @@ int main(int argc, char** argv) {
                     spellingValid.insert(p.wylie);
     }
     g_spellingValid = &spellingValid;
+    // the authority's APPROVED pronunciation rulings become a live
+    // layer over the canonical engine (this is how the prenasal
+    // register enters the spoken output: approve kamdir in the
+    // Approval queue and the display says kamdir on next launch —
+    // the engine itself is never modified)
+    static std::map<std::string, std::string> pronApproved;
+    if (!g_proposalsDir.isEmpty()) {
+        allcore::ProposalStore prstore(g_proposalsDir.toStdString());
+        if (prstore.load())
+            for (const auto& p : prstore.all())
+                if (p.kind == allcore::ProposalKind::Pronunciation &&
+                    p.status == allcore::ProposalStatus::Approved &&
+                    !p.value.empty() && !p.wylie.empty()) {
+                    std::string key;
+                    for (char c : p.wylie)
+                        key += (char)std::tolower(c);
+                    pronApproved[key] = p.value;
+                }
+    }
+    g_pronApproved = &pronApproved;
     // --screenshots <dir>: render every pane to PNGs and exit (demo /
     // documentation mode). Shows the Approval queue too, pointed at
     // the seeded proposals — session-only, nothing persisted.

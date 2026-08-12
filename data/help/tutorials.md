@@ -111,8 +111,12 @@ Pronunciation (GMR) — same shading and clicking in every mode. The
 pronunciation mode renders the whole text in Geshe Michael's
 convention through the battery-proven engine, with its own word
 segmentation: syllables that merge into one spoken word render once
-(bsod nams = sunam, skabs 'dir = kabdir), junctions correct; a THL-
-scheme option is planned. Typeface picker for script mode. Each
+(bsod nams = sunam), junctions correct; a THL-scheme option is
+planned. The authority's APPROVED pronunciation rulings apply as a
+layer over the engine — approve kamdir in the Approval queue (the
+prenasal register is seeded there, first row kamdir itself) and the
+display says kamdir on the next launch. The engine is never
+modified; rulings are data, with provenance. Typeface picker for script mode. Each
 reference layer toggles on/off; your choices are remembered.
 
 **REVIEW (left column, under its gold heading).** "Show spelling
