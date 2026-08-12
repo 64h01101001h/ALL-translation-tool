@@ -104,7 +104,12 @@ reference link that opens Sarat Chandra Das's dictionary INSIDE the
 app at (approximately) the entry's page — public domain, clearly a
 reference, never HGM material.
 "Propose to the authority…" on the card files a proposal with the
-passage auto-attached as evidence.
+passage auto-attached as evidence. Where a term has no
+HGM equivalent, two labeled layers may answer instead: the ALL
+WORKING GLOSSARY (violet — AI-drafted from reference comparanda
+only, with numbered senses and clickable see-also links; never
+Geshe Michael's English) and the 84000 GLOSSARY (green — CC BY
+4.0, with links back to 84000's own entries).
 
 **Display panel (left).** "text as": Tibetan script / ACIP / Wylie /
 Pronunciation (GMR) — same shading and clicking in every mode. The
@@ -148,7 +153,13 @@ material), the e-text lines as keyed, and the master's published
 English where a line is attested — click a row and its band lights
 on the carving.
 
-**FORMAT & EXPORT (left column, under its gold heading).** "Export
+**FORMAT & EXPORT (left column, under its gold heading).** "Make
+pecha (PDF)…" turns the loaded document into an authentic
+long-format pecha: framed folio sides (traditional 42×9 cm, wide,
+or A4), rotated Tibetan folio numerals, your chosen typeface, and
+an optional phonetics line under each segment — a printable PDF
+through the battery-proven script chain (failures appear as
+⟨wylie⟩, never guessed). "Export
 print Tibetan (Unicode)…" produces print-ready script. "Prepare for
 translation (Mixed Nuts)…" runs the demonstrated
 translation-preparation format.
