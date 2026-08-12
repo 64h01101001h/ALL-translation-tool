@@ -46,9 +46,15 @@ websites. Everything divides into four lanes:
   **Jäschke 1881 (PD)**, Hopkins (UMA's stated distribution terms),
   ITLR and TibTermProject (check terms), Rangjung Yeshe / Waldo /
   Valby (permission via Tsadra, already on the survey list).
-- **Geshe Chodrak etext**: not in Steinert's set under its own
-  name. Hunt: BDRC scans exist; an etext may live in the Monlam
-  data or THL. If found and PD confirmed → lane 2 pipeline.
+- **Geshe Chodrak: PD CONFIRMED (researched 2026-08-12).** Buryat
+  Mongol scholar, 1898–1972; brda dag ming tshig gsal ba, Lhasa
+  1946, compiled with Gendun Chophel's assistance. China life+50 →
+  public domain since 2023-01-01. Etext routes, best first:
+  (1) OpenPecha/Esukhia corpus; (2) the existing iOS app's maker
+  (App Store id602452248 — a digitization exists); (3) our own OCR
+  over the BDRC scans with the shipped BDRC models + review — the
+  self-reliant lane. Then: AI-translate the native definitions
+  (lane 2's flagship).
 - **DSAL (U. Chicago)** hosts digitized Das — an alternative
   text source to the PKTC edition (verify current terms).
 
