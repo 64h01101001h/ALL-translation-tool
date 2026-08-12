@@ -1227,6 +1227,30 @@ public:
             g_pronApproved = saved;
             scriptMode_->setCurrentIndex(0);
         }
+        // wylie source files show as ACIP in the Document box
+        // (Adam's finding: the Release 6 wylie edition rendered
+        // lowercase in a box labeled ACIP)
+        {
+            const QString tmp =
+                QDir::temp().filePath("all_selftest_wylie.txt");
+            QFile tf(tmp);
+            if (tf.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
+                tf.write("[@##incomplete note]\n@001a /bcom ldan "
+                         "'das ma'i man ngag/ /shes rab kyi pha rol "
+                         "tu phyin ma la phyag 'tshal lo/\n");
+                tf.close();
+            }
+            openFile(tmp);
+            const QString box = input_->toPlainText();
+            check(box.contains("BCOM LDAN") &&
+                      box.contains("@001A") &&
+                      box.contains("[@##incomplete note]") &&
+                      !box.contains("bcom ldan"),
+                  "wylie source file converts to ACIP in the box "
+                  "(markers preserved)");
+            check(hint_->text().contains("wylie source"),
+                  "wylie conversion is labeled in the hint");
+        }
         {
             // #62 logic: a left side-panel and a big inter-line gap
             // are found; a fully-texted page yields no candidates
@@ -1459,12 +1483,81 @@ public:
     void openFile(const QString& fn) {
         QFile f(fn);
         if (!f.open(QIODevice::ReadOnly)) return;
-        input_->setPlainText(QString::fromUtf8(f.readAll()));
+        {
+            // the Document box is ACIP (Adam, 2026-08-12): wylie
+            // source files (the Release 6 wylie edition, Lhasa _inc)
+            // convert at load through the round-trip-proven reverse
+            // engine — token-wise, markers and comments preserved,
+            // any failed token kept verbatim (never guessed). The
+            // file on disk is never touched.
+            QString raw = QString::fromUtf8(f.readAll());
+            if (allcore::looksLikeWylie(raw.toStdString())) {
+                QString out;
+                out.reserve(raw.size());
+                QString tok;
+                bool inComment = false;
+                auto flush = [&] {
+                    if (tok.isEmpty()) return;
+                    if (inComment || tok.startsWith('[') ||
+                        tok.contains('#')) {
+                        out += tok;   // comments/markers verbatim
+                    } else if (tok.startsWith('@')) {
+                        out += tok.toUpper();   // folio marker
+                    } else {
+                        // detach trailing shads, convert the core
+                        QString core = tok, shads;
+                        while (core.endsWith('/')) {
+                            shads += ',';
+                            core.chop(1);
+                        }
+                        QString lead;
+                        while (core.startsWith('/')) {
+                            lead += ',';
+                            core.remove(0, 1);
+                        }
+                        if (core.isEmpty()) {
+                            out += lead + shads;
+                        } else {
+                            const std::string a = allcore::ewtsToAcip(
+                                core.toStdString());
+                            out += lead +
+                                   (a.empty()
+                                        ? core
+                                        : QString::fromStdString(a)) +
+                                   shads;
+                        }
+                    }
+                    if (tok.startsWith('[')) inComment = true;
+                    if (tok.contains(']')) inComment = false;
+                    tok.clear();
+                };
+                for (QChar c : raw) {
+                    if (c == ' ' || c == '\n' || c == '\t') {
+                        flush();
+                        out += c;
+                    } else {
+                        tok += c;
+                    }
+                }
+                flush();
+                input_->setPlainText(out);
+                wasWylieFile_ = true;
+            } else {
+                input_->setPlainText(raw);
+                wasWylieFile_ = false;
+            }
+        }
         docFile_ = fn;
         QSettings("ALL", "TranslationTool")
             .setValue("overlay/lastFile", fn);
         loadGlossary();
         loadDoc();
+        if (wasWylieFile_)
+            hint_->setText(
+                "wylie source file — shown as ACIP (converted "
+                "through the round-trip-proven engine; the file on "
+                "disk is untouched)\n" +
+                hint_->text());
         auto info = allcore::decodeAcipFilename(fn.toStdString());
         setScanTarget(info, fn);
         // OCR outputs are review material until verified (OCR_DESIGN):
@@ -2964,7 +3057,11 @@ private:
         if (view_ && w == view_ && ev->type() == QEvent::KeyPress &&
             lastTok_ >= 0 && !doc_.tokens.empty()) {
             auto* k = static_cast<QKeyEvent*>(ev);
-            if (k->modifiers() == Qt::NoModifier) {
+            // macOS delivers arrow keys with KeypadModifier set —
+            // mask it or the filter never fires on real hardware
+            // (Adam's finding, 2026-08-12)
+            if ((k->modifiers() & ~Qt::KeypadModifier) ==
+                Qt::NoModifier) {
                 switch (k->key()) {
                     case Qt::Key_Right:
                         navPhrase(+1);
@@ -4006,6 +4103,8 @@ private:
     QLabel* scanCap_ = nullptr;
     QWidget* scanNav_ = nullptr;
     QString scanWork_, scanCache_, curFolio_, scanLicense_, fileKey_;
+    bool wasWylieFile_ = false;   // opened file was wylie (the box
+                                  // shows the ACIP conversion)
     int fetchEpoch_ = 0;
     QString curWordWylie_;   // ACIP token at cursor, as wylie
 #ifdef ALL_HAVE_OCR
