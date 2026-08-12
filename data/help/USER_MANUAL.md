@@ -65,6 +65,7 @@ app: Help menu → ALL Tool Help & Tutorials.*
   - 16.7 Session restore — the app reopens where you left off
   - 16.8 The self-test (--selftest)
   - 16.9 Help → Troubleshooting
+  - 16.10 Hunt Everywhere (⌘K)
 
 
 # PART ONE — READ & TRANSLATE
@@ -2535,3 +2536,22 @@ Everything a tester needs to file a useful finding in one click:
 - **Verbose Logging** — adds pane switches to the lifecycle log.
 - **Reset Settings…** — all preferences back to defaults, with
   confirmation; texts and data untouched; next launch.
+
+
+## 16.10 Hunt Everywhere (⌘K)
+
+Press **⌘K** anywhere (or View → Hunt Everywhere…). Type anything
+in any form — *bsod nams*, *BSOD NAMS*, *merit*, or *sunam* — and
+one list answers from every source at once:
+
+- **📖 dictionary** rows with the binding gloss and its tier;
+- **🔁 English reverse** rows (your English → his Tibetan);
+- **🗣 phonetics** rows through the GMR-convention fold;
+- **📜 corpus** rows with the master's published English;
+- **🎧 teaching** rows that open the recording at the timecode.
+
+Arrow to a row and press **Enter**: dictionary/reverse/phonetics
+rows land you in Lookup with the search already run; corpus rows
+land you in Search; teaching rows open the recording. Escape
+closes. Everything is the same deterministic machinery as the
+panes — the palette only saves you the walk.

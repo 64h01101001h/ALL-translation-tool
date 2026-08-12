@@ -432,6 +432,19 @@ Everything the app remembers, in one dialog:
   (auto-detected). Data-folder and authority-role changes take
   effect on the next launch.
 
+## Hunt Everywhere (⌘K)
+
+*Where: the View menu → Hunt Everywhere…, or ⌘K anywhere.*
+
+One box, every source. Type anything — wylie (bsod nams), ACIP
+(BSOD NAMS), English (merit), or the way you'd say it (sunam) —
+and one list answers from the dictionary (with tiers), the
+English reverse index, the pronunciation fold, the aligned
+corpus, and the teaching index. Arrow down, press Enter, and you
+land in the right pane with the query already run — or the
+recording already playing. Deterministic lookups only; nothing
+fuzzy, nothing guessed.
+
 ## Troubleshooting
 
 *Where: the Help menu → Troubleshooting.*

@@ -14,6 +14,7 @@
 #include <QListView>
 #include <QScrollArea>
 #include <QShortcut>
+#include <QKeyEvent>
 #include <QStringListModel>
 #include <QTextStream>
 #include <QLabel>
@@ -837,6 +838,12 @@ static void proposeTermDialog(QWidget* parent, const QString& wylie,
     fileProposal(parent, kind, wylie, value, field, evidence);
 }
 
+static std::function<void(QWidget*)> g_raisePane;
+// cross-pane query hooks for the Hunt palette (⌘K): set where each
+// pane is built, called only from user actions
+static std::function<void(const QString&)> g_lookupQuery;
+static std::function<void(const QString&)> g_goferQuery;
+
 static QWidget* makeLookupPane(allcore::Spine& spine, allcore::RefDict* ref,
                                allcore::Mvp* mvp,
                                allcore::WhitneyRoots* whitney = nullptr,
@@ -935,6 +942,12 @@ static QWidget* makeLookupPane(allcore::Spine& spine, allcore::RefDict* ref,
         results->setHtml(lookupResultsHtml(spine, ref, mvp, whitney,
                                            colloq, raw));
     });
+    // Hunt palette hook: land in this pane with the query run
+    g_lookupQuery = [pane, box](const QString& q) {
+        box->setText(q);
+        QMetaObject::invokeMethod(box, "returnPressed");
+        if (g_raisePane) g_raisePane(pane);
+    };
     return pane;
 }
 
@@ -3965,6 +3978,14 @@ public:
             refreshSaved();
         });
         connect(findB_, &QPushButton::clicked, [this] { find(); });
+    }
+
+    // Hunt palette hook: run a single-term query in this pane
+    void runQuery(const QString& term) {
+        for (auto* f : fields_) f->clear();
+        fields_[0]->setText(term);
+        combiner_->setCurrentIndex(0);
+        find();
     }
 
     int selfTest(QStringList& log) {
@@ -10264,7 +10285,6 @@ static QString findDataRoot() {
 
 // set after the pane groups are built; raises any pane through the
 // two-level navigation
-static std::function<void(QWidget*)> g_raisePane;
 
 static QString g_userName;
 static bool g_isAdmin = false;
@@ -11756,6 +11776,250 @@ private:
     std::vector<std::pair<int, QString>> rows_;
 };
 
+// ---- Hunt palette (⌘K, Adam's wow round 2026-08-12): type anything
+// — wylie, ACIP, English, GMR phonetics — and ONE list answers from
+// the dictionary, the English reverse index, the pronunciation fold,
+// the aligned corpus, and the teaching index. Enter jumps to the
+// right pane with the query already run. Deterministic lookups only;
+// tiers and provisional marks ride along.
+class HuntPalette : public QDialog {
+public:
+    HuntPalette(allcore::Spine& spine, QWidget* parent)
+        : QDialog(parent), spine_(spine) {
+        setWindowTitle("Hunt everywhere");
+        resize(760, 460);
+        setStyleSheet(
+            "QDialog { background: #F1EBDD; }"
+            "QLineEdit { background: #FFFFFF; color: #2B2118;"
+            "  border: 1px solid #C9B992; border-radius: 8px;"
+            "  padding: 10px 14px; font-size: 16px; }"
+            "QListWidget { background: #FAF6EE; color: #2B2118;"
+            "  border: 1px solid #C9B992; border-radius: 8px;"
+            "  padding: 6px; font-size: 13px; outline: none; }"
+            "QListWidget::item { padding: 6px 8px;"
+            "  border-radius: 5px; }"
+            "QListWidget::item:selected { background: #8C2F2B;"
+            "  color: #FAF6EE; }");
+        auto* v = new QVBoxLayout(this);
+        box_ = new QLineEdit;
+        box_->setPlaceholderText(
+            "Hunt everywhere: wylie · ACIP · English · phonetics… "
+            "(Enter jumps to the source)");
+        list_ = new QListWidget;
+        v->addWidget(box_);
+        v->addWidget(list_, 1);
+        timer_ = new QTimer(this);
+        timer_->setSingleShot(true);
+        timer_->setInterval(220);
+        connect(box_, &QLineEdit::textChanged,
+                [this] { timer_->start(); });
+        connect(timer_, &QTimer::timeout, [this] { runSearch(); });
+        connect(box_, &QLineEdit::returnPressed,
+                [this] { activate(list_->currentRow()); });
+        connect(list_, &QListWidget::itemActivated,
+                [this](QListWidgetItem* it) {
+                    activate(list_->row(it));
+                });
+        box_->installEventFilter(this);
+    }
+
+    void openPalette() {
+        box_->clear();
+        list_->clear();
+        acts_.clear();
+        show();
+        raise();
+        activateWindow();
+        box_->setFocus();
+    }
+
+    int selfTest(QStringList& log) {
+        int fails = 0;
+        auto check = [&](bool ok, const char* what) {
+            log << QString("  [%1] Hunt: %2")
+                       .arg(ok ? "PASS" : "FAIL")
+                       .arg(what);
+            if (!ok) ++fails;
+        };
+        box_->setText("bsod nams");
+        runSearch();
+        check(list_->count() > 0 && !acts_.empty(),
+              "wylie query answers");
+        bool dict = false;
+        for (int i = 0; i < list_->count(); ++i)
+            dict |= list_->item(i)->text().contains("bsod nams");
+        check(dict, "dictionary row present for a known headword");
+        box_->setText("sunam");
+        runSearch();
+        bool pron = false;
+        for (int i = 0; i < list_->count(); ++i)
+            pron |= list_->item(i)->text().contains("bsod nams");
+        check(pron, "phonetics query reaches the fold (sunam)");
+        box_->clear();
+        list_->clear();
+        acts_.clear();
+        return fails;
+    }
+
+protected:
+    bool eventFilter(QObject* o, QEvent* e) override {
+        if (o == box_ && e->type() == QEvent::KeyPress) {
+            auto* k = static_cast<QKeyEvent*>(e);
+            if (k->key() == Qt::Key_Down || k->key() == Qt::Key_Up) {
+                int r = list_->currentRow() +
+                        (k->key() == Qt::Key_Down ? 1 : -1);
+                if (list_->count())
+                    list_->setCurrentRow(
+                        qBound(0, r, list_->count() - 1));
+                return true;
+            }
+            if (k->key() == Qt::Key_Escape) {
+                hide();
+                return true;
+            }
+        }
+        return QDialog::eventFilter(o, e);
+    }
+
+private:
+    struct Act {
+        int kind = -1;   // 0=Lookup 1=Search(Gofer) 2=open URL
+        QString payload;
+    };
+    void add(const QString& text, int kind, const QString& payload) {
+        list_->addItem(text);
+        acts_.push_back({kind, payload});
+    }
+
+    void runSearch() {
+        list_->clear();
+        acts_.clear();
+        const QString q = box_->text().trimmed();
+        if (q.size() < 2) return;
+        const std::string raw = q.toStdString();
+        // ACIP is defined uppercase; anything with lowercase is
+        // wylie/English as typed
+        bool hasLower = false;
+        for (QChar c : q) hasLower |= c.isLower();
+        const std::string wylie =
+            hasLower ? q.toLower().toStdString()
+                     : allcore::acipToEwts(raw);
+        const QString wq = QString::fromStdString(wylie);
+        // 1. dictionary — exact, then FTS headword match
+        int n = 0;
+        auto addEntry = [&](const allcore::Entry& e) {
+            add(QString::fromUtf8("📖  ") +
+                    QString::fromStdString(e.wylie) +
+                    QString::fromUtf8(" — ") +
+                    (e.hgm_gloss.empty()
+                         ? QString("(no HGM gloss — reference layers "
+                                   "in Lookup)")
+                         : QString::fromStdString(e.hgm_gloss.front())) +
+                    (e.provisional() ? "   [PROVISIONAL]"
+                                     : QString("   [%1]").arg(
+                                           QString::fromStdString(
+                                               e.tier))),
+                0, QString::fromStdString(e.wylie));
+            ++n;
+        };
+        for (const auto& e : spine_.lookup(wylie)) {
+            if (n >= 4) break;
+            addEntry(e);
+        }
+        if (n == 0) {
+            try {
+                for (const auto& e :
+                     spine_.headwordSearch('"' + wylie + '"', 4))
+                    if (n < 4) addEntry(e);
+            } catch (const std::exception&) {
+            }
+        }
+        // 2. English reverse (exact phrase in the reverse index)
+        try {
+            int r = 0;
+            for (const auto& h : spine_.reverseIndex(
+                     q.toLower().toStdString())) {
+                if (r++ >= 3) break;
+                add(QString::fromUtf8("🔁  english “") + q +
+                        QString::fromUtf8("” → ") +
+                        QString::fromStdString(h.wylie) + "   [" +
+                        QString::fromStdString(h.tier) + "]",
+                    0, QString::fromStdString(h.wylie));
+            }
+        } catch (const std::exception&) {
+        }
+        // 3. pronunciation fold (GMR convention)
+        {
+            int r = 0;
+            for (const auto& e :
+                 spine_.lookupByPronunciation(raw, 3)) {
+                if (r++ >= 3) break;
+                add(QString::fromUtf8("🗣  said “") + q +
+                        QString::fromUtf8("” → ") +
+                        QString::fromStdString(e.wylie) +
+                        (e.hgm_gloss.empty()
+                             ? QString()
+                             : QString::fromUtf8(" — ") +
+                                   QString::fromStdString(
+                                       e.hgm_gloss.front())),
+                    0, QString::fromStdString(e.wylie));
+            }
+        }
+        // 4. aligned corpus (exact phrase)
+        try {
+            int r = 0;
+            for (const auto& s :
+                 spine_.corpusSearch('"' + wylie + '"', "", 3)) {
+                if (r++ >= 2) break;
+                add(QString::fromUtf8("📜  [") +
+                        QString::fromStdString(s.course) + ":" +
+                        QString::number(s.seq) + "]  " +
+                        QString::fromStdString(s.english).left(90),
+                    1, wq);
+            }
+        } catch (const std::exception&) {
+        }
+        // 5. the teaching index: he says this word
+        if (g_teachingTib) {
+            auto it = g_teachingTib->find(wylie);
+            if (it != g_teachingTib->end() && !it->second.empty()) {
+                const auto& m = it->second.front();
+                add(QString::fromUtf8("🎧  Geshe Michael says this "
+                                      "word — ") +
+                        m.title.left(70),
+                    2, m.url);
+            }
+        }
+        if (!list_->count())
+            add(QString::fromUtf8("— nothing exact; try the Lookup "
+                                  "pane's fuzzier paths"),
+                -1, QString());
+        list_->setCurrentRow(0);
+    }
+
+    void activate(int r) {
+        if (r < 0 || r >= (int)acts_.size()) return;
+        const Act a = acts_[r];
+        if (a.kind == 0 && g_lookupQuery) {
+            hide();
+            g_lookupQuery(a.payload);
+        } else if (a.kind == 1 && g_goferQuery) {
+            hide();
+            g_goferQuery(a.payload);
+        } else if (a.kind == 2 && !a.payload.isEmpty()) {
+            hide();
+            QDesktopServices::openUrl(QUrl(a.payload));
+        }
+    }
+
+    allcore::Spine& spine_;
+    QLineEdit* box_ = nullptr;
+    QListWidget* list_ = nullptr;
+    QTimer* timer_ = nullptr;
+    std::vector<Act> acts_;
+};
+static HuntPalette* g_hunt = nullptr;
+
 int main(int argc, char** argv) {
     QApplication app(argc, argv);
     const QString root = findDataRoot();
@@ -11905,6 +12169,7 @@ int main(int argc, char** argv) {
     if (nightOn) applyNight(true);
 
     QMainWindow win;
+    g_hunt = new HuntPalette(spine, &win);
     auto* tabsPtr = new QTabWidget;   // owned by the main window
     QTabWidget& tabs = *tabsPtr;
     win.setCentralWidget(tabsPtr);
@@ -11938,6 +12203,10 @@ int main(int argc, char** argv) {
                                 });
     tabs.addTab(libraryPane, "Library");
     auto* goferPane = new GoferPane(spine, root);
+    g_goferQuery = [goferPane](const QString& q) {
+        goferPane->runQuery(q);
+        if (g_raisePane) g_raisePane(goferPane);
+    };
     tabs.addTab(goferPane, "Search");
     tabs.addTab(makeConvertPane(mvp, whitney), "Convert");
     static std::vector<ApparatusNote> appNotes;
@@ -12206,6 +12475,14 @@ int main(int argc, char** argv) {
             applyNight(on);
             QSettings s("ALL", "TranslationTool");
             s.setValue("app/nightMode", on);
+        });
+        // Hunt everywhere (⌘K): one query across the dictionary,
+        // reverse index, phonetics, corpus, and teachings
+        QAction* huntA = view->addAction("Hunt Everywhere…");
+        huntA->setShortcut(QKeySequence("Ctrl+K"));
+        QObject::connect(huntA, &QAction::triggered, [&win] {
+            if (g_hunt) g_hunt->openPalette();
+            Q_UNUSED(win);
         });
         view->addSeparator();
         QAction* about = view->addAction("About ALL Translation Tool");
@@ -12769,6 +13046,8 @@ int main(int argc, char** argv) {
             ApprovalPane ap(root);
             fails += ap.selfTest(log);
         }
+        // the Hunt palette answers across sources
+        if (g_hunt) fails += g_hunt->selfTest(log);
         // the help system: chapters + auto-index + search
         {
             HelpWindow hw(&tabs, root, nullptr);
