@@ -187,6 +187,7 @@ struct EntryDisplay {
     bool glosses = true;
     bool sanskrit = true;
     bool hopkins = false;
+    bool notes = true;   // published footnotes & bibliography layer
 };
 
 // honorific register rows: wylie -> (ordinary, domain, level); loaded
@@ -305,7 +306,8 @@ static QString entryHtml(const allcore::Entry& e,
     h += "<span style='font-size:22px'>" +
          QString::fromStdString(e.tibetan).toHtmlEscaped() + "</span> ";
     h += "<b>" + QString::fromStdString(e.wylie).toHtmlEscaped() + "</b>";
-    if (g_appNotes && !e.hgm_gloss.empty()) {
+    if (d.notes && g_appNotes && !e.hgm_gloss.empty()) {
+        int shownNotes = 0;
         for (const auto& note : *g_appNotes) {
             bool hit = false;
             for (const auto& g : e.hgm_gloss)
@@ -314,12 +316,15 @@ static QString entryHtml(const allcore::Entry& e,
                                                        Qt::CaseInsensitive))
                     hit = true;
             if (hit) {
-                h += "<div style='background:#F3EDDF;padding:2px 6px;"
+                h += "<div style='background:#F3EDDF;padding:3px 7px;"
                      "border-radius:4px;margin:2px 0;font-size:11px'>"
-                     "\U0001F4CE dealt with in published footnote " +
-                     QString::number(note.num) + " \u2014 <i>" +
-                     note.source.toHtmlEscaped() + "</i></div>";
-                break;
+                     "\U0001F4CE <b>published footnote " +
+                     QString::number(note.num) + "</b> (" +
+                     note.lemma.toHtmlEscaped() + ") \u2014 <i>" +
+                     note.source.toHtmlEscaped() + "</i><br>" +
+                     note.text.left(280).toHtmlEscaped() +
+                     "</div>";
+                if (++shownNotes >= 2) break;
             }
         }
     }
@@ -2102,6 +2107,8 @@ auto* secScan = new QLabel("<span style='color:#9A7A33;font-size:10px;letter-spa
         showHopkins_ = mkToggle("hopkins", "Hopkins reference", false);
         showRefs_ = mkToggle("refs", "reference dictionaries (LC/TD/THL)",
                              true);
+        showNotes_ = mkToggle("notes", "footnotes && bibliography "
+                                       "(published)", true);
         {
             auto* eb = new QLabel("<span style='color:#9A7A33;font-size:10px;letter-spacing:2px;font-weight:600'>DOCUMENT MARKS</span>");
             eb->setContentsMargins(0, 8, 0, 0);
@@ -3299,10 +3306,15 @@ private:
             return x;
         };
         if (clickMode) {
+            // opaque ramp (Adam + design ruling 2026-08-12): the
+            // longest phrase is the LIGHT field; each nesting level
+            // darkens toward the atomic core — the ↓ key descends
+            // into visibly deeper amber. Opaque paint so the ramp
+            // reads identically in light and night.
             sels << mkSel(span.beg, span.end,
                           e.provisional()
-                              ? QColor(0xE8, 0xC9, 0x8A, 190)
-                              : QColor(0xE9, 0xC4, 0x6A, 170));
+                              ? QColor(0xF2, 0xE3, 0xBC)
+                              : QColor(0xF2, 0xDF, 0xAE));
             // nested terms within the active phrase, tone by depth
             struct Nested { int ix, beg, end, depth; };
             std::vector<Nested> nested;
@@ -3322,9 +3334,9 @@ private:
                           return a.depth < b.depth;
                       });
             static const QColor tones[3] = {
-                QColor(0xDF, 0xAE, 0x45, 200),
-                QColor(0xD4, 0x9B, 0x26, 210),
-                QColor(0xC8, 0x89, 0x12, 220)};
+                QColor(0xE5, 0xC3, 0x77),
+                QColor(0xD6, 0xA6, 0x4A),
+                QColor(0xC4, 0x8A, 0x26)};
             for (const auto& nsp : nested) {
                 auto x = mkSel(nsp.beg, nsp.end,
                                tones[qMin(nsp.depth, 3) - 1]);
@@ -3363,6 +3375,7 @@ private:
         disp.glosses = showGloss_->isChecked();
         disp.sanskrit = showSanskrit_->isChecked();
         disp.hopkins = showHopkins_->isChecked();
+        disp.notes = showNotes_->isChecked();
         h += entryHtml(e, disp);
         if (showGrammar_->isChecked() && !span.clitic.empty()) {
             // the span matched through a fused ending the Wilson layer split off
@@ -4708,6 +4721,7 @@ private:
     QCheckBox* showSanskrit_ = nullptr;
     QCheckBox* showHopkins_ = nullptr;
     QCheckBox* showRefs_ = nullptr;
+    QCheckBox* showNotes_ = nullptr;
     QCheckBox* showSeg_ = nullptr;
     QCheckBox* showAttest_ = nullptr;
     allcore::AbbrTable abbr_;
@@ -4973,6 +4987,147 @@ private:
 // list of search targets (the aligned corpus + any folders, added
 // exactly as in the original), Add/Remove/Duplicate/Save/Stop/Find,
 // and the Search Setting / Saved Search / Search Results tabs.
+// ---- ApparatusPane (Adam, 2026-08-12): the published footnotes
+// and bibliography as a scrollable, searchable BANK (STD-008:
+// released work is reused, never redone). Official tier only.
+class ApparatusPane : public QWidget {
+public:
+    ApparatusPane() {
+        auto* v = new QVBoxLayout(this);
+        auto* banner = new QLabel(
+            "<b>Apparatus</b> — every published footnote and "
+            "bibliography entry from the released volumes, "
+            "searchable and reusable. Official tier only: what "
+            "appears here was published under Geshe Michael's "
+            "approval; candidates live in the pending queues.");
+        banner->setWordWrap(true);
+        v->addWidget(banner);
+        auto* row = new QHBoxLayout;
+        search_ = new QLineEdit;
+        search_->setPlaceholderText(
+            "search lemmas, note text, bibliography entries…");
+        kind_ = new QComboBox;
+        kind_->addItems({"All", "Footnotes", "Bibliography"});
+        row->addWidget(search_, 1);
+        row->addWidget(kind_);
+        v->addLayout(row);
+        auto* split = new QSplitter;
+        list_ = new QListWidget;
+        list_->setMinimumWidth(320);
+        detail_ = new QTextBrowser;
+        split->addWidget(list_);
+        split->addWidget(detail_);
+        split->setStretchFactor(1, 1);
+        v->addWidget(split, 1);
+        connect(search_, &QLineEdit::textChanged,
+                [this] { refill(); });
+        connect(kind_, &QComboBox::currentIndexChanged,
+                [this](int) { refill(); });
+        connect(list_, &QListWidget::currentRowChanged,
+                [this](int r) { show(r); });
+        refill();
+    }
+
+    int selfTest(QStringList& log) {
+        int fails = 0;
+        auto check = [&](bool ok, const char* what) {
+            log << QString("  [%1] Apparatus: %2")
+                       .arg(ok ? "PASS" : "FAIL")
+                       .arg(what);
+            if (!ok) ++fails;
+        };
+        search_->clear();
+        kind_->setCurrentIndex(0);
+        refill();
+        check(list_->count() > 400,
+              "bank lists the full published apparatus");
+        const int full = list_->count();
+        search_->setText("emptiness");
+        refill();
+        check(list_->count() > 0 && list_->count() < full,
+              "search narrows the bank");
+        search_->clear();
+        refill();
+        return fails;
+    }
+
+private:
+    void refill() {
+        list_->clear();
+        rows_.clear();
+        const QString q = search_->text().trimmed();
+        const int k = kind_->currentIndex();
+        if (g_appNotes && (k == 0 || k == 1)) {
+            for (int i = 0; i < (int)g_appNotes->size(); ++i) {
+                const auto& n = (*g_appNotes)[i];
+                if (!q.isEmpty() &&
+                    !n.lemma.contains(q, Qt::CaseInsensitive) &&
+                    !n.text.contains(q, Qt::CaseInsensitive))
+                    continue;
+                list_->addItem(QString::fromUtf8("\xF0\x9F\x93\x8E ") +
+                               QString("note %1 — %2")
+                                   .arg(n.num)
+                                   .arg(n.lemma.left(48)));
+                rows_.push_back({true, i});
+            }
+        }
+        if (g_appBib && (k == 0 || k == 2)) {
+            for (int i = 0; i < (int)g_appBib->size(); ++i) {
+                const auto& b = (*g_appBib)[i];
+                if (!q.isEmpty() &&
+                    !b.id.contains(q, Qt::CaseInsensitive) &&
+                    !b.text.contains(q, Qt::CaseInsensitive))
+                    continue;
+                list_->addItem(QString::fromUtf8("\xF0\x9F\x93\x9A ") +
+                               QString("%1 — %2")
+                                   .arg(b.id)
+                                   .arg(b.text.left(52)));
+                rows_.push_back({false, i});
+            }
+        }
+        if (list_->count()) list_->setCurrentRow(0);
+        else
+            detail_->setHtml(
+                g_appNotes || g_appBib
+                    ? "<i>no matches</i>"
+                    : "<i>the apparatus banks load from the data "
+                      "release (docs/apparatus)</i>");
+    }
+    void show(int r) {
+        if (r < 0 || r >= (int)rows_.size()) return;
+        const bool isNote = rows_[r].first;
+        const int i = rows_[r].second;
+        if (isNote && g_appNotes) {
+            const auto& n = (*g_appNotes)[i];
+            detail_->setHtml(
+                QString("<h3>Footnote %1</h3><div style="
+                        "'color:#7A5A00'><b>%2</b></div><div "
+                        "style='color:#777;font-size:12px'>%3"
+                        "</div><hr><div style='font-size:15px'>"
+                        "%4</div>")
+                    .arg(n.num)
+                    .arg(n.lemma.toHtmlEscaped(),
+                         n.source.toHtmlEscaped(),
+                         n.text.toHtmlEscaped()));
+        } else if (g_appBib) {
+            const auto& b = (*g_appBib)[i];
+            detail_->setHtml(
+                QString("<h3>%1</h3><div style='color:#777;"
+                        "font-size:12px'>%2 · %3</div><hr>"
+                        "<div style='font-size:15px'>%4</div>")
+                    .arg(b.id.toHtmlEscaped(),
+                         b.source.toHtmlEscaped(),
+                         b.section.toHtmlEscaped(),
+                         b.text.toHtmlEscaped()));
+        }
+    }
+    QLineEdit* search_ = nullptr;
+    QComboBox* kind_ = nullptr;
+    QListWidget* list_ = nullptr;
+    QTextBrowser* detail_ = nullptr;
+    std::vector<std::pair<bool, int>> rows_;
+};
+
 // ---- ScansPane (Adam, 2026-08-12): the woodblock utilities in
 // their own Read-group pane. The follow-along VIEWER stays in the
 // Overlay (its point is tracking the reading cursor); this pane
@@ -14064,6 +14219,8 @@ int main(int argc, char** argv) {
     auto* draftPane = new DraftPane(spine, progress, root);
     tabs.addTab(draftPane, "Draft");
     auto* manuscriptPane = new ManuscriptPane(spine);
+    auto* apparatusPane = new ApparatusPane();
+    tabs.addTab(apparatusPane, "Apparatus");
     g_sendToManuscript = [manuscriptPane](const QString& t) {
         manuscriptPane->setManuscriptText(t);
         if (g_raisePane) g_raisePane(manuscriptPane);
@@ -14365,7 +14522,8 @@ int main(int argc, char** argv) {
         };
         mkGroup("Read", {"Overlay", "Library", "Scans", "Export"});
         mkGroup("Translate",
-                {"Manuscript", "Draft", "Review", "Align"});
+                {"Draft", "Manuscript", "Apparatus", "Review",
+                 "Align"});
         mkGroup("Research",
                 {"Search", "Lookup", "Sanskrit", "Convert", "Analysis"});
         mkGroup("Learn", {"Trainer", "Drills"});
@@ -14981,6 +15139,7 @@ int main(int argc, char** argv) {
         fails += overlay->selfTest(log, root);
         fails += exportPane->selfTest(log);
         fails += scansPane->selfTest(log);
+        fails += apparatusPane->selfTest(log);
         fails += trainerPane->selfTest(log);
         fails += drillsPane->selfTest(log);
         fails += draftPane->selfTest(log);

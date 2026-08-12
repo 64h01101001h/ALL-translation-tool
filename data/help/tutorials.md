@@ -252,6 +252,22 @@ print Tibetan (Unicode)…" produces print-ready script. "Prepare for
 translation (Mixed Nuts)…" runs the demonstrated
 translation-preparation format.
 
+## Apparatus
+
+*Where: Translate → Apparatus.*
+
+**What it's for.** Every published footnote and bibliography entry
+from the released volumes as a scrollable, searchable bank —
+Geshe Michael's directive that released work is reused, never
+redone, made browsable.
+
+**Use.** Type in the search box (lemmas, note text, bibliography
+entries all match); filter to Footnotes or Bibliography; click a
+row to read the full entry with its source. Official tier only —
+candidates stay in the pending queues until approved. On the
+Overlay, the "footnotes && bibliography (published)" card layer
+shows matching notes directly on any term's card.
+
 ## Manuscript
 
 *Where: Translate → Manuscript.*
