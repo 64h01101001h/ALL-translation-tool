@@ -57,6 +57,21 @@ on every pane (17/17 panes crash-free).
   the cached-pages gallery now actually finds its cache (a
   never-could-match filter was found and fixed this build).
 
+## The morning's three (added after the first press)
+
+- **The Evidence Ribbon** — in Draft, the evidence follows your
+  cursor: click into any clause and its terms, a scaffold of the
+  master's attested glosses in Wilson reading order (nothing ever
+  composed), "the master has translated this clause," and any
+  quotation alert arrive with zero clicks.
+- **Hunt Everywhere (⌘K)** — one palette, every source: wylie,
+  ACIP, English, or phonetics in; dictionary, reverse index,
+  phonetics fold, corpus, and teachings out; Enter jumps to the
+  right pane with the query already run.
+- **Four-layer view** — the folio you are reading as scan · OCR ·
+  e-text · attested English, row-aligned, click-to-band on the
+  carving.
+
 ## Search
 
 - **This Mac (Spotlight)** is now an opt-in source row in the

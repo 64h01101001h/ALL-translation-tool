@@ -1663,6 +1663,16 @@ auto* illusVolBtn = new QPushButton("Illustration gallery (cached scans)");
             runIllustrationGallery(this, root, paths,
                                    scanWork_ + " cached pages");
         });
+        auto* fourBtn = new QPushButton("Four-layer view (this folio)\u2026");
+        fourBtn->setToolTip(
+            "The folio you are reading in four synchronized layers: "
+            "the woodblock scan, its OCR reading (labeled review "
+            "material), the e-text lines as keyed, and the master's "
+            "published English where a line is attested in the "
+            "corpus. Click a row to light its band on the carving.");
+        ll->addWidget(fourBtn);
+        connect(fourBtn, &QPushButton::clicked,
+                [this] { fourLayerView(); });
         auto* illusWholeBtn =
             new QPushButton("Illustration gallery (whole volume)\u2026");
         illusWholeBtn->setToolTip(
@@ -3302,6 +3312,162 @@ private:
             showFolio(folio);
         else if (folio == curFolio_ && !basePx_.isNull())
             setScanPixmap(basePx_, curFolio_);
+    }
+
+    // ---- the Four-Layer Page (Adam's wow round, 2026-08-12): one
+    // folio, four synchronized layers — scan · OCR · e-text ·
+    // attested English — row-aligned, click a row to light its band
+    // on the carving. The OCR column is banner-labeled review
+    // material (the Scan-pane rule); the English column appears only
+    // where the exact line is attested in the aligned corpus.
+    void fourLayerView() {
+        if (basePx_.isNull() || curFolio_.isEmpty()) {
+            QMessageBox::information(
+                this, "Four-layer view",
+                "Open a text and start Follow along in scans first "
+                "(SCANS → Find scans on BDRC…) — the four-layer view "
+                "shows the folio you are reading.");
+            return;
+        }
+        // e-text lines of this folio side (the input centers kept
+        // the woodblock's own line breaks)
+        const QString all = input_->toPlainText();
+        static const QRegularExpression re("@0*(\\d+)([AB])");
+        int beg = -1, end = all.size();
+        {
+            auto it = re.globalMatch(all);
+            while (it.hasNext()) {
+                const auto m = it.next();
+                const QString f =
+                    m.captured(1) + m.captured(2).toLower();
+                if (beg < 0 && f == curFolio_) {
+                    beg = m.capturedEnd();
+                } else if (beg >= 0) {
+                    end = m.capturedStart();
+                    break;
+                }
+            }
+        }
+        QStringList src;
+        if (beg >= 0)
+            for (const QString& ln :
+                 all.mid(beg, end - beg).split('\n'))
+                if (!ln.trimmed().isEmpty()) src << ln.trimmed();
+        // OCR lines + their true rectangles (optional layer)
+        QStringList ocr;
+        std::vector<QRect> lineRects;
+        bool haveOcr = false;
+#ifdef ALL_HAVE_OCR
+        if (const FolioOcr* fo = folioOcrFor(curFolio_)) {
+            haveOcr = true;
+            for (const auto& t : fo->lineText)
+                ocr << QString::fromStdString(t);
+            for (const auto& l : fo->pl.lines)
+                lineRects.push_back(QRect(l.x, l.y, l.w, l.h));
+        }
+#endif
+        const int rows = std::max((int)src.size(), (int)ocr.size());
+        if (!rows) {
+            QMessageBox::information(
+                this, "Four-layer view",
+                "No lines found for folio " + curFolio_ + ".");
+            return;
+        }
+        auto* dlg = new QDialog(this);
+        dlg->setAttribute(Qt::WA_DeleteOnClose);
+        dlg->setWindowTitle("Four layers — folio " + curFolio_ +
+                            " · " + scanWork_);
+        const QRect avail = screen()->availableGeometry();
+        dlg->resize(qMin(1200, avail.width() - 80),
+                    qMin(860, avail.height() - 80));
+        auto* v = new QVBoxLayout(dlg);
+        auto* pic = new QLabel;
+        pic->setAlignment(Qt::AlignCenter);
+        v->addWidget(pic);
+        auto* note = new QLabel(
+            haveOcr
+                ? "<small>The OCR column is <b>machine-derived "
+                  "review material</b> (BDRC models, deskew 0° "
+                  "deviation); line bands use its real geometry. "
+                  "English appears only where the exact line is "
+                  "attested in the aligned corpus. Click a row to "
+                  "light its band.</small>"
+                : "<small>OCR models not installed (see the Scan "
+                  "pane) — the OCR layer is absent and line bands "
+                  "are uniform arithmetic, labeled approximate. "
+                  "English appears only where the exact line is "
+                  "attested in the aligned corpus. Click a row to "
+                  "light its band.</small>");
+        note->setWordWrap(true);
+        v->addWidget(note);
+        auto* table = new QTableWidget(rows, 4, dlg);
+        table->setHorizontalHeaderLabels(
+            {"line", haveOcr ? "OCR (review material)" : "OCR (—)",
+             "e-text (as keyed)", "the master's English (attested)"});
+        table->setEditTriggers(QAbstractItemView::NoEditTriggers);
+        table->setSelectionBehavior(QAbstractItemView::SelectRows);
+        table->verticalHeader()->hide();
+        for (int i = 0; i < rows; ++i) {
+            table->setItem(i, 0,
+                           new QTableWidgetItem(QString::number(i + 1)));
+            table->setItem(
+                i, 1,
+                new QTableWidgetItem(i < ocr.size() ? ocr[i]
+                                                    : QString("—")));
+            const QString et = i < src.size() ? src[i] : QString("—");
+            table->setItem(i, 2, new QTableWidgetItem(et));
+            QString eng = "—";
+            if (i < src.size()) {
+                bool hasLower = false;
+                for (QChar c : et) hasLower |= c.isLower();
+                const std::string w =
+                    hasLower ? et.toLower().toStdString()
+                             : allcore::acipToEwts(et.toStdString());
+                try {
+                    auto segs =
+                        spine_.corpusSearch('"' + w + '"', "", 1);
+                    if (!segs.empty())
+                        eng = QString::fromStdString(
+                            segs.front().english);
+                } catch (const std::exception&) {
+                }
+            }
+            table->setItem(i, 3, new QTableWidgetItem(eng));
+            QCoreApplication::processEvents();
+        }
+        table->resizeColumnsToContents();
+        table->horizontalHeader()->setStretchLastSection(true);
+        v->addWidget(table, 1);
+        const QPixmap base = basePx_;
+        const int nRows = rows;
+        auto drawBand = [pic, base, lineRects, nRows,
+                         avail](int row) {
+            QPixmap px = base.copy();
+            if (row >= 0) {
+                QPainter p(&px);
+                QRect band;
+                if (row < (int)lineRects.size()) {
+                    band = lineRects[row].adjusted(0, -4, 0, 4);
+                } else if (nRows > 0) {
+                    const int y0 = px.height() * row / nRows;
+                    const int y1 = px.height() * (row + 1) / nRows;
+                    band = QRect(0, y0, px.width(), y1 - y0);
+                }
+                p.fillRect(band, QColor(255, 190, 0, 55));
+                p.setPen(QPen(QColor(230, 150, 0, 190), 3));
+                p.drawRect(band);
+                p.end();
+            }
+            pic->setPixmap(px.scaledToWidth(
+                qMin(avail.width() - 140, 1100),
+                Qt::SmoothTransformation));
+        };
+        drawBand(-1);
+        QObject::connect(table, &QTableWidget::currentCellChanged,
+                         [drawBand](int r, int, int, int) {
+                             drawBand(r);
+                         });
+        dlg->show();
     }
 
     void stepFolio(int d) {

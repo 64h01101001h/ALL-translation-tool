@@ -127,7 +127,12 @@ scans)" searches this volume's already-downloaded pages for
 woodblock miniatures and diagrams — candidates only; pages cache as
 you view them. "Illustration gallery (whole volume)…" fetches every
 folio side of the linked volume from BDRC (reduced size, cached,
-with progress and Stop) and searches them all.
+with progress and Stop) and searches them all. "Four-layer view
+(this folio)…" shows the folio you are reading in four synchronized
+layers — the woodblock scan, its OCR reading (labeled review
+material), the e-text lines as keyed, and the master's published
+English where a line is attested — click a row and its band lights
+on the carving.
 
 **FORMAT & EXPORT (left column, under its gold heading).** "Export
 print Tibetan (Unicode)…" produces print-ready script. "Prepare for

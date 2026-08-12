@@ -402,6 +402,16 @@ are searched (pages cache as you view them in Follow along). If no
 volume is linked yet, the app tells you to link one first (Follow
 along / Search BDRC).
 
+**Four-layer view (this folio)…** — the folio you are reading in
+four synchronized layers: the woodblock scan on top; beneath it a
+line table with the OCR reading (machine-derived review material,
+clearly labeled; absent when the models are not installed), the
+e-text exactly as the input centers keyed it, and the master's
+published English wherever that exact line is attested in the
+aligned corpus. Click any row and its band lights on the carving —
+with the OCR's real line geometry when available, uniform
+arithmetic (labeled approximate) when not.
+
 **Illustration gallery (whole volume)…** — the same candidate
 search over the ENTIRE linked volume: every folio side BDRC lists
 is fetched (reduced size, cached under the volume's own folder,
