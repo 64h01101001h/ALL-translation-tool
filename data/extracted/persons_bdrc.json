@@ -11,13 +11,10 @@
    "'PHAGS MA SGROL MA",
    "'PHAGS PA BLO GROS",
    "(1) BSKAL BZANG RNAM RGYAL aka KA LBI BHA DRA BI DZA YA [sic]; (2) unknown; (3) RJE BTZUN [PAn CHEN]",
-   "A'ARYA SH'U RA",
    "AA BADH'U T'I PA",
    "AA RI DGE BSHES BLO BZANG CHOS 'DZIN",
-   "AA TZA tA",
    "AINDRA BH'U TI",
    "BEE RO TZA NA RAKshI TA",
-   "BI BH'U TI TZANDRA",
    "BIR WA PA",
    "BKA' CHEN BYAMS PA THUB BSTAN",
    "BLA MA DBU MA PA GRUB CHEN DPA' BO RDO RJE",
@@ -29,7 +26,6 @@
    "CHE SHOS RIN PO CHE BLO BZANG BYANG CHUB BSTAN PA'I SGRON ME",
    "CO NE BLA MA GRAGS PA BSHAD SGRUB",
    "DAD PA 'BYUNG GNAS GO CHA",
-   "DAmshtR'A SE NA [?]",
    "DE BA SH'A NITA",
    "DGE BAI 'BYUNG GNAS SBAS PA",
    "DGE BSHES 'CHAD KA BA YE SHES RDO RJE",
@@ -45,9 +41,7 @@
    "DPAL MAR ME MDZAD YE SHES (AA TI SHA)",
    "DPAL SKYE BO CHEN PO",
    "DZA GATTA T'A LAR GNAS PA",
-   "DZA YA A'A NANDA",
    "DZE T'A RI PA",
-   "KAMBA LA",
    "KAMPA LA",
    "KHAM LUNG PA",
    "KONKA BYIN",
@@ -59,7 +53,6 @@
    "MKHAS MCHOG SBYIN PA DAR RGYAS",
    "MKHAS MCHOG SBYIN PA DAR RGYAS [?]",
    "PHYAG NA RDO RJE",
-   "PRA SHASTRA SE N'A",
    "PRADZNY'A S'A GA RA DRUNG CHEN SHES RAB RGYA MTSO",
    "RGYA BA CAN",
    "RGYAL BA BDUN PA SKAL BZANG RGYA MTSO",
@@ -89,7 +82,6 @@
    "SUM PA LO TZA BA DHARMA YON TAN",
    "Said to be an oral teaching by ZHANG RATNA GU RU",
    "THU'U BKVAN BLO BZANG CHOS KYI NYI MA",
-   "TZANDRA HA RI PA",
    "YONGS 'DZIN PHUR BU LCOG BYAMS PA TSUL KHRIMS RGYA MTSO",
    "ZHVA DMAR COD PAN 'DZIN PA BZHI PA",
    "ZHVA LU BA RIN CHEN BLO BZANG MKHYEN RAB"
@@ -98,6 +90,10 @@
    "harvested": "2026-08-12",
    "method": "paged quoted phrase-window retrieval + deterministic all-tokens verification against the candidate's full skos label set (genitive-tolerant); aspiration near-misses recorded for review, never asserted",
    "review_candidates": {}
+  },
+  "pass3": {
+   "harvested": "2026-08-12",
+   "method": "canonical acip_to_iast + sa-x-ndia label search; accept only on canonical-fold EQUALITY (diacritic strip, aa->a, v->b); BDRC * reconstructed-name marks recorded"
   }
  },
  "authors": {
@@ -4113,6 +4109,214 @@
      "matched_via": {
       "variant": "as-written",
       "label": "zhi ba lha 05 blo bzang don grub rgya mtsho/"
+     }
+    }
+   ]
+  },
+  "A'ARYA SH'U RA": {
+   "eng": "",
+   "dates": "Unknown",
+   "works": 1,
+   "pass": 3,
+   "candidates": [
+    {
+     "pid": "P7588",
+     "names": [
+      "slob dpon dpa' bo/",
+      "Āryaśūra?"
+     ],
+     "tol": "",
+     "matched_via": {
+      "sanskrit_label": "Āryaśūra?",
+      "reconstructed": false
+     }
+    },
+    {
+     "pid": "P0AT0084",
+     "names": [
+      "phags pa dpa' bo/",
+      "Āryaśūra"
+     ],
+     "tol": "",
+     "matched_via": {
+      "sanskrit_label": "Āryaśūra",
+      "reconstructed": false
+     }
+    }
+   ]
+  },
+  "AA TZA tA": {
+   "eng": "",
+   "dates": "Unknown",
+   "works": 1,
+   "pass": 3,
+   "candidates": [
+    {
+     "pid": "P0AT0087",
+     "names": [
+      "bram ze a tsa Ta/",
+      "Ācaṭa"
+     ],
+     "tol": "",
+     "matched_via": {
+      "sanskrit_label": "Ācaṭa",
+      "reconstructed": false
+     }
+    }
+   ]
+  },
+  "BI BH'U TI TZANDRA": {
+   "eng": "",
+   "dates": "Unknown",
+   "works": 2,
+   "pass": 3,
+   "candidates": [
+    {
+     "pid": "P0RK496",
+     "names": [
+      "vibhUticandra",
+      "bi bhu ta tsandra/"
+     ],
+     "tol": "",
+     "matched_via": {
+      "sanskrit_label": "vibhUticandra",
+      "reconstructed": false
+     }
+    },
+    {
+     "pid": "P00EGS1017688",
+     "names": [
+      "Vibhūticandra",
+      "paN+Di ta bi b+hu ti tsan+dra/"
+     ],
+     "tol": "",
+     "matched_via": {
+      "sanskrit_label": "Vibhūticandra",
+      "reconstructed": false
+     }
+    }
+   ]
+  },
+  "DAmshtR'A SE NA [?]": {
+   "eng": "",
+   "dates": "Unknown",
+   "works": 2,
+   "pass": 3,
+   "candidates": [
+    {
+     "pid": "P1KG3392",
+     "names": [
+      "daM Sh+TA se na/",
+      "*Daṃṣṭrasena"
+     ],
+     "tol": "",
+     "matched_via": {
+      "sanskrit_label": "*Daṃṣṭrasena",
+      "reconstructed": true
+     }
+    }
+   ]
+  },
+  "DZA YA A'A NANDA": {
+   "eng": "",
+   "dates": "Unknown",
+   "works": 2,
+   "pass": 3,
+   "candidates": [
+    {
+     "pid": "P0AT0277",
+     "names": [
+      "Jayānanda",
+      "rgya gar kyi mkhan po dpal tsha ya A na n+da/"
+     ],
+     "tol": "",
+     "matched_via": {
+      "sanskrit_label": "Jayānanda",
+      "reconstructed": false
+     }
+    },
+    {
+     "pid": "P4CZ15242",
+     "names": [
+      "Jayānanda",
+      "paN+Di ta dza ya a nan+ta/"
+     ],
+     "tol": "",
+     "matched_via": {
+      "sanskrit_label": "Jayānanda",
+      "reconstructed": false
+     }
+    },
+    {
+     "pid": "P7216",
+     "names": [
+      "kha che dgon pa ba/",
+      "Āraṇyaka"
+     ],
+     "tol": "",
+     "matched_via": {
+      "sanskrit_label": "Jayananda?",
+      "reconstructed": false
+     }
+    }
+   ]
+  },
+  "KAMBA LA": {
+   "eng": "",
+   "dates": "Unknown",
+   "works": 3,
+   "pass": 3,
+   "candidates": [
+    {
+     "pid": "P7752",
+     "names": [
+      "Kambala",
+      "grub chen la wa pa/"
+     ],
+     "tol": "",
+     "matched_via": {
+      "sanskrit_label": "Kambala",
+      "reconstructed": false
+     }
+    }
+   ]
+  },
+  "PRA SHASTRA SE N'A": {
+   "eng": "",
+   "dates": "Unknown",
+   "works": 1,
+   "pass": 3,
+   "candidates": [
+    {
+     "pid": "P4CZ15646",
+     "names": [
+      "Praśāstrasena",
+      "pra shA s+t+ra se/"
+     ],
+     "tol": "",
+     "matched_via": {
+      "sanskrit_label": "Praśāstrasena",
+      "reconstructed": false
+     }
+    }
+   ]
+  },
+  "TZANDRA HA RI PA": {
+   "eng": "",
+   "dates": "Unknown",
+   "works": 1,
+   "pass": 3,
+   "candidates": [
+    {
+     "pid": "P4CZ16758",
+     "names": [
+      "paN+Di ta chen po rtsan+d+ra ha ri/",
+      "Candrahari"
+     ],
+     "tol": "",
+     "matched_via": {
+      "sanskrit_label": "Candraharipa",
+      "reconstructed": false
      }
     }
    ]
