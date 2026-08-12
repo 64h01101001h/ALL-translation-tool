@@ -30,16 +30,26 @@ the Pecha Maker (Read → Export) implements:
   classic to match common woodblock prints, bold for large sheets.
 - **Line count**: seven lines per side is the classical look; 5–9
   are accepted.
+- **The Degé measure** (THL's Degé cataloging documentation): a
+  Degé folio runs about 68 × 10 cm at 7 lines per side — and the
+  first two sides of a volume are set at **5 lines** with
+  proportionally larger letters (the "classical opening"), the
+  text settling into its regular count from the third side. The
+  first folio of a volume is side 1b. The Pecha Maker offers the
+  Degé preset and the classical opening as options.
 - **Printing protocol**: true-size folio sheets go to a print
   shop; for office printers, impose two-up on A4/US Letter with
-  corner cut marks and trim. Partner printing (Vimala Treasures)
+  corner cut marks and trim. Whole folders batch-render to a
+  pecha set (Export → Batch). Partner printing (Vimala Treasures)
   takes the native-size PDF.
 - **Script integrity in print is absolute**: every syllable passes
   the battery-proven conversion chain; a syllable that cannot be
   proven prints as ⟨wylie⟩ — flagged, never guessed.
-- *THL's print-formatting guidance (THL Toolbox) merges here as
-  the survey completes — including their specifications for
-  formatting Tibetan texts for publication.*
+- *Source: THL Toolbox (Tibetan Texts pipeline, Degé deep
+  cataloging form) — full notes in docs/research/THL/. THL
+  publishes no complete pecha point-size/margin spec; where their
+  documents are silent, this tool's measured defaults apply and
+  say so.*
 
 ## Digital Tibetan text
 
@@ -61,9 +71,32 @@ Protocols for keeping digital Tibetan trustworthy:
 - **Provenance is sacred.** Every generated field carries its
   source tag (engine version, wave, review flags); tags survive
   every schema change.
-- *THL Toolbox digitization standards (typing, proofreading,
-  structural markup, TEI/XML practice) merge here as the survey
-  completes.*
+
+THL's Tibetan Text Input Manual (their complete typing and
+proofreading standard) adds protocols worth adopting wherever we
+key or receive keyed text:
+
+- **Pagination travels inside the text**: inline markers like
+  `[231]` or `[24b.3]` (folio + side + line), with strict
+  no-extra-space rules, so any passage is citable to its witness.
+- **Never expand abbreviations** in the transcription; record
+  what the page shows.
+- **Illegibility is marked, never smoothed over** — THL uses an
+  explicit `{ILLEGIBLE…}` convention plus a required image of the
+  page region; the same spirit as our ⟨wylie⟩ flags.
+- **Corrections are attributed**: original reading, corrected
+  reading, and who made the call — a critical apparatus in
+  miniature, with sigla for witnesses.
+- **Proofing doctrine**: the proofreader is never the inputter;
+  proof from printouts; read the original first; double-input
+  with machine comparison is the gold standard.
+- **Born-digital pagination** (for texts with no printed
+  witness): THL freezes 20 syllables to the line and 15 lines
+  (300 syllables) to the page at publication, so citations stay
+  stable forever.
+- *Source: THL Toolbox → Tibetan Text Input Manual and TEI/XML
+  manuals (recovered captures; full notes in
+  docs/research/THL/toolbox_standards.md).*
 
 ## Transliteration schemes
 
@@ -118,8 +151,19 @@ treats pronunciation as derived data with an authority lane:
 - **OCR output is provisional by definition** — it enters the
   corpus only through review, and OCR text is never presented as
   the e-text without saying so.
-- *THL imaging/scanning standards merge here as the survey
-  completes.*
+- **THL's scanning standard** (adopted here as the reference for
+  any scanning we do or receive): uncompressed TIFF masters at
+  300–600 dpi, one image per folio side; JPEG derivatives around
+  1200–1600 px for reading copies; and two separate archival
+  copies of the masters, kept apart.
+- **Folio arithmetic is checkable**: THL's Degé cataloging form
+  works in vol:page.line references (e.g. `011:378a.5`) with
+  line-fraction rules per 7- and 8-line pages, and names the
+  canonical front matter (title page, title line, translator's
+  homage, opening verses, the author's pledge) — a ready
+  checklist when validating a scanned volume against its e-text.
+- *Source: THL Toolbox scanning/photography specs + Degé deep
+  cataloging form (docs/research/THL/toolbox_standards.md).*
 
 ## Catalogs & provenance
 
@@ -137,8 +181,30 @@ treats pronunciation as derived data with an authority lane:
   MATCH his published English from corpus evidence, never COMPOSE
   or edit it. AI-drafted reference entries live in their own tier,
   under an unmistakable banner, suppressed wherever he speaks.
-- *THL cataloging standards and their canon catalogs (Kangyur/
-  Tengyur numbering) merge here as the survey completes.*
+
+What THL's catalogs add to the reference picture:
+
+- **THL's canon catalogs** (alive at old.thlib.org) cover the
+  Kangyur in six editions (Degé, Choné, Nartang, Peking, Lhasa,
+  Urga) and the Tengyur in four, each searchable in Wylie,
+  Unicode, and English — plus "Master" concordances aligning a
+  text across editions, the only free multi-edition concordance
+  we know of. IDs read sigla.number (e.g. `dg.0043`). View-only:
+  link out, don't ingest.
+- **Genre classification**: THL's Tibetan Literary Genres map
+  (~200 nodes — Biography, Philosophical & Doctrinal with its
+  sixteen commentary types, Ritual with ~28 text types, and so
+  on) is captured in full in our research notes and is the best
+  available taxonomy when tagging what kind of text a work is.
+- **Places and subjects**: THL's gazetteer (~64,000 Tibetan
+  places with script + Wylie names) answers live JSON queries —
+  the licensing lane is *query and link out*, no bulk ingest.
+- **License lanes are per-resource and never assumed**: THL's
+  site-wide community license does not cover third-party media;
+  everything THL is link-out until a specific resource's terms
+  prove otherwise.
+- *Source: docs/research/THL/collections_catalogs.md +
+  knowledge_infrastructure.md.*
 
 ## Audio & teachings
 
@@ -148,5 +214,10 @@ treats pronunciation as derived data with an authority lane:
 - **Spoken Tibetan in teachings follows the GMR convention** for
   search (pronunciation-folded lookup), with the same
   never-guess rule: unmatched spoken forms stay unmatched.
-- *THL's audio-video archive practice (annotation, transcript
-  tooling) merges here as the survey completes.*
+- **Auto-captions are machine-derived and labeled so** wherever
+  quoted; the timecoded link to the original recording is always
+  the authority. YouTube captions notoriously corrupt Tibetan
+  terms — the re-transcription program (see
+  docs/research/TRANSCRIBER_SURVEY.md) exists to replace them
+  with lexicon-biased transcripts, and even those enter the index
+  as evidence, not as text of record.

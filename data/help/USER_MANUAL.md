@@ -491,9 +491,13 @@ crash-free:
 1. Load any text (Library double-click or paste) and press the
    button under FORMAT & EXPORT.
 2. Choose the page — **traditional pecha (42 × 9 cm)**, wide
-   (45 × 10 cm), or A4 landscape — the lines per side (5–9; seven
-   is the classical look), and the **rule weight** (Fine, Classic,
-   Bold — the page furniture).
+   (45 × 10 cm), A4 landscape, or the **Degé woodblock measure
+   (68 × 10 cm)** — the lines per side (5–9; seven is the
+   classical look), and the **rule weight** (Fine, Classic,
+   Bold — the page furniture). The **classical opening** option
+   sets the first two text sides at 5 lines with larger letters,
+   as in the great woodblock editions (per THL's Degé
+   documentation).
 3. Choose the **print layout**: native folio sheets at true size
    for a print shop, or **two-up on A4 / US Letter with cut
    marks** — two folio sides per office sheet, corner ticks to
@@ -520,6 +524,14 @@ crash-free:
 6. **Preview…** shows the whole pecha in the viewer before you
    commit; **Make PDF…** writes it. All options are remembered
    for next time.
+
+**Batch mode** (Export → *Batch: folder of texts → pecha set…*)
+turns every text file in a chosen folder — ACIP or wylie — into
+its own pecha PDF in an output folder, using your saved options.
+Wylie files convert through the round-trip-proven engine;
+per-text dress (title folio, margin title) stays off in batch,
+since a saved title would be wrong on every other text. It needs
+no loaded document.
 
 Every folio side is framed with the traditional double rule and
 carries its Tibetan folio numeral, rotated on the recto margin as
