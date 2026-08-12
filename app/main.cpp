@@ -1332,6 +1332,18 @@ public:
                       !view_->extraSelections().isEmpty(),
                   "arrow-key reading walks the phrase highlight");
         }
+        // nesting tones: the classic triple nest shows structure
+        // inside the active band (base + deeper golds)
+        {
+            input_->setPlainText("'PHAGS PA'I BDEN PA BZHI");
+            loadDoc();
+            QTextCursor c = view_->textCursor();
+            c.setPosition(tokBeg_.empty() ? 0 : tokBeg_[0]);
+            view_->setTextCursor(c);
+            onClick();
+            check(view_->extraSelections().size() >= 2,
+                  "nested terms tone inside the highlighted phrase");
+        }
         // pronunciation display mode: whole text in the GMR
         // convention, engine-segmented (bsod nams = sunam class)
         {
@@ -3268,18 +3280,68 @@ private:
         // the learner met this word: it enters (or bumps) their SRS deck
         if (progress_) progress_->touchWord(e.wylie, (long long)time(nullptr));
 
-        // active-span highlight via extra selections (never touches stored formats)
-        QTextEdit::ExtraSelection sel;
-        sel.cursor = QTextCursor(view_->document());
-        sel.cursor.setPosition(tokBeg_[span.beg]);
-        sel.cursor.setPosition(tokEnd_[span.end - 1], QTextCursor::KeepAnchor);
-        if (clickMode)
-            sel.format.setBackground(
-                e.provisional() ? QColor(0xE8, 0xC9, 0x8A, 190)
-                                : QColor(0xE9, 0xC4, 0x6A, 170));
-        else
-            sel.format.setBackground(QColor(0x7F, 0x77, 0xDD, 110));
-        view_->setExtraSelections({sel});
+        // active-span highlight via extra selections (never touches
+        // stored formats). Adam, 2026-08-12: the band is an X-RAY —
+        // terms NESTED inside the highlighted phrase render in
+        // progressively deeper golds (up to 3 tone steps), so the
+        // phrase's structure shows in place and ↓-stepping is
+        // previewed visually. Provisional nested terms keep their
+        // dashed-amber warning.
+        QList<QTextEdit::ExtraSelection> sels;
+        auto mkSel = [this](int beg, int end,
+                            const QColor& bg) {
+            QTextEdit::ExtraSelection x;
+            x.cursor = QTextCursor(view_->document());
+            x.cursor.setPosition(tokBeg_[beg]);
+            x.cursor.setPosition(tokEnd_[end - 1],
+                                 QTextCursor::KeepAnchor);
+            x.format.setBackground(bg);
+            return x;
+        };
+        if (clickMode) {
+            sels << mkSel(span.beg, span.end,
+                          e.provisional()
+                              ? QColor(0xE8, 0xC9, 0x8A, 190)
+                              : QColor(0xE9, 0xC4, 0x6A, 170));
+            // nested terms within the active phrase, tone by depth
+            struct Nested { int ix, beg, end, depth; };
+            std::vector<Nested> nested;
+            for (int i = 0; i < (int)doc_.spans.size(); ++i) {
+                const auto& sp = doc_.spans[i];
+                if (sp.beg >= span.beg && sp.end <= span.end &&
+                    !(sp.beg == span.beg && sp.end == span.end))
+                    nested.push_back({i, sp.beg, sp.end, 1});
+            }
+            for (auto& a : nested)
+                for (const auto& b : nested)
+                    if (b.beg <= a.beg && a.end <= b.end &&
+                        !(b.beg == a.beg && b.end == a.end))
+                        ++a.depth;
+            std::sort(nested.begin(), nested.end(),
+                      [](const Nested& a, const Nested& b) {
+                          return a.depth < b.depth;
+                      });
+            static const QColor tones[3] = {
+                QColor(0xDF, 0xAE, 0x45, 200),
+                QColor(0xD4, 0x9B, 0x26, 210),
+                QColor(0xC8, 0x89, 0x12, 220)};
+            for (const auto& nsp : nested) {
+                auto x = mkSel(nsp.beg, nsp.end,
+                               tones[qMin(nsp.depth, 3) - 1]);
+                if (doc_.entries[doc_.spans[nsp.ix].entry_ix]
+                        .provisional()) {
+                    x.format.setUnderlineStyle(
+                        QTextCharFormat::DashUnderline);
+                    x.format.setUnderlineColor(
+                        QColor(0xB4, 0x54, 0x0A));
+                }
+                sels << x;
+            }
+        } else {
+            sels << mkSel(span.beg, span.end,
+                          QColor(0x7F, 0x77, 0xDD, 110));
+        }
+        view_->setExtraSelections(sels);
 
         // breadcrumb of the nesting chain + entry + corpus count
         QString h = segmentationHtml(tok);
