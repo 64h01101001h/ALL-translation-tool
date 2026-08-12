@@ -204,6 +204,9 @@ static const IdiomMap* g_idioms = nullptr;
 // comparanda — its own tier, never Geshe Michael's English
 struct AiGloss {
     QString gloss, model, date, grounded, status;
+    QString pos, posSrc, sanskrit;
+    QStringList seeAlso;                       // real headwords only
+    QList<QPair<QString, QString>> senses;     // gloss, context
 };
 using AiGlossMap = std::map<std::string, AiGloss>;
 static const AiGlossMap* g_aiGlossary = nullptr;
@@ -453,21 +456,58 @@ static QString entryHtml(const allcore::Entry& e,
             if (g_aiGlossary) {
                 auto it = g_aiGlossary->find(e.wylie);
                 if (it != g_aiGlossary->end()) {
-                    h += "<div style='background:#EDE9F5;"
-                         "border-left:3px solid #7A5EA8;"
-                         "padding:3px 8px;margin:3px 0;"
-                         "border-radius:4px'>"
-                         "<small style='color:#4A2A6B;"
-                         "letter-spacing:1px'>ALL WORKING GLOSSARY "
-                         "— AI-DRAFTED, PROVISIONAL · not Geshe "
-                         "Michael's English</small><br>≡ " +
-                         it->second.gloss.toHtmlEscaped() +
-                         " <small style='color:#777'>[" +
-                         it->second.model.toHtmlEscaped() + " · " +
-                         it->second.date.toHtmlEscaped() +
-                         " · from " +
-                         it->second.grounded.toHtmlEscaped() +
-                         "]</small></div>";
+                    const AiGloss& a = it->second;
+                    QString b =
+                        "<div style='background:#EDE9F5;"
+                        "border-left:3px solid #7A5EA8;"
+                        "padding:4px 9px;margin:4px 0;"
+                        "border-radius:4px'>"
+                        "<small style='color:#4A2A6B;"
+                        "letter-spacing:1px'>ALL WORKING GLOSSARY "
+                        "— AI-DRAFTED, PROVISIONAL · not Geshe "
+                        "Michael's English</small><br>";
+                    if (!a.pos.isEmpty())
+                        b += "<span style='color:#A33;'>&lt;" +
+                             a.pos.toHtmlEscaped() +
+                             "&gt;</span> <small style='color:#777'>"
+                             "(" + a.posSrc.toHtmlEscaped() +
+                             ")</small> ";
+                    if (!a.senses.isEmpty()) {
+                        static const char* rn[] = {"I", "II", "III"};
+                        for (int si = 0; si < a.senses.size() &&
+                                          si < 3; ++si) {
+                            b += QString("<br><b>%1.</b> ")
+                                     .arg(rn[si]) +
+                                 a.senses[si].first.toHtmlEscaped();
+                            if (!a.senses[si].second.isEmpty())
+                                b += " — <span style='color:#333'>" +
+                                     a.senses[si]
+                                         .second.toHtmlEscaped() +
+                                     "</span>";
+                        }
+                    } else {
+                        b += "<br>≡ " + a.gloss.toHtmlEscaped();
+                    }
+                    if (!a.sanskrit.isEmpty())
+                        b += "<br><small style='color:#666'>"
+                             "sanskrit (LC): " +
+                             a.sanskrit.toHtmlEscaped() + "</small>";
+                    if (!a.seeAlso.isEmpty()) {
+                        b += "<br><small>see also: ";
+                        for (const QString& w : a.seeAlso)
+                            b += "<a href='term:" + anchorEnc(w) +
+                                 "'>" + w.toHtmlEscaped() +
+                                 "</a> · ";
+                        b.chop(3);
+                        b += "</small>";
+                    }
+                    b += "<br><small style='color:#777'>[" +
+                         a.model.toHtmlEscaped() + " · " +
+                         a.date.toHtmlEscaped() + " · from " +
+                         a.grounded.toHtmlEscaped() +
+                         " · q.v. links open the Lookup]</small>"
+                         "</div>";
+                    h += b;
                 }
             }
         }
@@ -935,6 +975,10 @@ static QWidget* makeLookupPane(allcore::Spine& spine, allcore::RefDict* ref,
             const QString s = u.toString();
             if (s.startsWith("das:")) {
                 showDasPage(pane, s.mid(4).toInt());
+                QMetaObject::invokeMethod(box, "returnPressed");
+            } else if (s.startsWith("term:")) {
+                // Working Glossary q.v. link: rerun the lookup here
+                box->setText(anchorPayload(s, 5));
                 QMetaObject::invokeMethod(box, "returnPressed");
             } else if (s.startsWith("propose:")) {
                 proposeTermDialog(
@@ -2186,6 +2230,13 @@ auto* secFmt = new QLabel("<span style='color:#9A7A33;font-size:10px;letter-spac
                     const QString s = u.toString();
                     if (s.startsWith("das:")) {
                         showDasPage(this, s.mid(4).toInt());
+                        return;
+                    }
+                    if (s.startsWith("term:")) {
+                        // Working Glossary q.v. link → Lookup with
+                        // the term already run
+                        if (g_lookupQuery)
+                            g_lookupQuery(anchorPayload(s, 5));
                         return;
                     }
                     if (s.startsWith("gloss:")) {
@@ -13411,12 +13462,25 @@ int main(int argc, char** argv) {
                 for (const auto& g :
                      e.value("grounded_in").toArray())
                     gr << g.toString();
-                aiGlossary[it.key().toStdString()] = AiGloss{
-                    e.value("gloss").toString(),
-                    e.value("model").toString(),
-                    e.value("date").toString(),
-                    gr.join("+"),
-                    e.value("status").toString()};
+                AiGloss a;
+                a.gloss = e.value("gloss").toString();
+                a.model = e.value("model").toString();
+                a.date = e.value("date").toString();
+                a.grounded = gr.join("+");
+                a.status = e.value("status").toString();
+                a.pos = e.value("pos").toString();
+                a.posSrc = e.value("pos_src").toString();
+                a.sanskrit = e.value("sanskrit").toString();
+                for (const auto& v :
+                     e.value("see_also").toArray())
+                    a.seeAlso << v.toString();
+                for (const auto& v : e.value("senses").toArray()) {
+                    const auto o2 = v.toObject();
+                    a.senses.append(
+                        {o2.value("gloss").toString(),
+                         o2.value("context").toString()});
+                }
+                aiGlossary[it.key().toStdString()] = a;
             }
         }
         if (!aiGlossary.empty()) g_aiGlossary = &aiGlossary;
@@ -14123,6 +14187,40 @@ int main(int argc, char** argv) {
         }
         // the Hunt palette answers across sources
         if (g_hunt) fails += g_hunt->selfTest(log);
+        // the Working Glossary deep entry renders (fixture; the
+        // wall: shown only because hgm_gloss is empty)
+        {
+            static AiGlossMap fixture;
+            if (fixture.empty()) {
+                AiGloss a;
+                a.gloss = "test gloss";
+                a.pos = "noun";
+                a.posSrc = "SOAS lexicon";
+                a.senses.append(qMakePair(QString("test gloss"),
+                                          QString("a context sentence.")));
+                a.seeAlso << "bsod nams";
+                a.model = "test";
+                a.date = "2026-08-12";
+                a.grounded = "hopkins";
+                a.status = "ai-draft";
+                fixture["zzz test term"] = a;
+            }
+            const auto* saved = g_aiGlossary;
+            g_aiGlossary = &fixture;
+            allcore::Entry fe;
+            fe.wylie = "zzz test term";
+            fe.status = "lc-layer";
+            const QString h = entryHtml(fe);
+            const bool ok = h.contains("ALL WORKING GLOSSARY") &&
+                            h.contains("<b>I.</b>") &&
+                            h.contains("see also") &&
+                            h.contains("term:");
+            g_aiGlossary = saved;
+            log << QString("  [%1] Working Glossary: deep entry "
+                           "renders with senses + q.v. links")
+                       .arg(ok ? "PASS" : "FAIL");
+            if (!ok) ++fails;
+        }
         // the Translator's Survey measures a known passage
         {
             const QString tmp =
