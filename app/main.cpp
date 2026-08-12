@@ -11385,19 +11385,35 @@ public:
         split->setStretchFactor(1, 1);
         outer->addWidget(split, 1);
 
-        // chapters from tutorials.md
-        QFile f(root + "/data/help/tutorials.md");
-        if (f.open(QIODevice::ReadOnly)) {
+        // chapters from tutorials.md, then the full User Manual
+        // (data/help/USER_MANUAL.md, "Manual: " prefix so the two
+        // Overlay chapters etc. never collide)
+        auto loadChapters = [this](const QString& path,
+                                   const QString& prefix,
+                                   bool skipHead) {
+            QFile f(path);
+            if (!f.open(QIODevice::ReadOnly)) return;
             const QString md = QString::fromUtf8(f.readAll());
-            for (const QString& part : md.split("\n## ")) {
+            const QStringList parts = md.split("\n## ");
+            for (int i = 0; i < parts.size(); ++i) {
+                if (skipHead && i == 0) continue;
+                QString part = parts[i];
                 const int nl = part.indexOf('\n');
                 if (nl < 0) continue;
                 QString title = part.left(nl).trimmed();
                 title.remove(QRegularExpression("^#+\\s*"));
-                chapters_[title] = "## " + part;
-                chapterOrder_ << title;
+                if (title.isEmpty() || title == "Contents") continue;
+                // a "# PART …" divider between manual chapters would
+                // otherwise trail the previous chapter's body
+                const int h1 = part.indexOf("\n# ");
+                if (h1 > 0) part = part.left(h1);
+                chapters_[prefix + title] = "## " + part;
+                chapterOrder_ << prefix + title;
             }
-        }
+        };
+        loadChapters(root + "/data/help/tutorials.md", "", false);
+        loadChapters(root + "/data/help/USER_MANUAL.md", "Manual: ",
+                     true);
         // auto-index every control in every pane — two-level aware:
         // top tabs are GROUPS holding inner pane tabs
         auto indexPane = [this](QWidget* w, const QString& pane,
@@ -11462,7 +11478,13 @@ public:
         return results_->count();
     }
     int chapterCount() const { return chapters_.size(); }
+    bool hasChapter(const QString& t) const {
+        return chapters_.contains(t);
+    }
     void openChapter(const QString& title) { showChapter(title); }
+    // the User Manual (Adam's total tutorial): filter the chapter
+    // list down to the manual's chapters; the first opens
+    void openManual() { search_->setText("Manual: "); }
     // the Workflows window opens listing EVERY workflow by name
     // (Adam, 2026-08-10); clicking one jumps the page to it
     void openWorkflows() {
@@ -12192,6 +12214,14 @@ int main(int argc, char** argv) {
             helpWin->activateWindow();
             helpWin->openWorkflows();
         });
+        QAction* um = helpMenu->addAction("User Manual…");
+        QObject::connect(um, &QAction::triggered, [&] {
+            if (!helpWin) helpWin = new HelpWindow(&tabs, root, &win);
+            helpWin->show();
+            helpWin->raise();
+            helpWin->activateWindow();
+            helpWin->openManual();
+        });
     }
 
     // --selftest: suite 38 — the real panes exercised against the
@@ -12284,6 +12314,15 @@ int main(int argc, char** argv) {
                            "name")
                        .arg(found ? "PASS" : "FAIL");
             if (!found) ++fails;
+            // the User Manual rides along as prefixed chapters
+            const bool manual = hw.hasChapter("Manual: Overlay") &&
+                                hw.hasChapter("Manual: Lookup") &&
+                                hw.hitCount("Manual: ") >= 40;
+            log << QString("  [%1] Help: User Manual chapters loaded "
+                           "(%2 chapters total)")
+                       .arg(manual ? "PASS" : "FAIL")
+                       .arg(hw.chapterCount());
+            if (!manual) ++fails;
         }
         {
             const bool ok = g_idioms && g_idioms->size() >= 5 &&
