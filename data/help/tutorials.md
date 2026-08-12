@@ -420,6 +420,32 @@ Everything the app remembers, in one dialog:
   (auto-detected). Data-folder and authority-role changes take
   effect on the next launch.
 
+## Troubleshooting
+
+*Where: the Help menu → Troubleshooting.*
+
+Everything a tester needs to file a useful finding in one click:
+
+- **Show Logs in Finder** — reveals the app's lifecycle log
+  (every launch, quit, and — with Verbose Logging on — every pane
+  switch is timestamped there).
+- **Show Data Folder in Finder** — opens the ALL Tool Data folder
+  (your glossaries, imported materials, proposals, caches).
+- **Copy Installation Info** — puts a one-line version/platform
+  summary on the clipboard for quick chat reports.
+- **Generate Diagnostic Report…** — writes a full report to your
+  Desktop (versions, data-file health, disk space, settings, the
+  log tail) and reveals it. Attach it to any bug report.
+- **Report a Problem…** — opens a pre-addressed email with a
+  what-happened template and your installation info filled in.
+- **Storage…** — shows what the caches weigh and clears the
+  reclaimable ones (woodblock scan cache, library search index).
+  Your texts and OCR output are never touched.
+- **Verbose Logging** — adds pane switches to the lifecycle log so
+  a report can say exactly where the app was.
+- **Reset Settings…** — every preference back to defaults (with a
+  confirmation; texts and data untouched; takes effect next launch).
+
 ## Suggested Workflows
 
 Recipes for putting the panes together. Each step names its tab path.

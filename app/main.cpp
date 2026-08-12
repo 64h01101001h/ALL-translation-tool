@@ -6,6 +6,8 @@
 #include <QCollator>
 #include <QElapsedTimer>
 #include <QEventLoop>
+#include <QClipboard>
+#include <QStorageInfo>
 #include <QHBoxLayout>
 #include <QInputDialog>
 #include <QTextDocumentFragment>
@@ -11631,13 +11633,42 @@ private:
         rows_.clear();
         const QString needle = q.trimmed();
         if (needle.isEmpty()) {
+            // the browse view (Adam, 2026-08-12): the full index is
+            // visible the moment the window opens — every chapter,
+            // then every control grouped under its pane — so a user
+            // who doesn't know a feature's NAME can still find it
+            // by scrolling
             for (const auto& t : chapterOrder_) {
                 results_->addItem("\U0001F4D6 " + t);
                 rows_.push_back({-1, t});
             }
-            body_->setMarkdown(
-                chapters_.value("Getting Started",
-                                "Welcome. Pick a chapter."));
+            QString lastPane;
+            for (int i = 0; i < (int)controls_.size(); ++i) {
+                const auto& c = controls_[i];
+                if (c.pane != lastPane) {
+                    lastPane = c.pane;
+                    auto* hdr = new QListWidgetItem(
+                        "— " + c.pane.toUpper() + " —");
+                    hdr->setFlags(Qt::NoItemFlags);
+                    hdr->setForeground(QColor("#9A7A33"));
+                    results_->addItem(hdr);
+                    rows_.push_back({-3, QString()});
+                }
+                results_->addItem("    " + c.label);
+                rows_.push_back({i, QString()});
+            }
+            if (chapterOrder_.isEmpty())
+                body_->setHtml(
+                    "<h2>Help chapters not found</h2><p>The file "
+                    "<code>data/help/tutorials.md</code> is missing "
+                    "from this installation's data folder — the "
+                    "feature index below the search box still works. "
+                    "Reinstall or refresh the ALL Tool Data folder "
+                    "to restore the written tutorials.</p>");
+            else
+                body_->setMarkdown(
+                    chapters_.value("Getting Started",
+                                    "Welcome. Pick a chapter."));
             return;
         }
         // chapters whose title or text match
@@ -12333,6 +12364,206 @@ int main(int argc, char** argv) {
             helpWin->activateWindow();
             helpWin->openManual();
         });
+
+        // ---- Troubleshooting (Adam, 2026-08-12, modeled on the
+        // Claude desktop app's Help menu he liked): everything a
+        // tester needs to file a useful finding in one click.
+        QMenu* trouble = helpMenu->addMenu("Troubleshooting");
+        const QString lifeLogPath = QDir::home().filePath(
+            "Library/Logs/ALLTranslationTool-lifecycle.log");
+        auto installInfo = [root]() {
+            return QString("ALL Translation Tool v%1 · Qt %2 · %3 · "
+                           "data: %4")
+                .arg(QStringLiteral(ALL_APP_VERSION), qVersion(),
+                     QSysInfo::prettyProductName(), root);
+        };
+        QObject::connect(
+            trouble->addAction("Show Logs in Finder"),
+            &QAction::triggered, [lifeLogPath] {
+                if (QFileInfo::exists(lifeLogPath))
+                    QProcess::startDetached("/usr/bin/open",
+                                            {"-R", lifeLogPath});
+                else
+                    QProcess::startDetached(
+                        "/usr/bin/open",
+                        {QDir::home().filePath("Library/Logs")});
+            });
+        QObject::connect(
+            trouble->addAction("Show Data Folder in Finder"),
+            &QAction::triggered, [root] {
+                QProcess::startDetached("/usr/bin/open", {root});
+            });
+        QObject::connect(
+            trouble->addAction("Copy Installation Info"),
+            &QAction::triggered, [installInfo] {
+                QApplication::clipboard()->setText(installInfo());
+            });
+        trouble->addSeparator();
+        auto buildDiagnostic = [root, lifeLogPath, installInfo]() {
+            QString r;
+            r += "ALL TRANSLATION TOOL — DIAGNOSTIC REPORT\n";
+            r += QDateTime::currentDateTime().toString(Qt::ISODate) +
+                 "\n\n";
+            r += installInfo() + "\n";
+            r += "app binary: " +
+                 QCoreApplication::applicationFilePath() + "\n\n";
+            r += "DATA FILES (present · size · modified)\n";
+            const QStringList keyFiles = {
+                "build/hgm_spine_v27_2.db",
+                "library/.index.db",
+                "data/help/tutorials.md",
+                "data/help/USER_MANUAL.md",
+                "data/teaching/teaching_moments_card.json",
+                "data/das/das_pages.json",
+                "data/fonts/NotoSerifTibetan.ttf"};
+            for (const QString& kf : keyFiles) {
+                QFileInfo fi(root + "/" + kf);
+                r += QString("  %1  %2  %3  %4\n")
+                         .arg(fi.exists() ? "OK " : "MISSING", kf)
+                         .arg(fi.exists()
+                                  ? QString::number(fi.size() / 1024) +
+                                        " KB"
+                                  : "-")
+                         .arg(fi.exists()
+                                  ? fi.lastModified().toString(
+                                        Qt::ISODate)
+                                  : "-");
+            }
+            QFileInfo md(root + "/library/ocr_models");
+            r += QString("  %1  library/ocr_models (folder)\n")
+                     .arg(md.isDir() ? "OK " : "MISSING");
+            QStorageInfo st(root);
+            r += QString("\nDISK: %1 GB free of %2 GB on %3\n")
+                     .arg(st.bytesAvailable() / 1000000000)
+                     .arg(st.bytesTotal() / 1000000000)
+                     .arg(QString::fromUtf8(st.rootPath().toUtf8()));
+            r += "\nSETTINGS\n";
+            QSettings s;
+            for (const QString& k : s.allKeys())
+                r += "  " + k + " = " +
+                     s.value(k).toString().left(120) + "\n";
+            r += "\nLIFECYCLE LOG (last 60 lines)\n";
+            QFile lf(lifeLogPath);
+            if (lf.open(QIODevice::ReadOnly)) {
+                const QStringList lines =
+                    QString::fromUtf8(lf.readAll()).split('\n');
+                for (int i = qMax(0, (int)lines.size() - 60);
+                     i < lines.size(); ++i)
+                    r += lines[i] + "\n";
+            } else
+                r += "  (no lifecycle log found)\n";
+            return r;
+        };
+        QObject::connect(
+            trouble->addAction("Generate Diagnostic Report…"),
+            &QAction::triggered, [&win, buildDiagnostic] {
+                const QString fn =
+                    QDir::home().filePath(
+                        "Desktop/ALL-Tool-Diagnostic-" +
+                        QDateTime::currentDateTime().toString(
+                            "yyyyMMdd-HHmmss") +
+                        ".txt");
+                QFile f(fn);
+                if (f.open(QIODevice::WriteOnly)) {
+                    f.write(buildDiagnostic().toUtf8());
+                    f.close();
+                    QProcess::startDetached("/usr/bin/open",
+                                            {"-R", fn});
+                } else
+                    QMessageBox::warning(&win, "Diagnostic report",
+                                         "Could not write to the "
+                                         "Desktop.");
+            });
+        QObject::connect(
+            trouble->addAction("Report a Problem…"),
+            &QAction::triggered, [installInfo] {
+                const QString body =
+                    "What I did:\n\nWhat I expected:\n\nWhat "
+                    "happened instead:\n\n(Please also attach a "
+                    "diagnostic report — Help > Troubleshooting > "
+                    "Generate Diagnostic Report.)\n\n--\n" +
+                    installInfo();
+                QDesktopServices::openUrl(QUrl(
+                    "mailto:adam.derick.andrade@gmail.com?subject=" +
+                    QString(QUrl::toPercentEncoding(
+                        "ALL Tool problem report (v" +
+                        QStringLiteral(ALL_APP_VERSION) + ")")) +
+                    "&body=" +
+                    QString(QUrl::toPercentEncoding(body))));
+            });
+        trouble->addSeparator();
+        QObject::connect(
+            trouble->addAction("Storage…"),
+            &QAction::triggered, [&win, root] {
+                auto dirSize = [](const QString& d) {
+                    qint64 n = 0;
+                    QDirIterator it(d, QDir::Files,
+                                    QDirIterator::Subdirectories);
+                    while (it.hasNext()) {
+                        it.next();
+                        n += it.fileInfo().size();
+                    }
+                    return n;
+                };
+                const QString scanDir = root + "/library/scan_cache";
+                const QString ixFile = root + "/library/.index.db";
+                const qint64 scanB = dirSize(scanDir);
+                const qint64 ixB = QFileInfo(ixFile).size();
+                const qint64 ocrB = dirSize(root + "/library/ocr_out");
+                QMessageBox box(&win);
+                box.setWindowTitle("Storage");
+                box.setText(QString(
+                    "Reclaimable space in the data folder:\n\n"
+                    "Woodblock scan cache: %1 MB (redownloads as "
+                    "you view)\n"
+                    "Library search index: %2 MB (rebuild with "
+                    "“Update search index”)\n\n"
+                    "Not touched here: your OCR output (%3 MB) and "
+                    "all texts.")
+                    .arg(scanB / 1048576)
+                    .arg(ixB / 1048576)
+                    .arg(ocrB / 1048576));
+                auto* clearScan = box.addButton(
+                    "Clear scan cache", QMessageBox::ActionRole);
+                auto* clearIx = box.addButton(
+                    "Clear search index", QMessageBox::ActionRole);
+                box.addButton(QMessageBox::Close);
+                box.exec();
+                if (box.clickedButton() == clearScan) {
+                    QDir(scanDir).removeRecursively();
+                    QMessageBox::information(
+                        &win, "Storage", "Scan cache cleared.");
+                } else if (box.clickedButton() == clearIx) {
+                    QFile::remove(ixFile);
+                    QMessageBox::information(
+                        &win, "Storage",
+                        "Search index cleared — run “Update "
+                        "search index” in the Library to "
+                        "rebuild it.");
+                }
+            });
+        QAction* verboseA = trouble->addAction("Verbose Logging");
+        verboseA->setCheckable(true);
+        verboseA->setChecked(
+            QSettings().value("troubleshoot/verbose", false).toBool());
+        QObject::connect(verboseA, &QAction::toggled, [](bool on) {
+            QSettings().setValue("troubleshoot/verbose", on);
+        });
+        QObject::connect(
+            trouble->addAction("Reset Settings…"),
+            &QAction::triggered, [&win] {
+                if (QMessageBox::question(
+                        &win, "Reset settings",
+                        "Reset every preference (fonts, toggles, "
+                        "saved searches, team identity) to "
+                        "defaults? Your texts and data are not "
+                        "touched. Takes effect on the next "
+                        "launch.") == QMessageBox::Yes) {
+                    QSettings s;
+                    s.clear();
+                    s.sync();
+                }
+            });
     }
 
     // --selftest: suite 38 — the real panes exercised against the
@@ -12434,6 +12665,14 @@ int main(int argc, char** argv) {
                        .arg(manual ? "PASS" : "FAIL")
                        .arg(hw.chapterCount());
             if (!manual) ++fails;
+            // the browse view: everything visible before any search
+            const int browse = hw.hitCount("");
+            const bool browseOk = browse > 250;
+            log << QString("  [%1] Help: browse list populated on "
+                           "open (%2 rows)")
+                       .arg(browseOk ? "PASS" : "FAIL")
+                       .arg(browse);
+            if (!browseOk) ++fails;
         }
         {
             const bool ok = g_idioms && g_idioms->size() >= 5 &&
@@ -12692,6 +12931,17 @@ int main(int argc, char** argv) {
                                          .arg(win.isVisible())
                                          .arg(QApplication::activeWindow()
                                                   != nullptr));
+                         });
+        // Verbose Logging (Help > Troubleshooting): pane switches
+        // land in the same log, so a report can say exactly where
+        // the app was when something went wrong
+        QObject::connect(&tabs, &QTabWidget::currentChanged,
+                         [lifeLog, &tabs](int ix) {
+                             if (QSettings()
+                                     .value("troubleshoot/verbose",
+                                            false)
+                                     .toBool())
+                                 lifeLog("pane: " + tabs.tabText(ix));
                          });
     }
     return app.exec();
