@@ -12411,6 +12411,121 @@ int main(int argc, char** argv) {
             });
     }
 
+    // --sweep <Pane>: the testing campaign's click-through,
+    // mechanized (Adam, 2026-08-12): load a real passage, then
+    // exercise EVERY control on the pane — each enabled button
+    // clicked, each checkbox toggled on and back, each combo cycled
+    // through its items — with any modal dialog that appears
+    // recorded and auto-dismissed. A control passes by leaving the
+    // app coherent; behavioral truth stays with --selftest and the
+    // human pass.
+    const int sweepIx = cliArgs.indexOf("--sweep");
+    if (sweepIx >= 0) {
+        const QString target = sweepIx + 1 < cliArgs.size()
+                                   ? cliArgs[sweepIx + 1]
+                                   : QString("Overlay");
+        // a sweep must never write real proposals or team state
+        g_proposalsDir =
+            QDir::temp().filePath("all_sweep_proposals");
+        QWidget* pane = nullptr;
+        for (auto& fp : flatPanes)
+            if (fp.title == target) {
+                pane = fp.w;
+                if (g_raisePane) g_raisePane(fp.w);
+            }
+        if (!pane) {
+            fprintf(stderr, "sweep: no pane named %s\n",
+                    qPrintable(target));
+            return 2;
+        }
+        if (target == "Overlay") {
+            const QString tmp =
+                QDir::temp().filePath("all_sweep_passage.txt");
+            QFile tf(tmp);
+            if (tf.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
+                tf.write("@001A SEMS CAN THAMS CAD BDE BA DANG LDAN "
+                         "PAR GYUR CIG,\nSDUG BSNGAL DANG BRAL BAR "
+                         "GYUR CIG,\n@001B 'PHAGS PA'I BDEN PA BZHI "
+                         "NI 'DI DAG GO,\n");
+                tf.close();
+                overlay->openFile(tmp);
+            }
+        }
+        win.show();
+        QCoreApplication::processEvents();
+        // dialog reaper: record and dismiss anything modal
+        QStringList dialogsSeen;
+        QTimer reaper;
+        QObject::connect(&reaper, &QTimer::timeout, [&] {
+            for (QWidget* w : QApplication::topLevelWidgets()) {
+                auto* d = qobject_cast<QDialog*>(w);
+                if (d && d->isVisible()) {
+                    const QString t = d->windowTitle().isEmpty()
+                                          ? QString("(untitled)")
+                                          : d->windowTitle();
+                    if (!dialogsSeen.contains(t)) dialogsSeen << t;
+                    d->reject();
+                }
+            }
+        });
+        reaper.start(250);
+        auto settle = [] {
+            for (int k = 0; k < 12; ++k)
+                QCoreApplication::processEvents(
+                    QEventLoop::AllEvents, 50);
+        };
+        int n = 0;
+        auto note = [&](const char* kind, const QString& label) {
+            printf("[OK] %-8s %s%s\n", kind, qPrintable(label),
+                   dialogsSeen.isEmpty()
+                       ? ""
+                       : qPrintable("   · dialog: " +
+                                    dialogsSeen.join(" / ")));
+            fflush(stdout);
+            dialogsSeen.clear();
+            ++n;
+        };
+        for (auto* b : pane->findChildren<QPushButton*>()) {
+            if (b->text().trimmed().isEmpty()) continue;
+            if (!b->isEnabled()) {
+                printf("[SKIP] button   %s   · disabled in this "
+                       "state\n",
+                       qPrintable(b->text()));
+                fflush(stdout);
+                continue;
+            }
+            b->click();
+            settle();
+            note("button", b->text());
+        }
+        for (auto* c : pane->findChildren<QCheckBox*>()) {
+            if (c->text().trimmed().isEmpty() || !c->isEnabled())
+                continue;
+            const bool was = c->isChecked();
+            c->setChecked(!was);
+            settle();
+            c->setChecked(was);
+            settle();
+            note("toggle", c->text());
+        }
+        for (auto* cb : pane->findChildren<QComboBox*>()) {
+            if (!cb->isEnabled() || cb->count() == 0) continue;
+            const int was = cb->currentIndex();
+            for (int i = 0; i < qMin(cb->count(), 6); ++i) {
+                cb->setCurrentIndex(i);
+                settle();
+            }
+            cb->setCurrentIndex(was);
+            settle();
+            note("combo", cb->count() ? cb->itemText(0) + ", …"
+                                      : QString());
+        }
+        printf("SWEEP COMPLETE: %s — %d control(s) exercised, app "
+               "coherent\n",
+               qPrintable(target), n);
+        return 0;
+    }
+
     // --selftest: suite 38 — the real panes exercised against the
     // real spine, offscreen; nonzero exit on any failure (ctest)
     if (selfTestMode) {

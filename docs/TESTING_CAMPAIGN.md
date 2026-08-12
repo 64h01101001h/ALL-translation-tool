@@ -224,6 +224,17 @@ end to end exactly as written)
   was already redundant (GoferPane's library folder row uses the
   index). The superseded makeSearchPane deleted (234 lines).
   Selftest guards the row; manual + tutorials corrected to match.
+- 2026-08-12 · Overlay · MECHANIZED CLICK-THROUGH (Adam's kickoff:
+  "run tests with each one of the buttons/fields on the overlay
+  page"): new `--sweep <Pane>` harness loads a real passage
+  offscreen, clicks every enabled button, toggles every checkbox on
+  and back, cycles every combo, auto-dismissing and recording any
+  dialog. Overlay result: 26 controls exercised, 0 crashes, all
+  empty-state edges graceful (folio nav w/o volume, OCR locate w/o
+  follow-along, galleries w/o cache all no-op politely with
+  guidance dialogs). Sweep is repeatable per pane; heavier panes
+  need per-button stall guards before sweeping (Library's index
+  rebuild would block minutes).
 
 # CURATION RULINGS
 *(pane · what stays / what pares / format decision)*
