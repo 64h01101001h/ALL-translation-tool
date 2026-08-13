@@ -1226,18 +1226,25 @@ always know how your match was found:
    sound and finds *byang chub*, with the green note "matched by
    **pronunciation** (GMR convention) — no exact headword for
    'jangchub'".
-5. **A community spelling**: type `gonpa`. The colloquial register
+5. **The authority's ruled form**: when a pronunciation ruling has
+   been approved (say *kamdir* for *skabs 'dir*), typing the RULED
+   form finds its entry even though the release index only knows
+   the engine's baseline — noted as "matched by the authority's
+   **ruled pronunciation** ⟪ruled⟫". Rulings reach every surface:
+   the whole-text pronunciation view, the entry card's pron line
+   (green ⟪ruled⟫ tag), and search.
+6. **A community spelling**: type `gonpa`. The colloquial register
    widens the search and finds *dgon pa*, noting "matched by
    **colloquial pronunciation** (community usage register)". The
    register only widens lookup — the GMR convention stays canonical.
-6. **English, in reverse**: type an English word (say `suffering`)
+7. **English, in reverse**: type an English word (say `suffering`)
    and the results end with an **English → Tibetan** section from
    the HGM reverse index: each Tibetan candidate with its
    pronunciation and its tier label — `[HGM (curated)]`,
    `[HGM (glossary)]`, or a red `[PROVISIONAL]` for auto-aligned
    matches, which are candidates, not rulings.
 
-7. **Affix-stripping fallback**: type `po'i`. There is no such
+8. **Affix-stripping fallback**: type `po'i`. There is no such
    headword, so the pane strips the affixed particle and shows
    *po*, with the note "no entry for 'po'i' — showing **po**
    (affixed particle stripped)". Nothing is silently substituted —
