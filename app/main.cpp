@@ -577,7 +577,12 @@ static QString entryHtml(const allcore::Entry& e,
                          a.model.toHtmlEscaped() + " · " +
                          a.date.toHtmlEscaped() + " · from " +
                          a.grounded.toHtmlEscaped() +
-                         " · q.v. links open the Lookup]</small>"
+                         " · q.v. links open the Lookup]</small>";
+                    b += "<br><small><a href='proposeai:" +
+                         anchorEnc(QString::fromStdString(
+                             e.wylie)) +
+                         "'>review & promote this draft to the "
+                         "authority…</a></small>"
                          "</div>";
                     h += b;
                 }
@@ -1143,6 +1148,38 @@ static void proposeTermDialog(QWidget* parent, const QString& wylie,
     fileProposal(parent, kind, wylie, value, field, evidence);
 }
 
+// the Working Glossary's promotion lane (closes task #17's app
+// side): an AI-drafted entry may be PROMOTED into a real proposal
+// for the authority — the human reviews and may edit the gloss,
+// then it files as an ordinary word-rendering proposal whose
+// evidence records the draft's full provenance. The draft itself
+// never touches the dictionary; only the approved proposal can.
+static void promoteAiDraftDialog(QWidget* parent,
+                                 const QString& wylie) {
+    if (!g_aiGlossary) return;
+    auto it = g_aiGlossary->find(wylie.toStdString());
+    if (it == g_aiGlossary->end()) return;
+    const AiGloss& a = it->second;
+    bool ok = false;
+    const QString value = QInputDialog::getText(
+        parent, "Promote AI draft to the authority",
+        "Review the draft rendering for “" + wylie +
+            "” — edit freely; filing sends it to the "
+            "Approval queue as YOUR proposal:",
+        QLineEdit::Normal, a.gloss, &ok);
+    if (!ok || value.trimmed().isEmpty()) return;
+    const QString evidence =
+        "Promoted from the ALL Working Glossary AI draft (" +
+        a.model + ", " + a.date + "; grounded in " + a.grounded +
+        " — reference comparanda only, never Geshe Michael's "
+        "English). Reviewed" +
+        (value.trimmed() == a.gloss.trimmed() ? "" : " and edited") +
+        " by the proposer before filing.";
+    loadIdentity();
+    fileProposal(parent, allcore::ProposalKind::WordRendering,
+                 wylie, value.trimmed(), QString(), evidence);
+}
+
 static std::function<void(QWidget*)> g_raisePane;
 // sweep mode opens no native OS panels — the sweep reaper can
 // reject QDialogs but not NSOpenPanel, so dialog-opening lanes
@@ -1267,6 +1304,9 @@ static QWidget* makeLookupPane(allcore::Spine& spine, allcore::RefDict* ref,
                     pane, anchorPayload(s, 8),
                     "looked up in the dictionary (Lookup pane)");
                 // re-run the search: the browser navigated away on click
+                QMetaObject::invokeMethod(box, "returnPressed");
+            } else if (s.startsWith("proposeai:")) {
+                promoteAiDraftDialog(pane, anchorPayload(s, 10));
                 QMetaObject::invokeMethod(box, "returnPressed");
             }
         });
@@ -2542,6 +2582,9 @@ auto* secScan = new QLabel("<span style='color:#9A7A33;font-size:10px;letter-spa
                         }
                     } else if (s.startsWith("propose:")) {
                         proposeFromCard(anchorPayload(s, 8));
+                    } else if (s.startsWith("proposeai:")) {
+                        promoteAiDraftDialog(this,
+                                             anchorPayload(s, 10));
                     } else if (s.startsWith("http")) {
                         QDesktopServices::openUrl(u);
                     }
@@ -7599,6 +7642,14 @@ static QWidget* makeConvertPane(allcore::Mvp* mvp,
                  "engine cannot legally convert — flagged, never guessed</i></td></tr>";
         h += "<tr><td><b>phonetics</b></td><td style='font-size:18px'>" +
              QString::fromStdString(pron).toHtmlEscaped() + "</td></tr>";
+        // the scholarly transcription beside the house convention
+        // (engine proven 139/139 on the standard's own examples)
+        const std::string thl = allcore::thlPhonetics(wylie);
+        h += "<tr><td><b>THL phonetics</b></td>"
+             "<td style='font-size:15px'>" +
+             QString::fromStdString(thl).toHtmlEscaped() +
+             " <small style='color:#777'>(Germano &amp; Tournadre, "
+             "THL)</small></td></tr>";
         h += "</table>";
         if (mvp) h += mvpHtml(mvp->byWylie(wylie));
         out->setHtml(h);
