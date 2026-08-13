@@ -1379,6 +1379,16 @@ public:
                   "approved pronunciation ruling overrides the "
                   "engine (kamdir)");
             g_pronApproved = saved;
+            // THL Simplified Phonetics mode (engine proven by its
+            // own ctest battery; here: the UI wiring renders it)
+            scriptMode_->setCurrentIndex(4);
+            input_->setPlainText(
+                "BSOD NAMS KYI, ZHVA SER BON PO,");
+            loadDoc();
+            const QString thl = view_->toPlainText();
+            check(thl.contains(QString::fromUtf8("sö")) &&
+                      thl.contains(QString::fromUtf8("bön")),
+                  "THL phonetics mode renders (sö/bön umlauts)");
             scriptMode_->setCurrentIndex(0);
         }
         // the 84000 glossary layer answers a canonical term
@@ -2042,14 +2052,24 @@ auto* secScan = new QLabel("<span style='color:#9A7A33;font-size:10px;letter-spa
         scriptRow->addWidget(new QLabel("text as"));
         scriptMode_ = new QComboBox;
         scriptMode_->addItems({"Tibetan script", "ACIP", "Wylie",
-                               "Pronunciation (GMR)"});
+                               "Pronunciation (GMR)",
+                               "Pronunciation (THL)"});
         scriptMode_->setItemData(
             3,
             "The whole text as Geshe Michael-convention phonetics — "
             "the same battery-proven engine as the cards, with its "
             "own word segmentation (syllables that merge into one "
-            "spoken word render once, junctions correct). A THL-"
-            "scheme option is planned.",
+            "spoken word render once, junctions correct).",
+            Qt::ToolTipRole);
+        scriptMode_->setItemData(
+            4,
+            "THL Simplified Phonetics (Germano & Tournadre, THL) — "
+            "the scholarly transcription, rendered per syllable in "
+            "THL's own interim machine convention (word-final é "
+            "and ba→wa apply only where word boundaries are "
+            "known). Engine proven against the standard's own "
+            "example battery; unresolvable syllables show ⟨wylie⟩, "
+            "never guesses.",
             Qt::ToolTipRole);
         scriptMode_->setCurrentIndex(
             // default: ACIP transliteration — the input centers'
@@ -2534,6 +2554,21 @@ private:
                 if (disp.isEmpty()) disp = QString::fromStdString(doc_.tokens[i]);
             } else if (mode == 2) {
                 disp = QString::fromStdString(tokEwts(doc_.tokens[i]));
+            } else if (mode == 4) {
+                // THL Simplified Phonetics, per syllable (THL's
+                // documented interim machine mode); non-letter
+                // tokens (markers, numbers) pass through raw
+                bool letters = !doc_.tokens[i].empty();
+                for (unsigned char c : doc_.tokens[i])
+                    if (!std::isalpha(c) && c != '\'' && c != '+' &&
+                        c != '-' && c != '.')
+                        letters = false;
+                disp = letters
+                           ? QString::fromStdString(
+                                 allcore::thlPhonetics(
+                                     tokEwts(doc_.tokens[i]),
+                                     /*wordFinal=*/false))
+                           : QString::fromStdString(doc_.tokens[i]);
             } else {
                 disp = QString::fromStdString(
                     docIsWylie_ ? allcore::ewtsToAcip(doc_.tokens[i])

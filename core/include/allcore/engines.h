@@ -60,4 +60,15 @@ struct PronSegWord {
 };
 std::vector<PronSegWord> pronounceSegmented(const std::string& wylie);
 
+// THL Simplified Phonetic Transcription (Germano & Tournadre 2003,
+// THL) — implemented rule-for-rule from the captured standard
+// (docs/research/THL/language_tools.md §2); proven by
+// tests/thl_battery.cpp against the standard's own examples and
+// its complete 19-word exception list. Unknown structures return
+// ⟨wylie⟩, never guesses. wordFinal=false gives THL's documented
+// interim per-syllable machine mode (word-final é / ba>wa
+// suppressed where word boundaries are unknown).
+std::string thlPhonetics(const std::string& wylie,
+                         bool wordFinal = true);
+
 }  // namespace allcore

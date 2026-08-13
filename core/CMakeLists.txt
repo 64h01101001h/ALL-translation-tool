@@ -35,6 +35,7 @@ add_library(allcore STATIC
   src/gofer.cpp
   src/acip_ewts.cpp
   src/pron_engine.cpp
+  src/thl_phonetics.cpp
   src/ewts_unicode.cpp
   src/spellcheck.cpp
   src/refdict.cpp
@@ -71,6 +72,9 @@ add_test(NAME analysis_smoke
 
 add_executable(engines_battery tests/engines_battery.cpp)
 target_link_libraries(engines_battery PRIVATE allcore)
+add_executable(thl_battery tests/thl_battery.cpp)
+target_link_libraries(thl_battery PRIVATE allcore)
+add_test(NAME thl_battery COMMAND thl_battery)
 add_test(NAME engines_battery
          COMMAND engines_battery ${CMAKE_SOURCE_DIR}/build/hgm_spine_v27_2.db
                  ${CMAKE_SOURCE_DIR}/build/pron_reference.tsv
