@@ -990,12 +990,17 @@ implementation is sidelined HERE from this date. What this means:
       credits "THL Simplified Phonetics (Germano & Tournadre, THL)".
       Policy decision documented at port: thun→tün (rules 2+3 over
       the source's own contradictory example).
-- [~] **THL Degé concordance harvest** — RUNNING: ~1,118 records
-      via cat_reader.php (gentle, resume-safe) →
-      data/extracted/thl_dege_records/; NEXT: parse titles → match
-      BDRC Toh-keyed Wylie labels → thl_dege_concordance.json →
-      only then THL catalog deep-links (numeric Toh=THL REFUTED,
-      see docs/research/THL/dege_tohoku_verification.md).
+- [x] **THL Degé concordance** — COMPLETE 2026-08-13: all 1,118
+      records harvested (3 passes vs their throttle) + 1,118 BDRC
+      Toh labels → data/extracted/thl_dege_concordance.json: 919
+      verified mappings (543 exact / 374 guarded-containment / 2
+      particle-fold), 33 ambiguous + 166 unmatched listed honestly
+      (THL-only insertions incl. D.8/D.361/D.543), ZERO order
+      inversions, offsets reproduce the live verification.
+      NEXT (new item): wire THL catalog deep-links through the
+      concordance (Library/Lookup: a Toh-numbered text links to
+      old.thlib.org catalog.php#cat=d/<THL#> via the mapping —
+      never numerically).
 - [ ] **Transcriber pilot** (needs Adam's go + account): <$20 on
       ~10 Tibetan-dense videos, ElevenLabs Scribe v2 vs AssemblyAI
       (± Soniox/Speechmatics), scored on Tibetan-term recall;
