@@ -404,6 +404,13 @@ implementation is sidelined HERE from this date. What this means:
       diff-battery, bophono MST IPA as a phonological cross-check;
       display mode joins the existing "text as" combo beside
       Pronunciation (GMR). Port-and-prove, never approximate.
+      **PORT-READY 2026-08-12**: the full standard is captured in
+      docs/research/THL/language_tools.md — 30-consonant map, all
+      16 rules with examples, exception classes, the 33-example
+      battery, the 19-word exception list (b13 confirmed empty in
+      the source; thun/thün internal contradiction flagged for
+      port-time resolution). Battery-first port can start any
+      session.
 - [~] **THL FULL-SITE KNOWLEDGE SWEEP** (Adam, 2026-08-12: "read
       the entirety of the Tibetan & Himalayan Library's website…
       everything useful to have in your back pocket" — documents,
