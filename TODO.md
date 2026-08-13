@@ -32,6 +32,18 @@ implementation is sidelined HERE from this date. What this means:
 
 ## Waiting on Adam (prompt him when the task starts)
 
+- [ ] **Confirm the pronunciation of LE'UR** (Adam's own note-to-self,
+      2026-08-13). His live ruling put the phrase pron at
+      "tsema namdrel gyi tsik le'ur jepa" ("lay-oohr"), but he wants
+      to CONFIRM le'ur itself before it hardens. On confirmation,
+      also rule whether it generalizes: 465 dictionary entries carry
+      an 'a-chung+u syllable of this class (le'ur, mtha'ur…) — if
+      general, implement as a DISPLAY-layer transform (engine stays
+      battery-locked canonical) and check against the banked ACIP
+      pronunciation standard (docs/standards/
+      ACIP_PRONUNCIATION_STANDARD.md). Ruling row:
+      pronunciation-2026-08-13-adam-1 in data/proposals/proposals.tsv.
+
 - [ ] **Send the 84000 license email** (drafted, docs/drafts/
       EMAIL_84000_license.md — resolves the CC-BY-4.0 vs BY-NC-ND
       discrepancy; unlocks the best-licensed aligned Ti–En dataset in
