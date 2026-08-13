@@ -550,6 +550,35 @@ land in the right pane with the query already run — or the
 recording already playing. Deterministic lookups only; nothing
 fuzzy, nothing guessed.
 
+## Jump to the Woodblock
+
+*Goal: select a phrase in a text and see it on the carving.*
+
+1. Read → Library → double-click a Kangyur text (KD0016, the
+   Diamond Cutter, is a good first choice).
+2. In the SCANS column press **Follow along in scans** — the
+   woodblock pages open beneath the text and follow your cursor.
+3. Select a few words anywhere in the document and **right-click**.
+   The menu names your position: *folio 94a · line 3/7* — read
+   from the text's own @folio markers, never guessed.
+4. Choose **Locate selection on the woodblock…** The full scan
+   viewer opens on that folio with your words boxed on the carving
+   (OCR is used only to find the boxes; anything it can't find is
+   named beside the breadcrumb).
+5. In the viewer, click the page to zoom in at that spot, drag to
+   pan, pinch or ⌘-scroll to zoom. Click the work name in the
+   breadcrumb for the whole-work scroll view, and tick **Show
+   e-text** to lay each side's keying beneath its image.
+6. Back in the text, right-click again → **Download all folio
+   scans** — after that everything above works offline, and the
+   Input workflow can open the same folder as a keying block in
+   folio order.
+
+*In the Input workflow*: select some typed ACIP and right-click →
+**Locate selection on the scan (OCR)** boxes your words on the
+page you are keying; **Jump to this folio's scan** turns the
+viewer to the side your @marker names.
+
 ## Troubleshooting
 
 *Where: the Help menu → Troubleshooting.*

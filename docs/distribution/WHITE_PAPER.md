@@ -315,6 +315,27 @@ writes a complete diagnostic report — versions, data health, the
 app's own log — and another opens a pre-addressed problem report,
 so a tester's finding arrives ready to act on.
 
+## 7½. Text ↔ woodblock synchronization (added August 13)
+
+The suite now closes the loop between the digital text and the
+carving it came from. Because the input centers preserved @folio
+markers and the woodblock's own lineation (one typed line per
+carved line), and because BDRC's IIIF manifests label every scan
+with its folio side, the mapping from a selected phrase to its
+folio, line, and image is deterministic end to end. Optical
+recognition is confined to the last inch — locating the words
+within the line — and is never surfaced as text.
+
+On that foundation: a right-click jump from any text to the
+reading panel, the keying workflow, or a full archive-grade scan
+viewer (two levels, direct manipulation, a self-completing
+thumbnail rail, display-only image adjustment for faint
+carvings); a folio-named offline store shared by reading and
+keying; folio-faithful per-side exports that cannot disagree with
+the markers they derive from; and the same locate power inside
+the keying room, where the typists' line convention makes the
+search order exact.
+
 ## 8. What comes next
 
 - **The registers grow under review.** A class of

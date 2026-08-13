@@ -2235,6 +2235,27 @@ public:
                       sides[1].second.contains("B LINE 3"),
                   "scan-sync: folio-faithful split yields "
                   "001a/001b sides");
+            // wylie files carry lowercase markers (@001a) — the
+            // resolver is case-insensitive
+            const QString lo =
+                "@001a bcom ldan 'das\nline two\n@001b side b\n";
+            input_->setPlainText(lo);
+            const auto l3 = resolveFolioAt(lo.indexOf("line two"));
+            check(l3.folio == "1a" && l3.line == 2,
+                  "scan-sync: lowercase @folio markers resolve");
+            // IIIF thumbnail rewrite — the exact URL shape verified
+            // against the live BDRC server 2026-08-13 (HTTP 200)
+            check(iiifThumbUrl("https://iiif.bdrc.io/bdr:I0886::"
+                               "08860003.tif/full/max/0/"
+                               "default.png") ==
+                      "https://iiif.bdrc.io/bdr:I0886::"
+                      "08860003.tif/full/,120/0/default.png",
+                  "scan viewer: IIIF thumb rewrite matches the "
+                  "live-verified shape");
+            check(iiifThumbUrl("https://example.com/plain.jpg")
+                      .isEmpty(),
+                  "scan viewer: non-IIIF URL yields no thumb "
+                  "(never guessed)");
         }
         {
             // #62 logic: a left side-panel and a big inter-line gap

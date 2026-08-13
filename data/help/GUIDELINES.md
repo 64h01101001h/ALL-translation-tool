@@ -179,6 +179,34 @@ treats pronunciation as derived data with an authority lane:
 - *Source: THL Toolbox scanning/photography specs + Degé deep
   cataloging form (docs/research/THL/toolbox_standards.md).*
 
+## Text ↔ scan synchronization (protocol)
+
+- **The markers are the authority.** A text's position on the
+  woodblock is derived from its own @folio markers and the
+  preserved line breaks (one typed line per carved line — the
+  input centers' convention). Never re-derive folio or line from
+  OCR when markers exist; never edit markers to "fix" a mismatch
+  without checking the scan — the marker is usually right.
+- **Folio → image comes from the archive's catalog.** BDRC's IIIF
+  manifests label each image with its folio side; the app maps
+  through those labels and never assumes image order equals folio
+  order (title pages and inserts break that assumption).
+- **OCR locates; it never testifies.** Word boxes may be used to
+  find text on a carving. Recognized text is review material only
+  and is never displayed or exported as the text itself.
+- **Downloads are folio-named** (`094a.jpg`) into
+  `library/scans/<work>/` — one store serving both reading
+  (follow-along, viewer) and keying (Input block). Keep it; it is
+  the offline ground truth for the volume.
+- **Folio-faithful exports** (one file per side, `001a.txt`) are
+  derived from markers and therefore safe as keying and
+  OCR-comparison targets. Regenerate them after edits; never edit
+  the per-side files directly (the document is the source).
+- **Attribution**: BDRC scan imagery is used with its own license
+  terms (shown in the viewer's ⓘ); public-domain volumes are
+  labeled as such. Thumbnails are fetched at reduced size, one
+  request at a time — be a polite guest on the archive's servers.
+
 ## Catalogs & provenance
 
 - **One text, many witnesses**: catalog identity (ACIP number,
