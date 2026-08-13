@@ -91,6 +91,10 @@
 #include <QDateTime>
 #include <QStandardPaths>
 #include <QTimer>
+#include <QPointer>
+#include <QWidgetAction>
+#include <QToolButton>
+#include <QSlider>
 #include <QStyleHints>
 #include <QMainWindow>
 #include <QMenuBar>
@@ -2525,6 +2529,13 @@ public:
                         connect(dl, &QAction::triggered,
                                 [this] { downloadAllFolios(); });
                         pre << dl;
+                        auto* vw = new QAction(
+                            "Open scan viewer (window)…", menu);
+                        connect(vw, &QAction::triggered,
+                                [this, loc] {
+                                    openWoodblockViewer(loc.folio);
+                                });
+                        pre << vw;
                     } else if (scanBtn_ && scanBtn_->isEnabled()) {
                         auto* follow = new QAction(
                             "Link the scans first (Follow along in "
@@ -2699,6 +2710,16 @@ auto* secScan = new QLabel("<span style='color:#9A7A33;font-size:10px;letter-spa
         scanNav_ = nav;
         scanNav_->hide();
         ll->addWidget(nav);
+        auto* viewerB = new QPushButton("Scan viewer (window)…");
+        viewerB->setIcon(miniIcon("image"));
+        viewerB->setToolTip(
+            "The full scan viewer in its own window — thumbnail "
+            "rail, dark canvas, go-to, zoom, pan, brightness/"
+            "contrast, downloads. Modeled on BDRC's own viewer.");
+        ll->addWidget(viewerB);
+        connect(viewerB, &QPushButton::clicked, [this] {
+            openWoodblockViewer(curFolio_);
+        });
         connect(prevB, &QPushButton::clicked, [this] { stepFolio(-1); });
         connect(nextB, &QPushButton::clicked, [this] { stepFolio(+1); });
         connect(input_, &QPlainTextEdit::cursorPositionChanged,
@@ -5043,6 +5064,382 @@ private:
         dlg->show();
     }
 #endif
+
+    // ---- the BUDA-style scan viewer (Adam's screenshot spec,
+    // docs/design/SCAN_VIEWER_BUDA_REFERENCE.md; "or you can try to
+    // build it now"): thumbnail rail · dark canvas, page on a white
+    // sheet · bottom toolbar with go-to, zoom, pan, adjust, info ----
+    void openWoodblockViewer(const QString& startFolio) {
+        if (folioOrder_.isEmpty()) {
+            QMessageBox::information(
+                this, "Scan viewer",
+                "Link the scans first (Follow along in scans / Find "
+                "scans on BDRC).");
+            return;
+        }
+        struct WB {
+            QPointer<QDialog> dlg;
+            QListWidget* rail = nullptr;
+            QLabel* img = nullptr;
+            QScrollArea* sa = nullptr;
+            QLabel* pos = nullptr;
+            QComboBox* pct = nullptr;
+            QString folio;
+            QPixmap orig;
+            int bright = 0, contrast = 0;
+            bool invert = false, syncing = false;
+        };
+        auto st = std::make_shared<WB>();
+        auto* dlg = new QDialog(this);
+        st->dlg = dlg;
+        dlg->setAttribute(Qt::WA_DeleteOnClose);
+        dlg->setWindowFlag(Qt::Window);
+        dlg->setWindowTitle(
+            "Woodblock scans · " + scanWork_ +
+            (scanLicense_.contains("publicdomain")
+                 ? " · public domain · BDRC"
+                 : " · BDRC"));
+        dlg->resize(1180, 760);
+        auto* outer = new QVBoxLayout(dlg);
+        outer->setContentsMargins(0, 0, 0, 0);
+        outer->setSpacing(0);
+        auto* mid = new QHBoxLayout;
+        mid->setContentsMargins(0, 0, 0, 0);
+        mid->setSpacing(0);
+        st->rail = new QListWidget;
+        st->rail->setFixedWidth(176);
+        st->rail->setIconSize(QSize(140, 44));
+        st->rail->setStyleSheet(
+            "QListWidget{background:#2b3038;color:#dde3ea;"
+            "border:none;font-size:11px;}"
+            "QListWidget::item{padding:4px;}"
+            "QListWidget::item:selected{background:#3d4450;"
+            "border-left:4px solid #c22a2a;color:#fff;}");
+        for (int i = 0; i < folioOrder_.size(); ++i) {
+            auto* it = new QListWidgetItem(
+                QString("%1 · img.%2")
+                    .arg(folioOrder_[i])
+                    .arg(i + 1));
+            it->setData(Qt::UserRole, folioOrder_[i]);
+            st->rail->addItem(it);
+        }
+        mid->addWidget(st->rail);
+        auto* collapse = new QToolButton;
+        collapse->setText("◀");
+        collapse->setFixedWidth(16);
+        collapse->setToolTip("Collapse / expand the thumbnail rail");
+        collapse->setStyleSheet(
+            "QToolButton{background:#c22a2a;color:#fff;border:none;}");
+        connect(collapse, &QToolButton::clicked, [st, collapse] {
+            const bool v = st->rail->isVisible();
+            st->rail->setVisible(!v);
+            collapse->setText(v ? "▶" : "◀");
+        });
+        mid->addWidget(collapse);
+        st->img = new QLabel;
+        st->img->setAlignment(Qt::AlignCenter);
+        st->sa = new QScrollArea;
+        st->sa->setWidget(st->img);
+        st->sa->setWidgetResizable(false);
+        st->sa->setAlignment(Qt::AlignCenter);
+        st->sa->setStyleSheet(
+            "QScrollArea{background:#17181c;border:none;}"
+            "QLabel{background:transparent;}");
+        mid->addWidget(st->sa, 1);
+        outer->addLayout(mid, 1);
+        auto* bar = new QWidget;
+        bar->setStyleSheet("background:#232730;color:#dde3ea;");
+        auto* bl = new QHBoxLayout(bar);
+        bl->setContentsMargins(10, 6, 10, 6);
+        auto mkBtn = [&bl](const QString& t, const QString& tip) {
+            auto* b = new QToolButton;
+            b->setText(t);
+            b->setToolTip(tip);
+            b->setStyleSheet(
+                "QToolButton{background:transparent;color:#dde3ea;"
+                "font-size:15px;border:none;padding:2px 7px;}"
+                "QToolButton:hover{background:#39404d;"
+                "border-radius:4px;}");
+            bl->addWidget(b);
+            return b;
+        };
+        auto* dlB = mkBtn("⬇ Download images",
+                          "Download every folio side into the offline "
+                          "store (library/scans) — the Input workflow "
+                          "can then open the volume as a block.");
+        bl->addSpacing(14);
+        auto* gotoL = new QLabel("Go to");
+        bl->addWidget(gotoL);
+        auto* gotoE = new QLineEdit;
+        gotoE->setFixedWidth(64);
+        gotoE->setPlaceholderText("94a");
+        gotoE->setToolTip(
+            "Type a folio (94a) or an image number and press Return");
+        gotoE->setStyleSheet(
+            "background:#fff;color:#222;border-radius:3px;"
+            "padding:2px;");
+        bl->addWidget(gotoE);
+        bl->addSpacing(8);
+        auto* prevB = mkBtn("◀", "Previous folio side");
+        st->pos = new QLabel;
+        bl->addWidget(st->pos);
+        auto* nextB = mkBtn("▶", "Next folio side");
+        bl->addStretch(1);
+        auto* zoutB = mkBtn("⊖", "Zoom out");
+        auto* panU = mkBtn("↑", "Pan up");
+        auto* panD = mkBtn("↓", "Pan down");
+        auto* panL = mkBtn("←", "Pan left");
+        auto* panR = mkBtn("→", "Pan right");
+        auto* zinB = mkBtn("⊕", "Zoom in");
+        st->pct = new QComboBox;
+        st->pct->setEditable(true);
+        st->pct->addItems({"50%", "65%", "100%", "150%", "200%",
+                           "300%", "Fit"});
+        st->pct->setCurrentText("Fit");
+        st->pct->setFixedWidth(76);
+        st->pct->setToolTip("Zoom — pick, type a percent, or Fit");
+        bl->addWidget(st->pct);
+        auto* fitB = mkBtn("⛶", "Fit the page in the window");
+        auto* adjB = mkBtn("◐",
+                           "Brightness · contrast · invert (display "
+                           "only — the scan file is untouched)");
+        auto* infoB = mkBtn("ⓘ", "About this scan");
+        outer->addWidget(bar);
+
+        auto render = [st] {
+            if (!st->dlg || st->orig.isNull()) return;
+            QImage im = st->orig.toImage().convertToFormat(
+                QImage::Format_RGB32);
+            if (st->bright || st->contrast || st->invert) {
+                int lut[256];
+                const double c = 1.0 + st->contrast / 100.0;
+                for (int v = 0; v < 256; ++v) {
+                    int nv = int((v - 128) * c + 128 + st->bright);
+                    nv = std::clamp(nv, 0, 255);
+                    lut[v] = st->invert ? 255 - nv : nv;
+                }
+                for (int y = 0; y < im.height(); ++y) {
+                    QRgb* ln = reinterpret_cast<QRgb*>(im.scanLine(y));
+                    for (int x = 0; x < im.width(); ++x)
+                        ln[x] = qRgb(lut[qRed(ln[x])],
+                                     lut[qGreen(ln[x])],
+                                     lut[qBlue(ln[x])]);
+                }
+            }
+            const int pad = 48;   // the BUDA white sheet
+            QPixmap sheet(im.width() + 2 * pad,
+                          im.height() + 2 * pad);
+            sheet.fill(Qt::white);
+            {
+                QPainter p(&sheet);
+                p.drawImage(pad, pad, im);
+                p.end();
+            }
+            int z = 100;
+            const QString t = st->pct->currentText();
+            if (t.startsWith("Fit")) {
+                const QSize vp = st->sa->viewport()->size();
+                z = std::max(
+                    10,
+                    std::min(vp.width() * 100 /
+                                 std::max(1, sheet.width()),
+                             vp.height() * 100 /
+                                 std::max(1, sheet.height())));
+            } else {
+                bool ok = false;
+                const int zz =
+                    QString(t).remove('%').trimmed().toInt(&ok);
+                z = ok ? std::clamp(zz, 10, 400) : 100;
+            }
+            const QPixmap shown =
+                z == 100 ? sheet
+                         : sheet.scaledToWidth(
+                               std::max(sheet.width() * z / 100, 60),
+                               Qt::SmoothTransformation);
+            st->img->setPixmap(shown);
+            st->img->resize(shown.size());
+        };
+        auto showF = [this, st, render](const QString& folio) {
+            if (!st->dlg) return;
+            st->folio = folio;
+            const int ix = folioOrder_.indexOf(folio);
+            st->pos->setText(QString("folio %1 · img.%2/%3")
+                                 .arg(folio)
+                                 .arg(ix + 1)
+                                 .arg(folioOrder_.size()));
+            st->syncing = true;
+            st->rail->setCurrentRow(ix);
+            st->syncing = false;
+            ensureFolioLocal(
+                folio, [st, render, folio](const QString& path) {
+                    if (!st->dlg || st->folio != folio) return;
+                    QPixmap px(path);
+                    if (px.isNull()) return;
+                    st->orig = px;
+                    render();
+                });
+        };
+        connect(st->rail, &QListWidget::currentRowChanged,
+                [this, st, showF](int row) {
+                    if (st->syncing || row < 0 ||
+                        row >= folioOrder_.size())
+                        return;
+                    showF(folioOrder_[row]);
+                });
+        connect(gotoE, &QLineEdit::returnPressed,
+                [this, st, showF, gotoE] {
+                    const QString q =
+                        gotoE->text().trimmed().toLower();
+                    if (q.isEmpty()) return;
+                    if (folioOrder_.contains(q)) { showF(q); return; }
+                    bool ok = false;
+                    const int n = q.toInt(&ok);
+                    if (ok && n >= 1 && n <= folioOrder_.size())
+                        showF(folioOrder_[n - 1]);
+                });
+        auto step = [this, st, showF](int d) {
+            const int ix = folioOrder_.indexOf(st->folio) + d;
+            if (ix >= 0 && ix < folioOrder_.size())
+                showF(folioOrder_[ix]);
+        };
+        connect(prevB, &QToolButton::clicked, [step] { step(-1); });
+        connect(nextB, &QToolButton::clicked, [step] { step(+1); });
+        auto zoomTo = [st, render](int z) {
+            st->pct->setCurrentText(
+                QString::number(std::clamp(z, 10, 400)) + "%");
+            render();
+        };
+        auto curZoom = [st]() -> int {
+            bool ok = false;
+            const int z = QString(st->pct->currentText())
+                              .remove('%')
+                              .trimmed()
+                              .toInt(&ok);
+            return ok ? z : 100;
+        };
+        connect(zinB, &QToolButton::clicked,
+                [zoomTo, curZoom] { zoomTo(curZoom() + 15); });
+        connect(zoutB, &QToolButton::clicked,
+                [zoomTo, curZoom] { zoomTo(curZoom() - 15); });
+        connect(fitB, &QToolButton::clicked, [st, render] {
+            st->pct->setCurrentText("Fit");
+            render();
+        });
+        connect(st->pct, &QComboBox::currentTextChanged,
+                [render](const QString&) { render(); });
+        auto pan = [st](int dx, int dy) {
+            st->sa->horizontalScrollBar()->setValue(
+                st->sa->horizontalScrollBar()->value() + dx);
+            st->sa->verticalScrollBar()->setValue(
+                st->sa->verticalScrollBar()->value() + dy);
+        };
+        connect(panL, &QToolButton::clicked,
+                [pan] { pan(-160, 0); });
+        connect(panR, &QToolButton::clicked, [pan] { pan(160, 0); });
+        connect(panU, &QToolButton::clicked,
+                [pan] { pan(0, -160); });
+        connect(panD, &QToolButton::clicked, [pan] { pan(0, 160); });
+        connect(adjB, &QToolButton::clicked, [st, render, adjB] {
+            QMenu m;
+            auto addSlider = [&m, render](const QString& lab, int val,
+                                          std::function<void(int)>
+                                              set) {
+                auto* w = new QWidget;
+                auto* h = new QHBoxLayout(w);
+                h->setContentsMargins(10, 4, 10, 4);
+                auto* l = new QLabel(lab);
+                l->setFixedWidth(70);
+                h->addWidget(l);
+                auto* s = new QSlider(Qt::Horizontal);
+                s->setRange(-100, 100);
+                s->setValue(val);
+                s->setFixedWidth(150);
+                QObject::connect(s, &QSlider::valueChanged,
+                                 [set, render](int v) {
+                                     set(v);
+                                     render();
+                                 });
+                h->addWidget(s);
+                auto* wa = new QWidgetAction(&m);
+                wa->setDefaultWidget(w);
+                m.addAction(wa);
+            };
+            addSlider("brightness", st->bright,
+                      [st](int v) { st->bright = v; });
+            addSlider("contrast", st->contrast,
+                      [st](int v) { st->contrast = v; });
+            auto* inv = new QAction("Invert (white on black)", &m);
+            inv->setCheckable(true);
+            inv->setChecked(st->invert);
+            QObject::connect(inv, &QAction::triggered,
+                             [st, render](bool on) {
+                                 st->invert = on;
+                                 render();
+                             });
+            m.addAction(inv);
+            m.exec(adjB->mapToGlobal(QPoint(0, -8)));
+        });
+        connect(infoB, &QToolButton::clicked, [this, st] {
+            QMessageBox::information(
+                st->dlg, "About this scan",
+                QString("Work: %1\nFolio sides mapped: %2\n"
+                        "Current: folio %3\nLicense: %4\n\n"
+                        "Images: Buddhist Digital Resource Center "
+                        "(BDRC), folio↔image mapping from "
+                        "BDRC's own IIIF manifest labels.\n\n"
+                        "Offline store: %5")
+                    .arg(scanWork_)
+                    .arg(folioOrder_.size())
+                    .arg(st->folio)
+                    .arg(scanLicense_.isEmpty() ? "not stated"
+                                                : scanLicense_)
+                    .arg(folioScansDir()));
+        });
+        // thumbnails: already-local images only, in gentle chunks
+        auto loadThumbs =
+            std::make_shared<std::function<void(int)>>();
+        *loadThumbs = [this, st, loadThumbs](int from) {
+            if (!st->dlg) return;
+            const int upto = std::min(from + 8, st->rail->count());
+            for (int i = from; i < upto; ++i) {
+                const QString f = st->rail->item(i)
+                                      ->data(Qt::UserRole)
+                                      .toString();
+                QString path = folioLocalPath(f);
+                if (!QFile::exists(path)) {
+                    const QString url = folioUrl_.value(f);
+                    const QString cn =
+                        volCacheDir() + "/" +
+                        QString(url).replace(
+                            QRegularExpression("[^A-Za-z0-9._-]"),
+                            "_");
+                    path = QFile::exists(cn) ? cn : QString();
+                }
+                if (path.isEmpty()) continue;
+                QPixmap px(path);
+                if (!px.isNull())
+                    st->rail->item(i)->setIcon(QIcon(px.scaled(
+                        140, 44, Qt::KeepAspectRatio,
+                        Qt::SmoothTransformation)));
+            }
+            if (upto < st->rail->count())
+                QTimer::singleShot(25, st->dlg,
+                                   [loadThumbs, upto] {
+                                       (*loadThumbs)(upto);
+                                   });
+        };
+        connect(dlB, &QToolButton::clicked,
+                [this, loadThumbs] {
+                    downloadAllFolios();
+                    (*loadThumbs)(0);
+                });
+        dlg->show();
+        showF(!startFolio.isEmpty() &&
+                      folioOrder_.contains(startFolio)
+                  ? startFolio
+                  : folioOrder_.front());
+        (*loadThumbs)(0);
+    }
 
 public:
     // ---- the Four-Layer Page (Adam's wow round, 2026-08-12): one

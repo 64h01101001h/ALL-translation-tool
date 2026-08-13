@@ -478,6 +478,21 @@ app runs recognition on the current folio image and draws a box
 around **the very word under your cursor, on the woodblock
 itself**. Recognition is used only to LOCATE — never as text.
 
+**Scan viewer (window)…** — the full viewer in its own window,
+modeled on BDRC's own BUDA viewer. Left: a collapsible thumbnail
+rail, one entry per folio side (`94a · img.12`), the current side
+marked in red — thumbnails appear for every page already
+downloaded or viewed. Center: the page on a white sheet over a
+dark canvas. Bottom toolbar, left to right: **⬇ Download images**
+(the whole volume into the offline store), **Go to** (type a folio
+like `94a` or an image number, press Return), **◀ / ▶** with the
+current position between them, pan arrows, **⊖ / ⊕** zoom with a
+percent box (**Fit** sizes the page to the window), **◐**
+brightness/contrast/invert (display-only — the scan file is never
+altered; invert helps faint carvings), and **ⓘ** the scan's
+identity, license, and attribution. Also reachable from the
+document box's right-click menu.
+
 **Illustration gallery (cached scans)** — searches this volume's
 already-downloaded pages for woodblock miniatures and diagrams and
 shows the crops as a gallery. Candidates only, machine-found,
