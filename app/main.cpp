@@ -1267,6 +1267,10 @@ static std::function<void(QWidget*)> g_raisePane;
 // reject QDialogs but not NSOpenPanel, so dialog-opening lanes
 // short-circuit when this is set (main() sets it for --sweep)
 static bool g_sweepActive = false;
+// open a library file in the Overlay AT a raw source line — the
+// TibetDoc search-locations jump; set in main() once the Overlay
+// exists
+static std::function<void(const QString&, int)> g_openAtLine;
 // every folder picker goes through this wrapper: in sweep mode it
 // answers empty (as if the user cancelled) instead of hanging the
 // harness on an un-reapable native panel
@@ -4648,6 +4652,35 @@ public:
                                      // 2 US-Letter two-up
     };
 
+    // open a file and land the reading cursor at a raw source
+    // line (the TibetDoc search-locations jump): tokenize the
+    // prefix above the line, place the cursor at that token — the
+    // same prefix→token technique as the Evidence Ribbon
+    void openFileAtLine(const QString& fn, int line) {
+        openFile(fn);
+        if (line <= 1 || tokBeg_.empty()) return;
+        const QString raw = input_->toPlainText();
+        int pos = 0, seen = 1;
+        while (seen < line && pos >= 0) {
+            pos = raw.indexOf('\n', pos);
+            if (pos < 0) break;
+            ++pos;
+            ++seen;
+        }
+        if (pos < 0) return;
+        std::vector<std::string> toks;
+        std::vector<bool> bars;
+        allcore::tokenizeDocument(raw.left(pos).toStdString(),
+                                  toks, bars);
+        const size_t k = toks.size();
+        if (k < tokBeg_.size()) {
+            QTextCursor c(view_->document());
+            c.setPosition(tokBeg_[k]);
+            view_->setTextCursor(c);
+            view_->ensureCursorVisible();
+        }
+    }
+
     // whole wylie document → ACIP, token-wise through the
     // round-trip-proven reverse engine — markers and comments
     // preserved, failed tokens kept verbatim (never guessed).
@@ -6695,6 +6728,18 @@ public:
         });
         connect(results_, &QTextBrowser::anchorClicked,
                 [](const QUrl& u) {
+                    const QString s = u.toString();
+                    if (s.startsWith("goferopen:")) {
+                        // payload: <percent-encoded path>|<line>
+                        const QString body = s.mid(10);
+                        const int bar = body.lastIndexOf('|');
+                        if (bar > 0 && g_openAtLine)
+                            g_openAtLine(
+                                anchorPayload("x:" + body.left(bar),
+                                              2),
+                                body.mid(bar + 1).toInt());
+                        return;
+                    }
                     if (u.isLocalFile())
                         QDesktopServices::openUrl(u);
                 });
@@ -7049,28 +7094,72 @@ private:
                 const QString ix = dir + "/.index.db";
                 if (QFileInfo::exists(ix)) {
                     allcore::LibraryIndex li(ix.toStdString());
-                    hits = li.search(q.toStdString(), 60);
+                    // higher cap: the per-file rollup wants real
+                    // counts, not a 60-hit truncation
+                    hits = li.search(q.toStdString(), 400);
                 } else {
                     hits = allcore::goferSearchFiles(dir.toStdString(),
-                                                     q.toStdString(), 60);
+                                                     q.toStdString(),
+                                                     400);
                 }
-                h += QString("<div><b>%1</b> \u2014 %2 hit(s)</div>")
-                         .arg(dir.toHtmlEscaped())
-                         .arg(hits.size());
-                total += (int)hits.size();
-                int shown = 0;
+                // the TibetDoc search-locations view: hits roll up
+                // PER FILE \u2014 count, first-hit line, first snippet \u2014
+                // and the file name opens the text in the Overlay
+                // AT that hit
+                struct FileRoll {
+                    int count = 0;
+                    int firstLine = 0;
+                    QString snippet;
+                };
+                std::map<std::string, FileRoll> byFile;
                 for (const auto& f : hits) {
-                    if (++shown > 20) break;
-                    h += "<div style='margin:4px 0'><small>" +
-                         QString::fromStdString(f.file).toHtmlEscaped() +
-                         ":" + QString::number(f.line_lo) + "</small> ";
-                    for (const auto& ln : f.lines)
-                        h += QString::fromStdString(ln)
-                                 .left(140)
-                                 .toHtmlEscaped() +
-                             " ";
-                    h += "</div>";
+                    auto& r = byFile[f.file];
+                    if (!r.count) {
+                        r.firstLine = f.line_lo;
+                        if (!f.lines.empty())
+                            r.snippet = QString::fromStdString(
+                                            f.lines.front())
+                                            .left(120);
+                    }
+                    ++r.count;
                 }
+                std::vector<std::pair<std::string, FileRoll>> rows(
+                    byFile.begin(), byFile.end());
+                std::stable_sort(rows.begin(), rows.end(),
+                                 [](const auto& a, const auto& b) {
+                                     return a.second.count >
+                                            b.second.count;
+                                 });
+                h += QString("<div><b>%1</b> \u2014 %2 hit(s) in %3 "
+                             "file(s)</div>")
+                         .arg(dir.toHtmlEscaped())
+                         .arg(hits.size())
+                         .arg(rows.size());
+                total += (int)hits.size();
+                int shownF = 0;
+                for (const auto& [file, r] : rows) {
+                    if (++shownF > 30) break;
+                    const QString full =
+                        dir + "/" + QString::fromStdString(file);
+                    h += QString("<div style='margin:4px 0'>"
+                                 "<b>%1</b> \u00b7 <a href='goferopen:"
+                                 "%2|%3'>%4</a><br><small "
+                                 "style='color:#666'>line %5 \u00b7 "
+                                 "%6</small></div>")
+                             .arg(r.count)
+                             .arg(anchorEnc(full))
+                             .arg(r.firstLine)
+                             .arg(QString::fromStdString(file)
+                                      .toHtmlEscaped())
+                             .arg(r.firstLine)
+                             .arg(r.snippet.toHtmlEscaped());
+                }
+                if ((int)rows.size() > 30)
+                    h += QString("<div style='color:#8A8A8A'>"
+                                 "<small>\u2026and %1 more file(s) \u2014 "
+                                 "narrow the terms to see them"
+                                 "</small></div>")
+                             .arg(rows.size() - 30);
                 h += "<hr>";
             } catch (const std::exception& e) {
                 h += QString("<div style='color:#8C2F2B'>%1: %2</div><hr>")
@@ -15778,6 +15867,10 @@ int main(int argc, char** argv) {
                                     overlay->openFile(path);
                                     if (g_raisePane) g_raisePane(overlay);
                                 });
+    g_openAtLine = [overlay](const QString& path, int line) {
+        overlay->openFileAtLine(path, line);
+        if (g_raisePane) g_raisePane(overlay);
+    };
     tabs.addTab(libraryPane, "Library");
     auto* goferPane = new GoferPane(spine, root);
     g_goferQuery = [goferPane](const QString& q) {

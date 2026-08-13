@@ -1121,6 +1121,13 @@ noble truth territory.
    footnote about the truth of suffering is worth knowing about.)
 7. Press **Find**.
 
+Folder results roll up **per file**, TibetDoc-style: each file
+shows its hit count and first matching line, sorted by count —
+and clicking the file name opens it in the Overlay **at the first
+hit**, reading cursor placed on the line. The classic
+search-locations workflow: survey where a term lives across a
+whole collection, then step into any witness in one click.
+
 The pane switches to the **Search Results** tab by itself. What you
 see, top to bottom:
 
