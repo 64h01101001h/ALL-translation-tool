@@ -1798,6 +1798,17 @@ static QIcon miniIcon(const QString& kind) {
 // canvas for the scan viewer (Adam's BUDA findings): click = zoom
 // in at that point, drag = grab-pan, pinch or ⌘-wheel = zoom at the
 // pointer; plain scrolling still pans (mac-natural).
+// IIIF thumbnail: rewrite the size segment of a IIIF image URL to
+// a small width (BUDA's rail does the same). Empty when the URL is
+// not the expected IIIF shape — then no thumb is fetched (no guess).
+static QString iiifThumbUrl(const QString& url) {
+    QRegularExpression re("(/full/)([^/]+)(/\\d+/default)");
+    const auto m = re.match(url);
+    if (!m.hasMatch()) return QString();
+    return url.left(m.capturedStart(2)) + ",120" +
+           url.mid(m.capturedEnd(2));
+}
+
 class ScanCanvasLabel : public QLabel {
 public:
     std::function<void(QPoint)> onClickAt;
@@ -4992,141 +5003,74 @@ private:
                 "Select the Tibetan to locate first.");
             return;
         }
-        ensureFolioLocal(loc.folio,
-                         [this, loc, needle](const QString& path) {
-                             QPixmap px(path);
-                             if (!px.isNull())
-                                 openLocateWindow(px, loc, needle);
-                         });
+        openWoodblockViewer(loc.folio, needle, loc.line,
+                            loc.lineTotal);
 #endif
     }
 
 #ifdef ALL_HAVE_OCR
-    void openLocateWindow(const QPixmap& px, const FolioLoc& loc,
-                          const QString& needle) {
-        const FolioOcr* fo = folioOcrFor(loc.folio, px);
-        QPixmap shown = px.copy();
-        {   // the follow-along's approximate line band, for context
-            QPainter p(&shown);
-            if (loc.line > 0 && loc.lineTotal >= loc.line &&
-                loc.lineTotal > 1) {
-                const int y0 =
-                    px.height() * (loc.line - 1) / loc.lineTotal;
-                const int y1 = px.height() * loc.line / loc.lineTotal;
-                p.fillRect(0, y0, px.width(), y1 - y0,
-                           QColor(255, 190, 0, 45));
-            }
-            p.end();
+    // OCR word-box rectangles for a needle on a folio (locator only)
+    QVector<QRect> locateNeedleRects(const QString& folio,
+                                     const QPixmap& px,
+                                     const QString& needle,
+                                     int expectLine, QString* note) {
+        QVector<QRect> out;
+        const FolioOcr* fo = folioOcrFor(folio, px);
+        if (!fo || fo->pl.lines.empty()) {
+            if (note)
+                *note = "OCR unavailable — approximate line band "
+                        "only.";
+            return out;
         }
-        int found = 0, total = 0;
+        const QStringList words =
+            needle.split(' ', Qt::SkipEmptyParts);
         QStringList missed;
-        if (fo && !fo->pl.lines.empty()) {
-            QPainter p(&shown);
-            const QStringList words =
-                needle.split(' ', Qt::SkipEmptyParts);
-            total = words.size();
-            for (const QString& wq : words) {
-                const std::string w = wq.toLower().toStdString();
-                std::vector<size_t> order;
-                if (loc.line >= 1 &&
-                    loc.line <= (int)fo->lineText.size())
-                    order.push_back(size_t(loc.line - 1));
-                for (size_t li = 0; li < fo->lineText.size(); ++li)
-                    if (order.empty() || li != order[0])
-                        order.push_back(li);
-                bool hit = false;
-                for (size_t oi = 0; oi < order.size() && !hit; ++oi) {
-                    const size_t li = order[oi];
-                    const std::string& text = fo->lineText[li];
-                    std::vector<size_t> pref{0};
-                    for (const auto& ws : fo->words[li])
-                        pref.push_back(pref.back() + ws.text.size());
-                    const size_t at = text.find(w);
-                    if (at == std::string::npos) continue;
-                    size_t k0 = 0, k1 = 0;
-                    for (size_t k = 0; k + 1 < pref.size(); ++k) {
-                        if (pref[k] <= at && at < pref[k + 1]) k0 = k;
-                        if (pref[k] < at + w.size() &&
-                            at + w.size() <= pref[k + 1])
-                            k1 = k;
-                    }
-                    const int x0 =
-                        folioPageX(*fo, li, fo->words[li][k0].x0);
-                    const int x1 =
-                        folioPageX(*fo, li, fo->words[li][k1].x1);
-                    const auto& ln = fo->pl.lines[li];
-                    p.fillRect(QRect(x0, ln.y, std::max(x1 - x0, 3),
-                                     ln.h),
-                               QColor(0xE8, 0x50, 0x20, 90));
-                    p.setPen(QPen(QColor(0xB4, 0x2A, 0x0A), 3));
-                    p.drawRect(x0, ln.y, std::max(x1 - x0, 3), ln.h);
-                    hit = true;
-                    ++found;
+        for (const QString& wq : words) {
+            const std::string w = wq.toLower().toStdString();
+            std::vector<size_t> order;
+            if (expectLine >= 1 &&
+                expectLine <= (int)fo->lineText.size())
+                order.push_back(size_t(expectLine - 1));
+            for (size_t li = 0; li < fo->lineText.size(); ++li)
+                if (order.empty() || li != order[0])
+                    order.push_back(li);
+            bool hit = false;
+            for (size_t oi = 0; oi < order.size() && !hit; ++oi) {
+                const size_t li = order[oi];
+                const std::string& text = fo->lineText[li];
+                std::vector<size_t> pref{0};
+                for (const auto& ws : fo->words[li])
+                    pref.push_back(pref.back() + ws.text.size());
+                const size_t at = text.find(w);
+                if (at == std::string::npos) continue;
+                size_t k0 = 0, k1 = 0;
+                for (size_t k = 0; k + 1 < pref.size(); ++k) {
+                    if (pref[k] <= at && at < pref[k + 1]) k0 = k;
+                    if (pref[k] < at + w.size() &&
+                        at + w.size() <= pref[k + 1])
+                        k1 = k;
                 }
-                if (!hit) missed << wq;
+                const int x0 =
+                    folioPageX(*fo, li, fo->words[li][k0].x0);
+                const int x1 =
+                    folioPageX(*fo, li, fo->words[li][k1].x1);
+                const auto& ln = fo->pl.lines[li];
+                out.append(QRect(x0, ln.y, std::max(x1 - x0, 3),
+                                 ln.h));
+                hit = true;
             }
-            p.end();
+            if (!hit) missed << wq;
         }
-        auto* dlg = new QDialog(this);
-        dlg->setAttribute(Qt::WA_DeleteOnClose);
-        dlg->setWindowFlag(Qt::Window);
-        dlg->setWindowTitle(
-            QString("Woodblock · folio %1 — “%2”")
-                .arg(loc.folio, needle));
-        dlg->resize(1000, 680);
-        auto* v = new QVBoxLayout(dlg);
-        auto* cap = new QLabel;
-        cap->setWordWrap(true);
-        cap->setMinimumWidth(1);
-        QString note =
-            fo ? QString("%1 of %2 selected word(s) located by OCR "
-                         "word boxes — locator only, the "
-                         "recognized text is never used as text.")
-                     .arg(found)
-                     .arg(total)
-               : QString("OCR unavailable for this folio — "
-                         "showing the approximate line band only.");
-        if (!missed.isEmpty())
-            note += " Not found on this side: " +
-                    missed.join(", ") + ".";
-        note += QString(" · folio %1, line %2/%3 by the text's "
-                        "own markers and line breaks.")
-                    .arg(loc.folio)
-                    .arg(loc.line)
-                    .arg(loc.lineTotal);
-        cap->setText(note);
-        v->addWidget(cap);
-        auto* img = new QLabel;
-        img->setAlignment(Qt::AlignCenter);
-        auto* sa = new QScrollArea;
-        sa->setWidget(img);
-        sa->setWidgetResizable(false);
-        v->addWidget(sa, 1);
-        auto* zr = new QHBoxLayout;
-        zr->addWidget(new QLabel("zoom"));
-        auto* zoom = new QSlider(Qt::Horizontal);
-        zoom->setRange(25, 400);
-        zoom->setValue(std::clamp(
-            sa->width() > 0 && shown.width() > 0
-                ? 96000 / shown.width()
-                : 100,
-            25, 400));
-        zr->addWidget(zoom, 1);
-        v->addLayout(zr);
-        auto apply = [img, zoom, shown] {
-            const int z = zoom->value();
-            const QPixmap scaled =
-                z == 100
-                    ? shown
-                    : shown.scaledToWidth(
-                          std::max(shown.width() * z / 100, 50),
-                          Qt::SmoothTransformation);
-            img->setPixmap(scaled);
-            img->resize(scaled.size());
-        };
-        connect(zoom, &QSlider::valueChanged, apply);
-        apply();
-        dlg->show();
+        if (note) {
+            *note = QString("%1 of %2 word(s) located by OCR word "
+                            "boxes — locator only")
+                        .arg(out.size())
+                        .arg(words.size());
+            if (!missed.isEmpty())
+                *note += "; not found on this side: " +
+                         missed.join(", ");
+        }
+        return out;
     }
 #endif
 
@@ -5134,7 +5078,9 @@ private:
     // docs/design/SCAN_VIEWER_BUDA_REFERENCE.md; "or you can try to
     // build it now"): thumbnail rail · dark canvas, page on a white
     // sheet · bottom toolbar with go-to, zoom, pan, adjust, info ----
-    void openWoodblockViewer(const QString& startFolio) {
+    void openWoodblockViewer(const QString& startFolio,
+                             const QString& hlNeedle = QString(),
+                             int hlLine = 0, int hlLineTotal = 0) {
         if (folioOrder_.isEmpty()) {
             QMessageBox::information(
                 this, "Scan viewer",
@@ -5159,10 +5105,21 @@ private:
             int bright = 0, contrast = 0, lastZ = 100;
             bool invert = false, syncing = false, inOverview = false;
             bool etext = false;
+            QString hlNeedle, hlFolio;
+            int hlLine = 0, hlLineTotal = 0;
+            QVector<QRect> hlRects;
+            QLabel* hlLbl = nullptr;
             QVector<QPair<QString, QString>> sides;   // folio-faithful
         };
         auto st = std::make_shared<WB>();
         st->sides = splitFolioSides(input_->toPlainText());
+        st->hlNeedle = hlNeedle;
+        st->hlLine = hlLine;
+        st->hlLineTotal = hlLineTotal;
+        if (!hlNeedle.isEmpty())
+            st->hlFolio = folioOrder_.contains(startFolio)
+                              ? startFolio
+                              : folioOrder_.front();
         auto* dlg = new QDialog(this);
         st->dlg = dlg;
         dlg->setAttribute(Qt::WA_DeleteOnClose);
@@ -5200,6 +5157,11 @@ private:
             "QToolButton{border:none;color:#c22a2a;}"
             "QToolButton:hover{color:#822;}");
         cl->addWidget(st->crumbFolio);
+        st->hlLbl = new QLabel;
+        st->hlLbl->setStyleSheet(
+            "color:#B42A0A;font-size:11px;padding-left:10px;");
+        st->hlLbl->hide();
+        cl->addWidget(st->hlLbl);
         cl->addStretch(1);
         outer->addWidget(crumb);
         auto* mid = new QHBoxLayout;
@@ -5343,6 +5305,27 @@ private:
                                      lut[qGreen(ln[x])],
                                      lut[qBlue(ln[x])]);
                 }
+            }
+            if (st->folio == st->hlFolio &&
+                !st->hlFolio.isEmpty()) {
+                QPainter hp(&im);
+                if (st->hlLine > 0 &&
+                    st->hlLineTotal >= st->hlLine &&
+                    st->hlLineTotal > 1) {
+                    const int y0 = im.height() *
+                                   (st->hlLine - 1) /
+                                   st->hlLineTotal;
+                    const int y1 =
+                        im.height() * st->hlLine / st->hlLineTotal;
+                    hp.fillRect(0, y0, im.width(), y1 - y0,
+                                QColor(255, 190, 0, 45));
+                }
+                for (const QRect& r : st->hlRects) {
+                    hp.fillRect(r, QColor(0xE8, 0x50, 0x20, 90));
+                    hp.setPen(QPen(QColor(0xB4, 0x2A, 0x0A), 3));
+                    hp.drawRect(r);
+                }
+                hp.end();
             }
             const int pad = 48;   // the BUDA white sheet
             QPixmap sheet(im.width() + 2 * pad,
@@ -5545,11 +5528,30 @@ private:
             st->rail->setCurrentRow(ix);
             st->syncing = false;
             ensureFolioLocal(
-                folio, [st, render, folio](const QString& path) {
+                folio,
+                [this, st, render, folio](const QString& path) {
                     if (!st->dlg || st->folio != folio) return;
                     QPixmap px(path);
                     if (px.isNull()) return;
                     st->orig = px;
+#ifdef ALL_HAVE_OCR
+                    if (!st->hlNeedle.isEmpty() &&
+                        folio == st->hlFolio &&
+                        st->hlRects.isEmpty()) {
+                        QString note;
+                        st->hlRects = locateNeedleRects(
+                            folio, px, st->hlNeedle, st->hlLine,
+                            &note);
+                        if (st->hlLbl) {
+                            st->hlLbl->setText(
+                                QString::fromUtf8("\u201C") +
+                                st->hlNeedle +
+                                QString::fromUtf8("\u201D \u2014 ") +
+                                note);
+                            st->hlLbl->show();
+                        }
+                    }
+#endif
                     render();
                 });
         };
@@ -5691,11 +5693,73 @@ private:
                                                 : scanLicense_)
                     .arg(folioScansDir()));
         });
-        // thumbnails: already-local images only, in gentle chunks
+        // thumbnails: local images first (gentle chunks); pages with
+        // no local copy then fill from small IIIF thumbnails, one
+        // polite request at a time (BUDA's rail is complete — ours
+        // becomes complete too, without full downloads)
+        auto thumbQueue = std::make_shared<QList<int>>();
+        auto fetchNextThumb =
+            std::make_shared<std::function<void()>>();
+        *fetchNextThumb = [this, st, thumbQueue, fetchNextThumb] {
+            if (!st->dlg || thumbQueue->isEmpty()) return;
+            const int i = thumbQueue->takeFirst();
+            if (i >= st->rail->count()) return;
+            const QString f = st->rail->item(i)
+                                  ->data(Qt::UserRole)
+                                  .toString();
+            const QString turl = iiifThumbUrl(folioUrl_.value(f));
+            if (turl.isEmpty()) {
+                QTimer::singleShot(0, st->dlg, [fetchNextThumb] {
+                    (*fetchNextThumb)();
+                });
+                return;
+            }
+            const QString cdir = volCacheDir() + "/thumbs";
+            QDir().mkpath(cdir);
+            const QString fn = cdir + "/" + f + ".jpg";
+            if (QFile::exists(fn)) {
+                QPixmap px(fn);
+                if (!px.isNull())
+                    st->rail->item(i)->setIcon(QIcon(px.scaled(
+                        140, 44, Qt::KeepAspectRatio,
+                        Qt::SmoothTransformation)));
+                QTimer::singleShot(0, st->dlg, [fetchNextThumb] {
+                    (*fetchNextThumb)();
+                });
+                return;
+            }
+            auto* rep = nam_.get(QNetworkRequest(QUrl(turl)));
+            connect(rep, &QNetworkReply::finished,
+                    [st, rep, i, fn, fetchNextThumb] {
+                        rep->deleteLater();
+                        if (!st->dlg) return;
+                        if (rep->error() ==
+                            QNetworkReply::NoError) {
+                            const QByteArray d = rep->readAll();
+                            QFile o(fn);
+                            if (o.open(QIODevice::WriteOnly))
+                                o.write(d);
+                            QPixmap px;
+                            if (px.loadFromData(d) &&
+                                i < st->rail->count())
+                                st->rail->item(i)->setIcon(
+                                    QIcon(px.scaled(
+                                        140, 44,
+                                        Qt::KeepAspectRatio,
+                                        Qt::SmoothTransformation)));
+                        }
+                        QTimer::singleShot(150, st->dlg,
+                                           [fetchNextThumb] {
+                                               (*fetchNextThumb)();
+                                           });
+                    });
+        };
         auto loadThumbs =
             std::make_shared<std::function<void(int)>>();
-        *loadThumbs = [this, st, loadThumbs](int from) {
+        *loadThumbs = [this, st, loadThumbs, thumbQueue,
+                       fetchNextThumb](int from) {
             if (!st->dlg) return;
+            if (from == 0) thumbQueue->clear();
             const int upto = std::min(from + 8, st->rail->count());
             for (int i = from; i < upto; ++i) {
                 const QString f = st->rail->item(i)
@@ -5711,7 +5775,10 @@ private:
                             "_");
                     path = QFile::exists(cn) ? cn : QString();
                 }
-                if (path.isEmpty()) continue;
+                if (path.isEmpty()) {
+                    thumbQueue->append(i);
+                    continue;
+                }
                 QPixmap px(path);
                 if (!px.isNull())
                     st->rail->item(i)->setIcon(QIcon(px.scaled(
@@ -5723,6 +5790,8 @@ private:
                                    [loadThumbs, upto] {
                                        (*loadThumbs)(upto);
                                    });
+            else
+                (*fetchNextThumb)();
         };
         connect(dlB, &QToolButton::clicked,
                 [this, st, loadThumbs, loadOv] {
@@ -5741,6 +5810,26 @@ private:
                                 [showF, f](QPoint) { showF(f); };
                         }
                 });
+        auto addSc = [dlg](const QKeySequence& k,
+                           std::function<void()> f) {
+            auto* sc = new QShortcut(k, dlg);
+            sc->setContext(Qt::WindowShortcut);
+            QObject::connect(sc, &QShortcut::activated, f);
+        };
+        addSc(QKeySequence(Qt::CTRL | Qt::Key_Right),
+              [step] { step(+1); });
+        addSc(QKeySequence(Qt::CTRL | Qt::Key_Left),
+              [step] { step(-1); });
+        addSc(QKeySequence::ZoomIn,
+              [zoomTo, curZoom] { zoomTo(curZoom() + 15); });
+        addSc(QKeySequence(Qt::CTRL | Qt::Key_Equal),
+              [zoomTo, curZoom] { zoomTo(curZoom() + 15); });
+        addSc(QKeySequence::ZoomOut,
+              [zoomTo, curZoom] { zoomTo(curZoom() - 15); });
+        addSc(QKeySequence(Qt::CTRL | Qt::Key_0), [st, render] {
+            st->pct->setCurrentText("Fit");
+            render();
+        });
         dlg->show();
         showF(!startFolio.isEmpty() &&
                       folioOrder_.contains(startFolio)

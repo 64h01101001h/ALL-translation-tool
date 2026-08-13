@@ -449,12 +449,15 @@ guess). Below it:
   folio image if needed (it lands in the offline store, below) and
   opens it in the Input pane's scan viewer, switching you there —
   ready to key or compare against the carving.
-- **Locate selection on the woodblock…** — opens the folio in its
-  own zoomable window with your **highlighted words boxed on the
+- **Locate selection on the woodblock…** — opens the full scan
+  viewer on that folio with your **highlighted words boxed on the
   carving itself** (OCR word boxes, used only to locate — the
   recognized text is never shown as text). The line you were in is
-  banded for context; any word OCR could not find on that side is
-  named in the caption, never silently dropped.
+  banded for context, the result is reported beside the breadcrumb
+  ("2 of 2 words located…"), and any word OCR could not find on
+  that side is named there, never silently dropped. All the
+  viewer's tools (zoom, pan, adjust, thumbnails) work on the
+  highlighted page.
 - **Download all N folio scans (offline + Input)…** — fetches the
   whole volume into `library/scans/<work>/` as folio-named files
   (`094a.jpg`). From then on the follow-along works offline, and
@@ -483,8 +486,10 @@ modeled closely on BDRC's own BUDA viewer, with its two levels:
 
 *Single-image level.* Left: a collapsible thumbnail rail, one
 entry per folio side (`94a · img.12`), the current side marked in
-red — thumbnails appear for every page already downloaded or
-viewed. Center: the page on a white sheet over a dark canvas.
+red. Pages already downloaded or viewed get their thumbnails
+instantly; the rest fill in on their own from small BDRC preview
+images, fetched politely one at a time — the rail becomes complete
+without downloading the volume. Center: the page on a white sheet over a dark canvas.
 Direct manipulation, exactly as on BDRC: **click the page to zoom
 in at that spot**, **drag to pan**, **pinch (trackpad) or
 ⌘-scroll to zoom at the pointer** — plain scrolling still pans.
@@ -496,7 +501,8 @@ position between them, pan arrows, **⊖ / ⊕** zoom with a percent
 box (**Fit** sizes the page to the window), **⤢ full screen**,
 **◐** brightness/contrast/invert (display-only — the scan file is
 never altered; invert helps faint carvings), and **ⓘ** the scan's
-identity, license, and attribution.
+identity, license, and attribution. Keyboard: **⌘→ / ⌘←** turn
+folios, **⌘+ / ⌘−** zoom, **⌘0** fits the page.
 
 *Whole-work level.* The top of the window is a **breadcrumb**:
 `▤ work | folio 94a`. Click the work name and the canvas becomes
