@@ -1043,3 +1043,16 @@ implementation is sidelined HERE from this date. What this means:
       --limit 1800` (resume-safe; BATCH=3 + max_tokens 8000 fix in
       place — verify 8000 is accepted once credits return).
       Current total: 1,395 entries.
+- [ ] **Hugging Face MT lane** (Adam's question 2026-08-13; verdict:
+      yes, narrowly, guarded): local batch scripts in tools/ (not
+      in-app) using Buddhist-MT models (evaluate MITRA/Dharmamitra
+      first; check model licenses). HARD GUARD required before any
+      output is kept: n-gram screen against the FULL HGM corpus
+      (quotation-detector machinery) — any overlap with Geshe
+      Michael's published English is flagged/discarded, because MT
+      weights may have memorized his translations (the wall,
+      enforced in code for arbitrary models). Uses, ranked:
+      (1) Geshe Chodrak PD definition translation lane,
+      (2) divergence-flagging cross-check on Working Glossary
+      drafts (evidence metadata only, never merged),
+      (3) Align-pane segment-pair candidates (PENDING tier).
