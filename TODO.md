@@ -218,7 +218,14 @@ implementation is sidelined HERE from this date. What this means:
 
 ## Waiting on the data project (Cowork sessions)
 
-- [ ] Review the 13 pyewts source-defect candidates
+- [x] Review the 13 pyewts source-defect candidates — DONE
+      2026-08-13 (docs/research/PYEWTS_DEFECT_REVIEW.md): ALL 13
+      are stored-Tibetan defects (engine==pyewts against stored in
+      every case): 10 truncated finals, 1 wrong-word (bsgrub bya
+      stores bsgrub byed's Tibetan), 2 different-text. Correction
+      handed to the data project (regenerate via the canonical
+      engine); this repo applies nothing.
+      Original: Review the 13 pyewts source-defect candidates
       (Handoff/data/qc_pyewts_defect_candidates_2026_08.json, filed
       2026-08-07 w/ HANDOFF QC note; standout: bsgrub bya stored with
       the Tibetan of bsgrub byed). Source check each before
