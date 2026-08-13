@@ -693,10 +693,12 @@ implementation is sidelined HERE from this date. What this means:
       **v3 progress:** batch mode SHIPPED 2026-08-12; Degé preset
       + classical 5-line opening SHIPPED (THL specs); cover/label
       sheet SHIPPED (office layouts; title/volume/count/date).
+      verse lineation SHIPPED 2026-08-13 (source lines → pecha
+      lines, blank = stanza gap; selftest + visual check).
       **v3 remaining:** per-side syllable budget tuned against real
       woodblock prints; head-letter (dbu khyud) and double-shad
-      conventions; verse lineation awareness; margin presets;
-      QA pass comparing against traditional prints.
+      conventions; margin presets; QA pass comparing against
+      traditional prints.
 - [ ] **PRINT PARTNERSHIP — Vimala Treasures** (Adam, 2026-08-12):
       partner/work with vimalatreasures.org (they print +
       distribute BDRC texts:

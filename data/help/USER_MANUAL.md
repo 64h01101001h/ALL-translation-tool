@@ -509,7 +509,10 @@ crash-free:
    Bold — the page furniture). The **classical opening** option
    sets the first two text sides at 5 lines with larger letters,
    as in the great woodblock editions (per THL's Degé
-   documentation).
+   documentation). For verse texts, **verse lineation** keeps the
+   poet's own lines: each source line becomes a pecha line and a
+   blank line becomes a stanza gap — off by default, since prose
+   pechas flow continuously.
 3. Choose the **print layout**: native folio sheets at true size
    for a print shop, or **two-up on A4 / US Letter with cut
    marks** — two folio sides per office sheet, corner ticks to

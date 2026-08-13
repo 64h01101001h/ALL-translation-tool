@@ -1979,6 +1979,26 @@ public:
             check(ok, "Pecha maker: English interlinear is "
                       "corpus-attested (matched, never composed)");
         }
+        // verse lineation: the poet's lines survive into the pecha
+        {
+            input_->setPlainText(
+                "SEMS CAN THAMS CAD BDE DANG LDAN GYUR CIG,\n"
+                "SDUG BSNGAL KUN DANG BRAL BAR GYUR CIG,\n"
+                "\n"
+                "BDE DANG MI 'BRAL BAR YANG GYUR CIG,");
+            const QString tmp = QDir::temp().filePath(
+                "all_selftest_pecha_verse.pdf");
+            QFile::remove(tmp);
+            OverlayPane::PechaOpts po;
+            po.verseLines = true;
+            po.family = "Noto Serif Tibetan";
+            const int sides = pechaWritePdf(tmp, po);
+            QFile pf(tmp);
+            bool ok = sides >= 1 && pf.open(QIODevice::ReadOnly) &&
+                      pf.read(5).startsWith("%PDF");
+            check(ok, "Pecha verse lineation renders (lines + "
+                      "stanza gap)");
+        }
         // batch lane: a folder of mixed ACIP + wylie texts becomes
         // a pecha set (wylie converts through the proven engine)
         {
@@ -4726,6 +4746,11 @@ public:
         bool coverSheet = false;        // office layouts: a label
                                         // page before the folios
         QString coverDate;              // stamped by the caller
+        bool verseLines = false;        // verse texts: the source's
+                                        // own lines become pecha
+                                        // lines (blank line =
+                                        // stanza gap) instead of
+                                        // prose reflow
         int ruleWeight = 1;          // 0 fine · 1 classic · 2 bold
         int layout = 0;              // 0 native · 1 A4 two-up ·
                                      // 2 US-Letter two-up
@@ -5023,7 +5048,25 @@ public:
                     return QString::fromStdString(s.english);
             return QString();
         };
-        if (!o.interPhon && !o.interEng) {
+        if (!o.interPhon && !o.interEng && o.verseLines) {
+            // verse lineation (pecha v3): the source's own line
+            // breaks are the poet's — each becomes a pecha line,
+            // a blank source line becomes a stanza gap
+            QString vtext = QString::fromStdString(res.unicode);
+            vtext.replace(marker, " ");
+            bool first = true;
+            for (QString ln : vtext.split('\n')) {
+                ln = ln.simplified();
+                if (ln.isEmpty()) {
+                    y += lineH * 0.5;   // stanza gap
+                    if (y > textR.bottom() + 0.5) newSide();
+                    continue;
+                }
+                if (first && o.headMarks) ln = yigMgo + ln;
+                first = false;
+                flow(ln, tf, 0.52, 1.0, Qt::black);
+            }
+        } else if (!o.interPhon && !o.interEng) {
             flow((o.headMarks ? yigMgo : QString()) + text, tf,
                  0.52, 1.0, Qt::black);
         } else {
@@ -5273,6 +5316,16 @@ public:
                               "text (yig mgo)"));
         heads->setChecked(
             st.value("pecha/headMarks", true).toBool());
+        auto* verse = new QCheckBox(
+            "verse lineation — keep the source's own lines (each "
+            "verse line is a pecha line; blank line = stanza gap)");
+        verse->setToolTip(
+            "For verse texts whose source file carries the poet's "
+            "lineation. Off, the text reflows continuously as "
+            "prose pechas do. Interlinear modes keep their own "
+            "per-segment layout either way.");
+        verse->setChecked(
+            st.value("pecha/verseLines", false).toBool());
         auto* cover = new QCheckBox(
             "cover sheet on office layouts — title, volume, folio "
             "count, and date on a label page");
@@ -5330,6 +5383,7 @@ public:
         v->addLayout(row4);
         v->addWidget(heads);
         v->addWidget(classical);
+        v->addWidget(verse);
         v->addWidget(cover);
         v->addWidget(inter);
         v->addWidget(interE);
@@ -5361,6 +5415,7 @@ public:
             o.headMarks = heads->isChecked();
             o.classicalOpening = classical->isChecked();
             o.coverSheet = cover->isChecked();
+            o.verseLines = verse->isChecked();
             o.coverDate =
                 QDate::currentDate().toString(Qt::ISODate);
             o.ruleWeight = rulesC->currentIndex();
@@ -5373,6 +5428,7 @@ public:
             s2.setValue("pecha/classicalOpening",
                         classical->isChecked());
             s2.setValue("pecha/coverSheet", cover->isChecked());
+            s2.setValue("pecha/verseLines", verse->isChecked());
             s2.setValue("pecha/lines", lines->value());
             s2.setValue("pecha/rules", rulesC->currentIndex());
             s2.setValue("pecha/layout", layoutC->currentIndex());
@@ -5485,6 +5541,8 @@ public:
             st.value("pecha/classicalOpening", true).toBool();
         o.coverSheet =
             st.value("pecha/coverSheet", false).toBool();
+        o.verseLines =
+            st.value("pecha/verseLines", false).toBool();
         o.coverDate = QDate::currentDate().toString(Qt::ISODate);
         o.ruleWeight =
             qBound(0, st.value("pecha/rules", 1).toInt(), 2);
