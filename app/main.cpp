@@ -379,127 +379,6 @@ static QString entryHtml(const allcore::Entry& e,
         h += " <span style='font-size:12px;color:#8A6D1F'>from: " +
              QString::fromStdString(d.surface).toHtmlEscaped() +
              "</span>";
-    if (d.notes && g_appNotes && !e.hgm_gloss.empty()) {
-        int shownNotes = 0;
-        for (const auto& note : *g_appNotes) {
-            bool hit = false;
-            for (const auto& g : e.hgm_gloss)
-                if (!note.lemma.isEmpty() &&
-                    QString::fromStdString(g).contains(note.lemma,
-                                                       Qt::CaseInsensitive))
-                    hit = true;
-            if (hit) {
-                h += "<div style='background:#F3EDDF;padding:3px 7px;"
-                     "border-radius:4px;margin:2px 0;font-size:11px'>"
-                     "\U0001F4CE <b>published footnote " +
-                     QString::number(note.num) + "</b> (" +
-                     note.lemma.toHtmlEscaped() + ") \u2014 <i>" +
-                     note.source.toHtmlEscaped() + "</i><br>" +
-                     note.text.left(280).toHtmlEscaped() +
-                     "</div>";
-                if (++shownNotes >= 2) break;
-            }
-        }
-    }
-    if (g_honorifics) {
-        auto it = g_honorifics->find(e.wylie);
-        if (it != g_honorifics->end()) {
-            const auto& [ord, dom, lvl] = it->second;
-            h += " <span style='background:#EADFF7;color:#4A2A6B;"
-                 "padding:1px 7px;border-radius:8px;font-size:11px'>" +
-                 QString(lvl == "high" ? "HIGH honorific"
-                         : lvl == "humilific" ? "humilific"
-                         : lvl == "double" ? "double honorific"
-                                           : "honorific") +
-                 " (zhe sa)</span>";
-            if (!ord.isEmpty())
-                h += " <small style='color:#555'>ordinary: <b>" +
-                     ord.toHtmlEscaped() + "</b></small>";
-        }
-    }
-    if (g_idioms) {
-        auto it = g_idioms->find(e.wylie);
-        if (it != g_idioms->end()) {
-            const bool approved = it->second.first == "approved";
-            h += QString(" <span style='background:%1;color:%2;"
-                         "padding:1px 7px;border-radius:8px;"
-                         "font-size:11px' title='%3'>IDIOM%4</span>")
-                     .arg(approved ? "#DDEBDC" : "#F2E8CF")
-                     .arg(approved ? "#2C5B2E" : "#6E5A1E")
-                     .arg(it->second.second.toHtmlEscaped())
-                     .arg(approved ? "" : " (proposed)");
-        }
-    }
-    if (g_dasSections && !e.wylie.empty()) {
-        const int pg = dasPageFor(e.wylie);
-        if (pg > 0)
-            h += QString(" <a href='das:%1' style='font-size:11px'>"
-                         "Das 1902 \u00b7 ~p.%1 (reference)</a>")
-                     .arg(pg);
-    }
-    if (g_teaching && !e.hgm_gloss.empty()) {
-        std::vector<const TeachingMoment*> ms;
-        std::set<QString> seen;
-        for (const auto& g : e.hgm_gloss) {
-            auto it = g_teaching->find(teachingKey(g));
-            if (it == g_teaching->end()) continue;
-            for (const auto& m : it->second)
-                if (!seen.count(m.url) && ms.size() < 3) {
-                    seen.insert(m.url);
-                    ms.push_back(&m);
-                }
-        }
-        if (!ms.empty()) {
-            h += "<div style='margin-top:6px;font-size:12px'>"
-                 "<span style='color:#7C2D26;font-weight:600'>Geshe "
-                 "Michael teaching this term</span> <i "
-                 "style='color:#888'>(machine-located from class "
-                 "captions \u2014 the recording is the "
-                 "authority)</i><br>";
-            for (const auto* m : ms) {
-                const int mm = m->t / 60, ss = m->t % 60;
-                h += QString("\u25B6 <a href='%1' title=\"%2\">%3</a>"
-                             " @%4:%5%6<br>")
-                         .arg(m->url,
-                              m->snippet.toHtmlEscaped(),
-                              m->title.left(60).toHtmlEscaped())
-                         .arg(mm)
-                         .arg(ss, 2, 10, QChar('0'))
-                         .arg(m->lang == "ENG" || m->lang == "?"
-                                  ? QString()
-                                  : " <b>[" + m->lang + "]</b>");
-            }
-            h += "</div>";
-        }
-    }
-    if (g_teachingTib && !e.wylie.empty()) {
-        auto it = g_teachingTib->find(e.wylie);
-        if (it != g_teachingTib->end() && !it->second.empty()) {
-            h += "<div style='margin-top:4px;font-size:12px'>"
-                 "<span style='color:#7C2D26;font-weight:600'>He says "
-                 "this word</span> <i style='color:#888'>(phonetic "
-                 "match on his own convention \u2014 candidates; "
-                 "homophones share moments)</i><br>";
-            int shown = 0;
-            for (const auto& m : it->second) {
-                if (++shown > 2) break;
-                h += QString("\u25B6 <a href='%1' title=\"%2\">%3</a>"
-                             " @%4:%5%6<br>")
-                         .arg(m.url, m.snippet.toHtmlEscaped(),
-                              m.title.left(60).toHtmlEscaped())
-                         .arg(m.t / 60)
-                         .arg(m.t % 60, 2, 10, QChar('0'))
-                         .arg((m.lang == "ENG" || m.lang == "?"
-                                   ? QString()
-                                   : " <b>[" + m.lang + "]</b>") +
-                              (m.src == "TKB"
-                                   ? " <i style='color:#7C2D26'>"
-                                     "\u00b7 lam rim</i>"
-                                   : QString()));
-            }
-            h += "</div>";
-        }
-    }
     if (!e.tibetan_source.empty())
         h += " <i style='color:#888'>[generated script]</i>";
     if (d.phonetics && !e.pronunciation.empty()) {
@@ -565,7 +444,7 @@ static QString entryHtml(const allcore::Entry& e,
                 }
             }
         }
-        h += "<br>pron: " +
+        h += "<div style='margin:5px 0 0 0'>pron: " +
              QString::fromStdString(cardPron).toHtmlEscaped();
         if (ruledPron)
             h += " <span style='color:#1E6B4E'>⟪ruled⟫</span>";
@@ -589,18 +468,58 @@ static QString entryHtml(const allcore::Entry& e,
                 h += "<br><small style='color:#666'>also heard: " +
                      also + "</small>";
         }
+        h += "</div>";
+    }
+    if (g_honorifics) {
+        auto it = g_honorifics->find(e.wylie);
+        if (it != g_honorifics->end()) {
+            const auto& [ord, dom, lvl] = it->second;
+            h += " <span style='background:#EADFF7;color:#4A2A6B;"
+                 "padding:1px 7px;border-radius:8px;font-size:11px'>" +
+                 QString(lvl == "high" ? "HIGH honorific"
+                         : lvl == "humilific" ? "humilific"
+                         : lvl == "double" ? "double honorific"
+                                           : "honorific") +
+                 " (zhe sa)</span>";
+            if (!ord.isEmpty())
+                h += " <small style='color:#555'>ordinary: <b>" +
+                     ord.toHtmlEscaped() + "</b></small>";
+        }
+    }
+    if (g_idioms) {
+        auto it = g_idioms->find(e.wylie);
+        if (it != g_idioms->end()) {
+            const bool approved = it->second.first == "approved";
+            h += QString(" <span style='background:%1;color:%2;"
+                         "padding:1px 7px;border-radius:8px;"
+                         "font-size:11px' title='%3'>IDIOM%4</span>")
+                     .arg(approved ? "#DDEBDC" : "#F2E8CF")
+                     .arg(approved ? "#2C5B2E" : "#6E5A1E")
+                     .arg(it->second.second.toHtmlEscaped())
+                     .arg(approved ? "" : " (proposed)");
+        }
+    }
+    if (g_dasSections && !e.wylie.empty()) {
+        const int pg = dasPageFor(e.wylie);
+        if (pg > 0)
+            h += QString(" <a href='das:%1' style='font-size:11px'>"
+                         "Das 1902 \u00b7 ~p.%1 (reference)</a>")
+                     .arg(pg);
     }
     if (d.glosses) {
         for (const auto& g : e.hgm_gloss) {
             QString tier = e.provisional()
                 ? "<span style='color:#b00'>PROVISIONAL (auto-aligned)</span>"
                 : QString::fromStdString("HGM (" + e.tier + ")");
-            h += "<br>≡ " + QString::fromStdString(g).toHtmlEscaped() +
-                 " &nbsp;<small>[" + tier + "]</small>";
+            h += "<div style='margin:3px 0 0 0'>≡ " +
+                 QString::fromStdString(g).toHtmlEscaped() +
+                 " &nbsp;<small>[" + tier + "]</small></div>";
         }
         if (e.hgm_gloss.empty()) {
-            h += "<br><i>(no HGM equivalent — " +
-                 QString::fromStdString(e.status).toHtmlEscaped() + ")</i>";
+            h += "<div style='margin:3px 0 0 0'><i>(no HGM "
+                 "equivalent — " +
+                 QString::fromStdString(e.status).toHtmlEscaped() +
+                 ")</i></div>";
             // the ALL Working Glossary (Adam, 2026-08-12): an
             // AI-drafted gloss may exist for HGM-less terms —
             // synthesized ONLY from reference comparanda (never
@@ -665,14 +584,39 @@ static QString entryHtml(const allcore::Entry& e,
             }
         }
     }
+    if (d.notes && g_appNotes && !e.hgm_gloss.empty()) {
+        int shownNotes = 0;
+        for (const auto& note : *g_appNotes) {
+            bool hit = false;
+            for (const auto& g : e.hgm_gloss)
+                if (!note.lemma.isEmpty() &&
+                    QString::fromStdString(g).contains(note.lemma,
+                                                       Qt::CaseInsensitive))
+                    hit = true;
+            if (hit) {
+                h += "<div style='background:#F3EDDF;padding:3px 7px;"
+                     "border-radius:4px;margin:7px 0 2px 0;"
+                     "font-size:11px'>"
+                     "\U0001F4CE <b>published footnote " +
+                     QString::number(note.num) + "</b> (" +
+                     note.lemma.toHtmlEscaped() + ") \u2014 <i>" +
+                     note.source.toHtmlEscaped() + "</i><br>" +
+                     note.text.left(280).toHtmlEscaped() +
+                     "</div>";
+                if (++shownNotes >= 2) break;
+            }
+        }
+    }
     if (d.sanskrit && !e.sanskrit_reference.empty())
-        h += "<br><small style='color:#666'>sanskrit (reference): " +
+        h += "<div style='margin-top:7px'><small style='color:#666'>"
+             "sanskrit (reference): " +
              QString::fromStdString(e.sanskrit_reference).left(160).toHtmlEscaped() +
-             "</small>";
+             "</small></div>";
     if (d.hopkins && !e.hopkins_reference.empty())
-        h += "<br><small style='color:#666'>Hopkins (reference only): " +
+        h += "<div style='margin-top:2px'><small style='color:#666'>"
+             "Hopkins (reference only): " +
              QString::fromStdString(e.hopkins_reference).left(200).toHtmlEscaped() +
-             "</small>";
+             "</small></div>";
     if (d.hopkins && g_84000) {
         auto it = g_84000->find(e.wylie);
         if (it != g_84000->end()) {
@@ -708,6 +652,69 @@ static QString entryHtml(const allcore::Entry& e,
                      x.left(160).toHtmlEscaped() + "</small>";
             b += "</div>";
             h += b;
+        }
+    }
+    if (g_teaching && !e.hgm_gloss.empty()) {
+        std::vector<const TeachingMoment*> ms;
+        std::set<QString> seen;
+        for (const auto& g : e.hgm_gloss) {
+            auto it = g_teaching->find(teachingKey(g));
+            if (it == g_teaching->end()) continue;
+            for (const auto& m : it->second)
+                if (!seen.count(m.url) && ms.size() < 3) {
+                    seen.insert(m.url);
+                    ms.push_back(&m);
+                }
+        }
+        if (!ms.empty()) {
+            h += "<div style='margin-top:9px;font-size:12px'>"
+                 "<span style='color:#7C2D26;font-weight:600'>Geshe "
+                 "Michael teaching this term</span> <i "
+                 "style='color:#888'>(machine-located from class "
+                 "captions \u2014 the recording is the "
+                 "authority)</i><br>";
+            for (const auto* m : ms) {
+                const int mm = m->t / 60, ss = m->t % 60;
+                h += QString("\u25B6 <a href='%1' title=\"%2\">%3</a>"
+                             " @%4:%5%6<br>")
+                         .arg(m->url,
+                              m->snippet.toHtmlEscaped(),
+                              m->title.left(60).toHtmlEscaped())
+                         .arg(mm)
+                         .arg(ss, 2, 10, QChar('0'))
+                         .arg(m->lang == "ENG" || m->lang == "?"
+                                  ? QString()
+                                  : " <b>[" + m->lang + "]</b>");
+            }
+            h += "</div>";
+        }
+    }
+    if (g_teachingTib && !e.wylie.empty()) {
+        auto it = g_teachingTib->find(e.wylie);
+        if (it != g_teachingTib->end() && !it->second.empty()) {
+            h += "<div style='margin-top:4px;font-size:12px'>"
+                 "<span style='color:#7C2D26;font-weight:600'>He says "
+                 "this word</span> <i style='color:#888'>(phonetic "
+                 "match on his own convention \u2014 candidates; "
+                 "homophones share moments)</i><br>";
+            int shown = 0;
+            for (const auto& m : it->second) {
+                if (++shown > 2) break;
+                h += QString("\u25B6 <a href='%1' title=\"%2\">%3</a>"
+                             " @%4:%5%6<br>")
+                         .arg(m.url, m.snippet.toHtmlEscaped(),
+                              m.title.left(60).toHtmlEscaped())
+                         .arg(m.t / 60)
+                         .arg(m.t % 60, 2, 10, QChar('0'))
+                         .arg((m.lang == "ENG" || m.lang == "?"
+                                   ? QString()
+                                   : " <b>[" + m.lang + "]</b>") +
+                              (m.src == "TKB"
+                                   ? " <i style='color:#7C2D26'>"
+                                     "\u00b7 lam rim</i>"
+                                   : QString()));
+            }
+            h += "</div>";
         }
     }
     h += "</div>";
