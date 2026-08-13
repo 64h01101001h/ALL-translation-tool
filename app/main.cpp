@@ -195,6 +195,7 @@ struct EntryDisplay {
     bool sanskrit = true;
     bool hopkins = false;
     bool g84000 = true;   // 84000 glossary layer (CC BY 4.0)
+    bool das = true;      // Das 1902 page-scan link
     bool notes = true;   // published footnotes & bibliography layer
     std::string surface;   // the clicked surface form (ACIP) when
                            // it differs from the headword — the
@@ -506,13 +507,6 @@ static QString entryHtml(const allcore::Entry& e,
                      .arg(approved ? "" : " (proposed)");
         }
     }
-    if (g_dasSections && !e.wylie.empty()) {
-        const int pg = dasPageFor(e.wylie);
-        if (pg > 0)
-            h += QString(" <a href='das:%1' style='font-size:11px'>"
-                         "Das 1902 \u00b7 ~p.%1 (reference)</a>")
-                     .arg(pg);
-    }
     if (d.glosses) {
         for (const auto& g : e.hgm_gloss) {
             QString tier = e.provisional()
@@ -618,6 +612,16 @@ static QString entryHtml(const allcore::Entry& e,
                 if (++shownNotes >= 2) break;
             }
         }
+    }
+    if (d.das && g_dasSections && !e.wylie.empty()) {
+        const int pg = dasPageFor(e.wylie);
+        if (pg > 0)
+            h += QString("<div style='margin-top:7px'><small>"
+                         "<a href='das:%1' style='color:#666'>"
+                         "Das 1902 dictionary \u00b7 open the "
+                         "page scan (~p.%1, reference)</a>"
+                         "</small></div>")
+                     .arg(pg);
     }
     if (d.sanskrit && !e.sanskrit_reference.empty())
         h += "<div style='margin-top:7px'><small style='color:#666'>"
@@ -909,9 +913,15 @@ static QString lookupResultsHtml(allcore::Spine& spine,
     }
     if (entries.empty()) h = "<i>no HGM match</i>";
     // (honorific badges render inside entryHtml, every pane alike)
-    for (const auto& e : entries) h += entryHtml(e);
+    EntryDisplay ld;
+    ld.das = QSettings("ALL", "TranslationTool")
+                 .value("lookup/showRefs", true)
+                 .toBool();
+    for (const auto& e : entries) h += entryHtml(e, ld);
 
-    if (ref) {
+    if (ref && QSettings("ALL", "TranslationTool")
+                   .value("lookup/showRefs", true)
+                   .toBool()) {
         // resolve to wylie for the reference layers (they key on wylie)
         std::string wylie = raw;
         if (!entries.empty()) wylie = entries.front().wylie;
@@ -1454,6 +1464,23 @@ static QWidget* makeLookupPane(allcore::Spine& spine, allcore::RefDict* ref,
     auto* box = new QLineEdit;
     box->setPlaceholderText(
         "wylie · Tibetan · ACIP · English · pronunciation…");
+    auto* refsToggle = new QCheckBox("reference layers");
+    refsToggle->setToolTip(
+        "Show or hide the Reference block (OT, IW and the other "
+        "local dictionary layers — unlicensed compilations, local "
+        "lookup only). The choice persists, and the ⌘D popup "
+        "follows it too.");
+    refsToggle->setChecked(QSettings("ALL", "TranslationTool")
+                               .value("lookup/showRefs", true)
+                               .toBool());
+    QObject::connect(refsToggle, &QCheckBox::toggled,
+                     [box](bool on) {
+                         QSettings("ALL", "TranslationTool")
+                             .setValue("lookup/showRefs", on);
+                         if (!box->text().trimmed().isEmpty())
+                             QMetaObject::invokeMethod(
+                                 box, "returnPressed");
+                     });
     auto* results = new QTextBrowser;
     results->setHtml(
         "<i style='color:#8A8A8A'>The entry appears here — try "
@@ -1485,6 +1512,7 @@ static QWidget* makeLookupPane(allcore::Spine& spine, allcore::RefDict* ref,
             }
         });
     layout->addWidget(box);
+    layout->addWidget(refsToggle);
     layout->addWidget(results);
     split->addWidget(left);
     split->addWidget(right);
@@ -3058,7 +3086,8 @@ auto* secScan = new QLabel("<span style='color:#9A7A33;font-size:10px;letter-spa
         showSanskrit_ = mkToggle("sanskrit", "Sanskrit reference", false);
         showHopkins_ = mkToggle("hopkins", "Hopkins reference", false);
         show84000_ = mkToggle("g84000", "84000 glossary (CC BY)", true);
-        showRefs_ = mkToggle("refs", "reference dictionaries (LC/TD/THL)",
+        showDas_ = mkToggle("das", "Das 1902 page links", true);
+        showRefs_ = mkToggle("refs", "reference dictionaries (LC/TD/THL/OT/IW)",
                              true);
         showNotes_ = mkToggle("notes", "footnotes && bibliography "
                                        "(published)", true);
@@ -4410,6 +4439,7 @@ private:
         disp.sanskrit = showSanskrit_->isChecked();
         disp.hopkins = showHopkins_->isChecked();
         disp.g84000 = show84000_->isChecked();
+        disp.das = showDas_->isChecked();
         disp.notes = showNotes_->isChecked();
         // when the clicked surface form differs from the headword
         // (affix landings: TSAD MA'I → tshad ma), the card says
@@ -7599,6 +7629,7 @@ private:
     QCheckBox* showSanskrit_ = nullptr;
     QCheckBox* showHopkins_ = nullptr;
     QCheckBox* show84000_ = nullptr;
+    QCheckBox* showDas_ = nullptr;
     QCheckBox* showRefs_ = nullptr;
     QCheckBox* showNotes_ = nullptr;
     QCheckBox* showSeg_ = nullptr;
