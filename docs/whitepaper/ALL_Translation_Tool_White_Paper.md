@@ -488,5 +488,68 @@ rather than approximated.
 
 - Windows and Linux builds for the input centers.
 
+## The August wave (12–13): the authority's tool
+
+Two further days of building brought the release to its present
+form, and their theme was singular: the tool now answers to its
+human authority faster, and in more places, than ever.
+
+**Rulings reach everything.** When the project's authority corrects
+a pronunciation — one message, "it should be *tsema namdrel*" —
+the correction becomes a stamped, provenance-carrying ruling that
+overrides the canonical engine on every surface at once: the
+whole-text pronunciation display, the entry cards (including
+embedded inside longer titles, where only the remainder re-derives
+through the engine), and the search box itself, where typing the
+ruled form now finds the entry. The engine is never edited; rulings
+are data, and the machinery beneath them (phrase-level runs that
+claim their syllables before the engine segments) is guarded by
+build-time tests pinned to the authority's own examples.
+
+**The wall became executable.** Facing the question of
+machine-translation models whose training corpora provably include
+rights-encumbered Buddhist translations, the project chose neither
+abstinence nor hope: it wrote the guard. Every machine-produced
+English — from any model, present or future — is screened against
+the complete corpus of the master's published English before it is
+kept; the screen's first audit exonerated all 1,395 existing
+AI-drafted glossary entries with zero reproductions. The Working
+Glossary itself is now feature-complete: drafts appear only where
+the master is silent, under an unmistakable banner, and a
+promotion lane lets a human review, edit, and file any draft to
+the Approval queue as an ordinary proposal with its machine
+provenance recorded.
+
+**The scholar's bench deepened.** A floating dictionary window
+(⌘D) answers from any text surface; folder searches roll up per
+file and open the text at the hit; two editions of a text collate
+into a colored variant view with a numbered, saveable apparatus —
+nothing auto-resolved. The THL Simplified Phonetic Transcription
+joined the display modes, implemented rule-for-rule from the
+published standard and proven against the standard's own 139
+examples; Old-Tibetan da-drag spellings now meet their classical
+forms in every search. The Pecha Maker matured into a production
+instrument: Degé measures with the classical five-line opening,
+title folios, margin furniture, verse lineation, two-up imposition
+with cut marks, cover sheets, batch folders — and an English
+interlinear that appears only where the aligned corpus attests the
+exact segment, proven end-to-end at every build.
+
+**The library keeps itself.** The application now checks the
+Asian Legacy Library's official release buckets, compares
+fingerprints with what is installed, and installs collection
+updates in place; the teaching index grew to 263,188 timecoded
+moments after an archival sweep recovered captions from dozens of
+unlisted recordings; and two catalog-numbering assumptions
+(Degé/Tohoku, and the Lhasa orderings) were tested against live
+records and *refuted* — replaced, in the first case, by a
+919-entry verified concordance, and in the second by the honest
+finding that a concordance must be built before a single link may
+ship.
+
+The wave closed with re-certification: every pane swept
+mechanically clean, every engine battery green, and eighteen
+pressed builds carrying it all into the installed application.
+
 *Prepared with reverence for the lineage of translation this tool exists
 to serve.*
