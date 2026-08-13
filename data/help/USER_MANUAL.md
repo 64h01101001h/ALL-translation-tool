@@ -564,6 +564,17 @@ app reopens exactly there.
 
 ## Library
 
+**Keeping the collections current.** Library → **Maintenance… →
+Check for collection updates…** asks asianlegacylibrary.org for
+the official Kangyur / Tengyur / Sungbum releases, shows each
+one's date and size against what this machine has installed
+(release fingerprints are remembered), and offers **Download &
+install…** right in the app — confirm, watch the progress, and
+the collection unpacks exactly as a manual install would. Your
+own materials and working folders are never touched; run "Update
+search index" afterward.
+
+
 *Where: Read → Library. The preserved canon on your own disk —
 8,986 texts and 14.1 million lines of the current public
 Kangyur, Tengyur, and Sungbum releases, plus your

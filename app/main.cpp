@@ -10479,6 +10479,10 @@ public:
             "Occasional utilities: search index rebuild, OCR "
             "hand-off, legacy font rescue.");
         auto* maintMenu = new QMenu(maintBtn);
+        maintMenu->addAction(
+            "Check for collection updates…",
+            [this] { checkCollectionUpdates(); });
+        maintMenu->addSeparator();
         maintMenu->addAction(indexBtn->text(), [indexBtn] {
             indexBtn->click();
         });
@@ -10653,6 +10657,14 @@ public:
         check(list_->rowCount() > 1000 ||
                   model_->rowCount(model_->index(libRoot_)) > 0,
               "catalog populated from the library");
+        // the update-checker's page parser (network never touched
+        // in selftest — the parse is the provable part)
+        check(parseCollectionLinks(
+                  "<a href=\"https://x.s3.amazonaws.com/KANGYUR"
+                  ".zip\">k</a> <A HREF=\"https://x/TENGYUR.zip\">"
+                  "t</A> <a href=\"https://x/page.html\">n</a>")
+                      .size() == 2,
+              "update checker parses collection ZIP links");
         {
             const QString ph = personHtml("S5271");
             check(ph.contains("treasuryoflives") ||
@@ -10762,6 +10774,10 @@ private:
         const QString zip = safeGetOpenFileName(
             this, "Install collection ZIP", QString(), "ZIP archives (*.zip)");
         if (zip.isEmpty()) return;
+        installZipPath(zip);
+    }
+
+    bool installZipPath(const QString& zip) {
         QString name = QFileInfo(zip).completeBaseName().toLower();
         for (const char* c : {"kangyur", "tengyur", "sungbum", "varanasi"})
             if (name.contains(c)) { name = c; break; }
@@ -10783,6 +10799,220 @@ private:
                       .arg(name)
                 : "<b style='color:#b00'>unzip failed</b> (exit " +
                       QString::number(p.exitCode()) + ") — is the ZIP intact?");
+        return p.exitCode() == 0;
+    }
+
+    // ---- in-app collection updates (Adam's "strongly suggest",
+    // 2026-08-12): check asianlegacylibrary.org for the official
+    // collection ZIPs, compare against what this machine last
+    // installed (S3 ETag fingerprints), and download+install
+    // directly — the library stays current without a browser. ----
+    static QStringList parseCollectionLinks(const QString& html) {
+        QStringList out;
+        static const QRegularExpression re(
+            "href=\"(https?://[^\"]+\\.zip)\"",
+            QRegularExpression::CaseInsensitiveOption);
+        auto it = re.globalMatch(html);
+        while (it.hasNext()) {
+            const QString u = it.next().captured(1);
+            if (!out.contains(u)) out << u;
+        }
+        return out;
+    }
+
+    void checkCollectionUpdates() {
+        if (g_sweepActive) {
+            info_->setHtml("<i>sweep mode — network checks stay "
+                           "offline</i>");
+            return;
+        }
+        info_->setHtml(
+            "<i>checking asianlegacylibrary.org for collection "
+            "updates…</i>");
+        QCoreApplication::processEvents();
+        auto await = [](QNetworkReply* r, int ms) {
+            QEventLoop loop;
+            QTimer::singleShot(ms, &loop, &QEventLoop::quit);
+            QObject::connect(r, &QNetworkReply::finished, &loop,
+                             &QEventLoop::quit);
+            loop.exec();
+        };
+        QStringList urls;
+        {
+            QNetworkReply* r = net_.get(QNetworkRequest(
+                QUrl("https://asianlegacylibrary.org/library/")));
+            await(r, 20000);
+            if (r->error() == QNetworkReply::NoError)
+                urls = parseCollectionLinks(
+                    QString::fromUtf8(r->readAll()));
+            r->deleteLater();
+        }
+        if (urls.isEmpty()) {
+            // the site page failed or changed shape — the known
+            // official buckets are the fallback, and we say so
+            for (const char* c : {"KANGYUR", "TENGYUR", "SUNGBUM"})
+                urls << QString("https://all-library-docs.s3."
+                                "us-west-2.amazonaws.com/%1.zip")
+                            .arg(c);
+        }
+        struct Row {
+            QString url, name, date, status;
+            qint64 bytes = 0;
+            QString etag;
+            bool updatable = false;
+        };
+        std::vector<Row> rows;
+        QSettings st("ALL", "TranslationTool");
+        for (const QString& u : urls) {
+            Row row;
+            row.url = u;
+            row.name =
+                QFileInfo(QUrl(u).path()).completeBaseName()
+                    .toLower();
+            QNetworkReply* r =
+                net_.head(QNetworkRequest(QUrl(u)));
+            await(r, 15000);
+            if (r->error() == QNetworkReply::NoError) {
+                row.bytes =
+                    r->header(QNetworkRequest::ContentLengthHeader)
+                        .toLongLong();
+                row.date =
+                    r->header(QNetworkRequest::LastModifiedHeader)
+                        .toDateTime()
+                        .toString("yyyy-MM-dd");
+                row.etag = QString::fromUtf8(
+                    r->rawHeader("ETag"));
+                const QString known =
+                    st.value("collections/etag/" + row.name)
+                        .toString();
+                const bool haveDir =
+                    QDir(libRoot_ + "/" + row.name)
+                        .entryList(QDir::Files |
+                                   QDir::AllDirs |
+                                   QDir::NoDotAndDotDot)
+                        .size() > 0;
+                if (!haveDir) {
+                    row.status = "not installed";
+                    row.updatable = true;
+                } else if (known.isEmpty()) {
+                    row.status =
+                        "installed (fingerprint unknown — "
+                        "installed outside this checker)";
+                    row.updatable = true;
+                } else if (known == row.etag) {
+                    row.status = "current ✓";
+                } else {
+                    row.status = "UPDATE AVAILABLE";
+                    row.updatable = true;
+                }
+            } else {
+                row.status = "unreachable";
+            }
+            r->deleteLater();
+            rows.push_back(row);
+        }
+        auto* dlg = new QDialog(this);
+        dlg->setAttribute(Qt::WA_DeleteOnClose);
+        dlg->setWindowTitle("Collection updates — "
+                            "asianlegacylibrary.org");
+        dlg->resize(680, 320);
+        auto* v = new QVBoxLayout(dlg);
+        auto* note = new QLabel(
+            "The official collection releases, checked live. "
+            "Downloading replaces nothing by itself — the ZIP "
+            "unpacks over the collection folder exactly as a "
+            "manual install does (your my_materials and work "
+            "folders are never touched).");
+        note->setWordWrap(true);
+        v->addWidget(note);
+        for (const auto& row : rows) {
+            auto* h = new QHBoxLayout;
+            auto* lbl = new QLabel(
+                QString("<b>%1</b> — %2 · %3 MB · %4")
+                    .arg(row.name.toUpper())
+                    .arg(row.date.isEmpty() ? "?" : row.date)
+                    .arg(row.bytes / (1024 * 1024))
+                    .arg(row.status));
+            lbl->setTextFormat(Qt::RichText);
+            h->addWidget(lbl, 1);
+            if (row.updatable) {
+                auto* dl = new QPushButton("Download && install…");
+                h->addWidget(dl);
+                const QString url = row.url, name = row.name,
+                              etag = row.etag;
+                const qint64 bytes = row.bytes;
+                connect(dl, &QPushButton::clicked,
+                        [this, dlg, url, name, etag, bytes] {
+                            downloadAndInstall(dlg, url, name,
+                                               etag, bytes);
+                        });
+            }
+            v->addLayout(h);
+        }
+        info_->setHtml(
+            "<i>update check complete — see the dialog.</i>");
+        dlg->show();
+    }
+
+    void downloadAndInstall(QWidget* parent, const QString& url,
+                            const QString& name,
+                            const QString& etag, qint64 bytes) {
+        if (QMessageBox::question(
+                parent, "Download collection",
+                QString("Download %1 (%2 MB) from the official "
+                        "release bucket and install it into the "
+                        "library?")
+                    .arg(name.toUpper())
+                    .arg(bytes / (1024 * 1024)),
+                QMessageBox::Yes | QMessageBox::No,
+                QMessageBox::No) != QMessageBox::Yes)
+            return;
+        const QString tmp =
+            QDir::temp().filePath(name + "-collection.zip");
+        QFile out(tmp);
+        if (!out.open(QIODevice::WriteOnly)) return;
+        QNetworkReply* r = net_.get(QNetworkRequest(QUrl(url)));
+        QProgressDialog prog("Downloading " + name.toUpper() + "…",
+                             "Cancel", 0, 100, parent);
+        prog.setWindowModality(Qt::WindowModal);
+        prog.setMinimumDuration(0);
+        connect(r, &QNetworkReply::downloadProgress,
+                [&prog](qint64 got, qint64 total) {
+                    if (total > 0)
+                        prog.setValue(int(got * 100 / total));
+                });
+        connect(r, &QNetworkReply::readyRead,
+                [&out, r] { out.write(r->readAll()); });
+        QEventLoop loop;
+        connect(&prog, &QProgressDialog::canceled, r,
+                &QNetworkReply::abort);
+        connect(r, &QNetworkReply::finished, &loop,
+                &QEventLoop::quit);
+        loop.exec();
+        out.write(r->readAll());
+        out.close();
+        const bool ok = r->error() == QNetworkReply::NoError;
+        r->deleteLater();
+        prog.close();
+        if (!ok) {
+            QMessageBox::warning(parent, "Download",
+                                 "Download failed or was "
+                                 "cancelled — nothing installed.");
+            QFile::remove(tmp);
+            return;
+        }
+        if (installZipPath(tmp)) {
+            QSettings st("ALL", "TranslationTool");
+            st.setValue("collections/etag/" + name, etag);
+            QMessageBox::information(
+                parent, "Collection installed",
+                name.toUpper() +
+                    " is installed and fingerprinted — the "
+                    "checker will report it current until the "
+                    "site publishes a new release. Run "
+                    "Maintenance → Update search index next.");
+        }
+        QFile::remove(tmp);
     }
 
     void importFiles() {
@@ -11322,6 +11552,7 @@ private:
     }
 
     QString libRoot_;
+    QNetworkAccessManager net_;   // collection update checks
     bool personsLoaded_ = false;
     QMap<QString, QString> authorByWork_;
     QMap<QString, QJsonObject> personsByAuthor_;

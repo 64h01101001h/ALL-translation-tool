@@ -647,13 +647,21 @@ implementation is sidelined HERE from this date. What this means:
 
 ## IN-APP COLLECTION UPDATES (Adam, 2026-08-12 — "strongly suggest")
 
-- [ ] **Check asianlegacylibrary.org for updates from inside the
+- [x] **SHIPPED 2026-08-13** — Library → Maintenance → "Check for
+      collection updates…": fetches the site's library page (S3
+      fallback), HEADs the official ZIPs (size/date/ETag), compares
+      ETag fingerprints against what this machine installed, and
+      downloads+installs in-app with progress + confirm. (was:
+      Check asianlegacylibrary.org for updates from inside the
       app**: a Library-pane action (and/or startup check) that
       probes the ALL website's library page for the current
       Kangyur/Tengyur/Sungbum collection releases, compares against
       the installed manifest (record installed release/version at
       install time), and reports what's new.
-- [ ] **Load the .zip files directly from the website**: download
+- [x] **SHIPPED 2026-08-13** (same dialog — per-collection
+      "Download & install…" with confirm, progress, cancel;
+      fingerprint recorded on success). (was: Load the .zip files
+      directly from the website: download
       chosen collection ZIPs in-app (progress + resume + checksum),
       then feed the existing Install-collection pipeline — no
       browser round-trip. Needs: a probe of the site's actual
