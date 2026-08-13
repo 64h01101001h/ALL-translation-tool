@@ -360,7 +360,15 @@ static QString entryHtml(const allcore::Entry& e,
     h += "<div style='margin-bottom:14px'>";
     h += "<span style='font-size:22px'>" +
          QString::fromStdString(e.tibetan).toHtmlEscaped() + "</span> ";
-    h += "<b>" + QString::fromStdString(e.wylie).toHtmlEscaped() + "</b>";
+    // ACIP beside the Tibetan (Adam's ruling 2026-08-12: the
+    // input centers' native transliteration, not wylie). Entries
+    // without a stored ACIP convert through the round-trip-proven
+    // engine; wylie only as a last resort.
+    std::string headTrans = e.acip;
+    if (headTrans.empty()) headTrans = allcore::ewtsToAcip(e.wylie);
+    if (headTrans.empty()) headTrans = e.wylie;
+    h += "<b>" + QString::fromStdString(headTrans).toHtmlEscaped() +
+         "</b>";
     if (d.notes && g_appNotes && !e.hgm_gloss.empty()) {
         int shownNotes = 0;
         for (const auto& note : *g_appNotes) {
@@ -1593,6 +1601,16 @@ public:
                 }
                 check(ok2, "card pron re-derives around the "
                            "embedded ruling");
+            }
+            // the card headword shows ACIP beside the Tibetan
+            // (Adam's ruling: the input centers' native script,
+            // not wylie)
+            {
+                auto es = spine_.lookup("bsod nams");
+                const bool ok3 =
+                    !es.empty() &&
+                    entryHtml(es.front()).contains("BSOD NAMS");
+                check(ok3, "card headword renders in ACIP");
             }
             // THL Simplified Phonetics mode (engine proven by its
             // own ctest battery; here: the UI wiring renders it)
