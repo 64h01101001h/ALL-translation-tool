@@ -257,8 +257,20 @@ nams* = **sunam**, never "so nam"; *skabs 'dir* = **kabdir**) and
 junction sound changes are correct. Clicking and the arrow keys
 work exactly as in the other modes (a merged word answers for its
 first syllable). Anything the engine cannot pronounce appears in
-⟨angle brackets⟩ rather than being dropped or guessed. A THL-scheme
-pronunciation option is planned as a follow-up.
+⟨angle brackets⟩ rather than being dropped or guessed.
+
+**Pronunciation (THL)** renders the text in the THL Simplified
+Phonetic Transcription (Germano & Tournadre, THL) — the scholarly
+standard used across the Tibetan & Himalayan Library. The engine
+was implemented rule-for-rule from THL's published standard and is
+proven against the standard's own complete example battery (139
+cases, including its 19-word exception list) on every build. It
+renders per syllable in THL's own interim machine convention:
+word-final é and the *ba*→*wa* rule apply only where word
+boundaries are certain, and unresolvable syllables appear in
+⟨angle brackets⟩ — never guesses. GMR remains the binding spoken
+convention of this project; the THL mode is a labeled scholarly
+reference.
 
 **Approved rulings override the engine.** When the authority
 approves a pronunciation proposal (the 205-row prenasal register is

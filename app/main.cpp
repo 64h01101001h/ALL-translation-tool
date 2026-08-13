@@ -972,6 +972,42 @@ static std::function<void(QWidget*)> g_raisePane;
 // reject QDialogs but not NSOpenPanel, so dialog-opening lanes
 // short-circuit when this is set (main() sets it for --sweep)
 static bool g_sweepActive = false;
+// every folder picker goes through this wrapper: in sweep mode it
+// answers empty (as if the user cancelled) instead of hanging the
+// harness on an un-reapable native panel
+static QString safeGetExistingDirectory(
+    QWidget* parent, const QString& caption = QString(),
+    const QString& dir = QString()) {
+    if (g_sweepActive) return QString();
+    return QFileDialog::getExistingDirectory(parent, caption, dir);
+}
+// …and the same for every native open/save panel (a stack sample
+// showed getOpenFileName parked in NSSavePanel runModal under the
+// sweep — the reaper can only reject QDialogs)
+static QString safeGetOpenFileName(
+    QWidget* parent, const QString& caption = QString(),
+    const QString& dir = QString(),
+    const QString& filter = QString()) {
+    if (g_sweepActive) return QString();
+    return QFileDialog::getOpenFileName(parent, caption, dir,
+                                        filter);
+}
+static QStringList safeGetOpenFileNames(
+    QWidget* parent, const QString& caption = QString(),
+    const QString& dir = QString(),
+    const QString& filter = QString()) {
+    if (g_sweepActive) return QStringList();
+    return QFileDialog::getOpenFileNames(parent, caption, dir,
+                                         filter);
+}
+static QString safeGetSaveFileName(
+    QWidget* parent, const QString& caption = QString(),
+    const QString& dir = QString(),
+    const QString& filter = QString()) {
+    if (g_sweepActive) return QString();
+    return QFileDialog::getSaveFileName(parent, caption, dir,
+                                        filter);
+}
 // cross-pane query hooks for the Hunt palette (⌘K): set where each
 // pane is built, called only from user actions
 static std::function<void(const QString&)> g_lookupQuery;
@@ -1007,7 +1043,17 @@ static QWidget* makeLookupPane(allcore::Spine& spine, allcore::RefDict* ref,
                                allcore::WhitneyRoots* whitney = nullptr,
                                allcore::ColloquialPron* colloq = nullptr) {
     auto* pane = new QWidget;
-    auto* outer = new QHBoxLayout(pane);
+    auto* paneL = new QVBoxLayout(pane);
+    auto* lkBanner = new QLabel(
+        "<b>Lookup</b> — the stacked multi-dictionary: type a "
+        "headword (wylie, Tibetan, ACIP, English, or pronunciation) "
+        "or browse in traditional Tibetan order. Geshe Michael's "
+        "equivalents are the binding layer; every other dictionary "
+        "is labeled reference.");
+    lkBanner->setWordWrap(true);
+    paneL->addWidget(lkBanner);
+    auto* outer = new QHBoxLayout;
+    paneL->addLayout(outer, 1);
     auto* split = new QSplitter(Qt::Horizontal);
     outer->addWidget(split);
 
@@ -1028,8 +1074,15 @@ static QWidget* makeLookupPane(allcore::Spine& spine, allcore::RefDict* ref,
     auto* right = new QWidget;
     auto* layout = new QVBoxLayout(right);
     auto* box = new QLineEdit;
-    box->setPlaceholderText("wylie · Tibetan · ACIP headword…");
+    box->setPlaceholderText(
+        "wylie · Tibetan · ACIP · English · pronunciation…");
     auto* results = new QTextBrowser;
+    results->setHtml(
+        "<i style='color:#8A8A8A'>The entry appears here — try "
+        "<b>bsod nams</b>, <b>BSOD NAMS</b>, \"merit\", or "
+        "\"sönam\". Layers you can toggle in the Overlay's card "
+        "appear here too: HGM (binding), reference dictionaries, "
+        "84000, and the Working Glossary (AI-drafted, labeled).</i>");
     results->setOpenExternalLinks(true);  // link-out tier opens the browser
     QObject::connect(
         results, &QTextBrowser::anchorClicked,
@@ -1121,6 +1174,14 @@ public:
         : spine_(spine), templatePath_(std::move(templatePath)),
           saveDir_(std::move(saveDir)) {
         auto* outer = new QVBoxLayout(this);
+        auto* anBanner = new QLabel(
+            "<b>Analysis</b> — a labeled-AI reading of one passage "
+            "against the corpus: pre-pass evidence gathered by the "
+            "engines, the model's report, and a validation pass "
+            "that checks every claim. AI output is always labeled; "
+            "nothing enters the corpus from here.");
+        anBanner->setWordWrap(true);
+        outer->addWidget(anBanner);
         auto* split = new QSplitter(Qt::Horizontal);
 
         auto* left = new QWidget;
@@ -1141,7 +1202,14 @@ public:
         auto* right = new QSplitter(Qt::Vertical);
         report_ = new QTextBrowser;
         report_->setOpenExternalLinks(false);
+        report_->setHtml(
+            "<i style='color:#8A8A8A'>The analysis report lands "
+            "here — paste a passage and press Analyze.</i>");
         qc_ = new QTextBrowser;
+        qc_->setHtml(
+            "<i style='color:#8A8A8A'>The validation pass "
+            "(claim-by-claim checks against the corpus) lands "
+            "here.</i>");
         right->addWidget(report_);
         right->addWidget(qc_);
         right->setStretchFactor(0, 4);
@@ -2010,7 +2078,7 @@ auto* secScan = new QLabel("<span style='color:#9A7A33;font-size:10px;letter-spa
         connect(input_, &QPlainTextEdit::cursorPositionChanged,
                 [this] { syncFolioToCursor(); });
         connect(open, &QPushButton::clicked, [this] {
-            const QString fn = QFileDialog::getOpenFileName(
+            const QString fn = safeGetOpenFileName(
                 this, "Open ACIP document", QString(),
                 "ACIP/text files (*.txt *.acip *.act *.inc *.md);;All files (*)");
             if (fn.isEmpty()) return;
@@ -4076,7 +4144,7 @@ public:
                 outText += "[" + std::to_string(i + 1) + "] " +
                            prep.notes[i] + "\n";
         }
-        const QString fn = QFileDialog::getSaveFileName(
+        const QString fn = safeGetSaveFileName(
             this, "Save translation-prep text", "translation_prep.txt",
             "Text files (*.txt)");
         if (!fn.isEmpty()) {
@@ -4097,7 +4165,7 @@ public:
         const std::string src = input_->toPlainText().toStdString();
         if (src.empty()) return QString();
         auto res = allcore::exportTibetanUnicode(src);
-        const QString fn = QFileDialog::getSaveFileName(
+        const QString fn = safeGetSaveFileName(
             this, "Save print Tibetan", "tibetan_unicode.txt",
             "Text files (*.txt)");
         if (!fn.isEmpty()) {
@@ -4756,7 +4824,7 @@ public:
         connect(go, &QPushButton::clicked, &dlg, &QDialog::accept);
         if (dlg.exec() != QDialog::Accepted) return QString();
         persist();
-        const QString fn = QFileDialog::getSaveFileName(
+        const QString fn = safeGetSaveFileName(
             this, "Save pecha", "pecha.pdf", "PDF (*.pdf)");
         if (fn.isEmpty()) return QString();
         const PechaOpts o = buildOpts();
@@ -4883,11 +4951,11 @@ public:
             return "<i>sweep mode — the folder pickers stay "
                    "closed (native panels cannot be reaped); the "
                    "batch lane is proven by its selftest.</i>";
-        const QString inDir = QFileDialog::getExistingDirectory(
+        const QString inDir = safeGetExistingDirectory(
             this,
             "Choose the folder of texts (ACIP or wylie files)");
         if (inDir.isEmpty()) return QString();
-        const QString outDir = QFileDialog::getExistingDirectory(
+        const QString outDir = safeGetExistingDirectory(
             this, "Choose the output folder for the pecha PDFs");
         if (outDir.isEmpty()) return QString();
         return pechaBatchDirs(inDir, outDir);
@@ -5985,19 +6053,35 @@ public:
         // ---- Search Setting tab
         auto* setting = new QWidget;
         auto* sl = new QVBoxLayout(setting);
+        auto* gfBanner = new QLabel(
+            "<b>Search (Gofer)</b> — the classic input-center "
+            "search, rebuilt: up to eight terms across the corpus, "
+            "the published apparatus, Spotlight, and your own "
+            "folders, combined with OR / AND / NEAR.");
+        gfBanner->setWordWrap(true);
+        sl->addWidget(gfBanner);
         sl->addWidget(new QLabel("Enter Text to Go For:"));
         auto* grid1 = new QGridLayout;
         for (int i = 0; i < 4; ++i) {
             fields_[i] = new QLineEdit;
+            fields_[i]->setPlaceholderText(
+                QString("term %1 — ACIP or English").arg(i + 1));
             grid1->addWidget(fields_[i], i / 2, i % 2);
         }
         sl->addLayout(grid1);
         auto* opRow = new QHBoxLayout;
         combiner_ = new QComboBox;
         combiner_->addItems({"OR", "AND (same file)", "NEAR"});
+        combiner_->setToolTip(
+            "OR: any term matches. AND: all terms in the same "
+            "file. NEAR: terms within the given number of lines "
+            "of each other.");
         opRow->addWidget(combiner_);
-        opRow->addWidget(new QLabel("proximity:"));
+        opRow->addWidget(new QLabel("within lines (NEAR):"));
         proximity_ = new QLineEdit("0");
+        proximity_->setToolTip(
+            "For NEAR: how many lines apart the terms may sit. "
+            "0 means the same line.");
         proximity_->setMaximumWidth(120);
         opRow->addWidget(proximity_);
         opRow->addStretch();
@@ -6005,6 +6089,8 @@ public:
         auto* grid2 = new QGridLayout;
         for (int i = 4; i < 8; ++i) {
             fields_[i] = new QLineEdit;
+            fields_[i]->setPlaceholderText(
+                QString("term %1 — ACIP or English").arg(i + 1));
             grid2->addWidget(fields_[i], (i - 4) / 2, (i - 4) % 2);
         }
         sl->addLayout(grid2);
@@ -6017,10 +6103,20 @@ public:
         loadDirs();
         sl->addWidget(dirs_, 1);
         auto* btnRow = new QHBoxLayout;
-        auto* addB = new QPushButton("Add");
+        auto* addB = new QPushButton("Add folder…");
+        addB->setToolTip(
+            "Add one of your own folders to the search scope "
+            "(checked rows above are searched).");
         auto* remB = new QPushButton("Remove");
+        remB->setToolTip("Remove the selected folder row.");
         auto* dupB = new QPushButton("Duplicate");
-        auto* saveB = new QPushButton("Save");
+        dupB->setToolTip(
+            "Copy the selected folder row (to search the same "
+            "folder with a different setting).");
+        auto* saveB = new QPushButton("Save search");
+        saveB->setToolTip(
+            "Keep this whole search — terms, operator, scope — on "
+            "the Saved Search tab.");
         stopB_ = new QPushButton("Stop");
         stopB_->setEnabled(false);
         findB_ = new QPushButton("Find");
@@ -6062,7 +6158,7 @@ public:
         inner_->addTab(results_, "Search Results");
 
         connect(addB, &QPushButton::clicked, [this] {
-            const QString d = QFileDialog::getExistingDirectory(
+            const QString d = safeGetExistingDirectory(
                 this, "Add a folder to search");
             if (!d.isEmpty()) { addDirRow(d, true); saveDirs(); }
         });
@@ -6551,6 +6647,12 @@ public:
         l->addLayout(row);
         out_ = new QTextBrowser;
         out_->setOpenExternalLinks(true);
+        out_->setHtml(
+            "<i style='color:#8A8A8A'>Every notation of the term "
+            "appears here — IAST, the ACIP Sanskrit input codes, "
+            "EWTS, Tibetan script, Devanagari, pronunciation — "
+            "with Whitney's roots and the Mahāvyutpatti bridge "
+            "where they answer. Type above and press Analyze.</i>");
         l->addWidget(out_, 1);
         connect(go, &QPushButton::clicked, [this] { analyze(); });
         connect(in_, &QLineEdit::returnPressed, [this] { analyze(); });
@@ -6678,7 +6780,7 @@ private:
                           "san.traineddata (see Convert pane note)</div>");
             return;
         }
-        const QString img = QFileDialog::getOpenFileName(
+        const QString img = safeGetOpenFileName(
             this, "Devanagari image", QString(),
             "Images (*.png *.jpg *.jpeg *.tif *.tiff)");
         if (img.isEmpty()) return;
@@ -6709,6 +6811,14 @@ static QWidget* makeConvertPane(allcore::Mvp* mvp,
                                 allcore::WhitneyRoots* whitney = nullptr) {
     auto* pane = new QWidget;
     auto* layout = new QVBoxLayout(pane);
+    auto* cvBanner = new QLabel(
+        "<b>Convert</b> — script and notation conversions through "
+        "the battery-proven engines: ACIP ⇄ wylie ⇄ Tibetan "
+        "Unicode, the Sanskrit notations, pronunciation, and the "
+        "Tibetan calendar. Anything unprovable is flagged, never "
+        "guessed.");
+    cvBanner->setWordWrap(true);
+    layout->addWidget(cvBanner);
 
     {
         auto* eb = new QLabel("<span style='color:#9A7A33;font-size:10px;"
@@ -9123,7 +9233,7 @@ public:
             report_->setHtml("<i>nothing to export</i>");
             return;
         }
-        const QString fn = QFileDialog::getSaveFileName(
+        const QString fn = safeGetSaveFileName(
             this, "Export draft as RTF", "draft.rtf", "RTF (*.rtf)");
         if (fn.isEmpty()) return;
         QString body;
@@ -9930,7 +10040,7 @@ private:
     }
 
     void installZip() {
-        const QString zip = QFileDialog::getOpenFileName(
+        const QString zip = safeGetOpenFileName(
             this, "Install collection ZIP", QString(), "ZIP archives (*.zip)");
         if (zip.isEmpty()) return;
         QString name = QFileInfo(zip).completeBaseName().toLower();
@@ -9957,7 +10067,7 @@ private:
     }
 
     void importFiles() {
-        const QStringList files = QFileDialog::getOpenFileNames(
+        const QStringList files = safeGetOpenFileNames(
             this, "Import materials", QString(),
             "Documents (*.docx *.txt *.acip *.act *.md *.rtf);;All files (*)");
         if (files.isEmpty()) return;
@@ -10014,12 +10124,12 @@ private:
                 utfcDir = QString::fromUtf8(f.readAll()).trimmed();
         }
         if (!QFileInfo::exists(utfcDir + "/Converter.c")) {
-            utfcDir = QFileDialog::getExistingDirectory(
+            utfcDir = safeGetExistingDirectory(
                 this, "Locate the UTFC-master folder (conversion tables)");
             if (utfcDir.isEmpty()) return;
         }
         st.setValue("utfc/dir", utfcDir);
-        const QString src = QFileDialog::getOpenFileName(
+        const QString src = safeGetOpenFileName(
             this, "Legacy document to rescue", QString(),
             "Text documents (*.txt *.rtf);;All files (*)");
         if (src.isEmpty()) return;
@@ -10534,9 +10644,15 @@ public:
         split->addWidget(draft_);
         outer->addWidget(split, 1);
         report_ = new QTextBrowser;
+        report_->setHtml(
+            "<i style='color:#8A8A8A'>The review report lands "
+            "here: register warnings, provisional-tier reliance, "
+            "unmatched established terms, collapsed distinctions. "
+            "Flags for the reviewer's eye — never verdicts, never "
+            "auto-corrections.</i>");
         outer->addWidget(report_, 1);
         auto openInto = [this](QPlainTextEdit* into) {
-            const QString f = QFileDialog::getOpenFileName(
+            const QString f = safeGetOpenFileName(
                 this, "Open file", QString(),
                 "Text (*.txt *.act *.inc *.md);;All files (*)");
             if (f.isEmpty()) return;
@@ -10851,7 +10967,7 @@ public:
         connect(sc, &QShortcut::activated, [this] { makeLink(); });
         connect(linkBtn_, &QPushButton::clicked, [this] { makeLink(); });
         connect(open, &QPushButton::clicked, [this] {
-            const QString f = QFileDialog::getOpenFileName(
+            const QString f = safeGetOpenFileName(
                 this, "Open ACIP file", root_ + "/library");
             if (f.isEmpty()) return;
             QFile qf(f);
@@ -11084,7 +11200,7 @@ private:
     // widen to whole tokens (counted), unmappable links are skipped
     // (counted), never guessed.
     void importHyp() {
-        const QString fn = QFileDialog::getOpenFileName(
+        const QString fn = safeGetOpenFileName(
             this, "Import Hypercontext file", QString(),
             "Hypercontext (*.hyp);;All files (*)");
         if (fn.isEmpty()) return;
@@ -11209,7 +11325,7 @@ private:
         const QString base = docFile_ == "untitled"
                                  ? "untitled"
                                  : QFileInfo(docFile_).completeBaseName();
-        const QString out = QFileDialog::getSaveFileName(
+        const QString out = safeGetSaveFileName(
             this, "Export aligned pairs",
             root_ + "/data/candidate_alignments/" + base + "-pairs.tsv",
             "TSV (*.tsv)");
@@ -11289,6 +11405,10 @@ public:
         row->addWidget(prevPageB_);
         row->addWidget(pageLbl_);
         row->addWidget(nextPageB_);
+        // second toolbar row (design audit 2026-08-12: one row
+        // clipped six-plus labels to garbage on the pane made for
+        // the least-expert users — no label may elide)
+        auto* row2 = new QHBoxLayout;
         predictToggle_ = new QCheckBox("Predictive typing");
         predictToggle_->setToolTip(
             "Complete the syllable or word you are typing from the "
@@ -11304,7 +11424,7 @@ public:
                 .setValue("input/predict", on);
             if (on) buildPredict();
         });
-        row->addWidget(predictToggle_);
+        row2->addWidget(predictToggle_);
         connect(openFolderB, &QPushButton::clicked,
                 [this] { openFolder(); });
         connect(prevPageB_, &QPushButton::clicked,
@@ -11313,7 +11433,7 @@ public:
                 [this] { gotoPage(pageIx_ + 1); });
         followBox_ = new QCheckBox("scan follows cursor");
         followBox_->setChecked(true);
-        row->addWidget(followBox_);
+        row2->addWidget(followBox_);
 #ifdef ALL_HAVE_OCR
         auto* bandsB = new QPushButton("Detect lines (OCR)");
         bandsB->setToolTip(
@@ -11321,7 +11441,7 @@ public:
             "cursor-following jumps to the EXACT line band instead of "
             "ACE's proportional estimate. Detection only — no text is "
             "recognized.");
-        row->addWidget(bandsB);
+        row2->addWidget(bandsB);
         connect(bandsB, &QPushButton::clicked, [this] { detectBands(); });
         auto* prefillB = new QPushButton("Pre-fill from OCR (draft)");
         prefillB->setToolTip(
@@ -11332,7 +11452,7 @@ public:
             "underlined. The draft is ocr-derived: correcting it is "
             "your typing pass; the double-keying comparison against "
             "your partner still applies unchanged.");
-        row->addWidget(prefillB);
+        row2->addWidget(prefillB);
         connect(prefillB, &QPushButton::clicked, [this] { prefill(); });
 #endif
         auto* zoomL = new QLabel("zoom");
@@ -11348,14 +11468,16 @@ public:
             "column 1, 3-digit zero-padded, side A then B): after "
             "@001A comes @001B, then @002A. Starts at @001A in an "
             "empty document.");
-        row->addWidget(folioB);
+        row2->addWidget(folioB);
         connect(folioB, &QPushButton::clicked, [this] { nextFolio(); });
         auto* partnerB = new QPushButton("Compare with partner file…");
-        row->addWidget(partnerB);
+        row2->addWidget(partnerB);
         auto* saveB = new QPushButton("Save…");
-        row->addWidget(saveB);
+        row2->addWidget(saveB);
         row->addStretch();
+        row2->addStretch();
         outer->addLayout(row);
+        outer->addLayout(row2);
 
         auto* split = new QSplitter(Qt::Vertical);
         scroll_ = new QScrollArea;
@@ -11486,7 +11608,7 @@ public:
 
 private:
     void openScan() {
-        const QString f = QFileDialog::getOpenFileName(
+        const QString f = safeGetOpenFileName(
             this, "Open page scan", root_ + "/library",
             "Images (*.png *.jpg *.jpeg *.tif *.tiff)");
         if (f.isEmpty()) return;
@@ -11735,7 +11857,7 @@ private:
     }
 
     void compare() {
-        const QString f = QFileDialog::getOpenFileName(
+        const QString f = safeGetOpenFileName(
             this, "Partner's input file", root_ + "/library",
             "Text (*.txt *.act *.inc);;All files (*)");
         if (f.isEmpty()) return;
@@ -11803,7 +11925,7 @@ private:
 
     // ---- the block workflow: a folder of pages, typed in order ----
     void openFolder() {
-        const QString dir = QFileDialog::getExistingDirectory(
+        const QString dir = safeGetExistingDirectory(
             this, "Folder of page scans", root_ + "/library");
         if (dir.isEmpty()) return;
         pages_.clear();
@@ -11898,7 +12020,7 @@ private:
         // block combined in page order
         if (!pages_.isEmpty() && pageIx_ >= 0) {
             gotoPage(pageIx_);   // persists the current page's text
-            const QString out = QFileDialog::getSaveFileName(
+            const QString out = safeGetSaveFileName(
                 this, "Export combined block",
                 workDir_ + "-combined.txt", "Text (*.txt)");
             if (out.isEmpty()) return;
@@ -11926,7 +12048,7 @@ private:
         const QString base =
             scanFile_.isEmpty() ? "input"
                                 : QFileInfo(scanFile_).completeBaseName();
-        const QString out = QFileDialog::getSaveFileName(
+        const QString out = safeGetSaveFileName(
             this, "Save input work",
             root_ + "/library/input_work/" + base + ".txt",
             "Text (*.txt)");
@@ -12122,7 +12244,7 @@ static void runIllustrationGallery(QWidget* parent, const QString& root,
             full.exec();
         });
     QObject::connect(saveB, &QPushButton::clicked, [&] {
-        const QString out = QFileDialog::getExistingDirectory(
+        const QString out = safeGetExistingDirectory(
             &dlg, "Save crops into folder");
         if (out.isEmpty()) return;
         int n = 0;
@@ -12154,9 +12276,11 @@ public:
         auto* row = new QHBoxLayout;
         auto* open = new QPushButton("Open scan image…");
         row->addWidget(open);
-        deskewOverride_ = new QCheckBox(
-            "override deskew to 0° (DEVIATION from the BDRC pipeline — "
-            "workaround for its angle bug on straight pages)");
+        deskewOverride_ = new QCheckBox("deskew off (0°)");
+        deskewOverride_->setToolTip(
+            "Override deskew to 0° — a labeled DEVIATION from the "
+            "BDRC pipeline, working around its angle bug on "
+            "straight pages. Leave off for tilted scans.");
         row->addWidget(deskewOverride_);
         run_ = new QPushButton("Run OCR");
         run_->setEnabled(false);
@@ -12229,7 +12353,7 @@ public:
 
 private:
     void openImage() {
-        const QString f = QFileDialog::getOpenFileName(
+        const QString f = safeGetOpenFileName(
             this, "Open scan image", root_ + "/library",
             "Images (*.png *.jpg *.jpeg *.tif *.tiff)");
         if (f.isEmpty()) return;
@@ -12441,7 +12565,7 @@ private:
     // same review-material rule on every output.
     void batchFolder() {
         if (!ensureModels()) return;
-        const QString dir = QFileDialog::getExistingDirectory(
+        const QString dir = safeGetExistingDirectory(
             this, "Folder of page scans", root_ + "/library");
         if (dir.isEmpty()) return;
         QStringList imgs;
@@ -12562,7 +12686,7 @@ private:
         if (lastWylie_.empty()) return;
         QDir().mkpath(root_ + "/library/ocr_out");
         const QString base = QFileInfo(file_).completeBaseName();
-        const QString out = QFileDialog::getSaveFileName(
+        const QString out = safeGetSaveFileName(
             this, "Save OCR text",
             root_ + "/library/ocr_out/" + base + "-ocr.txt",
             "Text (*.txt)");
@@ -12593,7 +12717,7 @@ private:
     QPushButton* run_ = nullptr;
     QPushButton* save_ = nullptr;
     void illusGallery() {
-        const QString dir = QFileDialog::getExistingDirectory(
+        const QString dir = safeGetExistingDirectory(
             this, "Folder of page scans");
         if (dir.isEmpty()) return;
         QStringList files =
@@ -12651,7 +12775,7 @@ static QString findDataRoot() {
         nullptr, "Locate the data folder",
         "The ALL Tool Data folder (containing build/hgm_spine_…db) was "
         "not found next to the application. Please choose it.");
-    const QString picked = QFileDialog::getExistingDirectory(
+    const QString picked = safeGetExistingDirectory(
         nullptr, "Choose the ALL Tool Data folder");
     if (!picked.isEmpty() && isDataRoot(picked)) {
         s.setValue("app/dataRoot", picked);
@@ -12857,7 +12981,7 @@ public:
         if (configured)
             QTimer::singleShot(0, [applyFold] { applyFold(false); });
         connect(pick, &QPushButton::clicked, [this] {
-            const QString d = QFileDialog::getExistingDirectory(
+            const QString d = safeGetExistingDirectory(
                 this, "Shared proposals folder (Dropbox-synced is ideal)");
             if (!d.isEmpty()) dir_->setText(d);
         });
@@ -13055,13 +13179,15 @@ class ApprovalPane : public QWidget {
 public:
     ApprovalPane(const QString& root) : root_(root) {
         auto* outer = new QVBoxLayout(this);
-        outer->addWidget(new QLabel(
+        auto* apBanner = new QLabel(
             "<b>Approval</b> — the authority's queue. Register approvals "
             "(honorific, pronunciation, abbreviation) apply in the app "
             "immediately, tiered as approved with your name and the "
             "date. Dictionary/corpus approvals are collected for the "
             "data project's next release — the app never edits the "
-            "corpus itself."));
+            "corpus itself.");
+        apBanner->setWordWrap(true);
+        outer->addWidget(apBanner);
         auto* row = new QHBoxLayout;
         auto* refresh = new QPushButton("Refresh queue");
         auto* exportB = new QPushButton("Export approved dictionary "
@@ -13395,7 +13521,7 @@ private:
     }
 
     void exportApproved() {
-        const QString out = QFileDialog::getSaveFileName(
+        const QString out = safeGetSaveFileName(
             this, "Export approved dictionary candidates",
             root_ + "/data/candidate_alignments/approved_terms.tsv",
             "TSV (*.tsv)");
@@ -13584,7 +13710,7 @@ public:
         connect(sideToggle, &QCheckBox::toggled, side_,
                 &QWidget::setVisible);
         connect(openB, &QPushButton::clicked, [this] {
-            const QString fn = QFileDialog::getOpenFileName(
+            const QString fn = safeGetOpenFileName(
                 this, "Open manuscript", QString(),
                 "Manuscript (*.html)");
             if (!fn.isEmpty()) openFile(fn);
@@ -13669,7 +13795,7 @@ public:
     }
 
     bool saveAs() {
-        QString fn = QFileDialog::getSaveFileName(
+        QString fn = safeGetSaveFileName(
             this, "Save manuscript", QString(), "Manuscript (*.html)");
         if (fn.isEmpty()) return false;
         if (!fn.endsWith(".html")) fn += ".html";
@@ -13682,7 +13808,7 @@ public:
     void exportRtf() {
         if (path_.isEmpty() && !saveAs()) return;
         if (dirty_) save();
-        QString fn = QFileDialog::getSaveFileName(
+        QString fn = safeGetSaveFileName(
             this, "Export RTF", QString(), "Rich Text (*.rtf)");
         if (fn.isEmpty()) return;
         if (!fn.endsWith(".rtf")) fn += ".rtf";
@@ -13844,7 +13970,7 @@ public:
         dw->setLayout(dr);
         tl->addRow("Shared proposals folder", dw);
         connect(pick, &QPushButton::clicked, [this] {
-            const QString d = QFileDialog::getExistingDirectory(
+            const QString d = safeGetExistingDirectory(
                 this, "Shared proposals folder (the team Dropbox)");
             if (!d.isEmpty()) dir_->setText(d);
         });
@@ -13861,7 +13987,7 @@ public:
         uw->setLayout(ur);
         dl->addRow("Team updates folder", uw);
         connect(updPick, &QPushButton::clicked, [this] {
-            const QString d = QFileDialog::getExistingDirectory(
+            const QString d = safeGetExistingDirectory(
                 this, "Team updates folder (where new DMGs arrive)");
             if (!d.isEmpty()) updDir_->setText(d);
         });
@@ -14727,7 +14853,7 @@ static void showTranslatorSurvey(QWidget* parent,
     QObject::connect(closeB, &QPushButton::clicked, dlg,
                      &QDialog::accept);
     QObject::connect(saveB, &QPushButton::clicked, [dlg, md, path] {
-        const QString fn = QFileDialog::getSaveFileName(
+        const QString fn = safeGetSaveFileName(
             dlg, "Save survey",
             QFileInfo(path).completeBaseName() + "-survey.md",
             "Markdown (*.md)");
@@ -15396,7 +15522,7 @@ int main(int argc, char** argv) {
                         "Dropbox).\n\nChoose that folder now? It "
                         "will be remembered.") != QMessageBox::Yes)
                     return;
-                dir = QFileDialog::getExistingDirectory(
+                dir = safeGetExistingDirectory(
                     &win, "Team updates folder");
                 if (dir.isEmpty()) return;
                 st.setValue("app/updatesDir", dir);
