@@ -61,16 +61,25 @@ def bdrc_labels():
         except Exception:
             continue
         n = int(m.group(1))
-        # JSON-LD: find any prefLabel valued in bo-x-ewts
+        # purl.bdrc.io serves expanded RDF/JSON: keys are full
+        # predicate URIs, literals are {"value","lang"}; accept
+        # the JSON-LD compact shape too. ALL bo-x-ewts labels in
+        # the file count — the title entities carry the variant
+        # titles, which raise the match rate honestly.
         def walk(x):
             if isinstance(x, dict):
                 for k, v in x.items():
-                    if k.endswith("prefLabel"):
+                    if k.endswith("prefLabel") or \
+                       k.endswith("#prefLabel"):
                         vals = v if isinstance(v, list) else [v]
                         for it in vals:
-                            if isinstance(it, dict) and \
-                               it.get("@language") == "bo-x-ewts":
-                                yield it.get("@value", "")
+                            if not isinstance(it, dict):
+                                continue
+                            lang = it.get("lang",
+                                          it.get("@language"))
+                            if lang == "bo-x-ewts":
+                                yield it.get("value",
+                                             it.get("@value", ""))
                     else:
                         yield from walk(v)
             elif isinstance(x, list):
