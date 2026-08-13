@@ -621,5 +621,46 @@ by click.
 
 ---
 
-*Seventeen panes, one principle: the machine may match the master's
+## The August wave — new since the sections above
+
+- **⌘D, anywhere**: select a word or phrase in any pane and the
+  floating dictionary window answers with the full lookup stack,
+  following its own cross-references.
+- **Rulings on every surface**: the authority's approved
+  pronunciations override the engine in the whole-text display,
+  on entry cards (green ⟪ruled⟫ tag — including phrases embedded
+  in longer titles), and in search, where the ruled form finds
+  its entry.
+- **Pronunciation (THL)**: the scholarly transcription beside the
+  house convention — in the Overlay's display modes and the
+  Convert pane's live table — proven against the published
+  standard's own 139 examples.
+- **Edition collation** (Align → Compare editions…): two
+  witnesses, every variant colored, a numbered apparatus you can
+  save. The editor rules; the machine never resolves.
+- **Search locations, TibetDoc-style**: folder results roll up
+  per file with hit counts; one click opens the text at the hit.
+- **The Pecha Maker, production-grade**: Degé measures, classical
+  five-line openings, title folios, ya-yig and volume letters,
+  verse lineation, two-up imposition with cut marks, cover
+  sheets, whole-folder batches — and a corpus-attested English
+  interlinear that is matched, never composed.
+- **Self-updating collections** (Library → Maintenance): the app
+  checks the official release buckets, compares fingerprints,
+  and installs updates in place.
+- **The Working Glossary, complete**: 1,395 AI-drafted deep
+  entries where the master is silent — violet-bannered, POS from
+  hand-tagged evidence only, resolving cross-references — with a
+  review-and-promote lane into the Approval queue, and a
+  corpus screen that proves no machine output reproduces the
+  master's English.
+- **Approve all in filter**: machine-seeded proposal batches
+  ruled in one considered act, every ruling stamped.
+- **THL Places** in the link-out row; **Old-Tibetan spellings**
+  (da-drag) folding into classical search; entry cards in a
+  deliberate typographic order with ACIP beside the Tibetan.
+
+---
+
+*Twenty panes, one principle: the machine may match the master's
 English — it may never compose it.*
