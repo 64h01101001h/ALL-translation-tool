@@ -32,11 +32,12 @@ implementation is sidelined HERE from this date. What this means:
 
 ## Waiting on Adam (prompt him when the task starts)
 
-- [ ] **Confirm the pronunciation of LE'UR** (Adam's own note-to-self,
-      2026-08-13). His live ruling put the phrase pron at
-      "tsema namdrel gyi tsik le'ur jepa" ("lay-oohr"), but he wants
-      to CONFIRM le'ur itself before it hardens. On confirmation,
-      also rule whether it generalizes: 465 dictionary entries carry
+- [ ] **Confirm with Geshe Michael Roach how to address the LE'UR
+      pronunciation exception** (Adam, 2026-08-13). "le'ur"
+      ("lay-oohr") is CONFIRMED for display and is live in the app;
+      what awaits GMR's word is how the exception class is to be
+      addressed in the pronunciation system. With that ruling,
+      also decide whether it generalizes: 465 dictionary entries carry
       an 'a-chung+u syllable of this class (le'ur, mtha'ur…) — if
       general, implement as a DISPLAY-layer transform (engine stays
       battery-locked canonical) and check against the banked ACIP
