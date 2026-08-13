@@ -30,60 +30,80 @@ SANS = 'Helvetica Neue'
 
 # pane number -> (title, caption) — keep in step with the gallery page
 PANES = {
- '01': ('Overlay', 'The flagship reading pane: a Mind-Training text '
-        'from the Sungbum, every word and phrase the dictionary knows '
-        'gently shaded, nested phrases within longer ones — 768 entries '
-        'live under this one screen. Click any word for its card; the '
-        'woodblock scan follows along beneath.'),
- '02': ('Analysis', 'The eighteen-section grammatical analysis: the '
-        'engine extracts everything verifiable, an AI model writes the '
-        'report, and the machine re-checks every quotation. Always '
-        'banner-labeled.'),
- '03': ('Trainer', 'Learning to read, layer by layer: clause '
-        'boundaries, particle roles, reading order, vocabulary, then '
-        'the answer key — Geshe Michael’s own English wherever the '
-        'passage lives in his corpus.'),
- '04': ('Drills', 'Exercises that write themselves from the corpus — '
-        'every answer is the master’s own text. Scrambles, '
-        'fill-ins, particle choices, parallel reading, review.'),
- '05': ('Draft', 'The working translator’s bench: source and '
-        'draft side by side, established terms anchored, quotations '
-        'detected, phrase memory, verse meter and stanza reading '
-        'order.'),
- '06': ('Review', 'The overseer’s bench: a senior translator '
-        'checks another’s draft — register warnings, '
+ '01': ('Overlay', 'The flagship reading pane: every word and phrase '
+        'the dictionary knows, clickable — the longest known phrase '
+        'lights up, the card answers below, the woodblock scan can '
+        'follow along. Arrow keys walk the text; five display '
+        'scripts including both pronunciation conventions.'),
+ '02': ('Library', 'The preserved canon close at hand: the current '
+        'Kangyur, Tengyur, and Sungbum releases, decoded catalog '
+        'identities, English titles, one click into the Overlay — '
+        'and a Maintenance menu that checks asianlegacylibrary.org '
+        'for collection updates and installs them in place.'),
+ '03': ('Scans', 'The woodblock tools for the loaded text: BDRC scan '
+        'linking, whole-volume illustration galleries, and the '
+        'four-layer folio view (scan · OCR · e-text · attested '
+        'English).'),
+ '04': ('Export', 'The publishing station: translation-prep format, '
+        'the Pecha Maker (title folio, ya-yig, Degé measures, '
+        'verse lineation, two-up imposition, batch mode), and '
+        'print-ready Tibetan Unicode.'),
+ '05': ('Draft', 'The working translator’s bench: source and draft '
+        'side by side, the Evidence Ribbon following the cursor, '
+        'established terms anchored, quotations detected, phrase '
+        'memory, a live terminology guard as you type.'),
+ '06': ('Manuscript', 'The composition surface: rich text with the '
+        'corpus search beside it — the master’s attested English '
+        'one “insert” away — and the publishing tools at hand.'),
+ '07': ('Apparatus', 'Every published footnote and bibliography '
+        'entry from the released volumes, sequential and '
+        'searchable — the official tier only, reusable with one '
+        'click.'),
+ '08': ('Review', 'The overseer’s bench: register warnings, '
         'provisional-tier cautions, unmatched terms, collapsed '
         'distinctions. Guidance, never verdicts.'),
- '07': ('Align', 'The dictionary-building workflow reborn from the '
+ '09': ('Align', 'The dictionary-building workflow reborn from the '
         'Hypercontext era: align Tibetan and English, harvest '
-        'translator-authored pairs — clearly PENDING until approved.'),
- '08': ('Input', 'The input-center workstation, ACE reborn: type '
-        'beside the scan, the image follows your cursor, OCR pre-fills '
-        'a draft, double-keying compared automatically.'),
- '09': ('Library', 'The preserved canon close at hand: 2,700+ texts '
-        'of Release 6, decoded catalog identities, one click into the '
-        'Overlay.'),
- '10': ('Search', 'The classic Gofer search grammar restored: OR and '
-        'NEAR-within-N-lines across the whole library, plus the '
-        'corpus.'),
- '11': ('Convert', 'Every writing system: ACIP ⇄ Wylie ⇄ '
-        'Tibetan script ⇄ Sanskrit in seven notations ⇄ '
-        'Devanagari, with Whitney’s root analyses annotating '
-        'Sanskrit.'),
- '12': ('Lookup', 'The stacked multi-dictionary: HGM binding layer '
-        'first, then reference works, each honestly labeled — with '
-        'honorific badges and community pronunciations.'),
- '13': ('Scan', 'Tibetan text recognition embedded and proven: '
-        'woodblock page images read line by line, output always marked '
-        'as review material.'),
- '14': ('Propose', 'The team’s channel to the authority: propose '
-        'honorifics, pronunciations, abbreviations, renderings — '
-        'evidence auto-captured, identity as provenance, Dropbox as '
-        'the server.'),
- '15': ('Approval', 'The authority’s queue — here holding all '
-        '205 machine-derived prenasal pronunciations awaiting ruling, '
-        'kamdir first. Approve, decline, or defer; every decision '
-        'stamped and archived.'),
+        'PENDING pairs — and collate two editions of a text into '
+        'a variant apparatus.'),
+ '10': ('Search', 'The classic Gofer grammar restored: OR and '
+        'NEAR-within-N-lines across corpus, apparatus, Spotlight, '
+        'and your own folders — folder results rolled up per file, '
+        'one click opening the text at the hit.'),
+ '11': ('Lookup', 'The stacked multi-dictionary: eight ways a query '
+        'can land (headword, ACIP, English, pronunciation, ruled '
+        'forms, community spellings, affix-stripped, browse), '
+        'every layer labeled.'),
+ '12': ('Sanskrit', 'The Sanskrit workbench: every notation, '
+        'Whitney’s roots and grammar, Monier-Williams deep links, '
+        'and the Mahāvyutpatti bridge.'),
+ '13': ('Convert', 'Every writing system live as you type — ACIP ⇄ '
+        'Wylie ⇄ Tibetan script, both pronunciation conventions '
+        'side by side, and the full Tibetan calendar.'),
+ '14': ('Analysis', 'The labeled-AI reading of one passage: engine '
+        'pre-pass evidence, the model’s report, and a validation '
+        'pass that re-checks every claim. Always banner-labeled.'),
+ '15': ('Trainer', 'Learning to read, layer by layer: clause '
+        'boundaries, particle roles, reading order, vocabulary, '
+        'then the answer key — the master’s own English wherever '
+        'the passage lives in his corpus.'),
+ '16': ('Drills', 'Exercises that write themselves from the corpus — '
+        'every answer is the master’s own text. Scrambles, '
+        'fill-ins, particle choices, parallel reading, review.'),
+ '17': ('Input', 'The input-center workstation, ACE reborn: type '
+        'beside the scan, the image follows your cursor, '
+        'predictive ACIP completion, OCR pre-fill, double-keying '
+        'comparison.'),
+ '18': ('OCR', 'Woodblock pages into text: line detection, '
+        'recognition, illustration-candidate marking — every '
+        'output headered OCR-DERIVED, review material only.'),
+ '19': ('Propose', 'The team’s channel: offer a term, marking, '
+        'pronunciation, or note — your name recorded, the passage '
+        'attached as evidence.'),
+ '20': ('Approval', 'The authority’s queue: every proposal ruled '
+        'with provenance; register approvals apply in-app '
+        'immediately; machine-seeded batches ruled in one '
+        'considered act.'),
 }
 
 
