@@ -1721,6 +1721,75 @@ private:
 };
 
 // ---- Overlay pane: document view with nested depth shading -----------------
+// ---- mini icon fleet (Adam's go, 2026-08-13): hand-drawn 16pt
+// monochrome glyphs on PRIMARY action buttons only (HIG restraint:
+// no icons on checkboxes, labels, or secondary controls). Drawn in
+// code — license-clean, crisp at 2x, one visual voice.
+static QIcon miniIcon(const QString& kind) {
+    QPixmap pm(32, 32);
+    pm.fill(Qt::transparent);
+    QPainter p(&pm);
+    p.setRenderHint(QPainter::Antialiasing);
+    QPen pen(QColor(0x44, 0x44, 0x44), 2.4);
+    pen.setJoinStyle(Qt::RoundJoin);
+    pen.setCapStyle(Qt::RoundCap);
+    p.setPen(pen);
+    if (kind == "page") {
+        p.drawPolyline(QPolygonF({{9, 4}, {9, 28}, {23, 28}, {23, 10},
+                                  {17, 4}, {9, 4}}));
+        p.drawPolyline(QPolygonF({{17, 4}, {17, 10}, {23, 10}}));
+    } else if (kind == "image") {
+        p.drawRect(6, 7, 20, 18);
+        p.drawEllipse(QPointF(12, 13), 2, 2);
+        p.drawPolyline(QPolygonF({{8, 23}, {14, 16}, {18, 20},
+                                  {21, 17}, {24, 20}}));
+    } else if (kind == "folder") {
+        p.drawPolyline(QPolygonF({{5, 26}, {5, 8}, {13, 8}, {15, 11},
+                                  {27, 11}, {27, 26}, {5, 26}}));
+    } else if (kind == "clock") {
+        p.drawEllipse(QPointF(16, 16), 11, 11);
+        p.drawLine(QPointF(16, 10), QPointF(16, 16));
+        p.drawLine(QPointF(16, 16), QPointF(21, 19));
+    } else if (kind == "save") {
+        p.drawLine(QPointF(16, 5), QPointF(16, 19));
+        p.drawPolyline(QPolygonF({{10, 13}, {16, 19}, {22, 13}}));
+        p.drawPolyline(
+            QPolygonF({{6, 21}, {6, 27}, {26, 27}, {26, 21}}));
+    } else if (kind == "diff") {
+        p.drawRect(5, 5, 13, 17);
+        p.drawRect(14, 10, 13, 17);
+    } else if (kind == "ocr") {
+        p.drawPolyline(QPolygonF({{10, 5}, {5, 5}, {5, 10}}));
+        p.drawPolyline(QPolygonF({{22, 5}, {27, 5}, {27, 10}}));
+        p.drawPolyline(QPolygonF({{10, 27}, {5, 27}, {5, 22}}));
+        p.drawPolyline(QPolygonF({{22, 27}, {27, 27}, {27, 22}}));
+        p.drawLine(QPointF(10, 13), QPointF(22, 13));
+        p.drawLine(QPointF(10, 19), QPointF(19, 19));
+    } else if (kind == "book") {
+        p.drawLine(QPointF(16, 7), QPointF(16, 26));
+        p.drawPolyline(QPolygonF(
+            {{16, 7}, {12, 5}, {5, 6}, {5, 25}, {12, 24}, {16, 26}}));
+        p.drawPolyline(QPolygonF({{16, 7},
+                                  {20, 5},
+                                  {27, 6},
+                                  {27, 25},
+                                  {20, 24},
+                                  {16, 26}}));
+    } else if (kind == "gear") {
+        p.drawEllipse(QPointF(16, 16), 6.5, 6.5);
+        for (int i = 0; i < 8; ++i) {
+            const double a = i * M_PI / 4;
+            p.drawLine(QPointF(16 + 8.5 * std::cos(a),
+                               16 + 8.5 * std::sin(a)),
+                       QPointF(16 + 12 * std::cos(a),
+                               16 + 12 * std::sin(a)));
+        }
+    }
+    p.end();
+    pm.setDevicePixelRatio(2.0);
+    return QIcon(pm);
+}
+
 class OverlayPane : public QWidget {
 public:
     // open a file into the overlay (used by the Library pane's browser)
@@ -2494,8 +2563,10 @@ public:
         auto* ll = new QVBoxLayout(left);
         ll->setContentsMargins(0, 4, 0, 0);
         auto* open = new QPushButton("Open ACIP file…");
+        open->setIcon(miniIcon("page"));
         ll->addWidget(open);
         auto* load = new QPushButton("Load into overlay");
+        load->setIcon(miniIcon("book"));
         ll->addWidget(load);
 auto* secRev = new QLabel("<span style='color:#9A7A33;font-size:10px;letter-spacing:2px;font-weight:600'>REVIEW</span>");
         secRev->setContentsMargins(0, 8, 0, 0);
@@ -2582,6 +2653,7 @@ auto* secScan = new QLabel("<span style='color:#9A7A33;font-size:10px;letter-spa
         secScan->setContentsMargins(0, 8, 0, 0);
         ll->addWidget(secScan);
                 scanBtn_ = new QPushButton("Follow along in scans (BDRC)");
+        scanBtn_->setIcon(miniIcon("image"));
         scanBtn_->setEnabled(false);
         scanBtn_->setToolTip(
             "Opens the woodblock scans of this text from BDRC and keeps "
@@ -11035,6 +11107,7 @@ public:
         row->addWidget(importBtn);
         row->addWidget(viewBtn);
         auto* maintBtn = new QPushButton("Maintenance…");
+        maintBtn->setIcon(miniIcon("gear"));
         maintBtn->setToolTip(
             "Occasional utilities: search index rebuild, OCR "
             "hand-off, legacy font rescue.");
@@ -12465,6 +12538,7 @@ public:
         outer->addWidget(alignBanner);
         auto* row = new QHBoxLayout;
         auto* open = new QPushButton("Open ACIP file…");
+        open->setIcon(miniIcon("page"));
         row->addWidget(open);
         auto* hypBtn = new QPushButton("Import .hyp…");
         hypBtn->setToolTip(
@@ -13019,8 +13093,10 @@ public:
 
         auto* row = new QHBoxLayout;
         auto* openScanB = new QPushButton("Open scan…");
+        openScanB->setIcon(miniIcon("image"));
         row->addWidget(openScanB);
         auto* openFolderB = new QPushButton("Open scan folder…");
+        openFolderB->setIcon(miniIcon("folder"));
         openFolderB->setToolTip(
             "The block workflow: open a whole folder of page scans and "
             "work through them in order — each page's typing saves to "
@@ -13028,6 +13104,7 @@ public:
             "when you return to the page.");
         row->addWidget(openFolderB);
         auto* recentB = new QPushButton("Recent ▾");
+        recentB->setIcon(miniIcon("clock"));
         recentB->setToolTip(
             "Recently viewed scans and scan folders — one click "
             "reopens (the folder workflow restores its page and "
@@ -13104,6 +13181,7 @@ public:
         row2->addWidget(followBox_);
 #ifdef ALL_HAVE_OCR
         auto* bandsB = new QPushButton("Detect lines (OCR)");
+        bandsB->setIcon(miniIcon("ocr"));
         bandsB->setToolTip(
             "Run line detection on the scan (BDRC PhotiLines model) so "
             "cursor-following jumps to the EXACT line band instead of "
@@ -13112,6 +13190,7 @@ public:
         row2->addWidget(bandsB);
         connect(bandsB, &QPushButton::clicked, [this] { detectBands(); });
         auto* prefillB = new QPushButton("Pre-fill from OCR (draft)");
+        prefillB->setIcon(miniIcon("ocr"));
         prefillB->setToolTip(
             "OCR-assisted input: recognize this page (BDRC Woodblock "
             "model, CC BY-NC, with permission) and fill the EMPTY "
@@ -13198,8 +13277,10 @@ public:
         row2->addWidget(folioB);
         connect(folioB, &QPushButton::clicked, [this] { nextFolio(); });
         auto* partnerB = new QPushButton("Compare with partner file…");
+        partnerB->setIcon(miniIcon("diff"));
         row2->addWidget(partnerB);
         auto* saveB = new QPushButton("Save…");
+        saveB->setIcon(miniIcon("save"));
         row2->addWidget(saveB);
         row->addStretch();
         row2->addStretch();
