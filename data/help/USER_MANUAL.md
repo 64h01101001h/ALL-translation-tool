@@ -1852,6 +1852,11 @@ right. (Every one of them is also reachable from the menu bar:
   TIFF). Use this for a one-page job.
 - **Open scan folder…** — opens a whole folder of page scans as a
   work queue: the block workflow. See §12.3.
+- **Recent ▾** — a menu of the last ten scans and scan folders you
+  opened, newest first. One click reopens the entry (a folder
+  reopens as its block, restoring your page and typing from the
+  work folder as usual). Entries whose file has moved or been
+  deleted simply don't appear. The list survives restarts.
 - **◀ page** and **page ▶** — step backward and forward through
   the pages of an open folder. Between them a label shows your
   place, e.g. **page 3/12**. Both buttons are greyed out until a
@@ -1868,8 +1873,16 @@ right. (Every one of them is also reachable from the menu bar:
   Woodblock model) and fills the **empty** editor with an ACIP
   draft for you to correct. It refuses to touch a page you have
   typed on. See §12.6.
-- **zoom** (slider, 25–200%) — scales the scan image. 100% is
-  actual size.
+- **− / zoom slider / + / percent box** — the zoom controls
+  (25–400%; 100% is actual size). Click **−** or **+** to step by
+  15%, drag the slider, or use the percent box: pick a preset
+  (50%–300%), type an exact figure, or choose **Fit width** /
+  **Fit page** to size the scan to the viewer. Keyboard, whenever
+  the pane has focus: **⌘＋** (or ⌘⇧＋) zooms in, **⌘−** zooms
+  out, **⌘0** returns to 100%. Hold **⌘ and scroll the mouse
+  wheel** (or trackpad) over the scan to zoom around the point
+  under the pointer — the spot you're inspecting stays put, as in
+  the BDRC scan viewer.
 - **@ next folio** — inserts the next folio marker per the ACIP
   specification. See §12.5.
 - **Compare with partner file…** — the double-keying diff. See

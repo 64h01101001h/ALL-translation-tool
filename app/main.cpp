@@ -12525,6 +12525,44 @@ public:
             "its own file in library/input_work/<folder>/ and reloads "
             "when you return to the page.");
         row->addWidget(openFolderB);
+        auto* recentB = new QPushButton("Recent ▾");
+        recentB->setToolTip(
+            "Recently viewed scans and scan folders — one click "
+            "reopens (the folder workflow restores its page and "
+            "your typing).");
+        auto* recentMenu = new QMenu(recentB);
+        recentB->setMenu(recentMenu);
+        connect(recentMenu, &QMenu::aboutToShow,
+                [this, recentMenu] {
+                    recentMenu->clear();
+                    const QStringList rec =
+                        QSettings("ALL", "TranslationTool")
+                            .value("input/recentScans")
+                            .toStringList();
+                    bool any = false;
+                    for (const QString& p : rec) {
+                        const QFileInfo fi(p);
+                        if (!fi.exists()) continue;
+                        any = true;
+                        recentMenu->addAction(
+                            (fi.isDir() ? QString::fromUtf8(
+                                              "\U0001F4C1 ")
+                                        : QString::fromUtf8(
+                                              "\U0001F5BC ")) +
+                                fi.fileName(),
+                            [this, p] {
+                                if (QFileInfo(p).isDir())
+                                    openFolderPath(p);
+                                else
+                                    openScanPath(p);
+                            });
+                    }
+                    if (!any)
+                        recentMenu
+                            ->addAction("(nothing opened yet)")
+                            ->setEnabled(false);
+                });
+        row->addWidget(recentB);
         prevPageB_ = new QPushButton("◀ page");
         nextPageB_ = new QPushButton("page ▶");
         pageLbl_ = new QLabel;
@@ -12585,11 +12623,70 @@ public:
 #endif
         auto* zoomL = new QLabel("zoom");
         row->addWidget(zoomL);
+        auto* zoomOutB = new QPushButton("−");
+        zoomOutB->setFixedWidth(26);
+        zoomOutB->setToolTip("Zoom out (⌘−)");
+        row->addWidget(zoomOutB);
         zoom_ = new QSlider(Qt::Horizontal);
-        zoom_->setRange(25, 200);
+        zoom_->setRange(25, 400);
         zoom_->setValue(100);
         zoom_->setMaximumWidth(120);
+        zoom_->setToolTip(
+            "Scan zoom — ⌘+ / ⌘− step, ⌘0 resets to 100%, and "
+            "⌘-scroll zooms at the pointer (the spot under the "
+            "cursor stays put).");
         row->addWidget(zoom_);
+        auto* zoomInB = new QPushButton("+");
+        zoomInB->setFixedWidth(26);
+        zoomInB->setToolTip("Zoom in (⌘+, also ⌘⇧+)");
+        row->addWidget(zoomInB);
+        // the BUDA-viewer idiom (Adam's reference): a live percent
+        // selector with fit modes beside the − / + controls
+        zoomPct_ = new QComboBox;
+        zoomPct_->setEditable(true);
+        zoomPct_->addItems({"50%", "65%", "100%", "150%", "200%",
+                            "300%", "Fit width", "Fit page"});
+        zoomPct_->setCurrentText("100%");
+        zoomPct_->setFixedWidth(96);
+        zoomPct_->setToolTip(
+            "Zoom percentage — type a value, pick a preset, or "
+            "choose Fit width / Fit page.");
+        row->addWidget(zoomPct_);
+        connect(zoomPct_, &QComboBox::activated, [this](int) {
+            const QString t = zoomPct_->currentText().trimmed();
+            if (t.startsWith("Fit"))
+                fitZoom(t.contains("page", Qt::CaseInsensitive));
+            else
+                setZoomAnchored(t.left(t.indexOf('%') > 0
+                                           ? t.indexOf('%')
+                                           : t.size())
+                                    .toInt(),
+                                QPoint(-1, -1));
+        });
+        connect(zoom_, &QSlider::valueChanged, [this](int v) {
+            if (zoomPct_)
+                zoomPct_->setCurrentText(QString::number(v) + "%");
+        });
+        connect(zoomInB, &QPushButton::clicked,
+                [this] { zoomStep(+25); });
+        connect(zoomOutB, &QPushButton::clicked,
+                [this] { zoomStep(-25); });
+        // hotkeys live on the pane — active whenever Input shows
+        // (Adam's request 2026-08-13: ⌘+/⌘− over the scan)
+        auto zsc = [this](const QKeySequence& k, int d) {
+            auto* s = new QShortcut(k, this);
+            s->setContext(Qt::WidgetWithChildrenShortcut);
+            connect(s, &QShortcut::activated, [this, d] {
+                if (d == 0)
+                    setZoomAnchored(100, QPoint(-1, -1));
+                else
+                    zoomStep(d);
+            });
+        };
+        zsc(QKeySequence::ZoomIn, +25);    // ⌘+ (and ⌘⇧+)
+        zsc(QKeySequence("Ctrl+="), +25);  // the unshifted key
+        zsc(QKeySequence::ZoomOut, -25);   // ⌘−
+        zsc(QKeySequence("Ctrl+0"), 0);    // reset
         auto* folioB = new QPushButton("@ next folio");
         folioB->setToolTip(
             "Insert the next folio marker per the ACIP spec (@ in "
@@ -12650,6 +12747,7 @@ public:
         connect(partnerB, &QPushButton::clicked, [this] { compare(); });
         connect(saveB, &QPushButton::clicked, [this] { save(); });
         connect(zoom_, &QSlider::valueChanged, [this](int) { render(); });
+        scroll_->viewport()->installEventFilter(this);   // ⌘-wheel zoom
         connect(editor_, &QPlainTextEdit::cursorPositionChanged,
                 [this] { follow(); });
         connect(editor_, &QPlainTextEdit::textChanged,
@@ -12735,11 +12833,27 @@ public:
     }
 
 private:
+    // recently viewed scans (Adam, 2026-08-13): files and folders
+    // both, newest first, capped at ten, persisted
+    void recordRecentScan(const QString& p) {
+        QSettings st("ALL", "TranslationTool");
+        QStringList rec =
+            st.value("input/recentScans").toStringList();
+        rec.removeAll(p);
+        rec.prepend(p);
+        while (rec.size() > 10) rec.removeLast();
+        st.setValue("input/recentScans", rec);
+    }
+
     void openScan() {
         const QString f = safeGetOpenFileName(
             this, "Open page scan", root_ + "/library",
             "Images (*.png *.jpg *.jpeg *.tif *.tiff)");
         if (f.isEmpty()) return;
+        openScanPath(f);
+    }
+    void openScanPath(const QString& f) {
+        recordRecentScan(f);
         base_ = QPixmap(f);
         if (base_.isNull()) {
             status_->setText("cannot read that image");
@@ -13056,6 +13170,10 @@ private:
         const QString dir = safeGetExistingDirectory(
             this, "Folder of page scans", root_ + "/library");
         if (dir.isEmpty()) return;
+        openFolderPath(dir);
+    }
+    void openFolderPath(const QString& dir) {
+        recordRecentScan(dir);
         pages_.clear();
         for (const QString& e : QDir(dir).entryList(
                  {"*.png", "*.jpg", "*.jpeg", "*.tif", "*.tiff"},
@@ -13195,6 +13313,61 @@ private:
     QPlainTextEdit* editor_ = nullptr;
     QCheckBox* followBox_ = nullptr;
     QSlider* zoom_ = nullptr;
+    QComboBox* zoomPct_ = nullptr;
+
+public:
+    // anchored zoom (Adam's request 2026-08-13): buttons and keys
+    // keep the viewport CENTER in place; ⌘-scroll keeps the POINT
+    // UNDER THE POINTER in place — zooming in on a specific part
+    // of the scan without losing it
+    void zoomStep(int delta) {
+        setZoomAnchored(zoom_->value() + delta, QPoint(-1, -1));
+    }
+    // BUDA-style fit modes: width fills the viewport, or the whole
+    // page visible at once
+    void fitZoom(bool wholePage) {
+        if (base_.isNull()) return;
+        const double vw = scroll_->viewport()->width();
+        const double vh = scroll_->viewport()->height();
+        const double zw = vw * 100.0 / base_.width();
+        const double zh = vh * 100.0 / base_.height();
+        const int z = int(wholePage ? qMin(zw, zh) : zw) - 1;
+        setZoomAnchored(z, QPoint(-1, -1));
+    }
+    void setZoomAnchored(int z, QPoint viewportPos) {
+        z = qBound(zoom_->minimum(), z, zoom_->maximum());
+        const int oldZ = zoom_->value();
+        if (z == oldZ || oldZ <= 0) return;
+        auto* h = scroll_->horizontalScrollBar();
+        auto* v = scroll_->verticalScrollBar();
+        QPoint p = viewportPos;
+        if (p.x() < 0)
+            p = QPoint(scroll_->viewport()->width() / 2,
+                       scroll_->viewport()->height() / 2);
+        const double cx = h->value() + p.x();
+        const double cy = v->value() + p.y();
+        const double r = double(z) / double(oldZ);
+        zoom_->setValue(z);   // re-renders at the new scale
+        h->setValue(int(cx * r - p.x()));
+        v->setValue(int(cy * r - p.y()));
+    }
+
+protected:
+    bool eventFilter(QObject* o, QEvent* e) override {
+        if (scroll_ && o == scroll_->viewport() &&
+            e->type() == QEvent::Wheel) {
+            auto* w = static_cast<QWheelEvent*>(e);
+            if (w->modifiers() & Qt::ControlModifier) {
+                const int d = w->angleDelta().y() > 0 ? +15 : -15;
+                setZoomAnchored(zoom_->value() + d,
+                                w->position().toPoint());
+                return true;   // consumed — no scroll on top
+            }
+        }
+        return QWidget::eventFilter(o, e);
+    }
+
+private:
     QLabel* status_ = nullptr;
     QList<QTextEdit::ExtraSelection> spellSels_, diffSels_;
     int curBand_ = -1;
