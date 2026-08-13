@@ -300,6 +300,21 @@ static const std::vector<ApparatusBib>* g_appBib = nullptr;
 // the colloquial/prenasal register, for the cards' "also heard" line
 static const allcore::ColloquialPron* g_colloquial = nullptr;
 
+// the authority's APPROVED pronunciation rulings — a live layer
+// over the canonical engine AND over stored entry phonetics; the
+// engine and the dictionary are never modified
+static const std::map<std::string, std::string>* g_pronApproved =
+    nullptr;
+
+// pronounce a word through the engine, then apply the authority's
+// ruling when one exists for exactly this word
+static std::string pronWithRulings(const std::string& word_wylie,
+                                   const std::string& engine_pron) {
+    if (!g_pronApproved) return engine_pron;
+    auto it = g_pronApproved->find(word_wylie);
+    return it == g_pronApproved->end() ? engine_pron : it->second;
+}
+
 static QString entryHtml(const allcore::Entry& e,
                          const EntryDisplay& d = EntryDisplay{}) {
     QString h;
@@ -431,8 +446,26 @@ static QString entryHtml(const allcore::Entry& e,
     if (!e.tibetan_source.empty())
         h += " <i style='color:#888'>[generated script]</i>";
     if (d.phonetics && !e.pronunciation.empty()) {
-        h += "<br>pron: " + QString::fromStdString(e.pronunciation).toHtmlEscaped();
-        if (e.pronunciation_card_attested) h += " ⟪card⟫";
+        // the authority's ruling shows wherever pronunciation
+        // shows (Adam's finding 2026-08-12: the ruled tsema
+        // namdrel wasn't reaching the entry cards)
+        std::string cardPron = e.pronunciation;
+        bool ruledPron = false;
+        if (g_pronApproved) {
+            std::string k;
+            for (char c : e.wylie)
+                k += (char)std::tolower((unsigned char)c);
+            auto itr = g_pronApproved->find(k);
+            if (itr != g_pronApproved->end()) {
+                cardPron = itr->second;
+                ruledPron = true;
+            }
+        }
+        h += "<br>pron: " +
+             QString::fromStdString(cardPron).toHtmlEscaped();
+        if (ruledPron)
+            h += " <span style='color:#1E6B4E'>⟪ruled⟫</span>";
+        else if (e.pronunciation_card_attested) h += " ⟪card⟫";
         // registered variants: community spellings and the prenasal
         // (kamdir) forms — labeled by class, never replacing the
         // GMR-convention pron above
@@ -1026,17 +1059,8 @@ static std::function<void(const QString&)> g_mssProposeNote;
 // kabdir) — word-wylie -> ruled pronunciation, loaded at startup
 // from the shared proposal store. The canonical engine is never
 // modified; rulings apply as a labeled layer above it.
-static const std::map<std::string, std::string>* g_pronApproved =
-    nullptr;
-
-// pronounce a word through the engine, then apply the authority's
-// ruling when one exists for exactly this word
-static std::string pronWithRulings(const std::string& word_wylie,
-                                   const std::string& engine_pron) {
-    if (!g_pronApproved) return engine_pron;
-    auto it = g_pronApproved->find(word_wylie);
-    return it == g_pronApproved->end() ? engine_pron : it->second;
-}
+// (declaration lives earlier, before entryHtml — the cards apply
+// rulings too)
 
 static QWidget* makeLookupPane(allcore::Spine& spine, allcore::RefDict* ref,
                                allcore::Mvp* mvp,
@@ -1461,6 +1485,13 @@ public:
                   "phrase ruling overrides across engine word "
                   "boundaries (tsema namdrel)");
             g_pronApproved = saved;
+            // and the REAL team store must carry Adam's ruling —
+            // this proves the data path end to end, not just the
+            // seeded mechanism
+            check(g_pronApproved &&
+                      g_pronApproved->count("tshad ma rnam 'grel"),
+                  "Adam's tsema namdrel ruling loads from the "
+                  "team store");
             // THL Simplified Phonetics mode (engine proven by its
             // own ctest battery; here: the UI wiring renders it)
             scriptMode_->setCurrentIndex(4);
