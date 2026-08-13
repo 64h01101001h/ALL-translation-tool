@@ -194,6 +194,7 @@ struct EntryDisplay {
     bool glosses = true;
     bool sanskrit = true;
     bool hopkins = false;
+    bool g84000 = true;   // 84000 glossary layer (CC BY 4.0)
     bool notes = true;   // published footnotes & bibliography layer
     std::string surface;   // the clicked surface form (ACIP) when
                            // it differs from the headword — the
@@ -628,7 +629,7 @@ static QString entryHtml(const allcore::Entry& e,
              "Hopkins (reference only): " +
              QString::fromStdString(e.hopkins_reference).left(200).toHtmlEscaped() +
              "</small></div>";
-    if (d.hopkins && g_84000) {
+    if (d.g84000 && g_84000) {
         auto it = g_84000->find(e.wylie);
         if (it != g_84000->end()) {
             const G84000& g = it->second;
@@ -3056,6 +3057,7 @@ auto* secScan = new QLabel("<span style='color:#9A7A33;font-size:10px;letter-spa
         showCorpus_ = mkToggle("corpus", "corpus usage (contextual)", true);
         showSanskrit_ = mkToggle("sanskrit", "Sanskrit reference", false);
         showHopkins_ = mkToggle("hopkins", "Hopkins reference", false);
+        show84000_ = mkToggle("g84000", "84000 glossary (CC BY)", true);
         showRefs_ = mkToggle("refs", "reference dictionaries (LC/TD/THL)",
                              true);
         showNotes_ = mkToggle("notes", "footnotes && bibliography "
@@ -4407,6 +4409,7 @@ private:
         disp.glosses = showGloss_->isChecked();
         disp.sanskrit = showSanskrit_->isChecked();
         disp.hopkins = showHopkins_->isChecked();
+        disp.g84000 = show84000_->isChecked();
         disp.notes = showNotes_->isChecked();
         // when the clicked surface form differs from the headword
         // (affix landings: TSAD MA'I → tshad ma), the card says
@@ -7595,6 +7598,7 @@ private:
     QCheckBox* showGrammar_ = nullptr;
     QCheckBox* showSanskrit_ = nullptr;
     QCheckBox* showHopkins_ = nullptr;
+    QCheckBox* show84000_ = nullptr;
     QCheckBox* showRefs_ = nullptr;
     QCheckBox* showNotes_ = nullptr;
     QCheckBox* showSeg_ = nullptr;

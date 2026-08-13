@@ -236,6 +236,7 @@ on or off (defaults in parentheses):
 | **grammar marks & particle notes** (on) | particle roles, suffix-agreement lines, fused-particle notes on the card AND the dotted-amber marks in the document |
 | **Sanskrit reference** (off) | Sanskrit equivalences (Mahāvyutpatti) on the card |
 | **Hopkins reference** (off) | the Hopkins reference layer on the card |
+| **84000 glossary (CC BY)** (on) | the 84000 translation glossary block on the card — reference only, clearly labeled, with its link back to the original entry |
 | **reference dictionaries (LC/TD/THL)** (on) | the Lokesh Chandra / TibetanDictionary / THL reference stacks on the card |
 | **Botok segmentation (reference)** (off) | an independent segmenter's reading of the clicked spot, labeled reference-only |
 | **unattested-word hints (segmenter + Monlam)** (off) | hints in the document for words no list attests |
