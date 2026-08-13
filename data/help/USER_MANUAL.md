@@ -413,6 +413,13 @@ grows as more classes are indexed.
 This is the one Overlay feature that touches the network (BDRC's
 public image servers).
 
+**THL Degé catalog link** — when the open text is a Degé Kangyur
+file (KD…), a link appears under the scans button: **THL Degé
+catalog: D.NNN**. It maps your text's Tohoku number to THL's own
+catalog number through the 919-entry verified title concordance —
+never by assuming the numbers are equal (they drift). Texts the
+concordance could not match honestly get no link.
+
 **Follow along in scans (BDRC)** — the main button. Its label
 depends on what the app knows:
 

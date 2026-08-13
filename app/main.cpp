@@ -2256,6 +2256,12 @@ public:
                       .isEmpty(),
                   "scan viewer: non-IIIF URL yields no thumb "
                   "(never guessed)");
+            // Toh->D through the verified concordance; the drifting
+            // offset's live-verified example is the pin
+            check(tohToThl().value(551) == 555 &&
+                      tohToThl().value(1) == 1,
+                  "THL catalog link maps through the verified "
+                  "concordance (Toh 551 -> D.555)");
         }
         {
             // #62 logic: a left side-panel and a big inter-line gap
@@ -2769,6 +2775,12 @@ auto* secScan = new QLabel("<span style='color:#9A7A33;font-size:10px;letter-spa
             "Folio\u2194image mapping comes from BDRC's own IIIF manifest "
             "labels — nothing is guessed.");
         ll->addWidget(scanBtn_);
+        thlCatLink_ = new QLabel;
+        thlCatLink_->setOpenExternalLinks(true);
+        thlCatLink_->setWordWrap(true);
+        thlCatLink_->setMinimumWidth(1);
+        thlCatLink_->hide();
+        ll->addWidget(thlCatLink_);
         connect(scanBtn_, &QPushButton::clicked, [this] {
             if (titleSearchMode_) titleSearchDialog();
             else followScans();
@@ -4495,6 +4507,36 @@ private:
     QPlainTextEdit* view_ = nullptr;
     QTextBrowser* context_ = nullptr;
     // ---- BDRC scan follow-along (APPARATUS_DESIGN §3) ----------------
+    // Toh -> THL D-number, inverted from the 919-entry verified
+    // concordance; inversion collisions dropped, never guessed
+    const QMap<int, int>& tohToThl() {
+        static QMap<int, int> m;
+        static bool tried = false;
+        if (!tried) {
+            tried = true;
+            QFile f(dataRoot_ +
+                    "/data/extracted/thl_dege_concordance.json");
+            if (f.open(QIODevice::ReadOnly)) {
+                const auto o =
+                    QJsonDocument::fromJson(f.readAll()).object();
+                const auto t2t = o["thl_to_toh"].toObject();
+                QSet<int> dup;
+                for (auto it = t2t.begin(); it != t2t.end(); ++it) {
+                    const int thl = it.key().toInt();
+                    const int toh = int(it.value().toDouble());
+                    if (!thl || !toh) continue;
+                    if (m.contains(toh)) {
+                        dup.insert(toh);
+                        continue;
+                    }
+                    m[toh] = thl;
+                }
+                for (int t : dup) m.remove(t);
+            }
+        }
+        return m;
+    }
+
     void setScanTarget(const allcore::AcipFileInfo& info,
                        const QString& fileName = QString()) {
         ++fetchEpoch_;   // invalidates any in-flight scan fetches
@@ -4516,6 +4558,32 @@ private:
                 const auto o =
                     QJsonDocument::fromJson(f.readAll()).object();
                 scanWork_ = o[fileKey_].toString();
+            }
+        }
+        // THL Degé catalog deep-link — through the VERIFIED title
+        // concordance only (numeric Toh=D equality is refuted; the
+        // offset drifts). Unmatched texts simply get no link.
+        if (thlCatLink_) {
+            thlCatLink_->hide();
+            if (info.recognized &&
+                info.collection == "Kangyur (Derge edition)") {
+                const int toh =
+                    QString::fromStdString(info.number).toInt();
+                const auto& m = tohToThl();
+                if (m.contains(toh)) {
+                    const int d = m.value(toh);
+                    thlCatLink_->setText(
+                        QString("<a href=\"https://old.thlib.org/"
+                                "encyclopedias/literary/canons/kt/"
+                                "catalog.php#cat=d/%1\">THL Degé "
+                                "catalog: D.%1</a> <span "
+                                "style='color:#777;font-size:11px'>"
+                                "(Toh %2 · verified title "
+                                "concordance)</span>")
+                            .arg(d)
+                            .arg(toh));
+                    thlCatLink_->show();
+                }
             }
         }
         titleSearchMode_ = scanWork_.isEmpty();
@@ -7431,6 +7499,7 @@ private:
     // scan follow-along state
     QNetworkAccessManager nam_;
     QPushButton* scanBtn_ = nullptr;
+    QLabel* thlCatLink_ = nullptr;
     QLabel* scanImg_ = nullptr;
     QLabel* scanCap_ = nullptr;
     QWidget* scanNav_ = nullptr;
