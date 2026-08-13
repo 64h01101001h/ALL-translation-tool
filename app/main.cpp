@@ -1795,6 +1795,43 @@ static QIcon miniIcon(const QString& kind) {
     return QIcon(pm);
 }
 
+// KL-aware BDRC scan URL (root cause fix, 2026-08-13): BDRC's
+// Lhasa Kangyur parts (MW26071_NNNN) follow the H catalog, and
+// KL != H — verified live (KL16, the Diamond Cutter, is part 0018;
+// part 0016 is a different sutra). Lhasa texts therefore route
+// through the title-matched KL->part concordance; unmatched texts
+// get an honest empty (-> title-search lane), never a wrong link.
+static QString bdrcScanUrlChecked(const allcore::AcipFileInfo& info,
+                                  const QString& dataRoot) {
+    if (info.recognized &&
+        info.collection == "Kangyur (Lhasa edition)") {
+        static QMap<int, int> m;
+        static bool tried = false;
+        if (!tried) {
+            tried = true;
+            QFile f(dataRoot +
+                    "/data/extracted/kl_bdrc_concordance.json");
+            if (f.open(QIODevice::ReadOnly)) {
+                const auto o =
+                    QJsonDocument::fromJson(f.readAll()).object();
+                const auto k2p = o["kl_to_part"].toObject();
+                for (auto it = k2p.begin(); it != k2p.end(); ++it)
+                    if (it.key().toInt() &&
+                        int(it.value().toDouble()))
+                        m[it.key().toInt()] =
+                            int(it.value().toDouble());
+            }
+        }
+        const int part =
+            m.value(QString::fromStdString(info.number).toInt());
+        return part ? QString("https://library.bdrc.io/show/"
+                              "bdr:MW26071_%1")
+                          .arg(part, 4, 10, QChar('0'))
+                    : QString();
+    }
+    return QString::fromStdString(allcore::bdrcScanUrl(info));
+}
+
 // canvas for the scan viewer (Adam's BUDA findings): click = zoom
 // in at that point, drag = grab-pan, pinch or ⌘-wheel = zoom at the
 // pointer; plain scrolling still pans (mac-natural).
@@ -2262,6 +2299,14 @@ public:
                       tohToThl().value(1) == 1,
                   "THL catalog link maps through the verified "
                   "concordance (Toh 551 -> D.555)");
+            // the root-cause pin: KL16 (Diamond Cutter) must route
+            // to MW26071_0018, never _0016 (verified live)
+            auto dcInfo =
+                allcore::decodeAcipFilename("KL00016E.ACT");
+            check(bdrcScanUrlChecked(dcInfo, dataRoot_)
+                      .endsWith("MW26071_0018"),
+                  "KL scans route through the concordance "
+                  "(KL16 -> part 0018, the Diamond Cutter)");
         }
         {
             // #62 logic: a left side-panel and a big inter-line gap
@@ -4546,10 +4591,11 @@ private:
         folioOrder_.clear();
         curFolio_.clear();
         scanImg_->hide(); scanCap_->hide(); scanNav_->hide();
-        const std::string url = allcore::bdrcScanUrl(info);
-        auto pos = url.rfind("bdr:");
-        if (pos != std::string::npos)
-            scanWork_ = QString::fromStdString(url.substr(pos));
+        {
+            const QString curl = bdrcScanUrlChecked(info, dataRoot_);
+            const int cpos = curl.lastIndexOf("bdr:");
+            if (cpos >= 0) scanWork_ = curl.mid(cpos);
+        }
         // no deterministic mapping (Sungbum etc.): use a saved,
         // user-confirmed link if one exists
         if (scanWork_.isEmpty() && !fileKey_.isEmpty()) {
@@ -11572,10 +11618,9 @@ public:
                 allcore::composeBibliographyEntry(assemble())));
             const auto info = allcore::decodeAcipFilename(
                 ac->text().trimmed().toStdString() + ".ACT");
-            const auto url = allcore::bdrcScanUrl(info);
+            const QString url = bdrcScanUrlChecked(info, root_);
             scanLink->setText(
-                url.empty() ? ""
-                            : "scans: " + QString::fromStdString(url));
+                url.isEmpty() ? "" : "scans: " + url);
         };
         for (auto* w : {ep, au, dt, et, tt, ac, fo})
             QObject::connect(w, &QLineEdit::textChanged, refresh);
@@ -12860,9 +12905,10 @@ private:
                  (acip.status.empty() ? "" : " · ") +
                  QString::fromStdString(acip.language).toHtmlEscaped();
             if (acip.incomplete) h += " · <b>INCOMPLETE</b>";
-            const std::string scan = allcore::bdrcScanUrl(acip);
-            if (!scan.empty())
-                h += "<br><a href='" + QString::fromStdString(scan) +
+            const QString scan = bdrcScanUrlChecked(
+                acip, QFileInfo(libRoot_).path());
+            if (!scan.isEmpty())
+                h += "<br><a href='" + scan +
                      "'>view the original scans on BDRC</a>";
             h += "</div>";
         }
