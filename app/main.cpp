@@ -1446,6 +1446,20 @@ public:
             check(view_->toPlainText().contains("kamdir"),
                   "approved pronunciation ruling overrides the "
                   "engine (kamdir)");
+            // a PHRASE ruling spans the engine's own word
+            // boundaries (Adam's live finding: tshad ma rnam
+            // 'grel must read tsema namdrel, not tse manam drel)
+            static const std::map<std::string, std::string>
+                ruled2 = {{"tshad ma rnam 'grel",
+                           "tsema namdrel"}};
+            g_pronApproved = &ruled2;
+            // ACIP: TS = tsha (aspirated), TZ = tsa — tshad ma
+            // is TSAD MA
+            input_->setPlainText("TSAD MA RNAM 'GREL GYI RTZA BA");
+            loadDoc();
+            check(view_->toPlainText().contains("tsema namdrel"),
+                  "phrase ruling overrides across engine word "
+                  "boundaries (tsema namdrel)");
             g_pronApproved = saved;
             // THL Simplified Phonetics mode (engine proven by its
             // own ctest battery; here: the UI wiring renders it)
@@ -2529,9 +2543,7 @@ private:
                        !doc_.barrier_after[g1])
                     ++g1;
                 ++g1;   // [g0, g1) is one barrier group
-                std::string joined;
-                std::vector<int> tokSylBeg;   // per group token
-                std::vector<size_t> feedTok;  // group tokens fed
+                std::vector<size_t> sylTok;   // owning token per syl
                 std::vector<std::string> sylsVec;  // normalized syls
                 for (size_t t = g0; t < g1; ++t) {
                     const std::string& raw = doc_.tokens[t];
@@ -2545,50 +2557,115 @@ private:
                         pronDisp[t] = QString::fromStdString(raw);
                         continue;
                     }
-                    tokSylBeg.push_back((int)sylsVec.size());
-                    feedTok.push_back(t);
-                    for (const auto& s : ks) sylsVec.push_back(s);
-                    if (!joined.empty()) joined += ' ';
-                    joined += w;
+                    for (const auto& s : ks) {
+                        sylTok.push_back(t);
+                        sylsVec.push_back(s);
+                    }
                 }
-                if (!joined.empty()) {
-                    for (const auto& wd :
-                         allcore::pronounceSegmented(joined)) {
-                        // first fed token whose syllables start the word
-                        size_t owner = feedTok.front();
-                        for (size_t j = 0; j < tokSylBeg.size(); ++j)
-                            if (tokSylBeg[j] == wd.syl_beg) {
-                                owner = feedTok[j];
-                                break;
+                // the authority's PHRASE rulings claim their
+                // syllable runs BEFORE the engine segments — a
+                // ruling may span the engine's own (possibly
+                // wrong) word boundaries (Adam's live finding
+                // 2026-08-12: tshad ma rnam 'grel came out
+                // "tse manam drel"; the ruling makes it
+                // "tsema namdrel"). Single-word rulings keep the
+                // per-word lane below.
+                std::vector<int> ruled(sylsVec.size(), -1);
+                std::vector<std::string> ruledVal;
+                if (g_pronApproved && !sylsVec.empty()) {
+                    for (const auto& [rk, rv] : *g_pronApproved) {
+                        std::vector<std::string> ks2;
+                        std::string cur;
+                        for (char c : rk) {
+                            if (c == ' ') {
+                                if (!cur.empty()) ks2.push_back(cur);
+                                cur.clear();
+                            } else {
+                                cur += (char)std::tolower(
+                                    (unsigned char)c);
                             }
+                        }
+                        if (!cur.empty()) ks2.push_back(cur);
+                        if (ks2.size() < 2) continue;
+                        for (size_t s = 0;
+                             s + ks2.size() <= sylsVec.size();
+                             ++s) {
+                            bool hit = true;
+                            for (size_t j = 0; j < ks2.size(); ++j)
+                                if (sylsVec[s + j] != ks2[j] ||
+                                    ruled[s + j] >= 0) {
+                                    hit = false;
+                                    break;
+                                }
+                            if (hit) {
+                                ruledVal.push_back(rv);
+                                for (size_t j = 0; j < ks2.size();
+                                     ++j)
+                                    ruled[s + j] =
+                                        (int)ruledVal.size() - 1;
+                            }
+                        }
+                    }
+                }
+                // ruled runs render their ruling; the engine
+                // segments only the uncovered stretches
+                size_t s0 = 0;
+                while (s0 < sylsVec.size()) {
+                    if (ruled[s0] >= 0) {
+                        const int rid = ruled[s0];
+                        size_t s1 = s0;
+                        while (s1 < sylsVec.size() &&
+                               ruled[s1] == rid)
+                            ++s1;
+                        pronDisp[sylTok[s0]] =
+                            QString::fromStdString(ruledVal[rid]);
+                        s0 = s1;
+                        continue;
+                    }
+                    size_t s1 = s0;
+                    std::string sub;
+                    while (s1 < sylsVec.size() && ruled[s1] < 0) {
+                        if (!sub.empty()) sub += ' ';
+                        sub += sylsVec[s1];
+                        ++s1;
+                    }
+                    for (const auto& wd :
+                         allcore::pronounceSegmented(sub)) {
+                        const size_t owner =
+                            sylTok[s0 + wd.syl_beg];
                         if (!wd.pron.empty()) {
-                            // the authority's approved rulings (the
-                            // prenasal register: kamdir over kabdir)
-                            // apply as a layer over the engine
+                            // per-word rulings (the prenasal
+                            // register: kamdir over kabdir)
                             std::string key;
                             for (int s = wd.syl_beg;
                                  s < wd.syl_end &&
-                                 s < (int)sylsVec.size();
+                                 s0 + s < sylsVec.size();
                                  ++s)
                                 key += (key.empty() ? "" : " ") +
-                                       sylsVec[s];
+                                       sylsVec[s0 + s];
                             pronDisp[owner] = QString::fromStdString(
                                 pronWithRulings(key, wd.pron));
                         } else {
                             QString fb;
-                            for (size_t j = 0; j < tokSylBeg.size();
-                                 ++j)
-                                if (tokSylBeg[j] >= wd.syl_beg &&
-                                    tokSylBeg[j] < wd.syl_end)
-                                    fb += QString::fromStdString(
-                                              tokEwts(doc_.tokens
-                                                          [feedTok[j]])) +
-                                          " ";
+                            size_t lastTok = SIZE_MAX;
+                            for (int s = wd.syl_beg;
+                                 s < wd.syl_end &&
+                                 s0 + s < sylsVec.size();
+                                 ++s) {
+                                const size_t tk = sylTok[s0 + s];
+                                if (tk == lastTok) continue;
+                                lastTok = tk;
+                                fb += QString::fromStdString(
+                                          tokEwts(
+                                              doc_.tokens[tk])) +
+                                      " ";
+                            }
                             pronDisp[owner] = QString::fromUtf8("⟨") +
                                               fb.trimmed() +
                                               QString::fromUtf8("⟩");
                         }
                     }
+                    s0 = s1;
                 }
                 g0 = g1;
             }
