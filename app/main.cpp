@@ -5091,12 +5091,26 @@ public:
         QString d = documentLabel();
         if (d.isEmpty()) return "no document loaded";
         QString t = "document: " + d;
-        t += scanWork_.isEmpty()
-                 ? QString(" · no scan volume linked")
-                 : " · linked: " + scanWork_ +
-                       (curFolio_.isEmpty()
-                            ? QString()
-                            : " · folio " + curFolio_);
+        if (scanWork_.isEmpty()) {
+            t += " · no scan volume linked";
+        } else {
+            t += " · linked: " + scanWork_ +
+                 (curFolio_.isEmpty()
+                      ? QString()
+                      : " · folio " + curFolio_);
+            // the cache census earns the idle space its keep
+            // (audit 2026-08-12): pages already fetched are the
+            // offline capital of the follow-along and galleries
+            if (!scanCache_.isEmpty()) {
+                const QDir cd(scanCache_ + "/" + scanWork_);
+                const int n =
+                    cd.exists()
+                        ? (int)cd.entryList(QDir::Files).size()
+                        : 0;
+                if (n)
+                    t += QString(" · %1 page(s) cached").arg(n);
+            }
+        }
         return t;
     }
 
