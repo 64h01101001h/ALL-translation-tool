@@ -360,7 +360,12 @@ with English, harvest translator-authored pairs.
 **Use.** Load the Tibetan and English sides. Select a Tibetan span
 and its English counterpart, link them; links save per text. Import
 .hyp files from the original Hypercontext era. Export candidate
-pairs — always labeled PENDING until approved.
+pairs — always labeled PENDING until approved. "Compare
+editions…" is the critical-edition lane: pick two witnesses of the
+same text (ACIP or wylie) and every variant reading renders in a
+collation — A-only readings struck red, B-only green — with a
+numbered apparatus (site, line, both readings) you can save as
+Markdown. Nothing is resolved automatically; the editor rules.
 
 ## Input
 

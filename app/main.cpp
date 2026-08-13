@@ -23,6 +23,7 @@
 #include <QLabel>
 #include <QLineEdit>
 #include <QPicture>
+#include "thirdparty/diff_match_patch.h"
 #include <QNetworkAccessManager>
 #include <QDialog>
 #include <QDialogButtonBox>
@@ -1261,6 +1262,79 @@ private:
     QTextBrowser* view_ = nullptr;
 };
 static LookupPopup* g_lookupPopup = nullptr;
+
+// ---- Critical-edition collation core (shortlist #3): two
+// witnesses of a text, diffed by the proven engine, rendered as a
+// colored collation + a numbered apparatus of variant readings.
+// Pure function so the selftest can drive it. ---------------------
+static QString editionDiffHtml(const QString& a, const QString& b,
+                               QString* apparatusMd = nullptr) {
+    diff_match_patch dmp;
+    auto diffs = dmp.diff_main(a, b);
+    dmp.diff_cleanupSemantic(diffs);
+    QString h, app;
+    int lineA = 1, site = 0;
+    QString pendDel;
+    int pendLine = 1;
+    auto flushSite = [&](const QString& ins) {
+        const bool delReal = !pendDel.trimmed().isEmpty();
+        const bool insReal = !ins.trimmed().isEmpty();
+        if (!delReal && !insReal) {
+            pendDel.clear();
+            return;
+        }
+        ++site;
+        QString kind = delReal && insReal
+                           ? "substitution"
+                           : (delReal ? "only in A" : "only in B");
+        app += QString("%1. (A line ~%2, %3) A: “%4” | B: “%5”\n")
+                   .arg(site)
+                   .arg(pendLine)
+                   .arg(kind)
+                   .arg(delReal ? pendDel.trimmed().left(80)
+                                : QString("—"))
+                   .arg(insReal ? ins.trimmed().left(80)
+                                : QString("—"));
+        pendDel.clear();
+    };
+    for (const auto& d : diffs) {
+        const QString t = d.text;
+        if (d.operation == EQUAL) {
+            flushSite(QString());
+            h += t.toHtmlEscaped().replace("\n", "<br>");
+            lineA += t.count('\n');
+        } else if (d.operation == DELETE) {
+            flushSite(QString());
+            pendDel = t;
+            pendLine = lineA;
+            h += "<span style='background:#F5D5CE;color:#7A1F14;"
+                 "text-decoration:line-through'>" +
+                 t.toHtmlEscaped().replace("\n", "<br>") +
+                 "</span>";
+            lineA += t.count('\n');
+        } else {   // INSERT (B-only)
+            h += "<span style='background:#D5E8D2;color:#1E5B24'>" +
+                 t.toHtmlEscaped().replace("\n", "<br>") +
+                 "</span>";
+            flushSite(t);
+        }
+    }
+    flushSite(QString());
+    const QString head =
+        QString("<div style='margin-bottom:8px'><b>Edition "
+                "collation</b> — %1 variant site(s). <span "
+                "style='background:#F5D5CE'>&nbsp;A only&nbsp;"
+                "</span> · <span style='background:#D5E8D2'>"
+                "&nbsp;B only&nbsp;</span>; every reading shown, "
+                "nothing resolved — the editor rules.</div>")
+            .arg(site);
+    if (apparatusMd)
+        *apparatusMd =
+            QString("# Apparatus — %1 variant site(s)\n\n")
+                .arg(site) +
+            app;
+    return head + "<div style='line-height:1.7'>" + h + "</div>";
+}
 
 static std::function<void(QWidget*)> g_raisePane;
 // sweep mode opens no native OS panels — the sweep reaper can
@@ -11613,6 +11687,16 @@ public:
         row->addWidget(unlink);
         auto* exportBtn = new QPushButton("Export aligned pairs (PENDING)…");
         row->addWidget(exportBtn);
+        auto* collateBtn = new QPushButton("Compare editions…");
+        collateBtn->setToolTip(
+            "Critical-edition collation: pick two witnesses of "
+            "the same text (ACIP or wylie files) and every "
+            "variant reading is shown — A-only readings struck "
+            "red, B-only green, plus a numbered apparatus you "
+            "can save. Nothing is resolved; the editor rules.");
+        row->addWidget(collateBtn);
+        connect(collateBtn, &QPushButton::clicked,
+                [this] { compareEditions(); });
         row->addStretch();
         outer->addLayout(row);
 
@@ -11688,6 +11772,19 @@ public:
               "harvest wylie stays lowercase for wylie docs");
         tib_->clear();
         loadTexts();
+        // edition collation core: variant sites counted, both
+        // readings shown, whitespace-only churn ignored
+        {
+            QString app;
+            const QString h = editionDiffHtml(
+                "KA KHA GA NGA,\nCA CHA JA NYA,",
+                "KA KHA GI NGA,\nCA CHA JA NYA, TA THA,", &app);
+            check(h.contains("variant site(s)") &&
+                      h.contains("line-through") &&
+                      app.contains("substitution") &&
+                      app.contains("only in B"),
+                  "edition collation: sites, readings, apparatus");
+        }
         return fails;
     }
 
@@ -12014,6 +12111,75 @@ private:
                         out.toHtmlEscaped() + "</div>");
     }
 
+    // critical-edition collation (shortlist #3): two witnesses in,
+    // colored collation + saveable apparatus out — the proven diff
+    // engine (the double-keying comparator) turned scholarly
+    void compareEditions() {
+        const QString filter =
+            "Text files (*.txt *.act *.acip);;All files (*)";
+        const QString fa = safeGetOpenFileName(
+            this, "Witness A — the base text", QString(), filter);
+        if (fa.isEmpty()) return;
+        const QString fb = safeGetOpenFileName(
+            this, "Witness B — the comparison text", QString(),
+            filter);
+        if (fb.isEmpty()) return;
+        auto readT = [](const QString& fn) {
+            QFile f(fn);
+            if (!f.open(QIODevice::ReadOnly)) return QString();
+            QString t = QString::fromUtf8(f.readAll());
+            if (allcore::looksLikeWylie(t.toStdString()))
+                t = OverlayPane::wylieDocToAcip(t);
+            return t;
+        };
+        const QString A = readT(fa), B = readT(fb);
+        if (A.isEmpty() || B.isEmpty()) {
+            QMessageBox::warning(this, "Compare editions",
+                                 "One of the files was empty or "
+                                 "unreadable.");
+            return;
+        }
+        if (A.size() > 500000 || B.size() > 500000) {
+            QMessageBox::warning(
+                this, "Compare editions",
+                "Over 500k characters — split the witnesses "
+                "first (per-volume collation).");
+            return;
+        }
+        QString app;
+        const QString html = editionDiffHtml(A, B, &app);
+        auto* dlg = new QDialog(this);
+        dlg->setAttribute(Qt::WA_DeleteOnClose);
+        dlg->setWindowTitle(
+            "Edition collation — A: " + QFileInfo(fa).fileName() +
+            " · B: " + QFileInfo(fb).fileName());
+        dlg->resize(920, 660);
+        auto* v = new QVBoxLayout(dlg);
+        auto* browser = new QTextBrowser;
+        browser->setHtml(html);
+        v->addWidget(browser, 1);
+        auto* rowB = new QHBoxLayout;
+        auto* saveApp = new QPushButton("Save apparatus "
+                                        "(Markdown)…");
+        rowB->addWidget(saveApp);
+        rowB->addStretch();
+        v->addLayout(rowB);
+        const QString appFull =
+            "witness A: " + fa + "\nwitness B: " + fb + "\n\n" +
+            app;
+        connect(saveApp, &QPushButton::clicked,
+                [this, dlg, appFull] {
+                    const QString out = safeGetSaveFileName(
+                        dlg, "Save apparatus", "apparatus.md",
+                        "Markdown (*.md)");
+                    if (out.isEmpty()) return;
+                    QFile f(out);
+                    if (f.open(QIODevice::WriteOnly))
+                        f.write(appFull.toUtf8());
+                });
+        dlg->show();
+    }
+
     allcore::Spine& spine_;
     QString root_, docFile_;
     allcore::HeadwordIndex index_;
@@ -12037,7 +12203,8 @@ private:
 // underlines, and the double-keying comparison (vendored google
 // diff-match-patch, Apache-2.0) that the correction pass ran "until the
 // text input by both input operators match exactly".
-#include "thirdparty/diff_match_patch.h"
+// (dmp include hoisted to the top include block for the
+// edition-diff core)
 
 class InputPane : public QWidget {
 public:
