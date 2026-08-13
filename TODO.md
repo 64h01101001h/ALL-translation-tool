@@ -1068,5 +1068,7 @@ implementation is sidelined HERE from this date. What this means:
       already proven on our own 1,395 drafts: 0 reproductions).
       MLotsawa = fully auditable data but chrF ~20, too weak.
       Watchlist: Banzhida 7B (ACL 2026), bdrc-mitra-ocr-qwen
-      (OCR bake-off candidate). NEEDS ADAM: does the Mac have
-      32GB+ unified memory? (gates the MITRA pilot).
+      (OCR bake-off candidate). Mac has 64GB unified memory —
+      the MITRA pilot is FEASIBLE here (18GB weights ≈ ~9GB
+      headroom-friendly at int8); the ~18GB download awaits
+      Adam's go (and the Chodrak etext, its real workload).
