@@ -23,3 +23,23 @@ THE WALL (inviolable):
   (licensing inquiry sent instead).
 
 Generator: tools/build_ai_glossary.py (requires ANTHROPIC_API_KEY).
+
+## Wall audit (2026-08-13) — the lane is proven clean
+
+All 1,395 AI-drafted entries were screened against the complete
+aligned corpus of Geshe Michael's published English with
+tools/mt_wall_screen.py (verbatim word-run detection):
+
+- At 8-word runs: **3 flags, all benign on inspection** — one
+  metrical commonplace ("at the end of a line of verse"), one
+  logical connective ("it is not the case that there is"), and
+  one Tibetan proper name in transliteration (an author's
+  alternative name, correctly cited). ZERO reproductions of his
+  renderings.
+- At 6-word runs: 26 flags, all of the same stock-phrase class.
+
+The same screen is now REQUIRED for any future machine lane
+(including any Hugging Face model, whose weights may have
+memorized published Buddhist translations): no machine English is
+kept until mt_wall_screen passes or a human has ruled on every
+flag.
