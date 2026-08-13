@@ -189,6 +189,10 @@ struct EntryDisplay {
     bool sanskrit = true;
     bool hopkins = false;
     bool notes = true;   // published footnotes & bibliography layer
+    std::string surface;   // the clicked surface form (ACIP) when
+                           // it differs from the headword — the
+                           // card explains the landing (Adam's
+                           // redundancy discussion, 2026-08-13)
 };
 
 // honorific register rows: wylie -> (ordinary, domain, level); loaded
@@ -367,8 +371,14 @@ static QString entryHtml(const allcore::Entry& e,
     std::string headTrans = e.acip;
     if (headTrans.empty()) headTrans = allcore::ewtsToAcip(e.wylie);
     if (headTrans.empty()) headTrans = e.wylie;
-    h += "<b>" + QString::fromStdString(headTrans).toHtmlEscaped() +
-         "</b>";
+    // identity metadata, not a second headline: the Tibetan leads,
+    // the ACIP sits a step smaller (Adam's redundancy ruling)
+    h += "<b style='font-size:14px;color:#555'>" +
+         QString::fromStdString(headTrans).toHtmlEscaped() + "</b>";
+    if (!d.surface.empty())
+        h += " <span style='font-size:12px;color:#8A6D1F'>from: " +
+             QString::fromStdString(d.surface).toHtmlEscaped() +
+             "</span>";
     if (d.notes && g_appNotes && !e.hgm_gloss.empty()) {
         int shownNotes = 0;
         for (const auto& note : *g_appNotes) {
@@ -3771,6 +3781,27 @@ private:
         disp.sanskrit = showSanskrit_->isChecked();
         disp.hopkins = showHopkins_->isChecked();
         disp.notes = showNotes_->isChecked();
+        // when the clicked surface form differs from the headword
+        // (affix landings: TSAD MA'I → tshad ma), the card says
+        // where it came from instead of merely echoing itself
+        {
+            std::string surfWy, surfAcip;
+            for (int t = span.beg;
+                 t < span.end && t < (int)doc_.tokens.size(); ++t) {
+                surfWy += (surfWy.empty() ? "" : " ") +
+                          tokEwts(doc_.tokens[t]);
+                surfAcip += (surfAcip.empty() ? "" : " ") +
+                            (docIsWylie_
+                                 ? allcore::ewtsToAcip(
+                                       doc_.tokens[t])
+                                 : doc_.tokens[t]);
+            }
+            std::string lowSurf;
+            for (char c : surfWy)
+                lowSurf += (char)std::tolower((unsigned char)c);
+            if (!lowSurf.empty() && lowSurf != e.wylie)
+                disp.surface = surfAcip;
+        }
         h += entryHtml(e, disp);
         if (showGrammar_->isChecked() && !span.clitic.empty()) {
             // the span matched through a fused ending the Wilson layer split off
