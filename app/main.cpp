@@ -5664,12 +5664,22 @@ private:
             }
         }
         if (list_->count()) list_->setCurrentRow(0);
-        else
+        else {
+            // empty list teaches instead of sitting as a void
+            auto* hint = new QListWidgetItem(
+                g_appNotes || g_appBib
+                    ? "no matches — clear the search or switch "
+                      "the filter"
+                    : "the bank is empty until a data release "
+                      "with apparatus is installed");
+            hint->setFlags(Qt::NoItemFlags);
+            list_->addItem(hint);
             detail_->setHtml(
                 g_appNotes || g_appBib
                     ? "<i>no matches</i>"
                     : "<i>the apparatus banks load from the data "
                       "release (docs/apparatus)</i>");
+        }
     }
     void show(int r) {
         if (r < 0 || r >= (int)rows_.size()) return;
@@ -7071,6 +7081,12 @@ public:
         layout->addLayout(row);
         view_ = new QTextBrowser;
         view_->setOpenLinks(false);   // chunk links are handled in-pane
+        view_->setHtml(
+            "<i style='color:#8A8A8A'>Paste a passage above and "
+            "press Load. Try to read it yourself first — then "
+            "reveal the layers one at a time, 1 through 6. Only "
+            "the HGM corpus lines are answers; everything else is "
+            "labeled guidance.</i>");
         QObject::connect(view_, &QTextBrowser::anchorClicked,
                          [this](const QUrl& u) { onAnchor(u); });
         layout->addWidget(view_, 1);
