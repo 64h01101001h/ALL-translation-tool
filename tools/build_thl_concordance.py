@@ -31,10 +31,18 @@ OUT = os.path.join(ROOT, "data", "extracted",
 TITLE = re.compile(r'class="wyl bibltitle">([^<]+)<')
 
 
+PA_BA = {"ba": "pa", "ba'i": "pa'i", "bar": "par", "bo": "po",
+         "bas": "pas", "bo'i": "po'i"}
+
+
 def norm(w):
+    """lowercase, strip punctuation, and fold the ba/pa suffix
+    alternation token-wise — the same orthographic normalization
+    BDRC's own lucene-bo applies (ported in allcore affixnorm)."""
     w = w.lower()
     w = re.sub(r"[^a-z'+ ]+", " ", w)
-    return " ".join(w.split())
+    toks = [PA_BA.get(t, t) for t in w.split()]
+    return " ".join(toks)
 
 
 def thl_titles():
@@ -70,7 +78,7 @@ def bdrc_labels():
             if isinstance(x, dict):
                 for k, v in x.items():
                     if k.endswith("prefLabel") or \
-                       k.endswith("#prefLabel"):
+                       k.endswith("altLabel"):
                         vals = v if isinstance(v, list) else [v]
                         for it in vals:
                             if not isinstance(it, dict):
@@ -95,20 +103,51 @@ def main():
     thl = thl_titles()
     toh = bdrc_labels()
     print(f"{len(thl)} THL titles · {len(toh)} BDRC label sets")
-    mapping, unmatched, ambiguous = {}, [], []
+    mapping, kind, unmatched, ambiguous = {}, {}, [], []
     for d, title in sorted(thl.items()):
         # verified offset grows: Toh candidate = d-14 … d+2
+        window = range(max(1, d - 14), d + 3)
         hits = []
-        for t in range(max(1, d - 14), d + 3):
-            for lab in toh.get(t, []):
-                if lab == title:
-                    hits.append(t)
-                    break
+        for t in window:
+            if any(lab == title for lab in toh.get(t, [])):
+                hits.append(t)
         hits = sorted(set(hits))
+        how = "exact"
+        if not hits:
+            # tier 2: exact after dropping free-standing genitive
+            # particles — titles alternate kyi/gyi/gi freely
+            # (found via the D.828 inversion: real mate differed
+            # only by one "kyi")
+            def pfree(s):
+                return " ".join(t for t in s.split()
+                                if t not in ("kyi", "gyi", "gi"))
+            tp = pfree(title)
+            for t in window:
+                if any(pfree(lab) == tp
+                       for lab in toh.get(t, [])):
+                    hits.append(t)
+            hits = sorted(set(hits))
+            how = "particle-fold"
+        if not hits:
+            # tier 3, labeled: one title contains the other
+            # (long-form vs short-form conventions) — unique hit
+            # only, and the shorter must be ≥60% of the longer so
+            # a generic stub title cannot swallow a long one
+            for t in window:
+                for lab in toh.get(t, []):
+                    lo, hi = sorted((len(lab), len(title)))
+                    if lo >= 15 and lo / hi >= 0.6 and \
+                       (lab in title or title in lab):
+                        hits.append(t)
+                        break
+            hits = sorted(set(hits))
+            how = "contained"
         if len(hits) == 1:
             mapping[str(d)] = hits[0]
+            kind[str(d)] = how
         elif len(hits) > 1:
-            ambiguous.append({"thl": d, "candidates": hits})
+            ambiguous.append({"thl": d, "candidates": hits,
+                              "tier": how})
         else:
             unmatched.append(d)
     json.dump({
@@ -126,6 +165,7 @@ def main():
                         "purl.bdrc.io MW22084 parts"],
         },
         "thl_to_toh": mapping,
+        "match_kind": kind,
         "ambiguous": ambiguous,
         "unmatched": unmatched,
     }, open(OUT, "w"), indent=1)
