@@ -2068,11 +2068,14 @@ public:
                 bool ok2 = false;
                 if (!es.empty()) {
                     const QString h2 = entryHtml(es.front());
-                    ok2 = h2.contains("tsema namdrel") &&
+                    // Adam's 2026-08-13 full-phrase ruling is the pin
+                    ok2 = h2.contains("tsema namdrel gyi tsik "
+                                      "le-ur jepa") &&
                           h2.contains(QString::fromUtf8("⟪ruled⟫"));
                 }
-                check(ok2, "card pron re-derives around the "
-                           "embedded ruling");
+                check(ok2, "card pron shows Adam's full-phrase "
+                           "ruling (tsema namdrel gyi tsik le-ur "
+                           "jepa)");
             }
             // the card headword shows ACIP beside the Tibetan
             // (Adam's ruling: the input centers' native script,
