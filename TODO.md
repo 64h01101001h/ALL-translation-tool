@@ -650,7 +650,15 @@ implementation is sidelined HERE from this date. What this means:
       form shipped; 45-entry pilot done. NEXT: scale batches (cost
       gate with Adam), Propose/Approval promotion lane, per-term
       suppression audit.
-- [ ] **Geshe Chodrak lane**: verify d. 1972 (PD-2023 math), hunt
+- [x] **Geshe Chodrak lane** — CLOSED 2026-08-13, see
+      docs/research/GESHE_CHODRAK_LANE.md: d.1972 VERIFIED
+      (1898–1972; dict compiled 1946, publ. 1949 Lhasa/Horkhang,
+      w/ Gendun Chophel) → PD in life+50 countries since 2023; BUT
+      US term restored to 2044 (URAA, 1949 publication) — not
+      clearly free for a US-distributed app until 2045. Etext:
+      only PKTC's commercial keying exists (Steinert's open set
+      has none); lane parked on the pending PKTC outreach.
+      Original line: verify d. 1972 (PD-2023 math), hunt
       the etext (BDRC/Monlam/THL), then AI-translate definitions
       ("AI-translated from a PD native definition" tier).
 - [~] **Jäschke 1881 (PD)** — EVALUATED 2026-08-12: Steinert's
