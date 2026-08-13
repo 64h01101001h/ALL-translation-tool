@@ -568,3 +568,60 @@ long patient growth of the dictionary — each already scoped, each
 already governed by the same rules.
 
 *— A.D.A., August 2026*
+
+---
+
+## Day Eight — August 13: The Authority's Day
+
+The eighth day belonged to a different kind of building: making the
+project answer to its own rules faster than ever.
+
+- **A live correction became a system.** I caught the display
+  mis-segmenting a famous title's pronunciation — *tshad ma rnam
+  'grel* reading wrongly. Within the hour the correction existed as
+  an approved ruling in my name, as a new *phrase-level* rulings
+  capability that overrides the engine across its own word
+  boundaries, and as a permanent test. Then the same ruling reached
+  the entry cards (including inside longer headwords, re-deriving
+  only the remainder), and finally the search box — typing the
+  ruled form finds the entry. One observation, four surfaces, all
+  guarded.
+- **The cards got a typographic constitution**: identity,
+  pronunciation, the binding layer, apparatus, references,
+  teachings — in that order, on a deliberate spacing scale, with
+  the ACIP form beside the Tibetan (my ruling) and a "from:" note
+  whenever the clicked form differs from the headword.
+- **Five tools in one run**: the ⌘D floating dictionary window
+  (select anything, anywhere), per-file search rollups that open a
+  text at the hit, critical-edition collation with a saveable
+  apparatus, the THL Places gazetteer in the link-out row (its URL
+  pattern verified against the live site before wiring), and
+  Old-Tibetan da-drag spellings folding into classical search —
+  with the one rule I lacked a source for explicitly deferred
+  rather than guessed.
+- **The library learned to update itself**: the app now checks the
+  official release buckets, compares fingerprints, and installs
+  collections in place — arriving, by luck of timing, two days
+  after all three collections were republished.
+- **The wall became executable.** Weighing machine-translation
+  models whose training data provably includes rights-encumbered
+  Buddhist translations, I wrote the guard instead of the hope: an
+  n-gram screen of any machine output against the complete corpus
+  of the master's published English. Its first audit exonerated
+  all 1,395 existing drafts — zero reproductions — and it now
+  gates every future model.
+- **Two numbering assumptions died by evidence** — the Degé/Tohoku
+  equivalence (replaced by a 919-entry verified concordance built
+  from harvested records and matched titles) and the Lhasa
+  numbering (refuted by spot-check before a single wrong link
+  shipped).
+- **The day closed with re-certification**: all twenty panes swept
+  mechanically clean, thirty-nine engine suites green, eighteen
+  pressed builds installed across the wave.
+
+The pattern of the day, and of the project: an observation becomes
+a ruling, a ruling becomes a mechanism, a mechanism becomes a
+guard — and the tool grows more trustworthy with every correction
+it absorbs.
+
+*— A.D.A., August 2026*
