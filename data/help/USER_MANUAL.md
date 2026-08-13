@@ -437,6 +437,38 @@ depends on what the app knows:
      automatically — and the link is remembered for this text, so
      next time the button goes straight to Follow along.
 
+**Right-click in the document box — the folio jump menu.** The
+top of the context menu identifies where you are — **folio 94a ·
+line 3/7** — read from the text's own @folio markers and the
+input centers' preserved line breaks (exact counting, never a
+guess). Below it:
+
+- **Show this folio in the scan panel** — turns the follow-along
+  viewer to that side.
+- **Open this folio in the Input workflow** — downloads that one
+  folio image if needed (it lands in the offline store, below) and
+  opens it in the Input pane's scan viewer, switching you there —
+  ready to key or compare against the carving.
+- **Locate selection on the woodblock…** — opens the folio in its
+  own zoomable window with your **highlighted words boxed on the
+  carving itself** (OCR word boxes, used only to locate — the
+  recognized text is never shown as text). The line you were in is
+  banded for context; any word OCR could not find on that side is
+  named in the caption, never silently dropped.
+- **Download all N folio scans (offline + Input)…** — fetches the
+  whole volume into `library/scans/<work>/` as folio-named files
+  (`094a.jpg`). From then on the follow-along works offline, and
+  **Open scan folder…** in the Input workflow opens the volume in
+  folio order. Strongly recommended when you start working with a
+  new text — the app suggests it as soon as the scans are linked.
+- **Export folio-faithful text files…** — splits the document at
+  its @folio markers into one text file per woodblock side
+  (`001a.txt`, `001b.txt`…), named to sit beside the downloaded
+  scans — an OCR-ready keying/comparison set that can never
+  disagree with the markers it came from.
+- **Copy location** — puts `work · folio · line` on the clipboard
+  for notes or citations.
+
 **◀ folio / folio ▶** — page through the scans by hand, one folio
 side at a time.
 
@@ -1857,6 +1889,12 @@ right. (Every one of them is also reachable from the menu bar:
   reopens as its block, restoring your page and typing from the
   work folder as usual). Entries whose file has moved or been
   deleted simply don't appear. The list survives restarts.
+- **Right-click in the typing area** — the menu identifies the
+  folio of the nearest @marker above your cursor, and when the open
+  scan folder contains that folio's image (folio-named files from
+  the Overlay's "Download all folio scans", or any filename
+  carrying the folio token), offers **Jump to this folio's scan
+  (page N)** — the viewer turns straight to that woodblock side.
 - **◀ page** and **page ▶** — step backward and forward through
   the pages of an open folder. Between them a label shows your
   place, e.g. **page 3/12**. Both buttons are greyed out until a

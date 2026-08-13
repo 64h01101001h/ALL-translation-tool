@@ -1350,6 +1350,9 @@ static bool g_sweepActive = false;
 // TibetDoc search-locations jump; set in main() once the Overlay
 // exists
 static std::function<void(const QString&, int)> g_openAtLine;
+// text↔woodblock jump (Adam's priority, 2026-08-13): the Overlay
+// hands a LOCAL folio image to the Input workflow
+static std::function<void(const QString&)> g_openScanInInput;
 // every folder picker goes through this wrapper: in sweep mode it
 // answers empty (as if the user cancelled) instead of hanging the
 // harness on an un-reapable native panel
@@ -2063,6 +2066,27 @@ public:
             check(hint_->text().contains("wylie source"),
                   "wylie conversion is labeled in the hint");
         }
+        {   // text->woodblock jump: folio/line identification and the
+            // folio-faithful split are pure marker arithmetic
+            const QString demo =
+                "@001A /BCOM LDAN 'DAS\nLINE TWO HERE\n"
+                "@001B SIDE B TEXT\nB LINE 2\nB LINE 3\n";
+            input_->setPlainText(demo);
+            const auto l1 =
+                resolveFolioAt(demo.indexOf("LINE TWO") + 2);
+            check(l1.folio == "1a" && l1.line == 2,
+                  "scan-sync: cursor resolves to folio 1a line 2");
+            const auto l2 = resolveFolioAt(demo.indexOf("B LINE 3"));
+            check(l2.folio == "1b" && l2.line == 3 &&
+                      l2.lineTotal == 3,
+                  "scan-sync: cursor resolves to folio 1b line 3/3");
+            const auto sides = splitFolioSides(demo);
+            check(sides.size() == 2 && sides[0].first == "001a" &&
+                      sides[1].first == "001b" &&
+                      sides[1].second.contains("B LINE 3"),
+                  "scan-sync: folio-faithful split yields "
+                  "001a/001b sides");
+        }
         {
             // #62 logic: a left side-panel and a big inter-line gap
             // are found; a fully-texted page yields no candidates
@@ -2377,6 +2401,95 @@ public:
         input_->setPlaceholderText("Paste an ACIP document…");
         input_->setMinimumHeight(60);
         ibl->addWidget(input_, 1);
+        // right-click: folio identity + woodblock jump actions
+        input_->setContextMenuPolicy(Qt::CustomContextMenu);
+        connect(
+            input_, &QPlainTextEdit::customContextMenuRequested,
+            [this](const QPoint& pt) {
+                QMenu* menu = input_->createStandardContextMenu();
+                menu->setAttribute(Qt::WA_DeleteOnClose);
+                const auto cur = input_->textCursor();
+                const auto loc = resolveFolioAt(
+                    cur.hasSelection() ? cur.selectionStart()
+                                       : cur.position());
+                if (!loc.folio.isEmpty()) {
+                    QList<QAction*> pre;
+                    auto* head = new QAction(
+                        QString("folio %1 · line %2/%3")
+                            .arg(loc.folio)
+                            .arg(loc.line)
+                            .arg(loc.lineTotal),
+                        menu);
+                    head->setEnabled(false);
+                    pre << head;
+                    if (folioUrl_.contains(loc.folio)) {
+                        auto* show = new QAction(
+                            "Show this folio in the scan panel", menu);
+                        connect(show, &QAction::triggered,
+                                [this, loc] { showFolio(loc.folio); });
+                        pre << show;
+                        auto* toInput = new QAction(
+                            "Open this folio in the Input workflow",
+                            menu);
+                        connect(toInput, &QAction::triggered,
+                                [this, loc] {
+                                    ensureFolioLocal(
+                                        loc.folio,
+                                        [](const QString& p) {
+                                            if (g_openScanInInput)
+                                                g_openScanInInput(p);
+                                        });
+                                });
+                        pre << toInput;
+                        auto* locate = new QAction(
+                            "Locate selection on the woodblock…",
+                            menu);
+                        connect(locate, &QAction::triggered, [this] {
+                            locateSelectionWindow();
+                        });
+                        pre << locate;
+                        auto* dl = new QAction(
+                            QString("Download all %1 folio scans "
+                                    "(offline + Input)…")
+                                .arg(folioOrder_.size()),
+                            menu);
+                        connect(dl, &QAction::triggered,
+                                [this] { downloadAllFolios(); });
+                        pre << dl;
+                    } else if (scanBtn_ && scanBtn_->isEnabled()) {
+                        auto* follow = new QAction(
+                            "Link the scans first (Follow along in "
+                            "scans)…",
+                            menu);
+                        connect(follow, &QAction::triggered,
+                                [this] { scanBtn_->click(); });
+                        pre << follow;
+                    }
+                    auto* exp = new QAction(
+                        "Export folio-faithful text files…", menu);
+                    connect(exp, &QAction::triggered,
+                            [this] { exportFolioSides(); });
+                    pre << exp;
+                    auto* cp = new QAction("Copy location", menu);
+                    connect(cp, &QAction::triggered, [this, loc] {
+                        QGuiApplication::clipboard()->setText(
+                            QString("%1 · folio %2 · line %3/%4")
+                                .arg(scanWork_.isEmpty() ? fileKey_
+                                                         : scanWork_)
+                                .arg(loc.folio)
+                                .arg(loc.line)
+                                .arg(loc.lineTotal));
+                    });
+                    pre << cp;
+                    auto* sep = new QAction(menu);
+                    sep->setSeparator(true);
+                    pre << sep;
+                    menu->insertActions(menu->actions().value(0),
+                                        pre);
+                }
+                menu->popup(
+                    input_->viewport()->mapToGlobal(pt));
+            });
         auto* left = new QWidget;
         auto* ll = new QVBoxLayout(left);
         ll->setContentsMargins(0, 4, 0, 0);
@@ -4375,7 +4488,10 @@ private:
             scanCap_->setText(
                 QString("Scans: Buddhist Digital Resource Center · %1 "
                         "folio sides mapped%2. Move the cursor in the "
-                        "document — the page follows its @folio marker.")
+                        "document — the page follows its @folio marker. "
+                        "Right-click in the document for folio actions "
+                        "(Input workflow, locate on woodblock, download "
+                        "all).")
                     .arg(folioOrder_.size())
                     .arg(scanLicense_.contains("publicdomain")
                              ? " · public domain"
@@ -4479,6 +4595,383 @@ private:
             setScanPixmap(basePx_, curFolio_);
     }
 
+    // ================= text<->woodblock jump (Adam's SUPER HIGH
+    // PRIORITY, 2026-08-13) =================
+    // The sync problem is solved on the DETERMINISTIC side first:
+    // the input centers preserved @folio markers and the woodblock's
+    // own line breaks, so text position -> (folio, line) is exact
+    // counting, never inference; folio -> image comes from BDRC's own
+    // IIIF labels. OCR enters only as the last-inch LOCATOR (word
+    // boxes on the carving) and its text is never surfaced as text.
+    struct FolioLoc { QString folio; int line = 0, lineTotal = 0; };
+
+    FolioLoc resolveFolioAt(int pos) const {
+        FolioLoc r;
+        const QString all = input_->toPlainText();
+        pos = std::clamp(pos, 0, (int)all.size());
+        QRegularExpression re("@0*(\\d+)([AB])",
+                              QRegularExpression::CaseInsensitiveOption);
+        int folioEnd = -1;
+        auto it = re.globalMatch(all.left(pos));
+        while (it.hasNext()) {
+            const auto m = it.next();
+            r.folio = QString::number(m.captured(1).toInt()) +
+                      m.captured(2).toLower();
+            folioEnd = m.capturedEnd();
+        }
+        if (r.folio.isEmpty()) return r;
+        r.line = 1 + (int)all.mid(folioEnd, pos - folioEnd).count('\n');
+        const auto next = re.match(all, pos);
+        const int sideEnd =
+            next.hasMatch() ? next.capturedStart() : all.size();
+        r.lineTotal = 1 + (int)all.mid(folioEnd, sideEnd - folioEnd)
+                              .trimmed()
+                              .count('\n');
+        return r;
+    }
+
+    // folio-faithful split: one (name, text) per woodblock side,
+    // 001a-style names that sort beside the downloaded scan files
+    static QVector<QPair<QString, QString>> splitFolioSides(
+        const QString& all) {
+        QVector<QPair<QString, QString>> out;
+        QRegularExpression re("@0*(\\d+)([AB])",
+                              QRegularExpression::CaseInsensitiveOption);
+        QVector<QPair<QString, int>> marks;
+        auto it = re.globalMatch(all);
+        while (it.hasNext()) {
+            const auto m = it.next();
+            marks.append({QString("%1%2")
+                              .arg(m.captured(1).toInt(), 3, 10,
+                                   QChar('0'))
+                              .arg(m.captured(2).toLower()),
+                          (int)m.capturedStart()});
+        }
+        for (int i = 0; i < marks.size(); ++i) {
+            const int end = i + 1 < marks.size() ? marks[i + 1].second
+                                                 : all.size();
+            out.append({marks[i].first,
+                        all.mid(marks[i].second, end - marks[i].second)
+                                .trimmed() +
+                            "\n"});
+        }
+        return out;
+    }
+
+    // the offline folio store: library/scans/<work>/094a.jpg — shared
+    // ground between the Overlay's follow-along and the Input workflow
+    QString folioScansDir() const {
+        QString w = scanWork_;
+        w.replace(QRegularExpression("[^A-Za-z0-9._-]"), "_");
+        return dataRoot_ + "/library/scans/" + w;
+    }
+    QString folioLocalPath(const QString& folio) const {
+        QRegularExpression re("^(\\d+)([ab])$");
+        const auto m = re.match(folio);
+        if (!m.hasMatch())
+            return folioScansDir() + "/" + folio + ".jpg";
+        return folioScansDir() +
+               QString("/%1%2.jpg")
+                   .arg(m.captured(1).toInt(), 3, 10, QChar('0'))
+                   .arg(m.captured(2));
+    }
+
+    void ensureFolioLocal(const QString& folio,
+                          std::function<void(const QString&)> done) {
+        const QString out = folioLocalPath(folio);
+        if (QFile::exists(out)) { done(out); return; }
+        const QString url = folioUrl_.value(folio);
+        // promote an already-cached panel image into the store
+        if (!scanCache_.isEmpty() && !url.isEmpty()) {
+            const QString fn =
+                volCacheDir() + "/" +
+                QString(url).replace(
+                    QRegularExpression("[^A-Za-z0-9._-]"), "_");
+            if (QFile::exists(fn)) {
+                QDir().mkpath(folioScansDir());
+                if (QFile::copy(fn, out)) { done(out); return; }
+            }
+        }
+        if (url.isEmpty()) return;
+        auto* rep = nam_.get(QNetworkRequest(QUrl(url)));
+        connect(rep, &QNetworkReply::finished, [this, rep, out, done] {
+            rep->deleteLater();
+            if (rep->error() != QNetworkReply::NoError) {
+                QMessageBox::warning(
+                    this, "Folio scan",
+                    "Could not fetch the folio image: " +
+                        rep->errorString());
+                return;
+            }
+            QDir().mkpath(folioScansDir());
+            QFile f(out);
+            if (f.open(QIODevice::WriteOnly)) f.write(rep->readAll());
+            done(out);
+        });
+    }
+
+    void downloadAllFolios() {
+        if (folioUrl_.isEmpty()) return;
+        QDir().mkpath(folioScansDir());
+        QProgressDialog pd("Downloading folio scans from BDRC…",
+                           "Stop", 0, folioOrder_.size(), this);
+        pd.setWindowModality(Qt::WindowModal);
+        int got = 0, had = 0, fail = 0, i = 0;
+        for (const QString& f : folioOrder_) {
+            pd.setValue(i++);
+            pd.setLabelText("folio " + f + "…");
+            QCoreApplication::processEvents();
+            if (pd.wasCanceled()) break;
+            const QString out = folioLocalPath(f);
+            if (QFile::exists(out)) { ++had; continue; }
+            QEventLoop loop;
+            auto* rep =
+                nam_.get(QNetworkRequest(QUrl(folioUrl_.value(f))));
+            connect(rep, &QNetworkReply::finished, &loop,
+                    &QEventLoop::quit);
+            loop.exec();
+            rep->deleteLater();
+            if (rep->error() == QNetworkReply::NoError) {
+                QFile o(out);
+                if (o.open(QIODevice::WriteOnly)) {
+                    o.write(rep->readAll());
+                    ++got;
+                }
+            } else {
+                ++fail;
+            }
+        }
+        pd.setValue(folioOrder_.size());
+        QMessageBox::information(
+            this, "Folio scans",
+            QString("%1 downloaded, %2 already present, %3 failed.\n\n"
+                    "Folder: %4\n\nOpen this folder in the Input "
+                    "workflow (Open scan folder…) to key the whole "
+                    "volume — the pages arrive in folio order, and "
+                    "folio jumps work offline from now on.")
+                .arg(got)
+                .arg(had)
+                .arg(fail)
+                .arg(folioScansDir()));
+    }
+
+    void exportFolioSides() {
+        const auto sides = splitFolioSides(input_->toPlainText());
+        if (sides.isEmpty()) {
+            QMessageBox::information(
+                this, "Folio export",
+                "No @folio markers in this document.");
+            return;
+        }
+        const QString dir = safeGetExistingDirectory(
+            this, "Folder for folio-faithful files",
+            dataRoot_ + "/library");
+        if (dir.isEmpty()) return;
+        int n = 0;
+        for (const auto& sd : sides) {
+            QFile f(dir + "/" + sd.first + ".txt");
+            if (f.open(QIODevice::WriteOnly | QIODevice::Text)) {
+                f.write(sd.second.toUtf8());
+                ++n;
+            }
+        }
+        QMessageBox::information(
+            this, "Folio export",
+            QString("%1 folio-side file(s) written (001a.txt style) "
+                    "— named to sit beside downloaded scans "
+                    "(001a.jpg): one text file per woodblock side, "
+                    "OCR-comparison-ready.")
+                .arg(n));
+    }
+
+    // the selection, as wylie, for locating on the carving
+    QString selectionWylie() const {
+        QString t = input_->textCursor().selectedText();
+        t.replace(QChar(0x2029), ' ');
+        t.replace(QRegularExpression("@[A-Za-z0-9]+"), " ");
+        t.replace(QRegularExpression("\\[[^\\]]*\\]"), " ");
+        t.replace(QRegularExpression("[*,;/]"), " ");
+        t = t.simplified();
+        if (t.isEmpty()) return t;
+        bool hasLower = false;
+        for (QChar c : t) hasLower |= c.isLower();
+        return hasLower ? t.toLower()
+                        : QString::fromStdString(allcore::acipToEwts(
+                                                     t.toStdString()))
+                              .trimmed();
+    }
+
+    void locateSelectionWindow() {
+#ifndef ALL_HAVE_OCR
+        QMessageBox::information(
+            this, "Locate on woodblock",
+            "This build has no OCR component, so the locator is "
+            "unavailable.");
+#else
+        const auto cur = input_->textCursor();
+        const auto loc = resolveFolioAt(
+            cur.hasSelection() ? cur.selectionStart() : cur.position());
+        if (loc.folio.isEmpty()) {
+            QMessageBox::information(
+                this, "Locate on woodblock",
+                "No @folio marker precedes this point, so the folio "
+                "cannot be identified.");
+            return;
+        }
+        if (!folioUrl_.contains(loc.folio)) {
+            QMessageBox::information(
+                this, "Locate on woodblock",
+                "Folio " + loc.folio +
+                    " is not in the mapped scan volume. Start "
+                    "“Follow along in scans” first.");
+            return;
+        }
+        const QString needle =
+            cur.hasSelection() ? selectionWylie() : curWordWylie_;
+        if (needle.isEmpty()) {
+            QMessageBox::information(
+                this, "Locate on woodblock",
+                "Select the Tibetan to locate first.");
+            return;
+        }
+        ensureFolioLocal(loc.folio,
+                         [this, loc, needle](const QString& path) {
+                             QPixmap px(path);
+                             if (!px.isNull())
+                                 openLocateWindow(px, loc, needle);
+                         });
+#endif
+    }
+
+#ifdef ALL_HAVE_OCR
+    void openLocateWindow(const QPixmap& px, const FolioLoc& loc,
+                          const QString& needle) {
+        const FolioOcr* fo = folioOcrFor(loc.folio, px);
+        QPixmap shown = px.copy();
+        {   // the follow-along's approximate line band, for context
+            QPainter p(&shown);
+            if (loc.line > 0 && loc.lineTotal >= loc.line &&
+                loc.lineTotal > 1) {
+                const int y0 =
+                    px.height() * (loc.line - 1) / loc.lineTotal;
+                const int y1 = px.height() * loc.line / loc.lineTotal;
+                p.fillRect(0, y0, px.width(), y1 - y0,
+                           QColor(255, 190, 0, 45));
+            }
+            p.end();
+        }
+        int found = 0, total = 0;
+        QStringList missed;
+        if (fo && !fo->pl.lines.empty()) {
+            QPainter p(&shown);
+            const QStringList words =
+                needle.split(' ', Qt::SkipEmptyParts);
+            total = words.size();
+            for (const QString& wq : words) {
+                const std::string w = wq.toLower().toStdString();
+                std::vector<size_t> order;
+                if (loc.line >= 1 &&
+                    loc.line <= (int)fo->lineText.size())
+                    order.push_back(size_t(loc.line - 1));
+                for (size_t li = 0; li < fo->lineText.size(); ++li)
+                    if (order.empty() || li != order[0])
+                        order.push_back(li);
+                bool hit = false;
+                for (size_t oi = 0; oi < order.size() && !hit; ++oi) {
+                    const size_t li = order[oi];
+                    const std::string& text = fo->lineText[li];
+                    std::vector<size_t> pref{0};
+                    for (const auto& ws : fo->words[li])
+                        pref.push_back(pref.back() + ws.text.size());
+                    const size_t at = text.find(w);
+                    if (at == std::string::npos) continue;
+                    size_t k0 = 0, k1 = 0;
+                    for (size_t k = 0; k + 1 < pref.size(); ++k) {
+                        if (pref[k] <= at && at < pref[k + 1]) k0 = k;
+                        if (pref[k] < at + w.size() &&
+                            at + w.size() <= pref[k + 1])
+                            k1 = k;
+                    }
+                    const int x0 =
+                        folioPageX(*fo, li, fo->words[li][k0].x0);
+                    const int x1 =
+                        folioPageX(*fo, li, fo->words[li][k1].x1);
+                    const auto& ln = fo->pl.lines[li];
+                    p.fillRect(QRect(x0, ln.y, std::max(x1 - x0, 3),
+                                     ln.h),
+                               QColor(0xE8, 0x50, 0x20, 90));
+                    p.setPen(QPen(QColor(0xB4, 0x2A, 0x0A), 3));
+                    p.drawRect(x0, ln.y, std::max(x1 - x0, 3), ln.h);
+                    hit = true;
+                    ++found;
+                }
+                if (!hit) missed << wq;
+            }
+            p.end();
+        }
+        auto* dlg = new QDialog(this);
+        dlg->setAttribute(Qt::WA_DeleteOnClose);
+        dlg->setWindowFlag(Qt::Window);
+        dlg->setWindowTitle(
+            QString("Woodblock · folio %1 — “%2”")
+                .arg(loc.folio, needle));
+        dlg->resize(1000, 680);
+        auto* v = new QVBoxLayout(dlg);
+        auto* cap = new QLabel;
+        cap->setWordWrap(true);
+        cap->setMinimumWidth(1);
+        QString note =
+            fo ? QString("%1 of %2 selected word(s) located by OCR "
+                         "word boxes — locator only, the "
+                         "recognized text is never used as text.")
+                     .arg(found)
+                     .arg(total)
+               : QString("OCR unavailable for this folio — "
+                         "showing the approximate line band only.");
+        if (!missed.isEmpty())
+            note += " Not found on this side: " +
+                    missed.join(", ") + ".";
+        note += QString(" · folio %1, line %2/%3 by the text's "
+                        "own markers and line breaks.")
+                    .arg(loc.folio)
+                    .arg(loc.line)
+                    .arg(loc.lineTotal);
+        cap->setText(note);
+        v->addWidget(cap);
+        auto* img = new QLabel;
+        img->setAlignment(Qt::AlignCenter);
+        auto* sa = new QScrollArea;
+        sa->setWidget(img);
+        sa->setWidgetResizable(false);
+        v->addWidget(sa, 1);
+        auto* zr = new QHBoxLayout;
+        zr->addWidget(new QLabel("zoom"));
+        auto* zoom = new QSlider(Qt::Horizontal);
+        zoom->setRange(25, 400);
+        zoom->setValue(std::clamp(
+            sa->width() > 0 && shown.width() > 0
+                ? 96000 / shown.width()
+                : 100,
+            25, 400));
+        zr->addWidget(zoom, 1);
+        v->addLayout(zr);
+        auto apply = [img, zoom, shown] {
+            const int z = zoom->value();
+            const QPixmap scaled =
+                z == 100
+                    ? shown
+                    : shown.scaledToWidth(
+                          std::max(shown.width() * z / 100, 50),
+                          Qt::SmoothTransformation);
+            img->setPixmap(scaled);
+            img->resize(scaled.size());
+        };
+        connect(zoom, &QSlider::valueChanged, apply);
+        apply();
+        dlg->show();
+    }
+#endif
+
 public:
     // ---- the Four-Layer Page (Adam's wow round, 2026-08-12): one
     // folio, four synchronized layers — scan · OCR · e-text ·
@@ -4524,7 +5017,7 @@ public:
         std::vector<QRect> lineRects;
         bool haveOcr = false;
 #ifdef ALL_HAVE_OCR
-        if (const FolioOcr* fo = folioOcrFor(curFolio_)) {
+        if (const FolioOcr* fo = folioOcrFor(curFolio_, basePx_)) {
             haveOcr = true;
             for (const auto& t : fo->lineText)
                 ocr << QString::fromStdString(t);
@@ -5813,6 +6306,14 @@ private:
         const QString url = folioUrl_.value(folio);
         scanCap_->setText(QString("<b>folio %1</b> · BDRC scan").arg(folio));
         scanCap_->show();
+        // offline store first (Download all folios): folio-named files
+        if (!scanWork_.isEmpty()) {
+            const QString lp = folioLocalPath(folio);
+            if (QFile::exists(lp)) {
+                QPixmap px(lp);
+                if (!px.isNull()) { setScanPixmap(px, folio); return; }
+            }
+        }
         if (!scanCache_.isEmpty()) {
             QDir().mkpath(volCacheDir());
             const QString fn = volCacheDir() + "/" +
@@ -5882,10 +6383,11 @@ private:
         return true;
     }
 
-    const FolioOcr* folioOcrFor(const QString& folio) {
+    const FolioOcr* folioOcrFor(const QString& folio,
+                                const QPixmap& px) {
         auto it = folioOcr_.find(folio);
         if (it != folioOcr_.end()) return &it->second;
-        if (folioOcrBusy_ || basePx_.isNull()) return nullptr;
+        if (folioOcrBusy_ || px.isNull()) return nullptr;
         if (!ensureFolioOcrModels()) {
             scanCap_->setText(scanCap_->text() +
                               " · word-locate needs the OCR models "
@@ -5897,7 +6399,7 @@ private:
                           ": running OCR to locate words…");
         QCoreApplication::processEvents();
         FolioOcr fo;
-        QImage img = basePx_.toImage().convertToFormat(QImage::Format_RGB888);
+        QImage img = px.toImage().convertToFormat(QImage::Format_RGB888);
         const int w = img.width(), h = img.height();
         std::vector<uint8_t> rgb(static_cast<size_t>(w) * h * 3);
         for (int y = 0; y < h; ++y)
@@ -5965,7 +6467,7 @@ private:
 #ifdef ALL_HAVE_OCR
         if (wordLocB_ && wordLocB_->isChecked() &&
             !curWordWylie_.isEmpty()) {
-            const FolioOcr* fo = folioOcrFor(folio);
+            const FolioOcr* fo = folioOcrFor(folio, basePx_);
             if (fo && !fo->pl.lines.empty()) {
                 // QPixmap is implicitly shared; QPainter detaches `shown`
                 QPainter p(&shown);
@@ -12716,6 +13218,73 @@ public:
             "Type the ACIP transliteration here, one line per woodblock "
             "line…");
         split->addWidget(editor_);
+        // right-click: the typed @folio marker jumps to its scan page
+        // (folio-named files — the Overlay's Download-all store — or
+        // any filename carrying the folio token)
+        editor_->setContextMenuPolicy(Qt::CustomContextMenu);
+        connect(
+            editor_, &QPlainTextEdit::customContextMenuRequested,
+            [this](const QPoint& pt) {
+                QMenu* menu = editor_->createStandardContextMenu();
+                menu->setAttribute(Qt::WA_DeleteOnClose);
+                const QString all = editor_->toPlainText();
+                const int pos = editor_->textCursor().position();
+                QRegularExpression re(
+                    "@0*(\\d+)([AB])",
+                    QRegularExpression::CaseInsensitiveOption);
+                QString num, side;
+                auto it = re.globalMatch(all.left(pos));
+                while (it.hasNext()) {
+                    const auto m = it.next();
+                    num = m.captured(1);
+                    side = m.captured(2).toLower();
+                }
+                if (!num.isEmpty()) {
+                    QList<QAction*> pre;
+                    auto* head = new QAction(
+                        QString("folio %1%2")
+                            .arg(num.toInt())
+                            .arg(side),
+                        menu);
+                    head->setEnabled(false);
+                    pre << head;
+                    if (!pages_.isEmpty()) {
+                        const QString pad =
+                            QString("%1%2")
+                                .arg(num.toInt(), 3, 10, QChar('0'))
+                                .arg(side);
+                        const QString bare =
+                            QString::number(num.toInt()) + side;
+                        int hit = -1;
+                        for (int i = 0;
+                             i < pages_.size() && hit < 0; ++i) {
+                            const QString b =
+                                QFileInfo(pages_[i])
+                                    .completeBaseName()
+                                    .toLower();
+                            if (b.contains(pad) || b.endsWith(bare))
+                                hit = i;
+                        }
+                        if (hit >= 0) {
+                            auto* jump = new QAction(
+                                QString("Jump to this folio's scan "
+                                        "(page %1)")
+                                    .arg(hit + 1),
+                                menu);
+                            connect(jump, &QAction::triggered,
+                                    [this, hit] { gotoPage(hit); });
+                            pre << jump;
+                        }
+                    }
+                    auto* sep = new QAction(menu);
+                    sep->setSeparator(true);
+                    pre << sep;
+                    menu->insertActions(menu->actions().value(0),
+                                        pre);
+                }
+                menu->popup(
+                    editor_->viewport()->mapToGlobal(pt));
+            });
         // predictive ACIP typing (Adam's wow round #13): the current
         // token completes from the dictionary's own ACIP headwords —
         // deterministic inventory, keystrokes saved on every syllable.
@@ -12833,6 +13402,7 @@ public:
     }
 
 private:
+public:
     // recently viewed scans (Adam, 2026-08-13): files and folders
     // both, newest first, capped at ten, persisted
     void recordRecentScan(const QString& p) {
@@ -16496,6 +17066,10 @@ int main(int argc, char** argv) {
     tabs.addTab(alignPane, "Align");
     auto* inputPane = new InputPane(checker, root, &spine);
     tabs.addTab(inputPane, "Input");
+    g_openScanInInput = [inputPane](const QString& p) {
+        inputPane->openScanPath(p);
+        if (g_raisePane) g_raisePane(inputPane);
+    };
     auto* libraryPane = new LibraryPane(root, progress,
                                 [overlay](const QString& path) {
                                     overlay->openFile(path);
