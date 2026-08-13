@@ -97,3 +97,92 @@ on every pane (17/17 panes crash-free).
   document were truth-passed against the shipped build; the
   testing campaign checklist and findings log ship in the
   distribution folder.
+
+---
+
+# Addendum — the August 12–13 wave
+
+Since the notes above, eighteen further pressed builds landed. The
+highlights, feature by feature:
+
+## Reading & the dictionary
+- **⌘D — the floating dictionary window.** Select a word or phrase
+  in any pane and press ⌘D: the full lookup stack answers in a
+  floating card that follows its own cross-reference links.
+- **Entry cards redesigned** into a deliberate typographic order:
+  identity (Tibetan headline with the ACIP form beside it, plus a
+  "from:" note when you clicked an inflected form), pronunciation,
+  the binding HGM layer, published apparatus, labeled reference
+  layers, and teaching links — consistent spacing throughout.
+- **Pronunciation rulings, everywhere.** The authority's approved
+  pronunciations now override the engine across every surface —
+  whole-text display, entry cards (green ⟪ruled⟫ tag), and search —
+  including phrase rulings that span the engine's own word
+  boundaries (tshad ma rnam 'grel = "tsema namdrel"), and rulings
+  embedded inside longer headwords.
+- **Pronunciation (THL)** display mode: the THL Simplified
+  Phonetic Transcription (Germano & Tournadre), implemented
+  rule-for-rule from the published standard and proven against the
+  standard's own complete example battery (139/139). The Convert
+  pane shows both systems side by side.
+- **Old-Tibetan spellings meet their classical forms** in every
+  search (the archaic da-drag: gyurd finds gyur).
+
+## The Pecha Maker, productionized
+- Ornamental title folio (text begins on 1b), margin title
+  (ya-yig) and volume letter, head marks, three rule weights.
+- The Degé woodblock measure (68 × 10 cm) with the classical
+  opening — first two text sides at five lines, larger letters.
+- Two-up imposition on A4/US Letter with cut marks; an optional
+  cover/label sheet; batch mode (a whole folder becomes a pecha
+  set); and verse lineation (the poet's lines survive, blank
+  lines become stanza gaps).
+- An English interlinear that appears ONLY where the aligned
+  corpus attests the exact segment — matched verbatim from
+  published translation, never composed, proven end-to-end by a
+  build-time self-test.
+
+## Scholarship tools
+- **Edition collation** (Align → Compare editions…): two witnesses
+  of a text, every variant shown in a colored collation with a
+  numbered, saveable apparatus. Nothing auto-resolved.
+- **Search locations, TibetDoc-style**: folder search results roll
+  up per file with hit counts; clicking opens the text in the
+  Overlay at the first hit.
+- **THL Places** joined the link-out row (~64,000 Tibetan places).
+
+## The library, self-updating
+- **Check for collection updates** (Library → Maintenance): the
+  app asks asianlegacylibrary.org for the official releases,
+  compares fingerprints with what is installed, and downloads and
+  installs in place — with confirmation and progress, never
+  touching your own materials.
+
+## The dictionary program
+- The **ALL Working Glossary** grew to 1,395 AI-drafted deep
+  entries (senses, context, part of speech from hand-tagged
+  evidence only, resolving cross-references) — shown only where
+  Geshe Michael is silent, violet-bannered, and now with a
+  **promotion lane**: review a draft, edit it, and file it to the
+  Approval queue as your own proposal with full provenance.
+- **The wall, enforced in code**: every machine-produced English
+  is screened against the complete corpus of Geshe Michael's
+  published English before it is kept. The screen's first audit
+  proved all existing drafts clean — zero reproductions.
+- The **84000 glossary** (24,576 terms, CC BY) as a toggleable
+  layer; the in-app **Guidelines & Protocols** chapters distilling
+  THL's published standards for print, digitization, scanning,
+  and cataloging.
+
+## The teaching archive
+- The index grew to **263,188 timecoded moments** across 2,812
+  recordings — including 554 caption files recovered from
+  unlisted and forgotten uploads found through the archival
+  program's link-probe.
+
+## Under the hood
+- The authority's queue gained **Approve all in filter** for
+  machine-seeded batches; the design audit closed every clipped
+  label and unexplained empty surface; the whole application was
+  re-certified by a 20-pane mechanized control sweep after the
+  wave — zero anomalies, 39/39 engine test suites green.
