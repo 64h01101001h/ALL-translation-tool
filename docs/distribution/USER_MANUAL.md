@@ -1221,6 +1221,14 @@ always know how your match was found:
 2. **Tibetan script**: paste བསོད་ནམས་ — same result.
 3. **ACIP**: type `BSOD NAMS` (uppercase input is auto-detected as
    ACIP) — same result.
+**⌘D — the floating dictionary window.** Select a word or phrase
+in ANY text surface — the Manuscript, a draft, the Input editor,
+even another pane's results — and press **⌘D** (or View → Look Up
+Selection). The full Lookup stack answers in a floating card that
+stays above your work: every match lane, every layer, the q.v.
+links following inside the card, and the propose/promote actions
+one click away. TibetDoc's dictionary window, reborn app-wide.
+
 4. **A pronunciation in the master's convention**: type `jangchub`.
    There is no headword spelled that way, so the pane matches by
    sound and finds *byang chub*, with the green note "matched by

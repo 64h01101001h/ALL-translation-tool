@@ -1180,6 +1180,88 @@ static void promoteAiDraftDialog(QWidget* parent,
                  wylie, value.trimmed(), QString(), evidence);
 }
 
+// ---- ⌘D: the floating dictionary window (TibetDoc's dictionary
+// window, reborn app-wide). Select Tibetan (or English) in ANY
+// text surface and press ⌘D — the full Lookup stack answers in a
+// floating card that follows its own q.v. links. One instance,
+// created in main() once the layers exist. ------------------------
+class LookupPopup : public QDialog {
+public:
+    LookupPopup(allcore::Spine& spine, allcore::RefDict* ref,
+                allcore::Mvp* mvp, allcore::WhitneyRoots* whitney,
+                allcore::ColloquialPron* colloq, QWidget* parent)
+        : QDialog(parent), spine_(spine), ref_(ref), mvp_(mvp),
+          whitney_(whitney), colloq_(colloq) {
+        setWindowTitle("Lookup — ⌘D");
+        setWindowFlag(Qt::Tool, true);   // floats above the app
+        resize(540, 500);
+        auto* v = new QVBoxLayout(this);
+        box_ = new QLineEdit;
+        box_->setPlaceholderText(
+            "wylie · ACIP · English · pronunciation…");
+        v->addWidget(box_);
+        view_ = new QTextBrowser;
+        view_->setOpenLinks(false);
+        view_->setHtml(
+            "<i style='color:#8A8A8A'>Select a word or phrase in "
+            "any pane and press ⌘D — the whole dictionary stack "
+            "answers here, without leaving your writing.</i>");
+        v->addWidget(view_, 1);
+        connect(box_, &QLineEdit::returnPressed,
+                [this] { run(box_->text()); });
+        connect(view_, &QTextBrowser::anchorClicked,
+                [this](const QUrl& u) {
+                    const QString s = u.toString();
+                    if (s.startsWith("term:")) {
+                        run(anchorPayload(s, 5));
+                    } else if (s.startsWith("das:")) {
+                        showDasPage(this, s.mid(4).toInt());
+                        run(box_->text());
+                    } else if (s.startsWith("propose:")) {
+                        proposeTermDialog(
+                            this, anchorPayload(s, 8),
+                            "looked up in the ⌘D dictionary "
+                            "window");
+                        run(box_->text());
+                    } else if (s.startsWith("proposeai:")) {
+                        promoteAiDraftDialog(this,
+                                             anchorPayload(s, 10));
+                        run(box_->text());
+                    } else if (s.startsWith("http")) {
+                        QDesktopServices::openUrl(u);
+                    }
+                });
+    }
+    void run(const QString& q0) {
+        QString q = q0;
+        q.replace(QChar(0x2029), ' ');   // paragraph separators
+        q = q.simplified();
+        if (q.isEmpty()) {
+            show();
+            raise();
+            box_->setFocus();
+            return;
+        }
+        box_->setText(q);
+        view_->setHtml(lookupResultsHtml(spine_, ref_, mvp_,
+                                         whitney_, colloq_,
+                                         q.toStdString()));
+        show();
+        raise();
+    }
+    QString viewText() const { return view_->toPlainText(); }
+
+private:
+    allcore::Spine& spine_;
+    allcore::RefDict* ref_;
+    allcore::Mvp* mvp_;
+    allcore::WhitneyRoots* whitney_;
+    allcore::ColloquialPron* colloq_;
+    QLineEdit* box_ = nullptr;
+    QTextBrowser* view_ = nullptr;
+};
+static LookupPopup* g_lookupPopup = nullptr;
+
 static std::function<void(QWidget*)> g_raisePane;
 // sweep mode opens no native OS panels — the sweep reaper can
 // reject QDialogs but not NSOpenPanel, so dialog-opening lanes
@@ -15783,6 +15865,10 @@ int main(int argc, char** argv) {
     }
     tabs.addTab(makeLookupPane(spine, refdict, mvp, whitney, colloq),
                 "Lookup");
+    // ⌘D floating dictionary window — one instance, app-wide
+    static LookupPopup lookupPopup(spine, refdict, mvp, whitney,
+                                   colloq, nullptr);
+    g_lookupPopup = &lookupPopup;
     auto* sanskritPane = new SanskritPane(mvp, whitney);
     tabs.addTab(sanskritPane, "Sanskrit");
 #ifdef ALL_HAVE_OCR
@@ -16024,6 +16110,26 @@ int main(int argc, char** argv) {
         QObject::connect(huntA, &QAction::triggered, [&win] {
             if (g_hunt) g_hunt->openPalette();
             Q_UNUSED(win);
+        });
+        // ⌘D: look up the selection from ANY text surface in the
+        // floating dictionary window (TibetDoc's dictionary
+        // window, reborn)
+        QAction* peekA = view->addAction("Look Up Selection…");
+        peekA->setShortcut(QKeySequence("Ctrl+D"));
+        peekA->setShortcutContext(Qt::ApplicationShortcut);
+        QObject::connect(peekA, &QAction::triggered, [] {
+            if (!g_lookupPopup) return;
+            QWidget* f = QApplication::focusWidget();
+            QString sel;
+            if (auto* pe = qobject_cast<QPlainTextEdit*>(f))
+                sel = pe->textCursor().selectedText();
+            else if (auto* te = qobject_cast<QTextEdit*>(f))
+                sel = te->textCursor().selectedText();
+            else if (auto* tb = qobject_cast<QTextBrowser*>(f))
+                sel = tb->textCursor().selectedText();
+            else if (auto* le = qobject_cast<QLineEdit*>(f))
+                sel = le->selectedText();
+            g_lookupPopup->run(sel);
         });
         view->addSeparator();
         QAction* about = view->addAction("About ALL Translation Tool");
@@ -16611,6 +16717,14 @@ int main(int argc, char** argv) {
                        hr.contains("SKABS"),
                    "ruled pronunciation finds its entry "
                    "(kamdir class)");
+            }
+            // the ⌘D floating dictionary window answers with the
+            // same stack
+            if (g_lookupPopup) {
+                g_lookupPopup->run("bsod nams");
+                lk(g_lookupPopup->viewText().contains("BSOD NAMS"),
+                   "⌘D popup answers with the full stack");
+                g_lookupPopup->hide();
             }
             lk(h.contains("propose:"),
                "propose-to-the-authority action offered");
