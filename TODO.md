@@ -979,3 +979,49 @@ implementation is sidelined HERE from this date. What this means:
       diamondcutterinstitute.com from GMR's publishing list);
       calendar reminder set 2026-08-13 09:00 Denver. On access:
       inventory → Leads sheet → All Recordings rows.
+
+## OPENED 2026-08-12 EVENING (autonomous block bookkeeping)
+- [~] **THL Pronunciation engine** — IN PROGRESS tonight: C++ port
+      of THL Simplified Phonetics (spec captured complete), battery
+      = the standard's own 33 examples + 19 exceptions + rule
+      examples as ctest; display mode joins "text as" combo; UI
+      credits "THL Simplified Phonetics (Germano & Tournadre, THL)".
+      Policy decision documented at port: thun→tün (rules 2+3 over
+      the source's own contradictory example).
+- [~] **THL Degé concordance harvest** — RUNNING: ~1,118 records
+      via cat_reader.php (gentle, resume-safe) →
+      data/extracted/thl_dege_records/; NEXT: parse titles → match
+      BDRC Toh-keyed Wylie labels → thl_dege_concordance.json →
+      only then THL catalog deep-links (numeric Toh=THL REFUTED,
+      see docs/research/THL/dege_tohoku_verification.md).
+- [ ] **Transcriber pilot** (needs Adam's go + account): <$20 on
+      ~10 Tibetan-dense videos, ElevenLabs Scribe v2 vs AssemblyAI
+      (± Soniox/Speechmatics), scored on Tibetan-term recall;
+      keyterms + phonetic→wylie map READY in data/teaching/
+      (transcriber_keyterms.txt / transcriber_lexicon.tsv). Then
+      full-archive run (~$840-1,080 at 4,000 hrs) + teaching-index
+      rebuild from the better transcripts.
+- [ ] **THL outreach email** (draft tonight if time; else next
+      session): dictionary-content licensing for the 16 TTT
+      dictionaries (the one documenting wiki page was never
+      archived), the possibly-unintentional public Solr endpoint,
+      data-partnership registration, and credit lines. Address:
+      THL/UVa contact page.
+- [ ] **kmaps Places live-query integration** (query + link-out
+      lane only, no bulk ingest; harsh 429s — cache per lookup):
+      Overlay/Library place names → places.kmaps.virginia.edu
+      JSON (~64k places, Tibetan script + Wylie names).
+- [ ] **Unlisted-recordings preservation pass** (68 unlisted links
+      now in the Recordings Tracker): confirm with Adam whether to
+      archive captions/audio for these before they rot — unlisted
+      videos vanish silently when channels reorganize.
+- [ ] Remaining design-audit shots not yet reviewed one-by-one:
+      Library, Scans, Manuscript, Review, Search, Lookup,
+      Sanskrit, Convert, Analysis, Drills, Input, OCR, Propose,
+      Approval (first pass found: clipped banners ALL FIXED,
+      empty-state gaps FIXED for Draft/Trainer/Apparatus/Export).
+- PENDING ADAM (standing): Jamie Plant draft recipient + send;
+      PKTC / GMR-permission / 84000 / Jigme drafts (send);
+      Dropbox share link → Jigme draft placeholder; transcriber
+      pilot go; joint T/K/F walkthrough; kamdir/prenasal Approval
+      queue rulings; Jäschke 1881 archive.org download go-ahead.
