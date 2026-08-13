@@ -315,6 +315,45 @@ static std::string pronWithRulings(const std::string& word_wylie,
     return it == g_pronApproved->end() ? engine_pron : it->second;
 }
 
+// mark every multi-syllable ruling's run inside a syllable
+// sequence (lowercased wylie syllables). Returns true if any run
+// was claimed. ruled[i] = index into vals, or -1.
+static bool markPhraseRulings(const std::vector<std::string>& syls,
+                              std::vector<int>& ruled,
+                              std::vector<std::string>& vals) {
+    ruled.assign(syls.size(), -1);
+    vals.clear();
+    if (!g_pronApproved || syls.empty()) return false;
+    for (const auto& [rk, rv] : *g_pronApproved) {
+        std::vector<std::string> ks;
+        std::string cur;
+        for (char c : rk) {
+            if (c == ' ') {
+                if (!cur.empty()) ks.push_back(cur);
+                cur.clear();
+            } else {
+                cur += (char)std::tolower((unsigned char)c);
+            }
+        }
+        if (!cur.empty()) ks.push_back(cur);
+        if (ks.size() < 2) continue;
+        for (size_t s = 0; s + ks.size() <= syls.size(); ++s) {
+            bool hit = true;
+            for (size_t j = 0; j < ks.size(); ++j)
+                if (syls[s + j] != ks[j] || ruled[s + j] >= 0) {
+                    hit = false;
+                    break;
+                }
+            if (hit) {
+                vals.push_back(rv);
+                for (size_t j = 0; j < ks.size(); ++j)
+                    ruled[s + j] = (int)vals.size() - 1;
+            }
+        }
+    }
+    return !vals.empty();
+}
+
 static QString entryHtml(const allcore::Entry& e,
                          const EntryDisplay& d = EntryDisplay{}) {
     QString h;
@@ -459,6 +498,53 @@ static QString entryHtml(const allcore::Entry& e,
             if (itr != g_pronApproved->end()) {
                 cardPron = itr->second;
                 ruledPron = true;
+            } else {
+                // a ruled PHRASE inside a longer headword
+                // (Adam's finding: tshad ma rnam 'grel gyi tshig
+                // le'ur byas pa) — the ruling claims its run and
+                // only the remainder re-derives through the
+                // battery-proven engine
+                std::vector<std::string> syls;
+                std::string cur;
+                for (char c : k) {
+                    if (c == ' ') {
+                        if (!cur.empty()) syls.push_back(cur);
+                        cur.clear();
+                    } else {
+                        cur += c;
+                    }
+                }
+                if (!cur.empty()) syls.push_back(cur);
+                std::vector<int> ruled;
+                std::vector<std::string> vals;
+                if (markPhraseRulings(syls, ruled, vals)) {
+                    std::string outp;
+                    size_t s0 = 0;
+                    while (s0 < syls.size()) {
+                        if (ruled[s0] >= 0) {
+                            const int rid = ruled[s0];
+                            while (s0 < syls.size() &&
+                                   ruled[s0] == rid)
+                                ++s0;
+                            outp += (outp.empty() ? "" : " ") +
+                                    vals[rid];
+                        } else {
+                            std::string run;
+                            while (s0 < syls.size() &&
+                                   ruled[s0] < 0) {
+                                run += (run.empty() ? "" : " ") +
+                                       syls[s0];
+                                ++s0;
+                            }
+                            const std::string p =
+                                allcore::pronounce(run);
+                            outp += (outp.empty() ? "" : " ") +
+                                    (p.empty() ? run : p);
+                        }
+                    }
+                    cardPron = outp;
+                    ruledPron = true;
+                }
             }
         }
         h += "<br>pron: " +
@@ -1492,6 +1578,22 @@ public:
                       g_pronApproved->count("tshad ma rnam 'grel"),
                   "Adam's tsema namdrel ruling loads from the "
                   "team store");
+            // and a longer headword CONTAINING the ruled phrase
+            // re-derives its card pron around the ruling (Adam's
+            // card: …rnam 'grel gyi tshig le'ur byas pa)
+            {
+                auto es = spine_.lookup(
+                    "tshad ma rnam 'grel gyi tshig le'ur byas "
+                    "pa");
+                bool ok2 = false;
+                if (!es.empty()) {
+                    const QString h2 = entryHtml(es.front());
+                    ok2 = h2.contains("tsema namdrel") &&
+                          h2.contains(QString::fromUtf8("⟪ruled⟫"));
+                }
+                check(ok2, "card pron re-derives around the "
+                           "embedded ruling");
+            }
             // THL Simplified Phonetics mode (engine proven by its
             // own ctest battery; here: the UI wiring renders it)
             scriptMode_->setCurrentIndex(4);
