@@ -87,8 +87,11 @@ implementation is sidelined HERE from this date. What this means:
       tools/build_main_apparatus.py); pending queue in the Draft pane
       (Propose footnote — candidates clearly PENDING, never mixed in).
       — REMAINING: rerun the three apparatus tools per new release;
-      confirm STD-008 in GMR's own words for the record; dedupe/merge
-      notes covering the same lemma across volumes.
+      confirm STD-008 in GMR's own words for the record.
+      — dedupe/merge RESOLVED BY MEASUREMENT 2026-08-13: zero
+      verbatim lemma+text duplicates exist across the 2,234 notes;
+      the 107 same-lemma multi-note cases are genuinely different
+      annotations and must stay separate. Nothing to merge.
 - [x] **Quotation detection → auto-recommend citations + bibliography
       entries** (Adam, 2026-08-06) — SHIPPED 2026-08-06: allcore
       detectQuotations (exact corpus match ≥7 syllables, greedy-longest,
