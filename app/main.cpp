@@ -743,7 +743,12 @@ static QString linkOutHtml(const std::string& wylie) {
     h += "<a href='https://www2.hf.uio.no/polyglotta/index.php?page=search&q=" +
          q + "'>Bibliotheca Polyglotta</a> · ";
     h += "<a href='https://www.lotsawahouse.org/search?q=" + q +
-         "'>Lotsawa House</a></div>";
+         "'>Lotsawa House</a> · ";
+    // THL Places gazetteer (~64k Tibetan places; the ?searchTerm
+    // pattern is the app's own search URL — verified live
+    // 2026-08-13, Sera Monastery → features/433)
+    h += "<a href='https://places.kmaps.virginia.edu/?searchTerm=" +
+         q + "'>THL Places</a></div>";
     return h;
 }
 

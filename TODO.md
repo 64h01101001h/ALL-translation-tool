@@ -485,7 +485,10 @@ implementation is sidelined HERE from this date. What this means:
       REMAINING: the rKTs 3,000+ list (license still unverified —
       would grow this table) and a bsdus-tshig table for the OM dot
       proper.
-- [ ] **THL kmaps place/subject lookup** — user-initiated JSON lookup
+- [x] **THL kmaps place lookup** — SHIPPED 2026-08-13 as a
+      link-out row ("THL Places" beside 84000/BDRC/Polyglotta/
+      Lotsawa; ?searchTerm= pattern verified live against their
+      own searchbox). Deeper JSON integration (was: user-initiated JSON lookup
       from the Overlay for place/person names (21k+ gazetteer; no-auth
       API; bundling license unclear so lookup-only).
 - [x] **Mahavyutpatti TEI (DILA)** — SHIPPED 2026-08-07: license
@@ -1018,7 +1021,9 @@ implementation is sidelined HERE from this date. What this means:
       archived), the possibly-unintentional public Solr endpoint,
       data-partnership registration, and credit lines. Address:
       THL/UVa contact page.
-- [ ] **kmaps Places live-query integration** (query + link-out
+- [~] **kmaps Places live-query integration** — link-out HALF
+      SHIPPED 2026-08-13 (cards' search-elsewhere row); JSON query
+      half remains (query + link-out
       lane only, no bulk ingest; harsh 429s — cache per lookup):
       Overlay/Library place names → places.kmaps.virginia.edu
       JSON (~64k places, Tibetan script + Wylie names).
