@@ -1927,11 +1927,16 @@ right. (Every one of them is also reachable from the menu bar:
   reopens as its block, restoring your page and typing from the
   work folder as usual). Entries whose file has moved or been
   deleted simply don't appear. The list survives restarts.
-- **Right-click in the typing area** — the menu identifies the
-  folio of the nearest @marker above your cursor, and when the open
+- **Right-click in the typing area** — two woodblock actions:
+  **Locate selection on the scan (OCR)** boxes your selected typed
+  ACIP on the scan image itself and scrolls it into view — your
+  own line is searched first (typed line N = scan line N), OCR is
+  used only to locate, and the status line reports what was found
+  and names anything that wasn't. And the menu identifies the
+  folio of the nearest @marker above your cursor; when the open
   scan folder contains that folio's image (folio-named files from
   the Overlay's "Download all folio scans", or any filename
-  carrying the folio token), offers **Jump to this folio's scan
+  carrying the folio token), it offers **Jump to this folio's scan
   (page N)** — the viewer turns straight to that woodblock side.
 - **◀ page** and **page ▶** — step backward and forward through
   the pages of an open folder. Between them a label shows your

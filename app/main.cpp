@@ -14114,6 +14114,22 @@ public:
                     num = m.captured(1);
                     side = m.captured(2).toLower();
                 }
+#ifdef ALL_HAVE_OCR
+                if (!base_.isNull() &&
+                    editor_->textCursor().hasSelection()) {
+                    auto* locA = new QAction(
+                        "Locate selection on the scan (OCR)",
+                        menu);
+                    connect(locA, &QAction::triggered,
+                            [this] { locateSelection(); });
+                    auto* ls = new QAction(menu);
+                    ls->setSeparator(true);
+                    menu->insertAction(menu->actions().value(0),
+                                       locA);
+                    menu->insertAction(menu->actions().value(1),
+                                       ls);
+                }
+#endif
                 if (!num.isEmpty()) {
                     QList<QAction*> pre;
                     auto* head = new QAction(
@@ -14307,6 +14323,7 @@ public:
         scanFile_ = f;
 #ifdef ALL_HAVE_OCR
         bands_.clear();
+        locRects_.clear();
 #endif
         curBand_ = -1;
         render();
@@ -14345,6 +14362,13 @@ public:
             } else {
                 p.setPen(QPen(QColor(0x7F, 0x77, 0xDD, 120), 1));
             }
+            p.drawRect(r);
+        }
+        for (const QRect& r0 : locRects_) {
+            const QRect r(int(r0.x() * z), int(r0.y() * z),
+                          int(r0.width() * z), int(r0.height() * z));
+            p.fillRect(r, QColor(0xE8, 0x50, 0x20, 90));
+            p.setPen(QPen(QColor(0xB4, 0x2A, 0x0A), 3));
             p.drawRect(r);
         }
 #endif
@@ -14466,6 +14490,152 @@ public:
                     "are underlined); the double-keying pass vs your "
                     "partner applies as always")
                 .arg(bands_.size()));
+    }
+
+    // locate the typed selection on the scan (Adam's ask: the jump
+    // works in the Input workflow too). OCR word boxes, locator only.
+    void locateSelection() {
+        if (base_.isNull()) {
+            status_->setText("open a scan first");
+            return;
+        }
+        QString selRaw = editor_->textCursor().selectedText();
+        selRaw.replace(QChar(0x2029), ' ');
+        selRaw.replace(QRegularExpression("@[A-Za-z0-9]+"), " ");
+        selRaw.replace(QRegularExpression("\\[[^\\]]*\\]"), " ");
+        selRaw.replace(QRegularExpression("[*,;/]"), " ");
+        selRaw = selRaw.simplified();
+        if (selRaw.isEmpty()) {
+            status_->setText(
+                "select the typed ACIP to locate first");
+            return;
+        }
+        bool hasLower = false;
+        for (QChar c : selRaw) hasLower |= c.isLower();
+        const QString needle =
+            hasLower ? selRaw.toLower()
+                     : QString::fromStdString(
+                           allcore::acipToEwts(
+                               selRaw.toStdString()))
+                           .trimmed();
+        const QString od =
+            root_ + "/library/ocr_models/BDRC_Woodblock";
+        if (!QFile::exists(od + "/OCRModel.onnx")) {
+            status_->setText(
+                "recognition model missing (see the Scan pane)");
+            return;
+        }
+        if (bands_.empty()) detectBands();
+        if (bands_.empty()) return;
+        locRects_.clear();
+        QStringList missed;
+        int found = 0, total = 0;
+        try {
+            if (!rec_)
+                rec_ = std::make_unique<allocr::TextRecognizer>(
+                    od.toStdString());
+            QImage img = base_.toImage().convertToFormat(
+                QImage::Format_RGB888);
+            const int w = img.width(), h = img.height();
+            std::vector<uint8_t> rgb(size_t(w) * h * 3);
+            for (int y = 0; y < h; ++y)
+                std::copy(img.constScanLine(y),
+                          img.constScanLine(y) + w * 3,
+                          rgb.begin() + size_t(y) * w * 3);
+            auto mask = det_->detect(rgb.data(), w, h);
+            const double zero = 0.0;
+            auto pl = allocr::buildLines(rgb.data(), w, h, mask,
+                                         2.5, 4.0, true, &zero);
+            std::vector<std::vector<allocr::WordSpan>> words(
+                pl.images.size());
+            std::vector<std::string> lineText;
+            for (size_t i = 0; i < pl.images.size(); ++i) {
+                status_->setText(QString("locating… line %1/%2")
+                                     .arg(i + 1)
+                                     .arg(pl.images.size()));
+                QCoreApplication::processEvents();
+                lineText.push_back(rec_->recognize(
+                    pl.images[i], true, &words[i]));
+            }
+            auto pageX = [&pl](size_t li, double x) -> int {
+                const auto& cm = pl.images[li].colMap;
+                if (cm.empty())
+                    return pl.lines[li].x + int(x);
+                const int ix = std::min(
+                    std::max(int(std::lround(x)), 0),
+                    int(cm.size()) - 1);
+                return cm[ix];
+            };
+            // typed line N = scan line N (the input convention):
+            // the selection's own line is searched first
+            QTextCursor sc = editor_->textCursor();
+            sc.setPosition(sc.selectionStart());
+            const int expect = sc.blockNumber();
+            const QStringList parts =
+                needle.split(' ', Qt::SkipEmptyParts);
+            total = parts.size();
+            for (const QString& wq : parts) {
+                const std::string wneedle =
+                    wq.toLower().toStdString();
+                std::vector<size_t> order;
+                if (expect >= 0 &&
+                    expect < (int)lineText.size())
+                    order.push_back(size_t(expect));
+                for (size_t li = 0; li < lineText.size(); ++li)
+                    if (order.empty() || li != order[0])
+                        order.push_back(li);
+                bool hit = false;
+                for (size_t oi = 0; oi < order.size() && !hit;
+                     ++oi) {
+                    const size_t li = order[oi];
+                    const std::string& text = lineText[li];
+                    std::vector<size_t> pref{0};
+                    for (const auto& ws : words[li])
+                        pref.push_back(pref.back() +
+                                       ws.text.size());
+                    const size_t at = text.find(wneedle);
+                    if (at == std::string::npos) continue;
+                    size_t k0 = 0, k1 = 0;
+                    for (size_t k = 0; k + 1 < pref.size(); ++k) {
+                        if (pref[k] <= at && at < pref[k + 1])
+                            k0 = k;
+                        if (pref[k] < at + wneedle.size() &&
+                            at + wneedle.size() <= pref[k + 1])
+                            k1 = k;
+                    }
+                    const int x0 = pageX(li, words[li][k0].x0);
+                    const int x1 = pageX(li, words[li][k1].x1);
+                    locRects_.append(
+                        QRect(x0, pl.lines[li].y,
+                              std::max(x1 - x0, 3),
+                              pl.lines[li].h));
+                    hit = true;
+                    ++found;
+                }
+                if (!hit) missed << wq;
+            }
+        } catch (const std::exception& e) {
+            status_->setText(
+                QString("locate failed: %1").arg(e.what()));
+            return;
+        }
+        render();
+        if (!locRects_.isEmpty()) {
+            const double z = zoom_->value() / 100.0;
+            scroll_->ensureVisible(
+                int(locRects_.first().center().x() * z),
+                int(locRects_.first().center().y() * z), 200,
+                120);
+        }
+        QString msg =
+            QString("“%1” — %2 of %3 word(s) located on "
+                    "the scan (OCR word boxes, locator only)")
+                .arg(needle)
+                .arg(found)
+                .arg(total);
+        if (!missed.isEmpty())
+            msg += "; not found: " + missed.join(", ");
+        status_->setText(msg);
     }
 #endif
 
@@ -14660,6 +14830,7 @@ public:
         scanFile_ = pages_[ix];
 #ifdef ALL_HAVE_OCR
         bands_.clear();
+        locRects_.clear();
 #endif
         curBand_ = -1;
         render();
@@ -14833,6 +15004,7 @@ private:
     std::unique_ptr<allocr::LineDetector> det_;
     std::unique_ptr<allocr::TextRecognizer> rec_;
     std::vector<allocr::OcrLine> bands_;
+    QVector<QRect> locRects_;   // locate-selection word boxes
 #endif
 };
 
