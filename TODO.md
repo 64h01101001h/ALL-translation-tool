@@ -1056,3 +1056,17 @@ implementation is sidelined HERE from this date. What this means:
       (2) divergence-flagging cross-check on Working Glossary
       drafts (evidence metadata only, never merged),
       (3) Align-pane segment-pair candidates (PENDING tier).
+      SURVEY DONE 2026-08-13 (docs/research/HF_TIBETAN_MT.md):
+      pilot = buddhist-nlp/mitra-qwen35-it (Apache 2.0, Wylie
+      input, ~18GB BF16 on MPS, needs 32GB+ unified memory);
+      cross-check juror = madlad400-3b-mt (Apache 2.0, CT2 int8);
+      embedder = mitra-qwen35-2b/8b (alignment substrate, cannot
+      emit prose). CONTAMINATION CONFIRMED IN PRINCIPLE: MITRA's
+      paper admits rights-encumbered translations in its MT
+      pipeline (2M undisclosed monlam.ai pairs) and ACIP Tibetan
+      in pretraining — the mt_wall_screen guard is MANDATORY (and
+      already proven on our own 1,395 drafts: 0 reproductions).
+      MLotsawa = fully auditable data but chrF ~20, too weak.
+      Watchlist: Banzhida 7B (ACL 2026), bdrc-mitra-ocr-qwen
+      (OCR bake-off candidate). NEEDS ADAM: does the Mac have
+      32GB+ unified memory? (gates the MITRA pilot).
