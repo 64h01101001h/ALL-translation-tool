@@ -679,11 +679,13 @@ implementation is sidelined HERE from this date. What this means:
       labels; all options persisted (QSettings pecha/*). Internals:
       QPicture-per-side recording (NB: QPicture replay rescales by
       device-DPI ratio — record at the picture's own logicalDpi).
+      **v3 progress:** batch mode SHIPPED 2026-08-12; Degé preset
+      + classical 5-line opening SHIPPED (THL specs); cover/label
+      sheet SHIPPED (office layouts; title/volume/count/date).
       **v3 remaining:** per-side syllable budget tuned against real
       woodblock prints; head-letter (dbu khyud) and double-shad
       conventions; verse lineation awareness; margin presets;
-      cover/label sheet; batch mode (whole Library folder → pecha
-      set); QA pass comparing against traditional prints.
+      QA pass comparing against traditional prints.
 - [ ] **PRINT PARTNERSHIP — Vimala Treasures** (Adam, 2026-08-12):
       partner/work with vimalatreasures.org (they print +
       distribute BDRC texts:
