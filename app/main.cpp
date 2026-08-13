@@ -402,6 +402,16 @@ static bool markPhraseRulings(const std::vector<std::string>& syls,
     return !vals.empty();
 }
 
+// card zone label: the gold micro-caps of the left pane, reused as
+// the card's grouping device (one idiom everywhere). A hairline
+// above separates the zone; 12px of air before it, 4px after.
+static QString zoneLabel(const QString& text) {
+    return "<div style='border-top:1px solid #E2DACB;margin-top:12px;"
+           "padding-top:6px;color:#9A7A33;font-size:10px;"
+           "letter-spacing:2px;font-weight:600;margin-bottom:4px'>" +
+           text + "</div>";
+}
+
 static QString entryHtml(const allcore::Entry& e,
                          const EntryDisplay& d = EntryDisplay{}) {
     QString h;
@@ -691,12 +701,12 @@ static QString entryHtml(const allcore::Entry& e,
                      .arg(pg);
     }
     if (d.sanskrit && !e.sanskrit_reference.empty())
-        h += "<div style='margin-top:7px'><small style='color:#666'>"
+        h += "<div style='margin-top:4px'><small style='color:#6E675D'>"
              "sanskrit (reference): " +
              QString::fromStdString(e.sanskrit_reference).left(160).toHtmlEscaped() +
              "</small></div>";
     if (d.hopkins && !e.hopkins_reference.empty())
-        h += "<div style='margin-top:2px'><small style='color:#666'>"
+        h += "<div style='margin-top:2px'><small style='color:#6E675D'>"
              "Hopkins (reference only): " +
              QString::fromStdString(e.hopkins_reference).left(200).toHtmlEscaped() +
              "</small></div>";
@@ -704,12 +714,11 @@ static QString entryHtml(const allcore::Entry& e,
         auto it = g_84000->find(e.wylie);
         if (it != g_84000->end()) {
             const G84000& g = it->second;
-            QString b = "<div style='background:#E8F1EE;"
-                        "border-left:3px solid #2E7D66;"
-                        "padding:3px 8px;margin:3px 0;"
-                        "border-radius:4px'><small style="
-                        "'color:#1E5748;letter-spacing:1px'>"
-                        "84000 GLOSSARY (CC BY 4.0) — reference "
+            QString b = "<div style='border-left:2px solid #B8AD9C;"
+                        "padding:2px 0 2px 8px;margin:6px 0'>"
+                        "<small style="
+                        "'color:#8A7E6E;letter-spacing:1px'>"
+                        "84000 GLOSSARY · CC BY 4.0 · reference "
                         "only</small>";
             for (const QString& x : g.glosses)
                 b += "<br>≡ " + x.toHtmlEscaped();
@@ -731,7 +740,7 @@ static QString entryHtml(const allcore::Entry& e,
                      "</small>";
             }
             for (const QString& x : g.skts)
-                b += "<br><small style='color:#666'>sanskrit: " +
+                b += "<br><small style='color:#6E675D'>sanskrit: " +
                      x.left(160).toHtmlEscaped() + "</small>";
             b += "</div>";
             h += b;
@@ -750,12 +759,11 @@ static QString entryHtml(const allcore::Entry& e,
                 }
         }
         if (!ms.empty()) {
-            h += "<div style='margin-top:9px;font-size:12px'>"
-                 "<span style='color:#7C2D26;font-weight:600'>Geshe "
-                 "Michael teaching this term</span> <i "
-                 "style='color:#888'>(machine-located from class "
+            h += zoneLabel("IN THE RECORDED TEACHINGS") +
+                 "<div style='font-size:12px'><i "
+                 "style='color:#9C948A'>machine-located from class "
                  "captions \u2014 the recording is the "
-                 "authority)</i><br>";
+                 "authority</i><br>";
             for (const auto* m : ms) {
                 const int mm = m->t / 60, ss = m->t % 60;
                 h += QString("\u25B6 <a href='%1' title=\"%2\">%3</a>"
@@ -1000,13 +1008,15 @@ static QString lookupResultsHtml(allcore::Spine& spine,
         }
         auto refs = ref->lookup(wylie);
         if (!refs.empty()) {
-            h += "<hr><div style='color:#993C1D'><b>Reference layers</b> "
-                 "<small>(unlicensed compilations — local lookup only, "
-                 "never for release data)</small></div>";
+            h += zoneLabel("REFERENCE · LOCAL ONLY") +
+                 "<div><small style='color:#9C948A'>unlicensed "
+                 "compilations — local lookup only, never for "
+                 "release data</small></div>";
             for (const auto& r : refs) {
-                h += "<div style='margin:8px 0'><span style='background:"
-                     "#FAEEDA;color:#633806;padding:1px 7px;border-radius:8px;"
-                     "font-size:12px'>" +
+                h += "<div style='margin:5px 0;font-size:12px;"
+                     "color:#6E675D'><span style='background:"
+                     "#F0E9DC;color:#6B5E4A;padding:1px 7px;border-radius:8px;"
+                     "font-size:11px'>" +
                      QString::fromStdString(r.layer).toHtmlEscaped() +
                      "</span> " +
                      QString::fromStdString(r.definition)
@@ -3188,11 +3198,55 @@ auto* secScan = new QLabel("<span style='color:#9A7A33;font-size:10px;letter-spa
         }
         showGrammar_ = mkToggle("grammar", "grammar marks && particle notes",
                                 true, /*docAffecting=*/true);
+        showPhon_->setToolTip(
+            "The pron: line on every card — GMR-convention "
+            "phonetics, with the authority's rulings marked "
+            "\u27EAruled\u27EB.");
+        showGloss_->setToolTip(
+            "Geshe Michael's English equivalents (\u2261 lines) — "
+            "the binding layer; provisional tiers are labeled.");
+        showCorpus_->setToolTip(
+            "FROM THE CORPUS: real sentences from the aligned "
+            "teachings where this term appears, with his published "
+            "English.");
+        showSanskrit_->setToolTip(
+            "The Sanskrit reference line (comparanda only, never "
+            "an HGM equivalent).");
+        showHopkins_->setToolTip(
+            "The Hopkins dictionary reference line (comparanda "
+            "only).");
+        show84000_->setToolTip(
+            "The 84000 translation glossary block (CC BY 4.0) — "
+            "clearly-labeled reference with a link back to the "
+            "original entry.");
+        showDas_->setToolTip(
+            "A link that opens the scanned page of Das's 1902 "
+            "dictionary near this word.");
+        showRefs_->setToolTip(
+            "REFERENCE \u00b7 LOCAL ONLY: the local dictionary "
+            "layers (Lokesh Chandra, TibetanDictionary, THL, OT, "
+            "IW\u2026) — unlicensed compilations, never release "
+            "data.");
+        showNotes_->setToolTip(
+            "Published footnotes and bibliography entries that "
+            "cite this term (chips open the apparatus).");
+        showGrammar_->setToolTip(
+            "Grammar notes on the card: particle agreement, verb "
+            "stems, contractions (bsdus tshig), honorific "
+            "register.");
         showSeg_ = mkToggle("segmentation", "Botok segmentation (reference)",
                             false);
+        showSeg_->setToolTip(
+            "Reference word boundaries from the Botok segmenter "
+            "(dotted underlines in the document — reference only, "
+            "never authority).");
         showAttest_ = mkToggle("attestation",
                                "unattested-word hints (segmenter + Monlam)",
                                false, /*docAffecting=*/true);
+        showAttest_->setToolTip(
+            "Shades words the segmenter and the Monlam word lists "
+            "do not recognize — typo candidates and rare forms "
+            "worth a second look (hints, never verdicts).");
         hint_ = new QLabel("Click a shaded word to see its context; click again "
                            "to cycle outward through the containing phrases.");
         hint_->setWordWrap(true);
@@ -4569,9 +4623,13 @@ private:
             auto [uw, okw] = allcore::wylieToUnicode(e.wylie);
             const auto att = okw ? lexicon_.attested(uw) : std::string();
             if (!att.empty())
-                h += QString("<div style='color:#1E6B4E;font-size:12px'>"
-                             "attested in the %1 word list <i>(Apache-"
-                             "2.0, reference)</i></div>")
+                h += QString("<div style='color:#6E675D;font-size:12px;"
+                             "margin-top:2px'><span style='background:"
+                             "#F0E9DC;color:#6B5E4A;padding:0 7px;"
+                             "border-radius:8px;font-size:11px'>Monlam"
+                             "</span> attested in the %1 word list "
+                             "<span style='color:#9C948A'>(Apache-2.0, "
+                             "reference)</span></div>")
                          .arg(QString::fromStdString(att)
                                   .toHtmlEscaped());
         }
@@ -4584,10 +4642,15 @@ private:
                                 .toStdString());
             }
             for (const auto* c : contr_.expansions(e.wylie))
-                h += QString("<div style='color:#7A3B5E;font-size:12px'>"
-                             "bsdus tshig <i>(derived register, %1/%2)</i>: "
-                             "contraction of <b>%3</b> — dropped %4; shared "
-                             "gloss “%5”</div>")
+                h += QString("<div style='color:#6E675D;font-size:12px;"
+                             "margin-top:2px'><span style='background:"
+                             "#F0E9DC;color:#6B5E4A;padding:0 7px;"
+                             "border-radius:8px;font-size:11px'>"
+                             "CONTRACTION</span> bsdus tshig of "
+                             "<b style='color:#2B2620'>%3</b> — dropped "
+                             "<i>%4</i> · shared gloss “%5” <span "
+                             "style='color:#9C948A'>(derived register, "
+                             "%1/%2)</span></div>")
                          .arg(QString::fromStdString(c->cls).toHtmlEscaped(),
                               QString::fromStdString(c->glossKind)
                                   .toHtmlEscaped(),
@@ -4637,11 +4700,13 @@ private:
                         ? spine_.corpusSearch('"' + e.wylie + '"', "", 3)
                         : std::vector<allcore::CorpusSegment>{};
         if (!segs.empty()) {
-            h += "<div style='margin-top:8px'><b>From the corpus:</b></div>";
+            h += zoneLabel("FROM THE CORPUS");
             for (const auto& s : segs) {
-                h += "<div style='margin:6px 0'><small>[" +
+                h += "<div style='border-left:2px solid #D8CFC0;"
+                     "padding:2px 0 2px 8px;margin:6px 0'>"
+                     "<small style='color:#9C948A'>[" +
                      QString::fromStdString(s.course) + ":" + QString::number(s.seq) +
-                     "]</small><br><i>" +
+                     "]</small><br><i style='color:#4A443C'>" +
                      QString::fromStdString(s.wylie).left(180).toHtmlEscaped() +
                      "</i><br>" +
                      QString::fromStdString(s.english).left(220).toHtmlEscaped() +
@@ -4651,11 +4716,11 @@ private:
         if (ref_ && showRefs_->isChecked()) {
             auto refs = ref_->lookup(e.wylie, 6);
             if (!refs.empty()) {
-                h += "<div style='margin-top:8px;color:#993C1D'><b>Reference</b> "
-                     "<small>(local only)</small></div>";
+                h += zoneLabel("REFERENCE · LOCAL ONLY");
                 for (const auto& r : refs)
-                    h += "<div style='margin:4px 0'><span style='background:#FAEEDA;"
-                         "color:#633806;padding:0 6px;border-radius:8px;font-size:11px'>" +
+                    h += "<div style='margin:4px 0;font-size:12px;"
+                         "color:#6E675D'><span style='background:#F0E9DC;"
+                         "color:#6B5E4A;padding:0 6px;border-radius:8px;font-size:11px'>" +
                          QString::fromStdString(r.layer).toHtmlEscaped() + "</span> " +
                          QString::fromStdString(r.definition).left(220).toHtmlEscaped() +
                          "</div>";
@@ -18168,6 +18233,21 @@ static void showTranslatorSurvey(QWidget* parent,
 
 int main(int argc, char** argv) {
     QApplication app(argc, argv);
+    // Adam's ruling (2026-08-13): English renders in Palatino
+    // Linotype everywhere. macOS ships the family as "Palatino";
+    // Tibetan glyphs fall through to the bundled Noto Serif
+    // Tibetan, so the scripts pair serif-to-serif.
+    {
+        QFont pal("Palatino Linotype");
+        if (!QFontInfo(pal).family().contains("Palatino",
+                                              Qt::CaseInsensitive))
+            pal.setFamily("Palatino");
+        if (QFontInfo(pal).family().contains("Palatino",
+                                             Qt::CaseInsensitive)) {
+            pal.setPointSize(13);
+            app.setFont(pal);
+        }
+    }
     const QString root = findDataRoot();
     // bundled Tibetan font (Noto Serif Tibetan, OFL — data/fonts/):
     // consistent complex-stack shaping regardless of system fonts
