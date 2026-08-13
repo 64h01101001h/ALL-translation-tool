@@ -5614,6 +5614,12 @@ public:
                        .arg(what);
             if (!ok) ++fails;
         };
+        // FIRST, before any refill of our own: the pane must
+        // arrive already populated (2026-08-12 finding: the banks
+        // loaded after construction, so the list sat empty until
+        // a search — the old selftest refilled first and hid it)
+        check(list_->count() > 400,
+              "bank arrives populated, no user action needed");
         search_->clear();
         kind_->setCurrentIndex(0);
         refill();
@@ -5627,6 +5633,14 @@ public:
         search_->clear();
         refill();
         return fails;
+    }
+
+protected:
+    void showEvent(QShowEvent* e) override {
+        // banks may load after construction — refill on every
+        // show so the sequential list is always populated
+        if (list_->count() <= 1) refill();
+        QWidget::showEvent(e);
     }
 
 private:
@@ -7917,11 +7931,13 @@ public:
         : spine_(spine), progress_(progress), index_(spine), root_(root) {
         auto* layout = new QVBoxLayout(this);
         auto* row = new QHBoxLayout;
-        row->addWidget(new QLabel(
+        auto* banner = new QLabel(
             "<b>Draft workspace</b> — paste the source, click a clause for "
             "its anchors, click a term for its corpus concordance. The "
             "terminology check matches your draft against HGM's equivalents; "
-            "it never writes English for you."));
+            "it never writes English for you.");
+        banner->setWordWrap(true);   // clipped single-line in the audit
+        row->addWidget(banner);
         layout->addLayout(row);
         auto* split = new QSplitter(Qt::Vertical);
 
@@ -8019,9 +8035,17 @@ auto* secEvid = new QLabel("<span style='color:#9A7A33;font-size:10px;letter-spa
         tl->addWidget(srcScroll, 1);
         clauseView_ = new QTextBrowser;
         clauseView_->setOpenLinks(false);
+        clauseView_->setHtml(
+            "<i style='color:#8A8A8A'>The source appears here as "
+            "clickable clauses once you press Load source.</i>");
         tl->addWidget(clauseView_, 1);
         anchors_ = new QTextBrowser;
         anchors_->setOpenLinks(false);
+        anchors_->setHtml(
+            "<i style='color:#8A8A8A'>The Evidence Ribbon — click "
+            "or arrow into any clause and its anchors, scaffold, "
+            "exact parallels, and quotation status appear here on "
+            "their own.</i>");
         tl->addWidget(anchors_, 1);
         split->addWidget(top);
 
@@ -14840,36 +14864,10 @@ int main(int argc, char** argv) {
     auto* draftPane = new DraftPane(spine, progress, root);
     tabs.addTab(draftPane, "Draft");
     auto* manuscriptPane = new ManuscriptPane(spine);
-    auto* apparatusPane = new ApparatusPane();
-    tabs.addTab(apparatusPane, "Apparatus");
-    g_sendToManuscript = [manuscriptPane](const QString& t) {
-        manuscriptPane->setManuscriptText(t);
-        if (g_raisePane) g_raisePane(manuscriptPane);
-    };
-    g_mssComposeBib = [draftPane] { draftPane->composeBibDialog(); };
-    g_mssProposeNote = [draftPane](const QString& sel) {
-        draftPane->proposeNoteText(sel);
-    };
-    tabs.addTab(manuscriptPane, "Manuscript");
-    auto* reviewPane = new ReviewPane(spine);
-    tabs.addTab(reviewPane, "Review");
-    auto* alignPane = new AlignPane(spine, root);
-    tabs.addTab(alignPane, "Align");
-    auto* inputPane = new InputPane(checker, root, &spine);
-    tabs.addTab(inputPane, "Input");
-    auto* libraryPane = new LibraryPane(root, progress,
-                                [overlay](const QString& path) {
-                                    overlay->openFile(path);
-                                    if (g_raisePane) g_raisePane(overlay);
-                                });
-    tabs.addTab(libraryPane, "Library");
-    auto* goferPane = new GoferPane(spine, root);
-    g_goferQuery = [goferPane](const QString& q) {
-        goferPane->runQuery(q);
-        if (g_raisePane) g_raisePane(goferPane);
-    };
-    tabs.addTab(goferPane, "Search");
-    tabs.addTab(makeConvertPane(mvp, whitney), "Convert");
+    // the apparatus banks MUST load before ApparatusPane exists —
+    // its constructor fills the list from g_appNotes/g_appBib
+    // (Adam's finding 2026-08-12: pane sat empty because the banks
+    // loaded after construction; showEvent refill added as belt)
     static std::vector<ApparatusNote> appNotes;
     static std::vector<ApparatusBib> appBib;
     {
@@ -14907,6 +14905,36 @@ int main(int argc, char** argv) {
         if (!appNotes.empty()) g_appNotes = &appNotes;
         if (!appBib.empty()) g_appBib = &appBib;
     }
+    auto* apparatusPane = new ApparatusPane();
+    tabs.addTab(apparatusPane, "Apparatus");
+    g_sendToManuscript = [manuscriptPane](const QString& t) {
+        manuscriptPane->setManuscriptText(t);
+        if (g_raisePane) g_raisePane(manuscriptPane);
+    };
+    g_mssComposeBib = [draftPane] { draftPane->composeBibDialog(); };
+    g_mssProposeNote = [draftPane](const QString& sel) {
+        draftPane->proposeNoteText(sel);
+    };
+    tabs.addTab(manuscriptPane, "Manuscript");
+    auto* reviewPane = new ReviewPane(spine);
+    tabs.addTab(reviewPane, "Review");
+    auto* alignPane = new AlignPane(spine, root);
+    tabs.addTab(alignPane, "Align");
+    auto* inputPane = new InputPane(checker, root, &spine);
+    tabs.addTab(inputPane, "Input");
+    auto* libraryPane = new LibraryPane(root, progress,
+                                [overlay](const QString& path) {
+                                    overlay->openFile(path);
+                                    if (g_raisePane) g_raisePane(overlay);
+                                });
+    tabs.addTab(libraryPane, "Library");
+    auto* goferPane = new GoferPane(spine, root);
+    g_goferQuery = [goferPane](const QString& q) {
+        goferPane->runQuery(q);
+        if (g_raisePane) g_raisePane(goferPane);
+    };
+    tabs.addTab(goferPane, "Search");
+    tabs.addTab(makeConvertPane(mvp, whitney), "Convert");
     static const HonorificMap honorifics = loadHonorifics(
         root + "/data/honorifics/honorific_register.tsv");
     if (!honorifics.empty()) g_honorifics = &honorifics;
