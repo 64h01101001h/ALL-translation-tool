@@ -320,11 +320,47 @@ static const std::map<std::string, std::string>* g_pronApproved =
 
 // pronounce a word through the engine, then apply the authority's
 // ruling when one exists for exactly this word
+// Adam's ruled 'a-chung class (le'ur, le'u — 2026-08-13): a
+// syllable-final 'u / 'ur / 'us keeps its apostrophe vowel in the
+// DISPLAYED pronunciation ("lay-oo(hr)"). Display layer only — the
+// canonical engine and the release data are never edited — and
+// PROVISIONAL pending GMR's systematic ruling (TODO: Waiting on
+// Adam). Last-syllable scope: inner occurrences await the general
+// ruling rather than risking misalignment with engine word grouping.
+static std::string restoreAchungU(const std::string& wylie,
+                                  std::string pron) {
+    if (pron.empty()) return pron;
+    static const char* kSufs[] = {"'ur", "'us", "'u"};
+    const size_t sp = wylie.find_last_of(' ');
+    const std::string last =
+        sp == std::string::npos ? wylie : wylie.substr(sp + 1);
+    for (const char* sf : kSufs) {
+        const std::string suf = sf;
+        if (last.size() <= suf.size()) continue;
+        if (last.compare(last.size() - suf.size(), suf.size(),
+                         suf) != 0)
+            continue;
+        if (pron.size() >= suf.size() &&
+            pron.compare(pron.size() - suf.size(), suf.size(),
+                         suf) == 0)
+            return pron;   // already carried
+        const std::string plain = suf.substr(1);
+        if (pron.size() > plain.size() &&
+            pron.compare(pron.size() - plain.size(), plain.size(),
+                         plain) == 0)
+            return pron.substr(0, pron.size() - plain.size()) + suf;
+        return pron + suf;
+    }
+    return pron;
+}
+
 static std::string pronWithRulings(const std::string& word_wylie,
                                    const std::string& engine_pron) {
-    if (!g_pronApproved) return engine_pron;
+    const std::string base =
+        restoreAchungU(word_wylie, engine_pron);
+    if (!g_pronApproved) return base;
     auto it = g_pronApproved->find(word_wylie);
-    return it == g_pronApproved->end() ? engine_pron : it->second;
+    return it == g_pronApproved->end() ? base : it->second;
 }
 
 // mark every multi-syllable ruling's run inside a syllable
@@ -441,8 +477,8 @@ static QString entryHtml(const allcore::Entry& e,
                                        syls[s0];
                                 ++s0;
                             }
-                            const std::string p =
-                                allcore::pronounce(run);
+                            const std::string p = restoreAchungU(
+                                run, allcore::pronounce(run));
                             outp += (outp.empty() ? "" : " ") +
                                     (p.empty() ? run : p);
                         }
@@ -452,6 +488,8 @@ static QString entryHtml(const allcore::Entry& e,
                 }
             }
         }
+        if (!ruledPron)
+            cardPron = restoreAchungU(e.wylie, cardPron);
         h += "<div style='margin:5px 0 0 0'>pron: " +
              QString::fromStdString(cardPron).toHtmlEscaped();
         if (ruledPron)
@@ -2331,6 +2369,15 @@ public:
                       tohToThl().value(1) == 1,
                   "THL catalog link maps through the verified "
                   "concordance (Toh 551 -> D.555)");
+            {   // 'a-chung class display (Adam: le'u must read
+                // le'u, not le) — provisional pending GMR
+                auto es = spine_.lookup("le'u");
+                const bool okU =
+                    !es.empty() &&
+                    entryHtml(es.front()).contains("pron: le'u");
+                check(okU, "'a-chung class: le'u card pron keeps "
+                           "the apostrophe vowel");
+            }
             // the root-cause pin: KL16 (Diamond Cutter) must route
             // to MW26071_0018, never _0016 (verified live)
             auto dcInfo =
@@ -9477,7 +9524,8 @@ static QWidget* makeConvertPane(allcore::Mvp* mvp,
         const std::string wylie =
             isAcip ? allcore::acipToEwts(raw.toStdString()) : raw.toStdString();
         auto [uni, ok] = allcore::wylieToUnicode(wylie);
-        const std::string pron = allcore::pronounce(wylie);
+        const std::string pron =
+            restoreAchungU(wylie, allcore::pronounce(wylie));
 
         QString h;
         h += "<table cellspacing='6'>";
