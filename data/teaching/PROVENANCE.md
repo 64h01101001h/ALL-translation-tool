@@ -27,3 +27,25 @@
   titles are excluded entirely — their English caption track is
   machine-TRANSLATED and translations are not evidence. The
   exclusion count is logged on every index build.
+
+## Third wave: recovered legacy links (added 2026-08-12, night)
+
+- Source: 377 video links recovered from Adam's own course link
+  sheets (2021–2022), probed individually: 68 unlisted + 309
+  public, 0 dead. Of these, 376 sit on the SAME two authorized
+  channels (Diamond Cutter Classics / The Knowledge Base) — the
+  captions-only harvest of those 376 runs under Adam's original
+  2026-08-11 authorization, unchanged in scope (captions only, no
+  video/audio downloaded, rate-limited).
+- Unlisted videos are reachable only by their links; capturing
+  their captions preserves searchable access to teachings that
+  would otherwise vanish silently on any channel reorganization.
+  The links themselves are inventoried in Adam's master
+  "GMR Recordings Tracker.xlsx".
+- Any recovered video on a channel OUTSIDE the two authorized ones
+  is NOT harvested — held for Adam's explicit call.
+- Same rules as the earlier waves: auto-captions are
+  machine-derived and labeled so; timecoded links point to the
+  original recording, which remains the authority; non-English
+  classes are excluded from the index (machine-translated captions
+  are not evidence).

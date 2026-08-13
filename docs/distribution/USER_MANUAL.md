@@ -2387,6 +2387,15 @@ proposals folder in the Propose tab first."
 Every ruling is stamped with your name (from Settings) and the
 date, permanently.
 
+**Approve all in filter…** rules the whole filtered queue in one
+considered act — built for the machine-seeded queues, where a
+205-row derived register deserves one decision, not 205 clicks.
+It shows the exact count and filter first and asks; one optional
+note is recorded on every ruling in the batch; register items
+apply in the app immediately, exactly as single approvals do.
+Decline or defer the exceptions *before* running it — the batch
+takes the queue as it stands.
+
 ## 15.3 What each ruling actually does
 
 The data boundary is enforced in the software itself — different

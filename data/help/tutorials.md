@@ -501,8 +501,13 @@ pronunciation removes it. Dictionary items export instead ("Export
 approved dictionary candidates…") for the data project — the app
 never edits the corpus. Filter by kind to take one category per
 sitting (e.g. just the 2 HIGH honorifics); the list keeps your
-scroll position between rulings. "Rulings archive" is the permanent
-record of every decision. Spelling flags (from the Overlay's
+scroll position between rulings. For machine-seeded queues (the
+205-row prenasal register), "Approve all in filter…" makes the
+batch one considered ruling: it shows the count, asks first, takes
+one optional note for the whole batch, and stamps every ruling
+with your name and the date — decline or defer individual rows
+beforehand if any should not ride along. "Rulings archive" is the
+permanent record of every decision. Spelling flags (from the Overlay's
 "Show spelling doubts" list) have their own filter: APPROVE confirms
 the input error for export to the input teams; DECLINE rules the
 form valid — the app stops doubting it from the next launch on.
