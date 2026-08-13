@@ -6494,10 +6494,12 @@ public:
     SanskritPane(allcore::Mvp* mvp, allcore::WhitneyRoots* whitney)
         : mvp_(mvp), whitney_(whitney) {
         auto* l = new QVBoxLayout(this);
-        l->addWidget(new QLabel(
+        auto* skBanner = new QLabel(
             "<b>Sanskrit workbench</b> — IAST, Devanagari, or ACIP "
             "input-code (a#/n%) auto-detected. Every notation, "
-            "Whitney's roots, and the Mah\u0101vyutpatti bridge."));
+            "Whitney's roots, and the Mah\u0101vyutpatti bridge.");
+        skBanner->setWordWrap(true);
+        l->addWidget(skBanner);
         auto* row = new QHBoxLayout;
         in_ = new QLineEdit;
         in_->setPlaceholderText(
@@ -7068,10 +7070,12 @@ public:
         : spine_(spine), progress_(progress), pos_(pos),
           contractions_(contractions), index_(spine) {
         auto* layout = new QVBoxLayout(this);
-        layout->addWidget(new QLabel(
+        auto* trBanner = new QLabel(
             "<b>Translation Trainer</b> — paste a passage, try to read it "
             "yourself, then reveal one layer at a time. Engine guidance is "
-            "labeled guidance; only HGM corpus lines are answers."));
+            "labeled guidance; only HGM corpus lines are answers.");
+        trBanner->setWordWrap(true);
+        layout->addWidget(trBanner);
         input_ = new QPlainTextEdit;
         input_->setPlaceholderText(
             "Paste ACIP Tibetan…   e.g.  SANGS RGYAS KYIS CHOS BSTAN");
@@ -7425,10 +7429,12 @@ public:
           factory_(spine, index_, progress),
           rng_((unsigned)QDateTime::currentMSecsSinceEpoch()) {
         auto* layout = new QVBoxLayout(this);
-        layout->addWidget(new QLabel(
+        auto* drBanner = new QLabel(
             "<b>Drills</b> — every exercise comes from a real corpus segment; "
             "every answer is HGM's own text. Engine guidance is labeled "
-            "guidance."));
+            "guidance.");
+        drBanner->setWordWrap(true);
+        layout->addWidget(drBanner);
         stats_ = new QLabel;
         layout->addWidget(stats_);
         auto* row = new QHBoxLayout;
@@ -9579,12 +9585,15 @@ public:
         QDir().mkpath(libRoot_ + "/my_materials");
         QDir().mkpath(libRoot_ + "/ocr_out");
         auto* layout = new QVBoxLayout(this);
-        layout->addWidget(new QLabel(
+        auto* libBanner = new QLabel(
             "<b>Library</b> — install the ACIP collections (download the "
             "Kangyur / Tengyur / Sungbum ZIPs from "
             "<a href='https://asianlegacylibrary.org/library/'>"
             "asianlegacylibrary.org/library</a>), or import your own "
-            "materials. Double-click a text to open it in the Overlay."));
+            "materials. Double-click a text to open it in the Overlay.");
+        libBanner->setWordWrap(true);
+        libBanner->setOpenExternalLinks(true);
+        layout->addWidget(libBanner);
         auto* row = new QHBoxLayout;
         auto* installBtn = new QPushButton("Install collection ZIP…");
         auto* importBtn = new QPushButton("Import my materials…");
@@ -10466,10 +10475,12 @@ class ReviewPane : public QWidget {
 public:
     ReviewPane(allcore::Spine& spine) : spine_(spine), index_(spine) {
         auto* outer = new QVBoxLayout(this);
-        outer->addWidget(new QLabel(
+        auto* rvBanner = new QLabel(
             "<b>Review (oversight)</b> — paste the Tibetan source and the "
             "finished English draft under review, then Run review. Flags "
-            "guide the reviewer's attention; nothing is auto-corrected."));
+            "guide the reviewer's attention; nothing is auto-corrected.");
+        rvBanner->setWordWrap(true);
+        outer->addWidget(rvBanner);
         auto* row = new QHBoxLayout;
         auto* openSrc = new QPushButton("Open source…");
         auto* openDraft = new QPushButton("Open draft…");
@@ -10756,12 +10767,14 @@ public:
     AlignPane(allcore::Spine& spine, const QString& root)
         : spine_(spine), root_(root), index_(spine) {
         auto* outer = new QVBoxLayout(this);
-        outer->addWidget(new QLabel(
+        auto* alignBanner = new QLabel(
             "<b>Align (hypertext)</b> — the Hypercontext workflow: click a "
             "Tibetan word (click again to cycle the word-finder), select its "
             "English, press <b>space</b> or Link. Sublinks inside longer "
             "links show green. Links save per text; the harvest exports as "
-            "PENDING candidates for the dictionary project."));
+            "PENDING candidates for the dictionary project.");
+        alignBanner->setWordWrap(true);
+        outer->addWidget(alignBanner);
         auto* row = new QHBoxLayout;
         auto* open = new QPushButton("Open ACIP file…");
         row->addWidget(open);
@@ -12761,10 +12774,12 @@ class ProposePane : public QWidget {
 public:
     ProposePane() {
         auto* outer = new QVBoxLayout(this);
-        outer->addWidget(new QLabel(
+        auto* prBanner = new QLabel(
             "<b>Propose</b> — offer a term, marking, pronunciation, or "
             "note for the authority to approve. Your name is recorded "
-            "for provenance; nothing is a login."));
+            "for provenance; nothing is a login.");
+        prBanner->setWordWrap(true);
+        outer->addWidget(prBanner);
 
         // identity setup — collapsed by default once configured
         // (UX program P1: the pane's job is proposing; setup lives
