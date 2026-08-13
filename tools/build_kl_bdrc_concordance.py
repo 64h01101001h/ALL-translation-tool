@@ -122,6 +122,86 @@ def main():
                               "tier": how})
         else:
             unmatched.append(n)
+
+    # ---- drift-interpolated second pass: for texts the fixed ±30
+    # window missed (drift exceeds it at high KL numbers), center a
+    # tight window on the offset interpolated between surrounding
+    # EXACT-tier anchors; exact/particle tiers only — containment is
+    # not allowed to reach this far.
+    anchors = sorted((int(k), v) for k, v in mapping.items()
+                     if kind[k] == "exact")
+    recovered = []
+    for n in sorted(unmatched):
+        title = kl.get(n, "")
+        if not title or not anchors:
+            continue
+        lo = [a for a in anchors if a[0] <= n]
+        hi = [a for a in anchors if a[0] >= n]
+        if lo and hi:
+            (k0, p0), (k1, p1) = lo[-1], hi[0]
+            exp = p0 if k1 == k0 else \
+                p0 + (p1 - p0) * (n - k0) / (k1 - k0)
+        elif lo:
+            exp = lo[-1][1] + (n - lo[-1][0])
+        else:
+            exp = hi[0][1] + (n - hi[0][0])
+        center = int(round(exp))
+        window = range(max(1, center - 15), center + 16)
+        hits, how = [], "exact-interp"
+        for t in window:
+            if parts.get(t, "") == title:
+                hits.append(t)
+        if not hits:
+            tp = pfree(title)
+            for t in window:
+                lab = parts.get(t, "")
+                if lab and tp and pfree(lab) == tp:
+                    hits.append(t)
+            how = "particle-fold-interp"
+        hits = sorted(set(hits))
+        if len(hits) == 1:
+            mapping[str(n)] = hits[0]
+            kind[str(n)] = how
+            recovered.append(n)
+    unmatched = [n for n in unmatched if n not in set(recovered)]
+    if recovered:
+        print(f"drift-interpolated pass recovered "
+              f"{len(recovered)}: {recovered[:10]}…")
+
+    # ---- order-inversion pruning to fixpoint (the Degé sanity
+    # check, tier-ranked): both catalogs are in canonical order, so
+    # kl_i < kl_j must give part_i <= part_j. On an inversion the
+    # LOWER-CONFIDENCE side is the false positive; equal confidence
+    # means we cannot tell — both leave the mapping as ambiguous.
+    RANK = {"exact": 0, "exact-interp": 1, "particle-fold": 2,
+            "particle-fold-interp": 3, "contained": 4}
+    dropped_inv = 0
+    changed = True
+    while changed:
+        changed = False
+        keys = sorted(int(k) for k in mapping)
+        for a, b in zip(keys, keys[1:]):
+            if mapping[str(a)] <= mapping[str(b)]:
+                continue
+            ra, rb = RANK[kind[str(a)]], RANK[kind[str(b)]]
+            victims = [a] if ra > rb else [b] if rb > ra else [a, b]
+            for v in victims:
+                if len(victims) == 2:
+                    ambiguous.append(
+                        {"kl": v,
+                         "candidates": [mapping[str(v)]],
+                         "tier": kind[str(v)] + "-inverted"})
+                else:
+                    unmatched.append(v)
+                del mapping[str(v)]
+                del kind[str(v)]
+                dropped_inv += 1
+            changed = True
+            break
+    if dropped_inv:
+        print(f"order-inversion pruning dropped {dropped_inv}")
+    unmatched = sorted(set(unmatched))
+
     json.dump({
         "meta": {
             "method": "title match KL filename (oracle wylie) vs "
