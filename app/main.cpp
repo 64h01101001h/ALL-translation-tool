@@ -92,6 +92,7 @@
 #include <QStandardPaths>
 #include <QTimer>
 #include <QPointer>
+#include <QMouseEvent>
 #include <QWidgetAction>
 #include <QToolButton>
 #include <QSlider>
@@ -1793,6 +1794,70 @@ static QIcon miniIcon(const QString& kind) {
     pm.setDevicePixelRatio(2.0);
     return QIcon(pm);
 }
+
+// canvas for the scan viewer (Adam's BUDA findings): click = zoom
+// in at that point, drag = grab-pan, pinch or ⌘-wheel = zoom at the
+// pointer; plain scrolling still pans (mac-natural).
+class ScanCanvasLabel : public QLabel {
+public:
+    std::function<void(QPoint)> onClickAt;
+    std::function<void(QPoint)> onDragBy;            // global delta
+    std::function<void(QPoint, double)> onZoomFactorAt;
+
+protected:
+    void mousePressEvent(QMouseEvent* e) override {
+        if (e->button() == Qt::LeftButton) {
+            lastGlobal_ = e->globalPosition().toPoint();
+            pressGlobal_ = lastGlobal_;
+            moved_ = false;
+            if (onDragBy) setCursor(Qt::ClosedHandCursor);
+        }
+        QLabel::mousePressEvent(e);
+    }
+    void mouseMoveEvent(QMouseEvent* e) override {
+        if (e->buttons() & Qt::LeftButton) {
+            const QPoint g = e->globalPosition().toPoint();
+            if ((g - pressGlobal_).manhattanLength() > 4)
+                moved_ = true;
+            if (moved_ && onDragBy) onDragBy(g - lastGlobal_);
+            lastGlobal_ = g;
+        }
+        QLabel::mouseMoveEvent(e);
+    }
+    void mouseReleaseEvent(QMouseEvent* e) override {
+        if (onDragBy) setCursor(Qt::OpenHandCursor);
+        if (e->button() == Qt::LeftButton && !moved_ && onClickAt)
+            onClickAt(e->pos());
+        QLabel::mouseReleaseEvent(e);
+    }
+    void wheelEvent(QWheelEvent* e) override {
+        if ((e->modifiers() & Qt::ControlModifier) &&
+            onZoomFactorAt) {
+            onZoomFactorAt(e->position().toPoint(),
+                           e->angleDelta().y() > 0 ? 1.15
+                                                   : 1.0 / 1.15);
+            e->accept();
+            return;
+        }
+        QLabel::wheelEvent(e);
+    }
+    bool event(QEvent* ev) override {
+        if (ev->type() == QEvent::NativeGesture) {
+            auto* g = static_cast<QNativeGestureEvent*>(ev);
+            if (g->gestureType() == Qt::ZoomNativeGesture &&
+                onZoomFactorAt) {
+                onZoomFactorAt(g->position().toPoint(),
+                               1.0 + g->value());
+                return true;
+            }
+        }
+        return QLabel::event(ev);
+    }
+
+private:
+    QPoint lastGlobal_, pressGlobal_;
+    bool moved_ = false;
+};
 
 class OverlayPane : public QWidget {
 public:
@@ -5080,16 +5145,24 @@ private:
         struct WB {
             QPointer<QDialog> dlg;
             QListWidget* rail = nullptr;
-            QLabel* img = nullptr;
+            ScanCanvasLabel* img = nullptr;
+            QWidget* overview = nullptr;
+            std::vector<ScanCanvasLabel*> ovPics;
             QScrollArea* sa = nullptr;
             QLabel* pos = nullptr;
             QComboBox* pct = nullptr;
+            QComboBox* gotoC = nullptr;
+            QToolButton* crumbWork = nullptr;
+            QToolButton* crumbFolio = nullptr;
             QString folio;
             QPixmap orig;
-            int bright = 0, contrast = 0;
-            bool invert = false, syncing = false;
+            int bright = 0, contrast = 0, lastZ = 100;
+            bool invert = false, syncing = false, inOverview = false;
+            bool etext = false;
+            QVector<QPair<QString, QString>> sides;   // folio-faithful
         };
         auto st = std::make_shared<WB>();
+        st->sides = splitFolioSides(input_->toPlainText());
         auto* dlg = new QDialog(this);
         st->dlg = dlg;
         dlg->setAttribute(Qt::WA_DeleteOnClose);
@@ -5099,10 +5172,36 @@ private:
             (scanLicense_.contains("publicdomain")
                  ? " · public domain · BDRC"
                  : " · BDRC"));
-        dlg->resize(1180, 760);
+        dlg->resize(1180, 780);
         auto* outer = new QVBoxLayout(dlg);
         outer->setContentsMargins(0, 0, 0, 0);
         outer->setSpacing(0);
+        // ---- breadcrumb (BUDA's hierarchy): work ▸ folio; clicking
+        // the work climbs to the whole-work scroll view ----
+        auto* crumb = new QWidget;
+        crumb->setStyleSheet("background:#ffffff;");
+        auto* cl = new QHBoxLayout(crumb);
+        cl->setContentsMargins(12, 6, 12, 6);
+        st->crumbWork = new QToolButton;
+        st->crumbWork->setText("▤ " + scanWork_);
+        st->crumbWork->setToolTip(
+            "The whole work — every folio side in one scrolling "
+            "view (click any page to open it)");
+        st->crumbWork->setStyleSheet(
+            "QToolButton{border:none;color:#333;font-weight:600;}"
+            "QToolButton:hover{color:#c22a2a;}");
+        cl->addWidget(st->crumbWork);
+        auto* csep = new QLabel("|");
+        csep->setStyleSheet("color:#bbb;");
+        cl->addWidget(csep);
+        st->crumbFolio = new QToolButton;
+        st->crumbFolio->setToolTip("This folio side on its own");
+        st->crumbFolio->setStyleSheet(
+            "QToolButton{border:none;color:#c22a2a;}"
+            "QToolButton:hover{color:#822;}");
+        cl->addWidget(st->crumbFolio);
+        cl->addStretch(1);
+        outer->addWidget(crumb);
         auto* mid = new QHBoxLayout;
         mid->setContentsMargins(0, 0, 0, 0);
         mid->setSpacing(0);
@@ -5136,8 +5235,9 @@ private:
             collapse->setText(v ? "▶" : "◀");
         });
         mid->addWidget(collapse);
-        st->img = new QLabel;
+        st->img = new ScanCanvasLabel;
         st->img->setAlignment(Qt::AlignCenter);
+        st->img->setCursor(Qt::OpenHandCursor);
         st->sa = new QScrollArea;
         st->sa->setWidget(st->img);
         st->sa->setWidgetResizable(false);
@@ -5170,20 +5270,34 @@ private:
         bl->addSpacing(14);
         auto* gotoL = new QLabel("Go to");
         bl->addWidget(gotoL);
-        auto* gotoE = new QLineEdit;
-        gotoE->setFixedWidth(64);
-        gotoE->setPlaceholderText("94a");
-        gotoE->setToolTip(
-            "Type a folio (94a) or an image number and press Return");
-        gotoE->setStyleSheet(
-            "background:#fff;color:#222;border-radius:3px;"
-            "padding:2px;");
-        bl->addWidget(gotoE);
+        st->gotoC = new QComboBox;
+        st->gotoC->setEditable(true);
+        for (int i = 0; i < folioOrder_.size(); ++i)
+            st->gotoC->addItem(QString("%1 · img.%2")
+                                   .arg(folioOrder_[i])
+                                   .arg(i + 1));
+        st->gotoC->setFixedWidth(126);
+        st->gotoC->setToolTip(
+            "Every image in the volume — pick one, or type a folio "
+            "(94a) or image number and press Return");
+        st->gotoC->setStyleSheet(
+            "QComboBox{background:#fff;color:#222;border-radius:3px;"
+            "padding:2px;}");
+        bl->addWidget(st->gotoC);
         bl->addSpacing(8);
         auto* prevB = mkBtn("◀", "Previous folio side");
         st->pos = new QLabel;
         bl->addWidget(st->pos);
         auto* nextB = mkBtn("▶", "Next folio side");
+        auto* etextT = new QCheckBox("Show e-text");
+        etextT->setToolTip(
+            "Whole-work view only: under every folio image, the "
+            "input centers' own keying of that side (from the "
+            "document's @folio markers)");
+        etextT->setStyleSheet("color:#dde3ea;");
+        etextT->hide();
+        bl->addSpacing(10);
+        bl->addWidget(etextT);
         bl->addStretch(1);
         auto* zoutB = mkBtn("⊖", "Zoom out");
         auto* panU = mkBtn("↑", "Pan up");
@@ -5197,9 +5311,12 @@ private:
                            "300%", "Fit"});
         st->pct->setCurrentText("Fit");
         st->pct->setFixedWidth(76);
-        st->pct->setToolTip("Zoom — pick, type a percent, or Fit");
+        st->pct->setToolTip("Zoom — pick, type a percent, or Fit. "
+                            "Click the page to zoom in at that spot; "
+                            "drag to pan; pinch or ⌘-scroll to zoom.");
         bl->addWidget(st->pct);
         auto* fitB = mkBtn("⛶", "Fit the page in the window");
+        auto* fsB = mkBtn("⤢", "Toggle this window to full screen");
         auto* adjB = mkBtn("◐",
                            "Brightness · contrast · invert (display "
                            "only — the scan file is untouched)");
@@ -5219,7 +5336,8 @@ private:
                     lut[v] = st->invert ? 255 - nv : nv;
                 }
                 for (int y = 0; y < im.height(); ++y) {
-                    QRgb* ln = reinterpret_cast<QRgb*>(im.scanLine(y));
+                    QRgb* ln =
+                        reinterpret_cast<QRgb*>(im.scanLine(y));
                     for (int x = 0; x < im.width(); ++x)
                         ln[x] = qRgb(lut[qRed(ln[x])],
                                      lut[qGreen(ln[x])],
@@ -5251,6 +5369,7 @@ private:
                     QString(t).remove('%').trimmed().toInt(&ok);
                 z = ok ? std::clamp(zz, 10, 400) : 100;
             }
+            st->lastZ = z;
             const QPixmap shown =
                 z == 100 ? sheet
                          : sheet.scaledToWidth(
@@ -5259,14 +5378,169 @@ private:
             st->img->setPixmap(shown);
             st->img->resize(shown.size());
         };
-        auto showF = [this, st, render](const QString& folio) {
+        auto pan = [st](int dx, int dy) {
+            st->sa->horizontalScrollBar()->setValue(
+                st->sa->horizontalScrollBar()->value() + dx);
+            st->sa->verticalScrollBar()->setValue(
+                st->sa->verticalScrollBar()->value() + dy);
+        };
+        auto zoomAtPoint = [st, render](QPoint labelPos, int nz) {
+            const QSize before = st->img->size();
+            if (before.isEmpty()) return;
+            const double fx =
+                double(labelPos.x()) / std::max(1, before.width());
+            const double fy =
+                double(labelPos.y()) / std::max(1, before.height());
+            st->pct->setCurrentText(
+                QString::number(std::clamp(nz, 10, 400)) + "%");
+            render();
+            const QSize after = st->img->size();
+            const QSize vp = st->sa->viewport()->size();
+            st->sa->horizontalScrollBar()->setValue(
+                int(fx * after.width() - vp.width() / 2.0));
+            st->sa->verticalScrollBar()->setValue(
+                int(fy * after.height() - vp.height() / 2.0));
+        };
+        st->img->onClickAt = [st, zoomAtPoint](QPoint p) {
+            zoomAtPoint(p, st->lastZ * 5 / 4);   // BUDA: click zooms
+        };
+        st->img->onZoomFactorAt = [st, zoomAtPoint](QPoint p,
+                                                    double f) {
+            zoomAtPoint(p, int(std::lround(st->lastZ * f)));
+        };
+        st->img->onDragBy = [pan](QPoint d) { pan(-d.x(), -d.y()); };
+
+        // ---- the whole-work scroll view (BUDA's work level) ----
+        auto modeChrome = [st, etextT, prevB, nextB, panU, panD, panL,
+                           panR, adjB, zoutB, zinB, fitB, gotoL] {
+            const bool ov = st->inOverview;
+            for (QWidget* w : std::initializer_list<QWidget*>{
+                     prevB, nextB, panU, panD, panL, panR, adjB,
+                     zoutB, zinB, fitB, st->pct, st->pos, gotoL,
+                     st->gotoC})
+                w->setVisible(!ov);
+            etextT->setVisible(ov);
+            st->crumbFolio->setVisible(!ov);
+        };
+        auto ensureOverview = [this, st] {
+            if (st->overview) return;
+            st->overview = new QWidget;
+            st->overview->setStyleSheet("background:#17181c;");
+            auto* ov = new QVBoxLayout(st->overview);
+            ov->setContentsMargins(24, 16, 24, 16);
+            ov->setSpacing(6);
+            for (int i = 0; i < folioOrder_.size(); ++i) {
+                auto* pic = new ScanCanvasLabel;
+                pic->setAlignment(Qt::AlignCenter);
+                pic->setText("folio " + folioOrder_[i] +
+                             " — not downloaded yet (⬇ Download "
+                             "images fills this view)");
+                pic->setStyleSheet("color:#8892a0;font-size:12px;");
+                pic->setCursor(Qt::PointingHandCursor);
+                pic->setToolTip("Open folio " + folioOrder_[i]);
+                ov->addWidget(pic, 0, Qt::AlignHCenter);
+                st->ovPics.push_back(pic);
+                auto* cap = new QLabel(QString("folio %1 · img.%2")
+                                           .arg(folioOrder_[i])
+                                           .arg(i + 1));
+                cap->setAlignment(Qt::AlignCenter);
+                cap->setStyleSheet(
+                    "color:#aab4c0;font-size:11px;padding:2px;");
+                ov->addWidget(cap);
+                // the input centers' own keying of this side
+                const QString name =
+                    QString("%1%2")
+                        .arg(QString(folioOrder_[i])
+                                 .left(folioOrder_[i].size() - 1)
+                                 .toInt(),
+                             3, 10, QChar('0'))
+                        .arg(folioOrder_[i].right(1));
+                for (const auto& sd : st->sides) {
+                    if (sd.first != name) continue;
+                    auto* et = new QLabel(sd.second.trimmed());
+                    et->setWordWrap(true);
+                    et->setMinimumWidth(1);
+                    et->setMaximumWidth(880);
+                    et->setStyleSheet(
+                        "color:#d8dee6;background:#232730;"
+                        "border-radius:4px;padding:8px;"
+                        "font-size:11px;");
+                    et->setProperty("etext", true);
+                    et->setVisible(st->etext);
+                    ov->addWidget(et, 0, Qt::AlignHCenter);
+                    break;
+                }
+            }
+            ov->addStretch(1);
+        };
+        auto loadOv = std::make_shared<std::function<void(int)>>();
+        *loadOv = [this, st, loadOv](int from) {
+            if (!st->dlg || !st->overview) return;
+            const int upto =
+                std::min(from + 4, (int)st->ovPics.size());
+            for (int i = from; i < upto; ++i) {
+                if (!st->ovPics[i]->text().isEmpty() ||
+                    st->ovPics[i]->pixmap().isNull()) {
+                    const QString f = folioOrder_[i];
+                    QString path = folioLocalPath(f);
+                    if (!QFile::exists(path)) {
+                        const QString url = folioUrl_.value(f);
+                        const QString cn =
+                            volCacheDir() + "/" +
+                            QString(url).replace(
+                                QRegularExpression(
+                                    "[^A-Za-z0-9._-]"),
+                                "_");
+                        path = QFile::exists(cn) ? cn : QString();
+                    }
+                    if (path.isEmpty()) continue;
+                    QPixmap px(path);
+                    if (px.isNull()) continue;
+                    st->ovPics[i]->setText(QString());
+                    st->ovPics[i]->setPixmap(px.scaledToWidth(
+                        880, Qt::SmoothTransformation));
+                }
+            }
+            if (upto < (int)st->ovPics.size())
+                QTimer::singleShot(20, st->dlg,
+                                   [loadOv, upto] {
+                                       (*loadOv)(upto);
+                                   });
+        };
+        auto toOverview = [st, ensureOverview, loadOv, modeChrome] {
+            ensureOverview();
+            if (st->sa->widget() != st->overview) {
+                st->sa->takeWidget();
+                st->sa->setWidget(st->overview);
+                st->overview->show();
+                st->sa->setWidgetResizable(true);
+            }
+            st->inOverview = true;
+            modeChrome();
+            (*loadOv)(0);
+        };
+        auto toSingle = [st, render, modeChrome] {
+            if (st->sa->widget() != st->img) {
+                st->sa->takeWidget();
+                st->sa->setWidget(st->img);
+                st->img->show();
+                st->sa->setWidgetResizable(false);
+            }
+            st->inOverview = false;
+            modeChrome();
+            render();
+        };
+        auto showF = [this, st, render, toSingle](
+                         const QString& folio) {
             if (!st->dlg) return;
+            toSingle();
             st->folio = folio;
             const int ix = folioOrder_.indexOf(folio);
             st->pos->setText(QString("folio %1 · img.%2/%3")
                                  .arg(folio)
                                  .arg(ix + 1)
                                  .arg(folioOrder_.size()));
+            st->crumbFolio->setText("folio " + folio);
             st->syncing = true;
             st->rail->setCurrentRow(ix);
             st->syncing = false;
@@ -5279,6 +5553,23 @@ private:
                     render();
                 });
         };
+        connect(st->crumbWork, &QToolButton::clicked,
+                [toOverview] { toOverview(); });
+        connect(st->crumbFolio, &QToolButton::clicked,
+                [toSingle] { toSingle(); });
+        connect(etextT, &QCheckBox::toggled, [st](bool on) {
+            st->etext = on;
+            if (!st->overview) return;
+            for (QLabel* l :
+                 st->overview->findChildren<QLabel*>())
+                if (l->property("etext").toBool())
+                    l->setVisible(on);
+        });
+        for (int i = 0; i < folioOrder_.size(); ++i) {
+            // overview pics are created lazily; clicks wired when
+            // the overview is built the first time
+            (void)i;
+        }
         connect(st->rail, &QListWidget::currentRowChanged,
                 [this, st, showF](int row) {
                     if (st->syncing || row < 0 ||
@@ -5286,12 +5577,22 @@ private:
                         return;
                     showF(folioOrder_[row]);
                 });
-        connect(gotoE, &QLineEdit::returnPressed,
-                [this, st, showF, gotoE] {
-                    const QString q =
-                        gotoE->text().trimmed().toLower();
+        connect(st->gotoC, QOverload<int>::of(&QComboBox::activated),
+                [this, st, showF](int ix) {
+                    if (ix >= 0 && ix < folioOrder_.size())
+                        showF(folioOrder_[ix]);
+                });
+        connect(st->gotoC->lineEdit(), &QLineEdit::returnPressed,
+                [this, st, showF] {
+                    const QString q = st->gotoC->currentText()
+                                          .section(QChar(0x00B7), 0, 0)
+                                          .trimmed()
+                                          .toLower();
                     if (q.isEmpty()) return;
-                    if (folioOrder_.contains(q)) { showF(q); return; }
+                    if (folioOrder_.contains(q)) {
+                        showF(q);
+                        return;
+                    }
                     bool ok = false;
                     const int n = q.toInt(&ok);
                     if (ok && n >= 1 && n <= folioOrder_.size())
@@ -5304,18 +5605,11 @@ private:
         };
         connect(prevB, &QToolButton::clicked, [step] { step(-1); });
         connect(nextB, &QToolButton::clicked, [step] { step(+1); });
+        auto curZoom = [st]() -> int { return st->lastZ; };
         auto zoomTo = [st, render](int z) {
             st->pct->setCurrentText(
                 QString::number(std::clamp(z, 10, 400)) + "%");
             render();
-        };
-        auto curZoom = [st]() -> int {
-            bool ok = false;
-            const int z = QString(st->pct->currentText())
-                              .remove('%')
-                              .trimmed()
-                              .toInt(&ok);
-            return ok ? z : 100;
         };
         connect(zinB, &QToolButton::clicked,
                 [zoomTo, curZoom] { zoomTo(curZoom() + 15); });
@@ -5325,14 +5619,15 @@ private:
             st->pct->setCurrentText("Fit");
             render();
         });
+        connect(fsB, &QToolButton::clicked, [st] {
+            if (!st->dlg) return;
+            if (st->dlg->isFullScreen())
+                st->dlg->showNormal();
+            else
+                st->dlg->showFullScreen();
+        });
         connect(st->pct, &QComboBox::currentTextChanged,
                 [render](const QString&) { render(); });
-        auto pan = [st](int dx, int dy) {
-            st->sa->horizontalScrollBar()->setValue(
-                st->sa->horizontalScrollBar()->value() + dx);
-            st->sa->verticalScrollBar()->setValue(
-                st->sa->verticalScrollBar()->value() + dy);
-        };
         connect(panL, &QToolButton::clicked,
                 [pan] { pan(-160, 0); });
         connect(panR, &QToolButton::clicked, [pan] { pan(160, 0); });
@@ -5341,7 +5636,8 @@ private:
         connect(panD, &QToolButton::clicked, [pan] { pan(0, 160); });
         connect(adjB, &QToolButton::clicked, [st, render, adjB] {
             QMenu m;
-            auto addSlider = [&m, render](const QString& lab, int val,
+            auto addSlider = [&m, render](const QString& lab,
+                                          int val,
                                           std::function<void(int)>
                                               set) {
                 auto* w = new QWidget;
@@ -5350,16 +5646,16 @@ private:
                 auto* l = new QLabel(lab);
                 l->setFixedWidth(70);
                 h->addWidget(l);
-                auto* s = new QSlider(Qt::Horizontal);
-                s->setRange(-100, 100);
-                s->setValue(val);
-                s->setFixedWidth(150);
-                QObject::connect(s, &QSlider::valueChanged,
+                auto* sl = new QSlider(Qt::Horizontal);
+                sl->setRange(-100, 100);
+                sl->setValue(val);
+                sl->setFixedWidth(150);
+                QObject::connect(sl, &QSlider::valueChanged,
                                  [set, render](int v) {
                                      set(v);
                                      render();
                                  });
-                h->addWidget(s);
+                h->addWidget(sl);
                 auto* wa = new QWidgetAction(&m);
                 wa->setDefaultWidget(w);
                 m.addAction(wa);
@@ -5429,9 +5725,21 @@ private:
                                    });
         };
         connect(dlB, &QToolButton::clicked,
-                [this, loadThumbs] {
+                [this, st, loadThumbs, loadOv] {
                     downloadAllFolios();
                     (*loadThumbs)(0);
+                    if (st->overview) (*loadOv)(0);
+                });
+        // overview pic clicks: wire once the overview exists — do it
+        // here by wrapping ensureOverview's product on first climb
+        connect(st->crumbWork, &QToolButton::clicked,
+                [this, st, showF] {
+                    for (size_t i = 0; i < st->ovPics.size(); ++i)
+                        if (!st->ovPics[i]->onClickAt) {
+                            const QString f = folioOrder_[(int)i];
+                            st->ovPics[i]->onClickAt =
+                                [showF, f](QPoint) { showF(f); };
+                        }
                 });
         dlg->show();
         showF(!startFolio.isEmpty() &&

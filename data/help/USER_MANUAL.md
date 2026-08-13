@@ -479,18 +479,35 @@ around **the very word under your cursor, on the woodblock
 itself**. Recognition is used only to LOCATE — never as text.
 
 **Scan viewer (window)…** — the full viewer in its own window,
-modeled on BDRC's own BUDA viewer. Left: a collapsible thumbnail
-rail, one entry per folio side (`94a · img.12`), the current side
-marked in red — thumbnails appear for every page already
-downloaded or viewed. Center: the page on a white sheet over a
-dark canvas. Bottom toolbar, left to right: **⬇ Download images**
-(the whole volume into the offline store), **Go to** (type a folio
-like `94a` or an image number, press Return), **◀ / ▶** with the
-current position between them, pan arrows, **⊖ / ⊕** zoom with a
-percent box (**Fit** sizes the page to the window), **◐**
-brightness/contrast/invert (display-only — the scan file is never
-altered; invert helps faint carvings), and **ⓘ** the scan's
-identity, license, and attribution. Also reachable from the
+modeled closely on BDRC's own BUDA viewer, with its two levels:
+
+*Single-image level.* Left: a collapsible thumbnail rail, one
+entry per folio side (`94a · img.12`), the current side marked in
+red — thumbnails appear for every page already downloaded or
+viewed. Center: the page on a white sheet over a dark canvas.
+Direct manipulation, exactly as on BDRC: **click the page to zoom
+in at that spot**, **drag to pan**, **pinch (trackpad) or
+⌘-scroll to zoom at the pointer** — plain scrolling still pans.
+Bottom toolbar, left to right: **⬇ Download images** (the whole
+volume into the offline store), **Go to** (a dropdown listing
+every image in the volume — pick one, or type a folio like `94a`
+or an image number and press Return), **◀ / ▶** with the current
+position between them, pan arrows, **⊖ / ⊕** zoom with a percent
+box (**Fit** sizes the page to the window), **⤢ full screen**,
+**◐** brightness/contrast/invert (display-only — the scan file is
+never altered; invert helps faint carvings), and **ⓘ** the scan's
+identity, license, and attribution.
+
+*Whole-work level.* The top of the window is a **breadcrumb**:
+`▤ work | folio 94a`. Click the work name and the canvas becomes
+one continuous scroll of **every folio side in the volume**, each
+captioned, downloaded pages shown full width (pages not yet
+downloaded say so — ⬇ Download images fills them in). Click any
+page (or the folio crumb) to drop back to the single-image level
+on that side. Here a **Show e-text** toggle appears: under every
+folio image, the input centers' own keying of that side, split
+from the loaded document's @folio markers — scan and e-text
+scrolling together, side by side. Also reachable from the
 document box's right-click menu.
 
 **Illustration gallery (cached scans)** — searches this volume's
