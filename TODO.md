@@ -411,7 +411,7 @@ implementation is sidelined HERE from this date. What this means:
       the source; thun/thün internal contradiction flagged for
       port-time resolution). Battery-first port can start any
       session.
-- [~] **THL FULL-SITE KNOWLEDGE SWEEP** (Adam, 2026-08-12: "read
+- [x] **THL FULL-SITE KNOWLEDGE SWEEP** — COMPLETE 2026-08-12 (4 reports + Guidelines + concordance) (Adam: "read
       the entirety of the Tibetan & Himalayan Library's website…
       everything useful to have in your back pocket" — documents,
       resources, digital-Tibetan practice, and especially their
@@ -620,7 +620,7 @@ implementation is sidelined HERE from this date. What this means:
 - [x] **84000 glossary layer** — SHIPPED 2026-08-12 (24,576 terms,
       CC-BY per 84000's own ToU table; via Steinert's public CSV
       mirror; green banner, entity links, never HGM).
-- [~] **ALL Working Glossary (AI tier)** — scaffolding + deep-entry
+- [~] **ALL Working Glossary (AI tier)** — APP-SIDE COMPLETE 2026-08-13 (deep-entry form + display + q.v. + PROMOTION LANE); scale-up credit-gated. (was: scaffolding + deep-entry
       form shipped; 45-entry pilot done. NEXT: scale batches (cost
       gate with Adam), Propose/Approval promotion lane, per-term
       suppression audit.
@@ -701,7 +701,7 @@ implementation is sidelined HERE from this date. What this means:
 
 ## Build queue
 
-- [ ] **White paper v5** — v4 predates most of 2026-08-07: the three
+- [x] **White paper v5** — SHIPPED 2026-08-12 (docx in Desktop distribution) (was: v4 predates most of 2026-08-07: the three
       catalog/subject corpus waves (42,184 segments), the calendar
       engine (year + day level, 76/76 oracle-proven, Convert-pane
       dates both directions), the affix program (Lookup fallback +
@@ -983,7 +983,7 @@ implementation is sidelined HERE from this date. What this means:
       inventory → Leads sheet → All Recordings rows.
 
 ## OPENED 2026-08-12 EVENING (autonomous block bookkeeping)
-- [~] **THL Pronunciation engine** — IN PROGRESS tonight: C++ port
+- [x] **THL Pronunciation engine** — SHIPPED 2026-08-13 (139/139 battery, display mode, Convert row, credited): C++ port
       of THL Simplified Phonetics (spec captured complete), battery
       = the standard's own 33 examples + 19 exceptions + rule
       examples as ctest; display mode joins "text as" combo; UI
@@ -1012,7 +1012,7 @@ implementation is sidelined HERE from this date. What this means:
       (transcriber_keyterms.txt / transcriber_lexicon.tsv). Then
       full-archive run (~$840-1,080 at 4,000 hrs) + teaching-index
       rebuild from the better transcripts.
-- [ ] **THL outreach email** (draft tonight if time; else next
+- [x] **THL outreach email** — DRAFTED (r2995543576256424105; Adam adds address + sends) (was: draft tonight if time; else next
       session): dictionary-content licensing for the 16 TTT
       dictionaries (the one documenting wiki page was never
       archived), the possibly-unintentional public Solr endpoint,
@@ -1026,7 +1026,7 @@ implementation is sidelined HERE from this date. What this means:
       now in the Recordings Tracker): confirm with Adam whether to
       archive captions/audio for these before they rot — unlisted
       videos vanish silently when channels reorganize.
-- [ ] Remaining design-audit shots not yet reviewed one-by-one:
+- [x] Remaining design-audit shots — ALL 14 AUDITED + fixes applied 2026-08-12/13 (docs/design/AUDIT_FINDINGS_2026-08-12.md):
       Library, Scans, Manuscript, Review, Search, Lookup,
       Sanskrit, Convert, Analysis, Drills, Input, OCR, Propose,
       Approval (first pass found: clipped banners ALL FIXED,
