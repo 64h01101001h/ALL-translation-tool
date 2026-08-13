@@ -33,7 +33,8 @@ SOAS = os.path.join(ROOT, "data", "soas_pos", "classical-lexicon.txt")
 OUTDIR = os.path.join(ROOT, "data", "ai_glossary")
 OUT = os.path.join(OUTDIR, "ai_glossary.json")
 MODEL = "claude-opus-5"   # the app's own analysis model
-BATCH = 5
+BATCH = 3   # was 5: Hopkins-rich entries overflowed max_tokens and
+            # truncated the JSON (batch-4 finding, 2026-08-12)
 
 SYSTEM = """You are a careful Tibetan-lexicography assistant for the \
 Asian Legacy Library, drafting WORKING dictionary entries. For each \
@@ -63,7 +64,7 @@ def api(user_text):
         "https://api.anthropic.com/v1/messages",
         data=json.dumps({
             "model": MODEL,
-            "max_tokens": 3000,
+            "max_tokens": 8000,
             "system": SYSTEM,
             "messages": [{"role": "user", "content": user_text}],
         }).encode(),
