@@ -13197,6 +13197,15 @@ public:
             "The read-only record of every decision — who proposed, who "
             "ruled, when, and the comment. Over the years, a record of "
             "the authority's own judgments.");
+        auto* bulkB = new QPushButton("Approve all in filter…");
+        bulkB->setToolTip(
+            "One ruling over every pending proposal in the current "
+            "filter — for machine-seeded queues (the 205-row "
+            "prenasal register) where row-by-row clicking wastes "
+            "the authority's time. Asks first, shows the count, "
+            "stamps every ruling with your name and today's date; "
+            "decline or defer individual rows beforehand if any "
+            "should not ride along.");
         filter_ = new QComboBox;
         filter_->addItem("All kinds", "");
         filter_->addItem("Pronunciations", "pronunciation");
@@ -13209,6 +13218,7 @@ public:
         filter_->addItem("Words / phrases / notes", "export");
         row->addWidget(filter_);
         row->addWidget(refresh);
+        row->addWidget(bulkB);
         row->addWidget(exportB);
         row->addWidget(archiveB);
         row->addStretch();
@@ -13216,6 +13226,7 @@ public:
         list_ = new QTextBrowser;
         list_->setOpenLinks(false);
         outer->addWidget(list_, 1);
+        connect(bulkB, &QPushButton::clicked, [this] { bulkApprove(); });
         connect(refresh, &QPushButton::clicked, [this] { rebuild(); });
         connect(filter_, &QComboBox::currentIndexChanged,
                 [this] { rebuild(); });
@@ -13420,6 +13431,79 @@ private:
                    comment.toStdString(), isoToday().toStdString());
         store.save();
         rebuild();
+    }
+
+    // one ruling over the whole filtered queue — mirrors the
+    // single-approve path exactly (applyRegister for register
+    // items, then store.rule with the authority's stamp); asks
+    // with the count first, one optional note covers the batch
+    void bulkApprove() {
+        const QString want = filter_->currentData().toString();
+        allcore::ProposalStore store(g_proposalsDir.toStdString());
+        store.load();
+        std::vector<std::string> ids;
+        for (const auto& p : store.all()) {
+            if (p.status != allcore::ProposalStatus::Pending)
+                continue;
+            const QString kindName =
+                allcore::Proposal::kindName(p.kind);
+            if (!want.isEmpty()) {
+                if (want == "export") {
+                    if (p.isRegister()) continue;
+                } else if (kindName != want) {
+                    continue;
+                }
+            }
+            ids.push_back(p.id);
+        }
+        if (ids.empty()) {
+            QMessageBox::information(
+                this, "Approve all",
+                "Nothing pending in this filter.");
+            return;
+        }
+        const QString who =
+            g_userName.isEmpty() ? "authority" : g_userName;
+        if (QMessageBox::question(
+                this, "Approve all",
+                QString("Approve ALL %1 pending proposal(s) in "
+                        "the current filter (%2)?\n\nEach ruling "
+                        "is stamped \"approved — %3, %4\"; "
+                        "register items apply in the app "
+                        "immediately. Decline or defer individual "
+                        "rows first if any should not ride along.")
+                    .arg(ids.size())
+                    .arg(filter_->currentText())
+                    .arg(who)
+                    .arg(isoToday()),
+                QMessageBox::Yes | QMessageBox::No,
+                QMessageBox::No) != QMessageBox::Yes)
+            return;
+        bool ok = false;
+        const QString comment = QInputDialog::getText(
+            this, "Approve all",
+            "Optional note (recorded on every ruling in this "
+            "batch):",
+            QLineEdit::Normal, "", &ok);
+        if (!ok) return;
+        int applied = 0;
+        for (const auto& idStd : ids) {
+            const allcore::Proposal* target = nullptr;
+            for (const auto& p : store.all())
+                if (p.id == idStd) target = &p;
+            if (!target) continue;
+            if (target->isRegister()) applyRegister(*target);
+            store.rule(idStd, allcore::ProposalStatus::Approved,
+                       who.toStdString(), comment.toStdString(),
+                       isoToday().toStdString());
+            ++applied;
+        }
+        store.save();
+        rebuild();
+        QMessageBox::information(
+            this, "Approve all",
+            QString("%1 proposal(s) approved and stamped.")
+                .arg(applied));
     }
 
     // the ruling's register mutation lives in allcore
