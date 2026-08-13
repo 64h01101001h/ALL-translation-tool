@@ -12793,11 +12793,23 @@ private:
                 personsByAuthor_[it.key()] =
                     it.value().toObject();
         }
+        // authoritative per-text author links: the ACIP<->BDRC
+        // catalog linkage (Elie Roux / Joel, received 2026-08-13)
+        QFile lf(base + "/data/extracted/acip_person_links.json");
+        if (lf.open(QIODevice::ReadOnly)) {
+            const auto l = QJsonDocument::fromJson(lf.readAll())
+                               .object().value("links").toObject();
+            for (auto it = l.begin(); it != l.end(); ++it)
+                acipPersonLinks_[it.key()] = it.value().toObject();
+        }
     }
 
     QString personHtml(const QString& workKey) {
         loadPersons();
-        const QString author = authorByWork_.value(workKey);
+        const auto auth = acipPersonLinks_.value(workKey);
+        QString author = authorByWork_.value(workKey);
+        if (author.isEmpty())
+            author = auth.value("author").toString();
         if (author.isEmpty()) return {};
         QString h;
         const auto p = personsByAuthor_.value(author);
@@ -12808,7 +12820,19 @@ private:
             h += " <small style='color:#777'>(" +
                  dates.toHtmlEscaped() + ")</small>";
         h += " <small style='color:#777'>(author)</small>";
-        const auto cands = p.value("candidates").toArray();
+        if (!auth.isEmpty()) {
+            // the authoritative tier: a PER-TEXT link, not a name
+            // match — the ACIP<->BDRC catalog work (BDRC + ACIP)
+            const QString pid = auth.value("pid").toString();
+            h += "<br>&nbsp;&nbsp;\u2022 <a href='https://"
+                 "library.bdrc.io/show/bdr:" + pid + "'>" + pid +
+                 " at BDRC</a> <small style='color:#2C5B2E'>"
+                 "(confirmed per-text link \u2014 ACIP\u2194BDRC "
+                 "catalog)</small>";
+        }
+        const auto cands = auth.isEmpty()
+                               ? p.value("candidates").toArray()
+                               : QJsonArray();
         if (!cands.isEmpty()) {
             if (cands.size() > 1)
                 h += " <small style='color:#8a6d1a'>" +
@@ -13157,6 +13181,7 @@ private:
     bool personsLoaded_ = false;
     QMap<QString, QString> authorByWork_;
     QMap<QString, QJsonObject> personsByAuthor_;
+    QMap<QString, QJsonObject> acipPersonLinks_;
     QMap<QString, QString> fileByWork_;
     allcore::Progress* progress_ = nullptr;
     std::function<void(const QString&)> open_;

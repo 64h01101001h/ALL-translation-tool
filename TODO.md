@@ -32,6 +32,13 @@ implementation is sidelined HERE from this date. What this means:
 
 ## Waiting on Adam (prompt him when the task starts)
 
+- [ ] **BDRC OCR: new version lands ~end of August 2026** (Élie
+      Roux's email, 2026-08-13: "a significant improvement").
+      When released: refresh the bundled BDRC_PhotiLines /
+      BDRC_Woodblock models, rerun the OCR selftests + the
+      word-locate lanes, and re-check the deskew-0 deviation still
+      holds. Also: thank-you/reply to Élie drafted in Gmail.
+
 - [ ] **Confirm with Geshe Michael Roach how to address the LE'UR
       pronunciation exception** (Adam, 2026-08-13). "le'ur"
       ("lay-oohr") is CONFIRMED for display and is live in the app;
