@@ -70,6 +70,25 @@ int main() {
     CHECK(stripAffixedParticlesWylie("de'ang") == "de",
           "wylie: de'ang -> de");
 
+    // Old-Tibetan da-drag: archaic second-suffix ད after ན/ར/ལ
+    using allcore::stripDaDrag;
+    using allcore::stripDaDragWylie;
+    CHECK(stripDaDragWylie("gyurd") == "gyur",
+          "da-drag wylie: gyurd -> gyur");
+    CHECK(stripDaDragWylie("stond") == "ston",
+          "da-drag wylie: stond -> ston");
+    CHECK(stripDaDragWylie("brtsald") == "brtsal",
+          "da-drag wylie: brtsald -> brtsal");
+    CHECK(stripDaDragWylie("kun") == "kun",
+          "da-drag wylie: kun unchanged");
+    CHECK(stripDaDragWylie("byed") == "byed",
+          "da-drag wylie: byed unchanged (e is not n/r/l)");
+    CHECK(stripDaDrag("གརད") == "གར",
+          "da-drag unicode: gard-class strips final da");
+    CHECK(stripDaDrag("ཀུན") ==
+              "ཀུན",
+          "da-drag unicode: kun unchanged");
+
     std::printf("%s (%d failures)\n",
                 failures ? "AFFIXNORM SMOKE FAILED" : "AFFIXNORM SMOKE OK",
                 failures);

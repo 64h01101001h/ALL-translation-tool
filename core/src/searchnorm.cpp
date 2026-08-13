@@ -261,7 +261,10 @@ const LemmaFold* globalLemmaFold() {
 }
 
 std::string searchFoldWylie(const std::string& token) {
-    std::string t = paBaFoldWylie(stripAffixedParticlesWylie(token));
+    // Old-Tibetan da-drag folds first, so archaic spellings meet
+    // their classical forms in every search
+    std::string t = paBaFoldWylie(
+        stripAffixedParticlesWylie(stripDaDragWylie(token)));
     if (g_lemmasLoaded)
         if (const auto* l = g_lemmas.fold(t)) t = *l;
     return t;

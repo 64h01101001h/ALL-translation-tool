@@ -10,8 +10,11 @@
 // syllable's own final འ is part of the word (dga', mkha' …), decided
 // by the same prefix/main-stack table the original uses.
 //
-// Classical-Tibetan path only; the filter's Old-Tibetan rules
-// (da-drag, medial འ) are deliberately not ported yet.
+// Old-Tibetan: the da-drag strip IS ported (final ད after ན/ར/ལ —
+// gyurd→gyur, stond→ston; grounded in the same historical-da-drag
+// model the particles layer ships). The filter's medial-འ rule
+// remains unported: no canonical source in-repo to port from, and
+// rules are never reconstructed from memory.
 // Search-layer normalization ONLY: display, parsing, and the
 // dictionary never see normalized forms.
 
@@ -29,5 +32,12 @@ std::string stripAffixedParticles(const std::string& syllable_unicode);
 // authority — this is a projection, not a second rule set). Returns
 // the input unchanged when no strip applies.
 std::string stripAffixedParticlesWylie(const std::string& wylie_word);
+
+// Old-Tibetan da-drag: strip the historical second-suffix ད after
+// ན/ར/ལ (gyurd→gyur, kund→kun, brtsald→brtsal). Search-layer only.
+// Safe by construction: no classical syllable ends in those
+// clusters — the ད there is always the archaic da-drag.
+std::string stripDaDrag(const std::string& syllable_unicode);
+std::string stripDaDragWylie(const std::string& wylie_word);
 
 }  // namespace allcore

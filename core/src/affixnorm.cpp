@@ -136,6 +136,24 @@ std::string stripAffixedParticles(const std::string& syl) {
     return encode(b, len);
 }
 
+std::string stripDaDrag(const std::string& syl) {
+    auto b = decode(syl);
+    const size_t len = b.size();
+    if (len >= 3 && b[len - 1] == U'ད' &&
+        (b[len - 2] == U'ན' || b[len - 2] == R ||
+         b[len - 2] == U'ལ'))
+        return encode(b, len - 1);
+    return syl;
+}
+
+std::string stripDaDragWylie(const std::string& w) {
+    const size_t n = w.size();
+    if (n >= 4 && w[n - 1] == 'd' &&
+        (w[n - 2] == 'n' || w[n - 2] == 'r' || w[n - 2] == 'l'))
+        return w.substr(0, n - 1);
+    return w;
+}
+
 std::string stripAffixedParticlesWylie(const std::string& w) {
     static const char* kSuff[] = {"'i'o", "'i'am", "'i'ang", "'o'am",
                                   "'o'ang", "'is",  "'i",    "'o",
