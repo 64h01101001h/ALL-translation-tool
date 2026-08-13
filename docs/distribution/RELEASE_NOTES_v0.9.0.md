@@ -180,6 +180,30 @@ highlights, feature by feature:
   unlisted and forgotten uploads found through the archival
   program's link-probe.
 
+## Text ↔ woodblock (the August 13 wave)
+
+- **Jump from text to carving.** Right-click in any loaded text:
+  the menu names your exact position (folio 94a · line 3/7, read
+  from the text's own markers and preserved lineation — never a
+  guess) and opens that folio in the reading panel, the Input
+  workflow, or the full scan viewer with your selected words boxed
+  on the woodblock itself (OCR used only to locate; misses named).
+- **The scan viewer**, modeled on BDRC's BUDA viewer: thumbnail
+  rail (self-completing from small preview images), dark canvas,
+  click-to-zoom, grab-pan, pinch/⌘-scroll zoom, go-to-any-image,
+  full screen, display-only brightness/contrast/invert, and a
+  whole-work scroll view with an e-text toggle that lays each
+  side's own keying beneath its image.
+- **One offline store** joins reading and keying: download a
+  volume once (folio-named files) — follow-along works offline and
+  the Input workflow opens the same folder in folio order. A
+  folio-faithful export writes one text file per woodblock side to
+  sit beside the images.
+- **In the Input workflow**: locate typed selections on the scan
+  (your line searched first), jump to a typed folio's page, zoom
+  hotkeys with anchored ⌘-scroll, a Recent-scans menu, and icons
+  on the primary actions.
+
 ## Under the hood
 - The authority's queue gained **Approve all in filter** for
   machine-seeded batches; the design audit closed every clipped

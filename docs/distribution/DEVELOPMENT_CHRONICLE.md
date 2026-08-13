@@ -624,4 +624,72 @@ a ruling, a ruling becomes a mechanism, a mechanism becomes a
 guard — and the tool grows more trustworthy with every correction
 it absorbs.
 
+## Day Nine — August 13 (continued): The Text Touches the Carving
+
+The feature I had wanted from the very beginning — and worried
+about the most, because I could not at first see the right way to
+build it — finally arrived, and the answer turned out to be a
+design insight rather than an algorithm.
+
+- **The question.** I wanted a translator reading a text to select
+  a phrase and jump straight to that exact point on the scanned
+  woodblock: right folio, right line, ideally the very words boxed
+  on the carving. Was the answer to reformat our files to follow
+  the woodblock? To OCR every scan and align text to it? Both?
+- **The ruling: mostly neither.** I realized the alignment already
+  lives in our data, put there by the input centers decades ago:
+  every file carries @folio markers at the exact side-turns, and
+  the typists preserved the woodblock's own line breaks — one
+  typed line per carved line. Meanwhile BDRC's own scan manifests
+  label each image with its folio side. So text position → folio →
+  line → image is pure counting and catalog lookup, deterministic
+  end to end. Optical recognition earns exactly one job — the last
+  inch, locating the selected words *within* the line — and its
+  output is never trusted as text, only as coordinates.
+- **The jump shipped in one day.** Right-click anywhere in a
+  loaded text: the menu names your position — *folio 94a · line
+  3/7* — and offers the folio in the reading panel, in the keying
+  workflow, or in a full scan window with the selected words boxed
+  on the carving itself; misses are named, never hidden.
+- **One folder joins reading and keying.** Downloading a volume
+  writes folio-named images into a shared store: the reader's
+  follow-along then works offline, and the keying workflow opens
+  the same folder as a work queue in folio order. A matching
+  export splits any text into one file per woodblock side, named
+  to sit beside its image — a keying target that cannot disagree
+  with the markers it came from.
+- **The viewer grew into the archive-grade idiom.** Working from
+  the reference interface I chose as the standard (the archive's
+  own scan viewer), the scan window gained its two levels: a
+  single-image view — collapsible thumbnail rail with the current
+  side marked, dark canvas, page on a white sheet, click-to-zoom
+  at the click point, grab-pan, pinch and modifier-scroll zoom,
+  go-to menu listing every image, full screen, display-only
+  brightness/contrast/invert for faint carvings — and a whole-work
+  view, one continuous scroll of every folio side. There I added
+  the thing the archive itself cannot do: a toggle that lays each
+  side's transliteration, split from our own markers, directly
+  beneath its image — scan and text scrolling together, side
+  matched to side by ground truth rather than guesswork.
+- **The rail completes itself politely.** Pages not yet downloaded
+  fill in from small preview images requested one at a time —
+  and I verified the mechanism against the archive's live servers
+  before shipping it, not after.
+- **The keying room got the same power.** Selecting typed
+  transliteration and right-clicking boxes those words on the scan
+  and scrolls them into view — the typist's own line searched
+  first, because typed line N *is* carved line N by our own
+  convention.
+- **Small courtesies landed the same day**: zoom hotkeys and
+  anchored trackpad zoom in the keying viewer, a remembered list
+  of recent scans, and a restrained fleet of hand-drawn monochrome
+  icons on the primary actions — file, folder, save, compare,
+  recognize — and nowhere else.
+
+The lesson I keep relearning: when the data was prepared with
+integrity, the feature you fear most may already be half-built
+inside it. The input centers preserved the woodblock's lineation
+as a matter of discipline; thirty years later, that discipline
+became a jump instruction.
+
 *— A.D.A., August 2026*

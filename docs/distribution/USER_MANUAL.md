@@ -437,6 +437,41 @@ depends on what the app knows:
      automatically — and the link is remembered for this text, so
      next time the button goes straight to Follow along.
 
+**Right-click in the document box — the folio jump menu.** The
+top of the context menu identifies where you are — **folio 94a ·
+line 3/7** — read from the text's own @folio markers and the
+input centers' preserved line breaks (exact counting, never a
+guess). Below it:
+
+- **Show this folio in the scan panel** — turns the follow-along
+  viewer to that side.
+- **Open this folio in the Input workflow** — downloads that one
+  folio image if needed (it lands in the offline store, below) and
+  opens it in the Input pane's scan viewer, switching you there —
+  ready to key or compare against the carving.
+- **Locate selection on the woodblock…** — opens the full scan
+  viewer on that folio with your **highlighted words boxed on the
+  carving itself** (OCR word boxes, used only to locate — the
+  recognized text is never shown as text). The line you were in is
+  banded for context, the result is reported beside the breadcrumb
+  ("2 of 2 words located…"), and any word OCR could not find on
+  that side is named there, never silently dropped. All the
+  viewer's tools (zoom, pan, adjust, thumbnails) work on the
+  highlighted page.
+- **Download all N folio scans (offline + Input)…** — fetches the
+  whole volume into `library/scans/<work>/` as folio-named files
+  (`094a.jpg`). From then on the follow-along works offline, and
+  **Open scan folder…** in the Input workflow opens the volume in
+  folio order. Strongly recommended when you start working with a
+  new text — the app suggests it as soon as the scans are linked.
+- **Export folio-faithful text files…** — splits the document at
+  its @folio markers into one text file per woodblock side
+  (`001a.txt`, `001b.txt`…), named to sit beside the downloaded
+  scans — an OCR-ready keying/comparison set that can never
+  disagree with the markers it came from.
+- **Copy location** — puts `work · folio · line` on the clipboard
+  for notes or citations.
+
 **◀ folio / folio ▶** — page through the scans by hand, one folio
 side at a time.
 
@@ -445,6 +480,41 @@ side at a time.
 app runs recognition on the current folio image and draws a box
 around **the very word under your cursor, on the woodblock
 itself**. Recognition is used only to LOCATE — never as text.
+
+**Scan viewer (window)…** — the full viewer in its own window,
+modeled closely on BDRC's own BUDA viewer, with its two levels:
+
+*Single-image level.* Left: a collapsible thumbnail rail, one
+entry per folio side (`94a · img.12`), the current side marked in
+red. Pages already downloaded or viewed get their thumbnails
+instantly; the rest fill in on their own from small BDRC preview
+images, fetched politely one at a time — the rail becomes complete
+without downloading the volume. Center: the page on a white sheet over a dark canvas.
+Direct manipulation, exactly as on BDRC: **click the page to zoom
+in at that spot**, **drag to pan**, **pinch (trackpad) or
+⌘-scroll to zoom at the pointer** — plain scrolling still pans.
+Bottom toolbar, left to right: **⬇ Download images** (the whole
+volume into the offline store), **Go to** (a dropdown listing
+every image in the volume — pick one, or type a folio like `94a`
+or an image number and press Return), **◀ / ▶** with the current
+position between them, pan arrows, **⊖ / ⊕** zoom with a percent
+box (**Fit** sizes the page to the window), **⤢ full screen**,
+**◐** brightness/contrast/invert (display-only — the scan file is
+never altered; invert helps faint carvings), and **ⓘ** the scan's
+identity, license, and attribution. Keyboard: **⌘→ / ⌘←** turn
+folios, **⌘+ / ⌘−** zoom, **⌘0** fits the page.
+
+*Whole-work level.* The top of the window is a **breadcrumb**:
+`▤ work | folio 94a`. Click the work name and the canvas becomes
+one continuous scroll of **every folio side in the volume**, each
+captioned, downloaded pages shown full width (pages not yet
+downloaded say so — ⬇ Download images fills them in). Click any
+page (or the folio crumb) to drop back to the single-image level
+on that side. Here a **Show e-text** toggle appears: under every
+folio image, the input centers' own keying of that side, split
+from the loaded document's @folio markers — scan and e-text
+scrolling together, side by side. Also reachable from the
+document box's right-click menu.
 
 **Illustration gallery (cached scans)** — searches this volume's
 already-downloaded pages for woodblock miniatures and diagrams and
@@ -1852,6 +1922,22 @@ right. (Every one of them is also reachable from the menu bar:
   TIFF). Use this for a one-page job.
 - **Open scan folder…** — opens a whole folder of page scans as a
   work queue: the block workflow. See §12.3.
+- **Recent ▾** — a menu of the last ten scans and scan folders you
+  opened, newest first. One click reopens the entry (a folder
+  reopens as its block, restoring your page and typing from the
+  work folder as usual). Entries whose file has moved or been
+  deleted simply don't appear. The list survives restarts.
+- **Right-click in the typing area** — two woodblock actions:
+  **Locate selection on the scan (OCR)** boxes your selected typed
+  ACIP on the scan image itself and scrolls it into view — your
+  own line is searched first (typed line N = scan line N), OCR is
+  used only to locate, and the status line reports what was found
+  and names anything that wasn't. And the menu identifies the
+  folio of the nearest @marker above your cursor; when the open
+  scan folder contains that folio's image (folio-named files from
+  the Overlay's "Download all folio scans", or any filename
+  carrying the folio token), it offers **Jump to this folio's scan
+  (page N)** — the viewer turns straight to that woodblock side.
 - **◀ page** and **page ▶** — step backward and forward through
   the pages of an open folder. Between them a label shows your
   place, e.g. **page 3/12**. Both buttons are greyed out until a
@@ -1868,8 +1954,16 @@ right. (Every one of them is also reachable from the menu bar:
   Woodblock model) and fills the **empty** editor with an ACIP
   draft for you to correct. It refuses to touch a page you have
   typed on. See §12.6.
-- **zoom** (slider, 25–200%) — scales the scan image. 100% is
-  actual size.
+- **− / zoom slider / + / percent box** — the zoom controls
+  (25–400%; 100% is actual size). Click **−** or **+** to step by
+  15%, drag the slider, or use the percent box: pick a preset
+  (50%–300%), type an exact figure, or choose **Fit width** /
+  **Fit page** to size the scan to the viewer. Keyboard, whenever
+  the pane has focus: **⌘＋** (or ⌘⇧＋) zooms in, **⌘−** zooms
+  out, **⌘0** returns to 100%. Hold **⌘ and scroll the mouse
+  wheel** (or trackpad) over the scan to zoom around the point
+  under the pointer — the spot you're inspecting stays put, as in
+  the BDRC scan viewer.
 - **@ next folio** — inserts the next folio marker per the ACIP
   specification. See §12.5.
 - **Compare with partner file…** — the double-keying diff. See

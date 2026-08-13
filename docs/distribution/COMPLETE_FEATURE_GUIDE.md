@@ -662,5 +662,22 @@ by click.
 
 ---
 
+### Text ↔ woodblock (August 13)
+
+The selection-to-carving jump: right-click in a loaded text for
+your position by folio and line (from the text's own @markers and
+the input centers' preserved line breaks), then open that folio in
+the reading panel, the Input workflow, or the full scan viewer
+with the selected words boxed on the woodblock (OCR word boxes,
+locator only, misses always named). The viewer follows the BUDA
+idiom — self-completing thumbnail rail, dark canvas, click-zoom,
+grab-pan, pinch zoom, go-to, full screen, display-only image
+adjustment — plus a whole-work scroll view whose e-text toggle
+lays each side's own keying beneath its image. One folio-named
+offline store serves reading and keying alike; a folio-faithful
+export writes one file per woodblock side. The Input workflow
+gained the same locate power over its own scans, folio jumps,
+anchored zoom, and a Recent-scans memory.
+
 *Twenty panes, one principle: the machine may match the master's
 English — it may never compose it.*
