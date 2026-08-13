@@ -490,6 +490,35 @@ static QString entryHtml(const allcore::Entry& e,
         }
         if (!ruledPron)
             cardPron = restoreAchungU(e.wylie, cardPron);
+        // the clicked SURFACE form owns the pron line (Adam,
+        // 2026-08-13: clicking LE'UR must read le'ur, not the bare
+        // headword's le'u — the card already says "from: LE'UR")
+        if (!d.surface.empty()) {
+            std::string sw =
+                QString::fromStdString(
+                    allcore::acipToEwts(d.surface))
+                    .trimmed()
+                    .toLower()
+                    .toStdString();
+            if (!sw.empty() && sw != e.wylie) {
+                bool sruled = false;
+                std::string sp;
+                if (g_pronApproved) {
+                    auto its = g_pronApproved->find(sw);
+                    if (its != g_pronApproved->end()) {
+                        sp = its->second;
+                        sruled = true;
+                    }
+                }
+                if (sp.empty())
+                    sp = restoreAchungU(sw,
+                                        allcore::pronounce(sw));
+                if (!sp.empty() && sp != cardPron) {
+                    cardPron = sp;
+                    ruledPron = sruled;
+                }
+            }
+        }
         h += "<div style='margin:5px 0 0 0'>pron: " +
              QString::fromStdString(cardPron).toHtmlEscaped();
         if (ruledPron)
@@ -2377,6 +2406,17 @@ public:
                     entryHtml(es.front()).contains("pron: le'u");
                 check(okU, "'a-chung class: le'u card pron keeps "
                            "the apostrophe vowel");
+                // and the clicked surface owns the pron line
+                if (!es.empty()) {
+                    EntryDisplay sd;
+                    sd.surface = "LE'UR";
+                    const bool okS =
+                        entryHtml(es.front(), sd)
+                            .contains("pron: le'ur");
+                    check(okS, "'a-chung class: clicked LE'UR "
+                               "shows pron le'ur on the le'u "
+                               "card");
+                }
             }
             // the root-cause pin: KL16 (Diamond Cutter) must route
             // to MW26071_0018, never _0016 (verified live)
