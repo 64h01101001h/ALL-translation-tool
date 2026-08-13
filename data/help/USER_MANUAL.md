@@ -548,8 +548,13 @@ with a progress bar and a Stop button; already-cached pages are
 not refetched), then all of them are searched. Fetch failures and
 early stops are reported in the gallery title, never hidden.
 
-*Worked example:* Read → Library → double-click **KD0016** (the
-Diamond Cutter). Press **Follow along in scans (BDRC)** — the
+*Worked example:* Read → Library → open the Kangyur folder
+**7. SHER PHYIN SNA TSOGS** → VOL 1 (KA) → double-click
+**KL00016E — the Diamond Cutter**. Press **Follow along in scans
+(bdr:MW26071_0018)** — the number differs from the file's KL16 on
+purpose: the app routes Lhasa texts through a verified title
+concordance, because BDRC's part numbers follow the Lhasa (H)
+catalog, not ACIP's KL numbers. The
 woodblock pages open beneath the text. Click into different parts
 of the document box and watch the folio image turn to follow your
 cursor. Press **locate word (OCR)** and the word at your cursor is
