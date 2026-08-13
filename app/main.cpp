@@ -6597,6 +6597,13 @@ private:
         s.beginGroup("gofer/saved");
         for (const auto& g : s.childGroups()) saved_->addItem(g);
         s.endGroup();
+        if (!saved_->count()) {
+            auto* hint = new QListWidgetItem(
+                "no saved searches yet — build one on the Search "
+                "Setting tab and press Save search");
+            hint->setFlags(Qt::NoItemFlags);
+            saved_->addItem(hint);
+        }
     }
 
     allcore::Spine& spine_;
@@ -12372,6 +12379,11 @@ public:
         scroll_ = scroll;
         results_ = new QTextBrowser;
         results_->setOpenLinks(false);
+        results_->setHtml(
+            "<i style='color:#8A8A8A'>Recognized text lands here, "
+            "headered OCR-DERIVED, with every word clickable back "
+            "to its spot on the page. Open a scan image and press "
+            "Run OCR — or Batch folder… for a whole volume.</i>");
         connect(results_, &QTextBrowser::anchorClicked, [this](const QUrl& u) {
             const QStringList p = u.toString().split(':');
             if (p.size() != 3 || p[0] != "w") return;
@@ -13068,6 +13080,9 @@ public:
                        int(allcore::ProposalKind::Note));
         fl->addRow("Kind", kind_);
         wylie_ = new QLineEdit;
+        // the form's placeholders were eliding in a narrow column
+        // (audit 2026-08-12) — give the fields a working width
+        wylie_->setMinimumWidth(360);
         wylie_->setPlaceholderText("the Tibetan (ACIP or wylie)");
         fl->addRow("Tibetan", wylie_);
         value_ = new QLineEdit;
