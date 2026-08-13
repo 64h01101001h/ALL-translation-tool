@@ -1489,6 +1489,8 @@ public:
             po.marginTitle = "lam rim";
             po.volLetter = "ka";
             po.layout = 1;   // two-up A4 imposition, cut marks
+            po.coverSheet = true;
+            po.coverDate = "2026-08-12";
             const int sides = pechaWritePdf(tmp, po);
             QFile pf(tmp);
             bool ok = sides >= 2 && pf.open(QIODevice::ReadOnly);
@@ -4215,6 +4217,9 @@ public:
         bool classicalOpening = true;   // first two text sides at
                                         // 5 lines (Degé convention
                                         // per THL's catalog docs)
+        bool coverSheet = false;        // office layouts: a label
+                                        // page before the folios
+        QString coverDate;              // stamped by the caller
         int ruleWeight = 1;          // 0 fine · 1 classic · 2 bold
         int layout = 0;              // 0 native · 1 A4 two-up ·
                                      // 2 US-Letter two-up
@@ -4560,6 +4565,66 @@ public:
             QPainter out(&pdf);
             if (!out.isActive()) return 0;
             const double omm = pdf.width() / pg.width();
+            // office layouts may open with a cover/label sheet —
+            // the print partnership's handling page (pecha v3)
+            if (o.coverSheet) {
+                const QRectF frame(20 * omm, 20 * omm,
+                                   pdf.width() - 40 * omm,
+                                   pdf.height() - 40 * omm);
+                out.setPen(QPen(Qt::black, 0.5 * omm));
+                out.drawRect(frame);
+                out.setPen(QPen(Qt::black, 0.2 * omm));
+                out.drawRect(frame.adjusted(2 * omm, 2 * omm,
+                                            -2 * omm, -2 * omm));
+                const QString tTitle2 = tibetanizeField(o.title);
+                QFont bigT(o.family.isEmpty()
+                               ? QString("Noto Serif Tibetan")
+                               : o.family);
+                bigT.setPixelSize(int(14 * omm));
+                out.setFont(bigT);
+                out.drawText(
+                    QRectF(frame.left(), frame.top() + 22 * omm,
+                           frame.width(), 30 * omm),
+                    Qt::AlignHCenter | Qt::AlignTop,
+                    tTitle2.isEmpty()
+                        ? QString::fromUtf8("༄༅། །")
+                        : tTitle2);
+                QFont lat;
+                lat.setPixelSize(int(5 * omm));
+                out.setFont(lat);
+                if (!o.title.trimmed().isEmpty())
+                    out.drawText(
+                        QRectF(frame.left(),
+                               frame.top() + 58 * omm,
+                               frame.width(), 12 * omm),
+                        Qt::AlignHCenter | Qt::AlignTop,
+                        o.title.trimmed());
+                QFont meta;
+                meta.setPixelSize(int(4 * omm));
+                out.setFont(meta);
+                QString info =
+                    QString("%1 folio side(s) · %2 lines per side")
+                        .arg(sidePics.size())
+                        .arg(o.lines);
+                if (!o.volLetter.trimmed().isEmpty())
+                    info = "volume " + o.volLetter.trimmed() +
+                           " · " + info;
+                if (!o.coverDate.isEmpty())
+                    info += " · " + o.coverDate;
+                out.drawText(
+                    QRectF(frame.left(),
+                           frame.bottom() - 30 * omm,
+                           frame.width(), 10 * omm),
+                    Qt::AlignHCenter | Qt::AlignTop, info);
+                out.drawText(
+                    QRectF(frame.left(),
+                           frame.bottom() - 18 * omm,
+                           frame.width(), 10 * omm),
+                    Qt::AlignHCenter | Qt::AlignTop,
+                    "Asian Legacy Library — ALL Translation "
+                    "Tool");
+                pdf.newPage();
+            }
             // dimensionless shrink so two sides + margins fit
             const double s =
                 qMin(1.0, qMin((pg.width() - 24.0) / o.wMM,
@@ -4673,6 +4738,16 @@ public:
                               "text (yig mgo)"));
         heads->setChecked(
             st.value("pecha/headMarks", true).toBool());
+        auto* cover = new QCheckBox(
+            "cover sheet on office layouts — title, volume, folio "
+            "count, and date on a label page");
+        cover->setToolTip(
+            "Two-up layouts open with a framed label page — the "
+            "handling sheet a print partner or a shelf needs. "
+            "Native folio sheets skip it (print shops take the "
+            "bare folios).");
+        cover->setChecked(
+            st.value("pecha/coverSheet", false).toBool());
         auto* classical = new QCheckBox(
             "classical opening — the first two text sides carry "
             "5 lines with larger letters (Degé convention)");
@@ -4720,6 +4795,7 @@ public:
         v->addLayout(row4);
         v->addWidget(heads);
         v->addWidget(classical);
+        v->addWidget(cover);
         v->addWidget(inter);
         v->addWidget(interE);
         auto buildOpts = [&]() {
@@ -4749,6 +4825,9 @@ public:
             o.volLetter = volL->text();
             o.headMarks = heads->isChecked();
             o.classicalOpening = classical->isChecked();
+            o.coverSheet = cover->isChecked();
+            o.coverDate =
+                QDate::currentDate().toString(Qt::ISODate);
             o.ruleWeight = rulesC->currentIndex();
             o.layout = layoutC->currentIndex();
             return o;
@@ -4758,6 +4837,7 @@ public:
             s2.setValue("pecha/preset", preset->currentIndex());
             s2.setValue("pecha/classicalOpening",
                         classical->isChecked());
+            s2.setValue("pecha/coverSheet", cover->isChecked());
             s2.setValue("pecha/lines", lines->value());
             s2.setValue("pecha/rules", rulesC->currentIndex());
             s2.setValue("pecha/layout", layoutC->currentIndex());
@@ -4868,6 +4948,9 @@ public:
         o.headMarks = st.value("pecha/headMarks", true).toBool();
         o.classicalOpening =
             st.value("pecha/classicalOpening", true).toBool();
+        o.coverSheet =
+            st.value("pecha/coverSheet", false).toBool();
+        o.coverDate = QDate::currentDate().toString(Qt::ISODate);
         o.ruleWeight =
             qBound(0, st.value("pecha/rules", 1).toInt(), 2);
         o.layout =

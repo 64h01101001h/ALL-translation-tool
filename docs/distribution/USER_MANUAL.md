@@ -513,7 +513,10 @@ crash-free:
 3. Choose the **print layout**: native folio sheets at true size
    for a print shop, or **two-up on A4 / US Letter with cut
    marks** — two folio sides per office sheet, corner ticks to
-   trim on, each side labeled.
+   trim on, each side labeled. Office layouts can open with a
+   **cover sheet** — a framed label page carrying the title,
+   volume letter, folio count, and date — the handling page a
+   print partner or a shelf needs.
 4. Optionally give the pecha its traditional dress:
    - **Ornamental title folio (1a)** — type the title in wylie or
      Tibetan; it is set centered in a double ornamental frame on
