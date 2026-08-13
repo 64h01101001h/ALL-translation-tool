@@ -998,9 +998,13 @@ implementation is sidelined HERE from this date. What this means:
       (THL-only insertions incl. D.8/D.361/D.543), ZERO order
       inversions, offsets reproduce the live verification.
       NEXT (new item): wire THL catalog deep-links through the
-      concordance (Library/Lookup: a Toh-numbered text links to
-      old.thlib.org catalog.php#cat=d/<THL#> via the mapping —
-      never numerically).
+      concordance (Toh/KD-numbered contexts: composer, citations,
+      BDRC-linked Derge works — never numerically). NOTE
+      2026-08-13: ACIP KL vs THL Lhasa (kt/h) numbering spot-check
+      REFUTED at H.11 (8k vs 10k Lines) — the KL-numbered library
+      files need their own title-matched Lhasa concordance first
+      (same recipe as the Degé one) before any THL link touches
+      them.
 - [ ] **Transcriber pilot** (needs Adam's go + account): <$20 on
       ~10 Tibetan-dense videos, ElevenLabs Scribe v2 vs AssemblyAI
       (± Soniox/Speechmatics), scored on Tibetan-term recall;

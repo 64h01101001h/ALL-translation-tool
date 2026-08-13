@@ -94,3 +94,20 @@ verdict).
 - `read.84000.co/translation/toh<N>.html` — ~40 Toh pages (og:title)
 - `raw.githubusercontent.com/84000/data-rdf/master/toh361.rdf` — Toh↔BDRC sameAs assertion
 - `purl.bdrc.io/resource/MW22084_NNNN.json` — ~70 Toh-numbered Degé Kangyur part labels
+
+## Addendum (2026-08-13): ACIP KL vs THL Lhasa (kt/h) — ALSO NOT IDENTICAL
+
+Spot-check via cat_reader.php?pg=kt/h/NNNN:
+- H.1 = 'dul ba gzhi ↔ KL1 Vinaya Vastu ✓
+- **H.11 = brgyad stong pa (8,000 Lines) ↔ KL11 = 10,000 Lines ✗**
+- H.100 = dkon mchog ta la la'i gzungs ↔ KL100 "Shining Jewel" (plausible ✓)
+
+Verdict: the orderings diverge within the Prajñāpāramitā block —
+never wire KL→kt/h links numerically. A Lhasa concordance is
+buildable exactly like the Degé one (harvest kt/h records, match
+titles against the ACIP catalog's own title data) if THL Lhasa
+deep-links are ever wanted. The Degé concordance
+(thl_dege_concordance.json) remains the only verified crosswalk;
+its natural first consumer is KD/Toh-numbered contexts (the
+composer, citations, BDRC-linked Derge works), not the KL-numbered
+library files.
