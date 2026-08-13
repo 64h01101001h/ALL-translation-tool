@@ -816,6 +816,38 @@ static QString lookupResultsHtml(allcore::Spine& spine,
              "headword for \u201c" +
              QString::fromStdString(raw).toHtmlEscaped() +
              "\u201d</div>";
+    // the authority's ruled pronunciations widen search too:
+    // typing the RULED form (tsema namdrel) finds the entry even
+    // though the release index only knows the engine's baseline
+    if (entries.empty() && g_pronApproved) {
+        auto fold = [](const std::string& s) {
+            std::string o;
+            for (char c : s)
+                if (std::isalpha((unsigned char)c))
+                    o += (char)std::tolower((unsigned char)c);
+            return o;
+        };
+        const std::string q = fold(raw);
+        if (q.size() >= 3) {
+            for (const auto& [rw, rp] : *g_pronApproved) {
+                const std::string fp = fold(rp);
+                if (fp == q ||
+                    (q.size() >= 5 && fp.rfind(q, 0) == 0)) {
+                    for (auto& e2 : spine.lookup(rw)) {
+                        bool dup = false;
+                        for (auto& x : entries)
+                            dup |= x.id == e2.id;
+                        if (!dup) entries.push_back(e2);
+                    }
+                }
+            }
+            if (!entries.empty())
+                h += "<div style='color:#1E6B4E;font-size:12px'>"
+                     "matched by the authority's <b>ruled "
+                     "pronunciation</b> \u27EA""ruled\u27EB"
+                     "</div>";
+        }
+    }
     // colloquial register fallback: community spellings (gonpa,
     // tulku\u2026) and the HGM prenasal forms (kamdir) \u2014 the register
     // only WIDENS lookup, GMR stays canonical
@@ -16502,6 +16534,26 @@ int main(int argc, char** argv) {
                                                  "gzigs");
             lk(hh.toLower().contains("honorific"),
                "honorific term carries its badge");
+            // typing the authority's RULED form finds the entry —
+            // proven on a ruling whose release baseline DIFFERS
+            // (kamdir: the release index only knows kabdir).
+            // tsema namdrel needs no fallback: the release index
+            // already folds it correctly (verified) — the ruled
+            // lane exists for the kamdir class.
+            {
+                static const std::map<std::string, std::string>
+                    seeded = {{"skabs 'dir", "kamdir"}};
+                const auto* savedMap = g_pronApproved;
+                g_pronApproved = &seeded;
+                const QString hr = lookupResultsHtml(
+                    spine, refdict, mvp, whitney, colloq,
+                    "kamdir");
+                g_pronApproved = savedMap;
+                lk(hr.contains("ruled pronunciation") &&
+                       hr.contains("SKABS"),
+                   "ruled pronunciation finds its entry "
+                   "(kamdir class)");
+            }
             lk(h.contains("propose:"),
                "propose-to-the-authority action offered");
         }
