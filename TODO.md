@@ -1035,8 +1035,13 @@ implementation is sidelined HERE from this date. What this means:
       data-partnership registration, and credit lines. Address:
       THL/UVa contact page.
 - [~] **kmaps Places live-query integration** — link-out HALF
-      SHIPPED 2026-08-13 (cards' search-elsewhere row); JSON query
-      half remains (query + link-out
+      SHIPPED 2026-08-13 (cards' search-elsewhere row). JSON half
+      PROBED 2026-08-13: features.json?searchtext= is a TREE
+      endpoint (returns root "Earth", ignores search params — all
+      variants tried); real search runs through THL's Solr index,
+      which we flagged to them as possibly-unintentional exposure —
+      NOT building on it before they answer the outreach email.
+      GATED ON: THL's reply. (query + link-out
       lane only, no bulk ingest; harsh 429s — cache per lookup):
       Overlay/Library place names → places.kmaps.virginia.edu
       JSON (~64k places, Tibetan script + Wylie names).
