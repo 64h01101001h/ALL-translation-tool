@@ -7608,6 +7608,12 @@ public:
         row->addStretch();
         layout->addLayout(row);
         question_ = new QTextBrowser;
+        question_->setHtml(
+            "<i style='color:#8A8A8A'>Pick a drill mode and press "
+            "New drill. Every exercise is built from a real corpus "
+            "segment — the drill shows here, and every answer is "
+            "the master's own text (85 vocabulary items may "
+            "already be due if you have trained before).</i>");
         layout->addWidget(question_, 2);
         answerRow_ = new QWidget;
         answerRow_->setLayout(new QVBoxLayout);
@@ -9737,6 +9743,11 @@ public:
             "asianlegacylibrary.org/library</a>), or import your own "
             "materials. Double-click a text to open it in the Overlay.");
         libBanner->setWordWrap(true);
+        // a wrapping QLabel still reports its unwrapped width as
+        // minimum — with the wide tree beside it that forced the
+        // pane past the window edge and clipped the banner
+        // (audit 2026-08-12); letting it shrink engages the wrap
+        libBanner->setMinimumWidth(1);
         libBanner->setOpenExternalLinks(true);
         layout->addWidget(libBanner);
         auto* row = new QHBoxLayout;
@@ -9809,7 +9820,12 @@ public:
         tree_->setRootIndex(model_->index(libRoot_));
         tree_->setSortingEnabled(true);
         tree_->sortByColumn(0, Qt::AscendingOrder);
-        tree_->setColumnWidth(0, 260);
+        tree_->setColumnWidth(0, 340);
+        // Size and Type are dead weight in a tree of folders —
+        // give their width to the Name column (audit 2026-08-12);
+        // date stays (newest volumes matter)
+        tree_->setColumnHidden(1, true);   // Size
+        tree_->setColumnHidden(2, true);   // Type
         // remember which folders were open across restarts (Adam,
         // 2026-08-10): persist expanded paths, restore on load
         {
@@ -10454,15 +10470,42 @@ private:
                label.toHtmlEscaped() + "</a>";
     }
 
+    // recents show as one readable line each: the catalog's
+    // English title where it knows one, else the filename — the
+    // full path rides in the tooltip, not across eight wrapped
+    // lines of underlined link (design audit 2026-08-12)
+    QString recentLink(const QString& path) {
+        const QFileInfo fi(path);
+        QString label = englishTitle(fi.fileName());
+        if (label.isEmpty()) label = fi.fileName();
+        if (label.size() > 58) label = label.left(55) + "…";
+        return "<div style='margin:2px 0;white-space:nowrap'>"
+               "<a href='openfile:" +
+               anchorEnc(path) + "' title='" +
+               path.toHtmlEscaped() + "'>" +
+               label.toHtmlEscaped() + "</a></div>";
+    }
+
     void showRecents() {
         if (!progress_) return;
         auto rec = progress_->recentKeys("openfile", 10);
-        if (rec.empty()) return;
-        QString h = "<b>Recently opened</b><br>";
+        QString h = "<b>Recently opened</b>";
+        int shown = 0;
         for (const auto& r : rec) {
             const QString p = QString::fromStdString(r);
-            if (QFileInfo::exists(p)) h += fileLink(p, libRoot_) + "<br>";
+            if (QFileInfo::exists(p)) {
+                h += recentLink(p);
+                ++shown;
+            }
         }
+        if (!shown)
+            h += "<br><i style='color:#8A8A8A'>nothing opened "
+                 "yet</i>";
+        h += "<div style='margin-top:10px;color:#8A8A8A'><small>"
+             "Double-click any text in the tree to read it in the "
+             "Overlay; click a title above to return to it. The "
+             "panel shows a text's catalog card when you select "
+             "it.</small></div>";
         info_->setHtml(h);
     }
 
@@ -13779,6 +13822,11 @@ public:
             "Tibetan.");
         results_ = new QTextBrowser;
         results_->setOpenLinks(false);
+        results_->setHtml(
+            "<i style='color:#8A8A8A'>Corpus results appear here "
+            "as you write — the master's English beside the "
+            "Tibetan, with an <b>insert</b> link that places the "
+            "attested rendering at your cursor.</i>");
         sv->addWidget(query_);
         sv->addWidget(findB);
         sv->addWidget(results_, 1);

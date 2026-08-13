@@ -1025,3 +1025,10 @@ implementation is sidelined HERE from this date. What this means:
       Dropbox share link → Jigme draft placeholder; transcriber
       pilot go; joint T/K/F walkthrough; kamdir/prenasal Approval
       queue rulings; Jäschke 1881 archive.org download go-ahead.
+- [ ] **GLOSSARY BLOCKED — API credits exhausted** (2026-08-12
+      night): batch 5 400'd on every call ("credit balance too
+      low"). Adam: top up at console.anthropic.com → Plans &
+      Billing, then rerun `python3 tools/build_ai_glossary.py
+      --limit 1800` (resume-safe; BATCH=3 + max_tokens 8000 fix in
+      place — verify 8000 is accepted once credits return).
+      Current total: 1,395 entries.
