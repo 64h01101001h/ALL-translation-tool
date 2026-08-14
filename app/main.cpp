@@ -11560,6 +11560,14 @@ public:
         drBanner->setWordWrap(true);
         layout->addWidget(drBanner);
         stats_ = new QLabel;
+        auto* weakB = new QPushButton("My weak spots\u2026");
+        weakB->setToolTip(
+            "The full miss taxonomy: every wrong answer, filed "
+            "under the skill it reveals, with the drill that "
+            "trains it. Local to this machine.");
+        connect(weakB, &QPushButton::clicked,
+                [this] { showMissReport(); });
+        layout->addWidget(weakB);
         layout->addWidget(stats_);
         auto* row = new QHBoxLayout;
         mode_ = new QComboBox;
@@ -11684,6 +11692,119 @@ private:
             radios_.push_back(rb);
             answerRow_->layout()->addWidget(rb);
         }
+    }
+
+public:
+    // ---- pedagogy (6): the miss taxonomy, reported (roadmap
+    // item; Adam's translator-training programme). Every wrong
+    // drill answer is already recorded WITH the skill it
+    // reveals; this names the weak spots in plain language and
+    // says which drill trains each one. ----
+    static QString missReportHtml(
+        const std::vector<std::pair<std::string, long long>>&
+            misses,
+        long long drillsDone) {
+        struct Fam {
+            QString title, drill;
+            long long total = 0;
+            QStringList rows;
+        };
+        Fam fams[4] = {
+            {"PARTICLE FAMILIES",
+             "practice: the Particle drill", 0, {}},
+            {"CLOZE — SENTENCE ROLES",
+             "practice: the Cloze drill", 0, {}},
+            {"READING ORDER",
+             "practice: the Chunk-order drill", 0, {}},
+            {"VOCABULARY",
+             "practice: Vocabulary review (your deck resurfaces "
+             "these automatically)", 0, {}}};
+        for (const auto& [k, n] : misses) {
+            QString key = QString::fromStdString(k);
+            key.remove(0, 5);   // "miss:"
+            int fi = -1;
+            QString label;
+            if (key.startsWith("particle:")) {
+                fi = 0;
+                label = key.mid(9);
+                label.replace("-family", " family");
+            } else if (key.startsWith("cloze-role:")) {
+                fi = 1;
+                label = "the " + key.mid(11) + " role";
+            } else if (key.startsWith("order:")) {
+                fi = 2;
+                label = key.mid(6);
+            } else if (key.startsWith("vocab:")) {
+                fi = 3;
+                label = key.mid(6);
+            } else {
+                fi = 2;
+                label = key;
+            }
+            fams[fi].total += n;
+            fams[fi].rows << QString(
+                                 "<div style='margin-left:14px'>"
+                                 "%1 — missed ×%2</div>")
+                                 .arg(label.toHtmlEscaped())
+                                 .arg(n);
+        }
+        QString h;
+        h += "<div style='color:#9A7A33;font-size:11px;"
+             "letter-spacing:2px;font-weight:600'>WHERE YOU "
+             "ACTUALLY STRUGGLE</div>";
+        long long allMisses = 0;
+        for (const auto& f : fams) allMisses += f.total;
+        if (allMisses == 0) {
+            h += "<div style='margin-top:8px'>No recorded misses "
+                 "yet — the taxonomy builds itself as you drill. "
+                 "Wrong answers are never wasted here: each one "
+                 "is filed under the skill it reveals.</div>";
+            return h;
+        }
+        h += QString("<div style='margin:4px 0 10px 0'>%1 "
+                     "miss(es) across %2 drill(s) — every one "
+                     "filed under the skill it reveals.</div>")
+                 .arg(allMisses)
+                 .arg(drillsDone);
+        for (const auto& f : fams) {
+            if (f.total == 0) continue;
+            h += QString("<div style='color:#9A7A33;font-size:"
+                         "10px;letter-spacing:2px;font-weight:"
+                         "600;margin-top:10px'>%1 · %2 "
+                         "MISS(ES)</div>")
+                     .arg(f.title)
+                     .arg(f.total);
+            for (const QString& r : f.rows) h += r;
+            h += QString("<div style='margin-left:14px;color:"
+                         "#1E6B4E;font-size:12px'>%1</div>")
+                     .arg(f.drill);
+        }
+        h += "<div style='margin-top:12px;color:#9C948A;"
+             "font-size:11px'>Counts are your own local record "
+             "(progress.db) — nothing leaves this machine. The "
+             "grammar behind each skill is in Help: the manual's "
+             "Trainer and Drills chapters, and the Guidelines "
+             "chapters.</div>";
+        return h;
+    }
+
+private:
+    void showMissReport() {
+        if (!progress_) return;
+        auto* dlg = new QDialog(this);
+        dlg->setAttribute(Qt::WA_DeleteOnClose);
+        dlg->setWindowFlag(Qt::Window);
+        dlg->setWindowTitle(
+            "My weak spots — the miss taxonomy");
+        dlg->resize(520, 560);
+        auto* v = new QVBoxLayout(dlg);
+        auto* browser = new QTextBrowser;
+        browser->setHtml(missReportHtml(
+            progress_->topMisses(100),
+            progress_->stats((long long)time(nullptr))
+                .drills_done));
+        v->addWidget(browser, 1);
+        dlg->show();
     }
 
     void refreshStats() {
@@ -11950,6 +12071,10 @@ private:
             if (progress_ && pick >= 0) {
                 progress_->reviewWord(vocab_, pick == 0,
                                       (long long)time(nullptr));
+                if (pick != 0)
+                    progress_->recordDrill(
+                        "miss:vocab:" + vocab_, vocab_, false,
+                        (long long)time(nullptr));
                 h += pick == 0 ? "<small style='color:#3B7A3B'>scheduled "
                                  "further out</small>"
                                : "<small style='color:#B4540A'>will retry "
@@ -23499,6 +23624,29 @@ int main(int argc, char** argv) {
             log << QString("  [%1] Draft: house-style check "
                            "flags dashes, ranges, ampersand, "
                            "era, and the word-use list")
+                       .arg(ok ? "PASS" : "FAIL");
+            if (!ok) ++fails;
+        }
+        // Drills: pedagogy (6) — the miss-taxonomy report
+        // names families, counts, and the drill that trains
+        // each; honest when empty
+        {
+            const QString h = DrillsPane::missReportHtml(
+                {{"miss:particle:gi-family", 5},
+                 {"miss:cloze-role:agent", 3},
+                 {"miss:vocab:bsod nams", 2}},
+                20);
+            const QString e = DrillsPane::missReportHtml({}, 0);
+            const bool ok =
+                h.contains("PARTICLE FAMILIES") &&
+                h.contains("gi family") &&
+                h.contains("the agent role") &&
+                h.contains("bsod nams") &&
+                h.contains("Particle drill") &&
+                e.contains("No recorded misses");
+            log << QString("  [%1] Drills: miss-taxonomy report "
+                           "groups families, names skills, "
+                           "honest when empty")
                        .arg(ok ? "PASS" : "FAIL");
             if (!ok) ++fails;
         }

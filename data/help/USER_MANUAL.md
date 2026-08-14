@@ -2046,6 +2046,13 @@ master's, 6 when you want the full grammatical accounting.
 
 ## Drills
 
+**My weak spots…** — the miss taxonomy. Every wrong drill answer
+is filed under the skill it reveals — a particle family, a cloze
+sentence role, a reading-order step, a vocabulary item — and this
+report names them all, with counts and the drill that trains
+each. Wrong answers are never wasted here. The record is local
+(progress.db); nothing leaves your machine.
+
 *Learn → Drills. Exercises that write themselves from the corpus —
 every exercise comes from a real corpus segment, so every answer is
 Geshe Michael's own text. Engine guidance is labeled guidance.*
