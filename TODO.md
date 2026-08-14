@@ -728,7 +728,12 @@ implementation is sidelined HERE from this date. What this means:
       covers it, same as ChandraDas_Scan). The 1881 text is PD on
       archive.org → "Jäschke at-page" layer needs the PDF (ask
       Adam before the download) + index license or our own map.
-- [ ] **Das text**: PKTC license answer → else DSAL Chicago terms →
+- [ ] **Das text** (etext): PKTC license answer → else DSAL Chicago terms →
+      NOTE 2026-08-14: Das PAGE-SCAN lane upgraded to HEADWORD level —
+      Steinert granted his ChandraDas_Scan index by email 2026-08-13
+      (20,773 headwords banked w/ provenance + his '?' marks; ±page
+      caveat kept; thanks drafted r-1310423263851445693, which also
+      asks whether the grant extends to his Jäschke index).
       else the input-center OCR digitization project.
 - [ ] **Steinert per-dictionary license verification** queue:
       Hopkins family (UMA terms), ITLR, TibTermProject, Berzin;

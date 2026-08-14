@@ -258,7 +258,21 @@ static const TeachingMap* g_teachingTib = nullptr;
 static std::vector<std::pair<std::string, int>>* g_dasSections =
     nullptr;
 static QString g_dasPdfPath;
+// Steinert's Das headword index (permission granted by email,
+// 2026-08-13) — headword-level pages, his ±page caveat kept in
+// the "~p." label; onset sections remain the fallback
+static QHash<QString, int>* g_dasHeadwords = nullptr;
 static int dasPageFor(const std::string& wylie) {
+    if (g_dasHeadwords && !g_dasHeadwords->isEmpty()) {
+        QString w = QString::fromStdString(wylie).trimmed();
+        while (!w.isEmpty()) {
+            auto it = g_dasHeadwords->find(w);
+            if (it != g_dasHeadwords->end()) return it.value();
+            const int sp = w.lastIndexOf(' ');
+            if (sp < 0) break;
+            w = w.left(sp);   // longest-prefix headword
+        }
+    }
     if (!g_dasSections || g_dasSections->empty()) return -1;
     std::string syl = wylie.substr(0, wylie.find(' '));
     int best = -1;
@@ -19260,6 +19274,20 @@ int main(int argc, char** argv) {
             g_dasSections = &dasSections;
             g_dasPdfPath = root + "/data/das/das_1902_bookmarked.pdf";
         }
+        static QHash<QString, int> dasHeadwords;
+        QFile hf(root + "/data/extracted/das_headwords.tsv");
+        if (hf.open(QIODevice::ReadOnly)) {
+            while (!hf.atEnd()) {
+                const QByteArray ln = hf.readLine();
+                if (ln.startsWith('#')) continue;
+                const auto parts = ln.trimmed().split('\t');
+                if (parts.size() >= 2)
+                    dasHeadwords[QString::fromUtf8(parts[0])] =
+                        parts[1].toInt();
+            }
+        }
+        if (!dasHeadwords.isEmpty())
+            g_dasHeadwords = &dasHeadwords;
     }
     static std::vector<std::pair<std::string, int>> jaeSections;
     {
@@ -20402,6 +20430,12 @@ int main(int argc, char** argv) {
                                   jaePageFor("ka ba") &&
                               jaePageFor("sha ba") >
                                   jaePageFor("pha rol"))) &&
+                            (g_dasHeadwords == nullptr ||
+                             (dasPageFor("ka ba") ==
+                                  g_dasHeadwords->value("ka ba",
+                                                        -7) ||
+                              !g_dasHeadwords->contains(
+                                  "ka ba"))) &&
                             dasPageFor("khyab pa") > 0 &&
                             dasPageFor("khyab pa") >
                                 dasPageFor("ka ba");
