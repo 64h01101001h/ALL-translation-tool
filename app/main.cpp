@@ -92,6 +92,7 @@
 #include <QStandardPaths>
 #include <QTimer>
 #include <QPointer>
+#include <QTreeWidget>
 #include <QRawFont>
 #include <QTextLayout>
 #include <QGlyphRun>
@@ -2539,6 +2540,19 @@ public:
                                "card");
                 }
             }
+            {   // sa bcad: nested enumeration parses to the tree
+                input_->setPlainText(
+                    "'DIR LA GNYIS, DANG PO SPYI DON NI ZHES, "
+                    "GNYIS PA GZHUNG DON LA GSUM, DANG PO NI A, "
+                    "GNYIS PA NI B, GSUM PA NI C,");
+                const auto nn = extractSaBcad();
+                bool ok = nn.size() == 5 && nn[0].depth == 1 &&
+                          nn[1].depth == 1 && nn[2].depth == 2 &&
+                          nn[4].depth == 2 &&
+                          nn[1].label.contains("GZHUNG DON");
+                check(ok, "sa bcad: nested enumeration yields the "
+                          "expected 5-node tree");
+            }
             {
                 input_->setPlainText(
                     "@215A x\n@215B y\n@216A z\n@215A dup");
@@ -3022,6 +3036,15 @@ public:
 auto* secRev = new QLabel("<span style='color:#9A7A33;font-size:10px;letter-spacing:2px;font-weight:600'>REVIEW</span>");
         secRev->setContentsMargins(0, 8, 0, 0);
         ll->addWidget(secRev);
+        auto* sabcadB = new QPushButton("Outline (sa bcad)…");
+        sabcadB->setToolTip(
+            "The text's own structural outline, extracted from "
+            "its enumeration grammar (…la gnyis / dang po…). "
+            "Machine-derived and heuristic — headings jump the "
+            "document, and the scans follow.");
+        ll->addWidget(sabcadB);
+        connect(sabcadB, &QPushButton::clicked,
+                [this] { showSaBcad(); });
         spellToggle_ = new QCheckBox("Show spelling doubts");
         spellToggle_->setToolTip(
             "Open a small list of every syllable in this text that "
@@ -6512,6 +6535,162 @@ private:
         auto* browser = new QTextBrowser;
         browser->setHtml(html);
         v->addWidget(browser, 1);
+        dlg->show();
+    }
+
+    // ================= sa bcad outline extractor (pedagogy ④,
+    // 2026-08-14): a Tibetan text announces its own structure —
+    // "… la gnyis/gsum …" opens a division, "dang po/gnyis pa …"
+    // are its headers. v1 detects that enumeration grammar and
+    // builds the tree. Heuristic, machine-derived, labeled so;
+    // never claimed complete.
+    struct SaBcadNode {
+        int depth;
+        QString label;
+        int pos;        // character position in the document
+    };
+
+    static int saBcadCardinal(const QString& w) {
+        static const QMap<QString, int> C = {
+            {"GNYIS", 2}, {"GSUM", 3}, {"BZHI", 4}, {"LNGA", 5},
+            {"DRUG", 6},  {"BDUN", 7}, {"BRGYAD", 8},
+            {"DGU", 9},   {"BCU", 10}};
+        return C.value(w, 0);
+    }
+
+    static int saBcadOrdinal(const QStringList& t, int i) {
+        // returns the ordinal number if tokens at i start one
+        // (DANG PO · GNYIS PA · … · BCU PA), else 0
+        if (i + 1 >= t.size()) return 0;
+        if (t[i] == "DANG" && t[i + 1] == "PO") return 1;
+        static const QMap<QString, int> O = {
+            {"GNYIS", 2}, {"GSUM", 3}, {"BZHI", 4}, {"LNGA", 5},
+            {"DRUG", 6},  {"BDUN", 7}, {"BRGYAD", 8},
+            {"DGU", 9},   {"BCU", 10}};
+        const int n = O.value(t[i], 0);
+        if (n && t[i + 1] == "PA") return n;
+        return 0;
+    }
+
+    std::vector<SaBcadNode> extractSaBcad() const {
+        std::vector<SaBcadNode> out;
+        const QString all = input_->toPlainText();
+        // tokenize with positions
+        QStringList toks;
+        QVector<int> tpos;
+        QRegularExpression tk("[A-Za-z'+]+");
+        auto it = tk.globalMatch(all);
+        while (it.hasNext()) {
+            const auto m = it.next();
+            toks << m.captured(0).toUpper();
+            tpos << (int)m.capturedStart();
+        }
+        struct Ctx { int expected; int seen; };
+        std::vector<Ctx> stack;
+        auto labelFrom = [&](int i) {
+            QString lab;
+            int n = 0;
+            for (int j = i; j < toks.size() && n < 10; ++j, ++n) {
+                if (toks[j] == "NI") break;
+                lab += (lab.isEmpty() ? "" : " ") + toks[j];
+                const int end = tpos[j] + toks[j].size();
+                if (end < all.size() &&
+                    (all[end] == ',' || all[end] == '/'))
+                    break;
+            }
+            return lab;
+        };
+        for (int i = 0; i + 1 < toks.size(); ++i) {
+            // division announcement: "LA <card>" / "RNAM PA <card>"
+            int card = 0;
+            if (toks[i] == "LA")
+                card = saBcadCardinal(toks[i + 1]);
+            else if (toks[i] == "RNAM" && i + 2 < toks.size() &&
+                     toks[i + 1] == "PA")
+                card = saBcadCardinal(toks[i + 2]);
+            if (card >= 2) {
+                stack.push_back({card, 0});
+                continue;
+            }
+            const int ord = saBcadOrdinal(toks, i);
+            if (!ord) continue;
+            if (ord == 1) {
+                // DANG PO under the most recent unfilled context
+                while (!stack.empty() &&
+                       stack.back().seen >= stack.back().expected)
+                    stack.pop_back();
+                if (stack.empty()) continue;   // stray ordinal
+                stack.back().seen = 1;
+            } else {
+                // GNYIS PA … must continue an open context whose
+                // next expected child is exactly this number
+                while (!stack.empty() &&
+                       (stack.back().seen + 1 != ord ||
+                        stack.back().seen >= stack.back().expected))
+                    stack.pop_back();
+                if (stack.empty()) continue;
+                stack.back().seen = ord;
+            }
+            out.push_back({(int)stack.size(),
+                           QString("%1. %2")
+                               .arg(ord)
+                               .arg(labelFrom(i + 2)),
+                           tpos[i]});
+            i += 1;
+        }
+        return out;
+    }
+
+    void showSaBcad() {
+        const auto nodes = extractSaBcad();
+        if (nodes.empty()) {
+            QMessageBox::information(
+                this, "Outline (sa bcad)",
+                "No enumeration structure detected in this "
+                "document (the extractor reads the text's own "
+                "…la gnyis / dang po … grammar).");
+            return;
+        }
+        auto* dlg = new QDialog(this);
+        dlg->setAttribute(Qt::WA_DeleteOnClose);
+        dlg->setWindowFlag(Qt::Window);
+        dlg->setWindowTitle(
+            "Outline (sa bcad) — machine-derived from the "
+            "text's own enumerations; heuristic, never complete");
+        dlg->resize(520, 640);
+        auto* v = new QVBoxLayout(dlg);
+        auto* note = new QLabel(
+            "Click a heading to jump the document there (the "
+            "scan follow-along keeps pace).");
+        note->setWordWrap(true);
+        note->setMinimumWidth(1);
+        v->addWidget(note);
+        auto* tree = new QTreeWidget;
+        tree->setHeaderHidden(true);
+        std::vector<QTreeWidgetItem*> lastAt(64, nullptr);
+        for (const auto& n : nodes) {
+            auto* item =
+                (n.depth <= 1 || !lastAt[n.depth - 1])
+                    ? new QTreeWidgetItem(tree)
+                    : new QTreeWidgetItem(lastAt[n.depth - 1]);
+            item->setText(0, n.label);
+            item->setData(0, Qt::UserRole, n.pos);
+            lastAt[n.depth] = item;
+            for (size_t d = n.depth + 1; d < lastAt.size(); ++d)
+                lastAt[d] = nullptr;
+        }
+        tree->expandAll();
+        connect(tree, &QTreeWidget::itemClicked,
+                [this](QTreeWidgetItem* it, int) {
+                    const int pos =
+                        it->data(0, Qt::UserRole).toInt();
+                    QTextCursor c(input_->document());
+                    c.setPosition(pos);
+                    input_->setTextCursor(c);
+                    input_->ensureCursorVisible();
+                    input_->setFocus();
+                });
+        v->addWidget(tree, 1);
         dlg->show();
     }
 

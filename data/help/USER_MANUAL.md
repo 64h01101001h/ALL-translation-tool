@@ -400,6 +400,14 @@ never edits the texts itself. When the authority **DECLINES** one,
 the form has been ruled VALID, and the app stops doubting it —
 everywhere, for the whole team, from the next launch on.
 
+**Outline (sa bcad)…** — the text's own structural outline,
+extracted from its enumeration grammar (…*la gnyis* opens a
+division; *dang po*, *gnyis pa*… are its headings). The tree is
+machine-derived and heuristic — honestly incomplete where the
+text's phrasing departs from the classic formulas. Click any
+heading to jump the document there; the scan follow-along keeps
+pace, so outline → passage → carving is one click.
+
 **Teachings for this text…** (button). Press it with a document
 loaded and the app sweeps every term the text contains and reports
 where Geshe Michael taught each one — a dialog titled "Teachings
