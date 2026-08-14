@@ -32,6 +32,17 @@ implementation is sidelined HERE from this date. What this means:
 
 ## Waiting on Adam (prompt him when the task starts)
 
+- [ ] **SOURCE TRUST DIALOG WITH GESHE MICHAEL** (Adam, 2026-08-14,
+      all-caps priority: "which sources to trust over others and
+      why"). PREPARED: docs/standards/SOURCE_TRUST_HIERARCHY.md —
+      the tool's ACTUAL current five-tier ranking, every open
+      question enumerated (published-vs-spoken gloss precedence,
+      Tier-III ordering, strike-list, 'a-chung class, imperial-vs-
+      ACIP Sanskrit rules); ratified answers become STD-009 in his
+      own words, then the tool is audited against it. EMAIL DRAFT
+      r8445981399472347202 (needs GMR's address — same as the
+      transcription appeal). Folds in the LE'UR item above.
+
 - [ ] **DISK: approve the git history cleanup (~20GB reclaim) +
       review the full drive.** 2026-08-13 postmortem: presses had
       committed every DMG/build into git → .git = 21GB; ENOSPC
