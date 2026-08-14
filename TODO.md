@@ -1203,3 +1203,4 @@ implementation is sidelined HERE from this date. What this means:
       the MITRA pilot is FEASIBLE here (18GB weights ≈ ~9GB
       headroom-friendly at int8); the ~18GB download awaits
       Adam's go (and the Chodrak etext, its real workload).
+- [ ] Meter reader phase 2 (Adam 2026-08-14): group even-count song meters (mgur — 6/8 syllable) as blocks too; per-BLOCK statistics (how uniform is each run); possibly a Tengyur-wide meter census so the reader can say "this meter is rare/common in the canon".

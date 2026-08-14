@@ -409,6 +409,21 @@ keying slip and one from poetic license look identical to
 arithmetic, so the tool never decides which. Click any block or
 flagged line to jump there.
 
+**Prose & prayer reader (syllable counts)…** — the whole
+document, line by line, every line carrying its syllable count
+in a bracket at the left margin. This is the structural view:
+verse blocks appear grouped under their meter heading
+(**7-SYLLABLE VERSE**), on-meter counts show in green, an
+off-meter line shows its arithmetic in red (`8 ≠ 7`), and prose
+stretches are labeled and left plain with grey counts. The
+summary line at the top gives the shape of the text at a glance —
+how many lines, how many in verse, on which meters (7s and 9s
+dominate the Tengyur). Tap any line to jump to it in the
+document. The reader is **live**: keep it open while you edit and
+the counts re-tally as you type — watching the count is itself a
+way of learning the structure. Even-count song meters (mgur) are
+not yet grouped into blocks, but their counts still display.
+
 **Citations & quotations…** — the upfront citation work, done
 for you. The moment you open a text, the hint line tells you how
 many quotations it carries and how many cited sources resolved to

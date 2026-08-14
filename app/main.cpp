@@ -2556,6 +2556,24 @@ public:
                           "honesty note");
                 }
             }
+            {   // prose & prayer reader: verse grouped under its
+                // meter, prose plain, deviants marked
+                input_->setPlainText(
+                    "DANG PO BSHAD PA NI 'DI YIN TE,\n"
+                    "SEMS CAN KUN LA PHAN PA'I PHYIR,\n"
+                    "BYANG CHUB MCHOG TU SEMS BSKYED DO,\n"
+                    "SANGS RGYAS KUN GYI ZHING DU 'GRO,\n"
+                    "BDE BA CAN GYI ZHING MCHOG DER RO,\n"
+                    "DE NAS RGYAL PO CHEN PO DE DAG GIS BCOM "
+                    "LDAN 'DAS GA LA BA DER SONG NGO,");
+                const QString h = meterReaderHtml();
+                const bool ok =
+                    h.contains("7-SYLLABLE VERSE") &&
+                    h.contains("8 ≠ 7") &&
+                    h.contains(">PROSE<");
+                check(ok, "meter reader: verse grouped, deviant "
+                          "marked, prose labeled");
+            }
             {   // verse meter: a 7-syllable quatrain with one
                 // 8-syllable slip is detected and flagged
                 input_->setPlainText(
@@ -3117,6 +3135,18 @@ auto* secRev = new QLabel("<span style='color:#9A7A33;font-size:10px;letter-spac
         ll->addWidget(meterB);
         connect(meterB, &QPushButton::clicked,
                 [this] { showVerseMeter(); });
+        auto* readerB = new QPushButton(
+            "Prose && prayer reader (syllable counts)…");
+        readerB->setToolTip(
+            "The whole document line by line, every line carrying "
+            "its syllable count: verse blocks grouped under their "
+            "meter, off-meter lines marked, prose left plain. The "
+            "running counts ARE the structure — watch a Tengyur "
+            "text resolve into its 7s and 9s. Live: the reader "
+            "re-counts as the document changes.");
+        ll->addWidget(readerB);
+        connect(readerB, &QPushButton::clicked,
+                [this] { showMeterReader(); });
         spellToggle_ = new QCheckBox("Show spelling doubts");
         spellToggle_->setToolTip(
             "Open a small list of every syllable in this text that "
@@ -6908,6 +6938,154 @@ private:
                     input_->setFocus();
                 });
         v->addWidget(tree, 1);
+        dlg->show();
+    }
+
+    // ================= prose & prayer reader (Adam, 2026-08-14):
+    // "keep counting the syllables in each meter/verse as another
+    // way of tracking verse/meter and helping the user understand
+    // its structure." Every shad-delimited unit is shown WITH its
+    // count — verse blocks grouped under their meter, deviants
+    // marked, prose left plain. The counts are the structure.
+    QString meterReaderHtml() {
+        const auto units = meterUnits();
+        const auto blocks = meterBlocks(units);
+        const QString all = input_->toPlainText();
+        // unit index → (block index, deviant?)
+        std::map<int, std::pair<int, bool>> inBlock;
+        for (size_t bi = 0; bi < blocks.size(); ++bi) {
+            for (int u = blocks[bi].first; u <= blocks[bi].last;
+                 ++u)
+                inBlock[u] = {(int)bi, false};
+            for (int d : blocks[bi].deviants)
+                inBlock[d] = {(int)bi, true};
+        }
+        auto unitText = [&](int ui) {
+            const int p = units[ui].pos;
+            int e = p;
+            while (e < all.size() && all[e] != ',' &&
+                   all[e] != ';' && all[e] != '\n')
+                ++e;
+            return all.mid(p, e - p).simplified();
+        };
+        // summary: how much of the text is verse, on which meters
+        int verseLines = 0;
+        std::map<int, int> meterLines;
+        for (const auto& b : blocks) {
+            verseLines += b.last - b.first + 1;
+            meterLines[b.meter] += b.last - b.first + 1;
+        }
+        QString h;
+        h += "<div style='color:#9A7A33;font-size:11px;"
+             "letter-spacing:2px;font-weight:600'>THE SHAPE OF "
+             "THIS TEXT</div>";
+        QStringList ms;
+        for (auto& [m, c] : meterLines)
+            ms << QString("%1-syllable × %2 lines").arg(m).arg(c);
+        h += QString("<div style='margin:4px 0 12px 0'>%1 lines "
+                     "total · %2 in verse (%3) · the rest reads "
+                     "as prose</div>")
+                 .arg(units.size())
+                 .arg(verseLines)
+                 .arg(ms.isEmpty() ? "none detected"
+                                   : ms.join(" · "));
+        int lastBlock = -2;
+        for (size_t ui = 0; ui < units.size(); ++ui) {
+            const auto it = inBlock.find((int)ui);
+            const bool inV = it != inBlock.end();
+            const int bi = inV ? it->second.first : -1;
+            const bool dev = inV && it->second.second;
+            if (inV && bi != lastBlock) {
+                h += QString(
+                         "<div style='color:#9A7A33;font-size:"
+                         "10px;letter-spacing:2px;font-weight:"
+                         "600;margin:14px 0 2px 0'>"
+                         "%1-SYLLABLE VERSE</div>")
+                         .arg(blocks[bi].meter);
+                lastBlock = bi;
+            }
+            if (!inV && lastBlock != -1 && ui > 0 &&
+                lastBlock >= 0) {
+                h += "<div style='color:#6E675D;font-size:10px;"
+                     "letter-spacing:2px;margin:14px 0 2px 0'>"
+                     "PROSE</div>";
+                lastBlock = -1;
+            }
+            const QString chipColor =
+                dev ? "#B42A0A" : (inV ? "#1E6B4E" : "#6E675D");
+            const QString chip =
+                dev ? QString("%1 ≠ %2")
+                          .arg(units[ui].syls)
+                          .arg(blocks[bi].meter)
+                    : QString::number(units[ui].syls);
+            h += QString(
+                     "<div style='margin:1px 0'>"
+                     "<a href='jumppos:%1' style='text-decoration:"
+                     "none'><span style='display:inline-block;"
+                     "min-width:34px;color:%2;font-weight:600;"
+                     "font-size:12px'>[%3]</span>"
+                     "<span style='color:%4'>%5</span></a></div>")
+                     .arg(units[ui].pos)
+                     .arg(chipColor)
+                     .arg(chip)
+                     .arg(inV ? "#2B2620" : "#6E675D")
+                     .arg(unitText((int)ui).toHtmlEscaped());
+        }
+        h += "<div style='margin-top:14px;color:#9C948A;font-size:"
+             "11px'>Counts are per shad-delimited unit. Verse "
+             "detection looks for sustained odd counts of 5+ (the "
+             "classical meters — 7 and 9 dominate the Tengyur); "
+             "even-count song meters (mgur) are not yet grouped, "
+             "but their counts still show. A marked line is for "
+             "YOUR judgment: keying slip and poetic license are "
+             "identical arithmetic.</div>";
+        return h;
+    }
+
+    void showMeterReader() {
+        if (input_->toPlainText().trimmed().isEmpty()) {
+            QMessageBox::information(
+                this, "Prose & prayer reader",
+                "Load a document first — the reader counts what "
+                "is in the Overlay.");
+            return;
+        }
+        auto* dlg = new QDialog(this);
+        dlg->setAttribute(Qt::WA_DeleteOnClose);
+        dlg->setWindowFlag(Qt::Window);
+        dlg->setWindowTitle(
+            "Prose & prayer reader — every line with its "
+            "syllable count");
+        dlg->resize(680, 700);
+        auto* v = new QVBoxLayout(dlg);
+        auto* browser = new QTextBrowser;
+        browser->setOpenLinks(false);
+        browser->setHtml(meterReaderHtml());
+        connect(browser, &QTextBrowser::anchorClicked,
+                [this](const QUrl& u) {
+                    const QString sUrl = u.toString();
+                    if (!sUrl.startsWith("jumppos:")) return;
+                    QTextCursor c(input_->document());
+                    c.setPosition(sUrl.mid(8).toInt());
+                    input_->setTextCursor(c);
+                    input_->ensureCursorVisible();
+                    input_->setFocus();
+                });
+        v->addWidget(browser, 1);
+        // live: re-count when the document changes (debounced),
+        // for as long as the reader is open
+        auto* timer = new QTimer(dlg);
+        timer->setSingleShot(true);
+        timer->setInterval(700);
+        connect(timer, &QTimer::timeout, dlg,
+                [this, browser] {
+                    const int sc =
+                        browser->verticalScrollBar()->value();
+                    browser->setHtml(meterReaderHtml());
+                    browser->verticalScrollBar()->setValue(sc);
+                });
+        connect(input_, &QPlainTextEdit::textChanged, dlg,
+                [timer] { timer->start(); });
         dlg->show();
     }
 
