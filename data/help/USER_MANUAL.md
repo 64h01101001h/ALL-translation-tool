@@ -918,6 +918,15 @@ other: files only on the left, only on the right, and same-name
 files whose sizes differ. (This level only; subfolders are not
 descended.)
 
+### Sync folders
+
+**Sync folders…** synchronizes the two shown folders — built for
+double-keying partners exchanging work. Choose the direction
+(left → right, right → left, or two-way where the newer copy
+wins) and read the **full plan first**: every row says what would
+be copied and whether it replaces an older copy. Nothing moves
+until you press Apply, and sync **never deletes** anything.
+
 ### Commander keys (opt-in)
 
 The **Commander keys** toggle turns on the classic
@@ -955,10 +964,10 @@ jump back with one click, remove from the same menu. **Terminal**
 opens Terminal.app at the active panel's folder (also on every
 file's right-click menu).
 
-### ZIP archives
+### ZIP and TAR archives
 
-Double-click a .zip and it opens as a browsable list *without
-extracting anything*. From there: **Extract selected & open**
+Double-click a .zip, .tar, .tgz, or .tar.gz and it opens as a
+browsable list *without extracting anything*. From there: **Extract selected & open**
 (pulls just those entries to a scratch folder and opens them with
 the usual smart routing) or **Extract all into the other pane**
 (never overwrites existing files).

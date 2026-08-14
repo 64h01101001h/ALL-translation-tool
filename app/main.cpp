@@ -13818,6 +13818,15 @@ public:
                          "every selected filename, with a full "
                          "preview before anything is touched.");
         ops->addWidget(renB);
+        auto* syncB = new QPushButton("Sync folders…");
+        syncB->setToolTip(
+            "Synchronize the two shown folders — one-way or "
+            "two-way (newer wins). You see the full plan first; "
+            "nothing is copied until you Apply, and sync never "
+            "deletes anything.");
+        ops->addWidget(syncB);
+        connect(syncB, &QPushButton::clicked,
+                [this] { syncFolders(); });
         auto* cmpB = new QPushButton("Compare panes…");
         cmpB->setToolTip("Compare the two folders being shown: "
                          "what exists only left, only right, and "
@@ -14163,7 +14172,8 @@ private:
             g_openScanInInput(p);
             return;
         }
-        if (ext == "zip") {
+        if (ext == "zip" || ext == "tar" || ext == "tgz" ||
+            p.endsWith(".tar.gz", Qt::CaseInsensitive)) {
             browseArchive(p);
             return;
         }
@@ -14223,6 +14233,136 @@ private:
                     this, move ? "Move" : "Copy",
                     "Failed on " + QFileInfo(src).fileName());
         }
+    }
+
+public:
+    // folder synchronization (file-browser P2, ForkLift's model):
+    // the PLAN is computed as data first — what would be copied,
+    // which direction, and whether it overwrites — and shown for
+    // consent before a single byte moves. Deletions are never
+    // planned; sync only adds and updates.
+    struct SyncAct {
+        int dir = 0;         // 0 = left→right, 1 = right→left
+        QString rel;         // relative path
+        bool overwrite = false;   // updates an older existing file
+    };
+    // maps rel-path → (size, mtime-secs); mode 0 L→R, 1 R→L,
+    // 2 two-way (newer wins)
+    static std::vector<SyncAct> computeSyncPlan(
+        const QMap<QString, QPair<qint64, qint64>>& l,
+        const QMap<QString, QPair<qint64, qint64>>& r, int mode) {
+        std::vector<SyncAct> plan;
+        auto oneWay = [&](const auto& src, const auto& dst,
+                          int dir) {
+            for (auto it = src.begin(); it != src.end(); ++it) {
+                const auto jt = dst.find(it.key());
+                if (jt == dst.end())
+                    plan.push_back({dir, it.key(), false});
+                else if (it.value() != jt.value() &&
+                         it.value().second > jt.value().second)
+                    plan.push_back({dir, it.key(), true});
+            }
+        };
+        if (mode == 0) oneWay(l, r, 0);
+        else if (mode == 1) oneWay(r, l, 1);
+        else {
+            oneWay(l, r, 0);
+            oneWay(r, l, 1);
+        }
+        return plan;
+    }
+
+private:
+    static void collectFiles(
+        const QString& base, const QString& sub,
+        QMap<QString, QPair<qint64, qint64>>& out) {
+        QDir d(base + (sub.isEmpty() ? "" : "/" + sub));
+        for (const QFileInfo& e : d.entryInfoList(
+                 QDir::AllEntries | QDir::NoDotAndDotDot)) {
+            const QString rel =
+                (sub.isEmpty() ? "" : sub + "/") + e.fileName();
+            if (e.isDir())
+                collectFiles(base, rel, out);
+            else
+                out[rel] = {e.size(),
+                            e.lastModified().toSecsSinceEpoch()};
+        }
+    }
+
+    void syncFolders() {
+        const QString L = curPath_[0], R = curPath_[1];
+        auto* dlg = new QDialog(this);
+        dlg->setAttribute(Qt::WA_DeleteOnClose);
+        dlg->setWindowFlag(Qt::Window);
+        dlg->setWindowTitle("Synchronize folders — preview first, "
+                            "nothing moves until Apply");
+        dlg->resize(640, 560);
+        auto* v = new QVBoxLayout(dlg);
+        v->addWidget(new QLabel(
+            QString("LEFT:  %1\nRIGHT: %2").arg(L).arg(R)));
+        auto* mode = new QComboBox;
+        mode->addItems({"left → right (add + update newer)",
+                        "right → left (add + update newer)",
+                        "two-way (add both ways; newer wins)"});
+        v->addWidget(mode);
+        auto* list = new QListWidget;
+        v->addWidget(list, 1);
+        auto* note = new QLabel(
+            "Sync never deletes. \u201cupdate\u201d overwrites "
+            "the OLDER copy with the newer one \u2014 those rows "
+            "are marked.");
+        note->setWordWrap(true);
+        v->addWidget(note);
+        auto* applyB = new QPushButton("Apply this plan");
+        v->addWidget(applyB);
+        auto plan = std::make_shared<std::vector<SyncAct>>();
+        auto refresh = [this, L, R, mode, list, plan] {
+            QMap<QString, QPair<qint64, qint64>> lm, rm;
+            collectFiles(L, "", lm);
+            collectFiles(R, "", rm);
+            *plan = computeSyncPlan(lm, rm,
+                                    mode->currentIndex());
+            list->clear();
+            for (const auto& a : *plan)
+                list->addItem(
+                    QString("%1  %2%3")
+                        .arg(a.dir == 0 ? "\u2192" : "\u2190")
+                        .arg(a.rel)
+                        .arg(a.overwrite
+                                 ? "   (update \u2014 replaces "
+                                   "the older copy)"
+                                 : "   (new)"));
+            if (plan->empty())
+                list->addItem(
+                    "Nothing to do \u2014 the folders already "
+                    "agree.");
+        };
+        connect(mode, &QComboBox::currentIndexChanged,
+                refresh);
+        refresh();
+        connect(applyB, &QPushButton::clicked,
+                [this, L, R, plan, dlg] {
+                    int done = 0, failed = 0;
+                    for (const auto& a : *plan) {
+                        const QString src =
+                            (a.dir == 0 ? L : R) + "/" + a.rel;
+                        const QString dst =
+                            (a.dir == 0 ? R : L) + "/" + a.rel;
+                        QDir().mkpath(QFileInfo(dst).path());
+                        if (a.overwrite) QFile::remove(dst);
+                        if (QFile::copy(src, dst))
+                            ++done;
+                        else
+                            ++failed;
+                    }
+                    QMessageBox::information(
+                        this, "Synchronize",
+                        QString("%1 file(s) copied, %2 failed.")
+                            .arg(done)
+                            .arg(failed));
+                    dlg->close();
+                });
+        dlg->show();
     }
 
     void quickSelect() {
@@ -14418,9 +14558,16 @@ private:
     }
 
     void browseArchive(const QString& p) {
+        const bool tar =
+            p.endsWith(".tar", Qt::CaseInsensitive) ||
+            p.endsWith(".tgz", Qt::CaseInsensitive) ||
+            p.endsWith(".tar.gz", Qt::CaseInsensitive);
         QProcess pr;
-        pr.start("/usr/bin/zipinfo", {"-1", p});
-        pr.waitForFinished(8000);
+        if (tar)
+            pr.start("/usr/bin/tar", {"-tf", p});
+        else
+            pr.start("/usr/bin/zipinfo", {"-1", p});
+        pr.waitForFinished(15000);
         const QStringList entries =
             QString::fromUtf8(pr.readAllStandardOutput())
                 .split('\n', Qt::SkipEmptyParts);
@@ -14447,24 +14594,38 @@ private:
         row->addWidget(allB);
         row->addStretch(1);
         v->addLayout(row);
-        connect(openB, &QPushButton::clicked, [this, p, list] {
+        const bool isTar =
+            p.endsWith(".tar", Qt::CaseInsensitive) ||
+            p.endsWith(".tgz", Qt::CaseInsensitive) ||
+            p.endsWith(".tar.gz", Qt::CaseInsensitive);
+        connect(openB, &QPushButton::clicked,
+                [this, p, list, isTar] {
             const QString tmp =
                 QDir::tempPath() + "/all_zip_view";
             QDir().mkpath(tmp);
             for (auto* it : list->selectedItems()) {
                 QProcess x;
-                x.start("/usr/bin/unzip",
-                        {"-o", "-d", tmp, p, it->text()});
+                if (isTar)
+                    x.start("/usr/bin/tar",
+                            {"-xf", p, "-C", tmp, it->text()});
+                else
+                    x.start("/usr/bin/unzip",
+                            {"-o", "-d", tmp, p, it->text()});
                 x.waitForFinished(15000);
                 const QString out = tmp + "/" + it->text();
                 if (QFile::exists(out)) openPath(out);
             }
         });
-        connect(allB, &QPushButton::clicked, [this, p, dlg] {
+        connect(allB, &QPushButton::clicked,
+                [this, p, dlg, isTar] {
             const QString dst = curPath_[1 - active_];
             QProcess x;
-            x.start("/usr/bin/unzip", {"-n", "-d", dst, p});
-            x.waitForFinished(120000);   // -n: never overwrite
+            if (isTar)
+                x.start("/usr/bin/tar",
+                        {"-xkf", p, "-C", dst});   // -k: keep
+            else
+                x.start("/usr/bin/unzip", {"-n", "-d", dst, p});
+            x.waitForFinished(120000);   // never overwrite
             QMessageBox::information(
                 this, "Extract",
                 "Extracted into " + dst +
@@ -22494,6 +22655,38 @@ int main(int argc, char** argv) {
             QFile::remove(probe);
             log << QString("  [%1] Files: Drop Stack add persists to "
                            "settings (shelf survives restart)")
+                       .arg(ok ? "PASS" : "FAIL");
+            if (!ok) ++fails;
+        }
+        // Files: sync planning — adds both ways, newer wins,
+        // never deletes
+        {
+            QMap<QString, QPair<qint64, qint64>> l, r;
+            l["a.txt"] = {10, 100};              // only left
+            r["b.txt"] = {20, 200};              // only right
+            l["c.txt"] = {30, 300};              // conflict:
+            r["c.txt"] = {31, 400};              // right newer
+            const auto plan =
+                FilesPane::computeSyncPlan(l, r, 2);
+            int addLR = 0, addRL = 0, updRL = 0, updLR = 0;
+            for (const auto& a : plan) {
+                if (a.rel == "a.txt" && a.dir == 0 &&
+                    !a.overwrite)
+                    ++addLR;
+                if (a.rel == "b.txt" && a.dir == 1 &&
+                    !a.overwrite)
+                    ++addRL;
+                if (a.rel == "c.txt" && a.dir == 1 &&
+                    a.overwrite)
+                    ++updRL;
+                if (a.rel == "c.txt" && a.dir == 0) ++updLR;
+            }
+            const bool ok = plan.size() == 3 && addLR == 1 &&
+                            addRL == 1 && updRL == 1 &&
+                            updLR == 0;
+            log << QString("  [%1] Files: two-way sync plan — "
+                           "adds both ways, newer wins, never "
+                           "deletes")
                        .arg(ok ? "PASS" : "FAIL");
             if (!ok) ++fails;
         }

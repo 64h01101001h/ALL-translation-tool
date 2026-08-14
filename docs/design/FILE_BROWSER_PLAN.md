@@ -123,9 +123,13 @@ browse *a canon*.
   2026-08-14:* workspaces (named layouts, both panes' tabs),
   ⌘K Hunt file targets (Library filenames answer in the
   palette; Enter opens with smart routing), Finder tags shown
-  read-only in the context menu. *Remaining in P2:* true folder
-  synchronization, share sheet, archive formats beyond ZIP,
-  tag WRITING (Finder stays the editor for now).
+  read-only in the context menu. *Third P2 tranche
+  shipped 2026-08-14:* folder synchronization (1-way/2-way
+  newer-wins; plan-preview-then-Apply; never deletes;
+  computeSyncPlan selftested) and tar/tgz browsing (tar -tf
+  list, -xkf never-overwrite extract). *Remaining in P2:* share
+  sheet (needs ObjC bridge), 7z (needs p7zip dep), tag WRITING
+  (Finder stays the editor for now). P2 otherwise COMPLETE.
 - **P3: remote** — SFTP/FTP/WebDAV connections, transfer queue,
   activity/log, remote editing.
 - **P4: long tail** — S3, embedded terminal, hex viewer.
