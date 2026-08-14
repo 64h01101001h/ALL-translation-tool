@@ -76,3 +76,46 @@ Sources: Unicode core spec ch. 13 (Tibetan), unicode.org;
 BabelStone Tibetan font page, babelstone.co.uk; Digital Tibetan
 font survey, digitaltibetan.github.io; THL Extended Wylie scheme,
 texts.mandala.library.virginia.edu.
+
+
+---
+
+## Addendum (same day): the programme, prior art, and the census
+
+**Prior art — the problem has a 1,200-year literature.** The
+sgra sbyor bam po gnyis pa (c. 783 CE, Trisong Detsen's decree) is
+the imperial standard for rendering Sanskrit — sutra, vinaya,
+abhidharma, **and mantra/dhāraṇī** — in Tibetan, alongside the
+Mahāvyutpatti (which we already ship as a lookup layer). Modern
+algorithmic treatments: THL's EWTS Sanskrit section (the
+transliteration standard our engines target) and Andrew West's
+attested-stack inventories behind BabelStone Tibetan (non-standard
+stack registry, Unicode-list discussions of Sanskrit conjuncts).
+Verdict: we are NOT first — the algorithm exists in layers
+(imperial rules → EWTS → Unicode ch.13 stacking); our job is
+faithful implementation plus an attested exceptions list.
+
+**The running list Adam asked for now exists — empirically.**
+`tools/harvest_sanskrit_clusters.py` swept all 8,986 library files:
+**82,834 distinct Sanskrit-flavored syllables, 9.66M occurrences**;
+each converted through the canonical chain and classified
+(data/extracted/sanskrit_cluster_census.tsv). Flag classes by
+occurrence:
+
+| class | distinct | occurrences | verdict |
+|---|---|---|---|
+| V-wasur-unmapped | 7,019 | 177,330 | THE fix: ACIP V = wa-zur; breaks everyday Tibetan (GRVA 19k, ZHVA, RTZVA, DVAGS…) AND all mantra sva/tva/rva |
+| visarga ':' unmapped | 8,888 | 56,023 | ACIP ':' → EWTS H (ཿ) |
+| '%' candrabindu etc. | (in other) | ~1,250+ | H'U% class → U+0F83 ྃ |
+| A'A long vowel | 20 | 28 | merge to ཨཱ |
+| x-mark | 687 | 20,098 | ACIP unclear-mark convention — pass-through policy needed |
+| noise (RTF/English) | ~15k | ~110k | some library files are RTF with markup; English notes inside ACIP files — census filter classes, not engine bugs |
+
+**Priority order for the canonical-engine fixes (data project):**
+1. V → w (wasur) — 177k occurrences, Tibetan and Sanskrit alike;
+2. ':' → H (visarga) — 56k;
+3. '%' → candrabindu ྃ / '#' per the ACIP Sanskrit code chart;
+4. A'A → A (long ā).
+All fixes go into hgm_tools/ewts engines with battery additions,
+then re-port to allcore; the census rerun + `--sanskritcheck` are
+the acceptance gates.
