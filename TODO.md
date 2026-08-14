@@ -118,7 +118,10 @@ implementation is sidelined HERE from this date. What this means:
       tier = published + GMR-approved ONLY, regenerated per release via
       tools/build_main_apparatus.py); pending queue in the Draft pane
       (Propose footnote — candidates clearly PENDING, never mixed in).
-      — REMAINING: rerun the three apparatus tools per new release;
+      — RERUN 2026-08-14: build_main_apparatus.py against the
+        current release — output unchanged (344/138; v27.2 still
+        current, so nothing new to fold). Next rerun at the next
+        release. Original: rerun the three apparatus tools per new release;
       confirm STD-008 in GMR's own words for the record.
       — dedupe/merge RESOLVED BY MEASUREMENT 2026-08-13: zero
       verbatim lemma+text duplicates exist across the 2,234 notes;
@@ -169,6 +172,10 @@ implementation is sidelined HERE from this date. What this means:
       link from ACIP number, pending-publication label). REMAINING:
       auto-fill from the Master Catalog title pairs when uploaded;
       other already-composed collections as Adam supplies them.
+      TITLE AUTO-FILL SHIPPED 2026-08-14: the compose dialog now
+      falls back to catalog_titles.json (v29-31 waves + the ACIP
+      catalog's own English titles via Élie's CSV) when the works
+      record lacks an English title.
 
 - [x] **Three new GMR translation volumes** — received readable copies
       2026-08-06 and staged with a provenance/ingestion README at
@@ -762,7 +769,7 @@ implementation is sidelined HERE from this date. What this means:
       (traditional 42×9 / wide / A4; double-rule frames; rotated
       Tibetan folio numerals; battery-proven script chain; optional
       GMR-phonetics interlinear; selftest writes+verifies a PDF).
-- [ ] **PECHA MAKER → TRUE PRODUCTION TOOL** (Adam, 2026-08-12:
+- [~] **PECHA MAKER → TRUE PRODUCTION TOOL** — 2026-08-13 additions: verse lineation; MEASURED woodblock preset (real-print geometry, 8 lines/side); 54-syl/line authentic type autofit (47,728 measured eKangyur lines); batch folder→PDFs. Remaining v3: dbu-khyud/double-shad conventions, eyeball QA vs prints, Sungbum-preset budget via OCR stats. (Adam, 2026-08-12:
       "super rudimentary as of now… focus on getting it ready for
       full production and deployment").
       **v2 TRANCHE SHIPPED 2026-08-12:** translation interlinear

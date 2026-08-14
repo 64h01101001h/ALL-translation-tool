@@ -12289,10 +12289,34 @@ public:
         QRegularExpression re("^([A-Za-z]+)0*(\\d+)");
         const auto m = re.match(ac->text().trimmed());
         if (!m.hasMatch()) return;
-        const auto w = worksDoc_[m.captured(1).toUpper() + m.captured(2)]
-                           .toObject();
+        const QString core =
+            m.captured(1).toUpper() + m.captured(2);
+        const auto w = worksDoc_[core].toObject();
+        // published catalog English titles (v29-31 waves + the
+        // ACIP catalog's own titles via Élie's CSV) — the compose
+        // dialog's title auto-fill source of last resort
+        static QMap<QString, QString> catTitles;
+        static bool ctTried = false;
+        if (!ctTried) {
+            ctTried = true;
+            QFile f(root_ +
+                    "/data/extracted/catalog_titles.json");
+            if (f.open(QIODevice::ReadOnly)) {
+                const auto o =
+                    QJsonDocument::fromJson(f.readAll()).object();
+                for (auto it = o.begin(); it != o.end(); ++it)
+                    if (it.key() != "meta")
+                        catTitles[it.key()] =
+                            it.value().toString();
+            }
+        }
         if (w.isEmpty()) {
-            ac->setToolTip("no catalog record for this number");
+            if (et->text().isEmpty() &&
+                catTitles.contains(core))
+                et->setText(catTitles.value(core));
+            else
+                ac->setToolTip(
+                    "no catalog record for this number");
             return;
         }
         (void)ep;
@@ -12305,6 +12329,8 @@ public:
             au->setText(toWylie(w["author"]));
         if (dt->text().isEmpty()) dt->setText(w["dates"].toString());
         if (et->text().isEmpty()) et->setText(w["eng"].toString());
+        if (et->text().isEmpty() && catTitles.contains(core))
+            et->setText(catTitles.value(core));
         if (tt->text().isEmpty() && !w["tib"].toString().isEmpty())
             tt->setText(toWylie(w["tib"]));
     }
