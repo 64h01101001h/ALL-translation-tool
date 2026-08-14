@@ -18795,6 +18795,44 @@ int main(int argc, char** argv) {
         }
         printf("sanskritcheck: %d missing-glyph case(s) across %d "
                "font(s)\n", missing, (int)fams.size());
+        // --png <path>: a visual render sheet — glyph indexes catch
+        // tofu, only eyes catch MIS-STACKING (Adam's screenshot,
+        // 2026-08-13: a chat font mangled rkSya; the sheet proves
+        // what OUR bundled font actually draws)
+        const int pngIx = cliArgs.indexOf("--png");
+        if (pngIx >= 0 && pngIx + 1 < cliArgs.size()) {
+            const int n = (int)(sizeof(tests) / sizeof(tests[0]));
+            const int rowH = 92, w = 900;
+            QImage img(w, rowH * n + 60,
+                       QImage::Format_ARGB32_Premultiplied);
+            img.fill(Qt::white);
+            QPainter p(&img);
+            QFont tib("Noto Serif Tibetan");
+            tib.setPointSize(40);
+            QFont lab("Palatino");
+            lab.setPointSize(13);
+            p.setPen(Qt::black);
+            p.setFont(lab);
+            p.drawText(20, 34,
+                       "Tibetanized-Sanskrit render sheet — "
+                       "bundled Noto Serif Tibetan @40pt");
+            for (int i = 0; i < n; ++i) {
+                const int y = 60 + i * rowH;
+                p.setPen(QColor(0xEE, 0xE6, 0xD8));
+                p.drawLine(0, y, w, y);
+                p.setPen(QColor(0x88, 0x80, 0x74));
+                p.setFont(lab);
+                p.drawText(20, y + 30, QString::fromUtf8(
+                                           tests[i].label));
+                p.setPen(Qt::black);
+                p.setFont(tib);
+                p.drawText(320, y + rowH - 26, tests[i].uni);
+            }
+            p.end();
+            img.save(cliArgs[pngIx + 1]);
+            printf("render sheet -> %s\n",
+                   cliArgs[pngIx + 1].toUtf8().constData());
+        }
         return missing == 0 ? 0 : 1;
     }
     const bool selfTestMode = cliArgs.contains("--selftest");
