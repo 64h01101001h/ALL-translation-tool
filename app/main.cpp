@@ -2619,6 +2619,38 @@ public:
                 check(ok, "meter reader: verse grouped, deviant "
                           "marked, prose labeled");
             }
+            {   // classical typography rules flag the four
+                // violation classes and pass clean text
+                const QString bad = QString::fromUtf8(
+                    "དག། ཨཱཿ་ ཡིན།། ང་།");
+                const auto fs =
+                    OverlayPane::typographyFindings(bad);
+                int kinds = 0;
+                bool kaga = false, visT = false, dbl = false,
+                     ngaT = false;
+                for (const auto& f : fs) {
+                    if (f.second.contains(QString::fromUtf8(
+                            "bare ཀ/ག")))
+                        kaga = true;
+                    if (f.second.contains("visarga")) visT = true;
+                    if (f.second.contains("solid")) dbl = true;
+                    if (f.second.contains("NON-breaking"))
+                        ngaT = true;
+                }
+                kinds = kaga + visT + dbl + ngaT;
+                const auto clean =
+                    OverlayPane::typographyFindings(
+                        QString::fromUtf8("བསོད་ནམས་ཀྱི། "));
+                const QString prot =
+                    OverlayPane::pechaBreakProtect(
+                        QString::fromUtf8("ཡིན། ། ང་།"));
+                check(kinds == 4 && clean.empty() &&
+                          prot.contains(QChar(0x00A0)) &&
+                          prot.contains(QChar(0x0F0C)),
+                      "typography: four classical rules flagged, "
+                      "clean text passes, pecha break "
+                      "protection applied");
+            }
             {   // pecha shad convention: stanza close normalized
                 // to ༎ only where a shad exists; doubles kept
                 const QString a = OverlayPane::stanzaShad(
@@ -3218,6 +3250,18 @@ auto* secRev = new QLabel("<span style='color:#9A7A33;font-size:10px;letter-spac
         ll->addWidget(readerB);
         connect(readerB, &QPushButton::clicked,
                 [this] { showMeterReader(); });
+        auto* typoB = new QPushButton(
+            "Typography check (classical rules)\u2026");
+        typoB->setToolTip(
+            "Check the document's generated Tibetan against the "
+            "classical typography rules (W3C Tibetan Layout "
+            "Requirements digest): shad after bare ka/ga, tsheg "
+            "after visarga, solid double shads, breaking tsheg "
+            "in \u0F44\u0F0B\u0F0D. Flags only — the text is "
+            "never edited.");
+        ll->addWidget(typoB);
+        connect(typoB, &QPushButton::clicked,
+                [this] { showTypographyCheck(); });
         spellToggle_ = new QCheckBox("Show spelling doubts");
         spellToggle_->setToolTip(
             "Open a small list of every syllable in this text that "
@@ -7169,6 +7213,52 @@ private:
         return h;
     }
 
+    void showTypographyCheck() {
+        const std::string src =
+            input_->toPlainText().toStdString();
+        if (src.empty()) {
+            QMessageBox::information(
+                this, "Typography check",
+                "Load a document first.");
+            return;
+        }
+        const auto res = allcore::exportTibetanUnicode(src);
+        const QString u = QString::fromStdString(res.unicode);
+        const auto fs = typographyFindings(u);
+        auto* dlg = new QDialog(this);
+        dlg->setAttribute(Qt::WA_DeleteOnClose);
+        dlg->setWindowFlag(Qt::Window);
+        dlg->setWindowTitle(
+            QString("Typography check — %1 finding(s) "
+                    "(classical rules; flags, never edits)")
+                .arg(fs.size()));
+        dlg->resize(600, 520);
+        auto* v = new QVBoxLayout(dlg);
+        auto* list = new QListWidget;
+        for (const auto& f : fs) {
+            const int a = qMax(0, f.first - 8);
+            list->addItem(
+                QString::fromUtf8("\u2026") +
+                u.mid(a, 18).simplified() +
+                QString::fromUtf8("\u2026   \u2014 ") +
+                f.second);
+        }
+        if (fs.empty())
+            list->addItem(
+                "No classical-typography findings in the "
+                "generated Tibetan.");
+        v->addWidget(list, 1);
+        auto* note = new QLabel(
+            "Rules from the W3C Tibetan Layout Requirements "
+            "(via DigitalTibetan): the pecha exporter already "
+            "protects \u0F0D \u0F0D pairs and "
+            "\u0F44\u0F0B\u0F0D from bad line breaks at "
+            "render time. Your source text is never modified.");
+        note->setWordWrap(true);
+        v->addWidget(note);
+        dlg->show();
+    }
+
     void showMeterReader() {
         if (input_->toPlainText().trimmed().isEmpty()) {
             QMessageBox::information(
@@ -7868,6 +7958,61 @@ public:
     // office-printer imposition, and an English interlinear that
     // appears ONLY where the corpus attests the exact segment
     // (rule 1: matched, never composed). ------------------------
+    // ================= classical typography rules (DigitalTibetan
+    // integration P1 — digest of the W3C Tibetan Layout
+    // Requirements): flags only, never auto-fixes. =================
+    static std::vector<QPair<int, QString>> typographyFindings(
+        const QString& u) {
+        std::vector<QPair<int, QString>> out;
+        const QChar tsheg(0x0F0B), ntsheg(0x0F0C), shad(0x0F0D),
+            ka(0x0F40), ga(0x0F42), nga(0x0F44), vis(0x0F7F);
+        for (int i = 0; i + 1 < u.size(); ++i) {
+            const QChar a = u[i], b = u[i + 1];
+            if ((a == ka || a == ga) && b == shad)
+                out.push_back(
+                    {i, QString::fromUtf8(
+                            "shad after bare ཀ/ག — classical "
+                            "usage drops it (གི, not གི།)")});
+            if (a == vis && (b == tsheg || b == ntsheg))
+                out.push_back(
+                    {i, QString::fromUtf8(
+                            "tsheg after visarga ཿ — none is "
+                            "written (ཨཱཿཧཱུཾ)")});
+            if (a == shad && b == shad)
+                out.push_back(
+                    {i, QString::fromUtf8(
+                            "double shad written solid །། — the "
+                            "pair is spaced ། ། (non-breaking "
+                            "space)")});
+            if (a == nga && b == tsheg && i + 2 < u.size() &&
+                u[i + 2] == shad)
+                out.push_back(
+                    {i, QString::fromUtf8(
+                            "ང་། — this tsheg is the NON-breaking "
+                            "one (U+0F0C) in classical "
+                            "typography")});
+        }
+        return out;
+    }
+
+    // display-layer break protection for the pecha exporter: the
+    // two sequences Qt/ICU may otherwise break — never applied to
+    // stored text, only to the rendered page
+    static QString pechaBreakProtect(QString t) {
+        t.replace(QString::fromUtf8("། །"),
+                  QString::fromUtf8("།\u00A0།"));
+        QString ngaFix;
+        ngaFix += QChar(0x0F44);
+        ngaFix += QChar(0x0F0C);
+        ngaFix += QChar(0x0F0D);
+        QString ngaBad;
+        ngaBad += QChar(0x0F44);
+        ngaBad += QChar(0x0F0B);
+        ngaBad += QChar(0x0F0D);
+        t.replace(ngaBad, ngaFix);
+        return t;
+    }
+
     // classical shad convention: a stanza's last line closes with
     // the double shad ༎. Applied only where the poet already wrote
     // a shad — punctuation is normalized, never invented.
@@ -8031,6 +8176,7 @@ public:
         text.replace('\n', ' ');
         text = text.simplified();
         if (text.isEmpty()) return 0;
+        text = pechaBreakProtect(text);   // classical break rules
         const QString yigMgo = QString::fromUtf8("༄༅། །");
 
         // folio sides are recorded as pictures at native size, so
@@ -8261,6 +8407,7 @@ public:
             // a blank source line becomes a stanza gap
             QString vtext = QString::fromStdString(res.unicode);
             vtext.replace(marker, " ");
+            vtext = pechaBreakProtect(vtext);
             const QStringList vls = vtext.split('\n');
             bool first = true;
             for (int li = 0; li < vls.size(); ++li) {

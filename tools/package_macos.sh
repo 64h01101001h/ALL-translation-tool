@@ -181,6 +181,27 @@ fi
 cp "$ROOT/docs/distribution/OPEN_SOURCE_NOTICES.md" \
    "$STAGE/OPEN_SOURCE_NOTICES.md"
 
+echo "== 6c. install to /Applications (the desktop copy) =="
+# THE step that keeps Adam's running app current — it was lost in
+# the 2026-08-13 rewrite, and every press until 2026-08-14 built a
+# fresh DMG while the desktop kept running the old install.
+INSTALL="/Applications/ALL Translation Tool"
+mkdir -p "$INSTALL"
+rsync -a --delete "$STAGE/$APPNAME.app/" "$INSTALL/$APPNAME.app/"
+# data: add/update shipped files, NEVER delete user materials
+rsync -a "$STAGE/ALL Tool Data/" "$INSTALL/ALL Tool Data/"
+cp "$STAGE/README.txt" "$STAGE/OPEN_SOURCE_NOTICES.md" "$INSTALL/" \
+   2>/dev/null || true
+# verify: the installed binary must BE the staged binary
+if cmp -s "$STAGE/$APPNAME.app/Contents/MacOS/ALLTranslationTool" \
+          "$INSTALL/$APPNAME.app/Contents/MacOS/ALLTranslationTool"; then
+  echo "   installed binary == staged binary (byte-identical)"
+else
+  echo "   ERROR: installed binary differs from the staged build!"
+  exit 1
+fi
+echo "   installed: $INSTALL/$APPNAME.app ($(date))"
+
 echo "== 7. DMG =="
 mkdir -p "$DIST"
 DMG="$DIST/ALL-Translation-Tool-$VERSION.dmg"

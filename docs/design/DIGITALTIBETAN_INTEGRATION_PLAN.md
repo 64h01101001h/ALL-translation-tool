@@ -1,0 +1,96 @@
+# DigitalTibetan Integration Plan (Adam: "use EVERYTHING that is open source")
+
+*2026-08-14. Source: full 41-page scour of
+digitaltibetan.github.io + the DigitalTibetan GitHub org (licenses
+API-verified). The site is knowledge + pointers; its org ships two
+GPL-3.0 utilities and no vendorable data. What follows is
+everything usable, ranked, with licenses.*
+
+## P1 — Tibetan typography rule engine (BUILD NOW; rules are facts, license-free)
+From docs/tibetan_formatting.html (digest of the W3C Tibetan
+Layout Requirements, 2020):
+- Breaking semantics: U+0F0B tsheg breaks, U+0F0C does not; never
+  break mid-syllable; breaks allowed after ། ༔ ཿ; NEVER inside
+  the verse-final "། །" pair; shad cannot start a line; the tsheg
+  in ང་། is non-breaking.
+- Shad grammar: **drop the shad after bare ཀ or ག** (no
+  super/subscript) — གི། is wrong, གི right; no tsheg after
+  visarga ཿ; ༔ replaces single AND double shad; ༑ (rin chen
+  spungs shad) replaces the shad when a line opens with the tail
+  of the previous sentence — must be recomputed on reflow.
+- Justification stretches intra-syllable letter spacing, never
+  spaces; only non-breaking spaces inside Tibetan text; yig-chung
+  annotations run 25–30% smaller.
+**Deliverables:** (a) `typographyFindings()` lint — a Typography
+check beside the spellcheck/style checks, flags never auto-fixes;
+(b) pecha-exporter hardening — display-layer break protection
+(NBSP inside ། །, U+0F0C in ང་།) so Qt/ICU cannot break them;
+(c) fetch the full W3C doc for edge cases before final hardening;
+(d) LATER: ༑ recomputation in the pecha flow (reference logic in
+TibFormat.oxt, GPL-3.0 — re-derive the rule, don't copy).
+
+## P2 — Fonts (bundle-safe list, verified)
+- **BabelStone Tibetan + Slim** (4,019 glyphs, open, active) —
+  add beside our bundled faces; **Noto Serif Tibetan**: ship the
+  dev-repo build to dodge the known དྡྷི release bug; **Tibetan
+  Machine Uni** (5,110 glyphs, largest coverage) and
+  **Jomolhari/DDC Uchen** (SIL) — all bundle-safe.
+- **Qomolangma (17 fonts incl. the only free dbu-med set): NON-
+  COMMERCIAL ONLY — do not ship** (already on our red-flag list);
+  document as user-side install. Kokonor/Kailasa: macOS
+  proprietary, never redistribute.
+
+## P3 — Phonetics conventions as oracles + display options
+Espel's Lingua-BO-Wylie (Perl, source downloadable) implements
+**five conventions: THL, Lotsawa House, Rigpa, Padmakara, Lhasey
+Lotsawa**. Use as diff-oracle for our THL engine now; candidate
+extra display conventions later (port-and-prove). Esukhia bophono
+= second oracle (already noted in TODO as satisfied-by-THL-engine
+— the oracle use is new).
+
+## P4 — py-tiblegenc (buda-base) for legacy rescue
+26+ pre-Unicode encodings (Sambhota/Dedris, TCRC, TCC, Monlam…)
+→ the input-center formatter's legacy lane beside our UTFC
+support. Verify its license (buda-base is usually Apache-2.0)
+then vendor as external tool first (already TODO L449 — this
+confirms priority).
+
+## P5 — StarDict import in Lookup
+GoldenDict (xiaoyifang fork) confirms StarDict as the ecosystem's
+dominant dictionary format (Steinert's dictionaries ship in it).
+Build a StarDict reader for **user-supplied local dictionaries**
+(local-only tier, honest labeling; licensing per dictionary
+unchanged — the reader is format support, not redistribution).
+
+## P6 — Pecha/booklet imposition modes
+BookletMaker (GPL-3.0) proves demand: A5/A6 booklet + 3-pecha-
+per-A4 imposition. Our exporter already does 2-up; add booklet
+signatures + 3-per-A4 as an independent implementation (no code
+reuse — trivial geometry).
+
+## P7 — Corpus/e-text endpoints (external watch)
+rKTs Vienna Kanjur/Tanjur URL API · Esukhia Parallel (84000
+Ti-En corpus — pairs with our pending 84000 license email) ·
+OpenPecha-Data catalog · awesome-tibetan-canon/nlp lists. All
+license-gated per source; add to acquisition watch.
+
+## P8 — Input conventions
+TISE de-facto keys for Wylie input fields: `*` = non-breaking
+tsheg, `_` = non-breaking space, `+` = explicit stack (we honor
+`+` already; add `*`/`_` in the Input pane's predictive editor).
+
+## P9 — Calendar cross-checks
+Henning's kalacakra.org C code is ALREADY our vendored oracle
+(third_party/kck_henning). New: Espel's Calendar-Phugpa Perl as
+an independent second oracle; Janson's Uppsala paper as the
+math reference; Tsurphu variant possible from the same oracle
+(epoch menu) if ever wanted.
+
+## P10 — Noted, not building
+Site/org repos without licenses (FontRenamer, the book source) —
+readable, not vendorable; ask maintainer if ever needed. OCR
+ratings (Tesseract bod 2/5) — consistent with our BDRC-models
+choice. MT-page opinion ("Gemini nearly solves it") — noted for
+the oversight pane's positioning docs only. E-reader export
+(Kindle ≥5.16 firmware, sideloaded fonts) — banked for a future
+EPUB lane.
