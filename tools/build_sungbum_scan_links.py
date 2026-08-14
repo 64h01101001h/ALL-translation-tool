@@ -48,7 +48,14 @@ def pfree_uni(t):
     return "་".join(x for x in syl if x not in CONNECT)
 
 
+CACHE = os.path.join(ROOT, "data/extracted/wvpp_rows")
+
+
 def fetch_person(pid):
+    os.makedirs(CACHE, exist_ok=True)
+    cf = os.path.join(CACHE, pid + ".json")
+    if os.path.exists(cf):
+        return [tuple(r) for r in json.load(open(cf))]
     rows, page = [], 1
     while True:
         try:
@@ -68,6 +75,7 @@ def fetch_person(pid):
             break
         page += 1
         time.sleep(1.0)
+    json.dump(rows, open(cf, "w"), ensure_ascii=False)
     return rows
 
 
@@ -77,7 +85,8 @@ def main():
     for s, v in links.items():
         if s.startswith("S") and v["title_wylie"]:
             by_pid[v["pid"]][s] = v["title_wylie"]
-    pids = {p: t for p, t in by_pid.items() if len(t) >= 5}
+    min_n = int(sys.argv[1]) if len(sys.argv) > 1 else 5
+    pids = {p: t for p, t in by_pid.items() if len(t) >= min_n}
     print(f"{len(pids)} authors with ≥5 texts")
 
     merged = {}
@@ -88,6 +97,7 @@ def main():
                          "pid": "P64",
                          "tier": "outline-" + v["tier"]}
     stats = []
+    review = []
     for pid, stexts in sorted(pids.items(),
                               key=lambda x: -len(x[1])):
         rows = fetch_person(pid)
@@ -147,6 +157,26 @@ def main():
                              "label": key, "pid": pid,
                              "tier": tier}
                 matched += 1
+        for s2, wy in stexts.items():
+            if s2 in merged:
+                continue
+            try:
+                r2 = wylie_to_unicode(wy)
+                u2 = r2[0] if isinstance(r2, tuple) else r2
+            except Exception:
+                continue
+            k2 = norm_uni(u2)
+            import difflib
+            scored = sorted(
+                ((difflib.SequenceMatcher(None, k2, c).ratio(),
+                  c, "|".join(sorted(ms)[:2]))
+                 for c, ms in cand.items()),
+                reverse=True)[:3]
+            review.append({"s": s2, "pid": pid, "ours": k2,
+                           "candidates": [
+                               {"score": round(sc, 3),
+                                "title": c, "nodes": ns}
+                               for sc, c, ns in scored]})
         stats.append((pid, len(stexts), len(rows), matched))
         print(f"  {pid}: {len(stexts)} S-texts · {len(rows)} BDRC "
               f"rows · principal {principal} · +{matched} matched")
@@ -163,7 +193,12 @@ def main():
         },
         "s_to_node": merged,
     }, open(OUT, "w"), ensure_ascii=False, indent=1)
+    json.dump(review, open(os.path.join(
+        ROOT, "data/extracted/sungbum_unmatched_review.json"),
+        "w"), ensure_ascii=False, indent=1)
     print(f"TOTAL {len(merged)} Sungbum scan links -> {OUT}")
+    print(f"{len(review)} unmatched dumped with candidates for "
+          "human review")
 
 
 if __name__ == "__main__":
