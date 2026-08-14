@@ -473,6 +473,14 @@ guess). Below it:
   **Open scan folder…** in the Input workflow opens the volume in
   folio order. Strongly recommended when you start working with a
   new text — the app suggests it as soon as the scans are linked.
+- **Compare with the eKangyur edition (Toh N)…** — Degé Kangyur
+  texts only: your document (converted through the proven
+  ACIP→Unicode chain) is collated against the same text in the
+  Esukhia eKangyur, a Public-Domain e-text of the entire Degé
+  Kangyur installed alongside the app. Red = a reading only in
+  your keying, green = only in the eKangyur; a numbered apparatus
+  lists the sites. Differences are witness readings for YOUR
+  judgment — the tool never auto-corrects either side.
 - **Export folio-faithful text files…** — splits the document at
   its @folio markers into one text file per woodblock side
   (`001a.txt`, `001b.txt`…), named to sit beside the downloaded

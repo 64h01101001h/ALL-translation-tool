@@ -2431,6 +2431,13 @@ public:
                                "card");
                 }
             }
+            check(ekStripMarkers(
+                      QString::fromUtf8(
+                          "[1b]\n[1b.1]{D1}{D1-1}\u0F04\u0F05"
+                          "\u0F0D[2a.3] \u0F56"))
+                          .contains(QString::fromUtf8(
+                              "\u0F04\u0F05\u0F0D \u0F56")),
+                  "eKangyur marker stripping keeps pure text");
             // the root-cause pin: KL16 (Diamond Cutter) must route
             // to MW26071_0018, never _0016 (verified live)
             auto dcInfo =
@@ -2830,6 +2837,29 @@ public:
                     connect(exp, &QAction::triggered,
                             [this] { exportFolioSides(); });
                     pre << exp;
+                    {
+                        const auto info =
+                            allcore::decodeAcipFilename(
+                                docFile_.toStdString());
+                        if (info.recognized &&
+                            info.collection ==
+                                "Kangyur (Derge edition)") {
+                            const int toh =
+                                QString::fromStdString(info.number)
+                                    .toInt();
+                            auto* ek = new QAction(
+                                QString("Compare with the "
+                                        "eKangyur edition "
+                                        "(Toh %1)…")
+                                    .arg(toh),
+                                menu);
+                            connect(ek, &QAction::triggered,
+                                    [this, toh] {
+                                        compareWithEkangyur(toh);
+                                    });
+                            pre << ek;
+                        }
+                    }
                     auto* cp = new QAction("Copy location", menu);
                     connect(cp, &QAction::triggered, [this, loc] {
                         QGuiApplication::clipboard()->setText(
@@ -6162,6 +6192,117 @@ private:
                   ? startFolio
                   : folioOrder_.front());
         (*loadThumbs)(0);
+    }
+
+    // ================= eKangyur comparison (Esukhia derge-kangyur,
+    // Public Domain per its README; acquired + Toh-indexed
+    // 2026-08-13) =================
+    // strip the e-text's own apparatus: [1b] [1b.1] folio.line
+    // markers and {D...} catalog tags — pure text remains
+    static QString ekStripMarkers(QString t) {
+        t.remove(QRegularExpression(
+            "\\[[0-9]+[ab](?:\\.[0-9]+)?\\]"));
+        t.remove(QRegularExpression("\\{[^}]*\\}"));
+        t.replace(QRegularExpression("[ \\t]*\\n[ \\t]*"), "");
+        return t;
+    }
+
+    QString ekangyurDir() const {
+        const QStringList cands = {
+            dataRoot_ + "/editions/derge-kangyur-esukhia/text",
+            QDir::homePath() +
+                "/ALL-translation-tool/editions/"
+                "derge-kangyur-esukhia/text"};
+        for (const QString& c : cands)
+            if (QDir(c).exists()) return c;
+        return {};
+    }
+
+    void compareWithEkangyur(int toh) {
+        const QString dir = ekangyurDir();
+        if (dir.isEmpty()) {
+            QMessageBox::information(
+                this, "eKangyur",
+                "The eKangyur e-text corpus is not installed "
+                "(editions/derge-kangyur-esukhia). It is Public "
+                "Domain — see TODO for the acquisition recipe.");
+            return;
+        }
+        QFile xf(dataRoot_ +
+                 "/data/extracted/ekangyur_index.json");
+        if (!xf.open(QIODevice::ReadOnly)) {
+            QMessageBox::information(this, "eKangyur",
+                                     "ekangyur_index.json missing.");
+            return;
+        }
+        const auto ix = QJsonDocument::fromJson(xf.readAll())
+                            .object()["toh"]
+                            .toObject();
+        const auto rec = ix.value(QString::number(toh)).toObject();
+        if (rec.isEmpty()) {
+            QMessageBox::information(
+                this, "eKangyur",
+                QString("Toh %1 is not in the eKangyur index.")
+                    .arg(toh));
+            return;
+        }
+        QFile vf(dir + "/" + rec["file"].toString());
+        if (!vf.open(QIODevice::ReadOnly)) {
+            QMessageBox::information(this, "eKangyur",
+                                     "volume file unreadable: " +
+                                         rec["file"].toString());
+            return;
+        }
+        const QString vol = QString::fromUtf8(vf.readAll());
+        const int start = rec["offset"].toInt();
+        // span ends at the NEXT {D...} marker after ours
+        static const QRegularExpression dmark("\\{D\\d");
+        int end = vol.indexOf(dmark, start + 4);
+        if (end < 0) end = vol.size();
+        const QString ek =
+            ekStripMarkers(vol.mid(start, end - start));
+        // our side: the document, ACIP → unicode through the
+        // battery-proven chain (markers and notes stripped)
+        QString mine = input_->toPlainText();
+        mine.remove(QRegularExpression("@[A-Za-z0-9.]+"));
+        mine.remove(QRegularExpression("\\[[^\\]]*\\]"));
+        const std::string wy =
+            allcore::acipToEwts(mine.toStdString());
+        auto [uni, okc] = allcore::wylieToUnicode(wy);
+        QString ours = QString::fromStdString(uni).simplified();
+        if (ours.size() > 500000 || ek.size() > 500000) {
+            QMessageBox::information(
+                this, "eKangyur",
+                "Over 500k characters on one side — compare "
+                "per-part files instead.");
+            return;
+        }
+        QString app;
+        const QString html = editionDiffHtml(ours, ek, &app);
+        auto* dlg = new QDialog(this);
+        dlg->setAttribute(Qt::WA_DeleteOnClose);
+        dlg->setWindowFlag(Qt::Window);
+        dlg->setWindowTitle(
+            QString("Our keying vs the eKangyur — Toh %1 "
+                    "(A = this document · B = Esukhia e-text, "
+                    "Public Domain)")
+                .arg(toh));
+        dlg->resize(940, 680);
+        auto* v = new QVBoxLayout(dlg);
+        auto* note = new QLabel(
+            "A = this document converted through the "
+            "battery-proven ACIP→Unicode chain · B = the Esukhia "
+            "derge-kangyur e-text (its folio/catalog markers "
+            "stripped). Red = ours only, green = eKangyur only. "
+            "Differences are WITNESS readings to judge, never "
+            "auto-corrections.");
+        note->setWordWrap(true);
+        note->setMinimumWidth(1);
+        v->addWidget(note);
+        auto* browser = new QTextBrowser;
+        browser->setHtml(html);
+        v->addWidget(browser, 1);
+        dlg->show();
     }
 
 public:
