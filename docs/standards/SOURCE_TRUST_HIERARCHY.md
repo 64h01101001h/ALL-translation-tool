@@ -72,3 +72,53 @@ One conversation (or short series) with Geshe Michael; his answers
 recorded verbatim into this document, each tier gaining a "WHY (in
 his words)" line; the ratified version becomes STD-009 and the
 tool's behavior is audited against it.
+
+
+---
+
+## ADDENDUM (same day — Adam's sharpening)
+
+**Two separate orderings, only one of which is ours to make.**
+The tiers above mix two things: LEGAL SHIPPING STATUS (what may be
+distributed — ours to determine) and TRUST (which witness to
+believe first — HIS to determine). Das sits "below" Lokesh
+Chandra above only because of licensing; whether Geshe Michael
+TRUSTS Das above or below Lokesh Chandra, and where the
+Mahāvyutpatti stands relative to both, is precisely the dialog.
+His ranking will govern display order and translator guidance
+within whatever the licenses allow.
+
+**The full inventory for his ranking** (every information source
+in the app today):
+
+Dictionaries & glossaries: his own equivalents (all tiers) ·
+Mahāvyutpatti · 84000 glossary · Lokesh Chandra · Das 1902 ·
+Jäschke 1881 · Monlam word lists · Hopkins · TibetanDictionary
+(TD) · THL stacks · OT · IW · {C}/{PH}/{GD} layers · the AI
+Working Glossary drafts.
+
+Texts & editions: the ACIP keying (KL/TD/S — the tool's ground
+truth) · the Esukhia eKangyur/eTengyur · the BDRC scans
+themselves · THL catalog records · the Tohoku catalogs.
+
+Language apparatus: the SOAS POS lexicon · tibetan-spellchecker
+syllable data · ERC abbreviations table · verb tables · botok
+segmentation · the OCR models (locate-only) · the teaching-moment
+index (recordings are the authority).
+
+**Sample ranking questions of the kind to put to him:**
+- Lokesh Chandra vs Das — which does he reach for first, and why?
+- Where does the Mahāvyutpatti stand relative to both — above all
+  reference (imperial standard) or a historical witness like any
+  other?
+- Jäschke vs Das for old-dialect senses?
+- 84000's renderings: peer reference or student aid?
+- Monlam: attestation only (current treatment) — correct?
+
+**VERY IMPORTANT (Adam's emphasis): the missing-sources
+question.** Ask Geshe Michael directly: *are there sources and
+reference materials he feels we SHOULD ADD that the tool does not
+carry?* His own teachers' materials, texts he trusts that we have
+not thought of, editions he prefers. His additions list becomes an
+acquisition roadmap with the same licensing discipline as
+everything above.

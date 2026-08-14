@@ -18368,6 +18368,10 @@ public:
         // per-medium chapters, "Guidelines: " prefix
         loadChapters(root + "/data/help/GUIDELINES.md",
                      "Guidelines: ", true);
+        // the source-trust pane (Adam 2026-08-14): the hierarchy
+        // Geshe Michael ratifies lives HERE, in his own words
+        loadChapters(root + "/data/help/SOURCES.md",
+                     "Sources: ", true);
         // auto-index every control in every pane — two-level aware:
         // top tabs are GROUPS holding inner pane tabs
         auto indexPane = [this](QWidget* w, const QString& pane,
@@ -20565,6 +20569,9 @@ int main(int argc, char** argv) {
             if (!manual) ++fails;
             // Working-with-Tibetan guidelines ride along too
             const bool guide =
+                hw.hasChapter("Sources: Tier I — The Authority "
+                              "(binding)") &&
+                hw.hitCount("Sources: ") >= 6 &&
                 hw.hasChapter("Guidelines: Print & pecha work") &&
                 hw.hasChapter(
                     "Guidelines: Pronunciation systems") &&
