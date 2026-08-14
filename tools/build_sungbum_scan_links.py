@@ -40,6 +40,14 @@ def norm_uni(t):
     return t
 
 
+CONNECT = {"ཀྱི", "གྱི", "གི", "ཡི", "ཞེས", "ཅེས", "བཞུགས", "སོ"}
+
+
+def pfree_uni(t):
+    syl = [x for x in t.split("་") if x]
+    return "་".join(x for x in syl if x not in CONNECT)
+
+
 def fetch_person(pid):
     rows, page = [], 1
     while True:
@@ -95,9 +103,16 @@ def main():
             continue
         principal = pref.most_common(1)[0][0]
         cand = collections.defaultdict(set)
+        cand_all = collections.defaultdict(set)
         for m, ti in rows:
-            if m.startswith(principal + "_"):
-                cand[norm_uni(ti)].add(m)
+            k = norm_uni(ti)
+            if re.fullmatch(r"MW\d+_[0-9A-F]+", m):
+                cand_all[k].add(m)
+                if m.startswith(principal + "_"):
+                    cand[k].add(m)
+        pf_cand = collections.defaultdict(set)
+        for k, ms in cand.items():
+            pf_cand[pfree_uni(k)].update(ms)
         matched = 0
         for s, wy in stexts.items():
             if s in merged:
@@ -108,11 +123,29 @@ def main():
             except Exception:
                 continue
             key = norm_uni(uni)
-            nodes = cand.get(key, set())
+            tier, nodes = "wvpp-exact", cand.get(key, set())
+            if len(nodes) != 1:
+                pf = pfree_uni(key)
+                tier, nodes = "wvpp-particle", pf_cand.get(pf,
+                                                          set())
+            if len(nodes) != 1 and len(key) >= 12:
+                hits = set()
+                for k2, ms in cand.items():
+                    lo, hi = sorted((len(k2), len(key)))
+                    if lo >= 12 and lo / hi >= 0.6 and \
+                       (k2 in key or key in k2):
+                        hits.update(ms)
+                tier, nodes = "wvpp-contained", hits
+            if len(nodes) != 1:
+                # other scanned edition of the same title —
+                # honestly tagged (folio numbering may differ
+                # from our keying's edition)
+                tier, nodes = "wvpp-other-edition", cand_all.get(
+                    key, set())
             if len(nodes) == 1:
                 merged[s] = {"node": next(iter(nodes)),
                              "label": key, "pid": pid,
-                             "tier": "wvpp-exact"}
+                             "tier": tier}
                 matched += 1
         stats.append((pid, len(stexts), len(rows), matched))
         print(f"  {pid}: {len(stexts)} S-texts · {len(rows)} BDRC "
