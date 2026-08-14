@@ -112,4 +112,8 @@ orphan page: **tibetanebook.com** and **dharmaebooks.org**
 pointer banked: the pre-Unicode **TiCode** spec PDF
 (digitaltibetan.github.io/DigitalTibetan/docs/Resources/
 ticode.pdf) — relevant to the legacy-rescue lane; repo carries
-no license, so pointer only. THE GOLDMINE IS FULLY MINED.
+no license, so pointer only. THE GOLDMINE IS FULLY MINED — with one correction from Adam's
+second push: the calendar page's os_tib.htm link led to Henning's
+TCG (true Phugpa/Tsurphu C source, MIT) which the first pass had
+not followed. Banked third_party/tcg_henning; Phugpa now
+double-oracle-confirmed; port path open.

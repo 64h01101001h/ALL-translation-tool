@@ -56,3 +56,21 @@ unzip phugpa.zip && perl -I shim -I Calendar-Phugpa/lib dump_year.pl 2153
 (shim = the two-function Time::JulianDay replacement; the dump
 driver is 15 lines — both preserved in the session scratchpad
 pattern and reproducible from this doc.)
+
+## Addendum (same day): double confirmation + the port source
+
+Adam's directed re-scour caught a real gap: kalacakra.org's
+os_tib.htm — **Henning's OWN open-source C implementation of the
+grub-rtsis systems** (TCG v1.06, MIT), including **Generalised
+Phugpa and Tsurphu** — distinct from the KCK karana program we
+had vendored. Banked at `third_party/tcg_henning` with build
+recipe. Verified immediately: TCG's Phugpa Losar 2025 = **Fri 28
+Feb 2025**, identical to Espel's independent Perl and the
+published almanac — the Phugpa side of this comparison is now
+confirmed by two unrelated implementations. Consequence: a true
+Phugpa lane in allcore is no longer hypothetical — TCG is the
+port source, Janson the spec, Espel + TCG prints the oracles,
+fixtures-first exactly like the proven KCK port. (Also banked
+from the same page family: the intercalation and epochs
+companion pages, Yongdan's and Jo's calendar-history papers,
+and kalacakra.org/calendar/kcal.htm as the source collection.)
