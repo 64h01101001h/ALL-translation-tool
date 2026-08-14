@@ -725,6 +725,14 @@ implementation is sidelined HERE from this date. What this means:
       per-session by app + font_smoke (never bundled), probed
       64/64 working-set coverage, appended to typeface combo +
       battery.
+- [ ] **Sanskrit findings for the data project (indic_transliteration
+      oracle, 2026-08-14)**: (a) standalone om/oṃ — consider the sacred
+      ligature ॐ (U+0950) for Devanagari display (library's convention;
+      mantra-authentic); (b) tisḥ-class degenerate inputs (bare
+      consonant+visarga) — library inserts virama, ours doesn't; likely
+      the LC entry itself is defective. 99.995% agreement over 63,667
+      terms otherwise (docs/research/INDIC_TRANSLIT_ORACLE.md).
+
 - [~] **Catalog-toolchain mining** (MakeGMRCatalog & co.) with the
       data project. DIFF-ORACLE CLAUSE LARGELY DONE 2026-08-14:
       jsewts (buda-base, Apache-2.0) run three-way over all 26,318
