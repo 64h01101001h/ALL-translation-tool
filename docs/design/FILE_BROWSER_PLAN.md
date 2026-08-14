@@ -119,9 +119,13 @@ browse *a canon*.
   Commander-keys opt-in (F3–F8 + Trash), persistent tabs,
   ZIP browsing (zipinfo/unzip, never-overwrite extract),
   open-in-Terminal, multi-select + recursive folder copy/move,
-  Move-to-Trash. *Remaining in P2:* tags, workspaces, folder
-  synchronization, ⌘K file targets, share sheet, archive
-  formats beyond ZIP.
+  Move-to-Trash. *Second P2 tranche shipped
+  2026-08-14:* workspaces (named layouts, both panes' tabs),
+  ⌘K Hunt file targets (Library filenames answer in the
+  palette; Enter opens with smart routing), Finder tags shown
+  read-only in the context menu. *Remaining in P2:* true folder
+  synchronization, share sheet, archive formats beyond ZIP,
+  tag WRITING (Finder stays the editor for now).
 - **P3: remote** — SFTP/FTP/WebDAV connections, transfer queue,
   activity/log, remote editing.
 - **P4: long tail** — S3, embedded terminal, hex viewer.

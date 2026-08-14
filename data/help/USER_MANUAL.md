@@ -934,6 +934,20 @@ enters the same-named folder in the other panel when it exists —
 made for walking two parallel trees side by side (an original
 and its double-keyed copy, two editions of a collection).
 
+### Workspaces
+
+The **Workspaces** menu saves your entire layout — every tab in
+both panels — under a name, and restores it in one click. Keep
+one workspace per project (a text and its scans side by side, a
+double-keying pair, a comparison set) and switch between them
+instantly. Delete from the same menu.
+
+### Finder tags
+
+Right-click any file: the menu shows its **Finder tags**, so a
+tagging system you maintain in the Finder stays visible here.
+(Finder remains the editor for tags.)
+
 ### Favorites and Terminal
 
 **Favorites** saves locations: add either panel's current folder,
@@ -3068,7 +3082,11 @@ one list answers from every source at once:
 - **🔁 English reverse** rows (your English → his Tibetan);
 - **🗣 phonetics** rows through the GMR-convention fold;
 - **📜 corpus** rows with the master's published English;
-- **🎧 teaching** rows that open the recording at the timecode.
+- **🎧 teaching** rows that open the recording at the timecode;
+- **📁 file** rows — Library filenames that match what you typed
+  (a catalog number like *TD04156*, a title fragment): Enter
+  opens the file itself — texts in the Overlay, scan images in
+  the Input viewer.
 
 Arrow to a row and press **Enter**: dictionary/reverse/phonetics
 rows land you in Lookup with the search already run; corpus rows

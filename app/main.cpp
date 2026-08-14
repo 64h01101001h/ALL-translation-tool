@@ -13783,6 +13783,15 @@ public:
         favMenu_ = new QMenu(favB_);
         favB_->setMenu(favMenu_);
         top->addWidget(favB_);
+        wsB_ = new QToolButton;
+        wsB_->setText("Workspaces");
+        wsB_->setPopupMode(QToolButton::InstantPopup);
+        wsB_->setToolTip(
+            "Save the whole layout — every tab in both panes — "
+            "as a named workspace, and restore it in one click.");
+        wsMenu_ = new QMenu(wsB_);
+        wsB_->setMenu(wsMenu_);
+        top->addWidget(wsB_);
         auto* termB = new QPushButton("Terminal");
         termB->setToolTip("Open Terminal at the active pane's "
                           "folder");
@@ -13901,6 +13910,7 @@ public:
                 .setValue("files/sync", on);
         });
         rebuildFavMenu();
+        rebuildWsMenu();
         // restore the stack
         for (const QString& p :
              QSettings("ALL", "TranslationTool")
@@ -14004,6 +14014,33 @@ private:
                     m.addAction("Move to Trash", [p] {
                         QFile::moveToTrash(p);   // recoverable
                     });
+                    {   // Finder tags, read via mdls (display
+                        // only — Finder stays the editor)
+                        QProcess md;
+                        md.start("/usr/bin/mdls",
+                                 {"-raw", "-name",
+                                  "kMDItemUserTags", p});
+                        md.waitForFinished(1500);
+                        const QString out = QString::fromUtf8(
+                            md.readAllStandardOutput());
+                        QStringList tags;
+                        for (QString ln :
+                             out.split('\n', Qt::SkipEmptyParts)) {
+                            ln = ln.trimmed();
+                            if (ln == "(" || ln == ")" ||
+                                ln == "(null)")
+                                continue;
+                            if (ln.endsWith(',')) ln.chop(1);
+                            ln.remove('"');
+                            if (!ln.isEmpty()) tags << ln;
+                        }
+                        auto* ta = m.addAction(
+                            tags.isEmpty()
+                                ? QString("Finder tags: none")
+                                : "Finder tags: " +
+                                      tags.join(", "));
+                        ta->setEnabled(false);
+                    }
                     m.exec(views_[ix]->viewport()->mapToGlobal(
                         pt));
                 });
@@ -14481,6 +14518,86 @@ private:
         }
     }
 
+    void applyTabs(int ix, const QStringList& paths) {
+        switching_ = true;
+        while (tabs_[ix]->count()) tabs_[ix]->removeTab(0);
+        switching_ = false;
+        for (const QString& p : paths)
+            if (QDir(p).exists()) addTab(ix, p);
+        if (!tabs_[ix]->count()) addTab(ix, QDir::homePath());
+    }
+
+    void rebuildWsMenu() {
+        wsMenu_->clear();
+        wsMenu_->addAction("Save current layout as workspace…",
+                           [this] {
+                               bool ok = false;
+                               const QString name =
+                                   QInputDialog::getText(
+                                       this, "Save workspace",
+                                       "Workspace name:",
+                                       QLineEdit::Normal,
+                                       QString(), &ok)
+                                       .trimmed();
+                               if (!ok || name.isEmpty()) return;
+                               QSettings st("ALL",
+                                            "TranslationTool");
+                               QStringList names =
+                                   st.value("files/workspaces")
+                                       .toStringList();
+                               if (!names.contains(name))
+                                   names << name;
+                               st.setValue("files/workspaces",
+                                           names);
+                               for (int ix = 0; ix < 2; ++ix) {
+                                   QStringList ps;
+                                   for (int t = 0;
+                                        t < tabs_[ix]->count();
+                                        ++t)
+                                       ps << tabs_[ix]
+                                                 ->tabData(t)
+                                                 .toString();
+                                   st.setValue(
+                                       QString("files/ws_%1_%2")
+                                           .arg(name)
+                                           .arg(ix),
+                                       ps);
+                               }
+                               rebuildWsMenu();
+                           });
+        const QStringList names =
+            QSettings("ALL", "TranslationTool")
+                .value("files/workspaces")
+                .toStringList();
+        if (!names.isEmpty()) wsMenu_->addSeparator();
+        for (const QString& n : names)
+            wsMenu_->addAction(n, [this, n] {
+                QSettings st("ALL", "TranslationTool");
+                for (int ix = 0; ix < 2; ++ix)
+                    applyTabs(
+                        ix, st.value(QString("files/ws_%1_%2")
+                                         .arg(n)
+                                         .arg(ix))
+                                .toStringList());
+                saveTabs();
+            });
+        if (!names.isEmpty()) {
+            auto* rm = wsMenu_->addMenu("Delete workspace");
+            for (const QString& n : names)
+                rm->addAction(n, [this, n] {
+                    QSettings st("ALL", "TranslationTool");
+                    QStringList names2 =
+                        st.value("files/workspaces")
+                            .toStringList();
+                    names2.removeAll(n);
+                    st.setValue("files/workspaces", names2);
+                    st.remove(QString("files/ws_%1_0").arg(n));
+                    st.remove(QString("files/ws_%1_1").arg(n));
+                    rebuildWsMenu();
+                });
+        }
+    }
+
     void saveTabs() {
         QSettings st("ALL", "TranslationTool");
         for (int ix = 0; ix < 2; ++ix) {
@@ -14560,6 +14677,8 @@ private:
     QLineEdit* quickSel_ = nullptr;
     QToolButton* favB_ = nullptr;
     QMenu* favMenu_ = nullptr;
+    QToolButton* wsB_ = nullptr;
+    QMenu* wsMenu_ = nullptr;
     int active_ = 0;
     bool switching_ = false;
 };
@@ -20187,8 +20306,9 @@ private:
 // tiers and provisional marks ride along.
 class HuntPalette : public QDialog {
 public:
-    HuntPalette(allcore::Spine& spine, QWidget* parent)
-        : QDialog(parent), spine_(spine) {
+    HuntPalette(allcore::Spine& spine, const QString& root,
+                QWidget* parent)
+        : QDialog(parent), spine_(spine), root_(root) {
         setWindowTitle("Hunt everywhere");
         resize(760, 460);
         setStyleSheet(
@@ -20258,6 +20378,14 @@ public:
         for (int i = 0; i < list_->count(); ++i)
             pron |= list_->item(i)->text().contains("bsod nams");
         check(pron, "phonetics query reaches the fold (sunam)");
+        box_->setText("TD04156");
+        runSearch();
+        bool file = false;
+        for (int i = 0; i < list_->count(); ++i)
+            file |= list_->item(i)->text().contains(
+                QString::fromUtf8("📁"));
+        check(file, "filename lane answers (TD04156 → Library "
+                    "file target)");
         box_->clear();
         list_->clear();
         acts_.clear();
@@ -20393,6 +20521,31 @@ private:
                     2, m.url);
             }
         }
+        // ⌘K file targets (file-browser P2): the Library's own
+        // filenames answer too — Enter opens the file in the
+        // right pane (texts → Overlay, images → Input viewer)
+        {
+            if (!filesIndexed_) {
+                filesIndexed_ = true;
+                QDirIterator it(
+                    root_ + "/library",
+                    {"*.txt", "*.act", "*.inc", "*.TXT", "*.ACT",
+                     "*.INC", "*.png", "*.jpg", "*.tif"},
+                    QDir::Files, QDirIterator::Subdirectories);
+                while (it.hasNext()) filePaths_ << it.next();
+            }
+            int hits = 0;
+            const QString ql = q.toLower();
+            for (const QString& p : filePaths_) {
+                if (hits >= 6) break;
+                const QString fn = QFileInfo(p).fileName();
+                if (!fn.toLower().contains(ql)) continue;
+                add(QString::fromUtf8("📁  ") + fn +
+                        "   — open this file",
+                    3, p);
+                ++hits;
+            }
+        }
         if (!list_->count())
             add(QString::fromUtf8("— nothing exact; try the Lookup "
                                   "pane's fuzzier paths"),
@@ -20406,6 +20559,15 @@ private:
         if (a.kind == 0 && g_lookupQuery) {
             hide();
             g_lookupQuery(a.payload);
+        } else if (a.kind == 3) {
+            const QString ext =
+                QFileInfo(a.payload).suffix().toLower();
+            hide();
+            if ((ext == "png" || ext == "jpg" || ext == "tif") &&
+                g_openScanInInput)
+                g_openScanInInput(a.payload);
+            else if (g_openAtLine)
+                g_openAtLine(a.payload, 1);
         } else if (a.kind == 1 && g_goferQuery) {
             hide();
             g_goferQuery(a.payload);
@@ -20420,6 +20582,9 @@ private:
     QListWidget* list_ = nullptr;
     QTimer* timer_ = nullptr;
     std::vector<Act> acts_;
+    QString root_;
+    QStringList filePaths_;
+    bool filesIndexed_ = false;
 };
 static HuntPalette* g_hunt = nullptr;
 
@@ -20856,7 +21021,7 @@ int main(int argc, char** argv) {
     if (nightOn) applyNight(true);
 
     QMainWindow win;
-    g_hunt = new HuntPalette(spine, &win);
+    g_hunt = new HuntPalette(spine, root, &win);
     g_surveyFile = [&win, &spine](const QString& p) {
         showTranslatorSurvey(&win, spine, p);
     };
