@@ -360,8 +360,14 @@ implementation is sidelined HERE from this date. What this means:
       mismatches (rab tu / kun tu) — all dictionary-side findings.
       (NetWylie's Wylie.java skipped: same Espel lineage as wylie.js,
       a third run of the same algorithm adds nothing.)
-- [ ] **diff-match-patch (C++/Qt, Apache-2.0) + antx logic** → the
+- [x] **diff-match-patch (C++/Qt, Apache-2.0) + antx logic** → the
       input-center double-keying proofreading pane (roadmap item A).
+      DONE by 2026-08-13: dmp semantic diff with inline orange/green
+      highlights shipped earlier; ◀ disc / disc ▶ navigation added
+      2026-08-13 (cursor jumps discrepancy to discrepancy with an
+      i/N readout — no scroll-hunting). antx's transfer concept is
+      N/A to double-keying (both texts are keyings, not annotation
+      carriers).
 - [x] **Tibetan collation** — SHIPPED 2026-08-07 via QCollator("bo")
       (brew Qt's ICU carries the CLDR Tibetan rules — probed first:
       REAL tailoring, e.g. ཀྵ inside the ka section against codepoint

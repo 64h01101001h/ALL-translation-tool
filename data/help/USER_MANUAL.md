@@ -1981,7 +1981,9 @@ right. (Every one of them is also reachable from the menu bar:
 - **@ next folio** — inserts the next folio marker per the ACIP
   specification. See §12.5.
 - **Compare with partner file…** — the double-keying diff. See
-  §12.7.
+  §12.7. After a compare, **◀ disc / disc ▶** step the cursor
+  from discrepancy to discrepancy with an "i/N" readout — no
+  scroll-hunting for the orange patches.
 - **Save…** — exports your typing: the current page as a text
   file, or (in folder mode) the whole block combined in page
   order. See §12.8.

@@ -14423,8 +14423,22 @@ public:
         row2->addWidget(folioB);
         connect(folioB, &QPushButton::clicked, [this] { nextFolio(); });
         auto* partnerB = new QPushButton("Compare with partner file…");
+        diffPrevB_ = new QPushButton("◀ disc");
+        diffNextB_ = new QPushButton("disc ▶");
+        diffPrevB_->setToolTip(
+            "Jump to the previous double-keying discrepancy");
+        diffNextB_->setToolTip(
+            "Jump to the next double-keying discrepancy");
+        diffPrevB_->setEnabled(false);
+        diffNextB_->setEnabled(false);
+        connect(diffPrevB_, &QPushButton::clicked,
+                [this] { jumpDiff(-1); });
+        connect(diffNextB_, &QPushButton::clicked,
+                [this] { jumpDiff(+1); });
         partnerB->setIcon(miniIcon("diff"));
         row2->addWidget(partnerB);
+        row2->addWidget(diffPrevB_);
+        row2->addWidget(diffNextB_);
         auto* saveB = new QPushButton("Save…");
         saveB->setIcon(miniIcon("save"));
         row2->addWidget(saveB);
@@ -15121,6 +15135,9 @@ public:
             if (d.operation != INSERT) minePos += int(d.text.length());
         }
         editor_->setExtraSelections(spellSels_ + diffSels_);
+        diffNavIx_ = -1;
+        diffPrevB_->setEnabled(nDisc > 0);
+        diffNextB_->setEnabled(nDisc > 0);
         status_->setText(
             nDisc == 0
                 ? QString("double-keying PASS — your text and the "
@@ -15130,6 +15147,24 @@ public:
                           "there. Correct until the texts match "
                           "exactly (the input-center rule).")
                       .arg(nDisc));
+    }
+
+    // proofreading navigation: step the cursor through the
+    // double-keying discrepancies (no scroll-hunting orange patches)
+    void jumpDiff(int d) {
+        if (diffSels_.isEmpty()) return;
+        const int n = diffSels_.size();
+        diffNavIx_ = ((diffNavIx_ + d) % n + n) % n;
+        QTextCursor c = diffSels_[diffNavIx_].cursor;
+        c.setPosition(c.selectionStart());
+        editor_->setTextCursor(c);
+        editor_->ensureCursorVisible();
+        editor_->setFocus();
+        status_->setText(QString("discrepancy %1/%2 — orange = "
+                                 "here only, green seam = partner "
+                                 "has extra text")
+                             .arg(diffNavIx_ + 1)
+                             .arg(n));
     }
 
     // ---- the block workflow: a folder of pages, typed in order ----
@@ -15343,6 +15378,9 @@ private:
     QStringList pages_;
     int pageIx_ = -1;
     QString workDir_;
+    QPushButton* diffPrevB_ = nullptr;
+    QPushButton* diffNextB_ = nullptr;
+    int diffNavIx_ = -1;
     QPushButton* prevPageB_ = nullptr;
     QPushButton* nextPageB_ = nullptr;
     QLabel* pageLbl_ = nullptr;
