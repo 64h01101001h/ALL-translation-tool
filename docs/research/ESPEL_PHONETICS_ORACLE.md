@@ -36,3 +36,14 @@ vs a `thl_dump` harness build (recipe in the Developer Handbook).
 **Future**: the other four conventions (Rigpa/Padmakara/Lhasey/
 Lotsawa House) are candidate additional display options for the
 Convert pane — port-and-prove with this same oracle when wanted.
+
+## Scope fence (Adam's ruling, 2026-08-14)
+
+The two phonetics systems are and remain independent: **the GMR
+ACIP pronunciation engine (`pron_engine`) is untouchable by this
+or any external oracle** — its authorities are the canonical
+Python engine and GMR's rulings alone, pinned by
+`engines_battery`. This oracle's writ runs only to
+`thl_phonetics` (the scholarly THL transcription shown as a
+separate labeled line). Verified at ruling time: `pron_engine.cpp`
+has no commits from the Espel work, and `engines_battery` passed.

@@ -5,6 +5,16 @@
 //
 // Internal markers: 'B' final-b placeholder (as in Python); '\x04' stands in
 // for Python's 'β' (b-before-s); '\x03' for the U+02D0 vowel-protector.
+// ---- SCOPE FENCE (Adam's ruling, 2026-08-14) ----
+// The authority for this engine is the canonical pron_engine.py
+// plus Geshe Michael Roach's recorded rulings — NOTHING ELSE.
+// External phonetics oracles (Espel/Lingua-BO-Wylie, bophono,
+// THL implementations) exist in this repo ONLY to cross-check
+// thl_phonetics.cpp (the separate scholarly-transcription
+// engine) and may never motivate a change here. GMR-convention
+// output is pinned by engines_battery (full parity vs the
+// canonical Python + the 2,118 published card lines); any drift
+// fails CI.
 #include <algorithm>
 #include <cctype>
 #include <cstring>

@@ -17,3 +17,13 @@ bin/pronounce.pl. First use (docs/research/ESPEL_PHONETICS_ORACLE
 that exposed and fixed our monosyllabic ba→wa over-application.
 Rerun recipe:
   perl bin/pronounce.pl -sty thl <in.txt> <out.txt>
+
+## SCOPE FENCE (Adam's ruling, 2026-08-14)
+
+This oracle may only ever be diffed against
+`allcore::thlPhonetics` (the THL scholarly transcription). It has
+**no authority over, and may never motivate changes to, the GMR
+ACIP pronunciation engine** (`core/src/pron_engine.cpp`), whose
+sole authorities are the canonical `pron_engine.py` and Geshe
+Michael Roach's own rulings, and whose battery
+(`engines_battery`) pins it mechanically.
