@@ -952,7 +952,9 @@ when you connect, and the answer lives only until the window
 closes. SFTP authenticates with your SSH keys (~/.ssh) instead.
 Once connected: browse folders, double-click to enter,
 **Download into the active pane** — files or **whole folders,
-recursively** — and **Upload the active pane's selected files**.
+recursively** — and **Upload the active pane's selected files
+or whole folders** (the folder structure is recreated on the
+server).
 The conflict rule is yours to choose per batch: **skip existing**
 (the default — never touches what you have), **keep both**
 (the new copy arrives renamed), or **overwrite** (explicit,

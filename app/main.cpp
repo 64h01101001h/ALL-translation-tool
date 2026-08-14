@@ -15004,30 +15004,97 @@ private:
                         }
                     }
                 });
+        // upload one file to a remote-relative directory (creates
+        // intermediate directories: --ftp-create-dirs on FTP,
+        // MKCOL walk on WebDAV, mkdir on sftp)
+        auto putFile = [this, st, logLine, runCurl, runSftp](
+                           const QString& src,
+                           const QString& relDir) -> bool {
+            const QString name = QFileInfo(src).fileName();
+            QString p2 = st->path;
+            if (!p2.endsWith('/')) p2 += "/";
+            const QString rd =
+                relDir.isEmpty() ? p2 : p2 + relDir + "/";
+            if (st->proto == "sftp") {
+                QString batch;
+                QString acc = p2;
+                for (const QString& part :
+                     relDir.split('/', Qt::SkipEmptyParts)) {
+                    acc += part + "/";
+                    batch += "-mkdir " + acc + "\n";
+                }
+                batch += QString("put %1 %2%3\n")
+                             .arg(src, rd, name);
+                return runSftp(batch, nullptr);
+            }
+            QString scheme = st->proto == "webdav"    ? "http"
+                             : st->proto == "webdavs" ? "https"
+                                                      : st->proto;
+            QString u = scheme + "://" + st->host;
+            if (st->port) u += ":" + QString::number(st->port);
+            if (st->proto.startsWith("webdav")) {
+                QString acc = p2;
+                for (const QString& part :
+                     relDir.split('/', Qt::SkipEmptyParts)) {
+                    acc += part + "/";
+                    // MKCOL on an existing collection fails
+                    // harmlessly (405) — errors surface in the
+                    // log either way
+                    runCurl({"-X", "MKCOL", u + acc}, nullptr);
+                }
+                return runCurl({"-T", src, u + rd + name},
+                               nullptr);
+            }
+            return runCurl({"--ftp-create-dirs", "-T", src,
+                            u + rd + name},
+                           nullptr);
+        };
         connect(ulB, &QPushButton::clicked,
-                [this, st, logLine, runCurl, runSftp, urlFor,
-                 refresh] {
+                [this, st, logLine, putFile, refresh] {
+                    std::function<void(const QString&,
+                                       const QString&)>
+                        putDir = [&](const QString& dir,
+                                     const QString& rel) {
+                            QDir d(dir);
+                            for (const QFileInfo& e :
+                                 d.entryInfoList(
+                                     QDir::AllEntries |
+                                     QDir::NoDotAndDotDot)) {
+                                if (e.isDir())
+                                    putDir(e.filePath(),
+                                           rel + "/" +
+                                               e.fileName());
+                                else {
+                                    logLine("uploading " + rel +
+                                            "/" + e.fileName() +
+                                            " …");
+                                    const bool ok = putFile(
+                                        e.filePath(), rel);
+                                    logLine(
+                                        ok ? "done: " +
+                                                 e.fileName()
+                                           : "FAILED: " +
+                                                 e.fileName());
+                                }
+                            }
+                        };
                     for (const QString& src :
                          selectedPathsIn(active_)) {
-                        if (QFileInfo(src).isDir()) continue;
-                        const QString name =
-                            QFileInfo(src).fileName();
-                        logLine("uploading " + name + " …");
-                        bool ok = false;
-                        if (st->proto == "sftp") {
-                            QString p2 = st->path;
-                            if (!p2.endsWith('/')) p2 += "/";
-                            ok = runSftp(
-                                QString("put %1 %2%3\n")
-                                    .arg(src, p2, name),
-                                nullptr);
+                        if (QFileInfo(src).isDir()) {
+                            logLine("uploading folder " +
+                                    QFileInfo(src).fileName() +
+                                    "/ …");
+                            putDir(src,
+                                   QFileInfo(src).fileName());
                         } else {
-                            ok = runCurl({"-T", src,
-                                          urlFor(QString())},
-                                         nullptr);
+                            const QString name =
+                                QFileInfo(src).fileName();
+                            logLine("uploading " + name + " …");
+                            const bool ok =
+                                putFile(src, QString());
+                            logLine(ok ? "done: " + name
+                                       : "FAILED: " + name);
                         }
-                        logLine(ok ? "done: " + name
-                                   : "FAILED: " + name);
                     }
                     refresh();
                 });

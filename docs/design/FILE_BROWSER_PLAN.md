@@ -145,7 +145,11 @@ browse *a canon*.
   2026-08-14:* recursive folder download (shared listAt lister,
   works on all four protocols) + per-batch conflict rules
   (skip default / keep-both-rename / explicit overwrite).
-  *Remaining in P3:* queue reorder, remote editing with
-  auto-upload, directory upload.
+  *Third P3 tranche shipped 2026-08-14:* recursive directory
+  UPLOAD (sftp -mkdir walk + put; FTP --ftp-create-dirs;
+  WebDAV MKCOL walk + PUT — nested uploads proven live on
+  both local servers). *Remaining in P3:* queue reorder and
+  remote editing with auto-upload — deferred until a real
+  input-center server exists to shake them down.
 - **P4: long tail** — S3, embedded terminal, hex viewer.
 Declines stay declined unless Adam overrules with reasons logged.
