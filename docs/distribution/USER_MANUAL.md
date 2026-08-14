@@ -236,7 +236,9 @@ on or off (defaults in parentheses):
 | **grammar marks & particle notes** (on) | particle roles, suffix-agreement lines, fused-particle notes on the card AND the dotted-amber marks in the document |
 | **Sanskrit reference** (off) | Sanskrit equivalences (Mahāvyutpatti) on the card |
 | **Hopkins reference** (off) | the Hopkins reference layer on the card |
-| **reference dictionaries (LC/TD/THL)** (on) | the Lokesh Chandra / TibetanDictionary / THL reference stacks on the card |
+| **84000 glossary (CC BY)** (on) | the 84000 translation glossary block on the card — reference only, clearly labeled, with its link back to the original entry |
+| **Das 1902 page links** (on) | the "open the page scan" link into Das's 1902 dictionary, shown with the other reference material |
+| **reference dictionaries (LC/TD/THL/OT/IW)** (on) | the Lokesh Chandra / TibetanDictionary / THL reference stacks on the card |
 | **Botok segmentation (reference)** (off) | an independent segmenter's reading of the clicked spot, labeled reference-only |
 | **unattested-word hints (segmenter + Monlam)** (off) | hints in the document for words no list attests |
 
@@ -413,6 +415,13 @@ grows as more classes are indexed.
 This is the one Overlay feature that touches the network (BDRC's
 public image servers).
 
+**THL Degé catalog link** — when the open text is a Degé Kangyur
+file (KD…), a link appears under the scans button: **THL Degé
+catalog: D.NNN**. It maps your text's Tohoku number to THL's own
+catalog number through the 919-entry verified title concordance —
+never by assuming the numbers are equal (they drift). Texts the
+concordance could not match honestly get no link.
+
 **Follow along in scans (BDRC)** — the main button. Its label
 depends on what the app knows:
 
@@ -464,6 +473,14 @@ guess). Below it:
   **Open scan folder…** in the Input workflow opens the volume in
   folio order. Strongly recommended when you start working with a
   new text — the app suggests it as soon as the scans are linked.
+- **Compare with the eKangyur edition (Toh N)…** — Degé Kangyur
+  texts only: your document (converted through the proven
+  ACIP→Unicode chain) is collated against the same text in the
+  Esukhia eKangyur, a Public-Domain e-text of the entire Degé
+  Kangyur installed alongside the app. Red = a reading only in
+  your keying, green = only in the eKangyur; a numbered apparatus
+  lists the sites. Differences are witness readings for YOUR
+  judgment — the tool never auto-corrects either side.
 - **Export folio-faithful text files…** — splits the document at
   its @folio markers into one text file per woodblock side
   (`001a.txt`, `001b.txt`…), named to sit beside the downloaded
@@ -541,8 +558,13 @@ with a progress bar and a Stop button; already-cached pages are
 not refetched), then all of them are searched. Fetch failures and
 early stops are reported in the gallery title, never hidden.
 
-*Worked example:* Read → Library → double-click **KD0016** (the
-Diamond Cutter). Press **Follow along in scans (BDRC)** — the
+*Worked example:* Read → Library → open the Kangyur folder
+**7. SHER PHYIN SNA TSOGS** → VOL 1 (KA) → double-click
+**KL00016E — the Diamond Cutter**. Press **Follow along in scans
+(bdr:MW26071_0018)** — the number differs from the file's KL16 on
+purpose: the app routes Lhasa texts through a verified title
+concordance, because BDRC's part numbers follow the Lhasa (H)
+catalog, not ACIP's KL numbers. The
 woodblock pages open beneath the text. Click into different parts
 of the document box and watch the folio image turn to follow your
 cursor. Press **locate word (OCR)** and the word at your cursor is
@@ -1967,7 +1989,9 @@ right. (Every one of them is also reachable from the menu bar:
 - **@ next folio** — inserts the next folio marker per the ACIP
   specification. See §12.5.
 - **Compare with partner file…** — the double-keying diff. See
-  §12.7.
+  §12.7. After a compare, **◀ disc / disc ▶** step the cursor
+  from discrepancy to discrepancy with an "i/N" readout — no
+  scroll-hunting for the orange patches.
 - **Save…** — exports your typing: the current page as a text
   file, or (in folder mode) the whole block combined in page
   order. See §12.8.

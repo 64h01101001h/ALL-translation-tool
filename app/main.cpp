@@ -6572,6 +6572,9 @@ public:
         bool coverSheet = false;        // office layouts: a label
                                         // page before the folios
         QString coverDate;              // stamped by the caller
+        int sylTarget = 0;   // authentic type: syllables/line
+                              // target (54 = measured Degé print;
+                              // 0 = size purely from line height)
         bool verseLines = false;        // verse texts: the source's
                                         // own lines become pecha
                                         // lines (blank line =
@@ -6714,6 +6717,29 @@ public:
         // catalog docs: first two text sides carry 5 lines, with
         // proportionally larger letters) re-measures each side
         double lineH = textR.height() / o.lines;
+        // authentic type size (pecha-v3 calibration, 2026-08-13):
+        // the real Degé print carries a median 54 syllables/line
+        // (47,728 eKangyur lines measured). Probe the actual face
+        // at the height-derived size, then scale so a line carries
+        // the measured budget — clamped so pathological faces
+        // cannot explode or vanish the type.
+        double tibScale = 0.52;
+        if (o.sylTarget > 0) {
+            QFont probeF(o.family);
+            probeF.setPixelSize(int(lineH * tibScale));
+            const QString probe =
+                QString::fromUtf8("\u0F56\u0F40\u0FB2\u0F0B"
+                                  "\u0F64\u0F72\u0F66\u0F0B")
+                    .repeated(10);   // 20 syllables, mixed stacks
+            const double adv =
+                QFontMetricsF(probeF).horizontalAdvance(probe);
+            if (adv > 1) {
+                const double sylNow =
+                    textR.width() / (adv / 20.0);
+                tibScale = qBound(
+                    0.30, tibScale * sylNow / o.sylTarget, 0.62);
+            }
+        }
         const double rw = o.ruleWeight == 0   ? 0.6
                           : o.ruleWeight == 2 ? 1.6
                                               : 1.0;
@@ -6890,11 +6916,11 @@ public:
                 }
                 if (first && o.headMarks) ln = yigMgo + ln;
                 first = false;
-                flow(ln, tf, 0.52, 1.0, Qt::black);
+                flow(ln, tf, tibScale, 1.0, Qt::black);
             }
         } else if (!o.interPhon && !o.interEng) {
             flow((o.headMarks ? yigMgo : QString()) + text, tf,
-                 0.52, 1.0, Qt::black);
+                 tibScale, 1.0, Qt::black);
         } else {
             // per barrier group: Tibetan, then phonetics and/or
             // corpus-attested English beneath, engines throughout
@@ -6921,7 +6947,7 @@ public:
                 tib += QString::fromUtf8("། ");
                 if (firstGroup && o.headMarks) tib = yigMgo + tib;
                 firstGroup = false;
-                flow(tib, tf, 0.52, 1.0, Qt::black);
+                flow(tib, tf, tibScale, 1.0, Qt::black);
                 if (o.interPhon) {
                     const std::string pron = allcore::pronounce(
                         wy.trimmed().toStdString());
@@ -7240,6 +7266,7 @@ public:
             if (preset->currentIndex() == 3) {
                 o.wMM = 680;   // Degé folio ≈ 680 × 100 mm (THL)
                 o.hMM = 100;
+                o.sylTarget = 54;   // the measured print budget
             }
             if (preset->currentIndex() == 4) {
                 // measured from real blocks (14 sampled sides,

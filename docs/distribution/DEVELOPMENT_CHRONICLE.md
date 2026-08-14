@@ -692,4 +692,64 @@ inside it. The input centers preserved the woodblock's lineation
 as a matter of discipline; thirty years later, that discipline
 became a jump instruction.
 
+## Day Ten — August 13 (evening): Verification as a Way of Life
+
+The day's second half turned into a study in one principle: never
+trust a mapping you haven't tested against the thing itself.
+
+- **"It's still not working" became the best bug of the project.**
+  Testing the woodblock jump as a fresh user, I found the scans it
+  fetched were the wrong text entirely. The trace was delicious:
+  our library is the Lhasa edition, the archive's Lhasa volumes
+  are numbered by a different catalog than ours, and the two
+  numbering systems drift apart from text seven onward. The fix
+  was not a patch but a concordance — hundreds of texts matched by
+  their actual titles, order-checked, honestly leaving unmatched
+  what could not be proven. Then the fix verified itself twice:
+  a second, fully independent route through another institution's
+  catalog agreed on every single overlapping text — 147 out of
+  147 — and the Diamond Cutter's own folio markers (215a–235b, as
+  the input operators keyed them decades ago) matched the scan
+  archive's labels leaf for leaf, 42 of 42.
+- **A colleague's generosity became an authority layer.** The
+  archive's engineers answered my outreach within hours, attaching
+  the author-linkage table they had built with our own catalog
+  team years earlier. By evening, 1,768 texts carried confirmed
+  per-text author links — replacing name-guessing with
+  institutional record — and my reply with the integration report
+  was drafted before dinner.
+- **The card got its typography.** Eight competing colors became
+  three ranks — ink for content, one green reserved for the
+  master's own words, one quiet parchment family for everything
+  merely reference — with gold micro-labels grouping the zones.
+  And the whole tool moved to Palatino, my preferred face, paired
+  serif-to-serif with the Tibetan.
+- **The mantra question opened properly.** Asking whether our
+  transliteration renders Tibetanized Sanskrit faithfully, I
+  found the problem has a 1,200-year literature (an eighth-century
+  imperial decree governs exactly this) — and then measured our
+  own reality: every Sanskrit-flavored syllable in all 8,986
+  library files, 82,834 distinct forms, each tested through the
+  conversion chain. The census found the one mapping gap that
+  matters (the subjoined wa — breaking common Tibetan words and
+  mantras alike, 177,000 occurrences) and a font layer proven
+  clean by a new render-sheet guard that draws every hard stack
+  for human eyes.
+- **The prints taught the pecha maker its own measure.** Using
+  the scan store as reference prints, I measured real woodblock
+  geometry (eight lines a side, a 5.6:1 leaf) into a new preset —
+  and then realized the e-canon's line markers make the classic
+  print's density an exact statistic: 47,728 lines say a Degé
+  line carries a median of 54 syllables. The tool now sizes its
+  type to that measured budget.
+- **And the canon itself came aboard**: the complete Public-Domain
+  e-Kangyur, indexed to the folio, so any of our texts can be
+  collated against it in one click — witness readings side by
+  side, judgment always human.
+
+Ten days in, the pattern has hardened into method: measure against
+the artifact, verify through independent witnesses, flag what
+cannot be proven, and let no convenience outrank the truth of the
+carving.
+
 *— A.D.A., August 2026*
