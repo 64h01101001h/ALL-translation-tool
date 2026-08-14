@@ -219,7 +219,12 @@ implementation is sidelined HERE from this date. What this means:
 ## Waiting on the data project (Cowork sessions)
 
 - [ ] **Sanskrit conversion gaps (canonical engines — findings
-      2026-08-13, docs/research/SANSKRIT_IN_TIBETAN_GLYPHS.md):**
+      2026-08-13, docs/research/SANSKRIT_IN_TIBETAN_GLYPHS.md;
+      CENSUS ADDENDUM same day: 82,834 attested syllables swept —
+      V=wasur gap is 177k occurrences incl. everyday TIBETAN
+      grva/zhva/rtsva/dvags; visarga ':' 56k; '%' candrabindu;
+      fix-priority table in the doc; census file
+      data/extracted/sanskrit_cluster_census.tsv):**
       (1) ACIP V in clusters unmapped: SV'AH'A/SATTVA/SARVA flag
       instead of yielding wasur stacks (fix: cluster V → EWTS w in
       hgm_tools.acip_to_ewts; target glyphs verified present);
