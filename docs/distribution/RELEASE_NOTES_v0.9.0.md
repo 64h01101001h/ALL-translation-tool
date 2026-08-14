@@ -210,3 +210,23 @@ highlights, feature by feature:
   label and unexplained empty surface; the whole application was
   re-certified by a 20-pane mechanized control sweep after the
   wave — zero anomalies, 39/39 engine test suites green.
+
+---
+
+# 0.10.0 — August 13, 2026 (the verification wave)
+
+Versioning policy from here on (adopted 2026-08-13): the VERSION
+file is the single source of truth; the minor number increments
+with each shipped feature wave, the patch number for fix-only
+presses, and 1.0.0 arrives with the first team installation.
+
+Highlights since 0.9.0: the text↔woodblock jump and BUDA-style
+scan viewer; the Lhasa scan-routing root-cause fix with
+double-source verification (147/147); confirmed per-text author
+links from the ACIP↔BDRC catalog; card typography v2 + Palatino
+throughout; the Sanskrit-mantra programme (82,834-syllable census,
+render guard); measured pecha presets + the 54-syllable authentic
+type autofit; eKangyur + eTengyur acquired, indexed, and
+collatable in one click (4,439 texts); pronunciation rulings
+(tsema namdrel gyi tsik le'ur jepa; 'a-chung class); Input zoom,
+recents, and locate lanes.
