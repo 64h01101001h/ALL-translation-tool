@@ -546,6 +546,22 @@ deferrals. The complete ledger: `docs/LOOSE_ENDS_AUDIT.md`.
 - Session memory (see §19) — the running institutional log.
 
 
+## 6½. The DigitalTibetan integration (slot-0 programme, same day)
+
+docs/design/DIGITALTIBETAN_INTEGRATION_PLAN.md — all core phases
+shipped 2026-08-14: **P1** typography rule engine (W3C digest
+lint + pecha break protection) · **P3** Espel phonetics
+cross-oracle (banked third_party, Perl dual license — found and
+fixed our monosyllabic ba→wa defect; GMR pron_engine fenced
+untouchable by Adam's ruling) · **P4** py-tiblegenc legacy
+rescue (Apache-2.0; venv + wrapper, 70 font tables, Library
+Maintenance lane) · **P5** StarDict reader (allcore module,
+battery #40, Lookup user-supplied layer) · **P6** pecha
+three-up + A5 saddle booklet imposition (pure ordering fn,
+selftested) · **P8** TISE input keys in Convert (display-layer
+joins, engine untouched). Remaining: W3C full-document pass;
+extra phonetics display conventions.
+
 ## Appendix A — exact inventory (captured 2026-08-14)
 
 - **Classes in app/main.cpp (25)**: LookupPopup, AnalysisPane,

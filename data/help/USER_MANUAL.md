@@ -855,6 +855,13 @@ abandons cleanly.
   appears in the output the app warns you the source encoding was
   probably wrong (wrong guesses produce garbage, not silent
   errors).
+- **Maintenance… → Legacy font rescue (py-tiblegenc)** — a second
+  rescue engine covering **28+ encodings through 70 font tables**
+  (the Dedris/Sambhota families and the TibetanMachine range).
+  One-time setup: `bash tools/setup_tiblegenc.sh`. Pick the source
+  font, pick the file, save the rescued Unicode — the engine's own
+  report (including anything it could not map) is shown for
+  review. A rescue is a per-glyph mapping, never blind trust.
 - **Maintenance… → Update search index** — refreshes the full-text index that
   Research → Search's "search the Library" uses. The report counts
   files added / updated / removed / unchanged; a full build
