@@ -580,7 +580,7 @@ implementation is sidelined HERE from this date. What this means:
       when absent. Setting now persisted by family name
       (overlay/tibFontFamily). LATER (nice-to-have): visual pass of the
       Sanskrit-stack battery output in both faces.
-- [ ] **Lotsawa House** — CC BY-NC: write them for bulk/permission;
+- [~] **Lotsawa House** — CC BY-NC: OUTREACH DRAFTED 2026-08-13 (Gmail r918926364457655611, To: blank — Adam adds the address and sends). Ask: bulk/permission;
       prayer-register corpus for register warnings.
 - [~] Link-out-only tier — Bibliotheca Polyglotta + Lotsawa House
       SHIPPED 2026-08-07 (with 84000 + BDRC etexts, above). Adarsha
@@ -764,14 +764,17 @@ implementation is sidelined HERE from this date. What this means:
       woodblock prints; head-letter (dbu khyud) and double-shad
       conventions; margin presets; QA pass comparing against
       traditional prints.
-- [ ] **PRINT PARTNERSHIP — Vimala Treasures** (Adam, 2026-08-12):
+- [~] **PRINT PARTNERSHIP — Vimala Treasures** (Adam, 2026-08-12):
+      OUTREACH DRAFTED 2026-08-13 (Gmail r1053591277282639853,
+      To: blank — Adam adds the address and sends; pecha tool has
+      matured: v2 + batch + verse lineation).
       partner/work with vimalatreasures.org (they print +
       distribute BDRC texts:
       vimalatreasures.org/collections/the-buddhist-digital-resource-
       center-bdrc) so texts/pechas produced by the tool can be
       PRINTED properly on request — the Pecha Maker's output as
       their input. Outreach draft when the pecha tool matures.
-- [ ] TibetDoc search-locations view: per-FILE hit counts across
+- [x] TibetDoc search-locations view — SHIPPED 2026-08-13 (per-file rollup + goferopen open-at-line): per-FILE hit counts across
       chosen locations + open-at-first-hit (Gofer extension).
 - [ ] In-document lookup popup (TibetDoc's dictionary window):
       select a word in Manuscript/Draft/Input → floating card
