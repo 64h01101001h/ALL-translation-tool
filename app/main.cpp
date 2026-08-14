@@ -2574,6 +2574,20 @@ public:
                 check(ok, "meter reader: verse grouped, deviant "
                           "marked, prose labeled");
             }
+            {   // pecha shad convention: stanza close normalized
+                // to ༎ only where a shad exists; doubles kept
+                const QString a = OverlayPane::stanzaShad(
+                    QString::fromUtf8("ཡིན།"));
+                const QString b = OverlayPane::stanzaShad(
+                    QString::fromUtf8("ཡིན། །"));
+                const QString c = OverlayPane::stanzaShad(
+                    QString::fromUtf8("ཡིན"));
+                check(a == QString::fromUtf8("ཡིན༎") &&
+                          b == QString::fromUtf8("ཡིན། །") &&
+                          c == QString::fromUtf8("ཡིན"),
+                      "pecha: stanza double-shad normalized, "
+                      "never invented");
+            }
             {   // song meter (mgur): four exact 6-syllable lines
                 // group under the stricter even rule
                 input_->setPlainText(
@@ -7804,6 +7818,23 @@ public:
     // office-printer imposition, and an English interlinear that
     // appears ONLY where the corpus attests the exact segment
     // (rule 1: matched, never composed). ------------------------
+    // classical shad convention: a stanza's last line closes with
+    // the double shad ༎. Applied only where the poet already wrote
+    // a shad — punctuation is normalized, never invented.
+    static QString stanzaShad(QString ln) {
+        const QString shad = QString::fromUtf8("།");
+        const QString nyis = QString::fromUtf8("༎");
+        QString t = ln;
+        while (t.endsWith(' ')) t.chop(1);
+        if (t.endsWith(shad + " " + shad) || t.endsWith(nyis))
+            return ln;   // already double
+        if (t.endsWith(shad)) {
+            t.chop(1);
+            return t + nyis;
+        }
+        return ln;
+    }
+
     struct PechaOpts {
         double wMM = 420, hMM = 90;  // folio side size
         int lines = 7;               // text lines per side
@@ -7824,6 +7855,10 @@ public:
         int sylTarget = 0;   // authentic type: syllables/line
                               // target (54 = measured Degé print;
                               // 0 = size purely from line height)
+        bool shadConv = true;           // classical conventions:
+                                        // ༎ closes each stanza in
+                                        // verse mode; ༄༅། ། opens
+                                        // every recto side
         bool verseLines = false;        // verse texts: the source's
                                         // own lines become pecha
                                         // lines (blank line =
@@ -8047,7 +8082,9 @@ public:
         const QString tTitle = tibetanizeField(o.title);
         bool titlePending = o.titleFolio && !tTitle.isEmpty();
         int textSides = 0;
+        bool sideFresh = true;   // recto head-mark pending
         auto beginSide = [&] {
+            sideFresh = true;
             pic = QPicture();
             p.begin(&pic);
             int L = o.lines;
@@ -8091,7 +8128,8 @@ public:
         // line breaks correctly across the transition
         auto flow = [&](const QString& whole, const QFont& proto,
                         double fscale, double factor,
-                        const QColor& col) {
+                        const QColor& col,
+                        bool tibMain = false) {
             QString t = whole;
             while (!t.isEmpty()) {
                 QFont f(proto);
@@ -8107,7 +8145,18 @@ public:
                 while (true) {
                     QTextLine line = tl.createLine();
                     if (!line.isValid()) break;
-                    line.setLineWidth(textR.width());
+                    // recto convention (o.shadConv): every a-side
+                    // opens with the yig-mgo — drawn as furniture,
+                    // never inserted into the text stream (unless
+                    // the text itself already opens with one)
+                    double ind = 0;
+                    if (sideFresh && sideA && tibMain &&
+                        o.shadConv && o.headMarks &&
+                        !(line.textStart() < t.size() &&
+                          t[line.textStart()] == QChar(0x0F04)))
+                        ind = QFontMetricsF(f).horizontalAdvance(
+                            yigMgo);
+                    line.setLineWidth(textR.width() - ind);
                     line.setPosition(QPointF(0, 0));
                     const double adv = lineH * factor;
                     if (y + adv > textR.bottom() + 0.5) {
@@ -8117,7 +8166,14 @@ public:
                     }
                     p.setPen(col);
                     p.setFont(f);
-                    line.draw(&p, QPointF(textR.left(), y));
+                    if (ind > 0)
+                        p.drawText(
+                            QPointF(textR.left(),
+                                    y + QFontMetricsF(f).ascent()),
+                            yigMgo);
+                    line.draw(&p,
+                              QPointF(textR.left() + ind, y));
+                    sideFresh = false;
                     y += adv;
                     consumed =
                         line.textStart() + line.textLength();
@@ -8155,21 +8211,27 @@ public:
             // a blank source line becomes a stanza gap
             QString vtext = QString::fromStdString(res.unicode);
             vtext.replace(marker, " ");
+            const QStringList vls = vtext.split('\n');
             bool first = true;
-            for (QString ln : vtext.split('\n')) {
-                ln = ln.simplified();
+            for (int li = 0; li < vls.size(); ++li) {
+                QString ln = vls[li].simplified();
                 if (ln.isEmpty()) {
                     y += lineH * 0.5;   // stanza gap
                     if (y > textR.bottom() + 0.5) newSide();
                     continue;
                 }
+                // stanza boundary = next line blank, or text end
+                bool boundary = li + 1 >= vls.size();
+                if (!boundary)
+                    boundary = vls[li + 1].simplified().isEmpty();
+                if (boundary && o.shadConv) ln = stanzaShad(ln);
                 if (first && o.headMarks) ln = yigMgo + ln;
                 first = false;
-                flow(ln, tf, tibScale, 1.0, Qt::black);
+                flow(ln, tf, tibScale, 1.0, Qt::black, true);
             }
         } else if (!o.interPhon && !o.interEng) {
             flow((o.headMarks ? yigMgo : QString()) + text, tf,
-                 tibScale, 1.0, Qt::black);
+                 tibScale, 1.0, Qt::black, true);
         } else {
             // per barrier group: Tibetan, then phonetics and/or
             // corpus-attested English beneath, engines throughout
@@ -8196,7 +8258,7 @@ public:
                 tib += QString::fromUtf8("། ");
                 if (firstGroup && o.headMarks) tib = yigMgo + tib;
                 firstGroup = false;
-                flow(tib, tf, tibScale, 1.0, Qt::black);
+                flow(tib, tf, tibScale, 1.0, Qt::black, true);
                 if (o.interPhon) {
                     const std::string pron = allcore::pronounce(
                         wy.trimmed().toStdString());
@@ -8451,6 +8513,17 @@ public:
             "bare folios).");
         cover->setChecked(
             st.value("pecha/coverSheet", false).toBool());
+        auto* shadC = new QCheckBox(QString::fromUtf8(
+            "classical conventions — ༎ closes each stanza (verse "
+            "mode); ༄༅། ། opens every recto side"));
+        shadC->setToolTip(
+            "Two conventions of the great woodblock editions: the "
+            "double shad that closes a stanza (applied only where "
+            "the poet already wrote a shad — punctuation is "
+            "normalized, never invented), and the yig-mgo head "
+            "mark opening the first line of every front (a) side.");
+        shadC->setChecked(
+            st.value("pecha/shadConv", true).toBool());
         auto* classical = new QCheckBox(
             "classical opening — the first two text sides carry "
             "5 lines with larger letters (Degé convention)");
@@ -8497,6 +8570,7 @@ public:
         v->addWidget(titleFolio);
         v->addLayout(row4);
         v->addWidget(heads);
+        v->addWidget(shadC);
         v->addWidget(classical);
         v->addWidget(verse);
         v->addWidget(cover);
@@ -8537,6 +8611,7 @@ public:
             o.marginTitle = marginT->text();
             o.volLetter = volL->text();
             o.headMarks = heads->isChecked();
+            o.shadConv = shadC->isChecked();
             o.classicalOpening = classical->isChecked();
             o.coverSheet = cover->isChecked();
             o.verseLines = verse->isChecked();
@@ -8562,6 +8637,7 @@ public:
             s2.setValue("pecha/marginTitle", marginT->text());
             s2.setValue("pecha/volLetter", volL->text());
             s2.setValue("pecha/headMarks", heads->isChecked());
+            s2.setValue("pecha/shadConv", shadC->isChecked());
             s2.setValue("pecha/interPhon", inter->isChecked());
             s2.setValue("pecha/interEng", interE->isChecked());
         };

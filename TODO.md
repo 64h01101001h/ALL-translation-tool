@@ -434,16 +434,18 @@ implementation is sidelined HERE from this date. What this means:
       NOTE: Monlam's own list files are only ~80% in this order
       (Sanskrit-diacritic interleaving differs) — measured, not used
       as a fixture. No port needed; tibetan-sort-js fallback unused.
-- [~] **eKangyur/eTengyur PD corpora** (Esukhia/OpenPecha) — citable
+- [x] **eKangyur/eTengyur PD corpora** (Esukhia/OpenPecha) — citable
       diff-proofread canon beside the HGM corpus. eKANGYUR ACQUIRED
       2026-08-13: Esukhia derge-kangyur cloned (103 vols, 336MB,
       Public Domain per its README) to editions/ (gitignored, out
       of the press); tools/index_ekangyur.py → 1,108 Toh texts
       indexed with volume/offset/folio (ekangyur_index.json);
       CROSS-CHECK: Toh 16 starts folio 121a = BDRC manifest labels
-      exactly. NEXT: app lane — 'Compare with the eKangyur
-      edition' for KD texts via the edition diff (unicode↔ACIP
-      conversion seam to design); eTengyur later.
+      exactly. APP LANE SHIPPED 2026-08-13/14: compareWithEkangyur
+      (KD via eKangyur AND TD via eTengyur — editionDir(bool),
+      ekStripMarkers, dmp edition diff, menu offers on both);
+      eTengyur indexed too (3,331 texts). Item CLOSED — remaining
+      only eyeball spot-checks as texts get used.
 - [ ] **py-tiblegenc** (Apache-2.0) — legacy-font→Unicode rescue for
       input-center documents; external tool first, port maps later.
 - [~] **lucene-bo** — Adam approved full inclusion 2026-08-07
@@ -577,7 +579,16 @@ implementation is sidelined HERE from this date. What this means:
       his OM dot marks the SURVIVING dot inside a SYLLABIC contraction
       (bsdus tshig: རྣམ་ཤེས for རྣམ་པར་ཤེས་པ) — a different animal
       from these orthographic squeezes (where the dot disappears).
-      REMAINING: the rKTs 3,000+ list (license still unverified —
+      rKTs LICENSE VERIFIED 2026-08-14 (subagent research): site-wide
+      CC BY-SA 4.0 on rkts.org/about.php ("If not indicated otherwise,
+      data (other than images) provided through the rKTs website are
+      placed under… CC BY-SA 4.0"); list now 6,709 entries (grown from
+      3,000); NO bulk download — export must come from Bruno Lainé
+      (brunogml@gmail.com; his GitHub catalog data is CC0 but does NOT
+      include the abbreviations). EMAIL DRAFTED r-9190233297626946294
+      (export request + license confirmation + CC0 invitation) — Adam
+      sends. On arrival: separate labeled layer beside TibSchol (never
+      merged — ShareAlike). (was: the rKTs 3,000+ list, license unverified —
       would grow this table) and a bsdus-tshig table for the OM dot
       proper.
 - [x] **THL kmaps place lookup** — SHIPPED 2026-08-13 as a
