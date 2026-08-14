@@ -468,7 +468,7 @@ implementation is sidelined HERE from this date. What this means:
       BDEN PA'I line answers a bden pa search).
 - [ ] **Steinert public dictionary CSVs** — Lookup-pane layers AFTER
       per-dictionary license review (code is GPL — data only).
-- [~] **bophono** (MIT) — optional non-GMR phonetics schemes toggle
+- [x] **bophono** — CORE REQUEST SATISFIED 2026-08-13 by our own THL Simplified Phonetics engine (139/139 battery; Overlay display mode + Convert row) — the 'THL scheme beside GMR' ask. bophono itself (Tournadre IPA etc.) stays optional/parked. Original: optional non-GMR phonetics schemes toggle
       (GMR convention stays binding). REQUESTED by Adam 2026-08-12:
       a THL-scheme option beside the new Pronunciation (GMR) display
       mode. RECON 2026-08-12: bophono = Esukhia/bophono (MIT, cloned
@@ -715,7 +715,7 @@ implementation is sidelined HERE from this date. What this means:
       Original line: verify d. 1972 (PD-2023 math), hunt
       the etext (BDRC/Monlam/THL), then AI-translate definitions
       ("AI-translated from a PD native definition" tier).
-- [~] **Jäschke 1881 (PD)** — EVALUATED 2026-08-12: Steinert's
+- [x] **Jäschke 1881 (PD)** — SHIPPED 2026-08-13: PD scan acquired (archive.org tibetanenglishdi00jsuoft, 81MB → data/das/), OUR OWN letter-section page map built from the scan itself (section-opening formulas + per-page root-letter voting; Steinert's index untouched — license stays pending), root-aware jaePageFor (prefix/superscript stripping), 'Jäschke 1881 · open the page scan' card line + jae: viewer on all three surfaces. Original: EVALUATED 2026-08-12: Steinert's
       Jaeschke_Scan = headword→page INDEX (154,112 rows), not text;
       index is Steinert's compilation (his pending license email
       covers it, same as ChandraDas_Scan). The 1881 text is PD on
@@ -796,7 +796,7 @@ implementation is sidelined HERE from this date. What this means:
       their input. Outreach draft when the pecha tool matures.
 - [x] TibetDoc search-locations view — SHIPPED 2026-08-13 (per-file rollup + goferopen open-at-line): per-FILE hit counts across
       chosen locations + open-at-first-hit (Gofer extension).
-- [ ] In-document lookup popup (TibetDoc's dictionary window):
+- [x] In-document lookup popup — SHIPPED 2026-08-13 (⌘D LookupPopup, app-wide selection → floating entryHtml card, follows lookups). Original: In-document lookup popup (TibetDoc's dictionary window):
       select a word in Manuscript/Draft/Input → floating card
       (entryHtml) + ⌘D shortcut; the popup follows lookups.
 
@@ -987,7 +987,7 @@ implementation is sidelined HERE from this date. What this means:
       ZIPs from asianlegacylibrary.org/library, import personal materials
       (.docx→.txt auto-conversion), sortable tree browser with catalog
       provenance + preview + open-in-Overlay. *Shipped 2026-08-06.*
-- [ ] **Tibetan OCR for pecha scans** (docs/OCR_DESIGN.md; Adam 2026-08-06,
+- [x] **Tibetan OCR for pecha scans** — STAGES 0-2 COMPLETE (see below) + 2026-08-13 additions: in-Input detect/prefill/locate-selection, Overlay word-locate, Four-Layer OCR column. RESIDUE: the other 4 tibetan-ocr-app script-style models (Uchan etc.) when needed; BDRC new OCR release ~2 wks triggers refresh. Original: (docs/OCR_DESIGN.md; Adam 2026-08-06,
       "eventually"): base = BDRC's open-source tibetan-ocr-app models
       (5 script styles incl. Woodblock). Stage 0 = document the manual
       BDRC-app → Import workflow; Stage 1 COMPLETE 2026-08-06 (Library
@@ -1017,7 +1017,7 @@ implementation is sidelined HERE from this date. What this means:
       verified); deterministic bdrcScanUrl (KD→MW22084, KL→MW26071,
       TD→MW23703) + "view the original scans on BDRC" link in the Library
       info panel. *Shipped 2026-08-06.*
-- [ ] BDRC linking, remaining: templated-query/SPARQL fallback for
+- [x] BDRC linking — LARGELY SHIPPED by 2026-08-13: templated-query fallback = WorkVersionPerPerson lane; Sungbum title-based candidates = 520 verified links + title-search dialog (user-confirmed); in-app IIIF viewer = the BUDA-style scan viewer + Four-Layer Page. RESIDUE: KX/TS editions still lack any lane. Original: BDRC linking, remaining: templated-query/SPARQL fallback for
       editions without ID-encoded Tohoku (KX, TS), title-based candidate
       search for Sungbum works (fuzzy — user-confirmed, never auto-
       asserted), in-app IIIF scan viewer beside the e-text, and the OCR
@@ -1062,7 +1062,7 @@ implementation is sidelined HERE from this date. What this means:
       and consider a grammar-references layer alongside Wilson.
 
 ## GMR RECORDINGS ARCHIVE (Adam, 2026-08-12)
-- [~] **Master recordings inventory** — every known recording of
+- [x] **Master recordings inventory** — COMPLETE 2026-08-13: 4,010 recordings tracked w/ language+duration census + transcription cost tiers (Summary sheet). Preservation pass remains its own item. Original: every known recording of
       Geshe Michael Roach, audio + video: YouTube, The Knowledge
       Base, personal collections. STARTED 2026-08-12:
       "~/Documents/GMR Recordings Tracker.xlsx" seeded with 3,633

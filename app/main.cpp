@@ -271,6 +271,55 @@ static int dasPageFor(const std::string& wylie) {
     return best;
 }
 static void showDasPage(QWidget* parent, int page);
+// Jäschke 1881 (PD, archive.org scan) — the second page-scan lane,
+// letter-level anchors (~page accuracy by design)
+static std::vector<std::pair<std::string, int>>* g_jaeSections =
+    nullptr;
+static QString g_jaePdfPath;
+static int jaePageFor(const std::string& wylie) {
+    if (!g_jaeSections || g_jaeSections->empty()) return -1;
+    std::string syl = wylie.substr(0, wylie.find(' '));
+    auto match = [&](const std::string& t) {
+        int best = -1;
+        size_t bestLen = 0;
+        for (const auto& [onset, page] : *g_jaeSections)
+            if (t.compare(0, onset.size(), onset) == 0 &&
+                onset.size() >= bestLen) {
+                bestLen = onset.size();
+                best = page;
+            }
+        return best;
+    };
+    // strip prefix letters (g d b m ') and superscripts (r l s)
+    // down to the root before matching the letter sections —
+    // bka/dkar/rkang all live under ka in Jäschke's order
+    std::string t = syl;
+    for (int pass = 0; pass < 2 && t.size() > 1; ++pass) {
+        const char c0 = t[0];
+        const bool pre = (c0 == 'g' || c0 == 'd' || c0 == 'b' ||
+                          c0 == 'm' || c0 == '\'');
+        const bool sup = (c0 == 'r' || c0 == 'l' || c0 == 's');
+        if (!pre && !sup) break;
+        const char c1 = t[1];
+        const bool nextCons =
+            std::isalpha((unsigned char)c1) && c1 != 'a' &&
+            c1 != 'e' && c1 != 'i' && c1 != 'o' && c1 != 'u';
+        // "sh"/"ng"/"dz" etc. are onsets themselves — only strip
+        // when the REMAINDER also matches a section
+        if (!nextCons) break;
+        const std::string rest = t.substr(1);
+        if (match(rest) < 0) break;
+        // don't split real digraph onsets (sh zh th ph kh ch ng
+        // ny ts dz): if the full form already matches a longer
+        // onset than the bare first letter, keep it
+        if ((c0 == 's' && c1 == 'h') || (c0 == 'd' && c1 == 'z') ||
+            (c0 == 'g' && c1 == '.'))
+            break;
+        t = rest;
+    }
+    return match(t);
+}
+static void showJaePage(QWidget* parent, int page);
 
 // normalization MUST mirror tools/build_teaching_index.py terms.txt
 static std::string teachingKey(std::string g) {
@@ -701,6 +750,16 @@ static QString entryHtml(const allcore::Entry& e,
                          "Das 1902 dictionary \u00b7 open the "
                          "page scan (~p.%1, reference)</a>"
                          "</small></div>")
+                     .arg(pg);
+    }
+    if (d.das && g_jaeSections && !e.wylie.empty()) {
+        const int pg = jaePageFor(e.wylie);
+        if (pg > 0)
+            h += QString("<div style='margin-top:2px'><small>"
+                         "<a href='jae:%1' style='color:#666'>"
+                         "J\u00e4schke 1881 dictionary \u00b7 "
+                         "open the page scan (\u00b1page, "
+                         "reference)</a></small></div>")
                      .arg(pg);
     }
     if (d.sanskrit && !e.sanskrit_reference.empty())
@@ -1316,6 +1375,9 @@ public:
                     const QString s = u.toString();
                     if (s.startsWith("term:")) {
                         run(anchorPayload(s, 5));
+                    } else if (s.startsWith("jae:")) {
+                        showJaePage(this, s.mid(4).toInt());
+                        run(box_->text());
                     } else if (s.startsWith("das:")) {
                         showDasPage(this, s.mid(4).toInt());
                         run(box_->text());
@@ -1575,6 +1637,11 @@ static QWidget* makeLookupPane(allcore::Spine& spine, allcore::RefDict* ref,
         results, &QTextBrowser::anchorClicked,
         [pane, box](const QUrl& u) {
             const QString s = u.toString();
+            if (s.startsWith("jae:")) {
+                showJaePage(pane, s.mid(4).toInt());
+                QMetaObject::invokeMethod(box, "returnPressed");
+                return;
+            }
             if (s.startsWith("das:")) {
                 showDasPage(pane, s.mid(4).toInt());
                 QMetaObject::invokeMethod(box, "returnPressed");
@@ -3282,7 +3349,7 @@ auto* secScan = new QLabel("<span style='color:#9A7A33;font-size:10px;letter-spa
         showSanskrit_ = mkToggle("sanskrit", "Sanskrit reference", false);
         showHopkins_ = mkToggle("hopkins", "Hopkins reference", false);
         show84000_ = mkToggle("g84000", "84000 glossary (CC BY)", true);
-        showDas_ = mkToggle("das", "Das 1902 page links", true);
+        showDas_ = mkToggle("das", "Das 1902 / J\u00e4schke 1881 page links", true);
         showRefs_ = mkToggle("refs", "reference dictionaries (LC/TD/THL/OT/IW)",
                              true);
         showNotes_ = mkToggle("notes", "footnotes && bibliography "
@@ -3365,6 +3432,10 @@ auto* secScan = new QLabel("<span style='color:#9A7A33;font-size:10px;letter-spa
         connect(context_, &QTextBrowser::anchorClicked,
                 [this](const QUrl& u) {
                     const QString s = u.toString();
+                    if (s.startsWith("jae:")) {
+                        showJaePage(this, s.mid(4).toInt());
+                        return;
+                    }
                     if (s.startsWith("das:")) {
                         showDasPage(this, s.mid(4).toInt());
                         return;
@@ -16485,6 +16556,42 @@ static void fileProposal(QWidget* parent, allcore::ProposalKind kind,
                              "The proposals folder could not be written.");
 }
 
+static void showJaePage(QWidget* parent, int page) {
+#ifdef ALL_HAVE_QTPDF
+    if (g_jaePdfPath.isEmpty() || !QFile::exists(g_jaePdfPath)) {
+        QMessageBox::information(
+            parent, "J\u00e4schke dictionary",
+            "The J\u00e4schke (1881) PDF is not in the data "
+            "folder (data/das/jaeschke_1881.pdf).");
+        return;
+    }
+    auto* dlg = new QDialog(parent);
+    dlg->setAttribute(Qt::WA_DeleteOnClose);
+    dlg->setWindowTitle(
+        QString("J\u00e4schke, A Tibetan-English Dictionary "
+                "(1881) \u2014 pdf p.%1 \u00b7 public domain "
+                "\u00b7 reference")
+            .arg(page));
+    dlg->resize(860, 900);
+    auto* v = new QVBoxLayout(dlg);
+    auto* pdfDoc = new QPdfDocument(dlg);
+    pdfDoc->load(g_jaePdfPath);
+    auto* view = new QPdfView(dlg);
+    view->setDocument(pdfDoc);
+    view->setPageMode(QPdfView::PageMode::MultiPage);
+    v->addWidget(view, 1);
+    dlg->show();
+    QTimer::singleShot(150, view, [view, page] {
+        view->pageNavigator()->jump(page - 1, QPointF(0, 0));
+    });
+#else
+    QMessageBox::information(parent, "J\u00e4schke dictionary",
+                             "This build lacks the PDF viewer "
+                             "component.");
+    (void)page;
+#endif
+}
+
 static void showDasPage(QWidget* parent, int page) {
 #ifdef ALL_HAVE_QTPDF
     if (g_dasPdfPath.isEmpty() || !QFile::exists(g_dasPdfPath)) {
@@ -18949,6 +19056,26 @@ int main(int argc, char** argv) {
             g_dasPdfPath = root + "/data/das/das_1902_bookmarked.pdf";
         }
     }
+    static std::vector<std::pair<std::string, int>> jaeSections;
+    {
+        QFile f(root + "/data/extracted/jaeschke_pages.json");
+        if (f.open(QIODevice::ReadOnly)) {
+            const auto doc = QJsonDocument::fromJson(f.readAll());
+            for (const auto& v :
+                 doc.object().value("sections").toArray()) {
+                const auto o = v.toObject();
+                jaeSections.push_back(
+                    {o.value("onset").toString().toStdString(),
+                     o.value("pdf_page").toInt()});
+            }
+        }
+        if (!jaeSections.empty() &&
+            QFile::exists(root +
+                          "/data/das/jaeschke_1881.pdf")) {
+            g_jaeSections = &jaeSections;
+            g_jaePdfPath = root + "/data/das/jaeschke_1881.pdf";
+        }
+    }
     tabs.addTab(makeLookupPane(spine, refdict, mvp, whitney, colloq),
                 "Lookup");
     // ⌘D floating dictionary window — one instance, app-wide
@@ -20064,6 +20191,12 @@ int main(int argc, char** argv) {
         {
             const bool ok = g_dasSections &&
                             g_dasSections->size() >= 800 &&
+                            (g_jaeSections == nullptr ||
+                             (jaePageFor("khyab pa") > 0 &&
+                              jaePageFor("khyab pa") >
+                                  jaePageFor("ka ba") &&
+                              jaePageFor("sha ba") >
+                                  jaePageFor("pha rol"))) &&
                             dasPageFor("khyab pa") > 0 &&
                             dasPageFor("khyab pa") >
                                 dasPageFor("ka ba");
