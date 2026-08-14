@@ -263,3 +263,22 @@ end to end exactly as written)
 *(pane · what stays / what pares / format decision)*
 
 (none yet — first pass pending)
+
+
+## August 13 recertification (evening close)
+
+Run against the INSTALLED binary — the artifact users launch, not
+the build tree:
+
+- App selftest: **141 checks, ALL PASS** (scan-sync, concordance
+  routing, pronunciation rulings incl. the 'a-chung class and
+  surface forms, folio sequencing, eKangyur stripping, IIIF
+  rewrite pins all added this day).
+- Engine suites: **39/39** via ctest.
+- Sanskrit render guard (`--sanskritcheck`): **23 stacks, 0
+  missing glyphs** across the bundled and application fonts.
+- Pane sweeps: all 20 panes coherent across the day's 15+
+  presses; Overlay at 26 exercised controls after the wave.
+- Post-incident: the disk-full press interruption was followed by
+  a full reinstall and this recertification — the installed
+  binary passed everything above.
