@@ -11353,7 +11353,10 @@ static QWidget* makeConvertPane(allcore::Mvp* mvp,
                                   .arg(m.female ? " (f)" : " (m)");
                     calOut->setText(
                         ms.join(" · ") +
-                        " <small>(ᵢ = intercalary; type e.g. \u201c" +
+                        " <small>(ᵢ = intercalary — Kalacakra "
+                        "karana reckoning; published almanacs "
+                        "follow Phugpa, whose leap months can "
+                        "differ; type e.g. \u201c" +
                         QString::number(y) +
                         " m3\u201d for the month's days)</small>");
                     return;
@@ -11402,8 +11405,12 @@ static QWidget* makeConvertPane(allcore::Mvp* mvp,
                     }
                     calOut->setText(
                         rows.join(" · ") +
-                        " <small>(dates verified 721/721 against the "
-                        "original program's printed years)</small>");
+                        " <small>(Kalacakra karana, proven 26 "
+                        "years vs the original program. NOTE: "
+                        "published almanacs follow PHUGPA, which "
+                        "intercalates differently — in leap-"
+                        "affected years dates differ by a month; "
+                        "docs/research/KCK_VS_PHUGPA.md)</small>");
                     return;
                 }
             }
