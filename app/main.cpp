@@ -12062,6 +12062,149 @@ private:
 // it never composes English (rule 1).
 class DraftPane : public QWidget {
 public:
+    // ---- Diamond Cutter Classics house-style check (the
+    // editor's guide, 2023-08-25 — docs/standards/). Mechanical
+    // rules only; everything subtler stays the translator's
+    // judgment. Findings are flags, never auto-fixes (the guide
+    // itself outlaws blind Find/Replace All). ----
+    struct StyleFinding {
+        int pos;
+        QString rule;
+    };
+    static std::vector<StyleFinding> styleCheck(
+        const QString& t) {
+        std::vector<StyleFinding> out;
+        auto scan = [&](const QRegularExpression& re,
+                        const QString& msg) {
+            auto it = re.globalMatch(t);
+            int n = 0;
+            while (it.hasNext() && n < 40) {
+                out.push_back(
+                    {(int)it.next().capturedStart(), msg});
+                ++n;
+            }
+        };
+        scan(QRegularExpression("\""),
+             "straight double quote — the house uses curly "
+             "quotes (fix individually, never Replace All)");
+        {   // straight apostrophes: one aggregate finding, not
+            // a flood — every typed ' is technically one
+            const int n = (int)t.count(QChar('\''));
+            if (n > 0)
+                out.push_back(
+                    {(int)t.indexOf(QChar('\'')),
+                     QString("%1 straight apostrophe(s) — the "
+                             "manuscript wants curly ’ "
+                             "(publishing pass fixes these; "
+                             "flagged for awareness)")
+                         .arg(n)});
+        }
+        scan(QRegularExpression("--"),
+             "double hyphen — use the em dash \u2014");
+        scan(QRegularExpression("\\d-\\d"),
+             "hyphen in a number range — use the en dash "
+             "\u2013 (ff. 25a\u201327b)");
+        scan(QRegularExpression(",\\s*&"),
+             "ampersand in a serial list — & is for pairs only");
+        scan(QRegularExpression("\\d\\s+(BC|AD|CE)\\b"),
+             "spaced era — the house sets 500bc / 650ad "
+             "(small caps, no space)");
+        static const std::vector<QPair<QString, QString>> WORDS =
+            {{"valid perception", "accurate perception"},
+             {"auto-commentary", "autocommentary"},
+             {"eBook", "ebook"},
+             {"mind stream", "mindstream"},
+             {"mind-stream", "mindstream"},
+             {"part-less", "partless"},
+             {"woodcarver", "wood-carver"},
+             {"Ornament of Realizations",
+              "the Jewel of Realizations (ruling 12/15/21)"},
+             {"The Jewel of Realizations",
+              "the Jewel of Realizations \u2014 lowercase "
+              "'the' (ruling 6/28/23)"},
+             {"Middle-Way School", "Middle Way School"},
+             {"Mind-Only School", "Mind Only School"},
+             {"a.k.a.", "aka"}};
+        for (const auto& [bad, good] : WORDS) {
+            int from = 0;
+            int n = 0;
+            while (n < 40) {
+                const int at = t.indexOf(bad, from,
+                                         Qt::CaseSensitive);
+                if (at < 0) break;
+                out.push_back(
+                    {at, "\u201c" + bad +
+                             "\u201d \u2014 the house writes "
+                             "\u201c" +
+                             good + "\u201d"});
+                from = at + bad.size();
+                ++n;
+            }
+        }
+        std::sort(out.begin(), out.end(),
+                  [](const StyleFinding& a,
+                     const StyleFinding& b) {
+                      return a.pos < b.pos;
+                  });
+        return out;
+    }
+
+private:
+    void showStyleCheck() {
+        const QString t = draft_->toPlainText();
+        if (t.trimmed().isEmpty()) {
+            QMessageBox::information(
+                this, "House style check",
+                "Write (or load) the English draft first \u2014 "
+                "the check reads the draft panel.");
+            return;
+        }
+        const auto fs = styleCheck(t);
+        auto* dlg = new QDialog(this);
+        dlg->setAttribute(Qt::WA_DeleteOnClose);
+        dlg->setWindowFlag(Qt::Window);
+        dlg->setWindowTitle(
+            QString("House style check \u2014 %1 finding(s) "
+                    "(Diamond Cutter Classics guide, mechanical "
+                    "rules only)")
+                .arg(fs.size()));
+        dlg->resize(640, 520);
+        auto* v = new QVBoxLayout(dlg);
+        auto* list = new QListWidget;
+        for (const auto& f : fs) {
+            auto* it = new QListWidgetItem(
+                t.mid(f.pos, 18).simplified() + "\u2026  \u2014 " +
+                f.rule);
+            it->setData(Qt::UserRole, f.pos);
+            list->addItem(it);
+        }
+        if (fs.empty())
+            list->addItem(
+                "No mechanical findings \u2014 the subtler "
+                "rules (italics, quotation placement, "
+                "capitalization) remain yours to check; the "
+                "full guide lives in Help under Style.");
+        connect(list, &QListWidget::itemClicked,
+                [this](QListWidgetItem* it) {
+                    if (it->data(Qt::UserRole).isNull()) return;
+                    QTextCursor c(draft_->document());
+                    c.setPosition(
+                        it->data(Qt::UserRole).toInt());
+                    draft_->setTextCursor(c);
+                    draft_->ensureCursorVisible();
+                    draft_->setFocus();
+                });
+        v->addWidget(list, 1);
+        auto* note = new QLabel(
+            "Findings are flags, never auto-fixes \u2014 the "
+            "guide itself forbids blind Replace All. Click a "
+            "row to jump there.");
+        note->setWordWrap(true);
+        v->addWidget(note);
+        dlg->show();
+    }
+public:
+public:
     DraftPane(allcore::Spine& spine, allcore::Progress* progress,
               const QString& root = QString())
         : spine_(spine), progress_(progress), index_(spine), root_(root) {
@@ -12125,6 +12268,16 @@ auto* secStruct = new QLabel("<span style='color:#9A7A33;font-size:10px;letter-s
         srcCol->addWidget(structBtn);
         auto* verseBtn = new QPushButton("Verse meter");
         srcCol->addWidget(verseBtn);
+        auto* styleBtn = new QPushButton("House style check\u2026");
+        styleBtn->setToolTip(
+            "Check the English draft against the Diamond Cutter "
+            "Classics style guide's mechanical rules \u2014 "
+            "quotes, dashes, the word-use list, era style. "
+            "Findings are flags, never auto-fixes. The full "
+            "guide is in Help under Style.");
+        srcCol->addWidget(styleBtn);
+        connect(styleBtn, &QPushButton::clicked,
+                [this] { showStyleCheck(); });
         auto* verseReadBtn = new QPushButton("Verse reading order");
         verseReadBtn->setToolTip(
             "Verse does not read line by line: the meter forces the "
@@ -20760,6 +20913,11 @@ public:
         // Geshe Michael ratifies lives HERE, in his own words
         loadChapters(root + "/data/help/SOURCES.md",
                      "Sources: ", true);
+        // the Diamond Cutter Classics house style (the editor's
+        // guide, received 2026-08-14) — enforced mechanically by
+        // the Draft pane's House style check
+        loadChapters(root + "/data/help/STYLE.md",
+                     "", true);
         // auto-index every control in every pane — two-level aware:
         // top tabs are GROUPS holding inner pane tabs
         auto indexPane = [this](QWidget* w, const QString& pane,
@@ -23174,6 +23332,32 @@ int main(int argc, char** argv) {
             QFile::remove(probe);
             log << QString("  [%1] Files: Drop Stack add persists to "
                            "settings (shelf survives restart)")
+                       .arg(ok ? "PASS" : "FAIL");
+            if (!ok) ++fails;
+        }
+        // Draft: the house-style check flags the mechanical
+        // rules from the editor's guide
+        {
+            const auto fs = DraftPane::styleCheck(
+                "He used valid perception -- see pages 12-14, "
+                "red, white, & blue, in 500 BC.");
+            int quotes = 0, dashes = 0, range = 0, amp = 0,
+                era = 0, wordUse = 0;
+            for (const auto& f : fs) {
+                if (f.rule.contains("em dash")) ++dashes;
+                if (f.rule.contains("en dash")) ++range;
+                if (f.rule.contains("pairs only")) ++amp;
+                if (f.rule.contains("small caps")) ++era;
+                if (f.rule.contains("accurate perception"))
+                    ++wordUse;
+                if (f.rule.contains("curly")) ++quotes;
+            }
+            const bool ok = dashes == 1 && range == 1 &&
+                            amp == 1 && era == 1 &&
+                            wordUse == 1 && quotes == 0;
+            log << QString("  [%1] Draft: house-style check "
+                           "flags dashes, ranges, ampersand, "
+                           "era, and the word-use list")
                        .arg(ok ? "PASS" : "FAIL");
             if (!ok) ++fails;
         }

@@ -1180,6 +1180,17 @@ Geshe Michael may already have a rendering.
   300-shloka bampo).
 - **Verse meter** — names the meter of verse passages and flags
   broken lines.
+- **House style check…** — checks your English draft against the
+  **Diamond Cutter Classics style guide's** mechanical rules:
+  straight vs. curly quotes, `--` where an em dash belongs,
+  hyphens in number ranges (en dash territory), ampersands in
+  serial lists, era style (500bc, no space), and the house
+  word-use list (accurate perception, mindstream, the Jewel of
+  Realizations, and the rest). Findings are **flags, never
+  auto-fixes** — the guide itself forbids blind Replace All.
+  Click a finding to jump to it. The full guide lives in Help
+  under the **Style:** chapters, with the editor's original
+  banked in the repository.
 - **Verse reading order** — stanza-by-stanza reading guidance with
   the verb named. Verse does not read line by line: the meter
   forces the poet to displace words and drop understood particles,

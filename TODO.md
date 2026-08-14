@@ -210,7 +210,7 @@ implementation is sidelined HERE from this date. What this means:
       (manual p. 83) — the ingested ACIP Catalog.TXT appears to be the
       same lineage (same field set), so this is confirmation +
       possible Sanskrit-title column, not new ground.
-- [ ] **Mixed Nuts style sheets / style guide** — Adam will get it from the
+- [x] **Mixed Nuts style sheets / style guide** — ARRIVED 2026-08-14 (Diamond Cutter Classics Style Guide, 2023-08-25, via Adam's Dropbox link): original banked docs/standards/DCC_Style_Guide_2023-08-25.docx; distilled to data/help/STYLE.md (6 in-app Help chapters, 'Style: ' prefix); Draft pane HOUSE STYLE CHECK button ships the mechanical rules (quotes/dashes/ranges/ampersand/era/word-use list; flags never auto-fixes — the guide itself forbids Replace All; selftest 150). Subtler rules (italics-in-root-text, quotation placement, capitalization) documented, left to judgment. (was: Adam will get it from the
       team's editor and upload it here; then extend the translation-prep
       formatter and Draft workspace to assist/enforce its rules
       (docs/standards/MIXED_NUTS_PRELIMINARY_FORMATTING.md holds the
