@@ -132,5 +132,18 @@ browse *a canon*.
   (Finder stays the editor for now). P2 otherwise COMPLETE.
 - **P3: remote** — SFTP/FTP/WebDAV connections, transfer queue,
   activity/log, remote editing.
+  *First P3 tranche shipped 2026-08-14:* connection profiles
+  (passwords NEVER stored — per-session prompt, memory only),
+  FTP/FTPS/WebDAV(S) via system curl (credentials over stdin
+  -K -, never argv), SFTP via system sftp batch mode (key auth,
+  BatchMode=yes fails fast), remote browser dialog (list /
+  navigate / download-to-active-pane with never-overwrite /
+  upload-from-active-pane), activity log. Listing parsers pinned
+  on output captured LIVE from local pyftpdlib + wsgidav
+  servers; FTP and WebDAV upload/download roundtrips proven
+  byte-identical against those servers. *Remaining in P3:*
+  transfer queue with reorder/conflict rules (v1 is sequential
+  FIFO), remote editing with auto-upload, directory
+  download/upload.
 - **P4: long tail** — S3, embedded terminal, hex viewer.
 Declines stay declined unless Adam overrules with reasons logged.

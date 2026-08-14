@@ -13783,6 +13783,15 @@ public:
         favMenu_ = new QMenu(favB_);
         favB_->setMenu(favMenu_);
         top->addWidget(favB_);
+        connB_ = new QToolButton;
+        connB_->setText("Connections");
+        connB_->setToolTip(
+            "Remote servers: FTP, FTPS, WebDAV, SFTP (key auth). "
+            "Browse, download into the active pane, upload from "
+            "it — passwords asked per session, never stored.");
+        connect(connB_, &QToolButton::clicked,
+                [this] { openConnections(); });
+        top->addWidget(connB_);
         wsB_ = new QToolButton;
         wsB_->setText("Workspaces");
         wsB_->setPopupMode(QToolButton::InstantPopup);
@@ -14236,6 +14245,77 @@ private:
     }
 
 public:
+    // ================= remote connections (file-browser P3):
+    // FTP/FTPS/WebDAV through the system curl, SFTP through the
+    // system sftp in batch mode (key auth). Credentials are
+    // prompted per session and held in memory only — never
+    // written to settings or passed on a command line (curl
+    // reads them over stdin via -K -). =================
+    struct RemoteEntry {
+        QString name;
+        bool isDir = false;
+        qint64 size = 0;
+    };
+
+    // unix ls -l style listing (FTP LIST / sftp ls -l), captured
+    // live from pyftpdlib + OpenSSH: perms links owner group
+    // size month day time name (name may hold spaces)
+    static std::vector<RemoteEntry> parseFtpList(
+        const QString& out) {
+        std::vector<RemoteEntry> es;
+        for (const QString& ln :
+             out.split('\n', Qt::SkipEmptyParts)) {
+            const QStringList t =
+                ln.split(' ', Qt::SkipEmptyParts);
+            if (t.size() < 9) continue;
+            if (t[0].size() < 10) continue;
+            RemoteEntry e;
+            e.isDir = t[0].startsWith('d');
+            e.size = t[4].toLongLong();
+            e.name = t.mid(8).join(' ');
+            if (e.name == "." || e.name == "..") continue;
+            es.push_back(e);
+        }
+        return es;
+    }
+
+    // WebDAV PROPFIND Depth:1 multistatus (namespace-agnostic;
+    // captured live from wsgidav): per-response href +
+    // <collection/> presence + getcontentlength
+    static std::vector<RemoteEntry> parseDavList(
+        const QString& xml, const QString& basePath) {
+        std::vector<RemoteEntry> es;
+        QRegularExpression resp(
+            "<(?:[A-Za-z0-9]+:)?response>(.*?)"
+            "</(?:[A-Za-z0-9]+:)?response>",
+            QRegularExpression::DotMatchesEverythingOption);
+        QRegularExpression hrefRe(
+            "<(?:[A-Za-z0-9]+:)?href>([^<]+)<");
+        QRegularExpression lenRe(
+            "<(?:[A-Za-z0-9]+:)?getcontentlength>(\\d+)<");
+        QString base = basePath;
+        if (!base.endsWith('/')) base += '/';
+        auto it = resp.globalMatch(xml);
+        while (it.hasNext()) {
+            const QString block = it.next().captured(1);
+            const auto hm = hrefRe.match(block);
+            if (!hm.hasMatch()) continue;
+            QString href = QUrl::fromPercentEncoding(
+                hm.captured(1).toUtf8());
+            if (href == base || href + "/" == base) continue;
+            RemoteEntry e;
+            e.isDir = block.contains("collection");
+            if (href.endsWith('/')) href.chop(1);
+            e.name = href.section('/', -1);
+            const auto lm = lenRe.match(block);
+            if (lm.hasMatch())
+                e.size = lm.captured(1).toLongLong();
+            if (e.name.isEmpty()) continue;
+            es.push_back(e);
+        }
+        return es;
+    }
+
     // folder synchronization (file-browser P2, ForkLift's model):
     // the PLAN is computed as data first — what would be copied,
     // which direction, and whether it overwrites — and shown for
@@ -14287,6 +14367,340 @@ private:
                 out[rel] = {e.size(),
                             e.lastModified().toSecsSinceEpoch()};
         }
+    }
+
+    void openConnections() {
+        auto* dlg = new QDialog(this);
+        dlg->setAttribute(Qt::WA_DeleteOnClose);
+        dlg->setWindowFlag(Qt::Window);
+        dlg->setWindowTitle(
+            "Remote connections — FTP · FTPS · WebDAV · SFTP "
+            "(key auth)");
+        dlg->resize(760, 620);
+        auto* v = new QVBoxLayout(dlg);
+        // profile row
+        auto* row = new QHBoxLayout;
+        auto* profiles = new QComboBox;
+        auto loadProfiles = [profiles] {
+            profiles->clear();
+            profiles->addItems(
+                QSettings("ALL", "TranslationTool")
+                    .value("files/conns")
+                    .toStringList());
+        };
+        loadProfiles();
+        row->addWidget(profiles, 1);
+        auto* addB = new QPushButton("Add / edit profile…");
+        row->addWidget(addB);
+        auto* connectB = new QPushButton("Connect");
+        row->addWidget(connectB);
+        v->addLayout(row);
+        auto* pathL = new QLabel("/");
+        v->addWidget(pathL);
+        auto* list = new QListWidget;
+        list->setSelectionMode(
+            QAbstractItemView::ExtendedSelection);
+        v->addWidget(list, 1);
+        auto* ops = new QHBoxLayout;
+        auto* upB = new QPushButton("Up");
+        auto* dlB = new QPushButton(
+            "Download into the active pane");
+        auto* ulB = new QPushButton(
+            "Upload the active pane's selected file(s)");
+        ops->addWidget(upB);
+        ops->addWidget(dlB);
+        ops->addWidget(ulB);
+        ops->addStretch(1);
+        v->addLayout(ops);
+        v->addWidget(new QLabel("Activity"));
+        auto* logW = new QPlainTextEdit;
+        logW->setReadOnly(true);
+        logW->setMaximumHeight(140);
+        v->addWidget(logW);
+        auto logLine = [logW](const QString& m) {
+            logW->appendPlainText(
+                QTime::currentTime().toString("HH:mm:ss  ") + m);
+        };
+        // in-memory connection state
+        struct ConnState {
+            QString proto, host, user, pass, path;
+            int port = 0;
+        };
+        auto st = std::make_shared<ConnState>();
+        // profile editor
+        connect(addB, &QPushButton::clicked,
+                [this, dlg, loadProfiles] {
+                    auto* d2 = new QDialog(dlg);
+                    d2->setWindowTitle("Connection profile");
+                    auto* f = new QFormLayout(d2);
+                    auto* name = new QLineEdit;
+                    auto* proto = new QComboBox;
+                    proto->addItems(
+                        {"ftp", "ftps", "webdav", "webdavs",
+                         "sftp"});
+                    auto* host = new QLineEdit;
+                    auto* port = new QLineEdit;
+                    port->setPlaceholderText(
+                        "blank = protocol default");
+                    auto* user = new QLineEdit;
+                    auto* path = new QLineEdit("/");
+                    f->addRow("Name", name);
+                    f->addRow("Protocol", proto);
+                    f->addRow("Host", host);
+                    f->addRow("Port", port);
+                    f->addRow("User", user);
+                    f->addRow("Start path", path);
+                    auto* note = new QLabel(
+                        "Passwords are never stored — you are "
+                        "asked when you connect, and the answer "
+                        "lives only until the window closes. "
+                        "SFTP uses your SSH keys (~/.ssh).");
+                    note->setWordWrap(true);
+                    f->addRow(note);
+                    auto* save = new QPushButton("Save profile");
+                    f->addRow(save);
+                    connect(save, &QPushButton::clicked,
+                            [=] {
+                                const QString n =
+                                    name->text().trimmed();
+                                if (n.isEmpty()) return;
+                                QSettings s2("ALL",
+                                             "TranslationTool");
+                                QStringList ns =
+                                    s2.value("files/conns")
+                                        .toStringList();
+                                if (!ns.contains(n)) ns << n;
+                                s2.setValue("files/conns", ns);
+                                const QString k =
+                                    "files/conn_" + n + "_";
+                                s2.setValue(k + "proto",
+                                            proto->currentText());
+                                s2.setValue(k + "host",
+                                            host->text().trimmed());
+                                s2.setValue(k + "port",
+                                            port->text().trimmed());
+                                s2.setValue(k + "user",
+                                            user->text().trimmed());
+                                s2.setValue(k + "path",
+                                            path->text().trimmed());
+                                loadProfiles();
+                                d2->close();
+                            });
+                    d2->show();
+                });
+        // curl runner: credentials go through stdin (-K -),
+        // never argv
+        auto runCurl = [logLine, st](const QStringList& args,
+                                     QByteArray* out) -> bool {
+            QProcess p;
+            QStringList full = {"-s", "-S"};
+            if (!st->pass.isEmpty()) full << "-K" << "-";
+            full << args;
+            p.start("/usr/bin/curl", full);
+            if (!st->pass.isEmpty()) {
+                p.waitForStarted(3000);
+                p.write(QString("user = \"%1:%2\"\n")
+                            .arg(st->user, st->pass)
+                            .toUtf8());
+                p.closeWriteChannel();
+            }
+            p.waitForFinished(60000);
+            if (out) *out = p.readAllStandardOutput();
+            const QString err =
+                QString::fromUtf8(p.readAllStandardError())
+                    .trimmed();
+            if (!err.isEmpty()) logLine("curl: " + err);
+            return p.exitCode() == 0;
+        };
+        auto runSftp = [logLine, st](const QString& batch,
+                                     QByteArray* out) -> bool {
+            QProcess p;
+            p.start("/usr/bin/sftp",
+                    {"-oBatchMode=yes", "-b", "-",
+                     st->user + "@" + st->host});
+            p.waitForStarted(3000);
+            p.write(batch.toUtf8());
+            p.closeWriteChannel();
+            p.waitForFinished(60000);
+            if (out) *out = p.readAllStandardOutput();
+            const QString err =
+                QString::fromUtf8(p.readAllStandardError())
+                    .trimmed();
+            if (!err.isEmpty()) logLine("sftp: " + err);
+            return p.exitCode() == 0;
+        };
+        auto urlFor = [st](const QString& rel) {
+            QString scheme =
+                st->proto == "webdav"    ? "http"
+                : st->proto == "webdavs" ? "https"
+                                         : st->proto;
+            QString u = scheme + "://" + st->host;
+            if (st->port) u += ":" + QString::number(st->port);
+            QString pth = st->path;
+            if (!pth.startsWith('/')) pth = "/" + pth;
+            if (!pth.endsWith('/')) pth += "/";
+            return u + pth + rel;
+        };
+        auto refresh = [this, st, list, pathL, logLine, runCurl,
+                        runSftp] {
+            list->clear();
+            pathL->setText(st->proto + "://" + st->host +
+                           st->path);
+            std::vector<RemoteEntry> es;
+            QByteArray out;
+            if (st->proto == "sftp") {
+                if (runSftp(QString("cd %1\nls -l\n")
+                                .arg(st->path),
+                            &out))
+                    es = parseFtpList(
+                        QString::fromUtf8(out));
+            } else if (st->proto.startsWith("webdav")) {
+                QString scheme = st->proto == "webdav"
+                                     ? "http"
+                                     : "https";
+                QString u = scheme + "://" + st->host;
+                if (st->port)
+                    u += ":" + QString::number(st->port);
+                QString pth = st->path;
+                if (!pth.endsWith('/')) pth += "/";
+                if (runCurl({"-X", "PROPFIND", "-H", "Depth: 1",
+                             u + pth},
+                            &out))
+                    es = parseDavList(QString::fromUtf8(out),
+                                      pth);
+            } else {
+                QString u = st->proto + "://" + st->host;
+                if (st->port)
+                    u += ":" + QString::number(st->port);
+                QString pth = st->path;
+                if (!pth.endsWith('/')) pth += "/";
+                if (runCurl({u + pth}, &out))
+                    es = parseFtpList(
+                        QString::fromUtf8(out));
+            }
+            for (const auto& e : es) {
+                auto* it = new QListWidgetItem(
+                    (e.isDir ? QString::fromUtf8("\U0001F4C1 ")
+                             : QString::fromUtf8("\U0001F4C4 ")) +
+                    e.name +
+                    (e.isDir ? ""
+                             : QString("   (%1 B)").arg(e.size)));
+                it->setData(Qt::UserRole, e.name);
+                it->setData(Qt::UserRole + 1, e.isDir);
+                list->addItem(it);
+            }
+            logLine(QString("listed %1 — %2 entries")
+                        .arg(st->path)
+                        .arg(es.size()));
+        };
+        connect(connectB, &QPushButton::clicked,
+                [this, st, profiles, refresh, logLine, dlg] {
+                    const QString n = profiles->currentText();
+                    if (n.isEmpty()) return;
+                    QSettings s2("ALL", "TranslationTool");
+                    const QString k = "files/conn_" + n + "_";
+                    st->proto = s2.value(k + "proto").toString();
+                    st->host = s2.value(k + "host").toString();
+                    st->port =
+                        s2.value(k + "port").toString().toInt();
+                    st->user = s2.value(k + "user").toString();
+                    st->path = s2.value(k + "path", "/")
+                                   .toString();
+                    if (st->path.isEmpty()) st->path = "/";
+                    if (st->proto != "sftp") {
+                        bool ok = false;
+                        st->pass = QInputDialog::getText(
+                            dlg, "Password for " + n,
+                            st->user + "@" + st->host +
+                                " — held in memory only:",
+                            QLineEdit::Password, QString(),
+                            &ok);
+                        if (!ok) return;
+                    }
+                    logLine("connecting to " + st->host +
+                            " (" + st->proto + ")");
+                    refresh();
+                });
+        connect(list, &QListWidget::itemDoubleClicked,
+                [st, refresh](QListWidgetItem* it) {
+                    if (!it->data(Qt::UserRole + 1).toBool())
+                        return;
+                    QString p2 = st->path;
+                    if (!p2.endsWith('/')) p2 += "/";
+                    st->path = p2 +
+                               it->data(Qt::UserRole).toString();
+                    refresh();
+                });
+        connect(upB, &QPushButton::clicked, [st, refresh] {
+            if (st->path == "/" || st->host.isEmpty()) return;
+            QString p2 = st->path;
+            if (p2.endsWith('/')) p2.chop(1);
+            p2 = p2.section('/', 0, -2);
+            st->path = p2.isEmpty() ? "/" : p2;
+            refresh();
+        });
+        // the transfer queue: FIFO, one at a time, logged
+        connect(dlB, &QPushButton::clicked,
+                [this, st, list, logLine, runCurl, runSftp,
+                 urlFor] {
+                    const QString dstDir = curPath_[active_];
+                    for (auto* it : list->selectedItems()) {
+                        if (it->data(Qt::UserRole + 1).toBool())
+                            continue;   // dirs: v1 files only
+                        const QString name =
+                            it->data(Qt::UserRole).toString();
+                        const QString dst =
+                            dstDir + "/" + name;
+                        if (QFile::exists(dst)) {
+                            logLine("skip (exists): " + name);
+                            continue;
+                        }
+                        logLine("downloading " + name + " …");
+                        bool ok = false;
+                        if (st->proto == "sftp") {
+                            QString p2 = st->path;
+                            if (!p2.endsWith('/')) p2 += "/";
+                            ok = runSftp(
+                                QString("get %1%2 %3\n")
+                                    .arg(p2, name, dst),
+                                nullptr);
+                        } else {
+                            ok = runCurl(
+                                {"-o", dst, urlFor(name)},
+                                nullptr);
+                        }
+                        logLine(ok ? "done: " + dst
+                                   : "FAILED: " + name);
+                    }
+                });
+        connect(ulB, &QPushButton::clicked,
+                [this, st, logLine, runCurl, runSftp, urlFor,
+                 refresh] {
+                    for (const QString& src :
+                         selectedPathsIn(active_)) {
+                        if (QFileInfo(src).isDir()) continue;
+                        const QString name =
+                            QFileInfo(src).fileName();
+                        logLine("uploading " + name + " …");
+                        bool ok = false;
+                        if (st->proto == "sftp") {
+                            QString p2 = st->path;
+                            if (!p2.endsWith('/')) p2 += "/";
+                            ok = runSftp(
+                                QString("put %1 %2%3\n")
+                                    .arg(src, p2, name),
+                                nullptr);
+                        } else {
+                            ok = runCurl({"-T", src,
+                                          urlFor(QString())},
+                                         nullptr);
+                        }
+                        logLine(ok ? "done: " + name
+                                   : "FAILED: " + name);
+                    }
+                    refresh();
+                });
+        dlg->show();
     }
 
     void syncFolders() {
@@ -14840,6 +15254,7 @@ private:
     QMenu* favMenu_ = nullptr;
     QToolButton* wsB_ = nullptr;
     QMenu* wsMenu_ = nullptr;
+    QToolButton* connB_ = nullptr;
     int active_ = 0;
     bool switching_ = false;
 };
@@ -22655,6 +23070,44 @@ int main(int argc, char** argv) {
             QFile::remove(probe);
             log << QString("  [%1] Files: Drop Stack add persists to "
                            "settings (shelf survives restart)")
+                       .arg(ok ? "PASS" : "FAIL");
+            if (!ok) ++fails;
+        }
+        // Files: remote listing parsers — pinned on output
+        // captured LIVE from local pyftpdlib + wsgidav servers
+        {
+            const QString ftp =
+                "-rw-r--r--   1 adam wheel           2 Aug 14 "
+                "18:36 readme.md\n"
+                "drwxr-xr-x   3 adam wheel          96 Aug 14 "
+                "18:36 texts\n";
+            const auto fe = FilesPane::parseFtpList(ftp);
+            const QString dav =
+                "<ns0:multistatus xmlns:ns0=\"DAV:\">"
+                "<ns0:response><ns0:href>/</ns0:href>"
+                "<ns0:propstat><ns0:prop><ns0:resourcetype>"
+                "<ns0:collection /></ns0:resourcetype>"
+                "</ns0:prop></ns0:propstat></ns0:response>"
+                "<ns0:response><ns0:href>/readme.md</ns0:href>"
+                "<ns0:propstat><ns0:prop><ns0:resourcetype />"
+                "<ns0:getcontentlength>2"
+                "</ns0:getcontentlength></ns0:prop>"
+                "</ns0:propstat></ns0:response>"
+                "<ns0:response><ns0:href>/texts/</ns0:href>"
+                "<ns0:propstat><ns0:prop><ns0:resourcetype>"
+                "<ns0:collection /></ns0:resourcetype>"
+                "</ns0:prop></ns0:propstat></ns0:response>"
+                "</ns0:multistatus>";
+            const auto de = FilesPane::parseDavList(dav, "/");
+            const bool ok =
+                fe.size() == 2 && fe[0].name == "readme.md" &&
+                !fe[0].isDir && fe[0].size == 2 &&
+                fe[1].name == "texts" && fe[1].isDir &&
+                de.size() == 2 && de[0].name == "readme.md" &&
+                !de[0].isDir && de[0].size == 2 &&
+                de[1].name == "texts" && de[1].isDir;
+            log << QString("  [%1] Files: FTP + WebDAV listing "
+                           "parsers (live-captured samples)")
                        .arg(ok ? "PASS" : "FAIL");
             if (!ok) ++fails;
         }

@@ -943,6 +943,19 @@ enters the same-named folder in the other panel when it exists —
 made for walking two parallel trees side by side (an original
 and its double-keyed copy, two editions of a collection).
 
+### Remote connections
+
+The **Connections** button reaches servers: **FTP, FTPS, WebDAV
+(http/https), and SFTP**. Save a profile (name, protocol, host,
+user, start path) — **passwords are never stored**: you are asked
+when you connect, and the answer lives only until the window
+closes. SFTP authenticates with your SSH keys (~/.ssh) instead.
+Once connected: browse folders, double-click to enter,
+**Download into the active pane** (existing local files are never
+overwritten — skipped and logged), and **Upload the active
+pane's selected files**. Every operation is written to the
+Activity log with its result, honestly including failures.
+
 ### Workspaces
 
 The **Workspaces** menu saves your entire layout — every tab in
