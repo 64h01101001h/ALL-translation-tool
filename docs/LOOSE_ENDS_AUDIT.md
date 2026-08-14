@@ -18,6 +18,15 @@ defect, not ours) · version bumped 0.12.0.
 
 ## A. ATTACK QUEUE — solo-doable, ranked
 
+**0. THE DIGITALTIBETAN INTEGRATION PLAN (Adam 2026-08-14: "drive
+   it up to the top of the list") —
+   docs/design/DIGITALTIBETAN_INTEGRATION_PLAN.md. Shipped: P1
+   typography engine; fonts P2 largely in (BabelStone bundled).
+   Work top-down: P5 StarDict reader → P3 Espel five-convention
+   phonetics oracles → P6 booklet/3-per-A4 imposition → P8 TISE
+   input keys → P4 py-tiblegenc → W3C full-doc pass on the
+   typography rules.**
+
 1. **Analysis item 14 suppressed** (`core/src/analysis.cpp:166`):
    the prompt still tells the model the library is NOT indexed —
    but LibraryIndex shipped. Route item 14 through

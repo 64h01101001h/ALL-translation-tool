@@ -1,5 +1,8 @@
 cmake_minimum_required(VERSION 3.24)
-project(ALLTranslationTool VERSION 0.1.0 LANGUAGES C CXX)
+# the project version tracks the VERSION file (single source);
+# a hardcoded number here went stale at 0.1.0 for months
+file(STRINGS "${CMAKE_SOURCE_DIR}/VERSION" ALL_ROOT_VERSION LIMIT_COUNT 1)
+project(ALLTranslationTool VERSION ${ALL_ROOT_VERSION} LANGUAGES C CXX)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
