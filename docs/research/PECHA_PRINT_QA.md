@@ -29,7 +29,17 @@ Pecha Maker gained the preset **"Measured woodblock (46 × 8.2 cm,
 8 lines)"** — 460×82 mm (5.6:1), 8 lines per side, matching the
 measured print. The four existing presets are untouched.
 
+## Syllable budget — MEASURED (same day, no OCR needed)
+The eKangyur's own `[folio.line]` markers make the Degé print's
+line lengths exact text statistics: **47,728 full lines across 11
+sampled volumes → median 54 syllables/line (mean 53.7, p10 45,
+p90 62)** on the 680mm Degé folio (≈578mm text width → ≈10.7mm
+per syllable). This is the calibration target for the Degé
+preset's type sizing: a healthy line should carry ≈54 syllables;
+under ~45 the type is too large, over ~62 too small. (The
+measured-woodblock preset's source volume is Sungbum — not in the
+eKangyur — so its budget awaits the OCR-statistics lane.)
+
 ## Still open in pecha v3
-Per-side syllable budget calibration (needs OCR line-length
-statistics against these same scans), dbu-khyud/double-shad
-conventions, and the eyeball QA pass — one honest step at a time.
+Type-size autofit to the 54-syllable target; dbu-khyud/double-shad
+conventions; the eyeball QA pass against prints.

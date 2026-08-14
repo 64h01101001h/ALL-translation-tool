@@ -7097,6 +7097,11 @@ public:
                           "Measured woodblock (46 × 8.2 cm, "
                           "8 lines)"});
         preset->setToolTip(
+            "Deg\u00e9 woodblock: the real print carries a MEDIAN "
+            "54 syllables per line (p10\u2013p90: 45\u201362; "
+            "measured from 47,728 eKangyur lines) \u2014 if your "
+            "output lines hold far fewer, the type is too large "
+            "for authenticity.\n"
             "Measured woodblock: geometry taken from 14 sampled "
             "sides of a real print volume in the scan store "
             "(rnam bshad snying po'i rgyan blocks) — folio ≈5.6:1, "
