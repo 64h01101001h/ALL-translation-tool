@@ -823,24 +823,26 @@ static QString entryHtml(const allcore::Entry& e,
             h += b;
         }
     }
-    if (g_teaching && !e.hgm_gloss.empty()) {
+    if (g_teachingTib && !e.wylie.empty()) {
         std::vector<const TeachingMoment*> ms;
         std::set<QString> seen;
-        for (const auto& g : e.hgm_gloss) {
-            auto it = g_teaching->find(teachingKey(g));
-            if (it == g_teaching->end()) continue;
-            for (const auto& m : it->second)
-                if (!seen.count(m.url) && ms.size() < 3) {
-                    seen.insert(m.url);
-                    ms.push_back(&m);
-                }
+        {
+            auto it = g_teachingTib->find(e.wylie);
+            if (it != g_teachingTib->end())
+                for (const auto& m : it->second)
+                    if (!seen.count(m.url) && ms.size() < 3) {
+                        seen.insert(m.url);
+                        ms.push_back(&m);
+                    }
         }
         if (!ms.empty()) {
             h += zoneLabel("IN THE RECORDED TEACHINGS") +
                  "<div style='font-size:12px'><i "
-                 "style='color:#9C948A'>machine-located from class "
-                 "captions \u2014 the recording is the "
-                 "authority</i><br>";
+                 "style='color:#9C948A'>moments where he says the "
+                 "TIBETAN phrase itself (phonetic match on his "
+                 "own convention \u2014 candidates; homophones "
+                 "share moments; the recording is the "
+                 "authority)</i><br>";
             for (const auto* m : ms) {
                 const int mm = m->t / 60, ss = m->t % 60;
                 h += QString("\u25B6 <a href='%1' title=\"%2\">%3</a>"
@@ -853,34 +855,6 @@ static QString entryHtml(const allcore::Entry& e,
                          .arg(m->lang == "ENG" || m->lang == "?"
                                   ? QString()
                                   : " <b>[" + m->lang + "]</b>");
-            }
-            h += "</div>";
-        }
-    }
-    if (g_teachingTib && !e.wylie.empty()) {
-        auto it = g_teachingTib->find(e.wylie);
-        if (it != g_teachingTib->end() && !it->second.empty()) {
-            h += "<div style='margin-top:4px;font-size:12px'>"
-                 "<span style='color:#7C2D26;font-weight:600'>He says "
-                 "this word</span> <i style='color:#888'>(phonetic "
-                 "match on his own convention \u2014 candidates; "
-                 "homophones share moments)</i><br>";
-            int shown = 0;
-            for (const auto& m : it->second) {
-                if (++shown > 2) break;
-                h += QString("\u25B6 <a href='%1' title=\"%2\">%3</a>"
-                             " @%4:%5%6<br>")
-                         .arg(m.url, m.snippet.toHtmlEscaped(),
-                              m.title.left(60).toHtmlEscaped())
-                         .arg(m.t / 60)
-                         .arg(m.t % 60, 2, 10, QChar('0'))
-                         .arg((m.lang == "ENG" || m.lang == "?"
-                                   ? QString()
-                                   : " <b>[" + m.lang + "]</b>") +
-                              (m.src == "TKB"
-                                   ? " <i style='color:#7C2D26'>"
-                                     "\u00b7 lam rim</i>"
-                                   : QString()));
             }
             h += "</div>";
         }

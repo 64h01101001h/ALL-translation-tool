@@ -319,7 +319,7 @@ of the phrase chain. Reading it top to bottom:
 - **Published footnotes** that deal with this term.
 - **"Geshe Michael teaching this term"** — timecoded links that
   open his recorded classes at the moment he teaches the term.
-  These are machine-located from class captions: candidates. **The
+  These are moments where Geshe Michael says the Tibetan phrase itself (phonetic match; machine-located from class captions: candidates. **The
   recording is the authority**, always; non-English sessions are
   tagged so you are not surprised.
 - **"He says this word"** — a second tier locating moments where
