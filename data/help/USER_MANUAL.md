@@ -421,8 +421,16 @@ how many lines, how many in verse, on which meters (7s and 9s
 dominate the Tengyur). Tap any line to jump to it in the
 document. The reader is **live**: keep it open while you edit and
 the counts re-tally as you type — watching the count is itself a
-way of learning the structure. Even-count song meters (mgur) are
-not yet grouped into blocks, but their counts still display.
+way of learning the structure. Even-count **song meters (mgur —
+6 or 8 syllables)** group too, under a stricter rule so prose
+cannot masquerade as song, and their headings say SONG METER
+(MGUR). Each meter heading also tells you how common that meter
+is **across the whole installed canon** — a census over all
+14 million lines of the Kangyur, Tengyur, and Sungbum found
+333,802 verse lines, of which the classic 7-syllable meter
+carries 61%, the 5-syllable 15%, the 9-syllable 8.5%, and the
+6-syllable song meter 6% — so the reader can tell you when a
+text is written in something rare.
 
 **Citations & quotations…** — the upfront citation work, done
 for you. The moment you open a text, the hint line tells you how

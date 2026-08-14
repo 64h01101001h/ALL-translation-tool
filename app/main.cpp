@@ -2574,6 +2574,18 @@ public:
                 check(ok, "meter reader: verse grouped, deviant "
                           "marked, prose labeled");
             }
+            {   // song meter (mgur): four exact 6-syllable lines
+                // group under the stricter even rule
+                input_->setPlainText(
+                    "BLA MA SANGS RGYAS RIN CHEN,\n"
+                    "SEMS CAN KUN LA PHAN MDZAD,\n"
+                    "BYANG CHUB LAM SNA 'DREN PA,\n"
+                    "MGON PO KHYED LA 'DUD DO,");
+                const QString h = meterReaderHtml();
+                check(h.contains("6-SYLLABLE SONG METER"),
+                      "meter reader: even-count mgur song meter "
+                      "grouped (stricter rule)");
+            }
             {   // verse meter: a 7-syllable quatrain with one
                 // 8-syllable slip is detected and flagged
                 input_->setPlainText(
@@ -6850,12 +6862,22 @@ private:
             for (int j = i; j < std::min(i + 8, n); ++j)
                 ++freq[units[j].syls];
             int meter = 0, best = 0;
-            for (auto& [m, c] : freq)
-                if (m >= 5 && m % 2 == 1 && c > best) {
+            for (auto& [m, c] : freq) {
+                // odd counts (7, 9, 11…) are the classical
+                // meters; even counts (mgur song meters — 6, 8)
+                // are admitted (floor 6: 4-count runs are
+                // indistinguishable from DANG-lists) under a STRICTER rule so prose
+                // cannot masquerade as song
+                const bool oddOk =
+                    m >= 5 && m % 2 == 1 && c >= 3;
+                const bool evenOk =
+                    m >= 6 && m % 2 == 0 && c >= 4;
+                if ((oddOk || evenOk) && c > best) {
                     best = c;
                     meter = m;
                 }
-            if (!meter || best < 3) {
+            }
+            if (!meter) {
                 ++i;
                 continue;
             }
@@ -6909,12 +6931,18 @@ private:
         tree->setHeaderHidden(true);
         for (const auto& b : blocks) {
             auto* top = new QTreeWidgetItem(tree);
+            const int lines = b.last - b.first + 1;
             top->setText(
-                0, QString("%1-syllable verse · %2 lines · %3 "
-                           "deviation(s)")
+                0, QString("%1-syllable %2 · %3 lines · %4 "
+                           "deviation(s) · %5% on meter")
                        .arg(b.meter)
-                       .arg(b.last - b.first + 1)
-                       .arg(b.deviants.size()));
+                       .arg(b.meter % 2 ? "verse"
+                                        : "song meter (mgur)")
+                       .arg(lines)
+                       .arg(b.deviants.size())
+                       .arg(100 * (lines - (int)b.deviants
+                                               .size()) /
+                            lines));
             top->setData(0, Qt::UserRole, units[b.first].pos);
             for (int d : b.deviants) {
                 auto* it = new QTreeWidgetItem(top);
@@ -6947,7 +6975,22 @@ private:
     // its structure." Every shad-delimited unit is shown WITH its
     // count — verse blocks grouped under their meter, deviants
     // marked, prose left plain. The counts are the structure.
+    void loadMeterCensus() {
+        if (censusLoaded_) return;
+        censusLoaded_ = true;
+        QFile f(dataRoot_ +
+                "/data/extracted/meter_census.json");
+        if (!f.open(QIODevice::ReadOnly)) return;
+        const auto doc = QJsonDocument::fromJson(f.readAll());
+        const auto ms = doc.object().value("meters").toObject();
+        for (auto it = ms.begin(); it != ms.end(); ++it)
+            censusShare_[it.key().toInt()] =
+                it.value().toObject().value("share_pct")
+                    .toDouble();
+    }
+
     QString meterReaderHtml() {
+        loadMeterCensus();
         const auto units = meterUnits();
         const auto blocks = meterBlocks(units);
         const QString all = input_->toPlainText();
@@ -6996,12 +7039,27 @@ private:
             const int bi = inV ? it->second.first : -1;
             const bool dev = inV && it->second.second;
             if (inV && bi != lastBlock) {
+                const int bl =
+                    blocks[bi].last - blocks[bi].first + 1;
+                const int on =
+                    bl - (int)blocks[bi].deviants.size();
+                QString head =
+                    QString("%1-SYLLABLE %2 · %3% ON METER")
+                        .arg(blocks[bi].meter)
+                        .arg(blocks[bi].meter % 2
+                                 ? "VERSE"
+                                 : "SONG METER (MGUR)")
+                        .arg(100 * on / bl);
+                if (censusShare_.contains(blocks[bi].meter))
+                    head += QString(
+                                " · %1% OF ALL CANON VERSE")
+                                .arg(censusShare_
+                                         [blocks[bi].meter]);
                 h += QString(
                          "<div style='color:#9A7A33;font-size:"
                          "10px;letter-spacing:2px;font-weight:"
-                         "600;margin:14px 0 2px 0'>"
-                         "%1-SYLLABLE VERSE</div>")
-                         .arg(blocks[bi].meter);
+                         "600;margin:14px 0 2px 0'>%1</div>")
+                         .arg(head);
                 lastBlock = bi;
             }
             if (!inV && lastBlock != -1 && ui > 0 &&
@@ -7032,13 +7090,18 @@ private:
                      .arg(unitText((int)ui).toHtmlEscaped());
         }
         h += "<div style='margin-top:14px;color:#9C948A;font-size:"
-             "11px'>Counts are per shad-delimited unit. Verse "
-             "detection looks for sustained odd counts of 5+ (the "
-             "classical meters — 7 and 9 dominate the Tengyur); "
-             "even-count song meters (mgur) are not yet grouped, "
-             "but their counts still show. A marked line is for "
-             "YOUR judgment: keying slip and poetic license are "
-             "identical arithmetic.</div>";
+             "11px'>Counts are per shad-delimited unit. Odd "
+             "counts of 5+ are the classical meters (7 and 9 "
+             "dominate the Tengyur); even counts (6, 8 — the "
+             "mgur song meters) group under a stricter rule so "
+             "prose cannot masquerade as song. A marked line is "
+             "for YOUR judgment: keying slip and poetic license "
+             "are identical arithmetic.";
+        if (!censusShare_.isEmpty())
+            h += " Canon shares come from the meter census over "
+                 "the installed collections "
+                 "(data/extracted/meter_census.json).";
+        h += "</div>";
         return h;
     }
 
@@ -9152,6 +9215,8 @@ private:
     int curLine_ = 0, curLineTotal_ = 0;
     std::vector<std::tuple<QString, QString, QString>> libIndex_;
     bool libIndexBuilt_ = false;
+    bool censusLoaded_ = false;
+    QMap<int, double> censusShare_;
     QMap<QString, QString> folioUrl_;
     QStringList canvasSeq_;
     QStringList folioOrder_, pendingManifests_;

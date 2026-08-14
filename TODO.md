@@ -1203,4 +1203,4 @@ implementation is sidelined HERE from this date. What this means:
       the MITRA pilot is FEASIBLE here (18GB weights ≈ ~9GB
       headroom-friendly at int8); the ~18GB download awaits
       Adam's go (and the Chodrak etext, its real workload).
-- [ ] Meter reader phase 2 (Adam 2026-08-14): group even-count song meters (mgur — 6/8 syllable) as blocks too; per-BLOCK statistics (how uniform is each run); possibly a Tengyur-wide meter census so the reader can say "this meter is rare/common in the canon".
+- [x] Meter reader phase 2 — SHIPPED 2026-08-14 same day: mgur even-count grouping (floor 6, best>=4 — 4-count runs are DANG-list noise, excluded by rule), per-block on-meter %, AND the full canon meter census (tools/meter_census.py → data/extracted/meter_census.json: 333,802 verse lines over all 3 collections; 7-syl 61.1%, 5-syl 15.4%, 9-syl 8.5%, 6-syl mgur 6.2%, 13-syl kavya 3.4%) wired into the reader headings ('· N% OF ALL CANON VERSE'). Possible later: per-collection shares in-app; census by century/author if metadata ever supports it.
