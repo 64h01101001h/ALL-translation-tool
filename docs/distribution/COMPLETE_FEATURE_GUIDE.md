@@ -679,5 +679,20 @@ export writes one file per woodblock side. The Input workflow
 gained the same locate power over its own scans, folio jumps,
 anchored zoom, and a Recent-scans memory.
 
+### The verification wave (August 13, evening)
+
+Scan routing for the Lhasa Kangyur corrected at the root and
+verified through two independent catalogs (244/244 agreement, 301
+texts routed); confirmed per-text author links from the ACIP↔BDRC
+catalog (1,768 texts); the full Degé canon — eKangyur and
+eTengyur, 4,439 texts, Public Domain — collatable against your
+keying in one right-click; card typography rebuilt on a
+three-rank color system with Palatino throughout; the
+Sanskrit-mantra programme (82,834-syllable census, render-sheet
+guard); pecha presets measured from real woodblocks with
+authentic 54-syllables-per-line type sizing; and the pronunciation
+authority lanes extended (full-phrase rulings, the 'a-chung
+class, surface-form pronunciation).
+
 *Twenty panes, one principle: the machine may match the master's
 English — it may never compose it.*

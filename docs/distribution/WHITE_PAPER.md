@@ -336,6 +336,20 @@ the markers they derive from; and the same locate power inside
 the keying room, where the typists' line convention makes the
 search order exact.
 
+## 7¾. The verification method (added August 13, evening)
+
+One day's numbers show the working method at maturity: a
+scan-routing defect was traced to a refuted numbering assumption
+and rebuilt as a title-matched concordance verified by two
+independent institutional catalogs (244/244 agreement); folio
+markers keyed by input operators decades ago matched the scan
+archive's labels leaf for leaf (42/42); a 1,200-year-old rendering
+problem was measured against every attested syllable in the
+library (82,834 forms) before a single rule was written; and the
+pecha typesetter now sizes its type to a budget measured from
+47,728 real print lines. Nothing ships on resemblance; everything
+ships on evidence.
+
 ## 8. What comes next
 
 - **The registers grow under review.** A class of

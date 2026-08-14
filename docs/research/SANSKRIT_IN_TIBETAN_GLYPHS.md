@@ -108,7 +108,7 @@ occurrence:
 | visarga ':' unmapped | 8,888 | 56,023 | ACIP ':' → EWTS H (ཿ) |
 | '%' candrabindu etc. | (in other) | ~1,250+ | H'U% class → U+0F83 ྃ |
 | A'A long vowel | 20 | 28 | merge to ཨཱ |
-| x-mark | 687 | 20,098 | ACIP unclear-mark convention — pass-through policy needed |
+| x-mark | 687 | 20,098 | RESOLVED (same day): RTF tab-stop markup (\\tx720…) from META.TXT files saved as RTF — noise class, no ACIP policy needed; pipeline rule: exclude META/RTF files from text processing |
 | noise (RTF/English) | ~15k | ~110k | some library files are RTF with markup; English notes inside ACIP files — census filter classes, not engine bugs |
 
 **Priority order for the canonical-engine fixes (data project):**
