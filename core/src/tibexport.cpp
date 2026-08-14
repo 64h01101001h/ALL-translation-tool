@@ -154,12 +154,31 @@ std::string bdrcScanUrl(const AcipFileInfo& info) {
     return "https://library.bdrc.io/show/bdr:" + std::string(base) + n;
 }
 
+// range punctuation per the DCC style guide (2023-08-25): number
+// and folio ranges take the en dash, never a hyphen. Applied only
+// between range endpoints — hyphens inside technical spellings
+// (Lam-rim) are untouched because titles never pass through here.
+static std::string endashRanges(const std::string& in) {
+    std::string out = in;
+    for (size_t i = 1; i + 1 < out.size(); ++i)
+        if (out[i] == '-' &&
+            std::isalnum((unsigned char)out[i - 1]) &&
+            std::isalnum((unsigned char)out[i + 1]))
+            out.replace(i, 1, "\u2013");
+    return out;
+}
+
 std::string composeBibliographyEntry(const BibliographyFields& f) {
+    // DCC style guide (2023-08-25) Tibetan-entry template:
+    //   author, date(s).  English title (Tibetan title, ACIP
+    //   number), folio range.
+    // — two spaces after the dates period (house sentence
+    // spacing), en dashes in ranges.
     std::string out;
     if (!f.epithets.empty()) out += "(" + f.epithets + ") ";
     out += f.author;
-    if (!f.dates.empty()) out += ", " + f.dates;
-    out += ". " + f.english_title;
+    if (!f.dates.empty()) out += ", " + endashRanges(f.dates);
+    out += ".  " + f.english_title;
     if (!f.tibetan_title.empty() || !f.acip_number.empty()) {
         out += " (";
         out += f.tibetan_title;
@@ -168,7 +187,54 @@ std::string composeBibliographyEntry(const BibliographyFields& f) {
                    f.acip_number;
         out += ")";
     }
-    if (!f.folios.empty()) out += ", ff. " + f.folios;
+    if (!f.folios.empty()) out += ", ff. " + endashRanges(f.folios);
+    out += ".";
+    return out;
+}
+
+std::string composeSanskritBibEntry(const SanskritBibFields& f) {
+    // DCC style guide Sanskrit-entry template, reproduced from its
+    // own S1 (Dharmakīrti) example: author (Tib: name), dates.
+    // English Title (Sanskrit) (Tib: Tibetan title, Tibetan
+    // translation at ACIP number, folio range of Vol. N [letter]
+    // in the … Section [Sanskrit, Tibetan] of the collection
+    // [edition edition]).
+    std::string out = f.author_skt;
+    if (!f.author_tib.empty())
+        out += " (Tib: " + f.author_tib + ")";
+    if (!f.dates.empty()) out += ", " + endashRanges(f.dates);
+    out += ".  " + f.english_title;
+    if (!f.sanskrit_title.empty())
+        out += " (" + f.sanskrit_title + ")";
+    const bool tibBlock = !f.tibetan_title.empty() ||
+                          !f.acip_number.empty() ||
+                          !f.folios.empty();
+    if (tibBlock) {
+        out += " (Tib: " + f.tibetan_title;
+        if (!f.acip_number.empty())
+            out += ", Tibetan translation at ACIP " + f.acip_number;
+        if (!f.folios.empty())
+            out += ", ff. " + endashRanges(f.folios);
+        if (!f.vol_num.empty()) {
+            out += " of Vol. " + f.vol_num;
+            if (!f.vol_letter.empty())
+                out += " [" + f.vol_letter + "]";
+        }
+        if (!f.section_en.empty()) {
+            out += " in the " + f.section_en + " Section";
+            std::string inner;
+            if (!f.section_skt.empty()) inner = f.section_skt;
+            if (!f.section_tib.empty())
+                inner += (inner.empty() ? "" : ", ") +
+                         f.section_tib;
+            if (!inner.empty()) out += " [" + inner + "]";
+        }
+        if (!f.collection.empty())
+            out += " of the " + f.collection;
+        if (!f.edition.empty())
+            out += " [" + f.edition + " edition]";
+        out += ")";
+    }
     out += ".";
     return out;
 }

@@ -86,6 +86,28 @@ struct BibliographyFields {
 };
 std::string composeBibliographyEntry(const BibliographyFields& f);
 
+// Sanskrit canonical work — the DCC style guide's full template
+// (S1 Dharmakīrti example): translation location down to volume,
+// section, collection, and edition.
+struct SanskritBibFields {
+    std::string author_skt;      // Dharmakīrti
+    std::string author_tib;      // Chos kyi grags-pa
+    std::string dates;           // c. 650ad
+    std::string english_title;
+    std::string sanskrit_title;  // Pramāṇavārtika
+    std::string tibetan_title;
+    std::string acip_number;     // TD04210
+    std::string folios;          // 94a-151a (en-dashed on output)
+    std::string vol_num;         // 1
+    std::string vol_letter;      // Ce
+    std::string section_en;      // Logical & Perceptual Theory
+    std::string section_skt;     // Pramāṇa
+    std::string section_tib;     // Tsad-ma
+    std::string collection;      // bsTan-'gyur
+    std::string edition;         // sDe-dge
+};
+std::string composeSanskritBibEntry(const SanskritBibFields& f);
+
 // ---- Mixed Nuts preliminary formatting (GMR's demonstrated workflow) -------
 // Prepares a raw ACIP input file for the translation team, replicating the
 // steps Geshe Michael demonstrated on "Destroying the Darkness" (9/26/20

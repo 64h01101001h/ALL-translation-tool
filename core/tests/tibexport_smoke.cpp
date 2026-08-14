@@ -124,23 +124,60 @@ int main() {
             "gsal-ba";
         f.acip_number = "S00184";
         f.folios = "1a-11a";
+        // pinned to the DCC style guide (2023-08-25), which
+        // supersedes the earlier single-space pin: en dashes in
+        // ranges, two spaces after the dates period
         CHECK(allcore::composeBibliographyEntry(f) ==
-                  "(Co-ne bla-ma) Grags-pa bshad-sgrub, 1675-1748. "
+                  "(Co-ne bla-ma) Grags-pa bshad-sgrub, "
+                  "1675\u20131748.  "
                   "A Brief Clarification of Heart: A Word-by-Word "
                   "Commentary to \u201cAn Abbreviated Presentation of "
                   "the Steps to the Path\u201d (Lam-rim bsdus-don gyi "
                   "tsig-'grel snying-po mdor-bsdus gsal-ba, "
-                  "ACIP S00184), ff. 1a-11a.",
-              "composer reproduces published B3 exactly");
+                  "ACIP S00184), ff. 1a\u201311a.",
+              "composer follows the DCC guide (en-dash ranges, "
+              "house sentence spacing)");
         allcore::BibliographyFields g;
         g.author = "N\u0101g\u0101rjuna (Tib: Klu-sgrub)";
         g.dates = "c. 200AD";
         g.english_title = "The String of Precious Jewels";
         g.acip_number = "TD04158";
         CHECK(allcore::composeBibliographyEntry(g) ==
-                  "N\u0101g\u0101rjuna (Tib: Klu-sgrub), c. 200AD. "
+                  "N\u0101g\u0101rjuna (Tib: Klu-sgrub), c. 200AD.  "
                   "The String of Precious Jewels (ACIP TD04158).",
               "composer: optional fields omitted cleanly");
+        {   // the guide's own S1 example, reproduced structurally
+            allcore::SanskritBibFields sk;
+            sk.author_skt = "Dharmak\u012brti";
+            sk.author_tib = "Chos kyi grags-pa";
+            sk.dates = "c. 650ad";
+            sk.english_title =
+                "A Detailed Commentary on Accurate Perception";
+            sk.sanskrit_title = "Pram\u0101\u1e47v\u0101rtika";
+            sk.tibetan_title =
+                "rGyas-pa'i bstan-bcos tsad-ma rnam-'grel";
+            sk.acip_number = "TD04210";
+            sk.folios = "94a-151a";
+            sk.vol_num = "1";
+            sk.vol_letter = "Ce";
+            sk.section_en = "Logical & Perceptual Theory";
+            sk.section_skt = "Pram\u0101\u1e47a";
+            sk.section_tib = "Tsad-ma";
+            sk.collection = "bsTan-'gyur";
+            sk.edition = "sDe-dge";
+            CHECK(allcore::composeSanskritBibEntry(sk) ==
+                      "Dharmak\u012brti (Tib: Chos kyi grags-pa), "
+                      "c. 650ad.  A Detailed Commentary on Accurate "
+                      "Perception (Pram\u0101\u1e47v\u0101rtika) "
+                      "(Tib: rGyas-pa'i bstan-bcos tsad-ma "
+                      "rnam-'grel, Tibetan translation at ACIP "
+                      "TD04210, ff. 94a\u2013151a of Vol. 1 [Ce] in "
+                      "the Logical & Perceptual Theory Section "
+                      "[Pram\u0101\u1e47a, Tsad-ma] of the "
+                      "bsTan-'gyur [sDe-dge edition]).",
+                  "Sanskrit composer reproduces the guide's S1 "
+                  "example");
+        }
     }
     // five-digit catalog refs normalize to BUDA's four digits
     CHECK(allcore::bdrcScanUrl(allcore::decodeAcipFilename("TD04158.ACT")) ==

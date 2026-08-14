@@ -13447,6 +13447,46 @@ public:
         form->addRow("Tibetan title", tt);
         form->addRow("ACIP number", ac);
         form->addRow("Folios", fo);
+        auto* skC = new QCheckBox(
+            "Sanskrit work — full canonical citation (volume, "
+            "section, collection, edition)");
+        form->addRow(skC);
+        auto* sat = new QLineEdit;   // author in Tibetan
+        auto* sst = new QLineEdit;   // Sanskrit title
+        auto* svn = new QLineEdit;   // volume number
+        auto* svl = new QLineEdit;   // volume letter
+        auto* sse = new QLineEdit;   // section, English
+        auto* sss = new QLineEdit;   // section, Sanskrit
+        auto* sstb = new QLineEdit;  // section, Tibetan
+        auto* sco = new QLineEdit("bsTan-'gyur");
+        auto* sed = new QLineEdit("sDe-dge");
+        sat->setPlaceholderText("Chos kyi grags-pa");
+        sst->setPlaceholderText("Pram\u0101\u1e47av\u0101rtika");
+        svn->setPlaceholderText("1");
+        svl->setPlaceholderText("Ce");
+        sse->setPlaceholderText("Logical & Perceptual Theory");
+        sss->setPlaceholderText("Pram\u0101\u1e47a");
+        sstb->setPlaceholderText("Tsad-ma");
+        std::vector<QWidget*> skRows = {sat, sst, svn, svl, sse,
+                                        sss, sstb, sco, sed};
+        form->addRow("Author (Tibetan)", sat);
+        form->addRow("Sanskrit title", sst);
+        form->addRow("Vol. number", svn);
+        form->addRow("Vol. letter", svl);
+        form->addRow("Section (English)", sse);
+        form->addRow("Section (Sanskrit)", sss);
+        form->addRow("Section (Tibetan)", sstb);
+        form->addRow("Collection", sco);
+        form->addRow("Edition", sed);
+        auto setSk = [form, skRows](bool on) {
+            for (QWidget* w : skRows) {
+                w->setVisible(on);
+                if (QWidget* l = form->labelForField(w))
+                    l->setVisible(on);
+            }
+        };
+        setSk(false);
+        QObject::connect(skC, &QCheckBox::toggled, setSk);
         auto* fillBtn = new QPushButton(
             "Auto-fill from catalog (by ACIP number — review result)");
         fillBtn->setToolTip(
@@ -13480,17 +13520,52 @@ public:
             f.folios = fo->text().trimmed().toStdString();
             return f;
         };
+        auto composedNow = [=]() -> QString {
+            if (skC->isChecked()) {
+                allcore::SanskritBibFields sk;
+                sk.author_skt = au->text().trimmed().toStdString();
+                sk.author_tib =
+                    sat->text().trimmed().toStdString();
+                sk.dates = dt->text().trimmed().toStdString();
+                sk.english_title =
+                    et->text().trimmed().toStdString();
+                sk.sanskrit_title =
+                    sst->text().trimmed().toStdString();
+                sk.tibetan_title =
+                    tt->text().trimmed().toStdString();
+                sk.acip_number =
+                    ac->text().trimmed().toStdString();
+                sk.folios = fo->text().trimmed().toStdString();
+                sk.vol_num = svn->text().trimmed().toStdString();
+                sk.vol_letter =
+                    svl->text().trimmed().toStdString();
+                sk.section_en =
+                    sse->text().trimmed().toStdString();
+                sk.section_skt =
+                    sss->text().trimmed().toStdString();
+                sk.section_tib =
+                    sstb->text().trimmed().toStdString();
+                sk.collection =
+                    sco->text().trimmed().toStdString();
+                sk.edition = sed->text().trimmed().toStdString();
+                return QString::fromStdString(
+                    allcore::composeSanskritBibEntry(sk));
+            }
+            return QString::fromStdString(
+                allcore::composeBibliographyEntry(assemble()));
+        };
         auto refresh = [=] {
-            preview->setText(QString::fromStdString(
-                allcore::composeBibliographyEntry(assemble())));
+            preview->setText(composedNow());
             const auto info = allcore::decodeAcipFilename(
                 ac->text().trimmed().toStdString() + ".ACT");
             const QString url = bdrcScanUrlChecked(info, root_);
             scanLink->setText(
                 url.isEmpty() ? "" : "scans: " + url);
         };
-        for (auto* w : {ep, au, dt, et, tt, ac, fo})
+        for (auto* w : {ep, au, dt, et, tt, ac, fo, sat, sst, svn,
+                        svl, sse, sss, sstb, sco, sed})
             QObject::connect(w, &QLineEdit::textChanged, refresh);
+        QObject::connect(skC, &QCheckBox::toggled, refresh);
         QObject::connect(hyBtn, &QPushButton::clicked, [au, refresh] {
             au->setText(QString::fromStdString(allcore::hgmTechnicalSpelling(
                 au->text().trimmed().toStdString())));
@@ -13538,12 +13613,11 @@ public:
         (void)insertB;
         refresh();
         if (dlg.exec() != QDialog::Accepted) return;
-        const QString entry = QString::fromStdString(
-            allcore::composeBibliographyEntry(assemble()));
+        const QString entry = composedNow();
         if (entry == ".") return;
         draft_->textCursor().insertText(
-            "[BIBLIOGRAPHY — NEW ENTRY, house format (STD-007), "
-            "pending publication: " + entry + "]");
+            "[BIBLIOGRAPHY — NEW ENTRY, house format (STD-007 / "
+            "DCC guide): " + entry + "]");
         draft_->setFocus();
     }
 

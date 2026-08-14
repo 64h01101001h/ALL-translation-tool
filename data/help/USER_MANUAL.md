@@ -1180,6 +1180,12 @@ Geshe Michael may already have a rendering.
   300-shloka bampo).
 - **Verse meter** — names the meter of verse passages and flags
   broken lines.
+- **Compose bibliography entry…** now emits the **Diamond Cutter
+  Classics templates exactly**: en dashes in date and folio
+  ranges, house sentence spacing, and — with the **Sanskrit
+  work** checkbox — the full canonical citation down to volume,
+  section, collection, and edition, reproducing the guide's own
+  Dharmakīrti example structurally.
 - **House style check…** — checks your English draft against the
   **Diamond Cutter Classics style guide's** mechanical rules:
   straight vs. curly quotes, `--` where an em dash belongs,
