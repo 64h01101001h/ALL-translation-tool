@@ -408,6 +408,22 @@ keying slip and one from poetic license look identical to
 arithmetic, so the tool never decides which. Click any block or
 flagged line to jump there.
 
+**Citations & quotations…** — the upfront citation work, done
+for you. The moment you open a text, the hint line tells you how
+many quotations it carries and how many cited sources resolved to
+works in your Library. The button builds the full report: **TEXTS
+YOU WILL ENCOUNTER**, each with a direct open-in-Library link and,
+beneath it, every quotation from your document — clickable both
+into *your* text and, where the exact phrasing was found, **into
+the cited source at its line**. Quotations whose source isn't
+announced get a one-click hunt across the whole Library.
+**Export quotations & bibliography document…** compiles
+everything — full quotations grouped under their works with file
+paths and located lines — into a side document you can save.
+Detection is heuristic (…*zhes/ces* + a speech verb; *zhes bya
+ba* namings excluded) and everything says so: verify before
+publication.
+
 **Outline (sa bcad)…** — the text's own structural outline,
 extracted from its enumeration grammar (…*la gnyis* opens a
 division; *dang po*, *gnyis pa*… are its headings). The tree is

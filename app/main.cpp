@@ -2528,6 +2528,31 @@ public:
                                "card");
                 }
             }
+            {   // citations: the classic formula parses; the
+                // naming pattern (zhes bya ba) is excluded
+                input_->setPlainText(
+                    "MDO SDE RGYAN LAS, SEMS CAN THAMS CAD NI "
+                    "SANGS RGYAS SNYING PO CAN ZHES GSUNGS SO, "
+                    "DE BZHIN GSHEGS PA ZHES BYA BA NI MING "
+                    "YIN NO,");
+                const auto cs = extractCitations();
+                const bool ok =
+                    cs.size() == 1 &&
+                    cs[0].quote.contains("SEMS CAN THAMS CAD") &&
+                    cs[0].titleGuess.contains("MDO SDE RGYAN");
+                check(ok, "citations: quotation + cited title "
+                          "detected; zhes-bya-ba naming "
+                          "excluded");
+                if (ok) {
+                    const QString doc = citationsDocText(cs);
+                    check(doc.contains("SEMS CAN THAMS CAD") &&
+                              doc.contains("verify before "
+                                           "publication"),
+                          "citations: compiled quotations "
+                          "document carries the full quote + "
+                          "honesty note");
+                }
+            }
             {   // verse meter: a 7-syllable quatrain with one
                 // 8-syllable slip is detected and flagged
                 input_->setPlainText(
@@ -2841,6 +2866,26 @@ public:
         docFile_ = fn;
         QSettings("ALL", "TranslationTool")
             .setValue("overlay/lastFile", fn);
+        {   // the upfront citation offer (Adam 2026-08-14): the
+            // moment a text opens, the translator learns what
+            // texts they will encounter — one click builds the
+            // full located report
+            const auto cs = extractCitations();
+            if (!cs.empty()) {
+                int resolved = 0;
+                for (const auto& c : cs)
+                    if (!c.resolvedFile.isEmpty()) ++resolved;
+                hint_->setText(
+                    QString("This text quotes other works: %1 "
+                            "quotation(s) detected, %2 with their "
+                            "source resolved in your Library — "
+                            "press “Citations & quotations…” for "
+                            "the full located report.\n")
+                        .arg(cs.size())
+                        .arg(resolved) +
+                    hint_->text());
+            }
+        }
         loadGlossary();
         loadDoc();
         if (wasWylieFile_)
@@ -3050,6 +3095,16 @@ auto* secRev = new QLabel("<span style='color:#9A7A33;font-size:10px;letter-spac
         ll->addWidget(sabcadB);
         connect(sabcadB, &QPushButton::clicked,
                 [this] { showSaBcad(); });
+        auto* citeB = new QPushButton("Citations && quotations…");
+        citeB->setToolTip(
+            "Scan this document for quotations (…zhes/ces + a "
+            "speech verb) and their announced sources (…las). "
+            "Resolved sources open in the Library; every quote "
+            "can be hunted across the whole Library in one "
+            "click — the search lands inside the cited texts.");
+        ll->addWidget(citeB);
+        connect(citeB, &QPushButton::clicked,
+                [this] { showCitations(); });
         auto* meterB = new QPushButton("Verse meter…");
         meterB->setToolTip(
             "Syllable-count analysis: sustained runs on one odd "
@@ -6853,6 +6908,408 @@ private:
         dlg->show();
     }
 
+    // ================= citation & quotation locator (Adam's
+    // commission, 2026-08-14): scan the loaded document for
+    // quotations (…ZHES/CES + speech verb; the naming pattern
+    // "zhes bya ba" excluded), resolve "…LAS"-cited titles against
+    // the library's own filenames, and hand each quote to the
+    // Search engine to locate it INSIDE the cited sources.
+    // Detection is heuristic and labeled; resolution is
+    // title-matched, never guessed. =================
+    struct Citation {
+        int pos;             // quote start in the document
+        QString quote;       // the quoted span (ACIP)
+        QString titleGuess;  // "…LAS" title, if announced
+        QString resolvedFile;   // library path when title matched
+        QString resolvedCore;   // its catalog core (S5275…)
+    };
+
+    // lazy library title index: normalized filename-title tokens
+    const std::vector<std::tuple<QString, QString, QString>>&
+    libTitleIndex() {
+        if (libIndexBuilt_) return libIndex_;
+        libIndexBuilt_ = true;
+        QRegularExpression fnRe(
+            "^([A-Z]{1,3}\\d+)[A-Z0-9]*_([^_]+)");
+        QDirIterator it(dataRoot_ + "/library",
+                        {"*.txt", "*.act", "*.inc", "*.TXT",
+                         "*.ACT", "*.INC"},
+                        QDir::Files,
+                        QDirIterator::Subdirectories);
+        while (it.hasNext()) {
+            const QString p = it.next();
+            const auto m = fnRe.match(QFileInfo(p).fileName());
+            if (!m.hasMatch()) continue;
+            QString t = m.captured(2).toUpper();
+            t.replace(QRegularExpression("[^A-Z' ]"), " ");
+            t = t.simplified();
+            if (t.size() < 6) continue;
+            libIndex_.push_back({t, p, m.captured(1)});
+        }
+        return libIndex_;
+    }
+
+    std::vector<Citation> extractCitations() {
+        std::vector<Citation> out;
+        const QString all = input_->toPlainText();
+        QStringList toks;
+        QVector<int> tpos;
+        QRegularExpression tk("[A-Za-z'+]+");
+        auto ti = tk.globalMatch(all);
+        while (ti.hasNext()) {
+            const auto m = ti.next();
+            toks << m.captured(0).toUpper();
+            tpos << (int)m.capturedStart();
+        }
+        static const QSet<QString> SPEECH = {
+            "GSUNGS", "GSUNG", "BSHAD", "'BYUNG", "SMOS",
+            "BRJOD", "BSTAN", "GRAGS", "SO"};
+        for (int i = 1; i + 1 < toks.size(); ++i) {
+            if (toks[i] != "ZHES" && toks[i] != "CES" &&
+                toks[i] != "SHES")
+                continue;
+            if (toks[i] == "SHES") {
+                // shes = knowing far more often than quotative;
+                // accept only immediately before a speech verb
+                if (!SPEECH.contains(toks[i + 1])) continue;
+            }
+            if (toks[i + 1] == "BYA")   // zhes bya ba = "called"
+                continue;
+            if (!SPEECH.contains(toks[i + 1])) continue;
+            // quote span: back to the previous shad boundary
+            int b = i - 1;
+            int backStop = std::max(0, i - 40);
+            int qStart = backStop;
+            for (; b >= backStop; --b) {
+                const int end = tpos[b] + toks[b].size();
+                bool shadAfter = false;
+                for (int c = end;
+                     c < all.size() && c < tpos[b + 1]; ++c)
+                    if (all[c] == ',' || all[c] == ';' ||
+                        all[c] == '\n')
+                        shadAfter = true;
+                if (shadAfter) {
+                    qStart = b + 1;
+                    break;
+                }
+            }
+            if (i - qStart < 3) continue;   // too short to be a quote
+            Citation c;
+            c.pos = tpos[qStart];
+            QStringList qw;
+            for (int j = qStart; j < i; ++j) qw << toks[j];
+            c.quote = qw.join(' ');
+            // title: look back before the quote for "<title> LAS"
+            for (int j = qStart - 1;
+                 j >= std::max(0, qStart - 18); --j) {
+                if (toks[j] != "LAS" && toks[j] != "NAS") continue;
+                QStringList tw;
+                for (int k = std::max(0, j - 8); k < j; ++k)
+                    tw << toks[k];
+                while (!tw.isEmpty() &&
+                       (tw.first() == "PA" || tw.first() == "BA" ||
+                        tw.first() == "DANG"))
+                    tw.removeFirst();
+                if (tw.size() >= 2) c.titleGuess = tw.join(' ');
+                break;
+            }
+            // resolve the title against library filenames
+            if (!c.titleGuess.isEmpty()) {
+                const auto& idx = libTitleIndex();
+                QString best;
+                int bestLen = 0;
+                for (const auto& [t, p, core] : idx) {
+                    if (!t.contains(c.titleGuess) &&
+                        !c.titleGuess.contains(t))
+                        continue;
+                    const int L = std::min(t.size(),
+                                           c.titleGuess.size());
+                    if (L > bestLen) {
+                        bestLen = L;
+                        c.resolvedFile = p;
+                        c.resolvedCore = core;
+                    }
+                }
+                (void)best;
+            }
+            out.push_back(c);
+        }
+        return out;
+    }
+
+    static int locateQuoteInFile(const QString& path,
+                                 const QString& quote) {
+        QFile f(path);
+        if (!f.open(QIODevice::ReadOnly)) return -1;
+        const QString text = QString::fromUtf8(f.readAll());
+        const QStringList syl = quote.split(' ').mid(0, 8);
+        if (syl.size() < 3) return -1;
+        QStringList esc;
+        for (const QString& w : syl)
+            esc << QRegularExpression::escape(w);
+        QRegularExpression re(
+            esc.join("[^A-Za-z'+]+"),
+            QRegularExpression::CaseInsensitiveOption);
+        const auto m = re.match(text);
+        if (!m.hasMatch()) return -1;
+        return 1 + (int)text.left(m.capturedStart()).count('\n');
+    }
+
+    QString citationsDocText(const std::vector<Citation>& cites) {
+        QString d;
+        d += "QUOTATIONS & CITED WORKS\n";
+        d += "compiled from: " +
+             QFileInfo(docFile_).fileName() + "\n";
+        d += "(machine-detected via the classic ZHES/CES + "
+             "speech-verb formulas; heuristic — verify before "
+             "publication)\n\n";
+        QMap<QString, std::vector<const Citation*>> byWork;
+        std::vector<const Citation*> unresolved;
+        for (const auto& c : cites) {
+            if (!c.resolvedFile.isEmpty())
+                byWork[c.resolvedFile].push_back(&c);
+            else
+                unresolved.push_back(&c);
+        }
+        for (auto it = byWork.begin(); it != byWork.end(); ++it) {
+            const Citation* f0 = it.value().front();
+            d += "== " + f0->resolvedCore;
+            const QString base =
+                QFileInfo(it.key()).completeBaseName();
+            const int us = base.indexOf('_');
+            if (us > 0)
+                d += " — " + base.mid(us + 1).left(90);
+            d += "\n   file: " + it.key() + "\n";
+            int n = 0;
+            for (const Citation* c : it.value()) {
+                const int line =
+                    locateQuoteInFile(it.key(), c->quote);
+                d += QString("   [%1] \"%2\"\n")
+                         .arg(++n)
+                         .arg(c->quote);
+                d += QString("       (your text @%1; %2)\n")
+                         .arg(c->pos)
+                         .arg(line > 0
+                                  ? QString("located in the "
+                                            "source, line %1")
+                                        .arg(line)
+                                  : QString("not located at "
+                                            "this phrasing"));
+            }
+            d += "\n";
+        }
+        if (!unresolved.empty()) {
+            d += "== QUOTATIONS WITHOUT AN ANNOUNCED SOURCE\n";
+            int n = 0;
+            for (const Citation* c : unresolved)
+                d += QString("   [%1] \"%2\" (your text @%3)\n")
+                         .arg(++n)
+                         .arg(c->quote)
+                         .arg(c->pos);
+        }
+        return d;
+    }
+
+    void exportCitationsDoc(const std::vector<Citation>& cites) {
+        const QString text = citationsDocText(cites);
+        auto* dlg = new QDialog(this);
+        dlg->setAttribute(Qt::WA_DeleteOnClose);
+        dlg->setWindowFlag(Qt::Window);
+        dlg->setWindowTitle(
+            "Quotations document — compiled for you (verify "
+            "before publication)");
+        dlg->resize(720, 640);
+        auto* v = new QVBoxLayout(dlg);
+        auto* ed = new QPlainTextEdit;
+        ed->setPlainText(text);
+        v->addWidget(ed, 1);
+        auto* row = new QHBoxLayout;
+        auto* saveB = new QPushButton("Save as text file…");
+        row->addWidget(saveB);
+        row->addStretch(1);
+        v->addLayout(row);
+        connect(saveB, &QPushButton::clicked, [this, ed] {
+            const QString fn = safeGetSaveFileName(
+                this, "Save quotations document",
+                QFileInfo(docFile_).completeBaseName() +
+                    "_quotations.txt",
+                "Text (*.txt)");
+            if (fn.isEmpty()) return;
+            QFile f(fn);
+            if (f.open(QIODevice::WriteOnly | QIODevice::Text))
+                f.write(ed->toPlainText().toUtf8());
+        });
+        dlg->show();
+    }
+
+    void showCitations() {
+        const auto cites = extractCitations();
+        if (cites.empty()) {
+            QMessageBox::information(
+                this, "Citations & quotations",
+                "No quotation patterns detected (…ZHES/CES + "
+                "speech verb). The detector is heuristic — "
+                "quotations phrased outside the classic formulas "
+                "will not appear.");
+            return;
+        }
+        auto* dlg = new QDialog(this);
+        dlg->setAttribute(Qt::WA_DeleteOnClose);
+        dlg->setWindowFlag(Qt::Window);
+        dlg->setWindowTitle(
+            QString("Citations & quotations — %1 detected "
+                    "(heuristic; titles resolved by filename "
+                    "match, never guessed)")
+                .arg(cites.size()));
+        dlg->resize(760, 640);
+        auto* v = new QVBoxLayout(dlg);
+        auto* browser = new QTextBrowser;
+        browser->setOpenLinks(false);
+        QString h;
+        // group citations by resolved work — the "texts you will
+        // encounter" list, all located up front
+        QMap<QString, std::vector<const Citation*>> byWork;
+        std::vector<const Citation*> unresolved;
+        for (const auto& c : cites) {
+            if (!c.resolvedFile.isEmpty())
+                byWork[c.resolvedFile].push_back(&c);
+            else
+                unresolved.push_back(&c);
+        }
+        if (!byWork.isEmpty()) {
+            h += QString("<div style='color:#9A7A33;font-size:11px;"
+                         "letter-spacing:2px;font-weight:600'>"
+                         "TEXTS YOU WILL ENCOUNTER (%1)</div>")
+                     .arg(byWork.size());
+            for (auto it = byWork.begin(); it != byWork.end();
+                 ++it) {
+                const Citation* first = it.value().front();
+                h += QString("<div style='margin:10px 0 2px 0'>"
+                             "<b>%1</b> — <a href='citefile:%2'>"
+                             "open in the Library</a></div>")
+                         .arg(first->resolvedCore.toHtmlEscaped())
+                         .arg(QString::fromUtf8(
+                             it.key().toUtf8().toBase64()));
+                for (const Citation* c : it.value()) {
+                    const int line = locateQuoteInFile(
+                        it.key(), c->quote);
+                    const QString shortQ =
+                        c->quote.split(' ').mid(0, 14).join(' ');
+                    h += QString(
+                             "<div style='margin-left:18px;"
+                             "border-left:2px solid #D8CFC0;"
+                             "padding-left:8px;margin-top:4px;"
+                             "font-size:12px'>"
+                             "<a href='jumppos:%1'>in your "
+                             "text</a> · “%2…”<br>")
+                             .arg(c->pos)
+                             .arg(shortQ.toHtmlEscaped());
+                    if (line > 0)
+                        h += QString(
+                                 "<a href='citeopen:%1|%2'>"
+                                 "LOCATED in the source at line "
+                                 "%2 — open there</a>")
+                                 .arg(QString::fromUtf8(
+                                     it.key().toUtf8()
+                                         .toBase64()))
+                                 .arg(line);
+                    else
+                        h += QString(
+                                 "<span style='color:#9C948A'>"
+                                 "announced here but not found "
+                                 "at this phrasing — </span>"
+                                 "<a href='citefind:%1'>hunt "
+                                 "across the Library</a>")
+                                 .arg(QString::fromUtf8(
+                                     c->quote.toUtf8()
+                                         .toBase64()));
+                    h += "</div>";
+                }
+            }
+        }
+        if (!unresolved.empty()) {
+            h += QString("<div style='color:#9A7A33;font-size:11px;"
+                         "letter-spacing:2px;font-weight:600;"
+                         "margin-top:14px'>QUOTATIONS WITHOUT AN "
+                         "ANNOUNCED SOURCE (%1)</div>")
+                     .arg(unresolved.size());
+            for (const Citation* c : unresolved) {
+                const QString shortQ =
+                    c->quote.split(' ').mid(0, 14).join(' ');
+                h += QString("<div style='margin:6px 0;font-size:"
+                             "12px'><a href='jumppos:%1'>in your "
+                             "text</a> · “%2…” — "
+                             "<a href='citefind:%3'>hunt across "
+                             "the Library</a></div>")
+                         .arg(c->pos)
+                         .arg(shortQ.toHtmlEscaped())
+                         .arg(QString::fromUtf8(
+                             c->quote.toUtf8().toBase64()));
+            }
+        }
+        h += "<div style='margin-top:14px;color:#9C948A;"
+             "font-size:11px'>All of this was generated from the "
+             "document itself the moment you asked — detection is "
+             "heuristic (…ZHES/CES + speech verb; “zhes bya "
+             "ba” namings excluded), titles resolve by "
+             "filename match, and a located line means the exact "
+             "phrasing was found in that file. Works alongside "
+             "the bibliography composer (resolved cores "
+             "auto-fill).</div>";
+        browser->setHtml(h);
+        connect(browser, &QTextBrowser::anchorClicked,
+                [this](const QUrl& u) {
+                    const QString sUrl = u.toString();
+                    if (sUrl.startsWith("jumppos:")) {
+                        QTextCursor c(input_->document());
+                        c.setPosition(sUrl.mid(8).toInt());
+                        input_->setTextCursor(c);
+                        input_->ensureCursorVisible();
+                        input_->setFocus();
+                    } else if (sUrl.startsWith("citeopen:")) {
+                        const QString rest = sUrl.mid(9);
+                        const int bar = rest.lastIndexOf('|');
+                        const QString p = QString::fromUtf8(
+                            QByteArray::fromBase64(
+                                rest.left(bar).toUtf8()));
+                        if (g_openAtLine)
+                            g_openAtLine(p,
+                                         rest.mid(bar + 1)
+                                             .toInt());
+                    } else if (sUrl.startsWith("citefile:")) {
+                        const QString p = QString::fromUtf8(
+                            QByteArray::fromBase64(
+                                sUrl.mid(9).toUtf8()));
+                        openFile(p);
+                    } else if (sUrl.startsWith("citefind:")) {
+                        const QString q = QString::fromUtf8(
+                            QByteArray::fromBase64(
+                                sUrl.mid(9).toUtf8()));
+                        const QStringList w =
+                            q.split(' ').mid(0, 8);
+                        if (g_goferQuery)
+                            g_goferQuery("\"" + w.join(' ') +
+                                         "\"");
+                    }
+                });
+        v->addWidget(browser, 1);
+        auto* row = new QHBoxLayout;
+        auto* expB = new QPushButton(
+            "Export quotations && bibliography document…");
+        expB->setToolTip(
+            "Compile every full quotation, grouped under its "
+            "cited work with file path and located line, into a "
+            "side document you can save — the upfront citation "
+            "work, done.");
+        row->addWidget(expB);
+        row->addStretch(1);
+        v->addLayout(row);
+        connect(expB, &QPushButton::clicked, [this, cites] {
+            exportCitationsDoc(cites);
+        });
+        dlg->show();
+    }
+
 public:
     // ---- the Four-Layer Page (Adam's wow round, 2026-08-12): one
     // folio, four synchronized layers — scan · OCR · e-text ·
@@ -8512,6 +8969,8 @@ private:
     bool titleSearchMode_ = false;
     QPixmap basePx_;
     int curLine_ = 0, curLineTotal_ = 0;
+    std::vector<std::tuple<QString, QString, QString>> libIndex_;
+    bool libIndexBuilt_ = false;
     QMap<QString, QString> folioUrl_;
     QStringList canvasSeq_;
     QStringList folioOrder_, pendingManifests_;
