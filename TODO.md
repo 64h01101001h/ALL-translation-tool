@@ -404,8 +404,16 @@ implementation is sidelined HERE from this date. What this means:
       NOTE: Monlam's own list files are only ~80% in this order
       (Sanskrit-diacritic interleaving differs) — measured, not used
       as a fixture. No port needed; tibetan-sort-js fallback unused.
-- [ ] **eKangyur/eTengyur PD corpora** (Esukhia/OpenPecha) — citable
-      diff-proofread canon beside the HGM corpus.
+- [~] **eKangyur/eTengyur PD corpora** (Esukhia/OpenPecha) — citable
+      diff-proofread canon beside the HGM corpus. eKANGYUR ACQUIRED
+      2026-08-13: Esukhia derge-kangyur cloned (103 vols, 336MB,
+      Public Domain per its README) to editions/ (gitignored, out
+      of the press); tools/index_ekangyur.py → 1,108 Toh texts
+      indexed with volume/offset/folio (ekangyur_index.json);
+      CROSS-CHECK: Toh 16 starts folio 121a = BDRC manifest labels
+      exactly. NEXT: app lane — 'Compare with the eKangyur
+      edition' for KD texts via the edition diff (unicode↔ACIP
+      conversion seam to design); eTengyur later.
 - [ ] **py-tiblegenc** (Apache-2.0) — legacy-font→Unicode rescue for
       input-center documents; external tool first, port maps later.
 - [~] **lucene-bo** — Adam approved full inclusion 2026-08-07
