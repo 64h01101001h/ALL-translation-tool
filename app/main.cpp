@@ -92,6 +92,9 @@
 #include <QStandardPaths>
 #include <QTimer>
 #include <QPointer>
+#include <QRawFont>
+#include <QTextLayout>
+#include <QGlyphRun>
 #include <QMouseEvent>
 #include <QWidgetAction>
 #include <QToolButton>
@@ -18730,6 +18733,70 @@ int main(int argc, char** argv) {
     const QStringList cliArgs = QCoreApplication::arguments();
     const int shotIx = cliArgs.indexOf("--screenshots");
     const bool shotMode = shotIx >= 0 && shotIx + 1 < cliArgs.size();
+    // --sanskritcheck: shape a battery of Tibetanized-Sanskrit
+    // stacks with the bundled font and report any missing glyphs
+    // (Adam's ask, 2026-08-13: ACIP input must render Tibetanized
+    // Sanskrit properly in Tibetan glyphs)
+    if (cliArgs.contains("--sanskritcheck")) {
+        struct SkTest { const char* label; QString uni; };
+        const SkTest tests[] = {
+            {"badzra (vajra)", QString::fromUtf8("\u0F56\u0F5B\u0FB2")},
+            {"padma", QString::fromUtf8("\u0F54\u0F51\u0FA8")},
+            {"siddhi ddh", QString::fromUtf8("\u0F51\u0FA1\u0FB7\u0F72")},
+            {"dznyA", QString::fromUtf8("\u0F5B\u0F99\u0F71")},
+            {"kSha", QString::fromUtf8("\u0F40\u0FB5")},
+            {"tstsha", QString::fromUtf8("\u0F59\u0FAA")},
+            {"sarba rb", QString::fromUtf8("\u0F66\u0F62\u0FA6")},
+            {"swA (svaahaa)", QString::fromUtf8("\u0F66\u0FAD\u0F71")},
+            {"r+wa zur", QString::fromUtf8("\u0F62\u0FAD")},
+            {"sat+t+wa", QString::fromUtf8("\u0F66\u0F4F\u0F9F\u0FAD")},
+            {"oM anusvara", QString::fromUtf8("\u0F68\u0F7C\u0F7E")},
+            {"hUM", QString::fromUtf8("\u0F67\u0F71\u0F74\u0F7E")},
+            {"AH visarga", QString::fromUtf8("\u0F68\u0F71\u0F7F")},
+            {"Na retroflex", QString::fromUtf8("\u0F4E\u0F71")},
+            {"DA retroflex", QString::fromUtf8("\u0F4C\u0F71")},
+            {"ShaT", QString::fromUtf8("\u0F65\u0F4A")},
+            {"dhyA d+h+y", QString::fromUtf8("\u0F51\u0FB7\u0FB1\u0F71")},
+            {"phaT", QString::fromUtf8("\u0F55\u0F4A")},
+            {"tadya d+y", QString::fromUtf8("\u0F4F\u0F51\u0FB1")},
+            {"mangga ngg", QString::fromUtf8("\u0F58\u0F44\u0F92")},
+            {"hri h+r", QString::fromUtf8("\u0F67\u0FB2\u0F72")},
+            {"vajrAcArya rya", QString::fromUtf8("\u0F62\u0FB1")},
+            {"deep stack rkSya", QString::fromUtf8("\u0F62\u0F90\u0FB5\u0FB1")},
+        };
+        const QStringList fams = {"Noto Serif Tibetan",
+                                  app.font().family()};
+        int missing = 0;
+        for (const QString& fam : fams) {
+            QFont f(fam);
+            f.setPointSize(24);
+            QRawFont raw = QRawFont::fromFont(f);
+            printf("FONT: %s (resolved %s)\n",
+                   fam.toUtf8().constData(),
+                   QFontInfo(f).family().toUtf8().constData());
+            for (const auto& t : tests) {
+                QTextLayout lay(t.uni, f);
+                lay.beginLayout();
+                lay.createLine();
+                lay.endLayout();
+                bool bad = false;
+                int nglyphs = 0;
+                for (const auto& run : lay.glyphRuns()) {
+                    for (quint32 g : run.glyphIndexes()) {
+                        ++nglyphs;
+                        if (g == 0) bad = true;
+                    }
+                }
+                if (bad) ++missing;
+                printf("  [%s] %-18s %s (%d glyph(s))\n",
+                       bad ? "MISS" : " ok ", t.label,
+                       t.uni.toUtf8().constData(), nglyphs);
+            }
+        }
+        printf("sanskritcheck: %d missing-glyph case(s) across %d "
+               "font(s)\n", missing, (int)fams.size());
+        return missing == 0 ? 0 : 1;
+    }
     const bool selfTestMode = cliArgs.contains("--selftest");
     const bool sweepMode = cliArgs.contains("--sweep");
     g_sweepActive = sweepMode;

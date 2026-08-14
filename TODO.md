@@ -218,6 +218,22 @@ implementation is sidelined HERE from this date. What this means:
 
 ## Waiting on the data project (Cowork sessions)
 
+- [ ] **Sanskrit conversion gaps (canonical engines — findings
+      2026-08-13, docs/research/SANSKRIT_IN_TIBETAN_GLYPHS.md):**
+      (1) ACIP V in clusters unmapped: SV'AH'A/SATTVA/SARVA flag
+      instead of yielding wasur stacks (fix: cluster V → EWTS w in
+      hgm_tools.acip_to_ewts; target glyphs verified present);
+      (2) A'A must merge to long ā (ཨཱ, EWTS "A") — A'ARYA renders
+      standalone འ today; (3) sanskrit_convert's own IAST v→W table
+      disagrees with its cluster output (SV'A H'A) — align. After
+      fixing: extend batteries, then re-port to allcore per the
+      inviolable rules. App guard: `--sanskritcheck` (23 stacks,
+      exits non-zero on missing glyphs).
+- [ ] Anusvara keying sweep (data-side): mantra syllables keyed
+      with uppercase M (OM, H'UM) render final ma (ཨོམ) not ཾ
+      (ཨོཾ); a corpus sweep for uppercase-M mantra syllables would
+      list review candidates.
+
 - [x] Review the 13 pyewts source-defect candidates — DONE
       2026-08-13 (docs/research/PYEWTS_DEFECT_REVIEW.md): ALL 13
       are stored-Tibetan defects (engine==pyewts against stored in
