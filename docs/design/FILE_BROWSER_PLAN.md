@@ -1,6 +1,9 @@
-# File Browser Programme — Path Finder × ForkLift 4 feature integration
+# File Browser Programme — Path Finder × ForkLift 4 × Commander One
 *2026-08-14 · Adam's commission: "plan on integrating all of the
-features found in both Path Finder … and the ForkLift 4."*
+features found in both Path Finder … and the ForkLift 4," extended
+same day: "let's also look at Commander One file manager and do
+some research to see what people say is best about its
+functionality and use/integrate them where necessary."*
 
 ## Legal ground first
 The GitHub org Adam linked (Path-Finder-Mac) was verified to be an
@@ -63,6 +66,37 @@ no assets, no trademarks in our UI.
 | Set-default-viewer | FL | DECLINE — the OS owns that choice |
 | iOS-device browsing | PF10 | DECLINE v1 |
 
+## Commander One (Eltima) — the deltas and the verdicts
+Research 2026-08-14: official site + support docs + six review
+sources (MacUpdate, App Store, AlternativeTo, Android Police,
+mqdir, tokie). What users praise MOST: (1) one hub for
+local + cloud + FTP + devices; (2) the strict Total-Commander
+F-key model (F2 rename · F3 view · F5 copy · F6 move · F7 new
+folder · F8 delete) — "muscle memory transfers cleanly" for
+Total Commander veterans; (3) Android/MTP mounting; (4) archive
+handling incl. RAR browse. What users criticize: paywalled
+drag-and-drop, non-Mac shortcuts forced on everyone, weak
+FTP-favorites/sync vs ForkLift, slow big trees, weak batch
+rename.
+
+| Commander One feature | Verdict |
+|---|---|
+| **TC F-key command set** (F2/F3/F5/F6/F7/F8) | **BUILD (P2) as an OPTIONAL "Commander keys" toggle** — their top-loved pattern; their top criticism is forcing it, so ours is opt-in and never displaces ⌘-conventions |
+| Tabs persist across sessions | BUILD (P2, QSettings) — cheap, loved |
+| F3 quick view (multi-format incl. hex) | ADAPT — our preview + P3 hex viewer already planned |
+| Regex search incl. inside archives | BUILD (P2) — fold into Quick Select + ⌘K file targets |
+| .zip/.jar/.ipa browsable as folders | ADAPT — same P2 archive-browsing lane |
+| RAR browse/extract | DEFER — needs unrar dep; revisit if a partner ships RARs |
+| Cloud mounts as local drives, client-side cloud encryption | DECLINE v1 — P3/P4 connection lanes stay as planned; encryption is out of scope |
+| iOS/Android/MTP device mounting | **DECLINE** — device drivers are not a translation tool's business |
+| Process viewer / quit process / restart-as-root | DECLINE (already declined for Path Finder — same reasoning) |
+| Free-tier-with-paywall model | n/a — everything in our tool ships to everyone |
+
+**Lessons taken from its criticisms** (as binding as the
+features): native Mac conventions stay default everywhere;
+drag-and-drop must simply work; batch rename (P2) must be
+genuinely good, not a checkbox.
+
 ## What makes OURS different (the translation superpowers)
 Every row above lands in a browser that already knows Tibetan:
 catalog identity on every ACIP filename, English titles, author
@@ -77,7 +111,8 @@ browse *a canon*.
   catalog-aware single-click info reuse, open-in-Overlay/Input.
 - **P2: power ops** — batch rename, folder compare+sync, archive
   browsing, tags, Quick Select, favorites, workspaces, sync
-  browsing, ⌘K file targets, open-in-Terminal, share.
+  browsing, ⌘K file targets, open-in-Terminal, share, optional
+  Commander-keys mode, persistent tabs, regex search.
 - **P3: remote** — SFTP/FTP/WebDAV connections, transfer queue,
   activity/log, remote editing.
 - **P4: long tail** — S3, embedded terminal, hex viewer.
