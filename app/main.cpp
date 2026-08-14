@@ -1940,18 +1940,18 @@ static QString bdrcScanUrlChecked(const allcore::AcipFileInfo& info,
     }
     if (info.recognized &&
         info.collection == "Sungbum Collection") {
-        // Sungbum pilot (2026-08-13): Tsongkhapa's texts route
-        // through the title-matched outline concordance
-        // (S → MW22109 per-text node; Élie-catalog titles vs the
-        // BDRC outline leaves; unmatched texts honestly get no
-        // link — the title-search lane remains)
+        // Sungbum scan links (2026-08-13): ~30 authors' texts
+        // route to their gsung 'bum per-text nodes — the MW22109
+        // outline pilot merged with BDRC's WorkVersionPerPerson
+        // route (unicode exact titles, principal-instance guard,
+        // unique-only). Unmatched texts honestly get no link —
+        // the title-search lane remains.
         static QMap<QString, QString> m;
         static bool tried = false;
         if (!tried) {
             tried = true;
             QFile f(dataRoot +
-                    "/data/extracted/"
-                    "sungbum_mw22109_concordance.json");
+                    "/data/extracted/sungbum_scan_links.json");
             if (f.open(QIODevice::ReadOnly)) {
                 const auto o =
                     QJsonDocument::fromJson(f.readAll())
