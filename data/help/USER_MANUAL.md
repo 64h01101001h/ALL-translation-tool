@@ -669,9 +669,15 @@ crash-free:
    blank line becomes a stanza gap — off by default, since prose
    pechas flow continuously.
 3. Choose the **print layout**: native folio sheets at true size
-   for a print shop, or **two-up on A4 / US Letter with cut
+   for a print shop; **two-up on A4 / US Letter with cut
    marks** — two folio sides per office sheet, corner ticks to
-   trim on, each side labeled. Office layouts can open with a
+   trim on, each side labeled; **three-up on A4** — three folio
+   strips per sheet, the classic office pecha layout; or the
+   **A5 booklet** — sides imposed in saddle-stitch order, two
+   rotated pages per A4 face with a dashed fold line and the
+   duplex instruction (flip on the short edge) printed on the
+   first sheet, short runs padded with blanks to a multiple of
+   four. Office layouts can open with a
    **cover sheet** — a framed label page carrying the title,
    volume letter, folio count, and date — the handling page a
    print partner or a shelf needs.
