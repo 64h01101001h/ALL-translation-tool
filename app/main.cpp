@@ -2465,6 +2465,15 @@ public:
                                "card");
                 }
             }
+            {
+                input_->setPlainText(
+                    "@215A x\n@215B y\n@216A z\n@215A dup");
+                const auto sq = docFolioSequence();
+                check(sq.size() == 3 && sq[0] == "215a" &&
+                          sq[2] == "216a",
+                      "ordinal map: document folio sequence "
+                      "extracts in order, deduped");
+            }
             check(ekStripMarkers(
                       QString::fromUtf8(
                           "[1b]\n[1b.1]{D1}{D1-1}\u0F04\u0F05"
@@ -4857,6 +4866,7 @@ private:
         fileKey_ = QFileInfo(fileName).fileName();
         folioUrl_.clear();
         folioOrder_.clear();
+        canvasSeq_.clear();
         curFolio_.clear();
         scanImg_->hide(); scanCap_->hide(); scanNav_->hide();
         {
@@ -5055,8 +5065,59 @@ private:
         });
     }
 
+    // the document's own @folio sequence, in order (normalized
+    // "215a" names) — the ordinal map's left-hand side
+    QStringList docFolioSequence() const {
+        QStringList out;
+        QSet<QString> seen;
+        QRegularExpression re("@0*(\\d+)([AB])",
+                              QRegularExpression::
+                                  CaseInsensitiveOption);
+        auto it = re.globalMatch(input_->toPlainText());
+        while (it.hasNext()) {
+            const auto m = it.next();
+            const QString f = QString::number(
+                                  m.captured(1).toInt()) +
+                              m.captured(2).toLower();
+            if (!seen.contains(f)) {
+                seen.insert(f);
+                out << f;
+            }
+        }
+        return out;
+    }
+
     void fetchNextManifest() {
         if (pendingManifests_.isEmpty()) {
+            // Sungbum reality (verified live 2026-08-13): text-
+            // scoped gsung 'bum manifests label canvases "img. N"
+            // only — no folio labels. The manifest IS the text's
+            // own page span though, so the keying's own @folio
+            // sequence maps ordinally onto the canvases. Labeled
+            // position-mapped; ◀ ▶ nudging still works.
+            if (folioOrder_.isEmpty() && !canvasSeq_.isEmpty()) {
+                const QStringList seq = docFolioSequence();
+                const int n = qMin((int)seq.size(),
+                                   (int)canvasSeq_.size());
+                for (int i = 0; i < n; ++i) {
+                    folioUrl_[seq[i]] = canvasSeq_[i];
+                    folioOrder_ << seq[i];
+                }
+                if (n > 0) {
+                    scanCap_->setText(QString(
+                        "Scans: BDRC · %1 sides POSITION-MAPPED "
+                        "(the archive's manifest has no folio "
+                        "labels; your keying's own @folio "
+                        "sequence is mapped to the pages in "
+                        "order — ±1 page drift possible, use "
+                        "◀ ▶ to nudge).").arg(n));
+                    scanNav_->show();
+                    syncFolioToCursor();
+                    if (curFolio_.isEmpty())
+                        showFolio(folioOrder_.front());
+                    return;
+                }
+            }
             scanCap_->setText(
                 QString("Scans: Buddhist Digital Resource Center · %1 "
                         "folio sides mapped%2. Move the cursor in the "
@@ -5098,14 +5159,16 @@ private:
                                     .hasMatch())
                                 folio = v;
                         }
-                        if (folio.isEmpty()) continue;
                         const auto imgs = c["images"].toArray();
                         if (imgs.isEmpty()) continue;
                         const QString iurl = imgs.first()
                                                  .toObject()["resource"]
                                                  .toObject()["@id"]
                                                  .toString();
-                        if (!iurl.isEmpty() && !folioUrl_.contains(folio)) {
+                        if (iurl.isEmpty()) continue;
+                        canvasSeq_ << iurl;
+                        if (folio.isEmpty()) continue;
+                        if (!folioUrl_.contains(folio)) {
                             folioUrl_[folio] = iurl;
                             folioOrder_ << folio;
                         }
@@ -8015,6 +8078,7 @@ private:
     QPixmap basePx_;
     int curLine_ = 0, curLineTotal_ = 0;
     QMap<QString, QString> folioUrl_;
+    QStringList canvasSeq_;
     QStringList folioOrder_, pendingManifests_;
     QComboBox* scriptMode_ = nullptr;
     QComboBox* shadeMode_ = nullptr;

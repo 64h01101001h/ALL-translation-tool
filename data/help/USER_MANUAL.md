@@ -433,6 +433,13 @@ depends on what the app knows:
   keeps pace. The current line is banded on the image, its
   placement honestly approximate. Folio-to-image mapping comes
   from BDRC's own IIIF manifest labels — nothing is guessed.
+- Sungbum texts: over 500 collected-works texts across some
+  thirty authors now map straight to their own scans (title-
+  matched links; the tier is recorded per text). Where the
+  archive's manifest carries no folio labels (common for
+  collected-works volumes), the viewer POSITION-MAPS your
+  keying's own @folio sequence onto the pages in order — labeled
+  as such, with ◀ ▶ to nudge if the alignment drifts a page.
 - If no catalog mapping exists, the button reads **Find scans on
   BDRC (title search)…** and opens a dialog instead:
   1. The query box is pre-filled with the text's own opening line
