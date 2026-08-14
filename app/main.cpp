@@ -2841,21 +2841,27 @@ public:
                         const auto info =
                             allcore::decodeAcipFilename(
                                 docFile_.toStdString());
-                        if (info.recognized &&
+                        const bool isKD =
                             info.collection ==
-                                "Kangyur (Derge edition)") {
+                            "Kangyur (Derge edition)";
+                        const bool isTD =
+                            info.collection ==
+                            "Tengyur (Derge edition)";
+                        if (info.recognized && (isKD || isTD)) {
                             const int toh =
                                 QString::fromStdString(info.number)
                                     .toInt();
                             auto* ek = new QAction(
-                                QString("Compare with the "
-                                        "eKangyur edition "
-                                        "(Toh %1)…")
+                                QString("Compare with the %1 "
+                                        "edition (Toh %2)…")
+                                    .arg(isTD ? "eTengyur"
+                                              : "eKangyur")
                                     .arg(toh),
                                 menu);
                             connect(ek, &QAction::triggered,
-                                    [this, toh] {
-                                        compareWithEkangyur(toh);
+                                    [this, toh, isTD] {
+                                        compareWithEkangyur(toh,
+                                                            isTD);
                                     });
                             pre << ek;
                         }
@@ -6207,19 +6213,20 @@ private:
         return t;
     }
 
-    QString ekangyurDir() const {
+    QString editionDir(bool tengyur) const {
+        const QString repo = tengyur ? "derge-tengyur-esukhia"
+                                     : "derge-kangyur-esukhia";
         const QStringList cands = {
-            dataRoot_ + "/editions/derge-kangyur-esukhia/text",
-            QDir::homePath() +
-                "/ALL-translation-tool/editions/"
-                "derge-kangyur-esukhia/text"};
+            dataRoot_ + "/editions/" + repo + "/text",
+            QDir::homePath() + "/ALL-translation-tool/editions/" +
+                repo + "/text"};
         for (const QString& c : cands)
             if (QDir(c).exists()) return c;
         return {};
     }
 
-    void compareWithEkangyur(int toh) {
-        const QString dir = ekangyurDir();
+    void compareWithEkangyur(int toh, bool tengyur = false) {
+        const QString dir = editionDir(tengyur);
         if (dir.isEmpty()) {
             QMessageBox::information(
                 this, "eKangyur",
@@ -6228,8 +6235,9 @@ private:
                 "Domain — see TODO for the acquisition recipe.");
             return;
         }
-        QFile xf(dataRoot_ +
-                 "/data/extracted/ekangyur_index.json");
+        QFile xf(dataRoot_ + "/data/extracted/" +
+                 (tengyur ? "etengyur_index.json"
+                          : "ekangyur_index.json"));
         if (!xf.open(QIODevice::ReadOnly)) {
             QMessageBox::information(this, "eKangyur",
                                      "ekangyur_index.json missing.");
@@ -6283,9 +6291,10 @@ private:
         dlg->setAttribute(Qt::WA_DeleteOnClose);
         dlg->setWindowFlag(Qt::Window);
         dlg->setWindowTitle(
-            QString("Our keying vs the eKangyur — Toh %1 "
-                    "(A = this document · B = Esukhia e-text, "
-                    "Public Domain)")
+            QString("Our keying vs the %1 — Toh %2 (A = this "
+                    "document · B = Esukhia e-text, Public "
+                    "Domain)")
+                .arg(tengyur ? "eTengyur" : "eKangyur")
                 .arg(toh));
         dlg->resize(940, 680);
         auto* v = new QVBoxLayout(dlg);

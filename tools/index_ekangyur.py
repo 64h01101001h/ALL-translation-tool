@@ -13,10 +13,14 @@ byte offset, folio) is a single scan.
 import json, os, re
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-SRC = os.path.join(ROOT, "editions", "derge-kangyur-esukhia",
-                   "text")
+import sys
+TENGYUR = "--tengyur" in sys.argv
+REPO = ("derge-tengyur-esukhia" if TENGYUR
+        else "derge-kangyur-esukhia")
+SRC = os.path.join(ROOT, "editions", REPO, "text")
 OUT = os.path.join(ROOT, "data", "extracted",
-                   "ekangyur_index.json")
+                   "etengyur_index.json" if TENGYUR
+                   else "ekangyur_index.json")
 
 DMARK = re.compile(r"\{D(\d+)\}")
 FOLIO = re.compile(r"\[(\d+[ab])(?:\.\d+)?\]")
@@ -41,7 +45,7 @@ def main():
                           "folio": fm or ""}
     json.dump({
         "meta": {
-            "source": "Esukhia derge-kangyur (Public Domain per "
+            "source": f"Esukhia {REPO} (Public Domain per "
                       "README §License), cloned 2026-08-13",
             "volumes": len(files),
             "texts": len(index),
