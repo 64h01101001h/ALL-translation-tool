@@ -1938,6 +1938,40 @@ static QString bdrcScanUrlChecked(const allcore::AcipFileInfo& info,
                           .arg(part, 4, 10, QChar('0'))
                     : QString();
     }
+    if (info.recognized &&
+        info.collection == "Sungbum Collection") {
+        // Sungbum pilot (2026-08-13): Tsongkhapa's texts route
+        // through the title-matched outline concordance
+        // (S → MW22109 per-text node; Élie-catalog titles vs the
+        // BDRC outline leaves; unmatched texts honestly get no
+        // link — the title-search lane remains)
+        static QMap<QString, QString> m;
+        static bool tried = false;
+        if (!tried) {
+            tried = true;
+            QFile f(dataRoot +
+                    "/data/extracted/"
+                    "sungbum_mw22109_concordance.json");
+            if (f.open(QIODevice::ReadOnly)) {
+                const auto o =
+                    QJsonDocument::fromJson(f.readAll())
+                        .object()["s_to_node"]
+                        .toObject();
+                for (auto it = o.begin(); it != o.end(); ++it)
+                    m[it.key()] = it.value()
+                                      .toObject()["node"]
+                                      .toString();
+            }
+        }
+        QString core = "S" + QString::number(
+                                 QString::fromStdString(
+                                     info.number)
+                                     .toInt());
+        const QString node = m.value(core);
+        return node.isEmpty()
+                   ? QString()
+                   : "https://library.bdrc.io/show/bdr:" + node;
+    }
     return QString::fromStdString(allcore::bdrcScanUrl(info));
 }
 
@@ -2446,6 +2480,13 @@ public:
                       .endsWith("MW26071_0018"),
                   "KL scans route through the concordance "
                   "(KL16 -> part 0018, the Diamond Cutter)");
+            // Sungbum pilot pin: S5271 (Tsongkhapa's bodhisattva
+            // ethics commentary) routes via the outline concordance
+            auto sbInfo = allcore::decodeAcipFilename("S05271E.ACT");
+            check(bdrcScanUrlChecked(sbInfo, dataRoot_)
+                      .contains("bdr:MW22109_"),
+                  "Sungbum pilot: S5271 routes to its MW22109 "
+                  "outline node");
         }
         {
             // #62 logic: a left side-panel and a big inter-line gap
