@@ -22131,6 +22131,129 @@ int main(int argc, char** argv) {
                 draftPane->demo(excerpt);
             }
         }
+        // populate the demo fields so every capture shows the tool
+        // AT WORK, not empty boxes (Adam: "populated fields")
+        auto paneByTitle = [&](const QString& t) -> QWidget* {
+            for (auto& f : flatPanes)
+                if (f.title == t || f.title.startsWith(t + " ("))
+                    return f.w;
+            return nullptr;
+        };
+        auto settle = [](int ms) {
+            QElapsedTimer t;
+            t.start();
+            while (t.elapsed() < ms)
+                QCoreApplication::processEvents(
+                    QEventLoop::AllEvents, 20);
+        };
+        // Overlay: place the cursor on a word so the card assembles
+        // (setTextCursor fires the click path)
+        for (auto* pv : overlay->findChildren<QPlainTextEdit*>())
+            if (pv->isReadOnly()) {
+                const int at =
+                    pv->toPlainText().indexOf("SHES RAB");
+                if (at >= 0) {
+                    QTextCursor c(pv->document());
+                    c.setPosition(at + 1);
+                    pv->setTextCursor(c);
+                }
+                break;
+            }
+        settle(900);
+        // Lookup: the classic bsod nams entry, layers and all
+        if (QWidget* lk = paneByTitle("Lookup"))
+            for (auto* e : lk->findChildren<QLineEdit*>())
+                if (e->placeholderText().startsWith("wylie")) {
+                    e->setText("bsod nams");
+                    QMetaObject::invokeMethod(e, "returnPressed");
+                    break;
+                }
+        // Search: a real two-term Gofer query, run
+        if (QWidget* sp = paneByTitle("Search")) {
+            for (auto* e : sp->findChildren<QLineEdit*>()) {
+                if (e->placeholderText().startsWith("term 1"))
+                    e->setText("SEMS CAN THAMS CAD");
+                if (e->placeholderText().startsWith("term 2"))
+                    e->setText("BDE BA");
+            }
+            for (auto* b : sp->findChildren<QPushButton*>())
+                if (b->text() == "Find") {
+                    b->click();
+                    break;
+                }
+            settle(3000);
+            for (auto* tw : sp->findChildren<QTabWidget*>())
+                if (tw->count() == 3) tw->setCurrentIndex(2);
+        }
+        // Sanskrit: pramāṇa analyzed end-to-end
+        if (QWidget* sk = paneByTitle("Sanskrit")) {
+            for (auto* e : sk->findChildren<QLineEdit*>())
+                if (e->placeholderText().startsWith("prama")) {
+                    e->setText(
+                        QString::fromUtf8("pramāṇa"));
+                    break;
+                }
+            for (auto* b : sk->findChildren<QPushButton*>())
+                if (b->text() == "Analyze") {
+                    b->click();
+                    break;
+                }
+        }
+        // Convert: live conversion of a merit-and-wisdom line
+        if (QWidget* cv = paneByTitle("Convert")) {
+            for (auto* e : cv->findChildren<QPlainTextEdit*>())
+                if (e->placeholderText().startsWith("BSOD NAMS")) {
+                    e->setPlainText(
+                        "BSOD NAMS KYI TSOGS DANG , YE SHES KYI "
+                        "TSOGS");
+                    break;
+                }
+            for (auto* b : cv->findChildren<QPushButton*>())
+                if (b->text().startsWith("Convert")) {
+                    b->click();
+                    break;
+                }
+        }
+        // Trainer: load a passage, reveal the first layer
+        if (QWidget* tr = paneByTitle("Trainer")) {
+            for (auto* e : tr->findChildren<QPlainTextEdit*>())
+                if (e->placeholderText().startsWith("Paste ACIP")) {
+                    e->setPlainText("SANGS RGYAS KYIS CHOS BSTAN");
+                    break;
+                }
+            for (auto* b : tr->findChildren<QPushButton*>())
+                if (b->text() == "Load") {
+                    b->click();
+                    break;
+                }
+            for (auto* b : tr->findChildren<QPushButton*>())
+                if (b->text().startsWith("1 ")) {
+                    b->click();
+                    break;
+                }
+        }
+        // Analysis: the passage in place (the model run itself
+        // needs API credit — the engine pre-pass fields suffice)
+        if (QWidget* an = paneByTitle("Analysis"))
+            for (auto* e : an->findChildren<QPlainTextEdit*>())
+                if (e->placeholderText().startsWith(
+                        "Paste the ACIP passage")) {
+                    e->setPlainText(
+                        "BCOM LDAN 'DAS MA'I MAN NGAG ,SHES RAB "
+                        "KYI PHA ROL TU PHYIN MA LA PHYAG 'TSAL "
+                        "LO,");
+                    break;
+                }
+        // Apparatus: search the published notes for a lemma
+        if (QWidget* ap = paneByTitle("Apparatus"))
+            for (auto* e : ap->findChildren<QLineEdit*>())
+                if (e->placeholderText().startsWith(
+                        "search lemmas")) {
+                    e->setText("merit");
+                    QMetaObject::invokeMethod(e, "returnPressed");
+                    break;
+                }
+        settle(800);
         printf("[shot] demo open; %d tabs\n", tabs.count()); fflush(stdout);
         for (size_t i = 0; i < flatPanes.size(); ++i) {
             printf("[shot] tab %zu %s\n", i,
