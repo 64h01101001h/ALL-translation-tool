@@ -56,6 +56,10 @@ int main() {
         // ---- rule 3 ----
         {"bka' brgyud", "kagyü"},
         {"bsod nams", "sönam"},
+        // Espel cross-oracle pins (2026-08-14): rule 6's b→w is
+        // NON-INITIAL only — a monosyllable's b stays b
+        {"bod", "bö"},
+        {"lta ba", "tawa"},
         {"yul", "yül"},
         {"dus tshod", "dütsö"},
         {"bon po", "bönpo"},

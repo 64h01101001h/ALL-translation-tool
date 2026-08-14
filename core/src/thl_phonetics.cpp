@@ -534,9 +534,15 @@ std::string thlPhonetics(const std::string& wylie, bool wordFinal) {
         const bool isLast = (i + 1 == syls.size());
         string body = a.body, sufPhon = a.suffix;
         if (wordFinal && isLast) {
-            // rule 6: final ba/bo family speaks as w
+            // rule 6: final ba/bo family speaks as w — but only
+            // as a NON-INITIAL syllable: a monosyllable's b is
+            // word-initial and stays b (bod = bö, never wö).
+            // Found by the Espel cross-oracle (2026-08-14): a
+            // 21-word divergence class; the 139-example standard
+            // battery contained no bare monosyllabic b-word.
             const string raw = parsed[i].raw;
-            if (a.plainBa && !body.empty() && body[0] == 'b')
+            if (a.plainBa && i > 0 && !body.empty() &&
+                body[0] == 'b')
                 body[0] = 'w';
             // rule 4/16: final open e ⇒ é
             if (sufPhon.empty() && a.endsOpenE)

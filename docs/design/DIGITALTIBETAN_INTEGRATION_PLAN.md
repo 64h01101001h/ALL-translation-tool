@@ -40,7 +40,7 @@ TibFormat.oxt, GPL-3.0 — re-derive the rule, don't copy).
   document as user-side install. Kokonor/Kailasa: macOS
   proprietary, never redistribute.
 
-## P3 — Phonetics conventions as oracles + display options
+## P3 — Phonetics conventions as oracles (SHIPPED 2026-08-14: oracle banked third_party/espel_lingua_bo_wylie, 3,031-word THL diff → OUR monosyllable-ba defect found+fixed+battery-pinned; 4 residual diffs all Espel-side; display-convention ports remain future)
 Espel's Lingua-BO-Wylie (Perl, source downloadable) implements
 **five conventions: THL, Lotsawa House, Rigpa, Padmakara, Lhasey
 Lotsawa**. Use as diff-oracle for our THL engine now; candidate
