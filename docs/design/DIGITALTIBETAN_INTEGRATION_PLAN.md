@@ -62,7 +62,7 @@ Build a StarDict reader for **user-supplied local dictionaries**
 (local-only tier, honest labeling; licensing per dictionary
 unchanged — the reader is format support, not redistribution).
 
-## P6 — Pecha/booklet imposition modes
+## P6 — Pecha/booklet imposition modes (SHIPPED 2026-08-14: three-up-A4 via generalized per-page loop; A5 saddle-stitch booklet — pure pechaBookletOrder selftested, rotated pages, fold line, short-edge duplex note; independent implementation, no GPL code)
 BookletMaker (GPL-3.0) proves demand: A5/A6 booklet + 3-pecha-
 per-A4 imposition. Our exporter already does 2-up; add booklet
 signatures + 3-per-A4 as an independent implementation (no code

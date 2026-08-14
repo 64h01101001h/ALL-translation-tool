@@ -2750,6 +2750,18 @@ public:
                       "clean text passes, pecha break "
                       "protection applied");
             }
+            {   // booklet imposition: saddle order for 8 pages,
+                // and blank pads when not a multiple of 4
+                const auto o8 = OverlayPane::pechaBookletOrder(8);
+                const std::vector<int> want{7, 0, 1, 6,
+                                            5, 2, 3, 4};
+                const auto o6 = OverlayPane::pechaBookletOrder(6);
+                check(o8 == want && o6.size() == 8 &&
+                          o6[0] == -1 && o6[3] == -1 &&
+                          o6[1] == 0,
+                      "pecha: saddle-stitch booklet order (8 "
+                      "exact; 6 pads with blanks)");
+            }
             {   // pecha shad convention: stanza close normalized
                 // to ༎ only where a shad exists; doubles kept
                 const QString a = OverlayPane::stanzaShad(
@@ -8112,6 +8124,26 @@ public:
         return t;
     }
 
+    // saddle-stitch booklet imposition order (DigitalTibetan P6,
+    // BookletMaker's demand proven — independent implementation):
+    // pages padded to a multiple of 4; each A4 landscape face
+    // carries two A5 pages; -1 = blank pad. Sequence per sheet k:
+    // front(left = N-1-2k, right = 2k), back(left = 2k+1,
+    // right = N-2-2k). Print duplex, flip on SHORT edge.
+    static std::vector<int> pechaBookletOrder(int n) {
+        const int N = ((n + 3) / 4) * 4;
+        std::vector<int> ord;
+        for (int k = 0; k < N / 4; ++k) {
+            ord.push_back(N - 1 - 2 * k);
+            ord.push_back(2 * k);
+            ord.push_back(2 * k + 1);
+            ord.push_back(N - 2 - 2 * k);
+        }
+        for (int& v : ord)
+            if (v >= n) v = -1;
+        return ord;
+    }
+
     // classical shad convention: a stanza's last line closes with
     // the double shad ༎. Applied only where the poet already wrote
     // a shad — punctuation is normalized, never invented.
@@ -8160,7 +8192,9 @@ public:
                                         // prose reflow
         int ruleWeight = 1;          // 0 fine · 1 classic · 2 bold
         int layout = 0;              // 0 native · 1 A4 two-up ·
-                                     // 2 US-Letter two-up
+                                     // 2 US-Letter two-up ·
+                                     // 3 A4 three-up ·
+                                     // 4 A5 saddle booklet
     };
 
     // open a file and land the reading cursor at a raw source
@@ -8593,9 +8627,9 @@ public:
             }
             out.end();
         } else {
-            const QSizeF pg = o.layout == 1
-                                  ? QSizeF(297, 210)
-                                  : QSizeF(279.4, 215.9);
+            const QSizeF pg = o.layout == 2
+                                  ? QSizeF(279.4, 215.9)
+                                  : QSizeF(297, 210);
             pdf.setPageSize(QPageSize(pg, QPageSize::Millimeter,
                                       "pecha imposition"));
             pdf.setPageMargins(QMarginsF(0, 0, 0, 0));
@@ -8662,19 +8696,74 @@ public:
                     "Tool");
                 pdf.newPage();
             }
-            // dimensionless shrink so two sides + margins fit
+            // A5 saddle-stitch booklet: two rotated pages per
+            // A4 landscape face, saddle order, duplex short-edge
+            if (o.layout == 4) {
+                const auto ord =
+                    pechaBookletOrder((int)sidePics.size());
+                const double halfW = pdf.width() / 2.0;
+                const double sc =
+                    qMin((pdf.height() - 16.0 * omm) /
+                             (o.wMM * omm),
+                         (halfW - 12.0 * omm) / (o.hMM * omm));
+                for (size_t f = 0; f < ord.size(); f += 2) {
+                    if (f) pdf.newPage();
+                    for (int s2 = 0; s2 < 2; ++s2) {
+                        const int pi = ord[f + s2];
+                        if (pi < 0 ||
+                            pi >= (int)sidePics.size())
+                            continue;
+                        out.save();
+                        out.translate(
+                            s2 * halfW + halfW / 2.0,
+                            pdf.height() / 2.0);
+                        out.rotate(90);
+                        out.scale(sc, sc);
+                        out.drawPicture(
+                            int(-o.wMM * omm / 2),
+                            int(-o.hMM * omm / 2),
+                            sidePics[pi]);
+                        out.restore();
+                    }
+                    // fold line
+                    out.setPen(QPen(Qt::black, 0.1 * omm,
+                                    Qt::DashLine));
+                    out.drawLine(
+                        QPointF(halfW, 6 * omm),
+                        QPointF(halfW, pdf.height() - 6 * omm));
+                    if (f == 0) {
+                        QFont nf;
+                        nf.setPixelSize(int(3 * omm));
+                        out.setFont(nf);
+                        out.setPen(Qt::black);
+                        out.drawText(
+                            QRectF(0,
+                                   pdf.height() - 5.5 * omm,
+                                   pdf.width(), 5 * omm),
+                            Qt::AlignHCenter,
+                            "duplex: flip on SHORT edge \u00b7 "
+                            "fold on the dashed line \u00b7 "
+                            "saddle-stitch");
+                    }
+                }
+                out.end();
+                return (int)sidePics.size();
+            }
+            // dimensionless shrink so N sides + margins fit
+            const int perPage = o.layout == 3 ? 3 : 2;
             const double s =
                 qMin(1.0, qMin((pg.width() - 24.0) / o.wMM,
                                (pg.height() - 24.0) /
-                                   (2 * o.hMM)));
+                                   (perPage * o.hMM)));
             const double sw = o.wMM * s * omm;
             const double sh = o.hMM * s * omm;
             const double x0 = (pdf.width() - sw) / 2;
-            const double gap = (pdf.height() - 2 * sh) / 3.0;
+            const double gap =
+                (pdf.height() - perPage * sh) / (perPage + 1.0);
             QFont lf;
             lf.setPixelSize(int(3 * omm));
             for (int i = 0; i < sidePics.size(); ++i) {
-                const int slot = i % 2;
+                const int slot = i % perPage;
                 if (i && !slot) pdf.newPage();
                 const double x1 = x0 + sw;
                 const double y0 = gap + slot * (sh + gap);
@@ -8760,13 +8849,15 @@ public:
         layoutC->addItems(
             {"Native folio sheets (print shop / cutter)",
              "Two-up on A4 with cut marks (office printer)",
-             "Two-up on US Letter with cut marks"});
+             "Two-up on US Letter with cut marks",
+             "Three-up on A4 with cut marks (pecha strips)",
+             "A5 booklet (saddle-stitch, duplex short-edge)"});
         layoutC->setToolTip(
             "Native writes each folio side at true size for a "
             "print shop. Two-up scales two sides onto one office "
             "sheet, with corner cut marks to trim on.");
         layoutC->setCurrentIndex(
-            qBound(0, st.value("pecha/layout", 0).toInt(), 2));
+            qBound(0, st.value("pecha/layout", 0).toInt(), 4));
         auto* titleE =
             new QLineEdit(st.value("pecha/title").toString());
         titleE->setPlaceholderText(
