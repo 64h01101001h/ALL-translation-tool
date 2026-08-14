@@ -92,5 +92,25 @@ int main(int argc, char** argv) {
 
     std::printf("%s (%d failures)\n", failures ? "ANALYSIS SMOKE FAILED" : "ANALYSIS SMOKE OK",
                 failures);
+    
+    // item 14: with library hits the prompt cites file+line; without,
+    // the honest fallback names the index-build path (the old "NOT
+    // yet indexed" claim is gone — the index shipped)
+    {
+        allcore::AnalysisPrePass pre;
+        auto p0 = allcore::buildAnalysisPrompt(argv[1], pre, "KA", "");
+        CHECK(p0.user.find("NOT yet indexed") == std::string::npos,
+              "item 14: stale not-indexed claim removed");
+        CHECK(p0.user.find("Update search index") != std::string::npos,
+              "item 14: no-hits fallback names the build path");
+        pre.library_hits.push_back({"kangyur/KD0016.txt", 42,
+                                    "BCOM LDAN 'DAS"});
+        auto p1 = allcore::buildAnalysisPrompt(argv[1], pre, "KA", "");
+        CHECK(p1.user.find("reference-library hits") != std::string::npos &&
+                  p1.user.find("KD0016.txt:42") != std::string::npos &&
+                  p1.user.find("never invent a citation") != std::string::npos,
+              "item 14: library hits render citable with file+line");
+    }
+
     return failures ? 1 : 0;
 }

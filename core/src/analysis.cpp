@@ -162,10 +162,25 @@ AssembledPrompt buildAnalysisPrompt(const std::string& template_path,
         }
     }
 
+    if (!pre.library_hits.empty()) {
+        u += "\n## ENGINE: reference-library hits (citable — file + line)\n";
+        u += "Full-text hits for the passage's strongest anchors across the installed "
+             "canon (Kangyur/Tengyur/Sungbum + personal materials). Each is citable "
+             "as file + line.\n";
+        for (const auto& lh : pre.library_hits)
+            u += "- [" + lh.file + ":" + std::to_string(lh.line) + "] " + lh.text + "\n";
+    }
     u += "\n## NOTE on item 14 (cross-references)\n";
-    u += "The reference library is NOT yet indexed in this app. For item 14, use ONLY "
-         "the corpus hits above as citable material; otherwise state plainly that the "
-         "library is not available and list what you would have searched.\n";
+    if (!pre.library_hits.empty()) {
+        u += "For item 14, cite ONLY the corpus hits and the reference-library hits "
+             "above (file + line). Anything not present in them must be stated as "
+             "not found — never invent a citation.\n";
+    } else {
+        u += "The reference-library index returned no hits for this passage (or the "
+             "index is not built — Library > Update search index builds it). For "
+             "item 14, use ONLY the corpus hits above as citable material; otherwise "
+             "state plainly what you would have searched.\n";
+    }
 
     u += "\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n<<INPUT START>>\n\n";
     u += acip_passage;

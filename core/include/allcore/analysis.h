@@ -34,10 +34,21 @@ struct CorpusHit {
     std::string english;
 };
 
+// a citable reference-library hit (file + line + text) — fed from
+// the app's LibraryIndex when it is built, so item 14 can cite the
+// canon instead of refusing (the index shipped after this prompt
+// was first written; the refusal is now only the no-index fallback)
+struct LibraryRefHit {
+    std::string file;
+    int line = 0;
+    std::string text;
+};
+
 struct AnalysisPrePass {
     std::vector<std::string> tokens;     // normalized ACIP syllable tokens
     std::vector<TermAnchor> anchors;     // all matches, longest-first per position
     std::vector<CorpusHit> corpus_hits;  // passages HGM translated that overlap
+    std::vector<LibraryRefHit> library_hits;  // citable canon hits (may be empty)
 };
 
 // Normalize raw ACIP input: straighten curly apostrophes, drop bracketed

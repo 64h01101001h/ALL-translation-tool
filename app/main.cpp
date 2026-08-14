@@ -1796,10 +1796,51 @@ private:
         accum_.clear();
         try {
             auto pre = allcore::runPrePass(spine_, passage);
-            status_->setText(QString("engine: %1 anchors, %2 corpus hits — asking "
+            // item 14 goes citable: hit the library index (when
+            // built) for the passage's strongest anchors — the
+            // prompt then cites file+line instead of refusing
+            {
+                const QString ixPath = QFileInfo(saveDir_).path() +
+                                       "/library/.index.db";
+                if (QFileInfo::exists(ixPath)) {
+                    try {
+                        allcore::LibraryIndex li(
+                            ixPath.toStdString());
+                        int taken = 0;
+                        std::set<std::string> seen;
+                        for (const auto& a : pre.anchors) {
+                            if (taken >= 4) break;
+                            if (a.acip.find(' ') ==
+                                std::string::npos)
+                                continue;   // phrases cite best
+                            if (!seen.insert(a.acip).second)
+                                continue;
+                            ++taken;
+                            for (const auto& hit : li.search(
+                                     "\"" + a.acip + "\"", 3)) {
+                                std::string txt =
+                                    hit.lines.empty()
+                                        ? std::string()
+                                        : hit.lines.front();
+                                if (txt.size() > 160)
+                                    txt = txt.substr(0, 160) +
+                                          "…";
+                                pre.library_hits.push_back(
+                                    {hit.file, hit.line_lo,
+                                     txt});
+                            }
+                        }
+                    } catch (const std::exception&) {
+                        // index unreadable → honest fallback text
+                    }
+                }
+            }
+            status_->setText(QString("engine: %1 anchors, %2 corpus hits, "
+                                     "%3 library citation(s) — asking "
                                      "Claude…")
                                  .arg(pre.anchors.size())
-                                 .arg(pre.corpus_hits.size()));
+                                 .arg(pre.corpus_hits.size())
+                                 .arg(pre.library_hits.size()));
             auto prompt = allcore::buildAnalysisPrompt(
                 templatePath_.toStdString(), pre, passage,
                 draft_->toPlainText().toStdString());
