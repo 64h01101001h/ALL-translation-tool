@@ -13,6 +13,7 @@ app: Help menu → ALL Tool Help & Tutorials.*
 - **PART ONE — READ & TRANSLATE**
   - Overlay
   - Library
+  - Files
   - Manuscript
   - Draft
   - Review
@@ -831,6 +832,67 @@ abandons cleanly.
   indexes all 14.1 million lines in under two minutes, and after
   it the Search pane answers from the index instantly.
 
+
+## Files
+
+*Where: Read → Files. A dual-pane file browser built into the
+app — browse your whole disk side by side, and everything you
+open routes straight into the right pane of the Tool.*
+
+### The layout
+
+Two independent browser panels sit side by side, with the **Drop
+Stack** shelf on the far right. Each panel has:
+
+- **Tabs** along its top — press **+** to open another tab at the
+  current location; close any tab with its ✕ (the last tab
+  stays).
+- **Breadcrumbs** under the tabs — the path as clickable
+  segments; click any ancestor to jump straight up to it.
+- **The file listing** — folders always sort above files; click
+  a column header to re-sort. The left panel starts in your
+  Library folder, the right in your home folder.
+
+### Moving around
+
+- **Double-click a folder** to enter it; use the breadcrumbs to
+  climb back out.
+- **Double-click a file** and it opens in the *right place*:
+  Tibetan text files (.txt/.act/.inc/.acip/.md) open in the
+  Overlay; images (.png/.jpg/.tif…) open in the Input pane's
+  scan viewer; everything else opens in its own Mac
+  application.
+- **hidden files** (top-left toggle) shows dotfiles in both
+  panels.
+
+### Copying and moving between the panes
+
+Select a file in one panel, then use **Copy → / ← Copy / Move →
+/ ← Move** in the top row: the file goes to the folder the
+*other* panel is showing. Existing files are never overwritten —
+the app tells you and stops. (Folder copy/move arrives in a
+later phase; files only for now.)
+
+### The Drop Stack
+
+The shelf on the right is for *gathering*: right-click any file
+or folder in a listing and choose **Add to Drop Stack** to park
+it there while you collect a project's materials from all over
+the disk. The stack **persists across sessions** — quit and
+relaunch, and your gathered pile is still there. Double-click a
+stacked item to open it (with the same smart routing);
+right-click for Open / Remove / Clear.
+
+### Right-click, anywhere
+
+Every file row offers: **Add to Drop Stack** · **Open** (smart
+routing) · **Reveal in Finder**.
+
+*This pane is Phase 1 of the file-browser programme (Path
+Finder × ForkLift × Commander One feature study —
+docs/design/FILE_BROWSER_PLAN.md). Batch rename, folder
+compare/sync, archive browsing, tags, favorites, and remote
+connections are scheduled next.*
 
 ## Manuscript
 

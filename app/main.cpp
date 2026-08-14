@@ -93,6 +93,9 @@
 #include <QTimer>
 #include <QPointer>
 #include <QTreeWidget>
+#include <QFileSystemModel>
+#include <QSortFilterProxyModel>
+#include <QTabBar>
 #include <QRawFont>
 #include <QTextLayout>
 #include <QGlyphRun>
@@ -13408,6 +13411,340 @@ public:
 // into their own folder, with .docx auto-converted to text via macOS
 // textutil. Everything lands under <root>/library/ and is browsable in a
 // sortable tree; ACIP file names decode to their catalog provenance.
+// ================= FILES pane — Phase 1 of the file-browser
+// programme (docs/design/FILE_BROWSER_PLAN.md; Adam 2026-08-14:
+// Path Finder × ForkLift feature sets, clean-room in Qt).
+// P1 delivers: dual panes · tabs per pane · breadcrumbs ·
+// folders-first sort · hidden toggle · copy/move between panes ·
+// the Drop Stack shelf · open-into-Overlay/Input integration.
+class FilesDirProxy : public QSortFilterProxyModel {
+public:
+    using QSortFilterProxyModel::QSortFilterProxyModel;
+protected:
+    bool lessThan(const QModelIndex& a,
+                  const QModelIndex& b) const override {
+        auto* m = static_cast<QFileSystemModel*>(sourceModel());
+        const bool da = m->isDir(a), db = m->isDir(b);
+        if (da != db) return da;   // folders first, always
+        return QSortFilterProxyModel::lessThan(a, b);
+    }
+};
+
+class FilesPane : public QWidget {
+public:
+    FilesPane(const QString& root,
+              std::function<void(const QString&)> openText)
+        : root_(root), openText_(std::move(openText)) {
+        auto* outer = new QVBoxLayout(this);
+        auto* top = new QHBoxLayout;
+        hiddenT_ = new QCheckBox("hidden files");
+        hiddenT_->setToolTip("Show dotfiles and hidden entries "
+                             "in both panes");
+        top->addWidget(hiddenT_);
+        auto* copyR = new QPushButton("Copy →");
+        auto* copyL = new QPushButton("← Copy");
+        auto* moveR = new QPushButton("Move →");
+        auto* moveL = new QPushButton("← Move");
+        for (auto* b :
+             std::initializer_list<QPushButton*>{copyR, moveR,
+                                                 copyL, moveL})
+            top->addWidget(b);
+        top->addStretch(1);
+        auto* stackT = new QCheckBox("Drop Stack");
+        stackT->setChecked(true);
+        stackT->setToolTip(
+            "The shelf: park files here while you gather a "
+            "project's texts — it persists across sessions.");
+        top->addWidget(stackT);
+        outer->addLayout(top);
+        auto* split = new QSplitter;
+        for (int i = 0; i < 2; ++i)
+            split->addWidget(buildPanel(i));
+        stack_ = new QListWidget;
+        stack_->setToolTip("Drop Stack — double-click opens; "
+                           "right-click for actions");
+        stack_->setMaximumWidth(230);
+        stack_->setContextMenuPolicy(Qt::CustomContextMenu);
+        connect(stack_, &QListWidget::customContextMenuRequested,
+                [this](const QPoint& pt) {
+                    auto* it = stack_->itemAt(pt);
+                    QMenu m;
+                    if (it) {
+                        m.addAction("Open", [this, it] {
+                            openPath(it->data(Qt::UserRole)
+                                         .toString());
+                        });
+                        m.addAction("Remove from stack",
+                                    [this, it] {
+                                        delete it;
+                                        saveStack();
+                                    });
+                    }
+                    m.addAction("Clear stack", [this] {
+                        stack_->clear();
+                        saveStack();
+                    });
+                    m.exec(stack_->mapToGlobal(pt));
+                });
+        connect(stack_, &QListWidget::itemDoubleClicked,
+                [this](QListWidgetItem* it) {
+                    openPath(it->data(Qt::UserRole).toString());
+                });
+        split->addWidget(stack_);
+        outer->addWidget(split, 1);
+        connect(stackT, &QCheckBox::toggled, stack_,
+                &QWidget::setVisible);
+        connect(hiddenT_, &QCheckBox::toggled, [this](bool on) {
+            const auto f = QDir::AllEntries | QDir::NoDotAndDotDot |
+                           (on ? QDir::Hidden
+                               : (QDir::Filters)0);
+            model_->setFilter(f);
+        });
+        auto xfer = [this](int from, bool move) {
+            const QString src = selectedPath(from);
+            if (src.isEmpty()) return;
+            const QString dstDir = curPath_[1 - from];
+            const QString dst =
+                dstDir + "/" + QFileInfo(src).fileName();
+            if (QFile::exists(dst)) {
+                QMessageBox::information(
+                    this, move ? "Move" : "Copy",
+                    "A file with that name already exists in "
+                    "the other pane — nothing was overwritten.");
+                return;
+            }
+            bool ok = false;
+            if (QFileInfo(src).isDir()) {
+                QMessageBox::information(
+                    this, move ? "Move" : "Copy",
+                    "Folder copy/move arrives in Phase 2 — "
+                    "files only for now.");
+                return;
+            }
+            ok = move ? QFile::rename(src, dst)
+                      : QFile::copy(src, dst);
+            if (!ok)
+                QMessageBox::warning(this, move ? "Move" : "Copy",
+                                     "The operation failed.");
+        };
+        connect(copyR, &QPushButton::clicked,
+                [xfer] { xfer(0, false); });
+        connect(copyL, &QPushButton::clicked,
+                [xfer] { xfer(1, false); });
+        connect(moveR, &QPushButton::clicked,
+                [xfer] { xfer(0, true); });
+        connect(moveL, &QPushButton::clicked,
+                [xfer] { xfer(1, true); });
+        // restore the stack
+        for (const QString& p :
+             QSettings("ALL", "TranslationTool")
+                 .value("files/stack")
+                 .toStringList())
+            if (QFile::exists(p)) addToStack(p);
+    }
+
+    void addToStack(const QString& p) {
+        auto* it = new QListWidgetItem(
+            (QFileInfo(p).isDir() ? QString::fromUtf8("📁 ")
+                                  : QString::fromUtf8("📄 ")) +
+            QFileInfo(p).fileName());
+        it->setToolTip(p);
+        it->setData(Qt::UserRole, p);
+        stack_->addItem(it);
+        saveStack();
+    }
+
+private:
+    QWidget* buildPanel(int ix) {
+        auto* w = new QWidget;
+        auto* v = new QVBoxLayout(w);
+        v->setContentsMargins(0, 0, 0, 0);
+        tabs_[ix] = new QTabBar;
+        tabs_[ix]->setTabsClosable(true);
+        tabs_[ix]->setExpanding(false);
+        v->addWidget(tabs_[ix]);
+        crumbs_[ix] = new QHBoxLayout;
+        crumbs_[ix]->setSpacing(0);
+        auto* cw = new QWidget;
+        cw->setLayout(crumbs_[ix]);
+        v->addWidget(cw);
+        if (!model_) {
+            model_ = new QFileSystemModel(this);
+            model_->setRootPath("/");
+            model_->setFilter(QDir::AllEntries |
+                              QDir::NoDotAndDotDot);
+            proxy_ = new FilesDirProxy(this);
+            proxy_->setSourceModel(model_);
+            proxy_->sort(0);
+        }
+        views_[ix] = new QTreeView;
+        views_[ix]->setModel(proxy_);
+        views_[ix]->setSortingEnabled(true);
+        views_[ix]->sortByColumn(0, Qt::AscendingOrder);
+        views_[ix]->setColumnWidth(0, 260);
+        views_[ix]->setDragEnabled(true);
+        v->addWidget(views_[ix], 1);
+        connect(views_[ix], &QTreeView::doubleClicked,
+                [this, ix](const QModelIndex& pix) {
+                    const QString p = model_->filePath(
+                        proxy_->mapToSource(pix));
+                    if (QFileInfo(p).isDir())
+                        setPath(ix, p);
+                    else
+                        openPath(p);
+                });
+        views_[ix]->setContextMenuPolicy(Qt::CustomContextMenu);
+        connect(views_[ix],
+                &QTreeView::customContextMenuRequested,
+                [this, ix](const QPoint& pt) {
+                    const QModelIndex pix =
+                        views_[ix]->indexAt(pt);
+                    if (!pix.isValid()) return;
+                    const QString p = model_->filePath(
+                        proxy_->mapToSource(pix));
+                    QMenu m;
+                    m.addAction("Add to Drop Stack",
+                                [this, p] { addToStack(p); });
+                    m.addAction("Open", [this, p] {
+                        openPath(p);
+                    });
+                    m.addAction("Reveal in Finder", [p] {
+                        QDesktopServices::openUrl(
+                            QUrl::fromLocalFile(
+                                QFileInfo(p).path()));
+                    });
+                    m.exec(views_[ix]->viewport()->mapToGlobal(
+                        pt));
+                });
+        connect(tabs_[ix], &QTabBar::currentChanged,
+                [this, ix](int t) {
+                    if (t < 0 || switching_) return;
+                    const QString p =
+                        tabs_[ix]->tabData(t).toString();
+                    if (!p.isEmpty()) setPath(ix, p, false);
+                });
+        connect(tabs_[ix], &QTabBar::tabCloseRequested,
+                [this, ix](int t) {
+                    if (tabs_[ix]->count() > 1)
+                        tabs_[ix]->removeTab(t);
+                });
+        // the "+" tab affordance: a plain button beside the bar
+        auto* plus = new QToolButton;
+        plus->setText("+");
+        plus->setToolTip("New tab (duplicates this location)");
+        connect(plus, &QToolButton::clicked, [this, ix] {
+            addTab(ix, curPath_[ix]);
+        });
+        tabs_[ix]->setParent(w);   // layout keeps order
+        auto* tabRow = new QHBoxLayout;
+        tabRow->setContentsMargins(0, 0, 0, 0);
+        tabRow->addWidget(tabs_[ix], 1);
+        tabRow->addWidget(plus);
+        static_cast<QVBoxLayout*>(v)->insertLayout(0, tabRow);
+        const QString start =
+            ix == 0 ? root_ + "/library" : QDir::homePath();
+        addTab(ix, QDir(start).exists() ? start
+                                        : QDir::homePath());
+        return w;
+    }
+
+    void addTab(int ix, const QString& path) {
+        switching_ = true;
+        const int t = tabs_[ix]->addTab(
+            QFileInfo(path).fileName().isEmpty()
+                ? "/"
+                : QFileInfo(path).fileName());
+        tabs_[ix]->setTabData(t, path);
+        tabs_[ix]->setCurrentIndex(t);
+        switching_ = false;
+        setPath(ix, path, false);
+    }
+
+    void setPath(int ix, const QString& path,
+                 bool updateTab = true) {
+        curPath_[ix] = path;
+        views_[ix]->setRootIndex(
+            proxy_->mapFromSource(model_->index(path)));
+        if (updateTab && tabs_[ix]->currentIndex() >= 0) {
+            tabs_[ix]->setTabText(
+                tabs_[ix]->currentIndex(),
+                QFileInfo(path).fileName().isEmpty()
+                    ? "/"
+                    : QFileInfo(path).fileName());
+            tabs_[ix]->setTabData(tabs_[ix]->currentIndex(),
+                                  path);
+        }
+        // breadcrumbs (the Path Finder namesake)
+        QLayoutItem* li;
+        while ((li = crumbs_[ix]->takeAt(0))) {
+            delete li->widget();
+            delete li;
+        }
+        QString acc;
+        const QStringList parts =
+            path.split('/', Qt::SkipEmptyParts);
+        auto* rootB = new QToolButton;
+        rootB->setText("/");
+        connect(rootB, &QToolButton::clicked,
+                [this, ix] { setPath(ix, "/"); });
+        crumbs_[ix]->addWidget(rootB);
+        for (const QString& part : parts) {
+            acc += "/" + part;
+            auto* b = new QToolButton;
+            b->setText(part + " ›");
+            b->setAutoRaise(true);
+            const QString target = acc;
+            connect(b, &QToolButton::clicked,
+                    [this, ix, target] { setPath(ix, target); });
+            crumbs_[ix]->addWidget(b);
+        }
+        crumbs_[ix]->addStretch(1);
+    }
+
+    QString selectedPath(int ix) const {
+        const auto pix = views_[ix]->currentIndex();
+        if (!pix.isValid()) return {};
+        return model_->filePath(proxy_->mapToSource(pix));
+    }
+
+    void openPath(const QString& p) {
+        const QString ext = QFileInfo(p).suffix().toLower();
+        if ((ext == "txt" || ext == "act" || ext == "inc" ||
+             ext == "acip" || ext == "md") &&
+            openText_) {
+            openText_(p);
+            return;
+        }
+        if ((ext == "png" || ext == "jpg" || ext == "jpeg" ||
+             ext == "tif" || ext == "tiff") &&
+            g_openScanInInput) {
+            g_openScanInInput(p);
+            return;
+        }
+        QDesktopServices::openUrl(QUrl::fromLocalFile(p));
+    }
+
+    void saveStack() {
+        QStringList ps;
+        for (int i = 0; i < stack_->count(); ++i)
+            ps << stack_->item(i)->data(Qt::UserRole).toString();
+        QSettings("ALL", "TranslationTool")
+            .setValue("files/stack", ps);
+    }
+
+    QString root_;
+    std::function<void(const QString&)> openText_;
+    QFileSystemModel* model_ = nullptr;
+    FilesDirProxy* proxy_ = nullptr;
+    QTreeView* views_[2] = {nullptr, nullptr};
+    QTabBar* tabs_[2] = {nullptr, nullptr};
+    QHBoxLayout* crumbs_[2] = {nullptr, nullptr};
+    QString curPath_[2];
+    QListWidget* stack_ = nullptr;
+    QCheckBox* hiddenT_ = nullptr;
+    bool switching_ = false;
+};
+
 class LibraryPane : public QWidget {
 public:
     LibraryPane(const QString& root, allcore::Progress* progress,
@@ -19799,6 +20136,13 @@ int main(int argc, char** argv) {
         if (g_raisePane) g_raisePane(overlay);
     };
     tabs.addTab(libraryPane, "Library");
+    auto* filesPane = new FilesPane(root,
+                                    [overlay](const QString& p) {
+                                        overlay->openFile(p);
+                                        if (g_raisePane)
+                                            g_raisePane(overlay);
+                                    });
+    tabs.addTab(filesPane, "Files");
     auto* goferPane = new GoferPane(spine, root);
     g_goferQuery = [goferPane](const QString& q) {
         goferPane->runQuery(q);
@@ -20181,7 +20525,8 @@ int main(int argc, char** argv) {
             if (g->count()) tabs.addTab(g, gname);
             else delete g;
         };
-        mkGroup("Read", {"Overlay", "Library", "Scans", "Export"});
+        mkGroup("Read", {"Overlay", "Library", "Files", "Scans",
+                         "Export"});
         mkGroup("Translate",
                 {"Draft", "Manuscript", "Apparatus", "Review",
                  "Align"});
@@ -21137,6 +21482,36 @@ int main(int argc, char** argv) {
             log << QString("  [%1] Approval: tab badge shows pending "
                            "count").arg(badge ? "PASS" : "FAIL");
             if (!badge) ++fails;
+        }
+        // Files pane: the Drop Stack shelf persists across sessions
+        {
+            const QString probe =
+                QDir::tempPath() + "/all_files_selftest_probe.txt";
+            {
+                QFile pf(probe);
+                if (pf.open(QIODevice::WriteOnly)) pf.write("x");
+            }
+            const int before = QSettings("ALL", "TranslationTool")
+                                   .value("files/stack")
+                                   .toStringList()
+                                   .size();
+            filesPane->addToStack(probe);
+            const QStringList after =
+                QSettings("ALL", "TranslationTool")
+                    .value("files/stack")
+                    .toStringList();
+            const bool ok = after.size() == before + 1 &&
+                            after.contains(probe);
+            // clean up: drop the probe entry again
+            QStringList cleaned = after;
+            cleaned.removeAll(probe);
+            QSettings("ALL", "TranslationTool")
+                .setValue("files/stack", cleaned);
+            QFile::remove(probe);
+            log << QString("  [%1] Files: Drop Stack add persists to "
+                           "settings (shelf survives restart)")
+                       .arg(ok ? "PASS" : "FAIL");
+            if (!ok) ++fails;
         }
         for (const QString& l : log)
             printf("%s\n", l.toUtf8().constData());
