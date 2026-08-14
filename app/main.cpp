@@ -6952,9 +6952,18 @@ public:
         preset->addItems({"Traditional pecha (42 × 9 cm)",
                           "Wide pecha (45 × 10 cm)",
                           "A4 landscape",
-                          "Degé woodblock (68 × 10 cm)"});
+                          "Degé woodblock (68 × 10 cm)",
+                          "Measured woodblock (46 × 8.2 cm, "
+                          "8 lines)"});
+        preset->setToolTip(
+            "Measured woodblock: geometry taken from 14 sampled "
+            "sides of a real print volume in the scan store "
+            "(rnam bshad snying po'i rgyan blocks) — folio ≈5.6:1, "
+            "text block ≈8.1:1 filling 85% of the width and 59% of "
+            "the height, 8 lines per side. See "
+            "docs/research/PECHA_PRINT_QA.md.");
         preset->setCurrentIndex(
-            qBound(0, st.value("pecha/preset", 0).toInt(), 3));
+            qBound(0, st.value("pecha/preset", 0).toInt(), 4));
         auto* lines = new QSpinBox;
         lines->setRange(5, 9);
         lines->setValue(
@@ -7086,7 +7095,15 @@ public:
                 o.wMM = 680;   // Degé folio ≈ 680 × 100 mm (THL)
                 o.hMM = 100;
             }
-            o.lines = lines->value();
+            if (preset->currentIndex() == 4) {
+                // measured from real blocks (14 sampled sides,
+                // 2026-08-13): folio aspect ≈5.6:1, 8 lines/side
+                o.wMM = 460;
+                o.hMM = 82;
+            }
+            o.lines = preset->currentIndex() == 4
+                          ? 8
+                          : lines->value();
             o.interPhon = inter->isChecked();
             o.interEng = interE->isChecked();
             o.family =
