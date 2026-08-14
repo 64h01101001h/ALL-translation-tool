@@ -11,10 +11,16 @@
 // program running unmodified (kck_fixtures.tsv).
 //
 // Scope notes (honest): epoch 3 only; dates before the epoch return
-// valid=false (the original refuses them too); intercalary-month
-// bookkeeping (adj_zla state) is not yet ported — zla dag itself is.
-// KCK computes the KALACAKRA karana; correspondence with published
-// Phugpa almanacs is a separate, documented question.
+// valid=false (the original refuses them too). Intercalary-month
+// bookkeeping IS proven: kckYearMonths + kckDayForTrueMonth are
+// diff-proven against 26 full oracle years (kc_2010..kc_2035:
+// 321 month headers, 9,479 day dates, 210 duplicated-day pairs —
+// tools/gen_kck_year_fixtures.py → kck_year_fixtures.tsv). The epoch
+// year 2009 itself is REFUSED by kckYearMonths (the original's own
+// print of it is boundary-corrupted; pre-epoch months mix in) —
+// refused rather than guessed. KCK computes the KALACAKRA karana;
+// correspondence with published Phugpa almanacs is a separate,
+// documented question.
 
 #include <array>
 #include <vector>

@@ -244,6 +244,10 @@ void monthName(long ty, long mthnum, KckMonth& m) {
 
 std::vector<KckMonth> kckYearMonths(long year) {
     std::vector<KckMonth> out;
+    // the epoch year (2009) mixes pre-epoch months with epoch-forward
+    // ones, and the original program's own print of it is boundary-
+    // corrupted — refused rather than guessed (fixtures prove 2010+)
+    if (year < 2010) return out;
     for (long tm = 1; tm <= 12; ++tm) {
         const long a = 12 * (year - kEpochYear) + tm - kEpochMonth;
         if (a < 0) continue;
