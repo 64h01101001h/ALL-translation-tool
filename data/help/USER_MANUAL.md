@@ -400,6 +400,14 @@ never edits the texts itself. When the authority **DECLINES** one,
 the form has been ruled VALID, and the app stops doubting it —
 everywhere, for the whole team, from the next launch on.
 
+**Verse meter…** — syllable-count analysis of the document.
+Sustained runs of shad-delimited lines on one odd count (7, 9,
+11…) are reported as verse blocks; lines off the count are
+flagged in red for YOUR judgment — an extra syllable from a
+keying slip and one from poetic license look identical to
+arithmetic, so the tool never decides which. Click any block or
+flagged line to jump there.
+
 **Outline (sa bcad)…** — the text's own structural outline,
 extracted from its enumeration grammar (…*la gnyis* opens a
 division; *dang po*, *gnyis pa*… are its headings). The tree is

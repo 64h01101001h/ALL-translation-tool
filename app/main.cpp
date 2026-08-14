@@ -2554,6 +2554,23 @@ public:
                                "card");
                 }
             }
+            {   // verse meter: a 7-syllable quatrain with one
+                // 8-syllable slip is detected and flagged
+                input_->setPlainText(
+                    "SANGS RGYAS CHOS DANG TSOGS KYI MCHOG , "
+                    "BYANG CHUB BAR DU BDAG NI SKYABS , "
+                    "BDAG GIS SBYIN SOGS BGYIS PA YIS EXTRA , "
+                    "'GRO LA PHAN PHYIR SANGS RGYAS SHOG ,");
+                const auto u = meterUnits();
+                const auto bl = meterBlocks(u);
+                const bool ok =
+                    bl.size() == 1 && bl[0].meter == 7 &&
+                    bl[0].deviants.size() == 1 &&
+                    u[bl[0].deviants[0]].syls == 8;
+                check(ok, "verse meter: 7-syllable quatrain "
+                          "detected, the 8-syllable slip "
+                          "flagged");
+            }
             {   // sa bcad: nested enumeration parses to the tree
                 input_->setPlainText(
                     "'DIR LA GNYIS, DANG PO SPYI DON NI ZHES, "
@@ -3059,6 +3076,15 @@ auto* secRev = new QLabel("<span style='color:#9A7A33;font-size:10px;letter-spac
         ll->addWidget(sabcadB);
         connect(sabcadB, &QPushButton::clicked,
                 [this] { showSaBcad(); });
+        auto* meterB = new QPushButton("Verse meter…");
+        meterB->setToolTip(
+            "Syllable-count analysis: sustained runs on one odd "
+            "count are verse; lines off the count are flagged "
+            "for your judgment — a keying slip and poetic "
+            "license look identical to arithmetic.");
+        ll->addWidget(meterB);
+        connect(meterB, &QPushButton::clicked,
+                [this] { showVerseMeter(); });
         spellToggle_ = new QCheckBox("Show spelling doubts");
         spellToggle_->setToolTip(
             "Open a small list of every syllable in this text that "
@@ -6700,6 +6726,151 @@ private:
                         it->data(0, Qt::UserRole).toInt();
                     QTextCursor c(input_->document());
                     c.setPosition(pos);
+                    input_->setTextCursor(c);
+                    input_->ensureCursorVisible();
+                    input_->setFocus();
+                });
+        v->addWidget(tree, 1);
+        dlg->show();
+    }
+
+    // ================= verse meter (pedagogy ⑤, 2026-08-14):
+    // classical Tibetan verse is syllable-counted — runs of
+    // shad-delimited units with one uniform count ARE the verse.
+    // Deviations inside a run are flagged (keying slip or poetic
+    // license — the human judges). =================
+    struct MeterUnit { int pos; int syls; };
+    struct MeterBlock {
+        int meter;                  // syllables per line
+        int first, last;            // unit indexes
+        std::vector<int> deviants;  // unit indexes off the meter
+    };
+
+    std::vector<MeterUnit> meterUnits() const {
+        std::vector<MeterUnit> units;
+        const QString all = input_->toPlainText();
+        int uStart = -1, syls = 0;
+        bool inTok = false, inBracket = false;
+        for (int i = 0; i <= all.size(); ++i) {
+            const QChar c = i < all.size() ? all[i] : QChar(',');
+            if (c == '[') inBracket = true;
+            if (c == ']') { inBracket = false; continue; }
+            if (inBracket) continue;
+            const bool letter =
+                c.isLetter() || c == '\'' || c == '+';
+            if (letter && !inTok) {
+                inTok = true;
+                ++syls;
+                if (uStart < 0) uStart = i;
+            } else if (!letter && inTok) {
+                inTok = false;
+            }
+            if (c == ',' || c == ';' || c == '\n' ||
+                i == all.size()) {
+                if (syls > 0)
+                    units.push_back({uStart, syls});
+                uStart = -1;
+                syls = 0;
+                inTok = false;
+            }
+        }
+        return units;
+    }
+
+    static std::vector<MeterBlock> meterBlocks(
+        const std::vector<MeterUnit>& units) {
+        std::vector<MeterBlock> blocks;
+        const int n = (int)units.size();
+        int i = 0;
+        while (i < n) {
+            // candidate meter = the mode of the next window
+            std::map<int, int> freq;
+            for (int j = i; j < std::min(i + 8, n); ++j)
+                ++freq[units[j].syls];
+            int meter = 0, best = 0;
+            for (auto& [m, c] : freq)
+                if (m >= 5 && m % 2 == 1 && c > best) {
+                    best = c;
+                    meter = m;
+                }
+            if (!meter || best < 3) {
+                ++i;
+                continue;
+            }
+            // extend while ≥75% of a sliding window stays on meter
+            MeterBlock b{meter, i, i, {}};
+            int off = 0, len = 0;
+            int j = i;
+            for (; j < n; ++j) {
+                if (units[j].syls == meter) {
+                    b.last = j;
+                    ++len;
+                } else if (std::abs(units[j].syls - meter) <= 2 &&
+                           off * 4 < len) {
+                    b.deviants.push_back(j);
+                    b.last = j;
+                    ++off;
+                    ++len;
+                } else {
+                    break;
+                }
+            }
+            if (len >= 4)
+                blocks.push_back(b);
+            i = b.last + 1;
+        }
+        return blocks;
+    }
+
+    void showVerseMeter() {
+        const auto units = meterUnits();
+        const auto blocks = meterBlocks(units);
+        if (blocks.empty()) {
+            QMessageBox::information(
+                this, "Verse meter",
+                "No sustained metrical runs found (4+ lines on "
+                "one odd syllable count). Prose reads this way "
+                "too — that is the honest answer, not a "
+                "failure.");
+            return;
+        }
+        auto* dlg = new QDialog(this);
+        dlg->setAttribute(Qt::WA_DeleteOnClose);
+        dlg->setWindowFlag(Qt::Window);
+        dlg->setWindowTitle(
+            "Verse meter — syllable-count analysis (deviant "
+            "lines are for YOUR judgment: keying slip or the "
+            "poet's own license)");
+        dlg->resize(560, 620);
+        auto* v = new QVBoxLayout(dlg);
+        auto* tree = new QTreeWidget;
+        tree->setHeaderHidden(true);
+        for (const auto& b : blocks) {
+            auto* top = new QTreeWidgetItem(tree);
+            top->setText(
+                0, QString("%1-syllable verse · %2 lines · %3 "
+                           "deviation(s)")
+                       .arg(b.meter)
+                       .arg(b.last - b.first + 1)
+                       .arg(b.deviants.size()));
+            top->setData(0, Qt::UserRole, units[b.first].pos);
+            for (int d : b.deviants) {
+                auto* it = new QTreeWidgetItem(top);
+                it->setText(0,
+                            QString("line with %1 syllables "
+                                    "(expected %2)")
+                                .arg(units[d].syls)
+                                .arg(b.meter));
+                it->setData(0, Qt::UserRole, units[d].pos);
+                it->setForeground(0, QColor(0xB4, 0x2A, 0x0A));
+            }
+        }
+        tree->expandAll();
+        connect(tree, &QTreeWidget::itemClicked,
+                [this](QTreeWidgetItem* it, int) {
+                    QTextCursor c(input_->document());
+                    c.setPosition(
+                        it->data(0, Qt::UserRole).toInt());
                     input_->setTextCursor(c);
                     input_->ensureCursorVisible();
                     input_->setFocus();

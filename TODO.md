@@ -963,7 +963,7 @@ implementation is sidelined HERE from this date. What this means:
       (cloze, chunk-ordering, parallel reading — HGM answers only),
       ② local progress/SRS layer, ③ draft workspace + terminology
       consistency + concordance, ④ sa bcad outline extractor (SHIPPED 2026-08-14: enumeration-grammar parser + clickable tree dialog, selftested), ⑤ verse
-      meter, ⑥ miss taxonomy, ⑦ AI back-translation QC.
+      meter (SHIPPED 2026-08-14: block detection + deviation flags, selftested), ⑥ miss taxonomy, ⑦ AI back-translation QC.
       — ① SHIPPED 2026-08-06: Drills pane (chunk-order, cloze, particle,
       parallel reading; seedable DrillFactory in allcore; drills_smoke).
       — ② SHIPPED 2026-08-06: local progress/SRS layer (allcore::Progress →
