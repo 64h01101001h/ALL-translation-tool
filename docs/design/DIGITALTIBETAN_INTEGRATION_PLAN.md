@@ -48,7 +48,7 @@ extra display conventions later (port-and-prove). Esukhia bophono
 = second oracle (already noted in TODO as satisfied-by-THL-engine
 — the oracle use is new).
 
-## P4 — py-tiblegenc (buda-base) for legacy rescue
+## P4 — py-tiblegenc for legacy rescue (SHIPPED 2026-08-14: Apache-2.0 verified; tools/setup_tiblegenc.sh venv + tools/tiblegenc_convert.py wrapper — 70 font tables listed from the tool itself; Library ▸ Maintenance offers it beside UTFC with honest not-installed guidance; app runs no Python)
 26+ pre-Unicode encodings (Sambhota/Dedris, TCRC, TCC, Monlam…)
 → the input-center formatter's legacy lane beside our UTFC
 support. Verify its license (buda-base is usually Apache-2.0)

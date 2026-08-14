@@ -22,7 +22,7 @@ defect, not ours) · version bumped 0.12.0.
    it up to the top of the list") —
    docs/design/DIGITALTIBETAN_INTEGRATION_PLAN.md. Shipped: P1
    typography engine; fonts P2 largely in (BabelStone bundled).
-   Work top-down: P5 StarDict reader (SHIPPED) → P3 Espel oracles (SHIPPED — found+fixed our monosyllable-ba defect) → P6 booklet/3-per-A4 (SHIPPED) → P8 TISE keys (SHIPPED) → P4 py-tiblegenc → W3C full-doc pass on the
+   Work top-down: P5 StarDict reader (SHIPPED) → P3 Espel oracles (SHIPPED — found+fixed our monosyllable-ba defect) → P6 booklet/3-per-A4 (SHIPPED) → P8 TISE keys (SHIPPED) → P4 py-tiblegenc (SHIPPED) → W3C full-doc pass on the
    typography rules.**
 
 1. **Analysis item 14 suppressed** (`core/src/analysis.cpp:166`):

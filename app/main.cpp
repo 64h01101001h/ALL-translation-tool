@@ -16334,6 +16334,10 @@ public:
                              [ocrBtn] { ocrBtn->click(); });
         maintMenu->addAction(utfcBtn->text(),
                              [utfcBtn] { utfcBtn->click(); });
+        maintMenu->addAction(
+            QString::fromUtf8("Legacy font rescue "
+                              "(py-tiblegenc, 28+ encodings)…"),
+            [this] { convertLegacyTiblegenc(); });
         maintBtn->setMenu(maintMenu);
         row->addWidget(maintBtn);
         for (auto* hb : {ocrBtn, utfcBtn, indexBtn}) hb->hide();
@@ -16895,6 +16899,99 @@ private:
     // Rescues documents typed in pre-Unicode font encodings — exactly
     // the TibetanMachineWeb/LTibetan/Sambhota faces the font survey
     // found installed here as custom-encoded legacy fonts.
+    // py-tiblegenc lane (DigitalTibetan P4, Apache-2.0): an
+    // OPTIONAL external engine in build/tiblegenc_venv — the app
+    // runs no Python; it QProcess-calls the venv's wrapper. 28+
+    // pre-Unicode encodings incl. the Dedris/Sambhota families
+    // UTFC lacks.
+    void convertLegacyTiblegenc() {
+        const QString venvPy =
+            QCoreApplication::applicationDirPath() +
+            "/../../../../build/tiblegenc_venv/bin/python";
+        QString py = QFileInfo(venvPy).exists()
+                         ? QFileInfo(venvPy).canonicalFilePath()
+                         : QString();
+        if (py.isEmpty()) {
+            // repo-root fallback (dev runs)
+            const QString alt =
+                libRoot_ + "/../build/tiblegenc_venv/bin/python";
+            if (QFileInfo::exists(alt))
+                py = QFileInfo(alt).canonicalFilePath();
+        }
+        const QString wrapper =
+            QFileInfo(libRoot_ + "/../tools/tiblegenc_convert.py")
+                .canonicalFilePath();
+        if (py.isEmpty() || wrapper.isEmpty()) {
+            QMessageBox::information(
+                this, "py-tiblegenc",
+                "The py-tiblegenc engine is not installed on "
+                "this machine. One-time setup in Terminal:\n\n"
+                "  bash tools/setup_tiblegenc.sh\n\n"
+                "(Apache-2.0; installs into build/tiblegenc_venv "
+                "— the app itself never runs Python.)");
+            return;
+        }
+        // font list from the tool itself — never hardcoded
+        QProcess lf;
+        lf.start(py, {wrapper, "--list-fonts"});
+        lf.waitForFinished(20000);
+        const QStringList fonts =
+            QString::fromUtf8(lf.readAllStandardOutput())
+                .split('\n', Qt::SkipEmptyParts);
+        if (fonts.isEmpty()) {
+            QMessageBox::warning(this, "py-tiblegenc",
+                                 "The engine answered with no "
+                                 "font tables — reinstall via "
+                                 "tools/setup_tiblegenc.sh.");
+            return;
+        }
+        bool ok = false;
+        const QString font = QInputDialog::getItem(
+            this, "py-tiblegenc — source encoding",
+            QString("Which legacy font was the document typed "
+                    "in? (%1 encodings)")
+                .arg(fonts.size()),
+            fonts, 0, false, &ok);
+        if (!ok) return;
+        const QString in = safeGetOpenFileName(
+            this, "Legacy-encoded text file", QString(),
+            "Text (*.txt *.rtf);;All files (*)");
+        if (in.isEmpty()) return;
+        QProcess cv;
+        cv.start(py, {wrapper, font, in});
+        cv.waitForFinished(60000);
+        const QString out =
+            QString::fromUtf8(cv.readAllStandardOutput());
+        const QString err =
+            QString::fromUtf8(cv.readAllStandardError()).trimmed();
+        if (out.trimmed().isEmpty()) {
+            QMessageBox::warning(
+                this, "py-tiblegenc",
+                "Nothing converted." +
+                    (err.isEmpty() ? QString()
+                                   : "\n\n" + err.left(400)));
+            return;
+        }
+        const QString fn = safeGetSaveFileName(
+            this, "Save rescued Unicode text",
+            QFileInfo(in).completeBaseName() + "_unicode.txt",
+            "Text (*.txt)");
+        if (fn.isEmpty()) return;
+        QFile f(fn);
+        if (f.open(QIODevice::WriteOnly)) {
+            f.write(out.toUtf8());
+            f.close();
+        }
+        QMessageBox::information(
+            this, "py-tiblegenc",
+            QString("Rescued to %1.\n\nEngine report: %2\n\n"
+                    "Review before trusting — legacy rescues "
+                    "are per-glyph mappings, and the stats line "
+                    "names anything unhandled.")
+                .arg(QFileInfo(fn).fileName(),
+                     err.isEmpty() ? "(none)" : err.left(300)));
+    }
+
     void convertLegacy() {
         const QString root = QFileInfo(libRoot_).path();
         const QString bin = root + "/build/utfc/utfc";
