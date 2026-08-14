@@ -32,6 +32,18 @@ implementation is sidelined HERE from this date. What this means:
 
 ## Waiting on Adam (prompt him when the task starts)
 
+- [ ] **DISK: approve the git history cleanup (~20GB reclaim) +
+      review the full drive.** 2026-08-13 postmortem: presses had
+      committed every DMG/build into git → .git = 21GB; ENOSPC
+      broke a press mid-rsync (recovered; installed app verified
+      ALL PASS; artifacts untracked going forward). The 21GB
+      HISTORY remains until you approve:
+      `git filter-repo --invert-paths --path dist --path
+      cmake-build-release` (local-only repo, no remote; sources
+      untouched; old DMG blobs are worthless). Separately: the
+      2TB drive is at 100% overall (3.4GB free) — worth a personal
+      sweep beyond this repo.
+
 - [ ] **BDRC OCR: new version lands ~end of August 2026** (Élie
       Roux's email, 2026-08-13: "a significant improvement").
       When released: refresh the bundled BDRC_PhotiLines /
