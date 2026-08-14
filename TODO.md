@@ -720,9 +720,16 @@ implementation is sidelined HERE from this date. What this means:
       per-session by app + font_smoke (never bundled), probed
       64/64 working-set coverage, appended to typeface combo +
       battery.
-- [ ] **Catalog-toolchain mining** (MakeGMRCatalog & co.) with the
-      data project; three more Wylie converters (NetWylie/
-      wylie.js/Lingua::BO) as extra diff-oracles.
+- [~] **Catalog-toolchain mining** (MakeGMRCatalog & co.) with the
+      data project. DIFF-ORACLE CLAUSE LARGELY DONE 2026-08-14:
+      jsewts (buda-base, Apache-2.0) run three-way over all 26,318
+      ground-truth pairs — 98.84% agreement with our canonical
+      engine, both ~98.3% vs ground truth (mutual corroboration);
+      jsewts defect found (Latin diacritics pass through: kā→ཀā —
+      ours is right); docs/research/JSEWTS_DIFF_REVIEW.md.
+      NetWylie/Lingua::BO deprioritized (add little beyond jsewts;
+      pyewts already mined). Remaining: the MakeGMRCatalog toolchain
+      mining itself (data-project side).
 
 ## THE DICTIONARY PROGRAM (Adam, 2026-08-12 — docs/DICTIONARY_STRATEGY.md)
 

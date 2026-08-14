@@ -116,5 +116,5 @@ text readable for *you* yet?"
    working-translator trio; also serves ACI teachers preparing materials).
 4. **Sa bcad outline extractor** (deterministic, delightful, aids reading AND
    translating).
-5. **Verse meter tools**; 6. **miss taxonomy**; 7. **back-translation QC**
+5. **Verse meter tools** (SHIPPED 2026-08-14); 6. **miss taxonomy** (SHIPPED 2026-08-14 — 'My weak spots…' report in Drills: per-skill filing across all four drill modes, plain-language families, per-family training prescription); 7. **back-translation QC** (credit-gated)
    (AI-labeled) — later, after the deterministic wins.
