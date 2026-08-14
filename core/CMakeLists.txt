@@ -6,6 +6,7 @@ option(USE_SYSTEM_SQLITE "Link the system sqlite3 library" ON)
 
 add_library(allcore STATIC
   src/spine.cpp
+    src/stardict.cpp
   src/analysis.cpp
   src/qc.cpp
   src/lattice.cpp
@@ -52,7 +53,7 @@ target_include_directories(allcore PUBLIC include)
 
 if(USE_SYSTEM_SQLITE)
   find_library(SQLITE3_LIB sqlite3 REQUIRED)
-  target_link_libraries(allcore PUBLIC ${SQLITE3_LIB})
+  target_link_libraries(allcore PUBLIC ${SQLITE3_LIB} z)
 else()
   if(NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/third_party/sqlite3.c")
     message(FATAL_ERROR "USE_SYSTEM_SQLITE=OFF needs the vendored SQLite amalgamation at core/third_party/sqlite3.c (not in the repo — download from sqlite.org and place it there)")
@@ -240,6 +241,10 @@ target_link_libraries(abbr_smoke PRIVATE allcore)
 add_test(NAME abbr_smoke
          COMMAND abbr_smoke ${CMAKE_SOURCE_DIR}/data/abbreviations/tibschol_abbr.csv
                  ${CMAKE_SOURCE_DIR}/data/spellcheck)
+
+add_executable(stardict_smoke tests/stardict_smoke.cpp)
+target_link_libraries(stardict_smoke PRIVATE allcore)
+add_test(NAME stardict_smoke COMMAND stardict_smoke)
 
 add_executable(contractions_smoke tests/contractions_smoke.cpp)
 target_link_libraries(contractions_smoke PRIVATE allcore)

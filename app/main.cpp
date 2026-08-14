@@ -132,6 +132,29 @@
 #include "allcore/spellcheck.h"
 #include "allcore/quotation.h"
 #include "allcore/spine.h"
+#include "allcore/stardict.h"
+
+// user-supplied StarDict dictionaries (DigitalTibetan plan P5):
+// loaded from the folder in lookup/stardictDir; format support
+// only — each dictionary's license stays its own, and the layer
+// is labeled user-supplied/local-only
+static std::vector<std::unique_ptr<allcore::StarDict>> g_stardicts;
+static bool g_stardictsLoaded = false;
+static void loadStardicts() {
+    g_stardictsLoaded = true;
+    g_stardicts.clear();
+    const QString dir = QSettings("ALL", "TranslationTool")
+                            .value("lookup/stardictDir")
+                            .toString();
+    if (dir.isEmpty() || !QDir(dir).exists()) return;
+    QDirIterator it(dir, {"*.ifo"}, QDir::Files,
+                    QDirIterator::Subdirectories);
+    while (it.hasNext()) {
+        auto d = std::make_unique<allcore::StarDict>(
+            it.next().toStdString());
+        if (d->ok()) g_stardicts.push_back(std::move(d));
+    }
+}
 #include "allcore/affixnorm.h"
 #include "allcore/lexicon.h"
 #include "allcore/verbstems.h"
@@ -1080,6 +1103,51 @@ static QString lookupResultsHtml(allcore::Spine& spine,
             }
         }
     }
+    // user-supplied StarDict dictionaries (P5): exact lookups in
+    // three key spaces (as typed, wylie, Tibetan unicode)
+    if (!g_stardictsLoaded) loadStardicts();
+    if (!g_stardicts.empty()) {
+        std::string wylie = raw;
+        {
+            bool upper = false;
+            for (char c : raw) upper |= (c >= 'A' && c <= 'Z');
+            if (upper) wylie = allcore::acipToEwts(raw);
+        }
+        auto [uni, uok] = allcore::wylieToUnicode(wylie);
+        bool any = false;
+        QString block;
+        for (const auto& d : g_stardicts) {
+            std::vector<std::string> defs = d->lookup(raw);
+            if (defs.empty()) defs = d->lookup(wylie);
+            if (defs.empty() && uok) defs = d->lookup(uni);
+            if (defs.empty() && uok)
+                defs = d->lookup(uni + "\u0F0B");
+            if (defs.empty()) continue;
+            any = true;
+            block += "<div style='margin:5px 0;font-size:12px;"
+                     "color:#6E675D'><span style='background:"
+                     "#F0E9DC;color:#6B5E4A;padding:1px 7px;"
+                     "border-radius:8px;font-size:11px'>" +
+                     QString::fromStdString(d->bookname())
+                         .toHtmlEscaped() +
+                     "</span> ";
+            for (size_t k = 0; k < defs.size() && k < 3; ++k)
+                block += QString::fromStdString(defs[k])
+                             .left(600)
+                             .toHtmlEscaped()
+                             .replace("\n", "<br>") +
+                         (k + 1 < defs.size() ? "<br>" : "");
+            block += "</div>";
+        }
+        if (any) {
+            h += zoneLabel("LOCAL DICTIONARIES \u00b7 "
+                           "USER-SUPPLIED") +
+                 "<div><small style='color:#9C948A'>StarDict "
+                 "files you installed \u2014 their licenses are "
+                 "their own; local display only</small></div>" +
+                 block;
+        }
+    }
     // Mahāvyutpatti: classical Skt⇄Tib reference (exact wylie match)
     if (mvp) {
         std::string wylie = raw;
@@ -1657,7 +1725,38 @@ static QWidget* makeLookupPane(allcore::Spine& spine, allcore::RefDict* ref,
             }
         });
     layout->addWidget(box);
-    layout->addWidget(refsToggle);
+    auto* refsRow = new QHBoxLayout;
+    refsRow->addWidget(refsToggle);
+    auto* sdBtn = new QPushButton(
+        "Local dictionaries (StarDict)\u2026");
+    sdBtn->setToolTip(
+        "Point at a folder of StarDict dictionaries (.ifo + .idx "
+        "+ .dict[.dz]) \u2014 the format GoldenDict and most "
+        "shared Tibetan dictionaries use. They appear as a "
+        "labeled user-supplied layer; their licenses remain "
+        "their own.");
+    refsRow->addWidget(sdBtn);
+    refsRow->addStretch(1);
+    layout->addLayout(refsRow);
+    QObject::connect(sdBtn, &QPushButton::clicked, [pane, box] {
+        const QString cur = QSettings("ALL", "TranslationTool")
+                                .value("lookup/stardictDir")
+                                .toString();
+        const QString dir = safeGetExistingDirectory(
+            pane, "Folder of StarDict dictionaries", cur);
+        if (dir.isEmpty()) return;
+        QSettings("ALL", "TranslationTool")
+            .setValue("lookup/stardictDir", dir);
+        loadStardicts();
+        QMessageBox::information(
+            pane, "Local dictionaries",
+            QString("%1 dictionary file(s) loaded. They appear "
+                    "in results as LOCAL DICTIONARIES \u00b7 "
+                    "USER-SUPPLIED.")
+                .arg(g_stardicts.size()));
+        if (!box->text().trimmed().isEmpty())
+            QMetaObject::invokeMethod(box, "returnPressed");
+    });
     layout->addWidget(results);
     split->addWidget(left);
     split->addWidget(right);

@@ -22,7 +22,7 @@ defect, not ours) · version bumped 0.12.0.
    it up to the top of the list") —
    docs/design/DIGITALTIBETAN_INTEGRATION_PLAN.md. Shipped: P1
    typography engine; fonts P2 largely in (BabelStone bundled).
-   Work top-down: P5 StarDict reader → P3 Espel five-convention
+   Work top-down: P5 StarDict reader (SHIPPED) → P3 Espel five-convention
    phonetics oracles → P6 booklet/3-per-A4 imposition → P8 TISE
    input keys → P4 py-tiblegenc → W3C full-doc pass on the
    typography rules.**

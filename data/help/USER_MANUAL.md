@@ -1695,6 +1695,14 @@ On the left side of the pane:
 
 ---
 
+**Local dictionaries (StarDict)** — point Lookup at a folder of
+StarDict dictionaries (.ifo/.idx/.dict, the format GoldenDict
+and most shared Tibetan dictionaries use) and they join your
+results as a clearly labeled **LOCAL DICTIONARIES ·
+USER-SUPPLIED** layer. Queries match as typed, as wylie, and as
+Tibetan script. Their licenses remain their own; nothing is
+redistributed.
+
 ## Sanskrit
 
 *Research → Sanskrit. The whole Sanskrit stack in one workbench:
