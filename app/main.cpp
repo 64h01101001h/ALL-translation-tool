@@ -1500,6 +1500,10 @@ static bool g_sweepActive = false;
 // TibetDoc search-locations jump; set in main() once the Overlay
 // exists
 static std::function<void(const QString&, int)> g_openAtLine;
+// Botok word boundaries as syllable counts (set once the Overlay's
+// segmenter is built) — lets other panes group syllables into words
+static std::function<std::vector<int>(const std::string&)>
+    g_segSylCounts;
 // text↔woodblock jump (Adam's priority, 2026-08-13): the Overlay
 // hands a LOCAL folio image to the Input workflow
 static std::function<void(const QString&)> g_openScanInInput;
@@ -6584,7 +6588,12 @@ private:
                 this, "eKangyur",
                 "The eKangyur e-text corpus is not installed "
                 "(editions/derge-kangyur-esukhia). It is Public "
-                "Domain — see TODO for the acquisition recipe.");
+                "Domain — install with:\n\n  git clone https://"
+                "github.com/Esukhia/derge-kangyur editions/"
+                "derge-kangyur-esukhia\n  git clone https://"
+                "github.com/Esukhia/derge-tengyur editions/"
+                "derge-tengyur-esukhia\n\nthen run tools/"
+                "index_ekangyur.py (and --tengyur).");
             return;
         }
         QFile xf(dataRoot_ + "/data/extracted/" +
@@ -9498,6 +9507,21 @@ private:
             lexicon_.eachWord(
                 [&seg](const std::string& w) { seg->addWord(w); });
             segmenter_ = std::move(seg);
+            g_segSylCounts = [this](const std::string& uni) {
+                std::vector<int> counts;
+                if (!segmenter_) return counts;
+                for (const auto& sw : segmenter_->segment(uni)) {
+                    if (!sw.tibetan) continue;
+                    int n = 0;
+                    for (const QString& p :
+                         QString::fromStdString(sw.text)
+                             .split(QChar(0x0F0B),
+                                    Qt::SkipEmptyParts))
+                        if (!p.trimmed().isEmpty()) ++n;
+                    if (n > 0) counts.push_back(n);
+                }
+                return counts;
+            };
             segInfo_ = QString("%1 HGM + %2 Monlam forms, built in %3s")
                            .arg(hgmWords)
                            .arg(segmenter_->wordCount() - hgmWords)
@@ -10777,6 +10801,54 @@ private:
     QTextBrowser* out_ = nullptr;
 };
 
+// THL phonetics for a PHRASE (Adam's finding 2026-08-14: the line
+// ran together — "sönamkyitsokdang…"). The engine is word-scoped
+// by design (its 139 standard examples are words), so a phrase
+// must be split first: clauses at punctuation, words by the Botok
+// segmenter when it is up, per-syllable spacing as the honest
+// fallback. Never a glued line.
+static std::string thlPhrase(const std::string& wylie) {
+    const QString w = QString::fromStdString(wylie);
+    auto clausePhon = [](const QString& clause) -> QString {
+        const QStringList syls =
+            clause.simplified().split(' ', Qt::SkipEmptyParts);
+        if (syls.isEmpty()) return {};
+        std::vector<int> counts;
+        if (g_segSylCounts) {
+            const auto conv = allcore::wylieToUnicode(
+                clause.simplified().toStdString());
+            if (conv.second) counts = g_segSylCounts(conv.first);
+            int tot = 0;
+            for (int c : counts) tot += c;
+            if (tot != (int)syls.size()) counts.clear();
+        }
+        if (counts.empty())
+            counts.assign(syls.size(), 1);   // syllable honesty
+        QStringList words;
+        int at = 0;
+        for (int c : counts) {
+            words << QString::fromStdString(allcore::thlPhonetics(
+                syls.mid(at, c).join(' ').toStdString()));
+            at += c;
+        }
+        return words.join(' ');
+    };
+    QStringList clauses;
+    QString cur;
+    for (int i = 0; i <= w.size(); ++i) {
+        const QChar ch = i < w.size() ? w[i] : QChar(',');
+        if (ch == ',' || ch == ';' || ch == '/' || ch == '\n' ||
+            ch == QChar(0x0F0D)) {
+            const QString c = clausePhon(cur);
+            if (!c.isEmpty()) clauses << c;
+            cur.clear();
+        } else {
+            cur += ch;
+        }
+    }
+    return clauses.join(", ").toStdString();
+}
+
 static QWidget* makeConvertPane(allcore::Mvp* mvp,
                                 allcore::WhitneyRoots* whitney = nullptr) {
     auto* pane = new QWidget;
@@ -11170,7 +11242,7 @@ static QWidget* makeConvertPane(allcore::Mvp* mvp,
              QString::fromStdString(pron).toHtmlEscaped() + "</td></tr>";
         // the scholarly transcription beside the house convention
         // (engine proven 139/139 on the standard's own examples)
-        const std::string thl = allcore::thlPhonetics(wylie);
+        const std::string thl = thlPhrase(wylie);
         h += "<tr><td><b>THL phonetics</b></td>"
              "<td style='font-size:15px'>" +
              QString::fromStdString(thl).toHtmlEscaped() +
@@ -22747,10 +22819,21 @@ int main(int argc, char** argv) {
             add("<div style='font-family:\"Iowan Old Style\",Georgia,"
                 "serif;font-size:24px;color:#7C2D26;font-weight:600'>"
                 "ALL Translation Tool</div>");
+            // release date = build date of this translation unit —
+            // every press rebuilds main.cpp, so it tracks presses
+            const QDate rel = QLocale(QLocale::English)
+                                  .toDate(QString(__DATE__)
+                                              .simplified(),
+                                          "MMM d yyyy");
             add(QString("<div style='font-size:12px;color:#6E5F4B;"
                         "letter-spacing:1px'>VERSION %1 &nbsp;"
-                        "\u00b7&nbsp; HGM DATA v%2</div>")
+                        "\u00b7&nbsp; RELEASED %2 &nbsp;"
+                        "\u00b7&nbsp; HGM DATA v%3</div>")
                     .arg(QStringLiteral(ALL_APP_VERSION),
+                         rel.isValid()
+                             ? rel.toString("d MMMM yyyy")
+                                   .toUpper()
+                             : QString(__DATE__),
                          QString::fromStdString(
                              g_spineForAbout
                                  ? g_spineForAbout->metaValue(
@@ -22784,7 +22867,7 @@ int main(int argc, char** argv) {
                 "it may never compose it.</div>");
             add(QString("<div style='font-size:11px;color:#6E5F4B;"
                         "margin-top:12px'>Developed in C++20 with "
-                        "Qt %1 \u00b7 38 automated test batteries "
+                        "Qt %1 \u00b7 39 automated test batteries "
                         "\u00b7 runs fully offline</div>")
                     .arg(QString::fromLatin1(qVersion())));
             add("<div style='font-size:12px;margin-top:8px'>"
@@ -23624,6 +23707,32 @@ int main(int argc, char** argv) {
             log << QString("  [%1] Draft: house-style check "
                            "flags dashes, ranges, ampersand, "
                            "era, and the word-use list")
+                       .arg(ok ? "PASS" : "FAIL");
+            if (!ok) ++fails;
+        }
+        // Convert: THL phonetics for phrases — words separated
+        // (Adam's finding: the line ran together)
+        {
+            const auto saved = g_segSylCounts;
+            g_segSylCounts = nullptr;
+            const QString fb = QString::fromStdString(
+                thlPhrase("bsod nams kyi tshogs dang"));
+            g_segSylCounts =
+                [](const std::string&) {
+                    return std::vector<int>{2, 1, 1, 1};
+                };
+            const QString segd = QString::fromStdString(
+                thlPhrase("bsod nams kyi tshogs dang"));
+            const QString cl = QString::fromStdString(
+                thlPhrase("bsod nams , ye shes"));
+            g_segSylCounts = saved;
+            const bool ok =
+                fb.count(' ') == 4 && !fb.contains("namkyi") &&
+                segd.startsWith(QString::fromUtf8("sönam ")) &&
+                segd.count(' ') == 3 && cl.contains(", ");
+            log << QString("  [%1] Convert: THL phrase phonetics "
+                           "— words separated (Botok groups), "
+                           "syllable fallback, clause commas")
                        .arg(ok ? "PASS" : "FAIL");
             if (!ok) ++fails;
         }

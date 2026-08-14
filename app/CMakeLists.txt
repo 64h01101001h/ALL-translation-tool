@@ -10,6 +10,10 @@ set_source_files_properties(AppIcon.icns PROPERTIES
 find_package(Qt6 COMPONENTS Network REQUIRED)
 find_package(Qt6 COMPONENTS Pdf PdfWidgets QUIET)
 file(STRINGS "${CMAKE_SOURCE_DIR}/VERSION" ALL_APP_VERSION LIMIT_COUNT 1)
+# re-configure when VERSION changes — otherwise the About pane
+# ships a stale number (bit us at 0.9.0 → 0.11.0)
+set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS
+             "${CMAKE_SOURCE_DIR}/VERSION")
 add_compile_definitions(ALL_APP_VERSION="${ALL_APP_VERSION}")
 target_link_libraries(ALLTranslationTool PRIVATE allcore Qt6::Widgets Qt6::Network)
 if(Qt6Pdf_FOUND)

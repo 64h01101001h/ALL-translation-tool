@@ -83,7 +83,12 @@ int main(int argc, char** argv) {
             for (const auto& q : m) hit |= (q.course == seed.course);
             CHECK(hit, "ACIP passage detected via canonical conversion");
         } else {
-            std::printf("  [SKIP] seed has no ACIP field\n");
+            // a silent skip hides coverage loss — fail loudly so
+            // a seed without an ACIP field gets noticed
+            std::printf("  [FAIL] seed has no ACIP field — the "
+                        "ACIP-conversion lane was NOT "
+                        "exercised\n");
+            ++failures;
         }
     }
 

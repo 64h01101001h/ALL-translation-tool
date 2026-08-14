@@ -32,6 +32,11 @@ implementation is sidelined HERE from this date. What this means:
 
 ## Waiting on Adam (prompt him when the task starts)
 
+- [ ] **ATTACK BOARD (2026-08-14 full audit)** — docs/LOOSE_ENDS_AUDIT.md
+      is the consolidated four-lane audit of every loose end since day
+      one (TODO line-by-line + all docs + code + memory promises).
+      Work the A-queue top-down; B is Adam's one-sitting queue; C is
+      the external watch. Keep it current as items strike.
 - [ ] **SOURCE TRUST DIALOG WITH GESHE MICHAEL** (Adam, 2026-08-14,
       all-caps priority: "which sources to trust over others and
       why"). PREPARED: docs/standards/SOURCE_TRUST_HIERARCHY.md —
@@ -859,7 +864,7 @@ implementation is sidelined HERE from this date. What this means:
       lines); docs truth-passed. The harvest HISTORY below stands
       (title pairs, author trees, subject browser — all ingested to
       the corpus before retirement).
-- [~] **Release 6 zip — unexplored assets** (Adam's Dropbox,
+- [x] **Release 6 zip — unexplored assets** (Adam's Dropbox,
       acip-release6-wylie.zip): (a) ACIP_Master_Catalog.html INSPECTED
       2026-08-07 — it is the Brief Catalog, record-identical to the
       ingested TXT (2,875; lineage proven, no Sanskrit column); (b)
@@ -987,7 +992,7 @@ implementation is sidelined HERE from this date. What this means:
 - [x] Grow the verb-class tables from chapters 17 & 19 (~70 verbs; corpus
       coverage 69.5% confident verb / 29.9% Wilson-classed over 147,902
       clauses). *Shipped 2026-08-06.*
-- [ ] **Pedagogy roadmap** (docs/PEDAGOGY_ROADMAP.md — Adam's translator-
+- [x] **Pedagogy roadmap** (docs/PEDAGOGY_ROADMAP.md — Adam's translator-
       training question, 2026-08-06). Build order: ① corpus drill generator
       (cloze, chunk-ordering, parallel reading — HGM answers only),
       ② local progress/SRS layer, ③ draft workspace + terminology
