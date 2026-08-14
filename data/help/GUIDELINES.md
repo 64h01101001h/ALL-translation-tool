@@ -263,3 +263,24 @@ What THL's catalogs add to the reference picture:
   docs/research/TRANSCRIBER_SURVEY.md) exists to replace them
   with lexicon-biased transcripts, and even those enter the index
   as evidence, not as text of record.
+
+
+## Guidelines: Typing IAST Sanskrit (macOS)
+
+You can type every IAST diacritic our Sanskrit pane accepts with
+macOS's built-in **ABC – Extended** keyboard (System Settings →
+Keyboard → Input Sources → add "ABC – Extended"). Press the
+option-key combination first, then the letter:
+
+| To get | Press | | To get | Press |
+|---|---|---|---|---|
+| ā Ā ī Ī ū Ū | ⌥a then the vowel | | ṛ Ṛ ḷ Ḷ | ⌥x then r/l |
+| ṃ Ṃ ḥ Ḥ | ⌥x then m/h | | ṭ Ṭ ḍ Ḍ ṇ Ṇ | ⌥x then t/d/n |
+| ṣ Ṣ | ⌥x then s | | ś Ś | ⌥e then s |
+| ṅ Ṅ | ⌥w then n | | ñ Ñ | ⌥n then n |
+
+The pattern: **⌥a** = long-vowel macron, **⌥x** = dot below,
+**⌥w** = dot above, **⌥e** = acute, **⌥n** = tilde. Type the
+result straight into the Sanskrit or Convert pane — IAST is
+auto-detected. (Assembled from DigitalTibetan's macOS
+documentation; the keystrokes are Apple's own keyboard layout.)

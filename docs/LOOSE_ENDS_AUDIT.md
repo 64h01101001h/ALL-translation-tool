@@ -94,6 +94,11 @@ vision projects · Fall-2022/Winter-2021 link sheets.
 
 ## C. EXTERNAL WATCH (dated triggers)
 
+New (DigitalTibetan census 2026-08-14): tibetanebook.com +
+dharmaebooks.org — Buddhist e-text sources, license check before
+any use; TiCode pre-Unicode spec PDF pointer (legacy lane
+reference).
+
 BDRC OCR release (~end Aug) → model refresh + deskew-bug report
 upstream · Lainé reply → abbreviations layer + Wilson register
 growth · THL reply → kmaps/Solr integration + dictionary licenses ·

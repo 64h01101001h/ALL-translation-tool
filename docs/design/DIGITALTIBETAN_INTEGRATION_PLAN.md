@@ -94,3 +94,22 @@ choice. MT-page opinion ("Gemini nearly solves it") — noted for
 the oversight pane's positioning docs only. E-reader export
 (Kindle ≥5.16 firmware, sideloaded fonts) — banked for a future
 EPUB lane.
+
+
+## Census close-out (Adam's directed re-scour, 2026-08-14)
+
+Exhaustive repo-tree enumeration (branch `main`, `_toc.yml`
+verified): the original 41-page scour was complete; the site has
+**one orphan page** (`ebook_sources.md` — unlinked, unbuilt) and
+**no data files**. The Sanskrit page is confirmed a TBD stub;
+its real content lives in the macOS IAST keyboard table (now in
+our Help: "Typing IAST Sanskrit") and the computational-dharma
+notebook's `indic_transliteration` demo — executed as our
+Sanskrit cross-oracle (99.995% / 63,667 terms;
+docs/research/INDIC_TRANSLIT_ORACLE.md). New leads from the
+orphan page: **tibetanebook.com** and **dharmaebooks.org**
+(license check before any use → external watch). Reference
+pointer banked: the pre-Unicode **TiCode** spec PDF
+(digitaltibetan.github.io/DigitalTibetan/docs/Resources/
+ticode.pdf) — relevant to the legacy-rescue lane; repo carries
+no license, so pointer only. THE GOLDMINE IS FULLY MINED.
