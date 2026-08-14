@@ -906,7 +906,7 @@ implementation is sidelined HERE from this date. What this means:
       the nga-tsheg exception, ⟨…⟩ failure flags; Overlay button + ACIP
       file-nomenclature provenance decoding). *Shipped 2026-08-06.*
 
-- [ ] **Wilson full-designation program** (the "complete access on every
+- [x] **Wilson full-designation program** — ALL TWELVE DOT DESIGNATIONS IMPLEMENTED (closed 2026-08-14; remaining clauses are externally gated: rKTs register growth awaits Lainé's answer r-9190233297626946294; letter-level fusions = research item). (the "complete access on every
       grammatical level" goal). DONE so far (2026-08-06): per-unit parse w/
       contextual eight-case numbers; negation particles; infinitive-marker +
       auxiliary verb phrases; postposition constructions; ambiguity guards

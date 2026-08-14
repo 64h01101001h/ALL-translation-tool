@@ -141,9 +141,11 @@ browse *a canon*.
   upload-from-active-pane), activity log. Listing parsers pinned
   on output captured LIVE from local pyftpdlib + wsgidav
   servers; FTP and WebDAV upload/download roundtrips proven
-  byte-identical against those servers. *Remaining in P3:*
-  transfer queue with reorder/conflict rules (v1 is sequential
-  FIFO), remote editing with auto-upload, directory
-  download/upload.
+  byte-identical against those servers. *Second P3 tranche shipped
+  2026-08-14:* recursive folder download (shared listAt lister,
+  works on all four protocols) + per-batch conflict rules
+  (skip default / keep-both-rename / explicit overwrite).
+  *Remaining in P3:* queue reorder, remote editing with
+  auto-upload, directory upload.
 - **P4: long tail** — S3, embedded terminal, hex viewer.
 Declines stay declined unless Adam overrules with reasons logged.

@@ -14403,6 +14403,16 @@ private:
         v->addWidget(list, 1);
         auto* ops = new QHBoxLayout;
         auto* upB = new QPushButton("Up");
+        auto* conflict = new QComboBox;
+        conflict->addItems(
+            {"skip existing (default)",
+             "keep both (rename the new copy)",
+             "overwrite existing"});
+        conflict->setToolTip(
+            "What a download does when the local file already "
+            "exists. Overwrite is explicit — the default never "
+            "touches what you have.");
+        ops->addWidget(conflict);
         auto* dlB = new QPushButton(
             "Download into the active pane");
         auto* ulB = new QPushButton(
@@ -14639,38 +14649,132 @@ private:
             st->path = p2.isEmpty() ? "/" : p2;
             refresh();
         });
-        // the transfer queue: FIFO, one at a time, logged
+        // list any remote path (shared by refresh and the
+        // recursive directory download)
+        auto listAt = [this, st, runCurl, runSftp](
+                          const QString& remotePath)
+            -> std::vector<RemoteEntry> {
+            QByteArray out;
+            QString pth = remotePath;
+            if (!pth.endsWith('/')) pth += "/";
+            if (st->proto == "sftp") {
+                if (runSftp(QString("cd %1\nls -l\n")
+                                .arg(remotePath),
+                            &out))
+                    return parseFtpList(
+                        QString::fromUtf8(out));
+            } else if (st->proto.startsWith("webdav")) {
+                QString scheme =
+                    st->proto == "webdav" ? "http" : "https";
+                QString u = scheme + "://" + st->host;
+                if (st->port)
+                    u += ":" + QString::number(st->port);
+                if (runCurl({"-X", "PROPFIND", "-H", "Depth: 1",
+                             u + pth},
+                            &out))
+                    return parseDavList(
+                        QString::fromUtf8(out), pth);
+            } else {
+                QString u = st->proto + "://" + st->host;
+                if (st->port)
+                    u += ":" + QString::number(st->port);
+                if (runCurl({u + pth}, &out))
+                    return parseFtpList(
+                        QString::fromUtf8(out));
+            }
+            return {};
+        };
+        // local landing spot under the conflict rule; empty =
+        // skip
+        auto landing = [conflict](const QString& dst) {
+            if (!QFile::exists(dst)) return dst;
+            const int mode = conflict->currentIndex();
+            if (mode == 0) return QString();   // skip
+            if (mode == 2) {                    // overwrite
+                QFile::remove(dst);
+                return dst;
+            }
+            const QFileInfo fi(dst);            // keep both
+            for (int n = 2; n < 1000; ++n) {
+                const QString cand =
+                    fi.path() + "/" + fi.completeBaseName() +
+                    QString(" (%1)").arg(n) +
+                    (fi.suffix().isEmpty()
+                         ? QString()
+                         : "." + fi.suffix());
+                if (!QFile::exists(cand)) return cand;
+            }
+            return QString();
+        };
+        auto fetchFile = [st, runCurl, runSftp, urlFor, logLine,
+                          landing](const QString& remoteDir,
+                                   const QString& name,
+                                   const QString& dstDir)
+            -> bool {
+            const QString dst = landing(dstDir + "/" + name);
+            if (dst.isEmpty()) {
+                logLine("skip (exists): " + name);
+                return true;
+            }
+            bool ok = false;
+            QString rd = remoteDir;
+            if (!rd.endsWith('/')) rd += "/";
+            if (st->proto == "sftp") {
+                ok = runSftp(QString("get %1%2 %3\n")
+                                 .arg(rd, name, dst),
+                             nullptr);
+            } else {
+                QString scheme =
+                    st->proto == "webdav"    ? "http"
+                    : st->proto == "webdavs" ? "https"
+                                             : st->proto;
+                QString u = scheme + "://" + st->host;
+                if (st->port)
+                    u += ":" + QString::number(st->port);
+                ok = runCurl({"-o", dst, u + rd + name},
+                             nullptr);
+            }
+            logLine(ok ? "done: " + dst : "FAILED: " + name);
+            return ok;
+        };
+        // the transfer queue: FIFO, one at a time, logged;
+        // folders download recursively
         connect(dlB, &QPushButton::clicked,
-                [this, st, list, logLine, runCurl, runSftp,
-                 urlFor] {
+                [this, st, list, logLine, listAt, fetchFile] {
                     const QString dstDir = curPath_[active_];
+                    std::function<void(const QString&,
+                                       const QString&)>
+                        fetchDir = [&](const QString& remoteDir,
+                                       const QString& localDir) {
+                            QDir().mkpath(localDir);
+                            for (const auto& e :
+                                 listAt(remoteDir)) {
+                                QString rd = remoteDir;
+                                if (!rd.endsWith('/'))
+                                    rd += "/";
+                                if (e.isDir)
+                                    fetchDir(rd + e.name,
+                                             localDir + "/" +
+                                                 e.name);
+                                else
+                                    fetchFile(remoteDir, e.name,
+                                              localDir);
+                            }
+                        };
                     for (auto* it : list->selectedItems()) {
-                        if (it->data(Qt::UserRole + 1).toBool())
-                            continue;   // dirs: v1 files only
                         const QString name =
                             it->data(Qt::UserRole).toString();
-                        const QString dst =
-                            dstDir + "/" + name;
-                        if (QFile::exists(dst)) {
-                            logLine("skip (exists): " + name);
-                            continue;
-                        }
-                        logLine("downloading " + name + " …");
-                        bool ok = false;
-                        if (st->proto == "sftp") {
-                            QString p2 = st->path;
-                            if (!p2.endsWith('/')) p2 += "/";
-                            ok = runSftp(
-                                QString("get %1%2 %3\n")
-                                    .arg(p2, name, dst),
-                                nullptr);
+                        if (it->data(Qt::UserRole + 1)
+                                .toBool()) {
+                            QString rd = st->path;
+                            if (!rd.endsWith('/')) rd += "/";
+                            logLine("downloading folder " +
+                                    name + "/ …");
+                            fetchDir(rd + name,
+                                     dstDir + "/" + name);
                         } else {
-                            ok = runCurl(
-                                {"-o", dst, urlFor(name)},
-                                nullptr);
+                            fetchFile(st->path, name, dstDir);
                         }
-                        logLine(ok ? "done: " + dst
-                                   : "FAILED: " + name);
                     }
                 });
         connect(ulB, &QPushButton::clicked,
