@@ -19,8 +19,13 @@
 // year 2009 itself is REFUSED by kckYearMonths (the original's own
 // print of it is boundary-corrupted; pre-epoch months mix in) —
 // refused rather than guessed. KCK computes the KALACAKRA karana;
-// correspondence with published Phugpa almanacs is a separate,
-// documented question.
+// correspondence with published Phugpa almanacs is now QUANTIFIED
+// (docs/research/KCK_VS_PHUGPA.md, Espel Phugpa oracle): identical
+// Losar and ~90% identical days in leap-free years, but the two
+// systems INTERCALATE DIFFERENTLY — in leap-affected stretches
+// dates differ by a month (2025: KCK Losar Jan 30 vs published/
+// Phugpa Feb 28). For published-almanac dating, Phugpa is the
+// standard; a future Phugpa port starts from Janson's paper.
 
 #include <array>
 #include <vector>

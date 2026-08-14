@@ -79,7 +79,7 @@ TISE de-facto keys for Wylie input fields: `*` = non-breaking
 tsheg, `_` = non-breaking space, `+` = explicit stack (we honor
 `+` already; add `*`/`_` in the Input pane's predictive editor).
 
-## P9 — Calendar cross-checks
+## P9 — Calendar cross-checks (EXECUTED 2026-08-14: Espel Calendar-Phugpa run as non-vendored oracle — KCK-vs-Phugpa question ANSWERED with numbers, docs/research/KCK_VS_PHUGPA.md; Phugpa matches all three published Losars 2024-26, KCK diverges by a month across differing intercalations; Janson = the spec for any future Phugpa port)
 Henning's kalacakra.org C code is ALREADY our vendored oracle
 (third_party/kck_henning). New: Espel's Calendar-Phugpa Perl as
 an independent second oracle; Janson's Uppsala paper as the
