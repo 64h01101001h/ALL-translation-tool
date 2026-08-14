@@ -74,7 +74,7 @@ Ti-En corpus — pairs with our pending 84000 license email) ·
 OpenPecha-Data catalog · awesome-tibetan-canon/nlp lists. All
 license-gated per source; add to acquisition watch.
 
-## P8 — Input conventions
+## P8 — Input conventions (SHIPPED 2026-08-14: Convert honors TISE '*'→U+0F0C and '_'→NBSP as display-layer joins — tiseWylieToUnicode wrapper, canonical engine untouched, selftest-pinned; placeholder documents the keys)
 TISE de-facto keys for Wylie input fields: `*` = non-breaking
 tsheg, `_` = non-breaking space, `+` = explicit stack (we honor
 `+` already; add `*`/`_` in the Input pane's predictive editor).

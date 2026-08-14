@@ -1882,6 +1882,13 @@ date and it refuses rather than guesses — year-level questions
 
 ---
 
+**TISE keys in Convert** — the de-facto Wylie-keyboard
+conventions work in the Input box: `*` joins syllables with the
+non-breaking tsheg (༌) and `_` inserts a non-breaking space —
+useful when preparing text whose line breaks must not fall at
+those joints. The markers are display conveniences; the canonical
+converter never sees them.
+
 ## Analysis
 
 *Research → Analysis. The full eighteen-section grammatical analysis

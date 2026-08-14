@@ -11185,6 +11185,44 @@ private:
 // must be split first: clauses at punctuation, words by the Botok
 // segmenter when it is up, per-syllable spacing as the honest
 // fallback. Never a glued line.
+// TISE input conventions (DigitalTibetan P8): '*' = non-breaking
+// tsheg U+0F0C, '_' = non-breaking space U+00A0 — the de-facto
+// EWTS-keyboard keys. Display-layer only: the canonical converter
+// never sees the markers; each chunk converts through it
+// unchanged, and the joins are inserted here.
+static std::pair<std::string, bool> tiseWylieToUnicode(
+    const std::string& wylie) {
+    if (wylie.find('*') == std::string::npos &&
+        wylie.find('_') == std::string::npos)
+        return allcore::wylieToUnicode(wylie);
+    std::string out;
+    bool ok = true;
+    std::string chunk;
+    auto flush = [&](const char* join) {
+        if (!chunk.empty()) {
+            auto [u, o] = allcore::wylieToUnicode(chunk);
+            out += u;
+            ok &= o;
+            chunk.clear();
+        }
+        out += join;
+    };
+    for (char c : wylie) {
+        if (c == '*')
+            flush("\u0F0C");
+        else if (c == '_')
+            flush("\u00A0");
+        else
+            chunk += c;
+    }
+    if (!chunk.empty()) {
+        auto [u, o] = allcore::wylieToUnicode(chunk);
+        out += u;
+        ok &= o;
+    }
+    return {out, ok};
+}
+
 static std::string thlPhrase(const std::string& wylie) {
     const QString w = QString::fromStdString(wylie);
     auto clausePhon = [](const QString& clause) -> QString {
@@ -11476,7 +11514,9 @@ static QWidget* makeConvertPane(allcore::Mvp* mvp,
         "<b>Input</b> (ACIP, EWTS wylie, or Sanskrit IAST — auto-detected)"));
     auto* input = new QPlainTextEdit;
     input->setPlaceholderText(
-        "BSOD NAMS   ·   bsod nams   ·   SNGA DRO'I KA BA …   ·   pramāṇa");
+        "BSOD NAMS   ·   bsod nams   ·   SNGA DRO'I KA BA …   ·   "
+        "pramāṇa   ·   TISE keys: * = ༌ (non-breaking tsheg), _ = "
+        "non-breaking space");
     layout->addWidget(input, 1);
     auto* out = new QTextBrowser;
     layout->addWidget(out, 2);
@@ -11601,7 +11641,7 @@ static QWidget* makeConvertPane(allcore::Mvp* mvp,
         const bool isAcip = letters > 0 && upper * 10 > letters * 6;
         const std::string wylie =
             isAcip ? allcore::acipToEwts(raw.toStdString()) : raw.toStdString();
-        auto [uni, ok] = allcore::wylieToUnicode(wylie);
+        auto [uni, ok] = tiseWylieToUnicode(wylie);
         const std::string pron =
             restoreAchungU(wylie, allcore::pronounce(wylie));
 
@@ -24085,6 +24125,27 @@ int main(int argc, char** argv) {
             log << QString("  [%1] Draft: house-style check "
                            "flags dashes, ranges, ampersand, "
                            "era, and the word-use list")
+                       .arg(ok ? "PASS" : "FAIL");
+            if (!ok) ++fails;
+        }
+        // Convert: TISE keys — '*' joins with the non-breaking
+        // tsheg, '_' with NBSP; plain input passes through the
+        // canonical converter unchanged
+        {
+            const auto a = tiseWylieToUnicode("sems*can");
+            const auto b = tiseWylieToUnicode("bsod nams_kyi");
+            const auto c = tiseWylieToUnicode("bsod nams");
+            const bool ok =
+                a.second &&
+                QString::fromStdString(a.first)
+                    .contains(QChar(0x0F0C)) &&
+                b.second &&
+                QString::fromStdString(b.first)
+                    .contains(QChar(0x00A0)) &&
+                c.first == allcore::wylieToUnicode("bsod nams")
+                               .first;
+            log << QString("  [%1] Convert: TISE keys * and _ "
+                           "join display-layer, engine untouched")
                        .arg(ok ? "PASS" : "FAIL");
             if (!ok) ++fails;
         }
