@@ -867,11 +867,69 @@ Stack** shelf on the far right. Each panel has:
 
 ### Copying and moving between the panes
 
-Select a file in one panel, then use **Copy → / ← Copy / Move →
-/ ← Move** in the top row: the file goes to the folder the
-*other* panel is showing. Existing files are never overwritten —
-the app tells you and stops. (Folder copy/move arrives in a
-later phase; files only for now.)
+Select files in one panel (⌘-click and ⇧-click select several;
+**quick select** below grabs whole patterns), then use **Copy →
+/ ← Copy / Move → / ← Move**: everything selected goes to the
+folder the *other* panel is showing. Folders copy and move too,
+recursively. Existing files are never overwritten — collisions
+are skipped and reported.
+
+### Quick select
+
+Type a pattern in the **quick select** box (`*.act`, `S01*`, or
+a full regular expression) and press Return: every matching name
+in the active panel is selected at once, ready to copy, move,
+batch-rename, or trash together.
+
+### Batch rename
+
+Select files, press **Batch rename…**: type find/replace (tick
+**regex** for patterns), watch the live preview of every
+old → new name, then Apply. A rename that would collide with an
+existing name is skipped — nothing is ever overwritten.
+
+### Compare panes
+
+**Compare panes…** reports the two shown folders against each
+other: files only on the left, only on the right, and same-name
+files whose sizes differ. (This level only; subfolders are not
+descended.)
+
+### Commander keys (opt-in)
+
+The **Commander keys** toggle turns on the classic
+Total-Commander function keys for those who grew up with them:
+**F3/F4** open · **F5** copy to the other pane · **F6** move ·
+**F7** new folder · **F8** move to Trash. It is strictly opt-in
+and never replaces normal Mac behavior; renaming in place (click
+the name, or F2) works regardless. The choice is remembered.
+
+### Sync browsing (opt-in)
+
+With **sync browsing** on, entering a folder in one panel also
+enters the same-named folder in the other panel when it exists —
+made for walking two parallel trees side by side (an original
+and its double-keyed copy, two editions of a collection).
+
+### Favorites and Terminal
+
+**Favorites** saves locations: add either panel's current folder,
+jump back with one click, remove from the same menu. **Terminal**
+opens Terminal.app at the active panel's folder (also on every
+file's right-click menu).
+
+### ZIP archives
+
+Double-click a .zip and it opens as a browsable list *without
+extracting anything*. From there: **Extract selected & open**
+(pulls just those entries to a scratch folder and opens them with
+the usual smart routing) or **Extract all into the other pane**
+(never overwrites existing files).
+
+### Tabs remember themselves
+
+Both panels' tabs — and the folder each one was showing — are
+restored exactly on the next launch.
 
 ### The Drop Stack
 
@@ -886,13 +944,14 @@ right-click for Open / Remove / Clear.
 ### Right-click, anywhere
 
 Every file row offers: **Add to Drop Stack** · **Open** (smart
-routing) · **Reveal in Finder**.
+routing) · **Reveal in Finder** · **Open in Terminal here** ·
+**Move to Trash** (recoverable from the macOS Trash, always).
 
-*This pane is Phase 1 of the file-browser programme (Path
-Finder × ForkLift × Commander One feature study —
-docs/design/FILE_BROWSER_PLAN.md). Batch rename, folder
-compare/sync, archive browsing, tags, favorites, and remote
-connections are scheduled next.*
+*Phases 1–2 of the file-browser programme (Path Finder ×
+ForkLift × Commander One feature study —
+docs/design/FILE_BROWSER_PLAN.md). Still scheduled: tags,
+workspaces, folder synchronization, ⌘K file targets, and remote
+connections (SFTP/FTP).*
 
 ## Manuscript
 

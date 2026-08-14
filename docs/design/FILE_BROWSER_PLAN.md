@@ -113,6 +113,15 @@ browse *a canon*.
   browsing, tags, Quick Select, favorites, workspaces, sync
   browsing, ⌘K file targets, open-in-Terminal, share, optional
   Commander-keys mode, persistent tabs, regex search.
+  *Shipped 2026-08-14 (first P2 tranche):* batch rename
+  (preview + collision-revert, selftested), pane compare,
+  quick select (wildcard/regex), favorites, sync browsing,
+  Commander-keys opt-in (F3–F8 + Trash), persistent tabs,
+  ZIP browsing (zipinfo/unzip, never-overwrite extract),
+  open-in-Terminal, multi-select + recursive folder copy/move,
+  Move-to-Trash. *Remaining in P2:* tags, workspaces, folder
+  synchronization, ⌘K file targets, share sheet, archive
+  formats beyond ZIP.
 - **P3: remote** — SFTP/FTP/WebDAV connections, transfer queue,
   activity/log, remote editing.
 - **P4: long tail** — S3, embedded terminal, hex viewer.

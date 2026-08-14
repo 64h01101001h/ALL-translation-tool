@@ -13441,14 +13441,33 @@ public:
         hiddenT_->setToolTip("Show dotfiles and hidden entries "
                              "in both panes");
         top->addWidget(hiddenT_);
-        auto* copyR = new QPushButton("Copy →");
-        auto* copyL = new QPushButton("← Copy");
-        auto* moveR = new QPushButton("Move →");
-        auto* moveL = new QPushButton("← Move");
-        for (auto* b :
-             std::initializer_list<QPushButton*>{copyR, moveR,
-                                                 copyL, moveL})
-            top->addWidget(b);
+        cmdKeysT_ = new QCheckBox("Commander keys");
+        cmdKeysT_->setToolTip(
+            "Total-Commander function keys, strictly opt-in: "
+            "F3/F4 open · F5 copy to the other pane · F6 move · "
+            "F7 new folder · F8 move to Trash. Mac conventions "
+            "keep working either way; F2/click-rename always "
+            "works.");
+        top->addWidget(cmdKeysT_);
+        syncT_ = new QCheckBox("sync browsing");
+        syncT_->setToolTip(
+            "Entering a folder in one pane also enters the "
+            "same-named folder in the other, when it exists — "
+            "for walking two parallel folder trees together.");
+        top->addWidget(syncT_);
+        favB_ = new QToolButton;
+        favB_->setText("Favorites");
+        favB_->setPopupMode(QToolButton::InstantPopup);
+        favB_->setToolTip("Saved locations — add the current "
+                          "folder of either pane, jump with one "
+                          "click.");
+        favMenu_ = new QMenu(favB_);
+        favB_->setMenu(favMenu_);
+        top->addWidget(favB_);
+        auto* termB = new QPushButton("Terminal");
+        termB->setToolTip("Open Terminal at the active pane's "
+                          "folder");
+        top->addWidget(termB);
         top->addStretch(1);
         auto* stackT = new QCheckBox("Drop Stack");
         stackT->setChecked(true);
@@ -13457,6 +13476,34 @@ public:
             "project's texts — it persists across sessions.");
         top->addWidget(stackT);
         outer->addLayout(top);
+        auto* ops = new QHBoxLayout;
+        auto* copyR = new QPushButton("Copy →");
+        auto* copyL = new QPushButton("← Copy");
+        auto* moveR = new QPushButton("Move →");
+        auto* moveL = new QPushButton("← Move");
+        for (auto* b :
+             std::initializer_list<QPushButton*>{copyR, moveR,
+                                                 copyL, moveL})
+            ops->addWidget(b);
+        auto* renB = new QPushButton("Batch rename…");
+        renB->setToolTip("Find/replace (plain or regex) across "
+                         "every selected filename, with a full "
+                         "preview before anything is touched.");
+        ops->addWidget(renB);
+        auto* cmpB = new QPushButton("Compare panes…");
+        cmpB->setToolTip("Compare the two folders being shown: "
+                         "what exists only left, only right, and "
+                         "what differs in size.");
+        ops->addWidget(cmpB);
+        quickSel_ = new QLineEdit;
+        quickSel_->setPlaceholderText(
+            "quick select: *.act or a regex, then Return");
+        quickSel_->setToolTip(
+            "Select every file in the active pane whose name "
+            "matches — then copy, move, rename, or trash them "
+            "all at once.");
+        ops->addWidget(quickSel_, 1);
+        outer->addLayout(ops);
         auto* split = new QSplitter;
         for (int i = 0; i < 2; ++i)
             split->addWidget(buildPanel(i));
@@ -13500,41 +13547,41 @@ public:
                                : (QDir::Filters)0);
             model_->setFilter(f);
         });
-        auto xfer = [this](int from, bool move) {
-            const QString src = selectedPath(from);
-            if (src.isEmpty()) return;
-            const QString dstDir = curPath_[1 - from];
-            const QString dst =
-                dstDir + "/" + QFileInfo(src).fileName();
-            if (QFile::exists(dst)) {
-                QMessageBox::information(
-                    this, move ? "Move" : "Copy",
-                    "A file with that name already exists in "
-                    "the other pane — nothing was overwritten.");
-                return;
-            }
-            bool ok = false;
-            if (QFileInfo(src).isDir()) {
-                QMessageBox::information(
-                    this, move ? "Move" : "Copy",
-                    "Folder copy/move arrives in Phase 2 — "
-                    "files only for now.");
-                return;
-            }
-            ok = move ? QFile::rename(src, dst)
-                      : QFile::copy(src, dst);
-            if (!ok)
-                QMessageBox::warning(this, move ? "Move" : "Copy",
-                                     "The operation failed.");
-        };
         connect(copyR, &QPushButton::clicked,
-                [xfer] { xfer(0, false); });
+                [this] { xferSel(0, false); });
         connect(copyL, &QPushButton::clicked,
-                [xfer] { xfer(1, false); });
+                [this] { xferSel(1, false); });
         connect(moveR, &QPushButton::clicked,
-                [xfer] { xfer(0, true); });
+                [this] { xferSel(0, true); });
         connect(moveL, &QPushButton::clicked,
-                [xfer] { xfer(1, true); });
+                [this] { xferSel(1, true); });
+        connect(renB, &QPushButton::clicked,
+                [this] { batchRename(); });
+        connect(cmpB, &QPushButton::clicked,
+                [this] { comparePanes(); });
+        connect(termB, &QPushButton::clicked, [this] {
+            QProcess::startDetached(
+                "/usr/bin/open",
+                {"-a", "Terminal", curPath_[active_]});
+        });
+        connect(quickSel_, &QLineEdit::returnPressed,
+                [this] { quickSelect(); });
+        {   // the two behaviour toggles persist
+            QSettings st("ALL", "TranslationTool");
+            cmdKeysT_->setChecked(
+                st.value("files/cmdkeys", false).toBool());
+            syncT_->setChecked(
+                st.value("files/sync", false).toBool());
+        }
+        connect(cmdKeysT_, &QCheckBox::toggled, [](bool on) {
+            QSettings("ALL", "TranslationTool")
+                .setValue("files/cmdkeys", on);
+        });
+        connect(syncT_, &QCheckBox::toggled, [](bool on) {
+            QSettings("ALL", "TranslationTool")
+                .setValue("files/sync", on);
+        });
+        rebuildFavMenu();
         // restore the stack
         for (const QString& p :
              QSettings("ALL", "TranslationTool")
@@ -13573,6 +13620,7 @@ private:
             model_->setRootPath("/");
             model_->setFilter(QDir::AllEntries |
                               QDir::NoDotAndDotDot);
+            model_->setReadOnly(false);   // enables F2 rename
             proxy_ = new FilesDirProxy(this);
             proxy_->setSourceModel(model_);
             proxy_->sort(0);
@@ -13583,15 +13631,28 @@ private:
         views_[ix]->sortByColumn(0, Qt::AscendingOrder);
         views_[ix]->setColumnWidth(0, 260);
         views_[ix]->setDragEnabled(true);
+        views_[ix]->setSelectionMode(
+            QAbstractItemView::ExtendedSelection);
+        views_[ix]->setEditTriggers(
+            QAbstractItemView::EditKeyPressed);
+        views_[ix]->installEventFilter(this);
         v->addWidget(views_[ix], 1);
         connect(views_[ix], &QTreeView::doubleClicked,
                 [this, ix](const QModelIndex& pix) {
                     const QString p = model_->filePath(
                         proxy_->mapToSource(pix));
-                    if (QFileInfo(p).isDir())
+                    if (QFileInfo(p).isDir()) {
+                        if (syncT_ && syncT_->isChecked()) {
+                            const QString mirror =
+                                curPath_[1 - ix] + "/" +
+                                QFileInfo(p).fileName();
+                            if (QFileInfo(mirror).isDir())
+                                setPath(1 - ix, mirror);
+                        }
                         setPath(ix, p);
-                    else
+                    } else {
                         openPath(p);
+                    }
                 });
         views_[ix]->setContextMenuPolicy(Qt::CustomContextMenu);
         connect(views_[ix],
@@ -13613,6 +13674,17 @@ private:
                             QUrl::fromLocalFile(
                                 QFileInfo(p).path()));
                     });
+                    m.addAction("Open in Terminal here", [p] {
+                        QProcess::startDetached(
+                            "/usr/bin/open",
+                            {"-a", "Terminal",
+                             QFileInfo(p).isDir()
+                                 ? p
+                                 : QFileInfo(p).path()});
+                    });
+                    m.addAction("Move to Trash", [p] {
+                        QFile::moveToTrash(p);   // recoverable
+                    });
                     m.exec(views_[ix]->viewport()->mapToGlobal(
                         pt));
                 });
@@ -13625,8 +13697,10 @@ private:
                 });
         connect(tabs_[ix], &QTabBar::tabCloseRequested,
                 [this, ix](int t) {
-                    if (tabs_[ix]->count() > 1)
+                    if (tabs_[ix]->count() > 1) {
                         tabs_[ix]->removeTab(t);
+                        saveTabs();
+                    }
                 });
         // the "+" tab affordance: a plain button beside the bar
         auto* plus = new QToolButton;
@@ -13641,10 +13715,20 @@ private:
         tabRow->addWidget(tabs_[ix], 1);
         tabRow->addWidget(plus);
         static_cast<QVBoxLayout*>(v)->insertLayout(0, tabRow);
-        const QString start =
-            ix == 0 ? root_ + "/library" : QDir::homePath();
-        addTab(ix, QDir(start).exists() ? start
-                                        : QDir::homePath());
+        QStringList saved;
+        for (const QString& p :
+             QSettings("ALL", "TranslationTool")
+                 .value(QString("files/tabs%1").arg(ix))
+                 .toStringList())
+            if (QDir(p).exists()) saved << p;
+        if (!saved.isEmpty()) {
+            for (const QString& p : saved) addTab(ix, p);
+        } else {
+            const QString start =
+                ix == 0 ? root_ + "/library" : QDir::homePath();
+            addTab(ix, QDir(start).exists() ? start
+                                            : QDir::homePath());
+        }
         return w;
     }
 
@@ -13658,6 +13742,7 @@ private:
         tabs_[ix]->setCurrentIndex(t);
         switching_ = false;
         setPath(ix, path, false);
+        saveTabs();
     }
 
     void setPath(int ix, const QString& path,
@@ -13673,6 +13758,7 @@ private:
                     : QFileInfo(path).fileName());
             tabs_[ix]->setTabData(tabs_[ix]->currentIndex(),
                                   path);
+            saveTabs();
         }
         // breadcrumbs (the Path Finder namesake)
         QLayoutItem* li;
@@ -13721,7 +13807,370 @@ private:
             g_openScanInInput(p);
             return;
         }
+        if (ext == "zip") {
+            browseArchive(p);
+            return;
+        }
         QDesktopServices::openUrl(QUrl::fromLocalFile(p));
+    }
+
+    QStringList selectedPathsIn(int ix) const {
+        QStringList out;
+        for (const auto& r :
+             views_[ix]->selectionModel()->selectedRows(0))
+            out << model_->filePath(proxy_->mapToSource(r));
+        if (out.isEmpty()) {
+            const QString p = selectedPath(ix);
+            if (!p.isEmpty()) out << p;
+        }
+        return out;
+    }
+
+    static bool copyRecursively(const QString& src,
+                                const QString& dst) {
+        if (QFileInfo(src).isDir()) {
+            if (!QDir().mkpath(dst)) return false;
+            for (const QFileInfo& e :
+                 QDir(src).entryInfoList(QDir::AllEntries |
+                                         QDir::NoDotAndDotDot |
+                                         QDir::Hidden))
+                if (!copyRecursively(e.filePath(),
+                                     dst + "/" + e.fileName()))
+                    return false;
+            return true;
+        }
+        return QFile::copy(src, dst);
+    }
+
+    void xferSel(int from, bool move) {
+        const QString dstDir = curPath_[1 - from];
+        for (const QString& src : selectedPathsIn(from)) {
+            const QString dst =
+                dstDir + "/" + QFileInfo(src).fileName();
+            if (QFile::exists(dst)) {
+                QMessageBox::information(
+                    this, move ? "Move" : "Copy",
+                    QFileInfo(src).fileName() +
+                        " already exists in the other pane — "
+                        "skipped; nothing was overwritten.");
+                continue;
+            }
+            bool ok = false;
+            if (QFileInfo(src).isDir())
+                ok = move ? QDir().rename(src, dst)
+                          : copyRecursively(src, dst);
+            else
+                ok = move ? QFile::rename(src, dst)
+                          : QFile::copy(src, dst);
+            if (!ok)
+                QMessageBox::warning(
+                    this, move ? "Move" : "Copy",
+                    "Failed on " + QFileInfo(src).fileName());
+        }
+    }
+
+    void quickSelect() {
+        const QString pat = quickSel_->text().trimmed();
+        if (pat.isEmpty()) return;
+        QRegularExpression re;
+        if (pat.contains('*') || pat.contains('?'))
+            re = QRegularExpression::fromWildcard(
+                pat, Qt::CaseInsensitive);
+        else
+            re = QRegularExpression(
+                pat, QRegularExpression::CaseInsensitiveOption);
+        if (!re.isValid())
+            re = QRegularExpression(
+                QRegularExpression::escape(pat),
+                QRegularExpression::CaseInsensitiveOption);
+        auto* view = views_[active_];
+        const QModelIndex root = view->rootIndex();
+        QItemSelection sel;
+        int hits = 0;
+        for (int r = 0; r < proxy_->rowCount(root); ++r) {
+            const QModelIndex ixm = proxy_->index(r, 0, root);
+            if (re.match(ixm.data().toString()).hasMatch()) {
+                sel.select(ixm, ixm);
+                ++hits;
+            }
+        }
+        view->selectionModel()->select(
+            sel, QItemSelectionModel::ClearAndSelect |
+                     QItemSelectionModel::Rows);
+        view->setFocus();
+        quickSel_->setPlaceholderText(
+            hits ? QString("%1 selected").arg(hits)
+                 : "no names matched");
+    }
+
+    void comparePanes() {
+        const QDir L(curPath_[0]), R(curPath_[1]);
+        QMap<QString, qint64> lf, rf;
+        for (const QFileInfo& e :
+             L.entryInfoList(QDir::Files | QDir::NoDotAndDotDot))
+            lf[e.fileName()] = e.size();
+        for (const QFileInfo& e :
+             R.entryInfoList(QDir::Files | QDir::NoDotAndDotDot))
+            rf[e.fileName()] = e.size();
+        QString rep;
+        rep += "LEFT:  " + curPath_[0] + "\n";
+        rep += "RIGHT: " + curPath_[1] + "\n\n";
+        QStringList onlyL, onlyR, differ;
+        for (auto it = lf.begin(); it != lf.end(); ++it) {
+            if (!rf.contains(it.key()))
+                onlyL << it.key();
+            else if (rf[it.key()] != it.value())
+                differ << QString("%1  (left %2 B, right %3 B)")
+                              .arg(it.key())
+                              .arg(it.value())
+                              .arg(rf[it.key()]);
+        }
+        for (auto it = rf.begin(); it != rf.end(); ++it)
+            if (!lf.contains(it.key())) onlyR << it.key();
+        rep += QString("ONLY LEFT (%1):\n").arg(onlyL.size());
+        for (const QString& n : onlyL) rep += "  " + n + "\n";
+        rep += QString("\nONLY RIGHT (%1):\n").arg(onlyR.size());
+        for (const QString& n : onlyR) rep += "  " + n + "\n";
+        rep += QString("\nSAME NAME, DIFFERENT SIZE (%1):\n")
+                   .arg(differ.size());
+        for (const QString& n : differ) rep += "  " + n + "\n";
+        if (onlyL.isEmpty() && onlyR.isEmpty() && differ.isEmpty())
+            rep += "\nThe two folders' files match by name and "
+                   "size.\n";
+        rep += "\n(files only, this level only — subfolders are "
+               "not descended)";
+        auto* dlg = new QDialog(this);
+        dlg->setAttribute(Qt::WA_DeleteOnClose);
+        dlg->setWindowFlag(Qt::Window);
+        dlg->setWindowTitle("Compare panes");
+        dlg->resize(640, 520);
+        auto* v = new QVBoxLayout(dlg);
+        auto* ed = new QPlainTextEdit;
+        ed->setReadOnly(true);
+        ed->setPlainText(rep);
+        v->addWidget(ed);
+        dlg->show();
+    }
+
+public:
+    // pure planning step, selftested: apply find/replace to every
+    // name; a result that collides with an earlier result reverts
+    static QStringList computeRenames(const QStringList& names,
+                                      const QString& find,
+                                      const QString& repl,
+                                      bool useRegex) {
+        QStringList out;
+        for (const QString& n : names) {
+            QString nn = n;
+            if (useRegex) {
+                QRegularExpression re(find);
+                if (re.isValid()) nn.replace(re, repl);
+            } else {
+                nn.replace(find, repl);
+            }
+            if (nn.trimmed().isEmpty()) nn = n;
+            out << nn;
+        }
+        QSet<QString> seen;
+        for (int i = 0; i < out.size(); ++i) {
+            if (seen.contains(out[i])) out[i] = names[i];
+            seen.insert(out[i]);
+        }
+        return out;
+    }
+
+private:
+    void batchRename() {
+        const QStringList paths = selectedPathsIn(active_);
+        if (paths.isEmpty()) {
+            QMessageBox::information(
+                this, "Batch rename",
+                "Select the files to rename first (quick select "
+                "helps).");
+            return;
+        }
+        auto* dlg = new QDialog(this);
+        dlg->setAttribute(Qt::WA_DeleteOnClose);
+        dlg->setWindowFlag(Qt::Window);
+        dlg->setWindowTitle(
+            QString("Batch rename — %1 file(s)").arg(paths.size()));
+        dlg->resize(560, 480);
+        auto* v = new QVBoxLayout(dlg);
+        auto* row = new QHBoxLayout;
+        auto* findE = new QLineEdit;
+        findE->setPlaceholderText("find");
+        auto* replE = new QLineEdit;
+        replE->setPlaceholderText("replace with");
+        auto* rxT = new QCheckBox("regex");
+        row->addWidget(findE, 1);
+        row->addWidget(replE, 1);
+        row->addWidget(rxT);
+        v->addLayout(row);
+        auto* prev = new QPlainTextEdit;
+        prev->setReadOnly(true);
+        v->addWidget(prev, 1);
+        auto* applyB = new QPushButton("Apply");
+        v->addWidget(applyB);
+        QStringList names;
+        for (const QString& p : paths)
+            names << QFileInfo(p).fileName();
+        auto refresh = [findE, replE, rxT, prev, names] {
+            const QStringList nn = computeRenames(
+                names, findE->text(), replE->text(),
+                rxT->isChecked());
+            QString t;
+            for (int i = 0; i < names.size(); ++i)
+                t += names[i] +
+                     (nn[i] == names[i] ? "   (unchanged)"
+                                        : "  →  " + nn[i]) +
+                     "\n";
+            prev->setPlainText(t);
+        };
+        connect(findE, &QLineEdit::textChanged, refresh);
+        connect(replE, &QLineEdit::textChanged, refresh);
+        connect(rxT, &QCheckBox::toggled, refresh);
+        refresh();
+        connect(applyB, &QPushButton::clicked,
+                [this, dlg, findE, replE, rxT, paths, names] {
+                    const QStringList nn = computeRenames(
+                        names, findE->text(), replE->text(),
+                        rxT->isChecked());
+                    int done = 0, skipped = 0;
+                    for (int i = 0; i < paths.size(); ++i) {
+                        if (nn[i] == names[i]) continue;
+                        const QString dir =
+                            QFileInfo(paths[i]).path();
+                        if (QFile::exists(dir + "/" + nn[i])) {
+                            ++skipped;   // never overwrite
+                            continue;
+                        }
+                        if (QFile::rename(paths[i],
+                                          dir + "/" + nn[i]))
+                            ++done;
+                        else
+                            ++skipped;
+                    }
+                    QMessageBox::information(
+                        this, "Batch rename",
+                        QString("%1 renamed, %2 skipped (existing "
+                                "names are never overwritten).")
+                            .arg(done)
+                            .arg(skipped));
+                    dlg->close();
+                });
+        dlg->show();
+    }
+
+    void browseArchive(const QString& p) {
+        QProcess pr;
+        pr.start("/usr/bin/zipinfo", {"-1", p});
+        pr.waitForFinished(8000);
+        const QStringList entries =
+            QString::fromUtf8(pr.readAllStandardOutput())
+                .split('\n', Qt::SkipEmptyParts);
+        auto* dlg = new QDialog(this);
+        dlg->setAttribute(Qt::WA_DeleteOnClose);
+        dlg->setWindowFlag(Qt::Window);
+        dlg->setWindowTitle(
+            QString("%1 — %2 entries (browsing, nothing "
+                    "extracted yet)")
+                .arg(QFileInfo(p).fileName())
+                .arg(entries.size()));
+        dlg->resize(560, 520);
+        auto* v = new QVBoxLayout(dlg);
+        auto* list = new QListWidget;
+        list->setSelectionMode(
+            QAbstractItemView::ExtendedSelection);
+        for (const QString& e : entries) list->addItem(e);
+        v->addWidget(list, 1);
+        auto* row = new QHBoxLayout;
+        auto* openB = new QPushButton("Extract selected & open");
+        auto* allB = new QPushButton(
+            "Extract all into the other pane");
+        row->addWidget(openB);
+        row->addWidget(allB);
+        row->addStretch(1);
+        v->addLayout(row);
+        connect(openB, &QPushButton::clicked, [this, p, list] {
+            const QString tmp =
+                QDir::tempPath() + "/all_zip_view";
+            QDir().mkpath(tmp);
+            for (auto* it : list->selectedItems()) {
+                QProcess x;
+                x.start("/usr/bin/unzip",
+                        {"-o", "-d", tmp, p, it->text()});
+                x.waitForFinished(15000);
+                const QString out = tmp + "/" + it->text();
+                if (QFile::exists(out)) openPath(out);
+            }
+        });
+        connect(allB, &QPushButton::clicked, [this, p, dlg] {
+            const QString dst = curPath_[1 - active_];
+            QProcess x;
+            x.start("/usr/bin/unzip", {"-n", "-d", dst, p});
+            x.waitForFinished(120000);   // -n: never overwrite
+            QMessageBox::information(
+                this, "Extract",
+                "Extracted into " + dst +
+                    " (existing files were left untouched).");
+            dlg->close();
+        });
+        dlg->show();
+    }
+
+    void addFav(const QString& p) {
+        QSettings st("ALL", "TranslationTool");
+        QStringList favs = st.value("files/favs").toStringList();
+        if (!favs.contains(p)) favs << p;
+        st.setValue("files/favs", favs);
+        rebuildFavMenu();
+    }
+
+    void rebuildFavMenu() {
+        favMenu_->clear();
+        favMenu_->addAction("Add LEFT pane's folder", [this] {
+            addFav(curPath_[0]);
+        });
+        favMenu_->addAction("Add RIGHT pane's folder", [this] {
+            addFav(curPath_[1]);
+        });
+        const QStringList favs =
+            QSettings("ALL", "TranslationTool")
+                .value("files/favs")
+                .toStringList();
+        if (!favs.isEmpty()) favMenu_->addSeparator();
+        for (const QString& f : favs) {
+            const QString label =
+                QFileInfo(f).fileName().isEmpty()
+                    ? f
+                    : QFileInfo(f).fileName();
+            favMenu_->addAction(label, [this, f] {
+                setPath(active_, f);
+            });
+        }
+        if (!favs.isEmpty()) {
+            auto* rm = favMenu_->addMenu("Remove favorite");
+            for (const QString& f : favs)
+                rm->addAction(f, [this, f] {
+                    QSettings st("ALL", "TranslationTool");
+                    QStringList favs2 =
+                        st.value("files/favs").toStringList();
+                    favs2.removeAll(f);
+                    st.setValue("files/favs", favs2);
+                    rebuildFavMenu();
+                });
+        }
+    }
+
+    void saveTabs() {
+        QSettings st("ALL", "TranslationTool");
+        for (int ix = 0; ix < 2; ++ix) {
+            if (!tabs_[ix]) continue;
+            QStringList ps;
+            for (int t = 0; t < tabs_[ix]->count(); ++t)
+                ps << tabs_[ix]->tabData(t).toString();
+            st.setValue(QString("files/tabs%1").arg(ix), ps);
+        }
     }
 
     void saveStack() {
@@ -13732,6 +14181,51 @@ private:
             .setValue("files/stack", ps);
     }
 
+protected:
+    bool eventFilter(QObject* o, QEvent* ev) override {
+        int ix = -1;
+        if (o == views_[0]) ix = 0;
+        else if (o == views_[1]) ix = 1;
+        if (ix < 0) return QWidget::eventFilter(o, ev);
+        if (ev->type() == QEvent::FocusIn) active_ = ix;
+        if (ev->type() == QEvent::KeyPress && cmdKeysT_ &&
+            cmdKeysT_->isChecked()) {
+            auto* ke = static_cast<QKeyEvent*>(ev);
+            switch (ke->key()) {
+            case Qt::Key_F3:
+            case Qt::Key_F4: {
+                const QString p = selectedPath(ix);
+                if (!p.isEmpty()) openPath(p);
+                return true;
+            }
+            case Qt::Key_F5:
+                xferSel(ix, false);
+                return true;
+            case Qt::Key_F6:
+                xferSel(ix, true);
+                return true;
+            case Qt::Key_F7: {
+                QDir d(curPath_[ix]);
+                QString name = "untitled folder";
+                int n = 1;
+                while (d.exists(name))
+                    name = QString("untitled folder %1")
+                               .arg(++n);
+                d.mkdir(name);
+                return true;
+            }
+            case Qt::Key_F8:
+                for (const QString& p : selectedPathsIn(ix))
+                    QFile::moveToTrash(p);   // recoverable
+                return true;
+            default:
+                break;
+            }
+        }
+        return QWidget::eventFilter(o, ev);
+    }
+
+private:
     QString root_;
     std::function<void(const QString&)> openText_;
     QFileSystemModel* model_ = nullptr;
@@ -13742,6 +14236,12 @@ private:
     QString curPath_[2];
     QListWidget* stack_ = nullptr;
     QCheckBox* hiddenT_ = nullptr;
+    QCheckBox* cmdKeysT_ = nullptr;
+    QCheckBox* syncT_ = nullptr;
+    QLineEdit* quickSel_ = nullptr;
+    QToolButton* favB_ = nullptr;
+    QMenu* favMenu_ = nullptr;
+    int active_ = 0;
     bool switching_ = false;
 };
 
@@ -21510,6 +22010,22 @@ int main(int argc, char** argv) {
             QFile::remove(probe);
             log << QString("  [%1] Files: Drop Stack add persists to "
                            "settings (shelf survives restart)")
+                       .arg(ok ? "PASS" : "FAIL");
+            if (!ok) ++fails;
+        }
+        // Files: batch-rename planning — find/replace applies,
+        // colliding results revert (nothing is ever overwritten)
+        {
+            const QStringList plan = FilesPane::computeRenames(
+                {"a_old.txt", "b_old.txt"}, "_old", "", false);
+            const QStringList plan2 = FilesPane::computeRenames(
+                {"a1.txt", "a2.txt"}, "a[0-9]", "z", true);
+            const bool ok =
+                plan == QStringList{"a.txt", "b.txt"} &&
+                plan2.at(0) == "z.txt" &&
+                plan2.at(1) == "a2.txt";
+            log << QString("  [%1] Files: batch-rename plan applies "
+                           "find/replace and reverts collisions")
                        .arg(ok ? "PASS" : "FAIL");
             if (!ok) ++fails;
         }
