@@ -20575,10 +20575,12 @@ public:
         wylie_->setPlaceholderText("the Tibetan (ACIP or wylie)");
         fl->addRow("Tibetan", wylie_);
         value_ = new QLineEdit;
+        value_->setMinimumWidth(360);   // same audit fix as wylie_
         value_->setPlaceholderText(
             "proposed English / pronunciation / expansion");
         fl->addRow("Proposed", value_);
         field_ = new QLineEdit;
+        field_->setMinimumWidth(360);
         field_->setPlaceholderText(
             "optional: ordinary form, domain, or note");
         fl->addRow("Secondary", field_);

@@ -247,3 +247,17 @@ could show the link status / cached-page count, but this is enhancement, not def
 5. **Missing banners on 11-lookup, 13-convert, 14-analysis** (and the clipped banners on
    02-library / 20-approval) — restore the app-wide "**Name** — purpose" contract on
    every pane.
+
+
+## CLOSE-OUT (2026-08-14 verification pass)
+
+Re-verified against fresh --screenshots captures: the Input
+toolbar two-row split, OCR deskew label, Search banner/
+placeholders/NEAR label, Lookup/Convert/Analysis banners,
+Manuscript B/I/U, Library recents, and the empty-state round are
+ALL LANDED (fixed in the post-audit rounds; several "never
+landed" notes in the session log were stale). Completed today:
+the Propose form's Proposed/Secondary fields now carry the same
+360px minimum as the Tibetan field (the audit's half-applied
+fix). This audit round is closed; future UI findings go to the
+attack board.

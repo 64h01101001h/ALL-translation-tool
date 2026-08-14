@@ -30,7 +30,7 @@ defect, not ours) · version bumped 0.12.0.
    but LibraryIndex shipped. Route item 14 through
    `LibraryIndex::search()` hits; keep the refusal only as the
    no-index fallback. *A capability we built and then hid.*
-2. **Design-audit fixes never applied**
+2. **Design-audit fixes** — CLOSED 2026-08-14: re-verified by fresh screenshots; nearly all had landed in post-audit rounds (stale notes); the one real remainder (Propose field widths) fixed. (was: never applied)
    (docs/design/AUDIT_FINDINGS_2026-08-12.md): Input-pane toolbar
    clip (6 garbled labels) · empty-state teaching HTML on ~8 blank
    surfaces · Gofer pane face · missing banners (Lookup, Convert,
