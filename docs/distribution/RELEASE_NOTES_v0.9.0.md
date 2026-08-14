@@ -230,3 +230,24 @@ type autofit; eKangyur + eTengyur acquired, indexed, and
 collatable in one click (4,439 texts); pronunciation rulings
 (tsema namdrel gyi tsik le'ur jepa; 'a-chung class); Input zoom,
 recents, and locate lanes.
+
+
+## 0.10.0 addendum — the Sungbum night
+
+- **Sungbum woodblocks, at scale:** 515+ collected-works texts
+  across ~30 authors now open their own scans (title-matched
+  through BDRC's per-person query; principal-instance guard;
+  every match tier recorded, including honestly tagged
+  other-edition links that warn about folio divergence).
+- **Position-mapping:** where collected-works manifests carry no
+  folio labels (verified live — they label pages "img. N"), the
+  viewer maps your keying's own @folio sequence onto the pages in
+  order, labeled as such with ±1-drift nudging.
+- **The adjudication workbook:** every text the matcher could not
+  link ships to reviewers with its three closest candidates —
+  machine proposes, humans decide, accepted rows merge as
+  "human-reviewed."
+- **Under the hood:** the disk-full incident traced to press
+  artifacts accumulating in version control — presses are now
+  sources-only, permanently; a ~20GB history cleanup awaits
+  approval.

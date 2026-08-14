@@ -1449,6 +1449,8 @@ static std::function<void(const QString&, int)> g_openAtLine;
 // text↔woodblock jump (Adam's priority, 2026-08-13): the Overlay
 // hands a LOCAL folio image to the Input workflow
 static std::function<void(const QString&)> g_openScanInInput;
+// Sungbum links routed to a DIFFERENT scanned edition (honest tag)
+static const QSet<QString>* g_sungbumOtherEdition = nullptr;
 // every folder picker goes through this wrapper: in sweep mode it
 // answers empty (as if the user cancelled) instead of hanging the
 // harness on an un-reapable native panel
@@ -1947,6 +1949,7 @@ static QString bdrcScanUrlChecked(const allcore::AcipFileInfo& info,
         // unique-only). Unmatched texts honestly get no link —
         // the title-search lane remains.
         static QMap<QString, QString> m;
+        static QSet<QString> otherEd;
         static bool tried = false;
         if (!tried) {
             tried = true;
@@ -1957,12 +1960,16 @@ static QString bdrcScanUrlChecked(const allcore::AcipFileInfo& info,
                     QJsonDocument::fromJson(f.readAll())
                         .object()["s_to_node"]
                         .toObject();
-                for (auto it = o.begin(); it != o.end(); ++it)
-                    m[it.key()] = it.value()
-                                      .toObject()["node"]
-                                      .toString();
+                for (auto it = o.begin(); it != o.end(); ++it) {
+                    const auto v = it.value().toObject();
+                    m[it.key()] = v["node"].toString();
+                    if (v["tier"].toString().contains(
+                            "other-edition"))
+                        otherEd.insert(it.key());
+                }
             }
         }
+        g_sungbumOtherEdition = &otherEd;
         QString core = "S" + QString::number(
                                  QString::fromStdString(
                                      info.number)
@@ -5104,13 +5111,32 @@ private:
                     folioOrder_ << seq[i];
                 }
                 if (n > 0) {
+                    bool otherEd = false;
+                    if (g_sungbumOtherEdition) {
+                        const auto info =
+                            allcore::decodeAcipFilename(
+                                docFile_.toStdString());
+                        const QString core =
+                            "S" + QString::number(
+                                      QString::fromStdString(
+                                          info.number)
+                                          .toInt());
+                        otherEd = g_sungbumOtherEdition->contains(
+                            core);
+                    }
                     scanCap_->setText(QString(
                         "Scans: BDRC · %1 sides POSITION-MAPPED "
                         "(the archive's manifest has no folio "
                         "labels; your keying's own @folio "
                         "sequence is mapped to the pages in "
                         "order — ±1 page drift possible, use "
-                        "◀ ▶ to nudge).").arg(n));
+                        "◀ ▶ to nudge).%2").arg(n).arg(
+                        otherEd
+                            ? " ⚠ These scans are a DIFFERENT "
+                              "EDITION of this text — folio "
+                              "numbering may diverge further "
+                              "from your keying."
+                            : ""));
                     scanNav_->show();
                     syncFolioToCursor();
                     if (curFolio_.isEmpty())
