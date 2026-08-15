@@ -56,5 +56,24 @@ viewer, and eventually the Input pane's viewer column.
   the folio/line band, which BUDA does not have.
 
 ## Status
-Reference banked; task #24 BUILT (archive-grade viewer window,
-thumbnail rail, image adjustments — this doc remains the spec).
+BUILT (task #24): archive-grade viewer window, thumbnail rail, dark
+canvas, go-to, zoom, pan, brightness/contrast/invert, whole-work
+overview, downloads. This doc remains the spec.
+
+**But Adam could not find it (2026-08-15), and he was right to say
+so — two defects, tracked as task #41:**
+
+1. It is reachable ONLY from the Overlay pane, via the "Scan viewer
+   (window)…" button. The Input workflow — where scans are actually
+   loaded — has no entry point at all, which is where he looked.
+2. `openWoodblockViewer()` early-returns whenever `folioOrder_` is
+   empty, showing "Link the scans first (Follow along in scans /
+   Find scans on BDRC)". To anyone who has not read this doc, that
+   dialog reads as "not implemented". It should open on locally
+   loaded images when no BDRC folio order exists (the Input pane
+   already holds `pages_`), or at minimum offer the two linking
+   actions as buttons rather than as prose.
+
+LESSON FOR THIS DOC AND THE TASK BOARD: "built" is not the same as
+"findable". A status line that records only the former is how a
+finished feature gets reported as missing.
