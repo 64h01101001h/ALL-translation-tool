@@ -1,0 +1,425 @@
+<title>Sound into Scripture — The Transcription Fund</title>
+<style>
+  /* committed single world: a candlelit shrine at night —
+     lacquer, gold leaf, vermilion. Painted explicitly. */
+  :root {
+    --lacquer:#131007; --panel:#1E1810; --panel2:#251E13;
+    --gold:#D4A946; --gold-hi:#F2CD6E; --gold-dim:#8A7434;
+    --verm:#B33A2B; --cream:#F2E7CF; --muted:#A79A7E;
+    --hair:rgba(212,169,70,.22);
+  }
+  * { box-sizing:border-box; }
+  html { scroll-behavior:smooth; }
+  body { margin:0; background:var(--lacquer); color:var(--cream);
+    font-family:"Palatino","Palatino Linotype","Book Antiqua",Georgia,serif;
+    line-height:1.55; -webkit-font-smoothing:antialiased; overflow-x:hidden; }
+  ::selection { background:var(--gold); color:var(--lacquer); }
+
+  /* ————— HERO ————— */
+  .hero { position:relative; min-height:100vh; min-height:100svh;
+    display:flex; align-items:center; justify-content:center;
+    text-align:center; overflow:hidden; }
+  #mandala { position:absolute; inset:0; width:100%; height:100%; }
+  .hero-inner { position:relative; z-index:2; padding:24px; max-width:760px; }
+  .hero .yig { font-size:54px; color:var(--gold-hi); display:block;
+    text-shadow:0 0 34px rgba(242,205,110,.5); margin-bottom:8px; }
+  .hero h1 { font-size:clamp(38px,7vw,66px); line-height:1.04; margin:0;
+    letter-spacing:-0.015em; text-wrap:balance;
+    background:linear-gradient(180deg,#F7E6B8 0%, var(--gold) 62%, #A88428 100%);
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+    filter:drop-shadow(0 2px 18px rgba(212,169,70,.25)); }
+  .hero .sub { font-size:clamp(16px,2.6vw,21px); color:var(--muted);
+    max-width:34em; margin:18px auto 0; }
+  .hero .goalline { margin-top:30px; font-size:clamp(20px,3.4vw,26px); }
+  .hero .goalline b { color:var(--gold-hi); font-variant-numeric:tabular-nums; }
+  .cta { display:inline-block; margin-top:26px; padding:16px 42px;
+    font-size:19px; font-weight:700; letter-spacing:.02em;
+    color:#1A1406; background:linear-gradient(180deg,var(--gold-hi),var(--gold));
+    border-radius:999px; text-decoration:none;
+    box-shadow:0 0 0 1px rgba(242,205,110,.6), 0 6px 30px rgba(212,169,70,.35);
+    transition:transform .18s ease, box-shadow .18s ease; }
+  .cta:hover { transform:translateY(-2px);
+    box-shadow:0 0 0 1px var(--gold-hi), 0 10px 44px rgba(212,169,70,.55); }
+  .scrollcue { position:absolute; bottom:22px; left:0; right:0; z-index:2;
+    text-align:center; font-family:-apple-system,Arial,sans-serif;
+    font-size:11px; letter-spacing:.28em; text-transform:uppercase;
+    color:var(--gold-dim); animation:bob 2.6s ease-in-out infinite; }
+  @keyframes bob { 0%,100%{transform:translateY(0)} 50%{transform:translateY(7px)} }
+
+  .wrap { max-width:760px; margin:0 auto; padding:0 22px; }
+  section { padding:74px 0 10px; }
+  .zone { font-family:-apple-system,Arial,sans-serif; font-size:11px;
+    letter-spacing:.3em; text-transform:uppercase; color:var(--gold);
+    margin-bottom:14px; }
+  h2 { font-size:clamp(28px,4.6vw,40px); line-height:1.12; margin:0 0 14px;
+    text-wrap:balance; color:var(--cream); }
+  p { color:var(--muted); font-size:17px; }
+  p b { color:var(--cream); }
+
+  /* reveal-on-scroll */
+  .rv { opacity:0; transform:translateY(26px);
+    transition:opacity .8s ease, transform .8s ease; }
+  .rv.in { opacity:1; transform:none; }
+  @media (prefers-reduced-motion: reduce) {
+    .rv { opacity:1; transform:none; transition:none; }
+    .scrollcue { animation:none; }
+  }
+
+  /* stats */
+  .stats { display:grid; grid-template-columns:repeat(2,1fr); gap:14px;
+    margin:30px 0 6px; }
+  @media(min-width:640px){ .stats{ grid-template-columns:repeat(4,1fr);} }
+  .stat { background:linear-gradient(180deg,var(--panel2),var(--panel));
+    border:1px solid var(--hair); border-radius:10px; padding:18px 14px;
+    text-align:center; }
+  .stat .n { display:block; font-size:clamp(26px,4vw,34px); font-weight:700;
+    color:var(--gold-hi); font-variant-numeric:tabular-nums;
+    letter-spacing:-0.02em; }
+  .stat .l { font-family:-apple-system,Arial,sans-serif; font-size:10px;
+    letter-spacing:.14em; text-transform:uppercase; color:var(--muted); }
+
+  /* wave→script canvas */
+  .wavewrap { border:1px solid var(--hair); border-radius:12px;
+    overflow:hidden; margin:26px 0 8px;
+    background:linear-gradient(180deg,#191309,#131007); }
+  #wave { display:block; width:100%; height:150px; }
+  .wavecap { font-size:12.5px; color:var(--gold-dim); text-align:center;
+    padding:8px 12px 12px; font-style:italic; }
+
+  /* slider */
+  .sponsor { background:linear-gradient(180deg,var(--panel2),var(--panel));
+    border:1px solid var(--hair); border-radius:14px; padding:26px 24px;
+    margin-top:26px; box-shadow:0 10px 50px rgba(0,0,0,.45); }
+  .amt { font-size:clamp(40px,8vw,58px); font-weight:700;
+    color:var(--gold-hi); font-variant-numeric:tabular-nums;
+    letter-spacing:-0.02em; line-height:1; }
+  .amt small { font-size:16px; color:var(--muted); font-weight:400;
+    letter-spacing:0; }
+  .hours { margin:6px 0 18px; color:var(--cream); font-size:17px; }
+  .hours b { color:var(--gold-hi); font-variant-numeric:tabular-nums; }
+  input[type=range] { width:100%; appearance:none; height:8px;
+    border-radius:4px; outline:none;
+    background:linear-gradient(90deg,var(--gold) var(--pct,10%),
+               #3A3020 var(--pct,10%)); }
+  input[type=range]::-webkit-slider-thumb { appearance:none; width:28px;
+    height:28px; border-radius:50%;
+    background:radial-gradient(circle at 35% 30%,var(--gold-hi),var(--gold) 60%,#8A6E23);
+    border:2px solid #F7E6B8; cursor:pointer;
+    box-shadow:0 0 18px rgba(242,205,110,.6); }
+  .milestone { min-height:24px; margin-top:12px; font-size:15px;
+    color:var(--verm); font-style:italic; }
+  .milestone b { color:#E06A57; }
+  .sponsor .cta { margin-top:18px; width:100%; text-align:center; }
+  .give-alt { text-align:center; margin-top:14px; font-size:14px;
+    color:var(--muted); }
+  .give-alt a { color:var(--gold); }
+
+  /* budget bars */
+  .budget { margin-top:22px; display:flex; flex-direction:column; gap:14px; }
+  .brow .lbl { display:flex; justify-content:space-between; gap:14px;
+    font-size:15px; color:var(--muted); margin-bottom:6px; }
+  .brow .lbl span:last-child { color:var(--cream);
+    font-variant-numeric:tabular-nums; white-space:nowrap; }
+  .brow .track { height:9px; border-radius:5px; background:#2A2213;
+    overflow:hidden; }
+  .brow .bfill { height:100%; width:0;
+    background:linear-gradient(90deg,var(--gold),var(--gold-hi));
+    border-radius:5px; transition:width 1.2s cubic-bezier(.2,.7,.2,1); }
+  .brow.total .lbl span { color:var(--gold-hi); font-weight:700; font-size:17px; }
+  .brow.total .bfill { background:linear-gradient(90deg,var(--verm),#E06A57); }
+
+  /* QR */
+  .qr { text-align:center; padding:20px 0 0; }
+  .qr img { width:216px; height:216px; max-width:70vw; background:#fff;
+    padding:12px; border-radius:14px;
+    box-shadow:0 0 0 1px var(--hair), 0 0 60px rgba(212,169,70,.25); }
+  .qr .cap { font-size:13px; color:var(--gold-dim); margin-top:10px; }
+
+  .foot { margin:70px 0 0; padding:26px 0 46px; border-top:1px solid var(--hair);
+    text-align:center; font-size:13px; color:var(--muted); }
+  .foot a { color:var(--gold); }
+  .foot .yigf { color:var(--gold); font-size:22px; display:block;
+    margin-bottom:10px; }
+</style>
+
+<div class="hero">
+  <canvas id="mandala" aria-hidden="true"></canvas>
+  <div class="hero-inner">
+    <span class="yig">༄༅། །</span>
+    <h1>Turn forty years of spoken wisdom into words that can never be lost.</h1>
+    <p class="sub">2,805 recorded teachings by Geshe Michael Roach exist only
+    as fading video. We are transcribing every English word — making each
+    teaching searchable, quotable, and permanent.</p>
+    <div class="goalline"><b>$<span id="goalCount">0</span></b> completes the
+    entire archive.</div>
+    <a class="cta" href="#give">Preserve an Hour</a>
+  </div>
+  <div class="scrollcue">scroll ⌄</div>
+</div>
+
+<div class="wrap">
+
+<section class="rv">
+  <div class="zone">The Archive</div>
+  <h2>Every number below is real, counted, and waiting.</h2>
+  <div class="stats">
+    <div class="stat"><span class="n" data-count="2805">0</span><span class="l">recorded teachings</span></div>
+    <div class="stat"><span class="n" data-count="2600" data-suffix=" h">0</span><span class="l">of his English</span></div>
+    <div class="stat"><span class="n" data-count="40" data-suffix="+">0</span><span class="l">years of classes</span></div>
+    <div class="stat"><span class="n" data-count="1">0</span><span class="l">archive, free forever</span></div>
+  </div>
+</section>
+
+<section class="rv">
+  <div class="zone">Sound into Scripture</div>
+  <h2>Watch what your gift does: a voice becomes a text.</h2>
+  <p>The Asian Legacy Library's translation workbench already plays you
+  <b>the exact moments he speaks a Tibetan word</b>. Transcription completes
+  the circle — every hour becomes an open book, full-text searchable and
+  linked forever to the scriptures it explains.</p>
+  <div class="wavewrap">
+    <canvas id="wave" aria-hidden="true"></canvas>
+    <div class="wavecap">his voice, becoming searchable text — this is the
+    whole project in one picture</div>
+  </div>
+</section>
+
+<section class="rv" id="give">
+  <div class="zone">Preserve an Hour</div>
+  <h2>Slide to choose what you save.</h2>
+  <div class="sponsor">
+    <div class="amt">$<span id="amt">108</span> <small>your gift</small></div>
+    <div class="hours">preserves <b><span id="hrs">108</span> hours</b> of
+    teaching, transcribed and archived</div>
+    <input type="range" id="slider" min="10" max="2500" step="1" value="108"
+      aria-label="Choose donation amount">
+    <div class="milestone" id="milestone"></div>
+    <a class="cta" id="giveBtn"
+       href="https://asianlegacylibrary.org/donate">Give through the Asian
+       Legacy Library</a>
+    <div class="give-alt">Tax-deductible 501(c)(3) — write
+    <b>“Transcription Fund”</b> in the note field.<br>
+    Or <a id="mailBtn"
+    href="mailto:adam.derick.andrade@gmail.com?subject=Transcription%20Fund%20Donation">
+    email us to give directly or sponsor a whole course</a>.</div>
+  </div>
+</section>
+
+<section class="rv">
+  <div class="zone">Every Dollar, Accounted</div>
+  <h2>Exactly where $2,500 goes.</h2>
+  <div class="budget" id="budget">
+    <div class="brow" data-w="42"><div class="lbl"><span>AI transcription of all
+      ≈2,600 English hours</span><span>$1,050</span></div>
+      <div class="track"><div class="bfill"></div></div></div>
+    <div class="brow" data-w="1"><div class="lbl"><span>Quality pilot across
+      engines on the hardest recordings</span><span>$20</span></div>
+      <div class="track"><div class="bfill"></div></div></div>
+    <div class="brow" data-w="28"><div class="lbl"><span>Premium passes +
+      human review on Tibetan-dense & interpreted classes</span><span>$700</span></div>
+      <div class="track"><div class="bfill"></div></div></div>
+    <div class="brow" data-w="17"><div class="lbl"><span>Tibetan-term lexicon
+      passes, review & integration</span><span>$430</span></div>
+      <div class="track"><div class="bfill"></div></div></div>
+    <div class="brow" data-w="12"><div class="lbl"><span>Preservation copies of
+      at-risk & unlisted recordings</span><span>$300</span></div>
+      <div class="track"><div class="bfill"></div></div></div>
+    <div class="brow total" data-w="100"><div class="lbl"><span>Total — the
+      complete archive</span><span>$2,500</span></div>
+      <div class="track"><div class="bfill"></div></div></div>
+  </div>
+  <p style="font-size:13.5px">The work is scoped, the tooling is built, the
+  recordings are inventoried. Funding is the only remaining step — and the
+  accounting will be published to donors when the run completes.</p>
+</section>
+
+<section class="rv qr">
+  <div class="zone">Take It With You</div>
+  <img src="data:image/png;base64,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" alt="QR code for this page">
+  <div class="cap">Scan to open this page — share it freely.</div>
+</section>
+
+<div class="foot rv">
+  <span class="yigf">༄༅། །</span>
+  The Transcription Fund · Asian Legacy Library · Diamond Cutter Classics<br>
+  Questions: <a href="mailto:adam.derick.andrade@gmail.com">adam.derick.andrade@gmail.com</a><br>
+  Supporting the ALL Translation Tool — connecting the preserved library of
+  Tibet to Geshe Michael Roach's English.
+</div>
+
+</div>
+
+<script>
+(function(){
+  var reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ---------- hero mandala: orbiting golden syllables ---------- */
+  var syls = ("ཨོཾ མ ཎི པ དྨེ ཧཱུྃ སྙིང རྗེ སྟོང ཉིད བསོད ནམས ཤེས རབ བྱང ཆུབ " +
+              "སེམས དཔའ ཐར པ ཆོས དད པ བཀའ དྲིན ཏིང འཛིན ཞི གནས").split(" ");
+  var cv = document.getElementById('mandala'), cx = cv.getContext('2d');
+  var W, H, parts = [], t0 = 0, px = 0, py = 0;
+  function size(){ W = cv.width = cv.offsetWidth * devicePixelRatio;
+                   H = cv.height = cv.offsetHeight * devicePixelRatio; }
+  size(); addEventListener('resize', size);
+  var N = Math.min(110, Math.floor(innerWidth / 6));
+  for (var i = 0; i < N; i++) {
+    parts.push({ s: syls[i % syls.length],
+      r: 0.16 + Math.pow(Math.random(), 0.7) * 0.42,
+      a: Math.random() * Math.PI * 2,
+      sp: (0.00008 + Math.random() * 0.00022) * (Math.random() < 0.5 ? 1 : -1),
+      f: 11 + Math.random() * 20, o: 0.14 + Math.random() * 0.5,
+      w: 0.5 + Math.random() });
+  }
+  addEventListener('pointermove', function(e){
+    px = (e.clientX / innerWidth - 0.5); py = (e.clientY / innerHeight - 0.5);
+  }, { passive:true });
+  function draw(t){
+    cx.clearRect(0, 0, W, H);
+    var cxp = W/2 + px * W * 0.03, cyp = H/2 + py * H * 0.03;
+    var base = Math.min(W, H);
+    // central glow
+    var g = cx.createRadialGradient(cxp, cyp, 0, cxp, cyp, base*0.42);
+    g.addColorStop(0, 'rgba(212,169,70,0.16)');
+    g.addColorStop(0.5, 'rgba(179,58,43,0.05)');
+    g.addColorStop(1, 'rgba(0,0,0,0)');
+    cx.fillStyle = g; cx.fillRect(0, 0, W, H);
+    // faint ring
+    cx.strokeStyle = 'rgba(212,169,70,0.12)'; cx.lineWidth = 1;
+    cx.beginPath(); cx.arc(cxp, cyp, base*0.30, 0, 7); cx.stroke();
+    cx.beginPath(); cx.arc(cxp, cyp, base*0.44, 0, 7); cx.stroke();
+    for (var i = 0; i < parts.length; i++) {
+      var p = parts[i];
+      p.a += p.sp * (t - t0 || 16);
+      var rr = p.r * base * (1 + 0.02 * Math.sin(t*0.0004 + i));
+      var x = cxp + Math.cos(p.a) * rr * 1.18;
+      var y = cyp + Math.sin(p.a) * rr * 0.92;
+      var tw = 0.55 + 0.45 * Math.sin(t * 0.0011 * p.w + i);
+      cx.globalAlpha = p.o * tw;
+      cx.fillStyle = i % 9 === 0 ? '#E06A57' : '#E9C871';
+      cx.font = (p.f * devicePixelRatio) + 'px "Kailasa","Noto Serif Tibetan",serif';
+      cx.fillText(p.s, x, y);
+    }
+    cx.globalAlpha = 1; t0 = t;
+    if (!reduced && !document.hidden) requestAnimationFrame(draw);
+  }
+  if (reduced) { draw(16); } else { requestAnimationFrame(draw); }
+  document.addEventListener('visibilitychange', function(){
+    if (!document.hidden && !reduced) requestAnimationFrame(draw);
+  });
+
+  /* ---------- wave → script strip ---------- */
+  var wv = document.getElementById('wave'), wx = wv.getContext('2d');
+  var words = ["compassion","སྙིང་རྗེ","emptiness","སྟོང་ཉིད","merit",
+    "བསོད་ནམས","wisdom","ཤེས་རབ","freedom","ཐར་པ","kindness","བཀའ་དྲིན"];
+  var drops = [];
+  function wsize(){ wv.width = wv.offsetWidth * devicePixelRatio;
+                    wv.height = 150 * devicePixelRatio; }
+  wsize(); addEventListener('resize', wsize);
+  function wdraw(t){
+    var Ww = wv.width, Hh = wv.height;
+    wx.clearRect(0, 0, Ww, Hh);
+    var mid = Hh / 2, third = Ww * 0.46;
+    // waveform (left)
+    wx.beginPath();
+    for (var x = 0; x < third; x += 3 * devicePixelRatio) {
+      var k = x / third;
+      var amp = (Math.sin(x*0.02 + t*0.004) * 14 +
+                 Math.sin(x*0.053 + t*0.0027) * 22 +
+                 Math.sin(x*0.011 - t*0.0035) * 9) * devicePixelRatio;
+      amp *= (0.35 + 0.65 * Math.sin(k * Math.PI));      // envelope
+      amp *= (1 - k * 0.55);                              // dissolve →
+      x === 0 ? wx.moveTo(x, mid + amp) : wx.lineTo(x, mid + amp);
+    }
+    wx.strokeStyle = 'rgba(224,106,87,0.85)';
+    wx.lineWidth = 2 * devicePixelRatio; wx.stroke();
+    // words condensing (right)
+    if (!reduced && Math.random() < 0.035 && drops.length < 14) {
+      drops.push({ w: words[Math.floor(Math.random()*words.length)],
+        x: third + Math.random() * (Ww - third - 90*devicePixelRatio),
+        y: mid + (Math.random() - 0.5) * Hh * 0.55,
+        b: 0, f: (11 + Math.random()*7) * devicePixelRatio });
+    }
+    for (var i = drops.length - 1; i >= 0; i--) {
+      var d = drops[i]; d.b += 0.012;
+      var a = d.b < 0.5 ? d.b * 2 : (1 - d.b) * 2;
+      wx.globalAlpha = Math.max(0, a);
+      wx.fillStyle = '#E9C871';
+      wx.font = d.f + 'px "Palatino","Kailasa",serif';
+      wx.fillText(d.w, d.x, d.y);
+      if (d.b >= 1) drops.splice(i, 1);
+    }
+    wx.globalAlpha = 1;
+    if (!reduced && !document.hidden) requestAnimationFrame(wdraw);
+  }
+  if (reduced) {
+    // static frame with a few words
+    for (var j = 0; j < 6; j++)
+      drops.push({ w: words[j], x: wv.width*0.5 + j*60, y: 60 + (j%3)*30,
+                   b: 0.5, f: 13*devicePixelRatio });
+    wdraw(600);
+  } else { requestAnimationFrame(wdraw); }
+
+  /* ---------- reveals + counters + budget bars ---------- */
+  var io = new IntersectionObserver(function(es){
+    es.forEach(function(e){
+      if (!e.isIntersecting) return;
+      e.target.classList.add('in');
+      e.target.querySelectorAll('[data-count]').forEach(runCount);
+      if (e.target.id === 'budget' || e.target.querySelector('#budget'))
+        e.target.querySelectorAll('.brow').forEach(function(b){
+          b.querySelector('.bfill').style.width = b.dataset.w + '%';
+        });
+      io.unobserve(e.target);
+    });
+  }, { threshold: 0.25 });
+  document.querySelectorAll('.rv').forEach(function(el){ io.observe(el); });
+
+  function runCount(el){
+    var end = +el.dataset.count, suf = el.dataset.suffix || '';
+    if (reduced) { el.textContent = end.toLocaleString() + suf; return; }
+    var t0 = performance.now(), dur = 1600;
+    (function tick(t){
+      var k = Math.min(1, (t - t0) / dur);
+      k = 1 - Math.pow(1 - k, 3);
+      el.textContent = Math.round(end * k).toLocaleString() + suf;
+      if (k < 1) requestAnimationFrame(tick);
+    })(t0);
+  }
+  // hero goal counter
+  var gc = document.getElementById('goalCount');
+  if (reduced) gc.textContent = '2,500';
+  else (function(){ var s = performance.now();
+    (function tick(t){ var k = Math.min(1,(t-s)/1800);
+      k = 1 - Math.pow(1-k,3);
+      gc.textContent = Math.round(2500*k).toLocaleString();
+      if (k < 1) requestAnimationFrame(tick); })(s); })();
+
+  /* ---------- sponsor slider ---------- */
+  var slider = document.getElementById('slider'),
+      amt = document.getElementById('amt'),
+      hrs = document.getElementById('hrs'),
+      mile = document.getElementById('milestone'),
+      mailBtn = document.getElementById('mailBtn');
+  var miles = [
+    [2500, "The <b>entire archive</b> — every hour, preserved in your name."],
+    [1000, "A <b>thousand hours</b> — decades of courses secured at once."],
+    [500,  "<b>Five hundred hours</b> — an entire teaching era, saved."],
+    [250,  "A <b>whole retreat</b> — every word of it, kept."],
+    [108,  "<b>108 hours</b> — the auspicious number, a mala of teachings."],
+    [54,   "A <b>full course</b>, transcribed end to end."],
+    [25,   "A <b>complete class</b> — one evening of wisdom, made permanent."],
+    [10,   "Ten hours of teaching — <b>a real difference</b>."]];
+  function upd(){
+    var v = +slider.value;
+    amt.textContent = v.toLocaleString();
+    hrs.textContent = Math.round(v * 1.04).toLocaleString();
+    slider.style.setProperty('--pct',
+      ((v - 10) / (2500 - 10) * 100) + '%');
+    for (var i = 0; i < miles.length; i++)
+      if (v >= miles[i][0]) { mile.innerHTML = miles[i][1]; break; }
+    mailBtn.href = "mailto:adam.derick.andrade@gmail.com?subject=" +
+      encodeURIComponent("Transcription Fund Donation — $" + v);
+  }
+  slider.addEventListener('input', upd); upd();
+})();
+</script>
