@@ -66,7 +66,7 @@ catalog provenance/titles/subjects · OCR: full in-app pipeline (Scan
 pane) + external hand-off + ocr_out review flow · Analysis pane (18
 sections, QC'd, auto-saved)
 
-## Not yet built (the honest list)
+## Originally not-yet-built (most since shipped — see ✅ marks inline; the honest list)
 
 - ✅ **Per-text glossary** (Ven. Phil's ancestor feature; survey ②) —
   Overlay `gloss:` anchors + `library/glossaries/<text>.tsv`

@@ -40,7 +40,7 @@ while leaving the rest untouched.
   (ste/te/de semi-final, na conditional, kyang concessive, nas/las when
   clause-connective, cing/zhing/shing, quotatives ces/zhes/shes, final 'o).
   Builds on `tokenizeDocument` barriers + `classifyParticle`. NOTE: cing/
-  zhing/shing and ces/zhes/shes are not yet in the particle tables — add them
+  zhing/shing and ces/zhes/shes SHIPPED into the particle tables (core/src/particles.cpp; allomorph licensing in reader.cpp — 2026-08-14 audit-verified). Original ask kept for the record: add them
   (with their suffix-agreement rows: cing after g/d/b, zhing after
   ng/n/m/'/r/l/vowel, shing after s; same pattern for the quotatives).
 - **Phrase chunker** — within a clause, cut after each case-particle

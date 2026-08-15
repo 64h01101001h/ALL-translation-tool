@@ -154,7 +154,7 @@ ratified. The architecture below is now settled:
   one click from reading on the Overlay; revisit after the joint
   walkthrough if the REVIEW section outgrows itself.
 
-Remaining for Adam: ratify A–E (or overrule any), the Phase 6
+Adam ratified A–E 2026-08-12 (see §4). Remaining for Adam (or overrule any), the Phase 6
 joint walkthrough (T/K/F campaign), and the night-mode audit
 (needs his live dark-mode screenshots — offscreen renders paint
 light chrome).

@@ -1,4 +1,8 @@
-# ALL Translation Tool — Integration Roadmap
+# ALL Translation Tool
+
+> **2026-08-14 note:** this roadmap's to-do ledger is historical — the
+> numbered build items have shipped (see docs/FEATURE_STATUS.md).
+> The LIVE list is TODO.md (Master Status Board at top). — Integration Roadmap
 ### v2 · 2026-08-04 · living document (update as tools land)
 
 **ALL = Asian Legacy Library · ACIP = Asian Classics Input Project**

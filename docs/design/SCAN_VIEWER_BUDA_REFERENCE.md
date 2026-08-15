@@ -56,5 +56,5 @@ viewer, and eventually the Input pane's viewer column.
   the folio/line band, which BUDA does not have.
 
 ## Status
-Reference banked; task #24 tracks the build. Not started — Adam
-said "save this for later."
+Reference banked; task #24 BUILT (archive-grade viewer window,
+thumbnail rail, image adjustments — this doc remains the spec).

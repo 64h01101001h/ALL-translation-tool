@@ -63,4 +63,4 @@ print(pronounce(acip_to_ewts("BSOD NAMS")))   # sunam
 EOF
 ```
 *(full 60-pair list lives in this file's history / the session log; a C++
-battery H over these pairs is queued in TODO.md).*
+battery H SHIPPED 2026-08-14: core/tests/pron_standard_smoke.cpp — 32 explicit standard pairs, each pre-validated against the canonical Python engine).*

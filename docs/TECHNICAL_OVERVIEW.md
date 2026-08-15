@@ -562,7 +562,7 @@ Maintenance lane) · **P5** StarDict reader (allcore module,
 battery #40, Lookup user-supplied layer) · **P6** pecha
 three-up + A5 saddle booklet imposition (pure ordering fn,
 selftested) · **P8** TISE input keys in Convert (display-layer
-joins, engine untouched). Remaining: W3C full-document pass;
+joins, engine untouched). W3C full-document pass DONE 2026-08-14 (docs/research/W3C_TIBETAN_LAYOUT_FULL.md; three lint rules + pecha v4 lane shipped);
 extra phonetics display conventions.
 
 ## Appendix A — exact inventory (captured 2026-08-14)

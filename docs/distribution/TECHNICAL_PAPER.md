@@ -450,7 +450,7 @@ verify, not assume).
 
 In keeping with the project's character, the known limits are
 documented rather than hidden: the day-level calendar implements the
-Modern Karana (correspondence with published Phugpa almanacs is a
+Modern Karana (correspondence with published Phugpa almanacs was ANSWERED 2026-08-14 — docs/research/KCK_VS_PHUGPA.md; formerly a
 documented open question); several reference payloads await license
 resolution before they can ship; Old-Tibetan affix rules are
 unported; and a small set of features is gated on external inputs

@@ -1,5 +1,5 @@
 # TibetanDictionary.dic — extraction & identification dossier
-### Roadmap item 3 · extracted 2026-08-06 · LICENSING DECISION PENDING (Adam)
+### Roadmap item 3 · extracted 2026-08-06 · LICENSING RESOLVED AS OPTION 2 (labeled LOCAL-ONLY Lookup layer, never redistributed — see SOURCE_TRUST_HIERARCHY Tier V); original note kept below (Adam)
 
 ## What was extracted
 - Source: `ACIPHypercontext Tool/…/en.lproj/TibetanDictionary.dic` (+ `.ndx`),

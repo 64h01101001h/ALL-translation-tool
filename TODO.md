@@ -40,97 +40,159 @@ implementation is sidelined HERE from this date. What this means:
       swallowed shad, N5 ༈ three-NBSP unbreakable block. Source:
       docs/research/W3C_TIBETAN_LAYOUT_FULL.md.
 
-- [ ] **ATTACK QUEUE** — merged 2026-08-14 from docs/LOOSE_ENDS_AUDIT.md
-      (the four-lane full-project audit: TODO line-by-line + all docs
-      + code + memory promises) back into this single file, so nothing
-      tracked in one place goes stale in the other. LOOSE_ENDS_AUDIT.md
-      is now a pointer back here. Work top-down; ranked by what's
-      solo-doable first.
-      1. Analysis item 14 suppressed (`core/src/analysis.cpp:166`):
-         the prompt still tells the model the library is NOT indexed —
-         but LibraryIndex shipped. Route item 14 through
-         `LibraryIndex::search()` hits; keep the refusal only as the
-         no-index fallback. *A capability we built and then hid.*
-      2. Trainer particle tables: zhing/shing and ces/zhes/shes rows
-         missing (TRAINER_DESIGN.md:43).
-      3. Banked-corpus mining lanes (data local, never mined until
-         2026-08-14): Goldstein glossary markings (banked, unmined) ·
-         Hackett verb classes (IN PROGRESS 2026-08-14 — vision-agent
-         transcription of the scanned lexicon underway, partial
-         results banked to data/hackett/) · Manual-of-Authentic-
-         Tibetan modern-colloquial mode (banked, unmined).
-      4. Small strikes: ~~Whitney last-four fields~~ DONE 2026-08-14
-         (dcs_freq/rank + Warnemyr conjugation-tables link, path
-         verified live; Apte id labeled, no unverified URL) ·
-         ~~Trainer honorific vocab tag~~ DONE 2026-08-14 (gold
-         register tag w/ ordinary form in the vocabulary reveal) ·
-         Input-pane partner auto-pairing + UTFC lane hookup ·
-         Spotlight async · QTextCursor selftest warning · empty-input
-         loadDoc guidance · nesting-tones shading swap · per-text
-         apparatus books (16) · OCR async + extra script models ·
-         KX/TS scan lane · pecha margin presets · outline/verse
-         wylie-parity probe · Botok overlap audit · citation
-         side-pane streamline.
-      5. Wow-list leftovers (ideas Adam liked, never built):
-         pronunciation trainer (whisper ready) · Text DNA strips ·
-         team board · apprenticeship mode · English-on-the-carving
-         hover · teaching-playlist karaoke · ⌘K persons/notes lanes.
-      6. ~~Approved-register regeneration~~ DONE 2026-08-14 (press
-         #85): allcore regenerateApprovedRegisters + regenreg_smoke
-         (suite 42) + Approval-tab "Regenerate registers" button —
-         idempotent strip-and-refold from the rulings store instead
-         of live-appending; also fixed the dead-ended abbreviation
-         approval path (malformed append, never loaded).
+- [ ] **MASTER STATUS BOARD (five-lane total audit, 2026-08-14)** —
+      Adam's directive: "total audit… nothing falls through the
+      cracks." Five parallel lanes (all docs · TODO verification ·
+      memory-log promises · Adam's request ledger · code markers)
+      reconciled here. THIS section is the single de-duplicated
+      queue; body items below keep their history and detail — where
+      an item appears in both, the body entry is the record and this
+      is the index. Canonical facts fixed by the audit: prenasal
+      queue = 225 pending in the store (164/205/220 were growth
+      snapshots); Analysis item 14 and the Trainer particle rows are
+      DONE (stale board claims corrected); code tree is clean (2 real
+      markers, both people-gated).
 
-      **Adam's one-sitting queue** (his items, consolidated — his to
-      act on, not solo-doable):
+      **A. SOLO BUILD QUEUE (ranked)**
+      1. Pecha programme remainder — v4: N2 double-shad-gap
+         justification, N4/N6 wrapped-shad space discard,
+         letter-spacing fallback for non-tsheg line ends; v3:
+         dbu-khyud + double-shad conventions, margin presets,
+         Sungbum-format syllable budget (needs the OCR-stats lane);
+         print QA needs Adam's reference prints (that half gated).
+      2. Banked-corpus mining — Hackett verb classes IN PROGRESS
+         (vision agents; partial TSVs banked in scratchpad; ka-section
+         pages resist at current zoom — targeted re-pass needed);
+         Goldstein 254 "(h.)" glossary markings (vision pass — the
+         text layer garbles Tibetan, grep-mining would be guessing);
+         then extend spotVerb with the 31 Wilson-class causative pairs.
+      3. THL Degé deep-links wired through the VERIFIED concordance
+         (KL files first need a title-matched Lhasa concordance) —
+         recovered by the audit: was tracked nowhere.
+      4. Gofer pane: engine-level fold semantics (space/
+         capitalization — combo is currently display-only) + async
+         search so the Stop button becomes real — recovered by the
+         audit from a closed item's tail.
+      5. People layer increments: Lookup PERSON card section +
+         Overlay person badge (design's next steps; only Library
+         info-panel links shipped). Plus the 81 unresolved authors →
+         BDRC letter (send is Adam's).
+      6. OCR: model manager (first-run auto-download with license/
+         credit display) · async recognition · 4 more script-style
+         models when BDRC's ~end-Aug release lands.
+      7. True-Phugpa calendar port — path proven: source TCG (MIT),
+         spec Janson, oracles Espel+TCG.
+      8. Draft-pane standards conventions: STD-006 translator-
+         insertion marking · STD-009 variant-reading notes (build
+         follows GMR ratification of the trust dialog).
+      9. Small strikes: Input-pane partner auto-pairing + UTFC lane
+         hookup · Spotlight async · QTextCursor selftest warning ·
+         empty-input loadDoc guidance · per-text apparatus books
+         (16) · KX/TS scan lane (SPARQL fallback) · outline/verse
+         wylie-parity probe · Botok-vs-SegTrie overlap audit ·
+         citation side-pane streamline · sweep-harness line-edit
+         coverage for typed-input panes · navigable-outline TOC over
+         Library texts (THL grammar banked) · Sungbum route-2
+         (per-author outline harvest) verification · THL follow-ups
+         (GMR-vs-THL phonetics convention doc; Studies-in-Genre
+         chapter list) · Zenodo license check on Hill's verb-stems
+         lexicon · About-dialog contact swap when a support@ address
+         exists · vendor libtesseract if the team wants zero-setup
+         Sanskrit OCR.
+      10. Idea bank (liked, never scheduled): pronunciation trainer ·
+         Text DNA strips · team board · apprenticeship mode ·
+         English-on-the-carving hover · teaching-playlist karaoke ·
+         ⌘K persons/notes lanes · live composing editor · register
+         studies · reverse-composition drills · sight-translation
+         timer · worked-examples casebook.
+
+      **B. ADAM'S ONE-SITTING QUEUE (his actions; canonical copy)**
       **Sends (drafts finished in Gmail):** Jamie Plant (#1 —
       irreplaceable recordings; confirm address) · 84000 license +
-      partnership · THL (16 dictionaries + Solr + kmaps) · rKTs/Lainé ·
-      Lotsawa House · Vimala · PKTC · Jigme (needs his Dropbox link) ·
-      Joel zoom · Élie reply · Steinert thanks (Jäschke ask) · GMR
+      partnership registration (their ToU asks for it) · THL (16
+      dictionaries + Solr + kmaps) · rKTs/Lainé · Lotsawa House ·
+      Vimala · PKTC (Chodrak + Das SCD) · Jigme (needs his Dropbox
+      link) · Joel zoom (agenda: text→BDRC-work linkage) · Élie
+      reply · Steinert thanks (asks re Jäschke index) · BDRC letter
+      (81 unresolved authors) · BDRC deskew-bug report · GMR
       transcription appeal + GMR trust dialog (both need GMR's
       address) · fundraising.
-      **Approvals/money:** git filter-repo (~20GB; disk at 3.4GB free
-      — operational risk) · API credits (glossary stalled at 1,395) ·
-      ElevenLabs pilot <$20 · MITRA 18GB download · API key rotation
-      (pasted in chat twice) · **get an Apple Developer ID** (Adam,
-      2026-08-14 — his action item; unlocks notarized builds so the
-      team stops right-click-Opening past Gatekeeper; $99/yr,
-      developer.apple.com/programs — enroll as ALL the organization
-      if possible, else personal).
-      **Rulings:** catalog-titles tier · prenasal queue (220 rows,
-      Approval pane, bulk-approve ready) · Sungbum workbook (963
-      yellow cells) · Sanskrit render-sheet eyeball rows · unlisted-
-      recordings archive go · GitHub private remote say-so ·
-      TibetanDictionary.dic licensing option.
-      **Sessions:** K/F testing-campaign walkthrough · clean-Mac
-      install (the release gate's most important step) · dark-mode
-      screenshots · GMR: LE'UR class + trust hierarchy + STD-008/9 +
-      what to ADD.
+      **Approvals/money:** git filter-repo (~20GB; disk at 3.4GB
+      free — operational risk) · API credits (glossary stalled at
+      1,395/93,630) · ElevenLabs pilot <$20 · MITRA 18GB download ·
+      API key rotation (pasted in chat twice) · **get an Apple
+      Developer ID** (2026-08-14 — unlocks notarized builds;
+      $99/yr, developer.apple.com/programs; enroll as ALL if
+      possible) · Windows/Linux build machines or CI when wanted.
+      **Rulings:** catalog-titles tier · prenasal queue (225
+      pending; Approval pane bulk-approve ready) · Sungbum workbook
+      (963 yellow cells) · Sanskrit render-sheet eyeball rows ·
+      unlisted-recordings archive go (68 links) · GitHub private
+      remote say-so · TibetanDictionary.dic licensing option ·
+      humilific/double-honorific schema blessing · display-toggles
+      retest verdict.
+      **Sessions:** K/F testing-campaign walkthrough + the 9
+      scenario walkthroughs · 5-step human release gate (reading
+      pass, woodblock word-locate #31, Input on a real scan, Mixed
+      Nuts export, clean-Mac install) · dark-mode screenshots · GMR
+      session: LE'UR class + trust-hierarchy ratification +
+      STD-008/9 in his words + "what sources would you ADD" ·
+      MP3-archive path for the whisper pilot · fundraiser
+      pre-presentation steps (Share the artifact, verify donate
+      URL, pick version; next week domain + Cloudflare + Zeffy).
       **Uploads:** input-center standards + samples (announced
       08-06) · Master Catalog · intact Release IV manual/Briefcat ·
-      honorific books · reference pecha prints · Das SCD re-download
-      · Xcode vision projects · Fall-2022/Winter-2021 link sheets.
+      honorific books · reference pecha prints · Das SCD
+      re-download · Xcode vision projects · Fall-2022/Winter-2021
+      link sheets · more already-composed bibliography collections.
 
-      **External watch (dated triggers):** tibetanebook.com +
-      dharmaebooks.org — Buddhist e-text sources, license check
-      before any use; TiCode pre-Unicode spec PDF pointer (legacy
-      lane reference). BDRC OCR release (~end Aug) → model refresh +
-      deskew-bug report upstream · Lainé reply → abbreviations layer
-      + Wilson register growth · THL reply → kmaps/Solr integration +
-      dictionary licenses · 84000 reply → TM ingest · PKTC → Das
-      etext/Chodrak lane · CIHTS → Negi · DILA site return →
-      Mahavyutpatti TEI refresh · web team → collections manifest
-      JSON · ALL Developer ID → signed builds · input-center server →
-      remote-lane shakedown · data project → Sanskrit
-      V/visarga/candrabindu/A'A fixes (177k+ occ), pyewts 13
-      regenerations, LC pair-script banking, attestation recount.
+      **C. EXTERNAL WATCH (dated/triggered)**
+      BDRC OCR release ~end Aug → model refresh + selftest rerun ·
+      BDRC written OCR permission to bank beside the verbal okay ·
+      Lainé reply → rKTs abbreviations layer + OM-register growth ·
+      THL reply → kmaps/Solr + dictionary licenses · 84000 reply →
+      TM ingest (resolve BY-NC-ND-vs-BY-4.0 conflict first) · PKTC
+      → Das etext + Chodrak lane · CIHTS → Negi · Tsadra →
+      RY/Waldo/Valby · DILA site return → Mahavyutpatti TEI
+      refresh · web team → collections manifest JSON · input-center
+      server → remote-lane shakedown (P3 queue-reorder + remote
+      editing wait on it) · data project → Sanskrit
+      V/visarga/candrabindu/A'A fixes (177k+ occ), pyewts-13 +
+      prenasal-defect regenerations, anusvara TSV ingest (2,172),
+      oṃ→ॐ question, LC pair-script banking, attestation recount,
+      register-annotation growth, then the NEXT RELEASE the new
+      importer exists to consume · tibetanebook.com +
+      dharmaebooks.org license checks · Banzhida MT weights ·
+      Monlam Melong license statement · transcription enterprise
+      quote.
 
-      **Policy fences (not open work — do not resurrect):** cataloging
-      sidelined (own future project, see SCOPE DECISION above) ·
-      NEVER lane (unlicensed dictionaries) · Monlam definitions
-      closed · red-flag list ships nothing unresolved.
+      **D. DEFERRED BY DESIGN (reasons logged — not open work)**
+      Files pane: share sheet (ObjC bridge) · 7z (p7zip dep) · tag
+      writing (Finder stays editor) · P3 queue reorder + remote
+      editing (need a real server) · P4 long tail (S3, embedded
+      terminal, hex viewer). Espel's other four phonetics display
+      conventions (port when wanted) · EPUB/e-reader export lane ·
+      Old-Tibetan affixnorm rules (until Old-Tibetan enters the
+      library) · Overlay incremental lattice rebuild + .hcprj/<NNN>
+      legacy interop · Manual-of-Authentic colloquial Trainer mode
+      (needs a labeled second corpus; parked unless wanted) · MST
+      honorific rule-detector + "who is doing what" lesson · People
+      browser under Research · NetWylie/Lingua::BO extra oracles ·
+      Gate E text-reports pane (only if REVIEW outgrows itself) ·
+      Chodrak scan-and-OCR fallback (until PKTC answers; US term
+      blocks distribution) · py-tiblegenc native port (external
+      tool shipped instead) · Lhasa gap-heal growth lane (optional).
+
+      **E. POLICY FENCES (do not resurrect)**
+      Cataloging sidelined (own future project, SCOPE DECISION
+      above) · NEVER lane (unlicensed dictionaries; no paraphrase)
+      · Monlam definitions closed (word lists only) · red-flag list
+      ships nothing unresolved · pron-engine fence (external
+      oracles may only cross-check THL phonetics; canonical
+      pron_engine.py + GMR rulings are the sole authorities) ·
+      hgm_gloss binding / never reconstruct engines / never guess /
+      provenance sacred (CLAUDE.md rules 1-4).
+
 - [ ] **SOURCE TRUST DIALOG WITH GESHE MICHAEL** (Adam, 2026-08-14,
       all-caps priority: "which sources to trust over others and
       why"). PREPARED: docs/standards/SOURCE_TRUST_HIERARCHY.md —
@@ -337,7 +399,7 @@ implementation is sidelined HERE from this date. What this means:
       (roadmap item A). *He announced the upload 2026-08-06 — ask for it at
       next session start.*
 - [ ] Input-center raw data samples (same item).
-- [ ] "ACIP Standards for Simplified Tibetan and Sanskrit Pronunciation" doc —
+- [x] "ACIP Standards for Simplified Tibetan and Sanskrit Pronunciation" doc — FOUND + BANKED 2026-08-06 (docs/standards/ACIP_PRONUNCIATION_STANDARD.md; the still-missing Input Code CHART pages ride with the intact-Release-IV item) —
       validates/replaces the provisional Sanskrit pronunciation style.
 - [ ] Adam's reference Xcode projects for the overall tool vision.
 - [x] Git init — done 2026-08-06 at Adam's "next most logical step":
