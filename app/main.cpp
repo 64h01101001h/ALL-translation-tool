@@ -5,6 +5,7 @@
 #include <QApplication>
 #include <QCollator>
 #include <QElapsedTimer>
+#include <QThread>
 #include <QEventLoop>
 #include <QPdfWriter>
 #include <QPageSize>
@@ -1885,6 +1886,11 @@ static std::function<void(QWidget*)> g_raisePane;
 // reject QDialogs but not NSOpenPanel, so dialog-opening lanes
 // short-circuit when this is set (main() sets it for --sweep)
 static bool g_sweepActive = false;
+// true under --selftest/--sweep/--screenshots: harness runs must
+// neither restore nor OVERWRITE the translator's saved session
+// (found 2026-08-15: the stray "QTextCursor::setPosition: Position
+// '4' out of range" was restoreSession racing the selftest doc)
+static bool g_harnessRun = false;
 // open a library file in the Overlay AT a raw source line — the
 // TibetDoc search-locations jump; set in main() once the Overlay
 // exists
@@ -3314,6 +3320,10 @@ public:
             st.setValue("overlay/lastFile", tmp);
             st.setValue("overlay/lastScroll", 0);
             st.setValue("overlay/lastCursor", 0);
+            // the guard rightly blocks harness runs; lift it just
+            // for this pin so the mechanism itself stays proven
+            const bool guardKeep = g_harnessRun;
+            g_harnessRun = false;
             restoreSession();
             bool spotOk = docFile_ == tmp;
             if (spotOk) {
@@ -3329,6 +3339,7 @@ public:
                     spotOk = (cycle_ == 1) && lastTok_ == tokA;
                 }
             }
+            g_harnessRun = guardKeep;
             check(spotOk,
                   "session restore reopens the file AND re-lights "
                   "the saved cursor spot + nest rung");
@@ -4372,6 +4383,18 @@ private:
     }
 
     void loadDoc() {
+        // empty-input guidance (small strike, 2026-08-15): Analyze
+        // with nothing pasted teaches instead of blanking
+        if (input_->toPlainText().trimmed().isEmpty()) {
+            context_->setHtml(
+                "<b>Nothing to analyze yet.</b><br>Paste ACIP or "
+                "wylie above (or open a Library text \u2014 "
+                "double-click one in Read \u2192 Library), then "
+                "Analyze. Every word gets its dictionary card; "
+                "phrases shade by nesting; click or arrow-walk to "
+                "read.");
+            return;
+        }
         docIsWylie_ =
             allcore::looksLikeWylie(input_->toPlainText().toStdString());
         doc_ = allcore::buildOverlay(spine_, index_,
@@ -5029,6 +5052,7 @@ public:
     // cursor. Saved on quit and after every open; restored on
     // normal launch only (never in selftest/probe runs).
     void saveSession() const {
+        if (g_harnessRun) return;   // never clobber the real session
         if (docFile_.isEmpty()) return;
         QSettings st("ALL", "TranslationTool");
         st.setValue("overlay/lastFile", docFile_);
@@ -5043,6 +5067,7 @@ public:
     }
 
     void restoreSession() {
+        if (g_harnessRun) return;   // harness docs are not sessions
         QSettings st("ALL", "TranslationTool");
         const QString f = st.value("overlay/lastFile").toString();
         if (f.isEmpty() || !QFile::exists(f)) return;
@@ -11570,23 +11595,42 @@ private:
             }
             probes.removeDuplicates();
             QStringList found;
-            for (const QString& term : probes) {
-                QCoreApplication::processEvents();
-                if (stopped_) break;
-                QProcess p;
-                p.start("/usr/bin/mdfind",
-                        {"-literal",
-                         QString("kMDItemTextContent == \"*%1*\"cd")
-                             .arg(term)});
-                // bounded: a cold Spotlight index can stall
-                if (!p.waitForFinished(6000)) { p.kill(); continue; }
-                for (const QString& f :
-                     QString::fromUtf8(p.readAllStandardOutput())
-                         .split('\n', Qt::SkipEmptyParts)) {
-                    if (!found.contains(f)) found << f;
-                    if (found.size() >= 40) break;
+            // async fan-out (small strike, 2026-08-15): all probes
+            // run CONCURRENTLY under one shared deadline instead of
+            // serial 6s blocks; Stop is honored throughout
+            {
+                std::vector<std::unique_ptr<QProcess>> procs;
+                for (const QString& term : probes) {
+                    auto p = std::make_unique<QProcess>();
+                    p->start("/usr/bin/mdfind",
+                             {"-literal",
+                              QString("kMDItemTextContent == "
+                                      "\"*%1*\"cd")
+                                  .arg(term)});
+                    procs.push_back(std::move(p));
                 }
-                if (found.size() >= 40) break;
+                QElapsedTimer clock;
+                clock.start();
+                bool anyRunning = true;
+                while (anyRunning && clock.elapsed() < 6000 &&
+                       !stopped_ && found.size() < 40) {
+                    QCoreApplication::processEvents();
+                    anyRunning = false;
+                    for (auto& p : procs)
+                        if (p->state() != QProcess::NotRunning)
+                            anyRunning = true;
+                    QThread::msleep(25);
+                }
+                for (auto& p : procs) {
+                    if (p->state() != QProcess::NotRunning) p->kill();
+                    for (const QString& f :
+                         QString::fromUtf8(
+                             p->readAllStandardOutput())
+                             .split('\n', Qt::SkipEmptyParts)) {
+                        if (!found.contains(f)) found << f;
+                        if (found.size() >= 40) break;
+                    }
+                }
             }
             h += QString("<div><b>%1</b> — %2 document(s); "
                          "searched as: ")
@@ -19230,7 +19274,14 @@ private:
     }
 
     void repaint_() {
-        // permanent link tints + current selection, via extraSelections
+        // permanent link tints + current selection, via extraSelections.
+        // Character offsets are clamped to the LIVE documents: this
+        // slot re-enters during setPlainText()/clear() with offsets
+        // from the previous text (the long-stray "setPosition:
+        // Position '4' out of range" — traced by backtrace
+        // 2026-08-15), so stale spans are skipped, never warned.
+        const int tibMax = tib_->document()->characterCount() - 1;
+        const int engMax = eng_->document()->characterCount() - 1;
         QList<QTextEdit::ExtraSelection> tsel, esel;
         for (size_t i = 0; i < linksList_.size(); ++i) {
             const Link& l = linksList_[i];
@@ -19239,7 +19290,8 @@ private:
                 if (&o != &l && l.tibBeg >= o.tibBeg && l.tibEnd <= o.tibEnd)
                     nested = true;
             if (l.tibBeg < (int)tokBeg_.size() &&
-                l.tibEnd <= (int)tokEnd_.size() && l.tibEnd > l.tibBeg) {
+                l.tibEnd <= (int)tokEnd_.size() && l.tibEnd > l.tibBeg &&
+                tokEnd_[l.tibEnd - 1] <= tibMax) {
                 QTextEdit::ExtraSelection s;
                 s.cursor = QTextCursor(tib_->document());
                 s.cursor.setPosition(tokBeg_[l.tibBeg]);
@@ -19248,6 +19300,7 @@ private:
                 s.format.setBackground(linkColor(nested));
                 tsel << s;
             }
+            if (l.engBeg > engMax) continue;
             QTextEdit::ExtraSelection s2;
             s2.cursor = QTextCursor(eng_->document());
             s2.cursor.setPosition(l.engBeg);
@@ -19257,7 +19310,9 @@ private:
             s2.format.setBackground(linkColor(nested));
             esel << s2;
         }
-        if (selBeg_ >= 0 && selBeg_ < (int)tokBeg_.size() && selEnd_ > selBeg_) {
+        if (selBeg_ >= 0 && selBeg_ < (int)tokBeg_.size() &&
+            selEnd_ > selBeg_ && selEnd_ <= (int)tokEnd_.size() &&
+            tokEnd_[selEnd_ - 1] <= tibMax) {
             QTextEdit::ExtraSelection s;
             s.cursor = QTextCursor(tib_->document());
             s.cursor.setPosition(tokBeg_[selBeg_]);
@@ -20414,9 +20469,44 @@ public:
         editor_->setExtraSelections(spellSels_ + diffSels_);
     }
 
+    // partner auto-pairing (small strike, 2026-08-15): both keyers
+    // type against the SAME page scan, so the scan's folder and stem
+    // are the honest pairing signal we have (the input centers'
+    // naming convention itself is still awaited — see TODO Uploads).
+    // If exactly ONE text file beside the scan shares its stem, the
+    // dialog opens preselected on it; otherwise it just opens in the
+    // most likely folder. The user always confirms — never auto-run.
+    QString suggestPartner() const {
+        if (scanFile_.isEmpty()) return {};
+        const QFileInfo sf(scanFile_);
+        const QString stem = sf.completeBaseName();
+        QStringList hits;
+        for (const QFileInfo& fi : QDir(sf.path()).entryInfoList(
+                 {"*.txt", "*.act", "*.inc", "*.TXT", "*.ACT",
+                  "*.INC"},
+                 QDir::Files)) {
+            if (fi.completeBaseName().startsWith(stem,
+                                                 Qt::CaseInsensitive))
+                hits << fi.absoluteFilePath();
+        }
+        return hits.size() == 1 ? hits.first() : QString();
+    }
+
     void compare() {
+        const QString sugg = suggestPartner();
+        QString startAt = sugg.isEmpty()
+                              ? (scanFile_.isEmpty()
+                                     ? root_ + "/library"
+                                     : QFileInfo(scanFile_).path())
+                              : sugg;
         const QString f = safeGetOpenFileName(
-            this, "Partner's input file", root_ + "/library",
+            this,
+            sugg.isEmpty()
+                ? QString("Partner's input file")
+                : QString("Partner's input file — suggested: %1 "
+                          "(same stem as the open scan)")
+                      .arg(QFileInfo(sugg).fileName()),
+            startAt,
             "Text (*.txt *.act *.inc);;All files (*)");
         if (f.isEmpty()) return;
         QFile qf(f);
@@ -24309,6 +24399,10 @@ int main(int argc, char** argv) {
         return missing == 0 ? 0 : 1;
     }
     const bool selfTestMode = cliArgs.contains("--selftest");
+    g_harnessRun = selfTestMode || cliArgs.contains("--sweep") ||
+                   cliArgs.contains("--screenshots") ||
+                   cliArgs.contains("--pasteprobe") ||
+                   cliArgs.contains("--sanskritcheck");
     const bool sweepMode = cliArgs.contains("--sweep");
     g_sweepActive = sweepMode;
     if (shotMode || selfTestMode || sweepMode) {

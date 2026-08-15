@@ -124,20 +124,32 @@ implementation is sidelined HERE from this date. What this means:
       8. Draft-pane standards conventions: STD-006 translator-
          insertion marking · STD-009 variant-reading notes (build
          follows GMR ratification of the trust dialog).
-      9. Small strikes: Input-pane partner auto-pairing + UTFC lane
-         hookup · Spotlight async · QTextCursor selftest warning ·
-         empty-input loadDoc guidance · per-text apparatus books
-         (16) · KX/TS scan lane (SPARQL fallback) · outline/verse
-         wylie-parity probe · Botok-vs-SegTrie overlap audit ·
-         citation side-pane streamline · sweep-harness line-edit
-         coverage for typed-input panes · navigable-outline TOC over
-         Library texts (THL grammar banked) · Sungbum route-2
-         (per-author outline harvest) verification · THL follow-ups
-         (GMR-vs-THL phonetics convention doc; Studies-in-Genre
-         chapter list) · Zenodo license check on Hill's verb-stems
-         lexicon · About-dialog contact swap when a support@ address
-         exists · vendor libtesseract if the team wants zero-setup
-         Sanskrit OCR.
+      9. Small strikes: ~~Input partner auto-pairing~~ DONE
+         2026-08-15 (suggestPartner: the shared page scan's folder +
+         stem; single match preselects the compare dialog, user
+         always confirms — the input centers' real naming convention
+         still awaited) · UTFC lane hookup · ~~Spotlight async~~
+         DONE 2026-08-15 (concurrent mdfind fan-out, one shared 6s
+         deadline, Stop honored) · ~~QTextCursor selftest warning~~
+         ROOT-CAUSED + FIXED 2026-08-15 (lldb backtrace:
+         AlignPane::repaint_ re-enters during clear() with stale
+         offsets; spans now clamped to the live documents) ·
+         ~~empty-input loadDoc guidance~~ DONE 2026-08-15 (teaches
+         instead of blanking) · BONUS FIX: harness runs
+         (--selftest/--sweep/--screenshots) no longer read or
+         clobber the translator's real saved session (g_harnessRun
+         guard; the session pin lifts it locally) · per-text
+         apparatus books (16) · KX/TS scan lane (SPARQL fallback) ·
+         outline/verse wylie-parity probe · Botok-vs-SegTrie overlap
+         audit · citation side-pane streamline · sweep-harness
+         line-edit coverage for typed-input panes ·
+         navigable-outline TOC over Library texts (THL grammar
+         banked) · Sungbum route-2 (per-author outline harvest)
+         verification · THL follow-ups (GMR-vs-THL phonetics
+         convention doc; Studies-in-Genre chapter list) · Zenodo
+         license check on Hill's verb-stems lexicon · About-dialog
+         contact swap when a support@ address exists · vendor
+         libtesseract if the team wants zero-setup Sanskrit OCR.
       10. Idea bank (liked, never scheduled): pronunciation trainer ·
          Text DNA strips · team board · apprenticeship mode ·
          English-on-the-carving hover · teaching-playlist karaoke ·
