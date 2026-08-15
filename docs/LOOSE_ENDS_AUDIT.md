@@ -65,7 +65,7 @@ defect, not ours) · version bumped 0.12.0.
     (selftest-pinned).
 11. **Small strikes**: ~~Whitney last-four fields~~ DONE
     2026-08-14 (dcs_freq/rank + Warnemyr conjugation-tables link,
-    path verified live; Apte id labeled, no unverified URL) · Trainer honorific vocab tag · Input-pane
+    path verified live; Apte id labeled, no unverified URL) · ~~Trainer honorific vocab tag~~ DONE 2026-08-14 (gold register tag w/ ordinary form in the vocabulary reveal) · Input-pane
     partner auto-pairing + UTFC lane hookup · Spotlight async ·
     QTextCursor selftest warning · empty-input loadDoc guidance ·
     nesting-tones shading swap · per-text apparatus books (16) ·

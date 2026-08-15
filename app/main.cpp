@@ -12295,9 +12295,32 @@ private:
                     QString tier = e.provisional()
                         ? " <span style='color:#b00'>[PROVISIONAL]</span>"
                         : "";
+                    // register tag: honorific vocabulary is marked in
+                    // the drill list too, ordinary form alongside
+                    QString honTag;
+                    if (g_honorifics) {
+                        auto hit = g_honorifics->find(e.wylie);
+                        if (hit != g_honorifics->end()) {
+                            const QString lvl = hit->second[2];
+                            honTag =
+                                " <span style='color:#9A7A33'>(" +
+                                QString(lvl == "high"
+                                            ? "high hon."
+                                        : lvl == "humilific"
+                                            ? "humilific"
+                                        : lvl == "double"
+                                            ? "double hon."
+                                            : "hon.") +
+                                (hit->second[0].isEmpty()
+                                     ? QString()
+                                     : " of " + hit->second[0]
+                                                    .toHtmlEscaped()) +
+                                ")</span>";
+                        }
+                    }
                     h += "<small>≡ <b>" +
                          QString::fromStdString(e.wylie).toHtmlEscaped() +
-                         "</b>: " + gl + tier + "</small><br>";
+                         "</b>: " + gl + honTag + tier + "</small><br>";
                 }
                 h += "</div>";
             }
