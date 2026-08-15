@@ -2767,6 +2767,32 @@ public:
                       "subjoined ka/ga exception honored, clean "
                       "text passes, break protection applied");
             }
+            {   // pecha v4: rin chen spungs shad substitution —
+                // a lone wrapped final syllable's ། becomes ༑;
+                // multi-syllable and non-wrapped lines untouched
+                QString lone;
+                lone += QChar(0x0F61); lone += QChar(0x0F72);
+                lone += QChar(0x0F53); lone += QChar(0x0F0D);
+                lone += ' '; lone += QChar(0x0F51);
+                const QString a = OverlayPane::pechaLineTransform(
+                    QChar(0x0F0B), lone);
+                const QString b = OverlayPane::pechaLineTransform(
+                    QChar(0x0F0D), lone);
+                QString two;
+                two += QChar(0x0F61); two += QChar(0x0F0B);
+                two += QChar(0x0F53); two += QChar(0x0F0D);
+                const QString c = OverlayPane::pechaLineTransform(
+                    QChar(0x0F0B), two);
+                const QString sb = OverlayPane::pechaBreakProtect(
+                    QString::fromUtf8("ཡིན། ༈ དེ"));
+                check(a.contains(QChar(0x0F11)) &&
+                          !b.contains(QChar(0x0F11)) &&
+                          !c.contains(QChar(0x0F11)) &&
+                          sb.contains(QChar(0x0F08)) &&
+                          sb.contains(QChar(0x00A0)),
+                      "pecha v4: ༑ on lone wrapped syllable only; "
+                      "༈ rides an NBSP block");
+            }
             {   // booklet imposition: saddle order for 8 pages,
                 // and blank pads when not a multiple of 4
                 const auto o8 = OverlayPane::pechaBookletOrder(8);
@@ -8153,6 +8179,30 @@ public:
         return out;
     }
 
+    // pecha v4 (r12a N3): when an expression's LAST syllable wraps
+    // alone onto a new line, its shad becomes the rin chen spungs
+    // shad ༑ (first shad of a pair only). prevChar = the character
+    // immediately before this line's text (a tsheg means the
+    // expression continued onto this line). Pure; recomputed per
+    // reflow by construction since lines re-render every layout.
+    static QString pechaLineTransform(QChar prevChar,
+                                      QString line) {
+        if (prevChar != QChar(0x0F0B) && prevChar != QChar(0x0F0C))
+            return line;
+        // the wrapped fragment must be a SINGLE tsheg-bar before
+        // its shad: no tsheg may occur before the first shad
+        int shadAt = -1;
+        for (int i = 0; i < line.size(); ++i) {
+            const QChar c = line[i];
+            if (c == QChar(0x0F0B) || c == QChar(0x0F0C)) return line;
+            if (c == QChar(0x0F0D)) { shadAt = i; break; }
+            if (c.isSpace()) return line;
+        }
+        if (shadAt < 1) return line;   // no shad, or line starts with it
+        line[shadAt] = QChar(0x0F11);  // ༑ — first shad only
+        return line;
+    }
+
     // display-layer break protection for the pecha exporter: the
     // two sequences Qt/ICU may otherwise break — never applied to
     // stored text, only to the rendered page
@@ -8168,6 +8218,11 @@ public:
         ngaBad += QChar(0x0F0B);
         ngaBad += QChar(0x0F0D);
         t.replace(ngaBad, ngaFix);
+        // sbrul shad ༈: an unbreakable block, spaced with NBSPs
+        // (r12a N5) — never line-initial by construction
+        const QString sbrul = QString(QChar(0x0F08));
+        const QString nb2 = QString(QChar(0x00A0)) + QChar(0x00A0);
+        t.replace(" " + sbrul + " ", nb2 + sbrul + nb2);
         return t;
     }
 
@@ -8547,8 +8602,59 @@ public:
                             QPointF(textR.left(),
                                     y + QFontMetricsF(f).ascent()),
                             yigMgo);
-                    line.draw(&p,
-                              QPointF(textR.left() + ind, y));
+                    // pecha v4: each line renders from its own
+                    // substring so classical conventions can act
+                    // per line (r12a via the W3C pass)
+                    {
+                        const int s0 = line.textStart();
+                        const int ln = line.textLength();
+                        QString lt = t.mid(s0, ln);
+                        if (tibMain && o.shadConv)
+                            lt = pechaLineTransform(
+                                s0 > 0 ? t[s0 - 1] : QChar(),
+                                lt);
+                        QTextLayout sl(lt, f);
+                        sl.beginLayout();
+                        QTextLine one = sl.createLine();
+                        one.setLineWidth(textR.width() * 2);
+                        one.setPosition(QPointF(0, 0));
+                        sl.endLayout();
+                        one.draw(&p,
+                                 QPointF(textR.left() + ind, y));
+                        // N1: traditional justification — a line
+                        // ending in tsheg pads with tshegs to the
+                        // margin (never the text's final line)
+                        if (tibMain && o.shadConv &&
+                            s0 + ln < t.size()) {
+                            QString lt2 = lt;
+                            while (!lt2.isEmpty() &&
+                                   (lt2.back().isSpace() ||
+                                    lt2.back() == QChar(0x00A0)))
+                                lt2.chop(1);
+                            if (!lt2.isEmpty() &&
+                                (lt2.back() == QChar(0x0F0B) ||
+                                 lt2.back() == QChar(0x0F0C))) {
+                                const QFontMetricsF fm(f);
+                                const double used =
+                                    one.naturalTextWidth();
+                                const double tAdv =
+                                    fm.horizontalAdvance(
+                                        QChar(0x0F0B));
+                                double rem = textR.width() - ind -
+                                             used;
+                                if (tAdv > 0.5 &&
+                                    rem > tAdv * 1.15) {
+                                    const int n = (int)(rem / tAdv);
+                                    p.drawText(
+                                        QPointF(textR.left() +
+                                                    ind + used,
+                                                y + fm.ascent()),
+                                        QString((int)n,
+                                                QChar(0x0F0B)));
+                                }
+                            }
+                        }
+                    }
                     sideFresh = false;
                     y += adv;
                     consumed =

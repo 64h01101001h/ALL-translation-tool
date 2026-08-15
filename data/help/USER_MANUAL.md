@@ -677,7 +677,13 @@ crash-free:
    rotated pages per A4 face with a dashed fold line and the
    duplex instruction (flip on the short edge) printed on the
    first sheet, short runs padded with blanks to a multiple of
-   four. Office layouts can open with a
+   four. Lines justify the **traditional way** (v4, from the
+   W3C/r12a layout rules): a line ending in a tsheg pads with
+   repeated tshegs to the margin, exactly as woodblocks do; and
+   when a lone final syllable wraps onto a new line, its shad is
+   set as the **rin chen spungs shad ༑** — the classical optical
+   signal, recomputed automatically on every reflow. The sbrul
+   shad ༈ travels in an unbreakable block. Office layouts can open with a
    **cover sheet** — a framed label page carrying the title,
    volume letter, folio count, and date — the handling page a
    print partner or a shelf needs.
