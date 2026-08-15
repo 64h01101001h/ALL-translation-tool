@@ -40,11 +40,93 @@ implementation is sidelined HERE from this date. What this means:
       swallowed shad, N5 ༈ three-NBSP unbreakable block. Source:
       docs/research/W3C_TIBETAN_LAYOUT_FULL.md.
 
-- [ ] **ATTACK BOARD (2026-08-14 full audit)** — docs/LOOSE_ENDS_AUDIT.md
-      is the consolidated four-lane audit of every loose end since day
-      one (TODO line-by-line + all docs + code + memory promises).
-      Work the A-queue top-down; B is Adam's one-sitting queue; C is
-      the external watch. Keep it current as items strike.
+- [ ] **ATTACK QUEUE** — merged 2026-08-14 from docs/LOOSE_ENDS_AUDIT.md
+      (the four-lane full-project audit: TODO line-by-line + all docs
+      + code + memory promises) back into this single file, so nothing
+      tracked in one place goes stale in the other. LOOSE_ENDS_AUDIT.md
+      is now a pointer back here. Work top-down; ranked by what's
+      solo-doable first.
+      1. Analysis item 14 suppressed (`core/src/analysis.cpp:166`):
+         the prompt still tells the model the library is NOT indexed —
+         but LibraryIndex shipped. Route item 14 through
+         `LibraryIndex::search()` hits; keep the refusal only as the
+         no-index fallback. *A capability we built and then hid.*
+      2. Trainer particle tables: zhing/shing and ces/zhes/shes rows
+         missing (TRAINER_DESIGN.md:43).
+      3. Banked-corpus mining lanes (data local, never mined until
+         2026-08-14): Goldstein glossary markings (banked, unmined) ·
+         Hackett verb classes (IN PROGRESS 2026-08-14 — vision-agent
+         transcription of the scanned lexicon underway, partial
+         results banked to data/hackett/) · Manual-of-Authentic-
+         Tibetan modern-colloquial mode (banked, unmined).
+      4. Small strikes: ~~Whitney last-four fields~~ DONE 2026-08-14
+         (dcs_freq/rank + Warnemyr conjugation-tables link, path
+         verified live; Apte id labeled, no unverified URL) ·
+         ~~Trainer honorific vocab tag~~ DONE 2026-08-14 (gold
+         register tag w/ ordinary form in the vocabulary reveal) ·
+         Input-pane partner auto-pairing + UTFC lane hookup ·
+         Spotlight async · QTextCursor selftest warning · empty-input
+         loadDoc guidance · nesting-tones shading swap · per-text
+         apparatus books (16) · OCR async + extra script models ·
+         KX/TS scan lane · pecha margin presets · outline/verse
+         wylie-parity probe · Botok overlap audit · citation
+         side-pane streamline.
+      5. Wow-list leftovers (ideas Adam liked, never built):
+         pronunciation trainer (whisper ready) · Text DNA strips ·
+         team board · apprenticeship mode · English-on-the-carving
+         hover · teaching-playlist karaoke · ⌘K persons/notes lanes.
+      6. ~~Approved-register regeneration~~ DONE 2026-08-14 (press
+         #85): allcore regenerateApprovedRegisters + regenreg_smoke
+         (suite 42) + Approval-tab "Regenerate registers" button —
+         idempotent strip-and-refold from the rulings store instead
+         of live-appending; also fixed the dead-ended abbreviation
+         approval path (malformed append, never loaded).
+
+      **Adam's one-sitting queue** (his items, consolidated — his to
+      act on, not solo-doable):
+      **Sends (drafts finished in Gmail):** Jamie Plant (#1 —
+      irreplaceable recordings; confirm address) · 84000 license +
+      partnership · THL (16 dictionaries + Solr + kmaps) · rKTs/Lainé ·
+      Lotsawa House · Vimala · PKTC · Jigme (needs his Dropbox link) ·
+      Joel zoom · Élie reply · Steinert thanks (Jäschke ask) · GMR
+      transcription appeal + GMR trust dialog (both need GMR's
+      address) · fundraising.
+      **Approvals/money:** git filter-repo (~20GB; disk at 3.4GB free
+      — operational risk) · API credits (glossary stalled at 1,395) ·
+      ElevenLabs pilot <$20 · MITRA 18GB download · API key rotation
+      (pasted in chat twice).
+      **Rulings:** catalog-titles tier · prenasal queue (220 rows,
+      Approval pane, bulk-approve ready) · Sungbum workbook (963
+      yellow cells) · Sanskrit render-sheet eyeball rows · unlisted-
+      recordings archive go · GitHub private remote say-so ·
+      TibetanDictionary.dic licensing option.
+      **Sessions:** K/F testing-campaign walkthrough · clean-Mac
+      install (the release gate's most important step) · dark-mode
+      screenshots · GMR: LE'UR class + trust hierarchy + STD-008/9 +
+      what to ADD.
+      **Uploads:** input-center standards + samples (announced
+      08-06) · Master Catalog · intact Release IV manual/Briefcat ·
+      honorific books · reference pecha prints · Das SCD re-download
+      · Xcode vision projects · Fall-2022/Winter-2021 link sheets.
+
+      **External watch (dated triggers):** tibetanebook.com +
+      dharmaebooks.org — Buddhist e-text sources, license check
+      before any use; TiCode pre-Unicode spec PDF pointer (legacy
+      lane reference). BDRC OCR release (~end Aug) → model refresh +
+      deskew-bug report upstream · Lainé reply → abbreviations layer
+      + Wilson register growth · THL reply → kmaps/Solr integration +
+      dictionary licenses · 84000 reply → TM ingest · PKTC → Das
+      etext/Chodrak lane · CIHTS → Negi · DILA site return →
+      Mahavyutpatti TEI refresh · web team → collections manifest
+      JSON · ALL Developer ID → signed builds · input-center server →
+      remote-lane shakedown · data project → Sanskrit
+      V/visarga/candrabindu/A'A fixes (177k+ occ), pyewts 13
+      regenerations, LC pair-script banking, attestation recount.
+
+      **Policy fences (not open work — do not resurrect):** cataloging
+      sidelined (own future project, see SCOPE DECISION above) ·
+      NEVER lane (unlicensed dictionaries) · Monlam definitions
+      closed · red-flag list ships nothing unresolved.
 - [ ] **SOURCE TRUST DIALOG WITH GESHE MICHAEL** (Adam, 2026-08-14,
       all-caps priority: "which sources to trust over others and
       why"). PREPARED: docs/standards/SOURCE_TRUST_HIERARCHY.md —
@@ -280,7 +362,10 @@ implementation is sidelined HERE from this date. What this means:
 - [ ] Anusvara keying sweep (data-side): mantra syllables keyed
       with uppercase M (OM, H'UM) render final ma (ཨོམ) not ཾ
       (ཨོཾ); a corpus sweep for uppercase-M mantra syllables would
-      list review candidates.
+      list review candidates. SWEEP RUN 2026-08-14:
+      data/extracted/anusvara_review_candidates.tsv — 2,172 flagged
+      (H'UM 1,512 · LAM 346 · BAM 76 · …, mantra-context filtered).
+      Handed to the data project; item stays open until ingested.
 
 - [x] Review the 13 pyewts source-defect candidates — DONE
       2026-08-13 (docs/research/PYEWTS_DEFECT_REVIEW.md): ALL 13
@@ -461,7 +546,7 @@ implementation is sidelined HERE from this date. What this means:
       only eyeball spot-checks as texts get used.
 - [ ] **py-tiblegenc** (Apache-2.0) — legacy-font→Unicode rescue for
       input-center documents; external tool first, port maps later.
-- [~] **lucene-bo** — Adam approved full inclusion 2026-08-07
+- [x] **lucene-bo** — Adam approved full inclusion 2026-08-07
       ("Lucene is good to include"). Affix rules ENGINE + LOOKUP
       SHIPPED 2026-08-07 (below); INTEGRATED 2026-08-07 per
       Adam ("integrate what we need to integrate"): allcore searchnorm
@@ -654,8 +739,10 @@ implementation is sidelined HERE from this date. What this means:
       prayer-register corpus for register warnings.
 - [~] Link-out-only tier — Bibliotheca Polyglotta + Lotsawa House
       SHIPPED 2026-08-07 (with 84000 + BDRC etexts, above). Adarsha
-      OMITTED: its new site (adarshah.org) broke the old search URL
-      formats — recheck later. THL kmaps lookup BLOCKED upstream
+      RESTORED 2026-08-14: the rebuilt site (adarshah.org) reads
+      online.adarshah.org/search.html?text=<Tibetan unicode> and
+      auto-runs the query — verified live in-browser, link-out
+      wired back in (selftest-pinned). THL kmaps lookup BLOCKED upstream
       (probed 2026-08-07: search endpoints 500, searchterm ignored,
       SOLR index host NXDOMAIN). Remaining: WTS Munich, Dharmamitra
       (optional labeled AI aid at most), RY/Waldo/Valby (permission
@@ -823,8 +910,16 @@ implementation is sidelined HERE from this date. What this means:
       download URL structure (and ideally a small manifest/JSON the
       website team could publish — one static file would make this
       robust forever; raise with the web team).
-- [ ] Same mechanism later for data releases (spine) alongside the
-      team-folder Check-for-Updates that exists for the app itself.
+- [x] Same mechanism later for data releases (spine) alongside the
+      team-folder Check-for-Updates that exists for the app itself —
+      SHIPPED 2026-08-14: build_spine.py parameterized (--release-dir
+      newest-version discovery, no-arg behavior unchanged); Library →
+      Maintenance → "Import data release…" (validate, copy, run the
+      canonical builder via QProcess, spine_current.txt pointer,
+      fail-safe — nothing switches if the build fails);
+      resolveSpinePath honors the pointer with traversal refused
+      (selftest-pinned); the press ships the builder so an installed
+      app can self-update.
 
 ## PECHA MAKER + TibetDoc workflows (Adam, 2026-08-12)
 

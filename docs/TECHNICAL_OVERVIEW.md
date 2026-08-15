@@ -4,8 +4,9 @@
 **2026-08-14, v0.12.0** (39 test batteries, 159 in-app selftest
 checks, corpus v32, 503 commits). Companion documents:
 `README.md` (user-facing pane guide),
-`ALL_TRANSLATION_TOOL_ROADMAP.md` (master plan), `TODO.md` (live
-ledger), `docs/LOOSE_ENDS_AUDIT.md` (the attack board),
+`ALL_TRANSLATION_TOOL_ROADMAP.md` (master plan), `TODO.md` (the
+single live ledger — includes the merged attack queue as of
+2026-08-14; `docs/LOOSE_ENDS_AUDIT.md` is now a historical pointer),
 `docs/whitepaper/` (the non-technical story), and the design docs
 referenced per subsystem below. The user-side counterpart is
 `data/help/USER_MANUAL.md`, which ships inside the app's Help.*
@@ -526,12 +527,14 @@ question); Old-Tibetan affix rules deliberately unported until
 Old-Tibetan material enters the library; letter-level
 contraction fusions (sher phyin class) are a research item; the
 Files pane's share sheet / 7z / tag-writing are logged
-deferrals. The complete ledger: `docs/LOOSE_ENDS_AUDIT.md`.
+deferrals. The complete ledger: `TODO.md`'s ATTACK QUEUE section.
 
 ## 21. Where knowledge lives
 
-- `TODO.md` — the live ledger (attack-board pointer at top).
-- `docs/LOOSE_ENDS_AUDIT.md` — the four-lane audit board.
+- `TODO.md` — the single live ledger (the four-lane audit's
+  findings were merged into its ATTACK QUEUE section 2026-08-14).
+- `docs/LOOSE_ENDS_AUDIT.md` — historical record of that audit
+  only; no longer a second tracked list.
 - `docs/design/` — per-feature designs (file browser, scan sync,
   BUDA viewer, DigitalTibetan integration…).
 - `docs/research/` — evidence documents (Sanskrit-in-Tibetan
