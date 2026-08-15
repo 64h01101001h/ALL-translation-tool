@@ -73,6 +73,25 @@
   td:last-child { text-align:right; font-variant-numeric:tabular-nums;
        color:var(--ink); white-space:nowrap; }
   tr:last-child td { border-bottom:none; font-weight:600; color:var(--green); }
+  .sponsor { background:var(--card); border:1px solid var(--hairline);
+    border-radius:8px; padding:20px 20px 22px; margin:6px 0 16px;
+    box-shadow:0 2px 10px var(--shadow); }
+  .amt { font-size:40px; font-weight:600; color:var(--green);
+    font-variant-numeric:tabular-nums; letter-spacing:-0.02em; line-height:1; }
+  .amt small { font-size:15px; color:var(--grey); font-weight:400; }
+  .hours { margin:6px 0 14px; color:var(--ink-soft); font-size:15.5px; }
+  .hours b { color:var(--green); font-variant-numeric:tabular-nums; }
+  input[type=range] { width:100%; appearance:none; height:8px;
+    border-radius:4px; outline:none;
+    background:linear-gradient(90deg,var(--green) var(--pct,10%),
+               var(--chipbg) var(--pct,10%)); }
+  input[type=range]::-webkit-slider-thumb { appearance:none; width:26px;
+    height:26px; border-radius:50%; background:var(--green);
+    border:2.5px solid var(--card); cursor:pointer;
+    box-shadow:0 1px 6px var(--shadow); }
+  .milestone { min-height:22px; margin-top:10px; font-size:14px;
+    color:var(--gold); font-style:italic; }
+  .milestone b { color:var(--ink); }
   .foot { margin-top:44px; padding-top:16px; border-top:1px solid var(--hairline);
     font-size:13px; color:var(--grey); }
   .foot a { color:var(--green); }
@@ -118,6 +137,14 @@ Transcripts, once made, preserve the teaching itself — in his own
 words, never paraphrased.</blockquote>
 
 <div class="zone">Ways to Give</div>
+<div class="sponsor">
+  <div class="amt">$<span id="amt">108</span> <small>your gift</small></div>
+  <div class="hours">preserves <b><span id="hrs">112</span> hours</b> of
+  teaching, transcribed and archived</div>
+  <input type="range" id="slider" min="10" max="2500" step="1" value="108"
+    aria-label="Choose donation amount">
+  <div class="milestone" id="milestone"></div>
+</div>
 <div class="give">
   <a class="btn" href="https://asianlegacylibrary.org/donate">Donate through the Asian Legacy Library</a>
   <div class="note">Tax-deductible (501(c)(3)). Please write
@@ -160,3 +187,31 @@ donors when the run completes.</p>
   Roach's English.
 </div>
 </div>
+
+<script>
+(function(){
+  var slider = document.getElementById('slider'),
+      amt = document.getElementById('amt'),
+      hrs = document.getElementById('hrs'),
+      mile = document.getElementById('milestone');
+  if (!slider) return;
+  var miles = [
+    [2500, "The <b>entire archive</b> — every hour, preserved in your name."],
+    [1000, "A <b>thousand hours</b> — decades of courses secured at once."],
+    [500,  "<b>Five hundred hours</b> — an entire teaching era, saved."],
+    [250,  "A <b>whole retreat</b> — every word of it, kept."],
+    [108,  "<b>108 hours</b> — the auspicious number, a mala of teachings."],
+    [54,   "A <b>full course</b>, transcribed end to end."],
+    [25,   "A <b>complete class</b> — one evening of wisdom, made permanent."],
+    [10,   "Ten hours of teaching — <b>a real difference</b>."]];
+  function upd(){
+    var v = +slider.value;
+    amt.textContent = v.toLocaleString();
+    hrs.textContent = Math.round(v * 1.04).toLocaleString();
+    slider.style.setProperty('--pct', ((v - 10) / 2490 * 100) + '%');
+    for (var i = 0; i < miles.length; i++)
+      if (v >= miles[i][0]) { mile.innerHTML = miles[i][1]; break; }
+  }
+  slider.addEventListener('input', upd); upd();
+})();
+</script>
