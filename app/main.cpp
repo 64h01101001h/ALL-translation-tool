@@ -1902,6 +1902,10 @@ static std::function<std::vector<int>(const std::string&)>
 // text↔woodblock jump (Adam's priority, 2026-08-13): the Overlay
 // hands a LOCAL folio image to the Input workflow
 static std::function<void(const QString&)> g_openScanInInput;
+// UTFC/tiblegenc lane hookup (small strike, 2026-08-15): a rescued
+// legacy document can flow straight into the Input pane's editor
+// for the keying/correction workflow
+static std::function<void(const QString&)> g_openTextInInput;
 // Sungbum links routed to a DIFFERENT scanned edition (honest tag)
 static const QSet<QString>* g_sungbumOtherEdition = nullptr;
 // every folder picker goes through this wrapper: in sweep mode it
@@ -17458,6 +17462,11 @@ public:
                 if (open_) open_(p);
             } else if (s.startsWith("survey:")) {
                 if (g_surveyFile) g_surveyFile(anchorPayload(s, 7));
+            } else if (s.startsWith("inputrescue:")) {
+                // UTFC/tiblegenc lane hookup: rescued text flows
+                // into the Input pane for the correction workflow
+                if (g_openTextInInput)
+                    g_openTextInInput(anchorPayload(s, 12));
             } else if (s.startsWith("http")) {
                 QDesktopServices::openUrl(u);
             }
@@ -17995,14 +18004,27 @@ private:
             f.write(out.toUtf8());
             f.close();
         }
-        QMessageBox::information(
-            this, "py-tiblegenc",
-            QString("Rescued to %1.\n\nEngine report: %2\n\n"
-                    "Review before trusting — legacy rescues "
-                    "are per-glyph mappings, and the stats line "
-                    "names anything unhandled.")
-                .arg(QFileInfo(fn).fileName(),
-                     err.isEmpty() ? "(none)" : err.left(300)));
+        if (g_openTextInInput &&
+            QMessageBox::question(
+                this, "py-tiblegenc",
+                QString("Rescued to %1.\n\nEngine report: %2\n\n"
+                        "Review before trusting — legacy rescues "
+                        "are per-glyph mappings, and the stats "
+                        "line names anything unhandled.\n\nOpen "
+                        "the rescued text in the Input pane for "
+                        "correction?")
+                    .arg(QFileInfo(fn).fileName(),
+                         err.isEmpty() ? "(none)" : err.left(300)),
+                QMessageBox::Yes | QMessageBox::No,
+                QMessageBox::Yes) == QMessageBox::Yes)
+            g_openTextInInput(fn);
+        else if (!g_openTextInInput)
+            QMessageBox::information(
+                this, "py-tiblegenc",
+                QString("Rescued to %1.\n\nEngine report: %2")
+                    .arg(QFileInfo(fn).fileName(),
+                         err.isEmpty() ? "(none)"
+                                       : err.left(300)));
     }
 
     void convertLegacy() {
@@ -18112,7 +18134,9 @@ private:
             "machine-converted from a legacy font encoding; review "
             "before treating as canonical. Wrong-encoding guesses "
             "produce garbage, not silent errors — if it looks wrong, "
-            "re-run with another source encoding.</div>" +
+            "re-run with another source encoding.</div>"
+            "<div><a href='inputrescue:" + anchorEnc(target) +
+            "'>Open in the Input pane for correction</a></div>" +
             (text.contains(QChar(0x0F0B))
                  ? QString()
                  : "<div style='color:#B00020'><b>warning:</b> no "
@@ -19968,6 +19992,26 @@ public:
         connect(editor_, &QPlainTextEdit::textChanged,
                 [this] { spellcheck(); predict(); });
         if (predictToggle_->isChecked()) buildPredict();
+        // legacy-rescue hookup: rescued Unicode text opens here for
+        // correction (raised via the pane hook so the tab switches)
+        g_openTextInInput = [this](const QString& path) {
+            QFile f(path);
+            if (!f.open(QIODevice::ReadOnly)) return;
+            QString text = QString::fromUtf8(f.readAll());
+            if (!editor_->toPlainText().trimmed().isEmpty() &&
+                QMessageBox::question(
+                    this, "Open rescued text",
+                    "The Input editor already has typing — replace "
+                    "it with the rescued document?") !=
+                    QMessageBox::Yes)
+                return;
+            editor_->setPlainText(text);
+            status_->setText(
+                QString("rescued document loaded: %1 — review the "
+                        "conversion, then Save\u2026")
+                    .arg(QFileInfo(path).fileName()));
+            if (g_raisePane) g_raisePane(this);
+        };
     }
 
     void buildPredict() {
