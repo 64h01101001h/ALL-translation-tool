@@ -94,7 +94,11 @@ implementation is sidelined HERE from this date. What this means:
       **Approvals/money:** git filter-repo (~20GB; disk at 3.4GB free
       — operational risk) · API credits (glossary stalled at 1,395) ·
       ElevenLabs pilot <$20 · MITRA 18GB download · API key rotation
-      (pasted in chat twice).
+      (pasted in chat twice) · **get an Apple Developer ID** (Adam,
+      2026-08-14 — his action item; unlocks notarized builds so the
+      team stops right-click-Opening past Gatekeeper; $99/yr,
+      developer.apple.com/programs — enroll as ALL the organization
+      if possible, else personal).
       **Rulings:** catalog-titles tier · prenasal queue (220 rows,
       Approval pane, bulk-approve ready) · Sungbum workbook (963
       yellow cells) · Sanskrit render-sheet eyeball rows · unlisted-
