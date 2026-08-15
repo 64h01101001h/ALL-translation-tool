@@ -217,6 +217,25 @@ implementation is sidelined HERE from this date. What this means:
       item below** — BDRC's seat/affiliation edges are exactly what
       ties a person to a house, so harvesting relations and places
       in one pass gives both layers at once.
+      **Enrich with Treasury of Lives (Adam, 2026-08-15)** — ToL
+      carries relational detail BDRC often lacks (who taught whom,
+      incarnation lines, which house someone headed and when). What
+      the earlier survey already established, and what it means
+      here: ToL **metadata is CC0** and reusable, but the biography
+      **essays are non-commercial — link out, never copy**; and
+      ToL's API is **Cloudflare-gated against scripts** (a browser
+      loads it fine, a harvester does not). So the practical route
+      is the one already proven for identity: **BDRC carries
+      `owl:sameAs` pointers to ToL resource ids**, so a single BDRC
+      harvest yields the ToL identifier for free and its CC0
+      metadata can be joined without fighting the gate. Where BDRC
+      and ToL disagree on a date or a relation, keep BOTH and flag
+      (their editorial judgments genuinely differ); where only ToL
+      asserts an edge, label it ToL-sourced so provenance shows on
+      the card. If we ever want the essays' depth rather than the
+      metadata, that is an EMAIL to Treasury of Lives, not a
+      scrape — add it to the sends queue if this layer is
+      prioritized.
 
       **MONASTERIES LAYER (Adam, 2026-08-15)** — bring a total
       study of the monasteries into the app: which house held which
