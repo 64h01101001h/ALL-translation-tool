@@ -48,8 +48,13 @@ defect, not ours) · version bumped 0.12.0.
    allcore regenerateApprovedRegisters + regenreg_smoke (suite 42) +
    Approval-tab button; also fixed the dead-ended abbreviation
    approval path (malformed append, never loaded).
-8. **Spine/data-release updater**: mirror the collection-updates
-   dialog for release packages (TODO L790).
+8. ~~Spine/data-release updater~~ DONE 2026-08-14 (press #86):
+   build_spine.py parameterized (--release-dir newest-version
+   discovery, unchanged no-arg behavior, SPINE_DB= sentinel);
+   Maintenance → "Import data release…" (validate, copy, canonical
+   builder via QProcess, spine_current.txt pointer, fail-safe);
+   resolveSpinePath honors the pointer w/ traversal refusal
+   (selftest-pinned); press ships the builder + pointer.
 9. **Banked-corpus mining lanes** (data local, never mined):
    Goldstein glossary markings · Hackett verb classes ·
    Manual-of-Authentic-Tibetan modern-colloquial mode.

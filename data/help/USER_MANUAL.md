@@ -744,6 +744,18 @@ the collection unpacks exactly as a manual install would. Your
 own materials and working folders are never touched; run "Update
 search index" afterward.
 
+**Importing a new data release.** When the HGM data project
+publishes a new release package (a folder holding
+`hgm_dictionary_v*.json.gz`, and optionally a new parallel corpus
+and reverse index), Library → **Maintenance… → Import data
+release…** and choose the folder. The tool shows what it found —
+the newest version of each file wins — copies the files into the
+data area, rebuilds the spine database with the canonical builder,
+and switches to the new spine on the next launch. Nothing is
+switched if the build fails; the app keeps running on the current
+spine throughout. After restarting, use Approval → **Regenerate
+registers** to re-fold the approved layer onto the fresh release.
+
 
 *Where: Read → Library. The preserved canon on your own disk —
 8,986 texts and 14.1 million lines of the current public
