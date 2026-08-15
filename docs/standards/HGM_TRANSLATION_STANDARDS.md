@@ -218,6 +218,17 @@ formatter; ⟨…⟩ failure marks; provisional labeling throughout.
 > Regenerate the banks + MAIN documents whenever a new volume is
 > released.
 
+## Pending sources (recorded, not yet mined)
+
+- **Diamond Way Translator Course, 2026-08-15** — GMR gives
+  translation points on the record, explicitly including
+  **removing semicolons** and **adding spaces**. Awaiting the
+  recording/transcript from Adam. On arrival: transcribe the
+  rulings verbatim, number them as STD- entries with the session
+  as citation, and implement the punctuation rules as Draft-pane
+  style-check lints (never silently auto-apply -- flag, per the
+  house rule that the translator decides).
+
 ## Gathering plan (Adam)
 - [ ] Ask Geshe Michael directly for standing translation principles
       (recordings or writing).

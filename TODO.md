@@ -194,6 +194,17 @@ implementation is sidelined HERE from this date. What this means:
       MP3-archive path for the whisper pilot · fundraiser
       pre-presentation steps (Share the artifact, verify donate
       URL, pick version; next week domain + Cloudflare + Zeffy).
+      **Recordings to obtain & mine:** **Diamond Way Translator
+      Course, 2026-08-15** — GMR gives explicit translation/
+      formatting rulings in this session, including *removing
+      semicolons* and *adding spaces*. Get the recording +
+      transcript, mine the rulings into
+      docs/standards/HGM_TRANSLATION_STANDARDS.md as new STD-
+      entries, then wire the punctuation ones into the Draft
+      pane's house STYLE CHECK (it already lints DCC rules, so
+      these become new lint rules) and the Input-pane formatter.
+      Adam's action: supply the recording/transcript.
+
       **Uploads:** input-center standards + samples (announced
       08-06) · Master Catalog · intact Release IV manual/Briefcat ·
       honorific books · reference pecha prints · Das SCD
