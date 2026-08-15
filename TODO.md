@@ -66,9 +66,13 @@ implementation is sidelined HERE from this date. What this means:
          Goldstein 254 "(h.)" glossary markings (vision pass — the
          text layer garbles Tibetan, grep-mining would be guessing);
          then extend spotVerb with the 31 Wilson-class causative pairs.
-      3. THL Degé deep-links wired through the VERIFIED concordance
-         (KL files first need a title-matched Lhasa concordance) —
-         recovered by the audit: was tracked nowhere.
+      3. ~~THL Degé deep-link wiring~~ AUDIT CORRECTION 2026-08-14:
+         already shipped with task #25 (setScanTarget routes through
+         the verified 919-entry concordance, collisions dropped).
+         Lhasa half CLOSED same day: kl_lhasa_concordance.json
+         (258 title-matched, already built) wired into setScanTarget
+         — KL files now carry "THL Lhasa catalog: H.N" links
+         (cat=h token live-verified; selftest-pinned).
       4. Gofer pane: engine-level fold semantics (space/
          capitalization — combo is currently display-only) + async
          search so the Stop button becomes real — recovered by the

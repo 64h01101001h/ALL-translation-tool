@@ -2945,6 +2945,15 @@ public:
                       "release import: newest-version discovery; "
                       "spine pointer honored, traversal refused");
             }
+            {   // THL Lhasa concordance wired: KL 1 -> H 1 and
+                // KL 7 -> H 8 per the title-matched table; an
+                // unmatched KL number carries no link
+                const auto& m = klToH();
+                check(m.value(1) == 1 && m.value(7) == 8 &&
+                          !m.contains(99999),
+                      "KL files link to the THL Lhasa catalog "
+                      "through the verified concordance");
+            }
             {   // pecha v4 N2: double-shad line-end detection —
                 // pair with gap = index of final shad; single shad
                 // and tsheg ends refuse
@@ -5531,6 +5540,29 @@ private:
         return m;
     }
 
+    // KL -> THL Lhasa (H) number, from the title-matched concordance
+    // (258 verified; ambiguous/unmatched carry no link, never guessed)
+    const QMap<int, int>& klToH() {
+        static QMap<int, int> m;
+        static bool tried = false;
+        if (!tried) {
+            tried = true;
+            QFile f(dataRoot_ +
+                    "/data/extracted/kl_lhasa_concordance.json");
+            if (f.open(QIODevice::ReadOnly)) {
+                const auto o =
+                    QJsonDocument::fromJson(f.readAll()).object();
+                const auto k2h = o["kl_to_h"].toObject();
+                for (auto it = k2h.begin(); it != k2h.end(); ++it) {
+                    const int kl = it.key().toInt();
+                    const int h = int(it.value().toDouble());
+                    if (kl && h) m[kl] = h;
+                }
+            }
+        }
+        return m;
+    }
+
     void setScanTarget(const allcore::AcipFileInfo& info,
                        const QString& fileName = QString()) {
         ++fetchEpoch_;   // invalidates any in-flight scan fetches
@@ -5578,6 +5610,28 @@ private:
                                 "concordance)</span>")
                             .arg(d)
                             .arg(toh));
+                    thlCatLink_->show();
+                }
+            }
+            // the Lhasa edition gets the same treatment through its
+            // own title-matched concordance (KL -> H)
+            if (info.recognized &&
+                info.collection == "Kangyur (Lhasa edition)") {
+                const int kl =
+                    QString::fromStdString(info.number).toInt();
+                const auto& m = klToH();
+                if (m.contains(kl)) {
+                    const int h = m.value(kl);
+                    thlCatLink_->setText(
+                        QString("<a href=\"https://old.thlib.org/"
+                                "encyclopedias/literary/canons/kt/"
+                                "catalog.php#cat=h/%1\">THL Lhasa "
+                                "catalog: H.%1</a> <span "
+                                "style='color:#777;font-size:11px'>"
+                                "(KL %2 · verified title "
+                                "concordance)</span>")
+                            .arg(h)
+                            .arg(kl));
                     thlCatLink_->show();
                 }
             }
