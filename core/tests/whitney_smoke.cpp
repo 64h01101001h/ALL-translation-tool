@@ -104,6 +104,15 @@ int main(int argc, char** argv) {
               hur[0]->meaning.find("see √hvṛ") != std::string::npos,
           "cross-reference roots kept (hur: see √hvṛ)");
 
+    {   // the last-four fields (banked 2026-08-14): aj is DCS-
+        // attested with rank, has a Warnemyr page and an Apte id
+        auto aj = w.byRoot("aj");
+        CHECK(!aj.empty() && aj[0]->dcsFreq == "55" &&
+                  aj[0]->dcsRank == "1741" &&
+                  aj[0]->warnemyr == "root_aj.html" &&
+                  aj[0]->apteId == "351",
+              "dcs_freq/rank, warnemyr, apte_id load");
+    }
     std::printf("whitney_smoke: %s (%d failures)\n",
                 failures ? "FAIL" : "ALL PASS", failures);
     return failures ? 1 : 0;

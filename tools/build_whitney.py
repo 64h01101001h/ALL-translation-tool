@@ -111,7 +111,8 @@ def main() -> int:
                   "for provenance and caveats\n")
         out.write("# id\troot\thomonym\tmeaning\tclasses\t"
                   "class_uncertain\tppp\tgrammar_secs\tdcs_classes\t"
-                  "mw_id\tsenses\tnotes\tslp1\tsection_refs\n")
+                  "mw_id\tsenses\tnotes\tslp1\tsection_refs\t"
+                  "dcs_freq\tdcs_rank\twarnemyr\tapte_id\n")
         for i in sorted(master):
             m = master[i]
             c = cites.get(i, {})
@@ -126,7 +127,11 @@ def main() -> int:
                    c.get("dcs", ""), hb.get("mw_id", ""),
                    hb.get("senses", ""), c.get("notes", ""),
                    hb.get("root_slp1", ""),
-                   hb.get("section_refs", "")]
+                   hb.get("section_refs", ""),
+                   hb.get("dcs_freq", "").strip(),
+                   hb.get("dcs_rank", "").strip(),
+                   hb.get("warnemyr_url", "").strip(),
+                   hb.get("apte_id", "").strip()]
             out.write("\t".join(x.replace("\t", " ") for x in row) + "\n")
 
     print(f"{len(master)} roots -> {OUT}")

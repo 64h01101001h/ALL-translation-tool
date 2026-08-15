@@ -1343,6 +1343,34 @@ static QString lookupResultsHtml(allcore::Spine& spine,
                                  .left(140)
                                  .toHtmlEscaped() +
                              "</small>";
+                    // DCS corpus attestation (the last-four
+                    // fields, banked 2026-08-14): count + rank as
+                    // plain facts; Warnemyr conjugation tables
+                    // link-out (path verified live 2026-08-14);
+                    // Apte id shown labeled — no unverified URL
+                    if (!r->dcsFreq.empty() && r->dcsFreq != "0")
+                        h += " · <small style='color:#777'>DCS " +
+                             QString::fromStdString(r->dcsFreq)
+                                 .toHtmlEscaped() +
+                             "×" +
+                             (r->dcsRank.empty()
+                                  ? QString()
+                                  : ", rank " +
+                                        QString::fromStdString(
+                                            r->dcsRank)
+                                            .toHtmlEscaped()) +
+                             "</small>";
+                    if (!r->warnemyr.empty())
+                        h += " <small><a href='http://www.warnemyr"
+                             ".com/skrgram/grammar/roots/" +
+                             QString::fromStdString(r->warnemyr)
+                                 .toHtmlEscaped() +
+                             "'>conjugation tables →</a></small>";
+                    if (!r->apteId.empty())
+                        h += " <small style='color:#999'>· Apte id " +
+                             QString::fromStdString(r->apteId)
+                                 .toHtmlEscaped() +
+                             "</small>";
                     // link-out: Cologne MW display, SLP1-keyed
                     // (URL format verified live 2026-08-08)
                     if (!r->mwId.empty() && !r->slp1.empty())

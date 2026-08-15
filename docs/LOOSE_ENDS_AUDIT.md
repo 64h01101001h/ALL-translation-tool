@@ -63,8 +63,9 @@ defect, not ours) · version bumped 0.12.0.
     auto-runs the query (verified live in-browser, results rendered);
     link-out restored with unicode from the proven converter
     (selftest-pinned).
-11. **Small strikes**: Whitney last-four fields (dcs_freq/rank,
-    warnemyr, apte_id) · Trainer honorific vocab tag · Input-pane
+11. **Small strikes**: ~~Whitney last-four fields~~ DONE
+    2026-08-14 (dcs_freq/rank + Warnemyr conjugation-tables link,
+    path verified live; Apte id labeled, no unverified URL) · Trainer honorific vocab tag · Input-pane
     partner auto-pairing + UTFC lane hookup · Spotlight async ·
     QTextCursor selftest warning · empty-input loadDoc guidance ·
     nesting-tones shading swap · per-text apparatus books (16) ·

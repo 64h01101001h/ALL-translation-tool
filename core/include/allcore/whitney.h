@@ -36,6 +36,11 @@ struct WhitneyRoot {
     std::string slp1;           // SLP1 form (Cologne deep-link key)
     std::string sectionRefs;    // topical Grammar ranges
                                 // (perfect:781-823|aor_is:898-911|…)
+    std::string dcsFreq;        // DCS corpus attestation count
+    std::string dcsRank;        // DCS frequency rank (may be empty)
+    std::string warnemyr;       // page file on warnemyr.com (skrgram/
+                                // grammar/roots/) — conjugation tables
+    std::string apteId;         // Apte digitization crosswalk id
 };
 
 class WhitneyRoots {

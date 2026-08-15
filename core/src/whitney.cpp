@@ -75,6 +75,10 @@ bool WhitneyRoots::load(const std::string& tsvPath) {
         if (cols.size() > 11) r.notes = cols[11];
         if (cols.size() > 12) r.slp1 = cols[12];
         if (cols.size() > 13) r.sectionRefs = cols[13];
+        if (cols.size() > 14) r.dcsFreq = cols[14];
+        if (cols.size() > 15) r.dcsRank = cols[15];
+        if (cols.size() > 16) r.warnemyr = cols[16];
+        if (cols.size() > 17) r.apteId = cols[17];
         const int ix = static_cast<int>(entries_.size());
         byFolded_[foldIast(r.root)].push_back(ix);
         if (!r.ppp.empty()) byPpp_[foldIast(r.ppp)].push_back(ix);
