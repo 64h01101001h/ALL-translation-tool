@@ -360,14 +360,14 @@ catalog, and preserving it first is built into this budget.</p>
     wx.strokeStyle = 'rgba(224,106,87,0.85)';
     wx.lineWidth = 2 * devicePixelRatio; wx.stroke();
     // words condensing (right)
-    if (!reduced && Math.random() < 0.045 && drops.length < 15) {
+    if (!reduced && Math.random() < 0.030 && drops.length < 15) {
       drops.push({ w: words[Math.floor(Math.random()*words.length)],
         x: third + Math.random() * (Ww - third - 90*devicePixelRatio),
         y: mid + (Math.random() - 0.5) * Hh * 0.55,
         b: 0, f: (11 + Math.random()*7) * devicePixelRatio });
     }
     for (var i = drops.length - 1; i >= 0; i--) {
-      var d = drops[i]; d.b += 0.015;
+      var d = drops[i]; d.b += 0.0075;
       var a = d.b < 0.5 ? d.b * 2 : (1 - d.b) * 2;
       wx.globalAlpha = Math.max(0, a);
       wx.fillStyle = '#E9C871';
