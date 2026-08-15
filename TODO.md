@@ -138,8 +138,16 @@ implementation is sidelined HERE from this date. What this means:
          instead of blanking) · BONUS FIX: harness runs
          (--selftest/--sweep/--screenshots) no longer read or
          clobber the translator's real saved session (g_harnessRun
-         guard; the session pin lifts it locally) · per-text
-         apparatus books (16) · KX/TS scan lane (SPARQL fallback) ·
+         guard; the session pin lifts it locally) · ~~apparatus expansion~~ DONE
+         2026-08-15 — the real find was not the 16 book .txts but the
+         OLDER compiled footnote collections (2018-05 + 2019-02
+         docx, never ingested): tools/extract_older_apparatus.py
+         (title-run heuristic, verse-marker rejection, roman-marker
+         glue-splitting, dedupe vs main bank) → 1,569 notes from 5
+         published books + one honestly-untitled 2018 opening
+         section; bank 344 → 1,913; Draft pane loads both banks.
+         The 16 Handoff/book_texts .txts remain a possible later
+         per-book pass; the older BIBLIOGRAPHY compilations too · KX/TS scan lane (SPARQL fallback) ·
          outline/verse wylie-parity probe · Botok-vs-SegTrie overlap
          audit · citation side-pane streamline · sweep-harness
          line-edit coverage for typed-input panes ·

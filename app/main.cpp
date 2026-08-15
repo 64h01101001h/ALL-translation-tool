@@ -14755,8 +14755,15 @@ private:
     void loadNotesBank() {
         if (notesLoaded_) return;
         notesLoaded_ = true;
-        QFile f(dataFile("extracted/mixed_nuts_notes.json"));
-        if (f.open(QIODevice::ReadOnly)) {
+        // both banks: the recent GMR volumes + the OLDER compiled
+        // collections (2018-2019, mined 2026-08-15 — 1,569 notes
+        // from 5 published books; extractor dedupes against the
+        // main bank at build time)
+        for (const char* bank :
+             {"extracted/mixed_nuts_notes.json",
+              "extracted/mixed_nuts_notes_older.json"}) {
+            QFile f(dataFile(bank));
+            if (!f.open(QIODevice::ReadOnly)) continue;
             for (const auto& v :
                  QJsonDocument::fromJson(f.readAll()).array()) {
                 const auto o = v.toObject();
