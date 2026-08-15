@@ -194,6 +194,30 @@ implementation is sidelined HERE from this date. What this means:
       MP3-archive path for the whisper pilot · fundraiser
       pre-presentation steps (Share the artifact, verify donate
       URL, pick version; next week domain + Cloudflare + Zeffy).
+      **BDRC "ASSOCIATED PEOPLE" RELATION GRAPH (Adam, 2026-08-15)**
+      — pull BDRC's person-to-person relational fields into the app
+      so a person card shows not just who they were but *who they
+      stood between*: teachers and students, incarnation lines,
+      kinship, and the seat/monastery each was associated with.
+      Feasible with what we already hold: we store BDRC person ids
+      (`pid`) for 184 resolved catalog authors plus Elie's
+      authoritative per-text links, and BDRC's Linked Data Server
+      (purl.bdrc.io, `buda-base/lds-pdi`) exposes SPARQL and
+      per-resource RDF — so the relations come from the same graph
+      whose ids we already trust, no new authority and no scraping.
+      Build shape: harvest relations per known pid (respect their
+      rate limits, cache to `data/extracted/person_relations.json`),
+      store edge type + direction + source id verbatim, and render
+      a "connected people" block on the PERSON card with each edge
+      clickable through to that person's own card. Two disciplines:
+      an edge appears only when BDRC asserts it (no inferring a
+      teacher from a shared monastery), and where BDRC marks a
+      relation uncertain we surface the uncertainty rather than
+      flattening it. **This is the natural join to the monasteries
+      item below** — BDRC's seat/affiliation edges are exactly what
+      ties a person to a house, so harvesting relations and places
+      in one pass gives both layers at once.
+
       **MONASTERIES LAYER (Adam, 2026-08-15)** — bring a total
       study of the monasteries into the app: which house held which
       lineage, who taught there, what was written there, and where
