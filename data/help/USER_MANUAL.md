@@ -682,7 +682,7 @@ crash-free:
    repeated tshegs to the margin, exactly as woodblocks do; and
    when a lone final syllable wraps onto a new line, its shad is
    set as the **rin chen spungs shad ༑** — the classical optical
-   signal, recomputed automatically on every reflow. The sbrul
+   signal, recomputed automatically on every reflow. Lines ending in a double shad justify the second classical way: the gap stretches so the closing shad sits flush at the margin. The sbrul
    shad ༈ travels in an unbreakable block. Office layouts can open with a
    **cover sheet** — a framed label page carrying the title,
    volume letter, folio count, and date — the handling page a
