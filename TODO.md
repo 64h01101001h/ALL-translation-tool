@@ -203,7 +203,12 @@ implementation is sidelined HERE from this date. What this means:
       entries, then wire the punctuation ones into the Draft
       pane's house STYLE CHECK (it already lints DCC rules, so
       these become new lint rules) and the Input-pane formatter.
-      Adam's action: supply the recording/transcript.
+      Adam's action: supply the recording/transcript. **ALSO contact
+      Ven. Utpala** to check whether these punctuation rules are
+      already on the house style sheet -- if they are, the sheet is
+      the authority and we cite it; if they are not, GMR's session
+      ruling is new and the sheet may need updating. Ask before
+      implementing either way.
 
       **Uploads:** input-center standards + samples (announced
       08-06) · Master Catalog · intact Release IV manual/Briefcat ·

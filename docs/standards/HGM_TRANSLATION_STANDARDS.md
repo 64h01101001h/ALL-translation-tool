@@ -228,6 +228,12 @@ formatter; ⟨…⟩ failure marks; provisional labeling throughout.
   as citation, and implement the punctuation rules as Draft-pane
   style-check lints (never silently auto-apply -- flag, per the
   house rule that the translator decides).
+- **First: ask Ven. Utpala** whether the semicolon/spacing rules
+  are already on the house style sheet. If they are, the sheet is
+  the authority and the lint cites it; if they are not, this is a
+  new ruling from the session and the sheet itself may need
+  updating. Resolve which before building the lint, so the app
+  never carries a rule the style sheet contradicts.
 
 ## Gathering plan (Adam)
 - [ ] Ask Geshe Michael directly for standing translation principles
