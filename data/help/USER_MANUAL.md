@@ -727,9 +727,7 @@ PDF prints at 300 dpi.
 
 ### Resuming work
 
-The Overlay restores your session on every normal launch: same
-file, same scroll position, same cursor. Quit mid-sentence and the
-app reopens exactly there.
+The Overlay restores your session on every normal launch: same document, same scroll, same cursor — and now the same highlight: the span that was lit when you left (including which rung of the nest) lights again on reopen. Your position is also autosaved a few seconds after every cursor move, so even a crash or force-quit loses almost nothing.
 
 
 ## Library

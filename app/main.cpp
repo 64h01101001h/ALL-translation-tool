@@ -3148,8 +3148,23 @@ public:
             st.setValue("overlay/lastScroll", 0);
             st.setValue("overlay/lastCursor", 0);
             restoreSession();
-            check(docFile_ == tmp,
-                  "session restore reopens the remembered file");
+            bool spotOk = docFile_ == tmp;
+            if (spotOk) {
+                // prove the synchronous spot restore: land on the
+                // first token and re-light nest rung 1 (BDEN PA has
+                // the two-syllable span + the syllable itself)
+                restoreSpot(0, 1, -1, 0);
+                const int tokA = lastTok_;
+                const int n =
+                    tokA >= 0 ? (int)doc_.spansAt(tokA).size() : 0;
+                if (n > 1) {
+                    restoreSpot(0, 1, tokA, 1);
+                    spotOk = (cycle_ == 1) && lastTok_ == tokA;
+                }
+            }
+            check(spotOk,
+                  "session restore reopens the file AND re-lights "
+                  "the saved cursor spot + nest rung");
             st.setValue("overlay/lastFile", keep);
             QFile::remove(tmp);
         }
@@ -4144,6 +4159,17 @@ auto* secScan = new QLabel("<span style='color:#9A7A33;font-size:10px;letter-spa
         connect(view_, &QPlainTextEdit::cursorPositionChanged, [this] { onClick(); });
         connect(qApp, &QCoreApplication::aboutToQuit,
                 [this] { saveSession(); });
+        // and a debounced autosave: a force-quit or crash between
+        // saves loses at most a few seconds of position (Adam's
+        // finding 2026-08-14 — quit-only saving went stale under
+        // hard kills)
+        auto* sessTimer = new QTimer(this);
+        sessTimer->setSingleShot(true);
+        sessTimer->setInterval(3000);
+        connect(sessTimer, &QTimer::timeout,
+                [this] { saveSession(); });
+        connect(view_, &QPlainTextEdit::cursorPositionChanged,
+                [sessTimer] { sessTimer->start(); });
     }
 
 private:
@@ -4843,6 +4869,10 @@ public:
                     view_->verticalScrollBar()->value());
         st.setValue("overlay/lastCursor",
                     view_->textCursor().position());
+        // the lit highlight too (Adam, 2026-08-14): anchor token +
+        // nest rung, so reopening re-lights the same span
+        st.setValue("overlay/lastNestTok", lastTok_);
+        st.setValue("overlay/lastNestCycle", cycle_);
     }
 
     void restoreSession() {
@@ -4852,15 +4882,35 @@ public:
         openFile(f);
         const int scroll = st.value("overlay/lastScroll").toInt();
         const int cur = st.value("overlay/lastCursor").toInt();
+        const int ntok = st.value("overlay/lastNestTok", -1).toInt();
+        const int ncyc = st.value("overlay/lastNestCycle", 0).toInt();
         // after the first progressive-format slice settles
-        QTimer::singleShot(400, this, [this, scroll, cur] {
-            view_->verticalScrollBar()->setValue(scroll);
-            if (cur > 0 && cur < view_->document()->characterCount()) {
-                QTextCursor c(view_->document());
-                c.setPosition(cur);
-                view_->setTextCursor(c);
-            }
+        QTimer::singleShot(400, this, [this, scroll, cur, ntok,
+                                       ncyc] {
+            restoreSpot(scroll, cur, ntok, ncyc);
         });
+    }
+
+    // the synchronous half of restoreSession, split out so the
+    // selftest can prove it without waiting on timers
+    void restoreSpot(int scroll, int cur, int ntok, int ncyc) {
+        view_->verticalScrollBar()->setValue(scroll);
+        if (cur > 0 && cur < view_->document()->characterCount()) {
+            QTextCursor c(view_->document());
+            c.setPosition(cur);
+            view_->setTextCursor(c);   // lights the longest span
+        }
+        // re-light the exact nest rung that was lit at save time —
+        // only if the cursor really landed on the same token
+        if (ntok >= 0 && ntok == lastTok_ && ncyc > 0) {
+            const int n = (int)doc_.spansAt(ntok).size();
+            if (n > 0) {
+                cycle_ = ncyc % n;
+                cardRefresh_ = true;
+                onClick();
+                cardRefresh_ = false;
+            }
+        }
     }
 
 private:
