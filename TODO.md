@@ -190,6 +190,53 @@ implementation is sidelined HERE from this date. What this means:
          SHIP ORDER: schema field first (so the pane can show what
          exists), then route 3, then routes 1+2, then the pane's
          display + a battery pinning known-good and known-bad pairs.
+      9d. **GMR RULING — resolve Tibetan number through the
+         Sanskrit (Adam relaying Geshe Michael, 2026-08-15).** His
+         method: *when you are stuck on whether a Tibetan term is
+         singular or plural, go to the Sanskrit if it is available,
+         because Sanskrit REQUIRES number to be designated
+         linguistically.* Tibetan marks number only optionally
+         (rnams / dag / tso, and constantly omitted), so the
+         information is genuinely absent from the Tibetan surface —
+         it is not there to be recovered. Sanskrit inflection carries
+         it obligatorily. NOTE THE THIRD VALUE: Sanskrit distinguishes
+         singular / DUAL / plural, and the dual is the most valuable
+         of the three here — it settles the pair-sets translators
+         argue about (the two accumulations, the two truths) in a way
+         no Tibetan reading can.
+         WHAT WE HOLD, MEASURED 2026-08-15: 92,071 of 105,634 spine
+         entries (87.2%) carry a Sanskrit form, plus 15,705 rows in
+         84000's Skt file. BUT EVERY ONE IS A CITATION FORM — kāya,
+         sarva, paryavasthāna — i.e. the lexicon lemma. Number in
+         Sanskrit lives in the INFLECTIONAL ENDING, so a citation form
+         says nothing about number in a given passage. The method
+         needs the Sanskrit OF THAT PASSAGE, which we do not have.
+         Do NOT build a number oracle on the lemma table; it would
+         manufacture confident answers out of data that cannot carry
+         them (rule 3).
+         BUILDABLE NOW, in order:
+         (1) Teach the method where it is needed — a number-ambiguity
+             flag in Draft/Review when a Tibetan noun phrase carries
+             no number marker AND the entry has a Sanskrit lemma,
+             surfacing GMR's rule plus the lemma and a link out. It
+             tells the translator WHERE to look; it never answers.
+         (2) Bank the ruling in the in-app guidance layer (Help ->
+             Working with Tibetan) as his named method, since it
+             generalizes far past any one passage.
+         (3) THE REAL UNLOCK — acquire aligned Sanskrit witnesses
+             where they survive (84000 carries Sanskrit for some
+             texts; GRETIL is the obvious candidate corpus, license
+             to be checked BEFORE any ingest). With a passage-level
+             Sanskrit alignment the ending can be parsed and the
+             number read off honestly, tagged as evidence with the
+             witness shown.
+         (4) Only after (3): a number column on the card, always
+             sourced to the witness, never asserted from the lemma.
+         ASK ADAM: whether Geshe Michael gave this as a general
+         principle or in a specific context (it came from the Diamond
+         Way Translator Course, 2026-08-15 — the same session as the
+         semicolon/spacing instructions already queued), and whether
+         Ven. Utpala's style sheet already records it.
       9c. **RECOVERED DEFERRALS (Adam, 2026-08-15: "look for any
          'saved for later' notes and add them to the updated todo
          list").** Swept every session transcript, all of docs/,
