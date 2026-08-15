@@ -25,7 +25,8 @@
 // systems INTERCALATE DIFFERENTLY — in leap-affected stretches
 // dates differ by a month (2025: KCK Losar Jan 30 vs published/
 // Phugpa Feb 28). For published-almanac dating, Phugpa is the
-// standard; a future Phugpa port starts from Janson's paper.
+// standard — NOW PORTED: allcore/tibcal_phugpa.h (proven against
+// 21 full TCG oracle years, suite phugpa_smoke).
 
 #include <array>
 #include <vector>

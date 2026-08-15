@@ -109,8 +109,13 @@ implementation is sidelined HERE from this date. What this means:
          string-form charsets, ocr_smoke-proven). REMAINING: async
          recognition · model refresh when BDRC's ~end-Aug release
          lands.
-      7. True-Phugpa calendar port — path proven: source TCG (MIT),
-         spec Janson, oracles Espel+TCG.
+      7. ~~True-Phugpa calendar port~~ CORE SHIPPED 2026-08-14:
+         allcore tibcal_phugpa (Generalised Phugpa epoch of TCG,
+         ported from the files) + suite 43 phugpa_smoke — 21 oracle
+         years diff-proven (260 months incl. intercalary/delayed
+         labels, 7,971 day lines, 171 duplicated pairs, 293 omitted
+         days, 0 failures). REMAINING: Convert-pane wiring (Phugpa
+         beside the KCK karana with honest captions).
       8. Draft-pane standards conventions: STD-006 translator-
          insertion marking · STD-009 variant-reading notes (build
          follows GMR ratification of the trust dialog).

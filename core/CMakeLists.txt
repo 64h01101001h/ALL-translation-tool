@@ -23,6 +23,7 @@ add_library(allcore STATIC
   src/colloquial.cpp
   src/proposals.cpp
   src/regenreg.cpp
+  src/tibcal_phugpa.cpp
   src/verse.cpp
   src/wilsonparse.cpp
   src/tibexport.cpp
@@ -144,6 +145,12 @@ add_test(NAME colloquial_smoke
                  ${CMAKE_SOURCE_DIR}/data/pron_colloquial/colloquial_pron.tsv
                  ${CMAKE_SOURCE_DIR}/data/honorifics/honorific_register.tsv
                  ${CMAKE_SOURCE_DIR}/build/hgm_spine_v27_2.db)
+
+add_executable(phugpa_smoke tests/phugpa_smoke.cpp)
+target_link_libraries(phugpa_smoke PRIVATE allcore)
+add_test(NAME phugpa_smoke
+         COMMAND phugpa_smoke
+                 ${CMAKE_SOURCE_DIR}/third_party/tcg_henning/fixtures)
 
 add_executable(regenreg_smoke tests/regenreg_smoke.cpp)
 target_link_libraries(regenreg_smoke PRIVATE allcore)
