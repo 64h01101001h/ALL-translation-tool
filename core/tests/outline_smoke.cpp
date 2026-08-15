@@ -160,6 +160,24 @@ int main() {
               "plain prose has no structural markers");
     }
 
+    {   // wylie parity (2026-08-15): the same commentary opener in
+        // lowercase wylie yields the same top-level division —
+        // library files arrive in both scripts
+        std::vector<std::string> ta, tw;
+        std::vector<bool> ba, bw;
+        allcore::tokenizeDocument(
+            "CHOS 'DI LA GSUM STE, DANG PO NI BSHAD PA'O, ,GNYIS "
+            "PA LA GNYIS TE,", ta, ba);
+        allcore::tokenizeDocument(
+            "chos 'di la gsum ste, dang po ni bshad pa'o, ,gnyis "
+            "pa la gnyis te,", tw, bw);
+        const auto oa = allcore::extractOutline(ta, ba);
+        const auto ow = allcore::extractOutline(tw, bw);
+        CHECK(oa.children.size() == 2 &&
+                  ow.children.size() == oa.children.size(),
+              "wylie outline parity: same division found in both "
+              "scripts");
+    }
     std::printf("%s (%d failures)\n",
                 failures ? "OUTLINE SMOKE FAILED" : "OUTLINE SMOKE OK",
                 failures);

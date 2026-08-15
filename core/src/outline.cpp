@@ -62,8 +62,20 @@ std::string joinTokens(const std::vector<std::string>& toks, int beg, int end) {
 
 }  // namespace
 
-OutlineNode extractOutline(const std::vector<std::string>& tokens,
+OutlineNode extractOutline(const std::vector<std::string>& tokens_in,
                            const std::vector<bool>& barrier_after) {
+    // wylie parity (probe finding, 2026-08-15): the marker grammar
+    // below matches uppercase ACIP forms, but library files also
+    // arrive as lowercase wylie (Lhasa _inc, the Release-6 wylie
+    // edition). Match on an uppercased shadow; headings keep the
+    // original text via the same indices.
+    std::vector<std::string> tokens(tokens_in.size());
+    for (size_t i = 0; i < tokens_in.size(); ++i) {
+        std::string t = tokens_in[i];
+        for (char& c : t)
+            if (c >= 'a' && c <= 'z') c -= 32;
+        tokens[i] = std::move(t);
+    }
     OutlineNode root;
     // stack of open nodes, root at the bottom; stored as index paths into the
     // tree to survive vector reallocation
@@ -103,7 +115,7 @@ OutlineNode extractOutline(const std::vector<std::string>& tokens,
                 if (cur->announced == 0) {
                     cur->announced = num;
                     if (cur->heading.empty())
-                        cur->heading = joinTokens(tokens, clauseStart(i), i - 1);
+                        cur->heading = joinTokens(tokens_in, clauseStart(i), i - 1);
                     if (cur->tok < 0) cur->tok = clauseStart(i);
                 }
                 continue;
@@ -152,7 +164,7 @@ OutlineNode extractOutline(const std::vector<std::string>& tokens,
                 OutlineNode child;
                 child.label = (parent->label.empty() ? "" : parent->label + ".") +
                               std::to_string(k);
-                child.heading = joinTokens(tokens, i, clauseEnd(i + ordLen));
+                child.heading = joinTokens(tokens_in, i, clauseEnd(i + ordLen));
                 child.tok = i;
                 child.irregular = irregular;
                 parent->children.push_back(std::move(child));

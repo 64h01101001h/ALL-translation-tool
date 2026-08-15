@@ -148,7 +148,7 @@ implementation is sidelined HERE from this date. What this means:
          section; bank 344 → 1,913; Draft pane loads both banks.
          The 16 Handoff/book_texts .txts remain a possible later
          per-book pass; the older BIBLIOGRAPHY compilations too · ~~KX/TS scan lane~~ CLOSED BY MEASUREMENT 2026-08-15 (library holds 1 KX file, 0 TS — no lane worth building; the one file gets the title-search fallback; revisit only if those collections ever install) ·
-         outline/verse wylie-parity probe · Botok-vs-SegTrie overlap
+         ~~outline/verse wylie-parity probe~~ DONE 2026-08-15: probe FOUND a real defect — the sa-bcad outline matcher was uppercase-ACIP-only, so wylie files (Lhasa _inc, Release-6 wylie) got NO outline; fixed with a case-folded matching shadow (headings keep original script); verse already had parity; outline_smoke parity-pinned · Botok-vs-SegTrie overlap
          audit · ~~citation side-pane streamline~~ DONE 2026-08-15 ("Pin to side panel" on the located report; cite anchors factored into handleCiteAnchor shared by dialog + side panel) · sweep-harness
          line-edit coverage for typed-input panes ·
          navigable-outline TOC over Library texts (THL grammar
