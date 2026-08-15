@@ -58,7 +58,11 @@ defect, not ours) · version bumped 0.12.0.
 9. **Banked-corpus mining lanes** (data local, never mined):
    Goldstein glossary markings · Hackett verb classes ·
    Manual-of-Authentic-Tibetan modern-colloquial mode.
-10. **Adarsha link-out recheck** (their new site broke old URLs).
+10. ~~Adarsha link-out recheck~~ DONE 2026-08-14: rebuilt site =
+    adarshah.org; online.adarshah.org/search.html?text=<unicode>
+    auto-runs the query (verified live in-browser, results rendered);
+    link-out restored with unicode from the proven converter
+    (selftest-pinned).
 11. **Small strikes**: Whitney last-four fields (dcs_freq/rank,
     warnemyr, apte_id) · Trainer honorific vocab tag · Input-pane
     partner auto-pairing + UTFC lane hookup · Spotlight async ·

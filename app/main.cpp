@@ -894,8 +894,11 @@ static QString entryHtml(const allcore::Entry& e,
 
 // Link-out tier (survey): external sites searched for a term — links only,
 // no ingestion, so restrictive licenses (BY-NC-ND etc.) are never touched.
-// Every URL format verified live 2026-08-07; Adarsha omitted (its new site
-// broke the old search URLs — recheck later).
+// Every URL format verified live 2026-08-07; Adarsha RESTORED
+// 2026-08-14: the rebuilt site (adarshah.org) reads search.html?text=
+// (Tibetan unicode) and auto-runs the query — verified live in the
+// browser (results rendered). The link passes unicode from our proven
+// converter; a form it refuses simply gets no Adarsha link.
 static QString linkOutHtml(const std::string& wylie) {
     const QString q = QString::fromUtf8(
         QUrl::toPercentEncoding(QString::fromStdString(wylie)));
@@ -909,6 +912,17 @@ static QString linkOutHtml(const std::string& wylie) {
          q + "'>Bibliotheca Polyglotta</a> · ";
     h += "<a href='https://www.lotsawahouse.org/search?q=" + q +
          "'>Lotsawa House</a> · ";
+    // Adarsha (Dharma Treasure): Kangyur/Tengyur/Sungbum full-text —
+    // wants Tibetan unicode, not wylie
+    {
+        auto [uni, uok] = allcore::wylieToUnicode(wylie);
+        if (uok)
+            h += "<a href='https://online.adarshah.org/search.html?"
+                 "text=" +
+                 QString::fromUtf8(QUrl::toPercentEncoding(
+                     QString::fromStdString(uni))) +
+                 "'>Adarsha</a> · ";
+    }
     // THL Places gazetteer (~64k Tibetan places; the ?searchTerm
     // pattern is the app's own search URL — verified live
     // 2026-08-13, Sera Monastery → features/433)
@@ -24305,6 +24319,13 @@ int main(int argc, char** argv) {
                                                  "gzigs");
             lk(hh.toLower().contains("honorific"),
                "honorific term carries its badge");
+            {   // link-outs: Adarsha restored on the rebuilt site
+                // (search.html?text=<unicode>, verified live)
+                const QString lo = linkOutHtml("bsod nams");
+                lk(lo.contains("online.adarshah.org/search.html?text=") &&
+                       lo.contains("adarshah"),
+                   "Adarsha link-out carries a unicode query");
+            }
             // the analyzer chain's verb-lemma step: a past form
             // with no headword of its own reaches its present stem
             {
