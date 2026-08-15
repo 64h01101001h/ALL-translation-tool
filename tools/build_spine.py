@@ -10,16 +10,60 @@ Inputs  (data/):  hgm_dictionary_v27_2.json.gz · full_parallel_corpus_v32.json.
                   hgm_reverse_index_v27_2.json
 Output  (build/): hgm_spine_v27_2.db
 """
-import json, gzip, sqlite3, sys, time
+import argparse, json, gzip, re, sqlite3, sys, time
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 DATA = ROOT / 'data'
 BUILD = ROOT / 'build'
+
+
+def _newest(folder, pattern):
+    """Highest-versioned file matching pattern in folder, else None.
+    Versions read as v<maj>[_<min>] from the filename."""
+    best, best_v = None, (-1, -1)
+    for p in Path(folder).glob(pattern):
+        m = re.search(r'_v(\d+)(?:_(\d+))?\.', p.name)
+        if not m:
+            continue
+        v = (int(m.group(1)), int(m.group(2) or 0))
+        if v > best_v:
+            best, best_v = p, v
+    return best
+
+
+ap = argparse.ArgumentParser(
+    description='Compile an HGM release package into the spine DB. '
+                'With no arguments, builds the current pinned release '
+                'exactly as always.')
+ap.add_argument('--release-dir', help='folder holding '
+                'hgm_dictionary_v*.json.gz (+ optional corpus and '
+                'reverse index); the newest version of each wins, and '
+                'anything absent falls back to the pinned default')
+ap.add_argument('--master')
+ap.add_argument('--corpus')
+ap.add_argument('--reverse')
+ap.add_argument('--out')
+args = ap.parse_args()
+
 MASTER = DATA / 'hgm_dictionary_v27_2.json.gz'
 CORPUS = DATA / 'full_parallel_corpus_v32.json.gz'
 REVERSE = DATA / 'hgm_reverse_index_v27_2.json'
-DB = BUILD / 'hgm_spine_v27_2.db'
+if args.release_dir:
+    MASTER = _newest(args.release_dir, 'hgm_dictionary_v*.json.gz') or MASTER
+    CORPUS = _newest(args.release_dir,
+                     'full_parallel_corpus_v*.json.gz') or CORPUS
+    REVERSE = _newest(args.release_dir,
+                      'hgm_reverse_index_v*.json') or REVERSE
+if args.master:
+    MASTER = Path(args.master)
+if args.corpus:
+    CORPUS = Path(args.corpus)
+if args.reverse:
+    REVERSE = Path(args.reverse)
+_m = re.search(r'_v(\d+)(?:_(\d+))?\.', MASTER.name)
+_ver = f"v{_m.group(1)}_{_m.group(2) or 0}" if _m else 'v27_2'
+DB = Path(args.out) if args.out else BUILD / f'hgm_spine_{_ver}.db'
 
 SCHEMA = """
 PRAGMA journal_mode=WAL;
@@ -231,6 +275,7 @@ def build():
     con.close()
     size = DB.stat().st_size / 1e6
     print(f'done in {time.time()-t0:.1f}s → {DB} ({size:.1f} MB)')
+    print(f'SPINE_DB={DB.name}')
 
 
 if __name__ == '__main__':

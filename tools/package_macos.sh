@@ -104,8 +104,20 @@ codesign --verify "$STAGE/$APPNAME.app" && echo "   signature ok"
 echo "== 6. data manifest =="
 DATA="$STAGE/ALL Tool Data"
 mkdir -p "$DATA/build" "$DATA/docs/analysis" "$DATA/library"
-cp "$ROOT/build/hgm_spine_v27_2.db" "$DATA/build/"
+# the spine ships by pointer when the release importer has moved it
+SPINE_NAME="hgm_spine_v27_2.db"
+if [[ -f "$ROOT/build/spine_current.txt" ]]; then
+  PTR=$(head -1 "$ROOT/build/spine_current.txt" | tr -d '[:space:]')
+  case "$PTR" in (*/*|*..*|"") ;; (*)
+    [[ -f "$ROOT/build/$PTR" ]] && SPINE_NAME="$PTR" ;; esac
+fi
+cp "$ROOT/build/$SPINE_NAME" "$DATA/build/"
+[[ -f "$ROOT/build/spine_current.txt" ]] &&   cp "$ROOT/build/spine_current.txt" "$DATA/build/"
 cp "$ROOT/build/reference.db" "$DATA/build/" 2>/dev/null || true
+# the canonical spine builder rides along so an installed app can
+# import a future data release (Maintenance → Import data release…)
+mkdir -p "$DATA/tools"
+cp "$ROOT/tools/build_spine.py" "$DATA/tools/"
 # OCR models ship in the team DMG (BDRC, CC BY-NC 4.0, used with
 # BDRC's permission — credited in the Scan pane wherever output
 # appears). Omitting them left packaged apps showing the

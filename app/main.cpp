@@ -86,6 +86,7 @@
 #include <QJsonObject>
 #include <QUrl>
 #include <QProgressDialog>
+#include <QTemporaryDir>
 
 #include <functional>
 #include <QDateTime>
@@ -951,6 +952,69 @@ static HonorificMap loadHonorifics(const QString& path) {
         m[c[0].toStdString()] = {c[1], c[2], c[3]};
     }
     return m;
+}
+
+// ---- data-release updater helpers (loose-ends item 8) ----
+// The spine the app opens is chosen by build/spine_current.txt when
+// the release importer has written one; otherwise the pinned
+// default. The pointer holds a bare filename — anything with a path
+// separator is refused (never trust a file to escape build/).
+static QString resolveSpinePath(const QString& root) {
+    const QString def = root + "/build/hgm_spine_v27_2.db";
+    QFile ptr(root + "/build/spine_current.txt");
+    if (ptr.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        const QString name =
+            QString::fromUtf8(ptr.readLine()).trimmed();
+        if (!name.isEmpty() && !name.contains('/') &&
+            !name.contains("..")) {
+            const QString p = root + "/build/" + name;
+            if (QFileInfo::exists(p)) return p;
+        }
+    }
+    return def;
+}
+
+// What a release folder offers: the newest version of each expected
+// file (master required; corpus and reverse index optional — the
+// builder falls back to the pinned ones when absent).
+struct ReleasePkg {
+    QString master, corpus, reverse;  // absolute paths ("" = absent)
+    QString version;                  // e.g. "v28_0" (from the master)
+};
+static ReleasePkg discoverReleasePackage(const QString& dir) {
+    ReleasePkg pkg;
+    auto newest = [&](const QString& prefix, const QString& suffix,
+                      QString* verOut) {
+        QString best;
+        long long bestV = -1;
+        QDir d(dir);
+        for (const QFileInfo& fi :
+             d.entryInfoList(QDir::Files | QDir::Readable)) {
+            const QString n = fi.fileName();
+            if (!n.startsWith(prefix) || !n.endsWith(suffix)) continue;
+            static const QRegularExpression rx(
+                "_v(\\d+)(?:_(\\d+))?\\.");
+            const auto m = rx.match(n);
+            if (!m.hasMatch()) continue;
+            const long long v = m.captured(1).toLongLong() * 1000 +
+                                m.captured(2).toLongLong();
+            if (v > bestV) {
+                bestV = v;
+                best = fi.absoluteFilePath();
+                if (verOut)
+                    *verOut = "v" + m.captured(1) + "_" +
+                              (m.captured(2).isEmpty()
+                                   ? "0"
+                                   : m.captured(2));
+            }
+        }
+        return best;
+    };
+    pkg.master =
+        newest("hgm_dictionary_", ".json.gz", &pkg.version);
+    pkg.corpus = newest("full_parallel_corpus_", ".json.gz", nullptr);
+    pkg.reverse = newest("hgm_reverse_index_", ".json", nullptr);
+    return pkg;
 }
 
 // The Lookup pane's whole stacked search, extracted for the
@@ -2804,6 +2868,40 @@ public:
                       "typography: classical + W3C rules flagged, "
                       "subjoined ka/ga exception honored, clean "
                       "text passes, break protection applied");
+            }
+            {   // data-release updater: discovery picks the newest
+                // version; the spine pointer honors a valid name
+                // and refuses traversal
+                QTemporaryDir td;
+                auto touch = [&](const char* n) {
+                    QFile f(td.path() + "/" + n);
+                    f.open(QIODevice::WriteOnly);
+                    f.write("x");
+                };
+                touch("hgm_dictionary_v27_2.json.gz");
+                touch("hgm_dictionary_v28_0.json.gz");
+                touch("full_parallel_corpus_v33.json.gz");
+                const ReleasePkg pkg =
+                    discoverReleasePackage(td.path());
+                QDir(td.path()).mkpath("build");
+                touch("build/hgm_spine_v99_0.db");
+                QFile p1(td.path() + "/build/spine_current.txt");
+                p1.open(QIODevice::WriteOnly);
+                p1.write("hgm_spine_v99_0.db\n");
+                p1.close();
+                const QString ok = resolveSpinePath(td.path());
+                p1.open(QIODevice::WriteOnly | QIODevice::Truncate);
+                p1.write("../evil.db\n");
+                p1.close();
+                const QString bad = resolveSpinePath(td.path());
+                check(pkg.version == "v28_0" &&
+                          pkg.master.contains("v28_0") &&
+                          pkg.corpus.contains("v33") &&
+                          pkg.reverse.isEmpty() &&
+                          ok.endsWith("hgm_spine_v99_0.db") &&
+                          bad.endsWith("hgm_spine_v27_2.db"),
+                      "release import: newest-version discovery; "
+                      "spine pointer honored, traversal refused");
             }
             {   // pecha v4: rin chen spungs shad substitution —
                 // a lone wrapped final syllable's ། becomes ༑;
@@ -16530,6 +16628,9 @@ public:
         maintMenu->addAction(
             "Check for collection updates…",
             [this] { checkCollectionUpdates(); });
+        maintMenu->addAction(
+            "Import data release…",
+            [this] { importDataRelease(); });
         maintMenu->addSeparator();
         maintMenu->addAction(indexBtn->text(), [indexBtn] {
             indexBtn->click();
@@ -17532,6 +17633,123 @@ private:
         h += "<div style='margin-top:6px;color:#777'><small>double-click to "
              "open in the Overlay</small></div>";
         info_->setHtml(h);
+    }
+
+    // Import a new HGM data release: validate the folder, copy the
+    // files into the data area, run the canonical Python builder
+    // (tools/build_spine.py — the app never reimplements its format
+    // rules), and point build/spine_current.txt at the new spine.
+    void importDataRelease() {
+        const QString dataRoot = libRoot_.chopped(8);  // strip "/library"
+        const QString dir = QFileDialog::getExistingDirectory(
+            this, "Choose the release package folder");
+        if (dir.isEmpty()) return;
+        const ReleasePkg pkg = discoverReleasePackage(dir);
+        if (pkg.master.isEmpty()) {
+            QMessageBox::warning(
+                this, "Import data release",
+                "No hgm_dictionary_v*.json.gz found in that folder — "
+                "not a release package.");
+            return;
+        }
+        auto line = [](const QString& p, const char* what) {
+            if (p.isEmpty())
+                return QString("• %1: not in the package (the "
+                               "current one stays)\n")
+                    .arg(what);
+            const QFileInfo fi(p);
+            return QString("• %1: %2 (%3 MB)\n")
+                .arg(what, fi.fileName())
+                .arg(fi.size() / 1e6, 0, 'f', 1);
+        };
+        if (QMessageBox::question(
+                this, "Import data release",
+                QString("Release %1 found:\n\n%2%3%4\nCopy into "
+                        "the data area and rebuild the spine "
+                        "database? (A few minutes; the app keeps "
+                        "running on the current spine until "
+                        "restart.)")
+                    .arg(pkg.version)
+                    .arg(line(pkg.master, "dictionary master"))
+                    .arg(line(pkg.corpus, "parallel corpus"))
+                    .arg(line(pkg.reverse, "reverse index"))) !=
+            QMessageBox::Yes)
+            return;
+        // copy the offered files into data/
+        for (const QString& src :
+             {pkg.master, pkg.corpus, pkg.reverse}) {
+            if (src.isEmpty()) continue;
+            const QString dst =
+                dataRoot + "/data/" + QFileInfo(src).fileName();
+            if (QFileInfo::exists(dst) &&
+                QFileInfo(dst).canonicalFilePath() ==
+                    QFileInfo(src).canonicalFilePath())
+                continue;
+            QFile::remove(dst);
+            if (!QFile::copy(src, dst)) {
+                QMessageBox::warning(
+                    this, "Import data release",
+                    "Could not copy " + QFileInfo(src).fileName() +
+                        " into the data area.");
+                return;
+            }
+        }
+        const QString builder = dataRoot + "/tools/build_spine.py";
+        const QString py =
+            QStandardPaths::findExecutable("python3");
+        if (!QFileInfo::exists(builder) || py.isEmpty()) {
+            QMessageBox::warning(
+                this, "Import data release",
+                QFileInfo::exists(builder)
+                    ? "python3 was not found on this Mac — install "
+                      "the Xcode command-line tools, then retry."
+                    : "The spine builder (tools/build_spine.py) is "
+                      "missing from the data folder.");
+            return;
+        }
+        QProgressDialog prog("Building the spine database from " +
+                                 pkg.version + "…",
+                             QString(), 0, 0, this);
+        prog.setWindowModality(Qt::WindowModal);
+        prog.setMinimumDuration(0);
+        prog.show();
+        QProcess proc;
+        proc.setWorkingDirectory(dataRoot);
+        proc.setProcessChannelMode(QProcess::MergedChannels);
+        proc.start(py, {builder, "--release-dir",
+                        dataRoot + "/data"});
+        QString out;
+        while (proc.state() != QProcess::NotRunning) {
+            proc.waitForReadyRead(200);
+            out += QString::fromUtf8(proc.readAll());
+            QCoreApplication::processEvents();
+        }
+        out += QString::fromUtf8(proc.readAll());
+        prog.close();
+        QString dbName;
+        for (const QString& l : out.split('\n'))
+            if (l.startsWith("SPINE_DB="))
+                dbName = l.mid(9).trimmed();
+        if (proc.exitStatus() != QProcess::NormalExit ||
+            proc.exitCode() != 0 || dbName.isEmpty()) {
+            QMessageBox::warning(
+                this, "Import data release",
+                "The spine build FAILED — nothing was switched. "
+                "Builder output (tail):\n\n" + out.right(1200));
+            return;
+        }
+        QFile ptr(dataRoot + "/build/spine_current.txt");
+        if (ptr.open(QIODevice::WriteOnly | QIODevice::Text |
+                     QIODevice::Truncate))
+            ptr.write((dbName + "\n").toUtf8());
+        QMessageBox::information(
+            this, "Import data release",
+            QString("Release %1 imported — the spine %2 is built "
+                    "and selected.\nRestart the app to search the "
+                    "new release. (Approval tab → Regenerate "
+                    "registers re-folds the approved layer "
+                    "afterwards.)")
+                .arg(pkg.version, dbName));
     }
 
     void updateIndex() {
@@ -22811,7 +23029,7 @@ int main(int argc, char** argv) {
     }
     QString dbPath = (argc > 1 && argv[1][0] != '-')
                          ? argv[1]
-                         : root + "/build/hgm_spine_v27_2.db";
+                         : resolveSpinePath(root);
     QString tplPath = argc > 2 ? argv[2]
                                : root + "/docs/analysis/PASSAGE_ANALYSIS_TEMPLATE.md";
 
