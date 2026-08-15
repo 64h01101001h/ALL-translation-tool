@@ -1061,6 +1061,48 @@ static QString entryHtml(const allcore::Entry& e,
             h += "</div>";
         }
     }
+    // Second tier, restored 2026-08-15 (Adam: "not being linked any
+    // longer"). The Tibetan-spoken tier above is his ruling and stays
+    // FIRST; this one matches on the entry's ENGLISH equivalent, which
+    // is what gave the card broad coverage before 2026-08-14 — the
+    // spoken-Tibetan index reaches 6,195 headwords, the English index
+    // 8,518 terms, so Tibetan-only left ~94% of lookups with nothing.
+    // Labeled distinctly so the two kinds of match are never confused.
+    if (g_teaching && !e.hgm_gloss.empty()) {
+        std::vector<const TeachingMoment*> ms;
+        std::set<QString> seen;
+        for (const auto& g : e.hgm_gloss) {
+            auto it = g_teaching->find(teachingKey(g));
+            if (it == g_teaching->end()) continue;
+            for (const auto& m : it->second)
+                if (!seen.count(m.url) && ms.size() < 3) {
+                    seen.insert(m.url);
+                    ms.push_back(&m);
+                }
+        }
+        if (!ms.empty()) {
+            h += "<div style='margin-top:4px;font-size:12px'>"
+                 "<span style='color:#7C2D26;font-weight:600'>He "
+                 "teaches this idea</span> <i style='color:#888'>"
+                 "(located by the ENGLISH equivalent in the class "
+                 "captions \u2014 the recording is the "
+                 "authority)</i><br>";
+            for (const auto* m : ms) {
+                const int mm = m->t / 60, ss = m->t % 60;
+                h += QString("\u25B6 <a href='%1' title=\"%2\">%3</a>"
+                             " @%4:%5%6<br>")
+                         .arg(m->url,
+                              m->snippet.toHtmlEscaped(),
+                              m->title.left(60).toHtmlEscaped())
+                         .arg(mm)
+                         .arg(ss, 2, 10, QChar('0'))
+                         .arg(m->lang == "ENG" || m->lang == "?"
+                                  ? QString()
+                                  : " <b>[" + m->lang + "]</b>");
+            }
+            h += "</div>";
+        }
+    }
     h += "</div>";
     return h;
 }
@@ -25534,6 +25576,24 @@ int main(int argc, char** argv) {
                        .arg(ok ? "PASS" : "FAIL")
                        .arg(g_teaching ? (int)g_teaching->size() : 0);
             if (!ok) ++fails;
+            {   // the maps loading is NOT proof the CARD shows them
+                // (Adam's finding 2026-08-15: links stopped
+                // appearing while both maps loaded fine) — pin the
+                // rendered card, not just the data
+                allcore::Entry te;
+                te.wylie = "bsod nams";
+                te.status = "curated";
+                const QString card = entryHtml(te);
+                const bool shown =
+                    card.contains("IN THE RECORDED TEACHINGS") &&
+                    card.contains("youtube.com") &&
+                    card.contains("@");
+                log << QString("  [%1] Teaching: the CARD renders "
+                               "recorded-teaching moments with "
+                               "timestamps")
+                           .arg(shown ? "PASS" : "FAIL");
+                if (!shown) ++fails;
+            }
         }
         {
             const bool cream =
