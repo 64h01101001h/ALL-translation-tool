@@ -1,0 +1,157 @@
+<title>The Transcription Fund — Asian Legacy Library</title>
+<style>
+  :root {
+    --paper:#F2EAD9; --card:#F8F2E5; --ink:#2B2620; --ink-soft:#57503F;
+    --grey:#6E675D; --gold:#9A7A33; --green:#1E6B4E; --green-deep:#175540;
+    --hairline:rgba(43,38,32,.18); --chipbg:#EDE3CE; --shadow:rgba(43,38,32,.10);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper:#211C15; --card:#2A241C; --ink:#EDE4D1; --ink-soft:#C9BEA8;
+      --grey:#A2988A; --gold:#C9A45C; --green:#4FA983; --green-deep:#5FBd95;
+      --hairline:rgba(237,228,209,.18); --chipbg:#332C22; --shadow:rgba(0,0,0,.4);
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper:#211C15; --card:#2A241C; --ink:#EDE4D1; --ink-soft:#C9BEA8;
+    --grey:#A2988A; --gold:#C9A45C; --green:#4FA983; --green-deep:#5FBd95;
+    --hairline:rgba(237,228,209,.18); --chipbg:#332C22; --shadow:rgba(0,0,0,.4);
+  }
+  body { margin:0; background:var(--paper); color:var(--ink);
+    font-family:"Palatino","Palatino Linotype","Book Antiqua",Georgia,serif;
+    line-height:1.55; -webkit-font-smoothing:antialiased; }
+  .wrap { max-width:680px; margin:0 auto; padding:34px 20px 60px; }
+  .yig { color:var(--gold); font-size:36px; display:block; margin-bottom:14px; }
+  h1 { font-size:38px; line-height:1.1; margin:0 0 10px; text-wrap:balance;
+       letter-spacing:-0.01em; }
+  .kicker { font-family:-apple-system,"SF Pro Text",Arial,sans-serif;
+    font-size:11px; letter-spacing:.24em; text-transform:uppercase;
+    color:var(--gold); margin-bottom:10px; }
+  .lead { font-size:18px; color:var(--ink-soft); margin:12px 0 0; }
+  .goalcard { background:var(--card); border:1px solid var(--hairline);
+    border-radius:6px; box-shadow:0 2px 10px var(--shadow);
+    padding:22px; margin:28px 0; }
+  .goal { font-size:44px; font-weight:600; color:var(--green);
+    font-variant-numeric:tabular-nums; letter-spacing:-0.02em; }
+  .goal small { font-size:16px; color:var(--grey); font-weight:400;
+    letter-spacing:0; }
+  .bar { height:10px; background:var(--chipbg); border-radius:5px;
+    margin:14px 0 6px; overflow:hidden; }
+  .fill { height:100%; width:2%; background:var(--green); border-radius:5px; }
+  .barnote { font-size:12.5px; color:var(--grey); }
+  .stats { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin:26px 0; }
+  .stat { background:var(--card); border:1px solid var(--hairline);
+    border-radius:5px; padding:12px 14px; }
+  .stat .n { font-size:24px; font-weight:600; color:var(--ink);
+    font-variant-numeric:tabular-nums; display:block; }
+  .stat .l { font-family:-apple-system,Arial,sans-serif; font-size:10.5px;
+    letter-spacing:.06em; text-transform:uppercase; color:var(--grey); }
+  h2 { font-size:24px; margin:36px 0 10px; }
+  p  { margin:10px 0; color:var(--ink-soft); }
+  p b, li b { color:var(--ink); }
+  .zone { font-family:-apple-system,Arial,sans-serif; font-size:11px;
+    letter-spacing:.22em; text-transform:uppercase; color:var(--gold);
+    margin:34px 0 8px; }
+  .give { display:flex; flex-direction:column; gap:12px; margin:14px 0 6px; }
+  .give a.btn { display:block; text-decoration:none; text-align:center;
+    padding:15px 18px; border-radius:6px; font-size:17px; font-weight:600;
+    background:var(--green); color:#F8F5EC; box-shadow:0 2px 8px var(--shadow); }
+  .give a.btn:hover { background:var(--green-deep); }
+  .give a.btn.secondary { background:var(--card); color:var(--ink);
+    border:1.5px solid var(--green); font-weight:500; }
+  .give .note { font-size:13px; color:var(--grey); text-align:center; margin-top:-4px; }
+  .soon { border:1.5px dashed var(--hairline); border-radius:6px;
+    padding:13px 16px; text-align:center; font-size:14.5px; color:var(--grey); }
+  .qr { text-align:center; margin:30px 0; }
+  .qr img { width:220px; height:220px; border-radius:8px;
+    border:1px solid var(--hairline); background:#fff; padding:10px;
+    max-width:100%; }
+  .qr .cap { font-size:13px; color:var(--grey); margin-top:8px; }
+  table { border-collapse:collapse; width:100%; font-size:14.5px; margin:10px 0; }
+  td { padding:7px 4px; border-bottom:1px solid var(--hairline);
+       color:var(--ink-soft); }
+  td:last-child { text-align:right; font-variant-numeric:tabular-nums;
+       color:var(--ink); white-space:nowrap; }
+  tr:last-child td { border-bottom:none; font-weight:600; color:var(--green); }
+  .foot { margin-top:44px; padding-top:16px; border-top:1px solid var(--hairline);
+    font-size:13px; color:var(--grey); }
+  .foot a { color:var(--green); }
+  blockquote { margin:18px 0; padding:2px 0 2px 16px;
+    border-left:3px solid var(--gold); font-style:italic;
+    color:var(--ink-soft); font-size:16.5px; }
+</style>
+<div class="wrap">
+
+<span class="yig">༄༅། །</span>
+<div class="kicker">Asian Legacy Library · Diamond Cutter Classics</div>
+<h1>Give the teachings a voice that can be searched, studied, and never lost.</h1>
+<p class="lead">Nearly three thousand recorded teachings by Geshe Michael
+Roach — decades of classes on the great books of Tibet — exist today only
+as video. We are transcribing every English word, so that every explanation
+he has ever given becomes searchable, teachable, and permanently preserved.</p>
+
+<div class="goalcard">
+  <span class="goal">$1,500 <small>completes the fund</small></span>
+  <div class="bar"><div class="fill"></div></div>
+  <div class="barnote">Every dollar transcribes about 1.7 hours of teaching.
+  Overage rolls directly into the next preservation phase.</div>
+</div>
+
+<div class="stats">
+  <div class="stat"><span class="n">2,805</span><span class="l">recorded teachings</span></div>
+  <div class="stat"><span class="n">≈2,600 hrs</span><span class="l">of his English to transcribe</span></div>
+  <div class="stat"><span class="n">40+ yrs</span><span class="l">of classes, retreats & courses</span></div>
+  <div class="stat"><span class="n">1 archive</span><span class="l">searchable forever, free to students</span></div>
+</div>
+
+<h2>Why this matters now</h2>
+<p>The Asian Legacy Library's translation workbench already does something
+remarkable: click any Tibetan word, and it can play you <b>the exact moments
+Geshe Michael speaks that word in his recorded teachings</b>. But today that
+link reaches only the fraction of recordings with usable captions.
+Transcription completes the circle — every hour of teaching becomes an
+open book: full-text searchable, quotable with a timestamp, and linked
+forever to the dictionary and the scriptures it explains.</p>
+<blockquote>Recordings decay, get unlisted, and disappear silently.
+Transcripts, once made, preserve the teaching itself — in his own
+words, never paraphrased.</blockquote>
+
+<div class="zone">Ways to Give</div>
+<div class="give">
+  <a class="btn" href="https://asianlegacylibrary.org/donate">Donate through the Asian Legacy Library</a>
+  <div class="note">Tax-deductible (501(c)(3)). Please write
+  <b>“Transcription Fund”</b> in the dedication / note field.</div>
+  <a class="btn secondary" href="mailto:adam.derick.andrade@gmail.com?subject=Transcription%20Fund%20Donation">Email us to give directly or sponsor a course</a>
+  <div class="soon">A dedicated zero-fee giving page (Zeffy) is coming online
+  this week — check back here, this page updates in place.</div>
+</div>
+
+<div class="qr" id="qrblock">
+  <img src="data:image/png;base64,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" alt="QR code for this page">
+  <div class="cap">Scan to open this page — share it freely.</div>
+</div>
+
+<h2>Exactly where the money goes</h2>
+<table>
+  <tr><td>Professional AI transcription of all ≈2,600 English hours
+      (current per-hour archive rates)</td><td>$1,050</td></tr>
+  <tr><td>Quality pilot across engines on the hardest recordings
+      (already scoped)</td><td>$20</td></tr>
+  <tr><td>Tibetan-term lexicon passes, review & integration into the
+      searchable archive</td><td>$430</td></tr>
+  <tr><td><b>Total</b></td><td>$1,500</td></tr>
+</table>
+<p style="font-size:13.5px;color:var(--grey)">The work is scoped, the
+tooling is built, and the recordings are inventoried — funding is the
+only remaining step. Accounting for every dollar will be published to
+donors when the run completes.</p>
+
+<div class="foot">
+  ༄༅། ། The Transcription Fund · Asian Legacy Library · Diamond Cutter
+  Classics<br>
+  Questions: <a href="mailto:adam.derick.andrade@gmail.com">adam.derick.andrade@gmail.com</a><br>
+  This effort supports the ALL Translation Tool — the open scholarly
+  workbench connecting the preserved library of Tibet to Geshe Michael
+  Roach's English.
+</div>
+</div>
