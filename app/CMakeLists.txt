@@ -6,7 +6,7 @@ set(_bat_count 0)
 foreach(_f core/CMakeLists.txt app/CMakeLists.txt ocr/CMakeLists.txt)
   if(EXISTS "${CMAKE_SOURCE_DIR}/${_f}")
     file(READ "${CMAKE_SOURCE_DIR}/${_f}" _bat_txt)
-    string(REGEX MATCHALL "add_test" _bat_hits "${_bat_txt}")
+    string(REGEX MATCHALL "add_test\\(" _bat_hits "${_bat_txt}")
     list(LENGTH _bat_hits _bat_n)
     math(EXPR _bat_count "${_bat_count} + ${_bat_n}")
     set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS

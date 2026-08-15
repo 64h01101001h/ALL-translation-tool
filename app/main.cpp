@@ -24176,9 +24176,9 @@ int main(int argc, char** argv) {
                                               .simplified(),
                                           "MMM d yyyy");
             add(QString("<div style='font-size:12px;color:#6E5F4B;"
-                        "letter-spacing:1px'>VERSION %1 &nbsp;"
+                        "letter-spacing:1px'>APP %1 &nbsp;"
                         "\u00b7&nbsp; RELEASED %2 &nbsp;"
-                        "\u00b7&nbsp; HGM DATA v%3</div>")
+                        "\u00b7&nbsp; HGM DICTIONARY DATA v%3</div>")
                     .arg(QStringLiteral(ALL_APP_VERSION),
                          rel.isValid()
                              ? rel.toString("d MMMM yyyy")
