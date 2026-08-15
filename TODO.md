@@ -54,6 +54,19 @@ implementation is sidelined HERE from this date. What this means:
       markers, both people-gated).
 
       **A. SOLO BUILD QUEUE (ranked)**
+      0. REVERTED — Overlay phrase-walk / nest-ladder change
+         (2026-08-14, commit 058efd2, reverted same day at Adam's
+         call: "working worse than before"). The DIAGNOSIS stands
+         (probe-proven): a bare connective (GYI class) between two
+         top-level phrases is covered only by itself + the whole
+         line; old walk re-lights the whole line and up/down
+         ring-cycles — the middle-syllable stall. The FIX attempt
+         changed too much at once (walk target + ladder semantics).
+         Revisit LATER (Adam's word) as a joint session with him
+         driving the exact reproduction; keep the lattice probe
+         (scratchpad/lattice_probe.cpp banked in the memory log) as
+         the test harness; consider fixing ONLY the walk target
+         first, leaving ↑/↓ untouched, then iterating live.
       1. Pecha programme remainder — v4: N2 double-shad-gap
          justification, N4/N6 wrapped-shad space discard,
          letter-spacing fallback for non-tsheg line ends; v3:
