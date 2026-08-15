@@ -10901,6 +10901,11 @@ public:
             "the Saved Search tab.");
         stopB_ = new QPushButton("Stop");
         stopB_->setEnabled(false);
+        stopB_->setToolTip(
+            "Stop the search after the current folder — partial "
+            "results stay on screen.");
+        connect(stopB_, &QPushButton::clicked,
+                [this] { stopped_ = true; });
         findB_ = new QPushButton("Find");
         auto* citB = new QPushButton("Citation web…");
         citB->setToolTip(
@@ -11169,7 +11174,40 @@ private:
         return terms.join(QString(" NEAR/%1 ").arg(n));
     }
 
+public:
+    // The fold combo's real semantics (Gofer heritage), applied as a
+    // strict post-filter over hit windows. The engine's recall is
+    // case-insensitive (a superset), so strictness only ever DROPS:
+    //   mode 0  ignore space+caps  — engine behavior, keep all
+    //   mode 1  ignore space only  — case must match (whitespace runs
+    //                                normalized on both sides)
+    //   mode 2  ignore nothing     — the exact string must appear
+    // A window is dropped when any term it matched loosely fails the
+    // strict comparison. Pure; pinned in the selftest.
+    static bool goferFoldKeep(int mode, const QString& windowText,
+                              const QStringList& terms) {
+        if (mode <= 0) return true;
+        auto squeeze = [](const QString& t) {
+            return t.simplified();
+        };
+        for (const QString& t : terms) {
+            if (t.isEmpty()) continue;
+            // both gates use the same normalization, so the loose
+            // gate sees exactly what the strict gate will judge
+            const QString wN =
+                mode == 1 ? squeeze(windowText) : windowText;
+            const QString tN = mode == 1 ? squeeze(t) : t;
+            if (!wN.contains(tN, Qt::CaseInsensitive))
+                continue;   // engine matched another term
+            if (!wN.contains(tN, Qt::CaseSensitive)) return false;
+        }
+        return true;
+    }
+
+private:
     void find() {
+        stopped_ = false;
+        stopB_->setEnabled(true);
         const QString q = buildQuery();
         if (q.isEmpty()) {
             results_->setHtml("<i>enter at least one term</i>");
@@ -11282,6 +11320,8 @@ private:
             probes.removeDuplicates();
             QStringList found;
             for (const QString& term : probes) {
+                QCoreApplication::processEvents();
+                if (stopped_) break;
                 QProcess p;
                 p.start("/usr/bin/mdfind",
                         {"-literal",
@@ -11315,7 +11355,16 @@ private:
             h += "<hr>";
             total += found.size();
         }
+        const int foldMode = fold_ ? fold_->currentIndex() : 0;
+        QStringList foldTerms;
+        for (auto* fld : fields_) {
+            const QString t = fld->text().trimmed();
+            if (!t.isEmpty()) foldTerms << t;
+        }
+        int foldDropped = 0;
         for (int i = kFirstDirRow; i < dirs_->count(); ++i) {
+            QCoreApplication::processEvents();
+            if (stopped_) break;
             if (dirs_->item(i)->checkState() != Qt::Checked) continue;
             const QString dir = dirs_->item(i)->text();
             try {
@@ -11341,6 +11390,19 @@ private:
                     QString snippet;
                 };
                 std::map<std::string, FileRoll> byFile;
+                if (foldMode > 0) {
+                    std::vector<allcore::FileGoferHit> kept;
+                    for (auto& f : hits) {
+                        QString wt;
+                        for (const auto& l : f.lines)
+                            wt += QString::fromStdString(l) + "\n";
+                        if (goferFoldKeep(foldMode, wt, foldTerms))
+                            kept.push_back(std::move(f));
+                        else
+                            ++foldDropped;
+                    }
+                    hits.swap(kept);
+                }
                 for (const auto& f : hits) {
                     auto& r = byFile[f.file];
                     if (!r.count) {
@@ -11397,6 +11459,16 @@ private:
             }
         }
         h += QString("<div><b>%1 total hit(s)</b></div>").arg(total);
+        if (foldDropped)
+            h += QString("<div style='color:#8A8A8A'><small>%1 "
+                         "window(s) hidden by the fold setting "
+                         "(%2)</small></div>")
+                     .arg(foldDropped)
+                     .arg(fold_->currentText().toHtmlEscaped());
+        if (stopped_)
+            h += "<div style='color:#8C2F2B'><small>search stopped "
+                 "— partial results</small></div>";
+        stopB_->setEnabled(false);
         results_->setHtml(h);
     }
 
@@ -11456,6 +11528,7 @@ private:
     QTextBrowser* results_ = nullptr;
     QJsonArray citEdges_;   // Citation Web edges (lazy-loaded)
     QPushButton* stopB_ = nullptr;
+    bool stopped_ = false;
     QPushButton* findB_ = nullptr;
 };
 
@@ -24512,6 +24585,22 @@ int main(int argc, char** argv) {
                 lk(lo.contains("online.adarshah.org/search.html?text=") &&
                        lo.contains("adarshah"),
                    "Adarsha link-out carries a unicode query");
+            }
+            {   // Gofer fold modes are real: strict modes drop
+                // case-mismatched windows; space-only mode
+                // tolerates whitespace runs; default keeps all
+                const QStringList terms{"SEM DPA"};
+                lk(GoferPane::goferFoldKeep(0, "sem dpa", terms) &&
+                       !GoferPane::goferFoldKeep(2, "sem dpa",
+                                                 terms) &&
+                       GoferPane::goferFoldKeep(2, "x SEM DPA y",
+                                                terms) &&
+                       GoferPane::goferFoldKeep(1, "SEM  DPA",
+                                                terms) &&
+                       !GoferPane::goferFoldKeep(1, "sem  dpa",
+                                                 terms),
+                   "Gofer fold: strict modes enforce case/space, "
+                   "default folds");
             }
             // the analyzer chain's verb-lemma step: a past form
             // with no headword of its own reaches its present stem

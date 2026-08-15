@@ -73,10 +73,12 @@ implementation is sidelined HERE from this date. What this means:
          (258 title-matched, already built) wired into setScanTarget
          — KL files now carry "THL Lhasa catalog: H.N" links
          (cat=h token live-verified; selftest-pinned).
-      4. Gofer pane: engine-level fold semantics (space/
-         capitalization — combo is currently display-only) + async
-         search so the Stop button becomes real — recovered by the
-         audit from a closed item's tail.
+      4. ~~Gofer fold + Stop~~ DONE 2026-08-14: the fold combo now
+         acts — strict modes post-filter hit windows (case /
+         space-normalized case; pure goferFoldKeep, selftest-pinned
+         — the pin caught a normalization bug before ship), hidden
+         windows counted in the footer; Stop is real (chunked loop,
+         partial results labeled).
       5. People layer increments: Lookup PERSON card section +
          Overlay person badge (design's next steps; only Library
          info-panel links shipped). Plus the 81 unresolved authors →
