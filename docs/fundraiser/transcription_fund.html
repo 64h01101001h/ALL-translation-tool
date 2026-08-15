@@ -144,12 +144,13 @@ words, never paraphrased.</blockquote>
   <div class="milestone" id="milestone"></div>
 </div>
 <div class="give">
-  <a class="btn" href="https://asianlegacylibrary.org/donate">Donate through the Asian Legacy Library</a>
-  <div class="note">Tax-deductible (501(c)(3)). Please write
+  <a class="btn" id="ppBtn" href="https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=adam.derick.andrade%40gmail.com&item_name=Teaching%20Archive%20Transcription%20Fund&currency_code=USD">Donate now (PayPal)</a>
+  <div class="note">The slider above sets the amount — it carries
+  straight through to PayPal.</div>
+  <a class="btn secondary" href="https://asianlegacylibrary.org/donate">Give through the Asian Legacy Library (tax-deductible 501(c)(3))</a>
+  <div class="note">If giving through ALL, please write
   <b>“Transcription Fund”</b> in the dedication / note field.</div>
-  <a class="btn secondary" href="mailto:adam.derick.andrade@gmail.com?subject=Transcription%20Fund%20Donation">Email us to give directly or sponsor a course</a>
-  <div class="soon">A dedicated zero-fee giving page (Zeffy) is coming online
-  this week — check back here, this page updates in place.</div>
+  <a class="btn secondary" href="mailto:adam.derick.andrade@gmail.com?subject=Transcription%20Fund%20Donation">Email us to sponsor a whole course</a>
 </div>
 
 <div class="qr" id="qrblock">
@@ -234,6 +235,8 @@ the full accounting is published to donors.</p>
     slider.style.setProperty('--pct', ((v - 10) / 9990 * 100) + '%');
     for (var i = 0; i < miles.length; i++)
       if (v >= miles[i][0]) { mile.innerHTML = miles[i][1]; break; }
+    var pp = document.getElementById('ppBtn');
+    if (pp) pp.href = "https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=adam.derick.andrade%40gmail.com&item_name=Teaching%20Archive%20Transcription%20Fund&currency_code=USD" + "&amount=" + v;
   }
   slider.addEventListener('input', upd); upd();
 })();

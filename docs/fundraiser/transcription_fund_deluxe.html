@@ -194,9 +194,11 @@
       aria-label="Choose donation amount">
     <div class="milestone" id="milestone"></div>
     <a class="cta" id="giveBtn"
-       href="https://asianlegacylibrary.org/donate">Give through the Asian
-       Legacy Library</a>
-    <div class="give-alt">Tax-deductible 501(c)(3) — write
+       href="https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=adam.derick.andrade%40gmail.com&item_name=Teaching%20Archive%20Transcription%20Fund&currency_code=USD">Donate Now — PayPal</a>
+    <div class="give-alt">The slider sets your amount — it carries
+    through to PayPal. Prefer tax-deductible? <a
+    href="https://asianlegacylibrary.org/donate">Give through the
+    Asian Legacy Library (501(c)(3))</a> and write
     <b>“Transcription Fund”</b> in the note field.<br>
     Or <a id="mailBtn"
     href="mailto:adam.derick.andrade@gmail.com?subject=Transcription%20Fund%20Donation">
@@ -437,6 +439,8 @@
       ((v - 10) / (10000 - 10) * 100) + '%');
     for (var i = 0; i < miles.length; i++)
       if (v >= miles[i][0]) { mile.innerHTML = miles[i][1]; break; }
+    var gb = document.getElementById('giveBtn');
+    if (gb) gb.href = "https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=adam.derick.andrade%40gmail.com&item_name=Teaching%20Archive%20Transcription%20Fund&currency_code=USD" + "&amount=" + v;
     mailBtn.href = "mailto:adam.derick.andrade@gmail.com?subject=" +
       encodeURIComponent("Transcription Fund Donation — $" + v);
   }
