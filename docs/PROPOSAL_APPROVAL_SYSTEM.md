@@ -75,9 +75,20 @@ differently:
    dictionary lookup ends with "propose to the authority…" — kind
    picker, proposed value, filed with the lookup context as evidence
    (selftest-covered).
-2. **Approved-register regeneration** — fold approved rows into the
-   canonical register TSVs at release time rather than appending live,
-   so the derivation tools and the approved additions stay one file.
+2. ~~Approved-register regeneration~~ — DONE 2026-08-14:
+   `allcore::regenerateApprovedRegisters` (42nd suite,
+   `regenreg_smoke`) re-derives the approved layer of every register
+   file from the rulings store — idempotent strip-and-refold of the
+   `# approved by` rows, so a decline falls out on the next pass and
+   running twice is byte-identical. Rulings now regenerate instead of
+   appending live; the Approval tab's **Regenerate registers** button
+   re-folds after importing a fresh data release. This also FIXED the
+   abbreviation path, which had been dead-ended (the live append
+   wrote a malformed row and nothing ever loaded the file):
+   `approved_abbreviations.tsv` now regenerates whole in the TibSchol
+   CSV shape — unicode renderings from the proven converter, empty
+   when it refuses, never guessed — and loads as a second display
+   layer under the same bskungs-yig card.
 3. ~~Notification counts~~ — DONE 2026-08-09: the Approval tab reads
    "Approval (N)" and updates live after each ruling.
 4. ~~Signed decisions archive~~ — DONE 2026-08-09: the Approval pane's

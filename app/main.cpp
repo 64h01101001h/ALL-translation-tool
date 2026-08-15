@@ -164,6 +164,7 @@ static void loadStardicts() {
 #include "allcore/whitney.h"
 #include "allcore/colloquial.h"
 #include "allcore/proposals.h"
+#include "allcore/regenreg.h"
 
 // the in-house proposal channel (defined before main; forward-declared
 // here so the panes above can offer "propose from card")
@@ -5051,6 +5052,12 @@ private:
                     abbr_.load((dataRoot_ +
                                 "/data/abbreviations/tibschol_abbr.csv")
                                    .toStdString());
+                    // the authority-approved layer rides on top
+                    // (regenerated from rulings; same CSV shape)
+                    abbr_.load(
+                        (dataRoot_ +
+                         "/data/abbreviations/approved_abbreviations.tsv")
+                            .toStdString());
                 }
                 auto hits = abbr_.byWylie(tokWylie);
                 if (hits.empty() && ok1) hits = abbr_.byUnicode(u1);
@@ -20960,6 +20967,12 @@ public:
         row->addWidget(bulkB);
         row->addWidget(exportB);
         row->addWidget(archiveB);
+        auto* regenB = new QPushButton("Regenerate registers");
+        regenB->setToolTip(
+            "Re-derive the approved layer of the register files "
+            "from the rulings store — idempotent, and the way to "
+            "re-fold approvals after importing a new data release.");
+        row->addWidget(regenB);
         row->addStretch();
         outer->addLayout(row);
         list_ = new QTextBrowser;
@@ -20971,6 +20984,7 @@ public:
                 [this] { rebuild(); });
         connect(exportB, &QPushButton::clicked, [this] { exportApproved(); });
         connect(archiveB, &QPushButton::clicked, [this] { showArchive(); });
+        connect(regenB, &QPushButton::clicked, [this] { regenerateNow(); });
         connect(list_, &QTextBrowser::anchorClicked,
                 [this](const QUrl& u) { onAction(u.toString()); });
         rebuild();
@@ -21154,8 +21168,6 @@ private:
         for (const auto& p : store.all())
             if (p.id == id.toStdString()) target = &p;
         if (!target) { rebuild(); return; }
-        if (st == allcore::ProposalStatus::Approved && target->isRegister())
-            applyRegister(*target);
         // declining a machine-derived pronunciation removes its derived
         // register row (only the prenasal-derived class — community and
         // hgm-attested rows are never touched by a ruling)
@@ -21164,11 +21176,18 @@ private:
             upgradeColloquialRow(
                 root_ + "/data/pron_colloquial/colloquial_pron.tsv",
                 *target, false);
+        const bool touchesRegister = target->isRegister();
         store.rule(id.toStdString(), st,
                    g_userName.isEmpty() ? "authority"
                                         : g_userName.toStdString(),
                    comment.toStdString(), isoToday().toStdString());
         store.save();
+        // v2 item 2: registers REGENERATE from the ruled store
+        // (idempotent strip-and-refold) instead of accumulating
+        // live appends — a decline falls out on the same pass
+        if (touchesRegister)
+            allcore::regenerateApprovedRegisters(
+                store, root_.toStdString());
         rebuild();
     }
 
@@ -21231,13 +21250,14 @@ private:
             for (const auto& p : store.all())
                 if (p.id == idStd) target = &p;
             if (!target) continue;
-            if (target->isRegister()) applyRegister(*target);
             store.rule(idStd, allcore::ProposalStatus::Approved,
                        who.toStdString(), comment.toStdString(),
                        isoToday().toStdString());
             ++applied;
         }
         store.save();
+        allcore::regenerateApprovedRegisters(store,
+                                             root_.toStdString());
         rebuild();
         QMessageBox::information(
             this, "Approve all",
@@ -21255,45 +21275,21 @@ private:
             g_userName.toStdString(), isoToday().toStdString());
     }
 
-    // register approvals write straight into the app's register files,
-    // appended with the approved tier + provenance
-    void applyRegister(const allcore::Proposal& p) {
-        QString path, line;
-        if (p.kind == allcore::ProposalKind::Honorific ||
-            p.kind == allcore::ProposalKind::HighHonorific ||
-            p.kind == allcore::ProposalKind::Humilific ||
-            p.kind == allcore::ProposalKind::DoubleHonorific) {
-            path = root_ + "/data/honorifics/honorific_register.tsv";
-            const QString level =
-                p.kind == allcore::ProposalKind::HighHonorific ? "high"
-                : p.kind == allcore::ProposalKind::Humilific ? "humilific"
-                : p.kind == allcore::ProposalKind::DoubleHonorific
-                    ? "double"
-                    : "honorific";
-            // honorific_wylie \t ordinary \t domain \t level
-            line = QString::fromStdString(p.wylie) + "\t" +
-                   QString::fromStdString(p.field) + "\t" +
-                   QString::fromStdString(p.value) + "\t" + level;
-        } else if (p.kind == allcore::ProposalKind::Pronunciation) {
-            // a machine-derived row for the same form may already exist
-            // (the seeded prenasal review): upgrade it IN PLACE to
-            // approved rather than appending a duplicate
-            path = root_ + "/data/pron_colloquial/colloquial_pron.tsv";
-            if (upgradeColloquialRow(path, p, true)) return;
-            // colloquial \t wylie \t gmr_pron \t class
-            line = QString::fromStdString(p.value) + "\t" +
-                   QString::fromStdString(p.wylie) + "\t\tapproved";
-        } else if (p.kind == allcore::ProposalKind::Abbreviation) {
-            path = root_ + "/data/abbreviations/approved_abbreviations.tsv";
-        }
-        if (path.isEmpty()) return;
-        QFile f(path);
-        if (f.open(QIODevice::Append | QIODevice::Text)) {
-            QTextStream ts(&f);
-            ts << line << "\t# approved by "
-               << (g_userName.isEmpty() ? "authority" : g_userName) << " "
-               << isoToday() << "\n";
-        }
+    // "Regenerate registers" — for after importing a fresh data
+    // release: re-fold every currently approved register proposal
+    // into the canonical files (idempotent; see allcore/regenreg.h)
+    void regenerateNow() {
+        allcore::ProposalStore store(g_proposalsDir.toStdString());
+        store.load();
+        const auto st = allcore::regenerateApprovedRegisters(
+            store, root_.toStdString());
+        QMessageBox::information(
+            this, "Regenerate registers",
+            QString("Approved layer re-folded from the rulings "
+                    "store:\n%1 honorific · %2 pronunciation · %3 "
+                    "abbreviation row(s).\nRun this after importing "
+                    "a new data release.")
+                .arg(st.honorific).arg(st.pron).arg(st.abbrev));
     }
 
     // the read-only decisions record: every ruled proposal, newest

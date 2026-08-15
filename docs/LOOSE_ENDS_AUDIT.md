@@ -44,9 +44,10 @@ defect, not ours) · version bumped 0.12.0.
    keyed with final ma instead of ཾ → review-candidate list.
 6. **lucene-bo app-side remainder**: updateIndex lemma path +
    Lookup affix-fold alignment (TODO L451).
-7. **Approved-register regeneration**: fold approved Proposal rows
-   into canonical register TSVs at release time
-   (PROPOSAL_APPROVAL_SYSTEM.md:78) — the one un-struck v2 item.
+7. ~~Approved-register regeneration~~ DONE 2026-08-14 (press #85):
+   allcore regenerateApprovedRegisters + regenreg_smoke (suite 42) +
+   Approval-tab button; also fixed the dead-ended abbreviation
+   approval path (malformed append, never loaded).
 8. **Spine/data-release updater**: mirror the collection-updates
    dialog for release packages (TODO L790).
 9. **Banked-corpus mining lanes** (data local, never mined):

@@ -22,6 +22,7 @@ add_library(allcore STATIC
   src/whitney.cpp
   src/colloquial.cpp
   src/proposals.cpp
+  src/regenreg.cpp
   src/verse.cpp
   src/wilsonparse.cpp
   src/tibexport.cpp
@@ -143,6 +144,10 @@ add_test(NAME colloquial_smoke
                  ${CMAKE_SOURCE_DIR}/data/pron_colloquial/colloquial_pron.tsv
                  ${CMAKE_SOURCE_DIR}/data/honorifics/honorific_register.tsv
                  ${CMAKE_SOURCE_DIR}/build/hgm_spine_v27_2.db)
+
+add_executable(regenreg_smoke tests/regenreg_smoke.cpp)
+target_link_libraries(regenreg_smoke PRIVATE allcore)
+add_test(NAME regenreg_smoke COMMAND regenreg_smoke)
 
 add_executable(proposals_smoke tests/proposals_smoke.cpp)
 target_link_libraries(proposals_smoke PRIVATE allcore)
