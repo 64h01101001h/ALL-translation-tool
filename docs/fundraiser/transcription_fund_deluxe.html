@@ -336,8 +336,29 @@ catalog, and preserving it first is built into this budget.</p>
 
   /* ---------- wave → script strip ---------- */
   var wv = document.getElementById('wave'), wx = wv.getContext('2d');
-  var words = ["compassion","emptiness","merit",
-    "wisdom","freedom","kindness","patience","stillness"];
+  // two banks condensing out of the same voice: the English a
+  // student hears, and the transliterated term behind it (ACIP
+  // romanization, drawn from the project's own dictionary)
+  var wordsEn = ["compassion","wisdom","emptiness","merit","freedom",
+    "kindness","patience","stillness","insight","generosity","courage",
+    "clarity","joy","mindfulness","understanding","awakening",
+    "morality","effort","meditation","faith","equanimity",
+    "loving-kindness","goodness","bliss","suffering","impermanence",
+    "interdependence","deeds","nirvana","prayer","teacher","students",
+    "practice","path","result","benefit","reasoning","proof",
+    "definition","nature","reality","ultimate","conventional",
+    "perception","concentration","dedication","refuge","aspiration",
+    "gratitude","presence"];
+  var wordsAcip = ["BSOD NAMS","YE SHES","SHES RAB","BYANG CHUB",
+    "SNYING RJE","STONG PA NYID","THAR PA","DAD PA","BZOD PA",
+    "BRTZON 'GRUS","BSAM GTAN","SBYIN PA","TSUL KHRIMS","DGE BA",
+    "BDE BA","SEMS CAN","BLA MA","CHOS","SANGS RGYAS","DGRA BCOM PA",
+    "RTEN 'BREL","LAS","ZHI GNAS","LHAG MTHONG","DRAN PA","SHES PA",
+    "BLO","DON DAM","KUN RDZOB","RANG BZHIN","MI RTAG PA",
+    "SDUG BSNGAL","'KHOR BA","SMON LAM","BYAMS PA","BTANG SNYOMS",
+    "DGA' BA","DBANG PO","RTOGS PA","NYAMS LEN","LAM","'BRAS BU",
+    "PHAN YON","TSAD MA","RIGS PA","GTAN TSIGS","DPE","MTSAN NYID",
+    "NGO BO","GNAS LUGS"];
   var drops = [];
   function wsize(){ wv.width = wv.offsetWidth * devicePixelRatio;
                     wv.height = 150 * devicePixelRatio; }
@@ -361,17 +382,25 @@ catalog, and preserving it first is built into this budget.</p>
     wx.lineWidth = 2 * devicePixelRatio; wx.stroke();
     // words condensing (right)
     if (!reduced && Math.random() < 0.030 && drops.length < 15) {
-      drops.push({ w: words[Math.floor(Math.random()*words.length)],
-        x: third + Math.random() * (Ww - third - 90*devicePixelRatio),
-        y: mid + (Math.random() - 0.5) * Hh * 0.55,
-        b: 0, f: (11 + Math.random()*7) * devicePixelRatio });
+      // ~40% of drops are the transliterated term, set smaller and
+      // dimmer so English reads first and the term sits behind it
+      var isAcip = Math.random() < 0.4;
+      var bank = isAcip ? wordsAcip : wordsEn;
+      drops.push({ w: bank[Math.floor(Math.random()*bank.length)],
+        acip: isAcip,
+        x: third + Math.random() * (Ww - third - 110*devicePixelRatio),
+        y: mid + (Math.random() - 0.5) * Hh * 0.62,
+        b: 0, f: (isAcip ? 9 + Math.random()*4
+                         : 12 + Math.random()*7) * devicePixelRatio });
     }
     for (var i = drops.length - 1; i >= 0; i--) {
       var d = drops[i]; d.b += 0.0075;
       var a = d.b < 0.5 ? d.b * 2 : (1 - d.b) * 2;
-      wx.globalAlpha = Math.max(0, a);
-      wx.fillStyle = '#E9C871';
+      wx.globalAlpha = Math.max(0, d.acip ? a * 0.62 : a);
+      wx.fillStyle = d.acip ? '#C89A52' : '#E9C871';
       wx.font = d.f + 'px "Palatino",serif';
+      if (d.acip) wx.letterSpacing = '0.06em';
+      else wx.letterSpacing = '0em';
       wx.fillText(d.w, d.x, d.y);
       if (d.b >= 1) drops.splice(i, 1);
     }
