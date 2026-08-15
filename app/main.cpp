@@ -5097,25 +5097,15 @@ private:
                     case Qt::Key_Left:
                         navPhrase(-1);
                         return true;
-                    case Qt::Key_Down: {
-                        // a LADDER, not a ring: at the innermost
-                        // rung ↓ stays put (the wrap-around was
-                        // Adam's middle-syllable trap)
-                        const int n =
-                            (int)doc_.spansAt(lastTok_).size();
-                        if (cycle_ + 1 < n)
-                            onClick();   // one step down the nest
+                    case Qt::Key_Down:
+                        onClick();   // one more step down the nest
                         return true;
-                    }
                     case Qt::Key_Up: {
-                        const int n =
-                            (int)doc_.spansAt(lastTok_).size();
-                        if (n > 1 && cycle_ > 0) {
-                            cycle_ -= 1;   // one step up, no wrap
-                            const bool save = cardRefresh_;
-                            cardRefresh_ = true;   // re-show, don't
-                            onClick();             // advance again
-                            cardRefresh_ = save;
+                        auto at = doc_.spansAt(lastTok_);
+                        if ((int)at.size() > 1) {
+                            cycle_ = (cycle_ + (int)at.size() - 2) %
+                                     (int)at.size();
+                            onClick();
                         }
                         return true;
                     }
@@ -5131,31 +5121,6 @@ private:
     // text: from the current span's edge, land on the nearest token
     // the dictionary knows (falling back to the adjacent token so
     // the walk never dead-ends), then light the longest phrase there
-public:
-    // Which span should light when the phrase walk lands on token t?
-    // Walking RIGHT: the longest span that BEGINS at/after t (so the
-    // walk advances phrase by phrase instead of re-lighting a longer
-    // span that reaches back over where we came from — Adam's
-    // TSAD MA RNAM 'GREL GYI... middle-syllable trap, 2026-08-14).
-    // Walking LEFT: the longest span that ENDS by the previous
-    // span's start. Falls back to the longest covering span.
-    // Returns an index into doc.spans, or -1 when t has none.
-    static int navTargetSpan(const allcore::OverlayDoc& doc, int t,
-                             int dir, int prevBeg) {
-        auto at = doc.spansAt(t);   // shortest first
-        if (at.empty()) return -1;
-        int best = -1, bestLen = -1;
-        for (int i : at) {
-            const auto& sp = doc.spans[i];
-            const bool ok = dir > 0 ? sp.beg >= t
-                                    : sp.end <= prevBeg;
-            const int len = sp.end - sp.beg;
-            if (ok && len > bestLen) { best = i; bestLen = len; }
-        }
-        return best >= 0 ? best : at.back();   // longest covering
-    }
-
-private:
     void navPhrase(int dir) {
         if (lastTok_ < 0 || doc_.tokens.empty()) return;
         auto at = doc_.spansAt(lastTok_);
@@ -5183,7 +5148,6 @@ private:
         // fresh longest-first state BEFORE moving the cursor —
         // setTextCursor fires onClick through cursorPositionChanged,
         // and a second direct call would step the nest down a level
-        navDesired_ = navTargetSpan(doc_, t, dir, beg);
         cycle_ = 0;
         lastTok_ = -1;
         const bool moves =
@@ -5312,13 +5276,7 @@ private:
                 cycle_ = 0;
         } else {
             cycle_ = 0;
-            // arriving from the phrase walk: light the span the
-            // walk chose, not blindly the longest
-            if (navDesired_ >= 0)
-                for (int i = 0; i < (int)at.size(); ++i)
-                    if (at[i] == navDesired_) { cycle_ = i; break; }
         }
-        navDesired_ = -1;
         lastTok_ = tok;
         const auto& span = doc_.spans[at[cycle_]];
         const auto& e = doc_.entries[span.entry_ix];
@@ -10260,7 +10218,6 @@ private:
     bool loading_ = false;
     int lastTok_ = -1;
     int cycle_ = 0;
-    int navDesired_ = -1;   // span the phrase walk wants lit next
 
     // ---- per-text glossary (Ven. Phil's Translation Tool + Hypercontext
     // "FROM THIS GLOSSARY:" — the ancestor feature; Adam approved
@@ -24735,33 +24692,6 @@ int main(int argc, char** argv) {
                        none.isEmpty(),
                    "Lookup PERSON card answers for an author name "
                    "only");
-            }
-            {   // Adam's middle-syllable trap (2026-08-14): in
-                // TSAD MA RNAM 'GREL GYI TSIG LE'UR BYAS PA'I the
-                // genitive GYI is covered by ONLY the bare syllable
-                // and the whole line. The phrase walk must land on
-                // GYI itself going right, then advance to TSIG
-                // LE'UR BYAS PA'I — never re-light the whole line.
-                auto pdoc = allcore::buildOverlay(
-                    spine,
-                    "TSAD MA RNAM 'GREL GYI TSIG LE'UR BYAS PA'I");
-                bool ok = pdoc.tokens.size() == 9;
-                if (ok) {
-                    const int s1 = OverlayPane::navTargetSpan(
-                        pdoc, 4, +1, 0);   // landing on GYI
-                    const int s2 = OverlayPane::navTargetSpan(
-                        pdoc, 5, +1, 4);   // landing on TSIG
-                    const int s3 = OverlayPane::navTargetSpan(
-                        pdoc, 3, -1, 5);   // walking LEFT from TSIG's
-                                            // phrase lands before GYI
-                    ok = s1 >= 0 && pdoc.spans[s1].beg == 4 &&
-                         pdoc.spans[s1].end == 5 &&
-                         s2 >= 0 && pdoc.spans[s2].beg == 5 &&
-                         pdoc.spans[s2].end == 9 &&
-                         s3 >= 0 && pdoc.spans[s3].end <= 5;
-                }
-                lk(ok, "phrase walk advances GYI -> TSIG LE'UR "
-                       "BYAS PA'I; never re-lights the whole line");
             }
             {   // Gofer fold modes are real: strict modes drop
                 // case-mismatched windows; space-only mode
