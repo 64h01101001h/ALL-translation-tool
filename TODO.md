@@ -152,8 +152,7 @@ implementation is sidelined HERE from this date. What this means:
          line-edit coverage for typed-input panes ·
          ~~navigable-outline TOC~~ AUDIT-STALE, CLOSED 2026-08-15: the sa-bcad outline tree already ships (Overlay → Outline (sa bcad)…: QTreeWidget, click-jump, scan follow-along keeps pace). The banked THL outline-MARKUP grammar remains a parser-in-waiting for whenever THL-marked-up files enter the library — none do today · Sungbum route-2 (per-author outline harvest)
          verification · THL follow-ups (GMR-vs-THL phonetics
-         convention doc; Studies-in-Genre chapter list) · Zenodo
-         license check on Hill's verb-stems lexicon · About-dialog
+         convention doc; Studies-in-Genre chapter list) · ~~Zenodo Hill verb-stems license check~~ DONE 2026-08-15: record 4726991 = open ACCESS but license 'other-open' with NO explicit grant (no CC tag, no LICENSE file; derives from Hill 2010, Bayerische Akademie — a published book). VERDICT: in-house research comparandum at most; nothing ships without Hill's word (an email would clear it — optional, our CC0 bank already covers stems; Hill adds grammatical-tradition attestations) · About-dialog
          contact swap when a support@ address exists · vendor
          libtesseract if the team wants zero-setup Sanskrit OCR.
       10. Idea bank (liked, never scheduled): pronunciation trainer ·
