@@ -32,7 +32,7 @@ implementation is sidelined HERE from this date. What this means:
 
 ## Waiting on Adam (prompt him when the task starts)
 
-- [~] **Pecha renderer v4 (W3C/r12a traditional justification)** — CORE SHIPPED 2026-08-14: N1 tsheg-padding justification + N3 ༑ substitution (pure pechaLineTransform, selftested) + N5 ༈ NBSP block, via per-line re-render in flow(). REMAINING: N2 double-shad-gap justification, N4/N6 wrapped-shad space discard, letter-spacing fallback for non-tsheg line ends. (was:
+- [x] **Pecha renderer v4 (W3C/r12a traditional justification)** — COMPLETE 2026-08-14: N1 tsheg-padding + N3 ༑ substitution + N5 ༈ NBSP block (core press #83), then N2 double-shad-GAP justification (closing shad drawn flush at the margin; pechaDoubleShadEnd pure helper, selftest-pinned) + N4 wrapped-shad leading-space discard. Letter-spacing fallback DROPPED with reason: lines break at tsheg/shad boundaries by construction so the case barely occurs, and stretching inside syllables is untraditional — tsheg-padding and shad-gap are the two attested methods, both shipped. (was:
       N1 tsheg-padding justification (dominant method; line-ends-in-
       tsheg → pad tshegs to margin), N2 double-shad gap justification
       (+1/4–1/3-space normal gap), N3 ༑ substitution on reflow (first

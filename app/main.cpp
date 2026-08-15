@@ -2945,6 +2945,22 @@ public:
                       "release import: newest-version discovery; "
                       "spine pointer honored, traversal refused");
             }
+            {   // pecha v4 N2: double-shad line-end detection —
+                // pair with gap = index of final shad; single shad
+                // and tsheg ends refuse
+                QString pair;
+                pair += QChar(0x0F61); pair += QChar(0x0F72);
+                pair += QChar(0x0F53); pair += QChar(0x0F0D);
+                pair += QChar(0x00A0); pair += QChar(0x0F0D);
+                QString single = pair.left(4);
+                QString tsheg = single;
+                tsheg[3] = QChar(0x0F0B);
+                check(OverlayPane::pechaDoubleShadEnd(pair) == 5 &&
+                          OverlayPane::pechaDoubleShadEnd(single) < 0 &&
+                          OverlayPane::pechaDoubleShadEnd(tsheg) < 0,
+                      "pecha v4: double-shad end detected, single "
+                      "shad and tsheg ends refused");
+            }
             {   // pecha v4: rin chen spungs shad substitution —
                 // a lone wrapped final syllable's ། becomes ༑;
                 // multi-syllable and non-wrapped lines untouched
@@ -8387,6 +8403,30 @@ public:
         return line;
     }
 
+    // pecha v4 (r12a N2): does this line end in a shad PAIR
+    // ("། །" — with any spaces/NBSPs between and after)? Returns the
+    // index of the FINAL shad, or -1. The renderer stretches the gap
+    // so the closing shad sits flush at the margin, the second
+    // classical justification method beside tsheg-padding.
+    static int pechaDoubleShadEnd(const QString& line) {
+        int i = line.size() - 1;
+        auto isSp = [](QChar c) {
+            return c.isSpace() || c == QChar(0x00A0);
+        };
+        while (i >= 0 && isSp(line[i])) --i;
+        if (i < 0 || (line[i] != QChar(0x0F0D) &&
+                      line[i] != QChar(0x0F11)))
+            return -1;
+        const int last = i;
+        --i;
+        bool gap = false;
+        while (i >= 0 && isSp(line[i])) { gap = true; --i; }
+        if (!gap || i < 0) return -1;
+        if (line[i] != QChar(0x0F0D) && line[i] != QChar(0x0F11))
+            return -1;
+        return last;
+    }
+
     // display-layer break protection for the pecha exporter: the
     // two sequences Qt/ICU may otherwise break — never applied to
     // stored text, only to the rendered page
@@ -8797,6 +8837,30 @@ public:
                             lt = pechaLineTransform(
                                 s0 > 0 ? t[s0 - 1] : QChar(),
                                 lt);
+                        // N4: a space a wrapped shad drags onto the
+                        // new line is discarded, never rendered
+                        while (tibMain && !lt.isEmpty() &&
+                               (lt.front().isSpace() ||
+                                lt.front() == QChar(0x00A0)))
+                            lt.remove(0, 1);
+                        // N2: a double-shad line end justifies by
+                        // stretching the GAP — the closing shad is
+                        // drawn flush at the margin, the body keeps
+                        // its natural width
+                        QChar stretchShad;
+                        if (tibMain && o.shadConv &&
+                            s0 + ln < t.size()) {
+                            const int ds = pechaDoubleShadEnd(lt);
+                            if (ds >= 0) {
+                                stretchShad = lt[ds];
+                                lt.truncate(ds);
+                                while (!lt.isEmpty() &&
+                                       (lt.back().isSpace() ||
+                                        lt.back() == QChar(0x00A0)))
+                                    lt.chop(1);
+                                lt += ' ';  // keep a minimal gap
+                            }
+                        }
                         QTextLayout sl(lt, f);
                         sl.beginLayout();
                         QTextLine one = sl.createLine();
@@ -8805,6 +8869,24 @@ public:
                         sl.endLayout();
                         one.draw(&p,
                                  QPointF(textR.left() + ind, y));
+                        if (!stretchShad.isNull()) {
+                            const QFontMetricsF fm2(f);
+                            const double sw = fm2.horizontalAdvance(
+                                stretchShad);
+                            const double sx =
+                                textR.left() + textR.width() - sw;
+                            if (sx > textR.left() + ind +
+                                         one.naturalTextWidth())
+                                p.drawText(
+                                    QPointF(sx, y + fm2.ascent()),
+                                    QString(stretchShad));
+                            else  // no room to stretch: draw inline
+                                p.drawText(
+                                    QPointF(textR.left() + ind +
+                                                one.naturalTextWidth(),
+                                            y + fm2.ascent()),
+                                    QString(stretchShad));
+                        }
                         // N1: traditional justification — a line
                         // ending in tsheg pads with tshegs to the
                         // margin (never the text's final line)
