@@ -5,6 +5,7 @@
 #include <fstream>
 
 #include "allcore/libindex.h"
+#include "allcore/searchnorm.h"
 
 static int failures = 0;
 #define CHECK(cond, msg)                                        \
@@ -69,6 +70,27 @@ int main() {
     auto st2 = ix.update(root.string());
     CHECK(st2.unchanged == 2 && st2.added == 0 && st2.updated == 0,
           "second update touches nothing");
+    // fold-generation stamp: configuring the lemma fold after an
+    // index was built forces one full reindex, so norms built
+    // without the fold heal — and a past-form line becomes
+    // reachable from its present stem
+    const fs::path verbs = fs::temp_directory_path() / "libindex_verbs.tsv";
+    write(verbs, "bkag\t'gog\n");
+    allcore::configureLemmaFold(verbs.string());
+    write(root / "past.txt", "BKAG PA YIN\n");
+    auto stf = ix.update(root.string());
+    CHECK(stf.added == 1 && stf.updated == 2 && stf.unchanged == 0,
+          "lemma-fold generation change reindexes every file once");
+    bool pastHit = false;
+    for (auto& h : ix.search("\"'gog\""))
+        for (auto& l : h.lines)
+            pastHit |= l.find("BKAG") != std::string::npos;
+    CHECK(pastHit, "past form BKAG found by its present stem 'gog");
+    auto stf2 = ix.update(root.string());
+    CHECK(stf2.unchanged == 3 && stf2.updated == 0,
+          "stamp settles: next update touches nothing");
+    fs::remove(verbs);
+
     fs::last_write_time(root / "notes.txt",
                         fs::file_time_type::clock::now());
     write(root / "notes.txt", "completely new content\n");
@@ -78,7 +100,7 @@ int main() {
           "stale lines are purged from the FTS index");
     fs::remove(root / "kangyur" / "KL0001MA.ACT");
     auto st4 = ix.update(root.string());
-    CHECK(st4.removed == 1 && ix.fileCount() == 1,
+    CHECK(st4.removed == 1 && ix.fileCount() == 2,
           "deleted file leaves the index");
     CHECK(ix.search("\"bden pa\"").empty(), "its lines are gone too");
 

@@ -481,8 +481,16 @@ implementation is sidelined HERE from this date. What this means:
       Lookup pane fallback labeled "matched by pronunciation") — OUR
       deterministic expression of the phonetics family; upstream's
       English-speller folding tiers (ee→i etc.) remain optional later
-      lenience. REMAINING app-side: updateIndex lemma path + Lookup
-      affix-fold alignment.
+      lenience. REMAINING app-side CLOSED
+      2026-08-14: app main() now configures the process-wide lemma
+      fold from the bundled CC0 bank, so the in-app indexer builds
+      the same text_norm as the offline v3 builder; libindex gained
+      a fold-generation stamp (PRAGMA application_id) — an index
+      whose norms were built without the fold full-reindexes ONCE
+      on the next update, healing the 08-07..08-14 in-app gap;
+      Lookup fallback walks the full analyzer chain (affix strip →
+      pa/ba fold → verb-lemma fold), each step labeled (klogs →
+      present stem klog, selftest-pinned). lucene-bo item COMPLETE.
       Affix rules detail:
       (allcore affixnorm: faithful TibAffixedFilter port, battery
       through our own converters incl. the needsAA guard; wylie-level

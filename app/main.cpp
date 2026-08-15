@@ -156,6 +156,7 @@ static void loadStardicts() {
     }
 }
 #include "allcore/affixnorm.h"
+#include "allcore/searchnorm.h"
 #include "allcore/lexicon.h"
 #include "allcore/verbstems.h"
 #include "allcore/outline.h"
@@ -981,6 +982,42 @@ static QString lookupResultsHtml(allcore::Spine& spine,
                                   .toHtmlEscaped(),
                               QString::fromStdString(base)
                                   .toHtmlEscaped());
+        }
+        // the rest of the lucene-bo analyzer chain, aligned with
+        // the index fold (searchFoldWylie): standalone ba/bo →
+        // pa/po, then non-present verb forms → their unique
+        // present stem (CC0 verbs bank; ambiguous forms were
+        // never folded). Each step labeled, never silent.
+        const std::string paba = allcore::paBaFoldWylie(base);
+        if (entries.empty() && paba != base) {
+            entries = spine.lookup(paba);
+            if (!entries.empty())
+                h += QString("<div style='color:#1E6B4E;font-size:"
+                             "12px'>no entry for \u201c%1\u201d — "
+                             "showing <b>%2</b> (standalone ba/bo "
+                             "folds to pa/po)</div>")
+                         .arg(QString::fromStdString(wy)
+                                  .toHtmlEscaped(),
+                              QString::fromStdString(paba)
+                                  .toHtmlEscaped());
+        }
+        if (entries.empty()) {
+            if (const auto* lf = allcore::globalLemmaFold()) {
+                if (const std::string* stem = lf->fold(paba)) {
+                    entries = spine.lookup(*stem);
+                    if (!entries.empty())
+                        h += QString(
+                                 "<div style='color:#1E6B4E;"
+                                 "font-size:12px'>\u201c%1\u201d "
+                                 "is a verb form — showing the "
+                                 "present stem <b>%2</b> (CC0 "
+                                 "verb bank)</div>")
+                                 .arg(QString::fromStdString(wy)
+                                          .toHtmlEscaped(),
+                                      QString::fromStdString(*stem)
+                                          .toHtmlEscaped());
+                }
+            }
         }
     }
     // pronunciation fallback (GMR convention): 'jangchub' finds
@@ -22728,6 +22765,13 @@ int main(int argc, char** argv) {
         }
     }
     const QString root = findDataRoot();
+    // lucene-bo lemma fold (CC0 verbs bank): configured process-wide
+    // so the in-app library indexer builds the SAME text_norm the
+    // offline v3 builder does, and the Lookup fallback can walk the
+    // same chain. Missing file = fold silently unconfigured
+    // (affix + pa/ba only), never an error.
+    allcore::configureLemmaFold(
+        (root + "/data/extracted/verb_lemmas.tsv").toStdString());
     // bundled Tibetan font (Noto Serif Tibetan, OFL — data/fonts/):
     // consistent complex-stack shaping regardless of system fonts
     QFontDatabase::addApplicationFont(root +
@@ -24047,6 +24091,16 @@ int main(int argc, char** argv) {
                                                  "gzigs");
             lk(hh.toLower().contains("honorific"),
                "honorific term carries its badge");
+            // the analyzer chain's verb-lemma step: a past form
+            // with no headword of its own reaches its present stem
+            {
+                const QString hv = lookupResultsHtml(
+                    spine, refdict, mvp, whitney, colloq, "klogs");
+                lk(hv.contains("present stem") &&
+                       hv.contains("klog"),
+                   "verb form klogs folds to present stem klog "
+                   "(CC0 bank, labeled)");
+            }
             // typing the authority's RULED form finds the entry —
             // proven on a ruling whose release baseline DIFFERS
             // (kamdir: the release index only knows kabdir).

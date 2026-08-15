@@ -154,6 +154,20 @@ LibraryIndex::UpdateStats LibraryIndex::update(const std::string& root) {
         disk[fs::relative(it->path(), root).string()] = {mt, (long long)size};
     }
 
+    // fold-generation stamp: text_norm depends on whether the
+    // verb-lemma fold was configured when a file was indexed. A
+    // mismatch (an index built before the caller configured the
+    // fold, or vice versa) forces ONE full reindex so every norm
+    // heals; searches keep answering from the old norms until then.
+    const int foldGen = globalLemmaFold() ? 1 : 0;
+    int prevGen = 0;
+    {
+        Stmt g(db_, "PRAGMA application_id");
+        if (sqlite3_step(g.p) == SQLITE_ROW)
+            prevGen = sqlite3_column_int(g.p, 0);
+    }
+    const bool refold = prevGen != foldGen;
+
     exec(db_, "BEGIN");
     // remove vanished files
     {
@@ -193,7 +207,8 @@ LibraryIndex::UpdateStats LibraryIndex::update(const std::string& root) {
                 size = sqlite3_column_int64(g.p, 2);
             }
         }
-        if (id >= 0 && mtime == ms.first && size == ms.second) {
+        if (!refold && id >= 0 && mtime == ms.first &&
+            size == ms.second) {
             ++st.unchanged;
             continue;
         }
@@ -290,6 +305,8 @@ LibraryIndex::UpdateStats LibraryIndex::update(const std::string& root) {
             sqlite3_step(lf.p);
         }
     }
+    exec(db_, foldGen ? "PRAGMA application_id=1"
+                      : "PRAGMA application_id=0");
     exec(db_, "COMMIT");
     st.lines = lineCount();
     return st;

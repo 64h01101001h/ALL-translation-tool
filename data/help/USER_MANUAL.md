@@ -1628,7 +1628,7 @@ one click away. TibetDoc's dictionary window, reborn app-wide.
 8. **Affix-stripping fallback**: type `po'i`. There is no such
    headword, so the pane strips the affixed particle and shows
    *po*, with the note "no entry for 'po'i' — showing **po**
-   (affixed particle stripped)". Nothing is silently substituted —
+   (affixed particle stripped; standalone *ba/bo* folds to *pa/po*; and an unambiguous past/future/imperative verb form folds to its present stem from the CC0 verb bank — every fallback is labeled in green above the results, never silent)". Nothing is silently substituted —
    the note is always there.
 
 ### Reading a result card
