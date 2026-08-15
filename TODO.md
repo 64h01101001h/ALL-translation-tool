@@ -190,6 +190,47 @@ implementation is sidelined HERE from this date. What this means:
          SHIP ORDER: schema field first (so the pane can show what
          exists), then route 3, then routes 1+2, then the pane's
          display + a battery pinning known-good and known-bad pairs.
+      9c. **RECOVERED DEFERRALS (Adam, 2026-08-15: "look for any
+         'saved for later' notes and add them to the updated todo
+         list").** Swept every session transcript, all of docs/,
+         data/help/ and the whole codebase for deferral phrasing.
+         Code carries ZERO TODO/FIXME/LATER comments; docs were clean
+         (the USER_MANUAL "deferred" hits are the proposal system's
+         own DEFERRED status label, not project debt). 21 real
+         deferrals surfaced in the transcripts, 13 were already on
+         this board. These EIGHT were not, and are now:
+         · **Arrow-key / highlighter revisit** — the shader stalling
+           on long strings. My fix made it WORSE and was reverted
+           2026-08-15; I said the queue would carry a note and it
+           never landed here, which is why this went missing. Terms:
+           a JOINT session with Adam driving the exact reproduction,
+           ONE semantic change at a time (likely the walk-target fix
+           alone first, leaving the up/down ladder untouched). The
+           lattice probe is kept as evidence. LESSON: arrow-key FEEL
+           cannot be signed off from a simulator.
+         · **`.hyp` legacy importer** — the format is understood
+           (script-switch markup + numbered nested links); an
+           importer is straightforward whenever hypertexted files
+           from that era turn up beyond the tutorial.
+         · **Word-level scan following** — blocked on coordinate OCR;
+           today's following is line-band granularity.
+         · **PPP-reverse lookup** — typing *gata* finds the root
+           *gam*; same Sanskrit hub as the shipped MW crosswalk.
+         · **"Text reports" pane (option E)** — survey + teachings +
+           structure gathered in one place; my own UX ruling was
+           "revisit after the polish phase", which has now passed.
+         · **Night-mode + typography audit** — needs fresh
+           screenshots against the current layout; pairs with the
+           joint T/K/F walkthrough already in Adam's queue.
+         · **Transfer-queue reordering + remote edit with
+           auto-upload** — the two File Browser P3 items deferred
+           with reasons.
+         · **Botok/Monlam deeper revisit** — load the Monlam lexicon
+           into the overlap probe for true in-app parity, and split
+           the divergence count into phrase-span-explained vs
+           genuinely-different-boundary classes
+           (docs/research/BOTOK_LATTICE_OVERLAP.md says what this
+           would look like).
       10. Idea bank (liked, never scheduled): pronunciation trainer ·
          Text DNA strips · team board · apprenticeship mode ·
          English-on-the-carving hover · teaching-playlist karaoke ·
