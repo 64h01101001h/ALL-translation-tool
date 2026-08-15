@@ -191,7 +191,7 @@
     <div class="amt">$<span id="amt">108</span> <small>your gift</small></div>
     <div class="hours">preserves <b><span id="hrs">108</span> hours</b> of
     teaching, transcribed and archived</div>
-    <input type="range" id="slider" min="10" max="2500" step="1" value="108"
+    <input type="range" id="slider" min="10" max="3000" step="1" value="125"
       aria-label="Choose donation amount">
     <div class="milestone" id="milestone"></div>
     <a class="cta" id="giveBtn"
@@ -207,7 +207,7 @@
 
 <section class="rv">
   <div class="zone">Every Dollar, Accounted</div>
-  <h2>Exactly where $2,500 goes.</h2>
+  <h2>Exactly where $3,000 goes.</h2>
   <div class="budget" id="budget">
     <div class="brow" data-w="42"><div class="lbl"><span>AI transcription of all
       ≈2,600 English hours</span><span>$1,050</span></div>
@@ -224,8 +224,11 @@
     <div class="brow" data-w="12"><div class="lbl"><span>Preservation copies of
       at-risk & unlisted recordings</span><span>$300</span></div>
       <div class="track"><div class="bfill"></div></div></div>
+    <div class="brow" data-w="17"><div class="lbl"><span>Contingency,
+      processing fees & overruns on long recordings</span><span>$500</span></div>
+      <div class="track"><div class="bfill"></div></div></div>
     <div class="brow total" data-w="100"><div class="lbl"><span>Total — the
-      complete archive</span><span>$2,500</span></div>
+      complete archive</span><span>$3,000</span></div>
       <div class="track"><div class="bfill"></div></div></div>
   </div>
   <p style="font-size:13.5px">The work is scoped, the tooling is built, the
@@ -387,11 +390,11 @@
   }
   // hero goal counter
   var gc = document.getElementById('goalCount');
-  if (reduced) gc.textContent = '2,500';
+  if (reduced) gc.textContent = '3,000';
   else (function(){ var s = performance.now();
     (function tick(t){ var k = Math.min(1,(t-s)/1800);
       k = 1 - Math.pow(1-k,3);
-      gc.textContent = Math.round(2500*k).toLocaleString();
+      gc.textContent = Math.round(3000*k).toLocaleString();
       if (k < 1) requestAnimationFrame(tick); })(s); })();
 
   /* ---------- sponsor slider ---------- */
@@ -401,20 +404,20 @@
       mile = document.getElementById('milestone'),
       mailBtn = document.getElementById('mailBtn');
   var miles = [
-    [2500, "The <b>entire archive</b> — every hour, preserved in your name."],
-    [1000, "A <b>thousand hours</b> — decades of courses secured at once."],
-    [500,  "<b>Five hundred hours</b> — an entire teaching era, saved."],
+    [3000, "The <b>entire archive</b> — every hour, preserved in your name."],
+    [1200, "A <b>thousand hours</b> — decades of courses secured at once."],
+    [600,  "<b>Five hundred hours</b> — an entire teaching era, saved."],
     [250,  "A <b>whole retreat</b> — every word of it, kept."],
-    [108,  "<b>108 hours</b> — the auspicious number, a mala of teachings."],
-    [54,   "A <b>full course</b>, transcribed end to end."],
-    [25,   "A <b>complete class</b> — one evening of wisdom, made permanent."],
-    [10,   "Ten hours of teaching — <b>a real difference</b>."]];
+    [125,  "<b>108 hours</b> — the auspicious number, a mala of teachings."],
+    [62,   "A <b>full course</b>, transcribed end to end."],
+    [29,   "A <b>complete class</b> — one evening of wisdom, made permanent."],
+    [10,   "Hours of teaching preserved — <b>a real difference</b>."]];
   function upd(){
     var v = +slider.value;
     amt.textContent = v.toLocaleString();
-    hrs.textContent = Math.round(v * 1.04).toLocaleString();
+    hrs.textContent = Math.round(v * 0.867).toLocaleString();
     slider.style.setProperty('--pct',
-      ((v - 10) / (2500 - 10) * 100) + '%');
+      ((v - 10) / (3000 - 10) * 100) + '%');
     for (var i = 0; i < miles.length; i++)
       if (v >= miles[i][0]) { mile.innerHTML = miles[i][1]; break; }
     mailBtn.href = "mailto:adam.derick.andrade@gmail.com?subject=" +
