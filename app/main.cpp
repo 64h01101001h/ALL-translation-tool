@@ -449,6 +449,44 @@ struct TeachingMoment {
     QString title, url, lang, src, snippet;
     int t = 0;
 };
+// One recorded-teaching row. Two things this fixes, both from
+// Adam's screenshot 2026-08-15:
+//  · 372 of the DCC caption files have video ids absent from
+//    dcc_videos.json, so the index carries no title for them and the
+//    link rendered as an arrow with nothing beside it. A link with no
+//    visible text is a bug whatever the data says, so the snippet —
+//    his actual words at that moment — stands in, and only if there
+//    is no snippet either does a generic label appear.
+//  · a moment 93 minutes in read "@93:37"; past an hour it belongs in
+//    h:mm:ss, which is also what YouTube shows.
+// escaped, ready to drop between <a>…</a>
+static QString teachingLabel(const TeachingMoment& m, int cap = 60) {
+    const QString t = m.title.left(cap).trimmed();
+    if (!t.isEmpty()) return t.toHtmlEscaped();
+    const QString sn = m.snippet.simplified().left(cap).trimmed();
+    if (!sn.isEmpty())
+        return "\u201c" + sn.toHtmlEscaped() + "\u2026\u201d";
+    return "recorded class";
+}
+
+static QString teachingStamp(const TeachingMoment& m) {
+    const int h = m.t / 3600, mm = (m.t / 60) % 60, ss = m.t % 60;
+    return h > 0 ? QString("%1:%2:%3").arg(h)
+                       .arg(mm, 2, 10, QChar('0'))
+                       .arg(ss, 2, 10, QChar('0'))
+                 : QString("%1:%2").arg(mm).arg(ss, 2, 10, QChar('0'));
+}
+
+static QString teachingRow(const TeachingMoment& m) {
+    return QString("\u25B6 <a href='%1' title=\"%2\">%3</a> @%4%5"
+                   "<br>")
+        .arg(m.url, m.snippet.toHtmlEscaped(), teachingLabel(m),
+             teachingStamp(m),
+             m.lang == "ENG" || m.lang == "?"
+                 ? QString()
+                 : " <b>[" + m.lang + "]</b>");
+}
+
 using TeachingMap = std::map<std::string, std::vector<TeachingMoment>>;
 static const TeachingMap* g_teaching = nullptr;
 // spoken-Tibetan tier: WYLIE -> moments where he SAYS the word
@@ -1045,19 +1083,7 @@ static QString entryHtml(const allcore::Entry& e,
                  "own convention \u2014 candidates; homophones "
                  "share moments; the recording is the "
                  "authority)</i><br>";
-            for (const auto* m : ms) {
-                const int mm = m->t / 60, ss = m->t % 60;
-                h += QString("\u25B6 <a href='%1' title=\"%2\">%3</a>"
-                             " @%4:%5%6<br>")
-                         .arg(m->url,
-                              m->snippet.toHtmlEscaped(),
-                              m->title.left(60).toHtmlEscaped())
-                         .arg(mm)
-                         .arg(ss, 2, 10, QChar('0'))
-                         .arg(m->lang == "ENG" || m->lang == "?"
-                                  ? QString()
-                                  : " <b>[" + m->lang + "]</b>");
-            }
+            for (const auto* m : ms) h += teachingRow(*m);
             h += "</div>";
         }
     }
@@ -1087,19 +1113,7 @@ static QString entryHtml(const allcore::Entry& e,
                  "(located by the ENGLISH equivalent in the class "
                  "captions \u2014 the recording is the "
                  "authority)</i><br>";
-            for (const auto* m : ms) {
-                const int mm = m->t / 60, ss = m->t % 60;
-                h += QString("\u25B6 <a href='%1' title=\"%2\">%3</a>"
-                             " @%4:%5%6<br>")
-                         .arg(m->url,
-                              m->snippet.toHtmlEscaped(),
-                              m->title.left(60).toHtmlEscaped())
-                         .arg(mm)
-                         .arg(ss, 2, 10, QChar('0'))
-                         .arg(m->lang == "ENG" || m->lang == "?"
-                                  ? QString()
-                                  : " <b>[" + m->lang + "]</b>");
-            }
+            for (const auto* m : ms) h += teachingRow(*m);
             h += "</div>";
         }
     }
@@ -1933,6 +1947,88 @@ static bool g_sweepActive = false;
 // (found 2026-08-15: the stray "QTextCursor::setPosition: Position
 // '4' out of range" was restoreSession racing the selftest doc)
 static bool g_harnessRun = false;
+
+// ── Session memory ────────────────────────────────────────────────
+// Adam, 2026-08-15: "make sure that the scan view in the input
+// workflow and input pane remember which scan was last opened and
+// what working folder was being worked with last... let's do that
+// with all functions and tools and capabilities."
+//
+// One place every pane parks its "where I was" — open file, working
+// folder, chosen scan, last query, chosen mode — and asks for it
+// back at launch. The harness guard is the whole point of routing it
+// through here: a --selftest or --sweep run neither reads nor writes
+// any of it, so a probe can never move the translator's furniture.
+namespace sess {
+
+inline void put(const QString& key, const QVariant& v) {
+    if (g_harnessRun) return;
+    QSettings("ALL", "TranslationTool").setValue("sess/" + key, v);
+}
+
+inline QVariant get(const QString& key,
+                    const QVariant& def = QVariant()) {
+    if (g_harnessRun) return def;
+    return QSettings("ALL", "TranslationTool")
+        .value("sess/" + key, def);
+}
+
+inline QString str(const QString& key) {
+    return get(key).toString();
+}
+
+// A remembered path is only worth restoring if it is still there —
+// drives get unmounted, folders get renamed, scratch files get
+// cleaned up. A vanished path restores as nothing, never as an
+// error dialog on launch.
+inline QString path(const QString& key) {
+    const QString p = get(key).toString();
+    return (!p.isEmpty() && QFileInfo::exists(p)) ? p : QString();
+}
+
+// Bind one control to session memory: seed it from last session at
+// construction, write it back whenever the user changes it. Panes
+// use these for the state that is a "where I was" rather than a
+// preference — a search box, a filter, a mode.
+static void remember(QLineEdit* w, const QString& key) {
+    const QString v = sess::str(key);
+    if (!v.isEmpty()) w->setText(v);
+    QObject::connect(w, &QLineEdit::textChanged,
+                     [key](const QString& t) { sess::put(key, t); });
+}
+static void remember(QComboBox* w, const QString& key) {
+    const int i = sess::get(key, -1).toInt();
+    if (i >= 0 && i < w->count()) w->setCurrentIndex(i);
+    QObject::connect(w, &QComboBox::currentIndexChanged,
+                     [key](int ix) { sess::put(key, ix); });
+}
+static void remember(QCheckBox* w, const QString& key) {
+    const QVariant v = sess::get(key);
+    if (v.isValid()) w->setChecked(v.toBool());
+    QObject::connect(w, &QCheckBox::toggled,
+                     [key](bool on) { sess::put(key, on); });
+}
+// Working text (a pasted passage, a draft in progress) is real work
+// — losing it to a quit is worse than losing a scroll position. Held
+// to a size cap so the settings file stays a settings file, and
+// debounced so a long paste is not written on every keystroke.
+static void remember(QPlainTextEdit* w, const QString& key,
+                     int capKb = 256) {
+    const QString v = sess::str(key);
+    if (!v.isEmpty()) w->setPlainText(v);
+    auto* t = new QTimer(w);
+    t->setSingleShot(true);
+    t->setInterval(1500);
+    QObject::connect(t, &QTimer::timeout, w, [w, key, capKb] {
+        const QString txt = w->toPlainText();
+        if (txt.size() <= capKb * 1024) sess::put(key, txt);
+    });
+    QObject::connect(w, &QPlainTextEdit::textChanged, t,
+                     [t] { t->start(); });
+}
+
+}   // namespace sess
+
 // open a library file in the Overlay AT a raw source line — the
 // TibetDoc search-locations jump; set in main() once the Overlay
 // exists
@@ -1950,6 +2046,34 @@ static std::function<void(const QString&)> g_openScanInInput;
 static std::function<void(const QString&)> g_openTextInInput;
 // Sungbum links routed to a DIFFERENT scanned edition (honest tag)
 static const QSet<QString>* g_sungbumOtherEdition = nullptr;
+// Every picker in the app also remembers where it last landed.
+// Keyed by caption, so "Choose a scan folder" and "Open a text" keep
+// separate memories; a picker with no memory of its own starts at
+// the last folder used ANYWHERE, which beats dumping the user at
+// $HOME every time. A caller that passes an explicit dir still wins.
+static QString dlgKey(const QString& caption) {
+    QString k;
+    for (const QChar c : caption)
+        k += c.isLetterOrNumber() ? c.toLower() : QChar('-');
+    return "dlg/" + (k.isEmpty() ? QString("any") : k);
+}
+static QString dlgStartDir(const QString& caption,
+                           const QString& dir) {
+    if (!dir.isEmpty()) return dir;
+    const QString own = sess::path(dlgKey(caption));
+    return own.isEmpty() ? sess::path("dlg/last") : own;
+}
+static void dlgRemember(const QString& caption,
+                        const QString& picked) {
+    if (picked.isEmpty()) return;
+    const QFileInfo fi(picked);
+    const QString folder =
+        fi.isDir() ? fi.absoluteFilePath() : fi.absolutePath();
+    if (folder.isEmpty()) return;
+    sess::put(dlgKey(caption), folder);
+    sess::put("dlg/last", folder);
+}
+
 // every folder picker goes through this wrapper: in sweep mode it
 // answers empty (as if the user cancelled) instead of hanging the
 // harness on an un-reapable native panel
@@ -1957,7 +2081,10 @@ static QString safeGetExistingDirectory(
     QWidget* parent, const QString& caption = QString(),
     const QString& dir = QString()) {
     if (g_sweepActive) return QString();
-    return QFileDialog::getExistingDirectory(parent, caption, dir);
+    const QString r = QFileDialog::getExistingDirectory(
+        parent, caption, dlgStartDir(caption, dir));
+    dlgRemember(caption, r);
+    return r;
 }
 // …and the same for every native open/save panel (a stack sample
 // showed getOpenFileName parked in NSSavePanel runModal under the
@@ -1967,24 +2094,30 @@ static QString safeGetOpenFileName(
     const QString& dir = QString(),
     const QString& filter = QString()) {
     if (g_sweepActive) return QString();
-    return QFileDialog::getOpenFileName(parent, caption, dir,
-                                        filter);
+    const QString r = QFileDialog::getOpenFileName(
+        parent, caption, dlgStartDir(caption, dir), filter);
+    dlgRemember(caption, r);
+    return r;
 }
 static QStringList safeGetOpenFileNames(
     QWidget* parent, const QString& caption = QString(),
     const QString& dir = QString(),
     const QString& filter = QString()) {
     if (g_sweepActive) return QStringList();
-    return QFileDialog::getOpenFileNames(parent, caption, dir,
-                                         filter);
+    const QStringList r = QFileDialog::getOpenFileNames(
+        parent, caption, dlgStartDir(caption, dir), filter);
+    if (!r.isEmpty()) dlgRemember(caption, r.front());
+    return r;
 }
 static QString safeGetSaveFileName(
     QWidget* parent, const QString& caption = QString(),
     const QString& dir = QString(),
     const QString& filter = QString()) {
     if (g_sweepActive) return QString();
-    return QFileDialog::getSaveFileName(parent, caption, dir,
-                                        filter);
+    const QString r = QFileDialog::getSaveFileName(
+        parent, caption, dlgStartDir(caption, dir), filter);
+    dlgRemember(caption, r);
+    return r;
 }
 // cross-pane query hooks for the Hunt palette (⌘K): set where each
 // pane is built, called only from user actions
@@ -2215,9 +2348,11 @@ public:
         ll->addWidget(new QLabel("<b>Passage (ACIP)</b>"));
         passage_ = new QPlainTextEdit;
         passage_->setPlaceholderText("Paste the ACIP passage here…");
+        sess::remember(passage_, "analysis/passage");
         ll->addWidget(passage_, 3);
         ll->addWidget(new QLabel("Draft English (optional)"));
         draft_ = new QPlainTextEdit;
+        sess::remember(draft_, "analysis/draft");
         ll->addWidget(draft_, 1);
         analyze_ = new QPushButton("Analyze");
         status_ = new QLabel;
@@ -3391,6 +3526,56 @@ public:
                   "the saved cursor spot + nest rung");
             st.setValue("overlay/lastFile", keep);
             QFile::remove(tmp);
+        }
+        {
+            // Session memory (Adam, 2026-08-15): every picker
+            // reopens where it last landed, an explicit dir from the
+            // caller still wins, separate pickers keep separate
+            // memories, and a path that has gone away since restores
+            // as nothing rather than an error on launch.
+            //
+            // The guard is lifted for the pin (it blocks harness
+            // runs by design), so every key written here is removed
+            // again before the guard goes back on — a probe must not
+            // leave the translator's dialogs pointing at /tmp.
+            const bool guardKeep = g_harnessRun;
+            g_harnessRun = false;
+            const QVariant priorLast =
+                QSettings("ALL", "TranslationTool")
+                    .value("sess/dlg/last");
+            const QString cap = "ZZ probe picker";
+            const QString cap2 = "ZZ other picker";
+            const QString tmpf =
+                QDir::temp().filePath("all_sess_probe.txt");
+            { QFile f(tmpf); f.open(QIODevice::WriteOnly);
+              f.write("x"); }
+            dlgRemember(cap, tmpf);
+            const QString want = QFileInfo(tmpf).absolutePath();
+            const bool folderRemembered =
+                dlgStartDir(cap, QString()) == want;
+            const bool callerWins = dlgStartDir(cap, "/usr") == "/usr";
+            const bool perPicker = dlgKey(cap) != dlgKey(cap2);
+            sess::put("zzprobe/gone", "/no/such/place/at/all");
+            const bool vanishSafe =
+                sess::path("zzprobe/gone").isEmpty();
+            {   // put the settings file back exactly as found —
+                // dlg/last is a REAL user value the probe just
+                // overwrote, so it is restored, not deleted
+                QSettings c("ALL", "TranslationTool");
+                c.remove("sess/" + dlgKey(cap));
+                c.remove("sess/zzprobe/gone");
+                if (priorLast.isValid())
+                    c.setValue("sess/dlg/last", priorLast);
+                else
+                    c.remove("sess/dlg/last");
+            }
+            g_harnessRun = guardKeep;
+            QFile::remove(tmpf);
+            check(folderRemembered && callerWins && perPicker &&
+                      vanishSafe,
+                  "session memory: pickers reopen their last folder, "
+                  "an explicit dir wins, and a vanished path is "
+                  "restored as nothing");
         }
         {
             // display toggles must NOT wipe the card or rebuild the
@@ -5311,16 +5496,15 @@ public:
                     const auto& m = *mp;
                     sec += QString(
                                "&nbsp;&nbsp;\u25B6 <a href='%1'>"
-                               "%2</a> @%3:%4%5<br>")
-                               .arg(m.url,
-                                    m.title.left(56).toHtmlEscaped())
-                               .arg(m.t / 60)
-                               .arg(m.t % 60, 2, 10, QChar('0'))
-                               .arg((m.lang == "ENG" || m.lang == "?"
+                               "%2</a> @%3%4<br>")
+                               .arg(m.url, teachingLabel(m, 56),
+                                    teachingStamp(m),
+                                    (m.lang == "ENG" || m.lang == "?"
                                          ? QString()
                                          : " [" + m.lang + "]") +
-                                    (m.src == "TKB" ? " (lam rim)"
-                                                    : QString()));
+                                        (m.src == "TKB"
+                                             ? " (lam rim)"
+                                             : QString()));
                 }
             }
             if (g_teachingTib) {
@@ -5329,13 +5513,11 @@ public:
                     !it->second.empty()) {
                     const auto& m = it->second.front();
                     sec += QString("&nbsp;&nbsp;\u25B6 <a href='%1'>"
-                                   "%2</a> @%3:%4 <i style="
+                                   "%2</a> @%3 <i style="
                                    "'color:#888'>(he says the "
                                    "word)</i><br>")
-                               .arg(m.url,
-                                    m.title.left(56).toHtmlEscaped())
-                               .arg(m.t / 60)
-                               .arg(m.t % 60, 2, 10, QChar('0'));
+                               .arg(m.url, teachingLabel(m, 56),
+                                    teachingStamp(m));
                 }
             }
             if (sec.isEmpty()) continue;
@@ -10815,6 +10997,8 @@ public:
             "search lemmas, note text, bibliography entries…");
         kind_ = new QComboBox;
         kind_->addItems({"All", "Footnotes", "Bibliography"});
+        sess::remember(search_, "apparatus/search");
+        sess::remember(kind_, "apparatus/kind");
         row->addWidget(search_, 1);
         row->addWidget(kind_);
         v->addLayout(row);
@@ -11224,6 +11408,14 @@ public:
         fold_->addItems({"Ignore space and capitalization when searching",
                          "Ignore space when searching",
                          "Ignore nothing when searching"});
+        // the LIVE query, not only the user-named saved searches:
+        // coming back to a half-built search is the common case
+        for (int i = 0; i < 8; ++i)
+            sess::remember(fields_[i],
+                           QString("gofer/f%1").arg(i));
+        sess::remember(combiner_, "gofer/combiner");
+        sess::remember(proximity_, "gofer/proximity");
+        sess::remember(fold_, "gofer/fold");
         sl->addWidget(fold_);
         dirs_ = new QListWidget;
         loadDirs();
@@ -11917,6 +12109,7 @@ public:
         in_->setPlaceholderText(
             "prama\u0304n\u0323a \u00b7 \u0928\u092e\u0903 \u00b7 "
             "prama#n%a \u00b7 root: bh\u016b");
+        sess::remember(in_, "sanskrit/query");
         row->addWidget(in_, 1);
         auto* go = new QPushButton("Analyze");
         row->addWidget(go);
@@ -12749,6 +12942,7 @@ public:
         input_->setPlaceholderText(
             "Paste ACIP Tibetan…   e.g.  SANGS RGYAS KYIS CHOS BSTAN");
         input_->setMaximumHeight(90);
+        sess::remember(input_, "trainer/source");
         layout->addWidget(input_);
         auto* row = new QHBoxLayout;
         auto* load = new QPushButton("Load");
@@ -13159,6 +13353,10 @@ public:
         for (const auto& c : spine_.corpusCourses())
             course_->addItem(QString::fromStdString(c));
         course_->setVisible(false);
+        sess::remember(mode_, "drills/mode");
+        sess::remember(course_, "drills/course");
+        sess::remember(script_, "drills/script");
+        sess::remember(adaptive_, "drills/adaptive");
         row->addWidget(course_);
         row->addStretch();
         layout->addLayout(row);
@@ -13918,6 +14116,7 @@ public:
         auto* srcCol = new QVBoxLayout;
         source_ = new QPlainTextEdit;
         source_->setPlaceholderText("Source ACIP…");
+        sess::remember(source_, "draft/source");
         srcCol->addWidget(source_);
         auto* loadBtn = new QPushButton("Load source");
         srcCol->addWidget(loadBtn);
@@ -14036,6 +14235,7 @@ auto* secEvid = new QLabel("<span style='color:#9A7A33;font-size:10px;letter-spa
         auto* draftCol = new QVBoxLayout;
         draft_ = new QPlainTextEdit;
         draft_->setPlaceholderText("Your English draft…");
+        sess::remember(draft_, "draft/english");
         draftCol->addWidget(draft_);
         // the terminology live-guard (Adam's wow round, 2026-08-12):
         // a spellcheck for terminology — as you type, the same
@@ -14105,6 +14305,7 @@ auto* secEvid = new QLabel("<span style='color:#9A7A33;font-size:10px;letter-spa
                 g_sendToManuscript(draft_->toPlainText());
         });
         notesSearch_ = new QLineEdit;
+        sess::remember(notesSearch_, "draft/notesSearch");
         notesSearch_->setPlaceholderText(
             "search the shared apparatus: footnotes + bibliography "
             "(GMR: reuse released work)…");
@@ -17447,6 +17648,10 @@ public:
         langFilter_ = new QComboBox;
         langFilter_->addItems({"any language", "Tibetan", "English",
                                "Sanskrit", "mixed"});
+        sess::remember(search_, "library/search");
+        sess::remember(colFilter_, "library/collection");
+        sess::remember(statusFilter_, "library/status");
+        sess::remember(langFilter_, "library/language");
         for (auto* cb : {colFilter_, statusFilter_, langFilter_}) {
             frow->addWidget(cb);
             connect(cb, &QComboBox::currentIndexChanged,
@@ -18504,7 +18709,7 @@ private:
     // rules), and point build/spine_current.txt at the new spine.
     void importDataRelease() {
         const QString dataRoot = libRoot_.chopped(8);  // strip "/library"
-        const QString dir = QFileDialog::getExistingDirectory(
+        const QString dir = safeGetExistingDirectory(
             this, "Choose the release package folder");
         if (dir.isEmpty()) return;
         const ReleasePkg pkg = discoverReleasePackage(dir);
@@ -18867,8 +19072,10 @@ public:
         auto* split = new QSplitter(Qt::Horizontal);
         src_ = new QPlainTextEdit;
         src_->setPlaceholderText("Tibetan source (ACIP)…");
+        sess::remember(src_, "review/source");
         draft_ = new QPlainTextEdit;
         draft_->setPlaceholderText("The finished English draft…");
+        sess::remember(draft_, "review/draft");
         split->addWidget(src_);
         split->addWidget(draft_);
         outer->addWidget(split, 1);
@@ -19209,12 +19416,7 @@ public:
         connect(open, &QPushButton::clicked, [this] {
             const QString f = safeGetOpenFileName(
                 this, "Open ACIP file", root_ + "/library");
-            if (f.isEmpty()) return;
-            QFile qf(f);
-            if (!qf.open(QIODevice::ReadOnly)) return;
-            tib_->setPlainText(QString::fromUtf8(qf.readAll()));
-            docFile_ = f;
-            loadTexts();
+            if (!f.isEmpty()) openFile(f);
         });
         connect(load, &QPushButton::clicked, [this] {
             if (docFile_.isEmpty()) docFile_ = "untitled";
@@ -19275,6 +19477,23 @@ public:
                   "edition collation: sites, readings, apparatus");
         }
         return fails;
+    }
+
+    // named so the session restore can reopen last time's text
+    // (the links TSV is keyed off docFile_, so reopening the file
+    // brings back the alignment work with it)
+    void openFile(const QString& f) {
+        QFile qf(f);
+        if (!qf.open(QIODevice::ReadOnly)) return;
+        tib_->setPlainText(QString::fromUtf8(qf.readAll()));
+        docFile_ = f;
+        sess::put("align/lastFile", f);
+        loadTexts();
+    }
+
+    void restoreSession() {
+        const QString f = sess::path("align/lastFile");
+        if (!f.isEmpty()) openFile(f);
     }
 
 private:
@@ -20166,6 +20385,24 @@ private:
 public:
     // recently viewed scans (Adam, 2026-08-13): files and folders
     // both, newest first, capped at ten, persisted
+    // Reopen last session's scan work: either the single image or
+    // the page-folder block AND the page inside it. Called from
+    // main() on a normal launch; the sess:: guard keeps harness runs
+    // out of it entirely.
+    void restoreSession() {
+        const QString mode = sess::str("input/mode");
+        if (mode == "folder") {
+            const QString d = sess::path("input/folder");
+            if (d.isEmpty()) return;
+            openFolderPath(d);
+            const int p = sess::get("input/page", 0).toInt();
+            if (p > 0 && p < pages_.size()) gotoPage(p);
+        } else if (mode == "file") {
+            const QString f = sess::path("input/scan");
+            if (!f.isEmpty()) openScanPath(f);
+        }
+    }
+
     void recordRecentScan(const QString& p) {
         QSettings st("ALL", "TranslationTool");
         QStringList rec =
@@ -20185,6 +20422,10 @@ public:
     }
     void openScanPath(const QString& f) {
         recordRecentScan(f);
+        // remember WHICH scan, not just that it was recent — the
+        // recents menu never reopened anything (Adam, 2026-08-15)
+        sess::put("input/mode", "file");
+        sess::put("input/scan", f);
         base_ = QPixmap(f);
         if (base_.isNull()) {
             status_->setText("cannot read that image");
@@ -20716,6 +20957,8 @@ public:
     }
     void openFolderPath(const QString& dir) {
         recordRecentScan(dir);
+        sess::put("input/mode", "folder");
+        sess::put("input/folder", dir);
         pages_.clear();
         for (const QString& e : QDir(dir).entryList(
                  {"*.png", "*.jpg", "*.jpeg", "*.tif", "*.tiff"},
@@ -20753,6 +20996,7 @@ public:
                 f.write(editor_->toPlainText().toUtf8());
         }
         pageIx_ = ix;
+        sess::put("input/page", ix);
         base_ = QPixmap(pages_[ix]);
         scanFile_ = pages_[ix];
 #ifdef ALL_HAVE_OCR
@@ -21213,12 +21457,23 @@ public:
         connect(save_, &QPushButton::clicked, [this] { saveOut(); });
     }
 
+    void restoreSession() {
+        const QString f = sess::path("ocr/lastImage");
+        if (!f.isEmpty()) openImagePath(f);
+    }
+
 private:
     void openImage() {
         const QString f = safeGetOpenFileName(
             this, "Open scan image", root_ + "/library",
             "Images (*.png *.jpg *.jpeg *.tif *.tiff)");
         if (f.isEmpty()) return;
+        openImagePath(f);
+    }
+
+    // split out of openImage() so the session restore can reopen
+    // last time's page without going through a file dialog
+    void openImagePath(const QString& f) {
         QImage img(f);
         if (img.isNull()) {
             results_->setHtml("<i>cannot read that image</i>");
@@ -21226,6 +21481,7 @@ private:
         }
         img_ = img.convertToFormat(QImage::Format_RGB888);
         file_ = f;
+        sess::put("ocr/lastImage", f);
         pageView_->setPixmap(QPixmap::fromImage(img_));
         pageView_->adjustSize();
         run_->setEnabled(true);
@@ -21923,6 +22179,7 @@ public:
                        int(allcore::ProposalKind::Idiom));
         kind_->addItem("Note about a passage",
                        int(allcore::ProposalKind::Note));
+        sess::remember(kind_, "propose/kind");
         fl->addRow("Kind", kind_);
         wylie_ = new QLineEdit;
         // the form's placeholders were eliding in a narrow column
@@ -22121,6 +22378,7 @@ public:
         filter_->addItem("Spelling flags", "spelling");
         filter_->addItem("Idioms", "idiom");
         filter_->addItem("Words / phrases / notes", "export");
+        sess::remember(filter_, "approval/kind");
         row->addWidget(filter_);
         row->addWidget(refresh);
         row->addWidget(bulkB);
@@ -22666,6 +22924,7 @@ public:
         query_->setPlaceholderText(
             "Gofer: bden pa \u00b7 stong OR bden \u00b7 \"sdug "
             "bsngal\" NEAR/5 \"bden pa\"");
+        sess::remember(query_, "manuscript/query");
         auto* findB = new QPushButton("Find in corpus");
         findB->setToolTip(
             "Search the aligned corpus with the Gofer grammar (OR, "
@@ -24306,7 +24565,8 @@ int main(int argc, char** argv) {
     auto* sanskritPane = new SanskritPane(mvp, whitney);
     tabs.addTab(sanskritPane, "Sanskrit");
 #ifdef ALL_HAVE_OCR
-    tabs.addTab(new ScanPane(checker, root), "OCR");
+    auto* ocrPane = new ScanPane(checker, root);
+    tabs.addTab(ocrPane, "OCR");
 #endif
     // the in-house proposal & approval channel: everyone can Propose;
     // the Approval tab shows only for an authority (Geshe Michael /
@@ -24583,6 +24843,35 @@ int main(int argc, char** argv) {
                     return;
                 }
         };
+
+        // …and which pane the user was ON. Stored by tab NAME, not
+        // index: the grouping above is edited often enough that an
+        // index would silently start reopening the wrong pane.
+        auto currentPaneName = [&tabs]() -> QString {
+            auto* g = qobject_cast<QTabWidget*>(tabs.currentWidget());
+            if (!g) return QString();
+            for (auto& f : flatPanes)
+                if (f.inner == g && f.w == g->currentWidget())
+                    return f.title;
+            return QString();
+        };
+        auto notePane = [currentPaneName] {
+            const QString n = currentPaneName();
+            if (!n.isEmpty()) sess::put("ui/pane", n);
+        };
+        QObject::connect(&tabs, &QTabWidget::currentChanged,
+                         [notePane](int) { notePane(); });
+        for (auto& f : flatPanes)
+            QObject::connect(f.inner, &QTabWidget::currentChanged,
+                             [notePane](int) { notePane(); });
+        const QString wantPane = sess::str("ui/pane");
+        if (!wantPane.isEmpty())
+            for (auto& f : flatPanes)
+                if (f.title == wantPane) {
+                    tabs.setCurrentWidget(f.inner);
+                    f.inner->setCurrentWidget(f.w);
+                    break;
+                }
     }
 
     // ---- the menu bar MIRRORS THE GUI (Adam, 2026-08-10): one menu
@@ -25594,6 +25883,33 @@ int main(int argc, char** argv) {
                            .arg(shown ? "PASS" : "FAIL");
                 if (!shown) ++fails;
             }
+            {   // Adam's screenshot 2026-08-15: rows rendered as a
+                // bare arrow because 372 DCC caption files have no
+                // entry in dcc_videos.json, so those moments carry
+                // no title. Every row must show SOMETHING clickable,
+                // and past an hour the stamp belongs in h:mm:ss (it
+                // was reading "@93:37").
+                TeachingMoment a;   // no title, but he says words
+                a.snippet = "the wish to be free of suffering";
+                a.t = 5617;
+                TeachingMoment b;   // nothing to show at all
+                b.t = 1136;
+                TeachingMoment c;
+                c.title = "Class 3 - The Devil Debates an Angel";
+                c.t = 45;
+                const bool labelsOk =
+                    teachingLabel(a).contains("wish to be free") &&
+                    teachingLabel(b) == "recorded class" &&
+                    teachingLabel(c).startsWith("Class 3") &&
+                    teachingStamp(a) == "1:33:37" &&
+                    teachingStamp(b) == "18:56" &&
+                    teachingStamp(c) == "0:45";
+                log << QString("  [%1] Teaching: every moment row "
+                               "carries a visible label, and past an "
+                               "hour the stamp reads h:mm:ss")
+                           .arg(labelsOk ? "PASS" : "FAIL");
+                if (!labelsOk) ++fails;
+            }
         }
         {
             const bool cream =
@@ -25881,6 +26197,14 @@ int main(int argc, char** argv) {
     win.setMinimumSize(640, 480);
     win.resize(1180, 760);
     overlay->restoreSession();   // resume where the translator was
+    // …and every other pane that holds a "where I was" (Adam,
+    // 2026-08-15). Each is a no-op when nothing was remembered or
+    // the remembered path has since gone away.
+    inputPane->restoreSession();
+    alignPane->restoreSession();
+#ifdef ALL_HAVE_OCR
+    ocrPane->restoreSession();
+#endif
     win.show();
     const int pasteIx = cliArgs.indexOf("--pasteprobe");
     if (pasteIx >= 0 && pasteIx + 1 < cliArgs.size()) {
