@@ -150,8 +150,7 @@ implementation is sidelined HERE from this date. What this means:
          per-book pass; the older BIBLIOGRAPHY compilations too · ~~KX/TS scan lane~~ CLOSED BY MEASUREMENT 2026-08-15 (library holds 1 KX file, 0 TS — no lane worth building; the one file gets the title-search fallback; revisit only if those collections ever install) ·
          ~~outline/verse wylie-parity probe~~ DONE 2026-08-15: probe FOUND a real defect — the sa-bcad outline matcher was uppercase-ACIP-only, so wylie files (Lhasa _inc, Release-6 wylie) got NO outline; fixed with a case-folded matching shadow (headings keep original script); verse already had parity; outline_smoke parity-pinned · ~~Botok-vs-lattice overlap audit~~ DONE 2026-08-15 (docs/research/BOTOK_LATTICE_OVERLAP.md: 400 corpus lines, 80% boundary agreement both directions, 25.5% identical partitions — the gap is largely phrase-spans-vs-words BY DESIGN; no pathology; reference-only ruling stands) · ~~citation side-pane streamline~~ DONE 2026-08-15 ("Pin to side panel" on the located report; cite anchors factored into handleCiteAnchor shared by dialog + side panel) · sweep-harness
          line-edit coverage for typed-input panes ·
-         navigable-outline TOC over Library texts (THL grammar
-         banked) · Sungbum route-2 (per-author outline harvest)
+         ~~navigable-outline TOC~~ AUDIT-STALE, CLOSED 2026-08-15: the sa-bcad outline tree already ships (Overlay → Outline (sa bcad)…: QTreeWidget, click-jump, scan follow-along keeps pace). The banked THL outline-MARKUP grammar remains a parser-in-waiting for whenever THL-marked-up files enter the library — none do today · Sungbum route-2 (per-author outline harvest)
          verification · THL follow-ups (GMR-vs-THL phonetics
          convention doc; Studies-in-Genre chapter list) · Zenodo
          license check on Hill's verb-stems lexicon · About-dialog
