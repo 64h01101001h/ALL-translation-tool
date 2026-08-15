@@ -2491,6 +2491,13 @@ untouched; the combined file is the deliverable.
 
 # CHAPTER 13 — THE OCR PANE (Input → OCR)
 
+**OCR models…** — download additional BDRC recognition models
+(Lhasa Kangyur, Derge Tengyur, dbu-can book hands, modern typeset
+print; all CC BY-NC 4.0, used with BDRC's permission) and pick
+which one Run OCR and the Input pane's OCR pre-fill use. The
+bundled Woodblock model stays the fallback whenever a pick is
+missing; the switch takes effect on the next recognition run.
+
 **What it's for.** Tibetan text recognition on woodblock page
 images — embedded, proven, and honest about itself. The models are
 by the Buddhist Digital Resource Center (CC BY-NC 4.0, used with
