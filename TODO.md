@@ -194,6 +194,35 @@ implementation is sidelined HERE from this date. What this means:
       MP3-archive path for the whisper pilot · fundraiser
       pre-presentation steps (Share the artifact, verify donate
       URL, pick version; next week domain + Cloudflare + Zeffy).
+      **MONASTERIES LAYER (Adam, 2026-08-15)** — bring a total
+      study of the monasteries into the app: which house held which
+      lineage, who taught there, what was written there, and where
+      each sits. Sources, in the order their licensing allows:
+      (1) **THL Places / kmaps gazetteer** — the survey already
+      found a *publicly queryable Solr core* behind the new site
+      (`kmterms`, ~4.49M docs) plus per-feature JSON at
+      `places.kmaps.virginia.edu/features/{id}.json`; the app
+      already link-outs to it, so this is an upgrade from link to
+      layer. Two gates: heavy 429 rate-limiting (single-digit
+      requests/minute — harvest slowly, cache locally) and the
+      per-dataset licence, which the THL email in Adam's sends
+      queue is meant to settle. (2) **Treasury of Lives** — People-
+      layer work already established its metadata is CC0-favorable
+      and the app links persons to it; monastery/institution records
+      cross-reference the same person IDs, so this joins the People
+      layer to the Places layer for free. (3) **BDRC place records**
+      (bdr:G…) — already our authority for texts and persons, so
+      monastery IDs come from the same graph we trust. Build shape:
+      a `data/extracted/monasteries.json` keyed by BDRC/kmaps id
+      with name, location, founding, lineage, and person links,
+      cross-checked between sources with disagreements FLAGGED not
+      resolved; surface it as a Places/Monastery card in the Library
+      and People panes. Adam's action: supply the **PDF of GMR's
+      translation of the Je Tsongkapa biography** — that is the
+      period-context source for which monasteries mattered in his
+      lifetime, and it can seed the first curated subset (facts with
+      citation only; nothing from the book ships verbatim).
+
       **Recordings to obtain & mine:** **Diamond Way Translator
       Course, 2026-08-15** — GMR gives explicit translation/
       formatting rulings in this session, including *removing
