@@ -60,12 +60,15 @@ implementation is sidelined HERE from this date. What this means:
          dbu-khyud + double-shad conventions, margin presets,
          Sungbum-format syllable budget (needs the OCR-stats lane);
          print QA needs Adam's reference prints (that half gated).
-      2. Banked-corpus mining — Hackett verb classes IN PROGRESS
-         (vision agents; partial TSVs banked in scratchpad; ka-section
-         pages resist at current zoom — targeted re-pass needed);
-         Goldstein 254 "(h.)" glossary markings (vision pass — the
-         text layer garbles Tibetan, grep-mining would be guessing);
-         then extend spotVerb with the 31 Wilson-class causative pairs.
+      2. Banked-corpus mining — Hackett verb classes FIRST HARVEST
+         BANKED 2026-08-14: data/hackett/verb_classes.tsv, 344 rows
+         (91 CC0-corroborated · 11 cc0-disagrees flagged for review
+         · 7 ⟨?⟩); coverage pp. 58–71/86–105/114–127/142–179;
+         REMAINING: crop re-pass for pp. 31–57, 72–85, 106–113,
+         128–141 (scan resists current zoom — agents refused rather
+         than guess); Goldstein 254 "(h.)" markings (vision pass);
+         then extend spotVerb with the 31 Wilson-class causative
+         pairs + the new class rows once reviewed.
       3. ~~THL Degé deep-link wiring~~ AUDIT CORRECTION 2026-08-14:
          already shipped with task #25 (setScanTarget routes through
          the verified 919-entry concordance, collisions dropped).

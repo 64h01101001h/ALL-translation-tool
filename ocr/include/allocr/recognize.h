@@ -31,6 +31,10 @@ struct WordSpan {
     double x0 = 0.0, x1 = 0.0;        // strip-x range
 };
 
+// test hook: charset entry count parsed from a model config (-1 on
+// error) — exercises both the array and BDRC string charset shapes
+int ocrConfigCharsetCount(const std::string& path);
+
 class TextRecognizer {
 public:
     // modelDir must hold model_config.json + the ONNX file it names

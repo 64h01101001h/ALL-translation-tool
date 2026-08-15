@@ -28,6 +28,21 @@ pairs with Wilson class assignments (III↔V alternations: 'grub/sgrub,
 'byung/'byin, …), transcribed from Table 2 (p. 7; Hackett after Das).
 Feeds the verb-class machinery when we next extend spotVerb.
 
+## 2½. Per-verb class + stem transcription (2026-08-14, PARTIAL)
+
+`data/hackett/verb_classes.tsv` — 344 main-entry rows transcribed
+from the scan by page-by-page vision agents under never-guess
+discipline (unclear characters = ⟨?⟩, refusals preferred over
+plausible-looking fabrication — three ka-section agents refused
+outright and said so). Coverage: book pages 58–71 (partial), 86–105,
+114–127, 142–179. NOT yet transcribed (scan resists the current
+zoom; queued for a targeted crop re-pass): pp. 31–57, 72–85,
+106–113, 128–141. QC: every transcribed past stem was folded
+through our CC0 verb bank — 91 rows corroborated, 11 flagged
+`cc0-disagrees` for review (a systematic ts/tsh aspiration
+confusion cluster in pp. 149–150 among them), 7 carry ⟨?⟩ flags.
+Flagged rows are REVIEW material, never parse-binding.
+
 ## 3. Raw OCR banked for future mining
 
 `data/hackett/ocr_text/` — the full 111-page English-layer OCR. The

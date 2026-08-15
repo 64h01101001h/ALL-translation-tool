@@ -82,6 +82,24 @@ OcrConfig loadConfig(const std::string& path) {
         std::string key = jsonString(s, i);
         skip();
         if (key == "charset") {
+            skip();
+            if (i < s.size() && s[i] == '"') {
+                // BDRC's v1 config shape: charset as ONE string, one
+                // symbol per Unicode code point (their own reader
+                // does list(charset)); split UTF-8 faithfully
+                const std::string flat = jsonString(s, i);
+                for (size_t k = 0; k < flat.size();) {
+                    const unsigned char b = flat[k];
+                    size_t n = b < 0x80 ? 1
+                               : (b >> 5) == 0x6 ? 2
+                               : (b >> 4) == 0xE ? 3
+                                                 : 4;
+                    if (k + n > flat.size()) n = 1;
+                    c.charset.push_back(flat.substr(k, n));
+                    k += n;
+                }
+                continue;
+            }
             while (i < s.size() && s[i] != '[') ++i;
             ++i;
             while (true) {
@@ -113,8 +131,21 @@ OcrConfig loadConfig(const std::string& path) {
     return c;
 }
 
+
+
 }  // namespace
 
+
+int ocrConfigCharsetCount(const std::string& path) {
+    // test hook: proves the config parser on both charset shapes
+    // (array = our banked models; single-string = BDRC's v1 configs
+    // as published on Hugging Face) without needing an ONNX file
+    try {
+        return static_cast<int>(loadConfig(path).charset.size());
+    } catch (const std::exception&) {
+        return -1;
+    }
+}
 struct TextRecognizer::Impl {
     OcrConfig cfg;
     Ort::Env env{ORT_LOGGING_LEVEL_ERROR, "allocr-ocr"};

@@ -8,6 +8,7 @@
 // 99a dense text (the real case), 94a sparse microfilm title page (the
 // hardest case, per the stage-2 spike).
 #include <cstdio>
+#include <filesystem>
 #include <fstream>
 #include <map>
 #include <string>
@@ -292,5 +293,29 @@ int main(int argc, char** argv) {
 
     std::printf("ocr_smoke: %s (%d failures)\n",
                 failures ? "FAIL" : "ALL PASS", failures);
+    {   // config parser: both charset shapes (array = banked
+        // models; single string = BDRC's published v1 configs)
+        namespace fs = std::filesystem;
+        const fs::path d = fs::temp_directory_path() / "ocr_cfg_smoke";
+        fs::create_directories(d);
+        {
+            std::ofstream a(d / "arr.json");
+            a << "{\"onnx-model\":\"m.onnx\",\"charset\":"
+                 "[\"a\",\"b\",\"c\"]}";
+        }
+        {
+            std::ofstream b(d / "str.json");
+            b << "{\"onnx-model\":\"m.onnx\",\"charset\":"
+                 "\"ab\u00e4c\"}";
+        }
+        const int na =
+            allocr::ocrConfigCharsetCount((d / "arr.json").string());
+        const int ns =
+            allocr::ocrConfigCharsetCount((d / "str.json").string());
+        CHECK(na == 3 && ns == 4,
+              "config charset parses as array (3) and as BDRC "
+              "string with a multi-byte symbol (4)");
+        fs::remove_all(d);
+    }
     return failures ? 1 : 0;
 }
