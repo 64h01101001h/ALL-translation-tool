@@ -4245,6 +4245,9 @@ auto* secScan = new QLabel("<span style='color:#9A7A33;font-size:10px;letter-spa
         connect(context_, &QTextBrowser::anchorClicked,
                 [this](const QUrl& u) {
                     const QString s = u.toString();
+                    // citation-report links work pinned in the
+                    // side panel too (streamline)
+                    if (handleCiteAnchor(s)) return;
                     if (s.startsWith("jae:")) {
                         showJaePage(this, s.mid(4).toInt());
                         return;
@@ -8224,6 +8227,46 @@ private:
         dlg->show();
     }
 
+    // the citation report's link vocabulary — shared by the report
+    // dialog AND the side panel it can pin into (streamline, Adam)
+    bool handleCiteAnchor(const QString& sUrl) {
+        if (sUrl.startsWith("jumppos:")) {
+            QTextCursor c(input_->document());
+            const int pos = sUrl.mid(8).toInt();
+            if (pos >= 0 &&
+                pos < input_->document()->characterCount()) {
+                c.setPosition(pos);
+                input_->setTextCursor(c);
+                input_->ensureCursorVisible();
+                input_->setFocus();
+            }
+            return true;
+        }
+        if (sUrl.startsWith("citeopen:")) {
+            const QString rest = sUrl.mid(9);
+            const int bar = rest.lastIndexOf('|');
+            const QString p = QString::fromUtf8(
+                QByteArray::fromBase64(rest.left(bar).toUtf8()));
+            if (g_openAtLine)
+                g_openAtLine(p, rest.mid(bar + 1).toInt());
+            return true;
+        }
+        if (sUrl.startsWith("citefile:")) {
+            openFile(QString::fromUtf8(
+                QByteArray::fromBase64(sUrl.mid(9).toUtf8())));
+            return true;
+        }
+        if (sUrl.startsWith("citefind:")) {
+            const QString q = QString::fromUtf8(
+                QByteArray::fromBase64(sUrl.mid(9).toUtf8()));
+            if (g_goferQuery)
+                g_goferQuery("\"" + q.split(' ').mid(0, 8).join(' ') +
+                             "\"");
+            return true;
+        }
+        return false;
+    }
+
     void showCitations() {
         const auto cites = extractCitations();
         if (cites.empty()) {
@@ -8341,41 +8384,20 @@ private:
         browser->setHtml(h);
         connect(browser, &QTextBrowser::anchorClicked,
                 [this](const QUrl& u) {
-                    const QString sUrl = u.toString();
-                    if (sUrl.startsWith("jumppos:")) {
-                        QTextCursor c(input_->document());
-                        c.setPosition(sUrl.mid(8).toInt());
-                        input_->setTextCursor(c);
-                        input_->ensureCursorVisible();
-                        input_->setFocus();
-                    } else if (sUrl.startsWith("citeopen:")) {
-                        const QString rest = sUrl.mid(9);
-                        const int bar = rest.lastIndexOf('|');
-                        const QString p = QString::fromUtf8(
-                            QByteArray::fromBase64(
-                                rest.left(bar).toUtf8()));
-                        if (g_openAtLine)
-                            g_openAtLine(p,
-                                         rest.mid(bar + 1)
-                                             .toInt());
-                    } else if (sUrl.startsWith("citefile:")) {
-                        const QString p = QString::fromUtf8(
-                            QByteArray::fromBase64(
-                                sUrl.mid(9).toUtf8()));
-                        openFile(p);
-                    } else if (sUrl.startsWith("citefind:")) {
-                        const QString q = QString::fromUtf8(
-                            QByteArray::fromBase64(
-                                sUrl.mid(9).toUtf8()));
-                        const QStringList w =
-                            q.split(' ').mid(0, 8);
-                        if (g_goferQuery)
-                            g_goferQuery("\"" + w.join(' ') +
-                                         "\"");
-                    }
+                    handleCiteAnchor(u.toString());
                 });
         v->addWidget(browser, 1);
         auto* row = new QHBoxLayout;
+        auto* pinB = new QPushButton("Pin to side panel");
+        pinB->setToolTip(
+            "Show this located report in the Overlay's side panel "
+            "so it stays beside the text while you work — every "
+            "link (jump, open-at-line, hunt) works there too.");
+        connect(pinB, &QPushButton::clicked, [this, h, dlg] {
+            context_->setHtml(h);
+            dlg->close();
+        });
+        row->addWidget(pinB);
         auto* expB = new QPushButton(
             "Export quotations && bibliography document…");
         expB->setToolTip(

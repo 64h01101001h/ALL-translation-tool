@@ -147,7 +147,7 @@ implementation is sidelined HERE from this date. What this means:
          published books + one honestly-untitled 2018 opening
          section; bank 344 → 1,913; Draft pane loads both banks.
          The 16 Handoff/book_texts .txts remain a possible later
-         per-book pass; the older BIBLIOGRAPHY compilations too · KX/TS scan lane (SPARQL fallback) ·
+         per-book pass; the older BIBLIOGRAPHY compilations too · ~~KX/TS scan lane~~ CLOSED BY MEASUREMENT 2026-08-15 (library holds 1 KX file, 0 TS — no lane worth building; the one file gets the title-search fallback; revisit only if those collections ever install) ·
          outline/verse wylie-parity probe · Botok-vs-SegTrie overlap
          audit · citation side-pane streamline · sweep-harness
          line-edit coverage for typed-input panes ·
