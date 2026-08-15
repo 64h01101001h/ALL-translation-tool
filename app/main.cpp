@@ -25134,6 +25134,31 @@ int main(int argc, char** argv) {
             note("combo", cb->count() ? cb->itemText(0) + ", …"
                                       : QString());
         }
+        // line edits (the strike's last gap, 2026-08-15): every
+        // enabled QLineEdit gets typed probes — a Tibetan-flavored
+        // string, an edge string, then cleared — with textChanged/
+        // editingFinished firing normally. A field passes by
+        // leaving the app coherent, same bar as the buttons.
+        for (auto* le : pane->findChildren<QLineEdit*>()) {
+            if (!le->isEnabled() || le->isReadOnly()) continue;
+            const QString keep = le->text();
+            const char* probes[] = {"BSOD NAMS", "bsod nams kyi",
+                                    "xyz'zz@@1234", ""};
+            for (const char* p : probes) {
+                le->setText(QString::fromUtf8(p));
+                settle();
+                QMetaObject::invokeMethod(le, "returnPressed");
+                settle();
+            }
+            le->setText(keep);
+            settle();
+            note("lineedit",
+                 le->placeholderText().isEmpty()
+                     ? le->objectName().isEmpty()
+                           ? QString("(unnamed)")
+                           : le->objectName()
+                     : le->placeholderText().left(48));
+        }
         printf("SWEEP COMPLETE: %s — %d control(s) exercised, app "
                "coherent\n",
                qPrintable(target), n);
