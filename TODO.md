@@ -79,10 +79,12 @@ implementation is sidelined HERE from this date. What this means:
          — the pin caught a normalization bug before ship), hidden
          windows counted in the footer; Stop is real (chunked loop,
          partial results labeled).
-      5. People layer increments: Lookup PERSON card section +
-         Overlay person badge (design's next steps; only Library
-         info-panel links shipped). Plus the 81 unresolved authors →
-         BDRC letter (send is Adam's).
+      5. ~~People layer increments~~ DONE 2026-08-14: Lookup PERSON
+         card (author-name query → dates + BDRC/Treasury-of-Lives
+         links, same authority as the Library panel; pinned) +
+         Overlay ✍-author badge with per-text BDRC link beside the
+         THL catalog line. Remaining people work = the 81 unresolved
+         authors → BDRC letter (send is Adam's).
       6. OCR: model manager (first-run auto-download with license/
          credit display) · async recognition · 4 more script-style
          models when BDRC's ~end-Aug release lands.

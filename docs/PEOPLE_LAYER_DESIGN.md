@@ -89,6 +89,10 @@ named lamas (homonymous teachers are legion; when several match, ALL
 are shown with dates so the human disambiguates).
 
 ## Increments
+
+> 2026-08-14: the Lookup PERSON card and the Overlay author badge
+> shipped (selftest-pinned). The People browser under Research stays
+> deferred-by-design.
 1. fetch_persons.py + banked persons_bdrc.json + license record.
 2. allcore People register + battery (name index round-trip, known
    P64 lookup, homonym listing).

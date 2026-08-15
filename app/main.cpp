@@ -240,6 +240,11 @@ struct EntryDisplay {
 // once in main(), consulted by every entry card in every pane
 using HonorificMap = std::map<std::string, std::array<QString, 3>>;
 static const HonorificMap* g_honorifics = nullptr;
+// people layer (design's next increments, 2026-08-14): the Library
+// pane owns the person data; these hooks let the Lookup card and the
+// Overlay badge answer from the same authority without a second load
+static std::function<QString(const QString&)> g_personCardByName;
+static std::function<QString(const QString&)> g_personBadgeForFile;
 
 // the idioms register (Adam, 2026-08-10): wylie -> (status, evidence).
 // Marks WHICH strings are idioms/fixed expressions — English stays
@@ -1454,6 +1459,11 @@ static QString lookupResultsHtml(allcore::Spine& spine,
             }
         }
     }
+    // People layer: a query that IS a catalog author's name gets the
+    // PERSON card (BDRC / Treasury of Lives), same authority as the
+    // Library info panel
+    if (g_personCardByName)
+        h += g_personCardByName(QString::fromStdString(raw));
     // the proposal channel, reachable while looking things up
     h += QString("<div style='margin-top:8px;font-size:12px'>"
                  "<a href='propose:%1'>propose to the authority\u2026"
@@ -3715,6 +3725,15 @@ auto* secScan = new QLabel("<span style='color:#9A7A33;font-size:10px;letter-spa
         thlCatLink_->setMinimumWidth(1);
         thlCatLink_->hide();
         ll->addWidget(thlCatLink_);
+        personBadge_ = new QLabel;
+        personBadge_->setOpenExternalLinks(true);
+        personBadge_->setWordWrap(true);
+        personBadge_->setMinimumWidth(1);
+        personBadge_->setToolTip(
+            "The text's author, from the catalog People layer — the "
+            "link opens the person's BDRC record.");
+        personBadge_->hide();
+        ll->addWidget(personBadge_);
         connect(scanBtn_, &QPushButton::clicked, [this] {
             if (titleSearchMode_) titleSearchDialog();
             else followScans();
@@ -5633,6 +5652,17 @@ private:
                             .arg(h)
                             .arg(kl));
                     thlCatLink_->show();
+                }
+            }
+        }
+        if (personBadge_) {
+            personBadge_->hide();
+            if (g_personBadgeForFile && !fileName.isEmpty()) {
+                const QString b = g_personBadgeForFile(fileName);
+                if (!b.isEmpty()) {
+                    personBadge_->setText(
+                        "<span style='color:#555'>" + b + "</span>");
+                    personBadge_->show();
                 }
             }
         }
@@ -10112,6 +10142,7 @@ private:
     QNetworkAccessManager nam_;
     QPushButton* scanBtn_ = nullptr;
     QLabel* thlCatLink_ = nullptr;
+    QLabel* personBadge_ = nullptr;
     QLabel* scanImg_ = nullptr;
     QLabel* scanCap_ = nullptr;
     QWidget* scanNav_ = nullptr;
@@ -17722,6 +17753,66 @@ private:
             for (auto it = l.begin(); it != l.end(); ++it)
                 acipPersonLinks_[it.key()] = it.value().toObject();
         }
+        // Lookup PERSON card: an author-name query answers with the
+        // person block (fold: case + whitespace runs; ACIP names)
+        g_personCardByName = [this](const QString& q) -> QString {
+            loadPersons();
+            const QString fq = q.trimmed().toUpper().simplified();
+            if (fq.size() < 4) return {};
+            for (auto it = personsByAuthor_.begin();
+                 it != personsByAuthor_.end(); ++it) {
+                if (it.key().toUpper().simplified() != fq) continue;
+                const auto p = it.value();
+                QString h =
+                    "<hr><div><b>PERSON</b> <small style='color:"
+                    "#777'>(catalog author \u2014 People layer)"
+                    "</small></div><div style='margin:4px 0'><b>" +
+                    it.key().toHtmlEscaped() + "</b>";
+                const QString dates = p.value("dates").toString();
+                if (!dates.isEmpty())
+                    h += " <small style='color:#777'>(" +
+                         dates.toHtmlEscaped() + ")</small>";
+                for (const auto& cv :
+                     p.value("candidates").toArray()) {
+                    const auto c = cv.toObject();
+                    const QString pid = c.value("pid").toString();
+                    const QString tol = c.value("tol").toString();
+                    h += "<br>&nbsp;&nbsp;\u2022 <a href='https://"
+                         "library.bdrc.io/show/bdr:" + pid + "'>" +
+                         pid + " at BDRC</a>";
+                    if (!tol.isEmpty())
+                        h += " \u00b7 <a href='" + tol +
+                             "'>Treasury of Lives</a>";
+                }
+                h += "<br><small style='color:#777'>works in your "
+                     "Library: see the text's card in Read \u2192 "
+                     "Library</small></div>";
+                return h;
+            }
+            return {};
+        };
+        // Overlay badge: filename -> work key -> author line
+        g_personBadgeForFile = [this](const QString& file) -> QString {
+            loadPersons();
+            static const QRegularExpression keyRe(
+                "^([A-Za-z]+)0*(\\d+)");
+            const auto m = keyRe.match(QFileInfo(file).fileName());
+            if (!m.hasMatch()) return {};
+            const QString k =
+                m.captured(1).toUpper() + m.captured(2);
+            const auto auth = acipPersonLinks_.value(k);
+            QString author = authorByWork_.value(k);
+            if (author.isEmpty())
+                author = auth.value("author").toString();
+            if (author.isEmpty()) return {};
+            QString h = QString::fromUtf8("\u270D ") +
+                        author.toHtmlEscaped();
+            const QString pid = auth.value("pid").toString();
+            if (!pid.isEmpty())
+                h += " \u00b7 <a href='https://library.bdrc.io/"
+                     "show/bdr:" + pid + "'>" + pid + "</a>";
+            return h;
+        };
     }
 
     QString personHtml(const QString& workKey) {
@@ -24585,6 +24676,22 @@ int main(int argc, char** argv) {
                 lk(lo.contains("online.adarshah.org/search.html?text=") &&
                        lo.contains("adarshah"),
                    "Adarsha link-out carries a unicode query");
+            }
+            {   // People layer increments: an author-name query
+                // gets the PERSON card; a non-name query gets none
+                const QString pc = g_personCardByName
+                    ? g_personCardByName("KLONG RDOL BLA MA NGAG "
+                                         "DBANG BLO BZANG")
+                    : QString();
+                const QString none = g_personCardByName
+                    ? g_personCardByName("bsod nams")
+                    : QString("x");
+                lk(pc.contains("PERSON") &&
+                       (pc.contains("bdrc.io") ||
+                        pc.contains("Treasury")) &&
+                       none.isEmpty(),
+                   "Lookup PERSON card answers for an author name "
+                   "only");
             }
             {   // Gofer fold modes are real: strict modes drop
                 // case-mismatched windows; space-only mode
