@@ -246,6 +246,172 @@ static const HonorificMap* g_honorifics = nullptr;
 static std::function<QString(const QString&)> g_personCardByName;
 static std::function<QString(const QString&)> g_personBadgeForFile;
 
+// ---- OCR model manager (registry verified live on Hugging Face,
+// 2026-08-14; all BDRC, CC BY-NC 4.0, used with BDRC's permission
+// and credited wherever OCR output appears) ----
+struct OcrModelInfo {
+    const char* dirName;   // library/ocr_models/<dirName>
+    const char* repo;      // huggingface.co/BDRC/<repo>
+    const char* onnx;      // the model file inside the repo
+    const char* what;      // one-line purpose for the dialog
+};
+static const OcrModelInfo kOcrModels[] = {
+    {"BDRC_Woodblock", "Woodblock", "OCRModel.onnx",
+     "Derge Kangyur woodblock (bundled default)"},
+    {"BDRC_LhasaKanjur", "LhasaKanjur", "LhasaKanjur.onnx",
+     "Lhasa Kangyur blockprint"},
+    {"BDRC_DergeTenjur", "DergeTenjur", "DergeTenjur.onnx",
+     "Derge Tengyur blockprint"},
+    {"BDRC_BigUCHAN_v1", "BigUCHAN_v1", "BigUCHAN_E_v1.onnx",
+     "dbu-can book hands (BigUCHAN)"},
+    {"BDRC_ModernBookFormat", "ModernBookFormat",
+     "modernbookformat.onnx", "modern typeset books"},
+};
+
+// which model dir recognition uses: the picked one when it is
+// actually installed, else the bundled default — never a guess
+static QString ocrModelDirFor(const QString& root) {
+    const QString name = QSettings("ALL", "TranslationTool")
+                             .value("scan/ocrModel", "BDRC_Woodblock")
+                             .toString();
+    if (!name.isEmpty() && !name.contains('/') &&
+        !name.contains("..")) {
+        const QString cand = root + "/library/ocr_models/" + name;
+        if (QFile::exists(cand + "/model_config.json")) return cand;
+    }
+    return root + "/library/ocr_models/BDRC_Woodblock";
+}
+
+static bool ocrDownloadOne(QWidget* parent, const QString& url,
+                           const QString& dest) {
+    QNetworkAccessManager nam;
+    QNetworkRequest req{QUrl(url)};
+    req.setAttribute(QNetworkRequest::RedirectPolicyAttribute,
+                     QNetworkRequest::NoLessSafeRedirectPolicy);
+    QNetworkReply* r = nam.get(req);
+    QProgressDialog prog("Downloading " + QFileInfo(dest).fileName() +
+                             "\u2026",
+                         "Cancel", 0, 100, parent);
+    prog.setWindowModality(Qt::WindowModal);
+    prog.setMinimumDuration(0);
+    QObject::connect(&prog, &QProgressDialog::canceled, r,
+                     &QNetworkReply::abort);
+    QObject::connect(r, &QNetworkReply::downloadProgress,
+                     [&prog](qint64 got, qint64 total) {
+                         if (total > 0)
+                             prog.setValue(int(got * 100 / total));
+                     });
+    QEventLoop loop;
+    QObject::connect(r, &QNetworkReply::finished, &loop,
+                     &QEventLoop::quit);
+    loop.exec();
+    prog.close();
+    const bool ok = r->error() == QNetworkReply::NoError;
+    if (ok) {
+        QFile f(dest);
+        if (f.open(QIODevice::WriteOnly | QIODevice::Truncate))
+            f.write(r->readAll());
+    }
+    r->deleteLater();
+    return ok && QFileInfo(dest).size() > 0;
+}
+
+static void showOcrModelManager(QWidget* parent,
+                                const QString& root) {
+    QDialog dlg(parent);
+    dlg.setWindowTitle("OCR models \u2014 BDRC recognition models");
+    auto* v = new QVBoxLayout(&dlg);
+    auto* banner = new QLabel(
+        "All models by <b>BDRC</b> (Buddhist Digital Resource "
+        "Center), <b>CC BY-NC 4.0</b>, used with BDRC's permission "
+        "\u2014 credited wherever OCR output appears. Downloads "
+        "come from huggingface.co/BDRC and install into "
+        "library/ocr_models/.");
+    banner->setWordWrap(true);
+    v->addWidget(banner);
+    auto installed = [&](const OcrModelInfo& m) {
+        return QFile::exists(root + "/library/ocr_models/" +
+                             m.dirName + "/model_config.json");
+    };
+    QList<QLabel*> stateLabels;
+    for (const auto& m : kOcrModels) {
+        auto* row = new QHBoxLayout;
+        auto* lab = new QLabel(
+            QString("<b>%1</b> \u2014 %2").arg(m.repo, m.what));
+        lab->setWordWrap(true);
+        row->addWidget(lab, 1);
+        auto* state = new QLabel(installed(m)
+                                     ? "\u2713 installed"
+                                     : "not installed");
+        state->setStyleSheet(installed(m) ? "color:#1E6B4E"
+                                          : "color:#8A8A8A");
+        stateLabels << state;
+        row->addWidget(state);
+        if (QString(m.dirName) != "BDRC_Woodblock") {
+            auto* dl = new QPushButton(installed(m)
+                                           ? "Re-download"
+                                           : "Download\u2026");
+            QObject::connect(
+                dl, &QPushButton::clicked, [&, m, state] {
+                    const QString dir = root +
+                                        "/library/ocr_models/" +
+                                        m.dirName;
+                    QDir().mkpath(dir);
+                    const QString base =
+                        QString("https://huggingface.co/BDRC/%1/"
+                                "resolve/main/")
+                            .arg(m.repo);
+                    // the config is fetched first and saved under
+                    // the recognizer's expected name
+                    if (!ocrDownloadOne(&dlg, base + "config.json",
+                                        dir + "/model_config.json") ||
+                        !ocrDownloadOne(&dlg, base + m.onnx,
+                                        dir + "/" + m.onnx)) {
+                        QMessageBox::warning(
+                            &dlg, "Download failed",
+                            "The model could not be downloaded "
+                            "\u2014 nothing was switched.");
+                        QFile::remove(dir + "/model_config.json");
+                        return;
+                    }
+                    state->setText("\u2713 installed");
+                    state->setStyleSheet("color:#1E6B4E");
+                });
+            row->addWidget(dl);
+        }
+        v->addLayout(row);
+    }
+    auto* pickRow = new QHBoxLayout;
+    pickRow->addWidget(new QLabel("Recognition model:"));
+    auto* pick = new QComboBox;
+    for (const auto& m : kOcrModels)
+        if (installed(m)) pick->addItem(m.dirName);
+    const QString cur = QSettings("ALL", "TranslationTool")
+                            .value("scan/ocrModel", "BDRC_Woodblock")
+                            .toString();
+    const int ci = pick->findText(cur);
+    if (ci >= 0) pick->setCurrentIndex(ci);
+    QObject::connect(pick, &QComboBox::currentTextChanged,
+                     [](const QString& t) {
+                         QSettings("ALL", "TranslationTool")
+                             .setValue("scan/ocrModel", t);
+                     });
+    pickRow->addWidget(pick, 1);
+    v->addLayout(pickRow);
+    auto* note = new QLabel(
+        "<small style='color:#777'>The picked model is used by the "
+        "next Run OCR / OCR pre-fill (models reload on the spot). "
+        "The bundled Woodblock model remains the fallback whenever "
+        "the pick is missing.</small>");
+    note->setWordWrap(true);
+    v->addWidget(note);
+    auto* close = new QPushButton("Close");
+    QObject::connect(close, &QPushButton::clicked, &dlg,
+                     &QDialog::accept);
+    v->addWidget(close);
+    dlg.exec();
+}
+
 // the idioms register (Adam, 2026-08-10): wylie -> (status, evidence).
 // Marks WHICH strings are idioms/fixed expressions — English stays
 // the dictionary's (rule 1). Grows via Propose (kind: idiom) + the
@@ -10014,13 +10180,16 @@ private:
         std::vector<std::string> lineText;
     };
 
+    QString frecDir_;
     bool ensureFolioOcrModels() {
         if (fdet_ && frec_) return true;
         const QString lm = dataRoot_ +
             "/library/ocr_models/BDRC_PhotiLines/PhotiLines.onnx";
-        const QString od = dataRoot_ + "/library/ocr_models/BDRC_Woodblock";
-        if (!QFile::exists(lm) || !QFile::exists(od + "/OCRModel.onnx"))
+        const QString od = ocrModelDirFor(dataRoot_);
+        if (!QFile::exists(lm) ||
+            !QFile::exists(od + "/model_config.json"))
             return false;
+        if (od != frecDir_) { frec_.reset(); frecDir_ = od; }
         try {
             fdet_ = std::make_unique<allocr::LineDetector>(lm.toStdString());
             frec_ = std::make_unique<allocr::TextRecognizer>(od.toStdString());
@@ -19834,12 +20003,13 @@ public:
                 "from an empty page (it never overwrites your work)");
             return;
         }
-        const QString od = root_ + "/library/ocr_models/BDRC_Woodblock";
-        if (!QFile::exists(od + "/OCRModel.onnx")) {
-            status_->setText("recognition model missing (see the Scan "
-                             "pane for download instructions)");
+        const QString od = ocrModelDirFor(root_);
+        if (!QFile::exists(od + "/model_config.json")) {
+            status_->setText("recognition model missing (Scan pane "
+                             "\u2192 OCR models\u2026)");
             return;
         }
+        if (od != recDir_) { rec_.reset(); recDir_ = od; }
         if (bands_.empty()) detectBands();
         if (bands_.empty()) return;
         try {
@@ -20417,6 +20587,7 @@ private:
     bool predictBuilt_ = false;
 #ifdef ALL_HAVE_OCR
     std::unique_ptr<allocr::LineDetector> det_;
+    QString recDir_;
     std::unique_ptr<allocr::TextRecognizer> rec_;
     std::vector<allocr::OcrLine> bands_;
     QVector<QRect> locRects_;   // locate-selection word boxes
@@ -20634,6 +20805,14 @@ public:
             "provenance. Candidates only \u2014 never claimed "
             "complete.");
         row->addWidget(galleryBtn);
+        auto* modelsBtn = new QPushButton("OCR models\u2026");
+        modelsBtn->setToolTip(
+            "Download additional BDRC recognition models (Lhasa "
+            "Kangyur, Derge Tengyur, dbu-can books, modern print) "
+            "and pick which one Run OCR uses.");
+        row->addWidget(modelsBtn);
+        connect(modelsBtn, &QPushButton::clicked,
+                [this] { showOcrModelManager(this, root_); });
         connect(galleryBtn, &QPushButton::clicked,
                 [this] { illusGallery(); });
         connect(illusToggle_, &QCheckBox::toggled, [this] {
@@ -20713,9 +20892,10 @@ private:
         if (det_ && rec_) return true;
         const QString lineModel =
             root_ + "/library/ocr_models/BDRC_PhotiLines/PhotiLines.onnx";
-        const QString ocrDir = root_ + "/library/ocr_models/BDRC_Woodblock";
+        const QString ocrDir = ocrModelDirFor(root_);
+        if (ocrDir != recDir_) { rec_.reset(); recDir_ = ocrDir; }
         if (!QFile::exists(lineModel) ||
-            !QFile::exists(ocrDir + "/OCRModel.onnx")) {
+            !QFile::exists(ocrDir + "/model_config.json")) {
             results_->setHtml(
                 "<b>models missing.</b> Download from Hugging Face "
                 "(huggingface.co/BDRC — CC BY-NC 4.0):<br>"
@@ -21048,6 +21228,7 @@ private:
     QString root_, file_;
     QImage img_;
     std::unique_ptr<allocr::LineDetector> det_;
+    QString recDir_;
     std::unique_ptr<allocr::TextRecognizer> rec_;
     QLabel* pageView_ = nullptr;
     QScrollArea* scroll_ = nullptr;
@@ -24742,6 +24923,21 @@ int main(int argc, char** argv) {
                        none.isEmpty(),
                    "Lookup PERSON card answers for an author name "
                    "only");
+            }
+            {   // OCR model resolver: a picked-but-absent model
+                // falls back to the bundled Woodblock; traversal
+                // in the setting is refused
+                QSettings st("ALL", "TranslationTool");
+                const auto keep = st.value("scan/ocrModel");
+                st.setValue("scan/ocrModel", "NoSuchModel");
+                const QString a = ocrModelDirFor(root);
+                st.setValue("scan/ocrModel", "../evil");
+                const QString b = ocrModelDirFor(root);
+                st.setValue("scan/ocrModel", keep);
+                lk(a.endsWith("BDRC_Woodblock") &&
+                       b.endsWith("BDRC_Woodblock"),
+                   "OCR model pick falls back to the bundled "
+                   "model; traversal refused");
             }
             {   // Gofer fold modes are real: strict modes drop
                 // case-mismatched windows; space-only mode

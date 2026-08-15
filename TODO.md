@@ -101,9 +101,14 @@ implementation is sidelined HERE from this date. What this means:
          Overlay ✍-author badge with per-text BDRC link beside the
          THL catalog line. Remaining people work = the 81 unresolved
          authors → BDRC letter (send is Adam's).
-      6. OCR: model manager (first-run auto-download with license/
-         credit display) · async recognition · 4 more script-style
-         models when BDRC's ~end-Aug release lands.
+      6. OCR: ~~model manager~~ DONE 2026-08-14 (Scan pane → "OCR
+         models…": 4 downloadable BDRC models verified live on HF,
+         license banner, progress downloads, config saved under the
+         recognizer's expected name, picker with bundled-Woodblock
+         fallback — resolver selftest-pinned; parser accepts BDRC
+         string-form charsets, ocr_smoke-proven). REMAINING: async
+         recognition · model refresh when BDRC's ~end-Aug release
+         lands.
       7. True-Phugpa calendar port — path proven: source TCG (MIT),
          spec Janson, oracles Espel+TCG.
       8. Draft-pane standards conventions: STD-006 translator-
