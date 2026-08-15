@@ -20394,14 +20394,20 @@ public:
         if (mode == "folder") {
             const QString d = sess::path("input/folder");
             if (d.isEmpty()) return;
-            openFolderPath(d);
+            // read the page FIRST: openFolderPath ends in gotoPage(0),
+            // which writes the page back, so reading afterwards always
+            // yielded 0 and landed on page 1 (caught by the pin below)
             const int p = sess::get("input/page", 0).toInt();
+            openFolderPath(d);
             if (p > 0 && p < pages_.size()) gotoPage(p);
         } else if (mode == "file") {
             const QString f = sess::path("input/scan");
             if (!f.isEmpty()) openScanPath(f);
         }
     }
+
+    QString currentScanFile() const { return scanFile_; }
+    int currentPage() const { return pageIx_; }
 
     void recordRecentScan(const QString& p) {
         QSettings st("ALL", "TranslationTool");
@@ -25910,6 +25916,51 @@ int main(int argc, char** argv) {
                            .arg(labelsOk ? "PASS" : "FAIL");
                 if (!labelsOk) ++fails;
             }
+        }
+        {   // The restore PATHS, not just the pure helpers: plant a
+            // working folder with two page images, ask the Input
+            // pane to resume, and prove it came back to the right
+            // folder AND the right page inside it.
+            const QString wd =
+                QDir::temp().filePath("all_input_probe");
+            QDir().mkpath(wd);
+            for (int i = 1; i <= 2; ++i) {
+                QImage im(40, 40, QImage::Format_RGB888);
+                im.fill(Qt::white);
+                im.save(QString("%1/page_%2.png").arg(wd).arg(i));
+            }
+            const bool guardKeep = g_harnessRun;
+            g_harnessRun = false;
+            QSettings c("ALL", "TranslationTool");
+            const QVariant km = c.value("sess/input/mode"),
+                           kf = c.value("sess/input/folder"),
+                           kp = c.value("sess/input/page");
+            sess::put("input/mode", "folder");
+            sess::put("input/folder", wd);
+            sess::put("input/page", 1);
+            inputPane->restoreSession();
+            const bool back = inputPane->currentScanFile().startsWith(wd) &&
+                              inputPane->currentPage() == 1;
+            // and a folder that has since gone away must be a no-op,
+            // not a launch-time error
+            sess::put("input/folder", wd + "_deleted");
+            inputPane->restoreSession();
+            const bool safe =
+                inputPane->currentScanFile().startsWith(wd);
+            auto back2 = [&c](const char* k, const QVariant& v) {
+                if (v.isValid()) c.setValue(QString("sess/") + k, v);
+                else c.remove(QString("sess/") + k);
+            };
+            back2("input/mode", km);
+            back2("input/folder", kf);
+            back2("input/page", kp);
+            g_harnessRun = guardKeep;
+            QDir(wd).removeRecursively();
+            log << QString("  [%1] Session: the Input pane resumes "
+                           "its working folder AND page, and ignores "
+                           "a folder that has gone away")
+                       .arg(back && safe ? "PASS" : "FAIL");
+            if (!(back && safe)) ++fails;
         }
         {
             const bool cream =
