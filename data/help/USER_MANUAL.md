@@ -1893,6 +1893,13 @@ auto-detected by the shape of what you type:
    list with element-animal names and any intercalary month marked
    ᵢ.
 
+A Tibetan year given in a text converts to a western **month
+span** too: type the year name plus a month — `me bya 6 m3` — and
+every matching year shows that Tibetan month's western start and
+end dates (true Phugpa, the published-almanac standard; proven
+2015–2035, earlier years computed by the same grub-rtsis
+arithmetic with historical practice honestly caveated).
+
 7. **A month's day table.** Type `2012 m3` (or `2012 m3i` for the
    intercalary third month, where one exists) for all thirty lunar
    days with their western dates, chad and lhag days annotated —

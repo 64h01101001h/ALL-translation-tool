@@ -218,6 +218,7 @@ static void runIllustrationGallery(QWidget* parent, const QString& root,
 #include "allcore/terminology.h"
 #include "allcore/tibcal.h"
 #include "allcore/tibcal_day.h"
+#include "allcore/tibcal_phugpa.h"
 #include "allcore/tibexport.h"
 
 // What an entry card shows — the Overlay's display toggles feed this; other
@@ -12082,18 +12083,39 @@ static QWidget* makeConvertPane(allcore::Mvp* mvp,
         layout->addWidget(eb);
     }
     // colophon-date helper (allcore tibcal): year ⇄ element-animal
+    // Phugpa reverse lookup: which Phugpa tithi(s) fall on this JD
+    // (scans the two candidate Tibetan years; the port is proven
+    // against 21 full oracle years)
+    auto phugpaFromJd = [](long jd) {
+        struct Hit { int year, month, tt; bool intercal, delayed; };
+        QList<Hit> hits;
+        const auto w = allcore::westernFromJd(jd);
+        for (int y = int(w.year) - 1; y <= int(w.year); ++y) {
+            const auto py = allcore::phugpaYear(y);
+            for (const auto& m : py.months)
+                for (const auto& d : m.days) {
+                    if (d.omitted) continue;
+                    if (d.jd == jd ||
+                        (d.duplicated && d.jd - 1 == jd))
+                        hits.append({y, m.month, d.tt,
+                                     m.intercalary, m.delayed});
+                }
+        }
+        return hits;
+    };
     auto* calRow = new QHBoxLayout;
     calRow->addWidget(new QLabel("<b>Colophon year</b>"));
     auto* calIn = new QLineEdit;
     calIn->setPlaceholderText(
-        "1357 · me bya · fire bird 6 · 3 8 2011 · 2011-08-31 · "
-        "2012 months · 2012 m3i");
+        "1357 · me bya · fire bird 6 · me bya 6 m3 · 3 8 2011 · "
+        "2011-08-31 · 2012 months · 2012 m3i");
     calRow->addWidget(calIn, 1);
     auto* calOut = new QLabel;
     calOut->setWordWrap(true);
     layout->addLayout(calRow);
     layout->addWidget(calOut);
-    QObject::connect(calIn, &QLineEdit::textChanged, [calIn, calOut] {
+    QObject::connect(calIn, &QLineEdit::textChanged,
+                     [calIn, calOut, phugpaFromJd] {
         const QString q = calIn->text().trimmed();
         if (q.isEmpty()) { calOut->clear(); return; }
         // western calendar date (ISO): -> Tibetan date(s)
@@ -12118,14 +12140,122 @@ static QWidget* makeConvertPane(allcore::Mvp* mvp,
                                  .arg(m.tshes)
                                  .arg(m.month)
                                  .arg(m.year);
-                calOut->setText(
-                    parts.join(" · ") +
+                QString h =
+                    "Kalacakra karana: " + parts.join(" · ") +
                     QString(" <small>(JD %1%2)</small>")
                         .arg(jd)
                         .arg(ms.size() > 1 ? " — a duplicated (lhag) "
                                              "lunar day"
-                                           : ""));
+                                           : "");
+                {   // the published-almanac answer rides alongside
+                    QStringList pp;
+                    for (const auto& hjd : phugpaFromJd(jd))
+                        pp << QString("tshes <b>%1</b>, month %2%3 "
+                                      "(year beginning %4)")
+                                  .arg(hjd.tt)
+                                  .arg(hjd.month)
+                                  .arg(hjd.intercal
+                                           ? " (intercalary)"
+                                       : hjd.delayed ? " (delayed)"
+                                                     : "")
+                                  .arg(hjd.year);
+                    if (!pp.isEmpty())
+                        h += "<br><b>Phugpa</b> (published-almanac "
+                             "standard, proven vs 21 oracle years): " +
+                             pp.join(" · ");
+                }
+                calOut->setText(h);
                 return;
+            }
+        }
+        // Tibetan year name + month -> WESTERN MONTH SPAN (Adam,
+        // 2026-08-15: "if there is ever a Tibetan year given in one
+        // of the texts, there should be a way of converting it into
+        // western year and month if possible"). Grammar:
+        // "<element> <animal> [rabjung] m<N>" — e.g. "me bya 6 m3",
+        // "fire bird m3". Uses the TRUE PHUGPA port for the span;
+        // outside the proven 2015-2035 window the same grub-rtsis
+        // arithmetic computes and the caption says so honestly.
+        {
+            const auto p = q.split(' ', Qt::SkipEmptyParts);
+            if (p.size() >= 3 && p.size() <= 4 &&
+                p.last().size() >= 2 && p.last().startsWith('m') &&
+                p.last().mid(1).toInt() >= 1 &&
+                p.last().mid(1).toInt() <= 12) {
+                const int wantM = p.last().mid(1).toInt();
+                int rab = 0;
+                int nameEnd = int(p.size()) - 1;
+                if (p.size() == 4) {
+                    bool okr = false;
+                    rab = p[2].toInt(&okr);
+                    if (!okr || rab <= 0) rab = 0;
+                    else nameEnd = 2;
+                }
+                if (nameEnd == 2) {
+                    const auto years = allcore::yearsFor(
+                        p[0].toStdString(), p[1].toStdString(), rab);
+                    if (!years.empty()) {
+                        QStringList rows;
+                        int shown = 0;
+                        for (auto it = years.rbegin();
+                             it != years.rend() && shown < 3;
+                             ++it, ++shown) {
+                            const int y = *it;
+                            const auto py = allcore::phugpaYear(y);
+                            long j0 = 0, j1 = 0;
+                            for (const auto& m : py.months) {
+                                if (m.month != wantM ||
+                                    m.intercalary)
+                                    continue;
+                                for (const auto& d : m.days)
+                                    if (!d.omitted) {
+                                        if (!j0)
+                                            j0 = d.duplicated
+                                                     ? d.jd - 1
+                                                     : d.jd;
+                                        j1 = d.jd;
+                                    }
+                                break;
+                            }
+                            if (!j0) continue;
+                            const auto a =
+                                allcore::westernFromJd(j0);
+                            const auto b =
+                                allcore::westernFromJd(j1);
+                            rows << QString(
+                                        "%1: month %2 = <b>%3-%4-%5 "
+                                        "\u2192 %6-%7-%8</b>")
+                                        .arg(y)
+                                        .arg(wantM)
+                                        .arg(a.year)
+                                        .arg(a.month, 2, 10,
+                                             QChar('0'))
+                                        .arg(a.day, 2, 10,
+                                             QChar('0'))
+                                        .arg(b.year)
+                                        .arg(b.month, 2, 10,
+                                             QChar('0'))
+                                        .arg(b.day, 2, 10,
+                                             QChar('0'));
+                        }
+                        if (!rows.isEmpty()) {
+                            calOut->setText(
+                                rows.join("<br>") +
+                                " <small>(true Phugpa, "
+                                "published-almanac standard; "
+                                "proven 2015-2035, earlier years "
+                                "by the same grub-rtsis "
+                                "arithmetic \u2014 historical "
+                                "almanac practice can differ; add "
+                                "the rab byung number to pick one "
+                                "cycle, e.g. \u201c" +
+                                p[0] + " " + p[1] +
+                                " 6 m" + QString::number(wantM) +
+                                "\u201d)</small>");
+                            return;
+                        }
+                    }
+                }
             }
         }
         // month list: "YYYY months" — the year's months with names
@@ -12147,14 +12277,24 @@ static QWidget* makeConvertPane(allcore::Mvp* mvp,
                                   .arg(QString::fromStdString(
                                       m.animal_en))
                                   .arg(m.female ? " (f)" : " (m)");
+                    QStringList ph;
+                    for (const auto& m : allcore::phugpaYear(int(y))
+                                             .months)
+                        ph << QString("%1%2")
+                                  .arg(m.month)
+                                  .arg(m.intercalary
+                                           ? "ᵢ"
+                                       : m.delayed ? "ᵈ" : "");
                     calOut->setText(
-                        ms.join(" · ") +
-                        " <small>(ᵢ = intercalary — Kalacakra "
-                        "karana reckoning; published almanacs "
-                        "follow Phugpa, whose leap months can "
-                        "differ; type e.g. \u201c" +
+                        "Kalacakra karana: " + ms.join(" · ") +
+                        "<br><b>Phugpa</b>: " + ph.join(" · ") +
+                        " <small>(ᵢ = intercalary, ᵈ = delayed — "
+                        "the two systems intercalate differently; "
+                        "Phugpa is the published-almanac standard; "
+                        "type e.g. \u201c" +
                         QString::number(y) +
-                        " m3\u201d for the month's days)</small>");
+                        " m3\u201d for the karana month's "
+                        "days)</small>");
                     return;
                 }
             }
@@ -24923,6 +25063,20 @@ int main(int argc, char** argv) {
                        none.isEmpty(),
                    "Lookup PERSON card answers for an author name "
                    "only");
+            }
+            {   // true Phugpa in the Convert pane's data path:
+                // Losar 2025 = 28 Feb 2025 (published almanac,
+                // double-confirmed); 2024 carries a delayed month
+                const auto py = allcore::phugpaYear(2025);
+                bool delayed24 = false;
+                for (const auto& m : allcore::phugpaYear(2024).months)
+                    delayed24 |= m.delayed;
+                lk(py.valid &&
+                       py.losar_jd ==
+                           allcore::julianDay(28, 2, 2025) &&
+                       delayed24,
+                   "Phugpa port: Losar 2025 = 28 Feb 2025; delayed "
+                   "month present");
             }
             {   // OCR model resolver: a picked-but-absent model
                 // falls back to the bundled Woodblock; traversal

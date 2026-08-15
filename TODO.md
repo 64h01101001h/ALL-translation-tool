@@ -114,8 +114,13 @@ implementation is sidelined HERE from this date. What this means:
          ported from the files) + suite 43 phugpa_smoke — 21 oracle
          years diff-proven (260 months incl. intercalary/delayed
          labels, 7,971 day lines, 171 duplicated pairs, 293 omitted
-         days, 0 failures). REMAINING: Convert-pane wiring (Phugpa
-         beside the KCK karana with honest captions).
+         days, 0 failures). Convert-pane wiring DONE same
+         day: ISO dates answer in BOTH systems; "YYYY months" shows
+         both month sequences (ᵢ intercalary, ᵈ delayed); and Adam's
+         2026-08-15 ask shipped — Tibetan year name + month
+         ("me bya 6 m3") → the month's western date span
+         (probe: me bya rabjung 6 = 1357, m3 = 30 Mar–28 Apr 1357).
+         Item COMPLETE.
       8. Draft-pane standards conventions: STD-006 translator-
          insertion marking · STD-009 variant-reading notes (build
          follows GMR ratification of the trust dialog).
