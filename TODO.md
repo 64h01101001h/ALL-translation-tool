@@ -153,6 +153,43 @@ implementation is sidelined HERE from this date. What this means:
          verification · ~~THL follow-ups~~ BOTH DONE 2026-08-15 (GMR_VS_THL_PHONETICS.md engine table; studies_in_genre_chapters.tsv — 30 chapters recovered from the legacy reader's server-rendered contents) · ~~Zenodo Hill verb-stems license check~~ DONE 2026-08-15: record 4726991 = open ACCESS but license 'other-open' with NO explicit grant (no CC tag, no LICENSE file; derives from Hill 2010, Bayerische Akademie — a published book). VERDICT: in-house research comparandum at most; nothing ships without Hill's word (an email would clear it — optional, our CC0 bank already covers stems; Hill adds grammatical-tradition attestations) · About-dialog
          contact swap when a support@ address exists · vendor
          libtesseract if the team wants zero-setup Sanskrit OCR.
+      9b. **ACIP anchor for every apparatus footnote (Adam,
+         2026-08-15).** His words: "we can see the footnotes output
+         but we don't know what Tibetan phrase/term they are
+         associated with in the Translate > Apparatus pane." He is
+         right and the gap is in the DATA, not the pane: all 2,234
+         mined notes carry `lemma` = the ENGLISH catchword from the
+         published translation, and no Tibetan field exists in the
+         ApparatusNote struct at all (lemma, text, source, num).
+         MEASURED FEASIBILITY 2026-08-15, before scheduling:
+           · 2,010 of 2,234 lemmas are 1-6 words (matchable length)
+           · 1,289 of those 2,010 (64%) appear verbatim inside an
+             aligned English segment of full_parallel_corpus_v32
+           · but naive first-match is WRONG often enough to be
+             dangerous: 'Je Tsongkapa' resolved to a segment whose
+             ACIP is "THE ASIAN CLASSICS INSTITUTE", because
+             containment returns the WHOLE SEGMENT, not the phrase,
+             and does not check that the segment even belongs to the
+             note's source work. 'Namo Guru Manjughoshaya' resolved
+             correctly. So the raw 64% is an upper bound on recall
+             and says nothing about precision.
+         WHAT THE REAL BUILD NEEDS: (1) constrain candidates to the
+         note's own source work via the corpus `course` field before
+         matching at all; (2) isolate the PHRASE inside the segment
+         (word-level alignment or the overlay lattice), never hand
+         back the whole segment; (3) a second, independent route for
+         the 318 notes whose BODY already quotes the Tibetan inline
+         ("the Tibetan word bum...") — those are self-anchoring and
+         should be mined directly, they are the cheapest true wins;
+         (4) hgm_reverse_index for single-term lemmas.
+         RULE 3 APPLIES HARD: every anchor is MACHINE-LOCATED
+         evidence, displayed as a labeled provisional candidate with
+         its corpus segment shown as proof, never as a silent fact
+         beside HGM's own footnote. Unresolved lemmas stay visibly
+         unresolved rather than being approximated.
+         SHIP ORDER: schema field first (so the pane can show what
+         exists), then route 3, then routes 1+2, then the pane's
+         display + a battery pinning known-good and known-bad pairs.
       10. Idea bank (liked, never scheduled): pronunciation trainer ·
          Text DNA strips · team board · apprenticeship mode ·
          English-on-the-carving hover · teaching-playlist karaoke ·
