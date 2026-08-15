@@ -161,6 +161,18 @@ implementation is sidelined HERE from this date. What this means:
          timer · worked-examples casebook.
 
       **B. ADAM'S ONE-SITTING QUEUE (his actions; canonical copy)**
+      **Donation rails (2026-08-15, after a donor said "I don't
+      have a PayPal account"):** the live site was PayPal-only,
+      and a PERSONAL PayPal account does not offer guest card
+      checkout — switching to a free Business account and turning
+      on "PayPal Account Optional" is what unlocks card-without-
+      an-account. Adam chose Venmo + Zelle + Stripe. Zelle is
+      LIVE (needs nothing but his email, already on the page).
+      Still needed FROM HIM: his Venmo handle, and a Stripe
+      Payment Link (dashboard.stripe.com -> Payment links -> new,
+      "customer chooses price"; Stripe signup wants bank details
+      + ID, so it cannot be done for him). Both drop into the
+      donate block in ~5 minutes once supplied.
       **Sends (drafts finished in Gmail):** Jamie Plant (#1 —
       irreplaceable recordings; confirm address) · 84000 license +
       partnership registration (their ToU asks for it) · THL (16
