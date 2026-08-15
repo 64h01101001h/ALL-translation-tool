@@ -384,5 +384,26 @@ int main(int argc, char** argv) {
 
     std::printf("%s (%d failures)\n",
                 failures ? "READER SMOKE FAILED" : "READER SMOKE OK", failures);
+    // allomorph licensing (TRAINER_DESIGN item, closed 2026-08-14):
+    // cing/ces after g d b; zhing/zhes after ng n m ' r l/vowels;
+    // shing/shes after s — mismatches name the expected form
+    CHECK(allcore::connectiveAllomorphCheck("DAG", "CING") == 0,
+          "cing licensed after final g");
+    CHECK(allcore::connectiveAllomorphCheck("YIN", "ZHING") == 0,
+          "zhing licensed after final n");
+    CHECK(allcore::connectiveAllomorphCheck("LUS", "SHING") == 0,
+          "shing licensed after final s");
+    CHECK(allcore::connectiveAllomorphCheck("DAG", "ZHES") == 1 &&
+              allcore::expectedAllomorph("DAG", "ZHES") == "CES",
+          "zhes after final g flagged; expected ces");
+    CHECK(allcore::connectiveAllomorphCheck("BA", "ZHES") == 0,
+          "zhes licensed after a vowel");
+    CHECK(allcore::connectiveAllomorphCheck("LUS", "CES") == 1 &&
+              allcore::expectedAllomorph("LUS", "CES") == "SHES",
+          "ces after final s flagged; expected shes");
+    CHECK(allcore::connectiveAllomorphCheck("LUS", "KYANG") == -1,
+          "non-family token returns -1");
+
+    
     return failures ? 1 : 0;
 }

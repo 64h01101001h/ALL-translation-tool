@@ -34,6 +34,19 @@ struct Clause {
 // noun so "tooth", lo "year", mo "she", etc.
 bool isFinalParticle(const std::string& prev_acip, const std::string& tok_acip);
 
+// Allomorph licensing for the cing/zhing/shing and ces/zhes/shes
+// families (Wilson's tables): cing/ces after final g d b;
+// zhing/zhes after ng n m ' r l and vowels; shing/shes after s.
+// Returns: 0 = correct allomorph for the preceding final,
+// 1 = mismatched (the string names the expected form via
+// expectedAllomorph), -1 = tok is not in these families.
+int connectiveAllomorphCheck(const std::string& prev_acip,
+                             const std::string& tok_acip);
+// the form the preceding final licenses ("CING"/"ZHING"/"SHING"
+// or "CES"/"ZHES"/"SHES"); empty when tok is not in the families
+std::string expectedAllomorph(const std::string& prev_acip,
+                              const std::string& tok_acip);
+
 // Split a tokenized document (tokens + barrier flags from tokenizeDocument)
 // into clauses.
 std::vector<Clause> splitClauses(const std::vector<std::string>& tokens,

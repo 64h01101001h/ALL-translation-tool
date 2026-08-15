@@ -32,6 +32,14 @@ implementation is sidelined HERE from this date. What this means:
 
 ## Waiting on Adam (prompt him when the task starts)
 
+- [ ] **Pecha renderer v4 (W3C/r12a traditional justification)** —
+      N1 tsheg-padding justification (dominant method; line-ends-in-
+      tsheg → pad tshegs to margin), N2 double-shad gap justification
+      (+1/4–1/3-space normal gap), N3 ༑ substitution on reflow (first
+      shad only), N4/N6 wrapped-shad space discard + NBSP after
+      swallowed shad, N5 ༈ three-NBSP unbreakable block. Source:
+      docs/research/W3C_TIBETAN_LAYOUT_FULL.md.
+
 - [ ] **ATTACK BOARD (2026-08-14 full audit)** — docs/LOOSE_ENDS_AUDIT.md
       is the consolidated four-lane audit of every loose end since day
       one (TODO line-by-line + all docs + code + memory promises).

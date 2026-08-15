@@ -55,6 +55,33 @@ bool vowelFinal(const std::string& s) {
 
 }  // namespace
 
+std::string expectedAllomorph(const std::string& prev_acip,
+                              const std::string& tok_acip) {
+    // family membership
+    bool quot = (tok_acip == "CES" || tok_acip == "ZHES" ||
+                 tok_acip == "SHES");
+    bool coord = (tok_acip == "CING" || tok_acip == "ZHING" ||
+                  tok_acip == "SHING");
+    if (!quot && !coord) return "";
+    if (prev_acip.empty()) return "";
+    const char f = prev_acip.back();
+    const char* form;
+    if (f == 'G' || f == 'D' || f == 'B')
+        form = quot ? "CES" : "CING";
+    else if (f == 'S')
+        form = quot ? "SHES" : "SHING";
+    else   // ng n m ' r l and vowels all license the zh- form
+        form = quot ? "ZHES" : "ZHING";
+    return form;
+}
+
+int connectiveAllomorphCheck(const std::string& prev_acip,
+                             const std::string& tok_acip) {
+    const std::string want = expectedAllomorph(prev_acip, tok_acip);
+    if (want.empty()) return -1;
+    return want == tok_acip ? 0 : 1;
+}
+
 bool isFinalParticle(const std::string& prev_acip, const std::string& tok_acip) {
     for (const auto& e : kEchoes) {
         if (tok_acip != e.tok) continue;

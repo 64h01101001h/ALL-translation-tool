@@ -2740,15 +2740,32 @@ public:
                 const auto clean =
                     OverlayPane::typographyFindings(
                         QString::fromUtf8("བསོད་ནམས་ཀྱི། "));
+                // the r12a exception: ka/ga WITH a subjoin keeps
+                // its shad (གྲུ།) — must NOT be flagged
+                const auto sub =
+                    OverlayPane::typographyFindings(
+                        QString::fromUtf8("གྲུ།"));
+                // new rules: misplaced tsa-'phru, vowel before
+                // a-chung, mid-line yig-mgo
+                const auto w3c =
+                    OverlayPane::typographyFindings(
+                        QString::fromUtf8("ཀྲ༹ ཀཱི ཀ༄"));
                 const QString prot =
                     OverlayPane::pechaBreakProtect(
                         QString::fromUtf8("ཡིན། ། ང་།"));
-                check(kinds == 4 && clean.empty() &&
+                bool w3ok = false, achung = false, midyig = false;
+                for (const auto& f : w3c) {
+                    if (f.second.contains("tsa-'phru")) w3ok = true;
+                    if (f.second.contains("a-chung")) achung = true;
+                    if (f.second.contains("mid-line")) midyig = true;
+                }
+                check(kinds == 4 && clean.empty() && sub.empty() &&
+                          w3ok && achung && midyig &&
                           prot.contains(QChar(0x00A0)) &&
                           prot.contains(QChar(0x0F0C)),
-                      "typography: four classical rules flagged, "
-                      "clean text passes, pecha break "
-                      "protection applied");
+                      "typography: classical + W3C rules flagged, "
+                      "subjoined ka/ga exception honored, clean "
+                      "text passes, break protection applied");
             }
             {   // booklet imposition: saddle order for 8 pages,
                 // and blank pads when not a multiple of 4
@@ -8102,6 +8119,36 @@ public:
                             "ང་། — this tsheg is the NON-breaking "
                             "one (U+0F0C) in classical "
                             "typography")});
+            // r12a/W3C full-doc rules (2026-08-14 pass):
+            // tsa-'phru sits immediately after its consonant —
+            // never after subjoins or vowels
+            const bool aSub = a.unicode() >= 0x0F90 &&
+                              a.unicode() <= 0x0FBC;
+            const bool aVow = (a.unicode() >= 0x0F71 &&
+                               a.unicode() <= 0x0F84);
+            if ((aSub || aVow) && b == QChar(0x0F39))
+                out.push_back(
+                    {i, QString::fromUtf8(
+                            "༹ (tsa-'phru) placed after a "
+                            "subjoin/vowel — it belongs "
+                            "immediately after its consonant")});
+            // stack order: subjoined a-chung (U+0F71) precedes
+            // vowel signs — a vowel before ཱ is misordered
+            if (aVow && a != QChar(0x0F71) && b == QChar(0x0F71))
+                out.push_back(
+                    {i, QString::fromUtf8(
+                            "vowel sign stored before the "
+                            "subjoined a-chung ཱ — a-chung "
+                            "comes first in the stack order")});
+            // yig-mgo only opens a text/line — mid-line ༄ is a
+            // keying slip
+            if (b == QChar(0x0F04) && a != QChar('\n') &&
+                a != QChar(0x0F0D) && !a.isSpace())
+                out.push_back(
+                    {i + 1, QString::fromUtf8(
+                                "༄ (yig-mgo) mid-line — the head "
+                                "mark opens a text, folio, or "
+                                "headline only")});
         }
         return out;
     }

@@ -246,6 +246,10 @@ add_executable(stardict_smoke tests/stardict_smoke.cpp)
 target_link_libraries(stardict_smoke PRIVATE allcore)
 add_test(NAME stardict_smoke COMMAND stardict_smoke)
 
+add_executable(pron_standard_smoke tests/pron_standard_smoke.cpp)
+target_link_libraries(pron_standard_smoke PRIVATE allcore)
+add_test(NAME pron_standard_smoke COMMAND pron_standard_smoke)
+
 add_executable(contractions_smoke tests/contractions_smoke.cpp)
 target_link_libraries(contractions_smoke PRIVATE allcore)
 add_test(NAME contractions_smoke
