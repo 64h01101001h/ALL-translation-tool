@@ -24217,7 +24217,7 @@ int main(int argc, char** argv) {
                 "it may never compose it.</div>");
             add(QString("<div style='font-size:11px;color:#6E5F4B;"
                         "margin-top:12px'>Developed in C++20 with "
-                        "Qt %1 \u00b7 39 automated test batteries "
+                        "Qt %1 \u00b7 " ALL_TEST_BATTERIES " automated test batteries "
                         "\u00b7 runs fully offline</div>")
                     .arg(QString::fromLatin1(qVersion())));
             add("<div style='font-size:12px;margin-top:8px'>"
