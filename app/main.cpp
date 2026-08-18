@@ -612,7 +612,23 @@ static const allcore::Spine* g_spineForAbout = nullptr;
 // The published apparatus (GMR-approved, mined from released books):
 // 344 footnotes keyed by English lemma + 138 bibliography entries.
 // Loaded once; flags terms wherever they appear.
-struct ApparatusNote { QString lemma, text, source; int num = 0; };
+struct ApparatusAnchor {
+    QString wylie, asWritten, evidence;
+    bool technical = false;
+};
+struct ApparatusNote {
+    QString lemma, text, source;
+    int num = 0;
+    // Adam, 2026-08-15: "we can see the footnotes output but we don't
+    // know what Tibetan phrase/term they are associated with." These
+    // are MACHINE-LOCATED CANDIDATES mined from the note's own body
+    // (data/extracted/apparatus_anchors.json) and validated against
+    // attested spine headwords. A note often names several Tibetan
+    // terms and only one is the real anchor, so they are shown as
+    // candidates carrying their evidence, never asserted as the term
+    // the footnote hangs on.
+    std::vector<ApparatusAnchor> anchors;
+};
 struct ApparatusBib { QString source, section, id, text; };
 static const std::vector<ApparatusNote>* g_appNotes = nullptr;
 static const std::vector<ApparatusBib>* g_appBib = nullptr;
@@ -10981,6 +10997,40 @@ private:
 // released work is reused, never redone). Official tier only.
 class ApparatusPane : public QWidget {
 public:
+    // The Tibetan this footnote is talking about. Labelled as
+    // candidates and shown WITH the sentence they were taken from,
+    // because a note may name several terms and only one is the
+    // anchor — the reader decides, the machine only locates.
+    static QString anchorHtml(const ApparatusNote& n) {
+        if (n.anchors.empty()) return {};
+        QString h =
+            "<hr><div style='font-size:12px;color:#7C2D26;"
+            "font-weight:600;letter-spacing:.06em'>TIBETAN NAMED IN "
+            "THIS NOTE</div><div style='font-size:12px;color:#888'>"
+            "<i>machine-located from the note's own words and matched "
+            "against attested dictionary entries &mdash; candidates, "
+            "not a ruling on which term the note hangs on</i></div>";
+        for (const auto& a : n.anchors) {
+            auto [uni, ok] =
+                allcore::wylieToUnicode(a.wylie.toStdString());
+            h += "<div style='margin-top:7px'>";
+            if (ok && !uni.empty())
+                h += "<span style='font-size:19px'>" +
+                     QString::fromStdString(uni).toHtmlEscaped() +
+                     "</span> &nbsp;";
+            h += "<b>" + a.wylie.toHtmlEscaped() + "</b>";
+            if (a.asWritten.trimmed().compare(a.wylie,
+                                              Qt::CaseInsensitive) != 0)
+                h += " <span style='color:#888;font-size:12px'>(written "
+                     "&ldquo;" + a.asWritten.toHtmlEscaped() +
+                     "&rdquo;)</span>";
+            h += "<div style='color:#666;font-size:12px;margin-left:"
+                 "12px'>&hellip;" + a.evidence.toHtmlEscaped() +
+                 "&hellip;</div></div>";
+        }
+        return h;
+    }
+
     ApparatusPane() {
         auto* v = new QVBoxLayout(this);
         auto* banner = new QLabel(
@@ -11056,6 +11106,7 @@ protected:
         QWidget::showEvent(e);
     }
 
+
 private:
     void refill() {
         list_->clear();
@@ -11123,7 +11174,8 @@ private:
                     .arg(n.num)
                     .arg(n.lemma.toHtmlEscaped(),
                          n.source.toHtmlEscaped(),
-                         n.text.toHtmlEscaped()));
+                         n.text.toHtmlEscaped()) +
+                anchorHtml(n));
         } else if (g_appBib) {
             const auto& b = (*g_appBib)[i];
             detail_->setHtml(
@@ -24389,6 +24441,35 @@ int main(int argc, char** argv) {
                                         ? o["num"].toInt()
                                         : o["note"].toInt()});
             }
+        // attach the mined Tibetan anchors, keyed lemma+source so a
+        // lemma reused across two books cannot cross-contaminate
+        {
+            QFile af(root + "/data/extracted/apparatus_anchors.json");
+            if (af.open(QIODevice::ReadOnly)) {
+                const auto rootObj =
+                    QJsonDocument::fromJson(af.readAll()).object();
+                QHash<QString, QJsonArray> byKey;
+                for (const auto& v : rootObj["rows"].toArray()) {
+                    const auto o = v.toObject();
+                    byKey.insert(o["lemma"].toString() + "\x1f" +
+                                     o["source"].toString(),
+                                 o["candidates"].toArray());
+                }
+                for (auto& n : appNotes) {
+                    const auto it =
+                        byKey.constFind(n.lemma + "\x1f" + n.source);
+                    if (it == byKey.constEnd()) continue;
+                    for (const auto& cv : *it) {
+                        const auto c = cv.toObject();
+                        n.anchors.push_back(
+                            {c["wylie"].toString(),
+                             c["as_written"].toString(),
+                             c["evidence"].toString(),
+                             c["technical_spelling"].toBool()});
+                    }
+                }
+            }
+        }
         QString bibPath =
             root + "/data/extracted/apparatus_bibliography.json";
         if (!QFileInfo::exists(bibPath))
@@ -25961,6 +26042,32 @@ int main(int argc, char** argv) {
                            "a folder that has gone away")
                        .arg(back && safe ? "PASS" : "FAIL");
             if (!(back && safe)) ++fails;
+        }
+        {   // Apparatus anchors (Adam 2026-08-15: "we don't know what
+            // Tibetan phrase they are associated with"). Pin the
+            // RENDERED detail, not just that the bank loaded — the
+            // teaching-links outage this morning was exactly a case
+            // of data loading fine while the card showed nothing.
+            int withAnchors = 0;
+            const ApparatusNote* sample = nullptr;
+            if (g_appNotes)
+                for (const auto& n : *g_appNotes)
+                    if (!n.anchors.empty()) {
+                        ++withAnchors;
+                        if (!sample) sample = &n;
+                    }
+            bool ok = withAnchors > 0 && sample;
+            if (ok) {
+                const QString h = ApparatusPane::anchorHtml(*sample);
+                ok = h.contains("TIBETAN NAMED IN THIS NOTE") &&
+                     h.contains(sample->anchors.front().wylie) &&
+                     h.contains("candidates");   // never asserted
+            }
+            log << QString("  [%1] Apparatus: footnotes carry their "
+                           "Tibetan, labelled as candidates (%2 notes "
+                           "anchored)")
+                       .arg(ok ? "PASS" : "FAIL").arg(withAnchors);
+            if (!ok) ++fails;
         }
         {
             const bool cream =
