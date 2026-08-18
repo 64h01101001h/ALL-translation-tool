@@ -257,6 +257,25 @@ implementation is sidelined HERE from this date. What this means:
          Persist both sizes per-pane in sess::, label the control
          plainly (A− / A+), respect the existing typography audit
          item when it runs.
+      9e. **From the DCC cataloging-agent demo (Lon & Tom,
+         2026-08-18, analysis: docs/research/DCC_CATALOG_AGENT_DEMO.md).**
+         Adoptable in our architecture, our rules: (1) title-vs-
+         translation mismatch QC over the library's bilingual
+         filenames (deterministic; their sweep found 6, ours will
+         find some); (2) doctrinal-topic + life-application tag
+         layers — machine-assigned, so PROVISIONAL-labeled through
+         the proposal channel, never silent; (3) catalog-title gloss
+         tier from GMR's own published title pairs (matched English,
+         labeled reference); (4) colophon-aware same-title/duplicate
+         detection; (5) GMR's 23-item Russian physical-catalog
+         format incl. printed-area-as-woodblock-fingerprint — ADAM:
+         request the list (GMR is sending it to Lon; it serves our
+         scan/edition matching directly); (6) conversational
+         librarian over OUR spine — gated on API credits, answers
+         restricted to attested material. ON THE RECORD: GMR called
+         the longest-match walk "a trick I taught Adam… it's going
+         to revolutionize the dictionary" — that is our lattice's
+         exact design, validated by the authority himself.
       9c. **RECOVERED DEFERRALS (Adam, 2026-08-15: "look for any
          'saved for later' notes and add them to the updated todo
          list").** Swept every session transcript, all of docs/,
