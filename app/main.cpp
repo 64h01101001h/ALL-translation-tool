@@ -3656,6 +3656,30 @@ public:
                   "step, and reset lands on the raised defaults");
         }
         {
+            // Adam's font ruling holds on the LIVE view (asked
+            // 2026-08-18: "verify the overlay pane is still
+            // rendering text in palatino"): ACIP mode = Palatino;
+            // script mode = the chosen Tibetan face
+            input_->setPlainText("BDEN PA ,");
+            scriptMode_->setCurrentIndex(1);   // ACIP
+            loadDoc();
+            const QString accipFam = QFontInfo(view_->font()).family();
+            scriptMode_->setCurrentIndex(0);   // Tibetan script
+            loadDoc();
+            const QString scriptFam =
+                QFontInfo(view_->font()).family();
+            const QString face = tibFont_->currentText();
+            const bool ok =
+                accipFam.contains("Palatino", Qt::CaseInsensitive) &&
+                (face == "system" ||
+                 scriptFam.compare(face, Qt::CaseInsensitive) == 0);
+            check(ok, QString("font ruling live: ACIP renders %1, "
+                              "script renders %2")
+                          .arg(accipFam, scriptFam)
+                          .toUtf8()
+                          .constData());
+        }
+        {
             // display toggles must NOT wipe the card or rebuild the
             // document (Adam's finding)
             input_->setPlainText("BDEN PA ,");
@@ -4836,9 +4860,12 @@ private:
                 QFontDatabase::hasFamily(want))
                 f.setFamilies({want});
             else
-                f.setFamilies(QFontDatabase::systemFont(
-                                  QFontDatabase::GeneralFont)
-                                  .families());
+                // the APP font, not the OS font: Adam's ruling
+                // (2026-08-13) is Palatino for Latin everywhere,
+                // and ACIP/wylie are Latin. This site was resetting
+                // to SF Pro on every re-render (found while
+                // verifying the ruling, 2026-08-18).
+                f.setFamilies(qApp->font().families());
             view_->setFont(f);
         }
         // Mirror the source's line structure (Adam, 2026-08-10): the
