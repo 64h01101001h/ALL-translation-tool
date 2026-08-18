@@ -3594,6 +3594,52 @@ public:
                   "restored as nothing");
         }
         {
+            // Reader zoom (Adam, 2026-08-16): the px rewrite scales
+            // and clamps; the live steps move both widgets' fonts and
+            // a reset really resets. State restored afterwards; the
+            // sess:: writes are already no-ops under the harness.
+            const bool pure =
+                scaleCardPx("a{font-size:12px}", 150)
+                        .contains("font-size:18px") &&
+                scaleCardPx("font-size: 10px", 200)
+                        .contains("font-size:20px") &&
+                scaleCardPx("font-size:4px", 50)
+                        .contains("font-size:7px") &&   // floor
+                scaleCardPx("font-size:12px", 100) ==
+                    "font-size:12px";
+            const int keepT = textZoom_, keepC = cardZoom_;
+            textZoomStep(0);
+            textZoomStep(+3);
+            const bool tOk = view_->font().pointSize() == 18;
+            cardZoomStep(0);
+            cardZoomStep(+1);
+            const bool cOk =
+                qAbs(context_->font().pointSizeF() -
+                     cardBasePt_ * 1.1) < 0.01;
+            textZoomStep(0);
+            cardZoomStep(0);
+            const bool rOk = view_->font().pointSize() == 15 &&
+                             qAbs(context_->font().pointSizeF() -
+                                  cardBasePt_) < 0.01;
+            textZoom_ = keepT;
+            textZoomStep(0);
+            textZoom_ = keepT;   // step(0) zeroed it; put the real
+            {                    // value back and re-apply
+                QFont f = view_->font();
+                f.setPointSize(std::clamp(15 + textZoom_, 8, 60));
+                view_->setFont(f);
+            }
+            cardZoom_ = keepC;
+            {
+                QFont cf = context_->font();
+                cf.setPointSizeF(cardBasePt_ * cardZoom_ / 100.0);
+                context_->setFont(cf);
+            }
+            check(pure && tOk && cOk && rOk,
+                  "reader zoom: card px sizes rewrite with a floor, "
+                  "both panes step and reset, state restored");
+        }
+        {
             // display toggles must NOT wipe the card or rebuild the
             // document (Adam's finding)
             input_->setPlainText("BDEN PA ,");
@@ -4358,6 +4404,24 @@ auto* secScan = new QLabel("<span style='color:#9A7A33;font-size:10px;letter-spa
             if (ix >= 0) tibFont_->setCurrentIndex(ix);
         }
         scriptRow->addWidget(tibFont_);
+        {
+            auto mkZ = [this](const char* t, const char* tip, int d) {
+                auto* z = new QToolButton;
+                z->setText(QString::fromUtf8(t));
+                z->setToolTip(tip);
+                z->setAutoRepeat(true);
+                connect(z, &QToolButton::clicked,
+                        [this, d] { textZoomStep(d); });
+                return z;
+            };
+            scriptRow->addWidget(mkZ(
+                "A\u2212", "Text smaller (\u2318\u2212 in the text)",
+                -1));
+            scriptRow->addWidget(mkZ(
+                "A+", "Text larger (\u2318+ in the text; \u23180 "
+                      "resets)",
+                +1));
+        }
         connect(tibFont_, &QComboBox::currentIndexChanged, [this](int) {
             QSettings s("ALL", "TranslationTool");
             s.setValue("overlay/tibFontFamily", tibFont_->currentText());
@@ -4397,7 +4461,44 @@ auto* secScan = new QLabel("<span style='color:#9A7A33;font-size:10px;letter-spa
         {
             auto* eb = new QLabel("<span style='color:#9A7A33;font-size:10px;letter-spacing:2px;font-weight:600'>CARD LAYERS</span>");
             eb->setContentsMargins(0, 8, 0, 0);
-            ll->addWidget(eb);
+            auto* er = new QHBoxLayout;
+            er->addWidget(eb);
+            er->addStretch();
+            auto mkZ = [this](const char* t, const char* tip, int d) {
+                auto* z = new QToolButton;
+                z->setText(QString::fromUtf8(t));
+                z->setToolTip(tip);
+                z->setAutoRepeat(true);
+                connect(z, &QToolButton::clicked,
+                        [this, d] { cardZoomStep(d); });
+                return z;
+            };
+            er->addWidget(mkZ(
+                "A\u2212", "Card text smaller (\u2318\u2212 in the "
+                            "card)",
+                -1));
+            er->addWidget(mkZ(
+                "A+", "Card text larger (\u2318+ in the card; "
+                      "\u23180 resets)",
+                +1));
+            ll->addLayout(er);
+        }
+        // \u2318+/\u2318\u2212/\u23180 zoom whichever half has
+        // focus — the card browser or the text. Widget-scoped, same
+        // as the Input pane's, so the two panes never collide.
+        {
+            auto zsc = [this](const QKeySequence& k, int d) {
+                auto* sc = new QShortcut(k, this);
+                sc->setContext(Qt::WidgetWithChildrenShortcut);
+                connect(sc, &QShortcut::activated, [this, d] {
+                    if (context_->hasFocus()) cardZoomStep(d);
+                    else textZoomStep(d);
+                });
+            };
+            zsc(QKeySequence::ZoomIn, +1);
+            zsc(QKeySequence("Ctrl+="), +1);
+            zsc(QKeySequence::ZoomOut, -1);
+            zsc(QKeySequence("Ctrl+0"), 0);
         }
         showPhon_ = mkToggle("phonetics", "phonetics", true);
         showGloss_ = mkToggle("glosses", "HGM definitions", true);
@@ -4482,8 +4583,21 @@ auto* secScan = new QLabel("<span style='color:#9A7A33;font-size:10px;letter-spa
         // (the whole line lit up after cycling — Adam, 2026-08-11)
         view_->viewport()->installEventFilter(this);
         view_->installEventFilter(this);   // arrow-key reading
-        { QFont vf = view_->font(); vf.setPointSize(15); view_->setFont(vf); }
+        textZoom_ = std::clamp(
+            sess::get("overlay/textZoom", 0).toInt(), -7, 45);
+        { QFont vf = view_->font();
+          vf.setPointSize(std::clamp(15 + textZoom_, 8, 60));
+          view_->setFont(vf); }
         context_ = new QTextBrowser;
+        cardBasePt_ = context_->font().pointSizeF();
+        if (cardBasePt_ <= 0) cardBasePt_ = 13.0;
+        cardZoom_ = std::clamp(
+            sess::get("overlay/cardZoom", 100).toInt(), 70, 220);
+        if (cardZoom_ != 100) {
+            QFont cf = context_->font();
+            cf.setPointSizeF(cardBasePt_ * cardZoom_ / 100.0);
+            context_->setFont(cf);
+        }
         context_->setOpenLinks(false);
         connect(context_, &QTextBrowser::anchorClicked,
                 [this](const QUrl& u) {
@@ -4636,7 +4750,7 @@ private:
         // empty-input guidance (small strike, 2026-08-15): Analyze
         // with nothing pasted teaches instead of blanking
         if (input_->toPlainText().trimmed().isEmpty()) {
-            context_->setHtml(
+            setCardHtml(
                 "<b>Nothing to analyze yet.</b><br>Paste ACIP or "
                 "wylie above (or open a Library text \u2014 "
                 "double-click one in Read \u2192 Library), then "
@@ -5301,6 +5415,53 @@ public:
     // exactly where they left off — same file, same scroll, same
     // cursor. Saved on quit and after every open; restored on
     // normal launch only (never in selftest/probe runs).
+    // ---- reader zoom (Adam, 2026-08-16) ----
+    // The card renderer hard-codes px sizes throughout, and QTextEdit
+    // zoom ignores explicit px — so the card scales by rewriting the
+    // sizes at render time. Raw html is kept so a zoom step re-renders
+    // the CURRENT card instantly.
+    static QString scaleCardPx(const QString& html, int pct) {
+        if (pct == 100) return html;
+        static const QRegularExpression re(
+            QStringLiteral("font-size:\\s*(\\d+)px"));
+        QString out;
+        out.reserve(html.size() + 64);
+        qsizetype last = 0;
+        auto it = re.globalMatch(html);
+        while (it.hasNext()) {
+            const auto m = it.next();
+            out += html.mid(last, m.capturedStart() - last);
+            out += QStringLiteral("font-size:%1px")
+                       .arg(std::max(7, m.captured(1).toInt() *
+                                            pct / 100));
+            last = m.capturedEnd();
+        }
+        out += html.mid(last);
+        return out;
+    }
+
+    void setCardHtml(const QString& h) {
+        cardHtmlRaw_ = h;
+        context_->setHtml(scaleCardPx(h, cardZoom_));
+    }
+
+    void textZoomStep(int d) {   // points; 0 resets
+        textZoom_ = d ? std::clamp(textZoom_ + d, -7, 45) : 0;
+        sess::put("overlay/textZoom", textZoom_);
+        QFont f = view_->font();
+        f.setPointSize(std::clamp(15 + textZoom_, 8, 60));
+        view_->setFont(f);
+    }
+
+    void cardZoomStep(int d) {   // ±10% per step; 0 resets
+        cardZoom_ = d ? std::clamp(cardZoom_ + d * 10, 70, 220) : 100;
+        sess::put("overlay/cardZoom", cardZoom_);
+        QFont cf = context_->font();
+        cf.setPointSizeF(cardBasePt_ * cardZoom_ / 100.0);
+        context_->setFont(cf);
+        if (!cardHtmlRaw_.isEmpty()) setCardHtml(cardHtmlRaw_);
+    }
+
     void saveSession() const {
         if (g_harnessRun) return;   // never clobber the real session
         if (docFile_.isEmpty()) return;
@@ -5693,7 +5854,7 @@ private:
             if (const auto* p = showGrammar_->isChecked()
                                     ? allcore::classifyParticle(doc_.tokens[tok])
                                     : nullptr) {
-                context_->setHtml(
+                setCardHtml(
                     segmentationHtml(tok) +
                     QString("<b>%1</b> — grammatical particle<br>%2<br>"
                             "<small style='color:#555'>paradigm: %3</small>")
@@ -5747,7 +5908,7 @@ private:
                                           .toHtmlEscaped(),
                                       QString::fromStdString(a->expUnicode)
                                           .toHtmlEscaped());
-                context_->setHtml(segmentationHtml(tok) +
+                setCardHtml(segmentationHtml(tok) +
                                   glossaryHtml(tokWylie) +
                                   "<i>no dictionary span here</i>" + extra);
             }
@@ -6004,7 +6165,7 @@ private:
                          "</div>";
             }
         }
-        context_->setHtml(h);
+        setCardHtml(h);
     }
 
     allcore::Spine& spine_;
@@ -6017,6 +6178,12 @@ private:
     QPlainTextEdit* input_ = nullptr;
     QPlainTextEdit* view_ = nullptr;
     QTextBrowser* context_ = nullptr;
+    // reader zoom (Adam, 2026-08-16): point delta on the text pane,
+    // percent on the card; both persisted, both survive re-renders
+    int textZoom_ = 0;
+    int cardZoom_ = 100;
+    qreal cardBasePt_ = 13.0;
+    QString cardHtmlRaw_;
     // ---- BDRC scan follow-along (APPARATUS_DESIGN §3) ----------------
     // Toh -> THL D-number, inverted from the 919-entry verified
     // concordance; inversion collisions dropped, never guessed
@@ -8634,7 +8801,7 @@ private:
             "so it stays beside the text while you work — every "
             "link (jump, open-at-line, hunt) works there too.");
         connect(pinB, &QPushButton::clicked, [this, h, dlg] {
-            context_->setHtml(h);
+            setCardHtml(h);
             dlg->close();
         });
         row->addWidget(pinB);
