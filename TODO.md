@@ -286,6 +286,13 @@ implementation is sidelined HERE from this date. What this means:
          timer · worked-examples casebook.
 
       **B. ADAM'S ONE-SITTING QUEUE (his actions; canonical copy)**
+      **ElevenLabs pilot (2026-08-16, plan at
+      docs/ELEVENLABS_TEST_PLAN.md, task #43):** two inputs are
+      his and everything else is on disk — (1) ElevenLabs account
+      + ~$20 credit; (2) three pre-2010 AUDIO-era samples
+      (cassette/minidisc quality, one deliberately bad) — the
+      repo holds none, and no verdict from clean 2020s video
+      generalizes to the era Phase One exists to rescue.
       **Donation rails (2026-08-15, after a donor said "I don't
       have a PayPal account"):** the live site was PayPal-only,
       and a PERSONAL PayPal account does not offer guest card
