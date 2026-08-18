@@ -237,6 +237,26 @@ implementation is sidelined HERE from this date. What this means:
          Way Translator Course, 2026-08-15 — the same session as the
          semicolon/spacing instructions already queued), and whether
          Ven. Utpala's style sheet already records it.
+      9b2. **Zoom for the Overlay text pane AND the card info pane
+         (Adam, 2026-08-16).** Reader-controlled text size on the
+         loaded document view and on the card/context browser.
+         SCOPED 2026-08-16: the two halves are NOT the same job.
+         · Text pane (view_, QPlainTextEdit): trivial — zoomIn/
+           zoomOut exist on the widget; wire ⌘+/⌘−/⌘0 (the Input
+           pane's zoom shortcuts are the in-app precedent), add a
+           small control, persist via sess:: so the size survives
+           relaunch.
+         · Card pane (context_, QTextBrowser): NOT trivial — the
+           entryHtml() renderer hard-codes px font sizes throughout
+           (font-size:12px etc.), which ignore QTextEdit zoom. Needs
+           a card-zoom factor threaded through entryHtml's px values
+           at render time (single shared renderer, so one change
+           covers Lookup/Overlay/popup), or a rem-style refactor of
+           the card CSS. Same treatment then benefits ⌘D popup and
+           Lookup pane free.
+         Persist both sizes per-pane in sess::, label the control
+         plainly (A− / A+), respect the existing typography audit
+         item when it runs.
       9c. **RECOVERED DEFERRALS (Adam, 2026-08-15: "look for any
          'saved for later' notes and add them to the updated todo
          list").** Swept every session transcript, all of docs/,
