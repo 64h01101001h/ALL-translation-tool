@@ -276,6 +276,39 @@ implementation is sidelined HERE from this date. What this means:
          the longest-match walk "a trick I taught Adam… it's going
          to revolutionize the dictionary" — that is our lattice's
          exact design, validated by the authority himself.
+      9f. **Windows .exe packaging (Adam, 2026-08-18: "considering
+         how hard it will be").** AUDITED SAME DAY — the stack was
+         chosen for this (CLAUDE.md: C++20 + Qt 6 + CMake "macOS-
+         first, cross-platform-clean"), and the audit bears it out:
+         core/ and app/ have ZERO Q_OS_MAC / __APPLE__ / objc code;
+         CMakeLists has no platform branches; SQLite is vendored;
+         all URL/file opens go through QDesktopServices (portable);
+         QSettings maps to the registry by itself. Only THREE real
+         mac-isms, all small: (1) Files pane "open Terminal here"
+         calls /usr/bin/open -a Terminal → Windows: start cmd /K;
+         (2) "Send to OCR" scans /Applications for the TibOCR app →
+         gate behind Q_OS_MACOS, hide the button elsewhere; (3) the
+         data-root discovery mentions .app-relative layout → add the
+         exe-relative equivalent. WORK LIST: Qt 6 (MSVC) + CMake
+         build, fix the three call sites, windeployqt instead of
+         macdeployqt in a package_windows.(bat|ps1) mirroring
+         tools/package_macos.sh (stage → deploy → data manifest →
+         launch test → installer), NSIS or Inno Setup for the
+         installer (~380MB payload, same as the DMG), FONTS: bundled
+         OFL faces carry over but Kailasa/Kokonor are Apple-only —
+         the vetted list already degrades gracefully. TESTING: the
+         batteries are ctest (portable) and --selftest/--sweep run
+         headless-ish — GitHub Actions windows-latest runner can
+         build+test without owning a Windows box; a real machine
+         only needed for the eyeball pass. SIGNING: unsigned .exe
+         hits SmartScreen warnings; an Authenticode cert (~$100-400/
+         yr, OV) is the Windows sibling of the Apple Developer ID
+         already on Adam's list — same sitting, decide both.
+         ESTIMATE: days, not weeks, absent surprises — the surprise
+         reserve is HarfBuzz/Tibetan shaping on Windows, which Qt
+         bundles, so verify shaping FIRST on the CI runner
+         (render bsgrubs-class stacks, compare screenshots) before
+         any packaging work.
       9c. **RECOVERED DEFERRALS (Adam, 2026-08-15: "look for any
          'saved for later' notes and add them to the updated todo
          list").** Swept every session transcript, all of docs/,
