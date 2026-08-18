@@ -4440,24 +4440,6 @@ auto* secScan = new QLabel("<span style='color:#9A7A33;font-size:10px;letter-spa
             if (ix >= 0) tibFont_->setCurrentIndex(ix);
         }
         scriptRow->addWidget(tibFont_);
-        {
-            auto mkZ = [this](const char* t, const char* tip, int d) {
-                auto* z = new QToolButton;
-                z->setText(QString::fromUtf8(t));
-                z->setToolTip(tip);
-                z->setAutoRepeat(true);
-                connect(z, &QToolButton::clicked,
-                        [this, d] { textZoomStep(d); });
-                return z;
-            };
-            scriptRow->addWidget(mkZ(
-                "A\u2212", "Text smaller (\u2318\u2212 in the text)",
-                -1));
-            scriptRow->addWidget(mkZ(
-                "A+", "Text larger (\u2318+ in the text; \u23180 "
-                      "resets)",
-                +1));
-        }
         connect(tibFont_, &QComboBox::currentIndexChanged, [this](int) {
             QSettings s("ALL", "TranslationTool");
             s.setValue("overlay/tibFontFamily", tibFont_->currentText());
@@ -4497,27 +4479,7 @@ auto* secScan = new QLabel("<span style='color:#9A7A33;font-size:10px;letter-spa
         {
             auto* eb = new QLabel("<span style='color:#9A7A33;font-size:10px;letter-spacing:2px;font-weight:600'>CARD LAYERS</span>");
             eb->setContentsMargins(0, 8, 0, 0);
-            auto* er = new QHBoxLayout;
-            er->addWidget(eb);
-            er->addStretch();
-            auto mkZ = [this](const char* t, const char* tip, int d) {
-                auto* z = new QToolButton;
-                z->setText(QString::fromUtf8(t));
-                z->setToolTip(tip);
-                z->setAutoRepeat(true);
-                connect(z, &QToolButton::clicked,
-                        [this, d] { cardZoomStep(d); });
-                return z;
-            };
-            er->addWidget(mkZ(
-                "A\u2212", "Card text smaller (\u2318\u2212 in the "
-                            "card)",
-                -1));
-            er->addWidget(mkZ(
-                "A+", "Card text larger (\u2318+ in the card; "
-                      "\u23180 resets)",
-                +1));
-            ll->addLayout(er);
+            ll->addWidget(eb);
         }
         // \u2318+/\u2318\u2212/\u23180 zoom whichever half has
         // focus — the card browser or the text. Widget-scoped, same
@@ -4692,8 +4654,52 @@ auto* secScan = new QLabel("<span style='color:#9A7A33;font-size:10px;letter-spa
                         QDesktopServices::openUrl(u);
                     }
                 });
-        right->addWidget(view_);
-        right->addWidget(context_);
+        // A\u2212/A+ float on each reading surface itself (Adam,
+        // 2026-08-18: "i'll need a-, a+ on both") — the pairs buried
+        // in the control rows were built and invisible, the scan-
+        // viewer lesson again. Grid-overlay: the text widget fills
+        // the cell, the buttons sit on top in the corner.
+        auto zoomWrap = [this](QWidget* inner, const char* what,
+                               std::function<void(int)> step) {
+            auto* wrap = new QWidget;
+            auto* g = new QGridLayout(wrap);
+            g->setContentsMargins(0, 0, 0, 0);
+            g->addWidget(inner, 0, 0);
+            auto* corner = new QWidget;
+            corner->setSizePolicy(QSizePolicy::Maximum,
+                                  QSizePolicy::Maximum);
+            auto* cl = new QHBoxLayout(corner);
+            cl->setContentsMargins(0, 4, 20, 0);
+            cl->setSpacing(2);
+            auto mk = [&](const QString& t, int d) {
+                auto* z = new QToolButton;
+                z->setText(t);
+                z->setToolTip(QString("%1 text %2 \u2014 \u2318%3 "
+                                      "works too; \u23180 resets")
+                                  .arg(what,
+                                       d > 0 ? "larger" : "smaller",
+                                       d > 0 ? "+" : "\u2212"));
+                z->setAutoRepeat(true);
+                z->setFocusPolicy(Qt::NoFocus);
+                z->setStyleSheet(
+                    "QToolButton{background:rgba(250,246,238,215);"
+                    "border:1px solid #C9BFA9;border-radius:3px;"
+                    "padding:1px 5px;font-size:11px}"
+                    "QToolButton:hover{background:#F1E8D4}");
+                connect(z, &QToolButton::clicked,
+                        [step, d] { step(d); });
+                cl->addWidget(z);
+            };
+            mk("A\u2212", -1);
+            mk("A+", +1);
+            g->addWidget(corner, 0, 0,
+                         Qt::AlignTop | Qt::AlignRight);
+            return wrap;
+        };
+        right->addWidget(zoomWrap(view_, "Reading",
+                                  [this](int d) { textZoomStep(d); }));
+        right->addWidget(zoomWrap(context_, "Card",
+                                  [this](int d) { cardZoomStep(d); }));
         right->setStretchFactor(0, 3);
         right->setStretchFactor(1, 2);
 
