@@ -4686,11 +4686,17 @@ auto* secScan = new QLabel("<span style='color:#9A7A33;font-size:10px;letter-spa
                                        d > 0 ? "+" : "\u2212"));
                 z->setAutoRepeat(true);
                 z->setFocusPolicy(Qt::NoFocus);
+                // Adam's screenshot 2026-08-18: the glyphs were
+                // inheriting a near-white color and the translucent
+                // fill let the text underneath bleed through — dark
+                // ink, opaque ground
                 z->setStyleSheet(
-                    "QToolButton{background:rgba(250,246,238,215);"
-                    "border:1px solid #C9BFA9;border-radius:3px;"
-                    "padding:1px 5px;font-size:11px}"
-                    "QToolButton:hover{background:#F1E8D4}");
+                    "QToolButton{color:#2B2118;background:#F3ECDC;"
+                    "border:1px solid #B9AB8C;border-radius:3px;"
+                    "padding:1px 5px;font-size:11px;"
+                    "font-weight:600}"
+                    "QToolButton:hover{background:#E9DFC8;"
+                    "color:#8C2F2B}");
                 connect(z, &QToolButton::clicked,
                         [step, d] { step(d); });
                 cl->addWidget(z);
