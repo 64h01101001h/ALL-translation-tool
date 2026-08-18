@@ -3961,27 +3961,7 @@ public:
         auto* inputBox = new QWidget;
         auto* ibl = new QVBoxLayout(inputBox);
         ibl->setContentsMargins(0, 0, 0, 0);
-        {
-            auto* hr = new QHBoxLayout;
-            hr->addWidget(new QLabel("<b>Document (ACIP)</b>"));
-            hr->addStretch();
-            auto mkZ = [this](const char* t, const char* tip, int d) {
-                auto* z = new QToolButton;
-                z->setText(QString::fromUtf8(t));
-                z->setToolTip(tip);
-                z->setAutoRepeat(true);
-                connect(z, &QToolButton::clicked,
-                        [this, d] { inputZoomStep(d); });
-                return z;
-            };
-            hr->addWidget(mkZ("A\u2212",
-                              "Source smaller (\u2318\u2212 in the "
-                              "box)", -1));
-            hr->addWidget(mkZ("A+",
-                              "Source larger (\u2318+ in the box; "
-                              "\u23180 resets)", +1));
-            ibl->addLayout(hr);
-        }
+        ibl->addWidget(new QLabel("<b>Document (ACIP)</b>"));
         input_ = new QPlainTextEdit;
         input_->setPlaceholderText("Paste an ACIP document…");
         input_->setMinimumHeight(60);
@@ -4510,24 +4490,7 @@ auto* secScan = new QLabel("<span style='color:#9A7A33;font-size:10px;letter-spa
             eb->setContentsMargins(0, 8, 0, 0);
             ll->addWidget(eb);
         }
-        // \u2318+/\u2318\u2212/\u23180 zoom whichever half has
-        // focus — the card browser or the text. Widget-scoped, same
-        // as the Input pane's, so the two panes never collide.
-        {
-            auto zsc = [this](const QKeySequence& k, int d) {
-                auto* sc = new QShortcut(k, this);
-                sc->setContext(Qt::WidgetWithChildrenShortcut);
-                connect(sc, &QShortcut::activated, [this, d] {
-                    if (context_->hasFocus()) cardZoomStep(d);
-                    else if (input_->hasFocus()) inputZoomStep(d);
-                    else textZoomStep(d);
-                });
-            };
-            zsc(QKeySequence::ZoomIn, +1);
-            zsc(QKeySequence("Ctrl+="), +1);
-            zsc(QKeySequence::ZoomOut, -1);
-            zsc(QKeySequence("Ctrl+0"), 0);
-        }
+
         showPhon_ = mkToggle("phonetics", "phonetics", true);
         showGloss_ = mkToggle("glosses", "HGM definitions", true);
         showCorpus_ = mkToggle("corpus", "corpus usage (contextual)", true);
@@ -4683,58 +4646,8 @@ auto* secScan = new QLabel("<span style='color:#9A7A33;font-size:10px;letter-spa
                         QDesktopServices::openUrl(u);
                     }
                 });
-        // A\u2212/A+ float on each reading surface itself (Adam,
-        // 2026-08-18: "i'll need a-, a+ on both") — the pairs buried
-        // in the control rows were built and invisible, the scan-
-        // viewer lesson again. Grid-overlay: the text widget fills
-        // the cell, the buttons sit on top in the corner.
-        auto zoomWrap = [this](QWidget* inner, const char* what,
-                               std::function<void(int)> step) {
-            auto* wrap = new QWidget;
-            auto* g = new QGridLayout(wrap);
-            g->setContentsMargins(0, 0, 0, 0);
-            g->addWidget(inner, 0, 0);
-            auto* corner = new QWidget;
-            corner->setSizePolicy(QSizePolicy::Maximum,
-                                  QSizePolicy::Maximum);
-            auto* cl = new QHBoxLayout(corner);
-            cl->setContentsMargins(0, 4, 20, 0);
-            cl->setSpacing(2);
-            auto mk = [&](const QString& t, int d) {
-                auto* z = new QToolButton;
-                z->setText(t);
-                z->setToolTip(QString("%1 text %2 \u2014 \u2318%3 "
-                                      "works too; \u23180 resets")
-                                  .arg(what,
-                                       d > 0 ? "larger" : "smaller",
-                                       d > 0 ? "+" : "\u2212"));
-                z->setAutoRepeat(true);
-                z->setFocusPolicy(Qt::NoFocus);
-                // Adam's screenshot 2026-08-18: the glyphs were
-                // inheriting a near-white color and the translucent
-                // fill let the text underneath bleed through — dark
-                // ink, opaque ground
-                z->setStyleSheet(
-                    "QToolButton{color:#2B2118;background:#F3ECDC;"
-                    "border:1px solid #B9AB8C;border-radius:3px;"
-                    "padding:1px 5px;font-size:11px;"
-                    "font-weight:600}"
-                    "QToolButton:hover{background:#E9DFC8;"
-                    "color:#8C2F2B}");
-                connect(z, &QToolButton::clicked,
-                        [step, d] { step(d); });
-                cl->addWidget(z);
-            };
-            mk("A\u2212", -1);
-            mk("A+", +1);
-            g->addWidget(corner, 0, 0,
-                         Qt::AlignTop | Qt::AlignRight);
-            return wrap;
-        };
-        right->addWidget(zoomWrap(view_, "Reading",
-                                  [this](int d) { textZoomStep(d); }));
-        right->addWidget(zoomWrap(context_, "Card",
-                                  [this](int d) { cardZoomStep(d); }));
+        right->addWidget(view_);
+        right->addWidget(context_);
         right->setStretchFactor(0, 3);
         right->setStretchFactor(1, 2);
 
@@ -5535,6 +5448,15 @@ public:
         cardHtmlRaw_ = h;
         context_->setHtml(
             scaleCardPx(h, cardZoom_ * kCardPxBase / 100));
+    }
+
+    // View-menu router (Adam, 2026-08-18: buttons out, menu in):
+    // one Larger/Smaller/Reset acts on whichever surface holds the
+    // focus — card browser, source box, or the reading text
+    void zoomRouted(int d) {
+        if (context_->hasFocus()) cardZoomStep(d);
+        else if (input_->hasFocus()) inputZoomStep(d);
+        else textZoomStep(d);
     }
 
     void textZoomStep(int d) {   // points; 0 resets
@@ -20451,22 +20373,8 @@ public:
                 [this] { zoomStep(+25); });
         connect(zoomOutB, &QPushButton::clicked,
                 [this] { zoomStep(-25); });
-        // hotkeys live on the pane — active whenever Input shows
-        // (Adam's request 2026-08-13: ⌘+/⌘− over the scan)
-        auto zsc = [this](const QKeySequence& k, int d) {
-            auto* s = new QShortcut(k, this);
-            s->setContext(Qt::WidgetWithChildrenShortcut);
-            connect(s, &QShortcut::activated, [this, d] {
-                if (d == 0)
-                    setZoomAnchored(100, QPoint(-1, -1));
-                else
-                    zoomStep(d);
-            });
-        };
-        zsc(QKeySequence::ZoomIn, +25);    // ⌘+ (and ⌘⇧+)
-        zsc(QKeySequence("Ctrl+="), +25);  // the unshifted key
-        zsc(QKeySequence::ZoomOut, -25);   // ⌘−
-        zsc(QKeySequence("Ctrl+0"), 0);    // reset
+        // zoom keys moved to the View menu (Adam, 2026-08-18);
+        // scanZoomRouted() is what the menu calls when focus is here
         auto* folioB = new QPushButton("@ next folio");
         folioB->setToolTip(
             "Insert the next folio marker per the ACIP spec (@ in "
@@ -20754,6 +20662,11 @@ public:
             const QString f = sess::path("input/scan");
             if (!f.isEmpty()) openScanPath(f);
         }
+    }
+
+    void scanZoomRouted(int d) {   // View menu, scan zoom
+        if (d == 0) setZoomAnchored(100, QPoint(-1, -1));
+        else zoomStep(d * 25);
     }
 
     QString currentScanFile() const { return scanFile_; }
@@ -25355,6 +25268,38 @@ int main(int argc, char** argv) {
 
     {
         QMenu* view = win.menuBar()->addMenu("View");
+        // Text size lives HERE, not as per-pane buttons (Adam's
+        // call, 2026-08-18). One action serves whichever surface
+        // holds the focus: Overlay text / card / source box, or the
+        // Input pane's scan.
+        {
+            auto route = [overlay, inputPane](int d) {
+                QWidget* f = QApplication::focusWidget();
+                auto within = [f](QWidget* anc) {
+                    for (QWidget* w = f; w; w = w->parentWidget())
+                        if (w == anc) return true;
+                    return false;
+                };
+                if (within(inputPane))
+                    inputPane->scanZoomRouted(d);
+                else
+                    overlay->zoomRouted(d);
+            };
+            QAction* bigger = view->addAction("Larger Text");
+            bigger->setShortcuts({QKeySequence::ZoomIn,
+                                  QKeySequence("Ctrl+=")});
+            QObject::connect(bigger, &QAction::triggered,
+                             [route] { route(+1); });
+            QAction* smaller = view->addAction("Smaller Text");
+            smaller->setShortcut(QKeySequence::ZoomOut);
+            QObject::connect(smaller, &QAction::triggered,
+                             [route] { route(-1); });
+            QAction* reset = view->addAction("Actual Text Size");
+            reset->setShortcut(QKeySequence("Ctrl+0"));
+            QObject::connect(reset, &QAction::triggered,
+                             [route] { route(0); });
+            view->addSeparator();
+        }
         QAction* night = view->addAction("Night mode");
         night->setCheckable(true);
         night->setChecked(nightOn);
