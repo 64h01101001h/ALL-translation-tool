@@ -2139,6 +2139,11 @@ static QString safeGetSaveFileName(
 // pane is built, called only from user actions
 static std::function<void(const QString&)> g_lookupQuery;
 static std::function<void(const QString&)> g_goferQuery;
+// Adam, 2026-08-18: "i'll also need to be able to search my
+// footnotes and bibliography entries" — the Apparatus pane HAS a
+// search box, but the place he actually searches from is ⌘K, which
+// had no apparatus lane. Raises the pane with the query applied.
+static std::function<void(const QString&)> g_apparatusQuery;
 // Translator's Survey (Library info panel link → dialog; the
 // implementation lives beside HuntPalette where the spine is bound)
 static std::function<void(const QString&)> g_surveyFile;
@@ -11227,6 +11232,13 @@ private:
 // released work is reused, never redone). Official tier only.
 class ApparatusPane : public QWidget {
 public:
+    QString currentSearchText() const { return search_->text(); }
+
+    void searchFor(const QString& q) {
+        kind_->setCurrentIndex(0);   // both notes and bibliography
+        search_->setText(q);         // textChanged runs the refill
+    }
+
     // The Tibetan this footnote is talking about. Labelled as
     // candidates and shown WITH the sentence they were taken from,
     // because a note may name several terms and only one is the
@@ -11323,6 +11335,20 @@ public:
         refill();
         check(list_->count() > 0 && list_->count() < full,
               "search narrows the bank");
+        // the Tibetan anchors answer the search too: the notes write
+        // "brtan-pa", a translator types "brtan pa" — the normalized
+        // anchor bridges the hyphen (Adam's ask, 2026-08-18)
+        search_->setText("brtan pa");
+        refill();
+        bool anchored = false;
+        for (const auto& r : rows_)
+            if (r.first && g_appNotes) {
+                for (const auto& an : (*g_appNotes)[r.second].anchors)
+                    if (an.wylie == "brtan pa") anchored = true;
+            }
+        check(list_->count() > 0 && anchored,
+              "searching a normalized Tibetan anchor finds the "
+              "notes that quote it hyphenated");
         search_->clear();
         refill();
         return fails;
@@ -11346,7 +11372,16 @@ private:
         if (g_appNotes && (k == 0 || k == 1)) {
             for (int i = 0; i < (int)g_appNotes->size(); ++i) {
                 const auto& n = (*g_appNotes)[i];
-                if (!q.isEmpty() &&
+                bool anchorHit = false;
+                for (const auto& an : n.anchors)
+                    if (an.wylie.contains(q, Qt::CaseInsensitive)) {
+                        anchorHit = true;
+                        break;
+                    }
+                // anchors match too: the notes write "brtan-pa" but
+                // a translator searches "brtan pa" — the normalized
+                // anchor is what bridges them
+                if (!q.isEmpty() && !anchorHit &&
                     !n.lemma.contains(q, Qt::CaseInsensitive) &&
                     !n.text.contains(q, Qt::CaseInsensitive))
                     continue;
@@ -24113,6 +24148,44 @@ private:
                     2, m.url);
             }
         }
+        // 6. the shared apparatus: footnotes + bibliography
+        if (g_apparatusQuery && q.size() >= 2) {
+            int nn = 0, nb = 0;
+            QString firstLemma;
+            if (g_appNotes)
+                for (const auto& n : *g_appNotes) {
+                    bool hit =
+                        n.lemma.contains(q, Qt::CaseInsensitive) ||
+                        n.text.contains(q, Qt::CaseInsensitive);
+                    for (const auto& an : n.anchors)
+                        if (hit) break;
+                        else if (an.wylie.contains(
+                                     q, Qt::CaseInsensitive))
+                            hit = true;
+                    if (hit) {
+                        if (!nn) firstLemma = n.lemma.left(40);
+                        ++nn;
+                    }
+                }
+            if (g_appBib)
+                for (const auto& b2 : *g_appBib)
+                    if (b2.id.contains(q, Qt::CaseInsensitive) ||
+                        b2.text.contains(q, Qt::CaseInsensitive))
+                        ++nb;
+            if (nn + nb > 0)
+                add(QString::fromUtf8("\xF0\x9F\x93\x8E  ") +
+                        QString("%1 footnote(s), %2 bibliography "
+                                "entr%3%4 \u2014 open in Apparatus")
+                            .arg(nn)
+                            .arg(nb)
+                            .arg(nb == 1 ? "y" : "ies")
+                            .arg(firstLemma.isEmpty()
+                                     ? QString()
+                                     : "  (first: " + firstLemma +
+                                           ")"),
+                    4, q);
+        }
+
         // ⌘K file targets (file-browser P2): the Library's own
         // filenames answer too — Enter opens the file in the
         // right pane (texts → Overlay, images → Input viewer)
@@ -24160,6 +24233,9 @@ private:
                 g_openScanInInput(a.payload);
             else if (g_openAtLine)
                 g_openAtLine(a.payload, 1);
+        } else if (a.kind == 4 && g_apparatusQuery) {
+            g_apparatusQuery(a.payload);
+            accept();
         } else if (a.kind == 1 && g_goferQuery) {
             hide();
             g_goferQuery(a.payload);
@@ -24718,6 +24794,10 @@ int main(int argc, char** argv) {
         if (!appBib.empty()) g_appBib = &appBib;
     }
     auto* apparatusPane = new ApparatusPane();
+    g_apparatusQuery = [apparatusPane](const QString& q) {
+        if (g_raisePane) g_raisePane(apparatusPane);
+        apparatusPane->searchFor(q);
+    };
     tabs.addTab(apparatusPane, "Apparatus");
     g_sendToManuscript = [manuscriptPane](const QString& t) {
         manuscriptPane->setManuscriptText(t);
@@ -26292,6 +26372,20 @@ int main(int argc, char** argv) {
                 ok = h.contains("TIBETAN NAMED IN THIS NOTE") &&
                      h.contains(sample->anchors.front().wylie) &&
                      h.contains("candidates");   // never asserted
+            }
+            {   // ⌘K reaches the apparatus (Adam: "search my
+                // footnotes and bibliography entries" — asked from
+                // the palette's side of the app)
+                const bool wired = bool(g_apparatusQuery);
+                if (wired) g_apparatusQuery("emptiness");
+                const bool landed =
+                    wired &&
+                    apparatusPane->currentSearchText() == "emptiness";
+                log << QString("  [%1] Apparatus: the ⌘K hunt lane "
+                               "routes a query into the pane")
+                           .arg(landed ? "PASS" : "FAIL");
+                if (!landed) ++fails;
+                apparatusPane->searchFor(QString());
             }
             log << QString("  [%1] Apparatus: footnotes carry their "
                            "Tibetan, labelled as candidates (%2 notes "
