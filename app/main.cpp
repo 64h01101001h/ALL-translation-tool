@@ -3607,27 +3607,38 @@ public:
                         .contains("font-size:7px") &&   // floor
                 scaleCardPx("font-size:12px", 100) ==
                     "font-size:12px";
-            const int keepT = textZoom_, keepC = cardZoom_;
+            const int keepT = textZoom_, keepC = cardZoom_,
+                      keepI = inputZoom_;
             textZoomStep(0);
             textZoomStep(+3);
-            const bool tOk = view_->font().pointSize() == 18;
+            const bool tOk = view_->font().pointSize() == 21;
+            inputZoomStep(0);
+            inputZoomStep(+2);
+            const bool iOk = input_->font().pointSize() == 16;
             cardZoomStep(0);
             cardZoomStep(+1);
             const bool cOk =
                 qAbs(context_->font().pointSizeF() -
                      cardBasePt_ * 1.1) < 0.01;
             textZoomStep(0);
+            inputZoomStep(0);
             cardZoomStep(0);
-            const bool rOk = view_->font().pointSize() == 15 &&
+            // the raised defaults ARE the reset targets (18/14/14pt)
+            const bool rOk = view_->font().pointSize() == 18 &&
+                             input_->font().pointSize() == 14 &&
                              qAbs(context_->font().pointSizeF() -
                                   cardBasePt_) < 0.01;
             textZoom_ = keepT;
-            textZoomStep(0);
-            textZoom_ = keepT;   // step(0) zeroed it; put the real
-            {                    // value back and re-apply
+            {
                 QFont f = view_->font();
-                f.setPointSize(std::clamp(15 + textZoom_, 8, 60));
+                f.setPointSize(std::clamp(18 + textZoom_, 8, 60));
                 view_->setFont(f);
+            }
+            inputZoom_ = keepI;
+            {
+                QFont f = input_->font();
+                f.setPointSize(std::clamp(14 + inputZoom_, 8, 44));
+                input_->setFont(f);
             }
             cardZoom_ = keepC;
             {
@@ -3635,9 +3646,9 @@ public:
                 cf.setPointSizeF(cardBasePt_ * cardZoom_ / 100.0);
                 context_->setFont(cf);
             }
-            check(pure && tOk && cOk && rOk,
-                  "reader zoom: card px sizes rewrite with a floor, "
-                  "both panes step and reset, state restored");
+            check(pure && tOk && iOk && cOk && rOk,
+                  "reader zoom: px rewrite floors, all three panes "
+                  "step, and reset lands on the raised defaults");
         }
         {
             // display toggles must NOT wipe the card or rebuild the
@@ -3921,10 +3932,35 @@ public:
         auto* inputBox = new QWidget;
         auto* ibl = new QVBoxLayout(inputBox);
         ibl->setContentsMargins(0, 0, 0, 0);
-        ibl->addWidget(new QLabel("<b>Document (ACIP)</b>"));
+        {
+            auto* hr = new QHBoxLayout;
+            hr->addWidget(new QLabel("<b>Document (ACIP)</b>"));
+            hr->addStretch();
+            auto mkZ = [this](const char* t, const char* tip, int d) {
+                auto* z = new QToolButton;
+                z->setText(QString::fromUtf8(t));
+                z->setToolTip(tip);
+                z->setAutoRepeat(true);
+                connect(z, &QToolButton::clicked,
+                        [this, d] { inputZoomStep(d); });
+                return z;
+            };
+            hr->addWidget(mkZ("A\u2212",
+                              "Source smaller (\u2318\u2212 in the "
+                              "box)", -1));
+            hr->addWidget(mkZ("A+",
+                              "Source larger (\u2318+ in the box; "
+                              "\u23180 resets)", +1));
+            ibl->addLayout(hr);
+        }
         input_ = new QPlainTextEdit;
         input_->setPlaceholderText("Paste an ACIP document…");
         input_->setMinimumHeight(60);
+        inputZoom_ = std::clamp(
+            sess::get("overlay/inputZoom", 0).toInt(), -6, 30);
+        { QFont f = input_->font();
+          f.setPointSize(std::clamp(14 + inputZoom_, 8, 44));
+          input_->setFont(f); }
         ibl->addWidget(input_, 1);
         // right-click: folio identity + woodblock jump actions
         input_->setContextMenuPolicy(Qt::CustomContextMenu);
@@ -4492,6 +4528,7 @@ auto* secScan = new QLabel("<span style='color:#9A7A33;font-size:10px;letter-spa
                 sc->setContext(Qt::WidgetWithChildrenShortcut);
                 connect(sc, &QShortcut::activated, [this, d] {
                     if (context_->hasFocus()) cardZoomStep(d);
+                    else if (input_->hasFocus()) inputZoomStep(d);
                     else textZoomStep(d);
                 });
             };
@@ -4584,16 +4621,22 @@ auto* secScan = new QLabel("<span style='color:#9A7A33;font-size:10px;letter-spa
         view_->viewport()->installEventFilter(this);
         view_->installEventFilter(this);   // arrow-key reading
         textZoom_ = std::clamp(
-            sess::get("overlay/textZoom", 0).toInt(), -7, 45);
+            sess::get("overlay/textZoom", 0).toInt(), -10, 42);
+        // default 18pt (Adam deferred the call, 2026-08-16): dbu-can
+        // stacks render dense at sizes that suit Latin text; 15pt was
+        // legible, not comfortable. Zoom deltas ride on top.
         { QFont vf = view_->font();
-          vf.setPointSize(std::clamp(15 + textZoom_, 8, 60));
+          vf.setPointSize(std::clamp(18 + textZoom_, 8, 60));
           view_->setFont(vf); }
         context_ = new QTextBrowser;
-        cardBasePt_ = context_->font().pointSizeF();
-        if (cardBasePt_ <= 0) cardBasePt_ = 13.0;
+        // card baseline raised by design (2026-08-16): 14pt widget
+        // font, and the hard-coded px sizes render at 115% — so
+        // "reset" (100%) IS the comfortable reading size, never
+        // something to zoom up from.
+        cardBasePt_ = 14.0;
         cardZoom_ = std::clamp(
             sess::get("overlay/cardZoom", 100).toInt(), 70, 220);
-        if (cardZoom_ != 100) {
+        {
             QFont cf = context_->font();
             cf.setPointSizeF(cardBasePt_ * cardZoom_ / 100.0);
             context_->setFont(cf);
@@ -5440,17 +5483,30 @@ public:
         return out;
     }
 
+    // px sizes render at 115% of what the html says at 100% zoom —
+    // the card's design px predate the larger-defaults ruling
+    static constexpr int kCardPxBase = 115;
+
     void setCardHtml(const QString& h) {
         cardHtmlRaw_ = h;
-        context_->setHtml(scaleCardPx(h, cardZoom_));
+        context_->setHtml(
+            scaleCardPx(h, cardZoom_ * kCardPxBase / 100));
     }
 
     void textZoomStep(int d) {   // points; 0 resets
-        textZoom_ = d ? std::clamp(textZoom_ + d, -7, 45) : 0;
+        textZoom_ = d ? std::clamp(textZoom_ + d, -10, 42) : 0;
         sess::put("overlay/textZoom", textZoom_);
         QFont f = view_->font();
-        f.setPointSize(std::clamp(15 + textZoom_, 8, 60));
+        f.setPointSize(std::clamp(18 + textZoom_, 8, 60));
         view_->setFont(f);
+    }
+
+    void inputZoomStep(int d) {   // the Document (ACIP) box
+        inputZoom_ = d ? std::clamp(inputZoom_ + d, -6, 30) : 0;
+        sess::put("overlay/inputZoom", inputZoom_);
+        QFont f = input_->font();
+        f.setPointSize(std::clamp(14 + inputZoom_, 8, 44));
+        input_->setFont(f);
     }
 
     void cardZoomStep(int d) {   // ±10% per step; 0 resets
@@ -6182,6 +6238,7 @@ private:
     // percent on the card; both persisted, both survive re-renders
     int textZoom_ = 0;
     int cardZoom_ = 100;
+    int inputZoom_ = 0;
     qreal cardBasePt_ = 13.0;
     QString cardHtmlRaw_;
     // ---- BDRC scan follow-along (APPARATUS_DESIGN §3) ----------------
