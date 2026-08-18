@@ -237,7 +237,7 @@ implementation is sidelined HERE from this date. What this means:
          Way Translator Course, 2026-08-15 — the same session as the
          semicolon/spacing instructions already queued), and whether
          Ven. Utpala's style sheet already records it.
-      9b2. **Zoom for the Overlay text pane AND the card info pane
+      9b2. ~~Zoom for the Overlay text pane AND the card info pane~~ DONE 2026-08-16 (A-/A+ both rows, cmd+/-/0 focus-routed, persisted, pinned) — original scoping kept below for the record: **Zoom for the Overlay text pane AND the card info pane
          (Adam, 2026-08-16).** Reader-controlled text size on the
          loaded document view and on the card/context browser.
          SCOPED 2026-08-16: the two halves are NOT the same job.
