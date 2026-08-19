@@ -1965,6 +1965,24 @@ static bool g_sweepActive = false;
 // '4' out of range" was restoreSession racing the selftest doc)
 static bool g_harnessRun = false;
 
+// The Anthropic API key for the two labeled-AI features. Sources, in
+// order: the environment (terminal launch), then the key file at
+// ~/Library/Application Support/ALL Translation Tool/
+// anthropic_api_key — which is what lets a Dock-launched app see it
+// (GUI apps never inherit shell exports). Harness runs ALWAYS see an
+// empty key: a sweep clicks every enabled button, and a paid API
+// call from inside the test harness must be impossible.
+static QByteArray anthropicKey() {
+    if (g_harnessRun || g_sweepActive) return {};
+    const QByteArray env = qgetenv("ANTHROPIC_API_KEY");
+    if (!env.trimmed().isEmpty()) return env.trimmed();
+    QFile f(QDir::homePath() +
+            "/Library/Application Support/ALL Translation Tool/"
+            "anthropic_api_key");
+    if (f.open(QIODevice::ReadOnly)) return f.readAll().trimmed();
+    return {};
+}
+
 // ── Session memory ────────────────────────────────────────────────
 // Adam, 2026-08-15: "make sure that the scan view in the input
 // workflow and input pane remember which scan was last opened and
@@ -2404,10 +2422,12 @@ public:
         split->setStretchFactor(1, 2);
         outer->addWidget(split);
 
-        if (qgetenv("ANTHROPIC_API_KEY").isEmpty()) {
+        if (anthropicKey().isEmpty()) {
             analyze_->setEnabled(false);
-            status_->setText("ANTHROPIC_API_KEY is not set — start the app from a "
-                             "terminal where the key is exported.");
+            status_->setText(
+                "No Anthropic API key — export ANTHROPIC_API_KEY, or "
+                "place the key in ~/Library/Application Support/ALL "
+                "Translation Tool/anthropic_api_key and relaunch.");
         }
         connect(analyze_, &QPushButton::clicked, [this] { run(); });
     }
@@ -2476,7 +2496,7 @@ private:
             const std::string body = allcore::buildMessagesRequestJson(prompt);
 
             QNetworkRequest req(QUrl("https://api.anthropic.com/v1/messages"));
-            req.setRawHeader("x-api-key", qgetenv("ANTHROPIC_API_KEY"));
+            req.setRawHeader("x-api-key", anthropicKey());
             req.setRawHeader("anthropic-version", "2023-06-01");
             req.setRawHeader("anthropic-beta", "server-side-fallback-2026-07-01");
             req.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
@@ -14620,9 +14640,11 @@ auto* secPub = new QLabel("<span style='color:#9A7A33;font-size:10px;letter-spac
         QObject::connect(proposeBtn, &QPushButton::clicked,
                          [this] { proposeNote(); });
         aiBtn_ = new QPushButton("AI back-check (API, labeled AI)");
-        if (qgetenv("ANTHROPIC_API_KEY").isEmpty()) {
+        if (anthropicKey().isEmpty()) {
             aiBtn_->setEnabled(false);
-            aiBtn_->setToolTip("ANTHROPIC_API_KEY is not set");
+            aiBtn_->setToolTip(
+                "No Anthropic API key (env or the Application "
+                "Support key file)");
         }
         draftCol->addWidget(aiBtn_);
         bl->addLayout(draftCol, 1);
@@ -15894,7 +15916,7 @@ public:
         auto prompt = allcore::buildBackTranslationPrompt(pre, src, dr);
         const std::string body = allcore::buildMessagesRequestJson(prompt);
         QNetworkRequest req(QUrl("https://api.anthropic.com/v1/messages"));
-        req.setRawHeader("x-api-key", qgetenv("ANTHROPIC_API_KEY"));
+        req.setRawHeader("x-api-key", anthropicKey());
         req.setRawHeader("anthropic-version", "2023-06-01");
         req.setRawHeader("anthropic-beta", "server-side-fallback-2026-07-01");
         req.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
@@ -24670,6 +24692,20 @@ static void showTranslatorSurvey(QWidget* parent,
 
 int main(int argc, char** argv) {
     QApplication app(argc, argv);
+    {
+        // harness guards are set BEFORE any pane is constructed —
+        // found 2026-08-19 wiring the API key file: panes are built
+        // hundreds of lines before the old assignment, so a sweep
+        // would have seen the key, enabled Analyze, clicked it, and
+        // fired PAID API calls from inside the test harness.
+        const QStringList early = QCoreApplication::arguments();
+        g_harnessRun = early.contains("--selftest") ||
+                       early.contains("--sweep") ||
+                       early.contains("--screenshots") ||
+                       early.contains("--pasteprobe") ||
+                       early.contains("--sanskritcheck");
+        g_sweepActive = early.contains("--sweep");
+    }
     // Adam's ruling (2026-08-13): English renders in Palatino
     // Linotype everywhere. macOS ships the family as "Palatino";
     // Tibetan glyphs fall through to the bundled Noto Serif
@@ -25314,12 +25350,9 @@ int main(int argc, char** argv) {
         return missing == 0 ? 0 : 1;
     }
     const bool selfTestMode = cliArgs.contains("--selftest");
-    g_harnessRun = selfTestMode || cliArgs.contains("--sweep") ||
-                   cliArgs.contains("--screenshots") ||
-                   cliArgs.contains("--pasteprobe") ||
-                   cliArgs.contains("--sanskritcheck");
     const bool sweepMode = cliArgs.contains("--sweep");
-    g_sweepActive = sweepMode;
+    // g_harnessRun / g_sweepActive were set right after QApplication
+    // (they must precede pane construction — see the note there)
     if (shotMode || selfTestMode || sweepMode) {
         g_isAdmin = true;
         if (g_proposalsDir.isEmpty())
@@ -26652,6 +26685,16 @@ int main(int argc, char** argv) {
                            "anchored)")
                        .arg(ok ? "PASS" : "FAIL").arg(withAnchors);
             if (!ok) ++fails;
+        }
+        {   // the API key must be INVISIBLE to harness runs — a
+            // sweep clicks every enabled button, and Analyze fires
+            // a paid call. This pin locks the invariant even when
+            // the key file exists on disk (it does, 2026-08-19).
+            const bool blind = anthropicKey().isEmpty();
+            log << QString("  [%1] Safety: harness runs never see "
+                           "the Anthropic API key")
+                       .arg(blind ? "PASS" : "FAIL");
+            if (!blind) ++fails;
         }
         {   // Cataloging intake (Adam, 2026-08-19): the census
             // tells the truth — a folder with one ACIP-named file
