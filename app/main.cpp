@@ -23461,6 +23461,168 @@ private:
 // ---- SettingsDialog (Adam, 2026-08-10): one place for everything the
 // app remembers, grouped and explained. Values live in QSettings —
 // this dialog only reads/writes the same keys the panes use.
+// ── Cataloging workflow (Adam, 2026-08-19: "bring files from the
+// inhouse uncataloged data into our official database/catalog...
+// begin by building out a place for it to live") ──────────────────
+// v1 is the INTAKE surface: point it at an uncataloged folder and it
+// tells you what is already identifiable (the ACIP filename decoder
+// is the same one the Library trusts) and what is not. Nothing here
+// writes to the catalog: the charter, inherited from the data
+// project, is that machine work LOCATES and SUGGESTS, humans approve,
+// and the official catalog changes only through the release process.
+class CatalogPane : public QWidget {
+public:
+    explicit CatalogPane(QWidget* parent = nullptr)
+        : QWidget(parent) {
+        auto* outer = new QVBoxLayout(this);
+        auto* banner = new QLabel(
+            "<b>Cataloging — intake</b> &nbsp;<span style="
+            "'color:#777'>survey an uncataloged folder: what is "
+            "already identifiable, what needs a cataloger. Nothing "
+            "is written to the official catalog from here — "
+            "suggestions route through the approval channel; the "
+            "catalog itself changes only through data releases."
+            "</span>");
+        banner->setWordWrap(true);
+        outer->addWidget(banner);
+        auto* row = new QHBoxLayout;
+        auto* pick = new QPushButton("Choose uncataloged folder…");
+        row->addWidget(pick);
+        status_ = new QLabel("no folder chosen");
+        status_->setWordWrap(true);
+        row->addWidget(status_, 1);
+        outer->addLayout(row);
+        auto* split = new QSplitter(Qt::Horizontal);
+        table_ = new QTableWidget(0, 4);
+        table_->setHorizontalHeaderLabels(
+            {"File", "Identity", "Status", "KB"});
+        table_->horizontalHeader()->setStretchLastSection(false);
+        table_->horizontalHeader()->setSectionResizeMode(
+            0, QHeaderView::Stretch);
+        table_->setEditTriggers(QAbstractItemView::NoEditTriggers);
+        table_->setSelectionBehavior(QAbstractItemView::SelectRows);
+        split->addWidget(table_);
+        info_ = new QTextBrowser;
+        info_->setOpenLinks(false);
+        info_->setHtml(
+            "<i style='color:#8A8A8A'>Choose a folder, then click a "
+            "file — its decoded identity and opening lines land "
+            "here.</i>");
+        split->addWidget(info_);
+        split->setStretchFactor(0, 3);
+        split->setStretchFactor(1, 2);
+        outer->addWidget(split, 1);
+        connect(pick, &QPushButton::clicked, [this] {
+            const QString d = safeGetExistingDirectory(
+                this, "Choose the uncataloged folder");
+            if (!d.isEmpty()) scanFolder(d);
+        });
+        connect(table_, &QTableWidget::currentCellChanged,
+                [this](int r, int, int, int) { showFile(r); });
+        connect(info_, &QTextBrowser::anchorClicked,
+                [](const QUrl& u) {
+                    const QString s2 = u.toString();
+                    if (s2.startsWith("catopen:") && g_openAtLine)
+                        g_openAtLine(anchorPayload(s2, 8), 0);
+                });
+        const QString last = sess::path("catalog/intakeDir");
+        if (!last.isEmpty()) scanFolder(last);
+    }
+
+    // public so the selftest can prove the census without a dialog
+    void scanFolder(const QString& dir) {
+        sess::put("catalog/intakeDir", dir);
+        files_.clear();
+        table_->setRowCount(0);
+        int recognized = 0;
+        QDirIterator it(dir, QDir::Files,
+                        QDirIterator::Subdirectories);
+        while (it.hasNext() && files_.size() < 5000) {
+            it.next();
+            files_ << it.filePath();
+        }
+        const bool capped = it.hasNext();
+        std::sort(files_.begin(), files_.end());
+        table_->setRowCount(files_.size());
+        for (int r = 0; r < files_.size(); ++r) {
+            const QFileInfo fi(files_[r]);
+            const auto inf = allcore::decodeAcipFilename(
+                fi.fileName().toStdString());
+            if (inf.recognized) ++recognized;
+            auto put = [&](int c, const QString& t) {
+                table_->setItem(r, c, new QTableWidgetItem(t));
+            };
+            put(0, fi.fileName());
+            put(1, inf.recognized
+                       ? QString::fromStdString(inf.collection) +
+                             " " +
+                             QString::fromStdString(inf.number)
+                       : QString::fromUtf8("\u2014 uncataloged"));
+            put(2, inf.recognized
+                       ? QString::fromStdString(inf.status)
+                       : QString());
+            put(3, QString::number(fi.size() / 1024));
+        }
+        recognized_ = recognized;
+        status_->setText(
+            QString("%1 file(s)%2 \u00b7 %3 already identifiable "
+                    "\u00b7 %4 uncataloged \u00b7 %5")
+                .arg(files_.size())
+                .arg(capped ? " (first 5,000 shown)" : "")
+                .arg(recognized)
+                .arg(files_.size() - recognized)
+                .arg(QDir(dir).dirName()));
+    }
+    int fileCount() const { return files_.size(); }
+    int recognizedCount() const { return recognized_; }
+
+private:
+    void showFile(int r) {
+        if (r < 0 || r >= files_.size()) return;
+        const QFileInfo fi(files_[r]);
+        const auto inf = allcore::decodeAcipFilename(
+            fi.fileName().toStdString());
+        QString h = "<h3>" + fi.fileName().toHtmlEscaped() + "</h3>";
+        if (inf.recognized) {
+            h += "<div><b>" +
+                 QString::fromStdString(inf.collection)
+                     .toHtmlEscaped() +
+                 " " + QString::fromStdString(inf.number) +
+                 "</b></div><div style='color:#777'>" +
+                 QString::fromStdString(inf.status).toHtmlEscaped() +
+                 (inf.language.empty()
+                      ? QString()
+                      : " \u00b7 " + QString::fromStdString(
+                                          inf.language)) +
+                 (inf.incomplete ? " \u00b7 incomplete" : "") +
+                 "</div>";
+        } else {
+            h += "<div style='color:#B26B00'><b>uncataloged</b> "
+                 "\u2014 the filename matches no ACIP convention; "
+                 "this is exactly the material this workflow will "
+                 "walk through identification \u2192 proposal "
+                 "\u2192 approval.</div>";
+        }
+        h += QString("<div style='margin:6px 0'><a href='catopen:%1"
+                     "'>Open in the Overlay</a></div>")
+                 .arg(anchorEnc(files_[r]));
+        QFile f(files_[r]);
+        if (f.open(QIODevice::ReadOnly)) {
+            const QString head = QString::fromUtf8(f.read(1200));
+            h += "<hr><pre style='font-size:12px;white-space:"
+                 "pre-wrap'>" +
+                 head.toHtmlEscaped() + "</pre>";
+        }
+        info_->setHtml(h);
+    }
+
+    QLabel* status_ = nullptr;
+    QTableWidget* table_ = nullptr;
+    QTextBrowser* info_ = nullptr;
+    QStringList files_;
+    int recognized_ = 0;
+};
+
 class SettingsDialog : public QDialog {
 public:
     SettingsDialog(std::function<void(bool)> applyNight, QWidget* parent)
@@ -25165,6 +25327,8 @@ int main(int argc, char** argv) {
         if (g_userName.isEmpty()) g_userName = "Adam";
         g_identityPinned = true;   // panes reload identity; keep seeds
     }
+    auto* catalogPane = new CatalogPane();
+    tabs.addTab(catalogPane, "Catalog");
     auto* proposePane = new ProposePane();
     tabs.addTab(proposePane, "Propose");
     if (g_isAdmin) {
@@ -25212,6 +25376,7 @@ int main(int argc, char** argv) {
                 {"Search", "Lookup", "Sanskrit", "Convert", "Analysis"});
         mkGroup("Learn", {"Trainer", "Drills"});
         mkGroup("Input", {"Input", "OCR"});
+        mkGroup("Catalog", {"Catalog"});
         mkGroup("Community", {"Propose", "Approval"});
         g_raisePane = [&tabs](QWidget* w) {
             for (auto& f : flatPanes)
@@ -26487,6 +26652,37 @@ int main(int argc, char** argv) {
                            "anchored)")
                        .arg(ok ? "PASS" : "FAIL").arg(withAnchors);
             if (!ok) ++fails;
+        }
+        {   // Cataloging intake (Adam, 2026-08-19): the census
+            // tells the truth — a folder with one ACIP-named file
+            // and one stranger counts 1 identifiable, 1 uncataloged
+            const QString wd =
+                QDir::temp().filePath("all_catalog_probe");
+            QDir().mkpath(wd);
+            { QFile f(wd + "/KL00016E.ACT");
+              f.open(QIODevice::WriteOnly); f.write("BDEN PA ,"); }
+            { QFile f(wd + "/holiday_photo_notes.txt");
+              f.open(QIODevice::WriteOnly); f.write("x"); }
+            catalogPane->scanFolder(wd);
+            const bool ok = catalogPane->fileCount() == 2 &&
+                            catalogPane->recognizedCount() == 1;
+            log << QString("  [%1] Catalog: intake census counts "
+                           "identifiable vs uncataloged honestly")
+                       .arg(ok ? "PASS" : "FAIL");
+            if (!ok) ++fails;
+            QDir(wd).removeRecursively();
+            {   // the probe folder must not become the remembered
+                // intake dir (sess:: writes are harness-guarded, but
+                // prove it rather than trust it)
+                const QString rem = QSettings("ALL", "TranslationTool")
+                                        .value("sess/catalog/intakeDir")
+                                        .toString();
+                const bool clean = rem != wd;
+                log << QString("  [%1] Catalog: harness probe left "
+                               "no session residue")
+                           .arg(clean ? "PASS" : "FAIL");
+                if (!clean) ++fails;
+            }
         }
         {
             const bool cream =

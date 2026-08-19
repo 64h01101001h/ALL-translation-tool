@@ -309,6 +309,35 @@ implementation is sidelined HERE from this date. What this means:
          bundles, so verify shaping FIRST on the CI runner
          (render bsgrubs-class stacks, compare screenshots) before
          any packaging work.
+      9g. **CATALOGING WORKFLOW (Adam, 2026-08-19: "this is about
+         to be a huge update... bring files from the inhouse
+         uncataloged data into our official database/catalog").**
+         This ACTIVATES what WP §8 had set aside as "its own future
+         project". v1 SHIPPED same day: a Catalog tab group with the
+         intake pane — folder census through the trusted ACIP
+         filename decoder (identifiable vs uncataloged, capped
+         5,000 files honest, per-file identity + preview + open in
+         Overlay, intake folder session-remembered, pinned).
+         Charter stated on the pane: machine LOCATES and SUGGESTS,
+         humans approve, the official catalog changes only through
+         data releases. ROADMAP (build in order, each its own
+         press):
+         (1) identity PROPOSAL lane for uncataloged files — title
+             extraction from opening lines via the existing catalog
+             title banks + corpus; every match evidence-carrying;
+         (2) the QC lanes from the Lon-demo adoptables (9e):
+             title-vs-translation mismatch + colophon-aware
+             same-title/duplicate detection over the intake set;
+         (3) worksheet: the catalog fields per file (start from the
+             ACIP identity + Élie CSV fields; consider GMR's
+             23-item physical format when Adam obtains it);
+         (4) routing: accepted identities become PROPOSALS in the
+             existing channel (kind: catalog identity), approvals
+             export as a candidates file for the data project — the
+             app NEVER writes the catalog;
+         (5) intake -> Library handoff: a cataloged file moves into
+             the library tree under its decoded name (move, not
+             copy; collision-safe).
       9c. **RECOVERED DEFERRALS (Adam, 2026-08-15: "look for any
          'saved for later' notes and add them to the updated todo
          list").** Swept every session transcript, all of docs/,
