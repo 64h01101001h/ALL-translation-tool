@@ -322,9 +322,38 @@ implementation is sidelined HERE from this date. What this means:
          humans approve, the official catalog changes only through
          data releases. ROADMAP (build in order, each its own
          press):
-         (1) identity PROPOSAL lane for uncataloged files — title
-             extraction from opening lines via the existing catalog
-             title banks + corpus; every match evidence-carrying;
+         (1) DONE 2026-08-19 — identity PROPOSAL lane for
+             uncataloged files. allcore/catalog_id.h: two title-page
+             rules taken from the collections themselves (the
+             canonical "BOD SKAD DU," bilingual head incl. the
+             Chinese-source RGYA'I SKAD DU variant; the Sungbum
+             block closing in BZHUGS SO), matched by shared-syllable
+             overlap against ~8,700 known titles (library filenames
+             + catalog_works.json). Every candidate carries its
+             evidence: extracted title, rule used, Sanskrit side of
+             the head, shared-syllable counts, matching basis,
+             source bank. A file that begins mid-text gets NO guess.
+             MEASURED by catalog_id_smoke (suite 44) against the
+             library itself, re-measured every ctest run: 240 of 414
+             sampled files carry a title page; top-1 80.8%, within
+             top-5 90.0%, wrong 4.6%, no match 5.4%. TWO THINGS
+             SETTLED BY MEASUREMENT, not taste: an edit-distance-1
+             "near syllable" tier LOWERED top-1 (81.8%→80.4%) and is
+             not shipped; the 0.5 score floor beat 0.35 (costs 2
+             correct, removes 4 confidently wrong). The corpus route
+             is NOT built — the title-page banks answered well
+             enough that corpus matching would add guesswork, not
+             recall; revisit only if intake material turns out to
+             lack title pages.
+             Manual: new Chapter 14 (the old 14-16 shifted to 15-17);
+             17.1's stale "six groups / seventeen panes" table fixed
+             to seven/twenty-two on the way past (audit finding 3,
+             partial).
+             THE HONEST GAP: measured against LIBRARY files, whose
+             title pages are clean. Adam's actual in-house intake
+             folder has not been seen yet — when he supplies it, the
+             first job is re-measuring on that material.
+
          (2) the QC lanes from the Lon-demo adoptables (9e):
              title-vs-translation mismatch + colophon-aware
              same-title/duplicate detection over the intake set;

@@ -44,29 +44,35 @@ app: Help menu → ALL Tool Help & Tutorials.*
   - 13.5 The Illustration gallery (folder mode)
   - 13.6 Save to ocr_out…
   - 13.7 Batch folder… — a whole volume
-- **CHAPTER 14 — THE PROPOSE PANE (Community → Propose)**
-  - 14.1 One-time identity setup
-  - 14.2 Making a proposal
-  - 14.3 The other ways proposals get filed
-  - 14.4 My proposals — what happened?
-- **CHAPTER 15 — THE APPROVAL PANE (Community → Approval)**
-  - 15.1 Reading the queue
-  - 15.2 Ruling on an item
-  - 15.3 What each ruling actually does
-  - 15.4 The kind filter — one category per sitting
-  - 15.5 Export approved dictionary candidates…
-  - 15.6 The Rulings archive
-- **CHAPTER 16 — THE APP ITSELF**
-  - 16.1 The window: six workflow groups
-  - 16.2 The menu bar mirrors the window
-  - 16.3 The app menu: About, Check for Updates, Settings
-  - 16.4 The Settings dialog — every field
-  - 16.5 The Help window
-  - 16.6 Night mode
-  - 16.7 Session restore — the app reopens where you left off
-  - 16.8 The self-test (--selftest)
-  - 16.9 Help → Troubleshooting
-  - 16.10 Hunt Everywhere (⌘K)
+- **CHAPTER 14 — THE CATALOG PANE (Catalog → Catalog)**
+  - 14.1 Choosing the uncataloged folder
+  - 14.2 Reading the census line
+  - 14.3 The file panel — what the machine can already tell
+  - 14.4 Suggested identity — how a nameless file names itself
+  - 14.5 What the workflow will do next
+- **CHAPTER 15 — THE PROPOSE PANE (Community → Propose)**
+  - 15.1 One-time identity setup
+  - 15.2 Making a proposal
+  - 15.3 The other ways proposals get filed
+  - 15.4 My proposals — what happened?
+- **CHAPTER 16 — THE APPROVAL PANE (Community → Approval)**
+  - 16.1 Reading the queue
+  - 16.2 Ruling on an item
+  - 16.3 What each ruling actually does
+  - 16.4 The kind filter — one category per sitting
+  - 16.5 Export approved dictionary candidates…
+  - 16.6 The Rulings archive
+- **CHAPTER 17 — THE APP ITSELF**
+  - 17.1 The window: seven workflow groups
+  - 17.2 The menu bar mirrors the window
+  - 17.3 The app menu: About, Check for Updates, Settings
+  - 17.4 The Settings dialog — every field
+  - 17.5 The Help window
+  - 17.6 Night mode
+  - 17.7 Session restore — the app reopens where you left off
+  - 17.8 The self-test (--selftest)
+  - 17.9 Help → Troubleshooting
+  - 17.10 Hunt Everywhere (⌘K)
 
 
 # PART ONE — READ & TRANSLATE
@@ -2239,7 +2245,7 @@ just did.
 
 All of these sit in one row across the top of the pane, left to
 right. (Every one of them is also reachable from the menu bar:
-**Input menu → Input submenu** — see Chapter 16.)
+**Input menu → Input submenu** — see Chapter 17.)
 
 - **Open scan…** — opens a single page image (PNG, JPG, JPEG, TIF,
   TIFF). Use this for a one-page job.
@@ -2678,7 +2684,129 @@ The deskew override checkbox applies to batch runs too.
 
 ---
 
-# CHAPTER 14 — THE PROPOSE PANE (Community → Propose)
+# CHAPTER 14 — THE CATALOG PANE (Catalog → Catalog)
+
+**What it's for.** Bringing in-house uncataloged material into the
+official catalog. A folder of files arrives — scanned, keyed, or
+inherited from an old drive — and somebody has to work out what
+each file actually *is* before it can be filed. This pane does the
+part a machine can honestly do, and it stops exactly where a
+machine should stop.
+
+**The charter, printed on the pane itself.** The machine LOCATES
+and SUGGESTS. Humans approve. The official catalog changes only
+through data releases — nothing you do here writes it. Every
+suggestion below is a candidate carrying its evidence, offered so
+a cataloger can judge it, never so the app can decide.
+
+**The layout.** A banner, then the **Choose uncataloged folder…**
+button with the census line beside it, then a split: the file
+table on the left, the file panel on the right.
+
+## 14.1 Choosing the uncataloged folder
+
+Click **Choose uncataloged folder…** and pick the folder. It is
+walked recursively, so a folder of subfolders is fine. The first
+5,000 files are surveyed; if there are more, the census line says
+so rather than quietly showing a partial picture.
+
+The folder is remembered between sessions and rescanned when the
+app opens, so the intake you are working through is where you left
+it.
+
+## 14.2 Reading the census line
+
+The line beside the button is the whole survey in one sentence:
+
+> *37 file(s) · 12 already identifiable · 25 uncataloged (16 of
+> them announce a title in their own text) · box12*
+
+- **already identifiable** — the filename follows an ACIP naming
+  convention, so the file's catalog identity is already readable
+  from its name alone.
+- **uncataloged** — the filename says nothing the decoder can use.
+- **announce a title in their own text** — of those uncataloged
+  files, how many open with a title page the machine can read.
+  This is the number that matters for planning: it separates the
+  files a machine pass can propose identities for from the ones a
+  cataloger must take from scratch.
+
+## 14.3 The file panel — what the machine can already tell
+
+Click any row. For an identifiable file the panel gives the
+decoded identity: collection, catalog number, verification status,
+language, and whether the input is marked incomplete. For an
+uncataloged file it says so plainly. Either way you get **Open in
+the Overlay** to read the text itself, and the file's opening
+lines below.
+
+## 14.4 Suggested identity — how a nameless file names itself
+
+A file whose *name* says nothing may still announce itself in its
+*text*. Tibetan works open with a title page, and this pane reads
+it.
+
+Two title-page shapes are recognized, both taken from the
+collections themselves:
+
+- **the canonical bilingual head** — "RGYA GAR SKAD DU, …, BOD
+  SKAD DU, «the title»," as Kangyur and Tengyur texts open (works
+  translated from Chinese use RGYA'I SKAD DU the same way). The
+  Sanskrit side of the head is shown too, as further evidence.
+- **the title block closing in BZHUGS SO** — the shape Sungbum
+  works use.
+
+The title is then matched against every title the app knows: the
+installed library's own filenames plus the catalog works table —
+around 8,700 titles. The panel tells you how many it matched
+against, because a thin bank must never look like a confident
+verdict.
+
+Up to five candidates are listed, best first. Each carries:
+
+- **the score** — the share of syllables the two titles have in
+  common, measured against the longer of the two. This is what
+  stops a three-syllable fragment from claiming a thirty-syllable
+  work.
+- **the catalog number and the title as filed**, with its English
+  title when the source has one.
+- **the evidence line** — how many syllables of how many were
+  shared, whether the titles matched exactly or by overlap, and
+  which bank the candidate came from.
+
+**What it does when it cannot tell.** A file that begins mid-text
+— an extract, a fragment, a continuation page — gets no guess at
+all. The panel says the file begins mid-text and needs a
+cataloger's eye. Likewise a title that reads cleanly but matches
+nothing closely enough is reported as exactly that: either the
+bank does not hold the work yet, or the title needs a human. An
+empty answer is a real answer here.
+
+**How well it works.** Measured against the installed library
+itself, where the correct answer is already known: of the files
+that carry a title page, the right work is the top candidate about
+81% of the time and is somewhere in the five about 90% of the
+time. Roughly four in ten files carry a readable title page at
+all; the rest begin mid-text. The wrong answers are mostly genuine
+ambiguity — two Tengyur works can carry nearly the same title —
+which is the plainest possible argument for why a human approves
+every one of these. The battery re-measures these numbers on every
+test run, so they cannot quietly drift.
+
+## 14.5 What the workflow will do next
+
+This is the first working step of a longer workflow. Still to come,
+in order: quality-control lanes (title-versus-translation mismatch,
+colophon-aware duplicate detection across the intake set); a
+cataloging worksheet of the fields each file needs; routing, so an
+identity a cataloger accepts becomes a proposal in the ordinary
+approval channel and exports as a candidates file for the data
+project; and the handoff that moves a finished file into the
+library tree under its proper name.
+
+---
+
+# CHAPTER 15 — THE PROPOSE PANE (Community → Propose)
 
 **What it's for.** The team's channel to the authority. Anyone can
 propose — a new honorific marking, a pronunciation exception, a
@@ -2693,7 +2821,7 @@ system: offline-capable and fully audit-trailed.
 (one-time)"** and **"Make a proposal"** — then the **"My proposals
 — what happened?"** button with its results area below.
 
-## 14.1 One-time identity setup
+## 15.1 One-time identity setup
 
 Do this once, on your first day (a coordinator will usually tell
 you the folder path):
@@ -2705,7 +2833,7 @@ you the folder path):
 3. **"I am an authority (can approve) — Geshe Michael / Adam
    only"** (checkbox): leave it OFF unless you are the authority.
    Ticking it (and restarting) reveals the Approval pane
-   (Chapter 15).
+   (Chapter 16).
 4. **Proposals folder**: click **Choose…** and select the team's
    shared proposals folder (the dialog hints: "Dropbox-synced is
    ideal"), or paste the path into the field.
@@ -2717,7 +2845,7 @@ These same three settings also live in the **Settings dialog**
 (View menu → Settings…, under *Team & proposals* — see §16.4);
 change them in either place, they are one and the same.
 
-## 14.2 Making a proposal
+## 15.2 Making a proposal
 
 The **"Make a proposal"** box is a five-field form:
 
@@ -2766,7 +2894,7 @@ Tibetan: `zhal`. Proposed: `mouth (hon.)`. Secondary: `kha`.
 Evidence: the passage and text where you saw it. **File proposal
 for review** — done. It now waits for the ruling.
 
-## 14.3 The other ways proposals get filed
+## 15.3 The other ways proposals get filed
 
 You rarely need to fill the form by hand, because proposals also
 file themselves from where you are working:
@@ -2780,7 +2908,7 @@ file themselves from where you are working:
   context attached as evidence. These have their own meaning at
   ruling time — see §15.4.
 
-## 14.4 My proposals — what happened?
+## 15.4 My proposals — what happened?
 
 Click **"My proposals — what happened?"** at the bottom of the
 pane. A list opens of every proposal *you* have filed, newest
@@ -2798,7 +2926,7 @@ instead: "set your name and the proposals folder above first".
 
 ---
 
-# CHAPTER 15 — THE APPROVAL PANE (Community → Approval)
+# CHAPTER 16 — THE APPROVAL PANE (Community → Approval)
 
 **What it's for.** The authority's queue — every proposal, ruled
 one by one. Nothing enters the registers without a ruling, and
@@ -2816,7 +2944,7 @@ toolbar row — the **kind filter**, **Refresh queue**, **Export
 approved dictionary candidates…**, **Rulings archive** — and below
 it the queue itself.
 
-## 15.1 Reading the queue
+## 16.1 Reading the queue
 
 The queue opens with a session overview: *"7 pending · signed in
 as Adam"*, followed by a small per-kind census (e.g. "2 honorific
@@ -2834,7 +2962,7 @@ as a boxed card showing:
 If the proposals folder is not set yet, the pane says: "set the
 proposals folder in the Propose tab first."
 
-## 15.2 Ruling on an item
+## 16.2 Ruling on an item
 
 1. Click **✓ Approve** or **✗ Decline** on any card. A small
    dialog asks for an **optional note** — write one when the
@@ -2861,7 +2989,7 @@ apply in the app immediately, exactly as single approvals do.
 Decline or defer the exceptions *before* running it — the batch
 takes the queue as it stands.
 
-## 15.3 What each ruling actually does
+## 16.3 What each ruling actually does
 
 The data boundary is enforced in the software itself — different
 kinds have different consequences, and none of them ever edits the
@@ -2897,7 +3025,7 @@ list — have their own filter and their own inverted logic:
   more red wave on it, for the whole team. A decline here is not
   a rejection; it is a positive ruling that teaches the software.
 
-## 15.4 The kind filter — one category per sitting
+## 16.4 The kind filter — one category per sitting
 
 The dropdown at the toolbar's left filters the queue to a single
 kind. Its entries: **All kinds · Pronunciations · Honorifics ·
@@ -2917,7 +3045,7 @@ clear."
 teammates have been filing while you work (a synced Dropbox folder
 delivers their proposals to your disk in the background).
 
-## 15.5 Export approved dictionary candidates…
+## 16.5 Export approved dictionary candidates…
 
 When you have approved dictionary-kind items to hand over:
 
@@ -2937,7 +3065,7 @@ date; the data project reviews it into the next release; until
 that release ships, it remains exactly what the file calls it — a
 candidate.
 
-## 15.6 The Rulings archive
+## 16.6 The Rulings archive
 
 Click **Rulings archive**. The queue area becomes the permanent,
 read-only record of **every** decision, newest first: status in
@@ -2949,30 +3077,31 @@ years this is a record of the authority's own judgments. Click
 
 ---
 
-# CHAPTER 16 — THE APP ITSELF
+# CHAPTER 17 — THE APP ITSELF
 
 This chapter covers everything that belongs to the application as
 a whole rather than to any one pane.
 
-## 16.1 The window: six workflow groups
+## 17.1 The window: seven workflow groups
 
-The window's **top row** holds the six workflow tabs; inside each,
-a **second row** holds its panes — seventeen in all:
+The window's **top row** holds the seven workflow tabs; inside
+each, a **second row** holds its panes — twenty-two in all:
 
 | Workflow | Panes |
 |---|---|
-| **Read** | Overlay, Library |
-| **Translate** | Manuscript, Draft, Review, Align |
+| **Read** | Overlay, Library, Files, Scans, Export |
+| **Translate** | Draft, Manuscript, Apparatus, Review, Align |
 | **Research** | Search, Lookup, Sanskrit, Convert, Analysis |
 | **Learn** | Trainer, Drills |
-| **Input** | Input, Scan |
+| **Input** | Input, OCR |
+| **Catalog** | Catalog |
 | **Community** | Propose, Approval |
 
-"Input → Scan" always means: click **Input** in the top row, then
-**Scan** in the row inside it. (Approval appears only for the
+"Input → OCR" always means: click **Input** in the top row, then
+**OCR** in the row inside it. (Approval appears only for the
 authority role, and carries a live pending count on its tab.)
 
-## 16.2 The menu bar mirrors the window
+## 17.2 The menu bar mirrors the window
 
 The menu bar has **one menu per workflow group** (Read, Translate,
 Research, Learn, Input, Community), and inside each, **one submenu
@@ -2996,7 +3125,7 @@ into its search box — macOS finds any menu item by name and points
 an arrow at it. Since the menus mirror everything, that means the
 system can literally point at any feature in the app.
 
-## 16.3 The app menu: About, Check for Updates, Settings
+## 17.3 The app menu: About, Check for Updates, Settings
 
 On a Mac these three live in the application menu (the one named
 after the app); they are also under **View** on every platform.
@@ -3041,7 +3170,7 @@ item checks it:
 **Settings…** (⌘, on a Mac) opens the Settings dialog — next
 section.
 
-## 16.4 The Settings dialog — every field
+## 17.4 The Settings dialog — every field
 
 Everything the app remembers, in one dialog, in four groups:
 
@@ -3075,7 +3204,7 @@ change them in either place, they are the same settings)*
 
 **Cancel** discards your edits; **Save** writes them all.
 
-## 16.5 The Help window
+## 17.5 The Help window
 
 **Help menu → "ALL Tool Help & Tutorials…"** (or the standard help
 shortcut, ⌘? on a Mac) opens the searchable Help window: a search
@@ -3110,14 +3239,14 @@ Try it now: open Help, type "partner". The result "Compare with
 partner file… — Input" appears; click it, then click "open that
 pane now" — you are standing in the Input pane.
 
-## 16.6 Night mode
+## 17.6 Night mode
 
 **View menu → Night mode** (checkable), or the same switch in
 Settings → Appearance. Dark chrome, cream reading pages — the
 reading surfaces stay warm and paper-like while the frame goes
 dark. It applies immediately and is remembered across launches.
 
-## 16.7 Session restore — the app reopens where you left off
+## 17.7 Session restore — the app reopens where you left off
 
 Quit the app mid-passage and relaunch it: the **Overlay reopens
 the same text, scrolled to the same place, with the cursor where
@@ -3130,7 +3259,7 @@ display choices (script, typeface, reference layers) and even the
 document box's height are remembered. You set the tool up once; it
 stays set up.
 
-## 16.8 The self-test (--selftest)
+## 17.8 The self-test (--selftest)
 
 If anything ever misbehaves, the app can examine itself. Open
 Terminal and run the app binary with the `--selftest` flag:
@@ -3161,7 +3290,7 @@ principle: the machine may match the master's English — it may
 never compose it.*
 
 
-## 16.9 Help → Troubleshooting
+## 17.9 Help → Troubleshooting
 
 Everything a tester needs to file a useful finding in one click:
 
@@ -3183,7 +3312,7 @@ Everything a tester needs to file a useful finding in one click:
   confirmation; texts and data untouched; next launch.
 
 
-## 16.10 Hunt Everywhere (⌘K)
+## 17.10 Hunt Everywhere (⌘K)
 
 Press **⌘K** anywhere (or View → Hunt Everywhere…). Type anything
 in any form — *bsod nams*, *BSOD NAMS*, *merit*, or *sunam* — and

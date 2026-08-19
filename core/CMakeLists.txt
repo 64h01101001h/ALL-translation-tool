@@ -50,6 +50,7 @@ add_library(allcore STATIC
   src/botok_trie.cpp
   src/botok_tokenize.cpp
   src/botok_segtrie.cpp
+  src/catalog_id.cpp
 )
 target_include_directories(allcore PUBLIC include)
 
@@ -254,6 +255,11 @@ add_test(NAME abbr_smoke
          COMMAND abbr_smoke ${CMAKE_SOURCE_DIR}/data/abbreviations/tibschol_abbr.csv
                  ${CMAKE_SOURCE_DIR}/data/spellcheck
                  ${CMAKE_SOURCE_DIR}/data/abbreviations/rkts_abb.csv)
+
+add_executable(catalog_id_smoke tests/catalog_id_smoke.cpp)
+target_link_libraries(catalog_id_smoke PRIVATE allcore)
+add_test(NAME catalog_id_smoke
+         COMMAND catalog_id_smoke ${CMAKE_SOURCE_DIR}/library)
 
 add_executable(stardict_smoke tests/stardict_smoke.cpp)
 target_link_libraries(stardict_smoke PRIVATE allcore)

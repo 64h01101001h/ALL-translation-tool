@@ -113,6 +113,7 @@
 
 #include "allcore/abbr.h"
 #include "allcore/analysis.h"
+#include "allcore/catalog_id.h"
 #ifdef ALL_HAVE_OCR
 #include "allocr/linebuild.h"
 #include "allocr/recognize.h"
@@ -23494,8 +23495,9 @@ private:
 // and the official catalog changes only through the release process.
 class CatalogPane : public QWidget {
 public:
-    explicit CatalogPane(QWidget* parent = nullptr)
-        : QWidget(parent) {
+    explicit CatalogPane(const QString& root = QString(),
+                         QWidget* parent = nullptr)
+        : QWidget(parent), root_(root) {
         auto* outer = new QVBoxLayout(this);
         auto* banner = new QLabel(
             "<b>Cataloging — intake</b> &nbsp;<span style="
@@ -23556,7 +23558,7 @@ public:
         sess::put("catalog/intakeDir", dir);
         files_.clear();
         table_->setRowCount(0);
-        int recognized = 0;
+        int recognized = 0, titled = 0;
         QDirIterator it(dir, QDir::Files,
                         QDirIterator::Subdirectories);
         while (it.hasNext() && files_.size() < 5000) {
@@ -23575,6 +23577,17 @@ public:
                 table_->setItem(r, c, new QTableWidgetItem(t));
             };
             put(0, fi.fileName());
+            // an uncataloged file that announces a title in its own
+            // text is one the identity lane can actually work on;
+            // counting them separates "needs a machine pass" from
+            // "needs a cataloger from scratch"
+            if (!inf.recognized) {
+                QFile hf(files_[r]);
+                if (hf.open(QIODevice::ReadOnly) &&
+                    allcore::extractAcipTitle(
+                        hf.read(4000).toStdString()).found)
+                    ++titled;
+            }
             put(1, inf.recognized
                        ? QString::fromStdString(inf.collection) +
                              " " +
@@ -23586,17 +23599,132 @@ public:
             put(3, QString::number(fi.size() / 1024));
         }
         recognized_ = recognized;
+        titled_ = titled;
         status_->setText(
             QString("%1 file(s)%2 \u00b7 %3 already identifiable "
-                    "\u00b7 %4 uncataloged \u00b7 %5")
+                    "\u00b7 %4 uncataloged (%5 of them announce a "
+                    "title in their own text) \u00b7 %6")
                 .arg(files_.size())
                 .arg(capped ? " (first 5,000 shown)" : "")
                 .arg(recognized)
                 .arg(files_.size() - recognized)
+                .arg(titled)
                 .arg(QDir(dir).dirName()));
     }
     int fileCount() const { return files_.size(); }
     int recognizedCount() const { return recognized_; }
+    int titledCount() const { return titled_; }
+    // select the first row the filename decoder could not identify —
+    // the row the identity lane exists for
+    bool selectFirstUncataloged() {
+        for (int r = 0; r < files_.size(); ++r) {
+            if (allcore::decodeAcipFilename(
+                    QFileInfo(files_[r]).fileName().toStdString())
+                    .recognized)
+                continue;
+            table_->setCurrentCell(r, 0);
+            return true;
+        }
+        return false;
+    }
+    // the identity lane, public so the selftest can prove a real
+    // proposal without driving the table
+    QString identityHtml(const QString& path) {
+        QFile f(path);
+        if (!f.open(QIODevice::ReadOnly))
+            return "<div style='color:#B26B00'>unreadable file</div>";
+        const std::string head = f.read(4000).toStdString();
+        const auto t = allcore::extractAcipTitle(head);
+        QString h = "<hr><div style='color:#8C2F2B'><b>SUGGESTED "
+                    "IDENTITY</b></div>";
+        if (!t.found) {
+            h += "<div style='color:#777'>No title page in the "
+                 "opening of this file &mdash; it begins mid-text. "
+                 "The machine has nothing to go on here; this one "
+                 "needs a cataloger's eye.</div>";
+            return h;
+        }
+        h += QString("<div style='margin:4px 0'><b>Title read from "
+                     "the text</b> <span style='color:#777'>(%1 "
+                     "rule)</span><br><span style='font-family:"
+                     "Palatino'>%2</span></div>")
+                 .arg(t.rule == "bod-skad-du"
+                          ? "canonical bilingual head"
+                          : "title block closing in BZHUGS SO")
+                 .arg(QString::fromStdString(t.raw)
+                          .simplified()
+                          .toHtmlEscaped());
+        if (!t.sanskrit.empty())
+            h += QString("<div style='color:#777'>Sanskrit side of "
+                         "the head: %1</div>")
+                     .arg(QString::fromStdString(t.sanskrit)
+                              .simplified()
+                              .toHtmlEscaped());
+        const auto& bank = titleBank();
+        const auto cands = allcore::suggestIdentity(t, bank, 5);
+        h += QString("<div style='color:#777;margin-top:6px'>matched "
+                     "against %1 known titles</div>")
+                 .arg(bank.size());
+        if (cands.empty()) {
+            h += "<div style='color:#B26B00;margin-top:4px'>The title "
+                 "reads cleanly but matches no work in the bank "
+                 "closely enough to name. That is a real answer: "
+                 "either the bank does not hold this work yet, or "
+                 "the title needs a human.</div>";
+            return h;
+        }
+        h += "<div style='margin-top:6px'><b>Candidates</b> "
+             "<span style='color:#777'>&mdash; machine suggestions, "
+             "not catalog entries. Nothing below is filed until a "
+             "cataloger approves it.</span></div>"
+             "<table cellpadding='4' style='margin-top:4px'>";
+        for (const auto& c : cands) {
+            h += QString("<tr><td valign='top'><b>%1%</b></td>"
+                         "<td valign='top'><b>%2</b></td><td>"
+                         "<span style='font-family:Palatino'>%3</span>"
+                         "%4<div style='color:#777;font-size:11px'>%5 "
+                         "of %6 title syllables shared &middot; %7 "
+                         "&middot; %8</div></td></tr>")
+                     .arg(qRound(c.score * 100))
+                     .arg(QString::fromStdString(c.key).toHtmlEscaped())
+                     .arg(QString::fromStdString(c.raw).toHtmlEscaped())
+                     .arg(c.eng.empty()
+                              ? QString()
+                              : "<div style='color:#555'>" +
+                                    QString::fromStdString(c.eng)
+                                        .toHtmlEscaped() +
+                                    "</div>")
+                     .arg(c.shared)
+                     .arg(std::max(c.extracted_syllables,
+                                   c.bank_syllables))
+                     .arg(QString::fromStdString(c.basis))
+                     .arg(QString::fromStdString(c.source));
+        }
+        h += "</table>";
+        return h;
+    }
+    // built once, from the installed library's filenames plus the
+    // catalog works table; size is reported to the reader so a thin
+    // bank never looks like a confident verdict
+    const allcore::TitleBank& titleBank() {
+        if (bankBuilt_) return bank_;
+        bankBuilt_ = true;
+        if (!root_.isEmpty())
+            bank_.addLibraryTree((root_ + "/library").toStdString());
+        QFile wf(root_ + "/data/extracted/catalog_works.json");
+        if (wf.open(QIODevice::ReadOnly)) {
+            const auto o =
+                QJsonDocument::fromJson(wf.readAll()).object();
+            for (auto it = o.begin(); it != o.end(); ++it) {
+                const auto w = it.value().toObject();
+                bank_.add(it.key().toStdString(),
+                          w.value("tib").toString().toStdString(),
+                          "catalog_works.json",
+                          w.value("eng").toString().toStdString());
+            }
+        }
+        return bank_;
+    }
 
 private:
     void showFile(int r) {
@@ -23628,6 +23756,9 @@ private:
         h += QString("<div style='margin:6px 0'><a href='catopen:%1"
                      "'>Open in the Overlay</a></div>")
                  .arg(anchorEnc(files_[r]));
+        // the file whose NAME says nothing may still announce itself
+        // in its TEXT — read the title page and offer candidates
+        if (!inf.recognized) h += identityHtml(files_[r]);
         QFile f(files_[r]);
         if (f.open(QIODevice::ReadOnly)) {
             const QString head = QString::fromUtf8(f.read(1200));
@@ -23643,6 +23774,10 @@ private:
     QTextBrowser* info_ = nullptr;
     QStringList files_;
     int recognized_ = 0;
+    int titled_ = 0;
+    QString root_;
+    allcore::TitleBank bank_;
+    bool bankBuilt_ = false;
 };
 
 class SettingsDialog : public QDialog {
@@ -25360,7 +25495,7 @@ int main(int argc, char** argv) {
         if (g_userName.isEmpty()) g_userName = "Adam";
         g_identityPinned = true;   // panes reload identity; keep seeds
     }
-    auto* catalogPane = new CatalogPane();
+    auto* catalogPane = new CatalogPane(root);
     tabs.addTab(catalogPane, "Catalog");
     auto* proposePane = new ProposePane();
     tabs.addTab(proposePane, "Propose");
@@ -26706,13 +26841,51 @@ int main(int argc, char** argv) {
               f.open(QIODevice::WriteOnly); f.write("BDEN PA ,"); }
             { QFile f(wd + "/holiday_photo_notes.txt");
               f.open(QIODevice::WriteOnly); f.write("x"); }
+            // the uncataloged stranger carries a real title page,
+            // so the census must also count it as one the identity
+            // lane can work on (1 of 1 uncataloged)
+            { QFile f(wd + "/scan_0417_unnamed.txt");
+              f.open(QIODevice::WriteOnly);
+              f.write("@85A #, ,RGYA GAR SKAD DU, YA M'A RI YANTRA "
+                      "AA BA LI,\nBOD SKAD DU, GSHIN RJE GSHED KYI "
+                      "'KHRUL 'KHOR GYI PHRENG BA, BCOM\nLDAN 'DAS "
+                      "GSHIN RJE GSHED LA PHYAG 'TSAL LO, ,\n"); }
             catalogPane->scanFolder(wd);
-            const bool ok = catalogPane->fileCount() == 2 &&
-                            catalogPane->recognizedCount() == 1;
+            const bool ok = catalogPane->fileCount() == 3 &&
+                            catalogPane->recognizedCount() == 1 &&
+                            catalogPane->titledCount() == 1;
             log << QString("  [%1] Catalog: intake census counts "
                            "identifiable vs uncataloged honestly")
                        .arg(ok ? "PASS" : "FAIL");
             if (!ok) ++fails;
+            {   // and the identity lane must render an actual
+                // candidate CARD for that file — a bank that loads
+                // is not a proposal a cataloger can read (the
+                // teaching-links lesson, pinned)
+                const QString h = catalogPane->identityHtml(
+                    wd + "/scan_0417_unnamed.txt");
+                const bool proposed =
+                    h.contains("SUGGESTED IDENTITY") &&
+                    h.contains("GSHIN RJE GSHED KYI") &&
+                    h.contains("TD02022") &&
+                    h.contains("not catalog entries");
+                log << QString("  [%1] Catalog: title page in an "
+                               "uncataloged file yields an "
+                               "evidence-carrying candidate")
+                           .arg(proposed ? "PASS" : "FAIL");
+                if (!proposed) ++fails;
+                // and a file with no title page says so, rather
+                // than reaching for the nearest work
+                const QString q = catalogPane->identityHtml(
+                    wd + "/holiday_photo_notes.txt");
+                const bool honest = q.contains("begins mid-text") &&
+                                    !q.contains("Candidates");
+                log << QString("  [%1] Catalog: a file with no title "
+                               "page is reported as needing a "
+                               "cataloger, not guessed")
+                           .arg(honest ? "PASS" : "FAIL");
+                if (!honest) ++fails;
+            }
             QDir(wd).removeRecursively();
             {   // the probe folder must not become the remembered
                 // intake dir (sess:: writes are harness-guarded, but
@@ -27232,6 +27405,34 @@ int main(int argc, char** argv) {
                     break;
                 }
         settle(800);
+        // the Catalog pane shows the intake workflow AT WORK: a
+        // scanner-named copy of a real text (no catalog number in the
+        // name) beside a properly named one, with the uncataloged row
+        // selected so its identity proposal renders. sess:: writes are
+        // harness-guarded, so this never touches Adam's intake folder.
+        if (auto* cp = dynamic_cast<CatalogPane*>(paneByTitle("Catalog"))) {
+            const QString wd = QDir::tempPath() + "/all_catalog_demo";
+            QDir(wd).removeRecursively();
+            QDir().mkpath(wd);
+            QDirIterator li(root + "/library/tengyur", QDir::Files,
+                            QDirIterator::Subdirectories);
+            int taken = 0;
+            while (li.hasNext() && taken < 2) {
+                const QString src = li.next();
+                if (!src.endsWith(".txt", Qt::CaseInsensitive)) continue;
+                QFile in(src);
+                if (!in.open(QIODevice::ReadOnly)) continue;
+                QFile out(wd + (taken == 0
+                                    ? "/scan_0417_box12_p1.txt"
+                                    : "/" + QFileInfo(src).fileName()));
+                if (out.open(QIODevice::WriteOnly))
+                    out.write(in.read(20000));
+                ++taken;
+            }
+            cp->scanFolder(wd);
+            cp->selectFirstUncataloged();
+            QCoreApplication::processEvents();
+        }
         printf("[shot] demo open; %d tabs\n", tabs.count()); fflush(stdout);
         for (size_t i = 0; i < flatPanes.size(); ++i) {
             printf("[shot] tab %zu %s\n", i,
