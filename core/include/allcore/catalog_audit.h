@@ -30,19 +30,31 @@ struct AcipCitation {
 
 // Scan any text for "ACIP <letters><digits>" citations. Case-sensitive on
 // "ACIP" (the published apparatus always sets it in caps); the number is
-// 1-2 letters + 3-5 digits, the shape the bibliographies actually use.
+// 1-2 letters + 3 or more digits (no upper cap — Adam 2026-08-19) with an
+// optional dashed sub-number.
 std::vector<AcipCitation> extractAcipCitations(const std::string& text);
 
-// "S464" and "S00464" are the same number filed with different padding.
-// Normalized form: (letter prefix, numeric value). Returns value -1 when
-// the string is not a catalog number.
+// "S464" and "S00464" are the same number filed with different padding;
+// "S05002-1" and "S05002-2" are DIFFERENT works (the dashed sub-number,
+// live in the registrar's own worksheet). Normalized key: prefix +
+// unpadded digits + optional "-sub" ("S464", "S5002-1"). Empty = not a
+// catalog number. NOTE (Adam, 2026-08-19): ACIP numbers are NOT capped
+// at 5 digits going forward — no upper digit limit here.
+std::string normalizeCatalogKey(const std::string& num);
+// the key with any dashed sub-number stripped ("S5002-1" -> "S5002").
+// Dashes mean different things in different sources (the registrar's
+// sub-works, a citation's volume, a filename's range) — presence
+// AUDITS compare at the base-work level, the honest common ground;
+// the register keeps full keys.
+std::string baseCatalogKey(const std::string& num);
+// compatibility shim: (prefix, value) with -1 for invalid; sub-numbers
+// LOSE their suffix here — prefer normalizeCatalogKey
 std::pair<std::string, int> normalizeCatalogNumber(const std::string& num);
 
-// Walk a library tree and collect the normalized catalog numbers its
-// FILENAMES assert (leading 1-2 letters + 3-5 digits; META files count —
-// they assert the same identity as their partner).
-std::set<std::pair<std::string, int>> collectLibraryNumbers(
-    const std::string& root);
+// Walk a library tree and collect the normalized catalog keys its
+// FILENAMES assert (leading 1-2 letters + 3+ digits + optional dashed
+// sub-number; META files count — they assert their partner's identity).
+std::set<std::string> collectLibraryNumbers(const std::string& root);
 
 struct AuditEntry {
     std::string number;   // as cited (first spelling seen)
@@ -60,6 +72,6 @@ struct AuditResult {
 
 // The audit: which cited numbers exist in the library, which do not.
 AuditResult auditPresence(const std::vector<AcipCitation>& cited,
-                          const std::set<std::pair<std::string, int>>& have);
+                          const std::set<std::string>& have);
 
 }  // namespace allcore

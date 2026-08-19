@@ -223,7 +223,19 @@ mints catalog numbers; the mother copy is never touched.**
       (from register or filename) / input exists (file present) /
       cataloged (inside the destination tree) — three independent
       lights, per the numbered≠input≠cataloged rule.
-- [ ] 10. **Change-log helper**. On any app-performed rename/move in
+- [x] 10. **Change-log helper** — SHIPPED 2026-08-19 (pins in suite
+      52; selftest pin). composeChangeStamp/parseChangeStamp
+      ("base - updated YYYY-MM-DD ADA"; hand-made "1 26 26 NL" style
+      parses too; re-stamp replaces; shelf names and volume labels
+      never mistaken for stamps). Offered after Rename-in-intake
+      (initials from Settings name); read back as "last changed …
+      by …" on any file under a stamped ancestor. SAME STRIKE:
+      Adam's Google sheet (worksheet tab + issuance register tab)
+      read in full — 52-column worksheet schema banked in the
+      research doc; his no-5-digit-cap ruling + dashed sub-numbers
+      implemented across the audit/register/library-harvest key
+      logic (base-key tier for presence; audit re-measured
+      347/297/50 and re-pinned; banked JSON regenerated). On any app-performed rename/move in
       the intake tree, offer the date+initials suffix convention
       (user's initials from team/name settings); display the last
       changer decoded from folder names in the destination tree.

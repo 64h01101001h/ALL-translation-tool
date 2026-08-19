@@ -641,6 +641,42 @@ implement or support.
   title / author / format / pages / physical dims / colophon), keep
   every old backup copy, offline-capable (S3).
 
+## The live worksheet and register (Adam's Google sheet, 2026-08-19)
+
+Adam supplied the team's actual spreadsheet (two tabs, read via his
+Drive connector; both read in full):
+
+- **Tab 1 — the cataloging worksheet**: 47 rows (S05001–S05039,
+  Bu-ston's Kalachakra annotation corpus) × **52 columns** — the real
+  schema for our worksheet step: ACIP Number · In Database · Tohoku ·
+  Title Page Title · Tibetan/English/Sanskrit Titles · Author(ship
+  statement) · Alternate Name · Author Dates · Tohoku Volume ID ·
+  ALL/BDRC Volume ID & Folio Count · database/scan links · subject
+  category · byte count (MD5) · BDRC permalink/Work RID/Image Group
+  RID/Volume RID · volume number · sequence · image range · Tohoku
+  notes · general notes · BDRC notes · publisher · location of
+  printing · **colophon** · place of production · drawings · input
+  file name · languages · brief titles (native/translated) ·
+  translator + dates · editor + dates · year of edition · format ·
+  cover · condition · readability · volume · page numbers · **size of
+  pages · size of printed area** (the St. Petersburg physical-dims
+  fields, live) · location of copy · copyright owner · ISBN.
+- **Tab 2 — the issuance register**: S25011+ rows ("Tohoku: none"),
+  Tibetan/English titles, author + dates, TBRC Work/Image-Group/
+  Volume RIDs, and issue months (May–Aug 2015 block visible).
+
+**Two schema facts changed the code the same day** (commit noted in
+git): ACIP numbers are NOT capped at 5 digits going forward (Adam's
+ruling), and **dashed sub-numbers are real** (S05002-1…-5 are five
+distinct works in the worksheet). Dashes mean different things by
+source — sub-works in the registrar's sheet, volume/part references
+in bibliography citations ("S05161-2" ↔ file S05161E2), and RANGES
+in filenames ("S06370-93E") — so presence audits compare at the
+BASE-work level while the register keeps full dashed keys. The
+bibliography audit re-measured under the corrected rules: **347
+distinct cited works · 297 present · 50 missing** (the previously
+refused 6-digit citation resolves to a present work).
+
 ## Sessions pending
 
 All 13 links Adam supplied 2026-08-19 are analyzed above except

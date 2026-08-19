@@ -50,6 +50,25 @@ int main(int argc, char** argv) {
                   reg.find("TD4210")->initials == "MR",
               "TSV with fuzzy header names parses the same");
     }
+    // the REAL register schema (Adam's Google sheet, tab 2, 2026-08-19)
+    {
+        allcore::CatalogRegister reg;
+        const int n = reg.loadText(
+            "S2\tACIP Number\tTohoku\tTibetan Title\tEnglish Title\t"
+            "Sanskrit Title\tAuthor\tAlternate Name\tAuthor Dates\t"
+            "Volume ID\tTohoku Volume ID\tTBRC Work RID\tTBRC Image "
+            "Group RID\tTBRC Volume RID\n"
+            "\tS25011\tnone\tNYE BRGYUD TSE KHRID 'CHI MED RDO RJE'I "
+            "SROG SHING\t\t\tRGYAL BA NGAG DBANG BLO BZANG RGYA "
+            "MTSO\t\t1617-1688\t\t\tW294\t1815\tW294-1815\n"
+            "\tS05002-1\t5002, (A)\tJIG RTEN GYI KHAMS KYI LE'U'I "
+            "'GREL BSHAD\t\t\tBU STON RIN CHEN GRUB\t\t1290-1364"
+            "\t\t\t\t\t\n");
+        CHECK(n == 2 && reg.find("S25011") &&
+                  reg.find("S05002-1") && !reg.find("S05002-2"),
+              "the real sheet schema loads; dashed sub-numbers stay "
+              "distinct in the register");
+    }
     CHECK(allcore::CatalogRegister().find("S1") == nullptr,
           "an empty register answers nullptr, never a guess");
     {
@@ -57,6 +76,33 @@ int main(int argc, char** argv) {
         CHECK(reg.loadText("Title,Author\nfoo,bar\n") == 0,
               "a sheet with no number column loads nothing (0), "
               "loudly");
+    }
+
+    // ---- the change-log stamp --------------------------------------------
+    {
+        const std::string stamped = allcore::composeChangeStamp(
+            "Sungbum", "2026-08-19", "ADA");
+        CHECK(stamped == "Sungbum - updated 2026-08-19 ADA",
+              "the stamp composes as base - updated DATE INITIALS");
+        const auto p1 = allcore::parseChangeStamp(stamped);
+        CHECK(p1.found && p1.base == "Sungbum" &&
+                  p1.date == "2026-08-19" && p1.initials == "ADA",
+              "the stamp parses back exactly");
+        CHECK(allcore::composeChangeStamp(stamped, "2026-08-20", "NL") ==
+                  "Sungbum - updated 2026-08-20 NL",
+              "re-stamping replaces the stamp (history lives in the "
+              "storage's version history)");
+        const auto p2 =
+            allcore::parseChangeStamp("Sungbum updated 1 26 26 NL");
+        CHECK(p2.found && p2.initials == "NL" && p2.base == "Sungbum",
+              "the hand-made session-4 style (1 26 26 NL) parses too");
+        CHECK(!allcore::parseChangeStamp("BLA BRGYUD_LAMA LINEAGE "
+                                         "TREES")
+                   .found,
+              "an ordinary shelf name is not mistaken for a stamp");
+        CHECK(!allcore::parseChangeStamp("Volume 10 KA").found,
+              "a volume label with digits is not a stamp (no date "
+              "shape)");
     }
 
     if (argc < 2) {
@@ -78,7 +124,7 @@ int main(int argc, char** argv) {
         const auto have = allcore::collectLibraryNumbers(argv[1]);
         int cataloged = 0, issuedOnly = 0;
         for (const auto& e : reg.entries()) {
-            if (have.count(allcore::normalizeCatalogNumber(e.number)))
+            if (have.count(allcore::baseCatalogKey(e.number)))
                 ++cataloged;
             else
                 ++issuedOnly;

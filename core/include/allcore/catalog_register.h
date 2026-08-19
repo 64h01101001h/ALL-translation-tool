@@ -42,4 +42,23 @@ private:
     std::vector<RegisterEntry> entries_;
 };
 
+// ---- the change-log stamp (session 4/Jun 16 policy) ------------------------
+// "You have to rename the copy with your initials so that we know you
+// changed it on this day, and to blame you if something went wrong.
+// That is our policy." A stamped folder name looks like
+//   "<base> - updated 2026-08-19 ADA"
+// The parser is tolerant of the older hand-made variants (a date-ish
+// token followed by trailing initials).
+struct ChangeStamp {
+    bool found = false;
+    std::string base;       // the name without the stamp
+    std::string date;       // as written
+    std::string initials;   // 2-4 capitals
+};
+
+ChangeStamp parseChangeStamp(const std::string& folder_name);
+std::string composeChangeStamp(const std::string& base,
+                               const std::string& iso_date,
+                               const std::string& initials);
+
 }  // namespace allcore

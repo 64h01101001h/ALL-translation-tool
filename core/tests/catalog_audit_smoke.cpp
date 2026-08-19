@@ -2,7 +2,8 @@
 // Pins the scanner and normalizer on constructed cases, then RE-RUNS the
 // real audit: every ACIP number cited in the extracted bibliography banks,
 // checked against the installed library. Exact counts are pinned to the
-// data as shipped (347 cited / 296 present / 51 missing, 2026-08-19); a
+// data as shipped (347 cited / 297 present / 50 missing, 2026-08-19,
+// after Adam's no-digit-cap ruling + base-key dash handling); a
 // data release legitimately moves them — update the pins WITH the data.
 //
 // Usage: catalog_audit_smoke <mixed_nuts_bibliography.json>
@@ -42,14 +43,20 @@ int main(int argc, char** argv) {
                   c[1].number == "S464" && c[2].number == "KL00824",
               "numbers captured verbatim, across a line break too");
     }
-    CHECK(allcore::normalizeCatalogNumber("S464") ==
-              allcore::normalizeCatalogNumber("S00464"),
-          "S464 and S00464 normalize to the same number");
-    CHECK(allcore::normalizeCatalogNumber("TD03971").first == "TD" &&
-              allcore::normalizeCatalogNumber("TD03971").second == 3971,
-          "prefix and value split correctly");
-    CHECK(allcore::normalizeCatalogNumber("NOPE").second == -1,
+    CHECK(allcore::normalizeCatalogKey("S464") ==
+              allcore::normalizeCatalogKey("S00464"),
+          "S464 and S00464 normalize to the same key");
+    CHECK(allcore::normalizeCatalogKey("TD03971") == "TD3971",
+          "prefix and unpadded digits form the key");
+    CHECK(allcore::normalizeCatalogKey("NOPE").empty(),
           "a non-number is refused, not guessed");
+    CHECK(allcore::normalizeCatalogKey("S05002-1") == "S5002-1" &&
+              allcore::normalizeCatalogKey("S05002-1") !=
+                  allcore::normalizeCatalogKey("S05002-2"),
+          "dashed sub-numbers are DISTINCT works (the registrar's own "
+          "worksheet uses them)");
+    CHECK(allcore::normalizeCatalogKey("S1234567") == "S1234567",
+          "no 5-digit cap (Adam's ruling, 2026-08-19)");
 
     // ---- audit pins on constructed data ----------------------------------
     {
@@ -59,7 +66,7 @@ int main(int argc, char** argv) {
             c.number = n;
             cited.push_back(c);
         }
-        std::set<std::pair<std::string, int>> have{{"S", 464}};
+        std::set<std::string> have{"S464"};
         const auto r = allcore::auditPresence(cited, have);
         CHECK(r.cited_distinct == 2 && r.present == 1 && r.missing == 1,
               "padding variants collapse; presence counted once");
@@ -89,8 +96,8 @@ int main(int argc, char** argv) {
                 r.cited_distinct, r.present, r.missing);
     CHECK(r.cited_distinct == 347,
           "347 distinct ACIP numbers cited (pinned to data as shipped)");
-    CHECK(r.present == 296, "296 present in the installed library (pinned)");
-    CHECK(r.missing == 51, "51 missing (pinned) — GMR's job #1, measured");
+    CHECK(r.present == 297, "297 present in the installed library (pinned)");
+    CHECK(r.missing == 50, "50 missing (pinned) — GMR's job #1, measured");
     bool klSeen = false;
     for (const auto& e : r.entries)
         if (!e.present && e.number == "KL00824") klSeen = true;

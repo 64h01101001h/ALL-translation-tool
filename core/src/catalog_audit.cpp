@@ -17,6 +17,37 @@ bool isDigit(char c) { return c >= '0' && c <= '9'; }
 
 }  // namespace
 
+namespace {
+
+// prefix + unpadded digits + optional "-sub"; "" when not a number.
+// No upper digit cap (Adam's ruling, 2026-08-19); minimum 3 digits so a
+// stray "ACIP 12" never reads as a citation.
+std::string normalizeAt(const std::string& s, size_t i, size_t* end_out) {
+    size_t p = i;
+    while (p < s.size() && isUpper(s[p]) && p - i < 2) ++p;
+    const size_t letters = p - i;
+    if (letters < 1 || letters > 2) return "";
+    size_t d = p;
+    while (d < s.size() && isDigit(s[d])) ++d;
+    if (d - p < 3) return "";
+    size_t z = p;
+    while (z < d && s[z] == '0') ++z;
+    std::string key = s.substr(i, letters);
+    key += z == d ? "0" : s.substr(z, d - z);
+    // dashed sub-number: S05002-1 is a distinct work
+    if (d < s.size() && s[d] == '-' && d + 1 < s.size() &&
+        isDigit(s[d + 1])) {
+        size_t e = d + 1;
+        while (e < s.size() && isDigit(s[e])) ++e;
+        key += "-" + s.substr(d + 1, e - d - 1);
+        d = e;
+    }
+    if (end_out) *end_out = d;
+    return key;
+}
+
+}  // namespace
+
 std::vector<AcipCitation> extractAcipCitations(const std::string& text) {
     std::vector<AcipCitation> out;
     const std::string cue = "ACIP";
@@ -30,45 +61,51 @@ std::vector<AcipCitation> extractAcipCitations(const std::string& text) {
                 text[i] == '\t'))
             ++i;
         if (i == ws) { pos += cue.size(); continue; }
-        size_t p = i;
-        while (p < text.size() && isUpper(text[p]) && p - i < 2) ++p;
-        const size_t letters = p - i;
-        size_t d = p;
-        while (d < text.size() && isDigit(text[d]) && d - p < 5) ++d;
-        const size_t digits = d - p;
-        if (letters >= 1 && letters <= 2 && digits >= 3 && digits <= 5 &&
-            (d == text.size() || !isDigit(text[d]))) {
+        size_t end = i;
+        const std::string key = normalizeAt(text, i, &end);
+        if (!key.empty()) {
             AcipCitation c;
-            c.number = text.substr(i, d - i);
+            c.number = text.substr(i, end - i);
             c.offset = i;
             out.push_back(std::move(c));
+            pos = end;
+        } else {
+            pos += cue.size();
         }
-        pos = d > pos + cue.size() ? d : pos + cue.size();
     }
     return out;
 }
 
-std::pair<std::string, int> normalizeCatalogNumber(const std::string& num) {
-    size_t i = 0;
-    while (i < num.size() && isUpper(num[i])) ++i;
-    if (i == 0 || i > 2) return {num, -1};
-    size_t d = i;
-    long v = 0;
-    while (d < num.size() && isDigit(num[d])) {
-        v = v * 10 + (num[d] - '0');
-        ++d;
-    }
-    if (d == i || d - i > 5) return {num, -1};
-    // the numeric part must end the number (a trailing letter suffix —
-    // language/part codes like S06850E1 — is fine and ignored here only
-    // if the caller stripped it; for cited numbers there is none)
-    return {num.substr(0, i), static_cast<int>(v)};
+std::string normalizeCatalogKey(const std::string& num) {
+    size_t end = 0;
+    const std::string key = normalizeAt(num, 0, &end);
+    return key;
 }
 
-std::set<std::pair<std::string, int>> collectLibraryNumbers(
-    const std::string& root) {
+std::string baseCatalogKey(const std::string& num) {
+    std::string key = normalizeCatalogKey(num);
+    const size_t d = key.find('-');
+    if (d != std::string::npos) key.erase(d);
+    return key;
+}
+
+std::pair<std::string, int> normalizeCatalogNumber(const std::string& num) {
+    const std::string key = normalizeCatalogKey(num);
+    if (key.empty()) return {num, -1};
+    size_t i = 0;
+    while (i < key.size() && isUpper(key[i])) ++i;
+    long v = 0;
+    size_t d = i;
+    while (d < key.size() && isDigit(key[d])) {
+        v = v * 10 + (key[d] - '0');
+        ++d;
+    }
+    return {key.substr(0, i), static_cast<int>(v)};
+}
+
+std::set<std::string> collectLibraryNumbers(const std::string& root) {
     namespace fs = std::filesystem;
-    std::set<std::pair<std::string, int>> have;
+    std::set<std::string> have;
     std::error_code ec;
     if (!fs::exists(root, ec)) return have;
     for (fs::recursive_directory_iterator it(
@@ -79,29 +116,19 @@ std::set<std::pair<std::string, int>> collectLibraryNumbers(
         std::string name = it->path().filename().string();
         for (char& c : name)
             c = static_cast<char>(std::toupper(static_cast<unsigned char>(c)));
-        size_t i = 0;
-        while (i < name.size() && isUpper(name[i]) && i < 2) ++i;
-        if (i == 0) continue;
-        size_t d = i;
-        long v = 0;
-        while (d < name.size() && isDigit(name[d]) && d - i < 5) {
-            v = v * 10 + (name[d] - '0');
-            ++d;
-        }
-        if (d - i < 3) continue;
-        have.insert({name.substr(0, i), static_cast<int>(v)});
+        const std::string key = baseCatalogKey(name);
+        if (!key.empty()) have.insert(key);
     }
     return have;
 }
 
-AuditResult auditPresence(
-    const std::vector<AcipCitation>& cited,
-    const std::set<std::pair<std::string, int>>& have) {
+AuditResult auditPresence(const std::vector<AcipCitation>& cited,
+                          const std::set<std::string>& have) {
     // distinct by normalized form; keep the first spelling + count
-    std::map<std::pair<std::string, int>, AuditEntry> byNorm;
+    std::map<std::string, AuditEntry> byNorm;
     for (const auto& c : cited) {
-        const auto n = normalizeCatalogNumber(c.number);
-        if (n.second < 0) continue;
+        const auto n = baseCatalogKey(c.number);
+        if (n.empty()) continue;
         auto& e = byNorm[n];
         if (e.citations == 0) {
             e.number = c.number;

@@ -23981,6 +23981,28 @@ public:
                 QMessageBox::warning(&dlg, "Nothing changed", err);
                 return;
             }
+            // the house change-log policy: stamp the folder with
+            // today's date + your initials (from Settings -> your
+            // name), so the record of who-changed-what lives in the
+            // tree itself
+            QString initials;
+            for (const QString& w : g_userName.split(
+                     ' ', Qt::SkipEmptyParts))
+                initials += w.left(1).toUpper();
+            if (initials.size() >= 2 &&
+                QMessageBox::question(
+                    &dlg, "Stamp the folder?",
+                    QString("Rename the folder with today's date and "
+                            "your initials (%1)?\n\n\u201cSo we know "
+                            "you changed it on this day\u201d \u2014 "
+                            "the house policy.")
+                        .arg(initials)) == QMessageBox::Yes) {
+                const QString serr = stampFolder(
+                    QFileInfo(lastFile_).path(), initials);
+                if (!serr.isEmpty())
+                    QMessageBox::warning(&dlg, "Folder not stamped",
+                                         serr);
+            }
             showFile(lastFile_);
             dlg.accept();
         });
@@ -24007,7 +24029,7 @@ public:
         int cataloged = 0;
         std::vector<const allcore::RegisterEntry*> absent;
         for (const auto& e : register_.entries()) {
-            if (have.count(allcore::normalizeCatalogNumber(e.number)))
+            if (have.count(allcore::baseCatalogKey(e.number)))
                 ++cataloged;
             else
                 absent.push_back(&e);
@@ -24064,6 +24086,27 @@ public:
             h += "</ul>";
         }
         return h;
+    }
+
+    // The change-log stamp (session 4 policy): rename a folder to
+    // carry today's date + the changer's initials. Intake tree only;
+    // collision refused. Public for the selftest.
+    QString stampFolder(const QString& dirPath, const QString& initials) {
+        QDir d(dirPath);
+        if (!d.exists()) return "no such folder";
+        const QString stamped = QString::fromStdString(
+            allcore::composeChangeStamp(
+                d.dirName().toStdString(),
+                QDate::currentDate().toString("yyyy-MM-dd").toStdString(),
+                initials.toUpper().toStdString()));
+        if (stamped == d.dirName()) return QString();
+        QDir parent(d.absolutePath());
+        parent.cdUp();
+        if (parent.exists(stamped))
+            return "a folder with the stamped name already exists";
+        if (!parent.rename(d.dirName(), stamped))
+            return "the filesystem refused the rename";
+        return QString();
     }
 
     // The cleanup lane's only write: a CLEANED COPY beside the
@@ -24400,7 +24443,7 @@ public:
         // collect citations WITH their source volume from the two
         // bibliography banks
         struct Cite { QString source, text; };
-        std::map<std::pair<std::string, int>, Cite> firstCite;
+        std::map<std::string, Cite> firstCite;
         std::vector<allcore::AcipCitation> cited;
         int banksLoaded = 0;
         for (const char* rel :
@@ -24419,8 +24462,8 @@ public:
                      allcore::extractAcipCitations(t)) {
                     cited.push_back(c);
                     const auto n =
-                        allcore::normalizeCatalogNumber(c.number);
-                    if (n.second >= 0 && !firstCite.count(n))
+                        allcore::baseCatalogKey(c.number);
+                    if (!n.empty() && !firstCite.count(n))
                         firstCite[n] = Cite{
                             o.value("source").toString(),
                             QString::fromStdString(t).left(240)};
@@ -24457,7 +24500,7 @@ public:
         std::map<QString, std::vector<const allcore::AuditEntry*>> bySrc;
         for (const auto& e : r.entries) {
             if (e.present) break;   // missing entries lead the list
-            const auto n = allcore::normalizeCatalogNumber(e.number);
+            const auto n = allcore::baseCatalogKey(e.number);
             const auto it = firstCite.find(n);
             bySrc[it == firstCite.end() ? QString("(source unknown)")
                                         : it->second.source]
@@ -24470,7 +24513,7 @@ public:
                  " cited work(s) not in this library:</div><ul>";
             for (const auto* e : list) {
                 const auto n =
-                    allcore::normalizeCatalogNumber(e->number);
+                    allcore::baseCatalogKey(e->number);
                 const auto it = firstCite.find(n);
                 h += "<li><b>" +
                      QString::fromStdString(e->number).toHtmlEscaped() +
@@ -24651,6 +24694,26 @@ private:
         QString h = "<h3>" + fi.fileName().toHtmlEscaped() + "</h3>";
         h += QString("<div style='color:#8A8A8A;font-size:11px'>%1</div>")
                  .arg(fi.path().toHtmlEscaped());
+        // the change-log stamp, decoded from the nearest stamped
+        // ancestor folder (the session-4 policy read back)
+        {
+            QDir walk(fi.path());
+            for (int depth = 0; depth < 6; ++depth) {
+                const auto st = allcore::parseChangeStamp(
+                    walk.dirName().toStdString());
+                if (st.found) {
+                    h += QString("<div style='color:#8A8A8A;font-size:"
+                                 "11px'>last changed %1 by %2 (folder "
+                                 "stamp)</div>")
+                             .arg(QString::fromStdString(st.date)
+                                      .toHtmlEscaped())
+                             .arg(QString::fromStdString(st.initials)
+                                      .toHtmlEscaped());
+                    break;
+                }
+                if (!walk.cdUp()) break;
+            }
+        }
         if (inf.recognized) {
             h += "<div><b>" +
                  QString::fromStdString(inf.collection)
@@ -28164,6 +28227,31 @@ int main(int argc, char** argv) {
                                "per file")
                            .arg(regOk && states ? "PASS" : "FAIL");
                 if (!(regOk && states)) ++fails;
+                QDir(wd).removeRecursively();
+            }
+            {   // the change-log stamp: stamping renames the folder
+                // with date+initials; a file inside shows the stamp;
+                // re-stamping replaces, collisions refuse
+                QDir().mkpath(wd + "/ShelfX");
+                { QFile f(wd + "/ShelfX/w.txt");
+                  f.open(QIODevice::WriteOnly);
+                  f.write("BDEN PA,"); }
+                const QString e1 =
+                    catalogPane->stampFolder(wd + "/ShelfX", "ADA");
+                const QString today =
+                    QDate::currentDate().toString("yyyy-MM-dd");
+                const QString stamped =
+                    wd + "/ShelfX - updated " + today + " ADA";
+                catalogPane->showFilePublic(stamped + "/w.txt");
+                const bool stampOk =
+                    e1.isEmpty() && QDir(stamped).exists() &&
+                    catalogPane->infoText().contains(
+                        "last changed " + today + " by ADA");
+                log << QString("  [%1] Catalog: the change-log stamp "
+                               "renames the folder and reads back on "
+                               "its files")
+                           .arg(stampOk ? "PASS" : "FAIL");
+                if (!stampOk) ++fails;
                 QDir(wd).removeRecursively();
             }
             {   // GMR's job #1 must render as a real report — the

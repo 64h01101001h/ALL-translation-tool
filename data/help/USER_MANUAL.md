@@ -58,7 +58,8 @@ app: Help menu → ALL Tool Help & Tutorials.*
   - 14.11 Tohoku numbers and colophon candidates
   - 14.12 Provenance banner and the cleanup lane
   - 14.13 Load register — the three states
-  - 14.14 What the workflow will do next
+  - 14.14 The change-log stamp
+  - 14.15 What the workflow will do next
 - **CHAPTER 15 — THE PROPOSE PANE (Community → Propose)**
   - 15.1 One-time identity setup
   - 15.2 Making a proposal
@@ -3040,7 +3041,25 @@ state lights, which are independent by design:
 3. **cataloged** — the file sits inside the destination tree, or a
    plain warning that it does not.
 
-## 14.14 What the workflow will do next
+## 14.14 The change-log stamp
+
+The house policy, stated on camera: "You have to rename the copy
+with your initials, so that we know you changed it on this day —
+and to blame you if something went wrong. That is our policy."
+
+After a successful **Rename in intake…**, the app offers to stamp
+the file's folder with today's date and your initials (taken from
+Settings → your name): the folder becomes `Name - updated
+2026-08-19 ADA`. Re-stamping replaces the previous stamp — the full
+history lives in the shared storage's version history; the name
+carries the latest change. A collision is refused, never forced.
+
+Reading works everywhere: clicking any file whose folder (or an
+ancestor up to six levels) carries a stamp — including the older
+hand-made styles — shows *last changed DATE by INITIALS* in the
+panel.
+
+## 14.15 What the workflow will do next
 
 This is the first working step of a longer workflow. Still to come,
 in order: quality-control lanes (title-versus-translation mismatch,
