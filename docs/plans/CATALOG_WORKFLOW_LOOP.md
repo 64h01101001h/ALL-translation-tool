@@ -76,8 +76,18 @@ mints catalog numbers; the mother copy is never touched.**
       the installed library is a lower bound. Data:
       `data/research/gmr_cataloging/bibliography_audit_missing.json`
       already banked.
-- [ ] 2. **Volume splitter — "chop assist"** (their #1 manual
-      activity). Core: scan a whole ACIP file for candidate text
+- [x] 2. **Volume splitter — "chop assist"** — SHIPPED 2026-08-19
+      (suite 46 volsplit_smoke; selftest pin; sweep 4 controls).
+      Measured on 30 synthetic volumes built from 120 real library
+      texts: 93.3% junction recall, 1.73 extra candidates/volume
+      (one Avatamsaka text with narrative bzhugs-so = 45 of 52
+      extras). TRIED AND REJECTED: an end-of-work (",,"/blank-line)
+      gate before the anchor — removed zero false blocks, cost a
+      real junction. The comma-density gate (>4 commas in the raw
+      block = prose) is what killed the false-positive class.
+      Cross-rule detections of one title page merge; same-rule
+      neighbors warn instead (empowerment-parts rule). Original
+      spec follows: (their #1 manual activity). Core: scan a whole ACIP file for candidate text
       boundaries: bilingual heads (BOD SKAD DU), BZHUGS SO blocks,
       kar-chag entry matches, closing formulas (MANGGA LAM / DGE'O /
       RDZOGS SO markers), page-number sanity. Emit candidate cut

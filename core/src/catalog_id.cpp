@@ -294,3 +294,181 @@ std::vector<IdentityCandidate> suggestIdentity(const TitleExtraction& t,
 }
 
 }  // namespace allcore
+
+namespace allcore {
+namespace {
+
+// nearest preceding page marker "@NNN[AB]" before pos, as "NNNA"
+std::string folioBefore(const std::string& up, size_t pos) {
+    size_t at = up.rfind('@', pos);
+    while (at != std::string::npos) {
+        size_t j = at + 1;
+        while (j < up.size() && up[j] == ' ') ++j;
+        size_t d = j;
+        while (d < up.size() && std::isdigit(static_cast<unsigned char>(up[d])))
+            ++d;
+        if (d > j && d < up.size() && (up[d] == 'A' || up[d] == 'B'))
+            return up.substr(j, d - j + 1);
+        if (at == 0) break;
+        at = up.rfind('@', at - 1);
+    }
+    return "";
+}
+
+bool closingFormulaBefore(const std::string& up, size_t pos) {
+    const size_t w = pos > 400 ? pos - 400 : 0;
+    const std::string win = up.substr(w, pos - w);
+    for (const char* f : {"RDZOGS S", "DGE'O", "DGE LEGS", "MANGGA LAM",
+                          "BKRA SHIS", "DZOGS SO"})
+        if (win.find(f) != std::string::npos) return true;
+    return false;
+}
+
+}  // namespace
+
+std::vector<SplitCandidate> suggestVolumeSplits(const std::string& doc) {
+    std::string up = doc;
+    for (char& c : up)
+        c = static_cast<char>(std::toupper(static_cast<unsigned char>(c)));
+
+    std::vector<SplitCandidate> out;
+
+    // Rule 1: canonical bilingual heads. Strong signal — BOD SKAD DU only
+    // appears where a translated work announces itself.
+    const std::string kBod = "BOD SKAD DU";
+    for (size_t pos = up.find(kBod); pos != std::string::npos;
+         pos = up.find(kBod, pos + kBod.size())) {
+        size_t start = pos;
+        for (const char* cue : {"RGYA GAR SKAD DU", "RGYA'I SKAD DU"}) {
+            const size_t g = up.rfind(cue, pos);
+            if (g != std::string::npos && pos - g < 300) {
+                start = g;
+                break;
+            }
+        }
+        const auto t = extractAcipTitle(doc.substr(start, 4000));
+        if (!t.found || t.rule != "bod-skad-du") continue;
+        SplitCandidate c;
+        c.offset = start;
+        c.rule = "bod-skad-du";
+        c.title = t.title;
+        c.raw = t.raw;
+        c.folio = folioBefore(up, start);
+        c.closing_before = closingFormulaBefore(up, start);
+        out.push_back(std::move(c));
+    }
+
+    // Rule 2: title blocks closing in BZHUGS SO (the Sungbum shape). A
+    // real title block is ANCHORED — it opens the document, follows a
+    // folio marker, or follows a line-start '*' (the pecha title-page
+    // mark) — and it reads like a title, not prose: almost no commas.
+    // (Measured on the library: narrative prose uses "bzhugs so" freely —
+    // one Avatamsaka text alone yielded 93 false blocks before the
+    // comma-density gate; a real title block carries at most a few.)
+    const std::string kZ = "BZHUGS SO";
+    for (size_t z = up.find(kZ); z != std::string::npos;
+         z = up.find(kZ, z + kZ.size())) {
+        const size_t w = z > 800 ? z - 800 : 0;
+        // candidate anchors, latest wins
+        size_t at = std::string::npos;
+        if (w == 0) at = 0;   // the document's own opening
+        const size_t fol = up.rfind('@', z);
+        if (fol != std::string::npos && fol >= w &&
+            (at == std::string::npos || fol > at))
+            at = fol;
+        // a line that BEGINS with '*' opens a title page mid-volume
+        for (size_t nl = up.rfind('\n', z);
+             nl != std::string::npos && nl >= w && nl > 0;
+             nl = up.rfind('\n', nl - 1)) {
+            size_t k = nl + 1;
+            while (k < z && (up[k] == ' ' || up[k] == '\r')) ++k;
+            if (k < z && up[k] == '*') {
+                if (at == std::string::npos || k > at) at = k;
+                break;
+            }
+            if (nl == 0) break;
+        }
+        if (at == std::string::npos) continue;
+        // TRIED AND REJECTED BY MEASUREMENT: requiring an end-of-work
+        // mark (",," / blank line) before the anchor removed ZERO false
+        // blocks (the pathological prose carries ",," too) and cost a
+        // real junction. The residual false-positive source is narrative
+        // "bzhugs so" in list-like scripture (one Avatamsaka text = 45
+        // of 49 extras across 120 sampled texts); those candidates are
+        // visibly prose fragments in the evidence panel, and a human
+        // dismisses them — this is a suggest-only lane.
+        const std::string rawBlock = doc.substr(at, z - at);
+        // prose gate: shad-commas everywhere means running text
+        int commas = 0;
+        for (char ch : rawBlock)
+            if (ch == ',') ++commas;
+        if (commas > 4) continue;
+        const auto t =
+            extractAcipTitle(doc.substr(at, (z - at) + kZ.size() + 4));
+        if (!t.found || t.rule != "bzhugs-so") continue;
+        // plausibility: a real title block is not a whole page of prose
+        int syl = 1;
+        for (char ch : t.title)
+            if (ch == ' ') ++syl;
+        if (syl > 45) continue;
+        SplitCandidate c;
+        c.offset = at;
+        c.rule = "bzhugs-so";
+        c.title = t.title;
+        c.raw = t.raw;
+        c.folio = folioBefore(up, z);
+        c.closing_before = closingFormulaBefore(up, at);
+        out.push_back(std::move(c));
+    }
+
+    std::sort(out.begin(), out.end(),
+              [](const SplitCandidate& a, const SplitCandidate& b) {
+                  return a.offset < b.offset;
+              });
+
+    // One title page can be detected twice: a BZHUGS SO title block often
+    // stands immediately before the bilingual head of the SAME text
+    // (Kangyur convention). Cross-rule neighbors within 600 bytes are one
+    // boundary — keep the earlier offset, prefer the bilingual head's
+    // title (the stronger rule). Same-rule neighbors are NOT merged; the
+    // proximity warning below flags them for the human instead.
+    for (size_t i = 1; i < out.size();) {
+        if (out[i].rule != out[i - 1].rule &&
+            out[i].offset - out[i - 1].offset < 600) {
+            SplitCandidate keep =
+                out[i].rule == "bod-skad-du" ? out[i] : out[i - 1];
+            keep.offset = out[i - 1].offset;
+            keep.folio = out[i - 1].folio.empty() ? out[i].folio
+                                                  : out[i - 1].folio;
+            keep.closing_before =
+                out[i - 1].closing_before || out[i].closing_before;
+            out[i - 1] = std::move(keep);
+            out.erase(out.begin() + i);
+        } else {
+            ++i;
+        }
+    }
+
+    // "Don't split what the author didn't split": a boundary whose title
+    // reads like a chapter or a part of the same work gets a warning.
+    for (auto& c : out) {
+        if (c.title.find(" LE'U") != std::string::npos ||
+            c.title.rfind("LE'U", 0) == 0) {
+            c.warn = true;
+            c.warn_reason =
+                "the title names a chapter (LE'U) - likely a part of one "
+                "work, not an independent text";
+        }
+    }
+    for (size_t i = 1; i < out.size(); ++i) {
+        if (out[i].offset - out[i - 1].offset < 1500 && !out[i].warn) {
+            out[i].warn = true;
+            out[i].warn_reason =
+                "very close to the previous boundary - possibly parts of "
+                "one work (an empowerment's sections, a broken head)";
+        }
+    }
+    return out;
+}
+
+}  // namespace allcore

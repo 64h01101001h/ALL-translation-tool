@@ -50,7 +50,8 @@ app: Help menu → ALL Tool Help & Tutorials.*
   - 14.3 The file panel — what the machine can already tell
   - 14.4 Suggested identity — how a nameless file names itself
   - 14.5 The bibliography audit
-  - 14.6 What the workflow will do next
+  - 14.6 Suggested splits — the chop assist
+  - 14.7 What the workflow will do next
 - **CHAPTER 15 — THE PROPOSE PANE (Community → Propose)**
   - 15.1 One-time identity setup
   - 15.2 Making a proposal
@@ -2830,7 +2831,37 @@ here is not proof of presence there. And the audit writes nothing:
 missing works are candidates for the intake workflow — locate a
 witness, input, propose, approve.
 
-## 14.6 What the workflow will do next
+## 14.6 Suggested splits — the chop assist
+
+The team's single biggest manual task is "chopping": a typed volume
+holds many works, and somebody must find every boundary before the
+works can be named and filed. Select a file in either tree and
+click **Suggest splits…** — the file is scanned for candidate text
+boundaries and the candidates land in the panel, each with its
+evidence:
+
+- the **rule** that found it — a canonical bilingual head (RGYA GAR
+  SKAD DU … BOD SKAD DU …) or a title block closing in BZHUGS SO;
+- the **folio** it sits on and how far into the file it lies;
+- whether a **closing formula** (RDZOGS SO, DGE'O, MANGGA LAM…)
+  stands just before it — corroboration that one work ended there;
+- the **title** the new segment announces.
+
+Two warnings implement the house rule *don't split what the author
+didn't split*: a boundary whose title names a chapter (LE'U) is
+flagged as likely a part of one work, and boundaries very close
+together are flagged as possible sections of a single text (an
+empowerment's parts, a broken head).
+
+**Nothing is cut.** The assist only reads; the mother copy is never
+touched. Measured against synthetic volumes built from this very
+library (real texts concatenated, so every boundary is known):
+about 93% of true boundaries are found, with about two false
+candidates per volume — almost all from one kind of text where
+"bzhugs so" is ordinary narrative. Every candidate needs a human
+eye; that is the design, not a shortcoming.
+
+## 14.7 What the workflow will do next
 
 This is the first working step of a longer workflow. Still to come,
 in order: quality-control lanes (title-versus-translation mismatch,

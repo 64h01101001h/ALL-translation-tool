@@ -102,4 +102,31 @@ std::vector<IdentityCandidate> suggestIdentity(const TitleExtraction& t,
                                                int limit = 5,
                                                double floor_score = 0.5);
 
+// ---- volume splitting ("chop assist") --------------------------------------
+// The team's #1 manual activity (sessions 4-8 and every continuation
+// session): a typed volume holds many works; somebody finds each boundary
+// and cuts. This SUGGESTS the boundaries — with evidence — and cuts
+// nothing. House rules honored: candidates carry the rule and the raw
+// evidence; a "title" that looks like a chapter or a part of one work
+// (LE'U etc.) gets a WARNING, not a cut, per "don't split what the author
+// didn't split"; the mother copy is never touched by this module at all
+// (it only reads).
+struct SplitCandidate {
+    size_t offset = 0;        // byte offset where the new text likely begins
+    std::string rule;         // "bod-skad-du" | "bzhugs-so"
+    std::string title;        // normalized title at the boundary
+    std::string raw;          // the evidence span, verbatim
+    std::string folio;        // nearest preceding page marker, e.g. "213B"
+    bool closing_before = false;  // a closing formula (RDZOGS SO / DGE'O /
+                                  // MANGGA LAM / BKRA SHIS) shortly before —
+                                  // corroborates a boundary
+    bool warn = false;        // looks like a chapter/part, not a new work
+    std::string warn_reason;
+};
+
+// Scan a whole ACIP document for candidate text boundaries. The first
+// candidate is usually the volume's own opening (offset near 0) — callers
+// display it as segment 1, not as a cut.
+std::vector<SplitCandidate> suggestVolumeSplits(const std::string& doc);
+
 }  // namespace allcore

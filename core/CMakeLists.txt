@@ -257,6 +257,11 @@ add_test(NAME abbr_smoke
                  ${CMAKE_SOURCE_DIR}/data/spellcheck
                  ${CMAKE_SOURCE_DIR}/data/abbreviations/rkts_abb.csv)
 
+add_executable(volsplit_smoke tests/volsplit_smoke.cpp)
+target_link_libraries(volsplit_smoke PRIVATE allcore)
+add_test(NAME volsplit_smoke
+         COMMAND volsplit_smoke ${CMAKE_SOURCE_DIR}/library)
+
 add_executable(catalog_audit_smoke tests/catalog_audit_smoke.cpp)
 target_link_libraries(catalog_audit_smoke PRIVATE allcore)
 add_test(NAME catalog_audit_smoke
