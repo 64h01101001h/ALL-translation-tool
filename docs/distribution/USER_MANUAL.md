@@ -13,6 +13,7 @@ app: Help menu → ALL Tool Help & Tutorials.*
 - **PART ONE — READ & TRANSLATE**
   - Overlay
   - Library
+  - Files
   - Manuscript
   - Draft
   - Review
@@ -237,7 +238,7 @@ on or off (defaults in parentheses):
 | **Sanskrit reference** (off) | Sanskrit equivalences (Mahāvyutpatti) on the card |
 | **Hopkins reference** (off) | the Hopkins reference layer on the card |
 | **84000 glossary (CC BY)** (on) | the 84000 translation glossary block on the card — reference only, clearly labeled, with its link back to the original entry |
-| **Das 1902 page links** (on) | the "open the page scan" link into Das's 1902 dictionary, shown with the other reference material |
+| **Das 1902 / Jäschke 1881 page links** (on) | the "open the page scan" links into Das's 1902 and Jäschke's 1881 dictionaries (both public domain), shown with the other reference material — Jäschke opens at letter-section accuracy (±page) |
 | **reference dictionaries (LC/TD/THL/OT/IW)** (on) | the Lokesh Chandra / TibetanDictionary / THL reference stacks on the card |
 | **Botok segmentation (reference)** (off) | an independent segmenter's reading of the clicked spot, labeled reference-only |
 | **unattested-word hints (segmenter + Monlam)** (off) | hints in the document for words no list attests |
@@ -319,7 +320,7 @@ of the phrase chain. Reading it top to bottom:
 - **Published footnotes** that deal with this term.
 - **"Geshe Michael teaching this term"** — timecoded links that
   open his recorded classes at the moment he teaches the term.
-  These are machine-located from class captions: candidates. **The
+  These are moments where Geshe Michael says the Tibetan phrase itself (phonetic match; machine-located from class captions: candidates. **The
   recording is the authority**, always; non-English sessions are
   tagged so you are not surprised.
 - **"He says this word"** — a second tier locating moments where
@@ -400,6 +401,61 @@ never edits the texts itself. When the authority **DECLINES** one,
 the form has been ruled VALID, and the app stops doubting it —
 everywhere, for the whole team, from the next launch on.
 
+**Verse meter…** — syllable-count analysis of the document.
+Sustained runs of shad-delimited lines on one odd count (7, 9,
+11…) are reported as verse blocks; lines off the count are
+flagged in red for YOUR judgment — an extra syllable from a
+keying slip and one from poetic license look identical to
+arithmetic, so the tool never decides which. Click any block or
+flagged line to jump there.
+
+**Prose & prayer reader (syllable counts)…** — the whole
+document, line by line, every line carrying its syllable count
+in a bracket at the left margin. This is the structural view:
+verse blocks appear grouped under their meter heading
+(**7-SYLLABLE VERSE**), on-meter counts show in green, an
+off-meter line shows its arithmetic in red (`8 ≠ 7`), and prose
+stretches are labeled and left plain with grey counts. The
+summary line at the top gives the shape of the text at a glance —
+how many lines, how many in verse, on which meters (7s and 9s
+dominate the Tengyur). Tap any line to jump to it in the
+document. The reader is **live**: keep it open while you edit and
+the counts re-tally as you type — watching the count is itself a
+way of learning the structure. Even-count **song meters (mgur —
+6 or 8 syllables)** group too, under a stricter rule so prose
+cannot masquerade as song, and their headings say SONG METER
+(MGUR). Each meter heading also tells you how common that meter
+is **across the whole installed canon** — a census over all
+14 million lines of the Kangyur, Tengyur, and Sungbum found
+333,802 verse lines, of which the classic 7-syllable meter
+carries 61%, the 5-syllable 15%, the 9-syllable 8.5%, and the
+6-syllable song meter 6% — so the reader can tell you when a
+text is written in something rare.
+
+**Citations & quotations…** — the upfront citation work, done
+for you. The moment you open a text, the hint line tells you how
+many quotations it carries and how many cited sources resolved to
+works in your Library. The button builds the full report: **TEXTS
+YOU WILL ENCOUNTER**, each with a direct open-in-Library link and,
+beneath it, every quotation from your document — clickable both
+into *your* text and, where the exact phrasing was found, **into
+the cited source at its line**. Quotations whose source isn't
+announced get a one-click hunt across the whole Library.
+**Export quotations & bibliography document…** compiles
+everything — full quotations grouped under their works with file
+paths and located lines — into a side document you can save.
+Detection is heuristic (…*zhes/ces* + a speech verb; *zhes bya
+ba* namings excluded) and everything says so: verify before
+publication.
+
+**Outline (sa bcad)…** — the text's own structural outline,
+extracted from its enumeration grammar (…*la gnyis* opens a
+division; *dang po*, *gnyis pa*… are its headings). The tree is
+machine-derived and heuristic — honestly incomplete where the
+text's phrasing departs from the classic formulas. Click any
+heading to jump the document there; the scan follow-along keeps
+pace, so outline → passage → carving is one click.
+
 **Teachings for this text…** (button). Press it with a document
 loaded and the app sweeps every term the text contains and reports
 where Geshe Michael taught each one — a dialog titled "Teachings
@@ -433,6 +489,13 @@ depends on what the app knows:
   keeps pace. The current line is banded on the image, its
   placement honestly approximate. Folio-to-image mapping comes
   from BDRC's own IIIF manifest labels — nothing is guessed.
+- Sungbum texts: over 500 collected-works texts across some
+  thirty authors now map straight to their own scans (title-
+  matched links; the tier is recorded per text). Where the
+  archive's manifest carries no folio labels (common for
+  collected-works volumes), the viewer POSITION-MAPS your
+  keying's own @folio sequence onto the pages in order — labeled
+  as such, with ◀ ▶ to nudge if the alignment drifts a page.
 - If no catalog mapping exists, the button reads **Find scans on
   BDRC (title search)…** and opens a dialog instead:
   1. The query box is pre-filled with the text's own opening line
@@ -606,9 +669,21 @@ crash-free:
    blank line becomes a stanza gap — off by default, since prose
    pechas flow continuously.
 3. Choose the **print layout**: native folio sheets at true size
-   for a print shop, or **two-up on A4 / US Letter with cut
+   for a print shop; **two-up on A4 / US Letter with cut
    marks** — two folio sides per office sheet, corner ticks to
-   trim on, each side labeled. Office layouts can open with a
+   trim on, each side labeled; **three-up on A4** — three folio
+   strips per sheet, the classic office pecha layout; or the
+   **A5 booklet** — sides imposed in saddle-stitch order, two
+   rotated pages per A4 face with a dashed fold line and the
+   duplex instruction (flip on the short edge) printed on the
+   first sheet, short runs padded with blanks to a multiple of
+   four. Lines justify the **traditional way** (v4, from the
+   W3C/r12a layout rules): a line ending in a tsheg pads with
+   repeated tshegs to the margin, exactly as woodblocks do; and
+   when a lone final syllable wraps onto a new line, its shad is
+   set as the **rin chen spungs shad ༑** — the classical optical
+   signal, recomputed automatically on every reflow. Lines ending in a double shad justify the second classical way: the gap stretches so the closing shad sits flush at the margin. The sbrul
+   shad ༈ travels in an unbreakable block. Office layouts can open with a
    **cover sheet** — a framed label page carrying the title,
    volume letter, folio count, and date — the handling page a
    print partner or a shelf needs.
@@ -652,9 +727,7 @@ PDF prints at 300 dpi.
 
 ### Resuming work
 
-The Overlay restores your session on every normal launch: same
-file, same scroll position, same cursor. Quit mid-sentence and the
-app reopens exactly there.
+The Overlay restores your session on every normal launch: same document, same scroll, same cursor — and now the same highlight: the span that was lit when you left (including which rung of the nest) lights again on reopen. Your position is also autosaved a few seconds after every cursor move, so even a crash or force-quit loses almost nothing.
 
 
 ## Library
@@ -668,6 +741,18 @@ install…** right in the app — confirm, watch the progress, and
 the collection unpacks exactly as a manual install would. Your
 own materials and working folders are never touched; run "Update
 search index" afterward.
+
+**Importing a new data release.** When the HGM data project
+publishes a new release package (a folder holding
+`hgm_dictionary_v*.json.gz`, and optionally a new parallel corpus
+and reverse index), Library → **Maintenance… → Import data
+release…** and choose the folder. The tool shows what it found —
+the newest version of each file wins — copies the files into the
+data area, rebuilds the spine database with the canonical builder,
+and switches to the new spine on the next launch. Nothing is
+switched if the build fails; the app keeps running on the current
+spine throughout. After restarting, use Approval → **Regenerate
+registers** to re-fold the approved layer onto the fresh release.
 
 
 *Where: Read → Library. The preserved canon on your own disk —
@@ -786,12 +871,180 @@ abandons cleanly.
   appears in the output the app warns you the source encoding was
   probably wrong (wrong guesses produce garbage, not silent
   errors).
+- **Maintenance… → Legacy font rescue (py-tiblegenc)** — a second
+  rescue engine covering **28+ encodings through 70 font tables**
+  (the Dedris/Sambhota families and the TibetanMachine range).
+  One-time setup: `bash tools/setup_tiblegenc.sh`. Pick the source
+  font, pick the file, save the rescued Unicode — the engine's own
+  report (including anything it could not map) is shown for
+  review. A rescue is a per-glyph mapping, never blind trust.
 - **Maintenance… → Update search index** — refreshes the full-text index that
   Research → Search's "search the Library" uses. The report counts
   files added / updated / removed / unchanged; a full build
   indexes all 14.1 million lines in under two minutes, and after
   it the Search pane answers from the index instantly.
 
+
+## Files
+
+*Where: Read → Files. A dual-pane file browser built into the
+app — browse your whole disk side by side, and everything you
+open routes straight into the right pane of the Tool.*
+
+### The layout
+
+Two independent browser panels sit side by side, with the **Drop
+Stack** shelf on the far right. Each panel has:
+
+- **Tabs** along its top — press **+** to open another tab at the
+  current location; close any tab with its ✕ (the last tab
+  stays).
+- **Breadcrumbs** under the tabs — the path as clickable
+  segments; click any ancestor to jump straight up to it.
+- **The file listing** — folders always sort above files; click
+  a column header to re-sort. The left panel starts in your
+  Library folder, the right in your home folder.
+
+### Moving around
+
+- **Double-click a folder** to enter it; use the breadcrumbs to
+  climb back out.
+- **Double-click a file** and it opens in the *right place*:
+  Tibetan text files (.txt/.act/.inc/.acip/.md) open in the
+  Overlay; images (.png/.jpg/.tif…) open in the Input pane's
+  scan viewer; everything else opens in its own Mac
+  application.
+- **hidden files** (top-left toggle) shows dotfiles in both
+  panels.
+
+### Copying and moving between the panes
+
+Select files in one panel (⌘-click and ⇧-click select several;
+**quick select** below grabs whole patterns), then use **Copy →
+/ ← Copy / Move → / ← Move**: everything selected goes to the
+folder the *other* panel is showing. Folders copy and move too,
+recursively. Existing files are never overwritten — collisions
+are skipped and reported.
+
+### Quick select
+
+Type a pattern in the **quick select** box (`*.act`, `S01*`, or
+a full regular expression) and press Return: every matching name
+in the active panel is selected at once, ready to copy, move,
+batch-rename, or trash together.
+
+### Batch rename
+
+Select files, press **Batch rename…**: type find/replace (tick
+**regex** for patterns), watch the live preview of every
+old → new name, then Apply. A rename that would collide with an
+existing name is skipped — nothing is ever overwritten.
+
+### Compare panes
+
+**Compare panes…** reports the two shown folders against each
+other: files only on the left, only on the right, and same-name
+files whose sizes differ. (This level only; subfolders are not
+descended.)
+
+### Sync folders
+
+**Sync folders…** synchronizes the two shown folders — built for
+double-keying partners exchanging work. Choose the direction
+(left → right, right → left, or two-way where the newer copy
+wins) and read the **full plan first**: every row says what would
+be copied and whether it replaces an older copy. Nothing moves
+until you press Apply, and sync **never deletes** anything.
+
+### Commander keys (opt-in)
+
+The **Commander keys** toggle turns on the classic
+Total-Commander function keys for those who grew up with them:
+**F3/F4** open · **F5** copy to the other pane · **F6** move ·
+**F7** new folder · **F8** move to Trash. It is strictly opt-in
+and never replaces normal Mac behavior; renaming in place (click
+the name, or F2) works regardless. The choice is remembered.
+
+### Sync browsing (opt-in)
+
+With **sync browsing** on, entering a folder in one panel also
+enters the same-named folder in the other panel when it exists —
+made for walking two parallel trees side by side (an original
+and its double-keyed copy, two editions of a collection).
+
+### Remote connections
+
+The **Connections** button reaches servers: **FTP, FTPS, WebDAV
+(http/https), and SFTP**. Save a profile (name, protocol, host,
+user, start path) — **passwords are never stored**: you are asked
+when you connect, and the answer lives only until the window
+closes. SFTP authenticates with your SSH keys (~/.ssh) instead.
+Once connected: browse folders, double-click to enter,
+**Download into the active pane** — files or **whole folders,
+recursively** — and **Upload the active pane's selected files
+or whole folders** (the folder structure is recreated on the
+server).
+The conflict rule is yours to choose per batch: **skip existing**
+(the default — never touches what you have), **keep both**
+(the new copy arrives renamed), or **overwrite** (explicit,
+never silent). Every operation is written to the Activity log
+with its result, honestly including failures.
+
+### Workspaces
+
+The **Workspaces** menu saves your entire layout — every tab in
+both panels — under a name, and restores it in one click. Keep
+one workspace per project (a text and its scans side by side, a
+double-keying pair, a comparison set) and switch between them
+instantly. Delete from the same menu.
+
+### Finder tags
+
+Right-click any file: the menu shows its **Finder tags**, so a
+tagging system you maintain in the Finder stays visible here.
+(Finder remains the editor for tags.)
+
+### Favorites and Terminal
+
+**Favorites** saves locations: add either panel's current folder,
+jump back with one click, remove from the same menu. **Terminal**
+opens Terminal.app at the active panel's folder (also on every
+file's right-click menu).
+
+### ZIP and TAR archives
+
+Double-click a .zip, .tar, .tgz, or .tar.gz and it opens as a
+browsable list *without extracting anything*. From there: **Extract selected & open**
+(pulls just those entries to a scratch folder and opens them with
+the usual smart routing) or **Extract all into the other pane**
+(never overwrites existing files).
+
+### Tabs remember themselves
+
+Both panels' tabs — and the folder each one was showing — are
+restored exactly on the next launch.
+
+### The Drop Stack
+
+The shelf on the right is for *gathering*: right-click any file
+or folder in a listing and choose **Add to Drop Stack** to park
+it there while you collect a project's materials from all over
+the disk. The stack **persists across sessions** — quit and
+relaunch, and your gathered pile is still there. Double-click a
+stacked item to open it (with the same smart routing);
+right-click for Open / Remove / Clear.
+
+### Right-click, anywhere
+
+Every file row offers: **Add to Drop Stack** · **Open** (smart
+routing) · **Reveal in Finder** · **Open in Terminal here** ·
+**Move to Trash** (recoverable from the macOS Trash, always).
+
+*Phases 1–2 of the file-browser programme (Path Finder ×
+ForkLift × Commander One feature study —
+docs/design/FILE_BROWSER_PLAN.md). Still scheduled: tags,
+workspaces, folder synchronization, ⌘K file targets, and remote
+connections (SFTP/FTP).*
 
 ## Manuscript
 
@@ -958,6 +1211,23 @@ Geshe Michael may already have a rendering.
   300-shloka bampo).
 - **Verse meter** — names the meter of verse passages and flags
   broken lines.
+- **Compose bibliography entry…** now emits the **Diamond Cutter
+  Classics templates exactly**: en dashes in date and folio
+  ranges, house sentence spacing, and — with the **Sanskrit
+  work** checkbox — the full canonical citation down to volume,
+  section, collection, and edition, reproducing the guide's own
+  Dharmakīrti example structurally.
+- **House style check…** — checks your English draft against the
+  **Diamond Cutter Classics style guide's** mechanical rules:
+  straight vs. curly quotes, `--` where an em dash belongs,
+  hyphens in number ranges (en dash territory), ampersands in
+  serial lists, era style (500bc, no space), and the house
+  word-use list (accurate perception, mindstream, the Jewel of
+  Realizations, and the rest). Findings are **flags, never
+  auto-fixes** — the guide itself forbids blind Replace All.
+  Click a finding to jump to it. The full guide lives in Help
+  under the **Style:** chapters, with the editor's original
+  banked in the repository.
 - **Verse reading order** — stanza-by-stanza reading guidance with
   the verb named. Verse does not read line by line: the meter
   forces the poet to displace words and drop understood particles,
@@ -1368,7 +1638,7 @@ one click away. TibetDoc's dictionary window, reborn app-wide.
 8. **Affix-stripping fallback**: type `po'i`. There is no such
    headword, so the pane strips the affixed particle and shows
    *po*, with the note "no entry for 'po'i' — showing **po**
-   (affixed particle stripped)". Nothing is silently substituted —
+   (affixed particle stripped; standalone *ba/bo* folds to *pa/po*; and an unambiguous past/future/imperative verb form folds to its present stem from the CC0 verb bank — every fallback is labeled in green above the results, never silent)". Nothing is silently substituted —
    the note is always there.
 
 ### Reading a result card
@@ -1453,6 +1723,14 @@ On the left side of the pane:
    the right-hand pane, exactly as if you had typed it.
 
 ---
+
+**Local dictionaries (StarDict)** — point Lookup at a folder of
+StarDict dictionaries (.ifo/.idx/.dict, the format GoldenDict
+and most shared Tibetan dictionaries use) and they join your
+results as a clearly labeled **LOCAL DICTIONARIES ·
+USER-SUPPLIED** layer. Queries match as typed, as wylie, and as
+Tibetan script. Their licenses remain their own; nothing is
+redistributed.
 
 ## Sanskrit
 
@@ -1615,6 +1893,13 @@ auto-detected by the shape of what you type:
    list with element-animal names and any intercalary month marked
    ᵢ.
 
+A Tibetan year given in a text converts to a western **month
+span** too: type the year name plus a month — `me bya 6 m3` — and
+every matching year shows that Tibetan month's western start and
+end dates (true Phugpa, the published-almanac standard; proven
+2015–2035, earlier years computed by the same grub-rtsis
+arithmetic with historical practice honestly caveated).
+
 7. **A month's day table.** Type `2012 m3` (or `2012 m3i` for the
    intercalary third month, where one exists) for all thirty lunar
    days with their western dates, chad and lhag days annotated —
@@ -1626,6 +1911,13 @@ date and it refuses rather than guesses — year-level questions
 (directions 1–3) reach all the way back to 1027.
 
 ---
+
+**TISE keys in Convert** — the de-facto Wylie-keyboard
+conventions work in the Input box: `*` joins syllables with the
+non-breaking tsheg (༌) and `_` inserts a non-breaking space —
+useful when preparing text whose line breaks must not fall at
+those joints. The markers are display conveniences; the canonical
+converter never sees them.
 
 ## Analysis
 
@@ -1804,6 +2096,13 @@ master's, 6 when you want the full grammatical accounting.
 ---
 
 ## Drills
+
+**My weak spots…** — the miss taxonomy. Every wrong drill answer
+is filed under the skill it reveals — a particle family, a cloze
+sentence role, a reading-order step, a vocabulary item — and this
+report names them all, with counts and the drill that trains
+each. Wrong answers are never wasted here. The record is local
+(progress.db); nothing leaves your machine.
 
 *Learn → Drills. Exercises that write themselves from the corpus —
 every exercise comes from a real corpus segment, so every answer is
@@ -2198,6 +2497,13 @@ untouched; the combined file is the deliverable.
 ---
 
 # CHAPTER 13 — THE OCR PANE (Input → OCR)
+
+**OCR models…** — download additional BDRC recognition models
+(Lhasa Kangyur, Derge Tengyur, dbu-can book hands, modern typeset
+print; all CC BY-NC 4.0, used with BDRC's permission) and pick
+which one Run OCR and the Input pane's OCR pre-fill use. The
+bundled Woodblock model stays the fallback whenever a pick is
+missing; the switch takes effect on the next recognition run.
 
 **What it's for.** Tibetan text recognition on woodblock page
 images — embedded, proven, and honest about itself. The models are
@@ -2885,7 +3191,11 @@ one list answers from every source at once:
 - **🔁 English reverse** rows (your English → his Tibetan);
 - **🗣 phonetics** rows through the GMR-convention fold;
 - **📜 corpus** rows with the master's published English;
-- **🎧 teaching** rows that open the recording at the timecode.
+- **🎧 teaching** rows that open the recording at the timecode;
+- **📁 file** rows — Library filenames that match what you typed
+  (a catalog number like *TD04156*, a title fragment): Enter
+  opens the file itself — texts in the Overlay, scan images in
+  the Input viewer.
 
 Arrow to a row and press **Enter**: dictionary/reverse/phonetics
 rows land you in Lookup with the search already run; corpus rows
