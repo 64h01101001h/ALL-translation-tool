@@ -354,16 +354,42 @@ implementation is sidelined HERE from this date. What this means:
              folder has not been seen yet — when he supplies it, the
              first job is re-measuring on that material.
 
+         (2a) BIBLIOGRAPHY AUDIT lane — GMR's own "first job"
+             (cataloging session 1, Dec 22 2025, SBceNNuHtRc;
+             docs/research/GMR_CATALOGING_SESSIONS.md): every ACIP
+             number cited in the published Mixed Nuts
+             bibliographies must exist in the database. MEASURED
+             2026-08-19 against the installed library: 349 distinct
+             cited numbers, 298 present, 51 MISSING — evidence
+             banked at data/research/gmr_cataloging/
+             bibliography_audit_missing.json. Build the report into
+             the Catalog pane (per source volume, citation text as
+             evidence). NOTE: installed library ≠ ACIP master tree;
+             ours is a lower bound.
          (2) the QC lanes from the Lon-demo adoptables (9e):
              title-vs-translation mismatch + colophon-aware
              same-title/duplicate detection over the intake set;
          (3) worksheet: the catalog fields per file (start from the
              ACIP identity + Élie CSV fields; consider GMR's
-             23-item physical format when Adam obtains it);
+             23-item physical format when Adam obtains it). FROM
+             SESSION 1: add witness census (how many versions, same
+             works?), witness quality tier (carving > vetted ms >
+             modern single-pass typeset), corruption evidence,
+             input-fidelity note ("faithful reproduction of a
+             corrupt version" is the standard), provenance leads
+             (who to ask, by name, status); and the THREE separate
+             states — number issued (by whom) / input exists /
+             cataloged to a shelf — a work can have a number and
+             exist nowhere;
          (4) routing: accepted identities become PROPOSALS in the
              existing channel (kind: catalog identity), approvals
              export as a candidates file for the data project — the
-             app NEVER writes the catalog;
+             app NEVER writes the catalog. FROM SESSION 1: catalog
+             numbers are issued by ONE human registrar (Nick) — the
+             app never mints numbers; export "needs a number" as a
+             REQUEST. Record who proposed and who approved (GMR's
+             trust gradient: authority earned over a few hundred
+             supervised reps);
          (5) intake -> Library handoff: a cataloged file moves into
              the library tree under its decoded name (move, not
              copy; collision-safe). GROUNDWORK LAID 2026-08-19:
