@@ -195,7 +195,14 @@ mints catalog numbers; the mother copy is never touched.**
       translator-credit patterns), render under SUGGESTED IDENTITY
       with the translator≠author warning. Battery: pins on known
       colophons from library texts.
-- [ ] 8. **Cleanup + provenance lanes**. Line-slash stripper
+- [x] 8. **Cleanup + provenance lanes** — SHIPPED 2026-08-19
+      (suite 51 cleanup_smoke; selftest pin). Slash-corruption
+      detector (>=40% slash-terminated lines) + stripper (cleaned
+      COPY beside the original, mother copy untouched, mid-line
+      slashes preserved); lowercase-run detector; western-pagination
+      typed-book signal. Library measure: 422 sampled, 0 corrupted,
+      0 lowercase, 5 western-paginated flagged. Provenance banner
+      renders in the file panel with the clean-copy anchor. Line-slash stripper
       (detect the Aug-4 diagonal-slash-per-line corruption; report
       count; fix writes a NEW file, mother copy untouched);
       lowercase-run detector; double-space-in-name check;

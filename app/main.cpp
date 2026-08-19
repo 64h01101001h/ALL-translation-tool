@@ -23820,10 +23820,19 @@ public:
             info_->setHtml(splitHtml(lastFile_));
         });
         connect(info_, &QTextBrowser::anchorClicked,
-                [](const QUrl& u) {
+                [this](const QUrl& u) {
                     const QString s2 = u.toString();
                     if (s2.startsWith("catopen:") && g_openAtLine)
                         g_openAtLine(anchorPayload(s2, 8), 0);
+                    else if (s2.startsWith("cleanslash:")) {
+                        const QString p = anchorPayload(s2, 11);
+                        const QString err = writeCleanedCopy(p);
+                        if (err.isEmpty()) showFile(lastFile_);
+                        else
+                            info_->setHtml("<div style='color:#B26B00'>" +
+                                           err.toHtmlEscaped() +
+                                           "</div>");
+                    }
                 });
         connect(auditB, &QPushButton::clicked,
                 [this] { info_->setHtml(bibliographyAuditHtml()); });
@@ -23959,6 +23968,28 @@ public:
             dlg.accept();
         });
         dlg.exec();
+    }
+
+    // The cleanup lane's only write: a CLEANED COPY beside the
+    // original — the mother copy is never touched, an existing name
+    // is refused. Public for the selftest.
+    QString writeCleanedCopy(const QString& path) {
+        QFile f(path);
+        if (!f.open(QIODevice::ReadOnly)) return "unreadable file";
+        const auto [clean, removed] =
+            allcore::stripLineSlashes(f.readAll().toStdString());
+        if (removed == 0) return "no line-slashes to remove";
+        const QFileInfo fi(path);
+        const QString outP = fi.path() + "/" + fi.completeBaseName() +
+                             " CLEANED." + fi.suffix();
+        if (QFile::exists(outP))
+            return "a CLEANED copy already exists - nothing written";
+        QFile out(outP);
+        if (!out.open(QIODevice::WriteOnly))
+            return "could not write the cleaned copy";
+        out.write(QByteArray::fromStdString(clean));
+        lastFile_ = outP;
+        return QString();
     }
 
     // The divergence report. Public for the selftest.
@@ -24550,6 +24581,50 @@ private:
         // the file whose NAME says nothing may still announce itself
         // in its TEXT — read the title page and offer candidates
         if (!inf.recognized) h += identityHtml(path);
+        // provenance banner: what the file's own mechanics say about
+        // its witness (session rules: western pagination = typed =
+        // suspect; lowercase runs = input error; line-slashes =
+        // the cleanup lane)
+        {
+            QFile pf(path);
+            if (pf.open(QIODevice::ReadOnly)) {
+                const QByteArray head4 = pf.read(4096);
+                if (!head4.contains('\0')) {
+                    pf.seek(0);
+                    const auto scan = allcore::scanAcipCleanup(
+                        pf.read(32 * 1024 * 1024).toStdString());
+                    QStringList sig;
+                    if (scan.folio_marks > 0)
+                        sig << QString("%1 folio marks")
+                                   .arg(scan.folio_marks);
+                    if (scan.western_page_marks > 3 &&
+                        scan.folio_marks == 0)
+                        sig << "<span style='color:#B26B00'>western "
+                               "pagination (no folio sides) \u2014 a "
+                               "typed book: suspect, per the house "
+                               "reading</span>";
+                    if (scan.lowercase_runs > 0)
+                        sig << QString("<span style='color:#B26B00'>"
+                                       "%1 lowercase run(s) \u2014 "
+                                       "typed illegally; fix later, "
+                                       "search still works</span>")
+                                   .arg(scan.lowercase_runs);
+                    if (scan.slash_corruption)
+                        sig << QString("<span style='color:#B26B00'>"
+                                       "line-slash corruption (%1 "
+                                       "lines) \u2014 breaks "
+                                       "cross-line search</span> "
+                                       "<a href='cleanslash:%2'>write "
+                                       "a cleaned copy\u2026</a>")
+                                   .arg(scan.slash_terminated)
+                                   .arg(anchorEnc(path));
+                    if (!sig.isEmpty())
+                        h += "<div style='color:#777;font-size:11px;"
+                             "margin:4px 0'>PROVENANCE: " +
+                             sig.join(" \u00b7 ") + "</div>";
+                }
+            }
+        }
         // the ENTIRE text (Adam, 2026-08-19: the panel must not
         // truncate). Guards, because an intake folder also holds
         // scans/PDFs/models: a binary file gets an honest note, not
@@ -27896,6 +27971,33 @@ int main(int argc, char** argv) {
                                "files and changes nothing")
                            .arg(diffOk ? "PASS" : "FAIL");
                 if (!diffOk) ++fails;
+                QDir(wd).removeRecursively();
+            }
+            {   // the cleanup lane: a slash-corrupted probe shows the
+                // provenance banner, the cleaned copy is a sibling,
+                // the mother copy is untouched
+                QDir().mkpath(wd);
+                const QString cp = wd + "/slashy.txt";
+                { QFile f(cp);
+                  f.open(QIODevice::WriteOnly);
+                  for (int i = 0; i < 30; ++i)
+                      f.write("SEMS CAN THAMS CAD BDE BA DANG /\n");
+                  f.write("LDAN PAR GYUR CIG ,\n"); }
+                catalogPane->showFilePublic(cp);
+                const bool banner =
+                    catalogPane->infoText().contains("line-slash") &&
+                    catalogPane->infoText().contains("cleaned copy");
+                const QString err = catalogPane->writeCleanedCopy(cp);
+                QFile orig(cp), cleaned(wd + "/slashy CLEANED.txt");
+                const bool cleanedOk =
+                    err.isEmpty() && cleaned.exists() &&
+                    orig.exists() &&
+                    orig.size() > cleaned.size();
+                log << QString("  [%1] Catalog: slash corruption is "
+                               "bannered and cleaned into a COPY - "
+                               "the mother copy untouched")
+                           .arg(banner && cleanedOk ? "PASS" : "FAIL");
+                if (!(banner && cleanedOk)) ++fails;
                 QDir(wd).removeRecursively();
             }
             {   // GMR's job #1 must render as a real report — the

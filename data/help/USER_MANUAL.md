@@ -56,7 +56,8 @@ app: Help menu → ALL Tool Help & Tutorials.*
   - 14.9 Translate title — the attestation workbench
   - 14.10 Compare trees — the divergence audit
   - 14.11 Tohoku numbers and colophon candidates
-  - 14.12 What the workflow will do next
+  - 14.12 Provenance banner and the cleanup lane
+  - 14.13 What the workflow will do next
 - **CHAPTER 15 — THE PROPOSE PANE (Community → Propose)**
   - 15.1 One-time identity setup
   - 15.2 Making a proposal
@@ -2991,7 +2992,30 @@ translator's line to find "composed by"). Measured on the library:
 about 88% of real texts yield at least one candidate clause. The
 machine locates the evidence; reading it is the cataloger's work.
 
-## 14.12 What the workflow will do next
+## 14.12 Provenance banner and the cleanup lane
+
+Clicking a file now also reads what the file's own mechanics say
+about its witness, in a small PROVENANCE line:
+
+- **folio marks** counted — a pecha input carries @NNNA/@NNNB
+  sides;
+- **western pagination** (page marks with no folio side) — the
+  session-8 reading applies and is printed: *a typed book: suspect*;
+- **lowercase runs** — "somebody typed in lowercase letters
+  illegally"; search still works, fix later;
+- **line-slash corruption** — the case from the August 4 session: a
+  slash inserted between every line breaks cross-line search. The
+  banner counts the slashed lines and offers **write a cleaned
+  copy…** — the one write this lane can do. The cleaned file lands
+  *beside* the original as `NAME CLEANED.ext`; the mother copy is
+  never touched, and an existing cleaned copy is refused rather
+  than overwritten. Mid-line slashes (real text) are left alone.
+
+Measured on the installed library: 0 slash-corrupted files (the
+lane exists for intake material), 0 lowercase runs, and 5
+western-paginated typed books flagged — the signal works.
+
+## 14.13 What the workflow will do next
 
 This is the first working step of a longer workflow. Still to come,
 in order: quality-control lanes (title-versus-translation mismatch,

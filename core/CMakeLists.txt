@@ -261,6 +261,11 @@ add_test(NAME abbr_smoke
                  ${CMAKE_SOURCE_DIR}/data/spellcheck
                  ${CMAKE_SOURCE_DIR}/data/abbreviations/rkts_abb.csv)
 
+add_executable(cleanup_smoke tests/cleanup_smoke.cpp)
+target_link_libraries(cleanup_smoke PRIVATE allcore)
+add_test(NAME cleanup_smoke
+         COMMAND cleanup_smoke ${CMAKE_SOURCE_DIR}/library)
+
 add_executable(tree_diff_smoke tests/tree_diff_smoke.cpp)
 target_link_libraries(tree_diff_smoke PRIVATE allcore)
 add_test(NAME tree_diff_smoke

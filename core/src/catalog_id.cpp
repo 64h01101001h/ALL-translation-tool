@@ -531,3 +531,74 @@ std::vector<ColophonSpan> findColophonCandidates(const std::string& doc,
 }
 
 }  // namespace allcore
+
+namespace allcore {
+
+CleanupScan scanAcipCleanup(const std::string& body) {
+    CleanupScan r;
+    int lineLen = 0, lastNonWs = 0;
+    int lcRun = 0;
+    for (size_t i = 0; i <= body.size(); ++i) {
+        const char c = i < body.size() ? body[i] : '\n';
+        if (c == '\n') {
+            if (lineLen > 0) {
+                ++r.total_lines;
+                if (lastNonWs == '/') ++r.slash_terminated;
+            }
+            lineLen = 0;
+            lastNonWs = 0;
+        } else {
+            ++lineLen;
+            if (c != ' ' && c != '\r' && c != '\t') lastNonWs = c;
+        }
+        if (c >= 'a' && c <= 'z') {
+            if (++lcRun == 20) ++r.lowercase_runs;
+        } else if (c < 'a' || c > 'z') {
+            lcRun = 0;
+        }
+        if (c == '@') {
+            size_t j = i + 1;
+            while (j < body.size() && body[j] == ' ') ++j;
+            size_t d = j;
+            while (d < body.size() &&
+                   body[d] >= '0' && body[d] <= '9')
+                ++d;
+            if (d > j) {
+                const char side =
+                    d < body.size()
+                        ? static_cast<char>(std::toupper(
+                              static_cast<unsigned char>(body[d])))
+                        : ' ';
+                if (side == 'A' || side == 'B') ++r.folio_marks;
+                else ++r.western_page_marks;
+            }
+        }
+    }
+    r.slash_corruption =
+        r.total_lines >= 10 &&
+        r.slash_terminated * 100 >= r.total_lines * 40;
+    return r;
+}
+
+std::pair<std::string, int> stripLineSlashes(const std::string& body) {
+    std::string out;
+    out.reserve(body.size());
+    int removed = 0;
+    for (size_t i = 0; i < body.size(); ++i) {
+        if (body[i] == '/') {
+            // a line-terminating slash: only whitespace to the newline
+            size_t j = i + 1;
+            while (j < body.size() &&
+                   (body[j] == ' ' || body[j] == '\r'))
+                ++j;
+            if (j >= body.size() || body[j] == '\n') {
+                ++removed;
+                continue;   // drop the slash, keep the newline
+            }
+        }
+        out.push_back(body[i]);
+    }
+    return {out, removed};
+}
+
+}  // namespace allcore

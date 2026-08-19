@@ -149,4 +149,27 @@ struct ColophonSpan {
 std::vector<ColophonSpan> findColophonCandidates(const std::string& doc,
                                                  int max_spans = 4);
 
+// ---- cleanup + provenance scan ---------------------------------------------
+// Session Aug 4: "somebody put a slash between each line [of Jamyang
+// Shepa's Abhidharma commentary]… you can't search across the lines
+// because there's an extra character there… I'd like to clean it up."
+// Plus the standing provenance signals: western-style pagination (page
+// marks with no folio A/B side = a typed book = suspect), and lowercase
+// runs ("somebody typed in lowercase letters illegally").
+struct CleanupScan {
+    int total_lines = 0;
+    int slash_terminated = 0;     // lines ending in '/'
+    bool slash_corruption = false;   // pervasive (>=40% of real lines)
+    int lowercase_runs = 0;       // runs of 20+ lowercase letters
+    int folio_marks = 0;          // @NNN[AB]
+    int western_page_marks = 0;   // @NNN with no A/B side
+};
+CleanupScan scanAcipCleanup(const std::string& body);
+
+// Remove the line-terminating slashes (only sensible when the scan says
+// the corruption is pervasive). Returns the cleaned text and how many
+// slashes were removed. NEVER writes anything — the caller decides
+// where a cleaned COPY goes; the mother copy is untouched by design.
+std::pair<std::string, int> stripLineSlashes(const std::string& body);
+
 }  // namespace allcore
