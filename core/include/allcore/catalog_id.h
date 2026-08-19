@@ -129,4 +129,24 @@ struct SplitCandidate {
 // display it as segment 1, not as a cut.
 std::vector<SplitCandidate> suggestVolumeSplits(const std::string& doc);
 
+// ---- colophon finder --------------------------------------------------------
+// The author-determination step from the sessions: "It is our duty to
+// find the author" — from the COLOPHON, never assumed from the
+// collection, never copied from a catalog without verification; and the
+// translator's credit at the very end is NOT the author (session 8).
+// This locates candidate colophon clauses near a text's end and labels
+// what each one is evidence OF. It identifies nobody itself.
+struct ColophonSpan {
+    size_t offset = 0;      // byte offset in the document
+    std::string text;       // the clause, verbatim (bounded)
+    std::string kind;       // "composition" | "translation-credit"
+    std::string cue;        // the word that triggered it (SBYAR, BSGYUR…)
+};
+
+// Scan the tail of a document for clauses carrying composition verbs
+// (SBYAR / MDZAD / BRIS / BRTZAMS / BKOD) or translation credits
+// (BSGYUR / LO TS'A). Nearest the end first.
+std::vector<ColophonSpan> findColophonCandidates(const std::string& doc,
+                                                 int max_spans = 4);
+
 }  // namespace allcore

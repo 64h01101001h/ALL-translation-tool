@@ -178,7 +178,15 @@ mints catalog numbers; the mother copy is never touched.**
       trees…" button using the two browsers' roots; report in the
       evidence panel; the Files pane's compare machinery may be
       reusable — check before writing new.
-- [ ] 7. **Tohoku-first + colophon finder in the identity lane**.
+- [x] 7. **Tohoku-first + colophon finder** — SHIPPED 2026-08-19
+      (extends suite 44 catalog_id_smoke; strengthened selftest
+      pin). KD/TD candidates carry "Tohoku N is the number to use"
+      (KD/TD ACIP numbers ARE Tohoku, per the BDRC-linking design);
+      colophon finder scans the tail for composition verbs (SBYAR/
+      MDZAD/BRIS/BRTZAMS/BKOD) vs translation credits (BSGYUR/LO
+      TS'A), nearest-end first, translator-is-not-the-author
+      labeled; measured 87.5% of sampled library texts yield a
+      candidate clause. Original spec: **Tohoku-first + colophon finder in the identity lane**.
       Identity candidates gain a Tohoku cross-reference where our
       concordances (bdrc_toh_labels, thl_dege_concordance,
       ekangyur/etengyur indexes) know the work: "Tohoku N — if

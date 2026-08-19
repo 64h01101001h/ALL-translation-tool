@@ -24442,8 +24442,54 @@ public:
                                    c.bank_syllables))
                      .arg(QString::fromStdString(c.basis))
                      .arg(QString::fromStdString(c.source));
+            // Tohoku-first (session 4): KD/TD ACIP numbers ARE Tohoku
+            // numbers — an existing Tohoku number is THE number to use
+            const QString key = QString::fromStdString(c.key).toUpper();
+            if (key.startsWith("KD") || key.startsWith("TD")) {
+                const QString digits =
+                    key.mid(2).remove(QRegularExpression("[^0-9]"));
+                if (!digits.isEmpty())
+                    h += QString("<tr><td></td><td></td>"
+                                 "<td style='color:#2E5D8C;font-size:"
+                                 "11px'>Tohoku %1 \u2014 if this "
+                                 "identification is right, the Tohoku "
+                                 "number is the number to use "
+                                 "(session-4 rule); no new number "
+                                 "needed from the registrar.</td></tr>")
+                             .arg(digits.toInt());
+            }
         }
         h += "</table>";
+        // the author-determination step: colophon candidates from the
+        // text's own tail, labeled for what they are evidence OF
+        QFile cf(path);
+        if (cf.open(QIODevice::ReadOnly)) {
+            const auto spans = allcore::findColophonCandidates(
+                cf.readAll().toStdString());
+            if (!spans.empty()) {
+                h += "<div style='margin-top:8px;color:#8C2F2B'><b>"
+                     "COLOPHON CANDIDATES</b> <span style='color:#777'>"
+                     "\u2014 the author comes from the colophon, never "
+                     "from the collection or a catalog. A translation "
+                     "credit names the translator, NOT the author."
+                     "</span></div>";
+                for (const auto& sp : spans) {
+                    h += QString("<div style='margin-top:4px'><span "
+                                 "style='color:%1'>[%2]</span> <span "
+                                 "style='font-family:Palatino'>%3</span>"
+                                 "</div>")
+                             .arg(sp.kind == "composition" ? "#2E7D32"
+                                                           : "#B26B00")
+                             .arg(sp.kind == "composition"
+                                      ? "composition"
+                                      : "translation credit \u2014 "
+                                        "not the author")
+                             .arg(QString::fromStdString(sp.text)
+                                      .simplified()
+                                      .toHtmlEscaped());
+                }
+            }
+        }
         return h;
     }
     // built once, from the installed library's filenames plus the
@@ -27616,7 +27662,10 @@ int main(int argc, char** argv) {
               f.write("@85A #, ,RGYA GAR SKAD DU, YA M'A RI YANTRA "
                       "AA BA LI,\nBOD SKAD DU, GSHIN RJE GSHED KYI "
                       "'KHRUL 'KHOR GYI PHRENG BA, BCOM\nLDAN 'DAS "
-                      "GSHIN RJE GSHED LA PHYAG 'TSAL LO, ,\n"); }
+                      "GSHIN RJE GSHED LA PHYAG 'TSAL LO, ,\n"
+                      "SNGAGS 'CHANG DPAL LDAN GYIS BRAG DKAR DU "
+                      "SBYAR BA'O,,LO TS'A BA CHEN PO ZHIG GIS "
+                      "BSGYUR BA'O,,"); }
             catalogPane->scanFolder(wd);
             const bool ok = catalogPane->fileCount() == 3 &&
                             catalogPane->recognizedCount() == 1 &&
@@ -27635,6 +27684,9 @@ int main(int argc, char** argv) {
                     h.contains("SUGGESTED IDENTITY") &&
                     h.contains("GSHIN RJE GSHED KYI") &&
                     h.contains("TD02022") &&
+                    h.contains("Tohoku 2022") &&
+                    h.contains("COLOPHON CANDIDATES") &&
+                    h.contains("not the author") &&
                     h.contains("not catalog entries");
                 log << QString("  [%1] Catalog: title page in an "
                                "uncataloged file yields an "

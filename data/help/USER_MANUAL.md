@@ -55,7 +55,8 @@ app: Help menu → ALL Tool Help & Tutorials.*
   - 14.8 Generate catalog list — the ASCII inventory
   - 14.9 Translate title — the attestation workbench
   - 14.10 Compare trees — the divergence audit
-  - 14.11 What the workflow will do next
+  - 14.11 Tohoku numbers and colophon candidates
+  - 14.12 What the workflow will do next
 - **CHAPTER 15 — THE PROPOSE PANE (Community → Propose)**
   - 15.1 One-time identity setup
   - 15.2 Making a proposal
@@ -2966,7 +2967,31 @@ of a second), and the list tells a cataloger where to look; confirm
 any difference by opening the files. The comparison changes
 nothing.
 
-## 14.11 What the workflow will do next
+## 14.11 Tohoku numbers and colophon candidates
+
+Two refinements ride inside the suggested-identity card:
+
+**Tohoku first.** The house rule for numbering (session 4): check
+the Tohoku catalog before issuing anything — "if they have assigned
+one, we use their catalog number." ACIP's KD (Derge Kangyur) and TD
+(Derge Tengyur) numbers *are* Tohoku numbers, so when a candidate
+identification is a KD or TD work, the card says so: *Tohoku N — if
+this identification is right, the Tohoku number is the number to
+use; no new number needed from the registrar.*
+
+**Colophon candidates.** The author comes from the colophon — never
+assumed from the collection, never copied from a catalog without
+verification. For an uncataloged file the card now scans the text's
+tail for clauses carrying composition verbs (SBYAR, MDZAD, BRIS,
+BRTZAMS…) or translation credits (BSGYUR, LO TSĀ BA), and lists
+them nearest-the-end first, labeled for what each is evidence of.
+The label on a translation credit is blunt on purpose: *the
+translator is NOT the author* (session 8's warning — read past the
+translator's line to find "composed by"). Measured on the library:
+about 88% of real texts yield at least one candidate clause. The
+machine locates the evidence; reading it is the cataloger's work.
+
+## 14.12 What the workflow will do next
 
 This is the first working step of a longer workflow. Still to come,
 in order: quality-control lanes (title-versus-translation mismatch,

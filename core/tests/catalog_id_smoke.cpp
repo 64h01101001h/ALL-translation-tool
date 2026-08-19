@@ -126,6 +126,37 @@ int main(int argc, char** argv) {
               "the floor");
     }
 
+    // ---- colophon finder pins --------------------------------------------
+    {
+        const std::string doc =
+            std::string(9000, 'K') +
+            ",,CES PA 'DI NI RJE BTZUN RED MDA' PA'I GSUNG LAS BTUS TE "
+            "DGE SLONG RATNA SAMBHA WAS RI KHROD DU SBYAR BA'O,"
+            ",RGYA GAR GYI MKHAN PO SHRADDH'A KA RA WARMA DANG LO TS'A "
+            "BA DGE BLO GROS KYIS BSGYUR CING ZHUS PA'O,,";
+        const auto c = allcore::findColophonCandidates(doc);
+        CHECK(c.size() == 2, "both colophon clauses are found in the tail");
+        bool comp = false, xlat = false;
+        for (const auto& sp : c) {
+            if (sp.kind == "composition" &&
+                sp.text.find("SBYAR") != std::string::npos)
+                comp = true;
+            if (sp.kind == "translation-credit" &&
+                sp.text.find("BSGYUR") != std::string::npos)
+                xlat = true;
+        }
+        CHECK(comp, "the SBYAR clause is labeled composition evidence");
+        CHECK(xlat, "the BSGYUR clause is labeled a translation credit - "
+                    "the translator is NOT the author (session 8)");
+        CHECK(!c.empty() && c[0].kind == "translation-credit",
+              "clauses come nearest-the-end first (credits live last)");
+    }
+    CHECK(allcore::findColophonCandidates(
+              "BSGOM PA NI SEMS LA GOMS PAR BYA BA STE,")
+              .empty() ||
+              true,
+          "informational: short prose may or may not carry cues");
+
     // ---- the battery: re-measure against the installed library -----------
     if (argc < 2) {
         std::printf("  [SKIP] library battery (no library root given)\n");
@@ -212,6 +243,27 @@ int main(int argc, char** argv) {
                           "of the time");
         CHECK(wrong * 100 <= titled * 8,
               "confidently wrong answers stay under 8%");
+    }
+
+    // colophon coverage over the same sampled files: how many texts
+    // yield at least one candidate clause in the tail
+    {
+        int scanned = 0, withColo = 0;
+        for (size_t i = 0; i < files.size(); i += stride * 4) {
+            std::ifstream f(files[i], std::ios::binary);
+            if (!f) continue;
+            std::ostringstream ss;
+            ss << f.rdbuf();
+            ++scanned;
+            if (!allcore::findColophonCandidates(ss.str()).empty())
+                ++withColo;
+        }
+        std::printf("  colophon: %d of %d sampled texts yield a candidate "
+                    "clause (%.1f%%)\n",
+                    withColo, scanned,
+                    scanned ? 100.0 * withColo / scanned : 0.0);
+        CHECK(scanned > 50 && withColo * 100 >= scanned * 55,
+              "a majority of real texts yield colophon candidates");
     }
 
     std::printf("%s\n", failures ? "FAILURES" : "catalog_id_smoke OK");

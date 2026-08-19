@@ -472,3 +472,62 @@ std::vector<SplitCandidate> suggestVolumeSplits(const std::string& doc) {
 }
 
 }  // namespace allcore
+
+namespace allcore {
+
+std::vector<ColophonSpan> findColophonCandidates(const std::string& doc,
+                                                 int max_spans) {
+    std::vector<ColophonSpan> out;
+    // the colophon lives in the tail; 8 KB is generous for any real one
+    const size_t tail = doc.size() > 8192 ? doc.size() - 8192 : 0;
+    std::string up = doc.substr(tail);
+    for (char& c : up)
+        c = static_cast<char>(std::toupper(static_cast<unsigned char>(c)));
+
+    // clause boundaries: the double shad ",," and its spaced form ", ,"
+    std::vector<size_t> bounds{0};
+    for (size_t i = 0; i + 1 < up.size(); ++i) {
+        if (up[i] == ',' &&
+            (up[i + 1] == ',' ||
+             (up[i + 1] == ' ' && i + 2 < up.size() && up[i + 2] == ',')))
+            bounds.push_back(i + 1);
+    }
+    bounds.push_back(up.size());
+
+    struct Cue { const char* word; const char* kind; };
+    static const Cue kCues[] = {
+        {"SBYAR", "composition"},   {"MDZAD", "composition"},
+        {"BRIS", "composition"},    {"BRTZAMS", "composition"},
+        {"BKOD PA", "composition"},
+        {"BSGYUR", "translation-credit"},
+        {"LO TS'A", "translation-credit"},
+        {"LOTS'A", "translation-credit"},
+    };
+
+    // walk clauses from the END backwards — the credits live last
+    for (size_t b = bounds.size() - 1;
+         b >= 1 && static_cast<int>(out.size()) < max_spans; --b) {
+        const size_t from = bounds[b - 1], to = bounds[b];
+        if (to <= from || to - from < 12) continue;
+        const std::string clause = up.substr(from, to - from);
+        for (const auto& cue : kCues) {
+            if (clause.find(cue.word) == std::string::npos) continue;
+            ColophonSpan s;
+            s.offset = tail + from;
+            // verbatim from the original, bounded for display
+            const size_t cap = std::min<size_t>(to - from, 420);
+            s.text = doc.substr(tail + from, cap);
+            // trim leading punctuation/whitespace
+            const size_t a2 = s.text.find_first_not_of(" ,\n\r*#`");
+            if (a2 != std::string::npos && a2 > 0) s.text.erase(0, a2);
+            s.kind = cue.kind;
+            s.cue = cue.word;
+            out.push_back(std::move(s));
+            break;   // one cue per clause is enough evidence
+        }
+        if (b == 1) break;
+    }
+    return out;
+}
+
+}  // namespace allcore
