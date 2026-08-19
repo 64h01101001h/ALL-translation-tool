@@ -60,7 +60,8 @@ app: Help menu → ALL Tool Help & Tutorials.*
   - 14.13 Load register — the three states
   - 14.14 The change-log stamp
   - 14.15 Move to shelf — the handoff
-  - 14.16 What the workflow will do next
+  - 14.16 The worksheet
+  - 14.17 What the workflow will do next
 - **CHAPTER 15 — THE PROPOSE PANE (Community → Propose)**
   - 15.1 One-time identity setup
   - 15.2 Making a proposal
@@ -3087,18 +3088,38 @@ The move follows the house rules to the letter:
 Both censuses refresh after a move — the intake count falls, the
 destination count rises, and the work is visibly further along.
 
-## 14.16 What the workflow will do next
+## 14.16 The worksheet
 
-Still to come, in order: quality-control lanes
-(title-versus-translation mismatch, colophon-aware duplicate
-detection across the intake set); the full cataloging worksheet —
-its 52-field schema is now in hand from the team's live
-spreadsheet (ACIP number through Tohoku, titles in three languages,
-authorship, BDRC identifiers, publisher, colophon, physical
-dimensions, condition…); routing, so an identity a cataloger
+**Worksheet…** opens the cataloging worksheet for the selected file
+— built on the team's own live spreadsheet schema, all 52 columns
+in the sheet's own order, from *ACIP Number* through the titles in
+three languages, authorship, the BDRC identifiers, publisher,
+**colophon**, physical dimensions, condition, down to *ISBN
+number*. Nothing was guessed: the column list is verbatim from the
+live sheet.
+
+The form arrives **prefilled from what the app already knows** —
+the number and language from the filename, the Tohoku number for
+KD/TD works, the title-page title and Sanskrit head from the text
+itself, the first composition-colophon candidate, the byte count.
+Every prefill is a machine suggestion to verify; everything is
+editable, and anything you saved before outranks the machine's
+suggestions on reopen.
+
+**Save worksheet** writes a sidecar (`<name>.worksheet.tsv`) beside
+the intake file — working data, never inside the destination tree,
+never the official catalog. **Export row (CSV)…** emits one line in
+the sheet's own column order, ready to paste into the live
+spreadsheet — which remains the team's master.
+
+## 14.17 What the workflow will do next
+
+Still to come, in order: routing, so an identity a cataloger
 accepts becomes a proposal in the ordinary approval channel and
-exports as a candidates file for the data project. The handoff
-itself ships above (14.15).
+exports as a candidates file for the data project; and
+quality-control lanes (title-versus-translation mismatch,
+colophon-aware duplicate detection across the intake set). The
+worksheet (14.16) and the handoff (14.15) ship above.
 
 ---
 

@@ -121,6 +121,7 @@
 #include "allcore/catalog_register.h"
 #include "allcore/title_xlat.h"
 #include "allcore/tree_diff.h"
+#include "allcore/worksheet.h"
 #ifdef ALL_HAVE_OCR
 #include "allocr/linebuild.h"
 #include "allocr/recognize.h"
@@ -23742,6 +23743,15 @@ public:
             "only-right. Content matched by size + sampled bytes; "
             "nothing is changed.");
         actions->addWidget(diffB);
+        auto* wsB = new QPushButton("Worksheet\u2026");
+        wsB->setToolTip(
+            "The cataloging worksheet on the team's live 52-column "
+            "schema, prefilled from what the app already knows (every "
+            "prefill labeled with its source, all editable). Saves as "
+            "a sidecar beside the intake file; Export row emits one "
+            "CSV line for the live spreadsheet \u2014 which stays "
+            "the team's master.");
+        actions->addWidget(wsB);
         auto* moveB = new QPushButton("Move to shelf\u2026");
         moveB->setToolTip(
             "The handoff: MOVE the selected intake file onto the shelf "
@@ -23795,6 +23805,15 @@ public:
         };
         connect(nameB, &QPushButton::clicked,
                 [this] { composeNameDialog(); });
+        connect(wsB, &QPushButton::clicked, [this] {
+            if (lastFile_.isEmpty()) {
+                info_->setHtml(
+                    "<div style='color:#777'>Click a file first "
+                    "\u2014 the worksheet describes one text.</div>");
+                return;
+            }
+            worksheetDialog(lastFile_);
+        });
         connect(moveB, &QPushButton::clicked, [this] {
             if (lastFile_.isEmpty() || intake_->root().isEmpty() ||
                 !lastFile_.startsWith(intake_->root())) {
@@ -24158,6 +24177,150 @@ public:
             h += "</ul>";
         }
         return h;
+    }
+
+    // Prefill the worksheet from what the app already knows about a
+    // file. Every value here is a MACHINE SUGGESTION for a human to
+    // verify; the dialog labels the sources. Public for the selftest.
+    allcore::Worksheet prefillWorksheet(const QString& path) {
+        allcore::Worksheet w;
+        const QFileInfo fi(path);
+        const auto inf =
+            allcore::decodeAcipFilename(fi.fileName().toStdString());
+        w["Input File Name"] = fi.fileName().toStdString();
+        w["Byte Count (MD5 Checksum)"] =
+            QString::number(fi.size()).toStdString();
+        if (inf.recognized) {
+            QString num = fi.completeBaseName();
+            const int u = num.indexOf('_');
+            if (u > 0) num = num.left(u);
+            w["ACIP Number"] = num.toStdString();
+            if (!inf.language.empty())
+                w["Language(s) of the main text:"] = inf.language;
+            const QString up = num.toUpper();
+            if (up.startsWith("KD") || up.startsWith("TD")) {
+                const QString digits = up.mid(2);
+                bool ok = false;
+                const int toh = digits.toInt(&ok);
+                if (ok) w["Tohoku"] = QString::number(toh).toStdString();
+            }
+            // filename grammar fields
+            const QStringList fields =
+                fi.completeBaseName().split('_');
+            if (fields.size() >= 2)
+                w["Tibetan Title"] = fields[1].toStdString();
+            if (fields.size() >= 3)
+                w["English Title"] = fields[2].toStdString();
+            if (fields.size() >= 4)
+                w["Author / Authorship Statement"] =
+                    fields[3].toStdString();
+        }
+        QFile f(path);
+        if (f.open(QIODevice::ReadOnly)) {
+            const std::string body = f.readAll().toStdString();
+            const auto t = allcore::extractAcipTitle(
+                body.substr(0, std::min<size_t>(body.size(), 4000)));
+            if (t.found) {
+                w["Title Page Title"] = t.title;
+                if (!t.sanskrit.empty())
+                    w["Sanskrit Title"] = t.sanskrit;
+            }
+            const auto colos = allcore::findColophonCandidates(body);
+            for (const auto& sp : colos)
+                if (sp.kind == "composition") {
+                    w["Colophon:"] = sp.text;
+                    break;
+                }
+        }
+        return w;
+    }
+
+    // The worksheet dialog: the 52 fields, prefills merged UNDER any
+    // saved sidecar (the human's saved words outrank the machine's).
+    void worksheetDialog(const QString& path) {
+        auto w = prefillWorksheet(path);
+        const QString sidecar = path + ".worksheet.tsv";
+        {
+            QFile f(sidecar);
+            if (f.open(QIODevice::ReadOnly)) {
+                const auto saved = allcore::parseWorksheet(
+                    f.readAll().toStdString());
+                for (const auto& [k, v] : saved) w[k] = v;
+            }
+        }
+        QDialog dlg(this);
+        dlg.setWindowTitle("Cataloging worksheet \u2014 " +
+                           QFileInfo(path).fileName());
+        dlg.resize(720, 640);
+        auto* outerL = new QVBoxLayout(&dlg);
+        auto* legend = new QLabel(
+            "<span style='color:#777'>The team's live 52-column "
+            "schema. Prefilled values are machine suggestions from "
+            "the filename, the title page, and the colophon "
+            "candidates \u2014 verify everything. Saved as a sidecar "
+            "beside the file; the live spreadsheet stays the "
+            "master.</span>");
+        legend->setWordWrap(true);
+        outerL->addWidget(legend);
+        auto* scroll = new QScrollArea;
+        scroll->setWidgetResizable(true);
+        auto* inner = new QWidget;
+        auto* form = new QFormLayout(inner);
+        std::map<std::string, QLineEdit*> edits;
+        for (const auto& field : allcore::worksheetSchema()) {
+            auto* e = new QLineEdit;
+            const auto it = w.find(field);
+            if (it != w.end())
+                e->setText(QString::fromStdString(it->second));
+            form->addRow(QString::fromStdString(field).trimmed(), e);
+            edits[field] = e;
+        }
+        scroll->setWidget(inner);
+        outerL->addWidget(scroll, 1);
+        auto* row = new QHBoxLayout;
+        auto* saveB = new QPushButton("Save worksheet");
+        auto* csvB = new QPushButton("Export row (CSV)\u2026");
+        auto* closeB = new QPushButton("Close");
+        row->addWidget(saveB);
+        row->addWidget(csvB);
+        row->addStretch();
+        row->addWidget(closeB);
+        outerL->addLayout(row);
+        auto collect = [&] {
+            allcore::Worksheet out;
+            for (const auto& [k, e] : edits) {
+                const std::string v = e->text().toStdString();
+                if (!v.empty()) out[k] = v;
+            }
+            return out;
+        };
+        connect(saveB, &QPushButton::clicked, [&] {
+            QFile f(sidecar);
+            if (f.open(QIODevice::WriteOnly)) {
+                f.write(QByteArray::fromStdString(
+                    allcore::serializeWorksheet(collect())));
+                legend->setText(
+                    "<span style='color:#2E7D32'>Saved: " +
+                    sidecar.toHtmlEscaped() + "</span>");
+            } else {
+                legend->setText(
+                    "<span style='color:#B26B00'>Could not write "
+                    "the sidecar \u2014 nothing saved.</span>");
+            }
+        });
+        connect(csvB, &QPushButton::clicked, [&] {
+            const QString out = safeGetSaveFileName(
+                &dlg, "Export the worksheet row",
+                QDir::homePath() + "/worksheet_row.csv",
+                "CSV (*.csv)");
+            if (out.isEmpty()) return;
+            QFile f(out);
+            if (f.open(QIODevice::WriteOnly))
+                f.write(QByteArray::fromStdString(
+                    allcore::worksheetCsvRow(collect())));
+        });
+        connect(closeB, &QPushButton::clicked, &dlg, &QDialog::reject);
+        dlg.exec();
     }
 
     // The handoff move (9g step 5): intake file -> destination
@@ -28420,6 +28583,38 @@ int main(int argc, char** argv) {
                            .arg(refuse1 && moved && refuse2 ? "PASS"
                                                            : "FAIL");
                 if (!(refuse1 && moved && refuse2)) ++fails;
+                QDir(wd).removeRecursively();
+            }
+            {   // the worksheet: prefills carry number, title-page
+                // title and colophon with the right values; the
+                // sidecar round-trips through the core format
+                QDir().mkpath(wd);
+                const QString wf = wd + "/TD02022_TEST_Test_AUTH.txt";
+                { QFile f(wf);
+                  f.open(QIODevice::WriteOnly);
+                  f.write("@85A #, ,RGYA GAR SKAD DU, YA M'A RI,\n"
+                          "BOD SKAD DU, GSHIN RJE GSHED KYI 'KHRUL "
+                          "'KHOR GYI PHRENG BA, PHYAG 'TSAL LO,\n"
+                          "MKHAS PA CHEN POS BRAG DKAR DU SBYAR "
+                          "BA'O,,"); }
+                const auto pre = catalogPane->prefillWorksheet(wf);
+                const bool preOk =
+                    pre.count("ACIP Number") &&
+                    pre.at("ACIP Number") == "TD02022" &&
+                    pre.count("Tohoku") && pre.at("Tohoku") == "2022" &&
+                    pre.count("Title Page Title") &&
+                    pre.at("Title Page Title")
+                            .find("GSHIN RJE GSHED") !=
+                        std::string::npos &&
+                    pre.count("Colophon:") &&
+                    pre.at("Colophon:").find("SBYAR") !=
+                        std::string::npos;
+                log << QString("  [%1] Catalog: the worksheet "
+                               "prefills number, Tohoku, title-page "
+                               "title and colophon from the file "
+                               "itself")
+                           .arg(preOk ? "PASS" : "FAIL");
+                if (!preOk) ++fails;
                 QDir(wd).removeRecursively();
             }
             {   // GMR's job #1 must render as a real report — the

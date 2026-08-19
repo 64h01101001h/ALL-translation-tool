@@ -276,7 +276,13 @@ mints catalog numbers; the mother copy is never touched.**
       move-plan logic if any (mostly app); selftest pins: move
       happens, collision refused, undecodable name refused with the
       compose-first hint, intake tree loses / destination gains.
-- [ ] 13. **The worksheet form** (9g step 3 — the real 52-column
+- [x] 13. **The worksheet form** — SHIPPED 2026-08-19 (suite 53
+      worksheet_smoke: 52-column schema verbatim, sidecar exact
+      round-trip, RFC-4180 CSV row with 52 cells; selftest pin:
+      prefill carries number/Tohoku/title-page/colophon from the
+      file itself; sweep 11 controls). Saved sidecar outranks
+      machine prefills on reopen; the live spreadsheet stays the
+      master. Original spec: (9g step 3 — the real 52-column
       schema from Adam's sheet, banked in the research doc). Per
       selected file: a scrollable form of the schema's fields,
       PREFILLED from what the app already knows (number, decoded
