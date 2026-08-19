@@ -18,6 +18,9 @@ namespace allcore {
 struct AbbrEntry {
     std::string abbrWylie, abbrUnicode;   // the squeezed form (EWTS/Unicode)
     std::string expWylie, expUnicode;     // the expansion
+    std::string src;   // attesting table, e.g. "rKTs (CC BY 4.0):
+                       // BabelStone" — empty = the loading file's
+                       // default attribution (TibSchol)
 };
 
 class AbbrTable {

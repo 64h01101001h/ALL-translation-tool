@@ -38,6 +38,26 @@ int main(int argc, char** argv) {
     CHECK(abbr.byWylie("khyad par").empty() && abbr.byUnicode("ZZZ").empty(),
           "expansions and garbage are not abbreviations");
 
+    // the rKTs layer (Dr. Laine's export, CC BY 4.0 — grant banked
+    // in docs/licenses/RKTS_ABBREVIATIONS.md) stacks onto the same
+    // table when its CSV is supplied as argv[3]; fixtures from the
+    // file's own rows, with per-row source attribution carried
+    if (argc >= 4) {
+        const size_t before = abbr.size();
+        CHECK(abbr.load(argv[3]), "rKTs table loads on top");
+        std::printf("  %zu after rKTs\n", abbr.size());
+        CHECK(abbr.size() >= before + 6000, "6,000+ rKTs forms join");
+        auto r = abbr.byWylie("khaMsuM seMn");
+        CHECK(!r.empty() &&
+                  r.front()->expWylie == "khams gsum sems can",
+              "khaMsuM seMn -> khams gsum sems can (rKTs row)");
+        CHECK(!r.empty() &&
+                  r.front()->src.find("rKTs") != std::string::npos,
+              "rKTs row carries its attribution");
+        CHECK(!k.empty() && k.front()->src.empty(),
+              "TibSchol rows keep the default attribution");
+    }
+
     // the red wave and this layer are companions: the squeezed form is
     // not a legal ordinary syllable, which is exactly why the card must
     // explain it as an abbreviation rather than a typo

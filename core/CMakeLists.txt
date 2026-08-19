@@ -252,7 +252,8 @@ add_executable(abbr_smoke tests/abbr_smoke.cpp)
 target_link_libraries(abbr_smoke PRIVATE allcore)
 add_test(NAME abbr_smoke
          COMMAND abbr_smoke ${CMAKE_SOURCE_DIR}/data/abbreviations/tibschol_abbr.csv
-                 ${CMAKE_SOURCE_DIR}/data/spellcheck)
+                 ${CMAKE_SOURCE_DIR}/data/spellcheck
+                 ${CMAKE_SOURCE_DIR}/data/abbreviations/rkts_abb.csv)
 
 add_executable(stardict_smoke tests/stardict_smoke.cpp)
 target_link_libraries(stardict_smoke PRIVATE allcore)

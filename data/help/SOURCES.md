@@ -46,6 +46,14 @@ What it looks like: the quiet grey reference zone.
 9. **Monlam word lists** — attestation only: a word exists;
    nothing about HIS equivalent.
 10. **Lokesh Chandra** — Sanskrit equivalences.
+11. **Abbreviation tables (bskungs yig)** — ERC TibSchol (CC0,
+    136 forms) and the **rKTs Tibetan Abbreviations list** (6,708
+    forms; rKTs — Resources for Kanjur and Tanjur Studies, TMPV,
+    University of Vienna, Dr. Bruno Lainé — **CC BY 4.0**,
+    supplied by Dr. Lainé 2026-08-19 with the license confirmed in
+    his own words; docs/licenses/RKTS_ABBREVIATIONS.md). Each
+    expansion names its attesting table on the card; never
+    auto-expanded.
 
 ## Tier IV — Historical reference (public domain)
 

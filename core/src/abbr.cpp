@@ -54,6 +54,7 @@ bool AbbrTable::load(const std::string& csvPath) {
         e.abbrUnicode = cols[1];
         e.expWylie = cols[2];
         e.expUnicode = cols[3];
+        if (cols.size() >= 5) e.src = cols[4];
         int ix = static_cast<int>(entries_.size());
         entries_.push_back(std::move(e));
         wylieIx_[foldWylie(entries_.back().abbrWylie)].push_back(ix);

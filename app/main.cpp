@@ -5929,7 +5929,13 @@ private:
                                       QString::fromStdString(a->expWylie)
                                           .toHtmlEscaped(),
                                       QString::fromStdString(a->expUnicode)
-                                          .toHtmlEscaped());
+                                          .toHtmlEscaped(),
+                                      a->src.empty()
+                                          ? QString("TibSchol table, "
+                                                    "CC0")
+                                          : QString::fromStdString(
+                                                a->src)
+                                                .toHtmlEscaped());
                 setCardHtml(segmentationHtml(tok) +
                                   glossaryHtml(tokWylie) +
                                   "<i>no dictionary span here</i>" + extra);

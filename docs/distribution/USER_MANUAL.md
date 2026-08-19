@@ -314,7 +314,9 @@ of the phrase chain. Reading it top to bottom:
 - **Verb tense paradigms**, where the dictionary has tense
   evidence.
 - **Expansions of abbreviations**: orthographic abbreviations
-  (bskungs yig, from the TibSchol/rKTs table, CC0 — "reference;
+  (bskungs yig, from the TibSchol table, CC0, and the rKTs
+  Abbreviations list, CC BY 4.0 — each expansion names its
+  attesting table — "reference;
   not a typo") and bsdus-tshig contractions with their shared
   gloss — both labeled with their derived register.
 - **Published footnotes** that deal with this term.
