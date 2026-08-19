@@ -253,3 +253,53 @@ mints catalog numbers; the mother copy is never touched.**
       (TODO 9g): the Lon-demo QC lanes (2), the 52-field worksheet
       form (3), proposal routing (4), the intake->library handoff
       move (5) — the dual trees are its two ends.
+
+## Phase 2 — the workflow's back half (queued 2026-08-19, Adam: "keep going")
+
+- [ ] 12. **The handoff move** (9g step 5 — the dual trees' purpose).
+      A cataloged file moves from the intake tree into the
+      destination tree: user picks the destination shelf (folder) in
+      the right tree, clicks "Move to shelf…" with the selected
+      intake file; preview shows source → destination path; MOVE not
+      copy, collision-safe (refuse, never overwrite), never deletes;
+      requires the file to carry an ACIP-decodable name (compose it
+      first — the workflow's order enforced gently); offers the
+      change-log stamp on the destination folder after the move.
+      Findability warning printed: "a book on the wrong shelf is
+      lost forever" — the shelf choice is the human's. Battery: core
+      move-plan logic if any (mostly app); selftest pins: move
+      happens, collision refused, undecodable name refused with the
+      compose-first hint, intake tree loses / destination gains.
+- [ ] 13. **The worksheet form** (9g step 3 — the real 52-column
+      schema from Adam's sheet, banked in the research doc). Per
+      selected file: a scrollable form of the schema's fields,
+      PREFILLED from what the app already knows (number, decoded
+      status/language, titles from the identity lane, Tohoku,
+      author/dates from colophon candidates — every prefill labeled
+      with its source and editable); saved as a sidecar
+      "<name>.worksheet.tsv" beside the intake file (never inside
+      the destination tree); "Export row (CSV)…" emits one line in
+      the sheet's own column order for pasting into the live
+      spreadsheet. Battery: schema round-trip; selftest: prefill +
+      save + reload.
+- [ ] 14. **Proposal routing** (9g step 4). An accepted identity
+      (from the worksheet or the identity card) files a proposal in
+      the EXISTING channel with kind "catalog-identity", carrying
+      the evidence (title extraction, candidate, Tohoku, colophon
+      spans, worksheet snapshot); the Approval pane's export path
+      gains these as a candidates file for the data project. The
+      app never writes the catalog; numbers stay registrar-issued.
+      Battery: proposals round-trip with the new kind; selftest:
+      propose → appears in queue → approve → export contains it.
+- [ ] 15. **QC lanes over the intake set** (9g step 2, the Lon-demo
+      adoptables): title-vs-translation mismatch (an ACIP-named
+      file whose English filename field does not match its Tibetan
+      field per the title workbench's attestations — evidence
+      shown, suggestion only) and colophon-aware duplicate
+      detection (same normalized title across intake files;
+      colophon spans compared to separate true duplicates from
+      same-title-different-work). Battery: constructed +
+      real-library measure; selftest pin per lane.
+- [ ] 16. **Closing audit, phase 2**: docs truth pass, fresh
+      sweeps/selftest, TODO 9g reconciliation, memory bank, stop
+      the loop.
