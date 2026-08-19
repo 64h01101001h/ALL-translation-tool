@@ -69,6 +69,7 @@
 #include <QFileDialog>
 #include <QFileInfo>
 #include <QFileSystemModel>
+#include <QStyledItemDelegate>
 #include <QTreeView>
 #include <QProcess>
 #ifdef ALL_HAVE_QTPDF
@@ -23493,6 +23494,176 @@ private:
 // writes to the catalog: the charter, inherited from the data
 // project, is that machine work LOCATES and SUGGESTS, humans approve,
 // and the official catalog changes only through the release process.
+// A cataloger reads a filename and its identity together, so the name
+// column carries the decoded identity after the name. This is a PAINT
+// concern only — the model keeps its own shape, which is what keeps a
+// lazy QFileSystemModel tree safe.
+class IdentitySuffixDelegate : public QStyledItemDelegate {
+public:
+    using QStyledItemDelegate::QStyledItemDelegate;
+
+protected:
+    void initStyleOption(QStyleOptionViewItem* opt,
+                         const QModelIndex& ix) const override {
+        QStyledItemDelegate::initStyleOption(opt, ix);
+        const auto* m =
+            qobject_cast<const QFileSystemModel*>(ix.model());
+        if (!m || m->isDir(ix)) return;
+        const auto inf = allcore::decodeAcipFilename(
+            m->fileName(ix).toStdString());
+        opt->text += inf.recognized
+                         ? QString::fromUtf8("   — ") +
+                               QString::fromStdString(inf.collection) +
+                               " " + QString::fromStdString(inf.number)
+                         : QString::fromUtf8("   — uncataloged");
+    }
+};
+
+// One tree browser over one folder: its own root chooser, its own
+// census, its own remembered root. The Catalog pane runs two of them.
+class CatalogTree : public QWidget {
+public:
+    CatalogTree(const QString& title, const QString& sessKey,
+                const QString& prompt, QWidget* parent = nullptr)
+        : QWidget(parent), sessKey_(sessKey), prompt_(prompt) {
+        auto* v = new QVBoxLayout(this);
+        v->setContentsMargins(0, 0, 0, 0);
+        auto* row = new QHBoxLayout;
+        auto* lab = new QLabel("<b>" + title + "</b>");
+        row->addWidget(lab);
+        auto* pick = new QPushButton("Choose folder…");
+        row->addWidget(pick);
+        row->addStretch();
+        v->addLayout(row);
+        census_ = new QLabel("no folder chosen");
+        census_->setWordWrap(true);
+        census_->setStyleSheet("color:#777");
+        v->addWidget(census_);
+        model_ = new QFileSystemModel(this);
+        model_->setFilter(QDir::AllEntries | QDir::NoDotAndDotDot);
+        tree_ = new QTreeView;
+        tree_->setModel(model_);
+        tree_->setSortingEnabled(true);
+        tree_->sortByColumn(0, Qt::AscendingOrder);
+        tree_->setColumnWidth(0, 380);
+        tree_->setColumnHidden(2, true);   // Type: dead weight here
+        // an intake folder is a TREE of boxes and volumes: subfolders
+        // expand in place rather than replacing the view
+        tree_->setRootIsDecorated(true);
+        tree_->setItemsExpandable(true);
+        tree_->setItemDelegateForColumn(0,
+                                        new IdentitySuffixDelegate(this));
+        v->addWidget(tree_, 1);
+        connect(pick, &QPushButton::clicked, [this] {
+            const QString d = safeGetExistingDirectory(this, prompt_);
+            if (!d.isEmpty()) setRoot(d);
+        });
+        auto emitFile = [this](const QModelIndex& ix) {
+            if (!ix.isValid() || model_->isDir(ix)) return;
+            if (onFile) onFile(model_->filePath(ix));
+        };
+        connect(tree_, &QTreeView::clicked, emitFile);
+        connect(tree_->selectionModel(),
+                &QItemSelectionModel::currentChanged,
+                [emitFile](const QModelIndex& c, const QModelIndex&) {
+                    emitFile(c);
+                });
+    }
+
+    // The census is the honest summary of what is in this folder: how
+    // much is already identifiable, and of the rest, how much the
+    // identity lane can actually work on.
+    void setRoot(const QString& dir, bool remember = true) {
+        if (dir.isEmpty() || !QDir(dir).exists()) return;
+        root_ = dir;
+        if (remember) sess::put(sessKey_, dir);
+        model_->setRootPath(dir);
+        tree_->setRootIndex(model_->index(dir));
+        files_ = 0;
+        recognized_ = 0;
+        titled_ = 0;
+        QDirIterator it(dir, QDir::Files, QDirIterator::Subdirectories);
+        while (it.hasNext() && files_ < 5000) {
+            const QString p = it.next();
+            ++files_;
+            const auto inf = allcore::decodeAcipFilename(
+                QFileInfo(p).fileName().toStdString());
+            if (inf.recognized) { ++recognized_; continue; }
+            QFile hf(p);
+            if (hf.open(QIODevice::ReadOnly) &&
+                allcore::extractAcipTitle(hf.read(4000).toStdString())
+                    .found)
+                ++titled_;
+        }
+        const bool capped = it.hasNext();
+        census_->setText(
+            QString("%1%2 · %3 identifiable by name · %4 "
+                    "uncataloged (%5 announce a title in their own "
+                    "text) · %6")
+                .arg(files_)
+                .arg(capped ? " file(s), first 5,000 counted"
+                            : " file(s)")
+                .arg(recognized_)
+                .arg(files_ - recognized_)
+                .arg(titled_)
+                .arg(QDir(dir).dirName()));
+    }
+
+    // Select a file in the tree. QFileSystemModel populates lazily, so
+    // a path whose folder has not been listed yet is selected when the
+    // listing arrives rather than silently dropped.
+    bool selectPath(const QString& path) {
+        const QModelIndex ix = model_->index(path);
+        if (ix.isValid()) {
+            tree_->setCurrentIndex(ix);
+            tree_->scrollTo(ix);
+            if (onFile && !model_->isDir(ix)) onFile(path);
+            return true;
+        }
+        auto* c = new QMetaObject::Connection;
+        *c = connect(model_, &QFileSystemModel::directoryLoaded,
+                     [this, path, c](const QString&) {
+                         const QModelIndex i = model_->index(path);
+                         if (!i.isValid()) return;
+                         tree_->setCurrentIndex(i);
+                         tree_->scrollTo(i);
+                         if (onFile && !model_->isDir(i)) onFile(path);
+                         disconnect(*c);
+                         delete c;
+                     });
+        return false;
+    }
+
+    // the first file in this folder the decoder cannot name — the one
+    // the identity lane exists for
+    QString firstUncataloged() const {
+        QDirIterator it(root_, QDir::Files, QDirIterator::Subdirectories);
+        QStringList found;
+        while (it.hasNext()) {
+            const QString p = it.next();
+            if (!allcore::decodeAcipFilename(
+                     QFileInfo(p).fileName().toStdString())
+                     .recognized)
+                found << p;
+        }
+        found.sort();
+        return found.isEmpty() ? QString() : found.first();
+    }
+
+    QString root() const { return root_; }
+    int fileCount() const { return files_; }
+    int recognizedCount() const { return recognized_; }
+    int titledCount() const { return titled_; }
+    std::function<void(const QString&)> onFile;
+
+private:
+    QString sessKey_, prompt_, root_;
+    QLabel* census_ = nullptr;
+    QFileSystemModel* model_ = nullptr;
+    QTreeView* tree_ = nullptr;
+    int files_ = 0, recognized_ = 0, titled_ = 0;
+};
+
 class CatalogPane : public QWidget {
 public:
     explicit CatalogPane(const QString& root = QString(),
@@ -23501,48 +23672,41 @@ public:
         auto* outer = new QVBoxLayout(this);
         auto* banner = new QLabel(
             "<b>Cataloging — intake</b> &nbsp;<span style="
-            "'color:#777'>survey an uncataloged folder: what is "
-            "already identifiable, what needs a cataloger. Nothing "
-            "is written to the official catalog from here — "
-            "suggestions route through the approval channel; the "
-            "catalog itself changes only through data releases."
-            "</span>");
+            "'color:#777'>the uncataloged material on the left, where "
+            "it is going on the right. What is already identifiable, "
+            "what needs a cataloger. Nothing is written to the "
+            "official catalog from here — suggestions route through "
+            "the approval channel; the catalog itself changes only "
+            "through data releases.</span>");
         banner->setWordWrap(true);
         outer->addWidget(banner);
-        auto* row = new QHBoxLayout;
-        auto* pick = new QPushButton("Choose uncataloged folder…");
-        row->addWidget(pick);
-        status_ = new QLabel("no folder chosen");
-        status_->setWordWrap(true);
-        row->addWidget(status_, 1);
-        outer->addLayout(row);
-        auto* split = new QSplitter(Qt::Horizontal);
-        table_ = new QTableWidget(0, 4);
-        table_->setHorizontalHeaderLabels(
-            {"File", "Identity", "Status", "KB"});
-        table_->horizontalHeader()->setStretchLastSection(false);
-        table_->horizontalHeader()->setSectionResizeMode(
-            0, QHeaderView::Stretch);
-        table_->setEditTriggers(QAbstractItemView::NoEditTriggers);
-        table_->setSelectionBehavior(QAbstractItemView::SelectRows);
-        split->addWidget(table_);
+
+        auto* vsplit = new QSplitter(Qt::Vertical);
+        auto* browsers = new QSplitter(Qt::Horizontal);
+        intake_ = new CatalogTree("Uncataloged intake",
+                                  "catalog/intakeDir",
+                                  "Choose the uncataloged folder");
+        dest_ = new CatalogTree("Destination — the library",
+                                "catalog/destDir",
+                                "Choose the destination folder");
+        browsers->addWidget(intake_);
+        browsers->addWidget(dest_);
+        browsers->setStretchFactor(0, 1);
+        browsers->setStretchFactor(1, 1);
+        vsplit->addWidget(browsers);
         info_ = new QTextBrowser;
         info_->setOpenLinks(false);
         info_->setHtml(
-            "<i style='color:#8A8A8A'>Choose a folder, then click a "
-            "file — its decoded identity and opening lines land "
-            "here.</i>");
-        split->addWidget(info_);
-        split->setStretchFactor(0, 3);
-        split->setStretchFactor(1, 2);
-        outer->addWidget(split, 1);
-        connect(pick, &QPushButton::clicked, [this] {
-            const QString d = safeGetExistingDirectory(
-                this, "Choose the uncataloged folder");
-            if (!d.isEmpty()) scanFolder(d);
-        });
-        connect(table_, &QTableWidget::currentCellChanged,
-                [this](int r, int, int, int) { showFile(r); });
+            "<i style='color:#8A8A8A'>Click a file in either tree — "
+            "its decoded identity, its opening lines, and (for an "
+            "uncataloged file) its suggested identity land here.</i>");
+        vsplit->addWidget(info_);
+        vsplit->setStretchFactor(0, 3);
+        vsplit->setStretchFactor(1, 2);
+        outer->addWidget(vsplit, 1);
+
+        intake_->onFile = [this](const QString& p) { showFile(p); };
+        dest_->onFile = [this](const QString& p) { showFile(p); };
         connect(info_, &QTextBrowser::anchorClicked,
                 [](const QUrl& u) {
                     const QString s2 = u.toString();
@@ -23550,85 +23714,30 @@ public:
                         g_openAtLine(anchorPayload(s2, 8), 0);
                 });
         const QString last = sess::path("catalog/intakeDir");
-        if (!last.isEmpty()) scanFolder(last);
+        if (!last.isEmpty()) intake_->setRoot(last);
+        // the destination defaults to the library — the tree a
+        // cataloged file is eventually filed into
+        QString dest = sess::path("catalog/destDir");
+        if (dest.isEmpty() && !root_.isEmpty()) dest = root_ + "/library";
+        if (!dest.isEmpty()) dest_->setRoot(dest, false);
     }
 
     // public so the selftest can prove the census without a dialog
-    void scanFolder(const QString& dir) {
-        sess::put("catalog/intakeDir", dir);
-        files_.clear();
-        table_->setRowCount(0);
-        int recognized = 0, titled = 0;
-        QDirIterator it(dir, QDir::Files,
-                        QDirIterator::Subdirectories);
-        while (it.hasNext() && files_.size() < 5000) {
-            it.next();
-            files_ << it.filePath();
-        }
-        const bool capped = it.hasNext();
-        std::sort(files_.begin(), files_.end());
-        table_->setRowCount(files_.size());
-        for (int r = 0; r < files_.size(); ++r) {
-            const QFileInfo fi(files_[r]);
-            const auto inf = allcore::decodeAcipFilename(
-                fi.fileName().toStdString());
-            if (inf.recognized) ++recognized;
-            auto put = [&](int c, const QString& t) {
-                table_->setItem(r, c, new QTableWidgetItem(t));
-            };
-            put(0, fi.fileName());
-            // an uncataloged file that announces a title in its own
-            // text is one the identity lane can actually work on;
-            // counting them separates "needs a machine pass" from
-            // "needs a cataloger from scratch"
-            if (!inf.recognized) {
-                QFile hf(files_[r]);
-                if (hf.open(QIODevice::ReadOnly) &&
-                    allcore::extractAcipTitle(
-                        hf.read(4000).toStdString()).found)
-                    ++titled;
-            }
-            put(1, inf.recognized
-                       ? QString::fromStdString(inf.collection) +
-                             " " +
-                             QString::fromStdString(inf.number)
-                       : QString::fromUtf8("\u2014 uncataloged"));
-            put(2, inf.recognized
-                       ? QString::fromStdString(inf.status)
-                       : QString());
-            put(3, QString::number(fi.size() / 1024));
-        }
-        recognized_ = recognized;
-        titled_ = titled;
-        status_->setText(
-            QString("%1 file(s)%2 \u00b7 %3 already identifiable "
-                    "\u00b7 %4 uncataloged (%5 of them announce a "
-                    "title in their own text) \u00b7 %6")
-                .arg(files_.size())
-                .arg(capped ? " (first 5,000 shown)" : "")
-                .arg(recognized)
-                .arg(files_.size() - recognized)
-                .arg(titled)
-                .arg(QDir(dir).dirName()));
-    }
-    int fileCount() const { return files_.size(); }
-    int recognizedCount() const { return recognized_; }
-    int titledCount() const { return titled_; }
-    // select the first row the filename decoder could not identify —
-    // the row the identity lane exists for
+    void scanFolder(const QString& dir) { intake_->setRoot(dir); }
+    int fileCount() const { return intake_->fileCount(); }
+    int recognizedCount() const { return intake_->recognizedCount(); }
+    int titledCount() const { return intake_->titledCount(); }
+    QString destRoot() const { return dest_->root(); }
     bool selectFirstUncataloged() {
-        for (int r = 0; r < files_.size(); ++r) {
-            if (allcore::decodeAcipFilename(
-                    QFileInfo(files_[r]).fileName().toStdString())
-                    .recognized)
-                continue;
-            table_->setCurrentCell(r, 0);
-            return true;
-        }
-        return false;
+        const QString p = intake_->firstUncataloged();
+        if (p.isEmpty()) return false;
+        intake_->selectPath(p);
+        showFile(p);   // the panel must not wait on a lazy listing
+        return true;
     }
+
     // the identity lane, public so the selftest can prove a real
-    // proposal without driving the table
+    // proposal without driving the tree
     QString identityHtml(const QString& path) {
         QFile f(path);
         if (!f.open(QIODevice::ReadOnly))
@@ -23727,12 +23836,14 @@ public:
     }
 
 private:
-    void showFile(int r) {
-        if (r < 0 || r >= files_.size()) return;
-        const QFileInfo fi(files_[r]);
+    void showFile(const QString& path) {
+        const QFileInfo fi(path);
+        if (!fi.isFile()) return;
         const auto inf = allcore::decodeAcipFilename(
             fi.fileName().toStdString());
         QString h = "<h3>" + fi.fileName().toHtmlEscaped() + "</h3>";
+        h += QString("<div style='color:#8A8A8A;font-size:11px'>%1</div>")
+                 .arg(fi.path().toHtmlEscaped());
         if (inf.recognized) {
             h += "<div><b>" +
                  QString::fromStdString(inf.collection)
@@ -23742,24 +23853,24 @@ private:
                  QString::fromStdString(inf.status).toHtmlEscaped() +
                  (inf.language.empty()
                       ? QString()
-                      : " \u00b7 " + QString::fromStdString(
+                      : " · " + QString::fromStdString(
                                           inf.language)) +
-                 (inf.incomplete ? " \u00b7 incomplete" : "") +
+                 (inf.incomplete ? " · incomplete" : "") +
                  "</div>";
         } else {
             h += "<div style='color:#B26B00'><b>uncataloged</b> "
-                 "\u2014 the filename matches no ACIP convention; "
+                 "— the filename matches no ACIP convention; "
                  "this is exactly the material this workflow will "
-                 "walk through identification \u2192 proposal "
-                 "\u2192 approval.</div>";
+                 "walk through identification → proposal "
+                 "→ approval.</div>";
         }
         h += QString("<div style='margin:6px 0'><a href='catopen:%1"
                      "'>Open in the Overlay</a></div>")
-                 .arg(anchorEnc(files_[r]));
+                 .arg(anchorEnc(path));
         // the file whose NAME says nothing may still announce itself
         // in its TEXT — read the title page and offer candidates
-        if (!inf.recognized) h += identityHtml(files_[r]);
-        QFile f(files_[r]);
+        if (!inf.recognized) h += identityHtml(path);
+        QFile f(path);
         if (f.open(QIODevice::ReadOnly)) {
             const QString head = QString::fromUtf8(f.read(1200));
             h += "<hr><pre style='font-size:12px;white-space:"
@@ -23769,12 +23880,9 @@ private:
         info_->setHtml(h);
     }
 
-    QLabel* status_ = nullptr;
-    QTableWidget* table_ = nullptr;
+    CatalogTree* intake_ = nullptr;
+    CatalogTree* dest_ = nullptr;
     QTextBrowser* info_ = nullptr;
-    QStringList files_;
-    int recognized_ = 0;
-    int titled_ = 0;
     QString root_;
     allcore::TitleBank bank_;
     bool bankBuilt_ = false;
@@ -26887,6 +26995,19 @@ int main(int argc, char** argv) {
                 if (!honest) ++fails;
             }
             QDir(wd).removeRecursively();
+            {   // the second browser: the destination tree must be
+                // rooted at the library by default — the tree a
+                // cataloged file is eventually filed into — and its
+                // root must survive the intake scan (two independent
+                // browsers, not one view with two labels)
+                const bool destOk =
+                    catalogPane->destRoot().endsWith("/library");
+                log << QString("  [%1] Catalog: destination tree "
+                               "defaults to the library and is "
+                               "independent of the intake scan")
+                           .arg(destOk ? "PASS" : "FAIL");
+                if (!destOk) ++fails;
+            }
             {   // the probe folder must not become the remembered
                 // intake dir (sess:: writes are harness-guarded, but
                 // prove it rather than trust it)

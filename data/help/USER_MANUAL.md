@@ -45,8 +45,8 @@ app: Help menu → ALL Tool Help & Tutorials.*
   - 13.6 Save to ocr_out…
   - 13.7 Batch folder… — a whole volume
 - **CHAPTER 14 — THE CATALOG PANE (Catalog → Catalog)**
-  - 14.1 Choosing the uncataloged folder
-  - 14.2 Reading the census line
+  - 14.1 Choosing the folders
+  - 14.2 Reading the census lines
   - 14.3 The file panel — what the machine can already tell
   - 14.4 Suggested identity — how a nameless file names itself
   - 14.5 What the workflow will do next
@@ -2699,29 +2699,37 @@ through data releases — nothing you do here writes it. Every
 suggestion below is a candidate carrying its evidence, offered so
 a cataloger can judge it, never so the app can decide.
 
-**The layout.** A banner, then the **Choose uncataloged folder…**
-button with the census line beside it, then a split: the file
-table on the left, the file panel on the right.
+**The layout.** A banner, then two file browsers side by side —
+**Uncataloged intake** on the left, **Destination — the library**
+on the right — and the file panel across the bottom. Both browsers
+are tree views: subfolders expand in place with the disclosure
+triangle, so a box of volumes reads as the tree it is. Each tree
+has its own **Choose folder…** button, its own census line, and
+each file is painted with its decoded identity right in the tree
+(*TD03996\_… — Tengyur (Derge) 3996*, or *— uncataloged*).
 
-## 14.1 Choosing the uncataloged folder
+## 14.1 Choosing the folders
 
-Click **Choose uncataloged folder…** and pick the folder. It is
-walked recursively, so a folder of subfolders is fine. The first
-5,000 files are surveyed; if there are more, the census line says
-so rather than quietly showing a partial picture.
+Click either tree's **Choose folder…** and pick its folder. Each
+is walked recursively, so a folder of subfolders is fine. The
+first 5,000 files are counted in the census; if there are more,
+the census line says so rather than quietly showing a partial
+picture.
 
-The folder is remembered between sessions and rescanned when the
-app opens, so the intake you are working through is where you left
-it.
+The left tree is your intake — the material being worked through.
+The right tree is where cataloged files are eventually filed; it
+starts at the app's own library and can be pointed anywhere. Both
+roots are remembered between sessions and reopened at launch, so
+the work is where you left it.
 
-## 14.2 Reading the census line
+## 14.2 Reading the census lines
 
-The line beside the button is the whole survey in one sentence:
+Each tree's census line is its whole survey in one sentence:
 
-> *37 file(s) · 12 already identifiable · 25 uncataloged (16 of
-> them announce a title in their own text) · box12*
+> *37 file(s) · 12 identifiable by name · 25 uncataloged (16
+> announce a title in their own text) · box12*
 
-- **already identifiable** — the filename follows an ACIP naming
+- **identifiable by name** — the filename follows an ACIP naming
   convention, so the file's catalog identity is already readable
   from its name alone.
 - **uncataloged** — the filename says nothing the decoder can use.
@@ -2733,12 +2741,12 @@ The line beside the button is the whole survey in one sentence:
 
 ## 14.3 The file panel — what the machine can already tell
 
-Click any row. For an identifiable file the panel gives the
-decoded identity: collection, catalog number, verification status,
-language, and whether the input is marked incomplete. For an
-uncataloged file it says so plainly. Either way you get **Open in
-the Overlay** to read the text itself, and the file's opening
-lines below.
+Click any file in either tree. For an identifiable file the panel
+gives the decoded identity: collection, catalog number,
+verification status, language, and whether the input is marked
+incomplete. For an uncataloged file it says so plainly. Either way
+you get the file's folder, **Open in the Overlay** to read the
+text itself, and the file's opening lines below.
 
 ## 14.4 Suggested identity — how a nameless file names itself
 
@@ -2801,8 +2809,9 @@ colophon-aware duplicate detection across the intake set); a
 cataloging worksheet of the fields each file needs; routing, so an
 identity a cataloger accepts becomes a proposal in the ordinary
 approval channel and exports as a candidates file for the data
-project; and the handoff that moves a finished file into the
-library tree under its proper name.
+project; and the handoff that moves a finished file from the
+left tree into the right one under its proper name — the two
+browsers are the two ends of that move.
 
 ---
 

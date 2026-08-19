@@ -366,7 +366,16 @@ implementation is sidelined HERE from this date. What this means:
              app NEVER writes the catalog;
          (5) intake -> Library handoff: a cataloged file moves into
              the library tree under its decoded name (move, not
-             copy; collision-safe).
+             copy; collision-safe). GROUNDWORK LAID 2026-08-19:
+             Adam's directive ("dual file browser windows, both
+             tree view") shipped same day — the pane is now two
+             independent QFileSystemModel tree browsers (intake
+             left, destination right, each with its own root
+             chooser + census + sess-remembered root; destination
+             defaults to the app library), identity painted per
+             file IN the tree via IdentitySuffixDelegate, shared
+             evidence panel below. The two trees are the two ends
+             of this move.
       9c. **RECOVERED DEFERRALS (Adam, 2026-08-15: "look for any
          'saved for later' notes and add them to the updated todo
          list").** Swept every session transcript, all of docs/,
