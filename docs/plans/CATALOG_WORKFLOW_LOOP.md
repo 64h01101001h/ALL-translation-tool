@@ -57,7 +57,16 @@ mints catalog numbers; the mother copy is never touched.**
 
 ## The build queue
 
-- [ ] 1. **Bibliography audit lane** (9g 2a — GMR's job #1). Core:
+- [x] 1. **Bibliography audit lane** — SHIPPED 2026-08-19 (suite 45
+      catalog_audit_smoke; selftest pin; sweep 3 controls). Measured:
+      347 distinct cited / 296 present / 51 missing against the
+      installed library. THE C++ BATTERY CORRECTED THE PYTHON
+      PROTOTYPE: a malformed 6-digit citation (ACIP S005282) had
+      been truncated into a phantom number, and padding variants
+      (S464/S00464) double-counted — refused and collapsed now;
+      banked audit JSON regenerated to match. Report renders per
+      source volume with citation evidence + the lower-bound caveat.
+      Original spec follows: (9g 2a — GMR's job #1). Core:
       `allcore` bibliography-citation scan (ACIP numbers out of the
       apparatus/bibliography banks) + presence check against a
       library tree; battery pins the 51-missing measurement shape.

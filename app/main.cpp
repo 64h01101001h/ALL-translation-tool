@@ -114,6 +114,7 @@
 
 #include "allcore/abbr.h"
 #include "allcore/analysis.h"
+#include "allcore/catalog_audit.h"
 #include "allcore/catalog_id.h"
 #ifdef ALL_HAVE_OCR
 #include "allocr/linebuild.h"
@@ -23680,6 +23681,16 @@ public:
             "through data releases.</span>");
         banner->setWordWrap(true);
         outer->addWidget(banner);
+        auto* actions = new QHBoxLayout;
+        auto* auditB = new QPushButton("Audit bibliographies\u2026");
+        auditB->setToolTip(
+            "GMR's first job to the cataloging class: every ACIP number "
+            "cited in the published Mixed Nuts bibliographies must exist "
+            "in the database. Checks the citations against the "
+            "destination tree.");
+        actions->addWidget(auditB);
+        actions->addStretch();
+        outer->addLayout(actions);
 
         auto* vsplit = new QSplitter(Qt::Vertical);
         auto* browsers = new QSplitter(Qt::Horizontal);
@@ -23713,6 +23724,8 @@ public:
                     if (s2.startsWith("catopen:") && g_openAtLine)
                         g_openAtLine(anchorPayload(s2, 8), 0);
                 });
+        connect(auditB, &QPushButton::clicked,
+                [this] { info_->setHtml(bibliographyAuditHtml()); });
         const QString last = sess::path("catalog/intakeDir");
         if (!last.isEmpty()) intake_->setRoot(last);
         // the destination defaults to the library — the tree a
@@ -23737,6 +23750,110 @@ public:
         intake_->selectPath(p);
         showFile(p);   // the panel must not wait on a lazy listing
         return true;
+    }
+
+    // GMR's job #1 as a live report: cited-but-absent works, per
+    // source volume, with the citation text as evidence. Public so
+    // the selftest can prove the report renders.
+    QString bibliographyAuditHtml() {
+        // collect citations WITH their source volume from the two
+        // bibliography banks
+        struct Cite { QString source, text; };
+        std::map<std::pair<std::string, int>, Cite> firstCite;
+        std::vector<allcore::AcipCitation> cited;
+        int banksLoaded = 0;
+        for (const char* rel :
+             {"/data/extracted/mixed_nuts_bibliography.json",
+              "/data/extracted/apparatus_bibliography.json"}) {
+            QFile f(root_ + rel);
+            if (!f.open(QIODevice::ReadOnly)) continue;
+            ++banksLoaded;
+            const auto arr =
+                QJsonDocument::fromJson(f.readAll()).array();
+            for (const auto& v : arr) {
+                const auto o = v.toObject();
+                const std::string t =
+                    o.value("text").toString().toStdString();
+                for (const auto& c :
+                     allcore::extractAcipCitations(t)) {
+                    cited.push_back(c);
+                    const auto n =
+                        allcore::normalizeCatalogNumber(c.number);
+                    if (n.second >= 0 && !firstCite.count(n))
+                        firstCite[n] = Cite{
+                            o.value("source").toString(),
+                            QString::fromStdString(t).left(240)};
+                }
+            }
+        }
+        if (banksLoaded == 0)
+            return "<div style='color:#B26B00'>The bibliography "
+                   "banks are not installed \u2014 the audit needs "
+                   "data/extracted/*_bibliography.json.</div>";
+        const QString destRootDir =
+            dest_->root().isEmpty() ? root_ + "/library" : dest_->root();
+        const auto have =
+            allcore::collectLibraryNumbers(destRootDir.toStdString());
+        const auto r = allcore::auditPresence(cited, have);
+        QString h =
+            "<h3>Bibliography audit</h3>"
+            "<div style='color:#777'>Geshe Michael's first job to the "
+            "cataloging class (Dec 22, 2025): every ACIP number cited "
+            "in the published bibliographies must exist in the "
+            "database. This checks the citations against <b>" +
+            destRootDir.toHtmlEscaped() +
+            "</b> \u2014 the app's installed subset, a LOWER BOUND: "
+            "missing here may still exist in ACIP's master tree, and "
+            "presence here is not proof of presence there.</div>";
+        h += QString(
+                 "<div style='margin:8px 0'><b>%1</b> distinct works "
+                 "cited \u00b7 <b>%2</b> present \u00b7 <b style="
+                 "'color:#8C2F2B'>%3 missing</b></div>")
+                 .arg(r.cited_distinct)
+                 .arg(r.present)
+                 .arg(r.missing);
+        // missing, grouped by the source volume that cited them
+        std::map<QString, std::vector<const allcore::AuditEntry*>> bySrc;
+        for (const auto& e : r.entries) {
+            if (e.present) break;   // missing entries lead the list
+            const auto n = allcore::normalizeCatalogNumber(e.number);
+            const auto it = firstCite.find(n);
+            bySrc[it == firstCite.end() ? QString("(source unknown)")
+                                        : it->second.source]
+                .push_back(&e);
+        }
+        for (const auto& [src, list] : bySrc) {
+            h += "<div style='margin-top:8px'><b>" +
+                 src.toHtmlEscaped() + "</b> \u2014 " +
+                 QString::number(list.size()) +
+                 " cited work(s) not in this library:</div><ul>";
+            for (const auto* e : list) {
+                const auto n =
+                    allcore::normalizeCatalogNumber(e->number);
+                const auto it = firstCite.find(n);
+                h += "<li><b>" +
+                     QString::fromStdString(e->number).toHtmlEscaped() +
+                     "</b>" +
+                     (e->citations > 1
+                          ? QString(" (cited %1\u00d7)").arg(e->citations)
+                          : QString()) +
+                     (it != firstCite.end()
+                          ? "<div style='color:#777;font-size:11px'>" +
+                                it->second.text.toHtmlEscaped() +
+                                "\u2026</div>"
+                          : QString()) +
+                     "</li>";
+            }
+            h += "</ul>";
+        }
+        if (r.missing == 0)
+            h += "<div style='color:#2E7D32'>Every cited work is "
+                 "present in this library.</div>";
+        h += "<div style='color:#777;margin-top:8px'>Missing works "
+             "are candidates for the intake workflow: locate a "
+             "witness, input, propose, approve. Nothing here writes "
+             "anything.</div>";
+        return h;
     }
 
     // the identity lane, public so the selftest can prove a real
@@ -27052,6 +27169,21 @@ int main(int argc, char** argv) {
                            .arg(honest ? "PASS" : "FAIL");
                 if (!honest) ++fails;
                 QDir(wd).removeRecursively();
+            }
+            {   // GMR's job #1 must render as a real report — the
+                // measured numbers, a known missing work, the
+                // lower-bound caveat, and the charter line
+                const QString a = catalogPane->bibliographyAuditHtml();
+                const bool audit =
+                    a.contains("Bibliography audit") &&
+                    a.contains("KL00824") &&
+                    a.contains("LOWER BOUND") &&
+                    a.contains("Nothing here writes anything");
+                log << QString("  [%1] Catalog: bibliography audit "
+                               "renders cited-but-absent works with "
+                               "evidence and the honest caveat")
+                           .arg(audit ? "PASS" : "FAIL");
+                if (!audit) ++fails;
             }
             {   // the second browser: the destination tree must be
                 // rooted at the library by default — the tree a

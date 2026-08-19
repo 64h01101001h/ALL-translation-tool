@@ -150,9 +150,11 @@ database**. "What if it's not? — We put it in."
 (mixed_nuts_bibliography.json + apparatus_bibliography.json, 596
 ACIP-number citations):**
 
-- 349 distinct ACIP catalog numbers cited across the published
-  bibliographies;
-- **298 present in the installed library, 51 missing** (list banked
+- 347 distinct ACIP catalog numbers cited across the published
+  bibliographies (corrected 2026-08-19 by the C++ battery: the Python
+  prototype had truncated one malformed 6-digit citation into a
+  phantom number and double-counted padding variants);
+- **296 present in the installed library, 51 missing** (list banked
   at `data/research/gmr_cataloging/bibliography_audit_missing.json`),
   incl. three KL Kangyur texts cited by the Sixty Verses volume and
   a cluster of S-numbers cited by King of Dharma.

@@ -49,7 +49,8 @@ app: Help menu → ALL Tool Help & Tutorials.*
   - 14.2 Reading the census lines
   - 14.3 The file panel — what the machine can already tell
   - 14.4 Suggested identity — how a nameless file names itself
-  - 14.5 What the workflow will do next
+  - 14.5 The bibliography audit
+  - 14.6 What the workflow will do next
 - **CHAPTER 15 — THE PROPOSE PANE (Community → Propose)**
   - 15.1 One-time identity setup
   - 15.2 Making a proposal
@@ -2805,7 +2806,31 @@ which is the plainest possible argument for why a human approves
 every one of these. The battery re-measures these numbers on every
 test run, so they cannot quietly drift.
 
-## 14.5 What the workflow will do next
+## 14.5 The bibliography audit
+
+The **Audit bibliographies…** button runs the first job Geshe
+Michael assigned the cataloging class (December 22, 2025): every
+ACIP number cited in the published Mixed Nuts bibliographies must
+exist in the database — "if a book made it into a bibliography, it
+was important enough that it sure as hell better be in the
+database."
+
+The report lands in the file panel: how many distinct works the
+published bibliographies cite, how many are present in the
+destination tree, and — the point — the **missing ones, grouped by
+the volume that cited them**, each with its citation text as
+evidence. Padding variants of the same number (S464, S00464) are
+counted once; a malformed citation is refused rather than guessed
+at.
+
+Two honesty clauses, printed on the report: the check runs against
+*this app's installed library*, which is a lower bound — a work
+missing here may still exist in ACIP's master tree, and presence
+here is not proof of presence there. And the audit writes nothing:
+missing works are candidates for the intake workflow — locate a
+witness, input, propose, approve.
+
+## 14.6 What the workflow will do next
 
 This is the first working step of a longer workflow. Still to come,
 in order: quality-control lanes (title-versus-translation mismatch,

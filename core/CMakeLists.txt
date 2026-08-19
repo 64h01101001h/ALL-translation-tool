@@ -51,6 +51,7 @@ add_library(allcore STATIC
   src/botok_tokenize.cpp
   src/botok_segtrie.cpp
   src/catalog_id.cpp
+  src/catalog_audit.cpp
 )
 target_include_directories(allcore PUBLIC include)
 
@@ -255,6 +256,14 @@ add_test(NAME abbr_smoke
          COMMAND abbr_smoke ${CMAKE_SOURCE_DIR}/data/abbreviations/tibschol_abbr.csv
                  ${CMAKE_SOURCE_DIR}/data/spellcheck
                  ${CMAKE_SOURCE_DIR}/data/abbreviations/rkts_abb.csv)
+
+add_executable(catalog_audit_smoke tests/catalog_audit_smoke.cpp)
+target_link_libraries(catalog_audit_smoke PRIVATE allcore)
+add_test(NAME catalog_audit_smoke
+         COMMAND catalog_audit_smoke
+                 ${CMAKE_SOURCE_DIR}/data/extracted/mixed_nuts_bibliography.json
+                 ${CMAKE_SOURCE_DIR}/data/extracted/apparatus_bibliography.json
+                 ${CMAKE_SOURCE_DIR}/library)
 
 add_executable(catalog_id_smoke tests/catalog_id_smoke.cpp)
 target_link_libraries(catalog_id_smoke PRIVATE allcore)
