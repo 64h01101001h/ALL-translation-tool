@@ -23656,6 +23656,16 @@ public:
         return found.isEmpty() ? QString() : found.first();
     }
 
+    // the folder the user has selected (a selected file yields its
+    // folder); empty when nothing is selected — the caller decides
+    // what an unmade choice means
+    QString currentDir() const {
+        const QModelIndex ix = tree_->currentIndex();
+        if (!ix.isValid()) return QString();
+        const QString p = model_->filePath(ix);
+        return model_->isDir(ix) ? p : QFileInfo(p).path();
+    }
+
     QString root() const { return root_; }
     int fileCount() const { return files_; }
     int recognizedCount() const { return recognized_; }
@@ -23732,6 +23742,14 @@ public:
             "only-right. Content matched by size + sampled bytes; "
             "nothing is changed.");
         actions->addWidget(diffB);
+        auto* moveB = new QPushButton("Move to shelf\u2026");
+        moveB->setToolTip(
+            "The handoff: MOVE the selected intake file onto the shelf "
+            "selected in the destination tree. Move, not copy; a META "
+            "companion travels along; collisions are refused; nothing "
+            "is deleted. The shelf choice is yours \u2014 a book on "
+            "the wrong shelf is lost forever.");
+        actions->addWidget(moveB);
         auto* regB = new QPushButton("Load register\u2026");
         regB->setToolTip(
             "Load the registrar's spreadsheet (CSV/TSV: number, title, "
@@ -23777,6 +23795,60 @@ public:
         };
         connect(nameB, &QPushButton::clicked,
                 [this] { composeNameDialog(); });
+        connect(moveB, &QPushButton::clicked, [this] {
+            if (lastFile_.isEmpty() || intake_->root().isEmpty() ||
+                !lastFile_.startsWith(intake_->root())) {
+                info_->setHtml(
+                    "<div style='color:#777'>Select a file in the "
+                    "INTAKE tree first \u2014 the handoff moves "
+                    "intake material onto a destination shelf.</div>");
+                return;
+            }
+            const QString shelf = dest_->currentDir();
+            if (shelf.isEmpty()) {
+                info_->setHtml(
+                    "<div style='color:#777'>Click the destination "
+                    "SHELF (folder) in the right tree \u2014 the "
+                    "shelf choice is the cataloger's: \u201ca book "
+                    "on the wrong shelf is lost forever.\u201d</div>");
+                return;
+            }
+            const QString name = QFileInfo(lastFile_).fileName();
+            if (QMessageBox::question(
+                    this, "Move to shelf?",
+                    "Move\n  " + name + "\nfrom\n  " +
+                        QFileInfo(lastFile_).path() + "\nonto\n  " +
+                        shelf +
+                        "\n\nMOVE, not copy; a META companion "
+                        "travels along; nothing is deleted. \u201cA "
+                        "book on the wrong shelf is lost "
+                        "forever\u201d \u2014 the shelf choice is "
+                        "yours.") != QMessageBox::Yes)
+                return;
+            const QString err = moveToShelf(lastFile_, shelf);
+            if (!err.isEmpty()) {
+                info_->setHtml("<div style='color:#B26B00'>" +
+                               err.toHtmlEscaped() +
+                               " \u2014 nothing moved.</div>");
+                return;
+            }
+            // the change-log stamp on the shelf, per the policy
+            QString initials;
+            for (const QString& w :
+                 g_userName.split(' ', Qt::SkipEmptyParts))
+                initials += w.left(1).toUpper();
+            if (initials.size() >= 2 &&
+                QMessageBox::question(
+                    this, "Stamp the shelf?",
+                    QString("Rename the shelf folder with today's "
+                            "date and your initials (%1)? The house "
+                            "change-log policy.")
+                        .arg(initials)) == QMessageBox::Yes)
+                stampFolder(shelf, initials);
+            intake_->setRoot(intake_->root());   // refresh censuses
+            dest_->setRoot(dest_->root(), false);
+            showFile(lastFile_);
+        });
         connect(regB, &QPushButton::clicked, [this] {
             const QString p = safeGetOpenFileName(
                 this, "Load the registrar's spreadsheet (read-only)",
@@ -24086,6 +24158,49 @@ public:
             h += "</ul>";
         }
         return h;
+    }
+
+    // The handoff move (9g step 5): intake file -> destination
+    // shelf. Move not copy; the META companion travels; collision
+    // and undecodable names refuse. Public for the selftest.
+    QString moveToShelf(const QString& srcFile, const QString& destDir) {
+        const QFileInfo fi(srcFile);
+        if (!fi.isFile()) return "no such file";
+        if (!QDir(destDir).exists()) return "no such shelf";
+        const auto inf =
+            allcore::decodeAcipFilename(fi.fileName().toStdString());
+        if (!inf.recognized)
+            return "the filename carries no catalog identity \u2014 "
+                   "compose the name first (the workflow's order: "
+                   "identify, name, then shelve)";
+        const QString destPath = destDir + "/" + fi.fileName();
+        if (QFile::exists(destPath))
+            return "a file with that name is already on the shelf";
+        // the META companion, if the name is truncated
+        QString metaSrc, metaDest;
+        if (fi.completeBaseName().endsWith('+')) {
+            QString num = fi.completeBaseName();
+            const int u = num.indexOf('_');
+            if (u > 0) num = num.left(u);
+            const QString mn = num + " META." + fi.suffix();
+            if (QFile::exists(fi.path() + "/" + mn)) {
+                metaSrc = fi.path() + "/" + mn;
+                metaDest = destDir + "/" + mn;
+                if (QFile::exists(metaDest))
+                    return "the META companion already exists on the "
+                           "shelf";
+            }
+        }
+        if (!QFile::rename(srcFile, destPath))
+            return "the filesystem refused the move";
+        if (!metaSrc.isEmpty() && !QFile::rename(metaSrc, metaDest)) {
+            // keep the pair together: undo rather than orphan the META
+            QFile::rename(destPath, srcFile);
+            return "the META companion could not move \u2014 the "
+                   "pair stays together in intake";
+        }
+        lastFile_ = destPath;
+        return QString();
     }
 
     // The change-log stamp (session 4 policy): rename a folder to
@@ -28252,6 +28367,59 @@ int main(int argc, char** argv) {
                                "its files")
                            .arg(stampOk ? "PASS" : "FAIL");
                 if (!stampOk) ++fails;
+                QDir(wd).removeRecursively();
+            }
+            {   // the handoff move: undecodable refused with the
+                // compose-first hint; a named file moves WITH its
+                // META companion; collisions refuse; nothing deleted
+                QDir().mkpath(wd + "/in");
+                QDir().mkpath(wd + "/shelf");
+                auto wr = [](const QString& p, const QByteArray& b) {
+                    QFile f(p);
+                    f.open(QIODevice::WriteOnly);
+                    f.write(b);
+                };
+                wr(wd + "/in/nameless_scan.txt", "BDEN,");
+                const QString e1 = catalogPane->moveToShelf(
+                    wd + "/in/nameless_scan.txt", wd + "/shelf");
+                const bool refuse1 =
+                    e1.contains("compose the name first") &&
+                    QFile::exists(wd + "/in/nameless_scan.txt");
+                // a truncated pair: main file + its META companion
+                std::string longTib(300, 'K');
+                for (size_t i = 4; i < longTib.size(); i += 5)
+                    longTib[i] = ' ';
+                const auto comp = allcore::composeCatalogFilename(
+                    "S25400", longTib, "A Long Test", "AUTHOR");
+                const QString mainP =
+                    wd + "/in/" + QString::fromStdString(comp.filename);
+                wr(mainP, "GNYIS,");
+                wr(wd + "/in/" +
+                       QString::fromStdString(comp.meta_filename),
+                   QByteArray::fromStdString(comp.meta_content));
+                const QString e2 =
+                    catalogPane->moveToShelf(mainP, wd + "/shelf");
+                const bool moved =
+                    e2.isEmpty() &&
+                    QFile::exists(wd + "/shelf/" +
+                                  QString::fromStdString(comp.filename)) &&
+                    QFile::exists(wd + "/shelf/" +
+                                  QString::fromStdString(
+                                      comp.meta_filename)) &&
+                    !QFile::exists(mainP);
+                // collision: same name back in intake, move refused
+                wr(mainP, "GSUM,");
+                const QString e3 =
+                    catalogPane->moveToShelf(mainP, wd + "/shelf");
+                const bool refuse2 =
+                    !e3.isEmpty() && QFile::exists(mainP);
+                log << QString("  [%1] Catalog: the handoff moves the "
+                               "file WITH its META companion, refuses "
+                               "the nameless and the colliding, "
+                               "deletes nothing")
+                           .arg(refuse1 && moved && refuse2 ? "PASS"
+                                                           : "FAIL");
+                if (!(refuse1 && moved && refuse2)) ++fails;
                 QDir(wd).removeRecursively();
             }
             {   // GMR's job #1 must render as a real report — the

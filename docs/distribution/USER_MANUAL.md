@@ -59,7 +59,8 @@ app: Help menu → ALL Tool Help & Tutorials.*
   - 14.12 Provenance banner and the cleanup lane
   - 14.13 Load register — the three states
   - 14.14 The change-log stamp
-  - 14.15 What the workflow will do next
+  - 14.15 Move to shelf — the handoff
+  - 14.16 What the workflow will do next
 - **CHAPTER 15 — THE PROPOSE PANE (Community → Propose)**
   - 15.1 One-time identity setup
   - 15.2 Making a proposal
@@ -3059,7 +3060,34 @@ ancestor up to six levels) carries a stamp — including the older
 hand-made styles — shows *last changed DATE by INITIALS* in the
 panel.
 
-## 14.15 What the workflow will do next
+## 14.15 Move to shelf — the handoff
+
+The two browsers are the two ends of one move: intake material,
+once identified and properly named, goes onto its shelf in the
+destination tree. Select the file on the left, click the target
+shelf (folder) on the right, then **Move to shelf…**.
+
+The move follows the house rules to the letter:
+
+- **Move, not copy** — after the handoff the file lives in exactly
+  one place;
+- a **META companion travels with its file** — the pair is never
+  split (if the companion cannot move, the whole move undoes);
+- a **collision is refused**, never overwritten; nothing is ever
+  deleted;
+- a file whose name carries **no catalog identity is refused** with
+  the workflow's order spelled out: identify, name (Compose
+  name…), then shelve;
+- the **shelf choice is the cataloger's** — the confirmation quotes
+  the warning that drives the whole design: *"a book on the wrong
+  shelf is lost forever"*;
+- after the move, the app offers the **change-log stamp** on the
+  shelf folder, per the policy.
+
+Both censuses refresh after a move — the intake count falls, the
+destination count rises, and the work is visibly further along.
+
+## 14.16 What the workflow will do next
 
 Still to come, in order: quality-control lanes
 (title-versus-translation mismatch, colophon-aware duplicate
@@ -3069,10 +3097,8 @@ spreadsheet (ACIP number through Tohoku, titles in three languages,
 authorship, BDRC identifiers, publisher, colophon, physical
 dimensions, condition…); routing, so an identity a cataloger
 accepts becomes a proposal in the ordinary approval channel and
-exports as a candidates file for the data project; and the handoff
-that moves a finished file from the left tree into the right one
-under its proper name — the two browsers are the two ends of that
-move.
+exports as a candidates file for the data project. The handoff
+itself ships above (14.15).
 
 ---
 

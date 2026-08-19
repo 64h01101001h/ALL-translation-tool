@@ -256,7 +256,13 @@ mints catalog numbers; the mother copy is never touched.**
 
 ## Phase 2 — the workflow's back half (queued 2026-08-19, Adam: "keep going")
 
-- [ ] 12. **The handoff move** (9g step 5 — the dual trees' purpose).
+- [x] 12. **The handoff move** — SHIPPED 2026-08-19 (selftest pin;
+      sweep 10 controls; ctest 52/52; no new core suite — the move
+      is filesystem orchestration, proven at the selftest level).
+      Move-not-copy with the META companion travelling (pair undo
+      if the companion cannot move), collision + nameless refused
+      (compose-first hint), stamp offered on the shelf, censuses
+      refresh. Original spec: (9g step 5 — the dual trees' purpose).
       A cataloged file moves from the intake tree into the
       destination tree: user picks the destination shelf (folder) in
       the right tree, clicks "Move to shelf…" with the selected
