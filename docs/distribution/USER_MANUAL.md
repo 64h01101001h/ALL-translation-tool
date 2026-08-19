@@ -3061,15 +3061,18 @@ panel.
 
 ## 14.15 What the workflow will do next
 
-This is the first working step of a longer workflow. Still to come,
-in order: quality-control lanes (title-versus-translation mismatch,
-colophon-aware duplicate detection across the intake set); a
-cataloging worksheet of the fields each file needs; routing, so an
-identity a cataloger accepts becomes a proposal in the ordinary
-approval channel and exports as a candidates file for the data
-project; and the handoff that moves a finished file from the
-left tree into the right one under its proper name — the two
-browsers are the two ends of that move.
+Still to come, in order: quality-control lanes
+(title-versus-translation mismatch, colophon-aware duplicate
+detection across the intake set); the full cataloging worksheet —
+its 52-field schema is now in hand from the team's live
+spreadsheet (ACIP number through Tohoku, titles in three languages,
+authorship, BDRC identifiers, publisher, colophon, physical
+dimensions, condition…); routing, so an identity a cataloger
+accepts becomes a proposal in the ordinary approval channel and
+exports as a candidates file for the data project; and the handoff
+that moves a finished file from the left tree into the right one
+under its proper name — the two browsers are the two ends of that
+move.
 
 ---
 

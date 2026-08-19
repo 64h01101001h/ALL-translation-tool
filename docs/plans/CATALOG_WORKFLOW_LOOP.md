@@ -239,7 +239,17 @@ mints catalog numbers; the mother copy is never touched.**
       the intake tree, offer the date+initials suffix convention
       (user's initials from team/name settings); display the last
       changer decoded from folder names in the destination tree.
-- [ ] 11. **Closing audit**: docs truth pass over Chapter 14 +
-      README Catalog row; fresh sweep + selftest of the whole
-      group; update TODO 9g statuses; write the handoff note; stop
-      the loop.
+- [x] 11. **Closing audit** — DONE 2026-08-19, loop complete.
+      README gains the Catalog pane row; manual 14.15 refreshed
+      (the 52-column worksheet schema now in hand); TODO 9g
+      statuses updated (2a done + re-measured, 2b queue complete,
+      3 has its real schema). Closing verification: ctest 52/52,
+      selftest ALL PASS, sweep 9 controls + 2 dialogs coherent,
+      fresh live capture of the full workbench. THE LOOP RAN 11
+      ITERATIONS, e0a7a86..this commit: 8 new test suites, 7 new
+      toolbar lanes + 4 in-card lanes, every threshold measured
+      against the real library before shipping, 3 designs rejected
+      by measurement and recorded. REMAINING FOR FUTURE SESSIONS
+      (TODO 9g): the Lon-demo QC lanes (2), the 52-field worksheet
+      form (3), proposal routing (4), the intake->library handoff
+      move (5) — the dual trees are its two ends.

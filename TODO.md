@@ -354,7 +354,10 @@ implementation is sidelined HERE from this date. What this means:
              folder has not been seen yet — when he supplies it, the
              first job is re-measuring on that material.
 
-         (2a) BIBLIOGRAPHY AUDIT lane — GMR's own "first job"
+         (2a) DONE 2026-08-19 (loop 1, suite 45; re-measured under
+             the uncapped-number rules in loop 10: 347 cited / 297
+             present / 50 missing). BIBLIOGRAPHY AUDIT lane — GMR's
+             own "first job"
              (cataloging session 1, Dec 22 2025, SBceNNuHtRc;
              docs/research/GMR_CATALOGING_SESSIONS.md): every ACIP
              number cited in the published Mixed Nuts
@@ -369,7 +372,16 @@ implementation is sidelined HERE from this date. What this means:
          (2) the QC lanes from the Lon-demo adoptables (9e):
              title-vs-translation mismatch + colophon-aware
              same-title/duplicate detection over the intake set;
-         (2b) FROM THE 13 SESSION VIDEOS (2026-08-19, all analyzed:
+         (2b) BUILD QUEUE COMPLETE 2026-08-19 — all ten items below
+             SHIPPED via the build loop (suites 45-52, sweeps 1->9
+             controls, manual 14.5-14.14; see
+             docs/plans/CATALOG_WORKFLOW_LOOP.md for the measured
+             checkoffs). Plus mid-loop: Adam's title translator
+             (attestation workbench), the live Google-sheet
+             worksheet/register read (52-column schema banked in
+             the research doc), the no-5-digit-cap ruling + dashed
+             sub-number key logic. FROM THE 13 SESSION VIDEOS
+             (2026-08-19, all analyzed:
              docs/research/GMR_CATALOGING_SESSIONS.md — "The house
              rules, consolidated" section IS the build spec). The
              build queue, in value order:
@@ -413,9 +425,11 @@ implementation is sidelined HERE from this date. What this means:
              scheduled for the following Monday.
              NOT CAPTIONED: Mar 24 session (bq8SfTu558c) — whisper
              pass possible if Adam wants it mined.
-         (3) worksheet: the catalog fields per file (start from the
-             ACIP identity + Élie CSV fields; consider GMR's
-             23-item physical format when Adam obtains it). FROM
+         (3) worksheet: the catalog fields per file — THE REAL
+             SCHEMA IS NOW IN HAND (2026-08-19): the team's live
+             52-column worksheet (Adam's Google sheet, banked in
+             GMR_CATALOGING_SESSIONS.md) supersedes guessing at
+             GMR's 23-item format; build the worksheet form on it. FROM
              SESSION 1: add witness census (how many versions, same
              works?), witness quality tier (carving > vetted ms >
              modern single-pass typeset), corruption evidence,
