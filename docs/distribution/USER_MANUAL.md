@@ -2746,7 +2746,11 @@ gives the decoded identity: collection, catalog number,
 verification status, language, and whether the input is marked
 incomplete. For an uncataloged file it says so plainly. Either way
 you get the file's folder, **Open in the Overlay** to read the
-text itself, and the file's opening lines below.
+text in the reading pane, and the file's **complete text** below —
+the panel never truncates a text file. (A binary file — a scan, a
+PDF — gets an honest "no preview" note instead of a garbage dump,
+and a text file beyond 20 MB, far past any real ACIP text, is
+capped with the cap stated.)
 
 ## 14.4 Suggested identity — how a nameless file names itself
 

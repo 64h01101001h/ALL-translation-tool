@@ -23698,7 +23698,7 @@ public:
         info_->setOpenLinks(false);
         info_->setHtml(
             "<i style='color:#8A8A8A'>Click a file in either tree — "
-            "its decoded identity, its opening lines, and (for an "
+            "its decoded identity, its complete text, and (for an "
             "uncataloged file) its suggested identity land here.</i>");
         vsplit->addWidget(info_);
         vsplit->setStretchFactor(0, 3);
@@ -23728,6 +23728,9 @@ public:
     int recognizedCount() const { return intake_->recognizedCount(); }
     int titledCount() const { return intake_->titledCount(); }
     QString destRoot() const { return dest_->root(); }
+    // what the panel actually shows, for the selftest
+    QString infoText() const { return info_->toPlainText(); }
+    void showFilePublic(const QString& p) { showFile(p); }
     bool selectFirstUncataloged() {
         const QString p = intake_->firstUncataloged();
         if (p.isEmpty()) return false;
@@ -23870,12 +23873,34 @@ private:
         // the file whose NAME says nothing may still announce itself
         // in its TEXT — read the title page and offer candidates
         if (!inf.recognized) h += identityHtml(path);
+        // the ENTIRE text (Adam, 2026-08-19: the panel must not
+        // truncate). Guards, because an intake folder also holds
+        // scans/PDFs/models: a binary file gets an honest note, not
+        // a garbage dump, and a text file beyond any real ACIP size
+        // (largest in the installed library: 2.6 MB) is capped with
+        // the cap STATED and the Overlay offered for the rest.
         QFile f(path);
         if (f.open(QIODevice::ReadOnly)) {
-            const QString head = QString::fromUtf8(f.read(1200));
-            h += "<hr><pre style='font-size:12px;white-space:"
-                 "pre-wrap'>" +
-                 head.toHtmlEscaped() + "</pre>";
+            constexpr qint64 kTextCap = 20 * 1024 * 1024;
+            const QByteArray sniff = f.read(4096);
+            if (sniff.contains('\0')) {
+                h += QString("<hr><div style='color:#777'>Not a "
+                             "text file (%1 KB) — no preview.</div>")
+                         .arg(fi.size() / 1024);
+            } else {
+                f.seek(0);
+                const QByteArray raw = f.read(kTextCap);
+                h += "<hr><pre style='font-size:12px;white-space:"
+                     "pre-wrap'>" +
+                     QString::fromUtf8(raw).toHtmlEscaped() +
+                     "</pre>";
+                if (fi.size() > kTextCap)
+                    h += QString("<div style='color:#B26B00'>Showing "
+                                 "the first 20 MB of %1 MB — open in "
+                                 "the Overlay for the whole text."
+                                 "</div>")
+                             .arg(fi.size() / (1024 * 1024));
+            }
         }
         info_->setHtml(h);
     }
@@ -26995,6 +27020,39 @@ int main(int argc, char** argv) {
                 if (!honest) ++fails;
             }
             QDir(wd).removeRecursively();
+            {   // the panel must show the ENTIRE text (Adam's
+                // report: it was cut at 1,200 bytes) — write a file
+                // whose distinctive END lies far past the old cap,
+                // and a binary file must get a note, not a dump
+                QDir().mkpath(wd);   // the census probe folder was
+                                     // already cleaned up above
+                const QString big = wd + "/long_text.txt";
+                { QFile f(big);
+                  f.open(QIODevice::WriteOnly);
+                  f.write(QByteArray("BSGOM PA, ").repeated(500));
+                  f.write("ZHES GRUB BO,,END-OF-TEXT-MARKER"); }
+                catalogPane->showFilePublic(big);
+                const bool whole = catalogPane->infoText().contains(
+                    "END-OF-TEXT-MARKER");
+                log << QString("  [%1] Catalog: the panel shows the "
+                               "entire text, not a truncation")
+                           .arg(whole ? "PASS" : "FAIL");
+                if (!whole) ++fails;
+                const QString bin = wd + "/scan_page.bin";
+                { QFile f(bin);
+                  f.open(QIODevice::WriteOnly);
+                  f.write(QByteArray(64, '\0') + "PDFISH"); }
+                catalogPane->showFilePublic(bin);
+                const bool honest = catalogPane->infoText().contains(
+                                        "Not a text file") &&
+                                    !catalogPane->infoText().contains(
+                                        "PDFISH");
+                log << QString("  [%1] Catalog: a binary file gets "
+                               "an honest note, not a garbage dump")
+                           .arg(honest ? "PASS" : "FAIL");
+                if (!honest) ++fails;
+                QDir(wd).removeRecursively();
+            }
             {   // the second browser: the destination tree must be
                 // rooted at the library by default — the tree a
                 // cataloged file is eventually filed into — and its
