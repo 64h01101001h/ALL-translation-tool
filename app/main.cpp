@@ -25798,6 +25798,23 @@ int main(int argc, char** argv) {
         const QStringList stallGuard = {
             "Update search index",   // minutes-long full rebuild
         };
+        // PRIME the pane first (audit finding 2026-08-18: the
+        // Analysis sweep exercised ZERO controls because its only
+        // button enables on pasted text, and Convert's converters
+        // are QPlainTextEdits the walk never touched). Every
+        // enabled, editable text box gets a standard ACIP probe —
+        // this enables text-gated buttons AND exercises the
+        // paste-to-convert wiring; originals restored at the end.
+        std::vector<std::pair<QPlainTextEdit*, QString>> primed;
+        for (auto* pe : pane->findChildren<QPlainTextEdit*>()) {
+            if (!pe->isEnabled() || pe->isReadOnly()) continue;
+            primed.push_back({pe, pe->toPlainText()});
+            pe->setPlainText("BDEN PA DANG , BSOD NAMS ,");
+            settle();
+            note("textbox", pe->placeholderText().isEmpty()
+                                ? QStringLiteral("(unnamed)")
+                                : pe->placeholderText().left(44));
+        }
         for (auto* b : pane->findChildren<QPushButton*>()) {
             if (b->text().trimmed().isEmpty()) continue;
             if (!b->isEnabled()) {
@@ -25864,6 +25881,10 @@ int main(int argc, char** argv) {
                            ? QString("(unnamed)")
                            : le->objectName()
                      : le->placeholderText().left(48));
+        }
+        for (auto& [pe, keepTxt] : primed) {
+            pe->setPlainText(keepTxt);
+            settle();
         }
         printf("SWEEP COMPLETE: %s — %d control(s) exercised, app "
                "coherent\n",
