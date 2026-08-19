@@ -209,7 +209,15 @@ mints catalog numbers; the mother copy is never touched.**
       provenance banner per selected file (western pagination / no
       folio marks / parenthesized titles) with the "typed = suspect"
       reading, sourced to the sessions doc.
-- [ ] 9. **Register view + three states**. Import a CSV/TSV register
+- [x] 9. **Register view + three states** — SHIPPED 2026-08-19
+      (suite 52 register_smoke; selftest pin; sweep 9 controls).
+      CSV/TSV parser with fuzzy headers + quoted fields +
+      padding-insensitive lookup; junk rows refused; no-number-column
+      sheets load 0, loudly. Register report: issued vs cataloged vs
+      issued-but-absent against the destination tree; per-file
+      three-lights line with the register ✓. Read-only throughout;
+      the app never mints. (Nick's real spreadsheet is his working
+      file — first live load happens when Adam gets a copy.) Import a CSV/TSV register
       (Nick's spreadsheet shape: number, title, folio start/end,
       date, initials) read-only; per-file state line: number issued
       (from register or filename) / input exists (file present) /

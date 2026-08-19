@@ -57,7 +57,8 @@ app: Help menu → ALL Tool Help & Tutorials.*
   - 14.10 Compare trees — the divergence audit
   - 14.11 Tohoku numbers and colophon candidates
   - 14.12 Provenance banner and the cleanup lane
-  - 14.13 What the workflow will do next
+  - 14.13 Load register — the three states
+  - 14.14 What the workflow will do next
 - **CHAPTER 15 — THE PROPOSE PANE (Community → Propose)**
   - 15.1 One-time identity setup
   - 15.2 Making a proposal
@@ -3015,7 +3016,31 @@ Measured on the installed library: 0 slash-corrupted files (the
 lane exists for intake material), 0 lowercase runs, and 5
 western-paginated typed books flagged — the signal works.
 
-## 14.13 What the workflow will do next
+## 14.13 Load register — the three states
+
+Catalog numbers are issued by one human — the registrar — from a
+spreadsheet. **Load register…** reads that spreadsheet (CSV or TSV;
+the columns are found by their header names: number/catalog, title,
+folio start/end, date, initials) strictly read-only: the app never
+writes the register and never mints a number.
+
+Loading renders the register report against the destination tree:
+how many issued numbers are **cataloged** there, and — the list
+that matters — the numbers **issued but absent**, each with its
+title, initials, and date from the sheet. This is the session-1
+disease made visible: works can carry numbers for years without
+ever entering the database.
+
+Once a register is loaded, clicking any file also shows its three
+state lights, which are independent by design:
+
+1. **number issued** — the filename (or the register) says so, with
+   a ✓ when the register holds the row;
+2. **input exists** — the file itself;
+3. **cataloged** — the file sits inside the destination tree, or a
+   plain warning that it does not.
+
+## 14.14 What the workflow will do next
 
 This is the first working step of a longer workflow. Still to come,
 in order: quality-control lanes (title-versus-translation mismatch,

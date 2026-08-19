@@ -56,6 +56,7 @@ add_library(allcore STATIC
   src/catalog_list.cpp
   src/title_xlat.cpp
   src/tree_diff.cpp
+  src/catalog_register.cpp
 )
 target_include_directories(allcore PUBLIC include)
 
@@ -260,6 +261,11 @@ add_test(NAME abbr_smoke
          COMMAND abbr_smoke ${CMAKE_SOURCE_DIR}/data/abbreviations/tibschol_abbr.csv
                  ${CMAKE_SOURCE_DIR}/data/spellcheck
                  ${CMAKE_SOURCE_DIR}/data/abbreviations/rkts_abb.csv)
+
+add_executable(register_smoke tests/register_smoke.cpp)
+target_link_libraries(register_smoke PRIVATE allcore)
+add_test(NAME register_smoke
+         COMMAND register_smoke ${CMAKE_SOURCE_DIR}/library)
 
 add_executable(cleanup_smoke tests/cleanup_smoke.cpp)
 target_link_libraries(cleanup_smoke PRIVATE allcore)

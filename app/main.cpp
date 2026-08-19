@@ -118,6 +118,7 @@
 #include "allcore/catalog_id.h"
 #include "allcore/catalog_list.h"
 #include "allcore/catalog_name.h"
+#include "allcore/catalog_register.h"
 #include "allcore/title_xlat.h"
 #include "allcore/tree_diff.h"
 #ifdef ALL_HAVE_OCR
@@ -23731,6 +23732,14 @@ public:
             "only-right. Content matched by size + sampled bytes; "
             "nothing is changed.");
         actions->addWidget(diffB);
+        auto* regB = new QPushButton("Load register\u2026");
+        regB->setToolTip(
+            "Load the registrar's spreadsheet (CSV/TSV: number, title, "
+            "folio start/end, date, initials) READ-ONLY, and see the "
+            "three states per work: number issued \u00b7 input exists "
+            "\u00b7 cataloged. The app never writes the register and "
+            "never mints numbers.");
+        actions->addWidget(regB);
         actions->addStretch();
         outer->addLayout(actions);
 
@@ -23768,6 +23777,14 @@ public:
         };
         connect(nameB, &QPushButton::clicked,
                 [this] { composeNameDialog(); });
+        connect(regB, &QPushButton::clicked, [this] {
+            const QString p = safeGetOpenFileName(
+                this, "Load the registrar's spreadsheet (read-only)",
+                QDir::homePath(),
+                "Spreadsheets (*.csv *.tsv *.txt)");
+            if (p.isEmpty()) return;
+            info_->setHtml(loadRegisterHtml(p));
+        });
         connect(diffB, &QPushButton::clicked, [this] {
             const QString L = intake_->root(), R = dest_->root();
             if (L.isEmpty() || R.isEmpty()) {
@@ -23968,6 +23985,85 @@ public:
             dlg.accept();
         });
         dlg.exec();
+    }
+
+    // Load the register read-only and render the three-states report.
+    // Public for the selftest.
+    QString loadRegisterHtml(const QString& path) {
+        QFile f(path);
+        if (!f.open(QIODevice::ReadOnly))
+            return "<div style='color:#B26B00'>unreadable file \u2014 "
+                   "no register loaded</div>";
+        const int n = register_.loadText(f.readAll().toStdString());
+        if (n == 0)
+            return "<div style='color:#B26B00'>No usable number column "
+                   "found \u2014 the register needs a header row with "
+                   "a number/catalog column. Nothing loaded.</div>";
+        const QString destRootDir = dest_->root().isEmpty()
+                                        ? root_ + "/library"
+                                        : dest_->root();
+        const auto have =
+            allcore::collectLibraryNumbers(destRootDir.toStdString());
+        int cataloged = 0;
+        std::vector<const allcore::RegisterEntry*> absent;
+        for (const auto& e : register_.entries()) {
+            if (have.count(allcore::normalizeCatalogNumber(e.number)))
+                ++cataloged;
+            else
+                absent.push_back(&e);
+        }
+        QString h =
+            "<h3>Register loaded (read-only)</h3>"
+            "<div style='color:#777'>" + path.toHtmlEscaped() +
+            "</div>" +
+            QString("<div style='margin:6px 0'><b>%1</b> issued "
+                    "number(s) \u00b7 <b>%2</b> cataloged in the "
+                    "destination tree \u00b7 <b style='color:#8C2F2B'>"
+                    "%3 issued but absent</b></div>")
+                .arg(n)
+                .arg(cataloged)
+                .arg(absent.size());
+        h += "<div style='color:#777;font-size:11px'>The three states "
+             "are independent: a number can be issued without the "
+             "input existing, and input can exist without being "
+             "cataloged (session 1: works cited in bibliographies got "
+             "numbers \u201cbut they're not in the catalog\u201d). "
+             "The register is never written by this app.</div>";
+        if (!absent.empty()) {
+            h += "<div style='margin-top:6px'><b>Issued but absent "
+                 "from this tree</b></div><ul style='margin:2px 0'>";
+            size_t shown = 0;
+            for (const auto* e : absent) {
+                if (shown++ >= 100) {
+                    h += QString("<li style='color:#777'>\u2026 and "
+                                 "%1 more</li>")
+                             .arg(absent.size() - 100);
+                    break;
+                }
+                h += "<li><b>" +
+                     QString::fromStdString(e->number).toHtmlEscaped() +
+                     "</b>" +
+                     (e->title.empty()
+                          ? QString()
+                          : " \u2014 " + QString::fromStdString(e->title)
+                                              .toHtmlEscaped()) +
+                     (e->initials.empty()
+                          ? QString()
+                          : QString(" <span style='color:#8A8A8A'>"
+                                    "(%1%2)</span>")
+                                .arg(QString::fromStdString(e->initials)
+                                         .toHtmlEscaped())
+                                .arg(e->date.empty()
+                                         ? QString()
+                                         : ", " +
+                                               QString::fromStdString(
+                                                   e->date)
+                                                   .toHtmlEscaped())) +
+                     "</li>";
+            }
+            h += "</ul>";
+        }
+        return h;
     }
 
     // The cleanup lane's only write: a CLEANED COPY beside the
@@ -24575,6 +24671,44 @@ private:
                  "walk through identification → proposal "
                  "→ approval.</div>";
         }
+        // the three lights: number issued / input exists / cataloged
+        {
+            QStringList st;
+            QString num;
+            if (inf.recognized) {
+                num = fi.completeBaseName();
+                const int u = num.indexOf('_');
+                if (u > 0) num = num.left(u);
+            }
+            if (inf.recognized) {
+                QString numLine = "number issued (" + num + ")";
+                if (register_.size() > 0) {
+                    const auto* re =
+                        register_.find(num.toStdString());
+                    if (re)
+                        numLine +=
+                            " \u2713 in the register" +
+                            (re->initials.empty()
+                                 ? QString()
+                                 : " (" + QString::fromStdString(
+                                              re->initials) + ")");
+                }
+                st << numLine;
+            } else {
+                st << "no number \u2014 the registrar issues one";
+            }
+            st << "input exists (this file)";
+            const QString destRootDir = dest_->root().isEmpty()
+                                            ? root_ + "/library"
+                                            : dest_->root();
+            st << (path.startsWith(destRootDir)
+                       ? "cataloged (inside the destination tree)"
+                       : "<span style='color:#B26B00'>not cataloged "
+                         "\u2014 not in the destination tree</span>");
+            h += "<div style='color:#555;font-size:11px;margin:4px 0'>"
+                 "STATES: " +
+                 st.join(" \u00b7 ") + "</div>";
+        }
         h += QString("<div style='margin:6px 0'><a href='catopen:%1"
                      "'>Open in the Overlay</a></div>")
                  .arg(anchorEnc(path));
@@ -24658,6 +24792,7 @@ private:
     }
 
     QString lastFile_;
+    allcore::CatalogRegister register_;
     allcore::TitlePairBank pairBank_;
     bool pairBankBuilt_ = false;
     CatalogTree* intake_ = nullptr;
@@ -27998,6 +28133,37 @@ int main(int argc, char** argv) {
                                "the mother copy untouched")
                            .arg(banner && cleanedOk ? "PASS" : "FAIL");
                 if (!(banner && cleanedOk)) ++fails;
+                QDir(wd).removeRecursively();
+            }
+            {   // the register view: load a probe register, prove the
+                // three-states report and the per-file register tick
+                QDir().mkpath(wd);
+                const QString rp = wd + "/register.csv";
+                { QFile f(rp);
+                  f.open(QIODevice::WriteOnly);
+                  f.write("number,title,initials\n"
+                          "KL00016,probe work,NL\n"
+                          "S99999,never input,GMR\n"); }
+                const QString rh = catalogPane->loadRegisterHtml(rp);
+                const bool regOk =
+                    rh.contains("Register loaded (read-only)") &&
+                    rh.contains("S99999") &&
+                    rh.contains("never written by this app");
+                { QFile f(wd + "/KL00016E.ACT");
+                  f.open(QIODevice::WriteOnly);
+                  f.write("@1A BDEN PA,"); }
+                catalogPane->showFilePublic(wd + "/KL00016E.ACT");
+                const bool states =
+                    catalogPane->infoText().contains(
+                        "number issued (KL00016E)") &&
+                    catalogPane->infoText().contains(
+                        "in the register") &&
+                    catalogPane->infoText().contains("not cataloged");
+                log << QString("  [%1] Catalog: the register loads "
+                               "read-only and the three states light "
+                               "per file")
+                           .arg(regOk && states ? "PASS" : "FAIL");
+                if (!(regOk && states)) ++fails;
                 QDir(wd).removeRecursively();
             }
             {   // GMR's job #1 must render as a real report — the
