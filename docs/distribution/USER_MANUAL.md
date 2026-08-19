@@ -53,7 +53,8 @@ app: Help menu → ALL Tool Help & Tutorials.*
   - 14.6 Suggested splits — the chop assist
   - 14.7 Compose name — the house filename grammar
   - 14.8 Generate catalog list — the ASCII inventory
-  - 14.9 What the workflow will do next
+  - 14.9 Translate title — the attestation workbench
+  - 14.10 What the workflow will do next
 - **CHAPTER 15 — THE PROPOSE PANE (Community → Propose)**
   - 15.1 One-time identity setup
   - 15.2 Making a proposal
@@ -2914,7 +2915,34 @@ the folio range seen in the text.
 The header states what the file is: a LIST of the folders, not the
 official catalog — the catalog changes only through data releases.
 
-## 14.9 What the workflow will do next
+## 14.9 Translate title — the attestation workbench
+
+Translating a title is the translator's work — but the published
+record already carries thousands of GMR's own title renderings, and
+consistency with them is the house standard ("people are going to
+emulate your work"). **Translate title…** brings that record to the
+bench.
+
+Type (or accept the prefilled) Tibetan title. The workbench answers
+with two kinds of evidence, from ~5,500 published title pairs (the
+library's own bilingual filenames plus the catalog works table):
+
+- **Whole-title matches** — titles the record already renders that
+  share most of this title's syllables, each with its published
+  English and its source.
+- **Attested phrases** — the title is covered greedily by its
+  longest phrases that appear in *other* published titles; each
+  phrase card lists up to three full Tibetan–English pairs so you
+  can see where the phrase landed in English. No word alignment is
+  invented — the card shows whole pairs, and you read them.
+
+Syllables with no attestation are listed plainly: *they need the
+translator, not the machine.* Nothing here is machine translation —
+the machine attests, you compose. Measured on held-out titles:
+attested phrases cover about 90% of a typical title's syllables,
+and a near whole-title match surfaces for about 62%.
+
+## 14.10 What the workflow will do next
 
 This is the first working step of a longer workflow. Still to come,
 in order: quality-control lanes (title-versus-translation mismatch,

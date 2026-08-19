@@ -142,7 +142,14 @@ mints catalog numbers; the mother copy is never touched.**
       list…" on the destination tree → writes to a user-chosen
       location + shows summary; this is a LIST of what's in the
       folders, not the official catalog — banner says so.
-- [ ] 5. **Title translator — the attested-fragments workbench**
+- [x] 5. **Title translator — the attested-fragments workbench** —
+      SHIPPED 2026-08-19 (suite 49 title_xlat_smoke; selftest pin;
+      sweep 7 controls). Held-out measurement over the library's
+      3,613 bilingual filename pairs: 90.2% mean fragment coverage,
+      62.0% whole-title near-match rate (the app's bank adds
+      catalog_works.json on top, ~5.5k pairs). Rule 1 pure: whole
+      pairs as evidence, no invented word alignment, uncovered
+      syllables listed plainly. Original spec follows:
       (Adam's ask, 2026-08-19; Jamie's title glossary from session 2
       is the precedent; rule 1 shapes it: MATCH GMR's English, never
       compose). Core: a TitlePairBank from catalog_works.json (1,846

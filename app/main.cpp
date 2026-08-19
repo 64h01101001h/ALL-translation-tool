@@ -118,6 +118,7 @@
 #include "allcore/catalog_id.h"
 #include "allcore/catalog_list.h"
 #include "allcore/catalog_name.h"
+#include "allcore/title_xlat.h"
 #ifdef ALL_HAVE_OCR
 #include "allocr/linebuild.h"
 #include "allocr/recognize.h"
@@ -23713,6 +23714,14 @@ public:
             "tree holds (S/F/T/E/A/V/P lines, St. Petersburg lineage) "
             "\u2014 a LIST of the folders, not the official catalog.");
         actions->addWidget(listB);
+        auto* xlatB = new QPushButton("Translate title\u2026");
+        xlatB->setToolTip(
+            "The attestation workbench: whole-title matches from the "
+            "published record, and per-phrase cards showing how each "
+            "phrase of the title has been rendered in OTHER published "
+            "titles. The machine attests; you compose \u2014 nothing "
+            "is machine-translated.");
+        actions->addWidget(xlatB);
         actions->addStretch();
         outer->addLayout(actions);
 
@@ -23750,6 +23759,24 @@ public:
         };
         connect(nameB, &QPushButton::clicked,
                 [this] { composeNameDialog(); });
+        connect(xlatB, &QPushButton::clicked, [this] {
+            QString seed;
+            if (!lastFile_.isEmpty()) {
+                QFile f(lastFile_);
+                if (f.open(QIODevice::ReadOnly)) {
+                    const auto t = allcore::extractAcipTitle(
+                        f.read(4000).toStdString());
+                    if (t.found)
+                        seed = QString::fromStdString(t.title);
+                }
+            }
+            bool ok = false;
+            const QString q = QInputDialog::getText(
+                this, "Translate title",
+                "Tibetan title (ACIP):", QLineEdit::Normal, seed, &ok);
+            if (!ok || q.trimmed().isEmpty()) return;
+            info_->setHtml(titleWorkbenchHtml(q.trimmed()));
+        });
         connect(listB, &QPushButton::clicked, [this] {
             const QString root = dest_->root().isEmpty()
                                      ? root_ + "/library"
@@ -23911,6 +23938,103 @@ public:
             dlg.accept();
         });
         dlg.exec();
+    }
+
+    // The title workbench render. Public for the selftest.
+    QString titleWorkbenchHtml(const QString& tib) {
+        const auto& bank = titlePairBank();
+        const auto w =
+            allcore::buildTitleWorkbench(tib.toStdString(), bank);
+        QString h =
+            "<h3>Title workbench</h3>"
+            "<div style='font-family:Palatino'><b>" +
+            tib.toHtmlEscaped() + "</b></div>" +
+            QString("<div style='color:#777'>Matched against %1 "
+                    "published title pairs. <b>The machine attests; "
+                    "you compose.</b> Nothing below is a machine "
+                    "translation \u2014 every English line is a "
+                    "rendering the published record already "
+                    "carries.</div>")
+                .arg(bank.size());
+        if (!w.whole.empty()) {
+            h += "<div style='margin-top:8px'><b>Whole-title "
+                 "matches</b></div><table cellpadding='4'>";
+            for (const auto& m : w.whole) {
+                h += QString("<tr><td valign='top'><b>%1%</b></td>"
+                             "<td><span style='font-family:Palatino'>"
+                             "%2</span><div>%3</div>"
+                             "<div style='color:#8A8A8A;font-size:"
+                             "11px'>%4</div></td></tr>")
+                         .arg(qRound(m.score * 100))
+                         .arg(QString::fromStdString(m.tib_raw)
+                                  .toHtmlEscaped())
+                         .arg(QString::fromStdString(m.eng)
+                                  .toHtmlEscaped())
+                         .arg(QString::fromStdString(m.source)
+                                  .toHtmlEscaped());
+            }
+            h += "</table>";
+        }
+        if (!w.fragments.empty()) {
+            h += QString("<div style='margin-top:8px'><b>Attested "
+                         "phrases</b> <span style='color:#777'>\u2014 "
+                         "%1% of the title's syllables covered</span>"
+                         "</div>")
+                     .arg(qRound(w.coverage * 100));
+            for (const auto& c : w.fragments) {
+                h += "<div style='margin-top:6px;font-family:Palatino'>"
+                     "<b>" +
+                     QString::fromStdString(c.fragment).toHtmlEscaped() +
+                     "</b></div><ul style='margin:2px 0'>";
+                for (const auto& ex : c.examples) {
+                    h += "<li><span style='font-family:Palatino;"
+                         "color:#555'>" +
+                         QString::fromStdString(ex.tib_raw)
+                             .toHtmlEscaped() +
+                         "</span><br>" +
+                         QString::fromStdString(ex.eng).toHtmlEscaped() +
+                         "</li>";
+                }
+                h += "</ul>";
+            }
+        }
+        if (!w.uncovered.empty()) {
+            QString u;
+            for (const auto& s2 : w.uncovered) {
+                if (!u.isEmpty()) u += " \u00b7 ";
+                u += QString::fromStdString(s2).toHtmlEscaped();
+            }
+            h += "<div style='margin-top:8px;color:#B26B00'><b>No "
+                 "attestation:</b> <span style='font-family:Palatino'>" +
+                 u +
+                 "</span> \u2014 the published record has no title "
+                 "carrying these; they need the translator, not the "
+                 "machine.</div>";
+        }
+        if (w.whole.empty() && w.fragments.empty())
+            h += "<div style='margin-top:8px;color:#777'>Nothing in "
+                 "the published record matches \u2014 an honest "
+                 "blank. This title needs the translator from "
+                 "scratch.</div>";
+        return h;
+    }
+    // built once: library filename pairs + GMR's catalog_works pairs
+    const allcore::TitlePairBank& titlePairBank() {
+        if (pairBankBuilt_) return pairBank_;
+        pairBankBuilt_ = true;
+        if (!root_.isEmpty())
+            pairBank_.addLibraryTree((root_ + "/library").toStdString());
+        QFile wf(root_ + "/data/extracted/catalog_works.json");
+        if (wf.open(QIODevice::ReadOnly)) {
+            const auto o = QJsonDocument::fromJson(wf.readAll()).object();
+            for (auto it = o.begin(); it != o.end(); ++it) {
+                const auto v = it.value().toObject();
+                pairBank_.add(v.value("tib").toString().toStdString(),
+                              v.value("eng").toString().toStdString(),
+                              "catalog_works.json");
+            }
+        }
+        return pairBank_;
     }
 
     // The ASCII catalog list: generate over a tree, write to the
@@ -24316,6 +24440,8 @@ private:
     }
 
     QString lastFile_;
+    allcore::TitlePairBank pairBank_;
+    bool pairBankBuilt_ = false;
     CatalogTree* intake_ = nullptr;
     CatalogTree* dest_ = nullptr;
     QTextBrowser* info_ = nullptr;
@@ -27575,6 +27701,22 @@ int main(int argc, char** argv) {
                            .arg(ok ? "PASS" : "FAIL");
                 if (!ok) ++fails;
                 QDir(wd).removeRecursively();
+            }
+            {   // the title workbench: attested renderings for a
+                // known title, uncovered syllables listed, the
+                // match-never-compose charter line
+                const QString th = catalogPane->titleWorkbenchHtml(
+                    "SHES RAB KYI PHA ROL TU PHYIN PA'I SNYING PO");
+                const bool tw =
+                    th.contains("Title workbench") &&
+                    th.contains("The machine attests; you compose") &&
+                    (th.contains("Whole-title matches") ||
+                     th.contains("Attested phrases"));
+                log << QString("  [%1] Catalog: the title workbench "
+                               "attests published renderings, never "
+                               "composes")
+                           .arg(tw ? "PASS" : "FAIL");
+                if (!tw) ++fails;
             }
             {   // GMR's job #1 must render as a real report — the
                 // measured numbers, a known missing work, the

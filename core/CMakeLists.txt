@@ -54,6 +54,7 @@ add_library(allcore STATIC
   src/catalog_audit.cpp
   src/catalog_name.cpp
   src/catalog_list.cpp
+  src/title_xlat.cpp
 )
 target_include_directories(allcore PUBLIC include)
 
@@ -258,6 +259,11 @@ add_test(NAME abbr_smoke
          COMMAND abbr_smoke ${CMAKE_SOURCE_DIR}/data/abbreviations/tibschol_abbr.csv
                  ${CMAKE_SOURCE_DIR}/data/spellcheck
                  ${CMAKE_SOURCE_DIR}/data/abbreviations/rkts_abb.csv)
+
+add_executable(title_xlat_smoke tests/title_xlat_smoke.cpp)
+target_link_libraries(title_xlat_smoke PRIVATE allcore)
+add_test(NAME title_xlat_smoke
+         COMMAND title_xlat_smoke ${CMAKE_SOURCE_DIR}/library)
 
 add_executable(catalog_list_smoke tests/catalog_list_smoke.cpp)
 target_link_libraries(catalog_list_smoke PRIVATE allcore)
