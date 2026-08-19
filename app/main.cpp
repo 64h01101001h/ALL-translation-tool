@@ -81,6 +81,7 @@
 #include <QStringDecoder>
 #include <QTextBlock>
 #include <QDirIterator>
+#include <QActionGroup>
 #include <QDesktopServices>
 #include <QJsonArray>
 #include <QJsonDocument>
@@ -17905,6 +17906,34 @@ public:
             QString::fromUtf8("Legacy font rescue "
                               "(py-tiblegenc, 28+ encodings)…"),
             [this] { convertLegacyTiblegenc(); });
+        maintMenu->addSeparator();
+        // audit finding C1 (2026-08-18): the survey was reachable
+        // ONLY through the info panel's HTML link — one broken link
+        // from invisible. Now also a real menu entry on the
+        // selected text.
+        maintMenu->addAction(
+            QString::fromUtf8("Translator's survey (selected "
+                              "text)…"),
+            [this] {
+                QString p;
+                if (stack_->currentIndex() == 1) {
+                    const int r = list_->currentRow();
+                    if (r >= 0 && list_->item(r, 0))
+                        p = list_->item(r, 0)
+                                ->data(Qt::UserRole)
+                                .toString();
+                } else {
+                    p = model_->filePath(tree_->currentIndex());
+                }
+                if (p.isEmpty() || QFileInfo(p).isDir()) {
+                    QMessageBox::information(
+                        this, "Translator's survey",
+                        "Select a text in the Library first — the "
+                        "survey reads one file.");
+                    return;
+                }
+                if (g_surveyFile) g_surveyFile(p);
+            });
         maintBtn->setMenu(maintMenu);
         row->addWidget(maintBtn);
         for (auto* hb : {ocrBtn, utfcBtn, indexBtn}) hb->hide();
@@ -25253,6 +25282,67 @@ int main(int argc, char** argv) {
                     if (g_raisePane) g_raisePane(pane);
                     b->click();
                 });
+            }
+            // tool buttons too (audit C2, 2026-08-18: the mirror
+            // enumerated only push buttons and checkboxes — Files'
+            // toolbar and every A-/gear-style control were
+            // invisible to it). Buttons that own a QMenu become
+            // submenus; plain ones become actions.
+            const auto tools = pane->findChildren<QToolButton*>();
+            bool tsep = false;
+            for (QToolButton* tb : tools) {
+                const QString label = tb->text().trimmed();
+                if (label.isEmpty()) continue;
+                if (!tsep) { menu->addSeparator(); tsep = true; }
+                if (tb->menu()) {
+                    menu->addMenu(tb->menu())->setText(label);
+                    continue;
+                }
+                QAction* a = menu->addAction(label);
+                if (!tb->toolTip().isEmpty())
+                    a->setToolTip(tb->toolTip());
+                QObject::connect(a, &QAction::triggered,
+                                 [pane, tb] {
+                    if (g_raisePane) g_raisePane(pane);
+                    tb->click();
+                });
+            }
+            // mode combos become submenus of exclusive checkable
+            // choices, two-way synced (audit C2)
+            const auto combos = pane->findChildren<QComboBox*>();
+            bool msep = false;
+            for (QComboBox* cb : combos) {
+                if (cb->count() < 2 || cb->count() > 24 ||
+                    cb->isEditable())
+                    continue;
+                QString title = cb->toolTip().section('\n', 0, 0)
+                                    .section('(', 0, 0)
+                                    .trimmed();
+                if (title.size() > 40) title.clear();
+                if (title.isEmpty())
+                    title = cb->itemText(0).left(24) + "\u2026";
+                if (!msep) { menu->addSeparator(); msep = true; }
+                QMenu* sub = menu->addMenu(title);
+                auto* grp = new QActionGroup(sub);
+                grp->setExclusive(true);
+                for (int i2 = 0; i2 < cb->count(); ++i2) {
+                    QAction* a = sub->addAction(cb->itemText(i2));
+                    a->setCheckable(true);
+                    a->setActionGroup(grp);
+                    a->setChecked(i2 == cb->currentIndex());
+                    QObject::connect(a, &QAction::triggered,
+                                     [cb, i2] {
+                        if (cb->currentIndex() != i2)
+                            cb->setCurrentIndex(i2);
+                    });
+                }
+                QObject::connect(
+                    cb, &QComboBox::currentIndexChanged, sub,
+                    [sub](int ix) {
+                        const auto acts = sub->actions();
+                        if (ix >= 0 && ix < acts.size())
+                            acts[ix]->setChecked(true);
+                    });
             }
             const auto checks = pane->findChildren<QCheckBox*>();
             bool csep = false;

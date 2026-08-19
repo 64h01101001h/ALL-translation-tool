@@ -99,11 +99,21 @@ reachability list. Cross-diff verdicts:
   adjustments) are all documented in the in-app manual.
 
 ### C1. Translator's survey is one broken link from invisible
+**FIXED 2026-08-19**: Maintenance menu gains "Translator's survey
+(selected text)…", surveying the tree or list selection; polite
+message when nothing is selected. The info-panel link stays.
+
 Reachable ONLY through the `survey:` HTML anchor in the Library info
 panel — no button, no menu. Same class as the scan-viewer finding.
 QUEUED: give it a Library button or menu entry.
 
 ### C2. The mirrored menu bar has systematic blind spots
+**FIXED 2026-08-19**: the generator now mirrors QToolButtons (menu-
+owning ones become submenus) and non-editable QComboBoxes (exclusive
+checkable choice submenus, two-way synced). Link-only actions inside
+HTML reports remain unmirrored by design — they are content, not
+chrome.
+
 It enumerates only QPushButton + QCheckBox children, so it misses
 every QToolButton (Files toolbar, viewer toolbar), every QComboBox
 mode selector, and all link-only actions. The menu claims to mirror
