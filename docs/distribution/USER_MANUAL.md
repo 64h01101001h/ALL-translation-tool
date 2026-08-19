@@ -51,7 +51,8 @@ app: Help menu → ALL Tool Help & Tutorials.*
   - 14.4 Suggested identity — how a nameless file names itself
   - 14.5 The bibliography audit
   - 14.6 Suggested splits — the chop assist
-  - 14.7 What the workflow will do next
+  - 14.7 Compose name — the house filename grammar
+  - 14.8 What the workflow will do next
 - **CHAPTER 15 — THE PROPOSE PANE (Community → Propose)**
   - 15.1 One-time identity setup
   - 15.2 Making a proposal
@@ -2861,7 +2862,39 @@ candidates per volume — almost all from one kind of text where
 "bzhugs so" is ordinary narrative. Every candidate needs a human
 eye; that is the design, not a shortcoming.
 
-## 14.7 What the workflow will do next
+## 14.7 Compose name — the house filename grammar
+
+When a text has been identified, it needs its proper name. Click
+**Compose name…** and fill the four fields:
+
+- **Catalog number** — from the registrar. The app never mints a
+  number; the field is free text because issuing numbers is a
+  human's act.
+- **Tibetan title** — prefilled from the selected file's own title
+  page when it has one. A trailing BZHUGS SO is stripped
+  automatically; it is never part of a name.
+- **English title** and **Author (dates)**.
+
+The preview updates as you type, applying the house rules: fields
+joined by underscores, capital .TXT, no colons (a single hyphen, no
+spaces, stands in), IAST diacritics folded to plain ASCII.
+
+**Over-long names.** A filename past the filesystem's 255-character
+limit is filled to the maximum and stopped *even mid-word*, a `+`
+marks the cut, and a companion **NUMBER META.TXT** in the same
+folder carries the rest of the name from the exact cut point — so
+rejoining is pure concatenation. This is precisely the library's
+own convention: 1,457 existing `+.TXT` names with their META
+companions. (A name that fits gets no `+` and no META — the
+machinery exists only for names that are too long.)
+
+**Rename in intake…** applies the name to the selected file — in
+the intake tree only, never the destination — after a preview and a
+confirmation. An existing name is refused, never overwritten, and
+nothing is ever deleted. **Copy name** puts the composed name on
+the clipboard for use anywhere else.
+
+## 14.8 What the workflow will do next
 
 This is the first working step of a longer workflow. Still to come,
 in order: quality-control lanes (title-versus-translation mismatch,

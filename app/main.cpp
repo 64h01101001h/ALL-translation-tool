@@ -116,6 +116,7 @@
 #include "allcore/analysis.h"
 #include "allcore/catalog_audit.h"
 #include "allcore/catalog_id.h"
+#include "allcore/catalog_name.h"
 #ifdef ALL_HAVE_OCR
 #include "allocr/linebuild.h"
 #include "allocr/recognize.h"
@@ -23696,6 +23697,15 @@ public:
             "and list them with evidence. Nothing is cut \u2014 the "
             "mother copy is never touched.");
         actions->addWidget(splitB);
+        auto* nameB = new QPushButton("Compose name\u2026");
+        nameB->setToolTip(
+            "Build a filename in the house grammar: NUMBER_TIBETAN_"
+            "ENGLISH_AUTHOR.TXT. The catalog number comes from the "
+            "registrar \u2014 the app never mints numbers. Over-long "
+            "names truncate mid-word with '+' and a NUMBER META.TXT "
+            "companion, exactly as the library's 1,457 existing pairs "
+            "do.");
+        actions->addWidget(nameB);
         actions->addStretch();
         outer->addLayout(actions);
 
@@ -23731,6 +23741,8 @@ public:
             lastFile_ = p;
             showFile(p);
         };
+        connect(nameB, &QPushButton::clicked,
+                [this] { composeNameDialog(); });
         connect(splitB, &QPushButton::clicked, [this] {
             if (lastFile_.isEmpty()) {
                 info_->setHtml(
@@ -23773,6 +23785,137 @@ public:
         intake_->selectPath(p);
         showFile(p);   // the panel must not wait on a lazy listing
         return true;
+    }
+
+    // The filename composer dialog. Prefills the Tibetan title from
+    // the selected file's own title page; the NUMBER is free text the
+    // registrar supplies. Rename applies ONLY inside the intake tree,
+    // with a preview and a confirm; the destination is never touched.
+    void composeNameDialog() {
+        QDialog dlg(this);
+        dlg.setWindowTitle("Compose catalog filename");
+        auto* form = new QFormLayout(&dlg);
+        auto* num = new QLineEdit;
+        num->setPlaceholderText(
+            "from the registrar (Nick) \u2014 e.g. S25239");
+        auto* tib = new QLineEdit;
+        auto* eng = new QLineEdit;
+        auto* aut = new QLineEdit;
+        aut->setPlaceholderText(
+            "from the colophon \u2014 e.g. RATNA SAMBHAVA (fl. 1405)");
+        if (!lastFile_.isEmpty()) {
+            QFile f(lastFile_);
+            if (f.open(QIODevice::ReadOnly)) {
+                const auto t = allcore::extractAcipTitle(
+                    f.read(4000).toStdString());
+                if (t.found)
+                    tib->setText(QString::fromStdString(t.title));
+            }
+        }
+        form->addRow("Catalog number", num);
+        form->addRow("Tibetan title", tib);
+        form->addRow("English title", eng);
+        form->addRow("Author (dates)", aut);
+        auto* preview = new QLabel;
+        preview->setWordWrap(true);
+        preview->setTextInteractionFlags(Qt::TextSelectableByMouse);
+        form->addRow("Preview", preview);
+        auto compose = [&] {
+            return allcore::composeCatalogFilename(
+                num->text().toStdString(), tib->text().toStdString(),
+                eng->text().toStdString(), aut->text().toStdString());
+        };
+        auto upd = [&] {
+            const auto r = compose();
+            QString t = "<b>" +
+                        QString::fromStdString(r.filename)
+                            .toHtmlEscaped() + "</b>";
+            if (r.truncated)
+                t += "<br><span style='color:#B26B00'>over the "
+                     "255-character limit \u2014 truncated mid-word "
+                     "with '+'; companion <b>" +
+                     QString::fromStdString(r.meta_filename)
+                         .toHtmlEscaped() +
+                     "</b> carries the rest:</span><br><span "
+                     "style='color:#777'>" +
+                     QString::fromStdString(r.meta_content)
+                         .toHtmlEscaped() + "</span>";
+            preview->setText(t);
+        };
+        for (auto* e : {num, tib, eng, aut})
+            connect(e, &QLineEdit::textChanged, upd);
+        upd();
+        auto* row = new QHBoxLayout;
+        auto* copyB = new QPushButton("Copy name");
+        auto* renameB = new QPushButton("Rename in intake\u2026");
+        renameB->setEnabled(!lastFile_.isEmpty() &&
+                            !intake_->root().isEmpty() &&
+                            lastFile_.startsWith(intake_->root()));
+        auto* closeB = new QPushButton("Close");
+        row->addWidget(copyB);
+        row->addWidget(renameB);
+        row->addStretch();
+        row->addWidget(closeB);
+        form->addRow(row);
+        connect(copyB, &QPushButton::clicked, [&] {
+            qApp->clipboard()->setText(
+                QString::fromStdString(compose().filename));
+        });
+        connect(closeB, &QPushButton::clicked, &dlg, &QDialog::reject);
+        connect(renameB, &QPushButton::clicked, [&] {
+            const auto r = compose();
+            if (num->text().trimmed().isEmpty()) {
+                QMessageBox::warning(
+                    &dlg, "No catalog number",
+                    "The registrar's number is required \u2014 the "
+                    "app never mints one.");
+                return;
+            }
+            const QFileInfo fi(lastFile_);
+            const QString newPath =
+                fi.path() + "/" + QString::fromStdString(r.filename);
+            QString msg = "Rename\n  " + fi.fileName() + "\nto\n  " +
+                          QString::fromStdString(r.filename);
+            if (r.truncated)
+                msg += "\n\nand write the companion\n  " +
+                       QString::fromStdString(r.meta_filename);
+            msg += "\n\nThe file stays in the intake tree; nothing "
+                   "is deleted.";
+            if (QMessageBox::question(&dlg, "Rename in intake?", msg) !=
+                QMessageBox::Yes)
+                return;
+            const QString err = applyComposedName(lastFile_, r);
+            if (!err.isEmpty()) {
+                QMessageBox::warning(&dlg, "Nothing changed", err);
+                return;
+            }
+            showFile(lastFile_);
+            dlg.accept();
+        });
+        dlg.exec();
+    }
+
+    // The rename itself, factored out so the selftest can prove it
+    // without driving the modal dialog. Renames IN PLACE in the same
+    // folder, writes the META companion when the name truncated, and
+    // refuses (returning the reason) rather than overwriting anything.
+    QString applyComposedName(const QString& path,
+                              const allcore::ComposedName& r) {
+        const QFileInfo fi(path);
+        const QString newPath =
+            fi.path() + "/" + QString::fromStdString(r.filename);
+        if (QFile::exists(newPath))
+            return "A file with that name already exists.";
+        if (!QFile::rename(path, newPath))
+            return "The filesystem refused the rename.";
+        if (r.truncated) {
+            QFile mf(fi.path() + "/" +
+                     QString::fromStdString(r.meta_filename));
+            if (mf.open(QIODevice::WriteOnly))
+                mf.write(QByteArray::fromStdString(r.meta_content));
+        }
+        lastFile_ = newPath;
+        return QString();
     }
 
     // Chop assist: candidate boundaries for a multi-text volume, with
@@ -27300,6 +27443,57 @@ int main(int argc, char** argv) {
                                "evidence, and cuts nothing")
                            .arg(split ? "PASS" : "FAIL");
                 if (!split) ++fails;
+                QDir(wd).removeRecursively();
+            }
+            {   // the filename composer end-to-end: compose in the
+                // house grammar, rename in place, META companion for
+                // an over-long name, refusal instead of overwrite
+                QDir().mkpath(wd);
+                const QString src = wd + "/scan_099.txt";
+                { QFile f(src);
+                  f.open(QIODevice::WriteOnly);
+                  f.write("BDEN PA,"); }
+                std::string longTib(300, 'K');
+                for (size_t i = 4; i < longTib.size(); i += 5)
+                    longTib[i] = ' ';
+                const auto comp = allcore::composeCatalogFilename(
+                    "S99999", longTib, "A Very Long Test Title",
+                    "AUTHOR (fl. 1405)");
+                const QString err =
+                    catalogPane->applyComposedName(src, comp);
+                const QString metaP =
+                    wd + "/" +
+                    QString::fromStdString(comp.meta_filename);
+                bool metaOk = false;
+                { QFile mf(metaP);
+                  if (mf.open(QIODevice::ReadOnly))
+                      metaOk = allcore::rejoinMetaName(
+                                   comp.filename.substr(
+                                       0, comp.filename.size() - 4),
+                                   mf.readAll().toStdString()) ==
+                               comp.full_stem; }
+                const bool renamed =
+                    err.isEmpty() && comp.truncated &&
+                    QFile::exists(wd + "/" + QString::fromStdString(
+                                                 comp.filename)) &&
+                    !QFile::exists(src) && metaOk;
+                log << QString("  [%1] Catalog: compose-name renames "
+                               "in place and the META companion "
+                               "rejoins to the full name")
+                           .arg(renamed ? "PASS" : "FAIL");
+                if (!renamed) ++fails;
+                // refusal instead of overwrite
+                { QFile f(src);
+                  f.open(QIODevice::WriteOnly);
+                  f.write("x"); }
+                const QString err2 =
+                    catalogPane->applyComposedName(src, comp);
+                const bool refused =
+                    !err2.isEmpty() && QFile::exists(src);
+                log << QString("  [%1] Catalog: an existing name is "
+                               "refused, never overwritten")
+                           .arg(refused ? "PASS" : "FAIL");
+                if (!refused) ++fails;
                 QDir(wd).removeRecursively();
             }
             {   // GMR's job #1 must render as a real report — the

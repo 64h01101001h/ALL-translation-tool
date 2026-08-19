@@ -101,7 +101,19 @@ mints catalog numbers; the mother copy is never touched.**
       don't-split-what-the-author-didn't-split rule: adjacent
       segments whose "titles" look like empowerment parts / chapter
       heads get a warning, not a cut.
-- [ ] 3. **Filename composer + _META convention**. Core: compose
+- [x] 3. **Filename composer + META convention** — SHIPPED
+      2026-08-19 (suite 47 catalog_name_smoke; 2 selftest pins;
+      sweep 5 controls incl. the dialog). GROUND TRUTH CORRECTED
+      FROM THE LIBRARY: the practiced companion is "NUMBER META.TXT"
+      (space, not the transcript's "_META"); 1,457 real +.TXT names,
+      93.5% with companions (95 genuinely incomplete pairs = a
+      finding for the team), 194/200 sampled rejoins clean; legacy
+      METAs are RTF (extractor ships), new ones write plain ASCII.
+      +/META engages ONLY past the 255-char limit (Adam confirmed
+      mid-build). Compose dialog prefills the Tibetan title from
+      the file's title page; number field free text (registrar's
+      act); rename intake-only with refusal-not-overwrite.
+      Original spec follows: Core: compose
       `NUMBER_TIBETAN_ENGLISH_AUTHOR.TXT` from fields; enforce
       punctuation rules (no colon, single hyphen no spaces, drop
       BZHUGS SO/nāma, (Sanskrit) for tantra systems, no
