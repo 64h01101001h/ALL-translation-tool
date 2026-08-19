@@ -369,6 +369,50 @@ implementation is sidelined HERE from this date. What this means:
          (2) the QC lanes from the Lon-demo adoptables (9e):
              title-vs-translation mismatch + colophon-aware
              same-title/duplicate detection over the intake set;
+         (2b) FROM THE 13 SESSION VIDEOS (2026-08-19, all analyzed:
+             docs/research/GMR_CATALOGING_SESSIONS.md — "The house
+             rules, consolidated" section IS the build spec). The
+             build queue, in value order:
+             · VOLUME SPLITTER ("chop assist") — their #1 manual
+               activity: detect title pages / BZHUGS SO blocks /
+               kar-chag entries inside one file, propose cut points
+               w/ evidence; never auto-cut; support cut-backwards
+               and remove-as-you-extract; mother copy untouched.
+             · FILENAME COMPOSER — NUMBER_TIB_ENG_AUTHOR + .TXT
+               grammar, the punctuation rules, the length limit w/
+               mid-word stop + "+" + companion _META file
+               generation; validates against decodeAcipFilename.
+             · ASCII MASTER CATALOG generator — GMR's session-3
+               directive ("we don't have a LIST of what's in the
+               folders"): walk the library, emit the field-coded
+               ASCII catalog (S:/N:/T:/author/format/pages/dims/
+               colophon where known); St. Petersburg format.
+             · TREE DIFF — the divergence audit (GMR's copy vs
+               Nick's): compare the two browser trees, list
+               adds/removes/renames; the dual-tree pane is the UI.
+             · TOHOKU-FIRST numbering support in the identity lane
+               (we hold Toh concordances); never mint numbers.
+             · COLOPHON FINDER — locate colophon candidates near
+               text end (jar/mdzad/bris + translator-credit
+               patterns), display for the author-determination
+               step; translator ≠ author warning.
+             · Cleanup lanes: line-slash stripper (Aug 4 directive),
+               lowercase-run detector, double-space-in-title check.
+             · Provenance signals surfaced per file: western-style
+               pagination (no folio A/B), parenthesized small-print
+               titles, computer-font-era markers → "typed = suspect"
+               banner.
+             · Register spreadsheet import/view (Nick's) w/ folio
+               start/end columns; three-state display (numbered /
+               input / cataloged).
+             · Initials+date change-log helper on destination-tree
+               folder renames (their Dropbox policy, in-app).
+             NOTE Aug 11 session: GMR mentions "Adam's been working
+             on" translation tools — this project is known to the
+             class; Lioran Katz demo (AI translation tools) was
+             scheduled for the following Monday.
+             NOT CAPTIONED: Mar 24 session (bq8SfTu558c) — whisper
+             pass possible if Adam wants it mined.
          (3) worksheet: the catalog fields per file (start from the
              ACIP identity + Élie CSV fields; consider GMR's
              23-item physical format when Adam obtains it). FROM
