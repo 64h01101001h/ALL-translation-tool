@@ -54,7 +54,8 @@ app: Help menu → ALL Tool Help & Tutorials.*
   - 14.7 Compose name — the house filename grammar
   - 14.8 Generate catalog list — the ASCII inventory
   - 14.9 Translate title — the attestation workbench
-  - 14.10 What the workflow will do next
+  - 14.10 Compare trees — the divergence audit
+  - 14.11 What the workflow will do next
 - **CHAPTER 15 — THE PROPOSE PANE (Community → Propose)**
   - 15.1 One-time identity setup
   - 15.2 Making a proposal
@@ -2942,7 +2943,30 @@ the machine attests, you compose. Measured on held-out titles:
 attested phrases cover about 90% of a typical title's syllables,
 and a near whole-title match surfaces for about 62%.
 
-## 14.10 What the workflow will do next
+## 14.10 Compare trees — the divergence audit
+
+Session 3's live problem: Geshe Michael's copy of the database and
+the team's master copy "have diverged from each other probably" —
+and the task he set was to compare the two trees and list the
+differences. **Compare trees…** runs that comparison between
+whatever the two browsers are pointed at: left (intake) root
+against right (destination) root, recursively.
+
+Every file is classified: **identical** · **modified** (same
+relative path, different content) · **renamed / refiled** (same
+content on a different path — a text moved shelves) · **only left**
+· **only right**. Ambiguity is never guessed at: identical twins on
+one side stay listed as added/removed rather than being paired into
+a rename.
+
+Honesty tier, printed on the report: content is matched by size
+plus sampled bytes (the first and last 4 KB), not full reads — fast
+enough for whole database copies (about a thousand files in a third
+of a second), and the list tells a cataloger where to look; confirm
+any difference by opening the files. The comparison changes
+nothing.
+
+## 14.11 What the workflow will do next
 
 This is the first working step of a longer workflow. Still to come,
 in order: quality-control lanes (title-versus-translation mismatch,

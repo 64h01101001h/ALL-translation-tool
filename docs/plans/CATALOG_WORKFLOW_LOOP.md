@@ -164,7 +164,14 @@ mints catalog numbers; the mother copy is never touched.**
       "Translate title…" in the compose dialog + standalone button;
       the human composes from attested fragments — the machine only
       attests.
-- [ ] 6. **Tree diff — the divergence audit**. Core: compare two
+- [x] 6. **Tree diff — the divergence audit** — SHIPPED 2026-08-19
+      (suite 50 tree_diff_smoke; selftest pin; sweep 8 controls).
+      Recursive walk + size/sampled-content signatures (FNV over
+      head+tail 4KB); classifies identical/modified/renamed-
+      refiled/added/removed; ambiguous twins never guessed into
+      renames; self-diff of the Kangyur (1,015 files) exactly clean
+      in 320 ms. The Files pane's compare was single-level
+      name+size — not reused, superseded here for this purpose. Core: compare two
       trees by relative path + size/mtime/content-hash tier;
       classify added/removed/renamed(same content, new path)/
       modified. Battery: constructed fixtures. Pane: "Compare

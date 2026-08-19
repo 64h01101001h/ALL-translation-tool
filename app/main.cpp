@@ -119,6 +119,7 @@
 #include "allcore/catalog_list.h"
 #include "allcore/catalog_name.h"
 #include "allcore/title_xlat.h"
+#include "allcore/tree_diff.h"
 #ifdef ALL_HAVE_OCR
 #include "allocr/linebuild.h"
 #include "allocr/recognize.h"
@@ -23722,6 +23723,14 @@ public:
             "titles. The machine attests; you compose \u2014 nothing "
             "is machine-translated.");
         actions->addWidget(xlatB);
+        auto* diffB = new QPushButton("Compare trees\u2026");
+        diffB->setToolTip(
+            "The divergence audit (session 3: GMR's copy vs Nick's): "
+            "compare the two browser roots recursively \u2014 "
+            "identical, modified, renamed/refiled, only-left, "
+            "only-right. Content matched by size + sampled bytes; "
+            "nothing is changed.");
+        actions->addWidget(diffB);
         actions->addStretch();
         outer->addLayout(actions);
 
@@ -23759,6 +23768,18 @@ public:
         };
         connect(nameB, &QPushButton::clicked,
                 [this] { composeNameDialog(); });
+        connect(diffB, &QPushButton::clicked, [this] {
+            const QString L = intake_->root(), R = dest_->root();
+            if (L.isEmpty() || R.isEmpty()) {
+                info_->setHtml(
+                    "<div style='color:#777'>Point both trees at "
+                    "folders first \u2014 the diff compares the "
+                    "left (intake) root against the right "
+                    "(destination) root.</div>");
+                return;
+            }
+            info_->setHtml(treeDiffHtml(L, R));
+        });
         connect(xlatB, &QPushButton::clicked, [this] {
             QString seed;
             if (!lastFile_.isEmpty()) {
@@ -23938,6 +23959,82 @@ public:
             dlg.accept();
         });
         dlg.exec();
+    }
+
+    // The divergence report. Public for the selftest.
+    QString treeDiffHtml(const QString& L, const QString& R) {
+        const auto d =
+            allcore::diffTrees(L.toStdString(), R.toStdString());
+        auto listBlock = [](const QString& title,
+                            const std::vector<std::string>& v) {
+            if (v.empty()) return QString();
+            QString h = QString("<div style='margin-top:6px'><b>%1 "
+                                "(%2)</b></div><ul style='margin:2px "
+                                "0'>")
+                            .arg(title)
+                            .arg(v.size());
+            size_t shown = 0;
+            for (const auto& s2 : v) {
+                if (shown++ >= 150) {
+                    h += QString("<li style='color:#777'>\u2026 and "
+                                 "%1 more</li>")
+                             .arg(v.size() - 150);
+                    break;
+                }
+                h += "<li>" +
+                     QString::fromStdString(s2).toHtmlEscaped() +
+                     "</li>";
+            }
+            return h + "</ul>";
+        };
+        QString h =
+            "<h3>Tree comparison</h3>"
+            "<div style='color:#777'>LEFT " + L.toHtmlEscaped() +
+            " \u00b7 RIGHT " + R.toHtmlEscaped() +
+            "</div>" +
+            QString("<div style='margin:6px 0'><b>%1</b> left \u00b7 "
+                    "<b>%2</b> right \u00b7 %3 identical \u00b7 "
+                    "%4 modified \u00b7 %5 renamed/refiled \u00b7 "
+                    "%6 only left \u00b7 %7 only right</div>")
+                .arg(d.files_left)
+                .arg(d.files_right)
+                .arg(d.identical)
+                .arg(d.modified.size())
+                .arg(d.renamed.size())
+                .arg(d.removed.size())
+                .arg(d.added.size());
+        h += "<div style='color:#777;font-size:11px'>Content matched "
+             "by size + sampled bytes (first/last 4 KB), not full "
+             "reads \u2014 confirm a difference by opening the "
+             "files. Nothing was changed by this comparison.</div>";
+        if (!d.renamed.empty()) {
+            h += QString("<div style='margin-top:6px'><b>Renamed / "
+                         "refiled (%1)</b></div><ul style='margin:2px "
+                         "0'>")
+                     .arg(d.renamed.size());
+            size_t shown = 0;
+            for (const auto& [a, b] : d.renamed) {
+                if (shown++ >= 100) {
+                    h += QString("<li style='color:#777'>\u2026 and "
+                                 "%1 more</li>")
+                             .arg(d.renamed.size() - 100);
+                    break;
+                }
+                h += "<li>" + QString::fromStdString(a).toHtmlEscaped() +
+                     " \u2192 " +
+                     QString::fromStdString(b).toHtmlEscaped() + "</li>";
+            }
+            h += "</ul>";
+        }
+        h += listBlock("Modified (same path, different content)",
+                       d.modified);
+        h += listBlock("Only in the left tree", d.removed);
+        h += listBlock("Only in the right tree", d.added);
+        if (d.modified.empty() && d.renamed.empty() &&
+            d.removed.empty() && d.added.empty())
+            h += "<div style='margin-top:6px;color:#2E7D32'>The two "
+                 "trees match.</div>";
+        return h;
     }
 
     // The title workbench render. Public for the selftest.
@@ -27717,6 +27814,37 @@ int main(int argc, char** argv) {
                                "composes")
                            .arg(tw ? "PASS" : "FAIL");
                 if (!tw) ++fails;
+            }
+            {   // the divergence audit: two probe trees with one of
+                // each class must classify exactly
+                QDir().mkpath(wd + "/L/shelf");
+                QDir().mkpath(wd + "/R/shelf");
+                QDir().mkpath(wd + "/R/other");
+                auto wr = [](const QString& p, const QByteArray& b) {
+                    QFile f(p);
+                    f.open(QIODevice::WriteOnly);
+                    f.write(b);
+                };
+                wr(wd + "/L/shelf/same.txt", "alike");
+                wr(wd + "/R/shelf/same.txt", "alike");
+                wr(wd + "/L/shelf/edit.txt", "old words");
+                wr(wd + "/R/shelf/edit.txt", "new words!");
+                wr(wd + "/L/shelf/move.txt", "travelling text");
+                wr(wd + "/R/other/moved.txt", "travelling text");
+                const QString dh =
+                    catalogPane->treeDiffHtml(wd + "/L", wd + "/R");
+                const bool diffOk =
+                    dh.contains("1 modified") &&
+                    dh.contains("1 renamed/refiled") &&
+                    dh.contains("shelf/move.txt") &&
+                    dh.contains("other/moved.txt") &&
+                    dh.contains("Nothing was changed");
+                log << QString("  [%1] Catalog: the tree comparison "
+                               "classifies modified and refiled "
+                               "files and changes nothing")
+                           .arg(diffOk ? "PASS" : "FAIL");
+                if (!diffOk) ++fails;
+                QDir(wd).removeRecursively();
             }
             {   // GMR's job #1 must render as a real report — the
                 // measured numbers, a known missing work, the

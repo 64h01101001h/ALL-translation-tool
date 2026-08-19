@@ -55,6 +55,7 @@ add_library(allcore STATIC
   src/catalog_name.cpp
   src/catalog_list.cpp
   src/title_xlat.cpp
+  src/tree_diff.cpp
 )
 target_include_directories(allcore PUBLIC include)
 
@@ -259,6 +260,12 @@ add_test(NAME abbr_smoke
          COMMAND abbr_smoke ${CMAKE_SOURCE_DIR}/data/abbreviations/tibschol_abbr.csv
                  ${CMAKE_SOURCE_DIR}/data/spellcheck
                  ${CMAKE_SOURCE_DIR}/data/abbreviations/rkts_abb.csv)
+
+add_executable(tree_diff_smoke tests/tree_diff_smoke.cpp)
+target_link_libraries(tree_diff_smoke PRIVATE allcore)
+add_test(NAME tree_diff_smoke
+         COMMAND tree_diff_smoke ${CMAKE_CURRENT_BINARY_DIR}
+                 ${CMAKE_SOURCE_DIR}/library/kangyur)
 
 add_executable(title_xlat_smoke tests/title_xlat_smoke.cpp)
 target_link_libraries(title_xlat_smoke PRIVATE allcore)
