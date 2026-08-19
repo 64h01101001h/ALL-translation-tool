@@ -53,6 +53,7 @@ add_library(allcore STATIC
   src/catalog_id.cpp
   src/catalog_audit.cpp
   src/catalog_name.cpp
+  src/catalog_list.cpp
 )
 target_include_directories(allcore PUBLIC include)
 
@@ -257,6 +258,11 @@ add_test(NAME abbr_smoke
          COMMAND abbr_smoke ${CMAKE_SOURCE_DIR}/data/abbreviations/tibschol_abbr.csv
                  ${CMAKE_SOURCE_DIR}/data/spellcheck
                  ${CMAKE_SOURCE_DIR}/data/abbreviations/rkts_abb.csv)
+
+add_executable(catalog_list_smoke tests/catalog_list_smoke.cpp)
+target_link_libraries(catalog_list_smoke PRIVATE allcore)
+add_test(NAME catalog_list_smoke
+         COMMAND catalog_list_smoke ${CMAKE_SOURCE_DIR}/library/kangyur)
 
 add_executable(catalog_name_smoke tests/catalog_name_smoke.cpp)
 target_link_libraries(catalog_name_smoke PRIVATE allcore)

@@ -52,7 +52,8 @@ app: Help menu → ALL Tool Help & Tutorials.*
   - 14.5 The bibliography audit
   - 14.6 Suggested splits — the chop assist
   - 14.7 Compose name — the house filename grammar
-  - 14.8 What the workflow will do next
+  - 14.8 Generate catalog list — the ASCII inventory
+  - 14.9 What the workflow will do next
 - **CHAPTER 15 — THE PROPOSE PANE (Community → Propose)**
   - 15.1 One-time identity setup
   - 15.2 Making a proposal
@@ -2894,7 +2895,26 @@ confirmation. An existing name is refused, never overwritten, and
 nothing is ever deleted. **Copy name** puts the composed name on
 the clipboard for use anywhere else.
 
-## 14.8 What the workflow will do next
+## 14.8 Generate catalog list — the ASCII inventory
+
+In session 3 Geshe Michael set the task plainly: "We have the
+database, we have the folders, but we don't have a separate LIST of
+what's in the folders." **Generate catalog list…** writes that
+list, over whatever the destination tree currently holds, to a file
+you choose.
+
+The format follows the St. Petersburg lineage — field-coded plain
+text, one record per file, readable by any computer forever:
+`S:` catalog number (or "uncataloged") · `F:` filename · `D:`
+folder · `T:` Tibetan title (`T*:` when it had to be read from the
+text's own title page — marked, never silent) · `E:` English title
+· `A:` author · `V:` verification status · `P:` size, lines, and
+the folio range seen in the text.
+
+The header states what the file is: a LIST of the folders, not the
+official catalog — the catalog changes only through data releases.
+
+## 14.9 What the workflow will do next
 
 This is the first working step of a longer workflow. Still to come,
 in order: quality-control lanes (title-versus-translation mismatch,

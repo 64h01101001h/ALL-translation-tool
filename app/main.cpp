@@ -116,6 +116,7 @@
 #include "allcore/analysis.h"
 #include "allcore/catalog_audit.h"
 #include "allcore/catalog_id.h"
+#include "allcore/catalog_list.h"
 #include "allcore/catalog_name.h"
 #ifdef ALL_HAVE_OCR
 #include "allocr/linebuild.h"
@@ -23706,6 +23707,12 @@ public:
             "companion, exactly as the library's 1,457 existing pairs "
             "do.");
         actions->addWidget(nameB);
+        auto* listB = new QPushButton("Generate catalog list\u2026");
+        listB->setToolTip(
+            "Write the field-coded ASCII list of what the destination "
+            "tree holds (S/F/T/E/A/V/P lines, St. Petersburg lineage) "
+            "\u2014 a LIST of the folders, not the official catalog.");
+        actions->addWidget(listB);
         actions->addStretch();
         outer->addLayout(actions);
 
@@ -23743,6 +23750,17 @@ public:
         };
         connect(nameB, &QPushButton::clicked,
                 [this] { composeNameDialog(); });
+        connect(listB, &QPushButton::clicked, [this] {
+            const QString root = dest_->root().isEmpty()
+                                     ? root_ + "/library"
+                                     : dest_->root();
+            const QString out = safeGetSaveFileName(
+                this, "Save the ASCII catalog list",
+                QDir::homePath() + "/catalog_list.txt",
+                "Text files (*.txt)");
+            if (out.isEmpty()) return;
+            info_->setHtml(generateListHtml(root, out));
+        });
         connect(splitB, &QPushButton::clicked, [this] {
             if (lastFile_.isEmpty()) {
                 info_->setHtml(
@@ -23893,6 +23911,37 @@ public:
             dlg.accept();
         });
         dlg.exec();
+    }
+
+    // The ASCII catalog list: generate over a tree, write to the
+    // chosen path, report honestly. Public for the selftest.
+    QString generateListHtml(const QString& root, const QString& out) {
+        const auto r = allcore::generateAsciiCatalog(root.toStdString());
+        QFile f(out);
+        if (!f.open(QIODevice::WriteOnly))
+            return "<div style='color:#B26B00'>Could not write " +
+                   out.toHtmlEscaped() + " \u2014 nothing saved.</div>";
+        f.write(QByteArray::fromStdString(r.text));
+        f.close();
+        return QString(
+                   "<h3>ASCII catalog list written</h3>"
+                   "<div style='color:#777'>%1</div>"
+                   "<div style='margin:6px 0'><b>%2</b> file(s) listed "
+                   "\u00b7 %3 cataloged by name \u00b7 %4 uncataloged "
+                   "\u00b7 %5 title(s) read from the text (marked "
+                   "T*)</div>"
+                   "<div style='color:#777'>The list answers Geshe "
+                   "Michael's session-3 ask \u2014 \u201cwe don't "
+                   "have a separate list of what's in the "
+                   "folders\u201d \u2014 in the St. Petersburg "
+                   "field-coded lineage. It is a LIST of the folders, "
+                   "not the official catalog; the catalog changes only "
+                   "through data releases.</div>")
+            .arg(out.toHtmlEscaped())
+            .arg(r.stats.files)
+            .arg(r.stats.cataloged)
+            .arg(r.stats.uncataloged)
+            .arg(r.stats.titled_from_text);
     }
 
     // The rename itself, factored out so the selftest can prove it
@@ -27494,6 +27543,37 @@ int main(int argc, char** argv) {
                                "refused, never overwritten")
                            .arg(refused ? "PASS" : "FAIL");
                 if (!refused) ++fails;
+                QDir(wd).removeRecursively();
+            }
+            {   // the ASCII catalog list end-to-end over the probe
+                // folder: file written, honest counts, header claims
+                QDir().mkpath(wd);
+                { QFile f(wd + "/KL00016E.ACT");
+                  f.open(QIODevice::WriteOnly);
+                  f.write("@1A BDEN PA,"); }
+                { QFile f(wd + "/mystery_scan.txt");
+                  f.open(QIODevice::WriteOnly);
+                  f.write("@85A #, ,RGYA GAR SKAD DU, A B C,\nBOD SKAD "
+                          "DU, SHES RAB SNYING PO ZHES BYA BA, PHYAG "
+                          "'TSAL LO,"); }
+                const QString outP = wd + "/list_out.txt";
+                const QString h =
+                    catalogPane->generateListHtml(wd, outP);
+                QString listed;
+                { QFile lf(outP);
+                  if (lf.open(QIODevice::ReadOnly))
+                      listed = QString::fromUtf8(lf.readAll()); }
+                const bool ok =
+                    h.contains("<b>2</b> file(s)") &&
+                    listed.contains("S: KL00016E") &&
+                    listed.contains("S: uncataloged") &&
+                    listed.contains("T*: SHES RAB SNYING PO") &&
+                    listed.contains("NOT the");
+                log << QString("  [%1] Catalog: the ASCII list is a "
+                               "faithful, marked inventory (T* for "
+                               "from-the-text titles)")
+                           .arg(ok ? "PASS" : "FAIL");
+                if (!ok) ++fails;
                 QDir(wd).removeRecursively();
             }
             {   // GMR's job #1 must render as a real report — the

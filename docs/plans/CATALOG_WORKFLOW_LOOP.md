@@ -126,8 +126,14 @@ mints catalog numbers; the mother copy is never touched.**
       field is FREE TEXT the registrar supplies — the app never
       mints), "Compose name…" → preview + copy; a rename-in-intake
       action with confirm (intake only, never the destination).
-- [ ] 4. **ASCII master catalog generator** (session-3 directive).
-      Core: walk a library tree, emit the field-coded ASCII catalog
+- [x] 4. **ASCII master catalog generator** — SHIPPED 2026-08-19
+      (suite 48 catalog_list_smoke; selftest pin; sweep 6 controls).
+      Kangyur measure: 927 files, 662 cataloged by name, 265
+      uncataloged, T* marks for from-the-text titles; structure
+      plain ASCII, values verbatim UTF-8 (a pointer must name the
+      file exactly). Grammar fields gated on ACIP recognition so
+      "mystery_scan.txt" underscores aren't mistaken for titles.
+      Original spec follows: (session-3 directive). Core: walk a library tree, emit the field-coded ASCII catalog
       (S:/T:/A: author/L: language/F: format-provenance signals/P:
       pages-size/D: dates where decodable; colophon line when the
       text's tail carries one) — one record per file, README header
@@ -136,14 +142,29 @@ mints catalog numbers; the mother copy is never touched.**
       list…" on the destination tree → writes to a user-chosen
       location + shows summary; this is a LIST of what's in the
       folders, not the official catalog — banner says so.
-- [ ] 5. **Tree diff — the divergence audit**. Core: compare two
+- [ ] 5. **Title translator — the attested-fragments workbench**
+      (Adam's ask, 2026-08-19; Jamie's title glossary from session 2
+      is the precedent; rule 1 shapes it: MATCH GMR's English, never
+      compose). Core: a TitlePairBank from catalog_works.json (1,846
+      GMR pairs), catalog_titles.json, and the library's bilingual
+      filenames (~7,150 pairs); given a Tibetan title: (a)
+      whole-title exact/near matches with GMR's published rendering;
+      (b) per-phrase attestations — longest-match-first fragments of
+      the title with every English rendering GMR used for that
+      fragment in OTHER titles, each carrying its source-title
+      evidence. Battery: held-out measurement (drop the title's own
+      pair, measure whole-title recall + fragment coverage). Pane:
+      "Translate title…" in the compose dialog + standalone button;
+      the human composes from attested fragments — the machine only
+      attests.
+- [ ] 6. **Tree diff — the divergence audit**. Core: compare two
       trees by relative path + size/mtime/content-hash tier;
       classify added/removed/renamed(same content, new path)/
       modified. Battery: constructed fixtures. Pane: "Compare
       trees…" button using the two browsers' roots; report in the
       evidence panel; the Files pane's compare machinery may be
       reusable — check before writing new.
-- [ ] 6. **Tohoku-first + colophon finder in the identity lane**.
+- [ ] 7. **Tohoku-first + colophon finder in the identity lane**.
       Identity candidates gain a Tohoku cross-reference where our
       concordances (bdrc_toh_labels, thl_dege_concordance,
       ekangyur/etengyur indexes) know the work: "Tohoku N — if
@@ -152,24 +173,24 @@ mints catalog numbers; the mother copy is never touched.**
       translator-credit patterns), render under SUGGESTED IDENTITY
       with the translator≠author warning. Battery: pins on known
       colophons from library texts.
-- [ ] 7. **Cleanup + provenance lanes**. Line-slash stripper
+- [ ] 8. **Cleanup + provenance lanes**. Line-slash stripper
       (detect the Aug-4 diagonal-slash-per-line corruption; report
       count; fix writes a NEW file, mother copy untouched);
       lowercase-run detector; double-space-in-name check;
       provenance banner per selected file (western pagination / no
       folio marks / parenthesized titles) with the "typed = suspect"
       reading, sourced to the sessions doc.
-- [ ] 8. **Register view + three states**. Import a CSV/TSV register
+- [ ] 9. **Register view + three states**. Import a CSV/TSV register
       (Nick's spreadsheet shape: number, title, folio start/end,
       date, initials) read-only; per-file state line: number issued
       (from register or filename) / input exists (file present) /
       cataloged (inside the destination tree) — three independent
       lights, per the numbered≠input≠cataloged rule.
-- [ ] 9. **Change-log helper**. On any app-performed rename/move in
+- [ ] 10. **Change-log helper**. On any app-performed rename/move in
       the intake tree, offer the date+initials suffix convention
       (user's initials from team/name settings); display the last
       changer decoded from folder names in the destination tree.
-- [ ] 10. **Closing audit**: docs truth pass over Chapter 14 +
+- [ ] 11. **Closing audit**: docs truth pass over Chapter 14 +
       README Catalog row; fresh sweep + selftest of the whole
       group; update TODO 9g statuses; write the handoff note; stop
       the loop.
