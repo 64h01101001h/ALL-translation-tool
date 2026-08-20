@@ -369,9 +369,10 @@ implementation is sidelined HERE from this date. What this means:
              the Catalog pane (per source volume, citation text as
              evidence). NOTE: installed library ≠ ACIP master tree;
              ours is a lower bound.
-         (2) the QC lanes from the Lon-demo adoptables (9e):
+         (2) DONE 2026-08-19 (loop 15, suite 54): QC lanes shipped —
              title-vs-translation mismatch + colophon-aware
-             same-title/duplicate detection over the intake set;
+             same-title/duplicate detection; found 8 real flags and
+             107 true-duplicate filings in the installed Sungbum;
          (2b) BUILD QUEUE COMPLETE 2026-08-19 — all ten items below
              SHIPPED via the build loop (suites 45-52, sweeps 1->9
              controls, manual 14.5-14.14; see
@@ -425,11 +426,11 @@ implementation is sidelined HERE from this date. What this means:
              scheduled for the following Monday.
              NOT CAPTIONED: Mar 24 session (bq8SfTu558c) — whisper
              pass possible if Adam wants it mined.
-         (3) worksheet: the catalog fields per file — THE REAL
-             SCHEMA IS NOW IN HAND (2026-08-19): the team's live
-             52-column worksheet (Adam's Google sheet, banked in
-             GMR_CATALOGING_SESSIONS.md) supersedes guessing at
-             GMR's 23-item format; build the worksheet form on it. FROM
+         (3) DONE 2026-08-19 (loop 13, suite 53): the worksheet form
+             shipped on the team's live 52-column schema (Adam's
+             Google sheet, banked in GMR_CATALOGING_SESSIONS.md) —
+             prefilled from the file, sidecar-saved, CSV row export;
+             the live spreadsheet stays the master. FROM
              SESSION 1: add witness census (how many versions, same
              works?), witness quality tier (carving > vetted ms >
              modern single-pass typeset), corruption evidence,
@@ -439,18 +440,18 @@ implementation is sidelined HERE from this date. What this means:
              states — number issued (by whom) / input exists /
              cataloged to a shelf — a work can have a number and
              exist nowhere;
-         (4) routing: accepted identities become PROPOSALS in the
-             existing channel (kind: catalog identity), approvals
-             export as a candidates file for the data project — the
-             app NEVER writes the catalog. FROM SESSION 1: catalog
-             numbers are issued by ONE human registrar (Nick) — the
-             app never mints numbers; export "needs a number" as a
-             REQUEST. Record who proposed and who approved (GMR's
-             trust gradient: authority earned over a few hundred
-             supervised reps);
-         (5) intake -> Library handoff: a cataloged file moves into
-             the library tree under its decoded name (move, not
-             copy; collision-safe). GROUNDWORK LAID 2026-08-19:
+         (4) DONE 2026-08-19 (loop 14): routing shipped —
+             catalog-identity proposals in the existing channel with
+             full evidence (rule, candidates, Tohoku, worksheet
+             snapshot), Approval filter, existing candidates-file
+             export; the app never writes the catalog, numbers stay
+             registrar-issued, proposer+approver recorded by the
+             channel itself;
+         (5) DONE 2026-08-19 (loop 12): the handoff shipped — Move
+             to shelf with move-not-copy, the META companion
+             travelling (pair-undo if it cannot follow), collisions
+             refused, nameless names sent to the composer, stamp
+             offered, censuses refreshed. GROUNDWORK notes follow:
              Adam's directive ("dual file browser windows, both
              tree view") shipped same day — the pane is now two
              independent QFileSystemModel tree browsers (intake

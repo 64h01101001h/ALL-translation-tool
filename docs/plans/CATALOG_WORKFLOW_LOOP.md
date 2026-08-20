@@ -327,6 +327,14 @@ mints catalog numbers; the mother copy is never touched.**
       colophon spans compared to separate true duplicates from
       same-title-different-work). Battery: constructed +
       real-library measure; selftest pin per lane.
-- [ ] 16. **Closing audit, phase 2**: docs truth pass, fresh
-      sweeps/selftest, TODO 9g reconciliation, memory bank, stop
-      the loop.
+- [x] 16. **Closing audit, phase 2** — DONE 2026-08-19; BOTH PHASES
+      COMPLETE. Chapter 14 TOC matches all 19 headings; README row
+      refreshed with the phase-2 lanes; TODO 9g steps 1-5 ALL DONE.
+      Closing verification: ctest 54/54, selftest ALL PASS, sweep
+      12 controls coherent. THE FULL LOOP: 16 iterations, 10 new
+      test suites (45-54), 12 toolbar/card lanes, every threshold
+      measured against the real library, 3 designs rejected by
+      measurement, 2 real team findings surfaced (the 95 incomplete
+      META pairs; the Sungbum QC flags and duplicate filings). The
+      cataloging workflow of TODO 9g is BUILT; what comes next
+      grows from the team's use.
