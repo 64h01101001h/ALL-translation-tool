@@ -18738,9 +18738,9 @@ public:
         auto* indexBtn = new QPushButton("Update search index");
         // daily acts stay on the row; occasional utilities fold into
         // Maintenance (UX program P1, 2026-08-12)
-        gShelve->add(installBtn);
-        gShelve->add(importBtn);
-        gFind->add(viewBtn);
+        gShelve->addBig(installBtn, "folder");
+        gShelve->addBig(importBtn, "save");
+        gFind->addBig(viewBtn, "page");
         auto* maintBtn = new QPushButton("Maintenance…");
         maintBtn->setIcon(miniIcon("gear"));
         maintBtn->setToolTip(
@@ -18775,7 +18775,7 @@ public:
                               "text)…"),
             [this] { surveySelected(); });
         maintBtn->setMenu(maintMenu);
-        gCare->add(maintBtn);
+        gCare->addBig(maintBtn, "gear");
         // audit C1's queued follow-up (closed 2026-08-20): the survey
         // also gets a VISIBLE button, not just the menu entry
         auto* surveyBtn = new QPushButton("Survey\u2026");
@@ -18786,7 +18786,7 @@ public:
             "does before committing.");
         connect(surveyBtn, &QPushButton::clicked,
                 [this] { surveySelected(); });
-        gStudy->add(surveyBtn);
+        gStudy->addBig(surveyBtn, "book");
         for (auto* hb : {ocrBtn, utfcBtn, indexBtn}) hb->hide();
         // hidden buttons keep their handlers alive for the menu +
         // the machine layers (Help index, sweep, menu bar)
@@ -22622,7 +22622,7 @@ public:
         auto* gVolume = ribbon->group("VOLUME");
         auto* gModels = ribbon->group("MODELS");
         auto* open = new QPushButton("Open scan image…");
-        gPage->add(open);
+        gPage->addBig(open, "image");
         deskewOverride_ = new QCheckBox("deskew off (0°)");
         deskewOverride_->setToolTip(
             "Override deskew to 0° — a labeled DEVIATION from the "
@@ -22631,7 +22631,7 @@ public:
         gView->add(deskewOverride_);
         run_ = new QPushButton("Run OCR");
         run_->setEnabled(false);
-        gPage->add(run_);
+        gPage->addBig(run_, "ocr");
         illusToggle_ = new QCheckBox("mark illustration candidates");
         illusToggle_->setToolTip(
             "Outline regions of the folio NOT covered by detected "
@@ -22647,13 +22647,13 @@ public:
             "and show them as a gallery of crops with their page "
             "provenance. Candidates only \u2014 never claimed "
             "complete.");
-        gVolume->add(galleryBtn);
+        gVolume->addBig(galleryBtn, "image");
         auto* modelsBtn = new QPushButton("OCR models\u2026");
         modelsBtn->setToolTip(
             "Download additional BDRC recognition models (Lhasa "
             "Kangyur, Derge Tengyur, dbu-can books, modern print) "
             "and pick which one Run OCR uses.");
-        gModels->add(modelsBtn);
+        gModels->addBig(modelsBtn, "gear");
         connect(modelsBtn, &QPushButton::clicked,
                 [this] { showOcrModelManager(this, root_); });
         connect(galleryBtn, &QPushButton::clicked,
@@ -22663,14 +22663,14 @@ public:
         });
         save_ = new QPushButton("Save to ocr_out…");
         save_->setEnabled(false);
-        gPage->add(save_);
+        gPage->addBig(save_, "save");
         auto* batchBtn = new QPushButton("Batch folder…");
         batchBtn->setToolTip(
             "OCR every page image in a folder (a scanned volume) — one "
             "-ocr.txt per page into library/ocr_out/<folder>/, all "
             "headered OCR-DERIVED. The Than Grove batch-volume pattern "
             "from the ACIP Development survey.");
-        gVolume->add(batchBtn);
+        gVolume->addBig(batchBtn, "folder");
         ribbon->finish();
         ribbon->attachTo(this);   // full-width host carries it
         connect(batchBtn, &QPushButton::clicked, [this] { batchFolder(); });
@@ -24194,10 +24194,10 @@ public:
         auto* gType = ribbon->group("TYPE");
         auto* gStyles = ribbon->group("HOUSE STYLES");
         auto* gView = ribbon->group("VIEW");
-        gFile->add(openB);
-        gFile->add(saveB);
-        gFile->add(saveAsB);
-        gFile->add(rtfB);
+        gFile->addBig(openB, "page");
+        gFile->addBig(saveB, "save");
+        gFile->addBig(saveAsB, "save");
+        gFile->addBig(rtfB, "book");
         gType->add(boldB_);
         gType->add(italB_);
         gType->add(undB_);
