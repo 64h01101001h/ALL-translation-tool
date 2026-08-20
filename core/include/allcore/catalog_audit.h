@@ -74,4 +74,12 @@ struct AuditResult {
 AuditResult auditPresence(const std::vector<AcipCitation>& cited,
                           const std::set<std::string>& have);
 
+// ---- the witness hunt (session 2's baskets) --------------------------------
+// A missing work needs a WITNESS found. The published citation usually
+// names the Tibetan title ("Tib: gSum la skyabs su 'gro-ba bdun-cu-pa,
+// Tibetan translation at ACIP TD03971…") — this extracts that span,
+// cleaned to a plain Wylie query for a BUDA/BDRC title search. Empty
+// when the citation carries no Tibetan span — a real answer.
+std::string witnessSearchQuery(const std::string& citation);
+
 }  // namespace allcore

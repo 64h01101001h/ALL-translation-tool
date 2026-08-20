@@ -23964,6 +23964,19 @@ public:
                                 : "<div style='color:#B26B00'>" +
                                       err.toHtmlEscaped() + "</div>");
                     }
+                    else if (s2 == "exportmissing:") {
+                        const QString out = safeGetSaveFileName(
+                            this, "Export the witness-hunt list",
+                            QDir::homePath() + "/missing_works.txt",
+                            "Text (*.txt)");
+                        if (!out.isEmpty()) {
+                            const QString res = exportMissingList(out);
+                            info_->setHtml(
+                                "<div style='color:#2E7D32'>" +
+                                res.toHtmlEscaped() + " \u2192 " +
+                                out.toHtmlEscaped() + "</div>");
+                        }
+                    }
                     else if (s2.startsWith("shelfsel:")) {
                         dest_->selectPath(anchorPayload(s2, 9));
                         info_->setHtml(
@@ -24754,6 +24767,95 @@ public:
         return h;
     }
 
+    // A witness-hunt link for one missing work: direct BUDA page
+    // when the number maps deterministically, else a title search
+    // built from the citation's own Tibetan span. Empty = no honest
+    // link to offer.
+    QString witnessLink(const QString& number, const QString& citation) {
+        const auto inf = allcore::decodeAcipFilename(
+            (number + ".ACT").toStdString());
+        if (inf.recognized) {
+            const std::string direct = allcore::bdrcScanUrl(inf);
+            if (!direct.empty())
+                return "<a href='" +
+                       QString::fromStdString(direct).toHtmlEscaped() +
+                       "'>scans on BDRC</a>";
+        }
+        const std::string q =
+            allcore::witnessSearchQuery(citation.toStdString());
+        if (q.empty()) return QString();
+        return "<a href='https://library.bdrc.io/search?q=%22" +
+               QString::fromUtf8(QUrl::toPercentEncoding(
+                   QString::fromStdString(q))) +
+               "%22&lg=bo-x-ewts&t=Work'>search BUDA</a>";
+    }
+
+    // The field-coded ASCII handout for the witness hunt. Public for
+    // the selftest.
+    QString exportMissingList(const QString& outPath) {
+        // rebuild the audit (cheap) to write the handout
+        std::vector<allcore::AcipCitation> cited;
+        std::map<std::string, QString> citeText;
+        for (const char* rel :
+             {"/data/extracted/mixed_nuts_bibliography.json",
+              "/data/extracted/apparatus_bibliography.json"}) {
+            QFile f(root_ + rel);
+            if (!f.open(QIODevice::ReadOnly)) continue;
+            const auto arr = QJsonDocument::fromJson(f.readAll()).array();
+            for (const auto& v : arr) {
+                const auto o = v.toObject();
+                const std::string t =
+                    o.value("text").toString().toStdString();
+                for (const auto& c : allcore::extractAcipCitations(t)) {
+                    cited.push_back(c);
+                    const auto n = allcore::baseCatalogKey(c.number);
+                    if (!n.empty() && !citeText.count(n))
+                        citeText[n] =
+                            o.value("source").toString() + "\t" +
+                            QString::fromStdString(t).left(300);
+                }
+            }
+        }
+        const QString destRootDir = dest_->root().isEmpty()
+                                        ? root_ + "/library"
+                                        : dest_->root();
+        const auto have =
+            allcore::collectLibraryNumbers(destRootDir.toStdString());
+        const auto r = allcore::auditPresence(cited, have);
+        QFile out(outPath);
+        if (!out.open(QIODevice::WriteOnly))
+            return "could not write the list";
+        QTextStream ts(&out);
+        ts << "; WITNESS HUNT - works cited in the published "
+              "bibliographies, absent from this library\n";
+        ts << "; (a lower bound: the installed library is not ACIP's "
+              "master tree)\n;\n";
+        int n = 0;
+        for (const auto& e : r.entries) {
+            if (e.present) break;
+            const auto k = allcore::baseCatalogKey(e.number);
+            const auto it = citeText.find(k);
+            ts << "S: " << QString::fromStdString(e.number) << "\n";
+            if (it != citeText.end()) {
+                const auto parts = it->second.split('\t');
+                ts << "V: " << parts.value(0) << "\n";
+                ts << "C: "
+                   << QString(parts.value(1)).replace('\n', ' ')
+                   << "\n";
+                const std::string q = allcore::witnessSearchQuery(
+                    parts.value(1).toStdString());
+                if (!q.empty())
+                    ts << "L: https://library.bdrc.io/search?q=%22"
+                       << QUrl::toPercentEncoding(
+                              QString::fromStdString(q))
+                       << "%22&lg=bo-x-ewts&t=Work\n";
+            }
+            ts << "\n";
+            ++n;
+        }
+        return QString("wrote %1 missing work(s)").arg(n);
+    }
+
     // GMR's job #1 as a live report: cited-but-absent works, per
     // source volume, with the citation text as evidence. Public so
     // the selftest can prove the report renders.
@@ -24814,6 +24916,11 @@ public:
                  .arg(r.cited_distinct)
                  .arg(r.present)
                  .arg(r.missing);
+        h += "<div style='margin:4px 0'><a href='exportmissing:'>"
+             "Export missing list\u2026</a> <span style='color:#777'>"
+             "\u2014 the field-coded handout for the witness hunt "
+             "(number, citing volume, citation, search link).</span>"
+             "</div>";
         // missing, grouped by the source volume that cited them
         std::map<QString, std::vector<const allcore::AuditEntry*>> bySrc;
         for (const auto& e : r.entries) {
@@ -24838,8 +24945,16 @@ public:
                      "</b>" +
                      (e->citations > 1
                           ? QString(" (cited %1\u00d7)").arg(e->citations)
-                          : QString()) +
-                     (it != firstCite.end()
+                          : QString());
+                // the witness hunt: a direct BUDA link when the
+                // number maps deterministically (KD/KL/TD are Tohoku
+                // numbers), else a title search from the citation
+                const QString wlink = witnessLink(
+                    QString::fromStdString(e->number),
+                    it != firstCite.end() ? it->second.text
+                                          : QString());
+                if (!wlink.isEmpty()) h += " " + wlink;
+                h += (it != firstCite.end()
                           ? "<div style='color:#777;font-size:11px'>" +
                                 it->second.text.toHtmlEscaped() +
                                 "\u2026</div>"
@@ -28986,11 +29101,25 @@ int main(int argc, char** argv) {
                 // measured numbers, a known missing work, the
                 // lower-bound caveat, and the charter line
                 const QString a = catalogPane->bibliographyAuditHtml();
+                QDir().mkpath(wd);
+                const QString mout = wd + "/missing.txt";
+                const QString mres =
+                    catalogPane->exportMissingList(mout);
+                QString mtxt;
+                { QFile mf(mout);
+                  if (mf.open(QIODevice::ReadOnly))
+                      mtxt = QString::fromUtf8(mf.readAll()); }
                 const bool audit =
                     a.contains("Bibliography audit") &&
                     a.contains("KL00824") &&
+                    a.contains("library.bdrc.io") &&
+                    a.contains("Export missing list") &&
                     a.contains("LOWER BOUND") &&
-                    a.contains("Nothing here writes anything");
+                    a.contains("Nothing here writes anything") &&
+                    mres.contains("wrote") &&
+                    mtxt.contains("S: KL00824") &&
+                    mtxt.contains("L: https://library.bdrc.io");
+                QDir(wd).removeRecursively();
                 log << QString("  [%1] Catalog: bibliography audit "
                                "renders cited-but-absent works with "
                                "evidence and the honest caveat")

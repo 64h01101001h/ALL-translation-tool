@@ -76,6 +76,18 @@ int main(int argc, char** argv) {
               "citation counts survive the collapse");
     }
 
+    // ---- witness-hunt query extraction -----------------------------------
+    CHECK(allcore::witnessSearchQuery(
+              "Candrak\xC4\xABrti. Seventy Verses (Tib: gSum la skyabs "
+              "su \xE2\x80\x99gro-ba bdun-cu-pa, Tibetan translation "
+              "at ACIP TD03971, ff. 251a-253b)") ==
+              "gsum la skyabs su 'gro ba bdun cu pa",
+          "the citation's Tibetan span becomes a clean Wylie query "
+          "(hyphens to spaces, typographic apostrophe folded)");
+    CHECK(allcore::witnessSearchQuery("no tibetan span here").empty(),
+          "a citation without a Tibetan span yields no query - not a "
+          "guess");
+
     if (argc < 4) {
         std::printf("  [SKIP] real-data audit (paths not given)\n");
         std::printf("%s\n", failures ? "FAILURES" : "catalog_audit_smoke OK");
@@ -103,6 +115,34 @@ int main(int argc, char** argv) {
         if (!e.present && e.number == "KL00824") klSeen = true;
     CHECK(klSeen, "known missing work KL00824 (Sixty Verses citation) "
                   "appears in the missing list");
+
+    // how many missing works yield a witness-hunt query?
+    {
+        int withQ = 0, missingN = 0;
+        // re-scan citations pairing each with its text span
+        for (const auto& e : r.entries) {
+            if (e.present) break;
+            ++missingN;
+        }
+        // count via the raw text: for each missing number, find one
+        // citation mentioning it and try the query
+        for (const auto& e : r.entries) {
+            if (e.present) break;
+            const size_t at = biblio.find("ACIP " + e.number);
+            if (at == std::string::npos) continue;
+            const size_t from = at > 400 ? at - 400 : 0;
+            if (!allcore::witnessSearchQuery(
+                     biblio.substr(from, 500))
+                     .empty())
+                ++withQ;
+        }
+        std::printf("  witness hunt: %d of %d missing works yield a "
+                    "title query\n",
+                    withQ, missingN);
+        CHECK(missingN > 0 && withQ * 100 >= missingN * 55,
+              "a majority of missing works yield a search query from "
+              "their own citation");
+    }
 
     std::printf("%s\n", failures ? "FAILURES" : "catalog_audit_smoke OK");
     return failures ? 1 : 0;
