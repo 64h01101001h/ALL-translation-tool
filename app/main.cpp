@@ -15173,12 +15173,41 @@ auto* secEvid = new QLabel("<span style='color:#9A7A33;font-size:10px;letter-spa
                         first = QString::fromStdString(t.wylie);
                     ++unmatched;
                 }
+            // 9n-8 (2026-08-20): the health chip also counts
+            // honorific-register terms in the source — the Review
+            // pane's respect advisory, surfaced while you type
+            int honor = 0;
+            if (g_honorifics) {
+                std::vector<std::string> toks;
+                std::vector<bool> bars;
+                allcore::tokenizeDocument(src, toks, bars);
+                std::set<std::string> seenH;
+                for (size_t i = 0; i < toks.size(); ++i) {
+                    const std::string a =
+                        allcore::tokenToEwts(toks[i]);
+                    if (g_honorifics->count(a) && seenH.insert(a).second)
+                        ++honor;
+                    if (i + 1 < toks.size() && !bars[i]) {
+                        const std::string b =
+                            a + " " +
+                            allcore::tokenToEwts(toks[i + 1]);
+                        if (g_honorifics->count(b) &&
+                            seenH.insert(b).second)
+                            ++honor;
+                    }
+                }
+            }
             if (!unmatched && rep.shared.empty()) {
                 termLive_->setStyleSheet(
                     "font-size:11px;color:#3B7A3B");
                 termLive_->setText(
-                    "✓ every established term is rendered; no "
-                    "shared-English collapses");
+                    QString("✓ every established term is rendered; "
+                            "no shared-English collapses%1")
+                        .arg(honor
+                                 ? QString(" · %1 honorific term(s) "
+                                           "— mind the register")
+                                       .arg(honor)
+                                 : QString()));
             } else {
                 termLive_->setStyleSheet(
                     "font-size:11px;color:#B26B00");
@@ -15193,6 +15222,11 @@ auto* secEvid = new QLabel("<span style='color:#9A7A33;font-size:10px;letter-spa
                                  "collapse(s)")
                              .arg(t.isEmpty() ? "" : " · ")
                              .arg(rep.shared.size());
+                if (honor)
+                    t += QString("%1%2 honorific term(s) — mind "
+                                 "the register")
+                             .arg(t.isEmpty() ? "" : " · ")
+                             .arg(honor);
                 t += " — press Check terminology for the detail";
                 termLive_->setText(t);
             }
@@ -28587,6 +28621,23 @@ int main(int argc, char** argv) {
         mkGroup("Input", {"Input", "OCR"});
         mkGroup("Catalog", {"Catalog"});
         mkGroup("Community", {"Propose", "Approval"});
+        // 9n-5 (2026-08-20): the Word-style visible search field —
+        // Hunt Everywhere surfaced top-right beside the group tabs
+        // instead of hiding behind its shortcut
+        {
+            auto* huntBtn =
+                new QPushButton(QString::fromUtf8("🔎 Hunt (⌘K)"));
+            huntBtn->setFlat(true);
+            huntBtn->setCursor(Qt::PointingHandCursor);
+            huntBtn->setToolTip(
+                "Hunt Everywhere — files, dictionary entries, "
+                "corpus lines, persons, apparatus, teachings, "
+                "commands. Same as pressing ⌘K.");
+            QObject::connect(huntBtn, &QPushButton::clicked, [] {
+                if (g_hunt) g_hunt->openPalette();
+            });
+            tabs.setCornerWidget(huntBtn, Qt::TopRightCorner);
+        }
         g_raisePane = [&tabs](QWidget* w) {
             for (auto& f : flatPanes)
                 if (f.w == w) {
