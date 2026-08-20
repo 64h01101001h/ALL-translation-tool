@@ -46,4 +46,9 @@ struct AsciiCatalogResult {
 // and emit the field-coded list. Deterministic order (sorted paths).
 AsciiCatalogResult generateAsciiCatalog(const std::string& root);
 
+// First and last @NNN[AB] folio marks in a document body ("","" when
+// none) — the worksheet's folio-range prefill uses this too.
+std::pair<std::string, std::string> acipFolioRange(
+    const std::string& body);
+
 }  // namespace allcore

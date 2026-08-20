@@ -24241,8 +24241,6 @@ public:
         const auto inf =
             allcore::decodeAcipFilename(fi.fileName().toStdString());
         w["Input File Name"] = fi.fileName().toStdString();
-        w["Byte Count (MD5 Checksum)"] =
-            QString::number(fi.size()).toStdString();
         if (inf.recognized) {
             QString num = fi.completeBaseName();
             const int u = num.indexOf('_');
@@ -24270,7 +24268,26 @@ public:
         }
         QFile f(path);
         if (f.open(QIODevice::ReadOnly)) {
-            const std::string body = f.readAll().toStdString();
+            const QByteArray raw = f.readAll();
+            const std::string body = raw.toStdString();
+            // the column literally asks for both: bytes and MD5
+            w["Byte Count (MD5 Checksum)"] =
+                (QString::number(raw.size()) + " bytes; MD5 " +
+                 QString::fromLatin1(
+                     QCryptographicHash::hash(
+                         raw, QCryptographicHash::Md5)
+                         .toHex()))
+                    .toStdString();
+            const auto [fol1, fol2] = allcore::acipFolioRange(body);
+            if (!fol1.empty())
+                w["ALL/BDRC Volume ID & Folio Count"] =
+                    "folios " + fol1 + "-" + fol2;
+            const auto infp = allcore::decodeAcipFilename(
+                fi.fileName().toStdString());
+            if (infp.recognized) {
+                const std::string purl = allcore::bdrcScanUrl(infp);
+                if (!purl.empty()) w["BDRC Permalink"] = purl;
+            }
             const auto t = allcore::extractAcipTitle(
                 body.substr(0, std::min<size_t>(body.size(), 4000)));
             if (t.found) {
@@ -28922,7 +28939,7 @@ int main(int argc, char** argv) {
                 // title and colophon with the right values; the
                 // sidecar round-trips through the core format
                 QDir().mkpath(wd);
-                const QString wf = wd + "/TD02022_TEST_Test_AUTH.txt";
+                const QString wf = wd + "/KD00016_TEST_Test_AUTH.txt";
                 { QFile f(wf);
                   f.open(QIODevice::WriteOnly);
                   f.write("@85A #, ,RGYA GAR SKAD DU, YA M'A RI,\n"
@@ -28933,8 +28950,17 @@ int main(int argc, char** argv) {
                 const auto pre = catalogPane->prefillWorksheet(wf);
                 const bool preOk =
                     pre.count("ACIP Number") &&
-                    pre.at("ACIP Number") == "TD02022" &&
-                    pre.count("Tohoku") && pre.at("Tohoku") == "2022" &&
+                    pre.at("ACIP Number") == "KD00016" &&
+                    pre.count("Tohoku") && pre.at("Tohoku") == "16" &&
+                    pre.count("Byte Count (MD5 Checksum)") &&
+                    pre.at("Byte Count (MD5 Checksum)").find("MD5 ") !=
+                        std::string::npos &&
+                    pre.count("ALL/BDRC Volume ID & Folio Count") &&
+                    pre.at("ALL/BDRC Volume ID & Folio Count")
+                            .find("85A") != std::string::npos &&
+                    pre.count("BDRC Permalink") &&
+                    pre.at("BDRC Permalink").find("bdrc.io") !=
+                        std::string::npos &&
                     pre.count("Title Page Title") &&
                     pre.at("Title Page Title")
                             .find("GSHIN RJE GSHED") !=

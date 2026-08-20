@@ -379,7 +379,13 @@ mints catalog numbers; the mother copy is never touched.**
       list of missing works (number, citing volume, citation, search
       link) — the handout for the witness hunt. Selftest pin: links
       present and well-formed; export file round-trips.
-- [ ] 19. **Worksheet enrichment**: fill what the schema asks for
+- [x] 19. **Worksheet enrichment** — SHIPPED 2026-08-19 (suite 48
+      extended with the folio-range helper pins; strengthened
+      worksheet selftest pin on a KD probe: MD5 + folio range +
+      bdrc.io permalink all prefill). The sheet's own columns
+      answered: "Byte Count (MD5 Checksum)" gets both, folio range
+      from the text's @-marks, BDRC permalink via the verified
+      Tohoku mapping. Original spec:: fill what the schema asks for
       that we already know how to compute — MD5 checksum (the
       column is literally "Byte Count (MD5 Checksum)"), folio range
       + count from the text, BDRC permalink via the verified

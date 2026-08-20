@@ -46,6 +46,11 @@ std::pair<std::string, std::string> folioRange(const std::string& body) {
 
 }  // namespace
 
+std::pair<std::string, std::string> acipFolioRange(
+    const std::string& body) {
+    return folioRange(body);
+}
+
 AsciiCatalogResult generateAsciiCatalog(const std::string& root) {
     namespace fs = std::filesystem;
     AsciiCatalogResult r;

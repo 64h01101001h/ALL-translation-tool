@@ -24,6 +24,14 @@ int main(int argc, char** argv) {
         std::printf("usage: catalog_list_smoke <root>\nFAILURES\n");
         return 1;
     }
+    {
+        const auto [a, b] = allcore::acipFolioRange(
+            "@85A BDEN, @85B GNYIS, @92B GSUM,");
+        CHECK(a == "85A" && b == "92B",
+              "the folio-range helper reads first and last marks");
+        CHECK(allcore::acipFolioRange("no folios here").first.empty(),
+              "no marks yields empty, not a guess");
+    }
     const auto r = allcore::generateAsciiCatalog(argv[1]);
     std::printf("  list: %d files - %d cataloged - %d uncataloged - %d "
                 "titled from text - %zu bytes\n",

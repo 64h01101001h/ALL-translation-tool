@@ -3113,7 +3113,10 @@ live sheet.
 The form arrives **prefilled from what the app already knows** —
 the number and language from the filename, the Tohoku number for
 KD/TD works, the title-page title and Sanskrit head from the text
-itself, the first composition-colophon candidate, the byte count.
+itself, the first composition-colophon candidate, the byte count
+**with its MD5 checksum** (the column asks for both), the **folio
+range** read from the text's own @-marks, and the **BDRC
+permalink** where the number maps deterministically (KD/KL/TD).
 Every prefill is a machine suggestion to verify; everything is
 editable, and anything you saved before outranks the machine's
 suggestions on reopen.
