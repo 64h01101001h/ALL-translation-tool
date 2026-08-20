@@ -648,6 +648,16 @@ implementation is sidelined HERE from this date. What this means:
          behind one button). Pairs with 9j (card format) as one
          UI-polish wave AFTER the test campaign surfaces which
          controls he actually reaches for.
+         DIRECTION RULED 2026-08-20 (Adam, Word-ribbon screenshot:
+         "start an extensive implementation of a toolbar across the
+         top as seen in the screenshot"): a WORD-STYLE RIBBON —
+         labeled groups of controls in a strip across the top,
+         group captions beneath, tabs when a pane's tools warrant
+         them. ROLLOUT: RibbonBar component + Catalog-pane pilot
+         first (worst button row; groups: Access · Suggest ·
+         Inventory · QC · Handoff), then pane by pane as the
+         campaign settles each; the design board's B/C candidates
+         are superseded by this ruling.
       9l. **EDIT MENU + WORD-STYLE MENU-BAR REORGANIZATION (Adam,
          2026-08-20, with two reference screenshots: the standard
          macOS Edit menu, and Microsoft Word's menu bar — "we will
