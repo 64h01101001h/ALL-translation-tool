@@ -244,6 +244,77 @@ static void runIllustrationGallery(QWidget* parent, const QString& root,
 
 // What an entry card shows — the Overlay's display toggles feed this; other
 // panes use the defaults (which match the historical behavior).
+// ==== UX design tokens (UX_AUDIT.md phase 1, 2026-08-20) ========
+// The palette and type roles the interface has been converging on,
+// named once. The audit found three greens and two ambers carrying
+// identical meanings and eight ad-hoc font sizes; new code takes
+// these tokens, and existing surfaces migrate area by area
+// (entryHtml and the ribbon first). Values preserve the app's
+// existing identity — this is consolidation, not a re-skin.
+namespace ux {
+// grounds
+constexpr const char* kPaper = "#FAF6EE";   // reading surface
+constexpr const char* kInk = "#2B2118";     // primary text on paper
+// structure & identity
+constexpr const char* kGold = "#9A7A33";    // eyebrows, identity
+constexpr const char* kMuted = "#6E675D";   // secondary text
+constexpr const char* kFaint = "#8A8A8A";   // tertiary/hints
+constexpr const char* kSoft = "#9C948A";    // caption italic
+// semantic
+constexpr const char* kAct = "#1E6B4E";     // actions / success
+constexpr const char* kWarn = "#B26B00";    // advisories
+constexpr const char* kMachine = "#B4540A"; // machine-derived marks
+constexpr const char* kError = "#8C2F2B";   // errors / refusals
+constexpr const char* kDoc = "#2E629E";     // documents / links-int
+constexpr const char* kPeople = "#6E3E8E";  // people / access
+// type roles (px, in rendered HTML)
+constexpr int kFsMeta = 11;     // metadata, badges, eyebrows
+constexpr int kFsBody = 12;     // supporting prose
+constexpr int kFsCard = 13;     // card body
+constexpr int kFsHead = 15;     // section heads
+constexpr int kFsLead = 18;     // leading content (pron etc.)
+constexpr int kFsTibetan = 22;  // Tibetan headword script
+
+// ---- epistemic badge grammar (phase 2; audit C2) ----------------
+// Every evidence block declares its authority class visually, in a
+// small chip BEFORE its label. Wording of existing honesty labels
+// stays verbatim — the badge adds a visual grammar, replaces
+// nothing. Classes:
+//   Binding   — HGM's own English; the point of the project
+//   Evidence  — primary attested material (corpus, colophons)
+//   Reference — external authorities (84000, Das, MVP, ref dicts)
+//   Machine   — machine-located/derived candidates (OCR, auto-
+//               aligned, suggestions); always review material
+//   Ai        — model-composed, always labeled
+enum class Epistemic { Binding, Evidence, Reference, Machine, Ai };
+inline QString sourceBadge(Epistemic e) {
+    const char* txt = nullptr;
+    const char* col = nullptr;
+    bool solid = false;
+    switch (e) {
+        case Epistemic::Binding:
+            txt = "HGM"; col = kGold; solid = true; break;
+        case Epistemic::Evidence:
+            txt = "EVIDENCE"; col = kAct; break;
+        case Epistemic::Reference:
+            txt = "REFERENCE"; col = kDoc; break;
+        case Epistemic::Machine:
+            txt = "MACHINE"; col = kMachine; break;
+        case Epistemic::Ai:
+            txt = "AI"; col = kError; break;
+    }
+    return QString("<span style='font-family:-apple-system,Arial,"
+                   "sans-serif;font-size:9px;letter-spacing:1px;"
+                   "font-weight:700;border:1px solid %1;"
+                   "border-radius:3px;padding:0 4px;%2'>%3</span> ")
+        .arg(col)
+        .arg(solid ? QString("background:%1;color:#FFF8EC;")
+                         .arg(col)
+                   : QString("color:%1;").arg(col))
+        .arg(txt);
+}
+}   // namespace ux
+
 struct EntryDisplay {
     bool phonetics = true;
     bool glosses = true;
@@ -1010,6 +1081,7 @@ static QString entryHtml(const allcore::Entry& e,
         }
     }
     if (d.glosses) {
+        h += ux::sourceBadge(ux::Epistemic::Binding);
         for (const auto& g : e.hgm_gloss) {
             QString tier = e.provisional()
                 ? "<span style='color:#b00'>PROVISIONAL (auto-aligned)</span>"
@@ -1150,7 +1222,8 @@ static QString entryHtml(const allcore::Entry& e,
         if (it != g_84000->end()) {
             const G84000& g = it->second;
             QString b = "<div style='border-left:2px solid #B8AD9C;"
-                        "padding:2px 0 2px 8px;margin:6px 0'>"
+                        "padding:2px 0 2px 8px;margin:6px 0'>" +
+                        ux::sourceBadge(ux::Epistemic::Reference) +
                         "<small style="
                         "'color:#8A7E6E;letter-spacing:1px'>"
                         "84000 GLOSSARY · CC BY 4.0 · reference "
@@ -1221,7 +1294,8 @@ static QString entryHtml(const allcore::Entry& e,
                     }
         }
         if (!ms.empty()) {
-            h += zoneLabel("IN THE RECORDED TEACHINGS") +
+            h += ux::sourceBadge(ux::Epistemic::Machine) +
+                 zoneLabel("IN THE RECORDED TEACHINGS") +
                  "<div style='font-size:12px'><i "
                  "style='color:#9C948A'>moments where he says the "
                  "TIBETAN phrase itself (phonetic match on his "
@@ -1575,7 +1649,8 @@ static QString lookupResultsHtml(allcore::Spine& spine,
         }
         auto refs = ref->lookup(wylie);
         if (!refs.empty()) {
-            h += zoneLabel("REFERENCE · LOCAL ONLY") +
+            h += ux::sourceBadge(ux::Epistemic::Reference) +
+                 zoneLabel("REFERENCE · LOCAL ONLY") +
                  "<div><small style='color:#9C948A'>unlicensed "
                  "compilations — local lookup only, never for "
                  "release data</small></div>";
@@ -1630,7 +1705,8 @@ static QString lookupResultsHtml(allcore::Spine& spine,
             block += "</div>";
         }
         if (any) {
-            h += zoneLabel("LOCAL DICTIONARIES \u00b7 "
+            h += ux::sourceBadge(ux::Epistemic::Reference) +
+                 zoneLabel("LOCAL DICTIONARIES \u00b7 "
                            "USER-SUPPLIED") +
                  "<div><small style='color:#9C948A'>StarDict "
                  "files you installed \u2014 their licenses are "
@@ -2191,6 +2267,8 @@ static void remember(QPlainTextEdit* w, const QString& key,
 }
 
 }   // namespace sess
+
+
 
 
 
@@ -6721,7 +6799,8 @@ private:
                         ? spine_.corpusSearch('"' + e.wylie + '"', "", 3)
                         : std::vector<allcore::CorpusSegment>{};
         if (!segs.empty()) {
-            h += zoneLabel("FROM THE CORPUS");
+            h += ux::sourceBadge(ux::Epistemic::Evidence) +
+                 zoneLabel("FROM THE CORPUS");
             for (const auto& s : segs) {
                 h += "<div style='border-left:2px solid #D8CFC0;"
                      "padding:2px 0 2px 8px;margin:6px 0'>"
@@ -6737,7 +6816,8 @@ private:
         if (ref_ && showRefs_->isChecked()) {
             auto refs = ref_->lookup(e.wylie, 6);
             if (!refs.empty()) {
-                h += zoneLabel("REFERENCE · LOCAL ONLY");
+                h += ux::sourceBadge(ux::Epistemic::Reference) +
+                     zoneLabel("REFERENCE · LOCAL ONLY");
                 for (const auto& r : refs)
                     h += "<div style='margin:4px 0;font-size:12px;"
                          "color:#6E675D'><span style='background:#F0E9DC;"
