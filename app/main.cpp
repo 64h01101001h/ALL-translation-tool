@@ -24876,9 +24876,9 @@ public:
             "AWAITING APPROVAL staging area, and every approved "
             "placement live inside it, so Dropbox carries all of it "
             "to the whole team.");
-        gAccess->add(offB);
+        gAccess->addBig(offB, "folder");
         auto* loginB = new QPushButton("Sign in…");
-        gAccess->add(loginB);
+        gAccess->addBig(loginB, "gear");
         pendB_ = new QPushButton("Approvals…");
         pendB_->setToolTip(
             "The list of staged cataloging actions awaiting Geshe "
@@ -24887,13 +24887,13 @@ public:
             "staged file onto its shelf; reject moves it to "
             "REJECTED with the reason. Anyone signed in can read "
             "the list; only an approver can rule.");
-        gHandoff->add(pendB_);
+        gHandoff->addBig(pendB_, "clock");
         teamB_ = new QPushButton("Team…");
         teamB_->setToolTip(
             "The roster: who may use this workflow, and as whom. "
             "Admins add members (each with their own passphrase) "
             "and revoke access.");
-        gAccess->add(teamB_);
+        gAccess->addBig(teamB_, "gear");
         who_ = new QLabel;
         who_->setStyleSheet("color:#777");
         gAccess->add(who_);
@@ -24917,14 +24917,14 @@ public:
             "cited in the published Mixed Nuts bibliographies must exist "
             "in the database. Checks the citations against the "
             "destination tree.");
-        gInventory->add(auditB);
+        gInventory->addBig(auditB, "book");
         auto* splitB = new QPushButton("Suggest splits\u2026");
         splitB->setToolTip(
             "Chop assist: scan the selected intake file for candidate "
             "text boundaries (bilingual heads, BZHUGS SO title blocks) "
             "and list them with evidence. Nothing is cut \u2014 the "
             "mother copy is never touched.");
-        gSuggest->add(splitB);
+        gSuggest->addBig(splitB, "diff");
         auto* nameB = new QPushButton("Compose name\u2026");
         nameB->setToolTip(
             "Build a filename in the house grammar: NUMBER_TIBETAN_"
@@ -24933,13 +24933,13 @@ public:
             "names truncate mid-word with '+' and a NUMBER META.TXT "
             "companion, exactly as the library's 1,457 existing pairs "
             "do.");
-        gSuggest->add(nameB);
+        gSuggest->addBig(nameB, "page");
         auto* listB = new QPushButton("Generate catalog list\u2026");
         listB->setToolTip(
             "Write the field-coded ASCII list of what the destination "
             "tree holds (S/F/T/E/A/V/P lines, St. Petersburg lineage) "
             "\u2014 a LIST of the folders, not the official catalog.");
-        gInventory->add(listB);
+        gInventory->addBig(listB, "page");
         auto* xlatB = new QPushButton("Translate title\u2026");
         xlatB->setToolTip(
             "The attestation workbench: whole-title matches from the "
@@ -24947,7 +24947,7 @@ public:
             "phrase of the title has been rendered in OTHER published "
             "titles. The machine attests; you compose \u2014 nothing "
             "is machine-translated.");
-        gSuggest->add(xlatB);
+        gSuggest->addBig(xlatB, "book");
         auto* diffB = new QPushButton("Compare trees\u2026");
         diffB->setToolTip(
             "The divergence audit (session 3: GMR's copy vs Nick's): "
@@ -24955,7 +24955,7 @@ public:
             "identical, modified, renamed/refiled, only-left, "
             "only-right. Content matched by size + sampled bytes; "
             "nothing is changed.");
-        gInventory->add(diffB);
+        gInventory->addBig(diffB, "diff");
         auto* qcB = new QPushButton("QC intake\u2026");
         qcB->setToolTip(
             "Two quality lanes over the intake tree: filenames whose "
@@ -24963,7 +24963,7 @@ public:
             "(the copy-paste disease), and files sharing one Tibetan "
             "title, told apart by their colophons. Flags are "
             "questions with evidence, never verdicts.");
-        gQc->add(qcB);
+        gQc->addBig(qcB, "ocr");
         auto* wsB = new QPushButton("Worksheet\u2026");
         wsB->setToolTip(
             "The cataloging worksheet on the team's live 52-column "
@@ -24972,7 +24972,7 @@ public:
             "a sidecar beside the intake file; Export row emits one "
             "CSV line for the live spreadsheet \u2014 which stays "
             "the team's master.");
-        gQc->add(wsB);
+        gQc->addBig(wsB, "page");
         auto* moveB = new QPushButton("Move to shelf\u2026");
         moveB->setToolTip(
             "The handoff: MOVE the selected intake file onto the shelf "
@@ -24980,7 +24980,7 @@ public:
             "companion travels along; collisions are refused; nothing "
             "is deleted. The shelf choice is yours \u2014 a book on "
             "the wrong shelf is lost forever.");
-        gHandoff->add(moveB);
+        gHandoff->addBig(moveB, "save");
         auto* regB = new QPushButton("Load register\u2026");
         regB->setToolTip(
             "Load the registrar's spreadsheet (CSV/TSV: number, title, "
@@ -24988,7 +24988,7 @@ public:
             "three states per work: number issued \u00b7 input exists "
             "\u00b7 cataloged. The app never writes the register and "
             "never mints numbers.");
-        gInventory->add(regB);
+        gInventory->addBig(regB, "clock");
         ribbon->finish();
         outer->addWidget(ribbon);
         // in-house gate: every catalog ACTION requires a signed-in
@@ -29270,6 +29270,18 @@ int main(int argc, char** argv) {
             qatPin->setMenu(pinMenu);
         }
         QMenu* view = win.menuBar()->addMenu("View");
+        {   // Adam's spec: the ribbon can show icons WITH the small
+            // descriptions, or icons alone
+            QAction* rl = view->addAction("Ribbon: show labels");
+            rl->setCheckable(true);
+            rl->setChecked(ribbonLabelsOn());
+            QObject::connect(rl, &QAction::toggled, [](bool on) {
+                QSettings("ALL", "TranslationTool")
+                    .setValue("ui/ribbonLabels", on);
+                applyRibbonLabelStyle();
+            });
+            view->addSeparator();
+        }
         // Text size lives HERE, not as per-pane buttons (Adam's
         // call, 2026-08-18). One action serves whichever surface
         // holds the focus: Overlay text / card / source box, or the
