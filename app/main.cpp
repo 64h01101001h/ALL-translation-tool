@@ -28755,6 +28755,46 @@ int main(int argc, char** argv) {
     // same place in the menus. Actions are still derived GENERICALLY
     // from the panes' own buttons and toggles (raise the pane, then
     // click), so future features appear with no menu maintenance.
+    // 9l part 1 (Adam, 2026-08-20, macOS Edit-menu screenshot): a
+    // proper EDIT MENU with the standard roles, routed to whichever
+    // editor has focus. Native shortcuts (⌘Z/⌘X/⌘C/⌘V/⌘A) already
+    // reach text widgets; the MENU makes them discoverable and adds
+    // Delete. Word-style menu-bar reorganization (the rest of 9l)
+    // follows the campaign.
+    {
+        QMenu* edit = win.menuBar()->addMenu("Edit");
+        auto route = [](auto fn) {
+            return [fn] {
+                QWidget* w = QApplication::focusWidget();
+                if (auto* e = qobject_cast<QPlainTextEdit*>(w)) fn(e);
+                else if (auto* t = qobject_cast<QTextEdit*>(w)) fn(t);
+                else if (auto* l = qobject_cast<QLineEdit*>(w)) fn(l);
+            };
+        };
+        auto add = [&](const QString& name, QKeySequence ks,
+                       auto fn) {
+            QAction* a = edit->addAction(name, route(fn));
+            if (!ks.isEmpty()) a->setShortcut(ks);
+            // the widgets' own built-in shortcuts must keep working;
+            // the menu action is a second path, not a replacement
+            a->setShortcutContext(Qt::WidgetShortcut);
+        };
+        add("Undo", QKeySequence(), [](auto* w) { w->undo(); });
+        add("Redo", QKeySequence(), [](auto* w) { w->redo(); });
+        edit->addSeparator();
+        add("Cut", QKeySequence(), [](auto* w) { w->cut(); });
+        add("Copy", QKeySequence(), [](auto* w) { w->copy(); });
+        add("Paste", QKeySequence(), [](auto* w) { w->paste(); });
+        add("Delete", QKeySequence(), [](auto* w) {
+            if constexpr (requires { w->textCursor(); })
+                w->textCursor().removeSelectedText();
+            else
+                w->del();
+        });
+        edit->addSeparator();
+        add("Select All", QKeySequence(),
+            [](auto* w) { w->selectAll(); });
+    }
     for (int gi = 0; gi < tabs.count(); ++gi) {
         auto* g = qobject_cast<QTabWidget*>(tabs.widget(gi));
         if (!g) continue;
