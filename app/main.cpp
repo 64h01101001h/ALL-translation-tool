@@ -28262,7 +28262,30 @@ int main(int argc, char** argv) {
     };
     auto* tabsPtr = new QTabWidget;   // owned by the main window
     QTabWidget& tabs = *tabsPtr;
-    win.setCentralWidget(tabsPtr);
+    // 9n-4 (2026-08-20): the Quick Access Toolbar — Word's pinned
+    // strip. A thin row above the group tabs holding the commands
+    // YOU pin (★ menu lists every mirrored command; pins persist).
+    // Buttons trigger the menu mirror's own QActions, so a pinned
+    // command behaves exactly like its menu entry.
+    auto* central = new QWidget;
+    auto* centralV = new QVBoxLayout(central);
+    centralV->setContentsMargins(0, 0, 0, 0);
+    centralV->setSpacing(0);
+    auto* qatRow = new QHBoxLayout;
+    qatRow->setContentsMargins(8, 3, 8, 3);
+    auto* qatPin = new QPushButton(QString::fromUtf8("★"));
+    qatPin->setFlat(true);
+    qatPin->setToolTip(
+        "Quick Access — pin the commands you use most; they stay "
+        "one click away in every pane.");
+    qatRow->addWidget(qatPin);
+    auto* qatStrip = new QHBoxLayout;
+    qatStrip->setSpacing(4);
+    qatRow->addLayout(qatStrip);
+    qatRow->addStretch();
+    centralV->addLayout(qatRow);
+    centralV->addWidget(tabsPtr, 1);
+    win.setCentralWidget(central);
     g_spineForAbout = &spine;
     win.setWindowTitle(
         QString("ALL Translation Tool %1 — HGM v%2")
@@ -29003,6 +29026,96 @@ int main(int argc, char** argv) {
     }
 
     {
+        // 9n-4 wiring: pinned commands trigger the mirror's own
+        // QActions ("Group>Pane>Action" paths persisted in
+        // QSettings) — a pin behaves exactly like its menu entry
+        {
+            auto qatFind = [&win](const QString& path) -> QAction* {
+                const QStringList p = path.split('>');
+                if (p.size() != 3) return nullptr;
+                for (QAction* m : win.menuBar()->actions()) {
+                    if (m->text() != p[0] || !m->menu()) continue;
+                    for (QAction* sub : m->menu()->actions()) {
+                        if (sub->text() != p[1] || !sub->menu())
+                            continue;
+                        for (QAction* a : sub->menu()->actions())
+                            if (a->text() == p[2]) return a;
+                    }
+                }
+                return nullptr;
+            };
+            auto rebuild =
+                std::make_shared<std::function<void()>>();
+            *rebuild = [qatStrip, qatFind] {
+                while (QLayoutItem* it = qatStrip->takeAt(0)) {
+                    delete it->widget();
+                    delete it;
+                }
+                const QStringList pins =
+                    QSettings("ALL", "TranslationTool")
+                        .value("qat/pins")
+                        .toStringList();
+                for (const QString& p : pins) {
+                    QAction* a = qatFind(p);
+                    if (!a) continue;
+                    auto* b = new QPushButton(a->text());
+                    b->setToolTip("Quick Access — " + p);
+                    QObject::connect(b, &QPushButton::clicked, a,
+                                     &QAction::trigger);
+                    qatStrip->addWidget(b);
+                }
+            };
+            (*rebuild)();
+            auto* pinMenu = new QMenu(qatPin);
+            QObject::connect(
+                pinMenu, &QMenu::aboutToShow,
+                [pinMenu, &win, rebuild] {
+                    pinMenu->clear();
+                    const QStringList pins =
+                        QSettings("ALL", "TranslationTool")
+                            .value("qat/pins")
+                            .toStringList();
+                    for (QAction* m : win.menuBar()->actions()) {
+                        if (!m->menu() || m->text() == "Edit" ||
+                            m->text() == "View" ||
+                            m->text() == "Help")
+                            continue;
+                        QMenu* gm = pinMenu->addMenu(m->text());
+                        for (QAction* sub : m->menu()->actions()) {
+                            if (!sub->menu()) continue;
+                            QMenu* pm = gm->addMenu(sub->text());
+                            for (QAction* a :
+                                 sub->menu()->actions()) {
+                                if (a->text().isEmpty()) continue;
+                                const QString path =
+                                    m->text() + ">" + sub->text() +
+                                    ">" + a->text();
+                                QAction* t = pm->addAction(a->text());
+                                t->setCheckable(true);
+                                t->setChecked(pins.contains(path));
+                                QObject::connect(
+                                    t, &QAction::toggled,
+                                    [path, rebuild](bool on) {
+                                        QSettings st(
+                                            "ALL",
+                                            "TranslationTool");
+                                        QStringList ps =
+                                            st.value("qat/pins")
+                                                .toStringList();
+                                        if (on &&
+                                            !ps.contains(path))
+                                            ps << path;
+                                        if (!on)
+                                            ps.removeAll(path);
+                                        st.setValue("qat/pins", ps);
+                                        (*rebuild)();
+                                    });
+                            }
+                        }
+                    }
+                });
+            qatPin->setMenu(pinMenu);
+        }
         QMenu* view = win.menuBar()->addMenu("View");
         // Text size lives HERE, not as per-pane buttons (Adam's
         // call, 2026-08-18). One action serves whichever surface
