@@ -28282,6 +28282,10 @@ int main(int argc, char** argv) {
     auto* qatStrip = new QHBoxLayout;
     qatStrip->setSpacing(4);
     qatRow->addLayout(qatStrip);
+    auto* qatHint = new QLabel(
+        "pin your most-used commands here — they stay in every pane");
+    qatHint->setStyleSheet("color:#9A8F80;font-size:11px");
+    qatRow->addWidget(qatHint);
     qatRow->addStretch();
     centralV->addLayout(qatRow);
     centralV->addWidget(tabsPtr, 1);
@@ -29046,7 +29050,7 @@ int main(int argc, char** argv) {
             };
             auto rebuild =
                 std::make_shared<std::function<void()>>();
-            *rebuild = [qatStrip, qatFind] {
+            *rebuild = [qatStrip, qatFind, qatHint] {
                 while (QLayoutItem* it = qatStrip->takeAt(0)) {
                     delete it->widget();
                     delete it;
@@ -29055,6 +29059,7 @@ int main(int argc, char** argv) {
                     QSettings("ALL", "TranslationTool")
                         .value("qat/pins")
                         .toStringList();
+                qatHint->setVisible(pins.isEmpty());
                 for (const QString& p : pins) {
                     QAction* a = qatFind(p);
                     if (!a) continue;
