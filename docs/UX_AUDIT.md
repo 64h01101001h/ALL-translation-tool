@@ -254,3 +254,18 @@ icon families with washes (visibility ruling, 2026-08-20).*
 - 2026-08-20 · **Trainer and Drills stay compact rows.** Both are settings-dense
   learning forms (mode/script/course selectors interleaved with actions); the
   query-surface ruling applies.
+- 2026-08-20 · **Files pane joins the band** (VIEW / GO / TRANSFER / TOOLS).
+  Two new grammar pieces proved here: RibbonGroup::addColumn() — Word's
+  stacked small-control idiom, for checkbox/pushbutton pairs that would
+  otherwise blow the band's width — and RibbonProxy now carries QToolButton
+  menus (Favorites/Workspaces). The quick-select field returned to the pane
+  body per the query-surface ruling. Screenshot-verified before commit.
+- 2026-08-20 · **Phase 3 ledger complete**: 84000 TM, both teaching tiers,
+  and the reference zone now show true "N of M" totals; no cap poses as
+  the whole anywhere on the card.
+- 2026-08-20 · **M3 empty states**: the terminal lookup miss now names every
+  fold it tried (exact · affix · ba/bo · verb-stem · pronunciation ·
+  colloquial) and points at the layers below without promising them; the
+  search zero-hit state offers the pane's REAL widening moves (combiner,
+  NEAR window, folder scope, case) — first drafted with a typed-grammar
+  description, corrected against the actual combiner control before commit.
