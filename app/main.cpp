@@ -1649,7 +1649,19 @@ static QString lookupResultsHtml(allcore::Spine& spine,
                                             .toHtmlEscaped());
         }
     }
-    if (entries.empty()) h = "<i>no HGM match</i>";
+    if (entries.empty())
+        h = QString(
+                "<div style='color:#6E675D'><b>no HGM entry for "
+                "\u201c%1\u201d</b></div>"
+                "<div style='color:#9C948A;font-size:12px;"
+                "margin-top:2px'>tried: exact headword \u00b7 "
+                "affix stripping \u00b7 ba/bo fold \u00b7 "
+                "verb-stem fold \u00b7 pronunciation \u00b7 "
+                "colloquial register \u2014 nothing matched. "
+                "Reference layers and external sites below may "
+                "still know the form; they are comparanda, "
+                "never HGM.</div>")
+                .arg(QString::fromStdString(raw).toHtmlEscaped());
     // (honorific badges render inside entryHtml, every pane alike)
     EntryDisplay ld;
     ld.das = QSettings("ALL", "TranslationTool")
@@ -13389,6 +13401,15 @@ private:
             }
         }
         h += QString("<div><b>%1 total hit(s)</b></div>").arg(total);
+        if (total == 0 && !stopped_)
+            h += "<div style='color:#9C948A;font-size:12px;"
+                 "margin-top:2px'>nothing matched in the searched "
+                 "files. Widening moves: switch the combiner to "
+                 "<i>OR</i>; raise the NEAR window; check which "
+                 "folders are searched. ACIP is UPPERCASE, wylie "
+                 "lowercase \u2014 case picks the reading. For a "
+                 "single term, the Lookup pane also folds affixes "
+                 "and verb stems.</div>";
         if (foldDropped)
             h += QString("<div style='color:#8A8A8A'><small>%1 "
                          "window(s) hidden by the fold setting "
