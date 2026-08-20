@@ -628,6 +628,19 @@ implementation is sidelined HERE from this date. What this means:
          with honest counts ("3 of 41 — see all"), one click to the
          complete evidence. Pair with the test campaign's 🤔/💡
          findings about the card before implementing.
+      9k. **TOOLBAR/CONTROLS PRESENTATION REDESIGN (Adam,
+         2026-08-20: "i don't like the way that the toolbar displays
+         the functions/tools/options"):** rethink how each pane's
+         toolbar presents its functions — today most panes carry a
+         long row of text buttons (the Catalog pane alone has 10+,
+         Overlay's REVIEW column keeps growing). Directions to
+         explore WITH Adam's campaign findings in hand: grouped
+         menu-buttons (the Library "Maintenance…" pattern), icons +
+         text, a two-row or sidebar layout, per-pane "Tools" menus,
+         progressive disclosure (common actions visible, the rest
+         behind one button). Pairs with 9j (card format) as one
+         UI-polish wave AFTER the test campaign surfaces which
+         controls he actually reaches for.
       10. Idea bank (liked, never scheduled): pronunciation trainer (DECLINED-AS-CONCEIVED 2026-08-20: whisper's Tibetan too weak to honestly score learner speech — rule 3; needs a design conversation) ·
          Text DNA strips DONE 2026-08-20 (Overlay REVIEW → Text DNA: one colored column per source line — meter/off-meter/prose/blank + quote-announcement ticks; hover + click-to-jump; allcore textdna, suite 58; summary+jump selftest pin) · team board · apprenticeship mode ·
          English-on-the-carving hover DONE 2026-08-20 (cache-only tooltip over the woodblock: OCR-read wylie + HGM gloss, review-material label; seeded-cache selftest pin) · teaching-playlist karaoke ·
