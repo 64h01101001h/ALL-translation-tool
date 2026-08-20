@@ -250,6 +250,8 @@ struct EntryDisplay {
     bool sanskrit = true;
     bool hopkins = false;
     bool g84000 = true;   // 84000 glossary layer (CC BY 4.0)
+    bool teachings = true;   // timecoded recorded-teaching links
+                             // (Adam 2026-08-20: toggleable layer)
     bool das = true;      // Das 1902 page-scan link
     bool notes = true;   // published footnotes & bibliography layer
     std::string surface;   // the clicked surface form (ACIP) when
@@ -1195,7 +1197,7 @@ static QString entryHtml(const allcore::Entry& e,
             h += b;
         }
     }
-    if (!g_teachingTib && !g_teaching) {
+    if (d.teachings && !g_teachingTib && !g_teaching) {
         // the thrice-bitten failure class (2026-08-15 twice, and
         // 2026-08-20: an instance relaunched mid-press loaded empty
         // maps): a MISSING index must never look like "this word has
@@ -1206,7 +1208,7 @@ static QString entryHtml(const allcore::Entry& e,
              "— quit and relaunch the app (data/teaching/"
              "teaching_moments_card.json)</div>";
     }
-    if (g_teachingTib && !e.wylie.empty()) {
+    if (d.teachings && g_teachingTib && !e.wylie.empty()) {
         std::vector<const TeachingMoment*> ms;
         std::set<QString> seen;
         {
@@ -1237,7 +1239,7 @@ static QString entryHtml(const allcore::Entry& e,
     // spoken-Tibetan index reaches 6,195 headwords, the English index
     // 8,518 terms, so Tibetan-only left ~94% of lookups with nothing.
     // Labeled distinctly so the two kinds of match are never confused.
-    if (g_teaching && !e.hgm_gloss.empty()) {
+    if (d.teachings && g_teaching && !e.hgm_gloss.empty()) {
         std::vector<const TeachingMoment*> ms;
         std::set<QString> seen;
         for (const auto& g : e.hgm_gloss) {
@@ -2772,6 +2774,115 @@ static QIcon miniIcon(const QString& kind) {
                                   {27, 25},
                                   {20, 24},
                                   {16, 26}}));
+    } else if (kind == "search") {
+        p.drawEllipse(QPointF(14, 14), 8, 8);
+        p.drawLine(QPointF(20, 20), QPointF(27, 27));
+    } else if (kind == "tree") {          // outline / sa bcad
+        p.drawLine(QPointF(8, 7), QPointF(24, 7));
+        p.drawLine(QPointF(8, 7), QPointF(8, 25));
+        p.drawLine(QPointF(8, 15), QPointF(20, 15));
+        p.drawLine(QPointF(8, 25), QPointF(16, 25));
+    } else if (kind == "quote") {         // citations
+        p.drawPolyline(QPolygonF({{9, 8}, {6, 14}, {11, 14},
+                                  {11, 20}, {5, 20}, {5, 13}}));
+        p.drawPolyline(QPolygonF({{21, 8}, {18, 14}, {23, 14},
+                                  {23, 20}, {17, 20}, {17, 13}}));
+    } else if (kind == "count") {         // verse meter
+        p.drawLine(QPointF(6, 9), QPointF(26, 9));
+        p.drawLine(QPointF(6, 16), QPointF(22, 16));
+        p.drawLine(QPointF(6, 23), QPointF(26, 23));
+        p.drawText(QRectF(20, 10, 10, 12), "7");
+    } else if (kind == "strip") {         // Text DNA
+        for (int i = 0; i < 6; ++i)
+            p.drawRect(5 + i * 4, 10 + (i % 2) * 3, 3,
+                       12 - (i % 2) * 3);
+    } else if (kind == "typo") {          // typography check
+        p.drawText(QRectF(6, 6, 20, 20), Qt::AlignCenter,
+                   QString::fromUtf8("¶"));
+    } else if (kind == "listen") {        // teachings
+        p.drawEllipse(QPointF(16, 14), 8, 8);
+        p.drawLine(QPointF(8, 14), QPointF(8, 24));
+        p.drawLine(QPointF(24, 14), QPointF(24, 24));
+        p.drawRect(6, 18, 4, 7);
+        p.drawRect(22, 18, 4, 7);
+    } else if (kind == "check") {         // QC / spelling
+        p.drawPolyline(QPolygonF({{6, 17}, {13, 24}, {26, 8}}));
+    } else if (kind == "eye") {           // follow along
+        p.drawEllipse(QPointF(16, 16), 11, 7);
+        p.drawEllipse(QPointF(16, 16), 3, 3);
+    } else if (kind == "target") {        // locate word
+        p.drawEllipse(QPointF(16, 16), 9, 9);
+        p.drawLine(QPointF(16, 3), QPointF(16, 10));
+        p.drawLine(QPointF(16, 22), QPointF(16, 29));
+        p.drawLine(QPointF(3, 16), QPointF(10, 16));
+        p.drawLine(QPointF(22, 16), QPointF(29, 16));
+    } else if (kind == "shelf") {         // move to shelf
+        p.drawRect(18, 6, 9, 20);
+        p.drawLine(QPointF(18, 13), QPointF(27, 13));
+        p.drawLine(QPointF(18, 20), QPointF(27, 20));
+        p.drawLine(QPointF(4, 16), QPointF(14, 16));
+        p.drawPolyline(QPolygonF({{10, 12}, {14, 16}, {10, 20}}));
+    } else if (kind == "grid") {          // worksheet
+        p.drawRect(5, 6, 22, 20);
+        p.drawLine(QPointF(5, 13), QPointF(27, 13));
+        p.drawLine(QPointF(5, 19), QPointF(27, 19));
+        p.drawLine(QPointF(13, 6), QPointF(13, 26));
+    } else if (kind == "ledger") {        // register
+        p.drawRect(7, 5, 18, 22);
+        p.drawLine(QPointF(11, 10), QPointF(21, 10));
+        p.drawLine(QPointF(11, 15), QPointF(21, 15));
+        p.drawLine(QPointF(11, 20), QPointF(21, 20));
+    } else if (kind == "scissors") {      // splits
+        p.drawEllipse(QPointF(8, 22), 3.4, 3.4);
+        p.drawEllipse(QPointF(8, 10), 3.4, 3.4);
+        p.drawLine(QPointF(11, 12), QPointF(26, 22));
+        p.drawLine(QPointF(11, 20), QPointF(26, 10));
+    } else if (kind == "tag") {           // compose name
+        p.drawPolyline(QPolygonF({{6, 6}, {17, 6}, {26, 15},
+                                  {15, 26}, {6, 17}, {6, 6}}));
+        p.drawEllipse(QPointF(11, 11), 1.8, 1.8);
+    } else if (kind == "textT") {         // translate title
+        p.drawLine(QPointF(7, 8), QPointF(25, 8));
+        p.drawLine(QPointF(16, 8), QPointF(16, 26));
+    } else if (kind == "people") {        // team
+        p.drawEllipse(QPointF(11, 11), 4, 4);
+        p.drawPolyline(QPolygonF({{4, 26}, {5, 19}, {11, 17},
+                                  {17, 19}, {18, 26}}));
+        p.drawEllipse(QPointF(22, 10), 3.4, 3.4);
+        p.drawPolyline(QPolygonF({{19, 24}, {21, 17}, {26, 16},
+                                  {28, 19}, {28, 24}}));
+    } else if (kind == "key") {           // sign in
+        p.drawEllipse(QPointF(10, 12), 5, 5);
+        p.drawLine(QPointF(14, 16), QPointF(26, 27));
+        p.drawLine(QPointF(21, 22), QPointF(25, 18));
+    } else if (kind == "play") {          // run
+        p.drawPolyline(
+            QPolygonF({{10, 6}, {25, 16}, {10, 26}, {10, 6}}));
+    } else if (kind == "stack") {         // batch
+        p.drawRect(8, 12, 16, 14);
+        p.drawPolyline(QPolygonF({{10, 12}, {10, 8}, {26, 8},
+                                  {26, 22}, {24, 22}}));
+    } else if (kind == "chip") {          // models
+        p.drawRect(9, 9, 14, 14);
+        for (int i = 0; i < 3; ++i) {
+            p.drawLine(QPointF(12 + i * 4, 4),
+                       QPointF(12 + i * 4, 9));
+            p.drawLine(QPointF(12 + i * 4, 23),
+                       QPointF(12 + i * 4, 28));
+            p.drawLine(QPointF(4, 12 + i * 4),
+                       QPointF(9, 12 + i * 4));
+            p.drawLine(QPointF(23, 12 + i * 4),
+                       QPointF(28, 12 + i * 4));
+        }
+    } else if (kind == "out") {           // export
+        p.drawPolyline(QPolygonF({{14, 6}, {6, 6}, {6, 26},
+                                  {22, 26}, {22, 18}}));
+        p.drawLine(QPointF(13, 15), QPointF(27, 5));
+        p.drawPolyline(QPolygonF({{20, 5}, {27, 5}, {27, 12}}));
+    } else if (kind == "pecha") {         // long folio
+        p.drawRect(3, 11, 26, 10);
+        p.drawLine(QPointF(7, 15), QPointF(25, 15));
+        p.drawLine(QPointF(7, 18), QPointF(21, 18));
     } else if (kind == "gear") {
         p.drawEllipse(QPointF(16, 16), 6.5, 6.5);
         for (int i = 0; i < 8; ++i) {
@@ -2928,8 +3039,15 @@ public:
         return g;
     }
     void finish() { row_->addStretch(); }
-    // full-width mode: the pane registers instead of embedding
-    void attachTo(QWidget* pane) { paneRibbons().insert(pane, this); }
+    // Word order (Adam 2026-08-20): tab rows ABOVE, ribbon directly
+    // BENEATH them — the strip mounts at the very top of the pane,
+    // spanning its full width
+    void attachTo(QWidget* pane) {
+        if (auto* v = qobject_cast<QVBoxLayout*>(pane->layout()))
+            v->insertWidget(0, this);
+        else
+            paneRibbons().insert(pane, this);
+    }
 
 private:
     QHBoxLayout* row_ = nullptr;
@@ -4477,7 +4595,7 @@ public:
             "its enumeration grammar (…la gnyis / dang po…). "
             "Machine-derived and heuristic — headings jump the "
             "document, and the scans follow.");
-        gReview->addBig(sabcadB, "page");
+        gReview->addBig(sabcadB, "tree");
         connect(sabcadB, &QPushButton::clicked,
                 [this] { showSaBcad(); });
         auto* citeB = new QPushButton("Citations && quotations…");
@@ -4487,7 +4605,7 @@ public:
             "Resolved sources open in the Library; every quote "
             "can be hunted across the whole Library in one "
             "click — the search lands inside the cited texts.");
-        gReview->addBig(citeB, "book");
+        gReview->addBig(citeB, "quote");
         connect(citeB, &QPushButton::clicked,
                 [this] { showCitations(); });
         auto* meterB = new QPushButton("Verse meter…");
@@ -4496,7 +4614,7 @@ public:
             "count are verse; lines off the count are flagged "
             "for your judgment — a keying slip and poetic "
             "license look identical to arithmetic.");
-        gReview->addBig(meterB, "diff");
+        gReview->addBig(meterB, "count");
         connect(meterB, &QPushButton::clicked,
                 [this] { showVerseMeter(); });
         auto* readerB = new QPushButton(
@@ -4520,7 +4638,7 @@ public:
             "lines (\u2026zhes/ces + a speech verb). Pure "
             "measurement \u2014 click anywhere to jump the "
             "document there.");
-        gReview->addBig(dnaB, "diff");
+        gReview->addBig(dnaB, "strip");
         connect(dnaB, &QPushButton::clicked, [this] { showTextDna(); });
         auto* typoB = new QPushButton(
             "Typography check (classical rules)\u2026");
@@ -4531,7 +4649,7 @@ public:
             "after visarga, solid double shads, breaking tsheg "
             "in \u0F44\u0F0B\u0F0D. Flags only — the text is "
             "never edited.");
-        gReview->addBig(typoB, "ocr");
+        gReview->addBig(typoB, "typo");
         connect(typoB, &QPushButton::clicked,
                 [this] { showTypographyCheck(); });
         spellToggle_ = new QCheckBox("Show spelling doubts");
@@ -4587,7 +4705,7 @@ public:
             "into the recorded classes, both by his English and by "
             "the spoken Tibetan. Machine-located candidates; the "
             "recordings are the authority.");
-        gReview->addBig(teachBtn, "clock");
+        gReview->addBig(teachBtn, "listen");
         connect(teachBtn, &QPushButton::clicked, [this] {
             if (doc_.tokens.empty()) {
                 QMessageBox::information(this, "Teachings",
@@ -4873,6 +4991,12 @@ public:
         showSanskrit_ = mkToggle("sanskrit", "Sanskrit reference", false);
         showHopkins_ = mkToggle("hopkins", "Hopkins reference", false);
         show84000_ = mkToggle("g84000", "84000 glossary (CC BY)", true);
+        showTeachings_ =
+            mkToggle("teachings", "teaching links (timecoded)", true);
+        showTeachings_->setToolTip(
+            "Moments in the recorded teachings where Geshe Michael "
+            "says the word — timecoded YouTube links on the card, "
+            "machine-located, candidates only.");
         showDas_ = mkToggle("das", "Das 1902 / J\u00e4schke 1881 page links", true);
         showRefs_ = mkToggle("refs", "reference dictionaries (LC/TD/THL/OT/IW)",
                              true);
@@ -6445,6 +6569,7 @@ private:
         disp.sanskrit = showSanskrit_->isChecked();
         disp.hopkins = showHopkins_->isChecked();
         disp.g84000 = show84000_->isChecked();
+        disp.teachings = showTeachings_->isChecked();
         disp.das = showDas_->isChecked();
         disp.notes = showNotes_->isChecked();
         // when the clicked surface form differs from the headword
@@ -11595,6 +11720,7 @@ private:
     QCheckBox* showSanskrit_ = nullptr;
     QCheckBox* showHopkins_ = nullptr;
     QCheckBox* show84000_ = nullptr;
+    QCheckBox* showTeachings_ = nullptr;
     QCheckBox* showDas_ = nullptr;
     QCheckBox* showRefs_ = nullptr;
     QCheckBox* showNotes_ = nullptr;
@@ -18743,8 +18869,8 @@ public:
         // daily acts stay on the row; occasional utilities fold into
         // Maintenance (UX program P1, 2026-08-12)
         gShelve->addBig(installBtn, "folder");
-        gShelve->addBig(importBtn, "save");
-        gFind->addBig(viewBtn, "page");
+        gShelve->addBig(importBtn, "out");
+        gFind->addBig(viewBtn, "ledger");
         auto* maintBtn = new QPushButton("Maintenance…");
         maintBtn->setIcon(miniIcon("gear"));
         maintBtn->setToolTip(
@@ -18790,7 +18916,7 @@ public:
             "does before committing.");
         connect(surveyBtn, &QPushButton::clicked,
                 [this] { surveySelected(); });
-        gStudy->addBig(surveyBtn, "book");
+        gStudy->addBig(surveyBtn, "search");
         for (auto* hb : {ocrBtn, utfcBtn, indexBtn}) hb->hide();
         // hidden buttons keep their handlers alive for the menu +
         // the machine layers (Help index, sweep, menu bar)
@@ -21261,7 +21387,7 @@ public:
             "cursor-following jumps to the EXACT line band instead of "
             "ACE's proportional estimate. Detection only — no text is "
             "recognized.");
-        gOcr->addBig(bandsB, "ocr");
+        gOcr->addBig(bandsB, "target");
         connect(bandsB, &QPushButton::clicked, [this] { detectBands(); });
         auto* prefillB = new QPushButton("Pre-fill from OCR (draft)");
         prefillB->setIcon(miniIcon("ocr"));
@@ -21334,7 +21460,7 @@ public:
             "column 1, 3-digit zero-padded, side A then B): after "
             "@001A comes @001B, then @002A. Starts at @001A in an "
             "empty document.");
-        gTyping->addBig(folioB, "page");
+        gTyping->addBig(folioB, "tag");
         connect(folioB, &QPushButton::clicked, [this] { nextFolio(); });
         auto* partnerB = new QPushButton("Compare with partner file…");
         diffPrevB_ = new QPushButton("◀ disc");
@@ -21355,7 +21481,7 @@ public:
         gPartner->add(diffNextB_);
         auto* saveB = new QPushButton("Save…");
         saveB->setIcon(miniIcon("save"));
-        gExport->addBig(saveB, "save");
+        gExport->addBig(saveB, "out");
         ribbon->finish();
         ribbon->attachTo(this);
 
@@ -22639,7 +22765,7 @@ public:
         gView->add(deskewOverride_);
         run_ = new QPushButton("Run OCR");
         run_->setEnabled(false);
-        gPage->addBig(run_, "ocr");
+        gPage->addBig(run_, "play");
         illusToggle_ = new QCheckBox("mark illustration candidates");
         illusToggle_->setToolTip(
             "Outline regions of the folio NOT covered by detected "
@@ -22661,7 +22787,7 @@ public:
             "Download additional BDRC recognition models (Lhasa "
             "Kangyur, Derge Tengyur, dbu-can books, modern print) "
             "and pick which one Run OCR uses.");
-        gModels->addBig(modelsBtn, "gear");
+        gModels->addBig(modelsBtn, "chip");
         connect(modelsBtn, &QPushButton::clicked,
                 [this] { showOcrModelManager(this, root_); });
         connect(galleryBtn, &QPushButton::clicked,
@@ -22678,7 +22804,7 @@ public:
             "-ocr.txt per page into library/ocr_out/<folder>/, all "
             "headered OCR-DERIVED. The Than Grove batch-volume pattern "
             "from the ACIP Development survey.");
-        gVolume->addBig(batchBtn, "folder");
+        gVolume->addBig(batchBtn, "stack");
         ribbon->finish();
         ribbon->attachTo(this);   // full-width host carries it
         connect(batchBtn, &QPushButton::clicked, [this] { batchFolder(); });
@@ -24886,7 +25012,7 @@ public:
             "to the whole team.");
         gAccess->addBig(offB, "folder");
         auto* loginB = new QPushButton("Sign in…");
-        gAccess->addBig(loginB, "gear");
+        gAccess->addBig(loginB, "key");
         pendB_ = new QPushButton("Approvals…");
         pendB_->setToolTip(
             "The list of staged cataloging actions awaiting Geshe "
@@ -24901,7 +25027,7 @@ public:
             "The roster: who may use this workflow, and as whom. "
             "Admins add members (each with their own passphrase) "
             "and revoke access.");
-        gAccess->addBig(teamB_, "gear");
+        gAccess->addBig(teamB_, "people");
         who_ = new QLabel;
         who_->setStyleSheet("color:#777");
         gAccess->add(who_);
@@ -24925,14 +25051,14 @@ public:
             "cited in the published Mixed Nuts bibliographies must exist "
             "in the database. Checks the citations against the "
             "destination tree.");
-        gInventory->addBig(auditB, "book");
+        gInventory->addBig(auditB, "check");
         auto* splitB = new QPushButton("Suggest splits\u2026");
         splitB->setToolTip(
             "Chop assist: scan the selected intake file for candidate "
             "text boundaries (bilingual heads, BZHUGS SO title blocks) "
             "and list them with evidence. Nothing is cut \u2014 the "
             "mother copy is never touched.");
-        gSuggest->addBig(splitB, "diff");
+        gSuggest->addBig(splitB, "scissors");
         auto* nameB = new QPushButton("Compose name\u2026");
         nameB->setToolTip(
             "Build a filename in the house grammar: NUMBER_TIBETAN_"
@@ -24941,13 +25067,13 @@ public:
             "names truncate mid-word with '+' and a NUMBER META.TXT "
             "companion, exactly as the library's 1,457 existing pairs "
             "do.");
-        gSuggest->addBig(nameB, "page");
+        gSuggest->addBig(nameB, "tag");
         auto* listB = new QPushButton("Generate catalog list\u2026");
         listB->setToolTip(
             "Write the field-coded ASCII list of what the destination "
             "tree holds (S/F/T/E/A/V/P lines, St. Petersburg lineage) "
             "\u2014 a LIST of the folders, not the official catalog.");
-        gInventory->addBig(listB, "page");
+        gInventory->addBig(listB, "ledger");
         auto* xlatB = new QPushButton("Translate title\u2026");
         xlatB->setToolTip(
             "The attestation workbench: whole-title matches from the "
@@ -24955,7 +25081,7 @@ public:
             "phrase of the title has been rendered in OTHER published "
             "titles. The machine attests; you compose \u2014 nothing "
             "is machine-translated.");
-        gSuggest->addBig(xlatB, "book");
+        gSuggest->addBig(xlatB, "textT");
         auto* diffB = new QPushButton("Compare trees\u2026");
         diffB->setToolTip(
             "The divergence audit (session 3: GMR's copy vs Nick's): "
@@ -24971,7 +25097,7 @@ public:
             "(the copy-paste disease), and files sharing one Tibetan "
             "title, told apart by their colophons. Flags are "
             "questions with evidence, never verdicts.");
-        gQc->addBig(qcB, "ocr");
+        gQc->addBig(qcB, "check");
         auto* wsB = new QPushButton("Worksheet\u2026");
         wsB->setToolTip(
             "The cataloging worksheet on the team's live 52-column "
@@ -24980,7 +25106,7 @@ public:
             "a sidecar beside the intake file; Export row emits one "
             "CSV line for the live spreadsheet \u2014 which stays "
             "the team's master.");
-        gQc->addBig(wsB, "page");
+        gQc->addBig(wsB, "grid");
         auto* moveB = new QPushButton("Move to shelf\u2026");
         moveB->setToolTip(
             "The handoff: MOVE the selected intake file onto the shelf "
@@ -24988,7 +25114,7 @@ public:
             "companion travels along; collisions are refused; nothing "
             "is deleted. The shelf choice is yours \u2014 a book on "
             "the wrong shelf is lost forever.");
-        gHandoff->addBig(moveB, "save");
+        gHandoff->addBig(moveB, "shelf");
         auto* regB = new QPushButton("Load register\u2026");
         regB->setToolTip(
             "Load the registrar's spreadsheet (CSV/TSV: number, title, "
@@ -24996,7 +25122,7 @@ public:
             "three states per work: number issued \u00b7 input exists "
             "\u00b7 cataloged. The app never writes the register and "
             "never mints numbers.");
-        gInventory->addBig(regB, "clock");
+        gInventory->addBig(regB, "ledger");
         ribbon->finish();
         ribbon->attachTo(this);   // full-width host carries it
         // in-house gate: every catalog ACTION requires a signed-in
@@ -28997,7 +29123,8 @@ int main(int argc, char** argv) {
         // instead of hiding behind its shortcut
         {
             auto* huntBtn =
-                new QPushButton(QString::fromUtf8("🔎 Hunt (⌘K)"));
+                new QPushButton(QString::fromUtf8("Hunt (⌘K)"));
+            huntBtn->setIcon(miniIcon("search"));
             huntBtn->setFlat(true);
             huntBtn->setCursor(Qt::PointingHandCursor);
             huntBtn->setToolTip(
