@@ -15651,6 +15651,50 @@ private:
                          .toHtmlEscaped() +
                      "</div>";
             }
+            // 84000 TM hints (9n-2, 2026-08-20): how the 84000
+            // translators rendered a passage containing this
+            // clause's opening phrase — REFERENCE comparanda,
+            // labeled, never HGM (rule 1). Phrase = the clause's
+            // first 4 syllables (enough to be distinctive, short
+            // enough to match real segments).
+            if (auto* tm = tm84000()) {
+                QString wy;
+                int n = 0;
+                for (int t = cl.beg; t < cl.end && n < 4; ++t, ++n)
+                    wy += (wy.isEmpty() ? "" : " ") +
+                          QString::fromStdString(
+                              tokEwts(doc_.tokens[t]));
+                auto [uni, uok] =
+                    allcore::wylieToUnicode(wy.toStdString());
+                if (uok && n >= 3) {
+                    QString phrase = QString::fromStdString(uni);
+                    phrase.replace(QChar(0x0F0B), QChar(' '));
+                    const auto hits = tm->search(
+                        "tibetan: \"" + phrase.trimmed().toStdString() +
+                            "\"",
+                        2);
+                    if (!hits.empty()) {
+                        h += "<div style='margin-top:6px;color:"
+                             "#1F5B4B'><b>84000 rendered a matching "
+                             "passage</b> <small>(CC BY 4.0 — "
+                             "reference only, never his)</small>"
+                             "</div>";
+                        for (const auto& t2 : hits)
+                            h += "<div style='font-size:12px;"
+                                 "color:#555'><small>[" +
+                                 QString::fromStdString(t2.toh)
+                                     .toHtmlEscaped() +
+                                 " " +
+                                 QString::fromStdString(t2.folio)
+                                     .toHtmlEscaped() +
+                                 "]</small> <i>" +
+                                 QString::fromStdString(t2.english)
+                                     .left(200)
+                                     .toHtmlEscaped() +
+                                 "</i></div>";
+                    }
+                }
+            }
         }
         anchors_->setHtml(h);
     }
