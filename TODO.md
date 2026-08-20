@@ -223,10 +223,17 @@ implementation is sidelined HERE from this date. What this means:
          the-whole-segment rule. +189 notes → 444/2,234 anchored.
          Selftest floor 420 + passage-render pin (pin lesson: the
          raw-wylie sample check needs a TERM anchor). REMAINING:
-         route 2 phrase isolation (word-level alignment inside the
-         matched passage) — genuine research; the two compilation
-         sources (1,890 notes) have no single course and stay
-         honestly unmapped.
+         route 2 phrase isolation — MEASURED AND PARKED 2026-08-20:
+         on the 19 ground-truth notes (r4 term + own-course passage),
+         the term's wylie occurs in the matched passage only 11/19
+         (58%) even affix-tolerant; the misses are epithets/
+         abbreviations ("Arya Nagarjuna" where the Tibetan says klu
+         sgrub alone) — i.e. the citation form ISN'T in the passage
+         half the time, so lookup-based isolation would attach wrong
+         or missing halves. Real isolation needs word-level
+         ALIGNMENT — genuine research, parked with this measurement
+         as its entry point. The two compilation sources (1,890
+         notes) have no single course and stay honestly unmapped.
       9d. **GMR RULING — resolve Tibetan number through the
          Sanskrit (Adam relaying Geshe Michael, 2026-08-15).** His
          method: *when you are stuck on whether a Tibetan term is
