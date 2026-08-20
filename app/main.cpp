@@ -5222,6 +5222,14 @@ public:
                         showDasPage(this, s.mid(4).toInt());
                         return;
                     }
+                    if (s == "corpusall:" || s == "corpusless:") {
+                        // card B (UX audit phase 3): show-all in
+                        // place, re-render without advancing the
+                        // nest cycle
+                        corpusAll_ = (s == "corpusall:");
+                        refreshCard();
+                        return;
+                    }
                     if (s.startsWith("term:")) {
                         // Working Glossary q.v. link → Lookup with
                         // the term already run
@@ -6795,12 +6803,33 @@ private:
                 }
             }
         }
+        // UX audit phase 3 (card B, Adam's 9j): honest counts and
+        // show-all in place — the cap never hides the true total
+        const int corpusCap = corpusAll_ ? 200 : 3;
         auto segs = showCorpus_->isChecked()
-                        ? spine_.corpusSearch('"' + e.wylie + '"', "", 3)
+                        ? spine_.corpusSearch('"' + e.wylie + '"', "",
+                                              corpusCap)
                         : std::vector<allcore::CorpusSegment>{};
+        int corpusTotal = (int)segs.size();
+        if (!corpusAll_ && corpusTotal == 3)
+            corpusTotal = (int)spine_
+                              .corpusSearch('"' + e.wylie + '"', "", 200)
+                              .size();
         if (!segs.empty()) {
             h += ux::sourceBadge(ux::Epistemic::Evidence) +
-                 zoneLabel("FROM THE CORPUS");
+                 zoneLabel("FROM THE CORPUS") +
+                 QString(" <small style='color:%1'>%2 of %3"
+                         "%4</small>")
+                     .arg(ux::kFaint)
+                     .arg((int)segs.size())
+                     .arg(corpusTotal)
+                     .arg(corpusAll_
+                              ? QString(" · <a href='corpusless:'>"
+                                        "show fewer</a>")
+                              : (corpusTotal > (int)segs.size()
+                                     ? QString(" · <a href='corpusall:'>"
+                                               "show all</a>")
+                                     : QString()));
             for (const auto& s : segs) {
                 h += "<div style='border-left:2px solid #D8CFC0;"
                      "padding:2px 0 2px 8px;margin:6px 0'>"
@@ -6836,6 +6865,7 @@ private:
     allcore::Progress* progress_ = nullptr;
     allcore::HeadwordIndex index_;
     allcore::OverlayDoc doc_;
+    bool corpusAll_ = false;   // card B: corpus show-all state
     std::vector<int> tokBeg_, tokEnd_;
     QPlainTextEdit* input_ = nullptr;
     QPlainTextEdit* view_ = nullptr;
