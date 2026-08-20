@@ -338,3 +338,37 @@ mints catalog numbers; the mother copy is never touched.**
       META pairs; the Sungbum QC flags and duplicate filings). The
       cataloging workflow of TODO 9g is BUILT; what comes next
       grows from the team's use.
+
+## Phase 3 — depth from the sessions (queued 2026-08-19, Adam: "keep going")
+
+- [ ] 17. **Shelf suggestions for the handoff** (the sessions'
+      endgame: subject shelves are the whole point; BDRC has none;
+      "a book on the wrong shelf is lost forever"). When a file is
+      selected for Move to shelf, suggest WHERE — evidence-carrying,
+      human-placed: (a) where same-author works already sit in the
+      destination tree (author from the filename's 4th field); (b)
+      where works with high title-syllable overlap sit; (c) the
+      subject banks (r6_work_subjects.json, sungbum_subjects.json)
+      when the work's number is known. Render as a ranked list of
+      existing shelves with reasons; clicking one selects it in the
+      destination tree — the human still confirms the move. Battery:
+      held-out shelf prediction over the installed Sungbum (drop a
+      file, predict its real shelf; measure top-1/top-3). Selftest
+      pin: suggestions render with reasons.
+- [ ] 18. **Witness-hunt links on the bibliography audit** (session
+      2's baskets: for never-input works, WHERE to find them). Each
+      missing work in the audit report gains: a BUDA/BDRC search
+      link prefilled from the citation's title words (EWTS), and an
+      "Export missing list…" action writing the field-coded ASCII
+      list of missing works (number, citing volume, citation, search
+      link) — the handout for the witness hunt. Selftest pin: links
+      present and well-formed; export file round-trips.
+- [ ] 19. **Worksheet enrichment**: fill what the schema asks for
+      that we already know how to compute — MD5 checksum (the
+      column is literally "Byte Count (MD5 Checksum)"), folio range
+      + count from the text, BDRC permalink via the verified
+      bdrcScanUrl mapping for KD/KL/TD works, language(s) observed.
+      Battery: enrichment determinism pins; selftest: enriched
+      prefill carries MD5 + folios + BDRC link for a KD probe.
+- [ ] 20. **Closing audit, phase 3**: docs truth pass, verification,
+      TODO/memory reconciliation, stop the loop.
