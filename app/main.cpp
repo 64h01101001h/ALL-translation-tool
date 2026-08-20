@@ -28742,7 +28742,17 @@ int main(int argc, char** argv) {
     // only — night chrome, paper page.
     app.setStyleSheet(
         "QTextEdit, QTextBrowser, QPlainTextEdit { "
-        "background: #FAF6EE; color: #2B2118; }");
+        "background: #FAF6EE; color: #2B2118; }"
+        // UX audit M1: splitter grips wide enough to actually
+        // grab (Fitts), with a quiet dotted affordance
+        "QSplitter::handle { background: transparent; }"
+        "QSplitter::handle:horizontal { width: 7px; }"
+        "QSplitter::handle:vertical { height: 7px; }"
+        "QSplitter::handle:hover { background: rgba(154,122,51,"
+        "0.25); }"
+        // M4/accessibility: keyboard focus must be visible
+        "QPushButton:focus, QToolButton:focus { "
+        "outline: none; border: 1px solid #9A7A33; }");
     auto applyNight = [&app](bool on) {
         // native macOS dark appearance — no style swap, so window
         // resize/decorations stay untouched
@@ -29532,6 +29542,35 @@ int main(int argc, char** argv) {
         edit->addSeparator();
         add("Select All", QKeySequence(),
             [](auto* w) { w->selectAll(); });
+    }
+    // UX audit M5: keyboard-first — group switching and in-group
+    // pane stepping without the mouse
+    {
+        for (int k = 0; k < 7; ++k) {
+            auto* sc = new QShortcut(
+                QKeySequence(QString("Ctrl+%1").arg(k + 1)), &win);
+            QObject::connect(sc, &QShortcut::activated,
+                             [&tabs, k] {
+                                 if (k < tabs.count())
+                                     tabs.setCurrentIndex(k);
+                             });
+        }
+        auto step = [&tabs](int dir) {
+            QWidget* page = tabs.currentWidget();
+            auto* g = qobject_cast<QTabWidget*>(page);
+            if (!g && page)
+                g = page->findChild<QTabWidget*>(
+                    QString(), Qt::FindDirectChildrenOnly);
+            if (!g || g->count() < 2) return;
+            g->setCurrentIndex(
+                (g->currentIndex() + dir + g->count()) % g->count());
+        };
+        auto* nx = new QShortcut(QKeySequence("Ctrl+Shift+]"), &win);
+        QObject::connect(nx, &QShortcut::activated,
+                         [step] { step(+1); });
+        auto* pv = new QShortcut(QKeySequence("Ctrl+Shift+["), &win);
+        QObject::connect(pv, &QShortcut::activated,
+                         [step] { step(-1); });
     }
     for (int gi = 0; gi < tabs.count(); ++gi) {
         auto* g = qobject_cast<QTabWidget*>(tabs.widget(gi));
