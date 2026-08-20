@@ -648,6 +648,28 @@ implementation is sidelined HERE from this date. What this means:
          behind one button). Pairs with 9j (card format) as one
          UI-polish wave AFTER the test campaign surfaces which
          controls he actually reaches for.
+      9l. **EDIT MENU + WORD-STYLE MENU-BAR REORGANIZATION (Adam,
+         2026-08-20, with two reference screenshots: the standard
+         macOS Edit menu, and Microsoft Word's menu bar — "we will
+         need an edit menu and i like the way that microsoft word's
+         menus are organized and displayed"):**
+         (1) A proper EDIT MENU with the standard roles — Undo/Redo,
+             Cut/Copy/Paste/Delete, Select All, Find in Page/Find
+             Again — wired to whichever editor has focus; using
+             native menu roles also brings the macOS services rows
+             (Writing Tools, AutoFill, Dictation, Emoji & Symbols)
+             for free on text widgets.
+         (2) Reorganize the whole menu bar in the WORD style Adam
+             likes: top-level verbs (File · Edit · View · Insert/
+             Format · Tools · Window · Help) with Word's visual
+             grammar — related items in separator-fenced groups,
+             ellipsis for dialogs, submenu arrows for families,
+             keyboard shortcuts shown. Today's menu bar mirrors
+             every pane's controls (the C2 audit mirror) — keep
+             that coverage but re-house it under Word-style
+             top-level menus instead of per-pane dumps.
+         Pairs with 9k (toolbars) as the menu half of the same
+         presentation wave; sequence with the campaign findings.
       10. Idea bank (liked, never scheduled): pronunciation trainer (DECLINED-AS-CONCEIVED 2026-08-20: whisper's Tibetan too weak to honestly score learner speech — rule 3; needs a design conversation) ·
          Text DNA strips DONE 2026-08-20 (Overlay REVIEW → Text DNA: one colored column per source line — meter/off-meter/prose/blank + quote-announcement ticks; hover + click-to-jump; allcore textdna, suite 58; summary+jump selftest pin) · team board · apprenticeship mode ·
          English-on-the-carving hover DONE 2026-08-20 (cache-only tooltip over the woodblock: OCR-read wylie + HGM gloss, review-material label; seeded-cache selftest pin) · teaching-playlist karaoke ·
