@@ -486,14 +486,16 @@ implementation is sidelined HERE from this date. What this means:
            alone first, leaving the up/down ladder untouched). The
            lattice probe is kept as evidence. LESSON: arrow-key FEEL
            cannot be signed off from a simulator.
-         · **`.hyp` legacy importer** — the format is understood
-           (script-switch markup + numbered nested links); an
-           importer is straightforward whenever hypertexted files
-           from that era turn up beyond the tutorial.
+         · **`.hyp` legacy importer** — DONE (verified 2026-08-20
+           reconciliation): "Import .hyp…" ships in the Align pane,
+           allcore::parseHypFile proven on tutorial.hyp (hyp_smoke).
+           This line had gone stale-open.
          · **Word-level scan following** — blocked on coordinate OCR;
            today's following is line-band granularity.
-         · **PPP-reverse lookup** — typing *gata* finds the root
-           *gam*; same Sanskrit hub as the shipped MW crosswalk.
+         · **PPP-reverse lookup** — DONE (verified 2026-08-20
+           reconciliation): allcore WhitneyRoots::byPpp shipped with
+           battery pins (gata→gam, krta→kṛtá) and TWO app wiring
+           sites (Lookup + Sanskrit). This line had gone stale-open.
          · **"Text reports" pane (option E)** — survey + teachings +
            structure gathered in one place; my own UX ruling was
            "revisit after the polish phase", which has now passed.
@@ -503,7 +505,10 @@ implementation is sidelined HERE from this date. What this means:
          · **Transfer-queue reordering + remote edit with
            auto-upload** — the two File Browser P3 items deferred
            with reasons.
-         · **Botok/Monlam deeper revisit** — load the Monlam lexicon
+         · **Botok/Monlam deeper revisit** — NOTE 2026-08-20: both
+           Monlam lexicons ARE loaded app-side (segtrie lexicon);
+           the open question is only the deeper botok integration.
+           Original: load the Monlam lexicon
            into the overlap probe for true in-app parity, and split
            the divergence count into phrase-span-explained vs
            genuinely-different-boundary classes
@@ -1127,8 +1132,10 @@ implementation is sidelined HERE from this date. What this means:
       ekStripMarkers, dmp edition diff, menu offers on both);
       eTengyur indexed too (3,331 texts). Item CLOSED — remaining
       only eyeball spot-checks as texts get used.
-- [ ] **py-tiblegenc** (Apache-2.0) — legacy-font→Unicode rescue for
-      input-center documents; external tool first, port maps later.
+- [x] **py-tiblegenc** (Apache-2.0) — SHIPPED 2026-08-15 (the UTFC/
+      tiblegenc hookup: completion dialog offers open-in-Input;
+      18 wiring sites in app). This line had gone stale-open;
+      verified + checked 2026-08-20. Port maps later if ever needed.
 - [x] **lucene-bo** — Adam approved full inclusion 2026-08-07
       ("Lucene is good to include"). Affix rules ENGINE + LOOKUP
       SHIPPED 2026-08-07 (below); INTEGRATED 2026-08-07 per
