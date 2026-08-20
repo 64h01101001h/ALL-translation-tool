@@ -61,7 +61,8 @@ app: Help menu → ALL Tool Help & Tutorials.*
   - 14.14 The change-log stamp
   - 14.15 Move to shelf — the handoff
   - 14.16 The worksheet
-  - 14.17 What the workflow will do next
+  - 14.17 Propose this identity — the routing
+  - 14.18 What the workflow will do next
 - **CHAPTER 15 — THE PROPOSE PANE (Community → Propose)**
   - 15.1 One-time identity setup
   - 15.2 Making a proposal
@@ -3112,14 +3113,35 @@ never the official catalog. **Export row (CSV)…** emits one line in
 the sheet's own column order, ready to paste into the live
 spreadsheet — which remains the team's master.
 
-## 14.17 What the workflow will do next
+## 14.17 Propose this identity — the routing
 
-Still to come, in order: routing, so an identity a cataloger
-accepts becomes a proposal in the ordinary approval channel and
-exports as a candidates file for the data project; and
-quality-control lanes (title-versus-translation mismatch,
-colophon-aware duplicate detection across the intake set). The
-worksheet (14.16) and the handoff (14.15) ship above.
+The suggested-identity card now ends with **Propose this
+identity…** — the bridge from the machine's suggestion to the
+team's ordinary decision channel.
+
+Clicking it files a proposal of kind **catalog identity** in the
+shared queue (the same folder-backed channel as every other
+proposal — Chapter 15), carrying everything a ruler needs: the
+title read from the text and the rule that read it, the Sanskrit
+side of the head, the ranked candidates with their scores, and —
+if you filled one — a snapshot of the file's worksheet sidecar.
+Your name rides on it as provenance (set it in Settings first).
+
+The authority rules on it in Community → Approval, where a
+**Catalog identities** filter now sits beside the others. An
+approved identity leaves through the same **Export approved
+candidates** file as the dictionary material — a candidates
+package for the data project. The boundary holds at every step:
+the app never writes the catalog, and catalog numbers remain the
+registrar's to issue. A file with no title page is refused with a
+real answer: there is no machine identity to propose.
+
+## 14.18 What the workflow will do next
+
+Still to come: the quality-control lanes over the intake set —
+title-versus-translation mismatch and colophon-aware duplicate
+detection. Routing (14.17), the worksheet (14.16), and the handoff
+(14.15) ship above.
 
 ---
 

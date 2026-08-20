@@ -294,7 +294,15 @@ mints catalog numbers; the mother copy is never touched.**
       the sheet's own column order for pasting into the live
       spreadsheet. Battery: schema round-trip; selftest: prefill +
       save + reload.
-- [ ] 14. **Proposal routing** (9g step 4). An accepted identity
+- [x] 14. **Proposal routing** — SHIPPED 2026-08-19 (proposals_smoke
+      extended: kind name round-trip + export-class pin; selftest
+      pin: propose files a PENDING catalog-identity row whose
+      evidence carries the rule and the top candidate, titleless
+      refused honestly, and the SHARED STORE IS SNAPSHOT-RESTORED so
+      probes never pollute the team queue — caught live: the first
+      pin version left 2 rows in data/proposals per run). Approval
+      pane gains the Catalog identities filter; approvals ride the
+      existing export. Original spec: (9g step 4). An accepted identity
       (from the worksheet or the identity card) files a proposal in
       the EXISTING channel with kind "catalog-identity", carrying
       the evidence (title extraction, candidate, Tohoku, colophon

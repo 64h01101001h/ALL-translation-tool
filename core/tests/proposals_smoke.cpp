@@ -181,6 +181,24 @@ int main(int argc, char** argv) {
         CHECK(!p.isRegister(), "idiom routes to the export lane");
     }
 
+
+    // the catalog-identity kind (loop 14): name round-trip + export class
+    {
+        using allcore::Proposal;
+        using allcore::ProposalKind;
+        CHECK(std::string(Proposal::kindName(
+                  ProposalKind::CatalogIdentity)) == "catalog-identity",
+              "catalog-identity kind has a stable name");
+        CHECK(Proposal::kindFromName("catalog-identity") ==
+                  ProposalKind::CatalogIdentity,
+              "catalog-identity parses back");
+        Proposal p;
+        p.kind = ProposalKind::CatalogIdentity;
+        CHECK(!p.isRegister(),
+              "catalog-identity is an EXPORT kind - approvals leave "
+              "through the candidates file, never applied in-app");
+    }
+
     std::printf("proposals_smoke: %s (%d failures)\n",
                 failures ? "FAIL" : "ALL PASS", failures);
     return failures ? 1 : 0;

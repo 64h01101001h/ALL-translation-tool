@@ -37,6 +37,11 @@ enum class ProposalKind {
     Spelling,        // doubted spelling / input error (export;
                      //   a DECLINED flag = ruled valid, and the
                      //   app stops doubting that form)
+    CatalogIdentity, // a proposed identity for an uncataloged text
+                     //   (export — approvals become a candidates
+                     //   file for the data project; the app NEVER
+                     //   writes the catalog, numbers stay
+                     //   registrar-issued)
     Unknown
 };
 

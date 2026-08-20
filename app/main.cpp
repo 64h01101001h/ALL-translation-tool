@@ -22712,6 +22712,7 @@ public:
         filter_->addItem("Double honorifics", "double-honorific");
         filter_->addItem("Spelling flags", "spelling");
         filter_->addItem("Idioms", "idiom");
+        filter_->addItem("Catalog identities", "catalog-identity");
         filter_->addItem("Words / phrases / notes", "export");
         sess::remember(filter_, "approval/kind");
         row->addWidget(filter_);
@@ -23932,6 +23933,21 @@ public:
                     const QString s2 = u.toString();
                     if (s2.startsWith("catopen:") && g_openAtLine)
                         g_openAtLine(anchorPayload(s2, 8), 0);
+                    else if (s2.startsWith("proposeid:")) {
+                        const QString p = anchorPayload(s2, 10);
+                        const QString err = proposeIdentity(p);
+                        info_->setHtml(
+                            err.isEmpty()
+                                ? "<div style='color:#2E7D32'>Filed: a "
+                                  "catalog-identity proposal is now "
+                                  "PENDING in the team channel "
+                                  "(Community \u2192 Approval rules "
+                                  "on it; approvals export as "
+                                  "candidates for the data project)."
+                                  "</div>"
+                                : "<div style='color:#B26B00'>" +
+                                      err.toHtmlEscaped() + "</div>");
+                    }
                     else if (s2.startsWith("cleanslash:")) {
                         const QString p = anchorPayload(s2, 11);
                         const QString err = writeCleanedCopy(p);
@@ -24818,6 +24834,64 @@ public:
         return h;
     }
 
+    // File a catalog-identity proposal from the identity lane's
+    // evidence. The proposal carries everything a ruler needs; the
+    // catalog itself is never written. Public for the selftest.
+    QString proposeIdentity(const QString& path) {
+        if (g_userName.isEmpty())
+            return "Set your name first (Settings) \u2014 proposals "
+                   "carry provenance.";
+        if (g_proposalsDir.isEmpty())
+            return "Set the shared proposals folder first (Settings).";
+        QFile f(path);
+        if (!f.open(QIODevice::ReadOnly)) return "unreadable file";
+        const std::string head = f.read(4000).toStdString();
+        const auto t = allcore::extractAcipTitle(head);
+        if (!t.found)
+            return "No title page \u2014 there is no machine identity "
+                   "to propose; this one needs a cataloger from "
+                   "scratch.";
+        const auto cands =
+            allcore::suggestIdentity(t, titleBank(), 3);
+        allcore::Proposal p;
+        p.kind = allcore::ProposalKind::CatalogIdentity;
+        p.proposer = g_userName.toStdString();
+        p.wylie = t.title;
+        if (!cands.empty()) {
+            p.value = cands.front().key + " \u2014 " +
+                      cands.front().raw;
+            p.field = QString("confidence %1%")
+                          .arg(qRound(cands.front().score * 100))
+                          .toStdString();
+        } else {
+            p.value = "(no bank match \u2014 new work?)";
+        }
+        QString ev = QFileInfo(path).fileName() + " | rule: " +
+                     QString::fromStdString(t.rule);
+        if (!t.sanskrit.empty())
+            ev += " | skt: " +
+                  QString::fromStdString(t.sanskrit).simplified();
+        for (const auto& c : cands)
+            ev += QString(" | cand: %1 (%2%)")
+                      .arg(QString::fromStdString(c.key))
+                      .arg(qRound(c.score * 100));
+        // the worksheet sidecar snapshot, when the cataloger made one
+        QFile ws(path + ".worksheet.tsv");
+        if (ws.open(QIODevice::ReadOnly))
+            ev += " | worksheet: " +
+                  QString::fromUtf8(ws.readAll()).simplified().left(600);
+        allcore::ProposalStore store(g_proposalsDir.toStdString());
+        store.load();
+        const std::string id = store.propose(
+            allcore::ProposalKind::CatalogIdentity,
+            g_userName.toStdString(), p.wylie, p.value, p.field,
+            ev.toStdString(),
+            QDate::currentDate().toString(Qt::ISODate).toStdString());
+        if (id.empty()) return "could not write the proposal store";
+        if (!store.save()) return "could not save the proposal store";
+        return QString();
+    }
+
     // the identity lane, public so the selftest can prove a real
     // proposal without driving the tree
     QString identityHtml(const QString& path) {
@@ -24908,6 +24982,14 @@ public:
             }
         }
         h += "</table>";
+        h += QString("<div style='margin:6px 0'><a href='proposeid:%1"
+                     "'>Propose this identity\u2026</a> <span style="
+                     "'color:#777'>files a catalog-identity proposal "
+                     "in the team channel \u2014 the authority rules; "
+                     "approvals export as candidates for the data "
+                     "project; the app never writes the catalog."
+                     "</span></div>")
+                 .arg(anchorEnc(path));
         // the author-determination step: colophon candidates from the
         // text's own tail, labeled for what they are evidence OF
         QFile cf(path);
@@ -28615,6 +28697,70 @@ int main(int argc, char** argv) {
                                "itself")
                            .arg(preOk ? "PASS" : "FAIL");
                 if (!preOk) ++fails;
+                QDir(wd).removeRecursively();
+            }
+            {   // routing: proposing an identity files a PENDING
+                // catalog-identity row carrying the evidence; a
+                // titleless file is refused with a real answer.
+                // The store is the REAL shared file — snapshot and
+                // restore it so probes never pollute the queue.
+                const QString storeP =
+                    g_proposalsDir + "/proposals.tsv";
+                QByteArray storeSnap;
+                { QFile sf(storeP);
+                  if (sf.open(QIODevice::ReadOnly))
+                      storeSnap = sf.readAll(); }
+                QDir().mkpath(wd);
+                const QString pf = wd + "/scan_0500_unnamed.txt";
+                { QFile f(pf);
+                  f.open(QIODevice::WriteOnly);
+                  f.write("@85A #, ,RGYA GAR SKAD DU, YA M'A RI,\n"
+                          "BOD SKAD DU, GSHIN RJE GSHED KYI 'KHRUL "
+                          "'KHOR GYI PHRENG BA, PHYAG 'TSAL LO,"); }
+                const QString e1 = catalogPane->proposeIdentity(pf);
+                bool filed = false, evOk = false;
+                {
+                    allcore::ProposalStore store(
+                        g_proposalsDir.toStdString());
+                    store.load();
+                    for (const auto& pr : store.all()) {
+                        if (pr.kind != allcore::ProposalKind::
+                                           CatalogIdentity)
+                            continue;
+                        if (pr.status !=
+                            allcore::ProposalStatus::Pending)
+                            continue;
+                        if (pr.wylie.find("GSHIN RJE GSHED") ==
+                            std::string::npos)
+                            continue;
+                        filed = true;
+                        evOk = pr.evidence.find("bod-skad-du") !=
+                                   std::string::npos &&
+                               pr.evidence.find("TD02022") !=
+                                   std::string::npos;
+                    }
+                }
+                { QFile f(wd + "/fragment.txt");
+                  f.open(QIODevice::WriteOnly);
+                  f.write("MID TEXT ONLY,"); }
+                const QString e2 = catalogPane->proposeIdentity(
+                    wd + "/fragment.txt");
+                const bool refused =
+                    e2.contains("No title page");
+                log << QString("  [%1] Catalog: routing files a "
+                               "catalog-identity proposal with "
+                               "evidence; titleless files are "
+                               "refused honestly")
+                           .arg(e1.isEmpty() && filed && evOk && refused
+                                    ? "PASS"
+                                    : "FAIL");
+                if (!(e1.isEmpty() && filed && evOk && refused))
+                    ++fails;
+                {   // restore the shared store exactly as found
+                    QFile sf(storeP);
+                    if (sf.open(QIODevice::WriteOnly))
+                        sf.write(storeSnap);
+                }
                 QDir(wd).removeRecursively();
             }
             {   // GMR's job #1 must render as a real report — the
