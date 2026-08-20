@@ -153,6 +153,7 @@
 #include "allcore/spine.h"
 #include "allcore/tm84000.h"
 #include "allcore/textdna.h"
+#include "allcore/unicode_wylie.h"
 #include "allcore/stardict.h"
 
 // user-supplied StarDict dictionaries (DigitalTibetan plan P5):
@@ -13566,6 +13567,60 @@ static QWidget* makeConvertPane(allcore::Mvp* mvp,
             QString::fromUtf8("āīūṛṝḷḹṅñṭḍṇśṣṃṁḥĀĪŪṚṜḶḸṄÑṬḌṆŚṢṂṀḤ");
         bool isIast = false;
         for (QChar c : raw) isIast |= kIast.contains(c);
+        // Tibetan SCRIPT input → the reverse engine (2026-08-20:
+        // pyewts-parity port, 109,490-fixture battery). This is the
+        // composing editor's other direction: type or edit rendered
+        // Tibetan and read the transliteration live.
+        bool isTibUni = false;
+        for (QChar c : raw)
+            isTibUni |= (c.unicode() >= 0x0F00 && c.unicode() <= 0x0FFF);
+        if (isTibUni && !isDeva) {
+            const auto rev =
+                allcore::unicodeToWylie(raw.toStdString());
+            const std::string pron = restoreAchungU(
+                rev.wylie, allcore::pronounce(rev.wylie));
+            QString h = "<table cellspacing='6'>";
+            h += "<tr><td><b>detected</b></td><td>Tibetan script "
+                 "(reverse conversion)</td></tr>";
+            h += "<tr><td><b>wylie</b></td><td style='font-size:16px'>" +
+                 QString::fromStdString(rev.wylie).toHtmlEscaped() +
+                 "</td></tr>";
+            {
+                auto acip = allcore::ewtsToAcip(rev.wylie);
+                if (!acip.empty())
+                    h += "<tr><td><b>ACIP</b></td><td>" +
+                         QString::fromStdString(acip).toHtmlEscaped() +
+                         "</td></tr>";
+            }
+            h += "<tr><td><b>phonetics</b></td><td style='font-size:"
+                 "18px'>" +
+                 QString::fromStdString(pron).toHtmlEscaped() +
+                 "</td></tr>";
+            {
+                const std::string thl = thlPhrase(rev.wylie);
+                h += "<tr><td><b>THL phonetics</b></td>"
+                     "<td style='font-size:15px'>" +
+                     QString::fromStdString(thl).toHtmlEscaped() +
+                     " <small style='color:#777'>(Germano &amp; "
+                     "Tournadre, THL)</small></td></tr>";
+            }
+            if (rev.warns > 0 ||
+                rev.wylie.find('[') != std::string::npos)
+                h += QString(
+                         "<tr><td></td><td><i style='color:#b00'>%1 "
+                         "warning(s); bracketed hex marks characters the "
+                         "engine cannot read as Tibetan — escaped, "
+                         "never guessed</i></td></tr>")
+                         .arg(rev.warns);
+            h += "<tr><td></td><td><i style='color:#777;font-size:"
+                 "11px'>reverse engine: pyewts-parity port, proven "
+                 "100.000% on 109,490 fixtures — edit the Tibetan "
+                 "above and this card follows live</i></td></tr>";
+            h += "</table>";
+            if (mvp) h += mvpHtml(mvp->byWylie(rev.wylie));
+            out->setHtml(h);
+            return;
+        }
         if (isDeva || isIast) {
             std::string t = raw.toStdString();
             bool devaOk = true;
@@ -30587,6 +30642,25 @@ int main(int argc, char** argv) {
                                .first;
             log << QString("  [%1] Convert: TISE keys * and _ "
                            "join display-layer, engine untouched")
+                       .arg(ok ? "PASS" : "FAIL");
+            if (!ok) ++fails;
+        }
+        // Convert: the REVERSE engine (2026-08-20) — Tibetan
+        // script answers with wylie at pyewts parity, and the
+        // engine pair round-trips a clean phrase
+        {
+            const auto rev = allcore::unicodeToWylie(
+                allcore::wylieToUnicode("bsod nams kyi").first);
+            const auto rt =
+                allcore::wylieToUnicode(rev.wylie);
+            const bool ok =
+                rev.wylie.rfind("bsod nams kyi", 0) == 0 &&
+                rev.warns == 0 && rt.second &&
+                rt.first ==
+                    allcore::wylieToUnicode("bsod nams kyi").first;
+            log << QString("  [%1] Convert: Tibetan-script input "
+                           "reverses to wylie (pyewts-parity "
+                           "engine) and round-trips")
                        .arg(ok ? "PASS" : "FAIL");
             if (!ok) ++fails;
         }

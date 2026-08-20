@@ -63,6 +63,7 @@ add_library(allcore STATIC
   src/tm84000.cpp
   src/catalog_actions.cpp
   src/textdna.cpp
+  src/unicode_wylie.cpp
 )
 target_include_directories(allcore PUBLIC include)
 
@@ -365,3 +366,8 @@ add_test(NAME catalog_actions_smoke
 add_executable(textdna_smoke tests/textdna_smoke.cpp)
 target_link_libraries(textdna_smoke PRIVATE allcore)
 add_test(NAME textdna_smoke COMMAND textdna_smoke)
+
+add_executable(towylie_battery tests/towylie_battery.cpp)
+target_link_libraries(towylie_battery PRIVATE allcore)
+add_test(NAME towylie_battery
+         COMMAND towylie_battery ${CMAKE_SOURCE_DIR}/build/towylie_reference.tsv)

@@ -1847,8 +1847,21 @@ implementation is sidelined HERE from this date. What this means:
       without ANTHROPIC_API_KEY).
       **The pedagogy roadmap build order ①–⑦ is complete.**
 - [ ] Input-center formatter (blocked on the two uploads above).
-- [ ] Live composing editor idea (type Wylie/ACIP, edit rendered Tibetan) —
-      possible fit for the formatter workflow; noted from the Jskad review.
+- [x] Live composing editor — BOTH DIRECTIONS LIVE 2026-08-20. The
+      typing half already existed (Convert renders as you type); the
+      missing half was the REVERSE ENGINE: allcore unicodeToWylie,
+      ported FROM THE FILE (pyewts.py::toWylie, OpenPecha master,
+      Apache-2.0 — the same library the forward engine was
+      cross-validated against; tables AUTO-GENERATED from the
+      module's own runtime maps, tools/gen_unicode_wylie_tables.py).
+      Suite 59 towylie_battery: 100.000% match on ALL 109,490
+      fixtures (master ground-truth Tibetan + strided native 84000
+      unicode; build/towylie_reference.tsv) + round-trip 97.3%
+      (floor 96.5% — misses are FORWARD-engine boundaries: EWTS '_'
+      explicit space, explicit '+' Sanskrit stacks; documented in
+      the battery). Convert pane: paste/edit Tibetan SCRIPT → live
+      wylie/ACIP/phonetics card, warns surfaced, escapes never
+      guessed. Selftest pin round-trips through both engines.
 
 - [x] **Library pane v1** (Adam's request 2026-08-06): install collection
       ZIPs from asianlegacylibrary.org/library, import personal materials
