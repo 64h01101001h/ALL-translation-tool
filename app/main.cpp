@@ -586,11 +586,19 @@ static QString tm84000Html(const std::string& wylie, int limit = 5) {
     const auto hits = tm->search(
         "tibetan: \"" + phrase.toStdString() + "\"", limit);
     if (hits.empty()) return {};
+    // counts-first ledger (UX audit phase 3): the cap never hides
+    // the true total
+    int tmTotal = (int)hits.size();
+    if ((int)hits.size() == limit)
+        tmTotal = (int)tm->search(
+            "tibetan: \"" + phrase.toStdString() + "\"", 200).size();
     QString h =
         "<hr><div style='color:#1F5B4B'><b>84000 Translation "
         "Memory</b> <small>(CC BY 4.0, 84000: Translating the Words "
         "of the Buddha - published-translation comparanda, reference "
-        "only, never HGM)</small></div>";
+        "only, never HGM)</small> <small style='color:#9C948A'>" +
+        QString::number(hits.size()) + " of " +
+        QString::number(tmTotal) + "</small></div>";
     for (const auto& t : hits) {
         QString ref = QString::fromStdString(t.toh);
         if (!t.folio.empty())
@@ -1284,19 +1292,25 @@ static QString entryHtml(const allcore::Entry& e,
     }
     if (d.teachings && g_teachingTib && !e.wylie.empty()) {
         std::vector<const TeachingMoment*> ms;
-        std::set<QString> seen;
+        std::set<QString> seen, all;
         {
             auto it = g_teachingTib->find(e.wylie);
             if (it != g_teachingTib->end())
-                for (const auto& m : it->second)
+                for (const auto& m : it->second) {
+                    all.insert(m.url);
                     if (!seen.count(m.url) && ms.size() < 3) {
                         seen.insert(m.url);
                         ms.push_back(&m);
                     }
+                }
         }
         if (!ms.empty()) {
             h += ux::sourceBadge(ux::Epistemic::Machine) +
                  zoneLabel("IN THE RECORDED TEACHINGS") +
+                 QString(" <small style='color:#9C948A'>%1 of %2"
+                         "</small>")
+                     .arg((int)ms.size())
+                     .arg((int)all.size()) +
                  "<div style='font-size:12px'><i "
                  "style='color:#9C948A'>moments where he says the "
                  "TIBETAN phrase itself (phonetic match on his "
@@ -1316,15 +1330,17 @@ static QString entryHtml(const allcore::Entry& e,
     // Labeled distinctly so the two kinds of match are never confused.
     if (d.teachings && g_teaching && !e.hgm_gloss.empty()) {
         std::vector<const TeachingMoment*> ms;
-        std::set<QString> seen;
+        std::set<QString> seen, all;
         for (const auto& g : e.hgm_gloss) {
             auto it = g_teaching->find(teachingKey(g));
             if (it == g_teaching->end()) continue;
-            for (const auto& m : it->second)
+            for (const auto& m : it->second) {
+                all.insert(m.url);
                 if (!seen.count(m.url) && ms.size() < 3) {
                     seen.insert(m.url);
                     ms.push_back(&m);
                 }
+            }
         }
         if (!ms.empty()) {
             h += "<div style='margin-top:4px;font-size:12px'>"
@@ -1332,7 +1348,9 @@ static QString entryHtml(const allcore::Entry& e,
                  "teaches this idea</span> <i style='color:#888'>"
                  "(located by the ENGLISH equivalent in the class "
                  "captions \u2014 the recording is the "
-                 "authority)</i><br>";
+                 "authority)</i> <small style='color:#9C948A'>" +
+                 QString::number((int)ms.size()) + " of " +
+                 QString::number((int)all.size()) + "</small><br>";
             for (const auto* m : ms) h += teachingRow(*m);
             h += "</div>";
         }
@@ -6907,8 +6925,16 @@ private:
         if (ref_ && showRefs_->isChecked()) {
             auto refs = ref_->lookup(e.wylie, 6);
             if (!refs.empty()) {
+                int refTotal = (int)refs.size();
+                if (refTotal == 6)
+                    refTotal = (int)ref_->lookup(e.wylie, 100).size();
                 h += ux::sourceBadge(ux::Epistemic::Reference) +
-                     zoneLabel("REFERENCE · LOCAL ONLY");
+                     zoneLabel("REFERENCE · LOCAL ONLY") +
+                     QString(" <small style='color:%1'>%2 of %3"
+                             "</small>")
+                         .arg(ux::kFaint)
+                         .arg((int)refs.size())
+                         .arg(refTotal);
                 for (const auto& r : refs)
                     h += "<div style='margin:4px 0;font-size:12px;"
                          "color:#6E675D'><span style='background:#F0E9DC;"
