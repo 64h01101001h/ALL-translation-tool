@@ -15335,8 +15335,13 @@ public:
         source_->setPlaceholderText("Source ACIP…");
         sess::remember(source_, "draft/source");
         srcCol->addWidget(source_);
+        auto* ribbon = new RibbonBar;
+        auto* gWork = ribbon->group("WORKBENCH");
+        auto* gStruct = ribbon->group("STRUCTURE");
+        auto* gEvid = ribbon->group("EVIDENCE");
+        auto* gPub = ribbon->group("PUBLISH");
         auto* loadBtn = new QPushButton("Load source");
-        srcCol->addWidget(loadBtn);
+        gWork->addBig(loadBtn, "page");
         // the Evidence Ribbon (Adam's wow round, 2026-08-12): once a
         // source is loaded, the evidence FOLLOWS THE CURSOR — click
         // or arrow into any clause and its anchors, scaffold,
@@ -15368,15 +15373,15 @@ auto* secStruct = new QLabel("<span style='color:#9A7A33;font-size:10px;letter-s
         secStruct->setContentsMargins(0, 8, 0, 0);
         srcCol->addWidget(secStruct);
                 auto* outlineBtn = new QPushButton("Extract outline (sa bcad)");
-        srcCol->addWidget(outlineBtn);
+        gStruct->addBig(outlineBtn, "tree");
                 auto* structBtn = new QPushButton("Structural units (bam po / le'u)");
         structBtn->setToolTip(
             "Explicit BAM PO and numbered LE'U markers written in the text "
             "(authoritative), plus a syllable-derived shloka/bampo ESTIMATE "
             "(30-syllable prose shloka, 300-shloka bampo).");
-        srcCol->addWidget(structBtn);
+        gStruct->addBig(structBtn, "ledger");
         auto* verseBtn = new QPushButton("Verse meter");
-        srcCol->addWidget(verseBtn);
+        gStruct->addBig(verseBtn, "count");
         auto* styleBtn = new QPushButton("House style check\u2026");
         styleBtn->setToolTip(
             "Check the English draft against the Diamond Cutter "
@@ -15384,7 +15389,7 @@ auto* secStruct = new QLabel("<span style='color:#9A7A33;font-size:10px;letter-s
             "quotes, dashes, the word-use list, era style. "
             "Findings are flags, never auto-fixes. The full "
             "guide is in Help under Style.");
-        srcCol->addWidget(styleBtn);
+        gStruct->addBig(styleBtn, "typo");
         connect(styleBtn, &QPushButton::clicked,
                 [this] { showStyleCheck(); });
         auto* verseReadBtn = new QPushButton("Verse reading order");
@@ -15395,7 +15400,7 @@ auto* secStruct = new QLabel("<span style='color:#9A7A33;font-size:10px;letter-s
             "shlokas (four verse lines, or the poet's own double-shad "
             "closes) and applies the verb-first reading order to each "
             "stanza as a whole.");
-        srcCol->addWidget(verseReadBtn);
+        gStruct->addBig(verseReadBtn, "book");
         QObject::connect(verseReadBtn, &QPushButton::clicked,
                          [this] { verseReading(); });
 auto* secEvid = new QLabel("<span style='color:#9A7A33;font-size:10px;letter-spacing:2px;font-weight:600'>EVIDENCE</span>");
@@ -15406,7 +15411,7 @@ auto* secEvid = new QLabel("<span style='color:#9A7A33;font-size:10px;letter-spa
             "Finds passages that exactly match corpus segments (7+ "
             "syllables) — attested quotations, never inferred. Matched "
             "works recommend their published bibliography entries.");
-        srcCol->addWidget(quoteBtn);
+        gEvid->addBig(quoteBtn, "quote");
         auto* memBtn = new QPushButton("Phrase memory");
         memBtn->setToolTip(
             "How has this phrase been rendered before? Select Tibetan "
@@ -15415,7 +15420,7 @@ auto* secEvid = new QLabel("<span style='color:#9A7A33;font-size:10px;letter-spa
             "the Align pane's harvest (translator-authored, PENDING — "
             "labeled). The beginnings of a Project translation memory, "
             "built only from attested work.");
-        srcCol->addWidget(memBtn);
+        gEvid->addBig(memBtn, "search");
         QObject::connect(memBtn, &QPushButton::clicked,
                          [this] { phraseMemory(); });
         QObject::connect(quoteBtn, &QPushButton::clicked,
@@ -15544,13 +15549,13 @@ auto* secEvid = new QLabel("<span style='color:#9A7A33;font-size:10px;letter-spa
             }
         });
         auto* checkBtn = new QPushButton("Check terminology");
-        draftCol->addWidget(checkBtn);
+        gEvid->addBig(checkBtn, "check");
         auto* toMssBtn = new QPushButton("Send to Manuscript →");
         toMssBtn->setToolTip(
             "The ladder: when the bench work is done, carry this "
             "draft into the Manuscript to write and publish — the "
             "apparatus is waiting there.");
-        draftCol->addWidget(toMssBtn);
+        gWork->addBig(toMssBtn, "out");
         connect(toMssBtn, &QPushButton::clicked, [this] {
             if (g_sendToManuscript)
                 g_sendToManuscript(draft_->toPlainText());
@@ -15571,7 +15576,7 @@ auto* secPub = new QLabel("<span style='color:#9A7A33;font-size:10px;letter-spac
             "Writes the draft as RTF for the publishing workflow. Text "
             "between *asterisks* becomes italic — STD-004: name-parts "
             "woven into a verse are italicized in the English.");
-        draftCol->addWidget(rtfBtn);
+        gPub->addBig(rtfBtn, "out");
         QObject::connect(rtfBtn, &QPushButton::clicked,
                          [this] { exportRtf(); });
         auto* composeBib = new QPushButton("Compose bibliography entry…");
@@ -15579,7 +15584,7 @@ auto* secPub = new QLabel("<span style='color:#9A7A33;font-size:10px;letter-spac
             "Assembles an entry in the published house format (STD-007). "
             "Fields are used exactly as typed — enter technical "
             "spelling as it should print.");
-        draftCol->addWidget(composeBib);
+        gPub->addBig(composeBib, "book");
         QObject::connect(composeBib, &QPushButton::clicked,
                          [this] { composeBibDialog(); });
         auto* proposeBtn =
@@ -15588,7 +15593,9 @@ auto* secPub = new QLabel("<span style='color:#9A7A33;font-size:10px;letter-spac
             "Saves the selected draft text as a CANDIDATE note. Candidates "
             "stay in the pending queue — the official MAIN apparatus only "
             "ever contains published, GMR-approved notes.");
-        draftCol->addWidget(proposeBtn);
+        gPub->addBig(proposeBtn, "tag");
+        ribbon->finish();
+        ribbon->attachTo(this);
         QObject::connect(proposeBtn, &QPushButton::clicked,
                          [this] { proposeNote(); });
         aiBtn_ = new QPushButton("AI back-check (API, labeled AI)");
