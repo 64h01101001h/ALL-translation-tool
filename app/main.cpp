@@ -2190,6 +2190,70 @@ static void remember(QPlainTextEdit* w, const QString& key,
 
 }   // namespace sess
 
+// ---- RibbonBar (9k ruling, 2026-08-20): the Word-style toolbar —
+// controls organized into labeled GROUPS in one strip across the
+// top, the group caption set small beneath its buttons, hairline
+// separators between groups. Adam's screenshot is the model; the
+// Catalog pane is the pilot, then pane by pane as the campaign
+// settles each. Buttons are plain QPushButtons so the sweep, the
+// lock gates, and every existing connect() work unchanged.
+class RibbonGroup : public QWidget {
+public:
+    explicit RibbonGroup(const QString& caption,
+                         QWidget* parent = nullptr)
+        : QWidget(parent) {
+        auto* v = new QVBoxLayout(this);
+        v->setContentsMargins(2, 2, 2, 0);
+        v->setSpacing(2);
+        row_ = new QHBoxLayout;
+        row_->setSpacing(4);
+        v->addLayout(row_);
+        v->addStretch();
+        auto* cap = new QLabel(caption);
+        cap->setAlignment(Qt::AlignHCenter);
+        cap->setStyleSheet(
+            "color:#9A7A33;font-size:9px;letter-spacing:1.5px;"
+            "font-weight:600;");
+        v->addWidget(cap);
+    }
+    void add(QWidget* w) { row_->addWidget(w); }
+
+private:
+    QHBoxLayout* row_ = nullptr;
+};
+
+class RibbonBar : public QWidget {
+public:
+    explicit RibbonBar(QWidget* parent = nullptr) : QWidget(parent) {
+        setObjectName("ribbonBar");
+        setStyleSheet(
+            "#ribbonBar { background:palette(alternate-base); "
+            "border:1px solid palette(mid); border-radius:4px; }"
+            "#ribbonBar QPushButton { padding:4px 10px; }");
+        row_ = new QHBoxLayout(this);
+        row_->setContentsMargins(6, 2, 6, 2);
+        row_->setSpacing(0);
+    }
+    RibbonGroup* group(const QString& caption) {
+        if (!first_) {
+            auto* sep = new QFrame;
+            sep->setFrameShape(QFrame::VLine);
+            sep->setStyleSheet("color:palette(mid)");
+            row_->addWidget(sep);
+        }
+        first_ = false;
+        auto* g = new RibbonGroup(caption);
+        row_->addWidget(g);
+        return g;
+    }
+    void finish() { row_->addStretch(); }
+
+private:
+    QHBoxLayout* row_ = nullptr;
+    bool first_ = true;
+};
+
+
 // open a library file in the Overlay AT a raw source line — the
 // TibetDoc search-locations jump; set in main() once the Overlay
 // exists
@@ -18426,7 +18490,11 @@ public:
         libBanner->setMinimumWidth(1);
         libBanner->setOpenExternalLinks(true);
         layout->addWidget(libBanner);
-        auto* row = new QHBoxLayout;
+        auto* ribbon = new RibbonBar;
+        auto* gShelve = ribbon->group("SHELVE");
+        auto* gStudy = ribbon->group("STUDY");
+        auto* gCare = ribbon->group("CARE");
+        auto* gFind = ribbon->group("FIND");
         auto* installBtn = new QPushButton("Install collection ZIP…");
         auto* importBtn = new QPushButton("Import my materials…");
         auto* ocrBtn = new QPushButton("Send to OCR…");
@@ -18444,9 +18512,9 @@ public:
         auto* indexBtn = new QPushButton("Update search index");
         // daily acts stay on the row; occasional utilities fold into
         // Maintenance (UX program P1, 2026-08-12)
-        row->addWidget(installBtn);
-        row->addWidget(importBtn);
-        row->addWidget(viewBtn);
+        gShelve->add(installBtn);
+        gShelve->add(importBtn);
+        gFind->add(viewBtn);
         auto* maintBtn = new QPushButton("Maintenance…");
         maintBtn->setIcon(miniIcon("gear"));
         maintBtn->setToolTip(
@@ -18481,7 +18549,7 @@ public:
                               "text)…"),
             [this] { surveySelected(); });
         maintBtn->setMenu(maintMenu);
-        row->addWidget(maintBtn);
+        gCare->add(maintBtn);
         // audit C1's queued follow-up (closed 2026-08-20): the survey
         // also gets a VISIBLE button, not just the menu entry
         auto* surveyBtn = new QPushButton("Survey\u2026");
@@ -18492,14 +18560,16 @@ public:
             "does before committing.");
         connect(surveyBtn, &QPushButton::clicked,
                 [this] { surveySelected(); });
-        row->addWidget(surveyBtn);
+        gStudy->add(surveyBtn);
         for (auto* hb : {ocrBtn, utfcBtn, indexBtn}) hb->hide();
         // hidden buttons keep their handlers alive for the menu +
         // the machine layers (Help index, sweep, menu bar)
         search_ = new QLineEdit;
         search_->setPlaceholderText("find in library by name… (Enter)");
-        row->addWidget(search_, 1);
-        layout->addLayout(row);
+        search_->setMinimumWidth(220);
+        gFind->add(search_);
+        ribbon->finish();
+        layout->addWidget(ribbon);
         // decoder-driven filters: browse the library by what the ACIP file
         // names themselves declare (collection, verification level, language)
         auto* frow = new QHBoxLayout;
@@ -22248,18 +22318,22 @@ public:
             "corpus-bound.</span>");
         banner->setWordWrap(true);
         outer->addWidget(banner);
-        auto* row = new QHBoxLayout;
+        auto* ribbon = new RibbonBar;
+        auto* gPage = ribbon->group("PAGE");
+        auto* gView = ribbon->group("VIEW");
+        auto* gVolume = ribbon->group("VOLUME");
+        auto* gModels = ribbon->group("MODELS");
         auto* open = new QPushButton("Open scan image…");
-        row->addWidget(open);
+        gPage->add(open);
         deskewOverride_ = new QCheckBox("deskew off (0°)");
         deskewOverride_->setToolTip(
             "Override deskew to 0° — a labeled DEVIATION from the "
             "BDRC pipeline, working around its angle bug on "
             "straight pages. Leave off for tilted scans.");
-        row->addWidget(deskewOverride_);
+        gView->add(deskewOverride_);
         run_ = new QPushButton("Run OCR");
         run_->setEnabled(false);
-        row->addWidget(run_);
+        gPage->add(run_);
         illusToggle_ = new QCheckBox("mark illustration candidates");
         illusToggle_->setToolTip(
             "Outline regions of the folio NOT covered by detected "
@@ -22267,7 +22341,7 @@ public:
             "woodblock miniatures and diagrams live. CANDIDATES "
             "only, machine-found from the line geometry; never "
             "claimed complete.");
-        row->addWidget(illusToggle_);
+        gView->add(illusToggle_);
         auto* galleryBtn = new QPushButton("Illustration gallery\u2026");
         galleryBtn->setToolTip(
             "Scan a whole folder of page images for illustration "
@@ -22275,13 +22349,13 @@ public:
             "and show them as a gallery of crops with their page "
             "provenance. Candidates only \u2014 never claimed "
             "complete.");
-        row->addWidget(galleryBtn);
+        gVolume->add(galleryBtn);
         auto* modelsBtn = new QPushButton("OCR models\u2026");
         modelsBtn->setToolTip(
             "Download additional BDRC recognition models (Lhasa "
             "Kangyur, Derge Tengyur, dbu-can books, modern print) "
             "and pick which one Run OCR uses.");
-        row->addWidget(modelsBtn);
+        gModels->add(modelsBtn);
         connect(modelsBtn, &QPushButton::clicked,
                 [this] { showOcrModelManager(this, root_); });
         connect(galleryBtn, &QPushButton::clicked,
@@ -22291,16 +22365,16 @@ public:
         });
         save_ = new QPushButton("Save to ocr_out…");
         save_->setEnabled(false);
-        row->addWidget(save_);
+        gPage->add(save_);
         auto* batchBtn = new QPushButton("Batch folder…");
         batchBtn->setToolTip(
             "OCR every page image in a folder (a scanned volume) — one "
             "-ocr.txt per page into library/ocr_out/<folder>/, all "
             "headered OCR-DERIVED. The Than Grove batch-volume pattern "
             "from the ACIP Development survey.");
-        row->addWidget(batchBtn);
-        row->addStretch();
-        outer->addLayout(row);
+        gVolume->add(batchBtn);
+        ribbon->finish();
+        outer->addWidget(ribbon);
         connect(batchBtn, &QPushButton::clicked, [this] { batchFolder(); });
         auto* split = new QSplitter(Qt::Vertical);
         auto* scroll = new QScrollArea;
@@ -24209,69 +24283,6 @@ protected:
                                " " + QString::fromStdString(inf.number)
                          : QString::fromUtf8("   — uncataloged");
     }
-};
-
-// ---- RibbonBar (9k ruling, 2026-08-20): the Word-style toolbar —
-// controls organized into labeled GROUPS in one strip across the
-// top, the group caption set small beneath its buttons, hairline
-// separators between groups. Adam's screenshot is the model; the
-// Catalog pane is the pilot, then pane by pane as the campaign
-// settles each. Buttons are plain QPushButtons so the sweep, the
-// lock gates, and every existing connect() work unchanged.
-class RibbonGroup : public QWidget {
-public:
-    explicit RibbonGroup(const QString& caption,
-                         QWidget* parent = nullptr)
-        : QWidget(parent) {
-        auto* v = new QVBoxLayout(this);
-        v->setContentsMargins(2, 2, 2, 0);
-        v->setSpacing(2);
-        row_ = new QHBoxLayout;
-        row_->setSpacing(4);
-        v->addLayout(row_);
-        v->addStretch();
-        auto* cap = new QLabel(caption);
-        cap->setAlignment(Qt::AlignHCenter);
-        cap->setStyleSheet(
-            "color:#9A7A33;font-size:9px;letter-spacing:1.5px;"
-            "font-weight:600;");
-        v->addWidget(cap);
-    }
-    void add(QWidget* w) { row_->addWidget(w); }
-
-private:
-    QHBoxLayout* row_ = nullptr;
-};
-
-class RibbonBar : public QWidget {
-public:
-    explicit RibbonBar(QWidget* parent = nullptr) : QWidget(parent) {
-        setObjectName("ribbonBar");
-        setStyleSheet(
-            "#ribbonBar { background:palette(alternate-base); "
-            "border:1px solid palette(mid); border-radius:4px; }"
-            "#ribbonBar QPushButton { padding:4px 10px; }");
-        row_ = new QHBoxLayout(this);
-        row_->setContentsMargins(6, 2, 6, 2);
-        row_->setSpacing(0);
-    }
-    RibbonGroup* group(const QString& caption) {
-        if (!first_) {
-            auto* sep = new QFrame;
-            sep->setFrameShape(QFrame::VLine);
-            sep->setStyleSheet("color:palette(mid)");
-            row_->addWidget(sep);
-        }
-        first_ = false;
-        auto* g = new RibbonGroup(caption);
-        row_->addWidget(g);
-        return g;
-    }
-    void finish() { row_->addStretch(); }
-
-private:
-    QHBoxLayout* row_ = nullptr;
-    bool first_ = true;
 };
 
 // One tree browser over one folder: its own root chooser, its own

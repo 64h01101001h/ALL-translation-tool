@@ -657,7 +657,13 @@ implementation is sidelined HERE from this date. What this means:
          first (worst button row; groups: Access · Suggest ·
          Inventory · QC · Handoff), then pane by pane as the
          campaign settles each; the design board's B/C candidates
-         are superseded by this ruling.
+         are superseded by this ruling. ROLLOUT PROGRESS
+         2026-08-20: Catalog (pilot) + OCR (PAGE · VIEW · VOLUME ·
+         MODELS) + Library (SHELVE · STUDY · CARE · FIND, search
+         box in the ribbon) converted; RibbonBar relocated early in
+         the file so every pane can use it. Remaining big rows:
+         Export, Input toolbar, Draft/Overlay tool columns (bigger
+         re-plumb), pending Adam's whole-window layout pick.
       9l. **EDIT MENU + WORD-STYLE MENU-BAR REORGANIZATION (Adam,
          2026-08-20, with two reference screenshots: the standard
          macOS Edit menu, and Microsoft Word's menu bar — "we will
