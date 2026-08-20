@@ -597,7 +597,7 @@ implementation is sidelined HERE from this date. What this means:
          approve/reject happen on one machine, GMR's).
       10. Idea bank (liked, never scheduled): pronunciation trainer ·
          Text DNA strips · team board · apprenticeship mode ·
-         English-on-the-carving hover · teaching-playlist karaoke ·
+         English-on-the-carving hover DONE 2026-08-20 (cache-only tooltip over the woodblock: OCR-read wylie + HGM gloss, review-material label; seeded-cache selftest pin) · teaching-playlist karaoke ·
          ⌘K persons lane DONE 2026-08-20 (authors layer in Hunt Everywhere; the apparatus/notes lane had already shipped 08-16); remaining: none · live composing editor · register
          studies · reverse-composition drills · sight-translation
          timer · worked-examples casebook.

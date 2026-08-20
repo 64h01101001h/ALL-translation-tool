@@ -94,6 +94,7 @@
 #include <functional>
 #include <QDateTime>
 #include <QStandardPaths>
+#include <QToolTip>
 
 #include <atomic>
 #include <thread>
@@ -3085,6 +3086,34 @@ public:
                   "THL phonetics mode renders (sö/bön umlauts)");
             scriptMode_->setCurrentIndex(0);
         }
+#ifdef ALL_HAVE_OCR
+        // English on the carving: a seeded folio cache proves the
+        // hover mapping (line band -> word span -> HGM gloss) and
+        // the review-material label, with no models or scans needed
+        {
+            QPixmap px(400, 100);
+            px.fill(Qt::white);
+            testSeedFolioOcr("1a-probe", px, 20, 40,
+                             {{"sems", 60},
+                              {" ", 8},
+                              {"can", 60}});
+            // scanImg_ may be hidden/zero-size in the harness — the
+            // mapping centers on max(label,pixmap), so probe via the
+            // pixmap's own coordinates offset by the label delta
+            const QSize ls = scanImg_->size();
+            const int offX = (ls.width() - px.width()) / 2;
+            const int offY = (ls.height() - px.height()) / 2;
+            const QString hitTip =
+                carvingHoverText(QPoint(offX + 30, offY + 40));
+            const QString missTip =
+                carvingHoverText(QPoint(offX + 30, offY + 90));
+            const bool ok = hitTip.contains("sems") &&
+                            hitTip.contains("review material") &&
+                            missTip.isEmpty();
+            check(ok, "carving hover names the OCR-read word with "
+                      "its label, and empty space stays silent");
+        }
+#endif
         // the 84000 glossary layer answers a canonical term
         {
             bool ok = g_84000 != nullptr;
@@ -4423,6 +4452,8 @@ auto* secScan = new QLabel("<span style='color:#9A7A33;font-size:10px;letter-spa
         scanImg_ = new QLabel;
         scanImg_->setScaledContents(false);
         scanImg_->setAlignment(Qt::AlignCenter);
+        scanImg_->setMouseTracking(true);   // carving hover (idea
+        scanImg_->installEventFilter(this); // bank, 2026-08-20)
         scanImg_->hide();
         ll->addWidget(scanImg_);
         auto* nav = new QWidget;
@@ -5933,6 +5964,25 @@ private:
                 }
             }
         }
+#ifdef ALL_HAVE_OCR
+        // English on the carving (idea bank, shipped 2026-08-20):
+        // hovering a word on the woodblock shows the OCR-read wylie
+        // and HGM's English for it. CACHE-ONLY — hovering never
+        // starts an OCR run; the boxes exist once word-locate has
+        // run on this side. Labeled OCR-derived, review material.
+        if (scanImg_ && w == scanImg_ &&
+            ev->type() == QEvent::MouseMove) {
+            const QString tip = carvingHoverText(
+                static_cast<QMouseEvent*>(ev)->pos());
+            if (!tip.isEmpty())
+                QToolTip::showText(QCursor::pos(), tip, scanImg_);
+            else
+                QToolTip::hideText();
+            return false;
+        }
+        if (scanImg_ && w == scanImg_ && ev->type() == QEvent::Leave)
+            QToolTip::hideText();
+#endif
         return QWidget::eventFilter(w, ev);
     }
 
@@ -10893,6 +10943,87 @@ private:
     }
 #endif
 
+#ifdef ALL_HAVE_OCR
+    // the carving-hover text for a cursor position inside scanImg_
+    // ("" = nothing under the cursor / no boxes yet). Public shape so
+    // the selftest can pin the mapping + labeling with a seeded cache.
+public:
+    QString carvingHoverText(const QPoint& labelPos) {
+        if (basePx_.isNull() || curFolio_.isEmpty()) return {};
+        const auto it = folioOcr_.find(curFolio_);
+        if (it == folioOcr_.end()) return {};
+        const FolioOcr& fo = it->second;
+        // the label centers the pixmap
+        const QSize ls = scanImg_ ? scanImg_->size() : basePx_.size();
+        const int px = labelPos.x() - (ls.width() - basePx_.width()) / 2;
+        const int py = labelPos.y() - (ls.height() - basePx_.height()) / 2;
+        for (size_t li = 0; li < fo.pl.lines.size(); ++li) {
+            const auto& l = fo.pl.lines[li];
+            if (py < l.y || py > l.y + l.h) continue;
+            if (li >= fo.words.size()) break;
+            for (const auto& ws : fo.words[li]) {
+                const int x0 = folioPageX(fo, li, ws.x0);
+                const int x1 = folioPageX(fo, li, ws.x1);
+                if (px < x0 || px > x1) continue;
+                QString wy = QString::fromStdString(ws.text).trimmed();
+                if (wy.isEmpty()) return {};
+                QString gloss;
+                for (const auto& e :
+                     spine_.lookup(wy.toLower().toStdString())) {
+                    for (const auto& g : e.hgm_gloss) {
+                        if (!gloss.isEmpty()) gloss += "; ";
+                        gloss += QString::fromStdString(g);
+                        if (gloss.size() > 120) break;
+                    }
+                    if (!gloss.isEmpty()) break;
+                }
+                QString tip = "<b>" + wy.toHtmlEscaped() + "</b>";
+                tip += gloss.isEmpty()
+                           ? QString(" — no dictionary entry")
+                           : " — " + gloss.toHtmlEscaped();
+                tip += "<br><small>OCR-read from the carving — "
+                       "review material, not text</small>";
+                return tip;
+            }
+            break;
+        }
+        return {};
+    }
+
+    // harness seed: the selftest pins the hover mapping without
+    // models or a live scan (g_harnessRun only)
+    void testSeedFolioOcr(const QString& folio, const QPixmap& px,
+                          int lineY, int lineH,
+                          const std::vector<std::pair<QString, int>>&
+                              wordsAndWidths) {
+        if (!g_harnessRun) return;
+        basePx_ = px;
+        curFolio_ = folio;
+        FolioOcr fo;
+        allocr::OcrLine l;
+        l.x = 0; l.y = lineY; l.w = px.width(); l.h = lineH;
+        fo.pl.width = px.width();
+        fo.pl.height = px.height();
+        fo.pl.lines.push_back(l);
+        fo.pl.images.resize(1);   // empty colMap → identity mapping
+        fo.words.resize(1);
+        int x = 0;
+        std::string lineText;
+        for (const auto& [wy, wpx] : wordsAndWidths) {
+            allocr::WordSpan ws;
+            ws.text = wy.toStdString();
+            ws.x0 = x;
+            ws.x1 = x + wpx;
+            fo.words[0].push_back(ws);
+            lineText += ws.text;
+            x += wpx;
+        }
+        fo.lineText.push_back(lineText);
+        folioOcr_[folio] = std::move(fo);
+    }
+
+private:
+#endif
     void setScanPixmap(const QPixmap& px, const QString& folio) {
         basePx_ = px;
         QPixmap shown = px;

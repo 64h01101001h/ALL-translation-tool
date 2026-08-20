@@ -657,6 +657,14 @@ of the document box and watch the folio image turn to follow your
 cursor. Press **locate word (OCR)** and the word at your cursor is
 boxed on the carving.
 
+**English on the carving (hover).** Once locate-word has run on a
+side, hovering any word *on the woodblock image* shows a small tip:
+the OCR-read wylie and Geshe Michael's English for that word (when
+the dictionary carries it). The tip always says what it is —
+OCR-read from the carving, review material, never text. Hovering
+never starts an OCR run by itself; the boxes come from the
+locate-word pass you already ran.
+
 ### FORMAT & EXPORT — MOVED: these tools now live in Read → Export
 
 - **Prepare for translation (Mixed Nuts)…** — runs Geshe Michael's
