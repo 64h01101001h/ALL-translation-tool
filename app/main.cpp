@@ -3088,6 +3088,10 @@ public:
             pb && pb->menu()) {
             setMenu(pb->menu());
             setPopupMode(QToolButton::InstantPopup);
+        } else if (auto* tb = qobject_cast<QToolButton*>(src);
+                   tb && tb->menu()) {
+            setMenu(tb->menu());
+            setPopupMode(QToolButton::InstantPopup);
         } else {
             connect(this, &QToolButton::clicked, src,
                     [src] { src->click(); });
@@ -3141,6 +3145,16 @@ public:
     // raw widgets (checkboxes, spinboxes, labels, line edits) sit
     // in the strip as themselves
     void add(QWidget* w) { row_->addWidget(w); }
+    // Word's small-control idiom: two or three compact widgets
+    // stacked in one column, so dense groups stay narrow
+    void addColumn(std::initializer_list<QWidget*> ws) {
+        auto* col = new QVBoxLayout;
+        col->setSpacing(1);
+        col->setContentsMargins(0, 0, 0, 0);
+        for (auto* w : ws) col->addWidget(w);
+        col->addStretch();
+        row_->addLayout(col);
+    }
     // buttons become icon-above-label proxies; the source stays
     // alive (hidden) so its connects, gates, and pins hold
     void addBig(QAbstractButton* src, const QString& iconKind) {
@@ -17386,11 +17400,15 @@ public:
               std::function<void(const QString&)> openText)
         : root_(root), openText_(std::move(openText)) {
         auto* outer = new QVBoxLayout(this);
-        auto* top = new QHBoxLayout;
+        auto* ribbon = new RibbonBar;
+        auto* gView = ribbon->group("VIEW");
+        auto* gGo = ribbon->group("GO");
+        auto* gOps = ribbon->group("TRANSFER");
+        auto* gTools = ribbon->group("TOOLS");
         hiddenT_ = new QCheckBox("hidden files");
         hiddenT_->setToolTip("Show dotfiles and hidden entries "
                              "in both panes");
-        top->addWidget(hiddenT_);
+
         cmdKeysT_ = new QCheckBox("Commander keys");
         cmdKeysT_->setToolTip(
             "Total-Commander function keys, strictly opt-in: "
@@ -17398,13 +17416,13 @@ public:
             "F7 new folder · F8 move to Trash. Mac conventions "
             "keep working either way; F2/click-rename always "
             "works.");
-        top->addWidget(cmdKeysT_);
+
         syncT_ = new QCheckBox("sync browsing");
         syncT_->setToolTip(
             "Entering a folder in one pane also enters the "
             "same-named folder in the other, when it exists — "
             "for walking two parallel folder trees together.");
-        top->addWidget(syncT_);
+        gView->addColumn({hiddenT_, syncT_});
         favB_ = new QToolButton;
         favB_->setText("Favorites");
         favB_->setPopupMode(QToolButton::InstantPopup);
@@ -17413,7 +17431,7 @@ public:
                           "click.");
         favMenu_ = new QMenu(favB_);
         favB_->setMenu(favMenu_);
-        top->addWidget(favB_);
+        gGo->addBig(favB_, "tag");
         connB_ = new QToolButton;
         connB_->setText("Connections");
         connB_->setToolTip(
@@ -17422,7 +17440,7 @@ public:
             "it — passwords asked per session, never stored.");
         connect(connB_, &QToolButton::clicked,
                 [this] { openConnections(); });
-        top->addWidget(connB_);
+        gGo->addBig(connB_, "out");
         wsB_ = new QToolButton;
         wsB_->setText("Workspaces");
         wsB_->setPopupMode(QToolButton::InstantPopup);
@@ -17431,47 +17449,44 @@ public:
             "as a named workspace, and restore it in one click.");
         wsMenu_ = new QMenu(wsB_);
         wsB_->setMenu(wsMenu_);
-        top->addWidget(wsB_);
+        gGo->addBig(wsB_, "grid");
         auto* termB = new QPushButton("Terminal");
         termB->setToolTip("Open Terminal at the active pane's "
                           "folder");
-        top->addWidget(termB);
-        top->addStretch(1);
+        gGo->addBig(termB, "chip");
+
         auto* stackT = new QCheckBox("Drop Stack");
         stackT->setChecked(true);
         stackT->setToolTip(
             "The shelf: park files here while you gather a "
             "project's texts — it persists across sessions.");
-        top->addWidget(stackT);
-        outer->addLayout(top);
-        auto* ops = new QHBoxLayout;
+        gView->addColumn({cmdKeysT_, stackT});
+
         auto* copyR = new QPushButton("Copy →");
         auto* copyL = new QPushButton("← Copy");
         auto* moveR = new QPushButton("Move →");
         auto* moveL = new QPushButton("← Move");
-        for (auto* b :
-             std::initializer_list<QPushButton*>{copyR, moveR,
-                                                 copyL, moveL})
-            ops->addWidget(b);
+        gOps->addColumn({copyR, moveR});
+        gOps->addColumn({copyL, moveL});
         auto* renB = new QPushButton("Batch rename…");
         renB->setToolTip("Find/replace (plain or regex) across "
                          "every selected filename, with a full "
                          "preview before anything is touched.");
-        ops->addWidget(renB);
+        gTools->addBig(renB, "typo");
         auto* syncB = new QPushButton("Sync folders…");
         syncB->setToolTip(
             "Synchronize the two shown folders — one-way or "
             "two-way (newer wins). You see the full plan first; "
             "nothing is copied until you Apply, and sync never "
             "deletes anything.");
-        ops->addWidget(syncB);
+        gTools->addBig(syncB, "target");
         connect(syncB, &QPushButton::clicked,
                 [this] { syncFolders(); });
         auto* cmpB = new QPushButton("Compare panes…");
         cmpB->setToolTip("Compare the two folders being shown: "
                          "what exists only left, only right, and "
                          "what differs in size.");
-        ops->addWidget(cmpB);
+        gTools->addBig(cmpB, "diff");
         quickSel_ = new QLineEdit;
         quickSel_->setPlaceholderText(
             "quick select: *.act or a regex, then Return");
@@ -17479,8 +17494,10 @@ public:
             "Select every file in the active pane whose name "
             "matches — then copy, move, rename, or trash them "
             "all at once.");
-        ops->addWidget(quickSel_, 1);
-        outer->addLayout(ops);
+
+        ribbon->finish();
+        ribbon->attachTo(this);
+        outer->addWidget(quickSel_);
         auto* split = new QSplitter;
         for (int i = 0; i < 2; ++i)
             split->addWidget(buildPanel(i));
