@@ -42,6 +42,8 @@ Version: 0.27.2 · August 2026
 | Lokesh Chandra Tibetan–Sanskrit layer | extracted from ACIP's own materials | Sanskrit reference on cards |
 | BDRC woodblock scans (IIIF) | public-domain images, BDRC terms; fetched live, cached locally, attributed in-pane | scan follow-along |
 | Buddhist canonical texts (ACIP Releases) | ACIP's own preserved corpus | the Library |
+| 84000 glossary (Steinert cumulative export + official live harvest 2026-08-20, 29,383 terms) | CC BY 4.0 — 84000's canonical Terms of Use table (all-data/Terms_of_Use.md rev. 2023-06-14) | the labeled 84000 block on entry cards, with links to the original entries and "attested in" work links |
+| 84000 Translation Memory (400,745 aligned Ti–En segments, 388 canonical texts; ingested 2026-08-20) | CC BY 4.0 — same Terms table ("Translation memory … CC-BY"); the TM repo README's BY-NC-ND boilerplate defers to those Terms | published-translation comparanda shown beside (never inside) the HGM corpus concordance |
 | Fonts (bundled Tibetan faces) | SIL OFL (each face's license banked in data/fonts/FONTS.md) | Tibetan script display |
 | Teaching-moments index (Diamond Cutter Classics + The Knowledge Base YouTube channels) | Geshe Michael Roach's own organizations' teachings, harvested captions-only with ALL's authorization (data/teaching/PROVENANCE.md); links open the original recordings | timecoded "teaching this term" links on entry cards; machine-located, labeled |
 

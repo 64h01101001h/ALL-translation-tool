@@ -1229,14 +1229,33 @@ implementation is sidelined HERE from this date. What this means:
       format verified live before shipping; nothing ingested, so
       restrictive licenses are never touched. (The full-TM ingest
       still waits on the 84000 license email.)
-- [ ] **84000 glossary + translation memory** — CC BY 4.0 VERIFIED
-      (glossary/TM/metadata; the translations are BY-NC-ND, different
-      asset). Import as a provenance-tagged reference wave: glossary →
-      Lookup layer, TM → concordance comparanda (never HGM tier).
-      Biggest license-clean data win of the whole survey. ⚠ Resolve
-      first: the TM GitHub README says BY-NC-ND 3.0 while 84000's
-      terms-of-use says CC BY 4.0 — confirm from the files/84000
-      before ingesting.
+- [x] **84000 glossary + translation memory** — SHIPPED 2026-08-20.
+      License gate resolved from the files: 84000's canonical Terms
+      table (all-data/Terms_of_Use.md rev. 2023-06-14, re-read live)
+      grants CC BY for BOTH the TM and the glossary; the TM README's
+      BY-NC-ND line is outdated boilerplate that itself defers to
+      those Terms. (Published translations stay BY-ND — not touched.
+      Courtesy/partnership email still queued for Adam, above.)
+      · TM: full repo combined — 400,745 aligned Ti–En segments, 388
+      texts (319 from json/ + 69 parsed from TMX) →
+      data/84000/tm_84000.tsv.gz (27MB); allcore Tm84000 builds an
+      FTS5 db on first use (data/extracted/); Overlay concordance now
+      shows "84000 Translation Memory" comparanda beside HGM corpus
+      hits, toh+folio attributed, linked to 84000.co/translation/<toh>
+      (URL pattern verified live). 56th suite tm84000_smoke: build,
+      cache-hit, Tibetan+English phrase search, nonsense-returns-
+      nothing — all against the real shipped TSV. Selftest pin builds
+      and answers sems can.
+      · Glossary: official live harvest via graphql.84000.co (open,
+      no auth) — 62,430 term instances across all 456 published works
+      merged into g84000.json: 24,576 → 29,383 keys, +46,662
+      definitions, +23,174 Sanskrit, 60,714 toh attestation links now
+      rendered as "attested in" on cards. GOTCHA the selftest caught:
+      the live harvest spells the wylie apostrophe U+2019; unfolded it
+      would have silently duplicated 9,317 keys.
+      · OPEN_SOURCE_NOTICES gained both rows (the 08-12 glossary ship
+      had missed its row); manual §Overlay + Lookup-card table
+      updated.
 - [~] **Tibetan calendar engine** — YEAR LEVEL SHIPPED 2026-08-07
       (allcore tibcal, 60-cycle arithmetic pinned to five documented
       anchors incl. Tsongkapa's own 1357 fire-bird / 1419 earth-pig;

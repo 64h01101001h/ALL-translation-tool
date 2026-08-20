@@ -258,7 +258,7 @@ on or off (defaults in parentheses):
 | **grammar marks & particle notes** (on) | particle roles, suffix-agreement lines, fused-particle notes on the card AND the dotted-amber marks in the document |
 | **Sanskrit reference** (off) | Sanskrit equivalences (Mahāvyutpatti) on the card |
 | **Hopkins reference** (off) | the Hopkins reference layer on the card |
-| **84000 glossary (CC BY)** (on) | the 84000 translation glossary block on the card — reference only, clearly labeled, with its link back to the original entry |
+| **84000 glossary (CC BY)** (on) | the 84000 translation glossary block on the card — reference only, clearly labeled, with its link back to the original entry and (since the 2026-08-20 merge of 84000's official live glossary) "attested in" links to the published works that carry the term |
 | **Das 1902 / Jäschke 1881 page links** (on) | the "open the page scan" links into Das's 1902 and Jäschke's 1881 dictionaries (both public domain), shown with the other reference material — Jäschke opens at letter-section accuracy (±page) |
 | **reference dictionaries (LC/TD/THL/OT/IW)** (on) | the Lokesh Chandra / TibetanDictionary / THL reference stacks on the card |
 | **Botok segmentation (reference)** (off) | an independent segmenter's reading of the clicked spot, labeled reference-only |
@@ -1178,6 +1178,17 @@ Two levels split by a draggable divider:
 press Load source, click the second clause. The anchors panel
 shows *sems can* banded in one hue with its English chip in the
 same hue. Click *sems can* to see its corpus concordance.
+
+Below the corpus hits, the concordance shows **84000 Translation
+Memory comparanda** — up to five aligned Tibetan–English segments
+from 84000's published canon translations (400,745 segments across
+388 Kangyur/Tengyur texts, CC BY 4.0 per 84000's own Terms of Use;
+ingested 2026-08-20). Each carries its Tohoku number, Degé folio
+where the source records it, and a link to the full translation at
+84000.co. These are *published-translation comparanda, reference
+only* — another team's renderings beside Geshe Michael's, never
+mixed with them. The first concordance click after an update
+builds the search index (a few seconds); after that it's instant.
 
 
 ### The Evidence Ribbon — the evidence follows your cursor

@@ -146,6 +146,7 @@
 #include "allcore/spellcheck.h"
 #include "allcore/quotation.h"
 #include "allcore/spine.h"
+#include "allcore/tm84000.h"
 #include "allcore/stardict.h"
 
 // user-supplied StarDict dictionaries (DigitalTibetan plan P5):
@@ -449,9 +450,84 @@ static const AiGlossMap* g_aiGlossary = nullptr;
 // table; data/84000/README.md) — reference only, never HGM
 struct G84000 {
     QStringList glosses, defs, skts;
+    QStringList tohs;   // published works attesting the term
+                        // (merged 2026-08-20 from the live harvest)
 };
 using G84000Map = std::map<std::string, G84000>;
 static const G84000Map* g_84000 = nullptr;
+
+// the 84000 Translation Memory comparanda layer (CC BY 4.0 per the
+// same Terms table; core/include/allcore/tm84000.h documents the
+// license verification). 400,745 aligned Ti-En segments / 388 texts;
+// the FTS5 db is generated on first use into data/extracted/ and
+// cached. Reference comparanda ONLY - never HGM material (rule 1).
+static QString g_tm84000Root;   // app root; set once at data load
+static allcore::Tm84000* tm84000() {
+    static std::unique_ptr<allcore::Tm84000> tm;
+    static bool tried = false;
+    if (!tried) {
+        tried = true;
+        if (!g_tm84000Root.isEmpty()) {
+            const QString tsv =
+                g_tm84000Root + "/data/84000/tm_84000.tsv.gz";
+            const QString db =
+                g_tm84000Root + "/data/extracted/tm_84000.db";
+            if (QFile::exists(tsv)) {
+                QDir().mkpath(g_tm84000Root + "/data/extracted");
+                if (allcore::Tm84000::ensureBuilt(
+                        tsv.toStdString(), db.toStdString()) > 0) {
+                    try {
+                        tm = std::make_unique<allcore::Tm84000>(
+                            db.toStdString());
+                    } catch (...) {
+                        // a bad cache stays unusable, never guessed at
+                    }
+                }
+            }
+        }
+    }
+    return tm.get();
+}
+
+// 84000 TM segments for a wylie term - shown BESIDE the HGM corpus
+// concordance, attribution always visible
+static QString tm84000Html(const std::string& wylie, int limit = 5) {
+    auto* tm = tm84000();
+    if (!tm) return {};
+    auto [uni, uok] = allcore::wylieToUnicode(wylie);
+    if (!uok || uni.empty()) return {};
+    // FTS5 phrase over the Tibetan column (unicode61 splits at tsheg;
+    // spelling the tshegs as spaces keeps the phrase explicit)
+    QString phrase = QString::fromStdString(uni);
+    phrase.replace(QString::fromUtf8("\u0F0B"), " ");
+    phrase = phrase.trimmed();
+    if (phrase.isEmpty()) return {};
+    const auto hits = tm->search(
+        "tibetan: \"" + phrase.toStdString() + "\"", limit);
+    if (hits.empty()) return {};
+    QString h =
+        "<hr><div style='color:#1F5B4B'><b>84000 Translation "
+        "Memory</b> <small>(CC BY 4.0, 84000: Translating the Words "
+        "of the Buddha - published-translation comparanda, reference "
+        "only, never HGM)</small></div>";
+    for (const auto& t : hits) {
+        QString ref = QString::fromStdString(t.toh);
+        if (!t.folio.empty())
+            ref += " " + QString::fromStdString(t.folio);
+        h += "<div style='margin:5px 0'><small>[" +
+             ref.toHtmlEscaped() + "]</small><br><span>" +
+             QString::fromStdString(t.tibetan)
+                 .left(160)
+                 .toHtmlEscaped() +
+             "</span><br><i>" +
+             QString::fromStdString(t.english)
+                 .left(220)
+                 .toHtmlEscaped() +
+             "</i> <a href='https://84000.co/translation/" +
+             QString::fromStdString(t.toh) + "'>[84000]</a></div>";
+    }
+    return h;
+}
 
 // teaching moments (#63, Adam-authorized 2026-08-11): normalized HGM
 // gloss -> up to 5 timecoded links to Geshe Michael's recorded
@@ -1087,6 +1163,22 @@ static QString entryHtml(const allcore::Entry& e,
             for (const QString& x : g.skts)
                 b += "<br><small style='color:#6E675D'>sanskrit: " +
                      x.left(160).toHtmlEscaped() + "</small>";
+            if (!g.tohs.isEmpty()) {
+                QString tl;
+                int shown = 0;
+                for (const QString& t2 : g.tohs) {
+                    if (shown++ >= 8) {
+                        tl += QString("+%1 more").arg(
+                            g.tohs.size() - 8);
+                        break;
+                    }
+                    tl += "<a href='https://84000.co/translation/" +
+                          t2 + "'>" + t2.toHtmlEscaped() +
+                          "</a> ";
+                }
+                b += "<br><small style='color:#8A7E6E'>attested "
+                     "in: " + tl.trimmed() + "</small>";
+            }
             b += "</div>";
             h += b;
         }
@@ -2990,10 +3082,24 @@ public:
             if (ok) {
                 auto it = g_84000->find("byang chub sems dpa'");
                 ok = it != g_84000->end() &&
-                     !it->second.glosses.isEmpty();
+                     !it->second.glosses.isEmpty() &&
+                     !it->second.tohs.isEmpty();
             }
             check(ok, "84000 glossary layer loaded (CC BY, "
-                      "bodhisattva present)");
+                      "bodhisattva present, toh-attested "
+                      "after the 2026-08-20 merge)");
+        }
+        // the 84000 TM comparanda layer builds and answers
+        {
+            auto* tm = tm84000();   // first call builds the FTS5 db
+            bool ok = tm != nullptr && tm->rowCount() >= 390000;
+            if (ok) {
+                const auto segs = tm84000Html("sems can");
+                ok = segs.contains("84000 Translation Memory") &&
+                     segs.contains("CC BY 4.0");
+            }
+            check(ok, "84000 TM comparanda (400k segments, CC BY) "
+                      "answers sems can");
         }
         // the Pecha Maker writes real folio sides
         {
@@ -15086,6 +15192,7 @@ private:
                  QString::fromStdString(s.english).left(200).toHtmlEscaped() +
                  "</div>";
         }
+        h += tm84000Html(wylie);
         h += linkOutHtml(wylie);
         anchors_->setHtml(h);
     }
@@ -27175,11 +27282,14 @@ int main(int argc, char** argv) {
                     g.defs << v.toString();
                 for (const auto& v : e.value("k").toArray())
                     g.skts << v.toString();
+                for (const auto& v : e.value("t").toArray())
+                    g.tohs << v.toString();
                 g84000[it.key().toStdString()] = g;
             }
         }
         if (!g84000.empty()) g_84000 = &g84000;
     }
+    g_tm84000Root = root;   // unlocks the lazy 84000 TM comparanda db
     // --screenshots <dir>: render every pane to PNGs and exit (demo /
     // documentation mode). Shows the Approval queue too, pointed at
     // the seeded proposals — session-only, nothing persisted.

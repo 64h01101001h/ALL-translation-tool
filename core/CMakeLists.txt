@@ -60,6 +60,7 @@ add_library(allcore STATIC
   src/worksheet.cpp
   src/catalog_qc.cpp
   src/shelf_suggest.cpp
+  src/tm84000.cpp
 )
 target_include_directories(allcore PUBLIC include)
 
@@ -347,3 +348,9 @@ add_executable(acipcodes_smoke tests/acipcodes_smoke.cpp)
 target_link_libraries(acipcodes_smoke PRIVATE allcore)
 add_test(NAME acipcodes_smoke
          COMMAND acipcodes_smoke ${CMAKE_SOURCE_DIR}/data/acip_codes/Acipcode.txt)
+
+add_executable(tm84000_smoke tests/tm84000_smoke.cpp)
+target_link_libraries(tm84000_smoke PRIVATE allcore)
+add_test(NAME tm84000_smoke
+         COMMAND tm84000_smoke ${CMAKE_SOURCE_DIR}/data/84000/tm_84000.tsv.gz
+                 ${CMAKE_BINARY_DIR})
