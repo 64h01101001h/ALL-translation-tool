@@ -853,7 +853,10 @@ filtered browse instead. Clear everything and the panel returns to
 
 ### The Translator's survey
 
-The info panel's **Translator's survey…** link answers the
+Three ways in: the visible **Survey…** button in the Library's
+control row, **Maintenance… → Translator's survey (selected
+text)**, and the info panel's **Translator's survey…** link — all
+three read the selected text. The survey answers the
 questions asked before a translation is assigned or begun — from
 the text itself, deterministically:
 

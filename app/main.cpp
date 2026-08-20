@@ -17947,28 +17947,20 @@ public:
         maintMenu->addAction(
             QString::fromUtf8("Translator's survey (selected "
                               "text)…"),
-            [this] {
-                QString p;
-                if (stack_->currentIndex() == 1) {
-                    const int r = list_->currentRow();
-                    if (r >= 0 && list_->item(r, 0))
-                        p = list_->item(r, 0)
-                                ->data(Qt::UserRole)
-                                .toString();
-                } else {
-                    p = model_->filePath(tree_->currentIndex());
-                }
-                if (p.isEmpty() || QFileInfo(p).isDir()) {
-                    QMessageBox::information(
-                        this, "Translator's survey",
-                        "Select a text in the Library first — the "
-                        "survey reads one file.");
-                    return;
-                }
-                if (g_surveyFile) g_surveyFile(p);
-            });
+            [this] { surveySelected(); });
         maintBtn->setMenu(maintMenu);
         row->addWidget(maintBtn);
+        // audit C1's queued follow-up (closed 2026-08-20): the survey
+        // also gets a VISIBLE button, not just the menu entry
+        auto* surveyBtn = new QPushButton("Survey\u2026");
+        surveyBtn->setToolTip(
+            "Translator's survey of the selected text: length, "
+            "vocabulary coverage against the HGM dictionary, "
+            "difficulty signals \u2014 the sizing-up a translator "
+            "does before committing.");
+        connect(surveyBtn, &QPushButton::clicked,
+                [this] { surveySelected(); });
+        row->addWidget(surveyBtn);
         for (auto* hb : {ocrBtn, utfcBtn, indexBtn}) hb->hide();
         // hidden buttons keep their handlers alive for the menu +
         // the machine layers (Help index, sweep, menu bar)
@@ -18758,6 +18750,27 @@ private:
                  : "<div style='color:#B00020'><b>warning:</b> no "
                    "Tibetan tsheg found in the output — the source "
                    "encoding chosen is probably wrong.</div>"));
+    }
+
+    // The survey on the currently selected Library text; shared by
+    // the Maintenance menu entry and the visible button (audit C1).
+    void surveySelected() {
+        QString p;
+        if (stack_->currentIndex() == 1) {
+            const int r = list_->currentRow();
+            if (r >= 0 && list_->item(r, 0))
+                p = list_->item(r, 0)->data(Qt::UserRole).toString();
+        } else {
+            p = model_->filePath(tree_->currentIndex());
+        }
+        if (p.isEmpty() || QFileInfo(p).isDir()) {
+            QMessageBox::information(
+                this, "Translator's survey",
+                "Select a text in the Library first — the survey "
+                "reads one file.");
+            return;
+        }
+        if (g_surveyFile) g_surveyFile(p);
     }
 
     // People layer (#59): work number -> author -> BDRC persons +

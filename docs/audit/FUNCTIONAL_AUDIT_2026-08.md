@@ -105,7 +105,7 @@ message when nothing is selected. The info-panel link stays.
 
 Reachable ONLY through the `survey:` HTML anchor in the Library info
 panel — no button, no menu. Same class as the scan-viewer finding.
-QUEUED: give it a Library button or menu entry.
+QUEUED item CLOSED 2026-08-20: a visible Survey… button now sits in the Library's control row alongside the menu entry.
 
 ### C2. The mirrored menu bar has systematic blind spots
 **FIXED 2026-08-19**: the generator now mirrors QToolButtons (menu-
