@@ -3738,6 +3738,14 @@ one list answers from every source at once:
 - **🗣 phonetics** rows through the GMR-convention fold;
 - **📜 corpus** rows with the master's published English;
 - **🎧 teaching** rows that open the recording at the timecode;
+- **📎 apparatus** rows — the published footnotes and
+  bibliography entries;
+- **👤 person** rows — the authors layer: type any part of a
+  name (*gzhon nu dpal*, an anglicized fragment, a BDRC variant)
+  and matching authors appear with their dates and catalog work
+  count; Enter opens the person's BDRC page (with Treasury of
+  Lives where linked). Their works surface right below through
+  the file lane — the same query finds both;
 - **📁 file** rows — Library filenames that match what you typed
   (a catalog number like *TD04156*, a title fragment): Enter
   opens the file itself — texts in the Overlay, scan images in

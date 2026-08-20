@@ -26040,6 +26040,14 @@ public:
                 QString::fromUtf8("📁"));
         check(file, "filename lane answers (TD04156 → Library "
                     "file target)");
+        box_->setText("gzhon nu dpal");
+        runSearch();
+        bool person = false;
+        for (int i = 0; i < list_->count(); ++i)
+            person |= list_->item(i)->text().contains(
+                QString::fromUtf8("👤"));
+        check(person, "persons lane answers (Gö Lotsawa reaches the "
+                      "authors layer)");
         box_->clear();
         list_->clear();
         acts_.clear();
@@ -26213,6 +26221,73 @@ private:
                     4, q);
         }
 
+        // 7. persons: the authors layer (BDRC + Treasury of Lives)
+        {
+            if (!personsLoaded_) {
+                personsLoaded_ = true;
+                QFile pf(root_ + "/data/extracted/persons_bdrc.json");
+                if (pf.open(QIODevice::ReadOnly))
+                    persons_ = QJsonDocument::fromJson(pf.readAll())
+                                   .object()
+                                   .value("authors")
+                                   .toObject();
+            }
+            const QString qUp = q.toUpper();
+            int shown = 0;
+            for (auto it = persons_.begin();
+                 it != persons_.end() && shown < 4; ++it) {
+                const auto o = it.value().toObject();
+                bool hit = it.key().toUpper().contains(qUp);
+                if (!hit)
+                    hit = o.value("eng")
+                              .toString()
+                              .toUpper()
+                              .contains(qUp);
+                if (!hit) {
+                    for (const auto& c :
+                         o.value("candidates").toArray()) {
+                        for (const auto& n : c.toObject()
+                                                 .value("names")
+                                                 .toArray())
+                            if (n.toString().toUpper().contains(qUp))
+                                hit = true;
+                    }
+                }
+                if (!hit) continue;
+                const auto cands = o.value("candidates").toArray();
+                QString url, via;
+                if (!cands.isEmpty()) {
+                    const auto c0 = cands.first().toObject();
+                    const QString tol = c0.value("tol").toString();
+                    if (!tol.isEmpty()) {
+                        // the API url resolves; the human page is
+                        // treasuryoflives.org/biographies — link the
+                        // BDRC person page instead when only the API
+                        // form is banked
+                        url = "https://library.bdrc.io/show/bdr:" +
+                              c0.value("pid").toString();
+                        via = "BDRC + Treasury of Lives";
+                    } else {
+                        url = "https://library.bdrc.io/show/bdr:" +
+                              c0.value("pid").toString();
+                        via = "BDRC";
+                    }
+                }
+                if (url.isEmpty()) continue;
+                add(QString::fromUtf8("👤  ") + it.key() +
+                        (o.value("dates").toString() == "Unknown"
+                             ? QString()
+                             : " (" + o.value("dates").toString() +
+                                   ")") +
+                        QString::fromUtf8(" — %1 work(s) in the "
+                                          "catalog · opens %2")
+                            .arg(o.value("works").toInt())
+                            .arg(via),
+                    2, url);
+                ++shown;
+            }
+        }
+
         // ⌘K file targets (file-browser P2): the Library's own
         // filenames answer too — Enter opens the file in the
         // right pane (texts → Overlay, images → Input viewer)
@@ -26280,6 +26355,8 @@ private:
     QString root_;
     QStringList filePaths_;
     bool filesIndexed_ = false;
+    QJsonObject persons_;
+    bool personsLoaded_ = false;
 };
 static HuntPalette* g_hunt = nullptr;
 
