@@ -3039,15 +3039,9 @@ public:
         return g;
     }
     void finish() { row_->addStretch(); }
-    // Word order (Adam 2026-08-20): tab rows ABOVE, ribbon directly
-    // BENEATH them — the strip mounts at the very top of the pane,
-    // spanning its full width
-    void attachTo(QWidget* pane) {
-        if (auto* v = qobject_cast<QVBoxLayout*>(pane->layout()))
-            v->insertWidget(0, this);
-        else
-            paneRibbons().insert(pane, this);
-    }
+    // the pane registers; the window's RIBBON BAND (one Word-style
+    // band under the single tab row) hosts it
+    void attachTo(QWidget* pane) { paneRibbons().insert(pane, this); }
 
 private:
     QHBoxLayout* row_ = nullptr;
@@ -27476,8 +27470,12 @@ public:
                         {cb->itemText(k), pane, cb->toolTip(), loc});
         };
         for (int i = 0; i < tabs_->count(); ++i) {
-            if (auto* inner =
-                    qobject_cast<QTabWidget*>(tabs_->widget(i))) {
+            auto* innerW =
+                qobject_cast<QTabWidget*>(tabs_->widget(i));
+            if (!innerW)
+                innerW = tabs_->widget(i)->findChild<QTabWidget*>(
+                    QString(), Qt::FindDirectChildrenOnly);
+            if (auto* inner = innerW) {
                 for (int j = 0; j < inner->count(); ++j) {
                     locs_.push_back({i, inner, j});
                     indexPane(inner->widget(j), inner->tabText(j),
@@ -29085,13 +29083,32 @@ int main(int argc, char** argv) {
     }
     // ---- two-level navigation (Adam, 2026-08-10): six workflow
     // groups, each an inner tab row; panes reparented untouched
-    struct FlatPane { QWidget* w; QString title; QTabWidget* inner; };
+    struct FlatPane { QWidget* w; QString title; QTabWidget* inner; QWidget* page = nullptr; };
     static std::vector<FlatPane> flatPanes;
     {
         std::vector<std::pair<QWidget*, QString>> all;
         for (int i = 0; i < tabs.count(); ++i)
             all.push_back({tabs.widget(i), tabs.tabText(i)});
         while (tabs.count()) tabs.removeTab(0);
+        // pane-name → ribbon icon for the SURFACE switch buttons
+        auto paneIcon = [](const QString& t) -> QString {
+            static const QHash<QString, QString> m = {
+                {"Overlay", "eye"},      {"Library", "book"},
+                {"Files", "folder"},     {"Scans", "image"},
+                {"Export", "out"},       {"Draft", "page"},
+                {"Manuscript", "book"},  {"Apparatus", "quote"},
+                {"Review", "check"},     {"Align", "diff"},
+                {"Search", "search"},    {"Lookup", "search"},
+                {"Sanskrit", "textT"},   {"Convert", "diff"},
+                {"Analysis", "chip"},    {"Trainer", "play"},
+                {"Drills", "count"},     {"Input", "page"},
+                {"OCR", "ocr"},          {"Catalog", "ledger"},
+                {"Propose", "tag"},      {"Approval", "check"}};
+            for (auto it = m.begin(); it != m.end(); ++it)
+                if (t == it.key() || t.startsWith(it.key() + " ("))
+                    return it.value();
+            return "page";
+        };
         auto mkGroup = [&](const QString& gname,
                            std::initializer_list<const char*> names) {
             auto* g = new QTabWidget;
@@ -29104,8 +29121,79 @@ int main(int argc, char** argv) {
                             g->addTab(w, t);
                             flatPanes.push_back({w, t, g});
                         }
-            if (g->count()) tabs.addTab(g, gname);
-            else delete g;
+            if (!g->count()) { delete g; return; }
+            // THE RIBBON BAND (Adam's Word spec): one band directly
+            // under the single tab row — big surface buttons on the
+            // left switch this group's panes (the inner tab bar
+            // hides; the ribbon IS the switcher), and the active
+            // pane's tool groups fill the rest of the band.
+            g->tabBar()->hide();
+            auto* band = new QWidget;
+            band->setObjectName("ribbonBand");
+            band->setStyleSheet(
+                "#ribbonBand { background:palette(alternate-base); "
+                "border-bottom:1px solid palette(mid); }"
+                "#ribbonBand QToolButton { padding:2px 7px; }");
+            auto* bandRow = new QHBoxLayout(band);
+            bandRow->setContentsMargins(8, 2, 8, 2);
+            bandRow->setSpacing(0);
+            auto* surf = new RibbonGroup(gname.toUpper());
+            QList<QToolButton*> surfBtns;
+            for (int j = 0; j < g->count(); ++j) {
+                auto* tb = new QToolButton;
+                QString label = g->tabText(j);
+                const int par = label.indexOf(" (");
+                if (par > 0) label.truncate(par);
+                tb->setText(label);
+                tb->setIcon(miniIcon(paneIcon(g->tabText(j))));
+                tb->setIconSize(QSize(20, 20));
+                tb->setCheckable(true);
+                tb->setAutoRaise(true);
+                tb->setToolButtonStyle(
+                    ribbonLabelsOn() ? Qt::ToolButtonTextUnderIcon
+                                     : Qt::ToolButtonIconOnly);
+                tb->setChecked(j == g->currentIndex());
+                QObject::connect(tb, &QToolButton::clicked,
+                                 [g, j] { g->setCurrentIndex(j); });
+                ribbonProxies().append(tb);
+                surf->add(tb);
+                surfBtns.append(tb);
+            }
+            bandRow->addWidget(surf);
+            auto* sep = new QFrame;
+            sep->setFrameShape(QFrame::VLine);
+            sep->setStyleSheet("color:palette(mid)");
+            bandRow->addWidget(sep);
+            auto* toolStack = new QStackedWidget;
+            {
+                auto* none = new QWidget;
+                toolStack->addWidget(none);
+            }
+            for (int j = 0; j < g->count(); ++j)
+                if (QWidget* r =
+                        paneRibbons().value(g->widget(j), nullptr))
+                    toolStack->addWidget(r);
+            bandRow->addWidget(toolStack, 1);
+            auto syncBand = [g, toolStack, surfBtns] {
+                QWidget* r =
+                    paneRibbons().value(g->currentWidget(), nullptr);
+                toolStack->setCurrentIndex(
+                    r ? toolStack->indexOf(r) : 0);
+                for (int j = 0; j < surfBtns.size(); ++j)
+                    surfBtns[j]->setChecked(j == g->currentIndex());
+            };
+            QObject::connect(g, &QTabWidget::currentChanged, band,
+                             [syncBand](int) { syncBand(); });
+            syncBand();
+            auto* page = new QWidget;
+            auto* pv = new QVBoxLayout(page);
+            pv->setContentsMargins(0, 0, 0, 0);
+            pv->setSpacing(0);
+            pv->addWidget(band);
+            pv->addWidget(g, 1);
+            for (auto& f : flatPanes)
+                if (f.inner == g) f.page = page;
+            tabs.addTab(page, gname);
         };
         mkGroup("Read", {"Overlay", "Library", "Files", "Scans",
                          "Export"});
@@ -29136,36 +29224,11 @@ int main(int argc, char** argv) {
             });
             tabs.setCornerWidget(huntBtn, Qt::TopRightCorner);
         }
-        // mount every registered ribbon and follow the active pane
-        {
-            for (auto it = paneRibbons().begin();
-                 it != paneRibbons().end(); ++it)
-                ribbonStack->addWidget(it.value());
-            auto syncRibbon = [ribbonStack, &tabs] {
-                QWidget* pane = nullptr;
-                if (auto* g = qobject_cast<QTabWidget*>(
-                        tabs.currentWidget()))
-                    pane = g->currentWidget();
-                QWidget* r =
-                    pane ? paneRibbons().value(pane, nullptr)
-                         : nullptr;
-                ribbonStack->setCurrentIndex(
-                    r ? ribbonStack->indexOf(r) : 0);
-            };
-            QObject::connect(&tabs, &QTabWidget::currentChanged,
-                             ribbonStack, [syncRibbon] { syncRibbon(); });
-            for (int gi = 0; gi < tabs.count(); ++gi)
-                if (auto* g = qobject_cast<QTabWidget*>(
-                        tabs.widget(gi)))
-                    QObject::connect(
-                        g, &QTabWidget::currentChanged, ribbonStack,
-                        [syncRibbon] { syncRibbon(); });
-            syncRibbon();
-        }
         g_raisePane = [&tabs](QWidget* w) {
             for (auto& f : flatPanes)
                 if (f.w == w) {
-                    tabs.setCurrentWidget(f.inner);
+                    tabs.setCurrentWidget(f.page ? f.page
+                                                 : (QWidget*)f.inner);
                     f.inner->setCurrentWidget(w);
                     return;
                 }
@@ -29175,10 +29238,10 @@ int main(int argc, char** argv) {
         // index: the grouping above is edited often enough that an
         // index would silently start reopening the wrong pane.
         auto currentPaneName = [&tabs]() -> QString {
-            auto* g = qobject_cast<QTabWidget*>(tabs.currentWidget());
-            if (!g) return QString();
+            QWidget* page = tabs.currentWidget();
             for (auto& f : flatPanes)
-                if (f.inner == g && f.w == g->currentWidget())
+                if ((f.page == page || f.inner == page) &&
+                    f.w == f.inner->currentWidget())
                     return f.title;
             return QString();
         };
@@ -29195,7 +29258,8 @@ int main(int argc, char** argv) {
         if (!wantPane.isEmpty())
             for (auto& f : flatPanes)
                 if (f.title == wantPane) {
-                    tabs.setCurrentWidget(f.inner);
+                    tabs.setCurrentWidget(f.page ? f.page
+                                                 : (QWidget*)f.inner);
                     f.inner->setCurrentWidget(f.w);
                     break;
                 }
@@ -29249,6 +29313,9 @@ int main(int argc, char** argv) {
     }
     for (int gi = 0; gi < tabs.count(); ++gi) {
         auto* g = qobject_cast<QTabWidget*>(tabs.widget(gi));
+        if (!g)
+            g = tabs.widget(gi)->findChild<QTabWidget*>(
+                QString(), Qt::FindDirectChildrenOnly);
         if (!g) continue;
         QMenu* gm = win.menuBar()->addMenu(tabs.tabText(gi));
         for (int pi = 0; pi < g->count(); ++pi) {
