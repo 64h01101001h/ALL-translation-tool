@@ -373,6 +373,13 @@ implementation is sidelined HERE from this date. What this means:
              title-vs-translation mismatch + colophon-aware
              same-title/duplicate detection; found 8 real flags and
              107 true-duplicate filings in the installed Sungbum;
+         (2c) PHASE 3 ALSO COMPLETE 2026-08-19 (loop 17-19, suites
+             55 + extensions): shelf suggestions at their measured
+             ceiling (31% top-1/43% top-3 held-out — shelving stays
+             human, numbers printed on the report), witness-hunt
+             links (45/50 missing works yield a BUDA query from
+             their own citation; export handout), worksheet
+             enrichment (MD5, folio range, BDRC permalink).
          (2b) BUILD QUEUE COMPLETE 2026-08-19 — all ten items below
              SHIPPED via the build loop (suites 45-52, sweeps 1->9
              controls, manual 14.5-14.14; see

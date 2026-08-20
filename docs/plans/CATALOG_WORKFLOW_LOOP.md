@@ -392,5 +392,15 @@ mints catalog numbers; the mother copy is never touched.**
       bdrcScanUrl mapping for KD/KL/TD works, language(s) observed.
       Battery: enrichment determinism pins; selftest: enriched
       prefill carries MD5 + folios + BDRC link for a KD probe.
-- [ ] 20. **Closing audit, phase 3**: docs truth pass, verification,
-      TODO/memory reconciliation, stop the loop.
+- [x] 20. **Closing audit, phase 3** — DONE 2026-08-19; ALL THREE
+      PHASES COMPLETE. Ch14 TOC coherent (19 sections); README row
+      carries phases 2+3; TODO 9g reconciled (2c added). Closing
+      verification: ctest 55/55, selftest ALL PASS, sweep 12
+      controls coherent. THE COMPLETE LOOP: 20 iterations, 11 new
+      test suites (45-55), 15 lanes, every threshold measured,
+      5 designs rejected by measurement (title edit-distance, chop
+      end-of-work gate, ASCII-only claim, author-heavy + leaf-
+      weighted shelf scoring), 3 real team findings (95 incomplete
+      META pairs; the Sungbum QC flags + duplicate filings; the
+      Tib:-names-the-author citation discovery). The workbench is
+      complete at its measured, honest ceilings.
