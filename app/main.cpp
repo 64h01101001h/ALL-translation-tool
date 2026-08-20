@@ -12251,15 +12251,13 @@ public:
         // dark and light chrome alike (night-mode audit 2026-08-12)
         doc_->setStyleSheet("color:#9A7A33;font-size:13px");
         v->addWidget(doc_);
-        auto mk = [&](const QString& title, const QString& what) {
+        auto* ribbon = new RibbonBar;
+        auto* gExp = ribbon->group("PUBLISH");
+        auto mk = [&](const QString& title, const QString& what,
+                      const char* icon = "page") {
             auto* b = new QPushButton(title);
-            b->setMinimumHeight(34);
-            v->addWidget(b);
-            auto* d = new QLabel(what);
-            d->setWordWrap(true);
-            d->setStyleSheet("color:#8A8A8A;font-size:12px;"
-                             "margin-bottom:6px");
-            v->addWidget(d);
+            b->setToolTip(what);   // the description lives on hover
+            gExp->addBig(b, icon);
             return b;
         };
         auto* prepB = mk(
@@ -12286,6 +12284,8 @@ public:
             "Clean print-ready Tibetan Unicode with the classical "
             "shad rules; anything the engine cannot convert is "
             "flagged ⟨wylie⟩, never guessed.");
+        ribbon->finish();
+        ribbon->attachTo(this);
         results_ = new QTextBrowser;
         results_->setHtml(
             "<i style='color:#8A8A8A'>Results appear here. Load a "
