@@ -311,7 +311,14 @@ mints catalog numbers; the mother copy is never touched.**
       app never writes the catalog; numbers stay registrar-issued.
       Battery: proposals round-trip with the new kind; selftest:
       propose → appears in queue → approve → export contains it.
-- [ ] 15. **QC lanes over the intake set** (9g step 2, the Lon-demo
+- [x] 15. **QC lanes over the intake set** — SHIPPED 2026-08-19
+      (suite 54 catalog_qc_smoke; selftest pin; sweep 12 controls).
+      Constructed pins prove both lanes' verdicts; the library
+      measure found REAL work in our own Sungbum: 8 mismatch flags
+      (incl. misplaced-field files) and 200 shared-title groups —
+      107 true-duplicate filings, 18 distinct works sharing a
+      title, 75 no-colophon-evidence. Flags are questions with
+      evidence, never verdicts. Original spec: (9g step 2, the Lon-demo
       adoptables): title-vs-translation mismatch (an ACIP-named
       file whose English filename field does not match its Tibetan
       field per the title workbench's attestations — evidence

@@ -62,7 +62,8 @@ app: Help menu → ALL Tool Help & Tutorials.*
   - 14.15 Move to shelf — the handoff
   - 14.16 The worksheet
   - 14.17 Propose this identity — the routing
-  - 14.18 What the workflow will do next
+  - 14.18 QC intake — the two quality lanes
+  - 14.19 What the workflow will do next
 - **CHAPTER 15 — THE PROPOSE PANE (Community → Propose)**
   - 15.1 One-time identity setup
   - 15.2 Making a proposal
@@ -3136,12 +3137,37 @@ the app never writes the catalog, and catalog numbers remain the
 registrar's to issue. A file with no title page is refused with a
 real answer: there is no machine identity to propose.
 
-## 14.18 What the workflow will do next
+## 14.18 QC intake — the two quality lanes
 
-Still to come: the quality-control lanes over the intake set —
-title-versus-translation mismatch and colophon-aware duplicate
-detection. Routing (14.17), the worksheet (14.16), and the handoff
-(14.15) ship above.
+**QC intake…** runs two checks over the whole intake tree, both
+suggestion-only — every flag is a question with its evidence, never
+a verdict, and nothing is changed:
+
+- **Title vs translation.** The copy-paste disease: a filename
+  whose English half belongs to a *different* text. A file is
+  flagged when its English matches another work's published English
+  almost entirely while the two Tibetan titles barely share a
+  syllable — the report shows both works and both percentages and
+  asks the question: is the English half from the wrong text?
+- **Shared titles, told apart by colophon.** Files carrying the
+  same Tibetan title are grouped, and their colophons compared —
+  the session lesson that two works can share a title. Verdicts
+  name their evidence: *same colophon — true duplicates* ·
+  *different colophons — distinct works sharing a title* · *no
+  colophon evidence — needs a human read*.
+
+Run against our own installed Sungbum, the lanes found real work:
+8 mismatch flags and 200 shared-title groups (107 reading as true
+duplicate filings, 18 as distinct works, 75 needing a human) — the
+battery re-measures this on every test run.
+
+## 14.19 What the workflow will do next
+
+The workflow's core is complete: census, identity, audit, splits,
+naming, the ASCII list, the title workbench, tree comparison,
+register, provenance, worksheet, routing, QC, and the handoff all
+ship above. What comes next grows from use — the team's own
+sessions will show where the workbench should deepen.
 
 ---
 

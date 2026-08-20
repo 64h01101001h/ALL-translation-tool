@@ -121,6 +121,7 @@
 #include "allcore/catalog_register.h"
 #include "allcore/title_xlat.h"
 #include "allcore/tree_diff.h"
+#include "allcore/catalog_qc.h"
 #include "allcore/worksheet.h"
 #ifdef ALL_HAVE_OCR
 #include "allocr/linebuild.h"
@@ -23744,6 +23745,14 @@ public:
             "only-right. Content matched by size + sampled bytes; "
             "nothing is changed.");
         actions->addWidget(diffB);
+        auto* qcB = new QPushButton("QC intake\u2026");
+        qcB->setToolTip(
+            "Two quality lanes over the intake tree: filenames whose "
+            "English half looks like it belongs to a DIFFERENT work "
+            "(the copy-paste disease), and files sharing one Tibetan "
+            "title, told apart by their colophons. Flags are "
+            "questions with evidence, never verdicts.");
+        actions->addWidget(qcB);
         auto* wsB = new QPushButton("Worksheet\u2026");
         wsB->setToolTip(
             "The cataloging worksheet on the team's live 52-column "
@@ -23806,6 +23815,16 @@ public:
         };
         connect(nameB, &QPushButton::clicked,
                 [this] { composeNameDialog(); });
+        connect(qcB, &QPushButton::clicked, [this] {
+            if (intake_->root().isEmpty()) {
+                info_->setHtml(
+                    "<div style='color:#777'>Choose the intake "
+                    "folder first \u2014 QC runs over the intake "
+                    "tree.</div>");
+                return;
+            }
+            info_->setHtml(qcIntakeHtml(intake_->root()));
+        });
         connect(wsB, &QPushButton::clicked, [this] {
             if (lastFile_.isEmpty()) {
                 info_->setHtml(
@@ -24831,6 +24850,65 @@ public:
              "are candidates for the intake workflow: locate a "
              "witness, input, propose, approve. Nothing here writes "
              "anything.</div>";
+        return h;
+    }
+
+    // The QC report over a tree. Public for the selftest.
+    QString qcIntakeHtml(const QString& root) {
+        const auto flags = allcore::qcTitleTranslationMismatch(
+            root.toStdString(), titlePairBank());
+        const auto groups =
+            allcore::qcDuplicateTitles(root.toStdString());
+        QString h =
+            "<h3>Intake QC</h3>"
+            "<div style='color:#777'>" + root.toHtmlEscaped() +
+            " \u2014 two lanes; every flag is a question with its "
+            "evidence, never a verdict. Nothing is changed.</div>";
+        h += QString("<div style='margin-top:8px'><b>Title vs "
+                     "translation (%1 flag%2)</b></div>")
+                 .arg(flags.size())
+                 .arg(flags.size() == 1 ? "" : "s");
+        if (flags.empty())
+            h += "<div style='color:#2E7D32'>No filename's English "
+                 "half matches a different work's published English "
+                 "\u2014 clean.</div>";
+        for (const auto& m : flags) {
+            h += "<div style='margin-top:4px'><b>" +
+                 QString::fromStdString(m.file).toHtmlEscaped() +
+                 "</b><div style='color:#777;font-size:11px'>its "
+                 "English \u201c" +
+                 QString::fromStdString(m.own_eng).toHtmlEscaped() +
+                 "\u201d matches <i>" +
+                 QString::fromStdString(m.other_eng).toHtmlEscaped() +
+                 "</i> (" +
+                 QString::fromStdString(m.other_tib).toHtmlEscaped() +
+                 QString(") at %1% while the Tibetan titles share "
+                         "only %2% \u2014 is the English half from "
+                         "the wrong text?</div></div>")
+                     .arg(qRound(m.eng_sim * 100))
+                     .arg(qRound(m.tib_sim * 100));
+        }
+        h += QString("<div style='margin-top:8px'><b>Shared titles "
+                     "(%1 group%2)</b></div>")
+                 .arg(groups.size())
+                 .arg(groups.size() == 1 ? "" : "s");
+        if (groups.empty())
+            h += "<div style='color:#2E7D32'>No two files share a "
+                 "Tibetan title.</div>";
+        for (const auto& g : groups) {
+            h += "<div style='margin-top:4px'><span style="
+                 "'font-family:Palatino'>" +
+                 QString::fromStdString(g.title_norm).toHtmlEscaped() +
+                 "</span><div style='color:#777;font-size:11px'>" +
+                 QString::number(g.members.size()) + " files \u2014 " +
+                 QString::fromStdString(g.verdict).toHtmlEscaped() +
+                 "</div><ul style='margin:2px 0'>";
+            for (const auto& mem : g.members)
+                h += "<li style='font-size:11px'>" +
+                     QString::fromStdString(mem.file).toHtmlEscaped() +
+                     "</li>";
+            h += "</ul></div>";
+        }
         return h;
     }
 
@@ -28761,6 +28839,45 @@ int main(int argc, char** argv) {
                     if (sf.open(QIODevice::WriteOnly))
                         sf.write(storeSnap);
                 }
+                QDir(wd).removeRecursively();
+            }
+            {   // the QC lanes: a planted English-from-the-wrong-text
+                // file is flagged with evidence; a shared-title pair
+                // with differing colophons gets the distinct-works
+                // verdict
+                QDir().mkpath(wd + "/qc");
+                auto wr = [](const QString& p, const QByteArray& b) {
+                    QFile f(p);
+                    f.open(QIODevice::WriteOnly);
+                    f.write(b);
+                };
+                wr(wd + "/qc/S09001_DUS KYI 'KHOR LO'I RGYUD KYI RNAM "
+                        "BSHAD_A Guide to the Bodhisattva Way of "
+                        "Life.txt",
+                   "@1A BDEN,");
+                const QByteArray colo1 =
+                    QByteArray(9000, 'K') +
+                    ",,DGE SLONG BLO BZANG GIS SBYAR BA'O,,";
+                const QByteArray colo2 =
+                    QByteArray(9000, 'K') +
+                    ",,MKHAN CHEN RIN CHEN GYIS SBYAR BA'O,,";
+                wr(wd + "/qc/S09010_BLO SBYONG DON BDUN MA_Seven A.txt",
+                   colo1);
+                wr(wd + "/qc/S09011_BLO SBYONG DON BDUN MA_Seven B.txt",
+                   colo2);
+                const QString qh =
+                    catalogPane->qcIntakeHtml(wd + "/qc");
+                const bool qcOk =
+                    qh.contains("S09001") &&
+                    qh.contains("wrong text?") &&
+                    qh.contains("BLO SBYONG DON BDUN MA") &&
+                    qh.contains("distinct works") &&
+                    qh.contains("never a verdict");
+                log << QString("  [%1] Catalog: QC flags the "
+                               "wrong-text English and tells shared "
+                               "titles apart by colophon")
+                           .arg(qcOk ? "PASS" : "FAIL");
+                if (!qcOk) ++fails;
                 QDir(wd).removeRecursively();
             }
             {   // GMR's job #1 must render as a real report — the
