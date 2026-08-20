@@ -5097,6 +5097,22 @@ public:
             ll->addWidget(eb);
         }
 
+        // UX audit H2 (2026-08-20): presets — one click sets the
+        // whole layer set for a way of working; individual toggles
+        // still rule after
+        {
+            auto* pr = new QLabel(
+                QString("<small style='color:%1'>presets: "
+                        "<a href='preset:reading'>reading</a> · "
+                        "<a href='preset:research'>research</a> · "
+                        "<a href='preset:minimal'>minimal</a>"
+                        "</small>")
+                    .arg(ux::kFaint));
+            pr->setTextInteractionFlags(Qt::TextBrowserInteraction);
+            connect(pr, &QLabel::linkActivated,
+                    [this](const QString& l) { applyPreset(l); });
+            ll->addWidget(pr);
+        }
         showPhon_ = mkToggle("phonetics", "phonetics", true);
         showGloss_ = mkToggle("glosses", "HGM definitions", true);
         showCorpus_ = mkToggle("corpus", "corpus usage (contextual)", true);
@@ -6159,6 +6175,40 @@ public:
     }
 
 private:
+    // H2 presets: reading = the daily set · research = everything ·
+    // minimal = HGM only. setChecked drives each toggle's existing
+    // handler, so persistence and re-render come free.
+    void applyPreset(const QString& link) {
+        const QString p = link.startsWith("preset:") ? link.mid(7)
+                                                     : link;
+        auto set = [](QCheckBox* c, bool on) {
+            if (c && c->isChecked() != on) c->setChecked(on);
+        };
+        if (p == "research") {
+            for (QCheckBox* c :
+                 {showPhon_, showGloss_, showCorpus_, showSanskrit_,
+                  showHopkins_, show84000_, showTeachings_, showDas_,
+                  showRefs_, showNotes_, showGrammar_, showSeg_,
+                  showAttest_})
+                set(c, true);
+        } else if (p == "reading") {
+            set(showPhon_, true); set(showGloss_, true);
+            set(showCorpus_, true); set(showTeachings_, true);
+            set(showGrammar_, true);
+            set(showSanskrit_, false); set(showHopkins_, false);
+            set(show84000_, false); set(showDas_, false);
+            set(showRefs_, false); set(showNotes_, false);
+            set(showSeg_, false); set(showAttest_, false);
+        } else if (p == "minimal") {
+            set(showGloss_, true);
+            for (QCheckBox* c :
+                 {showPhon_, showCorpus_, showSanskrit_, showHopkins_,
+                  show84000_, showTeachings_, showDas_, showRefs_,
+                  showNotes_, showGrammar_, showSeg_, showAttest_})
+                set(c, false);
+        }
+    }
+
     void refreshCard() {
         if (lastTok_ < 0 || lastTok_ >= (int)tokBeg_.size()) return;
         cardRefresh_ = true;
