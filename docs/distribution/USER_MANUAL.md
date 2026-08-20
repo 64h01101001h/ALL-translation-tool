@@ -1093,6 +1093,12 @@ connections (SFTP/FTP).*
 
 ## Manuscript
 
+> **House styles (2026-08-20).** The Manuscript bar is now a ribbon
+> with a **HOUSE STYLES** gallery — Body, Heading, Section, Verse,
+> Colophon — each button previewing its own look. Select paragraphs
+> and click: the style applies (indent, weight, size, italics per
+> the published books' grammar) and the RTF export carries it.
+
 *Where: Translate → Manuscript. The writing surface — the
 manuscript itself, with the corpus one keystroke away.*
 
@@ -2417,6 +2423,12 @@ models component — every standard team build has it.)*
 
 ## 12.3 Tutorial: the block workflow (a folder of pages)
 
+> **The folio strip (2026-08-20).** In block mode a thumbnail rail
+> runs beneath the editor — every page of the block as a small
+> image, a ✓ on pages that already carry typing, the current page
+> highlighted. Click any thumbnail to jump there. Thumbnails fill
+> in lazily, so a 400-page volume opens instantly.
+
 This is how a real input assignment is worked: a folder of page
 scans, typed in order, with your work autosaved page by page.
 
@@ -3593,6 +3605,16 @@ years this is a record of the authority's own judgments. Click
 ---
 
 # CHAPTER 17 — THE APP ITSELF
+
+> **New in the Word-style wave (2026-08-20):** an **Edit menu**
+> (Undo/Redo, Cut/Copy/Paste/Delete, Select All) acting on
+> whichever editor has focus; a visible **🔎 Hunt (⌘K)** button
+> beside the group tabs; and the **Quick Access Toolbar** — the
+> thin strip above the tabs where the ★ menu lets you pin any
+> command from any pane, kept one click away everywhere. The
+> Catalog, OCR, Library, and Manuscript panes now present their
+> tools as a **ribbon** — labeled groups in one strip, captions
+> beneath — with more panes following.
 
 This chapter covers everything that belongs to the application as
 a whole rather than to any one pane.
