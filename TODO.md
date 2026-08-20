@@ -1182,8 +1182,18 @@ implementation is sidelined HERE from this date. What this means:
       authority; external-content FTS delete-sync updated for both
       columns; pre-norm indexes migrate by one-time rebuild; battery:
       BDEN PA'I line answers a bden pa search).
-- [ ] **Steinert public dictionary CSVs** — Lookup-pane layers AFTER
-      per-dictionary license review (code is GPL — data only).
+- [x] **Steinert public dictionary CSVs** — REVIEW DONE 2026-08-20,
+      docs/research/STEINERT_DICT_LICENSES.md: all 46 public dicts
+      classified. Steinert's own README: copyright stays with the
+      respective authors — no repo-level grant. Everything clean we
+      already carry via better channels (84000 direct, Laine CC BY,
+      DILA MVP, LC-from-ACIP, Das index by email grant); the rest is
+      DO-NOT-INGEST (Hopkins/UMA, RY family, published Tib-Tib
+      dictionaries…) or one of SIX named outreach candidates
+      (TibTermProject/CTA, ComputerTerms, GaengWetzel, Yogacarabhumi/
+      Mahoney, Nick Prior colloquial vocab, Jäschke index already in
+      the queued Steinert thanks email) → folded into the Adam-gated
+      email batch. No ingest work follows until a grant lands.
 - [x] **bophono** — CORE REQUEST SATISFIED 2026-08-13 by our own THL Simplified Phonetics engine (139/139 battery; Overlay display mode + Convert row) — the 'THL scheme beside GMR' ask. bophono itself (Tournadre IPA etc.) stays optional/parked. Original: optional non-GMR phonetics schemes toggle
       (GMR convention stays binding). REQUESTED by Adam 2026-08-12:
       a THL-scheme option beside the new Pronunciation (GMR) display
