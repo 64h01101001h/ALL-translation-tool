@@ -24211,6 +24211,69 @@ protected:
     }
 };
 
+// ---- RibbonBar (9k ruling, 2026-08-20): the Word-style toolbar —
+// controls organized into labeled GROUPS in one strip across the
+// top, the group caption set small beneath its buttons, hairline
+// separators between groups. Adam's screenshot is the model; the
+// Catalog pane is the pilot, then pane by pane as the campaign
+// settles each. Buttons are plain QPushButtons so the sweep, the
+// lock gates, and every existing connect() work unchanged.
+class RibbonGroup : public QWidget {
+public:
+    explicit RibbonGroup(const QString& caption,
+                         QWidget* parent = nullptr)
+        : QWidget(parent) {
+        auto* v = new QVBoxLayout(this);
+        v->setContentsMargins(2, 2, 2, 0);
+        v->setSpacing(2);
+        row_ = new QHBoxLayout;
+        row_->setSpacing(4);
+        v->addLayout(row_);
+        v->addStretch();
+        auto* cap = new QLabel(caption);
+        cap->setAlignment(Qt::AlignHCenter);
+        cap->setStyleSheet(
+            "color:#9A7A33;font-size:9px;letter-spacing:1.5px;"
+            "font-weight:600;");
+        v->addWidget(cap);
+    }
+    void add(QWidget* w) { row_->addWidget(w); }
+
+private:
+    QHBoxLayout* row_ = nullptr;
+};
+
+class RibbonBar : public QWidget {
+public:
+    explicit RibbonBar(QWidget* parent = nullptr) : QWidget(parent) {
+        setObjectName("ribbonBar");
+        setStyleSheet(
+            "#ribbonBar { background:palette(alternate-base); "
+            "border:1px solid palette(mid); border-radius:4px; }"
+            "#ribbonBar QPushButton { padding:4px 10px; }");
+        row_ = new QHBoxLayout(this);
+        row_->setContentsMargins(6, 2, 6, 2);
+        row_->setSpacing(0);
+    }
+    RibbonGroup* group(const QString& caption) {
+        if (!first_) {
+            auto* sep = new QFrame;
+            sep->setFrameShape(QFrame::VLine);
+            sep->setStyleSheet("color:palette(mid)");
+            row_->addWidget(sep);
+        }
+        first_ = false;
+        auto* g = new RibbonGroup(caption);
+        row_->addWidget(g);
+        return g;
+    }
+    void finish() { row_->addStretch(); }
+
+private:
+    QHBoxLayout* row_ = nullptr;
+    bool first_ = true;
+};
+
 // One tree browser over one folder: its own root chooser, its own
 // census, its own remembered root. The Catalog pane runs two of them.
 class CatalogTree : public QWidget {
@@ -24387,7 +24450,13 @@ public:
             "share.</span>");
         banner->setWordWrap(true);
         outer->addWidget(banner);
-        auto* access = new QHBoxLayout;
+        // the ribbon (9k pilot): five labeled groups, one strip
+        auto* ribbon = new RibbonBar;
+        auto* gAccess = ribbon->group("ACCESS");
+        auto* gSuggest = ribbon->group("SUGGEST");
+        auto* gInventory = ribbon->group("INVENTORY");
+        auto* gQc = ribbon->group("QC");
+        auto* gHandoff = ribbon->group("HANDOFF");
         auto* offB = new QPushButton("Official library…");
         offB->setToolTip(
             "Choose the team's OFFICIAL library folder — the "
@@ -24395,13 +24464,9 @@ public:
             "AWAITING APPROVAL staging area, and every approved "
             "placement live inside it, so Dropbox carries all of it "
             "to the whole team.");
-        access->addWidget(offB);
+        gAccess->add(offB);
         auto* loginB = new QPushButton("Sign in…");
-        access->addWidget(loginB);
-        who_ = new QLabel;
-        who_->setStyleSheet("color:#777");
-        access->addWidget(who_);
-        access->addStretch();
+        gAccess->add(loginB);
         pendB_ = new QPushButton("Approvals…");
         pendB_->setToolTip(
             "The list of staged cataloging actions awaiting Geshe "
@@ -24410,14 +24475,16 @@ public:
             "staged file onto its shelf; reject moves it to "
             "REJECTED with the reason. Anyone signed in can read "
             "the list; only an approver can rule.");
-        access->addWidget(pendB_);
+        gHandoff->add(pendB_);
         teamB_ = new QPushButton("Team…");
         teamB_->setToolTip(
             "The roster: who may use this workflow, and as whom. "
             "Admins add members (each with their own passphrase) "
             "and revoke access.");
-        access->addWidget(teamB_);
-        outer->addLayout(access);
+        gAccess->add(teamB_);
+        who_ = new QLabel;
+        who_->setStyleSheet("color:#777");
+        gAccess->add(who_);
         connect(offB, &QPushButton::clicked, [this] {
             const QString d = safeGetExistingDirectory(
                 this, "Choose the OFFICIAL shared library folder "
@@ -24432,21 +24499,20 @@ public:
                 [this] { approvalsDialog(); });
         connect(teamB_, &QPushButton::clicked,
                 [this] { teamDialog(); });
-        auto* actions = new QHBoxLayout;
         auto* auditB = new QPushButton("Audit bibliographies\u2026");
         auditB->setToolTip(
             "GMR's first job to the cataloging class: every ACIP number "
             "cited in the published Mixed Nuts bibliographies must exist "
             "in the database. Checks the citations against the "
             "destination tree.");
-        actions->addWidget(auditB);
+        gInventory->add(auditB);
         auto* splitB = new QPushButton("Suggest splits\u2026");
         splitB->setToolTip(
             "Chop assist: scan the selected intake file for candidate "
             "text boundaries (bilingual heads, BZHUGS SO title blocks) "
             "and list them with evidence. Nothing is cut \u2014 the "
             "mother copy is never touched.");
-        actions->addWidget(splitB);
+        gSuggest->add(splitB);
         auto* nameB = new QPushButton("Compose name\u2026");
         nameB->setToolTip(
             "Build a filename in the house grammar: NUMBER_TIBETAN_"
@@ -24455,13 +24521,13 @@ public:
             "names truncate mid-word with '+' and a NUMBER META.TXT "
             "companion, exactly as the library's 1,457 existing pairs "
             "do.");
-        actions->addWidget(nameB);
+        gSuggest->add(nameB);
         auto* listB = new QPushButton("Generate catalog list\u2026");
         listB->setToolTip(
             "Write the field-coded ASCII list of what the destination "
             "tree holds (S/F/T/E/A/V/P lines, St. Petersburg lineage) "
             "\u2014 a LIST of the folders, not the official catalog.");
-        actions->addWidget(listB);
+        gInventory->add(listB);
         auto* xlatB = new QPushButton("Translate title\u2026");
         xlatB->setToolTip(
             "The attestation workbench: whole-title matches from the "
@@ -24469,7 +24535,7 @@ public:
             "phrase of the title has been rendered in OTHER published "
             "titles. The machine attests; you compose \u2014 nothing "
             "is machine-translated.");
-        actions->addWidget(xlatB);
+        gSuggest->add(xlatB);
         auto* diffB = new QPushButton("Compare trees\u2026");
         diffB->setToolTip(
             "The divergence audit (session 3: GMR's copy vs Nick's): "
@@ -24477,7 +24543,7 @@ public:
             "identical, modified, renamed/refiled, only-left, "
             "only-right. Content matched by size + sampled bytes; "
             "nothing is changed.");
-        actions->addWidget(diffB);
+        gInventory->add(diffB);
         auto* qcB = new QPushButton("QC intake\u2026");
         qcB->setToolTip(
             "Two quality lanes over the intake tree: filenames whose "
@@ -24485,7 +24551,7 @@ public:
             "(the copy-paste disease), and files sharing one Tibetan "
             "title, told apart by their colophons. Flags are "
             "questions with evidence, never verdicts.");
-        actions->addWidget(qcB);
+        gQc->add(qcB);
         auto* wsB = new QPushButton("Worksheet\u2026");
         wsB->setToolTip(
             "The cataloging worksheet on the team's live 52-column "
@@ -24494,7 +24560,7 @@ public:
             "a sidecar beside the intake file; Export row emits one "
             "CSV line for the live spreadsheet \u2014 which stays "
             "the team's master.");
-        actions->addWidget(wsB);
+        gQc->add(wsB);
         auto* moveB = new QPushButton("Move to shelf\u2026");
         moveB->setToolTip(
             "The handoff: MOVE the selected intake file onto the shelf "
@@ -24502,7 +24568,7 @@ public:
             "companion travels along; collisions are refused; nothing "
             "is deleted. The shelf choice is yours \u2014 a book on "
             "the wrong shelf is lost forever.");
-        actions->addWidget(moveB);
+        gHandoff->add(moveB);
         auto* regB = new QPushButton("Load register\u2026");
         regB->setToolTip(
             "Load the registrar's spreadsheet (CSV/TSV: number, title, "
@@ -24510,9 +24576,9 @@ public:
             "three states per work: number issued \u00b7 input exists "
             "\u00b7 cataloged. The app never writes the register and "
             "never mints numbers.");
-        actions->addWidget(regB);
-        actions->addStretch();
-        outer->addLayout(actions);
+        gInventory->add(regB);
+        ribbon->finish();
+        outer->addWidget(ribbon);
         // in-house gate: every catalog ACTION requires a signed-in
         // roster member; browsing the trees stays open
         gated_ = {auditB, splitB, nameB, listB, xlatB,

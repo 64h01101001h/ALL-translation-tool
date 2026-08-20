@@ -680,6 +680,22 @@ implementation is sidelined HERE from this date. What this means:
              top-level menus instead of per-pane dumps.
          Pairs with 9k (toolbars) as the menu half of the same
          presentation wave; sequence with the campaign findings.
+      9m. **FULL GUI RELAYOUT IN THE MICROSOFT STYLE — MOCKUPS FIRST
+         (Adam, 2026-08-20: "the tool bar is going to be key. maybe
+         we should reconsider the way our gui is layed out. maybe
+         you could give me some mockups of how a new gui layout that
+         would follow the way that microsoft works"):** produce a
+         MOCKUP BOARD (like the 9j/9k design board) showing the
+         whole app re-imagined Word-style: ribbon tabs across the
+         top as the PRIMARY navigation (possibly replacing the
+         current two-level group/pane tabs), one document/work
+         surface below, panels docking right (card/evidence) the
+         way Word docks Styles/Comments, a status bar. 2-3 whole-
+         window layout candidates with real pane content; Adam
+         picks; then staged migration (the 9k ribbon pilot on
+         Catalog is the first working taste and already shipped).
+         Supersedes/absorbs the pane-by-pane framing of 9k if Adam
+         chooses a global relayout.
       10. Idea bank (liked, never scheduled): pronunciation trainer (DECLINED-AS-CONCEIVED 2026-08-20: whisper's Tibetan too weak to honestly score learner speech — rule 3; needs a design conversation) ·
          Text DNA strips DONE 2026-08-20 (Overlay REVIEW → Text DNA: one colored column per source line — meter/off-meter/prose/blank + quote-announcement ticks; hover + click-to-jump; allcore textdna, suite 58; summary+jump selftest pin) · team board · apprenticeship mode ·
          English-on-the-carving hover DONE 2026-08-20 (cache-only tooltip over the woodblock: OCR-read wylie + HGM gloss, review-material label; seeded-cache selftest pin) · teaching-playlist karaoke ·
