@@ -269,3 +269,10 @@ icon families with washes (visibility ruling, 2026-08-20).*
   search zero-hit state offers the pane's REAL widening moves (combiner,
   NEAR window, folder scope, case) — first drafted with a typed-grammar
   description, corrected against the actual combiner control before commit.
+- 2026-08-20 · **Approval pane joins the band** (QUEUE / RULINGS / RELEASE;
+  the kind-filter rides in-band). Screenshot-verified: 225-pending queue
+  renders under the band untouched.
+- 2026-08-20 · **Propose stays a form pane.** Its whole surface is the
+  proposal form plus one-time identity setup; the query/form-surface
+  ruling applies. With this, every pane has either a band or a logged
+  ruling — the H3 coverage pass is complete.

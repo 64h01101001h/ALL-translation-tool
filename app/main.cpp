@@ -24088,7 +24088,10 @@ public:
             "corpus itself.");
         apBanner->setWordWrap(true);
         outer->addWidget(apBanner);
-        auto* row = new QHBoxLayout;
+        auto* ribbon = new RibbonBar;
+        auto* gQueue = ribbon->group("QUEUE");
+        auto* gRule = ribbon->group("RULINGS");
+        auto* gRel = ribbon->group("RELEASE");
         auto* refresh = new QPushButton("Refresh queue");
         auto* exportB = new QPushButton("Export approved dictionary "
                                         "candidates…");
@@ -24118,19 +24121,20 @@ public:
         filter_->addItem("Catalog identities", "catalog-identity");
         filter_->addItem("Words / phrases / notes", "export");
         sess::remember(filter_, "approval/kind");
-        row->addWidget(filter_);
-        row->addWidget(refresh);
-        row->addWidget(bulkB);
-        row->addWidget(exportB);
-        row->addWidget(archiveB);
+        gQueue->add(filter_);
+        gQueue->addBig(refresh, "clock");
+        gRule->addBig(bulkB, "check");
+        gRel->addBig(exportB, "save");
+        gRule->addBig(archiveB, "ledger");
         auto* regenB = new QPushButton("Regenerate registers");
         regenB->setToolTip(
             "Re-derive the approved layer of the register files "
             "from the rulings store — idempotent, and the way to "
             "re-fold approvals after importing a new data release.");
-        row->addWidget(regenB);
-        row->addStretch();
-        outer->addLayout(row);
+        gRel->addBig(regenB, "gear");
+
+        ribbon->finish();
+        ribbon->attachTo(this);
         list_ = new QTextBrowser;
         list_->setOpenLinks(false);
         outer->addWidget(list_, 1);
