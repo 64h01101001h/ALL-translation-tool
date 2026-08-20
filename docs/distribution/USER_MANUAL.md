@@ -1316,6 +1316,25 @@ Geshe Michael may already have a rendering.
   ANTHROPIC_API_KEY is configured.
 
 
+### The Apparatus pane — the published bank itself
+
+The **Apparatus** pane (same Translate group) is the bank the
+search box reaches: all 2,234 published footnotes and the
+bibliography, scrollable and searchable, official tier only —
+what shipped in the released volumes, nothing pending.
+
+Under a footnote's text you may see **TIBETAN NAMED IN THIS
+NOTE** — the Tibetan term(s) the note is talking about, each in
+Tibetan script with its wylie and the evidence it was located
+from. These are **machine-located candidates, never a ruling**:
+either the note itself quotes the Tibetan in its own body (the
+evidence line shows that sentence), or — added 2026-08-20 —
+Geshe Michael's own English equivalent for a dictionary entry is
+exactly this footnote's lemma (the evidence names the gloss, its
+tier, and marks PROVISIONAL tiers plainly). 252 of the 2,234
+notes carry such candidates today; the rest stay honestly bare
+rather than guessed at.
+
 ## Review
 
 *Where: Translate → Review. The overseer's bench — a senior

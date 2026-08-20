@@ -190,6 +190,21 @@ implementation is sidelined HERE from this date. What this means:
          SHIP ORDER: schema field first (so the pane can show what
          exists), then route 3, then routes 1+2, then the pane's
          display + a battery pinning known-good and known-bad pairs.
+         PROGRESS: schema + route 3 SHIPPED 2026-08-18 (commit
+         946e8a3: 117 body-quoted notes, evidence sentences carried,
+         "TIBETAN NAMED IN THIS NOTE" block + rendered-detail pin).
+         ROUTE 4 SHIPPED 2026-08-20: tools/build_apparatus_anchors_r4
+         .py (banked — route 3's generator never was; lesson noted)
+         resolves lemmas through hgm_reverse_index with the
+         gloss-equality gate (a lemma anchors only when it is EXACTLY
+         one of an entry's own hgm_glosses — rule 1 by construction);
+         tier discipline: curated/glossary preferred, auto-aligned
+         only alone, capped 3, labeled PROVISIONAL. +134 notes → 252
+         of 2,234 anchored; pane label covers both methods; selftest
+         floor 240 + route-4 evidence render pinned. REMAINING:
+         routes 1+2 (course-constrained corpus match + phrase
+         isolation — the dangerous one, measured 2026-08-15; needs
+         source-work→course mapping first) stay open.
       9d. **GMR RULING — resolve Tibetan number through the
          Sanskrit (Adam relaying Geshe Michael, 2026-08-15).** His
          method: *when you are stuck on whether a Tibetan term is

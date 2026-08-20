@@ -11348,8 +11348,9 @@ public:
             "<hr><div style='font-size:12px;color:#7C2D26;"
             "font-weight:600;letter-spacing:.06em'>TIBETAN NAMED IN "
             "THIS NOTE</div><div style='font-size:12px;color:#888'>"
-            "<i>machine-located from the note's own words and matched "
-            "against attested dictionary entries &mdash; candidates, "
+            "<i>machine-located &mdash; from the note's own words, "
+            "or (labeled) where HGM's own English equivalent is "
+            "exactly this lemma &mdash; candidates, "
             "not a ruling on which term the note hangs on</i></div>";
         for (const auto& a : n.anchors) {
             auto [uni, ok] =
@@ -11365,9 +11366,15 @@ public:
                 h += " <span style='color:#888;font-size:12px'>(written "
                      "&ldquo;" + a.asWritten.toHtmlEscaped() +
                      "&rdquo;)</span>";
+            // body excerpts get ellipses; complete evidence
+            // sentences (reverse-index route) stand alone
+            const bool sentence = a.evidence.trimmed().endsWith('.');
             h += "<div style='color:#666;font-size:12px;margin-left:"
-                 "12px'>&hellip;" + a.evidence.toHtmlEscaped() +
-                 "&hellip;</div></div>";
+                 "12px'>" +
+                 (sentence ? QString() : QString("&hellip;")) +
+                 a.evidence.toHtmlEscaped() +
+                 (sentence ? QString() : QString("&hellip;")) +
+                 "</div></div>";
         }
         return h;
     }
@@ -28708,12 +28715,27 @@ int main(int argc, char** argv) {
                         ++withAnchors;
                         if (!sample) sample = &n;
                     }
-            bool ok = withAnchors > 0 && sample;
+            // route 4 (2026-08-20) lifted the floor: 117 body-quoted
+            // + 134 reverse-index notes = 250 rows; assert just under
+            bool ok = withAnchors >= 240 && sample;
             if (ok) {
                 const QString h = ApparatusPane::anchorHtml(*sample);
                 ok = h.contains("TIBETAN NAMED IN THIS NOTE") &&
                      h.contains(sample->anchors.front().wylie) &&
                      h.contains("candidates");   // never asserted
+            }
+            if (ok && g_appNotes) {
+                // a reverse-index anchor renders WITH its labeled
+                // HGM-equivalence evidence (complete sentence, no
+                // excerpt ellipses)
+                const ApparatusNote* r4 = nullptr;
+                for (const auto& n : *g_appNotes)
+                    for (const auto& a : n.anchors)
+                        if (!r4 && a.evidence.contains(
+                                       "HGM's own English equivalent"))
+                            r4 = &n;
+                ok = r4 && ApparatusPane::anchorHtml(*r4).contains(
+                               "hgm_reverse_index");
             }
             {   // ⌘K reaches the apparatus (Adam: "search my
                 // footnotes and bibliography entries" — asked from
