@@ -127,7 +127,7 @@ and the technical overview is in your hands whenever you want it."
 
 - "A full canonical volume — 344,000 syllables — processes in under
   half a second."
-- "Thirty-eight automated test batteries run before any change ships."
+- "Fifty-five automated test batteries run before any change ships." (55 as of 2026-08-20; check ctest for the current count before demoing.)
 - "The registers grew this weekend from four grammars — Hackett,
   Goldstein, Tournadre — every entry cited to its page."
 - "This is ACE reborn" (Input pane) — "software the Project built

@@ -63,7 +63,7 @@ listed as top-row buttons (now under Maintenance…). Pane-name drift:
 ACTION: truth pass with live numbers; consider generating counts
 into docs from the batteries rather than hand-writing them.
 
-### D5. "Only two network features" claim is stale
+### D5. "Only two network features" claim is stale — FIXED 2026-08-20 (truth pass): both manual sites now enumerate the real list (Analysis, AI back-check, BDRC scans, OCR-model downloads)
 BDRC scans, collection updates, teaching links, link-outs, and the
 Files pane's remote connections all reach the network. The honest
 claim is "fully offline for all reading/translation; network only

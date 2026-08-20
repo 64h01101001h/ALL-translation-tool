@@ -1293,8 +1293,9 @@ Geshe Michael may already have a rendering.
   for the publishing workflow. Text between \*asterisks\* becomes
   italic (STD-004: name-parts woven into a verse are italicized in
   the English).
-- **AI back-check (API, labeled AI)** — one of the app's two
-  network features. Produces a coverage report only — omissions
+- **AI back-check (API, labeled AI)** — one of the app's few
+  network-touching features (see the Analysis chapter for the full
+  list). Produces a coverage report only — omissions
   and additions between source and draft — and is **forbidden by
   construction to retranslate**. Output is banner-labeled AI. The
   button is disabled (with a tooltip saying why) unless an
@@ -1945,8 +1946,10 @@ converter never sees them.
 ## Analysis
 
 *Research → Analysis. The full eighteen-section grammatical analysis
-of a passage. One of only two features in the app that touch the
-network.*
+of a passage. One of the app's few network-touching features — the
+others are the Draft pane's AI back-check, the Overlay's BDRC scan
+viewer, and the Scan pane's OCR-model downloads; everything else
+runs fully offline.*
 
 ### What it is, and what it costs
 
@@ -3546,8 +3549,9 @@ after the app); they are also under **View** on every platform.
   into translations, and students into translators — with Geshe
   Michael Roach's English as the binding layer. The machine may
   match the master's English; it may never compose it."*;
-- the build line (C++20, the Qt version, 38 automated test
-  batteries, runs fully offline), a contact email link, and a
+- the build line (C++20, the Qt version, the number of automated
+  test batteries — counted at build time, so it is always current
+  — runs fully offline), a contact email link, and a
   note that third-party components and data sources are credited
   in OPEN_SOURCE_NOTICES, shipped with every release.
 
@@ -3671,7 +3675,7 @@ Terminal and run the app binary with the `--selftest` flag:
     "/Applications/ALL Translation Tool.app/Contents/MacOS/ALL Translation Tool" --selftest
 
 The app constructs its real panes offscreen against the real data
-and exercises them — 89 checks at this writing (the battery grows
+and exercises them — 203 checks at this writing, 2026-08-20 (the battery grows
 with every feature), each printing PASS or FAIL with a one-line
 description:
 
@@ -3684,7 +3688,8 @@ description:
 A clean run exits with status 0; any failure exits nonzero and the
 FAIL lines localize the problem — copy them into your message to
 support and the diagnosis is already half done. (Behind the
-scenes, thirty-eight automated test batteries also run before any
+scenes, fifty-five automated test batteries (as of 2026-08-20; the
+count grows with every feature) also run before any
 change to the software ships.)
 
 ---

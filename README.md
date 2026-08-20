@@ -20,7 +20,7 @@ The window is organized in six workflow tabs — **Read** (Overlay,
 Library), **Translate** (Manuscript, Draft, Review, Align),
 **Research** (Search, Lookup, Sanskrit, Convert, Analysis), **Learn**
 (Trainer, Drills), **Input** (Input, Scan), **Community** (Propose,
-Approval) — seventeen panes in all, and the menu bar mirrors the
+Approval) — twenty-two panes in all, and the menu bar mirrors the
 groups. "Read → Library" means: click the Read tab, then the Library
 tab under it. The full user guide is `data/help/tutorials.md`.
 
@@ -67,7 +67,7 @@ dictionaries from their original binaries: `tools/extract_hypercontext_dic.py`,
 
     ctest --test-dir cmake-build
 
-36 suites, ~600k verified data points. The engine batteries enforce founding
+55 suites (2026-08-20; the count grows with every feature), ~600k verified data points. The engine batteries enforce founding
 rule 2 (a port that fails its battery does not ship): `acipToEwts` must match
 all 42,199 corpus conversions (100.000%), `wylieToUnicode` must hit the
 canonical 99.03% on 26,318 ground-truth pairs, `pronounce` must be identical

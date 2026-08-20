@@ -1,8 +1,8 @@
 # ALL Translation Tool — Developer Handbook
 
 *Under the hood, for the development team. Current as of
-**2026-08-14, v0.12.0** (39 test batteries, 159 in-app selftest
-checks, corpus v32, 503 commits). Companion documents:
+**2026-08-20, v0.12.0** (55 test batteries, 203 in-app selftest
+checks, corpus v32). Companion documents:
 `README.md` (user-facing pane guide),
 `ALL_TRANSLATION_TOOL_ROADMAP.md` (master plan), `TODO.md` (the
 single live ledger — includes the merged attack queue as of

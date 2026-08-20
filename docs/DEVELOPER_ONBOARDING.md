@@ -26,7 +26,7 @@ nothing: `python3 tools/build_spine.py` (release package + corpus →
 
 ## Prove the build
 
-    ctest --test-dir cmake-build             # 38 suites
+    ctest --test-dir cmake-build             # 55 suites (2026-08-20)
     ./cmake-build/app/ALLTranslationTool.app/Contents/MacOS/\
 ALLTranslationTool --selftest                # 80 checks
 

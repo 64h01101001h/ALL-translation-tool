@@ -8,7 +8,7 @@ human half is everything the script cannot know.
 ## 0. Before you run the script
 
 - [ ] Working tree committed; batteries green locally
-      (`ctest --test-dir cmake-build` — 38 suites — and
+      (`ctest --test-dir cmake-build` — all suites, 55 as of 2026-08-20 — and
       `./ALLTranslationTool --selftest` — 80 checks).
 - [ ] If the selftest or suite count changed this cycle, update the
       references in the docs that quote them (README.md,
