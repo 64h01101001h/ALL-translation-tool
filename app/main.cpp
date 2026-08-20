@@ -4459,22 +4459,25 @@ public:
         auto* left = new QWidget;
         auto* ll = new QVBoxLayout(left);
         ll->setContentsMargins(0, 4, 0, 0);
+        auto* ribbon = new RibbonBar;
+        auto* gDoc = ribbon->group("DOCUMENT");
+        auto* gReview = ribbon->group("REVIEW");
+        auto* gSpell = ribbon->group("SPELLING");
+        overlayScanGroup_ = ribbon->group("WOODBLOCK");
         auto* open = new QPushButton("Open ACIP file…");
         open->setIcon(miniIcon("page"));
-        ll->addWidget(open);
+        gDoc->addBig(open, "page");
         auto* load = new QPushButton("Load into overlay");
         load->setIcon(miniIcon("book"));
-        ll->addWidget(load);
-auto* secRev = new QLabel("<span style='color:#9A7A33;font-size:10px;letter-spacing:2px;font-weight:600'>REVIEW</span>");
-        secRev->setContentsMargins(0, 8, 0, 0);
-        ll->addWidget(secRev);
+        gDoc->addBig(load, "book");
+
         auto* sabcadB = new QPushButton("Outline (sa bcad)…");
         sabcadB->setToolTip(
             "The text's own structural outline, extracted from "
             "its enumeration grammar (…la gnyis / dang po…). "
             "Machine-derived and heuristic — headings jump the "
             "document, and the scans follow.");
-        ll->addWidget(sabcadB);
+        gReview->addBig(sabcadB, "page");
         connect(sabcadB, &QPushButton::clicked,
                 [this] { showSaBcad(); });
         auto* citeB = new QPushButton("Citations && quotations…");
@@ -4484,7 +4487,7 @@ auto* secRev = new QLabel("<span style='color:#9A7A33;font-size:10px;letter-spac
             "Resolved sources open in the Library; every quote "
             "can be hunted across the whole Library in one "
             "click — the search lands inside the cited texts.");
-        ll->addWidget(citeB);
+        gReview->addBig(citeB, "book");
         connect(citeB, &QPushButton::clicked,
                 [this] { showCitations(); });
         auto* meterB = new QPushButton("Verse meter…");
@@ -4493,7 +4496,7 @@ auto* secRev = new QLabel("<span style='color:#9A7A33;font-size:10px;letter-spac
             "count are verse; lines off the count are flagged "
             "for your judgment — a keying slip and poetic "
             "license look identical to arithmetic.");
-        ll->addWidget(meterB);
+        gReview->addBig(meterB, "diff");
         connect(meterB, &QPushButton::clicked,
                 [this] { showVerseMeter(); });
         auto* readerB = new QPushButton(
@@ -4505,7 +4508,7 @@ auto* secRev = new QLabel("<span style='color:#9A7A33;font-size:10px;letter-spac
             "running counts ARE the structure — watch a Tengyur "
             "text resolve into its 7s and 9s. Live: the reader "
             "re-counts as the document changes.");
-        ll->addWidget(readerB);
+        gReview->addBig(readerB, "book");
         connect(readerB, &QPushButton::clicked,
                 [this] { showMeterReader(); });
         auto* dnaB = new QPushButton("Text DNA (structure strip)\u2026");
@@ -4517,7 +4520,7 @@ auto* secRev = new QLabel("<span style='color:#9A7A33;font-size:10px;letter-spac
             "lines (\u2026zhes/ces + a speech verb). Pure "
             "measurement \u2014 click anywhere to jump the "
             "document there.");
-        ll->addWidget(dnaB);
+        gReview->addBig(dnaB, "diff");
         connect(dnaB, &QPushButton::clicked, [this] { showTextDna(); });
         auto* typoB = new QPushButton(
             "Typography check (classical rules)\u2026");
@@ -4528,7 +4531,7 @@ auto* secRev = new QLabel("<span style='color:#9A7A33;font-size:10px;letter-spac
             "after visarga, solid double shads, breaking tsheg "
             "in \u0F44\u0F0B\u0F0D. Flags only — the text is "
             "never edited.");
-        ll->addWidget(typoB);
+        gReview->addBig(typoB, "ocr");
         connect(typoB, &QPushButton::clicked,
                 [this] { showTypographyCheck(); });
         spellToggle_ = new QCheckBox("Show spelling doubts");
@@ -4537,7 +4540,7 @@ auto* secRev = new QLabel("<span style='color:#9A7A33;font-size:10px;letter-spac
             "fails the classical legality rules \u2014 likely "
             "input-operator errors. Click a row to jump to it in the "
             "text; file checked rows for the authority's ruling.");
-        ll->addWidget(spellToggle_);
+        gSpell->add(spellToggle_);
         spellPanel_ = new QWidget;
         spellPanel_->setVisible(false);
         spellPanel_->setMaximumHeight(230);
@@ -4584,7 +4587,7 @@ auto* secRev = new QLabel("<span style='color:#9A7A33;font-size:10px;letter-spac
             "into the recorded classes, both by his English and by "
             "the spoken Tibetan. Machine-located candidates; the "
             "recordings are the authority.");
-        ll->addWidget(teachBtn);
+        gReview->addBig(teachBtn, "clock");
         connect(teachBtn, &QPushButton::clicked, [this] {
             if (doc_.tokens.empty()) {
                 QMessageBox::information(this, "Teachings",
@@ -4609,9 +4612,7 @@ auto* secRev = new QLabel("<span style='color:#9A7A33;font-size:10px;letter-spac
             spellPanel_->setVisible(on);
             if (on) rebuildSpellPanel();
         });
-auto* secScan = new QLabel("<span style='color:#9A7A33;font-size:10px;letter-spacing:2px;font-weight:600'>SCANS</span>");
-        secScan->setContentsMargins(0, 8, 0, 0);
-        ll->addWidget(secScan);
+
                 scanBtn_ = new QPushButton("Follow along in scans (BDRC)");
         scanBtn_->setIcon(miniIcon("image"));
         scanBtn_->setEnabled(false);
@@ -4620,7 +4621,7 @@ auto* secScan = new QLabel("<span style='color:#9A7A33;font-size:10px;letter-spa
             "the page in step with the @folio marker at your cursor. "
             "Folio\u2194image mapping comes from BDRC's own IIIF manifest "
             "labels — nothing is guessed.");
-        ll->addWidget(scanBtn_);
+        overlayScanGroup_->add(scanBtn_);
         thlCatLink_ = new QLabel;
         thlCatLink_->setOpenExternalLinks(true);
         thlCatLink_->setWordWrap(true);
@@ -4675,6 +4676,8 @@ auto* secScan = new QLabel("<span style='color:#9A7A33;font-size:10px;letter-spa
 #endif
         scanNav_ = nav;
         scanNav_->hide();
+        ribbon->finish();
+        ribbon->attachTo(this);   // full-width host carries it
         ll->addWidget(nav);
         auto* viewerB = new QPushButton("Scan viewer (window)…");
         viewerB->setIcon(miniIcon("image"));
@@ -11547,6 +11550,7 @@ private:
 #ifdef ALL_HAVE_OCR
     // word-locate lane (OCR used as a LOCATOR only)
     QPushButton* wordLocB_ = nullptr;
+    RibbonGroup* overlayScanGroup_ = nullptr;
     std::unique_ptr<allocr::LineDetector> fdet_;
     std::unique_ptr<allocr::TextRecognizer> frec_;
     std::map<QString, FolioOcr> folioOcr_;
