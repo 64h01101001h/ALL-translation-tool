@@ -95,6 +95,7 @@
 #include <QDateTime>
 #include <QStandardPaths>
 #include <QToolTip>
+#include <QStatusBar>
 
 #include <atomic>
 #include <thread>
@@ -31937,6 +31938,33 @@ int main(int argc, char** argv) {
     // the remembered path has since gone away.
     inputPane->restoreSession();
     alignPane->restoreSession();
+    // UX audit H4: the quiet status bar — the standing facts that
+    // otherwise live in nobody's head: which data release, who is
+    // acting, what awaits the authority. Subordinate by design.
+    {
+        auto* sb = win.statusBar();
+        sb->setSizeGripEnabled(false);
+        sb->setStyleSheet(QString("QStatusBar{font-size:11px;"
+                                  "color:%1;}").arg(ux::kMuted));
+        auto* rel = new QLabel(
+            QString("release v%1")
+                .arg(QString::fromStdString(
+                    spine.metaValue("release_version"))));
+        sb->addPermanentWidget(rel);
+        auto* who = new QLabel(
+            g_userName.isEmpty()
+                ? QString("no identity set")
+                : g_userName + (g_isAdmin ? " (authority)" : ""));
+        sb->addPermanentWidget(who);
+        if (g_isAdmin && !g_proposalsDir.isEmpty()) {
+            allcore::ProposalStore st2(g_proposalsDir.toStdString());
+            st2.load();
+            if (st2.pendingCount())
+                sb->addPermanentWidget(new QLabel(
+                    QString("%1 proposal(s) pending")
+                        .arg(st2.pendingCount())));
+        }
+    }
 #ifdef ALL_HAVE_OCR
     ocrPane->restoreSession();
 #endif
