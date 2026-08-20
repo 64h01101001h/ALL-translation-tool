@@ -2729,10 +2729,50 @@ static QIcon miniIcon(const QString& kind) {
     pm.fill(Qt::transparent);
     QPainter p(&pm);
     p.setRenderHint(QPainter::Antialiasing);
-    QPen pen(QColor(0x44, 0x44, 0x44), 2.4);
+    // COLOR fleet (Adam 2026-08-20: "can we do color icons — i'm
+    // having a hard time seeing these"): each icon family gets a
+    // vivid stroke that reads on light and dark chrome alike.
+    auto colorFor = [](const QString& k) -> QColor {
+        // documents & pages — blue
+        static const QSet<QString> blue = {"page", "book",
+            "image", "folder", "grid", "ledger", "pecha",
+            "tree"};
+        // actions — green
+        static const QSet<QString> green = {"play", "check",
+            "save", "out", "shelf", "stack"};
+        // review & search — gold
+        static const QSet<QString> gold = {"search", "quote",
+            "count", "strip", "typo", "eye", "target",
+            "clock", "diff"};
+        // people & access — plum
+        static const QSet<QString> plum = {"people", "key",
+            "tag", "textT", "listen"};
+        // machines — vermilion
+        static const QSet<QString> verm = {"ocr", "chip",
+            "gear", "scissors"};
+        if (blue.contains(k)) return QColor(0x2E, 0x62, 0x9E);
+        if (green.contains(k)) return QColor(0x1E, 0x7A, 0x4E);
+        if (gold.contains(k)) return QColor(0xA8, 0x7A, 0x1E);
+        if (plum.contains(k)) return QColor(0x6E, 0x3E, 0x8E);
+        if (verm.contains(k)) return QColor(0xB4, 0x54, 0x0A);
+        return QColor(0x44, 0x44, 0x44);
+    };
+    const QColor line = colorFor(kind);
+    QPen pen(line, 2.6);
     pen.setJoinStyle(Qt::RoundJoin);
     pen.setCapStyle(Qt::RoundCap);
     p.setPen(pen);
+    // a soft same-hue wash behind each glyph lifts it off the
+    // band on both light and dark chrome
+    {
+        QColor wash = line;
+        wash.setAlpha(36);
+        p.setBrush(wash);
+        p.setPen(Qt::NoPen);
+        p.drawRoundedRect(QRectF(1, 1, 30, 30), 7, 7);
+        p.setBrush(Qt::NoBrush);
+        p.setPen(pen);
+    }
     if (kind == "page") {
         p.drawPolyline(QPolygonF({{9, 4}, {9, 28}, {23, 28}, {23, 10},
                                   {17, 4}, {9, 4}}));
