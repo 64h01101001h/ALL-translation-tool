@@ -30820,11 +30820,17 @@ int main(int argc, char** argv) {
         }
         // the menu bar mirrors the GUI: group menus + View + Help
         {
+            // find menus by TITLE, not position (the Edit menu of
+            // 9l sits before the group menus — positional indexing
+            // failed the day it landed)
             const auto menus = win.menuBar()->actions();
-            bool ok = menus.size() == tabs.count() + 2;
+            bool ok = menus.size() == tabs.count() + 3;   // Edit +
+                                                          // groups +
+                                                          // View + Help
             int overlayActions = 0;
-            if (!menus.isEmpty() && menus.first()->menu()) {
-                const auto subs = menus.first()->menu()->actions();
+            for (QAction* ma : menus) {
+                if (ma->text() != "Read" || !ma->menu()) continue;
+                const auto subs = ma->menu()->actions();
                 if (!subs.isEmpty() && subs.first()->menu())
                     overlayActions =
                         subs.first()->menu()->actions().size();
