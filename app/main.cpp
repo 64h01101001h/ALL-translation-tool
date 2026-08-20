@@ -152,6 +152,7 @@
 #include "allcore/quotation.h"
 #include "allcore/spine.h"
 #include "allcore/tm84000.h"
+#include "allcore/textdna.h"
 #include "allcore/stardict.h"
 
 // user-supplied StarDict dictionaries (DigitalTibetan plan P5):
@@ -3612,6 +3613,26 @@ public:
                           "detected, the 8-syllable slip "
                           "flagged");
             }
+            {   // Text DNA (idea bank 2026-08-20): the strip's
+                // summary reads the same structure per SOURCE line
+                input_->setPlainText(
+                    "SEMS CAN THAMS CAD BDE BA SHOG\n"
+                    "SDUG BSNGAL KUN LAS THAR BAR SHOG\n"
+                    "\n"
+                    "BDE BA'I RGYU LA,\n"
+                    "SANGS RGYAS BSTAN PA DAR BAR SHOG\n"
+                    "CHOS KYI 'KHOR LO BSKOR BAR SHOG\n"
+                    "DGE 'DUN THUGS MTHUN BYUNG BAR SHOG\n");
+                const QString sum = textDnaSummary();
+                jumpToSourceLine(5);
+                const bool ok =
+                    sum.contains("verse, meter 7") &&
+                    sum.contains("1 off") &&
+                    sum.contains("1 blank") &&
+                    input_->textCursor().blockNumber() == 4;
+                check(ok, "Text DNA: summary reads the structure "
+                          "and the strip's jump lands on the line");
+            }
             {   // sa bcad: nested enumeration parses to the tree
                 input_->setPlainText(
                     "'DIR LA GNYIS, DANG PO SPYI DON NI ZHES, "
@@ -4324,6 +4345,17 @@ auto* secRev = new QLabel("<span style='color:#9A7A33;font-size:10px;letter-spac
         ll->addWidget(readerB);
         connect(readerB, &QPushButton::clicked,
                 [this] { showMeterReader(); });
+        auto* dnaB = new QPushButton("Text DNA (structure strip)\u2026");
+        dnaB->setToolTip(
+            "The whole text's shape in one strip: each source line "
+            "is one column \u2014 gold = on the dominant meter, "
+            "vermilion = verse line off the meter, grey = prose, "
+            "pale = blank; a green tick marks quote-announcement "
+            "lines (\u2026zhes/ces + a speech verb). Pure "
+            "measurement \u2014 click anywhere to jump the "
+            "document there.");
+        ll->addWidget(dnaB);
+        connect(dnaB, &QPushButton::clicked, [this] { showTextDna(); });
         auto* typoB = new QPushButton(
             "Typography check (classical rules)\u2026");
         typoB->setToolTip(
@@ -8577,6 +8609,158 @@ private:
         note->setWordWrap(true);
         v->addWidget(note);
         dlg->show();
+    }
+
+    // Text DNA (idea bank, 2026-08-20): the document's structure as
+    // one colored column per source line. Pure measurement; clicking
+    // jumps the document.
+    QString textDnaSummary() {
+        const auto r =
+            allcore::textDna(input_->toPlainText().toStdString());
+        int v = 0, ir = 0, pr = 0, bl = 0, qm = 0;
+        for (const auto& l : r.lines) {
+            switch (l.cls) {
+                case allcore::DnaClass::Verse: ++v; break;
+                case allcore::DnaClass::VerseIrregular: ++ir; break;
+                case allcore::DnaClass::Prose: ++pr; break;
+                case allcore::DnaClass::Blank: ++bl; break;
+            }
+            if (l.quote_mark) ++qm;
+        }
+        QString head = r.is_verse
+                           ? QString("verse, meter %1").arg(r.meter)
+                           : QString("prose");
+        return QString("%1 \u00b7 %2 line(s): %3 on meter \u00b7 "
+                       "%4 off \u00b7 %5 prose \u00b7 %6 blank "
+                       "\u00b7 %7 quote mark(s)")
+            .arg(head)
+            .arg(r.lines.size())
+            .arg(v)
+            .arg(ir)
+            .arg(pr)
+            .arg(bl)
+            .arg(qm);
+    }
+
+    void showTextDna() {
+        const QString all = input_->toPlainText();
+        if (all.trimmed().isEmpty()) return;
+        const auto r = allcore::textDna(all.toStdString());
+        if (r.lines.empty()) return;
+        const int n = (int)r.lines.size();
+        QImage strip(n, 90, QImage::Format_RGB888);
+        for (int x = 0; x < n; ++x) {
+            const auto& l = r.lines[x];
+            QColor c;
+            switch (l.cls) {
+                case allcore::DnaClass::Verse:
+                    c = QColor(0xC9, 0xA4, 0x5C); break;
+                case allcore::DnaClass::VerseIrregular:
+                    c = QColor(0xB4, 0x54, 0x0A); break;
+                case allcore::DnaClass::Prose:
+                    c = QColor(0x8C, 0x9B, 0xAB); break;
+                case allcore::DnaClass::Blank:
+                    c = QColor(0xF2, 0xEA, 0xD9); break;
+            }
+            for (int y = 0; y < 90; ++y) {
+                const bool tick = y < 12 && l.quote_mark;
+                strip.setPixelColor(
+                    x, y, tick ? QColor(0x1E, 0x6B, 0x4E) : c);
+            }
+        }
+        auto* d = new QDialog(this);
+        d->setAttribute(Qt::WA_DeleteOnClose);
+        d->setWindowTitle("Text DNA \u2014 structure strip");
+        d->resize(940, 220);
+        auto* v = new QVBoxLayout(d);
+        v->addWidget(new QLabel("<b>" +
+                                textDnaSummary().toHtmlEscaped() +
+                                "</b>"));
+        auto* lab = new QLabel;
+        lab->setScaledContents(true);
+        lab->setPixmap(QPixmap::fromImage(strip));
+        lab->setMinimumHeight(90);
+        lab->setMouseTracking(true);
+        lab->installEventFilter(d);
+        v->addWidget(lab, 1);
+        v->addWidget(new QLabel(
+            "<small style='color:#777'>gold = on the dominant meter "
+            "\u00b7 vermilion = off the meter \u00b7 grey = prose "
+            "\u00b7 pale = blank \u00b7 green tick = quote "
+            "announcement (\u2026zhes/ces + speech verb). One column "
+            "per source line \u2014 click to jump the document; "
+            "hover for the line number. Pure measurement, nothing "
+            "inferred.</small>"));
+        // hover + click via a filter object owned by the dialog
+        class StripFilter : public QObject {
+        public:
+            StripFilter(OverlayPane* p, QLabel* l, int nLines,
+                        std::vector<allcore::DnaLine> lines)
+                : QObject(l), p_(p), l_(l), n_(nLines),
+                  lines_(std::move(lines)) {}
+            bool eventFilter(QObject* o, QEvent* ev) override {
+                if (o != l_) return false;
+                if (ev->type() == QEvent::MouseMove ||
+                    ev->type() == QEvent::MouseButtonPress) {
+                    const int x =
+                        static_cast<QMouseEvent*>(ev)->pos().x();
+                    const int ix = std::clamp(
+                        x * n_ / std::max(1, l_->width()), 0, n_ - 1);
+                    const auto& ln = lines_[ix];
+                    if (ev->type() == QEvent::MouseMove) {
+                        const char* cls =
+                            ln.cls == allcore::DnaClass::Verse
+                                ? "on meter"
+                            : ln.cls ==
+                                    allcore::DnaClass::VerseIrregular
+                                ? "off meter"
+                            : ln.cls == allcore::DnaClass::Prose
+                                ? "prose"
+                                : "blank";
+                        QToolTip::showText(
+                            QCursor::pos(),
+                            QString("line %1 \u00b7 %2 \u00b7 %3 "
+                                    "syllable(s)%4")
+                                .arg(ln.number)
+                                .arg(cls)
+                                .arg(ln.syllables)
+                                .arg(ln.quote_mark ? " \u00b7 quote"
+                                                   : ""),
+                            l_);
+                    } else {
+                        p_->jumpToSourceLine(ln.number);
+                    }
+                    return false;
+                }
+                return false;
+            }
+        private:
+            OverlayPane* p_;
+            QLabel* l_;
+            int n_;
+            std::vector<allcore::DnaLine> lines_;
+        };
+        lab->removeEventFilter(d);
+        lab->installEventFilter(
+            new StripFilter(this, lab, n, r.lines));
+        d->show();
+    }
+
+    // place the reading cursor at the start of a 1-based source line
+    void jumpToSourceLine(int line) {
+        const QString raw = input_->toPlainText();
+        int pos = 0, seen = 1;
+        while (seen < line && pos >= 0) {
+            pos = raw.indexOf('\n', pos);
+            if (pos < 0) return;
+            ++pos;
+            ++seen;
+        }
+        QTextCursor tc = input_->textCursor();
+        tc.setPosition(pos);
+        input_->setTextCursor(tc);
+        input_->ensureCursorVisible();
+        input_->setFocus();
     }
 
     void showMeterReader() {

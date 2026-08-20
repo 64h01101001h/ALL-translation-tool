@@ -62,6 +62,7 @@ add_library(allcore STATIC
   src/shelf_suggest.cpp
   src/tm84000.cpp
   src/catalog_actions.cpp
+  src/textdna.cpp
 )
 target_include_directories(allcore PUBLIC include)
 
@@ -360,3 +361,7 @@ add_executable(catalog_actions_smoke tests/catalog_actions_smoke.cpp)
 target_link_libraries(catalog_actions_smoke PRIVATE allcore)
 add_test(NAME catalog_actions_smoke
          COMMAND catalog_actions_smoke ${CMAKE_BINARY_DIR})
+
+add_executable(textdna_smoke tests/textdna_smoke.cpp)
+target_link_libraries(textdna_smoke PRIVATE allcore)
+add_test(NAME textdna_smoke COMMAND textdna_smoke)

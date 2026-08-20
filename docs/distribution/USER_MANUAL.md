@@ -433,6 +433,16 @@ keying slip and one from poetic license look identical to
 arithmetic, so the tool never decides which. Click any block or
 flagged line to jump there.
 
+**Text DNA (structure strip)…** — the whole text's shape in one
+picture: each source line is one colored column — gold on the
+dominant meter, vermilion for a verse line off the meter, grey for
+prose, pale for blank, with a green tick over lines carrying a
+quote announcement (…*zhes/ces* + a speech verb). The summary line
+gives the counts; hover for any line's number and syllables; click
+anywhere and the document jumps there. Pure measurement — the
+strip shows only what the syllable arithmetic and the quote
+grammar actually found.
+
 **Prose & prayer reader (syllable counts)…** — the whole
 document, line by line, every line carrying its syllable count
 in a bracket at the left margin. This is the structural view:
