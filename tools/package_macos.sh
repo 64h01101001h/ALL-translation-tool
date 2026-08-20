@@ -237,3 +237,21 @@ hdiutil create -volname "$APPNAME $VERSION" -srcfolder "$STAGE" \
     -ov -format UDZO "$DMG" | tail -1
 du -sh "$DMG"
 echo "PACKAGE COMPLETE: $DMG"
+
+echo "== 8. relaunch the installed app =="
+# the quit at step 0 leaves the translator without the app; bring the
+# NEW build up and verify it stays up (2026-08-20: two silent
+# relaunch failures read as "the app keeps crashing" from the
+# user's seat — never end a press with the app down)
+open "$INSTALL/$APPNAME.app"
+sleep 4
+if pgrep -x ALLTranslationTool >/dev/null; then
+  echo "   relaunched and running"
+else
+  echo "   first relaunch did not stick — retrying"
+  open "$INSTALL/$APPNAME.app"
+  sleep 5
+  pgrep -x ALLTranslationTool >/dev/null \
+    && echo "   relaunched on retry" \
+    || { echo "RELAUNCH FAILED — launch the app manually"; exit 9; }
+fi
