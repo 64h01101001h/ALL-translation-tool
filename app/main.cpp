@@ -24036,18 +24036,121 @@ public:
         sideToggle->setToolTip(
             "Show or hide the Gofer corpus search beside the "
             "manuscript.");
-        bar->addWidget(openB);
-        bar->addWidget(saveB);
-        bar->addWidget(saveAsB);
-        bar->addWidget(rtfB);
-        bar->addSpacing(12);
-        bar->addWidget(boldB_);
-        bar->addWidget(italB_);
-        bar->addWidget(undB_);
-        bar->addWidget(sizeSpin_);
-        bar->addStretch();
-        bar->addWidget(sideToggle);
-        outer->addLayout(bar);
+        // 9n-1 + ribbon rollout (2026-08-20): the Manuscript bar
+        // becomes a ribbon, and gains the HOUSE STYLES gallery —
+        // Word's styles idea in the published books' own grammar.
+        // Each gallery button previews itself; a click styles the
+        // selected paragraphs, and the RTF export carries it.
+        auto* ribbon = new RibbonBar;
+        auto* gFile = ribbon->group("MANUSCRIPT");
+        auto* gType = ribbon->group("TYPE");
+        auto* gStyles = ribbon->group("HOUSE STYLES");
+        auto* gView = ribbon->group("VIEW");
+        gFile->add(openB);
+        gFile->add(saveB);
+        gFile->add(saveAsB);
+        gFile->add(rtfB);
+        gType->add(boldB_);
+        gType->add(italB_);
+        gType->add(undB_);
+        gType->add(sizeSpin_);
+        auto styleBtn = [&](const QString& label,
+                            const QString& css,
+                            std::function<void(QTextCursor&)> apply,
+                            const QString& tip) {
+            auto* b = new QPushButton(label);
+            b->setStyleSheet("QPushButton { " + css +
+                             " padding:3px 9px; }");
+            b->setToolTip(tip);
+            gStyles->add(b);
+            connect(b, &QPushButton::clicked, [this, apply] {
+                QTextCursor c = editor_->textCursor();
+                c.beginEditBlock();
+                apply(c);
+                c.endEditBlock();
+                editor_->setFocus();
+            });
+        };
+        // editor_ is built later in the ctor — read the base size
+        // at CLICK time, never here
+        auto baseSize = [this] {
+            return editor_ ? editor_->font().pointSize() : 13;
+        };
+        styleBtn("Body", "",
+                 [baseSize](QTextCursor& c) {
+                     const int base = baseSize();
+                     QTextBlockFormat bf;
+                     bf.setLeftMargin(0); bf.setRightMargin(0);
+                     bf.setTopMargin(0);
+                     c.mergeBlockFormat(bf);
+                     QTextCharFormat cf;
+                     cf.setFontWeight(QFont::Normal);
+                     cf.setFontItalic(false);
+                     cf.setFontPointSize(base);
+                     c.mergeCharFormat(cf);
+                 },
+                 "Plain body prose — the manuscript's default "
+                 "voice.");
+        styleBtn("Heading", "font-weight:700; font-size:14px;",
+                 [baseSize](QTextCursor& c) {
+                     const int base = baseSize();
+                     QTextBlockFormat bf;
+                     bf.setTopMargin(14);
+                     c.mergeBlockFormat(bf);
+                     QTextCharFormat cf;
+                     cf.setFontWeight(QFont::Bold);
+                     cf.setFontItalic(false);
+                     cf.setFontPointSize(base + 5);
+                     c.mergeCharFormat(cf);
+                 },
+                 "A chapter or text heading.");
+        styleBtn("Section", "font-weight:600; letter-spacing:2px;",
+                 [baseSize](QTextCursor& c) {
+                     const int base = baseSize();
+                     QTextBlockFormat bf;
+                     bf.setTopMargin(10);
+                     c.mergeBlockFormat(bf);
+                     QTextCharFormat cf;
+                     cf.setFontWeight(QFont::Bold);
+                     cf.setFontPointSize(base + 1);
+                     cf.setFontLetterSpacing(106);
+                     cf.setFontLetterSpacingType(
+                         QFont::PercentageSpacing);
+                     c.mergeCharFormat(cf);
+                 },
+                 "A section head inside a text.");
+        styleBtn("Verse", "font-style:normal; padding-left:14px;",
+                 [baseSize](QTextCursor& c) {
+                     const int base = baseSize();
+                     QTextBlockFormat bf;
+                     bf.setLeftMargin(28);
+                     bf.setRightMargin(20);
+                     c.mergeBlockFormat(bf);
+                     QTextCharFormat cf;
+                     cf.setFontItalic(false);
+                     cf.setFontPointSize(base);
+                     c.mergeCharFormat(cf);
+                 },
+                 "A verse stanza — indented block, lines kept as "
+                 "you break them (the published books' verse "
+                 "setting).");
+        styleBtn("Colophon", "font-style:italic;",
+                 [baseSize](QTextCursor& c) {
+                     const int base = baseSize();
+                     QTextBlockFormat bf;
+                     bf.setLeftMargin(36);
+                     bf.setTopMargin(8);
+                     c.mergeBlockFormat(bf);
+                     QTextCharFormat cf;
+                     cf.setFontItalic(true);
+                     cf.setFontPointSize(base - 1);
+                     c.mergeCharFormat(cf);
+                 },
+                 "The colophon block — italic, stepped in, a size "
+                 "down.");
+        gView->add(sideToggle);
+        ribbon->finish();
+        outer->addWidget(ribbon);
         // the apparatus at composition time (UX P3 ladder)
         auto* pubRow = new QHBoxLayout;
         auto* pubEb = new QLabel(
