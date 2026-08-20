@@ -2190,68 +2190,6 @@ static void remember(QPlainTextEdit* w, const QString& key,
 
 }   // namespace sess
 
-// ---- RibbonBar (9k ruling, 2026-08-20): the Word-style toolbar —
-// controls organized into labeled GROUPS in one strip across the
-// top, the group caption set small beneath its buttons, hairline
-// separators between groups. Adam's screenshot is the model; the
-// Catalog pane is the pilot, then pane by pane as the campaign
-// settles each. Buttons are plain QPushButtons so the sweep, the
-// lock gates, and every existing connect() work unchanged.
-class RibbonGroup : public QWidget {
-public:
-    explicit RibbonGroup(const QString& caption,
-                         QWidget* parent = nullptr)
-        : QWidget(parent) {
-        auto* v = new QVBoxLayout(this);
-        v->setContentsMargins(2, 2, 2, 0);
-        v->setSpacing(2);
-        row_ = new QHBoxLayout;
-        row_->setSpacing(4);
-        v->addLayout(row_);
-        v->addStretch();
-        auto* cap = new QLabel(caption);
-        cap->setAlignment(Qt::AlignHCenter);
-        cap->setStyleSheet(
-            "color:#9A7A33;font-size:9px;letter-spacing:1.5px;"
-            "font-weight:600;");
-        v->addWidget(cap);
-    }
-    void add(QWidget* w) { row_->addWidget(w); }
-
-private:
-    QHBoxLayout* row_ = nullptr;
-};
-
-class RibbonBar : public QWidget {
-public:
-    explicit RibbonBar(QWidget* parent = nullptr) : QWidget(parent) {
-        setObjectName("ribbonBar");
-        setStyleSheet(
-            "#ribbonBar { background:palette(alternate-base); "
-            "border:1px solid palette(mid); border-radius:4px; }"
-            "#ribbonBar QPushButton { padding:4px 10px; }");
-        row_ = new QHBoxLayout(this);
-        row_->setContentsMargins(6, 2, 6, 2);
-        row_->setSpacing(0);
-    }
-    RibbonGroup* group(const QString& caption) {
-        if (!first_) {
-            auto* sep = new QFrame;
-            sep->setFrameShape(QFrame::VLine);
-            sep->setStyleSheet("color:palette(mid)");
-            row_->addWidget(sep);
-        }
-        first_ = false;
-        auto* g = new RibbonGroup(caption);
-        row_->addWidget(g);
-        return g;
-    }
-    void finish() { row_->addStretch(); }
-
-private:
-    QHBoxLayout* row_ = nullptr;
-    bool first_ = true;
-};
 
 
 // open a library file in the Overlay AT a raw source line — the
@@ -2848,6 +2786,155 @@ static QIcon miniIcon(const QString& kind) {
     pm.setDevicePixelRatio(2.0);
     return QIcon(pm);
 }
+
+// ---- RibbonBar v2 (9k; Adam's Word-Home spec 2026-08-20: spans
+// the application width, icons above a small description, and a
+// menu option to show or hide the descriptions). Buttons are
+// QToolButton PROXIES: icon above label, forwarding clicks to the
+// pane's real (hidden) button, mirroring its enabled/checked state,
+// carrying its menu — so every existing connect(), lock gate, and
+// selftest pin works untouched. A pane REGISTERS its ribbon
+// (attachTo) and the main window hosts all of them in one
+// full-width strip that follows the active pane; a pane that still
+// embeds its ribbon locally keeps working.
+static QHash<QWidget*, QWidget*>& paneRibbons() {
+    static QHash<QWidget*, QWidget*> h;
+    return h;
+}
+static QList<QToolButton*>& ribbonProxies() {
+    static QList<QToolButton*> l;
+    return l;
+}
+static bool ribbonLabelsOn() {
+    return QSettings("ALL", "TranslationTool")
+        .value("ui/ribbonLabels", true)
+        .toBool();
+}
+static void applyRibbonLabelStyle() {
+    const bool on = ribbonLabelsOn();
+    for (QToolButton* t : ribbonProxies())
+        t->setToolButtonStyle(on ? Qt::ToolButtonTextUnderIcon
+                                 : Qt::ToolButtonIconOnly);
+}
+
+class RibbonProxy : public QToolButton {
+public:
+    explicit RibbonProxy(QAbstractButton* src, const QIcon& icon)
+        : src_(src) {
+        setIcon(icon);
+        setIconSize(QSize(20, 20));
+        QString label = src->text();
+        label.remove(QString::fromUtf8("…"));
+        setText(label);
+        setToolTip(src->toolTip().isEmpty() ? src->text()
+                                            : src->toolTip());
+        setAutoRaise(true);
+        setToolButtonStyle(ribbonLabelsOn()
+                               ? Qt::ToolButtonTextUnderIcon
+                               : Qt::ToolButtonIconOnly);
+        setEnabled(src->isEnabled());
+        if (auto* pb = qobject_cast<QPushButton*>(src);
+            pb && pb->menu()) {
+            setMenu(pb->menu());
+            setPopupMode(QToolButton::InstantPopup);
+        } else {
+            connect(this, &QToolButton::clicked, src,
+                    [src] { src->click(); });
+        }
+        if (src->isCheckable()) {
+            setCheckable(true);
+            setChecked(src->isChecked());
+            connect(this, &QToolButton::toggled, src,
+                    [src](bool on) {
+                        if (src->isChecked() != on)
+                            src->setChecked(on);
+                    });
+            connect(src, &QAbstractButton::toggled, this,
+                    [this](bool on) {
+                        if (isChecked() != on) setChecked(on);
+                    });
+        }
+        src->hide();
+        src->installEventFilter(this);
+        ribbonProxies().append(this);
+    }
+    bool eventFilter(QObject* o, QEvent* ev) override {
+        if (o == src_ && ev->type() == QEvent::EnabledChange)
+            setEnabled(src_->isEnabled());
+        return QToolButton::eventFilter(o, ev);
+    }
+
+private:
+    QAbstractButton* src_;
+};
+
+class RibbonGroup : public QWidget {
+public:
+    explicit RibbonGroup(const QString& caption,
+                         QWidget* parent = nullptr)
+        : QWidget(parent) {
+        auto* v = new QVBoxLayout(this);
+        v->setContentsMargins(2, 2, 2, 0);
+        v->setSpacing(2);
+        row_ = new QHBoxLayout;
+        row_->setSpacing(2);
+        v->addLayout(row_);
+        v->addStretch();
+        auto* cap = new QLabel(caption);
+        cap->setAlignment(Qt::AlignHCenter);
+        cap->setStyleSheet(
+            "color:#9A7A33;font-size:9px;letter-spacing:1.5px;"
+            "font-weight:600;");
+        v->addWidget(cap);
+    }
+    // raw widgets (checkboxes, spinboxes, labels, line edits) sit
+    // in the strip as themselves
+    void add(QWidget* w) { row_->addWidget(w); }
+    // buttons become icon-above-label proxies; the source stays
+    // alive (hidden) so its connects, gates, and pins hold
+    void addBig(QAbstractButton* src, const QString& iconKind) {
+        auto* p = new RibbonProxy(src, miniIcon(iconKind));
+        src->setParent(this);
+        row_->addWidget(p);
+    }
+
+private:
+    QHBoxLayout* row_ = nullptr;
+};
+
+class RibbonBar : public QWidget {
+public:
+    explicit RibbonBar(QWidget* parent = nullptr) : QWidget(parent) {
+        setObjectName("ribbonBar");
+        setStyleSheet(
+            "#ribbonBar { background:palette(alternate-base); "
+            "border-bottom:1px solid palette(mid); }"
+            "#ribbonBar QToolButton { padding:2px 6px; }"
+            "#ribbonBar QPushButton { padding:3px 8px; }");
+        row_ = new QHBoxLayout(this);
+        row_->setContentsMargins(8, 2, 8, 2);
+        row_->setSpacing(0);
+    }
+    RibbonGroup* group(const QString& caption) {
+        if (!first_) {
+            auto* sep = new QFrame;
+            sep->setFrameShape(QFrame::VLine);
+            sep->setStyleSheet("color:palette(mid)");
+            row_->addWidget(sep);
+        }
+        first_ = false;
+        auto* g = new RibbonGroup(caption);
+        row_->addWidget(g);
+        return g;
+    }
+    void finish() { row_->addStretch(); }
+    // full-width mode: the pane registers instead of embedding
+    void attachTo(QWidget* pane) { paneRibbons().insert(pane, this); }
+
+private:
+    QHBoxLayout* row_ = nullptr;
+    bool first_ = true;
+};
 
 // KL-aware BDRC scan URL (root cause fix, 2026-08-13): BDRC's
 // Lhasa Kangyur parts (MW26071_NNNN) follow the H catalog, and
