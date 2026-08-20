@@ -613,6 +613,21 @@ implementation is sidelined HERE from this date. What this means:
          NOTE: sequence AFTER the test campaign — record features
          once they've survived the real-life pass, so the videos
          show the settled behavior.
+      9j. **CARD FORMAT DESIGN PASS (Adam, 2026-08-20 — "figure out
+         how to format the card info for each term"):** a deliberate
+         design pass over the entry card's layout/typography/section
+         order (the card has grown many layers: phonetics, glosses,
+         corpus usage, honorific/idiom badges, 84000 block + toh
+         attestations, Das/Jäschke links, reference stacks, teaching
+         moments, footnotes…). AND: "a place to take and display
+         MORE than just three of the corpus references" — the card
+         currently caps corpus renderings; design where the full
+         set lives (expander on the card, a "see all N corpus
+         hits →" link into the concordance view, and/or a
+         configurable cap). Candidate shape: card stays a SUMMARY
+         with honest counts ("3 of 41 — see all"), one click to the
+         complete evidence. Pair with the test campaign's 🤔/💡
+         findings about the card before implementing.
       10. Idea bank (liked, never scheduled): pronunciation trainer (DECLINED-AS-CONCEIVED 2026-08-20: whisper's Tibetan too weak to honestly score learner speech — rule 3; needs a design conversation) ·
          Text DNA strips DONE 2026-08-20 (Overlay REVIEW → Text DNA: one colored column per source line — meter/off-meter/prose/blank + quote-announcement ticks; hover + click-to-jump; allcore textdna, suite 58; summary+jump selftest pin) · team board · apprenticeship mode ·
          English-on-the-carving hover DONE 2026-08-20 (cache-only tooltip over the woodblock: OCR-read wylie + HGM gloss, review-material label; seeded-cache selftest pin) · teaching-playlist karaoke ·
