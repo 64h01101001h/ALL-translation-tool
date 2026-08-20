@@ -363,7 +363,15 @@ mints catalog numbers; the mother copy is never touched.**
       held-out shelf prediction over the installed Sungbum (drop a
       file, predict its real shelf; measure top-1/top-3). Selftest
       pin: suggestions render with reasons.
-- [ ] 18. **Witness-hunt links on the bibliography audit** (session
+- [x] 18. **Witness-hunt links on the bibliography audit** —
+      SHIPPED 2026-08-19 (suite 45 extended; strengthened selftest
+      pin; commit 142cbec). Citation-span extraction MEASURED then
+      rebuilt: the dominant shape (41/50) is the paren group
+      ENCLOSING "ACIP NUM", not the "Tib:" tag (which names the
+      AUTHOR first; first try scored 8/50) — final coverage 45/50;
+      direct BUDA scans links where KD/KL/TD map deterministically;
+      "Export missing list…" writes the field-coded handout.
+      Original spec: (session
       2's baskets: for never-input works, WHERE to find them). Each
       missing work in the audit report gains: a BUDA/BDRC search
       link prefilled from the citation's title words (EWTS), and an

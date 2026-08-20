@@ -2844,6 +2844,15 @@ here is not proof of presence there. And the audit writes nothing:
 missing works are candidates for the intake workflow — locate a
 witness, input, propose, approve.
 
+**The witness hunt.** Each missing work now carries its lead:
+**scans on BDRC** when the number maps deterministically (KD/KL/TD
+are Tohoku numbers), otherwise **search BUDA** — a title search
+built from the citation's own Tibetan span (measured: 45 of the 50
+missing works yield a query from their citation). **Export missing
+list…** writes the field-coded handout for the hunt — number,
+citing volume, citation, search link — the sheet a session hands
+to whoever is asked to check.
+
 ## 14.6 Suggested splits — the chop assist
 
 The team's single biggest manual task is "chopping": a typed volume
