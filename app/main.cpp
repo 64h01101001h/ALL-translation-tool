@@ -18795,7 +18795,7 @@ public:
         search_->setMinimumWidth(220);
         gFind->add(search_);
         ribbon->finish();
-        layout->addWidget(ribbon);
+        ribbon->attachTo(this);   // full-width host carries it
         // decoder-driven filters: browse the library by what the ACIP file
         // names themselves declare (collection, verification level, language)
         auto* frow = new QHBoxLayout;
@@ -22672,7 +22672,7 @@ public:
             "from the ACIP Development survey.");
         gVolume->add(batchBtn);
         ribbon->finish();
-        outer->addWidget(ribbon);
+        ribbon->attachTo(this);   // full-width host carries it
         connect(batchBtn, &QPushButton::clicked, [this] { batchFolder(); });
         auto* split = new QSplitter(Qt::Vertical);
         auto* scroll = new QScrollArea;
@@ -24298,7 +24298,7 @@ public:
                  "down.");
         gView->add(sideToggle);
         ribbon->finish();
-        outer->addWidget(ribbon);
+        ribbon->attachTo(this);   // full-width host carries it
         // the apparatus at composition time (UX P3 ladder)
         auto* pubRow = new QHBoxLayout;
         auto* pubEb = new QLabel(
@@ -24990,7 +24990,7 @@ public:
             "never mints numbers.");
         gInventory->addBig(regB, "clock");
         ribbon->finish();
-        outer->addWidget(ribbon);
+        ribbon->attachTo(this);   // full-width host carries it
         // in-house gate: every catalog ACTION requires a signed-in
         // roster member; browsing the trees stays open
         gated_ = {auditB, splitB, nameB, listB, xlatB,
@@ -28436,6 +28436,19 @@ int main(int argc, char** argv) {
     qatRow->addWidget(qatHint);
     qatRow->addStretch();
     centralV->addLayout(qatRow);
+    // ribbon v2 host: ONE strip spanning the whole window, showing
+    // the active pane's ribbon (Adam's Word-Home spec). Panes
+    // registered their ribbons via attachTo(); panes without one
+    // show the empty zero-height page.
+    auto* ribbonStack = new QStackedWidget;
+    ribbonStack->setSizePolicy(QSizePolicy::Preferred,
+                               QSizePolicy::Maximum);
+    {
+        auto* none = new QWidget;
+        none->setFixedHeight(0);
+        ribbonStack->addWidget(none);
+    }
+    centralV->addWidget(ribbonStack);
     centralV->addWidget(tabsPtr, 1);
     win.setCentralWidget(central);
     g_spineForAbout = &spine;
@@ -28987,6 +29000,32 @@ int main(int argc, char** argv) {
                 if (g_hunt) g_hunt->openPalette();
             });
             tabs.setCornerWidget(huntBtn, Qt::TopRightCorner);
+        }
+        // mount every registered ribbon and follow the active pane
+        {
+            for (auto it = paneRibbons().begin();
+                 it != paneRibbons().end(); ++it)
+                ribbonStack->addWidget(it.value());
+            auto syncRibbon = [ribbonStack, &tabs] {
+                QWidget* pane = nullptr;
+                if (auto* g = qobject_cast<QTabWidget*>(
+                        tabs.currentWidget()))
+                    pane = g->currentWidget();
+                QWidget* r =
+                    pane ? paneRibbons().value(pane, nullptr)
+                         : nullptr;
+                ribbonStack->setCurrentIndex(
+                    r ? ribbonStack->indexOf(r) : 0);
+            };
+            QObject::connect(&tabs, &QTabWidget::currentChanged,
+                             ribbonStack, [syncRibbon] { syncRibbon(); });
+            for (int gi = 0; gi < tabs.count(); ++gi)
+                if (auto* g = qobject_cast<QTabWidget*>(
+                        tabs.widget(gi)))
+                    QObject::connect(
+                        g, &QTabWidget::currentChanged, ribbonStack,
+                        [syncRibbon] { syncRibbon(); });
+            syncRibbon();
         }
         g_raisePane = [&tabs](QWidget* w) {
             for (auto& f : flatPanes)
