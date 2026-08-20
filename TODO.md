@@ -595,6 +595,24 @@ implementation is sidelined HERE from this date. What this means:
          Dropbox; concurrent edits of ACTIONS.tsv on two machines
          resolve as Dropbox conflicted copies (rare in practice:
          approve/reject happen on one machine, GMR's).
+      9i. **DOCUMENTATION & TEACHING MEDIA PROGRAM (Adam,
+         2026-08-20 — "put on the todo list"):**
+         (1) REVAMP + BEAUTIFY THE USER MANUAL — design pass over
+             the 17-chapter manual (typography, layout, visual
+             hierarchy, screenshots per chapter; possibly a styled
+             HTML/PDF edition alongside the docx).
+         (2) SCREEN RECORDINGS of how to use EVERY tool/function —
+             one short demo per feature, mirroring the manual's
+             chapter structure (the TEST_CAMPAIGN.md item list is
+             the natural shooting list; docs/DEMO_SCRIPT.md exists
+             as a starting script).
+         (3) A YOUTUBE CHANNEL dedicated to demonstrating every
+             aspect of the tool — channel setup is Adam's (account/
+             branding); the machine can script each video, generate
+             the demo material/screenshots, and draft descriptions.
+         NOTE: sequence AFTER the test campaign — record features
+         once they've survived the real-life pass, so the videos
+         show the settled behavior.
       10. Idea bank (liked, never scheduled): pronunciation trainer (DECLINED-AS-CONCEIVED 2026-08-20: whisper's Tibetan too weak to honestly score learner speech — rule 3; needs a design conversation) ·
          Text DNA strips DONE 2026-08-20 (Overlay REVIEW → Text DNA: one colored column per source line — meter/off-meter/prose/blank + quote-announcement ticks; hover + click-to-jump; allcore textdna, suite 58; summary+jump selftest pin) · team board · apprenticeship mode ·
          English-on-the-carving hover DONE 2026-08-20 (cache-only tooltip over the woodblock: OCR-read wylie + HGM gloss, review-material label; seeded-cache selftest pin) · teaching-playlist karaoke ·
