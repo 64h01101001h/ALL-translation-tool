@@ -1194,6 +1194,17 @@ static QString entryHtml(const allcore::Entry& e,
             h += b;
         }
     }
+    if (!g_teachingTib && !g_teaching) {
+        // the thrice-bitten failure class (2026-08-15 twice, and
+        // 2026-08-20: an instance relaunched mid-press loaded empty
+        // maps): a MISSING index must never look like "this word has
+        // no moments". Word-level absence stays silent — that is
+        // normal coverage; index-level absence says so.
+        h += "<div style='color:#B26B00;font-size:12px;margin-top:"
+             "6px'>recorded-teachings index not loaded this session "
+             "— quit and relaunch the app (data/teaching/"
+             "teaching_moments_card.json)</div>";
+    }
     if (g_teachingTib && !e.wylie.empty()) {
         std::vector<const TeachingMoment*> ms;
         std::set<QString> seen;
@@ -29561,6 +29572,25 @@ int main(int argc, char** argv) {
                                "timestamps")
                            .arg(shown ? "PASS" : "FAIL");
                 if (!shown) ++fails;
+            }
+            {   // index-level absence must be VISIBLE on the card
+                // (the thrice-bitten silent-outage class)
+                const TeachingMap* keepT = g_teaching;
+                const TeachingMap* keepTT = g_teachingTib;
+                g_teaching = nullptr;
+                g_teachingTib = nullptr;
+                allcore::Entry te2;
+                te2.wylie = "bsod nams";
+                const bool warned =
+                    entryHtml(te2).contains(
+                        "recorded-teachings index not loaded");
+                g_teaching = keepT;
+                g_teachingTib = keepTT;
+                log << QString("  [%1] Teaching: a MISSING index "
+                               "says so on the card instead of "
+                               "silently showing nothing")
+                           .arg(warned ? "PASS" : "FAIL");
+                if (!warned) ++fails;
             }
             {   // Adam's screenshot 2026-08-15: rows rendered as a
                 // bare arrow because 372 DCC caption files have no

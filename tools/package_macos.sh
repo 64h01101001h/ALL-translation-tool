@@ -129,6 +129,21 @@ mkdir -p "$DATA/data/teaching"
 cp "$ROOT/data/teaching/teaching_moments_card.json" \
    "$ROOT/data/teaching/PROVENANCE.md" "$DATA/data/teaching/" \
    2>/dev/null || true
+# leftovers from older press layouts confuse debugging (2026-08-20:
+# a stale teaching_moments.json + dcc_videos.json sat beside the
+# live card index); the runtime reads ONLY the card index — keep the
+# staged folder to exactly what ships
+rm -f "$DATA/data/teaching/teaching_moments.json" \
+      "$DATA/data/teaching/dcc_videos.json" \
+      "$DATA/data/teaching/tkb_videos.json" \
+      "$DATA/data/teaching/terms.txt" 2>/dev/null || true
+# and never relaunch onto a missing/truncated index: verify size
+SRC_SZ=$(stat -f%z "$ROOT/data/teaching/teaching_moments_card.json" 2>/dev/null || echo 0)
+DST_SZ=$(stat -f%z "$DATA/data/teaching/teaching_moments_card.json" 2>/dev/null || echo 1)
+if [[ "$SRC_SZ" != "$DST_SZ" ]]; then
+  echo "STAGING ERROR: teaching_moments_card.json size mismatch ($SRC_SZ vs $DST_SZ)" >&2
+  exit 1
+fi
 [[ -d "$ROOT/library/ocr_models" ]] && \
   cp -R "$ROOT/library/ocr_models" "$DATA/library/ocr_models"
 # runtime data folders the panes read (enumerated from the code)
