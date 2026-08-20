@@ -21032,6 +21032,40 @@ public:
         row->addWidget(prevPageB_);
         row->addWidget(pageLbl_);
         row->addWidget(nextPageB_);
+        // 9n-3 (2026-08-20): the folio strip — every page of the
+        // block as a thumbnail (PowerPoint's slide sorter, for
+        // pechas). ✓ marks pages that already carry typing; click
+        // to jump. Thumbnails render lazily in small batches so a
+        // 400-page volume never stalls the pane.
+        thumbs_ = new QListWidget;
+        thumbs_->setViewMode(QListView::IconMode);
+        thumbs_->setFlow(QListView::LeftToRight);
+        thumbs_->setWrapping(false);
+        thumbs_->setIconSize(QSize(96, 64));
+        thumbs_->setFixedHeight(104);
+        thumbs_->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+        thumbs_->setSelectionMode(QAbstractItemView::SingleSelection);
+        thumbs_->hide();
+        connect(thumbs_, &QListWidget::itemClicked,
+                [this](QListWidgetItem* it) {
+                    gotoPage(thumbs_->row(it));
+                });
+        thumbTimer_ = new QTimer(this);
+        thumbTimer_->setInterval(30);
+        connect(thumbTimer_, &QTimer::timeout, [this] {
+            int done = 0;
+            while (thumbNext_ < pages_.size() && done < 8) {
+                QPixmap px(pages_[thumbNext_]);
+                if (!px.isNull() && thumbNext_ < thumbs_->count())
+                    thumbs_->item(thumbNext_)
+                        ->setIcon(px.scaled(96, 64,
+                                            Qt::KeepAspectRatio,
+                                            Qt::SmoothTransformation));
+                ++thumbNext_;
+                ++done;
+            }
+            if (thumbNext_ >= pages_.size()) thumbTimer_->stop();
+        });
         // second toolbar row (design audit 2026-08-12: one row
         // clipped six-plus labels to garbage on the pane made for
         // the least-expert users — no label may elide)
@@ -21287,6 +21321,7 @@ public:
         split->setStretchFactor(0, 7);
         split->setStretchFactor(1, 3);
         outer->addWidget(split, 1);
+        outer->addWidget(thumbs_);
         status_ = new QLabel;
         status_->setWordWrap(true);
         outer->addWidget(status_);
@@ -22001,6 +22036,25 @@ public:
         workDir_ = root_ + "/library/input_work/" +
                    QFileInfo(dir).fileName();
         QDir().mkpath(workDir_);
+        // the folio strip: one item per page, thumbnails filled in
+        // lazily; ✓ marks pages that already carry typing
+        if (thumbs_) {
+            thumbs_->clear();
+            for (int i = 0; i < pages_.size(); ++i) {
+                const bool typed =
+                    QFileInfo(pageTextFile(i)).size() > 0;
+                auto* it = new QListWidgetItem(
+                    QString("%1%2").arg(typed
+                                            ? QString::fromUtf8("✓ ")
+                                            : QString())
+                        .arg(i + 1));
+                it->setToolTip(QFileInfo(pages_[i]).fileName());
+                thumbs_->addItem(it);
+            }
+            thumbs_->show();
+            thumbNext_ = 0;
+            thumbTimer_->start();
+        }
         pageIx_ = -1;
         gotoPage(0);
         status_->setText(
@@ -22043,6 +22097,21 @@ public:
                 : QString());
         pageLbl_->setText(QString("page %1/%2").arg(ix + 1)
                               .arg(pages_.size()));
+        if (thumbs_ && ix < thumbs_->count()) {
+            // refresh ✓ on every visit (the save above may have just
+            // made the previous page 'typed')
+            for (int k : {ix, std::max(0, ix - 1),
+                          std::min(int(pages_.size()) - 1, ix + 1)})
+                if (k < thumbs_->count())
+                    thumbs_->item(k)->setText(
+                        QString("%1%2")
+                            .arg(QFileInfo(pageTextFile(k)).size() > 0
+                                     ? QString::fromUtf8("✓ ")
+                                     : QString())
+                            .arg(k + 1));
+            thumbs_->setCurrentRow(ix);
+            thumbs_->scrollToItem(thumbs_->item(ix));
+        }
         prevPageB_->setEnabled(ix > 0);
         nextPageB_->setEnabled(ix + 1 < pages_.size());
         status_->setText(QString("%1 (%2) — %3")
@@ -22190,6 +22259,9 @@ private:
     int curBand_ = -1;
     // block workflow state
     QStringList pages_;
+    QListWidget* thumbs_ = nullptr;   // 9n-3: the folio strip
+    QTimer* thumbTimer_ = nullptr;    // lazy thumbnail batches
+    int thumbNext_ = 0;
     int pageIx_ = -1;
     QString workDir_;
     QPushButton* diffPrevB_ = nullptr;
