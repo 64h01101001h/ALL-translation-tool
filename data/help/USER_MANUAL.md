@@ -2227,8 +2227,8 @@ structure, the About box, Check for Updates, the Settings dialog,
 the Help window, night mode, session restore, and the built-in
 self-test.
 
-Paths are written as **Workflow → Pane**: "Input → Scan" means
-click the **Input** tab in the window's top row, then the **Scan**
+Paths are written as **Workflow → Pane**: "Input → OCR" means
+click the **Input** tab in the window's top row, then the **OCR**
 tab in the second row that appears inside it.
 
 Three rules govern everything you will read here, as they govern
@@ -2591,7 +2591,7 @@ place.)
 
 ## 13.3 Tutorial: recognize a page
 
-1. Click **Input → Scan**.
+1. Click **Input → OCR**.
 2. Click **Open scan image…** and choose a page. The page appears
    in the viewer; the results area reads "ready — Run OCR".
 3. Click **Run OCR**. You watch the pipeline work: "detecting
@@ -3257,7 +3257,10 @@ change them in either place, they are one and the same.
 The **"Make a proposal"** box is a five-field form:
 
 1. **Kind** (dropdown) — what sort of thing you are proposing.
-   The ten kinds, and what each means:
+   The form offers ten kinds (two more ride the channel from
+   elsewhere: spelling flags filed by the Overlay's doubt marks,
+   and catalog identities filed from the Catalog pane's
+   suggested-identity card). The ten, and what each means:
    - **Honorific term (↔ ordinary)** — a term of the general
      honorific register, paired with its ordinary counterpart.
    - **HIGH honorific marking** — the elevated register used for

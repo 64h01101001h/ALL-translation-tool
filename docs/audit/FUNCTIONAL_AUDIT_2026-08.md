@@ -46,14 +46,14 @@ WP and UM say seventeen while UM documents an 18th (Files) plus
 Scans and Export. Reality: **21 sweepable panes**. ACTION: one truth
 pass over the four documents' structure sections.
 
-### D3. Features documented in their old homes
+### D3. Features documented in their old homes — CLOSED 2026-08-20: the in-app manual was verified current at the audit (the drift was the distribution copies, fixed in D1); the residual "Input → Scan" pane-name drift fixed at both remaining sites
 Export/format tools documented under Overlay (they moved to Read →
 Export); scan one-shots under Overlay (moved to Scans); PUBLISH
 tools under Draft (moved to Manuscript); Library maintenance items
 listed as top-row buttons (now under Maintenance…). Pane-name drift:
 "Input → Scan" vs "Input → OCR". ACTION: same truth pass.
 
-### D4. Count drift (docs vs docs, and docs vs reality)
+### D4. Count drift — CLOSED 2026-08-20 (truth passes of 08-19/20): suite/check/pane counts now current-dated or build-derived everywhere living; the proposal-kinds text now states the form/channel split honestly
 - Test suites: docs say 36 or 38 — reality **43**.
 - Selftest checks: docs say 89 or 96 — reality **170+**.
 - "text as" modes: CFG says 3 — reality 5 (both pronunciations).
@@ -70,7 +70,7 @@ claim is "fully offline for all reading/translation; network only
 for scans, updates, link-outs, remote files, and the two AI
 features." ACTION: reword in README + WP + CFG.
 
-### D6. UM self-contradiction
+### D6. UM self-contradiction — CLOSED (the stale footer no longer exists in the manual; verified 2026-08-20)
 Files chapter footer says tags/workspaces/sync/remotes are "still
 scheduled" while the same chapter documents them shipped. ACTION:
 delete the stale footer.
