@@ -1351,9 +1351,12 @@ static QString entryHtml(const allcore::Entry& e,
 static QString linkOutHtml(const std::string& wylie) {
     const QString q = QString::fromUtf8(
         QUrl::toPercentEncoding(QString::fromStdString(wylie)));
+    // UX audit H5: one visual grammar for link behavior — the
+    // external class carries the outward mark so a reader knows a
+    // click leaves the app before clicking
     QString h =
         "<div style='color:#777;font-size:11px;margin-top:6px'>search "
-        "elsewhere <i>(external sites, links only)</i>: ";
+        "elsewhere <i>(external sites \u2197, links only)</i>: ";
     h += "<a href='https://84000.co/search?query=" + q + "'>84000</a> · ";
     h += "<a href='https://library.bdrc.io/search?q=%22" + q +
          "%22~1&lg=bo-x-ewts&t=Etext'>BDRC etexts</a> · ";
@@ -20883,27 +20886,30 @@ public:
             "PENDING candidates for the dictionary project.");
         alignBanner->setWordWrap(true);
         outer->addWidget(alignBanner);
-        auto* row = new QHBoxLayout;
+        auto* ribbon = new RibbonBar;
+        auto* gTexts = ribbon->group("TEXTS");
+        auto* gLink = ribbon->group("LINKING");
+        auto* gHarvest = ribbon->group("HARVEST");
         auto* open = new QPushButton("Open ACIP file…");
         open->setIcon(miniIcon("page"));
-        row->addWidget(open);
+        gTexts->addBig(open, "page");
         auto* hypBtn = new QPushButton("Import .hyp…");
         hypBtn->setToolTip(
             "Import a legacy Hypercontext hypertexted file: both texts "
             "and every numbered link come in as Align-pane links "
             "(sub-syllable links are widened to whole syllables and "
             "counted).");
-        row->addWidget(hypBtn);
+        gTexts->addBig(hypBtn, "out");
         connect(hypBtn, &QPushButton::clicked, [this] { importHyp(); });
         auto* load = new QPushButton("Load pasted texts");
-        row->addWidget(load);
+        gTexts->addBig(load, "book");
         linkBtn_ = new QPushButton("Link (space)");
         linkBtn_->setEnabled(false);
-        row->addWidget(linkBtn_);
+        gLink->addBig(linkBtn_, "diff");
         auto* unlink = new QPushButton("Delete last link");
-        row->addWidget(unlink);
+        gLink->addBig(unlink, "scissors");
         auto* exportBtn = new QPushButton("Export aligned pairs (PENDING)…");
-        row->addWidget(exportBtn);
+        gHarvest->addBig(exportBtn, "out");
         auto* collateBtn = new QPushButton("Compare editions…");
         collateBtn->setToolTip(
             "Critical-edition collation: pick two witnesses of "
@@ -20911,11 +20917,11 @@ public:
             "variant reading is shown — A-only readings struck "
             "red, B-only green, plus a numbered apparatus you "
             "can save. Nothing is resolved; the editor rules.");
-        row->addWidget(collateBtn);
+        gHarvest->addBig(collateBtn, "stack");
         connect(collateBtn, &QPushButton::clicked,
                 [this] { compareEditions(); });
-        row->addStretch();
-        outer->addLayout(row);
+        ribbon->finish();
+        ribbon->attachTo(this);
 
         auto* split = new QSplitter(Qt::Horizontal);
         tib_ = new QTextEdit;
