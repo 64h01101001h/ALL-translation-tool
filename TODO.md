@@ -696,6 +696,14 @@ implementation is sidelined HERE from this date. What this means:
          Catalog is the first working taste and already shipped).
          Supersedes/absorbs the pane-by-pane framing of 9k if Adam
          chooses a global relayout.
+         MOCKUP BOARD PUBLISHED 2026-08-20 (same session, Adam:
+         "the mockup would be cool to see now"): claude.ai/code/
+         artifact/c6826fd7-6c4f-4508-9118-e1aed75748aa — Layout 1
+         ribbon-as-navigation (Word-faithful, tabs switch live) /
+         Layout 2 left rail + ribbon (Outlook-style) / Layout 3
+         quiet migration (today's shell + ribbon everywhere — the
+         Catalog pilot is its first real pane). Awaiting Adam's
+         pick.
       10. Idea bank (liked, never scheduled): pronunciation trainer (DECLINED-AS-CONCEIVED 2026-08-20: whisper's Tibetan too weak to honestly score learner speech — rule 3; needs a design conversation) ·
          Text DNA strips DONE 2026-08-20 (Overlay REVIEW → Text DNA: one colored column per source line — meter/off-meter/prose/blank + quote-announcement ticks; hover + click-to-jump; allcore textdna, suite 58; summary+jump selftest pin) · team board · apprenticeship mode ·
          English-on-the-carving hover DONE 2026-08-20 (cache-only tooltip over the woodblock: OCR-read wylie + HGM gloss, review-material label; seeded-cache selftest pin) · teaching-playlist karaoke ·
