@@ -539,6 +539,33 @@ implementation is sidelined HERE from this date. What this means:
            stays a labeled reference layer. Two probe bugs recorded
            as method notes (trailing-tsheg off-by-one; ACIP-vs-wylie
            stream drift — same-stream by construction now).
+      9h. **IN-HOUSE ACCESS + APPROVAL PIPELINE — SHIPPED 2026-08-20**
+         (Adam's directive, same day: "in-house only… login… awaiting
+         approval folder… all actions propagate through the linked/
+         shared official dropbox"). allcore catalog_actions (suite 57,
+         15 pins): ActionLedger over "<official root>/AWAITING
+         APPROVAL/" — stage COPIES (mother copy untouched, META
+         companion travels), plain-ASCII ACTIONS.tsv ledger (id, ts,
+         actor, action, source, staged name, proposed shelf, status,
+         decided-by/on, note), approve MOVES onto the proposed shelf,
+         reject → REJECTED/ with reason, nothing overwrites, second
+         decisions refused. App: CATALOG_TEAM.tsv roster IN the
+         official root (salted SHA-256 passphrase hashes; roles
+         admin/approver/cataloger; first entry bootstraps as admin =
+         Adam; honesty: team discipline + attribution, the Dropbox
+         share is the real perimeter); Sign in gate — all 10 action
+         buttons disabled until login; cataloger's "Move to shelf"
+         becomes STAGE for approval (identity evidence in the note);
+         approver still moves directly; Approvals… dialog (pending
+         table, approve/reject approver-only); Team… roster admin.
+         Official root = sess catalog/officialRoot (the team's
+         Dropbox folder; dest tree defaults there). Selftest pin:
+         roster verify + lock holds + stage→approve lands on the
+         shelf. Manual 14.20 (+ 14.15 role note). NOTE FOR THE TEAM:
+         Dropbox propagation is file-level — the app never calls
+         Dropbox; concurrent edits of ACTIONS.tsv on two machines
+         resolve as Dropbox conflicted copies (rare in practice:
+         approve/reject happen on one machine, GMR's).
       10. Idea bank (liked, never scheduled): pronunciation trainer ·
          Text DNA strips · team board · apprenticeship mode ·
          English-on-the-carving hover · teaching-playlist karaoke ·

@@ -123,6 +123,7 @@
 #include "allcore/shelf_suggest.h"
 #include "allcore/tree_diff.h"
 #include "allcore/catalog_qc.h"
+#include "allcore/catalog_actions.h"
 #include "allcore/worksheet.h"
 #ifdef ALL_HAVE_OCR
 #include "allocr/linebuild.h"
@@ -23628,6 +23629,75 @@ private:
 // v1 is the INTAKE surface: point it at an uncataloged folder and it
 // tells you what is already identifiable (the ACIP filename decoder
 // is the same one the Library trusts) and what is not. Nothing here
+// ---- in-house catalog access (Adam, 2026-08-20) ----------------
+// "Only certain people I approve can have access." The gate is a
+// team roster (CATALOG_TEAM.tsv) living IN the official library root
+// — the team's Dropbox-synced folder — so the same roster reaches
+// every machine on the share. Each row: name, initials, roles,
+// salted passphrase hash, provenance, status. This is team
+// discipline plus attribution, not cryptography: the Dropbox share
+// itself is the real perimeter, and the roster decides who the app
+// lets act, and signs every action with a name.
+struct CatalogMember {
+    QString name, initials, roles, salt, hash, addedBy, addedOn,
+        status;
+    bool active() const { return status != "revoked"; }
+    bool has(const char* role) const {
+        return roles.split(',').contains(QLatin1String(role));
+    }
+};
+static QString g_catalogUser;    // signed-in roster name; "" = locked
+static QString g_catalogRoles;   // the signed-in member's roles
+static bool catalogRoleHas(const char* r) {
+    return g_catalogRoles.split(',').contains(QLatin1String(r));
+}
+static QString catalogOfficialRoot() {
+    return sess::path("catalog/officialRoot");
+}
+static QString catalogRosterPath(const QString& root) {
+    return root + "/CATALOG_TEAM.tsv";
+}
+static QString catalogHash(const QString& salt, const QString& pass) {
+    return QString::fromLatin1(
+        QCryptographicHash::hash((salt + ":" + pass).toUtf8(),
+                                 QCryptographicHash::Sha256)
+            .toHex());
+}
+static QVector<CatalogMember> catalogRosterLoad(const QString& root) {
+    QVector<CatalogMember> out;
+    QFile f(catalogRosterPath(root));
+    if (!f.open(QIODevice::ReadOnly | QIODevice::Text)) return out;
+    bool header = false;
+    while (!f.atEnd()) {
+        const QString line = QString::fromUtf8(f.readLine()).trimmed();
+        if (line.isEmpty() || line.startsWith('#')) continue;
+        if (!header) { header = true; continue; }
+        const QStringList c = line.split('\t');
+        if (c.size() < 8) continue;
+        out.push_back({c[0], c[1], c[2], c[3], c[4], c[5], c[6], c[7]});
+    }
+    return out;
+}
+static bool catalogRosterSave(const QString& root,
+                              const QVector<CatalogMember>& m) {
+    QFile f(catalogRosterPath(root));
+    if (!f.open(QIODevice::WriteOnly | QIODevice::Text)) return false;
+    QTextStream ts(&f);
+    ts << "# Catalog team roster - who may use the cataloging "
+          "workflow, and as whom.\n"
+       << "# Roles: admin (manages this roster), approver (Geshe "
+          "Michael - approves staged actions), cataloger.\n"
+       << "# Access discipline, not cryptography: the shared folder "
+          "itself is the perimeter.\n"
+       << "name\tinitials\troles\tsalt\thash\tadded_by\tadded_on\t"
+          "status\n";
+    for (const auto& x : m)
+        ts << x.name << '\t' << x.initials << '\t' << x.roles << '\t'
+           << x.salt << '\t' << x.hash << '\t' << x.addedBy << '\t'
+           << x.addedOn << '\t' << x.status << '\n';
+    return true;
+}
+
 // writes to the catalog: the charter, inherited from the data
 // project, is that machine work LOCATES and SUGGESTS, humans approve,
 // and the official catalog changes only through the release process.
@@ -23824,9 +23894,59 @@ public:
             "what needs a cataloger. Nothing is written to the "
             "official catalog from here — suggestions route through "
             "the approval channel; the catalog itself changes only "
-            "through data releases.</span>");
+            "through data releases. In-house workflow: sign in from "
+            "the team roster; catalogers' shelf placements STAGE "
+            "into AWAITING APPROVAL for Geshe Michael's ruling, "
+            "inside the team's shared (Dropbox-synced) library "
+            "folder, so every action propagates through the "
+            "share.</span>");
         banner->setWordWrap(true);
         outer->addWidget(banner);
+        auto* access = new QHBoxLayout;
+        auto* offB = new QPushButton("Official library…");
+        offB->setToolTip(
+            "Choose the team's OFFICIAL library folder — the "
+            "Dropbox-synced folder everyone shares. The roster, the "
+            "AWAITING APPROVAL staging area, and every approved "
+            "placement live inside it, so Dropbox carries all of it "
+            "to the whole team.");
+        access->addWidget(offB);
+        auto* loginB = new QPushButton("Sign in…");
+        access->addWidget(loginB);
+        who_ = new QLabel;
+        who_->setStyleSheet("color:#777");
+        access->addWidget(who_);
+        access->addStretch();
+        pendB_ = new QPushButton("Approvals…");
+        pendB_->setToolTip(
+            "The list of staged cataloging actions awaiting Geshe "
+            "Michael's ruling — who did what, when, onto which "
+            "proposed shelf, with the evidence. Approve moves the "
+            "staged file onto its shelf; reject moves it to "
+            "REJECTED with the reason. Anyone signed in can read "
+            "the list; only an approver can rule.");
+        access->addWidget(pendB_);
+        teamB_ = new QPushButton("Team…");
+        teamB_->setToolTip(
+            "The roster: who may use this workflow, and as whom. "
+            "Admins add members (each with their own passphrase) "
+            "and revoke access.");
+        access->addWidget(teamB_);
+        outer->addLayout(access);
+        connect(offB, &QPushButton::clicked, [this] {
+            const QString d = safeGetExistingDirectory(
+                this, "Choose the OFFICIAL shared library folder "
+                      "(the team's Dropbox-synced folder)");
+            if (d.isEmpty()) return;
+            sess::put("catalog/officialRoot", d);
+            dest_->setRoot(d, false);
+            applyLock();
+        });
+        connect(loginB, &QPushButton::clicked, [this] { signIn(); });
+        connect(pendB_, &QPushButton::clicked,
+                [this] { approvalsDialog(); });
+        connect(teamB_, &QPushButton::clicked,
+                [this] { teamDialog(); });
         auto* actions = new QHBoxLayout;
         auto* auditB = new QPushButton("Audit bibliographies\u2026");
         auditB->setToolTip(
@@ -23908,6 +24028,10 @@ public:
         actions->addWidget(regB);
         actions->addStretch();
         outer->addLayout(actions);
+        // in-house gate: every catalog ACTION requires a signed-in
+        // roster member; browsing the trees stays open
+        gated_ = {auditB, splitB, nameB, listB, xlatB,
+                  diffB,  qcB,    wsB,   moveB, regB};
 
         auto* vsplit = new QSplitter(Qt::Vertical);
         auto* browsers = new QSplitter(Qt::Horizontal);
@@ -23941,6 +24065,11 @@ public:
             lastFile_ = p;
             showFile(p);
         };
+        // the official (Dropbox-synced) root wins as the destination
+        // tree when configured, and the pane starts locked
+        if (!catalogOfficialRoot().isEmpty())
+            dest_->setRoot(catalogOfficialRoot(), false);
+        applyLock();
         connect(nameB, &QPushButton::clicked,
                 [this] { composeNameDialog(); });
         connect(qcB, &QPushButton::clicked, [this] {
@@ -23963,6 +24092,7 @@ public:
             worksheetDialog(lastFile_);
         });
         connect(moveB, &QPushButton::clicked, [this] {
+            if (!requireLogin()) return;
             if (lastFile_.isEmpty() || intake_->root().isEmpty() ||
                 !lastFile_.startsWith(intake_->root())) {
                 info_->setHtml(
@@ -23977,6 +24107,43 @@ public:
                 return;
             }
             const QString name = QFileInfo(lastFile_).fileName();
+            if (!catalogRoleHas("approver")) {
+                // a cataloger's placement STAGES for the approver
+                if (QMessageBox::question(
+                        this, "Stage for approval?",
+                        "Stage\n  " + name + "\nfor the shelf\n  " +
+                            shelf +
+                            "\n\nA COPY goes to AWAITING APPROVAL "
+                            "(the mother copy is untouched) and the "
+                            "action is recorded in the ledger under "
+                            "your name, for Geshe Michael's "
+                            "ruling.") != QMessageBox::Yes)
+                    return;
+                QString note;
+                {   // carry the identity evidence when we have it
+                    const auto inf = allcore::decodeAcipFilename(
+                        name.toStdString());
+                    if (inf.recognized)
+                        note = "filename asserts " +
+                               QString::fromStdString(
+                                   inf.collection) +
+                               " " +
+                               QString::fromStdString(inf.number);
+                }
+                const QString err =
+                    stageForApproval(lastFile_, shelf, note);
+                info_->setHtml(
+                    err.isEmpty()
+                        ? "<div>Staged for approval — the file and "
+                          "the ledger row are in AWAITING APPROVAL "
+                          "inside the official library, and the "
+                          "Dropbox share carries them to the "
+                          "team.</div>"
+                        : "<div style='color:#B26B00'>" +
+                              err.toHtmlEscaped() +
+                              " — nothing staged.</div>");
+                return;
+            }
             if (QMessageBox::question(
                     this, "Move to shelf?",
                     "Move\n  " + name + "\nfrom\n  " +
@@ -25619,6 +25786,352 @@ private:
     QString root_;
     allcore::TitleBank bank_;
     bool bankBuilt_ = false;
+
+    // ---- the in-house access + approval layer (2026-08-20) ----
+public:
+    QLabel* who_ = nullptr;
+    QPushButton* pendB_ = nullptr;
+    QPushButton* teamB_ = nullptr;
+    QVector<QPushButton*> gated_;   // action buttons locked until sign-in
+
+    void applyLock() {
+        const QString root = catalogOfficialRoot();
+        const bool rosterExists =
+            !root.isEmpty() &&
+            QFileInfo::exists(catalogRosterPath(root));
+        const bool in = !g_catalogUser.isEmpty();
+        for (auto* b : gated_) b->setEnabled(in);
+        if (pendB_) pendB_->setEnabled(in);
+        if (teamB_)
+            teamB_->setEnabled(in ? catalogRoleHas("admin")
+                                  : !rosterExists);
+        if (!who_) return;
+        if (in)
+            who_->setText("signed in: <b>" +
+                          g_catalogUser.toHtmlEscaped() + "</b> (" +
+                          g_catalogRoles.toHtmlEscaped() + ")");
+        else if (root.isEmpty())
+            who_->setText("locked — choose the official library, "
+                          "then sign in");
+        else if (!rosterExists)
+            who_->setText("locked — no roster yet: Team… creates "
+                          "the first admin");
+        else
+            who_->setText("locked — sign in to act");
+    }
+
+    void signIn() {
+        const QString root = catalogOfficialRoot();
+        if (root.isEmpty()) {
+            info_->setHtml(
+                "<div style='color:#777'>Choose the official "
+                "library folder first — the roster lives inside "
+                "it, on the team's shared Dropbox folder.</div>");
+            return;
+        }
+        auto roster = catalogRosterLoad(root);
+        if (roster.isEmpty()) {
+            info_->setHtml(
+                "<div style='color:#777'>No roster yet. "
+                "<b>Team…</b> creates the first admin entry "
+                "(that should be Adam).</div>");
+            return;
+        }
+        QDialog d(this);
+        d.setWindowTitle("Sign in — catalog workflow");
+        auto* v = new QVBoxLayout(&d);
+        v->addWidget(new QLabel(
+            "In-house workflow: your actions are signed with your "
+            "roster name."));
+        auto* who = new QComboBox;
+        for (const auto& m : roster)
+            if (m.active()) who->addItem(m.name);
+        const int last = who->findText(sess::str("catalog/lastUser"));
+        if (last >= 0) who->setCurrentIndex(last);
+        v->addWidget(who);
+        auto* pw = new QLineEdit;
+        pw->setEchoMode(QLineEdit::Password);
+        pw->setPlaceholderText("passphrase");
+        v->addWidget(pw);
+        auto* bb = new QDialogButtonBox(QDialogButtonBox::Ok |
+                                        QDialogButtonBox::Cancel);
+        v->addWidget(bb);
+        connect(bb, &QDialogButtonBox::accepted, &d, &QDialog::accept);
+        connect(bb, &QDialogButtonBox::rejected, &d, &QDialog::reject);
+        if (d.exec() != QDialog::Accepted) return;
+        for (const auto& m : roster) {
+            if (m.name != who->currentText() || !m.active()) continue;
+            if (catalogHash(m.salt, pw->text()) == m.hash) {
+                g_catalogUser = m.name;
+                g_catalogRoles = m.roles;
+                sess::put("catalog/lastUser", m.name);
+                applyLock();
+                info_->setHtml("<div>Signed in as <b>" +
+                               m.name.toHtmlEscaped() + "</b> (" +
+                               m.roles.toHtmlEscaped() +
+                               "). Every action you take is "
+                               "recorded under this name.</div>");
+                return;
+            }
+        }
+        info_->setHtml("<div style='color:#B26B00'>Wrong name or "
+                       "passphrase — nothing signed in.</div>");
+    }
+
+    bool requireLogin() {
+        if (catalogOfficialRoot().isEmpty()) {
+            info_->setHtml(
+                "<div style='color:#777'>Choose the official "
+                "library folder first (the team's shared Dropbox "
+                "folder).</div>");
+            return false;
+        }
+        if (g_catalogUser.isEmpty()) {
+            info_->setHtml(
+                "<div style='color:#777'>Sign in first — the "
+                "cataloging workflow is in-house only, and every "
+                "action carries its actor's name.</div>");
+            return false;
+        }
+        return true;
+    }
+
+    // A cataloger's shelf placement: COPY into AWAITING APPROVAL +
+    // ledger row. Returns "" on success, else the reason.
+    QString stageForApproval(const QString& srcFile,
+                             const QString& shelfAbs,
+                             const QString& note = QString(),
+                             const QString& rootOverride = QString()) {
+        const QString root = rootOverride.isEmpty()
+                                 ? catalogOfficialRoot()
+                                 : rootOverride;
+        if (root.isEmpty()) return "no official library chosen";
+        QString rel = shelfAbs;
+        if (rel.startsWith(root))
+            rel = QDir(root).relativeFilePath(shelfAbs);
+        if (rel.startsWith("..") || QDir::isAbsolutePath(rel))
+            return "the destination shelf must be inside the "
+                   "official library";
+        allcore::ActionLedger led(root.toStdString());
+        if (!led.load()) return "the ledger is unreadable";
+        const QString ts =
+            QDateTime::currentDateTime().toString("yyyy-MM-dd HH:mm");
+        const std::string id = led.stage(
+            srcFile.toStdString(),
+            QFileInfo(srcFile).fileName().toStdString(),
+            rel.toStdString(), g_catalogUser.toStdString(),
+            ts.toStdString(), note.toStdString());
+        if (id.empty())
+            return "staging failed (a file of that name may "
+                   "already be awaiting approval)";
+        return QString();
+    }
+
+    void teamDialog() {
+        const QString root = catalogOfficialRoot();
+        if (root.isEmpty()) {
+            info_->setHtml(
+                "<div style='color:#777'>Choose the official "
+                "library folder first.</div>");
+            return;
+        }
+        auto roster = catalogRosterLoad(root);
+        const bool bootstrap = roster.isEmpty();
+        if (!bootstrap && !catalogRoleHas("admin")) {
+            info_->setHtml("<div style='color:#777'>Only an admin "
+                           "manages the roster.</div>");
+            return;
+        }
+        QDialog d(this);
+        d.setWindowTitle(bootstrap ? "Create the team roster"
+                                   : "Team roster");
+        auto* v = new QVBoxLayout(&d);
+        auto* list = new QListWidget;
+        auto refill = [&] {
+            list->clear();
+            for (const auto& m : roster)
+                list->addItem(m.name + "  ·  " + m.roles +
+                              (m.active() ? "" : "  ·  REVOKED"));
+        };
+        refill();
+        if (!bootstrap) v->addWidget(list);
+        else
+            v->addWidget(new QLabel(
+                "No roster exists yet. This first entry becomes "
+                "the ADMIN — the person who approves who else may "
+                "use the workflow (that should be Adam)."));
+        auto* form = new QFormLayout;
+        auto* nm = new QLineEdit;
+        if (bootstrap) nm->setText(g_userName);
+        auto* ini = new QLineEdit;
+        auto* role = new QComboBox;
+        role->addItems({"cataloger", "approver", "admin",
+                        "admin,approver"});
+        if (bootstrap) role->setCurrentText("admin");
+        auto* p1 = new QLineEdit; p1->setEchoMode(QLineEdit::Password);
+        auto* p2 = new QLineEdit; p2->setEchoMode(QLineEdit::Password);
+        form->addRow("Name", nm);
+        form->addRow("Initials", ini);
+        form->addRow("Roles", role);
+        form->addRow("Passphrase", p1);
+        form->addRow("Repeat", p2);
+        v->addLayout(form);
+        auto* row = new QHBoxLayout;
+        auto* addB = new QPushButton(bootstrap ? "Create roster"
+                                               : "Add member");
+        row->addWidget(addB);
+        auto* revB = new QPushButton("Revoke selected");
+        revB->setEnabled(!bootstrap);
+        row->addWidget(revB);
+        auto* closeB = new QPushButton("Close");
+        row->addWidget(closeB);
+        v->addLayout(row);
+        connect(closeB, &QPushButton::clicked, &d, &QDialog::accept);
+        connect(addB, &QPushButton::clicked, [&] {
+            if (nm->text().trimmed().isEmpty() ||
+                p1->text().isEmpty() || p1->text() != p2->text()) {
+                QMessageBox::warning(&d, "Roster",
+                                     "Name and matching passphrases "
+                                     "are required.");
+                return;
+            }
+            CatalogMember m;
+            m.name = nm->text().trimmed();
+            m.initials = ini->text().trimmed().toUpper();
+            m.roles = role->currentText();
+            m.salt = QString::fromLatin1(
+                QCryptographicHash::hash(
+                    (m.name +
+                     QString::number(QDateTime::currentMSecsSinceEpoch()))
+                        .toUtf8(),
+                    QCryptographicHash::Sha256)
+                    .toHex()
+                    .left(16));
+            m.hash = catalogHash(m.salt, p1->text());
+            m.addedBy = bootstrap ? m.name : g_catalogUser;
+            m.addedOn = QDate::currentDate().toString(Qt::ISODate);
+            m.status = "active";
+            roster.push_back(m);
+            catalogRosterSave(root, roster);
+            refill();
+            nm->clear(); ini->clear(); p1->clear(); p2->clear();
+            if (bootstrap) {
+                g_catalogUser = m.name;
+                g_catalogRoles = m.roles;
+                d.accept();
+            }
+        });
+        connect(revB, &QPushButton::clicked, [&] {
+            const int ix = list->currentRow();
+            if (ix < 0 || ix >= roster.size()) return;
+            roster[ix].status = "revoked";
+            catalogRosterSave(root, roster);
+            refill();
+        });
+        d.exec();
+        applyLock();
+    }
+
+    void approvalsDialog() {
+        const QString root = catalogOfficialRoot();
+        if (!requireLogin()) return;
+        allcore::ActionLedger led(root.toStdString());
+        if (!led.load()) {
+            info_->setHtml("<div style='color:#B26B00'>The action "
+                           "ledger is unreadable.</div>");
+            return;
+        }
+        QDialog d(this);
+        d.setWindowTitle("Cataloging actions awaiting approval");
+        d.resize(860, 480);
+        auto* v = new QVBoxLayout(&d);
+        const bool mayRule = catalogRoleHas("approver");
+        v->addWidget(new QLabel(
+            mayRule ? "<b>Pending actions</b> — approve moves the "
+                      "staged file onto its proposed shelf; reject "
+                      "moves it to REJECTED with your reason."
+                    : "<b>Pending actions</b> — read-only for your "
+                      "role; Geshe Michael (approver) rules."));
+        auto* tbl = new QTableWidget;
+        tbl->setColumnCount(6);
+        tbl->setHorizontalHeaderLabels(
+            {"id", "when", "who", "file (proposed name)",
+             "proposed shelf", "evidence / note"});
+        tbl->setSelectionBehavior(QAbstractItemView::SelectRows);
+        tbl->setEditTriggers(QAbstractItemView::NoEditTriggers);
+        auto refill = [&] {
+            led.load();
+            tbl->setRowCount(0);
+            for (const auto& r : led.all()) {
+                if (r.status != "pending") continue;
+                const int row = tbl->rowCount();
+                tbl->insertRow(row);
+                auto put = [&](int c, const std::string& t) {
+                    tbl->setItem(row, c,
+                                 new QTableWidgetItem(
+                                     QString::fromStdString(t)));
+                };
+                put(0, r.id); put(1, r.ts); put(2, r.actor);
+                put(3, r.staged_name); put(4, r.proposed_shelf);
+                put(5, r.note);
+            }
+            tbl->resizeColumnsToContents();
+        };
+        refill();
+        v->addWidget(tbl, 1);
+        auto* row = new QHBoxLayout;
+        auto* apprB = new QPushButton("Approve — place on the shelf");
+        apprB->setEnabled(mayRule);
+        row->addWidget(apprB);
+        auto* rejB = new QPushButton("Reject…");
+        rejB->setEnabled(mayRule);
+        row->addWidget(rejB);
+        row->addStretch();
+        auto* closeB = new QPushButton("Close");
+        row->addWidget(closeB);
+        v->addLayout(row);
+        connect(closeB, &QPushButton::clicked, &d, &QDialog::accept);
+        auto selId = [&]() -> std::string {
+            const int r = tbl->currentRow();
+            if (r < 0 || !tbl->item(r, 0)) return "";
+            return tbl->item(r, 0)->text().toStdString();
+        };
+        const std::string approver = g_catalogUser.toStdString();
+        connect(apprB, &QPushButton::clicked, [&, this] {
+            const std::string id = selId();
+            if (id.empty()) return;
+            const std::string err = led.approve(
+                id, approver,
+                QDate::currentDate()
+                    .toString(Qt::ISODate)
+                    .toStdString());
+            if (!err.empty())
+                QMessageBox::warning(
+                    &d, "Approve", QString::fromStdString(err));
+            refill();
+            dest_->setRoot(dest_->root(), false);
+        });
+        connect(rejB, &QPushButton::clicked, [&, this] {
+            const std::string id = selId();
+            if (id.empty()) return;
+            bool ok = false;
+            const QString why = QInputDialog::getText(
+                &d, "Reject", "Reason (recorded in the ledger):",
+                QLineEdit::Normal, QString(), &ok);
+            if (!ok) return;
+            const std::string err = led.reject(
+                id, approver,
+                QDate::currentDate()
+                    .toString(Qt::ISODate)
+                    .toStdString(),
+                why.toStdString());
+            if (!err.empty())
+                QMessageBox::warning(
+                    &d, "Reject", QString::fromStdString(err));
+            refill();
+        });
+        d.exec();
+    }
 };
 
 class SettingsDialog : public QDialog {
@@ -29077,6 +29590,78 @@ int main(int argc, char** argv) {
                                "per file")
                            .arg(regOk && states ? "PASS" : "FAIL");
                 if (!(regOk && states)) ++fails;
+                QDir(wd).removeRecursively();
+            }
+            {   // the in-house access layer (Adam 2026-08-20):
+                // roster hash round-trip, the lock, and a
+                // cataloger's stage into AWAITING APPROVAL
+                QDir().mkpath(wd + "/official");
+                QDir().mkpath(wd + "/in2");
+                { QFile f(wd + "/in2/S99993_TIB T_ENG E_AU.TXT");
+                  f.open(QIODevice::WriteOnly);
+                  f.write("@001A BODY,"); }
+                // roster: save + load + verify right/wrong pass
+                QVector<CatalogMember> ros;
+                CatalogMember m;
+                m.name = "Probe Cataloger"; m.initials = "PC";
+                m.roles = "cataloger"; m.salt = "probesalt";
+                m.hash = catalogHash("probesalt", "om mani");
+                m.addedBy = "harness"; m.addedOn = "2026-08-20";
+                m.status = "active";
+                ros.push_back(m);
+                const bool rosterOk =
+                    catalogRosterSave(wd + "/official", ros) &&
+                    catalogRosterLoad(wd + "/official").size() == 1 &&
+                    catalogHash("probesalt", "om mani") == m.hash &&
+                    catalogHash("probesalt", "wrong") != m.hash;
+                // the lock: signed out, actions disabled; signed in,
+                // enabled (the sweep respects the same gate)
+                const QString keepU = g_catalogUser,
+                              keepR = g_catalogRoles;
+                g_catalogUser.clear(); g_catalogRoles.clear();
+                catalogPane->applyLock();
+                bool lockOk = !catalogPane->gated_.isEmpty();
+                for (auto* b : catalogPane->gated_)
+                    lockOk = lockOk && !b->isEnabled();
+                g_catalogUser = "Probe Cataloger";
+                g_catalogRoles = "cataloger";
+                catalogPane->applyLock();
+                for (auto* b : catalogPane->gated_)
+                    lockOk = lockOk && b->isEnabled();
+                // a cataloger's placement stages (copy + ledger row),
+                // and the approver's ruling lands it on the shelf
+                const QString serr = catalogPane->stageForApproval(
+                    wd + "/in2/S99993_TIB T_ENG E_AU.TXT",
+                    wd + "/official/Sungbum/PROBE SHELF", "probe",
+                    wd + "/official");
+                allcore::ActionLedger led(
+                    (wd + "/official").toStdString());
+                led.load();
+                bool stageOk =
+                    serr.isEmpty() && led.pendingCount() == 1 &&
+                    QFile::exists(wd + "/official/AWAITING APPROVAL/"
+                                       "S99993_TIB T_ENG E_AU.TXT") &&
+                    QFile::exists(
+                        wd + "/in2/S99993_TIB T_ENG E_AU.TXT");
+                if (stageOk) {
+                    const std::string aerr = led.approve(
+                        led.all().front().id, "Geshe Michael",
+                        "2026-08-20");
+                    stageOk = aerr.empty() &&
+                              QFile::exists(
+                                  wd +
+                                  "/official/Sungbum/PROBE SHELF/"
+                                  "S99993_TIB T_ENG E_AU.TXT");
+                }
+                g_catalogUser = keepU; g_catalogRoles = keepR;
+                catalogPane->applyLock();
+                log << QString("  [%1] Catalog: in-house gate — "
+                               "roster verifies, the lock holds, a "
+                               "cataloger's move stages and the "
+                               "approver's ruling shelves it")
+                           .arg(rosterOk && lockOk && stageOk
+                                    ? "PASS" : "FAIL");
+                if (!(rosterOk && lockOk && stageOk)) ++fails;
                 QDir(wd).removeRecursively();
             }
             {   // the change-log stamp: stamping renames the folder

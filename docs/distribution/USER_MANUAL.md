@@ -64,7 +64,8 @@ app: Help menu → ALL Tool Help & Tutorials.*
   - 14.17 Propose this identity — the routing
   - 14.18 QC intake — the two quality lanes
   - 14.19 Where might this belong? — shelf suggestions
-  - 14.20 What the workflow will do next
+  - 14.20 In-house access — sign in, stage, approve
+  - 14.21 What the workflow will do next
 - **CHAPTER 15 — THE PROPOSE PANE (Community → Propose)**
   - 15.1 One-time identity setup
   - 15.2 Making a proposal
@@ -3116,6 +3117,12 @@ once identified and properly named, goes onto its shelf in the
 destination tree. Select the file on the left, click the target
 shelf (folder) on the right, then **Move to shelf…**.
 
+Since the in-house access layer (14.20), what this button does
+depends on your role: an **approver** moves directly, as described
+here; a **cataloger's** click stages the placement for approval
+instead — nothing touches the official shelves until Geshe Michael
+rules.
+
 The move follows the house rules to the letter:
 
 - **Move, not copy** — after the handoff the file lives in exactly
@@ -3236,7 +3243,45 @@ lesson: shelf choice is the fine-grained subject judgment the
 sessions reserve for trained humans, which is exactly why the
 human confirms every move.
 
-## 14.20 What the workflow will do next
+## 14.20 In-house access — sign in, stage, approve
+
+The cataloging workflow is **in-house only** (2026-08-20). Three
+pieces make that real, all living inside one folder — the team's
+**official library**, which should be the shared Dropbox-synced
+folder everyone already uses. Because everything lives inside that
+folder, Dropbox itself carries every staged file, every ledger row,
+and every approved placement to the whole team; the app never talks
+to Dropbox, it just works inside the folder Dropbox syncs.
+
+**The roster and sign-in.** *Official library…* points the pane at
+the shared folder. *Team…* creates and manages `CATALOG_TEAM.tsv`
+inside it — who may use the workflow, and as whom. The first entry
+created becomes the **admin** (that should be Adam); the admin adds
+members, each with their own passphrase, and revokes access. Give
+Geshe Michael the **approver** role. Until someone signs in, every
+action button in the pane is disabled — browsing stays open, acting
+does not. Honesty note: this is team discipline plus attribution
+(salted passphrase hashes, every action signed with a name), not
+cryptography — the Dropbox share itself is the real wall.
+
+**Staging.** When a signed-in **cataloger** clicks *Move to
+shelf…*, the file does not go onto the shelf. A **copy** goes into
+`AWAITING APPROVAL/` inside the official library (the mother copy
+in the intake is untouched), under its proposed catalog name, and a
+row is appended to `ACTIONS.tsv` beside it: who, when, which file,
+which proposed shelf, and the evidence. The ledger is plain ASCII —
+Geshe Michael can read the list of actions in any editor, forever.
+
+**Approving.** *Approvals…* shows the pending list — every staged
+action with its actor, proposed name, proposed shelf, and evidence.
+Anyone signed in can read it; only an **approver** (Geshe Michael)
+can rule. *Approve* moves the staged file onto its proposed shelf
+(the placement then syncs to the whole team); *Reject…* moves it to
+`AWAITING APPROVAL/REJECTED/` with the reason recorded in the
+ledger — nothing is ever deleted. An approver's own *Move to
+shelf…* still acts directly, exactly as before.
+
+## 14.21 What the workflow will do next
 
 The workflow's core is complete: census, identity, audit, splits,
 naming, the ASCII list, the title workbench, tree comparison,

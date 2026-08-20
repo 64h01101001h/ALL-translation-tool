@@ -61,6 +61,7 @@ add_library(allcore STATIC
   src/catalog_qc.cpp
   src/shelf_suggest.cpp
   src/tm84000.cpp
+  src/catalog_actions.cpp
 )
 target_include_directories(allcore PUBLIC include)
 
@@ -354,3 +355,8 @@ target_link_libraries(tm84000_smoke PRIVATE allcore)
 add_test(NAME tm84000_smoke
          COMMAND tm84000_smoke ${CMAKE_SOURCE_DIR}/data/84000/tm_84000.tsv.gz
                  ${CMAKE_BINARY_DIR})
+
+add_executable(catalog_actions_smoke tests/catalog_actions_smoke.cpp)
+target_link_libraries(catalog_actions_smoke PRIVATE allcore)
+add_test(NAME catalog_actions_smoke
+         COMMAND catalog_actions_smoke ${CMAKE_BINARY_DIR})
