@@ -496,24 +496,30 @@ implementation is sidelined HERE from this date. What this means:
            reconciliation): allcore WhitneyRoots::byPpp shipped with
            battery pins (gata→gam, krta→kṛtá) and TWO app wiring
            sites (Lookup + Sanskrit). This line had gone stale-open.
-         · **"Text reports" pane (option E)** — survey + teachings +
-           structure gathered in one place; my own UX ruling was
-           "revisit after the polish phase", which has now passed.
+         · **"Text reports" pane (option E)** — CONDITION MEASURED
+           2026-08-20: the Overlay REVIEW section now holds SEVEN
+           tools (Outline, Citations, Verse meter, Prose reader,
+           Typography, Spellcheck, Teachings) — "outgrown" by any
+           reading. But ruling E is Adam-ratified and tied to the
+           joint walkthrough, so the pane is NOT built autonomously;
+           the measurement goes on the walkthrough agenda for Adam's
+           call.
          · **Night-mode + typography audit** — needs fresh
            screenshots against the current layout; pairs with the
            joint T/K/F walkthrough already in Adam's queue.
          · **Transfer-queue reordering + remote edit with
            auto-upload** — the two File Browser P3 items deferred
            with reasons.
-         · **Botok/Monlam deeper revisit** — NOTE 2026-08-20: both
-           Monlam lexicons ARE loaded app-side (segtrie lexicon);
-           the open question is only the deeper botok integration.
-           Original: load the Monlam lexicon
-           into the overlap probe for true in-app parity, and split
-           the divergence count into phrase-span-explained vs
-           genuinely-different-boundary classes
-           (docs/research/BOTOK_LATTICE_OVERLAP.md says what this
-           would look like).
+         · **Botok/Monlam deeper revisit** — DONE 2026-08-20
+           (docs/research/BOTOK_LATTICE_OVERLAP.md §Revisit): probe
+           rebuilt at full in-app parity (547,946 words). Identity
+           25.5%→41.7%, precision 98.4%, recall 92.9%; all 193
+           divergent lines classified — 129 pure merges (vocabulary,
+           not disagreement), 64 genuine crossings (19.3%), dominated
+           by honorific name/title chunking. Ruling stands: botok
+           stays a labeled reference layer. Two probe bugs recorded
+           as method notes (trailing-tsheg off-by-one; ACIP-vs-wylie
+           stream drift — same-stream by construction now).
       10. Idea bank (liked, never scheduled): pronunciation trainer ·
          Text DNA strips · team board · apprenticeship mode ·
          English-on-the-carving hover · teaching-playlist karaoke ·
