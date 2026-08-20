@@ -244,3 +244,13 @@ UX decision log starts with: (1) ribbon = primary navigation (Adam's
 ruling, screenshots, 2026-08-20); (2) query-form panes keep their
 forms in-pane (Word semantics — forms are not commands); (3) color
 icon families with washes (visibility ruling, 2026-08-20).*
+
+### Decision log (continued)
+- 2026-08-20 · **Review pane** joins the band (REVIEW group: source · draft · run). 59/59 green.
+- 2026-08-20 · **Scans stays a launcher page.** Its four actions carry epistemic
+  descriptions ("candidates only, never claimed complete") that the band's
+  icon-over-short-label grammar cannot hold. Ruling: launcher pages whose button
+  descriptions carry honesty wording keep the vertical layout. (§53 pushback.)
+- 2026-08-20 · **Trainer and Drills stay compact rows.** Both are settings-dense
+  learning forms (mode/script/course selectors interleaved with actions); the
+  query-surface ruling applies.

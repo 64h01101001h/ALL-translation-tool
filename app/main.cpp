@@ -20584,15 +20584,17 @@ public:
             "guide the reviewer's attention; nothing is auto-corrected.");
         rvBanner->setWordWrap(true);
         outer->addWidget(rvBanner);
-        auto* row = new QHBoxLayout;
+        auto* ribbon = new RibbonBar;
+        auto* gRv = ribbon->group("REVIEW");
         auto* openSrc = new QPushButton("Open source…");
         auto* openDraft = new QPushButton("Open draft…");
         auto* runB = new QPushButton("Run review");
-        row->addWidget(openSrc);
-        row->addWidget(openDraft);
-        row->addWidget(runB);
-        row->addStretch();
-        outer->addLayout(row);
+        gRv->addBig(openSrc, "page");
+        gRv->addBig(openDraft, "page");
+        gRv->addBig(runB, "check");
+
+        ribbon->finish();
+        ribbon->attachTo(this);
         auto* split = new QSplitter(Qt::Horizontal);
         src_ = new QPlainTextEdit;
         src_->setPlaceholderText("Tibetan source (ACIP)…");
