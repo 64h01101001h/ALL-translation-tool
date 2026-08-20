@@ -67,12 +67,17 @@ implementation is sidelined HERE from this date. What this means:
          (scratchpad/lattice_probe.cpp banked in the memory log) as
          the test harness; consider fixing ONLY the walk target
          first, leaving ↑/↓ untouched, then iterating live.
-      1. Pecha programme remainder — v4: N2 double-shad-gap
-         justification, N4/N6 wrapped-shad space discard,
-         letter-spacing fallback for non-tsheg line ends; v3:
-         dbu-khyud + double-shad conventions, margin presets,
+      1. Pecha programme remainder — RECONCILED 2026-08-20: the v4
+         half of this line was STALE — N1-N5 all COMPLETE 2026-08-14
+         (see the [x] v4 entry above; letter-spacing fallback DROPPED
+         with reason there). Shipped conventions verified in code:
+         ༄༅། ། opens every recto (shadConv), ༎ stanza close, yig-mgo
+         head marks, classical 5-line opening, ya-yig margin title,
+         volume letter, title folio. GENUINELY REMAINING, all gated:
          Sungbum-format syllable budget (needs the OCR-stats lane);
-         print QA needs Adam's reference prints (that half gated).
+         margin presets + dbu-khyud fine conventions + print QA
+         (correct values COME from Adam's reference prints — joint
+         half; building presets before the prints would be guessing).
       2. Banked-corpus mining — Hackett verb classes FIRST HARVEST
          BANKED 2026-08-14: data/hackett/verb_classes.tsv, 344 rows
          (91 CC0-corroborated · 11 cc0-disagrees flagged for review
@@ -205,10 +210,23 @@ implementation is sidelined HERE from this date. What this means:
          tier discipline: curated/glossary preferred, auto-aligned
          only alone, capped 3, labeled PROVISIONAL. +134 notes → 252
          of 2,234 anchored; pane label covers both methods; selftest
-         floor 240 + route-4 evidence render pinned. REMAINING:
-         routes 1+2 (course-constrained corpus match + phrase
-         isolation — the dangerous one, measured 2026-08-15; needs
-         source-work→course mapping first) stay open.
+         floor 240 + route-4 evidence render pinned.
+         ROUTE 1 SHIPPED 2026-08-20 (same day): the source-work→
+         course mapping EXISTS in the corpus itself — SVN/SSL/OSE are
+         whole published books as courses. tools/
+         build_apparatus_anchors_r1.py: lemma verbatim in the
+         published English of the note's OWN course → labeled PASSAGE
+         candidates ("WHERE HIS PUBLISHED ENGLISH USES THIS LEMMA…
+         not a term equivalence"), capped 3; the course constraint
+         kills the wrong-work class the 2026-08-15 measurement warned
+         about, and the passage label satisfies the never-hand-back-
+         the-whole-segment rule. +189 notes → 444/2,234 anchored.
+         Selftest floor 420 + passage-render pin (pin lesson: the
+         raw-wylie sample check needs a TERM anchor). REMAINING:
+         route 2 phrase isolation (word-level alignment inside the
+         matched passage) — genuine research; the two compilation
+         sources (1,890 notes) have no single course and stay
+         honestly unmapped.
       9d. **GMR RULING — resolve Tibetan number through the
          Sanskrit (Adam relaying Geshe Michael, 2026-08-15).** His
          method: *when you are stuck on whether a Tibetan term is

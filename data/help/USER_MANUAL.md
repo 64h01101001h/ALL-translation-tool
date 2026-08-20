@@ -1332,9 +1332,15 @@ either the note itself quotes the Tibetan in its own body (the
 evidence line shows that sentence), or — added 2026-08-20 —
 Geshe Michael's own English equivalent for a dictionary entry is
 exactly this footnote's lemma (the evidence names the gloss, its
-tier, and marks PROVISIONAL tiers plainly). 252 of the 2,234
-notes carry such candidates today; the rest stay honestly bare
-rather than guessed at.
+tier, and marks PROVISIONAL tiers plainly). A third route (also
+2026-08-20) adds **passage evidence** for notes from the three
+published single-book sources: where the lemma appears verbatim in
+the published English of the note's *own work* (the aligned corpus
+carries each book under one course), the matching passages appear
+under "WHERE HIS PUBLISHED ENGLISH USES THIS LEMMA" — explicitly
+the passage, never a term equivalence; you read the Tibetan
+yourself. 444 of the 2,234 notes carry candidates today; the rest
+stay honestly bare rather than guessed at.
 
 ## Review
 

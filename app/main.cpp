@@ -707,6 +707,11 @@ static const allcore::Spine* g_spineForAbout = nullptr;
 struct ApparatusAnchor {
     QString wylie, asWritten, evidence;
     bool technical = false;
+    bool passage = false;   // route 1 (2026-08-20): a course-
+                            // constrained PASSAGE where the lemma
+                            // appears in the published English of
+                            // the note's own work - displayed as a
+                            // passage, never as a term equivalence
 };
 struct ApparatusNote {
     QString lemma, text, source;
@@ -11356,7 +11361,35 @@ public:
             "or (labeled) where HGM's own English equivalent is "
             "exactly this lemma &mdash; candidates, "
             "not a ruling on which term the note hangs on</i></div>";
+        bool passageHdr = false;
         for (const auto& a : n.anchors) {
+            if (a.passage) {
+                if (!passageHdr) {
+                    passageHdr = true;
+                    h += "<div style='font-size:12px;color:#1F5B4B;"
+                         "font-weight:600;letter-spacing:.06em;"
+                         "margin-top:8px'>WHERE HIS PUBLISHED "
+                         "ENGLISH USES THIS LEMMA (same work)</div>"
+                         "<div style='font-size:12px;color:#888'><i>"
+                         "the passage, not a term equivalence "
+                         "&mdash; read the Tibetan yourself</i>"
+                         "</div>";
+                }
+                auto [puni, pok] =
+                    allcore::wylieToUnicode(a.wylie.toStdString());
+                h += "<div style='margin-top:6px'><small>[" +
+                     a.asWritten.toHtmlEscaped() + "]</small>";
+                if (pok && !puni.empty())
+                    h += "<br><span style='font-size:15px'>" +
+                         QString::fromStdString(puni)
+                             .left(220)
+                             .toHtmlEscaped() +
+                         "</span>";
+                h += "<br><i style='color:#666;font-size:12px'>" +
+                     a.evidence.left(260).toHtmlEscaped() +
+                     "</i></div>";
+                continue;
+            }
             auto [uni, ok] =
                 allcore::wylieToUnicode(a.wylie.toStdString());
             h += "<div style='margin-top:7px'>";
@@ -27587,7 +27620,8 @@ int main(int argc, char** argv) {
                             {c["wylie"].toString(),
                              c["as_written"].toString(),
                              c["evidence"].toString(),
-                             c["technical_spelling"].toBool()});
+                             c["technical_spelling"].toBool(),
+                             c["passage"].toBool()});
                     }
                 }
             }
@@ -29297,11 +29331,16 @@ int main(int argc, char** argv) {
                 for (const auto& n : *g_appNotes)
                     if (!n.anchors.empty()) {
                         ++withAnchors;
-                        if (!sample) sample = &n;
+                        // the raw-wylie render check needs a TERM
+                        // anchor (passage anchors print the
+                        // converted passage, not its wylie)
+                        if (!sample && !n.anchors.front().passage)
+                            sample = &n;
                     }
-            // route 4 (2026-08-20) lifted the floor: 117 body-quoted
-            // + 134 reverse-index notes = 250 rows; assert just under
-            bool ok = withAnchors >= 240 && sample;
+            // routes 3+4+1 (2026-08-20): 117 body-quoted + 134
+            // reverse-index + 189 course-passage = 439 rows; floor
+            // just under
+            bool ok = withAnchors >= 420 && sample;
             if (ok) {
                 const QString h = ApparatusPane::anchorHtml(*sample);
                 ok = h.contains("TIBETAN NAMED IN THIS NOTE") &&
@@ -29320,6 +29359,19 @@ int main(int argc, char** argv) {
                             r4 = &n;
                 ok = r4 && ApparatusPane::anchorHtml(*r4).contains(
                                "hgm_reverse_index");
+            }
+            if (ok && g_appNotes) {
+                // a course-passage anchor renders as a PASSAGE,
+                // labeled, never as a term equivalence
+                const ApparatusNote* r1 = nullptr;
+                for (const auto& n : *g_appNotes)
+                    for (const auto& a : n.anchors)
+                        if (!r1 && a.passage) r1 = &n;
+                const QString h1 =
+                    r1 ? ApparatusPane::anchorHtml(*r1) : QString();
+                ok = r1 &&
+                     h1.contains("WHERE HIS PUBLISHED ENGLISH") &&
+                     h1.contains("not a term equivalence");
             }
             {   // ⌘K reaches the apparatus (Adam: "search my
                 // footnotes and bibliography entries" — asked from
