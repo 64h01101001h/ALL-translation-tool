@@ -94,6 +94,9 @@
 #include <functional>
 #include <QDateTime>
 #include <QStandardPaths>
+
+#include <atomic>
+#include <thread>
 #include <QTimer>
 #include <QPointer>
 #include <QTreeWidget>
@@ -21922,6 +21925,12 @@ public:
         connect(save_, &QPushButton::clicked, [this] { saveOut(); });
     }
 
+    ~ScanPane() override {
+        // never leave the worker posting into a dead pane
+        ocrStop_ = true;
+        if (ocrThread_.joinable()) ocrThread_.join();
+    }
+
     void restoreSession() {
         const QString f = sess::path("ocr/lastImage");
         if (!f.isEmpty()) openImagePath(f);
@@ -22052,26 +22061,67 @@ private:
     }
 
     void runOcr() {
+        // async since 2026-08-20 (master-board item 6): recognition
+        // runs on a worker thread; the button becomes Stop while it
+        // runs; partial results are labeled, never silently dropped
+        if (ocrRunning_) {
+            ocrStop_ = true;
+            run_->setText("stopping…");
+            return;
+        }
         if (img_.isNull() || !ensureModels()) return;
-        results_->setHtml("<i>detecting lines…</i>");
-        QCoreApplication::processEvents();
-        // QImage rows are 4-byte aligned — repack tightly
+        // QImage rows are 4-byte aligned — repack tightly (UI thread;
+        // the worker never touches img_)
         const int w = img_.width(), h = img_.height();
         std::vector<uint8_t> rgb(static_cast<size_t>(w) * h * 3);
         for (int y = 0; y < h; ++y)
             std::copy(img_.constScanLine(y), img_.constScanLine(y) + w * 3,
                       rgb.begin() + static_cast<size_t>(y) * w * 3);
+        const bool deskewOff = deskewOverride_->isChecked();
+        ocrRunning_ = true;
+        ocrStop_ = false;
+        run_->setText("Stop");
+        save_->setEnabled(false);
+        results_->setHtml("<i>detecting lines…</i>");
+        if (ocrThread_.joinable()) ocrThread_.join();
+        ocrThread_ = std::thread([this, rgb = std::move(rgb), w, h,
+                                  deskewOff] {
+            ocrWorker(rgb, w, h, deskewOff);
+        });
+    }
+
+    // finishing move shared by completion and Stop: publish the
+    // worker's results on the UI thread
+    void ocrFinish(allocr::PageLines pl,
+                   std::vector<std::vector<allocr::WordSpan>> words,
+                   std::vector<std::string> wylie, QString html,
+                   bool stopped, int done) {
+        pl_ = std::move(pl);
+        words_ = std::move(words);
+        lastWylie_ = std::move(wylie);
+        if (stopped)
+            html += QString("<div style='color:#B4540A'><b>stopped "
+                            "after %1 line(s)</b> — partial results "
+                            "above; run again for the whole "
+                            "page</div>")
+                        .arg(done);
+        results_->setHtml(html);
+        drawPage(-1, -1);
+        save_->setEnabled(!lastWylie_.empty());
+        run_->setText("Run OCR");
+        ocrRunning_ = false;
+    }
+
+    void ocrWorker(const std::vector<uint8_t>& rgb, int w, int h,
+                   bool deskewOff) {
         auto mask = det_->detect(rgb.data(), w, h);
         const double zero = 0.0;
-        pl_ = allocr::buildLines(
+        allocr::PageLines pl = allocr::buildLines(
             rgb.data(), w, h, mask, 2.5, 4.0, true,
-            deskewOverride_->isChecked() ? &zero : nullptr);
-        auto& pl = pl_;
-        words_.assign(pl.images.size(), {});
-        drawPage(-1, -1);
-
-        // recognize each line; convert via OUR chain; syllable QC
-        lastWylie_.clear();
+            deskewOff ? &zero : nullptr);
+        std::vector<std::vector<allocr::WordSpan>> words(
+            pl.images.size());
+        std::vector<std::string> lastWylie;
         QString htmlOut =
             QString("<div style='color:#555;font-size:12px'>deskew %1° "
                     "%2 · %3 line(s) · every line OCR-DERIVED (review "
@@ -22083,15 +22133,23 @@ private:
                          : "(BDRC pipeline)")
                 .arg(pl.lines.size());
         int flagged = 0;
+        size_t done = 0;
         for (size_t i = 0; i < pl.images.size(); ++i) {
-            results_->setHtml(htmlOut +
-                              QString("<i>recognizing line %1/%2…</i>")
+            if (ocrStop_) break;
+            {   // progress lands on the UI thread; the worker owns
+                // all the data until the finish call
+                const QString prog =
+                    htmlOut + QString("<i>recognizing line %1/%2…</i>")
                                   .arg(i + 1)
-                                  .arg(pl.images.size()));
-            QCoreApplication::processEvents();
+                                  .arg(pl.images.size());
+                QMetaObject::invokeMethod(
+                    this, [this, prog] { results_->setHtml(prog); },
+                    Qt::QueuedConnection);
+            }
             const std::string wylie =
-                rec_->recognize(pl.images[i], true, &words_[i]);
-            lastWylie_.push_back(wylie);
+                rec_->recognize(pl.images[i], true, &words[i]);
+            lastWylie.push_back(wylie);
+            ++done;
             auto [uni, ok] = allcore::wylieToUnicode(wylie);
             int bad = 0, toks = 0;
             std::stringstream ss(wylie);
@@ -22109,14 +22167,14 @@ private:
             // wylie rendered as clickable per-word anchors (follow-along:
             // clicking highlights the word's frame-span box on the page)
             QString wylieHtml;
-            if (!words_[i].empty()) {
-                for (size_t k = 0; k < words_[i].size(); ++k)
+            if (!words[i].empty()) {
+                for (size_t k = 0; k < words[i].size(); ++k)
                     wylieHtml +=
                         QString("<a href='w:%1:%2' style='text-decoration:"
                                 "none;color:#1E4E6B'>%3</a>")
                             .arg(i)
                             .arg(k)
-                            .arg(QString::fromStdString(words_[i][k].text)
+                            .arg(QString::fromStdString(words[i][k].text)
                                      .toHtmlEscaped());
             } else {
                 wylieHtml = QString::fromStdString(wylie).toHtmlEscaped();
@@ -22139,8 +22197,18 @@ private:
                            "legality flags: %1 — OCR output is review "
                            "material (models: BDRC, CC BY-NC 4.0)</div>")
                        .arg(flagged);
-        results_->setHtml(htmlOut);
-        save_->setEnabled(!lastWylie_.empty());
+        const bool stopped = ocrStop_ && done < pl.images.size();
+        QMetaObject::invokeMethod(
+            this,
+            [this, pl = std::move(pl), words = std::move(words),
+             lastWylie = std::move(lastWylie),
+             htmlOut = std::move(htmlOut), stopped,
+             done]() mutable {
+                ocrFinish(std::move(pl), std::move(words),
+                          std::move(lastWylie), htmlOut, stopped,
+                          int(done));
+            },
+            Qt::QueuedConnection);
     }
 
     // Batch-volume OCR (Than Grove's OCRProcessing pattern): every page
@@ -22296,6 +22364,9 @@ private:
     std::unique_ptr<allocr::LineDetector> det_;
     QString recDir_;
     std::unique_ptr<allocr::TextRecognizer> rec_;
+    std::thread ocrThread_;             // the async recognition worker
+    std::atomic<bool> ocrStop_{false};  // Stop button sets this
+    bool ocrRunning_ = false;
     QLabel* pageView_ = nullptr;
     QScrollArea* scroll_ = nullptr;
     QTextBrowser* results_ = nullptr;

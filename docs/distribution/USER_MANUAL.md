@@ -2592,7 +2592,10 @@ top ("open a scan image (PNG/JPG/TIFF)" until you do) and the
   pipeline, the output header says so explicitly whenever it is
   on. Leave it off unless a straight page comes out skewed.
 - **Run OCR** — greyed out until an image is open; runs the full
-  pipeline on the page. See §13.3.
+  pipeline on the page. Since 2026-08-20 recognition runs in the
+  background: the interface stays live, the button becomes **Stop**
+  while it works, and stopping keeps the lines already recognized,
+  clearly labeled as partial. See §13.3.
 - **mark illustration candidates** (checkbox) — outlines folio
   regions *not* covered by detected text lines — side panels and
   large vertical gaps, where woodblock miniatures and diagrams

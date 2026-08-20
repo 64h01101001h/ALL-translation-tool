@@ -106,9 +106,13 @@ implementation is sidelined HERE from this date. What this means:
          license banner, progress downloads, config saved under the
          recognizer's expected name, picker with bundled-Woodblock
          fallback — resolver selftest-pinned; parser accepts BDRC
-         string-form charsets, ocr_smoke-proven). REMAINING: async
-         recognition · model refresh when BDRC's ~end-Aug release
-         lands.
+         string-form charsets, ocr_smoke-proven). ASYNC RECOGNITION
+         DONE 2026-08-20: Run OCR runs on a worker thread (std::thread
+         + queued invokeMethod posts; worker owns all data until the
+         finish call — no cross-thread mutation), button becomes Stop,
+         partial results labeled "stopped after N lines"; pane dtor
+         joins the worker. REMAINING: model refresh when BDRC's
+         ~end-Aug release lands (external).
       7. ~~True-Phugpa calendar port~~ CORE SHIPPED 2026-08-14:
          allcore tibcal_phugpa (Generalised Phugpa epoch of TCG,
          ported from the files) + suite 43 phugpa_smoke — 21 oracle
@@ -128,7 +132,7 @@ implementation is sidelined HERE from this date. What this means:
          2026-08-15 (suggestPartner: the shared page scan's folder +
          stem; single match preselects the compare dialog, user
          always confirms — the input centers' real naming convention
-         still awaited) · UTFC lane hookup · ~~Spotlight async~~
+         still awaited) · ~~UTFC lane hookup~~ AUDIT-STALE, was already DONE 2026-08-15 (g_openTextInInput + inputrescue: anchor — rescued text flows into Input; verified in code 2026-08-20) · ~~Spotlight async~~
          DONE 2026-08-15 (concurrent mdfind fan-out, one shared 6s
          deadline, Stop honored) · ~~QTextCursor selftest warning~~
          ROOT-CAUSED + FIXED 2026-08-15 (lldb backtrace:
