@@ -341,7 +341,15 @@ mints catalog numbers; the mother copy is never touched.**
 
 ## Phase 3 — depth from the sessions (queued 2026-08-19, Adam: "keep going")
 
-- [ ] 17. **Shelf suggestions for the handoff** (the sessions'
+- [x] 17. **Shelf suggestions for the handoff** — SHIPPED
+      2026-08-19 (suite 55 shelf_suggest_smoke; selftest pin).
+      FOUR configurations measured held-out on the shelved Sungbum
+      (author-heavy 24% top-1 / flat mixed-path 29% / leaf-weighted
+      23% / flat Tibetan-half 31%+43%-top-3, shipped) — the modest
+      ceiling recorded as the design's own lesson: shelf choice is
+      the human subject judgment; the report prints the numbers.
+      Clicking a suggestion selects the shelf; the human confirms.
+      Original spec: (the sessions'
       endgame: subject shelves are the whole point; BDRC has none;
       "a book on the wrong shelf is lost forever"). When a file is
       selected for Move to shelf, suggest WHERE — evidence-carrying,

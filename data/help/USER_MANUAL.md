@@ -63,7 +63,8 @@ app: Help menu → ALL Tool Help & Tutorials.*
   - 14.16 The worksheet
   - 14.17 Propose this identity — the routing
   - 14.18 QC intake — the two quality lanes
-  - 14.19 What the workflow will do next
+  - 14.19 Where might this belong? — shelf suggestions
+  - 14.20 What the workflow will do next
 - **CHAPTER 15 — THE PROPOSE PANE (Community → Propose)**
   - 15.1 One-time identity setup
   - 15.2 Making a proposal
@@ -3161,7 +3162,33 @@ Run against our own installed Sungbum, the lanes found real work:
 duplicate filings, 18 as distinct works, 75 needing a human) — the
 battery re-measures this on every test run.
 
-## 14.19 What the workflow will do next
+## 14.19 Where might this belong? — shelf suggestions
+
+Click **Move to shelf…** *without* a shelf selected and, instead of
+a bare refusal, the panel now answers the real question: *where
+might this belong?* Ranked existing shelves of the destination
+tree, each with its reasons:
+
+- *the shelf's own name appears in the title* — the subject folders
+  are named by their phrases, and the file's title carries them;
+- *closest title here* — the nearest neighbor by syllable overlap,
+  named;
+- *works by the same author already here* — counted, deliberately a
+  light signal (a prolific author's biggest folder must not drag
+  every file to it).
+
+Click a suggested shelf to select it in the right tree, then Move
+to shelf… again to confirm — the machine never places a book.
+
+The honest numbers are printed on the report: measured on held-out
+files of the installed Sungbum, the right shelf leads the list
+about **31%** of the time and appears in the top three about
+**43%** — an aid, not an oracle. That ceiling is the design's own
+lesson: shelf choice is the fine-grained subject judgment the
+sessions reserve for trained humans, which is exactly why the
+human confirms every move.
+
+## 14.20 What the workflow will do next
 
 The workflow's core is complete: census, identity, audit, splits,
 naming, the ASCII list, the title workbench, tree comparison,

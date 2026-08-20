@@ -59,6 +59,7 @@ add_library(allcore STATIC
   src/catalog_register.cpp
   src/worksheet.cpp
   src/catalog_qc.cpp
+  src/shelf_suggest.cpp
 )
 target_include_directories(allcore PUBLIC include)
 
@@ -263,6 +264,11 @@ add_test(NAME abbr_smoke
          COMMAND abbr_smoke ${CMAKE_SOURCE_DIR}/data/abbreviations/tibschol_abbr.csv
                  ${CMAKE_SOURCE_DIR}/data/spellcheck
                  ${CMAKE_SOURCE_DIR}/data/abbreviations/rkts_abb.csv)
+
+add_executable(shelf_suggest_smoke tests/shelf_suggest_smoke.cpp)
+target_link_libraries(shelf_suggest_smoke PRIVATE allcore)
+add_test(NAME shelf_suggest_smoke
+         COMMAND shelf_suggest_smoke ${CMAKE_SOURCE_DIR}/library/sungbum)
 
 add_executable(catalog_qc_smoke tests/catalog_qc_smoke.cpp)
 target_link_libraries(catalog_qc_smoke PRIVATE allcore)
