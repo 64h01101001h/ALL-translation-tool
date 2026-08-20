@@ -3139,7 +3139,15 @@ public:
         setStyleSheet(
             "#ribbonBar { background:palette(alternate-base); "
             "border-bottom:1px solid palette(mid); }"
-            "#ribbonBar QToolButton { padding:2px 6px; }"
+            "#ribbonBar QToolButton { padding:2px 6px; "
+            "border:1px solid transparent; border-radius:4px; }"
+            // M4: a checked tool must LOOK checked — gold frame +
+            // selection tint, not the faint platform default
+            "#ribbonBar QToolButton:checked { "
+            "border:1px solid #9A7A33; "
+            "background:rgba(154,122,51,0.18); }"
+            "#ribbonBar QToolButton:hover { "
+            "background:rgba(154,122,51,0.10); }"
             "#ribbonBar QPushButton { padding:3px 8px; }");
         row_ = new QHBoxLayout(this);
         row_->setContentsMargins(8, 2, 8, 2);
@@ -29341,7 +29349,13 @@ int main(int argc, char** argv) {
             band->setStyleSheet(
                 "#ribbonBand { background:palette(alternate-base); "
                 "border-bottom:1px solid palette(mid); }"
-                "#ribbonBand QToolButton { padding:2px 7px; }");
+                "#ribbonBand QToolButton { padding:2px 7px; "
+                "border:1px solid transparent; border-radius:4px; }"
+                "#ribbonBand QToolButton:checked { "
+                "border:1px solid #9A7A33; "
+                "background:rgba(154,122,51,0.18); }"
+                "#ribbonBand QToolButton:hover { "
+                "background:rgba(154,122,51,0.10); }");
             auto* bandRow = new QHBoxLayout(band);
             bandRow->setContentsMargins(8, 2, 8, 2);
             bandRow->setSpacing(0);
