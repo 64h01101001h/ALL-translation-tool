@@ -628,6 +628,13 @@ implementation is sidelined HERE from this date. What this means:
          with honest counts ("3 of 41 — see all"), one click to the
          complete evidence. Pair with the test campaign's 🤔/💡
          findings about the card before implementing.
+         DESIGN BOARD PUBLISHED 2026-08-20 (interactive mocks, real
+         bsod-nams content, app palette): claude.ai/code/artifact/
+         acd57e2b-7ff3-4959-a2a5-bf838676e1c0 — card A baseline /
+         B summary+ledger (counts first, expand in place) / C
+         two-zone tabs. The SAME board holds the 9k toolbar
+         candidates (A long row / B primary+menus / C eyebrow
+         groups). Answer by letter ("card B + toolbar C").
       9k. **TOOLBAR/CONTROLS PRESENTATION REDESIGN (Adam,
          2026-08-20: "i don't like the way that the toolbar displays
          the functions/tools/options"):** rethink how each pane's
