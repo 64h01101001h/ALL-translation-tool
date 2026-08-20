@@ -431,8 +431,12 @@ implementation is sidelined HERE from this date. What this means:
              on" translation tools — this project is known to the
              class; Lioran Katz demo (AI translation tools) was
              scheduled for the following Monday.
-             NOT CAPTIONED: Mar 24 session (bq8SfTu558c) — whisper
-             pass possible if Adam wants it mined.
+             NOT CAPTIONED: Mar 24 session (bq8SfTu558c,
+             "Mixed Nuts Translation with Geshe Michael (Xuanzang's
+             Tower)") — whisper tooling ready; media RETRIED
+             2026-08-20 (yt-dlp 2026.07.04, android_vr/tv/ios
+             clients): metadata answers, media still 403 — the
+             block is server-side; retry again later.
          (3) DONE 2026-08-19 (loop 13, suite 53): the worksheet form
              shipped on the team's live 52-column schema (Adam's
              Google sheet, banked in GMR_CATALOGING_SESSIONS.md) —
@@ -937,7 +941,9 @@ implementation is sidelined HERE from this date. What this means:
 
 ## Waiting on the data project (Cowork sessions)
 
-- [ ] **Sanskrit conversion gaps (canonical engines — findings
+- [ ] **[DATA-PROJECT-GATED, per the research doc: "the fixes
+      belong to the data project"] Sanskrit conversion gaps
+      (canonical engines — findings
       2026-08-13, docs/research/SANSKRIT_IN_TIBETAN_GLYPHS.md;
       CENSUS ADDENDUM same day: 82,834 attested syllables swept —
       V=wasur gap is 177k occurrences incl. everyday TIBETAN
