@@ -10496,6 +10496,65 @@ public:
             "docs/research/PECHA_PRINT_QA.md.");
         preset->setCurrentIndex(
             qBound(0, st.value("pecha/preset", 0).toInt(), 4));
+        // 9n-10 (2026-08-20): the preset GALLERY — each format as a
+        // painted tile at its true aspect with its line count, the
+        // Word-gallery idea for pecha formats. The tiles and the
+        // combo stay in two-way sync; everything downstream still
+        // reads the combo.
+        auto* gal = new QListWidget;
+        gal->setViewMode(QListView::IconMode);
+        gal->setFlow(QListView::LeftToRight);
+        gal->setWrapping(false);
+        gal->setIconSize(QSize(120, 66));
+        gal->setFixedHeight(102);
+        gal->setSelectionMode(QAbstractItemView::SingleSelection);
+        {
+            struct P { double w, h; int ln; const char* nm; };
+            const P ps[] = {{42, 9, 7, "Traditional"},
+                            {45, 10, 7, "Wide"},
+                            {29.7, 21, 7, "A4 land."},
+                            {68, 10, 7, "Degé block"},
+                            {46, 8.2, 8, "Measured"}};
+            for (const auto& p : ps) {
+                const int tw = 120;
+                const int th = std::min(
+                    64, std::max(16, int(tw * p.h / p.w)));
+                QPixmap px(tw, 66);
+                px.fill(Qt::transparent);
+                QPainter pt(&px);
+                const int y0 = (66 - th) / 2;
+                pt.fillRect(2, y0, tw - 4, th,
+                            QColor(0xF6, 0xEF, 0xDF));
+                pt.setPen(QColor(0x9A, 0x7A, 0x33));
+                pt.drawRect(2, y0, tw - 5, th - 1);
+                pt.setPen(QColor(0x8C, 0x6A, 0x28));
+                for (int i = 1; i <= p.ln; ++i) {
+                    const int ly =
+                        y0 + 3 + (th - 6) * i / (p.ln + 1);
+                    pt.drawLine(8, ly, tw - 9, ly);
+                }
+                pt.end();
+                auto* it = new QListWidgetItem(QIcon(px), p.nm);
+                it->setToolTip(QString("%1 × %2 cm · %3 lines")
+                                   .arg(p.w)
+                                   .arg(p.h)
+                                   .arg(p.ln));
+                gal->addItem(it);
+            }
+        }
+        gal->setCurrentRow(preset->currentIndex());
+        QObject::connect(gal, &QListWidget::currentRowChanged,
+                         [preset](int r) {
+                             if (r >= 0 &&
+                                 r != preset->currentIndex())
+                                 preset->setCurrentIndex(r);
+                         });
+        QObject::connect(preset,
+                         qOverload<int>(&QComboBox::currentIndexChanged),
+                         [gal](int r) {
+                             if (r >= 0 && r != gal->currentRow())
+                                 gal->setCurrentRow(r);
+                         });
         auto* lines = new QSpinBox;
         lines->setRange(5, 9);
         lines->setValue(
@@ -10603,6 +10662,8 @@ public:
         auto* row1 = new QHBoxLayout;
         row1->addWidget(new QLabel("page"));
         row1->addWidget(preset, 1);
+        v->addWidget(gal);   // the preset gallery rides above the
+                             // detail rows (synced with the combo)
         auto* row2 = new QHBoxLayout;
         row2->addWidget(new QLabel("lines per side"));
         row2->addWidget(lines);
