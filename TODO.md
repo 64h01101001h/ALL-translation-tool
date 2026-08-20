@@ -710,6 +710,34 @@ implementation is sidelined HERE from this date. What this means:
          quiet migration (today's shell + ribbon everywhere — the
          Catalog pilot is its first real pane). Awaiting Adam's
          pick.
+      9n. **FEATURE SCAN 2026-08-20 (Adam: "scan for any
+         functionality that you think we could implement to make our
+         tool more useful" — Word/PPT ribbon screenshots as the
+         model). The ten, awaiting his picks:**
+         (1) House-style GALLERY in Manuscript/Export (Word styles
+             analog): one-click STD formats w/ visual previews —
+             verse stanza, prose, heading, colophon, apparatus;
+             RTF honors them (STD-004/006/007).
+         (2) 84000 TM HINTS IN DRAFT: matching published renderings
+             beside corpus hits while drafting — reference-only,
+             never HGM; the 400k FTS index already exists.
+         (3) FOLIO THUMBNAIL STRIP (PPT slide-sorter analog) in
+             Scans + Input block mode: click-to-jump, per-page
+             keying-progress states.
+         (4) QUICK ACCESS TOOLBAR: user-pinnable favorite commands
+             above the ribbon.
+         (5) VISIBLE SEARCH FIELD top-right (⌘K surfaced).
+         (6) TEAM COMMENTS ON TEXTS: annotation threads stored
+             beside the file on the shared Dropbox (ledger pattern).
+         (7) BACKSTAGE/HOME VIEW: recents + pinned work.
+         (8) DRAFT-HEALTH CHIP: live Review-advisory summary in a
+             status bar.
+         (9) DICTATION (English fields; free with 9l native roles;
+             honest limit: no Tibetan dictation, rule 3).
+         (10) PECHA PRESET GALLERY: visual preview tiles.
+         RIBBON-GRAMMAR upgrades for RibbonBar noted from the
+         screenshots: big icon-above-label primaries, split buttons
+         with dropdowns, in-ribbon galleries, right feature cluster.
       10. Idea bank (liked, never scheduled): pronunciation trainer (DECLINED-AS-CONCEIVED 2026-08-20: whisper's Tibetan too weak to honestly score learner speech — rule 3; needs a design conversation) ·
          Text DNA strips DONE 2026-08-20 (Overlay REVIEW → Text DNA: one colored column per source line — meter/off-meter/prose/blank + quote-announcement ticks; hover + click-to-jump; allcore textdna, suite 58; summary+jump selftest pin) · team board · apprenticeship mode ·
          English-on-the-carving hover DONE 2026-08-20 (cache-only tooltip over the woodblock: OCR-read wylie + HGM gloss, review-material label; seeded-cache selftest pin) · teaching-playlist karaoke ·
