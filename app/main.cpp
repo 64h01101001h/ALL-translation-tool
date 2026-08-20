@@ -21121,10 +21121,16 @@ public:
         banner->setWordWrap(true);
         outer->addWidget(banner);
 
-        auto* row = new QHBoxLayout;
+        auto* ribbon = new RibbonBar;
+        auto* gPages = ribbon->group("PAGES");
+        auto* gView2 = ribbon->group("VIEW");
+        auto* gTyping = ribbon->group("TYPING");
+        auto* gOcr = ribbon->group("OCR");
+        auto* gPartner = ribbon->group("PARTNER");
+        auto* gExport = ribbon->group("EXPORT");
         auto* openScanB = new QPushButton("Open scan…");
         openScanB->setIcon(miniIcon("image"));
-        row->addWidget(openScanB);
+        gPages->addBig(openScanB, "image");
         auto* openFolderB = new QPushButton("Open scan folder…");
         openFolderB->setIcon(miniIcon("folder"));
         openFolderB->setToolTip(
@@ -21132,7 +21138,7 @@ public:
             "work through them in order — each page's typing saves to "
             "its own file in library/input_work/<folder>/ and reloads "
             "when you return to the page.");
-        row->addWidget(openFolderB);
+        gPages->addBig(openFolderB, "folder");
         auto* recentB = new QPushButton("Recent ▾");
         recentB->setIcon(miniIcon("clock"));
         recentB->setToolTip(
@@ -21171,15 +21177,15 @@ public:
                             ->addAction("(nothing opened yet)")
                             ->setEnabled(false);
                 });
-        row->addWidget(recentB);
+        gPages->addBig(recentB, "clock");
         prevPageB_ = new QPushButton("◀ page");
         nextPageB_ = new QPushButton("page ▶");
         pageLbl_ = new QLabel;
         prevPageB_->setEnabled(false);
         nextPageB_->setEnabled(false);
-        row->addWidget(prevPageB_);
-        row->addWidget(pageLbl_);
-        row->addWidget(nextPageB_);
+        gPages->add(prevPageB_);
+        gPages->add(pageLbl_);
+        gPages->add(nextPageB_);
         // 9n-3 (2026-08-20): the folio strip — every page of the
         // block as a thumbnail (PowerPoint's slide sorter, for
         // pechas). ✓ marks pages that already carry typing; click
@@ -21233,7 +21239,7 @@ public:
                 .setValue("input/predict", on);
             if (on) buildPredict();
         });
-        row2->addWidget(predictToggle_);
+        gTyping->add(predictToggle_);
         connect(openFolderB, &QPushButton::clicked,
                 [this] { openFolder(); });
         connect(prevPageB_, &QPushButton::clicked,
@@ -21242,7 +21248,7 @@ public:
                 [this] { gotoPage(pageIx_ + 1); });
         followBox_ = new QCheckBox("scan follows cursor");
         followBox_->setChecked(true);
-        row2->addWidget(followBox_);
+        gView2->add(followBox_);
 #ifdef ALL_HAVE_OCR
         auto* bandsB = new QPushButton("Detect lines (OCR)");
         bandsB->setIcon(miniIcon("ocr"));
@@ -21251,7 +21257,7 @@ public:
             "cursor-following jumps to the EXACT line band instead of "
             "ACE's proportional estimate. Detection only — no text is "
             "recognized.");
-        row2->addWidget(bandsB);
+        gOcr->addBig(bandsB, "ocr");
         connect(bandsB, &QPushButton::clicked, [this] { detectBands(); });
         auto* prefillB = new QPushButton("Pre-fill from OCR (draft)");
         prefillB->setIcon(miniIcon("ocr"));
@@ -21263,15 +21269,15 @@ public:
             "underlined. The draft is ocr-derived: correcting it is "
             "your typing pass; the double-keying comparison against "
             "your partner still applies unchanged.");
-        row2->addWidget(prefillB);
+        gOcr->addBig(prefillB, "ocr");
         connect(prefillB, &QPushButton::clicked, [this] { prefill(); });
 #endif
         auto* zoomL = new QLabel("zoom");
-        row->addWidget(zoomL);
+        gView2->add(zoomL);
         auto* zoomOutB = new QPushButton("−");
         zoomOutB->setFixedWidth(26);
         zoomOutB->setToolTip("Zoom out (⌘−)");
-        row->addWidget(zoomOutB);
+        gView2->add(zoomOutB);
         zoom_ = new QSlider(Qt::Horizontal);
         zoom_->setRange(25, 400);
         zoom_->setValue(100);
@@ -21280,11 +21286,11 @@ public:
             "Scan zoom — ⌘+ / ⌘− step, ⌘0 resets to 100%, and "
             "⌘-scroll zooms at the pointer (the spot under the "
             "cursor stays put).");
-        row->addWidget(zoom_);
+        gView2->add(zoom_);
         auto* zoomInB = new QPushButton("+");
         zoomInB->setFixedWidth(26);
         zoomInB->setToolTip("Zoom in (⌘+, also ⌘⇧+)");
-        row->addWidget(zoomInB);
+        gView2->add(zoomInB);
         // the BUDA-viewer idiom (Adam's reference): a live percent
         // selector with fit modes beside the − / + controls
         zoomPct_ = new QComboBox;
@@ -21296,7 +21302,7 @@ public:
         zoomPct_->setToolTip(
             "Zoom percentage — type a value, pick a preset, or "
             "choose Fit width / Fit page.");
-        row->addWidget(zoomPct_);
+        gView2->add(zoomPct_);
         connect(zoomPct_, &QComboBox::activated, [this](int) {
             const QString t = zoomPct_->currentText().trimmed();
             if (t.startsWith("Fit"))
@@ -21324,7 +21330,7 @@ public:
             "column 1, 3-digit zero-padded, side A then B): after "
             "@001A comes @001B, then @002A. Starts at @001A in an "
             "empty document.");
-        row2->addWidget(folioB);
+        gTyping->addBig(folioB, "page");
         connect(folioB, &QPushButton::clicked, [this] { nextFolio(); });
         auto* partnerB = new QPushButton("Compare with partner file…");
         diffPrevB_ = new QPushButton("◀ disc");
@@ -21340,16 +21346,14 @@ public:
         connect(diffNextB_, &QPushButton::clicked,
                 [this] { jumpDiff(+1); });
         partnerB->setIcon(miniIcon("diff"));
-        row2->addWidget(partnerB);
-        row2->addWidget(diffPrevB_);
-        row2->addWidget(diffNextB_);
+        gPartner->addBig(partnerB, "diff");
+        gPartner->add(diffPrevB_);
+        gPartner->add(diffNextB_);
         auto* saveB = new QPushButton("Save…");
         saveB->setIcon(miniIcon("save"));
-        row2->addWidget(saveB);
-        row->addStretch();
-        row2->addStretch();
-        outer->addLayout(row);
-        outer->addLayout(row2);
+        gExport->addBig(saveB, "save");
+        ribbon->finish();
+        ribbon->attachTo(this);
 
         auto* split = new QSplitter(Qt::Vertical);
         scroll_ = new QScrollArea;
