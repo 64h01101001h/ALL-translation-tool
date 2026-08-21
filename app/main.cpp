@@ -12261,9 +12261,21 @@ public:
         auto* box = new QPlainTextEdit;
         box->setMaximumHeight(70);
         v->addWidget(box);
+        auto* perm = new QLabel(
+            "comments are permanent - part of the team record, "
+            "like rulings");
+        perm->setStyleSheet(QString("color:%1;font-size:11px")
+                                .arg(ux::kFaint));
+        v->addWidget(perm);
         auto* row2 = new QHBoxLayout;
         row2->addStretch();
         auto* addB = new QPushButton("Add comment");
+        if (g_userName.isEmpty()) {
+            addB->setEnabled(false);
+            addB->setToolTip(
+                "Set your name once in Community > Propose - "
+                "comments carry provenance");
+        }
         auto* closeB = new QPushButton("Close");
         row2->addWidget(addB);
         row2->addWidget(closeB);

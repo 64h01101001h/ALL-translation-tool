@@ -15,3 +15,16 @@ NEEDS-INFO(question back to the filer).
 
 ## Inbox
 <!-- newest first; the app's File a Finding appends a template here -->
+
+### 2026-08-21 · design-wing heuristic pass · Team comments dialog
+(first combined act of the installed skills: design-critique/Nielsen
+lenses on the newest surface, findings → engineering flow → verify)
+- **H1/H9 violation:** with no identity set, the Add button LOOKS
+  active but silently no-ops (the caption hints, the button lies).
+  DISPOSITION: FIXED — Add disabled with explanatory tooltip until
+  an identity exists.
+- **H5/wording:** the dialog never states that comments are permanent
+  (append-only); only the band tooltip says so. DISPOSITION: FIXED —
+  the permanence line now lives in the dialog itself.
+- Append-only/no-delete: RULED (matches the rulings-record ethos;
+  permanence now stated where it applies).
