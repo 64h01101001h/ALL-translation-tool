@@ -152,6 +152,7 @@
 #include "allcore/spellcheck.h"
 #include "allcore/quotation.h"
 #include "allcore/spine.h"
+#include "allcore/backup.h"
 #include "allcore/tm84000.h"
 #include "allcore/textdna.h"
 #include "allcore/unicode_wylie.h"
@@ -29451,6 +29452,30 @@ int main(int argc, char** argv) {
     // the Approval tab shows only for an authority (Geshe Michael /
     // Adam), gated on the identity role
     loadIdentity();
+    // S2 (stewardship): the human-judgment safety net — quiet, dated,
+    // bounded backups of the shared stores at every real launch.
+    // Human judgments outrank computed data; the battery drills the
+    // restore path (backup_smoke).
+    if (!g_harnessRun) {
+        const QString bdir =
+            QStandardPaths::writableLocation(
+                QStandardPaths::AppDataLocation) +
+            "/backups";
+        const std::string stamp =
+            QDateTime::currentDateTime()
+                .toString("yyyy-MM-dd-HHmmss")
+                .toStdString();
+        if (!g_proposalsDir.isEmpty())
+            allcore::backupFile(
+                (g_proposalsDir + "/proposals.tsv").toStdString(),
+                bdir.toStdString(), stamp, 14);
+        const QString official =
+            sess::path("catalog/officialRoot");
+        if (!official.isEmpty())
+            allcore::backupFile(
+                (official + "/CATALOG_TEAM.tsv").toStdString(),
+                bdir.toStdString(), stamp, 14);
+    }
     // spelling forms the authority ruled valid (declined spelling
     // flags in the shared store) — the Overlay stops doubting them
     static std::set<std::string> spellingValid;

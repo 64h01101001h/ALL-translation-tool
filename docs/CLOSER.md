@@ -8,9 +8,9 @@ States: OPEN · CLOSED(date) · WAITING(who: what) · DEFERRED(stamp).
 | 2 | F1 honesty-invariant sweep at scale — provisional never unbadged, badges on every zone, true N-of-M, register warnings, machine labeling; permanent suite (Fidelity) | CLOSED(2026-08-20) |
 | 3 | F4 tier-arithmetic pins — populations recomputed from loaded data at selftest, About numbers can't lie (Fidelity) | CLOSED(2026-08-20) |
 | 4 | L2 licenses surface — About/Licenses screen + DMG LICENSES file assembled FROM the manifest; constitution rule: no unmanifested data layer (Shipwright) | CLOSED(2026-08-20) |
-| 5 | S2 rolling backup of human-judgment stores + restore drill in battery; corruption quarantine (Stewardship) | OPEN |
+| 5 | S2 rolling backup of human-judgment stores + restore drill in battery; corruption quarantine (Stewardship) | CLOSED(2026-08-20) |
 | 6 | F2 cross-engine coherence at dictionary scale, divergence classes banked (Fidelity) | OPEN |
-| 7 | D3 release script: VERSION+tag+CHANGELOG+RC naming move together; blessed baseline tagged per RC (Shipwright) | OPEN |
+| 7 | D3 release script: VERSION+tag+CHANGELOG+RC naming move together; blessed baseline tagged per RC (Shipwright) | CLOSED(2026-08-20) |
 | 8 | T3 engine fuzz at the seams, corpus banked as fixtures (Quality) | OPEN |
 | 9 | S4 security posture: no secrets in repo/logs, key path excluded from backups, FTP/SFTP no-persist proven, roster salt verified, trust model documented (Stewardship) | OPEN |
 | 10 | D2 signing/notarization pipeline in the press, skip-with-notice until identity exists (Shipwright) | OPEN |
@@ -62,3 +62,15 @@ States: OPEN · CLOSED(date) · WAITING(who: what) · DEFERRED(stamp).
   fails the battery. #24 refined: BDRC's banked okay covers
   NON-COMMERCIAL free distribution; written email still pending.
 **Burndown:** 15 open · 9 waiting · 2 deferred · 4 closed.
+- 2026-08-20 · **#5 S2 CLOSED.** allcore::backupFile/latestBackup/
+  restoreBackup (deterministic stamps, bounded prune, missing-source
+  honesty) + backup_smoke = battery suite 61: the corrupted-store
+  restore drill, self-cleaning at entry AND exit. App hookup: every
+  real launch quietly backs up proposals.tsv + CATALOG_TEAM.tsv into
+  Application Support/backups (keep 14). One key-wiring bug caught in
+  review before commit (officialRoot lives under the sess/ prefix).
+- 2026-08-20 · **#7 D3 CLOSED.** tools/release.sh: refuses a dirty
+  tree; VERSION + CHANGELOG (scaffolded from git log since last tag) +
+  commit + tag + three-gate press (team|market) + blessed-baseline
+  snapshot move as ONE ritual.
+**Burndown:** 13 open · 9 waiting · 2 deferred · 6 closed.

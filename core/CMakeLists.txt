@@ -21,6 +21,7 @@ add_library(allcore STATIC
   src/hypfile.cpp
   src/whitney.cpp
   src/colloquial.cpp
+  src/backup.cpp
   src/proposals.cpp
   src/regenreg.cpp
   src/tibcal_phugpa.cpp
@@ -366,6 +367,10 @@ add_test(NAME catalog_actions_smoke
 add_executable(textdna_smoke tests/textdna_smoke.cpp)
 target_link_libraries(textdna_smoke PRIVATE allcore)
 add_test(NAME textdna_smoke COMMAND textdna_smoke)
+
+add_executable(backup_smoke tests/backup_smoke.cpp)
+target_link_libraries(backup_smoke PRIVATE allcore)
+add_test(NAME backup_smoke COMMAND backup_smoke)
 
 add_executable(towylie_battery tests/towylie_battery.cpp)
 target_link_libraries(towylie_battery PRIVATE allcore)
