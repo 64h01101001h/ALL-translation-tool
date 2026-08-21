@@ -4472,8 +4472,13 @@ public:
             if (!vc) ++fails;
         }
         {
-            const bool ok =
-                QStringLiteral(ALL_APP_VERSION).count('.') == 2;
+            // x.y.z with an optional pre-release suffix
+            // ("1.0.0-rc.1") — the release ritual's rc versions
+            // are first-class citizens
+            static const QRegularExpression vre(
+                R"(^\d+\.\d+\.\d+(-[0-9A-Za-z.]+)?$)");
+            const bool ok = vre.match(QStringLiteral(ALL_APP_VERSION))
+                                .hasMatch();
             log << QString("  [%1] About: app version wired (%2)")
                        .arg(ok ? "PASS" : "FAIL")
                        .arg(QStringLiteral(ALL_APP_VERSION));

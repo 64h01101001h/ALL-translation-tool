@@ -41,9 +41,16 @@ git add VERSION CHANGELOG.md
 git commit -m "Release $VER
 
 Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>"
-git tag "v$VER"
 
-bash tools/package_macos.sh "$MODE"
+# the press PROVES the release before anything is tagged - a failed
+# press leaves no tag behind (learned the hard way: two half-releases
+# had to be unwound on 2026-08-21)
+if ! bash tools/package_macos.sh "$MODE"; then
+  echo "release: the press FAILED - unwinding the version commit"
+  git reset --hard HEAD~1
+  exit 1
+fi
+git tag "v$VER"
 
 if [[ -d build/blessed_shots ]]; then
   rm -rf "build/blessed_shots_$VER"
