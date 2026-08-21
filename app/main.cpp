@@ -2847,7 +2847,10 @@ private:
 // no icons on checkboxes, labels, or secondary controls). Drawn in
 // code — license-clean, crisp at 2x, one visual voice.
 static QIcon miniIcon(const QString& kind) {
-    QPixmap pm(32, 32);
+    // L-tier hi-DPI: paint at 2x so the 20pt ribbon icons stay
+    // crisp on retina — the painter still works in 32x32 logical
+    QPixmap pm(64, 64);
+    pm.setDevicePixelRatio(2.0);
     pm.fill(Qt::transparent);
     QPainter p(&pm);
     p.setRenderHint(QPainter::Antialiasing);

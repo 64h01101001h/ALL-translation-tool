@@ -276,3 +276,23 @@ icon families with washes (visibility ruling, 2026-08-20).*
   proposal form plus one-time identity setup; the query/form-surface
   ruling applies. With this, every pane has either a band or a logged
   ruling — the H3 coverage pass is complete.
+- 2026-08-20 · **Polish tier**: ux::snip honest elision on 15 evidence
+  snippets (a cut snippet shows its "…" instead of posing as whole);
+  group tabs teach their ⌘1–7 shortcuts on hover; Approve/Decline/Defer
+  ruling links carry semantic color (commit green · reject red · park
+  muted); miniIcon paints at 2x DPR — crisp ribbon icons on retina.
+- 2026-08-20 · **M2 ruling — no wholesale literal migration.** The ux::
+  type/color tokens are normative for all NEW work; rewriting the ~40
+  existing setStyleSheet literals to tokens would churn hundreds of pinned
+  lines for zero visible change. The audit's goal is user-visible truth,
+  not source cosmetics. (§53 pushback; revisit only if a themed/dark mode
+  ever forces palette indirection.)
+
+## AUDIT ROADMAP — CLOSING STATE (2026-08-20)
+P1 tokens ✓ · P2 epistemic badges ✓ · P3 counts-first ledger, ALL card
+evidence sections ✓ · H2 presets ✓ · H3 band coverage complete (every pane
+banded or ruled) ✓ · H4 status bar ✓ · H5 link grammar (external ↗ +
+semantic ruling colors) ✓ · M1 splitters/focus ✓ · M2 ruled ✓ · M3 empty
+states ✓ · M4 checked states ✓ · M5 shortcuts + taught tooltips ✓ ·
+L hi-DPI icons + honest elision ✓. Open beyond the audit: full Word-style
+menu reorganization (TODO 9l part 2) and the 9i manual/recordings program.
