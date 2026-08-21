@@ -371,3 +371,12 @@ add_executable(towylie_battery tests/towylie_battery.cpp)
 target_link_libraries(towylie_battery PRIVATE allcore)
 add_test(NAME towylie_battery
          COMMAND towylie_battery ${CMAKE_SOURCE_DIR}/build/towylie_reference.tsv)
+
+# The constitution (Fidelity engine, track C): process lessons as gates
+find_package(Python3 COMPONENTS Interpreter QUIET)
+if(Python3_FOUND)
+  add_test(NAME constitution
+           COMMAND ${Python3_EXECUTABLE}
+                   ${CMAKE_SOURCE_DIR}/tools/constitution_check.py
+                   ${CMAKE_SOURCE_DIR})
+endif()

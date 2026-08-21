@@ -41,6 +41,10 @@ fi
 APP="$BUILD/app/ALLTranslationTool.app"
 [[ -d "$APP" ]] || { echo "app bundle missing: $APP"; exit 1; }
 
+echo "== 2a. constitution gate (Fidelity engine, track C) =="
+python3 "$ROOT/tools/constitution_check.py" "$ROOT" || {
+  echo "CONSTITUTION VIOLATION - press stopped."; exit 8; }
+
 echo "== 2b. visual-regression gate (Phase-2 audit s11) =="
 SHOTS_TMP="$(mktemp -d)"
 "$APP/Contents/MacOS/ALLTranslationTool" --screenshots "$SHOTS_TMP" >/dev/null 2>&1 || true
