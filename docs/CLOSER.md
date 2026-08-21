@@ -4,8 +4,8 @@ States: OPEN · CLOSED(date) · WAITING(who: what) · DEFERRED(stamp).
 
 | # | Item (origin) | State |
 |---|---|---|
-| 1 | D1 virgin-Mac first-contact drill: mounted-DMG run + drag-install run, findings filed (Shipwright) | OPEN |
-| 2 | F1 honesty-invariant sweep at scale — provisional never unbadged, badges on every zone, true N-of-M, register warnings, machine labeling; permanent suite (Fidelity) | OPEN |
+| 1 | D1 virgin-Mac first-contact drill: mounted-DMG run + drag-install run, findings filed (Shipwright) | CLOSED(2026-08-20) |
+| 2 | F1 honesty-invariant sweep at scale — provisional never unbadged, badges on every zone, true N-of-M, register warnings, machine labeling; permanent suite (Fidelity) | CLOSED(2026-08-20) |
 | 3 | F4 tier-arithmetic pins — populations recomputed from loaded data at selftest, About numbers can't lie (Fidelity) | OPEN |
 | 4 | L2 licenses surface — About/Licenses screen + DMG LICENSES file assembled FROM the manifest; constitution rule: no unmanifested data layer (Shipwright) | OPEN |
 | 5 | S2 rolling backup of human-judgment stores + restore drill in battery; corruption quarantine (Stewardship) | OPEN |
@@ -34,8 +34,6 @@ States: OPEN · CLOSED(date) · WAITING(who: what) · DEFERRED(stamp).
 | 28 | Ribbon reorder from usage data | WAITING(time: a week of ledger data) |
 | 29 | 9i manual revamp + screen recordings + YouTube channel | DEFERRED(post-1.0 roadmap, per earlier sequencing) |
 | 30 | 9n remainder: team comments on texts; dictation | DEFERRED(post-1.0 unless Adam stamps otherwise) |
-
-**Burndown:** 19 open · 9 waiting · 2 deferred · 0 closed.
 
 ## Wave log
 - 2026-08-20 · **#1 D1 CLOSED.** Virgin-Mac drill: the app runs clean
