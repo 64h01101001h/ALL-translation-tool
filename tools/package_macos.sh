@@ -116,7 +116,18 @@ else
 fi
 
 echo "== 5. ad-hoc codesign =="
-codesign --force --deep -s - "$STAGE/$APPNAME.app" 2>/dev/null
+# D2 (shipwright): real signing when the identity exists, honest ad
+# hoc when it doesn't. Set ALL_DEV_IDENTITY ("Developer ID
+# Application: ...") once Adam's Apple Developer ID is active.
+if [[ -n "${ALL_DEV_IDENTITY:-}" ]]; then
+  codesign --force --deep --options runtime \
+    -s "$ALL_DEV_IDENTITY" "$STAGE/$APPNAME.app"
+  echo "   signed with $ALL_DEV_IDENTITY"
+else
+  codesign --force --deep -s - "$STAGE/$APPNAME.app" 2>/dev/null
+  echo "   (ad-hoc signed — set ALL_DEV_IDENTITY to sign for real;"
+  echo "    right-click-open instruction applies until then)"
+fi
 codesign --verify "$STAGE/$APPNAME.app" && echo "   signature ok"
 
 echo "== 6. data manifest =="
@@ -260,6 +271,21 @@ DMG="$DIST/ALL-Translation-Tool-$VERSION.dmg"
 rm -f "$DMG"
 hdiutil create -volname "$APPNAME $VERSION" -srcfolder "$STAGE" \
     -ov -format UDZO "$DMG" | tail -1
+
+# D2: notarization — armed, dormant until the keychain profile exists.
+# One-time setup once the Developer ID is active:
+#   xcrun notarytool store-credentials ALL_NOTARY --apple-id ... \
+#     --team-id ... --password <app-specific>
+if [[ -n "${ALL_DEV_IDENTITY:-}" ]] && \
+   xcrun notarytool history --keychain-profile ALL_NOTARY \
+     >/dev/null 2>&1; then
+  echo "== 7b. notarize + staple =="
+  xcrun notarytool submit "$DMG" --keychain-profile ALL_NOTARY --wait
+  xcrun stapler staple "$DMG"
+else
+  echo "   (notarization skipped — no ALL_NOTARY profile; Gatekeeper"
+  echo "    will require right-click-open on downloaded copies)"
+fi
 du -sh "$DMG"
 echo "PACKAGE COMPLETE: $DMG"
 
