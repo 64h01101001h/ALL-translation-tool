@@ -184,10 +184,17 @@ if [[ "$PRESS_MODE" == "team" ]]; then
 fi
 # runtime data folders the panes read (enumerated from the code)
 for d in fonts honorifics pron_colloquial abbreviations extracted idioms \
-         botok spellcheck soas_pos whitney candidate_alignments; do
+         botok spellcheck soas_pos whitney candidate_alignments 84000; do
   [[ -d "$ROOT/data/$d" ]] && cp -R "$ROOT/data/$d" "$DATA/data-$d.tmp" \
       && mkdir -p "$DATA/data" && mv "$DATA/data-$d.tmp" "$DATA/data/$d"
 done
+# L1 (shipwright): ingest intermediates with unresolved licenses NEVER
+# ship (the app reads build/reference.db, not these); the TM cache is
+# rebuilt from the CC BY tsv.gz on first use — 279MB of dead weight
+rm -f "$DATA/data/extracted/thl_dicts.jsonl" \
+      "$DATA/data/extracted/tibetan_dictionary_dic.jsonl" \
+      "$DATA/data/extracted/tm_84000.db" 2>/dev/null || true
+
 # strip superseded corpus versions from extracted copies if any slipped in
 cp "$ROOT/docs/analysis/PASSAGE_ANALYSIS_TEMPLATE.md" \
    "$DATA/docs/analysis/" 2>/dev/null || true

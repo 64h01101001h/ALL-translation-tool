@@ -147,13 +147,13 @@ def main():
     # reference.db and CC BY-NC models were shipping by habit.
     notices = read(os.path.join(
         root, "docs/distribution/OPEN_SOURCE_NOTICES.md")).lower()
-    staged = re.search(r"for d in ([a-z_ \\\n]+); do", press)
+    staged = re.search(r"for d in ([a-z0-9_ \\\n]+); do", press)
     credit = {
         "fonts": "ofl", "honorifics": "hgm", "pron_colloquial": "hgm",
         "abbreviations": "abbreviation", "extracted": "84000",
         "idioms": "hgm", "botok": "botok", "spellcheck": "spellchecker",
         "soas_pos": "soas", "whitney": "whitney",
-        "candidate_alignments": "hgm",
+        "candidate_alignments": "hgm", "84000": "84000",
     }
     if staged:
         for d in staged.group(1).split():

@@ -21,8 +21,8 @@ States: OPEN · CLOSED(date) · WAITING(who: what) · DEFERRED(stamp).
 | 15 | S6 findings loop: FINDINGS inbox + disposition cadence + Adam's outstanding campaign verdicts section (Stewardship) | CLOSED(2026-08-20) |
 | 16 | T9 docs-vs-UI truth pass (help, tutorials, README against the real UI) (Quality) | OPEN |
 | 17 | F3 outbound-link truth sampling at the index builders (Fidelity) | OPEN |
-| 18 | D4 update path: honest check-for-updates or documented re-download (Shipwright) | OPEN |
-| 19 | L1 itemized pass over data/extracted per-file licenses (Shipwright) | OPEN |
+| 18 | D4 update path: honest check-for-updates or documented re-download (Shipwright) | CLOSED(2026-08-20) |
+| 19 | L1 itemized pass over data/extracted per-file licenses (Shipwright) | CLOSED(2026-08-20) |
 | 20 | A1 campaign executed against an RC (acceptance gate) | WAITING(Adam: run docs/TEST_CAMPAIGN.md on the RC) |
 | 21 | A2 authority sign-off on data-facing surfaces | WAITING(Adam/GMR: walkthrough) |
 | 22 | A3 input-center pilot, one week, ledger on | WAITING(Adam: name the pilot user) |
@@ -125,3 +125,19 @@ States: OPEN · CLOSED(date) · WAITING(who: what) · DEFERRED(stamp).
   click appends a timestamped, pane-stamped, version-stamped template
   and opens the file.
 **Burndown:** 6 open · 9 waiting · 2 deferred · 13 closed.
+- 2026-08-20 · **#19 L1 CLOSED — and it caught the biggest licensing
+  leak yet.** The itemized pass over data/extracted found the two
+  CHECK-LICENSING payloads (thl_dicts.jsonl 56MB,
+  tibetan_dictionary_dic.jsonl 12MB — ingest intermediates only
+  build_reference_db.py reads) shipping in BOTH press modes via the
+  blanket extracted copy, plus the 279MB tm_84000.db cache shipping
+  while its CC BY source did not, plus data/84000 (glossary + TM
+  source) reaching installs only by legacy accident. Press fixed:
+  84000 staged explicitly (credit map updated), the two intermediates
+  and the cache stripped in both modes — the TM rebuilds from the
+  CC BY tsv.gz on first use. DMG shrinks by ~350MB of wrong bytes.
+- 2026-08-20 · **#18 D4 CLOSED.** Help → Check for Updates: states
+  the version and the truth — updates arrive as a new DMG from the
+  team; no auto-update, the app never phones home. (Modal baseline
+  107, reviewed: Help-menu-only, never harness-reachable.)
+**Burndown:** 4 open · 9 waiting · 2 deferred · 15 closed.

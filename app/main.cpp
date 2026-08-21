@@ -30443,6 +30443,22 @@ int main(int argc, char** argv) {
             helpWin->openManual();
         });
 
+        // ---- D4 (shipwright): the update path, honestly absent —
+        // no silent auto-update, no phantom endpoint; the dialog
+        // states the version and how updates actually arrive
+        QObject::connect(
+            helpMenu->addAction("Check for Updates\u2026"),
+            &QAction::triggered, [&win] {
+                QMessageBox::information(
+                    &win, "Updates",
+                    QString("This is ALL Translation Tool %1.\n\n"
+                            "Updates are distributed as a new disk "
+                            "image by the ALL team (there is no "
+                            "auto-update and the app never phones "
+                            "home). Ask Adam for the current DMG, "
+                            "or check the team's shared folder.")
+                        .arg(QStringLiteral(ALL_APP_VERSION)));
+            });
         // ---- L2 (shipwright): the licenses surface — one source
         // of truth (OPEN_SOURCE_NOTICES.md), viewable in-app
         QObject::connect(
