@@ -19122,10 +19122,22 @@ protected:
                 d.mkdir(name);
                 return true;
             }
-            case Qt::Key_F8:
-                for (const QString& p : selectedPathsIn(ix))
+            case Qt::Key_F8: {
+                const QStringList sel = selectedPathsIn(ix);
+                // W9-01: Total Commander itself confirms F8 — a
+                // multi-selection names its count before it moves
+                if (sel.size() > 1 &&
+                    QMessageBox::question(
+                        this, "Move to Trash",
+                        QString("Move %1 items to the Trash?")
+                            .arg(sel.size()),
+                        QMessageBox::Yes | QMessageBox::No,
+                        QMessageBox::No) != QMessageBox::Yes)
+                    return true;
+                for (const QString& p : sel)
                     QFile::moveToTrash(p);   // recoverable
                 return true;
+            }
             default:
                 break;
             }
@@ -19797,15 +19809,22 @@ private:
         QStringList report;
         for (const QString& f : files) {
             const QFileInfo fi(f);
-            const QString target = dest + "/" + fi.fileName();
-            QFile::remove(target);
+            QString target = dest + "/" + fi.fileName();
+            // W9-02: never clobber an earlier import — keep both,
+            // Finder-style
+            for (int n = 2; QFileInfo::exists(target) && n < 1000; ++n)
+                target = dest + "/" + fi.completeBaseName() + " " +
+                         QString::number(n) +
+                         (fi.suffix().isEmpty() ? "" : "." + fi.suffix());
             QFile::copy(f, target);
-            report << fi.fileName();
+            report << QFileInfo(target).fileName();
             const QString suffix = fi.suffix().toLower();
             if (suffix == "docx" || suffix == "rtf") {
                 // macOS textutil converts to plain text alongside
+                // (named after the FINAL target so keep-both holds)
                 const QString txt =
-                    dest + "/" + fi.completeBaseName() + ".txt";
+                    dest + "/" +
+                    QFileInfo(target).completeBaseName() + ".txt";
                 QProcess p;
                 p.start("/usr/bin/textutil",
                         {"-convert", "txt", "-output", txt, target});
@@ -20401,12 +20420,26 @@ private:
                 QFileInfo(dst).canonicalFilePath() ==
                     QFileInfo(src).canonicalFilePath())
                 continue;
-            QFile::remove(dst);
-            if (!QFile::copy(src, dst)) {
+            // W9-03: stage beside, then swap — a failed copy must
+            // never have destroyed the working release first
+            const QString stage = dst + ".importing~";
+            QFile::remove(stage);
+            if (!QFile::copy(src, stage)) {
+                QFile::remove(stage);
                 QMessageBox::warning(
                     this, "Import data release",
                     "Could not copy " + QFileInfo(src).fileName() +
-                        " into the data area.");
+                        " into the data area. The previous release "
+                        "files are untouched.");
+                return;
+            }
+            QFile::remove(dst);
+            if (!QFile::rename(stage, dst)) {
+                QMessageBox::warning(
+                    this, "Import data release",
+                    "Copied " + QFileInfo(src).fileName() +
+                        " but could not move it into place (" +
+                        stage + "). Nothing was imported.");
                 return;
             }
         }
