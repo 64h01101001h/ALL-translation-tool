@@ -26,3 +26,33 @@ Starting state: 34 warnings (default flags) + 27 more once -Wall stood.
   CMakeLists; the count is zero and stays zero. (-Wextra: evaluated
   next time the build is otherwise idle — not adopted blind.)
 Proof: clean rebuild 0 warnings · 59/59 suites green.
+
+## T6 — DEAD WEIGHT (swept 2026-08-20)
+- TODO/FIXME in shipping code: exactly TWO, both references to
+  externally-gated items already on the master TODO (GMR's systematic
+  honorific ruling; the Uploads naming convention). RULED: they stay —
+  they mark honest waiting, not neglect.
+- Settings keys: zero written-never-read; 70 read-with-default-only
+  (normal). CLEAN.
+- Dead allocations: two orphaned QHBoxLayouts found via T1 and removed.
+
+## T5 — THE MONOLITH, MAPPED (2026-08-20; regenerate with the
+one-liner in git log for this entry)
+app/main.cpp = 32,896 lines. Anchor table (class · start · ~end · size):
+ux 255-347 · OcrModelInfo 377-549 · G84000 561-653 · TeachingMoment
+654-820 · ApparatusNote 830-1496 · ReleasePkg 1497-2074 · LookupPopup
+2075-2267 · sess 2268-2706 (split by the W2 helpers) · AnalysisPane
+2707-3180 · RibbonProxy/Group/Bar 3181-3416 · ScanCanvasLabel 3417-3477 ·
+**OverlayPane 3478-12384 (8,906)** · ApparatusPane 12385-12653 ·
+ScansPane 12654-12739 · ExportPane 12740-12860 · GoferPane 12861-13633 ·
+SanskritPane 13634-14517 · TrainerPane 14518-14902 · DrillsPane
+14903-15545 · DraftPane 15546-17546 (2,000) · FilesPane 17560-19255
+(1,695) · LibraryPane 19256-20824 (1,568) · ReviewPane 20825-21125 ·
+AlignPane 21126-21716 · InputPane 21717-23222 (1,505) · ScanPane
+23223-24033 · ProposePane 24034-24285 · ApprovalPane 24286-24777 ·
+ManuscriptPane 24778-25235 · CatalogMember/Tree 25236-25479 ·
+CatalogPane 25480-27756 (2,276) · SettingsDialog 27757-27880 ·
+HelpWindow 27881-28211 · HuntPalette+main+selftest 28212-32896 (4,684).
+RULING (per T5): no extraction this wave — nothing here is being
+touched for another reason. The map exists so every future block edit
+anchors against known boundaries.
