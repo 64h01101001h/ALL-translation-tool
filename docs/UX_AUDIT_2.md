@@ -81,3 +81,26 @@ rulings append-only (QIODevice::Append).
   if the copy fails (disk full, network drive), the OLD release file is
   already destroyed: an update attempt can delete the working release.
   Fix: copy to dst+".tmp~" then atomic rename over dst.
+
+### §10 adversarial review of the W2 batch — verdicts and remediation
+The independent reviewer CONFIRMED three bugs in the batch itself:
+- **R1 · P0 · FIXED.** Failed roster bootstrap still granted admin
+  identity and closed the dialog as success (phantom sign-in over a
+  missing CATALOG_TEAM.tsv). Now: rollback + warn + return; typed
+  fields survive for retry.
+- **R2 · P1 · FIXED.** warnOpenFail could hang the scriptable --survey
+  and --teachbench CLI modes on a modal. Both modes joined the
+  g_harnessRun list; findDataRoot's hand-rolled flag re-parse replaced
+  by the same single flag (two lists had already diverged).
+- **R3 · P1 · FIXED.** Revoke-rollback blanket-restored "active" — a
+  failed save of an ALREADY-revoked member would un-revoke them on the
+  next successful save. Now restores the previous status.
+Weaknesses accepted and fixed: modal-per-link spam (warnWriteFail now
+warns once per failing path, then logs — Space-bar alignment cadence
+protected); the survey dialog's own Save-as-Markdown was still silent
+(same commit, 30 lines away — now warned); prose-coupled outcome color
+(dead "unreadable" branch removed, startsWith sentinel); launch-time
+restore now honors sess::path's no-modal contract (unreadable
+remembered files restore as nothing, Overlay + Align). Noted, accepted:
+folio/roster warnings use raw QMessageBox (unreachable under harness in
+practice).

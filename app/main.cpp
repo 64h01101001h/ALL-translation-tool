@@ -2266,12 +2266,21 @@ inline QString str(const QString& key) {
 // the work on screen is NOT persisted. Harness runs log instead.
 static bool warnWriteFail(QWidget* parent, const QFile& f,
                           const QString& what) {
+    static QSet<QString> warned;   // one modal per failing path —
+                                   // repeats log (Space-bar cadence
+                                   // must not become modal spam)
     const QString msg = what + " could not be written:\n" +
                         f.fileName() + "\n" + f.errorString() +
                         "\n\nWhat you see on screen is NOT saved. "
                         "Check disk space, permissions, and the "
-                        "folder's existence, then retry.";
-    if (g_harnessRun) { qWarning() << msg; return false; }
+                        "folder's existence, then retry. Further "
+                        "failures for this file will be logged, "
+                        "not shown.";
+    if (g_harnessRun || warned.contains(f.fileName())) {
+        qWarning() << msg;
+        return false;
+    }
+    warned.insert(f.fileName());
     QMessageBox::warning(parent, "Save failed", msg);
     return false;
 }
@@ -6240,7 +6249,7 @@ public:
         if (g_harnessRun) return;   // harness docs are not sessions
         QSettings st("ALL", "TranslationTool");
         const QString f = st.value("overlay/lastFile").toString();
-        if (f.isEmpty() || !QFile::exists(f)) return;
+        if (f.isEmpty() || !QFileInfo(f).isReadable()) return;
         openFile(f);
         const int scroll = st.value("overlay/lastScroll").toInt();
         const int cur = st.value("overlay/lastCursor").toInt();
@@ -21182,7 +21191,7 @@ public:
 
     void restoreSession() {
         const QString f = sess::path("align/lastFile");
-        if (!f.isEmpty()) openFile(f);
+        if (!f.isEmpty() && QFileInfo(f).isReadable()) openFile(f);
     }
 
 private:
@@ -23746,10 +23755,7 @@ static QString findDataRoot() {
     // W2-01: a harness run has no human to answer a modal — degrade
     // to cwd immediately (the degraded-state banner still tells the
     // truth in the rendered output)
-    const auto args = QCoreApplication::arguments();
-    if (args.contains("--screenshots") || args.contains("--selftest") ||
-        args.contains("--sweep"))
-        return QDir::currentPath();
+    if (g_harnessRun) return QDir::currentPath();
     QMessageBox::information(
         nullptr, "Locate the data folder",
         "The ALL Tool Data folder (containing build/hgm_spine_…db) was "
@@ -25776,9 +25782,7 @@ public:
                             "Text (*.txt)");
                         if (!out.isEmpty()) {
                             const QString res = exportMissingList(out);
-                            const bool bad =
-                                res.contains("could not", Qt::CaseInsensitive) ||
-                                res.contains("unreadable", Qt::CaseInsensitive);
+                            const bool bad = res.startsWith("could not");
                             info_->setHtml(
                                 QString("<div style='color:%1'>")
                                     .arg(bad ? "#8C2F2B" : "#2E7D32") +
@@ -27529,11 +27533,13 @@ public:
             roster.push_back(m);
             if (!catalogRosterSave(root, roster)) {
                 roster.pop_back();
-                QMessageBox::warning(
-                    &d, "Roster not saved",
-                    "CATALOG_TEAM.tsv could not be written - the "
-                    "member was NOT added. Check the official "
-                    "folder's permissions.");
+                if (!g_harnessRun)
+                    QMessageBox::warning(
+                        &d, "Roster not saved",
+                        "CATALOG_TEAM.tsv could not be written - the "
+                        "member was NOT added. Check the official "
+                        "folder's permissions.");
+                return;   // no sign-in, no accept, fields kept
             }
             refill();
             nm->clear(); ini->clear(); p1->clear(); p2->clear();
@@ -27546,14 +27552,16 @@ public:
         connect(revB, &QPushButton::clicked, [&] {
             const int ix = list->currentRow();
             if (ix < 0 || ix >= roster.size()) return;
+            const QString prev = roster[ix].status;
             roster[ix].status = "revoked";
             if (!catalogRosterSave(root, roster)) {
-                roster[ix].status = "active";
-                QMessageBox::warning(
-                    &d, "Roster not saved",
-                    "CATALOG_TEAM.tsv could not be written - the "
-                    "revocation did NOT take effect. Check the "
-                    "official folder's permissions.");
+                roster[ix].status = prev;
+                if (!g_harnessRun)
+                    QMessageBox::warning(
+                        &d, "Roster not saved",
+                        "CATALOG_TEAM.tsv could not be written - the "
+                        "revocation did NOT take effect. Check the "
+                        "official folder's permissions.");
             }
             refill();
         });
@@ -28787,7 +28795,10 @@ static void showTranslatorSurvey(QWidget* parent,
             "Markdown (*.md)");
         if (fn.isEmpty()) return;
         QFile f(fn);
-        if (f.open(QIODevice::WriteOnly)) f.write(md.toUtf8());
+        if (f.open(QIODevice::WriteOnly))
+            f.write(md.toUtf8());
+        else
+            warnWriteFail(dlg, f, "The survey markdown");
     });
     dlg->show();
 }
@@ -28805,7 +28816,9 @@ int main(int argc, char** argv) {
                        early.contains("--sweep") ||
                        early.contains("--screenshots") ||
                        early.contains("--pasteprobe") ||
-                       early.contains("--sanskritcheck");
+                       early.contains("--sanskritcheck") ||
+                       early.contains("--survey") ||
+                       early.contains("--teachbench");
         g_sweepActive = early.contains("--sweep");
     }
     // Adam's ruling (2026-08-13): English renders in Palatino
