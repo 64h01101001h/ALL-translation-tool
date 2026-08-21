@@ -86,3 +86,23 @@ search→lookup (W3-01) · ⌘D→popup.
   restores the real layers after itself). Invisible before: every
   engine tested the ruling STORE and the card RENDER separately —
   never the promise that spans them.
+
+## G5 — THE STRANGER'S REFLEXES (closed: built + ruled)
+The audit of what a Mac hand tries FIRST:
+- ⌘, Preferences — already existed (PreferencesRole, app menu). HOLDS.
+- **⌘O — BUILT** on File → Open ACIP File.
+- **Open Recent — BUILT**: File submenu, fed by the Overlay's open
+  path (cap 10, newest first, harness never writes), vanished files
+  shown disabled rather than guessed away.
+- **⌘W — BUILT**: File → Close Window.
+- **Drag-a-file-onto-the-window — BUILT**: .txt/.act/.inc/.ace drops
+  raise the Overlay and open the file (the same one code path).
+- ⌘S — RULED: the app's saves are store-driven (autosaved pages,
+  append-only stores, explicit exports with pickers); a global ⌘S
+  would promise a "document save" model the tool deliberately does
+  not have. The Manuscript pane's Save button remains its explicit
+  act. A stranger pressing ⌘S loses nothing (autosave) — acceptable.
+- Right-click context menus (Qt defaults + Files' custom) and Escape
+  (dialog defaults) — HOLD.
+Invisible before: every engine asked "does what exists work?" — never
+"does what a hand tries first exist?"

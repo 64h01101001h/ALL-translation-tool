@@ -4679,6 +4679,16 @@ public:
             warnOpenFail(this, f, "The document");
             return;
         }
+        // G5: feed File → Open Recent (cap 10, newest first; the
+        // harness never moves the translator's furniture)
+        if (!g_harnessRun) {
+            QSettings st("ALL", "TranslationTool");
+            QStringList rs = st.value("file/recents").toStringList();
+            rs.removeAll(fn);
+            rs.prepend(fn);
+            while (rs.size() > 10) rs.removeLast();
+            st.setValue("file/recents", rs);
+        }
         {
             // the Document box is ACIP (Adam, 2026-08-12): wylie
             // source files (the Release 6 wylie edition, Lhasa _inc)
@@ -30118,14 +30128,55 @@ int main(int argc, char** argv) {
         // place every desktop user reaches for first. Every action
         // routes to the SAME code the panes use; nothing forks.
         QMenu* fileM = win.menuBar()->addMenu("File");
-        QObject::connect(
-            fileM->addAction("Open ACIP File\u2026"),
-            &QAction::triggered, [overlay] {
-                const QString f = safeGetOpenFileName(
-                    overlay, "Open ACIP file", QString(),
-                    "Texts (*.txt *.act *.inc *.ace);;All files (*)");
-                if (!f.isEmpty()) overlay->openFile(f);
+        {
+            QAction* openA =
+                fileM->addAction("Open ACIP File\u2026");
+            openA->setShortcut(QKeySequence::Open);   // G5: ⌘O
+            QObject::connect(
+                openA, &QAction::triggered, [overlay] {
+                    const QString f = safeGetOpenFileName(
+                        overlay, "Open ACIP file", QString(),
+                        "Texts (*.txt *.act *.inc *.ace);;"
+                        "All files (*)");
+                    if (!f.isEmpty()) overlay->openFile(f);
+                });
+        }
+        // G5: Open Recent — fed by OverlayPane::openFile, capped,
+        // vanished files shown disabled (never guessed away)
+        {
+            QMenu* recent = fileM->addMenu("Open Recent");
+            QObject::connect(recent, &QMenu::aboutToShow,
+                             [recent, overlay] {
+                recent->clear();
+                const QStringList rs =
+                    QSettings("ALL", "TranslationTool")
+                        .value("file/recents")
+                        .toStringList();
+                if (rs.isEmpty())
+                    recent->addAction("(no recent files)")
+                        ->setEnabled(false);
+                for (const QString& r : rs) {
+                    QAction* a = recent->addAction(
+                        QFileInfo(r).fileName());
+                    a->setToolTip(r);
+                    if (!QFileInfo(r).isReadable())
+                        a->setEnabled(false);
+                    else
+                        QObject::connect(
+                            a, &QAction::triggered, [overlay, r] {
+                                overlay->openFile(r);
+                            });
+                }
             });
+        }
+        fileM->addSeparator();
+        // G5: ⌘W closes the window (the Mac hand expects it)
+        {
+            QAction* closeA = fileM->addAction("Close Window");
+            closeA->setShortcut(QKeySequence::Close);
+            QObject::connect(closeA, &QAction::triggered, &win,
+                             &QMainWindow::close);
+        }
         fileM->addSeparator();
         QObject::connect(
             fileM->addAction("Import Data Release\u2026"),
@@ -32993,6 +33044,50 @@ int main(int argc, char** argv) {
     tabs.setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
     win.setMinimumSize(640, 480);
     win.resize(1180, 760);
+    win.setAcceptDrops(true);
+    class DropRoute : public QObject {
+    public:
+        OverlayPane* ov;
+        std::function<void(QWidget*)>* raise;
+        bool eventFilter(QObject* o, QEvent* ev) override {
+            if (ev->type() == QEvent::DragEnter) {
+                auto* de = static_cast<QDragEnterEvent*>(ev);
+                if (de->mimeData()->hasUrls()) {
+                    const auto u =
+                        de->mimeData()->urls().first();
+                    const QString suf =
+                        QFileInfo(u.toLocalFile())
+                            .suffix()
+                            .toLower();
+                    if (QStringList{"txt", "act", "inc", "ace"}
+                            .contains(suf)) {
+                        de->acceptProposedAction();
+                        return true;
+                    }
+                }
+            } else if (ev->type() == QEvent::Drop) {
+                auto* dr = static_cast<QDropEvent*>(ev);
+                if (dr->mimeData()->hasUrls()) {
+                    const QString p = dr->mimeData()
+                                          ->urls()
+                                          .first()
+                                          .toLocalFile();
+                    if (!p.isEmpty()) {
+                        if (g_raisePane && ov)
+                            g_raisePane(ov);
+                        if (ov) ov->openFile(p);
+                        dr->acceptProposedAction();
+                        return true;
+                    }
+                }
+            }
+            return QObject::eventFilter(o, ev);
+        }
+    };
+    auto* dropRoute = new DropRoute;
+    dropRoute->ov = overlay;
+    dropRoute->setParent(&win);
+    win.installEventFilter(dropRoute);
     // G3 (gauntlet): the geometry inquisition proved the UI clean
     // down to 820x560 and breaking at 760x520 (Catalog label clips,
     // Overlay editor escapes). A user must not be able to resize
