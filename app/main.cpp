@@ -155,6 +155,7 @@
 #include "allcore/backup.h"
 #include "allcore/comments.h"
 #include "allcore/dossier.h"
+#include "allcore/glossary.h"
 #include "allcore/tm84000.h"
 #include "allcore/textdna.h"
 #include "allcore/unicode_wylie.h"
@@ -5086,6 +5087,15 @@ public:
             "into the recorded classes, both by his English and by "
             "the spoken Tibetan. Machine-located candidates; the "
             "recordings are the authority.");
+        auto* glossBtn = new QPushButton("Glossary\u2026");
+        glossBtn->setToolTip(
+            "See and tend THIS text's glossary — your own binding "
+            "equivalents, in one place instead of buried behind "
+            "card clicks. Entries can be proposed to the authority "
+            "from the card as before.");
+        gReview->addBig(glossBtn, "ledger");
+        connect(glossBtn, &QPushButton::clicked,
+                [this] { glossaryWorkbench(); });
         auto* commentsBtn = new QPushButton("Team comments\u2026");
         commentsBtn->setToolTip(
             "Read and leave comments on lines of THIS text — shared "
@@ -12235,6 +12245,104 @@ public:
         input_->setFocus();
     }
 
+    // LODESTAR: the Glossary Workbench — excise #7's answer
+    void glossaryWorkbench() {
+        const QString p = glossaryPath();
+        if (p.isEmpty()) {
+            QMessageBox::information(
+                this, "Glossary",
+                "Open a text first - a glossary belongs to one "
+                "text.");
+            return;
+        }
+        loadGlossary();
+        QDialog d(this);
+        d.setWindowTitle("Glossary - " +
+                         QFileInfo(docFile_).fileName());
+        auto* v = new QVBoxLayout(&d);
+        auto* list = new QTextBrowser;
+        list->setOpenLinks(false);
+        list->setMinimumSize(560, 300);
+        auto refill = [&list, this] {
+            QString h;
+            if (glossary_.empty())
+                h = "<i>no entries yet - add one below, or click a "
+                    "word in the text and use \u201cadd to this "
+                    "text's glossary\u201d</i>";
+            for (const auto& [w, g] : glossary_)
+                h += QString("<div style='margin:5px 0'>"
+                             "<a href='card:%1'><b>%2</b></a> "
+                             "\u2261 %3 <small>"
+                             "<a href='edit:%1'>edit</a> \u00b7 "
+                             "<a href='del:%1'>remove</a></small>"
+                             "</div>")
+                         .arg(anchorEnc(QString::fromStdString(w)))
+                         .arg(QString::fromStdString(w)
+                                  .toHtmlEscaped())
+                         .arg(QString::fromStdString(g)
+                                  .toHtmlEscaped());
+            list->setHtml(h);
+        };
+        refill();
+        v->addWidget(list, 1);
+        auto* row = new QHBoxLayout;
+        auto* wE = new QLineEdit;
+        wE->setPlaceholderText("wylie");
+        auto* gE = new QLineEdit;
+        gE->setPlaceholderText("your equivalent (binding for this "
+                               "text's display)");
+        auto* setB = new QPushButton("Set");
+        row->addWidget(wE, 1);
+        row->addWidget(gE, 2);
+        row->addWidget(setB);
+        v->addLayout(row);
+        auto doSet = [this, wE, gE, &refill] {
+            const auto w = wE->text().trimmed().toStdString();
+            const auto g = gE->text().trimmed().toStdString();
+            if (w.empty() || g.empty()) return;
+            saveGlossaryEntry(w, g);
+            wE->clear();
+            gE->clear();
+            refill();
+        };
+        connect(setB, &QPushButton::clicked, doSet);
+        connect(gE, &QLineEdit::returnPressed, doSet);
+        connect(list, &QTextBrowser::anchorClicked,
+                [this, wE, gE, &refill, &d](const QUrl& u) {
+                    const QString s = u.toString();
+                    const QString w = anchorPayload(s, 5);
+                    if (s.startsWith("card:")) {
+                        if (g_lookupQuery) g_lookupQuery(w);
+                        d.accept();
+                    } else if (s.startsWith("edit:")) {
+                        wE->setText(w);
+                        gE->setText(QString::fromStdString(
+                            glossary_.count(w.toStdString())
+                                ? glossary_[w.toStdString()]
+                                : std::string()));
+                        gE->setFocus();
+                    } else if (s.startsWith("del:")) {
+                        allcore::GlossaryStore gs(
+                            glossaryPath().toStdString());
+                        gs.load();
+                        gs.remove(w.toStdString());
+                        gs.save(QFileInfo(docFile_)
+                                    .fileName()
+                                    .toStdString());
+                        loadGlossary();
+                        refill();
+                    }
+                });
+        auto* row2 = new QHBoxLayout;
+        row2->addStretch();
+        auto* closeB = new QPushButton("Close");
+        connect(closeB, &QPushButton::clicked, &d,
+                &QDialog::accept);
+        row2->addWidget(closeB);
+        v->addLayout(row2);
+        d.exec();
+    }
+
     // 9n-6 team comments: the shared, append-only margin voice
     void commentsDialog() {
         loadIdentity();
@@ -12391,16 +12499,9 @@ private:
         glossary_.clear();
         const QString p = glossaryPath();
         if (p.isEmpty()) return;
-        QFile f(p);
-        if (!f.open(QIODevice::ReadOnly | QIODevice::Text)) return;
-        while (!f.atEnd()) {
-            const QString line = QString::fromUtf8(f.readLine()).trimmed();
-            if (line.isEmpty() || line.startsWith('#')) continue;
-            const int tab = line.indexOf('\t');
-            if (tab <= 0) continue;
-            glossary_[line.left(tab).trimmed().toStdString()] =
-                line.mid(tab + 1).trimmed().toStdString();
-        }
+        allcore::GlossaryStore gs(p.toStdString());
+        gs.load();
+        glossary_ = gs.all();
     }
     // propose a term to the authority straight from its card, with the
     // surrounding passage auto-captured as evidence (proposal channel
@@ -12486,21 +12587,16 @@ private:
     void saveGlossaryEntry(const std::string& wylie, const std::string& gloss) {
         const QString p = glossaryPath();
         if (p.isEmpty()) return;
-        QDir().mkpath(QFileInfo(p).path());
         glossary_[wylie] = gloss;
-        QFile f(p);
-        if (!f.open(QIODevice::WriteOnly | QIODevice::Text)) {
+        allcore::GlossaryStore gs(p.toStdString());
+        gs.load();
+        gs.set(wylie, gloss);
+        if (!gs.save(QFileInfo(docFile_).fileName().toStdString())) {
+            QFile f(p);
             warnWriteFail(this, f, "The glossary");
-            return;
         }
-        QTextStream ts(&f);
-        ts << "# per-text glossary for " << QFileInfo(docFile_).fileName()
-           << " — wylie <TAB> gloss; the translator's own, binding for "
-              "this text's display\n";
-        for (const auto& [w, g] : glossary_)
-            ts << QString::fromStdString(w) << "\t"
-               << QString::fromStdString(g) << "\n";
     }
+    QString glossaryStorePath() const { return glossaryPath(); }
     QString glossaryHtml(const std::string& wylie) const {
         auto it = glossary_.find(wylie);
         QString edit = QString("<a href='gloss:%1'>%2</a>")

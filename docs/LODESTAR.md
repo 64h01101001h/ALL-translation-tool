@@ -158,3 +158,13 @@ that changes the world is the one that carries its teacher inside it.
   selftest — a dossier reopens its text AT THE SAVED LINE as one
   act, forever.
 The Lodestar's ledger is now ash-cold: nothing queued, nothing open.
+
+## EPILOGUE II — the Glossary Workbench (excise #7's answer)
+allcore::GlossaryStore extracted from the Overlay's private pair
+(glossary_smoke, TDD-first, suite 69; format contract preserved
+including the header); Overlay's load/save strangler-routed through
+the one store; and the Overlay's REVIEW band gains **Glossary…** —
+this text's entries in one tended list: set, edit, remove, click a
+term to its card. The translator's own layer finally has a room of
+its own. (Constitution R3 census: baseline 111, reviewed — one
+dialog-scoped info modal, never harness-reachable.)
