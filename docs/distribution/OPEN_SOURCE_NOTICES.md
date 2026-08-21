@@ -36,7 +36,7 @@ Version: 0.27.2 · August 2026
 | tibetan-spellchecker syllable data | CC0 | the classical syllable-legality check (red waves, spelling doubts) |
 | TibSchol abbreviations (rKTs) | CC0 | bskungs-yig expansion on cards |
 | Tibetan verbs database | CC0 | verb reference layer |
-| SOAS POS lexicon | research use, banked with provenance | Wilson-dots disambiguation |
+| SOAS POS lexicon (Tibetan in Digital Communication, SOAS University of London) | CC BY 4.0 — Zenodo DOI 10.5281/zenodo.574876, banked in data/soas_pos/README.md | Wilson-dots disambiguation |
 | Whitney, *Roots* (1885) and *Sanskrit Grammar* (1879), via CDSL | public domain (texts); CDSL encoding terms recorded at bank time | Sanskrit root analyses and grammar link-outs |
 | THL dictionary payload (Waldo, Rangjung Yeshe, Valby, Dan Martin, Hopkins layers, etc.) | per-dictionary terms, LOCAL-ONLY display pending review — marked "(local only)" in the interface and NOT redistributed | Lookup/Overlay reference definitions |
 | Lokesh Chandra Tibetan–Sanskrit layer | extracted from ACIP's own materials | Sanskrit reference on cards |

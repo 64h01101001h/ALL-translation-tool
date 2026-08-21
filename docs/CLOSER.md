@@ -29,7 +29,7 @@ States: OPEN · CLOSED(date) · WAITING(who: what) · DEFERRED(stamp).
 | 23 | HGM/LC redistribution stance | WAITING(Adam: one written line) |
 | 24 | BDRC permission — banked note (2026-08-07) covers NON-COMMERCIAL free distribution and the WRITTEN email is still pending; verdict depends on whether v1.0 is sold or free | WAITING(Adam: (a) free or paid? (b) chase the written email) |
 | 25 | Teachings-index consent line | WAITING(Adam: one written line) |
-| 26 | SOAS POS terms | WAITING(Adam: locate terms; else MUST-REMOVE at market press) |
+| 26 | SOAS POS terms | CLOSED(2026-08-21): CC BY 4.0 all along — Zenodo DOI banked in data/soas_pos/README.md; notices corrected |
 | 27 | Apple Developer ID decision | WAITING(Adam: $99/yr call) |
 | 28 | Ribbon reorder from usage data | WAITING(time: a week of ledger data) |
 | 29 | 9i manual revamp + screen recordings + YouTube channel | PARTIAL: written half CLOSED(2026-08-21); recordings+channel WAITING(Adam: record or delegate) |
@@ -213,3 +213,12 @@ produces the candidate; 7–9 accept it; then
   (native Qt text input) — nothing to build; noted in the manual's
   keyboard section rather than duplicated as a fake feature.
 **Burndown:** 0 open · 10 waiting · 0 deferred · ALL ENGINEERING CLOSED.
+- 2026-08-21 · **#26 CLOSED by reading.** The SOAS POS lexicon was
+  CC BY 4.0 from the day it was banked (Zenodo DOI 10.5281/zenodo.574876
+  in its own README); SHIP.md's "verify terms" was stale caution. The
+  notices table now states the real license. Waiting list: 9 → 8.
+- 2026-08-21 · **The signature drafts.** docs/decisions/
+  DECISIONS_TO_SIGN.md turns #23/#24/#25 into one-approval affairs:
+  the HGM/LC statement, the BDRC written-confirmation email (with the
+  free-or-paid bracket marked), and the teachings consent line —
+  drafted, nothing sent, Adam edits and signs.
