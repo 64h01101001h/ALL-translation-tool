@@ -158,3 +158,10 @@ Shakedown 201×500 clean; fleet 202–205 × 1000: **4/4 SURVIVED** with
 word-clicks interleaved against doc churn, layer toggles, resizes,
 menus, and lookups. The reader's path holds under hostile sequencing;
 the arsenal is permanent.
+
+## LAP 4 — THE DOSSIER BUILD (closed: clean)
+The flagship faced the monkey the day it shipped: seeds 301–304 ×
+1000 steps with the full arsenal — the menu arm opening the new
+Dossiers dialog organically, the modal-closer working it, word-clicks
+and resizes interleaved. **4/4 SURVIVED.** New features enter through
+the gauntlet now; that is simply how the shop works.
