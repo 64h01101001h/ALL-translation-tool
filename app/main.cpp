@@ -30075,11 +30075,23 @@ int main(int argc, char** argv) {
         mkGroup("Community", {"Propose", "Approval"});
         // L-tier: every group tab teaches its own shortcut (M5's
         // \u2318 1..7), plus the pane-stepping pair, on hover
-        for (int gi = 0; gi < tabs.count() && gi < 9; ++gi)
-            tabs.setTabToolTip(
-                gi, QString::fromUtf8("\u2318%1 \u00b7 panes inside: "
-                                      "\u2318\u21e7] / \u2318\u21e7[")
+        {
+            static const char* kRoles[] = {
+                "Read - meet the text",
+                "Translate - make the draft",
+                "Research - interrogate the record",
+                "Learn - train the hand",
+                "Input - bring new pages in",
+                "Catalog - name and shelve every text",
+                "Community - propose; the authority rules"};
+            for (int gi = 0; gi < tabs.count() && gi < 7; ++gi)
+                tabs.setTabToolTip(
+                    gi,
+                    QString::fromUtf8("%1  (\u2318%2 \u00b7 panes: "
+                                      "\u2318\u21e7] / \u2318\u21e7[)")
+                        .arg(QString::fromUtf8(kRoles[gi]))
                         .arg(gi + 1));
+        }
         // 9n-5 (2026-08-20): the Word-style visible search field —
         // Hunt Everywhere surfaced top-right beside the group tabs
         // instead of hiding behind its shortcut
@@ -30752,6 +30764,71 @@ int main(int argc, char** argv) {
                             "home). Ask Adam for the current DMG, "
                             "or check the team's shared folder.")
                         .arg(QStringLiteral(ALL_APP_VERSION)));
+            });
+        // ---- LODESTAR L1: the tool teaches its own idea — the
+        // pipeline and the data hierarchy, one screen, from Help
+        QObject::connect(
+            helpMenu->addAction("How This Tool Thinks\u2026"),
+            &QAction::triggered, [&win] {
+                QDialog d(&win);
+                d.setWindowTitle("How this tool thinks");
+                auto* v = new QVBoxLayout(&d);
+                auto* t = new QTextBrowser;
+                t->setMinimumSize(640, 500);
+                t->setHtml(
+                    "<h3>The pipeline</h3>"
+                    "<p>Every group on the tab bar is one station of "
+                    "a scholarly pipeline:</p>"
+                    "<p><b>Read</b> — meet the text: the Overlay's "
+                    "click-a-word card, the Library, Files, scans."
+                    "<br><b>Translate</b> — make the draft: Draft, "
+                    "Manuscript, Apparatus, Review, Align."
+                    "<br><b>Research</b> — interrogate the record: "
+                    "Search, Lookup, Sanskrit, Convert, Analysis."
+                    "<br><b>Learn</b> — train the hand: Trainer, "
+                    "Drills."
+                    "<br><b>Input</b> — bring new pages in: "
+                    "double-keyed typing, OCR."
+                    "<br><b>Catalog</b> — give every text its name "
+                    "and shelf."
+                    "<br><b>Community</b> — propose, and let the "
+                    "authority rule. Rulings apply immediately.</p>"
+                    "<h3>Who is speaking (the data hierarchy)</h3>"
+                    "<p>Every block on a word's card wears a badge "
+                    "saying whose voice it is:</p>"
+                    "<p><b style='color:#82672A'>HGM</b> — Geshe "
+                    "Michael's own attested English. Binding. The "
+                    "point of the project."
+                    "<br><b style='color:#1E6B4E'>EVIDENCE</b> — "
+                    "the aligned corpus: his translations beside "
+                    "the Tibetan they translate."
+                    "<br><b style='color:#2E629E'>REFERENCE</b> — "
+                    "other authorities (84000, Das, Hopkins\u2026). "
+                    "Comparanda, never promoted."
+                    "<br><b style='color:#B4540A'>MACHINE</b> — "
+                    "machine-located candidates. Always review "
+                    "material."
+                    "<br><b style='color:#8C2F2B'>AI</b> — "
+                    "model-drafted, unmistakably bannered, shown "
+                    "only where HGM is silent.</p>"
+                    "<p><i>The order never lies: a lower tier is "
+                    "never dressed as a higher one. When the tool "
+                    "doesn't know, it says so.</i></p>"
+                    "<h3>The record</h3>"
+                    "<p>Rulings, comments, glossaries, and catalog "
+                    "actions are permanent, provenance-stamped, "
+                    "and shared through the team folder \u2014 "
+                    "the app is the reading room; the record is "
+                    "the library.</p>");
+                v->addWidget(t, 1);
+                auto* row = new QHBoxLayout;
+                row->addStretch();
+                auto* closeB = new QPushButton("Close");
+                QObject::connect(closeB, &QPushButton::clicked, &d,
+                                 &QDialog::accept);
+                row->addWidget(closeB);
+                v->addLayout(row);
+                d.exec();
             });
         // ---- L2 (shipwright): the licenses surface — one source
         // of truth (OPEN_SOURCE_NOTICES.md), viewable in-app

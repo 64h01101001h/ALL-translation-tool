@@ -35,3 +35,34 @@ hand. The dossier collapses excise #8, gives L3's personas their
 resumable world, and is the substrate Team Presence (candidate 6)
 and the Glossary Workbench (candidate 5) later attach to.
 Runner-up: the Pipeline Map welcome (cheapest, teaches the model).
+
+## L1 — THE CONCEPTUAL-MODEL AUDIT (Norman) — closed
+The tool's hidden model: a PIPELINE (Read → Translate → Research →
+Learn → Input → Catalog → Community) over a DATA HIERARCHY (HGM >
+evidence > reference > machine > AI). Findings + fixes:
+- **The model is now taught in one screen** — Help → How This Tool
+  Thinks…: the pipeline with each group's role, the five voices with
+  their badges and colors, and the record's permanence contract.
+  Blindspot class: *the model lived in the builders' heads and the
+  ledgers — never on a screen a stranger could reach.*
+- **Group tabs teach their roles** — hover any group: "Translate —
+  make the draft (⌘2 · panes: ⌘⇧]/[)". The shortcut tooltip grew a
+  purpose.
+- Pipeline-position cues on individual panes: RULED sufficient via
+  the map + role tooltips + pane banners (each pane already opens
+  with a role sentence); per-pane breadcrumbs would be chrome.
+
+## L4 — THE LAWS SWEEP — closed (analysis + rulings)
+- **Hick** (22 panes, 14 card layers): mitigated by design — the
+  seven-group chunking, card presets (reading/research/minimal), and
+  now the model map. HOLDS.
+- **Fitts**: band targets ≥24px with labels; splitters 7px grabbable
+  (Phase-1 M1); min-window floor keeps targets from crushing. HOLDS.
+- **Miller/chunking**: the card's zone order IS the data hierarchy
+  (HGM first, AI last) — structure encodes meaning. HOLDS.
+- **Jakob**: File/Edit/groups/View/Help + ⌘ vocabulary + ribbon =
+  the conventions users bring from Word/macOS. HOLDS (G5's work).
+- **Tesler**: the burden the software now carries that users once
+  did: conflict merging, backups, honest counts, live rulings,
+  recents, drag-open. Remaining user-side complexity is ESSENTIAL
+  (scholarly judgment). HOLDS.
