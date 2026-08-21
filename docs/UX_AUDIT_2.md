@@ -166,3 +166,23 @@ and swept the boundary: widget labels sitting ON the chrome.
   which the multi-line form had missed).
 - Dedicated viewers (four-layer, e-text, editors) own their fonts at
   larger sizes. HOLDS.
+
+## W8 — TERMINOLOGY TABLE (2026-08-20)
+One concept, one word — as the UI actually speaks, now ruled:
+- **Wylie** — the user-facing name for the transliteration (script
+  menus, row labels). **EWTS** appears only where the machine standard
+  itself matters (Convert pane's auto-detect note). RULED, consistent.
+- **HGM** (badge) / **the master's attested English** (four-layer
+  caption) — the same referent in two registers: badge grammar vs
+  reading prose. RULED acceptable: the badge is an identity mark, the
+  caption is narrative; both are honesty-load-bearing and stay verbatim.
+- **The authority** — the approver ROLE (Geshe Michael in the Approval
+  workflow); distinct concept from HGM-the-gloss-source, and the UI
+  keeps them distinct. HOLDS.
+- **Corpus** = the 35,601-segment parallel evidence base, everywhere.
+  HOLDS.
+- Interaction idioms verified in W2/W9 passes: one warning voice for
+  writes (warnWriteFail), one for opens (warnOpenFail), Trash always
+  "recoverable", previews before destructive syncs. HOLDS.
+No renames shipped: the audit found register variation, not concept
+collision — renames would churn honesty wording for zero clarity gain.
