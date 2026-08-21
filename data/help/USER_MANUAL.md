@@ -1,9 +1,58 @@
-> **2026-08-20 — interface note:** the app now uses the Word-style
-> RIBBON BAND (groups of labeled tool icons under the group tabs) in
-> place of the older per-pane button rows this manual describes. The
-> tools and their names are unchanged — only their home moved into the
-> band. A fully revised manual with new screenshots is scheduled
-> (roadmap 9i).
+# What's new — the 2026-08-20 interface (read this first)
+
+The tool now wears the **Word-style interface** you know from
+Microsoft Office. Everything this manual describes still exists —
+this chapter tells you where it moved and what joined it.
+
+## The ribbon band
+Under the seven group tabs (Read · Translate · Research · Learn ·
+Input · Catalog · Community) sits the **band**: the current group's
+panes on the left (click to switch), then the active pane's tools as
+**color icons with labels**, gathered into named clusters (DOCUMENT ·
+REVIEW · SPELLING…). Everything that used to sit in per-pane button
+rows lives here now. *View → ribbon labels* toggles the text under
+the icons.
+
+## The menu bar, Word-grammar
+- **File** — Open ACIP File… · Import Data Release…
+- **Edit** — Undo/Redo/Cut/Copy/Paste/Select All/Delete
+- **the seven group menus** — every pane and its tools, mirrored
+- **View** — zoom (⌘= / ⌘− / ⌘0), ribbon labels, panes
+- **Help** — Tutorials · **Keyboard Shortcuts…** · **Licenses & Data
+  Sources…** · **Usage Ledger…** · **Check for Updates…** ·
+  Troubleshooting (logs, diagnostic report, **File a Finding…**)
+
+## The keyboard
+**⌘K** hunts everything (panes, tools, terms, files). **⌘1–⌘7** jump
+to a group; **⌘⇧] / ⌘⇧[** step through its panes. **⌘D** peeks the
+dictionary card for any selected word, anywhere. The full map:
+Help → Keyboard Shortcuts.
+
+## The card, made measurable
+Every evidence section on the word card now shows its **true count**
+("3 of 41 · show all"), wears an **epistemic badge** (HGM ·
+EVIDENCE · REFERENCE · MACHINE · AI) so you always know who is
+speaking, marks every truncation with an honest "…", and offers
+**presets** (reading · research · minimal) above the layer toggles.
+Search results link every searched term straight to its card
+("look up: …").
+
+## First launch & safety nets
+A first run opens a demo text with a three-line welcome. Every real
+launch quietly backs up the shared team stores (proposals, roster) —
+14 dated copies in Application Support. If Dropbox ever forks the
+proposals file, the Approval pane says so by name and absorbs the
+new rows; nothing is merged by guess.
+
+## Where to complain
+Help → Troubleshooting → **File a Finding…** drops a timestamped,
+version-stamped entry into the team's findings inbox and opens it —
+one click from "something's off" to "it's on the record."
+
+*The chapters below predate the band: their tool NAMES are unchanged,
+but a control described "in the pane's button row" now lives in the
+band. New screenshots arrive with the full 9i revamp.*
+
 
 # The ALL Translation Tool — User Manual
 *The complete tutorial: every pane, every control, every workflow,

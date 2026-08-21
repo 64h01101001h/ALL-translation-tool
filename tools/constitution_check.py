@@ -154,6 +154,7 @@ def main():
         "idioms": "hgm", "botok": "botok", "spellcheck": "spellchecker",
         "soas_pos": "soas", "whitney": "whitney",
         "candidate_alignments": "hgm", "84000": "84000",
+        "help": "hgm",
     }
     if staged:
         for d in staged.group(1).split():

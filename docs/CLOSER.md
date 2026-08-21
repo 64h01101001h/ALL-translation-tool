@@ -32,7 +32,7 @@ States: OPEN · CLOSED(date) · WAITING(who: what) · DEFERRED(stamp).
 | 26 | SOAS POS terms | WAITING(Adam: locate terms; else MUST-REMOVE at market press) |
 | 27 | Apple Developer ID decision | WAITING(Adam: $99/yr call) |
 | 28 | Ribbon reorder from usage data | WAITING(time: a week of ledger data) |
-| 29 | 9i manual revamp + screen recordings + YouTube channel | DEFERRED(post-1.0 roadmap, per earlier sequencing) |
+| 29 | 9i manual revamp + screen recordings + YouTube channel | PARTIAL: written half CLOSED(2026-08-21); recordings+channel WAITING(Adam: record or delegate) |
 | 30 | 9n remainder: team comments on texts; dictation | DEFERRED(post-1.0 unless Adam stamps otherwise) |
 
 ## Wave log
@@ -186,3 +186,17 @@ Plus time itself: a week of usage-ledger data reorders the ribbon (#28).
 When items 1–6 are answered, `tools/release.sh 1.0.0-rc.1 market`
 produces the candidate; 7–9 accept it; then
 `tools/release.sh 1.0.0 market` is the whole remaining ceremony.
+
+## Post-letter wave (Adam: "keep going" over the deferred shelf)
+- 2026-08-21 · **#29 (written half) CLOSED — and it flushed out a
+  shipping bug.** The Help chapters were NOT staged by the press at
+  all: fresh installs got an EMPTY Help, and Adam's install was
+  reading 8-day-stale leftovers kept alive by the non-deleting data
+  rsync (the same legacy-persistence mechanism as the 84000 accident).
+  Fixed: data/help staged + credit-mapped. The manual itself now
+  opens with "What's new — the 2026-08-20 interface": the band, the
+  Word menu grammar, the keyboard, the measurable card, the safety
+  nets, and File-a-Finding — current-first instead of
+  stale-with-an-apology. Recordings + the YouTube channel remain
+  WAITING on Adam (record or delegate).
+**Burndown:** 0 open · 10 waiting · 1 deferred · 19½ closed.

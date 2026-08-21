@@ -184,7 +184,8 @@ if [[ "$PRESS_MODE" == "team" ]]; then
 fi
 # runtime data folders the panes read (enumerated from the code)
 for d in fonts honorifics pron_colloquial abbreviations extracted idioms \
-         botok spellcheck soas_pos whitney candidate_alignments 84000; do
+         botok spellcheck soas_pos whitney candidate_alignments 84000 \
+         help; do
   [[ -d "$ROOT/data/$d" ]] && cp -R "$ROOT/data/$d" "$DATA/data-$d.tmp" \
       && mkdir -p "$DATA/data" && mv "$DATA/data-$d.tmp" "$DATA/data/$d"
 done
