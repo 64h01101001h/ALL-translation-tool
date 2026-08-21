@@ -66,3 +66,37 @@ evidence > reference > machine > AI). Findings + fixes:
   did: conflict merging, backups, honest counts, live rulings,
   recents, drag-open. Remaining user-side complexity is ESSENTIAL
   (scholarly judgment). HOLDS.
+
+## L5 — THE VOICE — closed (convention verified)
+Sampling the jargon frontier (bskungs yig, sa bcad, colophon, tsheg,
+EWTS): every surveyed surface already speaks PLAIN-FIRST with the
+native term parenthesized and the next act stated ("orthographic
+abbreviation (bskungs yig): X = Y — not a typo"; "Outline (sa bcad)").
+The error voices (warnWriteFail/warnOpenFail), empty states, and
+banners all carry next-act discipline from earlier engines. RULED:
+the pairing convention is the house voice; honesty wording verbatim;
+no bare-jargon finding survived sampling. Blindspot class checked and
+found already-covered: *strings written by experts for experts.*
+
+## L3 — THE OTHER HUMANS (journey walks) — closed
+- **The cataloger (modest English, month one):** welcome → model map
+  → Catalog's role tooltip → the pane's own banner → chop/compose
+  tools with previews. Surviving friction: the interface is
+  English-only — i18n is DEFERRED to the post-1.0 roadmap with this
+  persona's name on it (the deepest remaining barrier, honestly
+  stated). House grammar (STD-007) JUSTIFIED: it is the team's own
+  trained standard, taught in Help.
+- **The authority (time-poor):** queue → filter → bulk-approve with
+  count + one note; rulings apply IMMEDIATELY (G6); conflict banner
+  names forks; backups quiet. The queue now respects minutes. HOLDS.
+- **The student translator:** welcome text → click-a-word → presets →
+  ⌘K → map. Surviving friction: no guided "first translation
+  project" path — that is EXACTLY the Dossier flagship's opening act
+  (L6-1); noted as the flagship's first acceptance test.
+Blindspot class: *built under one expert eye* — now walked by three.
+
+## LODESTAR SCOREBOARD
+Prologue (gate DPR) ✓ · L2 excise ✓ (2 kills, 2 collapses queued to
+1.1, 3 justified) · L1 model ✓ · L4 laws ✓ · L5 voice ✓ · L3 personas
+✓ — **L6 flagship: WAITING(Adam: pick — recommendation Translation
+Dossiers)**. The closing letter writes when L6 ships.
