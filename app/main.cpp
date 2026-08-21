@@ -257,13 +257,16 @@ namespace ux {
 constexpr const char* kPaper = "#FAF6EE";   // reading surface
 constexpr const char* kInk = "#2B2118";     // primary text on paper
 // structure & identity
-constexpr const char* kGold = "#9A7A33";    // eyebrows, identity
+constexpr const char* kGold = "#82672A";    // eyebrows, identity
+                                            // (AA 4.97 on paper; the
+                                            // chrome keeps #9A7A33
+                                            // for borders/washes)
 constexpr const char* kMuted = "#6E675D";   // secondary text
-constexpr const char* kFaint = "#8A8A8A";   // tertiary/hints
-constexpr const char* kSoft = "#9C948A";    // caption italic
+constexpr const char* kFaint = "#6F6F6F";   // tertiary/hints (AA 4.66)
+constexpr const char* kSoft = "#78706A";    // caption italic (AA 4.51)
 // semantic
 constexpr const char* kAct = "#1E6B4E";     // actions / success
-constexpr const char* kWarn = "#B26B00";    // advisories
+constexpr const char* kWarn = "#935800";    // advisories (AA 5.36)
 constexpr const char* kMachine = "#B4540A"; // machine-derived marks
 constexpr const char* kError = "#8C2F2B";   // errors / refusals
 constexpr const char* kDoc = "#2E629E";     // documents / links-int
@@ -450,7 +453,7 @@ static void showOcrModelManager(QWidget* parent,
                                      ? "\u2713 installed"
                                      : "not installed");
         state->setStyleSheet(installed(m) ? "color:#1E6B4E"
-                                          : "color:#8A8A8A");
+                                          : "color:#6F6F6F");
         stateLabels << state;
         row->addWidget(state);
         if (QString(m.dirName) != "BDRC_Woodblock") {
@@ -606,7 +609,7 @@ static QString tm84000Html(const std::string& wylie, int limit = 5) {
         "<hr><div style='color:#1F5B4B'><b>84000 Translation "
         "Memory</b> <small>(CC BY 4.0, 84000: Translating the Words "
         "of the Buddha - published-translation comparanda, reference "
-        "only, never HGM)</small> <small style='color:#9C948A'>" +
+        "only, never HGM)</small> <small style='color:#78706A'>" +
         QString::number(hits.size()) + " of " +
         QString::number(tmTotal) + "</small></div>";
     for (const auto& t : hits) {
@@ -1059,9 +1062,9 @@ static QString entryHtml(const allcore::Entry& e,
                 also += QString::fromStdString(v->colloquial)
                             .toHtmlEscaped() +
                         (v->cls == "prenasal-derived"
-                             ? " <span style='color:#999'>(prenasal, "
+                             ? " <span style='color:#6F6F6F'>(prenasal, "
                                "derived)</span>"
-                             : " <span style='color:#999'>(community)"
+                             : " <span style='color:#6F6F6F'>(community)"
                                "</span>");
             }
             if (!also.isEmpty())
@@ -1295,7 +1298,7 @@ static QString entryHtml(const allcore::Entry& e,
         // maps): a MISSING index must never look like "this word has
         // no moments". Word-level absence stays silent — that is
         // normal coverage; index-level absence says so.
-        h += "<div style='color:#B26B00;font-size:12px;margin-top:"
+        h += "<div style='color:#935800;font-size:12px;margin-top:"
              "6px'>recorded-teachings index not loaded this session "
              "— quit and relaunch the app (data/teaching/"
              "teaching_moments_card.json)</div>";
@@ -1317,12 +1320,12 @@ static QString entryHtml(const allcore::Entry& e,
         if (!ms.empty()) {
             h += ux::sourceBadge(ux::Epistemic::Machine) +
                  zoneLabel("IN THE RECORDED TEACHINGS") +
-                 QString(" <small style='color:#9C948A'>%1 of %2"
+                 QString(" <small style='color:#78706A'>%1 of %2"
                          "</small>")
                      .arg((int)ms.size())
                      .arg((int)all.size()) +
                  "<div style='font-size:12px'><i "
-                 "style='color:#9C948A'>moments where he says the "
+                 "style='color:#78706A'>moments where he says the "
                  "TIBETAN phrase itself (phonetic match on his "
                  "own convention \u2014 candidates; homophones "
                  "share moments; the recording is the "
@@ -1358,7 +1361,7 @@ static QString entryHtml(const allcore::Entry& e,
                  "teaches this idea</span> <i style='color:#888'>"
                  "(located by the ENGLISH equivalent in the class "
                  "captions \u2014 the recording is the "
-                 "authority)</i> <small style='color:#9C948A'>" +
+                 "authority)</i> <small style='color:#78706A'>" +
                  QString::number((int)ms.size()) + " of " +
                  QString::number((int)all.size()) + "</small><br>";
             for (const auto* m : ms) h += teachingRow(*m);
@@ -1663,7 +1666,7 @@ static QString lookupResultsHtml(allcore::Spine& spine,
         h = QString(
                 "<div style='color:#6E675D'><b>no HGM entry for "
                 "\u201c%1\u201d</b></div>"
-                "<div style='color:#9C948A;font-size:12px;"
+                "<div style='color:#78706A;font-size:12px;"
                 "margin-top:2px'>tried: exact headword \u00b7 "
                 "affix stripping \u00b7 ba/bo fold \u00b7 "
                 "verb-stem fold \u00b7 pronunciation \u00b7 "
@@ -1695,7 +1698,7 @@ static QString lookupResultsHtml(allcore::Spine& spine,
         if (!refs.empty()) {
             h += ux::sourceBadge(ux::Epistemic::Reference) +
                  zoneLabel("REFERENCE · LOCAL ONLY") +
-                 "<div><small style='color:#9C948A'>unlicensed "
+                 "<div><small style='color:#78706A'>unlicensed "
                  "compilations — local lookup only, never for "
                  "release data</small></div>";
             for (const auto& r : refs) {
@@ -1752,7 +1755,7 @@ static QString lookupResultsHtml(allcore::Spine& spine,
             h += ux::sourceBadge(ux::Epistemic::Reference) +
                  zoneLabel("LOCAL DICTIONARIES \u00b7 "
                            "USER-SUPPLIED") +
-                 "<div><small style='color:#9C948A'>StarDict "
+                 "<div><small style='color:#78706A'>StarDict "
                  "files you installed \u2014 their licenses are "
                  "their own; local display only</small></div>" +
                  block;
@@ -1861,7 +1864,7 @@ static QString lookupResultsHtml(allcore::Spine& spine,
                                  .toHtmlEscaped() +
                              "'>conjugation tables →</a></small>";
                     if (!r->apteId.empty())
-                        h += " <small style='color:#999'>· Apte id " +
+                        h += " <small style='color:#6F6F6F'>· Apte id " +
                              QString::fromStdString(r->apteId)
                                  .toHtmlEscaped() +
                              "</small>";
@@ -2067,7 +2070,7 @@ public:
         view_ = new QTextBrowser;
         view_->setOpenLinks(false);
         view_->setHtml(
-            "<i style='color:#8A8A8A'>Select a word or phrase in "
+            "<i style='color:#6F6F6F'>Select a word or phrase in "
             "any pane and press ⌘D — the whole dictionary stack "
             "answers here, without leaving your writing.</i>");
         v->addWidget(view_, 1);
@@ -2527,7 +2530,7 @@ static QWidget* makeLookupPane(allcore::Spine& spine, allcore::RefDict* ref,
                      });
     auto* results = new QTextBrowser;
     results->setHtml(
-        "<i style='color:#8A8A8A'>The entry appears here — try "
+        "<i style='color:#6F6F6F'>The entry appears here — try "
         "<b>bsod nams</b>, <b>BSOD NAMS</b>, \"merit\", or "
         "\"sönam\". Layers you can toggle in the Overlay's card "
         "appear here too: HGM (binding), reference dictionaries, "
@@ -2694,11 +2697,11 @@ public:
         report_ = new QTextBrowser;
         report_->setOpenExternalLinks(false);
         report_->setHtml(
-            "<i style='color:#8A8A8A'>The analysis report lands "
+            "<i style='color:#6F6F6F'>The analysis report lands "
             "here — paste a passage and press Analyze.</i>");
         qc_ = new QTextBrowser;
         qc_->setHtml(
-            "<i style='color:#8A8A8A'>The validation pass "
+            "<i style='color:#6F6F6F'>The validation pass "
             "(claim-by-claim checks against the corpus) lands "
             "here.</i>");
         right->addWidget(report_);
@@ -6895,7 +6898,7 @@ private:
                              "#F0E9DC;color:#6B5E4A;padding:0 7px;"
                              "border-radius:8px;font-size:11px'>Monlam"
                              "</span> attested in the %1 word list "
-                             "<span style='color:#9C948A'>(Apache-2.0, "
+                             "<span style='color:#78706A'>(Apache-2.0, "
                              "reference)</span></div>")
                          .arg(QString::fromStdString(att)
                                   .toHtmlEscaped());
@@ -6916,7 +6919,7 @@ private:
                              "CONTRACTION</span> bsdus tshig of "
                              "<b style='color:#2B2620'>%3</b> — dropped "
                              "<i>%4</i> · shared gloss “%5” <span "
-                             "style='color:#9C948A'>(derived register, "
+                             "style='color:#78706A'>(derived register, "
                              "%1/%2)</span></div>")
                          .arg(QString::fromStdString(c->cls).toHtmlEscaped(),
                               QString::fromStdString(c->glossKind)
@@ -6993,7 +6996,7 @@ private:
             for (const auto& s : segs) {
                 h += "<div style='border-left:2px solid #D8CFC0;"
                      "padding:2px 0 2px 8px;margin:6px 0'>"
-                     "<small style='color:#9C948A'>[" +
+                     "<small style='color:#78706A'>[" +
                      QString::fromStdString(s.course) + ":" + QString::number(s.seq) +
                      "]</small><br><i style='color:#4A443C'>" +
                      ux::snipStd(s.wylie, 180) +
@@ -9161,7 +9164,7 @@ private:
                      .arg(inV ? "#2B2620" : "#6E675D")
                      .arg(unitText((int)ui).toHtmlEscaped());
         }
-        h += "<div style='margin-top:14px;color:#9C948A;font-size:"
+        h += "<div style='margin-top:14px;color:#78706A;font-size:"
              "11px'>Counts are per shad-delimited unit. Odd "
              "counts of 5+ are the classical meters (7 and 9 "
              "dominate the Tengyur); even counts (6, 8 — the "
@@ -9769,7 +9772,7 @@ private:
                                  .arg(line);
                     else
                         h += QString(
-                                 "<span style='color:#9C948A'>"
+                                 "<span style='color:#78706A'>"
                                  "announced here but not found "
                                  "at this phrasing — </span>"
                                  "<a href='citefind:%1'>hunt "
@@ -9801,7 +9804,7 @@ private:
                              c->quote.toUtf8().toBase64()));
             }
         }
-        h += "<div style='margin-top:14px;color:#9C948A;"
+        h += "<div style='margin-top:14px;color:#78706A;"
              "font-size:11px'>All of this was generated from the "
              "document itself the moment you asked — detection is "
              "heuristic (…ZHES/CES + speech verb; “zhes bya "
@@ -12203,7 +12206,7 @@ private:
         if (it == glossary_.end())
             return docFile_.isEmpty()
                        ? QString()
-                       : "<div style='font-size:11px;color:#999'>" + edit +
+                       : "<div style='font-size:11px;color:#6F6F6F'>" + edit +
                              "</div>";
         return QString("<div style='background:#EAF6EF;padding:4px 7px;"
                        "border-radius:6px;margin:3px 0'><b>FROM THIS TEXT'S "
@@ -12620,7 +12623,7 @@ public:
             v->addWidget(b);
             auto* d = new QLabel(what);
             d->setWordWrap(true);
-            d->setStyleSheet("color:#8A8A8A;font-size:12px;"
+            d->setStyleSheet("color:#6F6F6F;font-size:12px;"
                              "margin-bottom:6px");
             v->addWidget(d);
             return b;
@@ -12738,7 +12741,7 @@ public:
         ribbon->attachTo(this);
         results_ = new QTextBrowser;
         results_->setHtml(
-            "<i style='color:#8A8A8A'>Results appear here. Load a "
+            "<i style='color:#6F6F6F'>Results appear here. Load a "
             "text in Read → Overlay, then choose an action above — "
             "or run the batch lane on a whole folder without "
             "loading anything.</i>");
@@ -13454,7 +13457,7 @@ private:
                              .arg(r.snippet.toHtmlEscaped());
                 }
                 if ((int)rows.size() > 30)
-                    h += QString("<div style='color:#8A8A8A'>"
+                    h += QString("<div style='color:#6F6F6F'>"
                                  "<small>\u2026and %1 more file(s) \u2014 "
                                  "narrow the terms to see them"
                                  "</small></div>")
@@ -13468,7 +13471,7 @@ private:
         }
         h += QString("<div><b>%1 total hit(s)</b></div>").arg(total);
         if (total == 0 && !stopped_)
-            h += "<div style='color:#9C948A;font-size:12px;"
+            h += "<div style='color:#78706A;font-size:12px;"
                  "margin-top:2px'>nothing matched in the searched "
                  "files. Widening moves: switch the combiner to "
                  "<i>OR</i>; raise the NEAR window; check which "
@@ -13477,7 +13480,7 @@ private:
                  "single term, the Lookup pane also folds affixes "
                  "and verb stems.</div>";
         if (foldDropped)
-            h += QString("<div style='color:#8A8A8A'><small>%1 "
+            h += QString("<div style='color:#6F6F6F'><small>%1 "
                          "window(s) hidden by the fold setting "
                          "(%2)</small></div>")
                      .arg(foldDropped)
@@ -13584,7 +13587,7 @@ public:
         out_ = new QTextBrowser;
         out_->setOpenExternalLinks(true);
         out_->setHtml(
-            "<i style='color:#8A8A8A'>Every notation of the term "
+            "<i style='color:#6F6F6F'>Every notation of the term "
             "appears here — IAST, the ACIP Sanskrit input codes, "
             "EWTS, Tibetan script, Devanagari, pronunciation — "
             "with Whitney's roots and the Mahāvyutpatti bridge "
@@ -14479,7 +14482,7 @@ public:
         view_ = new QTextBrowser;
         view_->setOpenLinks(false);   // chunk links are handled in-pane
         view_->setHtml(
-            "<i style='color:#8A8A8A'>Paste a passage above and "
+            "<i style='color:#6F6F6F'>Paste a passage above and "
             "press Load. Try to read it yourself first — then "
             "reveal the layers one at a time, 1 through 6. Only "
             "the HGM corpus lines are answers; everything else is "
@@ -14878,7 +14881,7 @@ public:
         layout->addLayout(row);
         question_ = new QTextBrowser;
         question_->setHtml(
-            "<i style='color:#8A8A8A'>Pick a drill mode and press "
+            "<i style='color:#6F6F6F'>Pick a drill mode and press "
             "New drill. Every exercise is built from a real corpus "
             "segment — the drill shows here, and every answer is "
             "the master's own text (85 vocabulary items may "
@@ -15061,7 +15064,7 @@ public:
                          "#1E6B4E;font-size:12px'>%1</div>")
                      .arg(f.drill);
         }
-        h += "<div style='margin-top:12px;color:#9C948A;"
+        h += "<div style='margin-top:12px;color:#78706A;"
              "font-size:11px'>Counts are your own local record "
              "(progress.db) — nothing leaves this machine. The "
              "grammar behind each skill is in Help: the manual's "
@@ -15738,13 +15741,13 @@ auto* secEvid = new QLabel("<span style='color:#9A7A33;font-size:10px;letter-spa
         clauseView_ = new QTextBrowser;
         clauseView_->setOpenLinks(false);
         clauseView_->setHtml(
-            "<i style='color:#8A8A8A'>The source appears here as "
+            "<i style='color:#6F6F6F'>The source appears here as "
             "clickable clauses once you press Load source.</i>");
         tl->addWidget(clauseView_, 1);
         anchors_ = new QTextBrowser;
         anchors_->setOpenLinks(false);
         anchors_->setHtml(
-            "<i style='color:#8A8A8A'>The Evidence Ribbon — click "
+            "<i style='color:#6F6F6F'>The Evidence Ribbon — click "
             "or arrow into any clause and its anchors, scaffold, "
             "exact parallels, and quotation status appear here on "
             "their own.</i>");
@@ -15826,7 +15829,7 @@ auto* secEvid = new QLabel("<span style='color:#9A7A33;font-size:10px;letter-spa
                                  : QString()));
             } else {
                 termLive_->setStyleSheet(
-                    "font-size:11px;color:#B26B00");
+                    "font-size:11px;color:#935800");
                 QString t;
                 if (unmatched)
                     t += QString("⚠ %1 established term(s) not yet "
@@ -16598,7 +16601,7 @@ private:
                 ordered.push_back({ord ? ord : 99,
                                    txt.toHtmlEscaped() +
                                        (ord ? "" :
-                                        " <small style='color:#999'>"
+                                        " <small style='color:#6F6F6F'>"
                                         "(reads with the next)</small>")});
             }
             std::stable_sort(ordered.begin(), ordered.end(),
@@ -16919,7 +16922,7 @@ public:
                 .arg(QFileInfo(fn).fileName().toHtmlEscaped())
                 .arg(italicRuns)
                 .arg(italicRuns == 1 ? "" : "s")
-                .arg(italic ? " · <b style='color:#B26B00'>warning: an "
+                .arg(italic ? " · <b style='color:#935800'>warning: an "
                               "asterisk was left unclosed</b>"
                             : ""));
     }
@@ -20061,7 +20064,7 @@ private:
                     "UTFC (Trace Foundation)<br>")
                 .arg(text.size())
                 .arg(enc.toHtmlEscaped()) +
-            "<div style='color:#B26B00'><b>utfc-derived</b> — "
+            "<div style='color:#935800'><b>utfc-derived</b> — "
             "machine-converted from a legacy font encoding; review "
             "before treating as canonical. Wrong-encoding guesses "
             "produce garbage, not silent errors — if it looks wrong, "
@@ -20299,7 +20302,7 @@ private:
                         .arg(fi.size() / 1024)
                         .arg(fi.lastModified().toString("yyyy-MM-dd"));
         if (path.contains("/ocr_out/"))
-            h += "<div style='color:#B26B00'><b>ocr-derived</b> — "
+            h += "<div style='color:#935800'><b>ocr-derived</b> — "
                  "unverified review material; opening it runs the "
                  "syllable-legality first-pass QC</div>";
         h += "<div style='margin:3px 0'><a href='survey:" +
@@ -20578,9 +20581,9 @@ private:
             }
         }
         if (!shown)
-            h += "<br><i style='color:#8A8A8A'>nothing opened "
+            h += "<br><i style='color:#6F6F6F'>nothing opened "
                  "yet</i>";
-        h += "<div style='margin-top:10px;color:#8A8A8A'><small>"
+        h += "<div style='margin-top:10px;color:#6F6F6F'><small>"
              "Double-click any text in the tree to read it in the "
              "Overlay; click a title above to return to it. The "
              "panel shows a text's catalog card when you select "
@@ -20773,7 +20776,7 @@ public:
         outer->addWidget(split, 1);
         report_ = new QTextBrowser;
         report_->setHtml(
-            "<i style='color:#8A8A8A'>The review report lands "
+            "<i style='color:#6F6F6F'>The review report lands "
             "here: register warnings, provisional-tier reliance, "
             "unmatched established terms, collapsed distinctions. "
             "Flags for the reviewer's eye — never verdicts, never "
@@ -23221,7 +23224,7 @@ public:
         results_ = new QTextBrowser;
         results_->setOpenLinks(false);
         results_->setHtml(
-            "<i style='color:#8A8A8A'>Recognized text lands here, "
+            "<i style='color:#6F6F6F'>Recognized text lands here, "
             "headered OCR-DERIVED, with every word clickable back "
             "to its spot on the page. Open a scan image and press "
             "Run OCR — or Batch folder… for a whole volume.</i>");
@@ -24152,7 +24155,7 @@ private:
             const char* col = colors[int(p.status)];
             h += QString("<div style='margin:6px 0'>"
                          "<span style='color:%1'><b>%2</b></span> · "
-                         "%3 <b>%4</b>%5 <small style='color:#999'>"
+                         "%3 <b>%4</b>%5 <small style='color:#6F6F6F'>"
                          "(%6)</small>%7</div>")
                      .arg(col)
                      .arg(QString(allcore::Proposal::statusName(p.status))
@@ -24400,7 +24403,7 @@ private:
                          .left(300)
                          .toHtmlEscaped() +
                      "</small>";
-            h += "<br><small style='color:#999'>proposed by " +
+            h += "<br><small style='color:#6F6F6F'>proposed by " +
                  QString::fromStdString(p.proposer).toHtmlEscaped() +
                  " · " + QString::fromStdString(p.created).toHtmlEscaped() +
                  "</small>";
@@ -24411,7 +24414,7 @@ private:
                  "'>✓ Approve</a> &nbsp; "
                  "<a style='color:#8C2F2B' href='decline:" + id +
                  "'>✗ Decline</a> &nbsp; "
-                 "<a style='color:#8A8A8A' href='defer:" + id +
+                 "<a style='color:#6F6F6F' href='defer:" + id +
                  "'>⏸ Defer</a></div>";
         }
         if (!shown)
@@ -24913,7 +24916,7 @@ public:
         results_ = new QTextBrowser;
         results_->setOpenLinks(false);
         results_->setHtml(
-            "<i style='color:#8A8A8A'>Corpus results appear here "
+            "<i style='color:#6F6F6F'>Corpus results appear here "
             "as you write — the master's English beside the "
             "Tibetan, with an <b>insert</b> link that places the "
             "attested rendering at your cursor.</i>");
@@ -25566,7 +25569,7 @@ public:
         info_ = new QTextBrowser;
         info_->setOpenLinks(false);
         info_->setHtml(
-            "<i style='color:#8A8A8A'>Click a file in either tree — "
+            "<i style='color:#6F6F6F'>Click a file in either tree — "
             "its decoded identity, its complete text, and (for an "
             "uncataloged file) its suggested identity land here.</i>");
         vsplit->addWidget(info_);
@@ -25656,7 +25659,7 @@ public:
                           "inside the official library, and the "
                           "Dropbox share carries them to the "
                           "team.</div>"
-                        : "<div style='color:#B26B00'>" +
+                        : "<div style='color:#935800'>" +
                               err.toHtmlEscaped() +
                               " — nothing staged.</div>");
                 return;
@@ -25674,7 +25677,7 @@ public:
                 return;
             const QString err = moveToShelf(lastFile_, shelf);
             if (!err.isEmpty()) {
-                info_->setHtml("<div style='color:#B26B00'>" +
+                info_->setHtml("<div style='color:#935800'>" +
                                err.toHtmlEscaped() +
                                " \u2014 nothing moved.</div>");
                 return;
@@ -25772,7 +25775,7 @@ public:
                                   "on it; approvals export as "
                                   "candidates for the data project)."
                                   "</div>"
-                                : "<div style='color:#B26B00'>" +
+                                : "<div style='color:#935800'>" +
                                       err.toHtmlEscaped() + "</div>");
                     }
                     else if (s2 == "exportmissing:") {
@@ -25803,7 +25806,7 @@ public:
                         const QString err = writeCleanedCopy(p);
                         if (err.isEmpty()) showFile(lastFile_);
                         else
-                            info_->setHtml("<div style='color:#B26B00'>" +
+                            info_->setHtml("<div style='color:#935800'>" +
                                            err.toHtmlEscaped() +
                                            "</div>");
                     }
@@ -25880,7 +25883,7 @@ public:
                         QString::fromStdString(r.filename)
                             .toHtmlEscaped() + "</b>";
             if (r.truncated)
-                t += "<br><span style='color:#B26B00'>over the "
+                t += "<br><span style='color:#935800'>over the "
                      "255-character limit \u2014 truncated mid-word "
                      "with '+'; companion <b>" +
                      QString::fromStdString(r.meta_filename)
@@ -25971,11 +25974,11 @@ public:
     QString loadRegisterHtml(const QString& path) {
         QFile f(path);
         if (!f.open(QIODevice::ReadOnly))
-            return "<div style='color:#B26B00'>unreadable file \u2014 "
+            return "<div style='color:#935800'>unreadable file \u2014 "
                    "no register loaded</div>";
         const int n = register_.loadText(f.readAll().toStdString());
         if (n == 0)
-            return "<div style='color:#B26B00'>No usable number column "
+            return "<div style='color:#935800'>No usable number column "
                    "found \u2014 the register needs a header row with "
                    "a number/catalog column. Nothing loaded.</div>";
         const QString destRootDir = dest_->root().isEmpty()
@@ -26028,7 +26031,7 @@ public:
                                               .toHtmlEscaped()) +
                      (e->initials.empty()
                           ? QString()
-                          : QString(" <span style='color:#8A8A8A'>"
+                          : QString(" <span style='color:#6F6F6F'>"
                                     "(%1%2)</span>")
                                 .arg(QString::fromStdString(e->initials)
                                          .toHtmlEscaped())
@@ -26187,7 +26190,7 @@ public:
                     sidecar.toHtmlEscaped() + "</span>");
             } else {
                 legend->setText(
-                    "<span style='color:#B26B00'>Could not write "
+                    "<span style='color:#935800'>Could not write "
                     "the sidecar \u2014 nothing saved.</span>");
             }
         });
@@ -26391,7 +26394,7 @@ public:
                 h += QString("<tr><td valign='top'><b>%1%</b></td>"
                              "<td><span style='font-family:Palatino'>"
                              "%2</span><div>%3</div>"
-                             "<div style='color:#8A8A8A;font-size:"
+                             "<div style='color:#6F6F6F;font-size:"
                              "11px'>%4</div></td></tr>")
                          .arg(qRound(m.score * 100))
                          .arg(QString::fromStdString(m.tib_raw)
@@ -26432,7 +26435,7 @@ public:
                 if (!u.isEmpty()) u += " \u00b7 ";
                 u += QString::fromStdString(s2).toHtmlEscaped();
             }
-            h += "<div style='margin-top:8px;color:#B26B00'><b>No "
+            h += "<div style='margin-top:8px;color:#935800'><b>No "
                  "attestation:</b> <span style='font-family:Palatino'>" +
                  u +
                  "</span> \u2014 the published record has no title "
@@ -26471,7 +26474,7 @@ public:
         const auto r = allcore::generateAsciiCatalog(root.toStdString());
         QFile f(out);
         if (!f.open(QIODevice::WriteOnly))
-            return "<div style='color:#B26B00'>Could not write " +
+            return "<div style='color:#935800'>Could not write " +
                    out.toHtmlEscaped() + " \u2014 nothing saved.</div>";
         f.write(QByteArray::fromStdString(r.text));
         f.close();
@@ -26524,7 +26527,7 @@ public:
     QString splitHtml(const QString& path) {
         QFile f(path);
         if (!f.open(QIODevice::ReadOnly))
-            return "<div style='color:#B26B00'>unreadable file</div>";
+            return "<div style='color:#935800'>unreadable file</div>";
         constexpr qint64 kCap = 32 * 1024 * 1024;
         const QByteArray sniff = f.read(4096);
         if (sniff.contains('\0'))
@@ -26535,7 +26538,7 @@ public:
         const auto cands = allcore::suggestVolumeSplits(doc);
         QString h =
             "<h3>Suggested splits</h3>"
-            "<div style='color:#8A8A8A;font-size:11px'>" +
+            "<div style='color:#6F6F6F;font-size:11px'>" +
             QFileInfo(path).fileName().toHtmlEscaped() + "</div>" +
             "<div style='color:#777'>Candidate text boundaries, with "
             "evidence \u2014 <b>nothing is cut</b>. The house method "
@@ -26578,13 +26581,13 @@ public:
             h += "<span style='font-family:Palatino'>" +
                  QString::fromStdString(c.title).toHtmlEscaped() +
                  "</span>";
-            h += QString("<div style='color:#8A8A8A;font-size:11px'>"
+            h += QString("<div style='color:#6F6F6F;font-size:11px'>"
                          "%1 rule</div>")
                      .arg(c.rule == "bod-skad-du"
                               ? "canonical bilingual head"
                               : "BZHUGS SO title block");
             if (c.warn)
-                h += "<div style='color:#B26B00'>\u26a0 " +
+                h += "<div style='color:#935800'>\u26a0 " +
                      QString::fromStdString(c.warn_reason)
                          .toHtmlEscaped() +
                      "</div>";
@@ -26592,7 +26595,7 @@ public:
         }
         h += "</table>";
         if (doc.size() >= static_cast<size_t>(kCap))
-            h += "<div style='color:#B26B00'>File larger than 32 MB "
+            h += "<div style='color:#935800'>File larger than 32 MB "
                  "\u2014 only the first 32 MB was scanned.</div>";
         return h;
     }
@@ -26721,7 +26724,7 @@ public:
             }
         }
         if (banksLoaded == 0)
-            return "<div style='color:#B26B00'>The bibliography "
+            return "<div style='color:#935800'>The bibliography "
                    "banks are not installed \u2014 the audit needs "
                    "data/extracted/*_bibliography.json.</div>";
         const QString destRootDir =
@@ -26846,7 +26849,7 @@ public:
                            QString::fromStdString(sg.shelf)) +
                  "'>" +
                  QString::fromStdString(sg.shelf).toHtmlEscaped() +
-                 "</a><div style='color:#8A8A8A;font-size:11px'>";
+                 "</a><div style='color:#6F6F6F;font-size:11px'>";
             QStringList rs;
             for (const auto& r : sg.reasons)
                 rs << QString::fromStdString(r).toHtmlEscaped();
@@ -26978,7 +26981,7 @@ public:
     QString identityHtml(const QString& path) {
         QFile f(path);
         if (!f.open(QIODevice::ReadOnly))
-            return "<div style='color:#B26B00'>unreadable file</div>";
+            return "<div style='color:#935800'>unreadable file</div>";
         const std::string head = f.read(4000).toStdString();
         const auto t = allcore::extractAcipTitle(head);
         QString h = "<hr><div style='color:#8C2F2B'><b>SUGGESTED "
@@ -27012,7 +27015,7 @@ public:
                      "against %1 known titles</div>")
                  .arg(bank.size());
         if (cands.empty()) {
-            h += "<div style='color:#B26B00;margin-top:4px'>The title "
+            h += "<div style='color:#935800;margin-top:4px'>The title "
                  "reads cleanly but matches no work in the bank "
                  "closely enough to name. That is a real answer: "
                  "either the bank does not hold this work yet, or "
@@ -27090,7 +27093,7 @@ public:
                                  "style='font-family:Palatino'>%3</span>"
                                  "</div>")
                              .arg(sp.kind == "composition" ? "#2E7D32"
-                                                           : "#B26B00")
+                                                           : "#935800")
                              .arg(sp.kind == "composition"
                                       ? "composition"
                                       : "translation credit \u2014 "
@@ -27133,7 +27136,7 @@ private:
         const auto inf = allcore::decodeAcipFilename(
             fi.fileName().toStdString());
         QString h = "<h3>" + fi.fileName().toHtmlEscaped() + "</h3>";
-        h += QString("<div style='color:#8A8A8A;font-size:11px'>%1</div>")
+        h += QString("<div style='color:#6F6F6F;font-size:11px'>%1</div>")
                  .arg(fi.path().toHtmlEscaped());
         // the change-log stamp, decoded from the nearest stamped
         // ancestor folder (the session-4 policy read back)
@@ -27143,7 +27146,7 @@ private:
                 const auto st = allcore::parseChangeStamp(
                     walk.dirName().toStdString());
                 if (st.found) {
-                    h += QString("<div style='color:#8A8A8A;font-size:"
+                    h += QString("<div style='color:#6F6F6F;font-size:"
                                  "11px'>last changed %1 by %2 (folder "
                                  "stamp)</div>")
                              .arg(QString::fromStdString(st.date)
@@ -27169,7 +27172,7 @@ private:
                  (inf.incomplete ? " · incomplete" : "") +
                  "</div>";
         } else {
-            h += "<div style='color:#B26B00'><b>uncataloged</b> "
+            h += "<div style='color:#935800'><b>uncataloged</b> "
                  "— the filename matches no ACIP convention; "
                  "this is exactly the material this workflow will "
                  "walk through identification → proposal "
@@ -27207,7 +27210,7 @@ private:
                                             : dest_->root();
             st << (path.startsWith(destRootDir)
                        ? "cataloged (inside the destination tree)"
-                       : "<span style='color:#B26B00'>not cataloged "
+                       : "<span style='color:#935800'>not cataloged "
                          "\u2014 not in the destination tree</span>");
             h += "<div style='color:#555;font-size:11px;margin:4px 0'>"
                  "STATES: " +
@@ -27237,18 +27240,18 @@ private:
                                    .arg(scan.folio_marks);
                     if (scan.western_page_marks > 3 &&
                         scan.folio_marks == 0)
-                        sig << "<span style='color:#B26B00'>western "
+                        sig << "<span style='color:#935800'>western "
                                "pagination (no folio sides) \u2014 a "
                                "typed book: suspect, per the house "
                                "reading</span>";
                     if (scan.lowercase_runs > 0)
-                        sig << QString("<span style='color:#B26B00'>"
+                        sig << QString("<span style='color:#935800'>"
                                        "%1 lowercase run(s) \u2014 "
                                        "typed illegally; fix later, "
                                        "search still works</span>")
                                    .arg(scan.lowercase_runs);
                     if (scan.slash_corruption)
-                        sig << QString("<span style='color:#B26B00'>"
+                        sig << QString("<span style='color:#935800'>"
                                        "line-slash corruption (%1 "
                                        "lines) \u2014 breaks "
                                        "cross-line search</span> "
@@ -27285,7 +27288,7 @@ private:
                      QString::fromUtf8(raw).toHtmlEscaped() +
                      "</pre>";
                 if (fi.size() > kTextCap)
-                    h += QString("<div style='color:#B26B00'>Showing "
+                    h += QString("<div style='color:#935800'>Showing "
                                  "the first 20 MB of %1 MB — open in "
                                  "the Overlay for the whole text."
                                  "</div>")
@@ -27393,7 +27396,7 @@ public:
                 return;
             }
         }
-        info_->setHtml("<div style='color:#B26B00'>Wrong name or "
+        info_->setHtml("<div style='color:#935800'>Wrong name or "
                        "passphrase — nothing signed in.</div>");
     }
 
@@ -27574,7 +27577,7 @@ public:
         if (!requireLogin()) return;
         allcore::ActionLedger led(root.toStdString());
         if (!led.load()) {
-            info_->setHtml("<div style='color:#B26B00'>The action "
+            info_->setHtml("<div style='color:#935800'>The action "
                            "ledger is unreadable.</div>");
             return;
         }

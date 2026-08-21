@@ -118,3 +118,22 @@ practice).
   the locate-or-exit dialog above. (A partial-data state — spine present,
   layers missing — still shows per-layer honest notices, which Phase 1
   already built.)
+
+## W5 — MEASURED ACCESSIBILITY (2026-08-20)
+Method: WCAG relative-luminance ratios computed for every token pair in
+actual use against kPaper (#FAF6EE).
+Passing already: kInk 14.6 · kError 7.6 · kPeople 7.1 · kAct 6.0 ·
+kDoc 5.8 · kMuted 5.2 · kMachine 4.6 (all AA-normal).
+- **W5-01 · P1 · FIXED.** Failing text colors corrected in place, hue
+  character kept: kSoft #9C948A (2.78!) → #78706A (4.51); kFaint
+  #8A8A8A (3.20) → #6F6F6F (4.66); proposed-by gray #999 (2.64) →
+  #6F6F6F; kWarn #B26B00 (3.90) → #935800 (5.36); kGold TEXT →
+  #82672A (4.97) while chrome gold (borders, washes, checked frames)
+  keeps #9A7A33 — non-text contrast rules differ. 80 literal sites
+  migrated with the tokens; all 59 suites and every rendered pin hold.
+- **W5-02 · verified by design.** Color is never the sole carrier:
+  rulings carry ✓/✗/⏸ glyphs, epistemic badges carry their text, register
+  warnings are prose. Deuteranopia-safe by redundancy.
+- **W5-03 · noted for W7.** Band captions (gold 9px on
+  palette(alternate-base)) sit on a theme-dependent ground — measured
+  3.41 on dark chrome; ruled in W7's theme pass, not here.
