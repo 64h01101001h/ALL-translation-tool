@@ -22,3 +22,11 @@ analyses/
 editions/
 dist/
 cmake-build-release/
+
+# data corpora deliberately outside version control (large source
+# payloads; their DERIVED indexes are tracked): caption files, raw
+# research transcripts, scanned-dictionary PDFs, sanitizer build
+build-asan/
+data/teaching/*captions/
+data/research/gmr_cataloging/
+data/das/*.pdf
