@@ -36,3 +36,20 @@ States: OPEN · CLOSED(date) · WAITING(who: what) · DEFERRED(stamp).
 | 30 | 9n remainder: team comments on texts; dictation | DEFERRED(post-1.0 unless Adam stamps otherwise) |
 
 **Burndown:** 19 open · 9 waiting · 2 deferred · 0 closed.
+
+## Wave log
+- 2026-08-20 · **#1 D1 CLOSED.** Virgin-Mac drill: the app runs clean
+  BOTH from the read-only mounted DMG and from a drag-install with a
+  fresh account simulation (22/22 panes each). OPEN_SOURCE_NOTICES.md
+  already ships. Honest limitation recorded: a locally-built DMG
+  carries no quarantine xattr, so Gatekeeper's downloaded-file verdict
+  can only be proven on a real second Mac (A3's pilot covers it).
+- 2026-08-20 · **#2 F1 CLOSED.** The honesty-invariant sweep is a
+  permanent part of app_selftest: 4,592 cards (stride-23 over the
+  whole dictionary) assert provisional-always-marked, no false
+  PROVISIONAL, absence-always-stated, reference-always-labeled,
+  AI-never-beside-HGM. First run caught its own invariant being too
+  blunt (provenance mentions inside the AI banner are labeled BY the
+  banner) — refined, then 4,592/4,592 clean. Battery is now 60 suites
+  with the sweep inside app_selftest.
+**Burndown:** 17 open · 9 waiting · 2 deferred · 2 closed.

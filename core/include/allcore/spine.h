@@ -64,6 +64,8 @@ public:
     // Exact headword lookup; tries wylie, then wylie variants, then tibetan
     // (trailing tsheg/shad ignored), then ACIP.
     std::vector<Entry> lookup(const std::string& headword) const;
+    // stratified whole-dictionary sample (F1 honesty sweep)
+    std::vector<Entry> sampleEntries(int stride, int cap = 5000) const;
 
     // FTS5 match over wylie/variants/tibetan/acip/pronunciation.
     std::vector<Entry> headwordSearch(const std::string& fts_query,

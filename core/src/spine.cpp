@@ -140,6 +140,21 @@ std::string Spine::metaValue(const std::string& key) const {
     return sqlite3_step(s.p) == SQLITE_ROW ? columnText(s.p, 0) : "";
 }
 
+// F1 (fidelity): a stratified stride over the whole dictionary, so
+// honesty invariants can be swept at scale rather than spot-checked
+std::vector<Entry> Spine::sampleEntries(int stride, int cap) const {
+    std::vector<Entry> out;
+    if (stride < 1) stride = 1;
+    std::string q = std::string("SELECT ") + kEntryCols +
+                    " FROM entries WHERE (id % ?) = 0 LIMIT ?";
+    Stmt s(db_, q.c_str());
+    sqlite3_bind_int(s.p, 1, stride);
+    sqlite3_bind_int(s.p, 2, cap);
+    while (sqlite3_step(s.p) == SQLITE_ROW)
+        out.push_back(entryFromRow(s.p));
+    return out;
+}
+
 std::vector<Entry> Spine::lookup(const std::string& headword) const {
     std::vector<Entry> out;
     auto collect = [&](const char* sql, const std::string& val) {

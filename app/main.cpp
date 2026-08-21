@@ -32187,6 +32187,45 @@ int main(int argc, char** argv) {
                 if (!clean) ++fails;
             }
         }
+        {   // F1 (fidelity): honesty invariants swept across a
+            // stratified sample of the WHOLE dictionary — the card's
+            // promises proven at scale, not on exemplars
+            const auto sample = spine.sampleEntries(23, 4600);
+            EntryDisplay d;
+            int rendered = 0, v1 = 0, v2 = 0, v3 = 0, v4 = 0,
+                v5 = 0;
+            for (const auto& e : sample) {
+                const QString h = entryHtml(e, d);
+                ++rendered;
+                const bool hasGloss = !e.hgm_gloss.empty();
+                if (e.provisional() && hasGloss &&
+                    !h.contains("PROVISIONAL (auto-aligned)"))
+                    ++v1;   // provisional rendered unmarked
+                if (!e.provisional() && hasGloss &&
+                    h.contains("PROVISIONAL (auto-aligned)"))
+                    ++v2;   // non-provisional slandered
+                if (!hasGloss && !h.contains("no HGM equivalent"))
+                    ++v3;   // silent absence
+                // provenance mentions INSIDE the AI banner are
+                // labeled by the banner itself ("from hopkins ...")
+                if (h.contains("Hopkins") &&
+                    !h.contains("reference only") &&
+                    !h.contains("AI-DRAFTED"))
+                    ++v4;   // reference layer unlabeled
+                if (h.contains("AI-DRAFTED") && hasGloss)
+                    ++v5;   // AI gloss beside a real HGM gloss
+            }
+            const bool ok = rendered > 3000 && !v1 && !v2 && !v3 &&
+                            !v4 && !v5;
+            log << QString("  [%1] F1 honesty sweep: %2 cards — "
+                           "prov-unmarked %3 · mislabeled %4 · "
+                           "silent-absence %5 · ref-unlabeled %6 · "
+                           "AI-beside-HGM %7")
+                       .arg(ok ? "PASS" : "FAIL")
+                       .arg(rendered)
+                       .arg(v1).arg(v2).arg(v3).arg(v4).arg(v5);
+            if (!ok) ++fails;
+        }
         {
             const bool cream =
                 qApp->styleSheet().contains("#FAF6EE");
