@@ -154,6 +154,7 @@
 #include "allcore/spine.h"
 #include "allcore/backup.h"
 #include "allcore/comments.h"
+#include "allcore/dossier.h"
 #include "allcore/tm84000.h"
 #include "allcore/textdna.h"
 #include "allcore/unicode_wylie.h"
@@ -12188,6 +12189,10 @@ private:
     QString docFile_;
 
 public:
+    QString docFile() const { return docFile_; }
+    int currentLine() const {
+        return input_ ? input_->textCursor().blockNumber() + 1 : 1;
+    }
     void scrollToLine(int line) {
         if (!input_ || line < 1) return;
         QTextCursor c(
@@ -30213,6 +30218,150 @@ int main(int argc, char** argv) {
                 }
             });
         }
+        fileM->addSeparator();
+        // LODESTAR L6: Translation Dossiers — the desk that
+        // reassembles a text's working world in one act
+        QObject::connect(
+            fileM->addAction("Dossiers\u2026"),
+            &QAction::triggered, [&win, overlay, root] {
+                allcore::DossierStore ds(
+                    (root + "/library").toStdString());
+                ds.load();
+                QDialog d(&win);
+                d.setWindowTitle("Translation dossiers");
+                auto* v = new QVBoxLayout(&d);
+                auto* intro = new QLabel(
+                    "A dossier is your desk for one text: open it "
+                    "and you are back where you left off, with its "
+                    "glossary and team comments one click away.");
+                intro->setWordWrap(true);
+                v->addWidget(intro);
+                auto* list = new QTextBrowser;
+                list->setOpenLinks(false);
+                list->setMinimumSize(620, 300);
+                auto refill = [&list, &ds, root] {
+                    QString h;
+                    if (ds.all().empty())
+                        h = "<i>no dossiers yet - open a text in "
+                            "the Overlay, then \u201cNew from "
+                            "current text\u201d</i>";
+                    for (const auto& x : ds.all()) {
+                        const QString base =
+                            QFileInfo(QString::fromStdString(
+                                          x.textPath))
+                                .fileName();
+                        int nCom = 0;
+                        if (!g_proposalsDir.isEmpty()) {
+                            allcore::CommentStore cs(
+                                g_proposalsDir.toStdString());
+                            cs.load();
+                            nCom = (int)cs.byFile(
+                                             base.toStdString())
+                                       .size();
+                        }
+                        const bool hasGloss = QFileInfo::exists(
+                            root + "/library/glossaries/" +
+                            QFileInfo(base).completeBaseName() +
+                            ".tsv");
+                        h += QString(
+                                 "<div style='margin:7px 0'>"
+                                 "<a href='open:%1'><b>%2</b></a> "
+                                 "<small style='color:%3'>%4 \u00b7 "
+                                 "line %5 \u00b7 touched %6 \u00b7 "
+                                 "%7 comment(s)%8 \u00b7 "
+                                 "<a href='save:%1'>save my "
+                                 "place</a> \u00b7 <a "
+                                 "href='drop:%1'>remove</a>"
+                                 "</small></div>")
+                                 .arg(QString::fromStdString(x.slug))
+                                 .arg(QString::fromStdString(x.title)
+                                          .toHtmlEscaped())
+                                 .arg(ux::kFaint)
+                                 .arg(base.toHtmlEscaped())
+                                 .arg(x.line)
+                                 .arg(QString::fromStdString(
+                                          x.touched)
+                                          .left(16))
+                                 .arg(nCom)
+                                 .arg(hasGloss
+                                          ? " \u00b7 glossary \u2713"
+                                          : "");
+                    }
+                    list->setHtml(h);
+                };
+                refill();
+                QObject::connect(list, &QTextBrowser::anchorClicked,
+                        [&ds, &refill, &d,
+                         overlay](const QUrl& u) {
+                    const QString s = u.toString();
+                    const std::string slug =
+                        s.mid(s.indexOf(':') + 1).toStdString();
+                    const auto stamp =
+                        QDateTime::currentDateTime()
+                            .toString("yyyy-MM-ddTHH:mm")
+                            .toStdString();
+                    if (s.startsWith("open:")) {
+                        for (const auto& x : ds.all())
+                            if (x.slug == slug) {
+                                if (g_raisePane)
+                                    g_raisePane(overlay);
+                                overlay->openFile(
+                                    QString::fromStdString(
+                                        x.textPath));
+                                overlay->scrollToLine(x.line);
+                                ds.touch(slug, x.line, stamp);
+                                ds.save();
+                                d.accept();
+                                return;
+                            }
+                    } else if (s.startsWith("save:")) {
+                        ds.touch(slug, overlay->currentLine(),
+                                 stamp);
+                        if (!ds.save())
+                            QMessageBox::warning(
+                                &d, "Dossiers",
+                                "The dossier file could not be "
+                                "written.");
+                        refill();
+                    } else if (s.startsWith("drop:")) {
+                        ds.remove(slug);
+                        ds.save();
+                        refill();
+                    }
+                });
+                v->addWidget(list, 1);
+                auto* row = new QHBoxLayout;
+                auto* newB =
+                    new QPushButton("New from current text");
+                newB->setEnabled(!overlay->docFile().isEmpty());
+                if (overlay->docFile().isEmpty())
+                    newB->setToolTip(
+                        "Open a text in the Overlay first");
+                QObject::connect(newB, &QPushButton::clicked,
+                        [&ds, &refill, overlay] {
+                            const QString f = overlay->docFile();
+                            if (f.isEmpty()) return;
+                            ds.create(
+                                QFileInfo(f)
+                                    .completeBaseName()
+                                    .toStdString(),
+                                f.toStdString(),
+                                overlay->currentLine(),
+                                QDateTime::currentDateTime()
+                                    .toString("yyyy-MM-ddTHH:mm")
+                                    .toStdString());
+                            ds.save();
+                            refill();
+                        });
+                row->addWidget(newB);
+                row->addStretch();
+                auto* closeB = new QPushButton("Close");
+                QObject::connect(closeB, &QPushButton::clicked, &d,
+                        &QDialog::accept);
+                row->addWidget(closeB);
+                v->addLayout(row);
+                d.exec();
+            });
         fileM->addSeparator();
         // G5: ⌘W closes the window (the Mac hand expects it)
         {

@@ -121,3 +121,27 @@ exist); honest counts derived live.
 4. Acceptance (L3's student persona): open app → Dossiers →
    double-click → reading exactly where they left off, glossary and
    comments one click away. Verify + press.
+
+### L6 shipped (v1) — and the closing letter
+**Translation Dossiers are live.** allcore::DossierStore (TDD:
+dossier_smoke wrote the contract first — suite 68; slug/round-trip/
+touch/ordering/escaping/honest-ghost-failure). File → Dossiers…:
+your desks listed most-recently-touched first with LIVE counts
+(comments from the shared store, glossary presence), "New from
+current text" captures the Overlay's document and line, one click
+reopens the text AT YOUR LINE with everything an arm's reach away,
+"save my place" updates the desk, remove removes. The constitution's
+R3 census caught the one new modal and it was reviewed in the same
+commit — the machine now polices its own growth.
+
+**THE CLOSING LETTER (Lodestar §11).** What the tool now teaches:
+its own pipeline and its five voices, on a screen a stranger can
+reach. What it stopped demanding: the name-trip, the copy-paste
+trips, the rebuild-your-world-every-session ritual — the excise
+ledger has verdicts, not habits. What it became able to do: give a
+translator a DESK — the object they always thought in — and resume
+scholarship as a unit. And the way of seeing it leaves behind: the
+ten prompts' blindspot classes are now named things (audited-against-
+itself; built-for-one-eye; excise-normalized; the-model-untaught;
+environment-of-birth) that any future engine checks FIRST. The tool
+that changes the world is the one that carries its teacher inside it.
