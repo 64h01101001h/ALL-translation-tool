@@ -148,3 +148,13 @@ seed 101×500 clean; fleet 102–107 × 1000 steps: **6/6 SURVIVED**.
 No new blood at this depth — lap 2 closes as deepened exhaustion, and
 the upgraded arsenal is permanent: every future gauntlet_walk carries
 menus, resizes, and lookups in its vocabulary.
+
+## LAP 3 — THE READER'S GAUNTLET (closed: deepened exhaustion)
+The one vocabulary the monkey never had was the one users use most:
+REAL mouse clicks on words in the reading view (press+release through
+the viewport → cursorForPosition → token → card — the 8.9k-line
+OverlayPane's hottest path), wheel rebalanced to reader weight (~9%).
+Shakedown 201×500 clean; fleet 202–205 × 1000: **4/4 SURVIVED** with
+word-clicks interleaved against doc churn, layer toggles, resizes,
+menus, and lookups. The reader's path holds under hostile sequencing;
+the arsenal is permanent.

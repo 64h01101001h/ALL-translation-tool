@@ -33661,6 +33661,7 @@ int main(int argc, char** argv) {
         stepper->setInterval(15);
         QObject::connect(stepper, &QTimer::timeout, &win, [&win,
                                                            &tabs,
+                                                           overlay,
                                                            rng, stepN,
                                                            stepsMax,
                                                            journal,
@@ -33749,7 +33750,7 @@ int main(int argc, char** argv) {
                     note(QString("pane:%1").arg(p));
                     inner->setCurrentIndex(p);
                 }
-            } else if (act < 65) {
+            } else if (act < 58) {
                 QList<QToolButton*> live;
                 for (QToolButton* t : ribbonProxies())
                     if (t->isVisible() && t->isEnabled() &&
@@ -33764,7 +33765,7 @@ int main(int argc, char** argv) {
                     // the stepper can't beat to close its dialog
                     QTimer::singleShot(0, t, [t] { t->click(); });
                 }
-            } else if (act < 78) {
+            } else if (act < 70) {
                 QList<QCheckBox*> boxes;
                 if (auto* cur = tabs.currentWidget())
                     for (auto* c : cur->findChildren<QCheckBox*>())
@@ -33776,7 +33777,7 @@ int main(int argc, char** argv) {
                     note("toggle:" + c->text());
                     QTimer::singleShot(0, c, [c] { c->click(); });
                 }
-            } else if (act < 90) {
+            } else if (act < 80) {
                 static const QStringList kTexts = {
                     "bsod nams", "BDEN PA", "sems can",
                     "byang chub", "zzz not a word", ""};
@@ -33797,7 +33798,7 @@ int main(int argc, char** argv) {
                                                   "returnPressed");
                     });
                 }
-            } else if (act < 93) {
+            } else if (act < 84) {
                 // lap 2: a random ENABLED menu action from the bar
                 // (submenus flattened one level; deny-list applies;
                 // role-actions like Quit are skipped)
@@ -33823,7 +33824,46 @@ int main(int argc, char** argv) {
                     note("menu:" + a->text());
                     QTimer::singleShot(0, a, [a] { a->trigger(); });
                 }
-            } else if (act < 96) {
+            } else if (act < 93 && overlay) {
+                // lap 3: THE core interaction — a real mouse click
+                // on a random point of the reading view, exactly the
+                // event stream a user's hand produces (press +
+                // release through cursorForPosition → token → card)
+                if ((*rng)() % 3 == 0 && g_raisePane)
+                    g_raisePane(overlay);
+                QPlainTextEdit* view = nullptr;
+                for (auto* e :
+                     overlay->findChildren<QPlainTextEdit*>())
+                    if (e->isReadOnly() && e->isVisible()) {
+                        view = e;
+                        break;
+                    }
+                if (view) {
+                    const QRect r = view->viewport()->rect();
+                    if (r.width() > 20 && r.height() > 20) {
+                        const QPoint p(
+                            10 + (int)((*rng)() %
+                                       (r.width() - 20)),
+                            10 + (int)((*rng)() %
+                                       (r.height() - 20)));
+                        note(QString("wordclick:%1,%2")
+                                 .arg(p.x())
+                                 .arg(p.y()));
+                        auto post = [view, p](QEvent::Type t) {
+                            QApplication::postEvent(
+                                view->viewport(),
+                                new QMouseEvent(
+                                    t, QPointF(p),
+                                    view->viewport()
+                                        ->mapToGlobal(QPointF(p)),
+                                    Qt::LeftButton, Qt::LeftButton,
+                                    Qt::NoModifier));
+                        };
+                        post(QEvent::MouseButtonPress);
+                        post(QEvent::MouseButtonRelease);
+                    }
+                }
+            } else if (act < 95) {
                 // lap 2: live resize across the ALLOWED range — the
                 // G3 floor must hold under motion, not just at rest
                 static const QSize sizes[] = {
@@ -33833,7 +33873,7 @@ int main(int argc, char** argv) {
                          .arg(sz.width())
                          .arg(sz.height()));
                 win.setFixedSize(sz);
-            } else if (act < 98) {
+            } else if (act < 97) {
                 // lap 2: a term lookup through the global seam
                 static const char* terms[] = {
                     "bsod nams", "sems can", "chos", "sdug bsngal",
