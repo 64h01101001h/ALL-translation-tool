@@ -327,6 +327,19 @@ static QString snip(const QString& t, int cap) {
 static QString snipStd(const std::string& t, int cap) {
     return snip(QString::fromStdString(t), cap);
 }
+// chrome-aware inks (W7): the chrome follows the system appearance,
+// so widget labels on it measure their ink at use time. Values are
+// WCAG-checked on both grounds (dark #2D2D2D · light #ECECEC).
+inline bool darkChrome() {
+    return QApplication::palette().color(QPalette::Window)
+               .lightness() < 128;
+}
+inline const char* chromeMuted() {
+    return darkChrome() ? "#A8A29A" : "#5E574D";
+}
+inline const char* chromeGold() {
+    return darkChrome() ? "#C9A55C" : "#82672A";
+}
 }   // namespace ux
 
 struct EntryDisplay {
@@ -3203,9 +3216,11 @@ public:
         v->addStretch();
         auto* cap = new QLabel(caption);
         cap->setAlignment(Qt::AlignHCenter);
+        // W5-03/W7: measured on the chrome the caption sits on
         cap->setStyleSheet(
-            "color:#9A7A33;font-size:9px;letter-spacing:1.5px;"
-            "font-weight:600;");
+            QString("color:%1;font-size:9px;letter-spacing:1.5px;"
+                    "font-weight:600;")
+                .arg(ux::chromeGold()));
         v->addWidget(cap);
     }
     // raw widgets (checkboxes, spinboxes, labels, line edits) sit
@@ -12615,7 +12630,8 @@ public:
         banner->setWordWrap(true);
         v->addWidget(banner);
         status_ = new QLabel;
-        status_->setStyleSheet("color:#9A7A33;font-size:13px");
+        status_->setStyleSheet(QString("color:%1;font-size:13px")
+                                   .arg(ux::chromeGold()));
         v->addWidget(status_);
         auto mk = [&](const QString& title, const QString& what) {
             auto* b = new QPushButton(title);
@@ -12702,7 +12718,8 @@ public:
         doc_ = new QLabel;
         // #9A7A33 = the app's gold eyebrow tone — readable on the
         // dark and light chrome alike (night-mode audit 2026-08-12)
-        doc_->setStyleSheet("color:#9A7A33;font-size:13px");
+        doc_->setStyleSheet(QString("color:%1;font-size:13px")
+                                .arg(ux::chromeGold()));
         v->addWidget(doc_);
         auto* ribbon = new RibbonBar;
         auto* gExp = ribbon->group("PUBLISH");
@@ -24929,7 +24946,8 @@ public:
         outer->addWidget(split, 1);
         status_ = new QLabel("No file \u2014 Save as\u2026 to name the "
                              "manuscript.");
-        status_->setStyleSheet("color:#777;font-size:11px");
+        status_->setStyleSheet(QString("color:%1;font-size:11px")
+                                   .arg(ux::chromeMuted()));
         outer->addWidget(status_);
 
         connect(sideToggle, &QCheckBox::toggled, side_,
@@ -25261,7 +25279,8 @@ public:
         v->addLayout(row);
         census_ = new QLabel("no folder chosen");
         census_->setWordWrap(true);
-        census_->setStyleSheet("color:#777");
+        census_->setStyleSheet(QString("color:%1")
+                                   .arg(ux::chromeMuted()));
         v->addWidget(census_);
         model_ = new QFileSystemModel(this);
         model_->setFilter(QDir::AllEntries | QDir::NoDotAndDotDot);
@@ -25452,7 +25471,8 @@ public:
             "and revoke access.");
         gAccess->addBig(teamB_, "people");
         who_ = new QLabel;
-        who_->setStyleSheet("color:#777");
+        who_->setStyleSheet(QString("color:%1")
+                                .arg(ux::chromeMuted()));
         gAccess->add(who_);
         connect(offB, &QPushButton::clicked, [this] {
             const QString d = safeGetExistingDirectory(
@@ -29064,7 +29084,8 @@ int main(int argc, char** argv) {
     qatRow->addLayout(qatStrip);
     auto* qatHint = new QLabel(
         "pin your most-used commands here — they stay in every pane");
-    qatHint->setStyleSheet("color:#9A8F80;font-size:11px");
+    qatHint->setStyleSheet(QString("color:%1;font-size:11px")
+                               .arg(ux::chromeMuted()));
     qatRow->addWidget(qatHint);
     qatRow->addStretch();
     centralV->addLayout(qatRow);
