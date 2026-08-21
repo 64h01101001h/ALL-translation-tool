@@ -8,6 +8,13 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
+# T1 (total-quality engine): the wall. Warnings were driven to zero on
+# 2026-08-20 (a collapsed-escape regex bug hid among them); -Wall keeps
+# the count at zero. (-Wextra evaluated separately before adoption.)
+if(NOT MSVC)
+  add_compile_options(-Wall)
+endif()
+
 enable_testing()
 
 add_subdirectory(core)

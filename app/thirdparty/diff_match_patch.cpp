@@ -1514,7 +1514,9 @@ int diff_match_patch::match_bitap(const QString &text, const QString &pattern,
         rd[j] = ((rd[j + 1] << 1) | 1) & charMatch;
       } else {
         // Subsequent passes: fuzzy match.
-        rd[j] = ((rd[j + 1] << 1) | 1) & charMatch
+        // parens added (T1): & binds before | — this IS upstream's
+        // bitap semantics, made explicit for -Wall
+        rd[j] = (((rd[j + 1] << 1) | 1) & charMatch)
             | (((last_rd[j + 1] | last_rd[j]) << 1) | 1)
             | last_rd[j + 1];
       }

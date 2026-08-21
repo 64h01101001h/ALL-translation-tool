@@ -254,31 +254,31 @@ static void runIllustrationGallery(QWidget* parent, const QString& root,
 // existing identity — this is consolidation, not a re-skin.
 namespace ux {
 // grounds
-constexpr const char* kPaper = "#FAF6EE";   // reading surface
-constexpr const char* kInk = "#2B2118";     // primary text on paper
+[[maybe_unused]] constexpr const char* kPaper = "#FAF6EE";   // reading surface
+[[maybe_unused]] constexpr const char* kInk = "#2B2118";     // primary text on paper
 // structure & identity
-constexpr const char* kGold = "#82672A";    // eyebrows, identity
+[[maybe_unused]] constexpr const char* kGold = "#82672A";    // eyebrows, identity
                                             // (AA 4.97 on paper; the
                                             // chrome keeps #9A7A33
                                             // for borders/washes)
-constexpr const char* kMuted = "#6E675D";   // secondary text
-constexpr const char* kFaint = "#6F6F6F";   // tertiary/hints (AA 4.66)
-constexpr const char* kSoft = "#78706A";    // caption italic (AA 4.51)
+[[maybe_unused]] constexpr const char* kMuted = "#6E675D";   // secondary text
+[[maybe_unused]] constexpr const char* kFaint = "#6F6F6F";   // tertiary/hints (AA 4.66)
+[[maybe_unused]] constexpr const char* kSoft = "#78706A";    // caption italic (AA 4.51)
 // semantic
-constexpr const char* kAct = "#1E6B4E";     // actions / success
-constexpr const char* kWarn = "#935800";    // advisories (AA 5.36)
-constexpr const char* kMachine = "#B4540A"; // machine-derived marks
-constexpr const char* kError = "#8C2F2B";   // errors / refusals
-constexpr const char* kDoc = "#2E629E";     // documents / links-int
-constexpr const char* kPeople = "#6E3E8E";  // people / access
+[[maybe_unused]] constexpr const char* kAct = "#1E6B4E";     // actions / success
+[[maybe_unused]] constexpr const char* kWarn = "#935800";    // advisories (AA 5.36)
+[[maybe_unused]] constexpr const char* kMachine = "#B4540A"; // machine-derived marks
+[[maybe_unused]] constexpr const char* kError = "#8C2F2B";   // errors / refusals
+[[maybe_unused]] constexpr const char* kDoc = "#2E629E";     // documents / links-int
+[[maybe_unused]] constexpr const char* kPeople = "#6E3E8E";  // people / access
 // type roles (px, in rendered HTML)
-constexpr int kFsMeta = 11;     // metadata, badges, eyebrows
-constexpr int kFsBody = 12;     // supporting prose
-constexpr int kFsCard = 13;     // card body
-constexpr int kFsHead = 15;     // section heads
-constexpr int kFsLead = 18;     // leading content (pron etc.)
-constexpr int kFsTibetan = 22;  // Tibetan headword script
-constexpr int kFsTibetanInline = 16;   // W6 floor: stacked glyphs in
+[[maybe_unused]] constexpr int kFsMeta = 11;     // metadata, badges, eyebrows
+[[maybe_unused]] constexpr int kFsBody = 12;     // supporting prose
+[[maybe_unused]] constexpr int kFsCard = 13;     // card body
+[[maybe_unused]] constexpr int kFsHead = 15;     // section heads
+[[maybe_unused]] constexpr int kFsLead = 18;     // leading content (pron etc.)
+[[maybe_unused]] constexpr int kFsTibetan = 22;  // Tibetan headword script
+[[maybe_unused]] constexpr int kFsTibetanInline = 16;   // W6 floor: stacked glyphs in
                                        // evidence rows never render
                                        // at Latin body sizes
 
@@ -1270,8 +1270,12 @@ static QString entryHtml(const allcore::Entry& e,
                 b += "<br>≡ " + x.toHtmlEscaped();
             for (QString x : g.defs) {
                 // keep the entity link to 84000, clickable
+                // T1: was a plain string — \( \s \) collapsed, so
+                // parens became capture groups (captured(1) returned
+                // the prefix text, not the URL) and the class barred
+                // 's' instead of whitespace. Raw string restores it.
                 static const QRegularExpression lk(
-                    "\(Original glossary entry: (https[^)\s]+)\)");
+                    R"(\(Original glossary entry: (https[^)\s]+)\))");
                 const auto m = lk.match(x);
                 QString url;
                 if (m.hasMatch()) {
@@ -3812,7 +3816,7 @@ public:
                 QFile::remove(QDir(outD).filePath(old));
             auto writeF = [&](const QString& n, const char* body) {
                 QFile f(QDir(inD).filePath(n));
-                f.open(QIODevice::WriteOnly);
+                (void)f.open(QIODevice::WriteOnly);
                 f.write(body);
             };
             writeF("a_acip.txt",
@@ -4026,7 +4030,7 @@ public:
                 QTemporaryDir td;
                 auto touch = [&](const char* n) {
                     QFile f(td.path() + "/" + n);
-                    f.open(QIODevice::WriteOnly);
+                    (void)f.open(QIODevice::WriteOnly);
                     f.write("x");
                 };
                 touch("hgm_dictionary_v27_2.json.gz");
@@ -4037,11 +4041,11 @@ public:
                 QDir(td.path()).mkpath("build");
                 touch("build/hgm_spine_v99_0.db");
                 QFile p1(td.path() + "/build/spine_current.txt");
-                p1.open(QIODevice::WriteOnly);
+                (void)p1.open(QIODevice::WriteOnly);
                 p1.write("hgm_spine_v99_0.db\n");
                 p1.close();
                 const QString ok = resolveSpinePath(td.path());
-                p1.open(QIODevice::WriteOnly | QIODevice::Truncate);
+                (void)p1.open(QIODevice::WriteOnly | QIODevice::Truncate);
                 p1.write("../evil.db\n");
                 p1.close();
                 const QString bad = resolveSpinePath(td.path());
@@ -4259,7 +4263,7 @@ public:
             // session restore reopens the remembered file
             const QString tmp =
                 QDir::temp().filePath("all_session_test.txt");
-            { QFile f(tmp); f.open(QIODevice::WriteOnly);
+            { QFile f(tmp); (void)f.open(QIODevice::WriteOnly);
               f.write("BDEN PA ,"); }
             QSettings st("ALL", "TranslationTool");
             const auto keep = st.value("overlay/lastFile");
@@ -4312,7 +4316,7 @@ public:
             const QString cap2 = "ZZ other picker";
             const QString tmpf =
                 QDir::temp().filePath("all_sess_probe.txt");
-            { QFile f(tmpf); f.open(QIODevice::WriteOnly);
+            { QFile f(tmpf); (void)f.open(QIODevice::WriteOnly);
               f.write("x"); }
             dlgRemember(cap, tmpf);
             const QString want = QFileInfo(tmpf).absolutePath();
@@ -6092,12 +6096,12 @@ private:
             auto rest = std::make_shared<std::vector<Run>>(
                 runs.begin() + kFirst, runs.end());
             auto cont = std::make_shared<std::function<void(size_t)>>();
-            *cont = [this, gen, rest, applySlice, cont,
-                     kSlice](size_t at) {
+            *cont = [this, gen, rest, applySlice,
+                     cont](size_t at) {
                 if (gen != formatGen_) return;   // doc reloaded
                 applySlice(at, at + kSlice, *rest);
                 if (at + kSlice < rest->size())
-                    QTimer::singleShot(0, view_, [cont, at, kSlice] {
+                    QTimer::singleShot(0, view_, [cont, at] {
                         (*cont)(at + kSlice);
                     });
             };
@@ -12197,7 +12201,7 @@ private:
             const QString all = input_->toPlainText();
             const int pos = input_->textCursor().position();
             int b = pos, e = pos;
-            for (int n = 0; b > 0 && all[b - 1] != '\n'; --b) {}
+            for (; b > 0 && all[b - 1] != '\n'; --b) {}
             for (; e < all.size() && all[e] != '\n'; ++e) {}
             evidence = all.mid(b, e - b).trimmed().left(300);
         }
@@ -15686,7 +15690,7 @@ public:
 public:
     DraftPane(allcore::Spine& spine, allcore::Progress* progress,
               const QString& root = QString())
-        : spine_(spine), progress_(progress), index_(spine), root_(root) {
+        : spine_(spine), progress_(progress), root_(root), index_(spine) {
         auto* layout = new QVBoxLayout(this);
         auto* row = new QHBoxLayout;
         auto* banner = new QLabel(
@@ -17131,7 +17135,7 @@ public:
             return QString::fromStdString(
                 allcore::composeBibliographyEntry(assemble()));
         };
-        auto refresh = [=] {
+        auto refresh = [=, this] {
             preview->setText(composedNow());
             const auto info = allcore::decodeAcipFilename(
                 ac->text().trimmed().toStdString() + ".ACT");
@@ -18246,7 +18250,7 @@ private:
         auto st = std::make_shared<ConnState>();
         // profile editor
         connect(addB, &QPushButton::clicked,
-                [this, dlg, loadProfiles] {
+                [dlg, loadProfiles] {
                     auto* d2 = new QDialog(dlg);
                     d2->setWindowTitle("Connection profile");
                     auto* f = new QFormLayout(d2);
@@ -18358,7 +18362,7 @@ private:
             if (!pth.endsWith('/')) pth += "/";
             return u + pth + rel;
         };
-        auto refresh = [this, st, list, pathL, logLine, runCurl,
+        auto refresh = [st, list, pathL, logLine, runCurl,
                         runSftp] {
             list->clear();
             pathL->setText(st->proto + "://" + st->host +
@@ -18411,7 +18415,7 @@ private:
                         .arg(es.size()));
         };
         connect(connectB, &QPushButton::clicked,
-                [this, st, profiles, refresh, logLine, dlg] {
+                [st, profiles, refresh, logLine, dlg] {
                     const QString n = profiles->currentText();
                     if (n.isEmpty()) return;
                     QSettings s2("ALL", "TranslationTool");
@@ -18458,7 +18462,7 @@ private:
         });
         // list any remote path (shared by refresh and the
         // recursive directory download)
-        auto listAt = [this, st, runCurl, runSftp](
+        auto listAt = [st, runCurl, runSftp](
                           const QString& remotePath)
             -> std::vector<RemoteEntry> {
             QByteArray out;
@@ -18587,7 +18591,7 @@ private:
         // upload one file to a remote-relative directory (creates
         // intermediate directories: --ftp-create-dirs on FTP,
         // MKCOL walk on WebDAV, mkdir on sftp)
-        auto putFile = [this, st, logLine, runCurl, runSftp](
+        auto putFile = [st, runCurl, runSftp](
                            const QString& src,
                            const QString& relDir) -> bool {
             const QString name = QFileInfo(src).fileName();
@@ -18708,7 +18712,7 @@ private:
         auto* applyB = new QPushButton("Apply this plan");
         v->addWidget(applyB);
         auto plan = std::make_shared<std::vector<SyncAct>>();
-        auto refresh = [this, L, R, mode, list, plan] {
+        auto refresh = [L, R, mode, list, plan] {
             QMap<QString, QPair<qint64, qint64>> lm, rm;
             collectFiles(L, "", lm);
             collectFiles(R, "", rm);
@@ -20110,7 +20114,10 @@ private:
         QString text;
         {
             QFile f(mid);
-            f.open(QIODevice::ReadOnly);
+            if (!f.open(QIODevice::ReadOnly)) {
+                warnOpenFail(this, f, "The UTFC converter's output");
+                return;
+            }
             QStringDecoder dec(QStringDecoder::Utf16LE);
             text = dec(f.readAll());
         }
@@ -20121,7 +20128,10 @@ private:
             dest + "/" + fi.completeBaseName() + ".utfc.txt";
         {
             QFile f(target);
-            f.open(QIODevice::WriteOnly | QIODevice::Truncate);
+            if (!f.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
+                warnWriteFail(this, f, "The converted UTFC text");
+                return;
+            }
             f.write(text.toUtf8());
         }
         info_->setHtml(
@@ -21666,7 +21676,7 @@ private:
             "witness A: " + fa + "\nwitness B: " + fb + "\n\n" +
             app;
         connect(saveApp, &QPushButton::clicked,
-                [this, dlg, appFull] {
+                [dlg, appFull] {
                     const QString out = safeGetSaveFileName(
                         dlg, "Save apparatus", "apparatus.md",
                         "Markdown (*.md)");
@@ -21821,7 +21831,6 @@ public:
         // second toolbar row (design audit 2026-08-12: one row
         // clipped six-plus labels to garbage on the pane made for
         // the least-expert users — no label may elide)
-        auto* row2 = new QHBoxLayout;
         predictToggle_ = new QCheckBox("Predictive typing");
         predictToggle_->setToolTip(
             "Complete the syllable or word you are typing from the "
@@ -24393,7 +24402,7 @@ public:
             const int n = writeApprovedExport(out);
             g_proposalsDir = saveDir;
             QFile ef(out);
-            ef.open(QIODevice::ReadOnly);
+            (void)ef.open(QIODevice::ReadOnly);
             const QString body = QString::fromUtf8(ef.readAll());
             check(n == 1 && body.contains("APPROVED") &&
                       body.contains("dge ba"),
@@ -24778,7 +24787,6 @@ public:
             "apparatus stay at your elbow.");
         roleBanner->setWordWrap(true);
         outer->addWidget(roleBanner);
-        auto* bar = new QHBoxLayout;
         auto* openB = new QPushButton("Open manuscript\u2026");
         openB->setToolTip("Open a manuscript file (.html) saved from "
                           "this pane.");
@@ -27723,7 +27731,7 @@ public:
             refill();
             dest_->setRoot(dest_->root(), false);
         });
-        connect(rejB, &QPushButton::clicked, [&, this] {
+        connect(rejB, &QPushButton::clicked, [&] {
             const std::string id = selId();
             if (id.empty()) return;
             bool ok = false;
@@ -31461,14 +31469,14 @@ int main(int argc, char** argv) {
                 QDir::temp().filePath("all_catalog_probe");
             QDir().mkpath(wd);
             { QFile f(wd + "/KL00016E.ACT");
-              f.open(QIODevice::WriteOnly); f.write("BDEN PA ,"); }
+              (void)f.open(QIODevice::WriteOnly); f.write("BDEN PA ,"); }
             { QFile f(wd + "/holiday_photo_notes.txt");
-              f.open(QIODevice::WriteOnly); f.write("x"); }
+              (void)f.open(QIODevice::WriteOnly); f.write("x"); }
             // the uncataloged stranger carries a real title page,
             // so the census must also count it as one the identity
             // lane can work on (1 of 1 uncataloged)
             { QFile f(wd + "/scan_0417_unnamed.txt");
-              f.open(QIODevice::WriteOnly);
+              (void)f.open(QIODevice::WriteOnly);
               f.write("@85A #, ,RGYA GAR SKAD DU, YA M'A RI YANTRA "
                       "AA BA LI,\nBOD SKAD DU, GSHIN RJE GSHED KYI "
                       "'KHRUL 'KHOR GYI PHRENG BA, BCOM\nLDAN 'DAS "
@@ -31524,7 +31532,7 @@ int main(int argc, char** argv) {
                                      // already cleaned up above
                 const QString big = wd + "/long_text.txt";
                 { QFile f(big);
-                  f.open(QIODevice::WriteOnly);
+                  (void)f.open(QIODevice::WriteOnly);
                   f.write(QByteArray("BSGOM PA, ").repeated(500));
                   f.write("ZHES GRUB BO,,END-OF-TEXT-MARKER"); }
                 catalogPane->showFilePublic(big);
@@ -31536,7 +31544,7 @@ int main(int argc, char** argv) {
                 if (!whole) ++fails;
                 const QString bin = wd + "/scan_page.bin";
                 { QFile f(bin);
-                  f.open(QIODevice::WriteOnly);
+                  (void)f.open(QIODevice::WriteOnly);
                   f.write(QByteArray(64, '\0') + "PDFISH"); }
                 catalogPane->showFilePublic(bin);
                 const bool honest = catalogPane->infoText().contains(
@@ -31555,7 +31563,7 @@ int main(int argc, char** argv) {
                 QDir().mkpath(wd);
                 const QString vol = wd + "/two_texts_volume.txt";
                 { QFile f(vol);
-                  f.open(QIODevice::WriteOnly);
+                  (void)f.open(QIODevice::WriteOnly);
                   f.write("@85A #, ,RGYA GAR SKAD DU, YA M'A RI YANTRA "
                           "AA BA LI,\nBOD SKAD DU, GSHIN RJE GSHED KYI "
                           "'KHRUL 'KHOR GYI PHRENG BA, BCOM LDAN 'DAS "
@@ -31585,7 +31593,7 @@ int main(int argc, char** argv) {
                 QDir().mkpath(wd);
                 const QString src = wd + "/scan_099.txt";
                 { QFile f(src);
-                  f.open(QIODevice::WriteOnly);
+                  (void)f.open(QIODevice::WriteOnly);
                   f.write("BDEN PA,"); }
                 std::string longTib(300, 'K');
                 for (size_t i = 4; i < longTib.size(); i += 5)
@@ -31618,7 +31626,7 @@ int main(int argc, char** argv) {
                 if (!renamed) ++fails;
                 // refusal instead of overwrite
                 { QFile f(src);
-                  f.open(QIODevice::WriteOnly);
+                  (void)f.open(QIODevice::WriteOnly);
                   f.write("x"); }
                 const QString err2 =
                     catalogPane->applyComposedName(src, comp);
@@ -31634,10 +31642,10 @@ int main(int argc, char** argv) {
                 // folder: file written, honest counts, header claims
                 QDir().mkpath(wd);
                 { QFile f(wd + "/KL00016E.ACT");
-                  f.open(QIODevice::WriteOnly);
+                  (void)f.open(QIODevice::WriteOnly);
                   f.write("@1A BDEN PA,"); }
                 { QFile f(wd + "/mystery_scan.txt");
-                  f.open(QIODevice::WriteOnly);
+                  (void)f.open(QIODevice::WriteOnly);
                   f.write("@85A #, ,RGYA GAR SKAD DU, A B C,\nBOD SKAD "
                           "DU, SHES RAB SNYING PO ZHES BYA BA, PHYAG "
                           "'TSAL LO,"); }
@@ -31684,7 +31692,7 @@ int main(int argc, char** argv) {
                 QDir().mkpath(wd + "/R/other");
                 auto wr = [](const QString& p, const QByteArray& b) {
                     QFile f(p);
-                    f.open(QIODevice::WriteOnly);
+                    (void)f.open(QIODevice::WriteOnly);
                     f.write(b);
                 };
                 wr(wd + "/L/shelf/same.txt", "alike");
@@ -31714,7 +31722,7 @@ int main(int argc, char** argv) {
                 QDir().mkpath(wd);
                 const QString cp = wd + "/slashy.txt";
                 { QFile f(cp);
-                  f.open(QIODevice::WriteOnly);
+                  (void)f.open(QIODevice::WriteOnly);
                   for (int i = 0; i < 30; ++i)
                       f.write("SEMS CAN THAMS CAD BDE BA DANG /\n");
                   f.write("LDAN PAR GYUR CIG ,\n"); }
@@ -31740,7 +31748,7 @@ int main(int argc, char** argv) {
                 QDir().mkpath(wd);
                 const QString rp = wd + "/register.csv";
                 { QFile f(rp);
-                  f.open(QIODevice::WriteOnly);
+                  (void)f.open(QIODevice::WriteOnly);
                   f.write("number,title,initials\n"
                           "KL00016,probe work,NL\n"
                           "S99999,never input,GMR\n"); }
@@ -31750,7 +31758,7 @@ int main(int argc, char** argv) {
                     rh.contains("S99999") &&
                     rh.contains("never written by this app");
                 { QFile f(wd + "/KL00016E.ACT");
-                  f.open(QIODevice::WriteOnly);
+                  (void)f.open(QIODevice::WriteOnly);
                   f.write("@1A BDEN PA,"); }
                 catalogPane->showFilePublic(wd + "/KL00016E.ACT");
                 const bool states =
@@ -31772,7 +31780,7 @@ int main(int argc, char** argv) {
                 QDir().mkpath(wd + "/official");
                 QDir().mkpath(wd + "/in2");
                 { QFile f(wd + "/in2/S99993_TIB T_ENG E_AU.TXT");
-                  f.open(QIODevice::WriteOnly);
+                  (void)f.open(QIODevice::WriteOnly);
                   f.write("@001A BODY,"); }
                 // roster: save + load + verify right/wrong pass
                 QVector<CatalogMember> ros;
@@ -31843,7 +31851,7 @@ int main(int argc, char** argv) {
                 // re-stamping replaces, collisions refuse
                 QDir().mkpath(wd + "/ShelfX");
                 { QFile f(wd + "/ShelfX/w.txt");
-                  f.open(QIODevice::WriteOnly);
+                  (void)f.open(QIODevice::WriteOnly);
                   f.write("BDEN PA,"); }
                 const QString e1 =
                     catalogPane->stampFolder(wd + "/ShelfX", "ADA");
@@ -31870,7 +31878,7 @@ int main(int argc, char** argv) {
                 QDir().mkpath(wd + "/shelf");
                 auto wr = [](const QString& p, const QByteArray& b) {
                     QFile f(p);
-                    f.open(QIODevice::WriteOnly);
+                    (void)f.open(QIODevice::WriteOnly);
                     f.write(b);
                 };
                 wr(wd + "/in/nameless_scan.txt", "BDEN,");
@@ -31922,7 +31930,7 @@ int main(int argc, char** argv) {
                 QDir().mkpath(wd);
                 const QString wf = wd + "/KD00016_TEST_Test_AUTH.txt";
                 { QFile f(wf);
-                  f.open(QIODevice::WriteOnly);
+                  (void)f.open(QIODevice::WriteOnly);
                   f.write("@85A #, ,RGYA GAR SKAD DU, YA M'A RI,\n"
                           "BOD SKAD DU, GSHIN RJE GSHED KYI 'KHRUL "
                           "'KHOR GYI PHRENG BA, PHYAG 'TSAL LO,\n"
@@ -31971,7 +31979,7 @@ int main(int argc, char** argv) {
                 QDir().mkpath(wd);
                 const QString pf = wd + "/scan_0500_unnamed.txt";
                 { QFile f(pf);
-                  f.open(QIODevice::WriteOnly);
+                  (void)f.open(QIODevice::WriteOnly);
                   f.write("@85A #, ,RGYA GAR SKAD DU, YA M'A RI,\n"
                           "BOD SKAD DU, GSHIN RJE GSHED KYI 'KHRUL "
                           "'KHOR GYI PHRENG BA, PHYAG 'TSAL LO,"); }
@@ -31999,7 +32007,7 @@ int main(int argc, char** argv) {
                     }
                 }
                 { QFile f(wd + "/fragment.txt");
-                  f.open(QIODevice::WriteOnly);
+                  (void)f.open(QIODevice::WriteOnly);
                   f.write("MID TEXT ONLY,"); }
                 const QString e2 = catalogPane->proposeIdentity(
                     wd + "/fragment.txt");
@@ -32028,7 +32036,7 @@ int main(int argc, char** argv) {
                 QDir().mkpath(wd + "/qc");
                 auto wr = [](const QString& p, const QByteArray& b) {
                     QFile f(p);
-                    f.open(QIODevice::WriteOnly);
+                    (void)f.open(QIODevice::WriteOnly);
                     f.write(b);
                 };
                 wr(wd + "/qc/S09001_DUS KYI 'KHOR LO'I RGYUD KYI RNAM "
@@ -32067,7 +32075,7 @@ int main(int argc, char** argv) {
                 QDir().mkpath(wd + "/dest/RGYUD_TANTRA");
                 auto wr = [](const QString& p, const QByteArray& b) {
                     QFile f(p);
-                    f.open(QIODevice::WriteOnly);
+                    (void)f.open(QIODevice::WriteOnly);
                     f.write(b);
                 };
                 wr(wd + "/dest/BLO SBYONG_GOOD HEART/"
