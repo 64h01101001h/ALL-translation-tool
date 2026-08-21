@@ -1,0 +1,175 @@
+<title>The Lived-Experience Audit — A Walkthrough</title>
+<style>
+:root {
+  --paper: #FAF6EE; --ink: #2B2118; --gold: #82672A; --muted: #6E675D;
+  --soft: #78706A; --act: #1E6B4E; --err: #8C2F2B; --doc: #2E629E;
+  --rule: #E4DCCB; --chip: #F0E9DC;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #201A14; --ink: #EFE7D8; --gold: #C9A55C; --muted: #B0A896;
+    --soft: #A79E8E; --act: #6FBF97; --err: #E08B85; --doc: #86AEDC;
+    --rule: #3A322A; --chip: #2E2820;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #201A14; --ink: #EFE7D8; --gold: #C9A55C; --muted: #B0A896;
+  --soft: #A79E8E; --act: #6FBF97; --err: #E08B85; --doc: #86AEDC;
+  --rule: #3A322A; --chip: #2E2820;
+}
+body {
+  background: var(--paper); color: var(--ink);
+  font-family: "Palatino", "Palatino Linotype", "Book Antiqua", Georgia, serif;
+  line-height: 1.65; margin: 0; padding: 3rem 1.25rem 5rem;
+}
+main { max-width: 65ch; margin: 0 auto; }
+h1 {
+  font-size: 1.9rem; line-height: 1.25; text-wrap: balance;
+  margin: 0 0 .4rem;
+}
+.sub { color: var(--muted); font-style: italic; margin: 0 0 2.4rem; }
+.eyebrow {
+  color: var(--gold); font-family: -apple-system, "Helvetica Neue", sans-serif;
+  font-size: .68rem; font-weight: 700; letter-spacing: .18em;
+  text-transform: uppercase; margin: 2.6rem 0 .3rem;
+}
+h2 { font-size: 1.25rem; margin: 0 0 .6rem; text-wrap: balance; }
+p { margin: 0 0 1rem; }
+.verify {
+  border-left: 3px solid var(--act); background: var(--chip);
+  padding: .65rem .9rem; margin: 0 0 1rem; font-size: .95rem;
+}
+.verify b { color: var(--act); }
+.was { color: var(--err); }
+hr { border: 0; border-top: 1px solid var(--rule); margin: 2.5rem 0; }
+table {
+  border-collapse: collapse; font-size: .9rem; width: 100%;
+  font-variant-numeric: tabular-nums;
+}
+.tablewrap { overflow-x: auto; margin: 1rem 0 1.5rem; }
+th, td {
+  text-align: left; padding: .35rem .6rem;
+  border-bottom: 1px solid var(--rule); vertical-align: top;
+}
+th {
+  color: var(--gold); font-family: -apple-system, sans-serif;
+  font-size: .68rem; letter-spacing: .14em; text-transform: uppercase;
+}
+.ok { color: var(--act); font-weight: 700; }
+.pend { color: var(--muted); font-style: italic; }
+.sig { margin-top: 3rem; color: var(--muted); font-style: italic; }
+a { color: var(--doc); }
+</style>
+<main>
+<h1>The tool, lived in: what the Phase-2 audit changed</h1>
+<p class="sub">A walkthrough letter for Adam — every claim below names the
+journey it improves and the way to see it with your own hands.
+2026-08-20.</p>
+
+<p>Phase 1 made the screens honest. Phase 2 asked a different question:
+what is this tool like to <i>use</i> — on a bad network, with a moved
+data folder, with a failing disk, at the keyboard, by a brand-new
+cataloger? We sabotaged it on purpose, sent an independent reviewer to
+refute our own fixes, and measured what had only been eyeballed. Here is
+what changed, journey by journey.</p>
+
+<div class="eyebrow">Your work, kept</div>
+<h2>Saving can no longer fail silently</h2>
+<p>Seven places could lose work while <i>looking</i> saved: alignment
+links (saved on every Space-bar press), glossary entries (the card
+showed the gloss from memory even when the disk write failed), typed
+transcription exports, OCR results, two export paths, and the catalog
+team roster. Each now warns in one consistent voice — the file, the
+reason, and the plain sentence <i>“what you see on screen is NOT
+saved”</i> — once per failing file, so an alignment session can never
+become a modal storm.</p>
+<div class="verify"><b>See it:</b> Align pane → make the links folder
+read-only in Finder → draw a link. One warning, naming the file.
+Fix the folder; saving resumes silently.</div>
+
+<h2>The importer can no longer destroy what it replaces</h2>
+<p><span class="was">Before:</span> importing a data release deleted the
+old file <i>first</i>, then copied — a full disk or dropped network
+drive left you with neither. Now it stages the copy beside the target
+and swaps only on success; a failure leaves the working release
+untouched and says so.</p>
+
+<div class="eyebrow">Cold start</div>
+<h2>A missing data folder was a crash. Now it is a conversation.</h2>
+<p>Moving the app without its “ALL Tool Data” folder used to crash on
+launch — the old ask-a-folder dialog was masking an uncaught error
+behind it. Now a plain dialog explains what the data folder is and
+where it ships, lets you locate it (retrying on a wrong pick), and
+quits cleanly if you decline. We proved it with a scratch-machine rig:
+copied .app, empty home, no data — clean message, no crash.</p>
+
+<div class="eyebrow">The queue you rule on</div>
+<h2>The Approval pane, hardened by an adversary</h2>
+<p>An independent review agent attacked our own fixes and confirmed
+three real bugs, all now closed: a failed roster save during first
+set-up still signed you in as admin over a roster file that did not
+exist; a failed save could quietly <i>un-revoke</i> a revoked member;
+and two scriptable command-line modes could hang forever on a dialog
+nobody can click. The ruling links also now carry their consequence in
+color — <span style="color:var(--act);font-weight:700">✓ approve</span>
+commits, <span style="color:var(--err);font-weight:700">✗ decline</span>
+refuses, defer parks.</p>
+
+<div class="eyebrow">Reading</div>
+<h2>Measured ink, not eyeballed ink</h2>
+<p>We computed real WCAG contrast for every color on the card. The
+quiet grays failed — captions at 2.8:1, hints at 3.2:1 — and are now
+re-inked to pass, keeping their warmth. Gold text deepened for
+legibility while the chrome’s gold identity stays. Labels that sit on
+the theme-following chrome now measure their ink against the ground
+they actually sit on, light or dark. And inline Tibetan in the 84000
+rows now honors a ruled floor of 16px — stacked glyphs never render at
+Latin body sizes anywhere on the card.</p>
+
+<div class="eyebrow">Finding things</div>
+<h2>From a search hit to the word’s card in one click</h2>
+<p><span class="was">Before:</span> copy the term, switch panes, paste,
+Return. Now the results footer offers <i>“look up: …”</i> for every
+searched term. And Help gained two sheets: <b>Keyboard Shortcuts</b>
+(the whole keyboard story in one place) and the <b>Usage Ledger</b> —
+an opt-in, this-Mac-only counter of pane visits and tool clicks whose
+single purpose is to let the ribbon and the manual be ordered by how
+you actually work instead of by guess.</p>
+<div class="verify"><b>See it:</b> Research → Search → any term →
+Return → click its name in “look up:” under the total.</div>
+
+<div class="eyebrow">The gate</div>
+<h2>Every press now proves the screens still look right</h2>
+<p>The packaging script screenshots all 22 panes and compares them
+perceptually against a blessed baseline; unexplained change stops the
+press. The gate earned its keep before it ever guarded a release — it
+caught the screenshot harness itself being non-deterministic (the
+window grew mid-sweep and reflowed every later capture). Blessing a new
+baseline is an explicit act: <code>tools/bless_shots.sh</code>.</p>
+
+<hr>
+<div class="eyebrow">Scoreboard</div>
+<div class="tablewrap"><table>
+<tr><th>Workstream</th><th>State</th></tr>
+<tr><td>W1 cold start</td><td><span class="ok">crash fixed</span> · welcome screen <span class="pend">proposed, awaiting your ruling</span></td></tr>
+<tr><td>W2 failure paths</td><td><span class="ok">closed</span> — 13 silent sites now speak; 3 reviewer bugs remediated</td></tr>
+<tr><td>W3 journey friction</td><td><span class="ok">closed</span> — search→card link; others held</td></tr>
+<tr><td>W4 keyboard</td><td><span class="ok">closed</span> — shortcut sheet; mouse-free reachability verified</td></tr>
+<tr><td>W5 accessibility</td><td><span class="ok">closed</span> — measured AA inks; glyph+text redundancy</td></tr>
+<tr><td>W6 Tibetan type</td><td><span class="ok">closed</span> — shaping 0 misses; 16px inline floor</td></tr>
+<tr><td>W7 theme</td><td><span class="ok">closed</span> — night chrome, paper page; chrome-aware inks</td></tr>
+<tr><td>W8 terminology</td><td><span class="ok">ruled</span> — register variation, no collisions</td></tr>
+<tr><td>W9 cost of a mistake</td><td><span class="ok">closed</span> — atomic import, keep-both, F8 confirm</td></tr>
+<tr><td>W10 measurement</td><td><span class="ok">live</span> — opt-in ledger; data-driven reorder after a week</td></tr>
+<tr><td>§10 adversarial review</td><td><span class="ok">ran for real</span> — and found real bugs</td></tr>
+<tr><td>§11 visual regression</td><td><span class="ok">in the press</span> — baseline blessed</td></tr>
+</table></div>
+
+<p>Your two open calls: the first-run welcome (three lines over the
+Diamond Cutter demo — the spec is in the ledger), and, after a week of
+real use with the ledger on, whether the ribbon reorders to match the
+data. Everything else on both audit prompts is done and pressed.</p>
+
+<p class="sig">— the Phase-2 audit, docs/UX_AUDIT_2.md holds every
+finding, verdict, and repro.</p>
+</main>
