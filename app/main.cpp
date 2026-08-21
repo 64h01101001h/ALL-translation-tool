@@ -314,6 +314,16 @@ inline QString sourceBadge(Epistemic e) {
                    : QString("color:%1;").arg(col))
         .arg(txt);
 }
+// honest elision (L-tier): evidence snippets never end mid-word
+// pretending to be whole — a cut is marked with a visible ellipsis
+static QString snip(const QString& t, int cap) {
+    if (t.size() <= cap) return t.toHtmlEscaped();
+    return t.left(cap).toHtmlEscaped() +
+           QString::fromUtf8("\u2026");
+}
+static QString snipStd(const std::string& t, int cap) {
+    return snip(QString::fromStdString(t), cap);
+}
 }   // namespace ux
 
 struct EntryDisplay {
@@ -1190,7 +1200,7 @@ static QString entryHtml(const allcore::Entry& e,
                      QString::number(note.num) + "</b> (" +
                      note.lemma.toHtmlEscaped() + ") \u2014 <i>" +
                      note.source.toHtmlEscaped() + "</i><br>" +
-                     note.text.left(280).toHtmlEscaped() +
+                     ux::snip(note.text, 280) +
                      "</div>";
                 if (++shownNotes >= 2) break;
             }
@@ -1219,12 +1229,12 @@ static QString entryHtml(const allcore::Entry& e,
     if (d.sanskrit && !e.sanskrit_reference.empty())
         h += "<div style='margin-top:4px'><small style='color:#6E675D'>"
              "sanskrit (reference): " +
-             QString::fromStdString(e.sanskrit_reference).left(160).toHtmlEscaped() +
+             ux::snipStd(e.sanskrit_reference, 160) +
              "</small></div>";
     if (d.hopkins && !e.hopkins_reference.empty())
         h += "<div style='margin-top:2px'><small style='color:#6E675D'>"
              "Hopkins (reference only): " +
-             QString::fromStdString(e.hopkins_reference).left(200).toHtmlEscaped() +
+             ux::snipStd(e.hopkins_reference, 200) +
              "</small></div>";
     if (d.g84000 && g_84000) {
         auto it = g_84000->find(e.wylie);
@@ -1258,7 +1268,7 @@ static QString entryHtml(const allcore::Entry& e,
             }
             for (const QString& x : g.skts)
                 b += "<br><small style='color:#6E675D'>sanskrit: " +
-                     x.left(160).toHtmlEscaped() + "</small>";
+                     ux::snip(x, 160) + "</small>";
             if (!g.tohs.isEmpty()) {
                 QString tl;
                 int shown = 0;
@@ -6942,9 +6952,9 @@ private:
                      "<small style='color:#9C948A'>[" +
                      QString::fromStdString(s.course) + ":" + QString::number(s.seq) +
                      "]</small><br><i style='color:#4A443C'>" +
-                     QString::fromStdString(s.wylie).left(180).toHtmlEscaped() +
+                     ux::snipStd(s.wylie, 180) +
                      "</i><br>" +
-                     QString::fromStdString(s.english).left(220).toHtmlEscaped() +
+                     ux::snipStd(s.english, 220) +
                      "</div>";
             }
         }
@@ -6966,7 +6976,7 @@ private:
                          "color:#6E675D'><span style='background:#F0E9DC;"
                          "color:#6B5E4A;padding:0 6px;border-radius:8px;font-size:11px'>" +
                          QString::fromStdString(r.layer).toHtmlEscaped() + "</span> " +
-                         QString::fromStdString(r.definition).left(220).toHtmlEscaped() +
+                         ux::snipStd(r.definition, 220) +
                          "</div>";
             }
         }
@@ -12313,7 +12323,7 @@ public:
                              .toHtmlEscaped() +
                          "</span>";
                 h += "<br><i style='color:#666;font-size:12px'>" +
-                     a.evidence.left(260).toHtmlEscaped() +
+                     ux::snip(a.evidence, 260) +
                      "</i></div>";
                 continue;
             }
@@ -13203,7 +13213,7 @@ private:
                               note.lemma.toHtmlEscaped() + " <small>(" +
                               note.source.toHtmlEscaped() +
                               ")</small><br>" +
-                              note.text.left(200).toHtmlEscaped() +
+                              ux::snip(note.text, 200) +
                               "</div>";
                 }
             if (g_appBib)
@@ -13212,7 +13222,7 @@ private:
                     if (++n <= 40)
                         ah += "<div style='margin:4px 0'><b>" +
                               b.id.toHtmlEscaped() + "</b> " +
-                              b.text.left(220).toHtmlEscaped() +
+                              ux::snip(b.text, 220) +
                               " <small>(" + b.source.toHtmlEscaped() +
                               ")</small></div>";
                 }
@@ -16306,9 +16316,9 @@ private:
             h += "<div style='margin:5px 0'><small>[" +
                  QString::fromStdString(s.course) + ":" +
                  QString::number(s.seq) + "]</small><br><i>" +
-                 QString::fromStdString(s.wylie).left(160).toHtmlEscaped() +
+                 ux::snipStd(s.wylie, 160) +
                  "</i><br>" +
-                 QString::fromStdString(s.english).left(200).toHtmlEscaped() +
+                 ux::snipStd(s.english, 200) +
                  "</div>";
         }
         h += tm84000Html(wylie);
@@ -16627,7 +16637,7 @@ private:
                      .arg(n.lemma.toHtmlEscaped())
                      .arg(n.source.toHtmlEscaped())
                      .arg(n.note)
-                     .arg(n.text.left(220).toHtmlEscaped());
+                     .arg(ux::snip(n.text, 220));
         }
         int bibFound = 0;
         for (int i = 0; i < (int)bibBank_.size() && bibFound < 8; ++i) {
@@ -16646,7 +16656,7 @@ private:
                      .arg(b.acipRefs.isEmpty()
                               ? QString()
                               : " · ACIP " + b.acipRefs.toHtmlEscaped())
-                     .arg(b.text.left(220).toHtmlEscaped());
+                     .arg(ux::snip(b.text, 220));
         }
         int candFound = 0;
         for (int i = 0; i < (int)candBank_.size() && candFound < 5; ++i) {
@@ -16662,7 +16672,7 @@ private:
                          "<small>%3</small></div>")
                      .arg(i)
                      .arg(n.lemma.toHtmlEscaped())
-                     .arg(n.text.left(220).toHtmlEscaped());
+                     .arg(ux::snip(n.text, 220));
         }
         if (!found && !bibFound && !candFound)
             h += "<i>no matching apparatus</i>";
@@ -24278,9 +24288,13 @@ private:
                  " · " + QString::fromStdString(p.created).toHtmlEscaped() +
                  "</small>";
             const QString id = QString::fromStdString(p.id);
-            h += "<br><a href='approve:" + id +
-                 "'>✓ Approve</a> &nbsp; <a href='decline:" + id +
-                 "'>✗ Decline</a> &nbsp; <a href='defer:" + id +
+            // H5 link classes: a ruling's consequence is visible
+            // in its color — commit green, reject red, park muted
+            h += "<br><a style='color:#1E7A4E' href='approve:" + id +
+                 "'>✓ Approve</a> &nbsp; "
+                 "<a style='color:#8C2F2B' href='decline:" + id +
+                 "'>✗ Decline</a> &nbsp; "
+                 "<a style='color:#8A8A8A' href='defer:" + id +
                  "'>⏸ Defer</a></div>";
         }
         if (!shown)
@@ -29514,6 +29528,13 @@ int main(int argc, char** argv) {
         mkGroup("Input", {"Input", "OCR"});
         mkGroup("Catalog", {"Catalog"});
         mkGroup("Community", {"Propose", "Approval"});
+        // L-tier: every group tab teaches its own shortcut (M5's
+        // \u2318 1..7), plus the pane-stepping pair, on hover
+        for (int gi = 0; gi < tabs.count() && gi < 9; ++gi)
+            tabs.setTabToolTip(
+                gi, QString::fromUtf8("\u2318%1 \u00b7 panes inside: "
+                                      "\u2318\u21e7] / \u2318\u21e7[")
+                        .arg(gi + 1));
         // 9n-5 (2026-08-20): the Word-style visible search field —
         // Hunt Everywhere surfaced top-right beside the group tabs
         // instead of hiding behind its shortcut
