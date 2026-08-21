@@ -28836,7 +28836,7 @@ int main(int argc, char** argv) {
             app.setFont(pal);
         }
     }
-    const QString root = findDataRoot();
+    QString root = findDataRoot();
     // lucene-bo lemma fold (CC0 verbs bank): configured process-wide
     // so the in-app library indexer builds the SAME text_norm the
     // offline v3 builder does, and the Lookup fallback can walk the
@@ -28891,7 +28891,40 @@ int main(int argc, char** argv) {
     QString tplPath = argc > 2 ? argv[2]
                                : root + "/docs/analysis/PASSAGE_ANALYSIS_TEMPLATE.md";
 
-    allcore::Spine spine(dbPath.toStdString());
+    std::unique_ptr<allcore::Spine> spineHold;
+    for (;;) {
+        try {
+            spineHold = std::make_unique<allcore::Spine>(
+                dbPath.toStdString());
+            break;
+        } catch (const std::exception& e) {
+            if (g_harnessRun) {
+                fprintf(stderr,
+                        "FATAL: %s\n(the harness has no dialog to "
+                        "offer — supply a data root)\n",
+                        e.what());
+                return 2;
+            }
+            const auto pick = QMessageBox::question(
+                nullptr, "ALL Translation Tool",
+                "The dictionary spine could not be opened:\n" +
+                    QString::fromUtf8(e.what()) +
+                    "\n\nThe app cannot run without its data "
+                    "folder (\"ALL Tool Data\", shipped beside "
+                    "the app on the DMG). Locate it now?",
+                QMessageBox::Open | QMessageBox::Close,
+                QMessageBox::Open);
+            if (pick != QMessageBox::Open) return 2;
+            const QString picked = safeGetExistingDirectory(
+                nullptr, "Choose the ALL Tool Data folder");
+            if (picked.isEmpty() || !isDataRoot(picked)) continue;
+            QSettings("ALL", "TranslationTool")
+                .setValue("app/dataRoot", picked);
+            root = picked;
+            dbPath = resolveSpinePath(root);
+        }
+    }
+    allcore::Spine& spine = *spineHold;
 
     // spellcheck layer is optional: missing data just disables the underlines
     allcore::SyllableChecker* checker = nullptr;

@@ -104,3 +104,17 @@ restore now honors sess::path's no-modal contract (unreadable
 remembered files restore as nothing, Overlay + Align). Noted, accepted:
 folio/roster warnings use raw QMessageBox (unreachable under harness in
 practice).
+
+## W1 — COLD START (first findings; the sabotage rig keeps paying)
+- **W1-01 · P0 · FIXED.** With no locatable data root the app CRASHED
+  (uncaught std::runtime_error from the Spine constructor) — the Phase-1-era
+  ask-folder modal had been masking a crash-on-launch for every
+  moved-the-app-without-its-data install. New startup contract: locate the
+  data or exit cleanly — an honest dialog explains what the data folder is,
+  offers the picker, retries on a wrong pick, and Close quits with no crash;
+  harness runs print FATAL + exit 2. Repro rig: scratch HOME + copied .app.
+- **W2-02 · SUPERSEDED.** The planned degraded-state banner assumed an app
+  that runs data-less; the spine is constitutive, so the correct surface is
+  the locate-or-exit dialog above. (A partial-data state — spine present,
+  layers missing — still shows per-layer honest notices, which Phase 1
+  already built.)
