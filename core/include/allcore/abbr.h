@@ -23,6 +23,9 @@ struct AbbrEntry {
                        // default attribution (TibSchol)
 };
 
+// LIFETIME (T2/S1 note): byWylie/byUnicode return pointers into the
+// entry vector; any later load() may reallocate and dangle them.
+// Query results must not be held across a load.
 class AbbrTable {
 public:
     bool load(const std::string& csvPath);

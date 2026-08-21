@@ -54,6 +54,10 @@ int main(int argc, char** argv) {
         CHECK(!r.empty() &&
                   r.front()->src.find("rKTs") != std::string::npos,
               "rKTs row carries its attribution");
+        // re-fetch: the second load() reallocated the entry
+        // vector, so pointers taken before it are dangling (the
+        // ASan battery caught exactly this)
+        k = abbr.byWylie("khyadr");
         CHECK(!k.empty() && k.front()->src.empty(),
               "TibSchol rows keep the default attribution");
     }

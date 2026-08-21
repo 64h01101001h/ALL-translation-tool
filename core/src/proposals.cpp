@@ -1,5 +1,7 @@
 #include "allcore/proposals.h"
 
+#include <cctype>
+#include <filesystem>
 #include <fstream>
 #include <sstream>
 
@@ -106,9 +108,10 @@ std::vector<std::string> splitTab(const std::string& line) {
 
 ProposalStore::ProposalStore(const std::string& dir) : dir_(dir) {}
 
-bool ProposalStore::load() {
-    items_.clear();
-    std::ifstream f(dir_ + "/proposals.tsv");
+namespace {
+bool parseProposalsFile(const std::string& path,
+                        std::vector<Proposal>& out) {
+    std::ifstream f(path);
     if (!f) return false;
     std::string line;
     while (std::getline(f, line)) {
@@ -129,12 +132,68 @@ bool ProposalStore::load() {
         p.approver = tsvUnescape(c[9]);
         p.ruled = tsvUnescape(c[10]);
         p.comment = tsvUnescape(c[11]);
-        items_.push_back(std::move(p));
+        out.push_back(std::move(p));
     }
     return true;
 }
+std::string rowFingerprint(const Proposal& p) {
+    return p.kindName(p.kind) + std::string("|") +
+           Proposal::statusName(p.status) + "|" + p.proposer + "|" +
+           p.created + "|" + p.wylie + "|" + p.value + "|" + p.field +
+           "|" + p.evidence + "|" + p.approver + "|" + p.ruled + "|" +
+           p.comment;
+}
+}  // namespace
 
-bool ProposalStore::save() const {
+bool ProposalStore::load() {
+    items_.clear();
+    conflictFiles_.clear();
+    absorbed_ = 0;
+    divergent_ = 0;
+    const bool ok = parseProposalsFile(dir_ + "/proposals.tsv", items_);
+    // S1: Dropbox conflict siblings — absorb unseen rows, count (not
+    // guess-merge) diverging ones, leave the files on disk untouched
+    std::error_code ec;
+    for (const auto& e :
+         std::filesystem::directory_iterator(dir_, ec)) {
+        const std::string name = e.path().filename().string();
+        if (name.rfind("proposals", 0) != 0 ||
+            name.find("conflicted copy") == std::string::npos ||
+            name.size() < 4 ||
+            name.substr(name.size() - 4) != ".tsv")
+            continue;
+        std::vector<Proposal> rows;
+        if (!parseProposalsFile(e.path().string(), rows)) continue;
+        conflictFiles_.push_back(name);
+        for (auto& r : rows) {
+            const Proposal* mine = nullptr;
+            for (const auto& p : items_)
+                if (p.id == r.id) { mine = &p; break; }
+            if (!mine) {
+                items_.push_back(std::move(r));
+                ++absorbed_;
+            } else if (rowFingerprint(*mine) != rowFingerprint(r)) {
+                ++divergent_;
+            }
+        }
+    }
+    return ok;
+}
+
+bool ProposalStore::save() {
+    // S1: another machine may have appended since our load — keep any
+    // ids we have never seen (our own rows stay authoritative for
+    // their ids; the single-authority model rules same-id edits)
+    {
+        std::vector<Proposal> disk;
+        if (parseProposalsFile(dir_ + "/proposals.tsv", disk))
+            for (auto& d : disk) {
+                bool have = false;
+                for (const auto& p : items_)
+                    if (p.id == d.id) { have = true; break; }
+                if (!have) items_.push_back(std::move(d));
+            }
+    }
     std::ofstream f(dir_ + "/proposals.tsv", std::ios::trunc);
     if (!f) return false;
     f << kHeader << "\n";
@@ -161,8 +220,18 @@ std::string ProposalStore::propose(ProposalKind kind,
     // id: kind + date + running count — stable, human-legible, unique
     // enough for an in-house queue (the store rewrites by id on ruling)
     std::ostringstream id;
-    id << Proposal::kindName(kind) << "-" << isoDate << "-"
-       << (items_.size() + 1);
+    std::string ini;
+    bool word = true;
+    for (char ch : proposer) {
+        if (word && std::isalpha((unsigned char)ch))
+            ini += (char)std::tolower((unsigned char)ch);
+        word = (ch == ' ' || ch == '-' || ch == '.');
+    }
+    if (ini.empty()) ini = "x";
+    // S1: two machines proposing the same day no longer collide —
+    // the proposer's initials join the id (kind-date-initials-N)
+    id << Proposal::kindName(kind) << "-" << isoDate << "-" << ini
+       << "-" << (items_.size() + 1);
     p.id = id.str();
     p.kind = kind;
     p.status = ProposalStatus::Pending;

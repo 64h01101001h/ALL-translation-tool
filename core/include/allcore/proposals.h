@@ -86,7 +86,7 @@ class ProposalStore {
 public:
     explicit ProposalStore(const std::string& dir);
     bool load();
-    bool save() const;
+    bool save();
     const std::vector<Proposal>& all() const { return items_; }
     // add a fresh pending proposal; returns its id
     std::string propose(ProposalKind kind, const std::string& proposer,
@@ -100,9 +100,24 @@ public:
               const std::string& isoDate);
     size_t pendingCount() const;
 
+    // S1 (stewardship): the many-hands surface. load() also absorbs
+    // Dropbox "conflicted copy" siblings — rows with unseen ids join
+    // the queue; same-id rows that DIFFER are counted, never merged
+    // by guess (the main file wins; the conflicted file is left on
+    // disk for a human). save() reloads the file first and keeps any
+    // rows another machine added while we held ours in memory.
+    const std::vector<std::string>& conflictFiles() const {
+        return conflictFiles_;
+    }
+    size_t absorbedRows() const { return absorbed_; }
+    size_t divergentRows() const { return divergent_; }
+
 private:
     std::string dir_;
     std::vector<Proposal> items_;
+    std::vector<std::string> conflictFiles_;
+    size_t absorbed_ = 0;
+    size_t divergent_ = 0;
 };
 
 // escape/unescape a field for single-line TSV storage

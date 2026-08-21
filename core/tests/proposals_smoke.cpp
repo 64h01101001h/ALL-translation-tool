@@ -25,7 +25,13 @@ int main(int argc, char** argv) {
     {
         allcore::ProposalStore store(dir);
         store.load();   // may be empty; fine
-        // start clean by rewriting empty then re-adding
+        // start clean EXPLICITLY: save() now merge-preserves rows on
+        // disk (S1 — a never-loaded store must not wipe the queue),
+        // so a deliberate reset removes the file itself
+        std::remove((dir + "/proposals.tsv").c_str());
+        std::remove((dir + "/proposals (test's conflicted copy "
+                           "2026-08-20).tsv")
+                        .c_str());
         allcore::ProposalStore fresh(dir);
         auto id1 = fresh.propose(
             allcore::ProposalKind::HighHonorific, "Tenzin",
@@ -197,6 +203,59 @@ int main(int argc, char** argv) {
         CHECK(!p.isRegister(),
               "catalog-identity is an EXPORT kind - approvals leave "
               "through the candidates file, never applied in-app");
+    }
+
+    // ---- S1 (stewardship): the Dropbox conflicted-copy drill ----
+    {
+        std::remove((dir + "/proposals.tsv").c_str());
+        std::remove((dir + "/proposals (test's conflicted copy "
+                           "2026-08-20).tsv")
+                        .c_str());
+        allcore::ProposalStore a(dir);
+        auto keep = a.propose(allcore::ProposalKind::PhraseRendering,
+                              "Tenzin", "bden pa", "truth", "",
+                              "ev", "2026-08-20");
+        CHECK(a.save(), "main store saves");
+        // simulate Dropbox: a sibling holding one NEW row and one
+        // DIVERGENT copy of the same id
+        {
+            allcore::ProposalStore b(dir);
+            b.load();
+            b.propose(allcore::ProposalKind::PhraseRendering,
+                      "Dorje", "sdug bsngal", "suffering", "",
+                      "ev2", "2026-08-20");
+            for (auto& p :
+                 const_cast<std::vector<allcore::Proposal>&>(b.all()))
+                if (p.id == keep) p.comment = "diverged";
+            const std::string conflictPath =
+                dir + "/proposals (test's conflicted copy "
+                      "2026-08-20).tsv";
+            // write the sibling by saving to a temp store dir is
+            // overkill - reuse save() then rename
+            allcore::ProposalStore c(dir);
+            c.load();
+            std::remove((dir + "/proposals.tsv").c_str());
+            b.save();
+            std::rename((dir + "/proposals.tsv").c_str(),
+                        conflictPath.c_str());
+            // restore the main file (store a's view)
+            a.save();
+        }
+        allcore::ProposalStore merged(dir);
+        CHECK(merged.load(), "load with a conflicted sibling present");
+        CHECK(merged.conflictFiles().size() == 1,
+              "the conflicted copy is detected and named");
+        CHECK(merged.absorbedRows() == 1,
+              "the sibling's NEW row joins the queue");
+        CHECK(merged.divergentRows() == 1,
+              "the diverged same-id row is counted, not guess-merged");
+        bool sawNew = false, mainWins = false;
+        for (const auto& p : merged.all()) {
+            if (p.proposer == "Dorje") sawNew = true;
+            if (p.id == keep) mainWins = (p.comment != "diverged");
+        }
+        CHECK(sawNew, "absorbed row is queryable");
+        CHECK(mainWins, "the main file's row wins on divergence");
     }
 
     std::printf("proposals_smoke: %s (%d failures)\n",

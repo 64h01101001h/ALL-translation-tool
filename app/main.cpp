@@ -24445,6 +24445,26 @@ private:
                         .arg(g_userName.isEmpty() ? "(unnamed)"
                                                   : g_userName)
                         .arg(counts);
+        // S1: a Dropbox conflicted copy is a fork of the queue —
+        // name it, say what was absorbed, never resolve by guess
+        if (!store.conflictFiles().empty()) {
+            QString cf;
+            for (const auto& f : store.conflictFiles()) {
+                if (!cf.isEmpty()) cf += " · ";
+                cf += QString::fromStdString(f).toHtmlEscaped();
+            }
+            h += QString(
+                     "<div style='background:#F6E7C9;color:#6B4E00;"
+                     "padding:6px 10px;border-radius:6px;font-size:"
+                     "12px'><b>Sync conflict detected</b> — %1. "
+                     "%2 new row(s) from the copy joined this queue; "
+                     "%3 row(s) differ between the files (this "
+                     "file's version shown — the copy is untouched "
+                     "on disk for review).</div>")
+                     .arg(cf)
+                     .arg((qulonglong)store.absorbedRows())
+                     .arg((qulonglong)store.divergentRows());
+        }
         int shown = 0;
         for (const auto& p : store.all()) {
             if (p.status != allcore::ProposalStatus::Pending) continue;
