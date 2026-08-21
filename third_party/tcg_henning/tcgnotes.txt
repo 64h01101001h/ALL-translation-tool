@@ -1,0 +1,136 @@
+TIBETAN CALENDAR SOFTWARE. Version 1.06. 3 September 2013.
+
+This revised version of the software is functionally identical to the previous version, 1.03, but has now been prepared as a 32-bit Windows NT command line executable, rather than as a DOS program. This is to ensure that the program is able to run on both Windows Vista and Windows 7, both of which are incompatible 16-bit DOS programs.
+
+When the program starts, it is first necessary to select an epoch - using the number keys - for the basis of subsequent calculations. The list given is as follows:
+
+    1. Generalised Phugpa, -1000.
+    2. Generalised Tsurphu, -1000.
+    3. Generalised Error Correction, -2000.
+    4. mkhas pa'i snying nor, 1796.
+    5. New Genden Calculations, 1747 CE.
+
+All of these are for siddhanta calculations (grub rtsis) devised in Tibet.
+
+After making a selection, you then come to the main menu, from which selections are again made using the numeric keys. This is a change from previous versions which made use of the function keys:
+
+           TIBETAN CALENDAR SOFTWARE
+                 Version 1.06
+
+  Use numeric to select from the following:
+      
+             1. Set epoch.
+             2. Print calendar.
+             3. Calendar cycle.
+             4. Run search test.
+             5. Calculate New Years.
+             6. Calculate yearly tables.
+             9. Finish.
+
+The first selection takes you back to the first menu to select a new epoch.
+
+The next two are the main routines in the program. "2. Print calendar" prints calendar information to a disk file, called, eg. PL_1992.TXT ("phug lugs" for 1992). This does handle years before 1 CE, but it is unlikely these will ever be needed. For this function you need to enter a start and finish year. Some of the data streams across the screen (this was originally in there for debugging puposes), but the results are only viewed properly using the file on disk.
+
+The third selection runs the main calendar cycle, printing on screen information for one day at a time. First you need to enter a three-field number as the starting date for calculations. This needs the Tibetan lunar day (tshes pa), month number and western year. For example:
+
+3 8 1997
+
+would start calculations for the 3rd lunar day (tshes pa) in the 3rd Tibetan month of the year starting early in 1997.
+
+Once the daily information has been displayed, single key commands are used to display further information.
+
+  N/n - goes back to select a new start date.
+  E/e - returns to the main menu.
+  T/t - adds 1 to the Tibetan lunar day, "tshes pa".
+  M/m - adds 1 to the month number.
+  Y/y - adds 1 to the year.
+  R/r - prints the current information on screen to file, in REPORT.DAT.
+  P/p - goes to the previous lunar day.
+
+In the block of data for any lunar date, the following information is given. The top three lines appear as follows:
+
+1. Generalised Phugpa, -1000.
+
+The ZLA-DAG is: 37239;48, Month = 11, Year = 2010
+DATE is: 2 / 11 / 2010 - Corrected Month = -11, mgo
+
+The first line indicates the chosen epoch. The next two lines indicate that the data is for the second lunar day (tshes pa, tithi) in the month calculated as the 11th month. In this instance the corrected month - the one used in actual calendars - has a negative value. This means that this is an intercalary month (zla lhag). There are two months numbered "eleven" that year, and the second of these is called the delayed month (zla bshol). "mgo" is the Tibetan name for the month.
+
+Since version 1.06, the second and third lines have been changed to read:
+
+True month: 37239;48, Month = 11, Year = 2010
+Target date: 2 / 11 / 2010 - Corrected Month = -11, mgo
+
+The following month we have for the month information:
+
+The ZLA-DAG is: 37240;50, Month = 12, Year = 2010
+DATE is: 2 / 12 / 2010 - Corrected Month = 11, mgo
+
+Here, although the calculated month is 12, the actual month value is 11, this being the delayed month. So, a month later, we would have the calculated month as 1, and the corrected month as 12. The term "zla-dag" translates as true month, and is the count of lunar months (37240) since the epoch. The value 50 is the intercalation index for the month in question.
+
+On the next line of the screen is data for the Moon's node, Rahu, calculated for the 15th and 30th of the month - the new and full Moon days, when eclipses can occur. The "ril-cha" is the lunar anomaly.
+
+In the next main block of four lines of data, the figures "gza-bar" (mean weekday) and "gza-dag" (true weekday) give data for the time of the end of the second lunar day in weekdays, nadi (chu tshod), pala (chu srang), breaths (dbugs) and fractional units. When a lunar day is omitted from the calendar there will be a "gza-dag" on one day such as 5;0,22,5,3 (very early in the morning) and on the next day figures such as 5;55,41,5,7 (very late, just before mean daybreak). Notice that the weekday value has not changed, and on the lower lines these will both register as the same day in the western calendar.
+
+If a lunar day is duplicated, there will be "gza-dag" figures such as 6;58,38,5,11 (late, just before daybreak) and 1;2,44,4,0 (very early in the morning) on the following day. The weekday figure has increased by two (it is calculated modulo 7), and the western date will also advance by two.
+
+The lines for "nyi-bar" (mean Sun) and "nyi-dag" (true Sun) give the mean and true longitudes of the Sun, calculated for the end of the lunar day. The decimal figures at the ends of these lines give these solar longitude values calculated in terms of degrees.
+
+The next line has the longitude of the Moon, calculated both at the end of the lunar day and at the start of the solar day, at daybreak. Next comes the general day factors - these are fractional units used to calculate data for the very end of the solar day. This is important in most traditions (not Tsurphu) for calculating planetary data. The same is true for the "Dragkang factor" - this is used to calculate the mean solar longitude at the end of the solar day.
+
+The next block contains planetary data for the five planets, in the format:
+
+MARS sgos zhag = 525 - 20;12,3,2,100 - myur: 19;37,33,2,26
+
+The planets are calculated using a count of solar days in their mean cycle from the beginning of the zodiac. The "sgos zhag" (particular or specific day) is this count of days. The next figures are the mean (heliocentric) longitude of the planet, and then the last figures (myur) are the apparent (geocentric) longitudes.
+
+Below the planetary data we have the following:
+
+SPYI ZHAG = 1099721. Julian day = 2455568. Western date = Thu, 6/1/2011
+
+Since version 1.06, this line has been changed to read:
+
+General day = 1099721. Julian day = 2455568. Western date = Thu, 6/1/2011
+
+This gives the Julian date starting at noon GMT for the solar day in question, followed by the western date, in dd/mm/yyyy format. The "spyi zhag" (general day) is the number of solar days since the selected epoch. (This information is crucial to the planetary calculations, and is also used to determine the western date.)
+
+The bottom line gives the following information:
+
+Julian tithi time, mean: 2455568.077196, true: 2455567.695051 
+
+The time for the lunar day (tithi) is the time for the very end of that lunar day in Julian days of Universal Time. So, as this example is for the second lunar day, the times given are for the end of that lunar day, the first value being for the mean lunar day, and the second the true lunar day. These values are important because this is the main timescale of the set of calculations for the whole calendar. The true lunar day is the one used in the calendar. To calculate these data a longitude of 91 degrees (that of Lhasa) has been assumed.
+
+The next selection on the main menu, "4. Run search test." runs a routine to search for particular values occuring in a calendar. For example, if you come across a reference to a text having been written on a certain lunar date, with a particular lunar mansion on a Wednesday, you can set this function to search for possible matches. This requires setting the search criteria in the source code - no generic search routine has been developed, and would probably not be worth the effort.
+
+By way of an example, the software is currently set to search for the Phugpa details of the time of the Buddha's enlightenment, as given in the "The Oral Instructions of Pundarika" (pad dkar zhal lung), by Norzang Gyatso (nor bzang rgya mtsho). He gives the following data:
+
+  Weekday: 1;38
+  Moon: 16;0 (true lunar day value)
+  Sun: 2;30
+  Rahu: 16;29
+
+If you select the Phugpa epoch, and then run the search routine, enter as the start date:
+
+0 1 -1000
+
+after a few minutes the software will find the data for the date Sunday 17 March 927 BCE. The next match is in 332 BCE, which is far too late. Pressing the "E" key exits the search routine; pressing any other key continues the search.
+
+The next selection, "F5. Calculate New Years." calculates a set of new year dates for a range of years, and stores the results in a text file (years.dat) on disk. As with the main calendar routine, you need to enter a start and finish year.
+
+The final selection (F9) of the main menu exits the program.
+
+The software is split into several main modules:
+
+T1.C - the main calendar and new year routines
+T2.C - the data for the different epochs and the main subroutines for the calendar
+T3.C - the routines for planetary calculations
+T4.C - the routines to print whole year calendars to disk
+BCD.C - binary coded decimal routines for very large integer arithmetic
+TESTS.C - search routines for finding particular calendar characteristics. Requires programming ability to use these functions.
+UTILS.C - various utility routines
+
+The source code contains a reasonable number of comments. In particular, comments labelled "KTC" give page number references to particular algorithms in the book "Kalacakra and the Tibetan Calendar".
+
+E Henning.
+
+Ends.

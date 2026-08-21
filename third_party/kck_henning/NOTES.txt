@@ -1,0 +1,99 @@
+KALACAKRA CALENDAR SOFTWARE USING TRADITIONAL CALCULATIONS WITH ACCURATE ASTRONOMY
+
+Version 1.03
+
+When the program starts, it is first necessary to select an epoch - using the number keys - for the basis of subsequent calculations. The list given is as follows:
+
+  1. Tantra Karana, 806 CE.
+  2. Shakya Shribhadra, 1206 CE.
+  3. Modern Karana, 2009 CE.
+  4. 
+
+At present, only these three epochs are available in the system, for the original tantra epoch of 23 March 806 CE, a later epoch from Shakya Shribhadra using adjusted data, and, for 24 February 2009. Calculations for dates before any of the epochs when set are not valid. 
+
+After making a selection, you come to the main menu, from which selections are made using the numeric keys:
+
+                              1. Set epoch.
+                              2. Print calendar.
+                              3. Calendar cycle.
+                              9. Finish.
+
+The first selection takes you back to the first screen to select a new epoch. 
+
+The second prints calendar information to a disk file, called eg. KC_2011.TXT. You need to enter a start and finish year for this. For the modern Karana, as the epoch is for the second month (nag pa, Caitra) in the year 2009, the only years for which valid calendars will be produced are 2010 onwards. Some of the data streams across the screen, but the results are only viewed properly using the file on disk.
+
+The third selection runs the main calendar cycle, printing on screen information for one day at a time. First you need to enter a three field number as the starting date for calculations. This needs the Tibetan "tshes", month number and western year. For example:
+
+3 8 2011
+
+would start calculations for the 3rd "tshes" in the 3rd Tibetan month of the year starting early in 2011. It is possible to enter something such as:
+
+0 2 2010
+
+This will calculate the data for the new Moon day at the beginning of the second month (nag pa) in the year 2010. This would be used as the epoch day if one is needed for 2010. Using this method the basic data for each month are displayed before additions for the lunar days.
+
+Once the daily information has been displayed, single key commands are used to display further information.
+
+  N/n - goes back to select a new start date.
+  E/e - restarts, and returns to the main menu.
+  T/t - adds 1 to the Tibetan lunar date, "tshes pa".
+  M/m - adds 1 to the month number.
+  Y/y - adds 1 to the year.
+  R/r - prints the current displayed information to file, in REPORT.DAT.
+  P/r - goes to the previous day.
+
+In the block of data for any date, the important data is at the top and the
+bottom of the block. The top three lines appear as follows:
+
+2. Modern Karana,  2009.
+
+The ZLA-DAG is: 5;0, Month = 7, Year = 2009
+DATE is: 2 / 7 / 2009 - Corrected Month = -7
+
+The first line indicates the chosen epoch. The next two lines indicate that the data is for the second lunar day (tshes, tithi) in the month calculated as the 7th month. In this instance the corrected month - the one used in actual calendars - has a negative value. This means that this is an intercalary month (zla lhag). There are two months numbered "seven" that year, and the second of these is called the delayed month (zla bshol).
+
+At the bottom of the block of data we have the following:
+
+SPYI ZHAG = 149. Julian day = 2455036. Western date = Thu, 23/7/2009
+
+This gives the Julian date starting at noon GMT for the solar day in question, followed by the western date, in dd/mm/yyyy format. The "spyi zhag" is the number of solar days since the selected epoch. (This information is crucial to the planetary calculations, and is also used to determine the western date.)
+
+The bottom line gives information such as:
+
+Julian tithi time, mean: 2455036.653981, true: 2455036.372650
+
+The time for the lunar day (tithi) is the time for the very end of that lunar day in Julian days of Universal Time. So, if one is checking the 30th of a month, this is for new Moon, and the time given is for exact new Moon. There are two values given here, the first is mean time of the end of the tithi. This is important because this is the main timescale of the set of calculations for the whole calendar. The true tithi is the one used in the calendar.
+
+The figures "gza-bar" and "gza-dag" give this same data in weekdays, "chu tshod", "chu srang", "dbugs" and fractional units. When a lunar day is omitted from the calendar you will get a "gza-dag" (true weekday) on one day such as 5;0,22,5,3 (very early in the morning) and on the next day figures such as 5;55,41,5,7 (very late, just before mean daybreak). Notice that the weekday value has not changed, and on the lower lines these will both register as the same day in the western calendar.
+
+If a lunar day is duplicated, you will get "gza-dag" figures such as 6;58,38,5,11 (late, just before daybreak) and 1;2,44,4,0 (very early on the morning) on the following day. The weekday figure has increased by two (it is calculated modulo 7), and the western date will also advance by two. 
+
+The final selection (F9) of the main menu exits the program.
+
+The epoch data used for the 2009 epoch are as follows:
+
+Epoch: Tuesday 24 February 2009. Julian day: 2454887
+
+True month:	m x 1;2 		+ 0;55 (1,65)
+Mean weekday:	M x 1;31,50 		+ 3;34,37
+Anomaly:	M x 2;1 		+ 4;73 (28,126)
+Mean Sun:	M x 2;10,58,2,10	+ 25;5,29,3,2 (13)
+General day:	27,54
+Mars:		586
+Jupiter:	3757
+Saturn:		4846
+Mercury:	6089
+Venus:		852
+Rahu:		122
+
+Birth signs are:
+
+Sun: 7;44
+Mercury: 19;19
+Venus: 23;23
+Mars: 11;43
+Jupiter: 14;35
+Saturn: 20;30
+
+Ends.
+

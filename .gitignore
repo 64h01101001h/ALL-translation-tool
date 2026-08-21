@@ -1,0 +1,33 @@
+# Build trees
+cmake-build/
+Testing/
+
+# Generated databases and release artifacts — reproducible from the HGM
+# data project's release packages (tools/build_spine.py, tools/build_reference_db.py)
+build/
+data/*.gz
+data/*.json
+data/*.tsv
+data/extracted/
+
+# The user's own data — never versioned
+progress.db
+progress.db-*
+library/
+analyses/
+
+# macOS noise
+.DS_Store
+~$*.docx
+editions/
+dist/
+cmake-build-release/
+
+# data corpora deliberately outside version control (large source
+# payloads; their DERIVED indexes are tracked): caption files, raw
+# research transcripts, scanned-dictionary PDFs, sanitizer build
+build-asan/
+data/teaching/*captions/
+data/research/gmr_cataloging/
+data/das/*.pdf
+data/teaching/teaching_moments.json
