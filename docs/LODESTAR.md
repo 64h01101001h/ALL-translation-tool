@@ -100,3 +100,24 @@ Prologue (gate DPR) ✓ · L2 excise ✓ (2 kills, 2 collapses queued to
 1.1, 3 justified) · L1 model ✓ · L4 laws ✓ · L5 voice ✓ · L3 personas
 ✓ — **L6 flagship: WAITING(Adam: pick — recommendation Translation
 Dossiers)**. The closing letter writes when L6 ships.
+
+## L6 — THE FLAGSHIP: TRANSLATION DOSSIERS (executing)
+**Brainstorm (condensed record).** Intent: a translator's working
+world for ONE text — source, position, draft, glossary, comments —
+resumable AS A UNIT. Norman: the object model users think in.
+Constraints: personal working state (LOCAL store, not the shared
+Dropbox — dossiers are a desk, not a record); never duplicates data
+(it POINTS at the text, the glossary, the comments that already
+exist); honest counts derived live.
+**Plan (v1 slice).**
+1. allcore::DossierStore — local TSV (library/dossiers.tsv): slug,
+   title, text path, cursor line, created, touched. TDD: battery
+   first.
+2. UI: File → Dossiers… — list (title · text · touched · live
+   glossary/comment counts), "New from current text" (captures the
+   Overlay's document + position), double-click = open-as-unit
+   (Overlay opens the text, restores the line, raises).
+3. Overlay position auto-touches the dossier on open/close.
+4. Acceptance (L3's student persona): open app → Dossiers →
+   double-click → reading exactly where they left off, glossary and
+   comments one click away. Verify + press.
