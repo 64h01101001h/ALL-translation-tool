@@ -30418,6 +30418,39 @@ int main(int argc, char** argv) {
             helpWin->openManual();
         });
 
+        // ---- L2 (shipwright): the licenses surface — one source
+        // of truth (OPEN_SOURCE_NOTICES.md), viewable in-app
+        QObject::connect(
+            helpMenu->addAction("Licenses && Data Sources\u2026"),
+            &QAction::triggered, [&win, root] {
+                QString path =
+                    root + "/docs/distribution/OPEN_SOURCE_NOTICES.md";
+                if (!QFileInfo::exists(path))
+                    path = QCoreApplication::applicationDirPath() +
+                           "/../../../OPEN_SOURCE_NOTICES.md";
+                QFile f(path);
+                QString md =
+                    f.open(QIODevice::ReadOnly)
+                        ? QString::fromUtf8(f.readAll())
+                        : QString("OPEN_SOURCE_NOTICES.md was not "
+                                  "found beside the app - it ships "
+                                  "on the install disk image.");
+                QDialog d(&win);
+                d.setWindowTitle("Licenses & data sources");
+                auto* v = new QVBoxLayout(&d);
+                auto* t = new QTextBrowser;
+                t->setMinimumSize(640, 460);
+                t->setMarkdown(md);
+                v->addWidget(t, 1);
+                auto* row = new QHBoxLayout;
+                row->addStretch();
+                auto* closeB = new QPushButton("Close");
+                QObject::connect(closeB, &QPushButton::clicked, &d,
+                                 &QDialog::accept);
+                row->addWidget(closeB);
+                v->addLayout(row);
+                d.exec();
+            });
         // ---- W4: the shortcut map — what the keyboard can do,
         // in one sheet (tooltips teach piecemeal; this teaches whole)
         QObject::connect(
@@ -32186,6 +32219,30 @@ int main(int argc, char** argv) {
                            .arg(clean ? "PASS" : "FAIL");
                 if (!clean) ++fails;
             }
+        }
+        {   // F4 (fidelity): tier arithmetic — the numbers the tool
+            // states about itself, recomputed from the loaded data
+            const int n = spine.entryCount();
+            const auto census = spine.tierCensus();
+            int sum = 0, hgm = 0;
+            for (const auto& [t, c] : census) {
+                sum += c;
+                if (t == "curated" || t == "glossary" ||
+                    t == "auto-aligned")
+                    hgm += c;
+            }
+            const int metaN = std::atoi(
+                spine.metaValue("n_entries").c_str());
+            bool ok = n > 0 && n == metaN && sum == n && hgm > 0;
+            // exact pin, version-gated: v27.2's populations are known
+            if (spine.metaValue("release_version") == "0.27.2")
+                ok = ok && n == 105634 && hgm == 12004;
+            log << QString("  [%1] F4 tier arithmetic: %2 entries "
+                           "(meta %3) · tiers sum %4 · HGM-glossed "
+                           "%5")
+                       .arg(ok ? "PASS" : "FAIL")
+                       .arg(n).arg(metaN).arg(sum).arg(hgm);
+            if (!ok) ++fails;
         }
         {   // F1 (fidelity): honesty invariants swept across a
             // stratified sample of the WHOLE dictionary — the card's

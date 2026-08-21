@@ -142,6 +142,36 @@ def main():
             "R6 proposals_smoke.cpp: the conflict drill must remove "
             "its conflicted-copy file at every entry point")
 
+    # L2 — no unmanifested payload: every runtime data dir the press
+    # stages must be credited in OPEN_SOURCE_NOTICES.md. Incident:
+    # reference.db and CC BY-NC models were shipping by habit.
+    notices = read(os.path.join(
+        root, "docs/distribution/OPEN_SOURCE_NOTICES.md")).lower()
+    staged = re.search(r"for d in ([a-z_ \\\n]+); do", press)
+    credit = {
+        "fonts": "ofl", "honorifics": "hgm", "pron_colloquial": "hgm",
+        "abbreviations": "abbreviation", "extracted": "84000",
+        "idioms": "hgm", "botok": "botok", "spellcheck": "spellchecker",
+        "soas_pos": "soas", "whitney": "whitney",
+        "candidate_alignments": "hgm",
+    }
+    if staged:
+        for d in staged.group(1).split():
+            if d == "\\":
+                continue
+            key = credit.get(d)
+            if key is None:
+                fails.append(
+                    f"L2 press stages data dir '{d}' with no entry in "
+                    f"the constitution's credit map - add the dir AND "
+                    f"its OPEN_SOURCE_NOTICES.md line")
+            elif key not in ("hgm",) and key not in notices:
+                fails.append(
+                    f"L2 staged dir '{d}' expects '{key}' credited in "
+                    f"OPEN_SOURCE_NOTICES.md - not found")
+    else:
+        fails.append("L2 could not locate the press's staged-dir list")
+
     # C2 — the press keeps its gates. A press that silently lost a
     # gate is a failed press.
     for gate, label in (("ctest", "battery gate"),

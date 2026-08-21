@@ -6,8 +6,8 @@ States: OPEN · CLOSED(date) · WAITING(who: what) · DEFERRED(stamp).
 |---|---|---|
 | 1 | D1 virgin-Mac first-contact drill: mounted-DMG run + drag-install run, findings filed (Shipwright) | CLOSED(2026-08-20) |
 | 2 | F1 honesty-invariant sweep at scale — provisional never unbadged, badges on every zone, true N-of-M, register warnings, machine labeling; permanent suite (Fidelity) | CLOSED(2026-08-20) |
-| 3 | F4 tier-arithmetic pins — populations recomputed from loaded data at selftest, About numbers can't lie (Fidelity) | OPEN |
-| 4 | L2 licenses surface — About/Licenses screen + DMG LICENSES file assembled FROM the manifest; constitution rule: no unmanifested data layer (Shipwright) | OPEN |
+| 3 | F4 tier-arithmetic pins — populations recomputed from loaded data at selftest, About numbers can't lie (Fidelity) | CLOSED(2026-08-20) |
+| 4 | L2 licenses surface — About/Licenses screen + DMG LICENSES file assembled FROM the manifest; constitution rule: no unmanifested data layer (Shipwright) | CLOSED(2026-08-20) |
 | 5 | S2 rolling backup of human-judgment stores + restore drill in battery; corruption quarantine (Stewardship) | OPEN |
 | 6 | F2 cross-engine coherence at dictionary scale, divergence classes banked (Fidelity) | OPEN |
 | 7 | D3 release script: VERSION+tag+CHANGELOG+RC naming move together; blessed baseline tagged per RC (Shipwright) | OPEN |
@@ -27,7 +27,7 @@ States: OPEN · CLOSED(date) · WAITING(who: what) · DEFERRED(stamp).
 | 21 | A2 authority sign-off on data-facing surfaces | WAITING(Adam/GMR: walkthrough) |
 | 22 | A3 input-center pilot, one week, ledger on | WAITING(Adam: name the pilot user) |
 | 23 | HGM/LC redistribution stance | WAITING(Adam: one written line) |
-| 24 | BDRC written permission or bless download-path | WAITING(Adam: contact BDRC or stamp) |
+| 24 | BDRC permission — banked note (2026-08-07) covers NON-COMMERCIAL free distribution and the WRITTEN email is still pending; verdict depends on whether v1.0 is sold or free | WAITING(Adam: (a) free or paid? (b) chase the written email) |
 | 25 | Teachings-index consent line | WAITING(Adam: one written line) |
 | 26 | SOAS POS terms | WAITING(Adam: locate terms; else MUST-REMOVE at market press) |
 | 27 | Apple Developer ID decision | WAITING(Adam: $99/yr call) |
@@ -51,3 +51,14 @@ States: OPEN · CLOSED(date) · WAITING(who: what) · DEFERRED(stamp).
   banner) — refined, then 4,592/4,592 clean. Battery is now 60 suites
   with the sweep inside app_selftest.
 **Burndown:** 17 open · 9 waiting · 2 deferred · 2 closed.
+- 2026-08-20 · **#3 F4 CLOSED.** Spine::entryCount()/tierCensus() +
+  selftest pin: 105,634 = meta = tier sum; curated 114 + glossary
+  7,980 + auto-aligned 3,910 = 12,004 HGM-glossed, exactly as claimed.
+  Consistency always asserted; exact numbers version-gated to v27.2.
+- 2026-08-20 · **#4 L2 CLOSED.** Help → Licenses & Data Sources…
+  renders OPEN_SOURCE_NOTICES.md in-app (already comprehensive — Qt
+  LGPL through CDSL); the constitution gained the unmanifested-payload
+  rule: a press-staged data dir without a credit-map + notices entry
+  fails the battery. #24 refined: BDRC's banked okay covers
+  NON-COMMERCIAL free distribution; written email still pending.
+**Burndown:** 15 open · 9 waiting · 2 deferred · 4 closed.

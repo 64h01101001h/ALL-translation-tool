@@ -7,6 +7,7 @@
 #pragma once
 
 #include <optional>
+#include <map>
 #include <string>
 #include <vector>
 
@@ -64,6 +65,9 @@ public:
     // Exact headword lookup; tries wylie, then wylie variants, then tibetan
     // (trailing tsheg/shad ignored), then ACIP.
     std::vector<Entry> lookup(const std::string& headword) const;
+    // F4 tier arithmetic: totals recomputed from the database
+    int entryCount() const;
+    std::map<std::string, int> tierCensus() const;
     // stratified whole-dictionary sample (F1 honesty sweep)
     std::vector<Entry> sampleEntries(int stride, int cap = 5000) const;
 

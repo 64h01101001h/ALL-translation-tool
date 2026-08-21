@@ -140,6 +140,21 @@ std::string Spine::metaValue(const std::string& key) const {
     return sqlite3_step(s.p) == SQLITE_ROW ? columnText(s.p, 0) : "";
 }
 
+// F4 (fidelity): tier arithmetic recomputed from the loaded data —
+// the About screen's numbers can never drift from the database
+int Spine::entryCount() const {
+    Stmt s(db_, "SELECT count(*) FROM entries");
+    return sqlite3_step(s.p) == SQLITE_ROW ? sqlite3_column_int(s.p, 0)
+                                           : -1;
+}
+std::map<std::string, int> Spine::tierCensus() const {
+    std::map<std::string, int> out;
+    Stmt s(db_, "SELECT tier, count(*) FROM entries GROUP BY tier");
+    while (sqlite3_step(s.p) == SQLITE_ROW)
+        out[columnText(s.p, 0)] = sqlite3_column_int(s.p, 1);
+    return out;
+}
+
 // F1 (fidelity): a stratified stride over the whole dictionary, so
 // honesty invariants can be swept at scale rather than spot-checked
 std::vector<Entry> Spine::sampleEntries(int stride, int cap) const {
