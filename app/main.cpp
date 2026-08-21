@@ -12270,11 +12270,23 @@ public:
         auto* row2 = new QHBoxLayout;
         row2->addStretch();
         auto* addB = new QPushButton("Add comment");
+        QLineEdit* nameInline = nullptr;
         if (g_userName.isEmpty()) {
+            // LODESTAR L2 (excise kill): the design pass disabled
+            // this button and sent the user to ANOTHER PANE to set a
+            // name — that trip is excise. Set it here, once.
             addB->setEnabled(false);
-            addB->setToolTip(
-                "Set your name once in Community > Propose - "
-                "comments carry provenance");
+            auto* idRow = new QHBoxLayout;
+            idRow->addWidget(new QLabel("your name (once):"));
+            nameInline = new QLineEdit;
+            nameInline->setPlaceholderText(
+                "carries provenance on every comment");
+            idRow->addWidget(nameInline, 1);
+            v->addLayout(idRow);
+            connect(nameInline, &QLineEdit::textChanged,
+                    [addB](const QString& t) {
+                        addB->setEnabled(!t.trimmed().isEmpty());
+                    });
         }
         auto* closeB = new QPushButton("Close");
         row2->addWidget(addB);
@@ -12283,7 +12295,15 @@ public:
         connect(closeB, &QPushButton::clicked, &d,
                 &QDialog::accept);
         connect(addB, &QPushButton::clicked,
-                [&store, &box, &refill, base, curLine, this] {
+                [&store, &box, &refill, base, curLine, nameInline,
+                 this] {
+                    if (nameInline &&
+                        !nameInline->text().trimmed().isEmpty() &&
+                        g_userName.isEmpty()) {
+                        g_userName = nameInline->text().trimmed();
+                        QSettings("ALL", "TranslationTool")
+                            .setValue("team/name", g_userName);
+                    }
                     const QString t =
                         box->toPlainText().trimmed();
                     if (t.isEmpty() || g_userName.isEmpty()) return;
