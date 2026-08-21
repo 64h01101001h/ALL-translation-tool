@@ -32506,6 +32506,78 @@ int main(int argc, char** argv) {
     ocrPane->restoreSession();
 #endif
     win.show();
+    // ---- W1 first-run welcome (Adam's ruling, 2026-08-20): the
+    // tool's first lesson is the tool doing its job on a real text.
+    // Once, dismissible, never again; harness runs never see it.
+    if (!g_harnessRun &&
+        !QSettings("ALL", "TranslationTool")
+             .value("ui/welcomed", false)
+             .toBool()) {
+        // the Overlay is empty on a true first run — load the
+        // Diamond Cutter opening so the first click teaches
+        const QString demo =
+            root + "/library/acip_release6/S0134I_inc_t.txt";
+        QFile df(demo);
+        if (df.open(QIODevice::ReadOnly)) {
+            QString excerpt = QString::fromUtf8(df.read(6000));
+            excerpt.remove(QRegularExpression("\\[[^\\]]*\\]"));
+            excerpt.remove(QRegularExpression("@#*[0-9A-Za-z.]*"));
+            excerpt.remove(QChar('('));
+            excerpt.remove(QChar(')'));
+            excerpt.truncate(excerpt.lastIndexOf('\n'));
+            QStringList clean;
+            for (const QString& ln : excerpt.split('\n')) {
+                bool ascii = !ln.trimmed().isEmpty() &&
+                             !ln.trimmed().startsWith('[');
+                for (QChar ch : ln) ascii &= ch.unicode() < 128;
+                if (ascii) clean << ln;
+            }
+            const QString tmp =
+                QDir::tempPath() + "/S0134I_welcome.txt";
+            QFile tf(tmp);
+            if (tf.open(QIODevice::WriteOnly |
+                        QIODevice::Truncate)) {
+                tf.write(clean.join('\n').toUtf8());
+                tf.close();
+                overlay->openFile(tmp);
+            }
+        }
+        auto* card = new QFrame(&win);
+        card->setObjectName("welcomeCard");
+        card->setStyleSheet(
+            "#welcomeCard { background:#FAF6EE; "
+            "border:2px solid #9A7A33; border-radius:10px; }"
+            "#welcomeCard QLabel { color:#2B2118; "
+            "font-size:14px; background:transparent; }"
+            "#welcomeCard QPushButton { color:#2B2118; "
+            "background:#F0E9DC; border:1px solid #9A7A33; "
+            "border-radius:5px; padding:4px 14px; }");
+        auto* cv = new QVBoxLayout(card);
+        cv->setContentsMargins(18, 14, 18, 12);
+        auto* msg = new QLabel(
+            "<b>This is the ALL Translation Tool.</b><br>"
+            "Click any Tibetan word to see the master's attested "
+            "English, the corpus evidence, and the recorded "
+            "teachings.<br>\u2318K searches everything. "
+            "Help \u2192 Tutorials walks every pane.");
+        msg->setWordWrap(true);
+        cv->addWidget(msg);
+        auto* dr = new QHBoxLayout;
+        dr->addStretch();
+        auto* dis = new QPushButton("Dismiss");
+        dr->addWidget(dis);
+        cv->addLayout(dr);
+        card->setFixedWidth(520);
+        card->adjustSize();
+        card->move((win.width() - card->width()) / 2, 96);
+        card->raise();
+        card->show();
+        QObject::connect(dis, &QPushButton::clicked, card, [card] {
+            QSettings("ALL", "TranslationTool")
+                .setValue("ui/welcomed", true);
+            card->deleteLater();
+        });
+    }
     const int pasteIx = cliArgs.indexOf("--pasteprobe");
     if (pasteIx >= 0 && pasteIx + 1 < cliArgs.size()) {
         for (auto* b : overlay->findChildren<QPushButton*>())

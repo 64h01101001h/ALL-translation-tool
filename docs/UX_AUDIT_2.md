@@ -253,3 +253,12 @@ All ten workstreams: fixed, ruled, or (W1 welcome) proposed-awaiting-
 ruling. §11 gate: in the press, baseline blessed. W10 ledger: live,
 opt-in. Walkthrough letter: docs/PHASE2_WALKTHROUGH.md + artifact.
 Phase 2 closes with this entry.
+
+## W1 — WELCOME SHIPPED (Adam's ruling: "ship the welcome", 2026-08-20)
+First launch only (ui/welcomed unset, never under harness): the Overlay
+opens with the demo excerpt loaded and the three-line dismissible card
+(gold border, paper ground; Dismiss styled explicitly so dark-mode
+chrome cannot wash it out). Verified live against a fresh-settings run
+with real data: card renders centered over the loaded text; one
+unclosed-bracket line leaked from the demo cleaner and the cleaner now
+drops bracket-opening lines. Dismiss writes ui/welcomed=true.
