@@ -2464,7 +2464,8 @@ static void dlgRemember(const QString& caption,
 static QString safeGetExistingDirectory(
     QWidget* parent, const QString& caption = QString(),
     const QString& dir = QString()) {
-    if (g_sweepActive) return QString();
+    if (g_harnessRun) return QString();   // GAUNTLET G1 first blood:
+    // sweep-only guard let native panels open under every OTHER harness
     const QString r = QFileDialog::getExistingDirectory(
         parent, caption, dlgStartDir(caption, dir));
     dlgRemember(caption, r);
@@ -2477,7 +2478,8 @@ static QString safeGetOpenFileName(
     QWidget* parent, const QString& caption = QString(),
     const QString& dir = QString(),
     const QString& filter = QString()) {
-    if (g_sweepActive) return QString();
+    if (g_harnessRun) return QString();   // GAUNTLET G1 first blood:
+    // sweep-only guard let native panels open under every OTHER harness
     const QString r = QFileDialog::getOpenFileName(
         parent, caption, dlgStartDir(caption, dir), filter);
     dlgRemember(caption, r);
@@ -2487,7 +2489,7 @@ static QStringList safeGetOpenFileNames(
     QWidget* parent, const QString& caption = QString(),
     const QString& dir = QString(),
     const QString& filter = QString()) {
-    if (g_sweepActive) return QStringList();
+    if (g_harnessRun) return QStringList();
     const QStringList r = QFileDialog::getOpenFileNames(
         parent, caption, dlgStartDir(caption, dir), filter);
     if (!r.isEmpty()) dlgRemember(caption, r.front());
@@ -2497,7 +2499,8 @@ static QString safeGetSaveFileName(
     QWidget* parent, const QString& caption = QString(),
     const QString& dir = QString(),
     const QString& filter = QString()) {
-    if (g_sweepActive) return QString();
+    if (g_harnessRun) return QString();   // GAUNTLET G1 first blood:
+    // sweep-only guard let native panels open under every OTHER harness
     const QString r = QFileDialog::getSaveFileName(
         parent, caption, dlgStartDir(caption, dir), filter);
     dlgRemember(caption, r);
@@ -29055,7 +29058,8 @@ int main(int argc, char** argv) {
                        early.contains("--pasteprobe") ||
                        early.contains("--sanskritcheck") ||
                        early.contains("--survey") ||
-                       early.contains("--teachbench");
+                       early.contains("--teachbench") ||
+                       early.contains("--gauntlet");
         g_sweepActive = early.contains("--sweep");
     }
     // Adam's ruling (2026-08-13): English renders in Palatino
@@ -33285,6 +33289,190 @@ int main(int argc, char** argv) {
                                      .toBool())
                                  lifeLog("pane: " + tabs.tabText(ix));
                          });
+    }
+    // ---- THE GAUNTLET, G1 (Engine 1.0.0): a deterministic random
+    // walk of REAL actions with invariants after every step. Every
+    // prior test performed one action; sequences are where the
+    // invisible bugs live. --gauntlet <seed> <steps>; exit 0 =
+    // survived, 3 = invariant violation (journal tail printed),
+    // death/hang = the runner counts the corpse.
+    const int gauntIx = cliArgs.indexOf("--gauntlet");
+    if (gauntIx >= 0 && gauntIx + 2 < cliArgs.size()) {
+        win.setFixedSize(1180, 760);
+        auto* rng = new std::mt19937(
+            cliArgs.at(gauntIx + 1).toUInt());
+        auto* stepN = new int(0);
+        const int stepsMax = cliArgs.at(gauntIx + 2).toInt();
+        auto* journal = new QStringList;
+        const int menus0 = win.menuBar()->actions().size();
+        const int tabs0 = tabs.count();
+        // buttons the monkey must never press for real (world-facing
+        // or destructive; dialogs are otherwise fair game — the
+        // modal-closer rejects them)
+        static const QStringList kDeny = {
+            "Terminal", "Connections", "Move", "Copy", "Trash",
+            "Sync folders", "Batch rename", "Choose", "Download",
+            "Reveal", "Open in", "Quit"};
+        auto denied = [](const QString& t) {
+            for (const auto& d : kDeny)
+                if (t.contains(d, Qt::CaseInsensitive)) return true;
+            return false;
+        };
+        auto* stepper = new QTimer(&win);
+        stepper->setInterval(15);
+        QObject::connect(stepper, &QTimer::timeout, &win, [&win,
+                                                           &tabs,
+                                                           rng, stepN,
+                                                           stepsMax,
+                                                           journal,
+                                                           menus0,
+                                                           tabs0,
+                                                           denied] {
+            // a modal opened by the last action gets ONE tick to be
+            // closed; a modal that survives its close is a finding
+            static long ticks = 0;
+            if ((++ticks % 100) == 0 &&
+                QCoreApplication::arguments().contains(
+                    "--gauntlet-verbose")) {
+                fprintf(stderr, "[heartbeat] tick=%ld step=%d\n",
+                        ticks, *stepN);
+                fflush(stderr);
+            }
+            if (QWidget* m = QApplication::activeModalWidget()) {
+                const QString cls = m->metaObject()->className();
+                journal->append("close-modal:" + cls);
+                if (QCoreApplication::arguments().contains(
+                        "--gauntlet-verbose")) {
+                    fprintf(stderr, "[modal] %s\n",
+                            cls.toUtf8().constData());
+                    fflush(stderr);
+                }
+                if (auto* dlg = qobject_cast<QDialog*>(m))
+                    dlg->reject();
+                else
+                    m->close();
+                QCoreApplication::processEvents();
+                if (QApplication::activeModalWidget() == m) {
+                    printf("GAUNTLET FAIL step %d: unclosable "
+                           "modal %s\n",
+                           *stepN, cls.toUtf8().constData());
+                    fflush(stdout);
+                    QApplication::exit(3);
+                }
+                return;
+            }
+            if (*stepN >= stepsMax) {
+                printf("GAUNTLET SURVIVED %d steps\n", *stepN);
+                fflush(stdout);
+                QApplication::exit(0);
+                return;
+            }
+            // invariants: the world keeps its shape
+            if (!win.isVisible() || tabs.count() != tabs0 ||
+                win.menuBar()->actions().size() != menus0) {
+                printf("GAUNTLET FAIL step %d: structure changed "
+                       "(visible=%d tabs=%d menus=%d)\n",
+                       *stepN, win.isVisible(), tabs.count(),
+                       (int)win.menuBar()->actions().size());
+                for (int i = std::max(0, (int)journal->size() - 15);
+                     i < journal->size(); ++i)
+                    printf("  %s\n",
+                           journal->at(i).toUtf8().constData());
+                fflush(stdout);
+                QApplication::exit(3);
+                return;
+            }
+            ++*stepN;
+            const int act = (int)((*rng)() % 100);
+            static const bool verbose =
+                QCoreApplication::arguments().contains(
+                    "--gauntlet-verbose");
+            auto note = [journal, stepN](const QString& what) {
+                journal->append(what);
+                if (verbose) {
+                    fprintf(stderr, "[g%04d] %s\n", *stepN,
+                            what.toUtf8().constData());
+                    fflush(stderr);
+                }
+            };
+            if (act < 20) {
+                const int g = (int)((*rng)() % tabs.count());
+                note(QString("group:%1").arg(g));
+                tabs.setCurrentIndex(g);
+            } else if (act < 35) {
+                auto* inner =
+                    tabs.currentWidget()
+                        ? tabs.currentWidget()
+                              ->findChild<QTabWidget*>()
+                        : nullptr;
+                if (inner && inner->count()) {
+                    const int p = (int)((*rng)() % inner->count());
+                    note(QString("pane:%1").arg(p));
+                    inner->setCurrentIndex(p);
+                }
+            } else if (act < 65) {
+                QList<QToolButton*> live;
+                for (QToolButton* t : ribbonProxies())
+                    if (t->isVisible() && t->isEnabled() &&
+                        !t->menu() && !denied(t->text()))
+                        live.append(t);
+                if (!live.isEmpty()) {
+                    auto* t =
+                        live[(int)((*rng)() % live.size())];
+                    note("tool:" + t->text());
+                    // deferred: a handler that opens a nested event
+                    // loop must never run ON the stepper's stack, or
+                    // the stepper can't beat to close its dialog
+                    QTimer::singleShot(0, t, [t] { t->click(); });
+                }
+            } else if (act < 78) {
+                QList<QCheckBox*> boxes;
+                if (auto* cur = tabs.currentWidget())
+                    for (auto* c : cur->findChildren<QCheckBox*>())
+                        if (c->isVisible() && c->isEnabled())
+                            boxes.append(c);
+                if (!boxes.isEmpty()) {
+                    auto* c =
+                        boxes[(int)((*rng)() % boxes.size())];
+                    note("toggle:" + c->text());
+                    QTimer::singleShot(0, c, [c] { c->click(); });
+                }
+            } else if (act < 90) {
+                static const QStringList kTexts = {
+                    "bsod nams", "BDEN PA", "sems can",
+                    "byang chub", "zzz not a word", ""};
+                QList<QLineEdit*> edits;
+                if (auto* cur = tabs.currentWidget())
+                    for (auto* e : cur->findChildren<QLineEdit*>())
+                        if (e->isVisible() && e->isEnabled())
+                            edits.append(e);
+                if (!edits.isEmpty()) {
+                    auto* e =
+                        edits[(int)((*rng)() % edits.size())];
+                    const QString& t =
+                        kTexts[(int)((*rng)() % kTexts.size())];
+                    note("type:" + t);
+                    e->setText(t);
+                    QTimer::singleShot(0, e, [e] {
+                        QMetaObject::invokeMethod(e,
+                                                  "returnPressed");
+                    });
+                }
+            } else {
+                if (QWidget* f = QApplication::focusWidget()) {
+                    note("escape");
+                    QApplication::postEvent(
+                        f, new QKeyEvent(QEvent::KeyPress,
+                                         Qt::Key_Escape,
+                                         Qt::NoModifier));
+                    QApplication::postEvent(
+                        f, new QKeyEvent(QEvent::KeyRelease,
+                                         Qt::Key_Escape,
+                                         Qt::NoModifier));
+                }
+            }
+        });
+        stepper->start();
     }
     return app.exec();
 }
