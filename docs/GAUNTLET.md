@@ -138,3 +138,13 @@ two tracks closed by genuine exhaustion with their telemetry banked.
 The RC that walks out of this gauntlet is the build that deserves the
 name 1.0.0 — pending only the nine human signatures that no engine
 can give.
+
+## LAP 2 (Adam re-armed the engine)
+The monkey's arsenal grew: random menu-bar actions (role-actions and
+deny-list excluded), LIVE window resizing across the allowed range
+(the G3 floor proven under motion, not just at rest), term lookups
+through the global seam, all still deferred and journaled. Shakedown
+seed 101×500 clean; fleet 102–107 × 1000 steps: **6/6 SURVIVED**.
+No new blood at this depth — lap 2 closes as deepened exhaustion, and
+the upgraded arsenal is permanent: every future gauntlet_walk carries
+menus, resizes, and lookups in its vocabulary.

@@ -33797,6 +33797,52 @@ int main(int argc, char** argv) {
                                                   "returnPressed");
                     });
                 }
+            } else if (act < 93) {
+                // lap 2: a random ENABLED menu action from the bar
+                // (submenus flattened one level; deny-list applies;
+                // role-actions like Quit are skipped)
+                QList<QAction*> acts;
+                for (QAction* top : win.menuBar()->actions()) {
+                    if (!top->menu()) continue;
+                    for (QAction* a : top->menu()->actions()) {
+                        if (a->menu() || a->isSeparator() ||
+                            !a->isEnabled())
+                            continue;
+                        if (a->menuRole() != QAction::NoRole &&
+                            a->menuRole() != QAction::TextHeuristicRole)
+                            continue;
+                        if (denied(a->text()) ||
+                            a->text().contains("Close"))
+                            continue;
+                        acts.append(a);
+                    }
+                }
+                if (!acts.isEmpty()) {
+                    QAction* a =
+                        acts[(int)((*rng)() % acts.size())];
+                    note("menu:" + a->text());
+                    QTimer::singleShot(0, a, [a] { a->trigger(); });
+                }
+            } else if (act < 96) {
+                // lap 2: live resize across the ALLOWED range — the
+                // G3 floor must hold under motion, not just at rest
+                static const QSize sizes[] = {
+                    {820, 560}, {1180, 760}, {1600, 1000}};
+                const QSize& sz = sizes[(int)((*rng)() % 3)];
+                note(QString("resize:%1x%2")
+                         .arg(sz.width())
+                         .arg(sz.height()));
+                win.setFixedSize(sz);
+            } else if (act < 98) {
+                // lap 2: a term lookup through the global seam
+                static const char* terms[] = {
+                    "bsod nams", "sems can", "chos", "sdug bsngal",
+                    "byang chub", "zzz"};
+                if (g_lookupQuery) {
+                    const char* t = terms[(int)((*rng)() % 6)];
+                    note(QString("lookup:%1").arg(t));
+                    g_lookupQuery(QString::fromUtf8(t));
+                }
             } else {
                 if (QWidget* f = QApplication::focusWidget()) {
                     note("escape");
