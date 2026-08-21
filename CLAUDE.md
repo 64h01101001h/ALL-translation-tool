@@ -81,3 +81,16 @@ every file reviewed before install). They govern how nontrivial work runs:
   **ln-41/ln-42 test planning** · **skill-creator/writing-skills** for
   minting house skills (candidates: the press ritual, the block-edit
   discipline, the constitution).
+
+**The design wing** (installed 2026-08-21, same vetting): **design-critique**
+(Nielsen + UX laws + IA + UX-writing review) · **nielsen-heuristics-audit** ·
+**don-norman-principles-audit** · **accessibility-audit** (WCAG 2.2) ·
+**interaction-design** · **design-systems** · **journey-mapping** ·
+**ux-designer** (encyclopedic references). Composition rules:
+- GUI-touching work opens with **brainstorming + design-critique**;
+  ships through **accessibility-audit + verification-before-completion**.
+- The Master UX Oversight governance (§63/§53) and the honesty rules
+  REMAIN SUPREME — these skills inform, Adam's rulings decide, and no
+  heuristic ever overrides a provenance/honesty label.
+- New surfaces get a heuristic pass BEFORE Adam sees them; findings
+  file into docs/FINDINGS.md with dispositions.
