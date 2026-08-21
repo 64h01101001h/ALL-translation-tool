@@ -367,6 +367,15 @@ struct EntryDisplay {
 // once in main(), consulted by every entry card in every pane
 using HonorificMap = std::map<std::string, std::array<QString, 3>>;
 static const HonorificMap* g_honorifics = nullptr;
+// G6-01 (gauntlet): rulings promised immediate in-app effect, but the
+// card read startup-snapshot maps. These handles + reloadApprovedLayers
+// make the promise true; defined after the loaders exist.
+static void reloadApprovedLayers();
+static QString g_registersRoot;   // set once at startup
+static HonorificMap* g_honorificsLive = nullptr;
+static std::map<std::string, std::string>* g_pronApprovedLive =
+    nullptr;
+static std::set<std::string>* g_spellingValidLive = nullptr;
 // people layer (design's next increments, 2026-08-14): the Library
 // pane owns the person data; these hooks let the Lookup card and the
 // Overlay badge answer from the same authority without a second load
@@ -2417,6 +2426,41 @@ static bool g_isAdmin = false;
 static QString g_proposalsDir;
 static bool g_identityPinned = false;   // screenshot mode: keep seeds
 static void loadIdentity();
+
+// G6-01: one function owns rebuilding every approved in-memory layer
+// from disk — called at startup and after EVERY ruling that
+// regenerates registers, so "applies immediately" is the truth
+static void reloadApprovedLayers() {
+    if (g_honorificsLive && !g_registersRoot.isEmpty())
+        *g_honorificsLive = loadHonorifics(
+            g_registersRoot +
+            "/data/honorifics/honorific_register.tsv");
+    if ((g_pronApprovedLive || g_spellingValidLive) &&
+        !g_proposalsDir.isEmpty()) {
+        allcore::ProposalStore st(g_proposalsDir.toStdString());
+        if (st.load()) {
+            if (g_pronApprovedLive) g_pronApprovedLive->clear();
+            if (g_spellingValidLive) g_spellingValidLive->clear();
+            for (const auto& p : st.all()) {
+                if (g_pronApprovedLive &&
+                    p.kind ==
+                        allcore::ProposalKind::Pronunciation &&
+                    p.status ==
+                        allcore::ProposalStatus::Approved &&
+                    !p.value.empty() && !p.wylie.empty()) {
+                    std::string key;
+                    for (char c : p.wylie)
+                        key += (char)std::tolower(c);
+                    (*g_pronApprovedLive)[key] = p.value;
+                }
+                if (g_spellingValidLive &&
+                    p.kind == allcore::ProposalKind::Spelling &&
+                    p.status == allcore::ProposalStatus::Declined)
+                    g_spellingValidLive->insert(p.wylie);
+            }
+        }
+    }
+}
 // Botok word boundaries as syllable counts (set once the Overlay's
 // segmenter is built) — lets other panes group syllables into words
 static std::function<std::vector<int>(const std::string&)>
@@ -24717,6 +24761,7 @@ private:
         if (touchesRegister)
             allcore::regenerateApprovedRegisters(
                 store, root_.toStdString());
+        reloadApprovedLayers();
         rebuild();
     }
 
@@ -24787,6 +24832,7 @@ private:
         store.save();
         allcore::regenerateApprovedRegisters(store,
                                              root_.toStdString());
+        reloadApprovedLayers();
         rebuild();
         QMessageBox::information(
             this, "Approve all",
@@ -24812,6 +24858,7 @@ private:
         store.load();
         const auto st = allcore::regenerateApprovedRegisters(
             store, root_.toStdString());
+        reloadApprovedLayers();
         QMessageBox::information(
             this, "Regenerate registers",
             QString("Approved layer re-folded from the rulings "
@@ -29462,9 +29509,12 @@ int main(int argc, char** argv) {
     };
     tabs.addTab(goferPane, "Search");
     tabs.addTab(makeConvertPane(mvp, whitney), "Convert");
-    static const HonorificMap honorifics = loadHonorifics(
+    g_registersRoot = root;
+    static HonorificMap honorificsLive;
+    honorificsLive = loadHonorifics(
         root + "/data/honorifics/honorific_register.tsv");
-    if (!honorifics.empty()) g_honorifics = &honorifics;
+    if (!honorificsLive.empty()) g_honorifics = &honorificsLive;
+    g_honorificsLive = &honorificsLive;
     static IdiomMap idioms;
     {
         QFile f(root + "/data/idioms/idioms.json");
@@ -29629,6 +29679,7 @@ int main(int argc, char** argv) {
                     spellingValid.insert(p.wylie);
     }
     g_spellingValid = &spellingValid;
+    g_spellingValidLive = &spellingValid;
     // the authority's APPROVED pronunciation rulings become a live
     // layer over the canonical engine (this is how the prenasal
     // register enters the spoken output: approve kamdir in the
@@ -29649,6 +29700,7 @@ int main(int argc, char** argv) {
                 }
     }
     g_pronApproved = &pronApproved;
+    g_pronApprovedLive = &pronApproved;
     // the ALL Working Glossary (AI-provisional tier)
     static AiGlossMap aiGlossary;
     {
@@ -32440,6 +32492,44 @@ int main(int argc, char** argv) {
                            .arg(clean ? "PASS" : "FAIL");
                 if (!clean) ++fails;
             }
+        }
+        {   // G6-01 (gauntlet): the ruling→card seam, proven LIVE —
+            // a pronunciation approved NOW reaches the in-memory
+            // layer NOW (the Approval banner's promise), not on
+            // relaunch (what the code did before the gauntlet)
+            const QString savedDir = g_proposalsDir;
+            const QString wd =
+                QDir::temp().filePath("all_seam_probe");
+            QDir().mkpath(wd);
+            QFile::remove(wd + "/proposals.tsv");
+            g_proposalsDir = wd;
+            {
+                allcore::ProposalStore st(wd.toStdString());
+                st.load();
+                const auto id = st.propose(
+                    allcore::ProposalKind::Pronunciation, "Seam",
+                    "gzhan don", "SHEN DON TEST", "",
+                    "seam probe", "2026-08-21");
+                st.rule(id, allcore::ProposalStatus::Approved,
+                        "Seam", "", "2026-08-21");
+                st.save();
+            }
+            reloadApprovedLayers();
+            const bool live =
+                g_pronApproved &&
+                g_pronApproved->count("gzhan don") &&
+                g_pronApproved->at("gzhan don") ==
+                    "SHEN DON TEST";
+            g_proposalsDir = savedDir;
+            reloadApprovedLayers();   // restore the real layers
+            const bool restored =
+                !g_pronApproved ||
+                !g_pronApproved->count("gzhan don");
+            QDir(wd).removeRecursively();
+            log << QString("  [%1] G6 seam: a ruling made NOW is "
+                           "live NOW (and cleanly restored)")
+                       .arg(live && restored ? "PASS" : "FAIL");
+            if (!(live && restored)) ++fails;
         }
         {   // T4 (quality): performance floors — what a user FEELS,
             // measured and pinned. Budgets are ~4x the observed

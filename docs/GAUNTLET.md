@@ -66,3 +66,23 @@ escapes), because a silent detector is worth nothing.
 - **The gate:** the inquisition now runs inside EVERY --screenshots
   sweep (exit 4 on violations) — so the press's visual step gained a
   second, wrongness-detecting eye for free, forever.
+
+## G6 — THE SEAM LEDGER (first blood + pin)
+The chains enumerated: ruling→card · glossary→draft (no such promise
+exists — verified) · comment→second machine (append-only union, store-
+drilled) · import→layers (honestly relaunch-noticed per layer) ·
+Propose-identity vs Catalog-login (two systems BY DESIGN — provenance
+vs roster perimeter, each documented) · Files-rename→open document
+(stale path is quiet and honest; session restore skips unreadable) ·
+search→lookup (W3-01) · ⌘D→popup.
+- **G6-01 · P1 · FIXED.** The heaviest promise in the app — register
+  rulings "apply in the app immediately" — was FALSE for
+  pronunciations, honorifics, and spelling declines: the card read
+  startup-snapshot maps; the startup comment even admitted "on next
+  launch" while the Approval banner promised "immediately."
+  reloadApprovedLayers() now owns rebuilding every approved in-memory
+  layer and runs after all three regenerate sites. PINNED in the
+  selftest: a pronunciation approved NOW is live NOW (and the probe
+  restores the real layers after itself). Invisible before: every
+  engine tested the ruling STORE and the card RENDER separately —
+  never the promise that spans them.
