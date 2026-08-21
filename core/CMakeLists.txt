@@ -368,6 +368,12 @@ add_executable(textdna_smoke tests/textdna_smoke.cpp)
 target_link_libraries(textdna_smoke PRIVATE allcore)
 add_test(NAME textdna_smoke COMMAND textdna_smoke)
 
+add_executable(forward_battery tests/forward_battery.cpp)
+target_link_libraries(forward_battery PRIVATE allcore)
+add_test(NAME forward_battery
+         COMMAND forward_battery
+                 ${CMAKE_SOURCE_DIR}/build/forward_reference.tsv)
+
 add_executable(backup_smoke tests/backup_smoke.cpp)
 target_link_libraries(backup_smoke PRIVATE allcore)
 add_test(NAME backup_smoke COMMAND backup_smoke)

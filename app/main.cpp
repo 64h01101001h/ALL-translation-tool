@@ -32245,6 +32245,35 @@ int main(int argc, char** argv) {
                 if (!clean) ++fails;
             }
         }
+        {   // F2 (fidelity): cross-engine coherence at dictionary
+            // scale — the ports must agree with the release's own
+            // generated fields (leg A: wylie→unicode where the
+            // release marked the unicode engine-generated; leg C:
+            // ACIP↔EWTS identity; the wylie↔unicode ROUND TRIP is
+            // suite towylie_battery's 109,490 fixtures)
+            const auto sample = spine.sampleEntries(11, 9700);
+            // leg A (wylie→unicode vs canonical python) lives in the
+            // forward_battery suite (35,211 fixtures, ratchet floor
+            // 99.95%) — the STORED generated rows carry v27-1 flag
+            // policy + release post-processing and are NOT the
+            // oracle. Here: leg C, ACIP↔EWTS identity (<2% known
+            // ambiguity classes tolerated).
+            int cTried = 0, cBad = 0;
+            for (const auto& e : sample) {
+                if (!e.acip.empty()) {
+                    ++cTried;
+                    if (allcore::acipToEwts(e.acip) != e.wylie)
+                        ++cBad;
+                }
+            }
+            const bool ok = cTried > 2000 && cBad * 50 < cTried;
+            log << QString("  [%1] F2 coherence: acip %2/%3 "
+                           "divergent (unicode leg: "
+                           "forward_battery)")
+                       .arg(ok ? "PASS" : "FAIL")
+                       .arg(cBad).arg(cTried);
+            if (!ok) ++fails;
+        }
         {   // F4 (fidelity): tier arithmetic — the numbers the tool
             // states about itself, recomputed from the loaded data
             const int n = spine.entryCount();

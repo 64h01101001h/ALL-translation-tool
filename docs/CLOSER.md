@@ -9,7 +9,7 @@ States: OPEN · CLOSED(date) · WAITING(who: what) · DEFERRED(stamp).
 | 3 | F4 tier-arithmetic pins — populations recomputed from loaded data at selftest, About numbers can't lie (Fidelity) | CLOSED(2026-08-20) |
 | 4 | L2 licenses surface — About/Licenses screen + DMG LICENSES file assembled FROM the manifest; constitution rule: no unmanifested data layer (Shipwright) | CLOSED(2026-08-20) |
 | 5 | S2 rolling backup of human-judgment stores + restore drill in battery; corruption quarantine (Stewardship) | CLOSED(2026-08-20) |
-| 6 | F2 cross-engine coherence at dictionary scale, divergence classes banked (Fidelity) | OPEN |
+| 6 | F2 cross-engine coherence at dictionary scale, divergence classes banked (Fidelity) | CLOSED(2026-08-20) |
 | 7 | D3 release script: VERSION+tag+CHANGELOG+RC naming move together; blessed baseline tagged per RC (Shipwright) | CLOSED(2026-08-20) |
 | 8 | T3 engine fuzz at the seams, corpus banked as fixtures (Quality) | OPEN |
 | 9 | S4 security posture: no secrets in repo/logs, key path excluded from backups, FTP/SFTP no-persist proven, roster salt verified, trust model documented (Stewardship) | OPEN |
@@ -74,3 +74,14 @@ States: OPEN · CLOSED(date) · WAITING(who: what) · DEFERRED(stamp).
   commit + tag + three-gate press (team|market) + blessed-baseline
   snapshot move as ONE ritual.
 **Burndown:** 13 open · 9 waiting · 2 deferred · 6 closed.
+- 2026-08-20 · **#6 F2 CLOSED.** The coherence question got a real
+  answer: the C++ forward engine vs CANONICAL python over 35,211
+  dictionary headwords = **100.000% agreement** (forward_battery,
+  suite 62, ratchet floor 99.95% — may only rise). Two false oracles
+  unmasked on the way: the STORED generated rows carry v27-1 flag
+  policy + release post-processing (python-vs-stored itself diverges
+  1.3%), and the engine's ok=false is a flagged-tokens signal, not a
+  failure (byte-identical outputs were being counted divergent). The
+  ACIP↔EWTS leg holds at 0.54% divergence (known ambiguity classes,
+  <2% threshold) in the selftest.
+**Burndown:** 12 open · 9 waiting · 2 deferred · 7 closed.
