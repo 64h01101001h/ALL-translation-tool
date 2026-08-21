@@ -22,6 +22,7 @@ add_library(allcore STATIC
   src/whitney.cpp
   src/colloquial.cpp
   src/backup.cpp
+  src/comments.cpp
   src/proposals.cpp
   src/regenreg.cpp
   src/tibcal_phugpa.cpp
@@ -377,6 +378,10 @@ add_test(NAME forward_battery
 add_executable(fuzz_smoke tests/fuzz_smoke.cpp)
 target_link_libraries(fuzz_smoke PRIVATE allcore)
 add_test(NAME fuzz_smoke COMMAND fuzz_smoke)
+
+add_executable(comments_smoke tests/comments_smoke.cpp)
+target_link_libraries(comments_smoke PRIVATE allcore)
+add_test(NAME comments_smoke COMMAND comments_smoke)
 
 add_executable(backup_smoke tests/backup_smoke.cpp)
 target_link_libraries(backup_smoke PRIVATE allcore)

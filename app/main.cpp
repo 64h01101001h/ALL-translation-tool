@@ -153,6 +153,7 @@
 #include "allcore/quotation.h"
 #include "allcore/spine.h"
 #include "allcore/backup.h"
+#include "allcore/comments.h"
 #include "allcore/tm84000.h"
 #include "allcore/textdna.h"
 #include "allcore/unicode_wylie.h"
@@ -2408,6 +2409,14 @@ static void remember(QPlainTextEdit* w, const QString& key,
 static std::function<void(const QString&, int)> g_openAtLine;
 // File menu → the Library pane's importer (T8; one code path)
 static std::function<void()> g_importRelease;
+// the in-house identity (provenance, not a login) — defined here so
+// the Overlay's team-comments dialog can reach it; established by
+// loadIdentity() (defined with the proposal channel below)
+static QString g_userName;
+static bool g_isAdmin = false;
+static QString g_proposalsDir;
+static bool g_identityPinned = false;   // screenshot mode: keep seeds
+static void loadIdentity();
 // Botok word boundaries as syllable counts (set once the Overlay's
 // segmenter is built) — lets other panes group syllables into words
 static std::function<std::vector<int>(const std::string&)>
@@ -4981,6 +4990,15 @@ public:
             "into the recorded classes, both by his English and by "
             "the spoken Tibetan. Machine-located candidates; the "
             "recordings are the authority.");
+        auto* commentsBtn = new QPushButton("Team comments\u2026");
+        commentsBtn->setToolTip(
+            "Read and leave comments on lines of THIS text — shared "
+            "with the whole team through the proposals folder. "
+            "Append-only: a comment, once made, is part of the "
+            "record (like the rulings).");
+        gReview->addBig(commentsBtn, "quote");
+        connect(commentsBtn, &QPushButton::clicked,
+                [this] { commentsDialog(); });
         gReview->addBig(teachBtn, "listen");
         connect(teachBtn, &QPushButton::clicked, [this] {
             if (doc_.tokens.empty()) {
@@ -12106,6 +12124,115 @@ private:
     allcore::Contractions contr_;
     bool contrTried_ = false;
     QString docFile_;
+
+public:
+    void scrollToLine(int line) {
+        if (!input_ || line < 1) return;
+        QTextCursor c(
+            input_->document()->findBlockByNumber(line - 1));
+        input_->setTextCursor(c);
+        input_->centerCursor();
+        input_->setFocus();
+    }
+
+    // 9n-6 team comments: the shared, append-only margin voice
+    void commentsDialog() {
+        loadIdentity();
+        if (g_proposalsDir.isEmpty()) {
+            QMessageBox::information(
+                this, "Team comments",
+                "Comments live in the shared proposals folder, "
+                "which is not set yet - choose it once in the "
+                "Community > Propose pane.");
+            return;
+        }
+        const QString base =
+            docFile_.isEmpty() ? "untitled"
+                               : QFileInfo(docFile_).fileName();
+        allcore::CommentStore store(
+            g_proposalsDir.toStdString());
+        store.load();
+        QDialog d(this);
+        d.setWindowTitle("Team comments - " + base);
+        auto* v = new QVBoxLayout(&d);
+        auto* list = new QTextBrowser;
+        list->setMinimumSize(560, 320);
+        list->setOpenLinks(false);
+        auto refill = [&list, &store, base] {
+            QString h;
+            const auto mine = store.byFile(base.toStdString());
+            if (mine.empty())
+                h = "<i>no comments on this text yet</i>";
+            for (const auto* c : mine)
+                h += QString("<div style='margin:6px 0'>"
+                             "<a href='line:%1'>line %1</a> "
+                             "<b>%2</b> <small style='color:%3'>"
+                             "%4</small><br>%5</div>")
+                         .arg(c->line)
+                         .arg(QString::fromStdString(c->author)
+                                  .toHtmlEscaped())
+                         .arg(ux::kFaint)
+                         .arg(QString::fromStdString(c->created)
+                                  .toHtmlEscaped())
+                         .arg(QString::fromStdString(c->text)
+                                  .toHtmlEscaped());
+            list->setHtml(h);
+        };
+        refill();
+        connect(list, &QTextBrowser::anchorClicked,
+                [this](const QUrl& u) {
+                    if (u.toString().startsWith("line:"))
+                        scrollToLine(
+                            u.toString().mid(5).toInt());
+                });
+        v->addWidget(list, 1);
+        const int curLine =
+            input_ ? input_->textCursor().blockNumber() + 1 : 1;
+        auto* row = new QHBoxLayout;
+        row->addWidget(new QLabel(
+            QString("comment on line %1 as %2:")
+                .arg(curLine)
+                .arg(g_userName.isEmpty() ? "(set your name in "
+                                            "Propose)"
+                                          : g_userName)));
+        v->addLayout(row);
+        auto* box = new QPlainTextEdit;
+        box->setMaximumHeight(70);
+        v->addWidget(box);
+        auto* row2 = new QHBoxLayout;
+        row2->addStretch();
+        auto* addB = new QPushButton("Add comment");
+        auto* closeB = new QPushButton("Close");
+        row2->addWidget(addB);
+        row2->addWidget(closeB);
+        v->addLayout(row2);
+        connect(closeB, &QPushButton::clicked, &d,
+                &QDialog::accept);
+        connect(addB, &QPushButton::clicked,
+                [&store, &box, &refill, base, curLine, this] {
+                    const QString t =
+                        box->toPlainText().trimmed();
+                    if (t.isEmpty() || g_userName.isEmpty()) return;
+                    if (!store.add(
+                            base.toStdString(), curLine,
+                            g_userName.toStdString(),
+                            t.toStdString(),
+                            QDateTime::currentDateTime()
+                                .toString("yyyy-MM-ddTHH:mm")
+                                .toStdString())) {
+                        QMessageBox::warning(
+                            this, "Team comments",
+                            "The comment could not be written - "
+                            "check the shared folder.");
+                        return;
+                    }
+                    box->clear();
+                    refill();
+                });
+        d.exec();
+    }
+
+private:
     bool docIsWylie_ = false;
     QString selfTestRoot_;
     int formatGen_ = 0;
@@ -23865,10 +23992,8 @@ static QString findDataRoot() {
 // set after the pane groups are built; raises any pane through the
 // two-level navigation
 
-static QString g_userName;
-static bool g_isAdmin = false;
-static QString g_proposalsDir;
-static bool g_identityPinned = false;   // screenshot mode: keep seeds
+// (definitions moved above OverlayPane - the comments dialog needs
+// them; see the g_openAtLine block)
 
 static QString isoToday() {
     return QDateTime::currentDateTime().toString("yyyy-MM-dd");
@@ -29468,10 +29593,14 @@ int main(int argc, char** argv) {
             QDateTime::currentDateTime()
                 .toString("yyyy-MM-dd-HHmmss")
                 .toStdString();
-        if (!g_proposalsDir.isEmpty())
+        if (!g_proposalsDir.isEmpty()) {
             allcore::backupFile(
                 (g_proposalsDir + "/proposals.tsv").toStdString(),
                 bdir.toStdString(), stamp, 14);
+            allcore::backupFile(
+                (g_proposalsDir + "/comments.tsv").toStdString(),
+                bdir.toStdString(), stamp, 14);
+        }
         const QString official =
             sess::path("catalog/officialRoot");
         if (!official.isEmpty())

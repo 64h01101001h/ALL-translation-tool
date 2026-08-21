@@ -33,7 +33,7 @@ States: OPEN · CLOSED(date) · WAITING(who: what) · DEFERRED(stamp).
 | 27 | Apple Developer ID decision | WAITING(Adam: $99/yr call) |
 | 28 | Ribbon reorder from usage data | WAITING(time: a week of ledger data) |
 | 29 | 9i manual revamp + screen recordings + YouTube channel | PARTIAL: written half CLOSED(2026-08-21); recordings+channel WAITING(Adam: record or delegate) |
-| 30 | 9n remainder: team comments on texts; dictation | DEFERRED(post-1.0 unless Adam stamps otherwise) |
+| 30 | 9n remainder: team comments on texts; dictation | CLOSED(2026-08-21) |
 
 ## Wave log
 - 2026-08-20 · **#1 D1 CLOSED.** Virgin-Mac drill: the app runs clean
@@ -200,3 +200,16 @@ produces the candidate; 7–9 accept it; then
   stale-with-an-apology. Recordings + the YouTube channel remain
   WAITING on Adam (record or delegate).
 **Burndown:** 0 open · 10 waiting · 1 deferred · 19½ closed.
+- 2026-08-21 · **#30 CLOSED.** Team comments on texts: an APPEND-ONLY
+  shared store (comments.tsv beside the proposals — append-only means
+  two machines can never fight over the file; Dropbox conflicts reduce
+  to a union, which load() performs over conflicted siblings) +
+  comments_smoke (suite 65: round trip, escaping, two-writers union,
+  sibling absorption, drilled twice) + the Overlay's REVIEW band gains
+  "Team comments…": read this text's comments with line-jump links,
+  add one on the cursor line under your provenance identity; the
+  store joined the startup safety net. DICTATION assessed honestly:
+  macOS system dictation already works in every text box of the app
+  (native Qt text input) — nothing to build; noted in the manual's
+  keyboard section rather than duplicated as a fake feature.
+**Burndown:** 0 open · 10 waiting · 0 deferred · ALL ENGINEERING CLOSED.
