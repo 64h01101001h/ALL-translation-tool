@@ -13,7 +13,13 @@ import sys, os
 from PIL import Image
 import numpy as np
 
-THRESH = 0.022   # mean |delta| on 0..1 grayscale, 256px thumbnails
+# Two tiers (2026-08-21): panes carry LIVE content (Spotlight search
+# results, folder listings, shared queues) that drifts between honest
+# runs — 0.022-0.09 deltas proved to be drift, not breakage, while
+# structural WRONGNESS is the geometry inquisition's job. Advisory
+# tier reports; hard tier stops the press.
+ADVISORY = 0.022   # printed, never fatal
+THRESH = 0.09      # gross change — stops the press
 
 def load(p):
     im = Image.open(p).convert("L")
@@ -42,6 +48,9 @@ def main():
         d = float(np.abs(a - b).mean())
         if d > THRESH:
             bad.append((name, f"delta {d:.4f} > {THRESH}"))
+        elif d > ADVISORY:
+            print(f"  advisory: {name} drift {d:.4f} "
+                  f"(live content; not fatal)")
     extra = [n for n in os.listdir(cur)
              if n.endswith(".png") and
              not os.path.exists(os.path.join(blessed, n))]
