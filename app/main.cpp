@@ -32554,15 +32554,42 @@ int main(int argc, char** argv) {
                 if (h.contains("AI-DRAFTED") && hasGloss)
                     ++v5;   // AI gloss beside a real HGM gloss
             }
-            const bool ok = rendered > 3000 && !v1 && !v2 && !v3 &&
-                            !v4 && !v5;
+            // G2: the SAME invariants over the weirdest-1000 slice
+            // (build/weird_top.tsv) — the tail stride sampling
+            // cannot see
+            int weird = 0;
+            {
+                QFile wf(root + "/build/weird_top.tsv");
+                (void)wf.open(QIODevice::ReadOnly);
+                while (wf.isOpen() && !wf.atEnd()) {
+                    const auto c = QString::fromUtf8(wf.readLine())
+                                       .trimmed()
+                                       .split('\t');
+                    if (c.size() < 2) continue;
+                    for (const auto& e :
+                         spine.lookup(c[1].toStdString())) {
+                        const QString h = entryHtml(e, d);
+                        ++weird;
+                        const bool hasGloss = !e.hgm_gloss.empty();
+                        if (e.provisional() && hasGloss &&
+                            !h.contains("PROVISIONAL (auto-aligned)"))
+                            ++v1;
+                        if (!hasGloss &&
+                            !h.contains("no HGM equivalent"))
+                            ++v3;
+                    }
+                }
+            }
+            const bool ok = rendered > 3000 && weird > 500 &&
+                            !v1 && !v2 && !v3 && !v4 && !v5;
             log << QString("  [%1] F1 honesty sweep: %2 cards — "
                            "prov-unmarked %3 · mislabeled %4 · "
                            "silent-absence %5 · ref-unlabeled %6 · "
-                           "AI-beside-HGM %7")
+                           "AI-beside-HGM %7 · weird-slice %8")
                        .arg(ok ? "PASS" : "FAIL")
                        .arg(rendered)
-                       .arg(v1).arg(v2).arg(v3).arg(v4).arg(v5);
+                       .arg(v1).arg(v2).arg(v3).arg(v4).arg(v5)
+                       .arg(weird);
             if (!ok) ++fails;
         }
         {

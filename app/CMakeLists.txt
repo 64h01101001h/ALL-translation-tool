@@ -70,5 +70,11 @@ add_test(NAME font_smoke
 
 # suite 38: the app's own pane-level selftest (docs/TEST_PLAN.md)
 add_test(NAME app_selftest COMMAND ALLTranslationTool --selftest)
+# G1 fossil: the monkey's canonical walk — seed 1, 300 steps, the walk
+# that drew first blood (unguarded native panels) now guards forever
+add_test(NAME gauntlet_walk
+         COMMAND ALLTranslationTool --gauntlet 1 300)
+set_tests_properties(gauntlet_walk PROPERTIES
+  ENVIRONMENT "QT_QPA_PLATFORM=offscreen" TIMEOUT 420)
 set_tests_properties(app_selftest PROPERTIES
   ENVIRONMENT "QT_QPA_PLATFORM=offscreen" TIMEOUT 300)

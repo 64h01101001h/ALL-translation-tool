@@ -375,6 +375,12 @@ add_test(NAME forward_battery
          COMMAND forward_battery
                  ${CMAKE_SOURCE_DIR}/build/forward_reference.tsv)
 
+add_executable(weird_battery tests/weird_battery.cpp)
+target_link_libraries(weird_battery PRIVATE allcore)
+add_test(NAME weird_battery
+         COMMAND weird_battery
+                 ${CMAKE_SOURCE_DIR}/build/weird_top.tsv)
+
 add_executable(fuzz_smoke tests/fuzz_smoke.cpp)
 target_link_libraries(fuzz_smoke PRIVATE allcore)
 add_test(NAME fuzz_smoke COMMAND fuzz_smoke)

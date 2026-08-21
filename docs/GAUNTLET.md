@@ -28,3 +28,24 @@ lines + 100-tick heartbeats + modal closes).
   telemetry. Actions are now deferred via singleShot(0) so the
   stepper always beats and can close what opens. Seed 1 × 300 now
   survives with four modal opens/closes on record.
+
+### Fleet telemetry + fossil
+Seeds 2–11 × 300 steps: **10/10 survived** post-fix. gauntlet_walk
+(seed 1 × 300, offscreen, suite 67) is now a permanent battery member —
+the walk that drew first blood guards forever.
+
+## G2 — THE WEIRDNESS PERCENTILE (closed by exhaustion-with-telemetry)
+tools/weirdness_rank.py scores all 105,634 entries (length extremes,
+stack depth, out-of-block codepoints, ASCII-in-Tibetan, control chars,
+flag density, empty-field patterns); 8,607 nonzero, top 1,000 banked
+(build/weird_top.tsv; champion: a 140-char multi-variant monster with
+22 inline markers). Two permanent proofs over the tail:
+- **weird_battery (suite 66):** every converter over all 1,000 —
+  0 failures, 983 honestly flagged (the ⟨⟩ grammar doing its job on
+  editorial-marker rows), all outputs bounded.
+- **The card sweep:** the F1 honesty invariants now ALSO run over the
+  weird slice inside app_selftest ("weird-slice 1000") — provisional
+  marking and honest absence hold at the tail, not just the stride.
+No blood: the tail was already survivable — now it's PINNED
+survivable. Closed as exhaustion with telemetry: the method ran at
+full depth and left two permanent suites behind.
