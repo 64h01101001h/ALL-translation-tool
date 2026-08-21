@@ -7,7 +7,10 @@ ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 APP="$ROOT/cmake-build-release/app/ALLTranslationTool.app/Contents/MacOS/ALLTranslationTool"
 BLESSED="$ROOT/build/blessed_shots"
 TMP="$(mktemp -d)"
-"$APP" --screenshots "$TMP" >/dev/null 2>&1
+# DPR-pinned: on-screen rendering follows the CURRENT display's
+# scale factor — a dock/undock changed every pixel and fired the gate
+# (found 2026-08-21). Offscreen = deterministic DPR 1, everywhere.
+QT_QPA_PLATFORM=offscreen "$APP" --screenshots "$TMP" >/dev/null 2>&1
 mkdir -p "$BLESSED"
 rm -f "$BLESSED"/*.png
 cp "$TMP"/*.png "$BLESSED/"
