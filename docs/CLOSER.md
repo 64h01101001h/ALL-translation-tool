@@ -11,8 +11,8 @@ States: OPEN · CLOSED(date) · WAITING(who: what) · DEFERRED(stamp).
 | 5 | S2 rolling backup of human-judgment stores + restore drill in battery; corruption quarantine (Stewardship) | CLOSED(2026-08-20) |
 | 6 | F2 cross-engine coherence at dictionary scale, divergence classes banked (Fidelity) | CLOSED(2026-08-20) |
 | 7 | D3 release script: VERSION+tag+CHANGELOG+RC naming move together; blessed baseline tagged per RC (Shipwright) | CLOSED(2026-08-20) |
-| 8 | T3 engine fuzz at the seams, corpus banked as fixtures (Quality) | OPEN |
-| 9 | S4 security posture: no secrets in repo/logs, key path excluded from backups, FTP/SFTP no-persist proven, roster salt verified, trust model documented (Stewardship) | OPEN |
+| 8 | T3 engine fuzz at the seams, corpus banked as fixtures (Quality) | CLOSED(2026-08-20) |
+| 9 | S4 security posture: no secrets in repo/logs, key path excluded from backups, FTP/SFTP no-persist proven, roster salt verified, trust model documented (Stewardship) | CLOSED(2026-08-20) |
 | 10 | D2 signing/notarization pipeline in the press, skip-with-notice until identity exists (Shipwright) | OPEN |
 | 11 | T7 chrome pins for every P0-capable path (save/export/import/rulings/propagation) (Quality) | OPEN |
 | 12 | T4 perf floors measured + pinned (cold start, big doc, query fan-out, index build) (Quality) | OPEN |
@@ -85,3 +85,20 @@ States: OPEN · CLOSED(date) · WAITING(who: what) · DEFERRED(stamp).
   ACIP↔EWTS leg holds at 0.54% divergence (known ambiguity classes,
   <2% threshold) in the selftest.
 **Burndown:** 12 open · 9 waiting · 2 deferred · 7 closed.
+- 2026-08-20 · **#8 T3 CLOSED.** fuzz_smoke (suite 63): 20,000
+  deterministic mutants (splices, stack pileups, orphan-plus walls,
+  control/high bytes, truncated UTF-8, repetition blowups) through all
+  four converters — every one returned, bounded, in 1.6 s. Promoted
+  fixtures pin the risky shapes forever. Fixed seed: any failure
+  reproduces exactly.
+- 2026-08-20 · **#9 S4 CLOSED.** The trust model, verified and stated:
+  the perimeter is the shared folder (the roster's own words —
+  "access discipline, not cryptography"). Checks all clean: zero
+  secrets in tracked files; FTP/SFTP passwords asked per session and
+  NEVER written to settings (grep-proven); the API key lives in env or
+  Application Support (harness runs always see an empty key; backups
+  copy only the two judgment stores, never the key file); roster
+  passphrases stored as SHA-256(salt:pass) with a per-member salt.
+  Known bound, stated honestly: SHA-256 is not a slow KDF — adequate
+  for the shared-folder perimeter, not for a hostile-network one.
+**Burndown:** 10 open · 9 waiting · 2 deferred · 9 closed.
