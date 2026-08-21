@@ -61,3 +61,23 @@ screen state is NOT saved; harness runs log instead of blocking.
 SILENT-ACTION queue (next wave): 4525 OverlayPane::openFile ·
 28406 translator survey · 22511 InputPane::compare · 21297 importHyp ·
 21093 AlignPane::openFile · 19699 downloadAndInstall.
+
+## W9 — STATE, UNDO, AND THE COST OF A MISTAKE (reconnaissance)
+Verified-good: deletes route through QFile::moveToTrash (recoverable) in
+both Files idioms; batch rename has full preview; sync folders previews
+and never deletes; native save dialogs confirm overwrite; register
+rulings append-only (QIODevice::Append).
+
+### Findings
+- **W9-01 · P2.** F8 (Commander keys) trashes the whole multi-selection
+  with no count confirmation — Total Commander itself confirms F8. Fix:
+  "Move N items to Trash?" when N>1 (single item stays instant, Finder
+  parity).
+- **W9-02 · P2.** "Add to my materials" silently QFile::remove()s an
+  existing same-named file before copying (main.cpp ~19801). A second
+  import of a revised file clobbers the first without a word. Fix:
+  keep-both suffixing or an ask.
+- **W9-03 · P1.** Data-release import does remove(dst) THEN copy(src) —
+  if the copy fails (disk full, network drive), the OLD release file is
+  already destroyed: an update attempt can delete the working release.
+  Fix: copy to dst+".tmp~" then atomic rename over dst.
