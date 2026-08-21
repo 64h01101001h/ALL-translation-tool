@@ -2314,6 +2314,30 @@ static void warnOpenFail(QWidget* parent, const QFile& f,
     QMessageBox::warning(parent, "Open failed", msg);
 }
 
+namespace usage {
+inline bool on() {
+    return !g_harnessRun &&
+           QSettings("ALL", "TranslationTool")
+               .value("ui/usageLedger", false)
+               .toBool();
+}
+inline QString path() {
+    return QStandardPaths::writableLocation(
+               QStandardPaths::AppDataLocation) +
+           "/usage_ledger.tsv";
+}
+inline void tick(const char* kind, const QString& name) {
+    if (!on() || name.isEmpty()) return;
+    QDir().mkpath(QFileInfo(path()).path());
+    QFile f(path());
+    if (!f.open(QIODevice::Append | QIODevice::Text)) return;
+    QTextStream ts(&f);
+    ts << QDate::currentDate().toString(Qt::ISODate) << '\t' << kind
+       << '\t' << name << '\n';
+}
+}  // namespace usage
+
+
 namespace sess {
 
 
@@ -3175,8 +3199,10 @@ public:
             setMenu(tb->menu());
             setPopupMode(QToolButton::InstantPopup);
         } else {
-            connect(this, &QToolButton::clicked, src,
-                    [src] { src->click(); });
+            connect(this, &QToolButton::clicked, src, [src] {
+                usage::tick("action", src->text());
+                src->click();
+            });
         }
         if (src->isCheckable()) {
             setCheckable(true);
@@ -29784,7 +29810,10 @@ int main(int argc, char** argv) {
         };
         auto notePane = [currentPaneName] {
             const QString n = currentPaneName();
-            if (!n.isEmpty()) sess::put("ui/pane", n);
+            if (!n.isEmpty()) {
+                sess::put("ui/pane", n);
+                usage::tick("pane", n);
+            }
         };
         QObject::connect(&tabs, &QTabWidget::currentChanged,
                          [notePane](int) { notePane(); });
@@ -30338,6 +30367,88 @@ int main(int argc, char** argv) {
             helpWin->openManual();
         });
 
+        // ---- W10: the usage ledger — opt-in, this Mac only ----
+        QObject::connect(
+            helpMenu->addAction("Usage Ledger\u2026"),
+            &QAction::triggered, [&win] {
+                QDialog d(&win);
+                d.setWindowTitle("Usage ledger");
+                auto* v = new QVBoxLayout(&d);
+                auto* onT = new QCheckBox(
+                    "Count pane visits and band-tool clicks");
+                onT->setChecked(QSettings("ALL", "TranslationTool")
+                                    .value("ui/usageLedger", false)
+                                    .toBool());
+                v->addWidget(onT);
+                auto* note = new QLabel(
+                    "A plain TSV on this Mac only (date \u00b7 kind "
+                    "\u00b7 name). Never transmitted anywhere. Its "
+                    "one purpose: order the ribbon and the manual by "
+                    "how the tool is ACTUALLY used instead of by "
+                    "guess.");
+                note->setWordWrap(true);
+                note->setStyleSheet(
+                    QString("color:%1;font-size:12px")
+                        .arg(ux::chromeMuted()));
+                v->addWidget(note);
+                QObject::connect(
+                    onT, &QCheckBox::toggled, [](bool on) {
+                        QSettings("ALL", "TranslationTool")
+                            .setValue("ui/usageLedger", on);
+                    });
+                auto* view = new QTextBrowser;
+                view->setMinimumSize(420, 260);
+                {
+                    QMap<QString, int> counts;
+                    QFile f(usage::path());
+                    if (f.open(QIODevice::ReadOnly | QIODevice::Text))
+                        while (!f.atEnd()) {
+                            const auto c =
+                                QString::fromUtf8(f.readLine())
+                                    .trimmed()
+                                    .split('\t');
+                            if (c.size() == 3)
+                                ++counts[c[1] + " \u00b7 " + c[2]];
+                        }
+                    QString h;
+                    if (counts.isEmpty())
+                        h = "<i>nothing counted yet" +
+                            QString(usage::on()
+                                        ? ""
+                                        : " \u2014 counting is off") +
+                            "</i>";
+                    else {
+                        QVector<QPair<int, QString>> rows;
+                        for (auto it = counts.begin();
+                             it != counts.end(); ++it)
+                            rows.append({it.value(), it.key()});
+                        std::sort(rows.begin(), rows.end(),
+                                  [](auto& a, auto& b) {
+                                      return a.first > b.first;
+                                  });
+                        for (const auto& r : rows)
+                            h += QString("%1 \u00d7 %2<br>")
+                                     .arg(r.first)
+                                     .arg(r.second.toHtmlEscaped());
+                    }
+                    view->setHtml(h);
+                }
+                v->addWidget(view, 1);
+                auto* row = new QHBoxLayout;
+                auto* reveal = new QPushButton("Reveal file");
+                QObject::connect(reveal, &QPushButton::clicked, [] {
+                    QProcess::startDetached(
+                        "/usr/bin/open", {"-R", usage::path()});
+                });
+                auto* closeB = new QPushButton("Close");
+                QObject::connect(closeB, &QPushButton::clicked, &d,
+                                 &QDialog::accept);
+                row->addWidget(reveal);
+                row->addStretch();
+                row->addWidget(closeB);
+                v->addLayout(row);
+                d.exec();
+            });
         // ---- Troubleshooting (Adam, 2026-08-12, modeled on the
         // Claude desktop app's Help menu he liked): everything a
         // tester needs to file a useful finding in one click.
@@ -32374,6 +32485,9 @@ int main(int argc, char** argv) {
     if (shotMode) {
         const QString outDir = cliArgs.at(shotIx + 1);
         QDir().mkpath(outDir);
+        // s11 determinism: a pane whose minimums exceed the window
+        // must not grow it mid-sweep and reflow every later capture
+        win.setFixedSize(1180, 760);
         // open a real text in the Overlay so the flagship pane shows
         // its shading, not an empty editor (the Diamond Cutter)
         // Only the first screenful is visible in a capture, and the

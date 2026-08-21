@@ -41,6 +41,12 @@ fi
 APP="$BUILD/app/ALLTranslationTool.app"
 [[ -d "$APP" ]] || { echo "app bundle missing: $APP"; exit 1; }
 
+echo "== 2b. visual-regression gate (Phase-2 audit s11) =="
+SHOTS_TMP="$(mktemp -d)"
+"$APP/Contents/MacOS/ALLTranslationTool" --screenshots "$SHOTS_TMP" >/dev/null 2>&1 || true
+python3 "$ROOT/tools/shot_diff.py" "$ROOT/build/blessed_shots" "$SHOTS_TMP" || {
+  echo "VISUAL REGRESSION - press stopped. Re-bless only if the change is intentional."; exit 7; }
+
 echo "== 3. staging =="
 rm -rf "$STAGE"
 mkdir -p "$STAGE"

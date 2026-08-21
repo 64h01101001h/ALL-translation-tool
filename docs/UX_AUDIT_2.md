@@ -186,3 +186,20 @@ One concept, one word — as the UI actually speaks, now ruled:
   "recoverable", previews before destructive syncs. HOLDS.
 No renames shipped: the audit found register variation, not concept
 collision — renames would churn honesty wording for zero clarity gain.
+
+## W10 — THE USAGE LEDGER (built 2026-08-20)
+Opt-in (default OFF), local-only, never transmitted: date·kind·name TSV
+in Application Support. Hooks: every pane raise (notePane) and every
+band-action click (RibbonProxy). Help → Usage Ledger…: the opt-in
+toggle, the aggregated counts ranked, Reveal file. Harness runs never
+tick. The H3 re-derivation from real data waits for a week of use.
+
+## §11 — VISUAL-REGRESSION GATE (built 2026-08-20)
+tools/shot_diff.py (perceptual: 256px grayscale mean-|delta|, threshold
+0.022) + tools/bless_shots.sh (explicit, logged blessing) + press step
+2b (exit 7 on unexplained change). The gate found its first bug BEFORE
+guarding anything: the sweep was non-deterministic — a pane whose
+minimum sizes exceeded the window grew it MID-SWEEP and reflowed every
+later capture (and async settles differ run-to-run at loose sizes).
+Fixed: the sweep pins the window at 1180x760. Same-build re-run now
+matches 22/22; baseline blessed.
