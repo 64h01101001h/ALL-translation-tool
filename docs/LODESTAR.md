@@ -145,3 +145,16 @@ ten prompts' blindspot classes are now named things (audited-against-
 itself; built-for-one-eye; excise-normalized; the-model-untaught;
 environment-of-birth) that any future engine checks FIRST. The tool
 that changes the world is the one that carries its teacher inside it.
+
+## EPILOGUE — the embers, executed (2026-08-21)
+- **L2 collapse #1 shipped**: File → Reload Data Layers — one act
+  refreshes approved rulings, honorifics, spelling, AND the teaching
+  indices (now Live-pointer reloadable like the rest); the status
+  bar reports what refreshed and states honestly that a new data
+  RELEASE still asks for a relaunch (the spine itself).
+- **L2 collapse #3 shipped**: a Catalog roster sign-in seeds the
+  provenance name when none is set — one identity act, not two.
+- **L6 acceptance pinned**: the student persona's test lives in the
+  selftest — a dossier reopens its text AT THE SAVED LINE as one
+  act, forever.
+The Lodestar's ledger is now ash-cold: nothing queued, nothing open.

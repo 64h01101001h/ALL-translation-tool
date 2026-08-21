@@ -2428,6 +2428,39 @@ static QString g_proposalsDir;
 static bool g_identityPinned = false;   // screenshot mode: keep seeds
 static void loadIdentity();
 
+// LODESTAR L2 collapse: the teaching indices, reloadable — kills the
+// "quit and relaunch" ritual for this layer (paired with File →
+// Reload Data Layers)
+static void reloadTeachingIndices(const QString& root) {
+    static TeachingMap teaching;
+    static TeachingMap teachingTib;
+    teaching.clear();
+    teachingTib.clear();
+    QFile f(root + "/data/teaching/teaching_moments_card.json");
+    if (f.open(QIODevice::ReadOnly)) {
+        const auto doc = QJsonDocument::fromJson(f.readAll());
+        const auto fill = [&doc](const char* key, TeachingMap& m) {
+            const auto terms = doc.object().value(key).toObject();
+            for (auto it = terms.begin(); it != terms.end(); ++it) {
+                auto& vec = m[it.key().toStdString()];
+                for (const auto& v : it.value().toArray()) {
+                    const auto o = v.toObject();
+                    vec.push_back({o.value("title").toString(),
+                                   o.value("url").toString(),
+                                   o.value("lang").toString(),
+                                   o.value("src").toString(),
+                                   o.value("snippet").toString(),
+                                   o.value("t").toInt()});
+                }
+            }
+        };
+        fill("terms", teaching);
+        fill("tibetan_terms", teachingTib);
+    }
+    g_teaching = teaching.empty() ? nullptr : &teaching;
+    g_teachingTib = teachingTib.empty() ? nullptr : &teachingTib;
+}
+
 // G6-01: one function owns rebuilding every approved in-memory layer
 // from disk — called at startup and after EVERY ruling that
 // regenerates registers, so "applies immediately" is the truth
@@ -27718,6 +27751,14 @@ public:
                 g_catalogUser = m.name;
                 g_catalogRoles = m.roles;
                 sess::put("catalog/lastUser", m.name);
+                // LODESTAR L2 collapse: one identity act, not two —
+                // a roster sign-in seeds the provenance name when
+                // none is set (comments/proposals inherit it)
+                if (g_userName.isEmpty()) {
+                    g_userName = m.name;
+                    QSettings("ALL", "TranslationTool")
+                        .setValue("team/name", g_userName);
+                }
                 applyLock();
                 info_->setHtml("<div>Signed in as <b>" +
                                m.name.toHtmlEscaped() + "</b> (" +
@@ -29577,47 +29618,7 @@ int main(int argc, char** argv) {
         }
         if (!idioms.empty()) g_idioms = &idioms;
     }
-    static TeachingMap teaching;
-    {
-        QFile f(root + "/data/teaching/teaching_moments_card.json");
-        if (f.open(QIODevice::ReadOnly)) {
-            const auto doc = QJsonDocument::fromJson(f.readAll());
-            const auto terms = doc.object().value("terms").toObject();
-            for (auto it = terms.begin(); it != terms.end(); ++it) {
-                auto& vec = teaching[it.key().toStdString()];
-                for (const auto& v : it.value().toArray()) {
-                    const auto o = v.toObject();
-                    vec.push_back({o.value("title").toString(),
-                                   o.value("url").toString(),
-                                   o.value("lang").toString(),
-                                   o.value("src").toString(),
-                                   o.value("snippet").toString(),
-                                   o.value("t").toInt()});
-                }
-            }
-        }
-        if (!teaching.empty()) g_teaching = &teaching;
-        static TeachingMap teachingTib;
-        QFile f2(root + "/data/teaching/teaching_moments_card.json");
-        if (f2.open(QIODevice::ReadOnly)) {
-            const auto doc = QJsonDocument::fromJson(f2.readAll());
-            const auto tt =
-                doc.object().value("tibetan_terms").toObject();
-            for (auto it = tt.begin(); it != tt.end(); ++it) {
-                auto& vec = teachingTib[it.key().toStdString()];
-                for (const auto& v : it.value().toArray()) {
-                    const auto o = v.toObject();
-                    vec.push_back({o.value("title").toString(),
-                                   o.value("url").toString(),
-                                   o.value("lang").toString(),
-                                   o.value("src").toString(),
-                                   o.value("snippet").toString(),
-                                   o.value("t").toInt()});
-                }
-            }
-        }
-        if (!teachingTib.empty()) g_teachingTib = &teachingTib;
-    }
+    reloadTeachingIndices(root);
     static std::vector<std::pair<std::string, int>> dasSections;
     {
         QFile f(root + "/data/extracted/das_pages.json");
@@ -30361,6 +30362,22 @@ int main(int argc, char** argv) {
                 row->addWidget(closeB);
                 v->addLayout(row);
                 d.exec();
+            });
+        // LODESTAR L2 collapse: ONE act refreshes the reloadable
+        // layers (approved rulings, spelling, honorifics, teaching
+        // indices) — the "quit and relaunch" ritual dies here
+        QObject::connect(
+            fileM->addAction("Reload Data Layers"),
+            &QAction::triggered, [&win, root] {
+                reloadApprovedLayers();
+                reloadTeachingIndices(root);
+                if (win.statusBar())
+                    win.statusBar()->showMessage(
+                        "Reloaded: approved rulings, honorifics, "
+                        "spelling, teaching indices. (A new data "
+                        "RELEASE still asks for a relaunch - the "
+                        "spine itself.)",
+                        6000);
             });
         fileM->addSeparator();
         // G5: ⌘W closes the window (the Mac hand expects it)
@@ -32801,6 +32818,34 @@ int main(int argc, char** argv) {
                            .arg(clean ? "PASS" : "FAIL");
                 if (!clean) ++fails;
             }
+        }
+        {   // LODESTAR L6 acceptance (the student persona's test):
+            // a dossier reopens the text AT THE SAVED LINE, as one
+            // act — pinned through the same calls the dialog makes
+            const QString wd =
+                QDir::temp().filePath("all_dossier_accept");
+            QDir().mkpath(wd);
+            const QString txt = wd + "/probe.txt";
+            {
+                QFile f(txt);
+                (void)f.open(QIODevice::WriteOnly);
+                for (int i = 0; i < 60; ++i)
+                    f.write("BDEN PA BZHI ,\n");
+            }
+            allcore::DossierStore ds(wd.toStdString());
+            ds.load();
+            const auto slug = ds.create("probe", txt.toStdString(),
+                                        37, "2026-08-21T12:00");
+            overlay->openFile(txt);
+            overlay->scrollToLine(37);
+            const bool ok = !slug.empty() &&
+                            overlay->docFile() == txt &&
+                            overlay->currentLine() == 37;
+            QDir(wd).removeRecursively();
+            log << QString("  [%1] L6 acceptance: dossier reopens "
+                           "the text at line 37 as one act")
+                       .arg(ok ? "PASS" : "FAIL");
+            if (!ok) ++fails;
         }
         {   // G6-01 (gauntlet): the ruling→card seam, proven LIVE —
             // a pronunciation approved NOW reaches the in-memory
