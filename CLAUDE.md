@@ -62,3 +62,22 @@ Gofer (search grammar: lex.c/expr.c/near.c) · ACIPHypercontext (overlay UX; con
 - Single-register terms (e.g. bsod nams: "goodness" in prayers vs "merit/good deeds" in prose) carry register warnings — never auto-resolve.
 - File-size notes: master json is 63MB+ plain (ship/store gz); corpus 27MB.
 - The HGM data project continues in Claude Cowork sessions (ingests, releases, mining); this repo consumes its releases. Don't fork the data.
+
+## The engineering-firm skill set (installed 2026-08-21, Adam's directive)
+`.claude/skills/` carries the vetted team-workflow skills (sources:
+obra/superpowers · anthropics/skills · levnikolaevich/claude-code-skills;
+every file reviewed before install). They govern how nontrivial work runs:
+- **brainstorming** before any creative/feature work (intent before code)
+- **writing-plans** for multi-step specs → **subagent-driven-development**
+  / **dispatching-parallel-agents** to execute · **executing-plans**
+- **test-driven-development** for features/bugfixes ·
+  **systematic-debugging** for defects
+- **requesting-code-review** / **receiving-code-review** /
+  **ln-11/ln-12 reviewers** before merges (the §10 adversarial-review
+  habit, now standing)
+- **verification-before-completion**: evidence before assertions, always
+  (the sweep/battery/press culture, codified)
+- **using-git-worktrees** · **finishing-a-development-branch** ·
+  **ln-41/ln-42 test planning** · **skill-creator/writing-skills** for
+  minting house skills (candidates: the press ritual, the block-edit
+  discipline, the constitution).
