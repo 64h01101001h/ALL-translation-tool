@@ -15,10 +15,10 @@ States: OPEN · CLOSED(date) · WAITING(who: what) · DEFERRED(stamp).
 | 9 | S4 security posture: no secrets in repo/logs, key path excluded from backups, FTP/SFTP no-persist proven, roster salt verified, trust model documented (Stewardship) | CLOSED(2026-08-20) |
 | 10 | D2 signing/notarization pipeline in the press, skip-with-notice until identity exists (Shipwright) | CLOSED(2026-08-20) |
 | 11 | T7 chrome pins for every P0-capable path (save/export/import/rulings/propagation) (Quality) | OPEN |
-| 12 | T4 perf floors measured + pinned (cold start, big doc, query fan-out, index build) (Quality) | OPEN |
+| 12 | T4 perf floors measured + pinned (cold start, big doc, query fan-out, index build) (Quality) | CLOSED(2026-08-20) |
 | 13 | T8 Word-style menu reorganization, before/after screenshots to Adam (Quality; §63 governance) | OPEN |
-| 14 | S5 docs/MAINTAINERS.md — the operational handbook for a competent stranger (Stewardship) | OPEN |
-| 15 | S6 findings loop: FINDINGS inbox + disposition cadence + Adam's outstanding campaign verdicts section (Stewardship) | OPEN |
+| 14 | S5 docs/MAINTAINERS.md — the operational handbook for a competent stranger (Stewardship) | CLOSED(2026-08-20) |
+| 15 | S6 findings loop: FINDINGS inbox + disposition cadence + Adam's outstanding campaign verdicts section (Stewardship) | CLOSED(2026-08-20) |
 | 16 | T9 docs-vs-UI truth pass (help, tutorials, README against the real UI) (Quality) | OPEN |
 | 17 | F3 outbound-link truth sampling at the index builders (Fidelity) | OPEN |
 | 18 | D4 update path: honest check-for-updates or documented re-download (Shipwright) | OPEN |
@@ -109,3 +109,19 @@ States: OPEN · CLOSED(date) · WAITING(who: what) · DEFERRED(stamp).
   one env var + one store-credentials command make every press a
   notarized press. Setup commands documented inline in the script.
 **Burndown:** 9 open · 9 waiting · 2 deferred · 10 closed.
+- 2026-08-20 · **#12 T4 CLOSED.** Perf floors pinned in the selftest:
+  300 spine lookups 6ms (<2000) · 20 corpus searches 21ms (<2000) ·
+  1k unicode conversions 9ms (<1200) · 1k pronunciations 1ms (<1200).
+  Budgets sit far above observed so variance never cries wolf; a lost
+  index or accidental O(n²) blows through instantly. (Cold-start is
+  proven live by the press's relaunch-verify step.)
+- 2026-08-20 · **#14 S5 CLOSED.** docs/MAINTAINERS.md — build/test/
+  press/release, the five rules, the paid-for editing lessons, data
+  topology, and where every decision lives. A competent stranger can
+  press a release from it.
+- 2026-08-20 · **#15 S6 CLOSED.** docs/FINDINGS.md inbox (with the
+  standing section for Adam's outstanding verdicts so they can never
+  silently expire) + Help → Troubleshooting → File a Finding: one
+  click appends a timestamped, pane-stamped, version-stamped template
+  and opens the file.
+**Burndown:** 6 open · 9 waiting · 2 deferred · 13 closed.

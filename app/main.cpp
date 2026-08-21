@@ -30616,6 +30616,27 @@ int main(int argc, char** argv) {
                      QSysInfo::prettyProductName(), root);
         };
         QObject::connect(
+            trouble->addAction("File a Finding\u2026"),
+            &QAction::triggered, [root, installInfo] {
+                // S6: one keystroke from "something's off" to a
+                // timestamped entry in the shared inbox
+                const QString path = root + "/docs/FINDINGS.md";
+                QFile f(path);
+                if (f.open(QIODevice::Append | QIODevice::Text)) {
+                    QTextStream ts(&f);
+                    ts << "\n### " 
+                       << QDateTime::currentDateTime().toString(
+                              "yyyy-MM-dd HH:mm")
+                       << " \u00b7 " << sess::str("ui/pane")
+                       << " \u00b7 " << installInfo() << "\n"
+                       << "WHAT I SAW:\n\nWHAT I EXPECTED:\n\n"
+                       << "DISPOSITION: (pending)\n";
+                    f.close();
+                }
+                QDesktopServices::openUrl(
+                    QUrl::fromLocalFile(path));
+            });
+        QObject::connect(
             trouble->addAction("Show Logs in Finder"),
             &QAction::triggered, [lifeLogPath] {
                 if (QFileInfo::exists(lifeLogPath))
@@ -32244,6 +32265,38 @@ int main(int argc, char** argv) {
                            .arg(clean ? "PASS" : "FAIL");
                 if (!clean) ++fails;
             }
+        }
+        {   // T4 (quality): performance floors — what a user FEELS,
+            // measured and pinned. Budgets are ~4x the observed
+            // numbers on Adam's machine so CI variance never cries
+            // wolf; a real regression (an accidental O(n²), a lost
+            // index) blows through 4x instantly.
+            QElapsedTimer t;
+            t.start();
+            for (int i = 0; i < 300; ++i)
+                (void)spine.lookup(i % 2 ? "bsod nams"
+                                         : "byang chub sems dpa'");
+            const qint64 lookupMs = t.restart();
+            for (int i = 0; i < 20; ++i)
+                (void)spine.corpusSearch("\"bsod nams\"", "", 10);
+            const qint64 corpusMs = t.restart();
+            for (int i = 0; i < 1000; ++i)
+                (void)allcore::wylieToUnicode(
+                    "byang chub sems dpa' sems dpa' chen po");
+            const qint64 uniMs = t.restart();
+            for (int i = 0; i < 1000; ++i)
+                (void)allcore::pronounce("bsod nams kyi tshogs");
+            const qint64 pronMs = t.restart();
+            const bool ok = lookupMs < 2000 && corpusMs < 2000 &&
+                            uniMs < 1200 && pronMs < 1200;
+            log << QString("  [%1] T4 perf floors: 300 lookups %2ms "
+                           "(<2000) · 20 corpus %3ms (<2000) · 1k "
+                           "unicode %4ms (<1200) · 1k pron %5ms "
+                           "(<1200)")
+                       .arg(ok ? "PASS" : "FAIL")
+                       .arg(lookupMs).arg(corpusMs).arg(uniMs)
+                       .arg(pronMs);
+            if (!ok) ++fails;
         }
         {   // F2 (fidelity): cross-engine coherence at dictionary
             // scale — the ports must agree with the release's own
