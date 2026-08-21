@@ -168,3 +168,15 @@ this text's entries in one tended list: set, edit, remove, click a
 term to its card. The translator's own layer finally has a room of
 its own. (Constitution R3 census: baseline 111, reviewed — one
 dialog-scoped info modal, never harness-reachable.)
+
+## EPILOGUE III — Team Presence (the last named ember)
+The many-hands model, made visible with ZERO new persistence: File →
+Team Activity… merges the stores that already remember (proposals,
+rulings, comments) into one newest-first feed — who proposed, who
+ruled, who commented, when. Pinned in the selftest (seeded stores →
+3 events, newest first, all voices). Gauntlet-checked before commit.
+Every candidate the Lodestar's brainstorm ranked buildable-now is now
+BUILT: dossiers, workbench, presence, the map, the feedback bar, the
+reload act. The substrate list is empty. The engine's work is truly
+done — what remains anywhere is human: signatures, verdicts, and the
+week of usage data.

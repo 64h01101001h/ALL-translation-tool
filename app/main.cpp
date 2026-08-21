@@ -2429,6 +2429,66 @@ static QString g_proposalsDir;
 static bool g_identityPinned = false;   // screenshot mode: keep seeds
 static void loadIdentity();
 
+// LODESTAR: Team Presence — the many-hands model made visible.
+// A read-only MERGE of stores that already exist (proposals with
+// their rulings, team comments); no new persistence, no new truth.
+// Testable: rows come back newest-first, capped.
+static QStringList teamActivityRows(int cap) {
+    struct Ev {
+        std::string when;
+        QString what;
+    };
+    std::vector<Ev> evs;
+    if (!g_proposalsDir.isEmpty()) {
+        allcore::ProposalStore ps(g_proposalsDir.toStdString());
+        if (ps.load())
+            for (const auto& p : ps.all()) {
+                evs.push_back(
+                    {p.created,
+                     QString("%1 proposed %2 \u201c%3\u201d")
+                         .arg(QString::fromStdString(p.proposer)
+                                  .toHtmlEscaped())
+                         .arg(allcore::Proposal::kindName(p.kind))
+                         .arg(QString::fromStdString(p.wylie)
+                                  .toHtmlEscaped())});
+                if (!p.ruled.empty() && !p.approver.empty())
+                    evs.push_back(
+                        {p.ruled,
+                         QString("%1 ruled %2 on \u201c%3\u201d")
+                             .arg(QString::fromStdString(p.approver)
+                                      .toHtmlEscaped())
+                             .arg(allcore::Proposal::statusName(
+                                 p.status))
+                             .arg(QString::fromStdString(p.wylie)
+                                      .toHtmlEscaped())});
+            }
+        allcore::CommentStore cs(g_proposalsDir.toStdString());
+        if (cs.load())
+            for (const auto& c : cs.all())
+                evs.push_back(
+                    {c.created,
+                     QString("%1 commented on %2 line %3")
+                         .arg(QString::fromStdString(c.author)
+                                  .toHtmlEscaped())
+                         .arg(QString::fromStdString(c.file)
+                                  .toHtmlEscaped())
+                         .arg(c.line)});
+    }
+    std::stable_sort(evs.begin(), evs.end(),
+                     [](const Ev& a, const Ev& b) {
+                         return a.when > b.when;
+                     });
+    QStringList out;
+    for (const auto& e : evs) {
+        if (out.size() >= cap) break;
+        out << QString("<small style='color:%1'>%2</small> %3")
+                   .arg(ux::kFaint)
+                   .arg(QString::fromStdString(e.when).left(16))
+                   .arg(e.what);
+    }
+    return out;
+}
+
 // LODESTAR L2 collapse: the teaching indices, reloadable — kills the
 // "quit and relaunch" ritual for this layer (paired with File →
 // Reload Data Layers)
@@ -30459,6 +30519,34 @@ int main(int argc, char** argv) {
                 v->addLayout(row);
                 d.exec();
             });
+        // LODESTAR: Team Presence — who did what, lately, from the
+        // stores that already remember
+        QObject::connect(
+            fileM->addAction("Team Activity\u2026"),
+            &QAction::triggered, [&win] {
+                QDialog d(&win);
+                d.setWindowTitle("Team activity");
+                auto* v = new QVBoxLayout(&d);
+                auto* t = new QTextBrowser;
+                t->setMinimumSize(560, 380);
+                const QStringList rows = teamActivityRows(60);
+                t->setHtml(rows.isEmpty()
+                               ? "<i>no team activity on record - "
+                                 "the shared proposals folder may "
+                                 "not be set (Community > Propose)"
+                                 "</i>"
+                               : "<div style='line-height:1.7'>" +
+                                     rows.join("<br>") + "</div>");
+                v->addWidget(t, 1);
+                auto* row = new QHBoxLayout;
+                row->addStretch();
+                auto* closeB = new QPushButton("Close");
+                QObject::connect(closeB, &QPushButton::clicked, &d,
+                                 &QDialog::accept);
+                row->addWidget(closeB);
+                v->addLayout(row);
+                d.exec();
+            });
         // LODESTAR L2 collapse: ONE act refreshes the reloadable
         // layers (approved rulings, spelling, honorifics, teaching
         // indices) — the "quit and relaunch" ritual dies here
@@ -32914,6 +33002,44 @@ int main(int argc, char** argv) {
                            .arg(clean ? "PASS" : "FAIL");
                 if (!clean) ++fails;
             }
+        }
+        {   // Team Presence pin: seeded stores yield a complete,
+            // newest-first feed
+            const QString saved = g_proposalsDir;
+            const QString wd =
+                QDir::temp().filePath("all_presence_probe");
+            QDir().mkpath(wd);
+            QFile::remove(wd + "/proposals.tsv");
+            QFile::remove(wd + "/comments.tsv");
+            g_proposalsDir = wd;
+            {
+                allcore::ProposalStore ps(wd.toStdString());
+                ps.load();
+                const auto id = ps.propose(
+                    allcore::ProposalKind::PhraseRendering,
+                    "Tenzin", "bden pa", "truth", "", "ev",
+                    "2026-08-20");
+                ps.rule(id, allcore::ProposalStatus::Approved,
+                        "Adam", "", "2026-08-21");
+                ps.save();
+                allcore::CommentStore cs(wd.toStdString());
+                cs.load();
+                cs.add("S1.txt", 5, "Pema", "note",
+                       "2026-08-22T09:00");
+            }
+            const QStringList rows = teamActivityRows(10);
+            const bool ok =
+                rows.size() == 3 &&
+                rows[0].contains("Pema") &&
+                rows[1].contains("Adam ruled approved") &&
+                rows[2].contains("Tenzin proposed");
+            g_proposalsDir = saved;
+            reloadApprovedLayers();
+            QDir(wd).removeRecursively();
+            log << QString("  [%1] Team Presence: 3 events, "
+                           "newest first, all voices present")
+                       .arg(ok ? "PASS" : "FAIL");
+            if (!ok) ++fails;
         }
         {   // LODESTAR L6 acceptance (the student persona's test):
             // a dossier reopens the text AT THE SAVED LINE, as one
