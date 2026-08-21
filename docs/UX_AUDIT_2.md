@@ -203,3 +203,31 @@ minimum sizes exceeded the window grew it MID-SWEEP and reflowed every
 later capture (and async settles differ run-to-run at loose sizes).
 Fixed: the sweep pins the window at 1180x760. Same-build re-run now
 matches 22/22; baseline blessed.
+
+## W3 — JOURNEY FRICTION (2026-08-20)
+Journeys walked via their code paths + the selftest's own flows:
+- Search hit → open source at line: goferopen: link. HOLDS (1 click).
+- Search hit → the TERM's card: was copy → switch pane → paste →
+  Return (4 steps, a modal pane switch in the middle).
+  **W3-01 · P2 · FIXED**: the results footer now links every searched
+  term ("look up: …") straight into the Lookup pane via g_lookupQuery.
+- Overlay word → card → teaching video: click → card → link. HOLDS.
+- Import release: menu → picker → atomic copy (W9-03) → spine rebuild
+  with progress. HOLDS.
+- Catalog stage → approve: Catalog band → Approval queue → ruling
+  links (colored, W5). HOLDS; roster failure paths hardened (§10 R1).
+Remaining journeys (OCR-correct-export, align-harvest,
+double-key-compare) exercised by their panes' selftest coverage; no
+new P1s surfaced by walkthrough.
+
+## W4 — KEYBOARD (2026-08-20)
+- Escape/Enter: Qt dialog defaults verified present (QDialog accept/
+  reject wiring at every hand-built dialog).
+- Band actions are reachable mouse-free via ⌘K Hunt (every proxy's
+  source remains a Hunt action) + ⌘1-7/⌘⇧]/[ navigation. HOLDS.
+- **W4-01 · FIXED**: the whole keyboard story now prints in one sheet —
+  Help → Keyboard Shortcuts… (navigation, reading zoom+peek, Commander
+  keys, editing standards).
+- Windows/Linux ⌘→Ctrl mapping: Qt's "Ctrl" bindings already map to
+  ⌘ on macOS and Ctrl elsewhere — the code is portable as written.
+  NOTED for the input-center builds.

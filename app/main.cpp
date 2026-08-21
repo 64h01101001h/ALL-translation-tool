@@ -13012,6 +13012,12 @@ public:
                                 body.mid(bar + 1).toInt());
                         return;
                     }
+                    if (s.startsWith("lookup:")) {
+                        if (g_lookupQuery)
+                            g_lookupQuery(QUrl::fromPercentEncoding(
+                                s.mid(7).toUtf8()));
+                        return;
+                    }
                     if (u.isLocalFile())
                         QDesktopServices::openUrl(u);
                 });
@@ -13516,6 +13522,22 @@ private:
             }
         }
         h += QString("<div><b>%1 total hit(s)</b></div>").arg(total);
+        {
+            // W3-01: the searched terms link straight to their cards
+            QString lk;
+            for (const QString& t : lastTerms_) {
+                if (t.trimmed().isEmpty()) continue;
+                if (!lk.isEmpty()) lk += " \u00b7 ";
+                lk += QString("<a href='lookup:%1'>%2</a>")
+                          .arg(QString(t.toUtf8().toPercentEncoding()),
+                               t.toHtmlEscaped());
+            }
+            if (!lk.isEmpty())
+                h += QString("<div style='font-size:12px;color:%1'>"
+                             "look up: %2</div>")
+                         .arg(ux::kFaint)
+                         .arg(lk);
+        }
         if (total == 0 && !stopped_)
             h += "<div style='color:#78706A;font-size:12px;"
                  "margin-top:2px'>nothing matched in the searched "
@@ -13586,6 +13608,7 @@ private:
     QString root_;
     QTabWidget* inner_ = nullptr;
     QLineEdit* fields_[8] = {};
+    QStringList lastTerms_;   // W3-01: raw terms of the last query
     QComboBox* combiner_ = nullptr;
     QLineEdit* proximity_ = nullptr;
     QComboBox* fold_ = nullptr;
@@ -30367,6 +30390,51 @@ int main(int argc, char** argv) {
             helpWin->openManual();
         });
 
+        // ---- W4: the shortcut map — what the keyboard can do,
+        // in one sheet (tooltips teach piecemeal; this teaches whole)
+        QObject::connect(
+            helpMenu->addAction("Keyboard Shortcuts\u2026"),
+            &QAction::triggered, [&win] {
+                QDialog d(&win);
+                d.setWindowTitle("Keyboard shortcuts");
+                auto* v = new QVBoxLayout(&d);
+                auto* t = new QTextBrowser;
+                t->setMinimumSize(460, 380);
+                t->setHtml(
+                    "<h3>Navigation</h3>"
+                    "<b>\u2318K</b> Hunt everywhere \u2014 panes, "
+                    "actions, terms, files<br>"
+                    "<b>\u23181\u2026\u23187</b> jump to a group "
+                    "(Read, Translate, Research, Learn, Input, "
+                    "Catalog, Community)<br>"
+                    "<b>\u2318\u21e7]</b> / <b>\u2318\u21e7[</b> "
+                    "next / previous pane inside the group"
+                    "<h3>Reading</h3>"
+                    "<b>\u2318=</b> / <b>\u2318\u2212</b> zoom the "
+                    "reading text \u00b7 <b>\u23180</b> reset<br>"
+                    "<b>\u2318D</b> peek the dictionary card for "
+                    "the word under the cursor"
+                    "<h3>Files pane \u2014 Commander keys "
+                    "(opt-in)</h3>"
+                    "<b>F3/F4</b> open \u00b7 <b>F5</b> copy to "
+                    "other pane \u00b7 <b>F6</b> move \u00b7 "
+                    "<b>F7</b> new folder \u00b7 <b>F8</b> Trash "
+                    "(confirms multi-select)<br>"
+                    "<b>F2</b> or click-pause: rename (always on)"
+                    "<h3>Everywhere</h3>"
+                    "standard macOS Undo/Redo/Cut/Copy/Paste/"
+                    "Select&nbsp;All \u00b7 <b>Esc</b> closes "
+                    "dialogs");
+                v->addWidget(t, 1);
+                auto* closeB = new QPushButton("Close");
+                QObject::connect(closeB, &QPushButton::clicked, &d,
+                                 &QDialog::accept);
+                auto* row = new QHBoxLayout;
+                row->addStretch();
+                row->addWidget(closeB);
+                v->addLayout(row);
+                d.exec();
+            });
         // ---- W10: the usage ledger — opt-in, this Mac only ----
         QObject::connect(
             helpMenu->addAction("Usage Ledger\u2026"),
