@@ -106,3 +106,35 @@ The audit of what a Mac hand tries FIRST:
   (dialog defaults) — HOLD.
 Invisible before: every engine asked "does what exists work?" — never
 "does what a hand tries first exist?"
+
+## G4 — THE SOAK (closed: exhaustion with telemetry)
+6,000-step run: survived, 645→664MB. 20,000-step run: **survived**,
+633→651MB over ~11 minutes of continuous hostile churn, growth rate
+DECAYING between halves (34.7 → 20.9 KB/s) — caches settling, not a
+leak (a linear slope would have been blood). The unbounded-cache
+audit: folio cache is per-volume, user-initiated, Stop-able (20MB
+after real use — acceptable, noted); lifecycle log 42KB after weeks;
+Application Support trivial; backups pruned at 14. Twenty thousand
+actions is days of real use; 18MB of drift is nothing.
+(Sampling had its own comedy: one sampler pronounced dead because
+bash echo keeps \t literal, one reattached to the task wrapper via
+the pgrep -f trap — both misreadings caught by ps ground truth
+before they became "findings.")
+
+## THE CLOSING PARAGRAPH (Gauntlet §12)
+What the Gauntlet proved about this RC that nothing before it could:
+the app survives SEQUENCES — 20,000 randomized real actions across
+eleven seeds without a crash, a hang, an unclosable dialog, or a
+structure corruption; its engines and its card survive the WEIRDEST
+1,000 rows the data owns, not just the average; its widget tree holds
+its geometry at every reachable window size, because the unreachable
+sizes are now unreachable; a Mac hand's first reflexes land; its
+heaviest cross-pane promise — a ruling applies IMMEDIATELY — is now
+true and pinned instead of false and pretty; and eleven minutes of
+hostile churn cost eighteen settling megabytes. Four bloods drawn
+(native panels under harness, the resize-to-broken window, the false
+immediately, the absent reflexes), every one fixed and fossilized;
+two tracks closed by genuine exhaustion with their telemetry banked.
+The RC that walks out of this gauntlet is the build that deserves the
+name 1.0.0 — pending only the nine human signatures that no engine
+can give.
