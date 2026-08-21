@@ -231,3 +231,25 @@ new P1s surfaced by walkthrough.
 - Windows/Linux ⌘→Ctrl mapping: Qt's "Ctrl" bindings already map to
   ⌘ on macOS and Ctrl elsewhere — the code is portable as written.
   NOTED for the input-center builds.
+
+## W1 — FIRST-RUN PROPOSAL (awaiting Adam's ruling — nothing shipped)
+The crash is fixed (W1-01); what remains is the WELCOME. Proposal:
+on first launch only (no QSettings), after data loads, the Overlay
+opens with the Diamond Cutter demo excerpt already loaded (the
+screenshot sweep already proves this path) and a one-time dismissible
+card overlay:
+  "This is the ALL Translation Tool. Click any Tibetan word to see
+   the master's attested English, the corpus evidence, and the
+   recorded teachings. ⌘K searches everything. Help → Tutorials
+   walks every pane."
+Three lines, one Dismiss, never shown again (ui/welcomed=true).
+No tour, no wizard: the tool's first lesson is the tool doing its
+job on a real text. Rationale: every input-center cataloger's first
+question is "what am I looking at?" — the card answers it with real
+content, not marketing. Estimated build: small; ships only on ruling.
+
+## §14 — EXIT CRITERIA CHECK
+All ten workstreams: fixed, ruled, or (W1 welcome) proposed-awaiting-
+ruling. §11 gate: in the press, baseline blessed. W10 ledger: live,
+opt-in. Walkthrough letter: docs/PHASE2_WALKTHROUGH.md + artifact.
+Phase 2 closes with this entry.
