@@ -49,3 +49,20 @@ flag density, empty-field patterns); 8,607 nonzero, top 1,000 banked
 No blood: the tail was already survivable — now it's PINNED
 survivable. Closed as exhaustion with telemetry: the method ran at
 full depth and left two permanent suites behind.
+
+## G3 — THE PIXEL INQUISITION (closed: blood + gate)
+Redesigned at the source: instead of guessing wrongness from pixels,
+the widget TREE is interrogated at capture time — three violation
+classes (clipped QLabels via sizeHint>width, sibling overlap, child
+escaping parent; scroll interiors exempt) swept at 1000x700 /
+1180x760 / 1600x1000. All clean — and the detectors were PROVEN live
+first by a 640x420 canary (Catalog label clips, Overlay editor
+escapes), because a silent detector is worth nothing.
+- **G3-01 · P2 · FIXED (the blood).** The app allowed resizing into
+  geometries where the UI silently breaks. Bisected the floor: clean
+  at 820x560, breaking at 760x520. win.setMinimumSize(820, 560) —
+  the smallest PROVEN-clean geometry is now the smallest reachable
+  one. Invisible before: every prior sweep ran at one fixed size.
+- **The gate:** the inquisition now runs inside EVERY --screenshots
+  sweep (exit 4 on violations) — so the press's visual step gained a
+  second, wrongness-detecting eye for free, forever.

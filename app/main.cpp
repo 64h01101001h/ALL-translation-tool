@@ -32903,6 +32903,12 @@ int main(int argc, char** argv) {
     tabs.setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
     win.setMinimumSize(640, 480);
     win.resize(1180, 760);
+    // G3 (gauntlet): the geometry inquisition proved the UI clean
+    // down to 820x560 and breaking at 760x520 (Catalog label clips,
+    // Overlay editor escapes). A user must not be able to resize
+    // into a state where the UI silently lies — the floor is the
+    // smallest PROVEN-clean geometry.
+    win.setMinimumSize(820, 560);
     overlay->restoreSession();   // resume where the translator was
     // …and every other pane that holds a "where I was" (Adam,
     // 2026-08-15). Each is a no-op when nothing was remembered or
@@ -33060,8 +33066,21 @@ int main(int argc, char** argv) {
         const QString outDir = cliArgs.at(shotIx + 1);
         QDir().mkpath(outDir);
         // s11 determinism: a pane whose minimums exceed the window
-        // must not grow it mid-sweep and reflow every later capture
-        win.setFixedSize(1180, 760);
+        // must not grow it mid-sweep and reflow every later capture.
+        // G3: --shotsize WxH sweeps other geometries (small laptop /
+        // default / wide) for the inquisition below
+        int shotW = 1180, shotH = 760;
+        {
+            const int szIx = cliArgs.indexOf("--shotsize");
+            if (szIx >= 0 && szIx + 1 < cliArgs.size()) {
+                const auto parts = cliArgs.at(szIx + 1).split('x');
+                if (parts.size() == 2) {
+                    shotW = parts[0].toInt();
+                    shotH = parts[1].toInt();
+                }
+            }
+        }
+        win.setFixedSize(shotW, shotH);
         // open a real text in the Overlay so the flagship pane shows
         // its shading, not an empty editor (the Diamond Cutter)
         // Only the first screenful is visible in a capture, and the
@@ -33254,6 +33273,7 @@ int main(int argc, char** argv) {
             QCoreApplication::processEvents();
         }
         printf("[shot] demo open; %d tabs\n", tabs.count()); fflush(stdout);
+        int inquisitTotal = 0;
         for (size_t i = 0; i < flatPanes.size(); ++i) {
             printf("[shot] tab %zu %s\n", i,
                    flatPanes[i].title.toUtf8().constData());
@@ -33272,6 +33292,113 @@ int main(int argc, char** argv) {
                         file.toUtf8().constData());
             else
                 printf("wrote %s\n", file.toUtf8().constData());
+            // G3 (gauntlet): the geometry inquisition — the widget
+            // tree cannot lie about clipping the way pixels can.
+            // Three violation classes per pane:
+            //   clip: a visible QLabel whose sizeHint exceeds its
+            //         actual width (Qt clips labels silently)
+            //   ovl:  visible siblings whose rects intersect
+            //   out:  a child escaping its parent's rect
+            // (scroll-area interiors are exempt — escaping is their
+            // job; so are QSplitter handles and 0-size spacers)
+            {
+                int clip = 0, ovl = 0, outv = 0;
+                QStringList detail;
+                const auto all =
+                    flatPanes[i].w->findChildren<QWidget*>();
+                auto inScroll = [](QWidget* w) {
+                    for (QWidget* p = w->parentWidget(); p;
+                         p = p->parentWidget())
+                        if (qobject_cast<QAbstractScrollArea*>(p))
+                            return true;
+                    return false;
+                };
+                for (QWidget* w : all) {
+                    if (!w->isVisible() || inScroll(w)) continue;
+                    if (auto* lab = qobject_cast<QLabel*>(w)) {
+                        if (!lab->wordWrap() &&
+                            !lab->text().isEmpty() &&
+                            lab->sizeHint().width() >
+                                lab->width() + 8) {
+                            ++clip;
+                            if (detail.size() < 6)
+                                detail << QString("clip \"%1\" "
+                                                  "hint%2>w%3")
+                                              .arg(lab->text()
+                                                       .left(28))
+                                              .arg(lab->sizeHint()
+                                                       .width())
+                                              .arg(lab->width());
+                        }
+                    }
+                    QWidget* par = w->parentWidget();
+                    if (par && par->isVisible() &&
+                        !w->geometry().intersected(par->rect())
+                             .isValid() == false &&
+                        !par->rect().contains(w->geometry()) &&
+                        w->width() > 2 && w->height() > 2) {
+                        ++outv;
+                        if (detail.size() < 6)
+                            detail << QString("out %1 in %2")
+                                          .arg(w->metaObject()
+                                                   ->className())
+                                          .arg(par->metaObject()
+                                                   ->className());
+                    }
+                }
+                // sibling overlap: direct children of one parent,
+                // both visible, rect intersection wider than a
+                // 2px slop (layouts place siblings apart; overlap
+                // means somebody positioned by hand and collided)
+                {
+                    QMap<QWidget*, QList<QWidget*>> byParent;
+                    for (QWidget* w : all) {
+                        if (!w->isVisible() || inScroll(w)) continue;
+                        if (w->width() < 4 || w->height() < 4)
+                            continue;
+                        byParent[w->parentWidget()].append(w);
+                    }
+                    for (auto it = byParent.begin();
+                         it != byParent.end(); ++it) {
+                        const auto& kids = it.value();
+                        for (int a = 0; a < kids.size(); ++a)
+                            for (int b = a + 1; b < kids.size();
+                                 ++b) {
+                                const QRect r =
+                                    kids[a]->geometry().intersected(
+                                        kids[b]->geometry());
+                                if (r.width() > 2 &&
+                                    r.height() > 2) {
+                                    ++ovl;
+                                    if (detail.size() < 6)
+                                        detail
+                                            << QString("ovl %1+%2")
+                                                   .arg(kids[a]
+                                                            ->metaObject()
+                                                            ->className())
+                                                   .arg(kids[b]
+                                                            ->metaObject()
+                                                            ->className());
+                                }
+                            }
+                    }
+                }
+                inquisitTotal += clip + ovl + outv;
+                if (clip || ovl || outv) {
+                    printf("[inquisit] %s: clip=%d ovl=%d out=%d\n",
+                           flatPanes[i].title.toUtf8().constData(),
+                           clip, ovl, outv);
+                    for (const auto& d : detail)
+                        printf("   %s\n", d.toUtf8().constData());
+                    fflush(stdout);
+                }
+            }
+        }
+        if (inquisitTotal) {
+            printf("[inquisit] TOTAL %d violation(s) — geometry "
+                   "gate FAILS\n", inquisitTotal);
+            fflush(stdout);
+            return 4;
         }
         return 0;
     }
