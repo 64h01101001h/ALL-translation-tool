@@ -17,6 +17,14 @@
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+# Shipwright L1: team vs market distribution. Market mode omits the
+# payloads that may not be redistributed (reference.db - the
+# unlicensed local-only compilations; BDRC OCR models - CC BY-NC):
+#   tools/package_macos.sh [team|market]      (default: team)
+PRESS_MODE="${1:-team}"
+case "$PRESS_MODE" in team|market) ;; *)
+  echo "unknown mode '$PRESS_MODE' (team|market)"; exit 2;; esac
+echo "press mode: $PRESS_MODE"
 BUILD="$ROOT/cmake-build-release"
 DIST="$ROOT/dist"
 APPVER=$(head -1 "$ROOT/VERSION")
@@ -123,7 +131,10 @@ if [[ -f "$ROOT/build/spine_current.txt" ]]; then
 fi
 cp "$ROOT/build/$SPINE_NAME" "$DATA/build/"
 [[ -f "$ROOT/build/spine_current.txt" ]] &&   cp "$ROOT/build/spine_current.txt" "$DATA/build/"
-cp "$ROOT/build/reference.db" "$DATA/build/" 2>/dev/null || true
+if [[ "$PRESS_MODE" == "team" ]]; then
+  # local-only reference compilations: TEAM builds only, never market
+  cp "$ROOT/build/reference.db" "$DATA/build/" 2>/dev/null || true
+fi
 # the canonical spine builder rides along so an installed app can
 # import a future data release (Maintenance → Import data release…)
 mkdir -p "$DATA/tools"
@@ -154,8 +165,12 @@ if [[ "$SRC_SZ" != "$DST_SZ" ]]; then
   echo "STAGING ERROR: teaching_moments_card.json size mismatch ($SRC_SZ vs $DST_SZ)" >&2
   exit 1
 fi
-[[ -d "$ROOT/library/ocr_models" ]] && \
-  cp -R "$ROOT/library/ocr_models" "$DATA/library/ocr_models"
+if [[ "$PRESS_MODE" == "team" ]]; then
+  # BDRC models are CC BY-NC (team permission); market users take the
+  # in-app download-it-yourself path instead
+  [[ -d "$ROOT/library/ocr_models" ]] && \
+    cp -R "$ROOT/library/ocr_models" "$DATA/library/ocr_models"
+fi
 # runtime data folders the panes read (enumerated from the code)
 for d in fonts honorifics pron_colloquial abbreviations extracted idioms \
          botok spellcheck soas_pos whitney candidate_alignments; do
