@@ -387,6 +387,12 @@ add_executable(fuzz_smoke tests/fuzz_smoke.cpp)
 target_link_libraries(fuzz_smoke PRIVATE allcore)
 add_test(NAME fuzz_smoke COMMAND fuzz_smoke)
 
+add_executable(spine_resilience_smoke tests/spine_resilience_smoke.cpp)
+target_link_libraries(spine_resilience_smoke PRIVATE allcore)
+add_test(NAME spine_resilience_smoke
+         COMMAND spine_resilience_smoke
+                 ${CMAKE_SOURCE_DIR}/build/hgm_spine_v27_2.db)
+
 add_executable(glossary_smoke tests/glossary_smoke.cpp)
 target_link_libraries(glossary_smoke PRIVATE allcore)
 add_test(NAME glossary_smoke COMMAND glossary_smoke)

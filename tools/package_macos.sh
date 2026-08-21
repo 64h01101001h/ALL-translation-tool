@@ -252,6 +252,27 @@ fi
 cp "$ROOT/docs/distribution/OPEN_SOURCE_NOTICES.md" \
    "$STAGE/OPEN_SOURCE_NOTICES.md"
 
+# 2026-08-21 field crash: the install rsync replaced the spine db
+# UNDER a live instance Adam had reopened mid-press — sqlite threw,
+# nothing caught it (now hardened), and the app died. The installer
+# now insists on a quiet target: quit any running instance politely,
+# wait, and only then touch /Applications.
+if pgrep -x ALLTranslationTool >/dev/null; then
+  echo "   (a running instance holds the install target - asking it"
+  echo "    to quit before touching its files)"
+  osascript -e 'quit app "ALLTranslationTool"' 2>/dev/null || true
+  for i in $(seq 1 20); do
+    pgrep -x ALLTranslationTool >/dev/null || break
+    sleep 1
+  done
+  if pgrep -x ALLTranslationTool >/dev/null; then
+    echo "   still running after 20s - stopping it (the relaunch at"
+    echo "    step 8 brings the NEW build back)"
+    pkill -x ALLTranslationTool || true
+    sleep 2
+  fi
+fi
+
 echo "== 6c. install to /Applications (the desktop copy) =="
 # THE step that keeps Adam's running app current — it was lost in
 # the 2026-08-13 rewrite, and every press until 2026-08-14 built a

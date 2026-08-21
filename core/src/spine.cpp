@@ -1,3 +1,4 @@
+#include <cstdio>
 #include "allcore/spine.h"
 
 #include <sqlite3.h>
@@ -135,29 +136,54 @@ Entry Spine::entryFromRow(void* stmt) const {
 }
 
 std::string Spine::metaValue(const std::string& key) const {
+    try {
     Stmt s(db_, "SELECT value FROM meta WHERE key=?");
     sqlite3_bind_text(s.p, 1, key.c_str(), -1, SQLITE_TRANSIENT);
     return sqlite3_step(s.p) == SQLITE_ROW ? columnText(s.p, 0) : "";
+    } catch (const std::exception& e) {
+        // the db was yanked/replaced under us (the
+        // 2026-08-21 field crash): degrade to empty,
+        // never abort — the card shows honest absence
+        fprintf(stderr, "[spine] metaValue suppressed: %s\n", e.what());
+        return {};
+    }
 }
 
 // F4 (fidelity): tier arithmetic recomputed from the loaded data —
 // the About screen's numbers can never drift from the database
 int Spine::entryCount() const {
+    try {
     Stmt s(db_, "SELECT count(*) FROM entries");
     return sqlite3_step(s.p) == SQLITE_ROW ? sqlite3_column_int(s.p, 0)
                                            : -1;
+    } catch (const std::exception& e) {
+        // the db was yanked/replaced under us (the
+        // 2026-08-21 field crash): degrade to empty,
+        // never abort — the card shows honest absence
+        fprintf(stderr, "[spine] entryCount suppressed: %s\n", e.what());
+        return -1;
+    }
 }
 std::map<std::string, int> Spine::tierCensus() const {
+    try {
     std::map<std::string, int> out;
     Stmt s(db_, "SELECT tier, count(*) FROM entries GROUP BY tier");
     while (sqlite3_step(s.p) == SQLITE_ROW)
         out[columnText(s.p, 0)] = sqlite3_column_int(s.p, 1);
     return out;
+    } catch (const std::exception& e) {
+        // the db was yanked/replaced under us (the
+        // 2026-08-21 field crash): degrade to empty,
+        // never abort — the card shows honest absence
+        fprintf(stderr, "[spine] tierCensus suppressed: %s\n", e.what());
+        return {};
+    }
 }
 
 // F1 (fidelity): a stratified stride over the whole dictionary, so
 // honesty invariants can be swept at scale rather than spot-checked
 std::vector<Entry> Spine::sampleEntries(int stride, int cap) const {
+    try {
     std::vector<Entry> out;
     if (stride < 1) stride = 1;
     std::string q = std::string("SELECT ") + kEntryCols +
@@ -168,9 +194,17 @@ std::vector<Entry> Spine::sampleEntries(int stride, int cap) const {
     while (sqlite3_step(s.p) == SQLITE_ROW)
         out.push_back(entryFromRow(s.p));
     return out;
+    } catch (const std::exception& e) {
+        // the db was yanked/replaced under us (the
+        // 2026-08-21 field crash): degrade to empty,
+        // never abort — the card shows honest absence
+        fprintf(stderr, "[spine] sampleEntries suppressed: %s\n", e.what());
+        return {};
+    }
 }
 
 std::vector<Entry> Spine::lookup(const std::string& headword) const {
+    try {
     std::vector<Entry> out;
     auto collect = [&](const char* sql, const std::string& val) {
         std::string q = std::string("SELECT ") + kEntryCols + " FROM entries " + sql;
@@ -192,10 +226,18 @@ std::vector<Entry> Spine::lookup(const std::string& headword) const {
     if (out.empty()) collect("WHERE tibetan=?", rstripTibetanPunct(headword));
     if (out.empty()) collect("WHERE acip=?", headword);
     return out;
+    } catch (const std::exception& e) {
+        // the db was yanked/replaced under us (the
+        // 2026-08-21 field crash): degrade to empty,
+        // never abort — the card shows honest absence
+        fprintf(stderr, "[spine] lookup suppressed: %s\n", e.what());
+        return {};
+    }
 }
 
 std::vector<Entry> Spine::headwordSearch(const std::string& fts_query,
                                          int limit) const {
+    try {
     std::vector<Entry> out;
     std::string q = std::string("SELECT ") + kEntryCols +
         " FROM entries WHERE id IN (SELECT rowid FROM entries_fts "
@@ -205,9 +247,17 @@ std::vector<Entry> Spine::headwordSearch(const std::string& fts_query,
     sqlite3_bind_int(s.p, 2, limit);
     while (sqlite3_step(s.p) == SQLITE_ROW) out.push_back(entryFromRow(s.p));
     return out;
+    } catch (const std::exception& e) {
+        // the db was yanked/replaced under us (the
+        // 2026-08-21 field crash): degrade to empty,
+        // never abort — the card shows honest absence
+        fprintf(stderr, "[spine] headwordSearch suppressed: %s\n", e.what());
+        return {};
+    }
 }
 
 std::vector<ReverseHit> Spine::reverseIndex(const std::string& english) const {
+    try {
     std::vector<ReverseHit> out;
     Stmt s(db_,
            "SELECT wylie, pronunciation, tier FROM reverse_index WHERE english=? "
@@ -217,10 +267,18 @@ std::vector<ReverseHit> Spine::reverseIndex(const std::string& english) const {
     while (sqlite3_step(s.p) == SQLITE_ROW)
         out.push_back({columnText(s.p, 0), columnText(s.p, 1), columnText(s.p, 2)});
     return out;
+    } catch (const std::exception& e) {
+        // the db was yanked/replaced under us (the
+        // 2026-08-21 field crash): degrade to empty,
+        // never abort — the card shows honest absence
+        fprintf(stderr, "[spine] reverseIndex suppressed: %s\n", e.what());
+        return {};
+    }
 }
 
 std::vector<Entry> Spine::englishSearch(const std::string& fts_query,
                                         bool binding_only, int limit) const {
+    try {
     std::vector<Entry> out;
     std::string match = binding_only ? "hgm_gloss:(" + fts_query + ")" : fts_query;
     std::string q = std::string("SELECT ") + kEntryCols +
@@ -231,11 +289,19 @@ std::vector<Entry> Spine::englishSearch(const std::string& fts_query,
     sqlite3_bind_int(s.p, 2, limit);
     while (sqlite3_step(s.p) == SQLITE_ROW) out.push_back(entryFromRow(s.p));
     return out;
+    } catch (const std::exception& e) {
+        // the db was yanked/replaced under us (the
+        // 2026-08-21 field crash): degrade to empty,
+        // never abort — the card shows honest absence
+        fprintf(stderr, "[spine] englishSearch suppressed: %s\n", e.what());
+        return {};
+    }
 }
 
 std::vector<CorpusSegment> Spine::corpusSearch(const std::string& fts_query,
                                                const std::string& course,
                                                int limit) const {
+    try {
     std::vector<CorpusSegment> out;
     std::string q =
         "SELECT s.id, s.course, s.seq, s.wylie, s.english, s.acip "
@@ -260,10 +326,18 @@ std::vector<CorpusSegment> Spine::corpusSearch(const std::string& fts_query,
         out.push_back(std::move(seg));
     }
     return out;
+    } catch (const std::exception& e) {
+        // the db was yanked/replaced under us (the
+        // 2026-08-21 field crash): degrade to empty,
+        // never abort — the card shows honest absence
+        fprintf(stderr, "[spine] corpusSearch suppressed: %s\n", e.what());
+        return {};
+    }
 }
 
 std::vector<CorpusSegment> Spine::corpusWindow(const std::string& course, int lo,
                                                int hi) const {
+    try {
     std::vector<CorpusSegment> out;
     Stmt s(db_,
            "SELECT id, course, seq, wylie, english, acip FROM corpus_segments "
@@ -282,9 +356,17 @@ std::vector<CorpusSegment> Spine::corpusWindow(const std::string& course, int lo
         out.push_back(std::move(seg));
     }
     return out;
+    } catch (const std::exception& e) {
+        // the db was yanked/replaced under us (the
+        // 2026-08-21 field crash): degrade to empty,
+        // never abort — the card shows honest absence
+        fprintf(stderr, "[spine] corpusWindow suppressed: %s\n", e.what());
+        return {};
+    }
 }
 
 CorpusSegment Spine::corpusSegmentById(long long id) const {
+    try {
     CorpusSegment seg;
     Stmt s(db_,
            "SELECT id, course, seq, wylie, english, acip FROM corpus_segments "
@@ -299,12 +381,27 @@ CorpusSegment Spine::corpusSegmentById(long long id) const {
         seg.acip = columnText(s.p, 5);
     }
     return seg;
+    } catch (const std::exception& e) {
+        // the db was yanked/replaced under us (the
+        // 2026-08-21 field crash): degrade to empty,
+        // never abort — the card shows honest absence
+        fprintf(stderr, "[spine] corpusSegmentById suppressed: %s\n", e.what());
+        return {};
+    }
 }
 
 long long Spine::corpusMaxId() const {
+    try {
     Stmt s(db_, "SELECT MAX(id) FROM corpus_segments");
     if (sqlite3_step(s.p) == SQLITE_ROW) return sqlite3_column_int64(s.p, 0);
     return 0;
+    } catch (const std::exception& e) {
+        // the db was yanked/replaced under us (the
+        // 2026-08-21 field crash): degrade to empty,
+        // never abort — the card shows honest absence
+        fprintf(stderr, "[spine] corpusMaxId suppressed: %s\n", e.what());
+        return 0;
+    }
 }
 
 std::vector<Entry> Spine::lookupByPronunciation(const std::string& query,
@@ -336,13 +433,22 @@ std::vector<Entry> Spine::lookupByPronunciation(const std::string& query,
 }
 
 std::vector<std::string> Spine::corpusCourses() const {
+    try {
     std::vector<std::string> out;
     Stmt s(db_, "SELECT DISTINCT course FROM corpus_segments ORDER BY course");
     while (sqlite3_step(s.p) == SQLITE_ROW) out.push_back(columnText(s.p, 0));
     return out;
+    } catch (const std::exception& e) {
+        // the db was yanked/replaced under us (the
+        // 2026-08-21 field crash): degrade to empty,
+        // never abort — the card shows honest absence
+        fprintf(stderr, "[spine] corpusCourses suppressed: %s\n", e.what());
+        return {};
+    }
 }
 
 Entry Spine::entryById(long long id) const {
+    try {
     // kEntryCols, NOT '*': the physical table order interleaves hgm_source and
     // tenses, so '*' silently misaligned status/flags/tenses in entryFromRow
     Stmt s(db_, (std::string("SELECT ") + kEntryCols +
@@ -350,15 +456,30 @@ Entry Spine::entryById(long long id) const {
     sqlite3_bind_int64(s.p, 1, id);
     if (sqlite3_step(s.p) == SQLITE_ROW) return entryFromRow(s.p);
     return Entry{};
+    } catch (const std::exception& e) {
+        // the db was yanked/replaced under us (the
+        // 2026-08-21 field crash): degrade to empty,
+        // never abort — the card shows honest absence
+        fprintf(stderr, "[spine] entryById suppressed: %s\n", e.what());
+        return {};
+    }
 }
 
 std::vector<std::pair<long long, std::string>> Spine::allAcipHeadwords() const {
+    try {
     std::vector<std::pair<long long, std::string>> out;
     out.reserve(110000);
     Stmt s(db_, "SELECT id, acip FROM entries WHERE acip IS NOT NULL AND acip != ''");
     while (sqlite3_step(s.p) == SQLITE_ROW)
         out.emplace_back(sqlite3_column_int64(s.p, 0), columnText(s.p, 1));
     return out;
+    } catch (const std::exception& e) {
+        // the db was yanked/replaced under us (the
+        // 2026-08-21 field crash): degrade to empty,
+        // never abort — the card shows honest absence
+        fprintf(stderr, "[spine] allAcipHeadwords suppressed: %s\n", e.what());
+        return {};
+    }
 }
 
 }  // namespace allcore
