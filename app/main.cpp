@@ -2260,6 +2260,24 @@ inline QString str(const QString& key) {
     return get(key).toString();
 }
 
+}  // namespace sess  (reopened below — helper needs the namespace end)
+// W2 (Phase-2 audit): saving user work must never fail silently. One
+// voice for every write failure: names the file, the reason, and that
+// the work on screen is NOT persisted. Harness runs log instead.
+static bool warnWriteFail(QWidget* parent, const QFile& f,
+                          const QString& what) {
+    const QString msg = what + " could not be written:\n" +
+                        f.fileName() + "\n" + f.errorString() +
+                        "\n\nWhat you see on screen is NOT saved. "
+                        "Check disk space, permissions, and the "
+                        "folder's existence, then retry.";
+    if (g_harnessRun) { qWarning() << msg; return false; }
+    QMessageBox::warning(parent, "Save failed", msg);
+    return false;
+}
+namespace sess {
+
+
 // A remembered path is only worth restoring if it is still there —
 // drives get unmounted, folders get renamed, scratch files get
 // cleaned up. A vanished path restores as nothing, never as an
@@ -7591,8 +7609,17 @@ private:
             }
             QDir().mkpath(folioScansDir());
             QFile f(out);
-            if (f.open(QIODevice::WriteOnly)) f.write(rep->readAll());
-            done(out);
+            if (f.open(QIODevice::WriteOnly)) {
+                f.write(rep->readAll());
+                f.close();
+                done(out);
+            } else {
+                QMessageBox::warning(
+                    this, "Folio scan",
+                    "Fetched the folio but could not save it to the "
+                    "cache (" + out + "): " + f.errorString() +
+                    ". Check disk space and permissions.");
+            }
         });
     }
 
@@ -12126,7 +12153,10 @@ private:
         QDir().mkpath(QFileInfo(p).path());
         glossary_[wylie] = gloss;
         QFile f(p);
-        if (!f.open(QIODevice::WriteOnly | QIODevice::Text)) return;
+        if (!f.open(QIODevice::WriteOnly | QIODevice::Text)) {
+            warnWriteFail(this, f, "The glossary");
+            return;
+        }
         QTextStream ts(&f);
         ts << "# per-text glossary for " << QFileInfo(docFile_).fileName()
            << " — wylie <TAB> gloss; the translator's own, binding for "
@@ -21395,7 +21425,10 @@ private:
         if (p.isEmpty()) return;
         QDir().mkpath(QFileInfo(p).path());
         QFile f(p);
-        if (!f.open(QIODevice::WriteOnly | QIODevice::Text)) return;
+        if (!f.open(QIODevice::WriteOnly | QIODevice::Text)) {
+            warnWriteFail(this, f, "The alignment links file");
+            return;
+        }
         QTextStream ts(&f);
         ts << "# align links for " << QFileInfo(docFile_).fileName()
            << " — tibBeg tibEnd wylie engBeg engEnd english (translator's "
@@ -21420,7 +21453,10 @@ private:
             "TSV (*.tsv)");
         if (out.isEmpty()) return;
         QFile f(out);
-        if (!f.open(QIODevice::WriteOnly | QIODevice::Text)) return;
+        if (!f.open(QIODevice::WriteOnly | QIODevice::Text)) {
+            warnWriteFail(this, f, "The aligned-pairs export");
+            return;
+        }
         QTextStream ts(&f);
         ts << "# PENDING alignment candidates (translator-authored in the "
               "Align pane) — for the data project's review; never "
@@ -22734,7 +22770,10 @@ public:
                 workDir_ + "-combined.txt", "Text (*.txt)");
             if (out.isEmpty()) return;
             QFile f(out);
-            if (!f.open(QIODevice::WriteOnly | QIODevice::Text)) return;
+            if (!f.open(QIODevice::WriteOnly | QIODevice::Text)) {
+                warnWriteFail(this, f, "The combined block export");
+                return;
+            }
             int nonEmpty = 0;
             for (int i = 0; i < pages_.size(); ++i) {
                 QFile pf(pageTextFile(i));
@@ -23559,7 +23598,10 @@ private:
             "Text (*.txt)");
         if (out.isEmpty()) return;
         QFile f(out);
-        if (!f.open(QIODevice::WriteOnly | QIODevice::Text)) return;
+        if (!f.open(QIODevice::WriteOnly | QIODevice::Text)) {
+            warnWriteFail(this, f, "The OCR text");
+            return;
+        }
         QTextStream ts(&f);
         ts << "# OCR-DERIVED (unverified review material) — source: "
            << QFileInfo(file_).fileName()
@@ -23642,6 +23684,13 @@ static QString findDataRoot() {
     // not found — ask once and remember (a distributed copy whose data
     // folder was moved). Refusing leaves the app to report the missing
     // spine exactly as before; nothing is guessed.
+    // W2-01: a harness run has no human to answer a modal — degrade
+    // to cwd immediately (the degraded-state banner still tells the
+    // truth in the rendered output)
+    const auto args = QCoreApplication::arguments();
+    if (args.contains("--screenshots") || args.contains("--selftest") ||
+        args.contains("--sweep"))
+        return QDir::currentPath();
     QMessageBox::information(
         nullptr, "Locate the data folder",
         "The ALL Tool Data folder (containing build/hgm_spine_…db) was "
@@ -24529,7 +24578,10 @@ private:
         allcore::ProposalStore store(g_proposalsDir.toStdString());
         store.load();
         QFile f(out);
-        if (!f.open(QIODevice::WriteOnly | QIODevice::Text)) return 0;
+        if (!f.open(QIODevice::WriteOnly | QIODevice::Text)) {
+            warnWriteFail(this, f, "The approved-candidates export");
+            return 0;
+        }
         QTextStream ts(&f);
         ts << "# APPROVED dictionary/corpus candidates for the data "
               "project — approved in-app, never auto-ingested\n";
@@ -25665,8 +25717,12 @@ public:
                             "Text (*.txt)");
                         if (!out.isEmpty()) {
                             const QString res = exportMissingList(out);
+                            const bool bad =
+                                res.contains("could not", Qt::CaseInsensitive) ||
+                                res.contains("unreadable", Qt::CaseInsensitive);
                             info_->setHtml(
-                                "<div style='color:#2E7D32'>" +
+                                QString("<div style='color:%1'>")
+                                    .arg(bad ? "#8C2F2B" : "#2E7D32") +
                                 res.toHtmlEscaped() + " \u2192 " +
                                 out.toHtmlEscaped() + "</div>");
                         }
@@ -27412,7 +27468,14 @@ public:
             m.addedOn = QDate::currentDate().toString(Qt::ISODate);
             m.status = "active";
             roster.push_back(m);
-            catalogRosterSave(root, roster);
+            if (!catalogRosterSave(root, roster)) {
+                roster.pop_back();
+                QMessageBox::warning(
+                    &d, "Roster not saved",
+                    "CATALOG_TEAM.tsv could not be written - the "
+                    "member was NOT added. Check the official "
+                    "folder's permissions.");
+            }
             refill();
             nm->clear(); ini->clear(); p1->clear(); p2->clear();
             if (bootstrap) {
@@ -27425,7 +27488,14 @@ public:
             const int ix = list->currentRow();
             if (ix < 0 || ix >= roster.size()) return;
             roster[ix].status = "revoked";
-            catalogRosterSave(root, roster);
+            if (!catalogRosterSave(root, roster)) {
+                roster[ix].status = "active";
+                QMessageBox::warning(
+                    &d, "Roster not saved",
+                    "CATALOG_TEAM.tsv could not be written - the "
+                    "revocation did NOT take effect. Check the "
+                    "official folder's permissions.");
+            }
             refill();
         });
         d.exec();
