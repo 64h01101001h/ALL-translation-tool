@@ -278,6 +278,9 @@ constexpr int kFsCard = 13;     // card body
 constexpr int kFsHead = 15;     // section heads
 constexpr int kFsLead = 18;     // leading content (pron etc.)
 constexpr int kFsTibetan = 22;  // Tibetan headword script
+constexpr int kFsTibetanInline = 16;   // W6 floor: stacked glyphs in
+                                       // evidence rows never render
+                                       // at Latin body sizes
 
 // ---- epistemic badge grammar (phase 2; audit C2) ----------------
 // Every evidence block declares its authority class visually, in a
@@ -630,10 +633,10 @@ static QString tm84000Html(const std::string& wylie, int limit = 5) {
         if (!t.folio.empty())
             ref += " " + QString::fromStdString(t.folio);
         h += "<div style='margin:5px 0'><small>[" +
-             ref.toHtmlEscaped() + "]</small><br><span>" +
-             QString::fromStdString(t.tibetan)
-                 .left(160)
-                 .toHtmlEscaped() +
+             ref.toHtmlEscaped() + "]</small><br><span " +
+             QString("style='font-size:%1px'>")
+                 .arg(ux::kFsTibetanInline) +
+             ux::snip(QString::fromStdString(t.tibetan), 160) +
              "</span><br><i>" +
              QString::fromStdString(t.english)
                  .left(220)

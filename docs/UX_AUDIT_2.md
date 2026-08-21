@@ -152,3 +152,17 @@ and swept the boundary: widget labels sitting ON the chrome.
   every band caption (RibbonGroup) migrated.
 - Dark-panel viewers (four-layer scan, e-text) keep their own light-on-
   dark inks by design — they own their background explicitly. HOLDS.
+
+## W6 — TIBETAN TYPE POLICY (2026-08-20)
+- Shaping: --sanskritcheck battery re-run on the current build — 0
+  missing-glyph cases across both bundled fonts, including the deep
+  stack rkSya (རྐྵྱ). HOLDS.
+- Line height: the card body already renders inside line-height:1.7 —
+  stacked vowels/subjoined letters have head- and foot-room. HOLDS.
+- **W6-01 · P2 · FIXED.** Inline Tibetan in the 84000 TM evidence rows
+  rendered at the 13px Latin card-body size — stacks illegible. New
+  token ux::kFsTibetanInline = 16 is the ruled FLOOR for Tibetan
+  outside the headword; TM rows migrated (and gained honest elision,
+  which the multi-line form had missed).
+- Dedicated viewers (four-layer, e-text, editors) own their fonts at
+  larger sizes. HOLDS.
