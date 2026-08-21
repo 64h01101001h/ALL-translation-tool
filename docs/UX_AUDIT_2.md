@@ -137,3 +137,18 @@ kDoc 5.8 · kMuted 5.2 · kMachine 4.6 (all AA-normal).
 - **W5-03 · noted for W7.** Band captions (gold 9px on
   palette(alternate-base)) sit on a theme-dependent ground — measured
   3.41 on dark chrome; ruled in W7's theme pass, not here.
+
+## W7 — THEME COHERENCE (2026-08-20)
+Ruling was already Adam's own (2026-08-10, selftest-pinned): "night
+chrome, paper page" — reading surfaces stay cream in all modes; the
+chrome follows the system appearance. W7 verified the ruling holds
+(app-wide QTextEdit/QTextBrowser/QPlainTextEdit cream + ink, pinned)
+and swept the boundary: widget labels sitting ON the chrome.
+- **W7-01 · P2 · FIXED.** Chrome-ground labels with single-appearance
+  inks: #777 status/census/who labels measured 2.2–2.9:1 on BOTH
+  grounds; gold and hint labels marginal on dark. New ux::darkChrome()/
+  chromeMuted()/chromeGold() pick the ink at use time — values measured
+  on both grounds (5.4–6.0:1 dark, 4.5–6.0:1 light). Six label sites +
+  every band caption (RibbonGroup) migrated.
+- Dark-panel viewers (four-layer scan, e-text) keep their own light-on-
+  dark inks by design — they own their background explicitly. HOLDS.
