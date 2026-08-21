@@ -387,8 +387,17 @@ target_link_libraries(towylie_battery PRIVATE allcore)
 add_test(NAME towylie_battery
          COMMAND towylie_battery ${CMAKE_SOURCE_DIR}/build/towylie_reference.tsv)
 
-# The constitution (Fidelity engine, track C): process lessons as gates
 find_package(Python3 COMPONENTS Interpreter QUIET)
+
+# F3 link truth: outbound claims verified at the index level
+if(Python3_FOUND)
+  add_test(NAME link_truth
+           COMMAND ${Python3_EXECUTABLE}
+                   ${CMAKE_SOURCE_DIR}/tools/link_truth_check.py
+                   ${CMAKE_SOURCE_DIR})
+endif()
+
+# The constitution (Fidelity engine, track C): process lessons as gates
 if(Python3_FOUND)
   add_test(NAME constitution
            COMMAND ${Python3_EXECUTABLE}

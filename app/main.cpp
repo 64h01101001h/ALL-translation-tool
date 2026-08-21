@@ -2406,6 +2406,8 @@ static void remember(QPlainTextEdit* w, const QString& key,
 // TibetDoc search-locations jump; set in main() once the Overlay
 // exists
 static std::function<void(const QString&, int)> g_openAtLine;
+// File menu → the Library pane's importer (T8; one code path)
+static std::function<void()> g_importRelease;
 // Botok word boundaries as syllable counts (set once the Overlay's
 // segmenter is built) — lets other panes group syllables into words
 static std::function<std::vector<int>(const std::string&)>
@@ -19315,6 +19317,7 @@ public:
         maintMenu->addAction(
             "Import data release…",
             [this] { importDataRelease(); });
+        g_importRelease = [this] { importDataRelease(); };
         maintMenu->addSeparator();
         maintMenu->addAction(indexBtn->text(), [indexBtn] {
             indexBtn->click();
@@ -29920,6 +29923,24 @@ int main(int argc, char** argv) {
     // Delete. Word-style menu-bar reorganization (the rest of 9l)
     // follows the campaign.
     {
+        // T8 (9l part 2): the Word menu grammar opens with FILE —
+        // the acts of getting work in and out, gathered in the one
+        // place every desktop user reaches for first. Every action
+        // routes to the SAME code the panes use; nothing forks.
+        QMenu* fileM = win.menuBar()->addMenu("File");
+        QObject::connect(
+            fileM->addAction("Open ACIP File\u2026"),
+            &QAction::triggered, [overlay] {
+                const QString f = safeGetOpenFileName(
+                    overlay, "Open ACIP file", QString(),
+                    "Texts (*.txt *.act *.inc *.ace);;All files (*)");
+                if (!f.isEmpty()) overlay->openFile(f);
+            });
+        fileM->addSeparator();
+        QObject::connect(
+            fileM->addAction("Import Data Release\u2026"),
+            &QAction::triggered,
+            [] { if (g_importRelease) g_importRelease(); });
         QMenu* edit = win.menuBar()->addMenu("Edit");
         auto route = [](auto fn) {
             return [fn] {
@@ -32438,7 +32459,8 @@ int main(int argc, char** argv) {
             // 9l sits before the group menus — positional indexing
             // failed the day it landed)
             const auto menus = win.menuBar()->actions();
-            bool ok = menus.size() == tabs.count() + 3;   // Edit +
+            bool ok = menus.size() == tabs.count() + 4;   // File +
+                                                          // Edit +
                                                           // groups +
                                                           // View + Help
             int overlayActions = 0;

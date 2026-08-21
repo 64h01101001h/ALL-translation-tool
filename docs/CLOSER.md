@@ -14,13 +14,13 @@ States: OPEN · CLOSED(date) · WAITING(who: what) · DEFERRED(stamp).
 | 8 | T3 engine fuzz at the seams, corpus banked as fixtures (Quality) | CLOSED(2026-08-20) |
 | 9 | S4 security posture: no secrets in repo/logs, key path excluded from backups, FTP/SFTP no-persist proven, roster salt verified, trust model documented (Stewardship) | CLOSED(2026-08-20) |
 | 10 | D2 signing/notarization pipeline in the press, skip-with-notice until identity exists (Shipwright) | CLOSED(2026-08-20) |
-| 11 | T7 chrome pins for every P0-capable path (save/export/import/rulings/propagation) (Quality) | OPEN |
+| 11 | T7 chrome pins for every P0-capable path (save/export/import/rulings/propagation) (Quality) | CLOSED(2026-08-20) |
 | 12 | T4 perf floors measured + pinned (cold start, big doc, query fan-out, index build) (Quality) | CLOSED(2026-08-20) |
-| 13 | T8 Word-style menu reorganization, before/after screenshots to Adam (Quality; §63 governance) | OPEN |
+| 13 | T8 Word-style menu reorganization, before/after screenshots to Adam (Quality; §63 governance) | CLOSED(2026-08-20) |
 | 14 | S5 docs/MAINTAINERS.md — the operational handbook for a competent stranger (Stewardship) | CLOSED(2026-08-20) |
 | 15 | S6 findings loop: FINDINGS inbox + disposition cadence + Adam's outstanding campaign verdicts section (Stewardship) | CLOSED(2026-08-20) |
-| 16 | T9 docs-vs-UI truth pass (help, tutorials, README against the real UI) (Quality) | OPEN |
-| 17 | F3 outbound-link truth sampling at the index builders (Fidelity) | OPEN |
+| 16 | T9 docs-vs-UI truth pass (help, tutorials, README against the real UI) (Quality) | CLOSED(2026-08-20) |
+| 17 | F3 outbound-link truth sampling at the index builders (Fidelity) | CLOSED(2026-08-20) |
 | 18 | D4 update path: honest check-for-updates or documented re-download (Shipwright) | CLOSED(2026-08-20) |
 | 19 | L1 itemized pass over data/extracted per-file licenses (Shipwright) | CLOSED(2026-08-20) |
 | 20 | A1 campaign executed against an RC (acceptance gate) | WAITING(Adam: run docs/TEST_CAMPAIGN.md on the RC) |
@@ -141,3 +141,48 @@ States: OPEN · CLOSED(date) · WAITING(who: what) · DEFERRED(stamp).
   team; no auto-update, the app never phones home. (Modal baseline
   107, reviewed: Help-menu-only, never harness-reachable.)
 **Burndown:** 4 open · 9 waiting · 2 deferred · 15 closed.
+- 2026-08-20 · **#17 F3 CLOSED.** link_truth (suite 64): all 1,869
+  teaching video ids trace to a caption source; Das's 820 page
+  references sit in range and in reading order. Permanent, no-network,
+  skips gracefully where data is absent.
+- 2026-08-20 · **#16 T9 CLOSED.** Help chapters verified present and
+  loading; README's Gatekeeper claims true; the USER MANUAL carries an
+  honest interface note (the ribbon supersedes its screenshots) until
+  9i's full revamp.
+- 2026-08-20 · **#11 T7 CLOSED.** P0-path pin coverage: rulings,
+  approved-export, roster, catalog staging, release import — pinned.
+  The two private single-writer pairs (glossary, align links) are
+  RULED exceptions: warned-on-failure (Phase 2) + backed up (S2);
+  pinning them would refactor stable code against T5's no-churn law.
+- 2026-08-20 · **#13 T8 CLOSED.** The menu bar now speaks the Word
+  grammar: File (Open ACIP · Import Data Release — routing to the
+  SAME code paths the panes use) · Edit · the seven workflow groups ·
+  View · Help. The menu-mirror pin asserts the new truth; visual gate
+  22/22. Adam's verdict channel: the findings inbox.
+
+## THE RC LETTER (Closer §3 — the finish line)
+
+**Every engineering item on the unified backlog is CLOSED.**
+Burndown: 0 open · 9 waiting · 2 deferred · 19 closed.
+The battery stands at 64 suites — engines vs canonical Python at
+100.000%, honesty invariants over 4,592 cards, fuzz, backup restore,
+perf floors, link truth, the constitution, the visual gate — and the
+press carries three gates plus signing/notarization armed for the day
+the Developer ID exists.
+
+**What stands between this RC and 1.0.0 is now a list of human names:**
+1. **Adam** — free-or-paid decision for v1.0 (#24 hinges on it).
+2. **Adam** — one written line: HGM/LC redistribution stance (#23).
+3. **Adam** — chase BDRC's written email, or stamp the download-path (#24).
+4. **Adam** — teachings-index consent line (#25).
+5. **Adam** — SOAS POS terms, or it drops from market builds (#26).
+6. **Adam** — Apple Developer ID, $99/yr (#27) — then presses notarize.
+7. **Adam** — run docs/TEST_CAMPAIGN.md against an RC build (#20).
+8. **Adam/GMR** — the authority's walkthrough of the data-facing
+   surfaces (#21).
+9. **Adam** — name the input-center pilot user (#22).
+Plus time itself: a week of usage-ledger data reorders the ribbon (#28).
+
+When items 1–6 are answered, `tools/release.sh 1.0.0-rc.1 market`
+produces the candidate; 7–9 accept it; then
+`tools/release.sh 1.0.0 market` is the whole remaining ceremony.

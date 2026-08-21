@@ -1,3 +1,10 @@
+> **2026-08-20 — interface note:** the app now uses the Word-style
+> RIBBON BAND (groups of labeled tool icons under the group tabs) in
+> place of the older per-pane button rows this manual describes. The
+> tools and their names are unchanged — only their home moved into the
+> band. A fully revised manual with new screenshots is scheduled
+> (roadmap 9i).
+
 # The ALL Translation Tool — User Manual
 *The complete tutorial: every pane, every control, every workflow,
 click by click. Version 0.9.0 · August 2026 · Asian Legacy Library.*
