@@ -2275,6 +2275,17 @@ static bool warnWriteFail(QWidget* parent, const QFile& f,
     QMessageBox::warning(parent, "Save failed", msg);
     return false;
 }
+// ...and a click that opens a file must never die silently either
+static void warnOpenFail(QWidget* parent, const QFile& f,
+                         const QString& what) {
+    const QString msg = what + " could not be opened:\n" +
+                        f.fileName() + "\n" + f.errorString() +
+                        "\n\nThe file may have been moved, renamed, "
+                        "or had its permissions changed.";
+    if (g_harnessRun) { qWarning() << msg; return; }
+    QMessageBox::warning(parent, "Open failed", msg);
+}
+
 namespace sess {
 
 
@@ -4540,7 +4551,10 @@ public:
 
     void openFile(const QString& fn) {
         QFile f(fn);
-        if (!f.open(QIODevice::ReadOnly)) return;
+        if (!f.open(QIODevice::ReadOnly)) {
+            warnOpenFail(this, f, "The document");
+            return;
+        }
         {
             // the Document box is ACIP (Adam, 2026-08-12): wylie
             // source files (the Release 6 wylie edition, Lhasa _inc)
@@ -19726,7 +19740,10 @@ private:
         const QString tmp =
             QDir::temp().filePath(name + "-collection.zip");
         QFile out(tmp);
-        if (!out.open(QIODevice::WriteOnly)) return;
+        if (!out.open(QIODevice::WriteOnly)) {
+            warnWriteFail(parent, out, "The download staging file");
+            return;
+        }
         QNetworkReply* r = net_.get(QNetworkRequest(QUrl(url)));
         QProgressDialog prog("Downloading " + name.toUpper() + "…",
                              "Cancel", 0, 100, parent);
@@ -21120,7 +21137,10 @@ public:
     // brings back the alignment work with it)
     void openFile(const QString& f) {
         QFile qf(f);
-        if (!qf.open(QIODevice::ReadOnly)) return;
+        if (!qf.open(QIODevice::ReadOnly)) {
+            warnOpenFail(this, qf, "The Tibetan text");
+            return;
+        }
         tib_->setPlainText(QString::fromUtf8(qf.readAll()));
         docFile_ = f;
         sess::put("align/lastFile", f);
@@ -21324,7 +21344,10 @@ private:
             "Hypercontext (*.hyp);;All files (*)");
         if (fn.isEmpty()) return;
         QFile qf(fn);
-        if (!qf.open(QIODevice::ReadOnly)) return;
+        if (!qf.open(QIODevice::ReadOnly)) {
+            warnOpenFail(this, qf, "The Hypercontext file");
+            return;
+        }
         const auto hyp =
             allcore::parseHypFile(qf.readAll().toStdString());
         if (hyp.tibetan.empty()) {
@@ -22544,7 +22567,10 @@ public:
             "Text (*.txt *.act *.inc);;All files (*)");
         if (f.isEmpty()) return;
         QFile qf(f);
-        if (!qf.open(QIODevice::ReadOnly)) return;
+        if (!qf.open(QIODevice::ReadOnly)) {
+            warnOpenFail(this, qf, "The partner's input file");
+            return;
+        }
         compareWith(QString::fromUtf8(qf.readAll()));
     }
 
@@ -28473,7 +28499,10 @@ static QString translatorSurveyMarkdown(allcore::Spine& spine,
                                         const QString& path,
                                         QWidget* parent) {
     QFile f(path);
-    if (!f.open(QIODevice::ReadOnly)) return QString();
+    if (!f.open(QIODevice::ReadOnly)) {
+        warnOpenFail(parent, f, "The text to survey");
+        return QString();
+    }
     const std::string raw = QString::fromUtf8(f.readAll()).toStdString();
     QProgressDialog prog("Surveying the text…", "Stop", 0, 4, parent);
     prog.setWindowModality(Qt::WindowModal);
