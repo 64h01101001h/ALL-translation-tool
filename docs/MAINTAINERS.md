@@ -41,6 +41,15 @@ ALL_NOTARY keychain profile exists) → install → relaunch + verify.
 **market mode omits** reference.db and the OCR models (licensing —
 docs/SHIP.md). Presses are announced to Adam, never ambient.
 
+## Backups (the work must exist in more than one place)
+    tools/backup.sh              # external drive + Dropbox + GitHub
+    tools/backup.sh --github     # cloud only (after `gh auth login`)
+Makes a FILTERED mirror — every commit, minus the regenerable DMG
+binaries that made the repo 7GiB (220MB filtered) — and refuses to
+ship if the filter ate the history. Proven by restore drill: cloning
+any copy yields the full working tree. The working repo is never
+touched; only the backup copies are rewritten.
+
 ## Releases
     tools/release.sh <version> [team|market]
 Moves VERSION + CHANGELOG + git tag + press + blessed-baseline
