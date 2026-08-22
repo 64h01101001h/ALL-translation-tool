@@ -23,6 +23,7 @@ import os, re, sys, collections
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 LIBS = [os.path.join(ROOT, "library"),
+        "/Applications/Diamond Cutter Translation Tool/Diamond Cutter Tool Data/library",
         "/Applications/ALL Translation Tool/ALL Tool Data/library"]
 HANDOFF = os.path.expanduser(
     "~/Desktop/HGM DICTIONARY - TRANSLATION APP/Handoff/tools")

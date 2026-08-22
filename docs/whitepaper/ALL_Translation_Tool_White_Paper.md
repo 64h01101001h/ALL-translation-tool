@@ -1,4 +1,4 @@
-**The ALL Translation Tool**
+**The Diamond Cutter Translation Tool**
 
 *A complete working environment for Tibetan texts and their translation*
 
@@ -7,7 +7,7 @@ August 2026 (v8)
 
 **1. Purpose**
 
-The ALL Translation Tool is a desktop application that gathers, in one
+The Diamond Cutter Translation Tool is a desktop application that gathers, in one
 place, every function needed to work with a Tibetan digital text:
 reading it, looking words up, converting between writing systems,
 analyzing grammar, drafting a translation, checking that draft, and

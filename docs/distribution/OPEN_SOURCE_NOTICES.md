@@ -1,4 +1,4 @@
-# ALL Translation Tool — Open-Source & Data Notices
+# Diamond Cutter Translation Tool — Open-Source & Data Notices
 
 *Ships with every release. This document names every third-party
 component and data source the application uses, with its license
@@ -50,7 +50,7 @@ Version: 0.27.2 · August 2026
 
 ## The dictionary and corpus
 
-The HGM dictionary, aligned corpus, registers, and published
+The Geshe Michael Roach Dictionary, aligned corpus, registers, and published
 apparatus are the Asian Legacy Library's own data, © their
 respective authors, distributed only within the ALL/ACIP team.
 Geshe Michael Roach's English is the binding layer; nothing in this

@@ -1,16 +1,16 @@
-# ALL Translation Tool — Claude Code Project Instructions
+# Diamond Cutter Translation Tool — Claude Code Project Instructions
 **ALL = Asian Legacy Library · ACIP = Asian Classics Input Project**
 
-You are building the ALL Translation Tool: a multifunctional desktop suite for Tibetan digital texts and translations.
+You are building the Diamond Cutter Translation Tool: a multifunctional desktop suite for Tibetan digital texts and translations.
 
 ## Tech stack (as-built decision, 2026-08-06 — supersedes "Swift ports" wording below/in the roadmap)
 **C++20 core (`allcore` static library) + Qt 6 UI.** Adam's call: C++ for the final product; Qt 6 chosen for proper Tibetan complex-script shaping (bundled HarfBuzz) and future Windows/Linux builds for the input centers. macOS-first, cross-platform-clean.
 - `allcore` owns: SQLite (FTS5) spine access, engine ports, the Gofer query grammar. The UI layer only calls `allcore`.
 - Engine ports are **C++ ports** (not Swift), same inviolable rules: port from the canonical Python file, prove with its validation battery as unit tests (CTest), never reconstruct from spec. The Python engines in `engines/` stay the canonical oracles — diff-test C++ vs Python across the full dictionary where practical.
 - Build: CMake; SQLite via vendored amalgamation (FTS5 compiled in); batteries run via `ctest`.
-- Validation-battery harness (Python side): `tools/validate_engines.py`. Spine builder: `tools/build_spine.py` → `build/hgm_spine_v27_2.db`; smoke CLI `tools/spine_query.py`. Read `ALL_TRANSLATION_TOOL_ROADMAP.md` (project root) first — it is the master plan. Read `Handoff/HANDOFF.md` + `Handoff/README.md` for the data project's full history.
+- Validation-battery harness (Python side): `tools/validate_engines.py`. Spine builder: `tools/build_spine.py` → `build/hgm_spine_v27_2.db`; smoke CLI `tools/spine_query.py`. Read `DIAMOND_CUTTER_TRANSLATION_TOOL_ROADMAP.md` (project root) first — it is the master plan. Read `Handoff/HANDOFF.md` + `Handoff/README.md` for the data project's full history.
 
-## Inviolable rules (inherited from the HGM Dictionary project)
+## Inviolable rules (inherited from the Geshe Michael Roach Dictionary project)
 1. **hgm_gloss is binding; everything else is reference.** The dictionary's `hgm_gloss` field carries Geshe Michael Roach's (HGM's) English equivalents — the whole point of the project. Hopkins, {C}, {PH}, {GD}, {LC} material is reference comparanda only and must never be presented as, or promoted into, HGM equivalents. Machine work may MATCH HGM's English from corpus evidence, never COMPOSE it.
 2. **Never reconstruct canonical engines from spec.** The Python engines in `Handoff/tools/` are the authority. When porting to Swift, port from the file and prove the port with its validation battery (below). A port that fails its battery does not ship.
 3. **Never guess.** Failed conversions/parses are flagged and surfaced, not silently approximated. Follow the existing flag conventions (`pronunciation-review`, `tibetan-review`, `⟨wylie⟩` markers).

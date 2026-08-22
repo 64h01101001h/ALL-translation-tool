@@ -1,6 +1,6 @@
 ---
 name: all-press-ritual
-description: Use when packaging, installing, or releasing the ALL Translation Tool — the announced press and release rituals, their gates, and the recovery moves when a gate fires
+description: Use when packaging, installing, or releasing the Diamond Cutter Translation Tool — the announced press and release rituals, their gates, and the recovery moves when a gate fires
 ---
 
 # The ALL Press Ritual (house skill #1)

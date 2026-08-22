@@ -1,4 +1,4 @@
-# ALL Translation Tool — Data & Privacy
+# Diamond Cutter Translation Tool — Data & Privacy
 
 *A plain statement of what leaves your computer. Short version:
 almost nothing, and never without you pressing a button.*
@@ -8,7 +8,7 @@ almost nothing, and never without you pressing a button.*
 The dictionary, the aligned corpus, the Library's texts, search,
 lookup, the Sanskrit stack, text recognition, the trainer and
 drills, the input workstation — all of it runs locally, offline,
-from the "ALL Tool Data" folder beside the app. Unplug the network
+from the "Diamond Cutter Tool Data" folder beside the app. Unplug the network
 and the tool keeps working.
 
 ## Exactly two features touch the network
@@ -56,7 +56,7 @@ yourself put them somewhere shared.
 
 The application keeps a single lifecycle log at
 
-    ~/Library/Logs/ALLTranslationTool-lifecycle.log
+    ~/Library/Logs/DiamondCutterTranslationTool-lifecycle.log
 
 It records only launch and quit timestamps — nothing about what you
 read, typed, searched, or translated. You can open it in any text

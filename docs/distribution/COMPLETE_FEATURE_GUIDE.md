@@ -1,11 +1,11 @@
-# The ALL Translation Tool — Complete Feature Guide & Workflows
+# The Diamond Cutter Translation Tool — Complete Feature Guide & Workflows
 
 *Asian Legacy Library · Asian Classics Input Project — August 2026*
 
 *Every pane, every control, and how to put them together. Companion
 documents: the White Paper (the mission and the design) and the
 Technical Paper (under the hood). The same material lives inside the
-application — Help menu → "ALL Tool Help & Tutorials…" — with a
+application — Help menu → "Diamond Cutter Help & Tutorials…" — with a
 search box that finds any button and shows where it lives.*
 
 ---
@@ -483,7 +483,7 @@ authority-role changes take effect on the next launch.
 group, one submenu per pane, every function inside — reachable no
 matter which tab is in front.
 
-**Help** (Help menu → "ALL Tool Help & Tutorials…", or ⌘?): a
+**Help** (Help menu → "Diamond Cutter Help & Tutorials…", or ⌘?): a
 searchable window with a tutorial chapter for every pane. Type any
 feature's name and the results show the how-to *and* which workflow
 tab it lives under — clicking takes you there. "Suggested

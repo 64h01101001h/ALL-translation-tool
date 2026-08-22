@@ -55,7 +55,7 @@ if gh auth status >/dev/null 2>&1; then
           2>/dev/null || true)"
   if [[ -z "$REPO" ]]; then
     gh repo create ALL-translation-tool --private \
-      --description "The ALL Translation Tool — Asian Legacy Library" \
+      --description "The Diamond Cutter Translation Tool — Asian Legacy Library" \
       >/dev/null && echo "   created private repo"
   fi
   USER="$(gh api user -q .login)"

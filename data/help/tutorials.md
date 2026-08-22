@@ -1,4 +1,4 @@
-# ALL Translation Tool — Help & Tutorials
+# Diamond Cutter Translation Tool — Help & Tutorials
 
 ## Getting Started
 
@@ -588,7 +588,7 @@ Everything a tester needs to file a useful finding in one click:
 - **Show Logs in Finder** — reveals the app's lifecycle log
   (every launch, quit, and — with Verbose Logging on — every pane
   switch is timestamped there).
-- **Show Data Folder in Finder** — opens the ALL Tool Data folder
+- **Show Data Folder in Finder** — opens the Diamond Cutter Tool Data folder
   (your glossaries, imported materials, proposals, caches).
 - **Copy Installation Info** — puts a one-line version/platform
   summary on the clipboard for quick chat reports.

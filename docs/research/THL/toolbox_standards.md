@@ -1,6 +1,6 @@
 # THL Toolbox — Standards & How-To Documentation (Research Notes)
 
-**Researched:** 2026-08-12, for the ALL Translation Tool (Pecha Maker QA reference, input/proofing standards, cataloging, scanning, markup).
+**Researched:** 2026-08-12, for the Diamond Cutter Translation Tool (Pecha Maker QA reference, input/proofing standards, cataloging, scanning, markup).
 **Method note / provenance:** The live `thlib.org/tools/` URL now returns 404. The Toolbox survives in two places: (1) `https://old.thlib.org/tools/` — but its wiki pages are empty JavaScript shells (content was AJAX-loaded from the Sakai wiki at `collab.its.virginia.edu`, whose DNS no longer resolves); (2) the **Wayback Machine**, which holds full server-rendered captures of `www.thlib.org/tools/wiki/*.html` (mostly 2010) and of `collab.its.virginia.edu/wiki/toolbox/*.html` (2017–2025). Everything below was read from those archived captures. Nothing in this file is reconstructed from general knowledge; unreachable pages are listed at the end.
 
 **Key URL patterns for re-fetching:**
@@ -223,7 +223,7 @@ Sources: *Dictionaries* (hub), **THL Tibetan Dictionaries Editorial Manual** (th
 - The **Editorial Manual** specifies THL's dictionary information architecture: hierarchical entries where every datum (definition, sub-definition, pronunciation, etymology, spelling variant, literary quotation, oral quotation, translation equivalent, model sentence, register/metadata, source) attaches either to the head term or to another datum; explicit aspiration to OED-style historical citations; head-term formatting rules; verb handling; controlled vocabulary/knowledge-map linkage; bibliographic sourcing per definition.
 - **Tibetan Translation Tool** (the ancestor of our Lookup/Overlay panes; by Andrés Montano Pellegrini, script input by Edward Garrett): takes pasted Unicode, typed Wylie, or Tibetan script; **segments the passage into component phrases and words and stacks corresponding dictionary definitions**; runs online, or offline via local install; separate pages for installation, available dictionaries, user instructions, and developer notes. (This is the same tool whose `thl.wrd`/`thl.def` payloads we already extract per the roadmap.)
 
-**Relevance to ALL Tool:** the editorial manual's entry model (typed relationships, citations, register) is a useful benchmark for how far our HGM dictionary schema could grow; the TTT docs confirm the segmentation→stacked-definitions UX pattern our Overlay pane implements.
+**Relevance to ALL Tool:** the editorial manual's entry model (typed relationships, citations, register) is a useful benchmark for how far our Geshe Michael Roach Dictionary schema could grow; the TTT docs confirm the segmentation→stacked-definitions UX pattern our Overlay pane implements.
 
 ---
 

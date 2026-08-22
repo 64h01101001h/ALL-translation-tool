@@ -1,16 +1,16 @@
-# ALL Translation Tool — Install & Quick Start
+# Diamond Cutter Translation Tool — Install & Quick Start
 
 *One page. No technical knowledge required.*
 
 ## Installing (three steps)
 
 1. **Open the DMG** you were given — double-click it. A window
-   appears with two things in it: **ALL Translation Tool.app** and a
-   folder called **ALL Tool Data**.
+   appears with two things in it: **Diamond Cutter Translation Tool.app** and a
+   folder called **Diamond Cutter Tool Data**.
 
 2. **Drag BOTH of them, together, to the same place.** They must sit
    side by side — the app finds its dictionary by looking for the
-   "ALL Tool Data" folder right next to itself. Your Applications
+   "Diamond Cutter Tool Data" folder right next to itself. Your Applications
    folder is the recommended home, but anywhere works as long as the
    two stay together.
 
@@ -57,5 +57,5 @@ they are the same settings in both places. Enter:
 
 That is the heart of the tool. Everything else — translating,
 searching, Sanskrit, drills, input work — lives in the six workflow
-tabs across the top, and the Help menu ("ALL Tool Help & Tutorials…")
+tabs across the top, and the Help menu ("Diamond Cutter Help & Tutorials…")
 has a searchable tutorial for every pane.

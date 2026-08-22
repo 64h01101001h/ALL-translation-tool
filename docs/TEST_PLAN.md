@@ -7,7 +7,7 @@
 - **selftest** — proven by the app's own `--selftest` mode (suite 38,
   `app_selftest`): the real panes constructed against the real spine,
   exercised programmatically offscreen, assertions on their actual
-  state. `./ALLTranslationTool --selftest` prints per-check PASS/FAIL
+  state. `./DiamondCutterTranslationTool --selftest` prints per-check PASS/FAIL
   and exits nonzero on any failure.
 - **manual** — needs eyes or hardware (rendering quality, network,
   drag-and-drop); scripted here as a checklist step for a human pass.

@@ -5,7 +5,7 @@ contracted form standing where syllables were omitted (App. 2, p. 569:
 རྣམ་ཤེས for རྣམ་པར་ཤེས་པ). Requested by Adam 2026-08-07.
 
 **How this register is derived — attestation only, never invention:**
-every pair below has BOTH forms as HGM dictionary entries WITH glosses;
+every pair below has BOTH forms as Geshe Michael Roach Dictionary entries WITH glosses;
 the contraction follows Wilson's drop pattern (particles and nominal
 endings omitted — or, in the *end-truncated* class, a trailing content
 word, admitted only on exact gloss equality); and the two entries'

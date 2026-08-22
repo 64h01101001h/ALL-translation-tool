@@ -1,6 +1,6 @@
 # PART THREE — INPUT, COMMUNITY & THE APP ITSELF
 
-*The ALL Translation Tool User Manual, Part Three of Three.
+*The Diamond Cutter Translation Tool User Manual, Part Three of Three.
 Asian Legacy Library · Asian Classics Input Project.*
 
 This part walks you, click by click, through the last two workflow
@@ -767,7 +767,7 @@ system can literally point at any feature in the app.
 On a Mac these three live in the application menu (the one named
 after the app); they are also under **View** on every platform.
 
-**About ALL Translation Tool** opens the About box:
+**About Diamond Cutter Translation Tool** opens the About box:
 
 - the app name and **two version numbers** — the app's own
   VERSION and the **HGM DATA** release version it is running
@@ -795,7 +795,7 @@ item checks it:
    or change it any time in Settings → Data → **Team updates
    folder**.)
 2. The app scans the folder for files named
-   `ALL-Translation-Tool-<version>.dmg` and compares the newest
+   `Diamond-Cutter-Translation-Tool-<version>.dmg` and compares the newest
    against the version you are running.
 3. If a newer one exists: **"Update available — Version 0.28.0 is
    available (you are running 0.27.2)"**, with an **Open** button
@@ -843,7 +843,7 @@ change them in either place, they are the same settings)*
 
 ## 16.5 The Help window
 
-**Help menu → "ALL Tool Help & Tutorials…"** (or the standard help
+**Help menu → "Diamond Cutter Help & Tutorials…"** (or the standard help
 shortcut, ⌘? on a Mac) opens the searchable Help window: a search
 box across the top, a results list on the left, the reading page
 on the right.
@@ -895,7 +895,7 @@ stays set up.
 If anything ever misbehaves, the app can examine itself. Open
 Terminal and run the app binary with the `--selftest` flag:
 
-    "/Applications/ALL Translation Tool.app/Contents/MacOS/ALL Translation Tool" --selftest
+    "/Applications/Diamond Cutter Translation Tool.app/Contents/MacOS/Diamond Cutter Translation Tool" --selftest
 
 The app constructs its real panes offscreen against the real data
 and exercises them — 89 checks at this writing (the battery grows

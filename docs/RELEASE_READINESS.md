@@ -17,7 +17,7 @@ half — the checklist at the bottom is the release gate you hold.*
 | Packaging pipeline (`tools/package_macos.sh`) | gate → Release build → battery → bundle fixup → sign → staged launch test → DMG | **PASS**; DMG re-verified today: mounts, contents right, signature valid |
 | Performance | full canonical volume (344,940 tokens) through the engine | **424 ms** (15 s regression ceiling enforced) |
 
-**The artifact: `dist/ALL-Translation-Tool-0.27.2.dmg` (183 MB), byte-current with commit `8a2da1a`.** App + "ALL Tool Data" (424 MB) + README. Ad-hoc signed.
+**The artifact: `dist/Diamond-Cutter-Translation-Tool-0.27.2.dmg` (183 MB), byte-current with commit `8a2da1a`.** App + "Diamond Cutter Tool Data" (424 MB) + README. Ad-hoc signed.
 
 ## The human release gate — the five-step checklist (docs/TEST_PLAN.md)
 

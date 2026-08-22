@@ -3,7 +3,7 @@
 The short version of how to build, test, and not break the rules.
 Deeper companions: `README.md` (pane guide),
 `docs/TECHNICAL_OVERVIEW.md` (under the hood),
-`ALL_TRANSLATION_TOOL_ROADMAP.md` (master plan), `CLAUDE.md`
+`DIAMOND_CUTTER_TRANSLATION_TOOL_ROADMAP.md` (master plan), `CLAUDE.md`
 (project rules).
 
 ## Prerequisites
@@ -27,8 +27,8 @@ nothing: `python3 tools/build_spine.py` (release package + corpus →
 ## Prove the build
 
     ctest --test-dir cmake-build             # 55 suites (2026-08-20)
-    ./cmake-build/app/ALLTranslationTool.app/Contents/MacOS/\
-ALLTranslationTool --selftest                # 80 checks
+    ./cmake-build/app/DiamondCutterTranslationTool.app/Contents/MacOS/\
+DiamondCutterTranslationTool --selftest                # 225 checks
 
 The ctest battery is the trust anchor: engine ports at
 full-dictionary parity against their Python oracles, data layers,

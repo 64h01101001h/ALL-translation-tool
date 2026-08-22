@@ -38,7 +38,7 @@ Read from tools/package_macos.sh staging (the manifest of record):
 
 
 ## THE FREE-DISTRIBUTION RULING (Adam, 2026-08-22)
-**The ALL Translation Tool is distributed FREE OF CHARGE and is not
+**The Diamond Cutter Translation Tool is distributed FREE OF CHARGE and is not
 sold.** It is given to translators, monastic input centers, and
 students of the tradition. This is the decision the licensing track
 was waiting on, and it resolves the manifest's hardest question.

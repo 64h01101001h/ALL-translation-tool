@@ -68,7 +68,7 @@ Actual library keying through the canonical chain
   Qt's shaping handled all 23 cases.
 
 ## The permanent guard
-`ALLTranslationTool --sanskritcheck` — shapes the battery through
+`DiamondCutterTranslationTool --sanskritcheck` — shapes the battery through
 the app's actual fonts and exits non-zero on any missing glyph.
 Run it after any font bundle change and after each engine re-port.
 

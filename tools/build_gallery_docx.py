@@ -167,7 +167,7 @@ def main():
 
     # title page block
     p = para(doc, WD_ALIGN_PARAGRAPH.CENTER, 30, 8)
-    add_run(p, 'Asian Legacy Library · ALL Translation Tool', size=8,
+    add_run(p, 'Asian Legacy Library · Diamond Cutter Translation Tool', size=8,
             color=GOLD, bold=True, font=SANS, caps=True, spacing=28)
     p = para(doc, WD_ALIGN_PARAGRAPH.CENTER, 0, 4)
     add_run(p, 'The Fifteen Panes', size=25, bold=True, color=ACCENT)

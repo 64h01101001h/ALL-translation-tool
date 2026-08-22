@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """build_spine.py — compile the HGM release package + parallel corpus into the
-ALL Translation Tool's SQLite (FTS5) spine database.
+Diamond Cutter Translation Tool's SQLite (FTS5) spine database.
 
 Roadmap item 1. The app IMPORTS a release; this builder is the importer.
 Provenance rule: every entry's complete source JSON is preserved verbatim in

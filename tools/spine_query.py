@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""spine_query.py — smoke-test CLI for the ALL Translation Tool SQLite spine.
+"""spine_query.py — smoke-test CLI for the Diamond Cutter Translation Tool SQLite spine.
 
 Usage:
   spine_query.py lookup  <headword>            wylie / Tibetan unicode / ACIP

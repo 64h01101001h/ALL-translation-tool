@@ -1,4 +1,4 @@
-# UX AUDIT — ALL Translation Tool
+# UX AUDIT — Diamond Cutter Translation Tool
 *Reconnaissance pass per the Master UX/UI Oversight Prompt
 (2026-08-20). No GUI was modified in producing this document.
 Status: awaiting second-reviewer challenge before implementation.*

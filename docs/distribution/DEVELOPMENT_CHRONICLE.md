@@ -1,11 +1,11 @@
-# The ALL Translation Tool
+# The Diamond Cutter Translation Tool
 ## A Development Chronicle — Seven Days, Three Hundred Increments
 
 **Adam Derick Andrade · Asian Legacy Library · August 2026**
 
 ---
 
-This is the complete development record of the ALL Translation Tool:
+This is the complete development record of the Diamond Cutter Translation Tool:
 a native desktop research suite for translators of classical Tibetan,
 built for the Asian Legacy Library on the foundation laid by the
 Asian Classics Input Project. It went from an empty repository to a

@@ -1,4 +1,4 @@
-# ALL Translation Tool — Troubleshooting & FAQ
+# Diamond Cutter Translation Tool — Troubleshooting & FAQ
 
 *If a question isn't answered here, the self-test (below) will
 usually localize the problem — include its output when you ask for
@@ -21,13 +21,13 @@ Current DMGs ship the models inside the data folder, so a fresh
 install never sees this. If you installed from an older DMG, copy
 the `library/ocr_models` folder (from a current DMG's "ALL Tool
 Data" folder, or from your coordinator) into your own
-`ALL Tool Data/library/` folder, then relaunch.
+`Diamond Cutter Tool Data/library/` folder, then relaunch.
 
 ---
 
 **Q. The app says it can't find its data.**
 
-The **"ALL Tool Data" folder must sit beside the app** — same
+The **"Diamond Cutter Tool Data" folder must sit beside the app** — same
 folder, side by side, exactly as they came off the DMG. If you moved
 the app to Applications but left the data folder behind (or renamed
 it), reunite them and relaunch. The app never guesses at a data
@@ -41,7 +41,7 @@ it to the right place.
 Run the built-in self-test. Open Terminal (Applications →
 Utilities → Terminal) and paste:
 
-    "/Applications/ALL Translation Tool.app/Contents/MacOS/ALL Translation Tool" --selftest
+    "/Applications/Diamond Cutter Translation Tool.app/Contents/MacOS/Diamond Cutter Translation Tool" --selftest
 
 (If the app lives somewhere other than Applications, adjust the
 path.) **89 checks** print PASS or FAIL, one per line, covering the
@@ -91,7 +91,7 @@ else is affected.
 
 **Q. How do I update to a new release?**
 
-Open the new DMG and drag **both** the app and the "ALL Tool Data"
+Open the new DMG and drag **both** the app and the "Diamond Cutter Tool Data"
 folder over your old ones, replacing them (keep them side by side,
 as always). That's the whole update. Your settings survive — they
 live in your user account, not in the replaced folders. If you keep

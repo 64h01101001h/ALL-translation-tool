@@ -2,12 +2,12 @@
 # package_macos.sh — build the distributable macOS DMG for the team
 # (leadership recommendation #7, macOS half).
 #
-# Produces dist/ALL-Translation-Tool-<version>.dmg containing:
-#   ALL Translation Tool.app   (Qt frameworks bundled, ad-hoc signed)
-#   ALL Tool Data/             (spine db + runtime data manifest)
+# Produces dist/Diamond-Cutter-Translation-Tool-<version>.dmg containing:
+#   Diamond Cutter Translation Tool.app   (Qt frameworks bundled, ad-hoc signed)
+#   Diamond Cutter Tool Data/             (spine db + runtime data manifest)
 #   README.txt
 #
-# The app finds "ALL Tool Data" beside itself (findDataRoot), so the
+# The app finds "Diamond Cutter Tool Data" beside itself (findDataRoot), so the
 # team drags BOTH items anywhere together — Applications, a folder,
 # an external drive — and it runs. Ad-hoc signing means the first
 # launch needs right-click → Open (no Apple Developer ID yet; a
@@ -29,7 +29,7 @@ BUILD="$ROOT/cmake-build-release"
 DIST="$ROOT/dist"
 APPVER=$(head -1 "$ROOT/VERSION")
 VERSION="$APPVER"
-APPNAME="ALL Translation Tool"
+APPNAME="Diamond Cutter Translation Tool"
 STAGE="$DIST/stage"
 QTBIN="$(dirname "$(which qmake6 2>/dev/null || echo /opt/homebrew/opt/qt/bin/qmake)")"
 
@@ -46,7 +46,7 @@ if [[ "${1:-}" != "--skip-build" ]]; then
   (cd "$BUILD" && ctest --output-on-failure -j 4 2>&1 | tail -2)
 fi
 
-APP="$BUILD/app/ALLTranslationTool.app"
+APP="$BUILD/app/DiamondCutterTranslationTool.app"
 [[ -d "$APP" ]] || { echo "app bundle missing: $APP"; exit 1; }
 
 echo "== 2a. constitution gate (Fidelity engine, track C) =="
@@ -55,7 +55,7 @@ python3 "$ROOT/tools/constitution_check.py" "$ROOT" || {
 
 echo "== 2b. visual-regression gate (Phase-2 audit s11) =="
 SHOTS_TMP="$(mktemp -d)"
-QT_QPA_PLATFORM=offscreen "$APP/Contents/MacOS/ALLTranslationTool" --screenshots "$SHOTS_TMP" >/dev/null 2>&1 || true
+QT_QPA_PLATFORM=offscreen "$APP/Contents/MacOS/DiamondCutterTranslationTool" --screenshots "$SHOTS_TMP" >/dev/null 2>&1 || true
 python3 "$ROOT/tools/shot_diff.py" "$ROOT/build/blessed_shots" "$SHOTS_TMP" || {
   echo "VISUAL REGRESSION - press stopped. Re-bless only if the change is intentional."; exit 7; }
 
@@ -99,7 +99,7 @@ fixup_macho() {
   done
 }
 for f in "$FW"/*.dylib; do fixup_macho "$f"; done
-fixup_macho "$STAGE/$APPNAME.app/Contents/MacOS/ALLTranslationTool"
+fixup_macho "$STAGE/$APPNAME.app/Contents/MacOS/DiamondCutterTranslationTool"
 # prove the escape hatches are closed
 LEAKS=""
 while IFS= read -r f; do
@@ -131,7 +131,7 @@ fi
 codesign --verify "$STAGE/$APPNAME.app" && echo "   signature ok"
 
 echo "== 6. data manifest =="
-DATA="$STAGE/ALL Tool Data"
+DATA="$STAGE/Diamond Cutter Tool Data"
 mkdir -p "$DATA/build" "$DATA/docs/analysis" "$DATA/library"
 # the spine ships by pointer when the release importer has moved it
 SPINE_NAME="hgm_spine_v27_2.db"
@@ -204,13 +204,13 @@ cp "$ROOT/docs/analysis/PASSAGE_ANALYSIS_TEMPLATE.md" \
    "$DATA/docs/analysis/" 2>/dev/null || true
 
 cat > "$STAGE/README.txt" <<EOF
-ALL Translation Tool — release $VERSION ($(date +%Y-%m-%d))
+Diamond Cutter Translation Tool — release $VERSION ($(date +%Y-%m-%d))
 
-1. Drag BOTH "$APPNAME.app" and "ALL Tool Data" to the same place
+1. Drag BOTH "$APPNAME.app" and "Diamond Cutter Tool Data" to the same place
    (your Applications folder, or any folder you like — together).
 2. First launch: RIGHT-CLICK the app and choose Open (the build is
    signed ad hoc, not yet notarized with an Apple Developer ID).
-3. Put your Tibetan texts in "ALL Tool Data/library" — the Library
+3. Put your Tibetan texts in "Diamond Cutter Tool Data/library" — the Library
    pane reads it.
 4. Propose tab: set your name and the shared proposals folder
    (the team's Dropbox) once. Authorities also tick the admin box
@@ -231,7 +231,7 @@ echo "== 6b. launch test from the staged layout =="
 # recorded for diagnosis
 LAUNCH_OK=0
 for ATTEMPT in 1 2 3; do
-  "$STAGE/$APPNAME.app/Contents/MacOS/ALLTranslationTool" \
+  "$STAGE/$APPNAME.app/Contents/MacOS/DiamondCutterTranslationTool" \
       > /tmp/all_stage_launch.log 2>&1 &
   LPID=$!
   sleep 8
@@ -260,18 +260,18 @@ cp "$ROOT/docs/distribution/OPEN_SOURCE_NOTICES.md" \
 # nothing caught it (now hardened), and the app died. The installer
 # now insists on a quiet target: quit any running instance politely,
 # wait, and only then touch /Applications.
-if pgrep -x ALLTranslationTool >/dev/null; then
+if pgrep -x DiamondCutterTranslationTool >/dev/null; then
   echo "   (a running instance holds the install target - asking it"
   echo "    to quit before touching its files)"
-  osascript -e 'quit app "ALLTranslationTool"' 2>/dev/null || true
+  osascript -e 'quit app "DiamondCutterTranslationTool"' 2>/dev/null || true
   for i in $(seq 1 20); do
-    pgrep -x ALLTranslationTool >/dev/null || break
+    pgrep -x DiamondCutterTranslationTool >/dev/null || break
     sleep 1
   done
-  if pgrep -x ALLTranslationTool >/dev/null; then
+  if pgrep -x DiamondCutterTranslationTool >/dev/null; then
     echo "   still running after 20s - stopping it (the relaunch at"
     echo "    step 8 brings the NEW build back)"
-    pkill -x ALLTranslationTool || true
+    pkill -x DiamondCutterTranslationTool || true
     sleep 2
   fi
 fi
@@ -280,16 +280,16 @@ echo "== 6c. install to /Applications (the desktop copy) =="
 # THE step that keeps Adam's running app current — it was lost in
 # the 2026-08-13 rewrite, and every press until 2026-08-14 built a
 # fresh DMG while the desktop kept running the old install.
-INSTALL="/Applications/ALL Translation Tool"
+INSTALL="/Applications/Diamond Cutter Translation Tool"
 mkdir -p "$INSTALL"
 rsync -a --delete "$STAGE/$APPNAME.app/" "$INSTALL/$APPNAME.app/"
 # data: add/update shipped files, NEVER delete user materials
-rsync -a "$STAGE/ALL Tool Data/" "$INSTALL/ALL Tool Data/"
+rsync -a "$STAGE/Diamond Cutter Tool Data/" "$INSTALL/Diamond Cutter Tool Data/"
 cp "$STAGE/README.txt" "$STAGE/OPEN_SOURCE_NOTICES.md" "$INSTALL/" \
    2>/dev/null || true
 # verify: the installed binary must BE the staged binary
-if cmp -s "$STAGE/$APPNAME.app/Contents/MacOS/ALLTranslationTool" \
-          "$INSTALL/$APPNAME.app/Contents/MacOS/ALLTranslationTool"; then
+if cmp -s "$STAGE/$APPNAME.app/Contents/MacOS/DiamondCutterTranslationTool" \
+          "$INSTALL/$APPNAME.app/Contents/MacOS/DiamondCutterTranslationTool"; then
   echo "   installed binary == staged binary (byte-identical)"
 else
   echo "   ERROR: installed binary differs from the staged build!"
@@ -299,7 +299,7 @@ echo "   installed: $INSTALL/$APPNAME.app ($(date))"
 
 echo "== 7. DMG =="
 mkdir -p "$DIST"
-DMG="$DIST/ALL-Translation-Tool-$VERSION.dmg"
+DMG="$DIST/Diamond-Cutter-Translation-Tool-$VERSION.dmg"
 rm -f "$DMG"
 hdiutil create -volname "$APPNAME $VERSION" -srcfolder "$STAGE" \
     -ov -format UDZO "$DMG" | tail -1
@@ -328,13 +328,13 @@ echo "== 8. relaunch the installed app =="
 # user's seat — never end a press with the app down)
 open "$INSTALL/$APPNAME.app"
 sleep 4
-if pgrep -x ALLTranslationTool >/dev/null; then
+if pgrep -x DiamondCutterTranslationTool >/dev/null; then
   echo "   relaunched and running"
 else
   echo "   first relaunch did not stick — retrying"
   open "$INSTALL/$APPNAME.app"
   sleep 5
-  pgrep -x ALLTranslationTool >/dev/null \
+  pgrep -x DiamondCutterTranslationTool >/dev/null \
     && echo "   relaunched on retry" \
     || { echo "RELAUNCH FAILED — launch the app manually"; exit 9; }
 fi

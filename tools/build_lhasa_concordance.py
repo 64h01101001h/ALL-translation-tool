@@ -22,7 +22,11 @@ import html, json, os, re, sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 LIB = os.path.join(ROOT, "library", "kangyur")
-LIB_ALT = "/Applications/ALL Translation Tool/ALL Tool Data/library/kangyur"
+# both install paths: the tool was renamed 2026-08-22 and an
+# already-installed copy still lives under the old one
+LIB_ALTS = ["/Applications/Diamond Cutter Translation Tool/Diamond Cutter Tool Data/library/kangyur",
+            "/Applications/ALL Translation Tool/ALL Tool Data/library/kangyur"]
+LIB_ALT = next((p for p in LIB_ALTS if os.path.isdir(p)), LIB_ALTS[0])
 THL = os.path.join(ROOT, "data", "extracted", "thl_lhasa_records")
 OUT = os.path.join(ROOT, "data", "extracted",
                    "kl_lhasa_concordance.json")

@@ -1,6 +1,6 @@
 # Working with Tibetan: Guidelines & Protocols
 
-These chapters are the house protocols of the ALL Translation Tool
+These chapters are the house protocols of the Diamond Cutter Translation Tool
 for working with Tibetan across formats and mediums — print,
 digital text, transliteration, pronunciation, scans, catalogs, and
 audio. They combine the project's own inviolable rules (ACIP/ALL

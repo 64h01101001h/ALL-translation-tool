@@ -1,4 +1,4 @@
-# ALL Translation Tool — Developer Handbook
+# Diamond Cutter Translation Tool — Developer Handbook
 
 *Under the hood, for the development team. Current as of
 **2026-08-22, v1.0.0-rc.1** (70 test suites green, corpus v32).
@@ -13,7 +13,7 @@ swept across the whole dictionary rather than sampled. The sections
 below remain accurate on architecture; version-specific counts may
 lag. Companion documents:
 `README.md` (user-facing pane guide),
-`ALL_TRANSLATION_TOOL_ROADMAP.md` (master plan), `TODO.md` (the
+`DIAMOND_CUTTER_TRANSLATION_TOOL_ROADMAP.md` (master plan), `TODO.md` (the
 single live ledger — includes the merged attack queue as of
 2026-08-14; `docs/LOOSE_ENDS_AUDIT.md` is now a historical pointer),
 `docs/whitepaper/` (the non-technical story), and the design docs
@@ -25,7 +25,7 @@ referenced per subsystem below. The user-side counterpart is
 A C++20 static library (**`allcore`**, `core/`) owns everything
 deterministic: SQLite/FTS5 data access, the ported conversion
 engines, the grammar layer, search, and every algorithm. A
-single-file **Qt 6 Widgets** app (`app/main.cpp`, ~24,300 lines)
+single-file **Qt 6 Widgets** app (`app/main.cpp`, ~34,600 lines)
 is the UI over it — **21 panes in six workflow groups** (Read /
 Translate / Research / Learn / Input / Community, mirrored by the
 menu bar), no logic that isn't presentation, network calls only in
@@ -36,16 +36,16 @@ library (**`allocr`**, `ocr/`) carries line detection/recognition
 (onnxruntime + OpenCV); the app builds without it (`ALL_HAVE_OCR`
 gates the OCR pane). `engines/` holds the canonical Python engine
 copies the C++ ports were transcribed from (the data project owns
-their evolution). Python lives in `tools/` (54 scripts) for data
+their evolution). Python lives in `tools/` (72 scripts) for data
 preparation and validation only; nothing Python runs at app
 runtime. Build is CMake (Qt 6.11.1, C++20, system SQLite with
-FTS5 asserted at runtime); `ctest` runs 39 suites (34 core + 4
+FTS5 asserted at runtime); `ctest` runs 70 suites (62 core + 7
 app-level + 1 ocr); a headless `allanalyze` CLI mirrors the
 Analysis pipeline. The packaged app installs to
-`/Applications/ALL Translation Tool/`.
+`/Applications/Diamond Cutter Translation Tool/`.
 
 ```
-data releases (HGM Dictionary project, versioned)     external APIs
+data releases (Geshe Michael Roach Dictionary project, versioned)     external APIs
         │                                       (BDRC · Anthropic ·
         ▼                                        user's own servers)
 tools/build_spine.py ──► build/hgm_spine_v27_2.db          │
@@ -57,7 +57,7 @@ tools/build_spine.py ──► build/hgm_spine_v27_2.db          │
 ```
 
 **The prime directive of the data flow**: this repo *consumes*
-versioned releases from the HGM Dictionary project (a separate
+versioned releases from the Geshe Michael Roach Dictionary project (a separate
 Cowork effort); it never forks or edits the data. Engine defects
 found here are *filed back* to the data project, which fixes the
 canonical Python engines and re-releases; we then re-port and
@@ -100,12 +100,12 @@ re-prove.
 ```
 core/include/allcore/*.h   public API, one header per subsystem
 core/src/*.cpp             implementations
-core/tests/*_smoke.cpp     the 39 batteries (see §7)
+core/tests/*_smoke.cpp     the 62 batteries (see §7)
 core/tools_*.cpp           headless CLIs: wynorm, libindex_cli
-app/main.cpp               the whole UI (~24.3k lines, pane classes)
+app/main.cpp               the whole UI (~34.6k lines, pane classes)
 ocr/                       allocr line-detect/recognize (onnx+OpenCV)
 engines/                   canonical Python engines (port sources)
-tools/*.py, *.sh           54 prep/oracle scripts + the press script
+tools/*.py, *.sh           72 prep/oracle scripts + the press script
 data/                      shipped payloads: fonts, extracted banks,
                            help (in-app manual/guides), das, teaching,
                            botok, spellcheck, soas_pos, whitney,
@@ -432,14 +432,14 @@ programme): `docs/standards/SOURCE_TRUST_HIERARCHY.md` +
 
 ## 17. Testing: three harnesses
 
-1. **ctest (39 suites = 34 core + 4 app + 1 ocr)** — the
+1. **ctest (70 suites = 62 core + 7 app + 1 ocr)** — the
    allcore batteries (§5/§7) plus app-level `dmp_smoke` /
    `collation_smoke` / `font_smoke` / `app_selftest` (which runs
    harness #2 offscreen under CTest) and `ocr_smoke`. Run:
    `ctest --test-dir cmake-build-release`. Batteries hard-fail on
    missing oracles; skips are loud.
-2. **In-app selftest (159 checks)** — `ALLTranslationTool
-   --selftest` builds the real UI offscreen (17 per-pane
+2. **In-app selftest (225 checks)** — `DiamondCutterTranslationTool
+   --selftest` builds the real UI offscreen (16 per-pane
    `selfTest` members + the main driver's inline checks) and
    checks pane behavior end-to-end: pins for every August subsystem
    (citations, meters, mgur, style, typography, THL phrase, sync
@@ -461,13 +461,13 @@ clean-Mac install is the most important step).
 
 `bash tools/package_macos.sh`:
 1. builds nothing itself — **build first** (`cmake --build
-   cmake-build-release --target ALLTranslationTool -j8`);
+   cmake-build-release --target DiamondCutterTranslationTool -j8`);
 2. stages the .app, runs `macdeployqt`, fixes rpaths, ad-hoc
    codesigns;
-3. assembles "ALL Tool Data" (spine, OCR models, runtime data
+3. assembles "Diamond Cutter Tool Data" (spine, OCR models, runtime data
    folders — enumerated in the script);
 4. launch-tests the staged layout (3 attempts);
-5. **installs to `/Applications/ALL Translation Tool/`** — app
+5. **installs to `/Applications/Diamond Cutter Translation Tool/`** — app
    rsync with `--delete`, data rsync WITHOUT delete (user
    materials safe), then verifies the installed binary is
    **byte-identical** to the staged one (hard fail otherwise).
@@ -475,7 +475,7 @@ clean-Mac install is the most important step).
    disk-emergency rewrite; presses built DMGs while the desktop
    ran stale. Never report "relaunched" without artifact
    verification.*
-6. builds the DMG (`dist/ALL-Translation-Tool-<v>.dmg`).
+6. builds the DMG (`dist/Diamond-Cutter-Translation-Tool-<v>.dmg`).
 
 Versioning: `VERSION` file is the single source (CMake
 configure-dependency — a bump re-configures; this was the root of
@@ -540,8 +540,10 @@ deferrals. The complete ledger: `TODO.md`'s ATTACK QUEUE section.
 
 ## 21. Where knowledge lives
 
-- `TODO.md` — the single live ledger (the four-lane audit's
-  findings were merged into its ATTACK QUEUE section 2026-08-14).
+- `docs/CLOSER.md` — **the single open-work backlog**. An item
+  not on it does not exist (this supersedes TODO.md as the live
+  ledger; TODO.md remains the historical attack queue, merged
+  2026-08-14).
 - `docs/LOOSE_ENDS_AUDIT.md` — historical record of that audit
   only; no longer a second tracked list.
 - `docs/design/` — per-feature designs (file browser, scan sync,
@@ -576,7 +578,7 @@ extra phonetics display conventions.
 
 ## Appendix A — exact inventory (captured 2026-08-14)
 
-- **Classes in app/main.cpp (25)**: LookupPopup, AnalysisPane,
+- **Classes in app/main.cpp (31)**: LookupPopup, AnalysisPane,
   ScanCanvasLabel, OverlayPane (the largest — Overlay + card +
   scan sync + pecha + citations + meters + typography),
   ApparatusPane, ScansPane, ExportPane, GoferPane, SanskritPane,
@@ -589,14 +591,14 @@ extra phonetics display conventions.
   `g_goferQuery`, `g_surveyFile`, `g_sendToManuscript`,
   `g_mssComposeBib`, `g_mssProposeNote`.
 - **CMake targets**: `allcore` (44 sources), `allocr`,
-  `ALLTranslationTool` (MACOSX_BUNDLE), `allanalyze`,
-  `libindex_cli`, `wynorm`, + 39 test executables. Root project
+  `DiamondCutterTranslationTool` (MACOSX_BUNDLE), `allanalyze`,
+  `libindex_cli`, `wynorm`, + 70 test executables. Root project
   version reads the `VERSION` file (wired 2026-08-14 — it had
   been a stale hardcoded 0.1.0); `USE_SYSTEM_SQLITE=OFF` now
   FATAL_ERRORs with instructions if the amalgamation isn't
   vendored.
 - **data/ (24 dirs, 1.6GB)**: teaching 1.2GB (DCC+TKB caption
-  corpora + teaching index) · extracted 168MB (50 banked
+  corpora + teaching index) · extracted 168MB (53 banked
   artifacts: concordances, apparatus, lexica, registers,
   people/subjects, oracle reports, censuses) · das 142MB (Das
   1902 + Jäschke 1881 scans) · 84000 18MB (CSV mirror) · fonts

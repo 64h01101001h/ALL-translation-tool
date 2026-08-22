@@ -4,7 +4,7 @@
 # this set and fails loudly on unexplained change.
 set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
-APP="$ROOT/cmake-build-release/app/ALLTranslationTool.app/Contents/MacOS/ALLTranslationTool"
+APP="$ROOT/cmake-build-release/app/DiamondCutterTranslationTool.app/Contents/MacOS/DiamondCutterTranslationTool"
 BLESSED="$ROOT/build/blessed_shots"
 TMP="$(mktemp -d)"
 # DPR-pinned: on-screen rendering follows the CURRENT display's

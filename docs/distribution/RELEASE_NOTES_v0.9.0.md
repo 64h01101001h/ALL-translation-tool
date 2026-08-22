@@ -1,4 +1,4 @@
-# ALL Translation Tool — Release Notes
+# Diamond Cutter Translation Tool — Release Notes
 ## Build of 2026-08-12 · app v0.9.0 · data release v0.27.2 (corpus v32)
 
 Everything below is in the DMG and verified by the automated

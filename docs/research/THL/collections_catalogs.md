@@ -1,6 +1,6 @@
 # THL (thlib.org) — Collections & Catalogs Research
 
-Researched 2026-08-12 for the ALL Translation Tool (Library pane / BDRC links / citation layers).
+Researched 2026-08-12 for the Diamond Cutter Translation Tool (Library pane / BDRC links / citation layers).
 Method: live WebFetch of thlib.org and its satellite sites; WebSearch where pages were dead or JS-only.
 **Licensing rule applied throughout: unknown means unknown — nothing is assumed ingestable.**
 

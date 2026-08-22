@@ -1,4 +1,4 @@
-# The ALL Translation Tool — Information Architecture & UX Plan
+# The Diamond Cutter Translation Tool — Information Architecture & UX Plan
 *(Adam's commission, 2026-08-12: "do the tools make sense where they
 are… draw up a multi-step plan… this takes precedent." Baseline:
 docs/CONTROL_INVENTORY_2026-08-12.txt — 145 controls, 19 panes.)*

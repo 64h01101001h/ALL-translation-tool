@@ -1,6 +1,6 @@
 # PART ONE — READ & TRANSLATE
 
-*The ALL Translation Tool User Manual, Part 1 of 3. Asian Legacy
+*The Diamond Cutter Translation Tool User Manual, Part 1 of 3. Asian Legacy
 Library · Asian Classics Input Project.*
 
 This part walks you through the two READ panes (Overlay, Library)
@@ -183,7 +183,7 @@ of the phrase chain. Reading it top to bottom:
   class.
 - **Monlam word-list attestation** — a labeled reference line
   telling you the form is a real word in the Monlam lists. On a
-  word the HGM dictionary does NOT know, this is how the card
+  word the Geshe Michael Roach Dictionary does NOT know, this is how the card
   distinguishes "a real word awaiting an entry" from "a probable
   typo".
 - **Verb tense paradigms**, where the dictionary has tense

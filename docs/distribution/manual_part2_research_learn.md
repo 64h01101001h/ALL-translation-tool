@@ -1,6 +1,6 @@
 # PART TWO — RESEARCH & LEARN
 
-*The ALL Translation Tool User Manual · Asian Legacy Library / ACIP*
+*The Diamond Cutter Translation Tool User Manual · Asian Legacy Library / ACIP*
 
 This part walks you, click by click, through the five panes of the
 **Research** workflow tab — Search (Gofer), Lookup, Sanskrit,

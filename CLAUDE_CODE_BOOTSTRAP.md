@@ -5,7 +5,7 @@ Create one dev directory for the app and start Claude Code there:
 
     ~/ALL-translation-tool/
       CLAUDE.md                        ← (provided; Claude Code reads this automatically)
-      ALL_TRANSLATION_TOOL_ROADMAP.md  ← copy from HGM folder root
+      DIAMOND_CUTTER_TRANSLATION_TOOL_ROADMAP.md  ← copy from HGM folder root
       data/                            ← copy of Handoff/release/ (v0.27.2) + corpus .gz
       engines/                         ← copy of Handoff/tools/ (the canonical Python engines)
       legacy/                          ← optional: symlinks or copies of Gofer, Hypercontext, spellchecker, THL folders
@@ -19,7 +19,7 @@ Keeping the app repo separate from `HGM DICTIONARY - TRANSLATION APP` preserves 
 (Adding "$HOME/ACIP Software Developmeent" covers Gofer, Hypercontext, all three LokeshChandra projects, and tibetan-spellchecker in one grant. The full itemized list lives in CLAUDE.md → "REQUIRED ACCESS" — Claude Code is instructed to verify every path at session start and prompt you for any that are missing, so you don't need to remember them.)
 
 ## 2. First prompt to give Claude Code
-> Read CLAUDE.md and ALL_TRANSLATION_TOOL_ROADMAP.md. Start with roadmap item 1: build the SQLite (FTS5) spine — a build script that compiles data/hgm_dictionary_v27_2.json.gz + the parallel corpus into one app database (entries, variants, reverse index, corpus segments, FTS5 indexes on wylie/tibetan/english), plus a small query CLI to smoke-test lookups and NEAR searches. Then run the engine validation batteries described in CLAUDE.md to confirm the environment reproduces them before any porting begins.
+> Read CLAUDE.md and DIAMOND_CUTTER_TRANSLATION_TOOL_ROADMAP.md. Start with roadmap item 1: build the SQLite (FTS5) spine — a build script that compiles data/hgm_dictionary_v27_2.json.gz + the parallel corpus into one app database (entries, variants, reverse index, corpus segments, FTS5 indexes on wylie/tibetan/english), plus a small query CLI to smoke-test lookups and NEAR searches. Then run the engine validation batteries described in CLAUDE.md to confirm the environment reproduces them before any porting begins.
 
 ## 3. What transfers and what doesn't
 - ✅ Everything on disk: HANDOFF.md, README changelogs (v0.10 → v0.27.1), roadmap, engines, release packages, extracts, evidence files.

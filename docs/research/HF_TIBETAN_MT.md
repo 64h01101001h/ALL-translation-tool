@@ -1,5 +1,5 @@
 # Hugging Face Landscape: Tibetan→English MT & Related Tibetan NLP
-**Survey date: 2026-08-13.** Research for the ALL Translation Tool. All licenses quoted verbatim where retrievable; unknowns are marked UNKNOWN rather than guessed.
+**Survey date: 2026-08-13.** Research for the Diamond Cutter Translation Tool. All licenses quoted verbatim where retrievable; unknowns are marked UNKNOWN rather than guessed.
 
 **Project ground rule this survey serves:** no machine output may reproduce Geshe Michael Roach's (GMR's) published English (CLAUDE.md rule 1: MATCH from corpus evidence, never COMPOSE). Every MT candidate below therefore carries a training-data-contamination assessment (§6) — because a model trained on GMR's published translations could *memorize and emit* his English, which would violate the rule even accidentally.
 

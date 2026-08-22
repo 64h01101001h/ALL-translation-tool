@@ -54,7 +54,7 @@ but a control described "in the pane's button row" now lives in the
 band. New screenshots arrive with the full 9i revamp.*
 
 
-# The ALL Translation Tool — User Manual
+# The Diamond Cutter Translation Tool — User Manual
 *The complete tutorial: every pane, every control, every workflow,
 click by click. Version 0.9.0 · August 2026 · Asian Legacy Library.*
 
@@ -63,7 +63,7 @@ click by click. Version 0.9.0 · August 2026 · Asian Legacy Library.*
 worked example, and what you should SEE. Companion documents: the
 Complete Feature Guide (conceptual reference), Install Quick Start,
 and Troubleshooting FAQ. The same material is searchable inside the
-app: Help menu → ALL Tool Help & Tutorials.*
+app: Help menu → Diamond Cutter Help & Tutorials.*
 
 ## Contents
 - **PART ONE — READ & TRANSLATE**
@@ -149,7 +149,7 @@ app: Help menu → ALL Tool Help & Tutorials.*
 
 # PART ONE — READ & TRANSLATE
 
-*The ALL Translation Tool User Manual, Part 1 of 3. Asian Legacy
+*The Diamond Cutter Translation Tool User Manual, Part 1 of 3. Asian Legacy
 Library · Asian Classics Input Project.*
 
 This part walks you through the two READ panes (Overlay, Library)
@@ -386,7 +386,7 @@ of the phrase chain. Reading it top to bottom:
   class.
 - **Monlam word-list attestation** — a labeled reference line
   telling you the form is a real word in the Monlam lists. On a
-  word the HGM dictionary does NOT know, this is how the card
+  word the Geshe Michael Roach Dictionary does NOT know, this is how the card
   distinguishes "a real word awaiting an entry" from "a probable
   typo".
 - **Verb tense paradigms**, where the dictionary has tense
@@ -1544,7 +1544,7 @@ sentient beings" and the inner links nest green inside it.
 
 # PART TWO — RESEARCH & LEARN
 
-*The ALL Translation Tool User Manual · Asian Legacy Library / ACIP*
+*The Diamond Cutter Translation Tool User Manual · Asian Legacy Library / ACIP*
 
 This part walks you, click by click, through the five panes of the
 **Research** workflow tab — Search (Gofer), Lookup, Sanskrit,
@@ -2336,7 +2336,7 @@ course and line.
 
 # PART THREE — INPUT, COMMUNITY & THE APP ITSELF
 
-*The ALL Translation Tool User Manual, Part Three of Three.
+*The Diamond Cutter Translation Tool User Manual, Part Three of Three.
 Asian Legacy Library · Asian Classics Input Project.*
 
 This part walks you, click by click, through the last two workflow
@@ -3723,7 +3723,7 @@ system can literally point at any feature in the app.
 On a Mac these three live in the application menu (the one named
 after the app); they are also under **View** on every platform.
 
-**About ALL Translation Tool** opens the About box:
+**About Diamond Cutter Translation Tool** opens the About box:
 
 - the app name and **two version numbers** — the app's own
   VERSION and the **HGM DATA** release version it is running
@@ -3800,7 +3800,7 @@ change them in either place, they are the same settings)*
 
 ## 17.5 The Help window
 
-**Help menu → "ALL Tool Help & Tutorials…"** (or the standard help
+**Help menu → "Diamond Cutter Help & Tutorials…"** (or the standard help
 shortcut, ⌘? on a Mac) opens the searchable Help window: a search
 box across the top, a results list on the left, the reading page
 on the right.
@@ -3858,7 +3858,7 @@ stays set up.
 If anything ever misbehaves, the app can examine itself. Open
 Terminal and run the app binary with the `--selftest` flag:
 
-    "/Applications/ALL Translation Tool.app/Contents/MacOS/ALL Translation Tool" --selftest
+    "/Applications/Diamond Cutter Translation Tool.app/Contents/MacOS/Diamond Cutter Translation Tool" --selftest
 
 The app constructs its real panes offscreen against the real data
 and exercises them — 203 checks at this writing, 2026-08-20 (the battery grows
@@ -3891,7 +3891,7 @@ Everything a tester needs to file a useful finding in one click:
 
 - **Show Logs in Finder** — reveals the lifecycle log (launches,
   quits, and — with Verbose Logging on — every pane switch).
-- **Show Data Folder in Finder** — opens the ALL Tool Data folder.
+- **Show Data Folder in Finder** — opens the Diamond Cutter Tool Data folder.
 - **Copy Installation Info** — one-line version/platform summary
   to the clipboard.
 - **Generate Diagnostic Report…** — writes a full report to the

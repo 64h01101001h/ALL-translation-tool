@@ -1,8 +1,8 @@
-# ALL Translation Tool — Release Notes
+# Diamond Cutter Translation Tool — Release Notes
 ## Build of 2026-08-11 · data release v0.27.2
 
 This build collects the August 2026 work. Everything below is in the
-DMG (`dist/ALL-Translation-Tool-0.27.2.dmg`) and verified by the
+DMG (`dist/Diamond-Cutter-Translation-Tool-0.27.2.dmg`) and verified by the
 automated batteries: 38 ctest suites plus the app's own 80-check
 `--selftest`.
 
@@ -62,14 +62,14 @@ automated batteries: 38 ctest suites plus the app's own 80-check
   `OPEN_SOURCE_NOTICES.md` is staged into the DMG alongside the app.
 - **Launch-test hardening.** The packaging gate launch-tests the
   staged layout up to three times and records exit codes; a
-  lifecycle log (`~/Library/Logs/ALLTranslationTool-lifecycle.log`)
+  lifecycle log (`~/Library/Logs/DiamondCutterTranslationTool-lifecycle.log`)
   now makes any silent startup death explain itself.
 
 ## Verification in this build
 
 - 38 ctest suites green (engine ports at full-dictionary parity
   against their Python oracles, data layers, stores, mutations).
-- 80 app selftest checks green (`./ALLTranslationTool --selftest`):
+- 80 app selftest checks green (`./DiamondCutterTranslationTool --selftest`):
   the real panes constructed against the real spine, exercised
   offscreen, assertions on their actual state.
 

@@ -1,4 +1,4 @@
-# TODO — ALL Translation Tool
+# TODO — Diamond Cutter Translation Tool
 
 **Vision (Adam, 2026-08-06):** a total all-in-one translation tool — every
 function and tool one may need in order to work with a Tibetan text.
@@ -1240,7 +1240,7 @@ implementation is sidelined HERE from this date. What this means:
       can't distinguish matched from backtracked) + Overlay Display
       toggle "Botok segmentation (reference)" (default off, persisted):
       click card shows the clicked CLAUSE segmented into words, lexicon
-      = HGM dictionary headwords via the battery-proven conversion
+      = Geshe Michael Roach Dictionary headwords via the battery-proven conversion
       chain (lazy one-time build, timing shown), out-of-lexicon runs
       ⟨bracketed⟩, non-Tibetan grayed — labeled reference display only,
       spans stay lattice-bound. Facade checks in botok_tok_smoke.
@@ -1272,7 +1272,7 @@ implementation is sidelined HERE from this date. What this means:
       RefLexicon, 18th suite proves the real conversion path matches
       the lists' storage form exactly): Overlay click card shows
       "attested in the Monlam (Grand) Dictionary word list (reference)"
-      for known spans AND for words the HGM dictionary doesn't have —
+      for known spans AND for words the Geshe Michael Roach Dictionary doesn't have —
       real-word vs possible-typo signal, display only. SEGMENTER
       LEXICON DONE 2026-08-07 (Botok increment 4: both lists feed the
       compact SegTrie; UTF-16 list-1 loader bug fixed en route).

@@ -16,7 +16,7 @@ endforeach()
 add_compile_definitions(ALL_TEST_BATTERIES="${_bat_count}")
 
 
-qt_add_executable(ALLTranslationTool
+qt_add_executable(DiamondCutterTranslationTool
   main.cpp
   thirdparty/diff_match_patch.cpp
   AppIcon.icns
@@ -31,18 +31,18 @@ file(STRINGS "${CMAKE_SOURCE_DIR}/VERSION" ALL_APP_VERSION LIMIT_COUNT 1)
 set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS
              "${CMAKE_SOURCE_DIR}/VERSION")
 add_compile_definitions(ALL_APP_VERSION="${ALL_APP_VERSION}")
-target_link_libraries(ALLTranslationTool PRIVATE allcore Qt6::Widgets Qt6::Network)
+target_link_libraries(DiamondCutterTranslationTool PRIVATE allcore Qt6::Widgets Qt6::Network)
 if(Qt6Pdf_FOUND)
-  target_link_libraries(ALLTranslationTool PRIVATE Qt6::Pdf Qt6::PdfWidgets)
-  target_compile_definitions(ALLTranslationTool PRIVATE ALL_HAVE_QTPDF)
+  target_link_libraries(DiamondCutterTranslationTool PRIVATE Qt6::Pdf Qt6::PdfWidgets)
+  target_compile_definitions(DiamondCutterTranslationTool PRIVATE ALL_HAVE_QTPDF)
 endif()
 # the Scan pane needs allocr (onnxruntime + OpenCV); optional — the app
 # builds without it and simply omits the pane
 if(TARGET allocr)
-  target_link_libraries(ALLTranslationTool PRIVATE allocr)
-  target_compile_definitions(ALLTranslationTool PRIVATE ALL_HAVE_OCR)
+  target_link_libraries(DiamondCutterTranslationTool PRIVATE allocr)
+  target_compile_definitions(DiamondCutterTranslationTool PRIVATE ALL_HAVE_OCR)
 endif()
-set_target_properties(ALLTranslationTool PROPERTIES
+set_target_properties(DiamondCutterTranslationTool PROPERTIES
   MACOSX_BUNDLE ON
   MACOSX_BUNDLE_ICON_FILE AppIcon.icns
 )
@@ -69,11 +69,11 @@ add_test(NAME font_smoke
                  ${CMAKE_SOURCE_DIR}/data/hypercontext_legacy/syllablesThatFailToRender_testFile_HyperContext.txt)
 
 # suite 38: the app's own pane-level selftest (docs/TEST_PLAN.md)
-add_test(NAME app_selftest COMMAND ALLTranslationTool --selftest)
+add_test(NAME app_selftest COMMAND DiamondCutterTranslationTool --selftest)
 # G1 fossil: the monkey's canonical walk — seed 1, 300 steps, the walk
 # that drew first blood (unguarded native panels) now guards forever
 add_test(NAME gauntlet_walk
-         COMMAND ALLTranslationTool --gauntlet 1 300)
+         COMMAND DiamondCutterTranslationTool --gauntlet 1 300)
 set_tests_properties(gauntlet_walk PROPERTIES
   ENVIRONMENT "QT_QPA_PLATFORM=offscreen" TIMEOUT 420)
 set_tests_properties(app_selftest PROPERTIES

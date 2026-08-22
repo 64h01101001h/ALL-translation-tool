@@ -9,7 +9,7 @@ human half is everything the script cannot know.
 
 - [ ] Working tree committed; batteries green locally
       (`ctest --test-dir cmake-build` — all suites, 55 as of 2026-08-20 — and
-      `./ALLTranslationTool --selftest` — 80 checks).
+      `./DiamondCutterTranslationTool --selftest` — 225 checks).
 - [ ] If the selftest or suite count changed this cycle, update the
       references in the docs that quote them (README.md,
       docs/TEST_PLAN.md, docs/RELEASE_READINESS.md, the release
@@ -43,7 +43,7 @@ past one):
 - [ ] **Ad-hoc codesign** — signed and verified (`codesign -s -`;
       right-click → Open on first launch until ALL provides a
       Developer ID).
-- [ ] **Data manifest** — "ALL Tool Data/" staged beside the app:
+- [ ] **Data manifest** — "Diamond Cutter Tool Data/" staged beside the app:
       spine db, reference.db, `library/ocr_models` (the BDRC OCR
       models MUST ship — omitting them regresses to the
       download-it-yourself fallback), and the runtime data folders
@@ -58,7 +58,7 @@ past one):
       itself; up to 3 attempts (one observed transient flake),
       two-in-a-row failure still fails the gate with exit codes
       recorded.
-- [ ] **DMG** — `dist/ALL-Translation-Tool-<version>.dmg` (UDZO).
+- [ ] **DMG** — `dist/Diamond-Cutter-Translation-Tool-<version>.dmg` (UDZO).
 
 ## 2. After the script
 
@@ -84,7 +84,7 @@ past one):
 ## If a pressed build won't launch
 
 First diagnostic: the lifecycle log —
-`~/Library/Logs/ALLTranslationTool-lifecycle.log`. It records
+`~/Library/Logs/DiamondCutterTranslationTool-lifecycle.log`. It records
 startup, lastWindowClosed, and aboutToQuit with timestamps, so a
 silent exit-0 explains itself. Then `/tmp/all_stage_launch.log` from
 the packaging launch test, then `DYLD_PRINT_LIBRARIES` per

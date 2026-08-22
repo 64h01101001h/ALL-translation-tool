@@ -1,4 +1,4 @@
-# The ALL Translation Tool — Technical Paper
+# The Diamond Cutter Translation Tool — Technical Paper
 
 *Asian Legacy Library · August 2026*
 
@@ -12,7 +12,7 @@ per subsystem.*
 
 ## 1. Architecture
 
-The ALL Translation Tool is a desktop application built from two
+The Diamond Cutter Translation Tool is a desktop application built from two
 layers with a hard boundary between them.
 
 **`allcore`** is a C++20 static library that owns everything
@@ -31,14 +31,14 @@ input centers.
 
 Python appears only in `tools/` — data preparation and validation
 harnesses. Nothing Python runs at application runtime; instead, the
-Python engines of the HGM Dictionary data project remain the
+Python engines of the Geshe Michael Roach Dictionary data project remain the
 **canonical oracles** against which every C++ port is proven (§3).
 
 The build is CMake. `ctest` runs 38 automated suites (§9). The
-product is `ALL Translation Tool.app`, distributed as a DMG (§11).
+product is `Diamond Cutter Translation Tool.app`, distributed as a DMG (§11).
 
 ```
-data releases (HGM Dictionary project, versioned)     external APIs
+data releases (Geshe Michael Roach Dictionary project, versioned)     external APIs
         │                                       (Claude, BDRC only)
         ▼                                                  │
 tools/build_spine.py ──► build/hgm_spine_v27_2.db          │
@@ -71,7 +71,7 @@ project, and they shape every subsystem described below:
 ## 2. The data spine
 
 The application never owns its data. It **imports versioned
-releases** from the HGM Dictionary data project — a separately
+releases** from the Geshe Michael Roach Dictionary data project — a separately
 maintained corpus-and-dictionary effort — and compiles them into a
 local SQLite database, the *spine*
 (`build/hgm_spine_v27_2.db`, ~240 MB, fully regenerable by
@@ -420,7 +420,7 @@ Distribution is a macOS DMG, produced by `tools/package_macos.sh` —
 a script that **refuses to package anything that fails the release
 gate or the full test battery**: a bad build or a bad data drop
 cannot become a DMG. The image contains the Release-built app with
-Qt frameworks bundled by `macdeployqt`, an "ALL Tool Data" folder
+Qt frameworks bundled by `macdeployqt`, an "Diamond Cutter Tool Data" folder
 (the spine and all reference payloads — drag both anywhere
 together), and a three-step README for non-technical users.
 

@@ -1,4 +1,4 @@
-// ALL Translation Tool — Qt 6 shell.
+// Diamond Cutter Translation Tool — Qt 6 shell.
 // Pane 1 "Lookup": headword search over the spine (walking skeleton kept).
 // Pane 2 "Analysis": passage → engine pre-pass → Claude API (streamed) →
 //                    rendered report → machine QC panel.
@@ -2251,7 +2251,7 @@ static bool g_harnessRun = false;
 
 // The Anthropic API key for the two labeled-AI features. Sources, in
 // order: the environment (terminal launch), then the key file at
-// ~/Library/Application Support/ALL Translation Tool/
+// ~/Library/Application Support/Diamond Cutter Translation Tool/
 // anthropic_api_key — which is what lets a Dock-launched app see it
 // (GUI apps never inherit shell exports). Harness runs ALWAYS see an
 // empty key: a sweep clicks every enabled button, and a paid API
@@ -2260,10 +2260,19 @@ static QByteArray anthropicKey() {
     if (g_harnessRun || g_sweepActive) return {};
     const QByteArray env = qgetenv("ANTHROPIC_API_KEY");
     if (!env.trimmed().isEmpty()) return env.trimmed();
-    QFile f(QDir::homePath() +
-            "/Library/Application Support/ALL Translation Tool/"
-            "anthropic_api_key");
-    if (f.open(QIODevice::ReadOnly)) return f.readAll().trimmed();
+    // renamed 2026-08-22. The OLD location is still read, second:
+    // a key file someone already placed there must keep working, and
+    // silently failing to find it would look like a broken feature
+    // rather than a moved file.
+    for (const char* dir : {"Diamond Cutter Translation Tool",
+                            "ALL Translation Tool"}) {
+        QFile f(QDir::homePath() + "/Library/Application Support/" +
+                QString::fromLatin1(dir) + "/anthropic_api_key");
+        if (f.open(QIODevice::ReadOnly)) {
+            const QByteArray k = f.readAll().trimmed();
+            if (!k.isEmpty()) return k;
+        }
+    }
     return {};
 }
 
@@ -4691,7 +4700,7 @@ public:
         }
         {
             // anchor payloads survive spaces (the installed-layout
-            // path '/Applications/ALL Translation Tool/...' broke
+            // path '/Applications/Diamond Cutter Translation Tool/...' broke
             // recently-opened links via QUrl percent-encoding)
             const QUrl u(QString("openfile:/tmp/a b/c d.txt"));
             check(anchorPayload(u.toString(), 9) ==
@@ -24419,7 +24428,7 @@ static bool isDataRoot(const QString& c) {
 }
 
 // Locate the data folder. Development: the repo checkout (walk up from
-// the build dir). Distribution: an "ALL Tool Data" folder beside the
+// the build dir). Distribution: a "Diamond Cutter Tool Data" folder beside the
 // .app (the DMG layout), a previously chosen folder remembered in
 // QSettings, or Application Support. Last resort: ask once, remember.
 static QString findDataRoot() {
@@ -24431,7 +24440,11 @@ static QString findDataRoot() {
     QDir d(QCoreApplication::applicationDirPath());
     for (int i = 0; i < 7; ++i) {
         cands << d.absolutePath();
-        cands << d.absolutePath() + "/ALL Tool Data";   // beside the .app
+        // renamed 2026-08-22; the OLD folder name is still accepted so an
+        // already-installed copy keeps finding its spine instead of
+        // demanding the folder be picked again after an update
+        cands << d.absolutePath() + "/Diamond Cutter Tool Data";
+        cands << d.absolutePath() + "/ALL Tool Data";
         if (!d.cdUp()) break;
     }
     cands << QStandardPaths::writableLocation(
@@ -24448,10 +24461,11 @@ static QString findDataRoot() {
     if (g_harnessRun) return QDir::currentPath();
     QMessageBox::information(
         nullptr, "Locate the data folder",
-        "The ALL Tool Data folder (containing build/hgm_spine_…db) was "
+        "The Diamond Cutter Tool Data folder (containing "
+        "build/hgm_spine_…db) was "
         "not found next to the application. Please choose it.");
     const QString picked = safeGetExistingDirectory(
-        nullptr, "Choose the ALL Tool Data folder");
+        nullptr, "Choose the Diamond Cutter Tool Data folder");
     if (!picked.isEmpty() && isDataRoot(picked)) {
         s.setValue("app/dataRoot", picked);
         return picked;
@@ -28520,7 +28534,7 @@ class HelpWindow : public QDialog {
 public:
     HelpWindow(QTabWidget* tabs, const QString& root, QWidget* parent)
         : QDialog(parent), tabs_(tabs) {
-        setWindowTitle("ALL Tool Help & Tutorials");
+        setWindowTitle("Diamond Cutter Help & Tutorials");
         resize(1020, 680);
         // the manuscript identity: cream page, maroon heads, gold
         // accents — the same design language as the leadership docs
@@ -28759,7 +28773,8 @@ private:
                     "<code>data/help/tutorials.md</code> is missing "
                     "from this installation's data folder — the "
                     "feature index below the search box still works. "
-                    "Reinstall or refresh the ALL Tool Data folder "
+                    "Reinstall or refresh the Diamond Cutter Tool Data "
+                    "folder "
                     "to restore the written tutorials.</p>");
             else
                 body_->setMarkdown(
@@ -29536,6 +29551,32 @@ static void showTranslatorSurvey(QWidget* parent,
 int main(int argc, char** argv) {
     QApplication app(argc, argv);
     {
+        // Pin the application-data folder by NAME rather than letting
+        // Qt derive it from the executable basename. Renaming the
+        // binary (2026-08-22, ALL Translation Tool -> Diamond Cutter
+        // Translation Tool) would otherwise silently move
+        // AppDataLocation and orphan everything living there: the
+        // dated backups of every human-judgment store, the usage
+        // ledger, and a data-root candidate. Human judgments outrank
+        // computed data, so losing their backups to a cosmetic rename
+        // is not an acceptable trade. Pinned here, the path is ours
+        // to move deliberately — which the migration below does once.
+        QCoreApplication::setApplicationName(
+            "Diamond Cutter Translation Tool");
+        const QString appData = QStandardPaths::writableLocation(
+            QStandardPaths::AppDataLocation);
+        const QString legacy =
+            QFileInfo(appData).path() + "/ALLTranslationTool";
+        if (QDir(legacy).exists() && !QDir(appData + "/backups").exists()) {
+            QDir().mkpath(appData);
+            for (const QString& e :
+                 QDir(legacy).entryList(QDir::Dirs | QDir::Files |
+                                        QDir::NoDotAndDotDot))
+                QFile::rename(legacy + "/" + e, appData + "/" + e);
+            QDir(legacy).rmdir(legacy);
+        }
+    }
+    {
         // harness guards are set BEFORE any pane is constructed —
         // found 2026-08-19 wiring the API key file: panes are built
         // hundreds of lines before the old assignment, so a sweep
@@ -29637,17 +29678,17 @@ int main(int argc, char** argv) {
                 return 2;
             }
             const auto pick = QMessageBox::question(
-                nullptr, "ALL Translation Tool",
+                nullptr, "Diamond Cutter Translation Tool",
                 "The dictionary spine could not be opened:\n" +
                     QString::fromUtf8(e.what()) +
                     "\n\nThe app cannot run without its data "
-                    "folder (\"ALL Tool Data\", shipped beside "
+                    "folder (\"Diamond Cutter Tool Data\", shipped beside "
                     "the app on the DMG). Locate it now?",
                 QMessageBox::Open | QMessageBox::Close,
                 QMessageBox::Open);
             if (pick != QMessageBox::Open) return 2;
             const QString picked = safeGetExistingDirectory(
-                nullptr, "Choose the ALL Tool Data folder");
+                nullptr, "Choose the Diamond Cutter Tool Data folder");
             if (picked.isEmpty() || !isDataRoot(picked)) continue;
             QSettings("ALL", "TranslationTool")
                 .setValue("app/dataRoot", picked);
@@ -29814,7 +29855,7 @@ int main(int argc, char** argv) {
     win.setCentralWidget(central);
     g_spineForAbout = &spine;
     win.setWindowTitle(
-        QString("ALL Translation Tool %1 — HGM v%2")
+        QString("Diamond Cutter Translation Tool %1 — GMR Dictionary v%2")
             .arg(QStringLiteral(ALL_APP_VERSION))
             .arg(QString::fromStdString(spine.metaValue("release_version"))));
     auto* overlay = new OverlayPane(spine, checker, refdict, progress, root);
@@ -31118,12 +31159,12 @@ int main(int argc, char** argv) {
             g_lookupPopup->run(sel);
         });
         view->addSeparator();
-        QAction* about = view->addAction("About ALL Translation Tool");
+        QAction* about = view->addAction("About Diamond Cutter Translation Tool");
         about->setMenuRole(QAction::AboutRole);   // macOS: app menu
         QObject::connect(about, &QAction::triggered, [&win] {
             auto* dlg = new QDialog(&win);
             dlg->setAttribute(Qt::WA_DeleteOnClose);
-            dlg->setWindowTitle("About ALL Translation Tool");
+            dlg->setWindowTitle("About Diamond Cutter Translation Tool");
             dlg->setFixedWidth(520);
             dlg->setStyleSheet(
                 "QDialog { background: #FAF6EE; }"
@@ -31143,7 +31184,7 @@ int main(int argc, char** argv) {
             };
             add("<div style='font-family:\"Iowan Old Style\",Georgia,"
                 "serif;font-size:24px;color:#7C2D26;font-weight:600'>"
-                "ALL Translation Tool</div>");
+                "Diamond Cutter Translation Tool</div>");
             // release date = build date of this translation unit —
             // every press rebuilds main.cpp, so it tracks presses
             const QDate rel = QLocale(QLocale::English)
@@ -31273,7 +31314,7 @@ int main(int argc, char** argv) {
     HelpWindow* helpWin = nullptr;
     {
         QMenu* helpMenu = win.menuBar()->addMenu("Help");
-        QAction* h = helpMenu->addAction("ALL Tool Help && Tutorials\u2026");
+        QAction* h = helpMenu->addAction("Diamond Cutter Help && Tutorials\u2026");
         h->setShortcut(QKeySequence::HelpContents);
         QObject::connect(h, &QAction::triggered, [&] {
             if (!helpWin) helpWin = new HelpWindow(&tabs, root, &win);
@@ -31306,7 +31347,7 @@ int main(int argc, char** argv) {
             &QAction::triggered, [&win] {
                 QMessageBox::information(
                     &win, "Updates",
-                    QString("This is ALL Translation Tool %1.\n\n"
+                    QString("This is the Diamond Cutter Translation Tool %1.\n\n"
                             "Updates are distributed as a new disk "
                             "image by the ALL team (there is no "
                             "auto-update and the app never phones "
@@ -31544,9 +31585,9 @@ int main(int argc, char** argv) {
         // tester needs to file a useful finding in one click.
         QMenu* trouble = helpMenu->addMenu("Troubleshooting");
         const QString lifeLogPath = QDir::home().filePath(
-            "Library/Logs/ALLTranslationTool-lifecycle.log");
+            "Library/Logs/DiamondCutterTranslationTool-lifecycle.log");
         auto installInfo = [root]() {
-            return QString("ALL Translation Tool v%1 · Qt %2 · %3 · "
+            return QString("Diamond Cutter Translation Tool v%1 · Qt %2 · %3 · "
                            "data: %4")
                 .arg(QStringLiteral(ALL_APP_VERSION), qVersion(),
                      QSysInfo::prettyProductName(), root);
@@ -31681,7 +31722,7 @@ int main(int argc, char** argv) {
                 QDesktopServices::openUrl(QUrl(
                     "mailto:adam.derick.andrade@gmail.com?subject=" +
                     QString(QUrl::toPercentEncoding(
-                        "ALL Tool problem report (v" +
+                        "Diamond Cutter Translation Tool problem report (v" +
                         QStringLiteral(ALL_APP_VERSION) + ")")) +
                     "&body=" +
                     QString(QUrl::toPercentEncoding(body))));
@@ -33904,7 +33945,7 @@ int main(int argc, char** argv) {
         auto* cv = new QVBoxLayout(card);
         cv->setContentsMargins(18, 14, 18, 12);
         auto* msg = new QLabel(
-            "<b>This is the ALL Translation Tool.</b><br>"
+            "<b>This is the Diamond Cutter Translation Tool.</b><br>"
             "Click any Tibetan word to see the master's attested "
             "English, the corpus evidence, and the recorded "
             "teachings.<br>\u2318K searches everything. "
@@ -34315,11 +34356,11 @@ int main(int argc, char** argv) {
     // at startup was observed on staged Release builds — no crash
     // report, no output, unreproducible under observation. These
     // three lines make any future silent death explain itself in
-    // ~/Library/Logs/ALLTranslationTool-lifecycle.log.
+    // ~/Library/Logs/DiamondCutterTranslationTool-lifecycle.log.
     {
         static const QString lifePath =
             QDir::home().filePath(
-                "Library/Logs/ALLTranslationTool-lifecycle.log");
+                "Library/Logs/DiamondCutterTranslationTool-lifecycle.log");
         auto lifeLog = [](const QString& msg) {
             QFile f(lifePath);
             if (f.open(QIODevice::Append)) {

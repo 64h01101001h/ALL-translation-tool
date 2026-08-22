@@ -1,4 +1,4 @@
-# ALL Translation Tool — Authority & Admin Guide
+# Diamond Cutter Translation Tool — Authority & Admin Guide
 
 *For the authority (Geshe Michael / Adam). The design principle this
 guide serves: nothing enters the official data without a ruling —

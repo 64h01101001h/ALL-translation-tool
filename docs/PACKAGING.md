@@ -15,11 +15,11 @@ The script refuses to package anything that fails the release gate
 (`tools/validate_release.py`) or the 37-suite battery — a bad build or
 a bad data drop cannot become a DMG.
 
-Product: `dist/ALL-Translation-Tool-<version>.dmg` containing
+Product: `dist/Diamond-Cutter-Translation-Tool-<version>.dmg` containing
 
-- **ALL Translation Tool.app** — Release build, Qt frameworks bundled
+- **Diamond Cutter Translation Tool.app** — Release build, Qt frameworks bundled
   by `macdeployqt`, ad-hoc signed.
-- **ALL Tool Data/** — the runtime payload: the spine and reference
+- **Diamond Cutter Tool Data/** — the runtime payload: the spine and reference
   databases plus the data folders the panes read (fonts, honorifics,
   colloquial pronunciations, abbreviations, extracted layers, botok,
   spellcheck, SOAS POS, Whitney, candidate alignments) and an empty
@@ -30,7 +30,7 @@ Product: `dist/ALL-Translation-Tool-<version>.dmg` containing
 
 In order: a folder remembered in QSettings (`app/dataRoot`) → the
 development checkout (walk up from the executable looking for
-`build/hgm_spine_v27_2.db`) → an **"ALL Tool Data" folder beside the
+`build/hgm_spine_v27_2.db`) → an **"Diamond Cutter Tool Data" folder beside the
 .app** (the DMG layout — drag both anywhere together) → Application
 Support → a one-time folder picker whose choice is remembered.
 Nothing is guessed: if the user cancels the picker the app reports the

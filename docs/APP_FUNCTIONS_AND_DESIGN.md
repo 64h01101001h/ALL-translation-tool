@@ -1,4 +1,4 @@
-# The ALL Translation Tool
+# The Diamond Cutter Translation Tool
 ## A Complete Overview: Every Function, Its Design, and the Vision Ahead
 
 ---

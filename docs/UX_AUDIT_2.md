@@ -238,7 +238,7 @@ on first launch only (no QSettings), after data loads, the Overlay
 opens with the Diamond Cutter demo excerpt already loaded (the
 screenshot sweep already proves this path) and a one-time dismissible
 card overlay:
-  "This is the ALL Translation Tool. Click any Tibetan word to see
+  "This is the Diamond Cutter Translation Tool. Click any Tibetan word to see
    the master's attested English, the corpus evidence, and the
    recorded teachings. ⌘K searches everything. Help → Tutorials
    walks every pane."

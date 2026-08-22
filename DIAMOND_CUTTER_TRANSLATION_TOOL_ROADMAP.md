@@ -1,4 +1,4 @@
-# ALL Translation Tool
+# Diamond Cutter Translation Tool
 
 > **2026-08-14 note:** this roadmap's to-do ledger is historical — the
 > numbered build items have shipped (see docs/FEATURE_STATUS.md).
@@ -7,7 +7,7 @@
 
 **ALL = Asian Legacy Library · ACIP = Asian Classics Input Project**
 
-The ALL Translation Tool is the multifunctional desktop suite for working with Tibetan digital texts and translations: search, translation oversight, conversion (wylie ⇄ ACIP ⇄ unicode), phonetics, and linguistic overlays — one shared core (the HGM release package compiled to SQLite + the canonical engines), multiple panes.
+The Diamond Cutter Translation Tool is the multifunctional desktop suite for working with Tibetan digital texts and translations: search, translation oversight, conversion (wylie ⇄ ACIP ⇄ unicode), phonetics, and linguistic overlays — one shared core (the HGM release package compiled to SQLite + the canonical engines), multiple panes.
 
 **Stack (decided 2026-08-06): C++20 core library (`allcore`) + Qt 6 UI.** See CLAUDE.md §Tech stack.
 **Item 1 SHIPPED (2026-08-05):** `tools/build_spine.py` → `build/hgm_spine_v27_2.db` (232 MB; FTS5 headword/english/corpus indexes; provenance preserved verbatim in `entries.raw`); smoke CLI `tools/spine_query.py`; batteries re-run via `tools/validate_engines.py` (ewts 99.03% on 26,318 GT pairs · pron 895/1,308 exact vs card-attested, differences classified · sanskrit 7/7 standard-doc examples — the 4,582-pair LC battery script is NOT banked in the Handoff; Adam to request it from the data project before the sanskrit_convert port).

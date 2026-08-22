@@ -6,10 +6,10 @@ sent or recorded until Adam says so.)*
 ## 1 · The HGM/LC redistribution line (#23)
 Paste into this file (or a reply) with your name and date to bank it:
 
-> The HGM dictionary release packages (including the Lokesh Chandra
+> The Geshe Michael Roach Dictionary release packages (including the Lokesh Chandra
 > layer as extracted from the ACIP payloads) are the Asian Legacy
 > Library / ACIP data project's own work, and I authorize their
-> redistribution inside ALL Translation Tool builds distributed by
+> redistribution inside Diamond Cutter Translation Tool builds distributed by
 > ALL. — Adam Derick Andrade, ____-__-__
 
 (If the LC layer's chain needs a narrower wording, say so and I'll
@@ -23,7 +23,7 @@ Translation Tool**
 >
 > Thank you again for okaying our use of the tibetan-ocr-app models
 > (PhotiLines and the woodblock recognition model) in the Asian
-> Legacy Library's ALL Translation Tool — we credit BDRC wherever
+> Legacy Library's Diamond Cutter Translation Tool — we credit BDRC wherever
 > OCR output appears, and all output is marked review material.
 >
 > As we prepare a distributable 1.0 release, could you confirm in
@@ -44,7 +44,7 @@ the actual words, who said them, when, in what medium.)
 > The recorded-teachings index (timecodes and caption snippets from
 > the organization's own recorded classes) is derived from
 > recordings the Asian Legacy Library / ACIP community controls, and
-> I authorize its inclusion in ALL Translation Tool builds.
+> I authorize its inclusion in Diamond Cutter Translation Tool builds.
 > — Adam Derick Andrade, ____-__-__
 
 ## Already resolved without you

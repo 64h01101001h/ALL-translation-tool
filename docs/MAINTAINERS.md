@@ -68,7 +68,7 @@ snapshot as one ritual. Refuses a dirty tree.
   argv (R2).
 
 ## Data
-- The spine db + runtime layers ship in "ALL Tool Data" beside the
+- The spine db + runtime layers ship in "Diamond Cutter Tool Data" beside the
   app; the staging list in package_macos.sh IS the distribution
   manifest, and every staged dir must be credited in
   docs/distribution/OPEN_SOURCE_NOTICES.md (constitution L2).
