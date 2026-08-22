@@ -35,3 +35,28 @@ Read from tools/package_macos.sh staging (the manifest of record):
 3. Adam: confirm the teachings-index consent line.
 4. SOAS POS materials: locate the original terms before any market DMG.
 5. Apple Developer ID decision ($99/yr) for D2 notarization.
+
+
+## THE FREE-DISTRIBUTION RULING (Adam, 2026-08-22)
+**The ALL Translation Tool is distributed FREE OF CHARGE and is not
+sold.** It is given to translators, monastic input centers, and
+students of the tradition. This is the decision the licensing track
+was waiting on, and it resolves the manifest's hardest question.
+
+Consequences, applied:
+- **BDRC OCR models (CC BY-NC 4.0 + BDRC's direct okay, banked
+  2026-08-07): SHIP IN BOTH MODES.** Free, attributed, non-commercial
+  redistribution is what the NC license permits; the banked note
+  calls this case "doubly covered." The press no longer strips them
+  from market builds. Written confirmation is still being sought —
+  it upgrades certainty, it does not unlock anything.
+- **reference.db still MUST-REMOVE from market builds** — unchanged,
+  and for a different reason: those are unlicensed compilations the
+  card itself labels "local lookup only, never for release data."
+  Commercial-vs-free was never the issue there.
+- Everything else on the manifest is unaffected: OFL fonts, CC BY
+  layers (84000, rKTs, SOAS), CC0 data, Apache/PD vendored code, and
+  the public-domain scans all permit free redistribution with
+  attribution, which the licenses surface provides.
+- Apple Developer ID (#27) remains a separate decision: notarization
+  costs $99/yr whether or not the tool is sold.

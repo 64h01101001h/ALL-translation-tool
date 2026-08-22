@@ -27,7 +27,7 @@ States: OPEN · CLOSED(date) · WAITING(who: what) · DEFERRED(stamp).
 | 21 | A2 authority sign-off on data-facing surfaces | WAITING(Adam/GMR: walkthrough) |
 | 22 | A3 input-center pilot, one week, ledger on | WAITING(Adam: name the pilot user) |
 | 23 | HGM/LC redistribution stance | WAITING(Adam: one written line) |
-| 24 | BDRC permission — banked note (2026-08-07) covers NON-COMMERCIAL free distribution and the WRITTEN email is still pending; verdict depends on whether v1.0 is sold or free | WAITING(Adam: (a) free or paid? (b) chase the written email) |
+| 24 | BDRC permission — **free-of-charge ruling made 2026-08-22**, which puts the models inside CC BY-NC; they now ship in both press modes. Written confirmation still sought for the record (draft in Gmail, needs a To: address) | RULED(free) + WAITING(Adam: send the written-confirmation email) |
 | 25 | Teachings-index consent line | WAITING(Adam: one written line) |
 | 26 | SOAS POS terms | CLOSED(2026-08-21): CC BY 4.0 all along — Zenodo DOI banked in data/soas_pos/README.md; notices corrected |
 | 27 | Apple Developer ID decision | WAITING(Adam: $99/yr call) |

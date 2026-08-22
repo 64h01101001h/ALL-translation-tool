@@ -176,12 +176,15 @@ if [[ "$SRC_SZ" != "$DST_SZ" ]]; then
   echo "STAGING ERROR: teaching_moments_card.json size mismatch ($SRC_SZ vs $DST_SZ)" >&2
   exit 1
 fi
-if [[ "$PRESS_MODE" == "team" ]]; then
-  # BDRC models are CC BY-NC (team permission); market users take the
-  # in-app download-it-yourself path instead
-  [[ -d "$ROOT/library/ocr_models" ]] && \
-    cp -R "$ROOT/library/ocr_models" "$DATA/library/ocr_models"
-fi
+# BDRC OCR models: CC BY-NC 4.0 + BDRC's direct okay. Adam ruled
+# 2026-08-22 that the tool is distributed FREE OF CHARGE and never
+# sold — which puts bundling inside the NC license (attributed in
+# the Scan pane and OPEN_SOURCE_NOTICES). They therefore ship in
+# BOTH modes. If the free-distribution stance ever changes, this
+# block returns to team-only and market users take the in-app
+# download-from-BDRC path, which still exists.
+[[ -d "$ROOT/library/ocr_models" ]] && \
+  cp -R "$ROOT/library/ocr_models" "$DATA/library/ocr_models"
 # runtime data folders the panes read (enumerated from the code)
 for d in fonts honorifics pron_colloquial abbreviations extracted idioms \
          botok spellcheck soas_pos whitney candidate_alignments 84000 \
