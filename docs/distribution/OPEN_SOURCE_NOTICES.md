@@ -37,6 +37,7 @@ Version: 0.27.2 · August 2026
 | TibSchol abbreviations (rKTs) | CC0 | bskungs-yig expansion on cards |
 | Tibetan verbs database | CC0 | verb reference layer |
 | SOAS POS lexicon (Tibetan in Digital Communication, SOAS University of London) | CC BY 4.0 — Zenodo DOI 10.5281/zenodo.574876, banked in data/soas_pos/README.md | Wilson-dots disambiguation |
+| Treasury of Lives biography ids (data/extracted/tol_links.json) | identifiers only, no Treasury of Lives content is copied or redistributed — the app links out to their site. Sourced from BDRC's own owl:sameAs and from Wikidata property P4138 joined on P2477 (Wikidata data is CC0); URL pattern per Wikidata's P1630 formatter. Built by tools/widen_tol_links.py | the "Treasury of Lives biography" link on person cards and in the ⌘K palette; Wikidata-sourced matches are labeled as such in the interface |
 | Whitney, *Roots* (1885) and *Sanskrit Grammar* (1879), via CDSL | public domain (texts); CDSL encoding terms recorded at bank time | Sanskrit root analyses and grammar link-outs |
 | THL dictionary payload (Waldo, Rangjung Yeshe, Valby, Dan Martin, Hopkins layers, etc.) | per-dictionary terms, LOCAL-ONLY display pending review — marked "(local only)" in the interface and NOT redistributed | Lookup/Overlay reference definitions |
 | Lokesh Chandra Tibetan–Sanskrit layer | extracted from ACIP's own materials | Sanskrit reference on cards |

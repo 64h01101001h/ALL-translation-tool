@@ -3104,6 +3104,50 @@ static QString tolBiographyUrl(const QString& banked) {
            m.captured(1);
 }
 
+// BDRC pid -> Treasury of Lives biography, from
+// data/extracted/tol_links.json (built by tools/widen_tol_links.py).
+// BDRC's own sameAs covers only 43 of our 350 catalog author pids;
+// Wikidata's independently-curated P4138, joined on the BDRC id,
+// carries 150 more. A Wikidata join is a THIRD-PARTY claim that this
+// pid is that person, and Tibetan names are homonym-dense, so the
+// caller is told which source asserted the match and says so in the
+// link. `dataRoot` is the folder CONTAINING data/.
+struct TolLink {
+    QString url;
+    bool viaWikidata = false;
+    bool ok() const { return !url.isEmpty(); }
+};
+
+static TolLink tolLinkForPid(const QString& pid,
+                             const QString& dataRoot) {
+    static bool loaded = false;
+    static QHash<QString, QPair<QString, bool>> map;
+    if (!loaded) {
+        loaded = true;
+        QFile f(dataRoot + "/data/extracted/tol_links.json");
+        if (f.open(QIODevice::ReadOnly)) {
+            const auto links = QJsonDocument::fromJson(f.readAll())
+                                   .object()
+                                   .value("links")
+                                   .toObject();
+            for (auto it = links.begin(); it != links.end(); ++it) {
+                const auto o = it.value().toObject();
+                map.insert(it.key(),
+                           qMakePair(o.value("tol").toString(),
+                                     o.value("source").toString() ==
+                                         "wikidata-P4138"));
+            }
+        }
+    }
+    const auto v = map.value(pid);
+    TolLink t;
+    if (!v.first.isEmpty())
+        t.url = "https://www.treasuryoflives.org/biographies/view/" +
+                v.first;
+    t.viaWikidata = v.second;
+    return t;
+}
+
 static QIcon miniIcon(const QString& kind) {
     // L-tier hi-DPI: paint at 2x so the 20pt ribbon icons stay
     // crisp on retina — the painter still works in 32x32 logical
@@ -20017,6 +20061,18 @@ public:
                                   "resource/TOLPxyz").isEmpty(),
                   "an unrecognized Treasury of Lives id yields no "
                   "link rather than a guessed one");
+            // the widened layer: a Wikidata-sourced pid must
+            // resolve AND announce its source (homonym risk)
+            const auto wdLink =
+                tolLinkForPid("P951", libRoot_.chopped(8));
+            check(wdLink.ok() && wdLink.url.endsWith("/12319") &&
+                      wdLink.viaWikidata,
+                  "tol_links.json widens biography coverage and flags "
+                  "Wikidata-matched identities as such");
+            check(!tolLinkForPid("P-no-such-person",
+                                 libRoot_.chopped(8))
+                       .ok(),
+                  "an unknown pid gets no biography link");
             const QString ph = personHtml("S5271");
             check(!ph.contains("api.treasuryoflives"),
                   "no person card hrefs the RDF API endpoint as if "
@@ -20730,10 +20786,21 @@ private:
                     h += "<br>&nbsp;&nbsp;\u2022 <a href='https://"
                          "library.bdrc.io/show/bdr:" + pid + "'>" +
                          pid + " at BDRC</a>";
-                    const QString tolPage = tolBiographyUrl(tol);
-                    if (!tolPage.isEmpty())
+                    QString tolPage = tolBiographyUrl(tol);
+                    bool tolViaWd = false;
+                    if (tolPage.isEmpty()) {
+                        const auto tl =
+                            tolLinkForPid(pid, libRoot_.chopped(8));
+                        tolPage = tl.url;
+                        tolViaWd = tl.viaWikidata;
+                    }
+                    if (!tolPage.isEmpty()) {
                         h += " \u00b7 <a href='" + tolPage +
                              "'>Treasury of Lives</a>";
+                        if (tolViaWd)
+                            h += " <small style='color:#777'>"
+                                 "(matched via Wikidata)</small>";
+                    }
                 }
                 h += "<br><small style='color:#777'>works in your "
                      "Library: see the text's card in Read \u2192 "
@@ -20808,10 +20875,21 @@ private:
                 h += "<br>&nbsp;&nbsp;\u2022 <a href='https://"
                      "library.bdrc.io/show/bdr:" + pid + "'>" + pid +
                      " at BDRC</a>";
-                const QString tolPage = tolBiographyUrl(tol);
-                if (!tolPage.isEmpty())
+                QString tolPage = tolBiographyUrl(tol);
+                bool tolViaWd = false;
+                if (tolPage.isEmpty()) {
+                    const auto tl =
+                        tolLinkForPid(pid, libRoot_.chopped(8));
+                    tolPage = tl.url;
+                    tolViaWd = tl.viaWikidata;
+                }
+                if (!tolPage.isEmpty()) {
                     h += " \u00b7 <a href='" + tolPage +
                          "'>Treasury of Lives biography</a>";
+                    if (tolViaWd)
+                        h += " <small style='color:#777'>"
+                             "(matched via Wikidata)</small>";
+                }
             }
         }
         // their works in YOUR library — local files only, each a
@@ -29038,6 +29116,11 @@ private:
                     // instead of being implied by this one.
                     tolPage = tolBiographyUrl(
                         c0.value("tol").toString());
+                    if (tolPage.isEmpty())
+                        tolPage =
+                            tolLinkForPid(c0.value("pid").toString(),
+                                          root_)
+                                .url;
                     url = "https://library.bdrc.io/show/bdr:" +
                           c0.value("pid").toString();
                     via = "BDRC";
