@@ -302,7 +302,13 @@ INSTALL="/Applications/Diamond Cutter Translation Tool"
 mkdir -p "$INSTALL"
 rsync -a --delete "$STAGE/$APPNAME.app/" "$INSTALL/$APPNAME.app/"
 # data: add/update shipped files, NEVER delete user materials
-rsync -a "$STAGE/Diamond Cutter Tool Data/" "$INSTALL/Diamond Cutter Tool Data/"
+# ditto, not rsync: rsync dies with "Illegal byte sequence" on the
+# corpus's decomposed-Unicode filenames (e.g. "Ārya Mahāyāna Prasāda
+# …Sūtra.txt") and stops MID-COPY — found 2026-08-22 migrating Adam's
+# 4,648-file library, where rsync moved 76 files and quit. ditto is
+# macOS-native and handles the normalisation. Still never --delete:
+# user materials live in this tree.
+ditto "$STAGE/Diamond Cutter Tool Data" "$INSTALL/Diamond Cutter Tool Data"
 cp "$STAGE/README.txt" "$STAGE/OPEN_SOURCE_NOTICES.md" "$INSTALL/" \
    2>/dev/null || true
 # verify: the installed binary must BE the staged binary

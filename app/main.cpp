@@ -19781,15 +19781,15 @@ public:
         // visible button sent them to Finder for a ZIP they did not
         // have. The official releases now get their own front door and
         // the local-file route is named as the manual alternative.
-        auto* getBtn = new QPushButton("Get collections…");
+        auto* getBtn = new QPushButton("Collections…");
         getBtn_ = getBtn;
         getBtn->setToolTip(
             "Download the official Kangyur, Tengyur, and Sungbum "
             "releases from asianlegacylibrary.org and install them "
             "straight into the library — no browser, no manual "
             "unzipping.");
-        auto* installBtn = new QPushButton("Install from ZIP file…");
-        auto* importBtn = new QPushButton("Import my materials…");
+        auto* installBtn = new QPushButton("Install…");
+        auto* importBtn = new QPushButton("Import…");
         auto* ocrBtn = new QPushButton("Send to OCR…");
         auto* utfcBtn = new QPushButton("Legacy font rescue (UTFC)…");
         utfcBtn->setToolTip(
@@ -19814,6 +19814,7 @@ public:
         // the P1 rule at this group already says: daily acts stay on
         // the row, occasional utilities fold in.
         gShelve->addBig(getBtn, "shelf");
+        gShelve->addBig(installBtn, "folder");
         gShelve->addBig(importBtn, "out");
         gFind->addBig(viewBtn, "ledger");
         auto* maintBtn = new QPushButton("Maintenance…");
@@ -19822,8 +19823,6 @@ public:
             "Occasional utilities: search index rebuild, OCR "
             "hand-off, legacy font rescue.");
         auto* maintMenu = new QMenu(maintBtn);
-        maintMenu->addAction(installBtn->text(),
-                             [installBtn] { installBtn->click(); });
         maintMenu->addAction(
             "Check for collection updates…",
             [this] { checkCollectionUpdates(); });
@@ -19865,7 +19864,7 @@ public:
         connect(surveyBtn, &QPushButton::clicked,
                 [this] { surveySelected(); });
         gStudy->addBig(surveyBtn, "search");
-        authorBtn_ = new QPushButton("Works by author\u2026");
+        authorBtn_ = new QPushButton("By author\u2026");
         authorBtn_->setToolTip(
             "Every text in your Library by one person. Type the name in "
             "ACIP (TZONG KHA PA), in wylie (tsong kha pa), in Tibetan, "
@@ -20050,7 +20049,7 @@ public:
                 });
         connect(getBtn, &QPushButton::clicked,
                 [this] { checkCollectionUpdates(); });
-        connect(installBtn, &QPushButton::clicked, [this] { installZip(); });
+        connect(installBtn, &QPushButton::clicked, [this] { installAny(); });
         connect(importBtn, &QPushButton::clicked, [this] { importFiles(); });
         connect(ocrBtn, &QPushButton::clicked, [this] { sendToOcr(); });
         connect(utfcBtn, &QPushButton::clicked, [this] { convertLegacy(); });
@@ -20094,7 +20093,7 @@ public:
                 if (o->objectName() == "ribbonBar") onRibbon = true;
             const bool front =
                 getBtn_ && onRibbon &&
-                getBtn_->text().startsWith("Get collections");
+                getBtn_->text().startsWith("Collections");
             check(front,
                   "official collections have a front-door button, not "
                   "only a Maintenance-menu entry");
@@ -20846,11 +20845,35 @@ private:
         list_->setColumnWidth(0, qMin(list_->columnWidth(0), 220));
     }
 
-    void installZip() {
-        const QString zip = safeGetOpenFileName(
-            this, "Install collection ZIP", QString(), "ZIP archives (*.zip)");
-        if (zip.isEmpty()) return;
-        installZipPath(zip);
+    // One door for everything you might have on disk. Adam
+    // 2026-08-22: "i need an install button for the .zip files and
+    // .txt files, etc." Two buttons (ZIP vs my-materials) meant
+    // guessing which one your file counted as, and on a crowded
+    // ribbon both labels elided anyway.
+    void installAny() {
+        const QStringList picked = safeGetOpenFileNames(
+            this, "Install into the Library", QString(),
+            "Anything the Library takes (*.zip *.txt *.TXT *.act *.ACT "
+            "*.inc *.INC *.acip *.docx *.rtf *.md);;"
+            "Collection archives (*.zip);;"
+            "Texts (*.txt *.act *.inc *.acip);;All files (*)");
+        if (picked.isEmpty()) return;
+        QStringList zips, docs;
+        for (const QString& f : picked)
+            (QFileInfo(f).suffix().compare("zip", Qt::CaseInsensitive) == 0
+                 ? zips
+                 : docs) << f;
+        int okZips = 0;
+        for (const QString& z : zips)
+            if (installZipPath(z)) ++okZips;
+        if (!docs.isEmpty()) importPaths(docs);
+        if (!zips.isEmpty() && !docs.isEmpty())
+            info_->setHtml(
+                QString("<b>Installed.</b> %1 collection archive(s) "
+                        "unpacked and %2 file(s) copied into "
+                        "library/my_materials/.")
+                    .arg(okZips)
+                    .arg(docs.size()));
     }
 
     bool installZipPath(const QString& zip) {
@@ -20870,14 +20893,28 @@ private:
         int files = 0;
         QDirIterator it(dest, QDir::Files, QDirIterator::Subdirectories);
         while (it.hasNext()) { it.next(); ++files; }
+        const bool ok = p.exitCode() == 0;
+        if (ok) {
+            // Adam 2026-08-22: "I can't install the collections." The
+            // unzip SUCCEEDED and said so — but neither the tree nor
+            // the catalog table was refreshed, so the texts did not
+            // appear until the app was restarted. A message saying
+            // "Installed" over a view that still shows nothing is
+            // indistinguishable from a failure.
+            if (model_) model_->setRootPath(libRoot_);
+            fillList();
+            if (tree_) tree_->setRootIndex(model_->index(libRoot_));
+        }
         info_->setHtml(
-            p.exitCode() == 0
-                ? QString("<b>Installed.</b> %1 file(s) now under library/%2/.")
-                      .arg(files)
-                      .arg(name)
-                : "<b style='color:#b00'>unzip failed</b> (exit " +
-                      QString::number(p.exitCode()) + ") — is the ZIP intact?");
-        return p.exitCode() == 0;
+            ok ? QString("<b>Installed.</b> %1 file(s) now under "
+                         "library/%2/ \u2014 the tree and the catalog "
+                         "list below are refreshed.")
+                     .arg(files)
+                     .arg(name)
+               : "<b style='color:#b00'>unzip failed</b> (exit " +
+                     QString::number(p.exitCode()) + ") \u2014 is the "
+                     "ZIP intact?");
+        return ok;
     }
 
     // ---- in-app collection updates (Adam's "strongly suggest",
@@ -21129,12 +21166,20 @@ private:
     }
 
     void importFiles() {
-        invalidateAuthorIndex();
         const QStringList files = safeGetOpenFileNames(
             this, "Import materials", QString(),
             "Documents (*.docx *.txt *.acip *.act *.md *.rtf);;All files (*)");
         if (files.isEmpty()) return;
+        importPaths(files);
+    }
+
+    // the copy half, shared with installAny() so one install button can
+    // take a mixed selection of archives and loose texts
+    void importPaths(const QStringList& files) {
+        invalidateAuthorIndex();
+        if (files.isEmpty()) return;
         const QString dest = libRoot_ + "/my_materials";
+        QDir().mkpath(dest);
         QStringList report;
         for (const QString& f : files) {
             const QFileInfo fi(f);
@@ -21162,6 +21207,11 @@ private:
                     report.last() += " (+ .txt conversion)";
             }
         }
+        // same refresh the ZIP install needed: an "Imported" message
+        // over a stale tree reads as a failure
+        if (model_) model_->setRootPath(libRoot_);
+        fillList();
+        if (tree_) tree_->setRootIndex(model_->index(libRoot_));
         info_->setHtml("<b>Imported into library/my_materials/:</b><br>" +
                        report.join("<br>").toHtmlEscaped());
     }
@@ -32596,7 +32646,7 @@ int main(int argc, char** argv) {
             "Update search index",   // minutes-long full rebuild
             // first click walks the whole library to build the person
             // index; the sweep must not sit through it
-            QString::fromUtf8("Works by author\u2026"),
+            QString::fromUtf8("By author\u2026"),
         };
         // PRIME the pane first (audit finding 2026-08-18: the
         // Analysis sweep exercised ZERO controls because its only
