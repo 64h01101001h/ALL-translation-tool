@@ -19806,8 +19806,14 @@ public:
         auto* indexBtn = new QPushButton("Update search index");
         // daily acts stay on the row; occasional utilities fold into
         // Maintenance (UX program P1, 2026-08-12)
+        // Pressing the rename showed every ribbon label elided to a
+        // stub ("G...s", "W...r") — I had added "Get collections" and
+        // then two author controls without taking anything off the
+        // row. The manual ZIP route is the occasional utility here, so
+        // it folds into Maintenance beside the other ones, exactly as
+        // the P1 rule at this group already says: daily acts stay on
+        // the row, occasional utilities fold in.
         gShelve->addBig(getBtn, "shelf");
-        gShelve->addBig(installBtn, "folder");
         gShelve->addBig(importBtn, "out");
         gFind->addBig(viewBtn, "ledger");
         auto* maintBtn = new QPushButton("Maintenance…");
@@ -19816,6 +19822,8 @@ public:
             "Occasional utilities: search index rebuild, OCR "
             "hand-off, legacy font rescue.");
         auto* maintMenu = new QMenu(maintBtn);
+        maintMenu->addAction(installBtn->text(),
+                             [installBtn] { installBtn->click(); });
         maintMenu->addAction(
             "Check for collection updates…",
             [this] { checkCollectionUpdates(); });
@@ -19878,7 +19886,8 @@ public:
         authorBox_ = new QLineEdit;
         authorBox_->setPlaceholderText(
             "author: ACIP, wylie, Tibetan, or how it sounds\u2026 (Enter)");
-        authorBox_->setMinimumWidth(230);
+        // 230 was a third of the ribbon's width on a 1180px window
+        authorBox_->setMinimumWidth(150);
         connect(authorBox_, &QLineEdit::returnPressed, [this] {
             showAuthorCandidates(authorBox_->text());
         });
@@ -34229,6 +34238,51 @@ int main(int argc, char** argv) {
                        .arg(ok ? "PASS" : "FAIL")
                        .arg(worstName)
                        .arg(worst);
+            if (!ok) ++fails;
+        }
+        // No ribbon label may elide. The principle predates this
+        // check (Input pane, design audit 2026-08-12: "one row clipped
+        // six-plus labels to garbage on the pane made for the least-
+        // expert users") but lived only in a comment — so when the
+        // Library ribbon overflowed on 2026-08-22 nothing caught it:
+        // the visual gate measured 1.85% drift, under threshold, and
+        // the geometry inquisition passed because eliding is not
+        // clipping. A human reading a screenshot caught it.
+        //
+        // Measure the ribbon's OWN minimum width, not live widget
+        // widths: only the visible pane is laid out, so a live-width
+        // test silently checks one ribbon and passes everything else.
+        // (First version of this check did exactly that and failed to
+        // fire when the defect was deliberately reintroduced.)
+        {
+            int worstW = 0;
+            QString worstR;
+            for (auto* rb : win.findChildren<QWidget*>()) {
+                if (rb->objectName() != "ribbonBar") continue;
+                const int need = rb->minimumSizeHint().width();
+                if (need > worstW) {
+                    worstW = need;
+                    QStringList labels;
+                    for (auto* b : rb->findChildren<QToolButton*>())
+                        if (!b->text().isEmpty()) labels << b->text();
+                    worstR = labels.join("/").left(60);
+                }
+            }
+            log << QString("  [info] ribbon: widest needs %1 px (%2)")
+                       .arg(worstW).arg(worstR);
+            // RATCHET, not a clean bar. Measured 2026-08-22: the
+            // widest ribbon already needs 2,572 px against a 1,180 px
+            // window, so several panes ship with labels elided to bare
+            // "…" (the Manuscript group shows four of them). That debt
+            // predates this check and is filed as backlog #36. What
+            // this gate does TODAY is stop it getting worse; the bar
+            // drops as panes are fixed, and reaching 1,180 closes #36.
+            const int kRibbonRatchet = 2572;
+            const bool ok = worstW <= kRibbonRatchet;
+            log << QString("  [%1] Fit: no ribbon grew past the "
+                           "recorded worst (%2 px, ratchet %3)")
+                       .arg(ok ? "PASS" : "FAIL")
+                       .arg(worstW).arg(kRibbonRatchet);
             if (!ok) ++fails;
         }
         // the menu bar mirrors the GUI: group menus + View + Help

@@ -115,6 +115,24 @@ else
   echo "   HOMEBREW RPATHS REMAIN:"; echo "$LEAKS"; exit 1
 fi
 
+# The press ritual's own recovery move is "PROVE with --screenshots on
+# the INSTALLED binary" — and it could not be executed, because
+# macdeployqt bundles only libqcocoa and the harness needs the
+# offscreen platform. Verifying the installed artifact was therefore
+# impossible without opening windows on Adam's screen. Copy the plugin
+# in so the ritual's own instruction works (found 2026-08-22, pressing
+# the rename).
+echo "== 4c. offscreen platform plugin (so the INSTALLED app is verifiable) =="
+QTPLUG="$(dirname "$QTBIN")/share/qt/plugins/platforms/libqoffscreen.dylib"
+if [[ -f "$QTPLUG" ]]; then
+  cp "$QTPLUG" "$STAGE/$APPNAME.app/Contents/PlugIns/platforms/"
+  fixup_macho "$STAGE/$APPNAME.app/Contents/PlugIns/platforms/libqoffscreen.dylib"
+  echo "   offscreen plugin bundled"
+else
+  echo "   WARNING: libqoffscreen.dylib not found at $QTPLUG —"
+  echo "   the installed app will NOT be headlessly verifiable"
+fi
+
 echo "== 5. ad-hoc codesign =="
 # D2 (shipwright): real signing when the identity exists, honest ad
 # hoc when it doesn't. Set ALL_DEV_IDENTITY ("Developer ID
