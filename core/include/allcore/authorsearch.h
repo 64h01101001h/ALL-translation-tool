@@ -89,4 +89,52 @@ std::string authorPhoneticFold(const std::string& name);
 std::vector<AuthorHit> matchAuthors(const std::string& query,
                                     const std::vector<std::string>& authors);
 
+
+// ── People, not spellings ────────────────────────────────────────────
+//
+// The catalog writes one person's name many ways. BDRC person id P64
+// carries SEVEN spellings of Tsongkhapa ("RJE T ZONG KHA PA",
+// "...BLO BZANG GR AGS PA"), P423 ten of Jamyang Zhepa. Matching
+// author STRINGS returns the same man seven times with his 161 works
+// split between the copies, which is useless to someone asking what
+// he wrote.
+//
+// So the searchable unit is the PERSON: every spelling is an alias,
+// and a hit on any alias returns that person once. The grouping comes
+// from BDRC's own per-text linkage, not from name similarity, so it
+// is evidence rather than inference.
+//
+// This is the opposite situation from homonyms and must not be
+// confused with it. Two different people who SOUND alike stay two
+// results (the machine must not merge them); one person spelled many
+// ways is one result (the machine must not split him). The pid is
+// what tells the two cases apart, which is why it is required here.
+//
+// Loading is the caller's job — allcore takes no JSON dependency.
+// The app reads data/extracted/author_index.json (built by
+// tools/build_author_index.py) into these structs.
+
+struct PersonRef {
+    std::string pid;
+    std::string display;               // empty when the catalog
+                                       // recorded no name at all
+    std::vector<std::string> aliases;  // every spelling seen
+    int localWorks = 0;                // texts present in this library
+};
+
+struct PersonHit {
+    std::string pid;
+    std::string display;
+    std::string matchedAlias;  // WHICH spelling the query hit
+    AuthorTier tier = AuthorTier::Exact;
+    std::string evidence;
+    int localWorks = 0;
+    int aliasCount = 0;        // how many spellings this person has
+};
+
+// One hit per person, best tier wins. Ordered strongest tier first,
+// then by how many texts are actually here, then by name.
+std::vector<PersonHit> matchPeople(const std::string& query,
+                                   const std::vector<PersonRef>& people);
+
 }  // namespace allcore

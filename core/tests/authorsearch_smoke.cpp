@@ -123,6 +123,96 @@ int main() {
         CHECK(ordered, "results are ordered strongest tier first");
     }
 
+
+    // ── people, not spellings ───────────────────────────────────────
+    // Real aliases from data/extracted/author_index.json. P64 is
+    // Tsongkhapa under six catalog spellings, all stray-space damage;
+    // P423 is Jamyang Zhepa under nine, two of them encoding garbage
+    // (Windows-1252 smart quotes, double-encoded UTF-8) that survives
+    // in the catalog and must not break anything.
+    const std::vector<PersonRef> kPeople = {
+        {"P64", "RJE TZONG KHA PA BLO BZANG GRAGS PA",
+         {"RJE T ZONG KHA PA BLO BZANG GRAGS PA",
+          "RJE TZ ONG KHA PA BLO BZANG GRAGS PA",
+          "RJE TZONG KHA PA BLO BZANG GR AGS PA",
+          "RJE TZONG KHA PA BLO BZANG GRA GS PA",
+          "RJE TZONG KHA PA BLO BZANG GRAGS P A",
+          "RJE TZONG KHA PA BLO BZANG GRAGS PA"},
+         139},
+        {"P423", "'JAM DBYANGS BZHAD PA'I RDO RJE NGAG DBANG BRTZON 'GRUS",
+         {"'JAM BBYANGS BZHAD PA'I RDO RJE",
+          "'JAM DBYANGS BZHAD PA NGAG DBANG BRTZON 'GRUS",
+          "'JAM DBYANGS BZHAD PA'I RDO RJE",
+          "\x91JAM DBYANGS BZHAD PA\x92I RDO RJE"},
+         111},
+        {"P209", "LCANG SKYA NGAG DBANG BLO BZANG CHOS LDAN",
+         {"LCANG SKYA NGAG DBANG BLO BZANG CHOS LDAN",
+          "LCANG SKYA NGAG DBANG BLO BZANG CHOD LDAN"},
+         98},
+        {"P1000", "LCANG SKYA ROL PA'I RDO RJE",
+         {"LCANG SKYA ROL PA'I RDO RJE"},
+         12},
+        {"P9999", "", {"SOME UNNAMED CATALOG PERSON"}, 3},
+    };
+
+    {
+        // THE point of the feature: one man, six spellings, one row.
+        const auto ppl = matchPeople("tsong kha pa", kPeople);
+        int p64 = 0;
+        for (const auto& h : ppl)
+            if (h.pid == "P64") ++p64;
+        CHECK(p64 == 1,
+              "a person written six ways returns ONCE, not six times");
+        CHECK(!ppl.empty() && ppl[0].pid == "P64" &&
+                  ppl[0].localWorks == 139,
+              "the person carries their WHOLE corpus, not one variant's "
+              "share");
+        CHECK(!ppl.empty() && ppl[0].aliasCount == 6,
+              "the number of catalog spellings is reported, not hidden");
+    }
+    {
+        // a DAMAGED spelling still finds him, shown under the clean name
+        const auto ppl = matchPeople("RJE TZ ONG KHA PA BLO BZANG GRAGS PA",
+                                     kPeople);
+        CHECK(!ppl.empty() && ppl[0].pid == "P64" &&
+                  ppl[0].display == "RJE TZONG KHA PA BLO BZANG GRAGS PA",
+              "an OCR-damaged spelling resolves to the clean display "
+              "name");
+        CHECK(!ppl.empty() &&
+                  ppl[0].matchedAlias == "RJE TZ ONG KHA PA BLO BZANG "
+                                         "GRAGS PA",
+              "the result says WHICH spelling was matched");
+    }
+    {
+        // the homonym rule cuts the other way and must still hold:
+        // two DIFFERENT Changkyas stay two people
+        const auto ppl = matchPeople("lcang skya", kPeople);
+        bool a = false, b = false;
+        for (const auto& h : ppl) {
+            if (h.pid == "P209") a = true;
+            if (h.pid == "P1000") b = true;
+        }
+        CHECK(a && b,
+              "two different people are never collapsed into one, even "
+              "as one person's spellings are never split");
+        CHECK(ppl.size() >= 2 && ppl[0].localWorks >= ppl[1].localWorks,
+              "within a tier, the person you can actually read comes "
+              "first");
+    }
+    {
+        // no name in the catalog: fall back, never invent, never drop
+        const auto ppl = matchPeople("SOME UNNAMED CATALOG PERSON",
+                                     kPeople);
+        CHECK(ppl.size() == 1 && ppl[0].pid == "P9999" &&
+                  !ppl[0].display.empty(),
+              "a person the catalog never named still returns, shown "
+              "under the spelling that matched");
+    }
+    CHECK(matchPeople("zzzznotaname", kPeople).empty(),
+          "people search invents nobody");
+    CHECK(matchPeople("", kPeople).empty(),
+          "an empty query returns no people");
+
     std::printf(failures ? "AUTHORSEARCH SMOKE: %d failure(s)\n"
                          : "AUTHORSEARCH SMOKE OK (%d failures)\n",
                 failures);

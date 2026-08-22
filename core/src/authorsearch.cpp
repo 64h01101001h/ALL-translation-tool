@@ -209,4 +209,38 @@ std::vector<AuthorHit> matchAuthors(
     return hits;
 }
 
+
+std::vector<PersonHit> matchPeople(const std::string& query,
+                                   const std::vector<PersonRef>& people) {
+    std::vector<PersonHit> out;
+    for (const auto& p : people) {
+        if (p.aliases.empty()) continue;
+        const auto hits = matchAuthors(query, p.aliases);
+        if (hits.empty()) continue;
+        // matchAuthors already sorts strongest first, so the head is
+        // this person's best claim. Every other alias that matched is
+        // the SAME man and must not become a second row.
+        const auto& best = hits.front();
+        PersonHit h;
+        h.pid = p.pid;
+        h.display = p.display.empty() ? best.author : p.display;
+        h.matchedAlias = best.author;
+        h.tier = best.tier;
+        h.evidence = best.evidence;
+        h.localWorks = p.localWorks;
+        h.aliasCount = (int)p.aliases.size();
+        out.push_back(std::move(h));
+    }
+    std::stable_sort(out.begin(), out.end(),
+                     [](const PersonHit& a, const PersonHit& b) {
+                         if (a.tier != b.tier) return a.tier < b.tier;
+                         // among equals, the one you can actually READ
+                         // something by comes first
+                         if (a.localWorks != b.localWorks)
+                             return a.localWorks > b.localWorks;
+                         return a.display < b.display;
+                     });
+    return out;
+}
+
 }  // namespace allcore
