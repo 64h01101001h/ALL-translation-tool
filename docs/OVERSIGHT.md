@@ -9,6 +9,9 @@ can be spent on the highest-leverage thing rather than the loudest.*
 explicitly defers it. Nothing is closed by inference, and nothing is
 quietly dropped because it went stale.*
 
+**As of 2026-08-22 every engineering item on the backlog is closed or
+deferred. Everything that remains in the project is on this page.**
+
 ---
 
 ## A · Highest leverage — minutes of your time, large unblock
@@ -75,7 +78,7 @@ quietly dropped because it went stale.*
 | **F1** | Joel Crawford | BDRC relationship, Apple ID, GitHub org, the real catalog, input centers, succession |
 | **F2** | BDRC | Written OCR-model confirmation (gated behind A3/A4) |
 | **F3** | Dr. Laine | rKTs export (CC BY-SA) |
-| **F4** | Ora Maimes / Jamie | Whisper transcripts — she offered; would feed backlog #32 |
+| **F4** | Ora Maimes / Jamie | Whisper transcripts — she offered. #32 is closed on the 2,800 auto-caption files; her transcripts are cleaner than YouTube's auto-captions (which demonstrably mishear "sutra" as "citrus"), so they would EXTEND the method mining and sharpen B1's 29 passages, not unblock anything. |
 | **F5** | THL · 84000 · PKTC · CIHTS | Licensing lines for reference layers currently local-only |
 
 ---
