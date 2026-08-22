@@ -118,6 +118,7 @@
 #include <QMenu>
 
 #include "allcore/abbr.h"
+#include "allcore/authorsearch.h"
 #include "allcore/analysis.h"
 #include "allcore/catalog_audit.h"
 #include "allcore/catalog_id.h"
@@ -19796,6 +19797,7 @@ public:
             "Unicode text, via the Universal Tibetan Font Converter — "
             "run as a separate external tool (GPL v3, never linked).");
         auto* viewBtn = new QPushButton("List view");
+        viewBtn_ = viewBtn;   // the author ledger flips it in sync
         viewBtn->setCheckable(true);
         viewBtn->setToolTip(
             "Flat catalog table of every file — sort by catalog number, "
@@ -19854,6 +19856,32 @@ public:
         connect(surveyBtn, &QPushButton::clicked,
                 [this] { surveySelected(); });
         gStudy->addBig(surveyBtn, "search");
+        authorBtn_ = new QPushButton("Works by author\u2026");
+        authorBtn_->setToolTip(
+            "Every text in your Library by one person. Type the name in "
+            "ACIP (TZONG KHA PA), in wylie (tsong kha pa), in Tibetan, "
+            "or the way it sounds (\"tsongkapa\"). Names that only "
+            "SOUND alike are labelled as guesses \u2014 you pick the "
+            "person.");
+        connect(authorBtn_, &QPushButton::clicked, [this] {
+            buildAuthorIndex();
+            authorBox_->setFocus();
+            authorBox_->selectAll();
+            info_->setHtml(authorIndexError_.isEmpty()
+                               ? authorPrimerHtml()
+                               : QString("<div style='color:%1'>%2</div>")
+                                     .arg(ux::kMachine)
+                                     .arg(authorIndexError_.toHtmlEscaped()));
+        });
+        gStudy->addBig(authorBtn_, "people");
+        authorBox_ = new QLineEdit;
+        authorBox_->setPlaceholderText(
+            "author: ACIP, wylie, Tibetan, or how it sounds\u2026 (Enter)");
+        authorBox_->setMinimumWidth(230);
+        connect(authorBox_, &QLineEdit::returnPressed, [this] {
+            showAuthorCandidates(authorBox_->text());
+        });
+        gStudy->add(authorBox_);
         for (auto* hb : {ocrBtn, utfcBtn, indexBtn}) hb->hide();
         // hidden buttons keep their handlers alive for the menu +
         // the machine layers (Help index, sweep, menu bar)
@@ -19963,6 +19991,16 @@ public:
                 const QString p = anchorPayload(s, 9);
                 logOpen(p);
                 if (open_) open_(p);
+            } else if (s.startsWith("authortable:")) {
+                fillListForPerson(anchorPayload(s, 12));
+                viewBtn_->setChecked(true);   // or the ribbon toggle lies
+                stack_->setCurrentIndex(1);
+            } else if (s.startsWith("authorback:")) {
+                showAuthorCandidates(anchorPayload(s, 11));
+            } else if (s.startsWith("authorname:")) {
+                showAuthorWorksByName(anchorPayload(s, 11));
+            } else if (s.startsWith("author:")) {
+                showAuthorWorks(anchorPayload(s, 7));
             } else if (s.startsWith("survey:")) {
                 if (g_surveyFile) g_surveyFile(anchorPayload(s, 7));
             } else if (s.startsWith("inputrescue:")) {
@@ -20100,11 +20138,596 @@ public:
             check(ph.contains("openfile:"),
                   "author's other works link into the Library");
         }
+        {
+            // ── author search (backlog #33) ──────────────────────────
+            buildAuthorIndex();
+            check(authorIndexError_.isEmpty() && !people_.empty(),
+                  "the author index loads, or says why it could not");
+            check(authorBtn_ && viewBtn_,
+                  "the author front door exists on the ribbon");
+            // one person, however many ways the catalog spells them
+            const auto hits =
+                allcore::matchPeople("tsong kha pa", people_);
+            int p64 = 0;
+            for (const auto& h : hits)
+                if (h.pid == "P64") ++p64;
+            check(p64 == 1,
+                  "a person spelled six ways is ONE candidate, not six");
+            // the weak tiers must LOOK weak
+            check(QString(skinFor(allcore::AuthorTier::Phonetic).wash)
+                          .size() > 0 &&
+                      QString(skinFor(allcore::AuthorTier::Exact).wash)
+                          .isEmpty(),
+                  "only machine-guessed tiers carry a wash");
+            check(!QString(skinFor(allcore::AuthorTier::Exact).ink)
+                       .contains("1E6B4E", Qt::CaseInsensitive) &&
+                      !QString(skinFor(allcore::AuthorTier::Phonetic).ink)
+                           .contains("1E6B4E", Qt::CaseInsensitive),
+                  "the binding-authority green is never spent on a "
+                  "catalog name");
+            // an arrival by sound says so; an exact arrival does not
+            lastAuthorQuery_ = "tsongkapa";
+            lastHitByPid_.clear();
+            {
+                allcore::PersonHit fake;
+                fake.pid = "P64";
+                fake.tier = allcore::AuthorTier::Phonetic;
+                lastHitByPid_["P64"] = fake;
+            }
+            showAuthorWorks("P64");
+            const QString sound = info_->toHtml();
+            check(sound.contains("arrived here by sound"),
+                  "a ledger reached by pronunciation says so on arrival");
+            lastHitByPid_.clear();
+            showAuthorWorks("P64");
+            check(!info_->toHtml().contains("arrived here by sound"),
+                  "an exact arrival is NOT slandered with a doubt "
+                  "banner");
+            check(info_->toHtml().contains("openfile:"),
+                  "the bibliography's works open in one click");
+            // never guess
+            showAuthorCandidates("zzzznotaname");
+            check(info_->toHtml().contains("No person of that name"),
+                  "an unknown name is answered honestly, not guessed");
+        }
         return fails;
     }
 
 private:
     QPushButton* getBtn_ = nullptr;  // the collections front door
+
+    // ── author search (backlog #33) ──────────────────────────────────
+    QPushButton* viewBtn_ = nullptr;
+    QPushButton* authorBtn_ = nullptr;
+    QLineEdit* authorBox_ = nullptr;
+    bool authorIndexBuilt_ = false;
+    QString authorIndexError_;            // stated, never silent
+    std::vector<allcore::PersonRef> people_;
+    QMap<QString, QJsonObject> personByPid_;
+    QMap<QString, allcore::PersonHit> lastHitByPid_;
+    std::vector<std::string> nameOnlyAuthors_;
+    QHash<QString, QStringList> filesByWork_;   // EVERY file per key
+    QString lastAuthorQuery_;
+    int nWorkKeys_ = 0, nWithPid_ = 0, nNameOnly_ = 0, nUnattributed_ = 0;
+
+    // Prefer something a reader can actually read. First-wins by walk
+    // order pointed 939 of 5,607 keys at a "<KEY> META.txt" sidecar
+    // (measured 2026-08-22), so clicking a work opened metadata.
+    static QString bestFile(QStringList paths) {
+        paths.sort();
+        auto sidecar = [](const QString& p) {
+            return QFileInfo(p).fileName().toUpper().contains(" META.");
+        };
+        for (const QString& p : paths) {
+            const QString n = QFileInfo(p).fileName().toUpper();
+            if (!sidecar(p) &&
+                (n.endsWith(".TXT") || n.endsWith(".ACT") ||
+                 n.endsWith(".INC") || n.endsWith(".ACE") ||
+                 n.endsWith(".ACIP")))
+                return p;
+        }
+        for (const QString& p : paths)
+            if (!sidecar(p)) return p;
+        return paths.isEmpty() ? QString() : paths.first();
+    }
+
+    // One walk, three consumers (personHtml, the author ledger, the
+    // live local-works count). The filter is wider than the old one:
+    // .ACT/.INC/.ACE were invisible before, silently.
+    void ensureFileIndex() {
+        if (!filesByWork_.isEmpty()) return;
+        QDirIterator it(libRoot_,
+                        {"*.txt", "*.TXT", "*.acip", "*.ACIP", "*.act",
+                         "*.ACT", "*.inc", "*.INC", "*.ace", "*.ACE"},
+                        QDir::Files, QDirIterator::Subdirectories);
+        static const QRegularExpression keyRe(R"(^([A-Za-z]+)0*(\d+))");
+        while (it.hasNext()) {
+            it.next();
+            const auto m = keyRe.match(it.fileName());
+            if (!m.hasMatch()) continue;
+            filesByWork_[m.captured(1).toUpper() + m.captured(2)]
+                << it.filePath();
+        }
+        nWorkKeys_ = filesByWork_.size();
+    }
+
+    // ── tier skins ───────────────────────────────────────────────────
+    // Five tiers on FOUR channels at once (rule weight + style, type
+    // size + weight, ink, and a wash on the machine tiers only) so the
+    // ranking survives greyscale, zoom and colour-blindness instead of
+    // leaning on hue. Green (ux::kAct) appears nowhere here: it is
+    // HGM's binding authority and attested evidence, and a name in a
+    // catalog is a REFERENCE record, not evidence of identity.
+    struct TierSkin {
+        const char* rule;
+        const char* ink;
+        int px;
+        int weight;
+        const char* wash;   // "" = none
+        const char* glyph;  // "" = none
+        const char* chip;
+        const char* chipInk;
+        bool machine;
+    };
+    static TierSkin skinFor(allcore::AuthorTier t) {
+        using T = allcore::AuthorTier;
+        switch (t) {
+            case T::Exact:
+                return {"3px solid #2E629E", ux::kInk, 14, 700, "", "",
+                        "EXACT NAME", "#2E629E", false};
+            case T::Contains:
+                return {"2px solid #6E675D", ux::kInk, 13, 600, "", "",
+                        "NAME CONTAINS", ux::kMuted, false};
+            case T::Spacing:
+                return {"2px dashed #6E675D", ux::kMuted, 13, 500, "",
+                        "", "SPACING VARIANT", ux::kMuted, false};
+            case T::Phonetic:
+                return {"2px dashed #B4540A", "#8A4A18", 13, 500,
+                        "#FBF1E6", "\u2248 ", "SOUNDS LIKE",
+                        ux::kMachine, true};
+            default:
+                return {"2px dotted #D89A6A", ux::kSoft, 12, 400,
+                        "#FDF7F0", "\u2248? ", "SOUNDS CLOSE",
+                        "#D89A6A", true};
+        }
+    }
+    static QString tierName(allcore::AuthorTier t) {
+        return skinFor(t).chip;
+    }
+
+    QString authorRowHtml(const allcore::PersonHit& h) {
+        const TierSkin sk = skinFor(h.tier);
+        const QJsonObject r = personByPid_.value(QString::fromStdString(h.pid));
+        const QString dates = r.value("dates").toString();
+        QString meta;
+        if (!dates.isEmpty()) meta += dates.toHtmlEscaped() + " \u00b7 ";
+        meta += h.localWorks > 0
+                    ? QString("<b>%1 text%2 here</b>")
+                          .arg(h.localWorks)
+                          .arg(h.localWorks == 1 ? "" : "s")
+                    : QString("no texts in your Library");
+        if (h.aliasCount > 1)
+            meta += QString(" \u00b7 %1 catalog spellings")
+                        .arg(h.aliasCount);
+        meta += " \u00b7 " + QString::fromStdString(h.pid).toHtmlEscaped();
+        return QString(
+                   "<div style='border-left:%1;padding:5px 9px;margin:4px 0;"
+                   "%2'>"
+                   "<a href='author:%3' style='color:%4;font-size:%5px;"
+                   "font-weight:%6;text-decoration:none'>%7%8</a>"
+                   "<div style='font-family:-apple-system,Arial,sans-serif;"
+                   "font-size:11px;color:%9;margin-top:2px'>"
+                   "<span style='border:1px solid %10;color:%10;"
+                   "border-radius:3px;padding:0 4px;font-size:9px;"
+                   "letter-spacing:.8px;font-weight:700'>%11</span> "
+                   "%12<div style='color:%9;font-style:italic'>%13</div>"
+                   "</div></div>")
+            .arg(sk.rule)
+            .arg(*sk.wash ? QString("background:%1;").arg(sk.wash)
+                          : QString())
+            .arg(anchorEnc(QString::fromStdString(h.pid)))
+            .arg(sk.ink).arg(sk.px).arg(sk.weight)
+            .arg(QString::fromUtf8(sk.glyph))
+            .arg(QString::fromStdString(h.display).toHtmlEscaped())
+            .arg(ux::kSoft)
+            .arg(sk.chipInk)
+            .arg(sk.chip)
+            .arg(meta)
+            .arg(QString::fromStdString(h.evidence).toHtmlEscaped());
+    }
+
+    QString authorPrimerHtml() const {
+        return QString(
+                   "<div style='font-size:13px;color:%1'>"
+                   "<b>Every text in your Library by one person.</b><br>"
+                   "Type a name the way you can: ACIP "
+                   "(<code>TZONG KHA PA</code>), wylie "
+                   "(<code>tsong kha pa</code>), Tibetan, or simply the "
+                   "way it sounds (<code>tsongkapa</code>).<br><br>"
+                   "<span style='color:%2'>Names that only <i>sound</i> "
+                   "alike are marked as guesses \u2014 two different "
+                   "people can sound identical, so you choose which is "
+                   "meant. The catalog also spells one person several "
+                   "ways; those are gathered into one person using "
+                   "BDRC's own per-text linkage, not by guessing from "
+                   "the spelling.</span></div>")
+            .arg(ux::kInk)
+            .arg(ux::kSoft);
+    }
+
+    // The bibliography. Everything present is listed — no cap: the
+    // claim is "every text by this person", and a capped list is a
+    // different, weaker claim.
+    void showAuthorWorks(const QString& pid) {
+        buildAuthorIndex();
+        const QJsonObject r = personByPid_.value(pid);
+        if (r.isEmpty()) { showAuthorCandidates(lastAuthorQuery_); return; }
+        const QString name = r.value("display").toString();
+        QString h;
+
+        // A weak arrival must survive the navigation: landing on the
+        // ledger by a pronunciation guess must not launder the guess
+        // into fact. An EXACT arrival gets no strip — labelling a
+        // certain hit as doubtful is the same failure reversed.
+        if (lastHitByPid_.contains(pid)) {
+            const auto hit = lastHitByPid_.value(pid);
+            if (skinFor(hit.tier).machine)
+                h += QString(
+                         "<div style='border:1px solid %1;background:"
+                         "#FBF1E6;border-radius:4px;padding:6px 9px;"
+                         "margin-bottom:9px;font-size:12px;color:%2'>"
+                         "<b>%3You arrived here by sound.</b> You typed "
+                         "\u201c%4\u201d; this is <b>%5</b>, matched "
+                         "because the pronunciations agree. Nothing has "
+                         "confirmed it is the person you meant.</div>")
+                         .arg(ux::kMachine).arg("#8A4A18")
+                         .arg(QString::fromUtf8("\u2248 "))
+                         .arg(lastAuthorQuery_.toHtmlEscaped())
+                         .arg(name.toHtmlEscaped());
+        }
+        if (!lastAuthorQuery_.isEmpty())
+            h += QString("<div style='font-size:11px;margin-bottom:6px'>"
+                         "<a href='authorback:%1' style='color:%2'>"
+                         "\u2190 other candidates for "
+                         "\u201c%3\u201d</a></div>")
+                     .arg(anchorEnc(lastAuthorQuery_))
+                     .arg(ux::kMuted)
+                     .arg(lastAuthorQuery_.toHtmlEscaped());
+
+        h += "<div>" + ux::sourceBadge(ux::Epistemic::Reference) +
+             zoneLabel("CATALOG RECORD \u00b7 " + pid.toHtmlEscaped()) +
+             "</div>";
+        h += QString("<div style='font-size:15px;font-weight:700;"
+                     "color:%1;margin:3px 0 1px'>%2</div>")
+                 .arg(ux::kInk)
+                 .arg(name.isEmpty()
+                          ? QString("<i>no name recorded in the "
+                                    "catalog</i>")
+                          : name.toHtmlEscaped());
+
+        const auto works = r.value("works").toArray();
+        QStringList present;
+        for (const auto& w : works) {
+            const QString wk = w.toString();
+            if (filesByWork_.contains(wk)) present << wk;
+        }
+        QString sub;
+        const QString dates = r.value("dates").toString();
+        if (!dates.isEmpty()) sub += dates.toHtmlEscaped() + " \u00b7 ";
+        sub += QString("%1 work%2 attributed \u00b7 <b>%3 in your "
+                       "Library</b>")
+                   .arg(works.size()).arg(works.size() == 1 ? "" : "s")
+                   .arg(present.size());
+        const int nAlias = r.value("aliases").toArray().size();
+        if (nAlias > 1)
+            sub += QString(" \u00b7 spelled %1 ways in the catalog")
+                       .arg(nAlias);
+        const QString tol = r.value("tol").toString();
+        if (!tol.isEmpty())
+            sub += QString(" \u00b7 <a href='https://www."
+                           "treasuryoflives.org/biographies/view/%1'>"
+                           "Treasury of Lives biography</a>")
+                       .arg(tol);
+        h += QString("<div style='font-size:11px;color:%1;margin-bottom:"
+                     "7px'>%2</div>").arg(ux::kSoft).arg(sub);
+
+        if (present.isEmpty()) {
+            h += QString("<div style='font-size:12px;color:%1;"
+                         "font-style:italic'>None of this person's "
+                         "texts are in your Library. They are indexed "
+                         "here from the catalog, not held locally "
+                         "\u2014 nothing is missing or broken.</div>")
+                     .arg(ux::kSoft);
+            info_->setHtml(h);
+            return;
+        }
+        h += QString("<div style='font-size:11px;margin-bottom:4px'>"
+                     "<a href='authortable:%1' style='color:%2'>show "
+                     "these %3 in the sortable list \u2192</a></div>")
+                 .arg(anchorEnc(pid)).arg(ux::kMuted).arg(present.size());
+        present.sort();
+        for (const QString& wk : present) {
+            const QString f = bestFile(filesByWork_.value(wk));
+            if (f.isEmpty()) continue;
+            QString title = englishTitle(QFileInfo(f).fileName());
+            if (title.isEmpty()) title = QFileInfo(f).completeBaseName();
+            h += QString("<div style='padding:1px 0'>"
+                         "<span style='font-family:Menlo,monospace;"
+                         "font-size:10px;color:%1'>%2</span> "
+                         "<a href='openfile:%3' style='color:%4;"
+                         "font-size:12px'>%5</a></div>")
+                     .arg(ux::kGold).arg(wk.toHtmlEscaped())
+                     .arg(anchorEnc(f)).arg("#2E629E")
+                     .arg(ux::snip(title.toHtmlEscaped(), 96));
+        }
+        info_->setHtml(h);
+    }
+
+    // the same table, restricted to one person's present works
+    void fillListForPerson(const QString& pid) {
+        buildAuthorIndex();
+        const QJsonObject r = personByPid_.value(pid);
+        QSet<QString> keep;
+        for (const auto& w : r.value("works").toArray())
+            keep.insert(w.toString());
+        fillList();
+        for (int i = list_->rowCount() - 1; i >= 0; --i) {
+            const QString path =
+                list_->item(i, 0)->data(Qt::UserRole).toString();
+            // key the row exactly as ensureFileIndex() keyed the
+            // file, so the two can never disagree
+            static const QRegularExpression keyRe(R"(^([A-Za-z]+)0*(\d+))");
+            const auto m = keyRe.match(QFileInfo(path).fileName());
+            const QString wk =
+                m.hasMatch() ? m.captured(1).toUpper() + m.captured(2)
+                             : QString();
+            if (wk.isEmpty() || !keep.contains(wk)) list_->removeRow(i);
+        }
+    }
+
+    // the residual path: a catalog author NAME with no person record
+    void showAuthorWorksByName(const QString& name) {
+        buildAuthorIndex();
+        QStringList present;
+        for (auto it = authorByWork_.constBegin();
+             it != authorByWork_.constEnd(); ++it)
+            if (it.value() == name && filesByWork_.contains(it.key()))
+                present << it.key();
+        present.sort();
+        QString h;
+        if (!lastAuthorQuery_.isEmpty())
+            h += QString("<div style='font-size:11px;margin-bottom:6px'>"
+                         "<a href='authorback:%1' style='color:%2'>"
+                         "\u2190 other candidates for \u201c%3\u201d"
+                         "</a></div>")
+                     .arg(anchorEnc(lastAuthorQuery_)).arg(ux::kMuted)
+                     .arg(lastAuthorQuery_.toHtmlEscaped());
+        h += "<div>" + ux::sourceBadge(ux::Epistemic::Reference) +
+             zoneLabel("NAME ONLY \u00b7 NO CATALOG PERSON RECORD") +
+             "</div>";
+        h += QString("<div style='font-size:15px;font-weight:700;color:%1;"
+                     "margin:3px 0'>%2</div>"
+                     "<div style='font-size:11px;color:%3;font-style:"
+                     "italic;margin-bottom:6px'>%4 text%5 here, grouped "
+                     "by this spelling alone. The catalog banks no "
+                     "person id for them, so two people sharing a "
+                     "spelling would share this list.</div>")
+                 .arg(ux::kInk).arg(name.toHtmlEscaped()).arg(ux::kSoft)
+                 .arg(present.size()).arg(present.size() == 1 ? "" : "s");
+        for (const QString& wk : present) {
+            const QString f = bestFile(filesByWork_.value(wk));
+            if (f.isEmpty()) continue;
+            QString t = englishTitle(QFileInfo(f).fileName());
+            if (t.isEmpty()) t = QFileInfo(f).completeBaseName();
+            h += QString("<div style='padding:1px 0'>"
+                         "<span style='font-family:Menlo,monospace;"
+                         "font-size:10px;color:%1'>%2</span> "
+                         "<a href='openfile:%3' style='color:%4;"
+                         "font-size:12px'>%5</a></div>")
+                     .arg(ux::kGold).arg(wk.toHtmlEscaped())
+                     .arg(anchorEnc(f)).arg("#2E629E")
+                     .arg(ux::snip(t.toHtmlEscaped(), 96));
+        }
+        info_->setHtml(h);
+    }
+
+    void showAuthorCandidates(const QString& query) {
+        buildAuthorIndex();
+        if (!authorIndexError_.isEmpty()) {
+            info_->setHtml(
+                QString("<div style='color:%1'><b>The author index "
+                        "could not be read.</b><br>%2<br><br>"
+                        "This is a missing or damaged file, <i>not</i> "
+                        "an empty result \u2014 no conclusion about "
+                        "any author should be drawn from it.</div>")
+                    .arg(ux::kMachine)
+                    .arg(authorIndexError_.toHtmlEscaped()));
+            return;
+        }
+        const QString q = query.trimmed();
+        if (q.isEmpty()) { info_->setHtml(authorPrimerHtml()); return; }
+        lastAuthorQuery_ = q;
+        const auto hits = allcore::matchPeople(q.toStdString(), people_);
+        const auto nameHits =
+            allcore::matchAuthors(q.toStdString(), nameOnlyAuthors_);
+        lastHitByPid_.clear();
+        for (const auto& h : hits)
+            lastHitByPid_[QString::fromStdString(h.pid)] = h;
+
+        // The ONE auto-advance: a single exactly-named person is not a
+        // choice. Anything else stops here — including a lone phonetic
+        // hit, because confirming a guess is the human's job.
+        if (hits.size() == 1 &&
+            hits[0].tier == allcore::AuthorTier::Exact &&
+            nameHits.empty()) {
+            showAuthorWorks(QString::fromStdString(hits[0].pid));
+            return;
+        }
+        if (hits.empty() && nameHits.empty()) {
+            info_->setHtml(
+                QString("<div style='font-size:13px;color:%1'>"
+                        "<b>No person of that name.</b><br>"
+                        "Nothing in the catalog matches "
+                        "\u201c%2\u201d by spelling or by sound. "
+                        "The search does not guess, so an empty answer "
+                        "means exactly that.<br><br>"
+                        "<span style='color:%3'>%4 people are indexed, "
+                        "%5 of them with texts in your Library.</span>"
+                        "</div>")
+                    .arg(ux::kInk).arg(q.toHtmlEscaped()).arg(ux::kSoft)
+                    .arg(people_.size())
+                    .arg(std::count_if(people_.begin(), people_.end(),
+                                       [](const allcore::PersonRef& p) {
+                                           return p.localWorks > 0;
+                                       })));
+            return;
+        }
+
+        // People you can actually READ come first; the rest are present
+        // but folded, so 300 biography-only records cannot crowd out a
+        // handful of useful hits (Adam's question b, default answer).
+        QString h = QString("<div style='font-size:12px;color:%1'>"
+                            "candidates for \u201c%2\u201d</div>")
+                        .arg(ux::kSoft).arg(q.toHtmlEscaped());
+        allcore::AuthorTier zone = allcore::AuthorTier::Exact;
+        bool first = true, anyLocal = false;
+        for (const auto& hit : hits) {
+            if (hit.localWorks == 0) continue;
+            anyLocal = true;
+            if (first || hit.tier != zone) {
+                zone = hit.tier;
+                first = false;
+                h += "<div style='margin-top:10px'>" +
+                     ux::sourceBadge(skinFor(zone).machine
+                                         ? ux::Epistemic::Machine
+                                         : ux::Epistemic::Reference) +
+                     zoneLabel(tierName(zone)) + "</div>";
+            }
+            h += authorRowHtml(hit);
+        }
+        int bioOnly = 0;
+        for (const auto& hit : hits)
+            if (hit.localWorks == 0) ++bioOnly;
+        if (!anyLocal && bioOnly) h += "<div style='margin-top:10px'></div>";
+        if (bioOnly) {
+            h += QString("<div style='margin-top:12px;font-size:12px;"
+                         "color:%1;font-style:italic'>%2 more %3 this "
+                         "name, but %4 no texts in your Library:</div>")
+                     .arg(ux::kSoft).arg(bioOnly)
+                     .arg(bioOnly == 1 ? "person matches"
+                                       : "people match")
+                     .arg(bioOnly == 1 ? "has" : "have");
+            for (const auto& hit : hits)
+                if (hit.localWorks == 0) h += authorRowHtml(hit);
+        }
+        if (!nameHits.empty()) {
+            h += "<div style='margin-top:14px'>" +
+                 ux::sourceBadge(ux::Epistemic::Reference) +
+                 zoneLabel(QString("NAME ONLY \u00b7 NO CATALOG PERSON "
+                                   "RECORD \u00b7 %1")
+                               .arg((int)nameHits.size())) +
+                 "</div>";
+            h += QString("<div style='font-size:11px;color:%1;"
+                         "font-style:italic;margin:2px 0 4px'>grouped by "
+                         "the spelling of the name, because the catalog "
+                         "banks no person id for these texts. Two people "
+                         "sharing a spelling would share a row here, and "
+                         "one person spelled two ways would appear twice "
+                         "\u2014 the rows above do not have that "
+                         "weakness.</div>")
+                     .arg(ux::kSoft);
+            for (const auto& nh : nameHits) {
+                const QString nm = QString::fromStdString(nh.author);
+                h += QString("<div style='border-left:2px dashed %1;"
+                             "padding:4px 9px;margin:3px 0'>"
+                             "<a href='authorname:%2' style='color:%3;"
+                             "font-size:12px;text-decoration:none'>%4</a>"
+                             "</div>")
+                         .arg(ux::kMuted)
+                         .arg(anchorEnc(nm))
+                         .arg(ux::kMuted)
+                         .arg(nm.toHtmlEscaped());
+            }
+        }
+        info_->setHtml(h);
+    }
+
+    void invalidateAuthorIndex() {
+        authorIndexBuilt_ = false;
+        authorIndexError_.clear();
+        people_.clear();
+        personByPid_.clear();
+        lastHitByPid_.clear();
+        nameOnlyAuthors_.clear();
+        filesByWork_.clear();
+        fileByWork_.clear();
+    }
+
+    // Lazy. The flag is set only after a SUCCESSFUL parse, and a
+    // failure is recorded for display — a missing bank must never read
+    // as "no such person" (the trap three other lazy guards fell into).
+    void buildAuthorIndex() {
+        if (authorIndexBuilt_) return;
+        loadPersons();
+        ensureFileIndex();
+        const QString path = libRoot_.chopped(8) +
+                             "/data/extracted/author_index.json";
+        QFile f(path);
+        if (!f.open(QIODevice::ReadOnly)) {
+            authorIndexError_ = path + " could not be opened";
+            return;
+        }
+        QJsonParseError pe{};
+        const auto doc = QJsonDocument::fromJson(f.readAll(), &pe);
+        if (pe.error != QJsonParseError::NoError) {
+            authorIndexError_ = path + ": " + pe.errorString();
+            return;
+        }
+        const QJsonObject ppl = doc.object().value("people").toObject();
+        if (ppl.isEmpty()) {
+            authorIndexError_ = path + ": no people in the bank";
+            return;
+        }
+        people_.clear();
+        personByPid_.clear();
+        QSet<QString> pidWorks;
+        for (auto it = ppl.begin(); it != ppl.end(); ++it) {
+            const QJsonObject r = it.value().toObject();
+            allcore::PersonRef pr;
+            pr.pid = it.key().toStdString();
+            pr.display = r.value("display").toString().toStdString();
+            for (const auto& a : r.value("aliases").toArray())
+                pr.aliases.push_back(a.toString().toStdString());
+            int local = 0;
+            for (const auto& w : r.value("works").toArray()) {
+                const QString wk = w.toString();
+                pidWorks.insert(wk);
+                // LIVE presence, never the bank's build-time snapshot
+                if (filesByWork_.contains(wk)) ++local;
+            }
+            pr.localWorks = local;
+            people_.push_back(std::move(pr));
+            personByPid_[it.key()] = r;
+        }
+        // the residue: work keys with a catalog author NAME but no
+        // person record. matchPeople cannot see them, so they get the
+        // string matcher and say plainly that they are weaker.
+        QSet<QString> names;
+        nWithPid_ = nNameOnly_ = nUnattributed_ = 0;
+        for (auto it = filesByWork_.constBegin();
+             it != filesByWork_.constEnd(); ++it) {
+            if (pidWorks.contains(it.key())) { ++nWithPid_; continue; }
+            const QString a = authorByWork_.value(it.key());
+            if (a.isEmpty()) { ++nUnattributed_; continue; }
+            ++nNameOnly_;
+            names.insert(a);
+        }
+        nameOnlyAuthors_.clear();
+        for (const QString& n : names)
+            nameOnlyAuthors_.push_back(n.toStdString());
+        std::sort(nameOnlyAuthors_.begin(), nameOnlyAuthors_.end());
+        authorIndexBuilt_ = true;
+    }
 
     // catalog-number → published catalog English title (v29 title wave)
     QString englishTitle(const QString& fileName) {
@@ -20207,6 +20830,8 @@ private:
     }
 
     bool installZipPath(const QString& zip) {
+        // new texts arriving invalidates "every text by this author"
+        invalidateAuthorIndex();
         QString name = QFileInfo(zip).completeBaseName().toLower();
         for (const char* c : {"kangyur", "tengyur", "sungbum", "varanasi"})
             if (name.contains(c)) { name = c; break; }
@@ -20480,6 +21105,7 @@ private:
     }
 
     void importFiles() {
+        invalidateAuthorIndex();
         const QStringList files = safeGetOpenFileNames(
             this, "Import materials", QString(),
             "Documents (*.docx *.txt *.acip *.act *.md *.rtf);;All files (*)");
@@ -31910,6 +32536,9 @@ int main(int argc, char** argv) {
         // covered by its own battery/selftest instead)
         const QStringList stallGuard = {
             "Update search index",   // minutes-long full rebuild
+            // first click walks the whole library to build the person
+            // index; the sweep must not sit through it
+            QString::fromUtf8("Works by author\u2026"),
         };
         // PRIME the pane first (audit finding 2026-08-18: the
         // Analysis sweep exercised ZERO controls because its only
