@@ -1,8 +1,17 @@
 # ALL Translation Tool — Developer Handbook
 
 *Under the hood, for the development team. Current as of
-**2026-08-20, v0.12.0** (55 test batteries, 203 in-app selftest
-checks, corpus v32). Companion documents:
+**2026-08-22, v1.0.0-rc.1** (70 test suites green, corpus v32).
+Since the v0.12.0 revision below: the Word-style ribbon band across
+every pane; Translation Dossiers (a resumable desk per text); the
+Glossary Workbench; team comments; conflict-safe shared stores with
+Dropbox "conflicted copy" absorption; a constitution suite that
+enforces process rules as tests; a geometry inquisition and
+visual-regression gate in the press; stateful sequence fuzzing
+(20,000 randomized real actions survived); and honesty invariants
+swept across the whole dictionary rather than sampled. The sections
+below remain accurate on architecture; version-specific counts may
+lag. Companion documents:
 `README.md` (user-facing pane guide),
 `ALL_TRANSLATION_TOOL_ROADMAP.md` (master plan), `TODO.md` (the
 single live ledger — includes the merged attack queue as of
