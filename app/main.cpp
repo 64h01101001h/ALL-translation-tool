@@ -29985,26 +29985,29 @@ private:
                                    .toObject();
             }
             const QString qUp = q.toUpper();
+            // the match test, lifted out so the TOTAL can be counted
+            // before anything is shown
+            auto matches = [&qUp](const QJsonObject& o,
+                                  const QString& key) {
+                if (key.toUpper().contains(qUp)) return true;
+                if (o.value("eng").toString().toUpper().contains(qUp))
+                    return true;
+                for (const auto& c : o.value("candidates").toArray())
+                    for (const auto& n :
+                         c.toObject().value("names").toArray())
+                        if (n.toString().toUpper().contains(qUp))
+                            return true;
+                return false;
+            };
+            int totalPeople = 0;
+            for (auto it = persons_.begin(); it != persons_.end(); ++it)
+                if (matches(it.value().toObject(), it.key()))
+                    ++totalPeople;
             int shown = 0;
             for (auto it = persons_.begin();
                  it != persons_.end() && shown < 4; ++it) {
                 const auto o = it.value().toObject();
-                bool hit = it.key().toUpper().contains(qUp);
-                if (!hit)
-                    hit = o.value("eng")
-                              .toString()
-                              .toUpper()
-                              .contains(qUp);
-                if (!hit) {
-                    for (const auto& c :
-                         o.value("candidates").toArray()) {
-                        for (const auto& n : c.toObject()
-                                                 .value("names")
-                                                 .toArray())
-                            if (n.toString().toUpper().contains(qUp))
-                                hit = true;
-                    }
-                }
+                const bool hit = matches(o, it.key());
                 if (!hit) continue;
                 const auto cands = o.value("candidates").toArray();
                 QString url, via, tolPage;
@@ -30047,6 +30050,16 @@ private:
                         2, tolPage);
                 ++shown;
             }
+            // The cap was silent AND alphabetical: you saw the first
+            // four people the map happened to walk past, with no sign
+            // the other twenty-three existed. Say the number.
+            if (totalPeople > shown)
+                add(QString::fromUtf8("      … and %1 more person(s) "
+                                      "match — the Library's "
+                                      "“By author” search "
+                                      "ranks them properly")
+                        .arg(totalPeople - shown),
+                    -1, QString());
         }
 
         // ⌘K file targets (file-browser P2): the Library's own
@@ -30065,6 +30078,17 @@ private:
                 // dead for the rest of the session
                 filesIndexed_ = !filePaths_.isEmpty();
             }
+            // Count ALL matches before showing any. A cap that stays
+            // silent reads as "that is everything there is" — someone
+            // searching a common word saw six files and no sign the
+            // other ninety existed (bug bounty, 2026-08-22).
+            int total = 0;
+            {
+                const QString ql0 = q.toLower();
+                for (const QString& p : filePaths_)
+                    if (QFileInfo(p).fileName().toLower().contains(ql0))
+                        ++total;
+            }
             int hits = 0;
             const QString ql = q.toLower();
             for (const QString& p : filePaths_) {
@@ -30076,6 +30100,12 @@ private:
                     3, p);
                 ++hits;
             }
+            if (total > hits)
+                add(QString::fromUtf8("      … and %1 more file(s) "
+                                      "match — narrow the search, or "
+                                      "use the Library's list view")
+                        .arg(total - hits),
+                    -1, QString());
         }
         if (!list_->count())
             add(QString::fromUtf8("— nothing exact; try the Lookup "
