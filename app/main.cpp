@@ -20042,6 +20042,14 @@ public:
                   "official collections have a front-door button, not "
                   "only a Maintenance-menu entry");
         }
+        check(officialCollectionUrls(QString()).size() == 3,
+              "all three official collections are offered even with "
+              "no network at all");
+        check(officialCollectionUrls(
+                  "<a href=\"https://x/EXTRA.zip\">e</a>")
+                      .size() == 4,
+              "a newly published collection joins the three without "
+              "displacing them");
         check(parseCollectionLinks(
                   "<a href=\"https://x.s3.amazonaws.com/KANGYUR"
                   ".zip\">k</a> <A HREF=\"https://x/TENGYUR.zip\">"
@@ -20232,6 +20240,21 @@ private:
         return out;
     }
 
+    // The three official collections ALWAYS appear, even with no
+    // network at all; whatever else the library page publishes is
+    // appended after them. Kept pure so the battery can prove that
+    // guarantee without touching the network.
+    static QStringList officialCollectionUrls(const QString& html) {
+        QStringList urls;
+        for (const char* c : {"KANGYUR", "TENGYUR", "SUNGBUM"})
+            urls << QString("https://all-library-docs.s3."
+                            "us-west-2.amazonaws.com/%1.zip")
+                        .arg(c);
+        for (const QString& u : parseCollectionLinks(html))
+            if (!urls.contains(u)) urls << u;
+        return urls;
+    }
+
     void checkCollectionUpdates() {
         if (g_sweepActive) {
             info_->setHtml("<i>sweep mode — network checks stay "
@@ -20249,24 +20272,23 @@ private:
                              &QEventLoop::quit);
             loop.exec();
         };
-        QStringList urls;
+        // The three official collections, direct from the release
+        // bucket (Adam supplied these URLs 2026-08-22; all three
+        // verified serving that day). They are the SPINE of this
+        // window, not a fallback — they must be offered whether or
+        // not the website answers and whether or not its page shape
+        // changes. Scraping only ADDS whatever else is published
+        // alongside them.
+        QString pageHtml;
         {
             QNetworkReply* r = net_.get(QNetworkRequest(
                 QUrl("https://asianlegacylibrary.org/library/")));
             await(r, 20000);
             if (r->error() == QNetworkReply::NoError)
-                urls = parseCollectionLinks(
-                    QString::fromUtf8(r->readAll()));
+                pageHtml = QString::fromUtf8(r->readAll());
             r->deleteLater();
         }
-        if (urls.isEmpty()) {
-            // the site page failed or changed shape — the known
-            // official buckets are the fallback, and we say so
-            for (const char* c : {"KANGYUR", "TENGYUR", "SUNGBUM"})
-                urls << QString("https://all-library-docs.s3."
-                                "us-west-2.amazonaws.com/%1.zip")
-                            .arg(c);
-        }
+        const QStringList urls = officialCollectionUrls(pageHtml);
         struct Row {
             QString url, name, date, status;
             qint64 bytes = 0;
@@ -20318,7 +20340,13 @@ private:
                     row.updatable = true;
                 }
             } else {
-                row.status = "unreachable";
+                // a refused HEAD says nothing about whether the GET
+                // would work — CDNs and proxies decline HEAD
+                // routinely. Dead-ending the one window that installs
+                // collections on that signal is worse than trying.
+                row.status = "the check did not answer \u2014 "
+                             "installing will still try";
+                row.updatable = true;
             }
             r->deleteLater();
             rows.push_back(row);
@@ -20340,12 +20368,22 @@ private:
         for (const auto& row : rows) {
             auto* h = new QHBoxLayout;
             auto* lbl = new QLabel(
-                QString("<b>%1</b> — %2 · %3 MB · %4")
+                QString("<b>%1</b> \u2014 %2 \u00b7 %3 \u00b7 %4"
+                        "<br><small style='color:#777'>%5</small>")
                     .arg(row.name.toUpper())
-                    .arg(row.date.isEmpty() ? "?" : row.date)
-                    .arg(row.bytes / (1024 * 1024))
-                    .arg(row.status));
+                    .arg(row.date.isEmpty() ? "date unknown"
+                                            : row.date)
+                    .arg(row.bytes > 0
+                             ? QString::number(row.bytes /
+                                               (1024 * 1024)) +
+                                   " MB"
+                             : QString("size unknown"))
+                    .arg(row.status)
+                    .arg(row.url.toHtmlEscaped()));
             lbl->setTextFormat(Qt::RichText);
+            // the direct link is shown so it can be read and copied,
+            // not just trusted
+            lbl->setTextInteractionFlags(Qt::TextSelectableByMouse);
             h->addWidget(lbl, 1);
             if (row.updatable) {
                 auto* dl = new QPushButton("Download && install…");
@@ -20371,11 +20409,13 @@ private:
                             const QString& etag, qint64 bytes) {
         if (QMessageBox::question(
                 parent, "Download collection",
-                QString("Download %1 (%2 MB) from the official "
-                        "release bucket and install it into the "
-                        "library?")
+                QString("Download %1 (%2) from the official release "
+                        "bucket and install it into the library?")
                     .arg(name.toUpper())
-                    .arg(bytes / (1024 * 1024)),
+                    .arg(bytes > 0
+                             ? QString::number(bytes / (1024 * 1024)) +
+                                   " MB"
+                             : QString("size not reported")),
                 QMessageBox::Yes | QMessageBox::No,
                 QMessageBox::No) != QMessageBox::Yes)
             return;
