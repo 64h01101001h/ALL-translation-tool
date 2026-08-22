@@ -3085,6 +3085,25 @@ private:
 // monochrome glyphs on PRIMARY action buttons only (HIG restraint:
 // no icons on checkboxes, labels, or secondary controls). Drawn in
 // code — license-clean, crisp at 2x, one visual voice.
+// Treasury of Lives: BDRC's owl:sameAs — and so our banked person
+// data — carries ONLY the API form,
+// http://api.treasuryoflives.org/resource/TOLP5500, which serves RDF
+// from behind a Cloudflare challenge. We were rendering that straight
+// into an href labelled "Treasury of Lives biography", so the link
+// never reached a biography a person could read. Wikidata property
+// P4138 publishes the authoritative human formatter —
+// .../biographies/view/$1 with a bare integer id — and the API form
+// carries that same integer after "TOLP", so the two map across
+// cleanly. Returns empty when the banked value is not that shape:
+// no link beats a guessed one (inviolable rule 3).
+static QString tolBiographyUrl(const QString& banked) {
+    static const QRegularExpression re(R"(TOLP(\d+)\s*$)");
+    const auto m = re.match(banked.trimmed());
+    if (!m.hasMatch()) return QString();
+    return "https://www.treasuryoflives.org/biographies/view/" +
+           m.captured(1);
+}
+
 static QIcon miniIcon(const QString& kind) {
     // L-tier hi-DPI: paint at 2x so the 20pt ribbon icons stay
     // crisp on retina — the painter still works in 32x32 logical
@@ -19986,7 +20005,22 @@ public:
                       .size() == 2,
               "update checker parses collection ZIP links");
         {
+            // the mapping itself, pinned as a pure function
+            check(tolBiographyUrl(
+                      "http://api.treasuryoflives.org/resource/"
+                      "TOLP5500") ==
+                      "https://www.treasuryoflives.org/biographies/"
+                      "view/5500",
+                  "Treasury of Lives ids reach a readable biography "
+                  "(Wikidata P4138 formatter), not the RDF endpoint");
+            check(tolBiographyUrl("http://api.treasuryoflives.org/"
+                                  "resource/TOLPxyz").isEmpty(),
+                  "an unrecognized Treasury of Lives id yields no "
+                  "link rather than a guessed one");
             const QString ph = personHtml("S5271");
+            check(!ph.contains("api.treasuryoflives"),
+                  "no person card hrefs the RDF API endpoint as if "
+                  "it were a biography");
             check(ph.contains("treasuryoflives") ||
                       ph.contains("bdrc.io"),
                   "person links resolve for a Tsongkhapa work");
@@ -20696,8 +20730,9 @@ private:
                     h += "<br>&nbsp;&nbsp;\u2022 <a href='https://"
                          "library.bdrc.io/show/bdr:" + pid + "'>" +
                          pid + " at BDRC</a>";
-                    if (!tol.isEmpty())
-                        h += " \u00b7 <a href='" + tol +
+                    const QString tolPage = tolBiographyUrl(tol);
+                    if (!tolPage.isEmpty())
+                        h += " \u00b7 <a href='" + tolPage +
                              "'>Treasury of Lives</a>";
                 }
                 h += "<br><small style='color:#777'>works in your "
@@ -20773,8 +20808,9 @@ private:
                 h += "<br>&nbsp;&nbsp;\u2022 <a href='https://"
                      "library.bdrc.io/show/bdr:" + pid + "'>" + pid +
                      " at BDRC</a>";
-                if (!tol.isEmpty())
-                    h += " \u00b7 <a href='" + tol +
+                const QString tolPage = tolBiographyUrl(tol);
+                if (!tolPage.isEmpty())
+                    h += " \u00b7 <a href='" + tolPage +
                          "'>Treasury of Lives biography</a>";
             }
         }
@@ -28990,23 +29026,21 @@ private:
                 }
                 if (!hit) continue;
                 const auto cands = o.value("candidates").toArray();
-                QString url, via;
+                QString url, via, tolPage;
                 if (!cands.isEmpty()) {
                     const auto c0 = cands.first().toObject();
-                    const QString tol = c0.value("tol").toString();
-                    if (!tol.isEmpty()) {
-                        // the API url resolves; the human page is
-                        // treasuryoflives.org/biographies — link the
-                        // BDRC person page instead when only the API
-                        // form is banked
-                        url = "https://library.bdrc.io/show/bdr:" +
-                              c0.value("pid").toString();
-                        via = "BDRC + Treasury of Lives";
-                    } else {
-                        url = "https://library.bdrc.io/show/bdr:" +
-                              c0.value("pid").toString();
-                        via = "BDRC";
-                    }
+                    // this row said "opens BDRC + Treasury of Lives"
+                    // while opening BDRC alone — the label named a
+                    // destination it did not go to. The BDRC page
+                    // stays the target here because it carries the
+                    // works list; the biography, when we can build a
+                    // readable URL for it, now gets its own row
+                    // instead of being implied by this one.
+                    tolPage = tolBiographyUrl(
+                        c0.value("tol").toString());
+                    url = "https://library.bdrc.io/show/bdr:" +
+                          c0.value("pid").toString();
+                    via = "BDRC";
                 }
                 if (url.isEmpty()) continue;
                 add(QString::fromUtf8("👤  ") + it.key() +
@@ -29019,6 +29053,12 @@ private:
                             .arg(o.value("works").toInt())
                             .arg(via),
                     2, url);
+                if (!tolPage.isEmpty())
+                    add(QString::fromUtf8("\U0001F464  ") + it.key() +
+                            QString::fromUtf8(
+                                " \u2014 biography \u00b7 opens "
+                                "Treasury of Lives"),
+                        2, tolPage);
                 ++shown;
             }
         }
