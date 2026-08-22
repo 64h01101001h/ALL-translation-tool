@@ -141,3 +141,73 @@ just the user's. Those variants must be offered together while
 remaining separately labeled — the homonym rule cuts the other way
 here, and telling the two situations apart is a human's call, not the
 machine's.
+
+## 2026-08-22 · Genre register (#31): the missing piece is data, not code
+
+Measured before designing. Adam's ask was that subject/genre govern how
+words are read — subject-aware gloss ordering, register warnings,
+suggestions tuned to genre, with Vinaya especially in mind because it
+is the oldest language in the monastic curriculum.
+
+**What exists, as fact:**
+
+| | |
+|---|---|
+| library work keys | 5,607 |
+| with an R6 subject label | 1,406 (25.1%) |
+| with a Sungbum subject label | 1,554 (27.7%) |
+| with **either** | **1,888 (33.7%)** |
+| distinct R6 subject labels | 243, bilingual (`Middle-Way_Philosophy--DBU_MA`) |
+| labelled `Vowed_Morality--'DUL_BA` (Vinaya) | 15 works, **12 present locally** (KD1–3, TD41xx) |
+
+**What does NOT exist, and this is the finding:**
+
+The binding layer carries almost no register annotation. Of 12,004
+HGM-glossed entries, **32 carry any parenthetical at all**, and only
+about **five** are register or genre marks:
+
+- `bsod nams` → "goodness (prayer register)"
+- `bden par grub pa` → "solid existence (poetic register)"
+- `dgongs pa` → "thought (honorific)"
+- `mdzod` → "treasure house of knowledge (abhidharmakosha)" ×2
+
+`bsod nams` — the example CLAUDE.md itself cites for register — is
+essentially alone. There is no register layer to surface.
+
+**Why that forbids the feature as first imagined.** Reordering glosses
+by genre would mean deciding that HGM means X in Vinaya and Y in
+Pramana. He has not said that for all but a handful of terms.
+Deriving it from course statistics is inference, and rule 1 permits
+machine work to MATCH his English from evidence but never to COMPOSE
+it. A subject-aware gloss ranking would be composition wearing the
+binding tier's clothes — the exact failure the whole provenance
+architecture exists to prevent.
+
+I tested the inference anyway, on `bsod nams` across its 539 corpus
+segments in 58 courses: "merit" 323 (concentrated in Sunlight, 77),
+"goodness" 50 (spread thinly across TCS04Initiation, ILL, C03, C18),
+"good karma" 40 (concentrated in GIE, 12). Real variation, but not a
+clean genre split — and even a clean one would still be the machine
+deciding what he meant.
+
+There is also **no course → subject mapping**: the corpus is tagged by
+ACI course, the catalog by R6/Sungbum subject, and nothing joins them.
+
+**What the tool can honestly do, and what it cannot:**
+
+- CAN state a text's catalogued subject — that is a fact someone
+  recorded, with 33.7% coverage and the other 66% said plainly.
+- CAN mark Vinaya prominently, per Adam's ruling that it reads
+  differently.
+- CAN show the corpus concordance GROUPED by course, so a translator
+  sees the real distribution and draws their own conclusion. That is
+  displaying evidence, not ruling on it.
+- CANNOT reorder or re-rank binding glosses by inferred register.
+- CANNOT warn "this word reads differently here" unless HGM said so.
+
+**The real fix is authorship, not engineering.** A register layer has
+to be WRITTEN by someone entitled to write it — Adam, or Geshe Michael
+through the approval channel. The tool can host it, carry it through
+the tiers, and surface it per genre the moment it exists. Until then
+the honest feature is the three CANs above, and the gap should be
+visible rather than papered over with a plausible-looking ranking.
