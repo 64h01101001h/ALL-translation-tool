@@ -19785,6 +19785,69 @@ public:
         libBanner->setMinimumWidth(1);
         libBanner->setOpenExternalLinks(true);
         layout->addWidget(libBanner);
+
+        // ORPHANED-LIBRARY GUARD. The 2026-08-22 rename installed a
+        // fresh "Diamond Cutter Tool Data" beside the new app while
+        // Adam's 767 MB / 4,648-text corpus sat in the old "ALL Tool
+        // Data" — and the app said nothing, because it HAD found a
+        // valid data root. The fallback meant to protect him is
+        // exactly why it was invisible. So: never silently prefer an
+        // empty library over a full one. Say what was found, name the
+        // fuller folder, change nothing (rule 3 — the tool does not
+        // guess which library is his).
+        {
+            auto texts = [](const QString& dir) {
+                int n = 0;
+                QDirIterator it(dir, {"*.txt", "*.TXT", "*.act", "*.ACT"},
+                                QDir::Files, QDirIterator::Subdirectories);
+                while (it.hasNext() && n < 500) { it.next(); ++n; }
+                return n;
+            };
+            const int mine = texts(libRoot_);
+            if (mine < 50) {
+                const QString apps = "/Applications";
+                QString richer;
+                int best = mine;
+                for (const QString& d :
+                     QDir(apps).entryList(QDir::Dirs |
+                                          QDir::NoDotAndDotDot)) {
+                    for (const char* dn : {"Diamond Cutter Tool Data",
+                                           "ALL Tool Data"}) {
+                        const QString cand = apps + "/" + d + "/" +
+                                             QString::fromLatin1(dn) +
+                                             "/library";
+                        if (cand == libRoot_ || !QDir(cand).exists())
+                            continue;
+                        const int n = texts(cand);
+                        if (n > best + 50) { best = n; richer = cand; }
+                    }
+                }
+                if (!richer.isEmpty()) {
+                    auto* warn = new QLabel(
+                        QString(
+                            "<div style='background:#FBF1E6;border:1px "
+                            "solid %1;border-radius:4px;padding:6px 9px'>"
+                            "%2<b>This Library is nearly empty, but a "
+                            "fuller one exists.</b><br>This copy holds "
+                            "%3 text(s). <code>%4</code> holds at least "
+                            "%5.<br>Most likely the application was "
+                            "renamed and its data folder did not move "
+                            "with it. Nothing has been changed or "
+                            "deleted — copy that folder's contents "
+                            "here, or point the app at it with "
+                            "Maintenance → Import data release."
+                            "</div>")
+                            .arg(ux::kMachine)
+                            .arg(ux::sourceBadge(ux::Epistemic::Machine))
+                            .arg(mine)
+                            .arg(richer.toHtmlEscaped())
+                            .arg(best));
+                    warn->setWordWrap(true);
+                    warn->setMinimumWidth(1);
+                    layout->addWidget(warn);
+                }
+            }
+        }
         auto* ribbon = new RibbonBar;
         auto* gShelve = ribbon->group("SHELVE");
         auto* gStudy = ribbon->group("STUDY");
