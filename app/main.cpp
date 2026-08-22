@@ -3386,6 +3386,12 @@ static QIcon miniIcon(const QString& kind) {
 // (attachTo) and the main window hosts all of them in one
 // full-width strip that follows the active pane; a pane that still
 // embeds its ribbon locally keeps working.
+// ribbon widget -> the scroller hosting it in the band
+static QHash<QWidget*, QWidget*>& ribbonHost() {
+    static QHash<QWidget*, QWidget*> m;
+    return m;
+}
+
 static QHash<QWidget*, QWidget*>& paneRibbons() {
     static QHash<QWidget*, QWidget*> h;
     return h;
@@ -3408,6 +3414,16 @@ static void applyRibbonLabelStyle() {
 
 class RibbonProxy : public QToolButton {
 public:
+    // A ribbon button states its natural width as its MINIMUM. Without
+    // this, QHBoxLayout shrinks whichever buttons have give and Qt
+    // elides their text — which is how the app shipped with
+    // "C...s"/"Im...rt" on SHELVE while READ's identical-length labels
+    // rendered fine (measured 2026-08-22: "Maintenance" fits at 11
+    // characters, "Collections" elides at 11 — it was never about the
+    // text). Refusing to shrink pushes the overflow to the band, which
+    // now scrolls; a label the user cannot read is not a saving.
+    QSize minimumSizeHint() const override { return sizeHint(); }
+
     explicit RibbonProxy(QAbstractButton* src, const QIcon& icon)
         : src_(src) {
         setIcon(icon);
@@ -31203,14 +31219,30 @@ int main(int argc, char** argv) {
             }
             for (int j = 0; j < g->count(); ++j)
                 if (QWidget* r =
-                        paneRibbons().value(g->widget(j), nullptr))
-                    toolStack->addWidget(r);
+                        paneRibbons().value(g->widget(j), nullptr)) {
+                    // host each ribbon in a scroller: when the row
+                    // genuinely exceeds the window it slides instead of
+                    // eliding, so every label stays readable at any
+                    // window size
+                    auto* sa = new QScrollArea;
+                    sa->setWidget(r);
+                    sa->setWidgetResizable(true);
+                    sa->setFrameShape(QFrame::NoFrame);
+                    sa->setHorizontalScrollBarPolicy(
+                        Qt::ScrollBarAsNeeded);
+                    sa->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+                    sa->setSizeAdjustPolicy(
+                        QAbstractScrollArea::AdjustToContents);
+                    ribbonHost().insert(r, sa);
+                    toolStack->addWidget(sa);
+                }
             bandRow->addWidget(toolStack, 1);
             auto syncBand = [g, toolStack, surfBtns] {
                 QWidget* r =
                     paneRibbons().value(g->currentWidget(), nullptr);
+                QWidget* host = r ? ribbonHost().value(r, r) : nullptr;
                 toolStack->setCurrentIndex(
-                    r ? toolStack->indexOf(r) : 0);
+                    host ? toolStack->indexOf(host) : 0);
                 for (int j = 0; j < surfBtns.size(); ++j)
                     surfBtns[j]->setChecked(j == g->currentIndex());
             };
@@ -34320,13 +34352,14 @@ int main(int argc, char** argv) {
             }
             log << QString("  [info] ribbon: widest needs %1 px (%2)")
                        .arg(worstW).arg(worstR);
-            // RATCHET, not a clean bar. Measured 2026-08-22: the
-            // widest ribbon already needs 2,572 px against a 1,180 px
-            // window, so several panes ship with labels elided to bare
-            // "…" (the Manuscript group shows four of them). That debt
-            // predates this check and is filed as backlog #36. What
-            // this gate does TODAY is stop it getting worse; the bar
-            // drops as panes are fixed, and reaching 1,180 closes #36.
+            // Elision is now structurally impossible: RibbonProxy
+            // declares its natural width as its MINIMUM, so a label can
+            // never be crushed, and the band scrolls instead. What this
+            // ratchet measures today is therefore how far the widest
+            // ribbon overflows — i.e. how much scrolling a user must
+            // do — not how much is unreadable. Still worth holding: a
+            // ribbon that keeps growing is a pane that needs controls
+            // demoted to its Maintenance menu.
             const int kRibbonRatchet = 2572;
             const bool ok = worstW <= kRibbonRatchet;
             log << QString("  [%1] Fit: no ribbon grew past the "
