@@ -19700,7 +19700,21 @@ public:
         auto* gStudy = ribbon->group("STUDY");
         auto* gCare = ribbon->group("CARE");
         auto* gFind = ribbon->group("FIND");
-        auto* installBtn = new QPushButton("Install collection ZIP…");
+        // Adam 2026-08-22: the download-and-install path existed but
+        // lived in the Maintenance menu under "check for collection
+        // updates" — a name that reads as a chore, so someone with NO
+        // collections never thought to look there, while the big
+        // visible button sent them to Finder for a ZIP they did not
+        // have. The official releases now get their own front door and
+        // the local-file route is named as the manual alternative.
+        auto* getBtn = new QPushButton("Get collections…");
+        getBtn_ = getBtn;
+        getBtn->setToolTip(
+            "Download the official Kangyur, Tengyur, and Sungbum "
+            "releases from asianlegacylibrary.org and install them "
+            "straight into the library — no browser, no manual "
+            "unzipping.");
+        auto* installBtn = new QPushButton("Install from ZIP file…");
         auto* importBtn = new QPushButton("Import my materials…");
         auto* ocrBtn = new QPushButton("Send to OCR…");
         auto* utfcBtn = new QPushButton("Legacy font rescue (UTFC)…");
@@ -19717,6 +19731,7 @@ public:
         auto* indexBtn = new QPushButton("Update search index");
         // daily acts stay on the row; occasional utilities fold into
         // Maintenance (UX program P1, 2026-08-12)
+        gShelve->addBig(getBtn, "shelf");
         gShelve->addBig(installBtn, "folder");
         gShelve->addBig(importBtn, "out");
         gFind->addBig(viewBtn, "ledger");
@@ -19913,6 +19928,8 @@ public:
                                      ->data(Qt::UserRole)
                                      .toString());
                 });
+        connect(getBtn, &QPushButton::clicked,
+                [this] { checkCollectionUpdates(); });
         connect(installBtn, &QPushButton::clicked, [this] { installZip(); });
         connect(importBtn, &QPushButton::clicked, [this] { importFiles(); });
         connect(ocrBtn, &QPushButton::clicked, [this] { sendToOcr(); });
@@ -19945,6 +19962,23 @@ public:
               "catalog populated from the library");
         // the update-checker's page parser (network never touched
         // in selftest — the parse is the provable part)
+        {
+            // addBig() reparents the source button under the
+            // ribbon and lets a RibbonProxy do the painting, so the
+            // source is never itself visible — the honest invariant
+            // is that it hangs under a ribbon at all (on the shelf),
+            // rather than living only inside the Maintenance menu.
+            bool onRibbon = false;
+            for (QObject* o = getBtn_ ? getBtn_->parent() : nullptr; o;
+                 o = o->parent())
+                if (o->objectName() == "ribbonBar") onRibbon = true;
+            const bool front =
+                getBtn_ && onRibbon &&
+                getBtn_->text().startsWith("Get collections");
+            check(front,
+                  "official collections have a front-door button, not "
+                  "only a Maintenance-menu entry");
+        }
         check(parseCollectionLinks(
                   "<a href=\"https://x.s3.amazonaws.com/KANGYUR"
                   ".zip\">k</a> <A HREF=\"https://x/TENGYUR.zip\">"
@@ -19963,6 +19997,8 @@ public:
     }
 
 private:
+    QPushButton* getBtn_ = nullptr;  // the collections front door
+
     // catalog-number → published catalog English title (v29 title wave)
     QString englishTitle(const QString& fileName) {
         if (!titlesLoaded_) {
@@ -20178,7 +20214,7 @@ private:
                                    QDir::NoDotAndDotDot)
                         .size() > 0;
                 if (!haveDir) {
-                    row.status = "not installed";
+                    row.status = "not in your library yet";
                     row.updatable = true;
                 } else if (known.isEmpty()) {
                     row.status =
@@ -20199,16 +20235,16 @@ private:
         }
         auto* dlg = new QDialog(this);
         dlg->setAttribute(Qt::WA_DeleteOnClose);
-        dlg->setWindowTitle("Collection updates — "
+        dlg->setWindowTitle("Official collections — "
                             "asianlegacylibrary.org");
         dlg->resize(680, 320);
         auto* v = new QVBoxLayout(dlg);
         auto* note = new QLabel(
-            "The official collection releases, checked live. "
-            "Downloading replaces nothing by itself — the ZIP "
-            "unpacks over the collection folder exactly as a "
-            "manual install does (your my_materials and work "
-            "folders are never touched).");
+            "The Kangyur, Tengyur, and Sungbum as published by the "
+            "Asian Legacy Library, checked live just now. Downloading "
+            "unpacks that collection's ZIP over its own folder exactly "
+            "as a manual install would — your my_materials and work "
+            "folders are never touched.");
         note->setWordWrap(true);
         v->addWidget(note);
         for (const auto& row : rows) {
