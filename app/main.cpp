@@ -21148,6 +21148,63 @@ private:
             "folders are never touched.");
         note->setWordWrap(true);
         v->addWidget(note);
+
+        // Remember that a check HAPPENED, and what it found. Without
+        // this the app cannot tell "checked this morning, all current"
+        // from "never checked in a year" — and neither can the user.
+        // The previous check's date is shown BEFORE this one's results
+        // so a failed check today still leaves the last known-good
+        // answer visible with its age attached, rather than an
+        // unqualified "current ✓" the tool is no longer entitled to.
+        {
+            QSettings st2("ALL", "TranslationTool");
+            const QString prev =
+                st2.value("collections/lastCheck").toString();
+            const QString prevWhat =
+                st2.value("collections/lastResult").toString();
+            if (!prev.isEmpty()) {
+                const QDateTime when =
+                    QDateTime::fromString(prev, Qt::ISODate);
+                const qint64 days = when.daysTo(QDateTime::currentDateTime());
+                auto* last = new QLabel(
+                    QString("<small style='color:%1'>Previously checked "
+                            "%2%3%4</small>")
+                        .arg(ux::kSoft)
+                        .arg(when.toString("d MMMM yyyy 'at' h:mm ap"))
+                        .arg(days >= 1 ? QString(" (%1 day%2 ago)")
+                                             .arg(days)
+                                             .arg(days == 1 ? "" : "s")
+                                       : QString(" (today)"))
+                        .arg(prevWhat.isEmpty()
+                                 ? QString(".")
+                                 : " — " + prevWhat.toHtmlEscaped()));
+                last->setWordWrap(true);
+                v->addWidget(last);
+            }
+            int reachable = 0, updatable = 0;
+            for (const auto& r : rows) {
+                if (r.status != "unreachable" &&
+                    !r.status.startsWith("the check did not answer"))
+                    ++reachable;
+                if (r.updatable) ++updatable;
+            }
+            // Only record a check that actually reached the server.
+            // Writing "checked" after a failed round would let a stale
+            // answer masquerade as a fresh one.
+            if (reachable > 0) {
+                st2.setValue("collections/lastCheck",
+                             QDateTime::currentDateTime().toString(
+                                 Qt::ISODate));
+                st2.setValue(
+                    "collections/lastResult",
+                    updatable == 0
+                        ? QString("all %1 current").arg(reachable)
+                        : QString("%1 of %2 needed attention")
+                              .arg(updatable)
+                              .arg(rows.size()));
+            }
+        }
+
         for (const auto& row : rows) {
             auto* h = new QHBoxLayout;
             auto* lbl = new QLabel(
