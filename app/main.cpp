@@ -20777,7 +20777,10 @@ private:
     // shown; the reader disambiguates, never the machine.
     void loadPersons() {
         if (personsLoaded_) return;
-        personsLoaded_ = true;
+        // the flag is set AFTER the load below, not here: setting it
+        // first meant one missing bank silently disabled the whole
+        // person layer for the rest of the session, with no banner and
+        // no retry (found 2026-08-22 across three lazy guards).
         QFile wf(libRoot_ + "/../data/extracted/catalog_works.json");
         QString base = libRoot_ + "/..";
         if (!wf.exists()) {
@@ -20880,6 +20883,12 @@ private:
                      "show/bdr:" + pid + "'>" + pid + "</a>";
             return h;
         };
+        // Only NOW is the layer "loaded". If both banks were missing
+        // the flag stays false so a later call retries — a data folder
+        // that arrives late (or an Import data release) heals itself
+        // instead of staying dead until relaunch.
+        personsLoaded_ =
+            !authorByWork_.isEmpty() || !acipPersonLinks_.isEmpty();
     }
 
     QString personHtml(const QString& workKey) {
@@ -20945,21 +20954,35 @@ private:
         // click from opening in the Overlay
         if (!author.isEmpty()) {
             if (fileByWork_.isEmpty()) {
+                // Measured 2026-08-22: first-wins-by-walk-order made
+                // 939 of 5,607 work keys resolve to their "<KEY> META"
+                // sidecar instead of the text itself — clicking the
+                // work in an author's list opened metadata, not the
+                // book. 1,141 keys carry more than one file. Prefer a
+                // real text; fall back to the sidecar only when it is
+                // all there is. (.act/.inc added for completeness: 4
+                // keys today, but the omission was silent.)
                 QDirIterator it(libRoot_,
-                                {"*.txt", "*.TXT", "*.acip"},
+                                {"*.txt", "*.TXT", "*.acip", "*.ACIP",
+                                 "*.act", "*.ACT", "*.inc", "*.INC"},
                                 QDir::Files,
                                 QDirIterator::Subdirectories);
                 static const QRegularExpression keyRe(
                     "^([A-Za-z]+)0*(\\d+)");
+                auto isSidecar = [](const QString& fn) {
+                    return fn.contains("META", Qt::CaseInsensitive);
+                };
                 while (it.hasNext()) {
                     it.next();
                     const auto m = keyRe.match(it.fileName());
-                    if (m.hasMatch()) {
-                        const QString k = m.captured(1).toUpper() +
-                                          m.captured(2);
-                        if (!fileByWork_.contains(k))
-                            fileByWork_[k] = it.filePath();
-                    }
+                    if (!m.hasMatch()) continue;
+                    const QString k =
+                        m.captured(1).toUpper() + m.captured(2);
+                    const bool side = isSidecar(it.fileName());
+                    auto have = fileByWork_.constFind(k);
+                    if (have == fileByWork_.constEnd() ||
+                        (isSidecar(QFileInfo(*have).fileName()) && !side))
+                        fileByWork_[k] = it.filePath();
                 }
             }
             QStringList sibs;
@@ -29128,8 +29151,11 @@ private:
         // 7. persons: the authors layer (BDRC + Treasury of Lives)
         {
             if (!personsLoaded_) {
-                personsLoaded_ = true;
                 QFile pf(root_ + "/data/extracted/persons_bdrc.json");
+                // flag set only on a real read (see LibraryPane::
+                // loadPersons): marking it done first turned one
+                // missing bank into a dead lane for the session
+                personsLoaded_ = pf.exists();
                 if (pf.open(QIODevice::ReadOnly))
                     persons_ = QJsonDocument::fromJson(pf.readAll())
                                    .object()
@@ -29206,13 +29232,16 @@ private:
         // right pane (texts → Overlay, images → Input viewer)
         {
             if (!filesIndexed_) {
-                filesIndexed_ = true;
                 QDirIterator it(
                     root_ + "/library",
                     {"*.txt", "*.act", "*.inc", "*.TXT", "*.ACT",
                      "*.INC", "*.png", "*.jpg", "*.tif"},
                     QDir::Files, QDirIterator::Subdirectories);
                 while (it.hasNext()) filePaths_ << it.next();
+                // an empty walk is not a completed index: a library
+                // that mounts late must not leave this lane silently
+                // dead for the rest of the session
+                filesIndexed_ = !filePaths_.isEmpty();
             }
             int hits = 0;
             const QString ql = q.toLower();
