@@ -46,3 +46,51 @@ DISPOSITION: **FIXED, twice over, same hour** —
    touches /Applications; step 8's relaunch brings the new build back.
 Blindspot class: *the installer was only ever tested with the app
 closed — the human habit of reopening mid-press was never modeled.*
+
+## 2026-08-22 · "The user should never need to leave the app" (Adam's principle)
+
+Adam's ruling: a translator should never have to leave the application
+to find a scan, install a collection, convert a script, or research an
+author. Audited every one of the 13 `QDesktopServices::openUrl` call
+sites against it.
+
+**The line drawn.** "Never leave" means never leave to GET WORK DONE.
+It does not mean rendering other people's sites inside ours — pulling
+Treasury of Lives or 84000 content into our own UI would take their
+scholarship without their attribution, and would be the one line in
+the licensing manifest we could not defend. The test applied to each
+site: *does leaving break the work, or is leaving the correct
+outcome?*
+
+| Exit point | Verdict |
+|---|---|
+| L11640 PDF fallback when QPdfView is unavailable | correct — local file to the system viewer |
+| L13507 `if (u.isLocalFile())` | correct — local file |
+| L18312 "Reveal in Finder" | correct — literally what was asked for |
+| L18481 unhandled file type | correct — texts, images, and archives are all intercepted in-app above it; only e.g. .docx falls through |
+| L31249 "Open the updates folder?" | correct — local folder, user consented in a dialog |
+| L31572 findings file · L31681 bug-report mailto | correct — hand-off to the tools that own those jobs |
+| L2134 · L5693 · L16523 · L19965 · L28676 · L29244 — the `startsWith("http")` link-out tiers | correct — these reach BDRC work/person pages, 84000, Treasury of Lives, Lotsawa House. Reference-site reading is the category where leaving IS the right outcome. |
+
+**Verified in-app, not exits:** scans render through IIIF fetched by
+the app (`iiifpres.bdrc.io` collection manifests) and `openPath()`
+routes png/jpg/jpeg/tif/tiff to the scan viewer, texts to the Overlay,
+archives to the in-app browser. Converters are our own engine ports.
+
+**Two genuine flow-breaks found and fixed** (commits 519aac0, edb6d9e,
+fd29861, 73ce8bc):
+
+1. **Collections.** The downloader existed and worked, but the visible
+   button opened a LOCAL file picker while the real one hid in a
+   Maintenance menu under "check for updates". Worse, the three
+   official URLs were only a fallback, and a refused HEAD request left
+   a row with no download button at all. Now the three are the window's
+   spine, always installable, direct links shown.
+2. **Author research.** Treasury of Lives links pointed at the RDF API
+   endpoint, not a biography — the link never worked. Coverage was 43
+   of 350 author pids. Now mapped via Wikidata's P4138 formatter and
+   widened to 193, with third-party matches labeled as such.
+
+**Left open:** backlog #33 — searching the Library BY author (ACIP or
+Wylie, plus pronunciation-approximate). Today an author's works are
+reachable only by landing on one of their texts first.
