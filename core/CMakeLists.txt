@@ -49,6 +49,7 @@ add_library(allcore STATIC
   src/mvp.cpp
   src/poslex.cpp
   src/abbr.cpp
+  src/authorsearch.cpp
   src/contractions.cpp
   src/botok_chunks.cpp
   src/botok_trie.cpp
@@ -344,6 +345,10 @@ add_test(NAME stardict_smoke COMMAND stardict_smoke)
 add_executable(pron_standard_smoke tests/pron_standard_smoke.cpp)
 target_link_libraries(pron_standard_smoke PRIVATE allcore)
 add_test(NAME pron_standard_smoke COMMAND pron_standard_smoke)
+
+add_executable(authorsearch_smoke tests/authorsearch_smoke.cpp)
+target_link_libraries(authorsearch_smoke PRIVATE allcore)
+add_test(NAME authorsearch_smoke COMMAND authorsearch_smoke)
 
 add_executable(contractions_smoke tests/contractions_smoke.cpp)
 target_link_libraries(contractions_smoke PRIVATE allcore)
