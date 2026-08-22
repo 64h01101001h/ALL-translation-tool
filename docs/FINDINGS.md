@@ -211,3 +211,49 @@ through the approval channel. The tool can host it, carry it through
 the tiers, and surface it per genre the moment it exists. Until then
 the honest feature is the three CANs above, and the gap should be
 visible rather than papered over with a plausible-looking ranking.
+
+## 2026-08-22 · #32 answers #31: the register rules are in the classes, not the dictionary
+
+Mining 2,800 caption files of Geshe Michael's own recorded classes for
+translation-method passages returned **407 candidates** — and **29 of
+them are context-dependent reading rules**, which is exactly what the
+#31 measurement found absent from the dictionary that same day.
+
+Examples, verbatim from the captions (which mishear — the recording is
+the authority):
+
+- *"it doesn't mean wisdom here … don't translate it as wisdom, when
+  you see it connected to [X] it always means corrupt intelligence"* —
+  a register rule with its trigger stated.
+- *"the four higher truths … mistranslated as noble truths … the word
+  means Arya"* — a direct correction of a standard rendering.
+- *"when you see [mdo dang sngags] you always have to translate it as
+  open and secret teachings, you shouldn't translate it as [sutra]"* —
+  the caption writes "citrus".
+- Xuanzang's five classes of word that should not be translated at
+  all, taught as translation theory.
+
+**Why this matters for #31.** That item concluded the register layer
+must be AUTHORED because the dictionary records ~5 register marks in
+12,004 entries. That conclusion stands — the tool still may not compose
+a reading. But the seed material for the authoring now exists and is
+citable to the second, so the ask changes from "write a register layer
+from scratch" to "rule on 29 passages where you already said it out
+loud." That is a far smaller thing to ask.
+
+**Two caption defects were fixed to get here**, and both would have made
+the output useless:
+
+1. YouTube rolling captions repeat the previous line plus a few words.
+   The existing term indexer collapses only exactly-equal neighbours,
+   which is right for counting term hits but leaves passages reading
+   *"difficult to when you these are difficult to when you these are"*.
+   Reading a passage back needs the overlap removed: keep the longest
+   suffix of what is already accumulated that prefixes the new cue and
+   append only the remainder.
+2. Consecutive cues each trip the same pattern, so one sentence became
+   three passages at t=2094/2096/2096. Collapsed to one passage per
+   video per 45-second bucket.
+
+Together these took a 200-file sample from 218 unreadable hits to 68
+readable ones — fewer, and worth reading.
