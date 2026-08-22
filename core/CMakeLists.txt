@@ -50,6 +50,7 @@ add_library(allcore STATIC
   src/poslex.cpp
   src/abbr.cpp
   src/authorsearch.cpp
+  src/subjects.cpp
   src/contractions.cpp
   src/botok_chunks.cpp
   src/botok_trie.cpp
@@ -345,6 +346,10 @@ add_test(NAME stardict_smoke COMMAND stardict_smoke)
 add_executable(pron_standard_smoke tests/pron_standard_smoke.cpp)
 target_link_libraries(pron_standard_smoke PRIVATE allcore)
 add_test(NAME pron_standard_smoke COMMAND pron_standard_smoke)
+
+add_executable(subjects_smoke tests/subjects_smoke.cpp)
+target_link_libraries(subjects_smoke PRIVATE allcore)
+add_test(NAME subjects_smoke COMMAND subjects_smoke ${CMAKE_SOURCE_DIR}/data/extracted/work_subjects.tsv)
 
 add_executable(authorsearch_smoke tests/authorsearch_smoke.cpp)
 target_link_libraries(authorsearch_smoke PRIVATE allcore)

@@ -119,6 +119,7 @@
 
 #include "allcore/abbr.h"
 #include "allcore/authorsearch.h"
+#include "allcore/subjects.h"
 #include "allcore/analysis.h"
 #include "allcore/catalog_audit.h"
 #include "allcore/catalog_id.h"
@@ -20141,6 +20142,18 @@ public:
         {
             // ── author search (backlog #33) ──────────────────────────
             buildAuthorIndex();
+            // #31: the genre layer states a FACT and stops there
+            check(!vinayaBannerHtml("KD1").isEmpty(),
+                  "a Vinaya text is marked as Vinaya");
+            check(vinayaBannerHtml("S419").isEmpty(),
+                  "a lojong text whose heading contains 'dul ba is NOT "
+                  "marked Vinaya");
+            check(vinayaBannerHtml("ZZ99999").isEmpty(),
+                  "an uncatalogued text is not guessed into a genre");
+            check(vinayaBannerHtml("KD1").contains(
+                      "no genre-specific reading"),
+                  "the Vinaya banner states its own limit: it names the "
+                  "genre, it does not claim to know how a word shifts");
             check(authorIndexError_.isEmpty() && !people_.empty(),
                   "the author index loads, or says why it could not");
             check(authorBtn_ && viewBtn_,
@@ -20197,6 +20210,8 @@ private:
     QPushButton* getBtn_ = nullptr;  // the collections front door
 
     // ── author search (backlog #33) ──────────────────────────────────
+    allcore::Subjects subjectLayer_;
+    bool subjectLayerTried_ = false;
     QPushButton* viewBtn_ = nullptr;
     QPushButton* authorBtn_ = nullptr;
     QLineEdit* authorBox_ = nullptr;
@@ -21640,6 +21655,37 @@ private:
         return h;
     }
 
+    // Adam's ruling 2026-08-22: Vinaya reads differently, being the
+    // oldest language in the monastic curriculum. The banner states
+    // that, and states its own limit in the same breath — the
+    // dictionary records genre-specific readings for about five terms
+    // out of 12,004, so the tool must NOT imply it knows how any given
+    // word shifts here. It points at the genre and stops.
+    QString vinayaBannerHtml(const QString& workKey) {
+        if (!subjectLayerTried_) {
+            subjectLayerTried_ = true;
+            subjectLayer_.load((libRoot_.chopped(8) +
+                                "/data/extracted/work_subjects.tsv")
+                                   .toStdString());
+        }
+        if (workKey.isEmpty() ||
+            !subjectLayer_.isVinaya(workKey.toStdString()))
+            return {};
+        return QString(
+                   "<div style='border-left:3px solid %1;background:"
+                   "#FBF1E6;padding:5px 9px;margin:5px 0;font-size:12px;"
+                   "color:%2'>%3<b>VINAYA</b> \u00b7 vowed morality "
+                   "(\u02bcdul ba)<br>The oldest language in the "
+                   "monastic curriculum, and it reads differently from "
+                   "the later literature. <span style='color:%4'>The "
+                   "dictionary records no genre-specific reading for "
+                   "these terms \u2014 this names the genre, it does "
+                   "not tell you how a word shifts in it.</span></div>")
+            .arg("#9A7A33").arg(ux::kInk)
+            .arg(ux::sourceBadge(ux::Epistemic::Reference))
+            .arg(ux::kSoft);
+    }
+
     void showInfo(const QString& path) {
         const QFileInfo fi(path);
         if (!fi.isFile()) { info_->clear(); return; }
@@ -21674,6 +21720,9 @@ private:
                      subj.toHtmlEscaped() +
                      "</span> <small style='color:#777'>(subject, "
                      "Sungbum catalog)</small></div>";
+            if (m.hasMatch())
+                h += vinayaBannerHtml(m.captured(1).toUpper() +
+                                      m.captured(2));
             const QString r6 =
                 m.hasMatch() ? r6subjects_.value(m.captured(1).toUpper() +
                                                  m.captured(2))

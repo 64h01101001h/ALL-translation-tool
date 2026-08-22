@@ -1,7 +1,7 @@
 # Diamond Cutter Translation Tool — Developer Handbook
 
 *Under the hood, for the development team. Current as of
-**2026-08-22, v1.0.0-rc.1** (71 test suites green, corpus v32).
+**2026-08-22, v1.0.0-rc.1** (72 test suites green, corpus v32).
 Since the v0.12.0 revision below: the Word-style ribbon band across
 every pane; Translation Dossiers (a resumable desk per text); the
 Glossary Workbench; team comments; conflict-safe shared stores with
@@ -39,7 +39,7 @@ copies the C++ ports were transcribed from (the data project owns
 their evolution). Python lives in `tools/` (72 scripts) for data
 preparation and validation only; nothing Python runs at app
 runtime. Build is CMake (Qt 6.11.1, C++20, system SQLite with
-FTS5 asserted at runtime); `ctest` runs 71 suites (63 core + 7
+FTS5 asserted at runtime); `ctest` runs 72 suites (64 core + 7
 app-level + 1 ocr); a headless `allanalyze` CLI mirrors the
 Analysis pipeline. The packaged app installs to
 `/Applications/Diamond Cutter Translation Tool/`.
@@ -100,7 +100,7 @@ re-prove.
 ```
 core/include/allcore/*.h   public API, one header per subsystem
 core/src/*.cpp             implementations
-core/tests/*_smoke.cpp     the 63 batteries (see §7)
+core/tests/*_smoke.cpp     the 64 batteries (see §7)
 core/tools_*.cpp           headless CLIs: wynorm, libindex_cli
 app/main.cpp               the whole UI (~34.6k lines, pane classes)
 ocr/                       allocr line-detect/recognize (onnx+OpenCV)
@@ -169,6 +169,7 @@ title pairs, v29–30), `SUBJ` (bilingual subject headings, v31),
 | `thl_phonetics.h` | THL Simplified Phonetics (Germano & Tournadre), word-scoped; the app's `thlPhrase()` wrapper segments phrases via Botok | 139/139 on the standard's own examples |
 | `botok.h` (`botok_*.cpp`) | botok segmentation port: chunker → trie → tokenizer → Segmenter facade + memory-lean `SegTrie` (HGM + Monlam lexicon, proven segmentation-identical) | botok_smoke, botok_tok_smoke |
 | `analysis.h` | AI analysis prompt assembly: engine pre-pass (anchors + corpus + **library citations**) + template; back-translation QC | analysis_smoke |
+| `subjects.h` | what the CATALOG says a text is about (R6 + Sungbum headings, 1,906 works); Vinaya flagged by exact heading match. NOT a register layer — see docs/FINDINGS.md 2026-08-22 | subjects_smoke |
 | `authorsearch.h` | find a catalog author from ACIP, wylie, Tibetan unicode, or an English phonetic spelling; tiered Exact > Contains > Spacing > Phonetic > PhoneticNear, homonyms never merged | authorsearch_smoke |
 | `abbr.h`, `contractions.h` | TibSchol abbreviation table (CC0) + the HGM-derived bsdus-tshig register (182 pairs) | abbr/contractions suites |
 | `poslex.h` | SOAS hand-tagged POS lexicon (CC BY 4.0, 13,107 forms) as Wilson-parse evidence | poslex suite |
@@ -433,7 +434,7 @@ programme): `docs/standards/SOURCE_TRUST_HIERARCHY.md` +
 
 ## 17. Testing: three harnesses
 
-1. **ctest (71 suites = 63 core + 7 app + 1 ocr)** — the
+1. **ctest (72 suites = 64 core + 7 app + 1 ocr)** — the
    allcore batteries (§5/§7) plus app-level `dmp_smoke` /
    `collation_smoke` / `font_smoke` / `app_selftest` (which runs
    harness #2 offscreen under CTest) and `ocr_smoke`. Run:
@@ -593,7 +594,7 @@ extra phonetics display conventions.
   `g_mssComposeBib`, `g_mssProposeNote`.
 - **CMake targets**: `allcore` (44 sources), `allocr`,
   `DiamondCutterTranslationTool` (MACOSX_BUNDLE), `allanalyze`,
-  `libindex_cli`, `wynorm`, + 71 test executables. Root project
+  `libindex_cli`, `wynorm`, + 72 test executables. Root project
   version reads the `VERSION` file (wired 2026-08-14 — it had
   been a stale hardcoded 0.1.0); `USE_SYSTEM_SQLITE=OFF` now
   FATAL_ERRORs with instructions if the amalgamation isn't
