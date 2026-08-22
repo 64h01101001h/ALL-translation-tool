@@ -20834,7 +20834,12 @@ private:
     // catalog-number → published catalog English title (v29 title wave)
     QString englishTitle(const QString& fileName) {
         if (!titlesLoaded_) {
-            titlesLoaded_ = true;
+            // flag set at the END, on success — the third instance of
+            // this same bug (loadPersons and the palette's two lanes
+            // were the first two, fixed earlier today). Marking the
+            // load done before attempting it means one absent bank
+            // silently kills catalog titles AND both subject layers
+            // for the whole session, with no banner and no retry.
             QFile f(QFileInfo(libRoot_).path() +
                     "/data/extracted/catalog_titles.json");
             if (f.open(QIODevice::ReadOnly)) {
@@ -20869,6 +20874,10 @@ private:
                         r6subjects_[it.key()] = ss.join(" · ");
                 }
             }
+            // loaded only if at least one bank actually arrived; a
+            // data folder that mounts late heals on the next call
+            titlesLoaded_ = !titles_.isEmpty() || !subjects_.isEmpty() ||
+                            !r6subjects_.isEmpty();
         }
         QRegularExpression re("^([A-Za-z]+)0*(\\d+)");
         const auto m = re.match(fileName);
@@ -30434,6 +30443,30 @@ int main(int argc, char** argv) {
                        early.contains("--teachbench") ||
                        early.contains("--gauntlet");
         g_sweepActive = early.contains("--sweep");
+    }
+    // GLOBAL DIALOG REAPER for every headless mode. The sweep has had
+    // one since the --survey modal hang; --gauntlet, --selftest,
+    // --screenshots, --survey and --teachbench did NOT, and relied on
+    // each modal call site remembering a g_harnessRun guard. That is
+    // discipline where a mechanism belongs: the gauntlet fires 20,000
+    // randomised actions, and ONE unguarded dialog anywhere in 34,700
+    // lines hangs the battery with no output.
+    //
+    // It also closes a census gap — the constitution's R3 counts
+    // QMessageBox sites but not QInputDialog, of which there are 15,
+    // equally blocking and entirely unwatched.
+    //
+    // Reaping is REJECT, never accept: a harness must not be able to
+    // confirm a destructive prompt it was never meant to answer.
+    static QTimer* g_reaper = nullptr;
+    if (g_harnessRun && !g_reaper) {
+        g_reaper = new QTimer(&app);
+        QObject::connect(g_reaper, &QTimer::timeout, [] {
+            for (QWidget* w : QApplication::topLevelWidgets())
+                if (auto* d = qobject_cast<QDialog*>(w))
+                    if (d->isVisible()) d->reject();
+        });
+        g_reaper->start(250);
     }
     // Adam's ruling (2026-08-13): English renders in Palatino
     // Linotype everywhere. macOS ships the family as "Palatino";

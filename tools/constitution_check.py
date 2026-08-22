@@ -80,8 +80,16 @@ def main():
     # reviewed for harness reachability; bump the baseline WITH the
     # review, in this file, in the same commit.
     R3_BASELINE = None  # set at install time below
+    # QInputDialog counts too: it is exactly as blocking as a
+    # QMessageBox and was entirely outside this census until
+    # 2026-08-22 (15 sites, unwatched). A global dialog reaper now
+    # protects every headless mode, but the census still tracks growth
+    # — a mechanism plus a count, not one or the other.
     msgbox = len(re.findall(r"QMessageBox::(warning|information|"
                             r"question|critical)\s*\(", main_cpp))
+    msgbox += len(re.findall(r"QInputDialog::(getText|getItem|getInt|"
+                             r"getDouble|getMultiLineText)\s*\(",
+                             main_cpp))
     baseline_path = os.path.join(root,
                                  "tools/constitution_baseline.txt")
     if os.path.exists(baseline_path):
