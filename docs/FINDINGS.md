@@ -94,3 +94,50 @@ fd29861, 73ce8bc):
 **Left open:** backlog #33 — searching the Library BY author (ACIP or
 Wylie, plus pronunciation-approximate). Today an author's works are
 reachable only by landing on one of their texts first.
+
+## 2026-08-22 · Author search would have missed 80% of authors who have texts
+
+Measured before wiring the UI, not after. The matcher built in 7d13801
+searches the author names in `persons_bdrc.json` (183). The mapping
+from an author to their TEXTS lives somewhere else entirely, in
+`acip_person_links.json` (1,768 per-text links, 209 distinct authors).
+
+The two sets barely overlap:
+
+| set | count |
+|---|---|
+| link-table authors (these HAVE local texts) | 209 |
+| persons_bdrc authors (what the matcher searches) | 183 |
+| in both | **41** |
+| have texts but the matcher cannot find them | **168** |
+| findable but with no texts behind them | **142** |
+
+So wiring the UI to the matcher as built would have meant: four out of
+five authors who actually have texts in the library are unfindable,
+and four out of five authors you CAN find show you nothing. It would
+have passed a demo on Tsongkhapa (who is in both sets) and failed on
+almost everyone else.
+
+Coverage of the link table itself is total — every one of the 209
+authors has at least one local text, and every linked work is present
+(135/135 for Dngul-chu Dharmabhadra, 132/132 for Tsongkhapa). So the
+"matched an author but they have no local texts" empty state, which I
+had assumed was the common case worth designing for, does not arise
+from the link table at all. It arises only from persons_bdrc names.
+
+**Consequence for the design**: the searchable name set must be the
+UNION, and each result must say which of the two it came from, because
+they promise different things — a link-table name promises texts, a
+persons_bdrc name promises a biography.
+
+**Second finding, unlooked for**: the link table carries OCR-grade
+spelling variants of ONE person as separate author strings —
+"'JAM DBYANGS BZHAD PA NGAG DBANG BRTZON 'GRUS",
+"'JAM BBYANGS BZHAD PA'I RDO RJE",
+"'JAM BYANGS BZHAD PADO RJE NGAG DBANG BRTZON 'GRUS" are all Jamyang
+Zhepa. The Spacing and Phonetic tiers therefore have a second job
+nobody specified: clustering the catalog's own spelling variance, not
+just the user's. Those variants must be offered together while
+remaining separately labeled — the homonym rule cuts the other way
+here, and telling the two situations apart is a human's call, not the
+machine's.
