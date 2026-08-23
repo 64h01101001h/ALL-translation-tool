@@ -14,6 +14,7 @@
 // Dictionary/corpus approvals still leave only via the signed
 // export — the corpus keeps its single pipeline.
 #include <string>
+#include <vector>
 
 #include "allcore/proposals.h"
 
@@ -23,6 +24,15 @@ struct RegenStats {
     int honorific = 0;  // rows folded into honorific_register.tsv
     int pron = 0;       // pronunciation rulings applied or folded
     int abbrev = 0;     // rows in approved_abbreviations.tsv
+    // Review finding, 2026-08-23: writeLines() was made honest about a
+    // failed write and every one of its four call sites here threw the
+    // answer away, so ApprovalPane could still print "N proposal(s)
+    // approved and stamped" over registers that never reached disk —
+    // the same defect FAIL-2 fixed one layer up, reintroduced by the
+    // fix itself. The struct now carries the failure, and the caller
+    // must look at it (house rule 4).
+    std::vector<std::string> unwritten;   // paths that did NOT land
+    bool ok() const { return unwritten.empty(); }
 };
 
 RegenStats regenerateApprovedRegisters(const ProposalStore& store,

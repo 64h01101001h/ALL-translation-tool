@@ -29,7 +29,9 @@ class DossierStore {
 public:
     explicit DossierStore(const std::string& dir);
     bool load();           // missing file = empty store, true
-    bool save();           // full rewrite (local, single-writer)
+    // [[nodiscard]] for the same reason as ActionLedger::save:
+    // a discarded false here WAS the critical SQA FAIL-2.
+    [[nodiscard]]  bool save();           // full rewrite (local, single-writer)
     // returns the new slug ("" on empty title/path)
     std::string create(const std::string& title,
                        const std::string& textPath, int line,

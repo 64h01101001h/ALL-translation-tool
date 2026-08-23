@@ -60,7 +60,7 @@ int main() {
                "2026-08-14");
     store.rule(prnId, allcore::ProposalStatus::Approved, "adam", "",
                "2026-08-14");
-    store.save();
+    CHECK(store.save(), "fixture saved (a silent failure here makes the assertions below it vacuous)");
 
     auto st = allcore::regenerateApprovedRegisters(store, root.string());
     CHECK(st.honorific == 1 && st.pron == 1 && st.abbrev == 1,
@@ -100,7 +100,7 @@ int main() {
     // a reversal falls out on the next regeneration
     store.rule(honId, allcore::ProposalStatus::Declined, "adam",
                "not attested", "2026-08-14");
-    store.save();
+    CHECK(store.save(), "fixture saved (a silent failure here makes the assertions below it vacuous)");
     auto st2 = allcore::regenerateApprovedRegisters(store, root.string());
     const std::string hon2 = slurp(honP);
     CHECK(st2.honorific == 0 &&

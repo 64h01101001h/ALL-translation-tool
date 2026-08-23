@@ -86,7 +86,9 @@ class ProposalStore {
 public:
     explicit ProposalStore(const std::string& dir);
     bool load();
-    bool save();
+    // [[nodiscard]] for the same reason as ActionLedger::save:
+    // a discarded false here WAS the critical SQA FAIL-2.
+    [[nodiscard]]  bool save();
     const std::vector<Proposal>& all() const { return items_; }
     // add a fresh pending proposal; returns its id
     std::string propose(ProposalKind kind, const std::string& proposer,

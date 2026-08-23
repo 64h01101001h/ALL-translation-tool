@@ -27,26 +27,25 @@ std::vector<std::string> readLines(const std::string& path) {
     return out;
 }
 
-bool writeLines(const std::string& path,
+// [[nodiscard]]: every one of this function's call sites below threw
+// its answer away once already, which let "N proposal(s) approved and
+// stamped" print over registers that never landed. Proven by mutation
+// 2026-08-23 — reverting the fix compiled clean without this.
+[[nodiscard]] bool writeLines(const std::string& path,
                 const std::vector<std::string>& lines) {
     std::ofstream f(path, std::ios::trunc);
     if (!f) return false;
     for (const auto& l : lines) f << l << "\n";
     // SQA FAIL-2 (critical): this ended `return true;` after an
-    // UNCHECKED ofstream. Measured against the real allcore on a
-    // volume with a 16,384-byte hole: save() returned TRUE having
-    // written 16,384 of 123,576 bytes. The stores either side of it
-    // in the same probe reported honestly, because they end with
-    // `return (bool)f;` — the rule was right and held only where its
-    // author remembered it. Flushing first turns a buffered short
-    // write into a stream error we can actually report (house rule 4:
-    // nothing reports success that did not verify the bytes landed).
-    // Flush AND close before judging. Measured 2026-08-23 on a full
-    // 2 MB volume: flush() alone reported success after writing
-    // 155,648 of ~240,000 bytes — the failure only surfaces when the
-    // filebuf is closed, so a check before close() is still a lie.
-    // Caught by tools/test_shortwrite.sh, which is the whole reason
-    // that test exists.
+    // UNCHECKED ofstream, and was measured returning TRUE having
+    // written 16,384 of 123,576 bytes.
+    //
+    // Flush AND CLOSE before judging. flush() alone is NOT enough —
+    // measured on a full 2 MB volume, it reported success after
+    // writing 155,648 of ~240,000 bytes, because the failure does not
+    // surface until the filebuf is closed. Caught by
+    // tools/test_shortwrite.sh, which exists for this.
+    // (House rule 4: nothing reports success it did not verify.)
     f.flush();
     f.close();
     return !f.fail();
@@ -114,7 +113,7 @@ RegenStats regenerateApprovedRegisters(const ProposalStore& store,
                                 provenance(p));
                 ++st.honorific;
             }
-            writeLines(path, lines);
+            if (!writeLines(path, lines)) st.unwritten.push_back(path);
         }
     }
 
@@ -131,7 +130,7 @@ RegenStats regenerateApprovedRegisters(const ProposalStore& store,
                 for (auto& l : readLines(path))
                     if (l.find(kMarker) == std::string::npos)
                         keep.push_back(l);
-                writeLines(path, keep);
+                if (!writeLines(path, keep)) st.unwritten.push_back(path);
             }
             for (const auto& p : store.all()) {
                 if (p.status != ProposalStatus::Approved) continue;
@@ -160,7 +159,7 @@ RegenStats regenerateApprovedRegisters(const ProposalStore& store,
                     lines.push_back(p.value + "\t" +
                                     toWylie(p.wylie) +
                                     "\t\tapproved\t" + provenance(p));
-                    writeLines(path, lines);
+                    if (!writeLines(path, lines)) st.unwritten.push_back(path);
                 }
                 ++st.pron;
             }
@@ -197,7 +196,7 @@ RegenStats regenerateApprovedRegisters(const ProposalStore& store,
                 "Abb. Wylie,Abb. Unicode,Expan. Wylie,Expan. Unicode,"
                 "Approval");
             for (auto& r : rows) lines.push_back(r);
-            writeLines(path, lines);
+            if (!writeLines(path, lines)) st.unwritten.push_back(path);
         }
     }
 

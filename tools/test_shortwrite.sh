@@ -41,6 +41,10 @@ command -v diskutil >/dev/null 2>&1 || skip "no diskutil"
 [[ -x "$PROBE" ]] || skip "probe not built at $PROBE"
 
 # 4096 sectors x 512 B = 2 MB
+# Review finding: a leftover mount from a killed run makes macOS mount
+# the NEW volume as "SQASHORTWRITE 1" while $MNT still resolves to the
+# stale one — the test would then measure the wrong disk and unmount it.
+[[ -d "$MNT" ]] && skip "$MNT already exists (leftover from a previous run); unmount it first"
 DEV=$(hdiutil attach -nomount "ram://4096" 2>/dev/null | tr -d '[:space:]')
 [[ -n "$DEV" ]] || skip "could not attach a RAM device"
 diskutil eraseVolume HFS+ "$VOL" "$DEV" >/dev/null 2>&1 || skip "could not format the RAM disk"
@@ -68,8 +72,16 @@ echo "  full volume    -> $out"
 claimed=$(echo "$out" | sed -E 's/.*CLAIMED=([A-Z]+).*/\1/')
 bytes=$(echo   "$out" | sed -E 's/.*BYTES=(-?[0-9]+).*/\1/')
 
-if [[ "$claimed" == "FALSE" ]]; then
+# Review finding 2026-08-23: asserting only CLAIMED=FALSE let an OPEN
+# failure satisfy this test identically to the short write it exists to
+# catch — if the volume fills completely the probe reports FALSE with
+# BYTES=-1 and the suite goes green while testing the open guard, which
+# was always correct. Demand evidence that bytes actually landed AND
+# that they were cut short.
+if [[ "$claimed" == "FALSE" && "$bytes" -gt 0 ]]; then
     check ok "save() reports FALSE when the write was cut short (bytes on disk: $bytes)"
+elif [[ "$claimed" == "FALSE" ]]; then
+    check no "the file never OPENED (bytes=$bytes) — this run tested the open guard, not a short write. Retune the dd filler so a hole remains."
 else
     check no "save() CLAIMED SUCCESS after a short write — only $bytes bytes landed. This is SQA FAIL-2 back again."
 fi

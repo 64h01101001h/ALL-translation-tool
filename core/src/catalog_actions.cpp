@@ -119,20 +119,15 @@ bool ActionLedger::save() const {
             << sanitizeField(r.note) << '\n';
     }
     // SQA FAIL-2 (critical): this ended `return true;` after an
-    // UNCHECKED ofstream. Measured against the real allcore on a
-    // volume with a 16,384-byte hole: save() returned TRUE having
-    // written 16,384 of 123,576 bytes. The stores either side of it
-    // in the same probe reported honestly, because they end with
-    // `return (bool)f;` — the rule was right and held only where its
-    // author remembered it. Flushing first turns a buffered short
-    // write into a stream error we can actually report (house rule 4:
-    // nothing reports success that did not verify the bytes landed).
-    // Flush AND close before judging. Measured 2026-08-23 on a full
-    // 2 MB volume: flush() alone reported success after writing
-    // 155,648 of ~240,000 bytes — the failure only surfaces when the
-    // filebuf is closed, so a check before close() is still a lie.
-    // Caught by tools/test_shortwrite.sh, which is the whole reason
-    // that test exists.
+    // UNCHECKED ofstream, and was measured returning TRUE having
+    // written 16,384 of 123,576 bytes.
+    //
+    // Flush AND CLOSE before judging. flush() alone is NOT enough —
+    // measured on a full 2 MB volume, it reported success after
+    // writing 155,648 of ~240,000 bytes, because the failure does not
+    // surface until the filebuf is closed. Caught by
+    // tools/test_shortwrite.sh, which exists for this.
+    // (House rule 4: nothing reports success it did not verify.)
     out.flush();
     out.close();
     return !out.fail();
@@ -183,6 +178,19 @@ std::string ActionLedger::stage(const std::string& src,
     return a.id;
 }
 
+// A rollback rename that says whether it worked. fs::rename with an
+// error_code silently does nothing on EXDEV or a read-only parent, and
+// a rollback nobody checked is how a "nothing was filed" message ends
+// up over a file sitting on the shelf.
+static bool restore(const std::filesystem::path& from,
+                    const std::filesystem::path& to) {
+    std::error_code rc;
+    std::filesystem::rename(from, to, rc);
+    if (!rc) return true;
+    return !std::filesystem::exists(from, rc) &&
+           std::filesystem::exists(to, rc);
+}
+
 std::string ActionLedger::approve(const std::string& id,
                                   const std::string& approver,
                                   const std::string& date) {
@@ -231,13 +239,23 @@ std::string ActionLedger::approve(const std::string& id,
     // file missing. stage(), twelve lines above, has always rolled
     // back correctly on the same failure.
     if (!save()) {
-        if (!metaDest.empty()) fs::rename(metaDest, meta, ec);
-        fs::rename(dest, staged, ec);
+        // Review finding 2026-08-23: these renames ignored their own
+        // error_code while the message below asserted the item was
+        // still staged — the very "report what you did not verify"
+        // shape this function was being fixed for.
+        const bool metaBack =
+            metaDest.empty() ? true : restore(metaDest, meta);
+        const bool fileBack = restore(dest, staged);
         a->status = prevStatus;
         a->decided_by.clear();
         a->decided_on.clear();
-        return "the ledger could not be written, so nothing was "
-               "filed \u2014 the item is still staged and pending";
+        if (fileBack && metaBack)
+            return "the ledger could not be written, so nothing was "
+                   "filed \u2014 the item is still staged and pending";
+        return "the ledger could not be written AND the item could "
+               "not be put back; it is now split between the shelf "
+               "and the staging area. Move it back by hand before "
+               "acting on this row again.";
     }
     return "";
 }
@@ -253,12 +271,17 @@ std::string ActionLedger::reject(const std::string& id,
     const fs::path staged = fs::path(stagingDir()) / a->staged_name;
     const fs::path rejDir = fs::path(stagingDir()) / kRejectedDirName;
     fs::create_directories(rejDir, ec);
+    std::string metaSrc;
+    fs::path metaDest;
     if (fs::exists(staged, ec)) {
         fs::rename(staged, rejDir / a->staged_name, ec);
         if (ec) return "move failed: " + ec.message();
-        const std::string meta = metaCompanionFor(staged);
-        if (!meta.empty())
-            fs::rename(meta, rejDir / fs::path(meta).filename(), ec);
+        metaSrc = metaCompanionFor(staged);
+        if (!metaSrc.empty()) {
+            metaDest = rejDir / fs::path(metaSrc).filename();
+            fs::rename(metaSrc, metaDest, ec);
+            if (ec) metaDest.clear();   // nothing to roll back
+        }
     }
     const std::string prevStatus = a->status;
     const std::string prevNote = a->note;
@@ -270,14 +293,26 @@ std::string ActionLedger::reject(const std::string& id,
     // the file moved into rejected/ while the ledger still read
     // pending.
     if (!save()) {
-        if (fs::exists(rejDir / a->staged_name, ec))
-            fs::rename(rejDir / a->staged_name, staged, ec);
+        // Review finding 2026-08-23, two defects in this rollback:
+        // the META moved above was NOT brought back, so the pair
+        // split and a later approve() filed the text with its catalog
+        // metadata stranded in REJECTED/; and the rename results were
+        // never checked while the message asserted the item was still
+        // staged. Roll back BOTH, then report what is actually true.
+        const bool fileBack = restore(rejDir / a->staged_name, staged);
+        const bool metaBack =
+            metaDest.empty() ? true : restore(metaDest, metaSrc);
         a->status = prevStatus;
         a->note = prevNote;
         a->decided_by.clear();
         a->decided_on.clear();
-        return "the ledger could not be written, so nothing was "
-               "rejected \u2014 the item is still staged and pending";
+        if (fileBack && metaBack)
+            return "the ledger could not be written, so nothing was "
+                   "rejected \u2014 the item is still staged and pending";
+        return "the ledger could not be written AND the item could "
+               "not be put back; it is now split between the staging "
+               "area and REJECTED/. Move it back by hand before "
+               "acting on this row again.";
     }
     return "";
 }

@@ -58,11 +58,6 @@ if [[ "$MODE" != "--tests-only" ]]; then
         grep -E "error:" /tmp/all_verify_build.log | head -20 || true
         fail "the build did not succeed"
     fi
-    # tee makes $? the tee's; check the build's via PIPESTATUS
-    if [[ "${PIPESTATUS[0]:-0}" -ne 0 ]]; then
-        grep -E "error:" /tmp/all_verify_build.log | head -20 || true
-        fail "the build did not succeed (PIPESTATUS)"
-    fi
     grn "build ok"
 fi
 

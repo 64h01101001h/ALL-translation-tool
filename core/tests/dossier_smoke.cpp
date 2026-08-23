@@ -60,7 +60,7 @@ int main() {
         // a second dossier; ordering = most recently touched first
         st.create("Sungbum vol 2", "/lib/S5275.txt", 1,
                   "2026-08-21T16:00");
-        st.save();
+        CHECK(st.save(), "fixture saved (a silent failure here makes the assertions below it vacuous)");
     }
     {
         allcore::DossierStore st(d);
@@ -71,7 +71,7 @@ int main() {
         // titles with tabs/newlines survive escaping
         st.create("weird\ttitle\nhere", "/x.txt", 3,
                   "2026-08-21T17:00");
-        st.save();
+        CHECK(st.save(), "fixture saved (a silent failure here makes the assertions below it vacuous)");
     }
     {
         allcore::DossierStore st(d);
@@ -81,7 +81,7 @@ int main() {
                       std::string::npos,
               "escaping round-trips");
         CHECK(st.remove(st.all().front().slug), "remove works");
-        st.save();
+        CHECK(st.save(), "fixture saved (a silent failure here makes the assertions below it vacuous)");
     }
     {
         allcore::DossierStore st(d);

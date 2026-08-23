@@ -75,7 +75,7 @@ int main(int argc, char** argv) {
                            allcore::ProposalStatus::Approved, "x", "",
                            "2026-08-09"),
               "ruling an unknown id fails cleanly");
-        reload.save();
+        CHECK(reload.save(), "fixture saved (a silent failure here makes the assertions below it vacuous)");
 
         allcore::ProposalStore after(dir);
         after.load();
@@ -236,11 +236,11 @@ int main(int argc, char** argv) {
             allcore::ProposalStore c(dir);
             c.load();
             std::remove((dir + "/proposals.tsv").c_str());
-            b.save();
+            CHECK(b.save(), "fixture saved (a silent failure here makes the assertions below it vacuous)");
             std::rename((dir + "/proposals.tsv").c_str(),
                         conflictPath.c_str());
             // restore the main file (store a's view)
-            a.save();
+            CHECK(a.save(), "fixture saved (a silent failure here makes the assertions below it vacuous)");
         }
         allcore::ProposalStore merged(dir);
         CHECK(merged.load(), "load with a conflicted sibling present");

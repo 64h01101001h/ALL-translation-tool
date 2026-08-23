@@ -42,11 +42,22 @@ int main(int argc, char** argv) {
         // the serialised store exceeds the hole left on the volume,
         // and big enough to overrun the ofstream's own buffer, which
         // is where a buffered short write hides.
-        store.propose(allcore::ProposalKind::Honorific,
+        // Review finding: discarding this in a probe about discarded
+        // returns. A refused propose() silently shrinks the payload
+        // until it FITS, and the script then blames FAIL-2 for a
+        // regression that is really an empty store.
+        const std::string pid = store.propose(
+                      allcore::ProposalKind::Honorific,
                       "proposer-" + std::to_string(i),
                       "bsod nams kyi phung po " + std::to_string(i),
                       std::string(200, 'x'), "field",
                       std::string(400, 'e'), "2026-08-22");
+
+        if (pid.empty()) {
+            std::printf("PROBE BROKEN: propose() refused a row; the "
+                        "store is too small to test a short write\n");
+            return 3;
+        }
     }
 
     const bool claimed = store.save();

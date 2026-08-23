@@ -2915,6 +2915,12 @@ static std::function<QString(const QString&, const QString&,
                              const QString&)> g_saveDialogStub;
 static std::function<QString(const QString&, const QString&)>
     g_dirDialogStub;
+// Review finding 2026-08-23: the seam covered saves and directories
+// but not OPENS, so every import/load failure path stayed as
+// untestable as the write paths had been — including the Overlay's
+// own open, which bounty #3 found bypassing openFile().
+static std::function<QString(const QString&, const QString&,
+                             const QString&)> g_openDialogStub;
 static QString safeGetExistingDirectory(
     QWidget* parent, const QString& caption = QString(),
     const QString& dir = QString()) {
@@ -2934,8 +2940,10 @@ static QString safeGetOpenFileName(
     QWidget* parent, const QString& caption = QString(),
     const QString& dir = QString(),
     const QString& filter = QString()) {
-    if (g_harnessRun) return QString();   // GAUNTLET G1 first blood:
-    // sweep-only guard let native panels open under every OTHER harness
+    if (g_harnessRun)   // GAUNTLET G1 first blood: a sweep-only guard
+        // let native panels open under every OTHER harness mode
+        return g_openDialogStub ? g_openDialogStub(caption, dir, filter)
+                                : QString();
     const QString r = QFileDialog::getOpenFileName(
         parent, caption, dlgStartDir(caption, dir), filter);
     dlgRemember(caption, r);
@@ -2945,7 +2953,12 @@ static QStringList safeGetOpenFileNames(
     QWidget* parent, const QString& caption = QString(),
     const QString& dir = QString(),
     const QString& filter = QString()) {
-    if (g_harnessRun) return QStringList();
+    if (g_harnessRun) {
+        const QString one =
+            g_openDialogStub ? g_openDialogStub(caption, dir, filter)
+                             : QString();
+        return one.isEmpty() ? QStringList() : QStringList{one};
+    }
     const QStringList r = QFileDialog::getOpenFileNames(
         parent, caption, dlgStartDir(caption, dir), filter);
     if (!r.isEmpty()) dlgRemember(caption, r.front());
@@ -15240,9 +15253,19 @@ private:
                     // the reader to mistake for a complete sweep.
                     if (cut) indexCapped = true;
                 } else {
+                    // Review finding 2026-08-23: only the indexed
+                    // branch disclosed its ceiling, so an unindexed
+                    // folder produced a visually identical list that
+                    // quietly stopped at 400 — and once a reader has
+                    // learned that this pane warns when it truncates,
+                    // the ABSENCE of a warning reads as completeness.
                     hits = allcore::goferSearchFiles(dir.toStdString(),
                                                      q.toStdString(),
-                                                     400);
+                                                     401);
+                    if ((int)hits.size() > 400) {
+                        hits.resize(400);
+                        indexCapped = true;
+                    }
                 }
                 // the TibetDoc search-locations view: hits roll up
                 // PER FILE \u2014 count, first-hit line, first snippet \u2014
@@ -26676,14 +26699,21 @@ private:
                 bool wroteOk = false;
                 QString wErr;
                 if (of.open(QIODevice::WriteOnly | QIODevice::Text)) {
-                    QTextStream ts(&of);
-                    ts << "# OCR-DERIVED (unverified review material) — "
-                          "source: "
-                       << QFileInfo(f).fileName()
-                       << " — models: BDRC (CC BY-NC 4.0, with "
-                          "permission)\n";
-                    for (const QString& w2 : wylieLines) ts << w2 << "\n";
-                    ts.flush();
+                    // Review finding: the QTextStream used to outlive
+                    // of.close(), so its destructor flushed into a
+                    // closed device AFTER the verdict had been taken
+                    // and any late error was unobservable. Scope it so
+                    // it is destroyed while the file is still open.
+                    {
+                        QTextStream ts(&of);
+                        ts << "# OCR-DERIVED (unverified review "
+                              "material) — source: "
+                           << QFileInfo(f).fileName()
+                           << " — models: BDRC (CC BY-NC 4.0, with "
+                              "permission)\n";
+                        for (const QString& w2 : wylieLines)
+                            ts << w2 << "\n";
+                    }
                     wroteOk = of.flush() &&
                               of.error() == QFileDevice::NoError;
                     wErr = of.errorString();
@@ -27207,7 +27237,9 @@ public:
         st.propose(allcore::ProposalKind::Honorific,
                    g_userName.toStdString(), "zhal", "mouth (hon.)",
                    "kha", "selftest", "2026-08-09");
-        st.save();
+        check(st.save(), "selftest fixture: the proposal store saved "
+               "(a fixture that silently fails makes every "
+               "assertion below it vacuous)");
         g_proposalsDir = tmp;
         showMine();
         const QString m = mine_->toPlainText();
@@ -27404,7 +27436,9 @@ public:
                 "2026-08-09");
             st.rule(id, allcore::ProposalStatus::Approved, "selftest",
                     "", "2026-08-09");
-            st.save();
+            check(st.save(), "selftest fixture: the proposal store saved "
+               "(a fixture that silently fails makes every "
+               "assertion below it vacuous)");
             g_proposalsDir = tmp;
             const QString out = tmp + "/export.tsv";
             const int n = writeApprovedExport(out);
@@ -27598,9 +27632,18 @@ private:
         // v2 item 2: registers REGENERATE from the ruled store
         // (idempotent strip-and-refold) instead of accumulating
         // live appends — a decline falls out on the same pass
-        if (touchesRegister)
-            allcore::regenerateApprovedRegisters(
+        if (touchesRegister) {
+            const auto rst = allcore::regenerateApprovedRegisters(
                 store, root_.toStdString());
+            if (!rst.ok())
+                QMessageBox::warning(
+                    this, "The ruling was saved, the register was not",
+                    QString("The ruling is recorded, but %1 register "
+                            "file(s) could not be written \u2014 the app "
+                            "will keep reading the OLD register. Check "
+                            "that the data folder is writable.")
+                        .arg(rst.unwritten.size()));
+        }
         reloadApprovedLayers();
         rebuild();
     }
@@ -27689,14 +27732,38 @@ private:
             rebuild();
             return;
         }
-        allcore::regenerateApprovedRegisters(store,
-                                             root_.toStdString());
+        // Review finding 2026-08-23: this discarded the regen result,
+        // so a register file that failed to write was invisible behind
+        // a green "approved and stamped". The rulings ARE saved by
+        // then (proposals.tsv is gated above); what can still fail is
+        // the register layer the app reads at startup, so say exactly
+        // that rather than either lying or crying wolf.
+        const auto rst =
+            allcore::regenerateApprovedRegisters(store,
+                                                 root_.toStdString());
         reloadApprovedLayers();
         rebuild();
-        QMessageBox::information(
-            this, "Approve all",
-            QString("%1 proposal(s) approved and stamped.")
-                .arg(applied));
+        if (!rst.ok()) {
+            QString paths;
+            for (const auto& u : rst.unwritten)
+                paths += "\n  \u2022 " + QString::fromStdString(u);
+            QMessageBox::warning(
+                this, "Approved, but the registers did not update",
+                QString("%1 proposal(s) were approved and saved. "
+                        "However %2 register file(s) could NOT be "
+                        "written, so the app will keep reading the "
+                        "OLD register until this is fixed:%3\n\n"
+                        "Check that the data folder is present and "
+                        "writable, then use Regenerate registers.")
+                    .arg(applied)
+                    .arg(rst.unwritten.size())
+                    .arg(paths));
+        } else {
+            QMessageBox::information(
+                this, "Approve all",
+                QString("%1 proposal(s) approved and stamped.")
+                    .arg(applied));
+        }
     }
 
     // the ruling's register mutation lives in allcore
@@ -27718,10 +27785,30 @@ private:
         const auto st = allcore::regenerateApprovedRegisters(
             store, root_.toStdString());
         reloadApprovedLayers();
+        // Review finding 2026-08-23: this printed row COUNTS from an
+        // in-memory fold while ignoring whether any of it reached
+        // disk. Counts are the hardest kind of false report to
+        // disbelieve, and this is the one action whose entire job is
+        // to make the registers on disk match the rulings.
+        if (!st.ok()) {
+            QString paths;
+            for (const auto& u : st.unwritten)
+                paths += "\n  \u2022 " + QString::fromStdString(u);
+            QMessageBox::warning(
+                this, "Registers NOT regenerated",
+                QString("%1 register file(s) could not be written, so "
+                        "the layer on disk is unchanged and the app "
+                        "will keep reading the old one:%2\n\nCheck "
+                        "that the data folder is present and "
+                        "writable.")
+                    .arg(st.unwritten.size())
+                    .arg(paths));
+            return;
+        }
         QMessageBox::information(
             this, "Regenerate registers",
             QString("Approved layer re-folded from the rulings "
-                    "store:\n%1 honorific · %2 pronunciation · %3 "
+                    "store:\n%1 honorific \u00b7 %2 pronunciation \u00b7 %3 "
                     "abbreviation row(s).\nRun this after importing "
                     "a new data release.")
                 .arg(st.honorific).arg(st.pron).arg(st.abbrev));
@@ -33471,7 +33558,13 @@ int main(int argc, char** argv) {
                                         x.textPath));
                                 overlay->scrollToLine(x.line);
                                 ds.touch(slug, x.line, stamp);
-                                ds.save();
+                                if (!ds.save())
+                                    QMessageBox::warning(
+                                        &d, "Dossier not saved",
+                                        "The change could not be written to the dossier "
+                                        "file. Check that the data folder is writable \u2014 "
+                                        "this edit will be gone when the app closes.");
+
                                 d.accept();
                                 return;
                             }
@@ -33486,7 +33579,13 @@ int main(int argc, char** argv) {
                         refill();
                     } else if (s.startsWith("drop:")) {
                         ds.remove(slug);
-                        ds.save();
+                        if (!ds.save())
+                            QMessageBox::warning(
+                                &d, "Dossier not saved",
+                                "The change could not be written to the dossier "
+                                "file. Check that the data folder is writable \u2014 "
+                                "this edit will be gone when the app closes.");
+
                         refill();
                     }
                 });
@@ -33511,7 +33610,12 @@ int main(int argc, char** argv) {
                                 QDateTime::currentDateTime()
                                     .toString("yyyy-MM-ddTHH:mm")
                                     .toStdString());
-                            ds.save();
+                            if (!ds.save())
+                                QMessageBox::warning(
+                                    nullptr, "Dossier not saved",
+                                    "The change could not be written to the dossier "
+                                    "file. Check that the data folder is writable \u2014 "
+                                    "this edit will be gone when the app closes.");
                             refill();
                         });
                 row->addWidget(newB);
@@ -36145,7 +36249,13 @@ int main(int argc, char** argv) {
                     "2026-08-20");
                 ps.rule(id, allcore::ProposalStatus::Approved,
                         "Adam", "", "2026-08-21");
-                ps.save();
+                const bool savedPS = ps.save();
+                log << QString("  [%1] selftest fixture: the proposal "
+                               "store saved (a fixture that fails "
+                               "silently makes every assertion below "
+                               "it vacuous)")
+                           .arg(savedPS ? "PASS" : "FAIL");
+                if (!savedPS) ++fails;
                 allcore::CommentStore cs(wd.toStdString());
                 cs.load();
                 cs.add("S1.txt", 5, "Pema", "note",
@@ -36212,7 +36322,13 @@ int main(int argc, char** argv) {
                     "seam probe", "2026-08-21");
                 st.rule(id, allcore::ProposalStatus::Approved,
                         "Seam", "", "2026-08-21");
-                st.save();
+                const bool savedST = st.save();
+                log << QString("  [%1] selftest fixture: the proposal "
+                               "store saved (a fixture that fails "
+                               "silently makes every assertion below "
+                               "it vacuous)")
+                           .arg(savedST ? "PASS" : "FAIL");
+                if (!savedST) ++fails;
             }
             reloadApprovedLayers();
             const bool live =

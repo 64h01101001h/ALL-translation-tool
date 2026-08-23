@@ -340,10 +340,19 @@ std::vector<FileGoferHit> LibraryIndex::search(const std::string& query,
                 // The LIMIT is the fix: "PA" alone matches 7,854,758
                 // of 14,077,690 lines, every one of which was pushed
                 // into this vector to return 60.
+                //
+                // ORDER BY is not decoration. Without it SQLite may
+                // return a DIFFERENT 200,000 rows between runs or
+                // after a VACUUM, so a translator who re-ran a search
+                // to check a citation could find the hit gone with
+                // nothing having changed. The window is now the first
+                // N in index order: still partial, but reproducible,
+                // which is the minimum a checkable-evidence tool owes.
                 Stmt s(db_,
                        "SELECT l.file_id, l.line_no FROM lines_fts f "
                        "JOIN lines l ON l.id = f.rowid "
-                       "WHERE lines_fts MATCH ? LIMIT ?");
+                       "WHERE lines_fts MATCH ? "
+                       "ORDER BY l.file_id, l.line_no LIMIT ?");
                 const std::string q = ftsQuote(n.term);
                 sqlite3_bind_text(s.p, 1, q.c_str(), -1, SQLITE_TRANSIENT);
                 sqlite3_bind_int(s.p, 2, kScanCap + 1);

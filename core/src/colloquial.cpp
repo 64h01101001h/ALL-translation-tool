@@ -100,20 +100,15 @@ bool applyPronunciationRuling(const std::string& tsvPath,
     if (!out) return false;
     for (const auto& l : lines) out << l << "\n";
     // SQA FAIL-2 (critical): this ended `return true;` after an
-    // UNCHECKED ofstream. Measured against the real allcore on a
-    // volume with a 16,384-byte hole: save() returned TRUE having
-    // written 16,384 of 123,576 bytes. The stores either side of it
-    // in the same probe reported honestly, because they end with
-    // `return (bool)f;` — the rule was right and held only where its
-    // author remembered it. Flushing first turns a buffered short
-    // write into a stream error we can actually report (house rule 4:
-    // nothing reports success that did not verify the bytes landed).
-    // Flush AND close before judging. Measured 2026-08-23 on a full
-    // 2 MB volume: flush() alone reported success after writing
-    // 155,648 of ~240,000 bytes — the failure only surfaces when the
-    // filebuf is closed, so a check before close() is still a lie.
-    // Caught by tools/test_shortwrite.sh, which is the whole reason
-    // that test exists.
+    // UNCHECKED ofstream, and was measured returning TRUE having
+    // written 16,384 of 123,576 bytes.
+    //
+    // Flush AND CLOSE before judging. flush() alone is NOT enough —
+    // measured on a full 2 MB volume, it reported success after
+    // writing 155,648 of ~240,000 bytes, because the failure does not
+    // surface until the filebuf is closed. Caught by
+    // tools/test_shortwrite.sh, which exists for this.
+    // (House rule 4: nothing reports success it did not verify.)
     out.flush();
     out.close();
     return !out.fail();
