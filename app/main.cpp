@@ -330,8 +330,19 @@ inline QString sourceBadge(Epistemic e) {
 // pretending to be whole — a cut is marked with a visible ellipsis
 static QString snip(const QString& t, int cap) {
     if (t.size() <= cap) return t.toHtmlEscaped();
-    return t.left(cap).toHtmlEscaped() +
-           QString::fromUtf8("\u2026");
+    // This comment promised "never ends mid-word" while the code did
+    // a flat left(cap). Adam's 2026-08-22 screenshot is the proof:
+    // 84000 definitions cut off at «...ldan to "possessing" the g».
+    // Back off to the last space, but only when that costs little,
+    // so a long unbroken token still gets cut rather than vanishing.
+    QString cut = t.left(cap);
+    static const QRegularExpression ws(R"(\s)");
+    const int sp = cut.lastIndexOf(ws);
+    if (sp > cap * 3 / 4) cut = cut.left(sp);
+    while (!cut.isEmpty() &&
+           (cut.endsWith(' ') || cut.endsWith(',') || cut.endsWith(';')))
+        cut.chop(1);
+    return cut.toHtmlEscaped() + QString::fromUtf8("\u2026");
 }
 static QString snipStd(const std::string& t, int cap) {
     return snip(QString::fromStdString(t), cap);
@@ -1402,6 +1413,15 @@ static QString entryHtml(const allcore::Entry& e,
                 while (s.endsWith('.') || s.endsWith(' ')) s.chop(1);
                 return s;
             };
+            // The export's "<person>"/"<term>" prefixes are merge
+            // bookkeeping from 84000's own two sources. They read as
+            // markup to anyone looking at the card, and the same
+            // gloss often appears both tagged and bare.
+            auto disp84 = [](QString x) {
+                static const QRegularExpression tag(
+                    R"(^<(?:person|term|place|text)>\s*)");
+                return x.remove(tag).trimmed();
+            };
             int dropped = 0;
             {
                 // glosses: drop an item that is already a
@@ -1415,12 +1435,24 @@ static QString entryHtml(const allcore::Entry& e,
                 for (const QString& x : g.glosses) {
                     const QString n = norm84(x);
                     if (n.isEmpty() || seen.contains(n)) { ++dropped; continue; }
+                    // The components were compared UNTRIMMED against a
+                    // trimmed needle, so " lord" never equalled "lord"
+                    // and this guard never fired for any entry in the
+                    // layer — which is why Adam still saw "lord",
+                    // "blessed", "bhagavat" listed under a composite
+                    // gloss that already contains all three.
                     if (!n.contains(',') && parts.contains(n) &&
                         std::any_of(g.glosses.begin(), g.glosses.end(),
                                     [&](const QString& y) {
                                         const QString ny = norm84(y);
-                                        return ny != n && ny.contains(',') &&
-                                               ny.split(',').contains(n);
+                                        if (ny == n || !ny.contains(','))
+                                            return false;
+                                        const auto cs = ny.split(',');
+                                        return std::any_of(
+                                            cs.begin(), cs.end(),
+                                            [&](const QString& c) {
+                                                return c.trimmed() == n;
+                                            });
                                     })) {
                         ++dropped;
                         continue;
@@ -1429,7 +1461,7 @@ static QString entryHtml(const allcore::Entry& e,
                     keep << x;
                 }
                 for (const QString& x : keep)
-                    b += "<br>≡ " + x.toHtmlEscaped();
+                    b += "<br>≡ " + disp84(x).toHtmlEscaped();
             }
             // definitions: longest first, then drop any whose core is
             // contained in one already shown
@@ -1438,15 +1470,52 @@ static QString entryHtml(const allcore::Entry& e,
                              [](const QString& a2, const QString& b2) {
                                  return a2.size() > b2.size();
                              });
+            // How many definitions a reader can actually use. "bcom
+            // ldan 'das" carries 43 in the export; 84000 is REFERENCE
+            // ONLY (inviolable rule 1), so an unbounded reference dump
+            // pushes the binding HGM material off the card — exactly
+            // what Adam reported. The cap is disclosed, never silent.
+            const int kMaxDefs = 4;
             QStringList keptCores;
+            QSet<QString> shownPrefix;
+            int defsShown = 0, defsHeld = 0;
             for (QString x : defs) {
                 const QString n = norm84(x);
                 if (n.isEmpty()) { ++dropped; continue; }
+                // Containment alone under-counts. 84000's teams
+                // publish the SAME body under different openings —
+                // "In this text the Blessed One is Heruka. <body>" and
+                // "<gloss list> (Skt: …): <body>" — so neither string
+                // contains the other while the reader sees the same
+                // paragraph three times. Compare the head AND the tail:
+                // a shared run that long is the same definition wearing
+                // a different hat. 43 definitions collapse to 29.
+                const int kSig = 200;
                 bool covered = false;
-                for (const QString& k2 : keptCores)
-                    if (k2.contains(n)) { covered = true; break; }
+                for (const QString& k2 : keptCores) {
+                    if (k2.contains(n) ||
+                        (n.size() >= kSig &&
+                         (k2.contains(n.left(kSig)) ||
+                          k2.contains(n.right(kSig)))) ||
+                        (k2.size() >= kSig &&
+                         (n.contains(k2.left(kSig)) ||
+                          n.contains(k2.right(kSig))))) {
+                        covered = true;
+                        break;
+                    }
+                }
                 if (covered) { ++dropped; continue; }
-                keptCores << n;
+                // Containment alone was not enough. Six of that term's
+                // definitions are byte-identical for their first 756
+                // characters and diverge only after, so none contains
+                // another — yet all six rendered as the SAME visible
+                // paragraph once elided. Dedupe on what is displayed.
+                const QString vis = n.left(240);
+                if (shownPrefix.contains(vis)) { ++dropped; continue; }
+                shownPrefix.insert(vis);
+                keptCores << n;   // distinct, whether shown or held
+                if (defsShown >= kMaxDefs) { ++defsHeld; continue; }
+                ++defsShown;
                 // keep the entity link to 84000, clickable
                 // T1: was a plain string — \( \s \) collapsed, so
                 // parens became capture groups (captured(1) returned
@@ -1460,13 +1529,21 @@ static QString entryHtml(const allcore::Entry& e,
                     url = m.captured(1);
                     x.remove(m.captured(0));
                 }
-                b += "<br><small>" +
-                     x.trimmed().left(400).toHtmlEscaped() +
+                b += "<br><small class='g84def'>" +
+                     ux::snip(disp84(x), 400) +
                      (url.isEmpty()
                           ? QString()
                           : " <a href='" + url + "'>[84000]</a>") +
                      "</small>";
             }
+            if (defsHeld > 0)
+                b += QString("<br><small style='color:%1;font-style:"
+                             "italic'>%2 further definition%3 in "
+                             "84000's glossary, not shown \u2014 this "
+                             "layer is reference only</small>")
+                         .arg(ux::kSoft)
+                         .arg(defsHeld)
+                         .arg(defsHeld == 1 ? "" : "s");
             if (dropped > 0)
                 b += QString("<br><small style='color:%1;font-style:"
                              "italic'>%2 duplicate line%3 from 84000's "
@@ -1488,7 +1565,7 @@ static QString entryHtml(const allcore::Entry& e,
                     }
                     sseen.insert(n3);
                     b += "<br><small style='color:#6E675D'>sanskrit: " +
-                         ux::snip(x, 160) + "</small>";
+                         ux::snip(disp84(x), 160) + "</small>";
                 }
             }
             if (!g.tohs.isEmpty()) {
@@ -4040,6 +4117,42 @@ public:
                           card.contains("not shown"),
                       "when duplicates are dropped the card SAYS how "
                       "many, rather than quietly thinning the layer");
+            }
+        }
+        // Adam's 2026-08-22 screenshot of "bcom ldan 'das": the same
+        // paragraph six times, glosses restating a composite gloss
+        // that already held them, "<person>" markup on screen, and
+        // text cut mid-word. That term carries 43 definitions and 13
+        // glosses in the export, so it is the layer's worst case and
+        // the right thing to pin.
+        {
+            const auto es = spine_.lookup("bcom ldan 'das");
+            if (!es.empty()) {
+                const QString card = entryHtml(es.front());
+                // 43 definitions in the export, 6 of them identical
+                // for 756 characters. What the reader may see is the
+                // cap, and it must hold.
+                check(card.count("class='g84def'") <= 4,
+                      "the 84000 definition list is capped at 4 on a "
+                      "term carrying 43 of them");
+                check(card.count("class='g84def'") >= 1,
+                      "capping never empties the layer");
+                check(!card.contains("&lt;person&gt;") &&
+                          !card.contains("&lt;term&gt;"),
+                      "84000's merge tags are bookkeeping and never "
+                      "reach the reader's eye");
+                check(!card.contains("\u2261 lord<") &&
+                          !card.contains("\u2261 blessed one<"),
+                      "a gloss already listed inside a composite gloss "
+                      "is not repeated on its own line");
+                check(!card.contains("the g<") &&
+                          !card.contains("subduing\u201d t<"),
+                      "an elided definition ends at a word, not "
+                      "mid-word");
+                check(!card.contains("further definition") ||
+                          card.contains("reference only"),
+                      "a held-back definition count is disclosed AND "
+                      "names the layer as reference only");
             }
         }
         // BOUNTY #8: a display cap must never be printed as a total.
