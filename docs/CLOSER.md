@@ -367,3 +367,19 @@ produces the candidate; 7–9 accept it; then
   caught both), and **ctest reports green against the STALE binary when
   a build fails**, so a suite that passes right after a broken build has
   proved nothing.
+- 2026-08-22 · **#49 CLOSED (process).** `tools/verify.sh` — build, then
+  test, and never test a stale binary. Found the hard way, twice in one
+  day: the loop `cmake --build … | grep -E " error" ; ctest` reported
+  **"72/72 tests passed" over a build that had FAILED**. grep printed the
+  errors, but its exit status is not the build's, and ctest ran the
+  binary left over from the previous build. A green suite after a broken
+  build has proved nothing, and it proves it very convincingly — the
+  numbers look exactly like success, and they arrive a second after the
+  compiler output has scrolled past. Both incidents were real duplicate
+  definitions (a verifier's "corrected" patch edit re-emitted its own
+  anchor line, so the superseded edit matched again — B11 and B14).
+  verify.sh fails at the first failing step and says "Nothing below this
+  line was run. Do NOT quote a test count." **Proven by deliberate
+  breakage**, not by inspection: a static_assert(false) appended to
+  main.cpp makes it stop at the build and refuse the suite; on a healthy
+  tree it exits 0 with all three gates green.
