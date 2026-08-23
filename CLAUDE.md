@@ -38,7 +38,13 @@ Reference documents (inside folder 1): `Guides/ACIP_Sanskrit_Input_Code_Standard
 
 ## Data assets (source of truth: `Handoff/release/`, current v0.27.2)
 - `hgm_dictionary_v27_2.json.gz` — THE MASTER. 105,634 unified entries: 12,004 HGM-glossed (tiered: curated > glossary > auto-aligned provisional), 79,305 Lokesh Chandra layer entries (awaiting), Tibetan unicode on all entries, pronunciations, ACIP, variants, evidence, corpus occurrences.
-- `full_parallel_corpus` (Handoff/data/, .gz) — 35,601 aligned Tibetan–English segments, 60+ HGM sources. The concordance/oversight evidence base.
+- `full_parallel_corpus` (Handoff/data/, .gz) — **42,199** aligned
+  Tibetan–English segments across HGM's courses. The concordance/
+  oversight evidence base. (Corrected 2026-08-23: this line said
+  35,601, which was the pre-v32 corpus. The SHIPPED spine records its
+  own provenance — `source_corpus=full_parallel_corpus_v32.json.gz`,
+  `n_corpus_segments=42199` — and that is the number the app can
+  demonstrate live, so it is the one to quote.)
 - `hgm_reverse_index_v27_2.json` — English → entries.
 - `Input/LokeshChandra/` — standalone LC extract (88,973 headwords with IAST Sanskrit + citations).
 - Release packages are versioned; the app should IMPORT a release, never own the data.
