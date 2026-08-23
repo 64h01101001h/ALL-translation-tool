@@ -1614,7 +1614,9 @@ static QString entryHtml(const allcore::Entry& e,
                 }
         }
         if (!ms.empty()) {
-            h += ux::sourceBadge(ux::Epistemic::Machine) +
+            h += "<div style='margin:9px 0 1px 0'>" +
+                 ux::sourceBadge(ux::Epistemic::Machine) +
+                 "</div>" +
                  zoneLabel("IN THE RECORDED TEACHINGS") +
                  QString(" <small style='color:#78706A'>%1 of %2"
                          "</small>")
@@ -1992,7 +1994,9 @@ static QString lookupResultsHtml(allcore::Spine& spine,
         }
         auto refs = ref->lookup(wylie);
         if (!refs.empty()) {
-            h += ux::sourceBadge(ux::Epistemic::Reference) +
+            h += "<div style='margin:9px 0 1px 0'>" +
+                 ux::sourceBadge(ux::Epistemic::Reference) +
+                 "</div>" +
                  zoneLabel("REFERENCE · LOCAL ONLY") +
                  "<div><small style='color:#78706A'>unlicensed "
                  "compilations — local lookup only, never for "
@@ -2048,7 +2052,9 @@ static QString lookupResultsHtml(allcore::Spine& spine,
             block += "</div>";
         }
         if (any) {
-            h += ux::sourceBadge(ux::Epistemic::Reference) +
+            h += "<div style='margin:9px 0 1px 0'>" +
+                 ux::sourceBadge(ux::Epistemic::Reference) +
+                 "</div>" +
                  zoneLabel("LOCAL DICTIONARIES \u00b7 "
                            "USER-SUPPLIED") +
                  "<div><small style='color:#78706A'>StarDict "
@@ -3323,6 +3329,13 @@ private:
             req.setRawHeader("anthropic-version", "2023-06-01");
             req.setRawHeader("anthropic-beta", "server-side-fallback-2026-07-01");
             req.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+            // Demo audit 2026-08-23: there is not one setTransferTimeout
+            // in this codebase, and Qt defaults to none. On bad wifi
+            // this request never returns, onDone() never fires, and the
+            // button it disabled stays greyed — no cancel, no retry, a
+            // dead pane for the rest of the session. 60 s is generous
+            // for a streaming completion and finite, which is the point.
+            req.setTransferTimeout(60000);
             reply_ = net_.post(req, QByteArray::fromStdString(body));
 
             connect(reply_, &QNetworkReply::readyRead, [this] { onData(); });
@@ -8221,7 +8234,9 @@ private:
         const int corpusTotal =
             trueTotal < 0 ? (int)segs.size() : (int)trueTotal;
         if (!segs.empty()) {
-            h += ux::sourceBadge(ux::Epistemic::Evidence) +
+            h += "<div style='margin:9px 0 1px 0'>" +
+                 ux::sourceBadge(ux::Epistemic::Evidence) +
+                 "</div>" +
                  zoneLabel("FROM THE CORPUS") +
                  QString(" <small style='color:%1'>%2 of %3"
                          "%4</small>")
@@ -8268,7 +8283,9 @@ private:
                 int refTotal = (int)refs.size();
                 if (refTotal == 6)
                     refTotal = (int)ref_->lookup(e.wylie, 100).size();
-                h += ux::sourceBadge(ux::Epistemic::Reference) +
+                h += "<div style='margin:9px 0 1px 0'>" +
+                     ux::sourceBadge(ux::Epistemic::Reference) +
+                     "</div>" +
                      zoneLabel("REFERENCE · LOCAL ONLY") +
                      QString(" <small style='color:%1'>%2 of %3"
                              "</small>")
@@ -19200,6 +19217,8 @@ public:
         req.setRawHeader("anthropic-version", "2023-06-01");
         req.setRawHeader("anthropic-beta", "server-side-fallback-2026-07-01");
         req.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+        // same hazard as AnalysisPane::run — see the note there
+        req.setTransferTimeout(60000);
         aiReply_ = net_.post(req, QByteArray::fromStdString(body));
         QObject::connect(aiReply_, &QNetworkReply::readyRead, [this] {
             aiBuf_ += aiReply_->readAll();
@@ -22669,7 +22688,13 @@ private:
         {
             QNetworkReply* r = net_.get(QNetworkRequest(
                 QUrl("https://asianlegacylibrary.org/library/")));
-            await(r, 20000);
+            // Demo audit 2026-08-23: 20 s here plus 3 x 15 s below is
+            // 65 SECONDS of a frozen pane on dead conference wifi, in a
+            // nested event loop with no cancel. The end state is honest
+            // ("the website did not answer") — it just arrives after the
+            // room has watched a minute of nothing. A collections check
+            // that cannot answer in 6 s is not going to.
+            await(r, 6000);
             if (r->error() == QNetworkReply::NoError)
                 pageHtml = QString::fromUtf8(r->readAll());
             r->deleteLater();
@@ -22694,7 +22719,7 @@ private:
                     .toLower();
             QNetworkReply* r =
                 net_.head(QNetworkRequest(QUrl(u)));
-            await(r, 15000);
+            await(r, 4000);   // see the note above: 3 of these run
             if (r->error() == QNetworkReply::NoError) {
                 row.bytes =
                     r->header(QNetworkRequest::ContentLengthHeader)
