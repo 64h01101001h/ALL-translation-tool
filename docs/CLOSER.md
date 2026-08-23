@@ -348,3 +348,22 @@ produces the candidate; 7–9 accept it; then
   conformance; documentation accuracy versus behaviour. Deliverable:
   a graded assessment with evidence per finding, a defect-density
   baseline, and a remediation ledger — not a pass/fail sentence.
+- 2026-08-22 · **BOUNTY B7, B9, B11, B12, B13, B14 ALL CLOSED.** The six
+  open findings, specced and adversarially verified by a fan-out (one
+  agent per finding, one independent verifier per patch), then applied
+  and pinned. The verifiers earned their place: they **refuted three of
+  the six patches**, and none of the three refutations was cosmetic.
+  B14's edit anchor matched ZERO times (the file writes non-ASCII in
+  string literals as `\u` escapes; the patch carried literal glyphs), so
+  it would have failed or half-applied. B13's headline pin was refuted
+  by MUTATION — the verifier reverted only the defect site, left the new
+  helpers in place, and watched my pin still pass; it was asserting the
+  helper, not the bug. B12's pins called the helper directly and so
+  could never have failed when Enter was broken. All three are instances
+  of the bounty's own systemic finding #7, which is the strongest
+  argument for #48. Two mechanical lessons banked: a "corrected" edit
+  that re-emits its own anchor line lets the superseded edit match
+  again (this duplicated code twice, in B11 and B14 — the compiler
+  caught both), and **ctest reports green against the STALE binary when
+  a build fails**, so a suite that passes right after a broken build has
+  proved nothing.
