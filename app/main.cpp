@@ -3937,6 +3937,23 @@ public:
     // band under the single tab row) hosts it
     void attachTo(QWidget* pane) { paneRibbons().insert(pane, this); }
 
+    // NO OVERFLOW MENU — tried twice on 2026-08-23, removed rather
+    // than shipped. With labels ON the Catalog ribbon wants ~2,200 px
+    // and QC/HANDOFF clip. The obvious fix is a "»" button listing the
+    // rest, but this bar lives INSIDE a QScrollArea and finish() ends
+    // with addStretch(), so a button appended to its own layout lands
+    // at the far right of the FULL bar width — i.e. clipped by exactly
+    // the thing it was added to solve. Measuring against width()
+    // instead of the viewport has the same flaw one level up.
+    //
+    // Doing it right means hosting the button in the BAND, outside the
+    // scroller, next to the existing ribbonHost() plumbing. That is
+    // real surgery and it did not belong two days before a demo.
+    // Meanwhile: the window now restores geometry and opens maximised,
+    // labels are on, and the band's horizontal scroller does reach
+    // every action. Recorded so the next person does not rediscover
+    // the same dead end.
+
 private:
     QHBoxLayout* row_ = nullptr;
     bool first_ = true;
