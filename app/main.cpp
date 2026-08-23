@@ -14735,6 +14735,13 @@ public:
             fields_[i] = new QLineEdit;
             fields_[i]->setPlaceholderText(
                 QString("term %1 — ACIP or English").arg(i + 1));
+            // Enter was INERT in all eight term boxes: no returnPressed
+            // anywhere in this pane, and QPushButton::autoDefault only
+            // fires inside a QDialog — this is a QWidget in a tab. So
+            // typing a query and pressing Enter did nothing at all, on
+            // a search pane.
+            connect(fields_[i], &QLineEdit::returnPressed,
+                    [this] { find(); });
             grid1->addWidget(fields_[i], i / 2, i % 2);
         }
         sl->addLayout(grid1);
@@ -14760,6 +14767,8 @@ public:
             fields_[i] = new QLineEdit;
             fields_[i]->setPlaceholderText(
                 QString("term %1 — ACIP or English").arg(i + 1));
+            connect(fields_[i], &QLineEdit::returnPressed,
+                    [this] { find(); });   // see note above
             grid2->addWidget(fields_[i], (i - 4) / 2, (i - 4) % 2);
         }
         sl->addLayout(grid2);
@@ -16412,6 +16421,18 @@ static QWidget* makeConvertPane(allcore::Mvp* mvp,
              QString(isAcip ? "ACIP" : "EWTS wylie") + "</td></tr>";
         h += "<tr><td><b>wylie</b></td><td>" +
              QString::fromStdString(wylie).toHtmlEscaped() + "</td></tr>";
+        // The pane's own banner promises "ACIP ⇄ wylie", but the card
+        // only ever showed ACIP when ACIP was what you typed — type
+        // wylie and the ACIP row vanished, so the ⇄ was one-way in the
+        // one place it is demonstrated. ewtsToAcip is round-trip proven
+        // in engines_battery; show it.
+        if (!isAcip) {
+            const std::string acip = allcore::ewtsToAcip(wylie);
+            if (!acip.empty())
+                h += "<tr><td><b>ACIP</b></td><td>" +
+                     QString::fromStdString(acip).toHtmlEscaped() +
+                     "</td></tr>";
+        }
         h += "<tr><td><b>Tibetan</b></td><td style='font-size:26px'>" +
              QString::fromStdString(uni).toHtmlEscaped() + "</td></tr>";
         if (!ok)
@@ -21173,6 +21194,38 @@ private:
     bool switching_ = false;
 };
 
+// What is actually installed, for the Library banner. Counting beats
+// asserting: the banner used to tell every viewer to go and download
+// the collections regardless of what was already there.
+//
+// Takes the root as an ARGUMENT. My first version read the g_tolRoot
+// global, which is assigned during data load — after this pane is
+// constructed — so it resolved "/library/kangyur", found nothing, and
+// the banner announced "no collection is installed yet" directly above
+// a tree listing Kangyur, Sungbum and Tengyur. A banner that lies in
+// the opposite direction is worse than the one I was fixing.
+static QString installedCollectionSummary(const QString& libRoot) {
+    struct C { const char* dir; const char* label; };
+    const C cols[] = {{"kangyur", "Kangyur"},
+                      {"tengyur", "Tengyur"},
+                      {"sungbum", "Sungbum"}};
+    QStringList have;
+    long long total = 0;
+    for (const auto& c : cols) {
+        const QString d = libRoot + "/" + c.dir;
+        if (!QFileInfo(d).isDir()) continue;
+        long long n = 0;
+        QDirIterator it(d, QStringList{"*.txt", "*.ACT", "*.acip"},
+                        QDir::Files, QDirIterator::Subdirectories);
+        while (it.hasNext()) { it.next(); ++n; }
+        if (n > 0) { have << c.label; total += n; }
+    }
+    if (have.isEmpty()) return QString();
+    return QString("%1 \u00b7 %2 texts installed")
+        .arg(have.join(" \u00b7 "))
+        .arg(QLocale().toString(total));
+}
+
 class LibraryPane : public QWidget {
 public:
     LibraryPane(const QString& root, allcore::Progress* progress,
@@ -21183,12 +21236,26 @@ public:
         QDir().mkpath(libRoot_ + "/my_materials");
         QDir().mkpath(libRoot_ + "/ocr_out");
         auto* layout = new QVBoxLayout(this);
-        auto* libBanner = new QLabel(
-            "<b>Library</b> — install the ACIP collections (download the "
-            "Kangyur / Tengyur / Sungbum ZIPs from "
-            "<a href='https://asianlegacylibrary.org/library/'>"
-            "asianlegacylibrary.org/library</a>), or import your own "
-            "materials. Double-click a text to open it in the Overlay.");
+        // Demo audit 2026-08-23: this led with "install the ACIP
+        // collections", which tells a first-time viewer the library is
+        // EMPTY — while 8,988 texts sit in the tree below it. Lead with
+        // what is present; keep the install route as the second clause
+        // for someone who genuinely has nothing.
+        auto* libBanner = new QLabel;
+        libBanner->setTextFormat(Qt::RichText);
+        {
+            const QString cts = installedCollectionSummary(libRoot_);
+            libBanner->setText(
+                (cts.isEmpty()
+                     ? QString("<b>Library</b> — no collection is "
+                               "installed yet. ")
+                     : QString("<b>Library</b> — %1. Double-click a "
+                               "text to open it in the Overlay. ")
+                           .arg(cts)) +
+                "Add more from <a href='https://asianlegacylibrary.org/"
+                "library/'>asianlegacylibrary.org/library</a>, or "
+                "import your own materials.");
+        }
         libBanner->setWordWrap(true);
         // a wrapping QLabel still reports its unwrapped width as
         // minimum — with the wide tree beside it that forced the
