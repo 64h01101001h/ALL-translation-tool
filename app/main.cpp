@@ -3732,6 +3732,29 @@ public:
                        .arg(what);
             if (!ok) ++fails;
         };
+        // ATTESTATION, pinned both ways. Bug bounty 2026-08-22: the
+        // four-layer view printed a CONTAINING segment's English under
+        // a header promising exact attestation — measured on the real
+        // spine, three Guru Puja lines each returned segment 31 and
+        // would have shown its whole eight-line stanza as the master's
+        // rendering of a line it does not translate.
+        {
+            // contained in segment 31, but not equal to it → EMPTY
+            check(attestedEnglish(
+                      "ma rig mun pa'i smag chen kun nas 'thibs")
+                      .isEmpty(),
+                  "a line merely CONTAINED in a corpus segment gets no "
+                  "English — attestation means the segment IS the line");
+            // a genuinely exact line still yields its English, so the
+            // fix cannot degenerate into 'always empty'
+            check(!attestedEnglish(
+                       "sa gzhi spos kyis byugs shing me tog bkram")
+                       .isEmpty(),
+                  "an exactly-attested line still shows its English");
+            check(attestedEnglish("").isEmpty() &&
+                      attestedEnglish("zzzz nothing here zzzz").isEmpty(),
+                  "empty and unattested input yield no English");
+        }
         const QString acip =
             "SEMS CAN THAMS CAD BDE BA DANG LDAN PAR GYUR CIG,";
         scriptMode_->setCurrentIndex(0);
@@ -10178,6 +10201,48 @@ public:
     // on the carving. The OCR column is banner-labeled review
     // material (the Scan-pane rule); the English column appears only
     // where the exact line is attested in the aligned corpus.
+    // THE attestation predicate — one definition, two callers.
+    //
+    // "Attested" means the corpus contains a segment whose Tibetan IS
+    // this line, not one that merely CONTAINS it. FTS5 phrase search
+    // matches containment, and corpus segments average far more Wylie
+    // than a woodblock line carries, so containment is the normal case
+    // rather than the edge case.
+    //
+    // Bug bounty, 2026-08-22: the four-layer view took corpusSearch(…,
+    // 1).front().english with no equality test, under a header
+    // promising "English appears only where the exact line is attested
+    // in the aligned corpus." Measured against the real spine, three
+    // different lines of the Guru Puja all returned segment 31 and
+    // would each have printed that segment's whole eight-line stanza
+    // English on their own row — a published sentence presented as
+    // Geshe Michael's rendering of a line it does not translate. That
+    // is rule 1's exact prohibition: machine work may MATCH his
+    // English from evidence, never COMPOSE the claim that it applies.
+    //
+    // The pecha exporter had this right all along; the two surfaces
+    // disagreed about what the word meant. Now they cannot.
+    QString attestedEnglish(const QString& wy) const {
+        auto norm = [](QString s) {
+            s = s.toLower();
+            static const QRegularExpression junk("[^a-z0-9'+.-]+");
+            s.replace(junk, " ");
+            return s.simplified();
+        };
+        const QString key = norm(wy);
+        if (key.isEmpty()) return QString();
+        try {
+            auto segs = spine_.corpusSearch(
+                '"' + key.toStdString() + '"', "", 5);
+            for (const auto& s : segs)
+                if (!s.english.empty() &&
+                    norm(QString::fromStdString(s.wylie)) == key)
+                    return QString::fromStdString(s.english);
+        } catch (const std::exception&) {
+        }
+        return QString();   // unattested: EMPTY, never a near match
+    }
+
     void fourLayerView() {
         if (basePx_.isNull() || curFolio_.isEmpty()) {
             QMessageBox::information(
@@ -10278,17 +10343,14 @@ public:
             if (i < src.size()) {
                 bool hasLower = false;
                 for (QChar c : et) hasLower |= c.isLower();
-                const std::string w =
-                    hasLower ? et.toLower().toStdString()
-                             : allcore::acipToEwts(et.toStdString());
-                try {
-                    auto segs =
-                        spine_.corpusSearch('"' + w + '"', "", 1);
-                    if (!segs.empty())
-                        eng = QString::fromStdString(
-                            segs.front().english);
-                } catch (const std::exception&) {
-                }
+                const QString w =
+                    hasLower ? et.toLower()
+                             : QString::fromStdString(
+                                   allcore::acipToEwts(
+                                       et.toStdString()));
+                // exact attestation only; an unattested line shows an
+                // empty cell rather than a neighbour's English
+                eng = attestedEnglish(w);
             }
             table->setItem(i, 3, new QTableWidgetItem(eng));
             QCoreApplication::processEvents();
@@ -11044,23 +11106,11 @@ public:
         // English appears ONLY when the corpus holds this exact
         // segment — matched from published translation, never
         // composed (rule 1)
-        auto attestedEnglish = [&](const QString& wy) -> QString {
-            auto norm = [](QString s) {
-                s = s.toLower();
-                static const QRegularExpression junk(
-                    "[^a-z0-9'+.-]+");
-                s.replace(junk, " ");
-                return s.simplified();
-            };
-            const QString key = norm(wy);
-            if (key.isEmpty()) return QString();
-            auto segs = spine_.corpusSearch(
-                '"' + key.toStdString() + '"', "", 3);
-            for (const auto& s : segs)
-                if (!s.english.empty() &&
-                    norm(QString::fromStdString(s.wylie)) == key)
-                    return QString::fromStdString(s.english);
-            return QString();
+        // one predicate, two surfaces (see OverlayPane::
+        // attestedEnglish) — they must never disagree about what
+        // "attested" means again
+        auto attestedEnglish = [this](const QString& wy) {
+            return this->attestedEnglish(wy);
         };
         if (!o.interPhon && !o.interEng && o.verseLines) {
             // verse lineation (pecha v3): the source's own line
