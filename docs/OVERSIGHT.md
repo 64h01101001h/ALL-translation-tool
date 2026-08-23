@@ -122,7 +122,8 @@ be guessing at how you work. None blocks other work.*
 | **H1** | **Whole-app visual direction.** Choose a direction from rendered options — density, chrome, typography, how panes read. I have sequenced this AFTER your test campaign, on the argument that a direction chosen before you have worked in the tool is chosen from my imagination. Overrule me if you disagree. | #37 |
 | **H2** | **Author-search layout.** Two rejected alternatives exist with documented reasons. I do not think either beats what ships, and said so, but you asked to see the options. | #38 |
 | **H3** | **The Overlay card redesign.** A four-direction campaign has ruled: authority zones, ruled, with an apparatus grammar inside each. It also proved by rendering that div borders have NEVER painted in this app. Awaiting your look before implementation. | #39, #43 |
-| **H5** | **Data-visualisation vocabulary.** Which of the four grounded mappings to build first — meter histogram, a text's tier composition, one term across the courses, or the citation web. | #42 |
+| **H5** | **Author portraits.** Measured: 62 of 462 people have a Commons portrait reachable by the join already built (34 with local texts), licences machine-readable and including PD and CC0. I can build the togglable layer; **fetching and redistributing images is a licensing act and yours to rule on**, and the two best Tibetan portrait collections (Treasury of Lives, Himalayan Art Resources) need a letter like BDRC's. | #44 |
+| **H6** | **Data-visualisation vocabulary.** Which of the four grounded mappings to build first — meter histogram, a text's tier composition, one term across the courses, or the citation web. | #42 |
 | **H6** | **GUI mockup + visual revamp**, the original deferral that #37 and #39 now give shape to. | #34 |
 
 ---
