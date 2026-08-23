@@ -4773,6 +4773,93 @@ public:
                           "honesty note");
                 }
             }
+            {   // BOUNTY B11: the citations report is modeless and
+                // its own "open in the Library" link replaces the
+                // document under it. The surviving "in your text"
+                // anchors then held offsets into a text no longer
+                // on screen - every one still a VALID offset in
+                // the cited work, so the cursor moved into
+                // somebody else's text under the user's own
+                // heading. Anchors now carry the document
+                // generation; a retired one is refused.
+                const QString ca = selfTestRoot_ +
+                                   "/library/__selftest_cite_A.txt";
+                const QString cb = selfTestRoot_ +
+                                   "/library/__selftest_cite_B.txt";
+                QDir().mkpath(QFileInfo(ca).path());
+                {
+                    QFile fa(ca);
+                    if (fa.open(QIODevice::WriteOnly |
+                                QIODevice::Truncate))
+                        fa.write("MDO SDE RGYAN LAS, SEMS CAN "
+                                 "THAMS CAD NI SANGS RGYAS "
+                                 "SNYING PO CAN ZHES GSUNGS SO,\n");
+                    QFile fb(cb);
+                    if (fb.open(QIODevice::WriteOnly |
+                                QIODevice::Truncate))
+                        fb.write("SEMS CAN THAMS CAD NI SANGS "
+                                 "RGYAS SNYING PO CAN NO, DE "
+                                 "LTAR SHES PAR BYA'O,\n");
+                }
+                const QString keepDoc = docFile_;
+                openFile(ca);
+                const auto ccs = extractCitations();
+                const int genA = docGen_;
+                const QString rep = citationsReportHtml(ccs);
+                check(!ccs.empty() && ccs[0].pos > 0 &&
+                          rep.contains(QString("jumppos:%1:%2")
+                                           .arg(genA)
+                                           .arg(ccs[0].pos)),
+                      "citations report stamps each in-your-text "
+                      "anchor with the generation of the document "
+                      "it measured");
+                handleCiteAnchor(QString("jumppos:%1:%2")
+                                     .arg(genA)
+                                     .arg(ccs[0].pos));
+                check(input_->textCursor().position() ==
+                          ccs[0].pos,
+                      "an anchor from the live generation still "
+                      "lands on the quotation it names");
+                // the report's own link swaps the document out
+                openFile(cb);
+                {   // park the cursor somewhere identifiable
+                    QTextCursor pc(input_->document());
+                    pc.setPosition(3);
+                    input_->setTextCursor(pc);
+                }
+                citeStaleNotice_.clear();
+                // the refusal's QMessageBox is reaped by the
+                // harness dialog reaper
+                handleCiteAnchor(QString("jumppos:%1:%2")
+                                     .arg(genA)
+                                     .arg(ccs[0].pos));
+                check(docGen_ != genA &&
+                          input_->textCursor().position() == 3,
+                      "after the report replaces the document, a "
+                      "retired anchor leaves the cursor where it "
+                      "is instead of jumping into the cited text");
+                check(citeStaleNotice_.contains(
+                          QFileInfo(ca).fileName()) &&
+                          citeStaleNotice_.contains(
+                              QFileInfo(cb).fileName()),
+                      "the refusal names the text the report was "
+                      "built for and the text now open");
+                citeStaleNotice_.clear();
+                handleCiteAnchor(
+                    QString("jumppos:%1:%2")
+                        .arg(docGen_)
+                        .arg(input_->document()
+                                 ->characterCount() + 500));
+                check(input_->textCursor().position() == 3 &&
+                          citeStaleNotice_.contains("past the end"),
+                      "an offset past the end of the current text "
+                      "is reported, never a silent no-op");
+                QFile::remove(ca);
+                QFile::remove(cb);
+                if (!keepDoc.isEmpty() &&
+                    QFileInfo(keepDoc).isReadable())
+                    openFile(keepDoc);
+            }
             {   // prose & prayer reader: verse grouped under its
                 // meter, prose plain, deviants marked
                 input_->setPlainText(
@@ -5463,6 +5550,13 @@ public:
             }
         }
         docFile_ = fn;
+        // B11: a new text in the box retires every offset an open
+        // citations report captured. Recording the name too lets a
+        // retired anchor say WHICH text it was measured against
+        // instead of dropping the cursor somewhere plausible.
+        docGenName_[++docGen_] =
+            fn.isEmpty() ? QString("your untitled text")
+                         : QFileInfo(fn).fileName();
         QSettings("ALL", "TranslationTool")
             .setValue("overlay/lastFile", fn);
         {   // the upfront citation offer (Adam 2026-08-14): the
@@ -10725,15 +10819,64 @@ private:
     // dialog AND the side panel it can pin into (streamline, Adam)
     bool handleCiteAnchor(const QString& sUrl) {
         if (sUrl.startsWith("jumppos:")) {
-            QTextCursor c(input_->document());
-            const int pos = sUrl.mid(8).toInt();
-            if (pos >= 0 &&
-                pos < input_->document()->characterCount()) {
-                c.setPosition(pos);
-                input_->setTextCursor(c);
-                input_->ensureCursorVisible();
-                input_->setFocus();
+            // B11: report anchors read jumppos:<docGen>:<pos>. An
+            // offset measured against a document this box no
+            // longer holds is still a VALID offset in whatever it
+            // holds now, so the old bounds check passed and the
+            // cursor scrolled the CITED text as if it were the
+            // translator's own. Refuse, and say which text is
+            // which. (Anchors with no generation — anything
+            // written before this stamp existed — still jump.)
+            const QString pay = sUrl.mid(8);
+            const int colon = pay.indexOf(':');
+            const int gen =
+                colon < 0 ? -1 : pay.left(colon).toInt();
+            const int pos = pay.mid(colon + 1).toInt();
+            if (gen >= 0 && gen != docGen_) {
+                citeStaleNotice_ =
+                    QString("This citations report was built for "
+                            "%1. The Overlay now holds %2, so the "
+                            "report's \"in your text\" positions "
+                            "no longer point at the passages they "
+                            "name - the cursor has been left where "
+                            "it is. Re-run Citations & "
+                            "quotations... to rebuild the report "
+                            "against the text now open.")
+                        .arg(docGenLabel(gen),
+                             docGenLabel(docGen_));
+                QMessageBox::information(
+                    this, "This report is out of date",
+                    citeStaleNotice_);
+                return true;
             }
+            // right generation, but the text was edited shorter:
+            // flagged, never a silent no-op (rule 3)
+            if (pos < 0 ||
+                pos >= input_->document()->characterCount()) {
+                citeStaleNotice_ =
+                    QString("This link points at character %1 of "
+                            "%2, which is past the end of the "
+                            "text now in the Overlay (%3 "
+                            "characters) - it has been edited "
+                            "since the report was built. The "
+                            "cursor has been left where it is; "
+                            "re-run Citations & quotations... "
+                            "for live positions.")
+                        .arg(QString::number(pos),
+                             docGenLabel(docGen_),
+                             QString::number(
+                                 input_->document()
+                                     ->characterCount()));
+                QMessageBox::information(
+                    this, "This link is out of date",
+                    citeStaleNotice_);
+                return true;
+            }
+            QTextCursor c(input_->document());
+            c.setPosition(pos);
+            input_->setTextCursor(c);
+            input_->ensureCursorVisible();
+            input_->setFocus();
             return true;
         }
         if (sUrl.startsWith("citeopen:")) {
@@ -10761,29 +10904,12 @@ private:
         return false;
     }
 
-    void showCitations() {
-        const auto cites = extractCitations();
-        if (cites.empty()) {
-            QMessageBox::information(
-                this, "Citations & quotations",
-                "No quotation patterns detected (…ZHES/CES + "
-                "speech verb). The detector is heuristic — "
-                "quotations phrased outside the classic formulas "
-                "will not appear.");
-            return;
-        }
-        auto* dlg = new QDialog(this);
-        dlg->setAttribute(Qt::WA_DeleteOnClose);
-        dlg->setWindowFlag(Qt::Window);
-        dlg->setWindowTitle(
-            QString("Citations & quotations — %1 detected "
-                    "(heuristic; titles resolved by filename "
-                    "match, never guessed)")
-                .arg(cites.size()));
-        dlg->resize(760, 640);
-        auto* v = new QVBoxLayout(dlg);
-        auto* browser = new QTextBrowser;
-        browser->setOpenLinks(false);
+    // the report's HTML, split out of the dialog the way
+    // meterReaderHtml is: the harness can then read what the
+    // anchors actually carry without standing up a modeless
+    // window, and the pinned card cannot drift from the dialog.
+    QString citationsReportHtml(
+        const std::vector<Citation>& cites) const {
         QString h;
         // group citations by resolved work — the "texts you will
         // encounter" list, all located up front
@@ -10814,15 +10940,21 @@ private:
                         it.key(), c->quote);
                     const QString shortQ =
                         c->quote.split(' ').mid(0, 14).join(' ');
+                    // B11: the jump carries the generation of the
+                    // document it was measured against. One-pass
+                    // arg() because the quoted ACIP is document
+                    // text and a stray '%' must not eat the next
+                    // placeholder.
                     h += QString(
                              "<div style='margin-left:18px;"
                              "border-left:2px solid #D8CFC0;"
                              "padding-left:8px;margin-top:4px;"
                              "font-size:12px'>"
-                             "<a href='jumppos:%1'>in your "
-                             "text</a> · “%2…”<br>")
-                             .arg(c->pos)
-                             .arg(shortQ.toHtmlEscaped());
+                             "<a href='jumppos:%1:%2'>in your "
+                             "text</a> · “%3…”<br>")
+                             .arg(QString::number(docGen_),
+                                  QString::number(c->pos),
+                                  shortQ.toHtmlEscaped());
                     if (line > 0)
                         h += QString(
                                  "<a href='citeopen:%1|%2'>"
@@ -10856,14 +10988,15 @@ private:
                 const QString shortQ =
                     c->quote.split(' ').mid(0, 14).join(' ');
                 h += QString("<div style='margin:6px 0;font-size:"
-                             "12px'><a href='jumppos:%1'>in your "
-                             "text</a> · “%2…” — "
-                             "<a href='citefind:%3'>hunt across "
+                             "12px'><a href='jumppos:%1:%2'>in "
+                             "your text</a> · “%3…” — "
+                             "<a href='citefind:%4'>hunt across "
                              "the Library</a></div>")
-                         .arg(c->pos)
-                         .arg(shortQ.toHtmlEscaped())
-                         .arg(QString::fromUtf8(
-                             c->quote.toUtf8().toBase64()));
+                         .arg(QString::number(docGen_),
+                              QString::number(c->pos),
+                              shortQ.toHtmlEscaped(),
+                              QString::fromUtf8(
+                                  c->quote.toUtf8().toBase64()));
             }
         }
         h += "<div style='margin-top:14px;color:#78706A;"
@@ -10875,10 +11008,97 @@ private:
              "phrasing was found in that file. Works alongside "
              "the bibliography composer (resolved cores "
              "auto-fill).</div>";
+        return h;
+    }
+
+    void showCitations() {
+        const auto cites = extractCitations();
+        if (cites.empty()) {
+            QMessageBox::information(
+                this, "Citations & quotations",
+                "No quotation patterns detected (…ZHES/CES + "
+                "speech verb). The detector is heuristic — "
+                "quotations phrased outside the classic formulas "
+                "will not appear.");
+            return;
+        }
+        auto* dlg = new QDialog(this);
+        dlg->setAttribute(Qt::WA_DeleteOnClose);
+        dlg->setWindowFlag(Qt::Window);
+        dlg->setWindowTitle(
+            QString("Citations & quotations — %1 detected "
+                    "(heuristic; titles resolved by filename "
+                    "match, never guessed)")
+                .arg(cites.size()));
+        dlg->resize(760, 640);
+        auto* v = new QVBoxLayout(dlg);
+        auto* browser = new QTextBrowser;
+        browser->setOpenLinks(false);
+        const QString h = citationsReportHtml(cites);
         browser->setHtml(h);
         connect(browser, &QTextBrowser::anchorClicked,
                 [this](const QUrl& u) {
                     handleCiteAnchor(u.toString());
+                });
+        // B11 belt: the generation stamp catches a WHOLESALE
+        // replacement of the document; an edit keeps the
+        // generation but slides every offset, so the report says
+        // plainly that it has gone out of date rather than
+        // landing a few syllables off. showMeterReader answers
+        // the same hazard with a 700 ms re-render; a citations
+        // report cannot — each located line is a disk scan of
+        // the cited work.
+        auto* stale = new QLabel;
+        stale->setWordWrap(true);
+        stale->setStyleSheet("background:#FBF0D4;color:#7A5A12;"
+                             "border:1px solid #E3D2A0;"
+                             "padding:6px");
+        stale->hide();
+        v->addWidget(stale);
+        const QString builtFor = docGenLabel(docGen_);
+        const int builtGen = docGen_;
+        // the wording is decided one event-loop turn LATE on
+        // purpose: openFile emits textChanged from setPlainText
+        // (main.cpp:5401/5404) but bumps docGen_ only at 5408,
+        // so at slot time a swap still looks like an edit —
+        // telling the translator their own text "changed" when
+        // the report's own link loaded a different one would be
+        // a false statement about their document.
+        auto* mark = new QTimer(dlg);
+        mark->setSingleShot(true);
+        mark->setInterval(0);
+        connect(mark, &QTimer::timeout, dlg,
+                [this, dlg, stale, builtFor, builtGen] {
+                    stale->setText(
+                        docGen_ != builtGen
+                            ? QString(
+                                  "⚠ OUT OF DATE — this report "
+                                  "was built for %1; the Overlay "
+                                  "now holds %2, so its “in your "
+                                  "text” links are refused. "
+                                  "Re-run “Citations & "
+                                  "quotations…” to rebuild it.")
+                                  .arg(builtFor,
+                                       docGenLabel(docGen_))
+                            : QString(
+                                  "⚠ OUT OF DATE — %1 has been "
+                                  "edited since this report was "
+                                  "built, so the positions below "
+                                  "describe the text as it stood "
+                                  "then. Re-run “Citations & "
+                                  "quotations…” for live "
+                                  "positions.")
+                                  .arg(builtFor));
+                    stale->show();
+                    dlg->setWindowTitle(
+                        dlg->windowTitle() +
+                        QString(" — STALE (built for %1)")
+                            .arg(builtFor));
+                });
+        connect(input_, &QPlainTextEdit::textChanged, dlg,
+                [mark, stale] {
+                    if (!stale->text().isEmpty()) return;
+                    mark->start();
                 });
         v->addWidget(browser, 1);
         auto* row = new QHBoxLayout;
@@ -13165,6 +13385,27 @@ private:
     allcore::Contractions contr_;
     bool contrTried_ = false;
     QString docFile_;
+    // BOUNTY B11: the Document box's generation, bumped every time
+    // a whole new text lands in it. The citations report is
+    // modeless, and its OWN links (citefile: / citeopen:) call
+    // openFile and replace the document underneath it — the
+    // report's surviving "in your text" offsets were still valid
+    // offsets in the cited work, so the cursor landed in somebody
+    // else's text and was presented as the reader's own passage.
+    // Every jump anchor now carries the generation it was measured
+    // against, and a click from a retired generation is refused.
+    int docGen_ = 0;
+    QHash<int, QString> docGenName_;
+    // the wording of the last refusal — kept so the harness can
+    // prove the click was declined without standing up the modal
+    QString citeStaleNotice_;
+
+    QString docGenLabel(int gen) const {
+        const auto it = docGenName_.constFind(gen);
+        if (it != docGenName_.constEnd()) return *it;
+        return gen == 0 ? QString("your untitled text")
+                        : QString("a document no longer open");
+    }
 
 public:
     QString docFile() const { return docFile_; }
