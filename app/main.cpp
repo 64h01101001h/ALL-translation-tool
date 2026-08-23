@@ -1336,9 +1336,91 @@ static QString entryHtml(const allcore::Entry& e,
                         "'color:#8A7E6E;letter-spacing:1px'>"
                         "84000 GLOSSARY · CC BY 4.0 · reference "
                         "only</small>";
-            for (const QString& x : g.glosses)
-                b += "<br>≡ " + x.toHtmlEscaped();
-            for (QString x : g.defs) {
+            // Adam, 2026-08-22: "some of the 84000 reference data
+            // seems to be rendering twice or more."
+            //
+            // It is the DATA, not the renderer. g84000.json was built
+            // by merging the live 84000 harvest into the Steinert
+            // cumulative export, and the merge did not deduplicate:
+            // the Steinert side carries "<person> Duḥkha" and
+            // "<term> suffering, calamity", the live side carries
+            // "Duḥkha", "suffering" and "calamity" as separate items,
+            // and both survive. Measured across the whole layer:
+            // 71.4% of 29,383 entries duplicate, and 46.9% of all
+            // 63,573 gloss lines are redundant.
+            //
+            // The definitions duplicate by CONTAINMENT rather than
+            // equality, which is why an exact-match check finds almost
+            // nothing: "one of the rāśis" is the tail of "Duḥkha (Skt:
+            // duḥkha): one of the rāśis", and the last line of the
+            // card is a substring of the line above it.
+            //
+            // Deduplicating at RENDER keeps the banked data untouched
+            // — this repo consumes releases and does not fork them —
+            // and the count is reported so nothing is hidden.
+            auto norm84 = [](QString s) {
+                static const QRegularExpression tag(
+                    R"(^<(?:person|term|place|text)>\s*)");
+                static const QRegularExpression src(
+                    R"(\s*\((?:Original glossary entry|From):[^)]*\)\s*)");
+                static const QRegularExpression syn(R"(\n+Synonym:[\s\S]*$)");
+                static const QRegularExpression sp(R"(\s+)");
+                static const QRegularExpression prePunct(R"(\s+([,.;:]))");
+                s.remove(tag).remove(src).remove(syn).replace(sp, " ");
+                // 84000's export writes "one of the rāśis ." with a
+                // space before the stop, so the short line was NOT a
+                // substring of the long one that contains it and the
+                // containment test missed. Found by my own pin failing.
+                s.replace(prePunct, "\\1");
+                s = s.trimmed().toLower();
+                while (s.endsWith('.') || s.endsWith(' ')) s.chop(1);
+                return s;
+            };
+            int dropped = 0;
+            {
+                // glosses: drop an item that is already a
+                // comma-component of another, or a repeat of one
+                QSet<QString> seen, parts;
+                for (const QString& x : g.glosses)
+                    for (const QString& p : norm84(x).split(','))
+                        if (!p.trimmed().isEmpty())
+                            parts.insert(p.trimmed());
+                QStringList keep;
+                for (const QString& x : g.glosses) {
+                    const QString n = norm84(x);
+                    if (n.isEmpty() || seen.contains(n)) { ++dropped; continue; }
+                    if (!n.contains(',') && parts.contains(n) &&
+                        std::any_of(g.glosses.begin(), g.glosses.end(),
+                                    [&](const QString& y) {
+                                        const QString ny = norm84(y);
+                                        return ny != n && ny.contains(',') &&
+                                               ny.split(',').contains(n);
+                                    })) {
+                        ++dropped;
+                        continue;
+                    }
+                    seen.insert(n);
+                    keep << x;
+                }
+                for (const QString& x : keep)
+                    b += "<br>≡ " + x.toHtmlEscaped();
+            }
+            // definitions: longest first, then drop any whose core is
+            // contained in one already shown
+            QStringList defs = g.defs;
+            std::stable_sort(defs.begin(), defs.end(),
+                             [](const QString& a2, const QString& b2) {
+                                 return a2.size() > b2.size();
+                             });
+            QStringList keptCores;
+            for (QString x : defs) {
+                const QString n = norm84(x);
+                if (n.isEmpty()) { ++dropped; continue; }
+                bool covered = false;
+                for (const QString& k2 : keptCores)
+                    if (k2.contains(n)) { covered = true; break; }
+                if (covered) { ++dropped; continue; }
+                keptCores << n;
                 // keep the entity link to 84000, clickable
                 // T1: was a plain string — \( \s \) collapsed, so
                 // parens became capture groups (captured(1) returned
@@ -1359,9 +1441,30 @@ static QString entryHtml(const allcore::Entry& e,
                           : " <a href='" + url + "'>[84000]</a>") +
                      "</small>";
             }
-            for (const QString& x : g.skts)
-                b += "<br><small style='color:#6E675D'>sanskrit: " +
-                     ux::snip(x, 160) + "</small>";
+            if (dropped > 0)
+                b += QString("<br><small style='color:%1;font-style:"
+                             "italic'>%2 duplicate line%3 from 84000's "
+                             "own merged export not shown</small>")
+                         .arg(ux::kSoft)
+                         .arg(dropped)
+                         .arg(dropped == 1 ? "" : "s");
+            {
+                // the same merge duplicates the Sanskrit line: the
+                // Steinert side keeps its <term> prefix, the live side
+                // does not, and both render (Adam's screenshot,
+                // 2026-08-22)
+                QSet<QString> sseen;
+                for (const QString& x : g.skts) {
+                    const QString n3 = norm84(x);
+                    if (n3.isEmpty() || sseen.contains(n3)) {
+                        ++dropped;
+                        continue;
+                    }
+                    sseen.insert(n3);
+                    b += "<br><small style='color:#6E675D'>sanskrit: " +
+                         ux::snip(x, 160) + "</small>";
+                }
+            }
             if (!g.tohs.isEmpty()) {
                 QString tl;
                 int shown = 0;
@@ -3814,6 +3917,28 @@ public:
                        .arg(what);
             if (!ok) ++fails;
         };
+        // Adam's 84000 duplication report, 2026-08-22. The layer's
+        // own merged export repeats itself — 71.4% of 29,383 entries,
+        // 46.9% of gloss lines — and the definitions repeat by
+        // CONTAINMENT, so the card printed the same sentence two and
+        // three times. Deduplicated at render; pinned here so it
+        // cannot creep back when the layer is refreshed.
+        {
+            const auto es = spine_.lookup("sdug bsngal");
+            if (!es.empty()) {
+                const QString card = entryHtml(es.front());
+                check(card.count("One of the r") <= 1,
+                      "an 84000 definition contained in a longer one is "
+                      "shown ONCE, not twice");
+                check(card.count("\u2261 Du\u1e25kha") <= 1,
+                      "an 84000 gloss repeated by the merge is shown "
+                      "once");
+                check(!card.contains("duplicate line") ||
+                          card.contains("not shown"),
+                      "when duplicates are dropped the card SAYS how "
+                      "many, rather than quietly thinning the layer");
+            }
+        }
         // BOUNTY #8: a display cap must never be printed as a total.
         // The card said "200 of 200 · show fewer" for terms with
         // thousands of attestations, and suppressed the show-all link,
