@@ -2898,12 +2898,30 @@ static void dlgRemember(const QString& caption,
 
 // every folder picker goes through this wrapper: in sweep mode it
 // answers empty (as if the user cancelled) instead of hanging the
-// harness on an un-reapable native panel
+// harness on an un-reapable native panel.
+//
+// SQA FAIL-4: answering EMPTY makes every caller take its
+// `if (fn.isEmpty()) return;` branch, which SKIPS the write rather
+// than redirecting it. That is why no test in this repository could
+// ever exercise a save path, and therefore why bounty findings #4,
+// #6 and #9 — all "reported success when the write failed" — were
+// unfalsifiable by the battery and had to be found by reading.
+//
+// These stubs give the harness somewhere to send the file instead.
+// When one is set, the wrapper returns what the test chose; when it
+// is not, behaviour is exactly as before. Production is untouched:
+// the stubs are only ever consulted under g_harnessRun.
+static std::function<QString(const QString&, const QString&,
+                             const QString&)> g_saveDialogStub;
+static std::function<QString(const QString&, const QString&)>
+    g_dirDialogStub;
 static QString safeGetExistingDirectory(
     QWidget* parent, const QString& caption = QString(),
     const QString& dir = QString()) {
-    if (g_harnessRun) return QString();   // GAUNTLET G1 first blood:
-    // sweep-only guard let native panels open under every OTHER harness
+    if (g_harnessRun)   // GAUNTLET G1 first blood: a sweep-only guard
+        // let native panels open under every OTHER harness mode
+        return g_dirDialogStub ? g_dirDialogStub(caption, dir)
+                               : QString();
     const QString r = QFileDialog::getExistingDirectory(
         parent, caption, dlgStartDir(caption, dir));
     dlgRemember(caption, r);
@@ -2937,8 +2955,10 @@ static QString safeGetSaveFileName(
     QWidget* parent, const QString& caption = QString(),
     const QString& dir = QString(),
     const QString& filter = QString()) {
-    if (g_harnessRun) return QString();   // GAUNTLET G1 first blood:
-    // sweep-only guard let native panels open under every OTHER harness
+    if (g_harnessRun)   // GAUNTLET G1 first blood: a sweep-only guard
+        // let native panels open under every OTHER harness mode
+        return g_saveDialogStub ? g_saveDialogStub(caption, dir, filter)
+                                : QString();
     const QString r = QFileDialog::getSaveFileName(
         parent, caption, dlgStartDir(caption, dir), filter);
     dlgRemember(caption, r);
@@ -26555,7 +26575,19 @@ private:
         }
         const QString outDir =
             root_ + "/library/ocr_out/" + QFileInfo(dir).fileName();
-        QDir().mkpath(outDir);
+        // SQA DATA-5: mkpath's bool was discarded, so a read-only or
+        // full data root (dataRoot is user-settable, so this is a
+        // supported configuration) ran the whole batch and then
+        // reported success over a directory that never existed.
+        if (!QDir().mkpath(outDir)) {
+            results_->setHtml(
+                QString("<div style='color:#8C2F2B'><b>Batch OCR did "
+                        "not run.</b> The output folder could not be "
+                        "created: %1 \u2014 check that the data folder "
+                        "is present and writable.</div>")
+                    .arg(outDir.toHtmlEscaped()));
+            return;
+        }
         QProgressDialog prog(
             QString("Batch OCR — %1 page(s)").arg(imgs.size()), "Stop", 0,
             imgs.size(), this);

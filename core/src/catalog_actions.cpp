@@ -198,13 +198,47 @@ std::string ActionLedger::approve(const std::string& id,
     if (fs::exists(dest, ec)) return "a file of that name is already on the shelf";
     fs::rename(staged, dest, ec);
     if (ec) return "move failed: " + ec.message();
+    // SQA STATIC-1: fs::rename OVERWRITES. metaCompanionFor truncates
+    // the stem at the first '_', so any two items numbered 001
+    // collide, and an existing shelf META was silently clobbered with
+    // no permission trickery at all. Refuse instead, and put the
+    // file back where it came from so nothing is half-moved.
     const std::string meta = metaCompanionFor(staged);
-    if (!meta.empty())
-        fs::rename(meta, shelf / fs::path(meta).filename(), ec);
+    fs::path metaDest;
+    if (!meta.empty()) {
+        metaDest = shelf / fs::path(meta).filename();
+        if (fs::exists(metaDest, ec)) {
+            fs::rename(dest, staged, ec);   // undo the move
+            return "a META companion of that name is already on the "
+                   "shelf; resolve it before approving";
+        }
+        fs::rename(meta, metaDest, ec);
+        if (ec) {
+            fs::rename(dest, staged, ec);
+            return "the META companion could not be moved; nothing "
+                   "was filed";
+        }
+    }
+    const std::string prevStatus = a->status;
     a->status = "approved";
     a->decided_by = approver;
     a->decided_on = date;
-    save();
+    // SQA STATIC-1: save()'s return was DISCARDED here. Measured with
+    // ACTIONS.tsv chmod 400: approve() returned "" (success to every
+    // caller) while the file sat on the shelf and the ledger on disk
+    // still said pending — permanently divergent, and the row became
+    // UNCLEARABLE because a second approve() then found the staged
+    // file missing. stage(), twelve lines above, has always rolled
+    // back correctly on the same failure.
+    if (!save()) {
+        if (!metaDest.empty()) fs::rename(metaDest, meta, ec);
+        fs::rename(dest, staged, ec);
+        a->status = prevStatus;
+        a->decided_by.clear();
+        a->decided_on.clear();
+        return "the ledger could not be written, so nothing was "
+               "filed \u2014 the item is still staged and pending";
+    }
     return "";
 }
 
@@ -226,11 +260,25 @@ std::string ActionLedger::reject(const std::string& id,
         if (!meta.empty())
             fs::rename(meta, rejDir / fs::path(meta).filename(), ec);
     }
+    const std::string prevStatus = a->status;
+    const std::string prevNote = a->note;
     a->status = "rejected";
     a->decided_by = approver;
     a->decided_on = date;
     a->note = reason.empty() ? a->note : reason;
-    save();
+    // SQA STATIC-1, same shape as approve(): a discarded save() left
+    // the file moved into rejected/ while the ledger still read
+    // pending.
+    if (!save()) {
+        if (fs::exists(rejDir / a->staged_name, ec))
+            fs::rename(rejDir / a->staged_name, staged, ec);
+        a->status = prevStatus;
+        a->note = prevNote;
+        a->decided_by.clear();
+        a->decided_on.clear();
+        return "the ledger could not be written, so nothing was "
+               "rejected \u2014 the item is still staged and pending";
+    }
     return "";
 }
 

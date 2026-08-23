@@ -48,7 +48,11 @@ public:
     // Loads ACTIONS.tsv if present. Returns false only on a
     // malformed file (missing file = empty ledger, fine).
     bool load();
-    bool save() const;
+    // [[nodiscard]] because this returning false and being ignored
+    // is SQA STATIC-1: approve() reported success while the ledger
+    // and the shelf diverged permanently. The compiler catches the
+    // whole class the moment the attribute exists.
+    [[nodiscard]] bool save() const;
 
     const std::vector<CatalogAction>& all() const { return rows_; }
     int pendingCount() const;

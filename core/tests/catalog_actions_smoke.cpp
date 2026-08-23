@@ -110,6 +110,65 @@ int main(int argc, char** argv) {
                             std::string::npos;
         CHECK(found, "the rejection reason survives the round trip");
     }
+    // ---- SQA STATIC-1: approve() must not report success over a
+    // ledger it could not write. Measured with ACTIONS.tsv chmod 400:
+    // approve() returned "" (success), the file sat on the shelf, the
+    // ledger on disk still said pending, and the row became
+    // UNCLEARABLE because the next approve() found the staged file
+    // gone. stage() had always rolled back correctly on the same
+    // failure — the rule held only where its author remembered it.
+    {
+        const fs::path wd2 = fs::temp_directory_path() /
+                             "sqa_static1_probe";
+        std::error_code ec;
+        fs::remove_all(wd2, ec);
+        fs::create_directories(wd2 / "intake", ec);
+        {
+            std::ofstream src(wd2 / "intake" / "S00001_A_B_C.TXT");
+            src << "body\n";
+        }
+        allcore::ActionLedger led(wd2.string());
+        led.load();
+        const std::string sid =
+            led.stage((wd2 / "intake" / "S00001_A_B_C.TXT").string(),
+                      "S00001_A_B_C.TXT", "shelf", "Tenzin",
+                      "2026-08-23", "note");
+        CHECK(!sid.empty() && sid.find(' ') == std::string::npos,
+              "staged an action to approve");
+
+        // make the ledger unwritable WITHOUT touching the staged file
+        const fs::path ledger = wd2 / "AWAITING APPROVAL" / "ACTIONS.tsv";
+        const bool haveLedger = fs::exists(ledger, ec);
+        CHECK(haveLedger, "the ledger file exists before the probe");
+        fs::permissions(ledger, fs::perms::owner_read,
+                        fs::perm_options::replace, ec);
+
+        const std::string err =
+            led.approve(sid, "GMR", "2026-08-23");
+        CHECK(!err.empty(),
+              "approve() REFUSES when the ledger cannot be written "
+              "(it once returned success and diverged permanently)");
+
+        // and the rollback: the item must still be staged, not
+        // stranded on the shelf with a pending ledger row
+        fs::permissions(ledger, fs::perms::owner_all,
+                        fs::perm_options::replace, ec);
+        const bool stillStaged =
+            fs::exists(wd2 / "AWAITING APPROVAL" / "S00001_A_B_C.TXT", ec);
+        const bool notOnShelf =
+            !fs::exists(wd2 / "shelf" / "S00001_A_B_C.TXT", ec);
+        CHECK(stillStaged && notOnShelf,
+              "a refused approval leaves the file staged, not "
+              "stranded on the shelf");
+        bool pending = false;
+        for (const auto& r : led.all())
+            if (r.id == sid) pending = (r.status == "pending");
+        CHECK(pending,
+              "a refused approval leaves the row pending, so it can "
+              "still be cleared");
+        fs::remove_all(wd2, ec);
+    }
+
     fs::remove_all(wd);
     std::printf("%s: %d failure(s)\n", failures ? "FAIL" : "OK",
                 failures);

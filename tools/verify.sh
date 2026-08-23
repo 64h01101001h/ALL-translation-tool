@@ -19,6 +19,14 @@
 # So: this script fails loudly at the first failing step, and prints the
 # one line that matters at the end. Use it instead of chaining by hand.
 #
+# A THIRD disguise of the same hazard, found 2026-08-23 while
+# mutation-testing: restoring a mutated file with `cp` gives it an
+# mtime OLDER than the object built from the mutant, so make skips the
+# rebuild and the "restored" run still executes the bug. If you revert
+# a file by copying, `touch` it before rebuilding. Corollary: never
+# read a build log through `tail -1` — that is exactly where "Building
+# CXX object" would have told you the truth.
+#
 #   tools/verify.sh            # build + ctest + constitution
 #   tools/verify.sh --quick    # build + app_selftest only
 #   tools/verify.sh --tests-only
