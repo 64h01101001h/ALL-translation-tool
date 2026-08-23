@@ -4665,6 +4665,63 @@ public:
                       .isEmpty(),
                   "scan viewer: non-IIIF URL yields no thumb "
                   "(never guessed)");
+            {   // B9: "Download all folios" reported "0 downloaded,
+                // 0 already present, 0 failed" when every save
+                // failed — a refused write incremented nothing, so
+                // it was not a category. The tally is pure now, and
+                // these pin the arithmetic, not the wording.
+                const QString bad = folioBatchReport(
+                    240, 12, 0, 3, 7, "/nowhere/scans");
+                check(bad.contains("12 downloaded") &&
+                          bad.contains("3 could not be fetched") &&
+                          bad.contains("7 could not be written"),
+                      "folio batch: a refused write is its own "
+                      "counted column, never silence");
+                check(bad.contains("218 of the 240 folios"),
+                      "folio batch: folios a Stop left unattempted "
+                      "are disclosed against the true total");
+                check(bad.contains("228 folio(s) are NOT in the "
+                                   "store"),
+                      "folio batch: the missing remainder is stated, "
+                      "not implied");
+                check(!bad.contains("offline from now on"),
+                      "folio batch: the offline promise is withheld "
+                      "while any folio is missing from the store");
+                const QString all = folioBatchReport(
+                    240, 200, 40, 0, 0, "/nowhere/scans");
+                check(all.contains("200 downloaded") &&
+                          all.contains("40 already present") &&
+                          all.contains("offline from now on"),
+                      "folio batch: the offline promise prints only "
+                      "when every folio is in the store");
+                // the poisoned-cache half: a truncated scan must read
+                // as ABSENT so the next run re-fetches it
+                const QString fp =
+                    QDir::temp().filePath("all_selftest_folio.png");
+                QImage probe(48, 16, QImage::Format_RGB32);
+                probe.fill(Qt::white);
+                const bool whole =
+                    probe.save(fp, "PNG") && folioCached(fp);
+                QFile cut(fp);
+                bool trimmed = false;
+                if (cut.open(QIODevice::ReadWrite)) {
+                    trimmed = cut.resize(24);
+                    cut.close();
+                }
+                check(whole && trimmed && !folioCached(fp),
+                      "folio store: a truncated scan reads as "
+                      "absent, so the next run re-fetches it");
+                const QString ep = QDir::temp().filePath(
+                    "all_selftest_folio_empty.png");
+                QFile empty(ep);
+                const bool made = empty.open(QIODevice::WriteOnly);
+                empty.close();
+                check(made && !folioCached(ep),
+                      "folio store: a zero-length scan never counts "
+                      "as already present");
+                QFile::remove(fp);
+                QFile::remove(ep);
+            }
             // Toh->D through the verified concordance; the drifting
             // offset's live-verified example is the pin
             check(tohToThl().value(551) == 555 &&
@@ -8496,10 +8553,23 @@ private:
                    .arg(m.captured(2));
     }
 
+    // A folio counts as CACHED only if it DECODES. A refused open
+    // leaves no file at all, but a short write (ENOSPC, a volume
+    // ejected mid-copy) leaves a truncated JPEG whose header still
+    // parses — the bare QFile::exists test scored that stub "already
+    // present" on every later run, so the half-page was never
+    // re-fetched and never reported. Decoding is the only test that
+    // tells the truth, and it self-heals caches poisoned before this
+    // fix (bounty B9).
+    static bool folioCached(const QString& path) {
+        if (QFileInfo(path).size() <= 0) return false;
+        return !QImage(path).isNull();
+    }
+
     void ensureFolioLocal(const QString& folio,
                           std::function<void(const QString&)> done) {
         const QString out = folioLocalPath(folio);
-        if (QFile::exists(out)) { done(out); return; }
+        if (folioCached(out)) { done(out); return; }
         const QString url = folioUrl_.value(folio);
         // promote an already-cached panel image into the store
         if (!scanCache_.isEmpty() && !url.isEmpty()) {
@@ -8509,7 +8579,16 @@ private:
                     QRegularExpression("[^A-Za-z0-9._-]"), "_");
             if (QFile::exists(fn)) {
                 QDir().mkpath(folioScansDir());
-                if (QFile::copy(fn, out)) { done(out); return; }
+                // copy() refuses an existing destination, so a stub
+                // left by an earlier short write would block the one
+                // promote that could heal it WITHOUT the network —
+                // clear it first, and trust the result only if it
+                // decodes (the panel cache can be truncated too)
+                QFile::remove(out);
+                if (QFile::copy(fn, out) && folioCached(out)) {
+                    done(out);
+                    return;
+                }
             }
         }
         if (url.isEmpty()) return;
@@ -8525,8 +8604,13 @@ private:
             }
             QDir().mkpath(folioScansDir());
             QFile f(out);
-            if (f.open(QIODevice::WriteOnly)) {
-                f.write(rep->readAll());
+            const QByteArray body = rep->readAll();
+            // write() is checked like every other honest save here:
+            // ENOSPC after a successful open loses the tail with no
+            // error anywhere, and the stub left behind would be read
+            // as a complete folio from then on (bounty B9)
+            if (f.open(QIODevice::WriteOnly | QIODevice::Truncate) &&
+                f.write(body) == body.size() && f.flush()) {
                 f.close();
                 done(out);
             } else {
@@ -8535,24 +8619,86 @@ private:
                     "Fetched the folio but could not save it to the "
                     "cache (" + out + "): " + f.errorString() +
                     ". Check disk space and permissions.");
+                f.close();
+                f.remove();   // never leave half a woodblock behind
             }
         });
     }
 
+    // The batch tally as a pure string, so the one thing the user
+    // reads is provable without a network. Bounty B9: ++got sat
+    // inside `if (open)` and ++fail ran only on a network error, so a
+    // scan folder the process could not write reported "0 downloaded,
+    // 0 already present, 0 failed" and still promised offline jumps.
+    // Every folio now lands in exactly one column, the folios a Stop
+    // left unattempted are named against the true total, and the
+    // offline promise is printed only by the arithmetic that earns it.
+    static QString folioBatchReport(int total, int got, int had,
+                                    int failedNet, int failedWrite,
+                                    const QString& dir) {
+        const int notTried = std::max(
+            0, total - got - had - failedNet - failedWrite);
+        QString s = QString("%1 downloaded, %2 already present, "
+                            "%3 could not be fetched, %4 could not "
+                            "be written.")
+                        .arg(got)
+                        .arg(had)
+                        .arg(failedNet)
+                        .arg(failedWrite);
+        if (notTried > 0)
+            s += QString("\nStopped early — %1 of the %2 folios were "
+                         "never attempted.")
+                     .arg(notTried)
+                     .arg(total);
+        if (failedWrite > 0)
+            s += "\nThe write failure is named in the Save-failed "
+                 "warning: check disk space and the permissions on "
+                 "the folder below, then run this again.";
+        s += "\n\nFolder: " + dir + "\n\n";
+        const int missing = failedNet + failedWrite + notTried;
+        if (missing == 0)
+            s += "Open this folder in the Input workflow (Open scan "
+                 "folder…) to key the whole volume — the pages "
+                 "arrive in folio order, and folio jumps work "
+                 "offline from now on.";
+        else
+            s += QString("%1 folio(s) are NOT in the store, so folio "
+                         "jumps for those pages still need the "
+                         "network. The rest are keyable now in the "
+                         "Input workflow (Open scan folder…).")
+                     .arg(missing);
+        return s;
+    }
+
     void downloadAllFolios() {
         if (folioUrl_.isEmpty()) return;
-        QDir().mkpath(folioScansDir());
+        // the folder has to exist before a single byte is fetched:
+        // mkpath's bool was discarded, so a read-only dataRoot_ (a
+        // user-settable override) pulled the whole volume over the
+        // network and then reported nothing wrong
+        if (!QDir().mkpath(folioScansDir())) {
+            QMessageBox::warning(
+                this, "Folio scans",
+                "The scan folder could not be created:\n" +
+                    folioScansDir() +
+                    "\n\nNothing was downloaded. Check that the data "
+                    "folder is writable, then try again.");
+            return;
+        }
         QProgressDialog pd("Downloading folio scans from BDRC…",
                            "Stop", 0, folioOrder_.size(), this);
         pd.setWindowModality(Qt::WindowModal);
-        int got = 0, had = 0, fail = 0, i = 0;
+        int got = 0, had = 0, failedNet = 0, failedWrite = 0, i = 0;
+        // warnWriteFail's warned-set is keyed by path, and a 240-side
+        // volume is 240 distinct paths — one modal for the batch
+        bool warnedWrite = false;
         for (const QString& f : folioOrder_) {
             pd.setValue(i++);
             pd.setLabelText("folio " + f + "…");
             QCoreApplication::processEvents();
             if (pd.wasCanceled()) break;
             const QString out = folioLocalPath(f);
-            if (QFile::exists(out)) { ++had; continue; }
+            if (folioCached(out)) { ++had; continue; }
             QEventLoop loop;
             auto* rep =
                 nam_.get(QNetworkRequest(QUrl(folioUrl_.value(f))));
@@ -8561,27 +8707,37 @@ private:
             loop.exec();
             rep->deleteLater();
             if (rep->error() == QNetworkReply::NoError) {
+                const QByteArray body = rep->readAll();
                 QFile o(out);
-                if (o.open(QIODevice::WriteOnly)) {
-                    o.write(rep->readAll());
+                const bool opened = o.open(QIODevice::WriteOnly |
+                                           QIODevice::Truncate);
+                const bool wrote = opened &&
+                                   o.write(body) == body.size() &&
+                                   o.flush();
+                if (!wrote && !warnedWrite) {
+                    warnedWrite = true;   // errorString() first —
+                                          // close() clears it
+                    warnWriteFail(this, o, "The folio scan");
+                }
+                if (opened) o.close();
+                if (wrote) {
                     ++got;
+                } else {
+                    // a short write leaves a truncated JPEG the next
+                    // run would score "already present" — drop it
+                    o.remove();
+                    ++failedWrite;
                 }
             } else {
-                ++fail;
+                ++failedNet;
             }
         }
         pd.setValue(folioOrder_.size());
         QMessageBox::information(
             this, "Folio scans",
-            QString("%1 downloaded, %2 already present, %3 failed.\n\n"
-                    "Folder: %4\n\nOpen this folder in the Input "
-                    "workflow (Open scan folder…) to key the whole "
-                    "volume — the pages arrive in folio order, and "
-                    "folio jumps work offline from now on.")
-                .arg(got)
-                .arg(had)
-                .arg(fail)
-                .arg(folioScansDir()));
+            folioBatchReport((int)folioOrder_.size(), got, had,
+                             failedNet, failedWrite,
+                             folioScansDir()));
     }
 
     void exportFolioSides() {
