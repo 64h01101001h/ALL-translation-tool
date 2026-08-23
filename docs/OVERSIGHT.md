@@ -62,7 +62,7 @@ deferred. Everything that remains in the project is on this page.**
 
 | # | What | Cost | Note |
 |---|---|---|---|
-| **C1** | **Run `docs/TESTING_CAMPAIGN.md` against the RC.** The K/F columns are yours. | a working session | Backlog #20. The acceptance gate. 72 automated suites prove the machine's claims; they cannot tell you the tool is *good to work in*. |
+| **C1** | **Run `docs/TESTING_CAMPAIGN.md` against the RC — REBUILT 2026-08-22 and ready.** The old one was dated 13 August and tested an app that no longer exists. The new one covers the measured inventory (22 tabs, 43 ribbon groups, 294 named controls), opens with **Part 0: the eight defects fixed today**, each with steps to reproduce what was broken, and gives every pane an explicit STRESS row — every one of today's worst defects was found in exactly those conditions. The K/F columns are yours. | a working session | Backlog #20, #41. The acceptance gate. 72 automated suites prove the machine's claims; they cannot tell you the tool is *good to work in*. |
 | **C2** | **Authority sign-off on data-facing surfaces** (you and/or GMR walk the panes) | a sitting | Backlog #21. Nothing machine-checkable replaces someone entitled to say the tiers read honestly. |
 | **C3** | **Clean-Mac install test** | 30 minutes | The most important release step, per RELEASE_READINESS.md. Everything here has only ever run on your machine. |
 | **C4** | **Name a pilot user** at an input center, one week, ledger on | 1 decision | Backlog #22. Also answers whether Windows builds are needed. |
