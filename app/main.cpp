@@ -7796,8 +7796,8 @@ private:
         }
         o[fileKey_] = scanWork_;
         QDir().mkpath(QFileInfo(linksFile()).path());
-        if (f.open(QIODevice::WriteOnly))
-            f.write(QJsonDocument(o).toJson());
+        saveOrWarn(this, f.fileName(), QJsonDocument(o).toJson(),
+                   "The scan-link record");
         titleSearchMode_ = false;
         scanBtn_->setText("Follow along in scans (" + scanWork_ + ")");
         followScans();
@@ -17596,10 +17596,8 @@ public:
         o["proposed"] = QDateTime::currentDateTime().toString(Qt::ISODate);
         o["status"] = "pending GMR approval";
         arr.append(o);
-        if (f.open(QIODevice::WriteOnly)) {
-            f.write(QJsonDocument(arr).toJson());
-            f.close();
-        }
+        saveOrWarn(this, f.fileName(), QJsonDocument(arr).toJson(),
+                   "The proposed note");
         loadCandidates();
         report_->setHtml(
             QString("<b>Candidate saved</b> — <b>%1</b> is now in the "
@@ -17918,10 +17916,9 @@ public:
                 QDateTime::currentDateTime().toString(Qt::ISODate);
             o["status"] = "pending GMR approval";
             arr.append(o);
-            if (fj.open(QIODevice::WriteOnly)) {
-                fj.write(QJsonDocument(arr).toJson());
-                fj.close();
-            }
+            saveOrWarn(this, fj.fileName(),
+                       QJsonDocument(arr).toJson(),
+                       "The bibliography candidate");
             report_->setHtml(
                 "<b>Bibliography candidate saved</b> — pending until "
                 "published and approved; it appears in the review "
@@ -21710,11 +21707,9 @@ private:
             QFileInfo(in).completeBaseName() + "_unicode.txt",
             "Text (*.txt)");
         if (fn.isEmpty()) return;
-        QFile f(fn);
-        if (f.open(QIODevice::WriteOnly)) {
-            f.write(out.toUtf8());
-            f.close();
-        }
+        if (!saveOrWarn(this, fn, out.toUtf8(),
+                        "The rescued text"))
+            return;
         if (g_openTextInInput &&
             QMessageBox::question(
                 this, "py-tiblegenc",
@@ -23466,9 +23461,8 @@ private:
                         dlg, "Save apparatus", "apparatus.md",
                         "Markdown (*.md)");
                     if (out.isEmpty()) return;
-                    QFile f(out);
-                    if (f.open(QIODevice::WriteOnly))
-                        f.write(appFull.toUtf8());
+                    saveOrWarn(dlg, out, appFull.toUtf8(),
+                               "The comparison export");
                 });
         dlg->show();
     }
@@ -24622,9 +24616,12 @@ public:
         if (ix < 0 || ix >= pages_.size()) return;
         // save the current page's typing before moving
         if (pageIx_ >= 0 && pageIx_ < pages_.size()) {
-            QFile f(pageTextFile(pageIx_));
-            if (f.open(QIODevice::WriteOnly | QIODevice::Text))
-                f.write(editor_->toPlainText().toUtf8());
+            // BOUNTY #6 sweep: this saves the page you are LEAVING.
+            // A silent failure here loses typing the user believes is
+            // safe, and they find out pages later or never.
+            saveOrWarn(this, pageTextFile(pageIx_),
+                       editor_->toPlainText().toUtf8(),
+                       "This page's text");
         }
         pageIx_ = ix;
         sess::put("input/page", ix);
@@ -28072,10 +28069,10 @@ public:
             return out;
         };
         connect(saveB, &QPushButton::clicked, [&] {
-            QFile f(sidecar);
-            if (f.open(QIODevice::WriteOnly)) {
-                f.write(QByteArray::fromStdString(
-                    allcore::serializeWorksheet(collect())));
+            if (saveOrWarn(&dlg, sidecar,
+                           QByteArray::fromStdString(
+                               allcore::serializeWorksheet(collect())),
+                           "The worksheet")) {
                 legend->setText(
                     "<span style='color:#2E7D32'>Saved: " +
                     sidecar.toHtmlEscaped() + "</span>");
@@ -28091,10 +28088,10 @@ public:
                 QDir::homePath() + "/worksheet_row.csv",
                 "CSV (*.csv)");
             if (out.isEmpty()) return;
-            QFile f(out);
-            if (f.open(QIODevice::WriteOnly))
-                f.write(QByteArray::fromStdString(
-                    allcore::worksheetCsvRow(collect())));
+            saveOrWarn(&dlg, out,
+                       QByteArray::fromStdString(
+                           allcore::worksheetCsvRow(collect())),
+                       "The worksheet CSV row");
         });
         connect(closeB, &QPushButton::clicked, &dlg, &QDialog::reject);
         dlg.exec();
