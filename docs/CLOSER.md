@@ -383,3 +383,29 @@ produces the candidate; 7–9 accept it; then
   breakage**, not by inspection: a static_assert(false) appended to
   main.cpp makes it stop at the build and refuse the suite; on a healthy
   tree it exits 0 with all three gates green.
+- 2026-08-23 · **#48 SQA assessment DELIVERED; both criticals and all
+  three ship-blockers CLOSED.** Report: docs/SQA_ASSESSMENT_2026-08-22.md
+  (1,352 lines). Overall **C−**; 94 live findings (2 critical, 22 high,
+  46 medium, 24 low) after ten claims were refuted or found already
+  closed in adversarial verification. Grades: memory safety B, test
+  strategy C, static analysis C, failure paths C, data integrity C,
+  build/release C, performance D. **Fixed today:** FAIL-2 (the approval
+  channel reported rulings it had not saved — save() returned TRUE after
+  writing 16,384 of 123,576 bytes), PERF-1 (three ordinary words ANDed:
+  5m46s / 18.0 GB → 3.3 s / 40.7 MB, 105× faster, 442× less memory, cap
+  disclosed), FAIL-4 (the harness dialog seam — the enabling cause of a
+  whole untestable family), DATA-5 (a 300-page batch could report
+  "300/300 written · 0 failure(s)" with nothing on disk), STATIC-1
+  (approve() reported success while ledger and shelf diverged
+  permanently; save() is now [[nodiscard]]). **Two new regression tests
+  of a class the assessment measured as untestable**, both
+  mutation-verified: `shortwrite` (a real short write staged on a 2 MB
+  RAM disk) and the STATIC-1 rollback pin. **What the process learned:**
+  my FIRST write-failure test could not fail — it exercised the open
+  guard, which was always correct — and I only found out by planting the
+  mutant; and my FIRST fix was insufficient, because ENOSPC does not
+  surface until the filebuf is CLOSED. Both were caught by testing, not
+  by reading, which is the assessment's own thesis applied to me.
+  REMAINDER OPEN: 89 findings, including the rest of PERF-1 (merge join,
+  stop_token, off-thread), dependency pinning, CI, and the 43
+  computed-path write sites.
