@@ -28085,17 +28085,26 @@ public:
             for (const QString& w :
                  g_userName.split(' ', Qt::SkipEmptyParts))
                 initials += w.left(1).toUpper();
+            QString stamped;   // where the stamp left the shelf
             if (initials.size() >= 2 &&
                 QMessageBox::question(
                     this, "Stamp the shelf?",
                     QString("Rename the shelf folder with today's "
                             "date and your initials (%1)? The house "
                             "change-log policy.")
-                        .arg(initials)) == QMessageBox::Yes)
-                stampFolder(shelf, initials);
-            intake_->setRoot(intake_->root());   // refresh censuses
-            dest_->setRoot(dest_->root(), false);
-            showFile(lastFile_);
+                        .arg(initials)) == QMessageBox::Yes) {
+                const QString serr =
+                    stampFolder(shelf, initials, &stamped);
+                if (!serr.isEmpty()) {
+                    // a refused stamp is said out loud, exactly as
+                    // the composer's stamp branch already does; the
+                    // file stays findable at the un-renamed shelf
+                    QMessageBox::warning(this, "Shelf not stamped",
+                                         serr);
+                    stamped.clear();
+                }
+            }
+            finishHandoffMove(shelf, stamped);
         });
         connect(regB, &QPushButton::clicked, [this] {
             const QString p = safeGetOpenFileName(
@@ -28226,6 +28235,10 @@ public:
     int recognizedCount() const { return intake_->recognizedCount(); }
     int titledCount() const { return intake_->titledCount(); }
     QString destRoot() const { return dest_->root(); }
+    void setDestRoot(const QString& dir) { dest_->setRoot(dir, false); }
+    // the file the pane is pointing at - the selftest proves it is
+    // still a real path after an action that renames folders under it
+    QString currentFile() const { return lastFile_; }
     // what the panel actually shows, for the selftest
     QString infoText() const { return info_->toPlainText(); }
     void showFilePublic(const QString& p) { showFile(p); }
@@ -28355,11 +28368,19 @@ public:
                             "you changed it on this day\u201d \u2014 "
                             "the house policy.")
                         .arg(initials)) == QMessageBox::Yes) {
+                QString moved;   // where the stamp left the folder
                 const QString serr = stampFolder(
-                    QFileInfo(lastFile_).path(), initials);
+                    QFileInfo(lastFile_).path(), initials, &moved);
                 if (!serr.isEmpty())
                     QMessageBox::warning(&dlg, "Folder not stamped",
                                          serr);
+                else if (!moved.isEmpty())
+                    // the stamp renames the folder out from under the
+                    // file this dialog just renamed, so showFile()
+                    // bailed and the card kept the PRE-rename name
+                    // over a completed rename — follow it
+                    lastFile_ =
+                        moved + "/" + QFileInfo(lastFile_).fileName();
             }
             showFile(lastFile_);
             dlg.accept();
@@ -28653,7 +28674,12 @@ public:
     // The change-log stamp (session 4 policy): rename a folder to
     // carry today's date + the changer's initials. Intake tree only;
     // collision refused. Public for the selftest.
-    QString stampFolder(const QString& dirPath, const QString& initials) {
+    // The rename takes everything inside the folder with it, so a
+    // caller holding a path UNDER it is left pointing at nothing:
+    // newPath reports where the folder ended up (unchanged when it
+    // already carried today's stamp), so the caller can follow it.
+    QString stampFolder(const QString& dirPath, const QString& initials,
+                        QString* newPath = nullptr) {
         QDir d(dirPath);
         if (!d.exists()) return "no such folder";
         const QString stamped = QString::fromStdString(
@@ -28661,14 +28687,58 @@ public:
                 d.dirName().toStdString(),
                 QDate::currentDate().toString("yyyy-MM-dd").toStdString(),
                 initials.toUpper().toStdString()));
-        if (stamped == d.dirName()) return QString();
+        if (stamped == d.dirName()) {
+            if (newPath) *newPath = d.absolutePath();
+            return QString();   // already stamped today: no rename
+        }
         QDir parent(d.absolutePath());
         parent.cdUp();
         if (parent.exists(stamped))
             return "a folder with the stamped name already exists";
         if (!parent.rename(d.dirName(), stamped))
             return "the filesystem refused the rename";
+        if (newPath) *newPath = parent.filePath(stamped);
         return QString();
+    }
+
+    // The tail of the handoff move. The stamp above RENAMES the shelf
+    // out from under the file that just landed on it (`stamped` = the
+    // shelf's new path, empty when nothing was renamed), which left
+    // lastFile_ pointing at a path that no longer existed: showFile()
+    // bailed on it and the pre-move INTAKE card stayed on screen
+    // reading "not cataloged" over a completed, irreversible move.
+    // Follow the rename, then say the outcome out loud - the move
+    // never had a message of its own, the re-render WAS the entire
+    // confirmation, and the rename is exactly what could destroy it.
+    // The success line is printed only where the file was verified on
+    // the shelf. Public for the selftest.
+    void finishHandoffMove(const QString& shelf,
+                           const QString& stamped) {
+        QString shelfNow = shelf;
+        if (!stamped.isEmpty() && stamped != shelf) {
+            shelfNow = stamped;
+            lastFile_ =
+                stamped + "/" + QFileInfo(lastFile_).fileName();
+            // the stamped folder may BE the destination root
+            if (dest_->root() == shelf)
+                dest_->setRoot(stamped, false);
+        }
+        intake_->setRoot(intake_->root());   // refresh censuses
+        dest_->setRoot(dest_->root(), false);
+        const QString where =
+            QDir(shelfNow).dirName().toHtmlEscaped();
+        showFile(lastFile_,
+                 QFileInfo(lastFile_).isFile()
+                     ? "<div style='color:#2E7D32'>Filed to " +
+                           where +
+                           " — the move is done and the file is "
+                           "verified on the shelf.</div>"
+                     : "<div style='color:#935800'>Moved onto " +
+                           where +
+                           ", but the pane cannot find the file "
+                           "there — re-select it in the "
+                           "destination tree before acting on it "
+                           "again.</div>");
     }
 
     // The cleanup lane's only write: a CLEANED COPY beside the
@@ -29596,12 +29666,21 @@ public:
     }
 
 private:
-    void showFile(const QString& path) {
+    // `banner` is the calling action's own outcome line, prepended
+    // to the card. An action whose ONLY feedback was this re-render
+    // (the handoff move) reports its result here, so a missing file
+    // can no longer swallow the confirmation of work that happened.
+    void showFile(const QString& path,
+                  const QString& banner = QString()) {
         const QFileInfo fi(path);
-        if (!fi.isFile()) return;
+        if (!fi.isFile()) {
+            if (!banner.isEmpty()) info_->setHtml(banner);
+            return;
+        }
         const auto inf = allcore::decodeAcipFilename(
             fi.fileName().toStdString());
-        QString h = "<h3>" + fi.fileName().toHtmlEscaped() + "</h3>";
+        QString h = banner + "<h3>" +
+                    fi.fileName().toHtmlEscaped() + "</h3>";
         h += QString("<div style='color:#6F6F6F;font-size:11px'>%1</div>")
                  .arg(fi.path().toHtmlEscaped());
         // the change-log stamp, decoded from the nearest stamped
@@ -34833,6 +34912,75 @@ int main(int argc, char** argv) {
                            .arg(refuse1 && moved && refuse2 ? "PASS"
                                                            : "FAIL");
                 if (!(refuse1 && moved && refuse2)) ++fails;
+                QDir(wd).removeRecursively();
+            }
+            {   // move + stamp: the stamp RENAMES the shelf out from
+                // under the file the handoff just moved onto it. The
+                // pointer dangled, showFile() bailed, and the stale
+                // pre-move intake card kept asserting "not cataloged"
+                // over a completed, irreversible move (2026-08-22).
+                auto check = [&](bool ok, const char* what) {
+                    log << QString("  [%1] Catalog: %2")
+                               .arg(ok ? "PASS" : "FAIL").arg(what);
+                    if (!ok) ++fails;
+                };
+                QDir().mkpath(wd + "/in");
+                QDir().mkpath(wd + "/lib/shelf");
+                const auto comp = allcore::composeCatalogFilename(
+                    "S25401", "BDEN PA", "Truth", "AUTHOR");
+                const QString fn =
+                    QString::fromStdString(comp.filename);
+                { QFile f(wd + "/in/" + fn);
+                  (void)f.open(QIODevice::WriteOnly);
+                  f.write("@1A GTAN TSHIGS,"); }
+                const QString keepDest = catalogPane->destRoot();
+                catalogPane->setDestRoot(wd + "/lib");
+                const QString merr = catalogPane->moveToShelf(
+                    wd + "/in/" + fn, wd + "/lib/shelf");
+                QString stamped;
+                const QString serr = catalogPane->stampFolder(
+                    wd + "/lib/shelf", "ADA", &stamped);
+                const QString today =
+                    QDate::currentDate().toString("yyyy-MM-dd");
+                check(merr.isEmpty() && serr.isEmpty() &&
+                          stamped == wd + "/lib/shelf - updated " +
+                                         today + " ADA",
+                      "the change-log stamp reports the shelf's new "
+                      "path, so the mover can follow the rename");
+                catalogPane->finishHandoffMove(wd + "/lib/shelf",
+                                               stamped);
+                check(catalogPane->currentFile() ==
+                              stamped + "/" + fn &&
+                          QFileInfo(catalogPane->currentFile())
+                              .isFile(),
+                      "after move + stamp the pane points at the real "
+                      "file on the renamed shelf, not at a path the "
+                      "rename erased");
+                const QString card = catalogPane->infoText();
+                check(card.contains("Filed to " +
+                                    QDir(stamped).dirName()),
+                      "the completed move states its own outcome and "
+                      "names the shelf the file landed on");
+                check(card.contains("cataloged (inside the "
+                                    "destination tree)") &&
+                          !card.contains("not cataloged"),
+                      "the card after filing never asserts \"not "
+                      "cataloged\" over a move that happened");
+                check(card.contains(stamped) &&
+                          card.contains("GTAN TSHIGS"),
+                      "the card is read back from the file at its new "
+                      "home - its shelf path and its own bytes");
+                // the house rule the other half of this fix carries:
+                // no success line from a path that did not verify the
+                // file. Take the file away and the same call flags.
+                QFile::remove(catalogPane->currentFile());
+                catalogPane->finishHandoffMove(stamped, QString());
+                const QString gone = catalogPane->infoText();
+                check(!gone.contains("Filed to") &&
+                          gone.contains("cannot find the file"),
+                      "a filing whose file is not on the shelf flags "
+                      "instead of printing the success line");
+                catalogPane->setDestRoot(keepDest);
                 QDir(wd).removeRecursively();
             }
             {   // the worksheet: prefills carry number, title-page
