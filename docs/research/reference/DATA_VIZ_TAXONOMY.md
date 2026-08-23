@@ -62,3 +62,29 @@ draw well in Qt, and the easiest to make pretty and useless.
   spend those hues on unrelated categories.
 - Absence must stay visible. A zero bar and a missing bar are different
   facts and must not look alike.
+
+---
+
+## The source article — banked, and to be walked together (Adam, 2026-08-22)
+
+**Link:** https://uxdesign.cc/20-ideas-for-better-data-visualization-73f7e3c2782d
+— Taras Bakusevych, *20 ideas for better data visualization*.
+
+Adam's instruction: bank the link, and put **going through it together,
+piece by piece** on the todo list. Filed as backlog #47.
+
+**What is banked here, honestly:** the "choose the right chart" taxonomy
+above is transcribed from the chart Adam supplied, so that part is
+solid. **The article's own 20 ideas are NOT transcribed** — Medium
+returns 403 to every automated request, and the Wayback snapshot
+(20250512161702) is an 11 KB JavaScript shell with no article body in
+it. I could not read the twenty ideas, and I am not going to
+reconstruct them from the title, because a plausible list of twenty
+design principles is exactly the kind of thing that would look right
+and be wrong.
+
+So #47 is a genuinely joint task: Adam has the article open, we take it
+one idea at a time, and each one gets a ruling on this page — does it
+apply here, where, and what it would cost. That is a better outcome
+than a summary anyway; the value is in the per-idea disposition against
+THIS tool's data, not in owning a copy of the list.

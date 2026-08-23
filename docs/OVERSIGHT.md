@@ -125,6 +125,7 @@ be guessing at how you work. None blocks other work.*
 | **H5** | **Author portraits.** Measured: 62 of 462 people have a Commons portrait reachable by the join already built (34 with local texts), licences machine-readable and including PD and CC0. I can build the togglable layer; **fetching and redistributing images is a licensing act and yours to rule on**, and the two best Tibetan portrait collections (Treasury of Lives, Himalayan Art Resources) need a letter like BDRC's. | #44 |
 | **H6** | **Data-visualisation vocabulary.** Which of the four grounded mappings to build first — meter histogram, a text's tier composition, one term across the courses, or the citation web. | #42 |
 | **H6** | **GUI mockup + visual revamp**, the original deferral that #37 and #39 now give shape to. | #34 |
+| **H7** | **Walk the "20 ideas for better data visualization" article together**, one idea at a time. This needs you in the room for a reason that is not politeness: Medium 403s every automated request and the Wayback snapshot is an empty JS shell, so I could not read the twenty ideas and will not reconstruct them from the title. You read, we rule on each against this tool's data. The taxonomy chart you supplied IS transcribed and already mapped to four grounded candidates (#42). | #47 |
 
 ---
 
