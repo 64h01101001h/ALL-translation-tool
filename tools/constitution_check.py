@@ -192,6 +192,22 @@ def main():
 
     for x in notes:
         print("  note:", x)
+    # L3 — the human-gated view must not drift from the backlog.
+    # Incident: ten items needing Adam, including every one filed that
+    # day, existed in CLOSER.md and appeared nowhere on the page he
+    # reads. An item only he can move, that he cannot see, is lost.
+    try:
+        import subprocess
+        r = subprocess.run(
+            [sys.executable, os.path.join(root, "tools/reconcile_lists.py"),
+             root], capture_output=True, text=True)
+        if r.returncode != 0:
+            for line in r.stdout.splitlines():
+                if line.strip().startswith("- "):
+                    fails.append("L3 " + line.strip()[2:])
+    except Exception as e:
+        notes.append("L3 reconcile could not run: %s" % e)
+
     if fails:
         print(f"constitution: {len(fails)} violation(s)")
         for x in fails:

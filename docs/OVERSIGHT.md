@@ -42,7 +42,7 @@ deferred. Everything that remains in the project is on this page.**
 |---|---|---|---|
 | **A1** | **`gh auth login`**, then `tools/backup.sh --github` | ~90 seconds | The only offsite copy of 790+ commits. External drive and Dropbox are current; GitHub is not. This is the copy that survives the house burning down. |
 | **A3** | **Send the Joel Crawford email** (draft `r-7864908769855474259`). Drag `~/Desktop/ALL-Translation-Tool-Documentation.zip` in first — I can attach the three .md files but not the binary archive. | 2 minutes | The BDRC letter, the Apple Developer ID, the GitHub org, the catalog question, and the input-center question are ALL stalled behind his answer. |
-| **A4** | **A To: address for the BDRC letter**, and the decision whether it goes from you or from ALL. Hold until Joel answers A3 — approaching them twice would be worse than approaching them late. | 1 minute after A3 | Written confirmation for the OCR models. The free-of-charge ruling already places them inside CC BY-NC; this is for the record. |
+| **A4** | **A To: address for the BDRC letter** (backlog #24), and the decision whether it goes from you or from ALL. Hold until Joel answers A3 — approaching them twice would be worse than approaching them late. | 1 minute after A3 | Written confirmation for the OCR models. The free-of-charge ruling already places them inside CC BY-NC; this is for the record. |
 
 ---
 
@@ -99,7 +99,7 @@ deferred. Everything that remains in the project is on this page.**
 | **F1** | Joel Crawford | BDRC relationship, Apple ID, GitHub org, the real catalog, input centers, succession |
 | **F2** | BDRC | Written OCR-model confirmation (gated behind A3/A4) |
 | **F3** | Dr. Laine | rKTs export (CC BY-SA) |
-| **F4** | Ora Maimes / Jamie | Whisper transcripts — she offered. #32 is closed on the 2,800 auto-caption files; her transcripts are cleaner than YouTube's auto-captions (which demonstrably mishear "sutra" as "citrus"), so they would EXTEND the method mining and sharpen B1's 29 passages, not unblock anything. |
+| **F4** | Ora Maimes / Jamie | Whisper transcripts — she offered. backlog #32 is CLOSED on the 2,800 auto-caption files; her transcripts are cleaner than YouTube's auto-captions (which demonstrably mishear "sutra" as "citrus"), so they would EXTEND the method mining and sharpen B1's 29 passages, not unblock anything. |
 | **F5** | THL · 84000 · PKTC · CIHTS | Licensing lines for reference layers currently local-only |
 
 ---
@@ -109,6 +109,31 @@ deferred. Everything that remains in the project is on this page.**
 | # | What |
 |---|---|
 | **G1** | Backlog #28 — ribbon reorder from real usage data. Needs a week of ledger, not a decision. |
+
+---
+
+## H · Design decisions waiting on your ruling
+
+*Filed 2026-08-22. Each is a real fork where my choosing for you would
+be guessing at how you work. None blocks other work.*
+
+| # | Decision | Backlog |
+|---|---|---|
+| **H1** | **Whole-app visual direction.** Choose a direction from rendered options — density, chrome, typography, how panes read. I have sequenced this AFTER your test campaign, on the argument that a direction chosen before you have worked in the tool is chosen from my imagination. Overrule me if you disagree. | #37 |
+| **H2** | **Author-search layout.** Two rejected alternatives exist with documented reasons. I do not think either beats what ships, and said so, but you asked to see the options. | #38 |
+| **H3** | **The Overlay card redesign.** A four-direction campaign has ruled: authority zones, ruled, with an apparatus grammar inside each. It also proved by rendering that div borders have NEVER painted in this app. Awaiting your look before implementation. | #39, #43 |
+| **H4** | **Where the ⌘K Hunt button lives.** You flagged it as sitting on a line. Candidate home is the ribbon band's right end. | #40 |
+| **H5** | **Data-visualisation vocabulary.** Which of the four grounded mappings to build first — meter histogram, a text's tier composition, one term across the courses, or the citation web. | #42 |
+| **H6** | **GUI mockup + visual revamp**, the original deferral that #37 and #39 now give shape to. | #34 |
+
+---
+
+## I · Living
+
+| # | What | Backlog |
+|---|---|---|
+| **I1** | **The oversight register itself** — this page. Standing rule: anything found to be human-gated is written into CLOSER.md AND surfaced here in the same commit that discovers it. Reconciled mechanically by `tools/reconcile_lists.py`, which runs in the constitution gate, so an item that needs you can no longer be invisible to you. | #35 |
+| **I2** | **Rebuild the test campaign, then walk it.** The existing one is dated 13 August and covers none of the last nine days. You asked to personally test and stress every function; you should be walking the app that exists. | #41 |
 
 ---
 
