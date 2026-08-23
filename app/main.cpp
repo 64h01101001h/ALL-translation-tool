@@ -28795,58 +28795,7 @@ public:
             info_->setHtml(splitHtml(lastFile_));
         });
         connect(info_, &QTextBrowser::anchorClicked,
-                [this](const QUrl& u) {
-                    const QString s2 = u.toString();
-                    if (s2.startsWith("catopen:") && g_openAtLine)
-                        g_openAtLine(anchorPayload(s2, 8), 0);
-                    else if (s2.startsWith("proposeid:")) {
-                        const QString p = anchorPayload(s2, 10);
-                        const QString err = proposeIdentity(p);
-                        info_->setHtml(
-                            err.isEmpty()
-                                ? "<div style='color:#2E7D32'>Filed: a "
-                                  "catalog-identity proposal is now "
-                                  "PENDING in the team channel "
-                                  "(Community \u2192 Approval rules "
-                                  "on it; approvals export as "
-                                  "candidates for the data project)."
-                                  "</div>"
-                                : "<div style='color:#935800'>" +
-                                      err.toHtmlEscaped() + "</div>");
-                    }
-                    else if (s2 == "exportmissing:") {
-                        const QString out = safeGetSaveFileName(
-                            this, "Export the witness-hunt list",
-                            QDir::homePath() + "/missing_works.txt",
-                            "Text (*.txt)");
-                        if (!out.isEmpty()) {
-                            const QString res = exportMissingList(out);
-                            const bool bad = res.startsWith("could not");
-                            info_->setHtml(
-                                QString("<div style='color:%1'>")
-                                    .arg(bad ? "#8C2F2B" : "#2E7D32") +
-                                res.toHtmlEscaped() + " \u2192 " +
-                                out.toHtmlEscaped() + "</div>");
-                        }
-                    }
-                    else if (s2.startsWith("shelfsel:")) {
-                        dest_->selectPath(anchorPayload(s2, 9));
-                        info_->setHtml(
-                            "<div style='color:#2E7D32'>Shelf "
-                            "selected in the destination tree \u2014 "
-                            "click Move to shelf\u2026 again to "
-                            "confirm the move.</div>");
-                    }
-                    else if (s2.startsWith("cleanslash:")) {
-                        const QString p = anchorPayload(s2, 11);
-                        const QString err = writeCleanedCopy(p);
-                        if (err.isEmpty()) showFile(lastFile_);
-                        else
-                            info_->setHtml("<div style='color:#935800'>" +
-                                           err.toHtmlEscaped() +
-                                           "</div>");
-                    }
-                });
+                [this](const QUrl& u) { handleInfoAnchor(u); });
         connect(auditB, &QPushButton::clicked,
                 [this] { info_->setHtml(bibliographyAuditHtml()); });
         const QString last = sess::path("catalog/intakeDir");
@@ -28856,6 +28805,74 @@ public:
         QString dest = sess::path("catalog/destDir");
         if (dest.isEmpty() && !root_.isEmpty()) dest = root_ + "/library";
         if (!dest.isEmpty()) dest_->setRoot(dest, false);
+    }
+
+    // Every anchor in this panel is dispatched by hand: info_ is
+    // built with setOpenLinks(false), so a scheme with no branch
+    // here is a link that silently does nothing. That is what the
+    // witness-hunt BDRC links were — plain https anchors with no
+    // http branch, and Qt still drew the pointing-hand cursor over
+    // them (it takes that from anchorAt, not from openLinks), so
+    // the dead affordance looked alive. Sweeping all 19
+    // setOpenLinks(false) browsers in this file on 2026-08-22, this
+    // was the only one rendering http anchors without an http
+    // branch. Public, and the opener is a seam, so the selftest can
+    // click an anchor without a mouse and prove the URL left.
+    std::function<void(const QUrl&)> urlOpener_ =
+        [](const QUrl& u) { QDesktopServices::openUrl(u); };
+    void handleInfoAnchor(const QUrl& u) {
+        const QString s2 = u.toString();
+        if (s2.startsWith("catopen:") && g_openAtLine)
+            g_openAtLine(anchorPayload(s2, 8), 0);
+        else if (s2.startsWith("proposeid:")) {
+            const QString p = anchorPayload(s2, 10);
+            const QString err = proposeIdentity(p);
+            info_->setHtml(
+                err.isEmpty()
+                    ? "<div style='color:#2E7D32'>Filed: a "
+                      "catalog-identity proposal is now "
+                      "PENDING in the team channel "
+                      "(Community → Approval rules "
+                      "on it; approvals export as "
+                      "candidates for the data project)."
+                      "</div>"
+                    : "<div style='color:#935800'>" +
+                          err.toHtmlEscaped() + "</div>");
+        }
+        else if (s2 == "exportmissing:") {
+            const QString out = safeGetSaveFileName(
+                this, "Export the witness-hunt list",
+                QDir::homePath() + "/missing_works.txt",
+                "Text (*.txt)");
+            if (!out.isEmpty()) {
+                const QString res = exportMissingList(out);
+                const bool bad = res.startsWith("could not");
+                info_->setHtml(
+                    QString("<div style='color:%1'>")
+                        .arg(bad ? "#8C2F2B" : "#2E7D32") +
+                    res.toHtmlEscaped() + " → " +
+                    out.toHtmlEscaped() + "</div>");
+            }
+        }
+        else if (s2.startsWith("shelfsel:")) {
+            dest_->selectPath(anchorPayload(s2, 9));
+            info_->setHtml(
+                "<div style='color:#2E7D32'>Shelf "
+                "selected in the destination tree — "
+                "click Move to shelf… again to "
+                "confirm the move.</div>");
+        }
+        else if (s2.startsWith("cleanslash:")) {
+            const QString p = anchorPayload(s2, 11);
+            const QString err = writeCleanedCopy(p);
+            if (err.isEmpty()) showFile(lastFile_);
+            else
+                info_->setHtml("<div style='color:#935800'>" +
+                               err.toHtmlEscaped() +
+                               "</div>");
+        }
+        else if (s2.startsWith("http"))
+            urlOpener_(u);   // the witness hunt's link out to BUDA
     }
 
     // public so the selftest can prove the census without a dialog
@@ -35919,6 +35936,54 @@ int main(int argc, char** argv) {
                                "evidence and the honest caveat")
                            .arg(audit ? "PASS" : "FAIL");
                 if (!audit) ++fails;
+            }
+            {   // B14: the witness-hunt link IS the payoff of the
+                // audit and it was a dead affordance — info_ is
+                // setOpenLinks(false) and its handler had no http
+                // branch, so the BDRC anchor rendered, Qt drew the
+                // pointing-hand cursor over it, and the click did
+                // nothing. Take the href the way a click does (out
+                // of the laid-out document, not out of the source
+                // string) and prove that URL leaves the pane.
+                const QString a2 = catalogPane->bibliographyAuditHtml();
+                QTextDocument rendered;
+                rendered.setHtml(a2);
+                QString href;
+                for (QTextBlock b = rendered.begin();
+                     b.isValid() && href.isEmpty(); b = b.next())
+                    for (auto it = b.begin(); !it.atEnd(); ++it) {
+                        const QString a3 =
+                            it.fragment().charFormat().anchorHref();
+                        if (a3.startsWith(
+                                "https://library.bdrc.io")) {
+                            href = a3;
+                            break;
+                        }
+                    }
+                QList<QUrl> opened;
+                auto keepOpener = catalogPane->urlOpener_;
+                catalogPane->urlOpener_ =
+                    [&opened](const QUrl& u) { opened << u; };
+                if (!href.isEmpty())
+                    catalogPane->handleInfoAnchor(QUrl(href));
+                const int afterWitness = opened.size();
+                // and the branch is scoped, not a catch-all: a
+                // scheme with no branch of its own must never be
+                // handed to the system browser
+                catalogPane->handleInfoAnchor(
+                    QUrl("mailto:nobody@example.org"));
+                catalogPane->urlOpener_ = keepOpener;
+                const bool witness =
+                    !href.isEmpty() && afterWitness == 1 &&
+                    opened.size() == 1 &&
+                    opened.first().scheme() == "https" &&
+                    opened.first().host() == "library.bdrc.io" &&
+                    opened.first() == QUrl(href);
+                log << QString("  [%1] Catalog: a witness-hunt click "
+                               "dispatches that exact BDRC URL to the "
+                               "browser, and no other scheme does")
+                           .arg(witness ? "PASS" : "FAIL");
+                if (!witness) ++fails;
             }
             {   // the second browser: the destination tree must be
                 // rooted at the library by default — the tree a
