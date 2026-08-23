@@ -150,36 +150,51 @@ def main():
             "R6 proposals_smoke.cpp: the conflict drill must remove "
             "its conflicted-copy file at every entry point")
 
-    # L2 — no unmanifested payload: every runtime data dir the press
-    # stages must be credited in OPEN_SOURCE_NOTICES.md. Incident:
-    # reference.db and CC BY-NC models were shipping by habit.
-    notices = read(os.path.join(
-        root, "docs/distribution/OPEN_SOURCE_NOTICES.md")).lower()
-    staged = re.search(r"for d in ([a-z0-9_ \\\n]+); do", press)
-    credit = {
-        "fonts": "ofl", "honorifics": "hgm", "pron_colloquial": "hgm",
-        "abbreviations": "abbreviation", "extracted": "84000",
-        "idioms": "hgm", "botok": "botok", "spellcheck": "spellchecker",
-        "soas_pos": "soas", "whitney": "whitney",
-        "candidate_alignments": "hgm", "84000": "84000",
-        "help": "hgm",
-    }
-    if staged:
-        for d in staged.group(1).split():
-            if d == "\\":
-                continue
-            key = credit.get(d)
-            if key is None:
-                fails.append(
-                    f"L2 press stages data dir '{d}' with no entry in "
-                    f"the constitution's credit map - add the dir AND "
-                    f"its OPEN_SOURCE_NOTICES.md line")
-            elif key not in ("hgm",) and key not in notices:
-                fails.append(
-                    f"L2 staged dir '{d}' expects '{key}' credited in "
-                    f"OPEN_SOURCE_NOTICES.md - not found")
-    else:
-        fails.append("L2 could not locate the press's staged-dir list")
+    # L2 — no unmanifested payload. Incident: reference.db and CC
+    # BY-NC models were shipping by habit.
+    #
+    # The first version of this rule mapped each staged directory to a
+    # keyword and passed if the keyword occurred ANYWHERE in
+    # OPEN_SOURCE_NOTICES.md — so 102 MB and 3,219 files under
+    # data/extracted were credited forever by the unrelated string
+    # "84000", among them 1,926 raw THL catalogue records the notices
+    # themselves called "NOT redistributed". It also only read the
+    # press's `for d in ...` loop, so everything staged by an explicit
+    # `cp`, including the 80 MB reference.db, was invisible to it
+    # (SQA BUILD-4, BUILD-5). A gate that never opens the payload is
+    # not a gate.
+    #
+    # The rule is now a manifest. docs/distribution/PAYLOAD_MANIFEST.txt
+    # carries one row per path that may be in a DMG, with its licence
+    # and the notices anchor that backs it; the press stages FROM it,
+    # prunes to it and is gated on it. What this checker can verify
+    # without a press, tools/manifest_check.py --static does:
+    #   * every anchor a row claims really occurs in the notices;
+    #   * the press still calls all four manifest entry points;
+    #   * nothing sits in data/extracted unclassified — which is the
+    #     check that would have caught the THL trees the day they
+    #     landed, no press needed.
+    import subprocess
+    try:
+        r = subprocess.run(
+            [sys.executable,
+             os.path.join(root, "tools/manifest_check.py"),
+             "--static", root], capture_output=True, text=True)
+        found = 0
+        for line in r.stdout.splitlines():
+            t = line.strip()
+            if t.startswith("FAIL "):
+                fails.append("L2 " + t[5:])
+                found += 1
+            elif t.startswith("note: "):
+                notes.append("L2 " + t[6:])
+        if r.returncode != 0 and found == 0:
+            fails.append(
+                "L2 manifest_check.py --static exited %d with no "
+                "parsable finding: %s"
+                % (r.returncode, r.stderr.strip() or "(no stderr)"))
+    except Exception as e:
+        fails.append("L2 manifest_check.py could not run: %s" % e)
 
     # C2 — the press keeps its gates. A press that silently lost a
     # gate is a failed press.

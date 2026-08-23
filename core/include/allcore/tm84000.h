@@ -56,6 +56,16 @@ public:
     std::vector<TmSegment> search(const std::string& fts_query,
                                   int limit = 50) const;
 
+    // How many segments the same query matches, WITHOUT a cap — the
+    // twin of Spine::corpusCount, and for the same reason (SQA DATA-3).
+    // search() takes a limit, so its result size can never answer "how
+    // many are there": the 84000 card re-queried with a literal 200 and
+    // printed "5 of 200" for a term with 55,720 segments, which reads
+    // as false scarcity in the published canon. A count is a different
+    // question from a page of results and needs its own query.
+    // Returns -1 if the query could not be run (never a guessed 0).
+    long long matchCount(const std::string& fts_query) const;
+
 private:
     sqlite3* db_ = nullptr;
 };

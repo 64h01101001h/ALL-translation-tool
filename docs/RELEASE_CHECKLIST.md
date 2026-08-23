@@ -10,6 +10,17 @@ human half is everything the script cannot know.
 - [ ] Working tree committed; batteries green locally
       (`ctest --test-dir cmake-build` — all suites, 55 as of 2026-08-20 — and
       `./DiamondCutterTranslationTool --selftest` — 225 checks).
+- [ ] **No suite skipped.** ctest reports a suite whose untracked
+      fixture is missing as `***Skipped`, never as a pass
+      (`cmake/AllFixtureTests.cmake`). A release must be cut from the
+      FULL battery: if the run lists anything under "The following
+      tests did not run", provision the fixture from
+      `docs/FIXTURES.md` before pressing. The press enforces this at
+      step 2 and stops.
+- [ ] **Dependencies declared.** `brew bundle check --file=Brewfile`
+      passes; if anything was installed or upgraded this cycle,
+      regenerate and commit `Brewfile.lock.json` alongside the
+      release commit.
 - [ ] If the selftest or suite count changed this cycle, update the
       references in the docs that quote them (README.md,
       docs/TEST_PLAN.md, docs/RELEASE_READINESS.md, the release
@@ -43,6 +54,14 @@ past one):
 - [ ] **Ad-hoc codesign** — signed and verified (`codesign -s -`;
       right-click → Open on first launch until ALL provides a
       Developer ID).
+- [ ] **Architecture and macOS floor** (step 5b) — the press prints
+      `lipo -archs`, the executable's `LC_BUILD_VERSION minos`, and
+      the bundle's `LSMinimumSystemVersion`, and REFUSES to continue
+      if the plist value is empty or the binary has no arm64 slice.
+      The shipped requirement is **Apple Silicon, macOS 26 or later**;
+      it is stated in the generated README.txt, README.md and
+      docs/distribution/INSTALL_QUICK_START.md. If any of those three
+      numbers moved, say so in the release notes.
 - [ ] **Data manifest** — "Diamond Cutter Tool Data/" staged beside the app:
       spine db, reference.db, `library/ocr_models` (the BDRC OCR
       models MUST ship — omitting them regresses to the
@@ -53,6 +72,14 @@ past one):
       template and the generated README.txt.
 - [ ] **OPEN_SOURCE_NOTICES.md staged** — every release carries the
       open-source & data notices (Adam, 2026-08-11).
+- [ ] **BUILD_MANIFEST staged** (step 6d) — `tools/build_manifest.py`
+      writes `BUILD_MANIFEST.json` and `BUILD_MANIFEST.txt` beside the
+      app: toolchain versions, git commit and whether the tree was
+      dirty, architecture and macOS floor, every bundled Mach-O with
+      its Homebrew formula, version, SPDX licence and sha256, and the
+      checksum of the shipped spine. Skim the UNMAPPED list before
+      shipping — anything there is a binary whose licence this release
+      cannot account for.
 - [ ] **Launch test from the staged layout** — the staged app must
       come up on the real cocoa platform and find its data beside
       itself; up to 3 attempts (one observed transient flake),
@@ -79,7 +106,11 @@ past one):
       items together, right-click → Open, confirm data found, then
       run the manual checklist at the end of docs/TEST_PLAN.md
       (five random panes at minimum).
-- [ ] Commit the release-notes and doc updates with the press.
+- [ ] Commit the release-notes and doc updates with the press —
+      including `Brewfile.lock.json` if it changed. Keep the DMG's
+      `BUILD_MANIFEST.json` with the release notes: it is the only
+      record of which library versions that DMG carries, and it is the
+      answer when a CVE lands on one of them.
 
 ## If a pressed build won't launch
 

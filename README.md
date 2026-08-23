@@ -4,6 +4,16 @@ A macOS desktop suite for Tibetan digital texts and translation, built on the
 Geshe Michael Roach Dictionary releases. C++20 core (`allcore`) + Qt 6 UI. **Everything except
 the AI Analysis sections works fully offline.**
 
+## System requirements
+
+**An Apple Silicon Mac (M1 or later), macOS 26 or later.** The shipped
+build is `arm64` only — there is no Intel slice and no Rosetta path in
+this direction, so it will not launch on an Intel Mac. The floor is
+`ALL_MACOS_MIN` in the root `CMakeLists.txt`; every release records the
+architecture and floor it was actually built with in `BUILD_MANIFEST.txt`
+inside the DMG, and the press refuses to ship a bundle whose
+`LSMinimumSystemVersion` is empty.
+
 ## Launch
 
 Double-click `cmake-build/app/DiamondCutterTranslationTool.app`, or from a terminal:
@@ -65,7 +75,13 @@ dictionaries from their original binaries: `tools/extract_hypercontext_dic.py`,
 
 ## Tests — the trust anchor
 
-    ctest --test-dir cmake-build
+    ctest --test-dir cmake-build              # everything
+    ctest --test-dir cmake-build -LE fixture  # from a clean checkout
+
+37 of the suites read data `.gitignore` keeps out of the repository
+(`build/`, `library/`, `data/extracted/`). Those are registered as
+ctest SKIPs naming the missing path when it is absent — never as a pass.
+`docs/FIXTURES.md` is the inventory and says how to produce each one.
 
 55 suites (2026-08-20; the count grows with every feature), ~600k verified data points. The engine batteries enforce founding
 rule 2 (a port that fails its battery does not ship): `acipToEwts` must match

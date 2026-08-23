@@ -1,0 +1,92 @@
+Diamond Cutter Translation Tool
+Copyright (c) 2026 Asian Legacy Library (ALL) / Asian Classics Input
+Project (ACIP). All rights reserved.
+
+STATUS OF THIS FILE
+-------------------
+Added 2026-08-23 because the project had no licence file at all, which
+an SQA audit named as a gap (BUILD-2). It states ONLY what this
+repository already records, with the date and the place each statement
+comes from. It has not been reviewed by Adam or by counsel. Nothing in
+it grants anyone a licence; where a question is open, it says so
+instead of answering it.
+
+
+1. THE SOFTWARE
+---------------
+The application source in this repository — app/, core/, ocr/, tools/ —
+is the Asian Legacy Library's own work. No public licence is granted
+for it here. Copies are given to named recipients (translators, the
+monastic input centres, students of the tradition) as builds, not as
+source.
+
+Distribution stance of record: "The Diamond Cutter Translation Tool is
+distributed FREE OF CHARGE and is not sold." — Adam's ruling,
+2026-08-22, recorded in docs/SHIP.md. That ruling is what places the
+bundled CC BY-NC recognition models inside their licence; if the stance
+ever changes, that bundling has to be revisited before anything else.
+
+
+2. THIRD-PARTY SOFTWARE IN THE APPLICATION
+------------------------------------------
+The application bundles ~33 upstream open-source projects, including
+Qt 6 (LGPL-3.0-only), GLib (LGPL-2.1-or-later) and the GCC runtime
+libraries (GPL-3.0-or-later WITH the GCC Runtime Library Exception).
+Their terms are not this project's to set, and this file does not
+override them.
+
+  * Prose list, per component:  docs/distribution/OPEN_SOURCE_NOTICES.md
+  * Generated, per binary:      inside each build, at
+      "…app/Contents/Resources/licenses/BUNDLED_COMPONENTS.tsv"
+    beside the licence texts themselves.
+
+The LGPL libraries are used unmodified and dynamically linked; they can
+be replaced in the bundle. See the LGPL notice in OPEN_SOURCE_NOTICES.md
+for how, and for which licence texts a given build was able to ship.
+
+
+3. THE DATA
+-----------
+The Geshe Michael Roach Dictionary, the aligned corpus, the registers
+and the published apparatus are the Asian Legacy Library's own data,
+(c) their respective authors, distributed within the ALL/ACIP team.
+Geshe Michael Roach's English is the binding layer of that data;
+nothing here relicenses or republishes it.
+
+Reference layers carry their own terms, one per row, in
+docs/distribution/OPEN_SOURCE_NOTICES.md and
+docs/distribution/PAYLOAD_MANIFEST.txt. Two things follow that are
+easy to get wrong, so they are stated plainly:
+
+  * A DMG pressed in TEAM mode contains build/reference.db —
+    unlicensed third-party dictionary compilations kept for in-house
+    lookup. A team DMG must not be forwarded outside the ALL/ACIP
+    team. Its own README.txt says so.
+  * Several layers ship under terms that are recorded as OPEN, not
+    settled: the redistribution stance for the HGM release package,
+    the teachings-index consent line, the SOAS POS terms, and the
+    per-file terms for 20 files under data/extracted. They are
+    itemised in PAYLOAD_MANIFEST.txt with status `gated` or `itemise`,
+    and a market-mode press refuses to build while they stand.
+
+
+4. TRADEMARKS AND NAMES
+-----------------------
+"Asian Legacy Library", "Asian Classics Input Project", "Diamond Cutter"
+and the names of the teachers and organisations referenced in the data
+are used with those organisations' own authorisation and are not
+licensed by this file.
+
+
+5. NO WARRANTY
+--------------
+The software is provided "as is", without warranty of any kind, express
+or implied. The tool's machine-produced output — segmentations,
+auto-aligned glosses, OCR, phonetics — is review material and is
+labelled as such in the interface. It is not a substitute for a
+translator's judgement.
+
+
+Corrections: if you are the author of a component or layer named in
+OPEN_SOURCE_NOTICES.md and want the attribution changed, contact the
+Asian Legacy Library and it will be changed in the next release.

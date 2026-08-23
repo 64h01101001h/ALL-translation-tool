@@ -59,9 +59,24 @@
 #include <ctime>
 #include <optional>
 #include <random>
+// DATA-4's failing-write drill: RLIMIT_FSIZE with SIGXFSZ ignored
+// reproduces a real short write (EFBIG, same shape as ENOSPC) in
+// process, so the export paths can be proved to REPORT a failed write
+// instead of printing green over it.
+#include <csignal>
+#include <sys/resource.h>
 
+#include <cstdio>
 #include <set>
+#include <stdexcept>
 #include <string>
+#ifdef Q_OS_UNIX
+// MEM-1/FAIL-1 regression pins: the roster pin lowers RLIMIT_FSIZE for
+// the length of one call so a write that cannot land is reproduced
+// deterministically, with no full volume and no root.
+#include <csignal>
+#include <sys/resource.h>
+#endif
 
 #include <QCoreApplication>
 #include <QDir>
@@ -628,35 +643,51 @@ static allcore::Tm84000* tm84000() {
     return tm.get();
 }
 
+// The FTS5 phrase for a wylie term over the TM's tibetan column
+// (unicode61 splits at tsheg; spelling the tshegs as spaces keeps the
+// phrase explicit). Factored out of tm84000Html by SQA DATA-3 so the
+// page of hits and the uncapped count ask the SAME question — and so
+// a selftest can ask it too. Empty when the term does not convert.
+static std::string tm84000Phrase(const std::string& wylie) {
+    auto [uni, uok] = allcore::wylieToUnicode(wylie);
+    if (!uok || uni.empty()) return {};
+    QString phrase = QString::fromStdString(uni);
+    phrase.replace(QString::fromUtf8("\u0F0B"), " ");
+    phrase = phrase.trimmed();
+    if (phrase.isEmpty()) return {};
+    return "tibetan: \"" + phrase.toStdString() + "\"";
+}
+
 // 84000 TM segments for a wylie term - shown BESIDE the HGM corpus
 // concordance, attribution always visible
 static QString tm84000Html(const std::string& wylie, int limit = 5) {
     auto* tm = tm84000();
     if (!tm) return {};
-    auto [uni, uok] = allcore::wylieToUnicode(wylie);
-    if (!uok || uni.empty()) return {};
-    // FTS5 phrase over the Tibetan column (unicode61 splits at tsheg;
-    // spelling the tshegs as spaces keeps the phrase explicit)
-    QString phrase = QString::fromStdString(uni);
-    phrase.replace(QString::fromUtf8("\u0F0B"), " ");
-    phrase = phrase.trimmed();
-    if (phrase.isEmpty()) return {};
-    const auto hits = tm->search(
-        "tibetan: \"" + phrase.toStdString() + "\"", limit);
+    const std::string q = tm84000Phrase(wylie);
+    if (q.empty()) return {};
+    const auto hits = tm->search(q, limit);
     if (hits.empty()) return {};
-    // counts-first ledger (UX audit phase 3): the cap never hides
-    // the true total
-    int tmTotal = (int)hits.size();
-    if ((int)hits.size() == limit)
-        tmTotal = (int)tm->search(
-            "tibetan: \"" + phrase.toStdString() + "\"", 200).size();
+    // counts-first ledger (UX audit phase 3): the cap never hides the
+    // true total. SQA DATA-3: it did. The comment sat directly above a
+    // re-query with a literal 200, so this rendered "5 of 200" for
+    // chos — which has 55,720 TM segments (278x), byang chub 53,111.
+    // A reference layer that big presenting as 200 reads as false
+    // scarcity in the published canon. matchCount is uncapped, and
+    // answers -1 rather than guess a number it did not measure.
+    const long long tmTotal = tm->matchCount(q);
+    const QString tmTotalTxt = tmTotal < 0
+                                   ? QString("an unmeasured number")
+                                   : QString::number(tmTotal);
     QString h =
         "<hr><div style='color:#1F5B4B'><b>84000 Translation "
         "Memory</b> <small>(CC BY 4.0, 84000: Translating the Words "
         "of the Buddha - published-translation comparanda, reference "
-        "only, never HGM)</small> <small style='color:#78706A'>" +
-        QString::number(hits.size()) + " of " +
-        QString::number(tmTotal) + "</small></div>";
+        "only, never HGM)</small> <small style='color:#78706A'>showing " +
+        QString::number(hits.size()) + " of " + tmTotalTxt +
+        ((long long)hits.size() < tmTotal
+             ? QString(" — display cap; refine the term to see more")
+             : QString()) +
+        "</small></div>";
     for (const auto& t : hits) {
         QString ref = QString::fromStdString(t.toh);
         if (!t.folio.empty())
@@ -2625,6 +2656,58 @@ static bool saveOrWarn(QWidget* parent, const QString& path,
     return true;
 }
 
+// SQA DATA-4. saveOrWarn covers a save that can be composed into a
+// QByteArray first; the four EXPORT paths stream instead, and every
+// one of them composed its green success line while the QTextStream
+// was still buffered. Two separate lies in one idiom:
+//
+//  · the success string was built before any byte had left the
+//    buffer, so it described a write that had not happened; and
+//  · a post-hoc QFile::error() check would not have caught it either.
+//    Measured on a genuinely full 2 MB volume: at the moment the
+//    success string was composed, ts.status() = 3 (WriteFailed) and
+//    f.error() = 0 (NoError), with 1,912,832 of ~7,000,000 bytes on
+//    disk, cut MID-RECORD. QTextStream::status() is the only signal,
+//    and the app checked it nowhere.
+//
+// So the verdict lives in one named predicate, flushed before it is
+// asked, and a test can drive it without a full disk.
+static bool streamWriteOk(QTextStream& ts, QFile& f) {
+    ts.flush();
+    if (ts.status() != QTextStream::Ok) return false;
+    if (!f.flush()) return false;
+    return f.error() == QFileDevice::NoError;
+}
+
+// One honest streamed save — the streaming twin of saveOrWarn. Opens,
+// runs the writer, takes the verdict while the stream is still alive,
+// and on failure warns AND removes the partial file: a TSV cut
+// mid-record re-imports as valid data with one corrupt row, which is
+// worse than no file at all. Callers gate their success string on the
+// return value, so nothing prints success that this did not verify
+// (house rule 4).
+static bool writeAllOrWarn(QWidget* parent, const QString& path,
+                           const std::function<void(QTextStream&)>& body,
+                           const QString& what) {
+    QFile f(path);
+    if (!f.open(QIODevice::WriteOnly | QIODevice::Text))
+        return warnWriteFail(parent, f, what);
+    bool ok = false;
+    {
+        QTextStream ts(&f);
+        body(ts);
+        ok = streamWriteOk(ts, f);
+    }
+    if (!ok) {
+        warnWriteFail(parent, f, what);
+        f.close();
+        QFile::remove(path);   // leave no truncated stub behind
+        return false;
+    }
+    f.close();
+    return true;
+}
+
 // ...and a click that opens a file must never die silently either
 static void warnOpenFail(QWidget* parent, const QFile& f,
                          const QString& what) {
@@ -2998,6 +3081,10 @@ static std::function<void(const QString&)> g_surveyFile;
 // the Translate ladder (UX P3): Workbench → Manuscript hand-off +
 // the apparatus reachable at composition time
 static std::function<void(const QString&)> g_sendToManuscript;
+// MEM-1: the ladder's regression pin used to assert a literal true
+// after invoking the hand-off. Receipt is only checkable if the
+// Manuscript can be read back, so it can be.
+static std::function<QString()> g_manuscriptText;
 static std::function<void()> g_mssComposeBib;
 static std::function<void(const QString&)> g_mssProposeNote;
 
@@ -4247,11 +4334,41 @@ public:
             const QString keep = input_->toPlainText();
             input_->setPlainText(deep);
             loadDoc();
-            bool survived = true;
+            // MEM-1 (SQA 2026-08-22): this pin read
+            //   bool survived = true; showSaBcad(); check(survived, …)
+            // — nothing ever reassigned `survived`, so it printed a
+            // memory-safety PASS over the very defect it was written
+            // for. It now asserts the three things the defect changes:
+            // that the fixture really is deeper than the old bound,
+            // that the depth table grew to the outline's real depth
+            // (rather than being indexed past its end), and that every
+            // heading landed under the right parent.
+            const auto nodes = extractSaBcad();
+            int fixtureDepth = 0;
+            for (const auto& n : nodes)
+                if (n.depth > fixtureDepth) fixtureDepth = n.depth;
+            check(!nodes.empty() && fixtureDepth > 64,
+                  "the deep-outline fixture really does nest past the "
+                  "old 64-slot bound, and still yields an outline");
+            const SaBcadShape shape = saBcadShapeOf(nodes);
+            check(!shape.overflowed &&
+                      shape.tableSize == shape.deepest + 1 &&
+                      shape.placed == (int)nodes.size(),
+                  "the outline's depth table grows to the outline's "
+                  "real depth — nothing is indexed past the end of "
+                  "it, and no heading is dropped");
+            int dangling = 0;
+            for (size_t i = 0; i < shape.parent.size(); ++i) {
+                const int p = shape.parent[i];
+                if (p == SaBcadShape::kRoot) continue;
+                if (p < 0 || p >= (int)i ||
+                    nodes[(size_t)p].depth != nodes[i].depth - 1)
+                    ++dangling;
+            }
+            check(dangling == 0,
+                  "every heading in a 90-deep outline hangs under a "
+                  "parent exactly one level above it");
             showSaBcad();          // reaped by the harness dialog reaper
-            check(survived,
-                  "an outline nested far past the old 64-slot bound "
-                  "does not write past the end of its vector");
             input_->setPlainText(keep);
             loadDoc();
         }
@@ -4309,6 +4426,107 @@ public:
             check(attestedEnglish("").isEmpty() &&
                       attestedEnglish("zzzz nothing here zzzz").isEmpty(),
                   "empty and unattested input yield no English");
+        }
+        // SQA TEST-2: the same rule pinned AT THE DEFECT SITE. The
+        // three checks above call the helper; the bug lived at the
+        // CALL SITE inside fourLayerView, and the 2026-08-22
+        // assessment reverted exactly that line and still got 72/72
+        // (MUT12_fourlayer_english). So build the real dialog and
+        // read the real table: row 0 is a line a corpus segment
+        // merely CONTAINS, row 1 is a line the corpus IS.
+        {
+            const QString keepFolio = curFolio_;
+            const QPixmap keepPx = basePx_;
+#ifdef ALL_HAVE_OCR
+            const bool keepBusy = folioOcrBusy_;
+            folioOcrBusy_ = true;   // no OCR models in a harness run
+#endif
+            QPixmap px(40, 60);
+            px.fill(Qt::white);
+            basePx_ = px;
+            curFolio_ = "1a";
+            input_->setPlainText(
+                "@001A\n"
+                "MA RIG MUN PA'I SMAG CHEN KUN NAS 'THIBS\n"
+                "SA GZHI SPOS KYIS BYUGS SHING ME TOG BKRAM\n"
+                "@001B\n");
+            fourLayerView();
+            QDialog* built = nullptr;
+            QTableWidget* tbl = nullptr;
+            for (QDialog* d : findChildren<QDialog*>())
+                if (d->windowTitle().startsWith("Four layers")) {
+                    built = d;
+                    tbl = d->findChild<QTableWidget*>();
+                }
+            const bool shaped = tbl && tbl->rowCount() == 2 &&
+                                tbl->columnCount() == 4 &&
+                                tbl->item(0, 3) && tbl->item(1, 3);
+            check(shaped,
+                  "four-layer view builds its table from the folio on "
+                  "screen");
+            check(shaped && tbl->item(0, 3)->text().isEmpty(),
+                  "four-layer English cell is EMPTY for a line a "
+                  "corpus segment only CONTAINS");
+            check(shaped && tbl->item(1, 3)->text().contains(
+                                "sashi pukyi jukshing"),
+                  "four-layer English cell still carries the master's "
+                  "English for an exactly attested line");
+            if (built) built->close();
+#ifdef ALL_HAVE_OCR
+            folioOcrBusy_ = keepBusy;
+#endif
+            basePx_ = keepPx;
+            curFolio_ = keepFolio;
+        }
+        // SQA TEST-2: bounty #2's THIRD surface, pinned at its own
+        // site. The only ctest-reachable pin on teachingsReportHtml
+        // asserted that the HTML contains "youtube.com"; deleting the
+        // provisional tag here left all 72 suites green
+        // (MUT3_prov_label). Tiers come from the real spine — only
+        // the teaching moment is a fixture, because a moment is what
+        // makes the gloss render at all.
+        {
+            static TeachingMap tibFixture;
+            tibFixture.clear();
+            TeachingMoment tm;
+            tm.title = "selftest moment";
+            tm.url = "https://www.youtube.com/watch?v=selftest";
+            tm.lang = "ENG";
+            tm.src = "ACI";
+            tm.snippet = "he says the word";
+            tibFixture["ka ba"] = {tm};
+            tibFixture["bsod nams"] = {tm};
+            const TeachingMap* keepTib = g_teachingTib;
+            const auto keepEntries = doc_.entries;
+            g_teachingTib = &tibFixture;
+            doc_.entries.clear();
+            for (const char* w : {"ka ba", "bsod nams"})
+                for (const auto& e : spine_.lookup(w)) {
+                    doc_.entries.push_back(e);
+                    break;
+                }
+            const QString th = teachingsReportHtml();
+            g_teachingTib = keepTib;
+            doc_.entries = keepEntries;
+            auto rowOf = [&th](const QString& w) {
+                const int a = th.indexOf("<b>" + w + "</b>");
+                if (a < 0) return QString();
+                const int b = th.indexOf("<br>", a);
+                return b < 0 ? th.mid(a) : th.mid(a, b - a);
+            };
+            const QString provRow = rowOf("ka ba");
+            const QString bindRow = rowOf("bsod nams");
+            check(!provRow.isEmpty() && !bindRow.isEmpty(),
+                  "teachings report reaches both an auto-aligned and "
+                  "a curated term of the loaded text");
+            check(provRow.contains("pillar") &&
+                      provRow.contains("PROVISIONAL"),
+                  "teachings report tags an auto-aligned gloss "
+                  "PROVISIONAL beside the recording of him saying it");
+            check(bindRow.contains("merit") &&
+                      !bindRow.contains("PROVISIONAL"),
+                  "teachings report leaves a curated gloss untagged "
+                  "— the tier is read, not stamped on every row");
         }
         const QString acip =
             "SEMS CAN THAMS CAD BDE BA DANG LDAN PAR GYUR CIG,";
@@ -4505,13 +4723,29 @@ public:
         {
             auto* tm = tm84000();   // first call builds the FTS5 db
             bool ok = tm != nullptr && tm->rowCount() >= 390000;
+            QString tmCard;
+            long long tmTrue = -1;
             if (ok) {
-                const auto segs = tm84000Html("sems can");
-                ok = segs.contains("84000 Translation Memory") &&
-                     segs.contains("CC BY 4.0");
+                tmCard = tm84000Html("sems can");
+                ok = tmCard.contains("84000 Translation Memory") &&
+                     tmCard.contains("CC BY 4.0");
+                tmTrue = tm->matchCount(tm84000Phrase("sems can"));
             }
             check(ok, "84000 TM comparanda (400k segments, CC BY) "
                       "answers sems can");
+            // DATA-3: this ledger re-queried with a literal 200 and
+            // rendered "5 of 200" as if 200 were the total. sems can
+            // has 24,859 TM segments; chos has 55,720. The number on
+            // the card must be the measured total, never the cap.
+            check(tmTrue > 200,
+                  "fixture holds: sems can exceeds the 84000 display "
+                  "cap");
+            check(tmTrue > 200 &&
+                      tmCard.contains(" of " + QString::number(tmTrue)),
+                  "84000 ledger prints the UNCAPPED segment total");
+            check(!tmCard.contains(" of 200 "),
+                  "84000 ledger never prints its display cap as the "
+                  "total");
         }
         // the Pecha Maker writes real folio sides
         {
@@ -6531,7 +6765,19 @@ public:
         showAttest_->setToolTip(
             "Shades words the segmenter and the Monlam word lists "
             "do not recognize — typo candidates and rare forms "
-            "worth a second look (hints, never verdicts).");
+            "worth a second look (hints, never verdicts). First use "
+            "builds a 548k-form word list, which takes a few seconds "
+            "and can be stopped.");
+        // SQA PERF-5: if the word-list build was stopped, the hints
+        // stay off and say so. UNTICKING arms the retry, so switching
+        // the box off and on again rebuilds — and no document load in
+        // between re-opens a dialog the reader already dismissed.
+        connect(showAttest_, &QCheckBox::toggled, [this](bool on) {
+            if (!on && segCanceled_) {
+                segCanceled_ = false;
+                segTried_ = false;
+            }
+        });
         hint_ = new QLabel("Click a shaded word to see its context; click again "
                            "to cycle outward through the containing phrases.");
         hint_->setWordWrap(true);
@@ -7296,10 +7542,20 @@ private:
         view_->setUpdatesEnabled(true);
         loading_ = false;
         lastTok_ = -1;
+        // SQA PERF-5: when the lexicon is not built (never asked for,
+        // or the build was stopped) this line used to say
+        // "0 unattested-word hint(s)" — a clean bill of health for a
+        // check that never ran. It now says which.
         QString attestNote =
-            showAttest_->isChecked()
-                ? QString(" · %1 unattested-word hint(s)").arg(attestFlags)
-                : QString();
+            !showAttest_->isChecked()
+                ? QString()
+                : segmenter_
+                      ? QString(" · %1 unattested-word hint(s)")
+                            .arg(attestFlags)
+                      : QString(" · unattested-word hints NOT RUN (%1)")
+                            .arg(segInfo_.isEmpty()
+                                     ? QString("word list not built")
+                                     : segInfo_);
         if (!doc_.tokens.empty() && doc_.spans.empty())
             hint_->setText(QString("%1 tokens, but NO dictionary "
                                    "matches — is this Tibetan "
@@ -10119,6 +10375,52 @@ private:
         int pos;        // character position in the document
     };
 
+    // BOUNTY #10 / MEM-1. The outline tree indexed a FIXED 64-slot
+    // vector by node depth, so a document nested deeper than 64 wrote
+    // pointers past the end of a heap block. The shape of the tree is
+    // computed HERE, without widgets, for two reasons: the depth table
+    // grows to the outline's real depth, and every index into it goes
+    // through std::vector::at — so a table that fails to grow
+    // THROWS and is flagged (house rule 2) instead of corrupting the
+    // heap. And because it is pure, the regression pin can assert the
+    // result instead of asserting a literal true.
+    struct SaBcadShape {
+        static constexpr int kRoot = -1;   // heading sits at top level
+        static constexpr int kSkip = -2;   // heading was not placed
+        std::vector<int> parent;   // per node: parent index/kRoot/kSkip
+        int placed = 0;            // headings that got a place
+        int deepest = -1;          // greatest depth actually seen
+        int tableSize = 0;         // size the depth table grew to  (Qt reserves `slots`)
+        bool overflowed = false;   // a depth outran the table: DEFECT
+    };
+
+    static SaBcadShape saBcadShapeOf(
+        const std::vector<SaBcadNode>& nodes) {
+        SaBcadShape s;
+        s.parent.assign(nodes.size(), SaBcadShape::kSkip);
+        std::vector<int> lastAt;   // depth -> last node seen there
+        try {
+            for (size_t i = 0; i < nodes.size(); ++i) {
+                const int d = nodes[i].depth;
+                if (d < 0) continue;              // never placed
+                if ((size_t)d + 1 > lastAt.size())
+                    lastAt.resize((size_t)d + 1, SaBcadShape::kRoot);
+                int up = SaBcadShape::kRoot;
+                if (d >= 2) up = lastAt.at((size_t)d - 1);
+                s.parent[i] = up;
+                lastAt.at((size_t)d) = (int)i;
+                for (size_t k = (size_t)d + 1; k < lastAt.size(); ++k)
+                    lastAt[k] = SaBcadShape::kRoot;
+                ++s.placed;
+                if (d > s.deepest) s.deepest = d;
+            }
+        } catch (const std::out_of_range&) {
+            s.overflowed = true;   // flagged and surfaced, never written
+        }
+        s.tableSize = (int)lastAt.size();
+        return s;
+    }
+
     static int saBcadCardinal(const QString& w) {
         static const QMap<QString, int> C = {
             {"GNYIS", 2}, {"GSUM", 3}, {"BZHI", 4}, {"LNGA", 5},
@@ -10246,20 +10548,32 @@ private:
         // "Outline (sa bcad)…" wrote pointers past the end of a
         // 512-byte heap block. Silent corruption, which surfaces
         // later and somewhere else.
-        std::vector<QTreeWidgetItem*> lastAt(64, nullptr);
-        for (const auto& n : nodes) {
-            if (n.depth < 0) continue;
-            if ((size_t)n.depth + 1 > lastAt.size())
-                lastAt.resize((size_t)n.depth + 1, nullptr);
-            auto* item =
-                (n.depth <= 1 || !lastAt[n.depth - 1])
-                    ? new QTreeWidgetItem(tree)
-                    : new QTreeWidgetItem(lastAt[n.depth - 1]);
-            item->setText(0, n.label);
-            item->setData(0, Qt::UserRole, n.pos);
-            lastAt[n.depth] = item;
-            for (size_t d = n.depth + 1; d < lastAt.size(); ++d)
-                lastAt[d] = nullptr;
+        const SaBcadShape shape = saBcadShapeOf(nodes);
+        std::vector<QTreeWidgetItem*> made(nodes.size(), nullptr);
+        for (size_t i = 0; i < nodes.size(); ++i) {
+            const int p = shape.parent[i];
+            if (p == SaBcadShape::kSkip) continue;
+            auto* item = (p < 0 || !made[(size_t)p])
+                             ? new QTreeWidgetItem(tree)
+                             : new QTreeWidgetItem(made[(size_t)p]);
+            item->setText(0, nodes[i].label);
+            item->setData(0, Qt::UserRole, nodes[i].pos);
+            made[i] = item;
+        }
+        if (shape.placed < (int)nodes.size()) {
+            // House rules 2 and 3: a heading the builder could not
+            // place is FLAGGED with its remainder, never dropped into
+            // silence and never left to look like the whole outline.
+            auto* flag = new QLabel(
+                QString("%1 of %2 heading(s) could not be placed "
+                        "(the depth table stopped at %3 level(s)) "
+                        "— this outline is INCOMPLETE.")
+                    .arg(nodes.size() - (size_t)shape.placed)
+                    .arg(nodes.size())
+                    .arg(shape.tableSize));
+            flag->setWordWrap(true);
+            flag->setStyleSheet("color:#935800");
+            v->addWidget(flag);
         }
         tree->expandAll();
         connect(tree, &QTreeWidget::itemClicked,
@@ -13967,6 +14281,17 @@ public:
         d.exec();
     }
 
+    // SQA PERF-3: the selftest's T4 floor pins the operations a user
+    // actually waits on, and this is the worst of them — the 548k-form
+    // lexicon build (PERF-5, measured 5,053 ms). Returns the
+    // milliseconds the build really took (-1 if it could not be
+    // built), and the same one-line census the pane shows.
+    qint64 segmenterBuildMs() {
+        ensureSegmenter();
+        return segBuildMs_;
+    }
+    QString segmenterInfo() const { return segInfo_; }
+
 private:
     bool docIsWylie_ = false;
     QString selfTestRoot_;
@@ -13974,6 +14299,14 @@ private:
     std::map<std::string, std::string> glossary_;
     std::unique_ptr<allcore::botok::SegTrie> segmenter_;
     bool segTried_ = false;
+    // SQA PERF-5: the 5-second lexicon build now paints and can be
+    // stopped, so it needs a re-entrancy guard (processEvents), a
+    // memory of having been stopped (so it does not re-prompt on
+    // every document load), and its own measured cost (the selftest's
+    // T4 floor pins it).
+    bool segBuilding_ = false;
+    bool segCanceled_ = false;
+    qint64 segBuildMs_ = -1;
     QString segInfo_;
     bool loading_ = false;
     int lastTok_ = -1;
@@ -14122,23 +14455,101 @@ private:
     // compact SegTrie (proven segmentation-identical to the ported path at
     // corpus scale). Reference display only — the Overlay's spans stay
     // dictionary-lattice-bound.
+    // SQA PERF-5: this build was measured at 5,053 ms on the GUI
+    // thread — SegTrie ctor 1 ms · 105,634 dictionary headwords
+    // 1,166 ms · Monlam lists load 313 ms · 449,445 Monlam forms
+    // 3,558 ms — and it is reached by ONE CLICK on the
+    // "unattested-word hints" checkbox, which calls loadDoc(), which
+    // calls this. The app froze for nearly six seconds with an
+    // unchanged pointer and no sign it was doing anything.
+    //
+    // It still runs on the GUI thread (this file has no worker
+    // threads, and a background thread touching these widgets would
+    // be a worse bug than the freeze). What it has now: a wait
+    // cursor, a modal progress dialog that names the phase, and a
+    // Stop. A stopped build keeps NOTHING — a half-filled lexicon
+    // would silently mark real words unattested, and an unattested
+    // hint is a claim about the language.
     void ensureSegmenter() {
         if (segTried_) return;
+        if (segBuilding_) return;   // processEvents re-entrancy
+        segBuilding_ = true;
+        struct Reset { bool& f; ~Reset() { f = false; } } reset{segBuilding_};
         segTried_ = true;
         QElapsedTimer timer;
         timer.start();
+        // A harness run builds it silently: the global dialog reaper
+        // rejects every visible QDialog every 250 ms, so a progress
+        // dialog here would cancel itself and no pin could ever see a
+        // built segmenter.
+        std::unique_ptr<QProgressDialog> prog;
+        if (!g_harnessRun) {
+            prog = std::make_unique<QProgressDialog>(
+                "Building the word list the unattested-word hints "
+                "need…", "Stop", 0, 0, this);
+            prog->setWindowTitle("unattested-word hints");
+            prog->setWindowModality(Qt::WindowModal);
+            prog->setMinimumDuration(0);
+            prog->setAutoClose(false);
+            prog->setAutoReset(false);
+            prog->show();
+        }
+        struct Busy {
+            Busy() { QApplication::setOverrideCursor(Qt::WaitCursor); }
+            ~Busy() { QApplication::restoreOverrideCursor(); }
+        } busy;
         try {
             auto seg = std::make_unique<allcore::botok::SegTrie>(
                 (dataRoot_ + "/data/botok").toStdString());
-            for (const auto& [id, acip] : spine_.allAcipHeadwords()) {
+            const auto heads = spine_.allAcipHeadwords();
+            // loaded BEFORE the first loop so the progress total is
+            // the real number of forms, not a guess
+            loadLexicon();
+            const int total = (int)heads.size() + (int)lexicon_.size();
+            int n = 0;
+            bool stopped = false;
+            const char* phase = "";
+            auto tick = [&] {
+                if (!prog) return true;
+                if ((n & 0xFFF) != 0) return true;   // every 4,096 forms
+                prog->setMaximum(total);
+                prog->setValue(n);
+                prog->setLabelText(
+                    QString("Building the unattested-word hint lexicon: "
+                            "%1 of %2 forms\n(%3)")
+                        .arg(n).arg(total).arg(QString(phase)));
+                QCoreApplication::processEvents();
+                return !prog->wasCanceled();
+            };
+            phase = "dictionary headwords";
+            for (const auto& [id, acip] : heads) {
                 auto [uni, ok] =
                     allcore::wylieToUnicode(allcore::acipToEwts(acip));
                 if (ok) seg->addWord(uni);
+                ++n;
+                if (!tick()) { stopped = true; break; }
             }
             size_t hgmWords = seg->wordCount();
-            loadLexicon();
-            lexicon_.eachWord(
-                [&seg](const std::string& w) { seg->addWord(w); });
+            phase = "Monlam word lists";
+            if (!stopped)
+                lexicon_.eachWord([&](const std::string& w) {
+                    if (stopped) return;   // eachWord has no early exit
+                    seg->addWord(w);
+                    ++n;
+                    if (!tick()) stopped = true;
+                });
+            if (stopped) {
+                // Rule 2/3: nothing half-built is kept or shown, and
+                // the reason is stated with its number.
+                segCanceled_ = true;
+                segInfo_ =
+                    QString("build STOPPED at %1 of %2 forms — the hints "
+                            "are OFF until it is built (switch the "
+                            "checkbox off and on again to retry)")
+                        .arg(n).arg(total);
+                return;
+            }
+            segBuildMs_ = timer.elapsed();
             segmenter_ = std::move(seg);
             g_segSylCounts = [this](const std::string& uni) {
                 std::vector<int> counts;
@@ -14158,7 +14569,7 @@ private:
             segInfo_ = QString("%1 HGM + %2 Monlam forms, built in %3s")
                            .arg(hgmWords)
                            .arg(segmenter_->wordCount() - hgmWords)
-                           .arg(timer.elapsed() / 1000.0, 0, 'f', 1);
+                           .arg(segBuildMs_ / 1000.0, 0, 'f', 1);
         } catch (const std::exception& e) {
             segInfo_ = QString("unavailable: %1").arg(e.what());
         }
@@ -15003,10 +15414,102 @@ public:
         for (auto* f : fields_) f->clear();
         fields_[0]->setText("sems can");
         combiner_->setCurrentIndex(0);
-        find();
+        // SQA TEST-5: the button's own clicked signal, not find().
+        // A dropped connect here is invisible to a suite that calls
+        // the slot by hand.
+        findB_->click();
         check(results_->toPlainText().contains("hit"),
               "Find reaches the corpus through the Gofer engine");
         fields_[0]->clear();
+        // SQA TEST-5 / MUT9: the fold combo's CALL SITE, over real
+        // files, driven by real events. The assessment disabled the
+        // call site (`if (false && foldMode > 0)`) and all 72 suites
+        // stayed green, because every pin on this feature called the
+        // static predicate directly. Two files differing only in case
+        // make the strict mode's behaviour observable.
+        {
+            QSettings gs("ALL", "TranslationTool");
+            auto keep = [&gs](const char* k) { return gs.value(k); };
+            const QVariant kDirs = keep("gofer/dirs");
+            const QVariant kChecked = keep("gofer/dirsChecked");
+            const QVariant kCorpus = keep("gofer/corpusChecked");
+            const QVariant kAppar = keep("gofer/apparatusChecked");
+            const QVariant kSpot = keep("gofer/spotlightChecked");
+            std::vector<Qt::CheckState> keepRows;
+            for (int i = 0; i < dirs_->count(); ++i)
+                keepRows.push_back(dirs_->item(i)->checkState());
+            QTemporaryDir td;
+            bool wrote = td.isValid();
+            const char* names[2] = {"upper.txt", "lower.txt"};
+            const QByteArray bodies[2] = {
+                QByteArray("BYANG CHUB SEM DPA' CHEN PO,\n"),
+                QByteArray("byang chub sem dpa' chen po,\n")};
+            for (int i = 0; i < 2; ++i) {
+                QFile ff(td.filePath(names[i]));
+                // house rule 4: the fixture counts as written only
+                // when the bytes landed
+                if (!ff.open(QIODevice::WriteOnly |
+                             QIODevice::Truncate) ||
+                    ff.write(bodies[i]) != bodies[i].size())
+                    wrote = false;
+                ff.close();
+            }
+            for (int i = 0; i < dirs_->count(); ++i)
+                dirs_->item(i)->setCheckState(Qt::Unchecked);
+            addDirRow(td.path(), true);
+            const int myRow = dirs_->count() - 1;
+            for (auto* f : fields_) f->clear();
+            fields_[0]->setText("SEM DPA");
+            combiner_->setCurrentIndex(0);
+            fold_->setCurrentIndex(0);      // ignore space + caps
+            findB_->click();
+            const QString loose = results_->toPlainText();
+            fold_->setCurrentIndex(2);      // ignore nothing
+            findB_->click();
+            const QString strict = results_->toPlainText();
+            check(wrote,
+                  "fold fixture written (both cases, bytes verified)");
+            check(wrote && loose.contains("upper.txt") &&
+                      loose.contains("lower.txt"),
+                  "the default fold keeps both cases");
+            check(wrote && strict.contains("upper.txt") &&
+                      !strict.contains("lower.txt"),
+                  "\"ignore nothing\" DROPS the case-mismatched file "
+                  "— the fold combo reaches the search itself, "
+                  "not only its predicate");
+            check(wrote && strict.contains("hidden by the fold "
+                                           "setting"),
+                  "the fold discloses how many windows it hid");
+            // SQA TEST-5: Enter in a term box. It was inert for the
+            // whole life of this pane (autoDefault only fires inside
+            // a QDialog) and no assertion could see it.
+            results_->setHtml("<i>cleared</i>");
+            fold_->setCurrentIndex(0);
+            emit fields_[0]->returnPressed();
+            check(wrote &&
+                      results_->toPlainText().contains("upper.txt"),
+                  "Enter in a term box runs the search (the "
+                  "returnPressed connect itself)");
+            check(wrote && results_->toHtml().contains(
+                               "goferopen:" +
+                               anchorEnc(td.filePath("upper.txt"))),
+                  "a result link carries the file's real path — "
+                  "the anchor payload survives rendering");
+            for (auto* f : fields_) f->clear();
+            delete dirs_->takeItem(myRow);
+            for (int i = 0;
+                 i < (int)keepRows.size() && i < dirs_->count(); ++i)
+                dirs_->item(i)->setCheckState(keepRows[i]);
+            auto restore = [&gs](const char* k, const QVariant& v) {
+                if (v.isValid()) gs.setValue(k, v);
+                else gs.remove(k);
+            };
+            restore("gofer/dirs", kDirs);
+            restore("gofer/dirsChecked", kChecked);
+            restore("gofer/corpusChecked", kCorpus);
+            restore("gofer/apparatusChecked", kAppar);
+            restore("gofer/spotlightChecked", kSpot);
+        }
         return fails;
     }
 
@@ -15411,18 +15914,30 @@ private:
                     if (++shownF > 30) break;
                     const QString full =
                         dir + "/" + QString::fromStdString(file);
+                    // SQA TEST-5, found by the pin in selfTest():
+                    // chained .arg() re-scans the string it has just
+                    // built, and anchorEnc() writes "%2F" for every
+                    // "/". So .arg(r.firstLine) was consumed by the
+                    // "%2" inside the encoded path: the link's visible
+                    // text became the line number, the file name went
+                    // into the href, the snippet landed in the "line"
+                    // slot and %6 rendered literally. Every file row
+                    // this pane has ever drawn was mangled, and no
+                    // assertion could see it. The one-pass multi-arg
+                    // overload substitutes against the ORIGINAL
+                    // markers only.
                     h += QString("<div style='margin:4px 0'>"
                                  "<b>%1</b> \u00b7 <a href='goferopen:"
                                  "%2|%3'>%4</a><br><small "
                                  "style='color:#666'>line %5 \u00b7 "
                                  "%6</small></div>")
-                             .arg(r.count)
-                             .arg(anchorEnc(full))
-                             .arg(r.firstLine)
-                             .arg(QString::fromStdString(file)
-                                      .toHtmlEscaped())
-                             .arg(r.firstLine)
-                             .arg(r.snippet.toHtmlEscaped());
+                             .arg(QString::number(r.count),
+                                  anchorEnc(full),
+                                  QString::number(r.firstLine),
+                                  QString::fromStdString(file)
+                                      .toHtmlEscaped(),
+                                  QString::number(r.firstLine),
+                                  r.snippet.toHtmlEscaped());
                 }
                 if ((int)rows.size() > 30)
                     h += QString("<div style='color:#6F6F6F'>"
@@ -16456,6 +16971,36 @@ static QWidget* makeConvertPane(allcore::Mvp* mvp,
     return pane;
 }
 
+// SQA DATA-2 (house rule 1). "HGM has:" is the strongest authority
+// claim this app makes, and 3,910 of the 12,004 glossed entries
+// (32.6%) are auto-aligned MACHINE output. allcore::TermUse carries
+// the tier — core/src/terminology.cpp sets both `tier` and
+// `provisional`, and checkTerminology applies no tier filter — but
+// two surfaces threw it away: the Drills "Translate & compare" answer
+// key printed an auto-aligned gloss under the literal words "HGM
+// has:", and the Reviewer's report called it "HGM's equivalents".
+// DraftPane, on the identical report, appended [PROVISIONAL].
+//
+// The label and the glosses therefore travel together in one helper,
+// so the label can never outrun the tier again.
+static QString hgmGlossPhrase(const allcore::TermUse& t,
+                              const QString& glosses) {
+    if (glosses.isEmpty()) return QString("no HGM equivalent recorded");
+    if (!t.provisional) return "HGM has: " + glosses;
+    return "auto-aligned <span style='color:#b00;font-size:11px'>"
+           "[PROVISIONAL]</span>, not HGM's own English: " + glosses;
+}
+
+// The possessive form of the same discipline: "HGM's equivalents" is
+// a claim about authorship, and it is false for the auto-aligned tier.
+static QString equivalentsOwner(const allcore::TermUse& t) {
+    return t.provisional
+               ? QString("the auto-aligned <span style='color:#b00;"
+                         "font-size:11px'>[PROVISIONAL]</span> "
+                         "equivalents (not HGM's own English)")
+               : QString("HGM's equivalents");
+}
+
 // ---- Trainer pane: progressive-reveal reading tutor (docs/TRAINER_DESIGN.md)
 class TrainerPane : public QWidget {
 public:
@@ -16529,6 +17074,27 @@ public:
         check(view_->toPlainText().contains("verb") ||
                   view_->toHtml().contains("verb"),
               "verb-first guidance present");
+        // SQA TEST-5: a checkbox TOGGLE with a contract behind it.
+        // script_'s connect and the branch it selects are the whole
+        // feature; a dropped connect leaves every other assertion in
+        // this suite green.
+        {
+            script_->setChecked(false);
+            render();
+            const QString roman = view_->toPlainText();
+            script_->setChecked(true);   // fires toggled -> render()
+            const QString tibetan = view_->toPlainText();
+            auto anyTibetan = [](const QString& s) {
+                for (QChar c : s)
+                    if (c.unicode() >= 0x0F00 && c.unicode() <= 0x0FFF)
+                        return true;
+                return false;
+            };
+            check(!anyTibetan(roman) && anyTibetan(tibetan),
+                  "ticking \"Tibetan script\" re-renders the passage "
+                  "in Tibetan (the checkbox's own toggled signal)");
+            script_->setChecked(false);
+        }
         for (int k = 0; k < 6; ++k) reveal_[k]->setChecked(false);
         input_->clear();
         loadDoc();
@@ -16950,6 +17516,51 @@ public:
         mode_->setCurrentIndex(2);
         newDrill();
         check(part_.has_value(), "particle drill generated");
+        // DATA-2 / house rule 1. Mode 5 ("Translate & compare") built
+        // its report from allcore::checkTerminology and printed every
+        // unrendered term under the literal label "HGM has:" with the
+        // tier discarded — a machine guess presented as the master's
+        // own English, in the drill, to the user least able to tell.
+        // ka ba is auto-aligned in the shipped spine (tier=
+        // auto-aligned, provisional=1); bum pa is glossary, so the
+        // same report carries one of each and the label must differ.
+        {
+            auto* savedProgress = progress_;
+            progress_ = nullptr;   // a battery never writes into the
+                                   // learner's real progress log
+            mode_->setCurrentIndex(5);
+            newDrill();
+            trans_ = allcore::CorpusSegment{};
+            trans_.id = 1;
+            trans_.course = "selftest";
+            trans_.seq = 1;
+            trans_.acip = "KA BA DANG BUM PA";
+            trans_.english = "a pillar and a vase";
+            transDraft_->setPlainText(
+                "my translation mentions nothing relevant");
+            checkDrill();
+            QString flat = result_->toPlainText();
+            flat.replace(QChar(0x2028), QChar('\n'));
+            flat.replace(QChar(0x2029), QChar('\n'));
+            QString kaLine, bumLine;
+            for (const QString& ln : flat.split(QChar('\n'))) {
+                if (ln.contains("ka ba")) kaLine = ln;
+                if (ln.contains("bum pa")) bumLine = ln;
+            }
+            progress_ = savedProgress;
+            transDraft_->clear();
+            check(!kaLine.isEmpty() && !bumLine.isEmpty(),
+                  "answer key reports both unrendered terms");
+            check(kaLine.contains("PROVISIONAL"),
+                  "the auto-aligned gloss (ka ba) is tier-labeled "
+                  "PROVISIONAL in the answer key");
+            check(!kaLine.contains("HGM has"),
+                  "an auto-aligned gloss is NEVER printed under the "
+                  "label \"HGM has:\" (house rule 1)");
+            check(bumLine.contains("HGM has") &&
+                      !bumLine.contains("PROVISIONAL"),
+                  "a binding gloss (bum pa) still reads as HGM's own");
+        }
         return fails;
     }
 
@@ -17345,7 +17956,8 @@ private:
                         }
                         un += "<br><small>○ <b>" +
                               QString::fromStdString(t.wylie).toHtmlEscaped() +
-                              "</b> — HGM has: " + gl + "</small>";
+                              "</b> — " + hgmGlossPhrase(t, gl) +
+                              "</small>";
                     }
                 }
                 h += QString("<div style='margin-top:4px'><small>terminology: "
@@ -18011,8 +18623,26 @@ auto* secPub = new QLabel("<span style='color:#9A7A33;font-size:10px;letter-spac
         check(anchors_->toPlainText().contains(QString::fromUtf8("≡")),
               "HGM glosses listed");
         showConcordance("sems can");
-        check(anchors_->toPlainText().contains("corpus hit"),
-              "term concordance reaches the corpus");
+        {
+            const QString conc = anchors_->toPlainText();
+            const long semsTotal = spine_.corpusCount("\"sems can\"");
+            check(conc.contains("corpus hit"),
+                  "term concordance reaches the corpus");
+            // DATA-3: this printed the 200-row FETCH cap as the corpus
+            // total — 200 where sems can has 1,566 and chos 6,273
+            // (1,532 headwords are affected). A display cap is never
+            // a total, and its remainder must be disclosed (rule 3).
+            check(semsTotal > 200,
+                  "fixture holds: sems can exceeds the 200-row fetch");
+            check(conc.contains(QString::number(semsTotal)),
+                  "concordance prints the UNCAPPED corpus total");
+            check(!conc.contains("200 corpus hit"),
+                  "concordance never prints the fetch cap as the total");
+            check(conc.contains("fetched 200 (display cap)"),
+                  "concordance discloses the cap and its remainder");
+            check(conc.contains("by course, over the"),
+                  "the per-course breakdown says which rows it covers");
+        }
         // Evidence Ribbon: the reading-order scaffold rides along
         demo("/ /blo sbyong snyan brgyud chen mo'i 'khrid yig "
              "/sems can thams cad bde ba dang ldan par gyur cig /");
@@ -18024,8 +18654,21 @@ auto* secPub = new QLabel("<span style='color:#9A7A33;font-size:10px;letter-spac
         c.select(QTextCursor::Document);
         source_->setTextCursor(c);
         phraseMemory();
-        check(anchors_->toPlainText().contains("HGM corpus"),
-              "phrase memory finds corpus renderings");
+        {
+            const QString pm = anchors_->toPlainText();
+            const long phrTotal =
+                spine_.corpusCount("\"sems can thams cad\"");
+            check(pm.contains("HGM corpus"),
+                  "phrase memory finds corpus renderings");
+            // DATA-3: the 12-row fetch was printed as the count.
+            check(phrTotal > 12,
+                  "fixture holds: the phrase exceeds the 12-row fetch");
+            check(pm.contains(QString::number(phrTotal)),
+                  "phrase memory prints the UNCAPPED segment total");
+            check(!pm.contains("12 segment(s)"),
+                  "phrase memory never prints its page size as the "
+                  "total");
+        }
         // terminology live-guard: an unrendered established term
         // warns quietly as you type
         demo("SEMS CAN THAMS CAD BDE BA DANG LDAN PAR GYUR CIG,");
@@ -18038,12 +18681,21 @@ auto* secPub = new QLabel("<span style='color:#9A7A33;font-size:10px;letter-spac
                   termLive_->text().contains("collapse") ||
                   termLive_->text().contains("every established"),
               "terminology live-guard reports as you type");
-        // the ladder: Send to Manuscript carries the draft over
-        if (g_sendToManuscript) {
-            draft_->setPlainText("the ladder carries this text");
+        // the ladder: Send to Manuscript carries the draft over.
+        // MEM-1 (SQA 2026-08-22): this was check(true, "…Manuscript
+        // receives the draft") — it invoked the hand-off and
+        // asserted nothing whatever about receipt. It now reads the
+        // Manuscript back and compares.
+        check((bool)g_sendToManuscript && (bool)g_manuscriptText,
+              "the ladder is wired: a hand-off out of the bench, and "
+              "a way to read the Manuscript back");
+        if (g_sendToManuscript && g_manuscriptText) {
+            const QString carried = "the ladder carries this text";
+            draft_->setPlainText(carried);
             g_sendToManuscript(draft_->toPlainText());
-            check(true, "ladder hand-off invoked (Manuscript "
-                        "receives the draft)");
+            check(g_manuscriptText() == carried,
+                  "ladder hand-off: the Manuscript now holds exactly "
+                  "the draft that was sent (receipt, not invocation)");
         }
         draft_->clear();
         source_->clear();
@@ -18372,21 +19024,53 @@ private:
     void showConcordance(const std::string& wylie) {
         if (progress_)
             progress_->touchWord(wylie, (long long)time(nullptr));
-        auto segs = spine_.corpusSearch('"' + wylie + '"', "", 200);
+        // SQA DATA-3 / house rule 3. 200 is the fetch cap and 8 is the
+        // display cap; neither answers "how often does the master use
+        // this word". corpusSearch takes a limit, so its result size
+        // can never be a total — this card printed "200 corpus hit(s)"
+        // for chos, which has 6,273, and the per-course breakdown was
+        // computed over the capped 200, so the distribution was wrong
+        // too. corpusCount is uncapped and proven; it returns -1
+        // rather than a zero it did not measure.
+        static constexpr int kFetch = 200;
+        static constexpr int kShow = 8;
+        auto segs = spine_.corpusSearch('"' + wylie + '"', "", kFetch);
+        const long total = spine_.corpusCount('"' + wylie + '"');
+        const int fetched = (int)segs.size();
+        const int showing = fetched < kShow ? fetched : kShow;
         std::map<std::string, int> byCourse;
         for (const auto& s : segs) ++byCourse[s.course];
         QString h = "<div><a href='back'>← back to anchors</a></div>"
                     "<div style='margin-top:4px'><b>" +
                     QString::fromStdString(wylie).toHtmlEscaped() +
-                    "</b> — " + QString::number(segs.size()) +
-                    " corpus hit(s)</div>";
-        h += "<div style='color:#777;font-size:11px'>";
+                    "</b> — " +
+                    (total < 0
+                         ? QString("corpus hit(s): count unavailable")
+                         : QString::number(total) + " corpus hit(s)") +
+                    "</div>";
+        // the cap, disclosed: what is on screen, and what is not
+        h += "<div style='color:#777;font-size:11px'>showing " +
+             QString::number(showing) +
+             (total > showing
+                  ? " of " + QString::number(total) +
+                        (total > fetched
+                             ? QString(" · fetched %1 (display cap) — "
+                                       "narrow the term to see more")
+                                   .arg(fetched)
+                             : QString())
+                  : QString()) +
+             "</div>";
+        h += "<div style='color:#777;font-size:11px'>by course, over the " +
+             QString::number(fetched) + " fetched" +
+             (total > fetched ? QString(" — NOT all %1").arg(total)
+                              : QString()) +
+             ": ";
         for (auto& [c, n] : byCourse)
             h += QString::fromStdString(c) + " ×" + QString::number(n) + " · ";
         h += "</div><hr>";
         int shown = 0;
         for (const auto& s : segs) {
-            if (shown++ >= 8) break;
+            if (shown++ >= kShow) break;
             h += "<div style='margin:5px 0'><small>[" +
                  QString::fromStdString(s.course) + ":" +
                  QString::number(s.seq) + "]</small><br><i>" +
@@ -19359,11 +20043,23 @@ public:
                     QString::fromStdString(wy).toHtmlEscaped() +
                     "”</div><hr>";
         // 1. the corpus: HGM's own renderings (binding layer)
-        auto segs = spine_.corpusSearch('"' + wy + '"', "", 12);
+        // DATA-3: 12 is the page size, never the count — this printed
+        // "12 segment(s)" for phrases with 967 and 1,610 (80x, 134x).
+        static constexpr int kPhraseFetch = 12;
+        auto segs = spine_.corpusSearch('"' + wy + '"', "", kPhraseFetch);
+        const long phraseTotal = spine_.corpusCount('"' + wy + '"');
         if (!segs.empty()) {
-            h += QString("<div><b>HGM corpus</b> — %1 segment(s) "
-                         "containing the phrase</div>")
-                     .arg(segs.size());
+            h += (phraseTotal < 0
+                      ? QString("<div><b>HGM corpus</b> — segment count "
+                                "unavailable; showing %1</div>")
+                            .arg(segs.size())
+                      : QString("<div><b>HGM corpus</b> — %1 segment(s) "
+                                "containing the phrase%2</div>")
+                            .arg(phraseTotal)
+                            .arg(phraseTotal > (long)segs.size()
+                                     ? QString(" · showing the first %1")
+                                           .arg(segs.size())
+                                     : QString()));
             for (const auto& s : segs)
                 h += "<div style='margin:5px 0'><small>[" +
                      QString::fromStdString(s.course) + ":" +
@@ -21778,6 +22474,32 @@ public:
         check(list_->rowCount() > 1000 ||
                   model_->rowCount(model_->index(libRoot_)) > 0,
               "catalog populated from the library");
+        {   // SQA PERF-2: "Update search index" ran 190,492 ms on
+            // the GUI thread over the real 8,988-file library with no
+            // progress and no cancel. It is stoppable now, and that
+            // creates a state the pane must never describe as
+            // finished.
+            allcore::LibraryIndex::UpdateStats done;
+            done.added = 8988;
+            const QString okHtml =
+                indexResultHtml(done, 8988, 14077690, 8988);
+            check(okHtml.contains("up to date") &&
+                      okHtml.contains("8988"),
+                  "a completed index run reports the index up to date");
+            allcore::LibraryIndex::UpdateStats stopped;
+            stopped.canceled = true;
+            stopped.added = 120;
+            const QString cutHtml =
+                indexResultHtml(stopped, 120, 200000, 8988);
+            check(!cutHtml.contains("up to date") &&
+                      cutHtml.contains("stopped"),
+                  "a STOPPED index run never borrows the words \"up to "
+                  "date\" from the run that finished");
+            check(cutHtml.contains("120") && cutHtml.contains("8988") &&
+                      cutHtml.contains("8868"),
+                  "a stopped index run discloses its remainder: files "
+                  "done, files in the library, and the difference");
+        }
         // the update-checker's page parser (network never touched
         // in selftest — the parse is the provable part)
         {
@@ -21931,6 +22653,66 @@ public:
                   "banner");
             check(info_->toHtml().contains("openfile:"),
                   "the bibliography's works open in one click");
+            {   // SQA TEST-5: "contains openfile:" is a substring,
+                // not a contract, and it stayed green while every
+                // link on this ledger was broken — chained .arg()
+                // plus anchorEnc()'s "%2F" put the colour code inside
+                // the href and left the anchor with no text at all.
+                // Assert the link: it resolves to a file that exists,
+                // and there is something to click.
+                const QString ah = info_->toHtml();
+                static const QRegularExpression openRe(
+                    "openfile:([^'\"]+)['\"][^>]*>(.*?)</a>",
+                    QRegularExpression::DotMatchesEverythingOption);
+                const auto m = openRe.match(ah);
+                const QString tgt =
+                    m.hasMatch()
+                        ? anchorPayload("x:" + m.captured(1), 2)
+                        : QString();
+                static const QRegularExpression tagRe("<[^>]*>");
+                const QString label =
+                    m.hasMatch()
+                        ? QString(m.captured(2)).remove(tagRe).trimmed()
+                        : QString();
+                check(m.hasMatch() && QFileInfo::exists(tgt),
+                      "a bibliography link href resolves to a file "
+                      "that is really on disk");
+                check(!label.isEmpty(),
+                      "a bibliography link has visible text to click");
+                // the by-name twin of this ledger is a SECOND render
+                // site with its own copy of the defect. Take a name
+                // the index really holds rather than hard-coding one.
+                QString someName;
+                for (auto it = authorByWork_.constBegin();
+                     it != authorByWork_.constEnd() &&
+                     someName.isEmpty();
+                     ++it)
+                    if (filesByWork_.contains(it.key()) &&
+                        !it.value().isEmpty())
+                        someName = it.value();
+                if (someName.isEmpty()) {
+                    log << "  [SKIP] Library: no author name in the "
+                           "index - the by-name ledger was not "
+                           "exercised";
+                } else {
+                    showAuthorWorksByName(someName);
+                    const auto m2 = openRe.match(info_->toHtml());
+                    const QString tgt2 =
+                        m2.hasMatch()
+                            ? anchorPayload("x:" + m2.captured(1), 2)
+                            : QString();
+                    const QString label2 =
+                        m2.hasMatch()
+                            ? QString(m2.captured(2))
+                                  .remove(tagRe)
+                                  .trimmed()
+                            : QString();
+                    check(m2.hasMatch() && QFileInfo::exists(tgt2) &&
+                              !label2.isEmpty(),
+                          "the by-name author ledger links the same "
+                          "way: a real file, with text to click");
+                }
+            }
             // never guess
             showAuthorCandidates("zzzznotaname");
             check(info_->toHtml().contains("No person of that name"),
@@ -22217,13 +22999,22 @@ private:
                          "font-size:10px;color:%1'>%2</span> "
                          "<a href='openfile:%3' style='color:%4;"
                          "font-size:12px'>%5</a></div>")
-                     .arg(ux::kGold).arg(wk.toHtmlEscaped())
-                     .arg(anchorEnc(f)).arg("#2E629E")
+                     // SQA TEST-5: chained .arg() re-scans what it
+                     // just inserted, and anchorEnc() writes "%2F"
+                     // for every "/" — so .arg("#2E629E") was
+                     // swallowed by the "%2" inside the encoded path.
+                     // The href read "openfile:#2E629EFUsers…",
+                     // the colour attribute got the title and %5 (the
+                     // link text) rendered literally, leaving nothing
+                     // to click. One-pass multi-arg substitutes
+                     // against the ORIGINAL markers only.
                      // ux::snip() escapes internally, so escaping
                      // first produced &amp;quot; and the catalog
                      // titles on the author ledger rendered a raw
                      // &quot; to the reader (~4 in 10 of them).
-                     .arg(ux::snip(title, 96));
+                     .arg(QString::fromLatin1(ux::kGold),
+                          wk.toHtmlEscaped(), anchorEnc(f),
+                          QString("#2E629E"), ux::snip(title, 96));
         }
         info_->setHtml(h);
     }
@@ -22289,13 +23080,17 @@ private:
                          "font-size:10px;color:%1'>%2</span> "
                          "<a href='openfile:%3' style='color:%4;"
                          "font-size:12px'>%5</a></div>")
-                     .arg(ux::kGold).arg(wk.toHtmlEscaped())
-                     .arg(anchorEnc(f)).arg("#2E629E")
+                     // SQA TEST-5: see the twin in
+                     // showAuthorWorks() — chained .arg() plus
+                     // anchorEnc()'s "%2F" corrupted the href and ate
+                     // the link's visible text.
                      // ux::snip() escapes internally, so escaping
                      // first produced &amp;quot; and the catalog
                      // titles on the author ledger rendered a raw
                      // &quot; to the reader (~4 in 10 of them).
-                     .arg(ux::snip(t, 96));
+                     .arg(QString::fromLatin1(ux::kGold),
+                          wk.toHtmlEscaped(), anchorEnc(f),
+                          QString("#2E629E"), ux::snip(t, 96));
         }
         info_->setHtml(h);
     }
@@ -23771,26 +24566,112 @@ private:
                 .arg(pkg.version, dbName));
     }
 
+    // SQA PERF-2: what the pane SAYS after an index run is a pure
+    // function of that run's own numbers, so the selftest can drive
+    // it — including the state the old code could not produce at all:
+    // a run the user stopped. Rule 4, only a completed run may say
+    // "up to date"; rule 3, a stopped one discloses its remainder
+    // instead of letting a partial index read as a whole library.
+    static QString indexResultHtml(
+        const allcore::LibraryIndex::UpdateStats& st, long long files,
+        long long lines, int libTotal) {
+        if (st.canceled) {
+            return QString(
+                       "<b>Indexing stopped.</b> Everything finished "
+                       "before you stopped it IS saved: %1 added · %2 "
+                       "updated · %3 removed.<br><b>%4 of %5 file(s)</b> "
+                       "in the library are indexed (%6 line(s)) — the "
+                       "remaining %7 are NOT in the index yet, so the "
+                       "Search pane's \"search the Library\" cannot "
+                       "answer from them.<br><small>Run “Update search "
+                       "index” again to carry on from here — the files "
+                       "already done are not redone.</small>")
+                .arg(st.added)
+                .arg(st.updated)
+                .arg(st.removed)
+                .arg(files)
+                .arg(libTotal > 0 ? QString::number(libTotal)
+                                  : QString("?"))
+                .arg(lines)
+                .arg(libTotal > 0 ? QString::number(libTotal - files)
+                                  : QString("?"));
+        }
+        return QString("<b>Search index up to date.</b><br>%1 added · %2 "
+                       "updated · %3 removed · %4 unchanged<br>%5 file(s), "
+                       "%6 line(s) indexed.<br><small>The Search pane's "
+                       "\"search the Library\" now answers from this index "
+                       "instantly.</small>")
+            .arg(st.added)
+            .arg(st.updated)
+            .arg(st.removed)
+            .arg(st.unchanged)
+            .arg(files)
+            .arg(lines);
+    }
+
     void updateIndex() {
+        // SQA PERF-2: this used to be ONE synchronous call. Measured
+        // over the real 8,988-file library it ran 190,492 ms on the
+        // GUI thread with no progress and no cancel — macOS marks the
+        // app Not Responding, and a reasonable user force-quits into a
+        // rolled-back transaction and a fresh three-minute wait.
+        //
+        // The work still runs on the GUI thread, deliberately: this
+        // file has no worker threads (one std::thread, in the OCR
+        // lane) and a background thread touching these widgets would
+        // be a worse bug than the freeze. What it has now is the house
+        // pattern the pecha and scan lanes already use — a modal
+        // QProgressDialog, processEvents, and a Stop that keeps every
+        // file it finished (LibraryIndex::update commits them).
+        static bool indexing = false;   // processEvents re-entrancy
+        if (indexing) return;
+        indexing = true;
+        struct Reset { bool& f; ~Reset() { f = false; } } reset{indexing};
+
         info_->setHtml("<i>indexing the library… (first run over a full "
                        "collection can take a while)</i>");
         QCoreApplication::processEvents();
+        QProgressDialog prog("Reading the library…", "Stop", 0, 0, this);
+        prog.setWindowTitle("Update search index");
+        prog.setWindowModality(Qt::WindowModal);
+        prog.setMinimumDuration(0);
+        prog.setAutoClose(false);
+        prog.setAutoReset(false);
+        prog.show();
+        QElapsedTimer paint;
+        paint.start();
+        int libTotal = 0;
         try {
             allcore::LibraryIndex ix((libRoot_ + "/.index.db").toStdString());
-            auto st = ix.update(libRoot_.toStdString());
-            info_->setHtml(
-                QString("<b>Search index up to date.</b><br>%1 added · %2 "
-                        "updated · %3 removed · %4 unchanged<br>%5 file(s), "
-                        "%6 line(s) indexed.<br><small>The Search pane's "
-                        "\"search the Library\" now answers from this index "
-                        "instantly.</small>")
-                    .arg(st.added)
-                    .arg(st.updated)
-                    .arg(st.removed)
-                    .arg(st.unchanged)
-                    .arg(ix.fileCount())
-                    .arg(ix.lineCount()));
+            auto st = ix.update(
+                libRoot_.toStdString(),
+                [&](int n, int total, const std::string& path) {
+                    if (total > 0) libTotal = total;
+                    // repaint at ~25 Hz, not once per file: 8,988
+                    // repaints would themselves cost seconds
+                    if (n > 0 && paint.elapsed() < 40)
+                        return !prog.wasCanceled();
+                    paint.restart();
+                    if (total == 0) {
+                        prog.setLabelText(
+                            QString("Reading the library… %1 file(s) "
+                                    "found").arg(n));
+                    } else {
+                        if (prog.maximum() != total) prog.setMaximum(total);
+                        prog.setValue(n);
+                        prog.setLabelText(
+                            QString("Indexing file %1 of %2\n%3")
+                                .arg(n + 1).arg(total)
+                                .arg(QString::fromStdString(path)));
+                    }
+                    QCoreApplication::processEvents();
+                    return !prog.wasCanceled();
+                });
+            prog.close();
+            info_->setHtml(indexResultHtml(st, ix.fileCount(),
+                                           ix.lineCount(), libTotal));
         } catch (const std::exception& ex) {
+            prog.close();
             info_->setHtml(QString("<b style='color:#b00'>indexing failed:"
                                    "</b> %1")
                                .arg(QString::fromUtf8(ex.what()).toHtmlEscaped()));
@@ -24083,6 +24964,22 @@ public:
         review();
         check(report_->toPlainText().contains("honorific"),
               "honorific source term raises the respect advisory");
+        // DATA-2 / house rule 1: the unmatched branch said "none of
+        // HGM's equivalents" for an AUTO-ALIGNED gloss, which is a
+        // claim about authorship the tier does not support. ka ba is
+        // auto-aligned in the shipped spine; nothing in this report
+        // said so, because provHtml only fires for MATCHED terms.
+        src_->setPlainText("KA BA DANG BUM PA");
+        draft_->setPlainText("my translation mentions nothing relevant");
+        review();
+        {
+            const QString rp = report_->toPlainText();
+            check(rp.contains("ka ba"),
+                  "unmatched auto-aligned term is surfaced");
+            check(rp.contains("PROVISIONAL"),
+                  "an unmatched auto-aligned gloss is tier-labeled "
+                  "PROVISIONAL, not attributed to HGM");
+        }
         src_->clear();
         draft_->clear();
         return fails;
@@ -24221,7 +25118,8 @@ private:
                                QString::fromStdString(t.wylie)
                                    .toHtmlEscaped() +
                                "</b> ×" + QString::number(t.occurrences) +
-                               " — none of HGM's equivalents (<i>" +
+                               " — none of " + equivalentsOwner(t) +
+                               " (<i>" +
                                QString::fromStdString(
                                    t.glosses.empty() ? ""
                                                      : t.glosses.front())
@@ -24778,20 +25676,24 @@ private:
             root_ + "/data/candidate_alignments/" + base + "-pairs.tsv",
             "TSV (*.tsv)");
         if (out.isEmpty()) return;
-        QFile f(out);
-        if (!f.open(QIODevice::WriteOnly | QIODevice::Text)) {
-            warnWriteFail(this, f, "The aligned-pairs export");
-            return;
-        }
-        QTextStream ts(&f);
-        ts << "# PENDING alignment candidates (translator-authored in the "
-              "Align pane) — for the data project's review; never "
-              "auto-ingested\n# source: "
-           << docFile_ << "\n";
-        for (const Link& l : linksList_)
-            ts << QString::fromStdString(l.wylie) << "\t"
-               << QString::fromStdString(l.english).replace('\t', ' ')
-               << "\n";
+        // DATA-4: the green line below used to be composed while the
+        // QTextStream was still buffered. Gate it on a verified write.
+        if (!writeAllOrWarn(
+                this, out,
+                [&](QTextStream& ts) {
+                    ts << "# PENDING alignment candidates "
+                          "(translator-authored in the Align pane) — "
+                          "for the data project's review; never "
+                          "auto-ingested\n# source: "
+                       << docFile_ << "\n";
+                    for (const Link& l : linksList_)
+                        ts << QString::fromStdString(l.wylie) << "\t"
+                           << QString::fromStdString(l.english)
+                                  .replace('\t', ' ')
+                           << "\n";
+                },
+                "The aligned-pairs export"))
+            return;   // warned, partial file removed, nothing green
         links_->setHtml(links_->toHtml() +
                         "<div style='color:#3B7A3B'>exported " +
                         QString::number(linksList_.size()) + " pair(s) to " +
@@ -26932,6 +27834,7 @@ private:
                     // closed device AFTER the verdict had been taken
                     // and any late error was unobservable. Scope it so
                     // it is destroyed while the file is still open.
+                    bool streamOk = false;
                     {
                         QTextStream ts(&of);
                         ts << "# OCR-DERIVED (unverified review "
@@ -26941,9 +27844,16 @@ private:
                               "permission)\n";
                         for (const QString& w2 : wylieLines)
                             ts << w2 << "\n";
+                        // DATA-4: QFile::error() is NOT the signal.
+                        // On a short write (ENOSPC, quota, ejected
+                        // volume) it stays NoError while
+                        // QTextStream::status() is WriteFailed —
+                        // measured: ts.status()=3, f.error()=0, file
+                        // cut mid-record. Take the stream's own
+                        // verdict, flushed, while it is still in scope.
+                        streamOk = streamWriteOk(ts, of);
                     }
-                    wroteOk = of.flush() &&
-                              of.error() == QFileDevice::NoError;
+                    wroteOk = streamOk;
                     wErr = of.errorString();
                     of.close();
                     // a truncated -ocr.txt would be counted "already
@@ -27009,17 +27919,20 @@ private:
             root_ + "/library/ocr_out/" + base + "-ocr.txt",
             "Text (*.txt)");
         if (out.isEmpty()) return;
-        QFile f(out);
-        if (!f.open(QIODevice::WriteOnly | QIODevice::Text)) {
-            warnWriteFail(this, f, "The OCR text");
-            return;
-        }
-        QTextStream ts(&f);
-        ts << "# OCR-DERIVED (unverified review material) — source: "
-           << QFileInfo(file_).fileName()
-           << " — models: BDRC (CC BY-NC 4.0, with permission)\n";
-        for (const auto& w2 : lastWylie_)
-            ts << QString::fromStdString(w2) << "\n";
+        // DATA-4: gate the "saved to" line on a verified write.
+        if (!writeAllOrWarn(
+                this, out,
+                [&](QTextStream& ts) {
+                    ts << "# OCR-DERIVED (unverified review material) "
+                          "— source: "
+                       << QFileInfo(file_).fileName()
+                       << " — models: BDRC (CC BY-NC 4.0, with "
+                          "permission)\n";
+                    for (const auto& w2 : lastWylie_)
+                        ts << QString::fromStdString(w2) << "\n";
+                },
+                "The OCR text"))
+            return;   // warned, partial file removed, nothing green
         results_->setHtml(results_->toHtml() +
                           "<div style='color:#3B7A3B'>saved to " +
                           out.toHtmlEscaped() +
@@ -27677,6 +28590,89 @@ public:
             check(n == 1 && body.contains("APPROVED") &&
                       body.contains("dge ba"),
                   "approved-candidates export writes the ruling");
+            ef.close();
+            // DATA-4 discriminator. On a refused or short write
+            // QFile::error() stays NoError while QTextStream::status()
+            // is WriteFailed — measured on a genuinely full volume
+            // (ts.status()=3, f.error()=0) and reproduced here with a
+            // read-only handle. A post-hoc QFile::error() check would
+            // have missed it, which is exactly why four exports
+            // shipped printing green over failed writes.
+            {
+                const QString rop = tmp + "/readonly_probe.txt";
+                {
+                    QFile seed(rop);
+                    if (seed.open(QIODevice::WriteOnly))
+                        (void)seed.write("seed");
+                    seed.close();
+                }
+                QFile ro(rop);
+                const bool opened = ro.open(QIODevice::ReadOnly);
+                bool verdict = true, fileSawIt = true;
+                if (opened) {
+                    QTextStream rts(&ro);
+                    rts << "this write cannot land\n";
+                    verdict = streamWriteOk(rts, ro);
+                    fileSawIt = ro.error() != QFileDevice::NoError;
+                    ro.close();
+                }
+                check(opened && !verdict,
+                      "streamWriteOk reports a refused stream write as "
+                      "a FAILURE");
+                check(opened && !fileSawIt,
+                      "...and QFile::error() alone would NOT have seen "
+                      "it - the blindness that shipped");
+            }
+            // ...and the whole export path, against a real short
+            // write: RLIMIT_FSIZE with SIGXFSZ ignored makes write(2)
+            // fail with EFBIG exactly as a full disk does, in
+            // process, with the file left truncated mid-record.
+            for (int i = 0; i < 300; ++i) {
+                const auto pid = st.propose(
+                    allcore::ProposalKind::WordRendering, "selftest",
+                    "dge ba " + std::to_string(i), "virtue", "",
+                    "selftest evidence padding row", "2026-08-09");
+                (void)st.rule(pid, allcore::ProposalStatus::Approved,
+                              "selftest", "", "2026-08-09");
+            }
+            check(st.save(),
+                  "selftest fixture: the padded store saved (a fixture "
+                  "that silently fails makes the drill vacuous)");
+            g_proposalsDir = tmp;
+            const QString bad = tmp + "/short_write.tsv";
+            const QString greenNeedle =
+                "approved dictionary candidate(s)";
+            const int greenBefore =
+                list_->toPlainText().count(greenNeedle);
+            struct rlimit oldLim {};
+            const bool haveLim = getrlimit(RLIMIT_FSIZE, &oldLim) == 0;
+            bool limApplied = false;
+            int nBad = 0;
+            if (haveLim) {
+                auto* prevH = signal(SIGXFSZ, SIG_IGN);
+                struct rlimit lim = oldLim;
+                lim.rlim_cur = 4096;
+                limApplied = setrlimit(RLIMIT_FSIZE, &lim) == 0;
+                if (limApplied) nBad = writeApprovedExport(bad);
+                (void)setrlimit(RLIMIT_FSIZE, &oldLim);
+                (void)signal(SIGXFSZ, prevH);
+            }
+            g_proposalsDir = saveDir;
+            const int greenAfter =
+                list_->toPlainText().count(greenNeedle);
+            check(limApplied,
+                  "short-write fixture armed (RLIMIT_FSIZE)");
+            if (limApplied) {
+                check(nBad < 0,
+                      "a short write is REPORTED as a failure, never "
+                      "counted as an export (house rule 4)");
+                check(greenAfter == greenBefore,
+                      "no green success line for an export that did "
+                      "not land");
+                check(!QFile::exists(bad),
+                      "the truncated file is removed, not left to "
+                      "re-import as valid data with one corrupt row");
+            }
         }
         return fails;
     }
@@ -28098,32 +29094,46 @@ private:
         writeApprovedExport(out);
     }
 
+    // Returns the number of rows exported, or -1 if the export did
+    // NOT land. DATA-4: this printed "exported N approved dictionary
+    // candidate(s)" in #1E6B4E — a binding-authority green — over a
+    // TSV truncated mid-record, because the success HTML was composed
+    // while the QTextStream was still buffered. Because the cut lands
+    // mid-line rather than at a record boundary, such a file
+    // re-imports as valid data with one corrupt row: silent corruption
+    // of the approved-candidates handoff, the one artefact this app
+    // produces that feeds the master dictionary.
     int writeApprovedExport(const QString& out) {
         allcore::ProposalStore store(g_proposalsDir.toStdString());
         store.load();
-        QFile f(out);
-        if (!f.open(QIODevice::WriteOnly | QIODevice::Text)) {
-            warnWriteFail(this, f, "The approved-candidates export");
-            return 0;
-        }
-        QTextStream ts(&f);
-        ts << "# APPROVED dictionary/corpus candidates for the data "
-              "project — approved in-app, never auto-ingested\n";
-        ts << "# kind\twylie\tvalue\tevidence\tapprover\truled\n";
         int n = 0;
-        for (const auto& p : store.all()) {
-            if (p.status != allcore::ProposalStatus::Approved ||
-                p.isRegister())
-                continue;
-            ts << allcore::Proposal::kindName(p.kind) << "\t"
-               << QString::fromStdString(p.wylie) << "\t"
-               << QString::fromStdString(p.value) << "\t"
-               << QString::fromStdString(p.evidence).replace('\t', ' ')
-                      .replace('\n', ' ')
-               << "\t" << QString::fromStdString(p.approver) << "\t"
-               << QString::fromStdString(p.ruled) << "\n";
-            ++n;
-        }
+        if (!writeAllOrWarn(
+                this, out,
+                [&](QTextStream& ts) {
+                    ts << "# APPROVED dictionary/corpus candidates for "
+                          "the data project — approved in-app, never "
+                          "auto-ingested\n";
+                    ts << "# kind\twylie\tvalue\tevidence\tapprover"
+                          "\truled\n";
+                    for (const auto& p : store.all()) {
+                        if (p.status !=
+                                allcore::ProposalStatus::Approved ||
+                            p.isRegister())
+                            continue;
+                        ts << allcore::Proposal::kindName(p.kind) << "\t"
+                           << QString::fromStdString(p.wylie) << "\t"
+                           << QString::fromStdString(p.value) << "\t"
+                           << QString::fromStdString(p.evidence)
+                                  .replace('\t', ' ')
+                                  .replace('\n', ' ')
+                           << "\t" << QString::fromStdString(p.approver)
+                           << "\t" << QString::fromStdString(p.ruled)
+                           << "\n";
+                        ++n;
+                    }
+                },
+                "The approved-candidates export"))
+            return -1;   // warned, partial removed, nothing green
         list_->setHtml(list_->toHtml() +
                        QString("<div style='color:#1E6B4E'>exported %1 "
                                "approved dictionary candidate(s) to %2"
@@ -28538,6 +29548,9 @@ public:
         editor_->setPlainText(t);
     }
 
+    // MEM-1: the ladder pin asserts receipt, which needs a reader.
+    QString manuscriptText() const { return editor_->toPlainText(); }
+
     int selfTest(QStringList& log) {
         int fails = 0;
         auto check = [&](bool ok, const char* what) {
@@ -28651,11 +29664,9 @@ static QVector<CatalogMember> catalogRosterLoad(const QString& root) {
     }
     return out;
 }
-static bool catalogRosterSave(const QString& root,
-                              const QVector<CatalogMember>& m) {
-    QFile f(catalogRosterPath(root));
-    if (!f.open(QIODevice::WriteOnly | QIODevice::Text)) return false;
-    QTextStream ts(&f);
+static QByteArray catalogRosterBytes(const QVector<CatalogMember>& m) {
+    QString out;
+    QTextStream ts(&out);
     ts << "# Catalog team roster - who may use the cataloging "
           "workflow, and as whom.\n"
        << "# Roles: admin (manages this roster), approver (Geshe "
@@ -28668,6 +29679,61 @@ static bool catalogRosterSave(const QString& root,
         ts << x.name << '\t' << x.initials << '\t' << x.roles << '\t'
            << x.salt << '\t' << x.hash << '\t' << x.addedBy << '\t'
            << x.addedOn << '\t' << x.status << '\n';
+    ts.flush();
+    return out.toUtf8();
+}
+
+// FAIL-1 (SQA 2026-08-22). This opened the LIVE roster with a
+// truncating open, wrote through a QTextStream nobody ever asked for
+// its status, and returned true. Measured on a full volume: returned
+// TRUE, 0 bytes on disk, 0 rows — and the caller, which correctly
+// rolls back and refuses the sign-in on false, signed the new member
+// in against a roster that no longer existed. CATALOG_TEAM.tsv is the
+// in-house identity list (who may catalog, and as whom, with a salt
+// and hash per member), so it is now written the way an identity file
+// must be: the bytes are built first, they land in a sibling temp file
+// whose write AND flush are checked, and only a complete temp file is
+// renamed into place. A failed write now destroys nothing, and says so
+// (house rules 2 and 4 — nothing returns success that the code
+// path did not verify).
+static bool catalogRosterSave(const QString& root,
+                              const QVector<CatalogMember>& m) {
+    const QString path = catalogRosterPath(root);
+    const QByteArray body = catalogRosterBytes(m);
+    const QString tmp = path + ".writing";
+    QFile::remove(tmp);
+    {
+        QFile f(tmp);
+        if (!f.open(QIODevice::WriteOnly | QIODevice::Truncate))
+            return false;
+        const bool ok = f.write(body) == body.size() && f.flush() &&
+                        f.error() == QFileDevice::NoError;
+        f.close();               // close() clears the error: check first
+        if (!ok) { QFile::remove(tmp); return false; }
+    }
+    // POSIX rename() replaces the destination atomically: there is
+    // no instant in which the roster does not exist. That is the path
+    // this platform takes.
+    if (std::rename(QFile::encodeName(tmp).constData(),
+                    QFile::encodeName(path).constData()) == 0)
+        return true;
+    // Fallback (Windows' rename refuses an existing destination, and
+    // any cross-device case): the live roster steps aside and steps
+    // back if the swap fails. At no point is it removed before its
+    // replacement is complete on disk.
+    const QString prev = path + ".previous";
+    QFile::remove(prev);
+    const bool had = QFile::exists(path);
+    if (had && !QFile::rename(path, prev)) {
+        QFile::remove(tmp);
+        return false;
+    }
+    if (!QFile::rename(tmp, path)) {
+        if (had) QFile::rename(prev, path);   // the roster is put back
+        QFile::remove(tmp);
+        return false;
+    }
+    QFile::remove(prev);
     return true;
 }
 
@@ -31837,6 +32903,44 @@ public:
         for (int i = 0; i < list_->count(); ++i)
             pron |= list_->item(i)->text().contains("bsod nams");
         check(pron, "phonetics query reaches the fold (sunam)");
+        // SQA TEST-2 + TEST-5: lane 3's tier, reached by the KEYSTROKE
+        // that reaches it. Bounty #2's third site printed a bare gloss
+        // here while lane 1, four lines above, tagged every row;
+        // reverting the fix left all 72 suites green (MUT14_hunt_lane3)
+        // because nothing asserted on this lane's rows at all. "kawa"
+        // is the measured case: its fold answers with an auto-aligned
+        // entry (ka ba — pillar) AND a glossary one (dka' ba —
+        // hard), so one query proves both directions at once.
+        {
+            auto keepLookup2 = g_lookupQuery;
+            g_lookupQuery = [](const QString&) {};
+            box_->setText("kawa");          // arms the 220 ms debounce
+            emit box_->returnPressed();     // the Return the user hits
+            g_lookupQuery = keepLookup2;
+            auto pronRow = [this](const QString& wylie,
+                                  const QString& gloss) {
+                for (int i = 0; i < list_->count(); ++i) {
+                    const QString t = list_->item(i)->text();
+                    if (t.startsWith(QString::fromUtf8("\U0001F5E3")) &&
+                        t.contains(wylie) && t.contains(gloss))
+                        return t;
+                }
+                return QString();
+            };
+            const QString provRow = pronRow("ka ba", "pillar");
+            const QString bindRow = pronRow("dka' ba", "hard");
+            check(!provRow.isEmpty() && !bindRow.isEmpty(),
+                  "Enter on a phonetic query fills the pronunciation "
+                  "lane with an auto-aligned AND a glossary row");
+            check(provRow.contains("[PROVISIONAL]"),
+                  "pronunciation lane tags its auto-aligned gloss "
+                  "— for a phonetic query it is often the only "
+                  "row on screen");
+            check(!bindRow.contains("[PROVISIONAL]") &&
+                      bindRow.contains("[glossary]"),
+                  "pronunciation lane names the true tier of a "
+                  "non-provisional gloss");
+        }
         box_->setText("TD04156");
         runSearch();
         bool file = false;
@@ -33050,6 +34154,9 @@ int main(int argc, char** argv) {
     g_sendToManuscript = [manuscriptPane](const QString& t) {
         manuscriptPane->setManuscriptText(t);
         if (g_raisePane) g_raisePane(manuscriptPane);
+    };
+    g_manuscriptText = [manuscriptPane] {
+        return manuscriptPane->manuscriptText();
     };
     g_mssComposeBib = [draftPane] { draftPane->composeBibDialog(); };
     g_mssProposeNote = [draftPane](const QString& sel) {
@@ -36054,6 +37161,50 @@ int main(int argc, char** argv) {
                            .arg(rosterOk && lockOk && stageOk
                                     ? "PASS" : "FAIL");
                 if (!(rosterOk && lockOk && stageOk)) ++fails;
+                // FAIL-1 (SQA 2026-08-22): a roster save whose bytes
+                // cannot reach the disk must report FALSE and must
+                // leave the roster that is already there untouched.
+                // The measured failure was a full volume; RLIMIT_FSIZE
+                // reproduces exactly that condition deterministically,
+                // for the length of one call, with no volume to fill
+                // and no privileges. SIGXFSZ is ignored across the
+                // window so the write returns EFBIG instead of killing
+                // the process; both are restored immediately after.
+#ifdef Q_OS_UNIX
+                {
+                    const QString rpath =
+                        catalogRosterPath(wd + "/official");
+                    const qint64 sizeBefore = QFileInfo(rpath).size();
+                    QVector<CatalogMember> grown = ros;
+                    CatalogMember m2 = m;
+                    m2.name = "Second Cataloger";
+                    m2.initials = "SC";
+                    grown.push_back(m2);
+                    struct rlimit keepLim {};
+                    bool said = true, limited = false;
+                    if (getrlimit(RLIMIT_FSIZE, &keepLim) == 0) {
+                        struct rlimit zero = keepLim;
+                        zero.rlim_cur = 0;   // no bytes into any file
+                        auto* prevSig = signal(SIGXFSZ, SIG_IGN);
+                        limited = setrlimit(RLIMIT_FSIZE, &zero) == 0;
+                        if (limited)
+                            said = catalogRosterSave(wd + "/official",
+                                                     grown);
+                        setrlimit(RLIMIT_FSIZE, &keepLim);
+                        signal(SIGXFSZ, prevSig);
+                    }
+                    const bool survivedFail =
+                        limited && !said &&
+                        QFileInfo(rpath).size() == sizeBefore &&
+                        catalogRosterLoad(wd + "/official").size() == 1;
+                    log << QString("  [%1] Catalog: a roster save that "
+                                   "cannot put its bytes on disk "
+                                   "reports FALSE and leaves the "
+                                   "existing roster intact")
+                               .arg(survivedFail ? "PASS" : "FAIL");
+                    if (!survivedFail) ++fails;
+                }
+#endif
                 QDir(wd).removeRecursively();
             }
             {   // the change-log stamp: stamping renames the folder
@@ -36611,15 +37762,37 @@ int main(int argc, char** argv) {
             if (!(live && restored)) ++fails;
         }
         {   // T4 (quality): performance floors — what a user FEELS,
-            // measured and pinned. Budgets are ~4x the observed
-            // numbers on Adam's machine so CI variance never cries
-            // wolf; a real regression (an accidental O(n²), a lost
-            // index) blows through 4x instantly.
+            // measured and pinned.
+            //
+            // SQA PERF-3 (2026-08-22) reopened this. The comment here
+            // claimed "~4x the observed numbers"; the printed headroom
+            // was 333x · 95x · 133x · 1200x, so a hundredfold
+            // regression passed green. The lookup loop hit TWO keys
+            // 300 times, which measures a warm SQLite page cache and
+            // not the dictionary. And the closure note (CLOSER #12)
+            // named "query fan-out" and "index build" — neither had a
+            // pin at all, while PERF-1's 346-second, 18 GB blow-up sat
+            // in exactly the fan-out it claimed.
+            //
+            // Now: 300 DISTINCT sampled headwords, and budgets at ~3x
+            // what this machine actually prints — 7-8 / 19-22 / 9 / 1
+            // ms over five runs, so 25 / 70 / 30 / 20, the last a
+            // floor because 3 ms is inside timer noise. Headroom is
+            // 3x, as the comment always claimed. Beside them, the two
+            // operations a user really waits on: the library index's
+            // AND-shape query and the segmenter lexicon build.
             QElapsedTimer t;
+            std::vector<std::string> keys;
+            {   // distinct headwords, deduped: a pin that measures a
+                // two-key cache measures nothing
+                std::set<std::string> seen;
+                for (const auto& e : spine.sampleEntries(53, 400))
+                    if (!e.wylie.empty() && seen.insert(e.wylie).second)
+                        keys.push_back(e.wylie);
+            }
             t.start();
             for (int i = 0; i < 300; ++i)
-                (void)spine.lookup(i % 2 ? "bsod nams"
-                                         : "byang chub sems dpa'");
+                (void)spine.lookup(keys[i % keys.size()]);
             const qint64 lookupMs = t.restart();
             for (int i = 0; i < 20; ++i)
                 (void)spine.corpusSearch("\"bsod nams\"", "", 10);
@@ -36631,15 +37804,73 @@ int main(int argc, char** argv) {
             for (int i = 0; i < 1000; ++i)
                 (void)allcore::pronounce("bsod nams kyi tshogs");
             const qint64 pronMs = t.restart();
-            const bool ok = lookupMs < 2000 && corpusMs < 2000 &&
-                            uniMs < 1200 && pronMs < 1200;
-            log << QString("  [%1] T4 perf floors: 300 lookups %2ms "
-                           "(<2000) · 20 corpus %3ms (<2000) · 1k "
-                           "unicode %4ms (<1200) · 1k pron %5ms "
-                           "(<1200)")
+            // one constant per budget, used by BOTH the comparison
+            // and the printed line: a label carrying its own literal
+            // is a number that can drift away from the check that
+            // produced it (this block's own history).
+            constexpr qint64 kLookupMax = 25, kCorpusMax = 70,
+                             kUniMax = 30, kPronMax = 20;
+            const bool ok = keys.size() >= 200 && lookupMs < kLookupMax &&
+                            corpusMs < kCorpusMax && uniMs < kUniMax &&
+                            pronMs < kPronMax;
+            log << QString("  [%1] T4 perf floors: %2 lookups over %3 "
+                           "distinct headwords %4ms (<%5) · 20 corpus "
+                           "%6ms (<%7) · 1k unicode %8ms (<%9) · 1k "
+                           "pron %10ms (<%11)")
                        .arg(ok ? "PASS" : "FAIL")
-                       .arg(lookupMs).arg(corpusMs).arg(uniMs)
-                       .arg(pronMs);
+                       .arg(300).arg(keys.size())
+                       .arg(lookupMs).arg(kLookupMax)
+                       .arg(corpusMs).arg(kCorpusMax)
+                       .arg(uniMs).arg(kUniMax)
+                       .arg(pronMs).arg(kPronMax);
+            if (!ok) ++fails;
+        }
+        {   // T4b (quality): the query fan-out CLOSER #12 claimed and
+            // never pinned. The Search pane's "AND (same file)"
+            // compiles to NEAR/1000000 — the shape that took 346,116
+            // ms and 18.0 GB before PERF-1. Measured after the fix on
+            // the real 2.36 GB index: 1,300 ms cold, 268 ms warm.
+            const QString ixp = root + "/library/.index.db";
+            if (QFileInfo::exists(ixp)) {
+                allcore::LibraryIndex li(ixp.toStdString());
+                QElapsedTimer t;
+                t.start();
+                bool cut = false;
+                const auto hits = li.search(
+                    "\"sems can\" NEAR/1000000 \"bsod nams\"", 60, &cut);
+                const qint64 ixMs = t.elapsed();
+                constexpr qint64 kIxMax = 6000;   // ~4.7x the cold 1,287 ms
+                const bool ok = ixMs < kIxMax && !hits.empty();
+                log << QString("  [%1] T4b library-index fan-out: two "
+                               "high-frequency terms ANDed over the "
+                               "installed index %2ms (<%3) · %4 hit(s)"
+                               "%5")
+                           .arg(ok ? "PASS" : "FAIL")
+                           .arg(ixMs).arg(kIxMax).arg(hits.size())
+                           .arg(cut ? " · window ceiling reached"
+                                    : QString());
+                if (!ok) ++fails;
+            } else {
+                // NOT a pass. An absent fixture is an unmeasured
+                // operation, and this file has printed enough green
+                // over zero data (SQA BUILD-7).
+                log << QString("  [SKIP] T4b library-index fan-out: no "
+                               "index at %1 — run Library → Update "
+                               "search index to make this pin real")
+                           .arg(ixp);
+            }
+        }
+        {   // T4c (quality): the lexicon build behind the
+            // "unattested-word hints" checkbox — 5,053 ms measured,
+            // the longest single-click wait in the app (PERF-5).
+            const qint64 segMs = overlay->segmenterBuildMs();
+            constexpr qint64 kSegMax = 16000;   // ~3.2x the measured 4,9xx ms
+            const bool ok = segMs >= 0 && segMs < kSegMax;
+            log << QString("  [%1] T4c segmenter lexicon build: %2ms "
+                           "(<%3) · %4")
+                       .arg(ok ? "PASS" : "FAIL")
+                       .arg(segMs).arg(kSegMax)
+                       .arg(overlay->segmenterInfo());
             if (!ok) ++fails;
         }
         {   // F2 (fidelity): cross-engine coherence at dictionary

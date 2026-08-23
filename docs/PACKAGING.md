@@ -12,8 +12,11 @@ bash tools/package_macos.sh --skip-build   # repackage an existing build
 ```
 
 The script refuses to package anything that fails the release gate
-(`tools/validate_release.py`) or the 37-suite battery — a bad build or
-a bad data drop cannot become a DMG.
+(`tools/validate_release.py`) or the ctest battery — a bad build or a
+bad data drop cannot become a DMG. Since 2026-08-23 it also refuses a
+battery that did not run in full: a suite whose untracked fixture is
+absent is registered as a ctest SKIP (`cmake/AllFixtureTests.cmake`,
+`docs/FIXTURES.md`), and any skip at press time stops the press.
 
 Product: `dist/Diamond-Cutter-Translation-Tool-<version>.dmg` containing
 
@@ -24,7 +27,16 @@ Product: `dist/Diamond-Cutter-Translation-Tool-<version>.dmg` containing
   colloquial pronunciations, abbreviations, extracted layers, botok,
   spellcheck, SOAS POS, Whitney, candidate alignments) and an empty
   `library/` for the user's texts.
-- **README.txt** — the three-step install for a non-technical user.
+- **README.txt** — the three-step install for a non-technical user,
+  opening with the system requirement: **Apple Silicon Mac, macOS 26 or
+  later** (step 5b measures both from the built binary and refuses to
+  continue if the bundle's `LSMinimumSystemVersion` is empty).
+- **BUILD_MANIFEST.txt / BUILD_MANIFEST.json** — what this copy was
+  built from (step 6d, `tools/build_manifest.py`): toolchain versions,
+  git commit and tree state, architecture and macOS floor, and every
+  bundled Mach-O with its Homebrew formula, version, SPDX licence and
+  sha256, plus the checksum of the shipped spine. This is the file that
+  answers "which OpenSSL did release X carry?".
 
 ## How the app finds its data (findDataRoot)
 

@@ -50,6 +50,16 @@ int main(int argc, char** argv) {
     std::sort(files.begin(), files.end());
     std::printf("  corpus: %zu shelved, named files\n", files.size());
     CHECK(files.size() > 1000, "a real shelved corpus to predict on");
+    // BUILD-7: with no corpus there is nothing to hold out. This used to
+    // fall through, divide by zero, print two [PASS] lines carrying a
+    // hardcoded "(measured 31%)" over ZERO queries, and then crash on
+    // files[0]. An absent fixture is a failure, never a green.
+    if (files.empty()) {
+        std::printf("  [FAIL] no shelved corpus under %s - the held-out "
+                    "battery measured nothing and does NOT pass\n", argv[1]);
+        std::printf("FAILURES\n");
+        return 1;
+    }
 
     const size_t stride = std::max<size_t>(1, files.size() / 100);
     int queries = 0, top1 = 0, top3 = 0, none = 0;
@@ -65,10 +75,11 @@ int main(int argc, char** argv) {
         for (size_t k = 1; k < sug.size(); ++k)
             if (sug[k].shelf == truth) { ++top3; break; }
     }
+    const double pct1 = queries ? 100.0 * top1 / queries : 0.0;
+    const double pct3 = queries ? 100.0 * top3 / queries : 0.0;
     std::printf("  held-out: %d queries · top-1 %d (%.1f%%) · top-3 %d "
                 "(%.1f%%) · no suggestion %d\n",
-                queries, top1, 100.0 * top1 / queries, top3,
-                100.0 * top3 / queries, none);
+                queries, top1, pct1, top3, pct3, none);
     // MEASURED REALITY (four configurations tried, 2026-08-19):
     // author-heavy 24/36, flat mixed-path 29/42, leaf-weighted 23/29,
     // flat Tibetan-half 31/43 (shipped). Shelf choice is a fine-grained
@@ -76,12 +87,22 @@ int main(int argc, char** argv) {
     // have got to do a few hundred") — so the machine's ceiling from
     // surface signals is modest, every suggestion carries its reasons,
     // and the human confirms. These pins hold the shipped floor.
-    CHECK(top1 * 100 >= queries * 25,
-          "the real shelf leads the list for at least a quarter of "
-          "held-out files (measured 31%)");
-    CHECK(top3 * 100 >= queries * 35,
-          "the real shelf is in the top three for at least 35% "
-          "(measured 43%)");
+    // BUILD-7 / house rule 4: the ratio pins below are vacuously true at
+    // queries == 0, and their labels used to carry a hardcoded
+    // "(measured 31%)" that printed on PASS whatever the run measured.
+    // The count is now pinned first and every number in a label is the
+    // number this run produced.
+    CHECK(queries > 0, "the held-out battery actually ran queries");
+    char lbl1[224], lbl3[224];
+    std::snprintf(lbl1, sizeof lbl1,
+                  "the real shelf leads the list for at least a quarter of "
+                  "held-out files (measured %.1f%% over %d queries)",
+                  pct1, queries);
+    std::snprintf(lbl3, sizeof lbl3,
+                  "the real shelf is in the top three for at least 35%% "
+                  "(measured %.1f%% over %d queries)", pct3, queries);
+    CHECK(queries > 0 && top1 * 100 >= queries * 25, lbl1);
+    CHECK(queries > 0 && top3 * 100 >= queries * 35, lbl3);
 
     // evidence is always attached
     {

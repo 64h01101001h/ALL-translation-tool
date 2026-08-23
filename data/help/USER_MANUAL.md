@@ -1245,10 +1245,14 @@ Two levels split by a draggable divider:
    which English goes with which Tibetan reads by color. Only
    established equivalents appear; the pane never writes English
    for you.
-4. Click any term in the anchors panel for its **full corpus
-   concordance** — every corpus segment containing it, with Geshe
-   Michael's English beside each. A "back" link returns to the
-   clause's anchors.
+4. Click any term in the anchors panel for its **corpus
+   concordance** — the card first states how many corpus segments
+   contain the term (the measured total, never a page count), then
+   shows the opening few with Geshe Michael's English beside each.
+   When more exist than the card can list, it says how many are
+   being shown and how many there are, and the per-course breakdown
+   beneath says which rows it was computed over. Narrow the term to
+   reach the rest. A "back" link returns to the clause's anchors.
 5. On an anchor's **technical spelling** link, a click inserts the
    apparatus form at your draft cursor — the pronunciation
    spelling plus "(technical spelling: …)" — the published house
@@ -1308,10 +1312,12 @@ is ever auto-corrected; the full detail stays one press away.
 
 1. Select any Tibetan in the source box.
 2. Press **Phrase memory** (under the EVIDENCE heading).
-3. *What you see:* every prior rendering of those words — segments
-   from **his corpus (binding)**, plus any matches from the Align
+3. *What you see:* how many prior renderings of those words exist —
+   the measured count of segments from **his corpus (binding)** —
+   and the opening twelve of them, plus any matches from the Align
    pane's harvest, which are translator-authored and **labeled
-   PENDING**. The beginnings of a Project translation memory,
+   PENDING**. When the corpus holds more than are listed, the card
+   says how many. The beginnings of a Project translation memory,
    built only from attested work.
 
 The working translator's habit: Phrase memory before inventing —

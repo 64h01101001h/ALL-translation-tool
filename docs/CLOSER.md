@@ -15,7 +15,7 @@ States: OPEN · CLOSED(date) · WAITING(who: what) · DEFERRED(stamp).
 | 9 | S4 security posture: no secrets in repo/logs, key path excluded from backups, FTP/SFTP no-persist proven, roster salt verified, trust model documented (Stewardship) | CLOSED(2026-08-20) |
 | 10 | D2 signing/notarization pipeline in the press, skip-with-notice until identity exists (Shipwright) | CLOSED(2026-08-20) |
 | 11 | T7 chrome pins for every P0-capable path (save/export/import/rulings/propagation) (Quality) | CLOSED(2026-08-20) |
-| 12 | T4 perf floors measured + pinned (cold start, big doc, query fan-out, index build) (Quality) | CLOSED(2026-08-20) |
+| 12 | T4 perf floors measured + pinned (cold start, big doc, query fan-out, index build) (Quality) | REOPENED(2026-08-23, SQA PERF-3) then PARTLY re-answered — see the 2026-08-23 note; cold start and big-doc still unpinned |
 | 13 | T8 Word-style menu reorganization, before/after screenshots to Adam (Quality; §63 governance) | CLOSED(2026-08-20) |
 | 14 | S5 docs/MAINTAINERS.md — the operational handbook for a competent stranger (Stewardship) | CLOSED(2026-08-20) |
 | 15 | S6 findings loop: FINDINGS inbox + disposition cadence + Adam's outstanding campaign verdicts section (Stewardship) | CLOSED(2026-08-20) |
@@ -133,6 +133,30 @@ States: OPEN · CLOSED(date) · WAITING(who: what) · DEFERRED(stamp).
   Budgets sit far above observed so variance never cries wolf; a lost
   index or accidental O(n²) blows through instantly. (Cold-start is
   proven live by the press's relaunch-verify step.)
+- 2026-08-23 · **#12 T4 REOPENED (SQA PERF-3), then partly
+  re-answered.** The closure above is wrong twice over, and it was
+  being cited as proof that performance is guarded. (a) "Budgets sit
+  far above observed" was the whole problem: the headroom was 333x ·
+  95x · 133x · 1200x against a code comment claiming 4x, so a
+  hundredfold regression passed green. (b) The lookup pin hit TWO keys
+  300 times, which measures a warm SQLite page cache, not the
+  dictionary. (c) The two paths this row NAMES — query fan-out and
+  index build — had no pin at all, while PERF-1's 346,116 ms / 18.0 GB
+  blow-up sat in exactly that fan-out.
+  Now pinned, measured on Adam's machine: **T4** 300 lookups over 400
+  DISTINCT sampled headwords 7ms (<25) · 20 corpus 20ms (<70) · 1k
+  unicode 9ms (<30) · 1k pron 1ms (<20 — a floor, because 3x of 1 ms
+  is timer noise); **T4b** the library index's AND-shape query
+  (NEAR/1000000, PERF-1's own shape) over the installed 2.36 GB index
+  1,038 ms (<6000, ~4.7x the cold 1,287 ms); **T4c** the segmenter
+  lexicon build behind the unattested-word hints 5,180 ms (<16000).
+  Every budget is now a named constant used by BOTH the comparison and
+  the printed line, so the label can no longer drift from the check.
+  Mutation-verified: a 4x lookup slowdown FAILS at 31 ms where the old
+  2000 ms budget waved it through.
+  **Still open on this row:** cold start and "big doc" (buildOverlay
+  over a full volume) have no pin; and T4b prints `[SKIP]` — never a
+  pass — on a machine with no library index built.
 - 2026-08-20 · **#14 S5 CLOSED.** docs/MAINTAINERS.md — build/test/
   press/release, the five rules, the paid-for editing lessons, data
   topology, and where every decision lives. A competent stranger can

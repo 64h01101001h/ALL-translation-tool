@@ -4,9 +4,23 @@
 pane's stacked multi-dictionary display.
 
 LOCAL REFERENCE ONLY (Adam's decision 2026-08-06): these layers are
-unlicensed compilations for personal in-house lookup. The DB never ships,
-never merges into HGM releases. Every row keeps its layer tag; the UI is
-required to label them "reference only".
+unlicensed compilations for personal in-house lookup. Every row keeps its
+layer tag; the UI is required to label them "reference only".
+
+WHERE IT MAY GO (corrected 2026-08-23, SQA BUILD-5). This header used to
+read "The DB never ships" — and it was shipping: 80,756,736 bytes of it,
+in every team DMG since the press gained a mode, while
+OPEN_SOURCE_NOTICES.md said the THL payload was "NOT redistributed". The
+truth, and the rule from here:
+
+  * never merges into HGM releases                     (unchanged)
+  * TEAM DMG only. docs/distribution/PAYLOAD_MANIFEST.txt carries the
+    row `team ... build/reference.db`; a market press that finds it
+    FAILS, and the team DMG's README.txt says in as many words that the
+    image is not for redistribution and names this file.
+  * the source extractions (data/extracted/thl_dicts.jsonl,
+    tibetan_dictionary_dic.jsonl) never leave this machine — they are
+    `drop` rows and the press removes them from the stage.
 """
 import json
 import sqlite3

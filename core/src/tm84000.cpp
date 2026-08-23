@@ -190,6 +190,21 @@ long long Tm84000::rowCount() const {
     return r.empty() ? 0 : std::stoll(r);
 }
 
+long long Tm84000::matchCount(const std::string& fts_query) const {
+    // SELECT COUNT(*) ... WHERE tm MATCH ? — the uncapped question.
+    // -1 means "could not measure", so the caller says so rather than
+    // printing a number it did not measure (rule 3).
+    sqlite3_stmt* st = nullptr;
+    if (sqlite3_prepare_v2(db_, "SELECT COUNT(*) FROM tm WHERE tm MATCH ?1",
+                           -1, &st, nullptr) != SQLITE_OK)
+        return -1;
+    sqlite3_bind_text(st, 1, fts_query.c_str(), -1, SQLITE_TRANSIENT);
+    long long n = -1;
+    if (sqlite3_step(st) == SQLITE_ROW) n = sqlite3_column_int64(st, 0);
+    sqlite3_finalize(st);
+    return n;
+}
+
 std::vector<TmSegment> Tm84000::search(const std::string& fts_query,
                                        int limit) const {
     std::vector<TmSegment> out;

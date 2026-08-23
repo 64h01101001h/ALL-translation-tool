@@ -62,18 +62,39 @@ if [[ "$MODE" != "--tests-only" ]]; then
 fi
 
 step "batteries"
+# A FOURTH disguise, found 2026-08-23 (SQA BUILD-7): ctest exits 0 when
+# a suite is SKIPPED, and 37 of the 73 suites skip when their untracked
+# fixture is absent (cmake/AllFixtureTests.cmake). "batteries ok" over a
+# run that executed 36 of 73 is the same lie in a new costume, so count
+# the skips and put the number in the success line.
+SKIP_NOTE=""
+CTEST_LOG=/tmp/all_verify_ctest.log
 if [[ "$MODE" == "--quick" ]]; then
     ( cd "$BUILD" && ctest --output-on-failure -R app_selftest ) \
         || fail "app_selftest"
+    grn "batteries ok (app_selftest only)"
 else
-    ( cd "$BUILD" && ctest -j"$JOBS" --output-on-failure ) \
-        || fail "ctest"
+    set +e
+    ( cd "$BUILD" && ctest -j"$JOBS" --output-on-failure ) 2>&1 \
+        | tee "$CTEST_LOG"
+    CTEST_RC=${PIPESTATUS[0]}
+    set -e
+    [[ "$CTEST_RC" == "0" ]] || fail "ctest"
+    SKIPPED=$(grep -c '\*\*\*Skipped' "$CTEST_LOG" || true)
+    if [[ "$SKIPPED" != "0" ]]; then
+        red "$SKIPPED suite(s) did NOT run — their fixtures are absent:"
+        grep '\*\*\*Skipped' "$CTEST_LOG" | sed 's/^/  /'
+        red "docs/FIXTURES.md says how to produce each one."
+        grn "batteries ok on the suites that ran"
+        SKIP_NOTE=", $SKIPPED SKIPPED (docs/FIXTURES.md)"
+    else
+        grn "batteries ok — nothing skipped"
+    fi
 fi
-grn "batteries ok"
 
 if [[ "$MODE" != "--quick" ]]; then
     step "constitution"
     python3 "$ROOT/tools/constitution_check.py" "$ROOT" || fail "constitution"
 fi
 
-grn "VERIFIED: built from this source, batteries green, constitution holds"
+grn "VERIFIED: built from this source, batteries green${SKIP_NOTE}, constitution holds"

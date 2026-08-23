@@ -25,6 +25,11 @@ cataloging, OCR, teaching links. One app, two parts:
     cmake -S . -B cmake-build-release -DCMAKE_BUILD_TYPE=Release
     cmake --build cmake-build-release -j8        # zero warnings, -Wall
     (cd cmake-build-release && ctest -j8)        # ALL suites must pass
+    #  ... and none may be SKIPPED. 37 of the suites read data git does
+    #  not track; without it they register as ctest SKIPs naming the
+    #  missing path (docs/FIXTURES.md). A skip is not a pass, tools/
+    #  verify.sh puts the count in its success line, and the press stops
+    #  if anything skipped. From a clean checkout use `ctest -LE fixture`.
 The battery includes: engine batteries (fixtures from canonical
 Python), the constitution (process rules as greps — read
 tools/constitution_check.py, every rule cites the bug that paid for

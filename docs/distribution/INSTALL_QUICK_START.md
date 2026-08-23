@@ -2,6 +2,19 @@
 
 *One page. No technical knowledge required.*
 
+## Before you start — will it run on your Mac?
+
+You need **an Apple Silicon Mac (M1, M2, M3, M4 or later) running
+macOS 26 or later**.
+
+To check: Apple menu → About This Mac. If the Chip line says "Intel",
+this build will not run on your machine at all — tell your coordinator
+rather than trying. If the macOS version is older than 26, update
+first.
+
+There is no error message for either case: the app simply will not
+open. That is why this section is here.
+
 ## Installing (three steps)
 
 1. **Open the DMG** you were given — double-click it. A window

@@ -134,7 +134,8 @@ LibraryIndex::LibraryIndex(const std::string& db_path) {
 
 LibraryIndex::~LibraryIndex() { sqlite3_close(db_); }
 
-LibraryIndex::UpdateStats LibraryIndex::update(const std::string& root) {
+LibraryIndex::UpdateStats LibraryIndex::update(
+    const std::string& root, const UpdateProgress& progress) {
     namespace fs = std::filesystem;
     UpdateStats st;
     if (!fs::exists(root))
@@ -152,6 +153,15 @@ LibraryIndex::UpdateStats LibraryIndex::update(const std::string& root) {
                             .time_since_epoch()
                             .count();
         disk[fs::relative(it->path(), root).string()] = {mt, (long long)size};
+        // SQA PERF-2: the walk alone is thousands of stat() calls on a
+        // real collection. Report it (total 0 = still counting) so the
+        // caller can paint and stay answerable. Stopping here has
+        // written nothing at all — no transaction is open yet.
+        if (progress && (disk.size() % 256) == 0 &&
+            !progress((int)disk.size(), 0, "")) {
+            st.canceled = true;
+            return st;
+        }
     }
 
     // fold-generation stamp: text_norm depends on whether the
@@ -196,7 +206,19 @@ LibraryIndex::UpdateStats LibraryIndex::update(const std::string& root) {
         }
     }
     // add/update
+    const int total = (int)disk.size();
+    int done = 0;
     for (auto& [path, ms] : disk) {
+        // SQA PERF-2: the cancellation point, and it sits HERE — before
+        // the file is touched — on purpose. See UpdateProgress in the
+        // header: a stop inside the line loop would bank a half-indexed
+        // file under its real mtime+size and every later update would
+        // skip it as unchanged.
+        if (progress && !progress(done, total, path)) {
+            st.canceled = true;
+            break;
+        }
+        ++done;
         long long id = -1, mtime = 0, size = 0;
         {
             Stmt g(db_, "SELECT id, mtime, size FROM files WHERE path=?");
@@ -305,8 +327,15 @@ LibraryIndex::UpdateStats LibraryIndex::update(const std::string& root) {
             sqlite3_step(lf.p);
         }
     }
-    exec(db_, foldGen ? "PRAGMA application_id=1"
-                      : "PRAGMA application_id=0");
+    // The fold stamp asserts "every row in this index was normalised
+    // under this fold". A cancelled pass has not finished proving that,
+    // so it must NOT stamp: otherwise an interrupted refold never heals
+    // and searches silently miss the rows that kept the old norms.
+    if (!st.canceled)
+        exec(db_, foldGen ? "PRAGMA application_id=1"
+                          : "PRAGMA application_id=0");
+    // Everything completed before the stop is committed — the index is
+    // incremental, so a partial index is valid and resumable.
     exec(db_, "COMMIT");
     st.lines = lineCount();
     return st;

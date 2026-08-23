@@ -8,9 +8,16 @@ Deeper companions: `README.md` (pane guide),
 
 ## Prerequisites
 
-    brew install cmake qt        # Qt 6 (HarfBuzz bundled — Tibetan
-                                 # shaping comes from Qt itself)
+**An Apple Silicon Mac, macOS 26 or later** (`ALL_MACOS_MIN` in the root
+`CMakeLists.txt` is the floor; the press refuses to ship a bundle that
+does not declare it).
+
+    brew bundle --file=Brewfile  # the declared build dependencies,
+                                 # and it writes Brewfile.lock.json
     brew install pandoc          # optional: .docx doc generation
+
+`Brewfile` is the single list; `brew bundle check --file=Brewfile`
+answers "have I got them all?".
 
 Python 3 (system is fine) drives the data harnesses in `tools/`;
 nothing Python runs at app runtime.
@@ -30,6 +37,12 @@ nothing: `python3 tools/build_spine.py` (release package + corpus →
     ./cmake-build/app/DiamondCutterTranslationTool.app/Contents/MacOS/\
 DiamondCutterTranslationTool --selftest                # 225 checks
 
+From a **clean checkout** run `ctest --test-dir cmake-build -LE
+fixture` instead: 37 of the suites read data git does not track, and
+without it they are registered as ctest SKIPs that name the missing
+path. `docs/FIXTURES.md` lists every one and how to produce it. A skip
+is never a pass, and the press refuses to cut a release if anything
+skipped.
 The ctest battery is the trust anchor: engine ports at
 full-dictionary parity against their Python oracles, data layers,
 stores, mutation paths. The selftest constructs the real panes

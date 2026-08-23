@@ -9,6 +9,7 @@
 // search), while the live scan matches raw substrings.
 #pragma once
 
+#include <functional>
 #include <string>
 #include <vector>
 
@@ -29,10 +30,31 @@ public:
     struct UpdateStats {
         int added = 0, updated = 0, removed = 0, unchanged = 0;
         long long lines = 0;   // total lines indexed after the update
+        // SQA PERF-2: true when the caller's progress callback asked
+        // to stop. Everything finished BEFORE the stop is committed —
+        // the index is incremental by (path, mtime, size), so a
+        // partial index is valid and the next update resumes from it.
+        // The caller must say "stopped, N of M done", never "up to
+        // date": a cancelled pass did not index the rest.
+        bool canceled = false;
     };
+    // SQA PERF-2: update() took 190,492 ms over the real 8,988-file
+    // library on the GUI thread, with no progress and no way out.
+    // This callback is invoked once per file (done, total, relative
+    // path) and periodically during the directory walk (where total
+    // is 0 — still counting); returning false stops the update.
+    //
+    // A stop is only ever honoured BETWEEN files. Stopping inside a
+    // file would leave it recorded with its real mtime and size and
+    // only some of its lines, and every later update would skip it as
+    // unchanged — a silent hole in the index, which is worse than the
+    // freeze this fixes.
+    using UpdateProgress =
+        std::function<bool(int done, int total, const std::string& path)>;
     // Walk root recursively (.txt/.acip/.md/.act/.inc/.ace, ≤10 MB) and
     // bring the index up to date.
-    UpdateStats update(const std::string& root);
+    UpdateStats update(const std::string& root,
+                       const UpdateProgress& progress = {});
 
     long long fileCount() const;
     long long lineCount() const;

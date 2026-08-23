@@ -289,8 +289,13 @@ icon families with washes (visibility ruling, 2026-08-20).*
   ever forces palette indirection.)
 
 ## AUDIT ROADMAP — CLOSING STATE (2026-08-20)
-P1 tokens ✓ · P2 epistemic badges ✓ · P3 counts-first ledger, ALL card
-evidence sections ✓ · H2 presets ✓ · H3 band coverage complete (every pane
+P1 tokens ✓ · P2 epistemic badges ✓ · P3 counts-first ledger — claimed
+complete for ALL card evidence sections here on 2026-08-20, and it was
+not: SQA DATA-3 (2026-08-22) found three surfaces still printing a
+display cap AS the total (the Draft concordance, phrase memory, and the
+84000 ledger — wrong by 30x, 80x and 278x). Fixed and pinned by battery
+on 2026-08-23; the ✓ dates from then, not from this closing state ·
+H2 presets ✓ · H3 band coverage complete (every pane
 banded or ruled) ✓ · H4 status bar ✓ · H5 link grammar (external ↗ +
 semantic ruling colors) ✓ · M1 splitters/focus ✓ · M2 ruled ✓ · M3 empty
 states ✓ · M4 checked states ✓ · M5 shortcuts + taught tooltips ✓ ·

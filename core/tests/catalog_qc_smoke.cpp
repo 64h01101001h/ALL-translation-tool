@@ -2,7 +2,11 @@
 // both lanes' verdicts; the library half measures the natural flag rate
 // (our own library should be nearly clean — the lanes exist for intake).
 //
-// Usage: catalog_qc_smoke <scratch_dir> [sungbum_root]
+// Usage: catalog_qc_smoke <scratch_dir> <sungbum_root>
+// BUILD-7: the sungbum root is REQUIRED. Whether this suite runs at all is
+// decided at configure time (cmake/AllFixtureTests.cmake turns it into a
+// ctest SKIP when library/sungbum is not in the checkout). The library
+// measure used to print a green all-clear over ZERO comparisons.
 #include <cstdio>
 #include <filesystem>
 #include <fstream>
@@ -89,14 +93,21 @@ int main(int argc, char** argv) {
     fs::remove_all(sc, ec);
 
     if (argc < 3) {
-        std::printf("  [SKIP] library measure (no root)\n");
-        std::printf("%s\n", failures ? "FAILURES" : "catalog_qc_smoke OK");
-        return failures ? 1 : 0;
+        std::printf("  [FAIL] library measure: no sungbum root given "
+                    "(usage: catalog_qc_smoke <scratch> <sungbum_root>)"
+                    "\nFAILURES\n");
+        return 1;
+    }
+    if (!fs::exists(argv[2], ec)) {
+        std::printf("  [FAIL] library measure: no library at %s - the "
+                    "measure compared nothing and does NOT pass\nFAILURES\n",
+                    argv[2]);
+        return 1;
     }
 
     // ---- the library's own rates -----------------------------------------
     allcore::TitlePairBank libBank;
-    libBank.addLibraryTree(argv[2]);
+    const int banked = libBank.addLibraryTree(argv[2]);
     const auto libFlags = allcore::qcTitleTranslationMismatch(
         argv[2], libBank, 0.85, 0.3, 200);
     const auto libGroups = allcore::qcDuplicateTitles(argv[2], 200);
@@ -109,15 +120,20 @@ int main(int argc, char** argv) {
         else
             ++dupUnknown;
     }
-    std::printf("  library: %zu mismatch flag(s) · %zu shared-title "
-                "group(s): %d true-dup · %d distinct · %d no-evidence\n",
-                libFlags.size(), libGroups.size(), dupTrue, dupDistinct,
-                dupUnknown);
+    std::printf("  library: %d banked title pair(s) · %zu mismatch flag(s) "
+                "· %zu shared-title group(s): %d true-dup · %d distinct · "
+                "%d no-evidence\n",
+                banked, libFlags.size(), libGroups.size(), dupTrue,
+                dupDistinct, dupUnknown);
     for (size_t i = 0; i < libFlags.size() && i < 3; ++i)
         std::printf("    flag: %.60s | eng-sim %.2f tib-sim %.2f\n",
                     libFlags[i].file.c_str(), libFlags[i].eng_sim,
                     libFlags[i].tib_sim);
-    CHECK(libFlags.size() <= 25,
+    // house rule 4: "0 flags" is only good news when something was
+    // compared. Pin the denominator before the ratio.
+    CHECK(banked > 0,
+          "the installed library yields title pairs to compare");
+    CHECK(banked > 0 && libFlags.size() <= 25,
           "the installed library's own mismatch rate stays low (the "
           "lane exists for intake material)");
 

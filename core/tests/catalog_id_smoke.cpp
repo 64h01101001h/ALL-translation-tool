@@ -7,8 +7,11 @@
 // set just under the measured numbers, so drift fails here rather than in
 // front of a cataloger.
 //
-// Usage: catalog_id_smoke [library_root]
-// Without a library root the pins still run and the battery reports skipped.
+// Usage: catalog_id_smoke <library_root>
+// BUILD-7: the library root is REQUIRED. Whether this suite runs at all is
+// decided at configure time (cmake/AllFixtureTests.cmake turns it into a
+// ctest SKIP when library/ is not in the checkout), so a missing tree here
+// means the battery lied about what it measured — it fails.
 #include <algorithm>
 #include <cctype>
 #include <cstdio>
@@ -159,18 +162,18 @@ int main(int argc, char** argv) {
 
     // ---- the battery: re-measure against the installed library -----------
     if (argc < 2) {
-        std::printf("  [SKIP] library battery (no library root given)\n");
-        std::printf("%s\n", failures ? "FAILURES" : "catalog_id_smoke OK");
-        return failures ? 1 : 0;
+        std::printf("  [FAIL] library battery: no library root given "
+                    "(usage: catalog_id_smoke <library_root>)\nFAILURES\n");
+        return 1;
     }
     namespace fs = std::filesystem;
     const std::string root = argv[1];
     std::error_code ec;
     if (!fs::exists(root, ec)) {
-        std::printf("  [SKIP] library battery (no library at %s)\n",
+        std::printf("  [FAIL] library battery: no library at %s - the "
+                    "battery measured nothing and does NOT pass\nFAILURES\n",
                     root.c_str());
-        std::printf("%s\n", failures ? "FAILURES" : "catalog_id_smoke OK");
-        return failures ? 1 : 0;
+        return 1;
     }
 
     allcore::TitleBank bank;

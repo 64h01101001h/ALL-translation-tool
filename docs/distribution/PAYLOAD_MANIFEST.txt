@@ -1,0 +1,126 @@
+# PAYLOAD_MANIFEST.txt — the machine-readable manifest of everything the
+# press stages into a DMG.  It is the SOURCE the press stages FROM and the
+# SET the gate inspects AGAINST: tools/manifest_check.py drives the press's
+# data-dir list from this file, prunes data/extracted to it, and fails the
+# press on any staged path this file does not name.
+#
+# Written 2026-08-23 for SQA BUILD-4 (the L2 gate passed on a keyword and
+# never opened the payload) and BUILD-5 (payload the notices called "NOT
+# redistributed" was in the DMG).  Before it, L2 credited a whole 102 MB
+# directory because the unrelated string "84000" occurred in the notices.
+#
+# Columns are separated by ' | '. No quoting; no field may contain
+# a '|'. Lines beginning with '#' are comments.
+#   mode      both / team / drop
+#             both = ships in team AND market DMGs
+#             team = TEAM DMG ONLY; a market press that finds it FAILS
+#             drop = present in the repo tree, deliberately NOT staged.
+#                    tools/manifest_check.py --prune-extracted removes these
+#                    from the staged data/extracted tree and prints each one.
+#   status    ok / itemise / gated
+#             ok       = terms recorded and settled
+#             itemise  = shipping under SHIP.md's blanket "data/extracted:
+#                        SHIPS-WITH-ATTRIBUTION, pending the per-file
+#                        itemization"; the per-file terms are NOT yet recorded
+#             gated    = SHIP.md names a human decision still open for it
+#             A market press FAILS on any staged `itemise` or `gated` row.
+#             A team press prints them as notes and continues.
+#   path      relative to the DMG root.  A trailing "/" covers the whole
+#             subtree.  "*" globs within one path component.
+#   licence   SPDX id where one is recorded, else the recorded status phrase.
+#   anchor    a substring that MUST occur in OPEN_SOURCE_NOTICES.md, or "-"
+#             for the files that ARE the licence/notice documents.
+#   provenance  where the licence claim comes from, so a reader can check it.
+#
+# mode | status | path | licence | anchor | provenance
+both | ok | Diamond Cutter Translation Tool.app/ | see Contents/Resources/licenses/BUNDLED_COMPONENTS.tsv | Bundled binary components | tools/bundle_licenses.py enumerates every Mach-O in the bundle to its Homebrew formula, version and SPDX id at press time and fails the press on any it cannot map
+both | ok | README.txt | ALL's own text | - | written by tools/package_macos.sh
+both | ok | OPEN_SOURCE_NOTICES.md | ALL's own text | - | docs/distribution/OPEN_SOURCE_NOTICES.md
+both | ok | LICENSE | ALL's own text | - | the repository root LICENSE, added 2026-08-23 (SQA BUILD-2: the project had no licence file)
+both | gated | Diamond Cutter Tool Data/build/hgm_spine_*.db | ALL/ACIP internal data; team distribution | The dictionary and corpus | SHIP.md L1 open item 1 - Adam's written stance on redistributing the HGM release package
+both | ok | Diamond Cutter Tool Data/build/spine_current.txt | ALL's own text | The dictionary and corpus | tools/build_spine.py writes it
+team | ok | Diamond Cutter Tool Data/build/reference.db | unlicensed third-party compilations - LOCAL REFERENCE ONLY, never redistributed | compiled into build/reference.db | SHIP.md L1: "P0 MUST-REMOVE(market)"; tools/build_reference_db.py header
+both | ok | Diamond Cutter Tool Data/tools/build_spine.py | ALL's own code | The dictionary and corpus | this repository
+both | ok | Diamond Cutter Tool Data/docs/analysis/PASSAGE_ANALYSIS_TEMPLATE.md | ALL's own text | The dictionary and corpus | this repository
+both | ok | Diamond Cutter Tool Data/library/ocr_models/ | CC-BY-NC-4.0 | BDRC line-detection model | docs/licenses/BDRC_OCR_permission.md + SHIP.md free-distribution ruling 2026-08-22
+both | ok | Diamond Cutter Tool Data/data/das/das_1902_bookmarked.pdf | public domain (published 1902) | Das, *Tibetan-English Dictionary* | SHIP.md L1 row: data/das (Das 1902 PDF), published 1902, public domain, SHIPS
+both | gated | Diamond Cutter Tool Data/data/teaching/teaching_moments_card.json | the org's own recorded teachings, captions-only derivation | Teaching-moments index | SHIP.md L1 open item 3 - Adam's one-line consent confirmation
+both | gated | Diamond Cutter Tool Data/data/teaching/PROVENANCE.md | the org's own text | Teaching-moments index | SHIP.md L1 open item 3 - Adam's one-line consent confirmation; the record itself is data/teaching/PROVENANCE.md
+both | ok | Diamond Cutter Tool Data/data/fonts/ | OFL-1.1 (per face, banked in FONTS.md) + BabelStone free-use | Fonts (bundled Tibetan faces) | data/fonts/FONTS.md, OFL.txt, Jomolhari-OFL.txt, MonlamBodyig-OFL.txt
+both | ok | Diamond Cutter Tool Data/data/honorifics/ | ALL's own data (HGM register work) | honorific register | data/honorifics/README.md
+both | ok | Diamond Cutter Tool Data/data/pron_colloquial/ | ALL's own data (HGM pronunciation conventions) | colloquial pronunciation | data/pron_colloquial/README.md
+both | ok | Diamond Cutter Tool Data/data/abbreviations/ | CC0-1.0 | TibSchol abbreviations | data/abbreviations/LICENSE-CC0 + README.md
+both | ok | Diamond Cutter Tool Data/data/idioms/ | ALL's own data | idiom | this repository
+both | ok | Diamond Cutter Tool Data/data/botok/ | Apache-2.0 | Botok | data/botok/LICENSE-botok
+both | ok | Diamond Cutter Tool Data/data/spellcheck/ | CC0-1.0 | tibetan-spellchecker syllable data | notices "tibetan-spellchecker syllable data / CC0"
+both | gated | Diamond Cutter Tool Data/data/soas_pos/ | CC-BY-4.0 claimed (Zenodo DOI 10.5281/zenodo.574876) - original terms not yet located | SOAS POS lexicon | SHIP.md L1 open item 4 - "SOAS POS materials: locate the original terms before any market DMG"
+both | ok | Diamond Cutter Tool Data/data/whitney/ | public domain (Whitney 1885/1879) + Apache-2.0 tooling | Whitney, *Roots* | data/whitney/LICENSE-Apache-2.0 + README.md
+both | ok | Diamond Cutter Tool Data/data/candidate_alignments/ | ALL's own data | The dictionary and corpus | this repository (directory absent from the current tree; the pre-manifest press named it, so the row is kept)
+both | ok | Diamond Cutter Tool Data/data/84000/ | CC-BY-4.0 | 84000 glossary | 84000 Terms of Use table rev. 2023-06-14, banked in data/84000/README.md
+both | ok | Diamond Cutter Tool Data/data/help/ | ALL's own text | The dictionary and corpus | this repository
+#
+# --- data/extracted, itemised.  BUILD-4's blind spot was exactly here: the
+# --- old gate credited the whole directory on one keyword.  Every entry is
+# --- named, and every entry the app never opens is `drop`.
+#
+both | itemise | Diamond Cutter Tool Data/data/extracted/ | itemised file by file in the rows below | The dictionary and corpus | BUILD-4: this is the directory L2 credited wholesale on the keyword "84000"; no row below it is covered by this one
+both | ok | Diamond Cutter Tool Data/data/extracted/mahavyutpatti.tsv | CC-BY-SA-3.0 | Mahāvyutpatti (DILA TEI edition) | notices "Mahāvyutpatti (DILA TEI edition) / CC BY-SA 3.0"
+both | ok | Diamond Cutter Tool Data/data/extracted/monlam_lexicon_1.txt | Apache-2.0 | Monlam word lists | notices "Monlam word lists (via openpecha) / Apache 2.0"
+both | ok | Diamond Cutter Tool Data/data/extracted/monlam_lexicon_2.txt | Apache-2.0 | Monlam word lists | notices "Monlam word lists (via openpecha) / Apache 2.0"
+both | ok | Diamond Cutter Tool Data/data/extracted/verb_lemmas.tsv | CC0-1.0 | Tibetan verbs database | notices "Tibetan verbs database / CC0"
+both | ok | Diamond Cutter Tool Data/data/extracted/verb_stems.tsv | CC0-1.0 | Tibetan verbs database | notices "Tibetan verbs database / CC0"
+both | ok | Diamond Cutter Tool Data/data/extracted/tol_links.json | identifiers only (Wikidata CC0 + BDRC owl:sameAs); no Treasury of Lives content | Treasury of Lives biography ids | notices Treasury of Lives row; built by tools/widen_tol_links.py
+both | ok | Diamond Cutter Tool Data/data/extracted/tol_slugs.json | identifiers only (Wikidata CC0 + BDRC owl:sameAs); no Treasury of Lives content | Treasury of Lives biography ids | notices Treasury of Lives row; built by tools/widen_tol_links.py
+both | ok | Diamond Cutter Tool Data/data/extracted/das_headwords.tsv | public domain (Das 1902) | Das, *Tibetan-English Dictionary* | derived from the public-domain 1902 scan the DMG already carries
+both | ok | Diamond Cutter Tool Data/data/extracted/das_pages.json | public domain (Das 1902) | Das, *Tibetan-English Dictionary* | built by tools/extract_das_outline.py from the 1902 scan
+both | ok | Diamond Cutter Tool Data/data/extracted/jaeschke_pages.json | public domain (Jäschke 1881) | Jäschke, *Tibetan-English Dictionary* | page index over the public-domain 1881 scan
+both | ok | Diamond Cutter Tool Data/data/extracted/ekangyur_index.json | offsets only, into an e-text the DMG does not carry (Esukhia derge-kangyur, public domain per its README §License) | Esukhia derge-kangyur e-text | tools/index_ekangyur.py header
+both | ok | Diamond Cutter Tool Data/data/extracted/etengyur_index.json | offsets only, into an e-text the DMG does not carry (Esukhia derge-tengyur, public domain per its README §License) | Esukhia derge-kangyur e-text | tools/index_ekangyur.py header
+both | ok | Diamond Cutter Tool Data/data/extracted/thl_dege_concordance.json | catalog numbers only (THL number ⇄ Tohoku number); no THL prose is copied | THL catalog numbers | tools/build_thl_concordance.py header
+both | itemise | Diamond Cutter Tool Data/data/extracted/acip_person_links.json | ACIP's own catalog material | Buddhist canonical texts (ACIP Releases) | built by tools/build_author_index.py
+both | itemise | Diamond Cutter Tool Data/data/extracted/author_index.json | ACIP's own catalog material | Buddhist canonical texts (ACIP Releases) | built by tools/build_author_index.py
+both | itemise | Diamond Cutter Tool Data/data/extracted/catalog_titles.json | ACIP's own catalog material | Buddhist canonical texts (ACIP Releases) | ACIP release catalog
+both | itemise | Diamond Cutter Tool Data/data/extracted/catalog_works.json | ACIP's own catalog material | Buddhist canonical texts (ACIP Releases) | built by tools/extract_catalog_works.py
+both | itemise | Diamond Cutter Tool Data/data/extracted/citation_web.json | derived from the ALL's own corpus | The dictionary and corpus | built by tools/build_citation_web.py
+both | itemise | Diamond Cutter Tool Data/data/extracted/apparatus_anchors.json | the org's own published apparatus | The dictionary and corpus | built by tools/build_apparatus_anchors_r4.py
+both | itemise | Diamond Cutter Tool Data/data/extracted/apparatus_bibliography.json | the org's own published apparatus | The dictionary and corpus | built by tools/extract_apparatus.py
+both | itemise | Diamond Cutter Tool Data/data/extracted/apparatus_notes.json | the org's own published apparatus | The dictionary and corpus | built by tools/build_apparatus_anchors_r1.py
+both | itemise | Diamond Cutter Tool Data/data/extracted/mixed_nuts_bibliography.json | the org's own published apparatus | The dictionary and corpus | built by tools/build_main_apparatus.py
+both | itemise | Diamond Cutter Tool Data/data/extracted/mixed_nuts_notes.json | the org's own published apparatus | The dictionary and corpus | built by tools/extract_mixed_nuts_notes.py
+both | itemise | Diamond Cutter Tool Data/data/extracted/mixed_nuts_notes_older.json | the org's own published apparatus | The dictionary and corpus | built by tools/extract_older_apparatus.py
+both | itemise | Diamond Cutter Tool Data/data/extracted/bsdus_tshig.tsv | derived from the ALL's own corpus | The dictionary and corpus | built by tools/derive_bsdus_tshig.py; docs/BSDUS_TSHIG_REGISTER.md
+both | itemise | Diamond Cutter Tool Data/data/extracted/meter_census.json | derived from the ALL's own corpus | The dictionary and corpus | built by tools/meter_census.py
+both | itemise | Diamond Cutter Tool Data/data/extracted/persons_bdrc.json | BDRC catalog metadata (names, dates, cross-refs) harvested via the BLMP label search | BDRC catalog metadata | built by tools/fetch_persons.py
+both | itemise | Diamond Cutter Tool Data/data/extracted/kl_bdrc_concordance.json | BDRC part numbers only | BDRC catalog metadata | built by tools/build_kl_bdrc_concordance.py
+both | itemise | Diamond Cutter Tool Data/data/extracted/kl_lhasa_concordance.json | BDRC part numbers only | BDRC catalog metadata | built by tools/build_lhasa_concordance.py
+both | itemise | Diamond Cutter Tool Data/data/extracted/sungbum_scan_links.json | BDRC scan identifiers only | BDRC catalog metadata | built by tools/build_sungbum_scan_links.py
+both | itemise | Diamond Cutter Tool Data/data/extracted/sungbum_subjects.json | catalogued subject headings | BDRC catalog metadata | built by tools/build_subject_index.py
+both | itemise | Diamond Cutter Tool Data/data/extracted/r6_work_subjects.json | catalogued subject headings (ACIP R6) | Buddhist canonical texts (ACIP Releases) | built by tools/build_subject_index.py
+both | itemise | Diamond Cutter Tool Data/data/extracted/work_subjects.tsv | catalogued subject headings | Buddhist canonical texts (ACIP Releases) | built by tools/build_subject_index.py
+#
+# --- drop: in the repo tree, NOT staged.  Each of these was in the DMG
+# --- before 2026-08-23 and is read by nothing in app/ or core/.
+#
+drop | ok | Diamond Cutter Tool Data/data/extracted/thl_dege_records | raw THL catalog HTML harvested from old.thlib.org - THL payload, terms unreviewed | THL catalog numbers | BUILD-5: the notices declared THL payload not redistributed while 1,118 records shipped
+drop | ok | Diamond Cutter Tool Data/data/extracted/thl_lhasa_records | raw THL catalog HTML harvested from old.thlib.org - THL payload, terms unreviewed | THL catalog numbers | BUILD-5: same tree, Lhasa side (808 records)
+drop | ok | Diamond Cutter Tool Data/data/extracted/thl_dege_titles.json | titles lifted from the THL catalog HTML above | THL catalog numbers | BUILD-5: derived from the same unreviewed harvest
+drop | ok | Diamond Cutter Tool Data/data/extracted/bdrc_toh_labels | BDRC RDF dumps (1,118 files) - ingest input to the concordance builder | BDRC catalog metadata | read by tools/build_thl_concordance.py only, never by the app
+drop | ok | Diamond Cutter Tool Data/data/extracted/wvpp_rows | BDRC title rows - ingest input | BDRC catalog metadata | read by ingest tools only, never by the app
+drop | ok | Diamond Cutter Tool Data/data/extracted/acip_catalog_bdrc.csv | ingest intermediate | Buddhist canonical texts (ACIP Releases) | read by ingest tools only, never by the app
+drop | ok | Diamond Cutter Tool Data/data/extracted/sanskrit_cluster_census.tsv | ingest intermediate (22 MB) | The dictionary and corpus | read by ingest tools only, never by the app
+drop | ok | Diamond Cutter Tool Data/data/extracted/sungbum_unmatched_review.json | ingest review by-product | BDRC catalog metadata | read by ingest tools only, never by the app
+drop | ok | Diamond Cutter Tool Data/data/extracted/sungbum_mw22109_concordance.json | ingest by-product | BDRC catalog metadata | read by ingest tools only, never by the app
+drop | ok | Diamond Cutter Tool Data/data/extracted/mw22109_outline.json | ingest by-product | BDRC catalog metadata | read by ingest tools only, never by the app
+drop | ok | Diamond Cutter Tool Data/data/extracted/mw26071_part_titles.tsv | ingest by-product | BDRC catalog metadata | read by ingest tools only, never by the app
+drop | ok | Diamond Cutter Tool Data/data/extracted/r6_subject_pairs.json | ingest by-product | Buddhist canonical texts (ACIP Releases) | read by ingest tools only, never by the app
+drop | ok | Diamond Cutter Tool Data/data/extracted/verbs_db.csv | ingest input superseded by verb_lemmas.tsv/verb_stems.tsv | Tibetan verbs database | read by ingest tools only, never by the app
+drop | ok | Diamond Cutter Tool Data/data/extracted/anusvara_review_candidates.tsv | engine review by-product | The dictionary and corpus | read by ingest tools only, never by the app
+drop | ok | Diamond Cutter Tool Data/data/extracted/prenasal_both.json | engine review by-product | The dictionary and corpus | read by ingest tools only, never by the app
+drop | ok | Diamond Cutter Tool Data/data/extracted/prenasal_defect_candidates.tsv | engine review by-product | The dictionary and corpus | read by ingest tools only, never by the app
+drop | ok | Diamond Cutter Tool Data/data/extracted/pyewts_oracle_defect_candidates.json | engine cross-check by-product | Cross-validation acknowledgments | read by ingest tools only, never by the app
+drop | ok | Diamond Cutter Tool Data/data/extracted/pyewts_oracle_report.json | engine cross-check by-product | Cross-validation acknowledgments | read by ingest tools only, never by the app
+drop | ok | Diamond Cutter Tool Data/data/extracted/thl_wylie_oracle_defect_candidates.json | engine cross-check by-product | Cross-validation acknowledgments | read by ingest tools only, never by the app
+drop | ok | Diamond Cutter Tool Data/data/extracted/thl_wylie_oracle_report.json | engine cross-check by-product | Cross-validation acknowledgments | read by ingest tools only, never by the app
+drop | ok | Diamond Cutter Tool Data/data/extracted/thl_dicts.jsonl | THL dictionary payload, terms unreviewed | compiled into build/reference.db | pre-existing L1 strip, now recorded here
+drop | ok | Diamond Cutter Tool Data/data/extracted/tibetan_dictionary_dic.jsonl | ACIPHypercontext TibetanDictionary.dic extraction, terms unreviewed | compiled into build/reference.db | pre-existing L1 strip, now recorded here
+drop | ok | Diamond Cutter Tool Data/data/extracted/tm_84000.db | rebuilt on first use from the CC BY tsv.gz - 279 MB of dead weight in the DMG | 84000 Translation Memory | pre-existing L1 strip, now recorded here

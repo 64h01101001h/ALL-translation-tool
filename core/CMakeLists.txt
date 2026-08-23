@@ -237,6 +237,11 @@ add_executable(libindex_smoke tests/libindex_smoke.cpp)
 target_link_libraries(libindex_smoke PRIVATE allcore)
 add_test(NAME libindex_smoke COMMAND libindex_smoke)
 
+# SQA PERF-2: stopping an index update must be safe, not just possible
+add_executable(libindex_cancel_smoke tests/libindex_cancel_smoke.cpp)
+target_link_libraries(libindex_cancel_smoke PRIVATE allcore)
+add_test(NAME libindex_cancel_smoke COMMAND libindex_cancel_smoke)
+
 add_executable(qc_smoke tests/qc_smoke.cpp)
 target_link_libraries(qc_smoke PRIVATE allcore)
 add_test(NAME qc_smoke
@@ -450,4 +455,56 @@ if(Python3_FOUND)
            COMMAND ${Python3_EXECUTABLE}
                    ${CMAKE_SOURCE_DIR}/tools/constitution_check.py
                    ${CMAKE_SOURCE_DIR})
+endif()
+
+# BUILD-7: the battery must say what it did NOT run. fixture_gate holds
+# the skip machinery (cmake/AllFixtureTests.cmake) and keeps
+# docs/FIXTURES.md in step with the fixtures the suites actually read;
+# it carries its own hermetic proof, so it goes red if the wrapper is
+# removed. Neither suite reads an untracked fixture, so both run from a
+# clean checkout — which is the point.
+if(Python3_FOUND)
+  add_test(NAME fixture_gate
+           COMMAND ${Python3_EXECUTABLE}
+                   ${CMAKE_SOURCE_DIR}/tools/fixture_gate_check.py
+                   ${CMAKE_SOURCE_DIR} ${CMAKE_BINARY_DIR}
+                   ${CMAKE_COMMAND} ${CMAKE_CTEST_COMMAND})
+endif()
+
+# BUILD-7 / house rule 4: a suite handed no data FAILS. Before
+# 2026-08-23 these three exited 0 against a path that does not exist,
+# one of them printing "(measured 31%)" from a string literal.
+if(Python3_FOUND)
+  add_test(NAME no_vacuous_pass
+           COMMAND ${Python3_EXECUTABLE}
+                   ${CMAKE_SOURCE_DIR}/tools/no_vacuous_pass_check.py
+                   ${CMAKE_CURRENT_BINARY_DIR}
+                   $<TARGET_FILE:catalog_id_smoke>
+                   $<TARGET_FILE:catalog_qc_smoke>
+                   $<TARGET_FILE:shelf_suggest_smoke>)
+endif()
+
+# BUILD-6: the release must be able to say what it was built from.
+if(Python3_FOUND)
+  add_test(NAME build_manifest
+           COMMAND ${Python3_EXECUTABLE}
+                   ${CMAKE_SOURCE_DIR}/tools/build_manifest_check.py
+                   ${CMAKE_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR})
+endif()
+
+# SQA BUILD-2/4/5: the payload gate that actually opens the payload.
+# The selftest stages synthetic trees in a temp dir and asserts the
+# walk's verdict on each: an unmanifested file inside a CREDITED
+# directory must fail (that is BUILD-4 exactly — the old rule credited
+# 102 MB of data/extracted on the keyword "84000"), a `drop` tree that
+# survived the prune must fail (BUILD-5 — THL records in a DMG whose
+# notices said they were not redistributed), team-only payload must
+# fail a market press, and the pre-fix eight-line README must fail the
+# team stamp check. Reverting any of those behaviours turns this red;
+# it was mutation-tested that way before it was committed.
+if(Python3_FOUND)
+  add_test(NAME payload_manifest
+           COMMAND ${Python3_EXECUTABLE}
+                   ${CMAKE_SOURCE_DIR}/tools/manifest_check.py
+                   --selftest ${CMAKE_SOURCE_DIR})
 endif()

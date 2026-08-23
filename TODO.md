@@ -2204,3 +2204,197 @@ implementation is sidelined HERE from this date. What this means:
       headroom-friendly at int8); the ~18GB download awaits
       Adam's go (and the Chodrak etext, its real workload).
 - [x] Meter reader phase 2 — SHIPPED 2026-08-14 same day: mgur even-count grouping (floor 6, best>=4 — 4-count runs are DANG-list noise, excluded by rule), per-block on-meter %, AND the full canon meter census (tools/meter_census.py → data/extracted/meter_census.json: 333,802 verse lines over all 3 collections; 7-syl 61.1%, 5-syl 15.4%, 9-syl 8.5%, 6-syl mgur 6.2%, 13-syl kavya 3.4%) wired into the reader headings ('· N% OF ALL CANON VERSE'). Possible later: per-collection shares in-app; census by century/author if metadata ever supports it.
+
+## SOFTWARE ENGINEERING DISCIPLINE AUDIT (Adam, 2026-08-23: "are
+## there other aspects like SQA I should be aware of… complete
+## rundown… put your findings onto the todo list")
+
+Scope note: this audit covers the disciplines AROUND quality
+assurance. QA itself is in good shape — docs/SQA_ASSESSMENT_2026-08-22.md
+carries 22+ measured findings with severity, effort and verification
+columns, and the remediation wave is running. Nothing below duplicates
+it; each item was checked against the repo on 2026-08-23 and each is
+either absent from the SQA doc entirely or is a lifecycle concern the
+SQA doc explicitly scopes out.
+
+### P0 — DATA LOSS RISK, act before any further feature work
+
+- [ ] **THE PROJECT HAS NEVER BEEN BACKED UP OFF THIS LAPTOP.**
+      Measured 2026-08-23: `git remote -v` is EMPTY — there is no
+      origin, no fork, no mirror. Time Machine IS configured to an
+      external volume ("My Book") and the repo IS included, but the
+      destination fails to mount and its last reference snapshot date
+      is **2026-05-21** — eleven weeks BEFORE the project's initial
+      commit (2026-08-06). The hourly APFS snapshots that do exist
+      (09:44…14:45 today) are LOCAL — same physical SSD, no protection
+      against drive failure, and macOS purges them under disk
+      pressure, which this machine is already under (100% capacity,
+      14 GiB free). Exposure: 19 GB working tree + 10 GB `.git`, 17
+      days of work, ~72,000 lines of C++, the entire institutional
+      deliverable. One SSD failure ends the project.
+      Remedy available NOW: `Oct2024(8TB)` is mounted with 1.1 TiB
+      free. Immediate: `git clone --mirror` onto it, today. Then
+      decide the durable answer — private remote (GitHub/GitLab) vs
+      an ALL-owned host — because a second copy on a desk in the same
+      room is not disaster recovery.
+
+- [ ] **Disk pressure is itself a correctness risk, not just an
+      inconvenience.** Data volume is at 100% capacity / 14 GiB free.
+      FAIL-1 in the SQA doc is `catalogRosterSave()` returning TRUE
+      after writing zero bytes — the exact failure ENOSPC produces.
+      The machine is currently sitting in the state that makes the
+      app's worst data-integrity bug fire. Reclaimable immediately:
+      3.5 GB of dead-session scratch under
+      /private/tmp/claude-501/…/5588dc0d-…/scratchpad, plus 2.0 GB in
+      `dist/`. Longer term, `library/` (2.9 GB) and the 10 GB `.git`
+      want a deliberate home.
+
+### P1 — needed before the app leaves this machine
+
+- [ ] **No LICENCE for the project's OWN code.** `ls LICENSE* COPYING*`
+      → no matches. ~32 upstream projects ship inside the bundle
+      (SQA BUILD-2) and there is no statement of what ALL is releasing
+      its own work under. Until that exists, nobody downstream — input
+      centres, collaborators, the director — can lawfully know what
+      they may do with it. Needs an ALL decision, not an engineering
+      one; prompt Adam to get it from ALL.
+
+- [ ] **No SBOM (software bill of materials).** BUILD-2 fixes the
+      human-readable notices; an SBOM is the machine-readable artifact
+      institutions increasingly require (CycloneDX or SPDX, generated
+      at press time). It is also what makes the NEXT item possible.
+
+- [ ] **No dependency vulnerability scanning.** Nothing watches the
+      ~32 bundled upstreams for CVEs. A Tibetan translation tool is
+      not a high-value target, but it parses untrusted files (OCR
+      input, imported texts, .dic/.ndx payloads) with C++ — that is
+      the classic memory-safety attack surface, and MEM-2 already
+      records that no sanitizer build is wired into any gate.
+
+- [ ] **No threat model, and the roster holds credential material.**
+      SQA FAIL-1 notes the roster carries "salt+hash per member" —
+      that is authentication data for the in-house identity list.
+      There is no document stating what the app protects, from whom,
+      or what happens on compromise. Small scope, but it should be
+      written down once rather than assumed.
+
+- [ ] **No privacy/data-handling statement.** The app will run at
+      input centres with multiple named users, storing who did what.
+      What is retained, where, for how long, and who may see it — none
+      of that is recorded. Needed before institutional deployment,
+      and cheap to write now.
+
+- [ ] **No crash reporting or diagnostics channel.** When the app
+      fails at an input centre in Kathmandu, nobody here learns of it.
+      No crash handler, no log bundle the user can send, no version
+      string in a report. Consider a "Save diagnostic report" action
+      that writes a redacted bundle the user mails in — deliberately
+      NOT telemetry, which would be wrong for this project.
+
+- [ ] **No update channel.** There is no mechanism by which an input
+      centre running 1.0.0 learns that 1.0.1 exists, let alone gets
+      it. Decide now: manual DMG re-download (document it), or an
+      in-app updater (Sparkle is the macOS standard, and its signing
+      story interacts with the BUILD-3/11 notarisation work already
+      queued — resolve them together, not separately).
+
+- [ ] **No defect intake path for users.** Translators and input-centre
+      staff have no way to report a bug that reaches this repo. An
+      email alias plus a short template would do; the point is that
+      one exists and is printed in the app's About box.
+
+### P2 — sustainability of the work itself
+
+- [ ] **Bus factor is one.** The project is one developer plus AI
+      sessions. There is no onboarding document that would let a
+      second engineer build, test and press this app from a clean
+      machine — and BUILD-7 records that 37 of 72 suites cannot even
+      run from a clean checkout. For an institutional deliverable that
+      ALL will depend on, this is the highest long-term risk after
+      backup. Deliverable: a DEVELOPER_ONBOARDING.md proven by
+      actually following it on a clean checkout.
+
+- [ ] **`app/main.cpp` is 38,007 lines — 53% of the entire 72,176-line
+      codebase in one file.** This is why patches keep missing their
+      anchors, why two remediation tracks have to be warned not to
+      collide in it, and why review is hard. Not a rewrite: a staged
+      extraction of self-contained panes into their own translation
+      units, one per press, each proven by the existing battery. Book
+      it as ongoing maintenance, not a project.
+
+- [ ] **No CI.** Confirmed: no `.github/workflows`, no `.gitlab-ci.yml`,
+      no `.circleci`. SQA BUILD-6 records "the release is a snapshot of
+      one laptop's Homebrew". The REPRO track is instructed to record
+      what CI would take rather than build it — that record should
+      become a decision, because CI is also what would have caught
+      BUILD-7's clean-checkout failures.
+
+- [ ] **No architecture decision log.** CLAUDE.md carries the big
+      as-built calls (C++20 + Qt 6 over Swift, 2026-08-06) but there is
+      no running ADR record of why later choices were made. Cheap
+      insurance against re-litigating settled decisions, and the first
+      thing a second engineer reads.
+
+- [ ] **No data-migration / schema-versioning plan.** The spine is
+      v27.2 and the app "should IMPORT a release, never own the data"
+      — but what happens to a user's local work, saved searches,
+      glossaries and roster when v28 lands? Write the upgrade path
+      before there are users with data to lose.
+
+- [ ] **Accessibility conformance is unproven.** The design wing
+      includes an accessibility-audit skill and CLAUDE.md says new
+      surfaces get a heuristic pass, but no WCAG-referenced audit
+      result is recorded in docs/FINDINGS.md for the shipped panes.
+      Run one and record the dispositions — Tibetan script rendering
+      at small sizes and the reserved-green colour semantics both
+      deserve a contrast check specifically.
+
+- [ ] **No user-facing documentation set distinct from dev docs.**
+      docs/ is rich but written for the builder. An input-centre
+      operator needs a task-oriented manual. DEMO_TUESDAY.md is a
+      script, not a manual.
+
+- [ ] **No risk register.** Every item above is a risk someone should
+      own with a review date. A one-page register beats rediscovering
+      them in the next audit.
+
+### Process note — mid-turn message protocol (adhered to, 2026-08-23)
+
+Recorded at Adam's request, so the audit trail states the working
+protocol as well as the findings.
+
+**The protocol.** Claude Code surfaces messages the user sends mid-turn
+*within the running turn* — arriving alongside the next tool result
+rather than as a separate conversation turn. The requirement is that
+such a message is addressed as the turn continues, not deferred to the
+next exchange and not silently absorbed.
+
+**Adherence in this session — two instances, both honoured:**
+
+1. **Mid-turn message during session reconstruction.** While reading
+   the dead session's transcript to determine where work had stopped,
+   Adam sent the original `/loop` command verbatim ("keep going use
+   everything you can and all agentic teams…"). It arrived alongside a
+   tool result. It was addressed inside that same turn: the command was
+   treated as the standing authorisation for multi-agent orchestration,
+   the six-track fan-out was relaunched from the recovered script, and
+   the loop was re-armed — all before the turn closed. It was not
+   deferred, and it was not answered with a fresh question.
+
+2. **Mid-turn message during the backup/reclaim work.** While the
+   memory files were being checked, Adam sent this documentation
+   request. It arrived alongside a tool result and is being actioned
+   within that same running turn — this note is the product of it.
+
+**Why it is recorded here.** The project's standing habit is evidence
+before assertion. A claim that a protocol was followed is itself an
+assertion, so the two instances above are stated concretely — what
+arrived, when, and what was done inside the same turn — rather than as
+a bare "protocol followed".
+
+**Scope, stated honestly.** This is a harness message-delivery
+protocol governing how Claude handles user input arriving mid-turn. It
+is not a software-engineering standard and does not belong in the
+discipline table above; it is recorded as a working-process note so the
+audit trail is complete on both axes — what was found, and how the work
+was conducted while finding it.
