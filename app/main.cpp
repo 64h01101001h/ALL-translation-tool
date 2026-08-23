@@ -1144,13 +1144,59 @@ static QString entryHtml(const allcore::Entry& e,
         // own block, which is what a heading is.
         h += "<div style='margin:9px 0 1px 0'>" +
              ux::sourceBadge(ux::Epistemic::Binding) + "</div>";
-        for (const auto& g : e.hgm_gloss) {
-            QString tier = e.provisional()
-                ? "<span style='color:#b00'>PROVISIONAL (auto-aligned)</span>"
-                : QString::fromStdString("HGM (" + e.tier + ")");
-            h += "<div style='margin:3px 0 0 0'>≡ " +
-                 QString::fromStdString(g).toHtmlEscaped() +
-                 " &nbsp;<small>[" + tier + "]</small></div>";
+        // ── EQUIVALENTS ────────────────────────────────────────────
+        // Adam, 2026-08-22, looking at bstan pa: "having them listed
+        // on different lines takes up too much space and pushes other
+        // information down, out of the pane."
+        //
+        // Measured: the median entry has ONE gloss and the mean is
+        // 2.3, so one-line-per-gloss is tuned for the common case —
+        // but the tail is brutal and lands exactly where it hurts
+        // most. 'i has 169 equivalents, med pa 137, med 111, la 108,
+        // ni 101: the grammatical particles a translator meets in
+        // every sentence. bstan pa has 65, of which SIXTY-FOUR are
+        // short words and exactly one is a long contextual note.
+        //
+        // And the repeated "[HGM (glossary)]" suffix was provably
+        // redundant: `tier` is a field on the ENTRY, computed inside a
+        // loop over that entry's glosses, so it could never differ
+        // between lines. Sixty-five identical suffixes restating one
+        // fact.
+        //
+        // So: state the tier ONCE with a count, flow the short
+        // equivalents as a wrapped list, and give a long gloss its own
+        // line because it is a NOTE about usage, not an equivalent
+        // that belongs in a comma list. Nothing is hidden and nothing
+        // is capped — the count says the scale up front.
+        if (!e.hgm_gloss.empty()) {
+            const QString tier =
+                e.provisional()
+                    ? "<span style='color:#b00'>PROVISIONAL "
+                      "(auto-aligned)</span>"
+                    : QString::fromStdString("HGM (" + e.tier + ")");
+            h += QString("<div style='margin:1px 0 3px 0;font-size:11px;"
+                         "color:%1'>%2 equivalent%3 &nbsp;<small>[%4]"
+                         "</small></div>")
+                     .arg(ux::kSoft)
+                     .arg((int)e.hgm_gloss.size())
+                     .arg(e.hgm_gloss.size() == 1 ? "" : "s")
+                     .arg(tier);
+            QStringList shortOnes;
+            QStringList notes;
+            for (const auto& g : e.hgm_gloss) {
+                const QString s = QString::fromStdString(g);
+                (s.size() > 40 ? notes : shortOnes)
+                    << s.toHtmlEscaped();
+            }
+            if (!shortOnes.isEmpty())
+                h += "<div style='margin:0 0 0 0;line-height:150%'>≡ " +
+                     shortOnes.join(
+                         QString(" <span style='color:%1'>·</span> ")
+                             .arg(ux::kSoft)) +
+                     "</div>";
+            for (const QString& n : notes)
+                h += "<div style='margin:4px 0 0 14px;text-indent:-14px'"
+                     ">≡ " + n + "</div>";
         }
         if (e.hgm_gloss.empty()) {
             h += "<div style='margin:3px 0 0 0'><i>(no HGM "
