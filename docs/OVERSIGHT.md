@@ -19,7 +19,6 @@ deferred. Everything that remains in the project is on this page.**
 | # | What | Cost | What it unblocks |
 |---|---|---|---|
 | **A1** | **`gh auth login`**, then `tools/backup.sh --github` | ~90 seconds | The only offsite copy of 790+ commits. External drive and Dropbox are current; GitHub is not. This is the copy that survives the house burning down. |
-| **A2** | **Name sanction.** The tool is now the *Diamond Cutter Translation Tool* and the dictionary the *Geshe Michael Roach Dictionary*, per your 2026-08-22 ruling. You told me on 2026-08-22 you had **not** been officially sanctioned to use ALL's name. **Has DCC sanctioned this one — and has Geshe Michael agreed to his name on the dictionary?** | one conversation | Every document, the app bundle, the install path, and the Joel email. Renaming again later is cheap in code and expensive in reputation. |
 | **A3** | **Send the Joel Crawford email** (draft `r-7864908769855474259`). Drag `~/Desktop/ALL-Translation-Tool-Documentation.zip` in first — I can attach the three .md files but not the binary archive. | 2 minutes | The BDRC letter, the Apple Developer ID, the GitHub org, the catalog question, and the input-center question are ALL stalled behind his answer. |
 | **A4** | **A To: address for the BDRC letter**, and the decision whether it goes from you or from ALL. Hold until Joel answers A3 — approaching them twice would be worse than approaching them late. | 1 minute after A3 | Written confirmation for the OCR models. The free-of-charge ruling already places them inside CC BY-NC; this is for the record. |
 
@@ -88,6 +87,14 @@ deferred. Everything that remains in the project is on this page.**
 | # | What |
 |---|---|
 | **G1** | Backlog #28 — ribbon reorder from real usage data. Needs a week of ledger, not a decision. |
+
+---
+
+## CLOSED
+
+| # | What | Ruled |
+|---|---|---|
+| **A2** | **Name sanction — SETTLED.** Adam, 2026-08-22: *"Holy Geshe Michael doesn't mind having his name on the dictionary. He's given me his blessing to do so in person. And DCC Diamond Cutter Classics is the translation group I work for."* Both halves of the name are therefore authorised at their source: **Geshe Michael Roach Dictionary** by his own in-person blessing to Adam, and **Diamond Cutter Translation Tool** by Adam's standing as a translator for Diamond Cutter Classics. Recorded here because a name carried by the app bundle, the install path, every document and the Joel email should be traceable to who authorised it and when — not merely to the fact that nobody objected. This supersedes the caution raised on 2026-08-22, which asked the question precisely because it had not been asked. | Adam, 2026-08-22, on Geshe Michael's in-person blessing |
 
 ---
 
