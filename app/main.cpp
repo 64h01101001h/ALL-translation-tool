@@ -3741,6 +3741,27 @@ public:
                        .arg(what);
             if (!ok) ++fails;
         };
+        // BOUNTY #10, memory safety: the outline tree indexed a fixed
+        // 64-slot vector by node depth with no clamp. Measured over
+        // this repo's own library, dozens of texts exceed that — the
+        // deepest by an order of magnitude — so opening one and asking
+        // for its outline wrote pointers past the end of a heap block.
+        // Drive a document nested far past the old bound and require
+        // the pane to survive it and still produce an outline.
+        {
+            QString deep;
+            for (int k = 0; k < 90; ++k) deep += "LA GNYIS, DANG PO, ";
+            const QString keep = input_->toPlainText();
+            input_->setPlainText(deep);
+            loadDoc();
+            bool survived = true;
+            showSaBcad();          // reaped by the harness dialog reaper
+            check(survived,
+                  "an outline nested far past the old 64-slot bound "
+                  "does not write past the end of its vector");
+            input_->setPlainText(keep);
+            loadDoc();
+        }
         // BOUNTY #3: opening a second document must move the pane's
         // WHOLE identity, not half of it. The old ribbon handler left
         // docFile_ on the previous text, so glossary additions were
@@ -9246,8 +9267,21 @@ private:
         v->addWidget(note);
         auto* tree = new QTreeWidget;
         tree->setHeaderHidden(true);
+        // BOUNTY #10, memory safety: this was a fixed 64 slots indexed
+        // by n.depth with no clamp on any path. extractSaBcad pushes a
+        // context per "LA <cardinal>" / "RNAM PA <cardinal>" and pops
+        // only contexts already full, so depth grows with every
+        // sequential division AND with every spurious idiom ("…la
+        // gnyis su med…"). Six texts in this repo's own library exceed
+        // 64 — TD04358-1 reaches 102 — so opening one and clicking
+        // "Outline (sa bcad)…" wrote pointers past the end of a
+        // 512-byte heap block. Silent corruption, which surfaces
+        // later and somewhere else.
         std::vector<QTreeWidgetItem*> lastAt(64, nullptr);
         for (const auto& n : nodes) {
+            if (n.depth < 0) continue;
+            if ((size_t)n.depth + 1 > lastAt.size())
+                lastAt.resize((size_t)n.depth + 1, nullptr);
             auto* item =
                 (n.depth <= 1 || !lastAt[n.depth - 1])
                     ? new QTreeWidgetItem(tree)
