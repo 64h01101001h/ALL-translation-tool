@@ -26663,7 +26663,18 @@ private:
                 const QString out = outDir + "/" +
                                     QFileInfo(f).completeBaseName() +
                                     "-ocr.txt";
+                // SQA DATA-5: ++pagesOk sat OUTSIDE this guard with no
+                // else, so a page counted as "written" on the branch
+                // where the file never opened. On a read-only dataRoot
+                // — user-settable, so a supported configuration — a
+                // 300-page batch reported "300/300 page(s) written ·
+                // 0 failure(s)" with nothing on disk, and the line and
+                // flag counts came from data that existed only in
+                // memory. A false COUNT is worse than a false
+                // sentence: it is harder to disbelieve.
                 QFile of(out);
+                bool wroteOk = false;
+                QString wErr;
                 if (of.open(QIODevice::WriteOnly | QIODevice::Text)) {
                     QTextStream ts(&of);
                     ts << "# OCR-DERIVED (unverified review material) — "
@@ -26672,6 +26683,25 @@ private:
                        << " — models: BDRC (CC BY-NC 4.0, with "
                           "permission)\n";
                     for (const QString& w2 : wylieLines) ts << w2 << "\n";
+                    ts.flush();
+                    wroteOk = of.flush() &&
+                              of.error() == QFileDevice::NoError;
+                    wErr = of.errorString();
+                    of.close();
+                    // a truncated -ocr.txt would be counted "already
+                    // present" by a later run: leave no stub behind
+                    if (!wroteOk) QFile::remove(out);
+                } else {
+                    wErr = of.errorString();
+                }
+                if (!wroteOk) {
+                    ++failed;
+                    detail += QString("<div style='color:#8C2F2B'>%1 "
+                                      "— NOT saved: %2</div>")
+                                  .arg(QFileInfo(f).fileName()
+                                           .toHtmlEscaped())
+                                  .arg(wErr.toHtmlEscaped());
+                    continue;
                 }
                 ++pagesOk;
                 lineCount += static_cast<long>(wylieLines.size());
