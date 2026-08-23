@@ -27497,7 +27497,20 @@ private:
                    g_userName.isEmpty() ? "authority"
                                         : g_userName.toStdString(),
                    comment.toStdString(), isoToday().toStdString());
-        store.save();
+        // SQA FAIL-2: the return was discarded and the ruling
+        // reported as landed. A read-only or missing proposals
+        // folder is enough — no ENOSPC needed. The correct twins
+        // are in this same file (see `if (store.save())` above).
+        if (!store.save()) {
+            QMessageBox::warning(
+                this, "The ruling was NOT saved",
+                "proposals.tsv could not be written, so this ruling "
+                "exists only in memory and will be gone when the app "
+                "closes. Check that the data folder is present and "
+                "writable, then rule again.");
+            rebuild();
+            return;
+        }
         // v2 item 2: registers REGENERATE from the ruled store
         // (idempotent strip-and-refold) instead of accumulating
         // live appends — a decline falls out on the same pass
@@ -27572,7 +27585,26 @@ private:
                        isoToday().toStdString());
             ++applied;
         }
-        store.save();
+        // SQA FAIL-2 (critical): this printed "N proposal(s)
+        // approved and stamped" unconditionally. proposals.tsv is
+        // the PROPOSE/APPROVE channel — a truncated write drops the
+        // tail, which is exactly where the newest rulings sit, and
+        // the registers were then regenerated from an in-memory
+        // store that no longer matched disk. On the next launch the
+        // approvals were simply gone, with no error ever shown.
+        if (!store.save()) {
+            QMessageBox::warning(
+                this, "The approvals were NOT saved",
+                QString("%1 proposal(s) were approved in memory, but "
+                        "proposals.tsv could not be written — so "
+                        "NOTHING has been stamped and the registers "
+                        "were not regenerated. Check that the data "
+                        "folder is present and writable, then approve "
+                        "again.")
+                    .arg(applied));
+            rebuild();
+            return;
+        }
         allcore::regenerateApprovedRegisters(store,
                                              root_.toStdString());
         reloadApprovedLayers();

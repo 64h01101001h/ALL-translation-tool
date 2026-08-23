@@ -415,6 +415,16 @@ add_executable(comments_smoke tests/comments_smoke.cpp)
 target_link_libraries(comments_smoke PRIVATE allcore)
 add_test(NAME comments_smoke COMMAND comments_smoke)
 
+# SQA FAIL-2: the first test that can see a write which failed AFTER a
+# successful open. Driven by a script because it needs a RAM disk to
+# stage a real short write (an unwritable directory only exercises the
+# open guard, which was always correct — see the script's header).
+add_executable(shortwrite_probe tests/shortwrite_probe.cpp)
+target_link_libraries(shortwrite_probe PRIVATE allcore)
+add_test(NAME shortwrite
+         COMMAND ${CMAKE_SOURCE_DIR}/tools/test_shortwrite.sh
+                 $<TARGET_FILE:shortwrite_probe>)
+
 add_executable(backup_smoke tests/backup_smoke.cpp)
 target_link_libraries(backup_smoke PRIVATE allcore)
 add_test(NAME backup_smoke COMMAND backup_smoke)

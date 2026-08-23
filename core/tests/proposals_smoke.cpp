@@ -6,6 +6,7 @@
 #include <cstdlib>
 #include <string>
 
+#include <filesystem>
 #include <fstream>
 #include <sstream>
 
@@ -256,6 +257,64 @@ int main(int argc, char** argv) {
         }
         CHECK(sawNew, "absorbed row is queryable");
         CHECK(mainWins, "the main file's row wins on divergence");
+    }
+
+    // ---- SQA FAIL-2: a save that did not land must SAY so ----
+    // The 2026-08-22 assessment's sharpest finding was that not one
+    // test in this repository could detect a write failure: five
+    // independent "report success when the write failed" mutants all
+    // survived a full green ctest. This is the first test that can.
+    //
+    // ProposalStore::save() ended with a bare `return true;` after an
+    // unchecked ofstream and was MEASURED returning TRUE having
+    // written 16,384 of 123,576 bytes. proposals.tsv is the
+    // PROPOSE/APPROVE channel — a truncated write drops the tail,
+    // which is exactly where the newest rulings sit.
+    //
+    // An unwritable directory is the reachable half of that bug (a
+    // read-only or missing data folder is enough — no full disk
+    // needed), and it needs no privileges to stage.
+    {
+        const std::string ro = dir + "/sqa_readonly_probe";
+        std::error_code pre;
+        std::filesystem::remove_all(ro, pre);
+        std::filesystem::create_directories(ro, pre);
+        allcore::ProposalStore store(ro);
+        store.propose(allcore::ProposalKind::Honorific, "Tenzin",
+                      "bsod nams", "merit", "field", "evidence",
+                      "2026-08-22");
+        CHECK(store.save(), "save succeeds while the folder is writable");
+        // Unlink FIRST: removing a file needs write permission on its
+        // DIRECTORY, so stripping the directory first makes the
+        // cleanup itself impossible. Every call here takes the
+        // error_code overload — a test that throws on its own setup
+        // reports "aborted", which reads like a product defect.
+        std::error_code ec;
+        std::filesystem::remove(ro + "/proposals.tsv", ec);
+        std::filesystem::permissions(
+            ro, std::filesystem::perms::owner_write |
+                    std::filesystem::perms::group_write |
+                    std::filesystem::perms::others_write,
+            std::filesystem::perm_options::remove, ec);
+        const bool honest = !store.save();
+        // restore before asserting, so a failed assertion cannot
+        // leave an undeletable tree behind for the next run
+        std::filesystem::permissions(
+            ro, std::filesystem::perms::owner_all,
+            std::filesystem::perm_options::add, ec);
+        std::filesystem::remove_all(ro, ec);
+        // HONEST LABEL. This exercises the OPEN guard, which was
+        // always correct — it passes with or without the SQA FAIL-2
+        // fix, and I proved that by planting the mutant and watching
+        // it survive. It is kept as a cheap guard against someone
+        // deleting `if (!f) return false;`, NOT as evidence about
+        // short writes. The short-write path needs a volume that
+        // fills mid-stream: tools/test_shortwrite.sh (ctest target
+        // `shortwrite`), which does kill the mutant.
+        CHECK(honest,
+              "save() reports FALSE when the file cannot be OPENED "
+              "(the open guard; short writes are covered by the "
+              "`shortwrite` test, not by this one)");
     }
 
     std::printf("proposals_smoke: %s (%d failures)\n",

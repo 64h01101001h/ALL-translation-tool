@@ -206,7 +206,24 @@ bool ProposalStore::save() {
           << tsvEscape(p.approver) << '\t' << tsvEscape(p.ruled) << '\t'
           << tsvEscape(p.comment) << "\n";
     }
-    return true;
+    // SQA FAIL-2 (critical): this ended `return true;` after an
+    // UNCHECKED ofstream. Measured against the real allcore on a
+    // volume with a 16,384-byte hole: save() returned TRUE having
+    // written 16,384 of 123,576 bytes. The stores either side of it
+    // in the same probe reported honestly, because they end with
+    // `return (bool)f;` — the rule was right and held only where its
+    // author remembered it. Flushing first turns a buffered short
+    // write into a stream error we can actually report (house rule 4:
+    // nothing reports success that did not verify the bytes landed).
+    // Flush AND close before judging. Measured 2026-08-23 on a full
+    // 2 MB volume: flush() alone reported success after writing
+    // 155,648 of ~240,000 bytes — the failure only surfaces when the
+    // filebuf is closed, so a check before close() is still a lie.
+    // Caught by tools/test_shortwrite.sh, which is the whole reason
+    // that test exists.
+    f.flush();
+    f.close();
+    return !f.fail();
 }
 
 std::string ProposalStore::propose(ProposalKind kind,
