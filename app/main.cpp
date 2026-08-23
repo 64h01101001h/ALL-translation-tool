@@ -1134,7 +1134,16 @@ static QString entryHtml(const allcore::Entry& e,
         }
     }
     if (d.glosses) {
-        h += ux::sourceBadge(ux::Epistemic::Binding);
+        // Adam, 2026-08-22, reading a real card: "there is no space
+        // between the highlighted HGM after malupa". The badge is a
+        // ZONE HEADING for the glosses beneath it, but it was emitted
+        // as a bare inline span after the pron div closed, and Qt rich
+        // text keeps a bare span on the preceding visual line — so it
+        // read as "pron: malupaHGM", a solid-filled binding mark
+        // apparently attached to the pronunciation. It now opens its
+        // own block, which is what a heading is.
+        h += "<div style='margin:9px 0 1px 0'>" +
+             ux::sourceBadge(ux::Epistemic::Binding) + "</div>";
         for (const auto& g : e.hgm_gloss) {
             QString tier = e.provisional()
                 ? "<span style='color:#b00'>PROVISIONAL (auto-aligned)</span>"
@@ -3732,6 +3741,38 @@ public:
                        .arg(what);
             if (!ok) ++fails;
         };
+        // BOUNTY #3: opening a second document must move the pane's
+        // WHOLE identity, not half of it. The old ribbon handler left
+        // docFile_ on the previous text, so glossary additions were
+        // written into the wrong text's TSV.
+        {
+            const QString a = selfTestRoot_ +
+                              "/library/__selftest_doc_A.txt";
+            const QString b = selfTestRoot_ +
+                              "/library/__selftest_doc_B.txt";
+            QDir().mkpath(QFileInfo(a).path());
+            for (const QString& p : {a, b}) {
+                QFile f(p);
+                if (f.open(QIODevice::WriteOnly | QIODevice::Truncate))
+                    f.write("BDAG NYID,\n");
+            }
+            const QString before = docFile_;
+            openFile(a);
+            const QString gA = glossaryPath();
+            openFile(b);
+            const QString gB = glossaryPath();
+            check(docFile_ == b,
+                  "opening a second document moves docFile_ with it");
+            check(!gA.isEmpty() && !gB.isEmpty() && gA != gB,
+                  "the glossary follows the document — additions cannot "
+                  "land in the previous text's file");
+            check(QFileInfo(gB).completeBaseName() ==
+                      QFileInfo(b).completeBaseName(),
+                  "the glossary path is keyed to the document on screen");
+            QFile::remove(a);
+            QFile::remove(b);
+            if (!before.isEmpty()) openFile(before);
+        }
         // ATTESTATION, pinned both ways. Bug bounty 2026-08-22: the
         // four-layer view printed a CONTAINING segment's English under
         // a header promising exact attestation — measured on the real
@@ -5389,29 +5430,30 @@ public:
                 this, "Open ACIP document", QString(),
                 "ACIP/text files (*.txt *.acip *.act *.inc *.md);;All files (*)");
             if (fn.isEmpty()) return;
-            QFile f(fn);
-            if (f.open(QIODevice::ReadOnly)) {
-                input_->setPlainText(QString::fromUtf8(f.readAll()));
-                loadDoc();
-                // ACIP file nomenclature: show the file's own provenance
-                auto info = allcore::decodeAcipFilename(fn.toStdString());
-                setScanTarget(info, fn);
-                if (info.recognized)
-                    hint_->setText(
-                        QString("%1 · text %2%3%4 · %5 — %6")
-                            .arg(QString::fromStdString(info.collection),
-                                 QString::fromStdString(info.number),
-                                 info.part.empty()
-                                     ? ""
-                                     : " part " + QString::fromStdString(
-                                                      info.part),
-                                 info.incomplete ? " · INCOMPLETE" : "",
-                                 QString::fromStdString(info.language),
-                                 QString::fromStdString(
-                                     info.status.empty() ? "status unknown"
-                                                         : info.status)) +
-                        "\n" + hint_->text());
-            }
+            // BOUNTY #3, critical (2026-08-22): this handler used to
+            // read the file itself — setPlainText, loadDoc,
+            // setScanTarget — and skip SEVEN things openFile() does.
+            // docFile_ was never reassigned and loadGlossary() was
+            // never called, so the pane ended with a split identity:
+            // scans and folio state followed the text you had just
+            // opened, while glossary, comments, exports and session
+            // state stayed on the PREVIOUS one.
+            //
+            // The card kept printing "FROM THIS TEXT'S GLOSSARY … (the
+            // translator's own — outranks the general dictionary
+            // here)" from the old text's entries, over the new text —
+            // a false authority label on the wrong vocabulary. And
+            // "+ add to this text's glossary" WROTE into the old
+            // text's TSV, because glossaryPath() keys off docFile_.
+            // The translator's own work was silently misfiled and
+            // recoverable only by hand.
+            //
+            // There is now ONE way into a document. openFile() covers
+            // recents, wylie detection and its banner, docFile_,
+            // overlay/lastFile, the citation offer, loadGlossary(),
+            // loadDoc(), setScanTarget() and the provenance line —
+            // which subsumes everything the old body did.
+            openFile(fn);
         });
         // ---- display toggles: the reader chooses their information density;
         // choices persist across sessions ----
@@ -12203,11 +12245,19 @@ public:
                 QString wy = QString::fromStdString(ws.text).trimmed();
                 if (wy.isEmpty()) return {};
                 QString gloss;
+                // BOUNTY #2: the tier was thrown away here. An
+                // auto-aligned gloss reached the tooltip wearing the
+                // master's authority, hung on an OCR guess, and the
+                // disclaimer below disowned only the OCR text — never
+                // the English. Entry::provisional() was on the object
+                // the whole time.
+                bool anyProvisional = false;
                 for (const auto& e :
                      spine_.lookup(wy.toLower().toStdString())) {
                     for (const auto& g : e.hgm_gloss) {
                         if (!gloss.isEmpty()) gloss += "; ";
                         gloss += QString::fromStdString(g);
+                        if (e.provisional()) anyProvisional = true;
                         if (gloss.size() > 120) break;
                     }
                     if (!gloss.isEmpty()) break;
@@ -12216,6 +12266,13 @@ public:
                 tip += gloss.isEmpty()
                            ? QString(" — no dictionary entry")
                            : " — " + gloss.toHtmlEscaped();
+                // if ANY contributing gloss is provisional the tip
+                // says so: mixed tiers must not be laundered by the
+                // stronger member
+                if (anyProvisional)
+                    tip += QString(" <span style='color:#b00'>"
+                                   "[PROVISIONAL — auto-aligned]"
+                                   "</span>");
                 tip += "<br><small>OCR-read from the carving — "
                        "review material, not text</small>";
                 return tip;
@@ -30041,7 +30098,20 @@ private:
                              ? QString()
                              : QString::fromUtf8(" — ") +
                                    QString::fromStdString(
-                                       e.hgm_gloss.front())),
+                                       e.hgm_gloss.front())) +
+                        // BOUNTY #2: bare gloss here while lane 1, a
+                        // few lines above, tags every row — the same
+                        // palette contradicting itself. For a phonetic
+                        // query the orthographic lanes are often
+                        // silent, so an untagged provisional row was
+                        // the ONLY row shown.
+                        (e.hgm_gloss.empty()
+                             ? QString()
+                             : e.provisional()
+                                   ? QString("   [PROVISIONAL]")
+                                   : QString("   [%1]").arg(
+                                         QString::fromStdString(
+                                             e.tier))),
                     0, QString::fromStdString(e.wylie));
             }
         }
@@ -34979,8 +35049,19 @@ int main(int argc, char** argv) {
     {
         auto* sb = win.statusBar();
         sb->setSizeGripEnabled(false);
-        sb->setStyleSheet(QString("QStatusBar{font-size:11px;"
-                                  "color:%1;}").arg(ux::kMuted));
+        // Adam, 2026-08-22: the final 'g' of "225 proposal(s)
+        // pending" was shaved off at the window edge.
+        // addPermanentWidget right-aligns, and with the size grip
+        // disabled the last label sits flush against the frame with
+        // nothing to hold it clear. Pad the bar and give each
+        // permanent widget breathing room; QStatusBar::item's border
+        // is also removed so the separators do not eat the space back.
+        sb->setStyleSheet(
+            QString("QStatusBar{font-size:11px;color:%1;"
+                    "padding-right:10px;}"
+                    "QStatusBar::item{border:none;}"
+                    "QStatusBar QLabel{margin-left:10px;}")
+                .arg(ux::kMuted));
         auto* rel = new QLabel(
             QString("release v%1")
                 .arg(QString::fromStdString(
