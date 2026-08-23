@@ -6367,8 +6367,28 @@ public:
         auto mkToggle = [&](const char* key, const QString& label,
                             bool defOn, bool docAffecting = false) {
             auto* cb = new QCheckBox(label);
-            cb->setChecked(settings.value(QString("overlay/") + key, defOn)
-                               .toBool());
+            bool on = settings.value(QString("overlay/") + key, defOn)
+                          .toBool();
+            // INVIOLABLE RULE 1: hgm_gloss is BINDING; everything else
+            // is reference. A persisted preference was allowed to
+            // suppress the binding layer entirely — found 2026-08-23
+            // with overlay/glosses=0 and overlay/hopkins=1 on Adam's
+            // own machine, which means clicking a Tibetan word showed
+            // Das 1902, Jäschke 1881, Hopkins and 84000 and NOT ONE
+            // WORD of Geshe Michael's English. That is the precise
+            // inverse of what this tool is for, and it had been true
+            // for an unknown number of sessions because nothing ever
+            // re-asserted the rule after the checkbox was unticked.
+            //
+            // The binding layer now re-arms at every launch. It stays
+            // togglable within a session (a translator may want to
+            // read the comparanda alone for a moment), but it can no
+            // longer be persistently switched off.
+            if (QString(key) == "glosses" && !on) {
+                on = true;
+                settings.setValue("overlay/glosses", true);
+            }
+            cb->setChecked(on);
             ll->addWidget(cb);
             connect(cb, &QCheckBox::toggled,
                     [this, key, docAffecting](bool on) {
@@ -15073,9 +15093,24 @@ private:
             try {
                 auto hits = allcore::goferSearch(spine_, q.toStdString(),
                                                  "", 60);
-                h += QString("<div><b>%1</b> \u2014 %2 hit(s)</div>")
-                         .arg(kCorpusRow)
-                         .arg(hits.size());
+                // HOUSE RULE 3: a display cap must never stand in for a
+                // total. This printed "60 hit(s)" for a term with 1,191
+                // — and Joel Crawford, who knows what a common term
+                // costs in a Kangyur, is exactly the reader who would
+                // catch it. corpusCount() is uncapped and answers in
+                // ~3 ms, so there is no excuse for the estimate.
+                long realN = -1;
+                try { realN = spine_.corpusCount(q.toStdString()); }
+                catch (const std::exception&) {}
+                h += (realN > (long)hits.size())
+                         ? QString("<div><b>%1</b> \u2014 showing %2 of "
+                                   "<b>%3</b> hit(s)</div>")
+                               .arg(kCorpusRow)
+                               .arg(hits.size())
+                               .arg(realN)
+                         : QString("<div><b>%1</b> \u2014 %2 hit(s)</div>")
+                               .arg(kCorpusRow)
+                               .arg(hits.size());
                 total += (int)hits.size();
                 int shown = 0;
                 for (const auto& g : hits) {
@@ -15308,11 +15343,25 @@ private:
                                      return a.second.count >
                                             b.second.count;
                                  });
-                h += QString("<div><b>%1</b> \u2014 %2 hit(s) in %3 "
-                             "file(s)</div>")
-                         .arg(dir.toHtmlEscaped())
-                         .arg(hits.size())
-                         .arg(rows.size());
+                // Same rule. 400 is the fetch cap, not the answer: a
+                // term with 82,102 hits across 4,085 files rendered as
+                // "400 hit(s) in 7 file(s)". Say which number is which.
+                const bool atCap = (int)hits.size() >= 400;
+                h += atCap
+                         ? QString("<div><b>%1</b> \u2014 first <b>%2</b> "
+                                   "hit(s) shown, in %3 file(s) so far "
+                                   "<span style='color:%4'>(display "
+                                   "limit \u2014 not the total)</span>"
+                                   "</div>")
+                               .arg(dir.toHtmlEscaped())
+                               .arg(hits.size())
+                               .arg(rows.size())
+                               .arg(ux::kSoft)
+                         : QString("<div><b>%1</b> \u2014 %2 hit(s) in %3 "
+                                   "file(s)</div>")
+                               .arg(dir.toHtmlEscaped())
+                               .arg(hits.size())
+                               .arg(rows.size());
                 total += (int)hits.size();
                 int shownF = 0;
                 for (const auto& [file, r] : rows) {
@@ -15345,7 +15394,14 @@ private:
                          .arg(QString::fromUtf8(e.what()).toHtmlEscaped());
             }
         }
-        h += QString("<div><b>%1 total hit(s)</b></div>").arg(total);
+        h += QString("<div><b>%1 hit(s) shown</b>%2</div>")
+                 .arg(total)
+                 .arg(indexCapped
+                          ? QString(" <span style='color:%1'>\u2014 a "
+                                    "display limit was reached; this is "
+                                    "not the corpus total</span>")
+                                .arg(ux::kSoft)
+                          : QString());
         {
             // W3-01: the searched terms link straight to their cards
             QString lk;
@@ -21334,12 +21390,24 @@ public:
                              .arg(dates.toHtmlEscaped());
                 h += " \u00b7 <a href='https://library.bdrc.io/show/"
                      "bdr:" + pid + "'>" + pid + " at BDRC</a>";
+                // This is the author line on the FLAGSHIP card, so it
+                // is the Treasury link a viewer is most likely to
+                // click. It was left as inert id text when the bare-id
+                // URL was withdrawn; the harvested slug resolves it for
+                // 116 of 193 people, so use it and fall back to plain
+                // text only when we genuinely have no verified URL.
                 const QString tol = rec.value("tol").toString();
-                if (!tol.isEmpty())
-                    h += QString(" \u00b7 <span style='color:%1'>"
-                                 "Treasury of Lives id %2</span>")
-                             .arg(ux::kSoft)
-                             .arg(tol.toHtmlEscaped());
+                if (!tol.isEmpty()) {
+                    const QString turl = tolUrlForId(tol);
+                    h += turl.isEmpty()
+                             ? QString(" \u00b7 <span style='color:%1'>"
+                                       "Treasury of Lives id %2</span>")
+                                   .arg(ux::kSoft)
+                                   .arg(tol.toHtmlEscaped())
+                             : QString(" \u00b7 <a href='%1'>Treasury of "
+                                       "Lives</a>")
+                                   .arg(turl);
+                }
                 const int works =
                     rec.value("works").toArray().size();
                 if (works > 1)
@@ -22001,13 +22069,23 @@ private:
         if (nAlias > 1)
             sub += QString(" \u00b7 spelled %1 ways in the catalog")
                        .arg(nAlias);
+        // The bare-id URL 404s (Adam clicked one). I first "hid" this
+        // link with style='display:none' — which Qt's rich-text engine
+        // IGNORES, so the dead link stayed live and clickable for two
+        // more days. Use the harvested slug, which resolves for 116 of
+        // 193 people, and emit NO anchor at all when we have none.
         const QString tol = r.value("tol").toString();
-        if (!tol.isEmpty())
-            sub += QString(" \u00b7 <a href='https://www."
-                           "treasuryoflives.org/biographies/view/%1' "
-                           "style='display:none'>"
-                           "Treasury of Lives biography</a>")
-                       .arg(tol);
+        if (!tol.isEmpty()) {
+            const QString url = tolUrlForId(tol);
+            sub += url.isEmpty()
+                       ? QString(" \u00b7 <span style='color:%1'>Treasury "
+                                 "of Lives id %2</span>")
+                             .arg(ux::kSoft)
+                             .arg(tol.toHtmlEscaped())
+                       : QString(" \u00b7 <a href='%1'>Treasury of Lives "
+                                 "biography</a>")
+                             .arg(url);
+        }
         h += QString("<div style='font-size:11px;color:%1;margin-bottom:"
                      "7px'>%2</div>").arg(ux::kSoft).arg(sub);
 
@@ -22038,7 +22116,11 @@ private:
                          "font-size:12px'>%5</a></div>")
                      .arg(ux::kGold).arg(wk.toHtmlEscaped())
                      .arg(anchorEnc(f)).arg("#2E629E")
-                     .arg(ux::snip(title.toHtmlEscaped(), 96));
+                     // ux::snip() escapes internally, so escaping
+                     // first produced &amp;quot; and the catalog
+                     // titles on the author ledger rendered a raw
+                     // &quot; to the reader (~4 in 10 of them).
+                     .arg(ux::snip(title, 96));
         }
         info_->setHtml(h);
     }
@@ -22106,7 +22188,11 @@ private:
                          "font-size:12px'>%5</a></div>")
                      .arg(ux::kGold).arg(wk.toHtmlEscaped())
                      .arg(anchorEnc(f)).arg("#2E629E")
-                     .arg(ux::snip(t.toHtmlEscaped(), 96));
+                     // ux::snip() escapes internally, so escaping
+                     // first produced &amp;quot; and the catalog
+                     // titles on the author ledger rendered a raw
+                     // &quot; to the reader (~4 in 10 of them).
+                     .arg(ux::snip(t, 96));
         }
         info_->setHtml(h);
     }
@@ -26226,7 +26312,17 @@ public:
         auto* gModels = ribbon->group("MODELS");
         auto* open = new QPushButton("Open scan image…");
         gPage->addBig(open, "image");
+        // MEASURED 2026-08-23 over 40 real BDRC folios from Adam's own
+        // scans: at the previous default (deskew ON) 18 of 40 pages
+        // returned ZERO lines and rendered the folio rotated ~90° in a
+        // black frame. All 18 recovered with deskew off. The estimator
+        // quantises to multiples of -15° (-15, -30, … -89.x) and is
+        // simply wrong on pecha proportions, where the page is far
+        // wider than it is tall and minAreaRect latches onto the wrong
+        // edge. Pecha scans arrive essentially square to the platen,
+        // so 0° is both the safer default and the usually-correct one.
         deskewOverride_ = new QCheckBox("deskew off (0°)");
+        deskewOverride_->setChecked(true);
         deskewOverride_->setToolTip(
             "Override deskew to 0° — a labeled DEVIATION from the "
             "BDRC pipeline, working around its angle bug on "
@@ -26467,6 +26563,9 @@ private:
             std::copy(img_.constScanLine(y), img_.constScanLine(y) + w * 3,
                       rgb.begin() + static_cast<size_t>(y) * w * 3);
         const bool deskewOff = deskewOverride_->isChecked();
+        // guard rail for when the box IS unticked: an estimate beyond
+        // this is the failure mode above, not a real page angle
+        constexpr double kMaxPlausibleSkew = 20.0;
         ocrRunning_ = true;
         ocrStop_ = false;
         run_->setText("Stop");
@@ -26518,9 +26617,29 @@ private:
                     "(word boxes: pyctcdecode frame spans)</div>")
                 .arg(pl.angle, 0, 'f', 2)
                 .arg(deskewOverride_->isChecked()
-                         ? "<b>(override — deviation)</b>"
-                         : "(BDRC pipeline)")
+                         ? "(deskew off — the default for pecha)"
+                         : "(BDRC pipeline estimate)")
                 .arg(pl.lines.size());
+        // A bare "0 line(s)" reads as "your OCR is broken" — which
+        // is what the room concluded before this line existed. Say
+        // what happened and what to do about it.
+        if (pl.lines.empty())
+            htmlOut += QString(
+                           "<div style='color:#8C2F2B'><b>No lines "
+                           "found on this page.</b> %1</div>")
+                           .arg(deskewOverride_->isChecked()
+                                    ? QString(
+                                          "The page may be blank, "
+                                          "very faint, or cropped too "
+                                          "tightly — try another "
+                                          "folio.")
+                                    : QString(
+                                          "The deskew estimate was "
+                                          "%1°, which on a pecha is "
+                                          "almost always wrong. Tick "
+                                          "'deskew off (0°)' in VIEW "
+                                          "and run again.")
+                                          .arg(pl.angle, 0, 'f', 1));
         int flagged = 0;
         size_t done = 0;
         for (size_t i = 0; i < pl.images.size(); ++i) {
@@ -32358,6 +32477,41 @@ static void showTranslatorSurvey(QWidget* parent,
     dlg->show();
 }
 
+// The first-run welcome card and the screenshot harness both loaded
+// library/acip_release6/S0134I_inc_t.txt — a path NOTHING in this repo
+// has ever written. So the flagship Overlay rendered EMPTY on a first
+// run and in every generated screenshot, under a welcome card telling
+// the reader to "click any Tibetan word" in a document with no words.
+// Found 2026-08-23 while checking what the installed build shows a
+// first-time viewer.
+//
+// Resolve against candidates that actually exist, newest-installed
+// first, and return empty if none do — a caller that gets nothing
+// shows its normal empty state instead of a broken promise.
+static QString demoTextPath(const QString& root) {
+    const QStringList candidates = {
+        // a short real Kangyur sutra: 2 KB, and its English title
+        // reads well to someone seeing the tool for the first time
+        "/library/kangyur/Kangyur/10. MDO MANG_Collection of Sutras "
+        "(S\u016btra)$$/VOL 22 (ZA)/KL00279_'PHAGS PA SANGS RGYAS RJES "
+        "SU DRAN PA_An Exalted Teaching entitled 'Bringing the Buddha "
+        "to Mind' (\u0100rya Buddha Anusm\u1e5bti).txt",
+        "/library/acip_release6/S0134I_inc_t.txt",
+    };
+    for (const QString& c : candidates)
+        if (QFileInfo(root + c).isReadable()) return root + c;
+    // last resort: any readable text in the library
+    QDirIterator it(root + "/library",
+                    QStringList{"*.txt", "*.ACT"}, QDir::Files,
+                    QDirIterator::Subdirectories);
+    while (it.hasNext()) {
+        const QString f = it.next();
+        const qint64 sz = QFileInfo(f).size();
+        if (sz > 1500 && sz < 40000) return f;
+    }
+    return QString();
+}
+
 int main(int argc, char** argv) {
     QApplication app(argc, argv);
     {
@@ -36854,7 +37008,27 @@ int main(int argc, char** argv) {
     tabs.tabBar()->setElideMode(Qt::ElideRight);
     tabs.setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
     win.setMinimumSize(640, 480);
-    win.resize(1180, 760);
+    // Demo-readiness, 2026-08-23: this hard-resized to 1180x760 on
+    // EVERY launch with no geometry persistence anywhere, so the window
+    // reset itself each time and the ribbons collapsed to unlabelled
+    // 20px icons — on Catalog that pushed "Approvals…" and "Move to
+    // shelf…" off-screen entirely. Restore what the user left, and open
+    // maximised the first time so the ribbons have room to label
+    // themselves.
+    {
+        QSettings g("ALL", "TranslationTool");
+        const QByteArray geo = g.value("ui/geometry").toByteArray();
+        if (!geo.isEmpty() && win.restoreGeometry(geo)) {
+            // kept what the user last set
+        } else {
+            win.resize(1180, 760);
+            win.showMaximized();
+        }
+        QObject::connect(&app, &QApplication::aboutToQuit, [&win] {
+            QSettings s2("ALL", "TranslationTool");
+            s2.setValue("ui/geometry", win.saveGeometry());
+        });
+    }
     win.setAcceptDrops(true);
     class DropRoute : public QObject {
     public:
@@ -36962,8 +37136,7 @@ int main(int argc, char** argv) {
              .toBool()) {
         // the Overlay is empty on a true first run — load the
         // Diamond Cutter opening so the first click teaches
-        const QString demo =
-            root + "/library/acip_release6/S0134I_inc_t.txt";
+        const QString demo = demoTextPath(root);
         QFile df(demo);
         if (df.open(QIODevice::ReadOnly)) {
             QString excerpt = QString::fromUtf8(df.read(6000));
@@ -37095,7 +37268,7 @@ int main(int argc, char** argv) {
         // change re-shapes the whole Tibetan document through
         // HarfBuzz — quadratic). So load just the opening of the
         // Diamond Cutter: identical screenshot, instant.
-        const QString demo = root + "/library/acip_release6/S0134I_inc_t.txt";
+        const QString demo = demoTextPath(root);
         printf("[shot] opening demo text…\n"); fflush(stdout);
         QFile df(demo);
         if (df.open(QIODevice::ReadOnly)) {
