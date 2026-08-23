@@ -257,3 +257,36 @@ the output useless:
 
 Together these took a 200-file sample from 218 unreadable hits to 68
 readable ones — fewer, and worth reading.
+
+## 2026-08-22 · External-URL sweep (prompted by the Treasury of Lives 404)
+
+Adam's dead biography link raised the obvious question: what ELSE points
+somewhere that no longer exists? Swept all 33 URL literals in
+app/main.cpp and probed every static one.
+
+**Clean:** 84000, asianlegacylibrary.org, library.bdrc.io (all four
+forms), purl.bdrc.io, old.thlib.org, online.adarshah.org,
+places.kmaps.virginia.edu, lotsawahouse.org, www2.hf.uio.no,
+buda-base.github.io/tibetan-ocr-app. The `https://x/...` literals are
+selftest fixtures, not links.
+
+**One real change in the world — BDRC IIIF now requires auth.**
+`https://iiifpres.bdrc.io/collection/wio:<work>` returns **401** for
+every work tried (W22084, W1KG5772), on 2.0 and 3.0 paths alike, from a
+client BDRC otherwise serves happily (purl.bdrc.io answers us 200). The
+route itself is still correct — wrong shapes return 404, this returns
+401 — so BDRC has moved IIIF presentation behind their Auth0 layer
+(buda-base/bdrc-auth-lib), not retired it.
+
+Consequence: "Follow along in scans" cannot fetch an outline for
+anonymous users. It FAILS HONESTLY — `followScans()` checks
+`rep->error()` and shows "BDRC unreachable: <reason> — open in the
+browser" with a working library.bdrc.io fallback — so this is a gated
+feature, not a dead affordance, and no code change is warranted on
+honesty grounds.
+
+Disposition: **folded into the BDRC letter** (OVERSIGHT A4 / F2) rather
+than patched. The letter already asks for written confirmation on the
+OCR models; an API-access question belongs in the same envelope instead
+of a second approach. Recorded here so the 401 is not rediscovered as a
+bug later.
