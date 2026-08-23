@@ -6915,10 +6915,21 @@ public:
             }
             if (sec.isEmpty()) continue;
             QString gloss;
-            if (!e.hgm_gloss.empty())
+            if (!e.hgm_gloss.empty()) {
                 gloss = " \u2014 " +
                         QString::fromStdString(e.hgm_gloss.front())
                             .toHtmlEscaped();
+                // BOUNTY #2, third surface. Printed untiered beside a
+                // link to a recording of him SAYING the word \u2014 the
+                // pairing implies the English is his too. This fix was
+                // reported landed once and was not: it sat in a script
+                // that asserted on a later anchor, and the write
+                // happens at the end, so nothing from that run reached
+                // disk. Caught by verifying the installed artifact.
+                if (e.provisional())
+                    gloss += " <span style='color:#b00'>"
+                             "[PROVISIONAL \u2014 auto-aligned]</span>";
+            }
             h += "<b>" +
                  QString::fromStdString(e.wylie).toHtmlEscaped() +
                  "</b><small style='color:#555'>" + gloss +
