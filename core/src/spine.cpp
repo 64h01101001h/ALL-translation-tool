@@ -298,6 +298,33 @@ std::vector<Entry> Spine::englishSearch(const std::string& fts_query,
     }
 }
 
+long Spine::corpusCount(const std::string& fts_query,
+                        const std::string& course) const {
+    try {
+        std::string q =
+            "SELECT COUNT(*) FROM corpus_fts f "
+            "JOIN corpus_segments s ON s.id=f.rowid "
+            "WHERE corpus_fts MATCH ?";
+        if (!course.empty()) q += " AND s.course=?";
+        Stmt s2(db_, q.c_str());
+        int i = 1;
+        sqlite3_bind_text(s2.p, i++, fts_query.c_str(), -1,
+                          SQLITE_TRANSIENT);
+        if (!course.empty())
+            sqlite3_bind_text(s2.p, i, course.c_str(), -1,
+                              SQLITE_TRANSIENT);
+        if (sqlite3_step(s2.p) == SQLITE_ROW)
+            return (long)sqlite3_column_int64(s2.p, 0);
+        return 0;
+    } catch (const std::exception& e) {
+        // same degradation contract as corpusSearch: a yanked db
+        // returns -1 so the caller can say "unknown" rather than
+        // print a zero it did not measure
+        fprintf(stderr, "[spine] corpusCount suppressed: %s\n", e.what());
+        return -1;
+    }
+}
+
 std::vector<CorpusSegment> Spine::corpusSearch(const std::string& fts_query,
                                                const std::string& course,
                                                int limit) const {

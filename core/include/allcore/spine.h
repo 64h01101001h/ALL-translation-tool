@@ -89,6 +89,15 @@ public:
                                             const std::string& course = "",
                                             int limit = 20) const;
 
+    // How many segments the same query matches, WITHOUT a cap.
+    // corpusSearch takes a limit, so its result size can never answer
+    // "how many are there" — and the Overlay card was printing the cap
+    // as if it were the total ("200 of 200" when sems can has 1,566
+    // attestations and chos 6,273). A count is a different question
+    // from a page of results and needs its own query.
+    long corpusCount(const std::string& fts_query,
+                     const std::string& course = "") const;
+
     // All segments of one course with seq in [lo, hi], in order (line window).
     std::vector<CorpusSegment> corpusWindow(const std::string& course, int lo,
                                             int hi) const;

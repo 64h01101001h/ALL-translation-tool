@@ -3814,6 +3814,22 @@ public:
                        .arg(what);
             if (!ok) ++fails;
         };
+        // BOUNTY #8: a display cap must never be printed as a total.
+        // The card said "200 of 200 · show fewer" for terms with
+        // thousands of attestations, and suppressed the show-all link,
+        // so a translator concluded they had seen everything.
+        {
+            const long n = spine_.corpusCount("\"sems can\"");
+            const auto page = spine_.corpusSearch("\"sems can\"", "", 200);
+            check(n > (long)page.size(),
+                  "the corpus count is UNCAPPED — it exceeds a capped "
+                  "page, so a cap can never stand in for a total");
+            check(n > 1000,
+                  "a high-frequency term reports its real attestation "
+                  "count, not the display limit");
+            check(spine_.corpusCount("\"zzzz no such phrase zzzz\"") == 0,
+                  "a term with no attestations counts zero, not -1");
+        }
         // BOUNTY #10, memory safety: the outline tree indexed a fixed
         // 64-slot vector by node depth with no clamp. Measured over
         // this repo's own library, dozens of texts exceed that — the
@@ -7468,11 +7484,22 @@ private:
                         ? spine_.corpusSearch('"' + e.wylie + '"', "",
                                               corpusCap)
                         : std::vector<allcore::CorpusSegment>{};
-        int corpusTotal = (int)segs.size();
-        if (!corpusAll_ && corpusTotal == 3)
-            corpusTotal = (int)spine_
-                              .corpusSearch('"' + e.wylie + '"', "", 200)
-                              .size();
+        // BOUNTY #8: corpusTotal was segs.size() — the CAP — and the
+        // "true total" re-query passed a literal 200, so it was capped
+        // too. Not-show-all printed "3 of 200"; show-all printed
+        // "200 of 200" with the show-all link suppressed, and a
+        // translator concluded they had seen every attestation.
+        // Measured: sems can has 1,566, chos 6,273, sangs rgyas 2,104,
+        // byang chub 1,833 — every one a reachable card.
+        //
+        // A count is a different question from a page of results, so
+        // it now gets its own uncapped query. -1 means the db could
+        // not answer, which is said rather than printed as a number.
+        const long trueTotal =
+            segs.empty() ? 0
+                         : spine_.corpusCount('"' + e.wylie + '"');
+        const int corpusTotal =
+            trueTotal < 0 ? (int)segs.size() : (int)trueTotal;
         if (!segs.empty()) {
             h += ux::sourceBadge(ux::Epistemic::Evidence) +
                  zoneLabel("FROM THE CORPUS") +
@@ -7481,13 +7508,28 @@ private:
                      .arg(ux::kFaint)
                      .arg((int)segs.size())
                      .arg(corpusTotal)
-                     .arg(corpusAll_
-                              ? QString(" · <a href='corpusless:'>"
-                                        "show fewer</a>")
-                              : (corpusTotal > (int)segs.size()
-                                     ? QString(" · <a href='corpusall:'>"
-                                               "show all</a>")
-                                     : QString()));
+                     .arg(trueTotal < 0
+                              ? QString(" \u00b7 <i>total unknown \u2014 "
+                                        "the corpus could not be "
+                                        "counted</i>")
+                              : corpusAll_
+                                    ? (corpusTotal > (int)segs.size()
+                                           ? QString(
+                                                 " \u00b7 showing the "
+                                                 "first %1 \u00b7 <a "
+                                                 "href='corpusless:'>show "
+                                                 "fewer</a>")
+                                                 .arg((int)segs.size())
+                                           : QString(
+                                                 " \u00b7 <a "
+                                                 "href='corpusless:'>show "
+                                                 "fewer</a>"))
+                                    : (corpusTotal > (int)segs.size()
+                                           ? QString(
+                                                 " \u00b7 <a "
+                                                 "href='corpusall:'>show "
+                                                 "more</a>")
+                                           : QString()));
             for (const auto& s : segs) {
                 h += "<div style='border-left:2px solid #D8CFC0;"
                      "padding:2px 0 2px 8px;margin:6px 0'>"
