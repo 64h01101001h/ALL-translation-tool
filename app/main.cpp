@@ -4482,6 +4482,86 @@ public:
             check(ok, "Pecha maker v2: title folio + ya-yig + "
                       "imposed two-up PDF with interlinears");
         }
+        // B13 (2026-08-22): every imposed run was reported as
+        // "imposed two-up on N sheet(s) with cut marks", three-up
+        // and the A5 booklet included — so the count was wrong and
+        // the marks named did not exist. The probe below pages to
+        // 16 folio sides: 8 sheets two-up, 6 three-up, 4 booklet —
+        // three different answers from one document, each proven
+        // against the page count of the PDF that run wrote.
+        {
+            QString doc;
+            for (int i = 0; i < 80; ++i)
+                doc += "SEMS CAN THAMS CAD BDE BA DANG LDAN PAR "
+                       "GYUR CIG, SDUG BSNGAL DANG BRAL BAR GYUR "
+                       "CIG, ";
+            input_->setPlainText(doc);
+            auto run = [&](int layout, int& sides) {
+                const QString tmp = QDir::temp().filePath(
+                    QString("all_selftest_pecha_l%1.pdf")
+                        .arg(layout));
+                QFile::remove(tmp);
+                OverlayPane::PechaOpts po;
+                po.family = "Noto Serif Tibetan";
+                po.wMM = 200;   // small folios: many sides from a
+                po.hMM = 70;    // short probe text, so the sheet
+                po.lines = 5;   // arithmetic has something to bite
+                po.layout = layout;
+                sides = pechaWritePdf(tmp, po);
+                int pages = 0;
+#ifdef ALL_HAVE_QTPDF
+                QPdfDocument pdoc;
+                pdoc.load(tmp);
+                if (pdoc.status() == QPdfDocument::Status::Ready)
+                    pages = pdoc.pageCount();
+#endif
+                return pages;
+            };
+            int s3 = 0, s4 = 0;
+            const int p3 = run(3, s3);
+            const int p4 = run(4, s4);
+            const QString r3 =
+                OverlayPane::pechaImposeLine(3, s3, false);
+            const QString r4 =
+                OverlayPane::pechaImposeLine(4, s4, false);
+            // the folio pagination is the same document either
+            // way — only the sheet arithmetic differs
+            bool ok = s3 >= 4 && s4 == s3 &&
+                      r3.contains("three-up") &&
+                      !r3.contains("two-up") &&
+                      r3.contains(QString("— %1 sheet(s)")
+                                      .arg((s3 + 2) / 3)) &&
+                      r4.contains("saddle-stitch") &&
+                      !r4.contains("with cut marks") &&
+                      r4.contains(QString("— %1 sheet(s)")
+                                      .arg((s4 + 3) / 4));
+            // the arithmetic itself, on the report's own example:
+            // nine sides are 5 two-up sheets but 3 three-up and 3
+            // booklet sheets — the three can never coincide again
+            ok = ok && OverlayPane::pechaSheetCount(1, 9) == 5 &&
+                 OverlayPane::pechaSheetCount(3, 9) == 3 &&
+                 OverlayPane::pechaSheetCount(4, 9) == 3 &&
+                 OverlayPane::pechaSheetCount(0, 9) == 9 &&
+                 OverlayPane::pechaImposeLine(1, 9, false) ==
+                     "imposed two-up on A4 with cut marks — 5 "
+                     "sheet(s)" &&
+                 OverlayPane::pechaImposeLine(1, 9, true)
+                     .contains("plus 1 label sheet") &&
+                 OverlayPane::pechaImposeLine(0, s3, false)
+                     .isEmpty();
+#ifdef ALL_HAVE_QTPDF
+            // the number in the report IS the PDF's page count —
+            // the booklet prints duplex, two faces to a sheet
+            ok = ok && p3 == OverlayPane::pechaSheetCount(3, s3) &&
+                 p4 == 2 * OverlayPane::pechaSheetCount(4, s4);
+#else
+            (void)p3;
+            (void)p4;
+#endif
+            check(ok, "pecha B13: the export report names the "
+                      "layout that was drawn and counts the "
+                      "sheets the PDF really has");
+        }
         // the English interlinear MATCHES, never composes: find a
         // barrier-free attested corpus segment, render its ACIP as
         // a pecha, and prove the published English landed verbatim
@@ -4599,6 +4679,75 @@ public:
             }
             check(ok, "Pecha batch: folder of ACIP + wylie texts "
                       "→ 3 pecha PDFs");
+        }
+        // B13: the batch lane clamped the saved layout to 2, so a
+        // three-up or A5-booklet choice came out as two-up with no
+        // notice. The probe writes a real user key, so it puts it
+        // back exactly as found.
+        {
+            QSettings st("ALL", "TranslationTool");
+            const QVariant keep = st.value("pecha/layout");
+            st.setValue("pecha/layout", 4);
+            const int booklet = pechaOptsFromSettings().layout;
+            st.setValue("pecha/layout", 3);
+            const int threeUp = pechaOptsFromSettings().layout;
+            if (keep.isValid())
+                st.setValue("pecha/layout", keep);
+            else
+                st.remove("pecha/layout");
+            check(booklet == 4 && threeUp == 3,
+                  "Pecha batch honours the saved three-up and "
+                  "booklet layouts (no silent downgrade)");
+        }
+        // B13: the batch lane clamped the saved layout to 2, so a
+        // three-up or A5-booklet choice came out as two-up with no
+        // notice — and the report named no layout at all. Drives
+        // the real batch lane, not just the settings reader: the
+        // three sample texts above are one folio side each, so the
+        // set is 3 sheets whichever way it is imposed and only the
+        // NAME may differ. Writes real user keys, so it puts them
+        // back exactly as found.
+        {
+            QSettings st("ALL", "TranslationTool");
+            const QVariant keepL = st.value("pecha/layout");
+            const QVariant keepC = st.value("pecha/coverSheet");
+            const QString inD2 =
+                QDir::temp().filePath("all_selftest_pecha_in");
+            const QString outD2 =
+                QDir::temp().filePath("all_selftest_pecha_out");
+            st.setValue("pecha/coverSheet", false);
+            st.setValue("pecha/layout", 4);
+            const int booklet = pechaOptsFromSettings().layout;
+            const QString hb = pechaBatchDirs(inD2, outD2);
+            st.setValue("pecha/layout", 3);
+            const int threeUp = pechaOptsFromSettings().layout;
+            const QString h3 = pechaBatchDirs(inD2, outD2);
+            st.setValue("pecha/layout", 4);
+            st.setValue("pecha/coverSheet", true);
+            const QString hbc = pechaBatchDirs(inD2, outD2);
+            if (keepL.isValid())
+                st.setValue("pecha/layout", keepL);
+            else
+                st.remove("pecha/layout");
+            if (keepC.isValid())
+                st.setValue("pecha/coverSheet", keepC);
+            else
+                st.remove("pecha/coverSheet");
+            const bool ok =
+                booklet == 4 && threeUp == 3 &&
+                hb.contains("saddle-stitch") &&
+                !hb.contains("two-up") &&
+                hb.contains("3 sheet(s) across the set") &&
+                !hb.contains("label sheet") &&
+                h3.contains("three-up on A4 with cut marks") &&
+                !h3.contains("two-up") &&
+                h3.contains("3 sheet(s) across the set") &&
+                hbc.contains("plus 3 label sheet(s)") &&
+                hbc.contains("saddle pairing");
+            check(ok,
+                  "Pecha batch honours the saved three-up and "
+                  "booklet layouts, names them in the report, and "
+                  "flags the label page's effect on the saddle");
         }
         // wylie source files show as ACIP in the Document box
         // (Adam's finding: the Release 6 wylie edition rendered
@@ -11581,6 +11730,61 @@ public:
         return ord;
     }
 
+    // printed sheets for a layout — what the PDF really pages out
+    // to. Native writes one sheet per folio side; the office
+    // layouts carry 2 or 3 sides to a sheet; the A5 booklet is
+    // duplex, so four A5 pages ride one A4 sheet (two faces).
+    static int pechaSheetCount(int layout, int sides) {
+        if (sides <= 0) return 0;
+        switch (layout) {
+            case 1:
+            case 2: return (sides + 1) / 2;
+            case 3: return (sides + 2) / 3;
+            case 4: return (sides + 3) / 4;
+            default: return sides;
+        }
+    }
+
+    // the layout in the words a print shop needs — one table, so
+    // no report can name a layout other than the one
+    // pechaWritePdfText actually drew.
+    static QString pechaLayoutName(int layout) {
+        switch (layout) {
+            case 1: return "two-up on A4 with cut marks";
+            case 2: return "two-up on US Letter with cut marks";
+            case 3: return "three-up on A4 with cut marks";
+            case 4:
+                return "A5 booklet (saddle-stitch, duplex "
+                       "short-edge, fold on the dashed line, no "
+                       "cut marks)";
+            default: return "native folio sheets";
+        }
+    }
+
+    // the imposition line of the export report. B13 (2026-08-22):
+    // it tested only `if (o.layout)` and always divided sides by
+    // 2 — nine folio sides three-up page out to 3 sheets, not 5,
+    // and the booklet branch draws a fold line and no cut marks
+    // at all. Whoever orders paper from that line ordered wrong.
+    static QString pechaImposeLine(int layout, int sides,
+                                   bool coverSheet) {
+        if (layout <= 0 || sides <= 0) return QString();
+        QString s = QString("imposed %1 — %2 sheet(s)")
+                        .arg(pechaLayoutName(layout))
+                        .arg(pechaSheetCount(layout, sides));
+        if (coverSheet) {
+            s += " plus 1 label sheet";
+            // the label page rides ahead of the folio faces; in
+            // the booklet that shifts the duplex pairing by one
+            // face, so it is flagged rather than shipped quiet
+            if (layout == 4)
+                s += " (print the label separately — in the "
+                     "duplex run it shifts the saddle pairing "
+                     "by one face)";
+        }
+        return s;
+    }
+
     // classical shad convention: a stanza's last line closes with
     // the double shad ༎. Applied only where the poet already wrote
     // a shad — punctuation is normalized, never invented.
@@ -12673,10 +12877,12 @@ public:
                             "side(s) → %2")
                         .arg(sides)
                         .arg(fn.toHtmlEscaped());
-        if (o.layout)
-            h += QString("<br>imposed two-up on %1 sheet(s) with "
-                         "cut marks.")
-                     .arg((sides + 1) / 2);
+        // B13: the imposition sentence comes from the layout the
+        // PDF was written with — a three-up run is 3 sheets, not
+        // "two-up on 5 sheet(s)", and the booklet has no cut marks
+        const QString imp =
+            pechaImposeLine(o.layout, sides, o.coverSheet);
+        if (!imp.isEmpty()) h += "<br>" + imp + ".";
         h += "<br><small>script through the battery-proven chain; "
              "failed syllables appear as ⟨wylie⟩, never guessed";
         if (o.interEng)
@@ -12712,8 +12918,11 @@ public:
         o.coverDate = QDate::currentDate().toString(Qt::ISODate);
         o.ruleWeight =
             qBound(0, st.value("pecha/rules", 1).toInt(), 2);
+        // all five layouts, not three (B13): the clamp stopped at
+        // 2, so a saved three-up or A5-booklet choice came out of
+        // the batch lane as two-up with nothing said about it
         o.layout =
-            qBound(0, st.value("pecha/layout", 0).toInt(), 2);
+            qBound(0, st.value("pecha/layout", 0).toInt(), 4);
         // per-text dress (title folio, ya-yig, volume letter) is
         // deliberately left off in batch — a saved title would be
         // wrong on every other text
@@ -12736,7 +12945,7 @@ public:
                              files.size(), this);
         prog.setWindowModality(Qt::WindowModal);
         prog.setMinimumDuration(0);
-        int done = 0, made = 0, sidesTotal = 0;
+        int done = 0, made = 0, sidesTotal = 0, sheetsTotal = 0;
         QStringList failed;
         for (const QString& fname : files) {
             prog.setValue(done);
@@ -12760,6 +12969,7 @@ public:
             if (sides) {
                 ++made;
                 sidesTotal += sides;
+                sheetsTotal += pechaSheetCount(o.layout, sides);
             } else {
                 failed << fname;
             }
@@ -12773,6 +12983,28 @@ public:
                 .arg(files.size())
                 .arg(outDir.toHtmlEscaped())
                 .arg(sidesTotal);
+        // the batch lane prints whatever layout is saved (B13), so
+        // it names it — the sheet total is summed per text, since
+        // each PDF rounds up its own last sheet
+        if (o.layout) {
+            h += QString("<br>imposed %1 — %2 sheet(s) across the "
+                         "set%3.")
+                     .arg(pechaLayoutName(o.layout))
+                     .arg(sheetsTotal)
+                     .arg(o.coverSheet
+                              ? QString(" plus %1 label sheet(s)")
+                                    .arg(made)
+                              : QString());
+            // measured 2026-08-22: the label page is written
+            // before the booklet faces, so a duplex run pairs it
+            // with face 1 and the saddle collates wrong — flagged
+            // here exactly as the single-text report flags it,
+            // never shipped quiet
+            if (o.layout == 4 && o.coverSheet)
+                h += "<br>print the label pages separately — in "
+                     "the duplex run each one shifts its "
+                     "booklet's saddle pairing by one face.";
+        }
         if (done < files.size())
             h += QString("<br>stopped early — %1 file(s) not "
                          "attempted.")
