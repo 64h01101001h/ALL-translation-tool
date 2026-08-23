@@ -21077,6 +21077,9 @@ private:
             qint64 bytes = 0;
             QString etag;
             bool updatable = false;
+            // true only when a HEAD answered in THIS session —
+            // the sole licence for the tick (design panel B3)
+            bool live = false;
         };
         std::vector<Row> rows;
         QSettings st("ALL", "TranslationTool");
@@ -21108,18 +21111,37 @@ private:
                                    QDir::AllDirs |
                                    QDir::NoDotAndDotDot)
                         .size() > 0;
+                // THE TENSE IS THE HONESTY MECHANISM (design panel,
+                // 2026-08-22). "matched the website on Fri 22 Aug" is
+                // a fact carrying its own date. "current" is a claim
+                // about the present tense that a cached fingerprint
+                // cannot support — the site may have published twice
+                // since. The tick below is earned ONLY by a HEAD that
+                // answered during THIS session; every other state is
+                // written in the past tense with a date attached, and
+                // states past 30 days carry their own age.
+                row.live = true;
                 if (!haveDir) {
-                    row.status = "not in your library yet";
+                    row.status = "not in your library · checked just now";
                     row.updatable = true;
                 } else if (known.isEmpty()) {
                     row.status =
-                        "installed (fingerprint unknown — "
-                        "installed outside this checker)";
+                        "installed, but not by this checker — there is "
+                        "no fingerprint to compare, so the tool cannot "
+                        "tell you whether it is current";
                     row.updatable = true;
                 } else if (known == row.etag) {
-                    row.status = "current ✓";
+                    row.status =
+                        QString("current as of this check, %1 ✓")
+                            .arg(QTime::currentTime().toString("h:mm ap"));
                 } else {
-                    row.status = "UPDATE AVAILABLE";
+                    row.status =
+                        QString("UPDATE AVAILABLE — the website's copy "
+                                "changed since yours was installed%1")
+                            .arg(row.date.isEmpty()
+                                     ? QString()
+                                     : QString("; site copy dated %1")
+                                           .arg(row.date));
                     row.updatable = true;
                 }
             } else {
@@ -21127,8 +21149,13 @@ private:
                 // would work — CDNs and proxies decline HEAD
                 // routinely. Dead-ending the one window that installs
                 // collections on that signal is worse than trying.
-                row.status = "the check did not answer \u2014 "
-                             "installing will still try";
+                // Nothing is known about this row either way. Say that
+                // \u2014 do NOT fall back to a remembered "matched", which
+                // would let a stale answer stand in for a fresh one.
+                row.status =
+                    "the website did not answer this row \u2014 nothing is "
+                    "known about it either way; installing will still "
+                    "try";
                 row.updatable = true;
             }
             r->deleteLater();
@@ -21141,8 +21168,12 @@ private:
         dlg->resize(680, 320);
         auto* v = new QVBoxLayout(dlg);
         auto* note = new QLabel(
+            // "checked live just now" deleted: the note is standing
+            // text shown in every state, including the one where the
+            // site refused to answer. The header above it carries what
+            // was actually learned, and when.
             "The Kangyur, Tengyur, and Sungbum as published by the "
-            "Asian Legacy Library, checked live just now. Downloading "
+            "Asian Legacy Library. Downloading "
             "unpacks that collection's ZIP over its own folder exactly "
             "as a manual install would — your my_materials and work "
             "folders are never touched.");
