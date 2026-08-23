@@ -2386,6 +2386,33 @@ static bool warnWriteFail(QWidget* parent, const QFile& f,
     QMessageBox::warning(parent, "Save failed", msg);
     return false;
 }
+// One honest save, so the four export paths that reported success on
+// failure cannot drift apart again (bounty #6). warnWriteFail's own
+// comment says "saving user work must never fail silently. One voice
+// for every write failure" — it was honoured at 8 of 76 write sites,
+// and the user-facing EXPORTS were among the misses: on an ejected
+// volume, a read-only share or a full disk, the Export pane still
+// printed "214 paragraphs at double shads" and the citations dialog
+// still closed, identical to success.
+//
+// A short write matters as much as a refused open: ENOSPC after a
+// successful open loses the tail of the file with no error anywhere,
+// so the byte count is checked and the handle flushed before this
+// returns true.
+static bool saveOrWarn(QWidget* parent, const QString& path,
+                       const QByteArray& body, const QString& what) {
+    QFile f(path);
+    if (!f.open(QIODevice::WriteOnly | QIODevice::Truncate))
+        return warnWriteFail(parent, f, what);
+    if (f.write(body) != body.size() || !f.flush()) {
+        const bool r = warnWriteFail(parent, f, what);
+        f.close();
+        return r;
+    }
+    f.close();
+    return true;
+}
+
 // ...and a click that opens a file must never die silently either
 static void warnOpenFail(QWidget* parent, const QFile& f,
                          const QString& what) {
@@ -8174,16 +8201,20 @@ private:
             this, "Folder for folio-faithful files",
             dataRoot_ + "/library");
         if (dir.isEmpty()) return;
-        int n = 0;
+        int n = 0, failed = 0;
         for (const auto& sd : sides) {
-            QFile f(dir + "/" + sd.first + ".txt");
-            if (f.open(QIODevice::WriteOnly | QIODevice::Text)) {
-                f.write(sd.second.toUtf8());
+            if (saveOrWarn(this, dir + "/" + sd.first + ".txt",
+                           sd.second.toUtf8(), "A folio-side file"))
                 ++n;
-            }
+            else
+                ++failed;   // counted, not swallowed
         }
         QMessageBox::information(
             this, "Folio export",
+            (failed ? QString("%1 written, <b>%2 FAILED</b> \u2014 "
+                              "see the message(s) above. ")
+                          .arg(n).arg(failed)
+                    : QString()) +
             QString("%1 folio-side file(s) written (001a.txt style) "
                     "— named to sit beside downloaded scans "
                     "(001a.jpg): one text file per woodblock side, "
@@ -10133,9 +10164,8 @@ private:
                     "_quotations.txt",
                 "Text (*.txt)");
             if (fn.isEmpty()) return;
-            QFile f(fn);
-            if (f.open(QIODevice::WriteOnly | QIODevice::Text))
-                f.write(ed->toPlainText().toUtf8());
+            saveOrWarn(this, fn, ed->toPlainText().toUtf8(),
+                       "The citations document");
         });
         dlg->show();
     }
@@ -10562,11 +10592,14 @@ public:
         const QString fn = safeGetSaveFileName(
             this, "Save translation-prep text", "translation_prep.txt",
             "Text files (*.txt)");
-        if (!fn.isEmpty()) {
-            QFile f(fn);
-            if (f.open(QIODevice::WriteOnly))
-                f.write(QByteArray::fromStdString(outText));
-        }
+        if (!fn.isEmpty() &&
+            !saveOrWarn(this, fn,
+                        QByteArray::fromStdString(outText),
+                        "The translation-prep file"))
+            return QString("<b style='color:#b00'>Not saved.</b> The "
+                           "prep ran, but the file could not be "
+                           "written \u2014 see the message above. "
+                           "Nothing on disk has changed.");
         return QString("<b>Translation prep (GMR workflow)</b>: %1 "
                        "paragraphs at double shads, %2 bracket note(s) "
                        "folio-tagged. Verse lineation + house style "
@@ -10583,11 +10616,14 @@ public:
         const QString fn = safeGetSaveFileName(
             this, "Save print Tibetan", "tibetan_unicode.txt",
             "Text files (*.txt)");
-        if (!fn.isEmpty()) {
-            QFile f(fn);
-            if (f.open(QIODevice::WriteOnly))
-                f.write(QByteArray::fromStdString(res.unicode));
-        }
+        if (!fn.isEmpty() &&
+            !saveOrWarn(this, fn,
+                        QByteArray::fromStdString(res.unicode),
+                        "The print export"))
+            return QString("<b style='color:#b00'>Not saved.</b> The "
+                           "conversion ran, but the file could not be "
+                           "written \u2014 see the message above. "
+                           "Nothing on disk has changed.");
         QString h = QString("<b>Print export</b>: %1 syllables, "
                             "%2 flagged ⟨…⟩ (never guessed).")
                         .arg(res.syllables)

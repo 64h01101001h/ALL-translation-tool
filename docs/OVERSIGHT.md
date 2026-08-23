@@ -122,7 +122,6 @@ be guessing at how you work. None blocks other work.*
 | **H1** | **Whole-app visual direction.** Choose a direction from rendered options — density, chrome, typography, how panes read. I have sequenced this AFTER your test campaign, on the argument that a direction chosen before you have worked in the tool is chosen from my imagination. Overrule me if you disagree. | #37 |
 | **H2** | **Author-search layout.** Two rejected alternatives exist with documented reasons. I do not think either beats what ships, and said so, but you asked to see the options. | #38 |
 | **H3** | **The Overlay card redesign.** A four-direction campaign has ruled: authority zones, ruled, with an apparatus grammar inside each. It also proved by rendering that div borders have NEVER painted in this app. Awaiting your look before implementation. | #39, #43 |
-| **H4** | **Where the ⌘K Hunt button lives.** You flagged it as sitting on a line. Candidate home is the ribbon band's right end. | #40 |
 | **H5** | **Data-visualisation vocabulary.** Which of the four grounded mappings to build first — meter histogram, a text's tier composition, one term across the courses, or the citation web. | #42 |
 | **H6** | **GUI mockup + visual revamp**, the original deferral that #37 and #39 now give shape to. | #34 |
 
@@ -133,7 +132,7 @@ be guessing at how you work. None blocks other work.*
 | # | What | Backlog |
 |---|---|---|
 | **I1** | **The oversight register itself** — this page. Standing rule: anything found to be human-gated is written into CLOSER.md AND surfaced here in the same commit that discovers it. Reconciled mechanically by `tools/reconcile_lists.py`, which runs in the constitution gate, so an item that needs you can no longer be invisible to you. | #35 |
-| **I2** | **Rebuild the test campaign, then walk it.** The existing one is dated 13 August and covers none of the last nine days. You asked to personally test and stress every function; you should be walking the app that exists. | #41 |
+| **I2** | **The test campaign** — mine to rebuild (the existing one is dated 13 August and covers none of the last nine days), yours to walk once it exists. | #41 |
 
 ---
 
