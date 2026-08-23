@@ -287,3 +287,33 @@ produces the candidate; 7–9 accept it; then
   The ratchet stays, re-scoped: it now measures how far the widest
   ribbon overflows (how much scrolling a user faces), not how much is
   unreadable.
+- 2026-08-22 · **#45 CLOSED (biography links) / residual noted.** Adam
+  clicked Gyaltsab Je's "biography" and got a 404. The ids were never
+  wrong — ours match Wikidata's P4138 exactly and BDRC confirms
+  P65 → 9095. The FORMATTER was: Wikidata's P1630 still publishes
+  ".../biographies/view/$1" with a bare integer, and TOL has moved to
+  /view/<name-slug>/<id>. The slug cannot be computed (deriving it
+  from Wikidata labels reproduced 2 of 6 known-good slugs), so slugs
+  are now DATA — harvested from the Wayback CDX index and held to
+  reproducing six URLs confirmed independently by live web search.
+  116 of 193 people resolve, including 43 of the 47 who have texts to
+  click from; the other 4 get TOL's by-name search, labelled as a
+  search. **Residual:** 77 people (4 with texts) have no archived TOL
+  page, so no direct biography link exists for them. Not human-gated
+  — it needs a reachable TOL index, and their site 403s every
+  automated request. Revisit if TOL ever publishes a dump.
+- 2026-08-22 · **#46 CLOSED.** The 84000 card was repeating itself
+  five different ways (Adam's "bcom ldan 'das" screenshot). The one
+  that matters most: the gloss dedup guard compared trimmed needles
+  against UNTRIMMED comma-components, so it had never fired for any
+  entry in the layer — the dedup committed earlier the same day
+  reported success while doing nothing for glosses. Also fixed:
+  definitions identical for 756 characters rendering six times once
+  elided at 400; the same body republished under different openings
+  (now caught by a shared 200-char head OR tail — 33.0% of 71,296
+  definition lines across 26,382 entries are restatements); ux::snip
+  truncating mid-word while its own comment promised otherwise; and
+  84000's "<person>"/"<term>" merge tags reaching the reader,
+  including on the Sanskrit line. The layer is reference only, so it
+  is capped at 4 definitions with the remainder disclosed and the
+  tier named. Pinned on the layer's worst case (43 definitions).
