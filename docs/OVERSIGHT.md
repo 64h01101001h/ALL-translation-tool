@@ -9,6 +9,28 @@ can be spent on the highest-leverage thing rather than the loudest.*
 explicitly defers it. Nothing is closed by inference, and nothing is
 quietly dropped because it went stale.*
 
+## How the lists relate (Adam asked, 2026-08-22)
+
+There are **two durable lists and they are deliberately different
+cuts of the same work** — not two backlogs.
+
+- **`docs/CLOSER.md` is THE backlog.** Every piece of open work lives
+  there, numbered, with its status and owner. An item not on it does
+  not exist. That is the single source of truth.
+- **This page is a VIEW of it** — the subset that no amount of
+  engineering can move, sorted by what kind of act it needs, so a
+  spare ten minutes can be spent well. Every row here cites its
+  backlog number. Nothing lives here that is not also there.
+
+A third list exists inside the session harness and is **scratch**: it
+vanishes when the session ends and holds nothing from today. It is not
+a source of truth and should not be treated as one.
+
+**The rule that keeps them honest:** anything discovered to be
+human-gated is written into CLOSER.md *and* surfaced here in the SAME
+commit that discovers it. An item that lives only in a chat message
+does not exist.
+
 **As of 2026-08-22 every engineering item on the backlog is closed or
 deferred. Everything that remains in the project is on this page.**
 

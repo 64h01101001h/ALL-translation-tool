@@ -28307,7 +28307,13 @@ public:
     // built once: library filename pairs + GMR's catalog_works pairs
     const allcore::TitlePairBank& titlePairBank() {
         if (pairBankBuilt_) return pairBank_;
-        pairBankBuilt_ = true;
+        // the FOURTH instance of this class today (loadPersons, the
+        // palette's two lanes, englishTitle were the others): the flag
+        // was set BEFORE the loads, so on an ordinary install where
+        // catalog_works.json or library/ is absent — both gitignored,
+        // and isDataRoot only requires the spine db — the bank stayed
+        // permanently empty for the session with no banner and no
+        // retry. Set at the end, only if something actually arrived.
         if (!root_.isEmpty())
             pairBank_.addLibraryTree((root_ + "/library").toStdString());
         QFile wf(root_ + "/data/extracted/catalog_works.json");
@@ -28320,6 +28326,7 @@ public:
                               "catalog_works.json");
             }
         }
+        pairBankBuilt_ = pairBank_.size() > 0;
         return pairBank_;
     }
 
@@ -28772,10 +28779,28 @@ public:
                      "translation (%1 flag%2)</b></div>")
                  .arg(flags.size())
                  .arg(flags.size() == 1 ? "" : "s");
-        if (flags.empty())
-            h += "<div style='color:#2E7D32'>No filename's English "
-                 "half matches a different work's published English "
-                 "\u2014 clean.</div>";
+        if (flags.empty()) {
+            // BOUNTY #5: zero flags from an EMPTY bank is not a clean
+            // bill of health, it is an untested one — and this
+            // rendered in binding green, so a cataloger read an
+            // authoritative all-clear on the copy-paste disease when
+            // nothing had been compared at all.
+            const size_t pairs = titlePairBank().size();
+            if (pairs == 0)
+                h += "<div style='color:#B4540A'><b>Nothing was "
+                     "compared.</b> The title-pair bank is empty, so "
+                     "this lane could not run \u2014 it is not "
+                     "reporting that your titles are clean. Check that "
+                     "data/extracted/catalog_works.json and the "
+                     "library tree are present.</div>";
+            else
+                h += QString("<div style='color:#2E7D32'>No filename's "
+                             "English half matches a different work's "
+                             "published English \u2014 clean against "
+                             "%1 known title pair%2.</div>")
+                         .arg((qulonglong)pairs)
+                         .arg(pairs == 1 ? "" : "s");
+        }
         for (const auto& m : flags) {
             h += "<div style='margin-top:4px'><b>" +
                  QString::fromStdString(m.file).toHtmlEscaped() +
