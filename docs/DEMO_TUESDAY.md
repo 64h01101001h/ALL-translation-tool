@@ -185,6 +185,31 @@ Nothing else in this document works if these are not done.
 
 ### STEP 4 — The author ledger *(Library)* · 6:30–8:30
 
+> **VERIFIED 2026-08-23 — type these names, not those.**
+>
+> The audit found "Gyaltsab Je", "Milarepa", "Nagarjuna" and "Khedrup" all
+> returned *"No person of that name"*, because every alias in the index was a
+> Wylie-caps variant (`RGYAL TSAB DAR MA RIN CHEN`) and nobody types that.
+> The phonetic half was already on disk in the Sungbum folder names, so
+> **88 people are now searchable the way a human spells them**
+> (`tools/add_phonetic_aliases.py`).
+>
+> **SAFE — these resolve:** `Gyaltsab Je` (P65) · `Tsongkapa` (P64) ·
+> `Kedrup Je` (P55) · `Sakya Pandita` (P1056) · `Panchen Sonam Drakpa` (P101)
+>
+> **AVOID — honest misses, not bugs:**
+> - **`Milarepa`** — genuinely absent from this catalog. The library is the
+>   Gelug Sungbum plus Kangyur/Tengyur; his collected works are not in it.
+>   If asked, that is the right answer and a good one: *"the tool only
+>   claims what ALL has actually catalogued."*
+> - **`Nagarjuna`** — present three times as `KLU SGRUB` with **zero** local
+>   works. Tibetan names are homonym-dense and we will not guess which one a
+>   visitor means, so no phonetic alias was invented for him.
+>
+> **Spelling note:** it is `Tsongkapa` in this index, not `Tsongkhapa` —
+> the catalog's own spelling. Type it as the ledger has it.
+
+
 - **Read tab → Library.**
 - **Author box (STUDY group) → type `Tsongkhapa` → Enter → click the candidate card.**
 
