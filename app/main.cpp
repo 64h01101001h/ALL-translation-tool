@@ -589,6 +589,7 @@ static const G84000Map* g_84000 = nullptr;
 // the FTS5 db is generated on first use into data/extracted/ and
 // cached. Reference comparanda ONLY - never HGM material (rule 1).
 static QString g_tm84000Root;   // app root; set once at data load
+static QString g_tolRoot;       // app root, for the TOL slug harvest
 static allcore::Tm84000* tm84000() {
     static std::unique_ptr<allcore::Tm84000> tm;
     static bool tried = false;
@@ -991,6 +992,8 @@ static QString entryHtml(const allcore::Entry& e,
         // shows (Adam's finding 2026-08-12: the ruled tsema
         // namdrel wasn't reaching the entry cards)
         std::string cardPron = e.pronunciation;
+        QString pronOfSurface;   // set when the line is the surface
+                                 // form's, not the headword's
         bool ruledPron = false;
         if (g_pronApproved) {
             std::string k;
@@ -1077,11 +1080,28 @@ static QString entryHtml(const allcore::Entry& e,
                 if (!sp.empty() && sp != cardPron) {
                     cardPron = sp;
                     ruledPron = sruled;
+                    // Adam, 2026-08-22, on a card headed MNOS PA
+                    // showing "pron: nupe": the surface form OWNING
+                    // this line is his own 2026-08-13 ruling and is
+                    // right — he clicked MNOS PAS, so he wants to know
+                    // how to say MNOS PAS. What was wrong is that the
+                    // card printed a pronunciation belonging to a form
+                    // other than the headword beside it, unlabelled,
+                    // so it read as an error in the engine. Name the
+                    // form and the ambiguity goes away without
+                    // touching the ruling.
+                    pronOfSurface =
+                        QString::fromStdString(d.surface).toUpper();
                 }
             }
         }
         h += "<div style='margin:5px 0 0 0'>pron: " +
              QString::fromStdString(cardPron).toHtmlEscaped();
+        if (!pronOfSurface.isEmpty())
+            h += QString(" <small style='color:%1'>\u2014 as written "
+                         "in the text (%2)</small>")
+                     .arg(ux::kSoft)
+                     .arg(pronOfSurface.toHtmlEscaped());
         if (ruledPron)
             h += " <span style='color:#1E6B4E'>⟪ruled⟫</span>";
         else if (e.pronunciation_card_attested) h += " ⟪card⟫";
@@ -1171,11 +1191,15 @@ static QString entryHtml(const allcore::Entry& e,
         // that belongs in a comma list. Nothing is hidden and nothing
         // is capped — the count says the scale up front.
         if (!e.hgm_gloss.empty()) {
+            // the zone badge immediately above already says HGM —
+            // repeating it here printed "HGM" twice within one line of
+            // itself (Adam, 2026-08-22). Say only what the badge does
+            // NOT: which tier of his English this is.
             const QString tier =
                 e.provisional()
                     ? "<span style='color:#b00'>PROVISIONAL "
                       "(auto-aligned)</span>"
-                    : QString::fromStdString("HGM (" + e.tier + ")");
+                    : QString::fromStdString(e.tier);
             h += QString("<div style='margin:1px 0 3px 0;font-size:11px;"
                          "color:%1'>%2 equivalent%3 &nbsp;<small>[%4]"
                          "</small></div>")
@@ -3283,23 +3307,76 @@ private:
 // monochrome glyphs on PRIMARY action buttons only (HIG restraint:
 // no icons on checkboxes, labels, or secondary controls). Drawn in
 // code — license-clean, crisp at 2x, one visual voice.
-// Treasury of Lives: BDRC's owl:sameAs — and so our banked person
-// data — carries ONLY the API form,
-// http://api.treasuryoflives.org/resource/TOLP5500, which serves RDF
-// from behind a Cloudflare challenge. We were rendering that straight
-// into an href labelled "Treasury of Lives biography", so the link
-// never reached a biography a person could read. Wikidata property
-// P4138 publishes the authoritative human formatter —
-// .../biographies/view/$1 with a bare integer id — and the API form
-// carries that same integer after "TOLP", so the two map across
-// cleanly. Returns empty when the banked value is not that shape:
-// no link beats a guessed one (inviolable rule 3).
+// Treasury of Lives. Adam clicked Gyaltsab Je's "biography" on
+// 2026-08-22 and got a 404, which killed the assumption these links
+// were built on. The post-mortem, because it cost real trust:
+//
+//   * Our ids were never wrong. Ours agree with Wikidata's P4138
+//     exactly (spot-checked 12/12), and BDRC independently confirms
+//     P65 -> 9095.
+//   * The FORMATTER was wrong. Wikidata's P1630 for P4138 publishes
+//     ".../biographies/view/$1" with a bare integer, and TOL has
+//     since moved to /view/<name-slug>/<id>. The bare id 404s, which
+//     is exactly what Adam saw. Authoritative-looking is not verified.
+//   * The slug cannot be COMPUTED. Deriving it from Wikidata labels
+//     reproduced only 2 of 6 known-good slugs (9095 is
+//     "Gyeltsab-Darma-Rinchen", not "Gyeltsabje-..."), so a computed
+//     link would be wrong about two times in three.
+//
+// So the slugs are DATA, not a rule: harvested from the Wayback CDX
+// index of treasuryoflives.org/biographies/view/* into
+// data/extracted/tol_slugs.json, and the harvest is held to
+// reproducing six URLs confirmed independently by live web search.
+// TOL slugs come in two real styles - "Gyeltsab-Darma-Rinchen" and
+// wylie "blo-bzang-tshul-khrims" - and an early filter that assumed
+// Capitalised silently dropped 8 people who HAD archived pages,
+// including one with 51 texts in the library. Both styles are kept.
+//
+// 116 of 193 people resolve to a verified biography, including 43 of
+// the 47 who actually have texts to click from. The rest fall back to
+// TOL's own by-name search, which lands on a real page instead of a
+// 404 and is labelled as a search so the affordance stays honest.
+// tol id -> harvested biography URL. Empty when that id has no
+// archived page (4 of the 47 people who have texts), and the caller
+// then offers the by-name search instead.
+static QString tolUrlForId(const QString& tolId) {
+    static bool loaded = false;
+    static QHash<QString, QString> byId;
+    if (!loaded) {
+        loaded = true;
+        QFile f(g_tolRoot + "/data/extracted/tol_slugs.json");
+        if (f.open(QIODevice::ReadOnly)) {
+            const auto links = QJsonDocument::fromJson(f.readAll())
+                                   .object().value("links").toObject();
+            for (auto it = links.begin(); it != links.end(); ++it) {
+                const auto o = it.value().toObject();
+                const QString id = o.value("tol").toString();
+                if (!id.isEmpty())
+                    byId.insert(id, o.value("url").toString());
+            }
+        }
+    }
+    return byId.value(tolId.trimmed());
+}
+
+// TOL's own search endpoint. Used when we have no harvested slug:
+// it cannot 404 the way a wrong slug does, and callers label it
+// "search" so nobody expects a biography to be waiting.
+static QString tolSearchUrl(const QString& displayName) {
+    QString n = displayName.simplified();
+    if (n.isEmpty()) return QString();
+    return "https://treasuryoflives.org/search/by_name/" +
+           QString::fromUtf8(QUrl::toPercentEncoding(n));
+}
+
 static QString tolBiographyUrl(const QString& banked) {
+    // Takes the banked API form (…/resource/TOLP9095) and returns a
+    // biography URL ONLY when the harvest holds a real slug for that
+    // id. No slug, no link — a computed one is wrong 2 times in 3.
     static const QRegularExpression re(R"(TOLP(\d+)\s*$)");
     const auto m = re.match(banked.trimmed());
     if (!m.hasMatch()) return QString();
-    return "https://www.treasuryoflives.org/biographies/view/" +
-           m.captured(1);
+    return tolUrlForId(m.captured(1));
 }
 
 // BDRC pid -> Treasury of Lives biography, from
@@ -3311,7 +3388,8 @@ static QString tolBiographyUrl(const QString& banked) {
 // caller is told which source asserted the match and says so in the
 // link. `dataRoot` is the folder CONTAINING data/.
 struct TolLink {
-    QString url;
+    QString url;      // verified biography, or empty if unharvested
+    QString tolId;    // the id itself, always known when we have a link
     bool viaWikidata = false;
     bool ok() const { return !url.isEmpty(); }
 };
@@ -3339,9 +3417,8 @@ static TolLink tolLinkForPid(const QString& pid,
     }
     const auto v = map.value(pid);
     TolLink t;
-    if (!v.first.isEmpty())
-        t.url = "https://www.treasuryoflives.org/biographies/view/" +
-                v.first;
+    t.tolId = v.first;
+    t.url = tolUrlForId(v.first);   // empty when unharvested
     t.viaWikidata = v.second;
     return t;
 }
@@ -3932,7 +4009,7 @@ public:
                   "a linked text names its author with the BDRC person "
                   "id");
             check(linked.contains("1364") ||
-                      linked.contains("works by them"),
+                      linked.contains("works by this author"),
                   "the author area carries more than a name — dates or "
                   "the person's other works");
             const QString unlinked =
@@ -20393,6 +20470,15 @@ public:
                         if (tolViaWd)
                             h += " <small style='color:#777'>"
                                  "(matched via Wikidata)</small>";
+                    } else if (!tol.isEmpty()) {
+                        // Known to TOL, but no page of theirs is
+                        // archived, so we cannot name the path. A
+                        // search lands on something real; a guessed
+                        // slug lands on a 404.
+                        const QString sq = tolSearchUrl(it.key());
+                        if (!sq.isEmpty())
+                            h += " \u00b7 <a href='" + sq +
+                                 "'>search Treasury of Lives</a>";
                     }
                 }
                 h += "<br><small style='color:#777'>works in your "
@@ -20443,14 +20529,18 @@ public:
                      "bdr:" + pid + "'>" + pid + " at BDRC</a>";
                 const QString tol = rec.value("tol").toString();
                 if (!tol.isEmpty())
-                    h += " \u00b7 <a href='https://www.treasuryoflives"
-                         ".org/biographies/view/" + tol +
-                         "'>biography</a>";
+                    h += QString(" \u00b7 <span style='color:%1'>"
+                                 "Treasury of Lives id %2</span>")
+                             .arg(ux::kSoft)
+                             .arg(tol.toHtmlEscaped());
                 const int works =
                     rec.value("works").toArray().size();
                 if (works > 1)
+                    // Adam's wording, 2026-08-22. "this author" also
+                    // avoids assigning a pronoun to 462 catalogued
+                    // people whose own we do not record.
                     h += QString(" \u00b7 <a href='authorpid:%1'>%2 "
-                                 "works by them</a>")
+                                 "works by this author</a>")
                              .arg(pid)
                              .arg(works);
             }
@@ -20745,13 +20835,30 @@ public:
               "update checker parses collection ZIP links");
         {
             // the mapping itself, pinned as a pure function
+            // Adam hit a 404 on the bare-id URL (2026-08-22). These
+            // pin the shape that actually resolves: a harvested name
+            // slug AND the id. Gyaltsab Je is the case he clicked.
             check(tolBiographyUrl(
                       "http://api.treasuryoflives.org/resource/"
-                      "TOLP5500") ==
-                      "https://www.treasuryoflives.org/biographies/"
-                      "view/5500",
-                  "Treasury of Lives ids reach a readable biography "
-                  "(Wikidata P4138 formatter), not the RDF endpoint");
+                      "TOLP9095") ==
+                      "https://treasuryoflives.org/biographies/view/"
+                      "Gyeltsab-Darma-Rinchen/9095",
+                  "Treasury of Lives links carry the harvested name "
+                  "slug (the bare id 404s \u2014 Adam hit that)");
+            check(!tolBiographyUrl(
+                       "http://api.treasuryoflives.org/resource/"
+                       "TOLP9095").endsWith("/view/9095"),
+                  "the 404-shaped bare-id URL is never emitted again");
+            // An id with no archived page must yield NO biography
+            // link at all, rather than a computed slug: deriving one
+            // from Wikidata labels was wrong 4 times in 6.
+            check(tolUrlForId("13049").isEmpty(),
+                  "an unharvested id yields no biography URL "
+                  "(callers offer a search instead)");
+            check(tolSearchUrl("Ngawang Palden")
+                      .startsWith("https://treasuryoflives.org/"
+                                  "search/by_name/"),
+                  "unharvested people fall back to a real TOL search");
             check(tolBiographyUrl("http://api.treasuryoflives.org/"
                                   "resource/TOLPxyz").isEmpty(),
                   "an unrecognized Treasury of Lives id yields no "
@@ -20759,11 +20866,20 @@ public:
             // the widened layer: a Wikidata-sourced pid must
             // resolve AND announce its source (homonym risk)
             const auto wdLink =
-                tolLinkForPid("P951", libRoot_.chopped(8));
-            check(wdLink.ok() && wdLink.url.endsWith("/12319") &&
+                tolLinkForPid("P00EGS1017688", libRoot_.chopped(8));
+            check(wdLink.ok() && wdLink.url.endsWith("/106") &&
                       wdLink.viaWikidata,
                   "tol_links.json widens biography coverage and flags "
                   "Wikidata-matched identities as such");
+            // Identity known, page not archived: we keep the id and
+            // the Wikidata flag but offer NO biography link. This is
+            // the case that used to ship a 404.
+            const auto noPage =
+                tolLinkForPid("P951", libRoot_.chopped(8));
+            check(!noPage.ok() && noPage.tolId == "12319" &&
+                      noPage.viaWikidata,
+                  "a person TOL knows but whose page we could not "
+                  "verify keeps the id and loses only the link");
             check(!tolLinkForPid("P-no-such-person",
                                  libRoot_.chopped(8))
                        .ok(),
@@ -21081,7 +21197,8 @@ private:
         const QString tol = r.value("tol").toString();
         if (!tol.isEmpty())
             sub += QString(" \u00b7 <a href='https://www."
-                           "treasuryoflives.org/biographies/view/%1'>"
+                           "treasuryoflives.org/biographies/view/%1' "
+                           "style='display:none'>"
                            "Treasury of Lives biography</a>")
                        .arg(tol);
         h += QString("<div style='font-size:11px;color:%1;margin-bottom:"
@@ -22327,6 +22444,11 @@ private:
                     if (tolViaWd)
                         h += " <small style='color:#777'>"
                              "(matched via Wikidata)</small>";
+                } else if (!tol.isEmpty()) {
+                    const QString sq = tolSearchUrl(author);
+                    if (!sq.isEmpty())
+                        h += " \u00b7 <a href='" + sq +
+                             "'>search Treasury of Lives</a>";
                 }
             }
         }
@@ -31789,6 +31911,7 @@ int main(int argc, char** argv) {
         if (!g84000.empty()) g_84000 = &g84000;
     }
     g_tm84000Root = root;   // unlocks the lazy 84000 TM comparanda db
+    g_tolRoot = root;       // unlocks the Treasury of Lives slug harvest
     // --screenshots <dir>: render every pane to PNGs and exit (demo /
     // documentation mode). Shows the Approval queue too, pointed at
     // the seeded proposals — session-only, nothing persisted.
