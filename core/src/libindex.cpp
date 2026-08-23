@@ -323,8 +323,10 @@ long long LibraryIndex::lineCount() const {
 }
 
 std::vector<FileGoferHit> LibraryIndex::search(const std::string& query,
-                                               int limit) const {
+                                               int limit,
+                                               bool* truncated) const {
     using namespace gofer_ast;
+    bool cut = false;   // any node hit kScanCap
     auto toks = lex(query);
     Parser parser(toks);
     auto ast = parser.parseQuery();
@@ -335,21 +337,33 @@ std::vector<FileGoferHit> LibraryIndex::search(const std::string& query,
         switch (n.kind) {
             case Node::TERM: {
                 std::vector<FWin> w;
+                // The LIMIT is the fix: "PA" alone matches 7,854,758
+                // of 14,077,690 lines, every one of which was pushed
+                // into this vector to return 60.
                 Stmt s(db_,
                        "SELECT l.file_id, l.line_no FROM lines_fts f "
                        "JOIN lines l ON l.id = f.rowid "
-                       "WHERE lines_fts MATCH ?");
+                       "WHERE lines_fts MATCH ? LIMIT ?");
                 const std::string q = ftsQuote(n.term);
                 sqlite3_bind_text(s.p, 1, q.c_str(), -1, SQLITE_TRANSIENT);
+                sqlite3_bind_int(s.p, 2, kScanCap + 1);
                 while (sqlite3_step(s.p) == SQLITE_ROW) {
                     const int ln = sqlite3_column_int(s.p, 1) - 1;
                     w.push_back({sqlite3_column_int64(s.p, 0), ln, ln});
+                }
+                if ((int)w.size() > kScanCap) {
+                    w.resize(kScanCap);
+                    cut = true;
                 }
                 return w;
             }
             case Node::OR: {
                 auto a = eval(*n.lhs), b = eval(*n.rhs);
                 a.insert(a.end(), b.begin(), b.end());
+                if ((int)a.size() > kScanCap) {   // two capped arms
+                    a.resize(kScanCap);
+                    cut = true;
+                }
                 return a;
             }
             case Node::NEAR: {
@@ -357,10 +371,21 @@ std::vector<FileGoferHit> LibraryIndex::search(const std::string& query,
                 std::map<long long, std::vector<const FWin*>> byFile;
                 for (const auto& w : b) byFile[w.file].push_back(&w);
                 std::vector<FWin> out;
+                // The pane's "AND (same file)" compiles to
+                // NEAR/1000000, so every same-file pair passes the gap
+                // test and this loop is the full cross product: 18.0 GB
+                // for three ordinary words. Bounded, and the cut is
+                // reported so the reader is not shown a partial answer
+                // as a whole one.
                 for (const auto& wa : a) {
+                    if ((int)out.size() >= kScanCap) { cut = true; break; }
                     auto it = byFile.find(wa.file);
                     if (it == byFile.end()) continue;
                     for (const auto* wb : it->second) {
+                        if ((int)out.size() >= kScanCap) {
+                            cut = true;
+                            break;
+                        }
                         const int gap =
                             std::max({wb->lo - wa.hi, wa.lo - wb->hi, 0});
                         if (gap <= n.near_n)
@@ -374,6 +399,7 @@ std::vector<FileGoferHit> LibraryIndex::search(const std::string& query,
         return {};
     };
     auto wins = eval(*ast);
+    if (truncated) *truncated = cut;
     std::sort(wins.begin(), wins.end(), [](const FWin& a, const FWin& b) {
         if (a.file != b.file) return a.file < b.file;
         if (a.lo != b.lo) return a.lo < b.lo;

@@ -15215,6 +15215,10 @@ private:
             if (!t.isEmpty()) foldTerms << t;
         }
         int foldDropped = 0;
+        // SQA PERF-1: set when the bounded scan hit its cap, so the
+        // result can say the search space was limited instead of
+        // reading as an exhaustive sweep (house rule 3).
+        bool indexCapped = false;
         for (int i = kFirstDirRow; i < dirs_->count(); ++i) {
             QCoreApplication::processEvents();
             if (stopped_) break;
@@ -15227,7 +15231,14 @@ private:
                     allcore::LibraryIndex li(ix.toStdString());
                     // higher cap: the per-file rollup wants real
                     // counts, not a 60-hit truncation
-                    hits = li.search(q.toStdString(), 400);
+                    bool cut = false;
+                    hits = li.search(q.toStdString(), 400, &cut);
+                    // SQA PERF-1: the scan is now bounded (it used to
+                    // materialise the whole match set — 18.0 GB and
+                    // 5m46s for three ordinary words). A bound is a
+                    // CAP, so it is said out loud rather than left for
+                    // the reader to mistake for a complete sweep.
+                    if (cut) indexCapped = true;
                 } else {
                     hits = allcore::goferSearchFiles(dir.toStdString(),
                                                      q.toStdString(),
@@ -15343,6 +15354,17 @@ private:
                          "(%2)</small></div>")
                      .arg(foldDropped)
                      .arg(fold_->currentText().toHtmlEscaped());
+        if (indexCapped)
+            h += QString("<div style='color:%1'><small>This term is "
+                         "common enough that the index scan reached "
+                         "its %2-window ceiling, so these hits are "
+                         "drawn from part of the library rather than "
+                         "all of it. Narrow the query (a longer "
+                         "phrase, a tighter NEAR window, fewer "
+                         "folders) for an exhaustive "
+                         "sweep.</small></div>")
+                     .arg(ux::kSoft)
+                     .arg(allcore::LibraryIndex::kScanCap);
         if (stopped_)
             h += "<div style='color:#8C2F2B'><small>search stopped "
                  "— partial results</small></div>";

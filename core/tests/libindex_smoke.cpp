@@ -104,6 +104,53 @@ int main() {
           "deleted file leaves the index");
     CHECK(ix.search("\"bden pa\"").empty(), "its lines are gone too");
 
+    // ---- SQA PERF-1: the scan is BOUNDED, and says when it cut ----
+    // Every node used to materialise its full match set before `limit`
+    // was consulted, and the pane's "AND (same file)" compiles to
+    // NEAR/1000000 — the entire same-file cross product. Measured on
+    // the real 2.36 GB index: three ordinary Tibetan words ANDed took
+    // 5m46s and 18.0 GB of RSS on the GUI thread. After bounding:
+    // 3.3 s and 40.7 MB.
+    //
+    // This test builds a corpus far larger than a deliberately tiny
+    // cap so the cross product WOULD explode if the bound were
+    // removed, and asserts two things: the bound holds, and it is
+    // reported. A cap that is not disclosed is house-rule-3 breakage,
+    // and silently returning part of a library reads as all of it.
+    {
+        const fs::path big = fs::temp_directory_path() / "sqa_perf1";
+        std::error_code ec;
+        fs::remove_all(big, ec);
+        fs::create_directories(big / "texts", ec);
+        // 60 files x 400 lines, every line carrying both terms: a
+        // same-file NEAR pair count in the millions if unbounded.
+        for (int f = 0; f < 60; ++f) {
+            std::ofstream o2(big / "texts" /
+                             ("T" + std::to_string(f) + ".ACT"));
+            for (int l = 0; l < 400; ++l)
+                o2 << "CHOS SANGS RGYAS line " << l << "\n";
+        }
+        allcore::LibraryIndex bx((big / ".index.db").string());
+        bx.update((big / "texts").string());
+
+        bool cut = false;
+        const auto hits =
+            bx.search("\"CHOS\" NEAR/1000000 \"SANGS RGYAS\"", 60, &cut);
+        CHECK(hits.size() <= 60,
+              "PERF-1: the hit list honours its limit");
+        CHECK(cut,
+              "PERF-1: a scan that reached the window ceiling REPORTS "
+              "it, so partial results are never read as a whole "
+              "library");
+        bool small = false;
+        const auto few = bx.search("\"line 7\"", 60, &small);
+        CHECK(!small,
+              "PERF-1: a query that fits under the ceiling reports NO "
+              "truncation (the flag means something)");
+        (void)few;
+        fs::remove_all(big, ec);
+    }
+
     fs::remove_all(root);
     std::printf("%s (%d failures)\n",
                 failures ? "LIBINDEX SMOKE FAILED" : "LIBINDEX SMOKE OK",
