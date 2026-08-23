@@ -385,6 +385,8 @@ static std::set<std::string>* g_spellingValidLive = nullptr;
 // Overlay badge answer from the same authority without a second load
 static std::function<QString(const QString&)> g_personCardByName;
 static std::function<QString(const QString&)> g_personBadgeForFile;
+// open the Library's ledger of one person's works, by BDRC pid
+static std::function<void(const QString&)> g_openAuthorByPid;
 
 // ---- OCR model manager (registry verified live on Hugging Face,
 // 2026-08-14; all BDRC, CC BY-NC 4.0, used with BDRC's permission
@@ -3917,6 +3919,30 @@ public:
                        .arg(what);
             if (!ok) ++fails;
         };
+        // Adam, 2026-08-22: "where did the authors link go… shouldn't
+        // there be an authors area that accompanies any text linked to
+        // our authors database". It existed as a one-line badge, and
+        // for 71.5% of the library's work keys it silently vanished.
+        {
+            const QString linked =
+                g_personBadgeForFile
+                    ? g_personBadgeForFile("S5427_x.txt")   // Gyaltsab Je
+                    : QString();
+            check(linked.contains("P65"),
+                  "a linked text names its author with the BDRC person "
+                  "id");
+            check(linked.contains("1364") ||
+                      linked.contains("works by them"),
+                  "the author area carries more than a name — dates or "
+                  "the person's other works");
+            const QString unlinked =
+                g_personBadgeForFile
+                    ? g_personBadgeForFile("ZZ99999_nothing.txt")
+                    : QString();
+            check(unlinked.contains("no author recorded"),
+                  "a text with no catalogued author SAYS so rather than "
+                  "showing nothing at all");
+        }
         // Adam's 84000 duplication report, 2026-08-22. The layer's
         // own merged export repeats itself — 71.4% of 29,383 entries,
         // 46.9% of gloss lines — and the definitions repeat by
@@ -5596,7 +5622,16 @@ public:
         thlCatLink_->hide();
         ll->addWidget(thlCatLink_);
         personBadge_ = new QLabel;
-        personBadge_->setOpenExternalLinks(true);
+        personBadge_->setOpenExternalLinks(false);
+        connect(personBadge_, &QLabel::linkActivated,
+                [](const QString& u) {
+                    if (u.startsWith("authorpid:")) {
+                        if (g_openAuthorByPid)
+                            g_openAuthorByPid(u.mid(10));
+                    } else {
+                        QDesktopServices::openUrl(QUrl(u));
+                    }
+                });
         personBadge_->setWordWrap(true);
         personBadge_->setMinimumWidth(1);
         personBadge_->setToolTip(
@@ -7838,14 +7873,17 @@ private:
             }
         }
         if (personBadge_) {
-            personBadge_->hide();
-            if (g_personBadgeForFile && !fileName.isEmpty()) {
-                const QString b = g_personBadgeForFile(fileName);
-                if (!b.isEmpty()) {
-                    personBadge_->setText(
-                        "<span style='color:#555'>" + b + "</span>");
-                    personBadge_->show();
-                }
+            // always present when a document is open: it now states
+            // the author OR states that the catalog records none
+            const QString b = (g_personBadgeForFile && !fileName.isEmpty())
+                                  ? g_personBadgeForFile(fileName)
+                                  : QString();
+            if (b.isEmpty()) {
+                personBadge_->hide();
+            } else {
+                personBadge_->setText(
+                    "<span style='color:#555'>" + b + "</span>");
+                personBadge_->show();
             }
         }
         titleSearchMode_ = scanWork_.isEmpty();
@@ -20307,6 +20345,122 @@ public:
             "Import data release…",
             [this] { importDataRelease(); });
         g_importRelease = [this] { importDataRelease(); };
+        // These hooks lived INSIDE loadPersons(), which is lazy —
+        // so the Overlay's author area existed only after some
+        // other surface had already triggered a person lookup.
+        // Adam saw the author on one text and not the next, and
+        // the difference was which pane he had visited first.
+        // Each lambda calls loadPersons() itself, so binding them
+        // at construction is both safe and the only way the
+        // Overlay can rely on them (found 2026-08-22 by a pin
+        // that reported hook=NULL).
+        g_personCardByName = [this](const QString& q) -> QString {
+            loadPersons();
+            const QString fq = q.trimmed().toUpper().simplified();
+            if (fq.size() < 4) return {};
+            for (auto it = personsByAuthor_.begin();
+                 it != personsByAuthor_.end(); ++it) {
+                if (it.key().toUpper().simplified() != fq) continue;
+                const auto p = it.value();
+                QString h =
+                    "<hr><div><b>PERSON</b> <small style='color:"
+                    "#777'>(catalog author \u2014 People layer)"
+                    "</small></div><div style='margin:4px 0'><b>" +
+                    it.key().toHtmlEscaped() + "</b>";
+                const QString dates = p.value("dates").toString();
+                if (!dates.isEmpty())
+                    h += " <small style='color:#777'>(" +
+                         dates.toHtmlEscaped() + ")</small>";
+                for (const auto& cv :
+                     p.value("candidates").toArray()) {
+                    const auto c = cv.toObject();
+                    const QString pid = c.value("pid").toString();
+                    const QString tol = c.value("tol").toString();
+                    h += "<br>&nbsp;&nbsp;\u2022 <a href='https://"
+                         "library.bdrc.io/show/bdr:" + pid + "'>" +
+                         pid + " at BDRC</a>";
+                    QString tolPage = tolBiographyUrl(tol);
+                    bool tolViaWd = false;
+                    if (tolPage.isEmpty()) {
+                        const auto tl =
+                            tolLinkForPid(pid, libRoot_.chopped(8));
+                        tolPage = tl.url;
+                        tolViaWd = tl.viaWikidata;
+                    }
+                    if (!tolPage.isEmpty()) {
+                        h += " \u00b7 <a href='" + tolPage +
+                             "'>Treasury of Lives</a>";
+                        if (tolViaWd)
+                            h += " <small style='color:#777'>"
+                                 "(matched via Wikidata)</small>";
+                    }
+                }
+                h += "<br><small style='color:#777'>works in your "
+                     "Library: see the text's card in Read \u2192 "
+                     "Library</small></div>";
+                return h;
+            }
+            return {};
+        };
+        // Overlay badge: filename -> work key -> author line
+        g_personBadgeForFile = [this](const QString& file) -> QString {
+            loadPersons();
+            static const QRegularExpression keyRe(
+                "^([A-Za-z]+)0*(\\d+)");
+            const auto m = keyRe.match(QFileInfo(file).fileName());
+            if (!m.hasMatch()) return {};
+            const QString k =
+                m.captured(1).toUpper() + m.captured(2);
+            const auto auth = acipPersonLinks_.value(k);
+            QString author = authorByWork_.value(k);
+            if (author.isEmpty())
+                author = auth.value("author").toString();
+            const QString pid = auth.value("pid").toString();
+
+            // Adam, 2026-08-22: "shouldn't there be an authors area
+            // somewhere that should accompany any text we have linked
+            // to our authors database". It existed as a one-line
+            // badge — and 71.5% of the library's 5,607 work keys have
+            // NO author link, so for most texts it simply vanished.
+            // Absence shown as silence is the failure this project
+            // names first; say it instead.
+            if (author.isEmpty() && pid.isEmpty())
+                return QString("<span style='color:%1'>\u270D no "
+                               "author recorded in the catalog for "
+                               "this text</span>")
+                    .arg(ux::kSoft);
+
+            QString h = QString::fromUtf8("\u270D ") +
+                        author.toHtmlEscaped();
+            if (!pid.isEmpty()) {
+                const QJsonObject rec = personRecord(pid);
+                const QString dates = rec.value("dates").toString();
+                if (!dates.isEmpty() && !author.contains(dates))
+                    h += QString(" <span style='color:%1'>(%2)</span>")
+                             .arg(ux::kSoft)
+                             .arg(dates.toHtmlEscaped());
+                h += " \u00b7 <a href='https://library.bdrc.io/show/"
+                     "bdr:" + pid + "'>" + pid + " at BDRC</a>";
+                const QString tol = rec.value("tol").toString();
+                if (!tol.isEmpty())
+                    h += " \u00b7 <a href='https://www.treasuryoflives"
+                         ".org/biographies/view/" + tol +
+                         "'>biography</a>";
+                const int works =
+                    rec.value("works").toArray().size();
+                if (works > 1)
+                    h += QString(" \u00b7 <a href='authorpid:%1'>%2 "
+                                 "works by them</a>")
+                             .arg(pid)
+                             .arg(works);
+            }
+            return h;
+        };
+
+        g_openAuthorByPid = [this](const QString& pid) {
+            if (g_raisePane) g_raisePane(this);
+            showAuthorWorks(pid);
+        };
         maintMenu->addSeparator();
         maintMenu->addAction(indexBtn->text(), [indexBtn] {
             indexBtn->click();
@@ -20697,6 +20851,8 @@ private:
     // ── author search (backlog #33) ──────────────────────────────────
     allcore::Subjects subjectLayer_;
     bool subjectLayerTried_ = false;
+    QJsonObject lightPeople_;
+    bool lightPeopleTried_ = false;
     QPushButton* viewBtn_ = nullptr;
     QPushButton* authorBtn_ = nullptr;
     QLineEdit* authorBox_ = nullptr;
@@ -21150,6 +21306,28 @@ private:
             }
         }
         info_->setHtml(h);
+    }
+
+    // The badge needs pid -> {display, dates, tol, works} but must NOT
+    // trigger buildAuthorIndex, which walks the whole library. Bare
+    // JSON load, cached, no filesystem sweep.
+    const QJsonObject& personRecord(const QString& pid) {
+        static const QJsonObject kNone;
+        if (!lightPeopleTried_) {
+            lightPeopleTried_ = true;
+            QFile f(libRoot_.chopped(8) +
+                    "/data/extracted/author_index.json");
+            if (f.open(QIODevice::ReadOnly))
+                lightPeople_ = QJsonDocument::fromJson(f.readAll())
+                                   .object()
+                                   .value("people")
+                                   .toObject();
+        }
+        static QJsonObject held;
+        const auto v = lightPeople_.value(pid);
+        if (!v.isObject()) return kNone;
+        held = v.toObject();
+        return held;
     }
 
     void invalidateAuthorIndex() {
@@ -22085,76 +22263,6 @@ private:
         }
         // Lookup PERSON card: an author-name query answers with the
         // person block (fold: case + whitespace runs; ACIP names)
-        g_personCardByName = [this](const QString& q) -> QString {
-            loadPersons();
-            const QString fq = q.trimmed().toUpper().simplified();
-            if (fq.size() < 4) return {};
-            for (auto it = personsByAuthor_.begin();
-                 it != personsByAuthor_.end(); ++it) {
-                if (it.key().toUpper().simplified() != fq) continue;
-                const auto p = it.value();
-                QString h =
-                    "<hr><div><b>PERSON</b> <small style='color:"
-                    "#777'>(catalog author \u2014 People layer)"
-                    "</small></div><div style='margin:4px 0'><b>" +
-                    it.key().toHtmlEscaped() + "</b>";
-                const QString dates = p.value("dates").toString();
-                if (!dates.isEmpty())
-                    h += " <small style='color:#777'>(" +
-                         dates.toHtmlEscaped() + ")</small>";
-                for (const auto& cv :
-                     p.value("candidates").toArray()) {
-                    const auto c = cv.toObject();
-                    const QString pid = c.value("pid").toString();
-                    const QString tol = c.value("tol").toString();
-                    h += "<br>&nbsp;&nbsp;\u2022 <a href='https://"
-                         "library.bdrc.io/show/bdr:" + pid + "'>" +
-                         pid + " at BDRC</a>";
-                    QString tolPage = tolBiographyUrl(tol);
-                    bool tolViaWd = false;
-                    if (tolPage.isEmpty()) {
-                        const auto tl =
-                            tolLinkForPid(pid, libRoot_.chopped(8));
-                        tolPage = tl.url;
-                        tolViaWd = tl.viaWikidata;
-                    }
-                    if (!tolPage.isEmpty()) {
-                        h += " \u00b7 <a href='" + tolPage +
-                             "'>Treasury of Lives</a>";
-                        if (tolViaWd)
-                            h += " <small style='color:#777'>"
-                                 "(matched via Wikidata)</small>";
-                    }
-                }
-                h += "<br><small style='color:#777'>works in your "
-                     "Library: see the text's card in Read \u2192 "
-                     "Library</small></div>";
-                return h;
-            }
-            return {};
-        };
-        // Overlay badge: filename -> work key -> author line
-        g_personBadgeForFile = [this](const QString& file) -> QString {
-            loadPersons();
-            static const QRegularExpression keyRe(
-                "^([A-Za-z]+)0*(\\d+)");
-            const auto m = keyRe.match(QFileInfo(file).fileName());
-            if (!m.hasMatch()) return {};
-            const QString k =
-                m.captured(1).toUpper() + m.captured(2);
-            const auto auth = acipPersonLinks_.value(k);
-            QString author = authorByWork_.value(k);
-            if (author.isEmpty())
-                author = auth.value("author").toString();
-            if (author.isEmpty()) return {};
-            QString h = QString::fromUtf8("\u270D ") +
-                        author.toHtmlEscaped();
-            const QString pid = auth.value("pid").toString();
-            if (!pid.isEmpty())
-                h += " \u00b7 <a href='https://library.bdrc.io/"
-                     "show/bdr:" + pid + "'>" + pid + "</a>";
-            return h;
-        };
         // Only NOW is the layer "loaded". If both banks were missing
         // the flag stays false so a later call retries — a data folder
         // that arrives late (or an Import data release) heals itself
