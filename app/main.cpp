@@ -28311,10 +28311,53 @@ public:
         if (!QFile::rename(path, newPath))
             return "The filesystem refused the rename.";
         if (r.truncated) {
-            QFile mf(fi.path() + "/" +
-                     QString::fromStdString(r.meta_filename));
-            if (mf.open(QIODevice::WriteOnly))
-                mf.write(QByteArray::fromStdString(r.meta_content));
+            // BOUNTY #4, critical. The composed name ends in '+' — a
+            // PROMISE that a companion META carries the rest — and
+            // composeCatalogFilename cuts the stem mid-word, so the
+            // lost half cannot be reconstructed from the filename.
+            // This block used to be `if (open) write(...)` with no
+            // else and write()'s return discarded: on a locked or
+            // read-only META, a directory in that path, or a full
+            // disk, the function returned success, the dialog showed
+            // no warning, and the file sat on disk promising a
+            // companion that did not exist. moveToShelf would later
+            // find no META and shelve the orphan without complaint.
+            //
+            // It also lacked the existence check the main name has
+            // (above), and WriteOnly TRUNCATES — so a second file
+            // composed under the same catalog number silently
+            // destroyed the first file's META, which is exactly what
+            // this function's own header comment says it refuses to do.
+            const QString metaPath =
+                fi.path() + "/" + QString::fromStdString(r.meta_filename);
+            auto undo = [&](const QString& why) {
+                // the rename already landed; put it back so the
+                // operation is all-or-nothing rather than half-done
+                if (!QFile::rename(newPath, path))
+                    return why + " The rename could NOT be undone — "
+                                 "the file is now at " +
+                           QFileInfo(newPath).fileName() +
+                           " with no companion.";
+                return why + " The rename was undone; nothing changed.";
+            };
+            if (QFile::exists(metaPath))
+                return undo("A companion META file of that name "
+                            "already exists, and overwriting it would "
+                            "destroy another text's continuation.");
+            QFile mf(metaPath);
+            if (!mf.open(QIODevice::WriteOnly | QIODevice::NewOnly))
+                return undo("The companion META file could not be "
+                            "created (" + mf.errorString() + ").");
+            const QByteArray body =
+                QByteArray::fromStdString(r.meta_content);
+            if (mf.write(body) != body.size() || !mf.flush()) {
+                const QString e = mf.errorString();
+                mf.close();
+                QFile::remove(metaPath);
+                return undo("The companion META file could not be "
+                            "written (" + e + ").");
+            }
+            mf.close();
         }
         lastFile_ = newPath;
         return QString();
