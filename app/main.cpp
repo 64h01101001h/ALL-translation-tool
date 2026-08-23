@@ -31113,8 +31113,11 @@ public:
         connect(box_, &QLineEdit::textChanged,
                 [this] { timer_->start(); });
         connect(timer_, &QTimer::timeout, [this] { runSearch(); });
+        // ⌘K's Return goes through submitCurrent(), which
+        // settles a pending debounce before it acts (BOUNTY #12,
+        // documented at the handler).
         connect(box_, &QLineEdit::returnPressed,
-                [this] { activate(list_->currentRow()); });
+                [this] { submitCurrent(); });
         connect(list_, &QListWidget::itemActivated,
                 [this](QListWidgetItem* it) {
                     activate(list_->row(it));
@@ -31170,6 +31173,67 @@ public:
                 QString::fromUtf8("👤"));
         check(person, "persons lane answers (Gö Lotsawa reaches the "
                       "authors layer)");
+        {   // BOUNTY #12: Enter inside the 220 ms debounce. These
+            // fire box_'s returnPressed itself — the signal ⌘K's
+            // Return raises — so the CONNECTION is pinned too, not
+            // just the handler behind it: rewiring the connect back
+            // to activate(currentRow()) fails (a) and (b) again
+            // (measured). No event loop is spun, which IS the
+            // quarter second the bug lived in. g_lookupQuery is
+            // borrowed so the activation is observed rather than
+            // thrown at the Lookup pane.
+            auto keepLookup = g_lookupQuery;
+            QString fired;
+            g_lookupQuery = [&fired](const QString& p) { fired = p; };
+            // (a) fresh palette: acts_ empty, currentRow() == -1
+            box_->clear();
+            list_->clear();
+            acts_.clear();
+            box_->setText("bsod nams");      // debounce pending
+            emit box_->returnPressed();
+            check(fired == "bsod nams",
+                  "Enter on a first-ever query runs the search and "
+                  "acts on it, instead of being swallowed");
+            // (b) a second query typed into an open palette must
+            // not be answered with the first query's row
+            box_->setText("byang chub");
+            runSearch();
+            const QString stale =
+                acts_.empty() ? QString() : acts_.front().payload;
+            fired.clear();
+            box_->setText("bsod nams");
+            emit box_->returnPressed();
+            check(fired == "bsod nams" && fired != stale,
+                  "Enter answers the query in the box, not the one "
+                  "the debounce still had on screen");
+            // (c) once the results have landed there must be NO
+            // re-run: the row the arrow keys chose is the answer
+            box_->setText("sunam");
+            runSearch();
+            int alt = -1;
+            for (int i = 1; i < (int)acts_.size(); ++i)
+                if (acts_[i].kind == 0 &&
+                    acts_[i].payload != acts_.front().payload) {
+                    alt = i;
+                    break;
+                }
+            if (alt < 0) {
+                // a check that did not run gets no PASS line —
+                // name it plainly instead
+                log << "  [SKIP] Hunt: arrowed row survives Enter — "
+                       "this spine offers no second lookup row for "
+                       "\"sunam\"";
+            } else {
+                const QString want = acts_[alt].payload;
+                list_->setCurrentRow(alt);
+                fired.clear();
+                emit box_->returnPressed();
+                check(fired == want,
+                      "Enter on settled results honours the row the "
+                      "arrow keys chose, not row 0");
+            }
+            g_lookupQuery = keepLookup;
+        }
         box_->clear();
         list_->clear();
         acts_.clear();
@@ -31207,6 +31271,11 @@ private:
     }
 
     void runSearch() {
+        // whoever called, the list is about to answer the box as
+        // it stands NOW, so a debounce still pending is redundant
+        // — and worse, isActive() is what submitCurrent() reads to
+        // decide whether the rows on screen are stale.
+        timer_->stop();
         list_->clear();
         acts_.clear();
         const QString q = box_->text().trimmed();
@@ -31500,9 +31569,31 @@ private:
         list_->setCurrentRow(0);
     }
 
+    // BOUNTY #12: ⌘K's Return. The 220 ms debounce used to eat
+    // this keystroke — for a quarter second after every letter
+    // acts_ still held the PREVIOUS query's rows. On a freshly
+    // opened palette (⌘K → type → Enter in one flow) acts_ was
+    // empty and currentRow() was -1, so activate()'s range guard
+    // fired and Enter did nothing: it had to be pressed twice, on
+    // the app's headline keyboard affordance. Typed into an
+    // already-open palette it jumped to the older headword instead.
+    // Settle the search here — but ONLY while the debounce is
+    // pending, because on results that have already landed a
+    // re-run would drag setCurrentRow(0) over whatever row the
+    // arrow keys chose.
+    void submitCurrent() {
+        if (timer_->isActive()) runSearch();
+        activate(list_->currentRow());
+    }
+
     void activate(int r) {
         if (r < 0 || r >= (int)acts_.size()) return;
         const Act a = acts_[r];
+        if (a.kind < 0) return;   // the "… and N more" lines are
+                                  // disclosures, not targets
+        // this query is done with: a debounce still pending would
+        // fire after hide() and repopulate a list nobody can see
+        timer_->stop();
         if (a.kind == 0 && g_lookupQuery) {
             hide();
             g_lookupQuery(a.payload);
