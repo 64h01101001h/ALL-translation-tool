@@ -66,7 +66,13 @@ std::vector<Window> evalNode(const Spine& spine, const Node& n,
 }  // namespace
 
 std::vector<FileGoferHit> goferSearchFiles(const std::string& root_dir,
-                                           const std::string& query, int limit) {
+                                           const std::string& query, int limit,
+                                           GoferScan* scan) {
+    // SQA PERF-1. Matches LibraryIndex::kScanCap (libindex.h:76): the
+    // two evaluators diverged once and that divergence WAS the bug.
+    constexpr int kWindowCap = 200000;
+    GoferScan local;
+    GoferScan& sc = scan ? *scan : local;
     namespace fs = std::filesystem;
     auto toks = lex(query);
     Parser parser(toks);
@@ -85,6 +91,10 @@ std::vector<FileGoferHit> goferSearchFiles(const std::string& root_dir,
         if (ext != ".txt" && ext != ".acip" && ext != ".md" &&
             ext != ".act" && ext != ".inc" && ext != ".ace") continue;
         if (it->file_size() > 10u * 1024 * 1024) continue;
+        // PERF-1: eligible but past the cap - COUNT it and keep
+        // walking. Breaking here is what made 4,988 files vanish
+        // without the pane ever being able to say so.
+        if ((int)files.size() >= sc.file_cap) { ++sc.files_skipped; continue; }
         std::ifstream f(it->path());
         if (!f) continue;
         std::vector<std::string> lines;
@@ -94,8 +104,8 @@ std::vector<FileGoferHit> goferSearchFiles(const std::string& root_dir,
             lines.push_back(line);
         }
         files.push_back({fs::relative(it->path(), root).string(), std::move(lines)});
-        if (files.size() >= 4000) break;
     }
+    sc.files_scanned = (int)files.size();
 
     auto upper = [](std::string s) {
         for (auto& c : s) c = (char)std::toupper((unsigned char)c);
@@ -131,7 +141,9 @@ std::vector<FileGoferHit> goferSearchFiles(const std::string& root_dir,
                 for (const auto& wa : a) {
                     auto it2 = byFile.find(wa.file);
                     if (it2 == byFile.end()) continue;
+                    if ((int)out.size() >= kWindowCap) { sc.cut = true; break; }
                     for (const auto* wb : it2->second) {
+                        if ((int)out.size() >= kWindowCap) { sc.cut = true; break; }
                         const int gap = std::max({wb->lo - wa.hi, wa.lo - wb->hi, 0});
                         if (gap <= n.near_n)
                             out.push_back({wa.file, std::min(wa.lo, wb->lo),

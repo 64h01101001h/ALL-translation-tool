@@ -418,6 +418,12 @@ add_executable(storeflush_smoke tests/storeflush_smoke.cpp)
 target_link_libraries(storeflush_smoke PRIVATE allcore)
 add_test(NAME storeflush_smoke COMMAND storeflush_smoke)
 
+# SQA PERF-1: the unindexed search's NEAR product and file walk are
+# both bounded, and both say so.
+add_executable(gofer_bound_smoke tests/gofer_bound_smoke.cpp)
+target_link_libraries(gofer_bound_smoke PRIVATE allcore)
+add_test(NAME gofer_bound_smoke COMMAND gofer_bound_smoke)
+
 add_executable(dossier_smoke tests/dossier_smoke.cpp)
 target_link_libraries(dossier_smoke PRIVATE allcore)
 add_test(NAME dossier_smoke COMMAND dossier_smoke)
