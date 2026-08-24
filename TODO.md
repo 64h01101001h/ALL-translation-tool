@@ -2219,7 +2219,7 @@ SQA doc explicitly scopes out.
 
 ### P0 — DATA LOSS RISK, act before any further feature work
 
-- [ ] **THE PROJECT HAS NEVER BEEN BACKED UP OFF THIS LAPTOP.**
+- [x] **THE PROJECT HAS NEVER BEEN BACKED UP OFF THIS LAPTOP.** CLOSED 2026-08-23/24: `git clone --mirror` to /Volumes/Oct2024(8TB)/ALL-translation-tool.git, verified by comparing HEADs and a full `git fsck` (exit captured directly, not through a pipe). A `backup` remote makes it `git push backup main`. Scheduled task `all-nightly-backup` runs it at 22:00 daily and reports which destinations were reachable. STILL OPEN as a separate decision: a copy on a drive beside the laptop is not disaster recovery - the durable answer (private remote, or an ALL-owned host) is the P1 'source hosting' question Joel was asked. (was:
       Measured 2026-08-23: `git remote -v` is EMPTY — there is no
       origin, no fork, no mirror. Time Machine IS configured to an
       external volume ("My Book") and the repo IS included, but the
@@ -2238,8 +2238,7 @@ SQA doc explicitly scopes out.
       an ALL-owned host — because a second copy on a desk in the same
       room is not disaster recovery.
 
-- [ ] **Disk pressure is itself a correctness risk, not just an
-      inconvenience.** Data volume is at 100% capacity / 14 GiB free.
+- [ ] **Disk pressure is itself a correctness risk, and it nearly bit today.** 2026-08-24: the volume fell from 14 GiB free to **327 MiB** during one working day. The cause was not the project - it was 32 GB of Claude workflow scratch (a 15-agent re-assessment and six remediation tracks, each copying the tree and building it) that nothing ever cleans up. Reclaimed to 12 GiB by hand. THE FIX IS NOT 'delete it again': a fan-out must clean its own scratch, and the nightly health task should fail loudly below ~5 GiB. Until then every long agent session walks the app back toward the ENOSPC regime where FAIL-1's family of bugs live. (was: Data volume is at 100% capacity / 14 GiB free.
       FAIL-1 in the SQA doc is `catalogRosterSave()` returning TRUE
       after writing zero bytes — the exact failure ENOSPC produces.
       The machine is currently sitting in the state that makes the
@@ -2248,6 +2247,20 @@ SQA doc explicitly scopes out.
       /private/tmp/claude-501/…/5588dc0d-…/scratchpad, plus 2.0 GB in
       `dist/`. Longer term, `library/` (2.9 GB) and the 10 GB `.git`
       want a deliberate home.
+
+- [x] **Guard the disk automatically, since the 2026-08-24 near-miss was
+      self-inflicted.** DONE same day: the nightly health task now checks
+      free space FIRST and leads with **DISK CRITICAL** below 5 GiB,
+      reporting what /private/tmp/claude-501 holds without deleting it;
+      the nightly repair task REFUSES to start below 5 GiB rather than
+      building into a full volume. Both say why in the terms that
+      matter here — under ENOSPC the app is in the exact regime
+      FAIL-1's family of "reported success over a lost write" defects
+      live in, so working low on disk tests the product in its worst
+      state while risking the machine. STILL OPEN: a fan-out does not
+      yet clean its own scratch; that is a discipline the workflow
+      scripts have to carry, and today's 32 GB proves asking nicely is
+      not enough.
 
 ### P1 — needed before the app leaves this machine
 
