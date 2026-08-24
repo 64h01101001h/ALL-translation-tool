@@ -82,6 +82,32 @@ int main(int argc, char** argv) {
     CHECK(normalizeTibetanUnicode("བཀའ") == "བཀའ",
           "plain classical text passes through");
 
+    {   // SQA TEST-1 survivor SEARCHNORM-RANGE (2026-08-24).
+        // inRange() is inclusive at BOTH ends and nothing asserted the
+        // upper one, so flipping `c <= b` to `c < b` silently dropped
+        // the LAST codepoint of every character class - U+0F87 from
+        // vowelSign, U+0FBC from subscript and anyCons - and the whole
+        // battery stayed green. It was one of thirteen re-injected
+        // defects that survived.
+        //
+        // The ReorderFilter is what observes it: a vowel-sign run
+        // followed by a subscript run must swap. Both codepoints here
+        // sit exactly ON the inclusive boundary, which is the only
+        // place the mutation is visible.
+        const std::string in  = "\u0F40\u0F87\u0FBC";   // ཀ + vowel + subscript
+        const std::string out = allcore::normalizeTibetanUnicode(in);
+        // The subscript moves BEFORE the vowel sign, and the lenient
+        // pass additionally folds the fixed-form subjoined RA U+0FBC
+        // to U+0FB2 - which is correct, and which I predicted wrongly
+        // the first time. The pin asserts what the engine does, not
+        // what I assumed it did.
+        const std::string want = "\u0F40\u0FB2\u0F87";
+        CHECK(out == want,
+              "ReorderFilter swaps a vowel-sign run past a subscript "
+              "run at the INCLUSIVE end of both classes "
+              "(TEST-1 SEARCHNORM-RANGE)");
+    }
+
     std::printf("%s (%d failures)\n",
                 failures ? "SEARCHNORM SMOKE FAILED"
                          : "SEARCHNORM SMOKE OK",

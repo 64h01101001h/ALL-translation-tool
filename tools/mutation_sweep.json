@@ -55,12 +55,13 @@
     },
     {
       "id": "SEARCHNORM-RANGE",
-      "note": "TEST-1 survivor. Inclusive/exclusive end of a codepoint class; drops the last consonant in the range.",
+      "note": "Was a TEST-1 survivor; KILLED 2026-08-24 by a pin in searchnorm_smoke that drives the inclusive end of both character classes through the ReorderFilter. First survivor converted.",
       "file": "core/src/searchnorm.cpp",
       "old": "bool inRange(char32_t c, char32_t a, char32_t b) { return c >= a && c <= b; }",
       "new": "bool inRange(char32_t c, char32_t a, char32_t b) { return c >= a && c < b; }",
       "test": "searchnorm|engines|selftest",
-      "expect": "survived"
+      "expect": "killed",
+      "expect_fail_contains": "SEARCHNORM-RANGE"
     }
   ]
 }
