@@ -478,6 +478,14 @@ if(Python3_FOUND)
   # free. This is the reclaimer, and these are the two rules that make
   # deleting anything safe: never the current session, never inside the
   # idle window.
+  # P1 2026-08-24: the machine-readable bill of materials. Its rules
+  # are the ones that matter - a dropped payload never appears, an
+  # unmapped licence says UNRESOLVED, and an unsettled payload says its
+  # terms are OPEN instead of reading as licensed.
+  add_test(NAME sbom_selftest
+           COMMAND ${Python3_EXECUTABLE}
+                   ${CMAKE_SOURCE_DIR}/tools/sbom.py --selftest)
+
   add_test(NAME scratch_gc_selftest
            COMMAND ${Python3_EXECUTABLE}
                    ${CMAKE_SOURCE_DIR}/tools/scratch_gc.py --selftest)

@@ -200,6 +200,16 @@ else
     echo "BUNDLED-LICENCE GATE FAILED - press stopped."; exit 6; }
 fi
 
+echo "== 4f. software bill of materials (SBOM) =="
+# P1 2026-08-24. bundle_licenses.py (4e) has just mapped every Mach-O
+# object to its upstream project; this turns that plus the payload
+# manifest into CycloneDX. Data layers are included deliberately: the
+# licensing finding that cost this project a day (BUILD-5) was DATA,
+# not dylibs, and an SBOM that covered only the binaries would omit the
+# half that has already gone wrong.
+python3 "$ROOT/tools/sbom.py" "$STAGE/$APPNAME.app" || {
+  echo "SBOM GENERATION FAILED - press stopped."; exit 6; }
+
 echo "== 5. ad-hoc codesign =="
 # D2 (shipwright): real signing when the identity exists, honest ad
 # hoc when it doesn't. Set ALL_DEV_IDENTITY ("Developer ID

@@ -2272,7 +2272,7 @@ SQA doc explicitly scopes out.
       they may do with it. Needs an ALL decision, not an engineering
       one; prompt Adam to get it from ALL.
 
-- [ ] **No SBOM (software bill of materials).** BUILD-2 fixes the
+- [x] **No SBOM (software bill of materials).** DONE 2026-08-24. tools/sbom.py emits CycloneDX 1.5 into the bundle at press time (step 4f, gated), built from bundle_licenses.py's object->formula mapping plus the payload manifest. It covers DATA layers as well as dylibs on purpose: the licensing finding that cost this project a day (BUILD-5) was data, and a binaries-only SBOM would omit the half that has already gone wrong. First run: 34 software components, 81 data layers, 0 unresolved software licences, and **24 data layers whose terms are OPEN** (4 gated, 20 itemise) - that number is now measurable per press instead of being discovered in an audit. Rules pinned by sbom_selftest: a `drop` payload never appears, an unmapped licence says UNRESOLVED rather than being given a plausible id, and an unsettled payload says TERMS OPEN rather than reading as licensed. (was: BUILD-2 fixes the
       human-readable notices; an SBOM is the machine-readable artifact
       institutions increasingly require (CycloneDX or SPDX, generated
       at press time). It is also what makes the NEXT item possible.
