@@ -14,6 +14,10 @@ foreach(_f core/CMakeLists.txt app/CMakeLists.txt ocr/CMakeLists.txt)
   endif()
 endforeach()
 add_compile_definitions(ALL_TEST_BATTERIES="${_bat_count}")
+# SQA BUILD-19: publish the WRITTEN count so the top level can compare
+# it against the count actually registered. A textual count that no
+# one checks is how six gates went missing without a word.
+set(ALL_BAT_WRITTEN "${_bat_count}" CACHE INTERNAL "suites written")
 
 
 qt_add_executable(DiamondCutterTranslationTool

@@ -96,6 +96,43 @@ endif()
 # checkout can actually run (BUILD-7)
 all_report_fixture_status()
 
+# SQA BUILD-19 (2026-08-24). ALL_TEST_BATTERIES is counted TEXTUALLY -
+# a regex over `add_test(` in the CMakeLists files - so the six suites
+# guarded by if(Python3_FOUND) were counted whether or not they were
+# ever registered. Configuring without Python3 silently dropped the
+# constitution, payload_manifest, fixture_gate, no_vacuous_pass,
+# build_manifest and link_truth gates, ctest reported 72 instead of 78,
+# nothing asserted the difference, and the About pane went on quoting
+# 78 automated batteries to the user.
+#
+# So compare what is WRITTEN against what is actually REGISTERED, and
+# refuse to configure a build that quietly lost gates. An intentional
+# reduced build is still possible - it just has to say so out loud,
+# which is the whole point.
+set(_all_registered 0)
+foreach(_d core ocr app)
+  if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/${_d}/CMakeLists.txt")
+    get_property(_d_tests DIRECTORY "${_d}" PROPERTY TESTS)
+    list(LENGTH _d_tests _d_n)
+    math(EXPR _all_registered "${_all_registered} + ${_d_n}")
+  endif()
+endforeach()
+if(ALL_BAT_WRITTEN AND _all_registered LESS ALL_BAT_WRITTEN
+   AND NOT ALL_ALLOW_REDUCED_BATTERY)
+  math(EXPR _all_missing "${ALL_BAT_WRITTEN} - ${_all_registered}")
+  message(FATAL_ERROR
+    "ALL battery: ${_all_registered} suites registered but "
+    "${ALL_BAT_WRITTEN} are written - ${_all_missing} gate(s) were dropped "
+    "by a missing optional dependency (Python3 or onnxruntime/opencv "
+    "are the usual causes). A press built from this tree would run a "
+    "smaller battery than it claims, and the About pane would quote "
+    "the larger number. Install the dependency, or configure with "
+    "-DALL_ALLOW_REDUCED_BATTERY=ON to say out loud that this build "
+    "is deliberately reduced.")
+endif()
+message(STATUS "ALL battery: ${_all_registered} suites registered "
+               "(${ALL_BAT_WRITTEN} written)")
+
 if(APPLE)
   set(_all_arch "${CMAKE_OSX_ARCHITECTURES}")
   if(NOT _all_arch)
