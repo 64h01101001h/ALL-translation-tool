@@ -482,6 +482,13 @@ if(Python3_FOUND)
   # are the ones that matter - a dropped payload never appears, an
   # unmapped licence says UNRESOLVED, and an unsettled payload says its
   # terms are OPEN instead of reading as licensed.
+  # P1 2026-08-24: dependency vulnerability scanning. The pinned rule
+  # is the one that matters - a query that could not run must never
+  # read as "nothing found".
+  add_test(NAME vuln_check_selftest
+           COMMAND ${Python3_EXECUTABLE}
+                   ${CMAKE_SOURCE_DIR}/tools/vuln_check.py --selftest)
+
   add_test(NAME sbom_selftest
            COMMAND ${Python3_EXECUTABLE}
                    ${CMAKE_SOURCE_DIR}/tools/sbom.py --selftest)

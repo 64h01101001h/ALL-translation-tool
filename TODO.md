@@ -2277,7 +2277,7 @@ SQA doc explicitly scopes out.
       institutions increasingly require (CycloneDX or SPDX, generated
       at press time). It is also what makes the NEXT item possible.
 
-- [ ] **No dependency vulnerability scanning.** Nothing watches the
+- [x] **No dependency vulnerability scanning.** DONE 2026-08-24. tools/vuln_check.py queries OSV.dev for every component the SBOM found. First run: **302 candidate advisories across 20 of 34 components** - libpng 109, jasper 41, dbus 34, onnx 24, protobuf 19. Deliberately labelled CANDIDATES REQUIRING TRIAGE, not vulnerabilities: OSV has no Homebrew ecosystem (measured - ecosystem-scoped openssl 3.0.0 returns 85, name-only returns 667), so the match is by NAME and sweeps in advisories against other distributions' packaging. NEXT and not done: triage those 20, starting with libpng/jasper/freetype, which are the ones the app actually drives with untrusted input through OCR. (was: Nothing watches the
       ~32 bundled upstreams for CVEs. A Tibetan translation tool is
       not a high-value target, but it parses untrusted files (OCR
       input, imported texts, .dic/.ndx payloads) with C++ — that is
