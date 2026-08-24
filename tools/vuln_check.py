@@ -115,6 +115,103 @@ def report(components, results):
     return total
 
 
+def norm_version(v):
+    """Numeric parts of a version, for a conservative comparison.
+
+    Distro packaging suffixes (-r1, _1, +deb11u2) are dropped. That is
+    deliberately LOSSY, and it is why the classifier below never uses
+    this to declare something safe on its own.
+    """
+    import re
+    v = v or ""
+    # Strip a distro EPOCH ("2:1.6.40-8.el10") before anything else.
+    # Without this the epoch becomes the leading component and swamps
+    # the comparison: 2:1.6.40 parsed as (2,1,6,40) reads as NEWER than
+    # our (1,6,58), so every RHEL/Alma advisory was flagged and the
+    # triage said "needs attention" 40 times out of 40 - conservative
+    # in form and useless in substance.
+    if ":" in v:
+        v = v.split(":", 1)[1]
+    # Cut the packaging revision too: upstream version is what we can
+    # compare. "1.6.40-8.el10_1.1" -> "1.6.40"
+    v = re.split(r"[-_+~]", v)[0]
+    parts = re.split(r"[^0-9]+", v)
+    return tuple(int(x) for x in parts if x != "")[:4]
+
+
+def classify(our_version, advisory):
+    """NEEDS ATTENTION / probably-fixed / undetermined.
+
+    Conservative by construction: anything this cannot decide is
+    NEEDS ATTENTION. A triage tool that guesses "safe" is the same
+    failure as a scanner that reports zero because it could not ask.
+    """
+    ours = norm_version(our_version)
+    if not ours:
+        return "undetermined", "our version does not parse"
+    fixed_seen = []
+    for aff in advisory.get("affected", []):
+        for rng in aff.get("ranges", []):
+            for ev in rng.get("events", []):
+                if "fixed" in ev:
+                    fixed_seen.append(ev["fixed"])
+    if not fixed_seen:
+        # No published fix means the ADVISORY carries no version data
+        # to decide with - typically a distro that never recorded a fix
+        # because the package is unsupported there. That is not
+        # evidence about us either way, and calling it "needs
+        # attention" buries the real findings: jasper 4.2.9 produced
+        # forty such rows, all 2016-2017 Ubuntu CVEs, which drowned the
+        # two genuine libpng hits when the buckets were merged.
+        # UNDETERMINED is the honest bucket - it says the question was
+        # not answered rather than answering it wrongly in either
+        # direction.
+        return "undetermined", ("no fixed version published in this "
+                                "advisory - nothing to compare against "
+                                "our %s" % our_version)
+    # If EVERY published fix is at or below our version, the upstream
+    # defect was probably resolved before the build we ship. "Probably"
+    # is the honest word: the suffix we dropped (-r1) is often exactly
+    # where a distro's patch lives.
+    newer = [f for f in fixed_seen if norm_version(f) > ours]
+    same = [f for f in fixed_seen if norm_version(f) == ours]
+    if newer:
+        return "needs-attention", "fixed in %s, we ship %s" % (
+            sorted(newer)[0], our_version)
+    if same:
+        return "needs-attention", (
+            "fixed in %s - same upstream numbers as our %s, so the patch "
+            "may live in the packaging suffix we cannot compare"
+            % (sorted(same)[0], our_version))
+    return "probably-fixed", "all published fixes at or below %s" % our_version
+
+
+def cmd_triage(name, version, limit=40):
+    import urllib.parse
+    q = json.dumps({"package": {"name": name}, "version": version})
+    r = subprocess.run(["curl", "-s", "--fail", "--max-time", "60", "-X",
+                        "POST", "https://api.osv.dev/v1/query", "-H",
+                        "Content-Type: application/json", "-d", q],
+                       capture_output=True, text=True)
+    if r.returncode != 0:
+        print("query failed - NOT a clean result, nothing was checked")
+        return 2
+    vulns = json.loads(r.stdout).get("vulns", [])
+    print("%s %s: %d candidate(s); triaging the first %d"
+          % (name, version, len(vulns), min(limit, len(vulns))))
+    buckets = {"needs-attention": [], "probably-fixed": [],
+               "undetermined": []}
+    for v in vulns[:limit]:
+        verdict, why = classify(version, v)
+        buckets[verdict].append((v.get("id", "?"), why))
+    for k in ("needs-attention", "undetermined", "probably-fixed"):
+        print("  %-16s %d" % (k, len(buckets[k])))
+    print()
+    for vid, why in buckets["needs-attention"][:12]:
+        print("  NEEDS ATTENTION  %-28s %s" % (vid[:28], why[:80]))
+    return 0
+
+
 def cmd_selftest():
     """Pin the two honesty rules. No network."""
     bad = []
@@ -160,9 +257,13 @@ def main():
     ap.add_argument("app", nargs="?")
     ap.add_argument("--tsv", default=None)
     ap.add_argument("--selftest", action="store_true")
+    ap.add_argument("--triage", nargs=2,
+                    metavar=("NAME", "VERSION"))
     a = ap.parse_args()
     if a.selftest:
         return cmd_selftest()
+    if a.triage:
+        return cmd_triage(a.triage[0], a.triage[1])
 
     tsv = a.tsv
     if not tsv and a.app:
