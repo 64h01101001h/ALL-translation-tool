@@ -2471,9 +2471,28 @@ static LookupPopup* g_lookupPopup = nullptr;
 // Pure function so the selftest can drive it. ---------------------
 static QString editionDiffHtml(const QString& a, const QString& b,
                                QString* apparatusMd = nullptr) {
+    // MEM-2 (SQA 2026-08-23). diff_main throws a bare const char*
+    // when either side isNull(), and nothing catches it before
+    // app.exec() - so a witness that failed to read aborted the whole
+    // application. Normalise in the one function every caller goes
+    // through, so compareWithEkangyur (main.cpp:10338) and any future
+    // caller are covered without each having to remember.
     diff_match_patch dmp;
-    auto diffs = dmp.diff_main(a, b);
-    dmp.diff_cleanupSemantic(diffs);
+    QList<Diff> diffs;
+    try {
+        diffs = dmp.diff_main(a.isNull() ? QString("") : a,
+                              b.isNull() ? QString("") : b);
+        dmp.diff_cleanupSemantic(diffs);
+    } catch (...) {
+        // the engine throws bare literals from several other places
+        // (diff_match_patch.cpp:57, 1135, 1397-1415). None is
+        // reachable from here today, but an uncaught throw crosses
+        // app.exec() and aborts, so this function refuses to be the
+        // path that lets one out.
+        if (apparatusMd) *apparatusMd = QString();
+        return QStringLiteral(
+            "<p>These two witnesses could not be collated.</p>");
+    }
     QString h, app;
     int lineA = 1, site = 0;
     QString pendDel;
@@ -25330,6 +25349,28 @@ public:
                       app.contains("only in B"),
                   "edition collation: sites, readings, apparatus");
         }
+        // MEM-2 sibling (SQA 2026-08-23). editionDiffHtml reaches
+        // the same diff_main that throws a bare const char* on a
+        // NULL QString. compareWithEkangyur (main.cpp:10338) hands
+        // it a file read with only a size guard, so an unreadable
+        // eKangyur part crashed the application the same way. The
+        // shared pure function is the one place that fixes every
+        // caller, present and future.
+        {
+            QString app2;
+            const QString h2 = editionDiffHtml(QString(), QString(),
+                                               &app2);
+            // NOT merely !isNull(): the catch(...) fallback below is
+            // also non-null, so that assertion passed with the
+            // normalisation deleted - a pin that could not fail, in
+            // the very fix for pins that cannot fail. Assert the
+            // NORMALISED path specifically: two absent witnesses are
+            // an empty collation, not a failure to collate.
+            check(!h2.isNull() &&
+                      !h2.contains("could not be collated"),
+                  "a null witness collates as empty, not as an "
+                  "error (MEM-2)");
+        }
         return fails;
     }
 
@@ -26259,6 +26300,19 @@ public:
         check(status_->text().contains("1") ||
                   status_->text().contains("discrep"),
               "planted difference is flagged");
+        // MEM-2 (SQA 2026-08-23, ship-blocker). A partner file that
+        // failed to read arrives as a NULL QString, and diff_main
+        // throws a bare const char* past the one app.exec() -
+        // SIGABRT on an ordinary click, taking the translator's
+        // unsaved double-keyed input with it. isNull(), not
+        // isEmpty(): QString::fromUtf8(QByteArray()) on a failed
+        // read is null, and that is the reachable case. The trigger
+        // is the ribbon Compare button and DEMO_TUESDAY.md:341 walks
+        // a presenter through pressing it.
+        editor_->setPlainText("SEMS CAN THAMS CAD BDE BA DANG,");
+        compareWith(QString());
+        check(status_->text().contains("could not be read"),
+              "a null partner is refused, not crashed (MEM-2)");
         check(!canPrefill(),
               "pre-fill refuses a non-empty editor (never overwrites)");
         editor_->clear();
@@ -26780,6 +26834,19 @@ public:
     // the double-keying diff itself, dialog-free (selftest-covered)
     void compareWith(const QString& partner) {
         const QString mine = editor_->toPlainText();
+        // MEM-2 (SQA 2026-08-23). diff_main throws a bare
+        // const char* when either side isNull(), and there is no try
+        // around app.exec() - so an unreadable partner took the whole
+        // application down, unsaved input with it. Refuse it here, in
+        // the voice this pane already speaks: status text, never a
+        // dialog, because compareWith is driven headlessly and a
+        // dialog would hang the harness (constitution R3).
+        if (mine.isNull() || partner.isNull()) {
+            status_->setText(
+                "that text could not be read - nothing to compare; "
+                "check the file and try again");
+            return;
+        }
         // diff cost grows with divergence; keep the correction pass at
         // block scale (the input workflow compares blocks, not volumes)
         if (mine.size() > 500000 || partner.size() > 500000) {
