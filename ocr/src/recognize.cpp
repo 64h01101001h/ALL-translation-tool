@@ -18,6 +18,23 @@
 
 namespace allocr {
 
+void ocrCheckVocabCovers(int64_t outputClasses, size_t charsetCount) {
+    // vocab is built as [" "] + charset, so it holds charsetCount + 1
+    // entries. The decode loop runs to the model's output width; if
+    // that is wider, every index past the table is a heap overread
+    // whose bytes were being appended to the recognized text.
+    const size_t vocabEntries = charsetCount + 1;
+    if (outputClasses < 0 ||
+        static_cast<size_t>(outputClasses) > vocabEntries) {
+        throw std::runtime_error(
+            "model output layer has " + std::to_string(outputClasses) +
+            " classes, model_config.json charset has " +
+            std::to_string(charsetCount) +
+            " (+1 blank) - these do not match, so the model and its "
+            "config are not a pair. Re-download both together.");
+    }
+}
+
 namespace {
 
 // minimal parser for model_config.json's flat shape: string / int values
@@ -261,6 +278,8 @@ std::string TextRecognizer::recognize(const LineImage& line, bool prePad,
         V = sq[0];
         transposed = true;
     }
+    // MEM-1: refuse a mismatch rather than index past the vocab table.
+    ocrCheckVocabCovers(V, cfg.charset.size());
     // CTC decode: faithful port of pyctcdecode's no-LM beam search
     // (Kensho pyctcdecode, Apache-2.0 — the canonical app's decoder).
     // Vocab as the canonical CTCDecoder builds it: [" "] + charset — the

@@ -317,5 +317,39 @@ int main(int argc, char** argv) {
               "string with a multi-byte symbol (4)");
         fs::remove_all(d);
     }
+    {   // SQA MEM-1 (2026-08-24, ship-blocker). recognize() indexed the
+        // vocab table by the MODEL's output dimension without ever
+        // comparing it to the charset it loaded. With a truncated
+        // charset (a short write from the in-app model downloader is
+        // enough) it read ~10 KB past the end of a 984-byte region and
+        // treated the wild bytes as a live std::string - appending them
+        // to the recognized text and presenting them as Tibetan. That
+        // is house rule 2 on top of the undefined behaviour.
+        bool threw = false;
+        std::string msg;
+        try {
+            allocr::ocrCheckVocabCovers(83, 40);   // model 83, charset 40
+        } catch (const std::exception& e) {
+            threw = true;
+            msg = e.what();
+        }
+        CHECK(threw,
+              "MEM-1: a model whose output layer is wider than the "
+              "charset is REFUSED, not indexed past the vocab table");
+        CHECK(msg.find("83") != std::string::npos &&
+                  msg.find("40") != std::string::npos,
+              "MEM-1: the refusal names both numbers, so the banner "
+              "tells the user which file is wrong");
+        bool threwOk = false;
+        try {
+            allocr::ocrCheckVocabCovers(41, 40);   // 40 chars + blank
+        } catch (const std::exception&) {
+            threwOk = true;
+        }
+        CHECK(!threwOk,
+              "MEM-1 control: the ordinary charset+blank shape is "
+              "accepted - a guard that refuses everything is not a "
+              "guard");
+    }
     return failures ? 1 : 0;
 }

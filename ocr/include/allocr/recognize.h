@@ -35,6 +35,16 @@ struct WordSpan {
 // error) — exercises both the array and BDRC string charset shapes
 int ocrConfigCharsetCount(const std::string& path);
 
+// SQA MEM-1 (2026-08-24). recognize() decodes by indexing a vocab
+// table built from model_config.json's charset, using the width of the
+// ONNX model's OUTPUT layer as the bound. Nothing compared the two, so
+// a charset narrower than the model (a short write from the in-app
+// downloader is enough) read past the end of the table and appended
+// the wild bytes to the recognized text AS TIBETAN. Refuse instead:
+// throws std::runtime_error naming both numbers, which ensureModels()
+// already knows how to turn into an honest banner.
+void ocrCheckVocabCovers(int64_t outputClasses, size_t charsetCount);
+
 class TextRecognizer {
 public:
     // modelDir must hold model_config.json + the ONNX file it names
