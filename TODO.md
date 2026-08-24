@@ -950,7 +950,7 @@ implementation is sidelined HERE from this date. What this means:
       r8445981399472347202 (needs GMR's address — same as the
       transcription appeal). Folds in the LE'UR item above.
 
-- [ ] **DISK: approve the git history cleanup (~20GB reclaim) +
+- [x] **DISK: approve the git history cleanup + review the full drive.** DONE 2026-08-24 with Adam's explicit approval. `git filter-repo --invert-paths --path dist --path cmake-build-release`: **.git 10 GB -> 185 MB**. Verified rather than assumed - HEAD^{tree} is BYTE-IDENTICAL (1408eda1...), so not one tracked file changed; 3,892 of 3,894 non-artifact paths survive in history and the only two missing are `dist` and `cmake-build-release` themselves; gate 82/82 after. 61 commits dropped, all of them presses whose entire content was build output. The pre-rewrite history is preserved as ALL-translation-tool-PRE-FILTER-REPO-2026-08-24.git on the 8 TB drive - DELETE THAT ONLY when you are satisfied, it is the rollback. Mirror remade (hashes all changed, so a push was impossible) and the `backup` remote repointed. Free disk 326 MiB -> 14 GiB. Side effect worth knowing: macOS purged every APFS local snapshot under the pressure, so Time Machine local restore points are gone. (was:
       review the full drive.** 2026-08-13 postmortem: presses had
       committed every DMG/build into git → .git = 21GB; ENOSPC
       broke a press mid-rsync (recovered; installed app verified
