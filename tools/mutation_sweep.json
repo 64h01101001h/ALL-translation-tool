@@ -1,0 +1,66 @@
+{
+  "_meta": {
+    "what": "Named mutations for tools/mutate.py --sweep. The battery's detection power, measured rather than assumed.",
+    "why": "SQA TEST-1 (2026-08-23): 13 of 21 re-injected defects survived the full battery. The unbiased arm was 4 of 9 killed - 44%, n=9, 95% CI roughly 14-79%. A green suite is not evidence that behaviour is preserved.",
+    "how_to_read": "expect=killed means a pin exists and can fail. expect=survived is a KNOWN GAP, recorded honestly so the score is comparable run to run rather than quietly improving when someone edits the list. A run is only trustworthy if the liveness control is killed.",
+    "rule": "Moving an entry from survived to killed requires a real pin, not a looser mutation."
+  },
+  "mutations": [
+    {
+      "id": "LIVENESS",
+      "note": "Control. If this is not killed, the harness is broken and no other verdict in the run means anything.",
+      "file": "core/src/spine.cpp",
+      "old": "        long n = -1;",
+      "new": "        long n = 0;",
+      "test": "app_selftest",
+      "expect_fail_contains": "DATA-1",
+      "expect": "killed"
+    },
+    {
+      "id": "HONESTY-PROVISIONAL",
+      "note": "House rule 1. An auto-aligned gloss must never print under the label 'HGM has:'. Pinned by the DrillsPane battery.",
+      "file": "app/main.cpp",
+      "old": "    if (!t.provisional) return \"HGM has: \" + glosses;",
+      "new": "    if (true) return \"HGM has: \" + glosses;",
+      "test": "app_selftest",
+      "expect_fail_contains": "house rule 1",
+      "expect": "killed"
+    },
+    {
+      "id": "AFFIXNORM-BOUNDARY",
+      "note": "TEST-1 survivor. Stacked double-particle boundary; the battery executes this line and does not assert on it.",
+      "file": "core/src/affixnorm.cpp",
+      "old": "    if (len > 4 && b[len - 4] == AA &&",
+      "new": "    if (len > 3 && b[len - 4] == AA &&",
+      "test": "affix|engines|selftest",
+      "expect": "survived"
+    },
+    {
+      "id": "TITLEXLAT-SPAN",
+      "note": "TEST-1 survivor. Minimum span length in the title translator's greedy match.",
+      "file": "core/src/title_xlat.cpp",
+      "old": "             n >= 2; --n) {",
+      "new": "             n >= 1; --n) {",
+      "test": "title_xlat|engines|selftest",
+      "expect": "survived"
+    },
+    {
+      "id": "TERMINOLOGY-NESTING",
+      "note": "TEST-1 survivor. Strict-containment test that decides which of two overlapping terms wins.",
+      "file": "core/src/terminology.cpp",
+      "old": "                (t.end - t.beg) > (s.end - s.beg)) {",
+      "new": "                (t.end - t.beg) >= (s.end - s.beg)) {",
+      "test": "terminology|engines|selftest",
+      "expect": "survived"
+    },
+    {
+      "id": "SEARCHNORM-RANGE",
+      "note": "TEST-1 survivor. Inclusive/exclusive end of a codepoint class; drops the last consonant in the range.",
+      "file": "core/src/searchnorm.cpp",
+      "old": "bool inRange(char32_t c, char32_t a, char32_t b) { return c >= a && c <= b; }",
+      "new": "bool inRange(char32_t c, char32_t a, char32_t b) { return c >= a && c < b; }",
+      "test": "searchnorm|engines|selftest",
+      "expect": "survived"
+    }
+  ]
+}

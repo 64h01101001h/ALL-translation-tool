@@ -192,6 +192,51 @@ def cmd_selftest():
     return 1 if bad else 0
 
 
+def cmd_sweep(path, only_id=None):
+    """Run the committed mutation set and report the score.
+
+    The score is only meaningful against a LIVENESS control: if a
+    mutation known to be killable is not killed, the harness is broken
+    and no other verdict in the run means anything. The assessment
+    that produced TEST-1 used exactly this discipline, and it is the
+    reason its 13-of-21 is quotable.
+    """
+    import json
+    doc = json.load(io.open(path, encoding="utf-8"))
+    muts = doc["mutations"]
+    if only_id:
+        muts = [m for m in muts if m["id"] == only_id]
+    results = []
+    for m in muts:
+        print("=" * 62)
+        print("%-22s expect=%s" % (m["id"], m["expect"]))
+        rc = mutate(m["file"], m["old"], m["new"], m.get("test"),
+                    m.get("expect_fail_contains"))
+        got = "killed" if rc == 0 else "survived"
+        results.append((m["id"], m["expect"], got))
+
+    live = [r for r in results if r[0] == "LIVENESS"]
+    print("=" * 62)
+    if live and live[0][2] != "killed":
+        print("LIVENESS CONTROL WAS NOT KILLED - the harness could not "
+              "go red, so NOTHING else in this run is evidence.")
+        return 1
+
+    killed = sum(1 for _i, _e, g in results if g == "killed")
+    drift = [(i, e, g) for i, e, g in results if e != g]
+    print("mutation score: %d/%d killed" % (killed, len(results)))
+    for i, e, g in results:
+        mark = "  " if e == g else "**"
+        print("  %s %-22s expected %-8s got %s" % (mark, i, e, g))
+    if drift:
+        print("DRIFT: %d mutation(s) changed verdict since the set was "
+              "recorded. A survivor that became killed needs its entry "
+              "updated; a killed one that survived is a REGRESSION."
+              % len(drift))
+        return 1
+    return 0
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--file")
@@ -203,9 +248,14 @@ def main():
                     help="require the red result to mention this, so a "
                          "pin cannot be credited for an unrelated failure")
     ap.add_argument("--selftest", action="store_true")
+    ap.add_argument("--sweep", nargs="?", const="tools/mutation_sweep.json",
+                    help="run the committed mutation set and score it")
+    ap.add_argument("--only", default=None, help="one mutation id")
     a = ap.parse_args()
     if a.selftest:
         return cmd_selftest()
+    if a.sweep:
+        return cmd_sweep(os.path.join(ROOT, a.sweep), a.only)
     if not (a.file and a.old is not None and a.new is not None):
         ap.error("--file, --old and --new are required")
     print("mutation harness (SQA TEST-1)")
