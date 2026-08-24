@@ -2284,7 +2284,7 @@ SQA doc explicitly scopes out.
       the classic memory-safety attack surface, and MEM-2 already
       records that no sanitizer build is wired into any gate.
 
-- [ ] **No threat model, and the roster holds credential material.**
+- [x] **No threat model, and the roster holds credential material.** DONE 2026-08-24: docs/THREAT_MODEL.md, grounded in this codebase rather than a template - every claim cites the file or finding behind it. Six trust boundaries, six ranked scenarios, and an explicit 'what this is not' so the two or three real risks are not lost inside pretend ones. Its practical use is immediate: it is what makes the 16 open advisories judgeable, by saying which libraries this app actually drives with untrusted bytes. It also states plainly that the roster is a record of who did what, NOT a security boundary, and must not be relied on as one. Records three gaps it does not close: our own engines have never been fuzzed against hostile ACIP/.dic input, there is no incident path, and notarisation is still pending. (was:
       SQA FAIL-1 notes the roster carries "salt+hash per member" —
       that is authentication data for the in-house identity list.
       There is no document stating what the app protects, from whom,
