@@ -15141,6 +15141,24 @@ private:
     QTextBrowser* results_ = nullptr;
 };
 
+// SQA PERF-1 (2026-08-24). The unindexed search reads at most
+// GoferScan::file_cap files. Before this, the rest were dropped in
+// silence, so a rare phrase in the unread 4,988 of 8,988 returned "no
+// matches" - a performance cap stated as a fact about the library
+// (house rule 3). Pure so the drill can reach it without a pane.
+static QString goferSkipNotice(int skipped, int scanned) {
+    if (skipped <= 0) return {};
+    return QString("<div style='color:%1'><small>%2 file(s) in these "
+                   "folders were <b>not searched</b> - this sweep read "
+                   "%3 of them. A term that appears only in the rest "
+                   "will show as no match here. Build the index "
+                   "(Update search index) for a complete sweep."
+                   "</small></div>")
+        .arg(ux::kSoft)
+        .arg(QLocale().toString(skipped))
+        .arg(QLocale().toString(scanned));
+}
+
 class GoferPane : public QWidget {
 public:
     GoferPane(allcore::Spine& spine, const QString& root)
@@ -15430,6 +15448,21 @@ public:
               "Spotlight source row present (opt-in)");
         check(loadCitationWeb() > 100,
               "Citation web loads (edges from the batch build)");
+        // SQA PERF-1 (2026-08-24), the pane half. The core now counts
+        // the files it declined to read; the PANE has to say so.
+        // 4,988 of 8,988 files were excluded from every unindexed
+        // search in silence, so a rare phrase in them came back "no
+        // matches" - a performance cap presented as a fact about the
+        // library, which is house rule 3 in its exact terms.
+        const QString skipNote = goferSkipNotice(4988, 4000);
+        check(skipNote.contains("4,988") && skipNote.contains("4,000"),
+              "skip notice names BOTH the unread count and what was "
+              "actually read");
+        check(skipNote.contains("not searched"),
+              "skip notice says plainly that the sweep was partial");
+        check(goferSkipNotice(0, 6).isEmpty(),
+              "skip notice is silent when nothing was skipped - a "
+              "warning that always fires is noise, not honesty");
         for (auto* f : fields_) f->clear();
         fields_[0]->setText("sems can");
         combiner_->setCurrentIndex(0);
@@ -15832,6 +15865,7 @@ private:
         // result can say the search space was limited instead of
         // reading as an exhaustive sweep (house rule 3).
         bool indexCapped = false;
+        int filesSkipped = 0, filesScanned = 0;
         for (int i = kFirstDirRow; i < dirs_->count(); ++i) {
             QCoreApplication::processEvents();
             if (stopped_) break;
@@ -15859,9 +15893,15 @@ private:
                     // quietly stopped at 400 — and once a reader has
                     // learned that this pane warns when it truncates,
                     // the ABSENCE of a warning reads as completeness.
+                    // SQA PERF-1: ask the scan what it actually
+                    // read. The core bounds the walk; the pane owes
+                    // the user the number it did not reach.
+                    allcore::GoferScan scan;
                     hits = allcore::goferSearchFiles(dir.toStdString(),
                                                      q.toStdString(),
-                                                     401);
+                                                     401, &scan);
+                    filesSkipped += scan.files_skipped;
+                    filesScanned += scan.files_scanned;
                     if ((int)hits.size() > 400) {
                         hits.resize(400);
                         indexCapped = true;
@@ -16010,6 +16050,7 @@ private:
                          "(%2)</small></div>")
                      .arg(foldDropped)
                      .arg(fold_->currentText().toHtmlEscaped());
+        h += goferSkipNotice(filesSkipped, filesScanned);
         if (indexCapped)
             h += QString("<div style='color:%1'><small>This term is "
                          "common enough that the index scan reached "
