@@ -467,6 +467,14 @@ if(Python3_FOUND)
            COMMAND ${Python3_EXECUTABLE}
                    ${CMAKE_SOURCE_DIR}/tools/constitution_check.py
                    ${CMAKE_SOURCE_DIR})
+
+  # SQA STATIC-3: the checker's own shell-out contract. A rule that
+  # shells out must assert the subprocess RAN - L3 did not, so the
+  # file it polices could be deleted while the gate printed green.
+  add_test(NAME constitution_selftest
+           COMMAND ${Python3_EXECUTABLE}
+                   ${CMAKE_SOURCE_DIR}/tools/constitution_check.py
+                   --selftest)
 endif()
 
 # BUILD-7: the battery must say what it did NOT run. fixture_gate holds

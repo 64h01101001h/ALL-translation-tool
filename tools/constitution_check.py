@@ -205,8 +205,6 @@ def main():
             fails.append(f"C2 tools/package_macos.sh: {label} "
                          f"missing from the press")
 
-    for x in notes:
-        print("  note:", x)
     # L3 — the human-gated view must not drift from the backlog.
     # Incident: ten items needing Adam, including every one filed that
     # day, existed in CLOSER.md and appeared nowhere on the page he
@@ -216,13 +214,18 @@ def main():
         r = subprocess.run(
             [sys.executable, os.path.join(root, "tools/reconcile_lists.py"),
              root], capture_output=True, text=True)
-        if r.returncode != 0:
-            for line in r.stdout.splitlines():
-                if line.strip().startswith("- "):
-                    fails.append("L3 " + line.strip()[2:])
+        f3, n3 = shell_verdict("L3", "reconcile_lists.py",
+                               r.returncode, r.stdout, r.stderr)
+        fails.extend(f3)
+        notes.extend(n3)
     except Exception as e:
-        notes.append("L3 reconcile could not run: %s" % e)
+        # STATIC-3: this was notes.append, and the notes print sat
+        # FIFTEEN LINES ABOVE this block - so the message could never
+        # reach the terminal even when it was produced.
+        fails.append("L3 reconcile could not run: %s" % e)
 
+    for x in notes:
+        print("  note:", x)
     if fails:
         print(f"constitution: {len(fails)} violation(s)")
         for x in fails:
@@ -232,5 +235,83 @@ def main():
     return 0
 
 
+def shell_verdict(rule, script, returncode, stdout, stderr):
+    """What a rule that shelled out is entitled to conclude.
+
+    SQA STATIC-3 (2026-08-24). The contract is that the subprocess must
+    be shown to have RUN. A non-zero exit carrying nothing parsable is
+    a LOST GATE, not a clean one - and that is precisely how L3 let the
+    very file it exists to police be deleted while this checker printed
+    "all rules hold" and exited 0.
+
+    L2 had this guard and L3 did not, 28 lines apart in one file. They
+    share it now, because two copies of a rule are how the copies
+    drift.
+
+    Returns (fails, notes).
+    """
+    fails, notes = [], []
+    found = 0
+    for line in stdout.splitlines():
+        t = line.strip()
+        if t.startswith("- "):
+            fails.append("%s %s" % (rule, t[2:]))
+            found += 1
+        elif t.startswith("FAIL "):
+            fails.append("%s %s" % (rule, t[5:]))
+            found += 1
+        elif t.startswith("note: "):
+            notes.append("%s %s" % (rule, t[6:]))
+    if returncode != 0 and found == 0:
+        fails.append(
+            "%s %s exited %d with no parsable finding: %s"
+            % (rule, script, returncode,
+               stderr.strip() or "(no stderr)"))
+    return fails, notes
+
+
+def cmd_selftest():
+    """SQA STATIC-3 (2026-08-24). A rule that shells out must assert
+    the subprocess RAN, not merely that it did not complain.
+
+    L2 had that guard; L3 did not, so deleting the very file L3 exists
+    to police left the gate printing "all rules hold" with exit 0. The
+    asymmetry was provable in one pair of commands, 28 lines apart in
+    this file. These pins fix the contract in one place that both rules
+    now share.
+    """
+    bad = []
+
+    # the file is gone / raised on import: exit code, no parsable line
+    f, _ = shell_verdict("L3", "reconcile_lists.py", 2, "",
+                         "Traceback ... FileNotFoundError")
+    if not f:
+        bad.append("a subprocess that exited non-zero with NO parsable "
+                   "finding must fail the gate - that is exactly how a "
+                   "deleted gate used to pass")
+    elif "2" not in f[0]:
+        bad.append("the failure must name the exit code")
+
+    # it ran and reported real findings: those are the findings
+    f, _ = shell_verdict("L3", "reconcile_lists.py", 1,
+                         "- item one\n- item two\n", "")
+    if len(f) != 2:
+        bad.append("parsable findings are reported individually, not "
+                   "collapsed into 'it failed'")
+
+    # control: it ran clean. A guard that fails everything is not a
+    # guard, it is an outage.
+    f, _ = shell_verdict("L3", "reconcile_lists.py", 0, "", "")
+    if f:
+        bad.append("a clean run must NOT fail the gate")
+
+    for b in bad:
+        print("  [FAIL]", b)
+    print("constitution selftest: %d failure(s)" % len(bad))
+    return 1 if bad else 0
+
+
 if __name__ == "__main__":
+    if "--selftest" in sys.argv:
+        sys.exit(cmd_selftest())
     sys.exit(main())
