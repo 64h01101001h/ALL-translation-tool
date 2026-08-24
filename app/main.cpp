@@ -4339,6 +4339,20 @@ public:
                   "count, not the display limit");
             check(spine_.corpusCount("\"zzzz no such phrase zzzz\"") == 0,
                   "a term with no attestations counts zero, not -1");
+            // SQA DATA-1 (2026-08-24). buildQuery emits FTS3/4 infix
+            // NEAR/N grammar, which FTS5 rejects at step() and not at
+            // prepare() - so nothing threw, and corpusCount fell
+            // through to `return 0`, never the -1 its OWN catch block
+            // promises. The Search pane then printed its 60-row
+            // display cap as the corpus total, under the binding
+            // layer's name, with no cap notice anywhere. The pin
+            // above fixes 0 as "measured none"; this one fixes -1 as
+            // "could not measure". They are different claims and the
+            // pane renders them differently.
+            check(spine_.corpusCount(
+                      "\"sems can\" NEAR/3 \"byang chub\"") == -1,
+                  "a query the engine CANNOT answer returns -1 "
+                  "(unknown), never a 0 it did not measure (DATA-1)");
         }
         // BOUNTY #10, memory safety: the outline tree indexed a fixed
         // 64-slot vector by node depth with no clamp. Measured over
@@ -15146,6 +15160,33 @@ private:
 // silence, so a rare phrase in the unread 4,988 of 8,988 returned "no
 // matches" - a performance cap stated as a fact about the library
 // (house rule 3). Pure so the drill can reach it without a pane.
+// SQA DATA-1 (2026-08-24). The corpus header collapsed three
+// different numbers into one and printed the smallest as if it were
+// the largest: rows RENDERED (20), hits FETCHED (60), and the real
+// attestation total. It rendered "60 hit(s)" for terms with
+// thousands, under the binding layer's own name. A total of -1 means
+// the engine could not measure it - FTS5 rejects the pane's own
+// NEAR/N grammar at step() - and that must read as unknown, never as
+// the fetch cap. Returns the phrase only; the caller supplies the
+// layer's name, which is a class member. Pure so the drill can reach
+// it without a pane.
+static QString corpusCountLine(int rendered, int fetched, long total) {
+    if (total < 0)
+        return QString("showing %1 of %2 fetched; the total for this "
+                       "query is <b>unknown</b> (the engine could not "
+                       "count it)")
+            .arg(rendered).arg(fetched);
+    if (total > (long)fetched)
+        return QString("showing %1 of %2 fetched, out of <b>%3</b> in "
+                       "the corpus")
+            .arg(rendered).arg(fetched)
+            .arg(QLocale().toString((qlonglong)total));
+    if (rendered < fetched)
+        return QString("showing %1 of %2 hit(s)")
+            .arg(rendered).arg(fetched);
+    return QString("%1 hit(s)").arg(fetched);
+}
+
 static QString goferSkipNotice(int skipped, int scanned) {
     if (skipped <= 0) return {};
     return QString("<div style='color:%1'><small>%2 file(s) in these "
@@ -15448,6 +15489,29 @@ public:
               "Spotlight source row present (opt-in)");
         check(loadCitationWeb() > 100,
               "Citation web loads (edges from the batch build)");
+        // SQA DATA-1 (2026-08-24). Three different numbers were being
+        // collapsed into one: 20 rows RENDERED, 60 hits FETCHED, and
+        // the real corpus total. The pane printed "60 hit(s)" - a
+        // display cap presented as a corpus total, under the binding
+        // layer's own name, with no cap notice in header or footer.
+        // And when the count is UNKNOWN (FTS5 rejects the pane's own
+        // NEAR/N grammar at step()), it must say unknown rather than
+        // fall back to the cap.
+        check(corpusCountLine(20, 60, 1191).contains("20") &&
+                  corpusCountLine(20, 60, 1191).contains("60") &&
+                  corpusCountLine(20, 60, 1191).contains("1,191"),
+              "corpus line prints all three numbers: rendered, "
+              "fetched, and the real total (DATA-1)");
+        check(corpusCountLine(20, 60, -1).contains("unknown"),
+              "an unmeasurable total says UNKNOWN, and never lets the "
+              "fetch cap stand in for it (DATA-1, house rule 3)");
+        check(!corpusCountLine(20, 60, -1).contains("60 hit(s)"),
+              "an unknown total must not render as '60 hit(s)' - that "
+              "is the exact sentence the finding is about");
+        check(corpusCountLine(5, 5, 5).contains("5") &&
+                  !corpusCountLine(5, 5, 5).contains("showing"),
+              "control: when everything fits, it reads plainly and "
+              "does not manufacture a cap notice");
         // SQA PERF-1 (2026-08-24), the pane half. The core now counts
         // the files it declined to read; the PANE has to say so.
         // 4,988 of 8,988 files were excluded from every unindexed
@@ -15700,15 +15764,17 @@ private:
                 long realN = -1;
                 try { realN = spine_.corpusCount(q.toStdString()); }
                 catch (const std::exception&) {}
-                h += (realN > (long)hits.size())
-                         ? QString("<div><b>%1</b> \u2014 showing %2 of "
-                                   "<b>%3</b> hit(s)</div>")
-                               .arg(kCorpusRow)
-                               .arg(hits.size())
-                               .arg(realN)
-                         : QString("<div><b>%1</b> \u2014 %2 hit(s)</div>")
-                               .arg(kCorpusRow)
-                               .arg(hits.size());
+                // SQA DATA-1: three numbers, said separately. The
+                // render cap below is 20; the fetch cap is 60; the
+                // corpus total is whatever corpusCount could measure,
+                // or unknown. Collapsing them printed the smallest as
+                // the largest.
+                const int renderedRows =
+                    std::min((int)hits.size(), 20);
+                h += QString("<div><b>%1</b> \u2014 %2</div>")
+                         .arg(kCorpusRow)
+                         .arg(corpusCountLine(renderedRows,
+                                              (int)hits.size(), realN));
                 total += (int)hits.size();
                 int shown = 0;
                 for (const auto& g : hits) {

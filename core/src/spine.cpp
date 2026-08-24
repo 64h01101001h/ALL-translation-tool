@@ -313,9 +313,19 @@ long Spine::corpusCount(const std::string& fts_query,
         if (!course.empty())
             sqlite3_bind_text(s2.p, i, course.c_str(), -1,
                               SQLITE_TRANSIENT);
+        // SQA DATA-1 (2026-08-24). This used to `return 0` when the
+        // step did not produce a row - which is exactly what FTS5 does
+        // when handed FTS3/4 infix NEAR/N grammar: it rejects at
+        // step(), not prepare(), so nothing throws. The caller then
+        // printed a zero this function never measured, and the Search
+        // pane rendered its display cap as the corpus total. The
+        // degradation contract in the catch below always said -1;
+        // this path simply did not honour it. Same shape as
+        // Tm84000::matchCount, which had it right.
+        long n = -1;
         if (sqlite3_step(s2.p) == SQLITE_ROW)
-            return (long)sqlite3_column_int64(s2.p, 0);
-        return 0;
+            n = (long)sqlite3_column_int64(s2.p, 0);
+        return n;
     } catch (const std::exception& e) {
         // same degradation contract as corpusSearch: a yanked db
         // returns -1 so the caller can say "unknown" rather than
