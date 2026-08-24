@@ -474,6 +474,14 @@ if(Python3_FOUND)
   # SQA TEST-1: the mutation harness's own contract. 13 of 21
   # re-injected defects survived the battery; this is the tool that
   # makes "the pin can fail" checkable instead of asserted.
+  # P0 2026-08-24: ~32 GB of fan-out scratch took the volume to 327 MiB
+  # free. This is the reclaimer, and these are the two rules that make
+  # deleting anything safe: never the current session, never inside the
+  # idle window.
+  add_test(NAME scratch_gc_selftest
+           COMMAND ${Python3_EXECUTABLE}
+                   ${CMAKE_SOURCE_DIR}/tools/scratch_gc.py --selftest)
+
   add_test(NAME mutate_selftest
            COMMAND ${Python3_EXECUTABLE}
                    ${CMAKE_SOURCE_DIR}/tools/mutate.py --selftest)
