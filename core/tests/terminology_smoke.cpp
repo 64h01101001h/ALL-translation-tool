@@ -48,6 +48,31 @@ int main(int argc, char** argv) {
               "chos matched via its HGM gloss (Dharma)");
     }
 
+    {   // SQA TEST-1 survivor TERMINOLOGY-NESTING (2026-08-24).
+        // A span is dropped when a STRICTLY LONGER glossed span
+        // contains it - that is how "sangs rgyas" wins over "sangs".
+        // The comparison was `(t.end - t.beg) > (s.end - s.beg)`, and
+        // flipping it to `>=` survived the whole battery.
+        //
+        // What `>=` breaks is homonyms. "shes pa" carries THREE
+        // HGM-glossed entries, so a source containing it produces
+        // three spans with the SAME extent. Each then "contains" the
+        // others at equal length, each suppresses the rest, and the
+        // term disappears from the report altogether - a word the
+        // master glossed three ways, silently absent from the
+        // translator's terminology check.
+        auto rep = allcore::checkTerminology(
+            spine, index, "SHES PA NI RTOGS PA'O",
+            "Consciousness is realization.");
+        bool found = false;
+        for (const auto& t : rep.terms)
+            if (t.wylie == "shes pa") found = true;
+        CHECK(found,
+              "a homonym with several glossed entries survives the "
+              "nesting filter - equal-length spans do not suppress "
+              "each other (TEST-1 TERMINOLOGY-NESTING)");
+    }
+
     // a draft that uses none of them: unmatched terms sort first
     {
         auto rep = allcore::checkTerminology(
