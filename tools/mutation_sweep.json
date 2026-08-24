@@ -37,12 +37,13 @@
     },
     {
       "id": "TITLEXLAT-SPAN",
-      "note": "TEST-1 survivor. Minimum span length in the title translator's greedy match.",
+      "note": "Was a TEST-1 survivor; KILLED 2026-08-24. The first pin attempt FAILED - against the existing large query the mutation is invisible because the leftover syllables are not attested singly either. The killing pin uses a dedicated two-title bank where one syllable IS attested alone. Second survivor converted.",
       "file": "core/src/title_xlat.cpp",
       "old": "             n >= 2; --n) {",
       "new": "             n >= 1; --n) {",
       "test": "title_xlat|engines|selftest",
-      "expect": "survived"
+      "expect": "killed",
+      "expect_fail_contains": "TITLEXLAT-SPAN"
     },
     {
       "id": "TERMINOLOGY-NESTING",

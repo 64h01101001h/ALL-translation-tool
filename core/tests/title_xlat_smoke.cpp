@@ -52,6 +52,31 @@ int main(int argc, char** argv) {
                      "uncovered - a real answer, not a guess");
         CHECK(w.coverage > 0.7 && w.coverage < 1.0,
               "coverage is measured, not claimed");
+        {   // SQA TEST-1 survivor TITLEXLAT-SPAN (2026-08-24). The
+            // greedy cover walks n from max_span DOWN TO 2, and the
+            // header states the contract in words: "contiguous
+            // syllable spans of the query (2..max_span syllables)".
+            // Nothing asserted the floor, so `n >= 2` -> `n >= 1`
+            // survived the whole battery.
+            //
+            // A DEDICATED bank is needed to see it. Against the large
+            // query above the mutation is invisible, because the
+            // leftover syllables are not attested singly either - the
+            // first version of this pin passed on the mutant and had
+            // to be thrown away. Here KA is attested (inside KA KHA)
+            // and GA is not, so a one-syllable cover is available to
+            // any implementation willing to emit one.
+            allcore::TitlePairBank b2;
+            b2.add("KA KHA", "alpha beta", "test");
+            const auto w2 = allcore::buildTitleWorkbench("KA GA", b2);
+            size_t shortest2 = 999;
+            for (const auto& f : w2.fragments)
+                shortest2 = std::min(shortest2, f.count);
+            CHECK(w2.fragments.empty() || shortest2 >= 2,
+                  "no fragment card is a single syllable - the cover "
+                  "attests spans, not particles (TEST-1 "
+                  "TITLEXLAT-SPAN)");
+        }
         // rule 1: every example is a full pair, never a composed gloss
         CHECK(!w.fragments[0].examples.empty() &&
                   !w.fragments[0].examples[0].tib_raw.empty() &&
