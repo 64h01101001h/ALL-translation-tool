@@ -89,6 +89,24 @@ int main() {
               "ཀུན",
           "da-drag unicode: kun unchanged");
 
+    {   // SQA TEST-1 survivor AFFIXNORM-BOUNDARY (2026-08-24). The
+        // stacked double-particle rule strips the LAST FOUR
+        // codepoints, and its guard `len > 4` is what guarantees
+        // there is a root syllable left underneath. Flipping it to
+        // `len > 3` survived the whole battery.
+        //
+        // The damage is total rather than subtle. A syllable that is
+        // EXACTLY the four particle codepoints and nothing else -
+        // 'i'o, U+0F60 U+0F72 U+0F60 U+0F7C - would match at len == 4
+        // and strip to the empty string. Normalisation would
+        // annihilate the syllable rather than normalise it, and a
+        // word would vanish from a search index without a word said.
+        const std::string bare = N("'i'o");
+        CHECK(!bare.empty(),
+              "stripping particles never annihilates the syllable: a "
+              "bare 'i'o keeps a root (TEST-1 AFFIXNORM-BOUNDARY)");
+    }
+
     std::printf("%s (%d failures)\n",
                 failures ? "AFFIXNORM SMOKE FAILED" : "AFFIXNORM SMOKE OK",
                 failures);

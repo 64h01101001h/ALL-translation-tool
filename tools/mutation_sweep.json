@@ -28,12 +28,13 @@
     },
     {
       "id": "AFFIXNORM-BOUNDARY",
-      "note": "TEST-1 survivor. Stacked double-particle boundary; the battery executes this line and does not assert on it.",
+      "note": "Was a TEST-1 survivor; KILLED 2026-08-24. The guard `len > 4` is what guarantees a root syllable survives the four-codepoint strip. At len == 4 the mutant strips a bare 'i'o to the EMPTY STRING - annihilation, not normalisation. Third survivor converted.",
       "file": "core/src/affixnorm.cpp",
       "old": "    if (len > 4 && b[len - 4] == AA &&",
       "new": "    if (len > 3 && b[len - 4] == AA &&",
       "test": "affix|engines|selftest",
-      "expect": "survived"
+      "expect": "killed",
+      "expect_fail_contains": "AFFIXNORM-BOUNDARY"
     },
     {
       "id": "TITLEXLAT-SPAN",
