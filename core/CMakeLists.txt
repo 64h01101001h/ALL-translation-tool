@@ -471,6 +471,13 @@ if(Python3_FOUND)
   # SQA STATIC-3: the checker's own shell-out contract. A rule that
   # shells out must assert the subprocess RAN - L3 did not, so the
   # file it polices could be deleted while the gate printed green.
+  # SQA TEST-1: the mutation harness's own contract. 13 of 21
+  # re-injected defects survived the battery; this is the tool that
+  # makes "the pin can fail" checkable instead of asserted.
+  add_test(NAME mutate_selftest
+           COMMAND ${Python3_EXECUTABLE}
+                   ${CMAKE_SOURCE_DIR}/tools/mutate.py --selftest)
+
   add_test(NAME constitution_selftest
            COMMAND ${Python3_EXECUTABLE}
                    ${CMAKE_SOURCE_DIR}/tools/constitution_check.py
