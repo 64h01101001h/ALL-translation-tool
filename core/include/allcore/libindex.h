@@ -37,6 +37,15 @@ public:
         // The caller must say "stopped, N of M done", never "up to
         // date": a cancelled pass did not index the rest.
         bool canceled = false;
+        // SQA PERF-6: true when a change of word-fold generation
+        // forced a FULL reindex. It matters to the caller because the
+        // fold stamp is deliberately withheld on a cancelled pass
+        // (otherwise an interrupted refold would never heal), so a
+        // cancelled refold banks NOTHING - the next run redoes every
+        // file. A caller that says "the files already done are not
+        // redone" is telling the truth about an incremental pass and
+        // a lie about this one.
+        bool refolded = false;
     };
     // SQA PERF-2: update() took 190,492 ms over the real 8,988-file
     // library on the GUI thread, with no progress and no way out.

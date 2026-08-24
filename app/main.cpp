@@ -22625,6 +22625,31 @@ public:
                       cutHtml.contains("8868"),
                   "a stopped index run discloses its remainder: files "
                   "done, files in the library, and the difference");
+            // SQA PERF-6 (2026-08-24). The stopped message promises
+            // "the files already done are not redone". That is TRUE
+            // for an incremental pass and FALSE for a REFOLD: the
+            // fold stamp is deliberately withheld when a pass is
+            // cancelled (libindex.cpp:334 - correct, or an
+            // interrupted refold would never heal), so the next run
+            // re-updates every file. Measured by the verifier: stop
+            // at 20 of 64, resume, and the resumed pass reports 64.
+            // The pane was telling the user their 2.6 minutes were
+            // banked when none of it was. House rule 4.
+            allcore::LibraryIndex::UpdateStats refoldStop;
+            refoldStop.canceled = true;
+            refoldStop.refolded = true;
+            refoldStop.updated = 20;
+            const QString refoldHtml =
+                indexResultHtml(refoldStop, 20, 40000, 8988);
+            check(!refoldHtml.contains("are not redone"),
+                  "a cancelled REFOLD never promises that finished "
+                  "files are kept - the fold stamp was withheld, so "
+                  "they are not (PERF-6)");
+            check(refoldHtml.contains("redone") ||
+                      refoldHtml.contains("again from the start"),
+                  "a cancelled refold says plainly that the work "
+                  "restarts, rather than staying silent about it "
+                  "(PERF-6, house rule 4)");
         }
         // the update-checker's page parser (network never touched
         // in selftest — the parse is the provable part)
@@ -24709,15 +24734,26 @@ private:
                        "in the library are indexed (%6 line(s)) — the "
                        "remaining %7 are NOT in the index yet, so the "
                        "Search pane's \"search the Library\" cannot "
-                       "answer from them.<br><small>Run “Update search "
-                       "index” again to carry on from here — the files "
-                       "already done are not redone.</small>")
+                       "answer from them.<br><small>%8</small>")
                 .arg(st.added)
                 .arg(st.updated)
                 .arg(st.removed)
                 .arg(files)
                 .arg(libTotal > 0 ? QString::number(libTotal)
                                   : QString("?"))
+                .arg(st.refolded
+                         // PERF-6: the fold stamp is withheld on a
+                         // cancelled pass, so a cancelled REFOLD banks
+                         // nothing. Saying otherwise was house rule 4.
+                         ? QString("This was a full re-fold, and a "
+                                   "stopped re-fold is <b>redone from "
+                                   "the start</b> — the word-fold stamp "
+                                   "is only written when a pass "
+                                   "finishes. Allow about 3 minutes "
+                                   "uninterrupted.")
+                         : QString("Run “Update search index” again to "
+                                   "carry on from here — the files "
+                                   "already done are not redone."))
                 .arg(lines)
                 .arg(libTotal > 0 ? QString::number(libTotal - files)
                                   : QString("?"));

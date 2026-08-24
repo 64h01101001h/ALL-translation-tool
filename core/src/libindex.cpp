@@ -177,6 +177,7 @@ LibraryIndex::UpdateStats LibraryIndex::update(
             prevGen = sqlite3_column_int(g.p, 0);
     }
     const bool refold = prevGen != foldGen;
+    st.refolded = refold;   // PERF-6: the caller must be able to say so
 
     exec(db_, "BEGIN");
     // remove vanished files
