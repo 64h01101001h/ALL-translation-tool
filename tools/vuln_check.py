@@ -132,7 +132,18 @@ def norm_version(v):
     # in form and useless in substance.
     if ":" in v:
         v = v.split(":", 1)[1]
-    # Cut the packaging revision too: upstream version is what we can
+    # DATE-VERSIONED packages (re2 ships "2025-11-05") must be
+    # collapsed BEFORE the revision split, or the dashes eat the month
+    # and day: "2025-11-05" -> (2025,) while a distro's "20180101-5.1"
+    # keeps all eight digits as (20180101,), so a 2018 fix reads as
+    # NEWER than our 2025 build. That flagged twelve re2 advisories
+    # that are all long fixed. Third version-parsing bug in this
+    # classifier, and like the other two it was found by looking at
+    # the biggest number rather than trusting it.
+    m = re.match(r"^(\d{4})-(\d{2})-(\d{2})$", v)
+    if m:
+        v = "".join(m.groups())
+    # Cut the packaging revision: upstream version is what we can
     # compare. "1.6.40-8.el10_1.1" -> "1.6.40"
     v = re.split(r"[-_+~]", v)[0]
     parts = re.split(r"[^0-9]+", v)
@@ -212,6 +223,76 @@ def cmd_triage(name, version, limit=40):
     return 0
 
 
+def osv_query_one(name, version, tries=4):
+    """One component, with backoff. OSV rate-limits in practice.
+
+    Returns (vulns, error). Measured 2026-08-24: three consecutive
+    triage runs failed under rate-limiting, which is exactly why this
+    retries AND why a give-up still returns an error rather than an
+    empty list.
+    """
+    import time
+    q = json.dumps({"package": {"name": name}, "version": version})
+    last = "not attempted"
+    for attempt in range(tries):
+        r = subprocess.run(["curl", "-s", "--fail", "--max-time", "60",
+                            "-X", "POST", "https://api.osv.dev/v1/query",
+                            "-H", "Content-Type: application/json",
+                            "-d", q], capture_output=True, text=True)
+        if r.returncode == 0:
+            try:
+                return json.loads(r.stdout).get("vulns", []), None
+            except Exception as e:
+                last = "unparsable JSON: %s" % e
+        else:
+            last = "curl exit %d" % r.returncode
+        time.sleep(2 ** attempt * 3)
+    return None, last
+
+
+def cmd_triage_all(tsv_path, limit=40):
+    comps = read_components(tsv_path)
+    print("triaging %d component(s) against OSV" % len(comps))
+    print()
+    unchecked, rows = [], []
+    for name, version in comps:
+        vulns, err = osv_query_one(name, version)
+        if err is not None:
+            unchecked.append((name, version, err))
+            continue
+        if not vulns:
+            continue
+        b = {"needs-attention": 0, "undetermined": 0, "probably-fixed": 0}
+        ids = []
+        for v in vulns[:limit]:
+            verdict, _why = classify(version, v)
+            b[verdict] += 1
+            if verdict == "needs-attention":
+                ids.append(v.get("id", "?"))
+        rows.append((b["needs-attention"], name, version, b, ids))
+    rows.sort(reverse=True)
+
+    print("%-20s %-14s %6s %6s %6s" % ("component", "version", "ATTN",
+                                       "undet", "fixed"))
+    for attn, name, version, b, ids in rows:
+        print("%-20s %-14s %6d %6d %6d  %s"
+              % (name[:20], version[:14], attn, b["undetermined"],
+                 b["probably-fixed"], ", ".join(ids[:2])))
+    total_attn = sum(r[0] for r in rows)
+    print()
+    print("%d component(s) with something needing attention; %d advisory"
+          " row(s) in that bucket" % (sum(1 for r in rows if r[0]), total_attn))
+    if unchecked:
+        # RULE 1 again: a component we could not ask about is NOT clean.
+        print()
+        print("NOT CHECKED - these were never answered, and must not be "
+              "read as clean:")
+        for name, version, err in unchecked:
+            print("  %-20s %-14s %s" % (name[:20], version[:14], err))
+        return 2
+    return 0
+
+
 def cmd_selftest():
     """Pin the two honesty rules. No network."""
     bad = []
@@ -259,11 +340,18 @@ def main():
     ap.add_argument("--selftest", action="store_true")
     ap.add_argument("--triage", nargs=2,
                     metavar=("NAME", "VERSION"))
+    ap.add_argument("--triage-all", action="store_true")
     a = ap.parse_args()
     if a.selftest:
         return cmd_selftest()
     if a.triage:
         return cmd_triage(a.triage[0], a.triage[1])
+    if a.triage_all:
+        t = a.tsv or (os.path.join(a.app, "Contents", "Resources",
+                      "licenses", "BUNDLED_COMPONENTS.tsv") if a.app else None)
+        if not t or not os.path.exists(t):
+            print("need a staged .app or --tsv"); return 1
+        return cmd_triage_all(t)
 
     tsv = a.tsv
     if not tsv and a.app:
