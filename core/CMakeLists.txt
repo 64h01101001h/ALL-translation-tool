@@ -412,6 +412,12 @@ add_executable(glossary_smoke tests/glossary_smoke.cpp)
 target_link_libraries(glossary_smoke PRIVATE allcore)
 add_test(NAME glossary_smoke COMMAND glossary_smoke)
 
+# SQA FAIL-1: the write-failure drill for the three stores whose
+# save() judged the stream before flushing it.
+add_executable(storeflush_smoke tests/storeflush_smoke.cpp)
+target_link_libraries(storeflush_smoke PRIVATE allcore)
+add_test(NAME storeflush_smoke COMMAND storeflush_smoke)
+
 add_executable(dossier_smoke tests/dossier_smoke.cpp)
 target_link_libraries(dossier_smoke PRIVATE allcore)
 add_test(NAME dossier_smoke COMMAND dossier_smoke)

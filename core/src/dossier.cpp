@@ -80,7 +80,18 @@ bool DossierStore::save() {
         f << esc(x.slug) << '\t' << esc(x.title) << '\t'
           << esc(x.textPath) << '\t' << x.line << '\t'
           << esc(x.created) << '\t' << esc(x.touched) << '\n';
-    return (bool)f;
+    // SQA FAIL-1 (2026-08-23): `return (bool)f;` judged the stream
+    // before anything pushed it. An ofstream does not set failbit
+    // until the buffer is flushed, so a SMALL store reported success
+    // having written nothing - measured at 64 of 2,842 bytes landed,
+    // 0 rows surviving reload. proposals.cpp:219 already had the
+    // right ending and its comment records why close() matters too:
+    // on a full volume the failure does not surface until the filebuf
+    // is closed. Pinned by core/tests/storeflush_smoke.cpp.
+    // (House rule 4: nothing reports success it did not verify.)
+    f.flush();
+    f.close();
+    return !f.fail();
 }
 
 std::string DossierStore::create(const std::string& title,

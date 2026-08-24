@@ -44,7 +44,18 @@ bool GlossaryStore::save(const std::string& docName) const {
          "this text's display\n";
     for (const auto& [w, g] : items_)
         f << w << '\t' << g << '\n';
-    return (bool)f;
+    // SQA FAIL-1 (2026-08-23): `return (bool)f;` judged the stream
+    // before anything pushed it. An ofstream does not set failbit
+    // until the buffer is flushed, so a SMALL store reported success
+    // having written nothing - measured at 64 of 2,842 bytes landed,
+    // 0 rows surviving reload. proposals.cpp:219 already had the
+    // right ending and its comment records why close() matters too:
+    // on a full volume the failure does not surface until the filebuf
+    // is closed. Pinned by core/tests/storeflush_smoke.cpp.
+    // (House rule 4: nothing reports success it did not verify.)
+    f.flush();
+    f.close();
+    return !f.fail();
 }
 
 void GlossaryStore::set(const std::string& wylie,

@@ -108,7 +108,20 @@ bool CommentStore::add(const std::string& file, int line,
     f << esc(id.str()) << '\t' << esc(file) << '\t' << line << '\t'
       << esc(author) << '\t' << esc(createdIso) << '\t' << esc(text)
       << '\n';
-    if (!f) return false;
+    // SQA FAIL-1 (2026-08-23): this `if (!f)` sat before any flush,
+    // and an ofstream does not set failbit until the buffer is
+    // pushed - so a single appended comment, far too small to fill
+    // it, reported success having written nothing. This store is
+    // explicitly for a shared Dropbox folder (comments.h:4-10), so a
+    // disconnected share is squarely in scope, and the header
+    // promises the record is "append-only; never rewritten".
+    //
+    // Judge the write BEFORE the in-memory push: a comment that did
+    // not reach disk must not sit in items_ looking saved for the
+    // rest of the session. Pinned by core/tests/storeflush_smoke.cpp.
+    f.flush();
+    f.close();
+    if (f.fail()) return false;
     TextComment t;
     t.id = id.str();
     t.file = file;
