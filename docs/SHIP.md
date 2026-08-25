@@ -49,6 +49,19 @@ Read from tools/package_macos.sh staging (the manifest of record):
 3. Adam: confirm the teachings-index consent line.
 4. SOAS POS materials: locate the original terms before any market DMG.
 5. Apple Developer ID decision ($99/yr) for D2 notarization.
+6. **These two also gate PUBLIC SOURCE HOSTING, not just a market
+   DMG.** Both files are tracked in git and present throughout the
+   history, so a public repository redistributes them to anyone who
+   clones or forks — more broadly than a DMG, and not recallable:
+   - `data/teaching/teaching_moments_card.json` (13.2 MB) — item 3
+   - `data/soas_pos/classical-lexicon.txt` (0.6 MB) — item 4
+   Decision 2026-08-25 (Adam): host PRIVATE now to close the
+   disaster-recovery gap, flip to public once items 3 and 4 are
+   settled. Making it public before then repeats BUILD-5 — notices
+   saying material is not redistributed while it ships — except a
+   public git history cannot be withdrawn. Clearing items 3 and 4 is
+   the whole cost of going public; nothing else in the repo blocks it
+   (history carries no credentials — checked 2026-08-25).
 
 
 ## THE FREE-DISTRIBUTION RULING (Adam, 2026-08-22)
