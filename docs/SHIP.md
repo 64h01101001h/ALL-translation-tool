@@ -55,9 +55,24 @@ Read from tools/package_macos.sh staging (the manifest of record):
    clones or forks — more broadly than a DMG, and not recallable:
    - `data/teaching/teaching_moments_card.json` (13.2 MB) — item 3
    - `data/soas_pos/classical-lexicon.txt` (0.6 MB) — item 4
-   Decision 2026-08-25 (Adam): host PRIVATE now to close the
-   disaster-recovery gap, flip to public once items 3 and 4 are
-   settled. Making it public before then repeats BUILD-5 — notices
+   Decision 2026-08-25 (Adam), REVISED SAME DAY: first private, then
+   **PUBLIC** at https://github.com/64h01101001h/ALL-translation-tool
+   so the link could be shared with ALL's technical lead. Adam was
+   told twice what publishing these two files means and chose it; that
+   is his call to make and it is recorded here as his, not as an
+   oversight.
+   What that means now, stated plainly so nobody has to reconstruct it:
+   the teachings index and the SOAS lexicon are published. Item 3 is
+   Adam's own confirmation to give, so publishing effectively gives
+   it. **Item 4 is not his to give** - the SOAS terms are unverified
+   and belong to a third party, so that file is public under terms
+   nobody has read. Closing item 4 is now urgent rather than
+   pre-market, and if the terms turn out to forbid redistribution the
+   fix is removal from the tree AND from history, plus asking GitHub
+   to purge forks.
+   Partial mitigation: the root LICENSE is all-rights-reserved
+   (c) Asian Legacy Library / ACIP, so visibility is not a licence
+   grant. Making it public before then repeats BUILD-5 — notices
    saying material is not redistributed while it ships — except a
    public git history cannot be withdrawn. Clearing items 3 and 4 is
    the whole cost of going public; nothing else in the repo blocks it
