@@ -74,9 +74,14 @@ Scan forward to the **first** `]`. The text between is `content`.
 - resume **after** the `]`
 
 ### 3.3 `,` — shad
-Look ahead. It is a **double shad** if either:
-- the next character is `,` (consume 2 characters), or
-- the next two characters are a space then `,` (consume 3)
+Look ahead, **skipping any run of whitespace — spaces, tabs, newlines,
+carriage returns.** If the next non-whitespace character is `,`, this is
+a **double shad**; consume through that second comma.
+
+The whitespace skip is not a nicety. ACIP input is typed to a fixed
+width, so the two halves of a nyis shad are regularly split by the hard
+wrap. Deciding on the immediately-next character alone misses every one
+of those (defect D1, fixed 2026-08-25).
 
 **Double shad:** `trimTrailingSpaces()`, append `",,\n\n"`, increment
 `paragraphs`.
@@ -128,17 +133,22 @@ Output:
 ```
 [f. 001A] *,,
 
-TSAD MA SDE BDUN, GYI RGYAN,, BZHUGS SO,,
+TSAD MA SDE BDUN, GYI RGYAN,,
+
+BZHUGS SO,,
 
 [f. 001B] RGYA GAR[1] SKAD DU,,
 
 DE NAS
 ```
 
-`paragraphs = 4`, `notes = ["folio 001B: DD"]`.
+`paragraphs = 5`, `notes = ["folio 001B: DD"]`.
 
-Note the `,,` in the middle of the second paragraph — that is defect **D1**
-below, not correct behaviour.
+The split between `GYI RGYAN,,` and `BZHUGS SO,,` is the D1 fix working
+on real text: in the source those two shads sit either side of a line
+break, and they mark exactly where the title ends and *bzhugs so*
+("herein contained") begins. Before the fix this ran on as one
+paragraph carrying a `,,` in its middle.
 
 ## 6. Conformance tests
 
@@ -152,6 +162,8 @@ Port these first; they are the reference implementation's actual output.
 | T3 | `AAA,BBB` | `AAA, BBB` | 1 |
 | T4 | `SO, ,\nNEXT` | `SO,,\n\nNEXT` | 2 |
 | T5 | `[QUERY] AAA` | `[1] AAA` | 1 |
+| T6 | `AAA,\n,BBB` | `AAA,,\n\nBBB` | 2 |
+| T7 | `AAA,\n, BBB` | `AAA,,\n\nBBB` | 2 |
 
 T5 also asserts `notes == ["QUERY"]` — no folio prefix, because no `@`
 had been seen.
@@ -160,7 +172,6 @@ had been seen.
 
 | # | Input | Current output | Should be |
 |---|---|---|---|
-| D1 | `AAA,\n,BBB` | `AAA,, BBB` (1 para) | `AAA,,\n\nBBB` (2 paras) |
 | D2 | `AAA [OOPS never closed` | `AAA[1]`, note `OOPS never closed` | flagged, not silently consumed |
 | D3 | `AAA [outer [inner] tail] BBB` | `AAA[1] tail] BBB`, note `outer [inner` | flagged or nested-aware |
 
@@ -169,8 +180,11 @@ had been seen.
 All three were found by running it on 2026-08-25. **Do not reproduce them
 in a new implementation.**
 
-**D1 — a double shad split across an input line break loses its paragraph
-break.** `AAA,\n,BBB` yields `AAA,, BBB` in one paragraph. The scanner
+**D1 — FIXED 2026-08-25.** *Kept here because the spec is also the record
+of what went wrong; T6 and T7 pin it.*
+
+A double shad split across an input line break used to lose its paragraph
+break: `AAA,\n,BBB` yielded `AAA,, BBB` in one paragraph. The scanner
 sees `,` followed by `\n`, classifies it as a single shad, flows the
 newline away, then meets the second `,` and treats it as another single
 shad. The two commas end up adjacent in the output — so the text
@@ -181,8 +195,9 @@ This matters more than it looks. ACIP input files wrap at a fixed width,
 so a nyis shad landing across a line boundary is ordinary, not exotic.
 Every occurrence is a passage boundary the translator does not get.
 
-*Fix:* flow newlines into the shad lookahead — treat `,` + whitespace
-(including newlines) + `,` as a double shad.
+*Fix, applied:* the shad lookahead now skips any whitespace run before
+deciding. Mutation-verified — reverting the newline case turns T6 and T7
+red by name.
 
 **D2 — an unterminated bracket silently swallows the rest of the file.**
 The scan for `]` runs to end-of-input and the remainder becomes one note,

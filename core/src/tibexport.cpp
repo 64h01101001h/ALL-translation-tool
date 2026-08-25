@@ -271,15 +271,22 @@ TranslationPrep formatForTranslation(const std::string& acip_document) {
             continue;
         }
         if (c == ',') {
-            // double shad = paragraph break; single shad flows on
+            // double shad = paragraph break; single shad flows on.
+            // The two halves of a nyis shad are often SPLIT by the input
+            // file's hard wrap - ACIP is typed to a fixed width, so a
+            // shad pair straddling the line end is ordinary, not exotic.
+            // Skip any run of whitespace (newlines included) before
+            // deciding, or every such pair silently loses its paragraph
+            // break while still emitting ",," into the text.
             trimEndSpace();
-            if (i + 1 < s.size() &&
-                (s[i + 1] == ',' ||
-                 (s[i + 1] == ' ' && i + 2 < s.size() && s[i + 2] == ','))) {
-                const size_t adv = (s[i + 1] == ',') ? 2 : 3;
+            size_t j = i + 1;
+            while (j < s.size() && (s[j] == ' ' || s[j] == '\t' ||
+                                    s[j] == '\n' || s[j] == '\r'))
+                ++j;
+            if (j < s.size() && s[j] == ',') {
                 out += ",,\n\n";
                 ++prep.paragraphs;
-                i += adv;
+                i = j + 1;
             } else {
                 out += ", ";
                 ++i;

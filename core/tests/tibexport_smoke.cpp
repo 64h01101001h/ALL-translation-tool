@@ -203,6 +203,19 @@ int main() {
               "prep: note marker numbered in the text");
         CHECK(p.paragraphs >= 2, "prep: paragraphs counted");
     }
+    {
+        // D1: a double shad split across an input line break is still a
+        // double shad. ACIP input files wrap at a fixed width, so a nyis
+        // shad straddling the wrap is ordinary - and each one is a
+        // passage boundary the translator would otherwise never see.
+        // Exact equality: a contains() pin here would pass on the very
+        // output this test exists to reject, which already contains ",,".
+        auto p = allcore::formatForTranslation("AAA,\n,BBB");
+        CHECK(p.text == "AAA,,\n\nBBB",
+              "prep: double shad split by a line break still breaks the paragraph");
+        CHECK(p.paragraphs == 2,
+              "prep: a line-split double shad counts as a paragraph boundary");
+    }
 
     std::printf("%s (%d failures)\n",
                 failures ? "TIBEXPORT SMOKE FAILED" : "TIBEXPORT SMOKE OK",
