@@ -25,157 +25,127 @@ paragraph, with the operator's remarks moved out of the way but not lost.
 This formatter is that conversion. It is deterministic and offline: same
 input, same output, no model, no network, no judgement calls.
 
-## 2. The six steps, and who does them
+## 2. Provenance of this spec — read this first
 
-From GMR's screen recording (Sept 2020, *Destroying the Darkness*, 144k
-words). Steps 2, 3 and 5 are automated; the rest are the editor's.
+Sections 3 onward were rewritten **2026-08-25** after transcribing the
+source recording and reading frames from it. Everything marked
+**[verified]** was read off a Find & Replace pane on screen, with its
+match count. Everything marked **[inferred]** was not.
 
-| # | Step | Automated? |
-|---|---|---|
-| 1 | Title the document in English | **No** — editor |
-| 2 | Flow the text: remove input line breaks | **Yes** |
-| 3 | Re-paragraph at every double shad `,,` | **Yes** |
-| 4 | Verse lineation, one line per metered line | **No** — editor, needs judgement |
-| 5 | Brackets → numbered notes, folio-tagged | **Yes** |
-| 6 | Result: clean paragraphed ACIP, apparatus in notes | — |
+This matters because the older note,
+[MIXED_NUTS_PRELIMINARY_FORMATTING.md](MIXED_NUTS_PRELIMINARY_FORMATTING.md),
+**gets the central rule backwards**, and the shipped C++ implements the
+backwards version. See §8.
 
-Step 4 stays human deliberately: deciding what is verse is an editorial
-reading, and guessing it would violate the project's never-guess rule.
+Source: `Preliminary formatting of a Mixed Nuts text.mp4`, 28.6 min,
+26 Sep 2020, Geshe Michael Roach, working on *DESTROYING DARKNESS
+working gmr 9 26 20* — 144,160 words, 253 pages at the start.
 
-## 3. The algorithm (normative)
+## 3. The demonstrated pipeline
 
-A single left-to-right pass over the input. No lookbehind, no
-backtracking, one character of lookahead (two for one case).
+Order is load-bearing: stage 5 only means what it means because stage 4
+already consumed the paragraph cases.
 
-**State:** `out` (output text), `notes` (ordered list of strings),
-`paragraphs` (integer, starts at 0), `folio` (string, starts empty).
+| # | Operation | Find → Replace | Count | Status |
+|---|---|---|---|---|
+| 1 | Flow out blank lines | `^p^p` → ` ` | 2,668 | **[verified]** |
+| 2 | Flow out remaining returns | `^p` → ` ` | 9,143 | **[verified]** |
+| 3 | *(house style)* full justification | — | — | [verified] |
+| 4 | **Paragraph ends** | `O, ,` → `O,,` + `^p^p` | **1,737** | **[verified]** |
+| 5 | **Verse lines** | `, ,` → `,` + `^p` + `,` | **679** | **[verified]** |
+| 6 | Bum shad normalisation | `;` → `,` | 429 | [inferred] |
+| 7 | Folio marker opens | `@` → `[f. ` | ~400 | **[verified]** |
+| 8 | Recto close + strip ornament | `A *,^p,` → `a] ` | ~200 | [inferred] |
+| 9 | Remaining recto letter | `A]` → `a]`, case-sensitive | ~200 | [inferred] |
+| 10 | Strip leading zeros | `[f. 00` → `[f. ` | 16–18 | [inferred] |
+| 11 | Verso (`B`) folios | — | — | **manual, by his own statement** |
 
-**Helper — `trimTrailingSpaces()`:** remove spaces from the end of `out`.
-Called before most emissions. It exists so that shads and note markers
-attach tightly to the preceding syllable rather than floating.
+### 3.1 The rule that matters — stage 4 vs stage 5
 
-Process each character `c` at position `i`:
+**A paragraph does not end at a double shad. It ends at `O, ,`.**
 
-### 3.1 `@` — page marker
-Consume `@` then all following **alphanumeric** characters. That run is
-the new `folio` (e.g. `@001A` → folio `001A`). Then:
-- `trimTrailingSpaces()`
-- if `out` is non-empty and does not end in newline, append one space
-- append `"[f. " + folio + "] "`
+> "the mixed nuts standard is that after a **final O**, when it completes
+> a paragraph, we just have two commas next to each other, we don't have
+> a space between the commas"
 
-The folio persists until the next `@`, and tags every note raised after it.
+The `O` is the final letter of the syllable closing the statement — `SO`,
+`LO`, `TO`. On screen at 08:30 the search box holds `O, ,` and the pane
+reads **MATCHES: Result 1 of 1737**; `BZHUGS SO, ,` and `PHYAG 'TSAL
+LO, ,` highlight, while `BZHIN, ,GANG` and `SEMS, ,'PHRIN` do not.
 
-### 3.2 `[` — input-operator bracket
-Scan forward to the **first** `]`. The text between is `content`.
-- append to `notes`: `"folio " + folio + ": " + content`, or just
-  `content` if no `@` has been seen yet
-- `trimTrailingSpaces()`
-- append `"[" + notes.length + "]"` (1-based, no surrounding spaces)
-- resume **after** the `]`
+**The remaining `, ,` are verse lines, not paragraphs.**
 
-### 3.3 `,` — shad
-Look ahead, **skipping any run of whitespace — spaces, tabs, newlines,
-carriage returns.** If the next non-whitespace character is `,`, this is
-a **double shad**; consume through that second comma.
+> "lines of quoted poetry from other texts are divided by a comma space
+> comma... we show lines of poetry in separate lines"
 
-The whitespace skip is not a nicety. ACIP input is typed to a fixed
-width, so the two halves of a nyis shad are regularly split by the hard
-wrap. Deciding on the immediately-next character alone misses every one
-of those (defect D1, fixed 2026-08-25).
+At 11:40 the box holds `, ,` and reads **MATCHES: Result 1 of 679**, with
+the stage-4 output already visible as tight `,,` separated by blank
+lines. Replacement is `,` + hard return + `,` — the shads stay, the line
+breaks between them.
 
-**Double shad:** `trimTrailingSpaces()`, append `",,\n\n"`, increment
-`paragraphs`.
+He is explicit that this is approximate: *"we won't catch all the lines,
+but we'll catch like 90%."* An implementation should say so too rather
+than presenting stage 5 as exhaustive.
 
-**Single shad:** `trimTrailingSpaces()`, append `", "`, consume 1.
+### 3.2 Case sensitivity is required
 
-### 3.4 Newline (`\n` or `\r`) — flowed away
-This is GMR's `^p^p` removal. `trimTrailingSpaces()`; if `out` is
-non-empty and does not end in a newline, append one space; then consume
-**all** consecutive newline characters.
+Stage 4 searches capital `O` and he warns against confusing it with zero.
+Stage 9 needs Word's "ignore case" switched **off** — he demonstrates
+getting this wrong first, and the replacement silently doing nothing.
+Any implementation must be case-sensitive throughout.
 
-### 3.5 Space or tab — collapsed
-Append a single space only if `out` is non-empty and does not already end
-in a space or a newline. Consume 1.
+### 3.3 Folio references
 
-### 3.6 Anything else
-Append the character verbatim. ACIP is passed through untouched — this
-formatter never transliterates, never corrects, never normalises casing.
+`@001A` becomes `[f. 1a]`, not `[f. 001A]`:
+- stage 7 opens it (`@` → `[f. `)
+- stage 8 or 9 closes it and lowercases the side letter
+- stage 10 strips the leading zeros
 
-### 3.7 Finalisation
-`trimTrailingSpaces()`. Then, if `out` contains any non-space,
-non-newline character **and** does not already end with `",,\n\n"`,
-increment `paragraphs` once more — the trailing passage has no closing
-double shad but is still a paragraph.
+`A` (recto) becomes `a`. `B` (verso) he leaves manual, so an
+implementation that lowercases `B` is going beyond the demonstrated
+standard and should say so.
 
-## 4. Output shape
+## 4. Algorithm notes for an implementer
+
+The stages above are Word find-and-replace, applied globally in order.
+A single-pass scanner can produce the same result but must respect the
+ordering: **classify `O, ,` before `, ,`**, or every paragraph end is
+mis-read as a verse line.
+
+Minimum state: current folio (for anything that tags by folio), and
+whether the previous non-space character was a capital `O`.
+
+Whitespace: because stages 1 and 2 have already flattened every line
+break to a space by the time stage 4 runs, `O, ,` and `O,,` and
+`O,` + wrap + `,` are all the same thing. A scanner that skips
+whitespace runs inside the shad lookahead reproduces this; one that
+looks only at the next character does not (defect D1).
+
+## 5. Output shape
 
 ```
 TranslationPrep {
-  text:       string    // formatted ACIP with [n] note markers
-  notes:      string[]  // note n is notes[n-1]
+  text:       string    // formatted ACIP
+  notes:      string[]  // see the caveat in §8
   paragraphs: int
 }
 ```
 
-The caller appends the notes to the saved file; the formatter does not
-format them. Note markers are 1-based to match how they read on the page.
-
-## 5. Worked example (verified output)
-
-Input (`\n` shown literally):
-
-```
-@001A *, ,TSAD MA\nSDE BDUN, GYI RGYAN,\n,BZHUGS SO, ,\n@001B RGYA GAR [DD] SKAD DU,, DE NAS
-```
-
-Output:
-
-```
-[f. 001A] *,,
-
-TSAD MA SDE BDUN, GYI RGYAN,,
-
-BZHUGS SO,,
-
-[f. 001B] RGYA GAR[1] SKAD DU,,
-
-DE NAS
-```
-
-`paragraphs = 5`, `notes = ["folio 001B: DD"]`.
-
-The split between `GYI RGYAN,,` and `BZHUGS SO,,` is the D1 fix working
-on real text: in the source those two shads sit either side of a line
-break, and they mark exactly where the title ends and *bzhugs so*
-("herein contained") begins. Before the fix this ran on as one
-paragraph carrying a `,,` in its middle.
-
 ## 6. Conformance tests
 
-Port these first; they are the reference implementation's actual output.
-`\n` is written literally.
+Derived from the verified rules, **not** from current behaviour. Several
+of these fail against the shipping C++ — that is the point.
 
-| # | Input | Expected `text` | `paragraphs` |
+| # | Input | Expected | Why |
 |---|---|---|---|
-| T1 | `AAA,,BBB` | `AAA,,\n\nBBB` | 2 |
-| T2 | `AAA, ,BBB` | `AAA,,\n\nBBB` | 2 |
-| T3 | `AAA,BBB` | `AAA, BBB` | 1 |
-| T4 | `SO, ,\nNEXT` | `SO,,\n\nNEXT` | 2 |
-| T5 | `[QUERY] AAA` | `[1] AAA` | 1 |
-| T6 | `AAA,\n,BBB` | `AAA,,\n\nBBB` | 2 |
-| T7 | `AAA,\n, BBB` | `AAA,,\n\nBBB` | 2 |
+| C1 | `BZHUGS SO, ,NEXT` | paragraph break after `SO,,` | stage 4 |
+| C2 | `BZHIN, ,GANG` | verse line break, **not** a paragraph | stage 5 |
+| C3 | `PHYAG 'TSAL LO, ,` | paragraph break | stage 4, capital O |
+| C4 | `AAA;BBB` | `AAA,BBB` | stage 6 |
+| C5 | `@001A` | `[f. 1a]` | stages 7–10 |
+| C6 | `o, ,` (lowercase) | **not** a paragraph break | §3.2 |
 
-T5 also asserts `notes == ["QUERY"]` — no folio prefix, because no `@`
-had been seen.
-
-**Tests that pin defects rather than intent** — port them, but see §7:
-
-| # | Input | Current output | Should be |
-|---|---|---|---|
-| D2 | `AAA [OOPS never closed` | `AAA[1]`, note `OOPS never closed` | flagged, not silently consumed |
-| D3 | `AAA [outer [inner] tail] BBB` | `AAA[1] tail] BBB`, note `outer [inner` | flagged or nested-aware |
-
-## 7. Known defects in the reference implementation
+## 7. Defects found in the reference implementation
 
 All three were found by running it on 2026-08-25. **Do not reproduce them
 in a new implementation.**
@@ -226,3 +196,50 @@ input centres, not for a programmer to assume.
   not this formatter.
 - **Any transliteration.** ACIP in, ACIP out, byte-for-byte apart from the
   transformations above.
+
+---
+
+## 8. Where the shipped implementation diverges from the standard
+
+Found 2026-08-25 by checking the recording rather than the older note.
+None of these are fixed yet; they are listed so nobody ports the current
+behaviour believing it is the standard.
+
+**S1 — `, ,` is treated as a paragraph break. It is a verse line.**
+The single most consequential divergence. `formatForTranslation` makes a
+paragraph at any `,` + whitespace + `,`, with no test for a preceding
+capital `O`. On the demonstrated text that is 679 verse-line divisions
+converted into paragraph breaks — the opening homage verses become
+prose. Stage 4 of the workflow (which the older note called "editorial
+judgement, deliberately human") is in fact ~90% automated by one
+find-and-replace, and we automate the wrong half of it.
+
+**S2 — the older standards note has the two counts swapped.** It reads
+"every `,,` ... becomes a paragraph (679 replacements; sentence-final
+patterns like `O, ,` handled the same way, 1,737 instances)." On screen,
+**1,737 is the `O, ,` paragraph count** and **679 is the `, ,` verse
+count**, and they are not handled the same way at all. The
+implementation follows the note, so the note is where the defect entered.
+
+**S3 — folio references keep their case and their leading zeros.**
+We emit `[f. 001A]`; the standard is `[f. 1a]`. Stages 8–10 exist
+specifically to lowercase the recto letter and strip `00`.
+
+**S4 — `;` → `,` is not implemented at all.** The bum shad normalisation
+(stage 6) has no counterpart in the code.
+
+**S5 — "brackets become footnotes" is unsourced.** The older note
+describes a step where `[...]` corrections are marked `[f.` and moved
+into Word footnotes, citing 383 instances, and the C++ implements a
+version of it. **The recording contains no such step.** The word
+"footnote" is never spoken, the only use of the Insert menu is for page
+numbers, and 383 is never said aloud. The bracket handling may be
+correct and come from elsewhere — but it does not come from here, and
+the note should not have said it did. Until a source is produced, treat
+`notes[]` as a house extension, not as GMR's demonstrated standard.
+
+*Caveat on all of the above:* the transcript is machine-generated and has
+known defects; the frame readings are direct but sampled. Where this
+document says **[verified]** it means a Find & Replace pane was read on
+screen with its count. Where it says [inferred] it means the transcript
+described it and no frame was checked.
