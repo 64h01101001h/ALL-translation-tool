@@ -2297,7 +2297,7 @@ SQA doc explicitly scopes out.
       of that is recorded. Needed before institutional deployment,
       and cheap to write now.
 
-- [ ] **No crash reporting or diagnostics channel.** When the app
+- [x] **No crash reporting or diagnostics channel.** DONE 2026-08-24, and deliberately NOT a crash reporter. docs/PRIVACY.md states this app has no telemetry and that was verified before it was written; a reporter would have quietly made it false. Help > Save Diagnostic Report writes a file the user hands over themselves - nothing is transmitted. It carries version, commit, OS, architecture and suite count, and reduces file paths to their EXTENSION and count: the type is what diagnoses a parser bug, while a text's TITLE can be the sensitive part on this project and a home directory carries the user's name. The redaction is pinned and mutation-verified, because that is the part that rots when someone later adds 'recently opened' for convenience. STILL OPEN: no crash HANDLER - there is no qInstallMessageHandler, no std::set_terminate and no signal handler anywhere, so an abort still leaves nothing behind. That is a separate piece of work. (was: When the app
       fails at an input centre in Kathmandu, nobody here learns of it.
       No crash handler, no log bundle the user can send, no version
       string in a report. Consider a "Save diagnostic report" action

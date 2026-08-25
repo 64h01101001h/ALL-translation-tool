@@ -15170,6 +15170,51 @@ private:
 // the fetch cap. Returns the phrase only; the caller supplies the
 // layer's name, which is a class member. Pure so the drill can reach
 // it without a pane.
+// P1 2026-08-24: the diagnostics channel, and the reason it is shaped
+// like this rather than like a crash reporter.
+//
+// docs/PRIVACY.md states that this application has no telemetry, and
+// that was verified before it was written - no analytics SDK, no crash
+// reporter, no launch beacon anywhere in app/, core/ or ocr/. Being
+// able to say that plainly is worth keeping, so the diagnostics
+// channel is deliberately NOT a reporter: nothing is transmitted, the
+// user asks for a file, and the user decides whether to send it.
+//
+// What it carries is what answers "which build, on what machine" -
+// version, commit, OS, architecture, suite count. What it must NEVER
+// carry is anything the translator authored. File paths are reduced to
+// their EXTENSION and size: the type is what diagnoses a parser bug,
+// while the title of a text can itself be the sensitive part on this
+// project, and the home directory carries the user's name.
+static QString buildDiagnosticReport(const QString& version,
+                                     const QString& commit,
+                                     const QString& osVersion,
+                                     const QString& arch,
+                                     int suites,
+                                     const QStringList& recentPaths) {
+    QString h;
+    h += "Diamond Cutter Translation Tool - diagnostic report\n";
+    h += "==================================================\n\n";
+    h += "This file contains no text you have written and no file\n";
+    h += "names. It is saved for you to send; nothing is transmitted.\n\n";
+    h += "version        " + version + "\n";
+    h += "git commit     " + commit + "\n";
+    h += "macOS          " + osVersion + "\n";
+    h += "architecture   " + arch + "\n";
+    h += "test suites    " + QString::number(suites) + "\n";
+    h += "\nrecent activity (types only, names redacted)\n";
+    QMap<QString, int> byExt;
+    for (const QString& p : recentPaths) {
+        const QString ext = QFileInfo(p).suffix().toLower();
+        byExt[ext.isEmpty() ? QString("(none)") : "." + ext] += 1;
+    }
+    for (auto it = byExt.constBegin(); it != byExt.constEnd(); ++it)
+        h += "  " + it.key() + "   " + QString::number(it.value())
+             + " file(s)\n";
+    if (byExt.isEmpty()) h += "  (none recorded)\n";
+    return h;
+}
+
 static QString corpusCountLine(int rendered, int fetched, long total) {
     if (total < 0)
         return QString("showing %1 of %2 fetched; the total for this "
@@ -15489,6 +15534,34 @@ public:
               "Spotlight source row present (opt-in)");
         check(loadCitationWeb() > 100,
               "Citation web loads (edges from the batch build)");
+        // P1 2026-08-24: the diagnostics channel. docs/PRIVACY.md says
+        // this application has NO telemetry, and that claim was
+        // verified before it was written. A diagnostic report must not
+        // quietly become one. So the report is user-initiated, saved
+        // to a file the user hands over deliberately, and carries
+        // NOTHING they authored.
+        //
+        // The pin is the redaction, because that is the part that can
+        // rot: a later edit adding "recently opened" for convenience
+        // would leak the titles of texts a translator is working on,
+        // and on this project a text's title can be the sensitive
+        // part.
+        {
+            const QString rep = buildDiagnosticReport(
+                "1.0.0-rc.1", "abc1234", "macOS 26.1", "arm64", 85,
+                {"/Users/adamderickandrade/Secret Retreat Notes.txt",
+                 "/Users/adamderickandrade/library/KL0001.act"});
+            check(rep.contains("1.0.0-rc.1") && rep.contains("abc1234"),
+                  "diagnostic report carries the version and commit - "
+                  "the whole point is answering 'which build'");
+            check(!rep.contains("Secret Retreat Notes") &&
+                      !rep.contains("adamderickandrade"),
+                  "diagnostic report leaks NO file title and NO user "
+                  "name - a text's title can be the sensitive part");
+            check(rep.contains(".txt") && rep.contains(".act"),
+                  "it keeps the file TYPES, which is the part that "
+                  "actually helps diagnose a parser bug");
+        }
         // SQA DATA-1 (2026-08-24). Three different numbers were being
         // collapsed into one: 20 rows RENDERED, 60 hits FETCHED, and
         // the real corpus total. The pane printed "60 hit(s)" - a
@@ -35769,6 +35842,66 @@ int main(int argc, char** argv) {
             helpWin->show();
             helpWin->raise();
             helpWin->activateWindow();
+        });
+        // P1 2026-08-24: the diagnostics channel. NOT a crash
+        // reporter - docs/PRIVACY.md says this app has no telemetry
+        // and that claim is worth keeping true. Nothing is
+        // transmitted: the user asks for a file and decides whether to
+        // send it. Uses askSaveFileName so the harness stub applies
+        // (constitution R3 - an unguarded native panel hangs the
+        // headless modes).
+        QAction* diag = helpMenu->addAction(
+            "Save Diagnostic Report\u2026");
+        QObject::connect(diag, &QAction::triggered, [&] {
+            QStringList recents;
+            {
+                QSettings st;
+                for (const QString& r :
+                     st.value("scan/recent").toStringList())
+                    recents << r;
+            }
+            const QString rep = buildDiagnosticReport(
+                QString(ALL_APP_VERSION),
+#ifdef ALL_GIT_COMMIT
+                QString(ALL_GIT_COMMIT),
+#else
+                QString("unknown"),
+#endif
+                QSysInfo::prettyProductName(),
+                QSysInfo::currentCpuArchitecture(),
+                QString(ALL_TEST_BATTERIES).toInt(), recents);
+            const QString out = safeGetSaveFileName(
+                &win, "Save Diagnostic Report",
+                QDir::homePath() + "/Desktop/diagnostic-report.txt",
+                "Text (*.txt)");
+            if (out.isEmpty()) return;
+            QFile f(out);
+            if (!f.open(QIODevice::WriteOnly | QIODevice::Text)) {
+                warnWriteFail(&win, f, "The diagnostic report");
+                return;
+            }
+            QTextStream ts(&f);
+            ts << rep;
+            ts.flush();
+            f.close();
+            // house rule 4: only say it saved if the bytes landed
+            if (f.error() != QFile::NoError) {
+                warnWriteFail(&win, f, "The diagnostic report");
+                return;
+            }
+            // Constitution R3. The sweep stubs the save panel to
+            // empty, so this line is unreachable under the harness
+            // TODAY - but relying on that is exactly the assumption
+            // FAIL-4 records as wrong (the stub SKIPS the write rather
+            // than redirecting it, and a mode that redirected instead
+            // would reach this modal and hang). Guard it explicitly
+            // rather than depend on a stub's current behaviour.
+            if (!g_harnessRun)
+                QMessageBox::information(
+                    &win, "Diagnostic report",
+                    "Saved to:\n" + out +
+                        "\n\nIt contains no text you have written and "
+                        "no file names. Nothing was sent anywhere.");
         });
         QAction* wf = helpMenu->addAction("Suggested Workflows…");
         QObject::connect(wf, &QAction::triggered, [&] {
