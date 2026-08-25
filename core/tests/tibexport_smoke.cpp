@@ -310,6 +310,25 @@ int main() {
             CHECK(!orphan, "prep: no orphan ,, left in running text");
         }
 
+        {
+            // Recto ornamentation. Verified at 21:05: find "A *,^p,",
+            // replace "a] " - 192 matches. The A-side of a folio carries
+            // a traditional ornament coded "*, ,", and it is deleted.
+            // Measured on the real text: 186 of 187 recto markers are
+            // followed by "*, "; NO verso marker is. Asterisk only and
+            // recto only, exactly as his pattern has it - a "#" is left
+            // alone because he never touches one.
+            auto r = allcore::formatForTranslation("@001A *, ,TSAD MA");
+            CHECK(r.text == "[f. 1a] TSAD MA",
+                  "prep: recto ornamentation is stripped with the folio");
+            auto v = allcore::formatForTranslation("@001B #, ,RGYA GAR");
+            CHECK(v.text.find("#") != std::string::npos,
+                  "prep: a # is not ornamentation and is left as written");
+            auto rh = allcore::formatForTranslation("@001A #, ,X");
+            CHECK(rh.text.find("#") != std::string::npos,
+                  "prep: even on the recto, only an asterisk is stripped");
+        }
+
         // S3: the stipulated folio form is [f. 1a] - leading zeros
         // stripped (he replaces "[f. 00" with "[f. ") and the side
         // letter lowercased ("A]" -> "a]", ignore-case OFF).

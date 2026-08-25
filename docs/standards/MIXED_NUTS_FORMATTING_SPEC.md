@@ -55,7 +55,7 @@ already consumed the paragraph cases.
 | 5 | **Verse lines** | `, ,` → `,` + `^p` + `,` | **679** | **[verified]** |
 | 6 | Bum shad → line break | `;` → `^p` + `,` | **429** | **[verified]** |
 | 7 | Folio marker opens | `@` → `[f. ` | ~400 | **[verified]** |
-| 8 | Recto close + strip ornament | `A *,^p,` → `a] ` | ~200 | [inferred] |
+| 8 | Recto close + strip ornament | `A *,^p,` → `a] ` | **192** | **[verified]** |
 | 9 | Remaining recto letter | `A]` → `a]`, case-sensitive | ~200 | [inferred] |
 | 10 | Strip leading zeros | `[f. 00` → `[f. ` | 16–18 | [inferred] |
 | 11 | Verso (`B`) folios | — | — | **manual, by his own statement** |
@@ -301,9 +301,12 @@ BDUD RTZI'I 'OD CAN COD PAN GYIS MDZES RAL PA'I KHUR 'CHANG BA BZHIN,
    apply it to both sides. If the intent was that verso stays raw, this
    is one line to reverse.
 
-2. **The recto ornamentation is retained.** He strips `*,` after a recto
-   folio; we still emit it (visible as `[f. 1a] *,` above). Not yet
-   implemented because the exact find-string was not read off a pane.
+2. ~~**The recto ornamentation is retained.**~~ **Implemented
+   2026-08-25.** Find string read at 21:05: `A *,^p,` → `a] `, 192
+   matches. Measured here: 186 of 187 recto markers carry `*, ` and no
+   verso marker does, so the rule is asterisk-only and recto-only, as
+   his pattern has it. A `#` in the same position is left alone — he
+   never touches one.
 
 **Still open — S5, and it needs a decision, not a patch.** The code turns
 `[...]` into numbered notes. That behaviour is not in this recording, and
@@ -391,3 +394,32 @@ reported with its byte offset and folio, the text is left exactly as
 written, and no note is fabricated from it. Previously an unterminated
 bracket ran to end-of-input and turned the remainder of the document
 into a single note, silently.
+
+
+## 12. Where it stands
+
+Everything demonstrated in the recording is now implemented and pinned,
+except the parts that are house style (justification, Word page numbers,
+Palatino) or explicitly the editor's judgement (the English title,
+splitting over-long paragraphs).
+
+Output on the real opening:
+
+```
+[f. 1a] TSAD MA SDE BDUN GYI RGYAN YID KYI MUN SEL ZHES BYA BA BZHUGS SO,,
+
+[f. 1b] #,
+,RGYA GAR SKAD DU, ... PHYAG 'TSAL LO,,
+
+BDUD RTZI'I 'OD CAN COD PAN GYIS MDZES RAL PA'I KHUR 'CHANG BA BZHIN,
+,GANG SKU RIN CHEN RI BO'I DPAL,
+,'DAR BAR SEMS
+```
+
+Corpus sweep after every change: **1,198 files, 156,045,513 bytes**,
+3,879 notes, 3 files flagged, 0 orphan `,,`, 0 stray `;`, no crashes.
+
+**The one open item is S5** and it is not a coding question. The
+bracket-to-notes behaviour is not in this recording, and the 383 that
+appeared to support it is the folio count. It needs a source, or a
+decision to keep it as a labelled house extension.

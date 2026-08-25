@@ -11853,6 +11853,20 @@ public:
                 outText += "[" + std::to_string(i + 1) + "] " +
                            prep.notes[i] + "\n";
         }
+        // A flagged parse travels WITH the file. A flag the translator
+        // never sees is the same as no flag at all (rule 3).
+        if (!prep.flags.empty()) {
+            outText += "\n\n---- COULD NOT BE PARSED - READ THIS ----\n";
+            outText += "These passages were left exactly as the input "
+                       "centre typed them. Nothing was guessed at, and "
+                       "no note was made from them. Check them against "
+                       "the folio before translating:\n";
+            for (const auto& f : prep.flags) outText += "  * " + f + "\n";
+        }
+        size_t verseLines = 0;
+        for (size_t k = prep.text.find(",\n,"); k != std::string::npos;
+             k = prep.text.find(",\n,", k + 2))
+            ++verseLines;
         const QString fn = safeGetSaveFileName(
             this, "Save translation-prep text", "translation_prep.txt",
             "Text files (*.txt)");
@@ -11864,13 +11878,21 @@ public:
                            "prep ran, but the file could not be "
                            "written \u2014 see the message above. "
                            "Nothing on disk has changed.");
-        return QString("<b>Translation prep (GMR workflow)</b>: %1 "
-                       "paragraphs at double shads, %2 bracket note(s) "
-                       "folio-tagged. Verse lineation + house style "
-                       "follow the Mixed Nuts style guide (pending "
-                       "upload).")
-            .arg(prep.paragraphs)
-            .arg(prep.notes.size());
+        QString msg = QString("<b>Translation prep (GMR workflow)</b>: "
+                              "%1 paragraphs (a final O before a double "
+                              "shad), %2 verse line(s), %3 bracket "
+                              "note(s) folio-tagged. House style stays "
+                              "with the editor.")
+                          .arg(prep.paragraphs)
+                          .arg(verseLines)
+                          .arg(prep.notes.size());
+        if (!prep.flags.empty())
+            msg += QString("<br><b style='color:#935800'>%1 passage(s) "
+                           "could not be parsed</b> and were left as "
+                           "written \u2014 they are listed at the end of "
+                           "the saved file. Nothing was guessed at.")
+                       .arg(prep.flags.size());
+        return msg;
     }
 
     QString exportPrintTibetan() {

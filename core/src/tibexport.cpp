@@ -273,6 +273,35 @@ TranslationPrep formatForTranslation(const std::string& acip_document) {
             if (!out.empty() && out.back() != '\n') out += ' ';
             out += "[f. " + ref + "] ";
             i = j;
+            // Recto ornamentation. The A-side of a folio traditionally
+            // opens with an ornament, coded "*, ," - his find string is
+            // "A *,^p," replaced by "a] ", 192 matches, so the ornament
+            // is deleted along with its shads. Measured here: 186 of 187
+            // recto markers carry it and no verso marker does. Asterisk
+            // only, recto only - he never touches the "#" that appears
+            // in the same position, so neither do we.
+            if (!ref.empty() && ref.back() == 'a') {
+                size_t k = i;
+                while (k < s.size() && (s[k] == ' ' || s[k] == '\t' ||
+                                        s[k] == '\n' || s[k] == '\r'))
+                    ++k;
+                if (k < s.size() && s[k] == '*') {
+                    size_t m = k + 1, commas = 0, last = k;
+                    while (m < s.size()) {
+                        if (s[m] == ',') { ++commas; last = m; ++m; continue; }
+                        if (s[m] == ' ' || s[m] == '\t' ||
+                            s[m] == '\n' || s[m] == '\r') {
+                            size_t q = m;
+                            while (q < s.size() && (s[q] == ' ' || s[q] == '\t' ||
+                                                    s[q] == '\n' || s[q] == '\r'))
+                                ++q;
+                            if (q < s.size() && s[q] == ',') { m = q; continue; }
+                        }
+                        break;
+                    }
+                    if (commas == 2) i = last + 1;   // ornament consumed
+                }
+            }
             continue;
         }
         if (c == '[') {
