@@ -423,3 +423,52 @@ Corpus sweep after every change: **1,198 files, 156,045,513 bytes**,
 bracket-to-notes behaviour is not in this recording, and the 383 that
 appeared to support it is the folio count. It needs a source, or a
 decision to keep it as a labelled house extension.
+
+
+## 13. S5 resolved as far as evidence can take it — 2026-08-25
+
+Three measurements, and they point one way.
+
+**1. The demonstrated text has no brackets at all.** *Destroying the
+Darkness* (our edition, 559 KB) contains **zero** `[...]`. He never
+demonstrates bracket handling because there was nothing to demonstrate.
+That is the whole explanation for the silence in the recording, and it
+means the absence is *not* evidence that he opposes the behaviour.
+
+**2. The 383 was never a bracket count.** Read off the pane at 22:58
+with `[f` in the find box: 383 is the number of **folio references**.
+The older note took it from that operation.
+
+**3. What brackets actually contain, measured over 400 real files:**
+
+| content | count | meaning |
+|---|---|---|
+| `[?]` | 972 | input operator: reading uncertain |
+| `[DD]` `[DD1]` `[DD2]` | 39 | damaged / doubtful block |
+| `[!]` | 14 | operator's note |
+| `[D]` `[N]` | 7 | ditto |
+| longer strings | ~60 | actual remarks |
+
+So brackets are **input-operator apparatus**, which is a real thing a
+translator wants flagged. But **~88% of them are a bare `?`**, and
+turning each into a numbered endnote produces a thousand notes reading
+`folio 12a: ?` — an apparatus that says nothing, a thousand times.
+
+### Recommendation
+
+Keep the marks, drop the endnote. A `[?]` means "the operator was
+unsure *here*" and that meaning is positional — moving it to the back
+of the document is what destroys it. Leave short operator marks inline
+where they sit, and reserve the numbered-note treatment for brackets
+carrying actual prose (~5% of them).
+
+This is a recommendation, not a change. It alters what a translator
+sees, and that is Adam's call. Recorded as backlog #50.
+
+### One defect found while measuring
+
+Running the prep over an **already-prepped** file turns its `[f. 1a]`
+folio references into notes — the formatter cannot tell its own output
+from raw input. Only 1 file in 400 of the library is pre-formatted, but
+a translator re-running the action on a saved file would silently lose
+every folio reference into the notes list. Also #50.
