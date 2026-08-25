@@ -32,6 +32,75 @@ static void particleScriptParity(int& failures) {
           "wylie agreeing pair accepted");
 }
 
+// LATTICE-EXTENT-UNIQUE — no two spans of one document share an extent.
+//
+// This is a load-bearing precondition, not a nicety. terminology.cpp
+// suppresses a glossed span that is contained in a LONGER glossed span
+// with a strict `(t.end - t.beg) > (s.end - s.beg)`. Containment plus
+// equal length forces t.beg == s.beg and t.end == s.end, so the strict
+// `>` differs from `>=` ONLY on two spans with the identical extent. As
+// long as this invariant holds, that comparison cannot be observed —
+// which is why the TERMINOLOGY-NESTING mutant is equivalent rather than
+// merely unpinned (tools/mutation_sweep.json records the proof).
+//
+// Both builders push at most one span per (i, len): the SQL path
+// `continue`s after an exact hit, and the indexed path keys `best` by
+// len and takes exact-else-clitic. If either ever emits both, the
+// terminology suppressor starts eating maximal terms out of the
+// oversight report silently. This test is the tripwire for that day.
+static void extentUniqueness(const allcore::Spine& spine,
+                             const allcore::HeadwordIndex& index,
+                             int& failures) {
+    // real course text, not toy phrases: the exact/clitic collision this
+    // guards needs syllable runs that match both as a word and as
+    // word+clitic, and those turn up in running prose
+    std::vector<std::string> docs;
+    for (const auto& course : spine.corpusCourses()) {
+        for (const auto& seg : spine.corpusWindow(course, 0, 60))
+            if (!seg.acip.empty()) docs.push_back(seg.acip);
+        if (docs.size() > 400) break;
+    }
+    docs.push_back("'PHAGS PA'I BDEN PA BZHI LA");
+    docs.push_back("'PHAGS PAS MED PAR");
+    docs.push_back("SANGS RGYAS KYI CHOS BSTAN PA");
+
+    long long spansChecked = 0;
+    int dupSql = 0, dupIndexed = 0;
+    std::string firstDup;
+    auto scan = [&](const allcore::OverlayDoc& d, int& dups) {
+        std::vector<std::pair<int, int>> seen;
+        for (const auto& s : d.spans) seen.push_back({s.beg, s.end});
+        spansChecked += (long long)seen.size();
+        std::sort(seen.begin(), seen.end());
+        for (size_t k = 1; k < seen.size(); ++k) {
+            if (seen[k] != seen[k - 1]) continue;
+            ++dups;
+            if (firstDup.empty())
+                firstDup = "[" + std::to_string(seen[k].first) + "," +
+                           std::to_string(seen[k].second) + ")";
+        }
+    };
+    for (const auto& text : docs) {
+        scan(allcore::buildOverlay(spine, text), dupSql);
+        scan(allcore::buildOverlay(spine, index, text), dupIndexed);
+    }
+
+    std::printf("  extent sweep: %zu documents, %lld spans\n", docs.size(),
+                spansChecked);
+    // guard the guard: a sweep that looked at nothing must not read green
+    CHECK(docs.size() >= 50 && spansChecked > 2000,
+          "LATTICE-EXTENT-UNIQUE sweep actually covered real text");
+    CHECK(dupSql == 0, ("LATTICE-EXTENT-UNIQUE: SQL lattice emits no two spans "
+                        "with the same extent" +
+                        (dupSql ? " (first " + firstDup + ")" : std::string()))
+                           .c_str());
+    CHECK(dupIndexed == 0,
+          ("LATTICE-EXTENT-UNIQUE: indexed lattice emits no two spans with the "
+           "same extent" +
+           (dupIndexed ? " (first " + firstDup + ")" : std::string()))
+              .c_str());
+}
+
 int main(int argc, char** argv) {
     if (argc < 2) {
         std::fprintf(stderr, "usage: lattice_smoke <spine.db>\n");
@@ -173,6 +242,8 @@ int main(int argc, char** argv) {
     auto docC = allcore::buildOverlay(spine, index, "'PHAGS PAS MED PAR");
     CHECK(sig(doc5) == sig(docC),
           "indexed lattice == SQL lattice on fused -s / -r forms");
+
+    extentUniqueness(spine, index, failures);
 
     particleScriptParity(failures);
 

@@ -48,7 +48,7 @@
     },
     {
       "id": "TERMINOLOGY-NESTING",
-      "note": "TEST-1 survivor, STILL SURVIVING. Attempt 2026-08-24 failed and the reason is worth keeping: the obvious theory (homonyms - 'shes pa' has three glossed entries) is WRONG, because the segmenter emits one span per extent via hits.front() (lattice.cpp:154), so same-extent homonym collisions never arise. The real collision is exact-vs-clitic: lattice.cpp:154 and :165 both push {i, i+len} with DIFFERENT entries when a syllable run matches both as a word and as word+clitic. terminology.cpp's own comment names the case ('a clitic-matched sangs rgyas kyi must not swallow sangs rgyas'). Killing this needs source text that triggers that path - data work, not a one-liner.",
+      "note": "EQUIVALENT MUTANT - resolved 2026-08-25, and it is not merely unpinned. terminology.cpp suppresses a glossed span contained in a LONGER glossed span with a strict `>`. Containment plus equal length forces identical extents, so `>` and `>=` differ ONLY on two spans sharing one extent - and lattice_smoke's LATTICE-EXTENT-UNIQUE sweep now pins that no such pair is ever emitted (438 real course documents, 42,469 spans, with a control asserting the sweep covered real text). So this mutation is unobservable BY INVARIANT rather than by oversight, and the entry stays 'survived' honestly. If the invariant ever breaks, lattice_smoke goes red first and this becomes a real finding again. Found by the nightly repair task, not by hand - my own attempt chased homonyms and was wrong.",
       "file": "core/src/terminology.cpp",
       "old": "                (t.end - t.beg) > (s.end - s.beg)) {",
       "new": "                (t.end - t.beg) >= (s.end - s.beg)) {",
