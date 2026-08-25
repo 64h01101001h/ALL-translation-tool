@@ -253,9 +253,25 @@ TranslationPrep formatForTranslation(const std::string& acip_document) {
             size_t j = i + 1;
             while (j < s.size() && std::isalnum((unsigned char)s[j])) ++j;
             folio = s.substr(i + 1, j - i - 1);
+            // GMR's stipulated form is [f. 1a], not [f. 001A]: he
+            // replaces "[f. 00" with "[f. " to strip the input centre's
+            // zero padding, and "A]" with "a]" (ignore-case OFF) to
+            // lowercase the side letter. He leaves the B side to be done
+            // by hand only because Word made it awkward - "in this
+            // simplified system I've done" - so we normalise both sides.
+            std::string ref = folio;
+            size_t z = 0;
+            while (z + 1 < ref.size() && ref[z] == '0') ++z;
+            ref = ref.substr(z);
+            if (!ref.empty()) {
+                char& side = ref.back();
+                if (side >= 'A' && side <= 'Z')
+                    side = (char)(side - 'A' + 'a');
+            }
+            folio = ref;   // notes tag with the same normalised form
             trimEndSpace();
             if (!out.empty() && out.back() != '\n') out += ' ';
-            out += "[f. " + folio + "] ";
+            out += "[f. " + ref + "] ";
             i = j;
             continue;
         }
@@ -284,13 +300,37 @@ TranslationPrep formatForTranslation(const std::string& acip_document) {
                                     s[j] == '\n' || s[j] == '\r'))
                 ++j;
             if (j < s.size() && s[j] == ',') {
-                out += ",,\n\n";
-                ++prep.paragraphs;
+                // A shad PAIR - but a pair is not automatically a
+                // paragraph. GMR's rule, read off the recording: a
+                // paragraph ends at "O, ," - a syllable closing in a
+                // CAPITAL O (SO, LO, TO), 1,737 of them on the
+                // demonstrated text. Every OTHER pair (679) is a line of
+                // quoted verse and takes a line break instead, keeping
+                // its shad at both ends. Treating all pairs as
+                // paragraphs turns the opening homage verses into prose.
+                // Capital only: he searches with ignore-case OFF and
+                // warns against confusing the letter with a zero.
+                if (!out.empty() && out.back() == 'O') {
+                    out += ",,\n\n";
+                    ++prep.paragraphs;
+                } else {
+                    out += ",\n,";
+                }
                 i = j + 1;
             } else {
                 out += ", ";
                 ++i;
             }
+            continue;
+        }
+        if (c == ';') {
+            // bum shad - the final shad of a woodblock page. Verified on
+            // screen at 13:18: find ";", replace "^p," - a line break
+            // and a leading shad, 429 matches. The narration says "a
+            // comma"; the pane says otherwise and the pane wins.
+            trimEndSpace();
+            out += "\n,";
+            ++i;
             continue;
         }
         if (c == '\n' || c == '\r') {

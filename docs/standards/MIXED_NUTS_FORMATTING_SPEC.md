@@ -53,7 +53,7 @@ already consumed the paragraph cases.
 | 3 | *(house style)* full justification | — | — | [verified] |
 | 4 | **Paragraph ends** | `O, ,` → `O,,` + `^p^p` | **1,737** | **[verified]** |
 | 5 | **Verse lines** | `, ,` → `,` + `^p` + `,` | **679** | **[verified]** |
-| 6 | Bum shad normalisation | `;` → `,` | 429 | [inferred] |
+| 6 | Bum shad → line break | `;` → `^p` + `,` | **429** | **[verified]** |
 | 7 | Folio marker opens | `@` → `[f. ` | ~400 | **[verified]** |
 | 8 | Recto close + strip ornament | `A *,^p,` → `a] ` | ~200 | [inferred] |
 | 9 | Remaining recto letter | `A]` → `a]`, case-sensitive | ~200 | [inferred] |
@@ -86,6 +86,21 @@ breaks between them.
 He is explicit that this is approximate: *"we won't catch all the lines,
 but we'll catch like 90%."* An implementation should say so too rather
 than presenting stage 5 as exhaustive.
+
+### 3.1b The bum shad is a line break, not a comma
+
+Verified at 13:18: find `;`, replace **`^p,`** — a hard return followed by
+a shad — **MATCHES: Result 1 of 429**.
+
+The narration says "replace all those with a comma", and an earlier draft
+of this spec believed it. The pane says otherwise: the semicolon is
+consumed and becomes a *line break plus a leading shad*, which is the
+same shape as the verse rule. The surrounding lines on screen open with
+`,RAB`, `,BSLA`, `,PHYA`, `,THU`, `,BSD` — each line beginning with its
+shad, exactly as §3.1 describes for verse.
+
+This is the clearest case in the whole recording where the spoken word
+and the screen disagree. **Where they disagree, the screen wins.**
 
 ### 3.2 Case sensitivity is required
 
@@ -141,7 +156,7 @@ of these fail against the shipping C++ — that is the point.
 | C1 | `BZHUGS SO, ,NEXT` | paragraph break after `SO,,` | stage 4 |
 | C2 | `BZHIN, ,GANG` | verse line break, **not** a paragraph | stage 5 |
 | C3 | `PHYAG 'TSAL LO, ,` | paragraph break | stage 4, capital O |
-| C4 | `AAA;BBB` | `AAA,BBB` | stage 6 |
+| C4 | `AAA;BBB` | `AAA` + line break + `,BBB` | stage 6 |
 | C5 | `@001A` | `[f. 1a]` | stages 7–10 |
 | C6 | `o, ,` (lowercase) | **not** a paragraph break | §3.2 |
 
@@ -205,7 +220,7 @@ Found 2026-08-25 by checking the recording rather than the older note.
 None of these are fixed yet; they are listed so nobody ports the current
 behaviour believing it is the standard.
 
-**S1 — `, ,` is treated as a paragraph break. It is a verse line.**
+**S1 — FIXED 2026-08-25.** *(`, ,` was treated as a paragraph break; it is a verse line.)*
 The single most consequential divergence. `formatForTranslation` makes a
 paragraph at any `,` + whitespace + `,`, with no test for a preceding
 capital `O`. On the demonstrated text that is 679 verse-line divisions
@@ -221,14 +236,20 @@ patterns like `O, ,` handled the same way, 1,737 instances)." On screen,
 count**, and they are not handled the same way at all. The
 implementation follows the note, so the note is where the defect entered.
 
-**S3 — folio references keep their case and their leading zeros.**
+**S3 — FIXED 2026-08-25.** *(folio references kept their case and zero padding.)*
 We emit `[f. 001A]`; the standard is `[f. 1a]`. Stages 8–10 exist
 specifically to lowercase the recto letter and strip `00`.
 
-**S4 — `;` → `,` is not implemented at all.** The bum shad normalisation
-(stage 6) has no counterpart in the code.
+**S4 — FIXED 2026-08-25.** *(the bum shad rule was not implemented at all.)* `;` should become
+a line break plus a shad (`^p,`), 429 times on the demonstrated text.
+The code does not touch `;`, so every bum shad stays inline.
 
-**S5 — "brackets become footnotes" is unsourced.** The older note
+**S5 — "brackets become footnotes" is unsourced, and its number came
+from somewhere else entirely.** **[verified 2026-08-25]** At 22:58 the
+find box holds `[f` and the pane reads **MATCHES: Result 4 of 383**.
+**383 is the count of FOLIO REFERENCES**, not of bracketed corrections.
+The older note took that figure from this operation and attached it to a
+footnote step that does not occur anywhere in the recording. The older note
 describes a step where `[...]` corrections are marked `[f.` and moved
 into Word footnotes, citing 383 instances, and the C++ implements a
 version of it. **The recording contains no such step.** The word
@@ -243,3 +264,49 @@ known defects; the frame readings are direct but sampled. Where this
 document says **[verified]** it means a Find & Replace pane was read on
 screen with its count. Where it says [inferred] it means the transcript
 described it and no frame was checked.
+
+
+---
+
+## 9. Status against the standard, 2026-08-25
+
+| | |
+|---|---|
+| S1 paragraph vs verse | **fixed**, mutation-verified |
+| S2 the note's swapped counts | **corrected in place**, note carries its banner |
+| S3 folio form `[f. 1a]` | **fixed** |
+| S4 bum shad `;` → `^p,` | **fixed** |
+| S5 brackets → footnotes | **open — needs Adam's ruling** |
+
+The formatter now reproduces the demonstrated output on the real opening
+of *Destroying the Darkness*:
+
+```
+[f. 1a] *,
+,TSAD MA SDE BDUN GYI RGYAN YID KYI MUN SEL ZHES BYA BA BZHUGS SO,,
+
+[f. 1b] #,
+,RGYA GAR SKAD DU, ... PHYAG 'TSAL LO,,
+
+BDUD RTZI'I 'OD CAN COD PAN GYIS MDZES RAL PA'I KHUR 'CHANG BA BZHIN,
+,GANG SKU RIN CHEN RI BO'I DPAL,
+,'DAR BAR SEMS
+```
+
+**Two deliberate departures, both flagged rather than hidden:**
+
+1. **Verso folios are normalised too.** He does the `B` side by hand,
+   but only because Word made it awkward — "in this simplified system
+   I've done". The stipulated *form* is lowercase and unpadded, so we
+   apply it to both sides. If the intent was that verso stays raw, this
+   is one line to reverse.
+
+2. **The recto ornamentation is retained.** He strips `*,` after a recto
+   folio; we still emit it (visible as `[f. 1a] *,` above). Not yet
+   implemented because the exact find-string was not read off a pane.
+
+**Still open — S5, and it needs a decision, not a patch.** The code turns
+`[...]` into numbered notes. That behaviour is not in this recording, and
+the 383 that appeared to support it turns out to be the folio count. It
+may well be right and sourced from elsewhere. Until somebody says where
+from, it should not be described as GMR's demonstrated standard.

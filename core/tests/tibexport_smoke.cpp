@@ -189,14 +189,14 @@ int main() {
         auto p = allcore::formatForTranslation(
             "@001A *, ,TSAD MA\nSDE BDUN, GYI RGYAN,\n,BZHUGS SO, ,\n"
             "@001B RGYA GAR [DD] SKAD DU,, DE NAS");
-        CHECK(contains(p.text, "[f. 001A]") && contains(p.text, "[f. 001B]"),
-              "prep: page markers become inline [f. NNN] references");
+        CHECK(contains(p.text, "[f. 1a]") && contains(p.text, "[f. 1b]"),
+              "prep: page markers become inline [f. Na] references");
         CHECK(contains(p.text, "TSAD MA SDE BDUN"),
               "prep: input line breaks flow into running text");
         CHECK(contains(p.text, ",,\n\n"),
               "prep: double shad breaks the paragraph");
         CHECK(p.notes.size() == 1 &&
-                  p.notes[0].find("folio 001B") != std::string::npos &&
+                  p.notes[0].find("folio 1b") != std::string::npos &&
                   p.notes[0].find("DD") != std::string::npos,
               "prep: bracketed correction becomes a folio-tagged note");
         CHECK(contains(p.text, "[1]"),
@@ -210,11 +210,56 @@ int main() {
         // passage boundary the translator would otherwise never see.
         // Exact equality: a contains() pin here would pass on the very
         // output this test exists to reject, which already contains ",,".
-        auto p = allcore::formatForTranslation("AAA,\n,BBB");
-        CHECK(p.text == "AAA,,\n\nBBB",
+        auto p = allcore::formatForTranslation("BZHUGS SO,\n,BBB");
+        CHECK(p.text == "BZHUGS SO,,\n\nBBB",
               "prep: double shad split by a line break still breaks the paragraph");
         CHECK(p.paragraphs == 2,
               "prep: a line-split double shad counts as a paragraph boundary");
+        // the same split WITHOUT a final O is a verse line, not a paragraph
+        auto v = allcore::formatForTranslation("BZHIN,\n,GANG");
+        CHECK(v.text == "BZHIN,\n,GANG",
+              "prep: a line-split pair without O is still a verse break");
+    }
+    {
+        // S1: GMR's rule, read off the recording. A paragraph ends at
+        // "O, ," - a syllable closing in capital O - and there were 1,737
+        // of those. The REMAINING ", ," (679) are lines of quoted verse
+        // and take a line break, not a paragraph break. Treating both as
+        // paragraphs turns the opening homage verses into prose.
+        auto para = allcore::formatForTranslation("BZHUGS SO, ,NEXT");
+        CHECK(para.text == "BZHUGS SO,,\n\nNEXT",
+              "prep: O + double shad ends a PARAGRAPH");
+
+        auto verse = allcore::formatForTranslation("BZHIN, ,GANG");
+        CHECK(verse.text == "BZHIN,\n,GANG",
+              "prep: a double shad without a final O is a VERSE line break");
+        CHECK(verse.paragraphs == 1,
+              "prep: a verse line break is not a new paragraph");
+
+        // capital O only - he warns against confusing it with a zero,
+        // and searches with ignore-case OFF.
+        auto lower = allcore::formatForTranslation("blo, ,GANG");
+        CHECK(lower.text == "blo,\n,GANG",
+              "prep: lowercase o does not end a paragraph");
+
+        // the bum shad: ";" becomes a line break PLUS a shad (429 on the
+        // demonstrated text). The narration says "a comma"; the pane
+        // says ^p, - the screen wins.
+        // S3: the stipulated folio form is [f. 1a] - leading zeros
+        // stripped (he replaces "[f. 00" with "[f. ") and the side
+        // letter lowercased ("A]" -> "a]", ignore-case OFF).
+        auto fol = allcore::formatForTranslation("@001A TEXT");
+        CHECK(fol.text.find("[f. 1a]") != std::string::npos,
+              "prep: folio renders as [f. 1a], zeros stripped and side lowercased");
+        CHECK(fol.text.find("001A") == std::string::npos,
+              "prep: the raw padded folio does not survive");
+        auto fol2 = allcore::formatForTranslation("@012B TEXT");
+        CHECK(fol2.text.find("[f. 12b]") != std::string::npos,
+              "prep: verso folio too - 12b, not 012B");
+
+        auto bum = allcore::formatForTranslation("AAA;BBB");
+        CHECK(bum.text == "AAA\n,BBB",
+              "prep: bum shad becomes a line break and a leading shad");
     }
 
     std::printf("%s (%d failures)\n",
