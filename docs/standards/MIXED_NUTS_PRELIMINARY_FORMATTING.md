@@ -5,6 +5,19 @@ working on "DESTROYING DARKNESS working gmr 9 26 20" — the Pramāṇa
 commentary "TSAD MA SDE BDUN GYI RGYAN YID KYI MUN SEL", 144k words. Frames
 archived from the session; the workflow below is what the recording shows.)*
 
+> **CORRECTION, 2026-08-25.** Step 3 below is **wrong**, and the C++ was
+> built from it. A paragraph ends at `O, ,` (1,737 on screen), and the
+> *remaining* `, ,` (679) are **lines of quoted verse**, which get a line
+> break — not a paragraph break. This note reports those two counts
+> swapped and says both are "handled the same way"; they are not. Step 5
+> (brackets → footnotes) is **not in the recording at all** — the word
+> "footnote" is never spoken and 383 is never said aloud.
+> The corrected, evidence-tagged version is
+> [MIXED_NUTS_FORMATTING_SPEC.md](MIXED_NUTS_FORMATTING_SPEC.md); read
+> that instead. This page is kept as written because the implementation
+> still follows it and because a note that quietly changes is worse than
+> one that carries its correction.
+
 ## The goal
 Turn a raw ACIP input-center file (page markers, hard line breaks, double
 shads, input-operator brackets) into a clean working document a translator
