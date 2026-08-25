@@ -409,10 +409,22 @@ TranslationPrep formatForTranslation(const std::string& acip_document) {
                     out += ",,\n\n,,";
                     ++prep.paragraphs;
                 } else {
-                    // 3, or 5 and up. The standard does not address these
-                    // (2 instances in 559 KB). Emit the shads as they
-                    // stand and invent no break - rule 3.
+                    // 3, or 5 and up. Measured across the whole 8,986
+                    // file corpus: 38 works end with a run of three, six
+                    // or eight shads - "SKABS SO,,,,,," - and every case
+                    // sampled is a colophon, often with the next work
+                    // beginning on the same line. His Find & Replace
+                    // cannot reach these: the run carries no space, so
+                    // ", ," never matches, which is why the recording is
+                    // silent about them rather than against them.
+                    // Leaving a work's terminal marker mid-line would
+                    // still be wrong in a reading document, so every
+                    // shad is preserved exactly as written and the break
+                    // goes after them. A REASONED EXTENSION, not
+                    // something demonstrated - see the spec.
                     for (size_t q = 0; q < commas; ++q) out += ',';
+                    out += "\n\n";
+                    ++prep.paragraphs;
                 }
                 i = lastComma + 1;
             } else {

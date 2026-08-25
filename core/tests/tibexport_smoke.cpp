@@ -344,6 +344,20 @@ int main() {
         auto four = allcore::formatForTranslation("ZIN TO,, ,,THAR LAM");
         CHECK(four.text == "ZIN TO,,\n\n,,THAR LAM",
               "prep: ,, ,, is one section break, both shads kept, no orphan");
+        // Long runs. 38 files in the 8,986-file corpus end a work with
+        // three, six or eight shads - "SKABS SO,,,,,," - and every
+        // sampled case is a colophon. His Find & Replace cannot reach
+        // them (no space, so ", ," never matches), which is why the
+        // recording is silent. Leaving a work's terminal marker mid-line
+        // is still wrong for a reading document: all the shads are kept
+        // and the break follows them.
+        auto six = allcore::formatForTranslation("SKABS SO,,,,,, DEB THER");
+        CHECK(six.text == "SKABS SO,,,,,,\n\nDEB THER",
+              "prep: a long terminal shad run keeps its shads and breaks after");
+        auto three = allcore::formatForTranslation("CHOG GO,,,MANGGA");
+        CHECK(three.text == "CHOG GO,,,\n\nMANGGA",
+              "prep: an odd run is preserved whole and then breaks");
+
         // ...and a four-run that does NOT follow an O is still a
         // section break: all three real cases are followed by "DA NI".
         auto four2 = allcore::formatForTranslation("NUS SAM,, ,,DA NI");

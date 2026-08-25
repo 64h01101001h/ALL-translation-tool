@@ -490,3 +490,49 @@ pass reads as an ordinary shad pair and tightens to `,\n,`. That is a
 transformation that *inserts* shads being re-read by a rule that
 *classifies* shads — inherent, not a bug, and it settles. Re-running the
 prep is safe; it is simply not a no-op.
+
+
+## 14. Full-corpus results, 2026-08-25
+
+Every ACIP file held: **8,986 files, 642,907,695 bytes.**
+
+| | |
+|---|---|
+| notes extracted | 11,911 |
+| files flagged (malformed brackets) | 53 |
+| orphan `,,` in running text | **0** |
+| stray `;` unconverted | **0** |
+| stable after one pass | 3,061 |
+| stable after two | 5,925 |
+| still drifting after four | **0** |
+
+### A measurement error worth recording
+
+Earlier sweeps used `find … | head -1200`, whose ordering is not
+guaranteed. Successive runs reported 149.8 MB, then 156.0 MB, then
+74.6 MB **for what was supposed to be the same 1,200 files** — and one
+of them showed 7 orphans where the previous had shown 0. That looked
+like a regression and was not: it was a different sample. Sweeps now
+run from a sorted list, and the numbers above cover the whole corpus
+rather than a sample of it.
+
+An unstable denominator makes every comparison meaningless, and the
+give-away was the byte total moving when the file count did not.
+
+### Long shad runs — a reasoned extension, not a demonstrated rule
+
+38 works in the corpus end with a run of three, six or eight shads —
+`SKABS SO,,,,,,` — and every sampled case is a colophon, often with the
+next work beginning on the same line (`SKABS SO,,,,,, [f. 46b] [f. 1a]
+DEB THER…`).
+
+His Find & Replace cannot reach these: the run carries no space, so
+`, ,` never matches. **The recording is therefore silent about them
+rather than against them** — the same situation as the brackets in §13.
+Leaving a work's terminal marker mid-line would still be wrong in a
+reading document, so every shad is preserved exactly as written and the
+break goes after them.
+
+This is flagged as an extension because it is reasoning from his
+principle, not a rule read off a pane. If it is wrong, it is wrong in
+one place and one line.
