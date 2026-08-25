@@ -245,6 +245,40 @@ int main() {
         // the bum shad: ";" becomes a line break PLUS a shad (429 on the
         // demonstrated text). The narration says "a comma"; the pane
         // says ^p, - the screen wins.
+        // Shad RUNS. Measured on the real text (S05501M, 559 KB):
+        // 2,168 pairs are spaced ", ,", 9 are tight ",," - and every
+        // tight one follows a final O, i.e. a paragraph end where the
+        // input operator omitted the space. 26 runs are FOUR commas
+        // ",, ,,", every one after a final O: a doubled nyis shad
+        // marking a major section break. A four-run must not be split
+        // into two pairs - that leaves an orphan ",," on a line of its
+        // own, which is the one shape the standard forbids.
+        auto four = allcore::formatForTranslation("ZIN TO,, ,,THAR LAM");
+        CHECK(four.text == "ZIN TO,,\n\n,,THAR LAM",
+              "prep: ,, ,, is one section break, both shads kept, no orphan");
+        // ...and a four-run that does NOT follow an O is still a
+        // section break: all three real cases are followed by "DA NI".
+        auto four2 = allcore::formatForTranslation("NUS SAM,, ,,DA NI");
+        CHECK(four2.text == "NUS SAM,,\n\n,,DA NI",
+              "prep: a doubled nyis shad breaks regardless of the final O");
+        auto tight = allcore::formatForTranslation("BZHUGS SO,, NEXT");
+        CHECK(tight.text == "BZHUGS SO,,\n\nNEXT",
+              "prep: a tight ,, after O is still a paragraph end");
+        // no ",," may ever sit in running text without its break
+        for (const char* src : {"ZIN TO,, ,,THAR", "BZHUGS SO,, NEXT",
+                                "BZHIN, ,GANG", "AAA, ,BBB, ,CCC"}) {
+            auto r = allcore::formatForTranslation(src);
+            size_t k = 0; bool orphan = false;
+            while ((k = r.text.find(",,", k)) != std::string::npos) {
+                if (r.text.compare(k, 4, ",,\n\n") != 0 &&
+                    !(k + 2 < r.text.size() && r.text[k + 2] == ',') &&
+                    !(k >= 1 && r.text[k - 1] == '\n'))
+                    orphan = true;
+                k += 2;
+            }
+            CHECK(!orphan, "prep: no orphan ,, left in running text");
+        }
+
         // S3: the stipulated folio form is [f. 1a] - leading zeros
         // stripped (he replaces "[f. 00" with "[f. ") and the side
         // letter lowercased ("A]" -> "a]", ignore-case OFF).

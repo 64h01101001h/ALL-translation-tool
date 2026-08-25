@@ -295,11 +295,29 @@ TranslationPrep formatForTranslation(const std::string& acip_document) {
             // deciding, or every such pair silently loses its paragraph
             // break while still emitting ",," into the text.
             trimEndSpace();
-            size_t j = i + 1;
-            while (j < s.size() && (s[j] == ' ' || s[j] == '\t' ||
-                                    s[j] == '\n' || s[j] == '\r'))
-                ++j;
-            if (j < s.size() && s[j] == ',') {
+            // Measure the WHOLE shad run before deciding anything. On
+            // the real text 2,168 pairs are spaced ", ," and 9 are tight
+            // ",," - and every tight one follows a final O, so a rule
+            // that requires the space (as his Find & Replace literally
+            // did) drops 9 real paragraph ends. 26 runs are FOUR commas,
+            // ",, ,,", every one after a final O: a doubled nyis shad
+            // marking a major section break. Splitting a four-run into
+            // two pairs strands a ",," alone on its own line, which is
+            // exactly the shape step 3 exists to remove.
+            size_t j = i, commas = 0, lastComma = i;
+            while (j < s.size()) {
+                if (s[j] == ',') { ++commas; lastComma = j; ++j; continue; }
+                if (s[j] == ' ' || s[j] == '\t' ||
+                    s[j] == '\n' || s[j] == '\r') {
+                    size_t k = j;
+                    while (k < s.size() && (s[k] == ' ' || s[k] == '\t' ||
+                                            s[k] == '\n' || s[k] == '\r'))
+                        ++k;
+                    if (k < s.size() && s[k] == ',') { j = k; continue; }
+                }
+                break;
+            }
+            if (commas >= 2) {
                 // A shad PAIR - but a pair is not automatically a
                 // paragraph. GMR's rule, read off the recording: a
                 // paragraph ends at "O, ," - a syllable closing in a
@@ -310,13 +328,27 @@ TranslationPrep formatForTranslation(const std::string& acip_document) {
                 // paragraphs turns the opening homage verses into prose.
                 // Capital only: he searches with ignore-case OFF and
                 // warns against confusing the letter with a zero.
-                if (!out.empty() && out.back() == 'O') {
-                    out += ",,\n\n";
+                const bool afterO = !out.empty() && out.back() == 'O';
+                if (commas == 2) {
+                    if (afterO) { out += ",,\n\n"; ++prep.paragraphs; }
+                    else        { out += ",\n,"; }
+                } else if (commas == 4) {
+                    // A doubled nyis shad is a MAJOR section break on its
+                    // own account, so unlike a plain pair it does not
+                    // consult the final O. Measured: 26 of 29 follow an O
+                    // anyway, and the 3 that do not (after MTSAR, ZIN LA,
+                    // NUS SAM) are each followed by "DA NI" - "now, next"
+                    // - opening a new section. Both doubled shads are
+                    // kept; only the break goes between them.
+                    out += ",,\n\n,,";
                     ++prep.paragraphs;
                 } else {
-                    out += ",\n,";
+                    // 3, or 5 and up. The standard does not address these
+                    // (2 instances in 559 KB). Emit the shads as they
+                    // stand and invent no break - rule 3.
+                    for (size_t q = 0; q < commas; ++q) out += ',';
                 }
-                i = j + 1;
+                i = lastComma + 1;
             } else {
                 out += ", ";
                 ++i;

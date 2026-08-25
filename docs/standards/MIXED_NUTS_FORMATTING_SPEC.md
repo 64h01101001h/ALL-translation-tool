@@ -310,3 +310,55 @@ BDUD RTZI'I 'OD CAN COD PAN GYIS MDZES RAL PA'I KHUR 'CHANG BA BZHIN,
 the 383 that appeared to support it turns out to be the folio count. It
 may well be right and sourced from elsewhere. Until somebody says where
 from, it should not be described as GMR's demonstrated standard.
+
+
+---
+
+## 10. Validation against a real text, 2026-08-25
+
+The recording gives ground-truth counts for one document, so the
+formatter was run over the closest copy we hold:
+`library/sungbum/.../S05501M_TSAD MA SDE BDUN GYI RGYAN YID KYI MUN
+SEL_...MKHAS GRUB RJE...TXT` — 559 KB, 571,055 bytes.
+
+**It is a different edition.** 120,884 words against his 144,160, and
+its opening folios are `@001A @001A` where his were `@001A @001B`. Exact
+count-matching is therefore not available, and no attempt was made to
+force one.
+
+| | ours | his | |
+|---|---|---|---|
+| verse breaks (`, ,` after the O pass) | **677** | **679** | 2 apart |
+| paragraph breaks | 1,536 | ~1,737 | edition differs |
+| folio references | 371 | 383 | edition differs |
+| orphan `,,` left in running text | **0** | — | |
+| stray `;` left unconverted | **0** | — | |
+
+The verse figure is the meaningful one: it is the count the O-rule
+*predicts* once paragraphs are removed, and it lands two away from his
+on a text that differs by 19% in length. That is corroboration the rule
+is right, not a coincidence of tuning.
+
+### What the real text taught that the recording could not
+
+**Tight pairs exist.** 2,168 pairs are spaced `, ,`; **9 are tight
+`,,`** — and every tight one follows a final O (`BZHUGS SO,,`, `PHYIR
+RO,,`, `ZIN TO,,`). His Find & Replace required the space literally, so
+on this text his method would silently drop 9 real paragraph ends. Our
+scanner skips zero-or-more whitespace and catches them. **This is a
+deliberate departure from his literal method in service of his stated
+rule.**
+
+**Four-comma runs are section breaks.** 26 runs of `,, ,,`, a doubled
+nyis shad. Splitting one into two pairs strands a `,,` alone on a line —
+the exact shape step 3 exists to remove. Both doubled shads are now
+kept and the break goes between them.
+
+Three of the 29 four-runs do **not** follow an O (after `MTSAR`,
+`ZIN LA`, `NUS SAM`) — and each is followed by `DA NI`, "now, next",
+opening a new section. So a doubled nyis shad breaks **on its own
+account** and does not consult the O; the O-test distinguishes paragraph
+from verse only for a plain pair. Mutation-verified.
+
+**Runs of 3, or 5 and more, are left alone.** Two instances in 559 KB.
+The standard does not address them and no break is invented — rule 3.
