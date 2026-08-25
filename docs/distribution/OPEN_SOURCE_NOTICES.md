@@ -32,7 +32,7 @@ that build's `BUNDLED_COMPONENTS.tsv`.
 
 | Component | Version | License (SPDX) | Use |
 |---|---|---|---|
-| Qt 6 (Core, Gui, Widgets, Network, DBus, OpenGL, Pdf, PdfWidgets, Qml, QmlMeta, QmlModels, QmlWorkerScript, Quick, and the cocoa/offscreen/imageformats/tls/styles plugins) | 6.11.1 | LGPL-3.0-only (with BSD-3-Clause, GPL-2.0-only and GPL-3.0-only-with-Qt-GPL-exception-1.0 parts) | the user interface toolkit, dynamically linked and shipped unmodified inside the app bundle |
+| Qt 6 (Core, Gui, Widgets, Network, DBus, OpenGL, Pdf, PdfWidgets, Qml, QmlMeta, QmlModels, QmlWorkerScript, Quick, and the cocoa/offscreen/imageformats/iconengines/tls/styles plugins) | 6.11.1 | LGPL-3.0-only (with BSD-3-Clause, GPL-2.0-only and GPL-3.0-only-with-Qt-GPL-exception-1.0 parts) | the user interface toolkit, dynamically linked and shipped unmodified inside the app bundle |
 | HarfBuzz | 14.3.0 | MIT | Tibetan complex-script shaping |
 | Graphite2 | 1.3.15 | MIT OR MPL-2.0 OR LGPL-2.1-or-later OR GPL-2.0-or-later | smart-font shaping under HarfBuzz |
 | FreeType | 2.14.3 | FTL (BSD-style) | font rasterisation |

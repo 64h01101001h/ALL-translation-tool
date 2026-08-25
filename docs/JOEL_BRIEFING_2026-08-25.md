@@ -78,7 +78,7 @@ not fail.
 `docs/distribution/PAYLOAD_MANIFEST.txt` carries one row per shipped
 path with a licence and a notices anchor. The press stages *from* it,
 prunes to it, and is gated on it — 406 MB of unshipped ingest material
-now comes out of every DMG. `tools/bundle_licenses.py` maps all 163
+now comes out of every DMG. `tools/bundle_licenses.py` maps all 164
 Mach-O objects to 34 upstream projects and **fails the press on any
 binary it cannot attribute**.
 
