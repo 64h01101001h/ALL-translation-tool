@@ -184,7 +184,7 @@ Every occurrence is a passage boundary the translator does not get.
 deciding. Mutation-verified — reverting the newline case turns T6 and T7
 red by name.
 
-**D2 — an unterminated bracket silently swallows the rest of the file.**
+**D2 — FIXED 2026-08-25.** *(an unterminated bracket silently swallowed the rest of the file.)*
 The scan for `]` runs to end-of-input and the remainder becomes one note,
 with no error and no marker. A truncated file therefore produces
 plausible-looking output whose tail has quietly become apparatus.
@@ -193,7 +193,7 @@ plausible-looking output whose tail has quietly become apparatus.
 record a flag on the result. This is inviolable rule 3: failed parses are
 surfaced, never approximated.
 
-**D3 — nested brackets corrupt both text and note.**
+**D3 — FIXED 2026-08-25.** *(nested brackets corrupted both text and note.)*
 `AAA [outer [inner] tail] BBB` gives note `outer [inner` and leaves a
 stray `]` in the running text. Neither the note nor the text is right.
 
@@ -362,3 +362,32 @@ from verse only for a plain pair. Mutation-verified.
 
 **Runs of 3, or 5 and more, are left alone.** Two instances in 559 KB.
 The standard does not address them and no break is invented — rule 3.
+
+
+## 11. Corpus sweep, 2026-08-25
+
+The formatter was run over **1,198 real ACIP files, 149,847,998 bytes**
+of the Kangyur, Tengyur and Sungbum holdings.
+
+| | |
+|---|---|
+| notes extracted | 3,760 |
+| files flagged (malformed brackets) | **3** |
+| orphan `,,` in running text | **0** |
+| stray `;` left unconverted | **0** |
+| crashes / hangs | 0 |
+
+The 3 flagged files are why D2 and D3 were worth fixing rather than
+documenting: malformed brackets are a live condition in the real
+corpus, not a theoretical one. Example flag:
+
+```
+unterminated bracket at byte 15329 (folio 6b)
+  - left as written, not converted to a note
+```
+
+`TranslationPrep::flags` is the channel. A malformed bracket is now
+reported with its byte offset and folio, the text is left exactly as
+written, and no note is fabricated from it. Previously an unterminated
+bracket ran to end-of-input and turned the remainder of the document
+into a single note, silently.

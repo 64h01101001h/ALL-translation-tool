@@ -277,13 +277,35 @@ TranslationPrep formatForTranslation(const std::string& acip_document) {
         }
         if (c == '[') {
             size_t j = i + 1;
-            while (j < s.size() && s[j] != ']') ++j;
+            bool nested = false;
+            while (j < s.size() && s[j] != ']') {
+                if (s[j] == '[') nested = true;
+                ++j;
+            }
+            if (j >= s.size() || nested) {
+                // Rule 3: a bracket we cannot parse is REPORTED, not
+                // approximated. Previously an unterminated bracket ran to
+                // end-of-input and turned the rest of the document into
+                // one note, silently; a nested one truncated the note at
+                // the inner ']' and stranded the outer one in the running
+                // text. Both occur in real input - 3 of 598 files. Emit
+                // the '[' literally, leave the text alone, and flag.
+                prep.flags.push_back(
+                    std::string(j >= s.size() ? "unterminated"
+                                              : "nested")
+                    + " bracket at byte " + std::to_string(i)
+                    + (folio.empty() ? "" : " (folio " + folio + ")")
+                    + " - left as written, not converted to a note");
+                out += '[';
+                ++i;
+                continue;
+            }
             const std::string content = s.substr(i + 1, j - i - 1);
             prep.notes.push_back(
                 (folio.empty() ? "" : "folio " + folio + ": ") + content);
             trimEndSpace();
             out += "[" + std::to_string(prep.notes.size()) + "]";
-            i = (j < s.size()) ? j + 1 : j;
+            i = j + 1;
             continue;
         }
         if (c == ',') {

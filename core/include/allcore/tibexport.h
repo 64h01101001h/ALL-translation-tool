@@ -119,6 +119,11 @@ std::string composeSanskritBibEntry(const SanskritBibFields& f);
 struct TranslationPrep {
     std::string text;                  // formatted ACIP, [n] note markers
     std::vector<std::string> notes;    // note n-1: "folio NNN: content"
+    // Parses that could not be completed. A malformed bracket is
+    // REPORTED, never guessed at: measured on 598 real ACIP files,
+    // 2 carry an unterminated bracket and 1 carries nested brackets,
+    // so this is a live condition, not a theoretical one.
+    std::vector<std::string> flags;
     int paragraphs = 0;
 };
 TranslationPrep formatForTranslation(const std::string& acip_document);

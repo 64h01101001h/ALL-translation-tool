@@ -245,6 +245,37 @@ int main() {
         // the bum shad: ";" becomes a line break PLUS a shad (429 on the
         // demonstrated text). The narration says "a comma"; the pane
         // says ^p, - the screen wins.
+        {
+            // D2: an unterminated bracket must NOT silently swallow the
+            // rest of the document into a note. 2 of 598 real files.
+            auto u = allcore::formatForTranslation("AAA [OOPS never closed");
+            CHECK(u.flags.size() == 1,
+                  "prep: an unterminated bracket is flagged");
+            CHECK(u.text.find("OOPS never closed") != std::string::npos,
+                  "prep: the unterminated tail stays in the text, not a note");
+            CHECK(u.notes.empty(),
+                  "prep: no note is fabricated from a broken bracket");
+
+            // D3: nested brackets must not truncate the note and strand
+            // a ']' in the running text. 1 of 598 real files.
+            auto n = allcore::formatForTranslation("AAA [outer [inner] tail] BBB");
+            CHECK(n.flags.size() == 1, "prep: a nested bracket is flagged");
+            // The contract is "left as written", so the outer bracket
+            // survives verbatim - removing it would be the guessing this
+            // exists to avoid. What must NOT happen is the old behaviour:
+            // a note truncated at the inner ']' reading "outer [inner".
+            CHECK(n.text.find("outer") != std::string::npos,
+                  "prep: the nested bracket's text is left as written");
+            for (const auto& note : n.notes)
+                CHECK(note.find("outer [inner") == std::string::npos,
+                      "prep: no truncated note is fabricated from nesting");
+
+            // a well-formed bracket still works and raises no flag
+            auto ok = allcore::formatForTranslation("@1A AAA [DD] BBB");
+            CHECK(ok.flags.empty() && ok.notes.size() == 1,
+                  "prep: a well-formed bracket still becomes a note, unflagged");
+        }
+
         // Shad RUNS. Measured on the real text (S05501M, 559 KB):
         // 2,168 pairs are spaced ", ,", 9 are tight ",," - and every
         // tight one follows a final O, i.e. a paragraph end where the
