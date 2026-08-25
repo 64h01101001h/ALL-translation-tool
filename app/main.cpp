@@ -11867,9 +11867,21 @@ public:
         for (size_t k = prep.text.find(",\n,"); k != std::string::npos;
              k = prep.text.find(",\n,", k + 2))
             ++verseLines;
+        // Two formats, chosen by the extension. RTF carries the house
+        // setup - Palatino Linotype 12, full justification, a page
+        // number centred at the foot and none on page 1 - which a .txt
+        // cannot; Word opens it and saves as .docx in one step. Plain
+        // text stays for anyone who wants the raw ACIP back. A native
+        // .docx writer is backlog #49.
         const QString fn = safeGetSaveFileName(
-            this, "Save translation-prep text", "translation_prep.txt",
-            "Text files (*.txt)");
+            this, "Save translation prep", "translation_prep.rtf",
+            "Formatted document, opens in Word (*.rtf);;"
+            "Plain text, raw ACIP (*.txt)");
+        if (!fn.isEmpty() && QFileInfo(fn).suffix().toLower() == "rtf")
+            // No title is supplied. Titling the document in English is
+            // step 1 of his workflow and is explicitly the editor's -
+            // substituting the filename would be inventing one.
+            outText = allcore::translationPrepToRtf(prep, "");
         if (!fn.isEmpty() &&
             !saveOrWarn(this, fn,
                         QByteArray::fromStdString(outText),

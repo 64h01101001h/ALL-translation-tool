@@ -439,6 +439,75 @@ TranslationPrep formatForTranslation(const std::string& acip_document) {
     return prep;
 }
 
+std::string translationPrepToRtf(const TranslationPrep& prep,
+                                 const std::string& title_en) {
+    // US Letter in twips, 1" margins - Word's own defaults, which is
+    // what he is working in.
+    std::string r =
+        "{\\rtf1\\ansi\\ansicpg1252\\deff0\n"
+        "{\\fonttbl{\\f0\\froman\\fcharset0 Palatino Linotype;}}\n"
+        "\\paperw12240\\paperh15840"
+        "\\margl1440\\margr1440\\margt1440\\margb1440\n"
+        // \titlepg gives the first page its own footer; leaving that
+        // footer empty is how "no number on the page with the pretty
+        // picture on it" is expressed.
+        "\\titlepg\n"
+        "{\\footerf\\pard\\par}\n"
+        "{\\footer\\pard\\qc\\f0\\fs20\\chpgn\\par}\n";
+
+    auto esc = [](const std::string& in) {
+        std::string o;
+        o.reserve(in.size() + in.size() / 8);
+        for (unsigned char c : in) {
+            if (c == '\\' || c == '{' || c == '}') { o += '\\'; o += (char)c; }
+            else if (c >= 0x80) {                  // RTF is 7-bit safe
+                o += "\\u" + std::to_string((int)c) + "?";
+            } else o += (char)c;
+        }
+        return o;
+    };
+
+    if (!title_en.empty())
+        r += "\\pard\\qc\\f0\\fs36\\b " + esc(title_en) + "\\b0\\par\\par\n";
+
+    // A paragraph break arrives as a blank line, a verse line break as a
+    // single one. Both become \par; the paragraph simply gets two.
+    r += "\\pard\\qj\\f0\\fs24 ";
+    const std::string& t = prep.text;
+    size_t i = 0;
+    while (i < t.size()) {
+        if (t[i] == '\n') {
+            size_t n = 0;
+            while (i < t.size() && t[i] == '\n') { ++n; ++i; }
+            r += (n >= 2) ? "\\par\\par\n" : "\\par\n";
+            continue;
+        }
+        size_t j = t.find('\n', i);
+        if (j == std::string::npos) j = t.size();
+        r += esc(t.substr(i, j - i));
+        i = j;
+    }
+    r += "\\par\n";
+
+    if (!prep.notes.empty()) {
+        r += "\\par\\pard\\ql\\f0\\fs20\\b NOTES (input-operator "
+             "brackets)\\b0\\par\n";
+        for (size_t k = 0; k < prep.notes.size(); ++k)
+            r += "[" + std::to_string(k + 1) + "] " + esc(prep.notes[k]) +
+                 "\\par\n";
+    }
+    if (!prep.flags.empty()) {
+        r += "\\par\\pard\\ql\\f0\\fs20\\b COULD NOT BE PARSED - READ "
+             "THIS\\b0\\par\n";
+        r += esc("These passages were left exactly as the input centre "
+                 "typed them. Nothing was guessed at. Check them "
+                 "against the folio before translating:") + "\\par\n";
+        for (const auto& f : prep.flags) r += esc("  * " + f) + "\\par\n";
+    }
+    r += "}";
+    return r;
+}
+
 AcipFileInfo decodeAcipFilename(const std::string& filename) {
     AcipFileInfo info;
     // strip any directory part, split name/extension

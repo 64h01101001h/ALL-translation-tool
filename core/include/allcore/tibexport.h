@@ -128,4 +128,14 @@ struct TranslationPrep {
 };
 TranslationPrep formatForTranslation(const std::string& acip_document);
 
+// The Mixed Nuts house setup, as Geshe Michael performs it in Word at
+// the end of the same recording: Palatino Linotype 12, full
+// justification, and a page number centred at the foot of every page
+// except the first. A .txt cannot carry any of that, so the prep can
+// also be written as RTF - which Word opens natively and saves as
+// .docx in one step. Paragraph breaks become a blank line, verse line
+// breaks a single one, exactly as the ^p / ^p^p passes leave them.
+std::string translationPrepToRtf(const TranslationPrep& prep,
+                                 const std::string& title_en = "");
+
 }  // namespace allcore

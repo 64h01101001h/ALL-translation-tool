@@ -246,6 +246,31 @@ int main() {
         // demonstrated text). The narration says "a comma"; the pane
         // says ^p, - the screen wins.
         {
+            // The house setup, from the tail of the recording: Palatino
+            // Linotype 12, full justification, page number centred at
+            // the foot, none on the first page.
+            auto pr = allcore::formatForTranslation("@001A *, ,AAA BB SO,, CCC");
+            const std::string r = allcore::translationPrepToRtf(pr, "Destroying the Darkness");
+            auto has=[&](const char* n){ return r.find(n)!=std::string::npos; };
+            CHECK(r.rfind("{\\rtf1",0)==0 && r.back()=='}',
+                  "rtf: well-formed envelope");
+            CHECK(has("Palatino Linotype"), "rtf: Palatino Linotype in the font table");
+            CHECK(has("\\fs24"), "rtf: 12pt body (24 half-points)");
+            CHECK(has("\\qj"),   "rtf: full justification");
+            CHECK(has("\\chpgn"),"rtf: a page-number field in the footer");
+            CHECK(has("\\titlepg"),"rtf: first page is treated separately, so it carries no number");
+            CHECK(has("Destroying the Darkness"), "rtf: the English title is carried through");
+            CHECK(has("[f. 1a]"), "rtf: folio references survive into the document");
+
+            // RTF's own metacharacters must be escaped or Word mis-parses
+            allcore::TranslationPrep braces;
+            braces.text = "A{B}C\\D";
+            const std::string e = allcore::translationPrepToRtf(braces);
+            CHECK(e.find("A\\{B\\}C\\\\D")!=std::string::npos,
+                  "rtf: braces and backslashes in the text are escaped");
+        }
+
+        {
             // D2: an unterminated bracket must NOT silently swallow the
             // rest of the document into a note. 2 of 598 real files.
             auto u = allcore::formatForTranslation("AAA [OOPS never closed");
