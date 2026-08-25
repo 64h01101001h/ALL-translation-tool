@@ -1,6 +1,6 @@
 # Test fixtures the repository does not carry
 
-**What this page is for.** 37 of the 73 registered ctest suites read
+**What this page is for.** 37 of the registered ctest suites read
 data that `.gitignore` keeps out of the repository. Before
 2026-08-23 a clean checkout ran them anyway: most aborted with an
 uncaught `std::runtime_error`, and three printed `[PASS]` over zero
