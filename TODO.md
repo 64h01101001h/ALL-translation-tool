@@ -2335,7 +2335,7 @@ SQA doc explicitly scopes out.
       become a decision, because CI is also what would have caught
       BUILD-7's clean-checkout failures.
 
-- [ ] **No architecture decision log.** CLAUDE.md carries the big
+- [x] **No architecture decision log.** DONE 2026-08-25: docs/ADR.md, eleven entries. Each carries the situation that forced the decision AND the bad half of the consequence - an ADR that records only upsides is a brochure. Five are back-dated from CLAUDE.md and the commit record, and say where a date is inferred. The last two are this week's: autonomous repair works on a branch and never merges itself, and claims in documents are verified against the code before they ship - the second written the same day it failed twice. (was: CLAUDE.md carries the big
       as-built calls (C++20 + Qt 6 over Swift, 2026-08-06) but there is
       no running ADR record of why later choices were made. Cheap
       insurance against re-litigating settled decisions, and the first
