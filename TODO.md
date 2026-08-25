@@ -2291,7 +2291,7 @@ SQA doc explicitly scopes out.
       or what happens on compromise. Small scope, but it should be
       written down once rather than assumed.
 
-- [ ] **No privacy/data-handling statement.** The app will run at
+- [x] **No privacy/data-handling statement.** DONE 2026-08-24: docs/PRIVACY.md, every claim checked against source with file:line given so a reader can check it too. Leads with the one thing that matters - the Analysis/AI feature sends the passage AND the translator's own draft to api.anthropic.com, it is inert unless a key is configured in one of exactly two places, and there is no bundled key. Verified there is NO telemetry of any kind. Lists every outbound host and what each sends. Section 5 records what we have NOT done: no retention policy for the shared team stores, no deletion path, no answer for a shared machine, and an unnotarised DMG - a privacy document that only lists reassurances is not worth reading. (was: The app will run at
       input centres with multiple named users, storing who did what.
       What is retained, where, for how long, and who may see it — none
       of that is recorded. Needed before institutional deployment,
