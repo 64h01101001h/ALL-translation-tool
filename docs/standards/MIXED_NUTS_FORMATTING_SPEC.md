@@ -465,10 +465,28 @@ carrying actual prose (~5% of them).
 This is a recommendation, not a change. It alters what a translator
 sees, and that is Adam's call. Recorded as backlog #50.
 
-### One defect found while measuring
+### The defect found while measuring — FIXED 2026-08-25
 
-Running the prep over an **already-prepped** file turns its `[f. 1a]`
-folio references into notes — the formatter cannot tell its own output
-from raw input. Only 1 file in 400 of the library is pre-formatted, but
-a translator re-running the action on a saved file would silently lose
-every folio reference into the notes list. Also #50.
+Running the prep over an already-prepped file turned its `[f. 1a]`
+folio references into notes — the formatter could not tell its own
+output from raw input, so a translator re-running the action on a saved
+file silently lost every folio reference into the notes list.
+
+`[f. …]` is now recognised and passed through untouched.
+Mutation-verified.
+
+**The honest guarantee is convergence, not idempotency.** Measured over
+398 real files:
+
+| | |
+|---|---|
+| stable after one pass | 112 |
+| stable after two | 286 |
+| still drifting after four | **0** |
+
+The residue is `;;`. A single `;` correctly becomes a line break plus a
+shad, so two of them yield `\n,\n,` on the first pass, which the second
+pass reads as an ordinary shad pair and tightens to `,\n,`. That is a
+transformation that *inserts* shads being re-read by a rule that
+*classifies* shads — inherent, not a bug, and it settles. Re-running the
+prep is safe; it is simply not a no-op.

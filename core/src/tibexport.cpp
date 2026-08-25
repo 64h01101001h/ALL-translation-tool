@@ -305,6 +305,21 @@ TranslationPrep formatForTranslation(const std::string& acip_document) {
             continue;
         }
         if (c == '[') {
+            // "[f. 1a]" is a folio reference THIS tool emitted, not an
+            // input-operator bracket. Pass it through untouched, or a
+            // second run over a saved file converts every folio in the
+            // document into a note and strips it from the running text.
+            if (s.compare(i, 4, "[f. ") == 0) {
+                size_t e = s.find(']', i);
+                if (e != std::string::npos && e - i <= 24) {
+                    folio = s.substr(i + 4, e - i - 4);
+                    trimEndSpace();
+                    if (!out.empty() && out.back() != '\n') out += ' ';
+                    out += s.substr(i, e - i + 1) + " ";
+                    i = e + 1;
+                    continue;
+                }
+            }
             size_t j = i + 1;
             bool nested = false;
             while (j < s.size() && s[j] != ']') {

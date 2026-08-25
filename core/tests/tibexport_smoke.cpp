@@ -246,6 +246,38 @@ int main() {
         // demonstrated text). The narration says "a comma"; the pane
         // says ^p, - the screen wins.
         {
+            // The formatter must not eat its own output. A "[f. 1a]" in
+            // the input is a folio reference this tool already emitted,
+            // not an input-operator bracket: converting it to a note
+            // loses the reference from the running text entirely. A
+            // translator who re-runs the action on a saved file would
+            // silently lose every folio in the document.
+            auto again = allcore::formatForTranslation("[f. 1a] TSAD MA SO,, X");
+            CHECK(again.text.find("[f. 1a]") != std::string::npos,
+                  "prep: an existing folio reference survives a second run");
+            CHECK(again.notes.empty(),
+                  "prep: an existing folio reference is not turned into a note");
+
+            // The honest property is CONVERGENCE, not strict
+            // idempotency. ";" correctly becomes a line break plus a
+            // shad, so ";;" yields "\n,\n," on pass 1, which pass 2 then
+            // reads as an ordinary shad pair and tightens to ",\n,".
+            // Measured over 398 real files: 112 are stable after one
+            // pass, 286 after two, and NONE are still drifting after
+            // four. So re-running is safe and settles; it is not a no-op.
+            const std::string src =
+                "@001A *, ,TSAD MA SDE BDUN BZHUGS SO, ,\n"
+                "@001B RGYA GAR [?] SKAD DU;;BZHIN, ,GANG SKU,, ,,DA NI";
+            auto p1 = allcore::formatForTranslation(src).text;
+            auto p2 = allcore::formatForTranslation(p1).text;
+            auto p3 = allcore::formatForTranslation(p2).text;
+            CHECK(p2 == p3, "prep: formatting converges by the second pass");
+            CHECK(p1.find("[f. 1a]") != std::string::npos &&
+                      p3.find("[f. 1a]") != std::string::npos,
+                  "prep: folio references survive every pass");
+        }
+
+        {
             // The house setup, from the tail of the recording: Palatino
             // Linotype 12, full justification, page number centred at
             // the foot, none on the first page.
