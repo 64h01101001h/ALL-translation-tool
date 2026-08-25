@@ -2367,7 +2367,7 @@ SQA doc explicitly scopes out.
       operator needs a task-oriented manual. DEMO_TUESDAY.md is a
       script, not a manual.
 
-- [ ] **No risk register.** Every item above is a risk someone should
+- [x] **No risk register.** DONE 2026-08-25: docs/RISK_REGISTER.md. Nine live risks, each with a likelihood, an impact, an OWNER and a review trigger - and several owners are ALL rather than Adam, which is the point of writing them down. Every number verified against the repo. Includes a closed section so the register shows movement rather than only alarm, and ends by naming what it cannot move: a risk with no owner is a wish. (was: Every item above is a risk someone should
       own with a review date. A one-page register beats rediscovering
       them in the next audit.
 
