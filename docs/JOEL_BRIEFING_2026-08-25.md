@@ -16,7 +16,7 @@ I would rather you hear these from me than find them.
 | "**70** automated test suites passing" | **85** as of today. |
 | "`allcore` … `app/main.cpp`" as ~33k lines | **39,448** lines — 53% of the codebase in one file. Called out below. |
 | "A constitution rule fails the build if any staged data directory lacks a licensing entry" | **Was not true when written.** That gate (L2) was a keyword match that never opened the payload. It is true now. |
-| "Every component that ships is inventoried with its source, its license, and a redistribution verdict" | **Was not true when written.** The notices named 6 components; 35 upstream projects shipped. It is true now. |
+| "Every component that ships is inventoried with its source, its license, and a redistribution verdict" | **Was not true when written.** The notices named 6 components; 34 upstream projects shipped. It is true now. |
 | "Reference dictionary compilations whose provenance is uncertain are excluded from public builds entirely" | **Was not true when written.** 1,926 raw THL catalogue records were shipping in every DMG while the notices said that payload was not redistributed. Fixed by removal. |
 
 The last three are the interesting ones, and they are why the rest of
@@ -78,8 +78,8 @@ not fail.
 `docs/distribution/PAYLOAD_MANIFEST.txt` carries one row per shipped
 path with a licence and a notices anchor. The press stages *from* it,
 prunes to it, and is gated on it — 406 MB of unshipped ingest material
-now comes out of every DMG. `tools/bundle_licenses.py` maps all 165
-Mach-O objects to 35 upstream projects and **fails the press on any
+now comes out of every DMG. `tools/bundle_licenses.py` maps all 163
+Mach-O objects to 34 upstream projects and **fails the press on any
 binary it cannot attribute**.
 
 **SBOM.** `tools/sbom.py` emits CycloneDX at press time. It covers
@@ -168,7 +168,7 @@ bus factor is one and I would not claim otherwise.
 | Test suites | 85 |
 | Mutation score | 5 / 6, drift-detecting |
 | SQA grade | C (from C−), 15 critical+high remaining |
-| Bundled upstream projects | 35, all attributed, press fails otherwise |
+| Bundled upstream projects | 34, all attributed, press fails otherwise |
 | Data layers with open terms | 24 of 115 |
 | Dependency advisories needing judgement | 16 across 9 components |
 | `.git` | 186 MB (was 10 GB) |
