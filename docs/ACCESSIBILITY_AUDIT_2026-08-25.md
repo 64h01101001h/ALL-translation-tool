@@ -14,13 +14,15 @@ counted, not estimated.*
 |---|---|
 | Colour contrast, reading surface | **11 of 11 tokens pass AA**, and every ratio the source claims is accurate |
 | Colour contrast, chrome (both appearances) | **4 of 4 pass AA** |
-| Screen-reader names | **0** `setAccessibleName`, **0** `setAccessibleDescription`, against **157** tooltips |
+| Screen-reader names | **0** `setAccessibleName` / `setAccessibleDescription`, against **157** tooltips. Affects **8 icon-only controls**; card text and tier badges ARE readable (see §2 correction) |
 | Explicit focus/tab order | **0** `setFocusPolicy`, **0** `setTabOrder` |
 | Tier labels | rendered at **11px**, the smallest type in the interface |
 
 The colour work is genuinely good and was *documented honestly* — that
-is the pleasant surprise. The gap is non-visual access, and it is
-total rather than partial.
+is the pleasant surprise. The gap is non-visual access to **controls**;
+card text, including the tier badges, is readable. An earlier draft of
+this audit said the gap was total. It is not, and §2 records how I got
+that wrong.
 
 ---
 
@@ -76,16 +78,25 @@ buttons with visible labels are partly covered. What is not covered:
 - **The 157 tooltips.** These carry a lot of this app's explanation —
   and a tooltip is not an accessible description. The information
   exists and is unreachable non-visually.
-- **The tier badges.** PROVISIONAL, MACHINE and the reference labels
-  are the load-bearing honesty signals of this product. A user who
-  cannot see them has no non-visual way to learn that a gloss is
-  machine-derived.
+- ~~**The tier badges.**~~ **CORRECTED 2026-08-25, same day.** The
+  first version of this audit claimed the tier badges had no non-visual
+  equivalent, and concluded that "a blind translator using this tool
+  today cannot tell binding English from machine output." **That was
+  wrong.** The badges render as TEXT inside `QTextBrowser` — 88
+  instances, zero custom `paintEvent` — and Qt exposes a text browser's
+  document through `QAccessibleTextInterface`, so a screen reader reads
+  `[PROVISIONAL]` as the words. The honesty signal survives non-visual
+  access.
 
-That last one is not a WCAG box — it is house rule 1. **A blind
-translator using this tool today cannot tell binding English from
-machine output.** Every audit this week has found a version of "a lower
-tier dressed as a higher one"; this is the same defect for a user who
-cannot see the dressing at all.
+  I made the claim from a count of `setAccessibleName` without checking
+  how the badges were drawn. It was the most quotable sentence in the
+  audit and it was the one I had not verified — which is the failure
+  mode this whole week has been about, committed by the person
+  auditing for it.
+
+  What remains true: the badge's *colour* carries meaning that its text
+  does not, and any tier signal that is ever drawn rather than written
+  would fall into exactly the gap I wrongly described.
 
 **Recommendation, in order:** set `setAccessibleName` on every
 icon-only control; promote tooltip text to `setAccessibleDescription`

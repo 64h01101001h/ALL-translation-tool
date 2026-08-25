@@ -9554,6 +9554,18 @@ private:
             auto* b = new QToolButton;
             b->setText(t);
             b->setToolTip(tip);
+            // ACCESSIBILITY (2026-08-25 audit, section 2). Eight of
+            // these buttons have a GLYPH for their text - the folio
+            // arrows, the zoom pair, fit, full-screen, the contrast
+            // toggle, the info button. Qt derives an accessible name
+            // from the text, so a screen reader announced the glyph
+            // and nothing else.
+            //
+            // The description was already here, as the tooltip, and a
+            // tooltip is not an accessible name. Setting it in the one
+            // place that builds these buttons covers all eight and
+            // every future one, which is worth more than eight edits.
+            b->setAccessibleName(tip);
             b->setStyleSheet(
                 "QToolButton{background:transparent;color:#dde3ea;"
                 "font-size:15px;border:none;padding:2px 7px;}"
