@@ -14,6 +14,8 @@
 // binding-authority colours by house rule 1, and having them in one
 // named place is worth more than the line count.
 
+#include <cmath>
+
 #include <QApplication>
 #include <QPalette>
 #include <QString>
@@ -119,5 +121,28 @@ inline const char* chromeMuted() {
 }
 inline const char* chromeGold() {
     return darkChrome() ? "#C9A55C" : "#82672A";
+}
+// WCAG 2.x relative luminance and contrast ratio. Here rather than in
+// a test so the tokens and the arithmetic that judges them live
+// together - the 2026-08-25 audit found every ratio annotated above to
+// be accurate, and the way to keep that true is to check it in the
+// battery rather than re-audit it in a year.
+inline double srgbLin(int c) {
+    const double v = c / 255.0;
+    return v <= 0.04045 ? v / 12.92
+                        : std::pow((v + 0.055) / 1.055, 2.4);
+}
+inline double luminance(const char* hex) {
+    const QString h = QString::fromLatin1(hex).mid(1);
+    const int r = h.mid(0, 2).toInt(nullptr, 16);
+    const int g = h.mid(2, 2).toInt(nullptr, 16);
+    const int b = h.mid(4, 2).toInt(nullptr, 16);
+    return 0.2126 * srgbLin(r) + 0.7152 * srgbLin(g) +
+           0.0722 * srgbLin(b);
+}
+inline double contrastRatio(const char* a, const char* b) {
+    const double la = luminance(a), lb = luminance(b);
+    const double hi = la > lb ? la : lb, lo = la > lb ? lb : la;
+    return (hi + 0.05) / (lo + 0.05);
 }
 }   // namespace ux

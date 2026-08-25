@@ -2347,7 +2347,7 @@ SQA doc explicitly scopes out.
       glossaries and roster when v28 lands? Write the upgrade path
       before there are users with data to lose.
 
-- [ ] **Accessibility conformance is unproven.** The design wing
+- [x] **Accessibility conformance is unproven.** AUDITED 2026-08-25: docs/ACCESSIBILITY_AUDIT_2026-08-25.md. COLOUR IS GOOD AND WAS DOCUMENTED HONESTLY - all 11 inks clear WCAG AA on the reading surface, all 4 chrome inks clear it on both appearances, and every ratio annotated in ux_tokens.h is accurate to two decimals with not one rounded in its own favour. Now PINNED in the battery (mutation-verified) so it is checked continuously rather than re-audited yearly. THE GAP IS NON-VISUAL ACCESS AND IT IS TOTAL: 0 setAccessibleName, 0 setAccessibleDescription, against 157 tooltips - so a blind translator has no way to learn that a gloss is machine-derived, which is house rule 1 for a user who cannot see the badge. Keyboard is UNTESTED, not known-good (0 setFocusPolicy, 0 setTabOrder, no keyboard walk performed). The audit names five things it did not cover, including any actual VoiceOver session. NEXT: accessible names on icon-only controls, then the tier badges. (was: The design wing
       includes an accessibility-audit skill and CLAUDE.md says new
       surfaces get a heuristic pass, but no WCAG-referenced audit
       result is recorded in docs/FINDINGS.md for the shipped panes.

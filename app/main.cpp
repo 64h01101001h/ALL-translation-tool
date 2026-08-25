@@ -15367,6 +15367,30 @@ public:
         check(QString(ux::kWarn) != QString(ux::kAct) &&
                   QString(ux::kError) != QString(ux::kAct),
               "no other semantic ink collides with the binding green");
+        // ACCESSIBILITY, 2026-08-25 audit section 1. Every ink on the
+        // reading surface must clear WCAG AA (4.5:1). The audit found
+        // all eleven passing and every ratio annotated in
+        // ux_tokens.h accurate - not one rounded in its own favour -
+        // so this pins the arithmetic rather than re-auditing it in a
+        // year. kMachine (4.62) and chromeGold on light chrome (4.53)
+        // have the least headroom; a future "slightly warmer gold"
+        // is exactly what this catches.
+        {
+            const char* inks[] = {ux::kInk, ux::kGold, ux::kMuted,
+                                  ux::kFaint, ux::kSoft, ux::kAct,
+                                  ux::kWarn, ux::kMachine, ux::kError,
+                                  ux::kDoc, ux::kPeople};
+            double worst = 99.0;
+            for (const char* c : inks)
+                worst = std::min(worst,
+                                 ux::contrastRatio(c, ux::kPaper));
+            check(worst >= 4.5,
+                  "every ink clears WCAG AA on the reading surface");
+            check(ux::contrastRatio(ux::kInk, ux::kPaper) > 10.0,
+                  "control: the arithmetic discriminates - primary ink "
+                  "on paper is far above the floor, so a pin that "
+                  "passed everything would be visible here");
+        }
         // P1 2026-08-24: the diagnostics channel. docs/PRIVACY.md says
         // this application has NO telemetry, and that claim was
         // verified before it was written. A diagnostic report must not
