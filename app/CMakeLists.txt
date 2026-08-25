@@ -22,6 +22,7 @@ set(ALL_BAT_WRITTEN "${_bat_count}" CACHE INTERNAL "suites written")
 
 qt_add_executable(DiamondCutterTranslationTool
   main.cpp
+  ux_tokens.h            # design tokens - first R7 extraction, 2026-08-25
   thirdparty/diff_match_patch.cpp
   AppIcon.icns
 )

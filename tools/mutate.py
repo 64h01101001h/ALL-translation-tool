@@ -53,13 +53,41 @@ def sh(cmd, cwd=None):
 
 
 def objects_for(rel_path):
-    """Every compiled object derived from this source file."""
+    """Every compiled object that must be rebuilt for this file.
+
+    For a .cpp that is <name>.cpp.o. For a HEADER there is no such
+    object at all, and this returned an empty list - so the harness's
+    central guarantee ("delete the object, never trust an mtime")
+    silently did nothing on header mutations. It happened to be safe
+    because CMake records header dependencies in the .o.d files and
+    rebuilds anyway, but a guarantee that holds by accident is the
+    kind of thing this tool exists to catch. Found 2026-08-25 while
+    mutating app/ux_tokens.h, by reading the harness's own output
+    line "objects : 0 will be deleted" and not trusting it.
+
+    So: for any file, also take every object whose depfile names it.
+    """
     base = os.path.basename(rel_path) + ".o"
     out = []
     for dirpath, _dirs, files in os.walk(BUILD):
         for f in files:
             if f == base:
                 out.append(os.path.join(dirpath, f))
+    # header (or any) dependents, via the compiler-written depfiles
+    leaf = os.path.basename(rel_path)
+    for dirpath, _dirs, files in os.walk(BUILD):
+        for f in files:
+            if not f.endswith(".o.d"):
+                continue
+            dep = os.path.join(dirpath, f)
+            try:
+                if leaf in io.open(dep, encoding="utf-8",
+                                   errors="ignore").read():
+                    obj = dep[:-2]        # strip the trailing ".d"
+                    if os.path.exists(obj) and obj not in out:
+                        out.append(obj)
+            except OSError:
+                pass
     return out
 
 

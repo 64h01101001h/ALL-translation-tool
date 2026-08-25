@@ -2327,14 +2327,7 @@ SQA doc explicitly scopes out.
       backup. Deliverable: a DEVELOPER_ONBOARDING.md proven by
       actually following it on a clean checkout.
 
-- [ ] **`app/main.cpp` is 38,007 lines — 53% of the entire 72,176-line
-      codebase in one file.** This is why patches keep missing their
-      anchors, why two remediation tracks have to be warned not to
-      collide in it, and why review is hard. Not a rewrite: a staged
-      extraction of self-contained panes into their own translation
-      units, one per press, each proven by the existing battery. Book
-      it as ongoing maintenance, not a project.
-
+- [ ] **`app/main.cpp`: staged extraction STARTED 2026-08-25.** First move done: the `ux` design tokens (103 lines) are now app/ux_tokens.h - main.cpp 39,581 -> 39,479, and app/ has its first header, which is the actual blocker the count was hiding (there was no pattern for putting anything anywhere else). All 100 ux:: references resolve, gate 85/85. The extraction earned its keep immediately: mutating the moved tokens showed the RESERVED BINDING GREENS WERE UNPINNED - kMachine could be set to #1E6B4E and machine output would wear the master's colour with the whole battery green. Pinned at the token now, both directions mutation-verified. NEXT: the pure text helpers (corpusCountLine, goferSkipNotice, buildDiagnosticReport), then a real pane. One per press, each proven by the battery.
 - [ ] **No CI.** Confirmed: no `.github/workflows`, no `.gitlab-ci.yml`,
       no `.circleci`. SQA BUILD-6 records "the release is a snapshot of
       one laptop's Homebrew". The REPRO track is instructed to record
