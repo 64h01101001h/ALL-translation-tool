@@ -82,3 +82,28 @@ set_tests_properties(gauntlet_walk PROPERTIES
   ENVIRONMENT "QT_QPA_PLATFORM=offscreen" TIMEOUT 420)
 set_tests_properties(app_selftest PROPERTIES
   ENVIRONMENT "QT_QPA_PLATFORM=offscreen" TIMEOUT 300)
+
+# BUS FACTOR / BUILD-7, found 2026-08-25 by actually following
+# docs/DEVELOPER_ONBOARDING.md on a clean clone. The doc calls
+# `ctest -LE fixture` "the clean-checkout gate"; it exited 8, because
+# these two suites need the spine database and were NOT labelled
+# `fixture`.
+#
+# The label is applied by cmake/AllFixtureTests.cmake's add_test
+# override, which detects a fixture dependency by inspecting the test's
+# COMMAND ARGUMENTS for paths under an untracked root. These two take
+# no path argument at all - the app locates the spine at runtime - so
+# the detection was blind to them by construction, and no amount of
+# care in the override would have caught it.
+#
+# Two properties, doing two different jobs:
+#   LABELS fixture            - so `-LE fixture` excludes them, which
+#                               is what makes the documented gate true
+#   SKIP_REGULAR_EXPRESSION   - so a plain `ctest` on a clean checkout
+#                               records an honest SKIP naming the
+#                               missing database, rather than a failure
+#                               that reads like a broken build. The
+#                               app already prints exactly this line.
+set_tests_properties(app_selftest gauntlet_walk PROPERTIES
+  LABELS "fixture"
+  SKIP_REGULAR_EXPRESSION "cannot open spine db")
