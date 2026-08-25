@@ -96,6 +96,52 @@ matching over-reports across distributions. A failed query exits
 non-zero and says "This is NOT a clean result" rather than reporting
 zero.
 
+**BDRC integration — what is actually wired.** Worth going over,
+because it is the piece that most depends on a relationship ALL owns
+rather than on code.
+
+The linking key is already in our filenames. ACIP Release IV
+nomenclature carries the **Tohoku catalogue number** for Kangyur and
+Tengyur texts (`TD4211…` = Derge Tengyur, Tohoku 4211), and BUDA
+cross-references Tohoku numbers on its work records. So the chain is
+filename → collection + Tohoku → BDRC work id → scans, with no
+name-matching guesswork.
+
+Endpoints in the shipped build:
+
+| Endpoint | Used for |
+|---|---|
+| `purl.bdrc.io/query/table/BLMP` | the templated title/name query — `LG_NAME=bo-x-ewts`, `I_LIM=20`, `format=json` |
+| `library.bdrc.io/show/bdr:<ID>` | the human-facing "view on BDRC" target |
+| `library.bdrc.io/search` | fallback search hand-off |
+| `iiif.bdrc.io` · `iiifpres.bdrc.io/collection/wio:` | IIIF page images and volume manifests for scan follow-along |
+
+Two design rules I would point at specifically.
+
+**Transliteration crosses a boundary, and the boundary is enforced.**
+BDRC works in Wylie (EWTS, language tag `bo-x-ewts`); our filenames and
+texts are ACIP. Every name-based query is seeded through the
+battery-proven converter — `deriveTitleQuery()` takes the file's
+opening syllables, stops at `BZHUGS`, and runs `acipToEwts` before the
+query is built. *Honest limit:* the seed is converted, but a user who
+retypes the field by hand can still send raw ACIP tagged as EWTS.
+Narrow, and worth closing.
+
+**A title match is never asserted automatically.** Sungbum texts have
+no Tohoku number, so they need title search — which is fuzzy. The
+dialog says so in as many words ("the match is never asserted
+automatically"), the user picks from candidates, and the confirmed
+mapping is saved to `library/bdrc_links.json` so it is decided once.
+That is inviolable rule 3 showing up in the interface rather than in a
+comment.
+
+**Where it goes next.** The author roster is already keyed by **BDRC
+person id** — 462 people — and Wikidata carries BDRC ids as property
+`P2477`, which is how the author-metadata design (`docs/superpowers/
+specs/2026-08-23-author-metadata-design.md`) reaches biographical data
+under CC0 without scraping anyone. Measured coverage: ~435 of 462
+people resolve.
+
 **Threat model** (`docs/THREAT_MODEL.md`) and **privacy statement**
 (`docs/PRIVACY.md`), both grounded with file:line citations.
 
