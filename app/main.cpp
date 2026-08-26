@@ -5596,6 +5596,36 @@ public:
                 check(ok, "Text DNA: summary reads the structure "
                           "and the strip's jump lands on the line");
             }
+            {   // FAIL-3: the dialog seam was built for exactly this
+                // and had ZERO consumers - every save flow behind a
+                // file dialog stayed untestable while the seam aged.
+                // First consumer: stub the save dialog, run the REAL
+                // Mixed Nuts prep flow end to end, and read the file
+                // it claims to have written.
+                input_->setPlainText(
+                    "@001A *, ,TSAD MA BZHUGS SO, ,GNYIS SO,,");
+                const QString outP = QDir::temp().filePath(
+                    "all_selftest_prep_seam.txt");
+                QFile::remove(outP);
+                g_saveDialogStub = [outP](const QString&,
+                                          const QString&,
+                                          const QString&) {
+                    return outP;
+                };
+                const QString status = prepareForTranslation();
+                g_saveDialogStub = nullptr;
+                QFile pf(outP);
+                const bool wrote =
+                    pf.open(QIODevice::ReadOnly) && pf.size() > 0;
+                QString body = wrote
+                                   ? QString::fromUtf8(pf.readAll())
+                                   : QString();
+                check(wrote && body.contains("[f. 1a]") &&
+                          status.contains("paragraph"),
+                      "the dialog seam drives a real prep save end to "
+                      "end (FAIL-3's first consumer)");
+                QFile::remove(outP);
+            }
             {   // sa bcad: nested enumeration parses to the tree
                 input_->setPlainText(
                     "'DIR LA GNYIS, DANG PO SPYI DON NI ZHES, "
