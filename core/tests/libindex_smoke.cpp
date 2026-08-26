@@ -154,6 +154,34 @@ int main() {
 
     fs::remove_all(root);
     {
+        // MEM-7: the query parser recursed per '(' with no bound - a
+        // pasted "((((..." from the search box was a stack overflow,
+        // safe only by whatever stack size the platform happened to
+        // grant. A hostile depth must be a FRIENDLY ERROR; a sane
+        // depth must still parse.
+        allcore::LibraryIndex mix((fs::temp_directory_path() /
+                                   "libindex_mem7.db").string());
+        std::string deep(300000, '(');
+        deep += "\"bden pa\"";
+        deep += std::string(300000, ')');
+        bool threw = false;
+        try {
+            (void)mix.search(deep, 5);
+        } catch (const std::exception&) {
+            threw = true;
+        }
+        CHECK(threw, "a 300k-deep query throws instead of smashing "
+                     "the stack (MEM-7)");
+        bool okShallow = true;
+        try {
+            (void)mix.search("((\"bden pa\"))", 5);
+        } catch (const std::exception&) {
+            okShallow = false;
+        }
+        CHECK(okShallow, "an ordinarily-nested query still parses");
+        fs::remove(fs::temp_directory_path() / "libindex_mem7.db");
+    }
+    {
         // PERF-3: limit must reach the scan. Own root and own index,
         // so the main fixture's incremental-update tests stay honest.
         const fs::path proot =
