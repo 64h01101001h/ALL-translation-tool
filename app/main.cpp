@@ -975,7 +975,10 @@ static QString entryHtml(const allcore::Entry& e,
              QString::fromStdString(d.surface).toHtmlEscaped() +
              "</span>";
     if (!e.tibetan_source.empty())
-        h += " <i style='color:#888'>[generated script]</i>";
+        // the provenance mark on 75% of entries was the faintest ink on
+        // the card (3.29:1) - a label that matters that much may not
+        // whisper. kFaint is the audited AA token for fine print.
+        h += " <i style='color:#6F6F6F'>[generated script]</i>";
     if (d.phonetics && !e.pronunciation.empty()) {
         // the authority's ruling shows wherever pronunciation
         // shows (Adam's finding 2026-08-12: the ruled tsema
