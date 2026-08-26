@@ -15752,6 +15752,17 @@ public:
 
 private:
     void find() {
+        // PERF-4 re-entrancy guard: the index scans below pump the
+        // event loop, so a second click on Find (or Enter) during a
+        // long search would nest a second find() inside the first.
+        // One search at a time; the button re-enables on every exit.
+        if (finding_) return;
+        finding_ = true;
+        findB_->setEnabled(false);
+        struct FindGuard {
+            bool& flag; QPushButton* b;
+            ~FindGuard() { flag = false; if (b) b->setEnabled(true); }
+        } findGuard{finding_, findB_};
         stopped_ = false;
         stopB_->setEnabled(true);
         const QString q = buildQuery();
@@ -15962,7 +15973,18 @@ private:
                     // higher cap: the per-file rollup wants real
                     // counts, not a 60-hit truncation
                     bool cut = false;
-                    hits = li.search(q.toStdString(), 400, &cut);
+                    // PERF-4: the pump keeps the GUI alive DURING the
+                    // scan and makes Stop abort it mid-flight - a
+                    // compound query over the full library froze this
+                    // thread ~1.5 s per directory before, with Stop
+                    // unable to even fire.
+                    allcore::LibraryIndex::SearchStats sst;
+                    hits = li.search(q.toStdString(), 400, &cut, &sst,
+                                     [this] {
+                                         QCoreApplication::processEvents();
+                                         return !stopped_;
+                                     });
+                    if (sst.aborted) indexCapped = true;
                     // SQA PERF-1: the scan is now bounded (it used to
                     // materialise the whole match set — 18.0 GB and
                     // 5m46s for three ordinary words). A bound is a
@@ -16211,6 +16233,7 @@ private:
     QPushButton* stopB_ = nullptr;
     bool stopped_ = false;
     QPushButton* findB_ = nullptr;
+    bool finding_ = false;   // PERF-4 re-entrancy guard
 };
 
 

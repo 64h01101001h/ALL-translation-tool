@@ -176,6 +176,20 @@ int main() {
         auto all = pix.search("ZAB", 60, &cut);
         CHECK(all.size() == 60 && cut,
               "perf: truncation reported when the limit cuts real matches");
+        // PERF-4: the pump fires during a scan, and returning false
+        // aborts it mid-flight instead of after the fact.
+        int pumped = 0;
+        allcore::LibraryIndex::SearchStats stp;
+        auto pumpedHits = pix.search("ZAB", 2000, nullptr, &stp,
+                                     [&] { ++pumped; return true; });
+        CHECK(pumped > 0, "perf4: the pump is actually called during a scan");
+        CHECK(!stp.aborted, "perf4: a true-returning pump never aborts");
+        allcore::LibraryIndex::SearchStats sta;
+        auto few2 = pix.search("ZAB", 2000, nullptr, &sta,
+                               [] { return false; });
+        CHECK(sta.aborted, "perf4: a false-returning pump aborts the scan");
+        CHECK(few2.size() < 2000,
+              "perf4: the aborted scan returns partial, not full, results");
         fs::remove_all(proot);
     }
 

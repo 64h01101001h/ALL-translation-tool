@@ -88,11 +88,19 @@ public:
     // not O(matches) - the difference between 15 ms and 1.9 s on "PA".
     struct SearchStats {
         long long term_rows_visited = 0;
+        bool aborted = false;   // the pump said stop mid-scan
     };
+    // PERF-4: a long scan used to own the GUI thread outright - the
+    // Stop button could not even fire. The pump is called every few
+    // thousand SQLite VM steps; return false to abort the scan
+    // immediately (SQLITE_INTERRUPT), true to keep going. The caller
+    // may pump an event loop inside it. No pump = no overhead.
+    using Pump = std::function<bool()>;
     std::vector<FileGoferHit> search(const std::string& query,
                                      int limit = 60,
                                      bool* truncated = nullptr,
-                                     SearchStats* stats = nullptr) const;
+                                     SearchStats* stats = nullptr,
+                                     const Pump& pump = {}) const;
 
 private:
     sqlite3* db_ = nullptr;

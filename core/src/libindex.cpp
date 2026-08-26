@@ -355,7 +355,37 @@ long long LibraryIndex::lineCount() const {
 std::vector<FileGoferHit> LibraryIndex::search(const std::string& query,
                                                int limit,
                                                bool* truncated,
-                                               SearchStats* stats) const {
+                                               SearchStats* stats,
+                                               const Pump& pump) const {
+    // PERF-4: the progress handler is SQLite's own cooperative-abort
+    // hook. Every kPumpEveryVmSteps VM instructions it calls the pump;
+    // a false return makes the active statement fail with
+    // SQLITE_INTERRUPT, which the row loops below treat as end-of-rows
+    // and the stats record as an abort. Installed only when a pump is
+    // supplied; removed on every exit path by the guard.
+    struct PumpGuard {
+        sqlite3* db;
+        bool armed;
+        bool aborted = false;
+        static int trampoline(void* self) {
+            auto* g = static_cast<PumpGuard*>(self);
+            if ((*g->pump)()) return 0;
+            g->aborted = true;
+            return 1;
+        }
+        const Pump* pump = nullptr;
+        PumpGuard(sqlite3* d, const Pump& p) : db(d), armed(bool(p)) {
+            if (armed) {
+                pump = &p;
+                constexpr int kPumpEveryVmSteps = 2000;
+                sqlite3_progress_handler(db, kPumpEveryVmSteps,
+                                         &trampoline, this);
+            }
+        }
+        ~PumpGuard() {
+            if (armed) sqlite3_progress_handler(db, 0, nullptr, nullptr);
+        }
+    } pumpGuard(db_, pump);
     using namespace gofer_ast;
     bool cut = false;   // any node hit kScanCap
     auto toks = lex(query);
@@ -405,7 +435,10 @@ std::vector<FileGoferHit> LibraryIndex::search(const std::string& query,
                     const int ln = sqlite3_column_int(s.p, 1) - 1;
                     w.push_back({sqlite3_column_int64(s.p, 0), ln, ln});
                 }
-                if (stats) stats->term_rows_visited += (long long)w.size();
+                if (stats) {
+                    stats->term_rows_visited += (long long)w.size();
+                    if (pumpGuard.aborted) stats->aborted = true;
+                }
                 if ((int)w.size() > scanLimit) {
                     w.resize(scanLimit);
                     cut = true;
