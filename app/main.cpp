@@ -2645,6 +2645,16 @@ static bool restoreStoreWithSafety(const std::string& backupPath,
     return allcore::restoreBackup(backupPath, dst);
 }
 
+// MEM-5 follow-on: wall-clock ceilings are calibrated on uninstrumented
+// builds; asan/ubsan taxes everything ~3x by design. The sanitized
+// battery exports ALL_SANITIZED=1 and every selftest ceiling scales by
+// this factor - a slow-by-instrumentation run must not read as a
+// regression, and a real regression still trips the scaled ceiling.
+static qint64 sanDerate(qint64 ceilingMs) {
+    return qEnvironmentVariableIsSet("ALL_SANITIZED") ? ceilingMs * 4
+                                                      : ceilingMs;
+}
+
 static bool streamWriteOk(QTextStream& ts, QFile& f) {
     ts.flush();
     if (ts.status() != QTextStream::Ok) return false;
@@ -6044,7 +6054,7 @@ public:
                            .arg(ms);
                 check(vdoc.tokens.size() > 100000,
                       "full volume tokenizes at scale");
-                check(ms < 15000,
+                check(ms < sanDerate(15000),
                       "full-volume engine pass under the regression "
                       "ceiling");
             } else {
@@ -6069,7 +6079,7 @@ public:
                            .arg(QFileInfo(vp).fileName())
                            .arg(QFileInfo(vp).size() / 1024)
                            .arg(ms);
-                check(ms < 20000,
+                check(ms < sanDerate(20000),
                       "full-volume openFile under the widget ceiling");
             } else {
                 // the OLD silent skip printed nothing at all - a guard
@@ -27974,6 +27984,55 @@ static void runIllustrationGallery(QWidget* parent, const QString& root,
 
 class ScanPane : public QWidget {
 public:
+    // TEST-7: this pane sat at 22.2% coverage with no selfTest at all
+    // - the OCR entry point, unexercised. This drives the headless
+    // half: open-state transitions and the strip->page coordinate map.
+    // The recognition path itself needs models and stays with the
+    // (guarded) live run.
+    int selfTest(QStringList& log) {
+        int fails = 0;
+        auto check = [&](bool ok, const char* what) {
+            log << QString("  [%1] Scan: %2")
+                       .arg(ok ? "PASS" : "FAIL")
+                       .arg(what);
+            if (!ok) ++fails;
+        };
+        // a bad path must refuse politely and arm nothing
+        openImagePath(QDir::temp().filePath(
+            "all_selftest_no_such_image.png"));
+        check(!run_->isEnabled() &&
+                  results_->toPlainText().contains("cannot read"),
+              "an unreadable image refuses politely and arms nothing");
+        // a real image arms the run and says ready
+        const QString imgP =
+            QDir::temp().filePath("all_selftest_scan.png");
+        {
+            QImage im(64, 32, QImage::Format_RGB888);
+            im.fill(Qt::white);
+            im.save(imgP);
+        }
+        openImagePath(imgP);
+        check(run_->isEnabled() &&
+                  results_->toPlainText().contains("ready"),
+              "a readable image arms Run OCR and reports ready");
+        check(!save_->isEnabled(),
+              "save stays disarmed until a recognition has run");
+        // the strip->page coordinate map: with no colMap the fallback
+        // is line.x + strip offset; with one, clamped indexing
+        pl_ = {};
+        pl_.lines.push_back({});
+        pl_.lines[0].x = 100;
+        pl_.images.push_back({});
+        check(pageX(0, 25.0) == 125,
+              "pageX falls back to line origin + strip offset");
+        pl_.images[0].colMap = {7, 8, 9};
+        check(pageX(0, 99.0) == 9 && pageX(0, -5.0) == 7,
+              "pageX clamps the column map at both ends");
+        pl_ = {};
+        QFile::remove(imgP);
+        return fails;
+    }
+
     ScanPane(allcore::SyllableChecker* checker, const QString& root)
         : checker_(checker), root_(root) {
         auto* outer = new QVBoxLayout(this);
@@ -33166,6 +33225,46 @@ public:
         });
     }
 
+public:
+    // TEST-7: 0.0% coverage on the one dialog that writes seven user
+    // settings. The drill proves the ROUND TRIP - a planted setting
+    // reaches the widget, an edited widget reaches the store - and
+    // puts every real key back exactly as found.
+    int selfTest(QStringList& log) {
+        int fails = 0;
+        auto check = [&](bool ok, const char* what) {
+            log << QString("  [%1] Settings: %2")
+                       .arg(ok ? "PASS" : "FAIL")
+                       .arg(what);
+            if (!ok) ++fails;
+        };
+        QSettings st("ALL", "TranslationTool");
+        const QVariant keepName = st.value("team/name");
+        const QVariant keepNight = st.value("app/nightMode");
+        st.setValue("team/name", "Selftest Probe");
+        st.setValue("app/nightMode", false);
+        {
+            SettingsDialog d(nullptr, nullptr);
+            check(d.name_->text() == "Selftest Probe" &&
+                      !d.night_->isChecked(),
+                  "stored settings reach the widgets on construction");
+            d.name_->setText("Edited Probe");
+            d.night_->setChecked(true);
+            // drive the real Save button, not the slot by hand
+            for (auto* b : d.findChildren<QPushButton*>())
+                if (b->text() == "Save") { b->click(); break; }
+        }
+        QSettings st2("ALL", "TranslationTool");
+        check(st2.value("team/name").toString() == "Edited Probe" &&
+                  st2.value("app/nightMode").toBool(),
+              "Save writes the edited widgets back to the store");
+        if (keepName.isValid()) st2.setValue("team/name", keepName);
+        else st2.remove("team/name");
+        if (keepNight.isValid()) st2.setValue("app/nightMode", keepNight);
+        else st2.remove("app/nightMode");
+        return fails;
+    }
+
 private:
     std::function<void(bool)> applyNight_;
     QCheckBox* night_ = nullptr;
@@ -37100,6 +37199,11 @@ int main(int argc, char** argv) {
         fails += overlay->selfTest(log, root);
         fails += exportPane->selfTest(log);
         fails += scansPane->selfTest(log);
+        fails += ocrPane->selfTest(log);
+        {
+            SettingsDialog sdlg(nullptr, nullptr);
+            fails += sdlg.selfTest(log);
+        }
         fails += apparatusPane->selfTest(log);
         fails += trainerPane->selfTest(log);
         fails += drillsPane->selfTest(log);
@@ -38666,11 +38770,17 @@ int main(int argc, char** argv) {
             // algorithmic slide (or a machine-wide stall worth knowing
             // about) can trip it; the measured number still prints on
             // every run for eyes that care about drift.
+            // MEM-5 follow-on: under the sanitized battery every wall
+            // clock runs ~3x slow by instrumentation, not regression.
+            // sanitized_battery.sh exports ALL_SANITIZED=1 and every
+            // ceiling in this selftest scales by sanDerate() - the
+            // first real asan run failed ONLY on a ceiling, which is
+            // the derate's whole justification.
             constexpr qint64 kLookupMax = 250, kCorpusMax = 400,
                              kUniMax = 250, kPronMax = 200;
-            const bool ok = keys.size() >= 200 && lookupMs < kLookupMax &&
-                            corpusMs < kCorpusMax && uniMs < kUniMax &&
-                            pronMs < kPronMax;
+            const bool ok = keys.size() >= 200 && lookupMs < sanDerate(kLookupMax) &&
+                            corpusMs < sanDerate(kCorpusMax) && uniMs < sanDerate(kUniMax) &&
+                            pronMs < sanDerate(kPronMax);
             log << QString("  [%1] T4 perf floors: %2 lookups over %3 "
                            "distinct headwords %4ms (<%5) · 20 corpus "
                            "%6ms (<%7) · 1k unicode %8ms (<%9) · 1k "
@@ -38698,7 +38808,7 @@ int main(int argc, char** argv) {
                     "\"sems can\" NEAR/1000000 \"bsod nams\"", 60, &cut);
                 const qint64 ixMs = t.elapsed();
                 constexpr qint64 kIxMax = 6000;   // ~4.7x the cold 1,287 ms
-                const bool ok = ixMs < kIxMax && !hits.empty();
+                const bool ok = ixMs < sanDerate(kIxMax) && !hits.empty();
                 log << QString("  [%1] T4b library-index fan-out: two "
                                "high-frequency terms ANDed over the "
                                "installed index %2ms (<%3) · %4 hit(s)"
@@ -38723,7 +38833,7 @@ int main(int argc, char** argv) {
             // the longest single-click wait in the app (PERF-5).
             const qint64 segMs = overlay->segmenterBuildMs();
             constexpr qint64 kSegMax = 16000;   // ~3.2x the measured 4,9xx ms
-            const bool ok = segMs >= 0 && segMs < kSegMax;
+            const bool ok = segMs >= 0 && segMs < sanDerate(kSegMax);
             log << QString("  [%1] T4c segmenter lexicon build: %2ms "
                            "(<%3) · %4")
                        .arg(ok ? "PASS" : "FAIL")
