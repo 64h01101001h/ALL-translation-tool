@@ -153,9 +153,16 @@ proximity rule with a liveness clause after it blessed four live
 red-PROVISIONAL sites (all repainted). Ledger rule going forward: a
 "CLOSED earlier" row without a named pin is testimony, not evidence.
 
-Remaining from the re-measurement, triaged: the write-path family
-(WP-3..WP-13, eleven sites that compose success strings over
-unverified writes — next sweep batch, the saveOrWarn/streamWriteOk
-routing is mechanical); one perf high (goferSearchFiles magnitude
-disputed by the verifier but shape confirmed); the gate-script and
-build/release mediums are itemized in the assessment's tables.
+**The write-path family is CLOSED whole (2026-08-26, commits 3c27c15
++ 4de83fd):** all eighteen findings WP-1..WP-18 — the re-measurement's
+worst dimension emptied. Fourteen app-side success strings now gated
+on verified writes; core-side, the library indexer un-stamps files
+whose rows did not land (the permanent silent search hole healed,
+with the dead-transaction case the drill discovered), and the drill
+store counts what it could not keep. Representative pins at
+WP-1/2/8/10/15, each mutation-verified.
+
+Still open from the re-measurement: one gate-script high (link_truth
+teaching count), one build high (VERSION single-sourced), one perf
+high (goferSearchFiles, magnitude disputed); mediums itemized in the
+assessment's tables.
