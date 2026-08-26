@@ -329,6 +329,43 @@ def main():
         print(f'\nRELEASE GATE: FAIL — {len(failures)} problem(s); '
               'do NOT import')
         sys.exit(1)
+    # BUILD-12: when a built spine exists AND carries source hashes
+    # (stamped by build_spine.py from this fix forward), verify them
+    # against the release package bytes - the link between what
+    # shipped and what it claims it was built from. A spine without
+    # stamps predates the fix and is reported, not failed.
+    import hashlib, sqlite3, os
+    spine = os.path.join(os.path.dirname(__file__), '..',
+                         'build', 'hgm_spine_v27_2.db')
+    if os.path.exists(spine):
+        try:
+            db = sqlite3.connect(spine)
+            meta = dict(db.execute('SELECT key, value FROM meta'))
+            db.close()
+            pairs = [('source_master_sha256', args.master),
+                     ('source_corpus_sha256', args.corpus),
+                     ('source_reverse_index_sha256', args.reverse)]
+            stamped = [k for k, _ in pairs if k in meta]
+            if not stamped:
+                print('note: the built spine predates source-hash '
+                      'stamping (BUILD-12) - hashes will appear on '
+                      'its next rebuild')
+            for key, path in pairs:
+                if key not in meta or not os.path.exists(path):
+                    continue
+                h = hashlib.sha256()
+                with open(path, 'rb') as fh:
+                    for chunk in iter(lambda: fh.read(1 << 20), b''):
+                        h.update(chunk)
+                if h.hexdigest() != meta[key]:
+                    print(f'RELEASE GATE: FAIL - the built spine says '
+                          f'{key}={meta[key][:12]}... but the package '
+                          f'file hashes {h.hexdigest()[:12]}... - the '
+                          f'spine was NOT built from this package')
+                    sys.exit(1)
+        except sqlite3.Error as e:
+            print(f'note: spine meta unreadable for BUILD-12 check: {e}')
+
     print(f'\nRELEASE GATE: PASS — safe to rebuild the spine '
           f'(tools/build_spine.py)'
           + (f'  [{len(warnings)} warning(s) above]' if warnings else ''))
