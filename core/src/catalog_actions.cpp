@@ -216,13 +216,25 @@ std::string ActionLedger::approve(const std::string& id,
     if (!meta.empty()) {
         metaDest = shelf / fs::path(meta).filename();
         if (fs::exists(metaDest, ec)) {
-            fs::rename(dest, staged, ec);   // undo the move
+            // FAIL-8: this undo used to discard its own error code
+            // while the message asserted the item was still staged -
+            // the report-what-you-did-not-verify shape, 30 lines above
+            // the honest twin that already existed. restore() checks.
+            if (!restore(dest, staged))
+                return "a META companion of that name is already on "
+                       "the shelf, AND the text could not be moved "
+                       "back - it now sits on the shelf without its "
+                       "companion. Move it back by hand.";
             return "a META companion of that name is already on the "
                    "shelf; resolve it before approving";
         }
         fs::rename(meta, metaDest, ec);
         if (ec) {
-            fs::rename(dest, staged, ec);
+            if (!restore(dest, staged))
+                return "the META companion could not be moved AND the "
+                       "text could not be put back; it is now split. "
+                       "Move it back by hand before acting on this "
+                       "row again.";
             return "the META companion could not be moved; nothing "
                    "was filed";
         }
