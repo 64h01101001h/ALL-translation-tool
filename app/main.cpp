@@ -25302,8 +25302,14 @@ private:
                     return !prog.wasCanceled();
                 });
             prog.close();
+            // PERF-15: this called lineCount() - a 1.7 s COUNT(*)
+            // over 14.1M rows - a SECOND time, when update() had
+            // already paid it into st.lines on the line above. (The
+            // tempting MAX(id) proxy was measured at 0.1 ms but lies
+            // the moment a file is ever removed; reuse tells the
+            // truth for free.)
             info_->setHtml(indexResultHtml(st, ix.fileCount(),
-                                           ix.lineCount(), libTotal));
+                                           st.lines, libTotal));
         } catch (const std::exception& ex) {
             prog.close();
             info_->setHtml(QString("<b style='color:#b00'>indexing failed:"
