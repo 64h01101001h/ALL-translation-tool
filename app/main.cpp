@@ -27,6 +27,8 @@
 #include "thirdparty/diff_match_patch.h"
 #include <QNetworkAccessManager>
 
+#include <mach/mach.h>
+
 // FAIL-4/PERF-10: every network manager in this file gets a transfer
 // timeout at birth. Qt's default is 0 - wait forever - and the audit
 // measured a folio request still blocked at 59.7 s on a black-holed
@@ -39304,6 +39306,30 @@ int main(int argc, char** argv) {
                            "find/replace and reverts collisions")
                        .arg(ok ? "PASS" : "FAIL");
             if (!ok) ++fails;
+        }
+        // PERF-9: 446 MB before the user does anything, 2.11 GB on a
+        // 10 MB document, and not one memory assertion in the tree.
+        // The coarse net, measured at the very END of the selftest so
+        // the cumulative peak covers every pane and every fixture:
+        // the ceiling is ~x2 the observed peak, generous enough for
+        // instrumentation, tight enough that an unbounded
+        // materialisation (the 23.5 GB PERF-1 shape) can never pass.
+        {
+            task_vm_info_data_t vm{};
+            mach_msg_type_number_t cnt = TASK_VM_INFO_COUNT;
+            const bool got =
+                task_info(mach_task_self(), TASK_VM_INFO,
+                          reinterpret_cast<task_info_t>(&vm),
+                          &cnt) == KERN_SUCCESS;
+            const double peakGB =
+                double(vm.ledger_phys_footprint_peak) /
+                (1024.0 * 1024.0 * 1024.0);
+            const bool memOk = got && peakGB > 0.05 && peakGB < 5.5;
+            log << QString("  [%1] peak footprint %2 GB stays under "
+                           "the 5.5 GB regression ceiling (PERF-9)")
+                       .arg(memOk ? "PASS" : "FAIL")
+                       .arg(peakGB, 0, 'f', 2);
+            if (!memOk) ++fails;
         }
         for (const QString& l : log)
             printf("%s\n", l.toUtf8().constData());
