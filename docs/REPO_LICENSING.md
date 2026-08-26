@@ -22,6 +22,7 @@ Statuses: **own** (ALL/ACIP work, root LICENSE applies) ·
 | cmake/ | own | build glue |
 | build/ | own | tracked build stubs |
 | docs/ | own | project documentation |
+| dist/ | own | release notes and pointers beside the artifacts |
 | VERSION | own | — |
 | README.md | own | — |
 | TODO.md | own | — |
