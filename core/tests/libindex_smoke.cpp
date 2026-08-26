@@ -92,6 +92,37 @@ int main() {
           "stamp settles: next update touches nothing");
     fs::remove(verbs);
 
+    // WP-10 (SQA re-measurement 2026-08-26): a write-side failure
+    // mid-index must not stamp the file as current - stamped-current
+    // over dropped rows is a PERMANENT silent search hole, because
+    // every later incremental pass sees "unchanged" and never heals.
+    // Driven for real: ALL_INDEX_MAX_PAGES caps the db so inserts hit
+    // SQLITE_FULL, then the cap lifts and the next pass must heal.
+    {
+        const fs::path r2 = fs::temp_directory_path() / "libindex_wp10";
+        fs::remove_all(r2);
+        fs::create_directories(r2);
+        std::string big;
+        for (int i = 0; i < 4000; ++i)
+            big += "SDUG BSNGAL LINE " + std::to_string(i) + "\n";
+        write(r2 / "big.txt", big.c_str());
+        setenv("ALL_INDEX_MAX_PAGES", "12", 1);
+        allcore::LibraryIndex cap((r2 / ".index.db").string());
+        auto stc = cap.update(r2.string());
+        unsetenv("ALL_INDEX_MAX_PAGES");
+        CHECK(stc.write_failures > 0,
+              "a full index db is COUNTED, never silent (WP-10)");
+        allcore::LibraryIndex heal((r2 / ".index.db").string());
+        auto sth = heal.update(r2.string());
+        CHECK(sth.added + sth.updated >= 1 &&
+                  sth.write_failures == 0,
+              "the failed file was not stamped - the next pass "
+              "heals it (WP-10)");
+        CHECK(heal.lineCount() >= 4000,
+              "after healing, every line is searchable (WP-10)");
+        fs::remove_all(r2);
+    }
+
     fs::last_write_time(root / "notes.txt",
                         fs::file_time_type::clock::now());
     write(root / "notes.txt", "completely new content\n");

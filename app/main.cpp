@@ -23310,6 +23310,18 @@ public:
                       cutHtml.contains("stopped"),
                   "a STOPPED index run never borrows the words \"up to "
                   "date\" from the run that finished");
+            // WP-10: a pass with write failures may not say "up to
+            // date" - the pane names the count and the retry path
+            allcore::LibraryIndex::UpdateStats wf;
+            wf.added = 100;
+            wf.write_failures = 3;
+            const QString wfHtml =
+                indexResultHtml(wf, 100, 1000, 8988);
+            check(!wfHtml.contains("up to date") &&
+                      wfHtml.contains("3 file(s) could NOT") &&
+                      wfHtml.contains("retries"),
+                  "an index pass with write failures says NOT, names "
+                  "the count, and points at the retry (WP-10)");
             check(cutHtml.contains("120") && cutHtml.contains("8988") &&
                       cutHtml.contains("8868"),
                   "a stopped index run discloses its remainder: files "
@@ -25479,6 +25491,29 @@ private:
                 .arg(libTotal > 0 ? QString::number(libTotal - files)
                                   : QString("?"));
         }
+        // WP-10 (rule 3): a pass with write failures may not say
+        // "up to date" - those files are NOT in the index, on
+        // purpose, so the next pass retries them; the pane says so.
+        if (st.write_failures > 0)
+            return QString(
+                       "<b style='color:#935800'>Index update "
+                       "incomplete.</b> %1 file(s) could NOT be "
+                       "written into the index (disk full or "
+                       "database error) and were left unstamped so "
+                       "the next run retries them.<br>%2 added · %3 "
+                       "updated · %4 removed · %5 unchanged · %6 "
+                       "file(s), %7 line(s) indexed.<br><small>Free "
+                       "disk space, then run \u201cUpdate search "
+                       "index\u201d again \u2014 searches cannot "
+                       "answer from the failed files until then."
+                       "</small>")
+                .arg(st.write_failures)
+                .arg(st.added)
+                .arg(st.updated)
+                .arg(st.removed)
+                .arg(st.unchanged)
+                .arg(files)
+                .arg(lines);
         return QString("<b>Search index up to date.</b><br>%1 added · %2 "
                        "updated · %3 removed · %4 unchanged<br>%5 file(s), "
                        "%6 line(s) indexed.<br><small>The Search pane's "

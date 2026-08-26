@@ -2,6 +2,8 @@
 
 #include <sqlite3.h>
 
+#include <cstdlib>
+
 #include <stdexcept>
 
 namespace allcore {
@@ -43,6 +45,11 @@ Progress::Progress(const std::string& db_path) {
         throw std::runtime_error("cannot open progress db '" + db_path +
                                  "': " + err);
     }
+    // WP-15 test hook: a page cap makes real SQLITE_FULL reachable
+    // by the battery without filling a disk
+    if (const char* cap = std::getenv("ALL_PROGRESS_MAX_PAGES"))
+        exec(db_,
+             ("PRAGMA max_page_count=" + std::string(cap)).c_str());
     exec(db_,
          "CREATE TABLE IF NOT EXISTS vocab ("
          "  wylie TEXT PRIMARY KEY,"
@@ -80,7 +87,7 @@ void Progress::touchWord(const std::string& wylie, long long now) {
     sqlite3_bind_double(s.p, 4, kEaseStart);
     sqlite3_bind_int64(s.p, 5, now);   // new words are due immediately
     sqlite3_bind_int64(s.p, 6, now);
-    sqlite3_step(s.p);
+    if (sqlite3_step(s.p) != SQLITE_DONE) ++write_failures_;   // WP-15
 }
 
 void Progress::reviewWord(const std::string& wylie, bool knew_it,
@@ -108,7 +115,7 @@ void Progress::reviewWord(const std::string& wylie, bool knew_it,
     sqlite3_bind_int64(u.p, 3, due);
     sqlite3_bind_int64(u.p, 4, now);
     sqlite3_bind_text(u.p, 5, wylie.c_str(), -1, SQLITE_TRANSIENT);
-    sqlite3_step(u.p);
+    if (sqlite3_step(u.p) != SQLITE_DONE) ++write_failures_;   // WP-15
     recordDrill("vocab", wylie, knew_it, now);
 }
 
@@ -137,7 +144,7 @@ void Progress::recordDrill(const std::string& kind, const std::string& key,
     sqlite3_bind_text(s.p, 2, kind.c_str(), -1, SQLITE_TRANSIENT);
     sqlite3_bind_text(s.p, 3, key.c_str(), -1, SQLITE_TRANSIENT);
     sqlite3_bind_int(s.p, 4, correct ? 1 : 0);
-    sqlite3_step(s.p);
+    if (sqlite3_step(s.p) != SQLITE_DONE) ++write_failures_;   // WP-15
 }
 
 void Progress::recordSegmentRead(long long segment_id, bool peeked,
@@ -151,7 +158,7 @@ void Progress::recordSegmentRead(long long segment_id, bool peeked,
     sqlite3_bind_int64(s.p, 3, now);
     sqlite3_bind_int(s.p, 4, peeked ? 1 : 0);
     sqlite3_bind_int64(s.p, 5, now);
-    sqlite3_step(s.p);
+    if (sqlite3_step(s.p) != SQLITE_DONE) ++write_failures_;   // WP-15
 }
 
 std::vector<long long> Progress::peekedSegments(int limit) const {

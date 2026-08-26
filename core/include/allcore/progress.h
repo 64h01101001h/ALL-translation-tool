@@ -20,6 +20,11 @@ class Progress {
 public:
     // Opens (or creates) the progress database and its schema.
     explicit Progress(const std::string& db_path);
+    // WP-15 (2026-08-26): writes this store could not land (e.g.
+    // disk full). The store never throws for them - drills must not
+    // crash mid-session - but it never hides them either; a pane
+    // that shows progress should disclose a nonzero count (rule 3).
+    int writeFailures() const { return write_failures_; }
     ~Progress();
     Progress(const Progress&) = delete;
     Progress& operator=(const Progress&) = delete;
@@ -70,6 +75,7 @@ public:
 
 private:
     sqlite3* db_ = nullptr;
+    int write_failures_ = 0;   // WP-15
 };
 
 }  // namespace allcore
