@@ -33548,6 +33548,31 @@ public:
                   "pronunciation lane names the true tier of a "
                   "non-provisional gloss");
         }
+        // DATA-9: the ENGLISH lane printed the raw internal tier
+        // string - [auto-aligned] - across 3,912 reverse-index rows
+        // while its sibling lanes normalized to [PROVISIONAL]. The
+        // house rule is that auto-aligned material LOOKS provisional
+        // everywhere; a raw storage token is a label only its
+        // programmer understands. "pillar" is the measured case.
+        {
+            auto keepLookup3 = g_lookupQuery;
+            g_lookupQuery = [](const QString&) {};
+            box_->setText("pillar");
+            emit box_->returnPressed();
+            g_lookupQuery = keepLookup3;
+            QString engRow;
+            for (int i = 0; i < list_->count(); ++i) {
+                const QString t = list_->item(i)->text();
+                if (t.startsWith(QString::fromUtf8("\U0001F501")) &&
+                    t.contains("ka ba")) { engRow = t; break; }
+            }
+            check(!engRow.isEmpty(),
+                  "the English lane answers 'pillar' with ka ba");
+            check(engRow.contains("[PROVISIONAL]") &&
+                      !engRow.contains("auto-aligned"),
+                  "the English lane wears the reader's label, never "
+                  "the storage token (DATA-9)");
+        }
         box_->setText("TD04156");
         runSearch();
         bool file = false;
@@ -33715,10 +33740,17 @@ private:
             for (const auto& h : spine_.reverseIndex(
                      q.toLower().toStdString())) {
                 if (r++ >= 3) break;
+                // DATA-9: h.tier is the STORAGE token; the reader's
+                // label for auto-aligned is [PROVISIONAL], as the
+                // other two lanes already say.
+                const QString tierLabel =
+                    h.tier == "auto-aligned"
+                        ? QString("PROVISIONAL")
+                        : QString::fromStdString(h.tier);
                 add(QString::fromUtf8("🔁  english “") + q +
                         QString::fromUtf8("” → ") +
                         QString::fromStdString(h.wylie) + "   [" +
-                        QString::fromStdString(h.tier) + "]",
+                        tierLabel + "]",
                     0, QString::fromStdString(h.wylie));
             }
         } catch (const std::exception&) {
@@ -34214,6 +34246,14 @@ static QString translatorSurveyMarkdown(allcore::Spine& spine,
                      .arg(c);
         }
         if (top.empty()) m += "(none — full coverage)\n";
+        // DATA-6: 15 of 786 unknown forms were shown with NO remainder
+        // line, twelve lines above a section that discloses its own
+        // cut. A capped list that does not say what it cut reads as
+        // complete (house rule 3).
+        else if ((int)top.size() > 15)
+            m += QString("…and %1 more distinct unknown form(s) "
+                         "not listed — top 15 only\n")
+                     .arg((int)top.size() - 15);
         m += "\n";
     }
     if (!quotes.empty()) {
