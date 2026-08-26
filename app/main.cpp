@@ -2589,6 +2589,18 @@ static bool saveOrWarn(QWidget* parent, const QString& path,
 //
 // So the verdict lives in one named predicate, flushed before it is
 // asked, and a test can drive it without a full disk.
+// FAIL-6: a network reply parsed as JSON must DISTINGUISH "the server
+// listed nothing" from "the server did not send JSON" - an HTTP 200
+// carrying an HTML error page used to parse to an empty document and
+// render as "BDRC lists no scan volumes", a silent wrong answer to a
+// translator. ok is false when the bytes were not JSON at all.
+static QJsonObject jsonObjectOrFlag(const QByteArray& bytes, bool* ok) {
+    QJsonParseError pe{};
+    const auto doc = QJsonDocument::fromJson(bytes, &pe);
+    if (ok) *ok = (pe.error == QJsonParseError::NoError && doc.isObject());
+    return doc.object();
+}
+
 static bool streamWriteOk(QTextStream& ts, QFile& f) {
     ts.flush();
     if (ts.status() != QTextStream::Ok) return false;
@@ -8722,8 +8734,14 @@ private:
                                   rep->errorString());
                     return;
                 }
-                const auto d =
-                    QJsonDocument::fromJson(rep->readAll()).object();
+                bool jsonOk = false;
+                const auto d = jsonObjectOrFlag(rep->readAll(), &jsonOk);
+                if (!jsonOk) {
+                    list->addItem(
+                        "BDRC replied, but not with JSON — the "
+                        "service may be degraded; try again shortly");
+                    return;
+                }
                 const auto rows = d["results"]
                                       .toObject()["bindings"]
                                       .toArray();
@@ -8790,7 +8808,19 @@ private:
                 scanCap_->setOpenExternalLinks(true);
                 return;
             }
-            const auto o = QJsonDocument::fromJson(rep->readAll()).object();
+            bool jsonOk = false;
+            const auto o = jsonObjectOrFlag(rep->readAll(), &jsonOk);
+            if (!jsonOk) {
+                // FAIL-6's exact wrong answer lived here: an HTML error
+                // page parsed to an empty object and rendered as "BDRC
+                // lists no scan volumes" - the difference between "the
+                // archive has nothing" and "the request went wrong" is
+                // the whole point of reporting.
+                scanCap_->setText("BDRC replied, but not with JSON — "
+                                  "cannot tell whether scans exist; try "
+                                  "again shortly");
+                return;
+            }
             QString lic = o["license"].toString();
             scanLicense_ = lic;
             QStringList manifests;
@@ -8902,8 +8932,14 @@ private:
             rep->deleteLater();
             if (epoch != fetchEpoch_) return;
             if (rep->error() == QNetworkReply::NoError) {
-                const auto man =
-                    QJsonDocument::fromJson(rep->readAll()).object();
+                bool jsonOk = false;
+                const auto man = jsonObjectOrFlag(rep->readAll(), &jsonOk);
+                if (!jsonOk) {
+                    scanCap_->setText(
+                        "the IIIF manifest was not JSON — cannot "
+                        "list folios; try again shortly");
+                    return;
+                }
                 for (const auto& sq : man["sequences"].toArray()) {
                     for (const auto& cv :
                          sq.toObject()["canvases"].toArray()) {
@@ -15463,6 +15499,19 @@ public:
                   "control: the arithmetic discriminates - primary ink "
                   "on paper is far above the floor, so a pin that "
                   "passed everything would be visible here");
+        }
+        // FAIL-6: HTML in, honestly flagged out. The helper must say
+        // "not JSON" for an error page and stay quiet for real JSON -
+        // the difference between "the archive has nothing" and "the
+        // request went wrong".
+        {
+            bool ok = true;
+            jsonObjectOrFlag("<html><body>502</body></html>", &ok);
+            check(!ok, "an HTML error page is flagged as not-JSON (FAIL-6)");
+            bool ok2 = false;
+            const auto o = jsonObjectOrFlag("{\"manifests\":[]}", &ok2);
+            check(ok2 && o.contains("manifests"),
+                  "real JSON parses with the flag staying clean");
         }
         // DATA-4: the Library banner counted every *.txt under the
         // collection dirs - including the " META.TXT" companion files,
