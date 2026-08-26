@@ -110,6 +110,31 @@ def main():
             f.write(str(msgbox) + "\n")
         notes.append(f"R3 baseline lowered to {msgbox}")
 
+    # G1 — the green vocabulary is FROZEN (SQA DATA-12). The audit
+    # found seven saturated greens across 43 sites giving the binding
+    # colour four different meanings; 2026-08-26 consolidated them to
+    # exactly three, each with ONE meaning:
+    #   #1E6B4E  kAct    - binding authority (HGM's English, approvals,
+    #                      confirmed rulings)
+    #   #2E7D32  reserved- the second binding-family green, kept out of
+    #                      machine/reference use by the ux pins
+    #   #3B7A3B          - the terminology-check "matched" bullet
+    # Pale wash tints (all channels > 0xC8) are backgrounds, not inks.
+    # A NEW saturated green is a new meaning: name it here with a
+    # ruling or use a token that exists.
+    import re as _re
+    G1_ALLOWED = {"1E6B4E", "2E7D32", "3B7A3B"}
+    for m in _re.finditer(r"#([0-9A-Fa-f]{6})", main_cpp):
+        hx = m.group(1).upper()
+        r, g, b = (int(hx[i:i+2], 16) for i in (0, 2, 4))
+        if g > r and g >= b and g < 0xC8 and hx not in G1_ALLOWED:
+            line = main_cpp[:m.start()].count("\n") + 1
+            fails.append(
+                f"G1 app/main.cpp:{line}: unvocabularied green #{hx} "
+                f"- the green vocabulary is frozen at three named "
+                f"meanings (DATA-12); use a token or add a ruling "
+                f"here")
+
     # R4 — the pre-W5 failing inks may not return as text colors.
     # Incident: captions at 2.78:1 shipped for weeks.
     for bad in ("color:#9C948A", "color:#8A8A8A", "color:#999;",

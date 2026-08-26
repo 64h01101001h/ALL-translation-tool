@@ -605,7 +605,7 @@ static QString tm84000Html(const std::string& wylie, int limit = 5) {
                                    ? QString("an unmeasured number")
                                    : QString::number(tmTotal);
     QString h =
-        "<hr><div style='color:#1F5B4B'><b>84000 Translation "
+        "<hr><div style='color:#2E629E'><b>84000 Translation "
         "Memory</b> <small>(CC BY 4.0, 84000: Translating the Words "
         "of the Buddha - published-translation comparanda, reference "
         "only, never HGM)</small> <small style='color:#78706A'>showing " +
@@ -1118,7 +1118,7 @@ static QString entryHtml(const allcore::Entry& e,
                          "padding:1px 7px;border-radius:8px;"
                          "font-size:11px' title='%3'>IDIOM%4</span>")
                      .arg(approved ? "#DDEBDC" : "#F2E8CF")
-                     .arg(approved ? "#2C5B2E" : "#6E5A1E")
+                     .arg(approved ? "#1E6B4E" : "#6E5A1E")
                      .arg(it->second.second.toHtmlEscaped())
                      .arg(approved ? "" : " (proposed)");
         }
@@ -2460,7 +2460,7 @@ static QString editionDiffHtml(const QString& a, const QString& b,
                  "</span>";
             lineA += t.count('\n');
         } else {   // INSERT (B-only)
-            h += "<span style='background:#D5E8D2;color:#1E5B24'>" +
+            h += "<span style='background:#D5E8D2;color:#2B2118'>" +
                  t.toHtmlEscaped().replace("\n", "<br>") +
                  "</span>";
             flushSite(t);
@@ -14917,7 +14917,7 @@ public:
             if (a.passage) {
                 if (!passageHdr) {
                     passageHdr = true;
-                    h += "<div style='font-size:12px;color:#1F5B4B;"
+                    h += "<div style='font-size:12px;color:#1E6B4E;"
                          "font-weight:600;letter-spacing:.06em;"
                          "margin-top:8px'>WHERE HIS PUBLISHED "
                          "ENGLISH USES THIS LEMMA (same work)</div>"
@@ -19548,7 +19548,7 @@ private:
                         2);
                     if (!hits.empty()) {
                         h += "<div style='margin-top:6px;color:"
-                             "#1F5B4B'><b>84000 rendered a matching "
+                             "#2E629E'><b>84000 rendered a matching "
                              "passage</b> <small>(CC BY 4.0 — "
                              "reference only, never his)</small>"
                              "</div>";
@@ -24803,7 +24803,7 @@ private:
             const QString pid = auth.value("pid").toString();
             h += "<br>&nbsp;&nbsp;\u2022 <a href='https://"
                  "library.bdrc.io/show/bdr:" + pid + "'>" + pid +
-                 " at BDRC</a> <small style='color:#2C5B2E'>"
+                 " at BDRC</a> <small style='color:#1E6B4E'>"
                  "(confirmed per-text link \u2014 ACIP\u2194BDRC "
                  "catalog)</small>";
         }
@@ -29440,7 +29440,7 @@ private:
             const QString id = QString::fromStdString(p.id);
             // H5 link classes: a ruling's consequence is visible
             // in its color — commit green, reject red, park muted
-            h += "<br><a style='color:#1E7A4E' href='approve:" + id +
+            h += "<br><a style='color:#1E6B4E' href='approve:" + id +
                  "'>✓ Approve</a> &nbsp; "
                  "<a style='color:#8C2F2B' href='decline:" + id +
                  "'>✗ Decline</a> &nbsp; "
