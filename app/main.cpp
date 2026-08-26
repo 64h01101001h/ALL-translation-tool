@@ -2674,7 +2674,16 @@ static bool writeAllOrWarn(QWidget* parent, const QString& path,
     if (!ok) {
         warnWriteFail(parent, f, what);
         f.close();
-        QFile::remove(path);   // leave no truncated stub behind
+        // FAIL-9: this remove's bool was discarded - when it fails,
+        // a TRUNCATED file remains at the path the user was just told
+        // holds nothing, and the next launch may read the stub as
+        // data. Removal is verified; a surviving stub is named.
+        if (!QFile::remove(path) && QFile::exists(path))
+            qWarning() << what
+                       << "write failed AND the truncated remnant "
+                          "could not be deleted - a partial file "
+                          "remains at" << path
+                       << "- delete it before trusting that file";
         return false;
     }
     f.close();
@@ -21701,8 +21710,13 @@ private:
             const int mode = conflict->currentIndex();
             if (mode == 0) return QString();   // skip
             if (mode == 2) {                    // overwrite
-                QFile::remove(dst);
-                return dst;
+                // FAIL-9: this remove's bool was discarded. When it
+                // fails (locked file, permissions) the copy that
+                // follows fails on the existing file and the user's
+                // OVERWRITE silently becomes a SKIP. Fall through to
+                // keep-both instead: the import still lands, under a
+                // numbered name, and nothing pretends.
+                if (QFile::remove(dst)) return dst;
             }
             const QFileInfo fi(dst);            // keep both
             for (int n = 2; n < 1000; ++n) {
