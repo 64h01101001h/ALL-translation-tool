@@ -216,6 +216,26 @@ def cmd_selftest():
     if not objects_for("definitely_not_a_real_file.cpp") == []:
         bad.append("objects_for must return empty for an unknown file")
 
+    # ENOSPC incident 2026-08-26: the lock drill. A mutating run
+    # against a held lock must REFUSE; the drill plants a lock at a
+    # sandbox path and expects the child to walk away. (The lock is
+    # scoped to mutating modes precisely so THIS selftest can run
+    # inside a sweep's ctest without deadlocking the sweep - which is
+    # how the first, unscoped lock poisoned four verdicts.)
+    lockp = os.path.join(d, "drill.lock")
+    io.open(lockp, "w").write("drill")
+    env = dict(os.environ, MUTATE_LOCK_PATH=lockp)
+    import subprocess
+    r = subprocess.run(
+        [sys.executable, os.path.abspath(__file__),
+         "--file", "core/src/spine.cpp",
+         "--old", "x-never-matches", "--new", "y",
+         "--test", "none"],
+        capture_output=True, text=True, env=env)
+    if r.returncode == 0 or "REFUSED" not in (r.stdout + r.stderr):
+        bad.append("a mutating run against a held lock must REFUSE "
+                   "(got rc %d)" % r.returncode)
+
     shutil.rmtree(d, ignore_errors=True)
     for b in bad:
         print("  [FAIL]", b)
@@ -291,6 +311,7 @@ def main():
     a = ap.parse_args()
     if a.selftest:
         return cmd_selftest()
+    _acquire_lock()
     if a.sweep:
         return cmd_sweep(os.path.join(ROOT, a.sweep), a.only)
     if not (a.file and a.old is not None and a.new is not None):
@@ -299,8 +320,10 @@ def main():
     return mutate(a.file, a.old, a.new, a.test, a.expect_fail_contains)
 
 
-LOCK = os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                    ".mutate.lock")
+LOCK = os.environ.get(
+    "MUTATE_LOCK_PATH",
+    os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                 ".mutate.lock"))
 
 
 def _acquire_lock():
@@ -324,5 +347,4 @@ def _acquire_lock():
 
 
 if __name__ == "__main__":
-    _acquire_lock()
     sys.exit(main())
