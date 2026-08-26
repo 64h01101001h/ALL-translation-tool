@@ -487,15 +487,20 @@ def cmd_selftest(root):
               t, "Diamond Cutter Tool Data/build/reference.db"),
           "team", None)
     # 6. unresolved terms block a market press but not a team one.
+    # Fixture note: this used soas_pos until 2026-08-26, when that row
+    # was verified CC BY 4.0 against the Zenodo record and moved to ok.
+    # The teachings index is the remaining genuinely-gated payload
+    # (SHIP.md item 3, Adam's consent line). If THAT closes too, this
+    # fixture must move again - the test wants any still-gated row.
     check("gated payload in a market press",
           lambda t: stage_with(
-              t, "Diamond Cutter Tool Data/data/soas_pos/"
-                 "classical-lexicon.txt"),
+              t, "Diamond Cutter Tool Data/data/teaching/"
+                 "teaching_moments_card.json"),
           "market", "UNRESOLVED TERMS")
     check("gated payload in a team press",
           lambda t: stage_with(
-              t, "Diamond Cutter Tool Data/data/soas_pos/"
-                 "classical-lexicon.txt"),
+              t, "Diamond Cutter Tool Data/data/teaching/"
+                 "teaching_moments_card.json"),
           "team", None)
     # 7. a wholly unmanifested top-level directory FAILS.
     check("unmanifested top-level dir",
