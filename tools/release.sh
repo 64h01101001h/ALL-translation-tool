@@ -42,6 +42,18 @@ git commit -m "Release $VER
 
 Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>"
 
+# MEM-5: the sanitizer gate had no trigger - written, recorded once
+# (stale even then), and never invoked by anything. A RELEASE is the
+# natural cadence: the asan+ubsan battery costs minutes, which is too
+# much per press and nothing next to a tag that outlives the machine.
+# A sanitizer report is a defect until proven otherwise; no tag lands
+# over one.
+if ! bash tools/sanitized_battery.sh; then
+  echo "release: the SANITIZED battery FAILED - unwinding the version commit"
+  git reset --hard HEAD~1
+  exit 1
+fi
+
 # the press PROVES the release before anything is tagged - a failed
 # press leaves no tag behind (learned the hard way: two half-releases
 # had to be unwound on 2026-08-21)

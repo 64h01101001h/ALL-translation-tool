@@ -25,6 +25,10 @@
 set -Eeuo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+# every selftest wall-clock ceiling derates itself when this is set -
+# instrumentation tax is not a regression (first real run failed only
+# on a ceiling; nothing the sanitizers exist to find).
+export ALL_SANITIZED=1
 BUILD="${ALL_ASAN_BUILD_DIR:-$ROOT/cmake-build-asan}"
 JOBS="${ALL_JOBS:-8}"
 
