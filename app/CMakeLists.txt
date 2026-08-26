@@ -48,9 +48,20 @@ if(TARGET allocr)
   target_link_libraries(DiamondCutterTranslationTool PRIVATE allocr)
   target_compile_definitions(DiamondCutterTranslationTool PRIVATE ALL_HAVE_OCR)
 endif()
+# BUILD-15: with no explicit identifier, Qt derived
+# com.appelegant.DiamondCutterTranslationTool from a machine-local
+# default - a stranger's reversed domain in the org's shipping
+# artifact, and CFBundleShortVersionString sat at a hardcoded "1.0"
+# while VERSION said 1.0.0-rc.1. The identity now names the Asian
+# Legacy Library and the version is read from the VERSION file the
+# release ritual maintains.
+file(STRINGS "${CMAKE_SOURCE_DIR}/VERSION" ALL_APP_VERSION LIMIT_COUNT 1)
 set_target_properties(DiamondCutterTranslationTool PROPERTIES
   MACOSX_BUNDLE ON
   MACOSX_BUNDLE_ICON_FILE AppIcon.icns
+  MACOSX_BUNDLE_GUI_IDENTIFIER "org.asianlegacylibrary.DiamondCutterTranslationTool"
+  MACOSX_BUNDLE_BUNDLE_VERSION "${ALL_APP_VERSION}"
+  MACOSX_BUNDLE_SHORT_VERSION_STRING "${ALL_APP_VERSION}"
 )
 
 find_package(Qt6 COMPONENTS Network REQUIRED)
