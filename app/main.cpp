@@ -4435,6 +4435,18 @@ public:
                        "sa gzhi spos kyis byugs shing me tog bkram")
                        .isEmpty(),
                   "an exactly-attested line still shows its English");
+            // DATA-11: the sutra opening is attested in more than one
+            // rendering; the count must come out so the cell can say
+            // "one of N" instead of presenting one voice as the only
+            // voice.
+            {
+                int nAtt = 0;
+                const QString e1 = attestedEnglish(
+                    "'di skad bdag gis thos pa dus gcig na", &nAtt);
+                check(!e1.isEmpty() && nAtt >= 2,
+                      "a multi-rendered line reports its distinct "
+                      "attested count (DATA-11)");
+            }
             check(attestedEnglish("").isEmpty() &&
                       attestedEnglish("zzzz nothing here zzzz").isEmpty(),
                   "empty and unattested input yield no English");
@@ -11841,7 +11853,8 @@ public:
     //
     // The pecha exporter had this right all along; the two surfaces
     // disagreed about what the word meant. Now they cannot.
-    QString attestedEnglish(const QString& wy) const {
+    QString attestedEnglish(const QString& wy,
+                            int* distinctOut = nullptr) const {
         auto norm = [](QString s) {
             s = s.toLower();
             static const QRegularExpression junk("[^a-z0-9'+.-]+");
@@ -11851,12 +11864,24 @@ public:
         const QString key = norm(wy);
         if (key.isEmpty()) return QString();
         try {
+            // DATA-11: 26.5% of woodblock-length lines carry MORE than
+            // one attested rendering, and this cell showed the first
+            // with no signal the others existed - one voice presented
+            // as the only voice. The distinct count now travels out so
+            // the cell can say so.
             auto segs = spine_.corpusSearch(
-                '"' + key.toStdString() + '"', "", 5);
+                '"' + key.toStdString() + '"', "", 12);
+            QString first;
+            std::set<std::string> distinct;
             for (const auto& s : segs)
                 if (!s.english.empty() &&
-                    norm(QString::fromStdString(s.wylie)) == key)
-                    return QString::fromStdString(s.english);
+                    norm(QString::fromStdString(s.wylie)) == key) {
+                    if (first.isEmpty())
+                        first = QString::fromStdString(s.english);
+                    distinct.insert(s.english);
+                }
+            if (distinctOut) *distinctOut = (int)distinct.size();
+            if (!first.isEmpty()) return first;
         } catch (const std::exception&) {
         }
         return QString();   // unattested: EMPTY, never a near match
@@ -11969,7 +11994,17 @@ public:
                                        et.toStdString()));
                 // exact attestation only; an unattested line shows an
                 // empty cell rather than a neighbour's English
-                eng = attestedEnglish(w);
+                int nAtt = 0;
+                eng = attestedEnglish(w, &nAtt);
+                // DATA-11: when the corpus holds more than one
+                // rendering of this exact line, say so - the master
+                // translated it differently in different classes,
+                // and hiding that resolves a variation only he may
+                // resolve.
+                if (nAtt > 1)
+                    eng += QString::fromUtf8(" \u27e8+%1 more "
+                                             "attested\u27e9")
+                               .arg(nAtt - 1);
             }
             table->setItem(i, 3, new QTableWidgetItem(eng));
             QCoreApplication::processEvents();
