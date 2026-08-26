@@ -5897,10 +5897,40 @@ public:
         // lattice + spans) — the algorithmic path a regression would
         // hit. Display timing is a GUI concern (viewport-lazy there,
         // pathological offscreen), covered by the manual checklist.
+        // PERF-2 (guards half): both perf guards hardcoded an
+        // acip_release6 fixture path, so on a machine whose library
+        // uses the real collection layout - like the machine with
+        // 8,988 installed texts this audit ran on - they skipped, and
+        // the open-path regression they exist to catch had NO guard
+        // anywhere. The fixture is now DISCOVERED: the hardcoded path
+        // if present, else the largest installed text. Skip only when
+        // there is genuinely no library.
+        const auto largestLibraryText = [&]() -> QString {
+            QString best;
+            qint64 bestSz = 0;
+            QDirIterator it(selfTestRoot_ + "/library",
+                            {"*.txt", "*.TXT", "*.act", "*.ACT"},
+                            QDir::Files,
+                            QDirIterator::Subdirectories);
+            while (it.hasNext()) {
+                it.next();
+                const auto fi = it.fileInfo();
+                if (fi.fileName().contains(" META.",
+                                           Qt::CaseInsensitive))
+                    continue;
+                if (fi.size() > bestSz) {
+                    bestSz = fi.size();
+                    best = fi.filePath();
+                }
+            }
+            return best;
+        };
         {
-            QFile v(selfTestRoot_ +
-                    "/library/acip_release6/TD10199_T.TXT");
-            if (v.open(QIODevice::ReadOnly)) {
+            QString vp = selfTestRoot_ +
+                         "/library/acip_release6/TD10199_T.TXT";
+            if (!QFile::exists(vp)) vp = largestLibraryText();
+            QFile v(vp);
+            if (!vp.isEmpty() && v.open(QIODevice::ReadOnly)) {
                 const std::string vol =
                     QString::fromUtf8(v.readAll()).toStdString();
                 QElapsedTimer t;
@@ -5927,18 +5957,26 @@ public:
         // loadDoc -> lazy layout) on the largest volume — this is the
         // check that would have caught the Library-open hang
         {
-            QFile v(selfTestRoot_ +
-                    "/library/acip_release6/TD3811I_inc_t.txt");
-            if (v.exists()) {
+            QString vp = selfTestRoot_ +
+                         "/library/acip_release6/TD3811I_inc_t.txt";
+            if (!QFile::exists(vp)) vp = largestLibraryText();
+            if (!vp.isEmpty()) {
                 QElapsedTimer t;
                 t.start();
-                openFile(v.fileName());
+                openFile(vp);
                 const qint64 ms = t.elapsed();
-                log << QString("  [info] Overlay: 1.2MB volume "
-                               "openFile in %1 ms")
+                log << QString("  [info] Overlay: %1 (%2 KB) openFile "
+                               "in %3 ms")
+                           .arg(QFileInfo(vp).fileName())
+                           .arg(QFileInfo(vp).size() / 1024)
                            .arg(ms);
                 check(ms < 20000,
                       "full-volume openFile under the widget ceiling");
+            } else {
+                // the OLD silent skip printed nothing at all - a guard
+                // that vanishes without a trace protects nobody
+                log << "  [info] Overlay: no library text found — "
+                       "openFile ceiling guard skipped";
             }
         }
         input_->clear();
