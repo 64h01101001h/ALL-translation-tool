@@ -37,7 +37,7 @@ the reasoning recorded; OPEN means not yet reached.*
 ## Memory and UB
 | MEM-3 (NULL → SEGV in progress readers) | CLOSED — reproduced at exit 139, then guarded |
 | MEM-4 (unchecked indexing in botok) | CLOSED — .at() = the canonical IndexError, 26 sites |
-| MEM-5 (sanitizer gate never triggered) | CLOSED — first real run executed (found only a ceiling artifact, now derated); release ritual runs it before any tag |
+| MEM-5 (sanitizer gate never triggered) | CLOSED — first FULL CLEAN run in the project's history: all 86 suites green under ASan+UBSan (2026-08-26, 55.7 s); the only maiden-run failure was a wall-clock ceiling tripped by instrumentation tax, now derated ×4 under ALL_SANITIZED; the release ritual runs the sanitized battery before any tag |
 | MEM-6 (widget read off-thread) | CLOSED — the worker uses its captured value |
 
 ## Static analysis
