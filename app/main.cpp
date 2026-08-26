@@ -1291,15 +1291,28 @@ static QString entryHtml(const allcore::Entry& e,
         }
     }
     if (d.notes && g_appNotes && !e.hgm_gloss.empty()) {
-        int shownNotes = 0;
+        // SQA low + the crawl it caused: the first remainder patch
+        // landed its recount INSIDE the note loop - O(notes^2 x
+        // glosses) with a QString conversion per probe - and the
+        // release selftest timed out at 300 s rendering cards. One
+        // pass now: glosses convert ONCE, every matching note is
+        // counted, the first two render, and the cap discloses the
+        // rest (house rule 3).
+        QStringList glossQ;
+        for (const auto& g : e.hgm_gloss)
+            glossQ << QString::fromStdString(g);
+        int shownNotes = 0, totalNotes = 0;
         for (const auto& note : *g_appNotes) {
+            if (note.lemma.isEmpty()) continue;
             bool hit = false;
-            for (const auto& g : e.hgm_gloss)
-                if (!note.lemma.isEmpty() &&
-                    QString::fromStdString(g).contains(note.lemma,
-                                                       Qt::CaseInsensitive))
+            for (const QString& gq : glossQ)
+                if (gq.contains(note.lemma, Qt::CaseInsensitive)) {
                     hit = true;
-            if (hit) {
+                    break;
+                }
+            if (!hit) continue;
+            ++totalNotes;
+            if (shownNotes < 2) {
                 h += "<div style='background:#F3EDDF;padding:3px 7px;"
                      "border-radius:4px;margin:7px 0 2px 0;"
                      "font-size:11px'>"
@@ -1309,28 +1322,16 @@ static QString entryHtml(const allcore::Entry& e,
                      note.source.toHtmlEscaped() + "</i><br>" +
                      ux::snip(note.text, 280) +
                      "</div>";
-                if (++shownNotes >= 2) break;
+                ++shownNotes;
             }
-            // SQA low: the cap was silent - a term with five published
-            // footnotes showed two and implied that was all of them.
-            // Count the rest and say so (house rule 3).
-            int totalNotes = 0;
-            for (const auto& note : *g_appNotes)
-                for (const auto& g : e.hgm_gloss)
-                    if (!note.lemma.isEmpty() &&
-                        QString::fromStdString(g).contains(
-                            note.lemma, Qt::CaseInsensitive)) {
-                        ++totalNotes;
-                        break;
-                    }
-            if (totalNotes > shownNotes)
-                h += QString("<div style='font-size:11px;color:%1;"
-                             "font-style:italic'>\u2026and %2 more "
-                             "published footnote(s) for this term in "
-                             "the Apparatus pane</div>")
-                         .arg(ux::kSoft)
-                         .arg(totalNotes - shownNotes);
         }
+        if (totalNotes > shownNotes)
+            h += QString("<div style='font-size:11px;color:%1;"
+                         "font-style:italic'>\u2026and %2 more "
+                         "published footnote(s) for this term in "
+                         "the Apparatus pane</div>")
+                     .arg(ux::kSoft)
+                     .arg(totalNotes - shownNotes);
     }
     if (d.das && g_dasSections && !e.wylie.empty()) {
         const int pg = dasPageFor(e.wylie);
