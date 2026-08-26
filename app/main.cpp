@@ -15664,10 +15664,8 @@ public:
             check(after.open(QIODevice::ReadOnly) &&
                       after.readAll() == "CURRENT",
                   "restore drill: the store carries the backup's bytes");
-            check(!allcore::latestBackup(bdir, "store.tsv")
-                       .compare(0, 0, "") ||
-                      QDir(rt + "/backups").entryList(QDir::Files)
-                              .filter("pre-restore-").size() == 1,
+            check(QDir(rt + "/backups").entryList(QDir::Files)
+                          .filter("pre-restore-").size() == 1,
                   "restore drill: the damaged current was safety-copied "
                   "before being overwritten");
             QDir(rt).removeRecursively();
