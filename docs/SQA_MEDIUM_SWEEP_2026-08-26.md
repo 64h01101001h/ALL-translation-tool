@@ -14,7 +14,7 @@ the reasoning recorded; OPEN means not yet reached.*
 | FAIL-3 (dialog seam, zero consumers) | OPEN |
 | FAIL-8 (rollback asserts unverified state) | CLOSED — both META-guard undos verify via restore() |
 | FAIL-9 (99 discarded I/O bools) | TRIAGED — the two with teeth fixed (overwrite-became-skip; surviving truncated stub); rest recorded benign |
-| FAIL-10 (no I/O rule in the process gate) | OPEN |
+| FAIL-10 (no I/O rule in the process gate) | TRIAGED-SUBSUMED — the mechanical rule now exists: Qt6 open() is nodiscard and the STATIC-1 wall reds every ignored one (it convicted this sweep author twice tonight); composed writes route through saveOrWarn/streamWriteOk with their own drills. A broader ban on bare write() would outlaw legitimate uses to catch none that these two nets miss. |
 | FAIL-11 (short-write drill under-pins) | OPEN — its false-lesson history is why FAIL-9 was not blanket-"fixed" |
 | FAIL-12 (read-only root collapses drills) | OPEN |
 | STATIC-2 ([[nodiscard]] on saves) | CLOSED — convicted the audit's site AND one it missed |
