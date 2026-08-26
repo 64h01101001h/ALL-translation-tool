@@ -87,6 +87,40 @@ int main(int argc, char** argv) {
               "already approved",
           "a second approve is refused, not repeated");
 
+    // STATIC-1 (TEST-3 retrofit): a META companion already ON THE
+    // SHELF must refuse the approve and undo the staged move - never
+    // overwrite. This guard survived a reversion probe on 2026-08-26
+    // (green battery with the guard deleted), which is how it earned
+    // this pin.
+    {
+        write(intake / "S99993_META CASE_T_A.TXT", "@001A BODY\n");
+        write(intake / "S99993 META.TXT", "companion");
+        // plant a colliding companion on the destination shelf first
+        fs::create_directories(root / "Sungbum" / "TEST SHELF");
+        write(root / "Sungbum" / "TEST SHELF" / "S99993 META.TXT",
+              "already here");
+        const std::string id3 = led2.stage(
+            (intake / "S99993_META CASE_T_A.TXT").string(),
+            "S99993_META CASE_T_A.TXT", "Sungbum/TEST SHELF",
+            "Nick Cataloger", "2026-08-20 12:03", "");
+        CHECK(!id3.empty(), "the META-collision candidate stages");
+        const std::string err =
+            led2.approve(id3, "Geshe Michael", "2026-08-20");
+        CHECK(err.find("META companion") != std::string::npos,
+              "approve REFUSES when a META companion already sits on "
+              "the shelf");
+        CHECK(fs::exists(root / "AWAITING APPROVAL" /
+                         "S99993_META CASE_T_A.TXT"),
+              "the refused approve undoes its move - the text is back "
+              "in staging");
+        std::ifstream chk(root / "Sungbum" / "TEST SHELF" /
+                          "S99993 META.TXT");
+        std::string kept((std::istreambuf_iterator<char>(chk)),
+                         std::istreambuf_iterator<char>());
+        CHECK(kept == "already here",
+              "the shelf's existing META companion is untouched");
+    }
+
     // a rejected action
     write(intake / "S99992_WRONG_WRONG_X.TXT", "body\n");
     const std::string id2 =

@@ -1,69 +1,109 @@
 {
-  "_meta": {
-    "what": "Named mutations for tools/mutate.py --sweep. The battery's detection power, measured rather than assumed.",
-    "why": "SQA TEST-1 (2026-08-23): 13 of 21 re-injected defects survived the full battery. The unbiased arm was 4 of 9 killed - 44%, n=9, 95% CI roughly 14-79%. A green suite is not evidence that behaviour is preserved.",
-    "how_to_read": "expect=killed means a pin exists and can fail. expect=survived is a KNOWN GAP, recorded honestly so the score is comparable run to run rather than quietly improving when someone edits the list. A run is only trustworthy if the liveness control is killed.",
-    "rule": "Moving an entry from survived to killed requires a real pin, not a looser mutation."
+ "_meta": {
+  "what": "Named mutations for tools/mutate.py --sweep. The battery's detection power, measured rather than assumed.",
+  "why": "SQA TEST-1 (2026-08-23): 13 of 21 re-injected defects survived the full battery. The unbiased arm was 4 of 9 killed - 44%, n=9, 95% CI roughly 14-79%. A green suite is not evidence that behaviour is preserved.",
+  "how_to_read": "expect=killed means a pin exists and can fail. expect=survived is a KNOWN GAP, recorded honestly so the score is comparable run to run rather than quietly improving when someone edits the list. A run is only trustworthy if the liveness control is killed.",
+  "rule": "Moving an entry from survived to killed requires a real pin, not a looser mutation."
+ },
+ "mutations": [
+  {
+   "id": "LIVENESS",
+   "note": "Control. If this is not killed, the harness is broken and no other verdict in the run means anything.",
+   "file": "core/src/spine.cpp",
+   "old": "        long n = -1;",
+   "new": "        long n = 0;",
+   "test": "app_selftest",
+   "expect_fail_contains": "DATA-1",
+   "expect": "killed"
   },
-  "mutations": [
-    {
-      "id": "LIVENESS",
-      "note": "Control. If this is not killed, the harness is broken and no other verdict in the run means anything.",
-      "file": "core/src/spine.cpp",
-      "old": "        long n = -1;",
-      "new": "        long n = 0;",
-      "test": "app_selftest",
-      "expect_fail_contains": "DATA-1",
-      "expect": "killed"
-    },
-    {
-      "id": "HONESTY-PROVISIONAL",
-      "note": "House rule 1. An auto-aligned gloss must never print under the label 'HGM has:'. Pinned by the DrillsPane battery.",
-      "file": "app/main.cpp",
-      "old": "    if (!t.provisional) return \"HGM has: \" + glosses;",
-      "new": "    if (true) return \"HGM has: \" + glosses;",
-      "test": "app_selftest",
-      "expect_fail_contains": "house rule 1",
-      "expect": "killed"
-    },
-    {
-      "id": "AFFIXNORM-BOUNDARY",
-      "note": "Was a TEST-1 survivor; KILLED 2026-08-24. The guard `len > 4` is what guarantees a root syllable survives the four-codepoint strip. At len == 4 the mutant strips a bare 'i'o to the EMPTY STRING - annihilation, not normalisation. Third survivor converted.",
-      "file": "core/src/affixnorm.cpp",
-      "old": "    if (len > 4 && b[len - 4] == AA &&",
-      "new": "    if (len > 3 && b[len - 4] == AA &&",
-      "test": "affix|engines|selftest",
-      "expect": "killed",
-      "expect_fail_contains": "AFFIXNORM-BOUNDARY"
-    },
-    {
-      "id": "TITLEXLAT-SPAN",
-      "note": "Was a TEST-1 survivor; KILLED 2026-08-24. The first pin attempt FAILED - against the existing large query the mutation is invisible because the leftover syllables are not attested singly either. The killing pin uses a dedicated two-title bank where one syllable IS attested alone. Second survivor converted.",
-      "file": "core/src/title_xlat.cpp",
-      "old": "             n >= 2; --n) {",
-      "new": "             n >= 1; --n) {",
-      "test": "title_xlat|engines|selftest",
-      "expect": "killed",
-      "expect_fail_contains": "TITLEXLAT-SPAN"
-    },
-    {
-      "id": "TERMINOLOGY-NESTING",
-      "note": "EQUIVALENT MUTANT - resolved 2026-08-25, and it is not merely unpinned. terminology.cpp suppresses a glossed span contained in a LONGER glossed span with a strict `>`. Containment plus equal length forces identical extents, so `>` and `>=` differ ONLY on two spans sharing one extent - and lattice_smoke's LATTICE-EXTENT-UNIQUE sweep now pins that no such pair is ever emitted (438 real course documents, 42,469 spans, with a control asserting the sweep covered real text). So this mutation is unobservable BY INVARIANT rather than by oversight, and the entry stays 'survived' honestly. If the invariant ever breaks, lattice_smoke goes red first and this becomes a real finding again. Found by the nightly repair task, not by hand - my own attempt chased homonyms and was wrong.",
-      "file": "core/src/terminology.cpp",
-      "old": "                (t.end - t.beg) > (s.end - s.beg)) {",
-      "new": "                (t.end - t.beg) >= (s.end - s.beg)) {",
-      "test": "terminology|engines|selftest",
-      "expect": "survived"
-    },
-    {
-      "id": "SEARCHNORM-RANGE",
-      "note": "Was a TEST-1 survivor; KILLED 2026-08-24 by a pin in searchnorm_smoke that drives the inclusive end of both character classes through the ReorderFilter. First survivor converted.",
-      "file": "core/src/searchnorm.cpp",
-      "old": "bool inRange(char32_t c, char32_t a, char32_t b) { return c >= a && c <= b; }",
-      "new": "bool inRange(char32_t c, char32_t a, char32_t b) { return c >= a && c < b; }",
-      "test": "searchnorm|engines|selftest",
-      "expect": "killed",
-      "expect_fail_contains": "SEARCHNORM-RANGE"
-    }
-  ]
+  {
+   "id": "HONESTY-PROVISIONAL",
+   "note": "House rule 1. An auto-aligned gloss must never print under the label 'HGM has:'. Pinned by the DrillsPane battery.",
+   "file": "app/main.cpp",
+   "old": "    if (!t.provisional) return \"HGM has: \" + glosses;",
+   "new": "    if (true) return \"HGM has: \" + glosses;",
+   "test": "app_selftest",
+   "expect_fail_contains": "house rule 1",
+   "expect": "killed"
+  },
+  {
+   "id": "AFFIXNORM-BOUNDARY",
+   "note": "Was a TEST-1 survivor; KILLED 2026-08-24. The guard `len > 4` is what guarantees a root syllable survives the four-codepoint strip. At len == 4 the mutant strips a bare 'i'o to the EMPTY STRING - annihilation, not normalisation. Third survivor converted.",
+   "file": "core/src/affixnorm.cpp",
+   "old": "    if (len > 4 && b[len - 4] == AA &&",
+   "new": "    if (len > 3 && b[len - 4] == AA &&",
+   "test": "affix|engines|selftest",
+   "expect": "killed",
+   "expect_fail_contains": "AFFIXNORM-BOUNDARY"
+  },
+  {
+   "id": "TITLEXLAT-SPAN",
+   "note": "Was a TEST-1 survivor; KILLED 2026-08-24. The first pin attempt FAILED - against the existing large query the mutation is invisible because the leftover syllables are not attested singly either. The killing pin uses a dedicated two-title bank where one syllable IS attested alone. Second survivor converted.",
+   "file": "core/src/title_xlat.cpp",
+   "old": "             n >= 2; --n) {",
+   "new": "             n >= 1; --n) {",
+   "test": "title_xlat|engines|selftest",
+   "expect": "killed",
+   "expect_fail_contains": "TITLEXLAT-SPAN"
+  },
+  {
+   "id": "TERMINOLOGY-NESTING",
+   "note": "EQUIVALENT MUTANT - resolved 2026-08-25, and it is not merely unpinned. terminology.cpp suppresses a glossed span contained in a LONGER glossed span with a strict `>`. Containment plus equal length forces identical extents, so `>` and `>=` differ ONLY on two spans sharing one extent - and lattice_smoke's LATTICE-EXTENT-UNIQUE sweep now pins that no such pair is ever emitted (438 real course documents, 42,469 spans, with a control asserting the sweep covered real text). So this mutation is unobservable BY INVARIANT rather than by oversight, and the entry stays 'survived' honestly. If the invariant ever breaks, lattice_smoke goes red first and this becomes a real finding again. Found by the nightly repair task, not by hand - my own attempt chased homonyms and was wrong.",
+   "file": "core/src/terminology.cpp",
+   "old": "                (t.end - t.beg) > (s.end - s.beg)) {",
+   "new": "                (t.end - t.beg) >= (s.end - s.beg)) {",
+   "test": "terminology|engines|selftest",
+   "expect": "survived"
+  },
+  {
+   "id": "SEARCHNORM-RANGE",
+   "note": "Was a TEST-1 survivor; KILLED 2026-08-24 by a pin in searchnorm_smoke that drives the inclusive end of both character classes through the ReorderFilter. First survivor converted.",
+   "file": "core/src/searchnorm.cpp",
+   "old": "bool inRange(char32_t c, char32_t a, char32_t b) { return c >= a && c <= b; }",
+   "new": "bool inRange(char32_t c, char32_t a, char32_t b) { return c >= a && c < b; }",
+   "test": "searchnorm|engines|selftest",
+   "expect": "killed",
+   "expect_fail_contains": "SEARCHNORM-RANGE"
+  },
+  {
+   "id": "TEST3-BOUNTY8",
+   "note": "TEST-3 retrofit: corpusCountLine must not conflate the display window with the corpus total. Reverting the honest total left the battery green on 2026-08-23; pinned since.",
+   "file": "app/textreport.h",
+   "old": "inline QString corpusCountLine(int rendered, int fetched, long total) {",
+   "new": "inline QString corpusCountLine(int rendered, int fetched, long total) { total = fetched;",
+   "test": "app_selftest",
+   "expect_fail_contains": "corpus",
+   "expect": "killed"
+  },
+  {
+   "id": "TEST3-PERF1-SKIP",
+   "note": "TEST-3 retrofit: files the cap leaves unread are COUNTED (rule 3). Dropping the counter must go red.",
+   "file": "core/src/gofer.cpp",
+   "old": "if ((int)files.size() >= sc.file_cap) { ++sc.files_skipped; conti",
+   "new": "if ((int)files.size() >= sc.file_cap) { conti",
+   "test": "",
+   "expect_fail_contains": "files left unread are COUNTED",
+   "expect": "killed"
+  },
+  {
+   "id": "TEST3-FAIL2",
+   "note": "TEST-3 retrofit: streamWriteOk must actually judge the write; a version returning true unconditionally shipped rulings that were never saved.",
+   "file": "app/main.cpp",
+   "old": "static bool streamWriteOk(QTextStream& ts, QFile& f) {",
+   "new": "static bool streamWriteOk(QTextStream& ts, QFile& f) { (void)ts; (void)f; return true; } static bool streamWriteOkDead(QTextStream& ts, QFile& f) {",
+   "test": "app_selftest",
+   "expect_fail_contains": "FAILURE",
+   "expect": "killed"
+  },
+  {
+   "id": "TEST3-STATIC1-META",
+   "note": "TEST-3 retrofit: approving over an existing shelf META companion must refuse and undo. This one SURVIVED the 2026-08-26 probe - the pin was written the same day.",
+   "file": "core/src/catalog_actions.cpp",
+   "old": "if (fs::exists(metaDest, ec)) {\n            fs::rename(dest, staged, ec);   // undo the move\n            return \"a META companion of that name is already on the \"\n                   \"shelf; resolve it before approving\";\n        }",
+   "new": "if (false) {}",
+   "test": "catalog_actions",
+   "expect_fail_contains": "META companion",
+   "expect": "killed"
+  }
+ ]
 }
