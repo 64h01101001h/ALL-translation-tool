@@ -472,6 +472,22 @@ cp "$ROOT/docs/distribution/OPEN_SOURCE_NOTICES.md" \
 # exist at all (SQA BUILD-2)
 cp "$ROOT/LICENSE" "$STAGE/LICENSE"
 
+echo "== 6c2. build manifest (BUILD-6; BUILD-24 moved it BEFORE the payload gate so the gate judges it like any other staged file) =="
+# There was no lockfile and no record in the DMG of which Homebrew
+# bottles macdeployqt copied in, so "which OpenSSL did release X carry?"
+# had no answer. This writes BUILD_MANIFEST.{json,txt} beside the app:
+# toolchain versions, git commit and tree state, the architecture and
+# macOS floor, and every bundled Mach-O with its formula, version, SPDX
+# licence and sha256 — plus the checksum of the shipped spine.
+python3 "$ROOT/tools/build_manifest.py" \
+    --bundle "$STAGE/$APPNAME.app" \
+    --out "$STAGE" \
+    --source "$ROOT" \
+    --payload "$DATA" \
+    --mode "$PRESS_MODE" || {
+  echo "BUILD MANIFEST FAILED — a release that cannot say what it was"
+  echo "built from does not ship."; exit 1; }
+
 echo "== 6d. payload gate: open the DMG and check every path =="
 # SQA BUILD-4. The constitution's L2 rule was supposed to stop
 # unmanifested payload. It matched a keyword: data/extracted passed
@@ -496,21 +512,6 @@ python3 "$ROOT/tools/manifest_check.py" --press \
   fi
   exit 6; }
 
-echo "== 6d. build manifest (BUILD-6) =="
-# There was no lockfile and no record in the DMG of which Homebrew
-# bottles macdeployqt copied in, so "which OpenSSL did release X carry?"
-# had no answer. This writes BUILD_MANIFEST.{json,txt} beside the app:
-# toolchain versions, git commit and tree state, the architecture and
-# macOS floor, and every bundled Mach-O with its formula, version, SPDX
-# licence and sha256 — plus the checksum of the shipped spine.
-python3 "$ROOT/tools/build_manifest.py" \
-    --bundle "$STAGE/$APPNAME.app" \
-    --out "$STAGE" \
-    --source "$ROOT" \
-    --payload "$DATA" \
-    --mode "$PRESS_MODE" || {
-  echo "BUILD MANIFEST FAILED — a release that cannot say what it was"
-  echo "built from does not ship."; exit 1; }
 
 # 2026-08-21 field crash: the install rsync replaced the spine db
 # UNDER a live instance Adam had reopened mid-press — sqlite threw,

@@ -38,6 +38,8 @@ both | ok | README.txt | ALL's own text | - | written by tools/package_macos.sh
 both | ok | OPEN_SOURCE_NOTICES.md | ALL's own text | - | docs/distribution/OPEN_SOURCE_NOTICES.md
 both | ok | LICENSE | ALL's own text | - | the repository root LICENSE, added 2026-08-23 (SQA BUILD-2: the project had no licence file)
 both | gated | Diamond Cutter Tool Data/build/hgm_spine_*.db | ALL/ACIP internal data; team distribution | The dictionary and corpus | SHIP.md L1 open item 1 - Adam's written stance on redistributing the HGM release package
+both | ok | BUILD_MANIFEST.txt | ALL's own build record | The dictionary and corpus | written by tools/build_manifest.py each press
+both | ok | BUILD_MANIFEST.json | ALL's own build record | The dictionary and corpus | ditto
 both | ok | Diamond Cutter Tool Data/build/spine_current.txt | ALL's own text; OPTIONAL - the press stages it only when built | The dictionary and corpus | tools/build_spine.py writes it
 team | ok | Diamond Cutter Tool Data/build/reference.db | unlicensed third-party compilations - LOCAL REFERENCE ONLY, never redistributed | compiled into build/reference.db | SHIP.md L1: "P0 MUST-REMOVE(market)"; tools/build_reference_db.py header
 both | ok | Diamond Cutter Tool Data/tools/build_spine.py | ALL's own code | The dictionary and corpus | this repository
