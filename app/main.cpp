@@ -27141,6 +27141,39 @@ public:
                   comp_->currentCompletion().startsWith("BSOD NAM"),
               "predictive typing completes BSOD NAM from the "
               "dictionary");
+        // WP-2 (SQA re-measurement 2026-08-26, confirmed): the
+        // single-file "Save input work" returned SILENTLY when the
+        // file would not open and said "saved" over an unchecked
+        // write. Both quadrants drilled through the real dialog
+        // stub: a good path must land the bytes; a bad path must
+        // say NOT SAVED out loud - silence lost transcriber hours.
+        {
+            pages_.clear();
+            pageIx_ = -1;
+            const QString good =
+                QDir::temp().filePath("all_inputwork_wp2.txt");
+            g_saveDialogStub = [good](const QString&, const QString&,
+                                      const QString&) { return good; };
+            editor_->setPlainText("KA KHA GA NGA");
+            save();
+            QFile gf(good);
+            const bool landed =
+                gf.open(QIODevice::ReadOnly) &&
+                gf.readAll().contains("KA KHA GA NGA");
+            check(landed && status_->text().contains("saved"),
+                  "input work lands its bytes and says so (WP-2)");
+            QFile::remove(good);
+            const QString bad =
+                "/nonexistent-dir-wp2/input.txt";
+            g_saveDialogStub = [bad](const QString&, const QString&,
+                                     const QString&) { return bad; };
+            status_->setText("sentinel");
+            save();
+            check(status_->text().contains("NOT SAVED"),
+                  "an unwritable input-work save says NOT SAVED "
+                  "instead of returning silently (WP-2)");
+            g_saveDialogStub = nullptr;
+        }
         return fails;
     }
 
@@ -27890,16 +27923,26 @@ public:
                 return;
             }
             int nonEmpty = 0;
+            bool wroteOk = true;
             for (int i = 0; i < pages_.size(); ++i) {
                 QFile pf(pageTextFile(i));
                 if (pf.open(QIODevice::ReadOnly | QIODevice::Text)) {
                     const QByteArray t = pf.readAll();
                     if (!t.trimmed().isEmpty()) {
-                        f.write(t);
-                        if (!t.endsWith('\n')) f.write("\n");
+                        wroteOk &= f.write(t) == t.size();
+                        if (!t.endsWith('\n'))
+                            wroteOk &= f.write("\n") == 1;
                         ++nonEmpty;
                     }
                 }
+            }
+            wroteOk &= f.flush();
+            if (!wroteOk) {
+                // a truncated combine reported as combined is the
+                // same lie as WP-2's - refuse the success line
+                warnWriteFail(this, f, "The combined block export");
+                status_->setText("NOT COMBINED \u2014 " + out);
+                return;
             }
             status_->setText(
                 QString("combined %1 typed page(s) of %2 into %3")
@@ -27916,9 +27959,14 @@ public:
             root_ + "/library/input_work/" + base + ".txt",
             "Text (*.txt)");
         if (out.isEmpty()) return;
-        QFile f(out);
-        if (!f.open(QIODevice::WriteOnly | QIODevice::Text)) return;
-        f.write(editor_->toPlainText().toUtf8());
+        // WP-2: the old shape returned SILENTLY on open failure and
+        // said "saved" over an unchecked write - the transcriber's
+        // hours, lost while believed safe. One verified voice now.
+        if (!saveOrWarn(this, out, editor_->toPlainText().toUtf8(),
+                        "The input work")) {
+            status_->setText("NOT SAVED \u2014 " + out);
+            return;
+        }
         status_->setText("saved " + out);
     }
 
@@ -30421,12 +30469,15 @@ public:
 
     bool save() {
         if (path_.isEmpty()) return saveAs();
-        QFile f(path_);
-        if (!f.open(QIODevice::WriteOnly)) {
-            status_->setText("Could not write " + path_);
+        // WP-1: the verdict comes from the flushed, byte-counted
+        // predicate (saveOrWarn), never from an unchecked write.
+        // Failure keeps dirty_ TRUE - the close-prompt is the last
+        // line of defense for a manuscript that never landed.
+        if (!saveOrWarn(this, path_, editor_->toHtml().toUtf8(),
+                        "The manuscript")) {
+            status_->setText("NOT SAVED \u2014 " + path_);
             return false;
         }
-        f.write(editor_->toHtml().toUtf8());
         dirty_ = false;
         status_->setText(QFileInfo(path_).fileName() + " \u2014 saved " +
                          QTime::currentTime().toString("HH:mm"));
@@ -30531,8 +30582,24 @@ public:
                   editor_->toPlainText().contains("round trip"),
               "manuscript saves and reopens");
         QFile::remove(tmp);
+        // WP-1 (SQA re-measurement 2026-08-26, confirmed by the
+        // adversarial pass): a save that cannot land its bytes must
+        // KEEP the manuscript dirty, warn, and never compose a
+        // "saved" status. The old shape discarded f.write's return,
+        // cleared dirty_, and printed saved HH:mm over a truncated
+        // file - silent loss of the very pane people type into.
+        path_ = "/nonexistent-dir-wp1/manuscript.html";
+        editor_->clear();
+        editor_->insertPlainText("bytes that must not vanish");
+        dirty_ = true;
+        const bool badSave = save();
+        check(!badSave && dirty_ &&
+                  !status_->text().contains("saved"),
+              "a failed save keeps dirty_ set and never claims "
+              "'saved' (WP-1)");
         path_.clear();
         editor_->clear();
+        dirty_ = false;
         QSettings("ALL", "TranslationTool")
             .remove("manuscript/lastFile");
         return fails;
