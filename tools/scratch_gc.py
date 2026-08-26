@@ -84,7 +84,6 @@ def sessions(root):
 
 def report(root, hours, reclaim, current_session):
     now = time.time()
-    cutoff = now - hours * 3600
     rows = []
     for sdir in sessions(root):
         size = dir_size(sdir)
