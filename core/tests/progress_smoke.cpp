@@ -1,6 +1,8 @@
 // progress_smoke — the local SRS/progress layer (in-memory db, fixed clock).
 #include <cstdio>
 
+#include <sqlite3.h>
+
 #include "allcore/progress.h"
 
 static int failures = 0;
@@ -85,6 +87,44 @@ int main() {
               misses[0].second == 2,
           "topMisses groups and ranks the named skills");
 
+    {
+        // MEM-3: a NULL in a text column must not SEGV the readers.
+        // sqlite3_column_text returns NULL for a NULL cell, and both
+        // dueWords and recentKeys built a std::string straight from
+        // it. NULLs are plantable by any external tool touching the
+        // same file, and this db lives in the user's own folder.
+        const std::string fp = "/tmp/progress_mem3_probe.db";
+        std::remove(fp.c_str());
+        {
+            allcore::Progress p2(fp);
+            p2.touchWord("real word", 100);
+            p2.recordDrill("card", "real key", true, 100);
+        }
+        sqlite3* raw = nullptr;
+        CHECK(sqlite3_open(fp.c_str(), &raw) == SQLITE_OK,
+              "mem3: probe db reopens raw");
+        char* err = nullptr;
+        sqlite3_exec(raw,
+            "INSERT INTO vocab (wylie, first_seen, last_seen, views, "
+            "ease, interval_days, due) VALUES (NULL, 1,1,1,2.5,1,1);"
+            "INSERT INTO events (ts, kind, key, correct) "
+            "VALUES (2,'card',NULL,1);", nullptr, nullptr, &err);
+        CHECK(err == nullptr, "mem3: NULL rows planted");
+        sqlite3_close(raw);
+        allcore::Progress p3(fp);
+        auto due = p3.dueWords(10, 1000);        // used to SEGV here
+        bool fabricated = false;
+        for (auto& w : due) if (w.empty()) fabricated = true;
+        CHECK(!fabricated && due.size() == 1,
+              "mem3: the NULL vocab row is skipped, not fabricated as "
+              "an empty word");
+        auto rec = p3.recentKeys("card", 10);
+        bool fab2 = false;
+        for (auto& k : rec) if (k.empty()) fab2 = true;
+        CHECK(!fab2 && rec.size() == 1,
+              "mem3: the NULL event key is skipped, not fabricated");
+        std::remove(fp.c_str());
+    }
     std::printf("%s (%d failures)\n",
                 failures ? "PROGRESS SMOKE FAILED" : "PROGRESS SMOKE OK",
                 failures);

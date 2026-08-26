@@ -118,8 +118,15 @@ std::vector<std::string> Progress::dueWords(int limit, long long now) const {
            "SELECT wylie FROM vocab WHERE due<=? ORDER BY due LIMIT ?");
     sqlite3_bind_int64(s.p, 1, now);
     sqlite3_bind_int(s.p, 2, limit);
-    while (sqlite3_step(s.p) == SQLITE_ROW)
-        out.push_back(reinterpret_cast<const char*>(sqlite3_column_text(s.p, 0)));
+    while (sqlite3_step(s.p) == SQLITE_ROW) {
+        // MEM-3: a NULL cell makes sqlite3_column_text return NULL,
+        // and building a std::string from NULL is a SEGV - reproduced
+        // before this guard existed. A NULL row is corrupt data in a
+        // file other tools can touch; it is SKIPPED, never fabricated
+        // as an empty string (rule 3).
+        const auto* txt = sqlite3_column_text(s.p, 0);
+        if (txt) out.push_back(reinterpret_cast<const char*>(txt));
+    }
     return out;
 }
 
@@ -199,10 +206,14 @@ std::vector<std::pair<std::string, long long>> Progress::topMisses(
            "SELECT kind, COUNT(*) FROM events WHERE kind LIKE 'miss:%' "
            "GROUP BY kind ORDER BY COUNT(*) DESC LIMIT ?");
     sqlite3_bind_int(s.p, 1, limit);
-    while (sqlite3_step(s.p) == SQLITE_ROW)
-        out.emplace_back(
-            reinterpret_cast<const char*>(sqlite3_column_text(s.p, 0)),
-            sqlite3_column_int64(s.p, 1));
+    while (sqlite3_step(s.p) == SQLITE_ROW) {
+        // kind is declared NOT NULL, but the same MEM-3 guard costs
+        // one branch and outlives the next schema edit.
+        const auto* txt = sqlite3_column_text(s.p, 0);
+        if (txt)
+            out.emplace_back(reinterpret_cast<const char*>(txt),
+                             sqlite3_column_int64(s.p, 1));
+    }
     return out;
 }
 
@@ -214,8 +225,15 @@ std::vector<std::string> Progress::recentKeys(const std::string& kind,
            "ORDER BY MAX(ts) DESC, MAX(id) DESC LIMIT ?");
     sqlite3_bind_text(s.p, 1, kind.c_str(), -1, SQLITE_TRANSIENT);
     sqlite3_bind_int(s.p, 2, limit);
-    while (sqlite3_step(s.p) == SQLITE_ROW)
-        out.push_back(reinterpret_cast<const char*>(sqlite3_column_text(s.p, 0)));
+    while (sqlite3_step(s.p) == SQLITE_ROW) {
+        // MEM-3: a NULL cell makes sqlite3_column_text return NULL,
+        // and building a std::string from NULL is a SEGV - reproduced
+        // before this guard existed. A NULL row is corrupt data in a
+        // file other tools can touch; it is SKIPPED, never fabricated
+        // as an empty string (rule 3).
+        const auto* txt = sqlite3_column_text(s.p, 0);
+        if (txt) out.push_back(reinterpret_cast<const char*>(txt));
+    }
     return out;
 }
 
