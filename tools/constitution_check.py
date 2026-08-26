@@ -165,6 +165,20 @@ def main():
                 f"meanings (DATA-12); use a token or add a ruling "
                 f"here")
 
+    # G3 — PROVISIONAL never wears error-red (SQA low; the manual
+    # promises amber three times). Red says "wrong"; provisional says
+    # "machine-matched, verify" - a translator taught that red means
+    # broken learns to ignore red, which then costs them on a REAL
+    # error. kMachine #B4540A is the tier's colour.
+    for bad in ("#b00'>PROVISIONAL", "#b00'>[PROVISIONAL]",
+                "#b00;font-size:11px'>[PROVISIONAL]"):
+        if bad in main_cpp:
+            line = main_cpp[:main_cpp.index(bad)].count("\n") + 1
+            fails.append(
+                f"G3 app/main.cpp:{line}: PROVISIONAL painted "
+                f"error-red - the tier's colour is kMachine amber "
+                f"(#B4540A); red is reserved for genuine failure")
+
     # R4 — the pre-W5 failing inks may not return as text colors.
     # Incident: captions at 2.78:1 shipped for weeks.
     for bad in ("color:#9C948A", "color:#8A8A8A", "color:#999;",
