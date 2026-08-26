@@ -44,7 +44,18 @@ Statuses: **own** (ALL/ACIP work, root LICENSE applies) ·
 | data/ai_glossary/ | own | AI-provisional tier, in-house; README |
 | data/botok/ | settled | Apache-2.0 derived (botok project); README |
 | data/das/ | own | .gitignore only — no content tracked |
-| data/extracted/ | open | 1,954 files under SHIP.md's blanket "SHIPS-WITH-ATTRIBUTION, pending the per-file itemization". Open item S-2 — the largest unfinished licensing job in the repo. |
+| data/extracted/thl_ | settled | numbers-and-titles concordance ONLY (thl↔Tohoku number map; canonical Wylie titles, which are the ancient works' own names) — keeps the notices' "no THL prose" promise; the 1,926 raw records were removed from tree AND history 2026-08-26 |
+| data/extracted/das_ | settled | index into Das 1902 (public domain by age), via Christian Steinert's scan index, credited in-file |
+| data/extracted/jaeschke_ | settled | index into Jäschke 1881, public domain by age |
+| data/extracted/ekangyur_ | settled | Esukhia eKangyur index — public domain per that project |
+| data/extracted/etengyur_ | settled | Esukhia eTengyur index — ditto |
+| data/extracted/kl_ | settled | number concordances against BDRC's open catalogue data |
+| data/extracted/persons_bdrc.json | settled | BDRC open catalogue person records |
+| data/extracted/acip_ | own | ACIP's own catalogue, mined in-house |
+| data/extracted/sungbum_ | own | derived from ACIP's own Sungbum corpus + BDRC links |
+| data/extracted/mixed_nuts_ | own | extractions from the team's own working documents |
+| data/extracted/mw2 | own | outlines/titles keyed by BDRC work id, mined in-house |
+| data/extracted/ | own | remaining derived working data (censuses, apparatus, author index, citation web) — produced by tools/ from sources itemized above |
 | data/fonts/ | settled | OFL fonts with licence texts beside them; FONTS.md |
 | data/goldstein/ | settled | derived factual findings only; source text removed from tree AND history 2026-08-26 (README) |
 | data/hackett/ | settled | derived factual findings only; source text removed 2026-08-26 (README) |
@@ -61,7 +72,7 @@ Statuses: **own** (ALL/ACIP work, root LICENSE applies) ·
 | data/PENDING_REVIEW.docx | own | ditto |
 | data/reports/ | own | generated reports |
 | data/research/ | own | in-house notes |
-| data/rkts/ | open | abb.xml from rKTs (Vienna) — terms not yet verified at source. Open item S-4. |
+| data/rkts/ | settled | CC BY 4.0 with recorded permission — Dr. Bruno Lainé's export and his exact words in docs/licenses/RKTS_ABBREVIATIONS.md (found 2026-08-26; the terms were on file all along, one directory over from the data — the SOAS lesson repeating) |
 | data/soas_pos/ | settled | CC BY 4.0, verified against Zenodo record 574876 on 2026-08-26; attribution in notices |
 | data/spellcheck/ | settled | tibetan-spellchecker, CC0 (per that project); plus in-house exception lists |
 | data/teaching/ | own | the org's own recorded teachings (captions only, no media). Formally gated on SHIP.md item 3, Adam's consent line — his own to give. |
@@ -74,12 +85,22 @@ Statuses: **own** (ALL/ACIP work, root LICENSE applies) ·
   anthropics/skills publishes NO licence, so those skills sit in a
   public tree on unrecorded terms. Adam's options: ask, or move them out
   of the public tree.
-- **S-2 · data/extracted itemization.** 1,954 files under one blanket.
-  The blanket was written for the DMG; the public repo inherits it.
-  Needs the per-file pass the blanket has always promised.
+- **S-2 · CLOSED 2026-08-26, and it was hiding the audit's biggest
+  finding.** The blanket covered 1,954 files; 1,926 of them were the
+  raw THL catalogue records — BUILD-5's exact payload, removed from the
+  DMG on 2026-08-23 and never from the repository, public since
+  2026-08-25 beside a notices file promising "no THL prose". Removed
+  from tree and history 2026-08-26; scrape cache banked on the 8TB
+  drive. The remaining 28 files are itemized above, each verified by
+  opening it, not by trusting its name.
 - **S-3 · data/mst counsel note.** Defensible as cited facts; a lawyer
   should say so once.
-- **S-4 · rKTs terms.** Verify at source, then move the row to settled.
+- **S-4 · CLOSED 2026-08-26.** The terms were already on file:
+  docs/licenses/RKTS_ABBREVIATIONS.md carries CC BY 4.0 and Bruno
+  Lainé's permission verbatim. Found by reading the converter's own
+  docstring — the second time in two days an "unverified" item was
+  documented all along. The audit habit to keep: before calling terms
+  unknown, grep for the filename.
 
 *Corrections to this ledger belong in the row, not a side channel — a
 reader must never trust a row the checker no longer enforces.*
