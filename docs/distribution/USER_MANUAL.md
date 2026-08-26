@@ -1,3 +1,59 @@
+# What's new — the 2026-08-20 interface (read this first)
+
+The tool now wears the **Word-style interface** you know from
+Microsoft Office. Everything this manual describes still exists —
+this chapter tells you where it moved and what joined it.
+
+## The ribbon band
+Under the seven group tabs (Read · Translate · Research · Learn ·
+Input · Catalog · Community) sits the **band**: the current group's
+panes on the left (click to switch), then the active pane's tools as
+**color icons with labels**, gathered into named clusters (DOCUMENT ·
+REVIEW · SPELLING…). Everything that used to sit in per-pane button
+rows lives here now. *View → ribbon labels* toggles the text under
+the icons.
+
+## The menu bar, Word-grammar
+- **File** — Open ACIP File… · Import Data Release…
+- **Edit** — Undo/Redo/Cut/Copy/Paste/Select All/Delete
+- **the seven group menus** — every pane and its tools, mirrored
+- **View** — zoom (⌘= / ⌘− / ⌘0), ribbon labels, panes
+- **Help** — Tutorials · **Keyboard Shortcuts…** · **Licenses & Data
+  Sources…** · **Usage Ledger…** · **Check for Updates…** ·
+  Troubleshooting (logs, diagnostic report, **File a Finding…**)
+
+## The keyboard
+**⌘K** hunts everything (panes, tools, terms, files). **⌘1–⌘7** jump
+to a group; **⌘⇧] / ⌘⇧[** step through its panes. **⌘D** peeks the
+dictionary card for any selected word, anywhere. The full map:
+Help → Keyboard Shortcuts.
+
+## The card, made measurable
+Every evidence section on the word card now shows its **true count**
+("3 of 41 · show all"), wears an **epistemic badge** (HGM ·
+EVIDENCE · REFERENCE · MACHINE · AI) so you always know who is
+speaking, marks every truncation with an honest "…", and offers
+**presets** (reading · research · minimal) above the layer toggles.
+Search results link every searched term straight to its card
+("look up: …").
+
+## First launch & safety nets
+A first run opens a demo text with a three-line welcome. Every real
+launch quietly backs up the shared team stores (proposals, roster) —
+14 dated copies in Application Support. If Dropbox ever forks the
+proposals file, the Approval pane says so by name and absorbs the
+new rows; nothing is merged by guess.
+
+## Where to complain
+Help → Troubleshooting → **File a Finding…** drops a timestamped,
+version-stamped entry into the team's findings inbox and opens it —
+one click from "something's off" to "it's on the record."
+
+*The chapters below predate the band: their tool NAMES are unchanged,
+but a control described "in the pane's button row" now lives in the
+band. New screenshots arrive with the full 9i revamp.*
+
+
 # The Diamond Cutter Translation Tool — User Manual
 *The complete tutorial: every pane, every control, every workflow,
 click by click. Version 0.9.0 · August 2026 · Asian Legacy Library.*
@@ -1189,10 +1245,14 @@ Two levels split by a draggable divider:
    which English goes with which Tibetan reads by color. Only
    established equivalents appear; the pane never writes English
    for you.
-4. Click any term in the anchors panel for its **full corpus
-   concordance** — every corpus segment containing it, with Geshe
-   Michael's English beside each. A "back" link returns to the
-   clause's anchors.
+4. Click any term in the anchors panel for its **corpus
+   concordance** — the card first states how many corpus segments
+   contain the term (the measured total, never a page count), then
+   shows the opening few with Geshe Michael's English beside each.
+   When more exist than the card can list, it says how many are
+   being shown and how many there are, and the per-course breakdown
+   beneath says which rows it was computed over. Narrow the term to
+   reach the rest. A "back" link returns to the clause's anchors.
 5. On an anchor's **technical spelling** link, a click inserts the
    apparatus form at your draft cursor — the pronunciation
    spelling plus "(technical spelling: …)" — the published house
@@ -1252,10 +1312,12 @@ is ever auto-corrected; the full detail stays one press away.
 
 1. Select any Tibetan in the source box.
 2. Press **Phrase memory** (under the EVIDENCE heading).
-3. *What you see:* every prior rendering of those words — segments
-   from **his corpus (binding)**, plus any matches from the Align
+3. *What you see:* how many prior renderings of those words exist —
+   the measured count of segments from **his corpus (binding)** —
+   and the opening twelve of them, plus any matches from the Align
    pane's harvest, which are translator-authored and **labeled
-   PENDING**. The beginnings of a Project translation memory,
+   PENDING**. When the corpus holds more than are listed, the card
+   says how many. The beginnings of a Project translation memory,
    built only from attested work.
 
 The working translator's habit: Phrase memory before inventing —
@@ -3696,7 +3758,7 @@ item checks it:
    or change it any time in Settings → Data → **Team updates
    folder**.)
 2. The app scans the folder for files named
-   `Diamond-Cutter-Translation-Tool-<version>.dmg` and compares the newest
+   `ALL-Translation-Tool-<version>.dmg` and compares the newest
    against the version you are running.
 3. If a newer one exists: **"Update available — Version 0.28.0 is
    available (you are running 0.27.2)"**, with an **Open** button

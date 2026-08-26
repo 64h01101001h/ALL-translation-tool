@@ -63,6 +63,18 @@ done < <(awk '/^brew /{gsub(/"/,"",$2); print $2}' "$ROOT/Brewfile")
   exit 10; }
 echo "   all Brewfile formulas present (exact versions: BUILD_MANIFEST.json)"
 
+echo "== 0b. manual twins (SQA low: the two USER_MANUAL copies drifted 58 lines in a day) =="
+# data/help/USER_MANUAL.md is CANONICAL - the app reads it in the Help
+# pane. docs/distribution's copy exists for out-of-DMG distribution and
+# has no right to its own opinions.
+if ! cmp -s "$ROOT/data/help/USER_MANUAL.md"             "$ROOT/docs/distribution/USER_MANUAL.md"; then
+  echo "MANUAL TWINS DIVERGED - data/help/USER_MANUAL.md is canonical."
+  echo "Sync:  cp data/help/USER_MANUAL.md docs/distribution/USER_MANUAL.md"
+  echo "       (and regenerate the .docx with pandoc)"
+  exit 11
+fi
+echo "   manual twins identical"
+
 echo "== 0. release gate =="
 python3 "$ROOT/tools/validate_release.py" >/dev/null || {
   echo "RELEASE GATE FAILED — not packaging a bad release"; exit 1; }
