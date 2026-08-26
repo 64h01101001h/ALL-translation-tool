@@ -299,5 +299,30 @@ def main():
     return mutate(a.file, a.old, a.new, a.test, a.expect_fail_contains)
 
 
+LOCK = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                    ".mutate.lock")
+
+
+def _acquire_lock():
+    """ENOSPC incident 2026-08-26: two concurrent sweeps interleaved
+    plant/restore on one working tree and left TWO mutants planted
+    (gofer.cpp skip-counter, main.cpp streamWriteOk lobotomy) when
+    the disk filled mid-run. A mutation run OWNS the tree; a second
+    one must refuse, not queue."""
+    try:
+        fd = os.open(LOCK, os.O_CREAT | os.O_EXCL | os.O_WRONLY)
+        os.write(fd, str(os.getpid()).encode())
+        os.close(fd)
+    except FileExistsError:
+        sys.exit("REFUSED: another mutate.py run owns the tree "
+                 "(%s exists). A second mutator interleaving "
+                 "plant/restore is how a mutant gets captured as "
+                 "clean. If the owner is dead, verify the tree with "
+                 "git diff, then delete the lock." % LOCK)
+    import atexit
+    atexit.register(lambda: os.path.exists(LOCK) and os.remove(LOCK))
+
+
 if __name__ == "__main__":
+    _acquire_lock()
     sys.exit(main())

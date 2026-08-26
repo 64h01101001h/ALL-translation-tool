@@ -8309,7 +8309,7 @@ public:
                 // happens at the end, so nothing from that run reached
                 // disk. Caught by verifying the installed artifact.
                 if (e.provisional())
-                    gloss += " <span style='color:#b00'>"
+                    gloss += " <span style='color:#B4540A'>"
                              "[PROVISIONAL \u2014 auto-aligned]</span>";
             }
             h += "<b>" +
@@ -14230,7 +14230,7 @@ public:
                 // says so: mixed tiers must not be laundered by the
                 // stronger member
                 if (anyProvisional)
-                    tip += QString(" <span style='color:#b00'>"
+                    tip += QString(" <span style='color:#B4540A'>"
                                    "[PROVISIONAL — auto-aligned]"
                                    "</span>");
                 tip += "<br><small>OCR-read from the carving — "
@@ -17754,7 +17754,7 @@ static QString hgmGlossPhrase(const allcore::TermUse& t,
                               const QString& glosses) {
     if (glosses.isEmpty()) return QString("no HGM equivalent recorded");
     if (!t.provisional) return "HGM has: " + glosses;
-    return "auto-aligned <span style='color:#b00;font-size:11px'>"
+    return "auto-aligned <span style='color:#B4540A;font-size:11px'>"
            "[PROVISIONAL]</span>, not HGM's own English: " + glosses;
 }
 
@@ -17762,7 +17762,7 @@ static QString hgmGlossPhrase(const allcore::TermUse& t,
 // a claim about authorship, and it is false for the auto-aligned tier.
 static QString equivalentsOwner(const allcore::TermUse& t) {
     return t.provisional
-               ? QString("the auto-aligned <span style='color:#b00;"
+               ? QString("the auto-aligned <span style='color:#B4540A;"
                          "font-size:11px'>[PROVISIONAL]</span> "
                          "equivalents (not HGM's own English)")
                : QString("HGM's equivalents");

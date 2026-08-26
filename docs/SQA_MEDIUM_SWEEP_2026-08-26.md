@@ -138,3 +138,24 @@ constitution's G1/G2/G3 and C2-liveness rules, the fixture-label skip
 machinery, a gauntlet that varies its walk and names its seed, and a
 parser that refuses a paren-bomb politely. The failures are in the
 commit messages, on purpose.
+
+---
+
+## Post-capstone addendum — the 26 Aug re-measurement
+
+The same-day agentic re-measurement (docs/SQA_ASSESSMENT_2026-08-26.md,
+15 agents, adversarial verify) graded the post-sweep tree **B−** (from
+C) and convicted the ledger itself twice: WP-1 (ManuscriptPane::save)
+and WP-2 (Save input work) were live silent-loss shapes recorded here
+as "CLOSED earlier" — both fixed same-day with pins and kills
+(cb0857e), and G3 was rewritten from three dead substrings to a
+proximity rule with a liveness clause after it blessed four live
+red-PROVISIONAL sites (all repainted). Ledger rule going forward: a
+"CLOSED earlier" row without a named pin is testimony, not evidence.
+
+Remaining from the re-measurement, triaged: the write-path family
+(WP-3..WP-13, eleven sites that compose success strings over
+unverified writes — next sweep batch, the saveOrWarn/streamWriteOk
+routing is mechanical); one perf high (goferSearchFiles magnitude
+disputed by the verifier but shape confirmed); the gate-script and
+build/release mediums are itemized in the assessment's tables.
