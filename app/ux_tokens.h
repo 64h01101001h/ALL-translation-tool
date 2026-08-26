@@ -17,8 +17,13 @@
 #include <cmath>
 
 #include <QApplication>
+#include <QEvent>
 #include <QPalette>
 #include <QString>
+#include <QWidget>
+
+#include <functional>
+#include <utility>
 
 namespace ux {
 // grounds
@@ -121,6 +126,51 @@ inline const char* chromeMuted() {
 }
 inline const char* chromeGold() {
     return darkChrome() ? "#C9A55C" : "#82672A";
+}
+// Night-mode fix, 2026-08-26. A chrome ink answers for the palette of
+// the MOMENT it is asked, so baking it into a stylesheet at
+// construction freezes that moment - which is how the ribbon captions
+// ended up wearing light-chrome gold on dark chrome (about 1.7:1)
+// after an appearance switch. themedStyle() re-runs the stylesheet
+// maker whenever the application palette changes, so an ink is asked
+// again each time the ground under it moves.
+class ThemeReapply : public QObject {
+public:
+    ThemeReapply(QWidget* w, std::function<QString()> mk)
+        : QObject(w), w_(w), mk_(std::move(mk)) {
+        // The filter watches the APPLICATION, not the widget:
+        // ApplicationPaletteChange is delivered to top-level widgets
+        // only, and these labels are children - a widget-level filter
+        // hears nothing when the appearance flips. Parenting to the
+        // widget still bounds the lifetime; Qt drops an event filter
+        // automatically when the filter object dies.
+        qApp->installEventFilter(this);
+        w_->setStyleSheet(mk_());
+    }
+    bool eventFilter(QObject* obj, QEvent* e) override {
+        // ApplicationPaletteChange ONLY. Reacting to per-widget
+        // PaletteChange is a feedback loop: applying a stylesheet with
+        // a color: sets the widget palette, which emits PaletteChange,
+        // which re-applies the stylesheet - found as a stack overflow
+        // in QStyleSheetStyle::initWidget on the first selftest run.
+        // The re-entry guard and the no-op check are belts for the
+        // same braces.
+        if (e->type() == QEvent::ApplicationPaletteChange && !busy_) {
+            busy_ = true;
+            const QString next = mk_();
+            if (next != w_->styleSheet()) w_->setStyleSheet(next);
+            busy_ = false;
+        }
+        return QObject::eventFilter(obj, e);
+    }
+
+private:
+    QWidget* w_;
+    std::function<QString()> mk_;
+    bool busy_ = false;
+};
+inline void themedStyle(QWidget* w, std::function<QString()> mk) {
+    new ThemeReapply(w, std::move(mk));   // parented to w; dies with it
 }
 // WCAG 2.x relative luminance and contrast ratio. Here rather than in
 // a test so the tokens and the arithmetic that judges them live

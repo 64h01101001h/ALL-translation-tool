@@ -3885,10 +3885,9 @@ public:
         auto* cap = new QLabel(caption);
         cap->setAlignment(Qt::AlignHCenter);
         // W5-03/W7: measured on the chrome the caption sits on
-        cap->setStyleSheet(
-            QString("color:%1;font-size:9px;letter-spacing:1.5px;"
-                    "font-weight:600;")
-                .arg(ux::chromeGold()));
+        ux::themedStyle(cap, [] {
+            return QString("color:%1;font-size:9px;letter-spacing:1.5px;" "font-weight:600;") .arg(ux::chromeGold());
+        });
         v->addWidget(cap);
     }
     // raw widgets (checkboxes, spinboxes, labels, line edits) sit
@@ -14921,8 +14920,9 @@ public:
         banner->setWordWrap(true);
         v->addWidget(banner);
         status_ = new QLabel;
-        status_->setStyleSheet(QString("color:%1;font-size:13px")
-                                   .arg(ux::chromeGold()));
+        ux::themedStyle(status_, [] {
+            return QString("color:%1;font-size:13px") .arg(ux::chromeGold());
+        });
         v->addWidget(status_);
         auto mk = [&](const QString& title, const QString& what) {
             auto* b = new QPushButton(title);
@@ -15009,8 +15009,9 @@ public:
         doc_ = new QLabel;
         // #9A7A33 = the app's gold eyebrow tone — readable on the
         // dark and light chrome alike (night-mode audit 2026-08-12)
-        doc_->setStyleSheet(QString("color:%1;font-size:13px")
-                                .arg(ux::chromeGold()));
+        ux::themedStyle(doc_, [] {
+            return QString("color:%1;font-size:13px") .arg(ux::chromeGold());
+        });
         v->addWidget(doc_);
         auto* ribbon = new RibbonBar;
         auto* gExp = ribbon->group("PUBLISH");
@@ -15453,6 +15454,29 @@ public:
                   "control: the arithmetic discriminates - primary ink "
                   "on paper is far above the floor, so a pin that "
                   "passed everything would be visible here");
+        }
+        // NIGHT MODE, 2026-08-26 (Adam's screenshot): the ribbon group
+        // captions were unreadable on dark chrome because chrome inks
+        // were baked into stylesheets ONCE at construction -
+        // chromeGold() answered for the palette of that moment, and an
+        // appearance switch afterwards left light-chrome gold (#82672A)
+        // on near-black, about 1.7:1. The pin: a caption must RE-INK
+        // when the application palette changes.
+        {
+            const QPalette save = qApp->palette();
+            RibbonGroup probe("PROBE");
+            auto* cap = probe.findChild<QLabel*>();
+            QPalette dark = save;
+            dark.setColor(QPalette::Window, QColor("#2D2D2D"));
+            qApp->setPalette(dark);
+            QCoreApplication::processEvents();
+            check(cap && cap->styleSheet().contains("#C9A55C"),
+                  "ribbon caption re-inks to dark-chrome gold when the "
+                  "palette turns dark");
+            qApp->setPalette(save);
+            QCoreApplication::processEvents();
+            check(cap && !cap->styleSheet().contains("#C9A55C"),
+                  "and re-inks back when the palette returns");
         }
         // P1 2026-08-24: the diagnostics channel. docs/PRIVACY.md says
         // this application has NO telemetry, and that claim was
@@ -29597,8 +29621,9 @@ public:
         outer->addWidget(split, 1);
         status_ = new QLabel("No file \u2014 Save as\u2026 to name the "
                              "manuscript.");
-        status_->setStyleSheet(QString("color:%1;font-size:11px")
-                                   .arg(ux::chromeMuted()));
+        ux::themedStyle(status_, [] {
+            return QString("color:%1;font-size:11px") .arg(ux::chromeMuted());
+        });
         outer->addWidget(status_);
 
         connect(sideToggle, &QCheckBox::toggled, side_,
@@ -29986,8 +30011,9 @@ public:
         v->addLayout(row);
         census_ = new QLabel("no folder chosen");
         census_->setWordWrap(true);
-        census_->setStyleSheet(QString("color:%1")
-                                   .arg(ux::chromeMuted()));
+        ux::themedStyle(census_, [] {
+            return QString("color:%1") .arg(ux::chromeMuted());
+        });
         v->addWidget(census_);
         model_ = new QFileSystemModel(this);
         model_->setFilter(QDir::AllEntries | QDir::NoDotAndDotDot);
@@ -30178,8 +30204,9 @@ public:
             "and revoke access.");
         gAccess->addBig(teamB_, "people");
         who_ = new QLabel;
-        who_->setStyleSheet(QString("color:%1")
-                                .arg(ux::chromeMuted()));
+        ux::themedStyle(who_, [] {
+            return QString("color:%1") .arg(ux::chromeMuted());
+        });
         gAccess->add(who_);
         connect(offB, &QPushButton::clicked, [this] {
             const QString d = safeGetExistingDirectory(
@@ -34237,8 +34264,9 @@ int main(int argc, char** argv) {
     qatRow->addLayout(qatStrip);
     auto* qatHint = new QLabel(
         "pin your most-used commands here — they stay in every pane");
-    qatHint->setStyleSheet(QString("color:%1;font-size:11px")
-                               .arg(ux::chromeMuted()));
+    ux::themedStyle(qatHint, [] {
+            return QString("color:%1;font-size:11px") .arg(ux::chromeMuted());
+        });
     qatRow->addWidget(qatHint);
     qatRow->addStretch();
     centralV->addLayout(qatRow);
@@ -36019,9 +36047,9 @@ int main(int argc, char** argv) {
                     "how the tool is ACTUALLY used instead of by "
                     "guess.");
                 note->setWordWrap(true);
-                note->setStyleSheet(
-                    QString("color:%1;font-size:12px")
-                        .arg(ux::chromeMuted()));
+                ux::themedStyle(note, [] {
+            return QString("color:%1;font-size:12px") .arg(ux::chromeMuted());
+        });
                 v->addWidget(note);
                 QObject::connect(
                     onT, &QCheckBox::toggled, [](bool on) {
