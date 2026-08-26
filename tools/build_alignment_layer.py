@@ -32,10 +32,13 @@ import sys
 from datetime import date
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-PAGES = os.path.expanduser("~/Desktop/ACI2-full-depth-alignment")
+PAGES = os.path.join(ROOT, "data", "alignment", "pages")
+if not os.path.isdir(PAGES):   # legacy location, pre-banking
+    PAGES = os.path.expanduser("~/Desktop/ACI2-full-depth-alignment")
 SPINE = os.path.join(ROOT, "build", "hgm_spine_v27_2.db")
 OUTDIR = os.path.join(ROOT, "data", "alignment")
 OUT = os.path.join(OUTDIR, "alignment_c02_v1.json")
+OUT_FULL = os.path.join(OUTDIR, "alignment_c02_full_v1.json")
 FLOOR = 120   # distinct word-level pairs; pass three carries ~200+
 
 PAGE_SEGS = {
@@ -48,6 +51,8 @@ PAGE_SEGS = {
 
 SPAN = re.compile(
     r'<span class="u" data-d="(\d)" data-l="([A-Za-z0-9_ ]+?)">')
+NOTE = re.compile(r'<div class="note">(.*?)</div>', re.S)
+TREE = re.compile(r'<div class="tree">(.*?)</div>', re.S)
 
 
 def letters(s):
@@ -87,8 +92,10 @@ def spans_of(doc, side):
             else:
                 m2 = SPAN.match(tk.group(0))
                 if m2:
+                    toks = m2.group(2).split(" ")
                     stack.append((int(m2.group(1)),
-                                  m2.group(2).split(" ")[0],
+                                  toks[0] +
+                                  ("|case" if "case" in toks else ""),
                                   tk.end()))
                 else:
                     stack.append((0, "", tk.end()))
@@ -109,18 +116,41 @@ def main():
     con.close()
 
     pairs = {}   # tib_norm -> {eng_display -> set(segs)}
+    full = {"links": [], "notes": {}, "trees": {}}
     sha = hashlib.sha256()
     for pg, seglist in sorted(PAGE_SEGS.items()):
         p = os.path.join(pages_dir, pg + ".html")
         doc = io.open(p, encoding="utf-8").read()
         sha.update(doc.encode())
         tib, eng = {}, {}
+        tibAll, engAll = {}, {}
         for d, l, txt in spans_of(doc, "tib"):
+            lid, case = l.split("|")[0], l.endswith("|case")
+            tibAll.setdefault((d, lid), {"t": txt, "case": case})
             if d == 5 and txt:
-                tib.setdefault(l, txt)
+                tib.setdefault(lid, txt)
         for d, l, txt in spans_of(doc, "eng"):
+            lid = l.split("|")[0]
+            engAll.setdefault((d, lid), []).append(txt)
             if d == 5 and txt:
-                eng.setdefault(l, []).append(txt)
+                eng.setdefault(lid, []).append(txt)
+        # THE BANK: every span at every depth, both-sided or not.
+        # A tib-only record IS information (a morpheme with no
+        # English exponent); nothing from the scan is discarded.
+        for (d, lid), rec in sorted(tibAll.items()):
+            m0 = re.match(r"s(\d+)", lid)
+            full["links"].append({
+                "page": pg, "seg": int(m0.group(1)) if m0 else None,
+                "id": lid, "d": d, "tib": rec["t"],
+                "eng": " … ".join(engAll.get((d, lid), [])) or None,
+                "case": rec["case"],
+            })
+        full["notes"][pg] = [
+            " ".join(strip_tags(n).split()) for n in NOTE.findall(doc)]
+        tr = TREE.findall(doc)
+        if tr:
+            full["trees"][pg] = [
+                " ".join(strip_tags(t).split()) for t in tr]
         for l, t in tib.items():
             if l not in eng:
                 continue   # no-exponent word: not evidence, skip
@@ -167,6 +197,25 @@ def main():
         },
     }
     os.makedirs(OUTDIR, exist_ok=True)
+    tmpf = OUT_FULL + ".staging"
+    with io.open(tmpf, "w", encoding="utf-8") as f:
+        json.dump({"meta": {"what": "the COMPLETE seven-layer bank: "
+                            "every span at every depth incl. one-"
+                            "sided (no-exponent) records, Wilson "
+                            "case flags, AI notes, tree blocks",
+                            "consumer": "none yet - banked for the "
+                            "grammar pane and the review workflow"},
+                   "links": full["links"], "notes": full["notes"],
+                   "trees": full["trees"]},
+                  f, ensure_ascii=False, indent=None,
+                  separators=(",", ":"))
+    os.replace(tmpf, OUT_FULL)
+    print("full bank: %d links (%d with no English exponent), "
+          "%d note blocks, %d tree blocks"
+          % (len(full["links"]),
+             sum(1 for L in full["links"] if not L["eng"]),
+             sum(len(v) for v in full["notes"].values()),
+             sum(len(v) for v in full["trees"].values())))
     tmp = OUT + ".staging"
     with io.open(tmp, "w", encoding="utf-8") as f:
         json.dump(doc, f, ensure_ascii=False, indent=1)
