@@ -2629,6 +2629,22 @@ static QJsonObject jsonObjectOrFlag(const QByteArray& bytes, bool* ok) {
     return doc.object();
 }
 
+// TEST-11: the restore half of the backup system existed only in core
+// - drilled by backup_smoke, reachable from NO surface, so a corrupted
+// store had 14 dated cures on disk and no spoon. This helper is the
+// app's restore rule in one testable place: the CURRENT file is backed
+// up first (a restore must never be the thing that loses data), then
+// the chosen backup is copied over it.
+static bool restoreStoreWithSafety(const std::string& backupPath,
+                                   const std::string& dst,
+                                   const std::string& backupDir,
+                                   const std::string& stamp) {
+    if (QFile::exists(QString::fromStdString(dst)) &&
+        !allcore::backupFile(dst, backupDir, "pre-restore-" + stamp, 14))
+        return false;
+    return allcore::restoreBackup(backupPath, dst);
+}
+
 static bool streamWriteOk(QTextStream& ts, QFile& f) {
     ts.flush();
     if (ts.status() != QTextStream::Ok) return false;
@@ -15621,6 +15637,40 @@ public:
                   "control: the arithmetic discriminates - primary ink "
                   "on paper is far above the floor, so a pin that "
                   "passed everything would be visible here");
+        }
+        // TEST-11: the restore rule, drilled end to end on real temp
+        // files - the current file must be safety-copied BEFORE the
+        // backup overwrites it, so a restore can never lose data.
+        {
+            const QString rt =
+                QDir::temp().filePath("all_selftest_restore");
+            QDir(rt).removeRecursively();
+            QDir().mkpath(rt);
+            const std::string dst =
+                (rt + "/store.tsv").toStdString();
+            const std::string bdir = (rt + "/backups").toStdString();
+            { QFile f(rt + "/store.tsv");
+              if (f.open(QIODevice::WriteOnly)) f.write("CURRENT"); }
+            check(allcore::backupFile(dst, bdir, "0001", 14),
+                  "restore drill: a dated backup banks");
+            { QFile f(rt + "/store.tsv");
+              if (f.open(QIODevice::WriteOnly)) f.write("DAMAGED"); }
+            const std::string latest =
+                allcore::latestBackup(bdir, "store.tsv");
+            check(!latest.empty(), "restore drill: the backup is found");
+            check(restoreStoreWithSafety(latest, dst, bdir, "0002"),
+                  "restore drill: restoreStoreWithSafety succeeds");
+            QFile after(rt + "/store.tsv");
+            check(after.open(QIODevice::ReadOnly) &&
+                      after.readAll() == "CURRENT",
+                  "restore drill: the store carries the backup's bytes");
+            check(!allcore::latestBackup(bdir, "store.tsv")
+                       .compare(0, 0, "") ||
+                      QDir(rt + "/backups").entryList(QDir::Files)
+                              .filter("pre-restore-").size() == 1,
+                  "restore drill: the damaged current was safety-copied "
+                  "before being overwritten");
+            QDir(rt).removeRecursively();
         }
         // TEST-2: saveOrWarn's failure branches were dead in the
         // battery - mutating BOTH to success left everything green, so
@@ -36096,6 +36146,71 @@ int main(int argc, char** argv) {
         // send it. Uses askSaveFileName so the harness stub applies
         // (constitution R3 - an unguarded native panel hangs the
         // headless modes).
+        QAction* restoreA = helpMenu->addAction(
+            "Restore a Shared Store from Backup\u2026");
+        QObject::connect(restoreA, &QAction::triggered, [&win] {
+            if (g_sweepActive) return;   // R3: the sweep never dialogs
+            const QString bdir =
+                QStandardPaths::writableLocation(
+                    QStandardPaths::AppDataLocation) + "/backups";
+            struct Row { QString label; QString dst; };
+            std::vector<Row> rows;
+            if (!g_proposalsDir.isEmpty()) {
+                rows.push_back({"proposals.tsv (translator proposals)",
+                                g_proposalsDir + "/proposals.tsv"});
+                rows.push_back({"comments.tsv (team comments)",
+                                g_proposalsDir + "/comments.tsv"});
+            }
+            const QString official = sess::path("catalog/officialRoot");
+            if (!official.isEmpty())
+                rows.push_back({"CATALOG_TEAM.tsv (the team catalog)",
+                                official + "/CATALOG_TEAM.tsv"});
+            QStringList items;
+            std::vector<std::pair<QString, QString>> plans;
+            for (const auto& r : rows) {
+                const std::string latest = allcore::latestBackup(
+                    bdir.toStdString(),
+                    QFileInfo(r.dst).fileName().toStdString());
+                if (latest.empty()) continue;
+                items << r.label + "  \u2014  newest backup: " +
+                            QFileInfo(QString::fromStdString(latest))
+                                .fileName();
+                plans.emplace_back(QString::fromStdString(latest),
+                                   r.dst);
+            }
+            if (items.isEmpty()) {
+                QMessageBox::information(
+                    &win, "Restore from Backup",
+                    "No backups exist yet. Backups are written "
+                    "automatically at every real launch.");
+                return;
+            }
+            bool okd = false;
+            const QString pick = QInputDialog::getItem(
+                &win, "Restore from Backup",
+                "Restore which store from its NEWEST backup?\n"
+                "The current file is backed up first, so this is "
+                "reversible.",
+                items, 0, false, &okd);
+            if (!okd) return;
+            const int idx = items.indexOf(pick);
+            if (idx < 0) return;
+            const std::string stamp =
+                QDateTime::currentDateTime()
+                    .toString("yyyy-MM-dd-HHmmss")
+                    .toStdString();
+            const bool ok = restoreStoreWithSafety(
+                plans[idx].first.toStdString(),
+                plans[idx].second.toStdString(),
+                bdir.toStdString(), stamp);
+            QMessageBox::information(
+                &win, "Restore from Backup",
+                ok ? "Restored. Restart the application so every pane "
+                     "rereads the store."
+                   : "The restore FAILED and nothing was changed - "
+                     "check permissions on the store and the backup "
+                     "folder.");
+        });
         QAction* diag = helpMenu->addAction(
             "Save Diagnostic Report\u2026");
         QObject::connect(diag, &QAction::triggered, [&] {
