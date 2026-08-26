@@ -7152,8 +7152,12 @@ public:
             if (!doc_.tokens.empty()) loadDoc();
         });
         connect(view_, &QPlainTextEdit::cursorPositionChanged, [this] { onClick(); });
+        // MEM-9: qApp outlives every pane. Without the receiver
+        // context this connection would call saveSession() on a
+        // destroyed pane if one is ever torn down before quit; with
+        // it, Qt drops the connection when the pane dies.
         connect(qApp, &QCoreApplication::aboutToQuit,
-                [this] { saveSession(); });
+                this, [this] { saveSession(); });
         // and a debounced autosave: a force-quit or crash between
         // saves loses at most a few seconds of position (Adam's
         // finding 2026-08-14 — quit-only saving went stale under
@@ -29125,7 +29129,11 @@ public:
         idl->addRow("", saveId);
         outer->addWidget(idBox);
         if (configured)
-            QTimer::singleShot(0, [applyFold] { applyFold(false); });
+            // MEM-9: the 0 ms shot held idBox with no context - a
+            // dialog torn down before the event loop turned would
+            // fire the lambda over a corpse. With idBox as context
+            // the shot dies with the widget it reads.
+            QTimer::singleShot(0, idBox, [applyFold] { applyFold(false); });
         connect(pick, &QPushButton::clicked, [this] {
             const QString d = safeGetExistingDirectory(
                 this, "Shared proposals folder (Dropbox-synced is ideal)");

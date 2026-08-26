@@ -33,18 +33,29 @@ the reasoning recorded; OPEN means not yet reached.*
 | TEST-10 (outline jump targets unasserted) | CLOSED — pinned to the announcing ordinal |
 | TEST-11 (restore path unreachable) | CLOSED — Help menu door + safety-copy rule drilled |
 | TEST-12 (flapping wall-clock pins) | CLOSED — micro-ceilings at regression scale; sanitized runs derate ×4 |
+| TEST-4 (B13 anti-pattern at bounty-#8) | RECORDED — the audit itself refuted its "exactly one place" premise (three sites, two driving real Qt events); the pattern is tracked by the no-vacuous-pass gate rather than chased pin-by-pin |
+| TEST-8 (42% substring-only pins) | RECORDED — honest ceiling on genuinely-weak pins is 27.7% by the audit's own arithmetic; every pin the sweep touched was rebuilt with a number or an absence clause, and mutation entries police the class; a wholesale rewrite of 274 pins is design-scale, not sweep-scale |
+| TEST-13 (gauntlet fossilised at seed 1) | CLOSED — ctest runs '--gauntlet auto': seed = Julian day, fresh walk daily, reproducible within the day, printed on every run (auto and explicit) so a corpse names its own reproduction; fuzz_smoke keeps its fixed seed deliberately (survivors promote to fixtures) |
+| TEST-14 (seven pins coupled to one machine's 2.2 GB index) | VERIFIED COVERED — every index-touching pin now guards with exists() and skips out loud ('library index absent — skipped'); the diagnostics report says OK/MISSING; clean-checkout suites carry the fixture label with [SKIP] path + docs/FIXTURES.md pointer, proven by fixture_gate_check |
 
 ## Memory and UB
 | MEM-3 (NULL → SEGV in progress readers) | CLOSED — reproduced at exit 139, then guarded |
 | MEM-4 (unchecked indexing in botok) | CLOSED — .at() = the canonical IndexError, 26 sites |
 | MEM-5 (sanitizer gate never triggered) | CLOSED — first FULL CLEAN run in the project's history: all 86 suites green under ASan+UBSan (2026-08-26, 55.7 s); the only maiden-run failure was a wall-clock ceiling tripped by instrumentation tax, now derated ×4 under ALL_SANITIZED; the release ritual runs the sanitized battery before any tag |
 | MEM-6 (widget read off-thread) | CLOSED — the worker uses its captured value |
+| MEM-7 (unbounded recursion in the Gofer parser) | CLOSED — reproduced first: 300k parens from the search box = exit 139, exactly as filed; parse depth now capped at 200 with a friendly 'simplify the grouping' refusal; ordinary nesting pinned still-parsing; mutation-verified (guard off → the pin crashes red) |
+| MEM-8 (two container reads, bounds emergent) | NEEDS THE DIMENSION REPORT — the finding's only public text never names the sites, and the one-liners row maps other items; recorded so nobody closes it by guessing |
+| MEM-9 (two Qt lifetime shapes outliving their pane) | CLOSED — both shapes: the context-less 0 ms singleShot now carries idBox (the very object it reads) as context, and the connect(qApp, aboutToQuit) lambda carries the pane as receiver, so Qt drops each when its object dies |
 
 ## Static analysis
 | STATIC-1 (-Wall wall broken) | CLOSED — clamp wired as a warning; verify.sh reds on own-code warnings |
 | STATIC-4 (no analyzer, 2,432 sites) | GROUPED WITH CI (P1, Adam) — an analyzer without an enforcement trigger is another MEM-5; it should arrive WITH the CI stand-up, armed |
 | STATIC-5 (ExportPane can't-fail assertion) | CLOSED — replacement went red twice on two REAL defects |
 | STATIC-6 (loop that always breaks) | CLOSED — contract pinned first, then the honest one-liner |
+| STATIC-8 (ruff findings in the gate scripts) | CLOSED — 207 raw findings over the eleven registered gates; five correctness-class fixed (dead cutoff/ctx, unused import, semicolon, shadowed 'l'), six execute bits set, sbom's git failure now says UNRESOLVED; style classes deliberately left (gate diffs are audit trail); all 14 check=-less subprocess sites audited — none drops an exit code |
+| STATIC-9 (numeric parse silently substituting 0) | CLOSED — a contraction row whose syllable counts fail to parse is skipped whole (rule 3), never half-loaded with zeros |
+| STATIC-10 (delete[] of uninitialized pointer in vendored dmp) | CLOSED — rd initialised to NULL; unreachable per the audit, but shipped code does not get to carry garbage into delete[] |
+| STATIC-11 (third-party includes not SYSTEM) | CLOSED — vendored SQLite include marked SYSTEM, dmp TU compiles -w; and the wall's own filter had a spelling hole ('third_party' but not 'thirdparty') that would have blamed upstream warnings on us — both spellings excluded, path-anchored |
 
 ## Performance
 | PERF-2 (open blocks 4–9 s; guards fixture-dead) | GUARDS CLOSED — both self-provision and now run (1,053 ms / 2,682 ms measured); the freeze half stays open honestly |
@@ -93,3 +104,37 @@ the reasoning recorded; OPEN means not yet reached.*
 three commit-before-verdict races, the vacuous-pin streak — lives in
 the commit messages, deliberately: the sweep's failures are part of its
 evidence.*
+
+---
+
+## Capstone — the sweep is complete (2026-08-26)
+
+Every finding in the 60-medium compact index, plus the low-severity
+tail the loop absorbed, now carries a disposition. The final census:
+
+- **57 CLOSED** (+2 closed earlier, +1 verified covered by later
+  work) — each with a red-first pin and, wherever the harness could
+  reach it, a mutation entry proving the pin can fail.
+- **2 OPEN by rule, not neglect**: PERF-13 (startup-lazy panes,
+  design-scale, grouped with PERF-2) and BUILD-3 (blocked on the
+  Apple Developer ID — Adam/ALL).
+- **2 NEED THE DIMENSION REPORT** (DATA-7, MEM-8): their public text
+  does not locate the defect and the sweep does not close findings by
+  guessing.
+- **2 RECORDED** (TEST-4, TEST-8): pattern-class findings policed by
+  standing gates rather than chased pin-by-pin.
+- **1 ONGOING** (TEST-5): mutation detection is a ratchet, not a
+  checkbox — the sweep file grew from 6 to 10 entries and every fix
+  in this ledger fed it.
+- **1 PARTIAL** (DATA-14): tracked in the a11y audit.
+- **1 NOT FOUND** (DATA-8): recorded so nobody re-hunts it.
+- **1 TRIAGED into CI** (STATIC-4): an analyzer without an
+  enforcement trigger is another MEM-5; it arrives WITH CI, armed.
+
+What the sweep leaves behind that did not exist when it started: the
+warning wall, the sanitized battery in the release ritual, the
+mutation sweep with drift detection and stale-anchor honesty, the
+constitution's G1/G2/G3 and C2-liveness rules, the fixture-label skip
+machinery, a gauntlet that varies its walk and names its seed, and a
+parser that refuses a paren-bomb politely. The failures are in the
+commit messages, on purpose.

@@ -39,7 +39,12 @@ bool Contractions::load(const std::string& tsvPath) {
         try {
             c.shortN = std::stol(cols[6]);
             c.longN = std::stol(cols[7]);
-        } catch (...) {}
+        } catch (...) {
+            // STATIC-9 / rule 3: a row whose syllable counts do not
+            // parse is a corrupt row. Loading it with silent zeros
+            // is a guess; skip it instead.
+            continue;
+        }
         int ix = static_cast<int>(entries_.size());
         entries_.push_back(std::move(c));
         ix_[fold(entries_.back().shortWylie)].push_back(ix);
