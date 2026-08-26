@@ -51,8 +51,6 @@ def main():
         for m in regex_call.finditer(src):
             lit = m.group(1)
             line = src[:m.start()].count("\n") + 1
-            ctx = src.splitlines()[line - 1] if line <= len(
-                src.splitlines()) else ""
             if "constitution: ruled(R1)" in src[
                     max(0, m.start() - 200):m.end() + 200]:
                 notes.append(f"R1 ruled exception at {name}:{line}")

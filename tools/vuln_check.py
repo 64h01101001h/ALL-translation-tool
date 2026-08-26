@@ -198,7 +198,6 @@ def classify(our_version, advisory):
 
 
 def cmd_triage(name, version, limit=40):
-    import urllib.parse
     q = json.dumps({"package": {"name": name}, "version": version})
     r = subprocess.run(["curl", "-s", "--fail", "--max-time", "60", "-X",
                         "POST", "https://api.osv.dev/v1/query", "-H",
@@ -350,7 +349,8 @@ def main():
         t = a.tsv or (os.path.join(a.app, "Contents", "Resources",
                       "licenses", "BUNDLED_COMPONENTS.tsv") if a.app else None)
         if not t or not os.path.exists(t):
-            print("need a staged .app or --tsv"); return 1
+            print("need a staged .app or --tsv")
+            return 1
         return cmd_triage_all(t)
 
     tsv = a.tsv

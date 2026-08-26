@@ -80,9 +80,11 @@ def read_payload_manifest(path):
 def git_head():
     try:
         return subprocess.run(["git", "-C", ROOT, "rev-parse", "HEAD"],
-                              capture_output=True, text=True).stdout.strip()
+                              capture_output=True, text=True).stdout.strip() \
+            or "UNRESOLVED"
     except Exception:
-        return ""
+        # say so in the document rather than shipping a blank field
+        return "UNRESOLVED"
 
 
 def build_sbom(software, data, app_version, head, stamp):

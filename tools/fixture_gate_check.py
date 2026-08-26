@@ -151,8 +151,8 @@ def selftest(src, cmake, ctest):
               "the wrapper configures a project cleanly")
         check("1 will SKIP" in cfg.stdout,
               "configure reports the skip count out loud "
-              "(saw: %s)" % next((l.strip() for l in cfg.stdout.splitlines()
-                                  if "ALL battery" in l), "<nothing>"))
+              "(saw: %s)" % next((ln.strip() for ln in cfg.stdout.splitlines()
+                                  if "ALL battery" in ln), "<nothing>"))
         run = subprocess.run([ctest, "-V"], cwd=os.path.join(tmp, "b"),
                              capture_output=True, text=True)
         out = run.stdout + run.stderr
