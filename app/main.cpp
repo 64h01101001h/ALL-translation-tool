@@ -15539,6 +15539,25 @@ public:
                   "on paper is far above the floor, so a pin that "
                   "passed everything would be visible here");
         }
+        // TEST-2: saveOrWarn's failure branches were dead in the
+        // battery - mutating BOTH to success left everything green, so
+        // the central write-failure guard was itself unguarded.
+        {
+            const QString noDir = QDir::temp().filePath(
+                "all_selftest_no_such_dir_xyzzy/out.txt");
+            check(!saveOrWarn(nullptr, noDir, "abc", "TEST-2 probe"),
+                  "saveOrWarn reports FALSE for an unopenable path "
+                  "(TEST-2)");
+            const QString okPath =
+                QDir::temp().filePath("all_selftest_test2_ok.txt");
+            QFile::remove(okPath);
+            check(saveOrWarn(nullptr, okPath, "abc", "TEST-2 probe"),
+                  "saveOrWarn reports TRUE for a good path");
+            QFile chk(okPath);
+            check(chk.open(QIODevice::ReadOnly) && chk.readAll() == "abc",
+                  "...and the bytes it claimed are the bytes on disk");
+            QFile::remove(okPath);
+        }
         // FAIL-4/PERF-10: no manager in this application may wait
         // forever. Qt's default transferTimeout is 0 - infinite - and
         // a black-holed address held a folio request 59.7 s with the
