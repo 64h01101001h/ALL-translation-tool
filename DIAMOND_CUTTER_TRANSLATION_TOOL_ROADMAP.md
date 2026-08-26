@@ -14,7 +14,7 @@ The Diamond Cutter Translation Tool is the multifunctional desktop suite for wor
 
 ## Core assets already in hand (HGM DICTIONARY - TRANSLATION APP/Handoff)
 - **hgm_dictionary v0.27.1** — 105,638 entries (12,004 HGM-glossed; {C}/{PH}/{GD}/{LC} reference layers; 105,637 with Tibetan unicode; tiered evidence).
-- **full_parallel_corpus** — 35,601 aligned Tibetan–English segments across 60+ HGM sources (the concordance/oversight evidence base).
+- **full_parallel_corpus** — 42,199 aligned Tibetan–English segments across 60+ HGM sources (the concordance/oversight evidence base).
 - **Canonical engines (Handoff/tools/)** — pron_engine.py (phonetics, 42/42 battery), hgm_tools.py (ACIP⇄EWTS), ewts_unicode.py (wylie→unicode, 98.88% on 26,318 ground-truth pairs), glyph_decoder.py, hopkins_parser.py, practice_parser.py, generate_package.py.
 
 ## Newly scanned tool folders → functionality to integrate

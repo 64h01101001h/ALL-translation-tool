@@ -179,7 +179,7 @@ One concept, one word — as the UI actually speaks, now ruled:
 - **The authority** — the approver ROLE (Geshe Michael in the Approval
   workflow); distinct concept from HGM-the-gloss-source, and the UI
   keeps them distinct. HOLDS.
-- **Corpus** = the 35,601-segment parallel evidence base, everywhere.
+- **Corpus** = the 42,199-segment parallel evidence base, everywhere.
   HOLDS.
 - Interaction idioms verified in W2/W9 passes: one warning voice for
   writes (warnWriteFail), one for opens (warnOpenFail), Trash always

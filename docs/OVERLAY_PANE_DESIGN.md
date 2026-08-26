@@ -37,7 +37,7 @@ We are completing their design, not inventing a new one.
 
 The original needed hand-authored `<NNN>` markup to pair Tibetan with English. **We get the
 pairing from data**: 105,634 headwords (96.7% multi-syllable, up to 48 syllables) for
-segmentation, and the 35,601-segment aligned corpus for "how did HGM actually translate this
+segmentation, and the 42,199-segment aligned corpus for "how did HGM actually translate this
 passage" — the corpus is the per-text glossary, generalized to the whole curriculum. Hand markup
 becomes optional, not required.
 

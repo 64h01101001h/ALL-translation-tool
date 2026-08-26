@@ -66,7 +66,7 @@ while leaving the rest untouched.
 
 Lattice segmentation + nested spans (Overlay), fused-particle splits,
 freestanding-particle classification + suffix agreement, tier-labeled spine
-glosses, 35,601-segment aligned corpus (the answer key), Tibetan-script
+glosses, 42,199-segment aligned corpus (the answer key), Tibetan-script
 rendering via the ported engines, spellcheck. The trainer is mostly a new
 *clause/role layer* over existing machinery plus a dedicated pane with the
 progressive-reveal interaction.

@@ -33,7 +33,7 @@ nothing: `python3 tools/build_spine.py` (release package + corpus →
 
 ## Prove the build
 
-    ctest --test-dir cmake-build             # 55 suites (2026-08-20)
+    ctest --test-dir cmake-build             # 86 suites (2026-08-26)
     ./cmake-build/app/DiamondCutterTranslationTool.app/Contents/MacOS/\
 DiamondCutterTranslationTool --selftest                # 225 checks
 

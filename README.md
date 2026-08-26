@@ -83,7 +83,7 @@ dictionaries from their original binaries: `tools/extract_hypercontext_dic.py`,
 ctest SKIPs naming the missing path when it is absent — never as a pass.
 `docs/FIXTURES.md` is the inventory and says how to produce each one.
 
-55 suites (2026-08-20; the count grows with every feature), ~600k verified data points. The engine batteries enforce founding
+86 suites (2026-08-26; the count grows with every feature), ~600k verified data points. The engine batteries enforce founding
 rule 2 (a port that fails its battery does not ship): `acipToEwts` must match
 all 42,199 corpus conversions (100.000%), `wylieToUnicode` must hit the
 canonical 99.03% on 26,318 ground-truth pairs, `pronounce` must be identical

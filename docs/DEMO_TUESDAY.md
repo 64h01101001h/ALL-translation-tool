@@ -90,7 +90,7 @@ Nothing else in this document works if these are not done.
 **Point at `FROM THE CORPUS — 3 of 827`.**
 
 > "Eight hundred and twenty-seven attestations. His own published translations.
-> Underneath this is a parallel corpus — 35,601 aligned Tibetan–English segments
+> Underneath this is a parallel corpus — 42,199 aligned Tibetan–English segments
 > across sixty of his courses."
 
 **Scroll down to the recorded teachings.**

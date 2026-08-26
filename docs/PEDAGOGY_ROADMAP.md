@@ -5,7 +5,7 @@ translation itself?)*
 
 ## The core pedagogical asset
 
-The 35,601-segment aligned corpus is not just reference data — it is **35,601
+The 42,199-segment aligned corpus is not just reference data — it is **42,199
 worked examples by the master translator**, machine-alignable at the clause
 and chunk level with tools that already exist (lattice, clause splitter,
 chunker, verb classes). Nearly every exercise below is *generated from the
