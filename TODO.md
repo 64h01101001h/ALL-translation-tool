@@ -1,4 +1,6 @@
-## ★ NEXT UP (Adam, 2026-08-26): full-depth C02 Wilson alignment
+## ✓ DONE 2026-08-26: full-depth C02 Wilson alignment
+- Delivered: ~/Desktop/ACI2-full-depth-alignment/ (index + 15 pages, 47 segments, seven layers, QA'd letter-exact). Findings indexed on the hub page.
+- **SPEC CHANGE (Adam, mid-run):** SEVEN layers, not six — layer 7 = syllable/compound-member (sub-word morphology). The interactive depth layers carry the analysis in place of the static parse tree. Pages built before the ruling (p01–p05) get retrofitted with layer-7 spans in the closing sweep.
 - The entire ACI Course 2 reading (C02:22-68, 47 segments) at six-layer depth with parse trees, per the two delivered demo passes. AI/PROVISIONAL labeling throughout; never dictionary material. Runs immediately after the SQA sweep tail closes.
 
 # TODO — Diamond Cutter Translation Tool
