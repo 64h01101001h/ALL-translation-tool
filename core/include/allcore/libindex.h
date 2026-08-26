@@ -37,6 +37,10 @@ public:
         // The caller must say "stopped, N of M done", never "up to
         // date": a cancelled pass did not index the rest.
         bool canceled = false;
+        // WP-10 (2026-08-26): files whose rows could not all be
+        // written. Such a file is NOT stamped, so the next pass
+        // retries it; the caller must disclose the count (rule 3).
+        int write_failures = 0;
         // SQA PERF-6: true when a change of word-fold generation
         // forced a FULL reindex. It matters to the caller because the
         // fold stamp is deliberately withheld on a cancelled pass

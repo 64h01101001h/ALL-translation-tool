@@ -69,6 +69,10 @@ LibraryIndex::LibraryIndex(const std::string& db_path) {
     // second connection. Converts an existing DELETE-mode index on
     // first touch; the -wal/-shm siblings live beside .index.db.
     exec(db_, "PRAGMA journal_mode=WAL");
+    // WP-10 test hook: a page cap makes real SQLITE_FULL reachable
+    // by the battery without filling a disk
+    if (const char* cap = std::getenv("ALL_INDEX_MAX_PAGES"))
+        exec(db_, ("PRAGMA max_page_count=" + std::string(cap)).c_str());
     exec(db_,
          "CREATE TABLE IF NOT EXISTS files ("
          "  id INTEGER PRIMARY KEY,"
@@ -261,6 +265,11 @@ LibraryIndex::UpdateStats LibraryIndex::update(
             if (!line.empty() && line.back() == '\r') line.pop_back();
             lines.push_back(line);
         }
+        // WP-10: every write-side step is judged. A file whose rows
+        // did not all land is UN-stamped (its rows deleted) so the
+        // next incremental pass retries - stamped-current over
+        // dropped rows was a permanent, silent search hole.
+        bool rowsOk = true;
         if (id < 0) {
             Stmt ins(db_,
                      "INSERT INTO files (path, mtime, size, nlines) "
@@ -269,7 +278,7 @@ LibraryIndex::UpdateStats LibraryIndex::update(
             sqlite3_bind_int64(ins.p, 2, ms.first);
             sqlite3_bind_int64(ins.p, 3, ms.second);
             sqlite3_bind_int64(ins.p, 4, (long long)lines.size());
-            sqlite3_step(ins.p);
+            rowsOk &= sqlite3_step(ins.p) == SQLITE_DONE;
             id = sqlite3_last_insert_rowid(db_);
         } else {
             Stmt up(db_,
@@ -278,7 +287,7 @@ LibraryIndex::UpdateStats LibraryIndex::update(
             sqlite3_bind_int64(up.p, 2, ms.second);
             sqlite3_bind_int64(up.p, 3, (long long)lines.size());
             sqlite3_bind_int64(up.p, 4, id);
-            sqlite3_step(up.p);
+            rowsOk &= sqlite3_step(up.p) == SQLITE_DONE;
         }
         Stmt li(db_,
                 "INSERT INTO lines (file_id, line_no, text, text_norm) "
@@ -324,20 +333,48 @@ LibraryIndex::UpdateStats LibraryIndex::update(
             sqlite3_bind_int64(li.p, 2, (long long)n + 1);
             sqlite3_bind_text(li.p, 3, lines[n].c_str(), -1, SQLITE_TRANSIENT);
             sqlite3_bind_text(li.p, 4, norm.c_str(), -1, SQLITE_TRANSIENT);
-            sqlite3_step(li.p);
+            rowsOk &= sqlite3_step(li.p) == SQLITE_DONE;
             const long long rowid = sqlite3_last_insert_rowid(db_);
             sqlite3_reset(lf.p);
             sqlite3_bind_int64(lf.p, 1, rowid);
             sqlite3_bind_text(lf.p, 2, lines[n].c_str(), -1, SQLITE_TRANSIENT);
             sqlite3_bind_text(lf.p, 3, norm.c_str(), -1, SQLITE_TRANSIENT);
-            sqlite3_step(lf.p);
+            rowsOk &= sqlite3_step(lf.p) == SQLITE_DONE;
+            if (!rowsOk) break;   // the file is already condemned
+        }
+        if (!rowsOk) {
+            ++st.write_failures;
+            if (sqlite3_get_autocommit(db_) != 0) {
+                // the error (e.g. SQLITE_FULL) auto-rolled the whole
+                // transaction back - every write of this pass is
+                // already gone, which IS the un-stamp. Nothing this
+                // pass claims to have added survived; say so and
+                // stop instead of grinding every remaining file
+                // into the same wall.
+                st.added = st.updated = 0;
+                st.lines = 0;
+                break;
+            }
+            // txn alive: un-stamp just this file so the next pass
+            // sees an unindexed file and retries it
+            Stmt dfts(db_,
+                      "DELETE FROM lines_fts WHERE rowid IN "
+                      "(SELECT rowid FROM lines WHERE file_id=?)");
+            sqlite3_bind_int64(dfts.p, 1, id);
+            sqlite3_step(dfts.p);
+            Stmt dl(db_, "DELETE FROM lines WHERE file_id=?");
+            sqlite3_bind_int64(dl.p, 1, id);
+            sqlite3_step(dl.p);
+            Stmt df(db_, "DELETE FROM files WHERE id=?");
+            sqlite3_bind_int64(df.p, 1, id);
+            sqlite3_step(df.p);
         }
     }
     // The fold stamp asserts "every row in this index was normalised
     // under this fold". A cancelled pass has not finished proving that,
     // so it must NOT stamp: otherwise an interrupted refold never heals
     // and searches silently miss the rows that kept the old norms.
-    if (!st.canceled) {
+    if (!st.canceled && st.write_failures == 0) {
         exec(db_, foldGen ? "PRAGMA application_id=1"
                           : "PRAGMA application_id=0");
         // PERF-6: a completed full refold rewrites every FTS row, which
@@ -351,7 +388,8 @@ LibraryIndex::UpdateStats LibraryIndex::update(
     }
     // Everything completed before the stop is committed — the index is
     // incremental, so a partial index is valid and resumable.
-    exec(db_, "COMMIT");
+    if (sqlite3_get_autocommit(db_) == 0)
+        exec(db_, "COMMIT");   // a rolled-back pass has nothing left
     st.lines = lineCount();
     return st;
 }

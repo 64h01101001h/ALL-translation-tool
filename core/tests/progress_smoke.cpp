@@ -125,6 +125,26 @@ int main() {
               "mem3: the NULL event key is skipped, not fabricated");
         std::remove(fp.c_str());
     }
+    {   // WP-15 (SQA re-measurement 2026-08-26): a drill store that
+        // silently drops writes eats the translator's review history.
+        // The page cap makes SQLITE_FULL reachable; the store must
+        // COUNT what it could not keep (rule 3).
+        const std::string fp = "/tmp/all_progress_wp15.db";
+        std::remove(fp.c_str());
+        setenv("ALL_PROGRESS_MAX_PAGES", "20", 1);
+        allcore::Progress pc(fp);
+        for (int i = 0; i < 4000; ++i)
+            pc.touchWord("tshig" + std::to_string(i), 1000 + i);
+        unsetenv("ALL_PROGRESS_MAX_PAGES");
+        CHECK(pc.writeFailures() > 0,
+              "a full progress db is COUNTED, never silent (WP-15)");
+        allcore::Progress ok(fp + "2");
+        ok.touchWord("bden pa", 1);
+        CHECK(ok.writeFailures() == 0,
+              "a healthy store counts zero write failures (WP-15)");
+        std::remove(fp.c_str());
+        std::remove((fp + "2").c_str());
+    }
     std::printf("%s (%d failures)\n",
                 failures ? "PROGRESS SMOKE FAILED" : "PROGRESS SMOKE OK",
                 failures);
