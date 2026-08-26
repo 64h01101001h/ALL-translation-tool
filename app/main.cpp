@@ -28295,7 +28295,7 @@ private:
                     "before use) · click a word to see it on the page "
                     "(word boxes: pyctcdecode frame spans)</div>")
                 .arg(pl.angle, 0, 'f', 2)
-                .arg(deskewOverride_->isChecked()
+                .arg(deskewOff
                          ? "(deskew off — the default for pecha)"
                          : "(BDRC pipeline estimate)")
                 .arg(pl.lines.size());
@@ -28318,7 +28318,7 @@ private:
             htmlOut += QString(
                            "<div style='color:#8C2F2B'><b>No lines "
                            "found on this page.</b> %1</div>")
-                           .arg(deskewOverride_->isChecked()
+                           .arg(deskewOff
                                     ? QString(
                                           "The page may be blank, "
                                           "very faint, or cropped too "
