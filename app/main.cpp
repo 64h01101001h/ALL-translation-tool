@@ -541,8 +541,21 @@ static allcore::Tm84000* tm84000() {
                 g_tm84000Root + "/data/extracted/tm_84000.db";
             if (QFile::exists(tsv)) {
                 QDir().mkpath(g_tm84000Root + "/data/extracted");
-                if (allcore::Tm84000::ensureBuilt(
-                        tsv.toStdString(), db.toStdString()) > 0) {
+                // PERF-5: the first touch may rebuild the 590 MB FTS
+                // cache from the tsv.gz - 5.6 s measured - and it lands
+                // inside a card render. The rebuild-on-first-use is a
+                // deliberate press decision (the db is dead weight in
+                // the DMG); the GUI freezing with NO acknowledgement was
+                // not. The wait cursor covers exactly the build; a
+                // warm cache never shows it.
+                const bool coldBuild = !QFile::exists(db);
+                if (coldBuild && qApp)
+                    QApplication::setOverrideCursor(Qt::WaitCursor);
+                const long built = allcore::Tm84000::ensureBuilt(
+                    tsv.toStdString(), db.toStdString());
+                if (coldBuild && qApp)
+                    QApplication::restoreOverrideCursor();
+                if (built > 0) {
                     try {
                         tm = std::make_unique<allcore::Tm84000>(
                             db.toStdString());
