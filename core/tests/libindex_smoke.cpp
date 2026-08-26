@@ -152,6 +152,33 @@ int main() {
     }
 
     fs::remove_all(root);
+    {
+        // PERF-3: limit must reach the scan. Own root and own index,
+        // so the main fixture's incremental-update tests stay honest.
+        const fs::path proot =
+            fs::temp_directory_path() / "libindex_perf3_root";
+        fs::remove_all(proot);
+        fs::create_directories(proot / "kangyur");
+        std::string many;
+        for (int i = 0; i < 3000; ++i)
+            many += "ZAB MO LINE " + std::to_string(i) + "\n";
+        write(proot / "kangyur" / "KL9999ZZ.ACT", many.c_str());
+        allcore::LibraryIndex pix((proot / ".index.db").string());
+        pix.update(proot.string());
+        allcore::LibraryIndex::SearchStats st5;
+        auto few = pix.search("ZAB", 5, nullptr, &st5);
+        CHECK(few.size() == 5, "perf: limit=5 returns 5 hits");
+        // >= guards the vacuous pass: an unpopulated counter reads 0,
+        // and 0 <= 6 would have blessed the very defect under test.
+        CHECK(st5.term_rows_visited >= 5 && st5.term_rows_visited <= 6,
+              "perf: a bare-term search visits O(limit) rows, not every match");
+        bool cut = false;
+        auto all = pix.search("ZAB", 60, &cut);
+        CHECK(all.size() == 60 && cut,
+              "perf: truncation reported when the limit cuts real matches");
+        fs::remove_all(proot);
+    }
+
     std::printf("%s (%d failures)\n",
                 failures ? "LIBINDEX SMOKE FAILED" : "LIBINDEX SMOKE OK",
                 failures);

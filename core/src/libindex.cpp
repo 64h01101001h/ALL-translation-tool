@@ -354,7 +354,8 @@ long long LibraryIndex::lineCount() const {
 
 std::vector<FileGoferHit> LibraryIndex::search(const std::string& query,
                                                int limit,
-                                               bool* truncated) const {
+                                               bool* truncated,
+                                               SearchStats* stats) const {
     using namespace gofer_ast;
     bool cut = false;   // any node hit kScanCap
     auto toks = lex(query);
@@ -362,6 +363,13 @@ std::vector<FileGoferHit> LibraryIndex::search(const std::string& query,
     auto ast = parser.parseQuery();
 
     struct FWin { long long file = 0; int lo = 0; int hi = 0; };
+    // PERF-3: a BARE term needs only `limit` windows - there is no
+    // OR/NEAR join downstream that could consume more. Leaves inside a
+    // compound query keep the full window (a join partner may sit
+    // anywhere in it). "PA" alone: 7.85M matching lines, 1.9s warm, to
+    // display 60 - now the scan stops at 61.
+    const bool bareTerm = ast->kind == Node::TERM;
+    const int scanLimit = bareTerm ? limit : kScanCap;
     std::function<std::vector<FWin>(const Node&)> eval =
         [&](const Node& n) -> std::vector<FWin> {
         switch (n.kind) {
@@ -371,27 +379,35 @@ std::vector<FileGoferHit> LibraryIndex::search(const std::string& query,
                 // of 14,077,690 lines, every one of which was pushed
                 // into this vector to return 60.
                 //
-                // ORDER BY is not decoration. Without it SQLite may
-                // return a DIFFERENT 200,000 rows between runs or
-                // after a VACUUM, so a translator who re-ran a search
-                // to check a citation could find the hit gone with
-                // nothing having changed. The window is now the first
-                // N in index order: still partial, but reproducible,
-                // which is the minimum a checkable-evidence tool owes.
+                // ORDER BY is not decoration - without it SQLite may
+                // return a DIFFERENT window between runs, so a
+                // translator re-checking a citation could find the hit
+                // gone with nothing changed. But ordering by
+                // (file_id, line_no) forced the join across every
+                // matching row (7.85M for "PA") before the LIMIT could
+                // act. f.rowid gives the same guarantee for less:
+                // rowid == lines.id, an INTEGER PRIMARY KEY, stable
+                // across VACUUM, monotone in (file, line) for any
+                // freshly built index - and FTS5 can walk matches in
+                // rowid order and STOP at the limit. The kept window is
+                // "first N by id" rather than "first N by (file,line)";
+                // identical on a fresh index, deterministic always, and
+                // the display sort below orders whatever is kept.
                 Stmt s(db_,
                        "SELECT l.file_id, l.line_no FROM lines_fts f "
                        "JOIN lines l ON l.id = f.rowid "
                        "WHERE lines_fts MATCH ? "
-                       "ORDER BY l.file_id, l.line_no LIMIT ?");
+                       "ORDER BY f.rowid LIMIT ?");
                 const std::string q = ftsQuote(n.term);
                 sqlite3_bind_text(s.p, 1, q.c_str(), -1, SQLITE_TRANSIENT);
-                sqlite3_bind_int(s.p, 2, kScanCap + 1);
+                sqlite3_bind_int(s.p, 2, scanLimit + 1);
                 while (sqlite3_step(s.p) == SQLITE_ROW) {
                     const int ln = sqlite3_column_int(s.p, 1) - 1;
                     w.push_back({sqlite3_column_int64(s.p, 0), ln, ln});
                 }
-                if ((int)w.size() > kScanCap) {
-                    w.resize(kScanCap);
+                if (stats) stats->term_rows_visited += (long long)w.size();
+                if ((int)w.size() > scanLimit) {
+                    w.resize(scanLimit);
                     cut = true;
                 }
                 return w;

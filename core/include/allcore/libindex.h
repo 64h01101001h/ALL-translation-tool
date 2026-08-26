@@ -83,9 +83,16 @@ public:
     // tell the reader their result set was cut, or they will read a
     // partial answer as a complete one.
     static constexpr int kScanCap = 200000;
+    // PERF-3 instrumentation: how many rows the TERM scans actually
+    // stepped. A pin asserts a bare-term search visits O(limit) rows,
+    // not O(matches) - the difference between 15 ms and 1.9 s on "PA".
+    struct SearchStats {
+        long long term_rows_visited = 0;
+    };
     std::vector<FileGoferHit> search(const std::string& query,
                                      int limit = 60,
-                                     bool* truncated = nullptr) const;
+                                     bool* truncated = nullptr,
+                                     SearchStats* stats = nullptr) const;
 
 private:
     sqlite3* db_ = nullptr;
