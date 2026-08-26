@@ -104,6 +104,16 @@
    "test": "catalog_actions",
    "expect_fail_contains": "META companion",
    "expect": "killed"
+  },
+  {
+   "id": "G3-VARIANT",
+   "note": "SQA re-measurement 2026-08-26: the first G3 was three substrings that C++ literal splits guaranteed could never match; it blessed four live red-PROVISIONAL sites. The proximity rule must convict a red variant the old patterns could not see.",
+   "file": "app/main.cpp",
+   "old": "                    gloss += \" <span style='color:#B4540A'>\"\n                             \"[PROVISIONAL \\u2014 auto-aligned]</span>\";",
+   "new": "                    gloss += \" <span style='color:#c00'>\"\n                             \"[PROVISIONAL \\u2014 auto-aligned]</span>\";",
+   "test": "constitution",
+   "expect_fail_contains": "G3",
+   "expect": "killed"
   }
  ]
 }

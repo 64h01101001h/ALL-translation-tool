@@ -168,14 +168,39 @@ def main():
     # "machine-matched, verify" - a translator taught that red means
     # broken learns to ignore red, which then costs them on a REAL
     # error. kMachine #B4540A is the tier's colour.
-    for bad in ("#b00'>PROVISIONAL", "#b00'>[PROVISIONAL]",
-                "#b00;font-size:11px'>[PROVISIONAL]"):
-        if bad in main_cpp:
-            line = main_cpp[:main_cpp.index(bad)].count("\n") + 1
+    # SQA re-measurement 2026-08-26 (adversarially confirmed): the
+    # first draft matched three exact substrings, all married to the
+    # PRE-sweep formatting - after the sweep repainted those sites the
+    # patterns matched NOTHING, so the rule blessed every future
+    # red-PROVISIONAL that dared to use different quoting. Same class
+    # as C2's disarmed-gate lesson: a rule is only as alive as its
+    # ability to see its subject. Now: every PROVISIONAL token is
+    # inspected against the nearest color declaration BEFORE it, and
+    # the rule fails itself if it cannot find its subject at all.
+    import re as _re3
+    prov_sites = [m.start() for m in _re3.finditer("PROVISIONAL",
+                                                   main_cpp)]
+    if len(prov_sites) < 3:
+        fails.append(
+            "G3 liveness: fewer than 3 PROVISIONAL tokens in "
+            "app/main.cpp - the tier label this rule polices has "
+            "vanished; the rule refuses to pass over a missing "
+            "subject")
+    red_ink = _re3.compile(
+        r"color:\s*(#[bcdef]0{2,5}\b|#f44|#e53|red\b|crimson)",
+        _re3.I)
+    for pos in prov_sites:
+        ctx = main_cpp[max(0, pos - 120):pos]
+        cm = None
+        for cm in red_ink.finditer(ctx):
+            pass   # keep the LAST color decl before the token
+        if cm:
+            line = main_cpp[:pos].count("\n") + 1
             fails.append(
                 f"G3 app/main.cpp:{line}: PROVISIONAL painted "
-                f"error-red - the tier's colour is kMachine amber "
-                f"(#B4540A); red is reserved for genuine failure")
+                f"error-red ({cm.group(1)}) - the tier's colour is "
+                f"kMachine amber (#B4540A); red is reserved for "
+                f"genuine failure")
 
     # R4 — the pre-W5 failing inks may not return as text colors.
     # Incident: captions at 2.78:1 shipped for weeks.
