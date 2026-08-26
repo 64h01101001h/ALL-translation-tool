@@ -72,6 +72,20 @@ Read from tools/package_macos.sh staging (the manifest of record):
    two days without opening the README beside the file. CC BY 4.0
    permits redistribution with attribution, which the notices carry.
    Publishing this file was fine.
+7. **Repo licensing audit 2026-08-26 (Adam's question) — three
+   in-copyright book texts WERE public and are now stripped:** Hackett's
+   *A Tibetan Verb Lexicon* (111 OCR pages), Goldstein's *Essentials of
+   Modern Literary Tibetan* (25,304 lines), Choephel's *Manual of
+   Authentic Tibetan* (page extraction). In-house working copies for the
+   honorific-verbs research; public for ~1 day. Removed from tree AND
+   all history (filter-repo, proven: 0 commits touch the paths, content
+   search for the books' text finds nothing); derived factual TSVs kept
+   with per-directory READMEs. Rollback mirror:
+   ALL-translation-tool-PRE-COPYRIGHT-STRIP-2026-08-26.git (Adam's to
+   delete). Force-push to GitHub is Adam's to run (classifier-blocked
+   for the agent); until he does, GitHub still serves the old history.
+   Anyone who cloned before the push (Joel, this morning) should
+   re-clone.
    Partial mitigation: the root LICENSE is all-rights-reserved
    (c) Asian Legacy Library / ACIP, so visibility is not a licence
    grant. Making it public before then repeats BUILD-5 — notices
