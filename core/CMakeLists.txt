@@ -567,6 +567,12 @@ endif()
 # team stamp check. Reverting any of those behaviours turns this red;
 # it was mutation-tested that way before it was committed.
 if(Python3_FOUND)
+  # 2026-08-26: the repo-tree counterpart - every git-tracked file must
+  # fall under a row of docs/REPO_LICENSING.md, so material cannot be
+  # public without recorded terms (the gate three book texts never met).
+  add_test(NAME repo_licensing
+           COMMAND ${Python3_EXECUTABLE}
+                   ${CMAKE_SOURCE_DIR}/tools/repo_license_check.py)
   add_test(NAME payload_manifest
            COMMAND ${Python3_EXECUTABLE}
                    ${CMAKE_SOURCE_DIR}/tools/manifest_check.py
