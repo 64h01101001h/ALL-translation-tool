@@ -26,6 +26,21 @@
 #include <QPicture>
 #include "thirdparty/diff_match_patch.h"
 #include <QNetworkAccessManager>
+
+// FAIL-4/PERF-10: every network manager in this file gets a transfer
+// timeout at birth. Qt's default is 0 - wait forever - and the audit
+// measured a folio request still blocked at 59.7 s on a black-holed
+// address, with the pane's cancel unable to reach it. 20 s covers the
+// slowest real IIIF fetches observed while ending a dead one while the
+// user is still looking at the pane. Individual requests may still
+// override upward (the model download uses 60 s deliberately).
+class TimedNam : public QNetworkAccessManager {
+public:
+    explicit TimedNam(QObject* parent = nullptr)
+        : QNetworkAccessManager(parent) {
+        setTransferTimeout(20000);
+    }
+};
 #include <QDialog>
 #include <QDialogButtonBox>
 #include <QFontDatabase>
@@ -350,7 +365,7 @@ static QString ocrModelDirFor(const QString& root) {
 
 static bool ocrDownloadOne(QWidget* parent, const QString& url,
                            const QString& dest) {
-    QNetworkAccessManager nam;
+    TimedNam nam;
     QNetworkRequest req{QUrl(url)};
     req.setAttribute(QNetworkRequest::RedirectPolicyAttribute,
                      QNetworkRequest::NoLessSafeRedirectPolicy);
@@ -3437,7 +3452,7 @@ private:
     QLabel* status_ = nullptr;
     QTextBrowser* report_ = nullptr;
     QTextBrowser* qc_ = nullptr;
-    QNetworkAccessManager net_;
+    TimedNam net_;
     QNetworkReply* reply_ = nullptr;
     QByteArray buf_;
     std::string accum_;
@@ -13978,7 +13993,7 @@ private:
 
     QLabel* hint_ = nullptr;
     // scan follow-along state
-    QNetworkAccessManager nam_;
+    TimedNam nam_;
     QPushButton* scanBtn_ = nullptr;
     QLabel* thlCatLink_ = nullptr;
     QLabel* personBadge_ = nullptr;
@@ -15499,6 +15514,16 @@ public:
                   "control: the arithmetic discriminates - primary ink "
                   "on paper is far above the floor, so a pin that "
                   "passed everything would be visible here");
+        }
+        // FAIL-4/PERF-10: no manager in this application may wait
+        // forever. Qt's default transferTimeout is 0 - infinite - and
+        // a black-holed address held a folio request 59.7 s with the
+        // cancel unable to reach it.
+        {
+            TimedNam probe;
+            check(probe.transferTimeout() == 20000,
+                  "every network manager is born with a transfer "
+                  "timeout (FAIL-4)");
         }
         // FAIL-6: HTML in, honestly flagged out. The helper must say
         // "not JSON" for an error page and stay quiet for real JSON -
@@ -20421,7 +20446,7 @@ public:
     bool notesLoaded_ = false;
     QLineEdit* notesSearch_ = nullptr;
     QPushButton* aiBtn_ = nullptr;
-    QNetworkAccessManager net_;
+    TimedNam net_;
     QNetworkReply* aiReply_ = nullptr;
     QByteArray aiBuf_;
     std::string aiAccum_;
@@ -25144,7 +25169,7 @@ private:
     }
 
     QString libRoot_;
-    QNetworkAccessManager net_;   // collection update checks
+    TimedNam net_;   // collection update checks
     bool personsLoaded_ = false;
     QMap<QString, QString> authorByWork_;
     QMap<QString, QJsonObject> personsByAuthor_;
