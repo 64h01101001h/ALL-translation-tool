@@ -44,6 +44,25 @@ APPNAME="Diamond Cutter Translation Tool"
 STAGE="$DIST/stage"
 QTBIN="$(dirname "$(which qmake6 2>/dev/null || echo /opt/homebrew/opt/qt/bin/qmake)")"
 
+echo "== 0a. dependency roll-call (BUILD-21) =="
+# brew bundle check conflates "missing" with "newer available", and a
+# press must not fail because Homebrew published an upgrade this
+# morning - nor may it proceed while a declared dependency is ABSENT.
+# Missing formula = stop. Version drift = a printed note, because the
+# authoritative record of what this press actually bundled is
+# BUILD_MANIFEST.json, written per-press with exact versions.
+MISSING_DEPS=0
+while read -r f; do
+  if ! brew list --versions "$f" >/dev/null 2>&1; then
+    echo "   MISSING dependency: $f (declared in Brewfile)"
+    MISSING_DEPS=1
+  fi
+done < <(awk '/^brew /{gsub(/"/,"",$2); print $2}' "$ROOT/Brewfile")
+[[ "$MISSING_DEPS" == "0" ]] || {
+  echo "DEPENDENCIES MISSING - brew bundle install, then press again."
+  exit 10; }
+echo "   all Brewfile formulas present (exact versions: BUILD_MANIFEST.json)"
+
 echo "== 0. release gate =="
 python3 "$ROOT/tools/validate_release.py" >/dev/null || {
   echo "RELEASE GATE FAILED — not packaging a bad release"; exit 1; }
