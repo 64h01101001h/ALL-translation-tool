@@ -2643,6 +2643,30 @@ static bool saveOrWarn(QWidget* parent, const QString& path,
 // carrying an HTML error page used to parse to an empty document and
 // render as "BDRC lists no scan volumes", a silent wrong answer to a
 // translator. ok is false when the bytes were not JSON at all.
+// FAIL-5: the HTTP status was never read, so 401, 404, 429 and 500
+// all rendered as "BDRC unreachable" - one message for four different
+// situations with four different remedies. Names the ones a
+// translator can act on; anything else keeps Qt's own words.
+static QString bdrcErrorLine(QNetworkReply* rep) {
+    const int http =
+        rep->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
+    switch (http) {
+        case 404: return "BDRC has no record at this address (404) - "
+                         "the id may be wrong or withdrawn";
+        case 429: return "BDRC is rate-limiting us (429) - wait a "
+                         "minute and try again";
+        case 401:
+        case 403: return QString("BDRC declined the request (%1) - "
+                                 "this record may be restricted")
+                      .arg(http);
+        default:
+            if (http >= 500)
+                return QString("BDRC's server errored (%1) - their "
+                               "side; try again later").arg(http);
+            return "BDRC unreachable: " + rep->errorString();
+    }
+}
+
 static QJsonObject jsonObjectOrFlag(const QByteArray& bytes, bool* ok) {
     QJsonParseError pe{};
     const auto doc = QJsonDocument::fromJson(bytes, &pe);
@@ -8967,8 +8991,7 @@ private:
                 rep->deleteLater();
                 list->clear();
                 if (rep->error() != QNetworkReply::NoError) {
-                    list->addItem("BDRC unreachable: " +
-                                  rep->errorString());
+                    list->addItem(bdrcErrorLine(rep));
                     return;
                 }
                 bool jsonOk = false;
@@ -9039,7 +9062,7 @@ private:
             rep->deleteLater();
             if (epoch != fetchEpoch_) return;   // a newer file took over
             if (rep->error() != QNetworkReply::NoError) {
-                scanCap_->setText("BDRC unreachable: " + rep->errorString() +
+                scanCap_->setText(bdrcErrorLine(rep) +
                                   " — <a href='https://library.bdrc.io/show/" +
                                   scanWork_ + "'>open in the browser</a>");
                 scanCap_->setOpenExternalLinks(true);
