@@ -110,6 +110,36 @@ def main():
             f.write(str(msgbox) + "\n")
         notes.append(f"R3 baseline lowered to {msgbox}")
 
+    # G2 — the binding gloss census (SQA DATA-3). Nothing mechanical
+    # prevented the NEXT surface from printing hgm_gloss untiered - the
+    # incident class behind "HGM has:" over a machine gloss, the demo
+    # banner, and most of the serious defects this project has had.
+    # Every site in app/main.cpp that touches hgm_gloss is counted;
+    # growth fails the gate until a human confirms the new site tiers
+    # its output (curated/glossary/PROVISIONAL, colour + label) and
+    # bumps tools/constitution_hgm_baseline.txt in the same commit.
+    hgm_sites = main_cpp.count("hgm_gloss")
+    hgm_baseline_path = os.path.join(root,
+                                     "tools/constitution_hgm_baseline.txt")
+    if os.path.exists(hgm_baseline_path):
+        hgm_base = int(read(hgm_baseline_path).strip())
+        if hgm_sites > hgm_base:
+            fails.append(
+                f"G2 app/main.cpp: hgm_gloss consumer sites grew "
+                f"{hgm_base} -> {hgm_sites}. Review each new site: the "
+                f"binding gloss may only render TIERED (curated/"
+                f"glossary/PROVISIONAL, colour and label), then bump "
+                f"tools/constitution_hgm_baseline.txt in the same "
+                f"commit (DATA-3)")
+        elif hgm_sites < hgm_base:
+            with open(hgm_baseline_path, "w") as f:
+                f.write(str(hgm_sites) + "\n")
+            notes.append(f"G2 baseline lowered to {hgm_sites}")
+    else:
+        with open(hgm_baseline_path, "w") as f:
+            f.write(str(hgm_sites) + "\n")
+        notes.append(f"G2 baseline installed: {hgm_sites} hgm_gloss sites")
+
     # G1 — the green vocabulary is FROZEN (SQA DATA-12). The audit
     # found seven saturated greens across 43 sites giving the binding
     # colour four different meanings; 2026-08-26 consolidated them to
