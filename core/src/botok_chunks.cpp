@@ -366,14 +366,19 @@ std::vector<Chunk> ChunkFramework::mergeSkippablePunct(
 
 // ------------------------------------------------------------- test methods
 
+// MEM-4: these classifiers indexed base_[] unchecked - C++ UB where
+// the canonical Python RAISES IndexError on a bad index. .at() is the
+// faithful port of that contract: a caller bug dies loudly instead of
+// reading a stranger's memory. (The methods are private, so no direct
+// pin is possible; the whole battery rides on them every run.)
 bool ChunkFramework::isBoUnicode(int i) const {
-    return base_[i] != OTHER && base_[i] != LATIN && base_[i] != CJK;
+    return base_.at(i) != OTHER && base_.at(i) != LATIN && base_.at(i) != CJK;
 }
 bool ChunkFramework::isLatin(int i) const {
-    return base_[i] == LATIN || base_[i] == TRANSPARENT;
+    return base_.at(i) == LATIN || base_.at(i) == TRANSPARENT;
 }
 bool ChunkFramework::isCjk(int i) const {
-    return base_[i] == CJK || base_[i] == TRANSPARENT;
+    return base_.at(i) == CJK || base_.at(i) == TRANSPARENT;
 }
 bool ChunkFramework::isPunct(int i) const {
     // exact port incl. the look-behind clause (chunkframework.__is_punct)
@@ -381,31 +386,31 @@ bool ChunkFramework::isPunct(int i) const {
               base_[i - 1] == OTHER || base_[i - 1] == NORMAL_PUNCT ||
               base_[i - 1] == SPECIAL_PUNCT || base_[i - 1] == TSEK ||
               base_[i - 1] == TRANSPARENT) &&
-        (base_[i] == TSEK || base_[i] == TRANSPARENT ||
-         base_[i] == NORMAL_PUNCT))
+        (base_.at(i) == TSEK || base_.at(i) == TRANSPARENT ||
+         base_.at(i) == NORMAL_PUNCT))
         return true;
-    return base_[i] == NORMAL_PUNCT || base_[i] == SPECIAL_PUNCT ||
-           base_[i] == TRANSPARENT;
+    return base_.at(i) == NORMAL_PUNCT || base_.at(i) == SPECIAL_PUNCT ||
+           base_.at(i) == TRANSPARENT;
 }
 bool ChunkFramework::isSym(int i) const {
-    return base_[i] == SYMBOL || base_[i] == TRANSPARENT || base_[i] == NFC;
+    return base_.at(i) == SYMBOL || base_.at(i) == TRANSPARENT || base_.at(i) == NFC;
 }
 bool ChunkFramework::isNum(int i) const {
-    return base_[i] == NUMERAL || base_[i] == TRANSPARENT;
+    return base_.at(i) == NUMERAL || base_.at(i) == TRANSPARENT;
 }
-bool ChunkFramework::isSpace(int i) const { return base_[i] == TRANSPARENT; }
+bool ChunkFramework::isSpace(int i) const { return base_.at(i) == TRANSPARENT; }
 bool ChunkFramework::isTsekOrLongSkrtVowel(int i) const {
-    return base_[i] == TSEK || base_[i] == SKRT_LONG_VOW;
+    return base_.at(i) == TSEK || base_.at(i) == SKRT_LONG_VOW;
 }
 bool ChunkFramework::isSkippablePunct(int i) const {
-    return base_[i] == TSEK || isSpace(i);
+    return base_.at(i) == TSEK || isSpace(i);
 }
 bool ChunkFramework::isSylText(int i) const {
     // literal port of TokChunks.__is_syl_text (the redundant OR keeps
     // SKRT_LONG_VOW in the cleaned syllable)
-    return (base_[i] != TSEK && base_[i] != TRANSPARENT &&
-            base_[i] != SKRT_LONG_VOW) ||
-           base_[i] == SKRT_LONG_VOW;
+    return (base_.at(i) != TSEK && base_.at(i) != TRANSPARENT &&
+            base_.at(i) != SKRT_LONG_VOW) ||
+           base_.at(i) == SKRT_LONG_VOW;
 }
 
 // ------------------------------------------------------------- chunkers

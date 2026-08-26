@@ -243,6 +243,7 @@ int main(int argc, char** argv) {
               "corpus-scale get_syls identical to Python oracle");
     }
 
+
     std::printf("botok_smoke: %s (%d failures)\n",
                 failures ? "FAIL" : "ALL PASS", failures);
     return failures ? 1 : 0;
