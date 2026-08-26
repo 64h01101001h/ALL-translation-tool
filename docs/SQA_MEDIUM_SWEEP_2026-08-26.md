@@ -11,12 +11,12 @@ the reasoning recorded; OPEN means not yet reached.*
 | finding | disposition |
 |---|---|
 | FAIL-2 (9 unverified success strings) | CLOSED earlier (streamWriteOk + selftest pins) |
-| FAIL-3 (dialog seam, zero consumers) | OPEN |
+| FAIL-3 (dialog seam, zero consumers) | CLOSED — first consumer drives the real Mixed Nuts prep save through the stubbed dialog and reads the file back; mutation-verified |
 | FAIL-8 (rollback asserts unverified state) | CLOSED — both META-guard undos verify via restore() |
 | FAIL-9 (99 discarded I/O bools) | TRIAGED — the two with teeth fixed (overwrite-became-skip; surviving truncated stub); rest recorded benign |
 | FAIL-10 (no I/O rule in the process gate) | TRIAGED-SUBSUMED — the mechanical rule now exists: Qt6 open() is nodiscard and the STATIC-1 wall reds every ignored one (it convicted this sweep author twice tonight); composed writes route through saveOrWarn/streamWriteOk with their own drills. A broader ban on bare write() would outlaw legitimate uses to catch none that these two nets miss. |
-| FAIL-11 (short-write drill under-pins) | OPEN — its false-lesson history is why FAIL-9 was not blanket-"fixed" |
-| FAIL-12 (read-only root collapses drills) | OPEN |
+| FAIL-11 (short-write drill under-pins) | CLOSED PRIOR, verified tonight — the audit's close-only mutant is KILLED by the read-only-handle drill, and every comment now teaches ts.status(), not QFile::error() |
+| FAIL-12 (read-only root collapses drills) | CLOSED — a chmod-500 directory driven through the real save path; the app reports, the drill stands |
 | STATIC-2 ([[nodiscard]] on saves) | CLOSED — convicted the audit's site AND one it missed |
 
 ## Network handling
@@ -28,7 +28,7 @@ the reasoning recorded; OPEN means not yet reached.*
 | TEST-2 (saveOrWarn branches dead) | CLOSED — real drill, finding's own mutation killed |
 | TEST-5 (44% mutation detection) | ONGOING — every sweep fix lands mutation-verified; sweep file now 10 entries |
 | TEST-6 (0.60 floor passed a 21-pt regression) | CLOSED — floors ratchet at 85%/55% with the rule written beside them |
-| TEST-7 (SettingsDialog 0%, ScanPane 22%) | OPEN |
+| TEST-7 (SettingsDialog 0%, ScanPane 22%) | CLOSED — both drilled: open-state/coordinate pins and the settings round trip through the real Save button; both mutation-verified |
 | TEST-9 (ctest over a failed build) | CLOSED earlier (verify.sh build-exit gate) |
 | TEST-10 (outline jump targets unasserted) | CLOSED — pinned to the announcing ordinal |
 | TEST-11 (restore path unreachable) | CLOSED — Help menu door + safety-copy rule drilled |
@@ -42,7 +42,7 @@ the reasoning recorded; OPEN means not yet reached.*
 
 ## Static analysis
 | STATIC-1 (-Wall wall broken) | CLOSED — clamp wired as a warning; verify.sh reds on own-code warnings |
-| STATIC-4 (no analyzer, 2,432 sites) | OPEN — standing clang-tidy adoption is its own project |
+| STATIC-4 (no analyzer, 2,432 sites) | GROUPED WITH CI (P1, Adam) — an analyzer without an enforcement trigger is another MEM-5; it should arrive WITH the CI stand-up, armed |
 | STATIC-5 (ExportPane can't-fail assertion) | CLOSED — replacement went red twice on two REAL defects |
 | STATIC-6 (loop that always breaks) | CLOSED — contract pinned first, then the honest one-liner |
 
@@ -52,14 +52,21 @@ the reasoning recorded; OPEN means not yet reached.*
 | PERF-4 (GUI-thread search, dead Stop) | CLOSED — sqlite progress pump; Stop aborts mid-scan |
 | PERF-5 (590 MB build in a render path) | CLOSED (acknowledgement) — wait cursor over exactly the cold build |
 | PERF-6 (refold mechanics) | CLOSED — WAL + post-refold optimize; wording sliver awaits Adam |
-| PERF-7/8/9/11/12/13/14/15 | OPEN |
+| PERF-7 | CLOSED PRIOR — the R7 skip-notice reports real scanned/skipped counts |
+| PERF-8 | CLOSED — 'instantly' became the measured claim |
+| PERF-9 | CLOSED — first memory assertion: peak footprint at selftest end, 0.85 GB vs 5.5 GB ceiling, inverse-mutation proven |
+| PERF-11 | ABSORBED by TEST-12 — ceilings re-derated with the ratchet rule; the sanitized derate covers instrumentation |
+| PERF-12 | CLOSED PRIOR — the selftest types real terms before every Find click |
+| PERF-13 (22 eager panes) | OPEN — startup-lazy construction is design-scale, grouped with PERF-2's freeze half |
+| PERF-14 | CLOSED PRIOR — the title index and pair bank are built once and cached |
+| PERF-15 | CLOSED — the duplicate 1.7 s COUNT(*) reuses st.lines |
 
 ## Build and release
 | BUILD-8 (codesign failure rolls on) | CLOSED |
 | BUILD-9 (absent baseline = pass) | CLOSED — explicit first-run escape only |
 | BUILD-10 (C2 blesses disarmed gates) | CLOSED — liveness check; both disarm shapes mutation-proven; first draft convicted by a log filename |
-| BUILD-12 (spine hash unlinked) | OPEN |
-| BUILD-13 (press is a deployment) | OPEN |
+| BUILD-12 (spine hash unlinked) | CLOSED — build_spine stamps source sha256s; validate_release cross-checks when present (arms on next spine build) |
+| BUILD-13 (press is a deployment) | CLOSED — ALL_PRESS_VERIFY_ONLY=1 stops after all gates; proven to leave dist/ and /Applications untouched |
 | BUILD-15 (com.appelegant, version 1.0) | CLOSED — org.asianlegacylibrary + VERSION-file truth |
 | BUILD-16 (DMG never verified) | CLOSED — hdiutil verify every press |
 | BUILD-21 (no lockfile, no check) | CLOSED — roll-call: missing fails, drift notes; MANIFEST stays the version authority |
@@ -69,11 +76,11 @@ the reasoning recorded; OPEN means not yet reached.*
 | BUILD-3 (unsigned DMG guidance) | OPEN — blocked on the Apple Developer ID (Adam/ALL) |
 
 ## Data and documentation
-| DATA-3 (nothing prevents the next untiered gloss) | OPEN — mechanical prevention is design work |
+| DATA-3 (nothing prevents the next untiered gloss) | CLOSED — constitution G2: the hgm_gloss consumer census (32 baselined); growth fails the gate until the new site is reviewed as tiered; mutation-proven |
 | DATA-4 (8,985 "texts" incl. 1,399 companions) | CLOSED — 7,586 truth, pinned |
 | DATA-5 ("shown" vs rendered) | CLOSED — "found", old wording banned by pin |
 | DATA-6 (771 hidden, no remainder) | CLOSED — remainder line |
-| DATA-7 (84000 dedup under-reports) | OPEN |
+| DATA-7 (84000 dedup under-reports) | NEEDS THE DIMENSION REPORT — both visible cut-classes disclose counts tonight; the audited 10,450 does not reproduce against current code |
 | DATA-8 (2-of-5 under "every") | NOT FOUND — both live surfaces disclose N of M; recorded so nobody re-hunts |
 | DATA-9 (raw tier token on one lane) | CLOSED — reader's label everywhere, storage token banned by pin |
 | DATA-10 (preset clamped 3, offered 5) | CLOSED — worse than filed: preset 4 had no dims at all |

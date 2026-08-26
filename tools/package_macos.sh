@@ -553,6 +553,16 @@ if pgrep -x DiamondCutterTranslationTool >/dev/null; then
   fi
 fi
 
+# BUILD-13: the press was a DEPLOYMENT - it could not be run as a
+# verification step because finishing it always installed and imaged.
+# ALL_PRESS_VERIFY_ONLY=1 stops here: everything is built, staged,
+# gated (payload, licences, battery, visual, manifest) and NOTHING on
+# the machine or in dist/ has changed. This is the mode a CI runs.
+if [[ "${ALL_PRESS_VERIFY_ONLY:-0}" == "1" ]]; then
+  echo "PRESS VERIFY-ONLY: all gates passed; skipping install and DMG."
+  exit 0
+fi
+
 echo "== 6c. install to /Applications (the desktop copy) =="
 # THE step that keeps Adam's running app current — it was lost in
 # the 2026-08-13 rewrite, and every press until 2026-08-14 built a
