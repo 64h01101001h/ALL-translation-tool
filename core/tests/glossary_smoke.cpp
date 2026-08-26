@@ -52,7 +52,7 @@ int main() {
               "edit round-trips");
         CHECK(g.remove("sdug bsngal"), "remove works");
         CHECK(!g.remove("never there"), "ghost remove fails honestly");
-        g.save("S0134I.txt"), "save reports success");
+        CHECK(g.save("S0134I.txt"), "save reports success");
     }
     {
         allcore::GlossaryStore g(p);
