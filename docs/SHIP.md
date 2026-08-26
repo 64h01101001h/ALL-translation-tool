@@ -47,7 +47,7 @@ Read from tools/package_macos.sh staging (the manifest of record):
 2. Adam: pursue BDRC WRITTEN distribution permission, or bless the
    download-on-demand market path (models fetched by the user).
 3. Adam: confirm the teachings-index consent line.
-4. SOAS POS materials: locate the original terms before any market DMG.
+4. ~~SOAS POS materials: locate the original terms~~ **CLOSED 2026-08-26**: verified against Zenodo record 574876 itself - license id `cc-by-4.0`, Hill & Garrett, SOAS Tibetan in Digital Communication. The banked README (data/soas_pos/README.md) had recorded this correctly since 2026-08-07; what remained was verifying the claim at the source, now done.
 5. Apple Developer ID decision ($99/yr) for D2 notarization.
 6. **These two also gate PUBLIC SOURCE HOSTING, not just a market
    DMG.** Both files are tracked in git and present throughout the
@@ -64,12 +64,14 @@ Read from tools/package_macos.sh staging (the manifest of record):
    What that means now, stated plainly so nobody has to reconstruct it:
    the teachings index and the SOAS lexicon are published. Item 3 is
    Adam's own confirmation to give, so publishing effectively gives
-   it. **Item 4 is not his to give** - the SOAS terms are unverified
-   and belong to a third party, so that file is public under terms
-   nobody has read. Closing item 4 is now urgent rather than
-   pre-market, and if the terms turn out to forbid redistribution the
-   fix is removal from the tree AND from history, plus asking GitHub
-   to purge forks.
+   it. **Item 4 CLOSED 2026-08-26, and my alarm about it was wrong:**
+   the terms were never unread - data/soas_pos/README.md had recorded
+   CC BY 4.0 with the Zenodo DOI since 2026-08-07, and the licence is
+   now verified against the Zenodo record itself (id cc-by-4.0). The
+   error was mine: I repeated SHIP.md's stale "verify terms" line for
+   two days without opening the README beside the file. CC BY 4.0
+   permits redistribution with attribution, which the notices carry.
+   Publishing this file was fine.
    Partial mitigation: the root LICENSE is all-rights-reserved
    (c) Asian Legacy Library / ACIP, so visibility is not a licence
    grant. Making it public before then repeats BUILD-5 — notices

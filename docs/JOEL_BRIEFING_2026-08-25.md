@@ -182,13 +182,15 @@ which does not remove it from history. `git filter-repo` took it out;
 `HEAD^{tree}` is byte-identical before and after, so the working tree
 never changed while every commit hash did. `.git` is 135 MB.
 
-*It is public, and one file in it is not mine to license.*
-`data/soas_pos/classical-lexicon.txt` is SOAS material whose terms
-nobody has read — it is item 4 on our own gated list, and going public
-moved it from "before any market DMG" to live. **This is the item I
-would most like your help running down.** The root `LICENSE` is
-all-rights-reserved © Asian Legacy Library / ACIP, so visibility is not
-a licence grant, but that does not settle third-party material.
+*A correction to what this section said on 25 August.* It warned that
+the SOAS lexicon was public "under terms nobody has read." That was
+wrong — the terms had been on file since 7 August (`data/soas_pos/
+README.md`: CC BY 4.0, Zenodo DOI 10.5281/zenodo.574876), and on 26
+August the licence was verified against the Zenodo record itself:
+`cc-by-4.0`, Hill & Garrett, SOAS *Tibetan in Digital Communication*.
+CC BY 4.0 permits redistribution with attribution, which the shipped
+notices carry. Publishing it was fine; the alarm was my own stale
+reading of an open-items list, not the file's actual status.
 
 *Where should it live?* It is under my personal account because ALL has
 no GitHub organisation — I checked. If ALL wants to own it, a transfer
