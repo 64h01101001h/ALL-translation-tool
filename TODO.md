@@ -1,3 +1,6 @@
+## ★ NEXT UP (Adam, 2026-08-26): full-depth C02 Wilson alignment
+- The entire ACI Course 2 reading (C02:22-68, 47 segments) at six-layer depth with parse trees, per the two delivered demo passes. AI/PROVISIONAL labeling throughout; never dictionary material. Runs immediately after the SQA sweep tail closes.
+
 # TODO — Diamond Cutter Translation Tool
 
 **Vision (Adam, 2026-08-06):** a total all-in-one translation tool — every
