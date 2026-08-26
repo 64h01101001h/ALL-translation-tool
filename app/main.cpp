@@ -302,6 +302,9 @@ struct EntryDisplay {
                              // (Adam 2026-08-20: toggleable layer)
     bool das = true;      // Das 1902 page-scan link
     bool notes = true;   // published footnotes & bibliography layer
+    bool alignTent = true;   // ACI alignment evidence, tier
+                             // TENTATIVE (Adam 2026-08-26:
+                             // toggleable layer)
     std::string surface;   // the clicked surface form (ACIP) when
                            // it differs from the headword — the
                            // card explains the landing (Adam's
@@ -532,6 +535,19 @@ struct AiGloss {
 };
 using AiGlossMap = std::map<std::string, AiGloss>;
 static const AiGlossMap* g_aiGlossary = nullptr;
+
+// the ACI alignment evidence layer (Adam, 2026-08-26): word-level
+// Tibetan<->English pairs machine-MATCHED from GMR's own course
+// English (inviolable rule 1: matched, never composed). Tier
+// TENTATIVE - it never enters hgm_gloss, renders in the machine
+// amber behind its own toggle, and each pair cites the corpus
+// segments that attest it.
+struct AlignPair {
+    QString eng;
+    QList<int> segs;
+};
+using AlignMap = std::map<std::string, QList<AlignPair>>;
+static const AlignMap* g_alignEvidence = nullptr;
 
 // the 84000 glossary layer (CC BY 4.0 per 84000's own Terms of Use
 // table; data/84000/README.md) — reference only, never HGM
@@ -1288,6 +1304,51 @@ static QString entryHtml(const allcore::Entry& e,
                     h += b;
                 }
             }
+        }
+    }
+    if (d.alignTent && g_alignEvidence) {
+        // HGM - TENTATIVE: machine-matched evidence from the ACI
+        // alignment layer. The English below is Geshe Michael's own
+        // corpus text verbatim; the MACHINE chose which spans pair
+        // (rule 1: match, never compose), so the tier says so and
+        // the amber says so, and the whole block obeys its toggle.
+        std::string k;
+        for (char c : e.wylie)
+            k += (char)std::tolower((unsigned char)c);
+        auto ita = g_alignEvidence->find(k);
+        if (ita != g_alignEvidence->end() && !ita->second.isEmpty()) {
+            h += "<div style='background:#FDF3E7;"
+                 "border-left:3px solid #B4540A;"
+                 "padding:4px 9px;margin:6px 0;border-radius:4px'>"
+                 "<small style='color:#B4540A;letter-spacing:1px'>"
+                 "HGM · TENTATIVE — machine-matched from "
+                 "course evidence (AI, unreviewed) · not a "
+                 "dictionary gloss</small>";
+            int shown = 0;
+            for (const auto& pr : ita->second) {
+                if (shown >= 4) break;
+                QStringList segq;
+                for (int sg : pr.segs) {
+                    segq << QString::number(sg);
+                    if (segq.size() >= 5) break;
+                }
+                h += QString("<br>≡ “%1” "
+                             "<small style='color:#8A6D1F'>(%2× "
+                             "· C02:%3%4)</small>")
+                         .arg(QString(pr.eng).toHtmlEscaped())
+                         .arg(pr.segs.size())
+                         .arg(segq.join(","))
+                         .arg(pr.segs.size() > 5 ? ",…" : "");
+                ++shown;
+            }
+            if ((int)ita->second.size() > shown)
+                h += QString("<br><small style='color:#8A6D1F'>"
+                             "…and %1 more attested pairing%2"
+                             "</small>")
+                         .arg((int)ita->second.size() - shown)
+                         .arg(ita->second.size() - shown == 1
+                                  ? "" : "s");
+            h += "</div>";
         }
     }
     if (d.notes && g_appNotes && !e.hgm_gloss.empty()) {
@@ -6938,6 +6999,15 @@ public:
                              true);
         showNotes_ = mkToggle("notes", "footnotes && bibliography "
                                        "(published)", true);
+        showAlignTent_ = mkToggle("alignTent",
+                                  "HGM tentative (machine-matched)",
+                                  true);
+        showAlignTent_->setToolTip(
+            "The ACI alignment evidence layer: Geshe Michael's own "
+            "course English, machine-matched to the Tibetan span by "
+            "span (AI, unreviewed). Tier TENTATIVE — shown in "
+            "the machine amber, never entered into the dictionary's "
+            "binding gloss.");
         {
             auto* eb = new QLabel("<span style='color:#9A7A33;font-size:10px;letter-spacing:2px;font-weight:600'>DOCUMENT MARKS</span>");
             eb->setContentsMargins(0, 8, 0, 0);
@@ -8023,7 +8093,7 @@ private:
                  {showPhon_, showGloss_, showCorpus_, showSanskrit_,
                   showHopkins_, show84000_, showTeachings_, showDas_,
                   showRefs_, showNotes_, showGrammar_, showSeg_,
-                  showAttest_})
+                  showAttest_, showAlignTent_})
                 set(c, true);
         } else if (p == "reading") {
             set(showPhon_, true); set(showGloss_, true);
@@ -8033,12 +8103,14 @@ private:
             set(show84000_, false); set(showDas_, false);
             set(showRefs_, false); set(showNotes_, false);
             set(showSeg_, false); set(showAttest_, false);
+            set(showAlignTent_, true);
         } else if (p == "minimal") {
             set(showGloss_, true);
             for (QCheckBox* c :
                  {showPhon_, showCorpus_, showSanskrit_, showHopkins_,
                   show84000_, showTeachings_, showDas_, showRefs_,
-                  showNotes_, showGrammar_, showSeg_, showAttest_})
+                  showNotes_, showGrammar_, showSeg_, showAttest_,
+                  showAlignTent_})
                 set(c, false);
         }
     }
@@ -8587,6 +8659,7 @@ private:
         disp.teachings = showTeachings_->isChecked();
         disp.das = showDas_->isChecked();
         disp.notes = showNotes_->isChecked();
+        disp.alignTent = showAlignTent_->isChecked();
         // when the clicked surface form differs from the headword
         // (affix landings: TSAD MA'I → tshad ma), the card says
         // where it came from instead of merely echoing itself
@@ -14363,6 +14436,7 @@ private:
     QCheckBox* showSanskrit_ = nullptr;
     QCheckBox* showHopkins_ = nullptr;
     QCheckBox* show84000_ = nullptr;
+    QCheckBox* showAlignTent_ = nullptr;
     QCheckBox* showTeachings_ = nullptr;
     QCheckBox* showDas_ = nullptr;
     QCheckBox* showRefs_ = nullptr;
@@ -35344,6 +35418,43 @@ int main(int argc, char** argv) {
         }
         if (!aiGlossary.empty()) g_aiGlossary = &aiGlossary;
     }
+    // the ACI alignment evidence layer (Adam, 2026-08-26) - tier
+    // TENTATIVE, machine-matched from GMR's corpus English, built by
+    // tools/build_alignment_layer.py whose battery refuses any pair
+    // that does not reconstruct letter-exact from the spine
+    static AlignMap alignEvidence;
+    {
+        QFile f(root + "/data/alignment/alignment_c02_v1.json");
+        if (f.open(QIODevice::ReadOnly)) {
+            const auto o = QJsonDocument::fromJson(f.readAll())
+                               .object()
+                               .value("pairs")
+                               .toObject();
+            for (auto it = o.begin(); it != o.end(); ++it) {
+                QList<AlignPair> ps;
+                for (const auto& v : it.value().toArray()) {
+                    const auto po = v.toObject();
+                    AlignPair ap;
+                    ap.eng = po.value("eng").toString();
+                    for (const auto& sv :
+                         po.value("segs").toArray())
+                        ap.segs << sv.toInt();
+                    if (!ap.eng.isEmpty() && !ap.segs.isEmpty())
+                        ps << ap;
+                }
+                // most-attested first: the card caps at four, so
+                // the strongest evidence must be what survives
+                std::sort(ps.begin(), ps.end(),
+                          [](const AlignPair& x, const AlignPair& y) {
+                              return x.segs.size() > y.segs.size();
+                          });
+                if (!ps.isEmpty())
+                    alignEvidence[it.key().toStdString()] = ps;
+            }
+        }
+        if (!alignEvidence.empty())
+            g_alignEvidence = &alignEvidence;
+    }
     // the 84000 glossary layer (CC BY 4.0; data/84000/README.md)
     static G84000Map g84000;
     {
@@ -39097,6 +39208,35 @@ int main(int argc, char** argv) {
                        .arg(v1).arg(v2).arg(v3).arg(v4).arg(v5)
                        .arg(weird);
             if (!ok) ++fails;
+        }
+        {   // ALIGN-1: the alignment evidence layer (Adam,
+            // 2026-08-26). HGM's corpus English machine-MATCHED
+            // (rule 1: never composed), rendered as a labeled
+            // TENTATIVE block in machine amber, toggleable, and
+            // absent entirely when toggled off. The pin uses the
+            // REAL loaded layer, so it also proves the loader.
+            allcore::Entry e;
+            e.wylie = "sems pa";
+            EntryDisplay dOn, dOff;
+            dOn.alignTent = true;
+            dOff.alignTent = false;
+            const QString hOn = entryHtml(e, dOn);
+            const QString hOff = entryHtml(e, dOff);
+            const bool a1 = hOn.contains("TENTATIVE") &&
+                            hOn.contains("movement of the mind") &&
+                            hOn.contains("machine-matched");
+            const bool a2 = hOn.contains("#B4540A");
+            const bool a3 = !hOff.contains("TENTATIVE") &&
+                            !hOff.contains("movement of the mind");
+            log << QString("  [%1] ALIGN-1: sems pa card carries the "
+                           "labeled TENTATIVE evidence block")
+                       .arg(a1 ? "PASS" : "FAIL");
+            log << QString("  [%1] ALIGN-1: the block wears the "
+                           "machine amber, never a binding color")
+                       .arg(a2 ? "PASS" : "FAIL");
+            log << QString("  [%1] ALIGN-1: toggled off, the layer "
+                           "vanishes whole").arg(a3 ? "PASS" : "FAIL");
+            if (!a1 || !a2 || !a3) ++fails;
         }
         {
             const bool cream =
