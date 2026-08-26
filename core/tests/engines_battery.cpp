@@ -376,6 +376,22 @@ int main(int argc, char** argv) {
         CHECK(allcore::iastToIpa("oṃ maṇi padme hūṃ") ==
                   std::make_pair(std::string("oːm mɐɳɪ pɐdmeː ɦuːm"), true),
               "G: mani mantra IPA");
+        // STATIC-6: the third clause of the header's anusvara contract
+        // - "before sibilants/semivowels/h it nasalizes the preceding
+        // vowel" - had no pin, and the code implementing all three
+        // clauses was written as a loop that always breaks, i.e. a
+        // conditional wearing a loop's clothes. saMsAra: m before s
+        // (sibilant) -> combining tilde on the vowel, not a row nasal.
+        {
+            const auto r = allcore::iastToIpa("saṃsāra");
+            CHECK(r.second &&
+                      r.first.find("\xCC\x83") != std::string::npos,
+                  "G: anusvara before a sibilant nasalizes the vowel "
+                  "(combining tilde present)");
+            CHECK(r.first.find("ŋ") == std::string::npos &&
+                      r.first.find("m") == std::string::npos,
+                  "G: ...and emits neither a row nasal nor a bare m");
+        }
         CHECK(allcore::iastToIpa("namaḥ") ==
                   std::make_pair(std::string("nɐmɐh"), true),
               "G: visarga renders as h");

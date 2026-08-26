@@ -599,12 +599,15 @@ std::pair<std::string, bool> iastToIpa(const std::string& iast) {
         if (v == U"ḥ") { out += U'h'; continue; }
         // anusvāra: next consonant's row-nasal; word-final m; otherwise
         // nasalize the preceding vowel
+        // STATIC-6: this was a loop whose body always broke - a
+        // conditional wearing a loop's clothes, and the shape implied a
+        // scan-ahead the contract never asks for. In well-formed IAST
+        // the token after an anusvara is either a consonant or a word
+        // boundary, so ONE look is the whole algorithm; the loop
+        // suggested otherwise and the audit rightly flagged the
+        // contradiction. Same behaviour, honest shape.
         std::u32string nxt;
-        for (size_t j = i + 1; j < T.size(); ++j) {
-            if (T[j].kind == 'B') break;
-            if (T[j].kind == 'C') { nxt = T[j].val; }
-            break;
-        }
+        if (i + 1 < T.size() && T[i + 1].kind == 'C') nxt = T[i + 1].val;
         if (nxt.empty()) {
             out += U'm';
         } else {
