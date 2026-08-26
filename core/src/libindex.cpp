@@ -64,6 +64,11 @@ LibraryIndex::LibraryIndex(const std::string& db_path) {
         throw std::runtime_error("cannot open library index '" + db_path +
                                  "': " + err);
     }
+    // PERF-6: WAL - readers never block the writer, a crash mid-update
+    // rolls back cleanly, and the fold rebuild can be watched by a
+    // second connection. Converts an existing DELETE-mode index on
+    // first touch; the -wal/-shm siblings live beside .index.db.
+    exec(db_, "PRAGMA journal_mode=WAL");
     exec(db_,
          "CREATE TABLE IF NOT EXISTS files ("
          "  id INTEGER PRIMARY KEY,"
@@ -332,9 +337,18 @@ LibraryIndex::UpdateStats LibraryIndex::update(
     // under this fold". A cancelled pass has not finished proving that,
     // so it must NOT stamp: otherwise an interrupted refold never heals
     // and searches silently miss the rows that kept the old norms.
-    if (!st.canceled)
+    if (!st.canceled) {
         exec(db_, foldGen ? "PRAGMA application_id=1"
                           : "PRAGMA application_id=0");
+        // PERF-6: a completed full refold rewrites every FTS row, which
+        // leaves the index maximally fragmented - the measured cold
+        // "PA" cost 8.1 s partly for this reason. Merge the b-trees
+        // once, now, while the cost is expected, instead of amortising
+        // it into the first hundred searches.
+        if (st.refolded)
+            exec(db_, "INSERT INTO lines_fts(lines_fts) "
+                      "VALUES('optimize')");
+    }
     // Everything completed before the stop is committed — the index is
     // incremental, so a partial index is valid and resumable.
     exec(db_, "COMMIT");

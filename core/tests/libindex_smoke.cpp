@@ -5,6 +5,7 @@
 #include <fstream>
 
 #include "allcore/libindex.h"
+#include <sqlite3.h>
 #include "allcore/searchnorm.h"
 
 static int failures = 0;
@@ -190,6 +191,21 @@ int main() {
         CHECK(sta.aborted, "perf4: a false-returning pump aborts the scan");
         CHECK(few2.size() < 2000,
               "perf4: the aborted scan returns partial, not full, results");
+        // PERF-6: the index runs in WAL mode - readers do not block
+        // the writer, and a crash mid-update rolls back cleanly.
+        {
+            sqlite3* raw = nullptr;
+            CHECK(sqlite3_open((proot / ".index.db").string().c_str(),
+                               &raw) == SQLITE_OK, "perf6: db reopens");
+            sqlite3_stmt* st = nullptr;
+            sqlite3_prepare_v2(raw, "PRAGMA journal_mode", -1, &st, nullptr);
+            std::string mode;
+            if (sqlite3_step(st) == SQLITE_ROW)
+                mode = (const char*)sqlite3_column_text(st, 0);
+            sqlite3_finalize(st);
+            sqlite3_close(raw);
+            CHECK(mode == "wal", "perf6: the index journal is WAL");
+        }
         fs::remove_all(proot);
     }
 
