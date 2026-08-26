@@ -1189,7 +1189,7 @@ static QString entryHtml(const allcore::Entry& e,
             // NOT: which tier of his English this is.
             const QString tier =
                 e.provisional()
-                    ? "<span style='color:#b00'>PROVISIONAL "
+                    ? "<span style='color:#B4540A'>PROVISIONAL "
                       "(auto-aligned)</span>"
                     : QString::fromStdString(e.tier);
             h += QString("<div style='margin:1px 0 3px 0;font-size:11px;"
@@ -2225,7 +2225,7 @@ static QString lookupResultsHtml(allcore::Spine& spine,
                  "index)</small></div>";
             for (const auto& r : rev) {
                 QString tier = r.tier == "auto-aligned"
-                    ? "<span style='color:#b00'>PROVISIONAL</span>"
+                    ? "<span style='color:#B4540A'>PROVISIONAL</span>"
                     : QString::fromStdString("HGM (" + r.tier + ")");
                 h += "<div style='margin:5px 0'><b>" +
                      QString::fromStdString(r.wylie).toHtmlEscaped() + "</b> \u00b7 " +
@@ -17967,7 +17967,7 @@ private:
                         : QString::fromStdString(e.hgm_gloss.front())
                               .toHtmlEscaped();
                     QString tier = e.provisional()
-                        ? " <span style='color:#b00'>[PROVISIONAL]</span>"
+                        ? " <span style='color:#B4540A'>[PROVISIONAL]</span>"
                         : "";
                     // register tag: honorific vocabulary is marked in
                     // the drill list too, ordinary form alongside
@@ -19498,7 +19498,7 @@ private:
                  "' style='font-size:11px;color:#7A5A00'>[+ technical "
                  "spelling]</a>";
             QString tier = e.provisional()
-                ? " <span style='color:#b00;font-size:11px'>[PROVISIONAL]"
+                ? " <span style='color:#B4540A;font-size:11px'>[PROVISIONAL]"
                   "</span>"
                 : QString(" <small>[%1]</small>")
                       .arg(QString::fromStdString(e.tier));
@@ -19582,7 +19582,7 @@ private:
                      "'color:#777'>— attested glosses in Wilson "
                      "reading order; arrange and complete yourself "
                      "(nothing composed; ⟨…⟩ unattested, "
-                     "<span style='color:#b00'>?</span> provisional)"
+                     "<span style='color:#B4540A'>?</span> provisional)"
                      "</small></div><div style='margin:4px 0'>" +
                      parts.join(" &nbsp;→&nbsp; ") + "</div>";
             }
@@ -20662,7 +20662,7 @@ public:
             if (t.occurrences > 1)
                 h += QString(" ×%1").arg(t.occurrences);
             if (t.provisional)
-                h += " <span style='color:#b00;font-size:11px'>[PROVISIONAL]"
+                h += " <span style='color:#B4540A;font-size:11px'>[PROVISIONAL]"
                      "</span>";
             if (un) {
                 QString gl;
@@ -25845,7 +25845,7 @@ private:
                             QString::fromStdString(t.matched.front())
                                 .toHtmlEscaped() +
                             "” — this equivalent is <span style='color:"
-                            "#b00'>PROVISIONAL</span> tier; verify "
+                            "#B4540A'>PROVISIONAL</span> tier; verify "
                             "against the corpus.</div>";
             }
             if (t.matched.empty()) {
