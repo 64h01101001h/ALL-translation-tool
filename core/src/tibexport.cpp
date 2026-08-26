@@ -1,5 +1,6 @@
 #include "allcore/tibexport.h"
 
+#include <algorithm>
 #include <cctype>
 
 #include "allcore/engines.h"
@@ -516,6 +517,27 @@ std::string translationPrepToRtf(const TranslationPrep& prep,
     }
     r += "\\par\n";
 
+    {
+        // Where to look, not what to do. Splitting is his "executive
+        // decision"; this only says which paragraphs are outliers and
+        // gives the folio to navigate to.
+        const ParagraphReport pr = translationPrepParagraphs(prep, 10);
+        if (pr.total > 0 && pr.max_words > pr.median_words * 3) {
+            r += "\\par\\pard\\ql\\f0\\fs20\\b WHERE THE LONG "
+                 "PARAGRAPHS ARE\\b0\\par\n";
+            r += esc("Splitting these is the editor's judgement, not the "
+                     "formatter's - Geshe Michael calls it an executive "
+                     "decision. Listed only so you know where to look. "
+                     + std::to_string(pr.total) + " paragraphs, median "
+                     + std::to_string(pr.median_words) + " words.") +
+                 "\\par\n";
+            for (const auto& sp : pr.longest)
+                r += esc("  paragraph " + std::to_string(sp.index) +
+                         (sp.folio.empty() ? "" : "  (folio " + sp.folio + ")") +
+                         "  -  " + std::to_string(sp.words) + " words") +
+                     "\\par\n";
+        }
+    }
     if (!prep.notes.empty()) {
         r += "\\par\\pard\\ql\\f0\\fs20\\b NOTES (input-operator "
              "brackets)\\b0\\par\n";
@@ -533,6 +555,74 @@ std::string translationPrepToRtf(const TranslationPrep& prep,
     }
     r += "}";
     return r;
+}
+
+ParagraphReport translationPrepParagraphs(const TranslationPrep& prep,
+                                          size_t longest_n) {
+    ParagraphReport rep;
+    const std::string& t = prep.text;
+
+    // Walk the formatted text, tracking the folio in force. A paragraph
+    // ends at a blank line - the shape ",,\n\n" and its long-run cousins
+    // all leave one behind.
+    std::string folio;
+    size_t words = 0;
+    bool inWord = false;
+    int index = 0;
+    std::vector<size_t> lengths;
+
+    auto closeParagraph = [&](std::string startFolio) {
+        if (words == 0) return;
+        ++index;
+        rep.longest.push_back({index, std::move(startFolio), words});
+        lengths.push_back(words);
+        words = 0;
+    };
+
+    std::string paraFolio = folio;
+    for (size_t i = 0; i < t.size(); ++i) {
+        // a folio reference updates the current folio without counting
+        if (t.compare(i, 4, "[f. ") == 0) {
+            size_t e = t.find(']', i);
+            if (e != std::string::npos && e - i <= 24) {
+                folio = t.substr(i + 4, e - i - 4);
+                if (words == 0) paraFolio = folio;
+                i = e;
+                inWord = false;
+                continue;
+            }
+        }
+        if (t[i] == '\n' && i + 1 < t.size() && t[i + 1] == '\n') {
+            closeParagraph(paraFolio);
+            paraFolio = folio;
+            inWord = false;
+            ++i;
+            continue;
+        }
+        const bool sep = (t[i] == ' ' || t[i] == '\t' || t[i] == '\n' ||
+                          t[i] == ',');
+        if (sep) { inWord = false; continue; }
+        if (!inWord) {
+            inWord = true;
+            if (words == 0) paraFolio = folio;
+            ++words;
+        }
+    }
+    closeParagraph(paraFolio);
+
+    rep.total = rep.longest.size();
+    if (!lengths.empty()) {
+        std::vector<size_t> sorted = lengths;
+        std::sort(sorted.begin(), sorted.end());
+        rep.median_words = sorted[sorted.size() / 2];
+        rep.max_words = sorted.back();
+    }
+    std::stable_sort(rep.longest.begin(), rep.longest.end(),
+                     [](const ParagraphSpan& a, const ParagraphSpan& b) {
+                         return a.words > b.words;
+                     });
+    if (rep.longest.size() > longest_n) rep.longest.resize(longest_n);
+    return rep;
 }
 
 AcipFileInfo decodeAcipFilename(const std::string& filename) {

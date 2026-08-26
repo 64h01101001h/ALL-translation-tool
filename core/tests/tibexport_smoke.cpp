@@ -278,6 +278,31 @@ int main() {
         }
 
         {
+            // Paragraph-length reporting. He calls splitting long
+            // paragraphs an "executive decision" and keeps it, so this
+            // reports and never splits.
+            auto pr = allcore::formatForTranslation(
+                "@001A ONE TWO THREE SO,, "
+                "@002A A B C D E F G H I J K L SO,, "
+                "@003A SHORT SO,,");
+            auto rep = allcore::translationPrepParagraphs(pr, 2);
+            CHECK(rep.total == 3, "report: every paragraph is counted");
+            CHECK(rep.longest.size() == 2, "report: the longest N are returned");
+            CHECK(rep.longest[0].words >= rep.longest[1].words,
+                  "report: longest first");
+            CHECK(rep.longest[0].words == 13,   // A..L plus SO
+                  "report: the 13-word paragraph is the longest");
+            CHECK(rep.longest[0].folio == "2a",
+                  "report: a long paragraph carries the folio to navigate to");
+            CHECK(rep.max_words == 13 && rep.median_words == 4,
+                  "report: distribution is given so N can be judged");
+            // asking for more than exist must not fabricate any
+            auto few = allcore::translationPrepParagraphs(pr, 99);
+            CHECK(few.longest.size() == 3,
+                  "report: never returns more paragraphs than exist");
+        }
+
+        {
             // The house setup, from the tail of the recording: Palatino
             // Linotype 12, full justification, page number centred at
             // the foot, none on the first page.

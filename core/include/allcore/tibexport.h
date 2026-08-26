@@ -138,4 +138,24 @@ TranslationPrep formatForTranslation(const std::string& acip_document);
 std::string translationPrepToRtf(const TranslationPrep& prep,
                                  const std::string& title_en = "");
 
+// Splitting over-long paragraphs is the editor's "executive decision"
+// in his own words, so this does NOT split anything. It reports where
+// the long ones are, with the folio to navigate to, because that is the
+// part a machine can honestly do. No threshold is invented: the caller
+// asks for the longest N, and the distribution is reported alongside so
+// a reader can judge whether N was the right question.
+struct ParagraphSpan {
+    int index = 0;            // 1-based, as the reader counts them
+    std::string folio;        // folio in force where the paragraph starts
+    size_t words = 0;
+};
+struct ParagraphReport {
+    std::vector<ParagraphSpan> longest;
+    size_t total = 0;
+    size_t median_words = 0;
+    size_t max_words = 0;
+};
+ParagraphReport translationPrepParagraphs(const TranslationPrep& prep,
+                                          size_t longest_n = 10);
+
 }  // namespace allcore

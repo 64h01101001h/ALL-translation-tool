@@ -11853,6 +11853,23 @@ public:
                 outText += "[" + std::to_string(i + 1) + "] " +
                            prep.notes[i] + "\n";
         }
+        const auto paraReport = allcore::translationPrepParagraphs(prep, 10);
+        if (paraReport.total > 0 &&
+            paraReport.max_words > paraReport.median_words * 3) {
+            outText += "\n\n---- WHERE THE LONG PARAGRAPHS ARE ----\n";
+            outText += "Splitting these is your judgement, not the "
+                       "formatter's - Geshe Michael calls it an "
+                       "executive decision. Listed only so you know "
+                       "where to look. " +
+                       std::to_string(paraReport.total) +
+                       " paragraphs, median " +
+                       std::to_string(paraReport.median_words) +
+                       " words.\n";
+            for (const auto& sp : paraReport.longest)
+                outText += "  paragraph " + std::to_string(sp.index) +
+                           (sp.folio.empty() ? "" : "  (folio " + sp.folio + ")") +
+                           "  -  " + std::to_string(sp.words) + " words\n";
+        }
         // A flagged parse travels WITH the file. A flag the translator
         // never sees is the same as no flag at all (rule 3).
         if (!prep.flags.empty()) {

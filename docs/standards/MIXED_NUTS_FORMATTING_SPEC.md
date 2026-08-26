@@ -536,3 +536,42 @@ break goes after them.
 This is flagged as an extension because it is reasoning from his
 principle, not a rule read off a pane. If it is wrong, it is wrong in
 one place and one line.
+
+
+## 15. Assisting the editor's one remaining job
+
+The last thing he does before calling the text ready is not mechanical:
+
+> "I have to make executive decisions about where to split the
+> paragraphs so that we don't get huge paragraphs that are difficult for
+> people to read... as short as you can make the paragraphs and not
+> insult somebody's intelligence."
+
+He also says why it matters — *"for people doing hypertexting, or
+translating chunks of text, pronouncing them in class."* The paragraph
+is the unit the whole downstream workflow operates on.
+
+**This is not automatable and is not automated.** `translationPrepParagraphs`
+reports; it never splits. It returns the longest N paragraphs with the
+folio in force at each, plus the total and the median so a reader can
+judge whether N was the right question.
+
+**No threshold is invented.** The report only appears when the longest
+paragraph exceeds three times the median — a shape test, not a house
+rule — and it says in the document itself that splitting is the
+editor's call.
+
+On *Destroying the Darkness*: 1,539 paragraphs, median 61 words,
+longest **651 words at folio 48b** — better than ten times the median.
+That is a specific place to go and look, which is the honest limit of
+what a machine can contribute here.
+
+### What was deliberately NOT built
+
+An earlier plan was to leave a styled empty paragraph under each
+passage for the English, on the strength of the older note's claim that
+"the translation will later go under each paragraph." **He never says
+that in the recording.** The claim comes from the same note that had
+the shad rule backwards and invented the footnote step, so it was
+dropped rather than built on. If that is genuinely the house practice,
+it needs a source — and then it is a good feature.
