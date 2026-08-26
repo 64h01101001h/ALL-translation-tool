@@ -29,9 +29,23 @@ def load(p):
 def main():
     blessed, cur = sys.argv[1], sys.argv[2]
     if not os.path.isdir(blessed) or not os.listdir(blessed):
-        print("shot_diff: no blessed set at", blessed,
-              "- skipping (bless with tools/bless_shots.sh)")
-        return 0
+        # BUILD-9: this used to return 0 - so a deleted or renamed
+        # baseline directory silently DISARMED the visual gate while
+        # the press printed its usual success. A missing baseline is
+        # not a pass; it is the gate's own preconditions failing. The
+        # one legitimate case - a machine that has never blessed -
+        # says so explicitly.
+        if os.environ.get("SHOT_DIFF_ALLOW_EMPTY") == "1":
+            print("shot_diff: no blessed set at", blessed,
+                  "- SKIPPED by explicit SHOT_DIFF_ALLOW_EMPTY=1 "
+                  "(first run; bless with tools/bless_shots.sh)")
+            return 0
+        print("shot_diff: FAIL - no blessed set at", blessed,
+              "- the visual gate cannot run. Bless with "
+              "tools/bless_shots.sh, or export "
+              "SHOT_DIFF_ALLOW_EMPTY=1 for a deliberate first run. "
+              "This is NOT a pass.")
+        return 1
     bad, seen = [], 0
     for name in sorted(os.listdir(blessed)):
         if not name.endswith(".png"):
