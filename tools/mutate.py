@@ -121,7 +121,10 @@ def mutate(path_rel, old, new, test_filter, expect_contains):
         print("  ANCHOR MATCHED %d TIMES - refusing. A mutation whose "
               "anchor is not unique is not the mutation you think you "
               "ran." % n)
-        return 1
+        # distinct code: a missing anchor is a STALE ENTRY, not a
+        # surviving mutant - the sweep once mislabeled a re-anchored
+        # guard as a regression because both came back as rc 1.
+        return 3
 
     verdict = 1
     restore_ok = True
@@ -240,7 +243,7 @@ def cmd_sweep(path, only_id=None):
         print("%-22s expect=%s" % (m["id"], m["expect"]))
         rc = mutate(m["file"], m["old"], m["new"], m.get("test"),
                     m.get("expect_fail_contains"))
-        got = "killed" if rc == 0 else "survived"
+        got = {0: "killed", 3: "stale-anchor"}.get(rc, "survived")
         results.append((m["id"], m["expect"], got))
 
     live = [r for r in results if r[0] == "LIVENESS"]
@@ -250,6 +253,12 @@ def cmd_sweep(path, only_id=None):
               "go red, so NOTHING else in this run is evidence.")
         return 1
 
+    stale = [(i, e) for i, e, g in results if g == "stale-anchor"]
+    for _i, e in stale:
+        print("  STALE ENTRY %s: its anchor no longer exists - the "
+              "code it targeted was rewritten. Re-anchor the entry to "
+              "the current shape; a stale entry is a maintenance task, "
+              "not a surviving mutant." % e["id"])
     killed = sum(1 for _i, _e, g in results if g == "killed")
     drift = [(i, e, g) for i, e, g in results if e != g]
     print("mutation score: %d/%d killed" % (killed, len(results)))
