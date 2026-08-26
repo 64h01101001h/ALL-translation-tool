@@ -40095,8 +40095,22 @@ int main(int argc, char** argv) {
     const int gauntIx = cliArgs.indexOf("--gauntlet");
     if (gauntIx >= 0 && gauntIx + 2 < cliArgs.size()) {
         win.setFixedSize(1180, 760);
-        auto* rng = new std::mt19937(
-            cliArgs.at(gauntIx + 1).toUInt());
+        // TEST-13: seed 1 was fossilised in the ctest registration,
+        // so the monkey walked one path forever. "auto" derives the
+        // seed from the day number - a fresh walk every day, the
+        // same walk on any rerun that day (a red stays attributable)
+        // - and the seed is printed either way so a corpse
+        // reproduces with --gauntlet <seed> <steps>.
+        const QString seedArg = cliArgs.at(gauntIx + 1);
+        const uint gauntSeed = (seedArg == QLatin1String("auto"))
+            ? static_cast<uint>(QDate::currentDate().toJulianDay())
+            : seedArg.toUInt();
+        std::fprintf(stderr,
+                     "GAUNTLET seed=%u steps=%d (reproduce: "
+                     "--gauntlet %u <steps>)\n",
+                     gauntSeed, cliArgs.at(gauntIx + 2).toInt(),
+                     gauntSeed);
+        auto* rng = new std::mt19937(gauntSeed);
         auto* stepN = new int(0);
         const int stepsMax = cliArgs.at(gauntIx + 2).toInt();
         auto* journal = new QStringList;

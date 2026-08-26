@@ -63,7 +63,7 @@ if [[ "$MODE" != "--tests-only" ]]; then
     # visible on every run, acted on by nobody - while two documents
     # asserted the count was zero. Warnings from OUR OWN sources are a
     # red gate; third-party and generated code are not ours to silence.
-    OWN_WARN=$(grep -E "warning:" /tmp/all_verify_build.log                  | grep -E "$ROOT/(app|core|ocr|tools)/"                  | grep -v "third_party" | sort -u || true)
+    OWN_WARN=$(grep -E "warning:" /tmp/all_verify_build.log                  | grep -E "$ROOT/(app|core|ocr|tools)/"                  | grep -vE "/(third_party|thirdparty)/" | sort -u || true)
     if [[ -n "$OWN_WARN" ]]; then
         red "--- compiler warnings in our own code (STATIC-1 wall) ---"
         echo "$OWN_WARN" | head -10
