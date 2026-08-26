@@ -15823,6 +15823,28 @@ public:
             check(!saveOrWarn(nullptr, noDir, "abc", "TEST-2 probe"),
                   "saveOrWarn reports FALSE for an unopenable path "
                   "(TEST-2)");
+            // FAIL-12: every drill used to WRITE its fixture first,
+            // so a read-only location collapsed the drill instead of
+            // testing the app. This probe makes the directory itself
+            // read-only and drives the real save path against it - the
+            // app must report failure honestly, and the drill must
+            // still be the one doing the reporting.
+            {
+                const QString roDir =
+                    QDir::temp().filePath("all_selftest_ro_dir");
+                QDir().mkpath(roDir);
+                QFile::setPermissions(
+                    roDir, QFileDevice::ReadOwner | QFileDevice::ExeOwner);
+                const bool saved = saveOrWarn(
+                    nullptr, roDir + "/blocked.txt", "x", "FAIL-12 probe");
+                QFile::setPermissions(
+                    roDir, QFileDevice::ReadOwner | QFileDevice::WriteOwner |
+                               QFileDevice::ExeOwner);
+                QDir(roDir).removeRecursively();
+                check(!saved,
+                      "a read-only DIRECTORY is reported by the app, "
+                      "not collapsed onto the drill (FAIL-12)");
+            }
             const QString okPath =
                 QDir::temp().filePath("all_selftest_test2_ok.txt");
             QFile::remove(okPath);
