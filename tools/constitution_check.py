@@ -221,14 +221,42 @@ def main():
     except Exception as e:
         fails.append("L2 manifest_check.py could not run: %s" % e)
 
-    # C2 — the press keeps its gates. A press that silently lost a
-    # gate is a failed press.
+    # C2 — the press keeps its gates, ALIVE. The original check was a
+    # substring test, and the audit proved it blessable over a press
+    # whose gates were all disarmed: comment the line out or append
+    # "|| true" and the substring survives while the gate dies
+    # (BUILD-10, mutation-proven). A gate is LIVE when at least one
+    # uncommented invocation carries no failure-swallower; the press
+    # runs under set -euo pipefail, so an unswallowed failure stops it.
     for gate, label in (("ctest", "battery gate"),
                         ("shot_diff.py", "visual-regression gate"),
                         ("constitution_check.py", "constitution gate")):
-        if gate not in press:
-            fails.append(f"C2 tools/package_macos.sh: {label} "
-                         f"missing from the press")
+        live = 0
+        disarmed = []
+        import re as _re2
+        # \b keeps ctest_press.log and prose mentions from counting
+        # as invocations - the first draft of this hardening was
+        # satisfied by a LOG FILENAME, the substring disease one level
+        # down.
+        inv = _re2.compile(r"\b" + _re2.escape(gate) + r"\b")
+        for ln, line in enumerate(press.splitlines(), 1):
+            if not inv.search(line):
+                continue
+            stripped = line.lstrip()
+            if stripped.startswith("#"):
+                continue
+            if _re2.search(_re2.escape(gate) + r"[\w.]*\.log", line):
+                continue   # a log path, not an invocation
+            if "|| true" in line or "|| :" in line:
+                disarmed.append(ln)
+                continue
+            live += 1
+        if live == 0:
+            detail = (f" (found only disarmed invocation(s) at line(s) "
+                      f"{disarmed})" if disarmed else "")
+            fails.append(f"C2 tools/package_macos.sh: {label} is not "
+                         f"LIVE in the press{detail} - a disarmed gate "
+                         f"blesses what it never judged (BUILD-10)")
 
     # L3 — the human-gated view must not drift from the backlog.
     # Incident: ten items needing Adam, including every one filed that
