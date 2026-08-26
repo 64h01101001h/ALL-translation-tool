@@ -90,6 +90,7 @@ struct Node {
 
 struct Parser {
     const std::vector<Tok>& t;
+    int depth_ = 0;   // MEM-7 paren-nesting guard
     size_t i = 0;
     explicit Parser(const std::vector<Tok>& toks) : t(toks) {}
 
@@ -127,8 +128,18 @@ struct Parser {
     }
     std::unique_ptr<Node> parseTerm() {
         if (t[i].kind == Tok::LPAR) {
+            // MEM-7: each '(' recursed three functions deep with no
+            // bound - a pasted "((((..." from the search box smashed
+            // the stack (reproduced at exit 139 before this guard).
+            // No honest query nests past a handful; 200 is generous
+            // and the refusal is a friendly error, not a crash.
+            if (++depth_ > 200)
+                throw std::runtime_error(
+                    "query nested deeper than 200 parentheses - "
+                    "simplify the grouping");
             ++i;
             auto n = parseOr();
+            --depth_;
             if (t[i].kind != Tok::RPAR) throw std::runtime_error("missing ')'");
             ++i;
             return n;
