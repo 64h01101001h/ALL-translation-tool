@@ -174,7 +174,7 @@ def size_of(path):
     return os.path.getsize(path)
 
 
-def walk_stage(stage, rows, mode):
+def walk_stage(stage, rows, mode, complete=False):
     """Inspect the real staged tree. Returns (fails, notes)."""
     fails, notes, itemised = [], [], []
 
@@ -224,6 +224,37 @@ def walk_stage(stage, rows, mode):
                 % (child, size_of(full), MANIFEST))
 
     visit("")
+    if complete:
+        # BUILD-20, the other direction: absence. A walk of what exists
+        # can never notice what should exist and does not - a cp that
+        # failed mid-press leaves a manifested payload silently missing
+        # from the image. Every row that ships in this mode must
+        # resolve to something staged. Keys may carry fnmatch
+        # wildcards (hgm_spine_*.db), so match accordingly.
+        for row in rows:
+            if not ships_in(row, mode):
+                continue
+            if "OPTIONAL" in row.licence:
+                # the press stages these behind its own [[ -f ]] guard;
+                # absence is a configuration of the build, not a failed
+                # copy. The marker lives in the licence field so the row
+                # itself explains why the gate lets it be absent.
+                continue
+            key = row.key.rstrip("/")
+            full = os.path.join(stage, key)
+            if "*" in key or "?" in key:
+                d = os.path.dirname(full)
+                pat = os.path.basename(key)
+                found = os.path.isdir(d) and any(
+                    fnmatch.fnmatch(n, pat) for n in os.listdir(d))
+            else:
+                found = os.path.exists(full)
+            if not found:
+                fails.append(
+                    "MISSING PAYLOAD: %s is manifested to ship in a "
+                    "%s press and nothing staged matches it - a copy "
+                    "step failed or the payload was never built. (%s)"
+                    % (row.key, mode, row.licence))
     if itemised:
         notes.append(
             "%d staged path(s) ship under SHIP.md's blanket "
@@ -440,11 +471,11 @@ def cmd_selftest(root):
         with open(full, "wb") as fh:
             fh.write(content)
 
-    def check(label, builder, mode, want_substr):
+    def check(label, builder, mode, want_substr, complete=False):
         tmp = tempfile.mkdtemp(prefix="manifest_selftest_")
         try:
             builder(tmp)
-            fails, _notes = walk_stage(tmp, rows, mode)
+            fails, _notes = walk_stage(tmp, rows, mode, complete=complete)
             joined = "\n".join(fails)
             if want_substr is None:
                 if fails:
@@ -456,6 +487,15 @@ def cmd_selftest(root):
         finally:
             shutil.rmtree(tmp, ignore_errors=True)
 
+    # 0. BUILD-20: the gate can only see what is PRESENT. A cp that
+    #    fails mid-press leaves a manifested payload missing from the
+    #    stage, and a walk of what exists never notices absence. With
+    #    completeness on, a one-file stage must report the rows that
+    #    should have shipped and did not.
+    check("manifested payload missing from the stage",
+          lambda t: stage_with(
+              t, "Diamond Cutter Tool Data/data/extracted/tol_links.json"),
+          "team", "MISSING PAYLOAD", complete=True)
     # 1. a manifested file passes
     check("manifested file",
           lambda t: stage_with(
@@ -600,7 +640,10 @@ def main(argv):
         rows, fails = load(root)
         if fails:
             return report("payload manifest", fails, [])
-        f2, notes = walk_stage(stage, rows, mode)
+        # the press gate judges absence too (BUILD-20); the L2
+        # constitution peek at dist/stage above deliberately does not,
+        # because a stale stage is a note there, not a finding
+        f2, notes = walk_stage(stage, rows, mode, complete=True)
         return report("payload manifest (%s press)" % mode, f2, notes)
     sys.stderr.write("unknown command %r\n" % cmd)
     return 2

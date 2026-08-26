@@ -38,7 +38,7 @@ both | ok | README.txt | ALL's own text | - | written by tools/package_macos.sh
 both | ok | OPEN_SOURCE_NOTICES.md | ALL's own text | - | docs/distribution/OPEN_SOURCE_NOTICES.md
 both | ok | LICENSE | ALL's own text | - | the repository root LICENSE, added 2026-08-23 (SQA BUILD-2: the project had no licence file)
 both | gated | Diamond Cutter Tool Data/build/hgm_spine_*.db | ALL/ACIP internal data; team distribution | The dictionary and corpus | SHIP.md L1 open item 1 - Adam's written stance on redistributing the HGM release package
-both | ok | Diamond Cutter Tool Data/build/spine_current.txt | ALL's own text | The dictionary and corpus | tools/build_spine.py writes it
+both | ok | Diamond Cutter Tool Data/build/spine_current.txt | ALL's own text; OPTIONAL - the press stages it only when built | The dictionary and corpus | tools/build_spine.py writes it
 team | ok | Diamond Cutter Tool Data/build/reference.db | unlicensed third-party compilations - LOCAL REFERENCE ONLY, never redistributed | compiled into build/reference.db | SHIP.md L1: "P0 MUST-REMOVE(market)"; tools/build_reference_db.py header
 both | ok | Diamond Cutter Tool Data/tools/build_spine.py | ALL's own code | The dictionary and corpus | this repository
 both | ok | Diamond Cutter Tool Data/docs/analysis/PASSAGE_ANALYSIS_TEMPLATE.md | ALL's own text | The dictionary and corpus | this repository
@@ -55,7 +55,7 @@ both | ok | Diamond Cutter Tool Data/data/botok/ | Apache-2.0 | Botok | data/bot
 both | ok | Diamond Cutter Tool Data/data/spellcheck/ | CC0-1.0 | tibetan-spellchecker syllable data | notices "tibetan-spellchecker syllable data / CC0"
 both | ok | Diamond Cutter Tool Data/data/soas_pos/ | CC-BY-4.0 VERIFIED against Zenodo record 574876 (license id cc-by-4.0, Hill & Garrett, checked 2026-08-26) - attribution shipped in notices| SOAS POS lexicon | SHIP.md L1 open item 4 - "SOAS POS materials: locate the original terms before any market DMG"
 both | ok | Diamond Cutter Tool Data/data/whitney/ | public domain (Whitney 1885/1879) + Apache-2.0 tooling | Whitney, *Roots* | data/whitney/LICENSE-Apache-2.0 + README.md
-both | ok | Diamond Cutter Tool Data/data/candidate_alignments/ | ALL's own data | The dictionary and corpus | this repository (directory absent from the current tree; the pre-manifest press named it, so the row is kept)
+both | ok | Diamond Cutter Tool Data/data/candidate_alignments/ | ALL's own data; OPTIONAL - staged only when the alignment work has produced it | The dictionary and corpus | this repository (directory absent from the current tree; the pre-manifest press named it, so the row is kept)
 both | ok | Diamond Cutter Tool Data/data/84000/ | CC-BY-4.0 | 84000 glossary | 84000 Terms of Use table rev. 2023-06-14, banked in data/84000/README.md
 both | ok | Diamond Cutter Tool Data/data/help/ | ALL's own text | The dictionary and corpus | this repository
 #

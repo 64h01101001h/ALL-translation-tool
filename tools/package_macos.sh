@@ -312,8 +312,18 @@ DATA_DIRS=$(python3 "$ROOT/tools/manifest_check.py" \
               --list-data-dirs "$ROOT" "$PRESS_MODE") || {
   echo "PAYLOAD MANIFEST UNREADABLE - press stopped."; exit 6; }
 for d in $DATA_DIRS; do
-  [[ -d "$ROOT/data/$d" ]] && cp -R "$ROOT/data/$d" "$DATA/data-$d.tmp" \
-      && mkdir -p "$DATA/data" && mv "$DATA/data-$d.tmp" "$DATA/data/$d"
+  # BUILD-20: a cp inside an && chain is exempt from errexit, so a copy
+  # that failed mid-press used to leave the payload silently missing
+  # from the image (the gate now also checks absence, belt and braces).
+  # Absence of the SOURCE dir stays allowed - the manifest marks the
+  # legitimately-conditional payloads OPTIONAL - but once we start
+  # copying, every step must succeed or the press stops.
+  [[ -d "$ROOT/data/$d" ]] || continue
+  cp -R "$ROOT/data/$d" "$DATA/data-$d.tmp" || {
+    echo "STAGE COPY FAILED for data/$d - press stopped."; exit 7; }
+  mkdir -p "$DATA/data" || exit 7
+  mv "$DATA/data-$d.tmp" "$DATA/data/$d" || {
+    echo "STAGE MOVE FAILED for data/$d - press stopped."; exit 7; }
 done
 # L1 (shipwright): ingest intermediates with unresolved licenses NEVER
 # ship (the app reads build/reference.db, not these); the TM cache is
