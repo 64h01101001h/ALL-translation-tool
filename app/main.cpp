@@ -3199,6 +3199,8 @@ static QWidget* makeLookupPane(allcore::Spine& spine, allcore::RefDict* ref,
 }
 
 namespace {
+// forward: defined with the Library pane, pinned in the selftest
+QString installedCollectionSummary(const QString& libRoot);
 
 class AnalysisPane : public QWidget {
 public:
@@ -15462,6 +15464,29 @@ public:
                   "on paper is far above the floor, so a pin that "
                   "passed everything would be visible here");
         }
+        // DATA-4: the Library banner counted every *.txt under the
+        // collection dirs - including the " META.TXT" companion files,
+        // which are catalog records, not texts. Measured on the real
+        // library: 1,399 companions inside a banner of 8,985, a 18%
+        // overstatement in the line the demo leads with.
+        {
+            const QString r =
+                QDir::temp().filePath("all_selftest_banner_root");
+            QDir(r).removeRecursively();
+            QDir().mkpath(r + "/kangyur");
+            auto put = [&](const char* n) {
+                QFile f(r + "/kangyur/" + n);
+                if (f.open(QIODevice::WriteOnly))
+                    f.write("@001A X\n");
+            };
+            put("KL0001.ACT");
+            put("KL0002.ACT");
+            put("KL0001 META.TXT");
+            const QString b = installedCollectionSummary(r);
+            check(b.contains("2 texts"),
+                  "the Library banner counts texts, not META companions");
+            QDir(r).removeRecursively();
+        }
         // NIGHT MODE, 2026-08-26 (Adam's screenshot): the ribbon group
         // captions were unreadable on dark chrome because chrome inks
         // were baked into stylesheets ONCE at construction -
@@ -15560,6 +15585,15 @@ public:
         findB_->click();
         check(results_->toPlainText().contains("hit"),
               "Find reaches the corpus through the Gofer engine");
+        // DATA-5: the footer said "N hit(s) shown" where N counted the
+        // hits FOUND while only the per-file rollup (capped at 30 rows
+        // per directory) actually renders. "Shown" must only ever
+        // describe what is on screen; what the engine counted is
+        // "found". The banned wording is pinned so it cannot creep
+        // back through the next copy edit.
+        check(!results_->toPlainText().contains("hit(s) shown"),
+              "the result footer never claims counts were SHOWN when "
+              "they were counted (DATA-5)");
         fields_[0]->clear();
         // SQA TEST-5 / MUT9: the fold combo's CALL SITE, over real
         // files, driven by real events. The assessment disabled the
@@ -16066,7 +16100,7 @@ private:
                 const bool atCap = (int)hits.size() >= 400;
                 h += atCap
                          ? QString("<div><b>%1</b> \u2014 first <b>%2</b> "
-                                   "hit(s) shown, in %3 file(s) so far "
+                                   "hit(s) found, in %3 file(s) so far "
                                    "<span style='color:%4'>(display "
                                    "limit \u2014 not the total)</span>"
                                    "</div>")
@@ -16123,7 +16157,10 @@ private:
                          .arg(QString::fromUtf8(e.what()).toHtmlEscaped());
             }
         }
-        h += QString("<div><b>%1 hit(s) shown</b>%2</div>")
+        // DATA-5: "found", never "shown" - the number counts what the
+        // engine matched; what renders is the per-file rollup, capped
+        // at 30 rows per directory and disclosed where it caps.
+        h += QString("<div><b>%1 hit(s) found</b>%2</div>")
                  .arg(total)
                  .arg(indexCapped
                           ? QString(" <span style='color:%1'>\u2014 a "
@@ -22086,7 +22123,16 @@ static QString installedCollectionSummary(const QString& libRoot) {
         long long n = 0;
         QDirIterator it(d, QStringList{"*.txt", "*.ACT", "*.acip"},
                         QDir::Files, QDirIterator::Subdirectories);
-        while (it.hasNext()) { it.next(); ++n; }
+        while (it.hasNext()) {
+            it.next();
+            // DATA-4: " META.TXT" companions are catalog records, not
+            // texts - 1,399 of them sat inside the banner's count, a
+            // 18% overstatement in the line the demo leads with. The
+            // convention is the ACIP one: "<id> META.<ext>".
+            if (it.fileName().contains(" META.", Qt::CaseInsensitive))
+                continue;
+            ++n;
+        }
         if (n > 0) { have << c.label; total += n; }
     }
     if (have.isEmpty()) return QString();
