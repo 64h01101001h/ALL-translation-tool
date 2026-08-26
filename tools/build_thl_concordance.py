@@ -20,6 +20,10 @@ verified offset never exceeded +10 by D.1100; window is ±0..+14 to
 be safe). Only UNIQUE window matches are accepted; everything else
 is listed unmatched — never guessed (rule 3).
 """
+# NOTE 2026-08-26: the raw THL records were removed from the repo
+# (THL's own prose; notices promise numbers-only). The scrape cache
+# is banked at /Volumes/Oct2024(8TB)/ALL-ingest-caches/
+# thl_records_2026-08-26/ - point THL there to re-derive.
 import html, json, os, re, sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
