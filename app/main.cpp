@@ -3305,6 +3305,7 @@ private:
         report_->clear();
         qc_->clear();
         accum_.clear();
+            complete_ = false;
         try {
             auto pre = allcore::runPrePass(spine_, passage);
             // item 14 goes citable: hit the library index (when
@@ -3396,6 +3397,10 @@ private:
                 report_->setPlainText(QString::fromStdString(accum_));
                 report_->verticalScrollBar()->setValue(
                     report_->verticalScrollBar()->maximum());
+            } else if (data.find("\"type\":\"message_stop\"") != std::string::npos) {
+                // FAIL-7: the only honest definition of "finished" is
+                // the protocol's own end marker, not the socket closing.
+                complete_ = true;
             } else if (data.find("\"stop_reason\":\"refusal\"") != std::string::npos) {
                 status_->setText("The safety classifiers declined this request and "
                                  "no fallback served it.");
@@ -3407,6 +3412,24 @@ private:
     }
 
     void onDone(const std::string& passage) {
+        if (!complete_ && !accum_.empty()) {
+            // FAIL-7: the stream died mid-report. The old path rendered
+            // the fragment as a finished analysis, QC'd it green and
+            // auto-saved it - a truncated AI report presented as
+            // complete, on the project whose first rule is that machine
+            // output must look like what it is. The fragment stays on
+            // screen, loudly labeled; nothing is QC'd, nothing saved.
+            report_->setPlainText(
+                "TRUNCATED - the stream ended before the report did. "
+                "What follows is a FRAGMENT, not the analysis; it was "
+                "not QC'd and not saved.\n\n" +
+                QString::fromStdString(accum_));
+            status_->setText("truncated mid-report - not saved; run the "
+                             "analysis again");
+            reply_->deleteLater();
+            reply_ = nullptr;
+            return;
+        }
         if (reply_->error() != QNetworkReply::NoError && accum_.empty()) {
             status_->setText("network error: " + reply_->errorString());
         } else {
@@ -3456,6 +3479,7 @@ private:
     QNetworkReply* reply_ = nullptr;
     QByteArray buf_;
     std::string accum_;
+    bool complete_ = false;   // FAIL-7: message_stop seen
 };
 
 // ---- Overlay pane: document view with nested depth shading -----------------
@@ -20196,6 +20220,7 @@ public:
         }
         aiBtn_->setEnabled(false);
         aiAccum_.clear();
+        aiComplete_ = false;
         aiBuf_.clear();
         report_->setHtml("<i>asking Claude for a coverage diff…</i>");
         auto pre = allcore::runPrePass(spine_, src);
@@ -20216,8 +20241,11 @@ public:
                 const QByteArray line = aiBuf_.left(nl).trimmed();
                 aiBuf_.remove(0, nl + 1);
                 if (!line.startsWith("data:")) continue;
-                const std::string t =
-                    allcore::sseTextDelta(line.mid(5).trimmed().toStdString());
+                const std::string d5 = line.mid(5).trimmed().toStdString();
+                if (d5.find("\"type\":\"message_stop\"") !=
+                    std::string::npos)
+                    aiComplete_ = true;   // FAIL-7
+                const std::string t = allcore::sseTextDelta(d5);
                 if (!t.empty()) aiAccum_ += t;
             }
             report_->setPlainText(
@@ -20234,6 +20262,12 @@ public:
             if (aiReply_->error() != QNetworkReply::NoError && aiAccum_.empty())
                 h += "<div style='color:#b00'>network/API error: " +
                      aiReply_->errorString().toHtmlEscaped() + "</div>";
+            else if (!aiComplete_ && !aiAccum_.empty())
+                // FAIL-7: a fragment must not read as a finished diff
+                h = "<div style='background:#FDF3E7;color:#935800;"
+                    "padding:4px'><b>TRUNCATED</b> - the stream ended "
+                    "before the report did; this is a FRAGMENT, not "
+                    "the coverage diff. Run it again.</div><hr>" + h;
             report_->setHtml(h);
             aiReply_->deleteLater();
             aiReply_ = nullptr;
@@ -20450,6 +20484,7 @@ public:
     QNetworkReply* aiReply_ = nullptr;
     QByteArray aiBuf_;
     std::string aiAccum_;
+    bool aiComplete_ = false;   // FAIL-7: message_stop seen
 };
 
 // ---- Library pane: collection installs, personal imports, tree browser -----
