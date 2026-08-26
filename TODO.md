@@ -1,3 +1,18 @@
+## ★★ TOP OF THE BACKLOG (Adam, 2026-08-26): the deep bank's two consumers
+Adam's ruling on the seven-layer question — initiate ASAP, super-important:
+1. **Overlay grammar view** — the deep bank's first consumer. Clicking a word
+   inside a corpus-attested sentence lights up THAT sentence's structure from
+   data/alignment/alignment_c02_full_v1.json: the layered spans (1–7), Wilson
+   case labels on the particles, ∅-exponent marks. The in-app version of the
+   delivered HTML pages. No existing Tibetan tool does this.
+2. **Oversight/register surface** — the register spreads (kun rdzob →
+   "apparent"/"deceptive"/"Nominally"; rgyud → "person"/"mental stream") and
+   the 596 ∅-exponent records as a corpus of HOW GMR translates, feeding the
+   translator-oversight pane. Register warnings never auto-resolve.
+Standing policy, same ruling: every new ACI reading is scanned at FULL seven-
+layer depth (depth is the quality control that makes the simple card pairs
+trustworthy); the entry card stays word-level only.
+
 ## ✓ DONE 2026-08-26: full-depth C02 Wilson alignment
 - Delivered: ~/Desktop/ACI2-full-depth-alignment/ (index + 15 pages, 47 segments, seven layers, QA'd letter-exact). Findings indexed on the hub page.
 - **SPEC CHANGE (Adam, mid-run):** SEVEN layers, not six — layer 7 = syllable/compound-member (sub-word morphology). The interactive depth layers carry the analysis in place of the static parse tree. Pages built before the ruling (p01–p05) get retrofitted with layer-7 spans in the closing sweep.
