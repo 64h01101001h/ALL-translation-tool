@@ -11,6 +11,7 @@ Inputs  (data/):  hgm_dictionary_v27_2.json.gz · full_parallel_corpus_v32.json.
 Output  (build/): hgm_spine_v27_2.db
 """
 import argparse, json, gzip, re, sqlite3, sys, time
+import hashlib
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -45,6 +46,14 @@ ap.add_argument('--corpus')
 ap.add_argument('--reverse')
 ap.add_argument('--out')
 args = ap.parse_args()
+
+def _sha256(path):
+    h = hashlib.sha256()
+    with open(path, 'rb') as fh:
+        for chunk in iter(lambda: fh.read(1 << 20), b''):
+            h.update(chunk)
+    return h.hexdigest()
+
 
 MASTER = DATA / 'hgm_dictionary_v27_2.json.gz'
 CORPUS = DATA / 'full_parallel_corpus_v32.json.gz'
@@ -261,6 +270,14 @@ def build():
         ('source_master', MASTER.name),
         ('source_corpus', CORPUS.name),
         ('source_reverse_index', REVERSE.name),
+        # BUILD-12: names alone link nothing - a renamed or edited
+        # package satisfies a name check. The sha256 of each source's
+        # BYTES, stamped at build time, is the cryptographic link from
+        # the shipped spine back to the release package it was built
+        # from; validate_release cross-checks these when present.
+        ('source_master_sha256', _sha256(MASTER)),
+        ('source_corpus_sha256', _sha256(CORPUS)),
+        ('source_reverse_index_sha256', _sha256(REVERSE)),
         ('built_utc', time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime())),
         ('n_entries', str(len(entries))),
         ('n_corpus_segments', str(len(corpus))),
