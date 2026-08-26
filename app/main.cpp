@@ -27988,7 +27988,6 @@ private:
         const bool deskewOff = deskewOverride_->isChecked();
         // guard rail for when the box IS unticked: an estimate beyond
         // this is the failure mode above, not a real page angle
-        constexpr double kMaxPlausibleSkew = 20.0;
         ocrRunning_ = true;
         ocrStop_ = false;
         run_->setText("Stop");
@@ -28043,6 +28042,18 @@ private:
                          ? "(deskew off — the default for pecha)"
                          : "(BDRC pipeline estimate)")
                 .arg(pl.lines.size());
+        // STATIC-1: this constant sat unused in the caller for weeks -
+        // the guard rail its own comment promised. An estimate beyond
+        // plausibility is REPORTED as implausible rather than printed
+        // as fact; nothing is silently re-run (rule 3).
+        constexpr double kMaxPlausibleSkew = 20.0;
+        if (!deskewOff && std::abs(pl.angle) > kMaxPlausibleSkew)
+            htmlOut += QString(
+                "<div style='color:#935800'><b>The deskew estimate "
+                "(%1\u00b0) is implausible</b> - a real page is never "
+                "this tilted. The line boxes below may be wrong; try "
+                "again with deskew off.</div>")
+                .arg(pl.angle, 0, 'f', 1);
         // A bare "0 line(s)" reads as "your OCR is broken" — which
         // is what the room concluded before this line existed. Say
         // what happened and what to do about it.
