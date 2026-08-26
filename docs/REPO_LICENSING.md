@@ -43,6 +43,7 @@ Statuses: **own** (ALL/ACIP work, root LICENSE applies) ·
 | data/abbreviations/ | own | in-house lists, sources cited inline |
 | data/acip_codes/ | own | ACIP's own coding standard |
 | data/ai_glossary/ | own | AI-provisional tier, in-house; README |
+| data/alignment/ | own | the ACI alignment evidence layer: GMR's course English verbatim, machine-matched (tier TENTATIVE). Public redistribution rides the same open HGM stance as the spine (SHIP.md item 1). |
 | data/botok/ | settled | Apache-2.0 derived (botok project); README |
 | data/das/ | own | .gitignore only — no content tracked |
 | data/extracted/thl_ | settled | numbers-and-titles concordance ONLY (thl↔Tohoku number map; canonical Wylie titles, which are the ancient works' own names) — keeps the notices' "no THL prose" promise; the 1,926 raw records were removed from tree AND history 2026-08-26 |
