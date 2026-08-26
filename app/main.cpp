@@ -38541,8 +38541,17 @@ int main(int argc, char** argv) {
             // and the printed line: a label carrying its own literal
             // is a number that can drift away from the check that
             // produced it (this block's own history).
-            constexpr qint64 kLookupMax = 25, kCorpusMax = 70,
-                             kUniMax = 30, kPronMax = 20;
+            // TEST-12: these four ceilings sat 3-4x over operations
+            // measured in SINGLE-DIGIT milliseconds - at that scale a
+            // wall clock measures the scheduler, not the code, and two
+            // pins both passed and failed on an unchanged binary in
+            // one audit session. A regression guard on a 6 ms
+            // operation earns its keep at 20x, where only a real
+            // algorithmic slide (or a machine-wide stall worth knowing
+            // about) can trip it; the measured number still prints on
+            // every run for eyes that care about drift.
+            constexpr qint64 kLookupMax = 250, kCorpusMax = 400,
+                             kUniMax = 250, kPronMax = 200;
             const bool ok = keys.size() >= 200 && lookupMs < kLookupMax &&
                             corpusMs < kCorpusMax && uniMs < kUniMax &&
                             pronMs < kPronMax;
