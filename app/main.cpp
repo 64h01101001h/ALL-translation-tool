@@ -11913,9 +11913,15 @@ public:
         return !input_->toPlainText().trimmed().isEmpty();
     }
     QString documentLabel() const {
+        // STATIC-5's falsifiable Export selftest exposed this: after a
+        // document is cleared, docFile_ kept the old name and this
+        // label kept ANSWERING with it - the Export pane read
+        // "working document: all_session_test.txt" while hasDocument()
+        // was false. The filename is only the document's name while
+        // there IS a document.
+        if (!hasDocument()) return QString();
         if (!docFile_.isEmpty()) return QFileInfo(docFile_).fileName();
-        return hasDocument() ? QString("pasted document (unsaved)")
-                             : QString();
+        return QString("pasted document (unsaved)");
     }
 
     QString prepareForTranslation() {
@@ -15161,15 +15167,34 @@ public:
     }
 
     int selfTest(QStringList& log) {
+        // STATIC-5: the old assertion here was `doc_ != nullptr` on a
+        // member the constructor unconditionally creates - it could not
+        // fail, and had doc_ somehow been null the log line would have
+        // crashed on doc_->text() before printing FAIL. An assertion
+        // that cannot fail certifies nothing. These can:
         int fails = 0;
+        auto check = [&](bool ok, const char* what) {
+            log << QString("  [%1] Export: %2")
+                       .arg(ok ? "PASS" : "FAIL")
+                       .arg(what);
+            if (!ok) ++fails;
+        };
         refresh();
-        const bool ok = doc_ != nullptr && results_ != nullptr;
-        log << QString("  [%1] Export: pane wired to the Overlay's "
-                       "document (%2)")
-                   .arg(ok ? "PASS" : "FAIL")
-                   .arg(doc_->text().isEmpty() ? "no doc"
-                                               : doc_->text());
-        if (!ok) ++fails;
+        // the label must SAY when no document is loaded, and carry the
+        // real name when one is - refresh() is the code under test
+        const bool hasDoc = overlay_ && overlay_->hasDocument();
+        check(hasDoc ? doc_->text().startsWith("working document: ") &&
+                           !doc_->text().contains("none loaded")
+                     : doc_->text().contains("none loaded"),
+              "the document label tells the truth about what is loaded");
+        // the guard must refuse (and say why, on screen) exactly when
+        // there is nothing to export
+        const bool g = guard();
+        check(g == hasDoc,
+              "guard() admits exactly when a document is loaded");
+        if (!hasDoc)
+            check(results_->toPlainText().contains("No document"),
+                  "a refused export explains itself on the pane");
         return fails;
     }
 
@@ -15190,7 +15215,14 @@ private:
         return false;
     }
     void refresh() {
-        if (!overlay_) return;
+        // STATIC-5's replacement assertion caught this on its first
+        // run: with no overlay wired the early return left the label
+        // BLANK - it never said "none loaded", it said nothing. No
+        // overlay means no document, and the label says so.
+        if (!overlay_) {
+            doc_->setText("working document: none loaded");
+            return;
+        }
         const QString d = overlay_->documentLabel();
         doc_->setText(d.isEmpty()
                           ? "working document: none loaded"
