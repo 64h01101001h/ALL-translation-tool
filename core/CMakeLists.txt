@@ -81,7 +81,9 @@ else()
     message(FATAL_ERROR "USE_SYSTEM_SQLITE=OFF needs the vendored SQLite amalgamation at core/third_party/sqlite3.c (not in the repo — download from sqlite.org and place it there)")
   endif()
   target_sources(allcore PRIVATE third_party/sqlite3.c)
-  target_include_directories(allcore PRIVATE third_party)
+  # SYSTEM: vendored-amalgamation warnings are upstream's, not ours -
+  # the STATIC-1 warning wall only polices code this repo can fix
+  target_include_directories(allcore SYSTEM PRIVATE third_party)
   target_compile_definitions(allcore PRIVATE SQLITE_ENABLE_FTS5)
 endif()
 
