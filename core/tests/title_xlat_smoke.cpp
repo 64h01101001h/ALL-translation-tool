@@ -130,12 +130,20 @@ int main(int argc, char** argv) {
         "· %d (%.1f%%) with a whole-title near match\n",
         queries, 100.0 * meanCov, wholeHits,
         queries ? 100.0 * wholeHits / queries : 0.0);
-    CHECK(meanCov >= 0.60,
-          "attested fragments cover at least 60% of a held-out title "
-          "on average");
-    CHECK(queries > 0 && wholeHits * 100 >= queries * 25,
-          "a near whole-title match surfaces for at least a quarter "
-          "of held-out titles");
+    // TEST-6: the floor was 0.60 against a measured 0.902 - a
+    // 30-point cushion, and this suite once PRINTED its own 21-point
+    // regression (90.2% -> 68.9%) and passed. A floor that loose is a
+    // decoration. RATCHET RULE: the floor sits 5 points under the
+    // measured mean (0.902 on 2026-08-26, 150 held-out titles); when
+    // the engine genuinely improves, raise the floor in the same
+    // commit, and never lower it without naming the regression it
+    // forgives.
+    CHECK(meanCov >= 0.85,
+          "attested fragments cover at least 85% of a held-out title "
+          "on average (measured 90.2%; the floor ratchets)");
+    CHECK(queries > 0 && wholeHits * 100 >= queries * 55,
+          "a near whole-title match surfaces for at least 55% of "
+          "held-out titles (measured 62.0%; the floor ratchets)");
 
     std::printf("%s\n", failures ? "FAILURES" : "title_xlat_smoke OK");
     return failures ? 1 : 0;
