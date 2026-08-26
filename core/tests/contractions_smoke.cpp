@@ -44,6 +44,25 @@ int main(int argc, char** argv) {
     CHECK(reg.expansions("ma yin").empty(),
           "ma yin NOT registered (tail-only drop is no contraction)");
     CHECK(reg.expansions("kag dag").empty(), "unknown form empty");
+    // STATIC-9: a row whose syllable counts do not parse must be
+    // skipped WHOLE, never half-loaded with silent zeros (rule 3).
+    {
+        const char* tp = "/tmp/all_contr_static9.tsv";
+        std::FILE* tf = std::fopen(tp, "w");
+        std::fprintf(tf, "zar zig\tzar zig long\tx\tc\tk\tg\t"
+                         "NOTANUMBER\t2\n");
+        std::fprintf(tf, "gar gag\tgar gag long\tx\tc\tk\tg\t"
+                         "1\t2\n");
+        std::fclose(tf);
+        allcore::Contractions bad;
+        bad.load(tp);
+        CHECK(bad.expansions("zar zig").empty(),
+              "a row with unparseable counts is dropped whole "
+              "(STATIC-9)");
+        CHECK(!bad.expansions("gar gag").empty(),
+              "the well-formed neighbour row still loads");
+        std::remove(tp);
+    }
 
     // letter-level fusions (2026-08-08): first syllable fused from the
     // long form's first two (onset+vowel + next first consonant),
