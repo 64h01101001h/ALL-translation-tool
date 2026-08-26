@@ -5557,6 +5557,37 @@ public:
                           nn[1].label.contains("GZHUNG DON");
                 check(ok, "sa bcad: nested enumeration yields the "
                           "expected 5-node tree");
+                // TEST-10: the tree was pinned, the JUMP TARGETS were
+                // not - a pos of 0 on every node would have passed and
+                // every outline click would land at the top of the
+                // document. The label carries the child NUMBER ("2.
+                // GZHUNG DON"); pos points at the ordinal words that
+                // announce it in the text ("GNYIS PA ..."). The pin
+                // maps number -> ordinal and requires the text at pos
+                // to open with exactly that ordinal, strictly ordered.
+                {
+                    const QString doc = input_->toPlainText();
+                    const QMap<QChar, QString> ordOf{
+                        {'1', "DANG PO"},
+                        {'2', "GNYIS PA"},
+                        {'3', "GSUM PA"}};
+                    bool posOk = !nn.empty();
+                    int prev = -1;
+                    for (const auto& n : nn) {
+                        const QString want =
+                            ordOf.value(n.label.isEmpty()
+                                            ? QChar()
+                                            : n.label.at(0));
+                        posOk = posOk && n.pos > prev &&
+                                n.pos < doc.size() && !want.isEmpty() &&
+                                doc.mid(n.pos, want.size()).toUpper() ==
+                                    want;
+                        prev = n.pos;
+                    }
+                    check(posOk,
+                          "sa bcad: every node's jump target lands on "
+                          "its announcing ordinal (TEST-10)");
+                }
             }
             {
                 input_->setPlainText(
