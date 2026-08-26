@@ -36349,15 +36349,19 @@ int main(int argc, char** argv) {
             add("<div style='font-family:\"Iowan Old Style\",Georgia,"
                 "serif;font-size:24px;color:#7C2D26;font-weight:600'>"
                 "Diamond Cutter Translation Tool</div>");
-            // release date = build date of this translation unit —
-            // every press rebuilds main.cpp, so it tracks presses
+            // BUILD-25: this used to read RELEASED, defended by "every
+            // press rebuilds main.cpp" - true, but every DEV build
+            // rebuilds it too, so the About pane claimed a release
+            // that never happened after any afternoon of work. __DATE__
+            // measures exactly one thing: when this binary was built.
+            // Say that.
             const QDate rel = QLocale(QLocale::English)
                                   .toDate(QString(__DATE__)
                                               .simplified(),
                                           "MMM d yyyy");
             add(QString("<div style='font-size:12px;color:#6E5F4B;"
                         "letter-spacing:1px'>APP %1 &nbsp;"
-                        "\u00b7&nbsp; RELEASED %2 &nbsp;"
+                        "\u00b7&nbsp; BUILT %2 &nbsp;"
                         "\u00b7&nbsp; HGM DICTIONARY DATA v%3</div>")
                     .arg(QStringLiteral(ALL_APP_VERSION),
                          rel.isValid()
