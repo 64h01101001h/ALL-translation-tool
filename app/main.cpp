@@ -5008,6 +5008,24 @@ public:
                   "Pecha batch honours the saved three-up and "
                   "booklet layouts (no silent downgrade)");
         }
+        // DATA-10: B13's exact shape, one field over. The batch lane
+        // clamped the PRESET to 3 while the dialog offers five
+        // (0..4), so "Measured woodblock" silently batched as Dege -
+        // four lines above the comment describing B13's fix.
+        {
+            QSettings st("ALL", "TranslationTool");
+            const QVariant keep = st.value("pecha/preset");
+            st.setValue("pecha/preset", 4);
+            const auto measured = pechaOptsFromSettings();
+            if (keep.isValid())
+                st.setValue("pecha/preset", keep);
+            else
+                st.remove("pecha/preset");
+            check(measured.wMM == 460 && measured.hMM == 82 &&
+                      measured.lines == 8,
+                  "Pecha batch honours the fifth preset - measured "
+                  "woodblock dims and its 8-line rule (DATA-10)");
+        }
         // B13: the batch lane clamped the saved layout to 2, so a
         // three-up or A5-booklet choice came out as two-up with no
         // notice — and the report named no layout at all. Drives
@@ -13472,12 +13490,21 @@ public:
     PechaOpts pechaOptsFromSettings() const {
         QSettings st("ALL", "TranslationTool");
         PechaOpts o;
+        // DATA-10: this clamp read 3 while the dialog offers five
+        // presets (0..4), and preset 4 had no dimension row here at
+        // all - so "Measured woodblock" silently batched as Dege,
+        // four lines under the comment describing B13's identical
+        // layout bug. The rows mirror the dialog's own mapping,
+        // including its 8-line rule for the measured block.
         const int preset =
-            qBound(0, st.value("pecha/preset", 0).toInt(), 3);
+            qBound(0, st.value("pecha/preset", 0).toInt(), 4);
         if (preset == 1) { o.wMM = 450; o.hMM = 100; }
         if (preset == 2) { o.wMM = 297; o.hMM = 210; }
         if (preset == 3) { o.wMM = 680; o.hMM = 100; }
-        o.lines = qBound(5, st.value("pecha/lines", 7).toInt(), 9);
+        if (preset == 4) { o.wMM = 460; o.hMM = 82; }
+        o.lines = preset == 4
+                      ? 8
+                      : qBound(5, st.value("pecha/lines", 7).toInt(), 9);
         o.interPhon = st.value("pecha/interPhon", false).toBool();
         o.interEng = st.value("pecha/interEng", false).toBool();
         o.family = tibFont_ && tibFont_->currentText() != "system"
