@@ -3622,17 +3622,20 @@ private:
             QDir().mkpath(saveDir_);
             const QString fn = saveDir_ + "/analysis-" +
                 QDateTime::currentDateTime().toString("yyyyMMdd-HHmmss") + ".md";
-            QFile f(fn);
-            if (f.open(QIODevice::WriteOnly)) {
-                f.write("<!-- source passage:\n");
-                f.write(QByteArray::fromStdString(passage));
-                f.write("\n-->\n\n");
-                f.write(QByteArray::fromStdString(accum_));
-                f.write("\n\n---\n\n");
-                f.write(QByteArray::fromStdString(
-                    allcore::findingsToMarkdown(findings)));
-                saved = " · saved " + QFileInfo(fn).fileName();
-            }
+            // WP-12: five unchecked writes and silence when the dir
+            // was unwritable - one composed body, one verdict, and
+            // the status names the failure instead of omitting it
+            QByteArray bodyMd;
+            bodyMd += "<!-- source passage:\n";
+            bodyMd += QByteArray::fromStdString(passage);
+            bodyMd += "\n-->\n\n";
+            bodyMd += QByteArray::fromStdString(accum_);
+            bodyMd += "\n\n---\n\n";
+            bodyMd += QByteArray::fromStdString(
+                allcore::findingsToMarkdown(findings));
+            saved = saveOrWarn(this, fn, bodyMd, "The analysis auto-save")
+                        ? " · saved " + QFileInfo(fn).fileName()
+                        : " · NOT auto-saved (see warning)";
             status_->setText((errs ? QString("done — QC flagged %1 error(s), see "
                                              "the panel below")
                                          .arg(errs)
@@ -13952,12 +13955,18 @@ public:
                     break;
                 }
                 if (rep->error() == QNetworkReply::NoError) {
+                    // WP-14: a truncated page counted as fetched
+                    // becomes a corrupt gallery image nobody re-pulls
+                    const QByteArray page = rep->readAll();
                     QFile f(rFn);
-                    if (f.open(QIODevice::WriteOnly)) {
-                        f.write(rep->readAll());
+                    if (f.open(QIODevice::WriteOnly) &&
+                        f.write(page) == page.size() && f.flush()) {
                         paths << rFn;
-                    } else
+                    } else {
+                        f.close();
+                        QFile::remove(rFn);
                         ++fetchFails;
+                    }
                 } else
                     ++fetchFails;
                 rep->deleteLater();
@@ -20247,8 +20256,16 @@ public:
         o["proposed"] = QDateTime::currentDateTime().toString(Qt::ISODate);
         o["status"] = "pending GMR approval";
         arr.append(o);
-        saveOrWarn(this, f.fileName(), QJsonDocument(arr).toJson(),
-                   "The proposed note");
+        // WP-11: the warn dialog followed by a green "saved" line is
+        // two contradictory messages about the same bytes - the
+        // verdict gates the celebration
+        if (!saveOrWarn(this, f.fileName(), QJsonDocument(arr).toJson(),
+                        "The proposed note")) {
+            report_->setHtml("<b>NOT saved</b> — the pending queue "
+                             "file could not be written; the "
+                             "candidate is not queued.");
+            return;
+        }
         loadCandidates();
         report_->setHtml(
             QString("<b>Candidate saved</b> — <b>%1</b> is now in the "
@@ -20370,17 +20387,18 @@ public:
             }
         }
         if (italic) body += "}";   // unclosed marker: close, then warn
-        QFile f(fn);
-        if (!f.open(QIODevice::WriteOnly)) {
-            report_->setHtml("<i>could not write " + fn.toHtmlEscaped() +
-                             "</i>");
+        // WP-6: "Exported" with statistics over a truncated RTF is
+        // a corrupt file Word opens later - the verdict comes first
+        const QByteArray rtf =
+            ("{\\rtf1\\ansi\\deff0{\\fonttbl{\\f0 Times New "
+             "Roman;}}\\f0\\fs24\n" +
+             body + "\n}")
+                .toUtf8();
+        if (!saveOrWarn(this, fn, rtf, "The STD-004 RTF export")) {
+            report_->setHtml("<i>NOT exported — " + fn.toHtmlEscaped() +
+                             " could not be written whole</i>");
             return;
         }
-        f.write(("{\\rtf1\\ansi\\deff0{\\fonttbl{\\f0 Times New "
-                 "Roman;}}\\f0\\fs24\n" +
-                 body + "\n}")
-                    .toUtf8());
-        f.close();
         report_->setHtml(
             QString("<b>Exported</b> %1 — %2 italic run%3 (STD-004)%4")
                 .arg(QFileInfo(fn).fileName().toHtmlEscaped())
@@ -20567,9 +20585,14 @@ public:
                 QDateTime::currentDateTime().toString(Qt::ISODate);
             o["status"] = "pending GMR approval";
             arr.append(o);
-            saveOrWarn(this, fj.fileName(),
-                       QJsonDocument(arr).toJson(),
-                       "The bibliography candidate");
+            if (!saveOrWarn(this, fj.fileName(),
+                            QJsonDocument(arr).toJson(),
+                            "The bibliography candidate")) {
+                report_->setHtml("<b>NOT saved</b> — the candidate "
+                                 "file could not be written; the "
+                                 "entry is not queued.");
+                return;
+            }
             report_->setHtml(
                 "<b>Bibliography candidate saved</b> — pending until "
                 "published and approved; it appears in the review "
@@ -24673,7 +24696,12 @@ private:
                 target = dest + "/" + fi.completeBaseName() + " " +
                          QString::number(n) +
                          (fi.suffix().isEmpty() ? "" : "." + fi.suffix());
-            QFile::copy(f, target);
+            // WP-5: a failed copy listed in the report as imported
+            // invites deleting the original against nothing
+            if (!QFile::copy(f, target)) {
+                report << (fi.fileName() + "  [FAILED - not imported]");
+                continue;
+            }
             report << QFileInfo(target).fileName();
             const QString suffix = fi.suffix().toLower();
             if (suffix == "docx" || suffix == "rtf") {
@@ -24901,14 +24929,11 @@ private:
             text.remove(0, 1);
         const QString target =
             dest + "/" + fi.completeBaseName() + ".utfc.txt";
-        {
-            QFile f(target);
-            if (!f.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
-                warnWriteFail(this, f, "The converted UTFC text");
-                return;
-            }
-            f.write(text.toUtf8());
-        }
+        // WP-7: "Rescued" with a character count over a short write
+        // invites discarding the legacy original against a stump
+        if (!saveOrWarn(this, target, text.toUtf8(),
+                        "The converted UTFC text"))
+            return;
         info_->setHtml(
             "<b>Rescued to Unicode:</b> <a href='openfile:" +
             anchorEnc(target) +
@@ -25315,13 +25340,30 @@ private:
                         "files are untouched.");
                 return;
             }
-            QFile::remove(dst);
+            // WP-17: the remove's bool was discarded, and worse -
+            // the failure message after a SUCCESSFUL remove claimed
+            // "Nothing was imported" over a live file already gone.
+            // Judge the remove; and if the rename then fails, say
+            // what is actually true: old gone, new stranded.
+            if (QFile::exists(dst) && !QFile::remove(dst)) {
+                QMessageBox::warning(
+                    this, "Import data release",
+                    "Could not replace " + QFileInfo(dst).fileName() +
+                        " (locked or protected). The previous "
+                        "release files are untouched; the staged "
+                        "copy was discarded.");
+                QFile::remove(stage);
+                return;
+            }
             if (!QFile::rename(stage, dst)) {
                 QMessageBox::warning(
                     this, "Import data release",
-                    "Copied " + QFileInfo(src).fileName() +
-                        " but could not move it into place (" +
-                        stage + "). Nothing was imported.");
+                    "The previous " + QFileInfo(dst).fileName() +
+                        " was removed but the new copy could not "
+                        "be moved into place - it is stranded at\n" +
+                        stage + "\nMove it there by hand (Finder) "
+                        "before restarting; until then this file "
+                        "of the release is MISSING.");
                 return;
             }
         }
@@ -25369,10 +25411,23 @@ private:
                 "Builder output (tail):\n\n" + out.right(1200));
             return;
         }
-        QFile ptr(dataRoot + "/build/spine_current.txt");
-        if (ptr.open(QIODevice::WriteOnly | QIODevice::Text |
-                     QIODevice::Truncate))
-            ptr.write((dbName + "\n").toUtf8());
+        // WP-3: "is built and selected" was composed over an
+        // unchecked pointer write - with build/ unwritable the box
+        // said selected while the pointer still named the OLD spine,
+        // and the restart silently searched the previous release.
+        const QByteArray ptrBody = (dbName + "\n").toUtf8();
+        if (!saveOrWarn(this, dataRoot + "/build/spine_current.txt",
+                        ptrBody, "The spine pointer")) {
+            QMessageBox::warning(
+                this, "Import data release",
+                QString("The spine %1 is BUILT, but the pointer "
+                        "(build/spine_current.txt) could not be "
+                        "written - the app will keep opening the "
+                        "PREVIOUS spine until it is. Fix the "
+                        "folder's permissions and re-import.")
+                    .arg(dbName));
+            return;
+        }
         QMessageBox::information(
             this, "Import data release",
             QString("Release %1 imported — the spine %2 is built "
@@ -26520,6 +26575,14 @@ private:
                << l.engEnd << "\t"
                << QString::fromStdString(l.english).replace('\t', ' ')
                << "\n";
+        // WP-4: the translator's own links, cut mid-record on a full
+        // disk, re-import as valid data - judge the stream while it
+        // is alive and never leave a truncated file behind
+        if (!streamWriteOk(ts, f)) {
+            f.close();
+            QFile::remove(p);
+            warnWriteFail(this, f, "The alignment links file");
+        }
     }
 
     void exportPairs() {
@@ -31915,10 +31978,14 @@ public:
                              " CLEANED." + fi.suffix();
         if (QFile::exists(outP))
             return "a CLEANED copy already exists - nothing written";
-        QFile out(outP);
-        if (!out.open(QIODevice::WriteOnly))
-            return "could not write the cleaned copy";
-        out.write(QByteArray::fromStdString(clean));
+        // WP-13: an empty error string over an unchecked write
+        // pointed lastFile_ at a possible stump - the CLEANED copy
+        // is either whole or absent, never partial
+        if (!saveOrWarn(nullptr, outP,
+                        QByteArray::fromStdString(clean),
+                        "The cleaned copy"))
+            return "could not write the cleaned copy whole - "
+                   "nothing kept";
         lastFile_ = outP;
         return QString();
     }
@@ -32107,12 +32174,18 @@ public:
     // chosen path, report honestly. Public for the selftest.
     QString generateListHtml(const QString& root, const QString& out) {
         const auto r = allcore::generateAsciiCatalog(root.toStdString());
-        QFile f(out);
-        if (!f.open(QIODevice::WriteOnly))
-            return "<div style='color:#935800'>Could not write " +
-                   out.toHtmlEscaped() + " \u2014 nothing saved.</div>";
-        f.write(QByteArray::fromStdString(r.text));
-        f.close();
+        // WP-8: this function's own comment says 'report honestly' -
+        // a truncated list reported written with full statistics is
+        // the opposite. saveOrWarn judges the bytes; no parent widget
+        // (selftest calls this directly), so nullptr routes the
+        // failure to the log and the return says NOT written.
+        if (!saveOrWarn(nullptr, out,
+                        QByteArray::fromStdString(r.text),
+                        "The ASCII catalog list"))
+            return "<div style='color:#935800'>NOT written \u2014 " +
+                   out.toHtmlEscaped() +
+                   " could not take the whole list; nothing to "
+                   "circulate.</div>";
         return QString(
                    "<h3>ASCII catalog list written</h3>"
                    "<div style='color:#777'>%1</div>"
@@ -32363,6 +32436,15 @@ public:
             }
             ts << "\n";
             ++n;
+        }
+        // WP-9: the DATA-4 idiom - on a full volume ts.status() is
+        // WriteFailed while f.error() stays NoError; judge the
+        // stream while it is alive or the count below is fiction
+        if (!streamWriteOk(ts, out)) {
+            out.close();
+            QFile::remove(outPath);
+            return "the list could NOT be written whole - removed "
+                   "the partial file; nothing saved";
         }
         return QString("wrote %1 missing work(s)").arg(n);
     }
@@ -34778,11 +34860,8 @@ static void showTranslatorSurvey(QWidget* parent,
             QFileInfo(path).completeBaseName() + "-survey.md",
             "Markdown (*.md)");
         if (fn.isEmpty()) return;
-        QFile f(fn);
-        if (f.open(QIODevice::WriteOnly))
-            f.write(md.toUtf8());
-        else
-            warnWriteFail(dlg, f, "The survey markdown");
+        // WP-16: open was checked, the write was not - one verdict
+        saveOrWarn(dlg, fn, md.toUtf8(), "The survey markdown");
     });
     dlg->show();
 }
@@ -37101,17 +37180,24 @@ int main(int argc, char** argv) {
                 // timestamped entry in the shared inbox
                 const QString path = root + "/docs/FINDINGS.md";
                 QFile f(path);
-                if (f.open(QIODevice::Append | QIODevice::Text)) {
-                    QTextStream ts(&f);
-                    ts << "\n### " 
-                       << QDateTime::currentDateTime().toString(
-                              "yyyy-MM-dd HH:mm")
-                       << " \u00b7 " << sess::str("ui/pane")
-                       << " \u00b7 " << installInfo() << "\n"
-                       << "WHAT I SAW:\n\nWHAT I EXPECTED:\n\n"
-                       << "DISPOSITION: (pending)\n";
-                    f.close();
+                // WP-18: a finding that silently failed to file is
+                // the diagnostic system eating its own tail - warn
+                // on open failure AND judge the appended stream
+                if (!f.open(QIODevice::Append | QIODevice::Text)) {
+                    warnWriteFail(nullptr, f, "The findings inbox");
+                    return;
                 }
+                QTextStream ts(&f);
+                ts << "\n### " 
+                   << QDateTime::currentDateTime().toString(
+                          "yyyy-MM-dd HH:mm")
+                   << " \u00b7 " << sess::str("ui/pane")
+                   << " \u00b7 " << installInfo() << "\n"
+                   << "WHAT I SAW:\n\nWHAT I EXPECTED:\n\n"
+                   << "DISPOSITION: (pending)\n";
+                if (!streamWriteOk(ts, f))
+                    warnWriteFail(nullptr, f, "The findings inbox");
+                f.close();
                 QDesktopServices::openUrl(
                     QUrl::fromLocalFile(path));
             });
@@ -38253,6 +38339,22 @@ int main(int argc, char** argv) {
                                "from-the-text titles)")
                            .arg(ok ? "PASS" : "FAIL");
                 if (!ok) ++fails;
+                // WP-8 (SQA re-measurement): the list write's verdict
+                // gates the "written" answer - an unwritable target
+                // must answer NOT written with no file left behind,
+                // never a success headline with statistics
+                const QString badOut =
+                    "/nonexistent-dir-wp8/list.txt";
+                const QString hbad =
+                    catalogPane->generateListHtml(wd, badOut);
+                const bool wp8 = hbad.contains("NOT written") &&
+                                 !hbad.contains("file(s) listed") &&
+                                 !QFileInfo::exists(badOut);
+                log << QString("  [%1] Catalog: an unwritable list "
+                               "target answers NOT written, no "
+                               "stump, no statistics (WP-8)")
+                           .arg(wp8 ? "PASS" : "FAIL");
+                if (!wp8) ++fails;
                 QDir(wd).removeRecursively();
             }
             {   // the title workbench: attested renderings for a
