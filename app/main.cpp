@@ -1311,6 +1311,25 @@ static QString entryHtml(const allcore::Entry& e,
                      "</div>";
                 if (++shownNotes >= 2) break;
             }
+            // SQA low: the cap was silent - a term with five published
+            // footnotes showed two and implied that was all of them.
+            // Count the rest and say so (house rule 3).
+            int totalNotes = 0;
+            for (const auto& note : *g_appNotes)
+                for (const auto& g : e.hgm_gloss)
+                    if (!note.lemma.isEmpty() &&
+                        QString::fromStdString(g).contains(
+                            note.lemma, Qt::CaseInsensitive)) {
+                        ++totalNotes;
+                        break;
+                    }
+            if (totalNotes > shownNotes)
+                h += QString("<div style='font-size:11px;color:%1;"
+                             "font-style:italic'>\u2026and %2 more "
+                             "published footnote(s) for this term in "
+                             "the Apparatus pane</div>")
+                         .arg(ux::kSoft)
+                         .arg(totalNotes - shownNotes);
         }
     }
     if (d.das && g_dasSections && !e.wylie.empty()) {
