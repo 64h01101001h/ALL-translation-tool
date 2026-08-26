@@ -25230,8 +25230,9 @@ private:
         return QString("<b>Search index up to date.</b><br>%1 added · %2 "
                        "updated · %3 removed · %4 unchanged<br>%5 file(s), "
                        "%6 line(s) indexed.<br><small>The Search pane's "
-                       "\"search the Library\" now answers from this index "
-                       "instantly.</small>")
+                       "\"search the Library\" answers from this index "
+                       "\u2014 typically well under a second; a capped "
+                       "window is disclosed when it applies.</small>")
             .arg(st.added)
             .arg(st.updated)
             .arg(st.removed)
