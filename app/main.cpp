@@ -390,13 +390,32 @@ static bool ocrDownloadOne(QWidget* parent, const QString& url,
     loop.exec();
     prog.close();
     const bool ok = r->error() == QNetworkReply::NoError;
+    bool landed = false;
     if (ok) {
-        QFile f(dest);
-        if (f.open(QIODevice::WriteOnly | QIODevice::Truncate))
-            f.write(r->readAll());
+        // FAIL-13: the old shape truncated the WORKING model first,
+        // wrote without checking the byte count, and blessed the
+        // result on size()>0 - so a 64-byte error page over a 100 MB
+        // recognizer reported "installed" while destroying the model
+        // that worked this morning. Stage beside, verify every byte,
+        // swap only on proof; a failed download leaves the working
+        // model exactly as it was.
+        const QByteArray body = r->readAll();
+        const QString stage = dest + ".downloading~";
+        QFile::remove(stage);
+        QFile f(stage);
+        if (!body.isEmpty() &&
+            f.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
+            landed = f.write(body) == body.size() && f.flush();
+            f.close();
+        }
+        if (landed) {
+            QFile::remove(dest);
+            landed = QFile::rename(stage, dest);
+        }
+        if (!landed) QFile::remove(stage);
     }
     r->deleteLater();
-    return ok && QFileInfo(dest).size() > 0;
+    return ok && landed;
 }
 
 static void showOcrModelManager(QWidget* parent,
