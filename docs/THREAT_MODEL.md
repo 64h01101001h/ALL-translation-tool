@@ -132,10 +132,24 @@ link but never drive with untrusted bytes (openblas, xz, glib) is lower
 priority and should be recorded as such rather than left ambiguous.
 
 One question is already open and unanswered: **libpng is reached only
-transitively, through Qt and OpenCV.** Whether the vulnerable push-mode
-APNG parser is ever entered depends on what those do with a scanned
-PNG. Nobody has traced it. Until someone does, CVE-2026-40930 is
-*unresolved*, not dismissed.
+transitively, through Qt and OpenCV.** ~~Whether the vulnerable
+push-mode APNG parser is ever entered depends on what those do with a
+scanned PNG. Nobody has traced it.~~
+
+**Traced 2026-08-26, at the binary level, and RESOLVED: unreachable.**
+The vulnerable code is libpng's push-mode (progressive) parser, entered
+only through `png_process_data`. `nm -u` over every libpng consumer in
+the staged bundle — QtGui, QtPdf, libfreetype — shows each imports
+`png_read_image`, the sequential reader, and **none imports
+`png_process_data`**. The OpenCV half of the worry was structurally
+impossible: the bundle ships core/flann/geometry/imgproc only — **no
+imgcodecs** — so our OpenCV build cannot decode a PNG by any path.
+
+Limits of the method, stated: `nm -u` sees direct imports, which is
+sufficient here because the push-mode machinery is only enterable
+through that entry point; nothing in the bundle `dlopen`s an image
+decoder. Re-run the check after any Qt or OpenCV upgrade — one
+`nm -u | grep png_process_data` over the Frameworks directory.
 
 ---
 
