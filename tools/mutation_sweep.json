@@ -97,10 +97,10 @@
   },
   {
    "id": "TEST3-STATIC1-META",
-   "note": "TEST-3 retrofit: approving over an existing shelf META companion must refuse and undo. This one SURVIVED the 2026-08-26 probe - the pin was written the same day.",
+   "note": "TEST-3 retrofit: approving over an existing shelf META companion must refuse. Re-anchored 2026-08-26 after FAIL-8 rewrote the guard body - the original anchor vanished and the sweep mislabeled the stale entry as a survivor.",
    "file": "core/src/catalog_actions.cpp",
-   "old": "if (fs::exists(metaDest, ec)) {\n            fs::rename(dest, staged, ec);   // undo the move\n            return \"a META companion of that name is already on the \"\n                   \"shelf; resolve it before approving\";\n        }",
-   "new": "if (false) {}",
+   "old": "if (fs::exists(metaDest, ec)) {",
+   "new": "if (false) {",
    "test": "catalog_actions",
    "expect_fail_contains": "META companion",
    "expect": "killed"
