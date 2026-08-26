@@ -162,14 +162,38 @@ runtime and no entitlements, which would fail on a QML/Quick bundle —
 so when an identity arrives, budget an afternoon rather than a
 `--sign` flag.
 
-**3. Source hosting.** This is now urgent and I would like a decision.
-Until 23 August **there was no off-machine copy of this project at
-all** — no remote, and Time Machine's last reference to its external
-volume predated the project's first commit. There is now a verified
-mirror on an external drive plus a nightly job, but a drive beside the
-laptop is not disaster recovery. Related: `.git` was 10 GB of committed
-build artefacts; a history rewrite took it to **186 MB**, so hosting it
-is now trivial rather than awkward.
+**3. Source hosting — resolved on 25 August, and I would still like
+your advice on where it should live.**
+
+The source is now public at
+**https://github.com/64h01101001h/ALL-translation-tool** — 849 commits,
+both branches, the release tag. Until 23 August there was no off-machine
+copy of this project at all: no remote, and Time Machine's last
+reference to its external volume predated the project's first commit.
+There is now GitHub plus a verified mirror on an external drive with a
+nightly job.
+
+Two things worth knowing rather than discovering:
+
+*Getting it there needed a history rewrite.* A 100.16 MB file — 0.16 MB
+over GitHub's hard limit — sat in six versions of the history and
+blocked every push. It had already been untracked once for that reason,
+which does not remove it from history. `git filter-repo` took it out;
+`HEAD^{tree}` is byte-identical before and after, so the working tree
+never changed while every commit hash did. `.git` is 135 MB.
+
+*It is public, and one file in it is not mine to license.*
+`data/soas_pos/classical-lexicon.txt` is SOAS material whose terms
+nobody has read — it is item 4 on our own gated list, and going public
+moved it from "before any market DMG" to live. **This is the item I
+would most like your help running down.** The root `LICENSE` is
+all-rights-reserved © Asian Legacy Library / ACIP, so visibility is not
+a licence grant, but that does not settle third-party material.
+
+*Where should it live?* It is under my personal account because ALL has
+no GitHub organisation — I checked. If ALL wants to own it, a transfer
+preserves the full history and redirects the old links, and I am happy
+to do it whenever you say.
 
 **4. The catalog.** Unchanged — I would still rather feed ALL's real
 catalog than build a parallel one.
