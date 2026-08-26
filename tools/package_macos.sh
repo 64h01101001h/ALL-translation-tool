@@ -223,7 +223,14 @@ else
   echo "   (ad-hoc signed — set ALL_DEV_IDENTITY to sign for real;"
   echo "    right-click-open instruction applies until then)"
 fi
-codesign --verify "$STAGE/$APPNAME.app" && echo "   signature ok"
+# BUILD-8: the old idiom was `codesign --verify && echo ok` - and a
+# command on the left of && is exempt from set -e, so a failing verify
+# printed nothing and the press rolled on to PACKAGE COMPLETE. Proven
+# by executing the idiom in audit. A signature we cannot verify is a
+# bundle we do not ship.
+codesign --verify "$STAGE/$APPNAME.app" || {
+  echo "CODESIGN VERIFY FAILED - press stopped."; exit 8; }
+echo "   signature ok"
 
 echo "== 5b. architecture and macOS floor (BUILD-1) =="
 # The audit found an arm64-only binary whose LSMinimumSystemVersion was
@@ -560,6 +567,12 @@ DMG="$DIST/Diamond-Cutter-Translation-Tool-$VERSION.dmg"
 rm -f "$DMG"
 hdiutil create -volname "$APPNAME $VERSION" -srcfolder "$STAGE" \
     -ov -format UDZO "$DMG" | tail -1
+# BUILD-16: the image the team will double-click gets verified by the
+# press that made it - four seconds against a corrupted download or a
+# truncated write discovered on demo day.
+hdiutil verify "$DMG" >/dev/null 2>&1 || {
+  echo "DMG VERIFY FAILED - the image is corrupt; press stopped."; exit 9; }
+echo "   hdiutil verify: image checksums good"
 
 # D2: notarization — armed, dormant until the keychain profile exists.
 # One-time setup once the Developer ID is active:
