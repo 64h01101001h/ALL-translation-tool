@@ -14128,9 +14128,16 @@ public:
                             glossaryPath().toStdString());
                         gs.load();
                         gs.remove(w.toStdString());
-                        gs.save(QFileInfo(docFile_)
-                                    .fileName()
-                                    .toStdString());
+                        // STATIC-2: this was the one call site that
+                        // discarded the save bool - a failed write here
+                        // meant the deleted gloss came back on the next
+                        // load with no warning to the translator.
+                        if (!gs.save(QFileInfo(docFile_)
+                                         .fileName()
+                                         .toStdString())) {
+                            QFile gf(glossaryPath());
+                            warnWriteFail(this, gf, "The glossary");
+                        }
                         loadGlossary();
                         refill();
                     }

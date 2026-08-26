@@ -18,7 +18,11 @@ public:
     explicit GlossaryStore(const std::string& path);
     bool load();   // missing file = empty store, true
     // docName appears in the header comment (provenance of purpose)
-    bool save(const std::string& docName) const;
+    // STATIC-2: [[nodiscard]] so -Wall turns every ignored save into
+    // a warning - the one discarding call site found in audit was a
+    // LIVE unflagged write failure (a deleted gloss that could
+    // resurrect on next load).
+    [[nodiscard]] bool save(const std::string& docName) const;
     void set(const std::string& wylie, const std::string& gloss);
     bool remove(const std::string& wylie);
     std::string get(const std::string& wylie) const;
