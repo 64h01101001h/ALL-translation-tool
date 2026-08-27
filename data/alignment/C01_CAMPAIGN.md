@@ -554,7 +554,7 @@ letter-exact battery gates every batch.
   (74's coinages reprised verbatim + self-referential "what we have
   called here"). khungs #4 "authentic source". Supplied transition
   sentence (filed with 115's). Self-quotes ×5 — densest cluster.
-| VII. Why You Need Renunciation (opens) | 143–496 | c1p36 (144–145) done; 143 = marker pair; 146+ open; C01 max seq = 496 |
+| VII. Why You Need Renunciation (opens) | 143–496 | c1p36–c1p37 (144–148) done; 143 = marker pair; 149+ open; C01 max seq = 496 |
 
 NEXT: continue section VII (seq 146+) — the renunciation chapter.
 - seg 143: section-marker pair (like 43) — wylie carries "the first
@@ -570,3 +570,16 @@ NEXT: continue section VII (seq 146+) — the renunciation chapter.
   witness case, both copies agreeing. thabs med fronting in
   miniature (L2-end opens the English). brkam pa → "hankering"
   (new desire-file exponent). lus can → "beings" (flattened).
+- seg 146–147: ESCAPE ANAPHORA AT FULL COUNT — thar ×5 → "escape"
+  ×5: where the Tibetan insists, GMR insists (repetition kept
+  against the variation habit). Prisoner simile with supplied
+  parabolic register ("can sit in"/"really"×2/"surely"). rang cag →
+  "all of us" (spread).
+- seg 148: SKANDHA FULLY UNPACKED — zag bcas nyer len gyi phung po
+  → "the impure groups of things that make up a normal suffering
+  being" (no aggregates/contaminated); 2nd occurrence compresses
+  ("those impure parts of our being") — two-step in one segment.
+  CATECHISM: gang gis/gang du na-pairs → explicit Q&A. ni → "is
+  defined as" (topic particle as definitional copula — Wilson
+  showpiece). las nyon: nyon (klesha clip) → "bad thoughts" (2nd
+  exponent; matches n.10). "life-circle" = 'khor ba #7.
