@@ -554,7 +554,7 @@ letter-exact battery gates every batch.
   (74's coinages reprised verbatim + self-referential "what we have
   called here"). khungs #4 "authentic source". Supplied transition
   sentence (filed with 115's). Self-quotes ×5 — densest cluster.
-| VII. Why You Need Renunciation (opens) | 143–496 | c1p36–c1p37 (144–148) done; 143 = marker pair; 149+ open; C01 max seq = 496 |
+| VII. Why You Need Renunciation (opens) | 143–496 | c1p36–c1p38 (144–151) done; 143 = marker pair; 152+ open; C01 max seq = 496 |
 
 NEXT: continue section VII (seq 146+) — the renunciation chapter.
 - seg 143: section-marker pair (like 43) — wylie carries "the first
@@ -583,3 +583,24 @@ NEXT: continue section VII (seq 146+) — the renunciation chapter.
   defined as" (topic particle as definitional copula — Wilson
   showpiece). las nyon: nyon (klesha clip) → "bad thoughts" (2nd
   exponent; matches n.10). "life-circle" = 'khor ba #7.
+- seg 149: SPEECH-ACT PROMOTION #5 with THE ANSWER SUPPLIED ("do
+  you imagine that you are not? Of course you are."). PARENTHETICAL
+  SELF-READ: Pabongka's brkam-pa gloss rendered in GMR's own terms
+  ("'hankering' is another name for... 'craving'"). CO-OCCURRENCE
+  SORTS A CONVERGENCE: skyo shas + zhen log in one clause →
+  "disgust"/"loathing" — the 64/132 convergence differentiates on
+  contact; filed as the oversight resolution case.
+- seg 150: thar pa → "a lower nirvana" (fn 83; doctrinally
+  specified exponent). 'jam mgon #3 "our Protector". shugs drag po
+  → "fierce".
+- seg 151: barley-film simile domesticated ("thin film of barley
+  powder... homemade beer"; "in your heart" supplied). CASCADE
+  SUPPLIED (six escalation markers). sdug kun = first-two-truths
+  DOUBLE CLIP unpacked (layer-7); kun 'byung coined ("what we call
+  the 'origin'") beside 70's definitional render. bla na med →
+  "matchless" = CONVERGENCE #4 (with 'gran zla med 90). tshig rjes
+  'brangs → "descriptions you find of it in books" (oral/book
+  contrast supplied).
+*** 2026-08-27: FULL tools/verify.sh GREEN — all suites, batteries
+ok nothing skipped, constitution holds. The debt standing since
+batch 2 is PAID. Disk 13Gi (Time Machine purged). Drift sweep next.
