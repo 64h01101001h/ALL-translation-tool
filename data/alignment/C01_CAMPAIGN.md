@@ -12,7 +12,7 @@ letter-exact battery gates every batch.
 | Section | Segments | Status |
 |---|---|---|
 | Root text (r1–r5) | 23–38 | ✓ DONE 2026-08-26 |
-| I–VI. The Lama and the Word; preliminaries | 40–142 | c1p01–c1p17 (40–89) done; 43 = marker pair; 90–142 open |
+| I–VI. The Lama and the Word; preliminaries | 40–142 | c1p01–c1p18 (40–92) done; 43 = marker pair; 93–142 open |
 | VII–X. Why You Need Renunciation | 143–258 | open |
 | XI–XIII. Why You Need the Wish | 259–323 | open |
 | XIV–XVIII. Why You Need Correct View | 324–426 | open |
@@ -263,3 +263,20 @@ letter-exact battery gates every batch.
   (de-technicalized). 2nd CORPUS-EN TYPO: "the goods things". rnal
   'byor → "the master meditator" (matches n.29). 'tshal (polite
   optative) → plain "must". 8 lines → 8 lines with enjambment.
+- seg 90: NAME-CLIP UNPACKING for humans — jo 'brom → "Lord Atisha
+  and the great Drom Tonpa" (layer-7 double); mid la → "Milarepa".
+  'gran zla med pa distributed twice ("matchless"/"beyond equal").
+  bsten #6 "maintaining the proper relationship with".
+- seg 91: nA ro pa = THIRD ACIP-Sanskrit token (long ā). rten 'brel
+  → "auspicious start/beginning" ×3 — 89's de-technicalization now
+  fixed. khe nyen → "tremendous potential--both good and bad"; ma
+  'chol bar → "in exact correspondence". phul (humilific) →
+  "offered" (copper-pot story).
+- seg 92: sa paN = FOURTH ACIP-Sanskrit token AND a clip — unpacked
+  to "The Sakya Pandita" while grags rgyan stays clipped
+  ("Drak-gyen"): unpacking is reader-oriented, not mechanical. rje
+  btsun #3 "Venerable". "the deity" SUPPLIED before Gentle Voice
+  (first explicit divine marker). dbu ma → "middle view" (no
+  "Madhyamaka"). gtsug tu bkur ba literalized ("to the very tip of
+  their heads"). sogs amplified: "and the list goes on and on"
+  (sogs file at five exponents).
