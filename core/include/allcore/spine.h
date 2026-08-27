@@ -84,6 +84,13 @@ public:
                                      bool binding_only = true,
                                      int limit = 20) const;
 
+    // One segment by address (course, seq) - the alignment layer's
+    // join point: alignment links cite segments this way, and the
+    // grammar view fetches the cited text verbatim. Empty optional
+    // when the address does not exist (never a fabrication).
+    std::optional<CorpusSegment> corpusSegment(const std::string& course,
+                                               int seq) const;
+
     // FTS5 over corpus (wylie/english/acip); optional course filter.
     std::vector<CorpusSegment> corpusSearch(const std::string& fts_query,
                                             const std::string& course = "",

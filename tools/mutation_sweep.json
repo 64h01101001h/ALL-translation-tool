@@ -184,6 +184,16 @@
    "test": "gofer_bound",
    "expect_fail_contains": "PERF-R1",
    "expect": "killed"
+  },
+  {
+   "id": "GRAMMAR-VIEW",
+   "note": "Backlog item 1: the grammar block must exist, cite its segment, carry Wilson labels and the PROVISIONAL banner. Silencing the helper reds five pins.",
+   "file": "app/main.cpp",
+   "old": "        if (!g_alignGrammar || !g_alignGrammarIx) return QString();",
+   "new": "        return QString();",
+   "test": "app_selftest",
+   "expect_fail_contains": "grammar block",
+   "expect": "killed"
   }
  ]
 }
