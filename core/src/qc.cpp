@@ -22,7 +22,9 @@ std::map<int, std::string> splitSections(const std::string& md) {
             while (i < line.size() && std::isspace((unsigned char)line[i])) ++i;
             size_t j = i;
             while (j < line.size() && std::isdigit((unsigned char)line[j])) ++j;
-            if (j > i && j < line.size() && line[j] == ')') {
+            if (j > i && j - i <= 8 && j < line.size() &&
+                line[j] == ')') {
+                // MEM-N4: same cap - report markdown is untrusted
                 cur = std::stoi(line.substr(i, j - i));
                 continue;
             }

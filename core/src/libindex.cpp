@@ -194,8 +194,11 @@ LibraryIndex::UpdateStats LibraryIndex::update(
         Stmt all(db_, "SELECT id, path FROM files");
         std::vector<std::pair<long long, std::string>> gone;
         while (sqlite3_step(all.p) == SQLITE_ROW) {
-            const std::string p =
-                reinterpret_cast<const char*>(sqlite3_column_text(all.p, 1));
+            const char* ptxt = reinterpret_cast<const char*>(
+                sqlite3_column_text(all.p, 1));
+            // MEM-N2: a NULL column is a corrupt row, not a segfault
+            if (!ptxt) continue;
+            const std::string p = ptxt;
             if (!disk.count(p))
                 gone.push_back({sqlite3_column_int64(all.p, 0), p});
         }
