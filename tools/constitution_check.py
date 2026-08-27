@@ -186,6 +186,18 @@ def main():
             "app/main.cpp - the tier label this rule polices has "
             "vanished; the rule refuses to pass over a missing "
             "subject")
+    # DH-3 extension: a provisional MARK (code guarded by
+    # e.provisional()) painted red is the same lie without the word
+    # PROVISIONAL nearby - scan those guards' forward context too.
+    for m in _re3.finditer(r"provisional\(\)", main_cpp):
+        fwd = main_cpp[m.end():m.end() + 320]
+        rm = _re3.search(r"color:\s*#[bcdef]0{2}\b", fwd)
+        if rm:
+            line = main_cpp[:m.start()].count("\n") + 1
+            fails.append(
+                f"G3 app/main.cpp:{line}: a provisional-guarded mark "
+                f"painted error-red ({rm.group(0)}) - the tier's "
+                f"colour is kMachine amber (#B4540A)")
     red_ink = _re3.compile(
         r"color:\s*(#[bcdef]0{2,5}\b|#f44|#e53|red\b|crimson)",
         _re3.I)

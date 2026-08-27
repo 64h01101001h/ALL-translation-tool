@@ -19799,7 +19799,10 @@ private:
                            QString::fromStdString(e.hgm_gloss.front())
                                .toHtmlEscaped() +
                            (e.provisional()
-                                ? "<small style='color:#b00'>?</small>"
+                                // DH-3: the provisional mark wears
+                                // the tier's amber, never error-red
+                                ? "<small style='color:#B4540A'>?"
+                                  "</small>"
                                 : "") +
                            "</span>";
                 }

@@ -216,6 +216,24 @@ def cmd_selftest():
     if not objects_for("definitely_not_a_real_file.cpp") == []:
         bad.append("objects_for must return empty for an unknown file")
 
+    # GATE-2/TP-3 + GATE-3 drills: the verdict logic is pure, so
+    # the report path that crashed and the guard that skipped are
+    # both exercised on every selftest run.
+    rc1, l1 = analyze_sweep(
+        [("SOMETHING", "killed", "killed")])   # no LIVENESS at all
+    if rc1 != 1 or not any("NO LIVENESS" in x for x in l1):
+        bad.append("a sweep set without LIVENESS must be REFUSED")
+    rc2, l2 = analyze_sweep(
+        [("LIVENESS", "killed", "killed"),
+         ("OLD-ENTRY", "killed", "stale-anchor")])
+    if not any("STALE ENTRY OLD-ENTRY" in x for x in l2):
+        bad.append("a stale anchor must be reported by id, not crash "
+                   "the report")
+    rc3, _l3 = analyze_sweep(
+        [("LIVENESS", "killed", "survived")])
+    if rc3 != 1:
+        bad.append("an unkilled LIVENESS control must fail the run")
+
     # ENOSPC incident 2026-08-26: the lock drill. A mutating run
     # against a held lock must REFUSE; the drill plants a lock at a
     # sandbox path and expects the child to walk away. (The lock is
@@ -266,32 +284,57 @@ def cmd_sweep(path, only_id=None):
         got = {0: "killed", 3: "stale-anchor"}.get(rc, "survived")
         results.append((m["id"], m["expect"], got))
 
-    live = [r for r in results if r[0] == "LIVENESS"]
     print("=" * 62)
-    if live and live[0][2] != "killed":
-        print("LIVENESS CONTROL WAS NOT KILLED - the harness could not "
-              "go red, so NOTHING else in this run is evidence.")
-        return 1
+    rc, out_lines = analyze_sweep(results)
+    for ln in out_lines:
+        print(ln)
+    return rc
 
-    stale = [(i, e) for i, e, g in results if g == "stale-anchor"]
-    for _i, e in stale:
-        print("  STALE ENTRY %s: its anchor no longer exists - the "
-              "code it targeted was rewritten. Re-anchor the entry to "
-              "the current shape; a stale entry is a maintenance task, "
-              "not a surviving mutant." % e["id"])
+
+def analyze_sweep(results):
+    """The verdict logic, pure so the selftest can drill it.
+
+    GATE-2/TP-3 (SQA re-measurement): the stale-anchor report indexed
+    the expect STRING as a dict and crashed with TypeError whenever a
+    stale entry existed - the report path itself was broken. GATE-3:
+    the liveness guard was 'if live and ...', so a sweep json with the
+    LIVENESS entry deleted skipped the control entirely and every
+    verdict below it was unanchored. Both convicted here for good:
+    no LIVENESS entry = refusal, and the stale report is drilled.
+    """
+    out = []
+    live = [r for r in results if r[0] == "LIVENESS"]
+    if not live:
+        out.append(
+            "NO LIVENESS CONTROL IN THE SET - a sweep without its "
+            "control cannot prove the harness can go red; REFUSED.")
+        return 1, out
+    if live[0][2] != "killed":
+        out.append(
+            "LIVENESS CONTROL WAS NOT KILLED - the harness could not "
+            "go red, so NOTHING else in this run is evidence.")
+        return 1, out
+    for mid, _e, g in results:
+        if g == "stale-anchor":
+            out.append(
+                "  STALE ENTRY %s: its anchor no longer exists - the "
+                "code it targeted was rewritten. Re-anchor the entry "
+                "to the current shape; a stale entry is a maintenance "
+                "task, not a surviving mutant." % mid)
     killed = sum(1 for _i, _e, g in results if g == "killed")
     drift = [(i, e, g) for i, e, g in results if e != g]
-    print("mutation score: %d/%d killed" % (killed, len(results)))
+    out.append("mutation score: %d/%d killed" % (killed, len(results)))
     for i, e, g in results:
         mark = "  " if e == g else "**"
-        print("  %s %-22s expected %-8s got %s" % (mark, i, e, g))
+        out.append("  %s %-22s expected %-8s got %s" % (mark, i, e, g))
     if drift:
-        print("DRIFT: %d mutation(s) changed verdict since the set was "
-              "recorded. A survivor that became killed needs its entry "
-              "updated; a killed one that survived is a REGRESSION."
-              % len(drift))
-        return 1
-    return 0
+        out.append(
+            "DRIFT: %d mutation(s) changed verdict since the set was "
+            "recorded. A survivor that became killed needs its entry "
+            "updated; a killed one that survived is a REGRESSION."
+            % len(drift))
+        return 1, out
+    return 0, out
 
 
 def main():

@@ -61,7 +61,11 @@ HypFile parseHypFile(const std::string& raw) {
                 while (j < raw.size() &&
                        std::isdigit(static_cast<unsigned char>(raw[j])))
                     ++j;
-                if (j > i + 1 && j < raw.size() && raw[j] == ' ') {
+                // MEM-N3: a digit run past int's range throws
+                // out_of_range through the parser - cap the width;
+                // an id that long is corrupt input, not an id
+                if (j > i + 1 && j - i - 1 <= 8 && j < raw.size() &&
+                    raw[j] == ' ') {
                     const int id = std::stoi(raw.substr(i + 1, j - i - 1));
                     stack.push_back(
                         {id, mode, static_cast<int>(buf(mode).size())});
