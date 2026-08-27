@@ -4,10 +4,10 @@ Adam's ruling on the seven-layer question — initiate ASAP, super-important:
    block on the card (Wilson classes, ∅-marks, compound members, verbatim
    cited segment via Spine::corpusSegment), amber/PROVISIONAL, grammar
    toggle, 5 pins + sweep entry GRAMMAR-VIEW.
-2. **Oversight/register surface** — the register spreads (kun rdzob →
-   "apparent"/"deceptive"/"Nominally"; rgyud → "person"/"mental stream") and
-   the 596 ∅-exponent records as a corpus of HOW GMR translates, feeding the
-   translator-oversight pane. Register warnings never auto-resolve.
+2. ✓ DONE 2026-08-26 (13368be) **Oversight/register surface** — shipped:
+   the Review pane's report surfaces alignment-attested register spreads
+   with counts + the draft's choice, AI-matched TENTATIVE, never
+   auto-resolved. 4 pins + sweep entry REGISTER-SPREAD.
 Standing policy, same ruling: every new ACI reading is scanned at FULL seven-
 layer depth (depth is the quality control that makes the simple card pairs
 trustworthy); the entry card stays word-level only.
