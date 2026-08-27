@@ -554,7 +554,7 @@ letter-exact battery gates every batch.
   (74's coinages reprised verbatim + self-referential "what we have
   called here"). khungs #4 "authentic source". Supplied transition
   sentence (filed with 115's). Self-quotes ×5 — densest cluster.
-| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p52 (144–193) done; 143 = marker pair; 194+ open; C01 max seq = 496 |
+| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p53 (144–196) done; 143 = marker pair; 197+ open; C01 max seq = 496 |
 
 NEXT: continue section VII (seq 146+) — the renunciation chapter.
 - seg 143: section-marker pair (like 43) — wylie carries "the first
@@ -832,3 +832,37 @@ TCS series and collections beyond, for later ruling). ***
   fused/dropped-a form. Kept verbatim, flagged, never entered as a
   headword.
 - Layer after batch: 1,838 headwords / 3,210 pairs.
+
+### c1p53 — C01:194–196 (batch 53) — the essence instruction
+- METHOD UPGRADE, now standing: BOTH blocks (tib AND eng) generated
+  from the DB text by cursor-ordered wrap (every keyword located by
+  find-after-cursor with assert). Page passed letter QA and battery
+  on the FIRST run — zero catches — vs batch 52's four rounds.
+  This is the batch-52 method rule extended page-wide; keep it.
+- seg 194: ORDER FLIP filed — 'chi ba mi rtag pa ("death–
+  impermanence") → "impermanence and death" (English collocation
+  order; recurs in 196). lta bu → "which we can call" (hedge as
+  naming move). THE CONCESSIVE MIGRATES: yin kyang's "though"
+  surfaces one English sentence later ("People like us though").
+  gnad du smin pa → "ripe for the realization" + "of death"
+  supplied. dal 'byor formula stable.
+- seg 195 (Tsongkhapa's jewel verse, keyword density): NAME
+  SUPPLIED — rje thams cad mkhyen pa = "the all-knowing Lord", no
+  name in the Tibetan; GMR supplies "Tsongkapa". First clear
+  name-supplying case in the onomastic file (inverse of the
+  title-absorption pattern). yid bzhin nor → "a jewel that gives
+  any wish" (no loanword). rnal 'byor → "the master meditator"
+  (spread exponent #3). sbun pa 'phyar ba → "the chaff of grain"
+  (winnowing verb folded). snying po len pa → "make the most of
+  life". zhal nas → "has said himself". Footnote 103 verbatim.
+- seg 196: THE REALIZATION-SOURCE DOCTRINE — thos byung / bsam
+  byung (śruta-/cintāmayī) → "from sitting and listening to someone
+  describe them" / "from thinking about them yourself"; gzhan
+  stobs / rang stobs → "from the outside" / "from the inside".
+  The classical pair unpacked with zero loanwords — model
+  successor-dictionary entries. zhes gsungs pa ltar → "The point
+  here is that" (quotation-exit as discourse move). zhen pa gting
+  nas log pa → "to you it's all repulsive" (idiom by effect).
+  skyug nad can la btso zan byin pa ltar → "like a feast set
+  before a sick man vomiting". gsha' ma → "truly pure".
+- Layer after batch: 1,872 headwords / 3,274 pairs.
