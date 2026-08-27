@@ -554,7 +554,7 @@ letter-exact battery gates every batch.
   (74's coinages reprised verbatim + self-referential "what we have
   called here"). khungs #4 "authentic source". Supplied transition
   sentence (filed with 115's). Self-quotes ×5 — densest cluster.
-| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p41 (144–160) done; 143 = marker pair; 161+ open; C01 max seq = 496 |
+| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p42 (144–163) done; 143 = marker pair; 164+ open; C01 max seq = 496 |
 
 NEXT: continue section VII (seq 146+) — the renunciation chapter.
 - seg 143: section-marker pair (like 43) — wylie carries "the first
@@ -638,3 +638,18 @@ batch 2 is PAID. Disk 13Gi (Time Machine purged). Drift sweep next.
   title now has three treatments). bsgom distributed ×3 ("Practice
   love/compassion/the wish..."); re → "some little sentence like";
   anecdote recast first-person. bka' gdams pa → "Seer" (clip ✓).
+- seg 161: "It's amazing." supplied exclamation; khong → "Shang"
+  (pronoun-to-name). GIVE-UP VERB'S THREE SPELLINGS all attested
+  (thongs/btang/gtong — paradigm row for variant machinery). mthil
+  #2 "the absolute essence".
+- seg 162: lto gos gtam coined → "food, clothes, and a big name"
+  (gtam "talk" → "big name", linking 155's snyan grags). zhen pa →
+  "concerns" (#4). 'jig rten chos brgyad → "eight worldly thoughts"
+  (chos #9).
+- seg 163: "BIG NAME" PROMOTED TO PROPER NOUN (162's lowercase
+  render capitalized into a vice-name — the two-step with a
+  typographic twist). bcud len fully unpacked ("mystical practices
+  where all you eat is some tiny pills..."). Cave tableau kept
+  literal ("glue their backs to the wall of a cave"). btsun pa →
+  "holy men" (#3). The hoped-for gossip (nga...red zer) flattened
+  to indirect discourse; re ba → "dream". gyong bskur ×2 parallel.
