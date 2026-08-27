@@ -12,6 +12,7 @@
 //            "sdug bsngal" NEAR/5 "bden pa" — both within 5 lines, same course
 #pragma once
 
+#include <functional>
 #include <string>
 #include <vector>
 
@@ -52,6 +53,14 @@ struct FileGoferHit {
 // (libindex.h:76) so the two evaluators cannot drift apart again.
 struct GoferScan {
     int file_cap = 4000;        // in:  files READ before the walk stops
+    // PERF-R1 (2026-08-26): the unindexed walk is the DEFAULT search
+    // on a fresh install and ran unpumped on the GUI thread - the
+    // Stop button was dead for the whole scan. The pulse fires every
+    // few files with the running scanned count; return false to stop
+    // the walk. The remainder is counted skipped and `stopped` set,
+    // so the pane can disclose a user-stopped scan honestly.
+    std::function<bool(int files_scanned)> pulse;   // in (optional)
+    bool stopped = false;       // out: the pulse asked to stop
     bool cut = false;           // out: a node hit the window cap
     int files_scanned = 0;      // out: files actually read
     int files_skipped = 0;      // out: eligible files left unread

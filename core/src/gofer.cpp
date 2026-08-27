@@ -95,6 +95,15 @@ std::vector<FileGoferHit> goferSearchFiles(const std::string& root_dir,
         // walking. Breaking here is what made 4,988 files vanish
         // without the pane ever being able to say so.
         if ((int)files.size() >= sc.file_cap) { ++sc.files_skipped; continue; }
+        // PERF-R1: the pulse keeps the caller alive during the walk
+        // and makes Stop real; a stopped walk counts its remainder
+        // (rule 3) instead of letting silence read as completeness
+        if (sc.stopped ||
+            (sc.pulse && !sc.pulse((int)files.size()))) {
+            sc.stopped = true;
+            ++sc.files_skipped;
+            continue;
+        }
         std::ifstream f(it->path());
         if (!f) continue;
         std::vector<std::string> lines;

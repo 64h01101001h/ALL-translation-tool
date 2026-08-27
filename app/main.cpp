@@ -16609,6 +16609,13 @@ private:
                     // read. The core bounds the walk; the pane owes
                     // the user the number it did not reach.
                     allcore::GoferScan scan;
+                    // PERF-R1: same pump as the indexed branch above
+                    // - the unindexed walk is the DEFAULT on a fresh
+                    // install, and Stop was dead for its whole scan
+                    scan.pulse = [this](int) {
+                        QCoreApplication::processEvents();
+                        return !stopped_;
+                    };
                     hits = allcore::goferSearchFiles(dir.toStdString(),
                                                      q.toStdString(),
                                                      401, &scan);
