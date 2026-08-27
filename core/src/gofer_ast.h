@@ -91,6 +91,7 @@ struct Node {
 struct Parser {
     const std::vector<Tok>& t;
     int depth_ = 0;   // MEM-7 paren-nesting guard
+    int terms_ = 0;   // MEM-N1 chain-length guard
     size_t i = 0;
     explicit Parser(const std::vector<Tok>& toks) : t(toks) {}
 
@@ -127,6 +128,15 @@ struct Parser {
         return lhs;
     }
     std::unique_ptr<Node> parseTerm() {
+        // MEM-N1: parens were capped (MEM-7) but "a OR b OR ..."
+        // builds its left spine ITERATIVELY - no parens, no depth_ -
+        // and evalNode plus ~Node's unique_ptr chain then recurse
+        // down that spine (reproduced at exit 139). No honest query
+        // carries thousands of terms; the refusal is friendly.
+        if (++terms_ > 5000)
+            throw std::runtime_error(
+                "query carries more than 5000 terms - "
+                "simplify it");
         if (t[i].kind == Tok::LPAR) {
             // MEM-7: each '(' recursed three functions deep with no
             // bound - a pasted "((((..." from the search box smashed

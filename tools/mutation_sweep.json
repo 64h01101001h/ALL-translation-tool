@@ -204,6 +204,35 @@
    "test": "app_selftest",
    "expect_fail_contains": "item 2",
    "expect": "killed"
+  },
+  {
+   "id": "MEM-N1-CHAIN",
+   "note": "OR chains build iteratively - no parens, no MEM-7 guard - and reproduced exit 139. The term cap must hold.",
+   "file": "core/src/gofer_ast.h",
+   "old": "        if (++terms_ > 5000)",
+   "new": "        if (false)",
+   "test": "libindex",
+   "expect_fail_contains": "MEM-N1",
+   "expect": "killed"
+  },
+  {
+   "id": "PERF-R2-TERMCAP",
+   "note": "Both TERM cap strands removed at once (single strands mask each other, proven by two surviving mutants before the fixture was isolated).",
+   "file": "core/src/gofer.cpp",
+   "old": "                for (int fi = 0; fi < (int)files.size(); ++fi) {\n                    if ((int)w.size() >= kWindowCap) { sc.cut = true; break; }\n                    const auto& lines = files[fi].second;\n                    for (int li = 0; li < (int)lines.size(); ++li) {\n                        if ((int)w.size() >= kWindowCap) { sc.cut = true; break; }\n                        if (upper(lines[li]).find(needle) != std::string::npos)",
+   "new": "                for (int fi = 0; fi < (int)files.size(); ++fi) {\n                    const auto& lines = files[fi].second;\n                    for (int li = 0; li < (int)lines.size(); ++li) {\n                        if (upper(lines[li]).find(needle) != std::string::npos)",
+   "test": "gofer_bound",
+   "expect_fail_contains": "PERF-R2",
+   "expect": "killed"
+  },
+  {
+   "id": "PERF-R2-ORRESIZE",
+   "note": "HONEST SURVIVOR: the OR resize is defense-in-depth - with TERM capped, both sides arrive flagged, so scan.cut cannot observe the resize alone (shared state). Recorded like TERMINOLOGY-NESTING: unobservable by invariant, not by oversight. If TERM's cap ever falls, PERF-R2-TERMCAP reds first.",
+   "file": "core/src/gofer.cpp",
+   "old": "                if ((int)a.size() > kWindowCap) {\n                    a.resize(kWindowCap);\n                    sc.cut = true;   // PERF-R2: the union disclosed too\n                }",
+   "new": "",
+   "test": "gofer_bound",
+   "expect": "survived"
   }
  ]
 }

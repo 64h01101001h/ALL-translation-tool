@@ -185,7 +185,27 @@ int main() {
 
     fs::remove_all(root);
     {
-        // MEM-7: the query parser recursed per '(' with no bound - a
+        // MEM-N1 (re-measurement): parens were capped (MEM-7) but OR
+    // chains build ITERATIVELY - "a OR b OR ..." 100k deep needs no
+    // parens at all, then evalNode and ~Node recurse down the left
+    // spine. The term cap closes the class the paren cap missed.
+    {
+        std::string chain = "\"ka\"";
+        for (int i = 0; i < 100000; ++i) chain += " OR \"kha\"";
+        allcore::LibraryIndex mix2(
+            (fs::temp_directory_path() / "libindex_memn1.db").string());
+        bool threw2 = false;
+        try { (void)mix2.search(chain, 5); }
+        catch (const std::exception&) { threw2 = true; }
+        CHECK(threw2, "a 100k-term OR chain throws instead of smashing "
+                      "the stack (MEM-N1)");
+        bool okSmall = true;
+        try { (void)mix2.search("\"ka\" OR \"kha\" OR \"ga\"", 5); }
+        catch (const std::exception&) { okSmall = false; }
+        CHECK(okSmall, "an ordinary OR chain still parses (MEM-N1)");
+    }
+
+    // MEM-7: the query parser recursed per '(' with no bound - a
         // pasted "((((..." from the search box was a stack overflow,
         // safe only by whatever stack size the platform happened to
         // grant. A hostile depth must be a FRIENDLY ERROR; a sane

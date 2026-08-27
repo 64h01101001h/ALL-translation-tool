@@ -250,8 +250,13 @@ then 139 clickable English titles.
 
 **For Joel:**
 > "That card is the ACIP catalog and BDRC's authority records rendered as one object.
-> 8,985 texts installed — Kangyur 1,011, Tengyur 3,439, Sungbum 4,535.
-> 462 people indexed, 127 of them with texts here."
+> 7,586 texts installed — the Library banner counts texts, not META companion
+> sheets (DATA-4: the old 8,985 quietly included 1,399 catalog companions, an
+> 18% overstatement). 462 people indexed, 127 of them with texts here."
+
+<!-- DH-4: quote the number the APP shows (the Library banner) rather than a
+     frozen count - if the banner and this script ever disagree, the banner
+     is the honest one and this script is stale. -->
 
 ---
 

@@ -79,6 +79,44 @@ int main() {
               "file cap: the number actually read is reported");
     }
 
+    // ---- 2b. PERF-R2: TERM and OR honor the same ceiling ----------
+    // The re-measurement caught the two evaluators re-diverged: the
+    // file walk capped only NEAR, so a common syllable materialised
+    // every matching line. Both nodes now cap and DISCLOSE.
+    // ISOLATED dir with ONE file: with a second file present the
+    // outer per-file cap re-arms and masks the inner strand - the
+    // first mutation run proved it (survived), so the fixture
+    // isolates what the pin claims to police.
+    const fs::path r2 = fs::temp_directory_path() / "all_gofer_r2";
+    fs::remove_all(r2, ec);
+    fs::create_directories(r2, ec);
+    {
+        std::ofstream f(r2 / "common.txt");
+        for (int i = 0; i < 210000; ++i) f << "CCC DDD\n";
+    }
+    {
+        allcore::GoferScan scan;
+        auto hits = allcore::goferSearchFiles(r2.string(),
+                                              "\"CCC\"", 60, &scan);
+        check(scan.cut,
+              "a TERM matching more lines than the ceiling is CUT "
+              "and says so (PERF-R2)");
+    }
+    // The OR-node resize is DEFENSE-IN-DEPTH: with TERM capped, each
+    // side arrives at <= cap already flagged, so the resize's own
+    // flag is unobservable through scan.cut (shared state) - the
+    // sweep records that honestly as an expected survivor rather
+    // than pretending this pin reaches it.
+    {
+        allcore::GoferScan scan;
+        auto hits = allcore::goferSearchFiles(
+            r2.string(), "\"CCC\" OR \"DDD\"", 60, &scan);
+        check(scan.cut,
+              "an OR of over-ceiling terms is CUT and says so "
+              "(PERF-R2)");
+    }
+    fs::remove_all(r2, ec);
+
     // ---- 3. an ordinary search still reports nothing cut ----------
     // A drill whose flags are always set proves nothing, so pin the
     // negative case too.
