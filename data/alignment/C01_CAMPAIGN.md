@@ -12,7 +12,7 @@ letter-exact battery gates every batch.
 | Section | Segments | Status |
 |---|---|---|
 | Root text (r1–r5) | 23–38 | ✓ DONE 2026-08-26 |
-| I–VI. The Lama and the Word; preliminaries | 40–142 | c1p01–c1p33 (40–137) done; 43 = marker pair; 138–142 open |
+| I–VI. The Lama and the Word; preliminaries | 40–142 | c1p01–c1p34 (40–140) done; 43 = marker pair; 141–142 open |
 | VII–X. Why You Need Renunciation | 143–258 | open |
 | XI–XIII. Why You Need the Wish | 259–323 | open |
 | XIV–XVIII. Why You Need Correct View | 324–426 | open |
@@ -524,3 +524,18 @@ letter-exact battery gates every batch.
   path that..." anaphora from three items: largest expansion device
   in the file. bzhi brgya pa → "the 400 Verses" (digits in a title,
   unique). rten → "the body you've found"; snying po #5.
+- seg 138: 400-Verses couplet, lines swapped (vessel line fronted);
+  snod → "vessel"; nyan po → "for study" (medium shift); "proper"
+  supplied.
+- seg 139: THE QUOTE ARC — 137's promoted speech runs through the
+  verse-citation and closes here: three-segment quotation, longest
+  promotion in the file. APPARATUS COINAGES GO LIVE: "three
+  problems of the pot" + "six images for the instruction" (nn.16/17
+  verbatim in body text — notes and translation one system).
+  'gal/mthun rkyen pair as mirrored avoid.../rely... imperatives.
+- seg 140: THE CLIP MEETS ITS FULL FORM — byang sems te byang chub
+  kyi sems: the source itself equates what our layer-7 links assert;
+  GMR renders the pair once. TAIL #6 ("for ALL living beings").
+  Self-quotes ×3 (136's renders); the interpretation-formula now
+  covers both root verses. snying po lon → "gotten the absolute
+  most" (formula confirmed). sbyar → "relates to" (spread vs 102).
