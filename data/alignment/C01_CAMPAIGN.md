@@ -12,7 +12,7 @@ letter-exact battery gates every batch.
 | Section | Segments | Status |
 |---|---|---|
 | Root text (r1–r5) | 23–38 | ✓ DONE 2026-08-26 |
-| I–VI. The Lama and the Word; preliminaries | 40–142 | c1p01–c1p22 (40–104) done; 43 = marker pair; 105–142 open |
+| I–VI. The Lama and the Word; preliminaries | 40–142 | c1p01–c1p23 (40–107) done; 43 = marker pair; 108–142 open |
 | VII–X. Why You Need Renunciation | 143–258 | open |
 | XI–XIII. Why You Need the Wish | 259–323 | open |
 | XIV–XVIII. Why You Need Correct View | 324–426 | open |
@@ -352,3 +352,21 @@ letter-exact battery gates every batch.
   lam gyi rim pa coined "Steps of the Path". drang nges → "literal
   or not". thams cad mkhyen pa #6 "omniscient". chab shog →
   "epistle"; phul → "offered".
+- seg 105: SANSKRIT RESTORED — dpal mar me mdzad ye shes (Tibetan
+  translates Atisha's name) → "Dipamkara Jnyana" back-translated to
+  Sanskrit: the three-way onomastic system complete (Indians →
+  Sanskrit, Tibetans → Tibetan, deities → English). mthong fronted
+  in PROSE (the 89/103 verse pattern). mtshan nyid #4 as vehicle
+  name → "the logical [tradition]". snang ×2 → first-person
+  epistemics. du ma zad concessive → literal parenthesis. "of Lord
+  Atisha's" supplied. One sentence → five.
+- seg 106: 'dzam gling (Jambudvipa) → "this entire planet" —
+  boldest modernization. 'chad nyan compound then UNPACKED into its
+  two agents ("the teacher has taught and the disciples have
+  heard"). po ti → "volume".
+- seg 107: REDUPLICATION PRESERVED — bsdu bsdu ba → "an abbreviated
+  abbreviation" (like round-around-round). snying po #4 "pith".
+  rgyal ba spread resolved by FUSION ("the victorious Buddhas").
+  sde snod gsum → "three collections" (no basket/Tripitaka). 'jam
+  mgon → "the gentle protector" (closes 78's spread). 'du chain ×3
+  all "included" — the inclusion verb's two English families filed.
