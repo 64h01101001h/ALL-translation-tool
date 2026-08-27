@@ -554,7 +554,7 @@ letter-exact battery gates every batch.
   (74's coinages reprised verbatim + self-referential "what we have
   called here"). khungs #4 "authentic source". Supplied transition
   sentence (filed with 115's). Self-quotes ×5 — densest cluster.
-| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p51 (144–190) done; 143 = marker pair; 191+ open; C01 max seq = 496 |
+| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p52 (144–193) done; 143 = marker pair; 194+ open; C01 max seq = 496 |
 
 NEXT: continue section VII (seq 146+) — the renunciation chapter.
 - seg 143: section-marker pair (like 43) — wylie carries "the first
@@ -804,3 +804,31 @@ TCS series and collections beyond, for later ruling). ***
 - seg 190: bsod snyoms (pindapata) → "whatever food someone might
   offer them" (alms unpacked, no loanword). phyag bzhes → "led a
   way of life that followed". Riches reprised in full coinage.
+
+### c1p52 — C01:191–193 (batch 52) — the death-songs
+- Built at stanza/keyword annotation density (labelled honestly on
+  the page): three long gsung mgur quotations; every keyword wrapped,
+  full seven-layer parse reserved for prose segments.
+- seg 191: Wensapa's song. bde stong → "bliss and emptiness" kept
+  paired; ri khrod → "mountain retreats" (spread vs 193's
+  "hermitage" context); gsang sngags → "the secret word".
+- seg 192: Milarepa to the demoness. snang ba thams cad → "all that
+  appears"; 'khrul pa → "mistaken"; the taunt-answer structure kept
+  whole (no smoothing of the challenge register).
+- seg 193: Milarepa's death-song. STRUCTURAL FINDING: the Tibetan
+  sings its first stanza as FOUR verse lines (skyid / sdug / rgas /
+  na ba) before the first refrain and carries SIX refrains total;
+  GMR's English regroups into quatrains and sings the refrain SEVEN
+  times. Neither side is in error — translation-shape divergence,
+  filed as the first stanza-architecture finding. The letter gate
+  caught my initial page (I had imposed the English quatrain shape
+  on the Tibetan); fix = regenerate the Tibetan block
+  programmatically from the DB wylie (wrap-by-first-occurrence), so
+  the block CANNOT diverge by construction. Method note banked: for
+  verse segments, generate tib blocks from DB text; never hand-copy.
+- TYPO CANDIDATE #10: seg 193 line 1 "gnyen gyis mtshor zhing" —
+  expected "ma tshor" (matches the parallel "ma tshor" in every
+  sibling line, incl. same seg: dgra yis MA TSHOR bar). "mtshor" =
+  fused/dropped-a form. Kept verbatim, flagged, never entered as a
+  headword.
+- Layer after batch: 1,838 headwords / 3,210 pairs.
