@@ -26031,6 +26031,31 @@ public:
         review();
         check(report_->toPlainText().contains("sems can"),
               "unmatched established term is surfaced");
+        {   // backlog item 2 (Adam 2026-08-26): the alignment
+            // evidence's register spreads reach the reviewer. rgyud
+            // carries three attested GMR renderings in C02; a source
+            // containing it must surface the spread with counts, say
+            // which rendering the draft used, and never rank one as
+            // correct.
+            src_->setPlainText("RANG RGYUD LA");
+            draft_->setPlainText("within his mental stream");
+            review();
+            const QString rr = report_->toHtml();
+            check(rr.contains("register spread", Qt::CaseInsensitive) &&
+                      rr.contains("rgyud"),
+                  "an aligned register spread is surfaced for the "
+                  "reviewer (item 2)");
+            check(rr.contains("mental stream") &&
+                      rr.contains("person"),
+                  "the spread lists GMR's attested renderings with "
+                  "their counts (item 2)");
+            check(rr.contains("draft uses", Qt::CaseInsensitive),
+                  "the report says which attested rendering the "
+                  "draft chose (item 2)");
+            check(!rr.contains("auto-resolve") ||
+                      rr.contains("never auto-resolve"),
+                  "spreads are flags, never verdicts (item 2)");
+        }
         // honorific in the source raises the register-of-respect note
         src_->setPlainText("GZIGS PA");
         draft_->setPlainText("he saw it");
@@ -26212,6 +26237,71 @@ private:
                               "” is the right one here.</div>";
             }
         }
+        // backlog item 2 (Adam 2026-08-26): the alignment evidence's
+        // register spreads reach the reviewer. Where GMR's own course
+        // English renders one Tibetan term several ways, the reviewer
+        // sees every attested rendering with its count, and which one
+        // the draft chose - a flag, never a verdict (single-register
+        // rule: spreads are never auto-resolved).
+        QString alignSpreadHtml;
+        if (g_alignEvidence) {
+            std::vector<std::string> toks2;
+            std::vector<bool> bars2;
+            allcore::tokenizeDocument(source, toks2, bars2);
+            std::vector<std::string> wy2;
+            wy2.reserve(toks2.size());
+            for (const auto& t : toks2)
+                wy2.push_back(allcore::tokenToEwts(t));
+            std::set<std::string> seenSp;
+            std::vector<std::string> cands2;
+            for (size_t i = 0; i < wy2.size(); ++i) {
+                cands2.push_back(wy2[i]);
+                if (i + 1 < wy2.size() && !bars2[i])
+                    cands2.push_back(wy2[i] + " " + wy2[i + 1]);
+            }
+            const QString dLow =
+                QString::fromStdString(draft).toLower();
+            int nSp = 0;
+            for (const auto& c0 : cands2) {
+                std::string c;
+                for (char ch : c0)
+                    c += (char)std::tolower((unsigned char)ch);
+                auto ita = g_alignEvidence->find(c);
+                if (ita == g_alignEvidence->end() ||
+                    ita->second.size() < 2 ||
+                    !seenSp.insert(c).second)
+                    continue;
+                if (++nSp > 6) break;
+                QString alts, used;
+                for (const auto& pr : ita->second) {
+                    if (!alts.isEmpty()) alts += " · ";
+                    alts += QString("\u201c%1\u201d (%2\u00d7)")
+                                .arg(pr.eng.toHtmlEscaped())
+                                .arg(pr.segs.size());
+                    if (used.isEmpty() &&
+                        dLow.contains(pr.eng.toLower()))
+                        used = pr.eng;
+                }
+                alignSpreadHtml +=
+                    "<div style='margin:4px 0'><b>" +
+                    QString::fromStdString(c).toHtmlEscaped() +
+                    "</b> \u2014 <b style='color:#B4540A'>register "
+                    "spread</b> in the course evidence: " +
+                    alts + "<br><small>" +
+                    (used.isEmpty()
+                         ? QString("the draft uses NONE of the "
+                                   "attested renderings \u2014 the "
+                                   "reviewer decides whether that is "
+                                   "a finding")
+                         : "the draft uses \u201c" +
+                               used.toHtmlEscaped() +
+                               "\u201d \u2014 attested; whether it "
+                               "is the right register HERE is the "
+                               "reviewer's call") +
+                    " \u00b7 spreads are never auto-resolved"
+                    "</small></div>";
+            }
+        }
         QString sharedHtml;
         for (const auto& s : rep.shared) {
             QString ws;
@@ -26240,6 +26330,12 @@ private:
         if (!regHtml.isEmpty())
             h += "<div style='color:#8C2F2B'><b>Register-sensitive "
                  "terms</b></div>" + regHtml + "<hr>";
+        if (!alignSpreadHtml.isEmpty())
+            h += "<div style='color:#B4540A'><b>Register spreads "
+                 "in the course evidence</b> <small>(GMR's own "
+                 "attested renderings \u00b7 AI-matched, "
+                 "TENTATIVE)</small></div>" +
+                 alignSpreadHtml + "<hr>";
         if (!noteHtml.isEmpty())
             h += QString("<div style='color:#5A3B22'><b>published "
                          "footnotes apply (reuse, don't rewrite)</b>"

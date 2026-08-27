@@ -194,6 +194,16 @@
    "test": "app_selftest",
    "expect_fail_contains": "grammar block",
    "expect": "killed"
+  },
+  {
+   "id": "REGISTER-SPREAD",
+   "note": "Backlog item 2: the reviewer must see GMR's attested register spreads with counts and the draft's choice. Silencing the advisory reds the item-2 pins.",
+   "file": "app/main.cpp",
+   "old": "        QString alignSpreadHtml;\n        if (g_alignEvidence) {",
+   "new": "        QString alignSpreadHtml;\n        if (false) {",
+   "test": "app_selftest",
+   "expect_fail_contains": "item 2",
+   "expect": "killed"
   }
  ]
 }
