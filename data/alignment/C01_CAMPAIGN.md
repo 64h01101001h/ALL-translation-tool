@@ -554,7 +554,7 @@ letter-exact battery gates every batch.
   (74's coinages reprised verbatim + self-referential "what we have
   called here"). khungs #4 "authentic source". Supplied transition
   sentence (filed with 115's). Self-quotes ×5 — densest cluster.
-| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p62 (144–223) done; 143 = marker pair; 224+ open; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
+| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p63 (144–226) done; 143 = marker pair; 227+ open; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
 
 NEXT: continue section VII (seq 146+) — the renunciation chapter.
 - seg 143: section-marker pair (like 43) — wylie carries "the first
@@ -1138,3 +1138,22 @@ TCS series and collections beyond, for later ruling). ***
   consistency documented. kho na...mi 'byung → "only X, never Y".
   Virtuous/non-virtuous parallelism preserved to the word. bde ba
   spread: happiness (216 verse) / pleasure (223 analysis).
+
+### c1p63 — C01:224–226 (batch 63) — principles two, three, four
+- Eleventh consecutive zero-catch batch. Layer: 2,058 headwords /
+  3,707 pairs.
+- FORMULA REUSE COMPLETE: all four principles (223–226) restate
+  212's wording verbatim ("...certain to produce similar
+  consequences" / "...greater than the actions" / "cannot meet a
+  consequence..." / "...cannot be lost") — four-way terminological
+  self-consistency across fifteen segments, documented.
+- seg 224: doublets → disjunctions (dge sdig, bde sdug); gnyis ka
+  → "they each"; concessive absorbed into a relative clause.
+- seg 225: rgyu fronted in Tibetan, trailing in English ("to act
+  as a cause") — same placement rule in 226; gang yang → "either".
+- seg 226: CLAUSE REORDER (conditions before principle in Tibetan,
+  after the dash in English; crossed ids). VERB GAPPED IN ENGLISH:
+  ma bcom ×2 in Tibetan, "is not destroyed" once in English —
+  inverse of 214's 'phen; both gapping directions filed. bsags pa
+  → "collected". Category-tags supplied ("an emotion like anger",
+  "applying an appropriate antidote"). fn 113.
