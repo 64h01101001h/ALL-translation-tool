@@ -12,7 +12,7 @@ letter-exact battery gates every batch.
 | Section | Segments | Status |
 |---|---|---|
 | Root text (r1–r5) | 23–38 | ✓ DONE 2026-08-26 |
-| I–VI. The Lama and the Word; preliminaries | 40–142 | c1p01–c1p14 (40–80) done; 43 = marker pair; 81–142 open |
+| I–VI. The Lama and the Word; preliminaries | 40–142 | c1p01–c1p15 (40–83) done; 43 = marker pair; 84–142 open |
 | VII–X. Why You Need Renunciation | 143–258 | open |
 | XI–XIII. Why You Need the Wish | 259–323 | open |
 | XIV–XVIII. Why You Need Correct View | 324–426 | open |
@@ -208,3 +208,26 @@ letter-exact battery gates every batch.
   "came up with on his own" — the tradition's own never-guess rule
   in the text itself. gsung file: words/writings/the lips of
   (METONYMY, 80). rtogs → "fathom".
+- seg 81: LARGEST EN-SIDE BLEED — the whole "Notes to Reading Two"
+  (nn. 7–41) + Reading Three header ride the segment; elided from
+  the aligned display with a labeled marker, banked in corpus. The
+  notes ARE evidence: n.12 = GMR's own defense of "Three Principal
+  Paths" over "Three Principles of the Path"; n.36 = Kadampa
+  etymology behind "Seers of the Word" (ka=Word, dam=personal
+  instruction); n.37 = the playful Gentle-Voice dialogue behind seg
+  72's promoted quote; n.8 "Holder of the Diamond" = intra-apparatus
+  variant of 77's "Diamond Holder". LOANWORD SPLIT in one segment:
+  bla ma kept ("the lamas") while bshes gnyen → "spiritual teacher".
+  rgyud → "within his own mind" (2nd exponent).
+- seg 82: NAME-POLICY SPLIT CONFIRMED — dge bshes po to ba → "Geshe
+  Potowa": humans transliterated, deities translated; the onomastic
+  system fully mapped. Potowa quote in oral-aphorism register (ga na
+  'ong → "how on earth..."; "sitting down"/"a journey through"
+  supplied). myong ba as experiential aux ("never gone before") —
+  both grammatical lives of the word now attested.
+- seg 83: rnam grol → "liberation" vs thar pa → "freedom" — a
+  near-synonym pair KEPT DISTINCT (counter-case to the shes-rab/
+  ye-shes convergence, filed beside it). dpe cha → "dharma books";
+  grub pa → "spiritual goals" (spread vs "great attainments" 54/56);
+  bsten spread ("follow the practice of proper behavior towards" 81
+  / "go and learn from" 83). chos #6 "a spiritual life".
