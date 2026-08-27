@@ -474,7 +474,11 @@ if(Python3_FOUND)
   # reads is not.
   set_tests_properties(link_truth PROPERTIES
     LABELS "fixture"
-    SKIP_REGULAR_EXPRESSION "with no caption source")
+    # GATE-1 (SQA re-measurement): the old skip regex "with no
+    # caption source" was a SUBSTRING OF THE FAILURE MESSAGE, so a
+    # genuine failure (exit 1) was reported Skipped. The skip line
+    # and only the skip line matches now.
+    SKIP_REGULAR_EXPRESSION "caption corpus absent - skipped")
 endif()
 
 # The constitution (Fidelity engine, track C): process lessons as gates
