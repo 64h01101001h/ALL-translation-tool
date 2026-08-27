@@ -554,7 +554,7 @@ letter-exact battery gates every batch.
   (74's coinages reprised verbatim + self-referential "what we have
   called here"). khungs #4 "authentic source". Supplied transition
   sentence (filed with 115's). Self-quotes ×5 — densest cluster.
-| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p46 (144–175) done; 143 = marker pair; 176+ open; C01 max seq = 496 |
+| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p47 (144–178) done; 143 = marker pair; 179+ open; C01 max seq = 496 |
 
 NEXT: continue section VII (seq 146+) — the renunciation chapter.
 - seg 143: section-marker pair (like 43) — wylie carries "the first
@@ -713,3 +713,27 @@ batch 2 is PAID. Disk 13Gi (Time Machine purged). Drift sweep next.
   ngon distributed into two beggar-scene clauses. mthun rkyen →
   "the bare necessities" (spread vs 139). mi yong ngam → "I'm
   afraid that".
+
+*** ADAM'S MANDATE 2026-08-27: the campaign continues through ALL
+EIGHTEEN ACI COURSES — after C01 completes, proceed C03, C04, ...
+C18 in course order, same batch method. The spine already holds all
+18 locally (C01–C18 = ~8,960 segs of the 42,199-seg corpus; plus
+TCS series and collections beyond, for later ruling). ***
+
+- seg 176: THE DOUBLE FIAT (shi na'ang shi ×2 → "let me freeze...
+  let me starve"). chos blos mi gtong ba (segment-final) FRONTED to
+  define the aim. khul → "try to" (pretense softened); bgyis
+  (humilific do) folded. go bcad → "make up for it". Rich/poor
+  equalizer as colon aphorism.
+- seg 177: THE DEATHBED QUESTIONS — one list-clause → FOUR supplied
+  rhetorical questions; verdict-sentence with zhen pa →
+  "attachment". Stray dog returns ("die like some stray dog...
+  maggots crawling all over the corpse" — kept whole).
+- seg 178: thebs med woven back as imperative ("Make yourself
+  uncatchable"); yid rdo rje ltar → "mind as firm and unchanging as
+  a diamond". snying dang 'dra ba → "close to you as the heart in
+  your breast"; the parting tableau staged ("standing with tears").
+  "Leave, go..." double imperative supplied. rnam dag → "the purest
+  of practice". (Cleanup-script lesson: a partial sed pass wrapped
+  a dirty body once — battery refused it; fixed pattern-by-pattern,
+  4th battery catch.)
