@@ -114,6 +114,66 @@
    "test": "constitution",
    "expect_fail_contains": "G3",
    "expect": "killed"
+  },
+  {
+   "id": "MEM-7-DEPTH",
+   "note": "The Gofer parser's 300k-paren stack smash (exit 139 reproduced before the guard). Disabling the depth cap must crash the pin red.",
+   "file": "core/src/gofer_ast.h",
+   "old": "            if (++depth_ > 200)",
+   "new": "            if (false)",
+   "test": "libindex",
+   "expect_fail_contains": "MEM-7",
+   "expect": "killed"
+  },
+  {
+   "id": "WP-1-MANUSCRIPT",
+   "note": "ManuscriptPane::save pretending success must red the dirty_/NOT-SAVED pin. The ledger once recorded this fixed when it was not; the entry keeps it honest forever.",
+   "file": "app/main.cpp",
+   "old": "        if (!saveOrWarn(this, path_, editor_->toHtml().toUtf8(),\n                        \"The manuscript\")) {",
+   "new": "        if (false) {",
+   "test": "app_selftest",
+   "expect_fail_contains": "WP-1",
+   "expect": "killed"
+  },
+  {
+   "id": "WP-8-CATALOGLIST",
+   "note": "generateListHtml's verdict gating: pretend-success must red the NOT-written pin.",
+   "file": "app/main.cpp",
+   "old": "        if (!saveOrWarn(nullptr, out,\n                        QByteArray::fromStdString(r.text),\n                        \"The ASCII catalog list\"))",
+   "new": "        if (false)",
+   "test": "app_selftest",
+   "expect_fail_contains": "WP-8",
+   "expect": "killed"
+  },
+  {
+   "id": "WP-10-UNSTAMP",
+   "note": "The indexer's condemnation guard: disabling it stamps failed files current - the permanent silent search hole returns and the heal pin reds.",
+   "file": "core/src/libindex.cpp",
+   "old": "        if (!rowsOk) {\n            ++st.write_failures;",
+   "new": "        if (false) {\n            ++st.write_failures;",
+   "test": "libindex",
+   "expect_fail_contains": "WP-10",
+   "expect": "killed"
+  },
+  {
+   "id": "WP-15-PROGRESS",
+   "note": "The drill store's failure counting: dropping the touchWord judgment must red the counted-never-silent pin.",
+   "file": "core/src/progress.cpp",
+   "old": "    sqlite3_bind_int64(s.p, 6, now);\n    if (sqlite3_step(s.p) != SQLITE_DONE) ++write_failures_;   // WP-15",
+   "new": "    sqlite3_bind_int64(s.p, 6, now);\n    sqlite3_step(s.p);",
+   "test": "progress",
+   "expect_fail_contains": "WP-15",
+   "expect": "killed"
+  },
+  {
+   "id": "GATE-1-SKIPMASK",
+   "note": "link_truth's forced failure must FAIL, never be masked as Skipped - the old skip regex was a substring of the failure message.",
+   "file": "tools/link_truth_check.py",
+   "old": "        if missing:",
+   "new": "        if True:",
+   "test": "link_truth",
+   "expect_fail_contains": "with no caption source",
+   "expect": "killed"
   }
  ]
 }

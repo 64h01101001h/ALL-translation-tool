@@ -40,6 +40,22 @@ BUILD="$ROOT/cmake-build-release"
 DIST="$ROOT/dist"
 APPVER=$(head -1 "$ROOT/VERSION")
 VERSION="$APPVER"
+# REL-1 (SQA re-measurement, proven live): a later press silently
+# re-cut a TAGGED release's DMG with different bits under the same
+# name - dist/ carried a dirty-tree build wearing v1.0.0-rc.1's
+# filename five days after the tag. The rule: a tagged version name
+# may only be worn by bits pressed from that tag's commit with a
+# clean tree; anything else presses under an honest dev name.
+GIT_SHA=$(git -C "$ROOT" rev-parse --short HEAD 2>/dev/null || echo nogit)
+GIT_DIRTY=""
+[ -n "$(git -C "$ROOT" status --porcelain 2>/dev/null)" ] && GIT_DIRTY="-dirty"
+TAG_SHA=$(git -C "$ROOT" rev-parse --short "v$APPVER^{commit}" 2>/dev/null || echo "")
+if [ -n "$TAG_SHA" ] && { [ "$TAG_SHA" != "$GIT_SHA" ] || [ -n "$GIT_DIRTY" ]; }; then
+  VERSION="$APPVER-dev-$GIT_SHA$GIT_DIRTY"
+  echo "REL-1: tag v$APPVER points at $TAG_SHA but this press is"
+  echo "  $GIT_SHA$GIT_DIRTY - pressing as $VERSION so the tagged"
+  echo "  artifact's name is never silently re-worn."
+fi
 APPNAME="Diamond Cutter Translation Tool"
 STAGE="$DIST/stage"
 QTBIN="$(dirname "$(which qmake6 2>/dev/null || echo /opt/homebrew/opt/qt/bin/qmake)")"
