@@ -12,7 +12,7 @@ letter-exact battery gates every batch.
 | Section | Segments | Status |
 |---|---|---|
 | Root text (r1–r5) | 23–38 | ✓ DONE 2026-08-26 |
-| I–VI. The Lama and the Word; preliminaries | 40–142 | c1p01–c1p05 (40–53) done; 43 = marker pair; 54–142 open |
+| I–VI. The Lama and the Word; preliminaries | 40–142 | c1p01–c1p06 (40–56) done; 43 = marker pair; 57–142 open |
 | VII–X. Why You Need Renunciation | 143–258 | open |
 | XI–XIII. Why You Need the Wish | 259–323 | open |
 | XIV–XVIII. Why You Need Correct View | 324–426 | open |
@@ -56,3 +56,8 @@ letter-exact battery gates every batch.
 - seg 53: four tantric contractions member-mapped (rtsa rlung thig
   le, phyag chen, rdzogs chen, bskyed rdzogs); first `lo`
   (pretense marker); lha → "pleasure-being" ×2.
+- segs 54/56: full/clip pair INSIDE one dialogue (grub chen in the
+  question, grub pa chen po in the answer — both "great attainments").
+  Second humilific: mchi (the speaker's own humble "go"), in quoted
+  speech. kha phyogs → "some glint of understanding". ma 'das ma
+  'phags kept doubled in English. 'di tsug joins red in the oral file.
