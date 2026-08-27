@@ -103,6 +103,26 @@ int main() {
               "constant that happens to match the cap");
     }
 
+    {   // PERF-R1 (SQA re-measurement 2026-08-26): the unindexed
+        // walk is the DEFAULT search on a fresh install and ran with
+        // no pulse - the pane's Stop button was dead for the whole
+        // scan. The pulse fires as the walk runs; returning false
+        // stops it, the remainder is COUNTED as skipped (rule 3),
+        // and stats say stopped out loud.
+        allcore::GoferScan scan;
+        int pulses = 0;
+        scan.pulse = [&pulses](int) { return ++pulses < 2; };
+        auto hits = allcore::goferSearchFiles(
+            root.string(), "\"bden\"", 60, &scan);
+        check(pulses >= 2, "the pulse fires during the walk (PERF-R1)");
+        check(scan.stopped,
+              "a false pulse stops the walk and says stopped (PERF-R1)");
+        check(scan.files_scanned < 6 && scan.files_skipped > 0 &&
+                  scan.files_scanned + scan.files_skipped == 6,
+              "the stopped walk counts every unread file as skipped - "
+              "scanned+skipped covers the library (PERF-R1)");
+    }
+
     fs::remove_all(root, ec);
     std::printf("%s (%d failure(s))\n", fails ? "FAILED" : "ok", fails);
     return fails ? 1 : 0;
