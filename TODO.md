@@ -1,10 +1,9 @@
 ## ★★ TOP OF THE BACKLOG (Adam, 2026-08-26): the deep bank's two consumers
 Adam's ruling on the seven-layer question — initiate ASAP, super-important:
-1. **Overlay grammar view** — the deep bank's first consumer. Clicking a word
-   inside a corpus-attested sentence lights up THAT sentence's structure from
-   data/alignment/alignment_c02_full_v1.json: the layered spans (1–7), Wilson
-   case labels on the particles, ∅-exponent marks. The in-app version of the
-   delivered HTML pages. No existing Tibetan tool does this.
+1. ✓ DONE 2026-08-26 (827fa27) **Overlay grammar view** — shipped: GRAMMAR
+   block on the card (Wilson classes, ∅-marks, compound members, verbatim
+   cited segment via Spine::corpusSegment), amber/PROVISIONAL, grammar
+   toggle, 5 pins + sweep entry GRAMMAR-VIEW.
 2. **Oversight/register surface** — the register spreads (kun rdzob →
    "apparent"/"deceptive"/"Nominally"; rgyud → "person"/"mental stream") and
    the 596 ∅-exponent records as a corpus of HOW GMR translates, feeding the
