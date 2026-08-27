@@ -554,7 +554,7 @@ letter-exact battery gates every batch.
   (74's coinages reprised verbatim + self-referential "what we have
   called here"). khungs #4 "authentic source". Supplied transition
   sentence (filed with 115's). Self-quotes ×5 — densest cluster.
-| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p43 (144–166) done; 143 = marker pair; 167+ open; C01 max seq = 496 |
+| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p44 (144–169) done; 143 = marker pair; 170+ open; C01 max seq = 496 |
 
 NEXT: continue section VII (seq 146+) — the renunciation chapter.
 - seg 143: section-marker pair (like 43) — wylie carries "the first
@@ -668,3 +668,25 @@ batch 2 is PAID. Disk 13Gi (Time Machine purged). Drift sweep next.
   refrain). Klesha quartet plain (pride/jealousy/dislike/longing;
   zhe sdang softened). che thabs → "ambition for eminence".
   *** LAYER CROSSED 1,500 HEADWORDS (1,522 / 2,637 pairs). ***
+- seg 167: LARGEST REORDER IN THE FILE — Tibetan quote→quote→
+  enumeration→ruling; English fronts the ruling, numbers the eight
+  (1–8 supplied), quotes last; "four pairs" analysis supplied. mgo
+  snyoms double-rendered (quell/stand neutral). LINGREPA VERSE: ro
+  langs → "waked cadavers", rgyu → "Scurry", and the RO PUN (taste/
+  corpse in ro snyoms) resolved corpse-ward: "keep your midnight
+  vigil among the dead". 'jig rten mkhyen pa → "Oh worldly wise!"
+- seg 168: KHUL (byed khul → "you imagine you are doing") RETRO-
+  ILLUMINATES 47's uncertain 'khul (same pretense morpheme;
+  cross-filed). yang dgon pa parsed as the NAME Yang Gonpa (parsing
+  gem). rgyal ba as human epithet → "the victorious". zab zab mo
+  reduplication dissolved. snying po med → "a hollow sham".
+- seg 169: rdzogs pa chen po → "Great Completion" (no Dzogchen) +
+  the adjectival coinage ("become... great complete"). TWO MANG-POS
+  species-matched ("whole HERD of horses"/"whole PACK of cases").
+  THE SOUP: glo ba'i tshod ma → "uncooperative vegetables in a
+  soup"; phye chu → "lumps of flour... in the batter"; ne tso →
+  "a parrot's been taught to squawk". har ba → "miles apart"
+  (rare word, noted). mthil #3 "the crux"; vocative fronted ("I
+  tell you all"). Display QA caught a doubled "never" pre-commit
+  (a flaw the letter/battery checks cannot see — eyeball pass
+  earns its place).
