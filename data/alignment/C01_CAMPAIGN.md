@@ -554,7 +554,7 @@ letter-exact battery gates every batch.
   (74's coinages reprised verbatim + self-referential "what we have
   called here"). khungs #4 "authentic source". Supplied transition
   sentence (filed with 115's). Self-quotes ×5 — densest cluster.
-| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p54 (144–199) done; 143 = marker pair; 200+ open; C01 max seq = 496 |
+| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p55 (144–202) done; 143 = marker pair; 203+ open; C01 max seq = 496 |
 
 NEXT: continue section VII (seq 146+) — the renunciation chapter.
 - seg 143: section-marker pair (like 43) — wylie carries "the first
@@ -897,3 +897,29 @@ TCS series and collections beyond, for later ruling). ***
   segment: 'dzam bu'i gling pa vs 'dzam bu gling pa (genitive 'i
   present/absent) — kept verbatim, filed. tshul khrims rnam par
   dag pa bsrung ba → "keeping your moral life completely pure".
+
+### c1p55 — C01:200–202 (batch 55) — the blind sea-turtle
+- Third consecutive zero-catch batch. Layer: 1,928 headwords /
+  3,380 pairs.
+- seg 200: FILE RECORD — one Tibetan sentence → EIGHT English
+  sentences; the parable staged as narrative ("Suppose... And
+  suppose..."), long ba (one word) → "He is sightless." as its own
+  dramatic sentence. AGENT INVERSION: mgrin pa ... bu ga dang
+  'phrad pa (neck meets hole) → "the golden ring happens to catch
+  him around the neck" (subject/object swap, image intact).
+  REFERENT RENAMED ON RE-MENTION: gnya' shing bu ga → "yoke-like
+  ring" then "the golden ring". srid mtha' tsam → "The odds
+  against it are nearly infinite". dpe'i sgo nas → "'classical
+  example'" (sgo-nas coinage #3).
+- seg 201: bzhin du (one particle) → "Our case is the same." (full
+  supplied pivot sentence). 'jig rten gyi khams → "the various
+  planets of the universe" (cosmological domestication, planets
+  #2). 'khor ba'i rgya mtsho → "the ocean of cyclic life" — GMR's
+  signature samsara render; parable-ocean and samsara-ocean fuse.
+  ma rig pa → "our ignorance" (no avidyā). FORMULA VARIANT: srid
+  mtha' tsam "nearly infinite" (200) vs "almost infinite" (201).
+- seg 202: theg pa chen po → "the Greater Way" — signature Mahayana
+  render, FIRST in the file; chos folds in. lan cig tsam → "the
+  first and last time we will ever have such a chance". snying
+  po...len → "make the greatest use we can of it" (snying-po-len
+  exponent #2). kho na → "The single".
