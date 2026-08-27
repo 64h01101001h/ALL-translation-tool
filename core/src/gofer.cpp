@@ -127,19 +127,32 @@ std::vector<FileGoferHit> goferSearchFiles(const std::string& root_dir,
         [&](const Node& n) -> std::vector<FWin> {
         switch (n.kind) {
             case Node::TERM: {
+                // PERF-R2: the comment above promised the two
+                // evaluators "cannot drift apart again" - and they
+                // had: LibraryIndex caps TERM and OR, this one
+                // capped only the NEAR join, so a common syllable
+                // materialised every matching line in the library.
+                // Same ceiling, same disclosure, both nodes.
                 const std::string needle = upper(n.term);
                 std::vector<FWin> w;
                 for (int fi = 0; fi < (int)files.size(); ++fi) {
+                    if ((int)w.size() >= kWindowCap) { sc.cut = true; break; }
                     const auto& lines = files[fi].second;
-                    for (int li = 0; li < (int)lines.size(); ++li)
+                    for (int li = 0; li < (int)lines.size(); ++li) {
+                        if ((int)w.size() >= kWindowCap) { sc.cut = true; break; }
                         if (upper(lines[li]).find(needle) != std::string::npos)
                             w.push_back({fi, li, li});
+                    }
                 }
                 return w;
             }
             case Node::OR: {
                 auto a = eval(*n.lhs), b = eval(*n.rhs);
                 a.insert(a.end(), b.begin(), b.end());
+                if ((int)a.size() > kWindowCap) {
+                    a.resize(kWindowCap);
+                    sc.cut = true;   // PERF-R2: the union disclosed too
+                }
                 return a;
             }
             case Node::NEAR: {
