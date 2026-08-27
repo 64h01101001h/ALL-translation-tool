@@ -12,7 +12,7 @@ letter-exact battery gates every batch.
 | Section | Segments | Status |
 |---|---|---|
 | Root text (r1–r5) | 23–38 | ✓ DONE 2026-08-26 |
-| I–VI. The Lama and the Word; preliminaries | 40–142 | c1p01 (40–42) + c1p02 (44–45) done; 43 = marker pair; 46–142 open |
+| I–VI. The Lama and the Word; preliminaries | 40–142 | c1p01–c1p03 (40–47) done; 43 = marker pair; 48–142 open |
 | VII–X. Why You Need Renunciation | 143–258 | open |
 | XI–XIII. Why You Need the Wish | 259–323 | open |
 | XIV–XVIII. Why You Need Correct View | 324–426 | open |
@@ -34,3 +34,8 @@ letter-exact battery gates every batch.
   honorific frame's verbs arrive in 45) — natural split, noted.
 - mkhyen brtse nus: the Uttaratantra triad now linked from BOTH
   courses (C02:32 verse, C01:44 prose).
+- seg 47: `rgyud 'khul nges` — uncertain syllable ('khul: variant
+  of 'dul? bskul?); linked at clause level, morphology refused rather
+  than fabricated. First morpheme-level rule-3 refusal of the campaign.
+- seg 46: the first COMPARATIVE las in the alignment corpus (yid
+  bzhin nor las lhag → "More than a wishing jewel").
