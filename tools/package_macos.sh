@@ -502,7 +502,10 @@ for ATTEMPT in 1 2 3; do
     LAUNCH_OK=1
     break
   fi
-  wait $LPID; LEXIT=$?
+  # REL-3: under set -e, a bare `wait` on a dead child ABORTED the
+  # whole press before LEXIT was even read - the retry loop never
+  # retried. The || arm makes the nonzero exit a value, not a bomb.
+  wait $LPID && LEXIT=0 || LEXIT=$?
   echo "   attempt $ATTEMPT: staged app exited early (exit=$LEXIT)"
 done
 if [ "$LAUNCH_OK" != 1 ]; then

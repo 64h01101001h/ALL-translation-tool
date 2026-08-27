@@ -54,6 +54,15 @@ def read_components(tsv_path):
         p = line.split("\t")
         if len(p) >= 2 and p[0] and p[1]:
             out.append((p[0], p[1]))
+    if not out:
+        # GATE-5, in the READER so every command inherits it: an
+        # empty or wrong-delimiter tsv parsed to zero components and
+        # the scan blessed a fleet it never queried. A scan of
+        # nothing is not a clean result.
+        raise SystemExit(
+            "VULNERABILITY SCAN DID NOT RUN: %s parsed to ZERO "
+            "components (empty or wrong-delimiter file). This is "
+            "NOT a clean result." % tsv_path)
     return out
 
 
@@ -363,6 +372,14 @@ def main():
         return 1
 
     comps = read_components(tsv)
+    if not comps:
+        # GATE-5: an empty or wrong-delimiter tsv used to yield zero
+        # queries and a clean-sounding exit - a scan that checked
+        # nothing must refuse, not bless
+        print("VULNERABILITY SCAN DID NOT RUN: %s parsed to ZERO "
+              "components (empty or wrong-delimiter file)." % tsv)
+        print("This is NOT a clean result. Nothing was checked.")
+        return 2
     print("asking OSV about %d bundled component(s)..." % len(comps))
     results, err = query_osv(comps)
     if err:

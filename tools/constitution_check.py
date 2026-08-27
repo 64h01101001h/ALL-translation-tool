@@ -130,13 +130,20 @@ def main():
                 f"tools/constitution_hgm_baseline.txt in the same "
                 f"commit (DATA-3)")
         elif hgm_sites < hgm_base:
-            with open(hgm_baseline_path, "w") as f:
-                f.write(str(hgm_sites) + "\n")
-            notes.append(f"G2 baseline lowered to {hgm_sites}")
+            # GATE-4: the gate used to WRITE the lowered baseline
+            # itself - a check run mutating the source tree, and a
+            # ratchet moving without a human commit. It now only
+            # says so; the tightening is a person's diff.
+            notes.append(
+                f"G2 baseline has slack: {hgm_sites} sites < baseline "
+                f"{hgm_base} - tighten "
+                f"tools/constitution_hgm_baseline.txt in a commit")
     else:
-        with open(hgm_baseline_path, "w") as f:
-            f.write(str(hgm_sites) + "\n")
-        notes.append(f"G2 baseline installed: {hgm_sites} hgm_gloss sites")
+        fails.append(
+            "G2 baseline file missing "
+            "(tools/constitution_hgm_baseline.txt) - the census has "
+            "no ratchet to check against; commit the baseline (the "
+            "gate no longer installs it itself, GATE-4)")
 
     # G1 — the green vocabulary is FROZEN (SQA DATA-12). The audit
     # found seven saturated greens across 43 sites giving the binding
