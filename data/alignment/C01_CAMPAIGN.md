@@ -12,7 +12,7 @@ letter-exact battery gates every batch.
 | Section | Segments | Status |
 |---|---|---|
 | Root text (r1–r5) | 23–38 | ✓ DONE 2026-08-26 |
-| I–VI. The Lama and the Word; preliminaries | 40–142 | c1p01–c1p19 (40–95) done; 43 = marker pair; 96–142 open |
+| I–VI. The Lama and the Word; preliminaries | 40–142 | c1p01–c1p20 (40–98) done; 43 = marker pair; 99–142 open |
 | VII–X. Why You Need Renunciation | 143–258 | open |
 | XI–XIII. Why You Need the Wish | 259–323 | open |
 | XIV–XVIII. Why You Need Correct View | 324–426 | open |
@@ -297,3 +297,18 @@ letter-exact battery gates every batch.
   doublet (drug cu re lnga / rtsa lnga) filed for variant machinery.
   *** LAYER CROSSED 1,000 HEADWORDS at this batch (1,030 / 1,572
   pairs, 20 pages C01 + 15 pages C02). ***
+- seg 96: bla ma lnga bcu pa → "the Fifty Verses on Lamas". der ma
+  zad spread #2. nad gdon order swapped; "constantly" supplied.
+- seg 97: HELL-NAME TRANSLATED — dmyal ba mnar med (Avici) → "the
+  lowest of all hells, known as 'Torment Without,' where the pain
+  goes on without stopping" (coinage frame + supplied gloss: the
+  deity-name treatment reaching cosmology). TWO MORE CORPUS TYPOS
+  kept verbatim: "byung bsogs" (byung ba sogs) and "che phyi mar"
+  (tshe phyi mar — EN "future lives" confirms). Queue at five.
+  rnam smin → "the result which ripens onto" (process not label).
+  spyan (hon.) → "eyes... out of their sockets" (vivid supplied).
+- seg 98: BOLDEST NO-LOANWORD MOVE — bla ma'i rnal 'byor (guru-
+  yoga) → "lama practice": both guru and yoga refused, two-step
+  coinage frame. ka kha → "the alphabet". Honorific service file:
+  zhabs tog/sri zhu/bkur sti/gnang mkhan. One sentence → three,
+  exception clause in em-dash parenthesis, clause order rotated.
