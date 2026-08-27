@@ -12,7 +12,7 @@ letter-exact battery gates every batch.
 | Section | Segments | Status |
 |---|---|---|
 | Root text (r1–r5) | 23–38 | ✓ DONE 2026-08-26 |
-| I–VI. The Lama and the Word; preliminaries | 40–142 | c1p01–c1p29 (40–125) done; 43 = marker pair; 126–142 open |
+| I–VI. The Lama and the Word; preliminaries | 40–142 | c1p01–c1p30 (40–128) done; 43 = marker pair; 129–142 open |
 | VII–X. Why You Need Renunciation | 143–258 | open |
 | XI–XIII. Why You Need the Wish | 259–323 | open |
 | XIV–XVIII. Why You Need Correct View | 324–426 | open |
@@ -463,3 +463,19 @@ letter-exact battery gates every batch.
   vs 110's directional clauses — both treatments attested). bslu →
   "fail" both directions; ma bslus na conditional restructured into
   concession (negation flip). snying rus ("heart-bone") → "effort".
+- seg 126: SUPPLIED DOCTRINAL GLOSSES ("--on emptiness"; ": those
+  on working to save all living beings") — reader-orientation at
+  doctrine level. mchog → "the acme"; dngos bstan kept technical.
+  ma nor ba #4 "free of error". rgya che ba → "far-reaching" ✓ 77.
+- seg 127: BON NAMED in English — 111's ban-bon fold reads as
+  contextual (named where topical, absorbed where slur-pair);
+  cross-filed. Wind idiom KEPT (rlung la bskur → "carried away on
+  the wind"). zhen khog → "mistaken loyalty... stick stubbornly".
+  blos mthongs = UNCERTAIN READING #3.
+- seg 128: name/noun split reaches rnal 'byor itself ("Neljor" in
+  name vs "master meditator" 89); rnying ma/gsar ma as descriptors
+  → "earlier/later secret traditions" (vs "Nyingma" in 104's list).
+  sa chen kun snying = double clip, SPLIT treatment (sa chen
+  unpacked, kun snying kept "Kun-nying"). khungs #3 "beginnings".
+  phebs → "travelled" (go-honorifics converge). GMR phonetics again
+  (Kyungpo/Neljor — engine-relevant).
