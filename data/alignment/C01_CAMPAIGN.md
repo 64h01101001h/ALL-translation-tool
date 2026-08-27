@@ -12,7 +12,7 @@ letter-exact battery gates every batch.
 | Section | Segments | Status |
 |---|---|---|
 | Root text (r1–r5) | 23–38 | ✓ DONE 2026-08-26 |
-| I–VI. The Lama and the Word; preliminaries | 40–142 | c1p01–c1p31 (40–131) done; 43 = marker pair; 132–142 open |
+| I–VI. The Lama and the Word; preliminaries | 40–142 | c1p01–c1p32 (40–134) done; 43 = marker pair; 135–142 open |
 | VII–X. Why You Need Renunciation | 143–258 | open |
 | XI–XIII. Why You Need the Wish | 259–323 | open |
 | XIV–XVIII. Why You Need Correct View | 324–426 | open |
@@ -494,3 +494,16 @@ letter-exact battery gates every batch.
   SPLITS BY GENRE: "vehicles" in quoted verse vs "way" in prose
   doctrine (67/95) — register-conditioned exponents. 'bras bur
   gnas → "Lies in the end in" (fruit-metaphor dissolved).
+- seg 132: theg pa RESOLVES BY FUSION ("vehicles or ways"). drang
+  don unpacked to full definition (vs 104's coined "literal or
+  not"). SUPPLIED DOCTRINAL GLOSS #3 ("--the Buddha's knowledge--").
+  CONVERGENCE WARNING #2: yid 'byung → "disgust" beside zhen pa log
+  (64) — filed for oversight. rgyud #5 "the minds".
+- seg 133: gloss refrain + self-quotation ("their holy sons").
+  byang chub kyi sems TAIL #5 ("enlightenment"). srog shing (stupa
+  pole) → "a great center beam that holds up the entire structure".
+  thugs dam → "meditation"; mthil → "single most important".
+- seg 134: CHAIN KEPT — de...de... anadiplosis preserved ("And to
+  cut... And to develop..."); gcod literal ("cut"). bdag med →
+  "no-self" (spread vs "no self-nature" 69). bsngags pa brjod →
+  "whose praises they sing" (spread vs 129). ma nor ba #6.
