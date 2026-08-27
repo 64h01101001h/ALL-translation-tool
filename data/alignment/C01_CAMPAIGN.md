@@ -554,7 +554,7 @@ letter-exact battery gates every batch.
   (74's coinages reprised verbatim + self-referential "what we have
   called here"). khungs #4 "authentic source". Supplied transition
   sentence (filed with 115's). Self-quotes ×5 — densest cluster.
-| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p48 (144–181) done; 143 = marker pair; 182+ open; C01 max seq = 496 |
+| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p49 (144–184) done; 143 = marker pair; 185+ open; C01 max seq = 496 |
 
 NEXT: continue section VII (seq 146+) — the renunciation chapter.
 - seg 143: section-marker pair (like 43) — wylie carries "the first
@@ -763,3 +763,17 @@ TCS series and collections beyond, for later ruling). ***
   173's formula verbatim + dash-qualified ("--men who live for this
   life"). mtho dman → "high or low"; smyon pa → "a madman" with
   "To them" supplied.
+- seg 182: gtam → "reputation" (FOURTH exponent: talk/big name/Big
+  Name/reputation — a complete dictionary micro-entry). Hardship
+  triple kept whole.
+- seg 183: LHA YI YANG LHA (devatideva) → "the very god of gods"
+  (epithet kept as figure). mthar bskyel → 128's formula verbatim.
+  dben pa'i gnas → "secluded place" (spread vs 120).
+- seg 184: 'KHOR SGYUR (cakravartin) coined+glossed ("'Wheel
+  Emperor'--one of those incredibly powerful beings..."). snying
+  rje pad dkar → "the White Lotus, the Sutra on Compassion".
+  "LIVING KIND" — GMR's coinage, filed. srid/mi srid aphorism kept
+  parallel. Letter-fidelity caught a dropped terminative -r
+  (sprang por) pre-commit — the letter gate's first catch of a
+  MISSING case morpheme (grammar-level save).
+  *** LAYER CROSSED 3,000 PAIRS (1,718 headwords / 3,011). ***
