@@ -12,7 +12,7 @@ letter-exact battery gates every batch.
 | Section | Segments | Status |
 |---|---|---|
 | Root text (r1–r5) | 23–38 | ✓ DONE 2026-08-26 |
-| I–VI. The Lama and the Word; preliminaries | 40–142 | c1p01–c1p24 (40–110) done; 43 = marker pair; 111–142 open |
+| I–VI. The Lama and the Word; preliminaries | 40–142 | c1p01–c1p25 (40–113) done; 43 = marker pair; 114–142 open |
 | VII–X. Why You Need Renunciation | 143–258 | open |
 | XI–XIII. Why You Need the Wish | 259–323 | open |
 | XIV–XVIII. Why You Need Correct View | 324–426 | open |
@@ -388,3 +388,21 @@ letter-exact battery gates every batch.
   GLOSSED ("tsatsa sheds around town where we dispose of...").
   'du family's two English houses (packed/included) both live in
   adjacent segments.
+- seg 111: MIXED-NAME TREATMENT — thu'u bkvan dharma badzr →
+  "Tuken Dharma Vajra" (Tibetan part Tibetan, Sanskrit part
+  restored, in one name); badzr = 6th ACIP-Sanskrit token. CONTENT
+  FOLD FILED: ban bon ("Buddhist and Bon") not carried into the
+  English ("earlier and later systems" covers gsar rnying only) —
+  for the oversight surface. "neither-here-and-neither-there
+  concoction" supplied; Tuken quote recast as imperative; gral
+  (seating-row idiom) de-materialized.
+- seg 112: 'dus lugs → "are packed into" (64 echo). brjod bya →
+  "the topics"; bsdus → "an abbreviated presentation".
+- seg 113: CORPUS TYPO #6 — "lem rim" (first word). GMR'S OWN
+  PHONETICS IN THE WILD: byang chub 'od → "Jangchub Uw" ('od→"Uw" =
+  the pron_engine convention, attested in the published text —
+  engine-relevant). jo bo → "Lord Atisha" ×3. TITLE-FORM VARIANT:
+  "Lamp on the Path to Buddhahood" vs 72's "Lamp on the Path".
+  gzhung lam → "grand highway"; dus gsum folded into "each and
+  every"; sher phyin mdo sdud pa → "the shorter Sutra on the
+  Perfection of Wisdom".
