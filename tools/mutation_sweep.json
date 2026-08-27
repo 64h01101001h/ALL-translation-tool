@@ -233,6 +233,34 @@
    "new": "",
    "test": "gofer_bound",
    "expect": "survived"
+  },
+  {
+   "id": "TP-5-SHORTWRITE",
+   "note": "The re-measurement predicted this exact mutant survives (saveOrWarn's short-write judgment to false). The RLIMIT_FSIZE drill now reds it - the ENOSPC shape is finally reachable by the battery.",
+   "file": "app/main.cpp",
+   "old": "    if (f.write(body) != body.size() || !f.flush()) {",
+   "new": "    if (false) {",
+   "test": "app_selftest",
+   "expect_fail_contains": "TP-5",
+   "expect": "killed"
+  },
+  {
+   "id": "TP-4-OCRFLAGS",
+   "note": "HONEST SURVIVOR (TP-4): zeroing the OCR legality counter ships every page reported clean with the battery green - the 23 Aug audit's planted mutant, still unpinned because driving it needs an OCR output fixture (a known-bad page through the QC path). Recorded per this file's own rule; converting it is the recorded next step, not a checkbox.",
+   "file": "app/main.cpp",
+   "old": "                if (checker_ && !checker_->legalWylie(tok)) ++bad;",
+   "new": "                if (false) ++bad;",
+   "test": "app_selftest",
+   "expect": "survived"
+  },
+  {
+   "id": "TP-4-BATCHFLAGS",
+   "note": "HONEST SURVIVOR (TP-4): the batch-OCR page-flag counter, same gap, same needed fixture.",
+   "file": "app/main.cpp",
+   "old": "                        if (alpha && checker_ && !checker_->legalWylie(tok))\n                            ++pageFlags;",
+   "new": "                        if (false)\n                            ++pageFlags;",
+   "test": "app_selftest",
+   "expect": "survived"
   }
  ]
 }
