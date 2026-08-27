@@ -12,7 +12,7 @@ letter-exact battery gates every batch.
 | Section | Segments | Status |
 |---|---|---|
 | Root text (r1–r5) | 23–38 | ✓ DONE 2026-08-26 |
-| I–VI. The Lama and the Word; preliminaries | 40–142 | c1p01–c1p30 (40–128) done; 43 = marker pair; 129–142 open |
+| I–VI. The Lama and the Word; preliminaries | 40–142 | c1p01–c1p31 (40–131) done; 43 = marker pair; 132–142 open |
 | VII–X. Why You Need Renunciation | 143–258 | open |
 | XI–XIII. Why You Need the Wish | 259–323 | open |
 | XIV–XVIII. Why You Need Correct View | 324–426 | open |
@@ -479,3 +479,18 @@ letter-exact battery gates every batch.
   unpacked, kun snying kept "Kun-nying"). khungs #3 "beginnings".
   phebs → "travelled" (go-honorifics converge). GMR phonetics again
   (Kyungpo/Neljor — engine-relevant).
+- seg 129: SPEECH-ACT PROMOTION #2 (Pabongka's paraphrase → direct
+  Tsongkapa quote; frame supplied). REFRAIN VERBATIM ("As far as I
+  am able I'll explain" = 103's render, 26 segments apart).
+  STACCATO PAIR: ma nor ba, ma 'khrul ba → two short sentences.
+  sgo dam pa fronted; dam pa → "the highest of all".
+- seg 130: SPEECH-ACT PROMOTION #3 ("they have the effect of
+  saying, '...'"). khengs skyungs → "an expression of modesty";
+  spyir/don du → "in general"/"More specifically". Battery refusal
+  caught a bracketed-wylie hack in an eng span — fixed to clean
+  mapping (working as designed, 2nd catch).
+- seg 131: SELF-QUOTATION (root line cited in its own 103 English).
+  mtshan brjod → "Chanting the Names" (title policy). theg pa
+  SPLITS BY GENRE: "vehicles" in quoted verse vs "way" in prose
+  doctrine (67/95) — register-conditioned exponents. 'bras bur
+  gnas → "Lies in the end in" (fruit-metaphor dissolved).
