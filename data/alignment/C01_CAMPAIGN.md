@@ -554,7 +554,7 @@ letter-exact battery gates every batch.
   (74's coinages reprised verbatim + self-referential "what we have
   called here"). khungs #4 "authentic source". Supplied transition
   sentence (filed with 115's). Self-quotes ×5 — densest cluster.
-| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p40 (144–157) done; 143 = marker pair; 158+ open; C01 max seq = 496 |
+| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p41 (144–160) done; 143 = marker pair; 161+ open; C01 max seq = 496 |
 
 NEXT: continue section VII (seq 146+) — the renunciation chapter.
 - seg 143: section-marker pair (like 43) — wylie carries "the first
@@ -625,3 +625,16 @@ batch 2 is PAID. Disk 13Gi (Time Machine purged). Drift sweep next.
 - seg 157: TITLE blo sbyong zhen pa bzhi bral → "Free of Four
   Loves"; zhen → "loves" ×2 in the couplet (title and quote share
   the exponent). VERDICT-FIRST couplet with both subjects supplied.
+- seg 158: sa mtshams → "The border that separates"; "in the form
+  of" ×3 supplied appositives; blos thongs ×2 (127's typo triple-
+  witnessed); zung 'brel → the "keep... and still keep" doubling.
+- seg 159: JO-BO HOMOGRAPH (statue) → "this holy place"; "UNCLE"
+  SUPPLIED with no wylie counterpart — witness question filed
+  beside 24/58. CORPUS TYPO #9: "dgom pas" for sgom (EN
+  "meditating" confirms). dge bshes → "preceptor" (treatment #2).
+  nan tan du → "and loud"; the story fully dramatized.
+- seg 160: JO-BO (Atisha) → "Lord Atisha" — the homograph's minimal
+  pair inside one page. dge bshes → "geshe" (treatment #3; the
+  title now has three treatments). bsgom distributed ×3 ("Practice
+  love/compassion/the wish..."); re → "some little sentence like";
+  anecdote recast first-person. bka' gdams pa → "Seer" (clip ✓).
