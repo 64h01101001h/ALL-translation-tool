@@ -554,7 +554,7 @@ letter-exact battery gates every batch.
   (74's coinages reprised verbatim + self-referential "what we have
   called here"). khungs #4 "authentic source". Supplied transition
   sentence (filed with 115's). Self-quotes ×5 — densest cluster.
-| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p63 (144–226) done; 143 = marker pair; 227+ open; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
+| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p64 (144–229) done; 143 = marker pair; 230+ open; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
 
 NEXT: continue section VII (seq 146+) — the renunciation chapter.
 - seg 143: section-marker pair (like 43) — wylie carries "the first
@@ -1157,3 +1157,28 @@ TCS series and collections beyond, for later ruling). ***
   inverse of 214's 'phen; both gapping directions filed. bsags pa
   → "collected". Category-tags supplied ("an emotion like anger",
   "applying an appropriate antidote"). fn 113.
+
+### c1p64 — C01:227–229 (batch 64) — multipliers; the worldly view
+- Twelfth consecutive zero-catch batch. Layer: 2,074 headwords /
+  3,744 pairs.
+- seg 227: THE FOUR MULTIPLIERS — zhing / bsam pa / dngos po /
+  rten → object / thought / material / person (term-quartet).
+  zhing's field metaphor dropped ("especially important object",
+  supplied); rten → "the person performing the deed" (rten spread
+  #3). Frame moved forward (gsungs pa → English opening "it is
+  said"). stobs che ×2 → once + "The same thing happens" anaphora.
+- seg 228: opens MID-PHRASE (rnams la — 227's list continues);
+  cross-segment syntax filed. ORDER FLIP #4: phra zhing zab pa →
+  "deep and subtle". zhib tu #3 ("Take time to"). bsrung ×2 →
+  "keeping" ×2 — repetition PRESERVED, completing the three-way
+  gapping contrast (214 eng repeats / 226 eng gaps / 228 both
+  repeat). lag file ×2 in one segment. fn 114.
+- seg 229: khyab — THE PERVASION FORMULA DOMESTICATED: so skye yin
+  na 'jig rten pa yin pas khyab → "so long as" construction — the
+  debate-logic operator in plain English; prime successor-
+  dictionary entry. ser skya (yellow-white color metonym) →
+  "a monk or nun or layman"; khyim pa skya bo → "still living the
+  secular life". 'phags → "a realized being" (fn 115). so so skye
+  bo → "ordinary people" (coinage two-step). Heaviest
+  conversational scaffolding yet ("You've heard of", "well", "by
+  the way", "You should realize").
