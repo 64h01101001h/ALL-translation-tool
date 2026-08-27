@@ -554,7 +554,7 @@ letter-exact battery gates every batch.
   (74's coinages reprised verbatim + self-referential "what we have
   called here"). khungs #4 "authentic source". Supplied transition
   sentence (filed with 115's). Self-quotes ×5 — densest cluster.
-| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p59 (144–214) done; 143 = marker pair; 215+ open; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
+| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p60 (144–217) done; 143 = marker pair; 218+ open; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
 
 NEXT: continue section VII (seq 146+) — the renunciation chapter.
 - seg 143: section-marker pair (like 43) — wylie carries "the first
@@ -1059,3 +1059,29 @@ TCS series and collections beyond, for later ruling). ***
   repeated twice in English — gapping filled). rang dbang med par
   → "totally helpless". "one of the THREE of misery" — cross-
   reference supplied from 213.
+
+### c1p60 — C01:215–217 (batch 60) — six births; the foregone conclusion
+- Eighth consecutive zero-catch batch. Layer: 2,017 headwords /
+  3,594 pairs.
+- seg 215: SIX BIRTHS, ONE VERB — skye varied FIVE ways in English
+  ("lead you to / make you take birth / bring you a birth / make
+  you / bring birth") — elegant variation filed. yi dvags → "an
+  insatiable spirit" (signature preta render, no "hungry ghost").
+  lha → "pleasure-being" (deflated to experiential description);
+  HYPHEN VARIES in-segment ("pleasure-being"/"pleasure being") —
+  micro-variant filed; endnotes 104/106 corroborate. 'dod khams
+  repeated → "the same realm" (anaphoric substitution). dpal mgon
+  klu sgrub → "our glorious protector, Nagarjuna" ("our" supplied;
+  Sanskrit restored).
+- seg 216 (Nagarjuna's verse): CORPUS TYPO CANDIDATE #12 — "ngan
+  'gro thams do" for "thams cad" (line 3 has it correctly; English
+  "all" both times). Kept verbatim, flagged, never entered.
+  CROSS-SEGMENT FRAME ABSORPTION: 216's ces gsungs → ∅ because 215
+  closed with supplied "As... Nagarjuna, has stated," — the frame
+  surfaced one segment early. Four universals (kun / thams do[cad]
+  / thams cad / kun tu) level to "all". Ablative las → "brings".
+- seg 217: rang re → "you and I" (inclusive we unpacked). thag
+  chod → "it's a foregone conclusion" — same root as 204's thag
+  bcad ("resolves"): decision-idiom spread. shin tu stobs che →
+  "ever so mighty". ngan 'gro alternation: realms (199) / births
+  (214) / realms (217).
