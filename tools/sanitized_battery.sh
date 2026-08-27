@@ -67,8 +67,22 @@ export ASAN_OPTIONS="detect_leaks=0:abort_on_error=1:symbolize=1:print_stats=0"
 export UBSAN_OPTIONS="print_stacktrace=1:halt_on_error=1"
 export QT_QPA_PLATFORM=offscreen
 
-if ( cd "$BUILD" && ctest -j"$JOBS" --output-on-failure "$@" ); then
-    grn "SANITIZED: every suite green under ASan + UBSan"
+# REL-2: a bare ctest exit 0 is satisfiable by ZERO tests (wrong
+# build dir, empty registration) - the green claim requires the run
+# to have actually run the fleet. The floor is deliberately below
+# the current 86 so ordinary suite growth never trips it, while a
+# hollow run cannot reach it.
+SAN_LOG=$(mktemp)
+if ( cd "$BUILD" && ctest -j"$JOBS" --output-on-failure "$@" ) | tee "$SAN_LOG"; then
+    RAN=$(grep -oE 'tests passed, [0-9]+ tests failed out of [0-9]+' "$SAN_LOG"           | grep -oE '[0-9]+$' || true)
+    [ -z "$RAN" ] && RAN=$(grep -oE '100% tests passed.*out of [0-9]+' "$SAN_LOG"           | grep -oE '[0-9]+$' || true)
+    if [ -z "$RAN" ] || [ "$RAN" -lt 60 ]; then
+        red "SANITIZED BATTERY HOLLOW: only ${RAN:-0} suite(s) ran (floor 60)."
+        red "A green over an empty fleet is not evidence; refusing the claim."
+        rm -f "$SAN_LOG"; exit 1
+    fi
+    rm -f "$SAN_LOG"
+    grn "SANITIZED: every suite green under ASan + UBSan ($RAN suites)"
 else
     red "SANITIZED BATTERY FAILED — read the report above."
     red "A sanitizer report is a defect until proven otherwise; do not"

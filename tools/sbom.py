@@ -50,7 +50,12 @@ def read_components_tsv(path):
             continue
         parts = line.split("\t")
         if len(parts) < 5:
-            continue
+            # GATE-8: a short row silently dropped is a component
+            # that escapes the SBOM - in a compliance document,
+            # omission IS the failure mode. Refuse the build.
+            raise SystemExit(
+                "SBOM REFUSED: malformed row (%d field(s), need 5) "
+                "in %s: %r" % (len(parts), path, line[:120]))
         name, version, spdx, texts, objects = parts[:5]
         out.append({"name": name, "version": version, "spdx": spdx,
                     "texts": texts, "objects": objects})

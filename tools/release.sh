@@ -54,6 +54,18 @@ if ! bash tools/sanitized_battery.sh; then
   exit 1
 fi
 
+# TP-2 (SQA re-measurement): the standing mutation sweep had no
+# trigger either - twenty committed kills that nothing ever re-ran,
+# so a refactor could quietly disarm a pin (exactly what FAIL-8 did
+# to the META guard) and no ritual would notice. Same cadence logic
+# as MEM-5 above: ~20 minutes is too much per press and nothing next
+# to a tag. DRIFT or a dead liveness control unwinds the release.
+if ! python3 tools/mutate.py --sweep; then
+  echo "release: the MUTATION SWEEP failed or drifted - unwinding the version commit"
+  git reset --hard HEAD~1
+  exit 1
+fi
+
 # the press PROVES the release before anything is tagged - a failed
 # press leaves no tag behind (learned the hard way: two half-releases
 # had to be unwound on 2026-08-21)

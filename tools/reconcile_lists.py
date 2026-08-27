@@ -42,6 +42,14 @@ def main():
     for m in re.finditer(r"^\|\s*(\d+)\s*\|(.*)\|([^|]*)\|\s*$",
                          closer, re.M):
         rows[int(m.group(1))] = m.group(3).strip()
+    if not rows:
+        # GATE-6: if CLOSER.md's table format drifts so this regex
+        # matches nothing, every downstream set is empty and the
+        # reconciliation "passes" over a list it never read
+        print("RECONCILE DID NOT RUN: the backlog table parsed to "
+              "ZERO rows - the format drifted or the file is wrong. "
+              "This is NOT a clean result.")
+        raise SystemExit(2)
 
     gated = {n: st for n, st in rows.items()
              if ("WAITING(" in st or "OPEN(Adam" in st
