@@ -554,7 +554,7 @@ letter-exact battery gates every batch.
   (74's coinages reprised verbatim + self-referential "what we have
   called here"). khungs #4 "authentic source". Supplied transition
   sentence (filed with 115's). Self-quotes ×5 — densest cluster.
-| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p53 (144–196) done; 143 = marker pair; 197+ open; C01 max seq = 496 |
+| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p54 (144–199) done; 143 = marker pair; 200+ open; C01 max seq = 496 |
 
 NEXT: continue section VII (seq 146+) — the renunciation chapter.
 - seg 143: section-marker pair (like 43) — wylie carries "the first
@@ -866,3 +866,34 @@ TCS series and collections beyond, for later ruling). ***
   skyug nad can la btso zan byin pa ltar → "like a feast set
   before a sick man vomiting". gsha' ma → "truly pure".
 - Layer after batch: 1,872 headwords / 3,274 pairs.
+
+### c1p54 — C01:197–199 (batch 54) — leisure and fortune analyzed
+- Second consecutive ZERO-CATCH batch under the generate-both-sides
+  method. Layer: 1,895 headwords / 3,326 pairs.
+- seg 197: THE ROOT VERSE QUOTED INSIDE THE COMMENTARY — dal 'byor
+  rnyed dka' zhes pas → "the one that reads 'Leisure and fortune
+  are hard to find'" (q-level pair). CITATION-COMPRESSION filed:
+  GMR does NOT splice his own 195 verse line back in; he re-renders
+  the compressed citation fresh. ORDER FLIP #3: phyi nang → "the
+  inner and outer" (joins 'chi ba mi rtag pa ×2). mi khom pa
+  brgyad → "the eight different ways a person can lack opportunity"
+  (unpacked, no jargon). 'byor-pa definition order NORMALIZED
+  (examples-then-category → category-then-"These include...").
+  tshang ba'am ldan pa doublet → "possess all".
+  ENGLISH-SIDE TYPO CANDIDATE #11: "and to the opportunity to
+  attempt" (expected "and to have the opportunity") — kept
+  verbatim, flagged, never entered.
+- seg 198: SCALE-DIRECTION INVERTED — nas...man chad (lit. "from X
+  on DOWN") → "from good things in our next life ON UP TO the
+  state of Buddhahood" (English re-orients the scale by value).
+  rang lag na yod → "gives us in our own two hands" ("two"
+  supplied). lus rten → "This body we live in".
+- seg 199: sgo nas → "viewpoint" with GMR's own scare quotes on
+  both coinages ("causal", "nature of the thing") — the coinage
+  two-step. THE FEWNESS LADDER: four bare nyung links → fully
+  scaffolded anaphora, shin tu nyung → "very, very few". 'dzam
+  bu'i gling pa → "those who live in the world we know" ('dzam-
+  gling file exponent #2, vs "planet" at 97). MICRO-VARIANT same
+  segment: 'dzam bu'i gling pa vs 'dzam bu gling pa (genitive 'i
+  present/absent) — kept verbatim, filed. tshul khrims rnam par
+  dag pa bsrung ba → "keeping your moral life completely pure".
