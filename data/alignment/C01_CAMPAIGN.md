@@ -554,7 +554,7 @@ letter-exact battery gates every batch.
   (74's coinages reprised verbatim + self-referential "what we have
   called here"). khungs #4 "authentic source". Supplied transition
   sentence (filed with 115's). Self-quotes ×5 — densest cluster.
-| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p44 (144–169) done; 143 = marker pair; 170+ open; C01 max seq = 496 |
+| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p45 (144–172) done; 143 = marker pair; 173+ open; C01 max seq = 496 |
 
 NEXT: continue section VII (seq 146+) — the renunciation chapter.
 - seg 143: section-marker pair (like 43) — wylie carries "the first
@@ -690,3 +690,15 @@ batch 2 is PAID. Disk 13Gi (Time Machine purged). Drift sweep next.
   tell you all"). Display QA caught a doubled "never" pre-commit
   (a flaw the letter/battery checks cannot see — eyeball pass
   earns its place).
+- seg 170: phugs nor → "the 'Ten Ultimate Riches'"; bka' gdams
+  reprised with full coinage frame; title-list capitalized ("The
+  Four Aims. The Three Diamonds..."); rdo rje → "Diamonds" in the
+  ascetic formulary. ngan song #3 "realms of misery"; phar bzhag →
+  "much less" with clauses swapped.
+- seg 171: THE CHAIN KEPT PERFECTLY — mind→practice→beggar→death→
+  ravine anadiplosis ×4 ("Aiming X ultimately to Y"); phugs →
+  "ultimately" (self-consistent with "Ultimate Riches"). grog po
+  skam po → "some dusty ravine".
+- seg 172: thebs med → "uncatchable"; khrel med → "UNABASHABLE" (a
+  coined English word — GMR minting vocabulary); Sending/Laying/
+  Keeping participial series. sprang → "the beggar".
