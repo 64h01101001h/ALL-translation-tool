@@ -554,7 +554,7 @@ letter-exact battery gates every batch.
   (74's coinages reprised verbatim + self-referential "what we have
   called here"). khungs #4 "authentic source". Supplied transition
   sentence (filed with 115's). Self-quotes ×5 — densest cluster.
-| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p60 (144–217) done; 143 = marker pair; 218+ open; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
+| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p61 (144–220) done; 143 = marker pair; 221+ open; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
 
 NEXT: continue section VII (seq 146+) — the renunciation chapter.
 - seg 143: section-marker pair (like 43) — wylie carries "the first
@@ -1085,3 +1085,30 @@ TCS series and collections beyond, for later ruling). ***
   bcad ("resolves"): decision-idiom spread. shin tu stobs che →
   "ever so mighty". ngan 'gro alternation: realms (199) / births
   (214) / realms (217).
+
+### c1p61 — C01:218–220 (batch 61) — the lower births; the way out
+- Ninth consecutive zero-catch batch. Layer: 2,040 headwords /
+  3,644 pairs.
+- seg 218: PREDICATE FRONTED — the Tibetan's final predicate
+  (sdug bsngal bzod glags med) opens the English as a topic
+  sentence; 1 Tibetan sentence → 4 English with supplied "As X"
+  anaphora; tib c5 has no English clause of its own (its words
+  wrapped inside the topic sentence). dmyal ba pa → "a hellbeing"
+  (one-word coinage). Pairs kept as pairs: tsha grang / bkres
+  skom / ngal 'jigs. glen zhing gti mug pa → "mindless brutes" +
+  "incapable of saying a thing" EXPANDED. bkol spyod →
+  "exploited by humans for their work or food" (agents/purposes
+  supplied).
+- seg 219: dkon mchog gsum → "the three rare jewels" (dkon=RARE —
+  signature render; fn 110). skyabs bcol UNPACKED (bcol → "turn
+  ourselves over", skyabs → "for their protection"). snying nas →
+  "from the bottom of our hearts". blang dor render #3
+  ("undertake/abandon"; spread complete with 211/212).
+- seg 220: SUPPLIED AUDIENCE CONTEXT (file's clearest): rang cag
+  phal che ba 'di → "People like you and I here in this assembly,
+  mostly monks" — the oral setting made explicit. thag chod chod
+  pa red (doubled chod) → "it's already decided" (thag-chod
+  spread #3). las 'bras BOTH "principles of" AND "laws of" in one
+  segment. lag tu ma blangs → "could not put... into actual
+  practice" (lag file). ches mang ba → "absolute multitudes".
+  khyad du bsad → "chose to disregard" ("chose" supplied).
