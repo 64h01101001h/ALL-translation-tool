@@ -554,7 +554,7 @@ letter-exact battery gates every batch.
   (74's coinages reprised verbatim + self-referential "what we have
   called here"). khungs #4 "authentic source". Supplied transition
   sentence (filed with 115's). Self-quotes ×5 — densest cluster.
-| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p49 (144–184) done; 143 = marker pair; 185+ open; C01 max seq = 496 |
+| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p50 (144–187) done; 143 = marker pair; 188+ open; C01 max seq = 496 |
 
 NEXT: continue section VII (seq 146+) — the renunciation chapter.
 - seg 143: section-marker pair (like 43) — wylie carries "the first
@@ -777,3 +777,16 @@ TCS series and collections beyond, for later ruling). ***
   (sprang por) pre-commit — the letter gate's first catch of a
   MISSING case morpheme (grammar-level save).
   *** LAYER CROSSED 3,000 PAIRS (1,718 headwords / 3,011). ***
+- seg 185: THE OATH REGISTER supplied ("shall... shall have
+  cheated... may I lose"); conditional split into promise/
+  condition/curse; gyur cig → "may I". MEASURE DOMESTICATED: sor
+  bzhi → "four inches". bslus → "cheated" (bslu file #4 — model
+  successor-dictionary entry).
+- seg 186: bre → "a box" (metrology policy #2). rtsam pa → "flour"
+  (tsampa de-loanworded). phongs → "want for" (archaic register).
+- seg 187: RAB TU BYUNG (pravrajita) → "those who've left their
+  homes for me" — the ordination term unpacked, no monk/ordained.
+  Fingernail image kept whole. thams cad kun → "each and every one"
+  (doubling for doubling). TSHAD MA → "a being who cannot lie" +
+  slu ba med → "whose words can never fail" (pair → parallel
+  predicates). "want for necessities" refrain 186→187.
