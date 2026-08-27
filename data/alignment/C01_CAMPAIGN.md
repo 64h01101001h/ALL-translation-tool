@@ -12,7 +12,7 @@ letter-exact battery gates every batch.
 | Section | Segments | Status |
 |---|---|---|
 | Root text (r1–r5) | 23–38 | ✓ DONE 2026-08-26 |
-| I–VI. The Lama and the Word; preliminaries | 40–142 | c1p01–c1p04 (40–50) done; 43 = marker pair; 51–142 open |
+| I–VI. The Lama and the Word; preliminaries | 40–142 | c1p01–c1p05 (40–53) done; 43 = marker pair; 54–142 open |
 | VII–X. Why You Need Renunciation | 143–258 | open |
 | XI–XIII. Why You Need the Wish | 259–323 | open |
 | XIV–XVIII. Why You Need Correct View | 324–426 | open |
@@ -47,3 +47,12 @@ letter-exact battery gates every batch.
   the honorific file ('bul ba, the note-taker's own register).
 - seg 49: the four-dgos chain — each necessity a different English
   modality; de…la anaphora as discourse connectives.
+- seg 51: first `red` (spoken assertive copula) in the corpus — the
+  zin-bris keeps Pabongka's classroom voice. sa bcad = the app's own
+  extractSaBcad term.
+- seg 52: rtsis zin ×4, four exponents in ONE segment (filled with /
+  caught up in / filled with / imbued with) — the largest one-segment
+  register spread yet; bodhicitta unpacked to a full definition.
+- seg 53: four tantric contractions member-mapped (rtsa rlung thig
+  le, phyag chen, rdzogs chen, bskyed rdzogs); first `lo`
+  (pretense marker); lha → "pleasure-being" ×2.
