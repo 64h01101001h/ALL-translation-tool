@@ -554,7 +554,7 @@ letter-exact battery gates every batch.
   (74's coinages reprised verbatim + self-referential "what we have
   called here"). khungs #4 "authentic source". Supplied transition
   sentence (filed with 115's). Self-quotes ×5 — densest cluster.
-| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p68 (144–241) done; 143 = marker pair; 242+ open; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
+| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p69 (144–244) done; 143 = marker pair; 245+ open; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
 
 NEXT: continue section VII (seq 146+) — the renunciation chapter.
 - seg 143: section-marker pair (like 43) — wylie carries "the first
@@ -1274,3 +1274,24 @@ TCS series and collections beyond, for later ruling). ***
   books, get teaching on them, contemplate their meaning"; spong
   ba bsam gtan → "Live a life of rejection, and stay in
   meditation". rab byung → "monks" (spread vs 187).
+
+### c1p69 — C01:242–244 (batch 69) — rejection defined; two sufferings
+- Seventeenth consecutive zero-catch batch. Layer: 2,163 headwords /
+  3,963 pairs.
+- seg 242: SELF-GLOSS — GMR defines his own 241 coinage ("a 'life
+  of rejection' means..."). mkhas pa dang grub thob → "both wise
+  and realized". COINAGE TWO-STEP ON AN IDIOM ("what they call
+  'lots of things to think about and lots of things to do'"). THE
+  PRECEPT: 'dod chung chog shes → "'Keep your wants few; be easy
+  to satisfy'" (fn 123).
+- seg 243: zag bcas → "impure" (sasrava, zero jargon; endnote 82
+  corroborates). sdug bsngal gyi sdug bsngal → "the 'suffering of
+  suffering'" (calqued + quotes + enumeration supplied).
+- seg 244: WYLIE TYPO CANDIDATE #14 — "grangs bas gdungs"
+  (expected "grang bas"; mirror clause + English "very cold"
+  witness). Kept verbatim, flagged. Hot/cold mirror expanded to
+  full sentences; 'gro sdod chiastically expanded with
+  parenthetical staging; bde bar snang stated once in Tibetan,
+  "seems like pleasure" repeated per English sentence (tib-once/
+  eng-repeats). snang = "seems" (appearance sense). Segment ends
+  on concessive yang — argument continues into 245.
