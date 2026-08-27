@@ -12,7 +12,7 @@ letter-exact battery gates every batch.
 | Section | Segments | Status |
 |---|---|---|
 | Root text (r1–r5) | 23–38 | ✓ DONE 2026-08-26 |
-| I–VI. The Lama and the Word; preliminaries | 40–142 | c1p01–c1p13 (40–77) done; 43 = marker pair; 78–142 open |
+| I–VI. The Lama and the Word; preliminaries | 40–142 | c1p01–c1p14 (40–80) done; 43 = marker pair; 81–142 open |
 | VII–X. Why You Need Renunciation | 143–258 | open |
 | XI–XIII. Why You Need the Wish | 259–323 | open |
 | XIV–XVIII. Why You Need Correct View | 324–426 | open |
@@ -189,3 +189,22 @@ letter-exact battery gates every batch.
   Metalinguistic render: rnams sgras → "The word 'all'...". rje
   btsun spread: high and holy (75) / the glorious lord (77).
   QA caught one missing close (s77S) pre-commit — fixed, balanced.
+- seg 78: name's THIRD form ('jam pa'i dbyangs) — three Tibetan
+  forms, one "Gentle Voice". VOICE FLIP: zhal gzigs (Tsongkhapa
+  sees) → "Gentle Voice was appearing to" (experiencer→stimulus
+  subject, held through four clauses). Vision taxonomy plain: rmi
+  lam/nyams/dngos → dream/imagination/directly; dbang shes/yid shes
+  → physical senses/mental sense. gsum dropped (English counts by
+  listing), gnyis kept. gsan (hon. hear) → "learn"; red returns.
+- seg 79: DOUBLE NEGATIVE KEPT (ma gsungs pa gcig kyang med →
+  "not a single example... that was not spoken"). rje btsun alone →
+  "Gentle Voice" (epithet resolved to referent). zhu gnang
+  (humilific+honorific) → "consulted"; bka' → "instructions";
+  bzhugs gnas/zhabs phyi plain-rendered. bstan bcos #4 "treatises".
+  mkhas btsun pair → "scholastic skill and moral depth".
+- seg 80: rje bla ma spread ("our Lord Lama" 79 / "This Lord of
+  Lamas" 80); mkhas pa spread (scholastic skill / sages). gtan la
+  phab → "definitive explanations". 'ol tshod du ("by guesswork") →
+  "came up with on his own" — the tradition's own never-guess rule
+  in the text itself. gsung file: words/writings/the lips of
+  (METONYMY, 80). rtogs → "fathom".
