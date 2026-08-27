@@ -554,7 +554,7 @@ letter-exact battery gates every batch.
   (74's coinages reprised verbatim + self-referential "what we have
   called here"). khungs #4 "authentic source". Supplied transition
   sentence (filed with 115's). Self-quotes ×5 — densest cluster.
-| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p67 (144–238) done; 143 = marker pair; 239+ open; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
+| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p68 (144–241) done; 143 = marker pair; 242+ open; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
 
 NEXT: continue section VII (seq 146+) — the renunciation chapter.
 - seg 143: section-marker pair (like 43) — wylie carries "the first
@@ -1251,3 +1251,26 @@ TCS series and collections beyond, for later ruling). ***
   molten steel"; kha na → "hanging over... about to be dipped in".
   yid gtan med DOUBLED ("none of them is stable, none of them is
   worth your trust"). phrad spread #3 ("touch").
+
+### c1p68 — C01:239–241 (batch 68) — the six problems; King Mefeed
+- Sixteenth consecutive zero-catch batch. Layer: 2,143 headwords /
+  3,930 pairs.
+- seg 239: AUTHOR SUPPLIED FROM TITLE — lam rim chen mo → "Lord
+  Tsongkapa, in his great exposition...". Migrating kyang again.
+  mjug bsdu → "as sort of a summary" (oral hedge). fn 121.
+- seg 240: TIBETAN GAPS, ENGLISH RESTORES — items 5–6 use bare de
+  for nyes pa; English restores "The problem" ×6 (gapping file's
+  4th configuration; de↔"The problem" paired directly). lus 'dor
+  ba → "keep shucking off bodies" (colloquial-vivid). nying
+  mtshams sbyor ba → "keep going into a new life" (technical term
+  domesticated). grogs med pa DOUBLED ("no one can come along with
+  us; ultimately we are alone").
+- seg 241: ROYAL NAME CALQUED — rgyal po nga las nus (Mandhata,
+  "nourished from me") → "King Mefeed" (fn 122); the name system
+  now covers deities, hells, and kings. FORMULA LEVELING: the
+  king's last words = 240's problem #2 verbatim in English though
+  the Tibetan wording differs ('dod pas mi ngoms pa vs ngoms pa
+  med pa). THE TWO ACTIVITIES: klog pa thos bsam → "Read the holy
+  books, get teaching on them, contemplate their meaning"; spong
+  ba bsam gtan → "Live a life of rejection, and stay in
+  meditation". rab byung → "monks" (spread vs 187).
