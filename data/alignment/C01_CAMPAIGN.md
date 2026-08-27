@@ -12,7 +12,7 @@ letter-exact battery gates every batch.
 | Section | Segments | Status |
 |---|---|---|
 | Root text (r1–r5) | 23–38 | ✓ DONE 2026-08-26 |
-| I–VI. The Lama and the Word; preliminaries | 40–142 | c1p01–c1p21 (40–101) done; 43 = marker pair; 102–142 open |
+| I–VI. The Lama and the Word; preliminaries | 40–142 | c1p01–c1p22 (40–104) done; 43 = marker pair; 105–142 open |
 | VII–X. Why You Need Renunciation | 143–258 | open |
 | XI–XIII. Why You Need the Wish | 259–323 | open |
 | XIV–XVIII. Why You Need Correct View | 324–426 | open |
@@ -331,3 +331,24 @@ letter-exact battery gates every batch.
   of fluency--in the realization of truth" ("a different type of"
   supplied to surface the arc). kha phar bslog → "turn the process
   around". Vajradhara formula repeats verbatim 99→101 (refrain).
+- seg 102: THE TRANSLATION READS ITSELF — Pabongka dissects rje/
+  btsun/bla ma; GMR maps it onto his own "high/holy/lamas": cleanest
+  layer-7 mirror; root line re-supplied in full for tshig 'dis.
+  SECOND APPARATUS BLEED (Notes to Reading Three, nn.42–60 + Reading
+  Four header) — elided with marker, mined: n.43 unpacks all three
+  seg-85 incipits in full verse (ends "first among all of those who
+  hold the diamond" — THIRD Diamond-holder variant); n.58 "Paktsangwa,
+  whose name means 'Swineherd'" (name-meaning gloss); n.51 Marpa
+  prostration mistake; n.57 the thirteen causes listed.
+- seg 103: ROOT VERSE 1 with L4→L1 fronting ("As far as I am able
+  I'll explain" opens; Tibetan puts it last) — seg-89 pattern is
+  GMR's standing verse method. rgyal ba → "the Victors" (KEPT, vs
+  "the Buddhas" 63 — spread). skal ldan → "the fortunate" (spread).
+- seg 104: THE PERFECT MINIMAL PAIR — gung thang 'jam pa'i dbyangs
+  (human) → "Gungtang Jampeyang" transliterated; same name as deity
+  → "Gentle Voice": the onomastic proof case. sa dge rnying TRIPLE
+  CLIP unpacked (Sakya/Geluk/Nyingma; layer-7 triple); living
+  schools transliterated, Kadampa alone translated — asymmetry.
+  lam gyi rim pa coined "Steps of the Path". drang nges → "literal
+  or not". thams cad mkhyen pa #6 "omniscient". chab shog →
+  "epistle"; phul → "offered".
