@@ -554,7 +554,7 @@ letter-exact battery gates every batch.
   (74's coinages reprised verbatim + self-referential "what we have
   called here"). khungs #4 "authentic source". Supplied transition
   sentence (filed with 115's). Self-quotes ×5 — densest cluster.
-| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p45 (144–172) done; 143 = marker pair; 173+ open; C01 max seq = 496 |
+| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p46 (144–175) done; 143 = marker pair; 176+ open; C01 max seq = 496 |
 
 NEXT: continue section VII (seq 146+) — the renunciation chapter.
 - seg 143: section-marker pair (like 43) — wylie carries "the first
@@ -702,3 +702,14 @@ batch 2 is PAID. Disk 13Gi (Time Machine purged). Drift sweep next.
 - seg 172: thebs med → "uncatchable"; khrel med → "UNABASHABLE" (a
   coined English word — GMR minting vocabulary); Sending/Laying/
   Keeping participial series. sprang → "the beggar".
+- seg 173: gral → "the ranks" ×3 (kept, vs 111's fold — pair
+  filed). lha → "the gods" (#3). "lastly" supplied.
+- seg 174: rten unpacked into three predicates (list-expansion);
+  lan gcig tsam grown into a whole sentence; gains-list tripled
+  with supplied anaphora ("All.../every bit.../everything else").
+- seg 175: TWO-VOICE MEDITATION (fear + resolve both dramatized;
+  "Think then to yourself this way:" supplied pivot). FIAT FORMULA:
+  byas na'ang byas → "then let me become a beggar". zas gos ngan
+  ngon distributed into two beggar-scene clauses. mthun rkyen →
+  "the bare necessities" (spread vs 139). mi yong ngam → "I'm
+  afraid that".
