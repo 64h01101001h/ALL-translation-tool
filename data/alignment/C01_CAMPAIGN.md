@@ -714,6 +714,18 @@ batch 2 is PAID. Disk 13Gi (Time Machine purged). Drift sweep next.
   "the bare necessities" (spread vs 139). mi yong ngam → "I'm
   afraid that".
 
+*** ADAM'S INTENT 2026-08-27 (second ruling, same day): the
+eighteen-course scan is building toward a SUCCESSOR DICTIONARY —
+"the Michael dictionary" (his phrase) — built exclusively from
+GMR's published English as attested in these scans, intended to
+eventually TAKE THE PLACE of the current HGM glossary. Standing
+implications for every batch: letter-exact only (battery-enforced),
+full course:seq provenance, register spreads/convergences recorded
+with counts (they are the future sense-structure), typos flagged
+never entered, uncertain readings flagged never guessed. hgm_gloss
+stays binding and the layer stays TENTATIVE until Adam rules on
+promotion — the replacement is his call at the end. ***
+
 *** ADAM'S MANDATE 2026-08-27: the campaign continues through ALL
 EIGHTEEN ACI COURSES — after C01 completes, proceed C03, C04, ...
 C18 in course order, same batch method. The spine already holds all
