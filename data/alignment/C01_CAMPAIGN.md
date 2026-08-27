@@ -12,7 +12,7 @@ letter-exact battery gates every batch.
 | Section | Segments | Status |
 |---|---|---|
 | Root text (r1–r5) | 23–38 | ✓ DONE 2026-08-26 |
-| I–VI. The Lama and the Word; preliminaries | 40–142 | c1p01–c1p23 (40–107) done; 43 = marker pair; 108–142 open |
+| I–VI. The Lama and the Word; preliminaries | 40–142 | c1p01–c1p24 (40–110) done; 43 = marker pair; 111–142 open |
 | VII–X. Why You Need Renunciation | 143–258 | open |
 | XI–XIII. Why You Need the Wish | 259–323 | open |
 | XIV–XVIII. Why You Need Correct View | 324–426 | open |
@@ -370,3 +370,21 @@ letter-exact battery gates every batch.
   sde snod gsum → "three collections" (no basket/Tripitaka). 'jam
   mgon → "the gentle protector" (closes 78's spread). 'du chain ×3
   all "included" — the inclusion verb's two English families filed.
+- seg 108: THE PUN COMPLETED — bgrangs ("counted", rosary verb) →
+  "read its beads": metaphor extended into the verb. bka' gdams →
+  "the Seers" — the translated school name gets its own English
+  CLIP. Verse triple echo partially preserved (word/Advice/Seers).
+  "phreng pa" spelling variant filed.
+- seg 109: POLICY REFINES — texts translated even when Sanskrit-
+  named: gsang ba 'dus pa → "Secret Collection", mngon rtogs rgyan
+  → "Jewel of Realizations" (rgyan → "Jewel" now fixed). Titles →
+  English, authors → Sanskrit. bstan bcos #5 "classical commentary".
+- seg 110: THE KEY IMAGE — 'phrul gyi lde mig / sgo brgya 'byed pa
+  → "a magic key that opens a hundred different doors": the
+  metaphor behind the commentary's own translated title, in the
+  text itself. PHAR/TSHUR pair unpacked into full directional
+  clauses with referents supplied (heaviest deixis-unpacking).
+  tstsha khang = 5th ACIP-Sanskrit-family token — loanword KEPT AND
+  GLOSSED ("tsatsa sheds around town where we dispose of...").
+  'du family's two English houses (packed/included) both live in
+  adjacent segments.
