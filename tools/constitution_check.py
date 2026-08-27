@@ -88,6 +88,11 @@ def main():
     msgbox += len(re.findall(r"QInputDialog::(getText|getItem|getInt|"
                              r"getDouble|getMultiLineText)\s*\(",
                              main_cpp))
+    # STATIC-R4: constructor-form dialogs (QMessageBox box(...);
+    # ... box.exec()) were structurally invisible to the static-call
+    # census - one live uncounted site existed when this landed.
+    msgbox += len(re.findall(
+        r"\b(?:QMessageBox|QInputDialog)\s+\w+\s*\(", main_cpp))
     baseline_path = os.path.join(root,
                                  "tools/constitution_baseline.txt")
     if os.path.exists(baseline_path):
@@ -314,6 +319,30 @@ def main():
     # (BUILD-10, mutation-proven). A gate is LIVE when at least one
     # uncommented invocation carries no failure-swallower; the press
     # runs under set -euo pipefail, so an unswallowed failure stops it.
+    # REL-5: the ritual ABOVE the press decays the same way - a
+    # written gate nothing checks (the MEM-5 mode). release.sh's own
+    # gates get the same liveness rules as the press's.
+    rel_sh = ""
+    rel_path = os.path.join(root, "tools", "release.sh")
+    if os.path.exists(rel_path):
+        rel_sh = open(rel_path, encoding="utf-8").read()
+    for gate, label in (("sanitized_battery.sh", "release sanitizer gate"),
+                        ("mutate.py --sweep", "release mutation gate"),
+                        ("package_macos.sh", "press-before-tag gate")):
+        live = 0
+        for ln in rel_sh.splitlines():
+            t = ln.strip()
+            if t.startswith("#") or gate not in ln:
+                continue
+            if "|| true" in ln or "||true" in ln:
+                continue
+            live += 1
+        if rel_sh and live == 0:
+            fails.append(
+                f"C2 tools/release.sh: the {label} ('{gate}') has no "
+                f"live invocation - deleted or disarmed; the release "
+                f"ritual must keep its gates (REL-5, the MEM-5 decay "
+                f"mode)")
     for gate, label in (("ctest", "battery gate"),
                         ("shot_diff.py", "visual-regression gate"),
                         ("constitution_check.py", "constitution gate")):
