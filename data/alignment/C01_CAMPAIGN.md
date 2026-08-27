@@ -12,7 +12,7 @@ letter-exact battery gates every batch.
 | Section | Segments | Status |
 |---|---|---|
 | Root text (r1–r5) | 23–38 | ✓ DONE 2026-08-26 |
-| I–VI. The Lama and the Word; preliminaries | 40–142 | c1p01–c1p32 (40–134) done; 43 = marker pair; 135–142 open |
+| I–VI. The Lama and the Word; preliminaries | 40–142 | c1p01–c1p33 (40–137) done; 43 = marker pair; 138–142 open |
 | VII–X. Why You Need Renunciation | 143–258 | open |
 | XI–XIII. Why You Need the Wish | 259–323 | open |
 | XIV–XVIII. Why You Need Correct View | 324–426 | open |
@@ -507,3 +507,20 @@ letter-exact battery gates every batch.
   cut... And to develop..."); gcod literal ("cut"). bdag med →
   "no-self" (spread vs "no self-nature" 69). bsngags pa brjod →
   "whose praises they sing" (spread vs 129). ma nor ba #6.
+- seg 135: THE FRAME SURFACES — gsungs → "our Lama concluded": the
+  zin-bris classroom made explicit in English for the first time.
+  myang 'das → "nirvana" = the NATURALIZED-LOANWORD exception.
+  THIRD APPARATUS BLEED (nn.61–78 + Reading Five header) elided +
+  mined: n.63 confirms 105 ("Dipamkara Jnyana refers to Lord
+  Atisha"); n.67 coins "the Great Mistake"; n.72 = GMR's own
+  textual criticism; n.75 defines Bon. daND''i #2.
+- seg 136: ROOT VERSE 2 — verse-final imperative nyon ("Listen!")
+  fronted to open the English: L4→L1 method's third verse. The
+  74-coined sa-bcad name repeats near-verbatim 60 segments on.
+  dvang ba (wa-zur) filed for variant machinery.
+- seg 137: SPEECH-ACT PROMOTION #4 with supplied triple apostrophe.
+  THE TRIPLE DOUBLED: lam log/lam gol/yan-lag-cha-shas rendered
+  twice (positive + negative sets, crossing clause order) — six "a
+  path that..." anaphora from three items: largest expansion device
+  in the file. bzhi brgya pa → "the 400 Verses" (digits in a title,
+  unique). rten → "the body you've found"; snying po #5.
