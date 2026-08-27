@@ -554,7 +554,7 @@ letter-exact battery gates every batch.
   (74's coinages reprised verbatim + self-referential "what we have
   called here"). khungs #4 "authentic source". Supplied transition
   sentence (filed with 115's). Self-quotes ×5 — densest cluster.
-| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p61 (144–220) done; 143 = marker pair; 221+ open; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
+| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p62 (144–223) done; 143 = marker pair; 224+ open; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
 
 NEXT: continue section VII (seq 146+) — the renunciation chapter.
 - seg 143: section-marker pair (like 43) — wylie carries "the first
@@ -1112,3 +1112,29 @@ TCS series and collections beyond, for later ruling). ***
   segment. lag tu ma blangs → "could not put... into actual
   practice" (lag file). ches mang ba → "absolute multitudes".
   khyad du bsad → "chose to disregard" ("chose" supplied).
+
+### c1p62 — C01:221–223 (batch 62) — no exemptions; the first principle
+- Tenth consecutive zero-catch batch. Layer: 2,054 headwords /
+  3,686 pairs.
+- seg 221: PERSON SHIFT + SUPPLIED ANAPHORA — impersonal concessive
+  list → direct address ("You can be... you can be... you can
+  have...") with supplied opening ("And we must heed these
+  laws."); condition clause surfaces third (crossed ids). mngon
+  shes → "extrasensory powers"; rdzu 'phrul → "ability to perform
+  miracles". sde snod 'dzin pa SPREAD: "learned" (189) vs full
+  unpacking (221). rnal 'byor pa → "an advanced meditator"
+  (exponent #4). nan tan → "behave with care".
+- seg 222: ONOMASTIC SPLIT IN ONE SENTENCE — legs skar → "Lekkar"
+  (Tibetan monk, transliterated) vs lhas byin → "Devadatta"
+  (Sanskrit restored from the calque). chos phung → "we call a
+  'heap'" (coinage two-step, fn 112). INVERSE ELEGANT VARIATION:
+  Tibetan varies (lag tu ma blangs 220 / nyams su ma blangs 222),
+  English levels ("put into actual practice" both) — mirror of
+  215's one-verb-five-ways. blor ×2 → "recite"/"in his memory".
+  ches mang du → "almost countless" (vs "absolute multitudes" 220).
+- seg 223: FORMULA REUSE VERBATIM — the first principle repeats
+  212's exact sentence ("actions are certain to produce similar
+  consequences") eleven segments later; terminological self-
+  consistency documented. kho na...mi 'byung → "only X, never Y".
+  Virtuous/non-virtuous parallelism preserved to the word. bde ba
+  spread: happiness (216 verse) / pleasure (223 analysis).
