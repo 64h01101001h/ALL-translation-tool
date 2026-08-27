@@ -554,7 +554,7 @@ letter-exact battery gates every batch.
   (74's coinages reprised verbatim + self-referential "what we have
   called here"). khungs #4 "authentic source". Supplied transition
   sentence (filed with 115's). Self-quotes ×5 — densest cluster.
-| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p57 (144–208) done; 143 = marker pair; 209+ open; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
+| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p58 (144–211) done; 143 = marker pair; 212+ open; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
 
 NEXT: continue section VII (seq 146+) — the renunciation chapter.
 - seg 143: section-marker pair (like 43) — wylie carries "the first
@@ -1006,3 +1006,32 @@ TCS series and collections beyond, for later ruling). ***
   into" + "base" supplied. EVIDENTIAL snang → "it would appear"
   (snang file: evidential sense). CLAUSE REORDERING shown by
   crossed clause ids (tib c2 ↔ eng position 3).
+
+### c1p58 — C01:209–211 (batch 58) — actions and their consequences
+- Sixth consecutive zero-catch batch. Layer: 1,985 headwords /
+  3,511 pairs. 3,500-pair milestone crossed.
+- seg 209: THE SCOPE VOCABULARY — skyes bu chung ngu / 'bring →
+  "people whose practice is of a lesser scope" / "people of a
+  medium scope". lam gtso 'dir → "Here in the teaching on the
+  three principal paths" (the text names itself). kyang MIGRATES
+  a third time (concessive surfaces in the next English
+  sentence). CROSS-SEGMENT SYNTAX: 209-final genitive "gsungs
+  pa'i" has its head noun in 210 (gnad) — segment boundary cuts a
+  noun phrase; English closes the sentence and 210 opens with a
+  supplied topic sentence. zung 'brel → "a combination of".
+- seg 210: THE 'KHOR PUN PRESERVED — 'khor bar 'khor bas → "will
+  wheel one back into the circle of life". phra zhing phra ba
+  (doubling) → "so extremely subtle". SUPPLIED TOPIC SENTENCE
+  carries its own eng-only clause id (s210cT — house first).
+  mtha' dag → "each and every". ldog → "defeat" (spread:
+  stop / turn back / defeat).
+- seg 211: DISTRIBUTED DOUBLETS — dkar nag + blang dor → "take up
+  white actions and abandon black actions" (4 syllables → full
+  parallel clause pair). las 'bras COMPLETES A FOUR-WAY REGISTER
+  SPREAD IN ONE BATCH: "deeds and their fruits" (verse 207) /
+  "the principles of..." (209) / "the law of..." (211) / bare
+  "actions and consequences" (211) — model successor-dictionary
+  entry. ANAPHORIC CHAIN des na / de la / de la → "Thus we can
+  say that / But to do this / And to do this". UNCERTAIN READING
+  (not typo): dang por ("first") → "at all" (possibly intended
+  "at first"); kept verbatim, filed.
