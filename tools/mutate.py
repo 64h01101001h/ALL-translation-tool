@@ -276,7 +276,22 @@ def cmd_sweep(path, only_id=None):
     if only_id:
         muts = [m for m in muts if m["id"] == only_id]
     results = []
+    import shutil as _sh
     for m in muts:
+        # ENOSPC tripwire (the two deaths of 2026-08-26): a sweep
+        # that dies mid-mutation strands a planted mutant in the
+        # tree. Below the floor it stops CLEANLY between entries -
+        # tree restored by the completed entry, lock released by
+        # atexit, partial score reported as partial.
+        free_mb = _sh.disk_usage(".").free // (1024 * 1024)
+        if free_mb < 500:
+            print("=" * 62)
+            print("SWEEP STOPPED CLEANLY: %d MB free (< 500 MB floor)."
+                  % free_mb)
+            print("The tree is restored; %d of %d entries ran. This "
+                  "is a PARTIAL run - free disk and rerun for a "
+                  "quotable score." % (len(results), len(muts)))
+            return 1
         print("=" * 62)
         print("%-22s expect=%s" % (m["id"], m["expect"]))
         rc = mutate(m["file"], m["old"], m["new"], m.get("test"),
