@@ -16116,6 +16116,37 @@ public:
             check(!saveOrWarn(nullptr, noDir, "abc", "TEST-2 probe"),
                   "saveOrWarn reports FALSE for an unopenable path "
                   "(TEST-2)");
+            // TP-5 (re-measurement): the SHORT-WRITE branch - write
+            // succeeds to open, fails to land the bytes - was the
+            // one quadrant no drill reached, and it is the ENOSPC
+            // shape. RLIMIT_FSIZE with SIGXFSZ ignored reproduces it
+            // deterministically (the house DATA-4 technique).
+            {
+                const QString sw = QDir::temp().filePath(
+                    "all_selftest_tp5_short.txt");
+                QFile::remove(sw);
+                QByteArray big(200000, 'x');
+                struct rlimit oldLim {};
+                const bool haveLim =
+                    getrlimit(RLIMIT_FSIZE, &oldLim) == 0;
+                bool limOn = false, verdict = true;
+                if (haveLim) {
+                    auto* prevH = signal(SIGXFSZ, SIG_IGN);
+                    struct rlimit lim = oldLim;
+                    lim.rlim_cur = 4096;
+                    limOn = setrlimit(RLIMIT_FSIZE, &lim) == 0;
+                    if (limOn)
+                        verdict = saveOrWarn(nullptr, sw, big,
+                                             "TP-5 probe");
+                    (void)setrlimit(RLIMIT_FSIZE, &oldLim);
+                    (void)signal(SIGXFSZ, prevH);
+                }
+                check(limOn, "TP-5 short-write fixture armed");
+                check(limOn && !verdict,
+                      "saveOrWarn reports FALSE for a SHORT write - "
+                      "opened fine, bytes did not land (TP-5)");
+                QFile::remove(sw);
+            }
             // FAIL-12: every drill used to WRITE its fixture first,
             // so a read-only location collapsed the drill instead of
             // testing the app. This probe makes the directory itself

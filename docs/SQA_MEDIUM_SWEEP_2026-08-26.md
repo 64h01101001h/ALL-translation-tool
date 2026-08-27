@@ -166,3 +166,38 @@ Still open from the re-measurement: one gate-script high (link_truth
 teaching count), one build high (VERSION single-sourced), one perf
 high (goferSearchFiles, magnitude disputed); mediums itemized in the
 assessment's tables.
+
+---
+
+## Second addendum — the re-measurement's own tier, worked (26 Aug, evening)
+
+Every HIGH from the 26 Aug assessment is closed (G3, GATE-1, REL-1,
+TP-1, PERF-R1) plus the eighteen-finding write-path family whole.
+The medium tier's disposition, this evening's run:
+
+**Closed with pins/kills:** GATE-2/TP-3 (the sweep's own crashing
+report), GATE-3 (skippable liveness), GATE-4 (the gate wrote its own
+baseline), GATE-5/6/8 (empty-input refusals, each proven on hollow
+input), GATE-7 (loud core-only skip), REL-2 (hollow-fleet green),
+REL-3 (the retry that could never retry), REL-4 (clean release
+builds), REL-5 (C2 watches release.sh), TP-2 (the sweep joins the
+release ritual), TP-5 (the short-write quadrant - the exact mutant
+the assessment predicted survives is now killed), STATIC-R1 (press
+warning wall), STATIC-R4 (constructor-form census, +1 site found),
+DH-3 (the last red provisional mark + G3's second eye), DH-4 (the
+demo's 18% line), MEM-N1 (the OR-chain crash the paren cap missed -
+reproduced 139, capped, killed), MEM-N2/N3/N4 (NULL and stoi
+guards), PERF-R2 (the evaluators reconverged, with the
+masked-strand and honest-survivor lessons banked).
+
+**Recorded honestly:** TP-4's two OCR-flag counters as
+expect=survived entries per this ledger's own rule (need an OCR
+fixture to convert); PERF-R2's OR-resize as defense-in-depth;
+STATIC-R2 not reproducible (census 33 = baseline 33).
+
+**Design-scale, parked with PERF-13:** PERF-R3 (tm84000 sync build),
+PERF-R5 (synchronous document open).
+
+The standing mutation set: 26 entries (from 10 this morning), every
+killed entry individually proven, the survivors carrying their
+reasons. The full drift-run still waits on disk headroom.
