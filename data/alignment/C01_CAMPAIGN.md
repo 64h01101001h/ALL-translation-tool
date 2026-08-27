@@ -12,7 +12,7 @@ letter-exact battery gates every batch.
 | Section | Segments | Status |
 |---|---|---|
 | Root text (r1–r5) | 23–38 | ✓ DONE 2026-08-26 |
-| I–VI. The Lama and the Word; preliminaries | 40–142 | c1p01–c1p10 (40–68) done; 43 = marker pair; 69–142 open |
+| I–VI. The Lama and the Word; preliminaries | 40–142 | c1p01–c1p11 (40–71) done; 43 = marker pair; 72–142 open |
 | VII–X. Why You Need Renunciation | 143–258 | open |
 | XI–XIII. Why You Need the Wish | 259–323 | open |
 | XIV–XVIII. Why You Need Correct View | 324–426 | open |
@@ -125,3 +125,22 @@ letter-exact battery gates every batch.
   Steps to Buddhahood" (title by his own seg-63 convention);
   citation frame las → "As...says," opens the first Great-Books
   quote (lands seg 69). "the same old" = supplied oral color.
+- seg 69: TOPIC-SUSPENSION INVERSION — the ni-marked topic (dge
+  sbyor rnams ni) held to the Tibetan's END, fronted to OPEN the
+  English: one link spanning the whole segment. ma rnyed / ma dpyad
+  / bral ba chain → "yet to / still haven't / still lack" (65's
+  doubling now a graded tripling). 'khor ba file SIX exponents wide.
+  FIRST CONVERGENCE WARNING: shes rab and ye shes both → "wisdom"
+  (filed for oversight surface — reverse of a spread). bdag med →
+  "no self-nature". byang chub kyi sems tail #4 ("reach").
+- seg 70: THE SOUND-PLAY GEM — 'khor ba'i 'khor lo bskor ba (triple
+  'khor cognates) → "you come back round around the round of
+  rebirth": first phonaesthetic link. kun 'byung (samudaya) → "the
+  same old source of suffering" (definition render; "same old" ×2 =
+  house colloquialism). zhing → "some particularly holy object".
+- seg 71: THIRD ONOMASTIC GEM — bka' gdams gong ma → "The Seers of
+  the Word in olden days" (no "Kadampa"). The saying in pure
+  American colloquial ("Everybody's got... nobody's got"); rgyu…re
+  triple → "meditating/talking/thinking about". lha → "mystic
+  being"; sngags → "mystic words"; chos → "real practice". dgongs
+  (hon.) dissolved into "were making the same point".
