@@ -99,7 +99,26 @@ echo "   banked release v$VERSION passes"
 if [[ "${1:-}" != "--skip-build" ]]; then
   echo "== 1. Release build =="
   cmake -S "$ROOT" -B "$BUILD" -DCMAKE_BUILD_TYPE=Release >/dev/null
-  cmake --build "$BUILD" -j 8 >/dev/null
+  # REL-4: a release press must not inherit the everyday tree's
+  # stale objects (the cp-restore mtime hazard verify.sh documents -
+  # and this session LIVED it: a mutant .o rode a restored source).
+  # release.sh exports ALL_PRESS_CLEAN=1; a clean build costs minutes
+  # and buys a tree whose every object came from this source.
+  if [ "${ALL_PRESS_CLEAN:-0}" = "1" ]; then
+    echo "   ALL_PRESS_CLEAN: full rebuild (release ritual)"
+    cmake --build "$BUILD" --target clean >/dev/null
+  fi
+  # STATIC-R1: the press used to pipe its build to /dev/null - the
+  # one build nothing ever checked for warnings. Same wall as
+  # verify.sh: an own-code warning fails the press.
+  PRESS_BUILD_LOG=/tmp/all_press_build.log
+  cmake --build "$BUILD" -j 8 2>&1 | tee "$PRESS_BUILD_LOG" | grep -E "error|warning" || true
+  PRESS_WARN=$(grep -E "warning:" "$PRESS_BUILD_LOG"       | grep -E "$ROOT/(app|core|ocr|tools)/"       | grep -vE "/(third_party|thirdparty)/" | sort -u || true)
+  if [ -n "$PRESS_WARN" ]; then
+    echo "PRESS REFUSED - compiler warnings in our own code (STATIC-R1):"
+    echo "$PRESS_WARN"
+    exit 12
+  fi
   echo "== 2. batteries on the Release build =="
   # BUILD-7: 37 of the 73 suites read data git does not track. An absent
   # fixture is now an honest ctest SKIP (cmake/AllFixtureTests.cmake)

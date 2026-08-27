@@ -117,6 +117,14 @@ foreach(_d core ocr app)
     math(EXPR _all_registered "${_all_registered} + ${_d_n}")
   endif()
 endforeach()
+if(NOT ALL_BAT_WRITTEN)
+  # GATE-7: a core-only configure (no Qt6) cannot compute the
+  # written-suite census, so the gate-loss comparison CANNOT run -
+  # said out loud instead of silently skipped
+  message(STATUS "ALL battery: BUILD-19 written-vs-registered "
+                 "comparison SKIPPED (core-only configure - no app "
+                 "census); the full gate needs a Qt6 configure")
+endif()
 if(ALL_BAT_WRITTEN AND _all_registered LESS ALL_BAT_WRITTEN
    AND NOT ALL_ALLOW_REDUCED_BATTERY)
   math(EXPR _all_missing "${ALL_BAT_WRITTEN} - ${_all_registered}")
