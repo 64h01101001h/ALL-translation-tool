@@ -212,6 +212,27 @@ int main() {
         // depth must still parse.
         allcore::LibraryIndex mix((fs::temp_directory_path() /
                                    "libindex_mem7.db").string());
+        // Mechanism pin: 4000 parens sits ABOVE the 200-paren depth
+        // cap but BELOW the 5000-term chain cap, so only the depth
+        // guard can refuse it - the sweep found the original 300k
+        // probe masked by the MEM-N1 counter (terms_ increments per
+        // parseTerm call, parens included), letting the depth-cap
+        // mutant survive. The message assert keeps the two guards
+        // distinguishable forever.
+        std::string mid(4000, '(');
+        mid += "\"bden pa\"";
+        mid += std::string(4000, ')');
+        std::string midMsg;
+        try {
+            (void)mix.search(mid, 5);
+        } catch (const std::exception& e) {
+            midMsg = e.what();
+        }
+        CHECK(midMsg.find("nested deeper than 200") != std::string::npos,
+              "a 4000-deep query is refused BY THE DEPTH CAP, with its "
+              "own message (MEM-7)");
+        // Property pin: the original 300k reproduction must never
+        // crash, whichever guard catches it first.
         std::string deep(300000, '(');
         deep += "\"bden pa\"";
         deep += std::string(300000, ')');
