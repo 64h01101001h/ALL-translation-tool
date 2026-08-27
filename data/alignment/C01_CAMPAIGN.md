@@ -554,7 +554,7 @@ letter-exact battery gates every batch.
   (74's coinages reprised verbatim + self-referential "what we have
   called here"). khungs #4 "authentic source". Supplied transition
   sentence (filed with 115's). Self-quotes ×5 — densest cluster.
-| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p58 (144–211) done; 143 = marker pair; 212+ open; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
+| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p59 (144–214) done; 143 = marker pair; 215+ open; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
 
 NEXT: continue section VII (seq 146+) — the renunciation chapter.
 - seg 143: section-marker pair (like 43) — wylie carries "the first
@@ -1035,3 +1035,27 @@ TCS series and collections beyond, for later ruling). ***
   say that / But to do this / And to do this". UNCERTAIN READING
   (not typo): dang por ("first") → "at all" (possibly intended
   "at first"); kept verbatim, filed.
+
+### c1p59 — C01:212–214 (batch 59) — the four principles; two births
+- Seventh consecutive zero-catch batch.
+  *** LAYER CROSSED 2,000 HEADWORDS (2,004 / 3,563 pairs). ***
+- seg 212: THE NUMBERED LIST SUPPLIED — the four principles of
+  action get "1)–4)" and full predicate sentences (Tibetan lists
+  nominal phrases); "similar consequences" supplied in #1. Page
+  marks each principle at phrase level (p1–p4) both sides. dad pa
+  → "belief" + yid ches → "well-founded" (faith term made
+  precise). blang dor REVERSED vs 211 ("avoid... begin" — negative
+  first). lag len → "in his daily life". rang shugs kyis →
+  "automatically". zhib tu spread: meticulously (203) / very
+  carefully (212). 'phrad spread: catch (200) / meet (212).
+- seg 213: kha bskang → "weave in". SECOND MENTION COMPRESSED:
+  lam rim → full title then "the Steps" (inverse of renamed-on-
+  re-mention; both directions filed). Intent-clause reordered to
+  trailing position (crossed ids). dgongs pa → "the intent".
+- seg 214: mar me shi ba — Tibetan lends the DEATH-verb to the
+  lamp (echoing 'chi ba); English splits the echo ("die"/"go
+  out") — echo-loss filed. ngan 'gro / bde 'gro realm/birth
+  alternation (199 vs 214). 'phen → "throw you into" (stated once,
+  repeated twice in English — gapping filled). rang dbang med par
+  → "totally helpless". "one of the THREE of misery" — cross-
+  reference supplied from 213.
