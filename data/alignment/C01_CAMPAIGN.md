@@ -554,7 +554,7 @@ letter-exact battery gates every batch.
   (74's coinages reprised verbatim + self-referential "what we have
   called here"). khungs #4 "authentic source". Supplied transition
   sentence (filed with 115's). Self-quotes ×5 — densest cluster.
-| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p50 (144–187) done; 143 = marker pair; 188+ open; C01 max seq = 496 |
+| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p51 (144–190) done; 143 = marker pair; 191+ open; C01 max seq = 496 |
 
 NEXT: continue section VII (seq 146+) — the renunciation chapter.
 - seg 143: section-marker pair (like 43) — wylie carries "the first
@@ -790,3 +790,17 @@ TCS series and collections beyond, for later ruling). ***
   (doubling for doubling). TSHAD MA → "a being who cannot lie" +
   slu ba med → "whose words can never fail" (pair → parallel
   predicates). "want for necessities" refrain 186→187.
+- seg 188: 'di snang → "the pleasures of this life" (snang #7).
+  Double render "thoughts or attachments". Title split: rgyal mchog
+  → "Gyalchok" (absorbed) vs paN chen → "the Panchen" (kept; 12th
+  ACIP token). "personages of fantastic material wealth" supplied.
+- seg 189: COUNTERFACTUAL SUPPLIED ("could have had the kingdom");
+  'khor sgyur → "World Emperor" (vs "Wheel Emperor" 184 — variant).
+  zhi ba lha → "Shantideva" (Sanskrit restored); rgyal sras → "The
+  princes" (name/noun split). aa ti sha + tA zhin = 13th/14th ACIP
+  tokens; Tashin kept+glossed. "Purest Eight" coined. gdan ma
+  'drongs → "could not induce him to come" (idiom by effect).
+  Tears-tableau formula ×2 (dzar re/tsa re both → same render).
+- seg 190: bsod snyoms (pindapata) → "whatever food someone might
+  offer them" (alms unpacked, no loanword). phyag bzhes → "led a
+  way of life that followed". Riches reprised in full coinage.
