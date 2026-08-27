@@ -554,4 +554,19 @@ letter-exact battery gates every batch.
   (74's coinages reprised verbatim + self-referential "what we have
   called here"). khungs #4 "authentic source". Supplied transition
   sentence (filed with 115's). Self-quotes ×5 — densest cluster.
-NEXT: sections VII+ (C01 seq 143+) — renunciation chapter onward.
+| VII. Why You Need Renunciation (opens) | 143–496 | c1p36 (144–145) done; 143 = marker pair; 146+ open; C01 max seq = 496 |
+
+NEXT: continue section VII (seq 146+) — the renunciation chapter.
+- seg 143: section-marker pair (like 43) — wylie carries "the first
+  path: renunciation" / EN "VII. Why You Need Renunciation"; noted,
+  not aligned.
+- seg 144: main-body sa bcad opens with all standing coinages
+  ("main body of the text" 74/142; telegraphic formula expanded;
+  "strong words of" supplied). tshad → "the point at which we can
+  say one has succeeded" — biggest single-word unpacking in the
+  sa-bcad file. nges pa rnyed → "recognize the truth".
+- seg 145: ROOT VERSE 3 — quotation IDENTICAL word-for-word to the
+  root-text English at C01:27 (r2): counterpart to the seg-24/75
+  witness case, both copies agreeing. thabs med fronting in
+  miniature (L2-end opens the English). brkam pa → "hankering"
+  (new desire-file exponent). lus can → "beings" (flattened).
