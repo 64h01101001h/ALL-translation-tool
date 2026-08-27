@@ -12,7 +12,7 @@ letter-exact battery gates every batch.
 | Section | Segments | Status |
 |---|---|---|
 | Root text (r1–r5) | 23–38 | ✓ DONE 2026-08-26 |
-| I–VI. The Lama and the Word; preliminaries | 40–142 | c1p01–c1p08 (40–62) done; 43 = marker pair; 63–142 open |
+| I–VI. The Lama and the Word; preliminaries | 40–142 | c1p01–c1p09 (40–65) done; 43 = marker pair; 66–142 open |
 | VII–X. Why You Need Renunciation | 143–258 | open |
 | XI–XIII. Why You Need the Wish | 259–323 | open |
 | XIV–XVIII. Why You Need Correct View | 324–426 | open |
@@ -86,3 +86,22 @@ letter-exact battery gates every batch.
   mkhyen pa third family member ("the state where you know all
   things"). gsungs closes the Manjushri-advice frame opened at seg
   57 (honorific frame verb, ∅-marked, footnote 31).
+- seg 63: SEVENTH full/clip mirror, first INSIDE one segment (lam
+  gyi gtso bo rnam gsum ... lam gtso gsum, both "the three principal
+  paths" — the treatise's own title term). 'du chain ×3 → "packed
+  into / packed further, into / packed into, in turn". snying po'i
+  bcud phyung ba → "the top of the cream skimmed" (dairy idiom for
+  the nutritive-essence metaphor). rgyal ba → "the Buddhas"
+  (epithet flattened). rtog sgom coined + dpyad sgom unpacked.
+- seg 64: byang chub kyi sems FULL form closes the mirror with 61's
+  clip; definition constant, tail varies ("for the sake of all
+  living beings" vs "for every living being") — filed. 'ba' zhig ×3.
+  rgyud → "the stream of one's mind". phun tshogs → "the APPARENT
+  good things" (interpretive adverb — flagged). gting nas →
+  "absolute". snyam-na musing frame rendered as the question itself.
+- seg 65: med thabs med → a "without which, nothing" — sine qua non
+  calqued into English word order; beside "Lo Diamond" in the
+  onomastic/idiom file. One ma-skyes-na conditional doubled to two
+  "Suppose you never..." sentences. snying rje chen po scare-quoted
+  + unpacked. 'khor ba spread: circle of births / cycle of life /
+  the cycle (three exponents, one page).
