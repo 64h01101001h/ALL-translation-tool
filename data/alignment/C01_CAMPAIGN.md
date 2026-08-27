@@ -554,7 +554,7 @@ letter-exact battery gates every batch.
   (74's coinages reprised verbatim + self-referential "what we have
   called here"). khungs #4 "authentic source". Supplied transition
   sentence (filed with 115's). Self-quotes ×5 — densest cluster.
-| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p55 (144–202) done; 143 = marker pair; 203+ open; C01 max seq = 496 |
+| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p56 (144–205) done; 143 = marker pair; 206+ open; Reading Six / §IX (Stopping Desire for Future Lives) begins at 206; C01 max seq = 496 |
 
 NEXT: continue section VII (seq 146+) — the renunciation chapter.
 - seg 143: section-marker pair (like 43) — wylie carries "the first
@@ -923,3 +923,59 @@ TCS series and collections beyond, for later ruling). ***
   first and last time we will ever have such a chance". snying
   po...len → "make the greatest use we can of it" (snying-po-len
   exponent #2). kho na → "The single".
+
+### c1p56 — C01:203–205 (batch 56) — begin now; the map; the apparatus
+- Fourth consecutive zero-catch batch. Layer: 1,961 headwords /
+  3,438 pairs.
+- seg 203: POLARITY FLIP — ma blangs na ("if not taken up") → "we
+  must begin this practice" (negative conditional as positive
+  imperative). da lta nyid nas → "now, right now" (nyid as
+  doubling). mi rtag pa → "the inevitable" (spread exponent #2).
+  gsha' ma → "really" (attributive→adverbial spread). shes pa tsam
+  / bsam pa tsam → "just some vague awareness / thinking some" —
+  tsam as insufficiency. zhib tu → "meticulously".
+- seg 204: root-verse citation #2 — tshe la long med → "life's not
+  long". THE CATEGORY MAP: phan yon / nyes dmigs / dran tshul
+  dngos + rtsa ba gsum / rgyu mtshan dgu / thag bcad pa gsum →
+  benefits / problems / how-then-actually + three principles /
+  nine reasons / three resolves (thag bcad pa → "resolves").
+  ORDER-FLIP COUNTEREXAMPLE: 'chi ba mi rtag pa → "his own death
+  and impermanence" — Tibetan order KEPT (vs flipped at 194/196):
+  the collocation is NOT fixed; file amended. bsam byung →
+  "through the process of careful contemplation" (spread #2).
+  rgyud la skyes → "developed... within him" (mind-stream
+  domesticated). rkang tshugs → "taken its root" (idiom-for-idiom).
+  snang shas → "his desire for the pleasures".
+- seg 205: lam rim khrid → "the standard works on the Steps of the
+  path to Buddhahood" (signature render, first in file). las 'bras
+  → "actions and their consequences" (karma unpacked, no
+  loanword). ngan song → "the lower births". FRAME VERB MOVED:
+  final gsungs → "concluded our Lama" mid-sentence. shugs la
+  bstan / tshig zin la dngos su ma gsungs → "by implication / not
+  directly in the actual words" (hermeneutic pair).
+- APPARATUS BANK (seg 205's English carries the full "Notes to
+  Reading Five", endnotes 79–107, elided from the page with an
+  explicit label; alignment-relevant witnesses):
+  * note 97 CONFIRMS seg-188 identifications: Gyalchok Kelsang
+    Gyatso = 7th Dalai Lama (1708–1757, built Norbulingka);
+    Panchen Lobsang Yeshe = 2nd Panchen Lama (1663–1737).
+  * note 99 dates the seg-189 Chinese invitation: 1408, Yung Lo
+    (3rd Ming emperor); Tsongkhapa sent Jamchen Chuje Shakya
+    Yeshe (founder of Sera) in his stead; THE PUREST EIGHT NAMED
+    (Jamkarwa Jampel Chusang, Neten Sang-kyongwa, Neten Rinchen
+    Gyeltsen, Neten Jangsengpa, Lama Jampel Gyatso, Geshe Sherab
+    Drak, Geshe Jampel Tashi, Geshe Pelkyong).
+  * note 100: Wensapa (1505–1566) = "Lobsang Dundrup" (his
+    ordination name); the seg-191 song is from "Advices to
+    Myself" — the self-reference reading confirmed.
+  * note 89: "Droway Gonpo" is a name applied to a NUMBER of
+    Tibetan sages; attribution of the seg-quotes uncertain even
+    to GMR — onomastic file updated (name ≠ unique person).
+  * notes 104/105 enumerate the eight non-opportunities and the
+    2×5 fortunes behind segs 197–199.
+  * note 107 enumerates the nine reasons and three resolves
+    behind seg 204's category map (incl. Pabongka's full death-
+    bed description in GMR's English — future C01 material will
+    quote it; it is corpus-attested English for many death terms).
+  * Reading Six header confirms §IX "Stopping Desire for Future
+    Lives" begins at seg 206.
