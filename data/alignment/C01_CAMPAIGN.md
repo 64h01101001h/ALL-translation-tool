@@ -12,7 +12,7 @@ letter-exact battery gates every batch.
 | Section | Segments | Status |
 |---|---|---|
 | Root text (r1–r5) | 23–38 | ✓ DONE 2026-08-26 |
-| I–VI. The Lama and the Word; preliminaries | 40–142 | c1p01–c1p15 (40–83) done; 43 = marker pair; 84–142 open |
+| I–VI. The Lama and the Word; preliminaries | 40–142 | c1p01–c1p16 (40–86) done; 43 = marker pair; 87–142 open |
 | VII–X. Why You Need Renunciation | 143–258 | open |
 | XI–XIII. Why You Need the Wish | 259–323 | open |
 | XIV–XVIII. Why You Need Correct View | 324–426 | open |
@@ -231,3 +231,19 @@ letter-exact battery gates every batch.
   grub pa → "spiritual goals" (spread vs "great attainments" 54/56);
   bsten spread ("follow the practice of proper behavior towards" 81
   / "go and learn from" 83). chos #6 "a spiritual life".
+- seg 84: sAtstsha = SECOND ACIP-Sanskrit token in the wylie (the
+  tsa-tsa), unpacked to a full cultural gloss. Supplied question
+  opens the segment (catechetical habit). Conclusion fronted before
+  the mold-simile. bzang ngan → "for better or for worse"; de med
+  na expanded to supplied double-negative emphasis.
+- seg 85: INCIPIT-CITATION pattern ×3 — Tibetan cites by opening
+  words + sogs ltar; GMR names the practice ("the verse that begins
+  with..."). 'dul ba (Vinaya) → "vowed morality". sgo gsum → "three
+  gateways". mtshan nyid spread #3 ("characteristics").
+- seg 86: CORPUS TYPO FLAGGED — "ma math" for ma mtha' (kept
+  verbatim per never-guess; input-review queue). VERSE-FINAL VERB
+  FRONTED: brten (last word of Maitreya's verse) → "Take yourself
+  to" (English's first words) — boldest verse inversion yet. mdo
+  sde rgyan → "the Jewel of the Sutras" (rgyan→Jewel). Homograph
+  pair 'dul ba/dul ba both filed. thugs rgyud → "his mind" (rgyud
+  #3). de nyid → "suchness" — technical term kept technical (rare).
