@@ -554,7 +554,7 @@ letter-exact battery gates every batch.
   (74's coinages reprised verbatim + self-referential "what we have
   called here"). khungs #4 "authentic source". Supplied transition
   sentence (filed with 115's). Self-quotes ×5 — densest cluster.
-| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p47 (144–178) done; 143 = marker pair; 179+ open; C01 max seq = 496 |
+| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p48 (144–181) done; 143 = marker pair; 182+ open; C01 max seq = 496 |
 
 NEXT: continue section VII (seq 146+) — the renunciation chapter.
 - seg 143: section-marker pair (like 43) — wylie carries "the first
@@ -749,3 +749,17 @@ TCS series and collections beyond, for later ruling). ***
   of practice". (Cleanup-script lesson: a partial sed pass wrapped
   a dirty body once — battery refused it; fixed pattern-by-pattern,
   4th battery catch.)
+- seg 179: THE FIAT'S THIRD FORM — zer na'ang zer ×2 → "that's
+  fine/that's fine too"; the X-na'ang-X paradigm now three verbs
+  (byas/shi/zer), three renders — a paradigm ROW (dictionary-grade
+  sense evidence for the successor project). Gossip quoted (3rd:
+  mi tshos...red zer). ngo bsrung → "keep up a good image". lha →
+  "a god" (#4); 'dre → "a devil". 'byung gnas → "lead to" (spread).
+- seg 180: SPANGS DOUBLED (gtan du spangs → "Abandon, and abandon
+  forever" — new expansion device). 'di snang → "desire for this
+  life". SNYOMS TRIPLE filed (quell/vigil/one-and-the-same).
+  snying po med → "absolutely meaningless" (spread vs 168).
+- seg 181: snang ba → "outlook" — the snang file's SIXTH exponent.
+  173's formula verbatim + dash-qualified ("--men who live for this
+  life"). mtho dman → "high or low"; smyon pa → "a madman" with
+  "To them" supplied.
