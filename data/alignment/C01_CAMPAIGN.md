@@ -554,7 +554,7 @@ letter-exact battery gates every batch.
   (74's coinages reprised verbatim + self-referential "what we have
   called here"). khungs #4 "authentic source". Supplied transition
   sentence (filed with 115's). Self-quotes ×5 — densest cluster.
-| VII. Why You Need Renunciation (opens) | 143–496 | c1p36–c1p38 (144–151) done; 143 = marker pair; 152+ open; C01 max seq = 496 |
+| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p40 (144–157) done; 143 = marker pair; 158+ open; C01 max seq = 496 |
 
 NEXT: continue section VII (seq 146+) — the renunciation chapter.
 - seg 143: section-marker pair (like 43) — wylie carries "the first
@@ -604,3 +604,24 @@ NEXT: continue section VII (seq 146+) — the renunciation chapter.
 *** 2026-08-27: FULL tools/verify.sh GREEN — all suites, batteries
 ok nothing skipped, constitution holds. The debt standing since
 batch 2 is PAID. Disk 13Gi (Time Machine purged). Drift sweep next.
+- seg 152: BODHISATTVA DE-LOANWORDED (byang chub sems dpa' →
+  "people with the wish for enlightenment" — the guru-yoga move
+  again). "concluded our Lama" #2 (the zin-bris frame). Atisha's
+  quip fronted ("Only in Tibet..."); bka' bkyon → "his GENTLE
+  rebuke" ("gentle" supplied — softening even Atisha's scolding);
+  bod kyis migrates quote→frame. rang steng/gzhan steng = deictic
+  pair #3. Small header bleed ("VIII...") noted.
+- seg 153–154: SNANG SHAS ENTERS THE SA-BCAD (→ "desire", 4th
+  exponent — the outline runs on the register file's founding
+  term). ROOT VERSE 4ab identical to seg 28 (3rd cross-page
+  verification). "(4a)" half-verse numbering supplied.
+- seg 155: SNANG SHAS COINED by GMR himself ("What we mean by
+  'desire for this life' is..."). Inner speech dramatized with
+  supplied superlatives (best/finest/biggest). Battery caught an
+  invented double negative pre-commit (3rd catch) — fixed verbatim.
+- seg 156: UNCERTAIN #3 → TYPO #8: blos thongs spelled right here,
+  witnessing 127's "blos mthongs" (self-correcting corpus, case 2).
+  lta ci → "--no, worse,". Numbered list + Steps-titles coined.
+- seg 157: TITLE blo sbyong zhen pa bzhi bral → "Free of Four
+  Loves"; zhen → "loves" ×2 in the couplet (title and quote share
+  the exponent). VERDICT-FIRST couplet with both subjects supplied.
