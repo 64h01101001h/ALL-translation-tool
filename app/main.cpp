@@ -544,7 +544,7 @@ static const AiGlossMap* g_aiGlossary = nullptr;
 // segments that attest it.
 struct AlignPair {
     QString eng;
-    QList<int> segs;
+    QStringList refs;   // "COURSE:seq" - course-aware since C01 joined
 };
 using AlignMap = std::map<std::string, QList<AlignPair>>;
 static const AlignMap* g_alignEvidence = nullptr;
@@ -559,10 +559,11 @@ struct GLink {
     QString tib, eng;   // eng empty = no English exponent (real data)
     bool isCase = false;
 };
-using AlignGrammarMap = std::map<int, QList<GLink>>;
+using AlignGrammarMap = std::map<std::string, QList<GLink>>;   // "C01:23"
 static const AlignGrammarMap* g_alignGrammar = nullptr;
-// d5 headword -> the first segment whose alignment attests it
-static const std::map<std::string, int>* g_alignGrammarIx = nullptr;
+// d5 headword -> the first ref whose alignment attests it
+static const std::map<std::string, std::string>* g_alignGrammarIx =
+    nullptr;
 
 // Wilson's particle classes by surface form - the taxonomy's DEFAULT
 // reading (instance-specific functions, e.g. the adversative gyi of
@@ -1376,17 +1377,17 @@ static QString entryHtml(const allcore::Entry& e,
             for (const auto& pr : ita->second) {
                 if (shown >= 4) break;
                 QStringList segq;
-                for (int sg : pr.segs) {
-                    segq << QString::number(sg);
+                for (const QString& rf : pr.refs) {
+                    segq << rf;
                     if (segq.size() >= 5) break;
                 }
                 h += QString("<br>≡ “%1” "
                              "<small style='color:#8A6D1F'>(%2× "
-                             "· C02:%3%4)</small>")
+                             "· %3%4)</small>")
                          .arg(QString(pr.eng).toHtmlEscaped())
-                         .arg(pr.segs.size())
-                         .arg(segq.join(","))
-                         .arg(pr.segs.size() > 5 ? ",…" : "");
+                         .arg(pr.refs.size())
+                         .arg(segq.join(", "))
+                         .arg(pr.refs.size() > 5 ? ",…" : "");
                 ++shown;
             }
             if ((int)ita->second.size() > shown)
@@ -4439,6 +4440,14 @@ public:
             check(alignGrammarHtml("zzz-not-aligned").isEmpty(),
                   "a word with no alignment evidence gets NO grammar "
                   "block - absence, not fabrication");
+            // course-aware: a root-text word from the Three
+            // Principal Paths cites its C01 segment - the layer
+            // stopped being C02-shaped the day C01 joined
+            const QString g01 = alignGrammarHtml("nges 'byung");
+            check(g01.contains("C01:") &&
+                      g01.contains("GRAMMAR"),
+                  "a C01 root-text word cites its C01 segment "
+                  "(course-aware)");
         }
         // Adam, 2026-08-22: "where did the authors link go… shouldn't
         // there be an authors area that accompanies any text linked to
@@ -8949,18 +8958,23 @@ private:
         const std::string k = wylie.toLower().simplified().toStdString();
         auto it = g_alignGrammarIx->find(k);
         if (it == g_alignGrammarIx->end()) return QString();
-        const int segNo = it->second;
-        auto gi = g_alignGrammar->find(segNo);
+        const std::string& ref = it->second;
+        auto gi = g_alignGrammar->find(ref);
         if (gi == g_alignGrammar->end()) return QString();
-        const auto seg = spine_.corpusSegment("C02", segNo);
+        const QString refQ = QString::fromStdString(ref);
+        const int colon = refQ.indexOf(':');
+        if (colon <= 0) return QString();
+        const auto seg = spine_.corpusSegment(
+            refQ.left(colon).toStdString(),
+            refQ.mid(colon + 1).toInt());
         if (!seg) return QString();
         QString h;
         h += "<div style='background:#FDF3E7;border-left:3px solid "
              "#B4540A;padding:5px 9px;margin:8px 0;border-radius:4px'>"
              "<small style='color:#B4540A;letter-spacing:1px'>"
              "GRAMMAR \u2014 machine analysis under Wilson's taxonomy "
-             "(AI, PROVISIONAL \u00b7 default readings) \u00b7 C02:" +
-             QString::number(segNo) + "</small>";
+             "(AI, PROVISIONAL \u00b7 default readings) \u00b7 " +
+             refQ + "</small>";
         // the cited sentence, verbatim from the spine, headword bold
         QString wy = QString::fromStdString(seg->wylie).toHtmlEscaped();
         const QString needle = wylie.toHtmlEscaped();
@@ -26311,7 +26325,7 @@ private:
                     if (!alts.isEmpty()) alts += " · ";
                     alts += QString("\u201c%1\u201d (%2\u00d7)")
                                 .arg(pr.eng.toHtmlEscaped())
-                                .arg(pr.segs.size());
+                                .arg(pr.refs.size());
                     if (used.isEmpty() &&
                         dLow.contains(pr.eng.toLower()))
                         used = pr.eng;
@@ -35901,7 +35915,7 @@ int main(int argc, char** argv) {
     // that does not reconstruct letter-exact from the spine
     static AlignMap alignEvidence;
     {
-        QFile f(root + "/data/alignment/alignment_c02_v1.json");
+        QFile f(root + "/data/alignment/alignment_evidence_v1.json");
         if (f.open(QIODevice::ReadOnly)) {
             const auto o = QJsonDocument::fromJson(f.readAll())
                                .object()
@@ -35914,16 +35928,16 @@ int main(int argc, char** argv) {
                     AlignPair ap;
                     ap.eng = po.value("eng").toString();
                     for (const auto& sv :
-                         po.value("segs").toArray())
-                        ap.segs << sv.toInt();
-                    if (!ap.eng.isEmpty() && !ap.segs.isEmpty())
+                         po.value("refs").toArray())
+                        ap.refs << sv.toString();
+                    if (!ap.eng.isEmpty() && !ap.refs.isEmpty())
                         ps << ap;
                 }
                 // most-attested first: the card caps at four, so
                 // the strongest evidence must be what survives
                 std::sort(ps.begin(), ps.end(),
                           [](const AlignPair& x, const AlignPair& y) {
-                              return x.segs.size() > y.segs.size();
+                              return x.refs.size() > y.refs.size();
                           });
                 if (!ps.isEmpty())
                     alignEvidence[it.key().toStdString()] = ps;
@@ -35934,9 +35948,9 @@ int main(int argc, char** argv) {
     }
     // the full seven-layer bank -> the grammar view's per-segment map
     static AlignGrammarMap alignGrammar;
-    static std::map<std::string, int> alignGrammarIx;
+    static std::map<std::string, std::string> alignGrammarIx;
     {
-        QFile f(root + "/data/alignment/alignment_c02_full_v1.json");
+        QFile f(root + "/data/alignment/alignment_full_v1.json");
         if (f.open(QIODevice::ReadOnly)) {
             const auto arr = QJsonDocument::fromJson(f.readAll())
                                  .object()
@@ -35945,14 +35959,17 @@ int main(int argc, char** argv) {
             for (const auto& v : arr) {
                 const auto o = v.toObject();
                 if (o.value("seg").isNull()) continue;
-                const int seg = o.value("seg").toInt();
+                const std::string ref =
+                    (o.value("course").toString() + ":" +
+                     QString::number(o.value("seg").toInt()))
+                        .toStdString();
                 GLink g;
                 g.d = o.value("d").toInt();
                 g.tib = o.value("tib").toString();
                 g.eng = o.value("eng").toString();   // null -> empty
                 g.isCase = o.value("case").toBool();
                 if (g.tib.isEmpty()) continue;
-                alignGrammar[seg] << g;
+                alignGrammar[ref] << g;
                 if (g.d == 5) {
                     std::string k;
                     for (QChar c : g.tib.toLower())
@@ -35961,7 +35978,7 @@ int main(int argc, char** argv) {
                             .simplified()
                             .toStdString();
                     if (!alignGrammarIx.count(k))
-                        alignGrammarIx[k] = seg;
+                        alignGrammarIx[k] = ref;
                 }
             }
         }
