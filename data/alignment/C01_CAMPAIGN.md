@@ -12,7 +12,7 @@ letter-exact battery gates every batch.
 | Section | Segments | Status |
 |---|---|---|
 | Root text (r1–r5) | 23–38 | ✓ DONE 2026-08-26 |
-| I–VI. The Lama and the Word; preliminaries | 40–142 | c1p01–c1p07 (40–59) done; 43 = marker pair; 60–142 open |
+| I–VI. The Lama and the Word; preliminaries | 40–142 | c1p01–c1p08 (40–62) done; 43 = marker pair; 63–142 open |
 | VII–X. Why You Need Renunciation | 143–258 | open |
 | XI–XIII. Why You Need the Wish | 259–323 | open |
 | XIV–XVIII. Why You Need Correct View | 324–426 | open |
@@ -68,3 +68,21 @@ letter-exact battery gates every batch.
 - seg 58: LIST DIVERGENCE — Wylie has four virtues, GMR's English
   adds "the perfection of giving" (sbyin pa absent from the carving);
   witness question filed beside seg 24's. zer ba → "supposedly."
+- seg 60: dbang byas AND 'ba' zhig each spread INSIDE the one
+  segment ("altered by"/"affected by"; "all they can do in the
+  end"/"only") — two auto-caught pairs at once. dman pa'i byang chub
+  → scare-quoted "lower enlightenment" (calque marked as term).
+  snang shas ×3, third exponent. dper na…bzhin no simile frame
+  folded into "This is similar to what happens when".
+- seg 61: byang sems = the bodhicitta CLIP (byang [chub] + sems),
+  sixth full/clip mirror — and GMR unpacks the clip to the same
+  definition he gave the full form at seg 52. CLAUSE-ORDER REVERSAL:
+  Tibetan sets-aside first then commands; English fronts "It's a
+  definite necessity". zer ba → "supposedly" ×2 (fixed exponent).
+  myong ba → "fluency" (register file). sngags → "secret teachings"
+  (consistent with seg 52's mdo sngags).
+- seg 62: THE IDIOM GEM — dbang med du 'gro → "leads you, despite
+  yourself": the campaign's cleanest idiom-for-idiom link. thams cad
+  mkhyen pa third family member ("the state where you know all
+  things"). gsungs closes the Manjushri-advice frame opened at seg
+  57 (honorific frame verb, ∅-marked, footnote 31).
