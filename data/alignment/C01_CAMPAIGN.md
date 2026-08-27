@@ -12,7 +12,7 @@ letter-exact battery gates every batch.
 | Section | Segments | Status |
 |---|---|---|
 | Root text (r1–r5) | 23–38 | ✓ DONE 2026-08-26 |
-| I–VI. The Lama and the Word; preliminaries | 40–142 | c1p01–c1p18 (40–92) done; 43 = marker pair; 93–142 open |
+| I–VI. The Lama and the Word; preliminaries | 40–142 | c1p01–c1p19 (40–95) done; 43 = marker pair; 96–142 open |
 | VII–X. Why You Need Renunciation | 143–258 | open |
 | XI–XIII. Why You Need the Wish | 259–323 | open |
 | XIV–XVIII. Why You Need Correct View | 324–426 | open |
@@ -280,3 +280,20 @@ letter-exact battery gates every batch.
   "Madhyamaka"). gtsug tu bkur ba literalized ("to the very tip of
   their heads"). sogs amplified: "and the list goes on and on"
   (sogs file at five exponents).
+- seg 93: title policy inside a title — dgra nag gi dka' 'grel →
+  "Difficult Points to the Black Enemy". Verse voice flip (mnyan pa
+  "hearing" → "who's taught him"); relative-clause lines swapped.
+  sme sha can → "the lowest of castes" (cultural gloss).
+- seg 94: dus 'khor rtsa rgyud → "root text of the secret teaching
+  on the Wheel of Time" — rgyud (tantra) → "secret teaching": the
+  sngags policy extended to the word tantra itself. de snyed
+  distributed into both "equal eons" slots; dmyal sogs migrates
+  T-L3 → E-L4. myong → "endure".
+- seg 95: TWO-STEP COINAGE in one segment — bya rdzogs kyi skad cig
+  ma → "what we call 'instants of minimum action'" then plain
+  "split-seconds" (the 74→75 pedagogy in miniature). VEHICLE PAIR
+  COMPLETE: theg pa 'og ma → "the lesser way" / theg chen → "the
+  greater way" — no Hinayana/Mahayana anywhere. Source-side number
+  doublet (drug cu re lnga / rtsa lnga) filed for variant machinery.
+  *** LAYER CROSSED 1,000 HEADWORDS at this batch (1,030 / 1,572
+  pairs, 20 pages C01 + 15 pages C02). ***
