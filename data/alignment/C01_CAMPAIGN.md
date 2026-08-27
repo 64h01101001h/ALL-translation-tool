@@ -12,7 +12,7 @@ letter-exact battery gates every batch.
 | Section | Segments | Status |
 |---|---|---|
 | Root text (r1–r5) | 23–38 | ✓ DONE 2026-08-26 |
-| I–VI. The Lama and the Word; preliminaries | 40–142 | c1p01–c1p06 (40–56) done; 43 = marker pair; 57–142 open |
+| I–VI. The Lama and the Word; preliminaries | 40–142 | c1p01–c1p07 (40–59) done; 43 = marker pair; 60–142 open |
 | VII–X. Why You Need Renunciation | 143–258 | open |
 | XI–XIII. Why You Need the Wish | 259–323 | open |
 | XIV–XVIII. Why You Need Correct View | 324–426 | open |
@@ -61,3 +61,10 @@ letter-exact battery gates every batch.
   Second humilific: mchi (the speaker's own humble "go"), in quoted
   speech. kha phyogs → "some glint of understanding". ma 'das ma
   'phags kept doubled in English. 'di tsug joins red in the oral file.
+- seg 57: kye rdo rje (Hevajra) → "Lo Diamond" — GMR's fully
+  literal deity-name render (kye "O!" → archaic "Lo"), the file's
+  most striking onomastic choice. One negative-conditional chain →
+  four second-person hypothetical sentences.
+- seg 58: LIST DIVERGENCE — Wylie has four virtues, GMR's English
+  adds "the perfection of giving" (sbyin pa absent from the carving);
+  witness question filed beside seg 24's. zer ba → "supposedly."
