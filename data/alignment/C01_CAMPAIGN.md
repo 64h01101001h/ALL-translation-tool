@@ -12,7 +12,7 @@ letter-exact battery gates every batch.
 | Section | Segments | Status |
 |---|---|---|
 | Root text (r1–r5) | 23–38 | ✓ DONE 2026-08-26 |
-| I–VI. The Lama and the Word; preliminaries | 40–142 | c1p01–c1p09 (40–65) done; 43 = marker pair; 66–142 open |
+| I–VI. The Lama and the Word; preliminaries | 40–142 | c1p01–c1p10 (40–68) done; 43 = marker pair; 69–142 open |
 | VII–X. Why You Need Renunciation | 143–258 | open |
 | XI–XIII. Why You Need the Wish | 259–323 | open |
 | XIV–XVIII. Why You Need Correct View | 324–426 | open |
@@ -105,3 +105,23 @@ letter-exact battery gates every batch.
   "Suppose you never..." sentences. snying rje chen po scare-quoted
   + unpacked. 'khor ba spread: circle of births / cycle of life /
   the cycle (three exponents, one page).
+- seg 66: SECOND ONOMASTIC GEM — 'jam dbyangs → "Gentle Voice
+  himself" (member-for-member, the Lo Diamond policy; the 57–62
+  frame now names its speaker). One sentence → SIX. Two-collections
+  parallelism coined ("collection of merit"/"collection of wisdom");
+  bsod nams → "merit" = the prose register of the standing warning.
+  bsdus joins 'du under "packed into". stsal ba (honorific bestow)
+  → "imparted". Battery refusal caught a paraphrase ("our lord, the
+  precious one" vs verbatim "our precious lord") — fixed to verbatim.
+- seg 67: ONE med thabs med distributed into THREE "There's no
+  way... unless" sentences (2nd/3rd = display-only ids; evidence
+  link stays single) — and it echoes 65's "without which, nothing":
+  same Tibetan, two registers one page apart. theg pa chen po →
+  "the greater way" (no loanword). byang chub kyi sems tail #3
+  ("become a Buddha"). sgrib pa gnyis → "the two obstacles" (fn 33).
+- seg 68: myong ba → "facility" (third exponent: experience /
+  fluency / facility). zin → "filled with" — the bare verb wearing
+  rtsis zin's English (seg 52). lam rim chen mo → "the Greater
+  Steps to Buddhahood" (title by his own seg-63 convention);
+  citation frame las → "As...says," opens the first Great-Books
+  quote (lands seg 69). "the same old" = supplied oral color.
