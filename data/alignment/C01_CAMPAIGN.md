@@ -12,7 +12,7 @@ letter-exact battery gates every batch.
 | Section | Segments | Status |
 |---|---|---|
 | Root text (r1–r5) | 23–38 | ✓ DONE 2026-08-26 |
-| I–VI. The Lama and the Word; preliminaries | 40–142 | c1p01–c1p34 (40–140) done; 43 = marker pair; 141–142 open |
+| I–VI. The Lama and the Word; preliminaries | 40–142 | *** COMPLETE *** c1p01–c1p35 (40–142); 43 = marker pair |
 | VII–X. Why You Need Renunciation | 143–258 | open |
 | XI–XIII. Why You Need the Wish | 259–323 | open |
 | XIV–XVIII. Why You Need Correct View | 324–426 | open |
@@ -539,3 +539,19 @@ letter-exact battery gates every batch.
   Self-quotes ×3 (136's renders); the interpretation-formula now
   covers both root verses. snying po lon → "gotten the absolute
   most" (formula confirmed). sbyar → "relates to" (spread vs 102).
+- seg 141: L4→L1 FOURTH VERSE (de ni sangs rgyas... opens the
+  English) — the verse method conclusively systematic. 'khor 'das →
+  "in the cycle or beyond" (file's own exponents). bslu → "fail"
+  (formula). dmigs pa'i gtad so...zhig → "lose all solid
+  appearance" (emptiness idiom, zero jargon). = root verse 12
+  quoted forward; cross-ref filed.
+- seg 142: *** SECTION I COMPLETE (segs 40–142, pages c1p01–c1p35,
+  plus root text r1–r5) *** — and the closer delivers THE ENDPOINT
+  SHIFT, the file's most systemic find: the Tibetan cites verse
+  spans from/up-to in ITS line order; GMR adjusts the endpoints to
+  match HIS reordered English verses — the citation apparatus
+  tracks the translation, not the source. Sa-bcad frame closes
+  (74's coinages reprised verbatim + self-referential "what we have
+  called here"). khungs #4 "authentic source". Supplied transition
+  sentence (filed with 115's). Self-quotes ×5 — densest cluster.
+NEXT: sections VII+ (C01 seq 143+) — renunciation chapter onward.
