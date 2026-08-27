@@ -12,7 +12,7 @@ letter-exact battery gates every batch.
 | Section | Segments | Status |
 |---|---|---|
 | Root text (r1–r5) | 23–38 | ✓ DONE 2026-08-26 |
-| I–VI. The Lama and the Word; preliminaries | 40–142 | c1p01–c1p20 (40–98) done; 43 = marker pair; 99–142 open |
+| I–VI. The Lama and the Word; preliminaries | 40–142 | c1p01–c1p21 (40–101) done; 43 = marker pair; 102–142 open |
 | VII–X. Why You Need Renunciation | 143–258 | open |
 | XI–XIII. Why You Need the Wish | 259–323 | open |
 | XIV–XVIII. Why You Need Correct View | 324–426 | open |
@@ -312,3 +312,22 @@ letter-exact battery gates every batch.
   coinage frame. ka kha → "the alphabet". Honorific service file:
   zhabs tog/sri zhu/bkur sti/gnang mkhan. One sentence → three,
   exception clause in em-dash parenthesis, clause order rotated.
+- seg 99: dpyad sgom COINED ("what we call 'analytical
+  meditation'") — the seg-63 unpacking's two-step completes across
+  36 segments. "Holder of the Diamond" (n.8's variant) goes LIVE in
+  body text vs 77's "Diamond Holder" — variant pair auto-caught.
+  lung/rigs → "scriptural authority"/"logical reasoning".
+- seg 100: med thabs med THIRD register ("absolutely can't do
+  without") — one idiom, three strategies, cleanest triple in the
+  file. Meditation taxonomy coined+glossed: bshar sgom → "'running'
+  meditation" (metaphor kept in gloss); grangs 'dren → "'reviewing'"
+  with inner speech DRAMATIZED into quotation. bsgrub bya (sadhya)
+  → "something you have to prove or disprove"; phugs su rtsa bar
+  bzhag → "set it at center stage". UNCERTAIN READING "re zhe"
+  filed beside 'khul (47).
+- seg 101: nyon mongs pa (klesha) → "unhealthy emotion" — plainest
+  technical render in the file. THE FLUENCY MIRROR: myong ba thon →
+  "some fluency in it" (craving) / nyams myong → "a different type
+  of fluency--in the realization of truth" ("a different type of"
+  supplied to surface the arc). kha phar bslog → "turn the process
+  around". Vajradhara formula repeats verbatim 99→101 (refrain).
