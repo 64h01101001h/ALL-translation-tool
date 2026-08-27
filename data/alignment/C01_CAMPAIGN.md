@@ -554,7 +554,7 @@ letter-exact battery gates every batch.
   (74's coinages reprised verbatim + self-referential "what we have
   called here"). khungs #4 "authentic source". Supplied transition
   sentence (filed with 115's). Self-quotes ×5 — densest cluster.
-| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p56 (144–205) done; 143 = marker pair; 206+ open; Reading Six / §IX (Stopping Desire for Future Lives) begins at 206; C01 max seq = 496 |
+| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p57 (144–208) done; 143 = marker pair; 209+ open; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
 
 NEXT: continue section VII (seq 146+) — the renunciation chapter.
 - seg 143: section-marker pair (like 43) — wylie carries "the first
@@ -979,3 +979,30 @@ TCS series and collections beyond, for later ruling). ***
     quote it; it is corpus-attested English for many death terms).
   * Reading Six header confirms §IX "Stopping Desire for Future
     Lives" begins at seg 206.
+
+### c1p57 — C01:206–208 (batch 57) — desire for the future
+- Fifth consecutive zero-catch batch; §IX opens. Layer: 1,974
+  headwords / 3,473 pairs.
+- seg 206: sa-bcad outline header EXPANDED into a reader-facing
+  sentence; outline position moved to the end ("which is the
+  second step") and "in developing the path known as renunciation"
+  SUPPLIED — the outline-header treatment rule.
+- seg 207 (root verse 4b): REGISTER SPLIT one segment apart — las
+  'bras → "deeds and their fruits" (verse) vs "actions and their
+  consequences" (prose, 205). mi bslu → "never fail" (bslu file:
+  bslus "cheated" 185, slu ba med "can never fail" 187). 'khor ba
+  → "the cycle's" (verse compression vs "cyclic life" 201).
+  "(4b)" supplied; frame ces pas bstan te dropped.
+- seg 208: DEITY NAMES CALQUED — tshangs pa → "Pure-One", brgya
+  byin → "Hundred-Gift" (Brahma/Indra by etymology, in "the
+  creatures they call" + deflationary "creatures") — the deity-
+  translation rule's most striking attestation. 'khor sgyur →
+  "Wheel Emperors who rule the entire world" (exponent #3, fusing
+  184+189). INTERNAL MONOLOGUE STAGED: byung na snyam pa → quoted
+  first-person prayer ("I hope... May I live..."). phun sum
+  tshogs pa distributed as "the best of..." anaphora + "at my
+  fingertips" supplied. phar ded na → "If we really follow this
+  line of thinking to its end". dbang du 'gro → "simply slipped
+  into" + "base" supplied. EVIDENTIAL snang → "it would appear"
+  (snang file: evidential sense). CLAUSE REORDERING shown by
+  crossed clause ids (tib c2 ↔ eng position 3).
