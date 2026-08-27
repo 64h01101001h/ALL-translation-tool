@@ -12,7 +12,7 @@ letter-exact battery gates every batch.
 | Section | Segments | Status |
 |---|---|---|
 | Root text (r1–r5) | 23–38 | ✓ DONE 2026-08-26 |
-| I–VI. The Lama and the Word; preliminaries | 40–142 | c1p01–c1p11 (40–71) done; 43 = marker pair; 72–142 open |
+| I–VI. The Lama and the Word; preliminaries | 40–142 | c1p01–c1p12 (40–74) done; 43 = marker pair; 75–142 open |
 | VII–X. Why You Need Renunciation | 143–258 | open |
 | XI–XIII. Why You Need the Wish | 259–323 | open |
 | XIV–XVIII. Why You Need Correct View | 324–426 | open |
@@ -144,3 +144,23 @@ letter-exact battery gates every batch.
   triple → "meditating/talking/thinking about". lha → "mystic
   being"; sngags → "mystic words"; chos → "real practice". dgongs
   (hon.) dissolved into "were making the same point".
+- seg 72: TSONGKAPA SUPPLIED — rje thams cad mkhyen pa names no
+  one; GMR inserts the name (and again at 73). SPEECH-ACT PROMOTION:
+  indirect gsungs-report → direct first-person quotation ("I
+  used..."). lam sgron → "the Lamp on the Path" (Atisha's title
+  translated). thams cad mkhyen pa #4 "all- knowingness" (spacing =
+  corpus line-break artifact, kept verbatim). myong ba #4 "masters".
+  chos #5 "practice of the spirit". snying po → "heart" (vs "cream"
+  63). 'am ("or") → appositive comma. 'bul ba (humilific) flattened
+  to "give" — first absorbed humilific.
+- seg 73: clip family completes — lam gtso rnam gsum joins the full
+  form and lam gtso gsum: three Tibetan forms, one referent; GMR
+  capitalizes "the Three Principal Paths" = doctrine promoted to
+  book title. "III. An Offering of Praise" heading supplied (sa-bcad
+  skeleton surfacing in the translation's body).
+- seg 74: sa bcad → "the general outline" (the extractSaBcad term,
+  2nd attestation). Structural file opens: yan lag → "preliminaries",
+  lus dngos → "main body", mthar phyin pa → "conclusion". MEDIUM
+  SHIFT: nyan par bskul ba ("urging to LISTEN") → "encouragement for
+  the READER to STUDY it well". bstan bcos → "the text"/"the work",
+  never "treatise". Telegraphic sa-bcad formulae expanded to prose.
