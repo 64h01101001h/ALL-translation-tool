@@ -554,7 +554,7 @@ letter-exact battery gates every batch.
   (74's coinages reprised verbatim + self-referential "what we have
   called here"). khungs #4 "authentic source". Supplied transition
   sentence (filed with 115's). Self-quotes ×5 — densest cluster.
-| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p65 (144–232) done; 143 = marker pair; 233+ open; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
+| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p66 (144–235) done; 143 = marker pair; 236+ open; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
 
 NEXT: continue section VII (seq 146+) — the renunciation chapter.
 - seg 143: section-marker pair (like 43) — wylie carries "the first
@@ -1206,3 +1206,25 @@ TCS series and collections beyond, for later ruling). ***
   ('khor-ba exponent #4). spyir ×2 varied in-segment. sne dang po
   skye → "just begun to sprout in a person's heart" (supplied).
   "the SUPPOSED good things" (evaluative supplied).
+
+### c1p66 — C01:233–235 (batch 66) — the sufferings, one by one
+- Fourteenth consecutive zero-catch batch. Layer: 2,100 headwords /
+  3,829 pairs (2,100-headword mark).
+- seg 233: TEXT TITLES TRANSLATED — 'jam dpal zhal lung → "Word of
+  the Gentle One" (deity-calque rule extends to titles, fn 118).
+  ABBREVIATION UNPACKED: bde myur → "Path of Bliss and Quick Path"
+  (both titles restored, fn 119). zhal lung → "the Word" (second-
+  mention compression again).
+- seg 234: NOTABLE TOKEN "ta aa cang ste" — aa (achen) = 15th
+  ACIP-style token in corpus wylie; ≈"a cang" ("needless to say"),
+  absorbed with a PERSPECTIVE FLIP ("while you may have avoided a
+  lower birth"). Flagged for the engine token catalogue. rten
+  spread #4 (→ "life"). kho na → "nothing but". ma 'das →
+  "anyway".
+- seg 235: THE SDUG POLYSEMY TRIANGLE in one segment — sdug bsngal
+  ("suffering" ×7) / sdug pa ("beloved") / mi sdug pa ("hated") —
+  one syllable, three senses side by side; spectacular successor-
+  dictionary entry. Litany restructured 4+3 with supplied anaphora
+  and a register shift at the hinge ("still you must suffer" ×4 →
+  "You must suffer the pain of" ×3). Concretization: "from the
+  womb", "day by day" supplied. p1–p7 phrase-marked both sides.
