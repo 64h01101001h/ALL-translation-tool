@@ -12,7 +12,7 @@ letter-exact battery gates every batch.
 | Section | Segments | Status |
 |---|---|---|
 | Root text (r1–r5) | 23–38 | ✓ DONE 2026-08-26 |
-| I–VI. The Lama and the Word; preliminaries | 40–142 | c1p01–c1p25 (40–113) done; 43 = marker pair; 114–142 open |
+| I–VI. The Lama and the Word; preliminaries | 40–142 | c1p01–c1p26 (40–116) done; 43 = marker pair; 117–142 open |
 | VII–X. Why You Need Renunciation | 143–258 | open |
 | XI–XIII. Why You Need the Wish | 259–323 | open |
 | XIV–XVIII. Why You Need Correct View | 324–426 | open |
@@ -406,3 +406,15 @@ letter-exact battery gates every batch.
   gzhung lam → "grand highway"; dus gsum folded into "each and
   every"; sher phyin mdo sdud pa → "the shorter Sutra on the
   Perfection of Wisdom".
+- seg 114: Sutra couplet — line order swapped; three times
+  REORDERED to English idiom (past/future/present → past/present/
+  future); bzhugs → archaic subjunctive "stay they" (verse register
+  supplied). pha rol phyin pa → "perfection".
+- seg 115: A WHOLE SENTENCE SUPPLIED — "They are not at fault;" has
+  no Tibetan counterpart (GMR softens the polemic): boldest supplied
+  content in the file, FILED FOR OVERSIGHT SURFACE. dge ldan pa →
+  "the Geluk tradition"; sger chos → "a private instruction".
+- seg 116: der ma zad completes a THREE-exponent spread. shul lam
+  ("track-road") → "well-worn path". khyad mtshar → "WEIRD" (most
+  colloquial single-word render). rang cag → "You and I". gol sa →
+  "blunder". jo bo → "Lord Atisha" ×5 now.
