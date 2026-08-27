@@ -12,7 +12,7 @@ letter-exact battery gates every batch.
 | Section | Segments | Status |
 |---|---|---|
 | Root text (r1–r5) | 23–38 | ✓ DONE 2026-08-26 |
-| I–VI. The Lama and the Word; preliminaries | 40–142 | c1p01–c1p27 (40–119) done; 43 = marker pair; 120–142 open |
+| I–VI. The Lama and the Word; preliminaries | 40–142 | c1p01–c1p28 (40–122) done; 43 = marker pair; 123–142 open |
 | VII–X. Why You Need Renunciation | 143–258 | open |
 | XI–XIII. Why You Need the Wish | 259–323 | open |
 | XIV–XVIII. Why You Need Correct View | 324–426 | open |
@@ -433,3 +433,19 @@ letter-exact battery gates every batch.
   "help or hurt". 'phyug → "mistake" (beside 'phyugs → "slipped"
   91). 'dun-ma REFRAIN 118→119 with pronoun shift. Supplied oral
   color ("That's just how it is", "run around").
+- seg 120: lo (pretense particle) #2 ("with the notion that"). rdo
+  rus ("stone and bone") → "dig down to its core". las ma 'das →
+  "won't be much more than" (#2, cf. 68).
+- seg 121: THE LABEL RENDER — Milarepa's couplet headwords don/gnas
+  → typographic labels "The point:"/"The place:" — boldest formal
+  device in the verse file. snyan brgyud → "passed down ear to ear".
+- seg 122: lo tshA ba = 8th ACIP-Sanskrit token. Direction unpacked
+  (both legs of the India journey); bod 'dir "here" kept (Lhasa
+  deixis). SOFTENING POLICY CONFIRMED: chos log ("heretics") →
+  "those who followed a mistaken path" — beside 115's supplied "not
+  at fault". WATER PROVERB: phugs → "at the end of ends" (coined
+  idiom). CORPUS TYPO #7: "chos kyi thugs" for khungs (EN "ultimate
+  origin" confirms). Triple apposition kept with anaphora (Lord of
+  the Word / Teacher / Buddha); bstan pa joins the Word-family.
+  *** LAYER CROSSED 2,000 PAIRS at this batch (1,260 headwords /
+  2,026 pairs; 28 C01 pages + 15 C02 pages). ***
