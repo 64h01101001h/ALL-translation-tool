@@ -12,7 +12,7 @@ letter-exact battery gates every batch.
 | Section | Segments | Status |
 |---|---|---|
 | Root text (r1–r5) | 23–38 | ✓ DONE 2026-08-26 |
-| I–VI. The Lama and the Word; preliminaries | 40–142 | c1p01–c1p26 (40–116) done; 43 = marker pair; 117–142 open |
+| I–VI. The Lama and the Word; preliminaries | 40–142 | c1p01–c1p27 (40–119) done; 43 = marker pair; 120–142 open |
 | VII–X. Why You Need Renunciation | 143–258 | open |
 | XI–XIII. Why You Need the Wish | 259–323 | open |
 | XIV–XVIII. Why You Need Correct View | 324–426 | open |
@@ -418,3 +418,18 @@ letter-exact battery gates every batch.
   ("track-road") → "well-worn path". khyad mtshar → "WEIRD" (most
   colloquial single-word render). rang cag → "You and I". gol sa →
   "blunder". jo bo → "Lord Atisha" ×5 now.
+- seg 117: sa paNDi ta = 7th ACIP-Sanskrit token AND a SANSKRIT-
+  level full/clip mirror (sa paN 92 / sa paNDi ta 117, one English
+  render). gang byung byung reduplication DISSOLVED (vs bsdu bsdu
+  ba kept — the file holds both cases). khyi'i kha zas → "stray dog
+  that gobbles down..." (vivid supplied). bsam pa tshos = colloquial
+  plural (zin-bris voice in morphology).
+- seg 118: MTHONG-FRONTING #3 (L5-final mthong → "We see" opening)
+  — now GMR's signature move (89/105/118). VERSE TAIL REVERSED
+  (last three lines in reverse order; dog-simile = English punch
+  line). "a scrap of food" echoes 110's "scrap of writing".
+- seg 119: nyo tshong spread adjacent segments (compound kept 118 /
+  unpacked "buying or selling" 119 — layer-7 in prose). phan gnod →
+  "help or hurt". 'phyug → "mistake" (beside 'phyugs → "slipped"
+  91). 'dun-ma REFRAIN 118→119 with pronoun shift. Supplied oral
+  color ("That's just how it is", "run around").
