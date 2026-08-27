@@ -554,7 +554,7 @@ letter-exact battery gates every batch.
   (74's coinages reprised verbatim + self-referential "what we have
   called here"). khungs #4 "authentic source". Supplied transition
   sentence (filed with 115's). Self-quotes ×5 — densest cluster.
-| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p66 (144–235) done; 143 = marker pair; 236+ open; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
+| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p67 (144–238) done; 143 = marker pair; 239+ open; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
 
 NEXT: continue section VII (seq 146+) — the renunciation chapter.
 - seg 143: section-marker pair (like 43) — wylie carries "the first
@@ -1228,3 +1228,26 @@ TCS series and collections beyond, for later ruling). ***
   and a register shift at the hinge ("still you must suffer" ×4 →
   "You must suffer the pain of" ×3). Concretization: "from the
   womb", "day by day" supplied. p1–p7 phrase-marked both sides.
+
+### c1p67 — C01:236–238 (batch 67) — even the gods
+- Fifteenth consecutive zero-catch batch. Layer: 2,131 headwords /
+  3,890 pairs.
+- seg 236: lha ma yin → "one of the lesser beings of pleasure" —
+  asura render extends the lha system (no demigod/titan). SUPPLIED
+  DOCTRINE: "towards the higher pleasure-beings" (asura jealousy's
+  object made explicit). ENGLISH TYPO CANDIDATE #13: "as you body"
+  (expected "your body") — kept verbatim, flagged.
+- seg 237: nyon mongs pa → "mental afflictions" — signature klesha
+  render, FIRST in the file. las gains the energetic register
+  ("stored-up positive power" / "tremendous negative power").
+  'dzad → "is squandered". 'phen spread #2 ("hurl"). rten spread
+  #5 ("During this existence"). DB line-wrap artifact kept
+  verbatim ("a pleasure- being's existence").
+- seg 238: THE THIRD SUFFERING UNPACKED — khyab pa 'du byed kyi
+  sdug bsngal → "the ever-present suffering of instant-by-instant
+  aging" (abhidharma term rendered experientially, zero jargon).
+  mtho srid rtse → "'peak of life'" (coinage two-step + supplied
+  gloss). MODERNIZED METAL: zangs (copper cauldron) → "a pot of
+  molten steel"; kha na → "hanging over... about to be dipped in".
+  yid gtan med DOUBLED ("none of them is stable, none of them is
+  worth your trust"). phrad spread #3 ("touch").
