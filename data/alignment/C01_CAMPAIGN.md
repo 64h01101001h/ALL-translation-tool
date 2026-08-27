@@ -12,7 +12,7 @@ letter-exact battery gates every batch.
 | Section | Segments | Status |
 |---|---|---|
 | Root text (r1–r5) | 23–38 | ✓ DONE 2026-08-26 |
-| I–VI. The Lama and the Word; preliminaries | 40–142 | c1p01–c1p12 (40–74) done; 43 = marker pair; 75–142 open |
+| I–VI. The Lama and the Word; preliminaries | 40–142 | c1p01–c1p13 (40–77) done; 43 = marker pair; 78–142 open |
 | VII–X. Why You Need Renunciation | 143–258 | open |
 | XI–XIII. Why You Need the Wish | 259–323 | open |
 | XIV–XVIII. Why You Need Correct View | 324–426 | open |
@@ -164,3 +164,28 @@ letter-exact battery gates every batch.
   SHIFT: nyan par bskul ba ("urging to LISTEN") → "encouragement for
   the READER to STUDY it well". bstan bcos → "the text"/"the work",
   never "treatise". Telegraphic sa-bcad formulae expanded to prose.
+- seg 75: THE ROOT LINE RETURNS AND RESOLVES THE SEG-24 WITNESS
+  QUESTION. Pabongka's lemma = rje btsun bla ma rnams la phyag
+  'tshal lo; GMR's English identical to C01:24's. But 24's own wylie
+  reads rje btsun 'jam pa'i dbyangs (homage to Manjushri) — the
+  divergence filed in r1. Verdict: GMR translated the textus
+  receptus as Pabongka quotes it; 24's wylie is the variant. The
+  commentary lemma is the missing witness. rje btsun → "high and
+  holy" (doublet).
+- seg 76: daND''i — ACIP Sanskrit input code inside the corpus
+  wylie (retroflex ND), the very style sanskrit_convert.py's ACIP
+  branch parses; engine-relevant, filed. Dandin's Kavyadarsha line
+  rendered AS VERSE. Medium shifts: nges par bstan pa ("taught") →
+  "Must be written"; gsungs → "we read as well" (the speech verb
+  become a reading verb — strongest yet). Yidam vocabulary
+  de-theologized: lhag pa'i lha → "lord of lords", 'dod pa'i lha →
+  "the one he holds his lord". bstan bcos #3 "a commentary".
+- seg 77: THE DIAMOND FAMILY — rdo rje 'chang → "Diamond Holder",
+  dpa' bo rdo rje → "Hero of the Diamond" (with Lo Diamond: rdo rje
+  policy systematic). 'jam dpal dbyangs → "Gentle Voice" = same
+  English as 66's 'jam dbyangs: a NAME-level full/clip mirror.
+  mkhyen srid ma (incipit) → "Knowledge Unlocks the World" (4th
+  onomastic; "Unlocks" echoing the commentary's own title).
+  Metalinguistic render: rnams sgras → "The word 'all'...". rje
+  btsun spread: high and holy (75) / the glorious lord (77).
+  QA caught one missing close (s77S) pre-commit — fixed, balanced.
