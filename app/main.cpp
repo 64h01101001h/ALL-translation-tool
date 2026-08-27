@@ -28657,6 +28657,20 @@ public:
         check(pageX(0, 99.0) == 9 && pageX(0, -5.0) == 7,
               "pageX clamps the column map at both ends");
         pl_ = {};
+        // TP-4 CONVERTED: the OCR legality counter, pure and drilled.
+        // 'qqqzz' is no legal syllable in any register; 'bden pa' is
+        // two legal ones. Zeroing the counter now reds HERE instead
+        // of surviving the battery (the 23 Aug planted mutant's
+        // two-year-feeling life ends tonight).
+        if (checker_) {
+            int toks = 0;
+            check(countIllegalWylie("bden pa qqqzz", checker_,
+                                    &toks) == 1 && toks == 3,
+                  "a known-bad token is COUNTED among legal ones "
+                  "(TP-4)");
+            check(countIllegalWylie("bden pa", checker_) == 0,
+                  "legal-only text counts zero flags (TP-4)");
+        }
         QFile::remove(imgP);
         return fails;
     }
@@ -28966,6 +28980,30 @@ private:
         ocrRunning_ = false;
     }
 
+        // TP-4 conversion: the OCR legality count, extracted pure so the
+    // selftest can drive it with a known-bad token and the sweep can
+    // kill its mutant - the counter was inline in two loops behind
+    // the real recognizer, which is why zeroing it survived the
+    // battery from 23 Aug until tonight.
+    static int countIllegalWylie(const std::string& wylie,
+                                 allcore::SyllableChecker* checker,
+                                 int* toksOut = nullptr) {
+        int bad = 0, toks = 0;
+        std::stringstream ss(wylie);
+        std::string tok;
+        while (ss >> tok) {
+            bool alpha = !tok.empty();
+            for (char c2 : tok)
+                alpha &= (std::isalpha(static_cast<unsigned char>(c2)) ||
+                          c2 == '\'' || c2 == '+');
+            if (!alpha) continue;
+            ++toks;
+            if (checker && !checker->legalWylie(tok)) ++bad;
+        }
+        if (toksOut) *toksOut = toks;
+        return bad;
+    }
+
     void ocrWorker(const std::vector<uint8_t>& rgb, int w, int h,
                    bool deskewOff) {
         auto mask = det_->detect(rgb.data(), w, h);
@@ -29037,18 +29075,8 @@ private:
             lastWylie.push_back(wylie);
             ++done;
             auto [uni, ok] = allcore::wylieToUnicode(wylie);
-            int bad = 0, toks = 0;
-            std::stringstream ss(wylie);
-            std::string tok;
-            while (ss >> tok) {
-                bool alpha = !tok.empty();
-                for (char c2 : tok)
-                    alpha &= (std::isalpha(static_cast<unsigned char>(c2)) ||
-                              c2 == '\'' || c2 == '+');
-                if (!alpha) continue;
-                ++toks;
-                if (checker_ && !checker_->legalWylie(tok)) ++bad;
-            }
+            int toks = 0;
+            const int bad = countIllegalWylie(wylie, checker_, &toks);
             flagged += bad;
             // wylie rendered as clickable per-word anchors (follow-along:
             // clicking highlights the word's frame-span box on the page)
@@ -29168,17 +29196,7 @@ private:
                 for (const auto& li : pl.images) {
                     const std::string wylie = rec_->recognize(li);
                     wylieLines << QString::fromStdString(wylie);
-                    std::stringstream ss(wylie);
-                    std::string tok;
-                    while (ss >> tok) {
-                        bool alpha = !tok.empty();
-                        for (char c2 : tok)
-                            alpha &= (std::isalpha(
-                                          static_cast<unsigned char>(c2)) ||
-                                      c2 == '\'' || c2 == '+');
-                        if (alpha && checker_ && !checker_->legalWylie(tok))
-                            ++pageFlags;
-                    }
+                    pageFlags += countIllegalWylie(wylie, checker_);
                 }
                 const QString out = outDir + "/" +
                                     QFileInfo(f).completeBaseName() +

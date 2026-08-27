@@ -246,21 +246,13 @@
   },
   {
    "id": "TP-4-OCRFLAGS",
-   "note": "HONEST SURVIVOR (TP-4): zeroing the OCR legality counter ships every page reported clean with the battery green - the 23 Aug audit's planted mutant, still unpinned because driving it needs an OCR output fixture (a known-bad page through the QC path). Recorded per this file's own rule; converting it is the recorded next step, not a checkbox.",
+   "note": "CONVERTED from survivor 2026-08-26 (same evening it was recorded): the counter was inline behind the real recognizer in two loops; extracted pure (countIllegalWylie, both sites route through it) and drilled with a known-bad token. The 23 Aug planted mutant finally dies.",
    "file": "app/main.cpp",
-   "old": "                if (checker_ && !checker_->legalWylie(tok)) ++bad;",
-   "new": "                if (false) ++bad;",
+   "old": "            if (checker && !checker->legalWylie(tok)) ++bad;",
+   "new": "            if (false) ++bad;",
    "test": "app_selftest",
-   "expect": "survived"
-  },
-  {
-   "id": "TP-4-BATCHFLAGS",
-   "note": "HONEST SURVIVOR (TP-4): the batch-OCR page-flag counter, same gap, same needed fixture.",
-   "file": "app/main.cpp",
-   "old": "                        if (alpha && checker_ && !checker_->legalWylie(tok))\n                            ++pageFlags;",
-   "new": "                        if (false)\n                            ++pageFlags;",
-   "test": "app_selftest",
-   "expect": "survived"
+   "expect_fail_contains": "TP-4",
+   "expect": "killed"
   }
  ]
 }
