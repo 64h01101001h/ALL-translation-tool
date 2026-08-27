@@ -554,7 +554,7 @@ letter-exact battery gates every batch.
   (74's coinages reprised verbatim + self-referential "what we have
   called here"). khungs #4 "authentic source". Supplied transition
   sentence (filed with 115's). Self-quotes ×5 — densest cluster.
-| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p42 (144–163) done; 143 = marker pair; 164+ open; C01 max seq = 496 |
+| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p43 (144–166) done; 143 = marker pair; 167+ open; C01 max seq = 496 |
 
 NEXT: continue section VII (seq 146+) — the renunciation chapter.
 - seg 143: section-marker pair (like 43) — wylie carries "the first
@@ -653,3 +653,18 @@ batch 2 is PAID. Disk 13Gi (Time Machine purged). Drift sweep next.
   literal ("glue their backs to the wall of a cave"). btsun pa →
   "holy men" (#3). The hoped-for gossip (nga...red zer) flattened
   to indirect discourse; re ba → "dream". gyong bskur ×2 parallel.
+- seg 164: mkhas pa + paNDi ta distributed → "sages and scholars";
+  dge slong → "monks" (bhiksu refused). 'gro ba'i mgon po
+  (translatable epithet) transliterated "Droway Gonpo" — human-name
+  rule overrides translatability; 'gro ba'i→"Droway" = GMR
+  phonetics (engine-relevant). lo #3 (hearsay) → "they call me";
+  "Great Meditator" capitalized (Big-Name device again). sgom chen
+  intra-batch spread (great meditators/master contemplators).
+- seg 165: THE SPEAR KEPT WHOLE ("Take a spear then, strike it into
+  every Thought"). Four-title list alliterated (sage/saint/scholar/
+  meditator; btsun #4). lo pa'i rta pa → "bandit locals"; "Spirited
+  away". mi dran dgu dran → "hopes and plans" (domesticated).
+- seg 166: kun 'byung coined with the 151 formula VERBATIM (coinage
+  refrain). Klesha quartet plain (pride/jealousy/dislike/longing;
+  zhe sdang softened). che thabs → "ambition for eminence".
+  *** LAYER CROSSED 1,500 HEADWORDS (1,522 / 2,637 pairs). ***
