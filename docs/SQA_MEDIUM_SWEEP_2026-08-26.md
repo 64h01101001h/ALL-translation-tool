@@ -201,3 +201,10 @@ PERF-R5 (synchronous document open).
 The standing mutation set: 26 entries (from 10 this morning), every
 killed entry individually proven, the survivors carrying their
 reasons. The full drift-run still waits on disk headroom.
+
+*Tripwire postscript (23:4x): the full drift-run was attempted at
+1.1 GB free; the sweep's own churn spiked the disk to zero mid-run
+and the new tripwire fired FOR REAL - stopped between entries, tree
+verified clean (git status: nothing), lock released. First live
+firing, clean. The quotable full run still waits for headroom; every
+entry in the set was proven individually today regardless.*
