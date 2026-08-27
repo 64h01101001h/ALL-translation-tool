@@ -12,7 +12,7 @@ letter-exact battery gates every batch.
 | Section | Segments | Status |
 |---|---|---|
 | Root text (r1–r5) | 23–38 | ✓ DONE 2026-08-26 |
-| I–VI. The Lama and the Word; preliminaries | 40–142 | c1p01–c1p16 (40–86) done; 43 = marker pair; 87–142 open |
+| I–VI. The Lama and the Word; preliminaries | 40–142 | c1p01–c1p17 (40–89) done; 43 = marker pair; 90–142 open |
 | VII–X. Why You Need Renunciation | 143–258 | open |
 | XI–XIII. Why You Need the Wish | 259–323 | open |
 | XIV–XVIII. Why You Need Correct View | 324–426 | open |
@@ -247,3 +247,19 @@ letter-exact battery gates every batch.
   sde rgyan → "the Jewel of the Sutras" (rgyan→Jewel). Homograph
   pair 'dul ba/dul ba both filed. thugs rgyud → "his mind" (rgyud
   #3). de nyid → "suchness" — technical term kept technical (rare).
+- seg 87: lam yongs rdzogs THREE WAYS in one segment (entire range
+  / in their entirety / overall) — widest intra-segment spread since
+  rtsis zin. CORPUS-EN TYPO: "greater merit that any other" (that→
+  than), kept verbatim, filed. bsten now a FIVE-exponent file. skal
+  ba/skal ldan → "blessed"; bzang zhan → "more or less"; che chung
+  → "the degree to which" (spread).
+- seg 88: bsten #4/#5 ("rely on him in the proper way" / "proper
+  behavior towards his teacher"). nyes dmigs → "dangers" (spread vs
+  "drawbacks" 69). Incipit citation "close to Buddhahood" (n.47).
+- seg 89: THE SHOWPIECE CROSSING — mthong (Tibetan line 5) fronted
+  to English line 1 ("First then see that..."); six-line periodic
+  sentence wholly redistributed: deepest verse crossing, Overlay
+  grammar-view showpiece. rten 'brel → "getting an excellent start"
+  (de-technicalized). 2nd CORPUS-EN TYPO: "the goods things". rnal
+  'byor → "the master meditator" (matches n.29). 'tshal (polite
+  optative) → plain "must". 8 lines → 8 lines with enjambment.
