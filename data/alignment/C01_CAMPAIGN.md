@@ -12,7 +12,7 @@ letter-exact battery gates every batch.
 | Section | Segments | Status |
 |---|---|---|
 | Root text (r1–r5) | 23–38 | ✓ DONE 2026-08-26 |
-| I–VI. The Lama and the Word; preliminaries | 40–142 | c1p01–c1p03 (40–47) done; 43 = marker pair; 48–142 open |
+| I–VI. The Lama and the Word; preliminaries | 40–142 | c1p01–c1p04 (40–50) done; 43 = marker pair; 51–142 open |
 | VII–X. Why You Need Renunciation | 143–258 | open |
 | XI–XIII. Why You Need the Wish | 259–323 | open |
 | XIV–XVIII. Why You Need Correct View | 324–426 | open |
@@ -39,3 +39,11 @@ letter-exact battery gates every batch.
   than fabricated. First morpheme-level rule-3 refusal of the campaign.
 - seg 46: the first COMPARATIVE las in the alignment corpus (yid
   bzhin nor las lhag → "More than a wishing jewel").
+- seg 50: 'jam mgon + drang don gdul bya'i snang ngor → "the
+  protector Gentle Voice as he appeared to his disciples in the form
+  of a man" — the campaign's boldest render (emanation doctrine from
+  six syllables); drang don technical register filed. dbon po →
+  "friar" now attested ×2 (pattern, not oddity). First HUMILIFIC in
+  the honorific file ('bul ba, the note-taker's own register).
+- seg 49: the four-dgos chain — each necessity a different English
+  modality; de…la anaphora as discourse connectives.
