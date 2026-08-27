@@ -32,21 +32,35 @@ import sys
 from datetime import date
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-PAGES = os.path.join(ROOT, "data", "alignment", "pages")
-if not os.path.isdir(PAGES):   # legacy location, pre-banking
-    PAGES = os.path.expanduser("~/Desktop/ACI2-full-depth-alignment")
 SPINE = os.path.join(ROOT, "build", "hgm_spine_v27_2.db")
 OUTDIR = os.path.join(ROOT, "data", "alignment")
-OUT = os.path.join(OUTDIR, "alignment_c02_v1.json")
-OUT_FULL = os.path.join(OUTDIR, "alignment_c02_full_v1.json")
-FLOOR = 120   # distinct word-level pairs; pass three carries ~200+
+OUT = os.path.join(OUTDIR, "alignment_evidence_v1.json")
+OUT_FULL = os.path.join(OUTDIR, "alignment_full_v1.json")
+FLOOR = 150   # distinct word-level pairs across all courses
 
-PAGE_SEGS = {
-    "p01": [23], "p02": [24, 25], "p03": [26, 27, 28, 29, 30],
-    "p04": [31, 32, 33, 34], "p05": [35, 36, 37], "p06": [38, 39, 40],
-    "p07": [41, 42, 43, 44, 45], "p08": [46], "p09": [47, 48, 49],
-    "p10": [50, 51, 52], "p11": [53, 54, 55, 56], "p12": [57, 58, 59],
-    "p13": [60, 61], "p14": [62, 63, 64], "p15": [65, 66, 67, 68],
+# course-aware (Adam's standing policy: every new reading scans at
+# full depth and flows into the evidence layer the same way)
+COURSES = {
+    "C02": {
+        "dir": os.path.join(OUTDIR, "pages"),
+        "pages": {
+            "p01": [23], "p02": [24, 25], "p03": [26, 27, 28, 29, 30],
+            "p04": [31, 32, 33, 34], "p05": [35, 36, 37],
+            "p06": [38, 39, 40], "p07": [41, 42, 43, 44, 45],
+            "p08": [46], "p09": [47, 48, 49], "p10": [50, 51, 52],
+            "p11": [53, 54, 55, 56], "p12": [57, 58, 59],
+            "p13": [60, 61], "p14": [62, 63, 64],
+            "p15": [65, 66, 67, 68],
+        },
+    },
+    "C01": {
+        "dir": os.path.join(OUTDIR, "pages_c01"),
+        "pages": {
+            "r1": [23, 24, 25, 26], "r2": [27, 28, 29],
+            "r3": [30, 31], "r4": [32, 33, 34, 35, 36],
+            "r5": [37, 38],
+        },
+    },
 }
 
 SPAN = re.compile(
@@ -106,92 +120,95 @@ def spans_of(doc, side):
 
 
 def main():
-    pages_dir = PAGES
-    if "--pages" in sys.argv:
-        pages_dir = sys.argv[sys.argv.index("--pages") + 1]
     con = sqlite3.connect(SPINE)
-    segs = {r[0]: (r[1], r[2]) for r in con.execute(
-        "SELECT seq, wylie, english FROM corpus_segments "
-        "WHERE course='C02'")}
-    con.close()
-
-    pairs = {}   # tib_norm -> {eng_display -> set(segs)}
+    pairs = {}   # tib_norm -> {eng_display -> set("COURSE:seq")}
     full = {"links": [], "notes": {}, "trees": {}}
     sha = hashlib.sha256()
-    for pg, seglist in sorted(PAGE_SEGS.items()):
-        p = os.path.join(pages_dir, pg + ".html")
-        doc = io.open(p, encoding="utf-8").read()
-        sha.update(doc.encode())
-        tib, eng = {}, {}
-        tibAll, engAll = {}, {}
-        for d, l, txt in spans_of(doc, "tib"):
-            lid, case = l.split("|")[0], l.endswith("|case")
-            tibAll.setdefault((d, lid), {"t": txt, "case": case})
-            if d == 5 and txt:
-                tib.setdefault(lid, txt)
-        for d, l, txt in spans_of(doc, "eng"):
-            lid = l.split("|")[0]
-            engAll.setdefault((d, lid), []).append(txt)
-            if d == 5 and txt:
-                eng.setdefault(lid, []).append(txt)
-        # THE BANK: every span at every depth, both-sided or not.
-        # A tib-only record IS information (a morpheme with no
-        # English exponent); nothing from the scan is discarded.
-        for (d, lid), rec in sorted(tibAll.items()):
-            m0 = re.match(r"s(\d+)", lid)
-            full["links"].append({
-                "page": pg, "seg": int(m0.group(1)) if m0 else None,
-                "id": lid, "d": d, "tib": rec["t"],
-                "eng": " … ".join(engAll.get((d, lid), [])) or None,
-                "case": rec["case"],
-            })
-        full["notes"][pg] = [
-            " ".join(strip_tags(n).split()) for n in NOTE.findall(doc)]
-        tr = TREE.findall(doc)
-        if tr:
-            full["trees"][pg] = [
-                " ".join(strip_tags(t).split()) for t in tr]
-        for l, t in tib.items():
-            if l not in eng:
-                continue   # no-exponent word: not evidence, skip
-            seg = None
-            m = re.match(r"s(\d+)", l)
-            if m and int(m.group(1)) in segs:
+    for course, cfg in sorted(COURSES.items()):
+        segs = {r[0]: (r[1], r[2]) for r in con.execute(
+            "SELECT seq, wylie, english FROM corpus_segments "
+            "WHERE course=?", (course,))}
+        for pg, _seglist in sorted(cfg["pages"].items()):
+            path = os.path.join(cfg["dir"], pg + ".html")
+            doc = io.open(path, encoding="utf-8").read()
+            sha.update(doc.encode())
+            tib, eng = {}, {}
+            tibAll, engAll = {}, {}
+            for d, l, txt in spans_of(doc, "tib"):
+                lid, case = l.split("|")[0], l.endswith("|case")
+                tibAll.setdefault((d, lid), {"t": txt, "case": case})
+                if d == 5 and txt:
+                    tib.setdefault(lid, txt)
+            for d, l, txt in spans_of(doc, "eng"):
+                lid = l.split("|")[0]
+                engAll.setdefault((d, lid), []).append(txt)
+                if d == 5 and txt:
+                    eng.setdefault(lid, []).append(txt)
+            # THE BANK: every span at every depth, both-sided or not.
+            for (d, lid), rec in sorted(tibAll.items()):
+                m0 = re.match(r"s(\d+)", lid)
+                full["links"].append({
+                    "course": course, "page": pg,
+                    "seg": int(m0.group(1)) if m0 else None,
+                    "id": lid, "d": d, "tib": rec["t"],
+                    "eng": " … ".join(engAll.get((d, lid), [])) or None,
+                    "case": rec["case"],
+                })
+            key = course + "/" + pg
+            full["notes"][key] = [
+                " ".join(strip_tags(n).split())
+                for n in NOTE.findall(doc)]
+            tr = TREE.findall(doc)
+            if tr:
+                full["trees"][key] = [
+                    " ".join(strip_tags(t).split()) for t in tr]
+            for l, t in tib.items():
+                if l not in eng:
+                    continue   # no-exponent word: not evidence
+                m = re.match(r"s(\d+)", l)
+                if not (m and int(m.group(1)) in segs):
+                    continue
                 seg = int(m.group(1))
-            if seg is None:
-                continue
-            e = " … ".join(eng[l])   # fragmented exponent joined
-            tn = " ".join(t.lower().split())
-            # BATTERY line 1+2: letter-exact against the spine
-            if letters(t) not in letters(segs[seg][0]):
-                sys.exit("REFUSED: tib %r not in seg %d wylie" % (t, seg))
-            for frag in eng[l]:
-                if letters(frag) and \
-                        letters(frag) not in letters(segs[seg][1]):
-                    sys.exit("REFUSED: eng %r not in seg %d english"
-                             % (frag, seg))
-            pairs.setdefault(tn, {}).setdefault(e, set()).add(seg)
+                e = " … ".join(eng[l])
+                tn = " ".join(t.lower().split())
+                # BATTERY: letter-exact against the spine, per course
+                if letters(t) not in letters(segs[seg][0]):
+                    sys.exit("REFUSED: tib %r not in %s:%d wylie"
+                             % (t, course, seg))
+                for frag in eng[l]:
+                    if letters(frag) and \
+                            letters(frag) not in letters(segs[seg][1]):
+                        sys.exit("REFUSED: eng %r not in %s:%d english"
+                                 % (frag, course, seg))
+                pairs.setdefault(tn, {}).setdefault(e, set()).add(
+                    "%s:%d" % (course, seg))
+    con.close()
 
     n_pairs = sum(len(v) for v in pairs.values())
     if n_pairs < FLOOR:
         sys.exit("REFUSED: only %d pairs (< floor %d) — the parse is "
                  "broken, not the corpus small" % (n_pairs, FLOOR))
 
+    def refkey(r):
+        c, n = r.split(":")
+        return (c, int(n))
+
     doc = {
         "meta": {
             "layer": "alignment-evidence",
             "tier": "TENTATIVE (machine-matched, unreviewed)",
-            "generator": "Claude (AI), full-depth alignment pass three",
+            "generator": "Claude (AI), full-depth alignment",
             "date": str(date.today()),
-            "source_pages": "ACI2-full-depth-alignment (sha256 %s)"
-                            % sha.hexdigest()[:16],
-            "source_corpus": "hgm_spine_v27_2 corpus_segments C02",
-            "course": "C02",
+            "source_pages": "banked pages, %d course(s) (sha256 %s)"
+                            % (len(COURSES), sha.hexdigest()[:16]),
+            "source_corpus": "hgm_spine_v27_2 corpus_segments "
+                             + "+".join(sorted(COURSES)),
             "rule": "English is HGM's corpus text verbatim, machine-"
                     "MATCHED never composed; never enters hgm_gloss",
         },
         "pairs": {
-            tn: [{"eng": e, "segs": sorted(ss), "n": len(ss)}
+            tn: [{"eng": e, "refs": sorted(ss, key=refkey),
+                  "n": len(ss)}
                  for e, ss in sorted(evs.items())]
             for tn, evs in sorted(pairs.items())
         },
@@ -199,12 +216,12 @@ def main():
     os.makedirs(OUTDIR, exist_ok=True)
     tmpf = OUT_FULL + ".staging"
     with io.open(tmpf, "w", encoding="utf-8") as f:
-        json.dump({"meta": {"what": "the COMPLETE seven-layer bank: "
-                            "every span at every depth incl. one-"
-                            "sided (no-exponent) records, Wilson "
-                            "case flags, AI notes, tree blocks",
-                            "consumer": "none yet - banked for the "
-                            "grammar pane and the review workflow"},
+        json.dump({"meta": {"what": "the COMPLETE seven-layer bank, "
+                            "all courses: every span at every depth "
+                            "incl. one-sided (no-exponent) records, "
+                            "Wilson case flags, AI notes, tree blocks",
+                            "consumer": "the Overlay grammar view; "
+                            "the review workflow"},
                    "links": full["links"], "notes": full["notes"],
                    "trees": full["trees"]},
                   f, ensure_ascii=False, indent=None,
