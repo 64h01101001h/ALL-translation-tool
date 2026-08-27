@@ -12,7 +12,7 @@ letter-exact battery gates every batch.
 | Section | Segments | Status |
 |---|---|---|
 | Root text (r1–r5) | 23–38 | ✓ DONE 2026-08-26 |
-| I–VI. The Lama and the Word; preliminaries | 40–142 | c1p01–c1p28 (40–122) done; 43 = marker pair; 123–142 open |
+| I–VI. The Lama and the Word; preliminaries | 40–142 | c1p01–c1p29 (40–125) done; 43 = marker pair; 126–142 open |
 | VII–X. Why You Need Renunciation | 143–258 | open |
 | XI–XIII. Why You Need the Wish | 259–323 | open |
 | XIV–XVIII. Why You Need Correct View | 324–426 | open |
@@ -449,3 +449,17 @@ letter-exact battery gates every batch.
   the Word / Teacher / Buddha); bstan pa joins the Word-family.
   *** LAYER CROSSED 2,000 PAIRS at this batch (1,260 headwords /
   2,026 pairs; 28 C01 pages + 15 C02 pages). ***
+- seg 123: khungs spelled correctly — retro-confirms 122's typo #7
+  (the witness one segment away). sne gcig → "a single sliver";
+  butter proverb: bsrub ("churn") → "thrashing".
+- seg 124: NUMBERED LIST SUPPLIED ("1) 2) 3)" for continuous
+  Tibetan) — the sa-bcad habit inside prose; 109's "three
+  distinguishing features" defined. paNDi ta as common noun →
+  "sages" (name vs noun policy split). zhugs ma zhugs (A-not-A) →
+  "whether..."; rtsod pa ("debate") → "examined" (gentling again).
+  thugs rgyud → "the hearts" (rgyud #4). grub pa'i dbang phyug →
+  "master practitioners".
+- seg 125: PHAR/TSHUR STRATEGY #2 ("from our side"/"from its side"
+  vs 110's directional clauses — both treatments attested). bslu →
+  "fail" both directions; ma bslus na conditional restructured into
+  concession (negation flip). snying rus ("heart-bone") → "effort".
