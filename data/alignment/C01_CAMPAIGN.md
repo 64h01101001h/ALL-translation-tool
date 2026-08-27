@@ -554,7 +554,7 @@ letter-exact battery gates every batch.
   (74's coinages reprised verbatim + self-referential "what we have
   called here"). khungs #4 "authentic source". Supplied transition
   sentence (filed with 115's). Self-quotes ×5 — densest cluster.
-| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p64 (144–229) done; 143 = marker pair; 230+ open; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
+| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p65 (144–232) done; 143 = marker pair; 233+ open; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
 
 NEXT: continue section VII (seq 146+) — the renunciation chapter.
 - seg 143: section-marker pair (like 43) — wylie carries "the first
@@ -1182,3 +1182,27 @@ TCS series and collections beyond, for later ruling). ***
   bo → "ordinary people" (coinage two-step). Heaviest
   conversational scaffolding yet ("You've heard of", "well", "by
   the way", "You should realize").
+
+### c1p65 — C01:230–232 (batch 65) — four beginnings; renunciation
+- Thirteenth consecutive zero-catch batch. Layer: 2,087 headwords /
+  3,786 pairs.
+- seg 230: THE FOUR BEGINNINGS aphorism (fn 116), four parallel
+  q-lines, each 'go → "begins with". chos → "religion" (new chos
+  exponent). bshes gnyen → "a spiritual guide" (no loanword;
+  "proper" supplied). kun slong → "your motivation" (direct pair).
+  ENGLISH PUNCTUATION ANOMALY noted verbatim: "observing the laws,
+  of actions..." (stray comma, likely verse-lineation artifact).
+- seg 231: sgo gsum TRIPLE TREATMENT — members enumerated ("body
+  or speech or mind", supplied) + metaphor kept ("the three
+  doors") + function glossed ("through which we express
+  ourselves", supplied) — richest single-term expansion on file.
+  brgya la → "if by some chance" (idiom). bshags → "the process
+  of confession".
+- seg 232: nges 'byung → "renunciation" (the first principal path,
+  named). HELL NAME CALQUED: yang sos → "'Revive'" + supplied
+  gloss "(the lightest hell)" (fn 117) — name-translation extends
+  to hells; dmyal ba pairs the gloss's "hell". TWO SAMSARA RENDERS
+  IN ONE SEGMENT: "this cyclic life" AND "this revolving life"
+  ('khor-ba exponent #4). spyir ×2 varied in-segment. sne dang po
+  skye → "just begun to sprout in a person's heart" (supplied).
+  "the SUPPOSED good things" (evaluative supplied).
