@@ -98,6 +98,16 @@ int main(int argc, char** argv) {
               "nonsense pronunciation finds nothing");
     }
 
+    {   // the grammar view's join point (Overlay backlog item 1):
+        // a segment fetched by its address, exactly as stored
+        auto seg = spine.corpusSegment("C02", 37);
+        CHECK(seg && seg->wylie.find("dpung gnyen") != std::string::npos,
+              "corpusSegment(C02,37) returns the refuge-definition "
+              "segment by address");
+        CHECK(!spine.corpusSegment("C99", 1),
+              "an unknown address answers empty, not a fabrication");
+    }
+
     std::printf("%s (%d failure%s)\n", failures ? "SMOKE FAILED" : "SMOKE OK",
                 failures, failures == 1 ? "" : "s");
     return failures ? 1 : 0;

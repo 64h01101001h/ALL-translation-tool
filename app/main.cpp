@@ -549,6 +549,54 @@ struct AlignPair {
 using AlignMap = std::map<std::string, QList<AlignPair>>;
 static const AlignMap* g_alignEvidence = nullptr;
 
+// The grammar view (Adam's backlog item 1, 2026-08-26): the FULL
+// seven-layer bank, loaded per segment. The card's grammar block
+// shows a cited segment's morphology - case particles under
+// Wilson's taxonomy, compound members, zero-exponent marks - all
+// machine analysis, PROVISIONAL, amber.
+struct GLink {
+    int d = 0;
+    QString tib, eng;   // eng empty = no English exponent (real data)
+    bool isCase = false;
+};
+using AlignGrammarMap = std::map<int, QList<GLink>>;
+static const AlignGrammarMap* g_alignGrammar = nullptr;
+// d5 headword -> the first segment whose alignment attests it
+static const std::map<std::string, int>* g_alignGrammarIx = nullptr;
+
+// Wilson's particle classes by surface form - the taxonomy's DEFAULT
+// reading (instance-specific functions, e.g. the adversative gyi of
+// C02:67, live in the banked AI notes, not here; the block's label
+// says "default reading" for exactly that reason).
+static QString wilsonClass(const QString& p) {
+    static const std::map<QString, QString> k = {
+        {"gi", "genitive"},     {"gyi", "genitive"},
+        {"kyi", "genitive"},    {"'i", "genitive"},
+        {"yi", "genitive"},     {"gis", "agentive"},
+        {"gyis", "agentive"},   {"kyis", "agentive"},
+        {"s", "agentive"},      {"la", "la-group"},
+        {"su", "la-group"},     {"tu", "la-group"},
+        {"du", "la-group"},     {"r", "la-group"},
+        {"ru", "la-group"},     {"na", "la-group (conditional)"},
+        {"ste", "semi-final"},  {"de", "semi-final"},
+        {"te", "semi-final"},   {"yang", "concessive"},
+        {"kyang", "concessive"},{"'ang", "concessive"},
+        {"rnams", "plural"},    {"dag", "plural"},
+        {"po", "specifier"},    {"bo", "specifier"},
+        {"can", "possessive"},  {"pa", "nominalizer"},
+        {"ba", "nominalizer"},  {"bya", "nominalizer (future)"},
+        {"ni", "topic"},        {"dang", "conjunctive"},
+        {"cing", "coordinative"},{"zhing", "coordinative"},
+        {"shing", "coordinative"},{"las", "ablative"},
+        {"nas", "elative"},     {"kho na", "restrictive"},
+        {"nyid", "abstractor"}, {"par", "la-group"},
+        {"bar", "la-group"},    {"pas", "agentive"},
+        {"bas", "agentive"},
+    };
+    auto it = k.find(p.trimmed().toLower());
+    return it == k.end() ? QString("particle") : it->second;
+}
+
 // the 84000 glossary layer (CC BY 4.0 per 84000's own Terms of Use
 // table; data/84000/README.md) — reference only, never HGM
 struct G84000 {
@@ -4372,6 +4420,26 @@ public:
                        .arg(what);
             if (!ok) ++fails;
         };
+        {   // the grammar view (backlog item 1, Adam 2026-08-26):
+            // machine morphology on the card - labeled, amber,
+            // Wilson-classed, honest about zero exponents
+            const QString g = alignGrammarHtml("sems pa");
+            check(g.contains("GRAMMAR") && g.contains("Wilson") &&
+                      g.contains("PROVISIONAL") &&
+                      g.contains("C02:37"),
+                  "sems pa's grammar block cites its segment and "
+                  "wears the machine labels");
+            check(g.contains("genitive") || g.contains("la-group"),
+                  "case particles carry Wilson classes");
+            check(g.contains("dpung gnyen"),
+                  "the cited sentence is the spine's verbatim text");
+            check(!g.contains("#1E6B4E") && !g.contains("#2E7D32"),
+                  "the grammar block never wears a reserved green "
+                  "(G1)");
+            check(alignGrammarHtml("zzz-not-aligned").isEmpty(),
+                  "a word with no alignment evidence gets NO grammar "
+                  "block - absence, not fabrication");
+        }
         // Adam, 2026-08-22: "where did the authors link go… shouldn't
         // there be an authors area that accompanies any text linked to
         // our authors database". It existed as a one-line badge, and
@@ -8841,6 +8909,8 @@ private:
                      "</div>";
             }
         }
+        if (showGrammar_->isChecked())
+            h += alignGrammarHtml(QString::fromStdString(e.wylie));
         if (ref_ && showRefs_->isChecked()) {
             auto refs = ref_->lookup(e.wylie, 6);
             if (!refs.empty()) {
@@ -8866,6 +8936,77 @@ private:
             }
         }
         setCardHtml(h);
+    }
+
+    // The grammar view (backlog item 1): the first alignment-attested
+    // segment for this headword, rendered as verbatim wylie plus a
+    // morphology table - case particles under Wilson's taxonomy
+    // (default readings), compound members, zero-exponent marks.
+    // Machine analysis, PROVISIONAL, amber; empty string when the
+    // word has no alignment evidence. Public for the selftest.
+    QString alignGrammarHtml(const QString& wylie) const {
+        if (!g_alignGrammar || !g_alignGrammarIx) return QString();
+        const std::string k = wylie.toLower().simplified().toStdString();
+        auto it = g_alignGrammarIx->find(k);
+        if (it == g_alignGrammarIx->end()) return QString();
+        const int segNo = it->second;
+        auto gi = g_alignGrammar->find(segNo);
+        if (gi == g_alignGrammar->end()) return QString();
+        const auto seg = spine_.corpusSegment("C02", segNo);
+        if (!seg) return QString();
+        QString h;
+        h += "<div style='background:#FDF3E7;border-left:3px solid "
+             "#B4540A;padding:5px 9px;margin:8px 0;border-radius:4px'>"
+             "<small style='color:#B4540A;letter-spacing:1px'>"
+             "GRAMMAR \u2014 machine analysis under Wilson's taxonomy "
+             "(AI, PROVISIONAL \u00b7 default readings) \u00b7 C02:" +
+             QString::number(segNo) + "</small>";
+        // the cited sentence, verbatim from the spine, headword bold
+        QString wy = QString::fromStdString(seg->wylie).toHtmlEscaped();
+        const QString needle = wylie.toHtmlEscaped();
+        const int at = wy.indexOf(needle, 0, Qt::CaseInsensitive);
+        if (at >= 0)
+            wy = wy.left(at) + "<b>" + wy.mid(at, needle.size()) +
+                 "</b>" + wy.mid(at + needle.size());
+        h += "<div style='margin:4px 0;color:#4A443C'><i>" + wy +
+             "</i></div>";
+        int shown = 0;
+        for (const auto& g : gi->second) {
+            if (g.d == 6 && g.isCase && shown < 8) {
+                h += QString("<div style='font-size:12px;margin:1px 0'>"
+                             "<b style='color:#6E3E8E'>%1</b> "
+                             "\u27E8%2\u27E9 \u2192 %3</div>")
+                         .arg(g.tib.toHtmlEscaped())
+                         .arg(wilsonClass(g.tib))
+                         .arg(g.eng.isEmpty()
+                                  ? QString("<span style='color:#78706A'>"
+                                            "\u2205 (no English "
+                                            "exponent)</span>")
+                                  : "\u201c" + g.eng.toHtmlEscaped() +
+                                        "\u201d");
+                ++shown;
+            }
+        }
+        int members = 0;
+        for (const auto& g : gi->second)
+            if (g.d == 7 && members < 4) {
+                if (!members)
+                    h += "<div style='font-size:11px;color:#78706A;"
+                         "margin-top:3px'>compound members:</div>";
+                h += "<div style='font-size:12px'>\u30fb " +
+                     g.tib.toHtmlEscaped() +
+                     (g.eng.isEmpty()
+                          ? QString()
+                          : " \u2192 \u201c" + g.eng.toHtmlEscaped() +
+                                "\u201d") +
+                     "</div>";
+                ++members;
+            }
+        h += "<div style='font-size:10px;color:#8A6D1F;margin-top:3px'>"
+             "instance-specific readings live in the banked AI notes; "
+             "this block shows the taxonomy's default class per "
+             "particle</div></div>";
+        return h;
     }
 
     allcore::Spine& spine_;
@@ -35642,6 +35783,44 @@ int main(int argc, char** argv) {
         }
         if (!alignEvidence.empty())
             g_alignEvidence = &alignEvidence;
+    }
+    // the full seven-layer bank -> the grammar view's per-segment map
+    static AlignGrammarMap alignGrammar;
+    static std::map<std::string, int> alignGrammarIx;
+    {
+        QFile f(root + "/data/alignment/alignment_c02_full_v1.json");
+        if (f.open(QIODevice::ReadOnly)) {
+            const auto arr = QJsonDocument::fromJson(f.readAll())
+                                 .object()
+                                 .value("links")
+                                 .toArray();
+            for (const auto& v : arr) {
+                const auto o = v.toObject();
+                if (o.value("seg").isNull()) continue;
+                const int seg = o.value("seg").toInt();
+                GLink g;
+                g.d = o.value("d").toInt();
+                g.tib = o.value("tib").toString();
+                g.eng = o.value("eng").toString();   // null -> empty
+                g.isCase = o.value("case").toBool();
+                if (g.tib.isEmpty()) continue;
+                alignGrammar[seg] << g;
+                if (g.d == 5) {
+                    std::string k;
+                    for (QChar c : g.tib.toLower())
+                        k += c.toLatin1();
+                    k = QString::fromStdString(k)
+                            .simplified()
+                            .toStdString();
+                    if (!alignGrammarIx.count(k))
+                        alignGrammarIx[k] = seg;
+                }
+            }
+        }
+        if (!alignGrammar.empty()) {
+            g_alignGrammar = &alignGrammar;
+            g_alignGrammarIx = &alignGrammarIx;
+        }
     }
     // the 84000 glossary layer (CC BY 4.0; data/84000/README.md)
     static G84000Map g84000;

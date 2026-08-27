@@ -335,6 +335,28 @@ long Spine::corpusCount(const std::string& fts_query,
     }
 }
 
+std::optional<CorpusSegment> Spine::corpusSegment(const std::string& course,
+                                                  int seq) const {
+    try {
+        Stmt s(db_,
+               "SELECT id, course, seq, wylie, english, acip "
+               "FROM corpus_segments WHERE course=? AND seq=?");
+        sqlite3_bind_text(s.p, 1, course.c_str(), -1, SQLITE_TRANSIENT);
+        sqlite3_bind_int(s.p, 2, seq);
+        if (sqlite3_step(s.p) != SQLITE_ROW) return std::nullopt;
+        CorpusSegment seg;
+        seg.id = sqlite3_column_int64(s.p, 0);
+        seg.course = columnText(s.p, 1);
+        seg.seq = sqlite3_column_int(s.p, 2);
+        seg.wylie = columnText(s.p, 3);
+        seg.english = columnText(s.p, 4);
+        seg.acip = columnText(s.p, 5);
+        return seg;
+    } catch (...) {
+        return std::nullopt;
+    }
+}
+
 std::vector<CorpusSegment> Spine::corpusSearch(const std::string& fts_query,
                                                const std::string& course,
                                                int limit) const {
