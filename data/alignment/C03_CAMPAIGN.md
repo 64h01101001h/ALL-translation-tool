@@ -29,7 +29,7 @@ When a segment's english field is phonetics, not translation:
    under its own clause with honest labels.
 
 ## Progress
-c3p1 (1–3) done; 4+ open; 617 segs remain.
+c3p1–c3p2 (1–6) done; 7+ open; 614 segs remain.
 
 ## Queues (wylie / english), C03
 - (open)
@@ -50,3 +50,19 @@ c3p1 (1–3) done; 4+ open; 617 segs remain.
   valid, semantically dead); caught because the full bank failed to
   grow, refixed into COURSES properly. Lesson: verify registration
   by the bank delta, not by ast.parse alone.
+
+### Batch C03-2 (c3p2, C03:4–6) — 2026-08-28
+- 4: dbul bar ↔ "ulwar" (d- silent, b→w); dmigs ↔ "mik"; sangs
+  rgyas ↔ "sangye".
+- 5: spyod par ↔ "chupar" (spy-→ch); 'gro ↔ "dro"; zhing in lines
+  3+4 (shingdu/shingla).
+- 6: FIRST BLENDED SEGMENT — mantra d=7 to BOTH phonetic
+  occurrences; the English stanza is an UNPAIRED clause (s6trans):
+  its Tibetan source is segs 2–5 (cross-segment consolidation), a
+  new page-topology precedent for the liturgical section. Right
+  label variant: GESHE MICHAEL'S PHONETICS + ENGLISH (VERBATIM).
+  WYLIE QUEUE: ACIP anusvara capitals dM/kM/ND; ni'a ta ya mi ↔
+  niryatayami ('a-chung, linked as unit); ra maND la kM ↔ ratna
+  mandalakam (unit). Verse capitalization flattened, kept verbatim.
+- Evidence layer still 3,845/7,167 (phonetics excluded by
+  construction); full bank +20 links.
