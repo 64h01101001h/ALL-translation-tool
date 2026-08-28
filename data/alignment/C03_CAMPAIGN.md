@@ -29,7 +29,7 @@ When a segment's english field is phonetics, not translation:
    under its own clause with honest labels.
 
 ## Progress
-c3p1–c3p20 (1–60) done; 61+ open; 560 segs remain.
+c3p1–c3p21 (1–63) done; 64+ open; 557 segs remain.
 
 ## Queues (wylie / english / PHONETICS), C03
 - WYLIE: ACIP anusvara capitals dM/kM/ND + ni'a oddity (seg 6).
@@ -313,4 +313,13 @@ c3p1–c3p20 (1–60) done; 61+ open; 560 segs remain.
 - 59: penday = nasal bridge #6; khri → "tri"; dun-gyi (hyphen #4).
 - 60: can → "chen" (palatalized + umlaut in one syllable);
   dzumkar — the white smile.
+- Evidence layer unchanged: 4,039 / 7,481.
+
+### Batch C03-21 (c3p21, C03:61–63) — 2026-08-28
+- 61: depay (umlaut + -ay); sunam consistent; shingchok.
+- 62: NUMBER SHIFT: bskal brgyar ("a hundred eons") → "For a
+  million years" (C01:474 family); "backs of lions" SUPPLIED from
+  iconography; stanza rotates 59-60-62-61; gyechir (phy-→ch holds).
+- 63: TWO ö-as-u in one line — khyon → "kyun" (#6), blo gros →
+  "lodru" (#7); jelway.
 - Evidence layer unchanged: 4,039 / 7,481.
