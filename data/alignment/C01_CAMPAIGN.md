@@ -554,7 +554,7 @@ letter-exact battery gates every batch.
   (74's coinages reprised verbatim + self-referential "what we have
   called here"). khungs #4 "authentic source". Supplied transition
   sentence (filed with 115's). Self-quotes ×5 — densest cluster.
-| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p97 (144–328) done; 143, 259 & 324 = marker pairs; 329+ open; 168 segs / 56 batches remain; §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
+| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p98 (144–331) done; 143, 259 & 324 = marker pairs; 332+ open; 165 segs / 55 batches remain; §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
 
 NEXT: continue section VII (seq 146+) — the renunciation chapter.
 - seg 143: section-marker pair (like 43) — wylie carries "the first
@@ -1888,3 +1888,21 @@ TCS series and collections beyond, for later ruling). ***
   second; fn 143). man chad/yan chad pair split across sentences.
   der ma zad stabilized ("And that's not all."). rkyang pa → "by
   force of... alone".
+
+### c1p98 — C01:329–331 (batch 98) — the view that cuts the root
+- Zero-catch. Layer: 2,721 headwords / 5,081 pairs.
+- seg 329: zin pa spread (bound/filled). rtogs na → "open your
+  eyes to". PARENTHETICAL RECALL of 328's coinage ("also called
+  'preparation'") — the coinage cycle's third step (coin, use,
+  recall). "all- knowing" artifact kept.
+- seg 330: THE AE PARTICLE (ae rnyed blta) → quoted first-person
+  resolve; "ae" = ACIP-style vowel token #21 (engine catalogue).
+  phu thag chod → "the final form" (thag-chod family #4). "All of
+  us SITTING HERE" (assembly supplied). Worldly-view coinage
+  stable across ~100 segs. ANATMAN VARIED: "no self exists" (vs
+  247's "nothing has a self-nature").
+- seg 331: phyi rol pa → "non-Buddhist SAGES" (outsider term
+  dignified; polemic calibrated by term vs 257). lta ci → "much
+  less" (3rd let-alone particle). nyon mongs → "harmful emotions"
+  (spread). bsam gzugs unpacked (fn 144). TITLE: King of
+  Concentration (Samadhiraja).
