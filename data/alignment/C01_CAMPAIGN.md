@@ -554,7 +554,7 @@ letter-exact battery gates every batch.
   (74's coinages reprised verbatim + self-referential "what we have
   called here"). khungs #4 "authentic source". Supplied transition
   sentence (filed with 115's). Self-quotes ×5 — densest cluster.
-| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p101 (144–340) done; 143, 259 & 324 = marker pairs; 341+ open; 156 segs / 52 batches remain; §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
+| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p102 (144–343) done; 143, 259 & 324 = marker pairs; 344+ open; 153 segs / 51 batches remain; §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
 
 NEXT: continue section VII (seq 146+) — the renunciation chapter.
 - seg 143: section-marker pair (like 43) — wylie carries "the first
@@ -1980,3 +1980,33 @@ TCS series and collections beyond, for later ruling). ***
   point in the formation" (interpretive recast, fn 149).
 - QA: both sides letter-exact, 143 spans balanced, depth clean.
   Layer: 2,770 headwords / 5,181 pairs.
+
+### c1p102 — Literal and figurative (341–343)
+- **341 — the formula's THIRD render**: ya ma bral 336 "never one
+  without the other" / 338 "one always with the other" / 341 "he must
+  have them both together" — three renders in six segments, plus the
+  NEGATIVE ya bral → "one without the other". Metatextual
+  consistency: Pabongka glosses his own 340 quote, GMR keeps the
+  verse's terms (kun rdzob "conventional", de nyid → "Reality").
+  byang chub kyi sems full unpack ("the wish to achieve enlightenment
+  for every sentient being") AND short form ("the wish for
+  enlightenment") in the same segment. bya gshog chag → "a bird with
+  a broken wing"; bgrod par mi nus → "He cannot make the journey".
+- **342 — THE DRANG-NGES RULING**: nges don ("definitive") →
+  "literal"; drang don ("interpretable") → "figurative" — GMR's
+  characteristic pair for the hermeneutic distinction, both DEFINED
+  in-text. Key successor-dictionary entries. bcom ldan 'das → "the
+  enlightened Conquerors"; tshad ma → "a true teaching"; mthar thug
+  gi don → "the ultimate"; de ga rang du → "actually"; bsgom
+  ("meditate") → "gain [this view]" (verb recast); snyam na → "you
+  may ask".
+- **343 — dgongs pa three ways in one segment**: "the true meaning" /
+  "the true intent" / "as…intended it". THREE TITLES: blo gros mi zad
+  pa'i mdo → "Understanding that Has No End" (Akshayamati calqued
+  into English); rtsa ba shes rab → "the Root Wisdom"; dbu ma rigs
+  tshogs → "Collection on the Reasoning of the Middle Way" ("his
+  famed" supplied). lung bstan → "foretold"; paNDi ta → "ancient
+  sage"; negation relocated (mi nus → "Not every…was capable"). Major
+  clause reorder: crossed ids s343c23x, s343c34x (fn 150).
+- QA: both sides letter-exact, 235 spans balanced, depth clean.
+  Layer: **2,800 headwords** / 5,248 pairs — 2,800 milestone.
