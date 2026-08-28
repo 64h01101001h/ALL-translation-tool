@@ -49,7 +49,7 @@ def main():
     for e in incoming:
         seq = e.get("seq")
         seg = "%s:%s" % (a.course, seq)
-        c.execute("select wylie, english from corpus_segments "
+        c.execute("select wylie, english, acip from corpus_segments "
                   "where course=? and seq=?", (a.course, int(seq)))
         row = c.fetchone()
         if not row:
@@ -57,7 +57,10 @@ def main():
             continue
         found = (e.get("found") or "").strip()
         # THE CHECK THAT MATTERS: the quoted text must actually be there.
-        if found and found not in row[0] and found not in row[1]:
+        # ACIP is the source of record, so a quote may legitimately come
+        # from that column. Checking only wylie and english refused a real
+        # finding on the first live batch.
+        if found and not any(found in (col or "") for col in row):
             refused.append((seg, "quoted text %r is not in the spine at this "
                                  "segment — misquoted or mis-cited" % found[:48]))
             continue
