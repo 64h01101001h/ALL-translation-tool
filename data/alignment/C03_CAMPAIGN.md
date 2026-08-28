@@ -76,7 +76,7 @@ entry from here records its producing model; everything through C03 batch
 32 was Fable.
 
 ## Progress
-c3p1–c3p50 (1–150) done; 151+ open; 470 segs remain. **50 pages.**
+c3p1–c3p51 (1–153) done; 154+ open; 467 segs remain.
 
 ## Queues (wylie / english / PHONETICS), C03
 - WYLIE: ACIP anusvara capitals dM/kM/ND + ni'a oddity (seg 6).
@@ -917,3 +917,33 @@ has predicted nothing.
   battery is structurally blind to. Worth a word-order check in the
   re-audit design.
 - Evidence layer: 4,231 headwords / 7,735 pairs.
+
+### Batch C03-51 (c3p51, C03:151–153) — 2026-08-28 — model: Opus
+- 152: **A FOURTH TREATMENT OF zhi gnas.** The layer now holds FIVE
+  distinct written forms for this one term, all GMR's:
+    "quietude"                     (117, 119, 129, …)
+    'quietude ("quiet")'           (131 — GMR reconciling his own two)
+    "quietude (shamata)"           (152 — Sanskrit, round brackets)
+    "quietude [shamata]"           (195 — square brackets)
+    "quiet"                        (130, inside the verse compound)
+  Exactly what the preserve-all ruling protects: a single-gloss entry
+  would discard four of the five.
+  theg pa gsum → "all three ways"; rnal 'byor pa → "any deep
+  practitioner" (the yogi by seriousness, not by role).
+- 153: **A NAMING INCONSISTENCY ACROSS COURSES.** byams pa's
+  honorific here is "Lord MAITREYA" — Sanskrit — where C01 calqued
+  the same being "the Loving One". With Vairochana (C03:136) that is
+  TWO holy names kept in Sanskrit in C03 against calques in C01. The
+  policy is NOT uniform across courses; the dictionary must record
+  both without implying either is the correct form.
+  dbus mtha' → "Distinguishing the Middle and the Extremes" — a
+  FIFTH Indian title calqued. So: titles always calqued, holy names
+  sometimes.
+  The five obstacles are each rendered by EFFECT not by term: le lo
+  → "not feeling like meditating"; gdams ngag brjed pa ("forgetting
+  the instruction") → "losing the object"; bying rgod → "dullness
+  and agitation"; 'du mi byed pa / 'du byed pa → "failing to take
+  action" / "taking action when there is no need".
+  Truncates at "The"; the four antidotes — including shin sbyangs in
+  a THIRD context — have no English here.
+- Evidence layer: 4,255 headwords / 7,764 pairs.
