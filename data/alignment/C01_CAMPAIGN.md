@@ -554,7 +554,7 @@ letter-exact battery gates every batch.
   (74's coinages reprised verbatim + self-referential "what we have
   called here"). khungs #4 "authentic source". Supplied transition
   sentence (filed with 115's). Self-quotes ×5 — densest cluster.
-| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p143 (144–466) done; 143, 259, 324, 427 & 446 = marker pairs; 467+ open; 30 segs / 10 batches remain; §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
+| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p144 (144–469) done; 143, 259, 324, 427 & 446 = marker pairs; 470+ open; 27 segs / 9 batches remain; §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
 
 NEXT: continue section VII (seq 146+) — the renunciation chapter.
 - seg 143: section-marker pair (like 43) — wylie carries "the first
@@ -2967,3 +2967,25 @@ TCS series and collections beyond, for later ruling). ***
   adverb vs noun one segment apart. (fn 190–191.)
 - QA: both sides letter-exact, 140 spans balanced, depth clean.
   Layer: 3,599 headwords / 6,790 pairs.
+
+### c1p144 — At the feet of many sages (467–469)
+- **467 — the closing prayer** (fn 192): sbyor dngos mjug → the
+  practice-session triad ("preliminaries…main meditation…proper
+  conclusion"). Incipit quoted ("May this good deed, standing for
+  whatever ones are done…"); mtshon nas → "standing for".
+- **468 — the lineage received** (fn 193): Pabongka's teachers named
+  — root lama "one and the same with the savior Serlingpa" (zhal mi
+  gnyis pa "not two faces"); "the Holder of the Diamond from
+  Drupkang…the good and glorious Lobsang Ngawang Tenzin Gyatso" with
+  the NAME-TABOO formula (mtshan brjod par dka' ba → "whose blessed
+  name my lips are hardly worthy to pronounce"). English fronts the
+  many-sages summary (crossed s468c14x). "our Lama concluded"
+  supplied #9. drung nas "at the feet of" / zhal snga nas "from the
+  holy lips of" — the two honorific-presence idioms distinguished.
+- **469 — the final request**: phul ZIN pa — zin's FIFTH attestation
+  (bound/filled/steeped/filled/offer-completed). bka' drin skyong
+  bar mdzod → "please be so very kind" (crossed from final); phyag
+  len la thebs → "put it into actual practice"; rtsa tshig → "the
+  lines of the root text" (spread #2); zab folded (flagged drop).
+- QA: both sides letter-exact, 150 spans balanced, depth clean.
+  Layer: 3,627 headwords / 6,836 pairs.
