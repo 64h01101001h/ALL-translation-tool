@@ -29,7 +29,7 @@ When a segment's english field is phonetics, not translation:
    under its own clause with honest labels.
 
 ## Progress
-c3p1–c3p29 (1–87) done; 88+ open; 533 segs remain.
+c3p1–c3p30 (1–90) done; 91+ open; 530 segs remain.
 
 ## Queues (wylie / english / PHONETICS), C03
 - WYLIE: ACIP anusvara capitals dM/kM/ND + ni'a oddity (seg 6).
@@ -400,3 +400,14 @@ c3p1–c3p29 (1–87) done; 88+ open; 533 segs remain.
   surfaces as nd after liquid coda (cousin of the nasal bridges).
   The root-lama verse opens.
 - Evidence layer unchanged: 4,039 / 7,481.
+
+### Batch C03-30 (c3p30, C03:88–90) — 2026-08-28
+- 88: bdag gi AND bdag gis both → "dakki" — case erosion doubly
+  attested; chiwor.
+- 89: chenpoy — THE DIPHTHONG SYSTEM COMPLETES (ay/uy/ey/oy);
+  gone (sg-→g + umlaut); jesung.
+- 90: tukkyi/ngudrup consistent. Stanza finds: rjes bzung → "Take
+  me after You"; dpal ldan → "Shining and precious"; dngos grub
+  (siddhi) → "Grant that I attain".
+- Evidence layer unchanged: 4,039 / 7,481. 30 pages / 90 segments
+  of C03 done.
