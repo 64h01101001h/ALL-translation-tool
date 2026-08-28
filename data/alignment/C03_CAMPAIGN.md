@@ -46,7 +46,7 @@ entry from here records its producing model; everything through C03 batch
 32 was Fable.
 
 ## Progress
-c3p1–c3p36 (1–108) done; 109+ open; 512 segs remain.
+c3p1–c3p37 (1–111) done; 112+ open; 509 segs remain.
 
 ## Queues (wylie / english / PHONETICS), C03
 - WYLIE: ACIP anusvara capitals dM/kM/ND + ni'a oddity (seg 6).
@@ -520,4 +520,26 @@ c3p1–c3p36 (1–108) done; 109+ open; 512 segs remain.
   "The Essence of the Word"). brtan par → "never moving".
 - PHONETICS QUEUE #4 opened: nyingpo (86) vs nyinpoy (108).
 - 106/107: verbatim repeats (98/102/106; 89/99/103/107).
+- Evidence layer: 4,039 headwords / 7,481 pairs; ACIP 4,038/4,039.
+
+### Batch C03-37 (c3p37, C03:109–111) — 2026-08-28 — model: Opus
+- THE ERGATIVE IS AUDIBLE — the batch's principal finding. The
+  agentive/ergative -s does not vanish in GMR's phonetics; it
+  fronts the preceding vowel:
+    tsong kha pa  → "tsongkapa" (95, caseless)
+    tsong kha pas → "tsongkape" (109, ergative)
+    rgyal ba      → "gyalwa"    (109, caseless)
+    rgyal bas     → "gyalwe"    (111, ergative)
+  Two matched minimal pairs, both on the same page. This is
+  GRAMMAR carried by the sound system, not merely sound — and it
+  bears directly on the pronunciation engine's treatment of case.
+  Note the asymmetry: a stem-final -s drops (tshe rabs → "tserab")
+  while the case -s survives as the umlaut.
+- 110: bshes gnyen → "she-nyen" (disambiguation hyphen; the same
+  word rendered "a spiritual teacher" at C01:485 and "your
+  Spiritual Guide" at C03:53). theg mchog → "tekchok"; dngos su →
+  "ngusu" (69/91 consistent); mthus → "tu".
+- 111: bsngags pa'i → "ngakpay" (bsng-→ng, cf. ngowa at 12); lam
+  bzang → "lamsang" (bz-→s, losang family); de nyid → "de-nyi";
+  las → "le" (15 consistent).
 - Evidence layer: 4,039 headwords / 7,481 pairs; ACIP 4,038/4,039.
