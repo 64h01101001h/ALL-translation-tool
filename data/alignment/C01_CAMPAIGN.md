@@ -3296,3 +3296,20 @@ C03 (C02 already complete).
   own phonetics, four segments apart, and the identical split occurs
   at the same segments in C03. Kept verbatim (ruling 1).
 - COVERAGE GATE: C01 486→489; 7 open (19-22, 39, 43, 143).
+
+### BACKFILL B7 (c1L7, C01:19–22) — 2026-08-28 — model: Opus
+- LITURGY 1–22 NOW COMPLETE. Coverage gate: C01 489→493; 3 open
+  (markers 39, 43, 143).
+- 19: skyob pa ↔ "kyoppa" (junction doubling, with dakki/druppar);
+  dam chos ↔ "damchu".
+- 20: dge 'dun ↔ "gendun" (nasal bridge, nyinde family).
+- 21: dkon mchog gsum ↔ "konchok sum". Stanza UNPAIRED (s21trans,
+  source 18–21), English "I offer this / Higher than any other" ×4
+  mirroring the Tibetan bla med anaphora. ENGLISH QUEUE: this
+  segment TRUNCATES mid-word at "To the places of ref".
+- 22: THE ONE SEGMENT OF THE LITURGY C01 DOES NOT SHARE WITH C03.
+  1–21 are byte-identical across the two courses; 22 names Course I,
+  its own syllabus and readings, where C03:22 names Course III.
+  This vindicates generating the backfill from C01's own spine rows:
+  copying the C03 pages would have been right 21 times and false on
+  the twenty-second.
