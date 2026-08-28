@@ -554,7 +554,7 @@ letter-exact battery gates every batch.
   (74's coinages reprised verbatim + self-referential "what we have
   called here"). khungs #4 "authentic source". Supplied transition
   sentence (filed with 115's). Self-quotes ×5 — densest cluster.
-| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p76 (144–265) done; 143 & 259 = marker pairs; 266+ open; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
+| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p77 (144–268) done; 143 & 259 = marker pairs; 269+ open; §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
 
 NEXT: continue section VII (seq 146+) — the renunciation chapter.
 - seg 143: section-marker pair (like 43) — wylie carries "the first
@@ -1456,3 +1456,36 @@ TCS series and collections beyond, for later ruling). ***
   "some wild bird" (generalized). ORDER FLIP #5: lha mi → "humans
   and gods". zil gyis gnon → "completely outshine". Line-wrap
   artifact "self- made" kept verbatim.
+
+### c1p77 — C01:266–268 (batch 77) — sons of the Buddhas; §XII
+- Twenty-fifth consecutive zero-catch batch. Layer: 2,260
+  headwords / 4,221 pairs.
+- AMENDMENT TO BATCH 76: the "becomes-triple" was NOT one-verb
+  amplification — its 2nd/3rd members are 266's first two clauses
+  (sangs rgyas ba'i rgyur 'gro / rgyal sras kyi spyod par 'gro),
+  rendered by GMR at the END of 265's English. The segment
+  boundary splits a Tibetan triple; English heals it in the prior
+  segment. ALSO: 265's bare "bodhisattva" renders rgyal sras
+  ("victor's son"), not byang chub sems dpa'. The c1p77 page
+  carries relocation nuls; batch 76's AI-note claim corrected
+  here (the page itself stays as shipped — ledger is the
+  correction of record).
+- seg 266: sras/spun → "their son"/"their brother" (kinship pair;
+  dgongs hon. → "look upon"). phyogs bcu → "the ten directions of
+  space" (+"countless" supplied). sems 'di shorthand → FULL
+  formula restored + "holy" supplied.
+- seg 267: A-NOT-A INTERROGATIVES (zhugs ma zhugs / 'tshang rgya
+  mi rgya) → "the whole question of whether..." ×2. der ma zad →
+  "But that's not all" (direct; spread vs 251). tshe gcig la →
+  "this one SHORT life". blo sbyong → "train your thoughts" (vs
+  blo sbyang 256). gsungs → "our Lama concluded" (3rd, formulaic).
+- APPARATUS BANK (Notes to Reading Seven, 126–129, elided):
+  "listeners" etymologized ("can listen... but NOT practice these
+  instructions themselves"); "self-made victors" explained (no
+  guide this life, countless teachers before); enemy destroyers
+  defined via desire/anger/ignorance; Chandrakirti 7th c. (his
+  text "covered below with the third path"); The Rare Stack = 49
+  sutras; Chapter of Light Protector cited (f. 237).
+  "practicioners" 4th attestation. Reading Eight + §XII header.
+- seg 268: outline expansion; lead-in announces TWO verses (7–8
+  come as a pair).
