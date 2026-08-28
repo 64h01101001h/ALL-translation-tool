@@ -554,7 +554,7 @@ letter-exact battery gates every batch.
   (74's coinages reprised verbatim + self-referential "what we have
   called here"). khungs #4 "authentic source". Supplied transition
   sentence (filed with 115's). Self-quotes ×5 — densest cluster.
-| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p105 (144–352) done; 143, 259 & 324 = marker pairs; 353+ open; 144 segs / 48 batches remain; §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
+| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p106 (144–355) done; 143, 259 & 324 = marker pairs; 356+ open; 141 segs / 47 batches remain; §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
 
 NEXT: continue section VII (seq 146+) — the renunciation chapter.
 - seg 143: section-marker pair (like 43) — wylie carries "the first
@@ -2101,3 +2101,29 @@ TCS series and collections beyond, for later ruling). ***
   terminological stability at density.
 - QA: both sides letter-exact, 125 spans balanced, depth clean.
   Layer: 2,866 headwords / 5,371 pairs.
+
+### c1p106 — The criterion ladder (353–355)
+- **353 — the Independent: parts**: rang gi cha shas la brten nas →
+  "in dependence upon its parts"; 'jog tshul cung drag pa → "a little
+  bit better". Order flip rtag mi rtag → "changing and unchanging".
+  SECOND SUPPLIED TAIL (": for those with causes and without" — no
+  Tibetan exponent; same amplification as 352): GMR glosses each
+  school's criterion with the cause-test. 1 tib sentence → 3 eng.
+- **354 — the Implication: names**: THE DESIGNATION TRIAD in plain
+  English — gdags gzhi → "a reasonable basis to be given a name";
+  'dogs byed rtog pa → "a reasonable idea to give it a name"; btags
+  chos → "an object we gave a name" — zero technical terms. tshad ma
+  → "reasonable" (spread #2 after 342's "a true teaching"),
+  distributed to both members. phra ba → "subtler than all the rest".
+- **355 — why interdependence first**: THE CHAD-LTA UNPACK — largest
+  single-term expansion in the file: chad lta → "swinging to the
+  opposite extreme where they believe that, if all things are empty,
+  they can have no existence at all". gsungs → "concluded our Lama" —
+  frame verb with SUPPLIED subject (Pabongka surfaces). "First of
+  all"/"Secondly" supplied. TYPO-QUEUE English #19: "cause-and-
+  effect" (hyphen-space line-break artifact) — kept verbatim,
+  flagged. SECTION XV header ("What is Correct View?") embedded at
+  segment end — own unpaired block. thabs → "way" ×3; section XIV
+  closes, XV opens.
+- QA: both sides letter-exact, 158 spans balanced, depth clean.
+  Layer: 2,881 headwords / 5,415 pairs.
