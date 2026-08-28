@@ -554,7 +554,7 @@ letter-exact battery gates every batch.
   (74's coinages reprised verbatim + self-referential "what we have
   called here"). khungs #4 "authentic source". Supplied transition
   sentence (filed with 115's). Self-quotes ×5 — densest cluster.
-| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p90 (144–307) done; 143 & 259 = marker pairs; 308+ open; 189 segs / 63 batches remain to close C01 (est. finish ~batch 153); §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
+| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p91 (144–310) done; 143 & 259 = marker pairs; 311+ open; 186 segs / 62 batches remain to close C01; §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
 
 NEXT: continue section VII (seq 146+) — the renunciation chapter.
 - seg 143: section-marker pair (like 43) — wylie carries "the first
@@ -1741,3 +1741,20 @@ TCS series and collections beyond, for later ruling). ***
   doubled. HONORIFIC TRIAD PLAIN: sku gsung thugs → "my body, or
   my speech, or my thoughts". don gnyis → "both mine and others'
   benefit". DB artifact "zhog,sems" kept.
+
+### c1p91 — C01:308–310 (batch 91) — the genuine wish; a point from the Steps
+- Zero-catch. Layer: 2,589 headwords / 4,847 pairs.
+- seg 308: ci nas kyang once → "do anything I/you can" twice
+  (tib-once/eng-repeats WITH a person shift between occurrences).
+  dus myur ba nyid du → "with every speed". "reach" enlightenment
+  (reach/achieve formula variation).
+- seg 309: NESTED ATTRIBUTION — gsungs yod + gsung → "Our Lama
+  mentioned that this point was stated in Lord Tsongkapa's
+  exposition..." (report-within-report; both frames rendered;
+  gsung 6th attestation). zhor du → "by the way". theg dman →
+  "the lesser way" (theg-pa system complete). rje → "Lord
+  Tsongkapa" (name from bare title again). fn 134.
+- seg 310: seven-part architecture recap ("beautiful" stable).
+  dmigs pa logs su skyong tshul med → "no separate meditation
+  instruction" (fn 135). Line-wrap artifact "loving- kindness"
+  kept. ldan 'dod → wish-form.
