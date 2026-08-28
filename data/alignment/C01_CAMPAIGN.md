@@ -554,7 +554,7 @@ letter-exact battery gates every batch.
   (74's coinages reprised verbatim + self-referential "what we have
   called here"). khungs #4 "authentic source". Supplied transition
   sentence (filed with 115's). Self-quotes ×5 — densest cluster.
-| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p80 (144–277) done; 143 & 259 = marker pairs; 278+ open; §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
+| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p81 (144–280) done; 143 & 259 = marker pairs; 281+ open; §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
 
 NEXT: continue section VII (seq 146+) — the renunciation chapter.
 - seg 143: section-marker pair (like 43) — wylie carries "the first
@@ -1550,3 +1550,25 @@ TCS series and collections beyond, for later ruling). ***
   fronted before method-stages (crossed ids). 'don pa doubled
   with "grasp her hand and draw her out" supplied. "jewel wish"
   compression.
+
+### c1p81 — C01:278–280 (batch 81) — defining love and compassion
+- Twenty-ninth consecutive zero-catch batch. Layer: 2,353
+  headwords / 4,402 pairs.
+- seg 278: DEFINITIONS with supplied quotes (byams pa →
+  "'Loving-kindness'", snying rje → "'Compassion'"). lhang lhang
+  spread → "almost obsessive"/"an obsession" (obsession register).
+  ANADIPLOSIS CHAIN kept (gain←contemplate←learn; "from another"
+  supplied from thos). Mother-son simile: spyod lam thams cad du
+  (four postures) → "Wherever she goes, whatever she does";
+  rgyun chad med par + ngam ngam shugs kyis both doubled.
+  1 Tibetan clause → 4 English sentences.
+- seg 279: THE TWO METHODS COINED — "seven-part, cause-and-effect
+  instruction" / "exchanging self and others" with mnyam (the
+  EQUALIZING half) FOLDED — successor-dictionary flag. WAY-TRIPLE
+  anaphora supplied. 'gran zla dang bral ba → "unmatched by any
+  other here upon this earth".
+- seg 280: SEVEN-PART VOCABULARY COINED — mar shes → "'mother
+  recognition'"; yid 'ong gi byams pa → "'beautiful' loving-
+  kindness" (the crux term, scare-quoted). drin dran/drin gzo
+  defined. btang snyoms → "feelings of neutrality". thog mar →
+  "The start-off". Cause-effect lattice with supplied ordinals.
