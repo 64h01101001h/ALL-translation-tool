@@ -4,13 +4,23 @@
   "tier": "TENTATIVE (machine-matched, unreviewed)",
   "generator": "Claude (AI), full-depth alignment",
   "date": "2026-08-28",
-  "source_pages": "banked pages, 3 course(s) (sha256 f150264bf97b4de0)",
+  "source_pages": "banked pages, 3 course(s) (sha256 5a8b856f7b6a7300)",
   "source_corpus": "hgm_spine_v27_2 corpus_segments C01+C02+C03",
   "rule": "English is HGM's corpus text verbatim, machine-MATCHED never composed; never enters hgm_gloss",
   "transliteration": "ACIP is the source of record and the join key (acip / acip_index); wylie is the derived display form, proven equal to acip_to_ewts(acip) on 8961/8961 segments of C01-C18 (Adam 2026-08-28)",
   "limit": "these gates prove the text is VERBATIM, never that the correspondence is CORRECT; a wrong pairing passes every one of them (risk R10)"
  },
  "pairs": {
+  "'ang": [
+   {
+    "eng": "even",
+    "refs": [
+     "C03:185"
+    ],
+    "n": 1,
+    "acip": "'ANG"
+   }
+  ],
   "'ang rung ste": [
    {
     "eng": "It is also quite acceptable",
@@ -302,6 +312,14 @@
     "eng": "effect",
     "refs": [
      "C01:36"
+    ],
+    "n": 1,
+    "acip": "'BRAS BU"
+   },
+   {
+    "eng": "fruit",
+    "refs": [
+     "C03:185"
     ],
     "n": 1,
     "acip": "'BRAS BU"
@@ -1352,9 +1370,11 @@
     "refs": [
      "C02:26",
      "C03:170",
-     "C03:173"
+     "C03:173",
+     "C03:176",
+     "C03:180"
     ],
-    "n": 3,
+    "n": 5,
     "acip": "'DI"
    }
   ],
@@ -1824,6 +1844,16 @@
   ],
   "'dis": [
    {
+    "eng": "This",
+    "refs": [
+     "C03:178",
+     "C03:183",
+     "C03:189"
+    ],
+    "n": 3,
+    "acip": "'DIS"
+   },
+   {
     "eng": "this",
     "refs": [
      "C03:174"
@@ -2192,6 +2222,14 @@
     "eng": "The objects of the senses",
     "refs": [
      "C01:192"
+    ],
+    "n": 1,
+    "acip": "'DOD YON"
+   },
+   {
+    "eng": "objects of the senses",
+    "refs": [
+     "C03:177"
     ],
     "n": 1,
     "acip": "'DOD YON"
@@ -3499,11 +3537,21 @@
     "acip": "'GRUB"
    },
    {
-    "eng": "reach",
+    "eng": "attain",
     "refs": [
-     "C03:174"
+     "C03:178"
     ],
     "n": 1,
+    "acip": "'GRUB"
+   },
+   {
+    "eng": "reach",
+    "refs": [
+     "C03:174",
+     "C03:183",
+     "C03:189"
+    ],
+    "n": 3,
     "acip": "'GRUB"
    }
   ],
@@ -3678,9 +3726,10 @@
     "eng": "of",
     "refs": [
      "C03:170",
-     "C03:174"
+     "C03:174",
+     "C03:178"
     ],
-    "n": 2,
+    "n": 3,
     "acip": "'I"
    }
   ],
@@ -4128,6 +4177,23 @@
    }
   ],
   "'jog pa": [
+   {
+    "eng": "Keeping",
+    "refs": [
+     "C03:175",
+     "C03:179"
+    ],
+    "n": 2,
+    "acip": "'JOG PA"
+   },
+   {
+    "eng": "Maintaining",
+    "refs": [
+     "C03:182"
+    ],
+    "n": 1,
+    "acip": "'JOG PA"
+   },
    {
     "eng": "Setting",
     "refs": [
@@ -5503,6 +5569,16 @@
     "acip": "'PHRIN LAS"
    }
   ],
+  "'phro": [
+   {
+    "eng": "distracted",
+    "refs": [
+     "C03:185"
+    ],
+    "n": 1,
+    "acip": "'PHRO"
+   }
+  ],
   "'phro ba": [
    {
     "eng": "distraction",
@@ -5531,6 +5607,16 @@
     ],
     "n": 1,
     "acip": "'PHROG PAR"
+   }
+  ],
+  "'phror": [
+   {
+    "eng": "distracted",
+    "refs": [
+     "C03:186"
+    ],
+    "n": 1,
+    "acip": "'PHROR"
    }
   ],
   "'phrul": [
@@ -6047,6 +6133,16 @@
     ],
     "n": 1,
     "acip": "BAR DU"
+   }
+  ],
+  "bar gcod": [
+   {
+    "eng": "obstacle",
+    "refs": [
+     "C03:185"
+    ],
+    "n": 1,
+    "acip": "BAR GCOD"
    }
   ],
   "bar gyi": [
@@ -7461,9 +7557,10 @@
    {
     "eng": "seventh",
     "refs": [
-     "C03:173"
+     "C03:173",
+     "C03:189"
     ],
-    "n": 1,
+    "n": 2,
     "acip": "BDUN PA"
    }
   ],
@@ -9304,6 +9401,16 @@
     "acip": "BRGYAD KHRI"
    }
   ],
+  "brgyad pa": [
+   {
+    "eng": "eighth",
+    "refs": [
+     "C03:189"
+    ],
+    "n": 1,
+    "acip": "BRGYAD PA"
+   }
+  ],
   "brgyad pa ni": [
    {
     "eng": "In the eighth mental state",
@@ -9956,9 +10063,10 @@
    {
     "eng": "effort",
     "refs": [
-     "C01:58"
+     "C01:58",
+     "C03:189"
     ],
-    "n": 1,
+    "n": 2,
     "acip": "BRTZON 'GRUS"
    },
    {
@@ -15471,6 +15579,26 @@
     "acip": "BYING BA MTSON"
    }
   ],
+  "bying ba phra mo": [
+   {
+    "eng": "Subtle dullness",
+    "refs": [
+     "C03:180"
+    ],
+    "n": 1,
+    "acip": "BYING BA PHRA MO"
+   }
+  ],
+  "bying ba phra rags": [
+   {
+    "eng": "obvious and subtle dullness",
+    "refs": [
+     "C03:180"
+    ],
+    "n": 1,
+    "acip": "BYING BA PHRA RAGS"
+   }
+  ],
   "bying rgod": [
    {
     "eng": "dullness and agitation",
@@ -16032,6 +16160,14 @@
    }
   ],
   "bzhi pa": [
+   {
+    "eng": "fourth",
+    "refs": [
+     "C03:178"
+    ],
+    "n": 1,
+    "acip": "BZHI PA"
+   },
    {
     "eng": "the fourth part",
     "refs": [
@@ -21623,9 +21759,10 @@
    {
     "eng": "virtuous",
     "refs": [
-     "C01:215"
+     "C01:215",
+     "C03:185"
     ],
-    "n": 1,
+    "n": 2,
     "acip": "DGE BA"
    },
    {
@@ -22094,9 +22231,10 @@
      "C01:211",
      "C01:214",
      "C01:333",
-     "C01:399"
+     "C01:399",
+     "C03:185"
     ],
-    "n": 13,
+    "n": 14,
     "acip": "DGOS"
    },
    {
@@ -22564,6 +22702,16 @@
     "acip": "DKAR"
    }
   ],
+  "dkar cha": [
+   {
+    "eng": "white patch",
+    "refs": [
+     "C03:176"
+    ],
+    "n": 1,
+    "acip": "DKAR CHA"
+   }
+  ],
   "dkar por": [
    {
     "eng": "is white",
@@ -22764,6 +22912,14 @@
     "eng": "meditative techniques",
     "refs": [
      "C01:98"
+    ],
+    "n": 1,
+    "acip": "DMIGS PA"
+   },
+   {
+    "eng": "object of meditation",
+    "refs": [
+     "C03:181"
     ],
     "n": 1,
     "acip": "DMIGS PA"
@@ -23227,6 +23383,14 @@
     "eng": "The point",
     "refs": [
      "C01:121"
+    ],
+    "n": 1,
+    "acip": "DON"
+   },
+   {
+    "eng": "activity",
+    "refs": [
+     "C03:185"
     ],
     "n": 1,
     "acip": "DON"
@@ -24437,6 +24601,14 @@
     "acip": "DRAN PA"
    },
    {
+    "eng": "bringing the mind back to the object",
+    "refs": [
+     "C03:178"
+    ],
+    "n": 1,
+    "acip": "DRAN PA"
+   },
+   {
     "eng": "is to bring the mind back to the object",
     "refs": [
      "C03:154"
@@ -24667,6 +24839,16 @@
     ],
     "n": 1,
     "acip": "DRED MDO"
+   }
+  ],
+  "dren pa": [
+   {
+    "eng": "leads",
+    "refs": [
+     "C03:186"
+    ],
+    "n": 1,
+    "acip": "DREN PA"
    }
   ],
   "dri ma": [
@@ -25035,6 +25217,16 @@
     "acip": "DRUG LA SOGS PA"
    }
   ],
+  "drug pa": [
+   {
+    "eng": "sixth",
+    "refs": [
+     "C03:183"
+    ],
+    "n": 1,
+    "acip": "DRUG PA"
+   }
+  ],
   "drung": [
    {
     "eng": "before",
@@ -25158,6 +25350,14 @@
    }
   ],
   "dul bar byed pa": [
+   {
+    "eng": "Controlling",
+    "refs": [
+     "C03:187"
+    ],
+    "n": 1,
+    "acip": "DUL BAR BYED PA"
+   },
    {
     "eng": "controlling the mind",
     "refs": [
@@ -25366,6 +25566,14 @@
     "eng": "distraction",
     "refs": [
      "C03:163"
+    ],
+    "n": 1,
+    "acip": "G-YENG BA"
+   },
+   {
+    "eng": "wandering",
+    "refs": [
+     "C03:181"
     ],
     "n": 1,
     "acip": "G-YENG BA"
@@ -26971,6 +27179,16 @@
     "acip": "GI TING NGE 'DZIN"
    }
   ],
+  "glan": [
+   {
+    "eng": "patches",
+    "refs": [
+     "C03:179"
+    ],
+    "n": 1,
+    "acip": "GLAN"
+   }
+  ],
   "glan de 'jog pa": [
    {
     "eng": "keeping the mind on the object with patches where you lose the object",
@@ -27438,6 +27656,16 @@
     "acip": "GNAS BZANG BA"
    }
   ],
+  "gnas cha": [
+   {
+    "eng": "fixation",
+    "refs": [
+     "C03:176"
+    ],
+    "n": 1,
+    "acip": "GNAS CHA"
+   }
+  ],
   "gnas khang": [
    {
     "eng": "the room",
@@ -27891,6 +28119,14 @@
      "C01:241"
     ],
     "n": 2,
+    "acip": "GNYIS"
+   },
+   {
+    "eng": "second",
+    "refs": [
+     "C03:185"
+    ],
+    "n": 1,
     "acip": "GNYIS"
    },
    {
@@ -29141,6 +29377,16 @@
     "acip": "GSAL BAR MDZAD"
    }
   ],
+  "gsal cha": [
+   {
+    "eng": "clarity",
+    "refs": [
+     "C03:176"
+    ],
+    "n": 1,
+    "acip": "GSAL CHA"
+   }
+  ],
   "gsal dgos pa": [
    {
     "eng": "you should visualize",
@@ -29792,9 +30038,10 @@
     "eng": "third",
     "refs": [
      "C01:134",
-     "C01:136"
+     "C01:136",
+     "C03:178"
     ],
-    "n": 2,
+    "n": 3,
     "acip": "GSUM PA"
    }
   ],
@@ -31013,6 +31260,16 @@
     "acip": "GTING NAS"
    }
   ],
+  "gtod pa": [
+   {
+    "eng": "re-focus",
+    "refs": [
+     "C03:181"
+    ],
+    "n": 1,
+    "acip": "GTOD PA"
+   }
+  ],
   "gtog pa": [
    {
     "eng": "snap",
@@ -31356,6 +31613,16 @@
     "acip": "GYUR PA"
    }
   ],
+  "gzengs gtod": [
+   {
+    "eng": "uplifting your heart",
+    "refs": [
+     "C03:186"
+    ],
+    "n": 1,
+    "acip": "GZENGS GTOD"
+   }
+  ],
   "gzhag": [
    {
     "eng": "presentation of our own position",
@@ -31472,9 +31739,10 @@
      "C01:104",
      "C01:151",
      "C01:370",
-     "C02:32"
+     "C02:32",
+     "C03:185"
     ],
-    "n": 6,
+    "n": 7,
     "acip": "GZHAN"
    },
    {
@@ -31868,6 +32136,16 @@
     ],
     "n": 1,
     "acip": "GZHI GCIG LA"
+   }
+  ],
+  "gzhi gnas": [
+   {
+    "eng": "quietude",
+    "refs": [
+     "C03:185"
+    ],
+    "n": 1,
+    "acip": "GZHI GNAS"
    }
   ],
   "gzhi nas": [
@@ -36568,6 +36846,14 @@
     "acip": "LEN"
    },
    {
+    "eng": "reaching",
+    "refs": [
+     "C03:185"
+    ],
+    "n": 1,
+    "acip": "LEN"
+   },
+   {
     "eng": "take",
     "refs": [
      "C01:214"
@@ -37185,9 +37471,10 @@
      "C01:54",
      "C01:56",
      "C01:92",
-     "C02:40"
+     "C02:40",
+     "C03:177"
     ],
-    "n": 4,
+    "n": 5,
     "acip": "LNGA"
    },
    {
@@ -37204,6 +37491,14 @@
     "eng": "The fifth",
     "refs": [
      "C02:45"
+    ],
+    "n": 1,
+    "acip": "LNGA PA"
+   },
+   {
+    "eng": "fifth",
+    "refs": [
+     "C03:183"
     ],
     "n": 1,
     "acip": "LNGA PA"
@@ -37560,6 +37855,14 @@
     "acip": "LTA BA"
    },
    {
+    "eng": "looking",
+    "refs": [
+     "C03:181"
+    ],
+    "n": 1,
+    "acip": "LTA BA"
+   },
+   {
     "eng": "of views",
     "refs": [
      "C01:272"
@@ -37802,6 +38105,16 @@
     ],
     "n": 5,
     "acip": "LTO"
+   }
+  ],
+  "ltobs": [
+   {
+    "eng": "power",
+    "refs": [
+     "C03:178"
+    ],
+    "n": 1,
+    "acip": "LTOBS"
    }
   ],
   "ltogs": [
@@ -40963,6 +41276,14 @@
    }
   ],
   "mgo": [
+   {
+    "eng": "head",
+    "refs": [
+     "C03:176"
+    ],
+    "n": 1,
+    "acip": "MGO"
+   },
    {
     "eng": "to poke his head up",
     "refs": [
@@ -44133,6 +44454,14 @@
   ],
   "mtshon": [
    {
+    "eng": "represent",
+    "refs": [
+     "C03:177"
+    ],
+    "n": 1,
+    "acip": "MTSON"
+   },
+   {
     "eng": "represents",
     "refs": [
      "C03:172"
@@ -46265,6 +46594,16 @@
     "acip": "NGO MTSAR"
    }
   ],
+  "ngo shes": [
+   {
+    "eng": "tell",
+    "refs": [
+     "C03:181"
+    ],
+    "n": 1,
+    "acip": "NGO SHES"
+   }
+  ],
   "ngo shes nas": [
    {
     "eng": "Able to tell",
@@ -46365,6 +46704,14 @@
     "eng": "identify",
     "refs": [
      "C02:64"
+    ],
+    "n": 1,
+    "acip": "NGOS ZIN PA"
+   },
+   {
+    "eng": "recognize",
+    "refs": [
+     "C03:180"
     ],
     "n": 1,
     "acip": "NGOS ZIN PA"
@@ -46606,9 +46953,10 @@
    {
     "eng": "power",
     "refs": [
-     "C02:41"
+     "C02:41",
+     "C03:184"
     ],
-    "n": 1,
+    "n": 2,
     "acip": "NUS PA"
    },
    {
@@ -46735,6 +47083,16 @@
     ],
     "n": 1,
     "acip": "NYAMS MYONG"
+   }
+  ],
+  "nyams pa": [
+   {
+    "eng": "loses",
+    "refs": [
+     "C03:184"
+    ],
+    "n": 1,
+    "acip": "NYAMS PA"
    }
   ],
   "nyams rtogs": [
@@ -47058,6 +47416,16 @@
     ],
     "n": 1,
     "acip": "NYE BA"
+   }
+  ],
+  "nye bar": [
+   {
+    "eng": "tightly",
+    "refs": [
+     "C03:182"
+    ],
+    "n": 1,
+    "acip": "NYE BAR"
    }
   ],
   "nye bar 'jog pa": [
@@ -49032,6 +49400,14 @@
   ],
   "phyi mig": [
    {
+    "eng": "back",
+    "refs": [
+     "C03:181"
+    ],
+    "n": 1,
+    "acip": "PHYI MIG"
+   },
+   {
     "eng": "look back",
     "refs": [
      "C01:192"
@@ -49326,6 +49702,14 @@
     "eng": "all turn",
     "refs": [
      "C01:479"
+    ],
+    "n": 1,
+    "acip": "PHYOGS"
+   },
+   {
+    "eng": "object",
+    "refs": [
+     "C03:185"
     ],
     "n": 1,
     "acip": "PHYOGS"
@@ -51762,11 +52146,20 @@
   ],
   "rgod pa": [
    {
-    "eng": "agitation",
+    "eng": "Agitation",
     "refs": [
-     "C03:172"
+     "C03:184"
     ],
     "n": 1,
+    "acip": "RGOD PA"
+   },
+   {
+    "eng": "agitation",
+    "refs": [
+     "C03:172",
+     "C03:177"
+    ],
+    "n": 2,
     "acip": "RGOD PA"
    }
   ],
@@ -52976,6 +53369,14 @@
    }
   ],
   "rgyun": [
+   {
+    "eng": "continuity",
+    "refs": [
+     "C03:175"
+    ],
+    "n": 1,
+    "acip": "RGYUN"
+   },
    {
     "eng": "currents",
     "refs": [
@@ -58386,9 +58787,12 @@
      "C01:169",
      "C01:192",
      "C03:167",
-     "C03:171"
+     "C03:171",
+     "C03:181",
+     "C03:185",
+     "C03:186"
     ],
-    "n": 5,
+    "n": 8,
     "acip": "SEMS"
    },
    {
@@ -58883,6 +59287,16 @@
      "C03:174"
     ],
     "n": 2,
+    "acip": "SEMS GNAS"
+   },
+   {
+    "eng": "mental states",
+    "refs": [
+     "C03:178",
+     "C03:183",
+     "C03:189"
+    ],
+    "n": 3,
     "acip": "SEMS GNAS"
    },
    {
@@ -59581,6 +59995,14 @@
   ],
   "sgrub": [
    {
+    "eng": "develop",
+    "refs": [
+     "C03:185"
+    ],
+    "n": 1,
+    "acip": "SGRUB"
+   },
+   {
     "eng": "do",
     "refs": [
      "C01:175",
@@ -60045,15 +60467,24 @@
    {
     "eng": "Watchfulness",
     "refs": [
-     "C03:169"
+     "C03:169",
+     "C03:186"
     ],
-    "n": 1,
+    "n": 2,
     "acip": "SHES BZHIN"
    },
    {
     "eng": "is watchfulness",
     "refs": [
      "C03:154"
+    ],
+    "n": 1,
+    "acip": "SHES BZHIN"
+   },
+   {
+    "eng": "watchfulness",
+    "refs": [
+     "C03:183"
     ],
     "n": 1,
     "acip": "SHES BZHIN"
@@ -60777,6 +61208,14 @@
     "acip": "SKABS"
    },
    {
+    "eng": "practices",
+    "refs": [
+     "C03:185"
+    ],
+    "n": 1,
+    "acip": "SKABS"
+   },
+   {
     "eng": "section",
     "refs": [
      "C02:26"
@@ -61468,6 +61907,14 @@
     "eng": "another birth",
     "refs": [
      "C01:214"
+    ],
+    "n": 1,
+    "acip": "SKYE BA"
+   },
+   {
+    "eng": "appear",
+    "refs": [
+     "C03:184"
     ],
     "n": 1,
     "acip": "SKYE BA"
@@ -63477,9 +63924,10 @@
    {
     "eng": "first",
     "refs": [
-     "C01:233"
+     "C01:233",
+     "C03:184"
     ],
-    "n": 1,
+    "n": 2,
     "acip": "SNGON"
    },
    {
@@ -64522,6 +64970,14 @@
     "eng": "and all the rest",
     "refs": [
      "C01:394"
+    ],
+    "n": 1,
+    "acip": "SOGS"
+   },
+   {
+    "eng": "and other such details",
+    "refs": [
+     "C03:180"
     ],
     "n": 1,
     "acip": "SOGS"
@@ -65793,6 +66249,14 @@
     ],
     "n": 1,
     "acip": "STER"
+   },
+   {
+    "eng": "let",
+    "refs": [
+     "C03:186"
+    ],
+    "n": 1,
+    "acip": "STER"
    }
   ],
   "stobs": [
@@ -65816,9 +66280,11 @@
    {
     "eng": "power",
     "refs": [
-     "C03:174"
+     "C03:174",
+     "C03:183",
+     "C03:189"
     ],
-    "n": 1,
+    "n": 3,
     "acip": "STOBS"
    },
    {
@@ -68925,9 +69391,10 @@
    {
     "eng": "one-pointed concentration",
     "refs": [
-     "C03:162"
+     "C03:162",
+     "C03:186"
     ],
-    "n": 1,
+    "n": 2,
     "acip": "TING 'DZIN"
    },
    {
@@ -71712,6 +72179,14 @@
     "acip": "YIN"
    },
    {
+    "eng": "becomes",
+    "refs": [
+     "C03:185"
+    ],
+    "n": 1,
+    "acip": "YIN"
+   },
+   {
     "eng": "is",
     "refs": [
      "C02:61",
@@ -73460,6 +73935,14 @@
   ],
   "zhi bar byed pa": [
    {
+    "eng": "Quieting",
+    "refs": [
+     "C03:188"
+    ],
+    "n": 1,
+    "acip": "ZHI BAR BYED PA"
+   },
+   {
     "eng": "for Ending",
     "refs": [
      "C01:318"
@@ -74106,6 +74589,7 @@
   ]
  },
  "acip_index": {
+  "'ANG": "'ang",
   "'ANG RUNG STE": "'ang rung ste",
   "'BA' ZHIG": "'ba' zhig",
   "'BAD": "'bad",
@@ -74442,9 +74926,11 @@
   "'PHRAL GYI 'KHRUL RGYUS MA BSLAD PA'I": "'phral gyi 'khrul rgyus ma bslad pa'i",
   "'PHRENG BA DAM PA": "'phreng ba dam pa",
   "'PHRIN LAS": "'phrin las",
+  "'PHRO": "'phro",
   "'PHRO BA": "'phro ba",
   "'PHROG PA": "'phrog pa",
   "'PHROG PAR": "'phrog par",
+  "'PHROR": "'phror",
   "'PHRUL": "'phrul",
   "'PHRUL CHE STE": "'phrul che ste",
   "'PHUR": "'phur",
@@ -74486,6 +74972,7 @@
   "BAR CHAD": "bar chad",
   "BAR CHAD LAM SEL": "bar chad lam sel",
   "BAR DU": "bar du",
+  "BAR GCOD": "bar gcod",
   "BAR GYI": "bar gyi",
   "BAR MA": "bar ma",
   "BAR PA LNGA'I SKABS": "bar pa lnga'i skabs",
@@ -74679,6 +75166,7 @@
   "BRGYAD": "brgyad",
   "BRGYAD KA": "brgyad ka",
   "BRGYAD KHRI": "brgyad khri",
+  "BRGYAD PA": "brgyad pa",
   "BRGYAD PA NI": "brgyad pa ni",
   "BRGYAD PO": "brgyad po",
   "BRGYUD": "brgyud",
@@ -75018,6 +75506,8 @@
   "BYIN PA": "byin pa",
   "BYIN RLABS": "byin rlabs",
   "BYING BA MTSON": "bying ba mtshon",
+  "BYING BA PHRA MO": "bying ba phra mo",
+  "BYING BA PHRA RAGS": "bying ba phra rags",
   "BYING RGOD": "bying rgod",
   "BYIS PA": "byis pa",
   "BYUNG": "byung",
@@ -75422,6 +75912,7 @@
   "DKA' SPYAD": "dka' spyad",
   "DKA' THUB": "dka' thub",
   "DKAR": "dkar",
+  "DKAR CHA": "dkar cha",
   "DKAR POR": "dkar por",
   "DKON BRTZEGS": "dkon brtsegs",
   "DKON MCHOG": "dkon mchog",
@@ -75554,6 +76045,7 @@
   "DRANGS PA": "drangs pa",
   "DRANGS PA'I": "drangs pa'i",
   "DRED MDO": "dred mdo",
+  "DREN PA": "dren pa",
   "DRI MA": "dri ma",
   "DRI MA CAN": "dri ma can",
   "DRI MA MED PAR GRAGS PA": "dri ma med par grags pa",
@@ -75580,6 +76072,7 @@
   "DRUG CU RTZA LNGA": "drug cu rtsa lnga",
   "DRUG KHRI": "drug khri",
   "DRUG LA SOGS PA": "drug la sogs pa",
+  "DRUG PA": "drug pa",
   "DRUNG": "drung",
   "DRUNG NAS": "drung nas",
   "DU MA": "du ma",
@@ -75699,6 +76192,7 @@
   "GDUNG SEMS": "gdung sems",
   "GDUNGS": "gdungs",
   "GI TING NGE 'DZIN": "gi ting nge 'dzin",
+  "GLAN": "glan",
   "GLAN DE 'JOG PA": "glan de 'jog pa",
   "GLANG PO": "glang po",
   "GLANG PO CHE MA DUL BA": "glang po che ma dul ba",
@@ -75727,6 +76221,7 @@
   "GNAS 'OG MAR": "gnas 'og mar",
   "GNAS BZANG": "gnas bzang",
   "GNAS BZANG BA": "gnas bzang ba",
+  "GNAS CHA": "gnas cha",
   "GNAS KHANG": "gnas khang",
   "GNAS LUGS": "gnas lugs",
   "GNAS MA BU PA": "gnas ma bu pa",
@@ -75837,6 +76332,7 @@
   "GSAL 'DEBS DGOS": "gsal 'debs dgos",
   "GSAL BAR BYAS NAS": "gsal bar byas nas",
   "GSAL BAR MDZAD": "gsal bar mdzad",
+  "GSAL CHA": "gsal cha",
   "GSAL DGOS PA": "gsal dgos pa",
   "GSAL GDAB": "gsal gdab",
   "GSAN": "gsan",
@@ -75938,6 +76434,7 @@
   "GTING": "gting",
   "GTING DU": "gting du",
   "GTING NAS": "gting nas",
+  "GTOD PA": "gtod pa",
   "GTOG PA": "gtog pa",
   "GTOGS PA": "gtogs pa",
   "GTONG": "gtong",
@@ -75962,6 +76459,7 @@
   "GYONG": "gyong",
   "GYUR CIG": "gyur cig",
   "GYUR PA": "gyur pa",
+  "GZENGS GTOD": "gzengs gtod",
   "GZHAG": "gzhag",
   "GZHAN": "gzhan",
   "GZHAN 'GA' RE": "gzhan 'ga' re",
@@ -75989,6 +76487,7 @@
   "GZHI": "gzhi",
   "GZHI GCIG": "gzhi gcig",
   "GZHI GCIG LA": "gzhi gcig la",
+  "GZHI GNAS": "gzhi gnas",
   "GZHI NAS": "gzhi nas",
   "GZHON GROGS": "gzhon grogs",
   "GZHON NU": "gzhon nu",
@@ -76352,6 +76851,7 @@
   "LTA ZHOG": "lta zhog",
   "LTE BAR": "lte bar",
   "LTO": "lto",
+  "LTOBS": "ltobs",
   "LTOGS": "ltogs",
   "LTOS": "ltos",
   "LTOS NAS": "ltos nas",
@@ -76881,6 +77381,7 @@
   "NGO BOS GRUB PA": "ngo bos grub pa",
   "NGO MA SHES PA": "ngo ma shes pa",
   "NGO MTSAR": "ngo mtshar",
+  "NGO SHES": "ngo shes",
   "NGO SHES NAS": "ngo shes nas",
   "NGOMS PA MED PA": "ngoms pa med pa",
   "NGOR": "ngor",
@@ -76911,6 +77412,7 @@
   "NYAMS LEN": "nyams len",
   "NYAMS LEN BYIN BRGYUD": "nyams len byin brgyud",
   "NYAMS MYONG": "nyams myong",
+  "NYAMS PA": "nyams pa",
   "NYAMS RTOGS": "nyams rtogs",
   "NYAMS SU BLANGS": "nyams su blangs",
   "NYAMS SU LEN": "nyams su len",
@@ -76934,6 +77436,7 @@
   "NYAR": "nyar",
   "NYE 'BREL": "nye 'brel",
   "NYE BA": "nye ba",
+  "NYE BAR": "nye bar",
   "NYE BAR 'JOG PA": "nye bar 'jog pa",
   "NYE BAR BSTAN PA": "nye bar bstan pa",
   "NYE BAR ZHI BAR": "nye bar zhi bar",
