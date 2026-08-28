@@ -29,7 +29,7 @@ When a segment's english field is phonetics, not translation:
    under its own clause with honest labels.
 
 ## Progress
-c3p1–c3p2 (1–6) done; 7+ open; 614 segs remain.
+c3p1–c3p3 (1–9) done; 10+ open; 611 segs remain.
 
 ## Queues (wylie / english), C03
 - (open)
@@ -66,3 +66,13 @@ c3p1–c3p2 (1–6) done; 7+ open; 614 segs remain.
   mandalakam (unit). Verse capitalization flattened, kept verbatim.
 - Evidence layer still 3,845/7,167 (phonetics excluded by
   construction); full bank +20 links.
+
+### Batch C03-3 (c3p3, C03:7–9) — 2026-08-28
+- 7: title skyabs 'gro sems bskyed ↔ "kyabdro semkye" (bskyed →
+  "kye": bsk- → k, final -d drops).
+- 8: chos → "chu" — GMR's ö-as-u convention (2nd attestation, cf.
+  spos → "pu"); tshogs → "tso"; mchog rnams → "choknam"; la survives
+  unchanged.
+- 9: byang chub → "jangchub" (by- → j consistent); bdag ni →
+  "dakni"; mchis → "chi".
+- Evidence layer 3,845/7,167 unchanged; full bank +18.
