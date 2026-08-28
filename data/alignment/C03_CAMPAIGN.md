@@ -29,7 +29,7 @@ When a segment's english field is phonetics, not translation:
    under its own clause with honest labels.
 
 ## Progress
-c3p1–c3p12 (1–36) done; 37+ open; 584 segs remain.
+c3p1–c3p13 (1–39) done; 40+ open; 581 segs remain.
 
 ## Queues (wylie / english / PHONETICS), C03
 - WYLIE: ACIP anusvara capitals dM/kM/ND + ni'a oddity (seg 6).
@@ -204,3 +204,20 @@ c3p1–c3p12 (1–36) done; 37+ open; 584 segs remain.
   bsngags pa). s36rest holds the multiplied heads/tongues + Yeshe De
   #3 + "rgya mtsho ni mang po'i tshig" (ocean = many).
 - Evidence layer: 3,949 headwords / 7,321 pairs.
+
+### Batch C03-13 (c3p13, C03:37–39) — 2026-08-28
+- 37: SEGMENT BOUNDARY SPLITS "tshig go" — the "go" particle of
+  36's last sentence opens 37 (corpus artifact, nulled). Verse
+  rotation 4-3-1-2; bde bar gshegs pa → "Who have Gone to Bliss";
+  dbyangs kyi yan lag → "the seed of harmony". Delayed English for
+  s36rest (heads/tongues, sea=multitude).
+- 38: kha/ ↔ "[b]" — letter-numeral SYSTEM confirmed (ka/kha).
+  bla na yod pa'i mchod pa → "the offering which does have
+  something higher" (vs bla na med pa to come). Citation mirror #5,
+  with gnyis → "the two" (verses). s38rest = the offering glossary,
+  English to come.
+- 39: rotation 4-1-2-3 (same as C01 verse 10). WYLIE QUEUE: byung
+  pa (typo for byug pa — 38's glossary spells it right);
+  'phreng/phreng 'a-chung variation across adjacent segments; dang
+  chain → commas.
+- Evidence layer: 3,967 headwords / 7,350 pairs.
