@@ -76,7 +76,7 @@ entry from here records its producing model; everything through C03 batch
 32 was Fable.
 
 ## Progress
-c3p1–c3p46 (1–138) done; 139+ open; 482 segs remain.
+c3p1–c3p47 (1–141) done; 142+ open; 479 segs remain.
 
 ## Queues (wylie / english / PHONETICS), C03
 - WYLIE: ACIP anusvara capitals dM/kM/ND + ni'a oddity (seg 6).
@@ -807,3 +807,25 @@ stack trace.
   dran pa (mindfulness) → "your thoughts" — a notably plain render
   of a technical term.
 - Evidence layer: 4,171 headwords / 7,663 pairs.
+
+### Batch C03-47 (c3p47, C03:139–141) — 2026-08-28 — model: Opus
+- 139: three-unit mirror (Tibetan w1-w2-w3 → English w1-w3-w2).
+- 140: ORDER REVERSED ON A PAIRED NEGATION. Tibetan mi mtho ("not
+  high") then mi dma' ("not low"); English "neither tilted DOWN nor
+  UP". The pair is faithfully rendered and its members swapped —
+  the kind of quiet inversion a word-order check would flag and a
+  letter-exact check never sees. Worth remembering when the Fable
+  re-audit designs its checks.
+- 141: **THE REGISTER ALTERNATION HAS A RHYTHM.** Six posture items
+  so far: [1] "one should", [2] "Ones eyes", [3] "your body",
+  [4] "The shoulders", [5] "The head", [6] "your teeth and your
+  lips" — impersonal, impersonal, PERSONAL, impersonal, impersonal,
+  PERSONAL. Two and one, twice over. The Tibetan marks nothing of
+  the kind: every item is a bare topic particle (rkang pa ni, mig
+  ni, lus ni, phrag pa ni, mgo ni, so dang mchu ni).
+  RECORDED AS AN OBSERVATION, NOT A RULE. Items [7] and [8] next
+  batch will test whether the pattern holds or whether six items
+  simply fell that way.
+  rang lugs su tha mal par → "in their normal, natural position" —
+  two adverbs to two adjectives, crossed w4-w1-w3-w2.
+- Evidence layer: 4,186 headwords / 7,678 pairs.
