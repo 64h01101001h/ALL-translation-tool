@@ -62,6 +62,18 @@ every headword.
   recoverable positionally. Demonstrated: `bshes gnyen bsten tshul` →
   `BSHES GNYEN BSTEN TSUL`.
 
+**STATUS 2026-08-28: steps 1, 2, 4, 5 DONE (commit below). Step 3 (ACIP
+on the page display) remains — the layer now derives ACIP at build time
+from the `acip` column, so the data is keyed correctly whether or not the
+pages show it; the display change is for the human re-auditor's benefit,
+not for correctness. Delivered: `acip_span()` in the builder (offset-based,
+self-proving), `tools/test_acip_recovery.py` registered as CTest suite
+`acip_recovery` (87 suites, all green), `acip` on every pair record and a
+top-level `acip_index` for ACIP-native lookup, `tib_acip` on every full-bank
+link. Coverage 4,038/4,039 headwords; the single miss is a Sanskrit
+long-vowel apostrophe (manydzu goh ShA) that returns None rather than
+guessing, pinned as a known limit in the battery.**
+
 **Work (additive — does NOT invalidate any shipped page):**
 1. Extend `tools/build_alignment_layer.py` so every harvested headword
    carries BOTH forms: `tib_acip` (from the `acip` column, positionally

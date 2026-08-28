@@ -32,6 +32,9 @@ import sys
 from datetime import date
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(ROOT, "engines"))
+from hgm_tools import acip_to_ewts          # noqa: E402  (canonical)
+
 SPINE = os.path.join(ROOT, "build", "hgm_spine_v27_2.db")
 OUTDIR = os.path.join(ROOT, "data", "alignment")
 OUT = os.path.join(OUTDIR, "alignment_evidence_v1.json")
@@ -131,6 +134,67 @@ def letters(s):
     return re.sub(r"[^a-z']", "", s.lower())
 
 
+_ACIP_CACHE = {}
+
+
+def norm_w(s):
+    return re.sub(r"\s+", " ", s or "").strip()
+
+
+def acip_span(acip, wylie, span):
+    """Recover the ACIP substring whose conversion is `span`.
+
+    ACIP is the source of record (Adam, 2026-08-28); the wylie column
+    is a derived conversion, proven equal to acip_to_ewts(acip) on
+    8,961/8,961 segments of C01-C18. acip_to_ewts is monotonic and
+    order-preserving but not length-preserving (TS->tsh) and spans may
+    begin mid-token (1a/gser), so map by converted-prefix offsets
+    rather than by tokens. Returns None rather than guessing.
+    """
+    if not acip:
+        return None
+    want = norm_w(span)
+    if not want:
+        return None
+    cached = _ACIP_CACHE.get(acip)
+    if cached is None:
+        conv = acip_to_ewts(acip)
+        lens = [len(acip_to_ewts(acip[:k]))
+                for k in range(len(acip) + 1)]
+        cached = _ACIP_CACHE[acip] = (conv, lens)
+    conv, lens = cached
+
+    # Candidate offsets, token-boundaried first: a bare span like
+    # "shog" also occurs INSIDE "tshogs", and the naive first hit
+    # would recover the wrong ACIP. Boundary hits are tried before
+    # interior ones, and every candidate must still round-trip.
+    hits, k = [], conv.find(want)
+    while k >= 0:
+        hits.append(k)
+        k = conv.find(want, k + 1)
+    if not hits:
+        return None
+
+    def bounded(x):
+        before = (x == 0) or conv[x - 1] in " ,"
+        y = x + len(want)
+        after = (y == len(conv)) or conv[y] in " ,"
+        return before and after
+
+    for i in sorted(hits, key=lambda x: (not bounded(x), x)):
+        j = i + len(want)
+        start = max((k for k in range(len(lens)) if lens[k] <= i),
+                    default=None)
+        end = next((k for k in range(len(lens)) if lens[k] >= j), None)
+        if start is None or end is None or end <= start:
+            continue
+        got = acip[start:end].strip().strip(",").strip()
+        # the proof: a recovery is accepted only if it round-trips
+        if got and norm_w(acip_to_ewts(got)) == want:
+            return got
+    return None
+
+
 def strip_tags(s):
     return html.unescape(re.sub(r"<[^>]+>", " ", s))
 
@@ -180,11 +244,13 @@ def spans_of(doc, side):
 def main():
     con = sqlite3.connect(SPINE)
     pairs = {}   # tib_norm -> {eng_display -> set("COURSE:seq")}
+    acip_forms = {}   # tib_norm -> set(ACIP forms recovered)
+    acip_miss = []    # spans whose ACIP could not be proven
     full = {"links": [], "notes": {}, "trees": {}}
     sha = hashlib.sha256()
     for course, cfg in sorted(COURSES.items()):
-        segs = {r[0]: (r[1], r[2]) for r in con.execute(
-            "SELECT seq, wylie, english FROM corpus_segments "
+        segs = {r[0]: (r[1], r[2], r[3]) for r in con.execute(
+            "SELECT seq, wylie, english, acip FROM corpus_segments "
             "WHERE course=?", (course,))}
         for pg, _seglist in sorted(cfg["pages"].items()):
             path = os.path.join(cfg["dir"], pg + ".html")
@@ -205,10 +271,14 @@ def main():
             # THE BANK: every span at every depth, both-sided or not.
             for (d, lid), rec in sorted(tibAll.items()):
                 m0 = re.match(r"s(\d+)", lid)
+                _sg = int(m0.group(1)) if m0 else None
+                _ac = (acip_span(segs[_sg][2], segs[_sg][0], rec["t"])
+                       if _sg in segs else None)
                 full["links"].append({
                     "course": course, "page": pg,
-                    "seg": int(m0.group(1)) if m0 else None,
+                    "seg": _sg,
                     "id": lid, "d": d, "tib": rec["t"],
+                    "tib_acip": _ac,
                     "eng": " … ".join(engAll.get((d, lid), [])) or None,
                     "case": rec["case"],
                 })
@@ -238,9 +308,38 @@ def main():
                             letters(frag) not in letters(segs[seg][1]):
                         sys.exit("REFUSED: eng %r not in %s:%d english"
                                  % (frag, course, seg))
+                # ACIP is the join key (Adam, 2026-08-28). Recovery
+                # is self-proving: acip_span returns None unless the
+                # candidate round-trips back to this very span.
+                ac = acip_span(segs[seg][2], segs[seg][0], t)
+                if ac:
+                    acip_forms.setdefault(tn, set()).add(ac)
+                else:
+                    acip_miss.append("%s:%d %r" % (course, seg, t))
                 pairs.setdefault(tn, {}).setdefault(e, set()).add(
                     "%s:%d" % (course, seg))
     con.close()
+
+    # BATTERY (Adam 2026-08-28): ACIP is the source of record, so a
+    # headword we cannot prove an ACIP form for is not evidence. Every
+    # recovery already round-tripped inside acip_span; here we check
+    # coverage and uniqueness.
+    ambiguous = {k: sorted(v) for k, v in acip_forms.items()
+                 if len(v) > 1}
+    if ambiguous:
+        for k, v in sorted(ambiguous.items())[:10]:
+            print("AMBIGUOUS %r -> %r" % (k, v))
+        sys.exit("REFUSED: %d headwords recovered more than one ACIP "
+                 "form; the wylie->ACIP map must be 1:1"
+                 % len(ambiguous))
+    n_head = len(pairs)
+    n_acip = len(acip_forms)
+    if n_head and n_acip * 100 < n_head * 95:
+        for m in acip_miss[:10]:
+            print("NO-ACIP " + m)
+        sys.exit("REFUSED: ACIP recovered for only %d/%d headwords "
+                 "(%.1f%%); the recovery is broken, not the corpus odd"
+                 % (n_acip, n_head, 100.0 * n_acip / max(n_head, 1)))
 
     n_pairs = sum(len(v) for v in pairs.values())
     if n_pairs < FLOOR:
@@ -263,13 +362,27 @@ def main():
                              + "+".join(sorted(COURSES)),
             "rule": "English is HGM's corpus text verbatim, machine-"
                     "MATCHED never composed; never enters hgm_gloss",
+            "transliteration": "ACIP is the source of record and the "
+                               "join key (acip / acip_index); wylie is "
+                               "the derived display form, proven equal "
+                               "to acip_to_ewts(acip) on 8961/8961 "
+                               "segments of C01-C18 (Adam 2026-08-28)",
+            "limit": "these gates prove the text is VERBATIM, never "
+                     "that the correspondence is CORRECT; a wrong "
+                     "pairing passes every one of them (risk R10)",
         },
         "pairs": {
             tn: [{"eng": e, "refs": sorted(ss, key=refkey),
-                  "n": len(ss)}
+                  "n": len(ss),
+                  "acip": (sorted(acip_forms[tn])[0]
+                           if tn in acip_forms else None)}
                  for e, ss in sorted(evs.items())]
             for tn, evs in sorted(pairs.items())
         },
+        # ACIP -> wylie headword. ACIP is the source of record and the
+        # join key for ACIP-native data; wylie stays the display form.
+        "acip_index": {sorted(v)[0]: k
+                       for k, v in sorted(acip_forms.items())},
     }
     os.makedirs(OUTDIR, exist_ok=True)
     tmpf = OUT_FULL + ".staging"
@@ -291,6 +404,11 @@ def main():
              sum(1 for L in full["links"] if not L["eng"]),
              sum(len(v) for v in full["notes"].values()),
              sum(len(v) for v in full["trees"].values())))
+    print("ACIP: %d/%d headwords carry a proven ACIP form (%.1f%%)"
+          % (n_acip, n_head, 100.0 * n_acip / max(n_head, 1)))
+    if acip_miss:
+        print("      %d span(s) without a provable ACIP form"
+              % len(acip_miss))
     tmp = OUT + ".staging"
     with io.open(tmp, "w", encoding="utf-8") as f:
         json.dump(doc, f, ensure_ascii=False, indent=1)

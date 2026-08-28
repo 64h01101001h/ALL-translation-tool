@@ -525,6 +525,14 @@ if(Python3_FOUND)
            COMMAND ${Python3_EXECUTABLE}
                    ${CMAKE_SOURCE_DIR}/tools/constitution_check.py
                    --selftest)
+
+  # Adam 2026-08-28: ACIP is the source of record for the equivalents,
+  # not the derived wylie. This proves span-level ACIP recovery and
+  # its round-trip, and pins the "shog inside tshogs" regression plus
+  # the one known-unrecoverable Sanskrit case.
+  add_test(NAME acip_recovery
+           COMMAND ${Python3_EXECUTABLE}
+                   ${CMAKE_SOURCE_DIR}/tools/test_acip_recovery.py)
 endif()
 
 # BUILD-7: the battery must say what it did NOT run. fixture_gate holds
