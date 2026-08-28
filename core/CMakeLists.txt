@@ -537,6 +537,10 @@ if(Python3_FOUND)
   add_test(NAME gen_alignment_page
            COMMAND ${Python3_EXECUTABLE}
                    ${CMAKE_SOURCE_DIR}/tools/test_gen_alignment_page.py)
+
+  add_test(NAME alignment_builder
+           COMMAND ${Python3_EXECUTABLE}
+                   ${CMAKE_SOURCE_DIR}/tools/test_alignment_builder.py)
 endif()
 
 # BUILD-7: the battery must say what it did NOT run. fixture_gate holds

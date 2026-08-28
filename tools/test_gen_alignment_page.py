@@ -177,6 +177,51 @@ expect_refusal("overlapping English spans refuse",
                   {"id": "w2", "d": 5, "tib": "stong", "eng": "thousand"}]}]},
     "overlap")
 
+# 14. THE NESTING BUG. C03:160 opens "de ltar sems gnas dgu ..." and ends
+#     "... zhi gnas grub pa". The member `gnas` of the compound `sems gnas`
+#     must resolve INSIDE its parent. Resolved flat it matches the unrelated
+#     `zhi gnas` 130 characters later, and the cursor then rejects every
+#     span after it -- which is exactly what happened on the first real
+#     batch this tool was used for.
+#     MUTATION: make resolve() treat d==7 like any other depth -> fails.
+rc, out, err = run({"course": "C03", "segments": [{"seq": 160, "title": "t",
+    "spans": [{"id": "w2", "d": 5, "tib": "sems gnas", "eng": "these"},
+              {"id": "y2", "d": 7, "tib": "gnas", "eng": None,
+               "nul": "member"},
+              {"id": "w3", "d": 5, "tib": "dgu", "eng": "nine"}]}]})
+if rc != 0:
+    fails.append("nesting: %s" % err.strip()[:260])
+elif 'data-l="s160w3"' not in out:
+    fails.append("nesting: the span after the nested member was lost")
+else:
+    print("  ok   a depth-7 member resolves inside its compound")
+
+# 15. A depth-7 span that is NOT inside its compound refuses, rather than
+#     silently reaching outside it.
+expect_refusal("depth-7 outside its compound refuses",
+    {"course": "C03", "segments": [{"seq": 160, "title": "t",
+        "spans": [{"id": "w2", "d": 5, "tib": "sems gnas", "eng": "these"},
+                  {"id": "y9", "d": 7, "tib": "bsam gtan", "eng": None,
+                   "nul": "not a member"}]}]},
+    "is not inside its compound")
+
+# 16. Two spans sharing a start offset must not crash the sort. A tuple
+#     comparison that reaches the span dict raises TypeError, which is a
+#     crash rather than a refusal -- and a crash after registration leaves
+#     the builder pointing at a page that was never written.
+#     MUTATION: drop the sort key in emit() -> TypeError, this pin fails.
+rc, out, err = run({"course": "C03", "segments": [{"seq": 160, "title": "t",
+    "spans": [{"id": "w2", "d": 5, "tib": "sems gnas", "eng": "nine states"},
+              {"id": "y1", "d": 7, "tib": "sems", "eng": "nine"},
+              {"id": "y2", "d": 7, "tib": "gnas", "eng": "states"}]}]})
+if rc != 0 and "Traceback" in err:
+    fails.append("shared-start spans CRASH instead of refusing: %s"
+                 % err.strip()[-200:])
+elif rc != 0:
+    fails.append("shared-start spans refused: %s" % err.strip()[:200])
+else:
+    print("  ok   spans sharing a start offset sort without crashing")
+
 if fails:
     print("\nFAILED:")
     for f in fails:
