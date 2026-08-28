@@ -554,7 +554,7 @@ letter-exact battery gates every batch.
   (74's coinages reprised verbatim + self-referential "what we have
   called here"). khungs #4 "authentic source". Supplied transition
   sentence (filed with 115's). Self-quotes ×5 — densest cluster.
-| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p95 (144–322) done; 143 & 259 = marker pairs; 323+ open; 174 segs / 58 batches remain to close C01; §XIII (the measure of the wish) begins at 321/322; §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
+| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p96 (144–325) done; 143, 259 & 324 = marker pairs; 326+ open; 171 segs / 57 batches remain; the SECOND path is COMPLETE — §XIV / the THIRD path (correct view) begins at 324; §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
 
 NEXT: continue section VII (seq 146+) — the renunciation chapter.
 - seg 143: section-marker pair (like 43) — wylie carries "the first
@@ -1831,3 +1831,41 @@ TCS series and collections beyond, for later ruling). ***
   fire is searing his body." supplied; 1 chain → 4 sentences).
   TITLE: sgom rim dang po → "the first of the Stages of
   Meditation" (fn 142). che chung spread.
+
+### c1p96 — C01:323–325 (batch 96) — the wish measured; correct view
+- Zero-catch. Layer: 2,683 headwords / 5,017 pairs. THE SECOND
+  PRINCIPAL PATH IS COMPLETE (206–323); the THIRD (correct view)
+  opens at 324.
+- seg 323: the measure stated (mnar → "burning", the fire-pit
+  simile applied; tshad → "you can say you have gained"; gsungs
+  9th, dash-interpolated).
+- APPARATUS BANK (Notes to Reading Eight, 130–142, elided):
+  * 132 defines Loving-Gaze ("The divine form of the Buddha that
+    represents all his compassion") — witnesses 281.
+  * 133: Dharmakirti c. 630, Dignaga c. 450 ("great forefather of
+    the Buddhist logic traditions"); ch. 2 "Proof of
+    Infallibility" — witnesses 285.
+  * 135 defines "beautiful" loving-kindness ("as beautiful or
+    beloved as one's only child") — witnesses 280.
+  * 136: ALL TWENTY-TWO METAPHORS enumerated (earth, gold, first
+    day's moon, fire, mine, cache of gemstones, ocean, diamond,
+    king of mountains, medicine, spiritual guide, wish-giving
+    jewel, sun, song, king, treasure, highway, riding horse,
+    fountain, sweet sound, river, cloud); smon/'jug = wanting-to-
+    go vs stepping-along; Lama of Chone Drakpa Shedrup
+    (1675–1748); Kedrup Tenpa Dargye (1493–1568, Sera Mey —
+    Pabongka's own college) — witnesses 312.
+  * 138: the FULL SIX-LINE center-beam stanza quoted; "two
+    collections" = knowledge and virtue — witnesses 316.
+  * 139: "We have not located the spurious texts listed." — GMR's
+    own provenance verdict on 318–319's catalog (the khungs ethic
+    mirrored in the corpus itself).
+  * 141: THE REFUGE PRAYER quoted in full; ENGLISH TYPO CANDIDATE
+    #18 in it: "other goods deeds" (echoes #15 "goods things").
+  * 142: Kamalashila, and the Samye debate ("Chinese monks who
+    wrongly asserted that meditating on nothing at all would be
+    of any benefit"). Reading Nine begins.
+- seg 324: MARKER PAIR — "the third path: correct view" / "XIV.
+  Why You Need Correct View".
+- seg 325: outline expansion; FIVE sections of correct view
+  announced; yang dag pa'i lta ba → "correct view" named.
