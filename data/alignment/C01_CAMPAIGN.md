@@ -554,7 +554,7 @@ letter-exact battery gates every batch.
   (74's coinages reprised verbatim + self-referential "what we have
   called here"). khungs #4 "authentic source". Supplied transition
   sentence (filed with 115's). Self-quotes ×5 — densest cluster.
-| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p147 (144–478) done; 143, 259, 324, 427 & 446 = marker pairs; 479+ open; 18 segs / 6 batches remain; §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
+| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p148 (144–481) done; 143, 259, 324, 427 & 446 = marker pairs; 482+ open; 15 segs / 5 batches remain; §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
 
 NEXT: continue section VII (seq 146+) — the renunciation chapter.
 - seg 143: section-marker pair (like 43) — wylie carries "the first
@@ -3051,3 +3051,24 @@ TCS series and collections beyond, for later ruling). ***
   admit any errors made"; 'chags → "I kneel" (fronted).
 - QA: both sides letter-exact, 108 spans balanced, depth clean.
   Layer: 3,708 headwords / 6,955 pairs.
+
+### c1p148 — Suddhi Vadzra at Tashi Chuling (479–481)
+- **479 — the pure white force**: dal 'byor's PLAINEST costume →
+  "the time and chance we have" (three registers of one term:
+  leisure-and-fortune / opportunity / time-and-chance). 'khri ba
+  chod and snying po lon consistent with 430/445.
+- **480 — PABONGKA NAMED** (fn 201): pha bong kha pa dpal bzang po →
+  "the good and glorious Pabongka" — the Lama of the whole text
+  finally named in the full title-chain (three kinds of kindness;
+  "the god who stood at the center of our universe"; the Holder of
+  the Diamond himself). THE RECEIVE→BESTOW FLIP: nos ("we
+  received") → "He bestowed upon us". zab RENDERED (contrast 469).
+- **481 — the compiler's colophon** (fn 202–203): su dha'i badzrsa →
+  "Suddhi Vadzra" of Den monastery (WYLIE QUEUE: "badzrsa" —
+  probable stray s). THE HUMILITY CHAIN IN FULL REVERSE (ails /
+  lack of knowledge / pretender in robes / the very lowest). FIVE
+  MANUSCRIPTS (khag lnga) — the text's own transmission history.
+  The relics and Tashi Chuling; bka' drin 'khor med → "whose
+  kindness defies repayment"; bsgrigs crossed to head.
+- QA: both sides letter-exact, 170 spans balanced, depth clean.
+  Layer: 3,745 headwords / **7,008 pairs** — 7,000-pair milestone.
