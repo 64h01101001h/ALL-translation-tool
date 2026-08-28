@@ -29,7 +29,7 @@ When a segment's english field is phonetics, not translation:
    under its own clause with honest labels.
 
 ## Progress
-c3p1–c3p11 (1–33) done; 34+ open; 587 segs remain.
+c3p1–c3p12 (1–36) done; 37+ open; 584 segs remain.
 
 ## Queues (wylie / english / PHONETICS), C03
 - WYLIE: ACIP anusvara capitals dM/kM/ND + ni'a oddity (seg 6).
@@ -191,3 +191,16 @@ c3p1–c3p11 (1–33) done; 34+ open; 587 segs remain.
   into one "I bow myself"; two rab merge into one "Perfectly";
   zhing 4th appearance ("all the worlds").
 - Evidence layer: 3,935 headwords / 7,300 pairs — 7,300 crossed.
+
+### Batch C03-12 (c3p12, C03:34–36) — 2026-08-28
+- Relays #3 (34→35, mind) and #4 (36→37, speech) — the
+  CITATION-FORMULA MIRROR confirmed systematic: [quote] zhes pa'i
+  tshigs bcad gcig ↔ "a single verse, the one with the words
+  [quote]" — four-unit mirror, instances 3 and 4.
+- 35: WYLIE QUEUE: snyeed (double-e, for snyed); ",de ltar" missing
+  comma-space. chos kyi dbyings (dharmadhatu) → "Every corner of
+  space"; sras → "sons and daughters"; mos → "I see" fronted.
+- 36: WYLIE QUEUE: bsngags ba (ba for pa; same segment later spells
+  bsngags pa). s36rest holds the multiplied heads/tongues + Yeshe De
+  #3 + "rgya mtsho ni mang po'i tshig" (ocean = many).
+- Evidence layer: 3,949 headwords / 7,321 pairs.
