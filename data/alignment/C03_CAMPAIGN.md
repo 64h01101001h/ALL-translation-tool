@@ -76,7 +76,7 @@ entry from here records its producing model; everything through C03 batch
 32 was Fable.
 
 ## Progress
-c3p1–c3p48 (1–144) done; 145+ open; 476 segs remain.
+c3p1–c3p49 (1–147) done; 148+ open; 473 segs remain.
 
 ## Queues (wylie / english / PHONETICS), C03
 - WYLIE: ACIP anusvara capitals dM/kM/ND + ni'a oddity (seg 6).
@@ -869,3 +869,26 @@ has predicted nothing.
   khri'am khri'u → "a platform or seat" against C01:27's "a platform
   or smaller seat": the diminutive marked there, unmarked here.
 - Evidence layer: 4,204 headwords / 7,700 pairs.
+
+### Batch C03-49 (c3p49, C03:145–147) — 2026-08-28 — model: Opus
+- 145: shin tu sbyangs pa → "practiced ease" (twice). CROSS-REF: the
+  same term in its shin sbyang contraction is "Physical / Mental
+  meditative pleasure" at C03:196–197. TWO English treatments of
+  prasrabdhi in one course — "practiced ease" in prose, "meditative
+  pleasure" in the chart headings. Both attested.
+  myur ba myur bar (reduplicated) → "very quickly", the same
+  intensifying doubling as dal bu dal bus at 143.
+- 146: de'i lus ("that one's body") folds into plain "you" — the
+  Tibetan's third-person impersonal becoming second person, the
+  batch-48 drift running in the other direction.
+- 147: **THE NEGATED FORM IS STABLE WHERE THE POSITIVE VARIES.**
+  thun mong ma yin pa → "is unique" here; C01:494 gave the same
+  negated compound "is truly unique". Two courses, one sense.
+  But positive thun mong has three: "common" (C03:104), "as a whole"
+  (C01:486), "that are shared" (C03:133). The negation is settled
+  and the positive is not — a genuine asymmetry, and one a
+  single-gloss entry could not express.
+  mu stegs → "non-Buddhists"; phas kyi rgol ba ("opponents") →
+  "those whom you may be debating", a technical term rendered as a
+  situation.
+- Evidence layer: 4,216 headwords / 7,716 pairs.
