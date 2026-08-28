@@ -28,9 +28,16 @@ When a segment's english field is phonetics, not translation:
    phonetic stretches at d=7, translated stretches at d=5, each
    under its own clause with honest labels.
 
-## ⚠ PENDING RULING (Adam, 2026-08-28) — read before the next batch
-The equivalents must be keyed on **ACIP**, not the derived Wylie. See
-TODO.md ★★★ item A. Verified: the spine's `acip` column is the source of
+## ✓ RULING CARRIED OUT (Adam, 2026-08-28) — ACIP is now the key
+The equivalents are keyed on **ACIP**, the source of record. Delivered
+2026-08-28: `acip_span()` in the builder (offset-based, self-proving —
+a recovery is returned only if it round-trips), CTest suite
+`acip_recovery` (87 suites green), `acip` on every pair record, a
+top-level `acip_index` (ACIP→wylie) as the join key, `tib_acip` on
+every full-bank link. Coverage 4,038/4,039; the one miss is a Sanskrit
+long-vowel apostrophe that returns None rather than guessing.
+Remaining from item A: ACIP on the page display (cosmetic — the data
+is correctly keyed regardless). Original ruling: Verified: the spine's `acip` column is the source of
 record; `acip_to_ewts(acip)` == stored `wylie` on 8,961/8,961 segments of
 C01–C18, so nothing shipped is wrong — it is keyed in the wrong
 transliteration. Fix is additive (emit both forms; ACIP as join key). A
@@ -39,7 +46,7 @@ entry from here records its producing model; everything through C03 batch
 32 was Fable.
 
 ## Progress
-c3p1–c3p32 (1–96) done; 97+ open; 524 segs remain.
+c3p1–c3p33 (1–99) done; 100+ open; 521 segs remain.
 
 ## Queues (wylie / english / PHONETICS), C03
 - WYLIE: ACIP anusvara capitals dM/kM/ND + ni'a oddity (seg 6).
@@ -445,3 +452,17 @@ c3p1–c3p32 (1–96) done; 97+ open; 524 segs remain.
   jewel"; dmigs med → "With no one it loves". Final line's triple
   frame kept verbatim.
 - Evidence layer unchanged: 4,039 / 7,481.
+
+### Batch C03-33 (c3p33, C03:97–99) — 2026-08-28 — model: Opus
+- FIRST BATCH UNDER THE ACIP KEYING and the first to record its model.
+- 97: verbatim repeat of 87. ACIP source reads RTZA BA'I → derived
+  wylie rtsa ba'i — the TZ/ts distinction live on the page; the
+  headword now keys as RTZA BA.
+- 98: THE ONE CHANGED WORD — 88 had spyi bor ("at the crown of my
+  head"), 97–99 has snying khar ("at my heart"). The second
+  recitation moves the visualization from crown to heart; everything
+  else repeats verbatim. nying-kar (hyphen, sny-→ny) vs 88's chiwor.
+- 99: verbatim repeat of 89; phonetics identical (kadrin/chenpoy/
+  gone/jesung) — the convention reproduces exactly across recitations,
+  which is evidence it is systematic rather than ad hoc.
+- Evidence layer: 4,039 headwords / 7,481 pairs; ACIP 4,038/4,039.
