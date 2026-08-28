@@ -554,7 +554,7 @@ letter-exact battery gates every batch.
   (74's coinages reprised verbatim + self-referential "what we have
   called here"). khungs #4 "authentic source". Supplied transition
   sentence (filed with 115's). Self-quotes ×5 — densest cluster.
-| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p132 (144–433) done; 143, 259, 324 & 427 = marker pairs; 434+ open; 63 segs / 21 batches remain; §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
+| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p133 (144–436) done; 143, 259, 324 & 427 = marker pairs; 437+ open; 60 segs / 20 batches remain; §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
 
 NEXT: continue section VII (seq 146+) — the renunciation chapter.
 - seg 143: section-marker pair (like 43) — wylie carries "the first
@@ -2732,3 +2732,27 @@ TCS series and collections beyond, for later ruling). ***
   its own segment.
 - QA: both sides letter-exact, 116 spans balanced, depth clean.
   Layer: 3,386 headwords / 6,430 pairs.
+
+### c1p133 — A day, a month, a year (434–436)
+- **434 — the impatient practitioner**: de ring/do nub morning-evening
+  satire. Technical triad unpacked: bsnyen sgrub → "going into
+  retreat to gain a special relationship with some holy being";
+  lha'i zhal gzigs → "meet some deity face to face"; lung bstan →
+  maximum unpack ("hear some voice that tells us we are going to get
+  enlightened on such and such a date"; 343 "foretold"). ENGLISH
+  TYPO QUEUE #24: "People like you an I" ("an" for "and").
+- **435 — three countless eons** (fn 173): ston pa thugs rje can →
+  "our compassionate Teacher, the Lord Buddha" (apposition
+  supplied). bskal pa grangs med gsum full mirror. Resolve as quoted
+  thought ("I am ready to spend…a hundred thousand lifetimes").
+  gsungs na → "The scriptures say" — SUPPLIED SUBJECT #4
+  (Lama/sages/Tsongkapa/scriptures).
+- **436 — the day/month/year ladder**: thos bsam sgom → "learning,
+  and reasoning out, and then meditating" — the THREE WISDOMS
+  complete (430 gave two). rab zhag / 'bring zla / tha mar lo →
+  best-day/average-month/least-year as first-person resolve; skyed
+  ×3 with #2–3 gapped. ACIP TOKEN: ae (ae yong blta) — second ae
+  instance. byang chub lam gyi rim pa → "the various Steps on the
+  path to Buddhahood".
+- QA: both sides letter-exact, 162 spans balanced, depth clean.
+  Layer: 3,411 headwords / 6,472 pairs.
