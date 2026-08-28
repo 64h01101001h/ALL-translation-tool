@@ -76,7 +76,7 @@ entry from here records its producing model; everything through C03 batch
 32 was Fable.
 
 ## Progress
-c3p1–c3p47 (1–141) done; 142+ open; 479 segs remain.
+c3p1–c3p48 (1–144) done; 145+ open; 476 segs remain.
 
 ## Queues (wylie / english / PHONETICS), C03
 - WYLIE: ACIP anusvara capitals dM/kM/ND + ni'a oddity (seg 6).
@@ -103,6 +103,8 @@ c3p1–c3p47 (1–141) done; 142+ open; 479 segs remain.
 - ENGLISH #10: "ones" for "one's" — "position ones body" (134, 135)
   and "Ones eyes" (137, capitalised). THREE occurrences make it a
   habit rather than a slip. Kept verbatim; page checks confirm.
+- ENGLISH #11: "cross- legged" (144) — line-break hyphen artifact,
+  same family as "even- mindedness" and "self- nature".
 
 ### Batch C03-1 (c3p1, C03:1–3) — 2026-08-28
 - PHONETICS PROTOCOL debut: right label = GESHE MICHAEL'S PHONETICS
@@ -826,6 +828,44 @@ stack trace.
   RECORDED AS AN OBSERVATION, NOT A RULE. Items [7] and [8] next
   batch will test whether the pattern holds or whether six items
   simply fell that way.
+  **→ DISCONFIRMED at batch 48. See that entry. Item [7] mixes both
+  persons in one sentence; there is no rhythm, only drift. This note
+  stands as written, corrected below, per the correction-of-record
+  protocol.**
   rang lugs su tha mal par → "in their normal, natural position" —
   two adverbs to two adjectives, crossed w4-w1-w3-w2.
 - Evidence layer: 4,186 headwords / 7,678 pairs.
+
+### Batch C03-48 (c3p48, C03:142–144) — 2026-08-28 — model: Opus
+#### THE BATCH-47 RHYTHM IS DISCONFIRMED
+Batch 47 saw a two-and-one register alternation across posture items
+[1]–[6] and predicted [7] would be impersonal. It is NEITHER:
+
+    [7] "The tongue should be kept close to the palate,
+         behind YOUR upper teeth."
+
+— an impersonal subject and a second-person possessive in one
+sentence. So the register does not alternate on a pattern; it
+DRIFTS, unmarked, sometimes within a single clause.
+
+That is the more useful result. A rhythm would imply deliberate
+design and something a translator could rely on. Drift means the
+person GMR happens to use carries no information, and the register
+surface should say exactly that rather than inviting inference. The
+six-item pattern was one I read into thin data; it is recorded as
+disconfirmed rather than quietly dropped.
+
+Item [8] IS personal throughout, which the discarded rhythm also
+predicted — but a prediction that fails on [7] and succeeds on [8]
+has predicted nothing.
+
+- 143: phar rgyu tshur rgyu → "when it is coming and going" — the
+  phar/tshur DEIXIS pair from C01:377 in its plainest use, of
+  breath. dal bu dal bus (reduplicated) → "very slowly", the
+  doubling rendered as intensification.
+- 144: ENGLISH QUEUE #11 "cross- legged". nyan sar → "In the Levels
+  of Listeners", a FOURTH holding — and note it is the CONTRACTED
+  form rendered identically to the full nyan thos kyi sa.
+  khri'am khri'u → "a platform or seat" against C01:27's "a platform
+  or smaller seat": the diminutive marked there, unmarked here.
+- Evidence layer: 4,204 headwords / 7,700 pairs.
