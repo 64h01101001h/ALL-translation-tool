@@ -40,7 +40,7 @@ upstream in the data project, rather than an editorial change here.
 Flagged for Adam.
 
 ## Progress
-c2L1–c2L6 (1–18) done; 19–22 open. Main pass 22–68 already delivered.
+✅ C02 COVERAGE CLOSED — 68/68, GATE-PROVED AND LOCKED. Main pass 22–68 already delivered.
 
 ### BACKFILL C2-B1 (c2L1, C02:1–3) — 2026-08-28 — model: Opus
 - Generated from C02's own spine rows. Segments 1–3 are byte-identical
@@ -115,3 +115,31 @@ c2L1–c2L6 (1–18) done; 19–22 open. Main pass 22–68 already delivered.
   rather than introduced per course. Worth knowing before anyone
   proposes normalising it: the variation is in the shared original.
 - COVERAGE GATE: C02 61→64; 4 open (19-22).
+
+### BACKFILL C2-B7 (c2L7, C02:19–22) — 2026-08-28 — model: Opus
+### ✅ C02 COVERAGE CLOSED — 68/68, gate-proved
+- 19: kyoppa (junction doubling); 20: gendun (nasal bridge);
+  21: konchok sum, stanza UNPAIRED (source 18–21).
+- ENGLISH QUEUE: segment 21 truncates mid-word at "To the places of
+  ref" — the SAME truncation at the same segment in C01 and C03, so
+  inherited from the shared source, not introduced here.
+- 22: the second of the two segments where C02 parts from the others
+  — its own Course II ("Buddhist Refuge") syllabus, where C01:22 is
+  Course I and C03:22 is Course III. Unpaired apparatus (s22app).
+- **C02 is now `"complete": True` and the COVERAGE GATE proves it at
+  68/68.** Liveness-tested: deleting a page from the locked course
+  makes the build REFUSE by name ("C02 claims complete but 4
+  segment(s) have no page: 19-22").
+
+## THE LITURGY BACKFILL IS COMPLETE ACROSS ALL THREE COURSES
+The 22-segment opening now exists in C01, C02 and C03. The three-way
+comparison it enables has already produced:
+- the `<1 Earth>` corpus artifact at C02:6 — a proven SINGLETON in
+  all 8,961 segments of C01–C18;
+- the sangye/sanggye split shown to be INHERITED from a common source
+  (identical at identical segment numbers in all three courses),
+  not introduced per course;
+- the "To the places of ref" truncation, likewise inherited;
+- tsok-dzok hyphenation shown to be settled practice, which in turn
+  makes chukyi/chu-kyi a genuine inconsistency rather than variation.
+None of this was visible while C01:1–22 and C02:1–22 did not exist.
