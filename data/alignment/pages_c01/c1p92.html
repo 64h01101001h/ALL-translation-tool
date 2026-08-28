@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>C1&middot;P92 &mdash; The architecture of the wish (C01:311&ndash;313)</title>
+<style>
+  :root { --paper:#FAF6EE; --ink:#2B2118; --gold:#82672A; --act:#1E6B4E;
+          --machine:#B4540A; --soft:#78706A; --doc:#2E629E; --ppl:#6E3E8E; }
+  body { background:var(--paper); color:var(--ink);
+         font-family:"Iowan Old Style",Georgia,serif; margin:0;
+         padding:26px 34px; line-height:1.7; }
+  h1 { font-size:21px; color:#7C2D26; margin:0 0 2px; }
+  .sub { font-size:13px; color:var(--soft); }
+  .banner { background:#FDF3E7; border:1px solid var(--machine);
+            color:var(--machine); padding:10px 14px; font-size:13px;
+            margin:14px 0 16px; border-radius:3px; }
+  h2 { font-size:14px; color:var(--gold); letter-spacing:1.5px;
+       text-transform:uppercase; margin:26px 0 8px;
+       border-bottom:1px solid #E4DCC9; padding-bottom:3px; }
+  .controls { font-size:14px; margin:0 0 6px; }
+  .controls input { vertical-align:middle; accent-color:var(--gold); width:260px; }
+  #depthname { color:var(--gold); font-weight:600; }
+  .pair { display:grid; grid-template-columns:1fr 1fr; gap:26px; margin:10px 0 8px; }
+  .lab { font-size:10px; letter-spacing:2px; color:var(--soft); margin-bottom:4px; }
+  .tib { font-size:16.5px; } .eng { font-size:15px; }
+  .u { border-radius:2px; }
+  .active { cursor:pointer; border-bottom:1px dotted #C9B98F; }
+  .hl { background:#F3E4B3 !important; border-bottom-color:var(--gold) !important; }
+  .pin { background:#EAD98F !important; outline:1px solid var(--gold); }
+  .case { color:var(--act); font-weight:600; }
+  .nul { color:var(--soft); font-size:10.5px; vertical-align:super; }
+  .note { font-size:12px; color:var(--soft); font-style:italic; margin:4px 0 0; }
+  .note b { color:var(--machine); font-style:normal; font-size:10px; letter-spacing:1px; }
+  .tree { font-family:"SF Mono",Menlo,monospace; font-size:12.5px;
+          background:#F6F1E4; border:1px solid #E4DCC9; border-radius:3px;
+          padding:14px 18px; margin:12px 0; overflow-x:auto; line-height:1.85; }
+  .tree .k { color:var(--doc); font-size:10.5px; letter-spacing:.5px; }
+  .tree .w { color:var(--ink); font-weight:600; }
+  .tree .e { color:var(--act); }
+  .tree .m { color:var(--machine); }
+  .tree i  { color:var(--soft); }
+  .legend { font-size:12px; color:var(--soft); border-top:1px solid #E4DCC9;
+            margin-top:22px; padding-top:10px; }
+  .wil { color:var(--ppl); }
+  .nav { font-size:13px; margin:6px 0 0; }
+  .nav a { color:var(--doc); text-decoration:none; margin-right:18px; }
+  .nav a:hover { text-decoration:underline; }
+</style>
+</head>
+<body data-depth="2">
+<h1>C1&middot;P92 &mdash; The architecture of the wish (C01:311&ndash;313)</h1>
+<div class="sub">Pabongka Rinpoche, <i>The Key that Unlocks the Door to the Noble Path</i> &middot; corpus C01:311&ndash;313 &middot; GMR's published translation &middot; grammar per <b>Joe Wilson</b></div>
+<div class='nav'><a href='index.html'>&#8962; Index</a><a href='c1p91.html'>&larr; Previous</a></div>
+<div class="banner"><b>MACHINE ALIGNMENT — AI (Claude), PROVISIONAL. PASS THREE: THE FULL-DEPTH RUN.</b>
+Not HGM dictionary material. Geshe Michael's English is verbatim and untouched; the
+machine matches spans of it and never composes. Grammar labels are the machine's
+analysis under Wilson's taxonomy (SOAS POS as cross-reference) and are themselves
+provisional. &#8709; marks a Tibetan morpheme with no English exponent. Input variants
+are flagged, never silently corrected.</div>
+<div class="controls">
+  Depth: <input type="range" id="depth" min="1" max="7" value="2">
+  <span id="depthname">2 &middot; Clause</span>
+  <span style="color:var(--soft);font-size:12px">&mdash; slide deeper; hover either language; click pins</span><br>
+  <span style="font-size:11.5px;color:var(--soft)">1 Sentence &middot; 2 Clause &middot; 3 Phrase &middot; 4 Embedded phrase &middot; 5 Word/compound &middot; 6 Morpheme &amp; particle &middot; 7 Syllable/compound member</span>
+</div>
+<h2>Segment 311 &mdash; preliminary, main stage, conclusion</h2>
+<div class="pair">
+<div class="tib"><div class="lab">TIBETAN (WYLIE)</div>
+<span class="u" data-d="1" data-l="s311S"><span class="u" data-d="2" data-l="s311c1"><span class="u" data-d="5" data-l="s311w1">byams pa</span> de dang , <span class="u" data-d="5" data-l="s311w2">snying rje</span>, <span class="u" data-d="5" data-l="s311w3">lhag bsam</span> <span class="u" data-d="6" data-l="s311m1">gsum</span> ni <span class="u" data-d="5" data-l="s311w4">gzhan don</span> <span class="u" data-d="5" data-l="s311w5">don gnyer</span> gyi <span class="u" data-d="5" data-l="s311w6">blo</span> <span class="u" data-d="6" data-l="s311m2">yin</span>, </span><span class="u" data-d="2" data-l="s311c2"><span class="u" data-d="5" data-l="s311w7">sems bskyed</span> <span class="u" data-d="6" data-l="s311m3">dngos</span> ni de dag gi <span class="u" data-d="5" data-l="s311w8">'bras bu</span> yin, </span><span class="u" data-d="2" data-l="s311c3"><span class="u" data-d="5" data-l="s311w9">lam rim</span> yang <span class="u" data-d="5" data-l="s311w10">skyes bu chung 'bring</span> gi <span class="u" data-d="5" data-l="s311w11">lam</span> ni <span class="u" data-d="5" data-l="s311w12">sems skye ba</span>'i <span class="u" data-d="5" data-l="s311w13">sngon 'gro</span> dang , </span><span class="u" data-d="2" data-l="s311c4"><span class="u" data-d="5" data-l="s311w14">byang chub kyi sems</span> <span class="u" data-d="5" data-l="s311w15">sgom tshul</span> ni <span class="u" data-d="5" data-l="s311w16">dngos gzhi</span>, </span><span class="u" data-d="2" data-l="s311c5"><span class="u" data-d="5" data-l="s311w17">mjug</span> <span class="u" data-d="5" data-l="s311w18">spyod pa'i skor</span> rnams de'i <span class="u" data-d="5" data-l="s311w19">bslab bya</span> yin</span></span>
+</div>
+<div class="eng"><div class="lab">GESHE MICHAEL'S ENGLISH (VERBATIM)</div>
+<span class="u" data-d="1" data-l="s311S"><span class="u" data-d="2" data-l="s311c1"><span class="u" data-d="5" data-l="s311w1">This loving-kindness</span>, as well as <span class="u" data-d="5" data-l="s311w2">compassion</span> and <span class="u" data-d="5" data-l="s311w3">the extraordinary type of personal responsibility</span>, are all forms of <span class="u" data-d="5" data-l="s311w6">an attitude</span> of <span class="u" data-d="5" data-l="s311w5">striving</span> for <span class="u" data-d="5" data-l="s311w4">the welfare of others</span>. </span><span class="u" data-d="2" data-l="s311c2"><span class="u" data-d="5" data-l="s311w7">The actual wish for enlightenment</span> is <span class="u" data-d="5" data-l="s311w8">their result</span>. <span class="u" data-d="5" data-l="s311w9">The works on the Steps of the path</span> themselves have a similar structure. </span><span class="u" data-d="2" data-l="s311c3"><span class="u" data-d="5" data-l="s311w11">The paths</span> for people of <span class="u" data-d="5" data-l="s311w10">lesser and medium scopes</span> represent <span class="u" data-d="5" data-l="s311w13">a preliminary</span> to <span class="u" data-d="5" data-l="s311w12">developing the wish</span> for enlightenment. </span><span class="u" data-d="2" data-l="s311c4">The teaching on <span class="u" data-d="5" data-l="s311w15">how to meditate</span> on <span class="u" data-d="5" data-l="s311w14">this great wish</span> is <span class="u" data-d="5" data-l="s311w16">the main stage</span>. </span><span class="u" data-d="2" data-l="s311c5"><span class="u" data-d="5" data-l="s311w17">In conclusion</span> then come <span class="u" data-d="5" data-l="s311w18">the sections on bodhisattva deeds</span>--<span class="u" data-d="5" data-l="s311w19">advices</span> in acting out the wish.</span></span>
+</div>
+</div>
+<div class="note"><b>AI NOTE</b> &mdash; (1) THE RITUAL-STRUCTURE TRIPLE: <b>sngon 'gro / dngos gzhi /
+mjug</b> &rarr; "a preliminary / the main stage / In conclusion" &mdash;
+the liturgical architecture in plain English. (2) <b>bslab bya</b>
+&rarr; "advices" &mdash; GMR's idiolect plural (matching note 100's
+"Advices to Myself"); <b>spyod pa'i skor</b> &rarr; "the sections on
+bodhisattva deeds--advices in acting out the wish". (3) <b>don
+gnyer</b> spread: "striving" (vs "achieving", 195/250). (4) "have a
+similar structure" SUPPLIED as the bridge between the two
+architectures; lam rim crosses into it. (5) <b>lhag bsam</b> &rarr;
+"the extraordinary type of personal responsibility" (stable).</div>
+<h2>Segment 312 &mdash; twenty-two forms</h2>
+<div class="pair">
+<div class="tib"><div class="lab">TIBETAN (WYLIE)</div>
+<span class="u" data-d="1" data-l="s312S"><span class="u" data-d="2" data-l="s312c1"><span class="u" data-d="5" data-l="s312w1">byang chub kyi sems</span> <span class="u" data-d="5" data-l="s312w2">sbyong ba</span>'i <span class="u" data-d="6" data-l="s312m1">skabs su</span> </span><span class="u" data-d="2" data-l="s312c2"><span class="u" data-d="5" data-l="s312w3">sems bskyed</span> <span class="u" data-d="5" data-l="s312w4">nyer gnyis</span> dang , <span class="u" data-d="5" data-l="s312w5">smon</span> <span class="u" data-d="5" data-l="s312w6">'jug</span> <span class="u" data-d="6" data-l="s312m2">sogs</span> kyi </span><span class="u" data-d="2" data-l="s312c3"><span class="u" data-d="5" data-l="s312w7">ngo bo</span> <span class="u" data-d="5" data-l="s312w8">khyad par</span> rnams <span class="u" data-d="5" data-l="s312w9">shes par byas</span> te <span class="u" data-d="5" data-l="s312w10">blo sbyang</span> <span class="u" data-d="5" data-l="s312w11">dgos</span></span></span>
+</div>
+<div class="eng"><div class="lab">GESHE MICHAEL'S ENGLISH (VERBATIM)</div>
+<span class="u" data-d="1" data-l="s312S"><span class="u" data-d="2" data-l="s312c1">When you're <span class="u" data-d="5" data-l="s312w2">practicing</span> to develop <span class="u" data-d="5" data-l="s312w1">this wish for enlightenment</span>, </span><span class="u" data-d="2" data-l="s312c3">you should <span class="u" data-d="5" data-l="s312w10">train your mind</span> in <span class="u" data-d="5" data-l="s312w7">its basic nature</span> and all <span class="u" data-d="5" data-l="s312w8">its various attributes</span>: </span><span class="u" data-d="2" data-l="s312c2">these include <span class="u" data-d="5" data-l="s312w4">the twenty-two</span> <span class="u" data-d="5" data-l="s312w3">forms of the wish</span>, the distinction between <span class="u" data-d="5" data-l="s312w5">praying</span> and <span class="u" data-d="5" data-l="s312w6">actually engaging</span>, <span class="u" data-d="6" data-l="s312m2">and so on</span>.136</span><span class="u" data-d="5" data-l="s312w9"><span class="nul">shes par byas&rarr;within &quot;train... in&quot;</span></span><span class="u" data-d="5" data-l="s312w11"><span class="nul">dgos&rarr;within &quot;should&quot;</span></span></span>
+</div>
+</div>
+<div class="note"><b>AI NOTE</b> &mdash; (1) THE SMON/'JUG PAIR: <b>smon 'jug</b> &rarr; "the distinction
+between praying and actually engaging" &mdash; the aspiring/engaging
+bodhichitta distinction unpacked ("the distinction between"
+supplied). (2) <b>sems bskyed nyer gnyis</b> &rarr; "the twenty-two
+forms of the wish" (fn 136). (3) Category/example order NORMALIZED
+again (197's rule): Tibetan examples-then-category; English
+category-colon-examples &mdash; crossed clause ids. (4) <b>ngo bo
+khyad par</b> &rarr; "its basic nature and all its various
+attributes".</div>
+<h2>Segment 313 &mdash; the centermost contemplation</h2>
+<div class="pair">
+<div class="tib"><div class="lab">TIBETAN (WYLIE)</div>
+<span class="u" data-d="1" data-l="s313S"><span class="u" data-d="2" data-l="s313c1"><span class="u" data-d="5" data-l="s313w1">byang chub kyi sems</span> <span class="u" data-d="5" data-l="s313w2">rin po che</span> 'di ni <span class="u" data-d="5" data-l="s313w3">rgyal ba</span>'i <span class="u" data-d="5" data-l="s313w4">gsung rab</span> thams cad kyi <span class="u" data-d="5" data-l="s313w5">snying po</span> dang , </span><span class="u" data-d="2" data-l="s313c2"><span class="u" data-d="5" data-l="s313w6">rgyal sras</span> <span class="u" data-d="5" data-l="s313w7">byang chub sems dpa'</span> thams cad kyi <span class="u" data-d="5" data-l="s313w8">thugs dam</span> gyi <span class="u" data-d="5" data-l="s313w9">mthil</span> <span class="u" data-d="5" data-l="s313w10">gcig pu</span> <span class="u" data-d="6" data-l="s313m1">yin te</span>, </span><span class="u" data-d="2" data-l="s313c3"><span class="u" data-d="5" data-l="s313w11">spyod 'jug</span> <span class="u case" data-d="6" data-l="s313m2">las</span></span></span>
+</div>
+<div class="eng"><div class="lab">GESHE MICHAEL'S ENGLISH (VERBATIM)</div>
+<span class="u" data-d="1" data-l="s313S"><span class="u" data-d="2" data-l="s313c1"><span class="u" data-d="5" data-l="s313w2">This precious jewel</span>, <span class="u" data-d="5" data-l="s313w1">the wish to gain enlightenment for every being</span>, is <span class="u" data-d="5" data-l="s313w5">the inner essence</span> of all <span class="u" data-d="5" data-l="s313w4">the high teachings</span> of <span class="u" data-d="5" data-l="s313w3">the victorious Buddhas</span>. </span><span class="u" data-d="2" data-l="s313c2">It is <span class="u" data-d="5" data-l="s313w10">the single</span> <span class="u" data-d="5" data-l="s313w9">centermost</span> <span class="u" data-d="5" data-l="s313w8">contemplation</span> of every one of <span class="u" data-d="5" data-l="s313w6">their sons</span>--<span class="u" data-d="5" data-l="s313w7">the bodhisattvas</span>. </span><span class="u" data-d="2" data-l="s313c3">As <span class="u" data-d="5" data-l="s313w11">The Bodhisattva's Life</span> relates,</span></span>
+</div>
+</div>
+<div class="note"><b>AI NOTE</b> &mdash; (1) THE APPOSITIVE PAIR CONFIRMS 266: <b>rgyal sras + byang chub
+sems dpa'</b> &rarr; "their sons--the bodhisattvas" &mdash; both terms
+rendered side by side, anchoring the 265/266 rgyal-sras =
+"bodhisattva" discovery. (2) <b>thugs dam gyi mthil</b> &rarr; "the
+single centermost contemplation" &mdash; mthil ("the palm/center")
+&rarr; "centermost". (3) <b>rgyal ba</b> &rarr; "the victorious
+Buddhas" (title and referent both). (4) "GAIN enlightenment" &mdash;
+formula variant #3 (achieve / reach / gain). (5) <b>snying po</b>
+&rarr; "the INNER essence" (supplied intensifier).</div>
+
+<div class="legend"><b>Depth key (Wilson-grounded, seven layers):</b> as the C02 set; verse pages add: line-crossing links honor GMR's published verse order. &middot; Source: hgm_spine_v27_2 corpus C01. English: Geshe Michael Roach, ACI Course 1, verbatim. Analysis &amp; links: Claude (AI), PROVISIONAL &mdash; evaluation only, not dictionary material.</div>
+<div class='nav'><a href='index.html'>&#8962; Index</a><a href='c1p91.html'>&larr; Previous</a></div>
+<script>
+const names={1:'1 \u00b7 Sentence',2:'2 \u00b7 Clause',3:'3 \u00b7 Phrase',4:'4 \u00b7 Embedded phrase',5:'5 \u00b7 Word / compound',6:'6 \u00b7 Morpheme / particle'};
+const slider=document.getElementById('depth'), nm=document.getElementById('depthname');
+function apply(){
+  const d=slider.value; nm.textContent=names[d];
+  document.querySelectorAll('.u').forEach(u=>{
+    u.classList.toggle('active', u.dataset.d===d);
+    u.classList.remove('hl','pin');
+  });
+}
+slider.addEventListener('input',apply); apply();
+const peers=el=>document.querySelectorAll(`[data-l="${el.dataset.l.split(' ')[0]}"]`);
+document.addEventListener('mouseover',e=>{const t=e.target.closest('.active');if(t)peers(t).forEach(p=>p.classList.add('hl'));});
+document.addEventListener('mouseout',e=>{const t=e.target.closest('.active');if(t)peers(t).forEach(p=>p.classList.remove('hl'));});
+document.addEventListener('click',e=>{
+  const t=e.target.closest('.active');
+  document.querySelectorAll('.pin').forEach(p=>p.classList.remove('pin'));
+  if(t)peers(t).forEach(p=>p.classList.add('pin'));
+});
+</script>
+</body>
+</html>

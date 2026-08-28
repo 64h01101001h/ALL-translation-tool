@@ -554,7 +554,7 @@ letter-exact battery gates every batch.
   (74's coinages reprised verbatim + self-referential "what we have
   called here"). khungs #4 "authentic source". Supplied transition
   sentence (filed with 115's). Self-quotes ×5 — densest cluster.
-| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p91 (144–310) done; 143 & 259 = marker pairs; 311+ open; 186 segs / 62 batches remain to close C01; §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
+| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p92 (144–313) done; 143 & 259 = marker pairs; 314+ open; 183 segs / 61 batches remain to close C01; §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
 
 NEXT: continue section VII (seq 146+) — the renunciation chapter.
 - seg 143: section-marker pair (like 43) — wylie carries "the first
@@ -1758,3 +1758,19 @@ TCS series and collections beyond, for later ruling). ***
   dmigs pa logs su skyong tshul med → "no separate meditation
   instruction" (fn 135). Line-wrap artifact "loving- kindness"
   kept. ldan 'dod → wish-form.
+
+### c1p92 — C01:311–313 (batch 92) — the architecture of the wish
+- Zero-catch. Layer: 2,596 headwords / 4,877 pairs.
+- seg 311: RITUAL-STRUCTURE TRIPLE (sngon 'gro/dngos gzhi/mjug →
+  preliminary/main stage/In conclusion). bslab bya → "advices"
+  (GMR idiolect plural, matching note 100). don gnyer →
+  "striving" (spread). Supplied bridge sentence; lam rim crosses
+  into it.
+- seg 312: SMON/'JUG PAIR → "the distinction between praying and
+  actually engaging" (aspiring/engaging bodhichitta unpacked).
+  sems bskyed nyer gnyis → "twenty-two forms" (fn 136).
+  Category/example order normalized (197's rule; crossed ids).
+- seg 313: APPOSITIVE PAIR CONFIRMS 266 — rgyal sras + byang chub
+  sems dpa' → "their sons--the bodhisattvas" side by side.
+  thugs dam gyi mthil → "the single centermost contemplation".
+  "gain" = formula variant #3 (achieve/reach/gain).
