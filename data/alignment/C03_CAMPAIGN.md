@@ -29,7 +29,7 @@ When a segment's english field is phonetics, not translation:
    under its own clause with honest labels.
 
 ## Progress
-c3p1–c3p14 (1–42) done; 43+ open; 578 segs remain.
+c3p1–c3p15 (1–45) done; 46+ open; 575 segs remain.
 
 ## Queues (wylie / english / PHONETICS), C03
 - WYLIE: ACIP anusvara capitals dM/kM/ND + ni'a oddity (seg 6).
@@ -236,3 +236,16 @@ c3p1–c3p14 (1–42) done; 43+ open; 578 segs remain.
   mirror; relay #6 closes with the emanated-offerings explanation +
   the last-two-feet instruction (tshig rkang pa tha ma gnyis).
 - Evidence layer: 3,977 headwords / 7,371 pairs.
+
+### Batch C03-15 (c3p15, C03:43–45) — 2026-08-28
+- 43: ga/ ↔ "[c]" (letter-numeral #3); citation mirror #7; 'dod
+  chags cited alone, English citation expands to "like and dislike".
+- 44: FULL-REVERSE rotation 4-3-2-1 (course's 2nd, with 31). TWO
+  bdag gis both → "I" at crossed positions. lus → "In action"
+  (body by function); gti mug → "dark ignorance"; so sor → "one by
+  one". Relay #7 closes (do/bid/rejoice triad; 'phro 'chad do →
+  "prevents any future wrong from starting at all").
+- 45: nga/ ↔ "[d]" (system 4 deep); FIVE-unit citation mirror
+  (quote splits crosswise). s45rest holds the pauper-treasure
+  simile (dbul pos gter rnyed pa ltar).
+- Evidence layer: 3,984 headwords / 7,391 pairs.
