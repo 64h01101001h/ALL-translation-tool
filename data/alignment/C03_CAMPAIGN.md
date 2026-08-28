@@ -29,7 +29,7 @@ When a segment's english field is phonetics, not translation:
    under its own clause with honest labels.
 
 ## Progress
-c3p1–c3p31 (1–93) done; 94+ open; 527 segs remain.
+c3p1–c3p32 (1–96) done; 97+ open; 524 segs remain.
 
 ## Queues (wylie / english / PHONETICS), C03
 - WYLIE: ACIP anusvara capitals dM/kM/ND + ni'a oddity (seg 6).
@@ -422,4 +422,16 @@ c3p1–c3p31 (1–93) done; 94+ open; 527 segs remain.
 - 93: 'jam dpal dbyangs → jampel yang — DOUBLE TREATMENT of db-:
   dbang→wang (w) but dbyangs→yang (y glide wins); dri med → drime
   (C01 3-render word, now its sound).
+- Evidence layer unchanged: 4,039 / 7,481.
+
+### Batch C03-32 (c3p32, C03:94–96) — 2026-08-28
+- 94: gsang ba'i bdag (Vajrapani); dupung fusion; jomdze.
+- 95: gangchen; tsuk-gyen (hyphen); kepay.
+- 96: THE MIGTSEMA STANZA (92–96, in order, sixfold "I pray").
+  CROWN-CALQUE HARVEST: spyan ras gzigs → "Loving Eyes"; 'jam dpal
+  dbyangs → "Soft Glorious Voice" (full 3-syllable calque; C01's
+  "Gentle Voice" + dpal); gsang ba'i bdag → "the Keeper of the
+  Secret"; gangs can → "the Land of Snow"; gtsug rgyan → "Crowning
+  jewel"; dmigs med → "With no one it loves". Final line's triple
+  frame kept verbatim.
 - Evidence layer unchanged: 4,039 / 7,481.
