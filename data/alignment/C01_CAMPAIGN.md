@@ -554,7 +554,7 @@ letter-exact battery gates every batch.
   (74's coinages reprised verbatim + self-referential "what we have
   called here"). khungs #4 "authentic source". Supplied transition
   sentence (filed with 115's). Self-quotes ×5 — densest cluster.
-| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p134 (144–439) done; 143, 259, 324 & 427 = marker pairs; 440+ open; 57 segs / 19 batches remain; §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
+| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p135 (144–442) done; 143, 259, 324 & 427 = marker pairs; 443+ open; 54 segs / 18 batches remain; §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
 
 NEXT: continue section VII (seq 146+) — the renunciation chapter.
 - seg 143: section-marker pair (like 43) — wylie carries "the first
@@ -2779,3 +2779,21 @@ TCS series and collections beyond, for later ruling). ***
   could manage").
 - QA: both sides letter-exact, 165 spans balanced, depth clean.
   Layer: 3,439 headwords / 6,515 pairs.
+
+### c1p135 — Bugs, flies and germs (440–442)
+- **440 — title**: spyod 'jug → "The Bodhisattva's Life"
+  (Bodhicharyavatara by abbreviation). de ltar min par → "But you're
+  wrong" (corrective as direct address).
+- **441 — TATHAGATA CALQUED**: de bzhin gshegs pa → "Those who've
+  Gone That Way" — the epithet as full English calque (crown piece
+  beside "Seers of the Word"). sgyid lug → "a quitter" (most
+  colloquial). BDEN-BDEN PLAY KEPT ("speak The truth…a truth they
+  spoke"). Lines 1-2 swapped (prohibition fronted).
+- **442 — the insect list localized**: sbrang bu/sha sbrang/bung
+  ba/srin bu (fly/gadfly/BEE/worm) → "bugs, Flies or gnats, and even
+  germs" — four-for-four but bee→"gnats", worm→"germs" (naturalizing
+  register; animal-file note). Lines 3-4 swapped (attainment
+  fronted). byang chub thob dka' bla med → "matchless, hard-won
+  Buddhahood" (three-element pile mirrored).
+- QA: both sides letter-exact, 96 spans balanced, depth clean.
+  Layer: 3,455 headwords / 6,540 pairs.
