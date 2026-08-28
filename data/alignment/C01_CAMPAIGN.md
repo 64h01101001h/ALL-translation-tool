@@ -554,7 +554,7 @@ letter-exact battery gates every batch.
   (74's coinages reprised verbatim + self-referential "what we have
   called here"). khungs #4 "authentic source". Supplied transition
   sentence (filed with 115's). Self-quotes ×5 — densest cluster.
-| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p87 (144–298) done; 143 & 259 = marker pairs; 299+ open; §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
+| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p88 (144–301) done; 143 & 259 = marker pairs; 302+ open; §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
 
 NEXT: continue section VII (seq 146+) — the renunciation chapter.
 - seg 143: section-marker pair (like 43) — wylie carries "the first
@@ -1685,3 +1685,19 @@ TCS series and collections beyond, for later ruling). ***
   documented. byi'u spread (chick 292 / sparrow 298). Application
   supplied ("what kindness we were given too"). Imperative
   supplied ("Look now").
+
+### c1p88 — C01:299–301 (batch 88) — repaying the kindness
+- Thirty-sixth consecutive zero-catch batch. Layer: 2,527
+  headwords / 4,703 pairs (4,700-pair mark).
+- seg 299: verses 7–8 imagery consolidated in prose ("out to sea"
+  supplied; klong → "the vast expanse"). Fragment closer ("Their
+  situation is desperate."). "endlessly"/"loving" supplied.
+- seg 300: THE CHILD FRONTED ("And here am I, their child.").
+  INSULT TRIPLE REORDERED (ma rabs/khrel med/tha chad → lowest-
+  stoop/base/absolutely shameless, tha chad fronted). bsdad →
+  "sit and bide my time". thar ba → "rescue" (spread).
+- seg 301: sogs → "whatever" (the sogs file's colloquial floor).
+  LDAN/BRAL resolve pair (278's definition-verbs in resolve
+  form). snyam du bsam → "let me decide within myself" (first-
+  person resolve, relocated forward). zas gos gnas mal →
+  necessities triple.
