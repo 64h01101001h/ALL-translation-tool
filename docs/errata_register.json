@@ -754,5 +754,101 @@
   "severity": "MEDIUM",
   "confidence": "CONFIRMED",
   "note": "filed from the alignment batch, spine-verified on merge"
+ },
+ {
+  "item_id": "E-064",
+  "course": "C03",
+  "segment": "C03:296",
+  "kind": "TIBETAN_SPELLING",
+  "found": "byang chub lam gyi rim pa'i nying po bsdus pa",
+  "expected": "byang chub lam gyi rim pa'i snying po bsdus pa",
+  "evidence": "C03:298 carries the identical phrase two segments later with the s- prefix ('byang chub lam gyi rim pa'i snying po bsdus pa,'). The prefixed phrase 'rim pa'i snying po bsdus pa' occurs in 3 spine segments (C03:298, C03:347, P1:5); the unprefixed form occurs in exactly 2 (C03:296 and P1:4), and P1:4 is a duplicate copy of this same title page, so there is one independent witness, not two. Corpus-wide, 433 segments contain ' snying po ' against 2 containing ' nying po '. All figures are segment-level counts, i.e. bounds — not span-level proof that each occurrence renders 'essence'. Held at PROBABLE rather than CONFIRMED because unprefixed 'nying' is a legal syllable elsewhere in this corpus (nying khu at C01:314 and C03:298, nying mtshams at C08:128, nying lag at C06:124), so the missing s- could in principle be the source edition's own orthography rather than a keying slip. The English is unaffected either way.",
+  "severity": "MEDIUM",
+  "confidence": "PROBABLE",
+  "note": "filed from the alignment batch, spine-verified on merge"
+ },
+ {
+  "item_id": "E-065",
+  "course": "C03",
+  "segment": "C03:297",
+  "kind": "TIBETAN_SPELLING",
+  "found": "bde chen snying po'i zhabs kyi mor sgo gsum",
+  "expected": "bde chen snying po'i zhabs kyi padmor sgo gsum",
+  "evidence": "The pad syllable of padmo (lotus) has dropped out. Four checks, each run against the shipped spine. (1) The facing English of this very segment reads \"I bow to the lotus feet\"; as the wylie now stands there is no syllable anywhere in the segment that can license \"lotus\". (2) A token census of every standalone \"mor\" in the spine returns 136 occurrences, and C03:297 is the ONLY one preceded by a genitive particle: a LIKE scan for 'kyi mor' / 'gyi mor' / ' gi mor' / \"'i mor\" returns exactly one row, this segment. Every other mor sits on a lexical stem with its head intact (rtse mor 21x, phra mor 17x, lha mor 12x, mtshan mor 11x, chen mor 9x, nyin mor 9x, ri mor 7x; e.g. C01:239 'lam rim chen mor', C03:137 'sna'i rtse mor', C03:399 'mtshan mor', C06:167 'nyin mor', C01:478 'ri mor'). (3) The identical construction is attested intact, spelled as one token: TCS18Commentary:17 reads \"bla ma'i (zhabs kyi padmor te) zhabs nyid padmar bkod pa de la'o\" and TCS18Commentary:116 reads \"bla ma'i (zhabs) kyi (padmor) te zhabs de nyid la padmo'i ming gis bstan nas\" -- and the facing English of both of those segments renders it \"lotus feet\". Further parallels: TCS18LamaChupa:34 \"rdo rje can zhabs padmor phyag 'tshal lo\" (English: \"I bow down to the lotus feet\"), TCS18LamaChupa:4 \"rdo rje can zhabs padmor gus btud nas\"; the la-variant at TCS14:34 \"zhabs kyi padmo la gus pa chen pos phyag 'tshal lo\" and TCS10:87 \"zhabs kyi padmo la gus pas 'dud pa\"; and the pad+m- spellings at TCS05:26 \"bla ma'i zhabs kyi pad+mara ji bzhin btud\" and TCS03:415 \"rje rdo rje 'chang zhabs pad+mora 'dud\". (4) The expected form is given as the single token 'padmor' rather than a spaced 'pad mor' because that is what the spine uses in this exact construction (padmor, 9 occurrences); a spaced 'pad mo' occurs only twice in the whole spine (C09:167, TITLS:3070) and in neither is it this formula.",
+  "severity": "MEDIUM",
+  "confidence": "CONFIRMED",
+  "note": "filed from the alignment batch, spine-verified on merge"
+ },
+ {
+  "item_id": "E-066",
+  "course": "C03",
+  "segment": "C03:298",
+  "kind": "INGEST_ARTEFACT",
+  "found": "how the teaching was given ,de la 'dir khyab bdag 'khor lo'i mgon po rdo rje 'chang",
+  "expected": ",de la 'dir khyab bdag 'khor lo'i mgon po rdo rje 'chang",
+  "evidence": "The English outline heading 'how the teaching was given ' is fused to the front of the wylie column of C03:298, before the leading comma at which the Tibetan begins. Three checks, each run against the spine. (1) In this same course such headings occupy their own segment with no Tibetan attached: the wylie of C03:294 is exactly 'foreword', of C03:295 exactly 'about the authors', of C03:303 exactly 'the preliminaries'. (2) The parallel witness of this very passage, P1:5, carries the same Tibetan with no English prefix - its wylie begins 'de la 'dir khyab bdag 'khor lo'i mgon po rdo rje 'chang pha bong kha pa bka' drin mnyam, med' - and its English column is identical to C03:298's. (3) The English column of C03:298 contains no exponent whatever for 'how the teaching was given'; it opens 'Here I will give just a brief account'. The heading therefore belongs in its own row, as at 294/295/303, and did not split.",
+  "severity": "MEDIUM",
+  "confidence": "CONFIRMED",
+  "note": "filed from the alignment batch, spine-verified on merge"
+ },
+ {
+  "item_id": "E-067",
+  "course": "C03",
+  "segment": "C03:300",
+  "kind": "ENGLISH_FACTUAL_ERROR",
+  "found": "Loving One, Avalokiteshvara, with Asanga,",
+  "expected": "Loving One, Maitreya, with Asanga,",
+  "evidence": "The Tibetan quoted in this slot is `byams pa thogs med`. TCS14:65 settles it inside this same corpus: the wylie `'di ni rje btsun byams pa nas thogs med dang, rje btsun 'jam dbyangs nas klu sgrub dang` is rendered \"those passed down to Master Asanga from the holy Maitreya, those come to the realized being Nagarjuna from the holy Manjushri\" - byams pa = Maitreya, thogs med = Asanga, in exactly this pairing, and immediately followed by the 'jam dbyangs pairing that C03:300 also continues in its next clause. TCS17:552 supplies the identical appositive: wylie `byams chen gyi mdun du phebs nas` is rendered \"The Lama came before the great image of the Loving One, Maitreya\". C01:471 renders `mgon po byams pa` as \"the savior Loving One\" and `'jam dbyangs` as \"Gentle Voice\", so \"Loving One\" is GMR's own English for byams pa and the Sanskrit appositive after it must be Maitreya. Avalokiteshvara is spyan ras gzigs, which this corpus renders \"Loving Eyes\": TITLS:817, wylie `rje btsun spyan ras gzigs la phyag 'tshal ba`, English \"An Obeisance to the Revered Loving Eyes [Avalokiteshvara]\". The parallel item four positions later, `'jam dbyangs` -> \"Gentle Voice, Manjushri\", establishes the pattern as [English of the Tibetan name], [Sanskrit of the same figure], so the slot cannot hold a different deity. All four cited rows were re-read from the spine for this report. Per rule 10 the English stands unchanged on the page and \"Avalokiteshvara,\" is left unwrapped; s09 keys byams pa to \"Loving One\" only.",
+  "severity": "HIGH",
+  "confidence": "CONFIRMED",
+  "note": "filed from the alignment batch, spine-verified on merge"
+ },
+ {
+  "item_id": "E-068",
+  "course": "C03",
+  "segment": "C03:300",
+  "kind": "INGEST_ARTEFACT",
+  "found": "rnams ooo ka re lhan du gsungs",
+  "expected": "rnams shlooo ka re lhan du gsungs",
+  "evidence": "The wylie conversion drops the ACIP Sanskrit brace code {SHl} (sh with subjoined la), leaving the orphan `ooo ka`, which cannot be a Tibetan syllable sequence - no consonant, and a tripled vowel letter. The acip field of this same row preserves the source: \"SKYE BA KUN TU RNAMS {SHl}OOO KA RE LHAN DU GSUNGS,\". Measured over the whole spine: 23 rows carry a {SHl} brace code and all 23 lose the `shl` in their wylie (count of rows where acip matches '%{SHl}OO%' and wylie matches '%oo ka%' but not '%shl%' = 23 of 23); by contrast 9 rows spell the word without the brace code as SHLOO KA and all 9 keep it, wylie `shloo ka` (e.g. TITLS:1252 acip \"...POD SO SOR SHLOO KA RE\" -> wylie \"...pod so sor shloo ka re\"; also C03:349 and C07:80). Two of the damaged rows are in this same document: C03:302 acip \"LHA YI SKAD DANG SOGS {SHl}OO KA RE RE\" -> wylie \"lha yi skad dang sogs oo ka re re\"; C03:378 acip \"ZHES PA'I {SHl}OO KA GCIG STE\" -> wylie \"zhes pa'i oo ka gcig ste\". The word is Sanskrit shloka, \"verse\", which is what the English of this segment renders (\"the various verses\"). `expected` above is the converter-faithful output for this row's source as keyed; the residual tripled vowel is a separate source defect, filed below, after which the reading is `shloo ka`. Effect: the word is unsearchable and unreadable in the wylie layer in all 23 rows.",
+  "severity": "MEDIUM",
+  "confidence": "CONFIRMED",
+  "note": "filed from the alignment batch, spine-verified on merge"
+ },
+ {
+  "item_id": "E-069",
+  "course": "C03",
+  "segment": "C03:300",
+  "kind": "TIBETAN_SPELLING",
+  "found": "SKYE BA KUN TU RNAMS {SHl}OOO KA RE LHAN DU GSUNGS,",
+  "expected": "SKYE BA KUN TU RNAMS {SHl}OO KA RE LHAN DU GSUNGS,",
+  "evidence": "Counted over corpus_segments: acip matching '%{SHl}OO KA%' = 22 rows, acip matching '%{SHl}OOO KA%' = 1 row, that one being C03:300. The 9 rows that spell the word without the brace code all write SHLOO KA, and acip matching '%SHLOOO%' = 0 rows - nothing in the corpus writes the vowel three times. Two of the 22 are in this same document: C03:302 \"{SHl}OO KA RE RE\" and C03:378 \"ZHES PA'I {SHl}OO KA GCIG STE\". The extra O is therefore a keying slip in the source ACIP rather than an orthographic variant. Marked PROBABLE because the claim about the keyer's intent rests on the corpus distribution rather than on the source document itself.",
+  "severity": "LOW",
+  "confidence": "PROBABLE",
+  "note": "filed from the alignment batch, spine-verified on merge"
+ },
+ {
+  "item_id": "E-070",
+  "course": "C03",
+  "segment": "C03:302",
+  "kind": "TIBETAN_SPELLING",
+  "found": "lha yi skad dang sogs oo ka re re rje nyid nas gnang ba'i mthar",
+  "expected": "lha yi skad dang sogs shloo ka re re rje nyid nas gnang ba'i mthar",
+  "evidence": "The word is Sanskrit shloka, 'verse' (the English of this segment renders the phrase 'bespoke the verses'), and 'oo' cannot be a Tibetan syllable — it has no root letter, so it will not convert to unicode and will not be found by any syllable-keyed lookup. Verified in the spine: C03:349 and C16:414 carry the SAME Tibetan sentence word for word — 'dang po ni, ,yon tan kun gzhir gyur drin can rje, ,tshul bzhin bsten pa lam gyi rtsa ba ru, ,legs par mthong nas 'bad pa du ma yis, ,gus pa chen pos bsten par byin gyis rlobs, ,zhes pa'i X ka gcig gis bstan' — where C03:349 reads 'shloo ka' and C16:414 reads 'oo ka'. That minimal pair fixes the full form and proves the two spellings are the same word. Corpus-wide the split is: 9 segments with 'shloo ka' (C03:349, C07:80, TITLS:847, 1252, 1282, 1289, 2514, 2570, 2597), 1 with 'shlo ka' (ILL:2047), and 22 with the bare 'oo ka' (C03:302, 378, 403, 432, 463, 478, 495, 505, 515, 524, 546, 560, 574; C16:414, 450, 463, 479, 482, 484, 492, 499, 507). Both forms occur inside C03, so this is not a per-file ingest failure dropping the 'shl' cluster; it reads as inconsistency carried in the source e-text. Adjacent but NOT claimed here: C03:300 has a third form, 'rnams ooo ka re lhan du gsungs', with three o's — outside this segment, flagged only so whoever aligns 300 checks it.",
+  "severity": "MEDIUM",
+  "confidence": "CONFIRMED",
+  "note": "filed from the alignment batch, spine-verified on merge"
+ },
+ {
+  "item_id": "E-071",
+  "course": "C03",
+  "segment": "C03:303",
+  "kind": "INGEST_ARTEFACT",
+  "found": "the preliminaries",
+  "expected": "",
+  "evidence": "Verified in build/hgm_spine_v27_2.db, row id=867. C03:303 stores wylie='the preliminaries' (17 chars, confirmed with length(wylie)) and english='I. Why the Steps?' (17 chars); the acip column holds 'THE PRELIMINARIES' — English sitting in the transliteration column — and raw carries the same. The wylie is not Wylie: 'preliminaries' has no legal syllable analysis ('prel' is not a possible stack, 'aries' has no root-letter reading). Three courses carry the IDENTICAL wylie against unrelated English, which proves the string is a repeated editorial running head rather than any segment's text: C01:43 'the preliminaries' / 'I. The Lama and the Word'; C09:171 'the preliminaries' / 'The preliminary division of my text has two parts of its own: the offering of praise, and an identification of that which is to be to be explained.'; C03:303 / 'I. Why the Steps?'. The mechanism is visible where the same header stream was concatenated in front of real Tibetan instead of being stranded alone: C03:298 wylie = \"how the teaching was given ,de la 'dir khyab bdag 'khor lo'i mgon po rdo rje 'chang...\" and C09:54 wylie = \"i. the preliminaries de la 'dir rje btsun chos kyi rgyal po shar tsong kha pa chen po blo...\". Sibling header rows of the same class in this course: C03:22 'the asian classics institute'; C03:294 'foreword'; C03:295 'about the authors'; C03:401 'steps shared with those of lesser capacity'; C03:430 'steps shared with those of medium capacity'; C03:476 'open steps for those of greater capacity'; C03:513 'secret steps for those of greater capacity'; C03:558 'the conclusion'. Class boundary, to prevent over-broad remediation: C03:263 wylie='the tshom' / english='Destructive Doubts vi.' IS genuine Wylie (the tshom = doubt) and is NOT part of this class. Effect: the segment carries no Tibetan, so it cannot be aligned, and wylie-side FTS or concordance queries return English strings as though they were Tibetan. No textual correction is possible — the remedy is reclassification as an editorial section header rather than a Tibetan-English parallel segment.",
+  "severity": "MEDIUM",
+  "confidence": "CONFIRMED",
+  "note": "filed from the alignment batch, spine-verified on merge"
  }
 ]
