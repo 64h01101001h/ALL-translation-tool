@@ -1327,3 +1327,49 @@ filtered for "respectively" and "with respect to" — 102 unfiltered against 93
 - Evidence layer: 4,513 headwords / 8,361 pairs. C03 at 237/620.
   Broken words: 11,967 English spans clean. Split syllables: 15,141 Tibetan
   spans clean. Both across 269 pages.
+
+### Batches C03-80 … C03-85 (C03:238–265) — 2026-08-28 — model: Opus
+Six pages, twenty-eight outline headings — refuge, the four laws of karma, the
+eight sufferings, the ten mental afflictions. **Twenty-eight of twenty-eight
+clean on the first attempt**, the largest first-pass batch of the campaign.
+
+**THE OUTLINE MARKER CONVENTION, settled by proof rather than assumption.**
+Each heading's English ends with a marker — `c)`, `ii.`, `2.` — and it was an
+open question whether that marker labels *this* heading or the *next* one. The
+C03:238 reconciler settled it by reconstructing two classical enumerations and
+checking which reading makes them come out right:
+
+- the three roots of the death meditation: a) 228 death is certain, b) 229 the
+  time is uncertain, c) 230 nothing but Dharma helps
+- the four laws of karma: a) 242 fixed, b) 243 expands, c) 244 not committed
+  brings no consequence, d) 245 committed must bring one
+
+Both sequences are correct **only** if the trailing marker belongs to the NEXT
+heading. Under the other reading both break. So a trailing marker is a
+glued-on fragment of the following heading — apparatus either way, so no span
+changed, but the convention is now established rather than guessed.
+
+**A SECOND REGISTER SPLIT, and this one is better evidenced than `gus pa`.**
+`skyabs su 'gro`, across 49 segments corpus-wide: **28 "refuge" / 20
+"shelter"**. The conditioning is register — outline headings and technical
+exposition take "Refuge"; running devotional and hortatory prose takes
+"shelter" (C03:311 "go for shelter to the Three Jewels", C03:423 "from the
+depths of your heart you will go for shelter"). Both stand; neither is
+auto-resolved.
+
+The reconciler attached the right caveat **unprompted**: *"These are
+segment-level co-occurrence counts and so bound the divergence rather than
+measure it token-by-token."* That is precisely the flaw that invalidated my own
+`gus pa` figure an hour earlier — reached independently, and stated before the
+number was used. It also corrected its own proposal's count (14/3 → 12/2 for
+C03 specifically).
+
+**A defect in one of my gates.** The broken-words gate flagged `n't` on
+C03:254 — legitimate negative-affix convention, already in the allowed list.
+The page stores entities, so the span arrives as `n&#x27;t` and never matched.
+The gate now unescapes before comparing; mutation-verified. It would have
+mis-fired on every allowed span containing an apostrophe.
+
+- Evidence layer: 4,525 headwords / 8,408 pairs. C03 at 265/620.
+  Broken words: 12,054 English spans clean. Split syllables: 15,247 Tibetan
+  spans clean. Both across 275 pages.
