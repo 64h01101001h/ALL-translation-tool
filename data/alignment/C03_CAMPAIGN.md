@@ -29,7 +29,7 @@ When a segment's english field is phonetics, not translation:
    under its own clause with honest labels.
 
 ## Progress
-c3p1–c3p18 (1–54) done; 55+ open; 566 segs remain.
+c3p1–c3p19 (1–57) done; 58+ open; 563 segs remain.
 
 ## Queues (wylie / english / PHONETICS), C03
 - WYLIE: ACIP anusvara capitals dM/kM/ND + ni'a oddity (seg 6).
@@ -292,3 +292,14 @@ c3p1–c3p18 (1–54) done; 55+ open; 566 segs remain.
   lha → "hla"; the Ganden Lhagyama opens (C01 fn 194 quoted its
   final verses).
 - Evidence layer: 4,039 headwords / 7,481 pairs.
+
+### Batch C03-19 (c3p19, C03:55–57) — 2026-08-28
+- 55: thugs ka ↔ "tukka" (junction doubling #4); mgon ↔ "gun"
+  (ö-as-u #5); nas ↔ "ne" (a-umlaut-as-e); hla-gyay (hyphen #2).
+- 56: chu 'dzin ↔ "chunzin" — NASAL BRIDGE #4 (nyinde/gendun/
+  nelnjor/chunzin); zho gsar ("fresh curd") ↔ "shosar".
+- 57: Tsongkapa's name line: blo bzang grags ↔ "losang drak"
+  (bz-→s, gr-→dr); chu-kyi and kun-kyen hyphenated — three hyphens
+  on one page; the hyphenation practice concentrates in this
+  prayer.
+- Evidence layer unchanged (pure phonetics batch): 4,039 / 7,481.
