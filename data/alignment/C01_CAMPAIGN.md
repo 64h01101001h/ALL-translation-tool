@@ -3268,3 +3268,15 @@ C03 (C02 already complete).
 - 12: bsngo ba ↔ "ngowa" — same bsng-→ng reduction as bsngags pa'i ↔
   "ngakpay" at C03:111, consistent across courses.
 - COVERAGE GATE: C01 480→483; 13 open (13-22, 39, 43, 143).
+
+### BACKFILL B5 (c1L5, C01:13–15) — 2026-08-28 — model: Opus
+- 13: dge ba ↔ "gewa", skye bo ↔ "kyewo" (b→w both; ba/bo stay
+  distinct against C03:113's skye ba ↔ "kyewa" — ba/bo and wa/wo
+  line up cleanly). 'di yis ↔ "diyi" = THIRD dropped instrumental -s
+  (with kyis→kyi at seg 10, 'dis→di at C03:83). The vowel-fronting
+  is NOT automatic for every -s; the three drops bound the rule.
+- 14: tshogs rdzogs ↔ "tsok-dzok" (hyphenated closed-syllable
+  junction); rdz-→dz.
+- 15: las byung ↔ "lejung"; ba'i ↔ "way". Lines 2 and 3 share the
+  bsod nams ye shes anaphora, phonetics identical both times.
+- COVERAGE GATE: C01 483→486; 10 open (16-22, 39, 43, 143).
