@@ -554,7 +554,7 @@ letter-exact battery gates every batch.
   (74's coinages reprised verbatim + self-referential "what we have
   called here"). khungs #4 "authentic source". Supplied transition
   sentence (filed with 115's). Self-quotes ×5 — densest cluster.
-| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p124 (144–409) done; 143, 259 & 324 = marker pairs; 410+ open; 87 segs / 29 batches remain; §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
+| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p125 (144–412) done; 143, 259 & 324 = marker pairs; 413+ open; 84 segs / 28 batches remain; §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
 
 NEXT: continue section VII (seq 146+) — the renunciation chapter.
 - seg 143: section-marker pair (like 43) — wylie carries "the first
@@ -2567,3 +2567,24 @@ TCS series and collections beyond, for later ruling). ***
   embedded ('A Unique Teaching of the "Implication" School').
 - QA: both sides letter-exact, 174 spans balanced, depth clean.
   Layer: 3,258 headwords / 6,175 pairs.
+
+### c1p125 — Root verse thirteen (410–412)
+- **410 — ROOT VERSE (13)**: in order (like 12); section-intro ("The
+  fifth and final section…") SUPPLIED wholesale before the verse,
+  frame zhes pas bstan te crossed forward. ENGLISH GAPPING in verse:
+  Tibetan repeats sel, English gaps the verb ("Emptiness that of
+  non-existence"). 'phrog par → "stolen off" (vivid robbery verb).
+  Compact renders: "the existence extreme"/"that of non-existence".
+- **411 — the others' assignment**: appearance→prevents
+  NON-existence, emptiness→prevents existence (non-Prasangika
+  mapping). FULL UNPACKS of yod/med mtha' — three degrees of the
+  same terms in three segments (verse compact / full quote-marked).
+  bzhed → "hold" (crossed); one sel bar serves both "prevents".
+- **412 — the reversal (the unique teaching)**: appearance prevents
+  the EXISTENCE extreme, emptiness the NON-existence extreme — each
+  with supplied "that is" qualifier ("in an ultimate way"/"in a
+  conventional way") — the ultimate/conventional guard explicit.
+  chos gang dang gang → "no particular object you can choose";
+  brten nas → "because" (dependence-word as causal conjunction).
+- QA: both sides letter-exact, 128 spans balanced, depth clean.
+  Layer: 3,270 headwords / 6,209 pairs.
