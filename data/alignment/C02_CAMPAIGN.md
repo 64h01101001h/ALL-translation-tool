@@ -40,7 +40,7 @@ upstream in the data project, rather than an editorial change here.
 Flagged for Adam.
 
 ## Progress
-c2L1–c2L3 (1–9) done; 10–22 open. Main pass 22–68 already delivered.
+c2L1–c2L4 (1–12) done; 13–22 open. Main pass 22–68 already delivered.
 
 ### BACKFILL C2-B1 (c2L1, C02:1–3) — 2026-08-28 — model: Opus
 - Generated from C02's own spine rows. Segments 1–3 are byte-identical
@@ -74,3 +74,15 @@ c2L1–c2L3 (1–9) done; 10–22 open. Main pass 22–68 already delivered.
 - Corpus-wide artifact scan run this batch: 8,961 segments, exactly
   one angle-bracket hit (C02:6). Singleton confirmed.
 - COVERAGE GATE: C02 52→55; 13 open (10-22).
+
+### BACKFILL C2-B4 (c2L4, C02:10–12) — 2026-08-28 — model: Opus
+- All three byte-identical to C01 and C03 (asserted in the generator,
+  not assumed). dakki; penchir; druppar; ngowa.
+- kyis ↔ "kyi": one of the three dropped-instrumental attestations
+  bounding the ergative fronting rule.
+- Cross-reference to the same day's two-dictionary measurement: the
+  641 scan/manual disagreements cluster on words GMR renders freely
+  in running text, not on plain lexical items like sbyin ("giving").
+  That is the evidence behind calling this an ATTESTATION layer
+  rather than a definition list.
+- COVERAGE GATE: C02 55→58; 10 open (13-22).
