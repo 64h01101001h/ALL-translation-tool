@@ -554,7 +554,7 @@ letter-exact battery gates every batch.
   (74's coinages reprised verbatim + self-referential "what we have
   called here"). khungs #4 "authentic source". Supplied transition
   sentence (filed with 115's). Self-quotes ×5 — densest cluster.
-| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p89 (144–304) done; 143 & 259 = marker pairs; 305+ open; §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
+| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p90 (144–307) done; 143 & 259 = marker pairs; 308+ open; 189 segs / 63 batches remain to close C01 (est. finish ~batch 153); §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
 
 NEXT: continue section VII (seq 146+) — the renunciation chapter.
 - seg 143: section-marker pair (like 43) — wylie carries "the first
@@ -1722,3 +1722,22 @@ TCS series and collections beyond, for later ruling). ***
   triple, two stagings). bkres skom → "hungry, and parched"
   (skom spread). khur...bab pa rendered literally ("has fallen
   only to you") — 277's recast/literal pair complete.
+
+### c1p90 — C01:305–307 (batch 90) — the extraordinary responsibility
+- Zero-catch. Layer: 2,573 headwords / 4,812 pairs. PROGRESS
+  MARK (per Adam's question): through 307 of 496 — 62% of C01;
+  189 segs / 63 batches remain; est. finish ~batch 153, then C03
+  per the standing mandate.
+- seg 305: khag mi 'khri → "no business of anyone else at all".
+  khur-babs formula's THIRD staging ("my responsibility, and only
+  mine"). sha stag spread #4 ("in every way").
+- seg 306: THE I-BY-MYSELF TRIPLE (anaphora kept; word order
+  varied). SPELLING VARIANT in one segment: gcig BUS vs gcig PUS
+  (filed as variant, not typo). bla ma...go 'phang → "the state
+  of the Lama, the state of Buddhahood". lhag pa'i bsam pa (full
+  form) matches 282's term — both Tibetan forms attested.
+- seg 307: lta zhog → "much less" (comparison reordered). Debate
+  question kept ("Who then has the capacity?"). nyag gcig
+  doubled. HONORIFIC TRIAD PLAIN: sku gsung thugs → "my body, or
+  my speech, or my thoughts". don gnyis → "both mine and others'
+  benefit". DB artifact "zhog,sems" kept.
