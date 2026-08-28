@@ -29,7 +29,7 @@ When a segment's english field is phonetics, not translation:
    under its own clause with honest labels.
 
 ## Progress
-c3p1–c3p6 (1–18) done; 19+ open; 602 segs remain.
+c3p1–c3p7 (1–21) done; 22+ open; 599 segs remain.
 
 ## Queues (wylie / english / PHONETICS), C03
 - WYLIE: ACIP anusvara capitals dM/kM/ND + ni'a oddity (seg 6).
@@ -112,3 +112,15 @@ c3p1–c3p6 (1–18) done; 19+ open; 602 segs remain.
 - 18: ston pa ↔ "tonpa"; bla med ↔ "lame". PHONETICS QUEUE #1:
   sanggye (18) vs sangye (4/8/11).
 - Evidence layer 3,845/7,167 unchanged; full bank +15.
+
+### Batch C03-7 (c3p7, C03:19–21) — 2026-08-28
+- 19: skyob pa ↔ "kyoppa" — junction doubling #3 (dakki/druppar/
+  kyoppa); dam chos ↔ "damchu".
+- 20: dge 'dun ↔ "gendun" — 'a-chung NASAL BRIDGE (ge+dün→gen-dun,
+  family of nyinde); ü-as-u.
+- 21: dkon mchog gsum ↔ "konchok sum"; skyabs gnas ↔ "kyabne".
+  English "A Buddhist Grace" stanza = UNPAIRED s21trans (source
+  18–21, 4th consolidation). The stanza's "I offer this / Higher
+  than any other" ×4 = English anaphora mirroring Tibetan bla med
+  anaphora.
+- Evidence layer 3,845/7,167 unchanged; full bank +19.
