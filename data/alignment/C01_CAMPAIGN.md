@@ -554,7 +554,7 @@ letter-exact battery gates every batch.
   (74's coinages reprised verbatim + self-referential "what we have
   called here"). khungs #4 "authentic source". Supplied transition
   sentence (filed with 115's). Self-quotes ×5 — densest cluster.
-| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p141 (144–460) done; 143, 259, 324, 427 & 446 = marker pairs; 461+ open; 36 segs / 12 batches remain; §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
+| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p142 (144–463) done; 143, 259, 324, 427 & 446 = marker pairs; 464+ open; 33 segs / 11 batches remain; §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
 
 NEXT: continue section VII (seq 146+) — the renunciation chapter.
 - seg 143: section-marker pair (like 43) — wylie carries "the first
@@ -2925,3 +2925,24 @@ TCS series and collections beyond, for later ruling). ***
   teaching". rno rtul → "how sharp their intellects are".
 - QA: both sides letter-exact, 122 spans balanced, depth clean.
   Layer: 3,554 headwords / 6,721 pairs.
+
+### c1p142 — Gentle Voice and the Great Seal (461–463)
+- **461 — the speaking book**: glegs bam gyis rang sgra sgrogs →
+  "The volume of scripture…is speaking out loud". THE THREEFOLD
+  BEING: sems dpa' sum brtsegs with the whole stacking unpack
+  SUPPLIED ("a holy being inside Lord Tsongkapa's heart, and yet
+  another holy being within this being's heart"). gsungs → "Our
+  Lama went on to give us" (#8).
+- **462 — TWO CROWN CALQUES**: 'jam dbyangs → "Gentle Voice"
+  (MANJUSHRI — completes the 'jam family: gentle protector 345 /
+  Word of the Gentle One / Gentle Voice); phyag chen → "the Great
+  Seal" (MAHAMUDRA). TITLES: mkhyen srid ma → "Knowledge Unlocks
+  the World" (fn 187, by incipit); bla mchod → "the Offering to
+  Lamas manual" (fn 188).
+- **463 — the four tantra classes** (fn 189): bla med →
+  "Unsurpassed"; rnal 'byor rgyud → "Master Practitioner"; spyod
+  rgyud → "Activity"; bya rgyud → "Action" — near-synonyms
+  distinguished. Directional mandala front/right/rear/left; TWO more
+  g-y tokens (g-yas, g-yon).
+- QA: both sides letter-exact, 130 spans balanced, depth clean.
+  Layer: 3,572 headwords / 6,750 pairs.
