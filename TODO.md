@@ -1,3 +1,29 @@
+## ✅ CLOSED 2026-08-28 — the mechanical-gate programme (three gates, three failures)
+
+Three defect detectors were proposed, each tested against the whole layer
+with falsification criteria fixed BEFORE the run. All three failed.
+Recorded in full with measurements in `docs/GATE_TRIALS.md`.
+
+| gate | signal | fires | precision | verdict |
+|---|---|---|---|---|
+| unbalanced quote | punctuation | 110 | low | rejected |
+| numeral leakage | lexical class | 23 | 43.5% | rejected |
+| over-capture (self-referential) | layer's own lexicon | 2,322 | — | rejected on volume |
+| over-capture, multi-word only | layer's own lexicon | 52 | **1.9%** | rejected, BELOW BASE RATE |
+
+**DO NOT propose another mechanical correctness gate for this layer without
+reading that file first.** The failure is structural: correctness here is
+semantic, and every mechanically available signal is surface. Gate 3b is the
+proof — given the strongest self-referential evidence the project can
+construct, it performed *worse than chance*.
+
+**What works instead, now standing practice:**
+- model-read audits with **sibling spans attached** to every record
+- an **adversarial refute pass** on every claimed defect, defaulting to refuted
+- the numeral rule kept as a **triage queue only** (2.9× enrichment)
+
+Twenty-one real defects were found and fixed along the way.
+
 ## ❓ NEEDS ADAM'S RULING (2026-08-28): prayer phonetics vs card phonetics
 
 C03 batch 37 found that GMR's liturgical phonetics encode the ergative
