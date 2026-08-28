@@ -554,7 +554,7 @@ letter-exact battery gates every batch.
   (74's coinages reprised verbatim + self-referential "what we have
   called here"). khungs #4 "authentic source". Supplied transition
   sentence (filed with 115's). Self-quotes ×5 — densest cluster.
-| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p135 (144–442) done; 143, 259, 324 & 427 = marker pairs; 443+ open; 54 segs / 18 batches remain; §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
+| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p136 (144–445) done; 143, 259, 324 & 427 = marker pairs; 446+ open; 51 segs / 17 batches remain; §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
 
 NEXT: continue section VII (seq 146+) — the renunciation chapter.
 - seg 143: section-marker pair (like 43) — wylie carries "the first
@@ -2797,3 +2797,22 @@ TCS series and collections beyond, for later ruling). ***
   Buddhahood" (three-element pile mirrored).
 - QA: both sides letter-exact, 96 spans balanced, depth clean.
   Layer: 3,455 headwords / 6,540 pairs.
+
+### c1p136 — Like some great river (443–445)
+- **443 — here am I** (fn 175): bdag lta → "Here am I"; phan/gnod →
+  "right and wrong". THE NEGATIVE TURNED POSITIVE: ma btang na ("if
+  I do not abandon") → "If I keep on acting" — polarity flipped,
+  meaning held. Lines 3-4 swapped (question fronted).
+- **444 — small and BIG**: blo rgya gang chung/gang che che → "as
+  small as you can…as BIG as you can" — che-che reduplication as
+  capitalized BIG (emphatic-capitals device, cf. 386 ME). blo rgya
+  #2 gapped.
+- **445 — the river**: nyams len chu bo'i rgyun ltar → "let it flow
+  on constant, like some great river" ("great" supplied). khong
+  gsang lhod glossed: skabs rer ×2 → "back and forth between"; skyid
+  nyal bag yangs → "laying around and doing nothing"; thang lhod ran
+  pa → "a steady pace". dal ba'i rten → "this life of opportunity";
+  snying po rab tu lon → "draw the very essence". gsungs → "our Lama
+  concluded" #7.
+- QA: both sides letter-exact, 125 spans balanced, depth clean.
+  Layer: 3,475 headwords / 6,570 pairs.
