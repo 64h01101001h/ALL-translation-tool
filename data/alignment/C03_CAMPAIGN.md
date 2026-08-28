@@ -46,7 +46,7 @@ entry from here records its producing model; everything through C03 batch
 32 was Fable.
 
 ## Progress
-c3p1–c3p37 (1–111) done; 112+ open; 509 segs remain.
+c3p1–c3p38 (1–114) done; 115+ open; 506 segs remain.
 
 ## Queues (wylie / english / PHONETICS), C03
 - WYLIE: ACIP anusvara capitals dM/kM/ND + ni'a oddity (seg 6).
@@ -542,4 +542,28 @@ c3p1–c3p37 (1–111) done; 112+ open; 509 segs remain.
 - 111: bsngags pa'i → "ngakpay" (bsng-→ng, cf. ngowa at 12); lam
   bzang → "lamsang" (bz-→s, losang family); de nyid → "de-nyi";
   las → "le" (15 consistent).
+- Evidence layer: 4,039 headwords / 7,481 pairs; ACIP 4,038/4,039.
+
+### Batch C03-38 (c3p38, C03:112–114) — 2026-08-28 — model: Opus
+- 112: theg mchog → "the Greater Way", and C01:486 rendered theg
+  chen "the greater way" too — TWO Tibetan compounds (mchog
+  "supreme" / chen "great") collapsing to ONE English phrase:
+  Tibetan-varies/English-stabilizes, now attested across courses.
+  bshes gnyen → "my spiritual guide", holding against C03:53 "your
+  Spiritual Guide" and C01:485 "a spiritual teacher" — one word,
+  one concept, three determiners. dngos su mdzad pa → "serve
+  himself as".
+- 113: skye ba → "kyewa" vs segment 13's skye bo → "kyewo" — the
+  ba/bo pair stays distinct in the phonetics.
+- 114: 'bral med → "drelme"; longs spyod → "longchu". PHONETICS
+  QUEUE #2 EXTENDED: chos kyi is "chu-kyi" here and at 57, plain
+  "chukyi" at 82 — two hyphenated against one plain.
+- SIDE INVESTIGATION (not a batch deliverable): probed
+  pron_engine.py against the C03 liturgical phonetics after batch
+  37's ergative finding. The engine DOES reproduce the ergative
+  umlaut correctly. Seven other recurring rule classes differ.
+  Written up honestly — including two discarded, unsound
+  measurements — in docs/PRON_ENGINE_VS_C03_LITURGY.md. NO ENGINE
+  CHANGE MADE; needs Adam's ruling on whether prayer transcription
+  and card phonetics are meant to share a convention.
 - Evidence layer: 4,039 headwords / 7,481 pairs; ACIP 4,038/4,039.

@@ -1,3 +1,27 @@
+## ❓ NEEDS ADAM'S RULING (2026-08-28): prayer phonetics vs card phonetics
+
+C03 batch 37 found that GMR's liturgical phonetics encode the ergative
+case as a vowel change (tsong kha pa→"tsongkapa" / tsong kha pas→
+"tsongkape"). `pron_engine.py` reproduces that correctly. But probing
+further surfaced **seven recurring rule classes** where the engine and the
+C03 prayer transcriptions differ — junction doubling, final -b/-p, the
+umlaut before -l, epenthetic n, intervocalic b→w, cross-word joining, and
+hyphenation.
+
+**No engine change was made and none should be made without a ruling.**
+The engine is validated 42/42 + 2,118 card lines; those are dictionary
+citation forms, while C03 is devotional verse transcribed for chanting.
+The likeliest answer is that these are two genres with two conventions
+and both are correct.
+
+The question for Adam: **are they meant to agree?** If not, this closes
+as "two genres" and the engine is untouched. If yes, which is
+authoritative for the segmental classes — and any change still has to be
+re-proved against the full battery first (rule 2).
+
+Full write-up, including two unsound measurements I discarded and why:
+`docs/PRON_ENGINE_VS_C03_LITURGY.md`.
+
 ## ⛔ STANDING LIMIT OF THE VERIFICATION HARNESS (2026-08-28) — read first
 
 **The deterministic gates prove the text is VERBATIM. They can never prove
