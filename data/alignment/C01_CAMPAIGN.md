@@ -554,7 +554,7 @@ letter-exact battery gates every batch.
   (74's coinages reprised verbatim + self-referential "what we have
   called here"). khungs #4 "authentic source". Supplied transition
   sentence (filed with 115's). Self-quotes ×5 — densest cluster.
-| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p75 (144–262) done; 143 & 259 = marker pairs; 263+ open; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
+| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p76 (144–265) done; 143 & 259 = marker pairs; 266+ open; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
 
 NEXT: continue section VII (seq 146+) — the renunciation chapter.
 - seg 143: section-marker pair (like 43) — wylie carries "the first
@@ -1433,3 +1433,26 @@ TCS series and collections beyond, for later ruling). ***
   corroborates). thams cad mkhyen pa noun/epithet split
   ("omniscient enlightenment" vs "all-knowing Lord"). typo #16
   third attestation ("practicioners"). kyang migrates again.
+
+### c1p76 — C01:263–265 (batch 76) — the jewel that changes everything
+- Twenty-fourth consecutive zero-catch batch. Layer: 2,250
+  headwords / 4,198 pairs.
+- seg 263: byang chub kyi sems rin po che → "this precious jewel
+  in your heart" (formula-then-image two-step). srid zhi UNPACKED
+  (srid → "cyclic life", zhi → "a lower escape from cyclic
+  life"). NEGATION TRIPLED ("none... none of them, none of them
+  at all"). phun tshogs bde ba → "total bliss" (verse formula in
+  prose). fn 127.
+- seg 264: dgra bcom pa → "'enemy destroyers'" — ARHAT CALQUED
+  (fn 128). WHY-QUESTION SUPPLIED (lan pa → "Why? Because...").
+  stong nyid → "emptiness". gser gyi ri → "a huge mountain made
+  of pure gold". nyan rang compressed to type-gloss (spread vs
+  262's full calques).
+- seg 265: THREE TITLES — spyod 'jug stable; 'jug pa → "Entering
+  the Middle Way" (expanded); dkon brtsegs → "The Rare Stack"
+  (calqued; dkon consistent with "rare jewels"). fn 129. THE
+  BECOMES-TRIPLE: one 'gro → three "becomes..." predicates;
+  "bodhisattva" as bare loanword (rare — filed). bya rog (crow) →
+  "some wild bird" (generalized). ORDER FLIP #5: lha mi → "humans
+  and gods". zil gyis gnon → "completely outshine". Line-wrap
+  artifact "self- made" kept verbatim.
