@@ -850,5 +850,65 @@
   "severity": "MEDIUM",
   "confidence": "CONFIRMED",
   "note": "filed from the alignment batch, spine-verified on merge"
+ },
+ {
+  "item_id": "E-072",
+  "course": "C03",
+  "segment": "C03:312",
+  "kind": "INGEST_ARTEFACT",
+  "found": "slob dpon tsa go mis",
+  "expected": "slob dpon tsandra go mis",
+  "evidence": "This segment's own acip column reads \"SLOB DPON TZA{ndr} GO MIS,\" — the {ndr} braced cluster (Sanskrit ndra) is present in the ACIP and absent from the wylie, so the ACIP-to-wylie conversion dropped it. This segment's English names the author \"the Master Chandragomi\", which requires the ndra. Other witnesses in the spine spell the name intact: EM:1022 \"slob dpon tsandra goo mis\" and ILL:164 \"tsandra go mi\" (the go/goo alternation is genuine orthographic variation and is NOT part of this finding — only the missing ndra is). The defect is systematic, not a one-off slip: exactly three segments corpus-wide carry {ndr} in their ACIP (C03:312, C16:397, C09:49) and all three lose it in the wylie — C09:49 turns ACIP \"MU N'AI {ndr}A M{NYDZ}A{u2}\" into wylie \"mu nAi a ma{u2}\", dropping {ndr} and {NYDZ} while the {u2} escape survives, so braced consonant-stack escapes specifically are being discarded rather than expanded. Unbraced clusters convert correctly (TCS15:7 ACIP \"TZAndA LI'I\" -> wylie \"tsaNDa li'i\"), which isolates the fault to the curly-brace form. C16:397 carries this segment with identical wylie and acip (its English differs only in lacking the footnote digit), so the same repair applies there.",
+  "severity": "MEDIUM",
+  "confidence": "CONFIRMED",
+  "note": "filed from the alignment batch, spine-verified on merge"
+ },
+ {
+  "item_id": "E-073",
+  "course": "C03",
+  "segment": "C03:313",
+  "kind": "INGEST_ARTEFACT",
+  "found": "rnyed sla'i rtsva kham 'ga'",
+  "expected": "rnyed sla'i rtswa kham 'ga'",
+  "evidence": "'rtsva' is not valid EWTS — wa-zur is written 'w' (rtswa, རྩྭ). The ACIP column of this segment reads RTZVA, which is CORRECT ACIP (V is the wa-zur code), so the defect is in the derived wylie column, not in the ACIP. Proved with the project's canonical engines, run just now: engines/hgm_tools.acip_to_ewts('RTZVA') returns 'rtsva' (V passed through unmapped, so not an EWTS letter) while acip_to_ewts('RTZWA') returns 'rtswa'; engines/ewts_unicode.wylie_to_unicode('rtsva') returns the failure marker ('⟨rtsva⟩', False) whereas wylie_to_unicode('rtswa') returns ('རྩྭ', True). So this word simply does not render in Tibetan here. P1:9 carries this identical verse and its wylie reads 'rtswa kham 'ga'' (its ACIP happens to read RTZWA), so the same verse renders there and not here. Not a local slip: the wylie column spells 'rtsva' in 21 spine segments (C03:144, C03:313, C05:397, C08:339, C10:386, C10:387, C16:398, C16:913, C17:428, C17:722, TCS03:214, TCS10:569, TCS11:372, TCS11:373, TCS13:245, TCS17:561, GIE:142, GIE:201, AK:442, ILL:4214, OSE:217) against 2 segments spelling 'rtswa', and 1,885 segments carry a literal 'v' somewhere in the wylie (e.g. 'dvang', 'bkvan'), which is not an EWTS letter at all. All counts are segment counts and are therefore lower bounds on occurrences.",
+  "severity": "MEDIUM",
+  "confidence": "CONFIRMED",
+  "note": "filed from the alignment batch, spine-verified on merge"
+ },
+ {
+  "item_id": "E-074",
+  "course": "C03",
+  "segment": "C03:313",
+  "kind": "TIBETAN_SPELLING",
+  "found": "de bde skyes pu'i rtsal de 'phags",
+  "expected": "de bde skyes bu'i rtsal de 'phags",
+  "evidence": "This same segment spells the word correctly about thirty words earlier, in \"'di na skyes bu gzhan don byed par\" — an internal inconsistency inside one segment. Corpus-wide the wylie column has 'skyes bu' in 374 spine segments against 'skyes pu' in 7 (segment counts, so lower bounds): C03:313, C16:398 and P1:9, which are three witnesses of this one verse and share an ACIP lineage rather than being independent; C03:332, C16:411 and P1:22, likewise one verse in three witnesses, reading 'skyes pu chen po'i' where the standard form is 'skyes bu chen po'i'; and TCS12:64 'skyes pu dam pa', standardly 'skyes bu dam pa'. Both spellings convert cleanly to unicode (སྐྱེས་པུའི vs སྐྱེས་བུའི), so the cost is not rendering but keying and search against a headword that appears in 374 other segments. CAVEAT to record with any fix: GMR's English here is \"This is a park of pleasure\", which renders neither 'skyes pu'i rtsal' nor 'skyes bu'i rtsal' — rtsal (རྩལ) is skill/prowess, not a park, and the near-homophone tshal (ཚལ) is grove/park — so he was very likely reading a pleasure-garden term. If so the corruption is wider than the b/p and the phrase needs a witness edition before anything is keyed to it; no spine witness carries such a reading, which is why spans s41 and s42 are nulled and no separate erratum is filed for the grove word.",
+  "severity": "MEDIUM",
+  "confidence": "PROBABLE",
+  "note": "filed from the alignment batch, spine-verified on merge"
+ },
+ {
+  "item_id": "E-075",
+  "course": "C03",
+  "segment": "C03:317",
+  "kind": "INGEST_ARTEFACT",
+  "found": "This would truly be an evil way to act, the way of a person without a conscience, of one who had no shame.",
+  "expected": "Segment 317 should carry only what its own Wylie licenses; this sentence's Tibetan exponent sits in C03:320, and that is the segment its English belongs with.",
+  "evidence": "C03:317's full Wylie is \"de'i phyir de dag la drin gzo'i bsam pa med na, klu'i rgyal po rnga sgra'i tshigs su bcad pa las\" — it runs straight from the conditional clause to the citation frame and contains no term for 'evil', 'way/custom', 'conscience' or 'shame'. Every lexical correspondent sits instead in C03:320, whose Wylie opens \"zhes pa ltar ma rabs khrel med kyi lugs ngan pa yin pas\" (ma rabs = a base/low person, khrel med = without shame or conscience, lugs ngan pa = an evil way or custom). C03:320's own English begins \"Think: everything we have now, from this precious human body on up\" and renders nothing of that opening clause. So the sentence is present exactly where its Tibetan is not, and absent exactly where its Tibetan is. CAVEAT, which is why this is filed low and probable rather than confirmed: the displacement spans the two quotations at C03:318 and C03:319, and 320's clause is governed by the quotation-closing formula 'zhes pa ltar'. GMR may therefore have deliberately front-loaded the summing-up sentence ahead of the verses he was about to quote, in which case the corpus faithfully records the printed order and this is a translation-order fact rather than an ingest slip. Either way the practical consequence for span work is the same: no Tibetan in 317 may be keyed to this sentence, and it is left wholly unwrapped under rule 10.",
+  "severity": "LOW",
+  "confidence": "PROBABLE",
+  "note": "filed from the alignment batch, spine-verified on merge"
+ },
+ {
+  "item_id": "E-076",
+  "course": "C03",
+  "segment": "C03:296",
+  "kind": "INGEST_ARTEFACT",
+  "found": "You Should Give Up.1",
+  "expected": "You Should Give Up.  [footnote 1]",
+  "evidence": "CLASS ENTRY, not a single instance. Printed footnote reference numbers have been flattened into the running English at ingest, fused to the sentence-final period with no separator. Measured across the whole spine: 307 occurrences in 281 segments across 5 courses - C01 161, C03 95, C16 38, TCS13 7, TCS15 6. Counted on the signature 'sentence-final punctuation + 1-3 digits + space + capital', which excludes thousands separators ('25,000'), section labels ('(S1)') and verse citations ('[I.1b]'); two looser patterns were tried first and gave 1,054 and 867 before those contaminants were excluded. Every instance breaks exact-match search on the final word of its sentence.",
+  "severity": "MEDIUM",
+  "confidence": "CONFIRMED",
+  "note": "filed from the alignment batch, spine-verified on merge"
  }
 ]
