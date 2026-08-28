@@ -29,7 +29,7 @@ When a segment's english field is phonetics, not translation:
    under its own clause with honest labels.
 
 ## Progress
-c3p1–c3p30 (1–90) done; 91+ open; 530 segs remain.
+c3p1–c3p31 (1–93) done; 94+ open; 527 segs remain.
 
 ## Queues (wylie / english / PHONETICS), C03
 - WYLIE: ACIP anusvara capitals dM/kM/ND + ni'a oddity (seg 6).
@@ -411,3 +411,15 @@ c3p1–c3p30 (1–90) done; 91+ open; 530 segs remain.
   (siddhi) → "Grant that I attain".
 - Evidence layer unchanged: 4,039 / 7,481. 30 pages / 90 segments
   of C03 done.
+
+### Batch C03-31 (c3p31, C03:91–93) — 2026-08-28
+- 91: THIRD LITURGICAL TOPOLOGY — line-by-line English drip (own
+  couplet per segment). rdo rje 'chang → "the One who Holds the
+  Diamond" (C01 crown calque cross-course). PHONETICS QUEUE #3:
+  kuynjung (unexpected y; expected kunjung). tubwang (db-→w).
+- 92: THE MIGTSEMA NAMESAKE (dmigs med brtse ba → mikme tseway);
+  spyan ras gzigs → chenre sik.
+- 93: 'jam dpal dbyangs → jampel yang — DOUBLE TREATMENT of db-:
+  dbang→wang (w) but dbyangs→yang (y glide wins); dri med → drime
+  (C01 3-render word, now its sound).
+- Evidence layer unchanged: 4,039 / 7,481.
