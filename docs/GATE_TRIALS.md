@@ -298,3 +298,71 @@ about why it fired.
 minutes and returned one real defect. That is a far better yield per minute
 than the 15% base rate — but it is a claim about triage economics, never about
 the rule's validity. **Do not let a lucky find rescue a falsified rule.**
+
+---
+
+## Gate 5 — semantic singleton against a well-attested key · FALSIFIED ON VOLUME
+
+**Proposed by:** the first honest audit (2026-08-28), which named it as *the
+only* signal that would have caught its one confirmed WRONG — `'dod` keyed to
+"make", sitting among eleven renderings all meaning *want*. It was never built.
+This built it.
+
+**Rule:** for a key with ≥5 renderings, flag any rendering whose content words
+are **disjoint from every other rendering of that key**. Unlike gates 1–4 this
+is not a surface feature of one pair; it is a claim about a pair's relationship
+to its siblings — which is the shape both confirmed WRONGs actually had
+(`'dod`→"make" among want-words, `gnas`→"really" among place-words).
+
+**Criteria fixed before the run:** falsified above 150 fires (1.8% of the
+population); falsified below 50% precision.
+
+**Result: 975 fires. FALSIFIED on volume, by more than six times.**
+
+    keys with >=5 renderings          316
+    renderings they hold            2,556
+    disjoint from every sibling       975  (38.1%)
+
+**Why it fails: the test conflates "different word" with "different meaning."**
+It cannot see synonymy. A sample of its fires:
+
+| key | flagged rendering | its siblings |
+|---|---|---|
+| `dgos` | "necessary" | must, have to, has to |
+| `go ba` | "realize" | understand, understanding, idea |
+| `med` | "Neither" | no, never, non-existence |
+| `bka'` | "the words" | instruction, instructions, word |
+| `zin pa` | "steeped" | filled, bound, under the influence |
+
+Every one is *correct*. They share no stem with their siblings because English
+has many words for one sense, not because the mapping is wrong.
+
+### The symmetry with Gate 3 is the real lesson
+
+Both were lexical-overlap tests, and they failed as exact mirror images:
+
+- **Gate 3** fired because **different Tibetan keys share the same English** —
+  Tibetan near-synonymy (`sdug` and `kun 'byung` both attract "suffering").
+- **Gate 5** fires because **the same Tibetan key takes different English** —
+  English synonymy (`go ba` is both "realize" and "understand").
+
+Meaning is not words. A test built on word overlap is defeated from both
+directions at once, and no amount of threshold tuning reaches across that gap.
+**Five gates proposed, five falsified.** The mechanical-gate programme is
+closed on the evidence, not on fatigue.
+
+### What the 38.1% is worth on its own
+
+It is a **measurement of Geshe Michael's range**, and the strongest quantitative
+support the preserve-all-renderings ruling has:
+
+> Across his most-rendered terms, **38.1% of renderings share no content word
+> with any other rendering of the same term.**
+
+Not a majority — but far too large a minority to be noise. A dictionary that
+collapsed each headword to a single equivalent would not merely lose nuance;
+for well over a third of these renderings it would discard English that has
+**no lexical overlap at all** with what it kept. `go ba` would become
+"understand" and lose "realize"; `bka'` would become "instruction" and lose
+"the words". Those are not shades of one gloss. They are different words a
+translator would actually reach for.
