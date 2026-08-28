@@ -29,10 +29,12 @@ When a segment's english field is phonetics, not translation:
    under its own clause with honest labels.
 
 ## Progress
-c3p1–c3p5 (1–15) done; 16+ open; 605 segs remain.
+c3p1–c3p6 (1–18) done; 19+ open; 602 segs remain.
 
-## Queues (wylie / english), C03
-- (open)
+## Queues (wylie / english / PHONETICS), C03
+- WYLIE: ACIP anusvara capitals dM/kM/ND + ni'a oddity (seg 6).
+- PHONETICS #1: sangs rgyas = "sangye" (4, 8, 11) vs "sanggye" (18)
+  — spelling variation inside the phonetics layer; kept verbatim.
 
 ### Batch C03-1 (c3p1, C03:1–3) — 2026-08-28
 - PHONETICS PROTOCOL debut: right label = GESHE MICHAEL'S PHONETICS
@@ -99,3 +101,14 @@ c3p1–c3p5 (1–15) done; 16+ open; 605 segs remain.
   (b→w + -ay). Lines 14/15 share "sunam yeshe" — the two
   collections as verse anaphora.
 - Evidence layer 3,845/7,167 unchanged; full bank +19.
+
+### Batch C03-6 (c3p6, C03:16–18) — 2026-08-28
+- 16: 'thob par ↔ "topar" ('th-→t); sku gnyis ↔ "kunyi". English
+  dedication stanza = UNPAIRED s16trans (source 13–16, 3rd
+  consolidation — topology settled).
+- 17: mchod pa ↔ "chupa" → THREE-WAY HOMOPHONE COLLISION: chos (8),
+  spyod (5), mchod (17) all spoken "chu"; only the wylie
+  disambiguates. Ö-as-u #4.
+- 18: ston pa ↔ "tonpa"; bla med ↔ "lame". PHONETICS QUEUE #1:
+  sanggye (18) vs sangye (4/8/11).
+- Evidence layer 3,845/7,167 unchanged; full bank +15.
