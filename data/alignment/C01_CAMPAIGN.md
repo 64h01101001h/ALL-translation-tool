@@ -554,7 +554,7 @@ letter-exact battery gates every batch.
   (74's coinages reprised verbatim + self-referential "what we have
   called here"). khungs #4 "authentic source". Supplied transition
   sentence (filed with 115's). Self-quotes ×5 — densest cluster.
-| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p146 (144–475) done; 143, 259, 324, 427 & 446 = marker pairs; 476+ open; 21 segs / 7 batches remain; §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
+| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p147 (144–478) done; 143, 259, 324, 427 & 446 = marker pairs; 479+ open; 18 segs / 6 batches remain; §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
 
 NEXT: continue section VII (seq 146+) — the renunciation chapter.
 - seg 143: section-marker pair (like 43) — wylie carries "the first
@@ -3032,3 +3032,22 @@ TCS series and collections beyond, for later ruling). ***
   class).
 - QA: both sides letter-exact, 121 spans balanced, depth clean.
   Layer: 3,680 headwords / 6,915 pairs.
+
+### c1p147 — In black and white (476–478)
+- **476 — when will I**: nam zhig 'gyur (verse-final) → "When will I
+  decide" fronted AND anaphora DOUBLED (one interrogative → two
+  "When will I"). GTAN-GTAN PLAY KEPT ("forever happiness"/"forever
+  friend"); gshed ma ("executioner") → "the foe"; brdzu ba → "this
+  lie". Near-complete reversal — the poem's pattern holds.
+- **477 — both the bodies** (fn 200): sku gnyis recalled; 'phral
+  dang yun → "the short and long-term"; mi dman → "may I never fail
+  to collect More" (negation as aspiration); mdzes fronted ("May I
+  win the beauty"). WYLIE QUEUE: "mig,mkhas" missing space (#3).
+- **478 — the scribe's confession**: THE 'DI-ANAPHORA PARTIALLY
+  RELEASED (four line-initial 'di → one English "This"; form-loss
+  flagged). khur du bzod min → "not a load that the likes of me
+  could ever bear" (khur file). ri mor 'phos → "put…down in black
+  and white" (writing-idiom modernized). nongs mchis → "freely
+  admit any errors made"; 'chags → "I kneel" (fronted).
+- QA: both sides letter-exact, 108 spans balanced, depth clean.
+  Layer: 3,708 headwords / 6,955 pairs.
