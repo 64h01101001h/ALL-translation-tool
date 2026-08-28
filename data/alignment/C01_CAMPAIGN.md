@@ -554,7 +554,7 @@ letter-exact battery gates every batch.
   (74's coinages reprised verbatim + self-referential "what we have
   called here"). khungs #4 "authentic source". Supplied transition
   sentence (filed with 115's). Self-quotes ×5 — densest cluster.
-| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p125 (144–412) done; 143, 259 & 324 = marker pairs; 413+ open; 84 segs / 28 batches remain; §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
+| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p126 (144–415) done; 143, 259 & 324 = marker pairs; 416+ open; 81 segs / 27 batches remain; §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
 
 NEXT: continue section VII (seq 146+) — the renunciation chapter.
 - seg 143: section-marker pair (like 43) — wylie carries "the first
@@ -2588,3 +2588,24 @@ TCS series and collections beyond, for later ruling). ***
   brten nas → "because" (dependence-word as causal conjunction).
 - QA: both sides letter-exact, 128 spans balanced, depth clean.
   Layer: 3,270 headwords / 6,209 pairs.
+
+### c1p126 — The king of proofs (413–415)
+- **413 — the feeble old man**: mi rgan 'khog → "some feeble old
+  man"; "from his chair" SUPPLIED (scene-furniture amplification);
+  tshugs thub negated ×3 → "cannot stand on its/his own"; tshad →
+  "so long as" (measure-word as conditional); mi rgan = rgan file's
+  third sense (chieftain 375 / adults 395 / old man 413). Full
+  mirrors in c2/c4.
+- **414 — the king of proofs**: rigs pa'i rgyal po → "the king of
+  them all"; rten 'brel gyi rigs pa → 'the "proof through
+  interdependence"'; rigs pa spread #2 ("logical proofs"). gtan la
+  'beb #3 "establish". FORWARD FRAME SUPPLIED ("Let's say we put
+  forth this argument…and we say:") pre-absorbing 415's ces rtags
+  bkod na — frame-fronting at its clearest.
+- **415 — the sprout syllogism**: three English lines — chos can →
+  "Consider" (362 consistency); phyir → "For" (362 "Because" —
+  reason-marker's 2nd render); bden par ma grub → "It cannot exist
+  truly". BOTH frames absorbed by 414 — zero frame residue. Shortest
+  aligned segment since the markers (11 syllables → 11 words).
+- QA: both sides letter-exact, 120 spans balanced, depth clean.
+  Layer: 3,288 headwords / 6,240 pairs.
