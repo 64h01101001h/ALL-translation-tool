@@ -144,6 +144,41 @@ attach, with redaction pinned.
 *Open:* nowhere to send it, and nothing captures the moment of failure.
 **Review: before any input-centre deployment.**
 
+### R10 · The alignment gates cannot test the thing that matters
+**Likelihood** certain, by construction · **Impact** severe and silent ·
+**Owner** Adam
+
+The alignment layer's batteries prove that every wrapped Tibetan fragment
+is a literal substring of the spine's source and every English fragment a
+literal substring of GMR's English. They have never let a fabrication
+through, across ~200 shipped pages. But they check exactly one property:
+that both sides are genuine, untouched text.
+
+**A link that maps the wrong Tibetan word to the wrong English span passes
+every one of them**, because both sides *are* genuine text. The letter-exact
+gate, the span-balance count, the never-negative depth walk, the pair FLOOR
+and `app_selftest` are all blind to whether the correspondence is the right
+one. Nothing in the pipeline tests correspondence, and nothing can: the
+property is semantic, and the harness is a substring checker.
+
+This is worse than R6 rather than a restatement of it. R6 says the code
+suites are weaker than they look and answers with mutation testing. Here
+there is no mutation to inject — the data is verbatim by construction, and
+the defect lives in the pairing, which is invisible to every mechanical
+check. It ships silently into the successor dictionary's evidence base.
+
+*Reduced by:* nothing mechanical, and saying so is the point. Partially
+bounded by the fact that this layer is TENTATIVE/PROVISIONAL and excluded
+from HGM equivalents by construction, so a bad pair cannot be promoted into
+binding data; and by the campaign ledgers, which make findings reviewable
+after the fact.
+*Open:* the full **Fable re-audit of C01–C18** (TODO.md item B) is the only
+answer on the table. Until it runs, the honest claim for any batch is
+"letter-exact against the spine, mapping unreviewed" — never "verified".
+Every batch now records its producing model so the audit can prioritise.
+**Review: when the re-audit runs, and before any release that exposes the
+equivalents as dictionary evidence.**
+
 ---
 
 ## Closed, kept for the record
