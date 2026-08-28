@@ -554,7 +554,7 @@ letter-exact battery gates every batch.
   (74's coinages reprised verbatim + self-referential "what we have
   called here"). khungs #4 "authentic source". Supplied transition
   sentence (filed with 115's). Self-quotes ×5 — densest cluster.
-| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p100 (144–337) done; 143, 259 & 324 = marker pairs; 338+ open; 159 segs / 53 batches remain; §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
+| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p101 (144–340) done; 143, 259 & 324 = marker pairs; 341+ open; 156 segs / 52 batches remain; §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
 
 NEXT: continue section VII (seq 146+) — the renunciation chapter.
 - seg 143: section-marker pair (like 43) — wylie carries "the first
@@ -1949,3 +1949,34 @@ TCS series and collections beyond, for later ruling). ***
   "freedom" (stable). fn 147.
 - QA: both sides letter-exact, 147 spans balanced, depth walk clean.
   Layer: 2,750 headwords / 5,139 pairs.
+
+### c1p101 — The two masses and the king goose (338–340)
+- **338 — formula recurrence with VARIATION**: thabs shes ya ma bral →
+  "method and wisdom, one always with the other" — the SAME formula
+  336 rendered "never one without the other". Two English renders two
+  segments apart: the translator varies the formula (anti-mechanical
+  evidence). chos gzugs kyi sku gnyis → both full names + supplied
+  category ('the two bodies of an enlightened being: the "dharma
+  body" and the "form body"'). tshogs gnyis → "two great masses of
+  goodness"; zung 'brel → "a perfect union". HONORIFIC CASCADE: dpal
+  mgon 'phags pa klu sgrub → "our glorious savior, the realized being
+  Nagarjuna". Crossed clause s338c23x ("To get them" = result-clause
+  material inside the gathering sentence).
+- **339 — REGISTER COUNTER-CASE**: bsod nams → "merit" IN VERSE while
+  338's prose used "goodness" — the split runs opposite to the
+  prayers-goodness/prose-merit rule; register is context-driven, not
+  genre-mechanical. dam pa gnyis → "the ultimate two"; rdzogs
+  ("complete") → "Gather"; las byung ba → "produce" (That-clause
+  inversion). fn 148.
+- **340 — the king goose**: SECOND Sanskrit restoration this batch:
+  dpal ldan zla ba ("glorious Moon") → "The illustrious Chandrakirti"
+  (zla ba = candra), after 336's Vimalakirti. ngang pa'i rgyal po →
+  "The king goose"; skye bo'i ngang pa → "the other geese, all
+  beings" (apposition supplied). IMAGE DROPPED: dkar po ("white") has
+  no English exponent — flagged. FIVE-ELEMENT GENITIVE-CHAIN MIRROR:
+  rgyal ba'i yon tan rgya mtsho'i pha rol mchog tu → "the farthest
+  shore of the ocean of Victors' qualities" — longest chain-flip in
+  the file. mdun du bdar nas ("driven in front") → "at the center
+  point in the formation" (interpretive recast, fn 149).
+- QA: both sides letter-exact, 143 spans balanced, depth clean.
+  Layer: 2,770 headwords / 5,181 pairs.
