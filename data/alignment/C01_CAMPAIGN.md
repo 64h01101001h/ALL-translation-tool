@@ -554,7 +554,7 @@ letter-exact battery gates every batch.
   (74's coinages reprised verbatim + self-referential "what we have
   called here"). khungs #4 "authentic source". Supplied transition
   sentence (filed with 115's). Self-quotes ×5 — densest cluster.
-| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p127 (144–418) done; 143, 259 & 324 = marker pairs; 419+ open; 78 segs / 26 batches remain; §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
+| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p128 (144–421) done; 143, 259 & 324 = marker pairs; 422+ open; 75 segs / 25 batches remain; §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
 
 NEXT: continue section VII (seq 146+) — the renunciation chapter.
 - seg 143: section-marker pair (like 43) — wylie carries "the first
@@ -2630,3 +2630,24 @@ TCS series and collections beyond, for later ruling). ***
   phye crossed to head. 'khrul gzhi → "The point of error".
 - QA: both sides letter-exact, 143 spans balanced, depth clean.
   Layer: 3,313 headwords / 6,281 pairs.
+
+### c1p128 — Cuts the net (419–421)
+- **419 — one statement, both extremes**: the 415 syllogism re-quoted
+  with VARIATION — phyir "For" (415) vs "because" (419): English
+  varies its own formula across quote and reuse. dang pos/gnyis pas →
+  "The first part…the second" with sel ba GAPPED in the second
+  clause. 417's extreme-names re-used verbatim
+  (formula-consistency). sel: "can be prevented"/"keeps us from".
+- **420 — CHONE LAMA NAMED** (fn 168): co ne bla ma rin po che → "My
+  own precious teacher, Chone Lama" — "My own" SUPPLIED (Pabongka's
+  personal relation explicit). gsungs kyin yod → "was always saying"
+  (continuous aspect). THE LITERAL/IMPLICIT PAIR: tshig zin → "the
+  literal sense" / shugs la → "The implication of" (shugs #3).
+  mtshon nus → "was enough for us to figure out for ourselves". sel
+  ×3 in one segment: prevent/serves to prevent/disallows.
+- **421 — the net verse** (fn 169): lta ngan dra ba mtha' dag gcod →
+  "Cuts the net of every mistaken view" — dra ba "net", gcod fronted;
+  near-total mirror. Frame crossed (ces gsungs pa red → pre-verse
+  "stated"). dpal ldan zla ba consistent with 379.
+- QA: both sides letter-exact, 154 spans balanced, depth clean.
+  Layer: 3,333 headwords / 6,321 pairs.
