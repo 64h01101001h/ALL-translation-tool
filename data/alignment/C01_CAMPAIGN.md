@@ -554,7 +554,7 @@ letter-exact battery gates every batch.
   (74's coinages reprised verbatim + self-referential "what we have
   called here"). khungs #4 "authentic source". Supplied transition
   sentence (filed with 115's). Self-quotes ×5 — densest cluster.
-| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p79 (144–274) done; 143 & 259 = marker pairs; 275+ open; §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
+| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p80 (144–277) done; 143 & 259 = marker pairs; 278+ open; §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
 
 NEXT: continue section VII (seq 146+) — the renunciation chapter.
 - seg 143: section-marker pair (like 43) — wylie carries "the first
@@ -1532,3 +1532,21 @@ TCS series and collections beyond, for later ruling). ***
   injected; vs bare 269). INVERSE VARIATION: des kyang mi tshad
   pa → "But that's not all" (= 267's der ma zad formula).
   gcod/thar dka' → "ever so hard to sever/unshackle".
+
+### c1p80 — C01:275–277 (batch 80) — night, ocean, the son's chance
+- Twenty-eighth consecutive zero-catch batch. Layer: 2,326
+  headwords / 4,343 pairs.
+- seg 275: der ma zad EXPONENT #3 ("And there's more."). Daylight
+  counterfactual staged (re ba → "glimmer of hope"). nam gung →
+  "the darkest hour of the night". smag ×2 leveled.
+- seg 276: khyab pa 'du byed THIRD RENDER — "the all-pervading
+  suffering" (238/246/276 three-way spread; flagship entry).
+  mtha' med mu med doublet kept parallel. srid pa → "life" (srid
+  spread #3). dus rtag tu split as dash-sentence.
+- seg 277: THE SON SUPPLIED (the mother-metaphor's agent named);
+  khur bu (the LOAD) recast as "a chance at hand" — burden→
+  opportunity INVERSION. lhag bsam → "deciding to take personal
+  responsibility" (adhyashaya signature, first attestation). Goal
+  fronted before method-stages (crossed ids). 'don pa doubled
+  with "grasp her hand and draw her out" supplied. "jewel wish"
+  compression.
