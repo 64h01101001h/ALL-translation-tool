@@ -3336,3 +3336,40 @@ C03 (C02 already complete).
   a false one refuses the build. Completeness is a machine-checked
   fact from here, not a sentence I wrote.
 - Evidence layer: 4,039 headwords / 7,481 pairs.
+
+## ⚠ CORRECTION OF RECORD 2 — 2026-08-28: the 'gro don 'phel colophon
+An adversarial audit found two real defects in the closing formula
+`'gro don 'phel`, which appears at BOTH 482 and 496. They were one
+bad analysis, split across two pages:
+
+| | was banked | corrected to |
+|---|---|---|
+| C01:482 `'gro don` | "all living beings" | (removed — span swallowed `don`) |
+| C01:482 `'phel` | "May it help" | "May it" |
+| C01:482 `'gro` | — | "all living beings" |
+| C01:482 `don` | — | "help" |
+| C01:496 `'gro don` | "of every living being" | (removed — span dropped the head) |
+| C01:496 `'phel` | "the higher good" | NULLED, no exponent |
+| C01:496 `'gro` | — | "of every living being" |
+| C01:496 `don` | — | "the higher good" |
+
+The error in both places was the same shape: the compound span
+swallowed `don` while the verb span stole the word `don` actually
+renders. `'phel` means *increase*; hanging the noun "the higher
+good" on it was a category error.
+
+Both pages REGENERATED rather than amended in the ledger only —
+these are data defects in what Adam intends to ship as the
+dictionary, not analysis notes, so ruling 1's fix-the-mapping
+mandate applies. c1p149 and c1p153 rewritten; layer rebuilt; 87/87
+suites green.
+
+`don` → "help" and `don` → "the higher good" now sit with that
+word's sixteen other renderings ("purpose", "the point", "meaning",
+"good things"), which is where they always belonged.
+
+Provenance: found by the 2026-08-28 adversarial audit, whose other
+findings were largely artifacts of my own fabricated inputs — see
+docs/AUDIT_2026-08-28_CONTAMINATED.md. These two survived because
+their input was faithful, and both were re-verified against the
+spine before any change was made.
