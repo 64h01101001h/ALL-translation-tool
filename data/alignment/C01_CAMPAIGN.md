@@ -554,7 +554,7 @@ letter-exact battery gates every batch.
   (74's coinages reprised verbatim + self-referential "what we have
   called here"). khungs #4 "authentic source". Supplied transition
   sentence (filed with 115's). Self-quotes ×5 — densest cluster.
-| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p121 (144–400) done; 143, 259 & 324 = marker pairs; 401+ open; 96 segs / 32 batches remain; §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
+| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p122 (144–403) done; 143, 259 & 324 = marker pairs; 404+ open; 93 segs / 31 batches remain; §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
 
 NEXT: continue section VII (seq 146+) — the renunciation chapter.
 - seg 143: section-marker pair (like 43) — wylie carries "the first
@@ -2502,3 +2502,26 @@ TCS series and collections beyond, for later ruling). ***
   self-nature" (new render). Full mirror closing clause.
 - QA: both sides letter-exact, 116 spans balanced, depth clean.
   Layer: 3,214 headwords / 6,076 pairs.
+
+### c1p122 — Hot and cold (401–403)
+- **401 — the Lama's gloss opens**: English casts Pabongka's prose
+  gloss as DIRECT SPEECH running 401–403, with "concluded our Lama"
+  FRONTED from 403's segment-final gsungs — a frame verb relocated
+  ACROSS TWO SEGMENTS (longest frame-crossing in the file). rten
+  cing 'brel 'byung — the full canonical form (third Tibetan form of
+  the term), still → "interdependence". 'gal 'dur song →
+  "contradictory characteristics" + supplied possession-unpack.
+- **402 — the two ideas defined**: PARENTHETICAL KARMA GLOSSES —
+  "causes (that is, actions)" / "results (consequences)" — GMR
+  supplies the karmic reading in parentheses (doctrinally loaded
+  amplification, cf. 381's guard). mi 'chol bar second render ("of a
+  certain kind must always lead to…of the same kind"). khas len
+  dang bral ba → "beyond taking any position" (verse consistency).
+  gnyis po/go ba crossed to sentence head.
+- **403 — hot and cold**: phan tshun tsha grang ltar → "mutually
+  exclusive, like hot and cold". APPOSITION GLOSS: thub pa → "the
+  Able Ones, the Buddhas" (398 bare calque; here explained). phyin
+  ci ma log par → "perfectly" (spread vs 345). SECTION XVII header
+  embedded ("How to Know When Your Analysis is Complete").
+- QA: both sides letter-exact, 126 spans balanced, depth clean.
+  Layer: 3,227 headwords / 6,105 pairs.
