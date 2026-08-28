@@ -554,7 +554,7 @@ letter-exact battery gates every batch.
   (74's coinages reprised verbatim + self-referential "what we have
   called here"). khungs #4 "authentic source". Supplied transition
   sentence (filed with 115's). Self-quotes ×5 — densest cluster.
-| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p116 (144–385) done; 143, 259 & 324 = marker pairs; 386+ open; 111 segs / 37 batches remain; §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
+| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p117 (144–388) done; 143, 259 & 324 = marker pairs; 389+ open; 108 segs / 36 batches remain; §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
 
 NEXT: continue section VII (seq 146+) — the renunciation chapter.
 - seg 143: section-marker pair (like 43) — wylie carries "the first
@@ -2376,3 +2376,28 @@ TCS series and collections beyond, for later ruling). ***
   yul = dgag bya (dgag bya #10–11). bzhin du tail carries into 386.
 - QA: both sides letter-exact, 168 spans balanced, depth clean.
   Layer: 3,117 headwords / 5,880 pairs.
+
+### c1p117 — So you're the thief! (386–388)
+- **386 — the accusation scene**: neutral call ("He's calling me") vs
+  accusation ("So you're the thief!") that makes the me SWELL —
+  shugs che ru song → "starts getting stronger and stronger"; nga
+  dang nga zhes → 'saying "me" "me"'. EMPHATIC CAPITALS: ngas nad mi
+  theg ("I can't bear it") → "They can't blame ME!" (free,
+  register-true). bsnyon 'dzugs → "pointing the finger at me". 1
+  Tibetan period → SEVEN English sentences — widest sentence-fission
+  yet.
+- **387 — the four-rung denial ladder**: appearance / appearing /
+  me-that-appears each NOT denied; the me actually existing that way
+  DENIED. mi bkag ×2 + mi dgag ×1 (past/present stems both →
+  "denying"); "Now…Nor…not even…Rather" staircase supplied; negation
+  fronted ×4; tshugs thub → "stand on its own" ×4; 374's three
+  neganda recur on the self. 'am-chains → colon-chains.
+- **388 — finding the view**: stong cham gyis song → "all that's
+  left is simple emptiness of him"; dbu ma'i lta ba → 'the "view of
+  the middle way"' FOUND. gsungs pas → "as the sages say" (supplied
+  subject #2). rgyal ba → "the Victors" vs 359 "the Buddhas" — the
+  English varies the epithet across the same formula. lus sems →
+  "mind and body" (flipped). ENGLISH TYPO QUEUE #23: "when for your
+  this so-vivid" (garbled), kept verbatim.
+- QA: both sides letter-exact, 191 spans balanced, depth clean.
+  Layer: 3,144 headwords / 5,931 pairs.
