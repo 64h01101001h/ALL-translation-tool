@@ -1154,3 +1154,40 @@ Content notes:
 
 - Evidence layer: 4,400 headwords / 8,006 pairs. C03 at 189/620.
   Broken-words gate: 11,328 English spans across 253 pages, clean.
+
+### Batches C03-64 … C03-67 (C03:190–201) — 2026-08-28 — model: Opus
+Four pages closing the elephant-path captions and opening the prose section
+that re-treats the nine states at length.
+
+**Twelve of twelve segments generated on the first attempt** — the first
+fully clean batch of the campaign. Nothing dropped, nothing promoted, no
+repairs needed. The progression across four batches is the point: 0/6, then
+5/9, then 10/15, now 12/12, as each batch's refusals were written into the
+proposer brief rather than remembered.
+
+**A reconciler contradicted a verified finding, and was wrong.** On C03:191
+it judged the folio marker `2a5/` intact, reasoning from its clean-looking
+neighbours `2a4/` and `2a6/`. Sound reasoning, wrong conclusion: the run
+`1a0/ 1a1/ … 1a9/ 2a0/ 2a1/` is caption numbers 10–19 and 20–29 with a folio
+letter spliced in — folios would read `1a, 1b, 2a, 2b` — and Geshe Michael's
+own bracketed numbers confirm the repair on 115 of the 119 occurrences found
+across the whole spine. **The correction is recorded in the page note rather
+than silently applied**, because a future reader will make the same
+three-neighbour inference and should find the answer there.
+
+Worth naming as a general lesson: an agent reasoning from local evidence
+reached a confident, plausible, wrong conclusion against a finding proved on
+115 independent witnesses. Local plausibility does not outrank a measurement.
+
+**The terminology divergence is now three-way, and confirmed against the
+spine.** `sems 'jog pa` is:
+- "setting the mind on the object" — the list at C03:157 and caption 167
+- "placing the mind on the object" — the prose at C03:201, 202
+
+Two bands of Geshe Michael's own English for the same state, in the same
+course, differing by one verb. Exactly what Adam's preserve-all-renderings
+ruling protects, and a case a single-equivalent dictionary would have to
+destroy.
+
+- Evidence layer: 4,419 headwords / 8,067 pairs. C03 at 201/620.
+  Broken-words gate: 11,420 English spans across 257 pages, clean.
