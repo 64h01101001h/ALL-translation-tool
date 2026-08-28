@@ -29,12 +29,15 @@ When a segment's english field is phonetics, not translation:
    under its own clause with honest labels.
 
 ## Progress
-c3p1–c3p7 (1–21) done; 22+ open; 599 segs remain.
+c3p1–c3p8 (1–24) done; 25+ open; 596 segs remain.
 
 ## Queues (wylie / english / PHONETICS), C03
 - WYLIE: ACIP anusvara capitals dM/kM/ND + ni'a oddity (seg 6).
 - PHONETICS #1: sangs rgyas = "sangye" (4, 8, 11) vs "sanggye" (18)
   — spelling variation inside the phonetics layer; kept verbatim.
+- ENGLISH #1: "commentray" ×2 (seg 22 syllabus, for "commentary").
+- ENGLISH #2: seg 22 TRUNCATES mid-word ("Je Tsongkapa's Sour" —
+  cuts "Source of All My Good") — corpus truncation artifact.
 
 ### Batch C03-1 (c3p1, C03:1–3) — 2026-08-28
 - PHONETICS PROTOCOL debut: right label = GESHE MICHAEL'S PHONETICS
@@ -124,3 +127,18 @@ c3p1–c3p7 (1–21) done; 22+ open; 599 segs remain.
   than any other" ×4 = English anaphora mirroring Tibetan bla med
   anaphora.
 - Evidence layer 3,845/7,167 unchanged; full bank +19.
+
+### Batch C03-8 (c3p8, C03:22–24) — 2026-08-28
+- 22: C03 MARKER #1 — wylie = "the asian classics institute";
+  English = the whole Course III syllabus (apparatus, unpaired
+  s22app). ENGLISH QUEUE #1 "commentray" ×2; #2 mid-word truncation
+  ("Sour"); double-hyphen folios.
+- 23: FIRST C03 EVIDENCE PAIRS — lam rim → "the Steps of the Path";
+  chen mo → "the Great Book" (crossed); las → "From" (fronted).
+- 24: Tsongkapa's outline: log rtog dgag pa → "refute certain
+  mistaken ideas"; thun → "meditation periods"; sbyor ba'i chos
+  drug → "Six Preliminaries" — CROSS-COURSE CONSISTENCY with
+  C01:485; dang po ×2 rendered by role ("the first" / "This starts
+  with").
+- Evidence layer FIRST C03 GROWTH: 3,845→3,855 headwords,
+  7,167→7,181 pairs; phonetics still excluded.
