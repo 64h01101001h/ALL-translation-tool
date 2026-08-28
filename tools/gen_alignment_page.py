@@ -65,6 +65,7 @@ def resolve(text, spans, side, seq):
     2026-08-28 on C03:160.
     """
     ranges, cur, parent = {}, 0, None
+    prev5 = None
     for sp in spans:
         piece = sp.get(side)
         if piece is None:
@@ -81,6 +82,23 @@ def resolve(text, spans, side, seq):
                     "it." % (seq, side, piece, sp["id"], text[lo:hi]))
             ranges["_inner"] = i + len(piece)
         else:
+            # The commonest authoring mistake by far, and it must be caught
+            # BEFORE searching: a morpheme BOUND inside the word above it,
+            # marked depth 6 (flat, standalone) instead of depth 7 (member).
+            # Listed flat, a bare syllable like 'i or pa or s usually MATCHES
+            # -- somewhere else in the segment entirely -- so waiting for the
+            # cursor to fail catches it only by luck, and blames whichever
+            # innocent span fails next. Refuse on the depth itself.
+            if (side == "tib" and prev5 is not None
+                    and piece in prev5.get("tib", "")
+                    and piece != prev5.get("tib")):
+                die("s%d span %s (%r) is marked depth %d, but it is part of "
+                    "%r -- the depth-5 span listed above it. A BOUND "
+                    "morpheme must be depth 7, so it resolves inside its "
+                    "parent. Listed flat it matches a different occurrence "
+                    "elsewhere in the segment and silently mis-attaches. "
+                    "Change %s to \"d\": 7."
+                    % (seq, sp["id"], piece, sp["d"], prev5["tib"], sp["id"]))
             i = text.find(piece, cur)
             if i < 0:
                 later = text.find(piece)
@@ -96,6 +114,7 @@ def resolve(text, spans, side, seq):
             cur = i + len(piece)
             if sp["d"] == 5:
                 parent = (i, cur)
+                prev5 = sp
                 ranges["_inner"] = i
         ranges[sp["id"]] = (i, i + len(piece))
     ranges.pop("_inner", None)

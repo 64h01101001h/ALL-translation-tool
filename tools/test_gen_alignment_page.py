@@ -222,6 +222,20 @@ elif rc != 0:
 else:
     print("  ok   spans sharing a start offset sort without crashing")
 
+# 17. The commonest authoring mistake gets a NAMED diagnostic, not a cursor
+#     offset. A bound morpheme marked d=6 instead of d=7 took down four of
+#     six segments on the first real batch; the refusal said only "cursor is
+#     already at 53", which is true and useless.
+#     MUTATION: remove the prev5 branch -> the message reverts to OUT OF
+#     ORDER and this pin fails.
+expect_refusal("a bound morpheme marked d=6 is named as such",
+    {"course": "C03", "segments": [{"seq": 161, "title": "t",
+        "spans": [{"id": "w1", "d": 5, "tib": "grub pa'i", "eng": "achieving"},
+                  {"id": "m2", "d": 6, "tib": "'i", "eng": None,
+                   "nul": "genitive"},
+                  {"id": "w2", "d": 5, "tib": "rjes su", "eng": "after"}]}]},
+    "must be depth 7")
+
 if fails:
     print("\nFAILED:")
     for f in fails:
