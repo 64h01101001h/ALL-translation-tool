@@ -554,7 +554,7 @@ letter-exact battery gates every batch.
   (74's coinages reprised verbatim + self-referential "what we have
   called here"). khungs #4 "authentic source". Supplied transition
   sentence (filed with 115's). Self-quotes ×5 — densest cluster.
-| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p93 (144–316) done; 143 & 259 = marker pairs; 317+ open; 180 segs / 60 batches remain to close C01; §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
+| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p94 (144–319) done; 143 & 259 = marker pairs; 320+ open; 177 segs / 59 batches remain to close C01; §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
 
 NEXT: continue section VII (seq 146+) — the renunciation chapter.
 - seg 143: section-marker pair (like 43) — wylie carries "the first
@@ -1791,3 +1791,23 @@ TCS series and collections beyond, for later ruling). ***
   supplied "Tsongkapa") because the name appears in-segment —
   the rule is anaphora-aware. rgyal sras dpa' bo → "Bodhisattva
   princes" (265-fusion + 189-princes converge).
+
+### c1p94 — C01:317–319 (batch 94) — what passes for practice
+- Zero-catch. Layer: 2,649 headwords / 4,949 pairs.
+- seg 317: yi dam → "one of those powerful tutelary deities"
+  (deflationary). phar zhog joins the let-alone file. mthil ×3
+  varied again. dkon → "difficult to find". Street-interview
+  staging supplied.
+- seg 318: THE RITUAL CATALOG — ten folk-ritual names ALL
+  TRANSLATED with glosses (bsangs → Elimination Ritual; gser
+  skyem → Golden Tea; gzungs → Spell ×3; rgya nag skag bzlog →
+  the twelve-year-cycle gloss; mi kha dgra bsgyur → the praise-
+  to-curse gloss). Name-translation at census scale, p-marked.
+  THE IRONIC INVERSION: dga' rab yin → "so bad that they make it
+  look pretty good". fn 139.
+- seg 319: THE ANIMAL SUTRAS (Dog/Wolf/Fox/Bear/Snake) with zer
+  ba distributed as "the so-called" ×5. PROVENANCE VOCABULARY:
+  khungs rnam dag → "legitimate origin" — GMR's own source-
+  criticism in-text; resonant with the project's provenance
+  rules. gang dran dran → "anything somebody could think up".
+  lung pa spread (country/localities).
