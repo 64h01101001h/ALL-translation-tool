@@ -29,7 +29,7 @@ When a segment's english field is phonetics, not translation:
    under its own clause with honest labels.
 
 ## Progress
-c3p1–c3p13 (1–39) done; 40+ open; 581 segs remain.
+c3p1–c3p14 (1–42) done; 43+ open; 578 segs remain.
 
 ## Queues (wylie / english / PHONETICS), C03
 - WYLIE: ACIP anusvara capitals dM/kM/ND + ni'a oddity (seg 6).
@@ -221,3 +221,18 @@ c3p1–c3p13 (1–39) done; 40+ open; 581 segs remain.
   'phreng/phreng 'a-chung variation across adjacent segments; dang
   chain → commas.
 - Evidence layer: 3,967 headwords / 7,350 pairs.
+
+### Batch C03-14 (c3p14, C03:40–42) — 2026-08-28
+- 40: rotation 4-1-2-3 consistent with 39 (offering verses share
+  it). ri rab → "Meru" HERE vs "The Great Mountain" (seg 6) —
+  Tibetan-stable/English-varies within one course. Glossary =
+  delayed English for s38rest. ENGLISH QUEUE #3: "imbues" (for
+  imbued); #4: truncation "spread itself or sprinkle". stong gsum
+  → "a thousand thousand planets".
+- 41: bla na med pa completes the yod/med technical pair; citation
+  mirror #6; s41tail = bkod pa gloss whose English fell in 40's
+  truncated stretch.
+- 42: mos → "I see" (2nd, consistent with 35); L3 three-unit
+  mirror; relay #6 closes with the emanated-offerings explanation +
+  the last-two-feet instruction (tshig rkang pa tha ma gnyis).
+- Evidence layer: 3,977 headwords / 7,371 pairs.
