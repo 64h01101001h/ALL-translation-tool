@@ -554,7 +554,7 @@ letter-exact battery gates every batch.
   (74's coinages reprised verbatim + self-referential "what we have
   called here"). khungs #4 "authentic source". Supplied transition
   sentence (filed with 115's). Self-quotes ×5 — densest cluster.
-| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p139 (144–454) done; 143, 259, 324, 427 & 446 = marker pairs; 455+ open; 42 segs / 14 batches remain; §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
+| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p140 (144–457) done; 143, 259, 324, 427 & 446 = marker pairs; 458+ open; 39 segs / 13 batches remain; §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
 
 NEXT: continue section VII (seq 146+) — the renunciation chapter.
 - seg 143: section-marker pair (like 43) — wylie carries "the first
@@ -2878,3 +2878,28 @@ TCS series and collections beyond, for later ruling). ***
   forced".
 - QA: both sides letter-exact, 111 spans balanced, depth clean.
   Layer: 3,525 headwords / 6,665 pairs.
+
+### c1p140 — Vessel and contents (455–457)
+- **AMENDMENT to c1p139/454**: 454's "supplied converse" is
+  RECLASSIFIED — 455's opening clause (de gnyis mtshan nyid pa zhig
+  byung na skyabs 'gro yang mtshan nyid pa zhig 'byung) is its
+  Tibetan source: a CROSS-SEGMENT RELOCATION (like 425/426's 'dug),
+  not pure supply. Page 139 stands; this ledger entry is the
+  correction of record. mtshan nyid pa → "true/genuine" (spread #2
+  after 417's "definition").
+- **455 — the pure world**: SNOD-BCUD pair unpacked (bcud →
+  "inhabitants"; snod → "The universe itself, the place which these
+  beings inhabit"). 'bras bu lam byed → taking-the-result-as-path at
+  full unpack. bdag 'bras → "a product of their collective deeds";
+  khungs 'dra ba → "comes from the same source" (khungs provenance
+  file). WYLIE QUEUE: "rgyal ma chog" (probable rgyal mchog
+  mis-segmentation).
+- **456 — the Pure One's places** (fn 183): tshangs pa → "the Pure
+  One" (established calque); chen po RENDERED ×2 as capitalized
+  "Great" (Great Compassion/Great Loving-Kindness) — honorific kept
+  where doctrine requires (contrast 345/347 drops).
+- **457 — neutrality first**: btang snyoms → "the feeling of
+  neutrality towards all beings"; rgyu 'bras man ngag bdun → "the
+  seven-part, cause-and-effect instruction" (purpose supplied).
+- QA: both sides letter-exact, 110 spans balanced, depth clean.
+  Layer: 3,538 headwords / 6,692 pairs.
