@@ -554,7 +554,7 @@ letter-exact battery gates every batch.
   (74's coinages reprised verbatim + self-referential "what we have
   called here"). khungs #4 "authentic source". Supplied transition
   sentence (filed with 115's). Self-quotes ×5 — densest cluster.
-| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p98 (144–331) done; 143, 259 & 324 = marker pairs; 332+ open; 165 segs / 55 batches remain; §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
+| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p99 (144–334) done; 143, 259 & 324 = marker pairs; 335+ open; 162 segs / 54 batches remain; §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
 
 NEXT: continue section VII (seq 146+) — the renunciation chapter.
 - seg 143: section-marker pair (like 43) — wylie carries "the first
@@ -1906,3 +1906,19 @@ TCS series and collections beyond, for later ruling). ***
   less" (3rd let-alone particle). nyon mongs → "harmful emotions"
   (spread). bsam gzugs unpacked (fn 144). TITLE: King of
   Concentration (Samadhiraja).
+
+### c1p99 — C01:332–334 (batch 99) — concentration is not enough
+- Zero-catch. Layer: 2,735 headwords / 5,107 pairs.
+- seg 332 (King of Concentration): lhag spyod → "Udraka" —
+  Sanskrit restored even for a rival meditator (fn 145). nyon
+  mongs THIRD render in three pages ("unhealthy thoughts"). 'du
+  shes → "concept". Frame absorbed by 331's pre-announcement.
+- seg 333: 'khor ba FIFTH exponent ("our circling life"). One
+  purposive clause → definition + imperative. ANATMAN face #3
+  ("no SUCH self"). de nyid las → "As the same work says," (the
+  same-work citation device).
+- seg 334: so sor rtog/brtags (present/past) → "analyze / on what
+  you've seen" (tense as stage-sequence). chos → "things" (the
+  chos file's widest span). mya ngan 'das → "nirvana" — the
+  loanword surfacing (register split vs 263). gal te ×2 kept.
+  DB artifact "rtog,so sor" kept.
