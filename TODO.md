@@ -1,3 +1,23 @@
+## ⚠️ GROWING AGAINST ADAM'S RULING — the entry card still shows only 4
+
+Adam ruled 2026-08-28 that **every** rendering is preserved, for posterity and
+to give the translator context. **The data obeys it. The UI does not.**
+
+`app/main.cpp:1378` — `if (shown >= 4) break;` — then prints
+"…and N more attested pairings" as dead text, not a link.
+
+    renderings out of reach   1,047 at the ruling  ->  1,200 now
+    headwords affected          286                ->    292
+
+**It grows with every batch**, because the deepest headwords are the commonest
+words. `chos` holds 36 renderings and a translator sees four.
+
+NOT TOUCHED DELIBERATELY: GUI work in this project opens with brainstorming +
+design-critique per CLAUDE.md, and the Review pane already does the right thing
+(uncapped register spread, `app/main.cpp:26288`) — so the fix is a design
+question about which surface shows what, not a one-line cap change. **Adam's
+call.** Measurements in `docs/PRESERVE_ALL_RENDERINGS.md`.
+
 ## ✅ CLOSED 2026-08-28 — the mechanical-gate programme (three gates, three failures)
 
 Three defect detectors were proposed, each tested against the whole layer
