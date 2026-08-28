@@ -76,7 +76,7 @@ entry from here records its producing model; everything through C03 batch
 32 was Fable.
 
 ## Progress
-c3p1–c3p45 (1–135) done; 136+ open; 485 segs remain.
+c3p1–c3p46 (1–138) done; 139+ open; 482 segs remain.
 
 ## Queues (wylie / english / PHONETICS), C03
 - WYLIE: ACIP anusvara capitals dM/kM/ND + ni'a oddity (seg 6).
@@ -100,8 +100,9 @@ c3p1–c3p45 (1–135) done; 136+ open; 485 segs remain.
 - ENGLISH #9: "your are quick to regret them" (125) — "your" for
   "you". Kept verbatim; page carries a dedicated check confirming the
   string survives byte-exact.
-- ENGLISH #10: "position ones body" (134, 135) — "ones" for "one's",
-  twice. Kept verbatim; page check counts the occurrences.
+- ENGLISH #10: "ones" for "one's" — "position ones body" (134, 135)
+  and "Ones eyes" (137, capitalised). THREE occurrences make it a
+  habit rather than a slip. Kept verbatim; page checks confirm.
 
 ### Batch C03-1 (c3p1, C03:1–3) — 2026-08-28
 - PHONETICS PROTOCOL debut: right label = GESHE MICHAEL'S PHONETICS
@@ -783,3 +784,26 @@ stack trace.
   stan → "meditation cushion"; the Bhavanakrama volumes numbered in
   English where the Tibetan names them by position.
 - Evidence layer: 4,154 headwords / 7,644 pairs.
+
+### Batch C03-46 (c3p46, C03:136–138) — 2026-08-28 — model: Opus
+- 136: A NAMING-POLICY EXCEPTION. rnam par snang mdzad → "Vairochana",
+  kept in SANSKRIT where C01 calqued every other holy name ('jam
+  dbyangs → "Gentle Voice", byams pa → "Loving One", tshangs pa →
+  "Pure One", thub pa → "the Able", rdo rje 'chang → "the One who
+  Holds the Diamond"). So: Indian TEXT titles always calqued (four
+  attested), Buddha names usually calqued — but not this one.
+  rje btsun → "the holy being named", the phrase that introduces an
+  untranslated name.
+- 137: ENGLISH QUEUE #10 third occurrence ("Ones eyes"). gtad
+  ("fixed, directed") → "loosely focussed" — the English softens a
+  firm verb, with "around the plane of" supplied to match.
+- 138: **THE REGISTER OSCILLATES INSIDE ONE LIST.** Items [1] and [2]
+  are impersonal ("one should", "Ones eyes"); item [3] switches to
+  "your body", "your spine", "your thoughts". Three consecutive
+  numbered items, two grammatical persons, and the Tibetan gives no
+  such signal — lus ni is exactly as impersonal as mig ni. This is
+  the translator's own variation and precisely what a register
+  warning should surface rather than smooth away.
+  dran pa (mindfulness) → "your thoughts" — a notably plain render
+  of a technical term.
+- Evidence layer: 4,171 headwords / 7,663 pairs.
