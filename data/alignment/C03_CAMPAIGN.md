@@ -46,7 +46,7 @@ entry from here records its producing model; everything through C03 batch
 32 was Fable.
 
 ## Progress
-c3p1–c3p33 (1–99) done; 100+ open; 521 segs remain.
+c3p1–c3p34 (1–102) done; 103+ open; 518 segs remain.
 
 ## Queues (wylie / english / PHONETICS), C03
 - WYLIE: ACIP anusvara capitals dM/kM/ND + ni'a oddity (seg 6).
@@ -465,4 +465,19 @@ c3p1–c3p33 (1–99) done; 100+ open; 521 segs remain.
 - 99: verbatim repeat of 89; phonetics identical (kadrin/chenpoy/
   gone/jesung) — the convention reproduces exactly across recitations,
   which is evidence it is systematic rather than ad hoc.
+- Evidence layer: 4,039 headwords / 7,481 pairs; ACIP 4,038/4,039.
+
+### Batch C03-34 (c3p34, C03:100–102) — 2026-08-28 — model: Opus
+- 100: THE CHANGE TRACKS IN BOTH LANGUAGES. The stanza (source
+  97–100) is word-for-word identical to segment 90's except for one
+  phrase: 90 "Atop my head", 100 "In my heart". One word changed in
+  the Tibetan (spyi bor → snying khar), one phrase changed in the
+  English, nothing else moved. Clean evidence of GMR's translation
+  consistency at stanza scale — the same source rendered the same
+  way twice with the single difference faithfully carried. Highest
+  grade of successor-dictionary evidence.
+- 101: third recitation of the opening line (87/97/101), phonetics
+  identical each time. ACIP RTZA BA'I → wylie rtsa ba'i.
+- 102: snying khar again — the verse cycles crown (88) → heart (98)
+  → heart (102).
 - Evidence layer: 4,039 headwords / 7,481 pairs; ACIP 4,038/4,039.
