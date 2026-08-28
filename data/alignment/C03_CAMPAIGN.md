@@ -998,3 +998,62 @@ has predicted nothing.
   C01:417 ("thinking things have stopped"). Two unrelated senses of
   one syllable — a concrete reason to key on spans, not syllables.
 - Evidence layer: 4,304 headwords / 7,820 pairs.
+
+### Batches C03-54 and C03-55 (c3p54, c3p55, C03:160–165) — 2026-08-28 — model: Opus
+First batch produced through the committed generator
+(`tools/gen_alignment_page.py`) rather than an inline heredoc, and through a
+two-proposer workflow: each segment analysed independently Tibetan-first and
+English-first, then reconciled with a standing instruction to prefer the
+TIGHTER span wherever the two disagreed.
+
+**The generator refused all six segments on the first attempt, and every
+refusal was correct.** It exposed three real bugs in itself and two authoring
+rules worth keeping.
+
+Bugs in the tool, all now fixed and pinned:
+- **It could not do crossings at all** — one forward-only cursor shared by
+  both sides, so `lo stong` → "a thousand years" refused. The tool was
+  unusable on real input and its six mutation-verified pins all used
+  non-crossing spans.
+- **No depth-7 nesting.** The member `gnas` of `sems gnas` matched the
+  unrelated `zhi gnas` 130 characters later and the cursor rejected
+  everything after it.
+- **Two `sort()` calls compared span dicts** on a tie and raised TypeError —
+  a crash, not a refusal, which is the worse failure because a crash after
+  registration leaves the builder pointing at a page that was never written.
+
+Authoring rules the refusals taught, now applied mechanically:
+- **A morpheme bound inside the word above it is depth 7, not depth 6.**
+  A bare `'i`, `pa`, `la`, `s` matches all over the wylie; as a flat span it
+  attaches wherever it first hits. Twelve were re-depthed in this batch.
+- **An English link to a single function word that occurs more than once is
+  not a link.** Nobody can say which "to" or "of" it means. Fifteen were
+  nulled rather than guessed at.
+
+**And a defect in the BUILDER that only this batch could have exposed:**
+`strip_tags` replaced each tag with a space, so a depth-7 member splitting
+`dbu ma'i` banked the headword as `dbu ma 'i` — a Tibetan string that does
+not exist. Every existing gate passed: they check the PAGE against the spine,
+and the page was fine; the corruption happened downstream. It surfaced only
+because the ACIP round-trip could not convert it, which was luck, not a gate.
+Fixed, pinned (`tools/test_alignment_builder.py`), and the fix repaired one
+pre-existing defect too — `sa dge rnying` had been banked as "the Sakya ,
+Geluk , and Nyingma" with spurious spaces before the commas.
+
+Content notes:
+- **160**: `mthar` ("final result") is the seventh Tibetan token but opens
+  the English, so the crossing runs backwards over five spans. `shin sbyangs`
+  takes "meditative pleasure" rather than the usual "pliancy" — worth
+  cross-checking against the other C03 occurrences before treating that as
+  this course's settled rendering. `sems` in `sems gnas` is unrendered: GMR
+  writes "these nine states", not "nine mental states".
+- **162**: the sustained battle metaphor — `ral gri rnon po` "razor-sharp
+  sword", `g-yul ngo` "field of battle", `rgyal thabs chen po` "the great
+  victory". `zung du 'brel ba` → "married together", which is why the numeral
+  gate misfired on `zung` elsewhere: it genuinely means "a pair".
+- **163–165**: the closing verses. 164 and 165 are the colophon and the
+  printing dedication — Trijang Trulku naming his patron, and the estate of
+  the deceased Asong funding the woodblocks. Verse, so the spans are shorter
+  and the line-crossing convention of the C03 verse pages applies.
+
+- Evidence layer: 4,359 headwords / 7,910 pairs. C03 at 165/620.

@@ -50,39 +50,92 @@ def die(msg):
     sys.exit("REFUSED: " + msg)
 
 
-def wrap(text, spans, side, seq):
-    """Wrap `spans` into `text` by a forward-only cursor.
+def resolve(text, spans, side, seq):
+    """Resolve each span to a (start, end) range in `text`.
 
-    Forward-only is the whole safety property: a span may only be found
-    at or after the end of the previous one. If the spec lists spans in
-    an order the text does not have, the cursor cannot find the next one
-    and the build refuses rather than silently attaching to a later
-    identical substring elsewhere in the segment.
+    Depth 5 and 6 spans form a FLAT sequence walked by a forward-only
+    cursor -- that is the safety property, and it refuses out-of-order
+    specs.
+
+    Depth 7 spans are members INSIDE a depth-5 compound, so they must be
+    resolved within their parent's range, not from the flat cursor.
+    Searching them flat is actively wrong: the member `gnas` of the
+    compound `sems gnas` matched the unrelated `zhi gnas` 130 characters
+    later, and the cursor then rejected everything after it. Found
+    2026-08-28 on C03:160.
     """
-    out, cur = [], 0
+    ranges, cur, parent = {}, 0, None
     for sp in spans:
         piece = sp.get(side)
         if piece is None:
-            continue                      # null side: emitted separately
-        i = text.find(piece, cur)
-        if i < 0:
-            later = text.find(piece)
-            if later >= 0:
-                die("s%d %s span %r appears at offset %d but the cursor is "
-                    "already at %d -- the spans are listed OUT OF ORDER "
-                    "relative to the text. Fix the order in the spec; do "
-                    "not reorder the text."
-                    % (seq, side, piece, later, cur))
-            die("s%d %s span %r is NOT PRESENT in the spine text. The "
-                "spine is the source of record -- correct the span, never "
-                "the text.\n  text: %r" % (seq, side, piece, text))
-        out.append(html.escape(text[cur:i]))
-        cls = "u" + ((" " + sp["cls"]) if sp.get("cls") else "")
-        out.append('<span class="%s" data-d="%d" data-l="s%d%s">%s</span>'
-                   % (cls, sp["d"], seq, sp["id"], html.escape(piece)))
-        cur = i + len(piece)
-    out.append(html.escape(text[cur:]))
-    return "".join(out)
+            continue
+        if sp["d"] == 7:
+            if parent is None:
+                die("s%d %s span %s is depth 7 but no depth-5 compound "
+                    "precedes it to nest inside." % (seq, side, sp["id"]))
+            lo, hi = parent
+            i = text.find(piece, ranges.get("_inner", lo), hi)
+            if i < 0:
+                die("s%d %s member %r (%s) is not inside its compound %r. A "
+                    "depth-7 span must be a member of the depth-5 span above "
+                    "it." % (seq, side, piece, sp["id"], text[lo:hi]))
+            ranges["_inner"] = i + len(piece)
+        else:
+            i = text.find(piece, cur)
+            if i < 0:
+                later = text.find(piece)
+                if later >= 0:
+                    die("s%d %s span %r appears at offset %d but the cursor "
+                        "is already at %d -- the spans are listed OUT OF "
+                        "ORDER relative to the text. Fix the order in the "
+                        "spec; do not reorder the text."
+                        % (seq, side, piece, later, cur))
+                die("s%d %s span %r is NOT PRESENT in the spine text. The "
+                    "spine is the source of record -- correct the span, "
+                    "never the text.\n  text: %r" % (seq, side, piece, text))
+            cur = i + len(piece)
+            if sp["d"] == 5:
+                parent = (i, cur)
+                ranges["_inner"] = i
+        ranges[sp["id"]] = (i, i + len(piece))
+    ranges.pop("_inner", None)
+    return ranges
+
+
+def emit(text, spans, ranges, side):
+    """Emit `text` with spans wrapped, nesting by containment."""
+    items = []
+    for sp in spans:
+        if sp["id"] in ranges:
+            lo, hi = ranges[sp["id"]]
+            items.append((lo, -(hi - lo), sp, hi))
+    # sort outermost-first at a shared start; the explicit key keeps the
+    # comparison off the dicts, which raises TypeError on any tie.
+    items.sort(key=lambda t: (t[0], t[1], t[2]["id"]))
+
+    def render(lo, hi, pool):
+        out, cur = [], lo
+        i = 0
+        while i < len(pool):
+            a, _, sp, b = pool[i]
+            if a < cur:
+                i += 1
+                continue
+            kids = []
+            j = i + 1
+            while j < len(pool) and pool[j][0] < b:
+                kids.append(pool[j])
+                j += 1
+            cls = "u" + ((" " + sp["cls"]) if sp.get("cls") else "")
+            out.append(html.escape(text[cur:a]))
+            out.append('<span class="%s" data-d="%d" data-l="%s">%s</span>'
+                       % (cls, sp["d"], sp["_lab"], render(a, b, kids)))
+            cur = b
+            i = j
+        out.append(html.escape(text[cur:hi]))
+        return "".join(out)
+
+    return render(0, len(text), items)
 
 
 def nest(inner, seq, clauses, text, side):
@@ -112,7 +165,9 @@ def main():
         wyl, eng = row
         spans = seg["spans"]
 
-        tib_html = wrap(wyl, spans, "tib", seq)
+        for sp in spans:
+            sp["_lab"] = "s%d%s" % (seq, sp["id"])
+        tib_html = emit(wyl, spans, resolve(wyl, spans, "tib", seq), "tib")
 
         order = seg.get("eng_order")
         if order:
@@ -153,20 +208,31 @@ def main():
                         % (seq, sp["eng"], n, sp["id"]))
                 i = eng.find(sp["eng"])
                 pos.append((i, i + len(sp["eng"]), sp))
-            pos.sort()
+            # outermost first at a tie, so a compound precedes its members;
+            # never let the tuple comparison fall through to the dicts.
+            pos.sort(key=lambda t: (t[0], -(t[1] - t[0]), t[2]["id"]))
             for k in range(1, len(pos)):
-                if pos[k][0] < pos[k - 1][1]:
-                    die("s%d English spans %s (%r) and %s (%r) overlap. Two "
-                        "spans cannot own the same characters."
-                        % (seq, pos[k - 1][2]["id"], pos[k - 1][2]["eng"],
-                           pos[k][2]["id"], pos[k][2]["eng"]))
+                a0, a1, A = pos[k - 1]
+                b0, b1, Bsp = pos[k]
+                if b0 >= a1:
+                    continue
+                # a depth-7 member legitimately sits inside its compound
+                if Bsp["d"] == 7 and b0 >= a0 and b1 <= a1:
+                    continue
+                if A["d"] == 7 and a0 >= b0 and a1 <= b1:
+                    continue
+                die("s%d English spans %s (%r) and %s (%r) overlap. Two "
+                    "spans cannot own the same characters, and neither is a "
+                    "depth-7 member of the other."
+                    % (seq, A["id"], A["eng"], Bsp["id"], Bsp["eng"]))
             eng_spans = [t[2] for t in pos]
-        eng_html = wrap(eng, eng_spans, "eng", seq)
+        eng_html = emit(eng, eng_spans,
+                        resolve(eng, eng_spans, "eng", seq), "eng")
 
         nulls = "".join(
-            '<span class="u" data-d="%d" data-l="s%d%s">'
+            '<span class="u" data-d="%d" data-l="%s">'
             '<span class="nul">%s</span></span>'
-            % (sp["d"], seq, sp["id"], html.escape(sp.get("nul") or
+            % (sp["d"], sp["_lab"], html.escape(sp.get("nul") or
                (sp["tib"] + "→∅")))
             for sp in spans if sp.get("eng") is None)
 
