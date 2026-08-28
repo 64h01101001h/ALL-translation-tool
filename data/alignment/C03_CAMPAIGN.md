@@ -1057,3 +1057,58 @@ Content notes:
   and the line-crossing convention of the C03 verse pages applies.
 
 - Evidence layer: 4,359 headwords / 7,910 pairs. C03 at 165/620.
+
+### Batches C03-56/57/58 (C03:166–174) — 2026-08-28 — model: Opus
+The printer's colophon plus the first captions of the elephant-path chart —
+the diagram where the mind is an elephant led up a winding road by a monk.
+
+**A defect class found here reaches back across the whole project.** The
+generator's word-boundary rule refused `par shing` → "block", because "block"
+also sits inside "blockprint" earlier in the same sentence. Sweeping all 248
+pages for the same shape turned up 16 English spans cut out of the middle of
+a word. Fourteen are a deliberate convention and are correct:
+
+> **The negative-affix convention.** The Tibetan negation `mi`/`ma` owns the
+> English negative, so the positive stem is spanned on its own: `n't` inside
+> "doesn't", "necessary" inside "unnecessary", "changing" inside
+> "unchanging", "not" inside "cannot". Used on 14 spans across C01.
+
+**Two were real damage, and both had been banked into the layer:**
+- `c3p43` (C03:129) banked `gong ma gong ma'i rgyu` as **"are caus"** — a
+  truncation of "are causes". Not English. It had been in the layer since
+  that batch shipped.
+- `c3p54` (C03:161) banked `rtse gcig` as **"one-pointed"**, cut out of
+  "one-pointedly".
+
+Neither was catchable before. Every existing gate proves the page byte-exact
+against the spine, and both pages *were* byte-exact — all the characters were
+right and only the span boundary was wrong. Now gated by
+`tools/test_no_broken_words.py`, which scans all 11,227 English spans on
+every build, with the fourteen legitimate cases listed by name so that
+allowing one is a deliberate act.
+
+The generator gained a `"subword": true` opt-in for the same reason: refuse
+the accident, allow the declared intent.
+
+Content notes:
+- **166** is the printer's colophon: blocks carved in the Fire-Sheep year
+  (1967) in Sikkim, stored at the Tarndu Ling Temple of Baksa Monastery. GMR
+  **inverts** the two monastery words relative to their dictionary senses —
+  `chos sgar` (literally "dharma camp") becomes "Monastery" and `dgon`
+  (literally "monastery") becomes "Temple". The spans follow his English,
+  not the lexicon. The wylie carries a damaged head token `shogces pa'i`
+  (illegal syllabification, `shog` and `ces` run together) and `19a67`, where
+  a folio marker has collided with the numeral 1967. Both left whole and
+  unparsed rather than guessed at. **WYLIE QUEUE: both.**
+- **167** reproduces the prose wording of 157 verbatim — "setting the mind on
+  the object". The caption series and the prose treatment of the nine states
+  agree, which is worth knowing: the chart is not a separate tradition.
+- **171–172**: the elephant is the mind and the monkey is distraction; black
+  colour is dullness on one and agitation on the other. `kha dog nag pa` →
+  "black color" has its members CROSSING inside the compound — `nag pa`
+  (black) precedes `kha dog` (color) in English but follows it in Tibetan.
+  That crossing is what exposed the generator's member-ordering bug.
+- **174**: the wylie is the agentive `'dis`, not a bare `'di`; the ergative
+  -s is not separable here.
+
+- Evidence layer: 4,380 headwords / 7,954 pairs. C03 at 174/620.
