@@ -29,7 +29,7 @@ When a segment's english field is phonetics, not translation:
    under its own clause with honest labels.
 
 ## Progress
-c3p1–c3p3 (1–9) done; 10+ open; 611 segs remain.
+c3p1–c3p4 (1–12) done; 13+ open; 608 segs remain.
 
 ## Queues (wylie / english), C03
 - (open)
@@ -76,3 +76,15 @@ c3p1–c3p3 (1–9) done; 10+ open; 611 segs remain.
 - 9: byang chub → "jangchub" (by- → j consistent); bdag ni →
   "dakni"; mchis → "chi".
 - Evidence layer 3,845/7,167 unchanged; full bank +18.
+
+### Batch C03-4 (c3p4, C03:10–12) — 2026-08-28
+- 10: bdag gis ↔ "dakki" — case particle ASSIMILATES AND DOUBLES
+  (first junction-doubling); bgyis pa'i ↔ "gyipay" (genitive
+  diphthong -ay); bsod → "su" (ö-as-u #3); sbyin → "jin".
+- 11: phan phyir ↔ "penchir" — a-umlaut-as-e debut + phy-→ch (joins
+  spy-→ch); 'grub par ↔ "druppar" (junction p-doubling). English
+  refuge stanza = UNPAIRED clause s11trans, source segs 8–11 —
+  2nd cross-segment consolidation (seg-6 topology confirmed as the
+  liturgical pattern).
+- 12: bsngo ba ↔ "ngowa" (bsng-→ng; intervocalic b→w).
+- Evidence layer 3,845/7,167 unchanged; full bank +17.
