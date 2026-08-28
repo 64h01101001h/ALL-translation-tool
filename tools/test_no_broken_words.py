@@ -35,8 +35,12 @@ SPAN = re.compile(r'<span class="u[^"]*" data-d="\d" data-l="(s\d+\w+)"[^>]*>'
 ALLOWED_SUBWORD = {
     # stem half — the positive word, negation lives elsewhere
     "n't", "necessary", "sufficient", "changing", "not",
-    # negative half — the affix itself, owned by mi / ma
-    "un",
+    # negative half — the affix itself, owned by the Tibetan negation.
+    # Three forms have turned up so far, one per batch, which is why this
+    # list is grown deliberately rather than guessed at up front:
+    #   "un"   prefix   — mi nus -> "unable"            (C03:209)
+    #   "less" suffix   — 'bad rtsol med par -> "effortlessly" (C03:211)
+    "un", "less",
 }
 
 

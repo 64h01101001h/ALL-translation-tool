@@ -1231,3 +1231,40 @@ from opposite ends; the list now says so.
 - Evidence layer: 4,466 headwords / 8,214 pairs. C03 at 209/620.
   Broken-words gate: 11,686 English spans across 261 pages, clean.
   24 pins on the generator, 12 mutation-verified.
+
+### Batches C03-72 … C03-75 (C03:210–217) — 2026-08-28 — model: Opus
+States eight and nine in prose, the long impressions passage (102 spans on a
+single segment — the campaign's densest), and the opening of the Lam-Rim
+outline.
+
+**Two findings in Geshe Michael's own text, both preserved verbatim:**
+- **C03:210 reads "the eight state of meditation"** where "eighth" is meant.
+  His slip, and it stands. Recorded so a reader meets the note rather than
+  the puzzle.
+- **The Tibetan name of state 8 is not in the segment at all.** Grepping the
+  wylie for `rtse gcig`, and for `gcig`, returns nothing; the wylie opens
+  with the bare ordinal `brgyad pa'i skabs su ni`, "on the occasion of the
+  eighth". Geshe Michael supplies the quoted label from the list band for the
+  reader's benefit. So no span claims it and the whole quoted phrase stays
+  unwrapped — which is the correct treatment and worth stating, because a
+  span claiming it would look perfectly reasonable.
+
+**A false positive in one of my own guards.** The bound-morpheme diagnostic
+tested containment: a flat span whose Tibetan sits inside the depth-5 span
+above it was refused as a mis-depthed morpheme. C03:212 has `gnyis pa`
+("second") followed by `gnyis` ("two") as a genuinely separate word, and the
+test refused it. **In Wylie every standalone word starts a syllable, and
+syllables are space-separated — so position, not containment, is the signal.**
+The check now looks for a syllable boundary. Regression-checked across all
+six batches; pinned, mutation-verified.
+
+**The negative-affix convention has a third form.** The broken-words gate
+flagged `less` inside "effortlessly" — `'bad rtsol med par`, where the
+negation `med` owns the English suffix. Three forms have now surfaced, one
+per batch: the contraction `n't`, the prefix `un`, the suffix `less`. The
+allowed list is grown deliberately, one confirmed case at a time, rather than
+guessed at up front — which is why each addition carries its citation.
+
+- Evidence layer: 4,505 headwords / 8,308 pairs. C03 at 217/620.
+  Broken words: 11,871 English spans clean. Split syllables: 15,023 Tibetan
+  spans clean. Both across 265 pages.

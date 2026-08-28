@@ -203,9 +203,24 @@ def resolve(text, spans, side, seq):
             # -- somewhere else in the segment entirely -- so waiting for the
             # cursor to fail catches it only by luck, and blames whichever
             # innocent span fails next. Refuse on the depth itself.
-            if (side == "tib" and prev5 is not None
-                    and piece in prev5.get("tib", "")
-                    and piece != prev5.get("tib")):
+            # In Wylie every standalone word or particle STARTS A SYLLABLE,
+            # and syllables are space-separated. So a flat span that can only
+            # be placed mid-syllable is a bound morpheme wearing the wrong
+            # depth. Testing containment alone was too blunt: `gnyis` ("two")
+            # legitimately follows `gnyis pa` ("second") as its own word, and
+            # the containment test refused it. Position is the real signal.
+            at_syllable = False
+            probe = cur
+            while True:
+                k = text.find(piece, probe)
+                if k < 0:
+                    break
+                if k == 0 or text[k - 1] in " ,":
+                    at_syllable = True
+                    break
+                probe = k + 1
+            if (side == "tib" and not at_syllable and prev5 is not None
+                    and piece in prev5.get("tib", "")):
                 die("s%d span %s (%r) is marked depth %d, but it is part of "
                     "%r -- the depth-5 span listed above it. A BOUND "
                     "morpheme must be depth 7, so it resolves inside its "
