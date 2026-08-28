@@ -236,6 +236,47 @@ expect_refusal("a bound morpheme marked d=6 is named as such",
                   {"id": "w2", "d": 5, "tib": "rjes su", "eng": "after"}]}]},
     "must be depth 7")
 
+# 18. A FLAT span must not match inside a larger word. C03:166 renders
+#     `par shing` as "block", and "block" also sits inside "blockprint"
+#     earlier in the same sentence. A raw substring search takes the
+#     interior hit and consumes half of another word. Same failure as the
+#     ACIP of `tshogs` once attaching to the span `shog`.
+#     MUTATION: use text.find instead of find_word -> this pin fails.
+rc, out, err = run({"course": "C03", "segments": [{"seq": 166, "title": "t",
+    "spans": [{"id": "w1", "d": 5, "tib": "par shing", "eng": "block"},
+              {"id": "w2", "d": 5, "tib": "bzhugs", "eng": "stored"}]}]})
+if rc != 0:
+    fails.append("word-boundary: %s" % err.strip()[:220])
+else:
+    import re as _re
+    m = _re.search(r'<span[^>]*s166w1">([^<]*)</span>', out)
+    ctx = out[max(0, out.find('s166w1') - 60):out.find('s166w1') + 90]
+    if "blockprint" in ctx and "block</span>print" in out:
+        fails.append("word-boundary: span landed INSIDE 'blockprint'")
+    else:
+        print("  ok   a flat span will not match inside a larger word")
+
+# 19. The negative-affix convention: the Tibetan negation maps to the
+#     "n't" inside "doesn't", so the span deliberately sits within a larger
+#     word. Declared with "subword": true, it must be ALLOWED -- 14 spans
+#     across C01 rely on this and the default refusal would break them all.
+#     MUTATION: ignore the subword flag -> this pin fails.
+rc, out, err = run({"course": "C01", "segments": [{"seq": 123, "title": "t",
+    "spans": [{"id": "m1", "d": 6, "tib": "mi", "eng": "n't",
+               "subword": True}]}]})
+if rc != 0:
+    fails.append("declared subword span refused: %s" % err.strip()[:220])
+else:
+    print("  ok   a declared sub-word span is allowed")
+
+# 20. But an UNDECLARED one still refuses. This is the accident the rule
+#     exists for: `one-pointed` cut out of "one-pointedly" on a real page.
+expect_refusal("an undeclared sub-word span still refuses",
+    {"course": "C03", "segments": [{"seq": 161, "title": "t",
+        "spans": [{"id": "w1", "d": 5, "tib": "rtse gcig",
+                   "eng": "one-pointed"}]}]},
+    "NOT PRESENT")
+
 if fails:
     print("\nFAILED:")
     for f in fails:

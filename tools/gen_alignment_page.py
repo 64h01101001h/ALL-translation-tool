@@ -29,6 +29,8 @@ Spec format (JSON on stdin):
         "title": "the ninth state, and quietude",
         "clauses": [ {"id":"c1","tib":"...","eng":"..."} ],
         "spans": [ {"id":"w1","d":5,"tib":"zhi gnas","eng":"quietude"},
+                   {"id":"m2","d":6,"tib":"ma","eng":"n't",
+                    "subword":true},   # declared sub-word: see find_word
                    {"id":"m1","d":6,"tib":"kyis","eng":null,
                     "cls":"case","nul":"instrumental; unrendered"} ],
         "eng_order": ["w2","w1"],
@@ -39,7 +41,7 @@ it is wrapped on the Tibetan side and emitted as a .nul marker on the
 English side. Null markers are stripped before the verbatim gate in
 build_alignment_layer.py, so they never affect the proof.
 """
-import sys, io, json, os, sqlite3, html
+import sys, io, json, os, re, sqlite3, html
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(ROOT, "tools"))
@@ -48,6 +50,97 @@ import build_alignment_layer as B   # noqa: E402  (for SPINE only)
 
 def die(msg):
     sys.exit("REFUSED: " + msg)
+
+
+WORDCH = re.compile(r"[A-Za-z0-9\u0F00-\u0FFF]")
+
+
+def find_word(text, piece, start, stop=None, subword=False):
+    """find(), but a FLAT span may not match inside a larger word.
+
+    `par shing` is rendered "block", and "block" also sits inside
+    "blockprint" twenty characters earlier. A raw substring search takes the
+    interior hit, consumes half of another word, and cascades. This is the
+    same failure that once attached the ACIP of `tshogs` to the span `shog`.
+
+    Depth-7 members are exempt: a member IS a sub-part of its parent, and
+    the genitive 'i inside pa'i has a letter on its left by definition.
+
+    A span may also opt in with "subword": true, which is how the campaign
+    aligns English negative affixes. The Tibetan negation mi/ma maps to the
+    "n't" of "doesn't" and to the "un" of "unnecessary", so the positive
+    stem is spanned on its own and deliberately sits inside a larger word.
+    That convention is used on 14 spans across C01 and is correct. The
+    default refusal exists to catch the ACCIDENT -- `one-pointed` cut out
+    of "one-pointedly" -- while a declared intent passes.
+    """
+    if subword:
+        i = text.find(piece, start, len(text) if stop is None else stop)
+        return i
+    stop = len(text) if stop is None else stop
+    i = start
+    while True:
+        i = text.find(piece, i, stop)
+        if i < 0:
+            return -1
+        # A boundary is required only on an edge whose OWN character is
+        # alphanumeric -- that is the only way a span can sit inside a
+        # larger word. A span that starts with an apostrophe ('i) or ends
+        # with a slash (1a/) has no such edge and needs no boundary there,
+        # which is why the naive rule broke every genitive and folio marker
+        # the first time it ran.
+        j = i + len(piece)
+        need_before = bool(WORDCH.match(piece[0]))
+        need_after = bool(WORDCH.match(piece[-1]))
+        before = (not need_before) or i == 0 or not WORDCH.match(text[i - 1])
+        after = (not need_after) or j >= len(text) or not WORDCH.match(text[j])
+        if before and after:
+            return i
+        i += 1
+
+
+def count_word(text, piece):
+    """How many times `piece` occurs as a whole word."""
+    n, i = 0, 0
+    while True:
+        i = find_word(text, piece, i)
+        if i < 0:
+            return n
+        n += 1
+        i += 1
+
+
+def with_members(spec_spans, flat, text=None):
+    """Re-insert depth-7 members after the parent the SPEC gave them.
+
+    Parenthood is a fact about the spec's Tibetan order, not about whichever
+    depth-5 span happens to sort in front of a member on the other side.
+    Sorting the English flat put the member `bring your mind back to the
+    object` behind the unrelated span `effort` and the nesting check
+    correctly refused it. Found 2026-08-28 on C03:173.
+
+    Members can also CROSS inside their own parent: `kha dog nag pa` is
+    "black color", where the member `nag pa` (black) precedes `kha dog`
+    (color) in the English but follows it in the Tibetan. So when a `text`
+    is given -- the English -- the members of each parent are ordered by
+    their position in that text rather than by Tibetan order.
+    """
+    kids = {}
+    parent = None
+    for sp in spec_spans:
+        if sp["d"] == 7:
+            if parent is not None:
+                kids.setdefault(parent["id"], []).append(sp)
+        else:
+            parent = sp
+    out = []
+    for sp in flat:
+        out.append(sp)
+        ks = [k for k in kids.get(sp["id"], []) if k.get("eng") is not None]
+        if text is not None:
+            ks.sort(key=lambda k: text.find(k["eng"]))
+        out.extend(ks)
+    return out
 
 
 def resolve(text, spans, side, seq):
@@ -99,9 +192,9 @@ def resolve(text, spans, side, seq):
                     "elsewhere in the segment and silently mis-attaches. "
                     "Change %s to \"d\": 7."
                     % (seq, sp["id"], piece, sp["d"], prev5["tib"], sp["id"]))
-            i = text.find(piece, cur)
+            i = find_word(text, piece, cur, subword=sp.get("subword"))
             if i < 0:
-                later = text.find(piece)
+                later = find_word(text, piece, 0, subword=sp.get("subword"))
                 if later >= 0:
                     die("s%d %s span %r appears at offset %d but the cursor "
                         "is already at %d -- the spans are listed OUT OF "
@@ -195,7 +288,10 @@ def main():
             if unknown:
                 die("s%d eng_order names span(s) that do not exist: %s"
                     % (seq, ", ".join(unknown)))
-            need = {sp["id"] for sp in spans if sp.get("eng") is not None}
+            # depth-7 members are positioned by their PARENT, not by the
+            # flat order, so eng_order neither needs nor accepts them.
+            need = {sp["id"] for sp in spans
+                    if sp.get("eng") is not None and sp["d"] != 7}
             got = set(order)
             if need - got:
                 die("s%d eng_order omits span(s) that have English: %s. Every "
@@ -205,7 +301,7 @@ def main():
             if got - need:
                 die("s%d eng_order names span(s) with no English: %s"
                     % (seq, ", ".join(sorted(got - need))))
-            eng_spans = [by_id[i] for i in order]
+            eng_spans = with_members(spans, [by_id[i] for i in order], eng)
         else:
             # Derive the English order -- but ONLY where the derivation is
             # not a guess. If a span's English occurs more than once, or two
@@ -213,10 +309,15 @@ def main():
             # know the author's intent and refuses rather than picking. This
             # is the "shog also occurs inside tshogs" class of error, and it
             # is precisely where silent guessing does damage.
-            have = [sp for sp in spans if sp.get("eng") is not None]
+            # depth-7 members are re-inserted after their parent by
+            # with_members(); including them in the flat sort would place
+            # them twice and under the wrong parent.
+            have = [sp for sp in spans
+                    if sp.get("eng") is not None and sp["d"] != 7]
             pos = []
             for sp in have:
-                n = eng.count(sp["eng"])
+                n = (eng.count(sp["eng"]) if sp.get("subword")
+                     else count_word(eng, sp["eng"]))
                 if n == 0:
                     die("s%d eng span %r is NOT PRESENT in the spine text."
                         % (seq, sp["eng"]))
@@ -225,7 +326,7 @@ def main():
                         "cannot be derived without guessing which one span "
                         "%s means. Supply an explicit \"eng_order\"."
                         % (seq, sp["eng"], n, sp["id"]))
-                i = eng.find(sp["eng"])
+                i = find_word(eng, sp["eng"], 0, subword=sp.get("subword"))
                 pos.append((i, i + len(sp["eng"]), sp))
             # outermost first at a tie, so a compound precedes its members;
             # never let the tuple comparison fall through to the dicts.
@@ -244,7 +345,7 @@ def main():
                     "spans cannot own the same characters, and neither is a "
                     "depth-7 member of the other."
                     % (seq, A["id"], A["eng"], Bsp["id"], Bsp["eng"]))
-            eng_spans = [t[2] for t in pos]
+            eng_spans = with_members(spans, [t[2] for t in pos], eng)
         eng_html = emit(eng, eng_spans,
                         resolve(eng, eng_spans, "eng", seq), "eng")
 
