@@ -533,6 +533,10 @@ if(Python3_FOUND)
   add_test(NAME acip_recovery
            COMMAND ${Python3_EXECUTABLE}
                    ${CMAKE_SOURCE_DIR}/tools/test_acip_recovery.py)
+
+  add_test(NAME gen_alignment_page
+           COMMAND ${Python3_EXECUTABLE}
+                   ${CMAKE_SOURCE_DIR}/tools/test_gen_alignment_page.py)
 endif()
 
 # BUILD-7: the battery must say what it did NOT run. fixture_gate holds
