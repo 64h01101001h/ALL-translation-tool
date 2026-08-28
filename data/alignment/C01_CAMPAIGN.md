@@ -554,7 +554,7 @@ letter-exact battery gates every batch.
   (74's coinages reprised verbatim + self-referential "what we have
   called here"). khungs #4 "authentic source". Supplied transition
   sentence (filed with 115's). Self-quotes ×5 — densest cluster.
-| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p112 (144–373) done; 143, 259 & 324 = marker pairs; 374+ open; 123 segs / 41 batches remain; §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
+| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p113 (144–376) done; 143, 259 & 324 = marker pairs; 377+ open; 120 segs / 40 batches remain; §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
 
 NEXT: continue section VII (seq 146+) — the renunciation chapter.
 - seg 143: section-marker pair (like 43) — wylie carries "the first
@@ -2279,3 +2279,23 @@ TCS series and collections beyond, for later ruling). ***
 - QA: both sides letter-exact, 152 spans balanced, depth clean.
   Layer: **3,010 headwords** / 5,673 pairs — 3,000-headword
   milestone.
+
+### c1p113 — Only in name (374–376)
+- **374 — the triple negation**: rang ngos nas / rang bzhin gyis /
+  bden par + ma grub pa → "they do not exist from their own side…
+  naturally… truly" — three synonymous neganda in strict parallel,
+  each adverb-verb pair flipped. tshogs pa render #3 ("group of
+  parts"); tshur → "out there". Counterfactual arc: 1 period → 3
+  sentences, pivot "But that's not the way it is" supplied.
+- **375 — snang/zhen in plain English**: snang → "appears"; zhen pa →
+  "we take him to be" — the appearance/grasping pair. phar → "we on
+  our part" (directional as first-person-plural). rgan po →
+  "chieftain". dgag bya #7. dper na → "We can take".
+- **376 — only in name**: NAME-CONCEPT PAIR VARIES — sgra rtog (376)
+  vs ming brdas (364/365): Tibetan varies, English near-stable
+  ("label and concept"/"name and the concept"). tsam ×3 → "only" ×4;
+  tha snyad tsam du → "only in name" (tha snyad #3:
+  manner-of-speaking / conventional / in name). ngos nas → "on top
+  of" (new). Negation fronted again.
+- QA: both sides letter-exact, 173 spans balanced, depth clean.
+  Layer: 3,030 headwords / 5,714 pairs.
