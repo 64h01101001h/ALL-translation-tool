@@ -554,7 +554,7 @@ letter-exact battery gates every batch.
   (74's coinages reprised verbatim + self-referential "what we have
   called here"). khungs #4 "authentic source". Supplied transition
   sentence (filed with 115's). Self-quotes ×5 — densest cluster.
-| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p110 (144–367) done; 143, 259 & 324 = marker pairs; 368+ open; 129 segs / 43 batches remain; §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
+| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p111 (144–370) done; 143, 259 & 324 = marker pairs; 371+ open; 126 segs / 42 batches remain; §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
 
 NEXT: continue section VII (seq 146+) — the renunciation chapter.
 - seg 143: section-marker pair (like 43) — wylie carries "the first
@@ -2229,3 +2229,29 @@ TCS series and collections beyond, for later ruling). ***
   causes and conditions" ("proper" supplied).
 - QA: both sides letter-exact, 191 spans balanced, depth clean.
   Layer: 2,972 headwords / 5,593 pairs.
+
+### c1p111 — The three conditions (368–370)
+- **368 — this we call this**: chos de dang de zhes → '"This we call
+  this, and that we call that"' (formula as invented speech).
+  Negation fronted again (rdul phran tsam yang med → "There does not
+  exist…"); rdul phran vs 361 rdul tsam (both sides vary the
+  atom-word). WYLIE VARIANT QUEUE: ma bltos par (368) vs ma ltos par
+  (361). ma bltos par → "divorced of" (strongest
+  dependence-negative).
+- **369 — gold as brass**: ka ba la bum pa → "call a pillar a
+  'pitcher'" — the debate-yard classic; bum pa → "pitcher" (not
+  "vase") — key lexical ruling. gser la rag → "call gold 'brass'".
+  ENGLISH TYPO QUEUE #20: "nothing more that what we label it"
+  ("that" for "than"), kept verbatim. snyam na fronted across two
+  clauses (s369c12x).
+- **370 — THE THREE CONDITIONS**: the conventional-existence criteria
+  in GMR English — grags pa → "known to a conventional perception";
+  tha snyad pa'i tshad ma gzhan gyis mi gnod pa → "no other
+  conventional perception can contradict its existence"; don dam
+  dpyod byed kyi rigs pas mi gnod pa → "no ultimate analysis can
+  contradict its existence"; numerals supplied. tshad ma SPREAD #5:
+  "perception" (true teaching / reasonable / qualified / perception)
+  — the file's widest technical spread. gnod pa → "contradict"; tha
+  snyad spread #2 "conventional"; rigs pa → "analysis".
+- QA: both sides letter-exact, 170 spans balanced, depth clean.
+  Layer: 2,985 headwords / 5,637 pairs.
