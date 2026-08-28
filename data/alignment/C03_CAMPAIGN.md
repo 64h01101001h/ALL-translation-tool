@@ -28,6 +28,16 @@ When a segment's english field is phonetics, not translation:
    phonetic stretches at d=7, translated stretches at d=5, each
    under its own clause with honest labels.
 
+## ⚠ PENDING RULING (Adam, 2026-08-28) — read before the next batch
+The equivalents must be keyed on **ACIP**, not the derived Wylie. See
+TODO.md ★★★ item A. Verified: the spine's `acip` column is the source of
+record; `acip_to_ewts(acip)` == stored `wylie` on 8,961/8,961 segments of
+C01–C18, so nothing shipped is wrong — it is keyed in the wrong
+transliteration. Fix is additive (emit both forms; ACIP as join key). A
+full **Fable re-audit of C01–C18** is also mandated (item B). Every batch
+entry from here records its producing model; everything through C03 batch
+32 was Fable.
+
 ## Progress
 c3p1–c3p32 (1–96) done; 97+ open; 524 segs remain.
 
