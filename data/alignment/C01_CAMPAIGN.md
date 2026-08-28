@@ -554,7 +554,7 @@ letter-exact battery gates every batch.
   (74's coinages reprised verbatim + self-referential "what we have
   called here"). khungs #4 "authentic source". Supplied transition
   sentence (filed with 115's). Self-quotes ×5 — densest cluster.
-| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p148 (144–481) done; 143, 259, 324, 427 & 446 = marker pairs; 482+ open; 15 segs / 5 batches remain; §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
+| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p149 (144–484) done; 143, 259, 324, 427, 446 & 483 = marker pairs; 485+ open; 12 segs / 4 batches remain; §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
 
 NEXT: continue section VII (seq 146+) — the renunciation chapter.
 - seg 143: section-marker pair (like 43) — wylie carries "the first
@@ -3072,3 +3072,21 @@ TCS series and collections beyond, for later ruling). ***
   kindness defies repayment"; bsgrigs crossed to head.
 - QA: both sides letter-exact, 170 spans balanced, depth clean.
   Layer: 3,745 headwords / **7,008 pairs** — 7,000-pair milestone.
+
+### Batch 149 (c1p149, C01:482–484) — 2026-08-28
+- 482: the benediction — 'gro don 'phel (three syllables) → "May it
+  help all living beings!"; 'phel ("increase") as "help"; exclamation
+  supplied; wylie tail ", , ," (triple shad) kept verbatim. The
+  compiler's last word before the appendix.
+- 483: MARKER SEGMENT — the SIXTH (143, 259, 324, 427, 446, 483):
+  wylie = "a secret key"; English = XXII section header ("A Secret Key
+  to the Three Principal Paths"). NOTE: English numbering runs XX (446)
+  → XXII (483) — no XXI observed in the corpus stream; recorded
+  as-is, not judged.
+- 484: THE GUNGTANG APPENDIX OPENS (fn 204): gsang ba'i lde mig →
+  '"Secret Key"' (lde mig = key); zin bris → "notes" (481
+  consistency); lam gtso → "the Three Principal Paths"; "composed by
+  Gungtang" SUPPLIED from the note apparatus — the attribution is not
+  in this wylie fragment. WYLIE QUEUE: stray leading backtick (`) at
+  segment start, kept verbatim.
+- Layer: 3,747 headwords / 7,014 pairs.
