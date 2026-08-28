@@ -554,7 +554,7 @@ letter-exact battery gates every batch.
   (74's coinages reprised verbatim + self-referential "what we have
   called here"). khungs #4 "authentic source". Supplied transition
   sentence (filed with 115's). Self-quotes ×5 — densest cluster.
-| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p149 (144–484) done; 143, 259, 324, 427, 446 & 483 = marker pairs; 485+ open; 12 segs / 4 batches remain; §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
+| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p150 (144–487) done; 143, 259, 324, 427, 446 & 483 = marker pairs; 488+ open; 9 segs / 3 batches remain; §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
 
 NEXT: continue section VII (seq 146+) — the renunciation chapter.
 - seg 143: section-marker pair (like 43) — wylie carries "the first
@@ -3090,3 +3090,23 @@ TCS series and collections beyond, for later ruling). ***
   in this wylie fragment. WYLIE QUEUE: stray leading backtick (`) at
   segment start, kept verbatim.
 - Layer: 3,747 headwords / 7,014 pairs.
+
+### Batch 150 (c1p150, C01:485–487) — 2026-08-28
+- Gungtang's notes proper begin (the appendix body).
+- 485: mchod brjod → 'the "offering of praise' (comma-inside-quote
+  trap again, avoided); bshes gnyen bsten tshul → "proper reliance on
+  a spiritual teacher" = the ROOT (rtsa ba); sbyor ba'i chos drug →
+  "the six preliminaries"; bstan relocated to mid-sentence; opening
+  attribution SUPPLIED (fn 205).
+- 486: zin pa ATTESTATION #6 — gcig gis gcig zin dgos pa → "each one
+  must be suffused with the other two" (bound/filled/steeped/filled/
+  offer-completed/SUFFUSED). rgyal ba → "Victors" (388 consistency);
+  theg chen → "the greater way". Clause e3 FULL REVERSAL
+  (w16-w17-w18 → w18-w17-w16). English merges Tibetan clauses 1+2
+  (cid s486c12). dang po'i dropped — renunciation IS the first path.
+- 487: dal 'byor ATTESTATION #4 — "this precious life of
+  opportunity"; mi rtag pa → "our approaching death" (rendered by its
+  POINT, not its letter); phyi bshol → "put our practice off for
+  another day"; bslus pas → "cheated of the chance"; gsungs
+  supplied-subject (Lord Tsongkapa) + "in the root text" supplied.
+- Layer: 3,767 headwords / 7,045 pairs.
