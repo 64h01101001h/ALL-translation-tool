@@ -554,7 +554,7 @@ letter-exact battery gates every batch.
   (74's coinages reprised verbatim + self-referential "what we have
   called here"). khungs #4 "authentic source". Supplied transition
   sentence (filed with 115's). Self-quotes ×5 — densest cluster.
-| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p128 (144–421) done; 143, 259 & 324 = marker pairs; 422+ open; 75 segs / 25 batches remain; §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
+| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p129 (144–424) done; 143, 259 & 324 = marker pairs; 425+ open; 72 segs / 24 batches remain; §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
 
 NEXT: continue section VII (seq 146+) — the renunciation chapter.
 - seg 143: section-marker pair (like 43) — wylie carries "the first
@@ -2651,3 +2651,22 @@ TCS series and collections beyond, for later ruling). ***
   "stated"). dpal ldan zla ba consistent with 379.
 - QA: both sides letter-exact, 154 spans balanced, depth clean.
   Layer: 3,333 headwords / 6,321 pairs.
+
+### c1p129 — Form is emptiness (422–424)
+- **422 — the recap trio**: one Tibetan clause → three parallel
+  "we've shown/given/demonstrated" clauses. rtags → "as our reason"
+  (spread #3: logical statement / indication / reason). rtsa she →
+  "Root Wisdom" (stable).
+- **423 — MMK (fn 170)**: gang la stong pa nyid rung ba / de la
+  thams cad rung bar 'gyur → "Everything is right for any thing /
+  For which the state of emptiness is right" — rung ba → "is right";
+  LINES SWAPPED (rotation 2-1 — the FOURTH distinct verse treatment:
+  4-1-2-3 / 4-3-1-2 / in-order / 2-1). gang la…de la → single
+  English relative.
+- **424 — THE HEART SUTRA (fn 171)**: gzugs stong pa'o / stong pa
+  nyid gzugs so → "Form is emptiness, Emptiness form" — the second
+  copula GAPPED, tightening the chiasmus on the tradition's most
+  famous line. mdo → "the well-known sutra" ("well-known" supplied —
+  fame signalled without naming). zhes sogs → "lines".
+- QA: both sides letter-exact, 74 spans balanced, depth clean.
+  Layer: 3,341 headwords / 6,338 pairs.
