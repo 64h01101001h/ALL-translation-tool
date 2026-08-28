@@ -554,7 +554,7 @@ letter-exact battery gates every batch.
   (74's coinages reprised verbatim + self-referential "what we have
   called here"). khungs #4 "authentic source". Supplied transition
   sentence (filed with 115's). Self-quotes ×5 — densest cluster.
-| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p69 (144–244) done; 143 = marker pair; 245+ open; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
+| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p70 (144–247) done; 143 = marker pair; 248+ open; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
 
 NEXT: continue section VII (seq 146+) — the renunciation chapter.
 - seg 143: section-marker pair (like 43) — wylie carries "the first
@@ -1295,3 +1295,25 @@ TCS series and collections beyond, for later ruling). ***
   "seems like pleasure" repeated per English sentence (tib-once/
   eng-repeats). snang = "seems" (appearance sense). Segment ends
   on concessive yang — argument continues into 245.
+
+### c1p70 — C01:245–247 (batch 70) — the pot, the needles, the escape
+- Eighteenth consecutive zero-catch batch.
+  *** LAYER CROSSED 4,000 PAIRS (2,182 headwords / 4,012). ***
+- seg 245: rang mtshan pa / ngo bo nyid doublet split → "by
+  nature" / "in its very essence". rtags (the logical SIGN) →
+  "When this happens we can understand that" — inference operator
+  domesticated (joins khyab). 1 Tibetan sentence → 5 English
+  (stepwise reductio staging).
+- seg 246: SAME TERM, TWO RENDERS — khyab pa 'du byed kyi sdug
+  bsngal → "'pervasive suffering, which brings in more'" (246) vs
+  "ever-present suffering of instant-by-instant aging" (238) —
+  'du byed read differently each time; prime spread entry. nyer
+  len gyi phung po → "the impure parts of our being (taken on)"
+  (endnote 82 corroborates). 'dren byed kyi snod → "a big pot,
+  sucking in..." MODERNIZATION: tsher ma (thorns) → "upright
+  needles" (joins copper→steel). Term-first restructure.
+- seg 247: THE ANATMAN FORMULA — bdag med rtogs pa'i shes rab →
+  "the wisdom that realizes that nothing has a self-nature"
+  (signature render, first in file). 'khor ba DEFINED by referent
+  (rgyun nam cha → appositive doubling). lung pa (valley) →
+  "country". rtsa ba nas rgyun bcad → "stopped at its root".
