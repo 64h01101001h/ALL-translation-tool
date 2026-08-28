@@ -76,7 +76,7 @@ entry from here records its producing model; everything through C03 batch
 32 was Fable.
 
 ## Progress
-c3p1–c3p49 (1–147) done; 148+ open; 473 segs remain.
+c3p1–c3p50 (1–150) done; 151+ open; 470 segs remain. **50 pages.**
 
 ## Queues (wylie / english / PHONETICS), C03
 - WYLIE: ACIP anusvara capitals dM/kM/ND + ni'a oddity (seg 6).
@@ -892,3 +892,28 @@ has predicted nothing.
   "those whom you may be debating", a technical term rendered as a
   situation.
 - Evidence layer: 4,216 headwords / 7,716 pairs.
+
+### Batch C03-50 (c3p50, C03:148–150) — 2026-08-28 — model: Opus
+### FIFTIETH PAGE OF C03
+- 148: dang ba (clear faith) → "deep feelings of faith" — the same
+  word is "and purely" in the C01 prostration verse (C01:31, dang
+  bas). An adverb of manner there, a noun phrase of emotion here.
+  The Tibetan conditional (mthong na, "if others see") generalises
+  to "Whenever".
+- 149: **nyan thos TWO WAYS IN ONE COURSE.** "the disciples" in
+  running prose here, but capital-L "Listeners" inside the title
+  "the Levels of Listeners" (nyan thos kyi sa — four holdings). The
+  title form is frozen, the prose form is not. A clean example of
+  genre governing rendering rather than meaning.
+  gsungs so → "states the text" — the supplied subject naming a
+  SOURCE, where C01 usually supplied a person ("our Lama", "Lord
+  Tsongkapa").
+  ENGLISH QUEUE #11 "cross- legged" recurs (2nd, with 144).
+- 150: rmugs pa dang gnyid → "mental fogginess and sleepiness";
+  C03:27 gave the same pair REVERSED as "sleepiness and fogginess",
+  with "mental" added here. A SECOND paired-term inversion, after
+  segment 140's mi mtho / mi dma'. Two instances make this a
+  recurring shape rather than a one-off — and one the letter-exact
+  battery is structurally blind to. Worth a word-order check in the
+  re-audit design.
+- Evidence layer: 4,231 headwords / 7,735 pairs.
