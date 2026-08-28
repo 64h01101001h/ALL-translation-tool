@@ -116,7 +116,7 @@ COURSES = {
     "C03": {
         "dir": os.path.join(OUTDIR, "pages_c03"),
         "pages": {
-            "c3p1": [1, 2, 3],
+            "c3p1": [1, 2, 3], "c3p2": [4, 5, 6],
         },
     },
 }
