@@ -76,7 +76,7 @@ entry from here records its producing model; everything through C03 batch
 32 was Fable.
 
 ## Progress
-c3p1–c3p43 (1–129) done; 130+ open; 491 segs remain.
+c3p1–c3p44 (1–132) done; 133+ open; 488 segs remain.
 
 ## Queues (wylie / english / PHONETICS), C03
 - WYLIE: ACIP anusvara capitals dM/kM/ND + ni'a oddity (seg 6).
@@ -733,3 +733,28 @@ stack trace.
   holding 115 more — 151 total, of which a bare lookup surfaces 36.
   Data complete; retrieval path missing.
 - Evidence layer: 4,125 headwords / 7,599 pairs.
+
+### Batch C03-44 (c3p44, C03:130–132) — 2026-08-28 — model: Opus
+- 130: lam sgron → "A Lamp for the Path" (Atisha) — a FOURTH Indian
+  title calqued, never transliterated, with the Jewel of the Sutras,
+  the Levels of Listeners and the Commentary of the True Thought.
+  The naming policy is now well attested across four titles.
+  Inside the verse zhi gnas yan lag → "the parts of QUIET", not
+  "quietude". ting 'dzin (contracted) → "this deep concentration".
+- 131: **GMR PRINTS BOTH RENDERINGS HIMSELF**: 'quietude ("quiet")'.
+  Having used "quiet" in the verse he just quoted and "quietude" in
+  his own prose, he reconciles them on the spot by printing one and
+  parenthesising the other. The author doing explicitly what this
+  layer does structurally — holding two renderings together rather
+  than choosing between them. The single best piece of evidence yet
+  for Adam's preserve-every-rendering ruling: it is GMR's own
+  practice, not an artifact of machine matching.
+  yan lag gam tshogs → 'the various "parts" or conditions' — tshogs
+  in its "conditions" sense a third time. zhi lhag (contraction of
+  zhi gnas + lhag mthong) → "quietude and special sight", named by
+  abbreviation in Tibetan, spelled out in English. nyan sa
+  (contracted) → "the Levels of Listeners", third holding.
+- 132: sbyor ba / dngos gzhi → "the preparation" / "the actual
+  meditation". de la brten nas → "once one has assembled all the
+  proper circumstances" — the pronoun unpacked into its referent.
+- Evidence layer: 4,138 headwords / 7,621 pairs.
