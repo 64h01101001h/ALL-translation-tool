@@ -51,10 +51,10 @@ COURSES = {
         # nothing could catch it because the gates only ever checked
         # the segments a page CITES. Completeness is now a claim the
         # builder proves or refuses.
-        "complete": False,
+        "complete": True,    # LOCKED 2026-08-28: gate-proved 68/68
         "dir": os.path.join(OUTDIR, "pages"),
         "pages": {
-            "c2L1": [1, 2, 3], "c2L2": [4, 5, 6], "c2L3": [7, 8, 9], "c2L4": [10, 11, 12], "c2L5": [13, 14, 15], "c2L6": [16, 17, 18], "p01": [23], "p02": [24, 25], "p03": [26, 27, 28, 29, 30],
+            "c2L1": [1, 2, 3], "c2L2": [4, 5, 6], "c2L3": [7, 8, 9], "c2L4": [10, 11, 12], "c2L5": [13, 14, 15], "c2L6": [16, 17, 18], "c2L7": [19, 20, 21, 22], "p01": [23], "p02": [24, 25], "p03": [26, 27, 28, 29, 30],
             "p04": [31, 32, 33, 34], "p05": [35, 36, 37],
             "p06": [38, 39, 40], "p07": [41, 42, 43, 44, 45],
             "p08": [46], "p09": [47, 48, 49], "p10": [50, 51, 52],
