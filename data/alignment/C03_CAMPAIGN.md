@@ -29,7 +29,7 @@ When a segment's english field is phonetics, not translation:
    under its own clause with honest labels.
 
 ## Progress
-c3p1–c3p4 (1–12) done; 13+ open; 608 segs remain.
+c3p1–c3p5 (1–15) done; 16+ open; 605 segs remain.
 
 ## Queues (wylie / english), C03
 - (open)
@@ -88,3 +88,14 @@ c3p1–c3p4 (1–12) done; 13+ open; 608 segs remain.
   liturgical pattern).
 - 12: bsngo ba ↔ "ngowa" (bsng-→ng; intervocalic b→w).
 - Evidence layer 3,845/7,167 unchanged; full bank +17.
+
+### Batch C03-5 (c3p5, C03:13–15) — 2026-08-28
+- 13: dge ba ↔ "gewa", skye bo ↔ "kyewo" (intervocalic b→w both);
+  'di yis ↔ "diyi".
+- 14: FIRST HYPHENATED PHONETIC — tshogs rdzogs ↔ "tsok-dzok"
+  (GMR hyphenates a closed-syllable junction; two d=7 units);
+  rdz-→dz.
+- 15: las byung ↔ "lejung" (a-umlaut-as-e #2); ba'i ↔ "way"
+  (b→w + -ay). Lines 14/15 share "sunam yeshe" — the two
+  collections as verse anaphora.
+- Evidence layer 3,845/7,167 unchanged; full bank +19.
