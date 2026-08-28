@@ -1,3 +1,12 @@
+# ✅ WORK ORDER 2026-08-28 — BACKFILL DONE, C03 RESUMES AT 115
+
+The coverage backfill Adam ordered is COMPLETE. C01 closed at 496/496
+and C02 at 68/68, both `"complete": True` and both gate-proved; the
+gate was liveness-tested on each. C03 resumes at segment 115 with 506
+open, and is the only course still carrying a coverage gap.
+
+Original work order, kept for the record:
+
 # ⛔ WORK ORDER 2026-08-28 — BACKFILL BEFORE NEW C03 SEGMENTS
 
 Adam's ruling: this scan is intended as the MAIN Geshe Michael dictionary,
