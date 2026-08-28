@@ -554,7 +554,7 @@ letter-exact battery gates every batch.
   (74's coinages reprised verbatim + self-referential "what we have
   called here"). khungs #4 "authentic source". Supplied transition
   sentence (filed with 115's). Self-quotes ×5 — densest cluster.
-| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p129 (144–424) done; 143, 259 & 324 = marker pairs; 425+ open; 72 segs / 24 batches remain; §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
+| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p130 (144–427) done; 143, 259, 324 & 427 = marker pairs; 428+ open; 69 segs / 23 batches remain; §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
 
 NEXT: continue section VII (seq 146+) — the renunciation chapter.
 - seg 143: section-marker pair (like 43) — wylie carries "the first
@@ -2670,3 +2670,23 @@ TCS series and collections beyond, for later ruling). ***
   fame signalled without naming). zhes sogs → "lines".
 - QA: both sides letter-exact, 74 spans balanced, depth clean.
   Layer: 3,341 headwords / 6,338 pairs.
+
+### c1p130 — I am emptiness (425–427)
+- **425 — the substitution exercise**: nga stong pa'o / stong pa nyid
+  nga'o → "I am emptiness, Emptiness me" — the Heart Sutra pattern
+  re-run on the self, English keeping 424's gapped-copula chiasmus
+  EXACTLY parallel. WYLIE TYPO CANDIDATE: "go bad bde bar" (probable
+  extra d; go ba bde bar "easy to understand") — kept verbatim,
+  queued.
+- **426 — in short**: SEGMENTATION ARTIFACT: 426's wylie begins
+  "'dugmdor" — 425's final verb 'dug fused to mdor at the segment
+  boundary (English rendered the 'dug within 425). Kept verbatim;
+  segmentation queue. gol sa → "blunders"; gsungs → "concluded our
+  Lama" #6 (crossed to head); 'thad #4 "totally proper". Section
+  XVIII closes.
+- **427 — MARKER SEGMENT** (the FOURTH: 143, 259, 324, 427): wylie
+  field = the English word "practice" (corpus part-title, not
+  Tibetan); English = section XIX header ("Put Into Practice What
+  You Have Learned"). Verbatim, honest labels, no lexical pairs.
+- QA: both sides letter-exact, 88 spans balanced, depth clean.
+  Layer: 3,348 headwords / 6,357 pairs.
