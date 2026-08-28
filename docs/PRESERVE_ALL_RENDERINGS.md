@@ -17,12 +17,17 @@ multiplicity is the point, not noise to be resolved.
 
 | | |
 |---|---|
-| headwords | 4,095 |
-| with a single rendering | 2,857 |
-| **with multiple renderings** | **1,238 (30.2%)** |
-| **total distinct renderings held** | **7,558** |
-| headwords with >4 renderings | 286 |
-| deepest | `chos` — **36 renderings** |
+| | at the ruling (2026-08-28) | now |
+|---|---|---|
+| headwords | 4,095 | **4,400** |
+| with multiple renderings | 1,238 (30.2%) | **1,290 (29.3%)** |
+| total distinct renderings held | 7,558 | **8,006** |
+| headwords with >4 renderings | 286 | **292** |
+| deepest | `chos` — 36 | `chos` — **36** |
+
+Next deepest: `byang chub kyi sems` 24 · `'khor ba` 23 · `gsungs` 22 ·
+`skye ba` 21 · `sogs` 21 · `sdug bsngal` 20 · `don` 19 · `gzhan` 19 ·
+`lam rim` 19 · `las 'bras` 19.
 
 `chos` alone spans "spiritual practice" (12×), "practice" (11×), "dharma"
 (6×), "religion" (3×), "the teaching" (3×), "Dharma" (2×), "objects" (2×)
@@ -36,7 +41,13 @@ collapses: renderings accumulate per headword and are written out in full.
 
 **1. The entry card truncates at four.** `app/main.cpp:1378` —
 `if (shown >= 4) break;` — then prints "…and N more attested pairings".
-That affects **286 headwords** and puts **1,047 renderings** out of reach.
+That affects **292 headwords** and puts **1,200 renderings** out of reach —
+and the number GROWS with every batch, because the deepest headwords are the
+commonest words and every new page adds to them. It was 1,047 when the ruling
+was made and is 1,200 now, after five batches.
+
+67% of the capped headwords are multi-word keys (`byang chub kyi sems`,
+`las 'bras`), which is the second gap below compounding the first.
 For `chos` the translator sees four and is told there are 32 more, with no
 way to see them. The line is dead text, not a link.
 
