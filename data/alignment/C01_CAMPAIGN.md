@@ -554,7 +554,7 @@ letter-exact battery gates every batch.
   (74's coinages reprised verbatim + self-referential "what we have
   called here"). khungs #4 "authentic source". Supplied transition
   sentence (filed with 115's). Self-quotes ×5 — densest cluster.
-| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p74 (144–259) done; 143 & 259 = marker pairs; 260+ open; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
+| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p75 (144–262) done; 143 & 259 = marker pairs; 263+ open; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
 
 NEXT: continue section VII (seq 146+) — the renunciation chapter.
 - seg 143: section-marker pair (like 43) — wylie carries "the first
@@ -1414,3 +1414,22 @@ TCS series and collections beyond, for later ruling). ***
   enlightenment for every living being") vs header "XI. Why You
   Need the Wish for Enlightenment". The renunciation part of the
   course is COMPLETE; the second principal path opens.
+
+### c1p75 — C01:260–262 (batch 75) — root verse 6; the second path
+- Twenty-third consecutive zero-catch batch. Layer: 2,232
+  headwords / 4,155 pairs.
+- seg 260: DEEPEST OUTLINE EXPANSION yet — 15 syllables → 4
+  English sentences, with the four-part position and the topic
+  sentence supplied from global structure. The rgyu-mtshan/tshul/
+  tshad triple repeats renunciation's architecture with the same
+  renders. p1–p3 phrase-marked.
+- seg 261 (root verse 6): LINE REORDER (unless-clause moves lines
+  1–2 → 3). bla med → "matchless"; zin pa → "bound by"; bskyed →
+  "seek". "(6)" supplied, frame dropped.
+- seg 262: nyan rang UNPACKED TO BOTH CALQUES — "listeners"
+  (shravaka) + "self-made victors" (pratyekabuddha) with category
+  gloss + coinage two-step (fn 126). thar pa spread: "freedom"
+  (195/250) vs "an ordinary nirvana" (262; endnote 83
+  corroborates). thams cad mkhyen pa noun/epithet split
+  ("omniscient enlightenment" vs "all-knowing Lord"). typo #16
+  third attestation ("practicioners"). kyang migrates again.
