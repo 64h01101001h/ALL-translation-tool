@@ -29,7 +29,7 @@ When a segment's english field is phonetics, not translation:
    under its own clause with honest labels.
 
 ## Progress
-c3p1–c3p21 (1–63) done; 64+ open; 557 segs remain.
+c3p1–c3p22 (1–66) done; 67+ open; 554 segs remain.
 
 ## Queues (wylie / english / PHONETICS), C03
 - WYLIE: ACIP anusvara capitals dM/kM/ND + ni'a oddity (seg 6).
@@ -322,4 +322,14 @@ c3p1–c3p21 (1–63) done; 64+ open; 557 segs remain.
   iconography; stanza rotates 59-60-62-61; gyechir (phy-→ch holds).
 - 63: TWO ö-as-u in one line — khyon → "kyun" (#6), blo gros →
   "lodru" (#7); jelway.
+- Evidence layer unchanged: 4,039 / 7,481.
+
+### Batch C03-22 (c3p22, C03:64–66) — 2026-08-28
+- 64: kelsang/lekshe (umlauts); gyengyur; naway.
+- 65: lham mer → "hlammer" — lh→hl + CROSS-COURSE token (C01:472
+  queued "lham"); pelgyi (case -s drops).
+- 66: umlaut cascade (tongtu #8, dunden #9, drenpe, chaktsel).
+  FIRST IN-ORDER STANZA (63-64-65-66, the thugs/gsung/sku triple).
+  lham mer → TRIPLE anaphora ("Shines forth/with brightness/with a
+  glory"); mthong thos dran pas → "Just to see/hear/think of You".
 - Evidence layer unchanged: 4,039 / 7,481.
