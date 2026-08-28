@@ -554,7 +554,7 @@ letter-exact battery gates every batch.
   (74's coinages reprised verbatim + self-referential "what we have
   called here"). khungs #4 "authentic source". Supplied transition
   sentence (filed with 115's). Self-quotes ×5 — densest cluster.
-| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p111 (144–370) done; 143, 259 & 324 = marker pairs; 371+ open; 126 segs / 42 batches remain; §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
+| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p112 (144–373) done; 143, 259 & 324 = marker pairs; 374+ open; 123 segs / 41 batches remain; §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
 
 NEXT: continue section VII (seq 146+) — the renunciation chapter.
 - seg 143: section-marker pair (like 43) — wylie carries "the first
@@ -2255,3 +2255,27 @@ TCS series and collections beyond, for later ruling). ***
   snyad spread #2 "conventional"; rigs pa → "analysis".
 - QA: both sides letter-exact, 170 spans balanced, depth clean.
   Layer: 2,985 headwords / 5,637 pairs.
+
+### c1p112 — Scarecrows and rabbit horns (371–373)
+- **371 — the scarecrow**: tho yor → "scarecrow" — condition (ii)
+  dramatized: two speeches ("That's a man over there" / "It's just a
+  scarecrow"), gtan yal du 'gro → "then vanishes". rtags spread #2:
+  "an indication" (362 "a logical statement"), fronted from
+  Tibetan-final. SAYS-BEFORE-QUOTE both times (Tibetan
+  quote-then-verb). 1 tib sentence → 5 eng (story-telling
+  expansion).
+- **372 — rabbit horns**: ri bong la rva → '"Rabbits have horns"' —
+  the canonical non-existent; der grub tu med → "that's not going to
+  make the horns exist". der ma zad → "That's not all"
+  (segment-initial ma-zad). blo → "state of mind"; tshad ma ×3 all
+  "reasonable". phar btags → "giving out all sorts of names"
+  (freest render of the labeling verb).
+- **373 — the unsuitable governor**: BLUNT REGISTER PRESERVED — mo
+  rang ma'i bu ("son of an unmarried woman") → "bastard kid"; glen
+  lkugs → "deaf-mute" — the file's bluntest passage, GMR does not
+  soften (register note). 'os pa #3: "suitable" (worthy 364 / fit
+  366 / suitable 373). Negation splits (mi bsko → "We
+  don't…appoint").
+- QA: both sides letter-exact, 152 spans balanced, depth clean.
+  Layer: **3,010 headwords** / 5,673 pairs — 3,000-headword
+  milestone.
