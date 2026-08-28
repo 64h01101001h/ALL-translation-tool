@@ -26,7 +26,18 @@ SPAN = re.compile(r'<span class="u[^"]*" data-d="\d" data-l="(s\d+\w+)"[^>]*>'
 # negative, so the positive stem is spanned separately and sits inside a
 # larger word on purpose. Keyed by the span text, which is what makes it
 # recognisable; adding to this list is a deliberate act.
-ALLOWED_SUBWORD = {"n't", "necessary", "sufficient", "changing", "not"}
+# The list has two halves. The STEM half is spanned when the Tibetan
+# negation owns the English negative affix: "necessary" out of
+# "unnecessary", "changing" out of "unchanging". The NEGATIVE half is the
+# affix itself, spanned when the Tibetan negation is a compound member:
+# C03:209 has `mi nus` -> "unable" with the member `mi` -> "un".
+# Both are the same convention seen from opposite ends.
+ALLOWED_SUBWORD = {
+    # stem half — the positive word, negation lives elsewhere
+    "n't", "necessary", "sufficient", "changing", "not",
+    # negative half — the affix itself, owned by mi / ma
+    "un",
+}
 
 
 def eng_blocks(page):

@@ -137,9 +137,16 @@ def with_members(spec_spans, flat, text=None):
     for sp in flat:
         out.append(sp)
         ks = [k for k in kids.get(sp["id"], []) if k.get("eng") is not None]
-        if text is not None:
-            ks.sort(key=lambda k: text.find(k["eng"]))
-        out.extend(ks)
+        if text is not None and sp.get("eng"):
+            # Sort members by where they sit INSIDE THE PARENT, not by their
+            # first occurrence in the whole segment. C03:207 has the parent
+            # "fourth state" with members "fourth" and "state" -- and "state"
+            # also occurs in "fifth state" 90 characters earlier, so a global
+            # find sorted the members backwards and the nesting cursor then
+            # refused the page.
+            out.extend(sorted(ks, key=lambda k: sp["eng"].find(k["eng"])))
+        else:
+            out.extend(ks)
     return out
 
 
@@ -168,7 +175,21 @@ def resolve(text, spans, side, seq):
                 die("s%d %s span %s is depth 7 but no depth-5 compound "
                     "precedes it to nest inside." % (seq, side, sp["id"]))
             lo, hi = parent
-            i = text.find(piece, ranges.get("_inner", lo), hi)
+            # A member that occurs MORE THAN ONCE inside its parent cannot
+            # be placed without guessing. C03:186 has the parent 'phror
+            # with a member "r" -- the terminative suffix -- and the search
+            # took the FIRST r, rendering 'ph<r>or and cutting the syllable
+            # in two on a shipped page. Members are exempt from the
+            # word-boundary rule (a member IS a sub-part), so nothing else
+            # catches this.
+            inner = ranges.get("_inner", lo)
+            if text.count(piece, lo, hi) > 1 and side == "tib":
+                die("s%d member %s (%r) occurs %d times inside its parent "
+                    "%r; which one it means is not determinable. Split the "
+                    "parent differently, or drop the member."
+                    % (seq, sp["id"], piece, text.count(piece, lo, hi),
+                       text[lo:hi]))
+            i = text.find(piece, inner, hi)
             if i < 0:
                 die("s%d %s member %r (%s) is not inside its compound %r. A "
                     "depth-7 span must be a member of the depth-5 span above "
@@ -314,20 +335,47 @@ def main():
             # them twice and under the wrong parent.
             have = [sp for sp in spans
                     if sp.get("eng") is not None and sp["d"] != 7]
-            pos = []
+
+            # EQUAL COUNTS IN ORDER ARE A DETERMINATION, NOT A GUESS.
+            # C03:209 has `bying rgod` six times in the Tibetan and
+            # "dullness and agitation" six times in the English. Refusing
+            # that as ambiguous would throw away six correct links. When k
+            # spans share one English string and that string occurs exactly
+            # k times, the i-th span in Tibetan order takes the i-th
+            # occurrence. Any other count IS ambiguous and still refuses.
+            groups = {}
             for sp in have:
-                n = (eng.count(sp["eng"]) if sp.get("subword")
-                     else count_word(eng, sp["eng"]))
-                if n == 0:
+                groups.setdefault(sp["eng"], []).append(sp)
+            slot = {}
+            for text_, members in groups.items():
+                hits, i = [], 0
+                while True:
+                    i = find_word(eng, text_, i,
+                                  subword=members[0].get("subword"))
+                    if i < 0:
+                        break
+                    hits.append(i)
+                    i += 1
+                if not hits:
                     die("s%d eng span %r is NOT PRESENT in the spine text."
-                        % (seq, sp["eng"]))
-                if n > 1:
-                    die("s%d eng span %r occurs %d times; the English order "
-                        "cannot be derived without guessing which one span "
-                        "%s means. Supply an explicit \"eng_order\"."
-                        % (seq, sp["eng"], n, sp["id"]))
-                i = find_word(eng, sp["eng"], 0, subword=sp.get("subword"))
-                pos.append((i, i + len(sp["eng"]), sp))
+                        % (seq, text_))
+                if len(hits) != len(members):
+                    if len(members) == 1 and len(hits) > 1:
+                        die("s%d eng span %r occurs %d times but only one "
+                            "span claims it; the English order cannot be "
+                            "derived without guessing which one span %s "
+                            "means. Supply an explicit \"eng_order\", or "
+                            "null the span."
+                            % (seq, text_, len(hits), members[0]["id"]))
+                    die("s%d: %d spans claim the English %r but it occurs "
+                        "%d times. Equal counts would be determinable; "
+                        "unequal counts are not."
+                        % (seq, len(members), text_, len(hits)))
+                for sp, at in zip(members, hits):
+                    slot[sp["id"]] = at
+
+            pos = [(slot[sp["id"]], slot[sp["id"]] + len(sp["eng"]), sp)
+                   for sp in have]
             # outermost first at a tie, so a compound precedes its members;
             # never let the tuple comparison fall through to the dicts.
             pos.sort(key=lambda t: (t[0], -(t[1] - t[0]), t[2]["id"]))
@@ -336,7 +384,6 @@ def main():
                 b0, b1, Bsp = pos[k]
                 if b0 >= a1:
                     continue
-                # a depth-7 member legitimately sits inside its compound
                 if Bsp["d"] == 7 and b0 >= a0 and b1 <= a1:
                     continue
                 if A["d"] == 7 and a0 >= b0 and a1 <= b1:

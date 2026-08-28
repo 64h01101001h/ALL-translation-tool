@@ -277,6 +277,60 @@ expect_refusal("an undeclared sub-word span still refuses",
                    "eng": "one-pointed"}]}]},
     "NOT PRESENT")
 
+# 21. EQUAL COUNTS ARE A DETERMINATION, NOT A GUESS. C03:209 has `bying
+#     rgod` six times in the Tibetan and "dullness and agitation" six times
+#     in the English. Refusing that as ambiguous throws away six correct
+#     links; the i-th span takes the i-th occurrence.
+#     MUTATION: drop the equal-count branch -> this pin fails.
+rc, out, err = run({"course": "C03", "segments": [{"seq": 206, "title": "t",
+    "spans": [{"id": "w1", "d": 5, "tib": "bying rgod",
+               "eng": "dullness and agitation"},
+              {"id": "w2", "d": 5, "tib": "bying rgod",
+               "eng": "dullness and agitation"}]}]})
+if rc != 0:
+    fails.append("equal counts refused: %s" % err.strip()[:220])
+elif out.count('data-l="s206w1"') != 2 or out.count('data-l="s206w2"') != 2:
+    fails.append("equal counts: both spans should appear on both sides")
+else:
+    print("  ok   equal Tibetan/English counts resolve in order")
+
+# 22. UNEQUAL counts still refuse -- one span claiming an English string
+#     that occurs twice is genuinely undeterminable.
+expect_refusal("unequal counts still refuse",
+    {"course": "C03", "segments": [{"seq": 206, "title": "t",
+        "spans": [{"id": "w1", "d": 5, "tib": "bying rgod",
+                   "eng": "dullness and agitation"}]}]},
+    "without guessing")
+
+# 23. Members sort by position INSIDE THE PARENT, not globally. C03:207 has
+#     the parent "fourth state" with members "fourth" and "state", and
+#     "state" also occurs in "fifth state" 90 characters earlier. A global
+#     sort orders the members backwards and the nesting cursor refuses.
+#     MUTATION: sort kids by text.find instead of parent-relative -> fails.
+rc, out, err = run({"course": "C03", "segments": [{"seq": 207, "title": "t",
+    "spans": [{"id": "w1", "d": 5, "tib": "lnga pa", "eng": "fifth"},
+              {"id": "w3", "d": 5, "tib": "bzhi pa'i skabs",
+               "eng": "fourth state"},
+              {"id": "y4", "d": 7, "tib": "bzhi pa'i", "eng": "fourth"},
+              {"id": "y5", "d": 7, "tib": "skabs", "eng": "state"}]}]})
+if rc != 0:
+    fails.append("parent-relative member sort: %s" % err.strip()[:230])
+else:
+    print("  ok   members sort by position inside their parent")
+
+# 24. A member occurring twice inside its parent is not placeable. C03:186
+#     has the parent 'phror with the terminative member "r"; the search took
+#     the FIRST r and rendered 'ph<r>or, cutting the syllable in two on a
+#     page that shipped. Members are exempt from the word-boundary rule, so
+#     nothing else catches this.
+#     MUTATION: drop the count check -> this pin fails.
+expect_refusal("an ambiguous member refuses",
+    {"course": "C03", "segments": [{"seq": 186, "title": "t",
+        "spans": [{"id": "w4", "d": 5, "tib": "'phror", "eng": "distracted"},
+                  {"id": "y5", "d": 7, "tib": "r", "eng": None,
+                   "nul": "terminative"}]}]},
+    "not determinable")
+
 if fails:
     print("\nFAILED:")
     for f in fails:
