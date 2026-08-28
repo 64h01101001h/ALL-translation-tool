@@ -1,3 +1,42 @@
+## 📋 ADAM 2026-08-28 — ERRATA REGISTER, and notify the organisation
+
+Adam's directive: **every source-document finding gets banked in one place**,
+so ALL as an organisation can update the documents and stay aware of what is
+in the core texts.
+
+### Standing capture rule — applies from now on
+A finding about the SOURCE (Geshe Michael's English, the ACIP Tibetan, or the
+digitisation) does not belong only in a campaign log. Every one goes into
+`docs/ERRATA_REGISTER.md` with: citation, what it says verbatim, what it
+should say if determinable, the evidence, severity, and confidence.
+
+The campaign log records what the batch did. **The register records what the
+organisation needs to fix.** They are different documents with different
+readers, and a finding buried in batch prose is a finding nobody acts on.
+
+### TO DO — notify in house
+- [ ] **Send the errata register to the director** and to whoever maintains
+      the ACIP input and the published translations. Split by owner:
+      document editors, data-pipeline maintainers, and the decisions that
+      need a director's ruling.
+- [ ] **Route the 119 folio-marker collisions separately** — those are an
+      ingest defect, fixed upstream in the corpus builder, not by editing a
+      document. `docs/upstream/FOLIO_MARKER_COLLISIONS.md` has the full list
+      with repairs and confirmation status.
+- [ ] **Flag C03:286 specifically.** `zhi gnas` glossed "(shamata, or
+      insight)" where shamata is quietude. The only case in 42,199 segments
+      where one gloss serves two different Sanskrit terms. HIGH severity: it
+      would teach a translator the opposite of what the term means.
+- [ ] **Decide the standing policy** on published corrections: does ALL issue
+      an erratum sheet, correct future printings, or annotate in place? The
+      scan preserves everything verbatim either way — this is an editorial
+      decision, not a technical one.
+
+### Not decided here
+Nothing in any document has been changed. The scan preserves Geshe Michael's
+English byte-for-byte by project rule, and entries marked PROBABLE or
+UNCERTAIN need a human ruling before anyone acts on them.
+
 ## ⚠️ GROWING AGAINST ADAM'S RULING — the entry card still shows only 4
 
 Adam ruled 2026-08-28 that **every** rendering is preserved, for posterity and

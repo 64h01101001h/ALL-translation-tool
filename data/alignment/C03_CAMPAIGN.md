@@ -24,6 +24,12 @@ Order of work:
    COVERAGE GATE prove it. If it refuses, the backfill is not done.
 5. Only then resume C03 at segment 115.
 
+**ERRATA CAPTURE (Adam, 2026-08-28): a source-document finding goes in
+`docs/ERRATA_REGISTER.md`, not only here.** The campaign log records what the
+batch did; the register records what the organisation needs to fix. A finding
+buried in batch prose is a finding nobody acts on. Cite it here AND file it
+there.
+
 Standing, per Adam 2026-08-28: GMR's English stays VERBATIM (typos flagged,
 never corrected); nothing is binding without human review; every batch
 records its producing model.
