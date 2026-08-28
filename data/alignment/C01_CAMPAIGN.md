@@ -3215,3 +3215,16 @@ Wilson depth across 153 pages. Six marker segments; two apparatus blocks (396, 4
 root verses; the Gungtang appendix. English typo queue #1–#26 and
 the wylie queue stand flagged-verbatim. Next per standing mandate:
 C03 (C02 already complete).
+
+### BACKFILL B1 (c1L1, C01:1–3) — 2026-08-28 — model: Opus
+- First page of the coverage remediation. The liturgical opening was
+  never scanned because the campaign began at segment 23.
+- Generated from C01's OWN spine rows, not copied from the C03 pages,
+  though the rows are confirmed byte-identical to C03:1–3.
+- 1: maNDla (ACIP Sanskrit capitals) ↔ "mandel".
+- 2: spos kyis ↔ "pukyi" (both final -s silent, ö-as-u); byugs ↔
+  "juk"; bkram ↔ "tram".
+- 3: nyi zlas ↔ "nyinde" (nasal migration); brgyan pa ↔ "gyenpa".
+  ri rab = "Meru" (C03:40 stanza) but "The Great Mountain" (C03:6) —
+  one word, two English renders, flagged for the review pass.
+- COVERAGE GATE now reads C01 471→474; 22 open (4-22, 39, 43, 143).
