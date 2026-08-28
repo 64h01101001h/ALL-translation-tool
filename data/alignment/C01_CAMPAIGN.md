@@ -554,7 +554,7 @@ letter-exact battery gates every batch.
   (74's coinages reprised verbatim + self-referential "what we have
   called here"). khungs #4 "authentic source". Supplied transition
   sentence (filed with 115's). Self-quotes ×5 — densest cluster.
-| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p106 (144–355) done; 143, 259 & 324 = marker pairs; 356+ open; 141 segs / 47 batches remain; §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
+| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p107 (144–358) done; 143, 259 & 324 = marker pairs; 359+ open; 138 segs / 46 batches remain; §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
 
 NEXT: continue section VII (seq 146+) — the renunciation chapter.
 - seg 143: section-marker pair (like 43) — wylie carries "the first
@@ -2127,3 +2127,28 @@ TCS series and collections beyond, for later ruling). ***
   closes, XV opens.
 - QA: both sides letter-exact, 158 spans balanced, depth clean.
   Layer: 2,881 headwords / 5,415 pairs.
+
+### c1p107 — Root verse ten (356–358)
+- **356 — outline expansion at maximum**: seven syllables (gnyis pa
+  lta ba gtan la 'beb tshul ni) → 34 English words — heading
+  re-situated, recast as a question, plus a forward pointer ("The
+  answer appears in the next verse") pre-announcing 357. gtan la 'beb
+  → "addresses the question".
+- **357 — ROOT VERSE (10)**: the root text's own words, verse number
+  supplied. FULL VERSE ROTATION 4-1-2-3 — the conclusion line fronted
+  ("A person's entered the path that pleases the Buddhas"). 'khor
+  'das → "in the cycle or beyond"; bslu ba med → "can never fail";
+  dmigs pa'i gtad so…kun zhig pa → "they lose all solid appearance"
+  (gtad so "focal target" → "solid appearance", zhig pa "destroyed" →
+  "lose"); sangs rgyas dgyes pa'i lam → "the path that pleases the
+  Buddhas".
+- **358 — the verse anatomized**: THE SYLLOGISM TRIAD in plain
+  English — chos can → "the subject under consideration"; gtan
+  tshigs → "the classic logical reason"; bsgrub bya → "the premise
+  that the reason is meant to prove". SELF-CONSISTENT CITATION: the
+  Tibetan cites lines by catchword (… sogs ×3); the English cites the
+  same lines by its own 357 renderings — the translation quotes
+  itself letter-true. stong gzhi → "what we will see is empty"; the
+  reason supplied as quote ("because they are interdependent").
+- QA: both sides letter-exact, 100 spans balanced, depth clean.
+  Layer: 2,887 headwords / 5,435 pairs.
