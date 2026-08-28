@@ -554,7 +554,7 @@ letter-exact battery gates every batch.
   (74's coinages reprised verbatim + self-referential "what we have
   called here"). khungs #4 "authentic source". Supplied transition
   sentence (filed with 115's). Self-quotes ×5 — densest cluster.
-| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p77 (144–268) done; 143 & 259 = marker pairs; 269+ open; §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
+| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p78 (144–271) done; 143 & 259 = marker pairs; 272+ open; §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
 
 NEXT: continue section VII (seq 146+) — the renunciation chapter.
 - seg 143: section-marker pair (like 43) — wylie carries "the first
@@ -1489,3 +1489,25 @@ TCS series and collections beyond, for later ruling). ***
   "practicioners" 4th attestation. Reading Eight + §XII header.
 - seg 268: outline expansion; lead-in announces TWO verses (7–8
   come as a pair).
+
+### c1p78 — C01:269–271 (batch 78) — the mothers, swept away
+- Twenty-sixth consecutive zero-catch batch. Layer: 2,288
+  headwords / 4,262 pairs.
+- seg 269 (ROOT VERSES 7–8): THE BONDAGE QUARTET — khyer/bsdams/
+  tshud/'thibs → "swept along / Chained up / Stuffed / Smothered".
+  METAL MODERNIZED #3: lcags (iron) → "steel"; dra ba (net) →
+  "cage". bdag 'dzin → "grasping 'self'" (third path previewed).
+  Cognate kept ("born, and in their births"). THE MOTHERS: ma
+  rnams → "your mothers" with doubled imperative. "(7,8)" double-
+  marker supplied.
+- seg 270 (Shantideva): dpag med ×3 → "without measure /
+  immeasurable / measureless" (elegant variation at maximum).
+  bsod nams → "merit" — the register file's flagship term now
+  corpus-anchored in the layer (vs "goodness" in prayers, per the
+  standing register case). smos ci dgos → "What need then to
+  mention". sems can → "another person"/"every being" in-verse.
+  yon tan → "happiness" (context). fn 130.
+- seg 271 (Viradatta sutra): dpa' byin → "Viradatta" (Sanskrit
+  restored); title translated. GANG HOMOGRAPH PAIR in one verse
+  (relative "which" vs "fill") — successor-dictionary homograph
+  entry. lhag par 'gyur → "spill over farther still". fn 131.
