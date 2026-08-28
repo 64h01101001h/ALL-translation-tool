@@ -215,6 +215,49 @@ Throughout the batch, a large number of the campaign's notes were **translation-
 5. **Scope and sequence.** C01 is complete at this depth; C03 is read to roughly segment 210. C02 and C04–C18 are unscanned, though duplicate-passage evidence already reaches into C06, C07, C09, C16, C17 and C18. Decide whether to finish C03, proceed in course order, or first run the corpus-wide pipeline sweeps in §8 (which would remove a large share of what any later course scan would otherwise report by hand).
 ---
 
+## Addendum, same day — seven entries the compilation missed, including the worst one
+
+**The register as first compiled did not contain its own highest-severity
+finding.** C03:286 — `zhi gnas` glossed "(shamata, or insight)" — was absent,
+along with six others, for a reason worth stating plainly:
+
+> The register was built by extracting anomalies from the **campaign logs**.
+> These seven were found *after* those logs were written, or were recorded in
+> commit messages and design documents rather than in a batch log. The
+> extraction saw only one of the places findings actually live.
+
+That is the capture problem in miniature, and it is exactly what Adam's
+standing rule was created to stop. The seven are now filed (E-057 … E-063):
+
+| id | segment | severity | what |
+|---|---|---|---|
+| E-057 | C03:286 | **HIGH** | `zhi gnas` glossed "(shamata, or insight)"; shamata is quietude |
+| E-062 | C03:166 | MEDIUM | `shogces pa'i` — illegal syllabification, `shog` and `ces` run together |
+| E-063 | C03:187 | MEDIUM | caption numbered `[17]` where the Tibetan and the sequence both give 21 |
+| E-058 | C03:276 | LOW | "Bodhisatttva" (three t's) |
+| E-059 | C03:258 | LOW | "The Ten **Menal** Afflictions" |
+| E-060 | C03:210 | LOW | "the **eight** state of meditation" |
+| E-061 | C03:199 | LOW | `[33}` — curly brace closing a bracket |
+
+### What changed so this cannot recur
+
+1. **Batches now emit errata as structured records**, not prose. The alignment
+   spec carries an `errata` array with kind, verbatim quote, proposed reading,
+   evidence, severity and confidence. Nothing has to be recovered from
+   narrative again.
+2. **`tools/merge_errata.py` files them, and refuses what it cannot verify.**
+   Before an entry enters the register the tool checks that the quoted text is
+   **actually present in the spine at the cited segment**. A misquotation or a
+   wrong citation is rejected outright rather than merely discouraged — which
+   matters, because misquotation is precisely what cost this register a full
+   verification pass (fifteen wrong segment references, four wrong proposed
+   corrections).
+
+The guard was tested by feeding it a deliberately fabricated entry alongside a
+real one. It accepted the real one and refused the fabrication.
+
+---
+
 ## Appendix — the finding that changes the fix strategy
 
 **Nine of these errors exist at more than one locus**, because several passages

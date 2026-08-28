@@ -670,5 +670,89 @@
   "severity": "LOW",
   "confidence": "CONFIRMED",
   "note": "Registered as not-an-erratum so the finding is closed rather than left for a future editor to re-derive. The log itself seems to reach the same conclusion — 'Recorded so a reader meets the note rather than the puzzle.' One caveat: the excerpt's first sentence, 'His slip, and it stands', belongs to a preceding item that is not in the excerpt, so I could not identify what slip was meant or confirm that it concerns C03:210. If that sentence names a real defect it is still unregistered, and the source log at line 1242 should be re-read for it."
+ },
+ {
+  "item_id": "E-057",
+  "course": "C03",
+  "segment": "C03:286",
+  "kind": "ENGLISH_FACTUAL_ERROR",
+  "found": "(shamata, or insight)",
+  "expected": "(shamata, or quietude)",
+  "evidence": "C03:287 gives '(vipashyana, or insight)' correctly for lhag mthong; C03:195 reads 'Achieving quietude [shamata]'. A sweep of all 42,199 spine segments found 13 '(Term, or gloss)' constructions and exactly ONE case of a gloss serving two different Sanskrit terms - this one.",
+  "severity": "HIGH",
+  "confidence": "CONFIRMED",
+  "note": "filed from the alignment batch, spine-verified on merge"
+ },
+ {
+  "item_id": "E-058",
+  "course": "C03",
+  "segment": "C03:276",
+  "kind": "ENGLISH_TYPO",
+  "found": "Bodhisatttva",
+  "expected": "Bodhisattva",
+  "evidence": "three t's; C03:278 spells 'Bodhisattva' correctly in the adjacent heading",
+  "severity": "LOW",
+  "confidence": "CONFIRMED",
+  "note": "filed from the alignment batch, spine-verified on merge"
+ },
+ {
+  "item_id": "E-059",
+  "course": "C03",
+  "segment": "C03:258",
+  "kind": "ENGLISH_TYPO",
+  "found": "The Ten Menal Afflictions",
+  "expected": "The Ten Mental Afflictions",
+  "evidence": "'Menal' is not a word; the segment enumerates the ten nyon mongs, standardly 'mental afflictions', and C03:204 uses 'mental' correctly",
+  "severity": "LOW",
+  "confidence": "CONFIRMED",
+  "note": "filed from the alignment batch, spine-verified on merge"
+ },
+ {
+  "item_id": "E-060",
+  "course": "C03",
+  "segment": "C03:210",
+  "kind": "ENGLISH_TYPO",
+  "found": "the eight state of meditation",
+  "expected": "the eighth state of meditation",
+  "evidence": "the segment is about sems gnas brgyad pa, the eighth; C03:193 and C03:194 use ordinal forms correctly",
+  "severity": "LOW",
+  "confidence": "CONFIRMED",
+  "note": "filed from the alignment batch, spine-verified on merge"
+ },
+ {
+  "item_id": "E-061",
+  "course": "C03",
+  "segment": "C03:199",
+  "kind": "FORMATTING",
+  "found": "[33}",
+  "expected": "[33]",
+  "evidence": "closing curly brace where a bracket belongs; every other caption in the 167-199 run closes with ]",
+  "severity": "LOW",
+  "confidence": "CONFIRMED",
+  "note": "filed from the alignment batch, spine-verified on merge"
+ },
+ {
+  "item_id": "E-062",
+  "course": "C03",
+  "segment": "C03:166",
+  "kind": "INGEST_ARTEFACT",
+  "found": "shogces pa'i",
+  "expected": "",
+  "evidence": "illegal Tibetan syllabification - shog and ces have run together. Almost certainly the tail of a quoted title '...ces pa'i'. Left unparsed by the campaign rather than guessed.",
+  "severity": "MEDIUM",
+  "confidence": "CONFIRMED",
+  "note": "filed from the alignment batch, spine-verified on merge"
+ },
+ {
+  "item_id": "E-063",
+  "course": "C03",
+  "segment": "C03:187",
+  "kind": "FORMATTING",
+  "found": "[17]",
+  "expected": "[21]",
+  "evidence": "the Tibetan folio marker reads 2a1/ which repairs to 21, and the segment sits between captions numbered [20] and [22]. The TIBETAN is right and GMR's bracket is the slip.",
+  "severity": "MEDIUM",
+  "confidence": "CONFIRMED",
+  "note": "filed from the alignment batch, spine-verified on merge"
  }
 ]
