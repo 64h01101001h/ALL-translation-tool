@@ -76,7 +76,7 @@ entry from here records its producing model; everything through C03 batch
 32 was Fable.
 
 ## Progress
-c3p1–c3p44 (1–132) done; 133+ open; 488 segs remain.
+c3p1–c3p45 (1–135) done; 136+ open; 485 segs remain.
 
 ## Queues (wylie / english / PHONETICS), C03
 - WYLIE: ACIP anusvara capitals dM/kM/ND + ni'a oddity (seg 6).
@@ -100,6 +100,8 @@ c3p1–c3p44 (1–132) done; 133+ open; 488 segs remain.
 - ENGLISH #9: "your are quick to regret them" (125) — "your" for
   "you". Kept verbatim; page carries a dedicated check confirming the
   string survives byte-exact.
+- ENGLISH #10: "position ones body" (134, 135) — "ones" for "one's",
+  twice. Kept verbatim; page check counts the occurrences.
 
 ### Batch C03-1 (c3p1, C03:1–3) — 2026-08-28
 - PHONETICS PROTOCOL debut: right label = GESHE MICHAEL'S PHONETICS
@@ -758,3 +760,26 @@ stack trace.
   meditation". de la brten nas → "once one has assembled all the
   proper circumstances" — the pronoun unpacked into its referent.
 - Evidence layer: 4,138 headwords / 7,621 pairs.
+
+### Batch C03-45 (c3p45, C03:133–135) — 2026-08-28 — model: Opus
+- 133: sbyor ba'i chos drug → "the six preliminary PRACTICES" — a
+  SECOND rendering against "the six preliminaries" at C01:485 and
+  C03:24. Same compound, two English forms, both GMR's, preserved
+  side by side.
+  thun mong ba'i → "that are shared" — A THIRD SENSE for thun mong,
+  joining "common" (C03:104) and "as a whole" (C01:486).
+  skyes bu chung 'bring → "people of lesser and medium capacities" —
+  the scopes named by capacity rather than by "scope".
+- 134: ENGLISH QUEUE #10 opened — "position ones body", "ones" for
+  "one's", recurring at 135. Kept verbatim.
+  REGISTER SHIFT noted: the translation moves to impersonal "one
+  should" from the "you" of the preceding pages, tracking the
+  Tibetan's own shift into prescriptive outline.
+- 135: chos brgyad → "eight different features" HERE, against "the
+  eight worldly thoughts" ('jig rten chos brgyad) at C03:76. Two
+  wholly different senses of the same compound, separated only by
+  context — worldly concerns there, posture features here. Both now
+  attested with citations.
+  stan → "meditation cushion"; the Bhavanakrama volumes numbered in
+  English where the Tibetan names them by position.
+- Evidence layer: 4,154 headwords / 7,644 pairs.
