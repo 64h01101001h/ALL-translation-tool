@@ -554,7 +554,7 @@ letter-exact battery gates every batch.
   (74's coinages reprised verbatim + self-referential "what we have
   called here"). khungs #4 "authentic source". Supplied transition
   sentence (filed with 115's). Self-quotes ×5 — densest cluster.
-| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p72 (144–253) done; 143 = marker pair; 254+ open; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
+| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p73 (144–256) done; 143 = marker pair; 257+ open; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
 
 NEXT: continue section VII (seq 146+) — the renunciation chapter.
 - seg 143: section-marker pair (like 43) — wylie carries "the first
@@ -1360,3 +1360,23 @@ TCS series and collections beyond, for later ruling). ***
   "The Bodhisattva's Life". ENGLISH TYPO CANDIDATE #16:
   "practicioners" ×2. mi bzod pa → "can absolutely no longer
   bear" (152's formula + intensifier).
+
+### c1p73 — C01:254–256 (batch 73) — one state of mind, two ways
+- Twenty-first consecutive zero-catch batch. Layer: 2,211
+  headwords / 4,097 pairs.
+- seg 254 (Shantideva): COGNATE FIGURE PRESERVED — rmi lam du yang
+  ma rmis → "Even in the dreams they dream". VERSE LINES
+  REORDERED (dream-line fronts wish-line). sems can → "people".
+  Cross-segment frame absorption again (253 pre-announced the
+  citation; zhes gsungs → ∅; fn 124).
+- seg 255: THE IDENTITY THESIS SUPPLIED — "renunciation and
+  compassion are the same state of mind, just that..." (the
+  Tibetan's parallel definitions made into an explicit thesis;
+  strongest supplied-doctrine case since 220). rang steng / gzhan
+  steng → "your own situation / others' situation". bsgom pa ×2
+  kept as "meditating" ×2.
+- seg 256: 'jam mgon → "the gentle protector" (epithet calqued;
+  'jam file consistent). thos bsam → "study and contemplate"
+  (compressed vs 241's triple — spread). je 'phel du 'gro → "grow
+  stronger day by day" ("day by day" supplied, matching 235).
+  skyon spread #3 ("the problem is").
