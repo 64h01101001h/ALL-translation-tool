@@ -554,7 +554,7 @@ letter-exact battery gates every batch.
   (74's coinages reprised verbatim + self-referential "what we have
   called here"). khungs #4 "authentic source". Supplied transition
   sentence (filed with 115's). Self-quotes ×5 — densest cluster.
-| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p140 (144–457) done; 143, 259, 324, 427 & 446 = marker pairs; 458+ open; 39 segs / 13 batches remain; §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
+| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p141 (144–460) done; 143, 259, 324, 427 & 446 = marker pairs; 461+ open; 36 segs / 12 batches remain; §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
 
 NEXT: continue section VII (seq 146+) — the renunciation chapter.
 - seg 143: section-marker pair (like 43) — wylie carries "the first
@@ -2903,3 +2903,25 @@ TCS series and collections beyond, for later ruling). ***
   seven-part, cause-and-effect instruction" (purpose supplied).
 - QA: both sides letter-exact, 110 spans balanced, depth clean.
   Layer: 3,538 headwords / 6,692 pairs.
+
+### c1p141 — The wish-granting tree (458–460)
+- **458 — the special wish** (fn 184): khyad par gyi sems bskyed →
+  'the "special wish for Buddhahood"'; sems bskyed ×3, term stable
+  surface varied. dngos min → "It is not…itself".
+- **459 — the tree and the white lord**: dpag bsam gyi shing → "a
+  magical tree…a tree that gives you whatever you wish". SGRIB GNYIS
+  AT MAXIMUM UNPACK: "both kinds of obstacles--those that prevent us
+  from reaching nirvana and those that prevent us from reaching
+  total enlightenment" (2 syllables → 24 words, rivals chad-lta).
+  "Lord Tsongkapa, at the center of the group" SUPPLIED for sku mdog
+  dkar por. thugs bskyed → "the enlightenment-wish"; zung 'brel → "a
+  union" (338); bsod nams → "merit".
+- **460 — the Eight Thousand and the Tutor**: stong phrag brgyad pa →
+  "the Eight Thousand Verses on the perfection of wisdom" (fn 185);
+  yongs 'dzin rdo rje 'chang → "the Great Tutor--the Holder of the
+  Diamond" (fn 186) — VAJRADHARA CALQUED. g-yon (g-y token, queue) →
+  "To Lord Tsongkapa's own left". WYLIE CURIOSITY: "gsungs gsungs" —
+  likely genuine double frame, flagged. gsung rgyun → "an oral
+  teaching". rno rtul → "how sharp their intellects are".
+- QA: both sides letter-exact, 122 spans balanced, depth clean.
+  Layer: 3,554 headwords / 6,721 pairs.
