@@ -554,7 +554,7 @@ letter-exact battery gates every batch.
   (74's coinages reprised verbatim + self-referential "what we have
   called here"). khungs #4 "authentic source". Supplied transition
   sentence (filed with 115's). Self-quotes ×5 — densest cluster.
-| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p151 (144–490) done; 143, 259, 324, 427, 446 & 483 = marker pairs; 491+ open; 6 segs / 2 batches remain; §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
+| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p152 (144–493) done; 143, 259, 324, 427, 446 & 483 = marker pairs; 494+ open; 3 segs / 1 batch remains; §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
 
 NEXT: continue section VII (seq 146+) — the renunciation chapter.
 - seg 143: section-marker pair (like 43) — wylie carries "the first
@@ -3135,3 +3135,24 @@ TCS series and collections beyond, for later ruling). ***
   e5 "It's only"). ngang tshul quoted from root text (fn 207), 2nd
   occurrence absorbed.
 - Layer: 3,791 headwords / 7,087 pairs.
+
+### Batch 152 (c1p152, C01:491–493) — 2026-08-28
+- 491: causal vs labelling interdependence distinguished; mdung khyim
+  ("spear-house") → "spears that you plant points-up to support a
+  canopy"; rgyu mang SPLITS (mang → "in many cases", rgyu →
+  '"causes', crossed); clause e3 = FOUR-UNIT MIRROR
+  (w11-w12-w13-w14 → w14-w13-w12-w11).
+- 492: the Tashi naming-example (fn 208/209). bkra shis ×3 in
+  Tibetan, ×4 in English (re-supply unwrapped). phar DEIXIS nulled
+  (cf. 377). de'i ngos nas → "all on his own" — "from its own side"
+  in street clothes. ngang tshul → "The process" (3rd rendering).
+  mas nas bltas te → "go back to the lower school systems and work
+  your way up". WYLIE QUEUE: ae token #3 (cf. 436 ×2); nges nges
+  reduplication joins grub grub (365) / gsungs gsungs (460).
+  phyogs na med do → "you're probably pretty far from".
+- 493: don dam AND gnas lugs BOTH → "ultimate reality" —
+  Tibetan-varies/English-stabilizes #7. 'di go na go (telegraphic
+  doubled go) unpacks to the full quoted conditional. la dgongs
+  (segment-final) fronted to "The point he is trying to make";
+  four-unit reversal in e1.
+- Layer: 3,828 headwords / 7,140 pairs.
