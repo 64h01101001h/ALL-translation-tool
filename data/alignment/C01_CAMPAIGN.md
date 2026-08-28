@@ -554,7 +554,7 @@ letter-exact battery gates every batch.
   (74's coinages reprised verbatim + self-referential "what we have
   called here"). khungs #4 "authentic source". Supplied transition
   sentence (filed with 115's). Self-quotes ×5 — densest cluster.
-| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p115 (144–382) done; 143, 259 & 324 = marker pairs; 383+ open; 114 segs / 38 batches remain; §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
+| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p116 (144–385) done; 143, 259 & 324 = marker pairs; 386+ open; 111 segs / 37 batches remain; §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
 
 NEXT: continue section VII (seq 146+) — the renunciation chapter.
 - seg 143: section-marker pair (like 43) — wylie carries "the first
@@ -2355,3 +2355,24 @@ TCS series and collections beyond, for later ruling). ***
   fine detail".
 - QA: both sides letter-exact, 134 spans balanced, depth clean.
   Layer: 3,093 headwords / 5,831 pairs.
+
+### c1p116 — The rope and the snake (383–385)
+- **383 — THE REFRAIN**: the four-line rtsa-tshig summary — labelled
+  / dependent on basis-and-labeler / dependent on conditions / not
+  from their own side; "That…" ×3 supplied. nges dgos → "Let me
+  realize" — fronted from the LAST word of the Tibetan to the FIRST
+  of the English, cast first-person optative. rtog pas → "creations
+  of concepts".
+- **384 — the examination test**: yod med brtag pa → "examine
+  whether it exists or not"; 'char ba → "the image that comes to our
+  mind". English states the point twice (image/object versions)
+  matching the two Tibetan clauses; zhen yul ×3 stable ("the object
+  we grasp").
+- **385 — THE ROPE-SNAKE**: thag khra → "rope with a checkered
+  pattern"; mun pa babs pa → "dusk has fallen"; brjed nas → "you
+  forget" (the forgetting step that turns label into appearance).
+  SUPPLIED EXCLAMATION: sbrul lo snyam du → 'think to yourself, "Oh
+  my! A snake!"'. The 382 grid applied: snang ba ≠ dgag bya, zhen
+  yul = dgag bya (dgag bya #10–11). bzhin du tail carries into 386.
+- QA: both sides letter-exact, 168 spans balanced, depth clean.
+  Layer: 3,117 headwords / 5,880 pairs.
