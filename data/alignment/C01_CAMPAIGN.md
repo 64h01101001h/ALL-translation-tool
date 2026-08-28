@@ -554,7 +554,7 @@ letter-exact battery gates every batch.
   (74's coinages reprised verbatim + self-referential "what we have
   called here"). khungs #4 "authentic source". Supplied transition
   sentence (filed with 115's). Self-quotes ×5 — densest cluster.
-| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p136 (144–445) done; 143, 259, 324 & 427 = marker pairs; 446+ open; 51 segs / 17 batches remain; §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
+| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p137 (144–448) done; 143, 259, 324, 427 & 446 = marker pairs; 449+ open; 48 segs / 16 batches remain; §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
 
 NEXT: continue section VII (seq 146+) — the renunciation chapter.
 - seg 143: section-marker pair (like 43) — wylie carries "the first
@@ -2816,3 +2816,23 @@ TCS series and collections beyond, for later ruling). ***
   concluded" #7.
 - QA: both sides letter-exact, 125 spans balanced, depth clean.
   Layer: 3,475 headwords / 6,570 pairs.
+
+### c1p137 — The colophon (446–448)
+- **446 — MARKER SEGMENT** (the FIFTH: 143, 259, 324, 427, 446):
+  wylie = "in conclusion"; English = §XX header ("The Conclusion of
+  the Explanation"). Verbatim, honest labels.
+- **447 — THE COLOPHON** (fn 176): blo bzang grags pa'i dpal → "the
+  glorious Lobsang Drakpa" — TSONGKHAPA'S ORDINATION NAME; mang du
+  thos pa'i dge slong → "that very learned Buddhist monk"; tsha kho
+  dbon po ngag dbang grags pa → "Ngawang Drakpa, a friar from the
+  Tsako district" (dbon po → "friar"). FULL AUTHOR-RECIPIENT
+  REVERSAL (agent-first Tibetan → recipient-first English); frame
+  clause crossed forward; mdzad byang → "the colophon". The work's
+  three-part outline closes.
+- **448 — toward meditation**: dpyis phyin pa → "might finally have
+  come to some real recognition"; dmigs pa skyong ba → "the proper
+  series of visualizations" (fn 177; skyong as curriculum); rtogs pa
+  → "grow them in your mind". The text turns from explanation to
+  practice — the meditation-manual coda begins.
+- QA: both sides letter-exact, 88 spans balanced, depth clean.
+  Layer: 3,482 headwords / 6,593 pairs.
