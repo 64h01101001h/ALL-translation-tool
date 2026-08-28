@@ -1112,3 +1112,45 @@ Content notes:
   -s is not separable here.
 
 - Evidence layer: 4,380 headwords / 7,954 pairs. C03 at 174/620.
+
+### Batches C03-59 … C03-63 (C03:175–189) — 2026-08-28 — model: Opus
+Five pages, the middle run of elephant-path captions. Fifteen segments, and
+**ten generated on the first attempt** — against zero on the batch before
+last, because the rules the earlier refusals taught are now written into the
+proposer prompt rather than discovered by failing.
+
+The five refusals were all one shape: a genitive `'i` marked as a member of a
+parent that stops short of it (`rgod pa` + `'i` where the wylie is `rgod pa'i`).
+Ten unnestable null members dropped, two with real content promoted.
+
+**A recurring authoring trap, now seen twice:** the agentive `'dis` proposed
+as `'di` + a separable `-s`. It is not separable, and the word-boundary rule
+catches it (a flat `'di` would have to sit inside `'dis`). Segments 174 and
+178 both hit it. **Worth adding to the proposer brief.**
+
+One reconciler independently derived the folio-marker pattern from the
+two-digit cases — "176 `1a0/` = 10, 177 `1a1/` = 11 … so `9a/` is marker 9" —
+which is exactly the rule the whole-spine sweep confirmed on 115 of 119
+occurrences the same hour. Two independent derivations agreeing is worth more
+than either alone. See `docs/upstream/FOLIO_MARKER_COLLISIONS.md`.
+
+Content notes:
+- **175** is the second of the nine states, and the caption is the prose list
+  item at C03:157 **verbatim** — differing only in the capital at the head of
+  a caption. The chart captions are drawn from the prose list, not paraphrased
+  off it. The same holds at 179 (one comma added). Worth carrying in the app
+  as a live cross-link: caption ⇄ list item.
+- **`'jog pa` takes four renderings across the nine states**: `sems 'jog pa`
+  "setting", `rgyun du` / `glan de 'jog pa` "keeping", `nye bar 'jog pa`
+  "maintaining", `mnyam par 'jog pa` "reaching deep meditation". A translator
+  must not fix one equivalent from any single caption. This is precisely the
+  case Adam's preserve-all-renderings ruling exists for.
+- **175 leaves "the mind on the object" and "brief" unwrapped** — neither has
+  a Tibetan exponent in a three-word caption. GMR carries the object phrase
+  over from the prose list, and "brief" is his gloss distinguishing state 2.
+  Letting `'jog pa` own them would be over-capture exactly.
+- **187** carries GMR's `[17]` where the sequence and the Tibetan marker both
+  say 21. His text stands verbatim; the discrepancy is recorded upstream.
+
+- Evidence layer: 4,400 headwords / 8,006 pairs. C03 at 189/620.
+  Broken-words gate: 11,328 English spans across 253 pages, clean.
