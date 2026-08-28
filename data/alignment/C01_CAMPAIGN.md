@@ -554,7 +554,7 @@ letter-exact battery gates every batch.
   (74's coinages reprised verbatim + self-referential "what we have
   called here"). khungs #4 "authentic source". Supplied transition
   sentence (filed with 115's). Self-quotes ×5 — densest cluster.
-| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p86 (144–295) done; 143 & 259 = marker pairs; 296+ open; §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
+| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p87 (144–298) done; 143 & 259 = marker pairs; 299+ open; §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
 
 NEXT: continue section VII (seq 146+) — the renunciation chapter.
 - seg 143: section-marker pair (like 43) — wylie carries "the first
@@ -1667,3 +1667,21 @@ TCS series and collections beyond, for later ruling). ***
   "gathered together". UNCERTAIN READING filed (not typo-queued):
   "longs spyad ma bra ba" — expected ma-phod-type form; English
   "hesitating to use" supports; kept verbatim. bu → "me".
+
+### c1p87 — C01:296–298 (batch 87) — kindness without measure
+- Thirty-fifth consecutive zero-catch batch. Layer: 2,513
+  headwords / 4,672 pairs (2,500-headword mark).
+- seg 296: chos byed pa → "practicing the monastic life"
+  (audience-contextualized; chos spread #4). chos sgor → "into
+  the monastery". man chad THIRD SENSE: temporal "from that time
+  on" (vs scale-inversion 198/258). phangs pa med par → "giving
+  without reservation".
+- seg 297: bskyangs → "SHOWERED me with this kindness" (+
+  appositive doubling supplied). ma zad render #4 ("not the only
+  one"). skye 'chi 'phos pa → "my transitions from death to
+  birth". sha stag → "no less than" (vs 288 "Absolutely").
+- seg 298: gsungs 5th attestation, RELOCATED to English opening
+  ("Look now, concluded our Lama,") — frame-verb mobility fully
+  documented. byi'u spread (chick 292 / sparrow 298). Application
+  supplied ("what kindness we were given too"). Imperative
+  supplied ("Look now").
