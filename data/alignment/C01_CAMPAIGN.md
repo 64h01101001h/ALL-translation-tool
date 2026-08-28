@@ -554,7 +554,7 @@ letter-exact battery gates every batch.
   (74's coinages reprised verbatim + self-referential "what we have
   called here"). khungs #4 "authentic source". Supplied transition
   sentence (filed with 115's). Self-quotes ×5 — densest cluster.
-| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p71 (144–250) done; 143 = marker pair; 251+ open; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
+| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p72 (144–253) done; 143 = marker pair; 254+ open; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
 
 NEXT: continue section VII (seq 146+) — the renunciation chapter.
 - seg 143: section-marker pair (like 43) — wylie carries "the first
@@ -1337,3 +1337,26 @@ TCS series and collections beyond, for later ruling). ***
   meditated thus". skad cig tsam yang → "not even A moment's"
   (verse line-break capital kept). 'khor ba'i phun tshogs pairs
   232's phrase — formula continuity across fifty segments.
+
+### c1p72 — C01:251–253 (batch 72) — the measure; the bridge
+- Twentieth consecutive zero-catch batch. Layer: 2,205 headwords /
+  4,070 pairs.
+- seg 251: curriculum recap with "on the points already mentioned"
+  supplied; until-clause reordered to English end (crossed ids);
+  segment-final ma zad → 252's opening "And then it comes even
+  stronger" (connective rendered across the boundary).
+- seg 252: THE WORRIED-MAN SIMILE (lhang lhang → "all in a rush";
+  ngam ngam shugs kyis → "on its own"). COMMENTARY QUOTES ITS OWN
+  VERSE with supplied quotation marks + gloss ("that is, in every
+  conscious minute"). "Pure-one" vs "Pure-One" (208) — micro-
+  variant. FULL FORM 'khor los sgyur ba'i rgyal po attested
+  (file holds contraction + full form). bcos ma ma yin pa →
+  "genuinely" (vs "true" 253 — adjacent spread).
+- seg 253: THE RENUNCIATION-COMPASSION BRIDGE — snying rje chen po
+  → "great compassion" (coinage two-step). BODY-HAIR IMAGE RECAST:
+  ba spu g-yo 'gul med pa → "so feeble that it couldn't blow down
+  a single upright hair" (stillness→force-measure inversion);
+  wylie g-yo hyphen passes letter gate. TEXT TITLE: spyod 'jug →
+  "The Bodhisattva's Life". ENGLISH TYPO CANDIDATE #16:
+  "practicioners" ×2. mi bzod pa → "can absolutely no longer
+  bear" (152's formula + intensifier).
