@@ -29,7 +29,7 @@ When a segment's english field is phonetics, not translation:
    under its own clause with honest labels.
 
 ## Progress
-c3p1–c3p15 (1–45) done; 46+ open; 575 segs remain.
+c3p1–c3p16 (1–48) done; 49+ open; 572 segs remain.
 
 ## Queues (wylie / english / PHONETICS), C03
 - WYLIE: ACIP anusvara capitals dM/kM/ND + ni'a oddity (seg 6).
@@ -249,3 +249,17 @@ c3p1–c3p15 (1–45) done; 46+ open; 575 segs remain.
   (quote splits crosswise). s45rest holds the pauper-treasure
   simile (dbul pos gter rnyed pa ltar).
 - Evidence layer: 3,984 headwords / 7,391 pairs.
+
+### Batch C03-16 (c3p16, C03:46–48) — 2026-08-28
+- 46: relay #8 closes. slob/mi slob → "paths of learning/done
+  learning"; the pauper simile lands as "like a beggar who has
+  stumbled across a mine of gold" (gter → gold mine). ENGLISH QUEUE
+  #5: STRAY DUPLICATE "[d]" mid-segment.
+- 47: ca/ ↔ "[e]" (letter-numeral #5); the ingredient TITLE itself
+  is a four-unit mirror; crosswise citation quote again.
+- 48: GMR'S FIRST-PERSON BRACKET — "[…and I have followed him.]" —
+  the translator adjudicating root-text readings via Yeshe De.
+  sgron ma → "Lamps"; 'jig rten → "the worlds" (3rd render); mgon
+  po → "Saviors"; bskul crosses L4→L3. WYLIE QUEUE: "dag,byang"
+  missing comma-space.
+- MILESTONE: 4,000 HEADWORDS CROSSED — 4,000 / 7,421 pairs.
