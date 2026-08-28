@@ -554,7 +554,7 @@ letter-exact battery gates every batch.
   (74's coinages reprised verbatim + self-referential "what we have
   called here"). khungs #4 "authentic source". Supplied transition
   sentence (filed with 115's). Self-quotes ×5 — densest cluster.
-| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p82 (144–283) done; 143 & 259 = marker pairs; 284+ open; §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
+| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p83 (144–286) done; 143 & 259 = marker pairs; 287+ open; §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
 
 NEXT: continue section VII (seq 146+) — the renunciation chapter.
 - seg 143: section-marker pair (like 43) — wylie carries "the first
@@ -1591,3 +1591,24 @@ TCS series and collections beyond, for later ruling). ***
   (family: 280's yid 'ong "beautiful" — three exponents). skyes/
   gyur varied in Tibetan, leveled to "taken birth" in English.
   Procedural scaffolding supplied (First/Then/Next).
+
+### c1p83 — C01:284–286 (batch 83) — equal beings, beginningless mind
+- Thirty-first consecutive zero-catch batch. Layer: 2,413
+  headwords / 4,503 pairs (4,500-pair mark).
+- seg 284: WYLIE TYPO CANDIDATE #17 — "de thabs cad" (expected
+  "thams cad"; English "every one" witnesses). Kept verbatim,
+  flagged. THE EQUALITY TRIPLE (mnyam ×3 — 279's folded mnyam now
+  fully exponent-ed). Rhetorical questions kept first-person.
+  sems can spread: "sentient beings". mkha' khyab → "as vast in
+  extent as space itself".
+- seg 285: TITLE — rnam 'grel → "the Commentary on Valid
+  Perception" (pramana → "Valid Perception"; fn 133). MINIMAL
+  PAIR in one segment: rig pa ("awareness") vs rigs pa ("line of
+  reasoning") — successor-dictionary neighbor-entry. phan che →
+  "much easier".
+- seg 286: THE REGRESSION LADDER — four rungs, rig rgyun leveled
+  to "a mental continuation" ×4 (formula-leveling as proof-
+  structure). QUOTED HYPOTHETICAL SUPPLIED ("Prior to this, I had
+  no awareness."). phar ded spread (208 chase → 286 regression).
+  gtan nas med par → "absolutely never". snga ma snga ma → "the
+  life before that".
