@@ -554,7 +554,7 @@ letter-exact battery gates every batch.
   (74's coinages reprised verbatim + self-referential "what we have
   called here"). khungs #4 "authentic source". Supplied transition
   sentence (filed with 115's). Self-quotes ×5 — densest cluster.
-| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p138 (144–451) done; 143, 259, 324, 427 & 446 = marker pairs; 452+ open; 45 segs / 15 batches remain; §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
+| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p139 (144–454) done; 143, 259, 324, 427 & 446 = marker pairs; 455+ open; 42 segs / 14 batches remain; §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
 
 NEXT: continue section VII (seq 146+) — the renunciation chapter.
 - seg 143: section-marker pair (like 43) — wylie carries "the first
@@ -2859,3 +2859,22 @@ TCS series and collections beyond, for later ruling). ***
 - QA: both sides letter-exact, 151 spans balanced, depth clean.
   Layer: **3,505 headwords** / 6,635 pairs — 3,500-headword
   milestone.
+
+### c1p139 — The black sow (452–454)
+- **452 — the black lump**: sdig sgrib unpacked ("bad deeds and all
+  the things that block our spiritual progress"). bdag gces 'dzin →
+  "to cherish ourselves rather than others" ("rather than others"
+  supplied). Heart pair (snying dbus/snying gar); nag phung → "piled
+  in a pitch-black lump". 1 sentence → 3.
+- **453 — THE BLACK SOW** (fn 181): 'chi bdag → "the lord of Death";
+  phag mo nag po → "a huge black sow" (gender kept, "She"). THE JAWS
+  SENTENCE SUPPLIED: "and her jaws are opened wide, pointed up,
+  waiting" — no Tibetan exponent, the file's most vivid pure
+  amplification. rngams → "she hungers for your life"; kho tshims →
+  "it satisfies her fully"; gnad che crossed from segment-final.
+- **454 — the two reasons** (fn 182): SUPPLIED CONVERSE — "But if
+  they are true feelings, your refuge too will be true" (no Tibetan
+  exponent; contrapositive completed). bcos ma → "artificial, and
+  forced".
+- QA: both sides letter-exact, 111 spans balanced, depth clean.
+  Layer: 3,525 headwords / 6,665 pairs.
