@@ -29,7 +29,7 @@ When a segment's english field is phonetics, not translation:
    under its own clause with honest labels.
 
 ## Progress
-c3p1–c3p10 (1–30) done; 31+ open; 590 segs remain.
+c3p1–c3p11 (1–33) done; 34+ open; 587 segs remain.
 
 ## Queues (wylie / english / PHONETICS), C03
 - WYLIE: ACIP anusvara capitals dM/kM/ND + ni'a oddity (seg 6).
@@ -175,3 +175,19 @@ c3p1–c3p10 (1–30) done; 31+ open; 590 segs remain.
   English arrives in following segments; segment ends mid-sentence
   "[The full verse reads:".
 - Evidence layer: 3,917 headwords / 7,266 pairs (+27/+41).
+
+### Batch C03-11 (c3p11, C03:31–33) — 2026-08-28
+- THE CITATION RELAY named: segment N cites a verse and truncates
+  ("[The full verse reads:"); segment N+1 carries the verse's
+  English + the delayed explanation English for N's unpaired
+  remainder. Two relays completed: 30→31, 32→33.
+- 31: THE VERSE READ BACKWARD (lines 4-3-2-1, the C01 praise-verse
+  rotation family). 'jig rten → "planets"; mi yi seng ge → "Lions
+  of living kind"; dang bas → "and purely". s31exp1-3 unpaired
+  (source = s30rest).
+- 32: four-unit mirror (w9-w8-w7-w6) + three-unit mirror in one
+  short segment; second truncation.
+- 33: rotation 1-2-4-3; TWO bow-verbs (btud/phyag 'tshal) MERGE
+  into one "I bow myself"; two rab merge into one "Perfectly";
+  zhing 4th appearance ("all the worlds").
+- Evidence layer: 3,935 headwords / 7,300 pairs — 7,300 crossed.
