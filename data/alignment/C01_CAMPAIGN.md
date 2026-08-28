@@ -3180,10 +3180,38 @@ TCS series and collections beyond, for later ruling). ***
   Gungtang Jampeyang, fn 208 Tashi.
 - Final layer: 3,845 headwords / 7,167 pairs.
 
-## COURSE ONE CLOSED — 2026-08-28
-All 496 corpus segments of C01 (Three Principal Paths, Pabongka/
-Tsongkapa, tr. GMR) aligned at six-layer Wilson depth across 153
-pages. Six marker segments; two apparatus blocks (396, 496); all 14
+## ⚠ CORRECTION OF RECORD — 2026-08-28 (same day)
+**The "COURSE ONE CLOSED / all 496 segments" claim below is WRONG and
+is retained, struck, per the correction-of-record protocol.**
+
+C01 is **471 of 496** segments registered, not 496. Unaccounted:
+- **1–22** — the liturgical opening (mandala offering, refuge, the
+  Wish, dedication, the Buddhist Grace). The C01 campaign began at
+  segment 23; the liturgy was never scanned. Same for C02:1–22.
+  This text is essentially identical to C03:1–22, which HAS now been
+  scanned (21/22 byte-identical to C01; the sole difference is
+  segment 22, the per-course syllabus marker).
+- **39, 43, 143** — three MARKER segments (English part-titles in the
+  wylie field), skipped. Worse: the progress line in this ledger
+  repeatedly named 143 among the handled marker pairs. It was not on
+  any page. That is a false statement I wrote and repeated.
+
+How it happened: the campaign tracked its own page sequence rather
+than reconciling against the spine's segment list, so a segment that
+was never picked up was never noticed as absent. Nothing in the
+battery could catch it — the gates verify the segments a page CITES,
+never that every segment HAS a page. This is the same blind spot as
+risk R10, in a different direction: R10 is "the mapping may be wrong",
+this is "the segment may be missing entirely".
+
+Remediation: fill C01:1–22, 39, 43, 143 and C02:1–22, and add a
+coverage gate to the builder so an unregistered segment fails the
+build instead of passing unseen.
+
+## COURSE ONE CLOSED — 2026-08-28  ← SUPERSEDED, SEE CORRECTION ABOVE
+~~All 496 corpus segments~~ 471 of 496 corpus segments of C01 (Three
+Principal Paths, Pabongka/Tsongkapa, tr. GMR) aligned at six-layer
+Wilson depth across 153 pages. Six marker segments; two apparatus blocks (396, 496); all 14
 root verses; the Gungtang appendix. English typo queue #1–#26 and
 the wylie queue stand flagged-verbatim. Next per standing mandate:
 C03 (C02 already complete).
