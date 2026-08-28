@@ -40,7 +40,7 @@ upstream in the data project, rather than an editorial change here.
 Flagged for Adam.
 
 ## Progress
-c2L1–c2L5 (1–15) done; 16–22 open. Main pass 22–68 already delivered.
+c2L1–c2L6 (1–18) done; 19–22 open. Main pass 22–68 already delivered.
 
 ### BACKFILL C2-B1 (c2L1, C02:1–3) — 2026-08-28 — model: Opus
 - Generated from C02's own spine rows. Segments 1–3 are byte-identical
@@ -98,3 +98,20 @@ c2L1–c2L5 (1–15) done; 16–22 open. Main pass 22–68 already delivered.
 - 15: lejung / way; the bsod nams ye shes anaphora reproduces
   identically across C01, C02, C03.
 - COVERAGE GATE: C02 58→61; 7 open (16-22).
+
+### BACKFILL C2-B6 (c2L6, C02:16–18) — 2026-08-28 — model: Opus
+- 16: topar / kunyi; stanza UNPAIRED (source 13–16). dam pa →
+  "Ultimate" in the stanza vs "holy" elsewhere in the same liturgy —
+  now confirmed identical in all three courses, so the split is
+  GMR's own, not a per-course variant.
+- 17: mchod pa ↔ "chupa", completing the three-way "chu" collision
+  (chos/spyod/mchod) for the THIRD course. Systematic across the
+  corpus — the standing argument for keying on ACIP and wylie rather
+  than sound.
+- 18: PHONETICS QUEUE, THIRD WITNESS. sangs rgyas = "sanggye" here,
+  "sangye" at 4/8/11 — the same split at the same segment numbers in
+  C01, C02 AND C03. Three independent courses reproducing an
+  identical inconsistency means it is INHERITED FROM A COMMON SOURCE
+  rather than introduced per course. Worth knowing before anyone
+  proposes normalising it: the variation is in the shared original.
+- COVERAGE GATE: C02 61→64; 4 open (19-22).
