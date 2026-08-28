@@ -554,7 +554,7 @@ letter-exact battery gates every batch.
   (74's coinages reprised verbatim + self-referential "what we have
   called here"). khungs #4 "authentic source". Supplied transition
   sentence (filed with 115's). Self-quotes ×5 — densest cluster.
-| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p96 (144–325) done; 143, 259 & 324 = marker pairs; 326+ open; 171 segs / 57 batches remain; the SECOND path is COMPLETE — §XIV / the THIRD path (correct view) begins at 324; §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
+| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p97 (144–328) done; 143, 259 & 324 = marker pairs; 329+ open; 168 segs / 56 batches remain; §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
 
 NEXT: continue section VII (seq 146+) — the renunciation chapter.
 - seg 143: section-marker pair (like 43) — wylie carries "the first
@@ -1869,3 +1869,22 @@ TCS series and collections beyond, for later ruling). ***
   Why You Need Correct View".
 - seg 325: outline expansion; FIVE sections of correct view
   announced; yang dag pa'i lta ba → "correct view" named.
+
+### c1p97 — C01:326–328 (batch 97) — the wisdom verse
+- Zero-catch. Layer: 2,698 headwords / 5,042 pairs.
+- seg 326 (ROOT VERSE 9): gnas lugs → "reality"; rten 'brel →
+  "interdependence" (the third path's key terms). Concessive line
+  fronted (lines 1–2 swapped). srid pa spread #4 ("cyclic life").
+  goms byas → "master".
+- seg 327: THE GLOSS STAGED AS SPEECH ("What the verse is saying
+  is this:" + full paraphrase in quotation marks — new citation
+  device). Term-cluster: de kho na nyid → "suchness"; don dam
+  bden pa → "ultimate truth". thabs → "'method'" (scare quotes;
+  method/wisdom division marked). bdag 'dzin ×2 mapped precisely
+  (root's → "grasping to a 'self'"; antidote's object → "your
+  grasping").
+- seg 328: PATH-NAMES CALQUED with supplied ordinals (tshogs lam
+  → "'accumulation'", first of five; sbyor lam → "'preparation'",
+  second; fn 143). man chad/yan chad pair split across sentences.
+  der ma zad stabilized ("And that's not all."). rkyang pa → "by
+  force of... alone".
