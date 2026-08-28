@@ -176,3 +176,75 @@ uncertain. Only survivors count toward precision. Gate 2's 43.5% was measured
 without that second pass, so if 3b clears 50% it clears a strictly harder bar.
 
 **Status: running.**
+
+**Result: 52 fires, 1 confirmed defect. Precision 1.9%. FALSIFIED.**
+
+Not merely below threshold — **below the base rate.** The layer's measured
+any-defect rate is 15.0%, so a *random* draw of 52 pairs would be expected to
+contain about 8 defects. Gate 3b found 1. It is worse than random: reading its
+output is a worse use of a reviewer's time than reading arbitrary pairs.
+
+The 51 false positives share one shape. The gate fires on generic nouns in
+passages whose subject *is* that noun:
+
+| segment | accused | "stolen" | supposed owner |
+|---|---|---|---|
+| C01:377 | `gdags gzhi` → "The basis to be given the name" | "the name" | `'dogs byed` |
+| C01:377 | `'dogs byed` → "that applies the name" | "the name" | `gdags gzhi` |
+| C01:349 | `gzung` → "and the object which it holds" | "the object" | `dgag bya` |
+
+The first two are the **same segment accusing each other in both directions**
+— a signature of pure string matching with no semantics. In a passage about
+naming, every span contains "name", and both spans are correct.
+
+**The one true positive is genuine and is fixed:** at C02:48 the root-text
+incipit `sems bskyed pa ni gzhan don phyir` had `phyir` keyed to "for the
+benefit of" while the compound `gzhan don` was reduced to "others". `don` *is*
+the benefit; `phyir` is only the purposive postposition. The refuting agent
+confirmed it against the Sanskrit — Abhisamayalamkara I.18, *cittotpadah
+pararthaya*, where "benefit" is *artha* = `don` — and against the layer's own
+settled convention at C02:50 and C02:51, where `gzhan don` carries the noun.
+`phyir` now holds purposive senses only.
+
+---
+
+## Conclusion for the whole family — three gates, three failures
+
+| gate | signal | fires | precision | verdict |
+|---|---|---|---|---|
+| 1 · unbalanced quote | surface punctuation | 110 | low | rejected |
+| 2 · numeral leakage | surface lexical class | 23 | 43.5% | rejected |
+| 3 · self-referential over-capture | layer's own lexicon | 2,322 | not reached | rejected on volume |
+| 3b · same, multi-word only | layer's own lexicon | 52 | **1.9%** | rejected, below base rate |
+
+**Stop building mechanical correctness gates for this layer.** The reason is
+structural, not a matter of finding a better signal. What makes a mapping
+wrong here is *semantic* — whether this English renders this Tibetan — and
+every mechanically available signal is *surface*: punctuation, lexical class,
+string co-occurrence. Surface signals cannot separate "B licenses this phrase"
+from "A and B are both about the same topic." Gate 3b is the proof: given the
+strongest self-referential evidence the project can construct, it performed
+worse than chance.
+
+This is consistent with **R10** in the risk register — the gates prove the
+text is verbatim, never that the correspondence is correct — and it now has a
+measurement behind it rather than only an argument.
+
+### What does work, and what to spend effort on instead
+
+**The model-read audit works.** Both audits found real defects at useful rates
+(12 in 80 uniform, 10 in 23 triaged), and every confirmed defect in this
+project has come from an agent reading the segment, not from a string rule.
+Two design choices earned their keep and are now standing practice:
+
+1. **Attach sibling spans.** An auditor that sees only `(key, rendering,
+   segment)` invents licensors — it produced two false accusations before
+   sibling spans were added, and used them correctly afterward to separate
+   `lam gtso`-as-title from `lam gtso`-with-`gsum`-present.
+2. **Run an adversarial refute pass.** Give every claimed defect to a separate
+   skeptic instructed to refute it and to default to refuted when uncertain.
+   Gate 3b's honest 1.9% exists *because* of that pass.
+
+**Gate 2 survives as a triage queue, and only that.** 43.5% yield against a
+15% base rate is a 2.9× enrichment — genuinely useful for ordering a review
+backlog, useless as an auto-reject. Gate 3b earns not even that.
