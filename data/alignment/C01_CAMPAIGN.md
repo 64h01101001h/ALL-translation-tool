@@ -3255,3 +3255,16 @@ C03 (C02 already complete).
   "dakki" (C03:10, 83, 88) — the junction doubling is triggered by
   the case particle, not by bdag itself.
 - COVERAGE GATE: C01 477→480; 16 open (10-22, 39, 43, 143).
+
+### BACKFILL B4 (c1L4, C01:10–12) — 2026-08-28 — model: Opus
+- 10: bdag gis ↔ "dakki", completing the contrast opened on c1L3
+  (bare bdag + ni → "dakni"; case gi/gis → "dakki").
+  A LIMIT ON THE ERGATIVE RULE: the final kyis ↔ "kyi" — here the
+  instrumental's own -s DROPS rather than fronting a vowel, because
+  kyi has no vowel available to front. Recorded beside the
+  tsongkapa/tsongkape evidence so the rule is not over-generalised.
+- 11: phan phyir ↔ "penchir"; 'grub par ↔ "druppar". English stanza
+  UNPAIRED (s11trans), source 8–11.
+- 12: bsngo ba ↔ "ngowa" — same bsng-→ng reduction as bsngags pa'i ↔
+  "ngakpay" at C03:111, consistent across courses.
+- COVERAGE GATE: C01 480→483; 13 open (13-22, 39, 43, 143).
