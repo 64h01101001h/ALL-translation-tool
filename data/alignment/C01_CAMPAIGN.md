@@ -554,7 +554,7 @@ letter-exact battery gates every batch.
   (74's coinages reprised verbatim + self-referential "what we have
   called here"). khungs #4 "authentic source". Supplied transition
   sentence (filed with 115's). Self-quotes ×5 — densest cluster.
-| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p109 (144–364) done; 143, 259 & 324 = marker pairs; 365+ open; 132 segs / 44 batches remain; §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
+| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p110 (144–367) done; 143, 259 & 324 = marker pairs; 368+ open; 129 segs / 43 batches remain; §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
 
 NEXT: continue section VII (seq 146+) — the renunciation chapter.
 - seg 143: section-marker pair (like 43) — wylie carries "the first
@@ -2205,3 +2205,27 @@ TCS series and collections beyond, for later ruling). ***
   qualities". 1 tib sentence → 5 eng with "First"/"Then" supplied.
 - QA: both sides letter-exact, 142 spans balanced, depth clean.
   Layer: 2,940 headwords / **5,540 pairs** — 5,500-pair milestone.
+
+### c1p110 — Here comes the chanting master (365–367)
+- **365 — the reductio**: womb-chanting-master; skyes song ("was
+  born") recast as the exclamation "Here comes the chanting
+  master!". TWO WOMB-WORDS ONE ENGLISH: khog pa ("belly") + mngal
+  ("womb") both → "womb" (many-to-one). ACIP token aa ma ×2 (queue
+  count now 7). WYLIE TYPO QUEUE (new): "grub grub pa" — doubled
+  grub, dittography, kept verbatim. rang steng nas grub → "all on
+  his own" (own-side #4).
+- **366 — the deictic triad**: three direct speeches preserved
+  exactly — 'di "This is" / khyod "You are" / nga "I am" the
+  chanting master; nga-speech repeated verbatim (c3, c5). 'dogs
+  mkhan → "a person qualified to give him the name"; tshad ma #4 →
+  "qualified" (true/reasonable/qualified). COLLOQUIAL: phar btags →
+  "hangs it on him". Negation fronted (med → "Neither"; mi zer →
+  "We don't call"). byung ba red → "begins to".
+- **367 — horse and building**: phung po in plain sense → "the body"
+  (register note, aggregates file). tsam → "nothing but". gdags
+  gzhi's FOURTH English phrasing ("basis to receive the name"; 354
+  given / 364 called / 366 give) — English varies, Tibetan stable:
+  inverse consistency inside the triad. rgyu rkyen → "all the proper
+  causes and conditions" ("proper" supplied).
+- QA: both sides letter-exact, 191 spans balanced, depth clean.
+  Layer: 2,972 headwords / 5,593 pairs.
