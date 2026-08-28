@@ -113,3 +113,66 @@ failure mode rather than a surface feature.
    (Two false accusations in the random-sample audit came from exactly this.)
 4. Report precision honestly against the pre-set threshold.
 5. A gate that fails becomes a triage queue at best. Record it here either way.
+
+---
+
+## Gate 3 — self-referential over-capture · FALSIFIED ON VOLUME
+
+**The rule** (stated in `tools/detect_overcapture.py` before it was run):
+
+> span A on segment S has English E_A; span B on the same segment has Tibetan
+> key K_B. If E_A contains a phrase the layer records ELSEWHERE as a rendering
+> of K_B, then A has probably swallowed B's material.
+
+The appeal: it needs no dictionary and no model. **The layer is its own
+lexicon.** It improves as the layer grows, it can only fire on evidence the
+project itself banked, and — unlike Gates 1 and 2 — it targets the mechanism
+both audits independently measured as dominant (span over-capture: 7 of 12,
+and 8 of 11) rather than a surface feature.
+
+**Criteria set before the run:**
+- falsified above 1,000 fires (the layer-wide defect estimate is ~1,423 pairs,
+  of which over-capture is ~58%, so ~825; a detector aimed at one mechanism
+  that fires more often than that mechanism is estimated to occur is finding
+  something else)
+- falsified below 50% precision
+
+**Result: 2,322 fires — 24.5% of the layer. FALSIFIED on volume**, before
+precision was ever measured.
+
+**Why**, and it is worth stating because it is a fact about Tibetan rather
+than about this code: **2,155 of the 2,322 fires are single-word phrases.**
+Tibetan has many near-synonyms that Geshe Michael renders with the same
+English word. `sdug` and `kun 'byung` both attract "suffering"; `ldog pa` and
+`dran pa` both attract "back". A shared single English content word between
+two Tibetan keys on one segment is the *expected* case, not a defect signal.
+
+    stolen-phrase length : 1 word 2155 | 2 words 137 | 3 words 29 | 4 words 1
+
+---
+
+## Gate 3b — the same rule, restricted to multi-word evidence · UNDER TEST
+
+**Rule:** Gate 3, but the shared phrase must be **at least two words** and
+attested at **two or more other citations**.
+
+**Provenance of each threshold, stated plainly:**
+- The two-word floor has a justification independent of this data: single
+  shared content words are expected between near-synonyms, as above. This is
+  a linguistic argument, not a curve fit.
+- The two-attestation floor is **data-derived** — I chose it after seeing the
+  attestation histogram. It is the weaker half of this rule and should be the
+  first thing re-examined if 3b survives.
+
+**Fires: 52 of 9,486 (0.55%).** Volume is not at issue.
+
+**Criterion set before the run: falsified below 50% precision** — the same
+threshold Gate 2 was held to, so the two are comparable.
+
+**Protocol, tightened over Gate 2's:** all 52 fires are checked with sibling
+spans attached, and then **every claimed defect is handed to a separate
+skeptic whose instruction is to refute it**, defaulting to refuted when
+uncertain. Only survivors count toward precision. Gate 2's 43.5% was measured
+without that second pass, so if 3b clears 50% it clears a strictly harder bar.
+
+**Status: running.**
