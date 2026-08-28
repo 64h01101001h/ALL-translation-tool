@@ -554,7 +554,7 @@ letter-exact battery gates every batch.
   (74's coinages reprised verbatim + self-referential "what we have
   called here"). khungs #4 "authentic source". Supplied transition
   sentence (filed with 115's). Self-quotes ×5 — densest cluster.
-| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p78 (144–271) done; 143 & 259 = marker pairs; 272+ open; §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
+| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p79 (144–274) done; 143 & 259 = marker pairs; 275+ open; §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
 
 NEXT: continue section VII (seq 146+) — the renunciation chapter.
 - seg 143: section-marker pair (like 43) — wylie carries "the first
@@ -1511,3 +1511,24 @@ TCS series and collections beyond, for later ruling). ***
   restored); title translated. GANG HOMOGRAPH PAIR in one verse
   (relative "which" vs "fill") — successor-dictionary homograph
   entry. lhag par 'gyur → "spill over farther still". fn 131.
+
+### c1p79 — C01:272–274 (batch 79) — torrents, chains, and the cage
+- Twenty-seventh consecutive zero-catch batch. Layer: 2,306
+  headwords / 4,299 pairs.
+- seg 272: REGISTER SHIFT verse→commentary — chu bo = "river
+  currents" (verse 269) vs "torrent" (commentary, ×5). THE TWO
+  TETRADS (rgyu dus/'bras dus → causes/results staging).
+  DOCTRINAL-INTERPRETIVE RENDER: srid pa (bhava) → "the ripe
+  force of deeds" (twelve-links reading injected). na ba →
+  "illness" (vs "sickness" 214).
+- seg 273: khyer spread ("swept"/"hurtling"). ORDER FLIP #6:
+  rkang lag → "hands and feet". zhags/'ching doublet distributed
+  AND swapped. "their own" supplied on las.
+- seg 274: ONE WORD, TWO METALS, ONE SENTENCE — lcags thag →
+  "fetters of IRON" vs lcags kyi dra ba → "a STEEL cage" — the
+  file's sharpest same-segment spread. MATERIAL CULTURE: 'breng
+  pa dang rtsid thag → "our twined ropes of yak-skin or hair".
+  "NON-EXISTENT" SUPPLIED on bdag 'dzin (doctrinal verdict
+  injected; vs bare 269). INVERSE VARIATION: des kyang mi tshad
+  pa → "But that's not all" (= 267's der ma zad formula).
+  gcod/thar dka' → "ever so hard to sever/unshackle".
