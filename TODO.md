@@ -22,6 +22,45 @@ re-proved against the full battery first (rule 2).
 Full write-up, including two unsound measurements I discarded and why:
 `docs/PRON_ENGINE_VS_C03_LITURGY.md`.
 
+## ★★★★ ADAM'S RULINGS 2026-08-28 (later): this becomes the main dictionary
+
+Adam: "I'm planning for this new work we do scanning to be used at the main
+Geshe Michael dictionary." The scan is no longer only provisional evidence —
+it is intended as the dictionary itself. Two rulings settle how:
+
+### RULING 1 — GMR's English stays VERBATIM
+"Fix the errors" does NOT mean editing Geshe Michael's text. The
+flagged-never-corrected discipline STANDS: "commentray", "you an I", "Look
+for ahead", "even- mindedness", the mid-word truncations — all preserved
+byte-exact and queued for his individual ruling. The letter-exact battery
+stays as the proof that every English string in the dictionary is provably
+his. The errors to fix are COVERAGE and MAPPING, not his words.
+
+### RULING 2 — nothing is binding without human review
+Machine verification is not sufficient for a binding dictionary (risk R10:
+a wrong pairing passes every gate). Everything stays labelled PROVISIONAL
+and nothing enters the binding dictionary until a review pass confirms the
+mapping. Build the review habit now, at 7% coverage, rather than facing it
+at 100%.
+
+### The coverage failure that prompted this, and its fix
+C01 was declared COMPLETE in prose while **25 segments had no page at all**
+(1–22, the whole liturgical opening; plus markers 39, 43, 143 — and the
+ledger named 143 as handled). C02:1–22 has the same gap. Nothing could
+catch it: the gates verify the segments a page CITES, never that every
+segment HAS a page.
+
+FIXED 2026-08-28: `build_alignment_layer.py` now runs a COVERAGE GATE.
+Every course declares `complete`; a course claiming completeness with any
+unregistered segment REFUSES the build, and an incomplete course must print
+its gap on every run so no gap is ever silent. Liveness-proved: with C01
+falsely marked complete the builder refuses, naming all 25. Completeness is
+now a claim the builder proves, not one I assert in prose.
+
+**Backfill outstanding:** C01:1–22, 39, 43, 143 and C02:1–22 (47 segments).
+The liturgy is 21/22 byte-identical to C03:1–22, already scanned, so this is
+real work but not novel work.
+
 ## ⛔ STANDING LIMIT OF THE VERIFICATION HARNESS (2026-08-28) — read first
 
 **The deterministic gates prove the text is VERBATIM. They can never prove

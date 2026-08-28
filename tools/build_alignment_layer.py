@@ -45,6 +45,13 @@ FLOOR = 150   # distinct word-level pairs across all courses
 # full depth and flows into the evidence layer the same way)
 COURSES = {
     "C02": {
+        # complete=True means EVERY segment of the course must be
+        # registered on some page. Adam 2026-08-28: C01 was declared
+        # complete in prose while 25 segments had no page at all, and
+        # nothing could catch it because the gates only ever checked
+        # the segments a page CITES. Completeness is now a claim the
+        # builder proves or refuses.
+        "complete": False,
         "dir": os.path.join(OUTDIR, "pages"),
         "pages": {
             "p01": [23], "p02": [24, 25], "p03": [26, 27, 28, 29, 30],
@@ -57,6 +64,7 @@ COURSES = {
         },
     },
     "C01": {
+        "complete": False,   # 1-22, 39, 43, 143 outstanding
         "dir": os.path.join(OUTDIR, "pages_c01"),
         "pages": {
             "r1": [23, 24, 25, 26], "r2": [27, 28, 29],
@@ -117,6 +125,7 @@ COURSES = {
         },
     },
     "C03": {
+        "complete": False,   # in progress
         "dir": os.path.join(OUTDIR, "pages_c03"),
         "pages": {
             "c3p1": [1, 2, 3], "c3p2": [4, 5, 6], "c3p3": [7, 8, 9], "c3p4": [10, 11, 12], "c3p5": [13, 14, 15], "c3p6": [16, 17, 18], "c3p7": [19, 20, 21], "c3p8": [22, 23, 24], "c3p9": [25, 26, 27], "c3p10": [28, 29, 30], "c3p11": [31, 32, 33], "c3p12": [34, 35, 36], "c3p13": [37, 38, 39], "c3p14": [40, 41, 42], "c3p15": [43, 44, 45], "c3p16": [46, 47, 48], "c3p17": [49, 50, 51], "c3p18": [52, 53, 54], "c3p19": [55, 56, 57], "c3p20": [58, 59, 60], "c3p21": [61, 62, 63], "c3p22": [64, 65, 66], "c3p23": [67, 68, 69], "c3p24": [70, 71, 72], "c3p25": [73, 74, 75], "c3p26": [76, 77, 78], "c3p27": [79, 80, 81], "c3p28": [82, 83, 84], "c3p29": [85, 86, 87], "c3p30": [88, 89, 90], "c3p31": [91, 92, 93], "c3p32": [94, 95, 96], "c3p33": [97, 98, 99], "c3p34": [100, 101, 102], "c3p35": [103, 104, 105], "c3p36": [106, 107, 108], "c3p37": [109, 110, 111], "c3p38": [112, 113, 114],
@@ -252,6 +261,36 @@ def main():
         segs = {r[0]: (r[1], r[2], r[3]) for r in con.execute(
             "SELECT seq, wylie, english, acip FROM corpus_segments "
             "WHERE course=?", (course,))}
+        # COVERAGE GATE (Adam 2026-08-28). A course that claims
+        # completeness must have a page for every segment; a course
+        # that does not must still say out loud what is missing, so a
+        # gap is never silent.
+        registered = set()
+        for _pg, _sl in cfg["pages"].items():
+            registered.update(_sl)
+        gap = sorted(set(segs) - registered)
+        if gap:
+            rngs, s, prev = [], gap[0], gap[0]
+            for q in gap[1:]:
+                if q == prev + 1:
+                    prev = q
+                else:
+                    rngs.append((s, prev)); s = prev = q
+            rngs.append((s, prev))
+            desc = ", ".join("%d" % a if a == b else "%d-%d" % (a, b)
+                             for a, b in rngs)
+            if cfg.get("complete"):
+                sys.exit("REFUSED: %s claims complete but %d segment(s) "
+                         "have no page: %s" % (course, len(gap), desc))
+            print("COVERAGE %s: %d/%d segments scanned, %d open (%s)"
+                  % (course, len(registered), len(segs),
+                     len(gap), desc if len(desc) < 90
+                     else desc[:87] + "..."))
+        elif not cfg.get("complete"):
+            print("COVERAGE %s: %d/%d scanned — no gaps; set "
+                  "complete=True to lock it" % (course, len(registered),
+                                                len(segs)))
+
         for pg, _seglist in sorted(cfg["pages"].items()):
             path = os.path.join(cfg["dir"], pg + ".html")
             doc = io.open(path, encoding="utf-8").read()
