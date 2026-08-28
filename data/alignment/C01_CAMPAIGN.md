@@ -554,7 +554,7 @@ letter-exact battery gates every batch.
   (74's coinages reprised verbatim + self-referential "what we have
   called here"). khungs #4 "authentic source". Supplied transition
   sentence (filed with 115's). Self-quotes ×5 — densest cluster.
-| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p117 (144–388) done; 143, 259 & 324 = marker pairs; 389+ open; 108 segs / 36 batches remain; §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
+| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p118 (144–391) done; 143, 259 & 324 = marker pairs; 392+ open; 105 segs / 35 batches remain; §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
 
 NEXT: continue section VII (seq 146+) — the renunciation chapter.
 - seg 143: section-marker pair (like 43) — wylie carries "the first
@@ -2401,3 +2401,29 @@ TCS series and collections beyond, for later ruling). ***
   this so-vivid" (garbled), kept verbatim.
 - QA: both sides letter-exact, 191 spans balanced, depth clean.
   Layer: 3,144 headwords / 5,931 pairs.
+
+### c1p118 — Enough to exist conventionally (389–391)
+- **389 — seek and not find**: brtags don btsal → "you seek the thing
+  with the name"; mi rnyed → "never be able to find". bya byed
+  UNPACKED into the doing-doublet ("things make other things happen,
+  things do what they do"). tha snyad du render #4: "in a
+  conventionally agreed-upon way". bsnyon med → "quite logical and
+  proper" (same root as 386's accusation verb).
+- **390 — THE MAXIM QUOTED**: tha snyad du yod pas yod go chod /
+  don dam du med pas med go mi chod → '"to exist, it's enough to
+  exist conventionally; but not existing ultimately, is not enough
+  to not exist"' — go chod as "it's enough"; formula status
+  conferred by quotation marks. THE MIRROR: nag nog yod med →
+  "whether you have a spot on your face"; byad bzhin ("face")
+  RELOCATES (absorbed up front as "of some object", resurfacing at
+  the end as "your face"). ngos bzung bral → "may never win any
+  endorsement as being the object itself". bya byed/bya bzhag —
+  Tibetan varies the workings-word.
+- **391 — the bridge to karma**: las 'bras → "the laws of actions
+  and their consequences" (fullest render, las-'bras file). rten
+  'byung (variant of rten 'brel) → same "interdependence" — Tibetan
+  varies, English stabilizes AGAIN. shugs drag po → "a strong";
+  rtsis che ru 'gro → "become more and more important". Full mirror
+  in c2.
+- QA: both sides letter-exact, 168 spans balanced, depth clean.
+  Layer: 3,182 headwords / 5,985 pairs.
