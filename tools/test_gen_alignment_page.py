@@ -331,6 +331,20 @@ expect_refusal("an ambiguous member refuses",
                    "nul": "terminative"}]}]},
     "not determinable")
 
+# 25. The bound-morpheme diagnostic must not fire on a legitimately separate
+#     later word. C03:212 has `gnyis pa` ("second") followed by `gnyis`
+#     ("two") as its own word; a containment test refused it. In Wylie every
+#     standalone word starts a SYLLABLE, so position is the real signal.
+#     MUTATION: revert to the containment test -> this pin fails.
+rc, out, err = run({"course": "C03", "segments": [{"seq": 212, "title": "t",
+    "spans": [{"id": "w1", "d": 5, "tib": "gnyis pa", "eng": "second"},
+              {"id": "w2", "d": 5, "tib": "gnyis", "eng": None,
+               "nul": "a separate word, not a bound morpheme"}]}]})
+if rc != 0:
+    fails.append("separate later word refused: %s" % err.strip()[:220])
+else:
+    print("  ok   a separate later word is not mistaken for a bound morpheme")
+
 if fails:
     print("\nFAILED:")
     for f in fails:
