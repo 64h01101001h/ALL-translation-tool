@@ -29,7 +29,7 @@ When a segment's english field is phonetics, not translation:
    under its own clause with honest labels.
 
 ## Progress
-c3p1–c3p23 (1–69) done; 70+ open; 551 segs remain.
+c3p1–c3p24 (1–72) done; 73+ open; 548 segs remain.
 
 ## Queues (wylie / english / PHONETICS), C03
 - WYLIE: ACIP anusvara capitals dM/kM/ND + ni'a oddity (seg 6).
@@ -342,4 +342,13 @@ c3p1–c3p23 (1–69) done; 70+ open; 551 segs remain.
 - 69: NEW CLUSTER RULE spr-→tr ×2 (yitrul, chutrin); dngos → "ngu"
   (ö-as-u #11); the dngos-bshams/yid-sprul pair (real vs emanated)
   from 41's prose, now in verse.
+- Evidence layer unchanged: 4,039 / 7,481.
+
+### Batch C03-24 (c3p24, C03:70–72) — 2026-08-28
+- 70: stanza (source 67–70) rotates (69 leads); zhing mchog
+  paraphrased "There is no higher With whom I may make merit";
+  kyela (khy-→ky).
+- 71: dus nas → "dune" — s-drop + umlaut FUSION into one word.
+- 72: lus ngag → "lu-ngak" — HYPHEN AS DISAMBIGUATION (prevents
+  "lungak" misread); ci → "chi" (c-palatalization).
 - Evidence layer unchanged: 4,039 / 7,481.
