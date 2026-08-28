@@ -554,7 +554,7 @@ letter-exact battery gates every batch.
   (74's coinages reprised verbatim + self-referential "what we have
   called here"). khungs #4 "authentic source". Supplied transition
   sentence (filed with 115's). Self-quotes ×5 — densest cluster.
-| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p142 (144–463) done; 143, 259, 324, 427 & 446 = marker pairs; 464+ open; 33 segs / 11 batches remain; §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
+| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p143 (144–466) done; 143, 259, 324, 427 & 446 = marker pairs; 467+ open; 30 segs / 10 batches remain; §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
 
 NEXT: continue section VII (seq 146+) — the renunciation chapter.
 - seg 143: section-marker pair (like 43) — wylie carries "the first
@@ -2946,3 +2946,24 @@ TCS series and collections beyond, for later ruling). ***
   g-y tokens (g-yas, g-yon).
 - QA: both sides letter-exact, 130 spans balanced, depth clean.
   Layer: 3,572 headwords / 6,750 pairs.
+
+### c1p143 — Lo Diamond (464–466)
+- **464 — the tantra-name set completes**: gsang 'dus → '"Secret
+  Collection"' (GUHYASAMAJA); kyee rdor → '"Lo Diamond"' (HEVAJRA —
+  the vocative kye rendered INSIDE the name: boldest calque in the
+  file). de'i phyir → "Outside of them" — phyi=outside, homograph
+  split from 362's "Because" (dictionary note). WYLIE FORMATTING
+  QUEUE: "bde mchog,rgyab" missing space.
+- **465 — the bath house**: khrus khang → "the crystal bath house"
+  ("crystal" supplied; offering-context supplied wholesale). gsum
+  gsum du → per-member distributive ("three of you stand before each
+  member"). sa thob → "the various bodhisattva levels"; smin byed →
+  "serves to ripen the potential in you". Full mirror c2; bskyed ×3
+  (#2–3 gapped); lugs gsum crossed to head.
+- **466 — the body mandala**: lus dkyil → 'a "body mandala"' with
+  full unpack supplied ("a complete secret world and its
+  inhabitants, all part of his own body" — snod-bcud re-applied to
+  the guru's body). gtso bor "mainly"/gtso bo "the central figure" —
+  adverb vs noun one segment apart. (fn 190–191.)
+- QA: both sides letter-exact, 140 spans balanced, depth clean.
+  Layer: 3,599 headwords / 6,790 pairs.
