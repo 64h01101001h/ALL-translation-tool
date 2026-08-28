@@ -1,3 +1,24 @@
+# ⛔ WORK ORDER 2026-08-28 — BACKFILL BEFORE NEW C03 SEGMENTS
+
+Adam's ruling: this scan is intended as the MAIN Geshe Michael dictionary,
+and the coverage gaps are the errors to fix first. C03:115+ WAITS.
+
+Order of work:
+1. **C01:1–22** — the liturgical opening, never scanned. 21/22 are
+   byte-identical to C03:1–22 (already done, pages c3p1–c3p7); the sole
+   difference is segment 22, the per-course syllabus marker. Build as
+   pages c1L1..c1L8 in pages_c01/, registering into the C01 course entry.
+2. **C01:39, 43, 143** — three marker segments (English part-titles in the
+   wylie field), skipped. Marker protocol, as 259/324/427/446/483.
+3. **C02:1–22** — same liturgy again; 20/22 identical to C03:1–22.
+4. Then set `"complete": True` for C01 and C02 in the builder and let the
+   COVERAGE GATE prove it. If it refuses, the backfill is not done.
+5. Only then resume C03 at segment 115.
+
+Standing, per Adam 2026-08-28: GMR's English stays VERBATIM (typos flagged,
+never corrected); nothing is binding without human review; every batch
+records its producing model.
+
 # C03 CAMPAIGN — ACI Course 3 (Applied Meditation), full-depth alignment
 Started 2026-08-28, immediately after C01 closed. Standing mandate:
 C03..C18 in order, three segments per batch, the C01 pipeline
