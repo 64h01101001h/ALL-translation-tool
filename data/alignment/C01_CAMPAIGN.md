@@ -554,7 +554,7 @@ letter-exact battery gates every batch.
   (74's coinages reprised verbatim + self-referential "what we have
   called here"). khungs #4 "authentic source". Supplied transition
   sentence (filed with 115's). Self-quotes ×5 — densest cluster.
-| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p120 (144–397) done; 143, 259 & 324 = marker pairs; 398+ open; 99 segs / 33 batches remain; §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
+| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p121 (144–400) done; 143, 259 & 324 = marker pairs; 401+ open; 96 segs / 32 batches remain; §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
 
 NEXT: continue section VII (seq 146+) — the renunciation chapter.
 - seg 143: section-marker pair (like 43) — wylie carries "the first
@@ -2481,3 +2481,24 @@ TCS series and collections beyond, for later ruling). ***
   When Your Analysis is Still Incomplete".
 - QA: both sides letter-exact (apparatus included), 126 spans
   balanced, depth clean. Layer: 3,205 headwords / 6,053 pairs.
+
+### c1p121 — Root verse eleven (398–400)
+- **398 — ROOT VERSE (11)**: rotation 4-3-1-2 (357 was 4-1-2-3) —
+  conclusion fronted, the two-ideas list after the colon. thub pa →
+  "the Able" (the Muni calque, Able-Lords file root). khas len bral
+  ba → "beyond taking any position" (no-thesis formula; khas len 352
+  "accepted"). so sor → "disparate"; bslu ba med pa → "infallible"
+  (adjectival vs 357's verbal). dgongs pa #7 → "the thought"; snang
+  ba twice, two renders.
+- **399 — the completion criterion**: gcig grogs gcig tu → "go hand
+  in hand, supporting each other" — the friend idiom recurs from 396
+  VERBATIM in English (formula-consistency across prose + verse
+  commentary). 1 clause-chain → 3 sentences; supplied context.
+- **400 — the pretenders**: go mdog mdog byas → "made it seem like
+  they had grasped" (mdog-mdog seeming-seeming reduplication). The
+  polemic targets: rgya gar ba kha cig → "some of the ancient Indian
+  sages"; bod snga ma tsho → "the earlier Tibetan Buddhists" —
+  rendered mildly. rang bzhin med pa → "the concept of no
+  self-nature" (new render). Full mirror closing clause.
+- QA: both sides letter-exact, 116 spans balanced, depth clean.
+  Layer: 3,214 headwords / 6,076 pairs.
