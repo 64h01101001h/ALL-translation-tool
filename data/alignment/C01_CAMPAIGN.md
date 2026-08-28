@@ -554,7 +554,7 @@ letter-exact battery gates every batch.
   (74's coinages reprised verbatim + self-referential "what we have
   called here"). khungs #4 "authentic source". Supplied transition
   sentence (filed with 115's). Self-quotes ×5 — densest cluster.
-| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p130 (144–427) done; 143, 259, 324 & 427 = marker pairs; 428+ open; 69 segs / 23 batches remain; §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
+| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p131 (144–430) done; 143, 259, 324 & 427 = marker pairs; 431+ open; 66 segs / 22 batches remain; §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
 
 NEXT: continue section VII (seq 146+) — the renunciation chapter.
 - seg 143: section-marker pair (like 43) — wylie carries "the first
@@ -2690,3 +2690,23 @@ TCS series and collections beyond, for later ruling). ***
   You Have Learned"). Verbatim, honest labels, no lexical pairs.
 - QA: both sides letter-exact, 88 spans balanced, depth clean.
   Layer: 3,348 headwords / 6,357 pairs.
+
+### c1p131 — My son (428–430)
+- **428 — the fourth part**: outline expansion (final of four
+  body-parts); bskul bar → "strong words of encouragement".
+- **429 — THE FINAL ROOT VERSE (14)**: in-order with ONE relocation —
+  the vocative bu ("my son") moves from the Tibetan's LAST word to
+  mid-verse ("Then go into isolation, my son…"). rang gis ji bzhin →
+  "as well as I". ALL 14 ROOT VERSES NOW ALIGNED across the
+  campaign.
+- **430 — Tsongkhapa's love**: the Tibetan's final clause FRONTED
+  WHOLESALE to the English's first sentence, "Lord Tsongkapa"
+  SUPPLIED as subject; the rest cast as extended quoted speech (the
+  401 pattern at full scale). THREE-WISDOMS LADDER: thos byung → "by
+  listening…over and over"; bsam byung → "use contemplation". TWIN
+  VIRTUES: 'dod chung chog shes → "few material wants…satisfied with
+  whatever you have"; don nyung bya nyung → "keep your concerns and
+  activities few". phyi bshol → "putting off your practice"; thugs
+  brtse ba chen pos → "out of deepest feelings of love".
+- QA: both sides letter-exact, 153 spans balanced, depth clean.
+  Layer: 3,372 headwords / 6,399 pairs.
