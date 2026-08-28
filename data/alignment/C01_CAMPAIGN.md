@@ -554,7 +554,7 @@ letter-exact battery gates every batch.
   (74's coinages reprised verbatim + self-referential "what we have
   called here"). khungs #4 "authentic source". Supplied transition
   sentence (filed with 115's). Self-quotes ×5 — densest cluster.
-| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p107 (144–358) done; 143, 259 & 324 = marker pairs; 359+ open; 138 segs / 46 batches remain; §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
+| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p108 (144–361) done; 143, 259 & 324 = marker pairs; 362+ open; 135 segs / 45 batches remain; §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
 
 NEXT: continue section VII (seq 146+) — the renunciation chapter.
 - seg 143: section-marker pair (like 43) — wylie carries "the first
@@ -2152,3 +2152,31 @@ TCS series and collections beyond, for later ruling). ***
   reason supplied as quote ("because they are interdependent").
 - QA: both sides letter-exact, 100 spans balanced, depth clean.
   Layer: 2,887 headwords / 5,435 pairs.
+
+### c1p108 — Nothing more than that (359–361)
+- **359 — the verse unpacked**: THE RANGE FORMULA gzugs nas rnam
+  mkhyen gyi bar → "from basic physical matter on up to the
+  omniscience of a Buddha". INVERSE CONSISTENCY: Tibetan varies the
+  buddha-word (357 sangs rgyas / 359 rgyal ba), English holds "the
+  path that pleases the Buddhas" both times — Tibetan varies, English
+  stabilizes. tha snyad du → "in a manner of speaking"; rang bzhin
+  gyis grub pa → "exist naturally"; dgag bya #6 → "The antithesis,
+  which we seek to disprove". Four verse catchwords re-quoted
+  letter-true.
+- **360 — the plan**: 'khor bar 'khor byed → "keeps you and I going
+  round in this circle of life" (cognate figure carried). LAM RIM
+  NAMED → "the works on the Steps to the path"; gnad bzhi'i dpyad pa
+  → 'the "fourfold analysis"' (fn 162). gtan la 'beb #2 "discuss";
+  gtan tshigs #2 "the classical reasoning". Order flip bdag 'dzin ma
+  rig pa → "ignorance, to our grasping for a 'self'". zhus na
+  (humble) → "we will give".
+- **361 — the me-analysis**: nga → '"me"' — designation triad applied
+  first-person; lus sems gnyis tshogs → "taken two things together,
+  my body and my mind"; phar btags pa tsam → "nothing more than
+  that"; tshur grub pa med ×2 with negation FRONTED. WYLIE VARIANT
+  QUEUE: dgags gzhi (361) vs gdags gzhi (354) — kept verbatim,
+  flagged. rdul tsam yang med → "not a single atom of anything in
+  the universe"; re re nas → "themselves"/rang rang → "their own
+  sides". One sentence-chain → six English sentences.
+- QA: both sides letter-exact, 202 spans balanced, depth clean.
+  Layer: 2,920 headwords / 5,498 pairs.
