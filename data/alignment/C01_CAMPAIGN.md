@@ -3228,3 +3228,16 @@ C03 (C02 already complete).
   ri rab = "Meru" (C03:40 stanza) but "The Great Mountain" (C03:6) —
   one word, two English renders, flagged for the review pass.
 - COVERAGE GATE now reads C01 471→474; 22 open (4-22, 39, 43, 143).
+
+### BACKFILL B2 (c1L2, C01:4–6) — 2026-08-28 — model: Opus
+- 4: dbul bar ↔ "ulwar" (d- silent, b→w); dmigs te ↔ "mikte".
+- 5: spyod par ↔ "chupar" (spy-→ch); zhing in both lines 3 and 4.
+- 6: blended segment — mantra phonetics + English stanza + mantra;
+  the stanza is UNPAIRED (s6trans), source segs 2–5.
+  RENDER SPLIT CONFIRMED IN C01's OWN TEXT: ri rab → "The Great
+  Mountain" here, "Meru" in the corresponding C03:40 stanza. Both are
+  GMR's; flagged for the review pass, corrected nowhere (Adam's
+  ruling 1, 2026-08-28).
+  WYLIE QUEUE: ACIP anusvara capitals dM/kM/ND; ni'a ta ya mi ↔
+  niryatayami and ra maND la kM ↔ ratna mandalakam linked as units.
+- COVERAGE GATE: C01 474→477; 19 open (7-22, 39, 43, 143).
