@@ -554,7 +554,7 @@ letter-exact battery gates every batch.
   (74's coinages reprised verbatim + self-referential "what we have
   called here"). khungs #4 "authentic source". Supplied transition
   sentence (filed with 115's). Self-quotes ×5 — densest cluster.
-| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p152 (144–493) done; 143, 259, 324, 427, 446 & 483 = marker pairs; 494+ open; 3 segs / 1 batch remains; §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
+| VII–VIII. Renunciation; Stopping Desire | 143–496 | COURSE ONE COMPLETE 2026-08-28: c1p1–c1p153, all 496 segments aligned; 143, 259, 324, 427, 446 & 483 = marker pairs; §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
 
 NEXT: continue section VII (seq 146+) — the renunciation chapter.
 - seg 143: section-marker pair (like 43) — wylie carries "the first
@@ -3156,3 +3156,34 @@ TCS series and collections beyond, for later ruling). ***
   (segment-final) fronted to "The point he is trying to make";
   four-unit reversal in e1.
 - Layer: 3,828 headwords / 7,140 pairs.
+
+### Batch 153 (c1p153, C01:494–496) — 2026-08-28 — COURSE ONE COMPLETE
+- 494: CROWN CALQUE rgyang phan (Charvaka) → 'the so-called
+  "Cast-Offs' (fn 210 confirms); yod mtha'/med mtha' = the two
+  extremes; sel → "prevents you from falling into" ×2; thun mong ma
+  yin → "is truly unique"; kyang yin te fronted.
+- 495: nying khu → "the concentrated essence"; yongs 'dzin rin po
+  che → "the Master Tutor, the Precious One"; gces par zungs shig →
+  "Hold them therefore very dear to your heart". CROSS-SEGMENT
+  RELOCATION: 'di gung thang gsung las bris pa'o has NO English here
+  — paid at 484 ("composed by Gungtang"), the 454→455 pattern.
+- 496: the Hlalu woodblock colophon (fn 211): gzim lha klu → "the
+  house of Hlalu"; dga' tshal bas → "a veritable garden of bliss";
+  'gro don 'phel — SAME formula as 482, DIFFERENT English ("the
+  higher good of every living being" vs "May it help all living
+  beings!") — Tibetan-stable/English-varies ON THE FORMULA. WYLIE
+  QUEUE: stray leading backtick #2. "Notes to Reading Ten" (fn
+  167–211) = translator's ENDNOTES APPARATUS, no Tibetan source,
+  unpaired clause s496app per the 396 protocol. The apparatus
+  CORROBORATES queues: fn 206 "even-mindedness" unspaced (489's
+  artifact confirmed), fn 202 Suddhi Vadzra = Lobsang Dorje, fn 204
+  Gungtang Jampeyang, fn 208 Tashi.
+- Final layer: 3,845 headwords / 7,167 pairs.
+
+## COURSE ONE CLOSED — 2026-08-28
+All 496 corpus segments of C01 (Three Principal Paths, Pabongka/
+Tsongkapa, tr. GMR) aligned at six-layer Wilson depth across 153
+pages. Six marker segments; two apparatus blocks (396, 496); all 14
+root verses; the Gungtang appendix. English typo queue #1–#26 and
+the wylie queue stand flagged-verbatim. Next per standing mandate:
+C03 (C02 already complete).
