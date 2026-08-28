@@ -1379,3 +1379,45 @@ mis-fired on every allowed span containing an apostrophe.
 - Evidence layer: 4,525 headwords / 8,408 pairs. C03 at 265/620.
   Broken words: 12,054 English spans clean. Split syllables: 15,247 Tibetan
   spans clean. Both across 275 pages.
+
+### Batches C03-86 … C03-91 (C03:266–295) — 2026-08-28 — model: Opus
+Six pages, thirty headings — the three trainings, the greater scope, the six
+perfections, entry to the secret way. **Thirty of thirty clean.**
+
+**RULE 10 WORKED IN PRACTICE.** C03:286 glosses `zhi gnas` as "(shamata, or
+insight)"; shamata is quietude. The page carries Geshe Michael's sentence
+unchanged, and the span keys `zhi gnas` to **"shamata"** alone with "or
+insight" unwrapped and explained. The layer now holds `zhi gnas` →
+*quietude · on quietude · shamata*, and **not "insight"**. The text is
+preserved and the falsehood is not banked. See
+`docs/NEVER_BANK_A_FALSEHOOD.md`.
+
+**"Belief" is a heading FRAME, not an exponent of `'dzin`** — a finding
+neither proposer reached, and it changes how the entry should be read. Across
+the five wrong-views run: 265 has both `lta` and `'dzin`, 266 has both, 267
+has only `'dzin`, and **268 has only `lta` and still says "Belief"**. So
+"Belief in/that…" is the frame Geshe Michael wraps the whole category in. The
+span is kept because "holding" → "Belief" is a true reading of `'dzin` and the
+only assignment available inside 266, **but the dictionary should carry it as
+heading-frame evidence, not as a clean equation.** That distinction is worth
+carrying into the app.
+
+**"Wrong" is not spannable, proved two ways.** C03:266 reads "Belief that
+One's Wrong Views are the Best" for `lta ba mchog 'dzin` — no morpheme means
+"wrong". Two lines later C03:268 puts "Wrong" on `log` (`log lta` → "Belief in
+a Wrong Worldview"), and every one of the 18 nominal `lta ba` occurrences in
+C03 is rendered plain "view" or "worldview". The instructive parallel:
+C03:199 supplies "**correct** view" for a bare `lta ba` with no exponent
+either. **The same bare word attracts opposite evaluative adjectives from
+context alone** — which is exactly why neither may be banked onto it.
+
+**A third register split**: `mchog 'dzin` is "Belief" in the outline headings
+and a verb of holding in running prose — C10:27 "holding wrong views as
+supreme", C18:546 "the view that holds mistaken views as being best",
+DTE:941 "where we hold our own viewpoints as best". Reported as a bound, not a
+census, and stated as such by the reconciler unprompted. Three splits now
+recorded: `gus pa`, `skyabs su 'gro`, `mchog 'dzin`.
+
+- Evidence layer: 4,553 headwords / 8,479 pairs. C03 at 295/620.
+  Broken words: 12,206 English spans clean. Split syllables: 15,419 Tibetan
+  spans clean. Both across 281 pages.
