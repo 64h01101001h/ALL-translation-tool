@@ -29,7 +29,7 @@ When a segment's english field is phonetics, not translation:
    under its own clause with honest labels.
 
 ## Progress
-c3p1–c3p28 (1–84) done; 85+ open; 536 segs remain.
+c3p1–c3p29 (1–87) done; 88+ open; 533 segs remain.
 
 ## Queues (wylie / english / PHONETICS), C03
 - WYLIE: ACIP anusvara capitals dM/kM/ND + ni'a oddity (seg 6).
@@ -389,4 +389,14 @@ c3p1–c3p28 (1–84) done; 85+ open; 536 segs remain.
 - 83: dakki consistent; ji-nye (disambiguation hyphen); 'dis → "di"
   — case -s erodes in speech, phonetics identical to 'di.
 - 84: gangpen (phan→pen consistent); tendang fusion.
+- Evidence layer unchanged: 4,039 / 7,481.
+
+### Batch C03-29 (c3p29, C03:85–87) — 2026-08-28
+- 85: kyepar/jetsun/losang drakpa — all consistent.
+- 86: 4th in-order stanza (83-86). bstan pa → "the Word" (Kadampa
+  calque echo); gsal byed → "carry forth The Light"; ring du →
+  "for many years to come".
+- 87: dpal ldan → "pelnden" — NEW JUNCTION PHENOMENON: ld- onset
+  surfaces as nd after liquid coda (cousin of the nasal bridges).
+  The root-lama verse opens.
 - Evidence layer unchanged: 4,039 / 7,481.
