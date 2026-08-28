@@ -40,7 +40,7 @@ upstream in the data project, rather than an editorial change here.
 Flagged for Adam.
 
 ## Progress
-c2L1–c2L4 (1–12) done; 13–22 open. Main pass 22–68 already delivered.
+c2L1–c2L5 (1–15) done; 16–22 open. Main pass 22–68 already delivered.
 
 ### BACKFILL C2-B1 (c2L1, C02:1–3) — 2026-08-28 — model: Opus
 - Generated from C02's own spine rows. Segments 1–3 are byte-identical
@@ -86,3 +86,15 @@ c2L1–c2L4 (1–12) done; 13–22 open. Main pass 22–68 already delivered.
   That is the evidence behind calling this an ATTESTATION layer
   rather than a definition list.
 - COVERAGE GATE: C02 55→58; 10 open (13-22).
+
+### BACKFILL C2-B5 (c2L5, C02:13–15) — 2026-08-28 — model: Opus
+- Identity with C01 asserted before generation; all three match.
+- 13: gewa / kyewo / diyi (dropped instrumental -s, 3rd attestation).
+- 14: tshogs rdzogs ↔ "tsok-dzok" — now attested at the same segment
+  number in ALL THREE courses, spelled identically each time. The
+  hyphenation is settled practice, not a one-off, which strengthens
+  phonetics queue #2 (chukyi vs chu-kyi) as a genuine inconsistency
+  rather than free variation.
+- 15: lejung / way; the bsod nams ye shes anaphora reproduces
+  identically across C01, C02, C03.
+- COVERAGE GATE: C02 58→61; 7 open (16-22).
