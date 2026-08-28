@@ -554,7 +554,7 @@ letter-exact battery gates every batch.
   (74's coinages reprised verbatim + self-referential "what we have
   called here"). khungs #4 "authentic source". Supplied transition
   sentence (filed with 115's). Self-quotes ×5 — densest cluster.
-| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p108 (144–361) done; 143, 259 & 324 = marker pairs; 362+ open; 135 segs / 45 batches remain; §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
+| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p109 (144–364) done; 143, 259 & 324 = marker pairs; 365+ open; 132 segs / 44 batches remain; §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
 
 NEXT: continue section VII (seq 146+) — the renunciation chapter.
 - seg 143: section-marker pair (like 43) — wylie carries "the first
@@ -2180,3 +2180,28 @@ TCS series and collections beyond, for later ruling). ***
   sides". One sentence-chain → six English sentences.
 - QA: both sides letter-exact, 202 spans balanced, depth clean.
   Layer: 2,920 headwords / 5,498 pairs.
+
+### c1p109 — The chanting master (362–364)
+- **362 — the syllogism PERFORMED**: 358 named the parts, 362
+  executes them — chos can → "Consider" (formal subject-marker as
+  imperative); phyir → "Because" (fronted from Tibetan-final); yin
+  pa'i → "they are". bden 'dzin → "the true…existence that I hold
+  them to have" (grasping-as-true first-person). rtags bkod na →
+  "express all this in the classical form of a logical statement".
+  rang gi ngo bos grub pa → "exist on their own" — THIRD phrasing of
+  own-side existence.
+- **363 — etymology rendered**: rten 'brel decomposed — brten nas
+  'brel ba → "interrelated with others on which they depend"; brten
+  nas 'byung → "occur through dependence" — both readings
+  translated. thabs #4: grub thabs med → "absolutely no way". 'am
+  ("or") → "that is" (alternative as restatement).
+- **364 — THE CHANTING MASTER PARABLE**: dbu mdzad → "chanting
+  master"; mkhan po → "the abbot"; the designation triad LIVED —
+  gdags gzhi tshad ma → "a reasonable basis to be called" (354's
+  exact terms), ming brdas → "the name and the concept", direct
+  speech "He is now the chanting master". SPELLING RESOLVED: gdags
+  gzhi (354, 364) vs dgags gzhi (361) — 361 is the outlier, variant
+  queue updated. tshogs kyang → "even though he may have all the
+  qualities". 1 tib sentence → 5 eng with "First"/"Then" supplied.
+- QA: both sides letter-exact, 142 spans balanced, depth clean.
+  Layer: 2,940 headwords / **5,540 pairs** — 5,500-pair milestone.
