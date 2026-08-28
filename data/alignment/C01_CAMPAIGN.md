@@ -554,7 +554,7 @@ letter-exact battery gates every batch.
   (74's coinages reprised verbatim + self-referential "what we have
   called here"). khungs #4 "authentic source". Supplied transition
   sentence (filed with 115's). Self-quotes ×5 — densest cluster.
-| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p70 (144–247) done; 143 = marker pair; 248+ open; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
+| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p71 (144–250) done; 143 = marker pair; 251+ open; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
 
 NEXT: continue section VII (seq 146+) — the renunciation chapter.
 - seg 143: section-marker pair (like 43) — wylie carries "the first
@@ -1317,3 +1317,23 @@ TCS series and collections beyond, for later ruling). ***
   (signature render, first in file). 'khor ba DEFINED by referent
   (rgyun nam cha → appositive doubling). lung pa (valley) →
   "country". rtsa ba nas rgyun bcad → "stopped at its root".
+
+### c1p71 — C01:248–250 (batch 71) — root verse 5; §X opens
+- Nineteenth consecutive zero-catch batch. Layer: 2,186 headwords /
+  4,024 pairs.
+- seg 248: bshad zin → "This completes our explanation" (section-
+  close formula). The segment English carries the SECTION X HEADER
+  ("How to Know When You've Found Renunciation") — §X begins here;
+  kept verbatim as reading-boundary marker.
+- seg 249: outline header expanded (206 pattern); "and final"
+  supplied; tshad ("the measure") → "the point at which we can say
+  a person has succeeded in developing it". Supplied citation
+  lead-in anticipates verse 5.
+- seg 250 (ROOT VERSE 5 — the renunciation criterion): "(5)"
+  supplied, frame dropped (207 pattern). ENGLISH TYPO CANDIDATE
+  #15: "the goods things of cyclic life" (expected "good things";
+  witnessed by 232/238). Kept verbatim, flagged. thar pa →
+  "freedom" (consistent with 195). goms pas → "When you've
+  meditated thus". skad cig tsam yang → "not even A moment's"
+  (verse line-break capital kept). 'khor ba'i phun tshogs pairs
+  232's phrase — formula continuity across fifty segments.
