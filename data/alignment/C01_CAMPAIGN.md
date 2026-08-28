@@ -554,7 +554,7 @@ letter-exact battery gates every batch.
   (74's coinages reprised verbatim + self-referential "what we have
   called here"). khungs #4 "authentic source". Supplied transition
   sentence (filed with 115's). Self-quotes ×5 — densest cluster.
-| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p126 (144–415) done; 143, 259 & 324 = marker pairs; 416+ open; 81 segs / 27 batches remain; §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
+| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p127 (144–418) done; 143, 259 & 324 = marker pairs; 419+ open; 78 segs / 26 batches remain; §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
 
 NEXT: continue section VII (seq 146+) — the renunciation chapter.
 - seg 143: section-marker pair (like 43) — wylie carries "the first
@@ -2609,3 +2609,24 @@ TCS series and collections beyond, for later ruling). ***
   aligned segment since the markers (11 syllables → 11 words).
 - QA: both sides letter-exact, 120 spans balanced, depth clean.
   Layer: 3,288 headwords / 6,240 pairs.
+
+### c1p127 — The fourfold distinction (416–418)
+- **416 — the outsiders' answer**: rtags ma grub → '"I disagree with
+  your reason"' — the debate-hall formula as first-person speech +
+  supplied gloss. spyi gtso bo → "some primeval One" (Samkhya
+  pradhana); rnam 'gyur → "a manifestation". English reorders
+  (answer first, belief second).
+- **417 — the error census**: chad mtha' → '"thinking things have
+  stopped"'; rtag mtha' → '"thinking things are permanent"' — the
+  extremes NAMED. rang gi mtshan nyid kyis ma grub → '"exist by
+  definition"' (mtshan nyid = definition). khyab pa absorbed into
+  "that if…"; bzhed → "agree" (411 "hold"). snga rabs pa vs snga ma
+  (400) — Tibetan varies, English stabilizes AGAIN. mthar
+  lhung/song: fell into / fall into / tantamount to.
+- **418 — the fourfold distinction**: naturally-not ≠ not-at-all;
+  convention-yes ≠ naturally-yes; taxonomy SUPPLIED ('two kinds of
+  "nothing exists" and two kinds of "everything exists"'). mkhas pa
+  → "The real sages" ("real" supplied, polemic edge). dbye ba bzhir
+  phye crossed to head. 'khrul gzhi → "The point of error".
+- QA: both sides letter-exact, 143 spans balanced, depth clean.
+  Layer: 3,313 headwords / 6,281 pairs.
