@@ -29,7 +29,7 @@ When a segment's english field is phonetics, not translation:
    under its own clause with honest labels.
 
 ## Progress
-c3p1–c3p25 (1–75) done; 76+ open; 545 segs remain.
+c3p1–c3p26 (1–78) done; 79+ open; 542 segs remain.
 
 ## Queues (wylie / english / PHONETICS), C03
 - WYLIE: ACIP anusvara capitals dM/kM/ND + ni'a oddity (seg 6).
@@ -360,4 +360,14 @@ c3p1–c3p25 (1–75) done; 76+ open; 545 segs remain.
   CROSS-TEXT consistency with seg 44 (Great Book verse vs Lhagyama).
 - 75: dundir (nasal bridge #7); mangtu (thos→tu, 66 consistency);
   tsun (#14). Rejoicing verse opens.
+- Evidence layer unchanged: 4,039 / 7,481.
+
+### Batch C03-26 (c3p26, C03:76–78) — 2026-08-28
+- 76: delnjor (bridge on dal 'byor itself); dunyu (DOUBLE ö-as-u
+  #15/#16); pangpe.
+- 77: kyukyi (the pronoun takes ö-as-u #17); gunpo consistent.
+- 78: 2nd in-order stanza (75-78). chos brgyad → "The eight worldly
+  thoughts" (C01 fn 172 exact); dal 'byor → "Your leisure and
+  fortune" — ENGLISH RENDER #5, the first LITERAL one; bsam pa thag
+  pas → "happy deep inside" (thag pa depth idiom).
 - Evidence layer unchanged: 4,039 / 7,481.
