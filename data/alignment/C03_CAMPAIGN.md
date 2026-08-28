@@ -1466,3 +1466,29 @@ only the wylie and english columns, so a quote legitimately taken from the
 - Evidence layer: 4,626 headwords / 8,642 pairs. C03 at 307/620.
   Errata register: 71 entries. 12,471 English and 15,744 Tibetan spans clean
   across 285 pages.
+
+### Batches C03-96 … C03-99 (C03:308–319) — 2026-08-28 — model: Opus
+Four pages, twelve of twelve clean. The first lesson — precious human life,
+refuge, and the workings of karma.
+
+**Eight errata proposed, five filed, and the difference is a judgment worth
+recording.** Four of the eight were footnote-marker instances — a printed
+reference number flattened into the running English and fused to the
+sentence-final period. **Four rows for one systematic pattern is register
+noise**, so they were collapsed into a single CLASS entry (E-076) carrying the
+measured extent instead:
+
+    footnote markers fused to a sentence end
+      307 occurrences in 281 segments across 5 courses
+      C01 161 · C03 95 · C16 38 · TCS13 7 · TCS15 6
+
+Getting that number took three passes, and the discarded two are recorded in
+the entry itself: a first pattern gave **1,054** (contaminated by thousands
+separators — "25,000"), a second gave **867** (contaminated by section labels
+"(S1)" and verse citations "[I.1b]"). Only the third — sentence-final
+punctuation, then 1–3 digits, then a space and a capital — isolates the real
+signature. An editor reading E-076 can see which number to trust and why.
+
+- Evidence layer: 4,688 headwords / 8,774 pairs. C03 at 319/620.
+  Errata register: 76 entries. 12,688 English and 16,051 Tibetan spans clean
+  across 289 pages.
