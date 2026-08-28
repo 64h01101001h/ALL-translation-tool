@@ -29,7 +29,7 @@ When a segment's english field is phonetics, not translation:
    under its own clause with honest labels.
 
 ## Progress
-c3p1–c3p22 (1–66) done; 67+ open; 554 segs remain.
+c3p1–c3p23 (1–69) done; 70+ open; 551 segs remain.
 
 ## Queues (wylie / english / PHONETICS), C03
 - WYLIE: ACIP anusvara capitals dM/kM/ND + ni'a oddity (seg 6).
@@ -332,4 +332,14 @@ c3p1–c3p22 (1–66) done; 67+ open; 554 segs remain.
   FIRST IN-ORDER STANZA (63-64-65-66, the thugs/gsung/sku triple).
   lham mer → TRIPLE anaphora ("Shines forth/with brightness/with a
   glory"); mthong thos dran pas → "Just to see/hear/think of You".
+- Evidence layer unchanged: 4,039 / 7,481.
+
+### Batch C03-23 (c3p23, C03:67–69) — 2026-08-28
+- 67: yid 'ong → "yi-ong" — 'a-chung juncture HYPHENATED (vs the
+  nasal-bridge treatment): both strategies now attested. mchod yon
+  → "chuyun" (chu member + ö-as-u #10).
+- 68: bdug spos → "dukpu" (spos→pu, c3p1 consistency); nangsel.
+- 69: NEW CLUSTER RULE spr-→tr ×2 (yitrul, chutrin); dngos → "ngu"
+  (ö-as-u #11); the dngos-bshams/yid-sprul pair (real vs emanated)
+  from 41's prose, now in verse.
 - Evidence layer unchanged: 4,039 / 7,481.
