@@ -554,7 +554,7 @@ letter-exact battery gates every batch.
   (74's coinages reprised verbatim + self-referential "what we have
   called here"). khungs #4 "authentic source". Supplied transition
   sentence (filed with 115's). Self-quotes ×5 — densest cluster.
-| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p118 (144–391) done; 143, 259 & 324 = marker pairs; 392+ open; 105 segs / 35 batches remain; §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
+| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p119 (144–394) done; 143, 259 & 324 = marker pairs; 395+ open; 102 segs / 34 batches remain; §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
 
 NEXT: continue section VII (seq 146+) — the renunciation chapter.
 - seg 143: section-marker pair (like 43) — wylie carries "the first
@@ -2427,3 +2427,24 @@ TCS series and collections beyond, for later ruling). ***
   in c2.
 - QA: both sides letter-exact, 168 spans balanced, depth clean.
   Layer: 3,182 headwords / 5,985 pairs.
+
+### c1p119 — Seeds to sprouts (392–394)
+- **392 — the double pair unzipped**: rgyu dge sdig las 'bras bu bde
+  sdug → "good deeds lead to pleasure and bad deeds lead to pain" —
+  two compressed pairs distributed into two parallel clauses. ma
+  'chol bar ("unmixed") unpacked to twenty words; "This invariable
+  relationship" supplied as summary subject.
+- **393 — understanding by implication**: shugs kyis go → "you
+  understand by implication" (fronted). gting nas → "a total
+  [conviction]". 'khor 'das unpacked ("whether they be those within
+  the circle of life or those that are beyond it" vs 357's compact
+  "in the cycle or beyond"). rten 'brel AND rten 'byung in one
+  segment, both → "interdependence" — variant-convergence sealed.
+- **394 — the sorites chain**: anadiplosis preserved ("And the fact
+  that…" ×2): depends → not natural → cause-effect plausible →
+  seeds-sprouts-grains. THE 'BRAS PUN: 'bras bu "result" (392) vs
+  'bras bur "grains" (394) — both senses two segments apart. 'thad
+  pa render #3 "perfectly plausible" (logical-proper /
+  proper-infallible / plausible).
+- QA: both sides letter-exact, 136 spans balanced, depth clean.
+  Layer: 3,195 headwords / **6,022 pairs** — 6,000-pair milestone.
