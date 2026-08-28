@@ -554,7 +554,7 @@ letter-exact battery gates every batch.
   (74's coinages reprised verbatim + self-referential "what we have
   called here"). khungs #4 "authentic source". Supplied transition
   sentence (filed with 115's). Self-quotes ×5 — densest cluster.
-| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p145 (144–472) done; 143, 259, 324, 427 & 446 = marker pairs; 473+ open; 24 segs / 8 batches remain; §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
+| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p146 (144–475) done; 143, 259, 324, 427 & 446 = marker pairs; 476+ open; 21 segs / 7 batches remain; §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
 
 NEXT: continue section VII (seq 146+) — the renunciation chapter.
 - seg 143: section-marker pair (like 43) — wylie carries "the first
@@ -3011,3 +3011,24 @@ TCS series and collections beyond, for later ruling). ***
   "rin cen" (rin chen variant); tail "lham" (possibly truncated).
 - QA: both sides letter-exact, 108 spans balanced, depth clean.
   Layer: 3,648 headwords / 6,870 pairs.
+
+### c1p146 — The bow and the shafts (473–475)
+- **473 — father of the Victors** (fn 197–198): rgyal ba'i yab/rgyal
+  sras byis pa → the Manjushri paradox intact. THE TITLE IN VERSE:
+  lam gtso rnam gsum zhes → "we call it Three Principal Paths". dri
+  med → "immaculate" (morpheme render #3: stainless/taint/
+  immaculate). dvangs ma'i khu → "the essence of the nectar from
+  the cream".
+- **474 — no empty words** (fn 199): zab zab → "supposedly deep"
+  (reduplication as pretense, mdog-mdog family). NUMBER SHIFTED:
+  gter brgya ("a hundred") → "a thousand riches" — the only
+  number-change observed; flagged. srid zhi → "the world or peace"
+  (the pair's 4th English costume).
+- **475 — the archery of reasoning**: gnam ru → "the bow"; rigs
+  pa'i nyag phran → "the feathered shafts of reasoning"; 'big →
+  "pierce" (fronted); log smra → "those who would teach wrong". mdo
+  rgyud → "the true Word, open and secret" (347 consistency); tshad
+  ma spread #6. WYLIE QUEUE: "dag,sbyor" missing space (#2 of
+  class).
+- QA: both sides letter-exact, 121 spans balanced, depth clean.
+  Layer: 3,680 headwords / 6,915 pairs.
