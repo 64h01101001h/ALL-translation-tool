@@ -29,7 +29,7 @@ When a segment's english field is phonetics, not translation:
    under its own clause with honest labels.
 
 ## Progress
-c3p1–c3p27 (1–81) done; 82+ open; 539 segs remain.
+c3p1–c3p28 (1–84) done; 85+ open; 536 segs remain.
 
 ## Queues (wylie / english / PHONETICS), C03
 - WYLIE: ACIP anusvara capitals dM/kM/ND + ni'a oddity (seg 6).
@@ -379,4 +379,14 @@ c3p1–c3p27 (1–81) done; 82+ open; 539 segs remain.
   (-e'i→ey); 'khrigs → "trik" ('khr-→tr); chukuy extends the chu
   collision to the Dharma-body.
 - 81: duljay; jitar (lt-→t); dzinma (the earth-holder).
+- Evidence layer unchanged: 4,039 / 7,481.
+
+### Batch C03-28 (c3p28, C03:82–84) — 2026-08-28
+- 82: dbab → "ap" (db- VOCALIZES, dbul family). PHONETICS QUEUE #2:
+  chukyi (82) vs chu-kyi (57) — hyphen inconsistency, same word.
+  Third in-order stanza (79-82); ji ltar 'tshams pa'i → "As we are
+  ready"; zab rgyas → "Deep and wide".
+- 83: dakki consistent; ji-nye (disambiguation hyphen); 'dis → "di"
+  — case -s erodes in speech, phonetics identical to 'di.
+- 84: gangpen (phan→pen consistent); tendang fusion.
 - Evidence layer unchanged: 4,039 / 7,481.
