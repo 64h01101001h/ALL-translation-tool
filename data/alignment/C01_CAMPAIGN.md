@@ -554,7 +554,7 @@ letter-exact battery gates every batch.
   (74's coinages reprised verbatim + self-referential "what we have
   called here"). khungs #4 "authentic source". Supplied transition
   sentence (filed with 115's). Self-quotes ×5 — densest cluster.
-| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p104 (144–349) done; 143, 259 & 324 = marker pairs; 350+ open; 147 segs / 49 batches remain; §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
+| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p105 (144–352) done; 143, 259 & 324 = marker pairs; 353+ open; 144 segs / 48 batches remain; §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
 
 NEXT: continue section VII (seq 146+) — the renunciation chapter.
 - seg 143: section-marker pair (like 43) — wylie carries "the first
@@ -2074,3 +2074,30 @@ TCS series and collections beyond, for later ruling). ***
   generator's assert before any file was written.
 - QA: both sides letter-exact, 165 spans balanced, depth clean.
   Layer: 2,853 headwords / 5,345 pairs.
+
+### c1p105 — Implication and interdependence (350–352)
+- **350 — the school set completes**: thal 'gyur ba → "Implication"
+  (Prasangika; category + "finally" supplied) — all five English
+  school names now attested: Detailist / Scripturalist / Mind-Only /
+  Independent / Implication. THE DIRECTIONAL PAIR: phar ("thither") →
+  "from our side" vs tshur ("hither") folded into "from its own
+  side" — phar-btags/tshur-grub as our-side/own-side. kho rang gi
+  steng nas → "from its own side" (signature Prasangika phrase).
+  dgag bya #5 / 'dod #5. Halves reversed again (as 349). fn 160.
+- **351 — the root text surfaces**: lam gtso → "the Three Principal
+  Paths" — the course's own root text named, verse line quoted: de
+  phyir rten 'brel rtogs pa'i thabs la 'bad → "Make efforts in ways
+  then to perceive interdependence". chen po RENDERED ("the great
+  Tsongkapa") — counter-case to 345/347's drops: the honorific is
+  variable, not systematically elided. thabs → "ways" (third sense:
+  method/way/ways). ces → "as the line goes". Tibetan repeats the
+  line; English restructures as urging + quotation.
+- **352 — Functionalists**: dngos smra ba → 'The "Functionalist"
+  group' (fn 161). TOPIC SENTENCE SUPPLIED ("Different schools have
+  different ways…") from 'jog tshul la; EXPLANATORY TAIL SUPPLIED
+  ("and have no causes" — no Tibetan exponent; inverse of a dropped
+  image, flagged). rgyu rkyen → "various causes and conditions";
+  rtag pa → "unchanging" (consistent 348); rten 'brel ×3/×3 —
+  terminological stability at density.
+- QA: both sides letter-exact, 125 spans balanced, depth clean.
+  Layer: 2,866 headwords / 5,371 pairs.
