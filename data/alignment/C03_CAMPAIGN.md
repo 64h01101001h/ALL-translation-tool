@@ -46,7 +46,7 @@ entry from here records its producing model; everything through C03 batch
 32 was Fable.
 
 ## Progress
-c3p1–c3p34 (1–102) done; 103+ open; 518 segs remain.
+c3p1–c3p35 (1–105) done; 106+ open; 515 segs remain.
 
 ## Queues (wylie / english / PHONETICS), C03
 - WYLIE: ACIP anusvara capitals dM/kM/ND + ni'a oddity (seg 6).
@@ -480,4 +480,24 @@ c3p1–c3p34 (1–102) done; 103+ open; 518 segs remain.
   identical each time. ACIP RTZA BA'I → wylie rtsa ba'i.
 - 102: snying khar again — the verse cycles crown (88) → heart (98)
   → heart (102).
+- Evidence layer: 4,039 headwords / 7,481 pairs; ACIP 4,038/4,039.
+
+### Batch C03-35 (c3p35, C03:103–105) — 2026-08-28 — model: Opus
+- 104: THE VARIATION MOVES FROM THE PLACE TO THE REQUEST. The stanza
+  (source 101–104) again matches 90's and 100's word for word,
+  keeps "In my heart" from 100, and changes only the final request:
+  90/100 asked "Your body, speech and mind" (sku gsung thugs), 104
+  asks "Both common and highest goals" (mchog dang thun mong). The
+  liturgy varies ONE slot per recitation — first the place, then the
+  boon — and the English varies with it and nowhere else. Together
+  with batch 34 this is a three-point demonstration of GMR's
+  stanza-scale consistency.
+- ORDER REVERSED: Tibetan mchog ("highest") dang thun mong
+  ("common") → English "Both common and highest".
+- dngos grub (siddhi) → "goals" here vs "Grant that I attain" at 90
+  — second render.
+- CROSS-COURSE: thun mong = "common" here, but "as a whole" at
+  C01:486 (thun mong du sbyor tshul) — two registers of one word.
+- 103/105: verbatim repeats (89/99/103; 87/97/101/105), phonetics
+  identical each time.
 - Evidence layer: 4,039 headwords / 7,481 pairs; ACIP 4,038/4,039.
