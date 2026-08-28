@@ -3241,3 +3241,17 @@ C03 (C02 already complete).
   WYLIE QUEUE: ACIP anusvara capitals dM/kM/ND; ni'a ta ya mi ↔
   niryatayami and ra maND la kM ↔ ratna mandalakam linked as units.
 - COVERAGE GATE: C01 474→477; 19 open (7-22, 39, 43, 143).
+
+### BACKFILL B3 (c1L3, C01:7–9) — 2026-08-28 — model: Opus
+- 7: skyabs 'gro sems bskyed ↔ "kyabdro semkye" (bsk-→k, final -d
+  drops).
+- 8: chos ↔ "chu"; tshogs kyi ↔ "tsokyi"; mchog rnams ↔ "choknam".
+  CASE CONTRAST BANKED: the la particle survives into speech
+  unchanged, where the ERGATIVE -s does not survive silently but
+  fronts the vowel (C03:109/111, tsongkapa/tsongkape). Two different
+  fates for two different particles.
+- 9: byang chub ↔ "jangchub"; mchis ↔ "chi". SECOND CASE CONTRAST:
+  bare bdag + topic ni gives "dakni", where bdag gi/gis gives
+  "dakki" (C03:10, 83, 88) — the junction doubling is triggered by
+  the case particle, not by bdag itself.
+- COVERAGE GATE: C01 477→480; 16 open (10-22, 39, 43, 143).
