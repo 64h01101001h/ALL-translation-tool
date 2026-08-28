@@ -554,7 +554,7 @@ letter-exact battery gates every batch.
   (74's coinages reprised verbatim + self-referential "what we have
   called here"). khungs #4 "authentic source". Supplied transition
   sentence (filed with 115's). Self-quotes ×5 — densest cluster.
-| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p94 (144–319) done; 143 & 259 = marker pairs; 320+ open; 177 segs / 59 batches remain to close C01; §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
+| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p95 (144–322) done; 143 & 259 = marker pairs; 323+ open; 174 segs / 58 batches remain to close C01; §XIII (the measure of the wish) begins at 321/322; §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
 
 NEXT: continue section VII (seq 146+) — the renunciation chapter.
 - seg 143: section-marker pair (like 43) — wylie carries "the first
@@ -1811,3 +1811,23 @@ TCS series and collections beyond, for later ruling). ***
   criticism in-text; resonant with the project's provenance
   rules. gang dran dran → "anything somebody could think up".
   lung pa spread (country/localities).
+
+### c1p95 — C01:320–322 (batch 95) — legitimate texts; the real measure
+- Zero-catch. *** LAYER CROSSED 5,000 PAIRS (2,680 headwords /
+  5,001). ***
+- seg 320: FOUR SUTRA TITLES translated (Three Heaps / Sublime
+  Medicine / Great Freedom / Eon of Fortune; fn 140). mdo rgyud →
+  "open and secret teachings" (sutra/tantra as open/secret).
+  PROVENANCE PAIR UNITED: tshad ldan khungs dag → "authoritative
+  texts with a legitimate origin". Title-list and Victors clauses
+  swap order (crossed ids). gsungs 7th.
+- seg 321: objector quoted (los yod → "But I DO have"); sangs
+  rgyas chos tshogs → "'Buddha-Dharma-Sangha' prayer" (refuge
+  formula named; fn 141). khul → "supposedly". Reductio staged
+  (sla shos → "the very easiest"). gsungs 8th. §XIII HEADER
+  in-segment, kept verbatim.
+- seg 322: §XIII opens with the FIRE-PIT MOTHER (me dong →
+  "red-hot coals"; rings pa → "throws herself forward"; "The
+  fire is searing his body." supplied; 1 chain → 4 sentences).
+  TITLE: sgom rim dang po → "the first of the Stages of
+  Meditation" (fn 142). che chung spread.
