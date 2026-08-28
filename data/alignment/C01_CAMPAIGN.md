@@ -554,7 +554,7 @@ letter-exact battery gates every batch.
   (74's coinages reprised verbatim + self-referential "what we have
   called here"). khungs #4 "authentic source". Supplied transition
   sentence (filed with 115's). Self-quotes ×5 — densest cluster.
-| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p137 (144–448) done; 143, 259, 324, 427 & 446 = marker pairs; 449+ open; 48 segs / 16 batches remain; §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
+| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p138 (144–451) done; 143, 259, 324, 427 & 446 = marker pairs; 452+ open; 45 segs / 15 batches remain; §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
 
 NEXT: continue section VII (seq 146+) — the renunciation chapter.
 - seg 143: section-marker pair (like 43) — wylie carries "the first
@@ -2836,3 +2836,26 @@ TCS series and collections beyond, for later ruling). ***
   practice — the meditation-manual coda begins.
 - QA: both sides letter-exact, 88 spans balanced, depth clean.
   Layer: 3,482 headwords / 6,593 pairs.
+
+### c1p138 — The ambrosia descends (449–451)
+- **449 — the first line, again**: rje btsun bla ma rnams la phyag
+  'tshal lo → '"I bow to all the high and holy lamas"' — the root
+  text's opening homage re-cited letter-true (longest-range
+  self-citation in the file). tshogs zhing → "Collection Field" (fn
+  178); bsags sbyang unpacked ("great loads" amplified). TITLES: bde
+  myur → "Path of Bliss or Quick Path" (fn 179) — two lam-rim
+  manuals from ONE compound abbreviation.
+- **450 — the shared path** (fn 180): dal 'byor don chen rnyed dka' →
+  the leisure-fortune couplet at full length. zin pa FOURTH
+  attestation (bound 261 / filled 329 / steeped 337 / filled 450).
+  thun mong bar 'gyur → "paths that you merely share with"; lam
+  dngos → "the actual paths"; chung 'bring → "the lesser and medium
+  scopes". "the attitude of the highest scope" supplied.
+- **451 — the two descents**: bdud rtsi → "the ambrosia"; 'khril →
+  "pulse or twist down along the outside of a light ray"; sbu gu →
+  "through the inside of a tube-like ray" — visualization
+  technicalia with engineering precision. skyabs yul unpacked;
+  "painting" supplied for the thangka; gnyis crossed to head.
+- QA: both sides letter-exact, 151 spans balanced, depth clean.
+  Layer: **3,505 headwords** / 6,635 pairs — 3,500-headword
+  milestone.
