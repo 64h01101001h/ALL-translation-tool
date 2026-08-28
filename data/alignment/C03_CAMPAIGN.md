@@ -29,7 +29,7 @@ When a segment's english field is phonetics, not translation:
    under its own clause with honest labels.
 
 ## Progress
-c3p1–c3p17 (1–51) done; 52+ open; 569 segs remain.
+c3p1–c3p18 (1–54) done; 55+ open; 566 segs remain.
 
 ## Queues (wylie / english / PHONETICS), C03
 - WYLIE: ACIP anusvara capitals dM/kM/ND + ni'a oddity (seg 6).
@@ -276,3 +276,19 @@ c3p1–c3p17 (1–51) done; 52+ open; 569 segs remain.
   ('"prostrations and..."'). s51rest = the bsag/sbyang/spel/mi-zad
   taxonomy of all seven ingredients; English ahead.
 - Evidence layer: 4,012 headwords / 7,441 pairs.
+
+### Batch C03-18 (c3p18, C03:52–54) — 2026-08-28
+- 52: relay #11 closes, rotation 4-3-1-2; two bdag gis → two crossed
+  "I"s (44 pattern). Taxonomy lands (gather/clean/multiply/
+  inexhaustible). GMR first person: "as I have taught you to here".
+  ENGLISH QUEUE #6: truncates mid-word "disappea".
+- 53: ENGLISH QUEUE #7 "Them make" (for Then); #8 "self- nature".
+  WYLIE QUEUE: mNaDl vs maNDla (seg 1) — two spellings of the
+  mandala abbreviation. byin gyis brlab → "bless" crosses clauses;
+  bshes gnyen → "Spiritual Guide" (C01: "spiritual teacher");
+  phyi/nang swap; embedded section header (s53title) = next
+  segment's Tibetan.
+- 54: PHONETICS resumes: rnal 'byor → "nelnjor" (nasal bridge #3);
+  lha → "hla"; the Ganden Lhagyama opens (C01 fn 194 quoted its
+  final verses).
+- Evidence layer: 4,039 headwords / 7,481 pairs.
