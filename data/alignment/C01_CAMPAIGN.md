@@ -554,7 +554,7 @@ letter-exact battery gates every batch.
   (74's coinages reprised verbatim + self-referential "what we have
   called here"). khungs #4 "authentic source". Supplied transition
   sentence (filed with 115's). Self-quotes ×5 — densest cluster.
-| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p92 (144–313) done; 143 & 259 = marker pairs; 314+ open; 183 segs / 61 batches remain to close C01; §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
+| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p93 (144–316) done; 143 & 259 = marker pairs; 317+ open; 180 segs / 60 batches remain to close C01; §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
 
 NEXT: continue section VII (seq 146+) — the renunciation chapter.
 - seg 143: section-marker pair (like 43) — wylie carries "the first
@@ -1774,3 +1774,20 @@ TCS series and collections beyond, for later ruling). ***
   sems dpa' → "their sons--the bodhisattvas" side by side.
   thugs dam gyi mthil → "the single centermost contemplation".
   "gain" = formula variant #3 (achieve/reach/gain).
+
+### c1p93 — C01:314–316 (batch 93) — essence, eons, the center beam
+- Zero-catch. Layer: 2,612 headwords / 4,905 pairs.
+- seg 314: the dairy metaphor kept whole; result fronted (essence-
+  first). dam chos → "the holy word".
+- seg 315: thub dbang → "the Able Lords" — the muni CALQUED (first
+  Able-attestation). Honorifics folded (dgongs mdzad/gzigs →
+  considered/found). fn 137.
+- seg 316: gzhung shing → "Center beam" (architectural calque);
+  theg mchog → "the highest way" (theg-pa system: greater/lesser/
+  highest). FROM-TO CITATION DEVICE rendered explicitly ("begin
+  with... conclude with"; " / " lineation kept; fn 138). mthil ×3
+  in one segment (register ladder). CONTEXT-SENSITIVE NAME-
+  SUPPLYING: "the all-knowing Lord" left bare here (vs 195's
+  supplied "Tsongkapa") because the name appears in-segment —
+  the rule is anaphora-aware. rgyal sras dpa' bo → "Bodhisattva
+  princes" (265-fusion + 189-princes converge).
