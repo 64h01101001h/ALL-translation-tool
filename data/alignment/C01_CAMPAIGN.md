@@ -554,7 +554,7 @@ letter-exact battery gates every batch.
   (74's coinages reprised verbatim + self-referential "what we have
   called here"). khungs #4 "authentic source". Supplied transition
   sentence (filed with 115's). Self-quotes ×5 — densest cluster.
-| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p103 (144–346) done; 143, 259 & 324 = marker pairs; 347+ open; 150 segs / 50 batches remain; §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
+| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p104 (144–349) done; 143, 259 & 324 = marker pairs; 350+ open; 147 segs / 49 batches remain; §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
 
 NEXT: continue section VII (seq 146+) — the renunciation chapter.
 - seg 143: section-marker pair (like 43) — wylie carries "the first
@@ -2039,3 +2039,38 @@ TCS series and collections beyond, for later ruling). ***
   the Tibetan pronominalizes. fn 152.
 - QA: both sides letter-exact, 174 spans balanced, depth clean.
   Layer: 2,829 headwords / 5,294 pairs.
+
+### c1p104 — The four schools (347–349)
+- **347 — the coinage's plain twin**: med thabs med pa →
+  "indispensable" — the idiom 335/336 rendered as the coined "a
+  'without which nothing'"; both attested within twelve segments. mdo
+  sngags gnyis ka → "both the open and the secret teachings"
+  (sutra/mantra as open/secret). jo bo → "Lord Atisha" (epithet
+  resolved); zla grags — THIRD Tibetan form of Chandrakirti's name
+  (zla ba 340 / zla ba grags pa 344 / zla grags 347), one English
+  name. chen po dropped again (cf. 345). Crossed frame: zhes gsungs
+  (post-verse) → "has said" (pre-verse). fn 153.
+- **348 — the school-name set begins**: bye brag smra ba → "Detailist"
+  (Vaibhashika; abbreviation bye smra attested); mdo sde pa →
+  "Scripturalist" (Sautrantika); gnas ma bu pa → "Vatsiputriya"
+  (restoration #5). dgag bya two ways ("what we seek to see does not
+  exist" / "what we seek to deny"); 'dod "assert"/"teach". THE
+  TRIPLE: rtag gcig rang dbang can gyi bdag → "any self which is
+  unchanging, and singular, and independent". rgya gar 'phags pa'i
+  yul → 'India—the "land of the realized"'. rang skya thub pa →
+  "something that can stand on its own". fn 154–155.
+- **349 — the gzung-'dzin unpack**: two syllables → "the subject that
+  holds an object and the object which it holds" — pair CROSSED in
+  English ('dzin first). sems tsam pa → "Mind-Only"; rang rgyud pa →
+  'the "Independent," one part of the Middle Way school' (category
+  supplied). dgag bya renders #3–4 ("what we come to realize does not
+  exist" / "what we come to refute"); 'dod "says"/"believes" — FOUR
+  renders each across two segments. Near-total mirror of the
+  Svatantrika criterion clause; blo gnod med → "an unaffected
+  awareness". fn 156–159.
+- Pipeline note: two straight-quote traps this window (336, 349) —
+  comma sits INSIDE the closing quote in GMR's English; markers and
+  finds must stop before the quote mark. Both caught by the
+  generator's assert before any file was written.
+- QA: both sides letter-exact, 165 spans balanced, depth clean.
+  Layer: 2,853 headwords / 5,345 pairs.
