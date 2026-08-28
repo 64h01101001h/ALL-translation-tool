@@ -1191,3 +1191,43 @@ destroy.
 
 - Evidence layer: 4,419 headwords / 8,067 pairs. C03 at 201/620.
   Broken-words gate: 11,420 English spans across 257 pages, clean.
+
+### Batches C03-68 … C03-71 (C03:202–209) — 2026-08-28 — model: Opus
+The prose treatment of mental states one through six. Long segments (300–800
+characters of wylie, 33–90 spans each) against the short captions before them.
+
+**Three generator defects surfaced, two of them corrupting output rather than
+refusing** — the worse kind, and both were found only because the prose is
+denser than anything the tool had seen.
+
+1. **`with_members` sorted members by their GLOBAL first occurrence.** C03:207
+   has the parent "fourth state" with members "fourth" and "state" — and
+   "state" also sits in "fifth state" 90 characters earlier, so the members
+   sorted backwards and the nesting cursor refused the page. Members now sort
+   by position *inside their parent*.
+
+2. **An ambiguous member could silently land on the wrong occurrence.** C03:186
+   has the parent `'phror` with the terminative member `r`; the search took the
+   FIRST `r` and rendered `'ph<r>or`, cutting the syllable in two **on a page
+   that had already shipped**. Members are exempt from the word-boundary rule
+   by design — a member *is* a sub-part — so nothing else could catch it.
+   Now guarded: a member occurring more than once inside its parent refuses.
+   `c3p62` regenerated.
+
+3. **Equal counts were being treated as ambiguity.** C03:209 has `bying rgod`
+   six times in the Tibetan and "dullness and agitation" six times in the
+   English. The blunt rule nulled all six. **Equal counts in order are a
+   determination, not a guess** — the i-th span takes the i-th occurrence —
+   and unequal counts still refuse. That change alone recovered 7 of 8
+   `bying rgod` links in this batch.
+
+**The broken-words gate earned its keep on its first live run.** It flagged
+`un` inside "unable" on c3p71. That is legitimate — `mi nus` → "unable" with
+the member `mi` → "un" — but it exposed that ALLOWED_SUBWORD held only the
+*stem* half of the negative-affix convention ("necessary" out of
+"unnecessary") and not the *negative* half. Both are the same convention seen
+from opposite ends; the list now says so.
+
+- Evidence layer: 4,466 headwords / 8,214 pairs. C03 at 209/620.
+  Broken-words gate: 11,686 English spans across 261 pages, clean.
+  24 pins on the generator, 12 mutation-verified.
