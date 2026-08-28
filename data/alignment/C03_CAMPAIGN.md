@@ -76,7 +76,7 @@ entry from here records its producing model; everything through C03 batch
 32 was Fable.
 
 ## Progress
-c3p1–c3p42 (1–126) done; 127+ open; 494 segs remain.
+c3p1–c3p43 (1–129) done; 130+ open; 491 segs remain.
 
 ## Queues (wylie / english / PHONETICS), C03
 - WYLIE: ACIP anusvara capitals dM/kM/ND + ni'a oddity (seg 6).
@@ -707,3 +707,29 @@ stack trace.
   yid du 'ong → "pretty things". Truncates at "how quickly it
   disappe"; Tibetan tail nulled with its reason.
 - Evidence layer: 4,095 headwords / 7,558 pairs.
+
+### Batch C03-43 (c3p43, C03:127–129) — 2026-08-28 — model: Opus
+- 127: sgom rim bar pa → "the Stages of Meditation"; nyan thos kyi sa
+  → "the Levels of Listeners", holding exactly against C03:27 a
+  hundred segments earlier. Truncates at "you realiz".
+- 128: tshogs → "the gathering" — A THIRD ENGLISH SENSE in one
+  course: "collections" (14–15), "conditions" (117, 119), "gathering"
+  (128, twice). All three GMR's, all three right in place, none able
+  to serve alone as the definition. Directly illustrates Adam's
+  preserve-every-rendering ruling.
+- 129: THREE INDIAN TITLES, THREE CALQUES, NO SANSKRIT — "the Jewel
+  of the Sutras" (121), "the Levels of Listeners" (27, 127), "the
+  Commentary of the True Thought" (129). A consistent naming policy.
+  Verse inversion: Tibetan puts myur du 'grub bo LAST, English puts
+  "If you want to reach quietude quickly" FIRST.
+- GENERATOR CAUGHT a bad split marker (",zhes gsungs" — the wylie has
+  ", , zhes gsungs so"). The corrected batch order held: the page was
+  never written, so the `test -f` chain short-circuited and NO
+  registration ran. No broken state this time — the process fix from
+  batch 40 proved itself.
+- RETRIEVAL FINDING banked in docs/PRESERVE_ALL_RENDERINGS.md: 86.2%
+  of headword keys are multi-word spans, so renderings scatter.
+  chos holds 36 under its bare key but appears in 51 other keys
+  holding 115 more — 151 total, of which a bare lookup surfaces 36.
+  Data complete; retrieval path missing.
+- Evidence layer: 4,125 headwords / 7,599 pairs.

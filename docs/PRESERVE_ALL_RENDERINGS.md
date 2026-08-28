@@ -50,6 +50,29 @@ and it stops after 6 terms per report.
 So a translator working in the Review pane sees full spreads for a handful
 of terms; a translator reading an entry card sees at most four.
 
+**3. Renderings scatter across compound keys, and lookup does not gather
+them.** The layer keys on the exact span that was paired, which is correct
+— `'jig rten chos brgyad` → "the eight worldly thoughts" is a real unit and
+its `chos` is not a separate rendering of `chos`. But **86.2% of the 4,125
+headword keys are multi-word spans**, so:
+
+| term | bare-key renderings | also appears in | total renderings involving it |
+|---|---|---|---|
+| `chos` | 36 | 51 other keys | **151** |
+| `tshogs` | 3 | 24 other keys | **43** |
+| `zhi gnas` | 1 | 1 other key | 2 |
+
+A translator looking up `chos` sees 36 of 151. The other 115 are present in
+the data, correctly recorded, and unreachable by that lookup. This is a
+retrieval gap, not data loss — and it matters most for exactly the common
+terms a translator is most likely to look up.
+
+What it needs is a second retrieval path: exact-key renderings first (what
+exists), then renderings of compounds *containing* the term, clearly
+labelled as context rather than as glosses of the bare word. The
+distinction has to survive into the display or it would manufacture false
+equivalences — which is the opposite of what the ruling asks for.
+
 ## What this needs
 
 The card cap is defensible as a *summary* — a card swamped by 36 lines helps
