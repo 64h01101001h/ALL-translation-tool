@@ -1,0 +1,218 @@
+<title>The Michael Dictionary</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<style>
+:root{
+  --paper:#FAF6EE; --card:#FFFDF8; --ink:#2B2118; --ink-2:#5A4A38;
+  --gold:#82672A; --machine:#B4540A; --soft:#7A716A; --rule:#E4DCC9;
+  --chip:#F3E9D4; --hl:#F6EDD6;
+  --f-text:"Iowan Old Style","Palatino Linotype",Georgia,"Times New Roman",serif;
+  --f-data:"SF Mono",Menlo,Consolas,"Liberation Mono",ui-monospace,monospace;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --paper:#181310; --card:#211A15; --ink:#EFE6D6; --ink-2:#BFB09A;
+    --gold:#C9A557; --machine:#E8823C; --soft:#9A9088;
+    --rule:#372C22; --chip:#2C231B; --hl:#2E2419;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#181310; --card:#211A15; --ink:#EFE6D6; --ink-2:#BFB09A;
+  --gold:#C9A557; --machine:#E8823C; --soft:#9A9088;
+  --rule:#372C22; --chip:#2C231B; --hl:#2E2419;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);
+     font-family:var(--f-text);line-height:1.55;
+     -webkit-font-smoothing:antialiased}
+.wrap{max-width:1180px;margin:0 auto;padding:0 22px 90px}
+
+header{padding:38px 0 0}
+.eyebrow{font-family:var(--f-data);font-size:10.5px;letter-spacing:2.4px;
+         text-transform:uppercase;color:var(--gold);margin:0 0 10px}
+h1{font-size:clamp(30px,4.6vw,50px);line-height:1.06;margin:0 0 8px;
+   font-weight:600;letter-spacing:-.015em;text-wrap:balance}
+.lede{font-size:17px;color:var(--ink-2);max-width:60ch;margin:0 0 20px}
+
+.banner{border:1px solid var(--machine);background:color-mix(in srgb,var(--machine) 7%,transparent);
+        border-radius:3px;padding:12px 15px;margin:0 0 26px;font-size:13.5px;
+        color:var(--machine);max-width:78ch}
+.banner b{font-family:var(--f-data);font-size:10.5px;letter-spacing:1.6px;
+          text-transform:uppercase;display:block;margin-bottom:4px}
+.banner span{color:var(--ink-2)}
+
+.rail{position:sticky;top:0;z-index:20;background:var(--paper);
+      border-bottom:1px solid var(--rule);padding:16px 0 14px;margin-bottom:8px}
+.rail-in{display:grid;grid-template-columns:minmax(260px,1.15fr) minmax(200px,1fr) auto;
+         gap:22px;align-items:end}
+.field label{display:block;font-family:var(--f-data);font-size:10px;
+             letter-spacing:1.8px;text-transform:uppercase;color:var(--gold);
+             margin-bottom:6px}
+input[type=search]{width:100%;font-family:var(--f-text);font-size:15px;
+  padding:7px 10px;border:1px solid var(--rule);border-radius:3px;
+  background:var(--card);color:var(--ink)}
+input[type=search]:focus-visible,input[type=range]:focus-visible,
+button:focus-visible{outline:2px solid var(--machine);outline-offset:2px}
+input[type=range]{width:100%;accent-color:var(--gold);margin:0}
+.depth-name{font-size:15px;font-weight:600;color:var(--ink);margin-top:3px}
+.depth-name em{font-style:normal;color:var(--soft);font-weight:400}
+.counts{font-family:var(--f-data);font-size:12px;color:var(--soft);
+        text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
+.counts b{display:block;font-size:21px;color:var(--ink);font-weight:600}
+
+.strata{display:flex;gap:3px;align-items:flex-end;height:34px;margin-top:12px}
+.strata button{flex:1;border:0;padding:0;cursor:pointer;background:transparent;
+               display:flex;flex-direction:column;justify-content:flex-end;height:100%}
+.strata i{display:block;background:var(--rule);border-radius:1.5px 1.5px 0 0;
+          transition:background .16s}
+.strata button[aria-current="true"] i{background:var(--gold)}
+.strata button:hover i{background:var(--machine)}
+.strata em{font-style:normal;font-family:var(--f-data);font-size:9px;
+           color:var(--soft);margin-top:3px;letter-spacing:.4px}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));
+      gap:14px;margin-top:20px}
+.entry{background:var(--card);border:1px solid var(--rule);border-radius:4px;
+       padding:14px 16px 12px;break-inside:avoid}
+.head{display:flex;justify-content:space-between;align-items:baseline;gap:10px;
+      border-bottom:1px solid var(--rule);padding-bottom:8px;margin-bottom:9px}
+.tib{font-family:var(--f-data);font-size:15.5px;color:var(--ink);
+     font-weight:600;word-break:break-word}
+.acip{font-family:var(--f-data);font-size:10px;letter-spacing:.9px;
+      color:var(--gold);margin-top:3px;word-break:break-word}
+.n{font-family:var(--f-data);font-size:10.5px;color:var(--soft);
+   white-space:nowrap;font-variant-numeric:tabular-nums}
+.rend{display:grid;grid-template-columns:1fr auto;gap:8px;
+      padding:4px 0;border-bottom:1px dotted var(--rule)}
+.rend:last-child{border-bottom:0}
+.eng{font-size:14.5px;color:var(--ink)}
+.eng mark{background:var(--hl);color:inherit;border-radius:2px}
+.refs{font-family:var(--f-data);font-size:10px;color:var(--soft);
+      text-align:right;white-space:nowrap;align-self:center}
+.more{font-family:var(--f-data);font-size:11px;color:var(--machine);
+      background:none;border:0;padding:4px 0 0;cursor:pointer;letter-spacing:.4px}
+.empty{color:var(--soft);padding:50px 0;text-align:center;font-size:15px}
+footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--rule);
+       font-size:12.5px;color:var(--soft);max-width:80ch}
+@media (max-width:760px){.rail-in{grid-template-columns:1fr;gap:14px}
+  .counts{text-align:left}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<div class="wrap">
+<header>
+  <p class="eyebrow">Asian Legacy Library &middot; Diamond Cutter Translation Tool</p>
+  <h1>The Michael Dictionary</h1>
+  <p class="lede">Every Tibetan term Geshe Michael Roach has rendered into English across
+  the courses scanned so far, with each rendering he gave it and the passage that attests
+  it. Built segment by segment; this is where it stands today.</p>
+
+  <div class="banner">
+    <b>Provisional &mdash; machine-matched, not yet reviewed</b>
+    <span>Every English phrase here is Geshe Michael&rsquo;s own, quoted verbatim from the
+    corpus. The machine <em>matched</em> them to Tibetan; it never composed one. Nothing on
+    this page is binding dictionary material, and nothing enters <code>hgm_gloss</code>
+    until a human review pass confirms the mapping.</span>
+  </div>
+</header>
+
+<div class="rail">
+  <div class="rail-in">
+    <div class="field">
+      <label for="depth">Depth &mdash; which layer of the text you are reading</label>
+      <input type="range" id="depth" min="1" max="7" value="5" step="1">
+      <div class="depth-name" id="dname"></div>
+    </div>
+    <div class="field">
+      <label for="q">Search Tibetan, ACIP or English</label>
+      <input type="search" id="q" placeholder="chos &middot; snying rje &middot; compassion" autocomplete="off">
+    </div>
+    <div class="counts" id="counts"></div>
+  </div>
+  <div class="strata" id="strata"></div>
+</div>
+
+<div class="grid" id="grid"></div>
+<p class="empty" id="empty" hidden>Nothing at this depth matches that search.</p>
+
+<footer id="foot"></footer>
+</div>
+
+<script>
+/*PAYLOAD*/
+
+const NAMES = {
+  1:["Sentence","a whole sentence paired with its translation"],
+  2:["Clause","a clause within a sentence"],
+  3:["Phrase","a phrase"],
+  4:["Embedded phrase","a phrase inside another phrase"],
+  5:["Word / compound","the dictionary layer &mdash; single words and compounds"],
+  6:["Morpheme / particle","grammatical particles that carry English"],
+  7:["Compound member","a member inside a compound, such as one half of a dvandva"]
+};
+const D = PAYLOAD.depths, META = PAYLOAD.meta;
+const grid = document.getElementById('grid'), empty = document.getElementById('empty');
+const depth = document.getElementById('depth'), q = document.getElementById('q');
+const dname = document.getElementById('dname'), counts = document.getElementById('counts');
+const esc = s => s.replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+// the strata bar encodes real volume: this corpus is overwhelmingly word-level
+const maxN = Math.max(...Object.keys(D).map(d => D[d].length));
+document.getElementById('strata').innerHTML = Object.keys(D).sort().map(d =>
+  `<button data-d="${d}" title="${NAMES[d][0]} — ${D[d].length} headwords">
+     <i style="height:${Math.max(4, Math.round(26 * D[d].length / maxN))}px"></i>
+     <em>${d}</em></button>`).join('');
+
+let shown = 60;
+function render(){
+  const d = depth.value, term = q.value.trim().toLowerCase();
+  dname.innerHTML = `${NAMES[d][0]} <em>&mdash; ${NAMES[d][1]}</em>`;
+  document.querySelectorAll('.strata button').forEach(b =>
+    b.setAttribute('aria-current', b.dataset.d === d));
+
+  let list = D[d];
+  if (term) list = list.filter(e =>
+    e[0].toLowerCase().includes(term) || e[1].toLowerCase().includes(term) ||
+    e[2].some(r => r[0].toLowerCase().includes(term)));
+
+  const rend = list.reduce((a, e) => a + e[2].length, 0);
+  counts.innerHTML = `<b>${list.length.toLocaleString()}</b>
+    ${term ? 'matching ' : ''}headwords<br>${rend.toLocaleString()} renderings`;
+
+  empty.hidden = list.length > 0;
+  const slice = list.slice(0, shown);
+  grid.innerHTML = slice.map(e => {
+    const hi = t => term ? esc(t).replace(new RegExp('('+term.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+')','ig'),'<mark>$1</mark>') : esc(t);
+    return `<article class="entry">
+      <div class="head">
+        <div><div class="tib">${hi(e[0])}</div>${e[1] ? `<div class="acip">${hi(e[1])}</div>` : ''}</div>
+        <div class="n">${e[2].length} ${e[2].length === 1 ? 'rendering' : 'renderings'}</div>
+      </div>
+      ${e[2].map(r => `<div class="rend"><div class="eng">${hi(r[0])}</div>
+         <div class="refs">${r[1].slice(0,3).join(' ')}${r[1].length>3?' +'+(r[1].length-3):''}</div></div>`).join('')}
+    </article>`;
+  }).join('');
+
+  if (list.length > shown) {
+    const b = document.createElement('button');
+    b.className = 'more';
+    b.textContent = `Show ${Math.min(120, list.length - shown)} more of ${list.length.toLocaleString()}`;
+    b.onclick = () => { shown += 120; render(); };
+    grid.append(b);
+  }
+}
+depth.addEventListener('input', () => { shown = 60; render(); });
+q.addEventListener('input', () => { shown = 60; render(); });
+document.getElementById('strata').addEventListener('click', ev => {
+  const b = ev.target.closest('button'); if (!b) return;
+  depth.value = b.dataset.d; shown = 60; render();
+});
+
+const total = Object.keys(D).reduce((a,d) => a + D[d].reduce((x,e)=>x+e[2].length,0), 0);
+document.getElementById('foot').innerHTML =
+  `${total.toLocaleString()} attested renderings across seven depths, drawn from
+   ${esc(META.corpus || '')}. Layer built ${esc(META.date || '')}. Tier:
+   ${esc(META.tier || '')}. &mdash; Citations are course and segment number in the
+   corpus spine. A term shows every rendering it has been given, never a chosen
+   one: the range is the point.`;
+render();
+</script>
