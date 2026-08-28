@@ -554,7 +554,7 @@ letter-exact battery gates every batch.
   (74's coinages reprised verbatim + self-referential "what we have
   called here"). khungs #4 "authentic source". Supplied transition
   sentence (filed with 115's). Self-quotes ×5 — densest cluster.
-| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p123 (144–406) done; 143, 259 & 324 = marker pairs; 407+ open; 90 segs / 30 batches remain; §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
+| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p124 (144–409) done; 143, 259 & 324 = marker pairs; 410+ open; 87 segs / 29 batches remain; §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
 
 NEXT: continue section VII (seq 146+) — the renunciation chapter.
 - seg 143: section-marker pair (like 43) — wylie carries "the first
@@ -2544,3 +2544,26 @@ TCS series and collections beyond, for later ruling). ***
   things"); first/Secondly supplied.
 - QA: both sides letter-exact, 104 spans balanced, depth clean.
   Layer: 3,240 headwords / 6,130 pairs.
+
+### c1p124 — In a flash (407–409)
+- **407 — no contradiction on one basis**: full mirror in c1 (four
+  items exactly reversed). WYLIE VARIANT within two segments: res
+  'jog MED par (405) vs MIN par (407), both → "no longer alternate"
+  — queue updated. gzhi gcig la 'gal med → "one and the same object,
+  with no contradiction at all".
+- **408 — THE FLASH QUOTE** (fn 167): rten 'brel gyi gnad shes na
+  stong nyid kyi don lhang la 'bud → '"Once you grasp the secret of
+  interdependence, the meaning of emptiness comes in a flash"' —
+  lhang la 'bud = "comes in a flash"; gnad → "the secret" (spread
+  #3: crucial/vital points/secret). THE CHIASMUS PRESERVED 1:1
+  (emptiness↔interdependence). dam pa 'ga'i zhal nas → "certain
+  holy sages…said"; dgongs pa crossed from final clause ("have
+  meant"). bden 'dzin gtan med du → "completely obviates…".
+- **409 — the analysis complete**: reciprocal completion (two-way
+  entailment); shugs drag 'dren thub → "has the power…strong and
+  certain realization". gsungs → "concluded our Lama" #5; "the pure
+  view"/"finally" supplied. dgongs pa thun mong ma yin pa → "the
+  unique thought of Nagarjuna himself". SECTION XVIII header
+  embedded ('A Unique Teaching of the "Implication" School').
+- QA: both sides letter-exact, 174 spans balanced, depth clean.
+  Layer: 3,258 headwords / 6,175 pairs.
