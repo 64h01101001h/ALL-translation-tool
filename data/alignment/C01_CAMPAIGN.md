@@ -554,7 +554,7 @@ letter-exact battery gates every batch.
   (74's coinages reprised verbatim + self-referential "what we have
   called here"). khungs #4 "authentic source". Supplied transition
   sentence (filed with 115's). Self-quotes ×5 — densest cluster.
-| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p114 (144–379) done; 143, 259 & 324 = marker pairs; 380+ open; 117 segs / 39 batches remain; §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
+| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p115 (144–382) done; 143, 259 & 324 = marker pairs; 383+ open; 114 segs / 38 batches remain; §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
 
 NEXT: continue section VII (seq 146+) — the renunciation chapter.
 - seg 143: section-marker pair (like 43) — wylie carries "the first
@@ -2328,3 +2328,30 @@ TCS series and collections beyond, for later ruling). ***
   illustrious 340 / glorious 379; name holds).
 - QA: both sides letter-exact, 260 spans balanced, depth clean.
   Layer: 3,076 headwords / 5,795 pairs.
+
+### c1p115 — Appear and grasp (380–382)
+- **380 — the definition quote** (fn 164): bdag → "self" = "any
+  nature or state objects could have in which they relied on nothing
+  else"; gzhan la rag ma las pa → "relied on nothing else"; de med
+  pa ni bdag med pa → the term defined by its own negation. ngo bo
+  rang bzhin → "any nature or state" (doubled essence-words
+  distributed). ENGLISH TYPO QUEUE #22: "The non- existence"
+  (hyphen-space artifact #3).
+- **381 — two tantras named**: 'jigs byed → "the secret Frightener
+  teaching" (Vajrabhairava as FRIGHTENER); bde mchog → "the secret
+  teaching of Highest Bliss" (Chakrasamvara) — tantra-name English
+  set opens, "secret" supplied both times (fn 165–166). SUPPLIED
+  CONTRAST with doctrinal force: "--the one that does exist--" (no
+  Tibetan exponent — guards conventional me vs refuted me). phyir →
+  "Since" and lta bu → "Like" both FRONTED in the citations. kun
+  rtog → "a concept"; sgyu ma → "an illusion"; dgongs pa #6 → "are
+  referring to".
+- **382 — the four-term grid**: snang tshul / zhen tshul / snang yul
+  / zhen yul → "the way that objects appear to us" / "how we grasp
+  them" / "what appears to us" / "what we grasp" — the
+  appearance-grasping system as a strict grid of plain relative
+  clauses (-tshul "way/how", -yul "what"). rtsa tshig → "our
+  refrain". dgag bya #9. zhib tu byas na → "If we really get into
+  fine detail".
+- QA: both sides letter-exact, 134 spans balanced, depth clean.
+  Layer: 3,093 headwords / 5,831 pairs.
