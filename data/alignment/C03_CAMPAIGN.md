@@ -76,7 +76,7 @@ entry from here records its producing model; everything through C03 batch
 32 was Fable.
 
 ## Progress
-c3p1–c3p51 (1–153) done; 154+ open; 467 segs remain.
+c3p1–c3p52 (1–156) done; 157+ open; 464 segs remain.
 
 ## Queues (wylie / english / PHONETICS), C03
 - WYLIE: ACIP anusvara capitals dM/kM/ND + ni'a oddity (seg 6).
@@ -947,3 +947,30 @@ has predicted nothing.
   Truncates at "The"; the four antidotes — including shin sbyangs in
   a THIRD context — have no English here.
 - Evidence layer: 4,255 headwords / 7,764 pairs.
+
+### Batch C03-52 (c3p52, C03:154–156) — 2026-08-28 — model: Opus
+- 154: dran pa → "to bring the mind back to the object" — a THIRD
+  rendering, after "your thoughts" (138) and beside 156's "bringing
+  The mind back to your object". Three treatments of mindfulness in
+  one course, from bare noun to full instruction.
+  btang snyoms (equanimity) → "to leave well enough alone" — a
+  technical term as an English idiom; strong review-pass candidate.
+  shes bzhin → "watchfulness", holding against 169.
+- 155: sems gnas dgu → "nine mental states" (200 consistent); stobs
+  drug → "six different powers"; yid byed bzhi → "four modes of
+  focus". gsungs pas fronted to "It is further stated", the same
+  supplied-source move as 149's "states the text".
+- 156: dbu ma snying po → "The Essence of the Middle Way" — a SIXTH
+  calqued Indian title; snying po → "Essence" holds with 86 and 108.
+  THE VERSE IS REORDERED: Tibetan closes with rim dbang bya ("master
+  by stages"), English OPENS with "Master the elephant of the mind
+  Step by step" — the instruction fronted so the image can follow.
+  The three implements map cleanly with their genitives: ka ba →
+  "the stake" (object), thag pa → "a strong rope" (mindfulness),
+  lcags kyu → "the iron hook" (wisdom).
+  Truncates at "and th".
+- GENERATOR CAUGHT a clause-split error at s155 ("grouped into four
+  modes" sits before the boundary, not after). No page written, no
+  registration ran — the batch-40 process fix held for the second
+  time under a real failure.
+- Evidence layer: 4,278 headwords / 7,792 pairs.
