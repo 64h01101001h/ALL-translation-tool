@@ -554,7 +554,7 @@ letter-exact battery gates every batch.
   (74's coinages reprised verbatim + self-referential "what we have
   called here"). khungs #4 "authentic source". Supplied transition
   sentence (filed with 115's). Self-quotes ×5 — densest cluster.
-| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p85 (144–292) done; 143 & 259 = marker pairs; 293+ open; §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
+| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p86 (144–295) done; 143 & 259 = marker pairs; 296+ open; §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
 
 NEXT: continue section VII (seq 146+) — the renunciation chapter.
 - seg 143: section-marker pair (like 43) — wylie carries "the first
@@ -1648,3 +1648,22 @@ TCS series and collections beyond, for later ruling). ***
   TRIAD (swayed/pressed/greeted). g-yab tsam ×2 + g-yengs: three
   more g-y hyphen tokens through the letter gate. sor mo bcu
   ("ten fingers") → "fingertips"; sha → "her body's".
+
+### c1p86 — C01:293–295 (batch 86) — what she did for me
+- Thirty-fourth consecutive zero-catch batch. Layer: 2,490
+  headwords / 4,635 pairs.
+- seg 293: DE-EUPHEMIZED — mi gtsang ba ("the unclean") → "my
+  filthy shit" (the file's frankest register). khas split by
+  context (lips/mouth-to-mine; chewing supplied). Parallel close
+  "She did her best to..." ×2. phyis ×2 varied.
+- seg 294: THE COLON REVEAL ("one person: mother"). Double doublet
+  swapped (skyid sdug legs nyes → good/bad, happy/sad). chu tshod
+  → "an hour" (water-clock domesticated). Exposure scenario
+  supplied. brgya brgya → "no less than a hundred times".
+  Fragment close ("Such was her kindness."). ACIP aa tokens
+  #19–20.
+- seg 295: THE MOTHER-TRIPLE (sdig sdug gtam ngan → sin/hardship/
+  gossip; gtam ngan fully unpacked). bsags bsags doubled →
+  "gathered together". UNCERTAIN READING filed (not typo-queued):
+  "longs spyad ma bra ba" — expected ma-phod-type form; English
+  "hesitating to use" supports; kept verbatim. bu → "me".
