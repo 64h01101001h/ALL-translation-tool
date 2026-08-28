@@ -29,7 +29,7 @@ When a segment's english field is phonetics, not translation:
    under its own clause with honest labels.
 
 ## Progress
-c3p1–c3p26 (1–78) done; 79+ open; 542 segs remain.
+c3p1–c3p27 (1–81) done; 82+ open; 539 segs remain.
 
 ## Queues (wylie / english / PHONETICS), C03
 - WYLIE: ACIP anusvara capitals dM/kM/ND + ni'a oddity (seg 6).
@@ -370,4 +370,13 @@ c3p1–c3p26 (1–78) done; 79+ open; 542 segs remain.
   thoughts" (C01 fn 172 exact); dal 'byor → "Your leisure and
   fortune" — ENGLISH RENDER #5, the first LITERAL one; bsam pa thag
   pas → "happy deep inside" (thag pa depth idiom).
+- Evidence layer unchanged: 4,039 / 7,481.
+
+### Batch C03-27 (c3p27, C03:79–81) — 2026-08-28
+- 79: THE PRONOUN PAIR DISTINGUISHED — khyod → "kyu" (77) vs khyed
+  → "kye" (79): the umlaut system encodes the vowel contrast.
+- 80: NEW DIPHTHONGS — sku'i → "kuy" (-u'i→uy), brtse'i → "tsey"
+  (-e'i→ey); 'khrigs → "trik" ('khr-→tr); chukuy extends the chu
+  collision to the Dharma-body.
+- 81: duljay; jitar (lt-→t); dzinma (the earth-holder).
 - Evidence layer unchanged: 4,039 / 7,481.
