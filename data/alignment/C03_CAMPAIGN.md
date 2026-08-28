@@ -1293,19 +1293,36 @@ auto-resolution (its example is `bsod nams`: "goodness" in prayers, "merit" in
 prose). Measured across the whole spine:
 
     segments whose wylie contains `gus pa`        184
-      rendered with "reverence"                    34   devotional register
-      rendered with "respect"                      93   vow-keeping register
-      BOTH words in one segment                     1
-      neither (unrendered or rendered otherwise)   56
+      English contains "reverence"                 34
+      English contains "respect"                   93
+        ...but 25 of those ALSO contain another
+        respect-word (bkur sti, 'dud pa, zhe sa),
+        so at most                                 69   are attributable
+      BOTH "reverence" and "respect"                1
+      neither                                      56
 
-**One segment in 184 uses both.** That is not free variation — the English is
-determined by register. "Reverence" belongs to the devotional passages
-(C03:218, 297, 349, 374); "respect" to vow-keeping and conduct (C03:53, 530,
-531). A dictionary offering one equivalent would mislead in half the corpus,
-and offering both without the register cue would leave the translator to guess.
+**CORRECTED, and the correction matters.** The figure was first stated as
+34 / 93, which counts the *word* "respect" appearing in a segment whose wylie
+contains `gus pa` — not the word *rendering* `gus pa`. In 25 of those segments
+another respect-word is present and may be what "respect" answers to. The
+defensible attribution is **at most 69**, not 93.
 
-*(Counting note: `respect` had to be filtered for "respectively" and "with
-respect to" before the figure meant anything. The unfiltered count was 102.)*
+The asymmetry survives the correction — 34 against ≤69, with **one segment in
+184 using both words** — so a register effect is still the best reading:
+"reverence" in the devotional passages (C03:218, 297, 349, 374), "respect" in
+vow-keeping and conduct (C03:53, 530, 531). But it is now a *reading*, not a
+measurement.
+
+**The honest limit: segment co-occurrence cannot attribute a rendering to a
+key.** Only span-level evidence can, and the alignment layer currently holds
+exactly one `gus pa` span (C03:218 → "Reverence"). Confirming this split
+properly needs the corpus scanned far enough to supply span-level witnesses on
+both sides. Until then it is a strong candidate, flagged for human review, and
+must not be stated as established.
+
+*(Two counting traps found here, both worth keeping: `respect` had to be
+filtered for "respectively" and "with respect to" — 102 unfiltered against 93
+— and then for competing Tibetan respect-words — 93 against 69.)*
 
 - Evidence layer: 4,513 headwords / 8,361 pairs. C03 at 237/620.
   Broken words: 11,967 English spans clean. Split syllables: 15,141 Tibetan
