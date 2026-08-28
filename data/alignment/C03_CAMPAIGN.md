@@ -29,7 +29,7 @@ When a segment's english field is phonetics, not translation:
    under its own clause with honest labels.
 
 ## Progress
-c3p1–c3p24 (1–72) done; 73+ open; 548 segs remain.
+c3p1–c3p25 (1–75) done; 76+ open; 545 segs remain.
 
 ## Queues (wylie / english / PHONETICS), C03
 - WYLIE: ACIP anusvara capitals dM/kM/ND + ni'a oddity (seg 6).
@@ -351,4 +351,13 @@ c3p1–c3p24 (1–72) done; 73+ open; 548 segs remain.
 - 71: dus nas → "dune" — s-drop + umlaut FUSION into one word.
 - 72: lus ngag → "lu-ngak" — HYPHEN AS DISAMBIGUATION (prevents
   "lungak" misread); ci → "chi" (c-palatalization).
+- Evidence layer unchanged: 4,039 / 7,481.
+
+### Batch C03-25 (c3p25, C03:73–75) — 2026-08-28
+- 73: kyepar (khy-→ky + umlaut); chok (phy-→ch holds).
+- 74: ö-as-u reaches the CASE PARTICLE (drag pos → "drakpu" #13;
+  gyupa #12). Stanza rotates 74-72-71-73. so sor → "One by one" —
+  CROSS-TEXT consistency with seg 44 (Great Book verse vs Lhagyama).
+- 75: dundir (nasal bridge #7); mangtu (thos→tu, 66 consistency);
+  tsun (#14). Rejoicing verse opens.
 - Evidence layer unchanged: 4,039 / 7,481.
