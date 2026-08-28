@@ -554,7 +554,7 @@ letter-exact battery gates every batch.
   (74's coinages reprised verbatim + self-referential "what we have
   called here"). khungs #4 "authentic source". Supplied transition
   sentence (filed with 115's). Self-quotes ×5 — densest cluster.
-| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p122 (144–403) done; 143, 259 & 324 = marker pairs; 404+ open; 93 segs / 31 batches remain; §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
+| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p123 (144–406) done; 143, 259 & 324 = marker pairs; 407+ open; 90 segs / 30 batches remain; §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
 
 NEXT: continue section VII (seq 146+) — the renunciation chapter.
 - seg 143: section-marker pair (like 43) — wylie carries "the first
@@ -2525,3 +2525,22 @@ TCS series and collections beyond, for later ruling). ***
   embedded ("How to Know When Your Analysis is Complete").
 - QA: both sides letter-exact, 126 spans balanced, depth clean.
   Layer: 3,227 headwords / 6,105 pairs.
+
+### c1p123 — Root verse twelve (404–406)
+- **404 — the fourth point**: bzhi pa expansion (cf. 356/397); tshad
+  → "how to know when" (consistent); 397/404 = minimal-pair headings
+  (ma rdzogs/rdzogs → incomplete/complete).
+- **405 — ROOT VERSE (12) — IN ORDER**: lines 1-2-3-4 map straight
+  through, NO rotation — counter-case to 357 (4-1-2-3) and 398
+  (4-3-1-2): the rotations are argument-driven, not mechanical. res
+  'jog med par → "they no longer alternate"; cig car du → "come
+  together"; tsam nyid nas → "Just"; 'dzin stangs → "how you hold"
+  (stable with 335); nges shes → "realization".
+- **406 — no longer alternating**: self-citation letter-true. ming
+  rkyang → "labels, just names". WYLIE VARIANT: btags don (406) vs
+  brtags don (389), English varies with it ("got the name"/"with the
+  name") — queue updated. chos de dang de → "whatever object we have
+  chosen". gnyis crossed to sentence head again ("We take two
+  things"); first/Secondly supplied.
+- QA: both sides letter-exact, 104 spans balanced, depth clean.
+  Layer: 3,240 headwords / 6,130 pairs.
