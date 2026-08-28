@@ -554,7 +554,7 @@ letter-exact battery gates every batch.
   (74's coinages reprised verbatim + self-referential "what we have
   called here"). khungs #4 "authentic source". Supplied transition
   sentence (filed with 115's). Self-quotes ×5 — densest cluster.
-| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p83 (144–286) done; 143 & 259 = marker pairs; 287+ open; §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
+| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p84 (144–289) done; 143 & 259 = marker pairs; 290+ open; §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
 
 NEXT: continue section VII (seq 146+) — the renunciation chapter.
 - seg 143: section-marker pair (like 43) — wylie carries "the first
@@ -1612,3 +1612,20 @@ TCS series and collections beyond, for later ruling). ***
   no awareness."). phar ded spread (208 chase → 286 regression).
   gtan nas med par → "absolutely never". snga ma snga ma → "the
   life before that".
+
+### c1p84 — C01:287–289 (batch 84) — countless births, countless mothers
+- Thirty-second consecutive zero-catch batch. Layer: 2,430
+  headwords / 4,539 pairs.
+- seg 287: PERSON SHIFT (rang gi → first-person I-statements).
+  Parallel bya-ba-med clauses leveled ("There exists no..." ×2).
+  lus blangs → body WORN (clothing metaphor; note 107 corpus-
+  consistent). The dog example. thog ma'i mtha' med / ya mtha'
+  med differentiated.
+- seg 288: ORTHOGRAPHIC CURIOSITY "ma ma byas" (mother + negation
+  adjacent) — homograph collision for the successor dictionary.
+  sha stag → "Absolutely". rten spread #6 ("my births").
+  grangs kyis mi chod varied across 287/288.
+- seg 289: MIRROR ORDERING — verb-final bsgom → sentence-initial
+  "Do this meditation"; cleanest full-clause inversion on file.
+  Two iteratives leveled to "over and over" (positions swapped).
+  shugs drag spread: fierce (262) / deepfelt (289).
