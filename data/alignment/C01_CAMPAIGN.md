@@ -3313,3 +3313,26 @@ C03 (C02 already complete).
   This vindicates generating the backfill from C01's own spine rows:
   copying the C03 pages would have been right 21 times and false on
   the twenty-second.
+
+### BACKFILL B8 (c1L8, C01:39, 43, 143) — 2026-08-28 — model: Opus
+### ✅ C01 COVERAGE CLOSED — 496/496, GATE-PROVED
+- 39: marker whose English side is the entire AUTHORS APPARATUS —
+  biographies of Tsongkapa, Pabongka, Geshe Lobsang Tharchin and
+  Geshe Michael Roach, plus Notes to Reading One and the Reading Two
+  header. Unpaired clause (s39app), apparatus protocol per 396/496.
+  It is the segment carrying GMR's own biography and the founding of
+  ACI and ACIP — whose transliteration is now this dictionary's join
+  key — and it sat unscanned while the course was recorded complete.
+- 43: plain marker (259/324/427 family). "the preliminaries" /
+  "I. The Lama and the Word".
+- 143: THE ONE THE LEDGER LIED ABOUT. The progress line named 143
+  among the handled marker pairs through every batch from 100 to
+  153; it was never on any page. c1p35 covered 141–142, c1p36
+  resumed at 144, and 143 fell through the join because no gate
+  checked that a segment HAS a page.
+- **C01 is now `"complete": True` in the builder and the COVERAGE
+  GATE proves it: 496/496, no gaps.** The course no longer appears
+  in the coverage report at all — a true claim passes silently where
+  a false one refuses the build. Completeness is a machine-checked
+  fact from here, not a sentence I wrote.
+- Evidence layer: 4,039 headwords / 7,481 pairs.
