@@ -1268,3 +1268,45 @@ guessed at up front — which is why each addition carries its citation.
 - Evidence layer: 4,505 headwords / 8,308 pairs. C03 at 217/620.
   Broken words: 11,871 English spans clean. Split syllables: 15,023 Tibetan
   spans clean. Both across 265 pages.
+
+### Batches C03-76 … C03-79 (C03:218–237) — 2026-08-28 — model: Opus
+Twenty Lam-Rim outline headings across four pages. **Twenty of twenty clean on
+the first attempt** — the second fully first-pass batch, and the largest.
+
+**The reconciliation on C03:218 is the strongest of the campaign**, and worth
+reading as a model. It checked the heading's exact wylie across the whole
+spine, **corrected two claims its own proposals had made**, and turned up a
+register split neither proposer saw:
+
+- Both proposals said the phrase occurs three times, all in Course 3. It
+  occurs **four** times — C03:218, C03:350, C16:415, P1:37 — and the latter
+  three carry byte-identical English. So the terse heading rendering is a
+  single witness standing against three identical expansive ones, not a
+  course-local split.
+- Proposal A claimed `bskyed pa` → "Developing" is consistent across sibling
+  headings 226, 241, 247, 273. It holds for the first three and **fails at
+  273** ("How to Develop"). Restated at the strength the evidence supports.
+
+**A REGISTER SPLIT ON `gus pa`, verified independently and quantified.**
+This is the class CLAUDE.md names as requiring a warning and forbidding
+auto-resolution (its example is `bsod nams`: "goodness" in prayers, "merit" in
+prose). Measured across the whole spine:
+
+    segments whose wylie contains `gus pa`        184
+      rendered with "reverence"                    34   devotional register
+      rendered with "respect"                      93   vow-keeping register
+      BOTH words in one segment                     1
+      neither (unrendered or rendered otherwise)   56
+
+**One segment in 184 uses both.** That is not free variation — the English is
+determined by register. "Reverence" belongs to the devotional passages
+(C03:218, 297, 349, 374); "respect" to vow-keeping and conduct (C03:53, 530,
+531). A dictionary offering one equivalent would mislead in half the corpus,
+and offering both without the register cue would leave the translator to guess.
+
+*(Counting note: `respect` had to be filtered for "respectively" and "with
+respect to" before the figure meant anything. The unfiltered count was 102.)*
+
+- Evidence layer: 4,513 headwords / 8,361 pairs. C03 at 237/620.
+  Broken words: 11,967 English spans clean. Split syllables: 15,141 Tibetan
+  spans clean. Both across 269 pages.
