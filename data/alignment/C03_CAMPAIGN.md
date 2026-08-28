@@ -29,7 +29,7 @@ When a segment's english field is phonetics, not translation:
    under its own clause with honest labels.
 
 ## Progress
-c3p1–c3p16 (1–48) done; 49+ open; 572 segs remain.
+c3p1–c3p17 (1–51) done; 52+ open; 569 segs remain.
 
 ## Queues (wylie / english / PHONETICS), C03
 - WYLIE: ACIP anusvara capitals dM/kM/ND + ni'a oddity (seg 6).
@@ -263,3 +263,16 @@ c3p1–c3p16 (1–48) done; 49+ open; 572 segs remain.
   po → "Saviors"; bskul crosses L4→L3. WYLIE QUEUE: "dag,byang"
   missing comma-space.
 - MILESTONE: 4,000 HEADWORDS CROSSED — 4,000 / 7,421 pairs.
+
+### Batch C03-17 (c3p17, C03:49–51) — 2026-08-28
+- 49: cha/ ↔ "[f]"; mya ngan 'da' ston → "pretend to pass into
+  nirvana" (ston "show" → "pretend" — the docetic display).
+- 50: rotation 4-1-2-3; opening three-unit mirror; TWO "Stay"s in
+  English vs ONE bzhugs (first = supplied anticipation, unwrapped);
+  "at my breast" SUPPLIED; press/palms crossed; w10-w9-w8 mirror
+  tail.
+- 51: ja/ ↔ "[g]" — LETTER-NUMERAL SEQUENCE COMPLETE (ka..ja =
+  a..g, one per ingredient). Citation keeps the trailing particle
+  ('"prostrations and..."'). s51rest = the bsag/sbyang/spel/mi-zad
+  taxonomy of all seven ingredients; English ahead.
+- Evidence layer: 4,012 headwords / 7,441 pairs.
