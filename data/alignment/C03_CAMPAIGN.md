@@ -46,12 +46,16 @@ entry from here records its producing model; everything through C03 batch
 32 was Fable.
 
 ## Progress
-c3p1–c3p35 (1–105) done; 106+ open; 515 segs remain.
+c3p1–c3p36 (1–108) done; 109+ open; 512 segs remain.
 
 ## Queues (wylie / english / PHONETICS), C03
 - WYLIE: ACIP anusvara capitals dM/kM/ND + ni'a oddity (seg 6).
 - PHONETICS #1: sangs rgyas = "sangye" (4, 8, 11) vs "sanggye" (18)
   — spelling variation inside the phonetics layer; kept verbatim.
+- PHONETICS #2: chos kyi = "chukyi" (82) vs "chu-kyi" (57) — hyphen.
+- PHONETICS #3: kun 'byung = "kuynjung" (91) — unexpected y glide.
+- PHONETICS #4: snying po = "nyingpo" (86) vs snying po'i =
+  "nyinpoy" (108) — the -oy genitive is regular, the lost g is not.
 - ENGLISH #1: "commentray" ×2 (seg 22 syllabus, for "commentary").
 - ENGLISH #2: seg 22 TRUNCATES mid-word ("Je Tsongkapa's Sour" —
   cuts "Source of All My Good") — corpus truncation artifact.
@@ -500,4 +504,20 @@ c3p1–c3p35 (1–105) done; 106+ open; 515 segs remain.
   C01:486 (thun mong du sbyor tshul) — two registers of one word.
 - 103/105: verbatim repeats (89/99/103; 87/97/101/105), phonetics
   identical each time.
+- Evidence layer: 4,039 headwords / 7,481 pairs; ACIP 4,038/4,039.
+
+### Batch C03-36 (c3p36, C03:106–108) — 2026-08-28 — model: Opus
+- 108: THE FOURTH-LINE SLOT, THIRD FILLING. Across four recitations
+  the closing line runs: sku gsung thugs kyi dngos grub rtsol du
+  gsol (90, 100) → "Grant that I attain Your body, speech and mind";
+  mchog dang thun mong … (104) → "… Both common and highest goals";
+  byang chub snying po'i bar du brtan par bzhugs (108) → "Stay here
+  never moving Until the Buddha's essence". This filling changes the
+  VERB as well as the object — rtsol du gsol (grant) becomes brtan
+  par bzhugs (stay) — and the English turns with it while the eight
+  lines above stay identical. Four-point consistency demonstration.
+- snying po → "essence", consistent with 86 (bstan pa'i snying po →
+  "The Essence of the Word"). brtan par → "never moving".
+- PHONETICS QUEUE #4 opened: nyingpo (86) vs nyinpoy (108).
+- 106/107: verbatim repeats (98/102/106; 89/99/103/107).
 - Evidence layer: 4,039 headwords / 7,481 pairs; ACIP 4,038/4,039.
