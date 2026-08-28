@@ -554,7 +554,7 @@ letter-exact battery gates every batch.
   (74's coinages reprised verbatim + self-referential "what we have
   called here"). khungs #4 "authentic source". Supplied transition
   sentence (filed with 115's). Self-quotes ×5 — densest cluster.
-| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p131 (144–430) done; 143, 259, 324 & 427 = marker pairs; 431+ open; 66 segs / 22 batches remain; §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
+| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p132 (144–433) done; 143, 259, 324 & 427 = marker pairs; 434+ open; 63 segs / 21 batches remain; §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
 
 NEXT: continue section VII (seq 146+) — the renunciation chapter.
 - seg 143: section-marker pair (like 43) — wylie carries "the first
@@ -2710,3 +2710,25 @@ TCS series and collections beyond, for later ruling). ***
   brtse ba chen pos → "out of deepest feelings of love".
 - QA: both sides letter-exact, 153 spans balanced, depth clean.
   Layer: 3,372 headwords / 6,399 pairs.
+
+### c1p132 — The intercontinental tour (431–433)
+- **431 — isolation, outer and inner**: rgyal khams bskor ba
+  ("touring the kingdoms") → "making its usual INTERCONTINENTAL
+  TOUR" — the file's boldest modernizing render (the wandering mind
+  as jet-setter); rnam rtog mang po → "your thousand daily hopes and
+  fears" ("thousand daily" amplifying mang po). chos brgyad → "the
+  eight worldly thoughts" (fn 172). dben pa ×3
+  (isolation/isolating/keep your mind from). 'du 'dzi → "the hustle
+  and bustle of life".
+- **432 — real efforts**: the virya definition — effort toward bad
+  deeds is NOT brtson 'grus; spro bzhin du → "with an enthusiasm"
+  ("Real" supplied). Negation fronted.
+- **433 — the ultimate wish**: 'di nas sangs rgyas pa'i bar → "starts
+  from now…up to the point where you become a Buddha yourself". THE
+  IMPERMANENCE FORMULA: tshe la nges pa med → "you cannot be sure
+  how many days are left in your life". 'bungs shig → "put all your
+  strength into". The word-gloss TRIPLE completes:
+  isolation/efforts/ultimate wish — each key term of verse 14 given
+  its own segment.
+- QA: both sides letter-exact, 116 spans balanced, depth clean.
+  Layer: 3,386 headwords / 6,430 pairs.
