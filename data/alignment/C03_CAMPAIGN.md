@@ -76,7 +76,7 @@ entry from here records its producing model; everything through C03 batch
 32 was Fable.
 
 ## Progress
-c3p1–c3p39 (1–117) done; 118+ open; 503 segs remain.
+c3p1–c3p40 (1–120) done; 121+ open; 500 segs remain.
 
 ## Queues (wylie / english / PHONETICS), C03
 - WYLIE: ACIP anusvara capitals dM/kM/ND + ni'a oddity (seg 6).
@@ -88,6 +88,9 @@ c3p1–c3p39 (1–117) done; 118+ open; 503 segs remain.
   "nyinpoy" (108) — the -oy genitive is regular, the lost g is not.
 - PHONETICS #5: the genitive is hyphenated "chang-gi" (116) against
   unhyphenated gungyi (55), lamgyi (115), tsokyi (8).
+- ENGLISH: consecutive mid-sentence truncations at 119 ("described
+  i") and 120 ("a good environment") — corpus artifacts, nulled with
+  reasons, never completed.
 - ENGLISH #1: "commentray" ×2 (seg 22 syllabus, for "commentary").
 - ENGLISH #2: seg 22 TRUNCATES mid-word ("Je Tsongkapa's Sour" —
   cuts "Source of All My Good") — corpus truncation artifact.
@@ -622,3 +625,37 @@ c3p1–c3p39 (1–117) done; 118+ open; 503 segs remain.
   word, two genuine senses, both GMR's — a review-pass item and a
   good example of why the scan is an attestation layer.
 - Evidence layer: 4,039 headwords / 7,481 pairs; ACIP 4,038/4,039.
+
+### Batch C03-40 (c3p40, C03:118–120) — 2026-08-28 — model: Opus
+- 118: THE CITATION FORMULA REPEATS. Segment 23 gave "…by Je
+  Tsongkapa:"; 118 drops the attribution. Same source, attribution
+  stated once then assumed. chen mo/lam rim crossed as at 23.
+- 119: lhag mthong → "special sight" HERE vs "(vipashyana, or
+  insight)" at 287 — two English renders of zhi gnas's pair-mate,
+  banked. zhi gnas holds as "quietude"; tshogs holds as
+  "conditions", confirming last batch's sense split in running prose
+  rather than on a header alone.
+- 120: each quality introduced as a quoted term (rnyed sla ba →
+  '"easy to find'; gnas bzang ba → 'a "good place'; sa bzang ba →
+  'a "good environment'). Comma-inside-quote trap throughout.
+- TWO CONSECUTIVE TRUNCATIONS (119, 120): Tibetan tails with no
+  English. Nulled with reasons, never completed.
+
+#### PROCESS FIX THIS BATCH
+The generator caught a real error — two English spans in the wrong
+cursor order at s119 — and refused to write the page. Correct
+behaviour. But the batch script had already run its sed-register, so
+the builder was left pointing at a page that was never written and
+died on a FileNotFoundError traceback.
+
+Added a MISSING-PAGE GUARD to build_alignment_layer.py: a page
+registered in COURSES whose file does not exist now REFUSES the build
+with a plain message naming the course, the page and the path, and
+saying what to do about it. Liveness-proved by registering a
+nonexistent page.
+
+Standing correction to the batch order: register AFTER the page is
+written, not before. Until every batch follows that, the guard is
+what turns a half-finished run into a legible error instead of a
+stack trace.
+- Evidence layer: 4,057 headwords / 7,503 pairs.
