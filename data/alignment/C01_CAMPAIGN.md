@@ -554,7 +554,7 @@ letter-exact battery gates every batch.
   (74's coinages reprised verbatim + self-referential "what we have
   called here"). khungs #4 "authentic source". Supplied transition
   sentence (filed with 115's). Self-quotes ×5 — densest cluster.
-| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p102 (144–343) done; 143, 259 & 324 = marker pairs; 344+ open; 153 segs / 51 batches remain; §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
+| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p103 (144–346) done; 143, 259 & 324 = marker pairs; 347+ open; 150 segs / 50 batches remain; §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
 
 NEXT: continue section VII (seq 146+) — the renunciation chapter.
 - seg 143: section-marker pair (like 43) — wylie carries "the first
@@ -2010,3 +2010,32 @@ TCS series and collections beyond, for later ruling). ***
   clause reorder: crossed ids s343c23x, s343c34x (fn 150).
 - QA: both sides letter-exact, 235 spans balanced, depth clean.
   Layer: **2,800 headwords** / 5,248 pairs — 2,800 milestone.
+
+### c1p103 — The lineage of the view (344–346)
+- **344 — name-restoration RUN**: sangs rgyas bskyangs →
+  "Buddhapalita" (#3), 'phags pa lha → "Aryadeva" (#4) — four
+  Sanskrit restorations in five batches. bu pA li ta (the Tibetan
+  PHONETIC of Buddhapālita naming his commentary) → "the commentary
+  that bears his name" (descriptive render). TITLE WORDPLAY
+  PRESERVED: tshig gsal → "A Clarification of the Words (which
+  explains the wording…)"; dbu ma la 'jug pa → "Entering the Middle
+  Way (which enters into the meaning…)" — the 'jug-pa play kept in
+  parentheticals. Abbreviation attested: rtsa she → "Root Wisdom".
+  zla ba grags pa (full form) → "Master Chandrakirti". fn 151.
+- **345 — Tsongkapa alone**: rje ("the Lord") → "Lord Tsongkapa" —
+  anaphora-aware name supply. 'jam mgon → "the gentle protector"
+  (Manjushri epithet calqued); chen po ("great") DROPPED — flagged.
+  dri ma → "taint" in plain use — same morpheme 336 restored inside
+  "Vimalakirti": name vs noun. bod gangs can gyi ljongs → "the Land
+  of Snows, in Tibet" (flip, both kept). yab sras → "and his
+  spiritual sons". 'jug pa (abbrev) → "Entering the Middle Way"
+  (expanded from 344). English fronts Tibet+Tsongkapa (s345c12x).
+  dgongs pa #5 → "the true meaning" (#4 in 344: "the intent").
+- **346 — Entering the Middle Way quote**: LINE-ORDER FLIP in verse
+  (tib lines 1–2 reversed in English). thabs → "way" — the thabs
+  file's second sense (method 336–341 / way 346). kun rdzob de nyid →
+  "the conventional and the real" — VERBATIM match with 340's goose
+  verse. bden las nyams → "lost the truths", repeated in full where
+  the Tibetan pronominalizes. fn 152.
+- QA: both sides letter-exact, 174 spans balanced, depth clean.
+  Layer: 2,829 headwords / 5,294 pairs.
