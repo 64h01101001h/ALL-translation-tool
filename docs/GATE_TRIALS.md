@@ -248,3 +248,53 @@ Two design choices earned their keep and are now standing practice:
 **Gate 2 survives as a triage queue, and only that.** 43.5% yield against a
 15% base rate is a 2.9× enrichment — genuinely useful for ordering a review
 backlog, useless as an auto-reject. Gate 3b earns not even that.
+
+---
+
+## Gate 4 — ordinal displacement in parallel lists · FALSIFIED ON PRECISION
+
+**Proposed by:** the C03 adversarial audit (2026-08-28), from the one defect
+it confirmed. Unlike gates 1–3 this targeted a **mechanism actually observed**
+rather than a surface feature, which is why it was worth a run.
+
+**Rule:** a span whose Tibetan key contains an ordinal morpheme (`dang po`,
+`gnyis pa`, `gsum pa` …) should hold that ordinal's English word. If the
+English ordinal is present in the segment but held by a *different* span, the
+clause has been displaced — the exact signature of the C03:158 defect.
+
+**Criteria fixed before the run:** falsified above 60 fires; falsified below
+50% precision.
+
+**Result: 2 fires. Volume passes easily. Precision 0 of 2. FALSIFIED.**
+
+Both failures are instructive:
+
+- **C03:153** — the "first" held elsewhere is a *temporal adverb* ("must first
+  seek out"), not the ordinal. The rule cannot tell an English ordinal from
+  its homonym.
+- **C03:24** — the segment contains **two separate `dang po`**, and both spans
+  are correct. The rule cannot tell one occurrence from another.
+
+Four gates proposed, four falsified. The pattern across all four is now
+unmistakable: **every mechanically available signal is a surface feature that
+correlates with correctness only until it is measured at scale.**
+
+### But the gate paid for itself anyway, and that is worth recording
+
+Fire 1 was a false positive *on the gate's own terms* and still surfaced a
+**real defect the audit had declared unmeasured**. `dang po'i gnyen por` ("as
+the antidote to the first") had been keyed to *"Then they should acquaint
+themselves with"* — English that actually renders `rig nas`, "having
+recognised" — while its true rendering, *"The corrections for the first of
+these obstacles"*, sat unwrapped in the last sentence of the segment.
+
+That is a **wrong-pairing**, not an over-capture. Every audit so far has found
+over-capture dominant, and the C03 audit explicitly flagged that mispairings
+"remain effectively unmeasured". Here is one, found by a rule that was wrong
+about why it fired.
+
+**The lesson for future gates:** a falsified gate can still be a useful
+*triage queue* if its fires are few enough to read by hand. Two fires cost
+minutes and returned one real defect. That is a far better yield per minute
+than the 15% base rate — but it is a claim about triage economics, never about
+the rule's validity. **Do not let a lucky find rescue a falsified rule.**
