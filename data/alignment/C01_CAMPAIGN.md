@@ -554,7 +554,7 @@ letter-exact battery gates every batch.
   (74's coinages reprised verbatim + self-referential "what we have
   called here"). khungs #4 "authentic source". Supplied transition
   sentence (filed with 115's). Self-quotes ×5 — densest cluster.
-| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p133 (144–436) done; 143, 259, 324 & 427 = marker pairs; 437+ open; 60 segs / 20 batches remain; §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
+| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p134 (144–439) done; 143, 259, 324 & 427 = marker pairs; 440+ open; 57 segs / 19 batches remain; §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
 
 NEXT: continue section VII (seq 146+) — the renunciation chapter.
 - seg 143: section-marker pair (like 43) — wylie carries "the first
@@ -2756,3 +2756,26 @@ TCS series and collections beyond, for later ruling). ***
   path to Buddhahood".
 - QA: both sides letter-exact, 162 spans balanced, depth clean.
   Layer: 3,411 headwords / 6,472 pairs.
+
+### c1p134 — Three short words (437–439)
+- **437 — KADAMPA CALQUED**: bka' gdams pa → "the Seers of the Word"
+  — the school name as English calque (school-name file's boldest
+  entry). GESHE DOLPA'S THREE WORDS (fn 174): mig rgyang bsring →
+  "Look far ahead"; blo rgya bskyed → "Think very big"; khong gsang
+  lhod ("loosen the inner depths") → "Keep a pace" (recast). lam rim
+  lam rim → "Steps of the path! Steps of the path!" (reduplication
+  kept, exclamation supplied).
+- **438 — self-quote with typo**: 437's "Look far ahead" returns as
+  '"Look for ahead"' — ENGLISH TYPO QUEUE #25 ("for" for "far");
+  "Think very big" shortens to "Thinking big" in re-quote. skyes bu
+  gsum → "the three increasing scopes"; bskyed rdzogs → "the levels
+  of creation and completion"; sngags → "the secret teaching".
+- **439 — the long/short mind pair**: shes rgyud ngang ring po →
+  "make grand plans" vs ngang thung thung ×2 → "as low as we
+  can"/"think small" — worldly/spiritual inversion on one idiom.
+  One-year/hundred-year inversion. khul byas → "supposedly"; kha ton
+  → "prayers…reciting daily"; superlative pair → "the easiest
+  practice possible"; quoted small-thought ("This is about all I
+  could manage").
+- QA: both sides letter-exact, 165 spans balanced, depth clean.
+  Layer: 3,439 headwords / 6,515 pairs.
