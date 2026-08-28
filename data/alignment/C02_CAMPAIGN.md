@@ -30,12 +30,17 @@ It is recorded here because it is a genuine three-way witness: two
 courses preserve the clean reading, one preserves a marked-up reading,
 and that is evidence about the corpus rather than about the text.
 
-**For the review pass:** this is a strong candidate for a corpus-level
-repair upstream in the data project, rather than an editorial change
-here. Flagged for Adam.
+**THE ARTIFACT IS A SINGLETON.** A scan of all 8,961 segments across
+C01–C18 for angle-bracket markup returns exactly ONE hit — this one.
+It is an isolated defect, not a systemic leak, so the upstream repair
+is a single edit with no class of similar cases behind it.
+
+**For the review pass:** a strong candidate for corpus-level repair
+upstream in the data project, rather than an editorial change here.
+Flagged for Adam.
 
 ## Progress
-c2L1–c2L2 (1–6) done; 7–22 open. Main pass 22–68 already delivered.
+c2L1–c2L3 (1–9) done; 10–22 open. Main pass 22–68 already delivered.
 
 ### BACKFILL C2-B1 (c2L1, C02:1–3) — 2026-08-28 — model: Opus
 - Generated from C02's own spine rows. Segments 1–3 are byte-identical
@@ -62,3 +67,10 @@ c2L1–c2L2 (1–6) done; 7–22 open. Main pass 22–68 already delivered.
   rather than editorial change here — fixing it in this layer would
   leave the dictionary silently disagreeing with its own source.
 - COVERAGE GATE: C02 49→52; 16 open (7-22).
+
+### BACKFILL C2-B3 (c2L3, C02:7–9) — 2026-08-28 — model: Opus
+- All three byte-identical to C01 and C03. kyabdro semkye; chos ↔
+  "chu"; bdag ni ↔ "dakni" against bdag gi/gis ↔ "dakki".
+- Corpus-wide artifact scan run this batch: 8,961 segments, exactly
+  one angle-bracket hit (C02:6). Singleton confirmed.
+- COVERAGE GATE: C02 52→55; 13 open (10-22).
