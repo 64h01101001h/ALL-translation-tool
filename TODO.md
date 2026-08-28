@@ -61,6 +61,42 @@ now a claim the builder proves, not one I assert in prose.
 The liturgy is 21/22 byte-identical to C03:1–22, already scanned, so this is
 real work but not novel work.
 
+## ★★★★★ ADAM 2026-08-28 (later still): keep BOTH dictionaries
+
+"Keep the original HGM dictionary intact, while integrating the new
+dictionary we're creating here... we will most likely use the data we're
+creating now in the application." The manual set was built by humans hand-
+linking Tibetan to English in GMR's translations; Adam trusts the machine
+linking more.
+
+**MEASURED, not assumed** (docs/TWO_DICTIONARIES_INTEGRATION.md): 2,178
+headwords are in both. They agree exactly on 41.5%, partly on a further
+29.1%, and disagree on 641 (29.4%). The scan adds 1,861 headwords the manual
+set lacks — from three courses of eighteen.
+
+**The disagreements do NOT all favour the scan**, and that matters:
+- manual clearly wrong: `zhus pa` = "tilopa" (auto-aligned tier) vs scan
+  "asked/requested";
+- **scan weaker as a definition**: `'phel` — manual "increasing" (what the
+  word means) vs scan "may it help" (what GMR wrote there, rendering the
+  formula freely);
+- genuine register difference, both right: `spro ba`, `zin`, `sdod pa`.
+
+**Structural finding: the scan is an ATTESTATION layer, not a DEFINITION
+layer.** It records what GMR wrote at a place, with citation; the manual set
+records what a word means. The integration must not flatten one into the
+other.
+
+**This is also the best answer yet to R10.** The manual dictionary is a
+partial human oracle for mapping correctness: where the two agree, a human
+already judged the link and the machine reproduced it. That turns "review
+9,000 segments" into "review 641 disagreements", shrinking per course.
+
+Recommendation (4 points, awaiting Adam): both layers separate and ACIP-keyed;
+corroboration recorded as a field not a merge; the 641 as a review queue
+partitioned by manual tier; attestation and definition kept distinguishable in
+the app.
+
 ## ⛔ STANDING LIMIT OF THE VERIFICATION HARNESS (2026-08-28) — read first
 
 **The deterministic gates prove the text is VERBATIM. They can never prove
