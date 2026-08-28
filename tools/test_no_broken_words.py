@@ -15,7 +15,7 @@ listed below by name. Anything else is an accident.
 
 Run over every page in the project on every build.
 """
-import re, io, os, glob, sys
+import re, io, os, glob, sys, html as _html
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 LET = re.compile(r"[A-Za-z]")
@@ -70,7 +70,11 @@ def main():
                     if not t:
                         continue
                     n_spans += 1
-                    if t in ALLOWED_SUBWORD:
+                    # the page stores entities, so "n't" arrives as
+                    # "n&#x27;t" and would never match the allowed list.
+                    # Unescape before comparing -- this gate reported a
+                    # false failure on C03:254 until it did.
+                    if _html.unescape(t) in ALLOWED_SUBWORD:
                         continue
                     nxt = chunk[m.end():m.end() + 1]
                     prv = chunk[m.start() - 1:m.start()]
