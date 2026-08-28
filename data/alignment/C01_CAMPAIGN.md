@@ -554,7 +554,7 @@ letter-exact battery gates every batch.
   (74's coinages reprised verbatim + self-referential "what we have
   called here"). khungs #4 "authentic source". Supplied transition
   sentence (filed with 115's). Self-quotes ×5 — densest cluster.
-| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p84 (144–289) done; 143 & 259 = marker pairs; 290+ open; §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
+| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p85 (144–292) done; 143 & 259 = marker pairs; 293+ open; §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
 
 NEXT: continue section VII (seq 146+) — the renunciation chapter.
 - seg 143: section-marker pair (like 43) — wylie carries "the first
@@ -1629,3 +1629,22 @@ TCS series and collections beyond, for later ruling). ***
   "Do this meditation"; cleanest full-clause inversion on file.
   Two iteratives leveled to "over and over" (positions swapped).
   shugs drag spread: fierce (262) / deepfelt (289).
+
+### c1p85 — C01:290–292 (batch 85) — the kindness of the mother
+- Thirty-third consecutive zero-catch batch. Layer: 2,463
+  headwords / 4,587 pairs.
+- seg 290: ACIP TOKENS #16–18 — "aa ma" ×2 here + "aa mas" (292):
+  the achen-spelled "mother"; domestic word in ACIP orthography,
+  engine catalogue updated. Gestation formula kept exactly ("nine
+  months and ten days"). "someone else" supplied intensification.
+  lhur blangs → "gladly taking it upon herself".
+- seg 291: WISH-JEWEL VARIED — "some precious gem that would grant
+  her any wish" (vs 195's "a jewel that gives any wish"). torn
+  with/violent/excruciating staging. dga' tshor chen po → "an
+  overwhelming joy".
+- seg 292: STACCATO FRAGMENTS ("Totally stupid. Incapacitated." —
+  file's shortest sentences). BABY CHICK EXPANDED ("red-rubber
+  beak still yet to harden" — supplied vivid detail). THE TENDER
+  TRIAD (swayed/pressed/greeted). g-yab tsam ×2 + g-yengs: three
+  more g-y hyphen tokens through the letter gate. sor mo bcu
+  ("ten fingers") → "fingertips"; sha → "her body's".
