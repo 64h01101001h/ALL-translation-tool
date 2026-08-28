@@ -1,0 +1,115 @@
+# Mechanical gates: what was proposed, tested, and rejected
+
+*A running record. Every gate proposed for the alignment layer gets tested
+against the whole layer before adoption, with a falsification criterion fixed
+IN ADVANCE. Two have been proposed. Both were falsified. This file exists so
+nobody re-proposes them on the strength of the sample that suggested them.*
+
+The pattern both failures share: a signal that separates cleanly on 12–60
+hand-inspected items saturates at 9,486. **A gate is a claim about the whole
+layer and must be tested on the whole layer.**
+
+---
+
+## Gate 1 — unbalanced quotation marks · REJECTED
+
+**Proposed by:** the stratified audit (2026-08-28). 3 of 3 flagged items were
+defective; none of the 49 sound items contained a quote character.
+
+**Criterion set in advance:** must hold at layer scale.
+
+**Result:** fires on **110 of 7,820 pairs**. Inspection showed the majority
+are correct — spans stop before a closing quote *deliberately*, because Geshe
+Michael puts commas inside closing quotes (`"wisdom,"`) and a span including
+the quote would drag the comma along.
+
+**Verdict: the signal is a fingerprint of correct comma-trap handling, not of
+error.** Adopting it would have discarded 110 mostly-good pairs.
+
+**Salvage:** a span consisting of a leading quote plus one or two words
+(`'chag` → `"press`) is a *display* defect even when the mapping is right.
+Worth a lint. Not a correctness gate.
+
+---
+
+## Gate 2 — numeral leakage · REJECTED ON PRECISION
+
+**Proposed by:** the uniform random-sample audit (2026-08-28), after 3 of its
+12 defects were English cardinals with no Tibetan numeral in the key.
+
+**Rule:** fire when the English span contains a cardinal ≥ "two" and the
+Tibetan key contains no numeral morpheme (`gcig gnyis gsum bzhi lnga drug
+bdun brgyad dgu bcu brgya stong khri 'bum phrag`).
+
+**Criteria set in advance, before running:**
+- falsified if it fires on more than ~400 triples
+- falsified if precision < 50%
+
+**Result:**
+
+    fires        : 23 of 9,486 triples (0.24%)   <- PASSES the volume test, easily
+    precision    : 10/23 = 43.5%                 <- FAILS the precision test
+
+**Verdict: falsified.** It passed the criterion I expected it to fail and
+failed the one I expected it to pass.
+
+The 13 false positives are not random. They fall into four clean classes:
+
+| class | n | example |
+|---|---|---|
+| the number is inside a **title** | 5 | `lam gtso` → "the Three Principal Paths" (short for *lam gtso rnam gsum*) |
+| **lexicalised** term whose standard English name carries the count | 4 | `ngan song` → "the three lower realms"; `khams gong ma` → "the higher two" |
+| number-meaning word **outside the morpheme list** | 3 | `zung` ("a pair"), `gnyi ga` ("both"), `skag` (the twelve-year-cycle obstacle year) |
+| English idiom the key genuinely heads | 1 | `rang lag na yod` → "in our own two hands" |
+
+**The 10 true positives were all real and are all now fixed** (see the commit
+following this file). So the rule has value as a *triage queue* — 23 items to
+read is cheap and it found 10 genuine defects. What it cannot be is an
+auto-reject.
+
+---
+
+## The refinement Gate 2 points to — NOT YET VALIDATED
+
+The auditors converged on one discriminator without being told it:
+
+> the number belongs to a neighbour **only if that neighbour is actually
+> present in this segment and already carries its own span.**
+
+It separates the `lam gtso` cases perfectly. C01:73 and C01:53 spell out
+`rnam gsum`, which has its own span — those were true positives. C01:209,
+253, 351, 469, 484 have no `gsum` anywhere in the segment — those were the
+title uses, all false positives.
+
+**This refinement was derived from the 23 items it would be scored on.**
+That is exactly the error that killed Gate 1: a rule chosen after seeing the
+data describes that data and predicts nothing. It is a HYPOTHESIS. It does
+not get adopted on this evidence, and its falsification criteria must be
+fixed before it is next tested.
+
+**But the refinement generalises past numerals**, and that is the part worth
+pursuing:
+
+> An English span over-captures whenever it contains material whose Tibetan
+> licensor **is present in the same segment and already has its own span.**
+
+That is not a numeral rule. It is a statement about span disjointness, and it
+is checkable mechanically against the page structure for every span in the
+layer, not just the 23 with numbers in them. It also explains the dominant
+defect mechanism both audits found independently (span over-capture, 7/12 and
+8/11), which is the first time a proposed gate has matched the measured
+failure mode rather than a surface feature.
+
+**Status: to be built and tested with its criteria fixed in advance.**
+
+---
+
+## Standing protocol for any future gate
+
+1. State the rule and the falsification criteria **before** running it.
+2. Run it against the whole layer. Report the fire count.
+3. Hand-check a random draw of fires with **sibling spans attached** — an
+   auditor that cannot see the other spans on the page will invent licensors.
+   (Two false accusations in the random-sample audit came from exactly this.)
+4. Report precision honestly against the pre-set threshold.
+5. A gate that fails becomes a triage queue at best. Record it here either way.
