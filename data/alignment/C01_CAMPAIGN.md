@@ -554,7 +554,7 @@ letter-exact battery gates every batch.
   (74's coinages reprised verbatim + self-referential "what we have
   called here"). khungs #4 "authentic source". Supplied transition
   sentence (filed with 115's). Self-quotes ×5 — densest cluster.
-| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p81 (144–280) done; 143 & 259 = marker pairs; 281+ open; §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
+| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p82 (144–283) done; 143 & 259 = marker pairs; 284+ open; §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
 
 NEXT: continue section VII (seq 146+) — the renunciation chapter.
 - seg 143: section-marker pair (like 43) — wylie carries "the first
@@ -1572,3 +1572,22 @@ TCS series and collections beyond, for later ruling). ***
   kindness" (the crux term, scare-quoted). drin dran/drin gzo
   defined. btang snyoms → "feelings of neutrality". thog mar →
   "The start-off". Cause-effect lattice with supplied ordinals.
+
+### c1p82 — C01:281–283 (batch 82) — Loving-Gaze; the even mind
+- Thirtieth consecutive zero-catch batch. Layer: 2,384 headwords /
+  4,455 pairs.
+- seg 281: AVALOKITESHVARA CALQUED — spyan ras gzigs →
+  "Loving-Gaze" ("Lama Loving-Gaze"; fn 132) — the deity-calque
+  crown jewel. THE ESOTERIC WITHHOLDING preserved ("he would not
+  detail them in a public gathering"); gsungs → "our Lama
+  explained" (4th). thugs/rang sems honorific split visible. che
+  chung → "relative intensity"; yod med → "depends on".
+- seg 282: lhag bsam EXPANDED ("the extraordinary form of personal
+  responsibility"). khur SPREAD COMPLETE: "a chance at hand" (277
+  recast) vs "the load" (282 literal) — one page apart.
+- seg 283: chags sdang → "feelings of like and dislike"
+  (domesticated); both-repeat frame configuration. THE YID-'ONG
+  MIRROR: yid la 'bab → "best-loved", yid du mi 'ong → "ugliest"
+  (family: 280's yid 'ong "beautiful" — three exponents). skyes/
+  gyur varied in Tibetan, leveled to "taken birth" in English.
+  Procedural scaffolding supplied (First/Then/Next).
