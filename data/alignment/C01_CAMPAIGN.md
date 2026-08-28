@@ -554,7 +554,7 @@ letter-exact battery gates every batch.
   (74's coinages reprised verbatim + self-referential "what we have
   called here"). khungs #4 "authentic source". Supplied transition
   sentence (filed with 115's). Self-quotes ×5 — densest cluster.
-| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p150 (144–487) done; 143, 259, 324, 427, 446 & 483 = marker pairs; 488+ open; 9 segs / 3 batches remain; §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
+| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p151 (144–490) done; 143, 259, 324, 427, 446 & 483 = marker pairs; 491+ open; 6 segs / 2 batches remain; §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
 
 NEXT: continue section VII (seq 146+) — the renunciation chapter.
 - seg 143: section-marker pair (like 43) — wylie carries "the first
@@ -3110,3 +3110,28 @@ TCS series and collections beyond, for later ruling). ***
   another day"; bslus pas → "cheated of the chance"; gsungs
   supplied-subject (Lord Tsongkapa) + "in the root text" supplied.
 - Layer: 3,767 headwords / 7,045 pairs.
+
+### Batch 151 (c1p151, C01:488–490) — 2026-08-28
+- 488: WHOLE-CLAUSE INVERSION (reason-first Tibetan → statement-first
+  English, crossed cids). 'khor ba rendered TWO WAYS in ONE segment
+  ("cyclic life" / "this circle of life") — the Tibetan-stable/
+  English-varies signature inside a single sentence. sbrel nas →
+  "juxtaposes" (vs 487 "right together with"). Clause e2 runs
+  w3-w2-w1 full reversal.
+- 489: the plural-of-mothers grammar note: rnams kyi sgras → "is
+  plural" (signals Shantideva's system), ma zhes pas → the word
+  "mother" itself (signals Atisha's). jo bo → "Lord Atisha"; zhi lha
+  → "Master Shantideva"; bsres pa'i → "he manages to interweave";
+  sems ALONE → "the wish for enlightenment" (bodhichitta compressed
+  to one syllable, restored in English). ENGLISH QUEUE #26:
+  "even- mindedness" (line-break hyphen artifact, fn 206). Two
+  comma-inside-quote traps avoided.
+- 490: Gungtang unpacked ~3×. THE BARLEY: nas btab ma thub =
+  "couldn't plant barley" — English drops the grain (nul), plants
+  "this fertile field" generically. 'phrul che → "gives fantastic
+  results"; yus mi 'byung → "you don't give them any credit for it"
+  (yus = acknowledgment-of-favor); mnyam pa rje → "you exchange
+  yourself and others". ma gtogs ("except") CROSSES CLAUSES (t-c4 →
+  e5 "It's only"). ngang tshul quoted from root text (fn 207), 2nd
+  occurrence absorbed.
+- Layer: 3,791 headwords / 7,087 pairs.
