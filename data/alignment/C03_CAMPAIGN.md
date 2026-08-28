@@ -76,7 +76,7 @@ entry from here records its producing model; everything through C03 batch
 32 was Fable.
 
 ## Progress
-c3p1–c3p38 (1–114) done; 115+ open; 506 segs remain.
+c3p1–c3p39 (1–117) done; 118+ open; 503 segs remain.
 
 ## Queues (wylie / english / PHONETICS), C03
 - WYLIE: ACIP anusvara capitals dM/kM/ND + ni'a oddity (seg 6).
@@ -86,6 +86,8 @@ c3p1–c3p38 (1–114) done; 115+ open; 506 segs remain.
 - PHONETICS #3: kun 'byung = "kuynjung" (91) — unexpected y glide.
 - PHONETICS #4: snying po = "nyingpo" (86) vs snying po'i =
   "nyinpoy" (108) — the -oy genitive is regular, the lost g is not.
+- PHONETICS #5: the genitive is hyphenated "chang-gi" (116) against
+  unhyphenated gungyi (55), lamgyi (115), tsokyi (8).
 - ENGLISH #1: "commentray" ×2 (seg 22 syllabus, for "commentary").
 - ENGLISH #2: seg 22 TRUNCATES mid-word ("Je Tsongkapa's Sour" —
   cuts "Source of All My Good") — corpus truncation artifact.
@@ -596,4 +598,27 @@ c3p1–c3p38 (1–114) done; 115+ open; 506 segs remain.
   measurements — in docs/PRON_ENGINE_VS_C03_LITURGY.md. NO ENGINE
   CHANGE MADE; needs Adam's ruling on whether prayer transcription
   and card phonetics are meant to share a convention.
+- Evidence layer: 4,039 headwords / 7,481 pairs; ACIP 4,038/4,039.
+
+### Batch C03-39 (c3p39, C03:115–117) — 2026-08-28 — model: Opus
+- FIRST BATCH AFTER THE BACKFILL. C01 and C02 are closed and locked;
+  C03 is now the only course carrying a coverage gap.
+- 115: yon tan ↔ "yunten"; sa dang lam, the levels-and-paths pair.
+- 116: THE GANDEN LHAGYAMA ENDS. rdo rje 'chang → "the One who Holds
+  the Diamond", the same rendering as C03:91 — the crown calque holds
+  across both occurrences in the prayer. go 'phang → "the place where
+  I Become myself"; myur thob → "reach then quickly".
+  PHONETICS QUEUE #5 opened: chang-gi hyphenated against gungyi /
+  lamgyi / tsokyi unhyphenated.
+  The segment carries three things: the phonetic line, the closing
+  stanza (s116trans, source 113–116), and the Reading Three header
+  plus apparatus (s116app, no Tibetan source).
+- 117: MARKER, unusual in that its wylie is REAL TIBETAN (zhi gnas
+  kyi tshogs) rather than an English title fragment. zhi gnas
+  (shamatha) → "Quietude", consistent with 195's "Achieving quietude
+  [shamata]".
+  SENSE SPLIT BANKED: tshogs → "Conditions" here against
+  "collections" (merit and wisdom) at segments 14 and 15. One common
+  word, two genuine senses, both GMR's — a review-pass item and a
+  good example of why the scan is an attestation layer.
 - Evidence layer: 4,039 headwords / 7,481 pairs; ACIP 4,038/4,039.
