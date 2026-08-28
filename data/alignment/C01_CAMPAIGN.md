@@ -554,7 +554,7 @@ letter-exact battery gates every batch.
   (74's coinages reprised verbatim + self-referential "what we have
   called here"). khungs #4 "authentic source". Supplied transition
   sentence (filed with 115's). Self-quotes ×5 — densest cluster.
-| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p113 (144–376) done; 143, 259 & 324 = marker pairs; 377+ open; 120 segs / 40 batches remain; §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
+| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p114 (144–379) done; 143, 259 & 324 = marker pairs; 380+ open; 117 segs / 39 batches remain; §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
 
 NEXT: continue section VII (seq 146+) — the renunciation chapter.
 - seg 143: section-marker pair (like 43) — wylie carries "the first
@@ -2299,3 +2299,32 @@ TCS series and collections beyond, for later ruling). ***
   of" (new). Negation fronted again.
 - QA: both sides letter-exact, 173 spans balanced, depth clean.
   Layer: 3,030 headwords / 5,714 pairs.
+
+### c1p114 — The three buildings and the vivid me (377–379)
+- **377 — THE DEIXIS FINDING**: phar ngos nas → "out there" / tshur
+  ngos nas → "From our side" — the EXACT OPPOSITE mapping of 350
+  (phar btags = "from our side" / tshur grub = "from its own side").
+  phar/tshur are speaker-anchored far/near directionals; GMR renders
+  each occurrence by contextual referent, never fixed equivalents. A
+  dictionary cannot list phar="our side" — successor-dictionary
+  design note: the pair needs a usage note, not a gloss.
+- **378 — the three buildings**: longest segment yet (8 clauses → 8
+  sentences): gzim chung → "sleeping quarters"; rung khang →
+  "kitchen facility"; bdag po → "the owner"; gzhi nas → "Only after
+  this"; 2 spoken + 2 thought speeches, verb-before-quote every
+  time. NAME-CONCEPT PAIR THIRD FORM: ming dang rtog pa (378) after
+  ming brdas (364/365) and sgra rtog (376/377) — three Tibetan
+  forms, English steady on "a name and a concept". btags chos → "a
+  product of the labelling process". chos gang dang gang yang →
+  "any existent entity".
+- **379 — the oh-so-vivid me**: ling ling po → "this vivid mental
+  image" / ling nge ba → "the oh-so- vivid" (GMR's coined intensifier;
+  ENGLISH TYPO QUEUE #21: "oh-so- vivid" hyphen-space artifact). THE
+  INBORN PAIR (fn 163): bden 'dzin lhan skyes → "inborn grasping to
+  a self"; 'jig lta lhan skyes → "inborn destructible view" ('jig
+  lta ruling). tshugs thub → "self-standing"; myong mkhan → "the
+  intimate experiencer"; dgag bya #8. FOURTH name-form: dpal ldan
+  zla ba grags pa → "the glorious Chandrakirti" (epithet varies:
+  illustrious 340 / glorious 379; name holds).
+- QA: both sides letter-exact, 260 spans balanced, depth clean.
+  Layer: 3,076 headwords / 5,795 pairs.
