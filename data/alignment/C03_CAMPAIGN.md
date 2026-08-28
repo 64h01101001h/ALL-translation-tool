@@ -29,7 +29,7 @@ When a segment's english field is phonetics, not translation:
    under its own clause with honest labels.
 
 ## Progress
-c3p1–c3p9 (1–27) done; 28+ open; 593 segs remain.
+c3p1–c3p10 (1–30) done; 31+ open; 590 segs remain.
 
 ## Queues (wylie / english / PHONETICS), C03
 - WYLIE: ACIP anusvara capitals dM/kM/ND + ni'a oddity (seg 6).
@@ -158,3 +158,20 @@ c3p1–c3p9 (1–27) done; 28+ open; 593 segs remain.
   ("or") rendered AS the parenthesis; spyod lam crosses clauses
   (t-c3→e4); rgyud dang 'dres → "sink your mind deep into".
 - Evidence layer: 3,890 headwords / 7,225 pairs (+35/+44).
+
+### Batch C03-10 (c3p10, C03:28–30) — 2026-08-28
+- 28: zhing → "the garden" (3rd render: Paradise/fields/garden);
+  rang sangs rgyas → "self-made Buddhas"; bka' sdod → "protectors
+  of the Dharma"; Tibetan final clause FRONTED to e1; bsams te
+  crosses t-c2→e2.
+- 29: LONGEST FULL MIRROR of the campaign — e3 = w18→w13, SIX units
+  reversed. yan lag bdun → "Seven Ingredients"; rkyen trio
+  (mthun/'gal/lhan-cig-byed) → conducive/oppose/supporting; nyer
+  len → "principal causes"; med na inverted → "You also need".
+- 30: ka/ ↔ "[a]" letter-numeral pairing; two 3-unit mirrors; ji
+  snyed su dag → the King of All Prayers incipit; NEW TOPOLOGY
+  "TIBETAN-AHEAD": wylie's ten-directions explanation + Yeshe De
+  commentary have no English in this segment (unpaired s30rest) —
+  English arrives in following segments; segment ends mid-sentence
+  "[The full verse reads:".
+- Evidence layer: 3,917 headwords / 7,266 pairs (+27/+41).
