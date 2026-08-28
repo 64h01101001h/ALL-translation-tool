@@ -1421,3 +1421,48 @@ recorded: `gus pa`, `skyabs su 'gro`, `mchog 'dzin`.
 - Evidence layer: 4,553 headwords / 8,479 pairs. C03 at 295/620.
   Broken words: 12,206 English spans clean. Split syllables: 15,419 Tibetan
   spans clean. Both across 281 pages.
+
+### Batches C03-92 … C03-95 (C03:296–307) — 2026-08-28 — model: Opus
+The teaching narrative opens — title page, homage, the roll of lamas, the
+first lesson. Twelve of twelve clean. **The first batch to emit structured
+errata**, and it justified the change immediately.
+
+**Nine errata proposed, eight filed, one refused by the guard.** The refusal
+was correct: the entry quoted evidence from C13 into a record cited to C03,
+and `merge_errata.py` requires the quoted text to exist in the spine at the
+cited segment. But the finding behind it was real and important — see below.
+
+**C03:300 — an ENGLISH FACTUAL ERROR at HIGH.** The lineage roll reads
+"Loving One, **Avalokiteshvara**, with Asanga". The Loving One is *Maitreya*
+(byams pa); Avalokiteshvara is a different figure entirely, and the Asanga
+lineage is the Maitreya lineage. Filed as E-067.
+
+**And the refused entry led to the largest data finding of the campaign.**
+Cross-referencing C13, the agent noticed its wylie column sits one row below
+the English. Verified independently: **across C13:63–82 every segment pairs a
+Tibetan text with the English of a different text.** `shes rab snying po` sits
+at seq 70 while "Essence of Wisdom" is at 69; `tsan dan ljon shing` at 72
+while "The Tree of Sandalwood" is at 71.
+
+The verification method is worth keeping, because it is also the fix: Geshe
+Michael prints the Tibetan name parenthetically inside much of this English —
+"(Ganden Hlagyama)", "('Heart Sutra')" — and those are **independent anchors**
+saying which Tibetan each English line is about, without reference to the
+wylie column. Eight anchors: 7 land one row above their wylie, 3 on the same
+row, and those 3 fall outside the run. No other course shows a systematic run.
+
+**Why it matters more than a typo:** every segment reads as coherent Tibetan
+beside coherent English. Only someone who knows both texts would see they are
+not the same text. **Any alignment over C13:63–82 would align unrelated texts,
+and every verbatim gate would pass** — the wylie is genuine wylie, the English
+genuine English, both byte-exact. Nothing in the alignment machinery could
+detect it. **C13 must not be scanned until this is fixed.**
+`docs/upstream/C13_COLUMN_OFFSET.md`.
+
+**A gap in my own guard, exposed the same batch.** `merge_errata.py` checked
+only the wylie and english columns, so a quote legitimately taken from the
+**ACIP column — the source of record** — was refused. Now checks all three.
+
+- Evidence layer: 4,626 headwords / 8,642 pairs. C03 at 307/620.
+  Errata register: 71 entries. 12,471 English and 15,744 Tibetan spans clean
+  across 285 pages.
