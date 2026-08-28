@@ -109,6 +109,74 @@ elif 'class="nul"' not in out or "closing; unrendered" not in out:
 else:
     print("  ok   null morpheme emits a marker, not invented English")
 
+# 7. THE CROSSING. Tibetan "lo stong" is English "a thousand years" -- the
+#    two spans are in OPPOSITE order on the two sides. Every real page has
+#    crossings; this is the whole point of the alignment. The first version
+#    of this generator shared ONE cursor between both sides and refused every
+#    real page. Pins 1-6 all used non-crossing spans and missed it.
+#    MUTATION: delete the eng_order branch -> this pin fails.
+rc, out, err = run({"course": "C01", "segments": [{"seq": 123, "title": "t",
+    "spans": [{"id": "w1", "d": 5, "tib": "lo", "eng": "years"},
+              {"id": "w2", "d": 5, "tib": "stong", "eng": "thousand"}],
+    "eng_order": ["w2", "w1"]}]})
+if rc != 0:
+    fails.append("CROSSING refused: %s" % err.strip()[:300])
+elif out.count('data-l="s123w1"') != 2 or out.count('data-l="s123w2"') != 2:
+    fails.append("crossing: both spans should appear on both sides")
+else:
+    print("  ok   a crossing generates (separate cursor per side)")
+
+# 8. eng_order that omits a span with English refuses -- otherwise that span
+#    would silently vanish from the English block while still being banked.
+expect_refusal("eng_order omitting a span refuses",
+    {"course": "C01", "segments": [{"seq": 123, "title": "t",
+        "spans": [{"id": "w1", "d": 5, "tib": "lo", "eng": "years"},
+                  {"id": "w2", "d": 5, "tib": "stong", "eng": "thousand"}],
+        "eng_order": ["w1"]}]},
+    "eng_order omits")
+
+# 9. eng_order naming a nonexistent span refuses (typo in the spec).
+expect_refusal("eng_order with an unknown id refuses",
+    {"course": "C01", "segments": [{"seq": 123, "title": "t",
+        "spans": [{"id": "w1", "d": 5, "tib": "lo", "eng": "years"}],
+        "eng_order": ["w1", "w9"]}]},
+    "do not exist")
+
+# 10. Out-of-order English is STILL caught when eng_order is given -- the
+#     safety property survives the fix. This is the batch-40/52 error.
+expect_refusal("out-of-order eng_order still refuses",
+    {"course": "C01", "segments": [{"seq": 123, "title": "t",
+        "spans": [{"id": "w1", "d": 5, "tib": "lo", "eng": "years"},
+                  {"id": "w2", "d": 5, "tib": "stong", "eng": "thousand"}],
+        "eng_order": ["w1", "w2"]}]},
+    "OUT OF ORDER")
+
+# 11. Without eng_order, a crossing is derived automatically when the
+#     derivation is unambiguous.
+rc, out, err = run({"course": "C01", "segments": [{"seq": 123, "title": "t",
+    "spans": [{"id": "w1", "d": 5, "tib": "lo", "eng": "years"},
+              {"id": "w2", "d": 5, "tib": "stong", "eng": "thousand"}]}]})
+if rc != 0:
+    fails.append("unambiguous crossing not derived: %s" % err.strip()[:200])
+else:
+    print("  ok   unambiguous English order is derived automatically")
+
+# 12. But an AMBIGUOUS derivation refuses instead of guessing. C01:132 has
+#     two occurrences of "three"; picking one silently is the bug class that
+#     attached 'shog' to the ACIP of 'tshogs'.
+#     MUTATION: drop the `if n > 1` branch -> this pin fails.
+expect_refusal("ambiguous English refuses derivation",
+    {"course": "C01", "segments": [{"seq": 132, "title": "t",
+        "spans": [{"id": "w1", "d": 5, "tib": "gsum", "eng": "three"}]}]},
+    "cannot be derived without guessing")
+
+# 13. Two spans claiming the same characters refuse.
+expect_refusal("overlapping English spans refuse",
+    {"course": "C01", "segments": [{"seq": 123, "title": "t",
+        "spans": [{"id": "w1", "d": 5, "tib": "lo", "eng": "thousand years"},
+                  {"id": "w2", "d": 5, "tib": "stong", "eng": "thousand"}]}]},
+    "overlap")
+
 if fails:
     print("\nFAILED:")
     for f in fails:

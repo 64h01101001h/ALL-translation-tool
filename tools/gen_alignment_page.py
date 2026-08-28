@@ -13,6 +13,15 @@ This refusal has caught three real authoring errors (C03 batches 40, 43,
 52). It lived in a scratchpad heredoc until 2026-08-28; it is a tool now
 because the thing that catches the errors should not be ephemeral.
 
+TWO ORDERINGS, and why (found the hard way, 2026-08-28):
+Tibetan and English word order differ -- that is the entire point of the
+exercise -- so the English spans routinely CROSS. A single forward-only
+cursor shared by both sides refuses every real page. The spec therefore
+carries the spans in TIBETAN order, and an optional "eng_order" listing
+the same span ids in ENGLISH order. Each side then gets its own
+forward-only cursor and keeps its own out-of-order refusal. Omit
+eng_order only when the segment genuinely has no crossing.
+
 Spec format (JSON on stdin):
   { "course": "C03",
     "segments": [
@@ -22,6 +31,7 @@ Spec format (JSON on stdin):
         "spans": [ {"id":"w1","d":5,"tib":"zhi gnas","eng":"quietude"},
                    {"id":"m1","d":6,"tib":"kyis","eng":null,
                     "cls":"case","nul":"instrumental; unrendered"} ],
+        "eng_order": ["w2","w1"],
         "note": "AI NOTE body, may contain HTML" } ] }
 
 A span with "eng": null is a Tibetan morpheme with no English exponent;
@@ -103,7 +113,55 @@ def main():
         spans = seg["spans"]
 
         tib_html = wrap(wyl, spans, "tib", seq)
-        eng_html = wrap(eng, spans, "eng", seq)
+
+        order = seg.get("eng_order")
+        if order:
+            by_id = {sp["id"]: sp for sp in spans}
+            unknown = [i for i in order if i not in by_id]
+            if unknown:
+                die("s%d eng_order names span(s) that do not exist: %s"
+                    % (seq, ", ".join(unknown)))
+            need = {sp["id"] for sp in spans if sp.get("eng") is not None}
+            got = set(order)
+            if need - got:
+                die("s%d eng_order omits span(s) that have English: %s. Every "
+                    "span with an eng value must appear, or it would be "
+                    "silently dropped from the English block."
+                    % (seq, ", ".join(sorted(need - got))))
+            if got - need:
+                die("s%d eng_order names span(s) with no English: %s"
+                    % (seq, ", ".join(sorted(got - need))))
+            eng_spans = [by_id[i] for i in order]
+        else:
+            # Derive the English order -- but ONLY where the derivation is
+            # not a guess. If a span's English occurs more than once, or two
+            # spans would claim overlapping characters, the generator cannot
+            # know the author's intent and refuses rather than picking. This
+            # is the "shog also occurs inside tshogs" class of error, and it
+            # is precisely where silent guessing does damage.
+            have = [sp for sp in spans if sp.get("eng") is not None]
+            pos = []
+            for sp in have:
+                n = eng.count(sp["eng"])
+                if n == 0:
+                    die("s%d eng span %r is NOT PRESENT in the spine text."
+                        % (seq, sp["eng"]))
+                if n > 1:
+                    die("s%d eng span %r occurs %d times; the English order "
+                        "cannot be derived without guessing which one span "
+                        "%s means. Supply an explicit \"eng_order\"."
+                        % (seq, sp["eng"], n, sp["id"]))
+                i = eng.find(sp["eng"])
+                pos.append((i, i + len(sp["eng"]), sp))
+            pos.sort()
+            for k in range(1, len(pos)):
+                if pos[k][0] < pos[k - 1][1]:
+                    die("s%d English spans %s (%r) and %s (%r) overlap. Two "
+                        "spans cannot own the same characters."
+                        % (seq, pos[k - 1][2]["id"], pos[k - 1][2]["eng"],
+                           pos[k][2]["id"], pos[k][2]["eng"]))
+            eng_spans = [t[2] for t in pos]
+        eng_html = wrap(eng, eng_spans, "eng", seq)
 
         nulls = "".join(
             '<span class="u" data-d="%d" data-l="s%d%s">'
