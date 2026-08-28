@@ -29,7 +29,7 @@ When a segment's english field is phonetics, not translation:
    under its own clause with honest labels.
 
 ## Progress
-c3p1–c3p19 (1–57) done; 58+ open; 563 segs remain.
+c3p1–c3p20 (1–60) done; 61+ open; 560 segs remain.
 
 ## Queues (wylie / english / PHONETICS), C03
 - WYLIE: ACIP anusvara capitals dM/kM/ND + ni'a oddity (seg 6).
@@ -303,3 +303,14 @@ c3p1–c3p19 (1–57) done; 58+ open; 563 segs remain.
   on one page; the hyphenation practice concentrates in this
   prayer.
 - Evidence layer unchanged (pure phonetics batch): 4,039 / 7,481.
+
+### Batch C03-20 (c3p20, C03:58–60) — 2026-08-28
+- 58: STANZA-LEVEL REVERSAL — the English stanza renders lines
+  57-58-56-55 (the 4-3-2-1 rotation on whole lines of a
+  consolidated stanza). IMAGE SWAP: zho gsar ("fresh curd") →
+  "mountains of pure white snow" — poetic substitution, flagged.
+  nendir = nasal bridge #5; sras → "se", bcas → "che".
+- 59: penday = nasal bridge #6; khri → "tri"; dun-gyi (hyphen #4).
+- 60: can → "chen" (palatalized + umlaut in one syllable);
+  dzumkar — the white smile.
+- Evidence layer unchanged: 4,039 / 7,481.
