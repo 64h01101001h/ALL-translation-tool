@@ -1,3 +1,73 @@
+## ★★★ TOP OF THE BACKLOG (Adam, 2026-08-28): two rulings on the equivalents pass
+
+### A. ACIP, not Wylie, is the key for the equivalents (do this FIRST)
+Adam's ruling: the batch processing of the Tibetan–English equivalents must
+run against **ACIP transliteration**, not Wylie. ALL/ACIP is the
+institutional standard and the input centers work in ACIP; an evidence layer
+keyed on Wylie cannot join to ACIP-native data without a conversion step on
+every headword.
+
+**State of play (verified 2026-08-28, not assumed):**
+- `corpus_segments` carries BOTH: `acip` (the source-of-record ACIP input)
+  and `wylie` (a derived conversion). Both are populated for all 8,961
+  segments of C01–C18 — no gaps.
+- The alignment batches to date (C01 all 496; C02 all 68; C03 through 96)
+  wrapped and keyed spans on the **derived `wylie`** column.
+- DIFF-TEST RUN: `engines/hgm_tools.acip_to_ewts(acip)` reproduces the
+  stored `wylie` **exactly on 8,961 / 8,961 segments (100.0000%)** across
+  C01–C18. The Wylie is therefore a PROVEN derivation, not a drifted or
+  approximated one. Nothing shipped is wrong; it is keyed in the wrong
+  transliteration for ALL/ACIP use.
+- Systematic ACIP↔Wylie differences that matter lexically: ACIP `TZ` =
+  Wylie `ts` (RTZA/rtsa); ACIP `TS` = Wylie `tsh` (TSUL/tshul); ACIP is
+  uppercase; ACIP preserves the shad.
+- SPAN RECOVERY IS MECHANICAL: the conversion is syllable-token-wise
+  (differences between token-wise and whole-string conversion are
+  punctuation-only, never lexical), so the ACIP form of any wrapped span is
+  recoverable positionally. Demonstrated: `bshes gnyen bsten tshul` →
+  `BSHES GNYEN BSTEN TSUL`.
+
+**Work (additive — does NOT invalidate any shipped page):**
+1. Extend `tools/build_alignment_layer.py` so every harvested headword
+   carries BOTH forms: `tib_acip` (from the `acip` column, positionally
+   recovered) and `tib_wylie`. ACIP becomes the join key; Wylie stays for
+   display and reading.
+2. Add a battery to the builder, same refusal discipline as the existing
+   letter-exact gate: refuse the build if any span's recovered ACIP does not
+   convert back to its Wylie under `acip_to_ewts`.
+3. Add the ACIP form to the page display (label it honestly as the source
+   transliteration; Wylie stays as the readable derived line).
+4. Backfill all shipped pages (C01 ×153, C02 ×15, C03 ×32+) — the layer is
+   rebuilt from the pages every batch, so this is one builder change plus one
+   rebuild, not a page-by-page rewrite.
+5. From the next batch onward, every new page carries both forms at
+   generation time.
+
+### B. Fable re-audit of the whole equivalents pass, C01–C18
+Adam's ruling: once Fable usage credits are available again, run a **full
+re-audit of the Tibetan–English equivalents processing across all eighteen
+ACI courses using Fable throughout**, to confirm everything is fully
+accounted for. Scope:
+- Every alignment page for every course, re-checked span by span: is each
+  Tibetan↔English link the CORRECT correspondence (not merely a letter-exact
+  one)? The existing gates prove the text is verbatim; they cannot prove the
+  mapping is right, and that is the one class of error that ships silently.
+- Confirm no segment, and no lexical item within a segment, was skipped —
+  full accounting, not spot checks.
+- Re-check the queue calls (English typos, wylie variants, phonetics
+  variants) — flagged-never-corrected discipline verified end to end.
+- Re-check the cross-course consistency claims banked in the campaign
+  ledgers (the register spreads, the crown calques, the repeated-render
+  findings) — these are the successor dictionary's backbone.
+- Deliverable: an audit report with dispositions, and amendments filed in
+  the campaign ledgers as corrections-of-record (shipped pages stand; the
+  ledger carries the correction, per the batch-76→77 protocol).
+
+**Provenance requirement for both:** every batch's ledger entry records the
+model that produced it, so the re-audit knows exactly which pages were built
+under which model. Applies from the next batch forward, and is backfilled
+for the pages already shipped (all C01/C02/C03 work to date: Fable).
+
 ## ★★ TOP OF THE BACKLOG (Adam, 2026-08-26): the deep bank's two consumers
 Adam's ruling on the seven-layer question — initiate ASAP, super-important:
 1. ✓ DONE 2026-08-26 (827fa27) **Overlay grammar view** — shipped: GRAMMAR
