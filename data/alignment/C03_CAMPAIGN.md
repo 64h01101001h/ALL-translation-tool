@@ -76,7 +76,7 @@ entry from here records its producing model; everything through C03 batch
 32 was Fable.
 
 ## Progress
-c3p1–c3p40 (1–120) done; 121+ open; 500 segs remain.
+c3p1–c3p41 (1–123) done; 124+ open; 497 segs remain.
 
 ## Queues (wylie / english / PHONETICS), C03
 - WYLIE: ACIP anusvara capitals dM/kM/ND + ni'a oddity (seg 6).
@@ -90,7 +90,10 @@ c3p1–c3p40 (1–120) done; 121+ open; 500 segs remain.
   unhyphenated gungyi (55), lamgyi (115), tsokyi (8).
 - ENGLISH: consecutive mid-sentence truncations at 119 ("described
   i") and 120 ("a good environment") — corpus artifacts, nulled with
-  reasons, never completed.
+  reasons, never completed. **120's loss is REPAIRED BY THE SOURCE
+  at 121**: the Jewel of the Sutras verse lists all five qualities,
+  so grogs bzang and yo byad ldan are attested in GMR's own English
+  one segment later. Nothing supplied.
 - ENGLISH #1: "commentray" ×2 (seg 22 syllabus, for "commentary").
 - ENGLISH #2: seg 22 TRUNCATES mid-word ("Je Tsongkapa's Sour" —
   cuts "Source of All My Good") — corpus truncation artifact.
@@ -659,3 +662,25 @@ written, not before. Until every batch follows that, the guard is
 what turns a half-finished run into a legible error instead of a
 stack trace.
 - Evidence layer: 4,057 headwords / 7,503 pairs.
+
+### Batch C03-41 (c3p41, C03:121–123) — 2026-08-28 — model: Opus
+- First batch under the corrected order: the page is written and its
+  existence CHECKED before the registration runs.
+- 121: THE TRUNCATION IS REPAIRED BY THE SOURCE ITSELF. 120's English
+  stopped at 'a "good environment'; this verse citation lists all
+  five qualities, so the two lost ones (grogs bzang → "A place where
+  good friends stay"; yo byad ldan → "With all the practitioner
+  needs, with ease") arrive attested rather than supplied.
+  mdo sde'i rgyan → "the Jewel of the Sutras" (rgyan "ornament" →
+  "Jewel"); blo ldan → "intelligent people"; zhes gsungs so → "says",
+  fronted to the citation frame.
+- 122: 'dod pa chung ba → "you keep your wants few"; chos gos →
+  "robes"; the 'am particle survives as English "or" rather than
+  being absorbed — rare.
+- 123: chog shes pa appears TWICE in the Tibetan and twice in the
+  English — "you are easily satisfied", then "you always feel like
+  you have enough". One compound, two renderings inside a single
+  segment, both GMR's: the term stated then unpacked. The clearest
+  kind of attestation evidence, and exactly what a definition list
+  would have to collapse into one gloss.
+- Evidence layer: 4,070 headwords / 7,524 pairs.
