@@ -554,7 +554,7 @@ letter-exact battery gates every batch.
   (74's coinages reprised verbatim + self-referential "what we have
   called here"). khungs #4 "authentic source". Supplied transition
   sentence (filed with 115's). Self-quotes ×5 — densest cluster.
-| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p73 (144–256) done; 143 = marker pair; 257+ open; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
+| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p74 (144–259) done; 143 & 259 = marker pairs; 260+ open; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
 
 NEXT: continue section VII (seq 146+) — the renunciation chapter.
 - seg 143: section-marker pair (like 43) — wylie carries "the first
@@ -1380,3 +1380,37 @@ TCS series and collections beyond, for later ruling). ***
   (compressed vs 241's triple — spread). je 'phel du 'gro → "grow
   stronger day by day" ("day by day" supplied, matching 235).
   skyon spread #3 ("the problem is").
+
+### c1p74 — C01:257–259 (batch 74) — the path secured; §XI opens
+- Twenty-second consecutive zero-catch batch. Layer: 2,227
+  headwords / 4,132 pairs.
+- seg 257: POLEMICAL DEFLATION — bon → "any local shaman"; mu
+  stegs pa → "follower of some deficient 'religion'"; gnas sgo
+  'byed → "'opening day'--pay-as-you-go religion" (gloss
+  supplied). One subject two renders ("Intelligent"/
+  "Discriminating people"). Hyphen variant extra-sensory vs 221.
+  Appositives → parentheses (typography device). thos bsam sgom
+  triple fully rendered (spread complete). fn 125.
+- seg 258: byang chub kyi sems → "the sublime wish to achieve
+  Buddhahood, for the sake of every living being" — BODHICHITTA
+  fully unpacked; cornerstone render, first attestation. zhi gnas
+  → "'quietude'". sngags → "the secret way". man chad → "on up
+  to" (now a rule). rgyud la → "in our hearts". gsungs → "our
+  Lama concluded" (mid-position); final clauses reordered.
+- APPARATUS BANK (Notes to Reading Six, 108–125, elided with
+  label): three jewels DEFINED (110); the "heap" = elephant-loads
+  (112); THE FOUR ANTIDOTE FORCES named — basis/destruction/
+  reverse/counteragent (113 — gnyen po stobs bzhi corpus English);
+  ten non-virtues enumerated 3/4/3 (114); "Revive" cycle
+  explained (117); Word of the Gentle One = GREAT FIFTH Dalai
+  Lama, who also wrote TWO commentaries on the Three Principal
+  Paths (118); Path of Bliss = Panchen I, Quick Path = Panchen II
+  (119, witnesses 233); KING MEFEED = Mandhata, breast-feeding
+  etymology (122 — CONFIRMS batch-68 calque reading); Treasure of
+  Wisdom = Abhidharmakosha (123, title file); Shantideva 695–743
+  (124). Reading Seven begins.
+- seg 259: STRUCTURAL MARKER PAIR (like 143) — wylie field carries
+  the English part-title ("the second path: the wish to achieve
+  enlightenment for every living being") vs header "XI. Why You
+  Need the Wish for Enlightenment". The renunciation part of the
+  course is COMPLETE; the second principal path opens.
