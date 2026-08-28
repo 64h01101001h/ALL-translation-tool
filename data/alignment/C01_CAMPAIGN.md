@@ -554,7 +554,7 @@ letter-exact battery gates every batch.
   (74's coinages reprised verbatim + self-referential "what we have
   called here"). khungs #4 "authentic source". Supplied transition
   sentence (filed with 115's). Self-quotes ×5 — densest cluster.
-| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p144 (144–469) done; 143, 259, 324, 427 & 446 = marker pairs; 470+ open; 27 segs / 9 batches remain; §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
+| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p145 (144–472) done; 143, 259, 324, 427 & 446 = marker pairs; 473+ open; 24 segs / 8 batches remain; §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
 
 NEXT: continue section VII (seq 146+) — the renunciation chapter.
 - seg 143: section-marker pair (like 43) — wylie carries "the first
@@ -2989,3 +2989,25 @@ TCS series and collections beyond, for later ruling). ***
   lines of the root text" (spread #2); zab folded (flagged drop).
 - QA: both sides letter-exact, 150 spans balanced, depth clean.
   Layer: 3,627 headwords / 6,836 pairs.
+
+### c1p145 — The praise poem opens (470–472)
+- **470 — the dedication** (fn 194): bdag gis ji snyed → "the verse
+  with which we dedicate a great good deed" (incipit
+  descriptivized); bka' drin stsal → "did our Lama bless us" (same
+  bka' drin as 469's kindness-formula, two functions); "our Lama"
+  supplied #10.
+- **471 — THE MOST EXTREME ROTATION** (fn 195): the English reads
+  the Tibetan verse essentially BACKWARD — verse-final rgyal →
+  "He's the lord" as word one; 17 items in near-perfect reverse.
+  MAITREYA CALQUED: byams pa → "the savior Loving One" (joins Gentle
+  Voice — both lineage-fathers, the two ways). spro dang sdud →
+  "stages and then withdraws the show" (theater; "the show"
+  supplied).
+- **472 — the spew kept** (fn 196): skyugs pa ("vomited") → "spewed
+  out from his lips" — register fidelity over politeness. THE NAME
+  WOVEN: blo bzang grags snyan rab 'bar → "He's Lobsang Drakpa, of
+  shining fame". mkhyen gter → "the gold mine of the sages"; stobs
+  bcu → "all ten forces". Near-total reversal again. WYLIE QUEUE:
+  "rin cen" (rin chen variant); tail "lham" (possibly truncated).
+- QA: both sides letter-exact, 108 spans balanced, depth clean.
+  Layer: 3,648 headwords / 6,870 pairs.
