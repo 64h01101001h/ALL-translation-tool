@@ -554,7 +554,7 @@ letter-exact battery gates every batch.
   (74's coinages reprised verbatim + self-referential "what we have
   called here"). khungs #4 "authentic source". Supplied transition
   sentence (filed with 115's). Self-quotes ×5 — densest cluster.
-| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p119 (144–394) done; 143, 259 & 324 = marker pairs; 395+ open; 102 segs / 34 batches remain; §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
+| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p120 (144–397) done; 143, 259 & 324 = marker pairs; 398+ open; 99 segs / 33 batches remain; §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
 
 NEXT: continue section VII (seq 146+) — the renunciation chapter.
 - seg 143: section-marker pair (like 43) — wylie carries "the first
@@ -2448,3 +2448,36 @@ TCS series and collections beyond, for later ruling). ***
   proper-infallible / plausible).
 - QA: both sides letter-exact, 136 spans balanced, depth clean.
   Layer: 3,195 headwords / **6,022 pairs** — 6,000-pair milestone.
+
+### c1p120 — Hand in hand (395–397)
+- **395 — four absurdities**: barley/sprouts, children/adults, higher
+  births/hells, beings/Buddha — strict parallel, negation fronted in
+  each. nas → "seeds of barley" (grain specified). rgan po →
+  "adults" — same word was "chieftain" 375 (elder→chief/adult
+  spread). Tibetan repeats each conditional noun; English
+  pronominalizes ×2, re-nouns ×2.
+- **396 — the unique feature + APPARATUS**: gcig grogs su gcig 'gro
+  ("one goes as the friend of the other") → "go hand in hand, each
+  supporting the other". khyad chos #2 "a teaching" (370
+  "conditions"). gsungs → "concluded our Lama" (supplied-subject
+  #3). APPARATUS ELIDED-IN-PLACE (carried verbatim, unpaired):
+  Notes to Reading Nine (143–166) + Reading Ten header + §XVI title.
+  WITNESSES BANKED: school-name etymologies CONFIRM the renders
+  (Detailist=Detailed Exposition 154; Scripturalist=
+  scripture-over-commentary 155; Mind-Only 156; Independent 158;
+  Implication=absurdity-implying 160; Functionalist=collective 161);
+  THE FOURFOLD ANALYSIS in full (162: the thief simile, the
+  cow-goat-sheep simile; cites Pabongka's Steps treatise ff.362–377
+  and Tsongkapa's greater Steps); destructible-view double etymology
+  (163); Udraka's chewed locks (145); five-paths list (143);
+  unaffected-awareness examples: moving leaf, alcohol (159);
+  two-truths gloss with "deceptive truth" (152); Changkya Rolpay
+  Dorje named as a former life of Pabongka Rinpoche (158); Sixty
+  Verses of Reasoning identified as source of 339's dedication
+  (148).
+- **397 — the third point**: gsum pa → "The third of the five
+  sections…" (expansion pattern, cf. 356); tshad → "how to know
+  when"; forward pointer supplied. Section XVI opens: "How to Know
+  When Your Analysis is Still Incomplete".
+- QA: both sides letter-exact (apparatus included), 126 spans
+  balanced, depth clean. Layer: 3,205 headwords / 6,053 pairs.
