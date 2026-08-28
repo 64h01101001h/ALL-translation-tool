@@ -554,7 +554,7 @@ letter-exact battery gates every batch.
   (74's coinages reprised verbatim + self-referential "what we have
   called here"). khungs #4 "authentic source". Supplied transition
   sentence (filed with 115's). Self-quotes ×5 — densest cluster.
-| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p99 (144–334) done; 143, 259 & 324 = marker pairs; 335+ open; 162 segs / 54 batches remain; §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
+| VII–VIII. Renunciation; Stopping Desire | 143–496 | c1p36–c1p100 (144–337) done; 143, 259 & 324 = marker pairs; 338+ open; 159 segs / 53 batches remain; §XII (developing the wish) begins at 268; §XI / the SECOND principal path begins at 259; §X (the measure of renunciation) begins at 248; §IX (Stopping Desire for Future Lives) runs from 206; C01 max seq = 496 |
 
 NEXT: continue section VII (seq 146+) — the renunciation chapter.
 - seg 143: section-marker pair (like 43) — wylie carries "the first
@@ -1922,3 +1922,30 @@ TCS series and collections beyond, for later ruling). ***
   chos file's widest span). mya ngan 'das → "nirvana" — the
   loanword surfacing (register split vs 263). gal te ×2 kept.
   DB artifact "rtog,so sor" kept.
+
+### c1p100 — Method and wisdom (335–337)
+- **335 — THE SINE-QUA-NON COINAGE**: med thabs med pa → "a 'without
+  which nothing'" — the indispensability idiom calqued into a quoted
+  English noun-phrase. Coined here, REUSED in 336 ("Compassion too is
+  a 'without which nothing'") — the coin-then-use cycle at
+  one-segment range. Also: 'dzin stangs dngos 'gal → "holds things in
+  a way that is completely incompatible with the way you now grasp"
+  (mode-of-apprehension contradiction unpacked); TITLE bzhi brgya pa →
+  "the 400 Verses" quoting "There is no second door to peace" (fn
+  146); sbyin pa/tshul khrims → "charity and morality"; lam → "a path
+  or mental viewpoint" (doubled gloss).
+- **336 — pair-bond + longest calque-collapse**: thabs shes ya ma
+  bral → "both 'method' and 'wisdom,' never one without the other"
+  (ya ma bral = the never-apart formula). dri ma med par grags pa
+  ("renowned as stainless") → "Vimalakirti" — Sanskrit restored from
+  the LONGEST Tibetan calque yet; title "the Sutra of Vimalakirti".
+  thabs snying rje: method glossed BY compassion in apposition (thabs
+  folded → nul).
+- **337 — THE PERFECT QUATRAIN**: the Vimalakirti chiasmus, four
+  lines, SIXTEEN slots, all pairing one-to-one with zero nuls — the
+  file's cleanest formal correspondence. zin pa → "steeped in" = the
+  zin file's THIRD exponent (bound 261 / filled 329 / steeped 337).
+  'ching ba → "bondage" (269's chains gone abstract); thar pa →
+  "freedom" (stable). fn 147.
+- QA: both sides letter-exact, 147 spans balanced, depth walk clean.
+  Layer: 2,750 headwords / 5,139 pairs.
