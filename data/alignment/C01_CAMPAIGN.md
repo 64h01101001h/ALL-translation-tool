@@ -3280,3 +3280,19 @@ C03 (C02 already complete).
 - 15: las byung ↔ "lejung"; ba'i ↔ "way". Lines 2 and 3 share the
   bsod nams ye shes anaphora, phonetics identical both times.
 - COVERAGE GATE: C01 483→486; 10 open (16-22, 39, 43, 143).
+
+### BACKFILL B6 (c1L6, C01:16–18) — 2026-08-28 — model: Opus
+- 16: 'thob par ↔ "topar"; sku gnyis ↔ "kunyi". Stanza UNPAIRED
+  (s16trans, source 13–16). dam pa → "Ultimate" in the stanza where
+  the same word is "holy" elsewhere in the liturgy (dam pa'i chos,
+  na bza' dam pa) — flagged for the review pass.
+- 17: mchod pa ↔ "chupa" — the THREE-WAY HOMOPHONE COLLISION now
+  attested in C01 too: chos (seg 8), spyod (seg 5), mchod (seg 17)
+  are three distinct words all spoken "chu". Only the wylie
+  disambiguates, which is exactly why the dictionary keys on ACIP
+  and wylie rather than phonetics.
+- 18: PHONETICS QUEUE: sangs rgyas = "sanggye" here vs "sangye" at
+  segs 4, 8, 11 OF THIS SAME COURSE — a spelling split inside GMR's
+  own phonetics, four segments apart, and the identical split occurs
+  at the same segments in C03. Kept verbatim (ruling 1).
+- COVERAGE GATE: C01 486→489; 7 open (19-22, 39, 43, 143).
