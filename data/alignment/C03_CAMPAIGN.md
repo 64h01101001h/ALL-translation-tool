@@ -76,7 +76,7 @@ entry from here records its producing model; everything through C03 batch
 32 was Fable.
 
 ## Progress
-c3p1–c3p52 (1–156) done; 157+ open; 464 segs remain.
+c3p1–c3p53 (1–159) done; 160+ open; 461 segs remain.
 
 ## Queues (wylie / english / PHONETICS), C03
 - WYLIE: ACIP anusvara capitals dM/kM/ND + ni'a oddity (seg 6).
@@ -974,3 +974,27 @@ has predicted nothing.
   registration ran — the batch-40 process fix held for the second
   time under a real failure.
 - Evidence layer: 4,278 headwords / 7,792 pairs.
+
+### Batch C03-53 (c3p53, C03:157–159) — 2026-08-28 — model: Opus
+- 157: A CLEAN NINE-TO-NINE LIST, in order, no crossings — rare here.
+  The three 'jog pa states are distinguished by what happens to the
+  object: rgyun du → "with brief continuity", glan de → "with
+  patches where you lose the object", nye bar → "tightly". zhi bar /
+  rnam par zhi bar → "quieting" / "completely quieting", the rnam
+  par prefix carried by one adverb.
+  States 8 and 9 match the chart headings at 192 and 194 word for
+  word — prose and chart agree.
+  WYLIE QUEUE: glan de 'jog pa (normally slan te 'jog pa).
+- 158: dran pa reaches a FOURTH rendering. Across this course:
+  "your thoughts" (138), "to bring the mind back to the object"
+  (154), "bringing The mind back to your object" (156), "bringing
+  your mind back to the object" (158). GMR treats the term as an
+  instruction, never as a noun.
+  WYLIE QUEUE: brgyad pa'i grub — stray genitive where the parallel
+  clauses read pa 'grub.
+- 159: A CLEAN FOUR-TO-FOUR MAPPING on the modes of focus, all four
+  distinguished by relation to interruption.
+  chad = "interrupted" here, against the annihilation extreme at
+  C01:417 ("thinking things have stopped"). Two unrelated senses of
+  one syllable — a concrete reason to key on spans, not syllables.
+- Evidence layer: 4,304 headwords / 7,820 pairs.
