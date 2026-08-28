@@ -76,7 +76,7 @@ entry from here records its producing model; everything through C03 batch
 32 was Fable.
 
 ## Progress
-c3p1–c3p41 (1–123) done; 124+ open; 497 segs remain.
+c3p1–c3p42 (1–126) done; 127+ open; 494 segs remain.
 
 ## Queues (wylie / english / PHONETICS), C03
 - WYLIE: ACIP anusvara capitals dM/kM/ND + ni'a oddity (seg 6).
@@ -97,6 +97,9 @@ c3p1–c3p41 (1–123) done; 124+ open; 497 segs remain.
 - ENGLISH #1: "commentray" ×2 (seg 22 syllabus, for "commentary").
 - ENGLISH #2: seg 22 TRUNCATES mid-word ("Je Tsongkapa's Sour" —
   cuts "Source of All My Good") — corpus truncation artifact.
+- ENGLISH #9: "your are quick to regret them" (125) — "your" for
+  "you". Kept verbatim; page carries a dedicated check confirming the
+  string survives byte-exact.
 
 ### Batch C03-1 (c3p1, C03:1–3) — 2026-08-28
 - PHONETICS PROTOCOL debut: right label = GESHE MICHAEL'S PHONETICS
@@ -684,3 +687,23 @@ stack trace.
   kind of attestation evidence, and exactly what a definition list
   would have to collapse into one gloss.
 - Evidence layer: 4,070 headwords / 7,524 pairs.
+
+### Batch C03-42 (c3p42, C03:124–126) — 2026-08-28 — model: Opus
+- 124: nyo tshong ("buying and selling") → "business"; skar ma brtsi
+  ba ("star-reckoning") → "astrology"; khyim pa / rab byung →
+  "laymen" / "monks".
+- 125: ENGLISH QUEUE #9 — "your are quick to regret them". Kept
+  verbatim, with a page-level check proving the string survives.
+  so thar (pratimoksha) → "vows of individual freedom" — GMR
+  calques this one but KEEPS the Sanskrit in "bodhisattva vows"
+  alongside it, in the same sentence. Two policies, one clause.
+  rang bzhin dang bcas pa / kha na ma tho ba → "naturally wrong to
+  do" / "those that the Buddha has prohibited" — the
+  natural-vs-proscribed distinction rendered by explanation.
+- 126: rnam rtog → "THE STUPID THOUGHTS" — a strong, unusual render
+  for a word normally given as conceptual/discursive thought.
+  Exactly the contextual force a definition list would lose.
+  nyes dmigs → "the problems", holding against C01:488 — cross-course.
+  yid du 'ong → "pretty things". Truncates at "how quickly it
+  disappe"; Tibetan tail nulled with its reason.
+- Evidence layer: 4,095 headwords / 7,558 pairs.
