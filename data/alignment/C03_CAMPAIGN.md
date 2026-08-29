@@ -1591,3 +1591,34 @@ null stands.
 
 - Evidence layer: 4,932 headwords / 9,341 pairs. C03 at 367/620.
   13,748 English and 17,399 Tibetan spans clean across 305 pages.
+
+### Batches C03-116 … C03-119 (C03:368–379) — 2026-08-28 — model: Opus
+Four pages, twelve of twelve clean, **zero errata for the third batch
+running**. Seeing the Lama as a Buddha, and what faith makes possible.
+
+**The degenerate-member rule propagated immediately.** The C03:368 reconciler
+applied it three times unprompted — taking the tighter parent span, then
+*dropping the member that tightening had made degenerate*. It also declined a
+null-English depth-7 member on the grounds that such a member cannot satisfy
+"unique inside its parent's English", which is a sharper reading of the rule
+than the one written down.
+
+**A defect in MY pipeline, caught by a gate and not by me.** The
+split-syllable gate refused `c3p118`: the span `bsten` had a member `te`
+nested inside it, rendering `bs`**te**`n`. The agent's spec was RIGHT — it had
+`te` as the standalone gerundive particle after `bsten te`. **My prep script
+broke it**, because its bound-morpheme rule re-depthed any d=6 particle whose
+text sits inside the word above it, and `te` is inside `bsten` by coincidence.
+
+Containment was the wrong test, and the generator already knew that — it uses
+a **syllable-boundary** test for exactly this case, and has since C03:212. The
+prep script never got the fix. It has it now, and the four pages were
+regenerated.
+
+Worth noting what this says about the gates: the generator could not catch it
+because depth-7 members are exempt from the boundary rule by design, so it
+took `no_split_syllables` — a gate written for an entirely different defect —
+to find it.
+
+- Evidence layer: 4,990 headwords / 9,465 pairs. C03 at 379/620.
+  13,983 English and 17,715 Tibetan spans clean across 309 pages.
