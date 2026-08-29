@@ -8,11 +8,11 @@
 
 Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source and Geshe Michael Roach's facing English &mdash; recorded as a by-product of a machine alignment campaign reading the courses segment by segment. **Every entry has been checked against the corpus database** (42,199 segments, spine `hgm_spine_v27_2.db`): the quoted strings were retrieved from the spine, not from a note, and each citation was re-derived rather than trusted.
 
-**85 entries**: **54 document errata** (5 HIGH, 36 MEDIUM, 13 LOW), **16 digitisation artefacts**, 14 observations checked and closed as *not* errata, and 1 that could not be verified.
+**88 entries**: **57 document errata** (5 HIGH, 39 MEDIUM, 13 LOW), **16 digitisation artefacts**, 14 observations checked and closed as *not* errata, and 1 that could not be verified.
 
 | Kind | n |
 |---|---|
-| Tibetan spelling | 35 |
+| Tibetan spelling | 38 |
 | Digitisation artefact | 16 |
 | English typo | 15 |
 | English factual error | 2 |
@@ -42,7 +42,7 @@ Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source 
 | `C03:339` | mthar mal rim rang la gcig tu dril te | mthar lam rim rang la gcig tu dril te | The term is lam rim, the Steps of the path. 'mal' is bedding or a couch and forms no compound with 'rim' that could take 'rang la gcig tu dril te nyams su len' - 'join into one within our own lives and put into practice'. The English of this very segment rende | CONFIRMED |
 | `C03:39` | acip: ,SIL SNYAN RNAMS DANG BYUNG PA GDUGS MCHOG DANG ,   \|   wylie: ,sil snyan rnams dang byung pa gdugs mchog dang , | byug pa | seg_hint 39 is CORRECT. Three independent proofs: (1) the note's own claim checks out — C03:38, the glossary segment immediately preceding, spells it right and defines it: "byug pa ni spos zhim po'i lde gu'o" (byug pa = thick fragrant unguent); (2) this segmen | CONFIRMED |
 
-## Medium severity &mdash; 36 entries
+## Medium severity &mdash; 39 entries
 
 | Citation | What it says | Should say | Evidence | Confidence |
 |---|---|---|---|---|
@@ -81,6 +81,9 @@ Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source 
 | `C03:35` | acip: ,RDUL GCIG STENG NA RDUL SNYEED SANGS RGYAS RNAMS,   \|   wylie: rdul gcig steng na rdul snyeed sangs rgyas rnams, | rdul snyed | seg_hint 35 is CORRECT. "snyeed" occurs exactly ONCE in the whole 42,199-segment corpus — this segment — and it is in the ACIP input as well as the Wylie, so it is a keying error, not a conversion loss. The correct "rdul snyed" is attested twice in this very c | CONFIRMED |
 | `C03:36` | acip: ,NGAG GI PHYAG NI, DE DAG BSNGAGS BA ZHES PA'I TSIGS BCAD GCIG STE, YUL RNAMS KYI YON TAN GYI BSNGAGS PA ZAD MI SHES PA RNAMS   \|   wylie: ngag | bsngags pa | seg_hint 36 is CORRECT, and the note's central claim is self-proving inside the segment: "bsngags ba" appears at the head, then the correct "bsngags pa" nineteen words later in the same line. After a -gs suffix the particle is pa, not ba. Present in the ACIP i | CONFIRMED |
 | `C03:39` | sil snyan rnams dang byung pa gdugs mchog dang (ACIP: ,SIL SNYAN RNAMS DANG BYUNG PA GDUGS MCHOG DANG ,) | sil snyan rnams dang byug pa gdugs mchog dang (ACIP: BYUG PA) | Three independent checks. (1) C03:38, the glossary segment that introduces this very verse, spells it correctly: "byug pa ni spos zhim po'i lde gu'o" (ACIP BYUG PA NI SPOS ZHIM PO'I LDE GU'O). (2) C03:39's own facing English reads "Cymbals and ointments" — byu | CONFIRMED |
+| `C03:393` | mtshams spyar ba | mtshams sbyar ba (spyar -> sbyar) | Verified independently against the shipped spine. (1) FREQUENCY: the substring 'spyar' occurs in exactly ONE of the 42,199 corpus segments - this one; 'sbyar' occurs in 667, and the specific idiom 'mtshams sbyar' in 35 (C01:486, C03:437, C05:36, C05:97, C06:32 | CONFIRMED |
+| `C03:394` | sangs rgyas kyi stan pa dar ba'i | sangs rgyas kyi bstan pa dar ba'i | The English for this token is 'the Buddha's teachings'. In the spine dictionary, `bstan pa` is the entry glossed ["taught", "the teachings", "teachings", "teaching", ...]; `stan pa` is an entry with NO hgm_gloss, and bare `stan` is glossed ["throne"] — a seat, | CONFIRMED |
+| `C03:402` | dang po skyes bu chung du dang thun mong ba'i lam gyi rim par blo sbyang ba ni | dang po skyes bu chung ngu dang thun mong ba'i lam gyi rim par blo sbyang ba ni | The Lam Rim scope idiom is 'skyes bu chung ngu' (person of lesser capacity); 'chung du' is not parsable here, since a terminative du cannot feed the comitative dang that follows. FILED AGAINST PROPOSAL B, WHICH REJECTED IT — B's counter-evidence does not survi | CONFIRMED |
 | `C03:53` | de nas dmigs pa gsal bar byas nas mNaDl phul te (ACIP: DE NAS DMIGS PA GSAL BAR BYAS NAS MnAdL PHUL TE) | maNDla (ACIP MAndLA), the spelling used at C03:1 | C03:1 records the same word as ACIP 'MAndLA' / Wylie 'maNDla', with the English 'mandel'. C03:53's 'MnAdL' transposes the vowel A onto the retroflex and drops the final A, leaving a form that is not well-formed Wylie (a bare 'm' root with no vowel, and a 'Dl'  | CONFIRMED |
 
 ## Low severity &mdash; 13 entries
@@ -159,7 +162,7 @@ Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source 
 
 ## Recommended actions, by owner
 
-**Document editors.** The 54 document errata above. Start with the 5 HIGH entries. Note that several errors exist at MORE THAN ONE LOCUS because passages are ingested twice &mdash; each entry's evidence names them, and a per-segment fix will leave duplicates behind.
+**Document editors.** The 57 document errata above. Start with the 5 HIGH entries. Note that several errors exist at MORE THAN ONE LOCUS because passages are ingested twice &mdash; each entry's evidence names them, and a per-segment fix will leave duplicates behind.
 
 **Data-pipeline maintainers.** The 16 digitisation artefacts, plus two reports filed separately: `docs/upstream/FOLIO_MARKER_COLLISIONS.md` (119 folio markers spliced into caption numbers) and `docs/upstream/C13_COLUMN_OFFSET.md` (**C13:63&ndash;82 pairs Tibetan with the English of a different text &mdash; C13 should not be scanned until it is fixed**).
 
