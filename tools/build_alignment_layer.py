@@ -206,13 +206,15 @@ COURSES = {
                    "c3p128": [403, 404, 405],
                    "c3p129": [406, 407, 408],
                    "c3p130": [409, 410, 411],
-                   # c3p131 (412-414) is NOT here. The generator has now
-                   # refused 412 TWICE - first a d=5 span listed after the
-                   # d=3 containing it, then depth-7 members hung off a
-                   # depth-3 clause with no depth-5 parent to nest inside.
-                   # The second was my brief's omission, not the analyst's:
-                   # the rules never said d=7 requires a d=5 parent. Being
-                   # re-run with that stated, not patched.
+                   "c3p131": [412, 413, 414],
+                   # c3p131 took THREE attempts. Refused first for a d=5
+                   # listed after the d=3 containing it, then for depth-7
+                   # members hung off a depth-3 clause with no depth-5 parent.
+                   # The second refusal was the brief's omission, not the
+                   # analyst's - the rules had never said d=7 needs a d=5
+                   # parent, because until then nobody had tried it. Landed
+                   # flat: d=5 words and d=6 particles at top level, d=7
+                   # members inside their compounds, no clause layer at all.
         },
     },
 }
