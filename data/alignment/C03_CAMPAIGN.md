@@ -1622,3 +1622,26 @@ to find it.
 
 - Evidence layer: 4,990 headwords / 9,465 pairs. C03 at 379/620.
   13,983 English and 17,715 Tibetan spans clean across 309 pages.
+
+### Batches C03-120 … C03-123 (C03:380–390) — 2026-08-28 — model: Opus
+Four pages, eleven segments, zero errata. **The layer passes 5,000 headwords.**
+
+**A reconciler caught a defect BOTH proposals shipped.** On C03:380 both
+analysts spanned `bral ba` where the wylie reads `bral ba'i` — a span ending
+mid-syllable, cutting `ba'i` into `ba|'i`. It found this by running its own
+positional check (matched at offset 263, next character an apostrophe, not a
+boundary) and corrected it to `bral ba'i`. That is the `bs|te|n` class from
+C03:374, caught before it shipped this time, by a check that did not exist
+four batches ago.
+
+**C03:391 is HELD BACK, deliberately.** Three propose agents died on a
+connection error, and 391 lost its English-first analysis entirely. Running on
+a single reading it produced a cascade of bound particles marked standalone —
+`ma` inside `ma shor bar` matching an unrelated `ma` thirty characters later,
+`pa'i` inside `'dzoms pa'i`, `tsam` inside `lan cig tsam`. Three were repaired
+by hand before it became clear what was happening: **hand-patching a spec that
+lost half its analysis is exactly the guessing this project forbids.** It gets
+a proper two-angle re-run instead.
+
+- Evidence layer: **5,038 headwords** / 9,594 pairs. C03 at 390/620.
+  14,221 English and 18,052 Tibetan spans clean across 313 pages.
