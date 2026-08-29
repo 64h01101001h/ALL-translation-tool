@@ -203,19 +203,40 @@ COURSES = {
                    "c3p125": [394, 395, 396],
                    "c3p126": [397, 398, 399],
                    "c3p127": [400, 401, 402],
+                   "c3p128": [403, 404, 405],
                    "c3p129": [406, 407, 408],
                    "c3p130": [409, 410, 411],
-                   # c3p128 (403-405) and c3p131 (412-414) are NOT here.
-                   # The generator refused both - a d=7 member claiming
-                   # English outside its parent at 405, and a d=5 span
-                   # listed after the d=3 that contains it at 412. They
-                   # are being re-run, not patched.
+                   # c3p131 (412-414) is NOT here. The generator has now
+                   # refused 412 TWICE - first a d=5 span listed after the
+                   # d=3 containing it, then depth-7 members hung off a
+                   # depth-3 clause with no depth-5 parent to nest inside.
+                   # The second was my brief's omission, not the analyst's:
+                   # the rules never said d=7 requires a d=5 parent. Being
+                   # re-run with that stated, not patched.
         },
     },
 }
 
+# The class attribute is "u" plus whatever grammar label the analyst supplied
+# ("u noun", "u verb-nominal", "u compound member, noun"). This pattern
+# required class="u" EXACTLY, so every labelled span was invisible to the
+# builder and its analysis was discarded without a word. Measured when found
+# on 2026-08-28: 1,260 spans across 141 of 320 pages - 2.7% of everything
+# analysed, and 77-80% of the three newest C03 pages, whose analysts happened
+# to label heavily. The page rendered the labels correctly the whole time,
+# which is why nothing looked wrong.
 SPAN = re.compile(
-    r'<span class="u" data-d="(\d)" data-l="([A-Za-z0-9_ ]+?)">')
+    r'<span class="u(?:[^"]*)" data-d="(\d)" data-l="([A-Za-z0-9_ ]+?)">')
+# The data-l character class excludes "-" and that exclusion is LOAD-BEARING,
+# so it is stated rather than left to look like an oversight. A hyphenated
+# label - s434-typo, s396app-lab, s453-jaws - marks an APPARATUS span: a typo
+# queue entry, a supplied-sentence flag, an editorial note. Those carry a
+# <span class="nul"> body, are not alignment pairs, and must never enter the
+# dictionary. 13 of them exist across 11 C01 pages. test_builder_sees_every_span
+# counts them separately and prints the number, so the exclusion stays visible
+# instead of being an accident of a character class.
+APPARATUS = re.compile(
+    r'<span class="u[^"]*" data-d="\d" data-l="[A-Za-z0-9_ ]*-[^"]*"\s*>')
 NOTE = re.compile(r'<div class="note">(.*?)</div>', re.S)
 TREE = re.compile(r'<div class="tree">(.*?)</div>', re.S)
 

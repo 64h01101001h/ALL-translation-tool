@@ -44,7 +44,7 @@ CEILING = {
     # segment. This is the one ceiling that legitimately RISES: every class
     # entry is a finding that spans many loci and cannot name one. It rises
     # only when a class entry is added deliberately, never to quiet a failure.
-    'not-a-single-segment-citation': 8,
+    'not-a-single-segment-citation': 9,
 }
 # 3, not 8. The first draft used 8 and threw away '[33}', '[17]' and
 # 'krma pa' as unparseable - the SHORTEST errata are the most checkable,

@@ -8,14 +8,14 @@
 
 Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source and Geshe Michael Roach's facing English &mdash; recorded as a by-product of a machine alignment campaign reading the courses segment by segment. **Every entry has been checked against the corpus database** (42,199 segments, spine `hgm_spine_v27_2.db`): the quoted strings were retrieved from the spine, not from a note, and each citation was re-derived rather than trusted.
 
-**96 entries**: **60 document errata** (5 HIGH, 41 MEDIUM, 14 LOW), **17 digitisation artefacts**, 14 observations checked and closed as *not* errata, and 1 that could not be verified.
+**97 entries**: **60 document errata** (5 HIGH, 41 MEDIUM, 14 LOW), **17 digitisation artefacts**, 14 observations checked and closed as *not* errata, and 1 that could not be verified.
 
 | Kind | n |
 |---|---|
 | Tibetan spelling | 39 |
 | Digitisation artefact | 17 |
 | English typo | 16 |
-| Our banked layer | 4 |
+| Our banked layer | 5 |
 | Formatting | 3 |
 | English factual error | 2 |
 
@@ -136,7 +136,7 @@ Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source 
 
 ---
 
-## Defects in OUR OWN banked layer &mdash; 4
+## Defects in OUR OWN banked layer &mdash; 5
 
 *Nothing here is a defect in an ALL document. These are ours, found by checking the shipped layer back against the spine, and they are fixed by re-running pages &mdash; not by anyone at ALL. They are listed so the register is honest about who owns what.*
 
@@ -146,6 +146,7 @@ Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source 
 | `C01:45, C01:38` | He spoke of the very heart of the "Steps to Buddhahood," [...] [SECTION-HEAD BLEED: "..." trails the corpus English - linked to nothing.] | the quoted source text alone, with the analyst's note in the note field | Two banked English fields carry a bracketed project annotation INSIDE a field the schema declares to be verbatim source quotation. A consumer reading the layer gets our commentary presented as GMR's English. Both are in the earliest C01 pages (c1p02, r5). | CONFIRMED |
 | `class entry (4 fields)` | links on pages c1p01 and r2 carrying "seg": null | a real segment number, or the link withdrawn | Four banked fields cite no segment at all, so nothing can check them against a source. Three sit on c1p01 and one on r2 - the very first pages built, before the builder recorded citations. | CONFIRMED |
 | `class entry (16 headwords)` | pan chen  ·  na ro pa  ·  sha ri'i bu  ·  mandla  ·  pandi ta  ·  manydzu goh sha | paN chen  ·  nA ro pa  ·  shA ri'i bu  ·  maNDla  ·  paNDi ta  ·  manydzu goh ShA | build_alignment_layer.py lowercased the evidence-layer headword key (`tn = ' '.join(t.lower().split())`). In Wylie a capital is a DIFFERENT LETTER - N is the retroflex Na, D the retroflex Da, Sh the retroflex sha, and A/I/U the long vowels - so lowercasing pro | CONFIRMED |
+| `class entry (1,260 spans, 141 pages)` | build_alignment_layer.py matched spans with class="u" exactly | class="u" plus whatever grammar label the analyst supplied - "u noun", "u verb-nominal", "u compound member, n | The generator writes the analyst's grammar label into the same class attribute the builder matched on, so every LABELLED span was invisible to the builder and its analysis was discarded without a word. The pages rendered the labels correctly throughout, which  | CONFIRMED |
 
 ---
 
