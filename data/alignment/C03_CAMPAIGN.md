@@ -1492,3 +1492,30 @@ signature. An editor reading E-076 can see which number to trust and why.
 - Evidence layer: 4,688 headwords / 8,774 pairs. C03 at 319/620.
   Errata register: 76 entries. 12,688 English and 16,051 Tibetan spans clean
   across 289 pages.
+
+### Batches C03-100 … C03-103 (C03:320–331) — 2026-08-28 — model: Opus
+Four pages, twelve of twelve clean. Repaying the kindness of all beings, and
+what the Steps teaching is.
+
+**Interrupted mid-run by a usage limit and recovered from cache.** Nine of the
+twelve reconciliations failed when the monthly spend limit hit; 320, 321 and
+325 had completed. Resuming the workflow from its run id replayed the cached
+proposals and re-ran only the nine — **664k subagent tokens against the
+original 1.70M**, so recovery cost roughly a third of a fresh run. Worth
+knowing as a standing recovery procedure: the script is on disk, the run id is
+in the notification, and `resumeFromRunId` pays only for what actually failed.
+
+Two errata filed. `dpen gnas` at C03:327 (CONFIRMED) and `drin ji ltar gze
+snyam na` at C03:322 (PROBABLE).
+
+**A judgment call recorded for a reviewer** rather than silently made. At
+C03:320, `drin gzo ba` → "repay them": the English "them" refers to the living
+beings while the Tibetan object is `drin`, their kindness. The span keys the
+phrase as Geshe Michael wrote it and carves out only "repay" at depth 7. A
+reviewer who wants `drin` held to "kindness" here should retighten it — but
+note that a bare "repay" at depth 5 would then collide with "repayment"
+elsewhere in the segment, which is why it was not done automatically.
+
+- Evidence layer: 4,734 headwords / 8,904 pairs. C03 at 331/620.
+  Errata register: 78 entries. 12,912 English and 16,350 Tibetan spans clean
+  across 293 pages.

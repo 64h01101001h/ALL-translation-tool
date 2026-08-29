@@ -910,5 +910,29 @@
   "severity": "MEDIUM",
   "confidence": "CONFIRMED",
   "note": "filed from the alignment batch, spine-verified on merge"
+ },
+ {
+  "item_id": "E-077",
+  "course": "C03",
+  "segment": "C03:322",
+  "kind": "TIBETAN_SPELLING",
+  "found": "drin ji ltar gze snyam na",
+  "expected": "drin ji ltar gzo snyam na",
+  "evidence": "The head verb of the question is written gze, but the answering clause ten words later in this same segment writes the same lexeme correctly: \"drin gzo'i mchog tu gyur pa ni\", and the ACIP column carries the identical GZE/GZO'I split, so this is a source-keying reading, not a wylie-conversion artefact. Corpus-wide, a standalone \"gze\" token occurs in exactly 4 segments: C03:322, C16:404 and P1:15 are the same sentence repeated verbatim (byte-identical wylie and English across all three), and the fourth, C11:469 (\"...mi bzod pa'i gze re can du 'gyur ba...\"), is the unrelated word \"gze re can\" — i.e. \"gze\" never functions as a verb of repaying kindness anywhere in the corpus except this one recurring sentence. \"drin gzo\" (the correct spelling) occurs in 28 other segments. Checked directly against the entries table: the headword \"gze\" exists with hgm_gloss = [] (empty — it entered the lexicon from this corpus reading alone and defines nothing), while \"gzo\" glosses as [\"to wish to repay\",\"repay\",\"repaying\"] and \"drin gzo\" as [\"to wish to repay that kindness\",\"repaying their kindness\",\"repay kindness\",\"wish to repay that kindness\"]. No standard form of gzo ba has an e vowel. The English (\"pay this kindness back\") is unaffected and correct; only the Wylie/ACIP is defective, so the span for this word is left unkeyed rather than banking \"gze = pay\" as a lexeme.",
+  "severity": "MEDIUM",
+  "confidence": "PROBABLE",
+  "note": "filed from the alignment batch, spine-verified on merge"
+ },
+ {
+  "item_id": "E-078",
+  "course": "C03",
+  "segment": "C03:327",
+  "kind": "TIBETAN_SPELLING",
+  "found": "dpen gnas",
+  "expected": "dben gnas",
+  "evidence": "dpen is not a Tibetan lexeme; dben gnas ('isolated place', hermitage) is the word this segment's own English renders as 'hermitage' in 'the hermitage of the Victor'. Independently re-queried against the spine: dben gnas occurs in 15 corpus segments (C01:191, C03:585, C03:611, C09:47, C11:340, C18:165, TCS03:343, TCS07:650, P1:147, P1:165, TCS07:818, OSE:278, OSE:291, OSE:353, SVN:749) while dpen gnas occurs in only 2, this segment and P1:19, which carries the identical duplicate sentence ('gsan par bya ba'i chos ni ... dpen gnas kyi yang dgon ... gzhung'). C03:585 repeats the very same phrase about the very same place with the correct spelling: 'byang rva sgreng rgyal ba'i dben gnas kyi dgon pa gong du', translated there as 'above the hermitage of the Victor, near the monastery of Radreng, which stands to the north.' The ACIP column of this segment reproduces the identical defect (DPEN GNAS), showing the error sits upstream of the wylie conversion rather than in ingest.",
+  "severity": "MEDIUM",
+  "confidence": "CONFIRMED",
+  "note": "filed from the alignment batch, spine-verified on merge"
  }
 ]
