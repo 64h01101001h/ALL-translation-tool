@@ -345,6 +345,19 @@ if rc != 0:
 else:
     print("  ok   a separate later word is not mistaken for a bound morpheme")
 
+# 26. A member that repeats its parent's WHOLE text is degenerate — legal
+#     under containment and uniqueness, and useless, because it draws a box
+#     around a box. A reconciler applied this check itself and dropped
+#     members on it before the generator could; now the generator refuses.
+#     MUTATION: drop the equality branch -> this pin fails.
+expect_refusal("a member repeating its parent whole refuses",
+    {"course": "C03", "segments": [{"seq": 157, "title": "t",
+        "spans": [{"id": "w1", "d": 5, "tib": "sems 'jog pa",
+                   "eng": "setting the mind on the object"},
+                  {"id": "y2", "d": 7, "tib": "sems 'jog pa",
+                   "eng": "setting the mind on the object"}]}]},
+    "ENTIRE text")
+
 if fails:
     print("\nFAILED:")
     for f in fails:

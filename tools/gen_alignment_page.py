@@ -183,6 +183,17 @@ def resolve(text, spans, side, seq):
             # word-boundary rule (a member IS a sub-part), so nothing else
             # catches this.
             inner = ranges.get("_inner", lo)
+            # A member must mark a TIGHTER boundary than its parent. One
+            # whose text IS the parent's whole text adds nothing: it draws a
+            # box around a box. Legal under containment and uniqueness, and
+            # useless. Found 2026-08-28 by a reconciler that wrote its own
+            # validator and applied a check this generator did not have.
+            if piece == text[lo:hi]:
+                die("s%d member %s (%r) is its parent's ENTIRE text. A "
+                    "depth-7 span must mark a tighter boundary than the "
+                    "depth-5 span it sits inside; one that repeats it whole "
+                    "carries no information. Drop the member."
+                    % (seq, sp["id"], piece))
             if text.count(piece, lo, hi) > 1 and side == "tib":
                 die("s%d member %s (%r) occurs %d times inside its parent "
                     "%r; which one it means is not determinable. Split the "
