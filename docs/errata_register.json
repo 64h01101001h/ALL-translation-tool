@@ -934,5 +934,89 @@
   "severity": "MEDIUM",
   "confidence": "CONFIRMED",
   "note": "filed from the alignment batch, spine-verified on merge"
+ },
+ {
+  "item_id": "E-079",
+  "course": "C03",
+  "segment": "C03:333",
+  "kind": "TIBETAN_SPELLING",
+  "found": "'jug bar 'dod pa",
+  "expected": "'jug par 'dod pa",
+  "evidence": "After a final -g the nominalizer takes the pa/par form, not ba/bar (standard 'jug pa, 'jug par). The sense here is unambiguously 'wishing to enter the door', so the alternative reading of bar as the separate noun 'interval / up to' is excluded. Spine check, span-level: exactly five segments contain the string 'jug bar, and I inspected all five — three (C03:367, C16:431, TCS11:199) are zung 'jug bar gyi, where bar IS the noun 'up to', and the remaining two are this sentence, duplicated verbatim at C16:412. So the nominalizer reading of bar after -g occurs nowhere else in the spine. The same orthographic rule holds elsewhere: all twelve thob bar segments are ma ... thob bar du ('until'), the noun again. By contrast 'jug par appears in 151 segments (a segment count, i.e. an upper bound on distinct spans, not a span-level tally). The ACIP column of this segment reads 'JUG BAR as well, so the deviation sits in the transcription source, not in spine ingest. Not an instance of any registered systematic class (no footnote fusion, folio marker, or glued-on heading). No span keys to the defect: bar is nulled on independent grounds.",
+  "severity": "LOW",
+  "confidence": "PROBABLE",
+  "note": "filed from the alignment batch, spine-verified on merge"
+ },
+ {
+  "item_id": "E-080",
+  "course": "C03",
+  "segment": "C03:337",
+  "kind": "TIBETAN_SPELLING",
+  "found": "byang chub lam gyis rim pa 'di ni",
+  "expected": "byang chub lam gyi rim pa 'di ni",
+  "evidence": "The particle after the final -m of 'lam' must be the genitive 'gyi' — 'the Steps OF the path', which is exactly what GMR's English renders. 'gyis' is the instrumental/agentive and cannot govern the head noun 'rim pa' in a possessive compound, nor stand as a topicalised subject marked by 'ni'. The same course spells the same phrase correctly at C03:298: 'byang chub lam gyi rim pa'i snying po bsdus pa'. Spine-wide the count is 172 segments with 'lam gyi rim pa' against 2 with 'lam gyis rim pa' (verified by query): this segment and P1:26, which I confirmed is a verbatim reproduction of this same paragraph — one source reading, not two independent witnesses. The defect is present identically in this segment's acip column ('BYANG CHUB LAM GYIS RIM PA 'DI NI'), so it lies in the keyed source rather than in ingest.",
+  "severity": "MEDIUM",
+  "confidence": "CONFIRMED",
+  "note": "filed from the alignment batch, spine-verified on merge"
+ },
+ {
+  "item_id": "E-081",
+  "course": "C03",
+  "segment": "C03:337",
+  "kind": "TIBETAN_SPELLING",
+  "found": "gang nas gsheg pa'i gzhung lam gcig pu",
+  "expected": "gang nas gshegs pa'i gzhung lam gcig pu",
+  "evidence": "The honorific verb of motion is 'gshegs' in every stem; there is no form 'gsheg'. The decisive comparandum is inside the same course: C03:298 carries this identical formula spelled correctly — 'dus gsum gyi rgyal ba thams cad gang nas gshegs pa'i gzhung lam gcig pu' — as does P1:5. Spine-wide: 957 segments with 'gshegs pa' against 2 with 'gsheg pa' (verified by query), those 2 being this segment and P1:26, a verbatim reproduction of this same paragraph. GMR's English reads it as 'gshegs' ('has travelled, or travels now, or ever again will travel'). The acip column reads 'GANG NAS GSHEG PA'I', so the dropped suffixed sa is in the keyed source, not in ingest. Raised from analyst B's PROBABLE/LOW to CONFIRMED/MEDIUM: the in-course correct parallel at C03:298 removes the 'ACIP unsuffixed convention' explanation, since the same keyer's same formula is suffixed 39 segments earlier.",
+  "severity": "MEDIUM",
+  "confidence": "CONFIRMED",
+  "note": "filed from the alignment batch, spine-verified on merge"
+ },
+ {
+  "item_id": "E-082",
+  "course": "C03",
+  "segment": "C03:339",
+  "kind": "TIBETAN_SPELLING",
+  "found": "mthar mal rim rang la gcig tu dril te",
+  "expected": "mthar lam rim rang la gcig tu dril te",
+  "evidence": "The term is lam rim, the Steps of the path. 'mal' is bedding or a couch and forms no compound with 'rim' that could take 'rang la gcig tu dril te nyams su len' - 'join into one within our own lives and put into practice'. The English of this very segment renders the phrase 'these Steps', GMR's standing rendering of lam rim across the courses. Two segments earlier, C03:337 carries 'rje bla mas lam rim che chung nas gsungs pa', rendered 'what our Lord Lama has spoken in all his presentations of the Steps of the path' - the same term, correctly spelt, inside the same argument. Measured over the shipped spine, 209 segments contain the string 'lam rim'; exactly two contain 'mal rim', this one and P1:28, which is a verbatim duplicate of this same passage and therefore not an independent witness. The acip column of this segment reads 'MTHAR MAL RIM RANG LA', carrying the same MAL, so the defect is in the keyed source and was not introduced by the ACIP-to-Wylie derivation. Consequence for this spec: 'these Steps' is left unwrapped rather than keyed to a corrupt form.",
+  "severity": "HIGH",
+  "confidence": "CONFIRMED",
+  "note": "filed from the alignment batch, spine-verified on merge"
+ },
+ {
+  "item_id": "E-083",
+  "course": "C03",
+  "segment": "C03:339",
+  "kind": "TIBETAN_SPELLING",
+  "found": "gzhung bka' bod lnga la thos pa mthil phyin byas",
+  "expected": "gzhung bka' pod lnga la thos pa mthil phyin byas",
+  "evidence": "The volume word is pod; bka' pod lnga is the five great volumes of the Word. 'bod' is Tibet and cannot head a count of scriptural volumes. C03:565 carries the same technical phrase inside the same verb frame - 'gzhung chen bka' pod lnga la thos bsam mthil phyin pa byas te' - which GMR renders 'the five great classics, the five great volumes of the Word'. Measured over the shipped spine, the string \"bka' pod\" occurs in 2 segments (C03:565 and P1:139) and \"bka' bod\" in 1 (this segment); the duplicate witness P1:28 carries the same BOD with an intruded comma, \"gzhung bka', bod lnga\". The acip column here reads \"GZHUNG BKA' BOD LNGA LA\", so the BOD is present in the keyed source rather than arising in derivation. No claim is made here that 'chen' has dropped out: this segment simply has no 'chen', and GMR's 'great' is treated as unlicensed English (left unwrapped) rather than as evidence of an omission. Consequence for this spec: the compound is not spanned as a unit; only the uncorrupted members gzhung and lnga are keyed.",
+  "severity": "MEDIUM",
+  "confidence": "CONFIRMED",
+  "note": "filed from the alignment batch, spine-verified on merge"
+ },
+ {
+  "item_id": "E-084",
+  "course": "C03",
+  "segment": "C03:343",
+  "kind": "TIBETAN_SPELLING",
+  "found": "krma pa",
+  "expected": "karma pa",
+  "evidence": "\"krma\" is not a well-formed Tibetan syllable (no a-vowel; ma cannot suffix a kr- stack), and the defect is in the source rather than the ingest: this segment's acip column also reads \"KRMA PA\". Four independent checks. (1) GMR's own English in this very segment spells the title \"Karmapa\". (2) The spine spells it correctly elsewhere: TITLS:889 and TITLS:2479 both read \"chos rje karma pa de bzhin gshegs pa'i drung du zhu yig\". (3) The spine dictionary carries six karma-initial headwords (karma, karma DA ki, karma DA ki nI, karma badzra, karma shI la, karma shyo si) and zero krma-initial headwords, so the name is unreachable by dictionary lookup as spelled. (4) The canonical pron_engine.py returns 'krmapa' for this spelling — not GMR's \"Karmapa\". A LIKE scan of the 42,199 spine segments finds the misspelling in no more than two places, this segment and its parallel P1:32, which carry the same quotation. Not an instance of any registered systematic class.",
+  "severity": "MEDIUM",
+  "confidence": "CONFIRMED",
+  "note": "filed from the alignment batch, spine-verified on merge"
+ },
+ {
+  "item_id": "E-085",
+  "course": "C03",
+  "segment": "C03:343",
+  "kind": "TIBETAN_SPELLING",
+  "found": "mi bskyed rdo rje",
+  "expected": "mi bskyod rdo rje",
+  "evidence": "The Eighth Karmapa is Mi bskyod rdo rje (Aksobhya-vajra); bskyed ('generate') is a different verb from bskyod ('move, be unmoved'). As with krma pa the acip column carries the same reading (\"MI BSKYED RDO RJE\"), so this is a source defect, not an ingest artefact. Four checks. (1) The canonical pron_engine.py is decisive: 'mi bskyod rdo rje' -> 'mikyu doje', which is GMR's \"Mikyu Dorje\" in this segment, while 'mi bskyed rdo rje' -> 'mikye doje'. GMR's own phonetic therefore transcribes bskyod, not bskyed. (2) The spine dictionary holds the headword \"mi bskyod rdo rje\" (plus \"gsang 'dus mi bskyod rdo rje\" and \"mi bskyod rdo rje'i sgrub pa'i thabs\") and no entry containing \"bskyed rdo rje\" at all. (3) The corpus spells it correctly elsewhere: TCS05:448 \"bdag mi bskyod rdo rje zhes bgyi ba\" and TITLS:907 \"dpal gsang ba 'dus pa mi bskyod rdo rje'i dkyil 'khor\". (4) C01:205 identifies the same figure in English as \"Karmapa Mikyu Dorje (1507-1554)\", the dates of the Eighth Karmapa Mi bskyod rdo rje. A LIKE scan of the 42,199 spine segments finds the misspelling in no more than two places, this segment and its parallel P1:32. Not an instance of any registered systematic class.",
+  "severity": "MEDIUM",
+  "confidence": "CONFIRMED",
+  "note": "filed from the alignment batch, spine-verified on merge"
  }
 ]

@@ -8,11 +8,11 @@
 
 Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source and Geshe Michael Roach's facing English &mdash; recorded as a by-product of a machine alignment campaign reading the courses segment by segment. **Every entry has been checked against the corpus database** (42,199 segments, spine `hgm_spine_v27_2.db`): the quoted strings were retrieved from the spine, not from a note, and each citation was re-derived rather than trusted.
 
-**78 entries**: **47 document errata** (4 HIGH, 31 MEDIUM, 12 LOW), **16 digitisation artefacts**, 14 observations checked and closed as *not* errata, and 1 that could not be verified.
+**85 entries**: **54 document errata** (5 HIGH, 36 MEDIUM, 13 LOW), **16 digitisation artefacts**, 14 observations checked and closed as *not* errata, and 1 that could not be verified.
 
 | Kind | n |
 |---|---|
-| Tibetan spelling | 28 |
+| Tibetan spelling | 35 |
 | Digitisation artefact | 16 |
 | English typo | 15 |
 | English factual error | 2 |
@@ -30,7 +30,7 @@ Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source 
 
 ---
 
-## High severity &mdash; 4 entries
+## High severity &mdash; 5 entries
 
 *Would mislead a reader who has no other cue in front of them.*
 
@@ -39,9 +39,10 @@ Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source 
 | `C01:127` | 'ga' zhig pha ma rigs rus sogs kyi zhen khog blos mthongs pas bon la sogs pa'i log chos kyis bslus pa ni | 'ga' zhig pha ma rigs rus sogs kyi zhen khog blos ma thongs pas ... (i.e. "blos ma thongs pas", NOT the log's  | The hint pointed at C01:156, which is only the witness segment: 156 spells the idiom correctly ("tshe 'di blos thongs pa zhig 'ong"). The erratum is at C01:127. "blos mthongs" occurs exactly once in the 42,199-segment corpus; "blos thongs" occurs 9 times (C01: | CONFIRMED |
 | `C03:286` | (shamata, or insight) | (shamata, or quietude) | C03:287 gives '(vipashyana, or insight)' correctly for lhag mthong; C03:195 reads 'Achieving quietude [shamata]'. A sweep of all 42,199 spine segments found 13 '(Term, or gloss)' constructions and exactly ONE case of a gloss serving two different Sanskrit term | CONFIRMED |
 | `C03:300` | Loving One, Avalokiteshvara, with Asanga, | Loving One, Maitreya, with Asanga, | The Tibetan quoted in this slot is `byams pa thogs med`. TCS14:65 settles it inside this same corpus: the wylie `'di ni rje btsun byams pa nas thogs med dang, rje btsun 'jam dbyangs nas klu sgrub dang` is rendered "those passed down to Master Asanga from the h | CONFIRMED |
+| `C03:339` | mthar mal rim rang la gcig tu dril te | mthar lam rim rang la gcig tu dril te | The term is lam rim, the Steps of the path. 'mal' is bedding or a couch and forms no compound with 'rim' that could take 'rang la gcig tu dril te nyams su len' - 'join into one within our own lives and put into practice'. The English of this very segment rende | CONFIRMED |
 | `C03:39` | acip: ,SIL SNYAN RNAMS DANG BYUNG PA GDUGS MCHOG DANG ,   \|   wylie: ,sil snyan rnams dang byung pa gdugs mchog dang , | byug pa | seg_hint 39 is CORRECT. Three independent proofs: (1) the note's own claim checks out — C03:38, the glossary segment immediately preceding, spells it right and defines it: "byug pa ni spos zhim po'i lde gu'o" (byug pa = thick fragrant unguent); (2) this segmen | CONFIRMED |
 
-## Medium severity &mdash; 31 entries
+## Medium severity &mdash; 36 entries
 
 | Citation | What it says | Should say | Evidence | Confidence |
 |---|---|---|---|---|
@@ -72,12 +73,17 @@ Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source 
 | `C03:313` | de bde skyes pu'i rtsal de 'phags | de bde skyes bu'i rtsal de 'phags | This same segment spells the word correctly about thirty words earlier, in "'di na skyes bu gzhan don byed par" — an internal inconsistency inside one segment. Corpus-wide the wylie column has 'skyes bu' in 374 spine segments against 'skyes pu' in 7 (segment c | PROBABLE |
 | `C03:322` | drin ji ltar gze snyam na | drin ji ltar gzo snyam na | The head verb of the question is written gze, but the answering clause ten words later in this same segment writes the same lexeme correctly: "drin gzo'i mchog tu gyur pa ni", and the ACIP column carries the identical GZE/GZO'I split, so this is a source-keyin | PROBABLE |
 | `C03:327` | dpen gnas | dben gnas | dpen is not a Tibetan lexeme; dben gnas ('isolated place', hermitage) is the word this segment's own English renders as 'hermitage' in 'the hermitage of the Victor'. Independently re-queried against the spine: dben gnas occurs in 15 corpus segments (C01:191, C | CONFIRMED |
+| `C03:337` | byang chub lam gyis rim pa 'di ni | byang chub lam gyi rim pa 'di ni | The particle after the final -m of 'lam' must be the genitive 'gyi' — 'the Steps OF the path', which is exactly what GMR's English renders. 'gyis' is the instrumental/agentive and cannot govern the head noun 'rim pa' in a possessive compound, nor stand as a to | CONFIRMED |
+| `C03:337` | gang nas gsheg pa'i gzhung lam gcig pu | gang nas gshegs pa'i gzhung lam gcig pu | The honorific verb of motion is 'gshegs' in every stem; there is no form 'gsheg'. The decisive comparandum is inside the same course: C03:298 carries this identical formula spelled correctly — 'dus gsum gyi rgyal ba thams cad gang nas gshegs pa'i gzhung lam gc | CONFIRMED |
+| `C03:339` | gzhung bka' bod lnga la thos pa mthil phyin byas | gzhung bka' pod lnga la thos pa mthil phyin byas | The volume word is pod; bka' pod lnga is the five great volumes of the Word. 'bod' is Tibet and cannot head a count of scriptural volumes. C03:565 carries the same technical phrase inside the same verb frame - 'gzhung chen bka' pod lnga la thos bsam mthil phyi | CONFIRMED |
+| `C03:343` | krma pa | karma pa | "krma" is not a well-formed Tibetan syllable (no a-vowel; ma cannot suffix a kr- stack), and the defect is in the source rather than the ingest: this segment's acip column also reads "KRMA PA". Four independent checks. (1) GMR's own English in this very segmen | CONFIRMED |
+| `C03:343` | mi bskyed rdo rje | mi bskyod rdo rje | The Eighth Karmapa is Mi bskyod rdo rje (Aksobhya-vajra); bskyed ('generate') is a different verb from bskyod ('move, be unmoved'). As with krma pa the acip column carries the same reading ("MI BSKYED RDO RJE"), so this is a source defect, not an ingest artefa | CONFIRMED |
 | `C03:35` | acip: ,RDUL GCIG STENG NA RDUL SNYEED SANGS RGYAS RNAMS,   \|   wylie: rdul gcig steng na rdul snyeed sangs rgyas rnams, | rdul snyed | seg_hint 35 is CORRECT. "snyeed" occurs exactly ONCE in the whole 42,199-segment corpus — this segment — and it is in the ACIP input as well as the Wylie, so it is a keying error, not a conversion loss. The correct "rdul snyed" is attested twice in this very c | CONFIRMED |
 | `C03:36` | acip: ,NGAG GI PHYAG NI, DE DAG BSNGAGS BA ZHES PA'I TSIGS BCAD GCIG STE, YUL RNAMS KYI YON TAN GYI BSNGAGS PA ZAD MI SHES PA RNAMS   \|   wylie: ngag | bsngags pa | seg_hint 36 is CORRECT, and the note's central claim is self-proving inside the segment: "bsngags ba" appears at the head, then the correct "bsngags pa" nineteen words later in the same line. After a -gs suffix the particle is pa, not ba. Present in the ACIP i | CONFIRMED |
 | `C03:39` | sil snyan rnams dang byung pa gdugs mchog dang (ACIP: ,SIL SNYAN RNAMS DANG BYUNG PA GDUGS MCHOG DANG ,) | sil snyan rnams dang byug pa gdugs mchog dang (ACIP: BYUG PA) | Three independent checks. (1) C03:38, the glossary segment that introduces this very verse, spells it correctly: "byug pa ni spos zhim po'i lde gu'o" (ACIP BYUG PA NI SPOS ZHIM PO'I LDE GU'O). (2) C03:39's own facing English reads "Cymbals and ointments" — byu | CONFIRMED |
 | `C03:53` | de nas dmigs pa gsal bar byas nas mNaDl phul te (ACIP: DE NAS DMIGS PA GSAL BAR BYAS NAS MnAdL PHUL TE) | maNDla (ACIP MAndLA), the spelling used at C03:1 | C03:1 records the same word as ACIP 'MAndLA' / Wylie 'maNDla', with the English 'mandel'. C03:53's 'MnAdL' transposes the vowel A onto the retroflex and drops the final A, leaving a form that is not well-formed Wylie (a bare 'm' root with no vowel, and a 'Dl'  | CONFIRMED |
 
-## Low severity &mdash; 12 entries
+## Low severity &mdash; 13 entries
 
 | Citation | What it says | Should say | Evidence | Confidence |
 |---|---|---|---|---|
@@ -93,6 +99,7 @@ Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source 
 | `C03:258` | The Ten Menal Afflictions | The Ten Mental Afflictions | 'Menal' is not a word; the segment enumerates the ten nyon mongs, standardly 'mental afflictions', and C03:204 uses 'mental' correctly | CONFIRMED |
 | `C03:276` | Bodhisatttva | Bodhisattva | three t's; C03:278 spells 'Bodhisattva' correctly in the adjacent heading | CONFIRMED |
 | `C03:300` | SKYE BA KUN TU RNAMS {SHl}OOO KA RE LHAN DU GSUNGS, | SKYE BA KUN TU RNAMS {SHl}OO KA RE LHAN DU GSUNGS, | Counted over corpus_segments: acip matching '%{SHl}OO KA%' = 22 rows, acip matching '%{SHl}OOO KA%' = 1 row, that one being C03:300. The 9 rows that spell the word without the brace code all write SHLOO KA, and acip matching '%SHLOOO%' = 0 rows - nothing in th | PROBABLE |
+| `C03:333` | 'jug bar 'dod pa | 'jug par 'dod pa | After a final -g the nominalizer takes the pa/par form, not ba/bar (standard 'jug pa, 'jug par). The sense here is unambiguously 'wishing to enter the door', so the alternative reading of bar as the separate noun 'interval / up to' is excluded. Spine check, sp | PROBABLE |
 
 ---
 
@@ -152,7 +159,7 @@ Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source 
 
 ## Recommended actions, by owner
 
-**Document editors.** The 47 document errata above. Start with the 4 HIGH entries. Note that several errors exist at MORE THAN ONE LOCUS because passages are ingested twice &mdash; each entry's evidence names them, and a per-segment fix will leave duplicates behind.
+**Document editors.** The 54 document errata above. Start with the 5 HIGH entries. Note that several errors exist at MORE THAN ONE LOCUS because passages are ingested twice &mdash; each entry's evidence names them, and a per-segment fix will leave duplicates behind.
 
 **Data-pipeline maintainers.** The 16 digitisation artefacts, plus two reports filed separately: `docs/upstream/FOLIO_MARKER_COLLISIONS.md` (119 folio markers spliced into caption numbers) and `docs/upstream/C13_COLUMN_OFFSET.md` (**C13:63&ndash;82 pairs Tibetan with the English of a different text &mdash; C13 should not be scanned until it is fixed**).
 

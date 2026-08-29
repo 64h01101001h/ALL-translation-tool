@@ -1519,3 +1519,27 @@ elsewhere in the segment, which is why it was not done automatically.
 - Evidence layer: 4,734 headwords / 8,904 pairs. C03 at 331/620.
   Errata register: 78 entries. 12,912 English and 16,350 Tibetan spans clean
   across 293 pages.
+
+### Batches C03-104 … C03-107 (C03:332–343) — 2026-08-28 — model: Opus
+Four pages, twelve of twelve clean. The Steps as the essential teaching, the
+Kadampa masters quoted, and the injunction to turn learning inward.
+
+**Seven errata filed, one at HIGH** — `mthar mal rim rang la gcig tu dril te`
+at C03:339, plus two proper-name spellings at C03:343 (`krma pa` for `karma
+pa`, `mi bskyed rdo rje` for `mi bskyod rdo rje`, the Karmapa Mikyö Dorje).
+
+**Rule 10 applied a second time, and this one is subtler.** C03:332 renders
+`thun mong` in a verse line as *"In the path that both them share"* —
+"both them" is ungrammatical. The span keys `thun mong` to **"share"** alone
+and leaves the broken phrase unwrapped rather than banking it. The reconciler
+then checked whether it was worth filing as an erratum and correctly decided
+**not** to: the identical string appears at C16:411, so it is the published
+verse compression rather than a corruption of this segment. (A third witness,
+P1:22, reads "both themshare" — a whitespace loss in *that* segment, recorded
+as context and not filed, because the quote is not from the segment cited.)
+
+That is the distinction the register depends on: **a defect must be filed
+against the segment that carries it.**
+
+- Evidence layer: 4,793 headwords / 9,038 pairs. C03 at 343/620.
+  Errata register: 85 entries.
