@@ -1090,5 +1090,65 @@
   "severity": "MEDIUM",
   "confidence": "CONFIRMED",
   "note": "Uncheckable provenance is the one thing the project cannot tolerate quietly; these are held at 4 by the gate and should be re-run or withdrawn rather than left uncitable."
+ },
+ {
+  "item_id": "E-092",
+  "course": "C03",
+  "segment": "C03:403",
+  "kind": "INGEST_ARTEFACT",
+  "found": "zhes pa'i oo ka gnyis kyis bstan te",
+  "expected": "zhes pa'i shloo ka gnyis kyis bstan te",
+  "evidence": "\"oo ka\" is not a word in Tibetan or Sanskrit; the sense required is shloka (verse) — \"this is taught by these two verses\". This segment's own ACIP reads \",ZHES PA'I {SHl}OO KA GNYIS KYIS BSTAN TE,\": the braced Sanskrit-letter token {SHl} was dropped wholesale by the ACIP-to-Wylie converter. The defect tracks the BRACE NOTATION, not the reading — where the same word is keyed without braces the Wylie survives intact, verified in-spine at C03:349 (ACIP \"ZHES PA'I SHLOO KA GCIG GIS BSTAN,\" -> Wylie \"zhes pa'i shloo ka gcig gis bstan\"), C07:80 (ACIP \",ZHES PA'I SHLOO KA GCIG STE,\" -> Wylie \"zhes pa'i shloo ka gcig ste\"), and TITLS:847, 1252, 1282, 1289, 2514, 2570. Measured over the whole spine by this reconciler: 23 segments carry {SHl} in ACIP; 0 of the 23 retain \"shl\" anywhere in Wylie; exactly 22 segments have a bare \" oo ka\" in Wylie and all 22 are {SHl}OO KA segments; the 23rd is C03:300, whose ACIP \"{SHl}OOO KA\" became Wylie \"ooo ka\" — a complete 23/23 correspondence, so this is a systematic converter defect, not a local corruption. The 23 are C03:300, 302, 378, 403, 432, 463, 478, 495, 505, 515, 524, 546, 560, 574 and C16:414, 450, 463, 479, 482, 484, 492, 499, 507. PARALLEL-WITNESS CHECK PERFORMED: C16:450 carries the identical \"zhes pa'i oo ka gnyis kyis bstan te\", but its ACIP is also \"{SHl}OO KA\", so it is the same artefact propagated through the same converter, not an independent published reading. Consequence: the citation-count colophon does not match the dictionary and \"oo ka\" is unsearchable as a word.",
+  "severity": "MEDIUM",
+  "confidence": "CONFIRMED",
+  "note": "filed from the alignment batch, spine-verified on merge"
+ },
+ {
+  "item_id": "E-093",
+  "course": "C03",
+  "segment": "C03:403",
+  "kind": "ENGLISH_TYPO",
+  "found": "To stop the slightest Wrong of many wrongs we do",
+  "expected": "To stop the slightest Wrongs of many wrongs we do",
+  "evidence": "Two witnesses of the same published translation read plural, and this segment is the sole outlier. Verified directly against the spine: C16:450 (the parallel commentary citation) reads \"To stop the slightest Wrongs of many wrongs we do, And try t...\", and TCS08SourceOfAllMyGood:5 (the standalone prayer text, an independent line of transmission whose Tibetan is given in phonetics, not in this ACIP edition) likewise reads \"To stop the slightest Wrongs of many wrongs we do\". Only C03:403 has singular \"Wrong\". The Tibetan of this very line licenses the plural: \"phra zhing phra ba rnams kyang spong ba\" carries the plural \"rnams\" over the collective \"nyes pa'i tshogs\" of the preceding line. The C16 witness cannot be dismissed as converter-propagated the way the shloka artefact was — that artefact is a Wylie-side pipeline drop, whereas this is English text, and the TCS08 witness is a separate text entirely. The capital W is verse lineation, not apparatus, and is not the issue. NOTE ON A CONTRARY CLAIM: it is true that TCS08SourceOfAllMyGood:4 stops at \"As certain as my shadow\", but the line in question continues into TCS08SourceOfAllMyGood:5, which was checked and does carry it — so the \"no third witness\" objection does not hold.",
+  "severity": "LOW",
+  "confidence": "CONFIRMED",
+  "note": "filed from the alignment batch, spine-verified on merge"
+ },
+ {
+  "item_id": "E-094",
+  "course": "C03",
+  "segment": "C03:410",
+  "kind": "TIBETAN_SPELLING",
+  "found": "pha dam pa sangs gyas kyis",
+  "expected": "pha dam pa sangs rgyas kyis",
+  "evidence": "The figure is Pha Dam pa Sangs rgyas. 'sangs gyas' is not a Tibetan word — the ra-mgo of rgyas is missing, and bare 'gyas' means 'right side', which yields no reading here. The segment's own English reads 'Pa Dampa Sangye', confirming sangs rgyas is intended. Counts re-derived from the spine by me, not taken from either analyst: 'sangs rgyas' appears in 2,101 segments, 'sangs gyas' in exactly 2. 'pha dam pa' appears in only 4 segments corpus-wide: C03:410, P1:65, TCS03:369 ('pha dam pas'), and TCS12:146, which spells the same figure correctly — 'pha dam pa sangs rgyas kyi zhal nas'. That is an independent witness for the correct form in a different text. PARALLEL-WITNESS DISCLOSURE: P1:65 carries this same citation with the identical error (wylie 'ces pa dang pha dam pa sangs gyas kyis...', ACIP 'PHA DAM PA SANGS GYAS KYIS'), differing from C03:410 only in verse shad placement and the absence of the trailing footnote number. P1:65 is therefore not an independent witness but the same passage in a second course packet, sharing one ACIP lineage; it shows the defect is upstream of the C03 file rather than an ingest slip, and does not vindicate the spelling. I checked this against the register's own practice before filing: E-entries at C01:388 and C01:380 were banked CONFIRMED with the note that a parallel (C16:203, C16:199) read identically, 'so the defect is in the shared source text rather than a one-off slip', and the C03:313 entry files a defect while stating its parallels 'share an ACIP lineage rather than being independent'. The register's stated scope likewise says duplicate passages are named, not used to suppress. This entry follows that precedent. The defect is in the source keying, not in wylie derivation, since the ACIP field carries the same error. Impact: headword lookup on the name fails in both segments.",
+  "severity": "MEDIUM",
+  "confidence": "CONFIRMED",
+  "note": "filed from the alignment batch, spine-verified on merge"
+ },
+ {
+  "item_id": "E-095",
+  "course": "C03",
+  "segment": "C03:412",
+  "kind": "FORMATTING",
+  "found": "previous consciousness if it could come from physical matter alone then every bit of dirt",
+  "expected": "previous consciousness, if it could come from physical matter alone, then every bit of dirt",
+  "evidence": "Verified directly against the spine, not taken from either analyst. (1) The quoted string occurs exactly once in this segment's English. (2) C16:456 carries the expected comma'd form verbatim, and its Tibetan is BYTE-IDENTICAL to this segment's over the shared stretch from 'bo dong paN chen' through 'gsung ste' (323 bytes on both sides, equality tested programmatically), so it is a true parallel witness of the same passage and not a different published reading. (3) The loss is local rather than house style: this segment's OWN immediately preceding sentence keeps the matching comma, 'without any proper cause, then every existing object', which is present verbatim here. (4) The third witness P1:67 shares the comma loss but cannot establish the reading, being demonstrably degraded by a whole-clause eyeskip ('If the human body could occur as well be stuffed full of human bodies'). Effect: without the commas the appositional 'if it could come from physical matter alone' fuses into 'consciousness if it could come' as a restrictive clause, 'alone then' runs on, and the If...then correlation that the parallel sentence in this same segment establishes is broken.",
+  "severity": "MEDIUM",
+  "confidence": "CONFIRMED",
+  "note": "filed from the alignment batch, spine-verified on merge"
+ },
+ {
+  "item_id": "E-096",
+  "course": "C01/C02/C03",
+  "segment": "class entry (16 headwords)",
+  "kind": "LAYER_ARTEFACT",
+  "found": "pan chen  ·  na ro pa  ·  sha ri'i bu  ·  mandla  ·  pandi ta  ·  manydzu goh sha",
+  "expected": "paN chen  ·  nA ro pa  ·  shA ri'i bu  ·  maNDla  ·  paNDi ta  ·  manydzu goh ShA",
+  "evidence": "build_alignment_layer.py lowercased the evidence-layer headword key (`tn = ' '.join(t.lower().split())`). In Wylie a capital is a DIFFERENT LETTER - N is the retroflex Na, D the retroflex Da, Sh the retroflex sha, and A/I/U the long vowels - so lowercasing produced 16 headwords that are not Tibetan words, across 18 senses. They are exactly the Sanskrit loanwords and proper names a reader is most likely to look up: Panchen, Naropa, Shariputra, mandala, pandita, Sakya Pandita, Manjughosha, lotsawa, Dandi, mani, satsa. The full bank was never affected - it banks `manydzu goh ShA` correctly - so the defect was introduced between the bank and the shipped card layer. FOUND BY: the builder reporting 1 span without a provable ACIP form, which led to the headword. Measured before fixing: preserving case splits ZERO existing headword keys, so the correction re-groups nothing.",
+  "severity": "MEDIUM",
+  "confidence": "CONFIRMED",
+  "note": "FIXED 2026-08-28 in the same pass. Ours, not ALL's. The gate that should have caught it did not: test_evidence_matches_spine's bare() normaliser case-folded before comparing, scoring all 18 as clean punctuation differences. bare() is now case-preserving on the Tibetan side, the tib-exact figure went 12,057/12,076 -> 12,076/12,076, and the ceiling is tightened to 0 with a regression mutation proving paN chen -> pan chen is now caught."
  }
 ]
