@@ -601,6 +601,13 @@ if(Python3_FOUND)
                    ${CMAKE_SOURCE_DIR}/docs/michael_dictionary.html
                    ${CMAKE_SOURCE_DIR}/data/alignment/alignment_full_v1.json
                    ${CMAKE_SOURCE_DIR}/data/alignment/alignment_evidence_v1.json)
+
+  # ERRATA_REGISTER.md and its sidecar drifted once already - the prose
+  # claimed 52 findings while the JSON held 78, and it was found by
+  # accident. The generator is deterministic, so regenerate and compare.
+  add_test(NAME generated_docs_in_sync
+           COMMAND ${Python3_EXECUTABLE}
+                   ${CMAKE_SOURCE_DIR}/tools/test_generated_docs_in_sync.py)
 endif()
 
 # BUILD-7: the battery must say what it did NOT run. fixture_gate holds
