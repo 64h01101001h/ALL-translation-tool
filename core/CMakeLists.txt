@@ -617,6 +617,17 @@ if(Python3_FOUND)
   add_test(NAME builder_sees_every_span
            COMMAND ${Python3_EXECUTABLE}
                    ${CMAKE_SOURCE_DIR}/tools/test_builder_sees_every_span.py)
+
+  # The most dangerous way the register can be wrong is to report a PUBLISHED
+  # READING as a local corruption - telling an editor to change a text that is
+  # already correct. The guard is the parallel witness in C16/P1/EM/TCS. This
+  # does not judge which case applies (a mechanical test cannot); it enforces
+  # that an entry with a witness NAMES it.
+  add_test(NAME errata_name_their_witnesses
+           COMMAND ${Python3_EXECUTABLE}
+                   ${CMAKE_SOURCE_DIR}/tools/test_errata_name_their_witnesses.py
+                   ${CMAKE_SOURCE_DIR}/docs/errata_register.json
+                   ${CMAKE_SOURCE_DIR}/build/hgm_spine_v27_2.db)
 endif()
 
 # BUILD-7: the battery must say what it did NOT run. fixture_gate holds
