@@ -569,6 +569,16 @@ if(Python3_FOUND)
                    ${CMAKE_SOURCE_DIR}/tools/test_layer_matches_spine.py
                    ${CMAKE_SOURCE_DIR}/data/alignment/alignment_full_v1.json
                    ${CMAKE_SOURCE_DIR}/build/hgm_spine_v27_2.db)
+
+  # Same question, asked of the artifact with the higher stakes: the
+  # evidence layer is what becomes HGM TENTATIVE cards in front of a user.
+  # Checks English, wylie AND ACIP - ACIP is the source of record, so an
+  # ACIP that does not check out is worse than a wylie that doesn't.
+  add_test(NAME evidence_matches_spine
+           COMMAND ${Python3_EXECUTABLE}
+                   ${CMAKE_SOURCE_DIR}/tools/test_evidence_matches_spine.py
+                   ${CMAKE_SOURCE_DIR}/data/alignment/alignment_evidence_v1.json
+                   ${CMAKE_SOURCE_DIR}/build/hgm_spine_v27_2.db)
 endif()
 
 # BUILD-7: the battery must say what it did NOT run. fixture_gate holds
