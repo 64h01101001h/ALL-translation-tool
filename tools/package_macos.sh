@@ -91,6 +91,32 @@ if ! cmp -s "$ROOT/data/help/USER_MANUAL.md"             "$ROOT/docs/distributio
 fi
 echo "   manual twins identical"
 
+# SQA 2026-08-28: the press carries WALL-CLOCK gates (T4b's library-index
+# fan-out asserts under 6000ms), and a loaded machine fails them for reasons
+# that have nothing to do with the build. Twice in a row, at load average 19
+# and 18, T4b reported 8383ms then 7376ms; re-run on an idle machine the same
+# binary passed in 28s. That is a FALSE FAILURE, and it is dangerous rather
+# than merely annoying: tools/release.sh does `git reset --hard HEAD~1` when
+# the press fails, so a spurious timing failure DESTROYS A REAL COMMIT.
+#
+# Refuse rather than mislead - the same discipline the alignment generator
+# uses. A press that cannot be trusted must not run, and must not be silently
+# treated as a verdict.
+NCPU="$(sysctl -n hw.ncpu 2>/dev/null || nproc 2>/dev/null || echo 8)"
+LOAD1="$(uptime | sed -E 's/.*load averages?: ([0-9.]+).*/\1/')"
+LOAD_CEIL="$(python3 -c "print(f'{${NCPU} * 0.75:.2f}')" 2>/dev/null || echo 6)"
+if python3 -c "import sys; sys.exit(0 if float('${LOAD1}') > float('${LOAD_CEIL}') else 1)" 2>/dev/null; then
+  echo "press: REFUSED - 1-minute load average is ${LOAD1}, ceiling ${LOAD_CEIL}"
+  echo "  (${NCPU} cores). The press has wall-clock gates that fail under"
+  echo "  contention for reasons unrelated to the build, and release.sh"
+  echo "  unwinds a commit on a failed press. Wait for background work to"
+  echo "  finish - agent workflows are the usual cause - and press again."
+  echo "  Override with ALL_PRESS_IGNORE_LOAD=1 only if you accept that a"
+  echo "  timing failure may be spurious."
+  [[ "${ALL_PRESS_IGNORE_LOAD:-0}" == "1" ]] || exit 2
+  echo "  ALL_PRESS_IGNORE_LOAD=1 set - continuing anyway."
+fi
+
 echo "== 0. release gate =="
 python3 "$ROOT/tools/validate_release.py" >/dev/null || {
   echo "RELEASE GATE FAILED — not packaging a bad release"; exit 1; }
