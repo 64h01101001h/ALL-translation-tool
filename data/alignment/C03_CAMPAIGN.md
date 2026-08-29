@@ -1671,3 +1671,47 @@ confirmed case with its citation, never by guessing the set.
 - Evidence layer: 5,097 headwords / 9,745 pairs. C03 at 402/620.
   Errata register: 88 entries, 57 document errata (5 HIGH).
   14,489 English and 18,451 Tibetan spans clean across 317 pages.
+
+### Batches C03-129 … C03-130 (C03:406–411) — 2026-08-28 — model: Opus
+Twelve segments analysed, **four pages attempted and two refused**. The two
+that landed cover 406–411; 403–405 and 412–414 are being re-run.
+
+**The refusals were both real, and both worth having.** At 405 a d=7 member
+claimed English its parent did not own — `'chi rkyen` → "conditions" with
+`'chi` → "kill", a defensible reading of a compound GMR spreads across a
+relative clause ("conditions all around me that can strike and kill me"). At
+412 a d=5 span was listed after the d=3 that contains it, dragging the
+forward-only cursor to 245 before hunting for a span that begins at 17. Neither
+was patched. The right boundary at 405 is genuinely ambiguous, and guessing it
+is the one thing this project forbids.
+
+**The Wylie capitals came back.** A single "span without a provable ACIP form"
+in the builder's own output led to `build_alignment_layer.py` lowercasing the
+evidence-layer headword key. In Wylie a capital is a different letter — `N` is
+the retroflex *ṇa*, `Sh` the retroflex *ṣa*, `A`/`I`/`U` the long vowels — so
+the shipped cards carried sixteen headwords that are not Tibetan words:
+`paN chen` → "pan chen", `nA ro pa` → "na ro pa", `shA ri'i bu` → "sha ri'i
+bu", `maNDla` → "mandla", `paNDi ta` → "pandi ta". Panchen, Naropa,
+Shariputra, mandala, pandita — the names a reader is most likely to look up,
+with the case carrying the whole consonant. The full bank was never wrong; the
+defect lived between the bank and the cards.
+
+**And the gate that should have caught it reported green.** Its normaliser
+case-folded before comparing, so all eighteen senses scored as clean
+punctuation differences. A gate that normalises away the thing it is checking
+for is worse than no gate. `bare()` is now case-preserving on the Tibetan side,
+the ceiling is 0, and a regression mutation proves the class is caught.
+
+**A systematic converter defect, verified rather than believed.** C03:403's
+reconciler reported that the ACIP→Wylie converter drops braced Sanskrit-letter
+tokens wholesale: `{SHl}OO KA` (*shloka*, "verse") becomes "oo ka", which is
+not a word. Re-measured independently before banking — 23 segments carry
+`{SHl}`, none retain "shl", 22 have a bare " oo ka" and all 22 are `{SHl}`
+segments, the 23rd is C03:300 where `{SHl}OOO` became "ooo ka" — and nine
+control segments where the same word is keyed *without* braces keep "shloo ka"
+intact. Across C03 and C16.
+
+- Evidence layer: 5,115 headwords / 9,773 pairs. C03 at 408/620.
+  Errata register: 96 entries, 60 document errata (5 HIGH), 4 ours.
+  14,615 English and 18,641 Tibetan spans clean across 319 pages.
+  Nine layer gates green; five of them new today.
