@@ -161,6 +161,25 @@ if [[ "${1:-}" != "--skip-build" ]]; then
   # This is the actual mechanism. A load check at the START of the press,
   # which is what was tried first, cannot see it: the machine is quiet then
   # and loud by the time it matters.
+  # DISK CHECK, added 2026-08-28 after a press passed all 93 batteries, built
+  # the app, staged it, passed the payload gate and installed to /Applications
+  # — then died at the very last step because `hdiutil verify` had no room to
+  # attach a 384 MB image. The volume was at 97% with 622 MB free. The error
+  # it gives is "Resource temporarily unavailable", which reads like a
+  # transient fault and is nothing of the kind.
+  #
+  # Fifteen minutes of work is worth one df call. A DMG needs roughly its own
+  # size again to verify, so require 3x the staged payload as headroom.
+  FREE_MB="$(df -m / | awk 'NR==2{print $4}')"
+  if [ "${FREE_MB:-0}" -lt 2048 ]; then
+    echo "press: REFUSED - only ${FREE_MB} MB free on /. The DMG step needs"
+    echo "  room to write the image AND to attach it for verification;"
+    echo "  hdiutil reports 'Resource temporarily unavailable' when it cannot,"
+    echo "  which does not look like a disk-space error. Free ~2 GB and press"
+    echo "  again. Everything before the DMG step will have to re-run."
+    exit 3
+  fi
+
   SETTLE_CEIL="$(python3 -c "print(f'{${NCPU} * 1.25:.2f}')" 2>/dev/null || echo 12)"
   for _i in $(seq 1 24); do
     _l="$(uptime | sed -E 's/.*load averages?: ([0-9.]+).*/\1/')"
