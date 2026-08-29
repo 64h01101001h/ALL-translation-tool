@@ -1018,5 +1018,41 @@
   "severity": "MEDIUM",
   "confidence": "CONFIRMED",
   "note": "filed from the alignment batch, spine-verified on merge"
+ },
+ {
+  "item_id": "E-086",
+  "course": "C03",
+  "segment": "C03:393",
+  "kind": "TIBETAN_SPELLING",
+  "found": "mtshams spyar ba",
+  "expected": "mtshams sbyar ba (spyar -> sbyar)",
+  "evidence": "Verified independently against the shipped spine. (1) FREQUENCY: the substring 'spyar' occurs in exactly ONE of the 42,199 corpus segments - this one; 'sbyar' occurs in 667, and the specific idiom 'mtshams sbyar' in 35 (C01:486, C03:437, C05:36, C05:97, C06:32, C08:128, C09:205, C16:275, C16:685, C17:304, C17:514, TCS01:206, TCS01:331, TCS03:231, TCS10:629, TCS11:16, TCS11:60, TCS14:476, TCS16Reading:128, TCS18Commentary:28, and 15 more). (2) LEXICON: the 105,634-entry dictionary carries 'sbyar', 'sbyar ba', 'sbyar bar bya', 'mtshams sbyar' and 'mtshams sbyar ba'; a query for entries matching 'spyar%' or '%mtshams spyar%' returns ZERO. (3) DIRECT PARALLEL: TCS01:206 is the same three-clause formula almost verbatim - 'tshul khrims rnam par dag pas gzhi bzung, sbyin sogs kyis grogs byas, smon lam dri ma med pas mtshams sbyar ba sogs dgos na' - and reads sbyar. (4) NOT AN INGEST ARTEFACT: the acip field of this segment independently reads SPYAR (the only segment in the corpus whose acip contains SPYAR), so wylie and ACIP agree and the defect is upstream in the source e-text, not in conversion. CONSEQUENCE: a Gofer or FTS search for the standard idiom mtshams sbyar silently misses this segment, and a lookup on spyar ba hits no dictionary entry. Banked VERBATIM at s30 per rule 1; the correction lives only here.",
+  "severity": "MEDIUM",
+  "confidence": "CONFIRMED",
+  "note": "filed from the alignment batch, spine-verified on merge"
+ },
+ {
+  "item_id": "E-087",
+  "course": "C03",
+  "segment": "C03:394",
+  "kind": "TIBETAN_SPELLING",
+  "found": "sangs rgyas kyi stan pa dar ba'i",
+  "expected": "sangs rgyas kyi bstan pa dar ba'i",
+  "evidence": "The English for this token is 'the Buddha's teachings'. In the spine dictionary, `bstan pa` is the entry glossed [\"taught\", \"the teachings\", \"teachings\", \"teaching\", ...]; `stan pa` is an entry with NO hgm_gloss, and bare `stan` is glossed [\"throne\"] — a seat, not a doctrine. Corpus-wide, 21 segments read `sangs rgyas kyi bstan pa`; exactly 2 read `sangs rgyas kyi stan pa`. Both analysts rejected the finding on the strength of those 2 witnesses, and that reasoning does not hold: I compared the whole rows with SQL equality and C03:394 and C16:448 are byte-identical in wylie and differ in English only by the trailing footnote marker '44'. That is ONE passage reprinted in two course editions, not two independent attestations — a reprint carries the typo forward and corroborates nothing. Independent corroboration that this is a keying-error class rather than an editorial reading does exist elsewhere in the corpus: TCS07:723 reads `nang pa'i stan pa la brtsud pas` and is translated '...confirming them in the teachings of...', the same wrong spelling for the same word in an unrelated passage by a different route. Span s45 preserves `stan pa` verbatim per rule 1; this entry is the report, not a correction. If it is ever fixed it must be fixed at C03:394 and C16:448 together.",
+  "severity": "MEDIUM",
+  "confidence": "CONFIRMED",
+  "note": "filed from the alignment batch, spine-verified on merge"
+ },
+ {
+  "item_id": "E-088",
+  "course": "C03",
+  "segment": "C03:402",
+  "kind": "TIBETAN_SPELLING",
+  "found": "dang po skyes bu chung du dang thun mong ba'i lam gyi rim par blo sbyang ba ni",
+  "expected": "dang po skyes bu chung ngu dang thun mong ba'i lam gyi rim par blo sbyang ba ni",
+  "evidence": "The Lam Rim scope idiom is 'skyes bu chung ngu' (person of lesser capacity); 'chung du' is not parsable here, since a terminative du cannot feed the comitative dang that follows. FILED AGAINST PROPOSAL B, WHICH REJECTED IT — B's counter-evidence does not survive checking. (1) Same-course parallel: C03:225 is the outline heading for this very section and reads 'skyes bu chung ngu dang thun mong ba'i lam gyi rim par blo sbyang ba' — identical to this clause word-for-word, including the distinctive 'rim par' (other witnesses read 'rim pa la'), differing ONLY in ngu/du. Its ACIP reads 'SKYES BU CHUNG NGU DANG ... RIM PAR BLO SBYANG BA,'. C03:401, the section header, glosses it 'steps shared with those of lesser capacity'. (2) Counts: 'skyes bu chung ngu' occurs in 23 spine segments (C02:40, C08:309, C09:214, C09:216, C16:238, C17:402, TCS01:223, TCS01:317, TCS01:318, TCS03:20, SSL:107, SSL:111, SSL:395, ...); 'skyes bu chung du' occurs in exactly 2 — this segment and TCS18Commentary:322, a different text and not a parallel of this passage. (3) B's claim that 'chung du' is 'a live adverbial form' across TCS03/05/06/09/10/11/15/16 is a category error. I enumerated every 'chung du' in the spine with context: TCS03:446 'chung du song', TCS05:499 'mthu chung du gtang', TCS06:161 'chung du 'gro', TCS06:341 'chung chung du gnas', TCS07:681 'chung du 'gro', TCS09:501 'chung du 'gro', TCS10:322/418 'je chung je chung du bsdus/song', TCS10:323/405, TCS11:265/333, TCS15:448 'drod chung du 'gro', TCS16Reading:159, EM:956, EM:1126, C01:105 — every one is adverbial terminative du plus a verb of diminution ('become/make smaller'), a wholly different construction. Not one is the skyes-bu scope idiom. The string 'chung du dang' occurs exactly twice in the entire spine: this segment and TCS18Commentary:322. The true adverbial du never once feeds a comitative dang. (4) B read the ACIP apparatus backwards. In ACIP, {%X} is the EDITORS' CORRECTION, so GIE:650 \"chung du'i {%ngu'i} chung du {%ngu}\" is evidence that du-for-ngu IS an error, not that it is accepted; the same correction recurs at AK:156 'chung du {%ngu%}', AK:842 'chung dur {%ngur}', GK:97 'chung dus {%ngus}', SOS:25 'chung dus {%ngus}'. This is a documented, editor-corrected keying slip class. (5) The ACIP field of this same segment also reads 'CHUNG DU', so the slip is in the keyed source, not introduced by the wylie transliteration step. Span s402-21 preserves 'chung du' byte-for-byte per rule 1.",
+  "severity": "MEDIUM",
+  "confidence": "CONFIRMED",
+  "note": "filed from the alignment batch, spine-verified on merge"
  }
 ]

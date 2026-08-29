@@ -40,7 +40,11 @@ ALLOWED_SUBWORD = {
     # list is grown deliberately rather than guessed at up front:
     #   "un"   prefix   — mi nus -> "unable"            (C03:209)
     #   "less" suffix   — 'bad rtsol med par -> "effortlessly" (C03:211)
-    "un", "less",
+    #   "im"   prefix   — mi srid -> "the impossible"    (C03:395)
+    #          the assimilated form of in- before a labial; a fourth shape
+    #          of the same convention, added one confirmed case at a time
+    #          rather than by guessing the full set up front.
+    "un", "less", "im",
 }
 
 

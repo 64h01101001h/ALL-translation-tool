@@ -1645,3 +1645,29 @@ a proper two-angle re-run instead.
 
 - Evidence layer: **5,038 headwords** / 9,594 pairs. C03 at 390/620.
   14,221 English and 18,052 Tibetan spans clean across 313 pages.
+
+### Batches C03-124 … C03-127 (C03:391–402) — 2026-08-28 — model: Opus
+Four pages, twelve of twelve clean, three errata. **C03:391 re-run on both
+angles** after losing one to a connection error, and the difference is visible.
+
+**The re-run corrected my own account of the failure.** I had said a `ma`
+marked standalone "matched an unrelated ma thirty characters later". The
+reconciler checked and found the description imprecise: the `ma` at wylie
+offset 18 *would* resolve correctly from a top-level cursor arriving at 17.
+**The break only occurs because `ma shor bar` is itself a d=5 span** — the
+parent advances the cursor to 29, and only then does a standalone `ma` land
+at 49. It reproduced the exact 31-character drag rather than restating my
+summary of it.
+
+That is the difference between two analyses and one: not more coverage, but a
+second reading willing to check the first.
+
+**The negative-affix convention has a fourth form.** `mi srid` → "the
+impossible", with the negation `mi` owning the **im-** prefix — the
+assimilated form of *in-* before a labial. Four shapes now: the contraction
+`n't`, the prefixes `un` and `im`, the suffix `less`. Each was added on one
+confirmed case with its citation, never by guessing the set.
+
+- Evidence layer: 5,097 headwords / 9,745 pairs. C03 at 402/620.
+  Errata register: 88 entries, 57 document errata (5 HIGH).
+  14,489 English and 18,451 Tibetan spans clean across 317 pages.
