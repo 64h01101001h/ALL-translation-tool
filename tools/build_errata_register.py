@@ -28,6 +28,9 @@ KIND_LABEL = {
     "ENGLISH_FACTUAL_ERROR": "English factual error",
     "INGEST_ARTEFACT": "Digitisation artefact",
     "FORMATTING": "Formatting",
+    # OUR OWN output, not ALL's documents. Kept in its own bucket so the
+    # director's list is never padded with our pipeline's bugs.
+    "LAYER_ARTEFACT": "Our banked layer",
 }
 
 
@@ -51,7 +54,9 @@ def main():
     real = [e for e in reg
             if e.get("kind") not in ("NOT_AN_ERRATUM", "UNVERIFIABLE")]
     ingest = [e for e in real if e.get("kind") == "INGEST_ARTEFACT"]
-    docerr = [e for e in real if e.get("kind") != "INGEST_ARTEFACT"]
+    ours = [e for e in real if e.get("kind") == "LAYER_ARTEFACT"]
+    docerr = [e for e in real
+              if e.get("kind") not in ("INGEST_ARTEFACT", "LAYER_ARTEFACT")]
     dismissed = [e for e in reg if e.get("kind") == "NOT_AN_ERRATUM"]
     unver = [e for e in reg if e.get("kind") == "UNVERIFIABLE"]
     sev = collections.Counter(e.get("severity") for e in docerr)
@@ -132,6 +137,18 @@ def main():
     A("")
     A(table(sorted(ingest, key=lambda e: str(e.get("segment")))))
     A("")
+    if ours:
+        A("---")
+        A("")
+        A("## Defects in OUR OWN banked layer &mdash; %d" % len(ours))
+        A("")
+        A("*Nothing here is a defect in an ALL document. These are ours, found "
+          "by checking the shipped layer back against the spine, and they are "
+          "fixed by re-running pages &mdash; not by anyone at ALL. They are "
+          "listed so the register is honest about who owns what.*")
+        A("")
+        A(table(sorted(ours, key=lambda e: str(e.get("item_id")))))
+        A("")
     if dismissed:
         A("---")
         A("")
@@ -179,8 +196,15 @@ def main():
     A("")
     io.open(OUT, "w", encoding="utf-8").write("\n".join(L))
     sys.stderr.write("wrote %s\n  %d entries, %d document errata "
-                     "(%d HIGH), %d artefacts\n"
-                     % (OUT, len(reg), len(docerr), sev["HIGH"], len(ingest)))
+                     "(%d HIGH), %d digitisation artefacts, %d ours\n"
+                     % (OUT, len(reg), len(docerr), sev["HIGH"], len(ingest),
+                        len(ours)))
+    # A summary that does not add up to the file is how the prose drifted from
+    # the sidecar the first time. Say so rather than let it slide.
+    counted = len(docerr) + len(ingest) + len(ours) + len(dismissed) + len(unver)
+    if counted != len(reg):
+        sys.stderr.write("  WARNING: %d entries but %d accounted for - a kind "
+                         "is missing from the buckets\n" % (len(reg), counted))
 
 
 if __name__ == "__main__":

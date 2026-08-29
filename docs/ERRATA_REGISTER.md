@@ -8,13 +8,14 @@
 
 Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source and Geshe Michael Roach's facing English &mdash; recorded as a by-product of a machine alignment campaign reading the courses segment by segment. **Every entry has been checked against the corpus database** (42,199 segments, spine `hgm_spine_v27_2.db`): the quoted strings were retrieved from the spine, not from a note, and each citation was re-derived rather than trusted.
 
-**88 entries**: **57 document errata** (5 HIGH, 39 MEDIUM, 13 LOW), **16 digitisation artefacts**, 14 observations checked and closed as *not* errata, and 1 that could not be verified.
+**91 entries**: **57 document errata** (5 HIGH, 39 MEDIUM, 13 LOW), **16 digitisation artefacts**, 14 observations checked and closed as *not* errata, and 1 that could not be verified.
 
 | Kind | n |
 |---|---|
 | Tibetan spelling | 38 |
 | Digitisation artefact | 16 |
 | English typo | 15 |
+| Our banked layer | 3 |
 | English factual error | 2 |
 | Formatting | 2 |
 
@@ -128,6 +129,18 @@ Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source 
 | `C03:313` | rnyed sla'i rtsva kham 'ga' | rnyed sla'i rtswa kham 'ga' | 'rtsva' is not valid EWTS — wa-zur is written 'w' (rtswa, རྩྭ). The ACIP column of this segment reads RTZVA, which is CORRECT ACIP (V is the wa-zur code), so the defect is in the derived wylie column, not in the ACIP. Proved with the project's canonical engine | CONFIRMED |
 | `C03:317` | This would truly be an evil way to act, the way of a person without a conscience, of one who had no shame. | Segment 317 should carry only what its own Wylie licenses; this sentence's Tibetan exponent sits in C03:320, a | C03:317's full Wylie is "de'i phyir de dag la drin gzo'i bsam pa med na, klu'i rgyal po rnga sgra'i tshigs su bcad pa las" — it runs straight from the conditional clause to the citation frame and contains no term for 'evil', 'way/custom', 'conscience' or 'sham | PROBABLE |
 | `C03:48` | gang rnams phyogs bcu'i 'jig rten sgron ma dag,byang chub rim par sangs rgyas ma chags brnyes (ACIP: ...SGRON MA DAG,BYANG CHUB RIM PAR...) | ...sgron ma dag, ,byang chub rim par... — a verse-line break, punctuated as the other three breaks in the same | The identical segment punctuates its other verse-line breaks with a space: "...ma chags brnyes, ,mgon po de dag..." and "...thams cad la, ,'khor lo bla na med pa...". Only the first break, after 'sgron ma dag', is run together. The English confirms a line boun | CONFIRMED |
+
+---
+
+## Defects in OUR OWN banked layer &mdash; 3
+
+*Nothing here is a defect in an ALL document. These are ours, found by checking the shipped layer back against the spine, and they are fixed by re-running pages &mdash; not by anyone at ALL. They are listed so the register is honest about who owns what.*
+
+| Citation | What it says | Should say | Evidence | Confidence |
+|---|---|---|---|---|
+| `class entry (29 fields)` | single-pointed concentration  ·  zhog, lam gyi rim pa  ·  grasping "self", | single- pointed concentration  ·  zhog,lam gyi rim pa  ·  grasping "self," | Found by checking all 42,648 banked fields against the spine (tools/test_layer_matches_spine.py, new 2026-08-28). 29 fields in the legacy C01 (23) and C02 (6) pages differ from the source ONLY in punctuation, hyphenation or spacing - the analyst silently repai | CONFIRMED |
+| `C01:45, C01:38` | He spoke of the very heart of the "Steps to Buddhahood," [...] [SECTION-HEAD BLEED: "..." trails the corpus English - linked to nothing.] | the quoted source text alone, with the analyst's note in the note field | Two banked English fields carry a bracketed project annotation INSIDE a field the schema declares to be verbatim source quotation. A consumer reading the layer gets our commentary presented as GMR's English. Both are in the earliest C01 pages (c1p02, r5). | CONFIRMED |
+| `class entry (4 fields)` | links on pages c1p01 and r2 carrying "seg": null | a real segment number, or the link withdrawn | Four banked fields cite no segment at all, so nothing can check them against a source. Three sit on c1p01 and one on r2 - the very first pages built, before the builder recorded citations. | CONFIRMED |
 
 ---
 
