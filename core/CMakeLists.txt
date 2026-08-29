@@ -608,6 +608,15 @@ if(Python3_FOUND)
   add_test(NAME generated_docs_in_sync
            COMMAND ${Python3_EXECUTABLE}
                    ${CMAKE_SOURCE_DIR}/tools/test_generated_docs_in_sync.py)
+
+  # Every other layer gate reads the LAYER - the artifact that had already
+  # lost the data. This one compares the layer's builder against the PAGES,
+  # which is the only place a silent parser drop is visible. It found 1,260
+  # spans, 2.7% of all analysis, discarded because the builder required
+  # class="u" exactly while the generator writes "u noun", "u verb-nominal".
+  add_test(NAME builder_sees_every_span
+           COMMAND ${Python3_EXECUTABLE}
+                   ${CMAKE_SOURCE_DIR}/tools/test_builder_sees_every_span.py)
 endif()
 
 # BUILD-7: the battery must say what it did NOT run. fixture_gate holds

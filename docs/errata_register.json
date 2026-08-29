@@ -1150,5 +1150,17 @@
   "severity": "MEDIUM",
   "confidence": "CONFIRMED",
   "note": "FIXED 2026-08-28 in the same pass. Ours, not ALL's. The gate that should have caught it did not: test_evidence_matches_spine's bare() normaliser case-folded before comparing, scoring all 18 as clean punctuation differences. bare() is now case-preserving on the Tibetan side, the tib-exact figure went 12,057/12,076 -> 12,076/12,076, and the ceiling is tightened to 0 with a regression mutation proving paN chen -> pan chen is now caught."
+ },
+ {
+  "item_id": "E-097",
+  "course": "C01/C02/C03",
+  "segment": "class entry (1,260 spans, 141 pages)",
+  "kind": "LAYER_ARTEFACT",
+  "found": "build_alignment_layer.py matched spans with class=\"u\" exactly",
+  "expected": "class=\"u\" plus whatever grammar label the analyst supplied - \"u noun\", \"u verb-nominal\", \"u compound member, noun\"",
+  "evidence": "The generator writes the analyst's grammar label into the same class attribute the builder matched on, so every LABELLED span was invisible to the builder and its analysis was discarded without a word. The pages rendered the labels correctly throughout, which is why nothing looked wrong. Measured 2026-08-28: 1,260 spans across 141 of 320 pages - 2.7% of everything analysed - and 77-80% of the three newest C03 pages (c3p128 saw 50 of 250, c3p129 saw 62 of 268, c3p130 saw 128 of 218), whose analysts happened to label heavily. FOUND BY: c3p128 registering only 3 links for 122 analysed spans, a number too small to be plausible.",
+  "severity": "HIGH",
+  "confidence": "CONFIRMED",
+  "note": "FIXED 2026-08-28. Recovery: +856 links, +97 headwords, +168 pairs, and ALL NINE existing layer gates pass on the recovered spans, so nothing unsound came in with them. No gate could have seen this: every other gate reads the LAYER, the artifact that had already lost the data. The new suite test_builder_sees_every_span compares the builder against the PAGES and imports the builder's real pattern, so narrowing it again trips immediately - mutation-verified at 1,247 dropped across 130 pages. 13 apparatus spans (typo queue, supplied-sentence flags, editorial notes) are excluded on purpose and now counted out loud, because that exclusion had been an accident of a character class rather than a decision."
  }
 ]
