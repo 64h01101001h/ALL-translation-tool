@@ -40,15 +40,22 @@ CEILING = {
     'QUOTE-NOT-AT-SEGMENT': 0,   # a stale quote. Never raise this.
     'SEGMENT-GONE': 0,           # cites a segment the spine no longer has
     'unparseable-quote': 0,      # no checkable fragment could be derived
-    # 4 UNVERIFIED rows + 4 class entries citing an extent rather than one
-    # segment. This is the one ceiling that legitimately RISES: every class
-    # entry is a finding that spans many loci and cannot name one. It rises
-    # only when a class entry is added deliberately, never to quiet a failure.
-    'not-a-single-segment-citation': 9,
+    # The 4 UNVERIFIED rows. Class entries that cite an extent used to land
+    # here too, but they are all LAYER_ARTEFACT and are now skipped above, so
+    # the ceiling comes back down from 9 to 4 rather than being left loose
+    # enough to hide real growth. It rises only when a non-layer class entry
+    # is added deliberately, never to quiet a failure.
+    'not-a-single-segment-citation': 4,
 }
 # 3, not 8. The first draft used 8 and threw away '[33}', '[17]' and
 # 'krma pa' as unparseable - the SHORTEST errata are the most checkable,
 # not the least, and a length floor quietly excused the gate from them.
+# LAYER_ARTEFACT rows describe OUR OWN layer, not an ALL document. Their
+# "found" field quotes a MAPPING - `blos -> "on"` - which is by construction
+# not a string in the spine, so checking it there is a category error. The
+# witness gate already skipped this kind; this one did not, and the two must
+# agree. They are counted and named in the output rather than quietly dropped.
+SKIP_KINDS = ('LAYER_ARTEFACT',)
 MIN_FRAG = 3
 TR = str.maketrans({'‘': "'", '’': "'", '“': '"', '”': '"',
                     '–': '-', '—': '-', '\xa0': ' '})
@@ -94,6 +101,9 @@ def classify(reg, rows):
     seg = {(c, s): (w or '', e or '', a or '') for c, s, w, e, a in rows}
     t, bad = Counter(), defaultdict(list)
     for e in reg:
+        if e.get('kind') in SKIP_KINDS:
+            t['ours (describe the layer, not a document)'] += 1
+            continue
         sid = (e.get('segment') or '').strip()
         m = re.fullmatch(r'([A-Z]\d\d):(\d+)', sid)
         if not m:
@@ -141,9 +151,11 @@ def main():
         return 1
     print('errata quotes hold: %d entries, %d with a single-segment citation, '
           '%d fragments all present in the spine; %d cite an extent or are '
-          'UNVERIFIED and are NOT checked here'
+          'UNVERIFIED and %d describe our own layer rather than a document - '
+          'none of those are checked here'
           % (len(reg), t['every fragment present'], t['fragments checked'],
-             t['not-a-single-segment-citation']))
+             t['not-a-single-segment-citation'],
+             t['ours (describe the layer, not a document)']))
     return 0
 
 if __name__ == '__main__':

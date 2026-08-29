@@ -1162,5 +1162,53 @@
   "severity": "HIGH",
   "confidence": "CONFIRMED",
   "note": "FIXED 2026-08-28. Recovery: +856 links, +97 headwords, +168 pairs, and ALL NINE existing layer gates pass on the recovered spans, so nothing unsound came in with them. No gate could have seen this: every other gate reads the LAYER, the artifact that had already lost the data. The new suite test_builder_sees_every_span compares the builder against the PAGES and imports the builder's real pattern, so narrowing it again trips immediately - mutation-verified at 1,247 dropped across 130 pages. 13 apparatus spans (typo queue, supplied-sentence flags, editorial notes) are excluded on purpose and now counted out loud, because that exclusion had been an accident of a character class rather than a decision."
+ },
+ {
+  "item_id": "E-098",
+  "course": "C01",
+  "segment": "C01:160",
+  "kind": "LAYER_ARTEFACT",
+  "found": "blos -> \"on\"",
+  "expected": "blos -> null, and thongs -> \"Give up on\"",
+  "evidence": "Confirmed by a 100-pair random audit (seed 20260828) and sustained by 2 of 3 adversarial lenses. GMR renders `tshe 'di blos thongs` as \"Give up on this life\". The layer split it three ways and handed `blos` the stranded particle of the English phrasal verb. `blos` is `blo` (mind) plus the instrumental - \"with the mind, mentally\" - and no instrumental of `blo` means \"on\" anywhere. The record carries SEVEN citations, so it is not a one-off. Page c1p41. The licence lens dissented, arguing `blos thongs` jointly licenses \"give up on\"; that argument supports moving the token to the compound, not leaving it on `blos`.",
+  "severity": "MEDIUM",
+  "confidence": "CONFIRMED",
+  "note": "A stranded-function-word artifact of over-splitting an idiom. Three of the four confirmed defects in the audit share that shape."
+ },
+ {
+  "item_id": "E-099",
+  "course": "C01",
+  "segment": "C01:419",
+  "kind": "LAYER_ARTEFACT",
+  "found": "chad mtha' -> \"from the extreme of thinking things have stopped\"",
+  "expected": "chad mtha' -> \"the extreme of thinking things have stopped\"",
+  "evidence": "Confirmed by the same audit, sustained by 2 of 3 lenses. The gloss is right; the leading \"from\" is not licensed by the compound. In \"gnyis pas chad mtha' sel ba yin\" the preposition is governed by the elided verb `sel ba` one word later, which the layer left unglossed - so its preposition fell onto the preceding noun. The sibling `rtag mtha'` carries the same fault in worse form, swallowing the whole verb phrase. Page c1p128.",
+  "severity": "LOW",
+  "confidence": "CONFIRMED",
+  "note": "Displaying a noun's gloss opening in a preposition implies the term itself carries ablative force. The fix is one word."
+ },
+ {
+  "item_id": "E-100",
+  "course": "C03",
+  "segment": "C03:122",
+  "kind": "LAYER_ARTEFACT",
+  "found": "'dod pa chung ba -> \"The second condition is that you keep your wants few\"",
+  "expected": "'dod pa chung ba -> \"you keep your wants few\"",
+  "evidence": "Confirmed by the same audit and the ONLY finding refuted by none of its three lenses. Nothing inside `'dod pa chung ba` means \"second\" or \"condition\": \"second\" comes from the outline marker \"2a/\" opening the segment and the \"X is that\" frame from the topic particle `ni`, both OUTSIDE the span. The layer proves it against itself - the d=2 sibling that does include \"2a/\" and `ni` carries the identical English legitimately, and the bare `ni` at d=6 is correctly unglossed. EM:922 independently attests the term with the ordinal as a separate Tibetan word (`gnyis pa 'dod pa chung ba ni`). Page c3p41.",
+  "severity": "MEDIUM",
+  "confidence": "CONFIRMED",
+  "note": "A deep span swallowing its parent's enumeration head. A translator would carry an ordinal and a list frame into every other passage where the term occurs."
+ },
+ {
+  "item_id": "E-101",
+  "course": "C02",
+  "segment": "C02:32",
+  "kind": "LAYER_ARTEFACT",
+  "found": "grub -> \"spontaneous\"",
+  "expected": "drop the d=5 row; keep the d=4 compound lhun gyis grub -> \"spontaneous\"",
+  "evidence": "Confirmed by the same audit, sustained by 2 of 3 lenses. `lhun gyis grub` is a fixed compound and the correct pair is ALREADY RECORDED at d=4; the d=5 row hands the whole word \"spontaneous\" to the bare verb while `lhun` and `gyis` are left unglossed. The spine's own dictionary lists about forty attested HGM renderings of `grub` - established, proven, exists, accomplished, true, be - and not one is \"spontaneous\", while separate entries exist for `lhun grub` and `lhun gyis grub`. The `grub` card carries five renderings, so one line in five on that card is a false lexical fact.",
+  "severity": "MEDIUM",
+  "confidence": "CONFIRMED",
+  "note": "Over-splitting an idiom that has no compositional sub-parts. The correct unit was already there one level up."
  }
 ]
