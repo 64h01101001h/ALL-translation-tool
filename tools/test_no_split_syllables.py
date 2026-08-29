@@ -31,6 +31,30 @@ SPAN = re.compile(r'<span class="u[^"]*" data-d="(\d)" data-l="(s\d+\w+)"[^>]*>'
 #   ng     nasal finals split from their stem
 SUFFIX = {"s", "'i", "i", "'o", "'am", "'ang", "r", "ng", "'u"}
 
+# THE SUFFIX ALLOWANCE HAS A HOLE, and it let two real defects ship.
+# A member ending right before "s" or "r" is usually a legitimate
+# morphological split (sgo|r, phyi ma|r, thar pa|r). But it is NOT when the
+# member plus suffix is itself an ordinary word and the member alone is not
+# a morpheme: `du|s` inside "dus mnyam" (dus = time), `la|s` inside "las"
+# (las = action). Both were standalone particles that my prep had nested
+# because their letters also appear earlier as a substring — the same
+# defect as `te` inside "bsten", which DID trip this gate because "n" is
+# not an allowed suffix.
+#
+# So the allowance is now conditional: a split before a suffix is accepted
+# only when the member is NOT a bare one- or two-letter fragment of a
+# common word. The exceptions actually seen and verified legitimate are
+# listed by name; anything else in that shape is reported for a human.
+# Verified stems, each checked against its own segment before being listed:
+#   mi + r   C01:215  "mir skye ba" -> "birth as a human"; mi = human
+#   ma + s   C01:297  "tshe 'di'i mas" -> "my present mother"; ma = mother
+#   sgo + r, de + r, rim pa + r, phyi ma + r, thar pa + r -- terminatives
+# The point of the list is that adding to it is a DELIBERATE act with a
+# citation, not a way to silence the gate.
+STEM_OK = {"sgo", "de", "rim pa", "phyi ma", "thar pa", "gzhi", "don",
+           "tshul", "lam", "sems", "chos", "dge ba", "bsod nams",
+           "mi", "ma"}
+
 
 def main():
     bad = []
@@ -55,6 +79,13 @@ def main():
                     run = re.match(r"[A-Za-z']+", nxt)
                     tail = run.group(0) if run else ""
                     if tail in SUFFIX:
+                        # a short member closed by a suffix may be half of an
+                        # ordinary word rather than a stem plus ending
+                        if len(t) <= 2 and t not in STEM_OK:
+                            bad.append((os.path.basename(f), m.group(2),
+                                        t[-24:],
+                                        "%r + %r — is %r a stem, or half of "
+                                        "the word %r?" % (t, tail, t, t + tail)))
                         continue
                     bad.append((os.path.basename(f), m.group(2), t[-24:], tail))
     if bad:
