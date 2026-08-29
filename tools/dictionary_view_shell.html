@@ -91,6 +91,15 @@ input[type=range]{width:100%;accent-color:var(--gold);margin:0}
 .more{font-family:var(--f-data);font-size:11px;color:var(--machine);
       background:none;border:0;padding:4px 0 0;cursor:pointer;letter-spacing:.4px}
 .empty{color:var(--soft);padding:50px 0;text-align:center;font-size:15px}
+.phon-note{border-left:3px solid var(--machine);background:var(--chip);
+  padding:11px 14px;margin:18px 0 0;font-size:13.5px;color:var(--ink-2);
+  max-width:80ch;border-radius:0 3px 3px 0}
+.phon-note b{color:var(--machine)}
+.phon-note code{font-family:var(--f-data);font-size:12.5px}
+body.phon .entry{border-left:3px solid var(--machine)}
+body.phon .tib{color:var(--machine)}
+.strata button[data-d="0"] i{background:color-mix(in srgb,var(--machine) 45%,transparent)}
+.strata button[data-d="0"][aria-current="true"] i{background:var(--machine)}
 footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--rule);
        font-size:12.5px;color:var(--soft);max-width:80ch}
 @media (max-width:760px){.rail-in{grid-template-columns:1fr;gap:14px}
@@ -104,7 +113,8 @@ footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--rule);
   <h1>The Michael Dictionary</h1>
   <p class="lede">Every Tibetan term Geshe Michael Roach has rendered into English across
   the courses scanned so far, with each rendering he gave it and the passage that attests
-  it. Built segment by segment; this is where it stands today.</p>
+  it. Built segment by segment; this is where it stands today. Slide the depth control
+  down past Sentence to reach his phonetics, which are kept separate.</p>
 
   <div class="banner">
     <b>Provisional &mdash; machine-matched, not yet reviewed</b>
@@ -119,7 +129,7 @@ footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--rule);
   <div class="rail-in">
     <div class="field">
       <label for="depth">Depth &mdash; which layer of the text you are reading</label>
-      <input type="range" id="depth" min="1" max="7" value="5" step="1">
+      <input type="range" id="depth" min="0" max="7" value="5" step="1">
       <div class="depth-name" id="dname"></div>
     </div>
     <div class="field">
@@ -131,6 +141,14 @@ footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--rule);
   <div class="strata" id="strata"></div>
 </div>
 
+<p class="phon-note" id="note" hidden>
+  These are <b>not dictionary entries</b>. On the liturgy pages Geshe Michael
+  prints a phonetic line beside the Tibetan so a reader can chant it, and the
+  alignment pairs each sound to the syllables it stands for. Read as a gloss
+  it would say <code>bsod nams</code> means &ldquo;sunam&rdquo;; it means
+  <em>merit</em>. They are held apart here, and never enter the dictionary
+  layer the application reads.
+</p>
 <div class="grid" id="grid"></div>
 <p class="empty" id="empty" hidden>Nothing at this depth matches that search.</p>
 
@@ -141,6 +159,7 @@ footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--rule);
 /*PAYLOAD*/
 
 const NAMES = {
+  0:["Phonetics","Geshe Michael&rsquo;s transcription of how the Tibetan SOUNDS &mdash; not translations"],
   1:["Sentence","a whole sentence paired with its translation"],
   2:["Clause","a clause within a sentence"],
   3:["Phrase","a phrase"],
@@ -149,8 +168,10 @@ const NAMES = {
   6:["Morpheme / particle","grammatical particles that carry English"],
   7:["Compound member","a member inside a compound, such as one half of a dvandva"]
 };
-const D = PAYLOAD.depths, META = PAYLOAD.meta;
+const D = Object.assign({0: PAYLOAD.phonetics || []}, PAYLOAD.depths);
+const META = PAYLOAD.meta;
 const grid = document.getElementById('grid'), empty = document.getElementById('empty');
+const note = document.getElementById('note');
 const depth = document.getElementById('depth'), q = document.getElementById('q');
 const dname = document.getElementById('dname'), counts = document.getElementById('counts');
 const esc = s => s.replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
@@ -166,6 +187,8 @@ let shown = 60;
 function render(){
   const d = depth.value, term = q.value.trim().toLowerCase();
   dname.innerHTML = `${NAMES[d][0]} <em>&mdash; ${NAMES[d][1]}</em>`;
+  document.body.classList.toggle('phon', d === '0');
+  note.hidden = d !== '0';
   document.querySelectorAll('.strata button').forEach(b =>
     b.setAttribute('aria-current', b.dataset.d === d));
 

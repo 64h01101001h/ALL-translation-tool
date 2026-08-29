@@ -549,6 +549,10 @@ if(Python3_FOUND)
   add_test(NAME no_split_syllables
            COMMAND ${Python3_EXECUTABLE}
                    ${CMAKE_SOURCE_DIR}/tools/test_no_split_syllables.py)
+
+  add_test(NAME no_phonetics_in_layer
+           COMMAND ${Python3_EXECUTABLE}
+                   ${CMAKE_SOURCE_DIR}/tools/test_no_phonetics_in_layer.py)
 endif()
 
 # BUILD-7: the battery must say what it did NOT run. fixture_gate holds
