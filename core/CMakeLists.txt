@@ -553,6 +553,10 @@ if(Python3_FOUND)
   add_test(NAME no_phonetics_in_layer
            COMMAND ${Python3_EXECUTABLE}
                    ${CMAKE_SOURCE_DIR}/tools/test_no_phonetics_in_layer.py)
+
+  add_test(NAME no_degenerate_members
+           COMMAND ${Python3_EXECUTABLE}
+                   ${CMAKE_SOURCE_DIR}/tools/test_no_degenerate_members.py)
 endif()
 
 # BUILD-7: the battery must say what it did NOT run. fixture_gate holds
