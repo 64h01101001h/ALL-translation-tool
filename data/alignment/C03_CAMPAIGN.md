@@ -1543,3 +1543,28 @@ against the segment that carries it.**
 
 - Evidence layer: 4,793 headwords / 9,038 pairs. C03 at 343/620.
   Errata register: 85 entries.
+
+### Batches C03-108 … C03-111 (C03:344–355) — 2026-08-28 — model: Opus
+Four pages, twelve of twelve clean, **zero errata** — the first batch of the
+campaign to find nothing wrong with the source, which is itself worth noting
+after 85 register entries.
+
+**The negative-affix convention was applied correctly and unprompted.**
+C03:345 spans `dri ma dang bral ba` → "spotless" with the member `bral ba` →
+**"less"**, flagged `subword: true`. The Tibetan privative owns the English
+suffix — the same convention as `mi nus` → "unable" and `mi` → "un", reached
+here without the reconciler being told which words it applies to.
+
+**An erratum was proposed and correctly withdrawn.** C03:344 carries the
+ungrammatical-looking "biased Or limited" and mid-verse capitals. The
+reconciler pulled **P1:33**, found byte-identical wylie and byte-identical
+English save a trailing footnote number, and concluded it is **the published
+reading and lineation, not damage to this segment**. It also live-checked
+`nying khu`: 16 segments spell it that way, zero spell it `snying khu`.
+
+That is the gate working as designed. The register's value depends on it —
+a defect must be filed against the segment that carries it, and a parallel
+witness in another course settles whether there is a defect at all.
+
+- Evidence layer: 4,866 headwords / 9,187 pairs. C03 at 355/620.
+  13,466 English and 17,044 Tibetan spans clean across 301 pages.
