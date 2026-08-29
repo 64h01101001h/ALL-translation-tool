@@ -90,6 +90,10 @@ input[type=range]{width:100%;accent-color:var(--gold);margin:0}
       text-align:right;white-space:nowrap;align-self:center}
 .more{font-family:var(--f-data);font-size:11px;color:var(--machine);
       background:none;border:0;padding:4px 0 0;cursor:pointer;letter-spacing:.4px}
+.disclose{display:inline-block;margin-top:9px;padding:7px 10px;
+  border-left:2px solid var(--machine);
+  background:color-mix(in srgb,var(--machine) 6%,transparent);
+  color:var(--ink-2);max-width:74ch}
 .empty{color:var(--soft);padding:50px 0;text-align:center;font-size:15px}
 .phon-note{border-left:3px solid var(--machine);background:var(--chip);
   padding:11px 14px;margin:18px 0 0;font-size:13.5px;color:var(--ink-2);
@@ -249,6 +253,13 @@ document.getElementById('foot').innerHTML =
    ${esc(META.corpus || '')}. Layer built ${esc(META.date || '')}. Tier:
    ${esc(META.tier || '')}. &mdash; Citations are course and segment number in the
    corpus spine. A term shows every rendering it has been given, never a chosen
-   one: the range is the point.`;
+   one: the range is the point.
+   ${META.n_glued ? `<br><span class="disclose">This page shows
+     ${META.n_glued.toLocaleString()} entries with less text than the layer holds:
+     a following section&rsquo;s heading had run on into the English at
+     digitisation, and it is cut back here. Nothing is added or reworded &mdash;
+     a trim can only remove. ${(META.n_phon||0).toLocaleString()} phonetic
+     transcriptions are held out of the dictionary entirely, in band 0.</span>`
+     : ''}`;
 render();
 </script>

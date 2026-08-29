@@ -590,6 +590,17 @@ if(Python3_FOUND)
                    ${CMAKE_SOURCE_DIR}/tools/test_errata_quotes_hold.py
                    ${CMAKE_SOURCE_DIR}/docs/errata_register.json
                    ${CMAKE_SOURCE_DIR}/build/hgm_spine_v27_2.db)
+
+  # Every gate above stops at the layer. The published dictionary is built
+  # by a SECOND code path that reshapes it, so the layer could be provably
+  # verbatim while the page in front of the reader said something else.
+  # Published must be exactly banked, or a trim of it, and nothing else.
+  add_test(NAME view_matches_layer
+           COMMAND ${Python3_EXECUTABLE}
+                   ${CMAKE_SOURCE_DIR}/tools/test_view_matches_layer.py
+                   ${CMAKE_SOURCE_DIR}/docs/michael_dictionary.html
+                   ${CMAKE_SOURCE_DIR}/data/alignment/alignment_full_v1.json
+                   ${CMAKE_SOURCE_DIR}/data/alignment/alignment_evidence_v1.json)
 endif()
 
 # BUILD-7: the battery must say what it did NOT run. fixture_gate holds
