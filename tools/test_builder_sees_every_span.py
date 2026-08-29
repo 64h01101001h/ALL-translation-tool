@@ -46,9 +46,22 @@ import build_alignment_layer as B   # noqa: E402  -- the REAL pattern, not a cop
 # fewer of these than exist, it is dropping analysis.
 PRESENT = re.compile(r'<span class="u[^"]*" data-d="\d" data-l="[^"]+"\s*>')
 
+# SPAN was the one that broke, but it is not the only pattern the builder
+# parses pages with, and the other two carry the identical fragility: NOTE and
+# TREE also pin the class attribute exactly. They are clean today - 921 notes
+# and 11 trees, none dropped, verified rather than assumed - and they are
+# checked here so that stays true. The bug class is "a parser silently accepts
+# less than it is given", and closing it for one pattern while leaving two
+# open would be closing it for none.
+LOOSE = {
+    'note': re.compile(r'<div class="note[^"]*"[^>]*>'),
+    'tree': re.compile(r'<div class="tree[^"]*"[^>]*>'),
+}
+
 def main():
     dirs = ['pages', 'pages_c01', 'pages_c03']
     seen = present = npages = apparatus = 0
+    other = {'note': 0, 'tree': 0}
     bad = []
     for d in dirs:
         for f in sorted(glob.glob(os.path.join(ROOT, 'data/alignment', d, '*.html'))):
@@ -63,18 +76,25 @@ def main():
             apparatus += ap
             npages += 1
             if a != b:
-                bad.append((os.path.basename(f), a, b, b - a))
+                bad.append((os.path.basename(f), 'span', a, b, b - a))
+            for name, loose in LOOSE.items():
+                pat = B.NOTE if name == 'note' else B.TREE
+                x, y = len(pat.findall(s)), len(loose.findall(s))
+                other[name] += x
+                if x != y:
+                    bad.append((os.path.basename(f), name, x, y, y - x))
     if bad:
-        bad.sort(key=lambda x: -abs(x[3]))
-        print('FAIL the builder does not see every span: %d of %d pages differ, '
-              '%d spans dropped' % (len(bad), npages, present - seen))
-        for f, a, b, d_ in bad[:12]:
-            print('      %-16s builder sees %4d of %4d  (drops %d)' % (f, a, b, d_))
+        bad.sort(key=lambda x: -abs(x[4]))
+        print('FAIL the builder does not see everything the pages contain: '
+              '%d page/pattern pairs differ' % len(bad))
+        for f, what, x, y, d_ in bad[:12]:
+            print('      %-16s %-5s builder sees %4d of %4d  (drops %d)'
+                  % (f, what, x, y, d_))
         return 1
-    print('builder sees every span: %d spans across %d pages, none dropped; '
-          '%d apparatus spans excluded on purpose (typo queue, supplied-'
-          'sentence flags, editorial notes - never dictionary content)'
-          % (seen, npages, apparatus))
+    print('builder sees everything: %d spans, %d notes, %d trees across %d '
+          'pages, none dropped; %d apparatus spans excluded on purpose (typo '
+          'queue, supplied-sentence flags, editorial notes - never dictionary '
+          'content)' % (seen, other['note'], other['tree'], npages, apparatus))
     return 0
 
 if __name__ == '__main__':
