@@ -8,7 +8,7 @@
 
 Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source and Geshe Michael Roach's facing English &mdash; recorded as a by-product of a machine alignment campaign reading the courses segment by segment. **Every entry has been checked against the corpus database** (42,199 segments, spine `hgm_spine_v27_2.db`): the quoted strings were retrieved from the spine, not from a note, and each citation was re-derived rather than trusted.
 
-**97 entries**: **60 document errata** (5 HIGH, 41 MEDIUM, 14 LOW), **17 digitisation artefacts**, 14 observations checked and closed as *not* errata, and 1 that could not be verified.
+**97 entries**: **60 document errata** (5 HIGH, 40 MEDIUM, 15 LOW), **17 digitisation artefacts**, 14 observations checked and closed as *not* errata, and 1 that could not be verified.
 
 | Kind | n |
 |---|---|
@@ -43,7 +43,7 @@ Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source 
 | `C03:339` | mthar mal rim rang la gcig tu dril te | mthar lam rim rang la gcig tu dril te | The term is lam rim, the Steps of the path. 'mal' is bedding or a couch and forms no compound with 'rim' that could take 'rang la gcig tu dril te nyams su len' - 'join into one within our own lives and put into practice'. The English of this very segment rende | CONFIRMED |
 | `C03:39` | acip: ,SIL SNYAN RNAMS DANG BYUNG PA GDUGS MCHOG DANG ,   \|   wylie: ,sil snyan rnams dang byung pa gdugs mchog dang , | byug pa | seg_hint 39 is CORRECT. Three independent proofs: (1) the note's own claim checks out — C03:38, the glossary segment immediately preceding, spells it right and defines it: "byug pa ni spos zhim po'i lde gu'o" (byug pa = thick fragrant unguent); (2) this segmen | CONFIRMED |
 
-## Medium severity &mdash; 41 entries
+## Medium severity &mdash; 40 entries
 
 | Citation | What it says | Should say | Evidence | Confidence |
 |---|---|---|---|---|
@@ -86,10 +86,9 @@ Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source 
 | `C03:394` | sangs rgyas kyi stan pa dar ba'i | sangs rgyas kyi bstan pa dar ba'i | The English for this token is 'the Buddha's teachings'. In the spine dictionary, `bstan pa` is the entry glossed ["taught", "the teachings", "teachings", "teaching", ...]; `stan pa` is an entry with NO hgm_gloss, and bare `stan` is glossed ["throne"] — a seat, | CONFIRMED |
 | `C03:402` | dang po skyes bu chung du dang thun mong ba'i lam gyi rim par blo sbyang ba ni | dang po skyes bu chung ngu dang thun mong ba'i lam gyi rim par blo sbyang ba ni | The Lam Rim scope idiom is 'skyes bu chung ngu' (person of lesser capacity); 'chung du' is not parsable here, since a terminative du cannot feed the comitative dang that follows. FILED AGAINST PROPOSAL B, WHICH REJECTED IT — B's counter-evidence does not survi | CONFIRMED |
 | `C03:410` | pha dam pa sangs gyas kyis | pha dam pa sangs rgyas kyis | The figure is Pha Dam pa Sangs rgyas. 'sangs gyas' is not a Tibetan word — the ra-mgo of rgyas is missing, and bare 'gyas' means 'right side', which yields no reading here. The segment's own English reads 'Pa Dampa Sangye', confirming sangs rgyas is intended.  | CONFIRMED |
-| `C03:412` | previous consciousness if it could come from physical matter alone then every bit of dirt | previous consciousness, if it could come from physical matter alone, then every bit of dirt | Verified directly against the spine, not taken from either analyst. (1) The quoted string occurs exactly once in this segment's English. (2) C16:456 carries the expected comma'd form verbatim, and its Tibetan is BYTE-IDENTICAL to this segment's over the shared | CONFIRMED |
 | `C03:53` | de nas dmigs pa gsal bar byas nas mNaDl phul te (ACIP: DE NAS DMIGS PA GSAL BAR BYAS NAS MnAdL PHUL TE) | maNDla (ACIP MAndLA), the spelling used at C03:1 | C03:1 records the same word as ACIP 'MAndLA' / Wylie 'maNDla', with the English 'mandel'. C03:53's 'MnAdL' transposes the vowel A onto the retroflex and drops the final A, leaving a form that is not well-formed Wylie (a bare 'm' root with no vowel, and a 'Dl'  | CONFIRMED |
 
-## Low severity &mdash; 14 entries
+## Low severity &mdash; 15 entries
 
 | Citation | What it says | Should say | Evidence | Confidence |
 |---|---|---|---|---|
@@ -107,6 +106,7 @@ Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source 
 | `C03:300` | SKYE BA KUN TU RNAMS {SHl}OOO KA RE LHAN DU GSUNGS, | SKYE BA KUN TU RNAMS {SHl}OO KA RE LHAN DU GSUNGS, | Counted over corpus_segments: acip matching '%{SHl}OO KA%' = 22 rows, acip matching '%{SHl}OOO KA%' = 1 row, that one being C03:300. The 9 rows that spell the word without the brace code all write SHLOO KA, and acip matching '%SHLOOO%' = 0 rows - nothing in th | PROBABLE |
 | `C03:333` | 'jug bar 'dod pa | 'jug par 'dod pa | After a final -g the nominalizer takes the pa/par form, not ba/bar (standard 'jug pa, 'jug par). The sense here is unambiguously 'wishing to enter the door', so the alternative reading of bar as the separate noun 'interval / up to' is excluded. Spine check, sp | PROBABLE |
 | `C03:403` | To stop the slightest Wrong of many wrongs we do | To stop the slightest Wrongs of many wrongs we do | Two witnesses of the same published translation read plural, and this segment is the sole outlier. Verified directly against the spine: C16:450 (the parallel commentary citation) reads "To stop the slightest Wrongs of many wrongs we do, And try t...", and TCS0 | CONFIRMED |
+| `C03:412` | previous consciousness if it could come from physical matter alone then every bit of dirt | previous consciousness, if it could come from physical matter alone, then every bit of dirt | THREE witnesses, and they do not agree the way the original filing assumed. C16:456 reads with both commas. C03:412 AND P1:67 both read WITHOUT them, verbatim. C03:412 differs from C16:456 by NOTHING ELSE at all - the only other difference is C16's extra follo | UNCERTAIN |
 
 ---
 
