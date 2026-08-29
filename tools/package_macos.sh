@@ -92,19 +92,25 @@ fi
 echo "   manual twins identical"
 
 # SQA 2026-08-28: the press carries WALL-CLOCK gates (T4b's library-index
-# fan-out asserts under 6000ms), and a loaded machine fails them for reasons
-# that have nothing to do with the build. Twice in a row, at load average 19
-# and 18, T4b reported 8383ms then 7376ms; re-run on an idle machine the same
-# binary passed in 28s. That is a FALSE FAILURE, and it is dangerous rather
-# than merely annoying: tools/release.sh does `git reset --hard HEAD~1` when
-# the press fails, so a spurious timing failure DESTROYS A REAL COMMIT.
+# fan-out asserts under 6000ms), and heavy contention fails them for reasons
+# that have nothing to do with the build. Measured, not assumed:
 #
-# Refuse rather than mislead - the same discipline the alignment generator
-# uses. A press that cannot be trusted must not run, and must not be silently
-# treated as a verdict.
+#   load 19, 18  ->  T4b FAILED at 8383ms then 7376ms   (agent workflow running)
+#   load  8-9    ->  full 92-test suite PASSES, T4b included
+#
+# So the ceiling sits between those, at 1.25x cores. TWO CAVEATS, stated
+# because they matter: this is calibrated on a handful of observations, not a
+# sweep; and this machine idles near load 9 from ordinary desktop apps, so a
+# stricter ceiling (0.75x cores was tried first) blocks the press permanently
+# rather than protecting it.
+#
+# Why refuse at all rather than just let a timing test fail: tools/release.sh
+# does `git reset --hard HEAD~1` when the press fails, so a spurious timing
+# failure DESTROYS A REAL COMMIT. Refuse rather than mislead - the same
+# discipline the alignment generator uses everywhere else.
 NCPU="$(sysctl -n hw.ncpu 2>/dev/null || nproc 2>/dev/null || echo 8)"
 LOAD1="$(uptime | sed -E 's/.*load averages?: ([0-9.]+).*/\1/')"
-LOAD_CEIL="$(python3 -c "print(f'{${NCPU} * 0.75:.2f}')" 2>/dev/null || echo 6)"
+LOAD_CEIL="$(python3 -c "print(f'{${NCPU} * 1.25:.2f}')" 2>/dev/null || echo 12)"
 if python3 -c "import sys; sys.exit(0 if float('${LOAD1}') > float('${LOAD_CEIL}') else 1)" 2>/dev/null; then
   echo "press: REFUSED - 1-minute load average is ${LOAD1}, ceiling ${LOAD_CEIL}"
   echo "  (${NCPU} cores). The press has wall-clock gates that fail under"
