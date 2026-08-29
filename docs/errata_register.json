@@ -1054,5 +1054,41 @@
   "severity": "MEDIUM",
   "confidence": "CONFIRMED",
   "note": "filed from the alignment batch, spine-verified on merge"
+ },
+ {
+  "item_id": "E-089",
+  "course": "C01/C02",
+  "segment": "class entry (29 fields)",
+  "kind": "LAYER_ARTEFACT",
+  "found": "single-pointed concentration  ·  zhog, lam gyi rim pa  ·  grasping \"self\",",
+  "expected": "single- pointed concentration  ·  zhog,lam gyi rim pa  ·  grasping \"self,\"",
+  "evidence": "Found by checking all 42,648 banked fields against the spine (tools/test_layer_matches_spine.py, new 2026-08-28). 29 fields in the legacy C01 (23) and C02 (6) pages differ from the source ONLY in punctuation, hyphenation or spacing - the analyst silently repaired a hyphenated line break, inserted a missing space after a comma, or moved a comma out of a closing quote while quoting. Text is present and correct in every case; nothing is fabricated. Distinct from E-025, which records the SOURCE-side hyphen break: this records our page quietly fixing it instead of preserving it.",
+  "severity": "LOW",
+  "confidence": "CONFIRMED",
+  "note": "A Rule 1 (verbatim) breach, not a Rule 10 (falsehood) breach. Fixed by re-running the affected legacy pages, not by editing anything at ALL. Ceilinged at 29 by the new gate so the class cannot spread; C03's current pipeline has zero."
+ },
+ {
+  "item_id": "E-090",
+  "course": "C01",
+  "segment": "C01:45, C01:38",
+  "kind": "LAYER_ARTEFACT",
+  "found": "He spoke of the very heart of the \"Steps to Buddhahood,\" [...] [SECTION-HEAD BLEED: \"...\" trails the corpus English - linked to nothing.]",
+  "expected": "the quoted source text alone, with the analyst's note in the note field",
+  "evidence": "Two banked English fields carry a bracketed project annotation INSIDE a field the schema declares to be verbatim source quotation. A consumer reading the layer gets our commentary presented as GMR's English. Both are in the earliest C01 pages (c1p02, r5).",
+  "severity": "MEDIUM",
+  "confidence": "CONFIRMED",
+  "note": "The honesty risk here is larger than the count: it is our own words appearing where the reader expects GMR's. Ceilinged at 2. The annotation is worth keeping - it belongs in the page note, not the quoted field."
+ },
+ {
+  "item_id": "E-091",
+  "course": "C01",
+  "segment": "class entry (4 fields)",
+  "kind": "LAYER_ARTEFACT",
+  "found": "links on pages c1p01 and r2 carrying \"seg\": null",
+  "expected": "a real segment number, or the link withdrawn",
+  "evidence": "Four banked fields cite no segment at all, so nothing can check them against a source. Three sit on c1p01 and one on r2 - the very first pages built, before the builder recorded citations.",
+  "severity": "MEDIUM",
+  "confidence": "CONFIRMED",
+  "note": "Uncheckable provenance is the one thing the project cannot tolerate quietly; these are held at 4 by the gate and should be re-run or withdrawn rather than left uncitable."
  }
 ]

@@ -557,6 +557,18 @@ if(Python3_FOUND)
   add_test(NAME no_degenerate_members
            COMMAND ${Python3_EXECUTABLE}
                    ${CMAKE_SOURCE_DIR}/tools/test_no_degenerate_members.py)
+
+  # The four suites above check pages for internal well-formedness. None of
+  # them ever asked whether the text we SHIPPED still occurs in the text we
+  # CLAIM it came from - so a page could be perfectly well-formed and still
+  # bank a string the source does not contain. This one checks the layer
+  # against the spine itself; NOT-IN-CORPUS is Rule 10 mechanised.
+  # Both fixtures are passed as arguments so BUILD-7's wrapper can see them.
+  add_test(NAME layer_matches_spine
+           COMMAND ${Python3_EXECUTABLE}
+                   ${CMAKE_SOURCE_DIR}/tools/test_layer_matches_spine.py
+                   ${CMAKE_SOURCE_DIR}/data/alignment/alignment_full_v1.json
+                   ${CMAKE_SOURCE_DIR}/build/hgm_spine_v27_2.db)
 endif()
 
 # BUILD-7: the battery must say what it did NOT run. fixture_gate holds
