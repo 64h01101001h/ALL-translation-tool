@@ -579,6 +579,17 @@ if(Python3_FOUND)
                    ${CMAKE_SOURCE_DIR}/tools/test_evidence_matches_spine.py
                    ${CMAKE_SOURCE_DIR}/data/alignment/alignment_evidence_v1.json
                    ${CMAKE_SOURCE_DIR}/build/hgm_spine_v27_2.db)
+
+  # The register is the artifact that LEAVES this building - ALL's editors
+  # and the director act on it. merge_errata.py checks a quote on the way
+  # in; nothing re-checked one after the spine moved underneath it. A stale
+  # quote makes us the unreliable party in a conversation about someone
+  # else's errors.
+  add_test(NAME errata_quotes_hold
+           COMMAND ${Python3_EXECUTABLE}
+                   ${CMAKE_SOURCE_DIR}/tools/test_errata_quotes_hold.py
+                   ${CMAKE_SOURCE_DIR}/docs/errata_register.json
+                   ${CMAKE_SOURCE_DIR}/build/hgm_spine_v27_2.db)
 endif()
 
 # BUILD-7: the battery must say what it did NOT run. fixture_gate holds
