@@ -45,8 +45,17 @@ TR = str.maketrans({'‘': "'", '’': "'", '“': '"', '”': '"', '–': '-', 
 def fold(s):
     return re.sub(r'\s+', ' ', (s or '').translate(TR)).strip()
 
-def bare(s):
-    return re.sub(r'[^a-z0-9ༀ-࿿]', '', fold(s).lower())
+def bare(s, tibetan=False):
+    """Strip punctuation and spacing so a quoting artefact does not read as a
+    missing string. NEVER case-folds Tibetan: in Wylie a capital is a DIFFERENT
+    LETTER (N is retroflex Na, Sh is retroflex sha, A/I/U are the long vowels),
+    so lowercasing hides a changed consonant as a punctuation difference. It
+    did exactly that - 16 headwords, among them paN chen, nA ro pa, shA ri'i bu
+    and maNDla, were shipped lowercased and this gate scored them as clean."""
+    s = fold(s)
+    if not tibetan:
+        s = s.lower()
+    return re.sub(r'[^A-Za-z0-9ༀ-࿿]' if tibetan else r'[^a-z0-9ༀ-࿿]', '', s)
 
 def classify(layer, spine_rows):
     seg = {(c, s): (w or '', e or '') for c, s, w, e in spine_rows}
@@ -67,8 +76,10 @@ def classify(layer, spine_rows):
             elif JOIN in v:                           verdict = 'builder-join'
             elif re.search(r'\[[A-Z][A-Z -]{3,}', v): verdict = 'annotation-in-verbatim-field'
             elif fold(v) in fold(seg[k][idx]):        verdict = 'whitespace/quote-fold-only'
-            elif bare(v) in bare(seg[k][idx]):        verdict = 'punct-or-hyphen-normalised'
-            elif bare(v) in bare(course[l['course']][idx]): verdict = 'stale-citation'
+            elif bare(v, idx == 0) in bare(seg[k][idx], idx == 0):
+                                                      verdict = 'punct-or-hyphen-normalised'
+            elif bare(v, idx == 0) in bare(course[l['course']][idx], idx == 0):
+                                                      verdict = 'stale-citation'
             else:                                     verdict = 'NOT-IN-CORPUS'
             tally[verdict] += 1
             if verdict not in ('EXACT', 'builder-join', 'whitespace/quote-fold-only'):

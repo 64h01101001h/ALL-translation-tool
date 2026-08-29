@@ -203,6 +203,13 @@ COURSES = {
                    "c3p125": [394, 395, 396],
                    "c3p126": [397, 398, 399],
                    "c3p127": [400, 401, 402],
+                   "c3p129": [406, 407, 408],
+                   "c3p130": [409, 410, 411],
+                   # c3p128 (403-405) and c3p131 (412-414) are NOT here.
+                   # The generator refused both - a d=7 member claiming
+                   # English outside its parent at 405, and a d=5 span
+                   # listed after the d=3 that contains it at 412. They
+                   # are being re-run, not patched.
         },
     },
 }
@@ -428,7 +435,18 @@ def main():
                     continue
                 seg = int(m.group(1))
                 e = " … ".join(eng[l])
-                tn = " ".join(t.lower().split())
+                # NO .lower(). In Wylie a capital is a DIFFERENT LETTER -
+                # N is the retroflex Na, D the retroflex Da, Sh the retroflex
+                # sha, and A/I/U the long vowels. Lowercasing produced 16
+                # headwords that are not Tibetan words at all: paN chen ->
+                # "pan chen", nA ro pa -> "na ro pa", shA ri'i bu -> "sha ri'i
+                # bu", maNDla -> "mandla", paNDi ta -> "pandi ta". Those are
+                # the Sanskrit loanwords and proper names a reader is most
+                # likely to look up, and the case is the only thing carrying
+                # the consonant. Measured before changing: preserving case
+                # splits ZERO existing headword keys, so this is a pure
+                # correction and not a re-grouping.
+                tn = " ".join(t.split())
                 # BATTERY: letter-exact against the spine, per course
                 if letters(t) not in letters(segs[seg][0]):
                     sys.exit("REFUSED: tib %r not in %s:%d wylie"

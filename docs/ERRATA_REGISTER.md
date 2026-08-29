@@ -8,16 +8,16 @@
 
 Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source and Geshe Michael Roach's facing English &mdash; recorded as a by-product of a machine alignment campaign reading the courses segment by segment. **Every entry has been checked against the corpus database** (42,199 segments, spine `hgm_spine_v27_2.db`): the quoted strings were retrieved from the spine, not from a note, and each citation was re-derived rather than trusted.
 
-**91 entries**: **57 document errata** (5 HIGH, 39 MEDIUM, 13 LOW), **16 digitisation artefacts**, 14 observations checked and closed as *not* errata, and 1 that could not be verified.
+**96 entries**: **60 document errata** (5 HIGH, 41 MEDIUM, 14 LOW), **17 digitisation artefacts**, 14 observations checked and closed as *not* errata, and 1 that could not be verified.
 
 | Kind | n |
 |---|---|
-| Tibetan spelling | 38 |
-| Digitisation artefact | 16 |
-| English typo | 15 |
-| Our banked layer | 3 |
+| Tibetan spelling | 39 |
+| Digitisation artefact | 17 |
+| English typo | 16 |
+| Our banked layer | 4 |
+| Formatting | 3 |
 | English factual error | 2 |
-| Formatting | 2 |
 
 ---
 
@@ -43,7 +43,7 @@ Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source 
 | `C03:339` | mthar mal rim rang la gcig tu dril te | mthar lam rim rang la gcig tu dril te | The term is lam rim, the Steps of the path. 'mal' is bedding or a couch and forms no compound with 'rim' that could take 'rang la gcig tu dril te nyams su len' - 'join into one within our own lives and put into practice'. The English of this very segment rende | CONFIRMED |
 | `C03:39` | acip: ,SIL SNYAN RNAMS DANG BYUNG PA GDUGS MCHOG DANG ,   \|   wylie: ,sil snyan rnams dang byung pa gdugs mchog dang , | byug pa | seg_hint 39 is CORRECT. Three independent proofs: (1) the note's own claim checks out — C03:38, the glossary segment immediately preceding, spells it right and defines it: "byug pa ni spos zhim po'i lde gu'o" (byug pa = thick fragrant unguent); (2) this segmen | CONFIRMED |
 
-## Medium severity &mdash; 39 entries
+## Medium severity &mdash; 41 entries
 
 | Citation | What it says | Should say | Evidence | Confidence |
 |---|---|---|---|---|
@@ -85,9 +85,11 @@ Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source 
 | `C03:393` | mtshams spyar ba | mtshams sbyar ba (spyar -> sbyar) | Verified independently against the shipped spine. (1) FREQUENCY: the substring 'spyar' occurs in exactly ONE of the 42,199 corpus segments - this one; 'sbyar' occurs in 667, and the specific idiom 'mtshams sbyar' in 35 (C01:486, C03:437, C05:36, C05:97, C06:32 | CONFIRMED |
 | `C03:394` | sangs rgyas kyi stan pa dar ba'i | sangs rgyas kyi bstan pa dar ba'i | The English for this token is 'the Buddha's teachings'. In the spine dictionary, `bstan pa` is the entry glossed ["taught", "the teachings", "teachings", "teaching", ...]; `stan pa` is an entry with NO hgm_gloss, and bare `stan` is glossed ["throne"] — a seat, | CONFIRMED |
 | `C03:402` | dang po skyes bu chung du dang thun mong ba'i lam gyi rim par blo sbyang ba ni | dang po skyes bu chung ngu dang thun mong ba'i lam gyi rim par blo sbyang ba ni | The Lam Rim scope idiom is 'skyes bu chung ngu' (person of lesser capacity); 'chung du' is not parsable here, since a terminative du cannot feed the comitative dang that follows. FILED AGAINST PROPOSAL B, WHICH REJECTED IT — B's counter-evidence does not survi | CONFIRMED |
+| `C03:410` | pha dam pa sangs gyas kyis | pha dam pa sangs rgyas kyis | The figure is Pha Dam pa Sangs rgyas. 'sangs gyas' is not a Tibetan word — the ra-mgo of rgyas is missing, and bare 'gyas' means 'right side', which yields no reading here. The segment's own English reads 'Pa Dampa Sangye', confirming sangs rgyas is intended.  | CONFIRMED |
+| `C03:412` | previous consciousness if it could come from physical matter alone then every bit of dirt | previous consciousness, if it could come from physical matter alone, then every bit of dirt | Verified directly against the spine, not taken from either analyst. (1) The quoted string occurs exactly once in this segment's English. (2) C16:456 carries the expected comma'd form verbatim, and its Tibetan is BYTE-IDENTICAL to this segment's over the shared | CONFIRMED |
 | `C03:53` | de nas dmigs pa gsal bar byas nas mNaDl phul te (ACIP: DE NAS DMIGS PA GSAL BAR BYAS NAS MnAdL PHUL TE) | maNDla (ACIP MAndLA), the spelling used at C03:1 | C03:1 records the same word as ACIP 'MAndLA' / Wylie 'maNDla', with the English 'mandel'. C03:53's 'MnAdL' transposes the vowel A onto the retroflex and drops the final A, leaving a form that is not well-formed Wylie (a bare 'm' root with no vowel, and a 'Dl'  | CONFIRMED |
 
-## Low severity &mdash; 13 entries
+## Low severity &mdash; 14 entries
 
 | Citation | What it says | Should say | Evidence | Confidence |
 |---|---|---|---|---|
@@ -104,10 +106,11 @@ Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source 
 | `C03:276` | Bodhisatttva | Bodhisattva | three t's; C03:278 spells 'Bodhisattva' correctly in the adjacent heading | CONFIRMED |
 | `C03:300` | SKYE BA KUN TU RNAMS {SHl}OOO KA RE LHAN DU GSUNGS, | SKYE BA KUN TU RNAMS {SHl}OO KA RE LHAN DU GSUNGS, | Counted over corpus_segments: acip matching '%{SHl}OO KA%' = 22 rows, acip matching '%{SHl}OOO KA%' = 1 row, that one being C03:300. The 9 rows that spell the word without the brace code all write SHLOO KA, and acip matching '%SHLOOO%' = 0 rows - nothing in th | PROBABLE |
 | `C03:333` | 'jug bar 'dod pa | 'jug par 'dod pa | After a final -g the nominalizer takes the pa/par form, not ba/bar (standard 'jug pa, 'jug par). The sense here is unambiguously 'wishing to enter the door', so the alternative reading of bar as the separate noun 'interval / up to' is excluded. Spine check, sp | PROBABLE |
+| `C03:403` | To stop the slightest Wrong of many wrongs we do | To stop the slightest Wrongs of many wrongs we do | Two witnesses of the same published translation read plural, and this segment is the sole outlier. Verified directly against the spine: C16:450 (the parallel commentary citation) reads "To stop the slightest Wrongs of many wrongs we do, And try t...", and TCS0 | CONFIRMED |
 
 ---
 
-## Digitisation artefacts &mdash; 16
+## Digitisation artefacts &mdash; 17
 
 *These are fixed **upstream in the data pipeline**, not by editing a document, and go to a different person. Two are class entries carrying a measured extent rather than one row per instance.*
 
@@ -128,11 +131,12 @@ Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source 
 | `C03:312` | slob dpon tsa go mis | slob dpon tsandra go mis | This segment's own acip column reads "SLOB DPON TZA{ndr} GO MIS," — the {ndr} braced cluster (Sanskrit ndra) is present in the ACIP and absent from the wylie, so the ACIP-to-wylie conversion dropped it. This segment's English names the author "the Master Chand | CONFIRMED |
 | `C03:313` | rnyed sla'i rtsva kham 'ga' | rnyed sla'i rtswa kham 'ga' | 'rtsva' is not valid EWTS — wa-zur is written 'w' (rtswa, རྩྭ). The ACIP column of this segment reads RTZVA, which is CORRECT ACIP (V is the wa-zur code), so the defect is in the derived wylie column, not in the ACIP. Proved with the project's canonical engine | CONFIRMED |
 | `C03:317` | This would truly be an evil way to act, the way of a person without a conscience, of one who had no shame. | Segment 317 should carry only what its own Wylie licenses; this sentence's Tibetan exponent sits in C03:320, a | C03:317's full Wylie is "de'i phyir de dag la drin gzo'i bsam pa med na, klu'i rgyal po rnga sgra'i tshigs su bcad pa las" — it runs straight from the conditional clause to the citation frame and contains no term for 'evil', 'way/custom', 'conscience' or 'sham | PROBABLE |
+| `C03:403` | zhes pa'i oo ka gnyis kyis bstan te | zhes pa'i shloo ka gnyis kyis bstan te | "oo ka" is not a word in Tibetan or Sanskrit; the sense required is shloka (verse) — "this is taught by these two verses". This segment's own ACIP reads ",ZHES PA'I {SHl}OO KA GNYIS KYIS BSTAN TE,": the braced Sanskrit-letter token {SHl} was dropped wholesale  | CONFIRMED |
 | `C03:48` | gang rnams phyogs bcu'i 'jig rten sgron ma dag,byang chub rim par sangs rgyas ma chags brnyes (ACIP: ...SGRON MA DAG,BYANG CHUB RIM PAR...) | ...sgron ma dag, ,byang chub rim par... — a verse-line break, punctuated as the other three breaks in the same | The identical segment punctuates its other verse-line breaks with a space: "...ma chags brnyes, ,mgon po de dag..." and "...thams cad la, ,'khor lo bla na med pa...". Only the first break, after 'sgron ma dag', is run together. The English confirms a line boun | CONFIRMED |
 
 ---
 
-## Defects in OUR OWN banked layer &mdash; 3
+## Defects in OUR OWN banked layer &mdash; 4
 
 *Nothing here is a defect in an ALL document. These are ours, found by checking the shipped layer back against the spine, and they are fixed by re-running pages &mdash; not by anyone at ALL. They are listed so the register is honest about who owns what.*
 
@@ -141,6 +145,7 @@ Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source 
 | `class entry (29 fields)` | single-pointed concentration  ·  zhog, lam gyi rim pa  ·  grasping "self", | single- pointed concentration  ·  zhog,lam gyi rim pa  ·  grasping "self," | Found by checking all 42,648 banked fields against the spine (tools/test_layer_matches_spine.py, new 2026-08-28). 29 fields in the legacy C01 (23) and C02 (6) pages differ from the source ONLY in punctuation, hyphenation or spacing - the analyst silently repai | CONFIRMED |
 | `C01:45, C01:38` | He spoke of the very heart of the "Steps to Buddhahood," [...] [SECTION-HEAD BLEED: "..." trails the corpus English - linked to nothing.] | the quoted source text alone, with the analyst's note in the note field | Two banked English fields carry a bracketed project annotation INSIDE a field the schema declares to be verbatim source quotation. A consumer reading the layer gets our commentary presented as GMR's English. Both are in the earliest C01 pages (c1p02, r5). | CONFIRMED |
 | `class entry (4 fields)` | links on pages c1p01 and r2 carrying "seg": null | a real segment number, or the link withdrawn | Four banked fields cite no segment at all, so nothing can check them against a source. Three sit on c1p01 and one on r2 - the very first pages built, before the builder recorded citations. | CONFIRMED |
+| `class entry (16 headwords)` | pan chen  ·  na ro pa  ·  sha ri'i bu  ·  mandla  ·  pandi ta  ·  manydzu goh sha | paN chen  ·  nA ro pa  ·  shA ri'i bu  ·  maNDla  ·  paNDi ta  ·  manydzu goh ShA | build_alignment_layer.py lowercased the evidence-layer headword key (`tn = ' '.join(t.lower().split())`). In Wylie a capital is a DIFFERENT LETTER - N is the retroflex Na, D the retroflex Da, Sh the retroflex sha, and A/I/U the long vowels - so lowercasing pro | CONFIRMED |
 
 ---
 
@@ -175,8 +180,8 @@ Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source 
 
 ## Recommended actions, by owner
 
-**Document editors.** The 57 document errata above. Start with the 5 HIGH entries. Note that several errors exist at MORE THAN ONE LOCUS because passages are ingested twice &mdash; each entry's evidence names them, and a per-segment fix will leave duplicates behind.
+**Document editors.** The 60 document errata above. Start with the 5 HIGH entries. Note that several errors exist at MORE THAN ONE LOCUS because passages are ingested twice &mdash; each entry's evidence names them, and a per-segment fix will leave duplicates behind.
 
-**Data-pipeline maintainers.** The 16 digitisation artefacts, plus two reports filed separately: `docs/upstream/FOLIO_MARKER_COLLISIONS.md` (119 folio markers spliced into caption numbers) and `docs/upstream/C13_COLUMN_OFFSET.md` (**C13:63&ndash;82 pairs Tibetan with the English of a different text &mdash; C13 should not be scanned until it is fixed**).
+**Data-pipeline maintainers.** The 17 digitisation artefacts, plus two reports filed separately: `docs/upstream/FOLIO_MARKER_COLLISIONS.md` (119 folio markers spliced into caption numbers) and `docs/upstream/C13_COLUMN_OFFSET.md` (**C13:63&ndash;82 pairs Tibetan with the English of a different text &mdash; C13 should not be scanned until it is fixed**).
 
 **Director.** The standing policy question: does ALL issue an erratum sheet, correct future printings, or annotate in place? The scan preserves everything verbatim either way &mdash; this is an editorial decision, not a technical one.

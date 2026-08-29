@@ -36,7 +36,7 @@ CEILING = {
     'acip NOT-IN-SEGMENT': 0,   # the source of record. Never raise this.
     'no-such-segment': 0,
     'bad-ref-format': 0,
-    'tib punct-normalised': 19,
+    'tib punct-normalised': 0,
     'eng punct-normalised': 2,
 }
 JOIN = '…'
@@ -46,8 +46,17 @@ TR = str.maketrans({'‘': "'", '’': "'", '“': '"', '”': '"',
 def fold(s):
     return re.sub(r'\s+', ' ', (s or '').translate(TR)).strip()
 
-def bare(s):
-    return re.sub(r'[^a-z0-9ༀ-࿿]', '', fold(s).lower())
+def bare(s, tibetan=False):
+    """Strip punctuation and spacing so a quoting artefact does not read as a
+    missing string. NEVER case-folds Tibetan: in Wylie a capital is a DIFFERENT
+    LETTER (N is retroflex Na, Sh is retroflex sha, A/I/U are the long vowels),
+    so lowercasing hides a changed consonant as a punctuation difference. It
+    did exactly that - 16 headwords, among them paN chen, nA ro pa, shA ri'i bu
+    and maNDla, were shipped lowercased and this gate scored them as clean."""
+    s = fold(s)
+    if not tibetan:
+        s = s.lower()
+    return re.sub(r'[^A-Za-z0-9ༀ-࿿]' if tibetan else r'[^a-z0-9ༀ-࿿]', '', s)
 
 def classify(evid, rows):
     seg = {(c, s): (w or '', e or '', a or '') for c, s, w, e, a in rows}
@@ -74,7 +83,7 @@ def classify(evid, rows):
                     elif val in src:            t[tag + ' EXACT'] += 1
                     elif JOIN in val:           t[tag + ' builder-join'] += 1
                     elif fold(val) in fold(src): t[tag + ' fold-only'] += 1
-                    elif bare(val) in bare(src):
+                    elif bare(val, tag == 'tib') in bare(src, tag == 'tib'):
                         t[tag + ' punct-normalised'] += 1
                         bad[tag + ' punct-normalised'].append((head, val, ref))
                     else:
