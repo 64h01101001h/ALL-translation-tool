@@ -180,9 +180,35 @@ def main():
                      "(held apart, not dictionary content)\n"
                      % (len(pents), sum(len(x[2]) for x in pents)))
 
+    # The page must SAY what it did to the text, not just do it. trim_glued
+    # cuts a following section's heading off the English, so a trimmed entry
+    # shows less than the layer banked - defensible, but not something to do
+    # silently to a reader who is told the text is verbatim.
+    #
+    # Count the ROWS a reader can actually see differing from the layer, not
+    # the trim CALLS. They are not the same number: 11 calls produce 27
+    # visible rows, because a headword can bank a longer English at one
+    # segment and show a trimmed one here. The page must not quote the
+    # smaller figure - a disclosure that understates is worse than none - so
+    # it is measured the same way test_view_matches_layer.py measures it.
+    banked = collections.defaultdict(set)
+    for l in links:
+        if l.get("tib") and l.get("eng"):
+            banked[l["tib"]].add(l["eng"])
+    n_short = 0
+    for ents in list(depths.values()) + [pents]:
+        for t, _a, rl in ents:
+            for e, _rs in rl:
+                if e not in banked[t] and any(b.startswith(e) for b in banked[t]):
+                    n_short += 1
+    sys.stderr.write("  %d published rows show less than the layer banked "
+                     "(from %d trim calls)\n" % (n_short, n_glued))
+
     payload = {"meta": {"date": meta.get("date"), "tier": meta.get("tier"),
                         "corpus": meta.get("source_corpus"),
-                        "rule": meta.get("rule")},
+                        "rule": meta.get("rule"),
+                        "n_glued": n_short, "n_phon": n_phon,
+                        "n_skipped": skipped},
                "depths": depths, "phonetics": pents}
     shell = io.open(SHELL, encoding="utf-8").read()
     data = json.dumps(payload, ensure_ascii=False, separators=(",", ":"))
