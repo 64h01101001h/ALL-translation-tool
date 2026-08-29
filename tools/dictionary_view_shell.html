@@ -95,6 +95,8 @@ input[type=range]{width:100%;accent-color:var(--gold);margin:0}
   padding:11px 14px;margin:18px 0 0;font-size:13.5px;color:var(--ink-2);
   max-width:80ch;border-radius:0 3px 3px 0}
 .phon-note b{color:var(--machine)}
+.struct{border-left-color:var(--gold)}
+.struct b{color:var(--gold)}
 .phon-note code{font-family:var(--f-data);font-size:12.5px}
 body.phon .entry{border-left:3px solid var(--machine)}
 body.phon .tib{color:var(--machine)}
@@ -149,6 +151,15 @@ footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--rule);
   <em>merit</em>. They are held apart here, and never enter the dictionary
   layer the application reads.
 </p>
+<p class="phon-note struct" id="struct" hidden>
+  <b>This is alignment structure, not the dictionary.</b> These strata pair a
+  whole segment, clause or phrase with the English facing it, which is how the
+  alignment is checked &mdash; but a segment sometimes carries more than one
+  thing. Some liturgy segments hold a phonetic line and then the whole
+  following prayer&rsquo;s translation; some carry the next section&rsquo;s
+  heading. Those arrive here intact because that is what the segment contains.
+  <b>The dictionary is depth 5.</b>
+</p>
 <div class="grid" id="grid"></div>
 <p class="empty" id="empty" hidden>Nothing at this depth matches that search.</p>
 
@@ -160,11 +171,11 @@ footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--rule);
 
 const NAMES = {
   0:["Phonetics","Geshe Michael&rsquo;s transcription of how the Tibetan SOUNDS &mdash; not translations"],
-  1:["Sentence","a whole sentence paired with its translation"],
-  2:["Clause","a clause within a sentence"],
-  3:["Phrase","a phrase"],
-  4:["Embedded phrase","a phrase inside another phrase"],
-  5:["Word / compound","the dictionary layer &mdash; single words and compounds"],
+  1:["Sentence","ALIGNMENT STRUCTURE, not dictionary entries &mdash; a whole segment beside its whole translation"],
+  2:["Clause","ALIGNMENT STRUCTURE &mdash; a clause within a sentence"],
+  3:["Phrase","ALIGNMENT STRUCTURE &mdash; a phrase"],
+  4:["Embedded phrase","ALIGNMENT STRUCTURE &mdash; a phrase inside another phrase"],
+  5:["Word / compound","THE DICTIONARY &mdash; single words and compounds, the layer the application reads"],
   6:["Morpheme / particle","grammatical particles that carry English"],
   7:["Compound member","a member inside a compound, such as one half of a dvandva"]
 };
@@ -172,6 +183,7 @@ const D = Object.assign({0: PAYLOAD.phonetics || []}, PAYLOAD.depths);
 const META = PAYLOAD.meta;
 const grid = document.getElementById('grid'), empty = document.getElementById('empty');
 const note = document.getElementById('note');
+const struct = document.getElementById('struct');
 const depth = document.getElementById('depth'), q = document.getElementById('q');
 const dname = document.getElementById('dname'), counts = document.getElementById('counts');
 const esc = s => s.replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
@@ -189,6 +201,7 @@ function render(){
   dname.innerHTML = `${NAMES[d][0]} <em>&mdash; ${NAMES[d][1]}</em>`;
   document.body.classList.toggle('phon', d === '0');
   note.hidden = d !== '0';
+  struct.hidden = !(d >= '1' && d <= '4');
   document.querySelectorAll('.strata button').forEach(b =>
     b.setAttribute('aria-current', b.dataset.d === d));
 

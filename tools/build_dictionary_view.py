@@ -16,7 +16,7 @@ second artifact instead.
 The page carries the PROVISIONAL banner from the layer's own meta block,
 so the tier label can never drift from what the layer actually claims.
 """
-import json, io, os, re, sys, collections
+import json, io, os, re, sys, collections, difflib
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(ROOT, "engines"))
@@ -56,7 +56,57 @@ def is_phonetic(tib, eng):
     ph, ne = _PHC[tib], _n(eng)
     if not ph or not ne:
         return False
-    return ph == ne or (len(ne) > 3 and (ph.startswith(ne) or ne.startswith(ph)))
+    if ph == ne or (len(ne) > 3 and (ph.startswith(ne) or ne.startswith(ph))):
+        return True
+    # A depth-1 span wraps the WHOLE segment, and 115 source segments end a
+    # phonetic prayer run by appending the prayer's entire English
+    # translation to the last phonetic line (C01:11 carries "drola penchir
+    # sangye druppar shok." followed by the whole Refuge and The Wish). The
+    # page handles this correctly, separating the two at depth 2 -- but the
+    # depth-1 wrapper necessarily holds both, and as a dictionary entry that
+    # reads as though the Tibetan means all of it.
+    # Adam caught this in the published view, 2026-08-28.
+    if len(ph) >= 8 and ne.startswith(ph[:max(10, int(len(ph) * 0.8))]):
+        return True
+    # Geshe Michael's phonetics are his own convention and vary from the
+    # engine's: for `sku gsung thugs kyi dngos grub rtsol du gsol` the engine
+    # says "tsul du sul" and he writes "tsoldu sol". Exact prefix matching
+    # misses those, so compare the head of the English against the engine's
+    # output by similarity. 0.75 is deliberately high -- a real translation
+    # scores far below it against a transliteration.
+    if len(ph) >= 12:
+        head = ne[:len(ph)]
+        if difflib.SequenceMatcher(None, ph, head).ratio() >= 0.75:
+            return True
+    return False
+
+
+# A new section's heading glued onto the previous segment's English. 511
+# segments across 59 courses carry one (Adam, 2026-08-28). Only
+# high-confidence forms are trimmed -- numbered readings and contemplations,
+# cantos, and the course front matter -- because a general Title Case rule
+# also matches ordinary mid-sentence capitals like "As Master Shantideva".
+GLUED = re.compile(
+    r"[a-z\.\,\!\?][\.\s]\s*("
+    r"Reading (?:One|Two|Three|Four|Five|Six|Seven|Eight|Nine|Ten|\d+)"
+    r"|Contemplation (?:One|Two|Three|Four|Five|Six|Seven|Eight|Nine|Ten|"
+    r"Eleven|Twelve|Thirteen|Fourteen|Fifteen|Sixteen|Seventeen|Eighteen|"
+    r"Nineteen|Twenty|Twenty-\w+|Thirty|Thirty-\w+|\d+)"
+    r"|(?:First|Second|Third|Fourth|Fifth) Canto"
+    r"|The Asian Classics Institute"
+    r"|Refuge and The Wish|A Buddhist Grace|Offering the Mandala"
+    r")\b")
+
+
+def trim_glued(eng):
+    """Cut the English where a following section's heading was glued on."""
+    m = GLUED.search(eng or "")
+    if not m:
+        return eng, False
+    cut = eng[:m.start() + 1].rstrip()
+    # only trim if something substantial survives; otherwise the span IS the
+    # heading and belongs to whatever follows, not here
+    return (cut, True) if len(cut) >= 12 else (eng, False)
 
 
 FULL = os.path.join(ROOT, "data", "alignment", "alignment_full_v1.json")
@@ -73,7 +123,7 @@ def main():
     byd = collections.defaultdict(
         lambda: collections.defaultdict(lambda: collections.defaultdict(list)))
     phon = collections.defaultdict(lambda: collections.defaultdict(list))
-    skipped = n_phon = 0
+    skipped = n_phon = n_glued = 0
     for l in links:
         d, t = l.get("d"), (l.get("tib") or "").strip()
         e, seg, co = (l.get("eng") or "").strip(), l.get("seg"), l.get("course")
@@ -87,9 +137,25 @@ def main():
         # capitalised in GMR's text and phonetic lines are not, which
         # separates them without a hand-kept list.
         if is_phonetic(t, e) and not e[:1].isupper():
+            # show only the transcription; the appended translation belongs
+            # to the prayer, not to this Tibetan line
+            trimmed = e
+            try:
+                say = _P.pronounce(t)
+                cut = len(say) + 2
+                if len(e) > cut * 1.6:
+                    m = re.match(r"^.{%d,%d}?[\.\,]" % (max(0, cut - 12), cut + 14), e)
+                    if m:
+                        trimmed = m.group(0)
+            except Exception:
+                pass
+            e = trimmed
             phon[t][e].append("%s:%s" % (co, seg))
             n_phon += 1
             continue
+        e, was_glued = trim_glued(e)
+        if was_glued:
+            n_glued += 1
         byd[d][t][e].append("%s:%s" % (co, seg))
 
     depths = {}
@@ -122,7 +188,9 @@ def main():
     data = json.dumps(payload, ensure_ascii=False, separators=(",", ":"))
     html = shell.replace("/*PAYLOAD*/", "const PAYLOAD = " + data + ";", 1)
     io.open(OUT, "w", encoding="utf-8").write(html)
-    sys.stderr.write("\n  skipped %d links with no English exponent\n" % skipped)
+    sys.stderr.write("\n  trimmed %d spans where a following section's "
+                     "heading was glued on\n" % n_glued)
+    sys.stderr.write("  skipped %d links with no English exponent\n" % skipped)
     sys.stderr.write("  wrote %s (%.2f MB)\n" % (OUT, len(html) / 1048576.0))
 
 
