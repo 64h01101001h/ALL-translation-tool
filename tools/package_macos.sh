@@ -151,6 +151,25 @@ if [[ "${1:-}" != "--skip-build" ]]; then
     echo "$PRESS_WARN"
     exit 12
   fi
+  # SETTLE BEFORE TIMING. The press's own `cmake --build -j 8` leaves the
+  # 1-minute load average near 18 on a 10-core machine, and the batteries
+  # start immediately after - so the press was failing its own wall-clock
+  # gate (T4b, <6000ms) with contention IT had just created. Measured:
+  # 8383ms, 7376ms and 7422ms across three presses, against a 25-28s pass
+  # for the same suite on a settled machine.
+  #
+  # This is the actual mechanism. A load check at the START of the press,
+  # which is what was tried first, cannot see it: the machine is quiet then
+  # and loud by the time it matters.
+  SETTLE_CEIL="$(python3 -c "print(f'{${NCPU} * 1.25:.2f}')" 2>/dev/null || echo 12)"
+  for _i in $(seq 1 24); do
+    _l="$(uptime | sed -E 's/.*load averages?: ([0-9.]+).*/\1/')"
+    python3 -c "import sys; sys.exit(0 if float('${_l}') <= float('$SETTLE_CEIL') else 1)" 2>/dev/null && break
+    [ "$_i" = "1" ] && echo "   waiting for the build's own load to settle (ceiling $SETTLE_CEIL)..."
+    sleep 10
+  done
+  echo "   load $(uptime | sed -E 's/.*load averages?: ([0-9.]+).*/\1/') — running batteries"
+
   echo "== 2. batteries on the Release build =="
   # BUILD-7: 37 of the 73 suites read data git does not track. An absent
   # fixture is now an honest ctest SKIP (cmake/AllFixtureTests.cmake)
