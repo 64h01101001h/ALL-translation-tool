@@ -1568,3 +1568,26 @@ witness in another course settles whether there is a defect at all.
 
 - Evidence layer: 4,866 headwords / 9,187 pairs. C03 at 355/620.
   13,466 English and 17,044 Tibetan spans clean across 301 pages.
+
+### Batches C03-112 … C03-115 (C03:356–367) — 2026-08-28 — model: Opus
+Four pages, twelve of twelve clean, **zero errata again** — the second
+consecutive batch to find nothing wrong with the source.
+
+**A reconciler wrote and ran its own validator.** On C03:356 it checked the
+reconciled spec against the spine mechanically before returning it — forward
+cursor, unique English, depth-7 containment and in-parent uniqueness, and a
+*tighter-than-parent* test — and reported 0 errors. That last check is one the
+page generator does not make: a member whose English merely repeats its
+parent's whole English is legal by the generator's rules but useless, and it
+was dropped on those grounds.
+
+**Rule 6 adjudicated in both directions**, which is the sign it is being
+reasoned about rather than applied defensively. `mi chog par` → "is not just"
+was RESTORED against a null: the analyst had nulled it because "not" occurs
+twice, but no span claims bare "not" and the full string occurs once, so the
+rule never fires. `mnga' ba` → "mastery" was likewise restored. Where the
+ambiguity genuinely holds — `yod pa` against four instances of "have" — the
+null stands.
+
+- Evidence layer: 4,932 headwords / 9,341 pairs. C03 at 367/620.
+  13,748 English and 17,399 Tibetan spans clean across 305 pages.
