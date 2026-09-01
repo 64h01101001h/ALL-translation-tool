@@ -215,6 +215,7 @@ COURSES = {
                    # parent, because until then nobody had tried it. Landed
                    # flat: d=5 words and d=6 particles at top level, d=7
                    # members inside their compounds, no clause layer at all.
+                   "c3p132": [415, 416, 417],
         },
     },
 }
