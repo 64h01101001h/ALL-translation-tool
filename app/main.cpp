@@ -39638,11 +39638,22 @@ int main(int argc, char** argv) {
             const qint64 segMs = overlay->segmenterBuildMs();
             constexpr qint64 kSegMax = 16000;   // ~3.2x the measured 4,9xx ms
             const bool ok = segMs >= 0 && segMs < sanDerate(kSegMax);
+            // 2026-09-01: this line read 35,557 ms in a tree configured
+            // with no CMAKE_BUILD_TYPE (no -O flag at all) — the same
+            // source at -O3 builds in 4.8 s. The ceiling is a Release
+            // number; an unoptimized measurement must say so.
+#ifdef NDEBUG
+            const char* buildKind = "";
+#else
+            const char* buildKind = " · UNOPTIMIZED BUILD (no NDEBUG) — "
+                                    "the ceiling is a Release measurement";
+#endif
             log << QString("  [%1] T4c segmenter lexicon build: %2ms "
-                           "(<%3) · %4")
+                           "(<%3) · %4%5")
                        .arg(ok ? "PASS" : "FAIL")
                        .arg(segMs).arg(kSegMax)
-                       .arg(overlay->segmenterInfo());
+                       .arg(overlay->segmenterInfo())
+                       .arg(buildKind);
             if (!ok) ++fails;
         }
         {   // F2 (fidelity): cross-engine coherence at dictionary
