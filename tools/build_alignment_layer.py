@@ -216,6 +216,11 @@ COURSES = {
                    # flat: d=5 words and d=6 particles at top level, d=7
                    # members inside their compounds, no clause layer at all.
                    "c3p132": [415, 416, 417],
+                   "c3p133": [418, 419, 420],
+                   "c3p134": [421, 422, 423],
+                   "c3p135": [424, 425, 426],
+                   "c3p136": [427, 428, 429],
+                   "c3p137": [430, 431, 432],
         },
     },
 }
