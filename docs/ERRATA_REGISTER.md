@@ -8,12 +8,12 @@
 
 Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source and Geshe Michael Roach's facing English &mdash; recorded as a by-product of a machine alignment campaign reading the courses segment by segment. **Every entry has been checked against the corpus database** (42,199 segments, spine `hgm_spine_v27_2.db`): the quoted strings were retrieved from the spine, not from a note, and each citation was re-derived rather than trusted.
 
-**101 entries**: **60 document errata** (5 HIGH, 40 MEDIUM, 15 LOW), **17 digitisation artefacts**, 14 observations checked and closed as *not* errata, and 1 that could not be verified.
+**107 entries**: **64 document errata** (5 HIGH, 44 MEDIUM, 15 LOW), **19 digitisation artefacts**, 14 observations checked and closed as *not* errata, and 1 that could not be verified.
 
 | Kind | n |
 |---|---|
-| Tibetan spelling | 39 |
-| Digitisation artefact | 17 |
+| Tibetan spelling | 43 |
+| Digitisation artefact | 19 |
 | English typo | 16 |
 | Our banked layer | 9 |
 | Formatting | 3 |
@@ -43,7 +43,7 @@ Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source 
 | `C03:339` | mthar mal rim rang la gcig tu dril te | mthar lam rim rang la gcig tu dril te | The term is lam rim, the Steps of the path. 'mal' is bedding or a couch and forms no compound with 'rim' that could take 'rang la gcig tu dril te nyams su len' - 'join into one within our own lives and put into practice'. The English of this very segment rende | CONFIRMED |
 | `C03:39` | acip: ,SIL SNYAN RNAMS DANG BYUNG PA GDUGS MCHOG DANG ,   \|   wylie: ,sil snyan rnams dang byung pa gdugs mchog dang , | byug pa | seg_hint 39 is CORRECT. Three independent proofs: (1) the note's own claim checks out — C03:38, the glossary segment immediately preceding, spells it right and defines it: "byug pa ni spos zhim po'i lde gu'o" (byug pa = thick fragrant unguent); (2) this segmen | CONFIRMED |
 
-## Medium severity &mdash; 40 entries
+## Medium severity &mdash; 44 entries
 
 | Citation | What it says | Should say | Evidence | Confidence |
 |---|---|---|---|---|
@@ -86,6 +86,10 @@ Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source 
 | `C03:394` | sangs rgyas kyi stan pa dar ba'i | sangs rgyas kyi bstan pa dar ba'i | The English for this token is 'the Buddha's teachings'. In the spine dictionary, `bstan pa` is the entry glossed ["taught", "the teachings", "teachings", "teaching", ...]; `stan pa` is an entry with NO hgm_gloss, and bare `stan` is glossed ["throne"] — a seat, | CONFIRMED |
 | `C03:402` | dang po skyes bu chung du dang thun mong ba'i lam gyi rim par blo sbyang ba ni | dang po skyes bu chung ngu dang thun mong ba'i lam gyi rim par blo sbyang ba ni | The Lam Rim scope idiom is 'skyes bu chung ngu' (person of lesser capacity); 'chung du' is not parsable here, since a terminative du cannot feed the comitative dang that follows. FILED AGAINST PROPOSAL B, WHICH REJECTED IT — B's counter-evidence does not survi | CONFIRMED |
 | `C03:410` | pha dam pa sangs gyas kyis | pha dam pa sangs rgyas kyis | The figure is Pha Dam pa Sangs rgyas. 'sangs gyas' is not a Tibetan word — the ra-mgo of rgyas is missing, and bare 'gyas' means 'right side', which yields no reading here. The segment's own English reads 'Pa Dampa Sangye', confirming sangs rgyas is intended.  | CONFIRMED |
+| `C03:420` | ston pa'i bka' la tsha dmar byed de | ston pa'i bka' la tshad mar byed de | CONFIRMED FROM THIS SEGMENT'S OWN TEXT. The syllable break falls one letter early. The idiom is tshad mar byed pa, 'to treat as valid/authoritative' (tshad ma 'valid' + terminative -r); tsha dmar parses as tsha ('hot/salt') + dmar ('red') and is meaningless in | CONFIRMED |
+| `C03:428` | dran shes bag yod dang lan pa'i sgo nas | dran shes bag yod dang ldan pa'i sgo nas | Re-derived by the reconciler from the spine. The frame is X dang ldan pa'i sgo nas, 'by way of being endowed with X', which is what GMR's 'by acting with proper recollection and watchfulness' renders; lan (reply/answer, occasion) gives no sense here. Spine cou | CONFIRMED |
+| `C03:428` | bsrung bsam tshon te | bsrung bsam mtshon te — or bsrung bas mtshon te (the same keyed letters BSAM TSON / BAS MTSON with the word br | Re-derived by the reconciler from the spine. GMR's 'is just one typical example' translates mtshon pa ('to illustrate, to take as an example'); tshon ('dye, colour') cannot construe with the gerundive te in this frame. Spine counts: wylie like '% mtshon te%' = | PROBABLE |
+| `C03:432` | nyes dmigs ri gnas thar pa'i bde ba la | nyes dmigs rig nas thar pa'i bde ba la | Misplaced syllable boundary in the ACIP of record (C03:432 reads 'NYES DMIGS RI GNAS'): 'ri gnas' (mountain abode) is not a possible reading after 'nyes dmigs', while 'rig nas' (having realized) is what the syntax requires and what GMR translates ('Bless me to | CONFIRMED |
 | `C03:53` | de nas dmigs pa gsal bar byas nas mNaDl phul te (ACIP: DE NAS DMIGS PA GSAL BAR BYAS NAS MnAdL PHUL TE) | maNDla (ACIP MAndLA), the spelling used at C03:1 | C03:1 records the same word as ACIP 'MAndLA' / Wylie 'maNDla', with the English 'mandel'. C03:53's 'MnAdL' transposes the vowel A onto the retroflex and drops the final A, leaving a form that is not well-formed Wylie (a bare 'm' root with no vowel, and a 'Dl'  | CONFIRMED |
 
 ## Low severity &mdash; 15 entries
@@ -110,7 +114,7 @@ Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source 
 
 ---
 
-## Digitisation artefacts &mdash; 17
+## Digitisation artefacts &mdash; 19
 
 *These are fixed **upstream in the data pipeline**, not by editing a document, and go to a different person. Two are class entries carrying a measured extent rather than one row per instance.*
 
@@ -132,7 +136,9 @@ Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source 
 | `C03:313` | rnyed sla'i rtsva kham 'ga' | rnyed sla'i rtswa kham 'ga' | 'rtsva' is not valid EWTS — wa-zur is written 'w' (rtswa, རྩྭ). The ACIP column of this segment reads RTZVA, which is CORRECT ACIP (V is the wa-zur code), so the defect is in the derived wylie column, not in the ACIP. Proved with the project's canonical engine | CONFIRMED |
 | `C03:317` | This would truly be an evil way to act, the way of a person without a conscience, of one who had no shame. | Segment 317 should carry only what its own Wylie licenses; this sentence's Tibetan exponent sits in C03:320, a | C03:317's full Wylie is "de'i phyir de dag la drin gzo'i bsam pa med na, klu'i rgyal po rnga sgra'i tshigs su bcad pa las" — it runs straight from the conditional clause to the citation frame and contains no term for 'evil', 'way/custom', 'conscience' or 'sham | PROBABLE |
 | `C03:403` | zhes pa'i oo ka gnyis kyis bstan te | zhes pa'i shloo ka gnyis kyis bstan te | "oo ka" is not a word in Tibetan or Sanskrit; the sense required is shloka (verse) — "this is taught by these two verses". This segment's own ACIP reads ",ZHES PA'I {SHl}OO KA GNYIS KYIS BSTAN TE,": the braced Sanskrit-letter token {SHl} was dropped wholesale  | CONFIRMED |
+| `C03:429` | our Lama to help us find the ability to do so. Notes to Reading Nine 37 Three lower realms: According to Buddhism there are six different types of reb | our Lama to help us find the ability to do so. | Measured on the spine row: the english field is 1500 characters; the translation of the Tibetan (which ends `gsol ba btab pa yin gsungs`) ends at character 499 with "do so." (character 499) The remaining 1001 characters are the Reading Nine endnote apparatus — | CONFIRMED |
 | `C03:48` | gang rnams phyogs bcu'i 'jig rten sgron ma dag,byang chub rim par sangs rgyas ma chags brnyes (ACIP: ...SGRON MA DAG,BYANG CHUB RIM PAR...) | ...sgron ma dag, ,byang chub rim par... — a verse-line break, punctuated as the other three breaks in the same | The identical segment punctuates its other verse-line breaks with a space: "...ma chags brnyes, ,mgon po de dag..." and "...thams cad la, ,'khor lo bla na med pa...". Only the first break, after 'sgron ma dag', is run together. The English confirms a line boun | CONFIRMED |
+| `class entry (186 segments end at exactly 1,500 characters)` | ' '.join(eng)[:1500] in engines/hgm_tools.py - the spine ingest silently caps every segment's English at 1,500 characters | the whole English of the segment; a segment whose translation runs past 1,500 characters loses its tail with n | Found by the skeptic pass on C03:429 (E-106), which asked why that field ends mid-sentence at 'there are five ' and measured length(english) = 1500 exactly. Census 2026-09-01 on build/hgm_spine_v27_2.db: 186 segments have length(english) = 1500 (DDA 28, C18 15 | CONFIRMED |
 
 ---
 
@@ -185,8 +191,8 @@ Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source 
 
 ## Recommended actions, by owner
 
-**Document editors.** The 60 document errata above. Start with the 5 HIGH entries. Note that several errors exist at MORE THAN ONE LOCUS because passages are ingested twice &mdash; each entry's evidence names them, and a per-segment fix will leave duplicates behind.
+**Document editors.** The 64 document errata above. Start with the 5 HIGH entries. Note that several errors exist at MORE THAN ONE LOCUS because passages are ingested twice &mdash; each entry's evidence names them, and a per-segment fix will leave duplicates behind.
 
-**Data-pipeline maintainers.** The 17 digitisation artefacts, plus two reports filed separately: `docs/upstream/FOLIO_MARKER_COLLISIONS.md` (119 folio markers spliced into caption numbers) and `docs/upstream/C13_COLUMN_OFFSET.md` (**C13:63&ndash;82 pairs Tibetan with the English of a different text &mdash; C13 should not be scanned until it is fixed**).
+**Data-pipeline maintainers.** The 19 digitisation artefacts, plus two reports filed separately: `docs/upstream/FOLIO_MARKER_COLLISIONS.md` (119 folio markers spliced into caption numbers) and `docs/upstream/C13_COLUMN_OFFSET.md` (**C13:63&ndash;82 pairs Tibetan with the English of a different text &mdash; C13 should not be scanned until it is fixed**).
 
 **Director.** The standing policy question: does ALL issue an erratum sheet, correct future printings, or annotate in place? The scan preserves everything verbatim either way &mdash; this is an editorial decision, not a technical one.

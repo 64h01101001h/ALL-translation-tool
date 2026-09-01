@@ -1,3 +1,62 @@
+## 📋 2026-09-01 — the 8/23 session picked up; what closed, what opened
+
+**Closed today (session "8 23 26" ended on an API error before any of its
+four-item plan started):**
+- C03:415–432 landed (six pages, 18 segments). The batch had been killed by
+  the monthly spend limit on 8/28; the 36 proposals survived in the workflow
+  journal and the 11 dead reconcilers were re-run from them. **Last week's
+  "three of seven REFUSED" was false**: the reconcilers' on-disk specs passed;
+  the StructuredOutput schema had stripped `eng_order` from the returned
+  copies. Standing fix: a reconciler's deliverable is a spec FILE that exited
+  0, never a returned object. Ledger: `data/alignment/C03_CAMPAIGN.md`.
+- The "two mutation regressions" (MEM-7-DEPTH, PERF-R2-ORRESIZE) were not
+  regressions. MEM-7-DEPTH re-run 2026-09-01: KILLED. PERF-R2-ORRESIZE is
+  `expect: survived` by design in the sweep. The claim came from a
+  Haiku-model reading with no run behind it. Nothing to fix.
+- Phase 3 gate for alignment v1 DRAFTED for Adam's ratification:
+  `docs/PHASE3_GATE_ALIGNMENT_V1.md` — recommends PASS WITH CONDITIONS,
+  close the epic at C01+C02+C03:1–417, open a new epic for C03:418–620.
+  **Adam decides; nothing in it is settled.**
+
+### ❓ NEEDS ADAM'S RULING — the 1,500-character English cap (E-107)
+`engines/hgm_tools.py` builds each segment's English as
+`' '.join(eng)[:1500]`. 186 segments across 35 courses end at exactly 1,500
+characters with no marker; 34 exceed it (one ingest path does not cap).
+Found by the skeptic on C03:429, whose field ends mid-sentence at "there are
+five ". Where the cap falls inside a translation, the rest of the Tibetan has
+no English and cannot be aligned. **Not fixed**: the cap is in the canonical
+ingest, so lifting it changes the spine and must be re-proved against the
+full batteries (rule 2) before any layer is rebuilt; affected note blocks
+(C03:376/429/620) and any truncated translations then need re-scanning.
+Ruling needed: lift the cap in the data project, or document it as a known
+limit of the spine.
+
+### ❓ NEEDS ADAM'S RULING — a fifth negative-affix form?
+C03:426 banks `ma` → "not" as a subword inside "cannot" (the Tibetan negation
+owning the English negative). The four confirmed forms are n't / un / im /
+less; "not" inside "cannot" is the same convention but not on the list. Left
+in, flagged in the page note. Confirm as the fifth form, or null it.
+
+### Still open from the 8/31 plan
+- [x] **T4c "perf regression" — CLOSED 2026-09-01, it was the build tree.**
+      `build/CMakeCache.txt` had an empty `CMAKE_BUILD_TYPE`, so allcore was
+      compiled at -O0 with no NDEBUG; the 5,053 ms ceiling was a Release
+      measurement. Same source at -O3: 4,777 ms. No lexicon code or data had
+      changed since 2026-08-07. Fix: CMakeLists.txt defaults an untyped
+      single-config configure to Release; T4c's log line now names an
+      unoptimized build so the number can never again be read as a regression.
+      No honest mutation pin exists (mutate.py builds the other tree, which has
+      an explicit type); T4c itself is the check.
+- **Model policy (Adam, 2026-09-01):** propose on Claude Opus 5; reconcile and
+      refute on Claude Fable 5.1. Written into `docs/alignment_briefs/` and the
+      campaign-log head.
+- [ ] **Sublime-grade editing design** (Phase 1–3 before any code). The 8/28
+      design workflow returned 0/11 agents (spend limit); not restarted.
+- [ ] **Author portraits design gate** — scope not yet clarified.
+- [ ] **C03:433–620** — 188 segments open; new epic per the gate document.
+- [ ] Untracked empty file `0` in the repo root (Aug 28, a stray redirect) —
+      delete when convenient.
+
 ## 📋 ADAM 2026-08-28 — ERRATA REGISTER, and notify the organisation
 
 Adam's directive: **every source-document finding gets banked in one place**,

@@ -1,3 +1,9 @@
+# ★ MODEL POLICY (Adam, 2026-09-01)
+PROPOSE agents: Claude Opus 5. RECONCILE and REFUTE agents: Claude Fable 5.1,
+high effort. The judgment steps decide whether a page lands and whether a claim
+leaves the building; the proposals are the cheaper half and are checked twice
+downstream. Briefs: docs/alignment_briefs/. Every batch heading names both.
+
 # ✅ WORK ORDER 2026-08-28 — BACKFILL DONE, C03 RESUMES AT 115
 
 The coverage backfill Adam ordered is COMPLETE. C01 closed at 496/496
@@ -1715,3 +1721,146 @@ intact. Across C03 and C16.
   Errata register: 96 entries, 60 document errata (5 HIGH), 4 ours.
   14,615 English and 18,641 Tibetan spans clean across 319 pages.
   Nine layer gates green; five of them new today.
+
+### Batches C03-128 and C03-131 (C03:403–405, 412–414) — 2026-08-28/29 — model: Opus
+Written into the ledger 2026-09-01 from commits d6b3ac1, fc22386 and b068219;
+both pages landed without a ledger entry, which is exactly the drift the
+Phase 3 gate document (docs/PHASE3_GATE_ALIGNMENT_V1.md, condition 2) says
+must not happen again.
+
+**c3p128 (403–405) landed after its re-run.** Both analysts independently
+nulled the `'chi` member rather than widen `'chi rkyen`, and the reconciler
+tested widening and rejected it: the only contiguous English holding both
+halves over-captures a relative clause GMR built to carry the compound.
+
+**c3p131 (412–414) landed on the third attempt, flat.** Refused first for a
+d=5 listed after the d=3 containing it, then for d=7 members hung off a d=3
+clause with no d=5 parent — the brief's omission, since the rules had never
+said d=7 needs a d=5 parent. Two spans that PASSED were rejected anyway:
+`ma sogs bar` → "without any involvement" would bank *sogs* as
+"involvement". "Rule 10 outranks coverage."
+
+**The builder had been discarding 2.7% of every analysis, silently** (E-097):
+it matched `class="u"` exactly, so every span carrying a grammar label was
+invisible. 1,260 spans across 141 pages recovered; the 99th suite now
+compares the builder against the PAGES. **E-095 downgraded to UNCERTAIN**:
+C03:412 and P1:67 both read comma-less against C16:456 — a variant, not a
+defect.
+
+- Evidence layer: 5,239 headwords / 9,993 pairs, 25,372 links. C03 at 414/620.
+  Ten layer gates green across 321 pages; 12,339/12,339 Tibetan exact.
+
+### Batches C03-132 … C03-137 (C03:415–432) — 2026-09-01 — model: Fable 5.1 (reconcile, audit); proposals Opus, 2026-08-28
+Six pages, eighteen segments, one of them a marker. **This is the batch the
+spend limit killed on 2026-08-28**: 36 proposals returned, 7 of 18
+reconcilers returned, 11 reconcilers and one skeptic died. Recovered today
+without re-proposing.
+
+**Last week's "three of seven REFUSED" was false, and the schema was the
+liar.** The reconcilers wrote their working specs to private directories
+WITH `eng_order` and ran the generator on those — exit 0. The copies
+returned through the StructuredOutput schema had no `eng_order` property,
+so the key was stripped and the returned spec failed. The on-disk specs
+were the proof; the schema discarded it. Fix, now standing: **a reconciler's
+deliverable is a spec FILE that has exited 0, not a JSON return value.**
+Every reconciler today wrote spec.json, body.html, errata.json and report.md
+to its own directory; all ten merged specs exited 0 on their first run.
+
+**The eleven lost reconcilers were re-run from the journaled proposals**, not
+re-proposed: the workflow journal held all 36 proposal objects, so the
+analysis was never lost, only the merge. 423 had three proposals (one
+analyst ran twice); all three were given to the reconciler.
+
+**430 is a corpus marker.** Both analysts independently returned zero spans:
+the wylie field holds the printed running head "steps shared with those of
+medium capacity" (acip: the same, uppercased), the English the chapter
+heading "V. Learning How to Want Freedom". Two consecutive lines of a
+part-divider ingested as one row. Rendered per the marker protocol
+(C01:39/43/143), registered so the coverage gate can count it, banked
+nothing. Both analysts filed it as an INGEST_ARTEFACT; the skeptic found
+E-071's sibling list already names C03:430 verbatim, so both claims were
+refuted as duplicates. Segment 429 ends mid-endnote and 431 opens a fresh
+sentence, so 430 is stranded furniture, not a mis-split of a neighbour.
+
+**Rulings worth keeping.**
+- 418 `chud mi za ba` → "never just fade away", whole, with `mi` → "never"
+  as member. A's `za ba` → "fade away" alone refused (banks *eat* as *fade*),
+  as the C03:245 reconciler refused it; the idiom is spanned whole at
+  C01:212/226 too. Flagged: the one span carrying a supplied adverb ("just").
+- 423 `gtso sreg` → "molten steel" rejected by the third proposal's null.
+  *btso bsreg* is boiling/burning (C01:218, C16:105 "boiled or scorched");
+  "steel" has no Tibetan under it. Passes every mechanical check.
+- 424 "very" given to `ha cang`, not minted into `phra zhing phra ba`: every
+  other spine occurrence of the bare reduplication (C03:311/403, C16:396/450,
+  P1:8, TCS08:5) renders "slightest" with no intensifier.
+- 425 `'jig rten 'di` → "this life" kept as d=5 with only `'di` → "this" as
+  member; `'jig rten` → "life" rejected because the sentence's one "world"
+  is already owned by the earlier `'jig rten`. `lhag par du` → "most", not
+  "most important". FLAGGED, both analysts agreed, GMR diathesis shifts:
+  `tshe` → "live", `shi` → "kill", `sprangs` → "poorest", `'grub` → "work".
+- 426 `ma` → "not" as a **subword inside "cannot"**, `'bad` → "do your best".
+  The negation owning the English negative is the affix convention, but
+  "not" of "cannot" is NOT one of the four confirmed forms (n't/un/im/less).
+  **NEEDS A RULING: fifth form, or null it.** Left in, flagged.
+- 427 `blang dor`: the tighter span pointed at English whose should/shouldn't
+  is `dge sdig`'s, so the wider d=3 `dge sdig gi blang dor` was taken on
+  rule 10 grounds; `thabs` → "choice" rejected as not that morpheme's.
+- 428 `tshon` → "typical example" kept (both agreed) with the *mtshon*
+  erratum filed beside it; `lan pa'i` → "with" refused as mapping the
+  emendation rather than the text. **The reconciler flagged its own
+  asymmetry** — consistency would null `tshon` too, or map `lan pa'i` — and
+  followed the brief (agreement stands; null wins a disagreement).
+- 429 `byang chub kyi sems` → "Wish for enlightenment" kept as the one
+  compound: a flat `sems` → "Wish" would bank a false dictionary fact.
+  B's `skyes bu chung 'bring` → "persons of lesser and medium capacity"
+  rejected: no Tibetan under "capacity".
+- 431 `don du gnyer ba` → "want" as one d=5 (a real dictionary unit, "to seek,
+  strive for"); `bskyed pa` nulled rather than banked as "learning"
+  (C03:247 renders the same phrase "Developing the Wish…").
+- 432 `byin gyis rlobs` rendered twice by GMR ("Bless me…", "Grant me then…");
+  "Bless me" taken as the lexical equivalent, the echo left unwrapped.
+
+**Errata: nine claimed, four refuted, five filed, plus one class entry of our
+own.** Every claim went to an independent skeptic told to refute it.
+- E-102 C03:420 `tsha dmar` → `tshad mar` (MEDIUM, CONFIRMED). P1:72 carries
+  the same keying but is the same passage re-ingested (137/168 P1 segments
+  match C03 verbatim), not a witness; `tshad mar byed` ×3 in the spine,
+  `tsha dmar` nowhere else, no dictionary entry.
+- E-103 C03:428 `dang lan pa'i` → `dang ldan pa'i` (MEDIUM, CONFIRMED).
+  `dang ldan pa` 822 hits, `dang lan pa` this row only; TCS05:363 reads
+  `bag yod dang ldan par`.
+- E-104 C03:428 `tshon te` → `mtshon te` (MEDIUM, PROBABLE). The missing m-
+  is established (word-initial `tshon te` is a hapax; `mtshon te` is a
+  headword). **The preceding syllable is not**: `bsam mtshon` occurs nowhere,
+  while `bas mtshon te` — the same keyed letters with the break moved — is the
+  author's own idiom at C03:550/571. Filed with the expected form left open.
+  A third repair, `bsrung (ba) tsam mtshon te`, had zero corpus support and
+  was REFUTED; folded into E-104 as a note rather than billed twice.
+- E-105 C03:432 `ri gnas` → `rig nas` (MEDIUM, CONFIRMED). TCS08:6 root text
+  reads `rig nas`, phonetic "rikne"; C16:463 is same-lineage.
+- E-106 C03:429 (HIGH, CONFIRMED). The English field carries the translation
+  (499 chars) and then 1,001 characters of Reading Nine endnote BODIES, ending
+  mid-sentence at "there are five ". Beyond the registered heading-glue class.
+  The skeptic corrected two things: P1:77's Tibetan differs by three
+  punctuation marks, not "identical"; and **the mid-sentence cut is ours**.
+- **E-107, ours: `' '.join(eng)[:1500]` in engines/hgm_tools.py silently
+  caps every segment's English at 1,500 characters.** 186 segments across 35
+  courses end at exactly 1,500 (DDA 28, C18 15, C12 14, C13 12, C03 9 …); 34
+  exceed it, so the cap's reach is not uniform. NOT FIXED: it is the canonical
+  ingest, so removing it changes the spine and needs the full battery re-proof
+  (rule 2) and Adam's ruling. Opened in TODO.md.
+- REFUTED: 431 `gnyis la, dang po` (grammatical Tibetan; TCS14:532 attests the
+  locative enumerator; a lone minority lectio is not an erratum); 430's two
+  INGEST_ARTEFACT claims (E-071's sibling list already names C03:430).
+- Register: **107 entries, 64 document errata (5 HIGH), 19 digitisation
+  artefacts, 9 ours.**
+
+- Evidence layer: **5,298 headwords / 10,183 pairs**, 25,957 links. C03 at
+  **432/620**, 188 open (433–620). Fifteen layer gates green across 327
+  pages: 45,243/45,304 fields exact, 0 fabrications, 12,623/12,623 Tibetan
+  exact, 48,403 spans seen by the builder, none dropped.
+- Mutation items from the 2026-08-31 plan closed without code: MEM-7-DEPTH
+  re-run today, KILLED (`libindex_smoke` reds on the depth cap);
+  PERF-R2-ORRESIZE is `expect: survived` in the sweep by design (unobservable
+  by invariant, TERMCAP reds first). The "two regressions" were a
+  Haiku-model reading with no run behind it.

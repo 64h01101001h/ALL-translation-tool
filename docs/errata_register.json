@@ -1210,5 +1210,77 @@
   "severity": "MEDIUM",
   "confidence": "CONFIRMED",
   "note": "Over-splitting an idiom that has no compositional sub-parts. The correct unit was already there one level up."
+ },
+ {
+  "item_id": "E-102",
+  "course": "C03",
+  "segment": "C03:420",
+  "kind": "TIBETAN_SPELLING",
+  "found": "ston pa'i bka' la tsha dmar byed de",
+  "expected": "ston pa'i bka' la tshad mar byed de",
+  "evidence": "CONFIRMED FROM THIS SEGMENT'S OWN TEXT. The syllable break falls one letter early. The idiom is tshad mar byed pa, 'to treat as valid/authoritative' (tshad ma 'valid' + terminative -r); tsha dmar parses as tsha ('hot/salt') + dmar ('red') and is meaningless in this frame. GMR's English in THIS segment is 'we must look on this Word of the Buddha as perfectly accurate' -- that is tshad mar byed and nothing else. The segment's OWN ACIP is keyed the same way, 'BKA' LA TSA DMAR BYED DE' (ACIP TSA = tsha; the correct form would be TSAD MAR), so the D is misplaced in the source keying and the defect is not an artefact of the EWTS converter. CORROBORATION (other segments, cited only for the correct spelling, not as the defect): 'tshad mar byed' occurs three times in the spine -- C05:78 'mdo tshad mar byed kyi mngon pa sde bdun', whose English renders it 'holds that sutra is valid'; ILL:3267 'lung tshad mar byed pa la'; and DDA:372 'de la yid ches tshad mar byed', which pairs the idiom with the very same yid ches this segment ends on. PARALLEL-WITNESS CHECK PERFORMED: 'tsha dmar' occurs exactly twice in the entire spine -- C03:420 and P1:72. P1:72 is this same Bodongwa passage ingested a second time (Wylie identical apart from punctuation; English identical apart from two defects of its own, 'we must to look' and 'fromold age'), so it is a duplicate of the same source, not an independent witness, and it does not establish tsha dmar as a published variant reading. No other spine text spells the collocation 'tsha dmar' anywhere. Filed as an upstream source-keying defect, not as an ingest corruption of C03:420.",
+  "severity": "MEDIUM",
+  "confidence": "CONFIRMED",
+  "note": "filed from the alignment batch, spine-verified on merge"
+ },
+ {
+  "item_id": "E-103",
+  "course": "C03",
+  "segment": "C03:428",
+  "kind": "TIBETAN_SPELLING",
+  "found": "dran shes bag yod dang lan pa'i sgo nas",
+  "expected": "dran shes bag yod dang ldan pa'i sgo nas",
+  "evidence": "Re-derived by the reconciler from the spine. The frame is X dang ldan pa'i sgo nas, 'by way of being endowed with X', which is what GMR's 'by acting with proper recollection and watchfulness' renders; lan (reply/answer, occasion) gives no sense here. Spine counts: wylie like '%dang ldan pa%' = 822 segments; '%dang lan pa%' = 1 segment, C03:428 only. The same head with the correct spelling is attested at TCS05:363 and TCS17:1076 ('bag yod dang ldan par byas te'). ACIP column of this segment reads 'DANG LAN PA'I', so the defect is in the keyed source, not the ACIP->EWTS converter. PARALLEL WITNESS: the passage's distinctive strings 'phra rags kyis bsdus' (wylie) and 'many different kinds of good' / 'watchfulness in every moment' (english) occur only in C03:428; the generic phrase 'skyabs 'gro'i bslab bya' hits C01:220, C09:90/93, C16:107, C17:488, TCS01:294, TCS18Commentary:336 but none of those carries this passage, so no published reading exists to cite against the emendation. Not a registered class. Both analysts filed this independently.",
+  "severity": "MEDIUM",
+  "confidence": "CONFIRMED",
+  "note": "filed from the alignment batch, spine-verified on merge"
+ },
+ {
+  "item_id": "E-104",
+  "course": "C03",
+  "segment": "C03:428",
+  "kind": "TIBETAN_SPELLING",
+  "found": "bsrung bsam tshon te",
+  "expected": "bsrung bsam mtshon te — or bsrung bas mtshon te (the same keyed letters BSAM TSON / BAS MTSON with the word break shifted one position). The missing m- is established; the preceding syllable (BSAM / BAS / BA TSAM) is not.",
+  "evidence": "Re-derived by the reconciler from the spine. GMR's 'is just one typical example' translates mtshon pa ('to illustrate, to take as an example'); tshon ('dye, colour') cannot construe with the gerundive te in this frame. Spine counts: wylie like '% mtshon te%' = 23 segments (e.g. C03:550 'bas mtshon te', C03:571 'bas mtshon te', Sunlight:633 'des mtshon te'); word-initial 'tshon te' = 1 segment, C03:428 only; 'bsam tshon' / 'bsam mtshon' = this segment only. ACIP column reads 'BSRUNG BSAM TSON TE', so the missing prefix is in the keyed source, not a converter artefact. PARALLEL WITNESS: none -- 'phra rags kyis bsdus' and the English 'many different kinds of good' occur only in C03:428; the seven other 'skyabs 'gro'i bslab bya' hits are the generic phrase, not this passage. Not a registered class. Both analysts filed this independently. PROBABLE rather than CONFIRMED because the evidence is sense plus corpus distribution, with no witness to compare. SKEPTIC PASS 2026-09-01 (independent re-check, survived): word-initial 'tshon te' is a corpus hapax and 'tshon' glosses only as hue/dye across 71 other word-initial tokens, while 'mtshon te' is itself a dictionary headword and ' mtshon te' occurs in 23 segments — so the missing m- is real. CAVEAT the claim did not consider: 'bsrung bsam' is also a hapax with no dictionary entry, and 'bas mtshon te' is the author's own idiom in this text (C03:550 'khyer bas mtshon te', C03:571 'mi rung bas mtshon te'; 4 hits corpus-wide), needing no lost syllable. A third repair proposed by one analyst, 'bsrung (ba) tsam mtshon te', has zero corpus support ('tsam mtshon te' = 0) and was refuted; it is recorded here as a note rather than filed. Correction to the analyst's count: 'bsam mtshon' occurs nowhere, not 'only here'.",
+  "severity": "MEDIUM",
+  "confidence": "PROBABLE",
+  "note": "filed from the alignment batch, spine-verified on merge"
+ },
+ {
+  "item_id": "E-105",
+  "course": "C03",
+  "segment": "C03:432",
+  "kind": "TIBETAN_SPELLING",
+  "found": "nyes dmigs ri gnas thar pa'i bde ba la",
+  "expected": "nyes dmigs rig nas thar pa'i bde ba la",
+  "evidence": "Misplaced syllable boundary in the ACIP of record (C03:432 reads 'NYES DMIGS RI GNAS'): 'ri gnas' (mountain abode) is not a possible reading after 'nyes dmigs', while 'rig nas' (having realized) is what the syntax requires and what GMR translates ('Bless me to perceive'). Parallel witnesses checked in the spine: C16:463 carries the identical string 'ri gnas', but it is the same ACI course transcription of this verse, so it is a shared inheritance rather than an independent witness. The independent witness is the root text, TCS08SourceOfAllMyGood:6, whose wylie reads 'nyes dmigs rig nas thar pa'i bde ba la', whose ACIP reads 'NYES DMIGS RIG NAS', and whose phonetic line reads 'nyemik rikne tarpay dewa la' (rikne = rig nas). 'rig nas' is also the form C03 itself uses elsewhere (C03:153 'rig nas dang po'i gnyen por', C03:459 'mthong zhing rig nas'); 'ri gnas' occurs nowhere in the spine except these two course segments. Not filed: the same TCS08 line reads 'don gnyer chen por skye bar' against 'chen po skye bar' here; that is a legitimate grammatical variant. The 'oo ka' for '{SHl}OO KA' is the registered converter-drop class and is not re-filed.",
+  "severity": "MEDIUM",
+  "confidence": "CONFIRMED",
+  "note": "filed from the alignment batch, spine-verified on merge"
+ },
+ {
+  "item_id": "E-106",
+  "course": "C03",
+  "segment": "C03:429",
+  "kind": "INGEST_ARTEFACT",
+  "found": "our Lama to help us find the ability to do so. Notes to Reading Nine 37 Three lower realms: According to Buddhism there are six different types of rebirth.",
+  "expected": "our Lama to help us find the ability to do so.",
+  "evidence": "Measured on the spine row: the english field is 1500 characters; the translation of the Tibetan (which ends `gsol ba btab pa yin gsungs`) ends at character 499 with \"do so.\" (character 499) The remaining 1001 characters are the Reading Nine endnote apparatus — the heading \"Notes to Reading Nine\" plus the full BODIES of notes 37 and 38 and the opening of note 39 — and the field ends mid-sentence, verbatim \"there are five \" (trailing space, no terminator). This exceeds the registered heading-only class (\"a following section's heading glued onto the end\"): the parallel witness P1:77 carries the identical Tibetan and the identical 499-character translation and shows exactly the registered form (translation, then only the next heading \"Asian Classics Institute Reading Three: … V. Learning How to Want Freedom\"), whereas C03:429 has absorbed a section body. The following heading is separately segmented here as C03:430 (\"V. Learning How to Want Freedom\"); a spine query for \"Three lower realms: According to Buddhism\" returns C03:429 and nothing else, so the Reading Nine notes exist in the corpus only as this buried, truncated tail. Alignment impact: the tail inflates English-side counts for this segment (e.g. it is where the ambiguity of common words must be measured) and is unsearchable as notes. SKEPTIC PASS 2026-09-01 (independent re-check, survived HIGH/CONFIRMED, two corrections): (1) P1:77's Tibetan is NOT identical — it differs by three punctuation marks (comma/shad placement); the 499-character translation is identical. (2) THE MID-SENTENCE CUT IS OURS. The english field is exactly 1500 characters because the spine ingest caps it: engines/hgm_tools.py, ' '.join(eng)[:1500]. The glued endnote bodies are a source-layout defect; the truncation at 'there are five ' is a pipeline defect. Siblings C03:376 and C03:620 (the Reading Eight and Ten note blocks) are also glued and also exactly 1500 characters; see the class entry filed alongside for the corpus-wide count. Field tail verbatim: 'there are five ' (trailing space, 1500th character).",
+  "severity": "HIGH",
+  "confidence": "CONFIRMED",
+  "note": "filed from the alignment batch, spine-verified on merge"
+ },
+ {
+  "item_id": "E-107",
+  "course": "corpus-wide",
+  "segment": "class entry (186 segments end at exactly 1,500 characters)",
+  "kind": "INGEST_ARTEFACT",
+  "found": "' '.join(eng)[:1500] in engines/hgm_tools.py - the spine ingest silently caps every segment's English at 1,500 characters",
+  "expected": "the whole English of the segment; a segment whose translation runs past 1,500 characters loses its tail with no marker, no count and no log line",
+  "evidence": "Found by the skeptic pass on C03:429 (E-106), which asked why that field ends mid-sentence at 'there are five ' and measured length(english) = 1500 exactly. Census 2026-09-01 on build/hgm_spine_v27_2.db: 186 segments have length(english) = 1500 (DDA 28, C18 15, C12 14, C13 12, C11 11, Sunlight 11, C17 10, C03 9 - including C03:376, 429, 620, the Reading Eight/Nine/Ten note blocks - MB2 8, C16 7, and 25 further courses); 34 segments EXCEED 1,500, so at least one ingest path does not apply the cap and its reach is not uniform. What is lost is not always apparatus: wherever the cap falls inside a translation, the corpus has no English for the rest of the Tibetan and nothing can align it. The 186 are a floor for the affected rows (a row cut at exactly the cap is certain; a row that happened to be shorter is unaffected).",
+  "severity": "HIGH",
+  "confidence": "CONFIRMED",
+  "note": "OURS, NOT FIXED. The cap lives in the canonical ingest (engines/hgm_tools.py), so removing it changes the spine itself and must be re-proved against the full batteries (inviolable rule 2) before any layer is rebuilt on it; the C03:376/429/620 note blocks and any truncated translation would need re-scanning afterwards. Opened in TODO.md 2026-09-01 for Adam's ruling and the data project. No document edit is asked of ALL for this entry - it is a pipeline defect on our side."
  }
 ]
