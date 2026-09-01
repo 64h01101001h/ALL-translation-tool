@@ -39,6 +39,26 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
+# PERF (2026-09-01): a tree configured without -DCMAKE_BUILD_TYPE compiles
+# with NO optimization flag at all (CMake's default is the empty type —
+# not Debug, not Release: `-std=gnu++20 -Wall` and nothing else). Such a
+# tree ran the app selftest's T4c lexicon build in 35.6 s against a
+# 16 s ceiling that was measured on the press's Release build; the same
+# source at -O3 builds it in 4.8 s. No code or data had changed. Every
+# documented configure (docs/MAINTAINERS.md, tools/package_macos.sh,
+# tools/sanitized_battery.sh) names a type, so an untyped tree is never
+# anyone's intent: default it to Release. Same FORCE-repair idiom as
+# ALL_MACOS_MIN above — the empty string is exactly what an already-
+# configured untyped tree has cached, and an explicit -DCMAKE_BUILD_TYPE=
+# Debug/RelWithDebInfo/... is non-empty and survives untouched.
+# Multi-config generators (Xcode) pick per build and are left alone.
+if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
+  set(CMAKE_BUILD_TYPE "Release" CACHE STRING
+      "Build type (Release unless stated — perf floors are measured on it)"
+      FORCE)
+  message(STATUS "CMAKE_BUILD_TYPE was empty (unoptimized) — set to Release")
+endif()
+
 # T1 (total-quality engine): the wall. Warnings were driven to zero on
 # 2026-08-20 (a collapsed-escape regex bug hid among them); -Wall keeps
 # the count at zero. (-Wextra evaluated separately before adoption.)
