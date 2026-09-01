@@ -1282,5 +1282,89 @@
   "severity": "HIGH",
   "confidence": "CONFIRMED",
   "note": "OURS, NOT FIXED. The cap lives in the canonical ingest (engines/hgm_tools.py), so removing it changes the spine itself and must be re-proved against the full batteries (inviolable rule 2) before any layer is rebuilt on it; the C03:376/429/620 note blocks and any truncated translation would need re-scanning afterwards. Opened in TODO.md 2026-09-01 for Adam's ruling and the data project. No document edit is asked of ALL for this entry - it is a pipeline defect on our side."
+ },
+ {
+  "item_id": "E-108",
+  "course": "C03",
+  "segment": "C03:437",
+  "kind": "TIBETAN_SPELLING",
+  "found": "sngon chad thob med nas da bar",
+  "expected": "sngon chad thog med nas da bar",
+  "evidence": "QUOTED AS FILED BY THE RECONCILER: sngon chad thob med nas da bar   (ACIP: \"SNGON CHAD THOB MED NAS DA BAR\") || Confirmed from this segment's own text: GMR renders the phrase \"From time with no beginning up to the present moment\", which is thog med ('beginningless', lit. without a start); thob med would be 'without attainment', which the English does not say and which makes no sense after sngon chad. The error is in the ACIP source of record (THOB), so it is upstream of our ingest, not an ingest artefact. Corpus check (re-run by the reconciler): wylie like '%thog med%' = 36 rows, '%thog med nas%' = 22 rows; '%thob med%' = exactly 2 rows, C03:437 and P1:80. P1:80 is this same passage (identical wylie apart from comma placement, identical English, identical ACIP reading THOB), so it is the same text transmitted twice, not an independent published witness for 'thob'; equally there is no parallel carrying 'sngon chad thog med' (0 rows), so the emendation rests on sense plus the English, not on a matching parallel. Registered classes checked and not applicable.",
+  "severity": "MEDIUM",
+  "confidence": "CONFIRMED",
+  "note": "filed from the alignment batch, spine-verified on merge"
+ },
+ {
+  "item_id": "E-109",
+  "course": "C03",
+  "segment": "C03:437",
+  "kind": "TIBETAN_SPELLING",
+  "found": "nying ma tshams sbyar",
+  "expected": "'khor ba'i gnas su nying mtshams sbyar",
+  "evidence": "QUOTED AS FILED BY THE RECONCILER: 'khor ba'i gnas su nying ma tshams sbyar   (ACIP: \"'KHOR BA'I GNAS SU NYING MA TSAMS SBYAR\") || Confirmed by an INTERNAL witness: the same row spells the word correctly later, 'nyer len gyi phung por nying mtshams sbyar nas' (ACIP 'NYING MTSAMS SBYAR NAS'). The verb is nying mtshams sbyar ba, 'to join the link of rebirth' (GMR: 'take ... birth'); there is no word 'ma tshams' -- the syllable ma is spurious and mtshams has lost its m- prefix. The error is in the ACIP source of record (MA TSAMS), so it is upstream of our ingest. (ACIP TSAMS for tshams is the normal ACIP convention and not part of the error.) Corpus check (re-run by the reconciler): '%nying mtshams%' = 30 rows; '%nying ma tshams%' and indeed '%ma tshams%' anywhere = exactly 2 rows, C03:437 and P1:80. P1:80 is this same passage transmitted twice (identical wylie, English and ACIP), not an independent published witness.",
+  "severity": "MEDIUM",
+  "confidence": "CONFIRMED",
+  "note": "filed from the alignment batch, spine-verified on merge"
+ },
+ {
+  "item_id": "E-110",
+  "course": "C03",
+  "segment": "C03:438",
+  "kind": "TIBETAN_SPELLING",
+  "found": "sdug bsngal gsum gyis go mtshams med par mngar ba las",
+  "expected": "sdug bsngal gsum gyis go mtshams med par mnar ba las",
+  "evidence": "Confirmed from this segment's own text. ACIP, the source of record, reads 'SDUG BSNGAL GSUM GYIS GO MTSAMS MED PAR MNGAR BA LAS', so the error is in the source, not in the wylie conversion (MTSAMS -> mtshams is the correct TS -> tsh conversion). mngar ba means 'sweet'; the verb the instrumental agent 'sdug bsngal gsum gyis' requires is mnar ba, 'to be tormented', and Geshe Michael's English for the clause is 'tormented by the three different kinds of suffering'. The collocation 'sdug bsngal gyis mnar' occurs 21 times in the spine (C01:152, C01:253, C01:277, C03:493, C06:141, C07:31, C12:310, C16:59, C17:74, C18:396, TCS02:267, TCS09:301/311/312, TCS14:108, TCS18Commentary:347, Sunlight:415, SPF:238, P1:109, P3:39); every other 'mngar ba' in the spine (C05:251, C15:396, C16:827, C18:1119, ILL:2332, P5:125, TCS09:413, TCS10:213, DTE:116, DTE:117) is the taste-word in a list of flavours or in 'sweet, clear, cool water'. PARALLEL WITNESS CHECKED: the only other row carrying this passage (wylie like '%go mtshams med par m%ar ba%'; english like '%friend who brings us pain%' / '%without the slightest break%') is P1:81, which reads 'mngar ba' identically; per C03_CAMPAIGN.md (E-102 entry) P1 is the same passage re-ingested, 137/168 P1 segments matching C03 verbatim, and is not an independent witness. No C16 or TCS row carries the passage. SKEPTIC PASS 2026-09-01 (survived, MEDIUM/CONFIRMED): dictionary gives mngar ba = sweet vs mnar ba = torment, matching GMR's 'tormented'; collocation recount 'sdug bsngal gyis mnar' = 23 rows (the claim's 21 omitted P3:66, P3:90, P6:13), 0 rows for gyis/kyis mngar spine-wide; P1:81 is the same text re-ingested, not a witness.",
+  "severity": "MEDIUM",
+  "confidence": "CONFIRMED",
+  "note": "filed from the alignment batch, spine-verified on merge"
+ },
+ {
+  "item_id": "E-111",
+  "course": "C03",
+  "segment": "C03:440",
+  "kind": "INGEST_ARTEFACT",
+  "found": "phyi ma'i snang shas",
+  "expected": "the row's Tibetan should close the verse line: \"...YANG YANG BSAMS PAS PHYI MA'I SNANG SHAS LDOG,\"",
+  "evidence": "QUOTED AS FILED BY THE RECONCILER: wylie/ACIP of C03:440 end at \"YANG YANG BSAMS PAS PHYI MA'I SNANG SHAS\" (no closing shad) while the row's English ends \"...And the cycle's suffering: stop desire for the future.\" || Confirmed from this row's own text. (1) The quoted verse is in nine-syllable metre: line 1 of the citation, las 'bras mi slu 'khor ba'i sdug bsngal rnams, has nine syllables; line 2, yang yang bsams pas phyi ma'i snang shas, has eight, so the row ends one syllable short of the line. (2) Every other verse line in the row closes with a shad (\", ,\"); the row ends at snang shas with none. (3) The row's English renders the complete line including its verb (\"stop desire for the future\"), and \"stop\" has no Tibetan anywhere in the row. The missing syllable is ldog: C03:441's wylie begins \"ldog,ces pa ltar thog mar 'khor ba'i phun tshogs...\" while its English begins \"Suppose at first we are able to find...\", so the 440/441 boundary is offset by one word. The undivided line is witnessed at C01:207 and C16:98 (\"...PHYI MA'I SNANG SHAS LDOG,CES PAS BSTAN TE\") and at P1:83 (\"...phyi ma'i snang shas ldog\", same source re-ingested, corroborative only). The same split recurs two rows later: C03:443 ends \"...yid la goms pas tshe 'di'i snang shas\" with English \"...Think it constantly, stop desire for this life.\" and C03:444 opens \"ldogs pa ltar...\". Effect: \"stop\" in this row is necessarily left unwrapped, and ldog in C03:441 has no English on its row. Nothing is lost across the pair, hence LOW. SKEPTIC PASS 2026-09-01 (two independent skeptics, one on each side of the boundary, both survived): C03:440's wylie, ACIP and raw ingest record stop at 'snang shas' and 'ldog,ces' opens 441; the independent witnesses C01:207 and C16:98 carry the undivided line '...phyi ma'i snang shas ldog,ces pas bstan te'. The mirror claim filed from 441 ('ldog,' as the tail of 440's verse) is the same defect and is folded into this record rather than billed twice. THE SAME CUT RECURS at eight C03 row boundaries: 36/37, 163/164, 165/166 (filed as E-062), 440/441, 443/444, 472/473, 594/595, 610/611 - a verse line's final syllable spilling into the next row is a class, not a one-off; recorded here as a list rather than as a class entry so every citation stays checkable.",
+  "severity": "LOW",
+  "confidence": "CONFIRMED",
+  "note": "filed from the alignment batch, spine-verified on merge"
+ },
+ {
+  "item_id": "E-112",
+  "course": "C03",
+  "segment": "C03:441",
+  "kind": "TIBETAN_SPELLING",
+  "found": "rnyed kyang yin brtan med par",
+  "expected": "RNYED KYANG YID BRTAN MED PAR SNGAR (wylie: \"rnyed kyang yid brtan med par sngar\")",
+  "evidence": "QUOTED AS FILED BY THE RECONCILER: RNYED KYANG YIN BRTAN MED PAR SNGAR (wylie: \"rnyed kyang yin brtan med par sngar\") || yid brtan ('trust', lit. mind-steady) is the idiom; yin brtan is not a Tibetan collocation, and reading yin as a copula leaves 'rnyed kyang yin' without a sensible parse. This segment's own English, 'None of these forms can be trusted though', translates yid brtan med. Re-run sweep of the spine: wylie LIKE '%yin brtan%' returns exactly two rows, C03:441 and P1:84; wylie LIKE '%yid brtan%' returns 36 rows across C03, C05, C08, C09, C10, C16, C17, TCS03, TCS08, TCS15, TCS16, GIE, GK, ILL, P5 and DDA (including C03:432 and C16:463 'yid brtan mi rung', C03:458 'yid brtan byar mi rung ba', C08:369 / C17:458 'de la yid brtan du mi rung ste'). Parallel witness: P1:84 is the same passage and its ACIP also reads YIN BRTAN, so this is the published reading of the source file, not a converter or ingest corruption -- hence TIBETAN_SPELLING, not INGEST_ARTEFACT. P1 is a re-ingest of the same digital text and therefore not an independent witness for the spelling. The wylie is quoted uncorrected in the alignment, per the verbatim rule.",
+  "severity": "MEDIUM",
+  "confidence": "CONFIRMED",
+  "note": "filed from the alignment batch, spine-verified on merge"
+ },
+ {
+  "item_id": "E-113",
+  "course": "C03",
+  "segment": "C03:445",
+  "kind": "TIBETAN_SPELLING",
+  "found": "THAMS CAD MKHYEN PA'I GO 'PANG BSGRUB PA",
+  "expected": "THAMS CAD MKHYEN PA'I GO 'PHANG BSGRUB PA",
+  "evidence": "Confirmed from this segment's own text. ACIP (source of record) reads GO 'PANG; the wylie field carries the same reading, go 'pang, so this is in the source, not the converter. The word is go 'phang (rank, station, state), which is what GMR translates: 'the state of All-Knowing'. Re-derived corpus counts: acip LIKE '%GO ''PANG%' returns exactly one row, C03:445; acip LIKE '%GO ''PHANG%' returns 219; the wylie field splits identically, 1 vs 219. Stronger still, the syllable 'pang occurs NOWHERE else in the corpus wylie: a-chung ('a) prefixes only voiced or aspirated radicals in Tibetan orthography ('g 'j 'd 'b 'dz 'kh 'ch 'th 'ph 'tsh), so 'p- is not a spellable syllable onset and 'pang cannot be a variant. Parallel-witness check: no other segment carries this passage (english LIKE '%habit of hoping for the%', english LIKE '%up to the final end%', wylie LIKE '%tshe ''di snang gi zhen pa%', wylie LIKE '%rang res ngan ''gro%' each return C03:445 alone). The exact collocation mkhyen pa'i go 'p… appears in seven other rows, every one of them 'phang: C01:84, C16:32, TCS02:315, TCS09:37, Sunlight:595, Sunlight:707, SPF:461. The nearest relative for the surrounding idiom, ILL:126 (thog mtha' bar gsum du gal che), shares only that closing idiom and says nothing about go 'phang. Registered classes checked and not applicable: no {SHl} drop, no fused footnote number, no folio marker, no glued heading; the ACIP trailing shad ',' absent from the wylie is the normal strip, and ACIP TSE for wylie tshe is the ACIP convention (TS = tsh), not an error. A dropped aspiration H in one row against 219 correct ones, yielding an impossible syllable, is a keystroke error.",
+  "severity": "MEDIUM",
+  "confidence": "CONFIRMED",
+  "note": "filed from the alignment batch, spine-verified on merge"
+ },
+ {
+  "item_id": "E-114",
+  "course": "C03",
+  "segment": "C03:444",
+  "kind": "TIBETAN_SPELLING",
+  "found": "tshe 'di'i snag shas ldog pa dgos te",
+  "expected": "tshe 'di'i snang shas ldog pa dgos te",
+  "evidence": "Confirmed from this row's own text: wylie reads 'snag shas' and the ACIP (source of record) reads 'TSE 'DI'I SNAG SHAS LDOG PA DGOS TE,' - so the defect is in the e-text, not our converter. The term is snang shas (preoccupation with / desire for appearances), which is what GMR translates here ('desire'). The same sentence's verse half, C03:443, ends 'tshe 'di'i snang shas' (ACIP 'SNANG SHAS'), and the identical verb-frame reads 'snang shas ldog pa dgos' at C03:442. Parallel-witness sweep re-run by the reconciler: 'snag shas' occurs in exactly two rows of the spine (C03:444, P1:86); 'snang shas' occurs in 29 rows (C01 x14, C03 x4 [440,442,443,454], C16 x6, P1 x3, TCS09 x2). P1 is the same text re-ingested (PROPOSE_BRIEF: not an independent witness), so there is no published reading 'snag shas'. Meaning unaffected in the English; MEDIUM. SKEPTIC PASS 2026-09-01 (survived, MEDIUM/CONFIRMED): 'snag shas' occurs only here and in the re-ingested P1:86; the dictionary has 'snang shas' = desire, matching GMR's English and C16:61's independent 'tshe 'di'i snang shas ldog pa zhig dgos'; every claimed count re-ran exactly.",
+  "severity": "MEDIUM",
+  "confidence": "CONFIRMED",
+  "note": "filed from the alignment batch, spine-verified on merge"
  }
 ]
