@@ -1864,3 +1864,102 @@ own.** Every claim went to an independent skeptic told to refute it.
   PERF-R2-ORRESIZE is `expect: survived` in the sweep by design (unobservable
   by invariant, TERMCAP reds first). The "two regressions" were a
   Haiku-model reading with no run behind it.
+
+### Batches C03-138 … C03-143 (C03:433–450) — 2026-09-01 — propose: Opus 5 · reconcile/refute: Fable 5.1
+Six pages, eighteen segments, the first batch run under the model policy, and
+the first run entirely from the promoted briefs in docs/alignment_briefs/.
+Thirty-six analysts, eighteen reconcilers, six skeptics. **Every one of the
+eighteen merged specs exited 0 on the first run.** Every agent wrote to its own
+directory and proved its spec against the real generator before returning;
+nothing was taken from a returned object.
+
+**The harness caps concurrent agents at twenty**, so the batch ran as a rolling
+queue rather than a single fan-out: analysts first, each reconciler launched
+the moment its pair was home, each skeptic the moment its reconciler was.
+Pages landed in three groups as their triples completed (140; 138–139; 142;
+then 141 and 143). That is the shape to expect from now on.
+
+**Where the two angles disagreed, and how it went.** The Tibetan-first analyst
+tends to bank a verb's lexical sense onto GMR's functional English; the
+English-first analyst tends to over-capture GMR's scaffolding. The reconcilers
+overruled BOTH analysts on an agreed span five times this batch — the
+"agreement stands" rule yielded to rule 10 each time:
+- 433 `blang dor` → "observing", not "observing the laws": TCS07:523 renders
+  the same frame with "observation" on `blang dor` and "the laws" with `las
+  'bras`, so "the laws" is honestly neither word's.
+- 438 `su` in `grogs su dang 'grogs kyang` is the animate indefinite "whoever"
+  (the Eight Verses idiom, C14:25), not a terminative — both analysts had
+  nulled it, and one had filed a dropped-`gang` erratum for the "Whatever" it
+  left stranded. The span fixed the erratum.
+- 443 `dang por` → "Before" rejected though both banked it and both passed:
+  the subordinator is GMR's, and the word's priority sense surfaces as his
+  own "first" at 444.
+- 449 `chod` → "Dispense with", not "Dispense": "dispense" alone means hand
+  out, which `chod` (cut, settle) does not say; the "with" is the lexeme's.
+- 450 `tshogs pa` → "everything is just right" nulled: both analysts had
+  flagged it first and both had banked it anyway. Four English words on
+  "gathered". Passes every mechanical check.
+
+**Other rulings worth keeping.**
+- 435 (83 spans, the Great Fifth's verse with GMR's interpolated questions):
+  `las` → "karma" kept and `sngon` → "before" nulled, both inside the
+  rhetorical questions — a technical noun is not question framing. Two errata
+  dropped because C16:464 carries both readings.
+- 436 `nyid` → "none other than" kept: deleting `nyid` removes the licence for
+  GMR's idiom; `byas` → "cherished" refused as banking a light verb.
+- 437 `sngon chad` → "time" and `byung` → "find" nulled against A: "formerly"
+  is not "time", and `ma byung na` has no verb of finding.
+- 439 `rang bzhin` → "nature", not "very nature"; once "very" goes, `bzhin`
+  alone cannot carry "nature", so no member survives.
+- 440 `gcod` → "stop" inside "stopping" refused as a broken word even though
+  d=7 members are exempt from the generator's boundary check.
+- 442 `kun 'byung` → "source of all pain" kept; no member claims "pain", which
+  is licensed by *samudaya* (C05:91, TCS14:67), not by a morpheme.
+- 446 `nus pa` → "powerful", `che ba` nulled, "results" left bare: the
+  head-to-head pairing would have banked both words crossed.
+- 447 `mi rtsi` → "no interest" kept: `rtsi` (reckon, set store by) genuinely
+  underlies "interest", unlike the `sogs` → "involvement" class.
+- 444 `tshul` → "following" and `yod` → "have" nulled though both analysts
+  banked them and both flagged them: each English word fills the Tibetan
+  word's slot without rendering it. A's INGEST_ARTEFACT record for the orphan
+  `s` of `ldogs` was refuted — P1:85/86 shows the `s` sits in the source text
+  in both ingests.
+- 448 (92 spans, Yang Gonpa's verses) `sdug rogs` → "Through thick and thin"
+  kept as B's tighter span with A's member `rogs` → "with us" dropped (GMR's
+  supplied pronoun): a category shift, not a change of sense, and nothing else
+  on either side could produce it. A's `skyel mkhan` → "one Who can take"
+  dissolved: it banks GMR's modal "can".
+
+**Errata: eleven claimed by the reconcilers, seven filed, one folded, three
+dropped at the reconcile gate; every kept claim went to an independent
+skeptic and every one survived** — the reconcilers are now the stricter gate.
+- E-108 C03:437 `thob med` → `thog med` (MEDIUM, CONFIRMED); TCS10:271 reads
+  `thog med nas da bar` independently.
+- E-109 C03:437 `nying ma tshams` → `nying mtshams` (MEDIUM, CONFIRMED); the
+  same row spells it `nying mtshams` forty words later.
+- E-110 C03:438 `mngar ba` → `mnar ba` (MEDIUM, CONFIRMED). The skeptic
+  corrected the count upward: `sdug bsngal gyis mnar` 23 rows, not 21.
+- E-111 C03:440 (LOW, CONFIRMED) — the row ends mid-verse at `phyi ma'i
+  snang shas`; `ldog,ces` opens 441. C01:207 and C16:98 carry the line whole.
+  **Two skeptics judged it from both sides**; 441's mirror claim is folded in.
+  **The same cut recurs at eight C03 row boundaries** (36/37, 163/164,
+  165/166 = E-062, 440/441, 443/444, 472/473, 594/595, 610/611) — listed in
+  the record so each stays checkable, not filed as a class.
+- E-112 C03:441 `yin brtan` → `yid brtan` (MEDIUM, CONFIRMED); 16 `yid brtan`
+  headwords, zero `yin brtan`.
+- E-113 C03:445 `go 'pang` → `go 'phang` (MEDIUM, CONFIRMED); 1 against 219,
+  and `'pang` is not a spellable syllable.
+- E-114 C03:444 `snag shas` → `snang shas` (MEDIUM, CONFIRMED); C16:61 reads
+  `snang shas` independently.
+- Dropped at the reconcile gate: 435's `mgal mi` and `dpag bor` (C16:464
+  carries both — the published reading); 438's dropped-`gang` (a span, not a
+  defect, once `su` is read as "whoever"); 440's `mi slu`/`mi bslu` (wylie and
+  ACIP agree, valid present stem); 444's orphan `s` of `ldogs` (P1:85/86 shows
+  it sits in the source in both ingests).
+- Register: **114 entries, 70 document errata (5 HIGH), 20 digitisation
+  artefacts, 9 ours.**
+
+- Evidence layer: **5,381 headwords / 10,421 pairs**, 26,724 links. C03 at
+  **450/620**, 170 open (451–620). Fifteen layer gates green across 333
+  pages: 46,551/46,612 fields exact, 0 fabrications, 12,999/12,999 Tibetan
+  exact, 49,937 spans seen by the builder, none dropped. app_selftest ALL PASS.
