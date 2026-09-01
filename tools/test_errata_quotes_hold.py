@@ -45,7 +45,11 @@ CEILING = {
     # the ceiling comes back down from 9 to 4 rather than being left loose
     # enough to hide real growth. It rises only when a non-layer class entry
     # is added deliberately, never to quiet a failure.
-    'not-a-single-segment-citation': 4,
+    # 4 -> 5 on 2026-09-01 for E-107, an INGEST_ARTEFACT class entry (186
+    # segments end at exactly 1,500 characters because engines/hgm_tools.py
+    # caps the English at [:1500]). It cites an extent, not a segment, and it
+    # is OURS, so no spine quote can hold for it; it is named in the output.
+    'not-a-single-segment-citation': 5,
 }
 # 3, not 8. The first draft used 8 and threw away '[33}', '[17]' and
 # 'krma pa' as unparseable - the SHORTEST errata are the most checkable,
