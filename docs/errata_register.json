@@ -1366,5 +1366,53 @@
   "severity": "MEDIUM",
   "confidence": "CONFIRMED",
   "note": "filed from the alignment batch, spine-verified on merge"
+ },
+ {
+  "item_id": "E-115",
+  "course": "C03",
+  "segment": "C03:464",
+  "kind": "TIBETAN_SPELLING",
+  "found": "RNAM PAR DAG BA",
+  "expected": "RNAM PAR DAG PA",
+  "evidence": "Verbatim in this segment's ACIP (source of record): \"THAR PA DON GNYER GYI BLO RNAM PAR DAG BA NGES 'BYUNG GI BSAM PA\"; the wylie field agrees (\"rnam par dag ba\"), so this is not a wylie-conversion slip and not a registered ingest class. Orthographic rule: after a GA suffix the nominaliser is PA, not BA. Reconciler re-ran the counts: 'rnam par dag pa' occurs in 107 spine rows, 'rnam par dag ba' in exactly one (C03:464). Parallel witness: 'yid gting nas log', 'rnam par dag ba nges' and the full 'rje thams cad mkhyen pa nyid kyis' each return C03:464 alone; 'thar pa don gnyer gyi blo' alone hits 12 other rows (C01, C09, C17, TCS02, TCS03, SSL, SVN) but as the lamrim stock phrase, none continuing into 'rnam par dag', so there is no published reading of this passage to defer to. Against CONFIRMED: bare 'dag ba' for 'dag pa' is attested in three TCS ACIP fields (TCS10:642 \"'GRO BA DAG BA'I\", TCS13:754 \"DAG BA'I SNANG ZHEN\", TCS13:761 \"MA DAG BA'I NYES SKYON\"), so the variant occurs in ACIP input and may be the etext's own spelling rather than a fault introduced here. One-letter variant, sense unchanged ('utterly pure'); the alignment spans it verbatim as printed. SKEPTIC PASS 2026-09-01 (survived, LOW/PROBABLE): no parallel witness of this passage exists; TCS09:269 spells the same compound rnam par dag pa; the register's E-048 (bsngags ba -> bsngags pa) treats this ba-after-g class as a keying erratum; dag ba appears only in two uncurated LC scaffold rows, and ACIP itself marks DAG BAR {%PAR} at GK:302; counts re-ran (107 vs 1).",
+  "severity": "LOW",
+  "confidence": "PROBABLE",
+  "note": "filed from the alignment batch, spine-verified on merge"
+ },
+ {
+  "item_id": "E-116",
+  "course": "C03",
+  "segment": "C03:467",
+  "kind": "TIBETAN_SPELLING",
+  "found": ",'DI NA RNAM DAG GTING 'DZIN SKYE BA LA,",
+  "expected": ",'DI NA RNAM DAG TING 'DZIN SKYE BA LA,",
+  "evidence": "Confirmed from this row's own text: line 2 spells the concentration term correctly (ACIP ',ZHI GNAS TING 'DZIN DGOS PA'I MING TZAM SNANG ,'), line 3 spells the same term GTING 'DZIN, which is not a lexical item, and the English 'Pure single-pointed mind' translates TING 'DZIN (samadhi), not any sense of GTING ('depth'). Parallel witnesses checked: C09:32 and C17:473 (a different GMR translation of the same quatrain, so independent) both read ',DI NA RNAM DAG TING 'DZIN SKYE BA LA,'. C16:473 and P1:93 read GTING 'DZIN but carry this row's English word for word — same lineage, not independent — so this is the PUBLISHED reading of the C03/C16 edition, not an ingest artefact of this row; the converter is behaving correctly elsewhere in the row (TZAM -> tsam, TSUL -> tshul). Filed as an upstream edition spelling slip for editorial correction. SKEPTIC PASS 2026-09-01 (survived): the independent witnesses C09:32 and C17:473 carry the corrected reading; only same-lineage C16:473 and re-ingested P1:93 share the C03 form.",
+  "severity": "MEDIUM",
+  "confidence": "CONFIRMED",
+  "note": "filed from the alignment batch, spine-verified on merge"
+ },
+ {
+  "item_id": "E-117",
+  "course": "C03",
+  "segment": "C03:467",
+  "kind": "TIBETAN_SPELLING",
+  "found": ",TSUL KHRIMS BSLAB PA DGOS PA'I GTAM YAG NUB,",
+  "expected": ",TSUL KHRIMS BSLAB PA DGOS PA'I GTAM YANG NUB,",
+  "evidence": "Not confirmable from this row's text alone, so downgraded from A's CONFIRMED/HIGH. Internal evidence is stylistic: YANG NUB ('even the talk ... has sunk away') is the answering phrase to MING TZAM SNANG ('only the mention appears') in line 2, and gives NUB a subject; with YAG, NUB is stranded and the English of this row drops it entirely. The two independent witnesses C09:32 and C17:473 both read '...DGOS PA'I GTAM YANG NUB,' and GMR's rendering there ('and not a peep On the fact that good concentration can't come without first training in ethics') translates YANG NUB. C16:473 and P1:93 read YAG but share this row's English word for word (same lineage), so YAG is the PUBLISHED reading of the C03/C16 edition and not an ingest corruption of this row. The English 'And this is fine advice' is a faithful rendering of GTAM YAG as printed and is therefore not filed separately as an English error (A's third record dropped). SKEPTIC PASS 2026-09-01 (survived): the independent witnesses C09:32 and C17:473 carry the corrected reading; only same-lineage C16:473 and re-ingested P1:93 share the C03 form.",
+  "severity": "MEDIUM",
+  "confidence": "PROBABLE",
+  "note": "filed from the alignment batch, spine-verified on merge"
+ },
+ {
+  "item_id": "E-118",
+  "course": "C03",
+  "segment": "C03:468",
+  "kind": "TIBETAN_SPELLING",
+  "found": "KHAS LEN TAM LA RAB TU DPA' BA YIS",
+  "expected": ",KHAS LEN TZAM LA RAB TU DPA' BA YIS,  (wylie: \"khas len tsam la rab tu dpa' ba yis,\")",
+  "evidence": "QUOTED AS FILED BY THE RECONCILER: ,KHAS LEN TAM LA RAB TU DPA' BA YIS,  (wylie: \"khas len tam la rab tu dpa' ba yis,\") || ACIP is the source of record and prints TAM in this row; the wylie follows it (\"khas len tam la\"). The converter is behaving normally elsewhere in the same row (CI TZAM -> ci tsam, BRTZON -> brtson, TSUL -> tshul), so this is in the source text, not a transliteration slip. TAM does not construe in this slot: the only reading of tam here is the interrogative particle, and an interrogative followed by the locative la is not parsable. TZAM (\"merely\") construes exactly -- \"brave merely at the promising\" -- and the same verse spells CI TZAM correctly nineteen syllables later (skeptic recount 2026-09-01) in line 3. PARALLEL WITNESSES CHECKED (all rows in the spine whose wylie contains \"la rab tu dpa' ba yis\"): C09:33 and C17:474 both print ,KHAS LEN TZAM LA RAB TU DPA' BA YIS, with the other three lines byte-identical to this row; C16:474 prints TAM as here, and P1:94 prints TAM but is a re-ingest of the same English translation, not an independent witness. C03:468 and C16:474 share one English rendering and C09:33 and C17:474 share another, so the split is one text lineage against another, not three-to-two. Because C16 carries the same reading this is a misspelling in the published course text, not an ingest corruption introduced here; it is filed as TIBETAN_SPELLING on that footing. Not one of the registered artefact classes. SKEPTIC PASS 2026-09-01 (survived, MEDIUM/CONFIRMED): the only TAM rows are C03:468, same-lineage C16:474 and re-ingested P1:94; both independent witnesses C09:33 and C17:474 read TZAM; the dictionary gives tam only as the interrogative particle, unparsable before locative la, against tsam la in 173 rows.",
+  "severity": "MEDIUM",
+  "confidence": "CONFIRMED",
+  "note": "filed from the alignment batch, spine-verified on merge"
  }
 ]

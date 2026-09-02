@@ -1963,3 +1963,97 @@ skeptic and every one survived** — the reconcilers are now the stricter gate.
   **450/620**, 170 open (451–620). Fifteen layer gates green across 333
   pages: 46,551/46,612 fields exact, 0 fabrications, 12,999/12,999 Tibetan
   exact, 49,937 spans seen by the builder, none dropped. app_selftest ALL PASS.
+
+### Batches C03-144 … C03-149 (C03:451–468) — 2026-09-01 — propose: Opus 5 · reconcile/refute: Fable 5.1
+Six pages, eighteen segments: Yang Gonpa's verse series (451–453), Dromtonpa
+and the Seventh Dalai Lama (454–455), the turn to renunciation (456–461), the
+second division's heading (462), and the root-text stanzas on the three
+trainings (463–468). Thirty-six analysts, eighteen reconcilers, four
+skeptics. **Eighteen of eighteen merged specs exited 0 on the first run** —
+the second batch in a row.
+
+**The reconcile gate is doing what the skeptic pass used to.** The analysts
+claimed nine distinct errata; the reconcilers dropped three at their own
+gate before any skeptic saw them. The clearest: 459's `rang mtshangs`, filed
+by both analysts as a spine-wide hapax — the reconciler found the ACIP carries
+the -s and the following `sam` is the correct allomorph after -s, so the -s is
+in the exemplar and an emendation would have to touch two syllables. A
+well-formed minority lectio the row's own grammar supports is not an erratum.
+
+**Rulings worth keeping.**
+- 451 `lhangs` → "sudden" kept as the only word in the line GMR's adjective can
+  render (the stem is "ringing out clear"); `rgyu` → "Brings it on" kept on a
+  re-verified minimal pair across C03:449–453 and C16:468–472.
+- 452 `tshong dus` split (`tshong` → "sell", `dus` null): the compound "sell
+  their wares" over-captures the possessive, and the compromise shape is
+  refused by the generator — a member's English may not equal its parent's,
+  which is the mechanical form of the same objection.
+- 453 `thur` → "Down the hill" with `gyis` nulled: 449–452 render the same
+  wylie as one word "Downhill", so "the hill" is the noun inside `thur`.
+- 455 `snang tshul` → "life" nulled under rule 10 though both analysts banked
+  it; `gang du … kyang` mapped literally (`gang` → "any", `du` → "In"), with
+  "Wherever" left as GMR's second pass.
+- 456 `kyang` owns "It doesn't matter", the first discharge of the frame;
+  "it's all the same" is a fresh clause and stays GMR's.
+- 458 `dgos` → "always" nulled (33 "must", 0 "always" in the corpus); `dang` →
+  "or else" cut to "or".
+- 460 `thar pa mi gnas pa'i` → "beyond both extremes" rejected though passing:
+  every other occurrence sits over bare `mi gnas pa'i myang 'das`. `bsam pa`
+  → "form" nulled as a false dictionary entry.
+- 461 `shugs drag` spanned as one unit → "fierce", overriding both analysts'
+  split: 43 "fierce" to 3 "strength" across 113 corpus rows; `chen po` →
+  "very" only.
+- 462 (an outline heading whose English mostly restates the parent heading
+  C03:246) `bgrod pa'i` → "take" as the verb head of GMR's causative, on
+  C03:248's "Leads".
+- 463 `byin gyis rlobs` → "Grant me", "Grant that" left bare, following the
+  C03:432 one-exponent precedent.
+- 464 `rje` → "One" rejected under rule 10 though both banked it; "One"
+  credited to the nominaliser `pa`, the morpheme it renders.
+- 465 `par` → "that" nulled: with `yin` absorbed into "resides", giving the
+  complementizer to `par` alone is arbitrary. FLAGGED by the reconciler: the
+  same flat ruling on `gsung rab` goes against three shipped pages that
+  captured "the highest of words" whole — a consistency item for the review pass.
+- 466 `ci yi phyir na` flattened (d=5 `ci yi phyir` → "Could it ever", `na`
+  nulled), rejecting B's d=3 recast; "happen" left bare because C10:294 shows
+  it may be `'gyur`'s trace. `'dul ba'i` → "discipline", not "Of the works On
+  discipline".
+- 467 `ming tsam snang` → "Nowhere does it say Anything else but this": both
+  A's memberless d=3 paraphrase and B's `snang` → "say" rejected (`snang` is
+  "appears"; "does it say" is GMR's verb); all three nulled, clause left bare.
+- 468 `byas pa` → "have" rejected as a decomposition of one predicate; B's unit
+  `khas len byas pa` → "have agreed" taken with `khas len` → "agreed" inside
+  and `byas pa` a null member — the past stem licenses "have" without
+  asserting it.
+
+**Errata: the analysts claimed nine distinct defects; the reconcilers kept five
+and dropped the rest at their own gate; four skeptics then refuted one of the
+five. Four filed.**
+- E-115 C03:464 `rnam par dag ba` → `dag pa` (LOW, PROBABLE); the ba-after-g
+  keying class of E-048; ACIP itself marks `DAG BAR {%PAR}` at GK:302.
+- E-116 C03:467 `gting 'dzin` → `ting 'dzin` (MEDIUM, CONFIRMED); C09:32 and
+  C17:473 read `ting 'dzin` independently.
+- E-117 C03:467 `gtam yag nub` → `gtam yang nub` (MEDIUM, PROBABLE); bare
+  adjectival `yag` occurs nowhere else in the corpus.
+- E-118 C03:468 `tam` → `tsam` (MEDIUM, CONFIRMED); C09:33 and C17:474 read
+  TZAM; C16:474 shares the C03 reading but is the same lineage (English
+  byte-identical, wylie differing by three spaces). The skeptic corrected a
+  peripheral count (nineteen syllables, not fourteen).
+- REFUTED by the skeptic: 463 `so so thar pa` → `so sor thar pa`. A
+  well-attested variant, not a defect: `so so` is a glossary headword, the
+  ACIP of record carries SO SO THAR in five independently keyed texts including
+  the Kangyur catalogue's own title (TITLK:26), C09:146 alternates both
+  spellings in one paragraph, and E-105 already declined the identical
+  terminative-`r` divergence between these two witnesses.
+- Dropped at the reconcile gate: 459 `rang mtshangs` (the -s is in the
+  exemplar, see above); 467's ENGLISH_FACTUAL_ERROR record; 468's "A lot of
+  different vows" was considered and not filed — GMR's renderings are free
+  throughout, and the analyst could not point at the error hard enough to bank
+  it.
+- Register: **118 entries, 74 document errata (5 HIGH), 20 digitisation
+  artefacts, 9 ours.**
+
+- Evidence layer: **5,441 headwords / 10,610 pairs**, 27,287 links. C03 at
+  **468/620**, 152 open (469–620). Fifteen layer gates green across 339
+  pages: 47,514/47,575 fields exact, 0 fabrications,
+  13,305/13,305 Tibetan exact, 51,063 spans seen by the builder, none dropped. app_selftest passed (ctest 1/1).
