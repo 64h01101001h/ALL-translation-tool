@@ -8,11 +8,11 @@
 
 Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source and Geshe Michael Roach's facing English &mdash; recorded as a by-product of a machine alignment campaign reading the courses segment by segment. **Every entry has been checked against the corpus database** (42,199 segments, spine `hgm_spine_v27_2.db`): the quoted strings were retrieved from the spine, not from a note, and each citation was re-derived rather than trusted.
 
-**114 entries**: **70 document errata** (5 HIGH, 50 MEDIUM, 15 LOW), **20 digitisation artefacts**, 14 observations checked and closed as *not* errata, and 1 that could not be verified.
+**118 entries**: **74 document errata** (5 HIGH, 53 MEDIUM, 16 LOW), **20 digitisation artefacts**, 14 observations checked and closed as *not* errata, and 1 that could not be verified.
 
 | Kind | n |
 |---|---|
-| Tibetan spelling | 49 |
+| Tibetan spelling | 53 |
 | Digitisation artefact | 20 |
 | English typo | 16 |
 | Our banked layer | 9 |
@@ -43,7 +43,7 @@ Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source 
 | `C03:339` | mthar mal rim rang la gcig tu dril te | mthar lam rim rang la gcig tu dril te | The term is lam rim, the Steps of the path. 'mal' is bedding or a couch and forms no compound with 'rim' that could take 'rang la gcig tu dril te nyams su len' - 'join into one within our own lives and put into practice'. The English of this very segment rende | CONFIRMED |
 | `C03:39` | acip: ,SIL SNYAN RNAMS DANG BYUNG PA GDUGS MCHOG DANG ,   \|   wylie: ,sil snyan rnams dang byung pa gdugs mchog dang , | byug pa | seg_hint 39 is CORRECT. Three independent proofs: (1) the note's own claim checks out — C03:38, the glossary segment immediately preceding, spells it right and defines it: "byug pa ni spos zhim po'i lde gu'o" (byug pa = thick fragrant unguent); (2) this segmen | CONFIRMED |
 
-## Medium severity &mdash; 50 entries
+## Medium severity &mdash; 53 entries
 
 | Citation | What it says | Should say | Evidence | Confidence |
 |---|---|---|---|---|
@@ -96,9 +96,12 @@ Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source 
 | `C03:441` | rnyed kyang yin brtan med par | RNYED KYANG YID BRTAN MED PAR SNGAR (wylie: "rnyed kyang yid brtan med par sngar") | QUOTED AS FILED BY THE RECONCILER: RNYED KYANG YIN BRTAN MED PAR SNGAR (wylie: "rnyed kyang yin brtan med par sngar") \|\| yid brtan ('trust', lit. mind-steady) is the idiom; yin brtan is not a Tibetan collocation, and reading yin as a copula leaves 'rnyed kya | CONFIRMED |
 | `C03:444` | tshe 'di'i snag shas ldog pa dgos te | tshe 'di'i snang shas ldog pa dgos te | Confirmed from this row's own text: wylie reads 'snag shas' and the ACIP (source of record) reads 'TSE 'DI'I SNAG SHAS LDOG PA DGOS TE,' - so the defect is in the e-text, not our converter. The term is snang shas (preoccupation with / desire for appearances),  | CONFIRMED |
 | `C03:445` | THAMS CAD MKHYEN PA'I GO 'PANG BSGRUB PA | THAMS CAD MKHYEN PA'I GO 'PHANG BSGRUB PA | Confirmed from this segment's own text. ACIP (source of record) reads GO 'PANG; the wylie field carries the same reading, go 'pang, so this is in the source, not the converter. The word is go 'phang (rank, station, state), which is what GMR translates: 'the st | CONFIRMED |
+| `C03:467` | ,'DI NA RNAM DAG GTING 'DZIN SKYE BA LA, | ,'DI NA RNAM DAG TING 'DZIN SKYE BA LA, | Confirmed from this row's own text: line 2 spells the concentration term correctly (ACIP ',ZHI GNAS TING 'DZIN DGOS PA'I MING TZAM SNANG ,'), line 3 spells the same term GTING 'DZIN, which is not a lexical item, and the English 'Pure single-pointed mind' trans | CONFIRMED |
+| `C03:467` | ,TSUL KHRIMS BSLAB PA DGOS PA'I GTAM YAG NUB, | ,TSUL KHRIMS BSLAB PA DGOS PA'I GTAM YANG NUB, | Not confirmable from this row's text alone, so downgraded from A's CONFIRMED/HIGH. Internal evidence is stylistic: YANG NUB ('even the talk ... has sunk away') is the answering phrase to MING TZAM SNANG ('only the mention appears') in line 2, and gives NUB a s | PROBABLE |
+| `C03:468` | KHAS LEN TAM LA RAB TU DPA' BA YIS | ,KHAS LEN TZAM LA RAB TU DPA' BA YIS,  (wylie: "khas len tsam la rab tu dpa' ba yis,") | QUOTED AS FILED BY THE RECONCILER: ,KHAS LEN TAM LA RAB TU DPA' BA YIS,  (wylie: "khas len tam la rab tu dpa' ba yis,") \|\| ACIP is the source of record and prints TAM in this row; the wylie follows it ("khas len tam la"). The converter is behaving normally e | CONFIRMED |
 | `C03:53` | de nas dmigs pa gsal bar byas nas mNaDl phul te (ACIP: DE NAS DMIGS PA GSAL BAR BYAS NAS MnAdL PHUL TE) | maNDla (ACIP MAndLA), the spelling used at C03:1 | C03:1 records the same word as ACIP 'MAndLA' / Wylie 'maNDla', with the English 'mandel'. C03:53's 'MnAdL' transposes the vowel A onto the retroflex and drops the final A, leaving a form that is not well-formed Wylie (a bare 'm' root with no vowel, and a 'Dl'  | CONFIRMED |
 
-## Low severity &mdash; 15 entries
+## Low severity &mdash; 16 entries
 
 | Citation | What it says | Should say | Evidence | Confidence |
 |---|---|---|---|---|
@@ -117,6 +120,7 @@ Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source 
 | `C03:333` | 'jug bar 'dod pa | 'jug par 'dod pa | After a final -g the nominalizer takes the pa/par form, not ba/bar (standard 'jug pa, 'jug par). The sense here is unambiguously 'wishing to enter the door', so the alternative reading of bar as the separate noun 'interval / up to' is excluded. Spine check, sp | PROBABLE |
 | `C03:403` | To stop the slightest Wrong of many wrongs we do | To stop the slightest Wrongs of many wrongs we do | Two witnesses of the same published translation read plural, and this segment is the sole outlier. Verified directly against the spine: C16:450 (the parallel commentary citation) reads "To stop the slightest Wrongs of many wrongs we do, And try t...", and TCS0 | CONFIRMED |
 | `C03:412` | previous consciousness if it could come from physical matter alone then every bit of dirt | previous consciousness, if it could come from physical matter alone, then every bit of dirt | THREE witnesses, and they do not agree the way the original filing assumed. C16:456 reads with both commas. C03:412 AND P1:67 both read WITHOUT them, verbatim. C03:412 differs from C16:456 by NOTHING ELSE at all - the only other difference is C16's extra follo | UNCERTAIN |
+| `C03:464` | RNAM PAR DAG BA | RNAM PAR DAG PA | Verbatim in this segment's ACIP (source of record): "THAR PA DON GNYER GYI BLO RNAM PAR DAG BA NGES 'BYUNG GI BSAM PA"; the wylie field agrees ("rnam par dag ba"), so this is not a wylie-conversion slip and not a registered ingest class. Orthographic rule: aft | PROBABLE |
 
 ---
 
@@ -198,7 +202,7 @@ Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source 
 
 ## Recommended actions, by owner
 
-**Document editors.** The 70 document errata above. Start with the 5 HIGH entries. Note that several errors exist at MORE THAN ONE LOCUS because passages are ingested twice &mdash; each entry's evidence names them, and a per-segment fix will leave duplicates behind.
+**Document editors.** The 74 document errata above. Start with the 5 HIGH entries. Note that several errors exist at MORE THAN ONE LOCUS because passages are ingested twice &mdash; each entry's evidence names them, and a per-segment fix will leave duplicates behind.
 
 **Data-pipeline maintainers.** The 20 digitisation artefacts, plus two reports filed separately: `docs/upstream/FOLIO_MARKER_COLLISIONS.md` (119 folio markers spliced into caption numbers) and `docs/upstream/C13_COLUMN_OFFSET.md` (**C13:63&ndash;82 pairs Tibetan with the English of a different text &mdash; C13 should not be scanned until it is fixed**).
 
