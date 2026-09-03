@@ -2320,3 +2320,59 @@ span takes "pledges" only (529), the supplied "vows" left unwrapped.
 Coverage after landing: **C03 540/620, 80 open (541–620).** Register at
 **124 entries.** Evidence layer 5,639 headwords / 11,269 pairs, 29,347 links.
 Fifteen layer gates green; app_selftest passed.
+
+### Batches C03-174 … C03-179 (C03:541–558) — 2026-09-03 — propose: Opus 5 · reconcile/refute: Fable 5.1
+Six pages, eighteen segments: the tantras and adepts on keeping the pledges,
+the outcaste's ultimatum and the vow kept at the cost of life (541–544); the
+third step and the stanza on the two stages (545–546); what to do after the
+pledges, the secret ways, seeing the ordinary as it is (547–549); the stage of
+creation, the two errors, winds into the central channel (550–552); the union
+of body and mind, learning both stages, steady effort (553–555); counterfeit
+dharma and the person incapable of lying (556–557); the part-divider marker
+558 ("the conclusion", hand-built block under E-071). Thirty-four analysts,
+seventeen reconcilers, five skeptics. **Seventeen of seventeen merged specs
+exited 0 on the first run** — the seventh batch in a row. 508 spans banked.
+
+**Five errata filed, all held under the skeptic pass.**
+- E-125 C03:541 (MEDIUM, CONFIRMED): `gyud` for `rgyud` — no dictionary
+  headword, three corpus slips; TCS13:894 and TITLS:2708 read `rgyud dang grub
+  chen`. The reconciler's C16:507 citation was withdrawn by the skeptic as a
+  different passage.
+- E-126 C03:541 (MEDIUM, PROBABLE): `gur nas` for `gyur nas` — the prose
+  glosses the root verse `nges pa rnyed gyur nas` (TCS08:12, C03:524); `gur`
+  (tent) is unreadable in the frame.
+- E-127 C03:542 (LOW, HIGH): `dam thig` for `dam tshig` — spine hapax against
+  469 occurrences, zero dictionary rows; no independent witness exists, so the
+  skeptic set HIGH rather than CONFIRMED.
+- E-128 C03:548 (LOW, PROBABLE): `gungs` for `gsungs` — no dictionary word;
+  corpus 2 (this row and same-lineage C16:509) against 3,972.
+- E-129 C03:544 (LOW, PROBABLE): `tshe bar byas` for `che bar byas` — `tshe`
+  cannot fill the adverbial frame; dictionary 7 `che bar*` vs 0.
+- Dropped at the reconcile gate: 550 ACIP `MTSON` (TS is the standard ACIP
+  keying of tsh, 686 hits) and 557 ACIP `TSAD MA` (1,041 ACIP segments carry
+  TSAD, zero TSHAD) — both are encoding, not error.
+
+**Rule 10 rulings this batch.** 541's `de 'dra'i bka'` → "these facts" and
+`rnyed par gur nas` → "come to know" (GMR's very free rendering; all four
+morphemes nulled); 543 `'gyur` → "reach"; 549 `tha mal` → "an ordinary way"
+(hinge over-capture; pinned bare "ordinary" by `eng_order`); 551 `'bar ba` →
+"achieving"; 554 `ji lta ba bzhin du` → "conform precisely with" (took
+"precisely" only); 555 `thang`/`lhod` → "not overdoing"/"not underdoing";
+556 `zhen` → "desire for gain"; 552 second `las` → "As a result" KEPT as the
+ablative of source, not a bare hinge.
+
+**Standing epithets.** 553 `khyab bdag` → "Lord of the Secret World" banked
+whole at d=5 as GMR's consistent published rendering (19 corpus segments), no
+members minted since neither syllable has "Secret World" under it. 548
+`rgyud sde` → "secret ways" banked as GMR's standard rendering of tantra,
+noted as interpretive.
+
+**Vow doublets, again.** 544: `dam sdom` takes "vows and pledges" as the
+object of "keep properly"; the earlier `dam tshig dang sdom pa` is summed up
+by GMR's resumptive "these commitments" and stays null rather than
+double-banked. 542: bare `khyod` → "yours" banked once against seven "you"s
+because it alone sits on "vows of yours".
+
+Coverage after landing: **C03 558/620, 62 open (559–620).** Register at
+**129 entries.** Evidence layer 5,699 headwords / 11,445 pairs, 29,864 links.
+Fifteen layer gates green; app_selftest passed.

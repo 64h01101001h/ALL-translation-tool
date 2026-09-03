@@ -53,10 +53,10 @@ in, flagged in the page note. Confirm as the fifth form, or null it.
 - [ ] **Sublime-grade editing design** (Phase 1–3 before any code). The 8/28
       design workflow returned 0/11 agents (spend limit); not restarted.
 - [ ] **Author portraits design gate** — scope not yet clarified.
-- [ ] **C03:541–620** — 80 segments open. 433–540 landed 2026-09-01/03 as the
-      first seven batches under the model policy (thirty-six pages, 106/106
-      first-run passes; 430, 476 and 513 are markers; 558 is the next marker).
-      New epic per the gate document.
+- [ ] **C03:559–620** — 62 segments open. 433–558 landed 2026-09-01/03 as the
+      first eight batches under the model policy (forty-two pages, 123/123
+      first-run passes; 430, 476, 513 and 558 are markers). New epic per the
+      gate document.
 - [ ] **Ruling needed (negation):** 539 `ma` → "fail to" kept as a whole-word
       negation; pair with the `ma` → "not"-inside-"cannot" question below and
       rule once.
