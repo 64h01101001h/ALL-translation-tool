@@ -8,11 +8,11 @@
 
 Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source and Geshe Michael Roach's facing English &mdash; recorded as a by-product of a machine alignment campaign reading the courses segment by segment. **Every entry has been checked against the corpus database** (42,199 segments, spine `hgm_spine_v27_2.db`): the quoted strings were retrieved from the spine, not from a note, and each citation was re-derived rather than trusted.
 
-**124 entries**: **78 document errata** (5 HIGH, 56 MEDIUM, 17 LOW), **22 digitisation artefacts**, 14 observations checked and closed as *not* errata, and 1 that could not be verified.
+**129 entries**: **83 document errata** (5 HIGH, 58 MEDIUM, 20 LOW), **22 digitisation artefacts**, 14 observations checked and closed as *not* errata, and 1 that could not be verified.
 
 | Kind | n |
 |---|---|
-| Tibetan spelling | 56 |
+| Tibetan spelling | 61 |
 | Digitisation artefact | 22 |
 | English typo | 16 |
 | Our banked layer | 9 |
@@ -43,7 +43,7 @@ Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source 
 | `C03:339` | mthar mal rim rang la gcig tu dril te | mthar lam rim rang la gcig tu dril te | The term is lam rim, the Steps of the path. 'mal' is bedding or a couch and forms no compound with 'rim' that could take 'rang la gcig tu dril te nyams su len' - 'join into one within our own lives and put into practice'. The English of this very segment rende | CONFIRMED |
 | `C03:39` | acip: ,SIL SNYAN RNAMS DANG BYUNG PA GDUGS MCHOG DANG ,   \|   wylie: ,sil snyan rnams dang byung pa gdugs mchog dang , | byug pa | seg_hint 39 is CORRECT. Three independent proofs: (1) the note's own claim checks out — C03:38, the glossary segment immediately preceding, spells it right and defines it: "byug pa ni spos zhim po'i lde gu'o" (byug pa = thick fragrant unguent); (2) this segmen | CONFIRMED |
 
-## Medium severity &mdash; 56 entries
+## Medium severity &mdash; 58 entries
 
 | Citation | What it says | Should say | Evidence | Confidence |
 |---|---|---|---|---|
@@ -103,8 +103,10 @@ Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source 
 | `C03:524` | rnam da dam tshig | rnam dag dam tshig | Wylie ',rnam da dam tshig sdom par gsungs pa la,' and ACIP ',RNAM DA DAM TSIG SDOM PAR GSUNGS PA LA,' (source of record) both drop the final -g of rnam dag ('pure'), which the English renders as 'most pure'. Independent witnesses of the same verse read rnam da | CONFIRMED |
 | `C03:53` | de nas dmigs pa gsal bar byas nas mNaDl phul te (ACIP: DE NAS DMIGS PA GSAL BAR BYAS NAS MnAdL PHUL TE) | maNDla (ACIP MAndLA), the spelling used at C03:1 | C03:1 records the same word as ACIP 'MAndLA' / Wylie 'maNDla', with the English 'mandel'. C03:53's 'MnAdL' transposes the vowel A onto the retroflex and drops the final A, leaving a form that is not well-formed Wylie (a bare 'm' root with no vowel, and a 'Dl'  | CONFIRMED |
 | `C03:539` | ma bsgom sgyur | ma bsgoms gyur | Displaced syllable break: the final -s of bsgoms has migrated onto the auxiliary gyur, yielding the unrelated verb sgyur. Two independent witnesses of the same verse read 'ma bsgoms gyur kyang ltung med na': TCS13:730 and TCS05:475. P1:127 reproduces 'ma bsgom | CONFIRMED |
+| `C03:541` | gyud dang grub chen | rgyud dang grub chen | Wylie/ACIP read 'gyud' (ACIP GYUD). 'gyud' is not a headword in the spine dictionary; 'rgyud' is (glossed tantra/secret teaching). The idiom 'rgyud dang grub chen' is attested at TCS13:894 and TITLS:2708. [C16:507 citation withdrawn by skeptic: different passa | CONFIRMED |
+| `C03:541` | rnyed par gur nas | rnyed par gyur nas | Wylie/ACIP read 'gur' (ACIP GUR). 'gur' is an attested word (tent) so the dictionary alone does not decide it; the root verse this passage glosses reads 'bcos ma min pa'i nges pa rnyed gyur nas' at TCS08SourceOfAllMyGood:12 (independent witness; also C03:524,  | PROBABLE |
 
-## Low severity &mdash; 17 entries
+## Low severity &mdash; 20 entries
 
 | Citation | What it says | Should say | Evidence | Confidence |
 |---|---|---|---|---|
@@ -125,6 +127,9 @@ Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source 
 | `C03:412` | previous consciousness if it could come from physical matter alone then every bit of dirt | previous consciousness, if it could come from physical matter alone, then every bit of dirt | THREE witnesses, and they do not agree the way the original filing assumed. C16:456 reads with both commas. C03:412 AND P1:67 both read WITHOUT them, verbatim. C03:412 differs from C16:456 by NOTHING ELSE at all - the only other difference is C16's extra follo | UNCERTAIN |
 | `C03:464` | RNAM PAR DAG BA | RNAM PAR DAG PA | Verbatim in this segment's ACIP (source of record): "THAR PA DON GNYER GYI BLO RNAM PAR DAG BA NGES 'BYUNG GI BSAM PA"; the wylie field agrees ("rnam par dag ba"), so this is not a wylie-conversion slip and not a registered ingest class. Orthographic rule: aft | PROBABLE |
 | `C03:489` | of birth and getting old and death | of birth and getting old and sickness and death | ACIP (source of record) reads 'SKYE RGA NA 'CHI'I RBA KLONG', the standard four-member list skye rga na 'chi. The syllable NA (sickness) has no exponent anywhere in the English. Parallel witness: TCS03:349 carries the same verse image ('skye rga na 'chi'i rba  | PROBABLE |
+| `C03:542` | dam thig | dam tshig | ACIP source of record reads DAM THIG (wylie 'dam thig'), in the fixed pair 'sdom pa dam tshig' rendered 'pledges and vows'. Spine hapax: 'dam thig' occurs in exactly 1 corpus segment (this one) against 469 segments containing 'dam tshig'. Dictionary: entries h | HIGH |
+| `C03:544` | tshe bar byas te | che bar byas te | Wylie and ACIP (TSE BAR BYAS TE) agree, so the reading is in the source of record, not the converter. 'tshe bar' is not a Tibetan lexeme: the spine dictionary has 0 entries beginning 'tshe bar' against 7 beginning 'che bar' (che bar, che bar skyes, che bar dar | PROBABLE |
+| `C03:548` | gungs | gsungs | ACIP (source of record) reads GUNGS PA; wylie 'ces gungs pa bzhin'. Spine dictionary: 0 entries for 'gungs' (also 0 in entry_variants), 1 entry each for 'gsungs' and 'gsungs pa'. Corpus: 'gungs' occurs in 2 segments (C03:548 and C16:509 — the identical passage | PROBABLE |
 
 ---
 
@@ -208,7 +213,7 @@ Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source 
 
 ## Recommended actions, by owner
 
-**Document editors.** The 78 document errata above. Start with the 5 HIGH entries. Note that several errors exist at MORE THAN ONE LOCUS because passages are ingested twice &mdash; each entry's evidence names them, and a per-segment fix will leave duplicates behind.
+**Document editors.** The 83 document errata above. Start with the 5 HIGH entries. Note that several errors exist at MORE THAN ONE LOCUS because passages are ingested twice &mdash; each entry's evidence names them, and a per-segment fix will leave duplicates behind.
 
 **Data-pipeline maintainers.** The 22 digitisation artefacts, plus two reports filed separately: `docs/upstream/FOLIO_MARKER_COLLISIONS.md` (119 folio markers spliced into caption numbers) and `docs/upstream/C13_COLUMN_OFFSET.md` (**C13:63&ndash;82 pairs Tibetan with the English of a different text &mdash; C13 should not be scanned until it is fixed**).
 
