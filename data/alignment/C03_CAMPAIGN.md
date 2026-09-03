@@ -2331,7 +2331,7 @@ of body and mind, learning both stages, steady effort (553–555); counterfeit
 dharma and the person incapable of lying (556–557); the part-divider marker
 558 ("the conclusion", hand-built block under E-071). Thirty-four analysts,
 seventeen reconcilers, five skeptics. **Seventeen of seventeen merged specs
-exited 0 on the first run** — the seventh batch in a row. 508 spans banked.
+exited 0 on the first run** — the seventh batch in a row. 498 spans banked.
 
 **Five errata filed, all held under the skeptic pass.**
 - E-125 C03:541 (MEDIUM, CONFIRMED): `gyud` for `rgyud` — no dictionary
@@ -2376,3 +2376,47 @@ because it alone sits on "vows of yours".
 Coverage after landing: **C03 558/620, 62 open (559–620).** Register at
 **129 entries.** Evidence layer 5,699 headwords / 11,445 pairs, 29,864 links.
 Fifteen layer gates green; app_selftest passed.
+
+### Batches C03-180 … C03-185 (C03:559–576) — 2026-09-03 — propose: Opus 5 · reconcile/refute: Fable 5.1
+Six pages, eighteen segments: the third root and the stanza on the teacher
+(559–561); the Great Fifth on the saffron stain, red hats and yellow caps,
+the gold assay (562–564); the qualified guide, method and wisdom inseparable,
+the good road (565–567); sutra and tantra combined, the lotus feet, the outer
+and inner obstacles (568–572); the fourth root and the stanzas on never
+parting from the Lama (573–576). Thirty-six analysts, eighteen reconcilers,
+no skeptics needed. **Eighteen of eighteen merged specs exited 0 on the first
+run** — the eighth batch in a row. 477 spans banked.
+
+**The spend-limit stop.** The monthly limit hit mid-batch: fourteen
+English-first analysts and the 559 reconciler were killed by HTTP 429. Three
+analysts (560, 561, 565) and the 559 reconciler had already written a
+spec.json that exits 0 before dying; those were kept (re-proven on disk,
+report.md backfilled with a one-line note) and the rest were relaunched after
+the reset. No page was landed from an unproven spec.
+
+**No errata.** Candidates raised: 562's dropped ACIP `{lv}` escape falls under
+the registered braced-escape converter class (E-044/{SHl}); 575's ACIP
+`MTSAN NYID` is standard keying; the fused "line.94"/"95" are E-076; 572's
+glued heading is the registered heading-glue class.
+
+**Rule 10 rulings.** 561 `bzang po` → "pure" (lexeme is "good", rendered so
+later in the row); 563 `zhes`/`gsungs` → "These lines describe" (GMR's frame);
+566 second `ya ma bral ba` → "always combined with the others" (positive face
+on a negated idiom); 567 `bya` → "do" and `de lta bu` → "all this" (GMR's
+fronted conditional; `bya` is the verb of naming, "calls"); 568 `tshul
+bzhin` → "true"; 572 `rim` → "at each point"; 573 `'bras bu` → "end"; 575
+`med par` → "without" (one predicate rendered twice). KEPT as honest
+exponents with notes: 560 `tshogs` → "rain" (GMR's figure, nothing else yields
+it); 564 `bsregs`/`bcad`/`brdar` → "fire"/"shears"/"file" (the classical gold
+tests, verbs rendered by their instruments, articles stripped); 571 `mtshon`
+→ "examples", `bkol` → "direct".
+
+**Split units.** 574 `'bral med` ("inseparable") banked as two d=5 words
+("Apart"/"never") because GMR's own verb "live" sits between the halves; a
+single span would over-capture. 570 `mi gtong ba` → "refuse to allow" kept
+whole with `gtong` → "allow" as member, the split `mi` → "refuse" rejected as
+an unsanctioned negative form.
+
+Coverage after landing: **C03 576/620, 44 open (577–620).** Register stays at
+**129 entries.** Evidence layer 5,762 headwords / 11,620 pairs, 30,359 links.
+Fifteen layer gates green; app_selftest passed (ctest 16/16).
