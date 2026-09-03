@@ -2233,3 +2233,44 @@ refuted one. Three filed.**
   pages: 49,225/49,286 fields exact, 0 fabrications,
   13,831/13,831 Tibetan exact, 53,123 spans seen by the builder, none dropped.
   app_selftest passed (ctest 16/16 with the layer gates).
+
+### Batches C03-162 … C03-167 (C03:505–522) — 2026-09-03 — propose: Opus 5 · reconcile/refute: Fable 5.1
+Six pages, eighteen segments: quietude and insight joined, wrong objects,
+dullness mistaken for quietude (505–510); perfect insight defined and the
+request for the union (511–512); the part-divider marker (513, hand-built
+block under E-071); the three steps of the secret half, entering the Diamond
+Way, the meaning of *vajra*, the way as conveyance, one short lifetime, the
+listeners' lesser fortune, and the four empowerments (514–522). Thirty-four
+analysts, seventeen reconcilers, no skeptics needed. **Seventeen of seventeen
+merged specs exited 0 on the first run** — the fifth batch in a row. 606
+spans banked.
+
+**No errata.** Every candidate the analysts raised was already a registered
+class (E-076 footnote-period fusion at 519, heading glue at 522, the E-071
+marker at 513) or a same-lineage P1 re-ingest with identical wording (514).
+Nothing filed; register stays at 122.
+
+**Rule 10 did most of the work.** The reconcilers rejected a run of spans that
+passed the generator but taught a falsehood: `ltar` → "follow" (508, GMR's
+supplied main clause, as at 487); `min` → "except" (507, a supplied contrastive
+hinge); `brten nas` → "as a result" (512, GMR's own hinge across his sentence
+split); `sngon du song nas` → "On top of this" and `gyur pa` → "make" (516);
+`gnyis` → "combination" (518); `phyir` → "in order to" and `yun` → "eons"
+(519, causal vs purpose, duration vs the ellipsed `bskal pa`); `de lta bur` →
+"just described" (522). Each is nulled with a note; none is banked.
+
+**The doubled-rendering convention, restated.** When GMR renders one Tibetan
+phrase twice (`tshe thung gcig` at 520, `skad dod` at 518, "receiving" at
+522), a morpheme is banked against exactly one rendering, chosen at the
+cursor position with explicit `eng_order`; splitting the members across both
+renderings (P2 at 520) is refused.
+
+**Explicit `eng_order` unlocks bare words.** At 511 both analysts over-captured
+"perfect meaning" believing bare "perfect" (×2) would be refused; with
+`eng_order` listed the forward-only English cursor pins the first "perfect"
+and `lhag mthong` takes "perfect insight" later. Three shared over-captures
+removed the same way.
+
+Coverage after landing: **C03 522/620, 98 open (523–620).** Evidence layer
+5,586 headwords / 11,136 pairs, 28,942 links. Fifteen layer gates green;
+app_selftest passed (ctest 16/16).
