@@ -2057,3 +2057,86 @@ five. Four filed.**
   **468/620**, 152 open (469–620). Fifteen layer gates green across 339
   pages: 47,514/47,575 fields exact, 0 fabrications,
   13,305/13,305 Tibetan exact, 51,063 spans seen by the builder, none dropped. app_selftest passed (ctest 1/1).
+
+### Batches C03-150 … C03-155 (C03:469–486) — 2026-09-03 — propose: Opus 5 · reconcile/refute: Fable 5.1
+Six pages, eighteen segments, one of them a marker: the close of the medium
+scope (469–475, the vows and the three trainings), the part-divider at 476,
+and the opening of the greater scope (477–486, the Wish for enlightenment and
+its citations). Thirty-four analysts, seventeen reconcilers, two skeptics.
+**Seventeen of seventeen merged specs exited 0 on the first run** — the third
+batch in a row.
+
+**476 is a corpus marker**, the same class as 430 and E-071: wylie "open steps
+for those of greater capacity", English "VII. Developing the Wish for
+Enlightenment". E-071's sibling list already names it, so no erratum was
+claimed; rendered per the marker protocol and registered for the coverage gate.
+
+**The verse-cut class (E-111) recurred at 472/473 as predicted**, `'dug,ces`
+opening 473. Both analysts were told it is registered and neither re-filed it.
+
+**Rulings worth keeping.**
+- 469 `de lta de ltar` → "However" only: "you wish it to be" re-echoes `'dod`
+  and would double-claim the wish verb.
+- 470 the two "keeps" given to `'dzin` and `byas` with `eng_order` pinning
+  each — "keeps" occurs exactly twice and is claimed exactly twice.
+- 471 `so sor thar pa'i` → "the various vows of freedom" rejected though it
+  passed: "vows" has no Tibetan under it; split to `so sor` → "various",
+  `thar pa'i` → "freedom".
+- 472 `du ma` → "a few" nulled under rule 10: the word means "many" and is
+  banked as "many" at its second occurrence; wrapping "a few" would teach a
+  false gloss. `de` → "vows" kept as the anaphor's referent, "your" left bare.
+- 474 `bcas rkyang` → "minor vows" kept after independent confirmation that
+  GMR renders it so at C03:472, C16:477 and C16:478 — his established term,
+  not a gloss of the whole `tshun chod` idiom.
+- 477 `sems` → "Wish" rejected though both analysts banked it and it passed:
+  "Wish" renders the bodhicitta idiom, not `sems` ("mind") — the same falsehood
+  the C03:429 reconciler avoided. `rim par` → "Steps" stands: the fused `-r`
+  can be neither a d=6 nor a d=7, so the whole word is the only honest shape.
+- 478 `byin gyis rlobs` → "Grant me", following the majority precedent
+  (C03:349/378/400/403/463) and treating C03:432's "Bless me" as the outlier;
+  the agreed `srid` → "suffering life" tightened to "life".
+- 479 `de bas` → "farther" rejected though passing: `de bas` is the standard of
+  comparison ("than that"); the degree belongs to `lhag`. A's `bkang`/`gang`
+  erratum dropped: ACIP and C16:480 witness the published reading.
+- 480 `sogs` → "lines like the following" nulled: GMR's front-placed paraphrase
+  of the closing hinge, not the exponent of "et cetera". B's "plantain" erratum
+  dropped: C16:481 and P1:102 witness the identical English.
+- 481 `dbang gis` → "And so" nulled as a supplied hinge (rules 7 and 10);
+  `bdag nyid kyis` → "great beings" kept via the *bdag nyid chen po* idiom, the
+  literal sense recorded in the note.
+- 482 `gyi` → "Of" rejected though passing: the genitive binds `lam` to
+  `gzhung shing` and GMR renders it "That holds up"; the prose witnesses
+  C09:248 and C17:527 confirm.
+- 483 neither citation-frame claim survived: `sogs` → "and other" only,
+  `gsungs pa` nulled ("works" is GMR's supplied noun for the elided citations).
+- 484 `na` → "The minute" kept (nothing else can own the hinge); `yod` nulled
+  rather than banked as "reach" — stative "is present" versus GMR's inchoative.
+- 485 `pas na` → "And so" nulled: the causal "since" closes sentence 2, and
+  GMR's "And so" is a supplied hinge opening sentence 3 (the 481 precedent);
+  `mi` → "n't" nulled under rule 6, "n't" occurring twice against one claimant.
+- 486 `pas` → "In this way" nulled as a supplied hinge; B's d=3 `rang steng du`
+  → "to ourselves" replaced by the flat `rang` → "ourselves", since `eng_order`
+  alone makes the cursor wrap the correct occurrence — the d=3 only
+  over-captured "to".
+
+**Errata: two claims reached the skeptics, one survived; the reconcilers
+dropped two more at their own gate.**
+- E-119 C03:470 ACIP `RUNG B'AI` → `BA'I` (MEDIUM, CONFIRMED): a keying
+  transposition of the apostrophe, which the converter renders faithfully as
+  `bAi`; the same row spells `BA'I` correctly earlier. Not a converter class.
+- REFUTED: 471 `slab pa` → `bslab pa`. The spine's own LC dictionary carries
+  `slab pa sbyin pa` (śikṣādattaka), `slab pa'i gzhi bca' ba` and `slab par
+  bya`, so the unprefixed form is attested Tibetan for śikṣā, not a keying
+  error. The skeptic also corrected the claim's count (BSLAB five syllables
+  earlier, not nine).
+- Dropped at the reconcile gate: 479's `bkang`/`gang` (ACIP and C16:480 witness
+  the published reading); 480's "plantain" ENGLISH record (C16:481 and P1:102
+  carry the identical English).
+- Register: **119 entries, 75 document errata (5 HIGH), 20 digitisation
+  artefacts, 9 ours.**
+
+- Evidence layer: **5,489 headwords / 10,795 pairs**, 27,801 links. C03 at
+  **486/620**, 134 open (487–620). Fifteen layer gates green across 345
+  pages: 48,362/48,423 fields exact, 0 fabrications,
+  13,569/13,569 Tibetan exact, 52,091 spans seen by the builder, none dropped.
+  app_selftest passed (ctest 16/16 with the layer gates).
