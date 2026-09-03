@@ -53,9 +53,9 @@ in, flagged in the page note. Confirm as the fifth form, or null it.
 - [ ] **Sublime-grade editing design** (Phase 1–3 before any code). The 8/28
       design workflow returned 0/11 agents (spend limit); not restarted.
 - [ ] **Author portraits design gate** — scope not yet clarified.
-- [ ] **C03:505–620** — 116 segments open. 433–504 landed 2026-09-01/03 as the
-      first five batches under the model policy (twenty-four pages, 71/71
-      first-run passes; 430 and 476 are markers). New epic per the gate document.
+- [ ] **C03:523–620** — 98 segments open. 433–522 landed 2026-09-01/03 as the
+      first six batches under the model policy (thirty pages, 88/88
+      first-run passes; 430, 476 and 513 are markers). New epic per the gate document.
 - [ ] Untracked empty file `0` in the repo root (Aug 28, a stray redirect) —
       delete when convenient.
 
