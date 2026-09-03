@@ -8,16 +8,16 @@
 
 Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source and Geshe Michael Roach's facing English &mdash; recorded as a by-product of a machine alignment campaign reading the courses segment by segment. **Every entry has been checked against the corpus database** (42,199 segments, spine `hgm_spine_v27_2.db`): the quoted strings were retrieved from the spine, not from a note, and each citation was re-derived rather than trusted.
 
-**119 entries**: **75 document errata** (5 HIGH, 54 MEDIUM, 16 LOW), **20 digitisation artefacts**, 14 observations checked and closed as *not* errata, and 1 that could not be verified.
+**121 entries**: **76 document errata** (5 HIGH, 54 MEDIUM, 17 LOW), **21 digitisation artefacts**, 14 observations checked and closed as *not* errata, and 1 that could not be verified.
 
 | Kind | n |
 |---|---|
 | Tibetan spelling | 54 |
-| Digitisation artefact | 20 |
+| Digitisation artefact | 21 |
 | English typo | 16 |
 | Our banked layer | 9 |
+| English factual error | 3 |
 | Formatting | 3 |
-| English factual error | 2 |
 
 ---
 
@@ -102,7 +102,7 @@ Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source 
 | `C03:470` | RUNG B'AI | wylie "rung ba'i kun spyod rnams"; acip "RUNG BA'I KUN SPYOD RNAMS" | QUOTED AS FILED BY THE RECONCILER: wylie "rung bAi kun spyod rnams"; acip "RUNG B'AI KUN SPYOD RNAMS" \|\| Transposed apostrophe inside the syllable (B'AI for BA'I); 'bAi' is not a well-formed Wylie syllable. Internal witness: the same row spells the same word | CONFIRMED |
 | `C03:53` | de nas dmigs pa gsal bar byas nas mNaDl phul te (ACIP: DE NAS DMIGS PA GSAL BAR BYAS NAS MnAdL PHUL TE) | maNDla (ACIP MAndLA), the spelling used at C03:1 | C03:1 records the same word as ACIP 'MAndLA' / Wylie 'maNDla', with the English 'mandel'. C03:53's 'MnAdL' transposes the vowel A onto the retroflex and drops the final A, leaving a form that is not well-formed Wylie (a bare 'm' root with no vowel, and a 'Dl'  | CONFIRMED |
 
-## Low severity &mdash; 16 entries
+## Low severity &mdash; 17 entries
 
 | Citation | What it says | Should say | Evidence | Confidence |
 |---|---|---|---|---|
@@ -122,10 +122,11 @@ Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source 
 | `C03:403` | To stop the slightest Wrong of many wrongs we do | To stop the slightest Wrongs of many wrongs we do | Two witnesses of the same published translation read plural, and this segment is the sole outlier. Verified directly against the spine: C16:450 (the parallel commentary citation) reads "To stop the slightest Wrongs of many wrongs we do, And try t...", and TCS0 | CONFIRMED |
 | `C03:412` | previous consciousness if it could come from physical matter alone then every bit of dirt | previous consciousness, if it could come from physical matter alone, then every bit of dirt | THREE witnesses, and they do not agree the way the original filing assumed. C16:456 reads with both commas. C03:412 AND P1:67 both read WITHOUT them, verbatim. C03:412 differs from C16:456 by NOTHING ELSE at all - the only other difference is C16's extra follo | UNCERTAIN |
 | `C03:464` | RNAM PAR DAG BA | RNAM PAR DAG PA | Verbatim in this segment's ACIP (source of record): "THAR PA DON GNYER GYI BLO RNAM PAR DAG BA NGES 'BYUNG GI BSAM PA"; the wylie field agrees ("rnam par dag ba"), so this is not a wylie-conversion slip and not a registered ingest class. Orthographic rule: aft | PROBABLE |
+| `C03:489` | of birth and getting old and death | of birth and getting old and sickness and death | ACIP (source of record) reads 'SKYE RGA NA 'CHI'I RBA KLONG', the standard four-member list skye rga na 'chi. The syllable NA (sickness) has no exponent anywhere in the English. Parallel witness: TCS03:349 carries the same verse image ('skye rga na 'chi'i rba  | PROBABLE |
 
 ---
 
-## Digitisation artefacts &mdash; 20
+## Digitisation artefacts &mdash; 21
 
 *These are fixed **upstream in the data pipeline**, not by editing a document, and go to a different person. Two are class entries carrying a measured extent rather than one row per instance.*
 
@@ -150,6 +151,7 @@ Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source 
 | `C03:429` | our Lama to help us find the ability to do so. Notes to Reading Nine 37 Three lower realms: According to Buddhism there are six different types of reb | our Lama to help us find the ability to do so. | Measured on the spine row: the english field is 1500 characters; the translation of the Tibetan (which ends `gsol ba btab pa yin gsungs`) ends at character 499 with "do so." (character 499) The remaining 1001 characters are the Reading Nine endnote apparatus — | CONFIRMED |
 | `C03:440` | phyi ma'i snang shas | the row's Tibetan should close the verse line: "...YANG YANG BSAMS PAS PHYI MA'I SNANG SHAS LDOG," | QUOTED AS FILED BY THE RECONCILER: wylie/ACIP of C03:440 end at "YANG YANG BSAMS PAS PHYI MA'I SNANG SHAS" (no closing shad) while the row's English ends "...And the cycle's suffering: stop desire for the future." \|\| Confirmed from this row's own text. (1) T | CONFIRMED |
 | `C03:48` | gang rnams phyogs bcu'i 'jig rten sgron ma dag,byang chub rim par sangs rgyas ma chags brnyes (ACIP: ...SGRON MA DAG,BYANG CHUB RIM PAR...) | ...sgron ma dag, ,byang chub rim par... — a verse-line break, punctuated as the other three breaks in the same | The identical segment punctuates its other verse-line breaks with a space: "...ma chags brnyes, ,mgon po de dag..." and "...thams cad la, ,'khor lo bla na med pa...". Only the first break, after 'sgron ma dag', is run together. The English confirms a line boun | CONFIRMED |
+| `C03:497` | all six perfections77 are covered | all six perfections are covered | Footnote marker 77 fused to the preceding word (not to a period, so outside the registered period-fusion class). Re-checked by the reconciler: parallel witness C07:81 carries the identical English sentence and identical wylie but reads 'all six perfections are | CONFIRMED |
 | `class entry (186 segments end at exactly 1,500 characters)` | ' '.join(eng)[:1500] in engines/hgm_tools.py - the spine ingest silently caps every segment's English at 1,500 characters | the whole English of the segment; a segment whose translation runs past 1,500 characters loses its tail with n | Found by the skeptic pass on C03:429 (E-106), which asked why that field ends mid-sentence at 'there are five ' and measured length(english) = 1500 exactly. Census 2026-09-01 on build/hgm_spine_v27_2.db: 186 segments have length(english) = 1500 (DDA 28, C18 15 | CONFIRMED |
 
 ---
@@ -203,8 +205,8 @@ Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source 
 
 ## Recommended actions, by owner
 
-**Document editors.** The 75 document errata above. Start with the 5 HIGH entries. Note that several errors exist at MORE THAN ONE LOCUS because passages are ingested twice &mdash; each entry's evidence names them, and a per-segment fix will leave duplicates behind.
+**Document editors.** The 76 document errata above. Start with the 5 HIGH entries. Note that several errors exist at MORE THAN ONE LOCUS because passages are ingested twice &mdash; each entry's evidence names them, and a per-segment fix will leave duplicates behind.
 
-**Data-pipeline maintainers.** The 20 digitisation artefacts, plus two reports filed separately: `docs/upstream/FOLIO_MARKER_COLLISIONS.md` (119 folio markers spliced into caption numbers) and `docs/upstream/C13_COLUMN_OFFSET.md` (**C13:63&ndash;82 pairs Tibetan with the English of a different text &mdash; C13 should not be scanned until it is fixed**).
+**Data-pipeline maintainers.** The 21 digitisation artefacts, plus two reports filed separately: `docs/upstream/FOLIO_MARKER_COLLISIONS.md` (119 folio markers spliced into caption numbers) and `docs/upstream/C13_COLUMN_OFFSET.md` (**C13:63&ndash;82 pairs Tibetan with the English of a different text &mdash; C13 should not be scanned until it is fixed**).
 
 **Director.** The standing policy question: does ALL issue an erratum sheet, correct future printings, or annotate in place? The scan preserves everything verbatim either way &mdash; this is an editorial decision, not a technical one.
