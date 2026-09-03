@@ -2140,3 +2140,96 @@ dropped two more at their own gate.**
   pages: 48,362/48,423 fields exact, 0 fabrications,
   13,569/13,569 Tibetan exact, 52,091 spans seen by the builder, none dropped.
   app_selftest passed (ctest 16/16 with the layer gates).
+
+### Batches C03-156 … C03-161 (C03:487–504) — 2026-09-03 — propose: Opus 5 · reconcile/refute: Fable 5.1
+Six pages, eighteen segments: the exchange of self and others (487–493), the
+second division and its stanza (494–495), and the three moralities (496–504).
+Thirty-six analysts, eighteen reconcilers, four skeptics. **Eighteen of eighteen merged specs exited 0 on the first run** — the fourth
+batch in a row.**
+
+**The `sogs` question, settled across three rows.** Analysts keep handing the
+list-closer `sogs` ("and so on") GMR's expansions — "the other attitudes"
+(487), "all the relevant details" (488), "works like" (454, last batch). The
+reconcilers' rule is now consistent: `sogs` may own "and other", "such as",
+"like", "the other" — the closing gesture — and never the noun GMR supplies
+for the elided items.
+
+**The `du ma` pair.** 472 (`du ma` → "a few") was nulled on rule 10 because
+the word means "many"; 490 (`du mas` → "A great host") was nulled on rule 7
+because the sense is right but the only honest exponent is an idiom whose
+article and noun are GMR's. Two rules, one word, both nulls.
+
+**Rulings worth keeping.**
+- 489 `rgya mtsho` takes only the unique "ocean", the "sea" half of GMR's
+  doublet left bare; `drag` → "great" rejected — "great" modifies the waves,
+  `drag tu` the raging.
+- 491 `sgo nas` → "with" kept: a manner postposition whose whole job is to make
+  "great kindness" adverbial, and "with" is the English word doing that.
+- 492 `dgod` → "climbs" and `snyam` → "resolve" both nulled though passing:
+  the causative versus GMR's intransitive; the verb "to think" versus GMR's
+  vow-frame.
+- 493 `gyis` → "by" kept ("plagued by suffering" renders the instrumental
+  directly); `'byongs pa` → "practice" kept, "the ability to" belonging to the
+  nulled `nus par`.
+- 494 `nas` → "once you have" accepted (TCS03:163 corroborates); "how" owned
+  only by the fifth `tshul` as a member of `slob tshul`.
+- 495 `mi` → "cannot" kept — one indivisible word, rule 8; `byin gyis rlobs` →
+  "Grant me" on the 478 precedent.
+- 497 `des na` → "This fact (explains why)" rejected in both shapes: the
+  particle means "therefore", the subject and verb are GMR's.
+- 498 A's d=3 `spong gi tshul khrims` flattened: `eng_order` placing `tshul
+  khrims` after "keep" resolves the double "morality" without a clause layer.
+  `legs par` → "careful", not "extremely careful".
+- 500 `tshul khrims` → `"morality` rejected (punctuation inside a span is
+  over-capture); the head aligned as one d=5 term with unique d=7 members.
+  `sgo nas` → "use" nulled though both banked it: GMR's finite verb.
+- 502 `nges pa brtan po` → "knowledge" + "sure" (one noun and one adjective
+  for one noun and one adjective); `rdzogs pa` → "fully" with `yang dag par`
+  nulled — two dictionary units, not one.
+- 496 both proposals' `sems` → "(reach) the Wish for enlightenment" rejected
+  though passing: no `byang chub` in the wylie, and per 429/477 bare `sems`
+  does not own "Wish". The contiguous idiom `sems bskyed` taken whole matches
+  "reach the Wish"; "for enlightenment" left bare.
+- 499 the fused first word. `thog` (the end of 498's clause, per C07:82/83) is
+  fused onto `bye brag tu` as `thogbye`. A d=7 member `bye brag tu` under the
+  fused parent is refused (a member's English may not equal its parent's), so
+  the reconciler spanned the fusion verbatim → "More specifically" and
+  disclosed on the page that only `bye brag tu` is rendered — one stray
+  syllable disclosed beat nulling the row's best dictionary match.
+- 501 A's d=3 `don byed kyi tshul khrims` flattened as at 498: `eng_order`
+  (w20 `yin` → "is" before w19 "morality") carries the cursor past the
+  unclaimed first "morality". B's `sems can don byed` compound rejected for
+  over-capturing the supplied "every".
+- 503 `brtson pa` → "resolve" kept as the translator's choice sitting exactly
+  where the noun sits, the dictionary value (effort, diligence) disclosed in
+  the note; `gsungs` → "said", "our Lama" having no Tibetan.
+- 504 `slob tshul` → "how to train" as one d=5 with members `slob` → "train"
+  and `tshul` → "how to"; A's "oneself" dropped (no Tibetan reflexive);
+  `gnyis pa` stays null — "we will now turn to" is GMR's hinge, not the ordinal.
+
+**Errata: the analysts claimed six; the reconcilers kept four; the skeptics
+refuted one. Three filed.**
+- E-120 C03:489 (LOW, PROBABLE): GMR's "of birth and getting old and death"
+  drops "sickness" from the four-member `skye rga na 'chi`; TCS03:349 and
+  TCS03:219 render all four. An ENGLISH_FACTUAL_ERROR, filed for GMR's ruling,
+  never corrected.
+- E-121 C03:497 (LOW, CONFIRMED): "perfections77" — a footnote number fused to
+  a WORD, distinct from E-076's period-fusion class; C07:81 is clean.
+- E-122 C03:499 (LOW, CONFIRMED): `thogbye brag tu` — `thog`, the end of 498's
+  clause, fused onto 499's first word. C07:82/83 shows the split. The same
+  row-boundary mechanism as E-111 but a distinct class: a prose token fused
+  across the cut, not a verse syllable spilled. Nothing is lost, so LOW.
+- REFUTED: 496 `spyin sogs` → `sbyin sogs`. The claim's key evidence ("spyin is
+  not a dictionary word") is false — the spine dictionary carries `spyin pa`
+  (Hopkins "giving", Skt. dāna) and independent TCS texts use the same sp- for
+  sb- (`spyin sreg` ×4, TCS04:442). An attested orthographic variant.
+- Dropped at the reconcile gate: 497's second record (the first was E-121);
+  489's second (P1 duplicate).
+- Register: **122 entries, 76 document errata (5 HIGH), 22 digitisation
+  artefacts, 9 ours.**
+
+- Evidence layer: **5,526 headwords / 10,944 pairs**, 28,317 links. C03 at
+  **504/620**, 116 open (505–620). Fifteen layer gates green across 351
+  pages: 49,225/49,286 fields exact, 0 fabrications,
+  13,831/13,831 Tibetan exact, 53,123 spans seen by the builder, none dropped.
+  app_selftest passed (ctest 16/16 with the layer gates).

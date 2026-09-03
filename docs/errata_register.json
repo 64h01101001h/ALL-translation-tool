@@ -1450,5 +1450,17 @@
   "severity": "LOW",
   "confidence": "CONFIRMED",
   "note": "filed from the alignment batch, spine-verified on merge"
+ },
+ {
+  "item_id": "E-122",
+  "course": "C03",
+  "segment": "C03:499",
+  "kind": "INGEST_ARTEFACT",
+  "found": "THOGBYE BRAG TU RANG RANG GIS SO THAR",
+  "expected": "BYE BRAG TU RANG RANG GIS SO THAR (with THOG restored to the end of C03:498, '...LEGS PAR BSRUNG BA'I THOG')",
+  "evidence": "This segment's ACIP (source of record) opens 'THOGBYE BRAG TU' and its wylie 'thogbye brag tu'; 'thogbye' is not a Tibetan syllable. Verified by re-query: C03:498 ends '...mi dge bcu spong gi tshul khrims legs par bsrung ba'i' (no thog). Independent parallel witness C07:82 ends '...mi dge bcu spong gi tshul khrims legs par bsrung ba'i thog' and C07:83 opens 'BYE BRAG TU RANG RANG GIS SO THAR, BYANG...' with English identical to this segment ('More specifically, with this first type of morality...'). P1:111 also reads 'bye brag tu rang rang gis...' (same text re-ingested; corroborating, not independent). Corpus-wide, 'thogbye' occurs only in C03:499 and 'thog bye brag tu' occurs nowhere, so this is a one-off segmentation fault at the C03 498/499 boundary: the stranded final syllable of 498 was glued to the head of 499. Not in any registered class. SKEPTIC PASS 2026-09-03 (survived; severity set LOW, consistent with E-111, since nothing is lost): the fused THOGBYE is verbatim in the ACIP and wylie while 498 ends at BA'I with no thog; the independent witness C07:82/83 reads '...bsrung ba'i thog | bye brag tu ...'; 'thogbye' is not a possible Tibetan syllable. The same row-boundary mechanism as E-111 but a distinct class: a PROSE token fused across the cut rather than a verse line's final syllable spilled. Not in E-111's list.",
+  "severity": "LOW",
+  "confidence": "CONFIRMED",
+  "note": "filed from the alignment batch, spine-verified on merge"
  }
 ]
