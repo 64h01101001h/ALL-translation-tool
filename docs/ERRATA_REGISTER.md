@@ -8,12 +8,12 @@
 
 Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source and Geshe Michael Roach's facing English &mdash; recorded as a by-product of a machine alignment campaign reading the courses segment by segment. **Every entry has been checked against the corpus database** (42,199 segments, spine `hgm_spine_v27_2.db`): the quoted strings were retrieved from the spine, not from a note, and each citation was re-derived rather than trusted.
 
-**121 entries**: **76 document errata** (5 HIGH, 54 MEDIUM, 17 LOW), **21 digitisation artefacts**, 14 observations checked and closed as *not* errata, and 1 that could not be verified.
+**122 entries**: **76 document errata** (5 HIGH, 54 MEDIUM, 17 LOW), **22 digitisation artefacts**, 14 observations checked and closed as *not* errata, and 1 that could not be verified.
 
 | Kind | n |
 |---|---|
 | Tibetan spelling | 54 |
-| Digitisation artefact | 21 |
+| Digitisation artefact | 22 |
 | English typo | 16 |
 | Our banked layer | 9 |
 | English factual error | 3 |
@@ -126,7 +126,7 @@ Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source 
 
 ---
 
-## Digitisation artefacts &mdash; 21
+## Digitisation artefacts &mdash; 22
 
 *These are fixed **upstream in the data pipeline**, not by editing a document, and go to a different person. Two are class entries carrying a measured extent rather than one row per instance.*
 
@@ -152,6 +152,7 @@ Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source 
 | `C03:440` | phyi ma'i snang shas | the row's Tibetan should close the verse line: "...YANG YANG BSAMS PAS PHYI MA'I SNANG SHAS LDOG," | QUOTED AS FILED BY THE RECONCILER: wylie/ACIP of C03:440 end at "YANG YANG BSAMS PAS PHYI MA'I SNANG SHAS" (no closing shad) while the row's English ends "...And the cycle's suffering: stop desire for the future." \|\| Confirmed from this row's own text. (1) T | CONFIRMED |
 | `C03:48` | gang rnams phyogs bcu'i 'jig rten sgron ma dag,byang chub rim par sangs rgyas ma chags brnyes (ACIP: ...SGRON MA DAG,BYANG CHUB RIM PAR...) | ...sgron ma dag, ,byang chub rim par... — a verse-line break, punctuated as the other three breaks in the same | The identical segment punctuates its other verse-line breaks with a space: "...ma chags brnyes, ,mgon po de dag..." and "...thams cad la, ,'khor lo bla na med pa...". Only the first break, after 'sgron ma dag', is run together. The English confirms a line boun | CONFIRMED |
 | `C03:497` | all six perfections77 are covered | all six perfections are covered | Footnote marker 77 fused to the preceding word (not to a period, so outside the registered period-fusion class). Re-checked by the reconciler: parallel witness C07:81 carries the identical English sentence and identical wylie but reads 'all six perfections are | CONFIRMED |
+| `C03:499` | THOGBYE BRAG TU RANG RANG GIS SO THAR | BYE BRAG TU RANG RANG GIS SO THAR (with THOG restored to the end of C03:498, '...LEGS PAR BSRUNG BA'I THOG') | This segment's ACIP (source of record) opens 'THOGBYE BRAG TU' and its wylie 'thogbye brag tu'; 'thogbye' is not a Tibetan syllable. Verified by re-query: C03:498 ends '...mi dge bcu spong gi tshul khrims legs par bsrung ba'i' (no thog). Independent parallel w | CONFIRMED |
 | `class entry (186 segments end at exactly 1,500 characters)` | ' '.join(eng)[:1500] in engines/hgm_tools.py - the spine ingest silently caps every segment's English at 1,500 characters | the whole English of the segment; a segment whose translation runs past 1,500 characters loses its tail with n | Found by the skeptic pass on C03:429 (E-106), which asked why that field ends mid-sentence at 'there are five ' and measured length(english) = 1500 exactly. Census 2026-09-01 on build/hgm_spine_v27_2.db: 186 segments have length(english) = 1500 (DDA 28, C18 15 | CONFIRMED |
 
 ---
@@ -207,6 +208,6 @@ Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source 
 
 **Document editors.** The 76 document errata above. Start with the 5 HIGH entries. Note that several errors exist at MORE THAN ONE LOCUS because passages are ingested twice &mdash; each entry's evidence names them, and a per-segment fix will leave duplicates behind.
 
-**Data-pipeline maintainers.** The 21 digitisation artefacts, plus two reports filed separately: `docs/upstream/FOLIO_MARKER_COLLISIONS.md` (119 folio markers spliced into caption numbers) and `docs/upstream/C13_COLUMN_OFFSET.md` (**C13:63&ndash;82 pairs Tibetan with the English of a different text &mdash; C13 should not be scanned until it is fixed**).
+**Data-pipeline maintainers.** The 22 digitisation artefacts, plus two reports filed separately: `docs/upstream/FOLIO_MARKER_COLLISIONS.md` (119 folio markers spliced into caption numbers) and `docs/upstream/C13_COLUMN_OFFSET.md` (**C13:63&ndash;82 pairs Tibetan with the English of a different text &mdash; C13 should not be scanned until it is fixed**).
 
 **Director.** The standing policy question: does ALL issue an erratum sheet, correct future printings, or annotate in place? The scan preserves everything verbatim either way &mdash; this is an editorial decision, not a technical one.
