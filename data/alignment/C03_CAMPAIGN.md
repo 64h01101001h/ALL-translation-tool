@@ -2274,3 +2274,49 @@ removed the same way.
 Coverage after landing: **C03 522/620, 98 open (523–620).** Evidence layer
 5,586 headwords / 11,136 pairs, 28,942 links. Fifteen layer gates green;
 app_selftest passed (ctest 16/16).
+
+### Batches C03-168 … C03-173 (C03:523–540) — 2026-09-03 — propose: Opus 5 · reconcile/refute: Fable 5.1
+Six pages, eighteen segments: keeping the pledges and vows pure and the stanza
+on the ground of attainments (523–525); the supreme and the eight common
+attainments (526–528); the root downfalls, the four doors of downfall and how
+to keep them closed (529–531); where the instructions are found and the fruit
+of keeping them (532–534); seven or sixteen births and the three stanzas on
+empowerment life after life (535–540). Thirty-six analysts, eighteen
+reconcilers, two skeptics. **Eighteen of eighteen merged specs exited 0 on the
+first run** — the sixth batch in a row. 387 spans banked (shorter rows and
+verse).
+
+**Two errata filed, both CONFIRMED by independent witnesses.**
+- E-123 C03:524 (MEDIUM, CONFIRMED): `rnam da dam tshig` for `rnam dag dam
+  tshig` — the final -g of *rnam dag* ("pure") dropped in wylie and ACIP.
+  TCS13:729 and TCS08:12 read `rnam dag` in the same verse line; C16:499
+  carries the same defect but is the same text re-ingested. Skeptic pass held.
+- E-124 C03:539 (MEDIUM, CONFIRMED): `ma bsgom sgyur` for `ma bsgoms gyur` —
+  a displaced syllable break turns the auxiliary *gyur* into the unrelated
+  verb *sgyur*. TCS13:730 and TCS05:475 read `bsgoms gyur`; P1:127 is
+  same-lineage. Skeptic pass held.
+- Dropped at the reconcile gate: 533 `sdoms tshig` (LOW) — `sdoms` is an
+  HGM-glossed spine entry attested in 49 corpus segments; not an erratum.
+
+**Rule 10 rulings this batch.** `bya ba'i` → "keep" (523: "keep pure" renders
+`dag par bya`, not *bya ba*); `de yang` → "Now" and `gyur` → "have made
+yourself" (525); `bcas` → "include" (527, list-closer); `'grub pa'i` →
+"gives" and `rnyed` → "know" (524); `sgrub pa'i` → "cause" (528); `mang ba`
+→ "particularly severe" (530, word means "many"); `dma' mtha'ang` → "at the
+very most" (536 — the LOW limit; GMR renders the same phrase "at least" at
+578); `dang` → "after" (537); `kyang` → "concurs" (540); `sha stag tu` →
+"always" and `gyur te` → "find yourself" (535). All nulled with notes.
+
+**Open ruling for Adam.** 539 `ma` → "fail to" was KEPT by the reconciler on
+the reading that the four-form negative-affix rule governs splitting a word,
+while "fail to" is two whole words carrying the negation. This sits beside the
+pending `ma` → "not"-inside-"cannot" question (TODO). Both need one ruling.
+
+**`dam tshig` and the doublet.** HGM glosses `dam tshig` alone as "pledges and
+vows"; where GMR's English has the pair, neither `dam` nor `sdom` may claim one
+word of it (534), and where a bare `dam tshig` meets "vows and pledges" the
+span takes "pledges" only (529), the supplied "vows" left unwrapped.
+
+Coverage after landing: **C03 540/620, 80 open (541–620).** Register at
+**124 entries.** Evidence layer 5,639 headwords / 11,269 pairs, 29,347 links.
+Fifteen layer gates green; app_selftest passed.

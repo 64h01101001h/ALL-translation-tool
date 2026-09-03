@@ -8,11 +8,11 @@
 
 Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source and Geshe Michael Roach's facing English &mdash; recorded as a by-product of a machine alignment campaign reading the courses segment by segment. **Every entry has been checked against the corpus database** (42,199 segments, spine `hgm_spine_v27_2.db`): the quoted strings were retrieved from the spine, not from a note, and each citation was re-derived rather than trusted.
 
-**122 entries**: **76 document errata** (5 HIGH, 54 MEDIUM, 17 LOW), **22 digitisation artefacts**, 14 observations checked and closed as *not* errata, and 1 that could not be verified.
+**124 entries**: **78 document errata** (5 HIGH, 56 MEDIUM, 17 LOW), **22 digitisation artefacts**, 14 observations checked and closed as *not* errata, and 1 that could not be verified.
 
 | Kind | n |
 |---|---|
-| Tibetan spelling | 54 |
+| Tibetan spelling | 56 |
 | Digitisation artefact | 22 |
 | English typo | 16 |
 | Our banked layer | 9 |
@@ -43,7 +43,7 @@ Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source 
 | `C03:339` | mthar mal rim rang la gcig tu dril te | mthar lam rim rang la gcig tu dril te | The term is lam rim, the Steps of the path. 'mal' is bedding or a couch and forms no compound with 'rim' that could take 'rang la gcig tu dril te nyams su len' - 'join into one within our own lives and put into practice'. The English of this very segment rende | CONFIRMED |
 | `C03:39` | acip: ,SIL SNYAN RNAMS DANG BYUNG PA GDUGS MCHOG DANG ,   \|   wylie: ,sil snyan rnams dang byung pa gdugs mchog dang , | byug pa | seg_hint 39 is CORRECT. Three independent proofs: (1) the note's own claim checks out — C03:38, the glossary segment immediately preceding, spells it right and defines it: "byug pa ni spos zhim po'i lde gu'o" (byug pa = thick fragrant unguent); (2) this segmen | CONFIRMED |
 
-## Medium severity &mdash; 54 entries
+## Medium severity &mdash; 56 entries
 
 | Citation | What it says | Should say | Evidence | Confidence |
 |---|---|---|---|---|
@@ -100,7 +100,9 @@ Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source 
 | `C03:467` | ,TSUL KHRIMS BSLAB PA DGOS PA'I GTAM YAG NUB, | ,TSUL KHRIMS BSLAB PA DGOS PA'I GTAM YANG NUB, | Not confirmable from this row's text alone, so downgraded from A's CONFIRMED/HIGH. Internal evidence is stylistic: YANG NUB ('even the talk ... has sunk away') is the answering phrase to MING TZAM SNANG ('only the mention appears') in line 2, and gives NUB a s | PROBABLE |
 | `C03:468` | KHAS LEN TAM LA RAB TU DPA' BA YIS | ,KHAS LEN TZAM LA RAB TU DPA' BA YIS,  (wylie: "khas len tsam la rab tu dpa' ba yis,") | QUOTED AS FILED BY THE RECONCILER: ,KHAS LEN TAM LA RAB TU DPA' BA YIS,  (wylie: "khas len tam la rab tu dpa' ba yis,") \|\| ACIP is the source of record and prints TAM in this row; the wylie follows it ("khas len tam la"). The converter is behaving normally e | CONFIRMED |
 | `C03:470` | RUNG B'AI | wylie "rung ba'i kun spyod rnams"; acip "RUNG BA'I KUN SPYOD RNAMS" | QUOTED AS FILED BY THE RECONCILER: wylie "rung bAi kun spyod rnams"; acip "RUNG B'AI KUN SPYOD RNAMS" \|\| Transposed apostrophe inside the syllable (B'AI for BA'I); 'bAi' is not a well-formed Wylie syllable. Internal witness: the same row spells the same word | CONFIRMED |
+| `C03:524` | rnam da dam tshig | rnam dag dam tshig | Wylie ',rnam da dam tshig sdom par gsungs pa la,' and ACIP ',RNAM DA DAM TSIG SDOM PAR GSUNGS PA LA,' (source of record) both drop the final -g of rnam dag ('pure'), which the English renders as 'most pure'. Independent witnesses of the same verse read rnam da | CONFIRMED |
 | `C03:53` | de nas dmigs pa gsal bar byas nas mNaDl phul te (ACIP: DE NAS DMIGS PA GSAL BAR BYAS NAS MnAdL PHUL TE) | maNDla (ACIP MAndLA), the spelling used at C03:1 | C03:1 records the same word as ACIP 'MAndLA' / Wylie 'maNDla', with the English 'mandel'. C03:53's 'MnAdL' transposes the vowel A onto the retroflex and drops the final A, leaving a form that is not well-formed Wylie (a bare 'm' root with no vowel, and a 'Dl'  | CONFIRMED |
+| `C03:539` | ma bsgom sgyur | ma bsgoms gyur | Displaced syllable break: the final -s of bsgoms has migrated onto the auxiliary gyur, yielding the unrelated verb sgyur. Two independent witnesses of the same verse read 'ma bsgoms gyur kyang ltung med na': TCS13:730 and TCS05:475. P1:127 reproduces 'ma bsgom | CONFIRMED |
 
 ## Low severity &mdash; 17 entries
 
@@ -206,7 +208,7 @@ Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source 
 
 ## Recommended actions, by owner
 
-**Document editors.** The 76 document errata above. Start with the 5 HIGH entries. Note that several errors exist at MORE THAN ONE LOCUS because passages are ingested twice &mdash; each entry's evidence names them, and a per-segment fix will leave duplicates behind.
+**Document editors.** The 78 document errata above. Start with the 5 HIGH entries. Note that several errors exist at MORE THAN ONE LOCUS because passages are ingested twice &mdash; each entry's evidence names them, and a per-segment fix will leave duplicates behind.
 
 **Data-pipeline maintainers.** The 22 digitisation artefacts, plus two reports filed separately: `docs/upstream/FOLIO_MARKER_COLLISIONS.md` (119 folio markers spliced into caption numbers) and `docs/upstream/C13_COLUMN_OFFSET.md` (**C13:63&ndash;82 pairs Tibetan with the English of a different text &mdash; C13 should not be scanned until it is fixed**).
 
