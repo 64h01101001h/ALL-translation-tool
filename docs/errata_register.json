@@ -1414,5 +1414,17 @@
   "severity": "MEDIUM",
   "confidence": "CONFIRMED",
   "note": "filed from the alignment batch, spine-verified on merge"
+ },
+ {
+  "item_id": "E-119",
+  "course": "C03",
+  "segment": "C03:470",
+  "kind": "TIBETAN_SPELLING",
+  "found": "RUNG B'AI",
+  "expected": "wylie \"rung ba'i kun spyod rnams\"; acip \"RUNG BA'I KUN SPYOD RNAMS\"",
+  "evidence": "QUOTED AS FILED BY THE RECONCILER: wylie \"rung bAi kun spyod rnams\"; acip \"RUNG B'AI KUN SPYOD RNAMS\" || Transposed apostrophe inside the syllable (B'AI for BA'I); 'bAi' is not a well-formed Wylie syllable. Internal witness: the same row spells the same word correctly thirty syllables earlier, wylie 'mi rung ba'i bsam sbyor' / acip 'MI RUNG BA'I BSAM SBYOR'. Parallel witness: P1:96 is the same passage re-ingested (not independent) and reads 'rung ba'i kun spyod rnams' / 'RUNG BA'I KUN SPYOD RNAMS' at this position, localising the fault to this C03 row. Case-sensitive corpus sweep (wylie glob '*bAi*', acip glob '*B''AI*') returns C03:470 only; the two TCS rows returned by a case-insensitive LIKE are false positives on 'bu'i'. Both proposals filed this same record independently; confirmed by the reconciler from the row text. SKEPTIC PASS 2026-09-03 (survived, MEDIUM/CONFIRMED): the ACIP source itself keys RUNG B'AI and the converter renders it faithfully as bAi, so this is a keying defect, not a converter class; the same row spells BA'I correctly earlier; the only parallel (P1:96, same lineage) reads BA'I; no C16/C09/TCS row carries the passage.",
+  "severity": "MEDIUM",
+  "confidence": "CONFIRMED",
+  "note": "filed from the alignment batch, spine-verified on merge"
  }
 ]
