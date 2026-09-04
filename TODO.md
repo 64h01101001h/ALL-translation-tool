@@ -53,10 +53,11 @@ in, flagged in the page note. Confirm as the fifth form, or null it.
 - [ ] **Sublime-grade editing design** (Phase 1–3 before any code). The 8/28
       design workflow returned 0/11 agents (spend limit); not restarted.
 - [ ] **Author portraits design gate** — scope not yet clarified.
-- [ ] **C03:577–620** — 44 segments open. 433–576 landed 2026-09-01/03 as the
-      first nine batches under the model policy (forty-eight pages, 141/141
-      first-run passes; 430, 476, 513 and 558 are markers). New epic per the
-      gate document.
+- [x] **C03:433–620 — COMPLETE 2026-09-03.** Eleven batches under the model
+      policy (sixty-three pages c3p138–c3p200, 185/185 first-run passes;
+      markers 430, 476, 513, 558). C03 locked `complete=True` in the builder;
+      register at 137. Open for Adam: E-133 (GMR's "Ganden" for Gatsel) and
+      E-120 need his ruling; the Phase 3 gate document can now be ratified.
 - [ ] **Ruling needed (negation):** 539 `ma` → "fail to" kept as a whole-word
       negation; pair with the `ma` → "not"-inside-"cannot" question below and
       rule once.

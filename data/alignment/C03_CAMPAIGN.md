@@ -2420,3 +2420,91 @@ an unsanctioned negative form.
 Coverage after landing: **C03 576/620, 44 open (577–620).** Register stays at
 **129 entries.** Evidence layer 5,762 headwords / 11,620 pairs, 30,359 links.
 Fifteen layer gates green; app_selftest passed (ctest 16/16).
+
+### Batches C03-186 … C03-191 (C03:577–594) — 2026-09-03 — propose: Opus 5 · reconcile/refute: Fable 5.1
+Six pages, eighteen segments: the steps of the path as taught, the Lord of the
+Able as Diamond Keeper, the stanza that does not appear (577–579); the three
+dedications (580–582); under the Lama's care, the ten kinds of thought, the
+supplication at Radreng (583–585); the preliminaries, the least one must do,
+Tukwan on learning (586–588); practising what the Buddha taught, the little
+scroll, Milarepa and Khyungpo (589–591); Changkya, the Dharma that benefits
+all, Gungtang (592–594). Thirty-six analysts, eighteen reconcilers, two
+skeptics. **Eighteen of eighteen merged specs exited 0 on the first run** —
+the ninth batch in a row. 520 spans banked.
+
+**Two errata filed, both held.**
+- E-130 C03:590 (LOW, PROBABLE): `chang chung` for `chung chung` — a source
+  keying error (the ACIP column itself reads CHANG CHUNG); `chang` glosses
+  only "alcohol"; 2 vs 10 corpus occurrences, P1:151 same-lineage.
+- E-131 C03:592 (LOW, CONFIRMED): an 86-character verse block dittographed in
+  both wylie and ACIP. The skeptic corrected the class: the English lines that
+  seem orphaned here have their Tibetan whole in C03:593 — a translation-order
+  row skew, not lost text — so only the dittograph is filed.
+- Dropped at the reconcile gate: 581's `{NGg}` escape (E-044 class), 585's
+  "north.101" (E-076), 579's ".97" (E-076).
+
+**Rule 10 rulings.** 577 `bam` → "or" (not a morpheme: `'am` bound to `rab`)
+and `gyur pa` → "which exists"; 578 `ma 'gyangs par` → "no more than"; 579
+`sogs` → "begins with"; 580 `zhes sogs` → "which starts with the line"; 582
+`rgyur` → "so that it brings"; 583 `phyi ma` → "the third kind of goal"; 587
+`tshun` → "beginning with"; 588 `tshad mar gyur pa` → "sees with perfect
+accuracy"; 589 `des` → "the Buddha himself"; 593 `mdzod cig` → "Be"; 594
+`na yang` → "It may seem". All nulled with notes. 578 `thub dbang` → "Lord of
+the Powerful Buddhas" banked whole as GMR's standing epithet.
+
+### Batches C03-192 … C03-200 (C03:595–620) — 2026-09-03 — propose: Opus 5 · reconcile/refute: Fable 5.1 — **THE COURSE CLOSES**
+Nine pages, twenty-six segments: the four gates of the Dharma, review
+meditation, the presentations of the Steps, the open basket, the texts of
+our own tradition, the two secret stages (595–600); the one good life and
+the kind mothers (601–603); the lineage stanzas from Nagarjuna to Tsongkapa
+and the sixty glorious tones (604–609); the mother of the moon and the
+colophon of the lecture (610–612); the memory-refresher notes, the sponsor
+Yangdzom Tsering, the rush to the woodblocks, the scribe at Gatsel Palace,
+the dedications, and the closing blessing (613–620). Fifty-two analysts,
+twenty-six reconcilers, four skeptics. **Twenty-six of twenty-six merged
+specs exited 0 on the first run** — the tenth batch in a row. 654 spans
+banked. The last page, c3p200, carries two rows: 619 and the 620 blessing
+whose English is the E-107 1,500-character cap.
+
+**Six errata filed, all held.**
+- E-132 C03:612 (LOW, CONFIRMED): "Gantapada" for "Ghantapada" — the
+  spine's English spells it Ghantapada in 62 rows and Gantapada only here.
+- E-133 C03:617 (MEDIUM, CONFIRMED): GMR's "Ganden Palace" for `dga' tshal`
+  (Gatsel, the Hlalu family seat) — an ENGLISH_FACTUAL_ERROR of the E-120
+  class, filed for GMR's ruling; TCS04:219, TCS13:269, TCS12:443 and C01:496
+  all render `lha klu dga' tshal ba` as Hlalu Gatsel.
+- E-134 C03:617 (LOW, PROBABLE): `ma sprel` for `me sprel` — the fire-monkey
+  year, as GMR's own English "fire monkey [1956]" confirms.
+- E-135 C03:611 (LOW, PROBABLE): `gangs gi''a` — a doubled a-chung with no
+  legal reading, a source keying error; P1:165 reads a different illegal
+  form.
+- E-136 C03:614 (MEDIUM, PROBABLE): the closing clause of the sponsor's name
+  dittographed in both wylie and ACIP; the two copies differ (`yang` vs
+  `g-yang`), so the correction keeps the second.
+- E-137 C03:614 (LOW, PROBABLE): `yang 'dzoms` for `g-yang 'dzoms` in the
+  first copy — subsumed by E-136 if the second copy is retained.
+- Dropped at the reconcile gate: 606's `brgyas` → "thousands of" (OSE 269
+  shows the same idiom — GMR's published rendering, not a corruption);
+  595/596's row skew (E-111, 594–596 boundary); 609/610 footnote fusions
+  (E-076); 620's cap (E-107) and spilled `shog` (E-111).
+
+**Rule 10 rulings.** 596 `bka'` → "has taught us" (noun over verb); 597
+`rjes 'brang` and `rim pa` stripped of GMR's supplied nouns; 599 `myong ba`
+→ "flow"; 601 `'dir` → "This"; 602 `'bad de` → "go"; 604 `gcig gyur` →
+"one" (only `gcig` renders it); 606 `'grib` → "set" (that is `nub`); 608
+`zhes` → "they call this teaching"; 609 `che` → "highly accomplished"; 611
+`khyab bdag` → "God of a Secret World" (only here and P1 against 22 rows of
+"Lord of the Secret World"); 613 `dran gso'i` → "retain"; 618 `gyur cig` →
+"I pray that" (a discontinuous frame); 619 `bgrod pa` → "across". 610 `ma ma`
+→ "mother" (lexically nurse) BANKED as GMR's published corpus match with a
+note. 620 `dge legs 'phel` banked as one blessing unit, no d=7 layer.
+
+**Course lock.** `build_alignment_layer.py` now carries
+`"complete": True` for C03 (LOCKED 2026-09-03: gate-proved 620/620, 200
+pages, markers 22/294/303/430/476/513/558). The coverage gate refuses any
+future edit that drops a segment.
+
+Coverage after landing: **C03 620/620 — COMPLETE.** Register at **137
+entries** (90 document errata, 5 HIGH; 23 digitisation artefacts; 9 ours).
+Evidence layer 5,932 headwords / 12,069 pairs, 31,577 links. Sixteen gates
+green including app_selftest.
