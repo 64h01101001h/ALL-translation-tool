@@ -1726,5 +1726,17 @@
   "severity": "MEDIUM",
   "confidence": "CONFIRMED",
   "note": "filed from the alignment batch, spine-verified on merge"
+ },
+ {
+  "item_id": "E-145",
+  "course": "C04",
+  "segment": "C04:61",
+  "kind": "ENGLISH_TYPO",
+  "found": "There are two reason why",
+  "expected": "There are two reasons why",
+  "evidence": "Verbatim at the head of the C04:61 english column. Witness check: the only other row carrying the string is C16:544, which is the same file re-ingested (byte-identical wylie too), so not an independent witness; no published parallel carries the singular. GK:153 has 'two reasons why' but is a different passage, cited only to show GMR's normal form. SKEPTIC PASS 2026-09-04 (Fable 5.1): refuted=false — (a) 'There are two reason why' is verbatim at the head of the C04:61 english column (ACIP/wylie are Tibetan and cannot carry the English string). (b) The only other row with the string is C16:544, whose english and wylie are byte-identical to C04:61 (sqlite equality test returned 1|1) - same file re-ingested, not an independent witness; the wylie passage occurs nowhere else. (c) docs/errata_regist",
+  "severity": "LOW",
+  "confidence": "CONFIRMED",
+  "note": "filed from the alignment batch, spine-verified on merge"
  }
 ]
