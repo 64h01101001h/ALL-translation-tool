@@ -8,11 +8,11 @@
 
 Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source and Geshe Michael Roach's facing English &mdash; recorded as a by-product of a machine alignment campaign reading the courses segment by segment. **Every entry has been checked against the corpus database** (42,199 segments, spine `hgm_spine_v27_2.db`): the quoted strings were retrieved from the spine, not from a note, and each citation was re-derived rather than trusted.
 
-**137 entries**: **90 document errata** (5 HIGH, 60 MEDIUM, 25 LOW), **23 digitisation artefacts**, 14 observations checked and closed as *not* errata, and 1 that could not be verified.
+**143 entries**: **96 document errata** (6 HIGH, 62 MEDIUM, 28 LOW), **23 digitisation artefacts**, 14 observations checked and closed as *not* errata, and 1 that could not be verified.
 
 | Kind | n |
 |---|---|
-| Tibetan spelling | 66 |
+| Tibetan spelling | 72 |
 | Digitisation artefact | 23 |
 | English typo | 17 |
 | Our banked layer | 9 |
@@ -31,7 +31,7 @@ Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source 
 
 ---
 
-## High severity &mdash; 5 entries
+## High severity &mdash; 6 entries
 
 *Would mislead a reader who has no other cue in front of them.*
 
@@ -42,8 +42,9 @@ Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source 
 | `C03:300` | Loving One, Avalokiteshvara, with Asanga, | Loving One, Maitreya, with Asanga, | The Tibetan quoted in this slot is `byams pa thogs med`. TCS14:65 settles it inside this same corpus: the wylie `'di ni rje btsun byams pa nas thogs med dang, rje btsun 'jam dbyangs nas klu sgrub dang` is rendered "those passed down to Master Asanga from the h | CONFIRMED |
 | `C03:339` | mthar mal rim rang la gcig tu dril te | mthar lam rim rang la gcig tu dril te | The term is lam rim, the Steps of the path. 'mal' is bedding or a couch and forms no compound with 'rim' that could take 'rang la gcig tu dril te nyams su len' - 'join into one within our own lives and put into practice'. The English of this very segment rende | CONFIRMED |
 | `C03:39` | acip: ,SIL SNYAN RNAMS DANG BYUNG PA GDUGS MCHOG DANG ,   \|   wylie: ,sil snyan rnams dang byung pa gdugs mchog dang , | byug pa | seg_hint 39 is CORRECT. Three independent proofs: (1) the note's own claim checks out — C03:38, the glossary segment immediately preceding, spells it right and defines it: "byug pa ni spos zhim po'i lde gu'o" (byug pa = thick fragrant unguent); (2) this segmen | CONFIRMED |
+| `C04:29` | lkog 'gyur la gsar du bslu ba'i shes pa | lkog 'gyur la gsar du mi bslu ba'i shes pa | ACIP reads 'LKOG 'GYUR LA GSAR DU BSLU BA'I SHES PA' (source). An inference is by definition a NON-deceiving (mi bslu ba) fresh awareness; as written the definition of inference by convention says 'deceiving'. INTERNAL witness: the parallel definition of scrip | PROBABLE |
 
-## Medium severity &mdash; 60 entries
+## Medium severity &mdash; 62 entries
 
 | Citation | What it says | Should say | Evidence | Confidence |
 |---|---|---|---|---|
@@ -107,8 +108,10 @@ Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source 
 | `C03:541` | rnyed par gur nas | rnyed par gyur nas | Wylie/ACIP read 'gur' (ACIP GUR). 'gur' is an attested word (tent) so the dictionary alone does not decide it; the root verse this passage glosses reads 'bcos ma min pa'i nges pa rnyed gyur nas' at TCS08SourceOfAllMyGood:12 (independent witness; also C03:524,  | PROBABLE |
 | `C03:614` | mchog nas, lhun po ltar brtan pa'i yon gyi bdag mo chen mo lha lcam sku ngo g-yang 'dzoms tshe ring mchog nas | mchog nas | The clause 'lhun po ltar ... mchog nas' is written twice in wylie and in the ACIP source of record (LHUN PO LTAR ... MCHOG NAS, LHUN PO LTAR ... MCHOG NAS,); the English renders it once. P1:167 carries the same doubling (same lineage, not independent). TCS12:4 | PROBABLE |
 | `C03:617` | Ganden Palace | Gatsel Palace (dga' tshal, the Hlalu family seat) | wylie and ACIP both read `lha klu dga' tshal ba'i pho brang` (DGA' TSAL, not DGA' LDAN). Parallel colophons in the same corpus render the same name `lha klu dga' tshal ba` as "Hlalu Gatsel" (TCS04PrayerBook:219) and "Hla-Lu Gatselwa" (TCS13:269); C01:496 gloss | CONFIRMED |
+| `C04:29` | sbyis pas longs spyod khrims kyis bde | sbyin pas longs spyod khrims kyis bde | ACIP (source of record) reads 'SBYIS PAS LONGS SPYOD KHRIMS KYIS BDE', so the error is in the source, not the conversion. The line is the Precious Garland verse quoted as the scriptural example; the corpus carries the published reading 'sbyin pas longs spyod k | CONFIRMED |
+| `C04:29` | yid ches pa'i rtag la brten nas | yid ches pa'i rtags la brten nas | ACIP reads 'YID CHES PA'I RTAG LA BRTEN NAS' (source, not conversion). The definition of scriptural inference rests on a logical reason (rtags), not on permanence (rtag). INTERNAL witness: the parallel definition later in the same row reads 'grags pa'i rtags y | PROBABLE |
 
-## Low severity &mdash; 25 entries
+## Low severity &mdash; 28 entries
 
 | Citation | What it says | Should say | Evidence | Confidence |
 |---|---|---|---|---|
@@ -137,6 +140,9 @@ Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source 
 | `C03:612` | according to the tradition of Gantapada. | according to the tradition of Ghantapada. | Spine ENGLISH field (corpus_segments.english). 'Ghantapada' occurs in 62 segments across TCS06/09/10/11/13/14/17 and TITLS (e.g. TITLS 2732, 2736: 'Outer Secret World of the Five Angels of Highest Bliss (Samvara), in the Tradition of Ghantapada' — the same phr | CONFIRMED |
 | `C03:614` | sku ngo yang 'dzoms tshe ring | sku ngo g-yang 'dzoms tshe ring | The first copy of the name drops the g- prefix; the second copy in this same row reads g-yang 'dzoms, as do C03:619 (g-yang 'dzoms tshe ring) and TCS12:443 (ga-yang 'dzoms). P1:167 reads yang 'dzoms in the first copy too (same lineage). One analyst filed this. | PROBABLE |
 | `C03:617` | ma sprel | me sprel | ACIP source of record reads `MA SPREL`; the English renders "fire monkey" (me sprel, 1956). `me sprel` occurs 0 times and `ma sprel` once (this segment) in the corpus, so no parallel witness settles it; the English fixes the intended reading. Quoted as found i | PROBABLE |
+| `C04:29` | 'dod pa tsham gyis bzhag pa | 'dod pa tsam gyis bzhag pa | ACIP reads "'DOD PA TSAM GYIS BZHAG PA"; ACIP TS converts to wylie tsh, so 'tsham' is a faithful conversion of a source mis-keying (TSAM for TZAM). INTERNAL witness: the same row keys the same word correctly earlier, 'LUNG TZAM GYIS GRUB PA' -> 'lung tsam gyis | CONFIRMED |
+| `C04:29` | yid ches rjes dpg-yid ches pa'i | yid ches rjes dpag, yid ches pa'i | ACIP reads 'YID CHES RJES DPG-YID CHES PA'I' (source). 'dpg' is not a Tibetan syllable; the heading term is rjes dpag (inference), attested across the corpus (C18:560 'yid ches kyi rjes dpag', C13:822). The hyphen fusing the heading to the definition is layout | CONFIRMED |
+| `C04:29` | grags pa'i rjes dpggrags pa'i rtags yang dag | grags pa'i rjes dpag, grags pa'i rtags yang dag | ACIP reads "GRAGS PA'I RJES DPGGRAGS PA'I RTAGS YANG DAG" (source). Second occurrence of the dpg-for-dpag spelling, here with the heading 'grags pa'i rjes dpag' run into the definition with no separator (the first heading at least has a hyphen). Term attested  | CONFIRMED |
 
 ---
 
@@ -221,7 +227,7 @@ Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source 
 
 ## Recommended actions, by owner
 
-**Document editors.** The 90 document errata above. Start with the 5 HIGH entries. Note that several errors exist at MORE THAN ONE LOCUS because passages are ingested twice &mdash; each entry's evidence names them, and a per-segment fix will leave duplicates behind.
+**Document editors.** The 96 document errata above. Start with the 6 HIGH entries. Note that several errors exist at MORE THAN ONE LOCUS because passages are ingested twice &mdash; each entry's evidence names them, and a per-segment fix will leave duplicates behind.
 
 **Data-pipeline maintainers.** The 23 digitisation artefacts, plus two reports filed separately: `docs/upstream/FOLIO_MARKER_COLLISIONS.md` (119 folio markers spliced into caption numbers) and `docs/upstream/C13_COLUMN_OFFSET.md` (**C13:63&ndash;82 pairs Tibetan with the English of a different text &mdash; C13 should not be scanned until it is fixed**).
 
