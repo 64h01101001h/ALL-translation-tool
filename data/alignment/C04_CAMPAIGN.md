@@ -132,3 +132,11 @@ passed; 58 `rtogs zin` split (`zin` → ∅), `kho bos` → "our" whole.
 **Errata.** 57 `bcas shes` for `bcad shes` (ACIP `BCAS SHES`; independent
 witnesses C04:48 and SVN:1202) — to the refute pass. 61 "There are two
 reason why" (ENGLISH_TYPO) filed by both analysts, pending reconcile.
+
+**Ruling item (2026-09-04, C04:80).** GMR's English reads "The root text of
+Master Chandrakirti says:" where the root text quoted is Dharmakirti's
+*Commentary on Valid Perception*; the wylie says only `rtsa bar` ("in the
+root text") and names no author, so this is not a Tibetan-checkable erratum
+and was not filed. It is an attribution in GMR's own frame — E-120 class,
+for GMR's ruling; the English stays byte-exact. Both analysts and the
+reconciler noted it.

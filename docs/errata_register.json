@@ -1738,5 +1738,17 @@
   "severity": "LOW",
   "confidence": "CONFIRMED",
   "note": "filed from the alignment batch, spine-verified on merge"
+ },
+ {
+  "item_id": "E-146",
+  "course": "C04",
+  "segment": "C04:73",
+  "kind": "ENGLISH_TYPO",
+  "found": "even it the object is unchanging",
+  "expected": "even if the object is unchanging",
+  "evidence": "English column of C04:73, verbatim: 'It is true that, even it the object is unchanging, the subject mind that perceives it need not be unchanging.' Wylie 'yul rtag pa yin na'ang' is the concessive 'even if'. Filed independently by both analysts. Witness check: the only other row with this string is C16:555, which is byte-identical in both wylie and english (same file re-ingested, per C04_CAMPAIGN Gates) and so is not an independent witness; no row carries the corrected reading. Not in any registered artefact class. SKEPTIC PASS 2026-09-04 (Fable 5.1): refuted=false — (a) 'even it the object is unchanging' is present verbatim in the english column of C04:73; wylie/acip carry 'yul rtag pa yin na'ang' (concessive), so 'even if' is the only defensible English. (b) The sole other occurrence is C16:555, which is byte-identical to C04:73 in wylie, english and acip (sqlite equality 1|1|1) -- same file re-ingested, not independent; no row carries 'even if the object'. ",
+  "severity": "LOW",
+  "confidence": "CONFIRMED",
+  "note": "filed from the alignment batch, spine-verified on merge"
  }
 ]
