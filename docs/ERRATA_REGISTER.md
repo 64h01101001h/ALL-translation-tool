@@ -8,13 +8,13 @@
 
 Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source and Geshe Michael Roach's facing English &mdash; recorded as a by-product of a machine alignment campaign reading the courses segment by segment. **Every entry has been checked against the corpus database** (42,199 segments, spine `hgm_spine_v27_2.db`): the quoted strings were retrieved from the spine, not from a note, and each citation was re-derived rather than trusted.
 
-**145 entries**: **98 document errata** (6 HIGH, 63 MEDIUM, 29 LOW), **23 digitisation artefacts**, 14 observations checked and closed as *not* errata, and 1 that could not be verified.
+**146 entries**: **99 document errata** (6 HIGH, 63 MEDIUM, 30 LOW), **23 digitisation artefacts**, 14 observations checked and closed as *not* errata, and 1 that could not be verified.
 
 | Kind | n |
 |---|---|
 | Tibetan spelling | 73 |
 | Digitisation artefact | 23 |
-| English typo | 18 |
+| English typo | 19 |
 | Our banked layer | 9 |
 | English factual error | 4 |
 | Formatting | 3 |
@@ -112,7 +112,7 @@ Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source 
 | `C04:29` | yid ches pa'i rtag la brten nas | yid ches pa'i rtags la brten nas | ACIP reads 'YID CHES PA'I RTAG LA BRTEN NAS' (source, not conversion). The definition of scriptural inference rests on a logical reason (rtags), not on permanence (rtag). INTERNAL witness: the parallel definition later in the same row reads 'grags pa'i rtags y | PROBABLE |
 | `C04:57` | bcas shes kyi mtshan nyid du 'jog | bcad shes kyi mtshan nyid du 'jog | ACIP column (source of record) reads BCAS SHES here while the same row reads BCAD SHES five words earlier for the same term (both rendered 'recollection'); independent witnesses of the term spell it bcad shes: C04:48, SVN:1202. C16:533/540 are the same file re | CONFIRMED |
 
-## Low severity &mdash; 29 entries
+## Low severity &mdash; 30 entries
 
 | Citation | What it says | Should say | Evidence | Confidence |
 |---|---|---|---|---|
@@ -145,6 +145,7 @@ Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source 
 | `C04:29` | yid ches rjes dpg-yid ches pa'i | yid ches rjes dpag, yid ches pa'i | ACIP reads 'YID CHES RJES DPG-YID CHES PA'I' (source). 'dpg' is not a Tibetan syllable; the heading term is rjes dpag (inference), attested across the corpus (C18:560 'yid ches kyi rjes dpag', C13:822). The hyphen fusing the heading to the definition is layout | CONFIRMED |
 | `C04:29` | grags pa'i rjes dpggrags pa'i rtags yang dag | grags pa'i rjes dpag, grags pa'i rtags yang dag | ACIP reads "GRAGS PA'I RJES DPGGRAGS PA'I RTAGS YANG DAG" (source). Second occurrence of the dpg-for-dpag spelling, here with the heading 'grags pa'i rjes dpag' run into the definition with no separator (the first heading at least has a hyphen). Term attested  | CONFIRMED |
 | `C04:61` | There are two reason why | There are two reasons why | Verbatim at the head of the C04:61 english column. Witness check: the only other row carrying the string is C16:544, which is the same file re-ingested (byte-identical wylie too), so not an independent witness; no published parallel carries the singular. GK:15 | CONFIRMED |
+| `C04:73` | even it the object is unchanging | even if the object is unchanging | English column of C04:73, verbatim: 'It is true that, even it the object is unchanging, the subject mind that perceives it need not be unchanging.' Wylie 'yul rtag pa yin na'ang' is the concessive 'even if'. Filed independently by both analysts. Witness check: | CONFIRMED |
 
 ---
 
@@ -229,7 +230,7 @@ Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source 
 
 ## Recommended actions, by owner
 
-**Document editors.** The 98 document errata above. Start with the 6 HIGH entries. Note that several errors exist at MORE THAN ONE LOCUS because passages are ingested twice &mdash; each entry's evidence names them, and a per-segment fix will leave duplicates behind.
+**Document editors.** The 99 document errata above. Start with the 6 HIGH entries. Note that several errors exist at MORE THAN ONE LOCUS because passages are ingested twice &mdash; each entry's evidence names them, and a per-segment fix will leave duplicates behind.
 
 **Data-pipeline maintainers.** The 23 digitisation artefacts, plus two reports filed separately: `docs/upstream/FOLIO_MARKER_COLLISIONS.md` (119 folio markers spliced into caption numbers) and `docs/upstream/C13_COLUMN_OFFSET.md` (**C13:63&ndash;82 pairs Tibetan with the English of a different text &mdash; C13 should not be scanned until it is fixed**).
 
