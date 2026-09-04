@@ -238,3 +238,42 @@ Explicit preconditions, none met today:
 - Adam's ruling still needed: prayer phonetics vs card phonetics (`docs/PRON_ENGINE_VS_C03_LITURGY.md`).
 - Fix the stale figure in `docs/RISK_REGISTER.md` R10 ("~200 shipped pages"; now 322).
 - Record in `docs/ADR.md` the decision that mechanical correctness gates are closed and model-read audit with refute pass is the correctness method (currently in GATE_TRIALS.md and TODO.md only).
+
+---
+
+## Addendum 2026-09-04 — status of the conditions after C03 closed
+
+*Appended, not edited: the body above is the 2026-09-01 draft Adam has not
+yet ratified, and a reader may hold that version.*
+
+- **C03 is 620/620, locked `complete: True` on 2026-09-03** (commit 1d829a1;
+  200 pages c3p1–c3p200; markers 22/294/303/430/476/513/558). The §5b
+  recommendation to open a new epic for C03:418–620 was followed in
+  practice: batches 132–200 ran under the written briefs and the model
+  policy, 185/185 merged specs exited 0 first run, and every kept erratum
+  passed a skeptic. Register at 137.
+- **Condition 2 (ledger level with HEAD): met.** `C03_CAMPAIGN.md` carries an
+  entry for every batch through 200; counts agree with the commits.
+- **Condition 3 (single spec document): met.** `docs/ALIGNMENT_LAYER_SPEC.md`
+  written 2026-09-04; `CLAUDE.md` and `README.md` point at it.
+- **Condition 4 (per-batch model provenance): resolved as prose-only.** C03
+  batches 1–32 carry no model heading; the TODO.md statement that they were
+  Fable is a prose claim without a per-batch record and is marked so there.
+  Batches 33–131 say Opus; 132 onward name both models per the policy.
+- **Condition 1 (Adam signs the reading of "validated"): open.**
+- **Full-scan estimate (§5b precondition for C04):** C01–C03 = 1,184 segments
+  in 368 pages between 2026-08-26 and 2026-09-03 (9 calendar days, ~132
+  segments/day at the three-per-page cadence with two analysts, one
+  reconciler and skeptics on demand per segment). The remaining 15 courses
+  hold 7,777 segments: ~59 working days at that pace, or ~2,600 pages. C13
+  (1,041) stays blocked, leaving 6,736 segments / ~51 days.
+- **C03-stratified audit (§5b precondition for C04): drawn 2026-09-04**, seed
+  20260904, headword-level (uniform over the C03-cited headwords, then
+  uniform over that headword's C03 occurrences), n=100, with a second reader
+  on SOUND calls per §5c.2. Result banked when it lands as
+  `docs/AUDIT_2026-09-04_C03_STRATIFIED.md` and
+  `data/alignment/audit_sample_20260904.json`.
+- Backlog items closed today: ADR-012 recorded; RISK_REGISTER R10 figure
+  corrected (368 pages); the `eng_order` pin already exists in
+  `tools/test_gen_alignment_page.py` (§8 of that file) and the d=7 parent
+  rule is pinned there (§15).

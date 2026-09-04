@@ -363,7 +363,7 @@ accounted for. Scope:
 **Provenance requirement for both:** every batch's ledger entry records the
 model that produced it, so the re-audit knows exactly which pages were built
 under which model. Applies from the next batch forward, and is backfilled
-for the pages already shipped (all C01/C02/C03 work to date: Fable).
+for the pages already shipped (all C01/C02/C03 work to date: Fable — PROSE-ONLY CLAIM, 2026-09-04: the C03 ledger carries no per-batch model heading for batches 1–32 and says Opus for 33–131; per-batch provenance begins at batch 132 under the model policy).
 
 ## ★★ TOP OF THE BACKLOG (Adam, 2026-08-26): the deep bank's two consumers
 Adam's ruling on the seven-layer question — initiate ASAP, super-important:

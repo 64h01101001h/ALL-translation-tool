@@ -156,3 +156,5 @@ Regenerate the Botok references after a spine rebuild (needs
     analyses/        auto-saved analysis reports
 
 Project rules and history: `CLAUDE.md`, `DIAMOND_CUTTER_TRANSLATION_TOOL_ROADMAP.md`.
+
+**Alignment layer:** the machine-authored Tibetan–English alignment (C01–C03 complete, PROVISIONAL) is specified in `docs/ALIGNMENT_LAYER_SPEC.md`; the errata it surfaced are in `docs/ERRATA_REGISTER.md`.

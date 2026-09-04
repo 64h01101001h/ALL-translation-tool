@@ -170,3 +170,26 @@ Two documents committed this week already do.
 
 *If a decision here is wrong, argue with the entry rather than working
 around it. An ADR nobody contradicts is one nobody read.*
+
+## ADR-012 · Correctness of the alignment layer is measured by model-read audit with a refute pass; mechanical correctness gates are closed
+**2026-09-04 · decided in practice 2026-08-28/29, recorded here per the Phase 3 gate backlog**
+
+The fifteen layer gates prove fidelity (every wrapped fragment is verbatim
+spine text, in order, with coverage) and nothing about correspondence. Five
+mechanical correctness gates were built and falsified against pre-registered
+criteria (`docs/GATE_TRIALS.md`: 110 fires / 43.5% / 2,322 fires / 1.9% / 975
+fires; none separated defect from non-defect). The correctness method is
+therefore: a model reads each sampled (Tibetan, English, citation) triple
+WITH its page siblings and full source segment, calls SOUND or DEFECTIVE;
+every DEFECTIVE call goes to three independent skeptics with different lenses
+who default to refuted; only survivors count (`docs/AUDIT_2026-08-29_LAYER_CORRECTNESS.md`).
+
+*Why:* the property is semantic and the harness is a substring checker
+(`docs/RISK_REGISTER.md` R10). The single-auditor rate was 2.25x the
+defensible rate; without the refute pass the layer would be misreported.
+*Consequence:* no green gate may be cited as evidence of correctness; every
+correctness number must name its sample, seed, stratum, and refute protocol.
+The same three-step shape (propose → reconcile → refute, with a file that
+exited 0 as the only deliverable) is the campaign's production pipeline
+(`docs/alignment_briefs/`). Model policy: propose on Opus 5, judge on Fable 5.1
+(Adam, 2026-09-01).
