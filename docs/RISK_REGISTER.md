@@ -151,7 +151,7 @@ attach, with redaction pinned.
 The alignment layer's batteries prove that every wrapped Tibetan fragment
 is a literal substring of the spine's source and every English fragment a
 literal substring of GMR's English. They have never let a fabrication
-through, across ~200 shipped pages. But they check exactly one property:
+through, across 368 shipped pages (7 C02 + 161 C01 + 200 C03, recounted 2026-09-04; the figure read "~200" from 2026-08-2x to 2026-09-03). But they check exactly one property:
 that both sides are genuine, untouched text.
 
 **A link that maps the wrong Tibetan word to the wrong English span passes

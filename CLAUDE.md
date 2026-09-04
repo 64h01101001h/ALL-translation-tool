@@ -64,6 +64,7 @@ Build order = the numbered to-do in the roadmap: SQLite spine first.
 Gofer (search grammar: lex.c/expr.c/near.c) · ACIPHypercontext (overlay UX; contains TibetanDictionary.dic — extract but CHECK LICENSING before shipping) · tibetan-spellchecker (CC0 syllable data — use freely) · THL tool (thl.wrd/thl.def — extract, per-dictionary licensing review) · LokeshChandra trio (already extracted v0.27).
 
 ## Working conventions
+- **Alignment layer spec:** `docs/ALIGNMENT_LAYER_SPEC.md` (schema, depth rules, gate inventory, audit protocol, Rule 10) — read before touching `data/alignment/` or the briefs.
 - UI displays tier labels honestly: auto-aligned glosses are PROVISIONAL and must look provisional.
 - Single-register terms (e.g. bsod nams: "goodness" in prayers vs "merit/good deeds" in prose) carry register warnings — never auto-resolve.
 - File-size notes: master json is 63MB+ plain (ship/store gz); corpus 27MB.
