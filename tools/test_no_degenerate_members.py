@@ -21,7 +21,7 @@ PAT = re.compile(r'<span class="u[^"]*" data-d="5" data-l="(s\d+\w+)">'
 
 def main():
     bad, n_pages = [], 0
-    for d in ("pages_c01", "pages", "pages_c03"):
+    for d in ("pages_c01", "pages", "pages_c03", "pages_c04"):
         for f in sorted(glob.glob(os.path.join(ROOT, "data", "alignment",
                                                d, "*.html"))):
             n_pages += 1

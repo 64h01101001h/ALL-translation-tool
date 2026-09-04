@@ -63,7 +63,7 @@ def eng_blocks(page):
 def main():
     bad = []
     n_pages = n_spans = 0
-    for d in ("pages_c01", "pages", "pages_c03"):
+    for d in ("pages_c01", "pages", "pages_c03", "pages_c04"):
         for f in sorted(glob.glob(os.path.join(ROOT, "data", "alignment",
                                                d, "*.html"))):
             n_pages += 1

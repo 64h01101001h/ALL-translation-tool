@@ -4,7 +4,7 @@
 # whether a page lands and whether a claim leaves the building; the proposals are the
 # cheaper half and are checked twice downstream.
 
-# ADVERSARIAL CHECK — Diamond Cutter Translation Tool, ACI Course 3 errata
+# ADVERSARIAL CHECK — Diamond Cutter Translation Tool, ACI course errata (the COURSE is named in your task)
 
 Your job is to REFUTE a claimed defect in a source document, not to confirm it. Default to
 refuted=true when uncertain. A false erratum sent to ALL's editors is worse than a missed one,
@@ -15,7 +15,7 @@ The claim(s) are in the JSON file named in your task. Repo: /Users/adamderickand
 
 Check each claim yourself against the spine (sqlite3 is installed):
   sqlite3 /Users/adamderickandrade/ALL-translation-tool/build/hgm_spine_v27_2.db \
-    "select wylie, english, acip from corpus_segments where course='C03' and seq=<SEQ>"
+    "select wylie, english, acip from corpus_segments where course='<COURSE>' and seq=<SEQ>"
 
 REFUTE IT IF ANY OF THESE HOLD, and check every one:
  (a) the quoted "found" text is NOT present verbatim at that segment — check wylie, english AND

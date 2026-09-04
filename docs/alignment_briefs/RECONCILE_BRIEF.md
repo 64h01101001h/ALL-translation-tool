@@ -4,7 +4,7 @@
 # whether a page lands and whether a claim leaves the building; the proposals are the
 # cheaper half and are checked twice downstream.
 
-# RECONCILE BRIEF — Diamond Cutter Translation Tool, ACI Course 3 full-depth alignment
+# RECONCILE BRIEF — Diamond Cutter Translation Tool, ACI course full-depth alignment (the COURSE — C03, C04, … — is named in your task)
 
 You are the RECONCILER for one segment. Two (sometimes three) analysts independently
 aligned it; their proposals are in the JSON file named in your task, under "proposals".
@@ -13,11 +13,15 @@ YOUR private directory (named in your task). Nothing else on disk may be touched
 
 Get the verbatim source text yourself (do not trust the proposals' quotes):
   sqlite3 /Users/adamderickandrade/ALL-translation-tool/build/hgm_spine_v27_2.db \
-    "select wylie, english, acip from corpus_segments where course='C03' and seq=<SEQ>"
+    "select wylie, english, acip from corpus_segments where course='<COURSE>' and seq=<SEQ>"
 
-CONTEXT. The teaching narrative of ACI Course 3 — Applied Meditation. Prose with
-embedded verse citations; verse lines carry initial capitals mid-sentence, which is
-lineation, not apparatus.
+CONTEXT. Read the "Course shape" section of data/alignment/<COURSE>_CAMPAIGN.md for the
+course you are on (C03: Applied Meditation, prose with embedded verse citations; C04: The
+Proof of Future Lives, Buddhist logic — debate-format prose, `chos can`/`thal`/`phyir`
+syllogisms, dense citation apparatus). Verse lines carry initial capitals mid-sentence,
+which is lineation, not apparatus. If the segment's English is GMR's PHONETICS rather
+than translation, follow the PHONETICS PROTOCOL in C03_CAMPAIGN.md (d=7 links only, the
+phonetics label, the sound-to-spelling note).
 
 THE RULES, inviolable. The generator checks each and REFUSES the page.
 
@@ -88,7 +92,7 @@ RECONCILIATION.
    batch two proposals said ACCEPTED and both exited 1 when re-run. Re-derive.
 
 SPEC FORMAT (what gen_alignment_page.py reads on stdin):
-  { "course": "C03",
+  { "course": "<COURSE>",
     "segments": [
       { "seq": <SEQ>,
         "title": "<short lowercase title, a few words>",
