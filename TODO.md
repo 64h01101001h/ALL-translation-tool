@@ -6,11 +6,15 @@
   13 OVER_CAPTURE / 4 UNDER_CAPTURE / 2 WRONG_MAPPING. Second reader found 3
   defects in 81 SOUND calls. Report `docs/AUDIT_2026-09-04_C03_STRATIFIED.md`;
   data `data/alignment/audit_verdicts_20260904.json`.
-- [ ] **Repair the 19 confirmed C03 spans** (14 pages). Exact fix per item is
-  in the verdict bundle's skeptic `argument`. Page-spec edits through
-  `gen_alignment_page.py` + full gate set; ledger entry in C03_CAMPAIGN.md.
-  Eight are one-word rule-7 strips: 33 "him", 37/73/85 "the/The", 40 "our",
-  53 "You also", 54 "I", 55 "like", 70/95 "and", 98 "his".
+- [x] **14 of the 19 confirmed spans REPAIRED 2026-09-04** on 12 pages
+  (items 33, 35, 37, 38, 39, 53, 54, 55, 66, 70, 73, 85, 95, 98; plus
+  318 `sa rnams` "the earth" for row consistency). Layer rebuilt: 5,931
+  headwords / 12,065 pairs; ratchet re-frozen c03 613→603. Ledger entry in
+  C03_CAMPAIGN.md. Each page carries a REPAIRED note naming the item.
+- [ ] **5 confirmed defects held for Adam's ruling, not repaired:** 5, 15,
+  40, 77 (spec conflicts, audit §6) and 46 `len sa` → "places" (the only
+  widening would wrap supplied "we can"; UNDER_CAPTURE stands but rule 7
+  blocks the fix — needs a call on whether to null it).
 - [x] **Span-initial function-word check added 2026-09-04**: RECONCILE_BRIEF
   rule 7 hard check + gate `no_supplied_span_head` (ratchet on shipped dirs,
   zero-or-allowlisted for C04+; allowlist `data/alignment/span_head_allow.json`).

@@ -2508,3 +2508,43 @@ Coverage after landing: **C03 620/620 — COMPLETE.** Register at **137
 entries** (90 document errata, 5 HIGH; 23 digitisation artefacts; 9 ours).
 Evidence layer 5,932 headwords / 12,069 pairs, 31,577 links. Sixteen gates
 green including app_selftest.
+
+### Audit repairs (C03-stratified correctness audit) — 2026-09-04 — first read: Opus 5 · second read/skeptics: Fable 5.1
+
+**The audit** (`docs/AUDIT_2026-09-04_C03_STRATIFIED.md`): 100 headword-level
+pairs, seed 20260904; 19 confirmed defects, Wilson 95% [12.5%, 27.8%]; 11
+unanimous. 13 OVER_CAPTURE / 4 UNDER_CAPTURE / 2 WRONG_MAPPING. The second
+reader on SOUND calls found 3 (37, 39, 85), all confirmed. Verdicts:
+`data/alignment/audit_verdicts_20260904.json`.
+
+**Repaired (14 spans, 12 pages).** Rule-7 trims: 29 `med na` "You also
+need"→"need" (c3p10); 37 `rab brjod cing` "I proclaim"→"proclaim" (c3p13);
+52 `gsol ba yi` "and supplication"→"supplication", the "and" now keyed to
+`zhing` s52m3 as the page's own null note had named (c3p18); 124 `nyo
+tshong` "like business"→"business" (c3p42); 138 `'dug par bya'o` "and sit
+there"→"sit there" (c3p46); 153 `'du byed pa` "and taking action when there
+is no need to do so"→"taking action" (c3p51); 318 `rgya mtsho` "The
+sea"→"sea", `ri rab` "the mountains"→"mountains", and unsampled `sa rnams`
+"the earth"→"earth" for row consistency, their d=7 members dropped as now
+degenerate (c3p99); 356 `slob ma` "his student"→"student" (c3p112); 360 `ma
+bsten pa` "refusing to follow him"→"refusing to follow" (c3p113); 517 `nyan
+thos` "the listeners"→"listeners" (c3p166). Widenings: 156 `shes rab lcags
+kyus` "Then finally use the iron hook"→"iron hook Of your wisdom" (c3p52);
+605 `dpal` "Fortune"→"glorious Fortune" (c3p195). Null: 356 `mnga' ba`
+"mastery"→∅, WRONG_MAPPING (c3p112). Every page carries a REPAIRED note.
+
+**Held for ruling (5):** 152 `dngos sam rjes mthun` (headword cut across
+`sam`); 428 `tshon` (prefix-dropped `mtshon te`; re-key + input-variant
+erratum); 337 `rje bla mas` "our Lord Lama" (epithet-whole vs rule 7); 356
+`de 'dra'i` "that we are describing here" (GMR idiom vs frame); 414 `len sa`
+"places" (widening would wrap supplied "we can").
+
+**The larger finding.** Building the gate for this class
+(`no_supplied_span_head`) showed 1,640/9,168 C01 d=5 English spans (17.9%)
+and 577/8,192 C03 spans (7.0%) begin with a supplied article or hinge. The
+gate is a ratchet on C01–C03 (frozen 1,643 / 50 / 603) and zero-or-
+allowlisted for C04+. What to do about the C01 habit is a ruling item in
+TODO.md.
+
+Layer after repairs: 5,931 headwords / 12,065 pairs, 31,574 links. Gates
+green (see commit).
