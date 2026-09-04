@@ -8,11 +8,11 @@
 
 Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source and Geshe Michael Roach's facing English &mdash; recorded as a by-product of a machine alignment campaign reading the courses segment by segment. **Every entry has been checked against the corpus database** (42,199 segments, spine `hgm_spine_v27_2.db`): the quoted strings were retrieved from the spine, not from a note, and each citation was re-derived rather than trusted.
 
-**147 entries**: **100 document errata** (6 HIGH, 63 MEDIUM, 31 LOW), **23 digitisation artefacts**, 14 observations checked and closed as *not* errata, and 1 that could not be verified.
+**149 entries**: **102 document errata** (6 HIGH, 63 MEDIUM, 33 LOW), **23 digitisation artefacts**, 14 observations checked and closed as *not* errata, and 1 that could not be verified.
 
 | Kind | n |
 |---|---|
-| Tibetan spelling | 73 |
+| Tibetan spelling | 75 |
 | Digitisation artefact | 23 |
 | English typo | 20 |
 | Our banked layer | 9 |
@@ -112,7 +112,7 @@ Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source 
 | `C04:29` | yid ches pa'i rtag la brten nas | yid ches pa'i rtags la brten nas | ACIP reads 'YID CHES PA'I RTAG LA BRTEN NAS' (source, not conversion). The definition of scriptural inference rests on a logical reason (rtags), not on permanence (rtag). INTERNAL witness: the parallel definition later in the same row reads 'grags pa'i rtags y | PROBABLE |
 | `C04:57` | bcas shes kyi mtshan nyid du 'jog | bcad shes kyi mtshan nyid du 'jog | ACIP column (source of record) reads BCAS SHES here while the same row reads BCAD SHES five words earlier for the same term (both rendered 'recollection'); independent witnesses of the term spell it bcad shes: C04:48, SVN:1202. C16:533/540 are the same file re | CONFIRMED |
 
-## Low severity &mdash; 31 entries
+## Low severity &mdash; 33 entries
 
 | Citation | What it says | Should say | Evidence | Confidence |
 |---|---|---|---|---|
@@ -141,6 +141,8 @@ Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source 
 | `C03:612` | according to the tradition of Gantapada. | according to the tradition of Ghantapada. | Spine ENGLISH field (corpus_segments.english). 'Ghantapada' occurs in 62 segments across TCS06/09/10/11/13/14/17 and TITLS (e.g. TITLS 2732, 2736: 'Outer Secret World of the Five Angels of Highest Bliss (Samvara), in the Tradition of Ghantapada' — the same phr | CONFIRMED |
 | `C03:614` | sku ngo yang 'dzoms tshe ring | sku ngo g-yang 'dzoms tshe ring | The first copy of the name drops the g- prefix; the second copy in this same row reads g-yang 'dzoms, as do C03:619 (g-yang 'dzoms tshe ring) and TCS12:443 (ga-yang 'dzoms). P1:167 reads yang 'dzoms in the first copy too (same lineage). One analyst filed this. | PROBABLE |
 | `C03:617` | ma sprel | me sprel | ACIP source of record reads `MA SPREL`; the English renders "fire monkey" (me sprel, 1956). `me sprel` occurs 0 times and `ma sprel` once (this segment) in the corpus, so no parallel witness settles it; the English fixes the intended reading. Quoted as found i | PROBABLE |
+| `C04:117` | lus gyi yon tan | lus kyi yon tan | ACIP source of record reads LUS GYI YON TAN, so the error is in the input, not the converter. Genitive after final -s is kyi; gyi is illegal there. Corpus: 'lus gyi ' 1 attestation (this row only) vs 'lus kyi ' 300. Parallel witness C16:593 (Jewel of the True  | CONFIRMED |
+| `C04:117` | grub pa med bar 'dod | grub pa med par 'dod | ACIP source of record reads MED BAR 'DOD. The particle before 'dod after final -d is par; bar here is neither the noun bar ('interval') nor the bar du construction. Corpus: 'med par ' 1665 vs 'med bar ' 5, and of those 5 the other four are genuine bar (mnar me | PROBABLE |
 | `C04:29` | 'dod pa tsham gyis bzhag pa | 'dod pa tsam gyis bzhag pa | ACIP reads "'DOD PA TSAM GYIS BZHAG PA"; ACIP TS converts to wylie tsh, so 'tsham' is a faithful conversion of a source mis-keying (TSAM for TZAM). INTERNAL witness: the same row keys the same word correctly earlier, 'LUNG TZAM GYIS GRUB PA' -> 'lung tsam gyis | CONFIRMED |
 | `C04:29` | yid ches rjes dpg-yid ches pa'i | yid ches rjes dpag, yid ches pa'i | ACIP reads 'YID CHES RJES DPG-YID CHES PA'I' (source). 'dpg' is not a Tibetan syllable; the heading term is rjes dpag (inference), attested across the corpus (C18:560 'yid ches kyi rjes dpag', C13:822). The hyphen fusing the heading to the definition is layout | CONFIRMED |
 | `C04:29` | grags pa'i rjes dpggrags pa'i rtags yang dag | grags pa'i rjes dpag, grags pa'i rtags yang dag | ACIP reads "GRAGS PA'I RJES DPGGRAGS PA'I RTAGS YANG DAG" (source). Second occurrence of the dpg-for-dpag spelling, here with the heading 'grags pa'i rjes dpag' run into the definition with no separator (the first heading at least has a hyphen). Term attested  | CONFIRMED |
@@ -231,7 +233,7 @@ Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source 
 
 ## Recommended actions, by owner
 
-**Document editors.** The 100 document errata above. Start with the 6 HIGH entries. Note that several errors exist at MORE THAN ONE LOCUS because passages are ingested twice &mdash; each entry's evidence names them, and a per-segment fix will leave duplicates behind.
+**Document editors.** The 102 document errata above. Start with the 6 HIGH entries. Note that several errors exist at MORE THAN ONE LOCUS because passages are ingested twice &mdash; each entry's evidence names them, and a per-segment fix will leave duplicates behind.
 
 **Data-pipeline maintainers.** The 23 digitisation artefacts, plus two reports filed separately: `docs/upstream/FOLIO_MARKER_COLLISIONS.md` (119 folio markers spliced into caption numbers) and `docs/upstream/C13_COLUMN_OFFSET.md` (**C13:63&ndash;82 pairs Tibetan with the English of a different text &mdash; C13 should not be scanned until it is fixed**).
 

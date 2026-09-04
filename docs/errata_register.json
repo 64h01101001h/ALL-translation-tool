@@ -1762,5 +1762,29 @@
   "severity": "LOW",
   "confidence": "CONFIRMED",
   "note": "filed from the alignment batch, spine-verified on merge"
+ },
+ {
+  "item_id": "E-148",
+  "course": "C04",
+  "segment": "C04:117",
+  "kind": "TIBETAN_SPELLING",
+  "found": "lus gyi yon tan",
+  "expected": "lus kyi yon tan",
+  "evidence": "ACIP source of record reads LUS GYI YON TAN, so the error is in the input, not the converter. Genitive after final -s is kyi; gyi is illegal there. Corpus: 'lus gyi ' 1 attestation (this row only) vs 'lus kyi ' 300. Parallel witness C16:593 (Jewel of the True Thought prose, a different text quoting the same doctrine) reads LUS KYI YON TAN. No other row of the spine carries this verse (search on lus 'bras / lugs gsum la brten / 'integral part of the body' returns only C04:117), so there is no same-file re-ingest to compare against. SKEPTIC PASS 2026-09-04 (Fable 5.1): refuted=false — ACIP reads LUS GYI verbatim; gyi after final -s is illegal; corpus 1 vs 300; no parallel witness or C16 re-ingest of this verse.",
+  "severity": "LOW",
+  "confidence": "CONFIRMED",
+  "note": "filed from the alignment batch, spine-verified on merge"
+ },
+ {
+  "item_id": "E-149",
+  "course": "C04",
+  "segment": "C04:117",
+  "kind": "TIBETAN_SPELLING",
+  "found": "grub pa med bar 'dod",
+  "expected": "grub pa med par 'dod",
+  "evidence": "ACIP source of record reads MED BAR 'DOD. The particle before 'dod after final -d is par; bar here is neither the noun bar ('interval') nor the bar du construction. Corpus: 'med par ' 1665 vs 'med bar ' 5, and of those 5 the other four are genuine bar (mnar med bar du, TCS10:454; ye shes med bar ye shes tshul, TCS17:1119; rang dbang med bar 'khor bar, ILL:150) or already carry an input-center correction marker for the same slip (SOS:145 'med bar {%par} gsungs'). No parallel witness for this verse exists in the spine. SKEPTIC PASS 2026-09-04 (Fable 5.1): refuted=false — ACIP reads MED BAR 'DOD verbatim; corpus med par 1665 vs med bar 5 (the other four are genuine bar or already carry a {%par} input-center correction marker); no parallel witness.",
+  "severity": "LOW",
+  "confidence": "PROBABLE",
+  "note": "filed from the alignment batch, spine-verified on merge"
  }
 ]
