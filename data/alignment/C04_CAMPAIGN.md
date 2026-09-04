@@ -51,7 +51,7 @@ lists it under `pages_c04` with the Tibetan word that licenses it. The
 reconciler names the licensor or trims the span; there is no third option.
 
 ## Progress
-c4p1–c4p11 (1–33) landed; 165 segments remain (34–198).
+c4p1–c4p19 (1–57) landed; 141 segments remain (58–198).
 
 ## Queues (wylie / english), C04
 (opened empty)
@@ -93,3 +93,42 @@ pairings, not span heads, so the gate does not list them.
 against "Light **on**" elsewhere; the reconciler dropped it (a title
 variant in GMR's own prose, no witness says which is canonical) — noted
 here, not filed.
+
+### Batches C04-12 … C04-19 (C04:34–57) — 2026-09-04 — propose: Opus 5 · reconcile/refute: Fable 5.1
+
+24 segments, 48 proposals, 48/48 exited 0 on re-run; 24 reconciled specs,
+24/24 exited 0. Pages c4p12–c4p19. Coverage 57/198; layer 6,043 headwords /
+12,346 pairs; 16 gates green; `no_supplied_span_head` still 0 in pages_c04.
+
+**Interruption.** Five reconcilers (39, 40, 41, 43, 44) were killed by the
+account's Fable rate limit mid-run. 39 and 43 had finished; 40, 41, 44 had
+written a spec that re-ran at exit 0 but no errata.json/report.md. They
+were RESUMED in their own context once the limit lifted, not re-run and not
+moved to another model — the model policy held. Nothing was landed on an
+unfinished reconcile.
+
+**First allowlist entry.** 57 `rang re'i` → "our" (span w1): the
+first-person possessive licenses the pronoun; recorded in
+`data/alignment/span_head_allow.json` under pages_c04 with the reconciler's
+reason. All other rule-7 heads on these pages were trimmed.
+
+**Rule 10 rulings of note.** 34 `dang po` → ∅ (means "the first", GMR
+resolved the outline reference to "main subject"); 36 the tighter span
+each time ("One who turned correct" → "turned correct"); 38 `chos kyi grags
+pas` whole → "Dharmakirti" (rule 9, agentive -s), `dgongs` → "Thought" not
+"True Thought"; 40 `ngos gzung ba'o` → ∅ (one verb, two "to identify");
+42 first `mtshan nyid` → ∅ (four "definition" against two tokens); 47
+`dgos pa'i` → ∅ (two "must", first is GMR's frame), the enclitic `'am`
+dropped rather than minted as a bound d=6; 48 `gsar du rtogs pa` → "fresh
+perception" as a compound; 50/52/53 `thub pa` → "Buddha" / "able Buddha"
+with "Victorious" left to GMR; 51 mirrored the landed C04:31 (byte-identical
+row) and rejected `ser`/`smad` → "Sera"/"Mey" (transcription, not English);
+53 `de` → "it" (the quoted string), `ldan` → ∅; 54 the two `pa'ang` stand
+at d=5 (cannot be d=6, bound); 55 `gsung` → ∅; 56 the `ma grub na` /
+`gzhi grub par thal` formulas flattened to the word layer; 57 `mtshan nyid
+du bzhag` → "define" as one idiom, `phyogs` → "look" rejected though it
+passed; 58 `rtogs zin` split (`zin` → ∅), `kho bos` → "our" whole.
+
+**Errata.** 57 `bcas shes` for `bcad shes` (ACIP `BCAS SHES`; independent
+witnesses C04:48 and SVN:1202) — to the refute pass. 61 "There are two
+reason why" (ENGLISH_TYPO) filed by both analysts, pending reconcile.
