@@ -270,9 +270,16 @@ yet ratified, and a reader may hold that version.*
 - **C03-stratified audit (§5b precondition for C04): drawn 2026-09-04**, seed
   20260904, headword-level (uniform over the C03-cited headwords, then
   uniform over that headword's C03 occurrences), n=100, with a second reader
-  on SOUND calls per §5c.2. Result banked when it lands as
-  `docs/AUDIT_2026-09-04_C03_STRATIFIED.md` and
-  `data/alignment/audit_sample_20260904.json`.
+  on SOUND calls per §5c.2. **LANDED 2026-09-04:**
+  `docs/AUDIT_2026-09-04_C03_STRATIFIED.md`, sample
+  `data/alignment/audit_sample_20260904.json`, all verdicts
+  `data/alignment/audit_verdicts_20260904.json`. Result: **19/100 confirmed
+  defects, Wilson 95% [12.5%, 27.8%]** (11/100 unanimous); 13 OVER_CAPTURE,
+  4 UNDER_CAPTURE, 2 WRONG_MAPPING. The second reader found 3 defects in 81
+  SOUND calls. Eight of the 19 are one-word rule-7 violations (an article or
+  hinge inside the span). Disposition: C04 does not open under the C03
+  briefs unchanged; a span-initial function-word check is added to the
+  reconcile brief first (audit §8), and the 19 C03 repairs are queued.
 - Backlog items closed today: ADR-012 recorded; RISK_REGISTER R10 figure
   corrected (368 pages); the `eng_order` pin already exists in
   `tools/test_gen_alignment_page.py` (§8 of that file) and the d=7 parent
