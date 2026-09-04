@@ -1546,5 +1546,101 @@
   "severity": "LOW",
   "confidence": "PROBABLE",
   "note": "filed from the alignment batch, spine-verified on merge"
+ },
+ {
+  "item_id": "E-130",
+  "course": "C03",
+  "segment": "C03:590",
+  "kind": "TIBETAN_SPELLING",
+  "found": "shog dril chang chung tsam",
+  "expected": "shog dril chung chung tsam",
+  "evidence": "ACIP source of record reads CHANG CHUNG. Spine dictionary: 'chang' = alcohol only; 'chung chung' is an entry (reduplicated 'little'); no 'chang chung' entry. Corpus: 'chang chung' occurs 2x (C03:590 and P1:151, the identical passage - same lineage, not an independent witness); 'chung chung' occurs 10x across C01, C03, C07, C17, TCS06/07/17, EM. 'chang chung' is not readable in context ('little alcohol scraps'); GMR translates 'little scraps', i.e. chung chung tsam. May be a scribal error in the published Tibetan rather than an ingest error. SKEPTIC PASS 2026-09-03: refuted=false — document erratum (source keying): the ACIP column itself reads SHOG DRIL CHANG CHUNG TZAM; `chang` glosses only 'alcohol', no `chang chung` entry; P1:151 same-lineage; counts 2 vs 10 verified. LOW/PROBABLE stands.",
+  "severity": "LOW",
+  "confidence": "PROBABLE",
+  "note": "filed from the alignment batch, spine-verified on merge"
+ },
+ {
+  "item_id": "E-131",
+  "course": "C03",
+  "segment": "C03:592",
+  "kind": "INGEST_ARTEFACT",
+  "found": "gcig bsdus pa, lags kyang , ,rje thub pa'i dbang po'i gsung rab kun, ,don ma tshang med par gcig bsdus pa",
+  "expected": "The block 'lags kyang , ,rje thub pa'i dbang po'i gsung rab kun, ,don ma tshang med par gcig bsdus pa' should appear once; the second copy is a dittograph. (The Tibetan of the English lines that seem orphaned here is carried whole in C03:593 — a translation-order row skew, not lost text.)",
+  "evidence": "ACIP source of record carries the same repeat: '...GCIG BSDUS PA, LAGS KYANG , ,RJE THUB PA'I DBANG PO'I GSUNG RAB KUN, ,DON MA TSANG MED PAR GCIG BSDUS PA,'. P1:153 has the identical duplication but is the same text re-ingested (same lineage, not independent). SSL:311/312/371 match only on 'blo bzang grags pa' (the colophon of the Lam rim), not this verse. C03:593 supplies the Tibetan for the orphaned English lines. SKEPTIC PASS 2026-09-03: refuted=false — 86-char block byte-identical twice in both wylie and ACIP (offsets 116/208); only P1:153 (same lineage) repeats it; the 'missing Tibetan' half is NOT a defect: C03:593 carries the lines whole, so this is a row skew, not E-111. File the dittograph only; severity LOW, CONFIRMED.",
+  "severity": "LOW",
+  "confidence": "CONFIRMED",
+  "note": "filed from the alignment batch, spine-verified on merge"
+ },
+ {
+  "item_id": "E-132",
+  "course": "C03",
+  "segment": "C03:612",
+  "kind": "ENGLISH_TYPO",
+  "found": "according to the tradition of Gantapada.",
+  "expected": "according to the tradition of Ghantapada.",
+  "evidence": "Spine ENGLISH field (corpus_segments.english). 'Ghantapada' occurs in 62 segments across TCS06/09/10/11/13/14/17 and TITLS (e.g. TITLS 2732, 2736: 'Outer Secret World of the Five Angels of Highest Bliss (Samvara), in the Tradition of Ghantapada' — the same phrase as this segment); 'Gantapada' occurs in exactly 1 segment, C03:612 itself. Tibetan dril bu (Skt. ghanta) confirms the aspirated form. SKEPTIC PASS 2026-09-03: refuted=false — spine English: 'Ghantapada' 62 segments, 'Gantapada' only C03:612; dictionary dril bu = bell (Skt. ghanta) confirms; no register entry. LOW/CONFIRMED.",
+  "severity": "LOW",
+  "confidence": "CONFIRMED",
+  "note": "filed from the alignment batch, spine-verified on merge"
+ },
+ {
+  "item_id": "E-133",
+  "course": "C03",
+  "segment": "C03:617",
+  "kind": "ENGLISH_FACTUAL_ERROR",
+  "found": "Ganden Palace",
+  "expected": "Gatsel Palace (dga' tshal, the Hlalu family seat)",
+  "evidence": "wylie and ACIP both read `lha klu dga' tshal ba'i pho brang` (DGA' TSAL, not DGA' LDAN). Parallel colophons in the same corpus render the same name `lha klu dga' tshal ba` as \"Hlalu Gatsel\" (TCS04PrayerBook:219) and \"Hla-Lu Gatselwa\" (TCS13:269); C01:496 glosses it \"the house of Hlalu, a veritable garden of bliss\". The spine dictionary carries dga' tshal and dga' ldan as separate entries. GMR's ruling, as in E-120: filed, not corrected. SKEPTIC PASS 2026-09-03: refuted=false — wylie/ACIP read `dga' tshal`; dictionary keeps dga' tshal (Gatsel) and dga' ldan (Ganden) separate; TCS04:219, TCS13:269, TCS12:443, C01:496 all render `lha klu dga' tshal ba` as Hlalu Gatsel. Filed for GMR's ruling (E-120 class), never corrected.",
+  "severity": "MEDIUM",
+  "confidence": "CONFIRMED",
+  "note": "filed from the alignment batch, spine-verified on merge"
+ },
+ {
+  "item_id": "E-134",
+  "course": "C03",
+  "segment": "C03:617",
+  "kind": "TIBETAN_SPELLING",
+  "found": "ma sprel",
+  "expected": "me sprel",
+  "evidence": "ACIP source of record reads `MA SPREL`; the English renders \"fire monkey\" (me sprel, 1956). `me sprel` occurs 0 times and `ma sprel` once (this segment) in the corpus, so no parallel witness settles it; the English fixes the intended reading. Quoted as found in the spec. SKEPTIC PASS 2026-09-03: refuted=false — ACIP MA SPREL verbatim; me sprel 0 / ma sprel 1 in corpus; `ma` is no element; English 'fire monkey [1956]' and GMR's convention (TCS07:617 me pho spre'u = fire monkey) fix me sprel.",
+  "severity": "LOW",
+  "confidence": "PROBABLE",
+  "note": "filed from the alignment batch, spine-verified on merge"
+ },
+ {
+  "item_id": "E-135",
+  "course": "C03",
+  "segment": "C03:611",
+  "kind": "TIBETAN_SPELLING",
+  "found": "GANGS GI''A",
+  "expected": "uncertain - a single a-chung (P1:165 reads gi'a'; the English 'Ganggiu' suggests gangs gi'u)",
+  "evidence": "Field: acip (source of record) reads 'ZHOL KHANG SRAS GANGS GI''A SPRUL SKU'; wylie mirrors it as gi''a. A doubled a-chung is not a legal Tibetan syllable. Parallel witness P1:165 (same lineage, same colophon) reads gi'a' - a DIFFERENT illegal form, so there is no published reading to defend either; the two copies disagree with each other. No other corpus row contains 'gangs gi'. Not in any registered class. SKEPTIC PASS 2026-09-03: refuted=false — source keying error: GANGS GI''A verbatim in the ACIP source of record, mirrored in wylie; a doubled a-chung has no legal reading and no headword; P1:165 same-lineage and reads a different illegal form GI'A'; E-044 does not apply. LOW/PROBABLE.",
+  "severity": "LOW",
+  "confidence": "PROBABLE",
+  "note": "filed from the alignment batch, spine-verified on merge"
+ },
+ {
+  "item_id": "E-136",
+  "course": "C03",
+  "segment": "C03:614",
+  "kind": "TIBETAN_SPELLING",
+  "found": "mchog nas, lhun po ltar brtan pa'i yon gyi bdag mo chen mo lha lcam sku ngo g-yang 'dzoms tshe ring mchog nas",
+  "expected": "mchog nas",
+  "evidence": "The clause 'lhun po ltar ... mchog nas' is written twice in wylie and in the ACIP source of record (LHUN PO LTAR ... MCHOG NAS, LHUN PO LTAR ... MCHOG NAS,); the English renders it once. P1:167 carries the same doubling (same lineage, not independent). TCS12:443 has the lady's title once but in a different sentence, so it is only weak external support. Both analysts filed this. SKEPTIC PASS 2026-09-03: refuted=false — the clause appears twice in both wylie and ACIP (source-level); only C03:614 and same-lineage P1:167 carry it; TCS12:443 is a different sentence (the reconciler's witness citation was withdrawn); the two copies differ (yang vs g-yang) so the correction should keep the SECOND copy. `yang 'dzoms` is absent from the dictionary while TCS12:443 and C03:619 read g-yang; subsumed if the g-yang copy is retained.",
+  "severity": "MEDIUM",
+  "confidence": "PROBABLE",
+  "note": "filed from the alignment batch, spine-verified on merge"
+ },
+ {
+  "item_id": "E-137",
+  "course": "C03",
+  "segment": "C03:614",
+  "kind": "TIBETAN_SPELLING",
+  "found": "sku ngo yang 'dzoms tshe ring",
+  "expected": "sku ngo g-yang 'dzoms tshe ring",
+  "evidence": "The first copy of the name drops the g- prefix; the second copy in this same row reads g-yang 'dzoms, as do C03:619 (g-yang 'dzoms tshe ring) and TCS12:443 (ga-yang 'dzoms). P1:167 reads yang 'dzoms in the first copy too (same lineage). One analyst filed this. SKEPTIC PASS 2026-09-03: refuted=false — the clause appears twice in both wylie and ACIP (source-level); only C03:614 and same-lineage P1:167 carry it; TCS12:443 is a different sentence (the reconciler's witness citation was withdrawn); the two copies differ (yang vs g-yang) so the correction should keep the SECOND copy. `yang 'dzoms` is absent from the dictionary while TCS12:443 and C03:619 read g-yang; subsumed if the g-yang copy is retained.",
+  "severity": "LOW",
+  "confidence": "PROBABLE",
+  "note": "filed from the alignment batch, spine-verified on merge"
  }
 ]
