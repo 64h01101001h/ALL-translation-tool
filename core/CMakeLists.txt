@@ -558,6 +558,13 @@ if(Python3_FOUND)
            COMMAND ${Python3_EXECUTABLE}
                    ${CMAKE_SOURCE_DIR}/tools/test_no_degenerate_members.py)
 
+  # Rule-7 ratchet (2026-09-04 audit): d=5/d=7 English spans that begin with a
+  # supplied article or hinge may not increase in the shipped dirs and must
+  # be zero (or allowlisted with a licensor) in any new course directory.
+  add_test(NAME no_supplied_span_head
+           COMMAND ${Python3_EXECUTABLE}
+                   ${CMAKE_SOURCE_DIR}/tools/test_no_supplied_span_head.py)
+
   # The four suites above check pages for internal well-formedness. None of
   # them ever asked whether the text we SHIPPED still occurs in the text we
   # CLAIM it came from - so a page could be perfectly well-formed and still

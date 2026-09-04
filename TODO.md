@@ -11,10 +11,17 @@
   `gen_alignment_page.py` + full gate set; ledger entry in C03_CAMPAIGN.md.
   Eight are one-word rule-7 strips: 33 "him", 37/73/85 "the/The", 40 "our",
   53 "You also", 54 "I", 55 "like", 70/95 "and", 98 "his".
-- [ ] **Before C04 opens: add the span-initial function-word check** to
-  `docs/alignment_briefs/RECONCILE_BRIEF.md` and as a gate (`no_supplied_span_head`):
-  no d≥3 span may begin with the/a/an/and/or/his/our/your/I/you unless the
-  reconciler names the Tibetan word under it. Would have caught 8/19.
+- [x] **Span-initial function-word check added 2026-09-04**: RECONCILE_BRIEF
+  rule 7 hard check + gate `no_supplied_span_head` (ratchet on shipped dirs,
+  zero-or-allowlisted for C04+; allowlist `data/alignment/span_head_allow.json`).
+- [ ] **RULING NEEDED — the layer-wide article habit.** The gate's scan found
+  1,640/9,168 (17.9%) C01 d=5 English spans and 577/8,192 (7.0%) C03 spans
+  begin with a supplied article/hinge ("the three principal paths", "the
+  east"). Rule 7 forbids it; C01 did it routinely. Options: (a) mechanical
+  strip where no de/'di/rang gi/bdag gi/genitive precedes the noun in the
+  wylie, re-land all pages, re-freeze the ratchet; (b) leave C01 as landed,
+  label the convention in the spec as "C01-era: article inside span". The
+  4% of 2026-08-29 did not see this; the 19% of 2026-09-04 partly did.
 - [ ] **Rulings for Adam (spec conflicts, audit §6):** 40 `rje bla mas` → "our
   Lord Lama" (epithet-whole vs rule 7); 77 `de 'dra'i` → "that we are
   describing here" (GMR idiom vs frame); 5 `dngos sam rjes mthun` (headword
