@@ -165,9 +165,17 @@ noun in the wylie, or leave C01 as landed and label it. Not this audit's
 call. The list with the exact edit for each is in
 `data/alignment/audit_verdicts_20260904.json` (field `final ==
 "CONFIRMED_DEFECT"`, with the skeptics' `argument` naming the fix). These
-are page-spec edits that go through `tools/gen_alignment_page.py` and the
-full gate set like any other landing; they are queued in TODO.md and are
-**not** applied by this audit, which measures and does not repair.
+are page edits that go through the full gate set like any other landing.
+**Landed the same day:** 14 of the 19 (items 33, 35, 37, 38, 39, 53, 54,
+55, 66, 70, 73, 85, 95, 98) on 12 pages, each page carrying a REPAIRED
+note that names the item and the reason; `sa rnams` → "the earth" on the
+same row as items 37/85 was trimmed for row consistency though not sampled.
+Layer rebuilt to 5,931 headwords / 12,065 pairs (from 12,069); ratchet
+re-frozen for C03 at 603. **Held for ruling, not repaired:** 5, 15, 40, 77
+(§6) and 46 (`len sa` → "places": the only widening wraps supplied "we
+can", so rule 7 blocks the fix; null or leave is Adam's call). The sample
+and verdict files are unchanged: the measurement stands as taken, before
+the repairs.
 
 ## 8. Disposition for the Phase 3 gate
 

@@ -32,7 +32,7 @@ import re, io, os, glob, sys, json
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 ALIGN = os.path.join(ROOT, "data", "alignment")
 ALLOW = os.path.join(ALIGN, "span_head_allow.json")
-BASELINE = {"pages_c01": 1643, "pages": 50, "pages_c03": 613}   # frozen 2026-09-04
+BASELINE = {"pages_c01": 1643, "pages": 50, "pages_c03": 603}   # frozen 2026-09-04; c03 613->603 after the audit repairs the same day
 FN = r'(?:the|The|a|A|an|An|and|And|or|Or|his|His|our|Our|your|Your|I|you|You) '
 PAT = re.compile(r'<span class="u[^"]*" data-d="([57])" data-l="(s\d+\w+)">'
                  r'(?:<span class="u[^"]*" data-d="7" data-l="s\d+\w+">)?' + FN)

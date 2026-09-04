@@ -121,7 +121,7 @@ verbatim, never corrected, and not re-filed.
 | `alignment_builder` | every wrapped fragment is a literal substring of its cited spine segment; refuses otherwise | correspondence |
 | `no_broken_words`, `no_split_syllables` | no span cuts an English word or a Tibetan syllable | — |
 | `no_degenerate_members` | no d=7 member equals or exceeds its parent | — |
-| `no_supplied_span_head` | d=5/d=7 English spans beginning with a supplied article or hinge: ratchet on C01–C03 (frozen 2026-09-04 at 1,643 / 50 / 613), zero-or-allowlisted with a named licensor for C04+ | which of the frozen spans are licensed |
+| `no_supplied_span_head` | d=5/d=7 English spans beginning with a supplied article or hinge: ratchet on C01–C03 (frozen 2026-09-04 at 1,643 / 50 / 603), zero-or-allowlisted with a named licensor for C04+ | which of the frozen spans are licensed |
 | `no_phonetics_in_layer` | d=7 sound-spelling pairs never enter the evidence layer | — |
 | `layer_matches_spine`, `evidence_matches_spine` | every banked field occurs at every cited segment (NOT-IN-CORPUS hard zero) | correspondence |
 | `view_matches_layer` | the dictionary view shows only what the layer banked | — |
