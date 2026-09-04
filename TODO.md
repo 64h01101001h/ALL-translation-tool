@@ -1,3 +1,30 @@
+## 📋 2026-09-04 — the C03-stratified correctness audit landed (§5b gate precondition)
+
+- [x] **Audit run and banked.** 100 pairs, headword-level, seed 20260904;
+  285 agents (Opus 5 first readers; Fable 5.1 second readers and skeptics).
+  **19/100 confirmed defects, Wilson 95% [12.5%, 27.8%]**; 11 unanimous;
+  13 OVER_CAPTURE / 4 UNDER_CAPTURE / 2 WRONG_MAPPING. Second reader found 3
+  defects in 81 SOUND calls. Report `docs/AUDIT_2026-09-04_C03_STRATIFIED.md`;
+  data `data/alignment/audit_verdicts_20260904.json`.
+- [ ] **Repair the 19 confirmed C03 spans** (14 pages). Exact fix per item is
+  in the verdict bundle's skeptic `argument`. Page-spec edits through
+  `gen_alignment_page.py` + full gate set; ledger entry in C03_CAMPAIGN.md.
+  Eight are one-word rule-7 strips: 33 "him", 37/73/85 "the/The", 40 "our",
+  53 "You also", 54 "I", 55 "like", 70/95 "and", 98 "his".
+- [ ] **Before C04 opens: add the span-initial function-word check** to
+  `docs/alignment_briefs/RECONCILE_BRIEF.md` and as a gate (`no_supplied_span_head`):
+  no d≥3 span may begin with the/a/an/and/or/his/our/your/I/you unless the
+  reconciler names the Tibetan word under it. Would have caught 8/19.
+- [ ] **Rulings for Adam (spec conflicts, audit §6):** 40 `rje bla mas` → "our
+  Lord Lama" (epithet-whole vs rule 7); 77 `de 'dra'i` → "that we are
+  describing here" (GMR idiom vs frame); 5 `dngos sam rjes mthun` (headword
+  cut across `sam`: re-key or null); 15 `tshon` = prefix-dropped `mtshon te`
+  (re-key headword; input-variant erratum to file).
+- [ ] **C04 opening** stays blocked on the brief edit above (not on the
+  rulings). Briefs hardwire C03 in query/context/spec; `pages_c04`, COURSES
+  entry, C04_CAMPAIGN.md, wrap script course arg 4 still to create. Rows 22
+  and 28 are 1,500-char-cap rows (E-107); rows 1/7/12/17/30/50 short headings.
+
 ## 📋 2026-09-01 — the 8/23 session picked up; what closed, what opened
 
 **Closed today (session "8 23 26" ended on an API error before any of its
