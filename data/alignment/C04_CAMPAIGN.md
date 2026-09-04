@@ -51,7 +51,7 @@ lists it under `pages_c04` with the Tibetan word that licenses it. The
 reconciler names the licensor or trims the span; there is no third option.
 
 ## Progress
-c4p1–c4p19 (1–57) landed; 141 segments remain (58–198).
+c4p1–c4p35 (1–105) landed; 93 segments remain (106–198). Last updated 2026-09-04.
 
 ## Queues (wylie / english), C04
 (opened empty)
@@ -140,3 +140,43 @@ root text") and names no author, so this is not a Tibetan-checkable erratum
 and was not filed. It is an attribution in GMR's own frame — E-120 class,
 for GMR's ruling; the English stays byte-exact. Both analysts and the
 reconciler noted it.
+
+### Batches C04-20 … C04-35 (C04:58–105) — 2026-09-04 — propose: Opus 5 · reconcile/refute: Fable 5.1
+
+Sixteen pages landed in eight waves of six segments (commits 5500a93 →
+f489385); every reconciler spec exited 0 first or second run; 17 gates
+green after each wave; `pages_c04` stayed at 0 function-word-initial
+d5/d7 spans throughout — the rule-7 hard check plus the allowlist is
+holding as designed.
+
+**Allowlist entries added** (each names its licensor, checked by the
+`no_supplied_span_head` gate): c4p21/s61w12 `rang gi` → "its proper";
+c4p28/s83w18 `khyod kyi` → "your"; c4p30/s89w2 `'o skol gyi` → "our";
+c4p33/s99w18 `rang re'i` → "our". Every other rule-7 head was trimmed
+(C04:102 both analysts trimmed "Our own" → "own" and the reconciler kept
+the agreed trim).
+
+**Errata filed (each skeptic-passed, Fable 5.1).** E-144 C04:57 `bcas
+shes` for `bcad shes`; E-145 C04:61 "There are two reason why"; E-146
+C04:73 "even it"; E-147 C04:98 "The two phrases terms" (dittography, no
+Tibetan source for either noun; C16:575 is the same file re-ingested —
+173/198 C04 wylie lines recur in C16 — so no independent witness). Dropped
+as not errata: C04:24 "Light for"; C04:75/77 `'ags kyang` (attested);
+C04:81 `gnyis gyis` (published reading).
+
+**Conventions settled in this stretch.** `thugs rje chen po` → "holy
+great compassion" (the honorific `thugs` is the exponent of GMR's "holy",
+the very distinction C04:98 teaches) and `snying rje chen po` → "great
+compassion" (98, 100, 107, 108). `sgrub byed` takes the tight verb and
+leaves GMR's expansion unwrapped ("helps bring", not "helps bring Him
+about"; "allows", not "allows one to reach": 96, 97, 104). `der`/`de` →
+"this", never "this state"/"same One" (93, 94). `stobs kyis` → ∅ when GMR's
+exponent is discontinuous ("driven … by", 93). `mthar phyin pa'i` kept as
+the d=5 unit with the split readings as d=7 members (92). `la sogs pa` →
+∅ rather than "or the like" (every trim heads with a supplied function
+word, 99). `rdzogs pa'i` → "enlightened" rejected as a rule-10 falsehood
+(rdzogs pa is *complete*, 99). The opening `zhes gsungs` of a row closes
+the previous row's citation and pairs with nothing (107). A single verb
+GMR renders twice by *different* strings may be banked once at its literal
+sense (`bshad` → "said", 108), unlike the identical-string cases nulled at
+40/47.
