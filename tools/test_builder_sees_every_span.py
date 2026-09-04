@@ -59,7 +59,7 @@ LOOSE = {
 }
 
 def main():
-    dirs = ['pages', 'pages_c01', 'pages_c03']
+    dirs = ['pages', 'pages_c01', 'pages_c03', 'pages_c04']
     seen = present = npages = apparatus = 0
     other = {'note': 0, 'tree': 0}
     bad = []

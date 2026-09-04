@@ -286,6 +286,20 @@ COURSES = {
                    "c3p200": [619, 620],
         },
     },
+    "C04": {
+        # OPENED 2026-09-04 after the C03-stratified audit and the
+        # no_supplied_span_head gate (Phase 3 gate §5b precondition).
+        # 198 segments. 1-21 are byte-identical to C03:1-21 (the
+        # liturgical opening): c4p1-c4p7 are the landed c3p1-c3p7 copied
+        # verbatim with course labels changed (2026-09-04); every sentence
+        # was checked against the C04 rows at copy time and the gates
+        # below re-derive every span against them on each run.
+        "complete": False,
+        "dir": os.path.join(OUTDIR, "pages_c04"),
+        "pages": {
+            "c4p1": [1, 2, 3], "c4p2": [4, 5, 6], "c4p3": [7, 8, 9], "c4p4": [10, 11, 12], "c4p5": [13, 14, 15], "c4p6": [16, 17, 18], "c4p7": [19, 20, 21],
+        },
+    },
 }
 
 # The class attribute is "u" plus whatever grammar label the analyst supplied

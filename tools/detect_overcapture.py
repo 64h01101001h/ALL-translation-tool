@@ -34,7 +34,7 @@ import json, io, os, re, sys, glob, collections
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 LAYER = os.path.join(ROOT, "data", "alignment", "alignment_evidence_v1.json")
-DIRS = {"C01": "pages_c01", "C02": "pages", "C03": "pages_c03"}
+DIRS = {"C01": "pages_c01", "C02": "pages", "C03": "pages_c03", "C04": "pages_c04"}
 
 SPAN = re.compile(r'<span class="u[^"]*" data-d="(\d)" data-l="s(\d+)([a-z]+\d*)[^"]*">'
                   r'([^<]*)</span>')

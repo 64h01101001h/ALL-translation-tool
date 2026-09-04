@@ -38,7 +38,7 @@ ORD = {
 def main():
     fires = []
     for course, sub in (("C01", "pages_c01"), ("C02", "pages"),
-                        ("C03", "pages_c03")):
+                        ("C03", "pages_c03"), ("C04", "pages_c04")):
         for page in sorted(glob.glob(os.path.join(ROOT, "data", "alignment",
                                                   sub, "*.html"))):
             html = io.open(page, encoding="utf-8").read()

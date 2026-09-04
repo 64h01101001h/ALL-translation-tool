@@ -4,7 +4,7 @@
 # whether a page lands and whether a claim leaves the building; the proposals are the
 # cheaper half and are checked twice downstream.
 
-# PROPOSE BRIEF — Diamond Cutter Translation Tool, ACI Course 3 full-depth alignment
+# PROPOSE BRIEF — Diamond Cutter Translation Tool, ACI course full-depth alignment (the COURSE — C03, C04, … — is named in your task)
 
 You are ONE OF TWO independent analysts for one segment; your task names the ANGLE you take.
 A reconciler will merge your proposal with the other analyst's, so be complete, be honest, and
@@ -13,11 +13,15 @@ doubt it. Write everything to YOUR private directory (named in your task). Touch
 
 Get the verbatim source text yourself:
   sqlite3 /Users/adamderickandrade/ALL-translation-tool/build/hgm_spine_v27_2.db \
-    "select wylie, english, acip from corpus_segments where course='C03' and seq=<SEQ>"
+    "select wylie, english, acip from corpus_segments where course='<COURSE>' and seq=<SEQ>"
 
-CONTEXT. The teaching narrative of ACI Course 3 — Applied Meditation. Prose with embedded
-verse citations; verse lines carry initial capitals mid-sentence, which is lineation, not
-apparatus. Prose of this length takes 25-60 spans. Cover the content words; null or omit
+CONTEXT. Read the "Course shape" section of data/alignment/<COURSE>_CAMPAIGN.md for the
+course you are on (C03: Applied Meditation, prose with embedded verse citations; C04: The
+Proof of Future Lives, Buddhist logic — debate-format prose, `chos can`/`thal`/`phyir`
+syllogisms, dense citation apparatus). Verse lines carry initial capitals mid-sentence,
+which is lineation, not apparatus. If the segment's English is GMR's PHONETICS rather
+than translation, follow the PHONETICS PROTOCOL in C03_CAMPAIGN.md (d=7 links only, the
+phonetics label, the sound-to-spelling note). Prose of this length takes 25-60 spans. Cover the content words; null or omit
 particles freely — an omitted particle costs nothing, a mis-depthed one costs the page.
 
 THE RULES, inviolable. The generator checks each and REFUSES the page.
@@ -66,7 +70,7 @@ THE RULES, inviolable. The generator checks each and REFUSES the page.
     span that PASSES every mechanical check can still be false.
 
 SPEC FORMAT (what gen_alignment_page.py reads on stdin):
-  { "course": "C03",
+  { "course": "<COURSE>",
     "segments": [
       { "seq": <SEQ>,
         "title": "<short lowercase title, a few words>",
