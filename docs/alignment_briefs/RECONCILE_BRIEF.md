@@ -55,6 +55,14 @@ THE RULES, inviolable. The generator checks each and REFUSES the page.
    English side is out of order or ambiguous.
 7. NO OVER-CAPTURE - the dominant measured defect. Leftover English stays
    UNWRAPPED. An article or a hinge GMR supplied has no Tibetan under it.
+   HARD CHECK (2026-09-04 audit, 8 of 19 confirmed defects were this): before
+   you write any d=5 or d=7 "eng" that BEGINS with the/a/an/and/or/his/our/
+   your/I/you, name the Tibetan word under that first English word (a
+   demonstrative de/'di, a possessive rang gi/bdag gi, a connective dang/
+   zhing/cing, a genitive). If you cannot name it, the span starts one word
+   later. If you can, record it: the gate `no_supplied_span_head` refuses
+   any such span in a new course directory unless it is listed in
+   data/alignment/span_head_allow.json with that licensor.
 8. NO BROKEN WORDS. The one exception is the negative-affix convention,
    where the Tibetan negation owns the English negative - four confirmed
    forms: "n't" (doesn't), "un" (unable), "im" (impossible), "less"

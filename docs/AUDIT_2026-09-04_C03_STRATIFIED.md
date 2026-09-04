@@ -82,11 +82,31 @@ cluster on rare words.
 
 **Eight of the thirteen over-captures are one word wide**: "the listeners",
 "The sea", "the mountains", "his student", "and supplication", "and sit
-there", "like business", "our Lord Lama". Rule 7 of the spec already forbids
-every one of them. They are not judgement calls; they are the rule not being
-applied on the day. The campaign's own log shows the same rule being applied
-correctly elsewhere on the same pages (articles stripped at C03:564, span
-nulled at C03:490), so this is inconsistency, not a missing rule.
+there", "like business", "our Lord Lama". Rule 7 of the spec forbids every
+one of them. I first wrote here that this was "the rule not being applied
+on the day"; a scan of the whole shipped layer, run while building the gate
+for it, says otherwise. **A word-level English span beginning with a
+supplied function word is the layer's habit, not its slip:**
+
+| directory | d=5 English spans | begin with the/a/an/and/or/his/our/your/I/you |
+|---|---|---|
+| pages_c01 | 9,168 | 1,640 (17.9%) |
+| pages (C02) | 680 | 49 (7.2%) |
+| pages_c03 | 8,192 | 577 (7.0%), plus 36 at d=7 |
+
+Some of those are licensed (a demonstrative `de`, a possessive `rang gi`, a
+genitive), and this scan cannot tell which. But C01 at 18% means that when
+C01 was landed the article was routinely banked inside the noun span
+("the three principal paths", "the east", "the Noble Path"), and the
+practice was only partly stopped by C03. The campaign log does show the
+rule applied on the same C03 pages where it was broken (articles stripped at
+C03:564, span nulled at C03:490), so C03 is inconsistent where C01 was
+consistent in the other direction. The 2026-08-29 audit's 4% could not see
+this because a triple-level draw is dominated by C01 spans and its single
+auditor accepted the article as convention. The gate `no_supplied_span_head`
+(added the same day) freezes these counts as a ratchet and forbids the
+pattern in every new course directory unless the reconciler names the
+licensor.
 
 The three refutations were all "the auditor could not see the licensor":
 item 12 (a misquoted sibling), item 62 (the infinitive "to" is the layer's
@@ -138,7 +158,11 @@ the standing example, and the mechanical gates for that class are closed
 ## 7. Repairs
 
 Nineteen spans on fourteen C03 pages need their `eng` trimmed, widened, or
-nulled. The list with the exact edit for each is in
+nulled. Behind them stands the layer-wide article habit in §3 (about 2,300
+d=5 spans), which is a separate, larger repair that needs its own ruling:
+strip mechanically where no demonstrative/possessive/genitive precedes the
+noun in the wylie, or leave C01 as landed and label it. Not this audit's
+call. The list with the exact edit for each is in
 `data/alignment/audit_verdicts_20260904.json` (field `final ==
 "CONFIRMED_DEFECT"`, with the skeptics' `argument` naming the fix). These
 are page-spec edits that go through `tools/gen_alignment_page.py` and the
