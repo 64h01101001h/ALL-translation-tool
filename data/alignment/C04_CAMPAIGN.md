@@ -51,7 +51,45 @@ lists it under `pages_c04` with the Tibetan word that licenses it. The
 reconciler names the licensor or trims the span; there is no third option.
 
 ## Progress
-(none landed yet)
+c4p1–c4p11 (1–33) landed; 165 segments remain (34–198).
 
 ## Queues (wylie / english), C04
 (opened empty)
+
+### Batches C04-8 … C04-11 (C04:22–33) — 2026-09-04 — propose: Opus 5 · reconcile/refute: Fable 5.1
+
+First proposed batch of the course: 10 segments (22 and 28 are hand-built
+markers), 20 proposals, 20/20 exited 0 on re-run; 10 reconciled specs,
+10/10 exited 0 first run. Pages c4p8–c4p11 wrapped and registered;
+coverage 33/198; layer 5,963 headwords / 12,132 pairs; 16 gates green and
+`no_supplied_span_head` reports **0** function-word-initial d5/d7 spans in
+pages_c04 — the rule-7 hard check held on the first batch under it.
+
+**Course shape confirmed on the ground.** C16:516–522 are byte-identical
+parallel witnesses of C04:26, 27, 33, 34, 35, 36 (same file re-ingested,
+so not independent). C04:29 is an **UNPAIRED ROW**: its English column is a
+page number plus the running head ("13 The Asian Classics Institute Course
+IV … Reading 2B: What it Was that Master Dignaga Stated") while the wylie
+carries the two inference definitions; both analysts and the reconciler
+banked nulls only (69 spans, zero pairs). Six Tibetan-side errata filed
+from that row (fused `rjes dpggrags`, `sbyis` for `sbyin`, missing `mi`,
+`tsham` for `tsam`, `rtag` for `rtags`) — ACIP column carries the same
+readings, so they are source-of-record keyings; sent to the refute pass
+before anything is registered.
+
+**Rule 10 rulings.** 23 `ma dmigs pa` → ∅ (both analysts had
+"non-existence"; dmigs pa is observe, not exist); 24 `gsung` → "written"
+(not "written by"; the "by" is the genitive's hinge); 26 `gnas 'di la`
+split flat, `bya'o` → "should"; 27 `sbyong bar` → ∅ (train, not "remain"),
+`skyon brjod kyi smra ba` → "speak badly of others" as one idiom; 30
+`dgod pa` → ∅ (GMR's frame "What it Was that" has no single word under
+it); 31 title compounds kept with d=7 members; 32 `tshad ma` → "correct
+person" (the Pramanasiddhi sense, GMR's fixed rendering); 33 `rtsa ba'i`
+→ "entire work" over "major". Reconciler 25 named licensors for three
+one-word spans (`nga` → "I" ×2, `'am` → "or"); these are whole-span
+pairings, not span heads, so the gate does not list them.
+
+**Errata 24.** Both analysts flagged "Light **for** the Path to Freedom"
+against "Light **on**" elsewhere; the reconciler dropped it (a title
+variant in GMR's own prose, no witness says which is canonical) — noted
+here, not filed.
