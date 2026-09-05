@@ -51,7 +51,7 @@ lists it under `pages_c04` with the Tibetan word that licenses it. The
 reconciler names the licensor or trims the span; there is no third option.
 
 ## Progress
-c4p1–c4p59 (1–177) landed; 21 segments remain (178–198). Last updated 2026-09-04.
+**COMPLETE 2026-09-04.** c4p1–c4p66 (1–198) landed; coverage gate proved 198/198 with `"complete": True`; 17 gates green; `pages_c04` finished at 0 function-word-initial d5/d7 spans.
 
 ## Queues (wylie / english), C04
 (opened empty)
@@ -180,3 +180,52 @@ the previous row's citation and pairs with nothing (107). A single verb
 GMR renders twice by *different* strings may be banked once at its literal
 sense (`bshad` → "said", 108), unlike the identical-string cases nulled at
 40/47.
+
+### Batches C04-36 … C04-66 (C04:106–198) — 2026-09-04 — propose: Opus 5 · reconcile/refute: Fable 5.1 — COURSE CLOSED
+
+Thirty-one pages in sixteen waves (commits 08112f1 → the closing commit);
+every reconciler spec exited 0; 17 gates green after every wave; the
+rule-7 hard check held at 0 violations for the whole course. One wave
+(132–143) was killed by a Fable/Opus rate limit before any deliverable
+existed and was relaunched whole under the same model policy.
+
+**Allowlist entries added:** c4p37/s110w3 `rang re'i` → "our own";
+c4p51/s152w9 `sogs` → "or the like"; c4p52/s156w17 `sogs` → "and the
+like"; c4p55/s163w7 `sogs` → "and so on" (the etc. particle is its own
+licensor; C03 precedent "or anything else"/"or whatever"). `yang` → "And"
+at C04:187 sits at d=6 and is outside the gate's d5/d7 scope.
+
+**Errata filed (each skeptic-passed, Fable 5.1):** E-147 C04:98 "The two
+phrases terms"; E-148 C04:117 `lus gyi` → `lus kyi`; E-149 C04:117 `med
+bar 'dod` → `med par`; E-150 C04:134 `dge bshes dge bshes` → `dge bshes ye
+shes` (seven Tibetan witnesses); E-151 C04:143 "which it depends" missing
+"on"; E-152 C04:160 `des dbang gis` → `de'i dbang gis` (28 vs 2 corpus
+rows); E-153 C04:166 "it is state of mind" missing "a". Dropped: C04:140
+"missing las skyes pa" (two complete 7-syllable variant lines, not a
+corruption); C04:141 leading `bdag` (registered E-111 row spill); C04:153,
+170, 171 ACIP `MTSAMS`/`MTSAN` (TS = tsha keying convention, corpus
+596/0 and 1199/0); C04:172 "non- meritorious" (registered hyphen-break
+class E-025/028/029/045; refuted as a re-file).
+
+**Conventions settled 106–198.** `thal`/`thal ba'i` → ∅ when GMR's "would
+have to"/"is the case"/"It is true that" is his syllogism frame
+(127/131/148/157/184/198); `na`/`ltar na` → ∅ for "Suppose you say"
+(124/125/131); `chos can` → "consider" (fourteen landed spans, 164/185);
+`phyi ma` → "new life"/"future lives"/"another"/"later" on the HGM gloss,
+never "states" (149/153/158/195); `bdag` → "self-nature" whole when GMR
+hyphenates it (HGM glossary tier: 178/188/190/194), "self" otherwise
+(177); `'du byed kyi las` → "immature karma" as the compound only, `'du
+byed` alone stays null (170/171); `srid pa` → "ripened karma" (180);
+`mtshams sbyor` → "cross the line" on the HGM gloss, members never split
+(139/149/165); `rnam smin` ≠ "karma" (158); `res 'ga'` → "variable" banked
+as sense-for-sense with a literal note (120); transcribed names and titles
+(Kedrup, Geshe, Sera Mey, Tenpa Dargye) stay null, Sanskrit-origin names in
+GMR's English are banked (119/134/169/181); a pronoun is never banked as
+its referent (`de'i` → "wall", 116; `de dag` → "This", 130); compounds
+minted only to escape a count ambiguity are dissolved (123/125/174/185),
+real HGM-glossed units are kept (`skye ba snga phyi`, 135; the four
+upādāna, 177).
+
+**Ruling items carried forward for Adam:** C04:80 Chandrakirti
+attribution (E-120 class); the layer-wide article habit; the negation
+subword ruling; audit items 5/15/40/46/77; Phase 3 gate ratification.
