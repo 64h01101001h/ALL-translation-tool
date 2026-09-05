@@ -8,11 +8,11 @@
 
 Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source and Geshe Michael Roach's facing English &mdash; recorded as a by-product of a machine alignment campaign reading the courses segment by segment. **Every entry has been checked against the corpus database** (42,199 segments, spine `hgm_spine_v27_2.db`): the quoted strings were retrieved from the spine, not from a note, and each citation was re-derived rather than trusted.
 
-**149 entries**: **102 document errata** (6 HIGH, 63 MEDIUM, 33 LOW), **23 digitisation artefacts**, 14 observations checked and closed as *not* errata, and 1 that could not be verified.
+**150 entries**: **103 document errata** (6 HIGH, 64 MEDIUM, 33 LOW), **23 digitisation artefacts**, 14 observations checked and closed as *not* errata, and 1 that could not be verified.
 
 | Kind | n |
 |---|---|
-| Tibetan spelling | 75 |
+| Tibetan spelling | 76 |
 | Digitisation artefact | 23 |
 | English typo | 20 |
 | Our banked layer | 9 |
@@ -44,7 +44,7 @@ Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source 
 | `C03:39` | acip: ,SIL SNYAN RNAMS DANG BYUNG PA GDUGS MCHOG DANG ,   \|   wylie: ,sil snyan rnams dang byung pa gdugs mchog dang , | byug pa | seg_hint 39 is CORRECT. Three independent proofs: (1) the note's own claim checks out — C03:38, the glossary segment immediately preceding, spells it right and defines it: "byug pa ni spos zhim po'i lde gu'o" (byug pa = thick fragrant unguent); (2) this segmen | CONFIRMED |
 | `C04:29` | lkog 'gyur la gsar du bslu ba'i shes pa | lkog 'gyur la gsar du mi bslu ba'i shes pa | ACIP reads 'LKOG 'GYUR LA GSAR DU BSLU BA'I SHES PA' (source). An inference is by definition a NON-deceiving (mi bslu ba) fresh awareness; as written the definition of inference by convention says 'deceiving'. INTERNAL witness: the parallel definition of scrip | PROBABLE |
 
-## Medium severity &mdash; 63 entries
+## Medium severity &mdash; 64 entries
 
 | Citation | What it says | Should say | Evidence | Confidence |
 |---|---|---|---|---|
@@ -108,6 +108,7 @@ Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source 
 | `C03:541` | rnyed par gur nas | rnyed par gyur nas | Wylie/ACIP read 'gur' (ACIP GUR). 'gur' is an attested word (tent) so the dictionary alone does not decide it; the root verse this passage glosses reads 'bcos ma min pa'i nges pa rnyed gyur nas' at TCS08SourceOfAllMyGood:12 (independent witness; also C03:524,  | PROBABLE |
 | `C03:614` | mchog nas, lhun po ltar brtan pa'i yon gyi bdag mo chen mo lha lcam sku ngo g-yang 'dzoms tshe ring mchog nas | mchog nas | The clause 'lhun po ltar ... mchog nas' is written twice in wylie and in the ACIP source of record (LHUN PO LTAR ... MCHOG NAS, LHUN PO LTAR ... MCHOG NAS,); the English renders it once. P1:167 carries the same doubling (same lineage, not independent). TCS12:4 | PROBABLE |
 | `C03:617` | Ganden Palace | Gatsel Palace (dga' tshal, the Hlalu family seat) | wylie and ACIP both read `lha klu dga' tshal ba'i pho brang` (DGA' TSAL, not DGA' LDAN). Parallel colophons in the same corpus render the same name `lha klu dga' tshal ba` as "Hlalu Gatsel" (TCS04PrayerBook:219) and "Hla-Lu Gatselwa" (TCS13:269); C01:496 gloss | CONFIRMED |
+| `C04:134` | ser smad dge bshes dge bshes dbang phyug | ser smad dge bshes ye shes dbang phyug | Dittography in the author's name. The ACIP column (source of record) reads SER SMAD DGE BSHES DGE BSHES DBANG PHYUG, so the doubled dge bshes is a source keying error, not an ingest artefact. The same caption in C04:63, 79 and 181 reads dge bshes ye shes dbang | CONFIRMED |
 | `C04:29` | sbyis pas longs spyod khrims kyis bde | sbyin pas longs spyod khrims kyis bde | ACIP (source of record) reads 'SBYIS PAS LONGS SPYOD KHRIMS KYIS BDE', so the error is in the source, not the conversion. The line is the Precious Garland verse quoted as the scriptural example; the corpus carries the published reading 'sbyin pas longs spyod k | CONFIRMED |
 | `C04:29` | yid ches pa'i rtag la brten nas | yid ches pa'i rtags la brten nas | ACIP reads 'YID CHES PA'I RTAG LA BRTEN NAS' (source, not conversion). The definition of scriptural inference rests on a logical reason (rtags), not on permanence (rtag). INTERNAL witness: the parallel definition later in the same row reads 'grags pa'i rtags y | PROBABLE |
 | `C04:57` | bcas shes kyi mtshan nyid du 'jog | bcad shes kyi mtshan nyid du 'jog | ACIP column (source of record) reads BCAS SHES here while the same row reads BCAD SHES five words earlier for the same term (both rendered 'recollection'); independent witnesses of the term spell it bcad shes: C04:48, SVN:1202. C16:533/540 are the same file re | CONFIRMED |
@@ -233,7 +234,7 @@ Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source 
 
 ## Recommended actions, by owner
 
-**Document editors.** The 102 document errata above. Start with the 6 HIGH entries. Note that several errors exist at MORE THAN ONE LOCUS because passages are ingested twice &mdash; each entry's evidence names them, and a per-segment fix will leave duplicates behind.
+**Document editors.** The 103 document errata above. Start with the 6 HIGH entries. Note that several errors exist at MORE THAN ONE LOCUS because passages are ingested twice &mdash; each entry's evidence names them, and a per-segment fix will leave duplicates behind.
 
 **Data-pipeline maintainers.** The 23 digitisation artefacts, plus two reports filed separately: `docs/upstream/FOLIO_MARKER_COLLISIONS.md` (119 folio markers spliced into caption numbers) and `docs/upstream/C13_COLUMN_OFFSET.md` (**C13:63&ndash;82 pairs Tibetan with the English of a different text &mdash; C13 should not be scanned until it is fixed**).
 
