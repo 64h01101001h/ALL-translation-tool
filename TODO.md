@@ -1,3 +1,15 @@
+## 📋 2026-09-04 — Overlay card: the HGM · TENTATIVE block is now a stepper (Adam's ask)
+
+- One (rendering, witness) at a time, shown INSIDE the spine segment it
+  was matched from, headword and rendering highlighted; ◀ prev / next ▶
+  anchors and ⌥← ⌥→ on the text or the card; every distinct rendering
+  listed as a jump target with its witness count. Selftest ALIGN-2 pins
+  it. The FROM THE CORPUS zone is untouched pending Adam's decision on
+  whether the stepper replaces or condenses it.
+- Harness: `DCT_SHOT_WORD`, `DCT_SHOT_NEST`, `DCT_SHOT_CARD_HTML` (env,
+  --screenshots only) aim the demo click and dump the whole card as HTML
+  + PNG, so a card can be reviewed without a live session.
+
 ## 📋 2026-09-04 — C04 (The Proof of Future Lives) CLOSED: 198/198
 
 - 66 pages landed (`data/alignment/pages_c04/`), coverage gate proved with
