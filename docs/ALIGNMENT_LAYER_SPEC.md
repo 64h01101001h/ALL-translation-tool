@@ -20,7 +20,7 @@ Artefacts:
 
 | artefact | path | built by |
 |---|---|---|
-| pages (both sides wrapped in place from the spine) | `data/alignment/pages/` (C02), `pages_c01/`, `pages_c03/` | `tools/gen_alignment_page.py` + `tools/wrap_alignment_page.py` |
+| pages (both sides wrapped in place from the spine) | `data/alignment/pages/` (C02), `pages_c01/`, `pages_c03/`, `pages_c04/` | `tools/gen_alignment_page.py` + `tools/wrap_alignment_page.py` |
 | evidence sidecar (depth-5 word pairs, ACIP-keyed, cited) | `data/alignment/alignment_evidence_v1.json` | `tools/build_alignment_layer.py` |
 | full bank (every span at every depth, notes, trees) | `data/alignment/alignment_full_v1.json` | same |
 | dictionary view | `docs/michael_dictionary.html` | `tools/build_dictionary_view.py` |
@@ -28,7 +28,7 @@ Artefacts:
 | campaign ledgers | `data/alignment/C0N_CAMPAIGN.md` | by hand, one entry per batch |
 
 Courses locked complete (coverage-gate proved): C01 496/496, C02 68/68,
-C03 620/620 (2026-09-03). C04–C18 unscanned. C13 is under standing order not
+C03 620/620 (2026-09-03), C04 198/198 (2026-09-04). C05–C18 unscanned. C13 is under standing order not
 to be scanned until the upstream column offset is resolved
 (`docs/upstream/C13_COLUMN_OFFSET.md`).
 
