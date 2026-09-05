@@ -51,7 +51,7 @@ lists it under `pages_c04` with the Tibetan word that licenses it. The
 reconciler names the licensor or trims the span; there is no third option.
 
 ## Progress
-c4p1–c4p35 (1–105) landed; 93 segments remain (106–198). Last updated 2026-09-04.
+c4p1–c4p59 (1–177) landed; 21 segments remain (178–198). Last updated 2026-09-04.
 
 ## Queues (wylie / english), C04
 (opened empty)
