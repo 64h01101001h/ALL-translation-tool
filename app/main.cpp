@@ -305,6 +305,9 @@ struct EntryDisplay {
     bool alignTent = true;   // ACI alignment evidence, tier
                              // TENTATIVE (Adam 2026-08-26:
                              // toggleable layer)
+    int alignCursor = 0;     // the TENTATIVE stepper (Adam
+                             // 2026-09-04): which (rendering,
+                             // witness) pair is shown in context
     std::string surface;   // the clicked surface form (ACIP) when
                            // it differs from the headword — the
                            // card explains the landing (Adam's
@@ -1018,6 +1021,58 @@ static QString zoneLabel(const QString& text) {
            text + "</div>";
 }
 
+// The TENTATIVE stepper (Adam, 2026-09-04): every attested
+// (rendering, witness) pair of a headword, flattened in the layer's
+// own order (most-attested rendering first, witnesses in cited
+// order), so the card can walk them one at a time and show each
+// inside the very segment it was matched from. Nothing here
+// composes English: the rendering is GMR's text, the segment is the
+// spine's row, and the highlight is a substring find on both.
+struct AlignStep {
+    const AlignPair* pair;
+    int pairIx;     // which distinct rendering
+    int refIx;      // which witness of that rendering
+    QString ref;    // "COURSE:seq"
+};
+static std::vector<AlignStep> alignSteps(const std::string& wylie) {
+    std::vector<AlignStep> v;
+    if (!g_alignEvidence) return v;
+    std::string k;
+    for (char c : wylie) k += (char)std::tolower((unsigned char)c);
+    auto it = g_alignEvidence->find(k);
+    if (it == g_alignEvidence->end()) return v;
+    int pi = 0;
+    for (const auto& pr : it->second) {
+        int ri = 0;
+        for (const QString& rf : pr.refs) v.push_back({&pr, pi, ri++, rf});
+        ++pi;
+    }
+    return v;
+}
+// A window of `text` around the first occurrence of `needle`
+// (case-insensitive), HTML-escaped, the match marked in the machine
+// amber. When the needle is absent the window opens at the start and
+// nothing is marked - the caller says so rather than inventing a hit.
+static QString alignCtx(const QString& text, const QString& needle,
+                        int window, bool* found) {
+    const int at = needle.isEmpty()
+                       ? -1
+                       : text.indexOf(needle, 0, Qt::CaseInsensitive);
+    if (found) *found = at >= 0;
+    if (at < 0) return ux::snip(text, window * 2).toHtmlEscaped();
+    const int n = needle.size();
+    const int b = std::max(0, at - window);
+    const int e = std::min((int)text.size(), at + n + window);
+    QString h;
+    if (b > 0) h += "\u2026";
+    h += text.mid(b, at - b).toHtmlEscaped();
+    h += "<b style='color:#B4540A;background:#FBE3C8'>" +
+         text.mid(at, n).toHtmlEscaped() + "</b>";
+    h += text.mid(at + n, e - (at + n)).toHtmlEscaped();
+    if (e < (int)text.size()) h += "\u2026";
+    return h;
+}
+
 static QString entryHtml(const allcore::Entry& e,
                          const EntryDisplay& d = EntryDisplay{}) {
     QString h;
@@ -1373,30 +1428,89 @@ static QString entryHtml(const allcore::Entry& e,
                  "HGM · TENTATIVE — machine-matched from "
                  "course evidence (AI, unreviewed) · not a "
                  "dictionary gloss</small>";
-            int shown = 0;
-            for (const auto& pr : ita->second) {
-                if (shown >= 4) break;
-                QStringList segq;
-                for (const QString& rf : pr.refs) {
-                    segq << rf;
-                    if (segq.size() >= 5) break;
-                }
-                h += QString("<br>≡ “%1” "
-                             "<small style='color:#8A6D1F'>(%2× "
-                             "· %3%4)</small>")
-                         .arg(QString(pr.eng).toHtmlEscaped())
-                         .arg(pr.refs.size())
-                         .arg(segq.join(", "))
-                         .arg(pr.refs.size() > 5 ? ",…" : "");
-                ++shown;
-            }
-            if ((int)ita->second.size() > shown)
+            // The stepper (Adam, 2026-09-04): one (rendering, witness)
+            // at a time, shown INSIDE the spine segment it came from,
+            // walkable with prev/next (or ⌥← ⌥→ on the card); every
+            // distinct rendering listed below it as a jump target.
+            const auto steps = alignSteps(e.wylie);
+            const int N = (int)steps.size();
+            if (N > 0) {
+                const int cur = ((d.alignCursor % N) + N) % N;
+                const AlignStep& st = steps[cur];
+                auto esc = [](const QString& q) { return q.toHtmlEscaped(); };
                 h += QString("<br><small style='color:#8A6D1F'>"
-                             "…and %1 more attested pairing%2"
+                             "<a href='alignprev:' style='color:#B4540A;"
+                             "text-decoration:none'>&#9664; prev</a>"
+                             " &nbsp;rendering %1 of %2 \u00b7 witness "
+                             "%3 of %4 &nbsp;<a href='alignnext:' "
+                             "style='color:#B4540A;text-decoration:none'>"
+                             "next &#9654;</a> &nbsp;<span style='color:%5'>"
+                             "(\u2325\u2190 \u2325\u2192)</span></small>")
+                         .arg(st.pairIx + 1)
+                         .arg((int)ita->second.size())
+                         .arg(st.refIx + 1)
+                         .arg(st.pair->refs.size())
+                         .arg(ux::kFaint);
+                h += QString("<br>\u2261 <b>\u201c%1\u201d</b> "
+                             "<small style='color:#8A6D1F'>(%2\u00d7)"
                              "</small>")
-                         .arg((int)ita->second.size() - shown)
-                         .arg(ita->second.size() - shown == 1
-                                  ? "" : "s");
+                         .arg(esc(st.pair->eng))
+                         .arg(st.pair->refs.size());
+                const QString course = st.ref.section(':', 0, 0);
+                const int seq = st.ref.section(':', 1, 1).toInt();
+                std::optional<allcore::CorpusSegment> seg;
+                if (g_spineForAbout)
+                    seg = g_spineForAbout->corpusSegment(
+                        course.toStdString(), seq);
+                if (seg) {
+                    bool ft = false, fe = false;
+                    const QString tw = alignCtx(
+                        QString::fromStdString(seg->wylie),
+                        QString::fromStdString(e.wylie), 140, &ft);
+                    const QString en = alignCtx(
+                        QString::fromStdString(seg->english),
+                        st.pair->eng, 160, &fe);
+                    h += "<div style='border-left:2px solid #E0B98C;"
+                         "padding:2px 0 2px 8px;margin:4px 0'>"
+                         "<small style='color:#78706A'>[" + esc(st.ref) +
+                         "]</small><br><i style='color:#4A443C'>" + tw +
+                         "</i><br>" + en;
+                    if (!ft || !fe)
+                        h += QString("<br><small style='color:#8A6D1F'>"
+                                     "%1%2 \u2014 not marked rather than "
+                                     "guessed</small>")
+                                 .arg(ft ? "" : "headword not found "
+                                               "verbatim in this row's "
+                                               "wylie; ")
+                                 .arg(fe ? "" : "rendering not found "
+                                               "verbatim in this row's "
+                                               "English");
+                    h += "</div>";
+                } else {
+                    h += "<br><small style='color:#8A6D1F'>[" +
+                         esc(st.ref) +
+                         "] is not in the loaded spine \u2014 nothing "
+                         "shown rather than something invented</small>";
+                }
+                h += "<div style='margin-top:4px'><small style='color:"
+                     "#8A6D1F'>all attested renderings \u2014 click one "
+                     "to step to it:</small>";
+                int flat = 0, pi = 0;
+                for (const auto& pr : ita->second) {
+                    h += QString("<br><small>%1<a href='aligncur:%2' "
+                                 "style='color:#7A5A00;text-decoration:"
+                                 "none'>\u201c%3\u201d</a> <span style='"
+                                 "color:#8A6D1F'>(%4\u00d7)</span></small>")
+                             .arg(pi == st.pairIx ? "&#9656; "
+                                                  : "&nbsp;&nbsp; ")
+                             .arg(flat)
+                             .arg(esc(pr.eng))
+                             .arg(pr.refs.size());
+                    flat += pr.refs.size();
+                    ++pi;
+                }
+                h += "</div>";
+            }
             h += "</div>";
         }
     }
@@ -7194,6 +7308,7 @@ public:
             context_->setFont(cf);
         }
         context_->setOpenLinks(false);
+        context_->installEventFilter(this);   // ⌥← ⌥→ stepper
         connect(context_, &QTextBrowser::anchorClicked,
                 [this](const QUrl& u) {
                     const QString s = u.toString();
@@ -7214,6 +7329,15 @@ public:
                         // nest cycle
                         corpusAll_ = (s == "corpusall:");
                         refreshCard();
+                        return;
+                    }
+                    if (s == "alignprev:" || s == "alignnext:" ||
+                        s.startsWith("aligncur:")) {
+                        // the TENTATIVE stepper (Adam 2026-09-04)
+                        alignStep(s == "alignprev:" ? -1
+                                  : s == "alignnext:" ? +1 : 0,
+                                  s.startsWith("aligncur:")
+                                      ? s.mid(9).toInt() : -1);
                         return;
                     }
                     if (s.startsWith("term:")) {
@@ -8195,6 +8319,17 @@ private:
         }
     }
 
+    // the TENTATIVE stepper (Adam 2026-09-04): move the (rendering,
+    // witness) cursor - by delta, or straight to a flat index - and
+    // re-render the card in place
+    void alignStep(int delta, int jumpTo) {
+        const int n = (int)alignSteps(alignCursorKey_).size();
+        if (n <= 0) return;
+        if (jumpTo >= 0) alignCursor_ = jumpTo % n;
+        else alignCursor_ = ((alignCursor_ + delta) % n + n) % n;
+        refreshCard();
+    }
+
     void refreshCard() {
         if (lastTok_ < 0 || lastTok_ >= (int)tokBeg_.size()) return;
         cardRefresh_ = true;
@@ -8421,6 +8556,18 @@ private:
         // stop, like clicking); ↓ steps down the nesting chain in
         // place, ↑ steps back up. Until something is highlighted the
         // arrows keep their normal caret behavior.
+        // the TENTATIVE stepper (Adam 2026-09-04): ⌥← / ⌥→ on the
+        // text or on the card walk the attested witnesses in context
+        if ((w == view_ || w == context_) &&
+            ev->type() == QEvent::KeyPress) {
+            auto* k = static_cast<QKeyEvent*>(ev);
+            if ((k->modifiers() & ~Qt::KeypadModifier) ==
+                    Qt::AltModifier &&
+                (k->key() == Qt::Key_Left || k->key() == Qt::Key_Right)) {
+                alignStep(k->key() == Qt::Key_Right ? +1 : -1, -1);
+                return true;
+            }
+        }
         if (view_ && w == view_ && ev->type() == QEvent::KeyPress &&
             lastTok_ >= 0 && !doc_.tokens.empty()) {
             auto* k = static_cast<QKeyEvent*>(ev);
@@ -8761,6 +8908,13 @@ private:
             if (!lowSurf.empty() && lowSurf != e.wylie)
                 disp.surface = surfAcip;
         }
+        // the TENTATIVE stepper keeps its place while the headword is
+        // the same and starts over on a new one
+        if (alignCursorKey_ != e.wylie) {
+            alignCursorKey_ = e.wylie;
+            alignCursor_ = 0;
+        }
+        disp.alignCursor = alignCursor_;
         h += entryHtml(e, disp);
         if (showGrammar_->isChecked() && !span.clitic.empty()) {
             // the span matched through a fused ending the Wilson layer split off
@@ -9030,6 +9184,8 @@ private:
     allcore::HeadwordIndex index_;
     allcore::OverlayDoc doc_;
     bool corpusAll_ = false;   // card B: corpus show-all state
+    int alignCursor_ = 0;          // TENTATIVE stepper position
+    std::string alignCursorKey_;   // ...and the headword it belongs to
     std::vector<int> tokBeg_, tokEnd_;
     QPlainTextEdit* input_ = nullptr;
     QPlainTextEdit* view_ = nullptr;
@@ -39804,6 +39960,31 @@ int main(int argc, char** argv) {
                            "vanishes whole").arg(a3 ? "PASS" : "FAIL");
             if (!a1 || !a2 || !a3) ++fails;
         }
+        {   // ALIGN-2 (Adam 2026-09-04): the TENTATIVE block is a
+            // stepper - one (rendering, witness) shown inside its own
+            // spine segment, prev/next anchors, every rendering listed
+            // as a jump target, and the cursor changes what is shown.
+            allcore::Entry e;
+            e.wylie = "sems pa";
+            EntryDisplay d0, d1;
+            d1.alignCursor = 1;
+            const QString h0 = entryHtml(e, d0), h1 = entryHtml(e, d1);
+            const auto st = alignSteps(e.wylie);
+            const bool b1 = st.size() > 1 && h0.contains("alignnext:") &&
+                            h0.contains("alignprev:") &&
+                            h0.contains("witness 1 of");
+            const bool b2 = h0 != h1 && h1.contains("aligncur:");
+            const bool b3 = !st.empty() && h0.contains(st[0].ref);
+            log << QString("  [%1] ALIGN-2: the TENTATIVE block steps "
+                           "through attested witnesses in context")
+                       .arg(b1 ? "PASS" : "FAIL");
+            log << QString("  [%1] ALIGN-2: the cursor changes the "
+                           "shown witness; renderings are jump targets")
+                       .arg(b2 ? "PASS" : "FAIL");
+            log << QString("  [%1] ALIGN-2: the shown witness names its "
+                           "segment address").arg(b3 ? "PASS" : "FAIL");
+            if (!b1 || !b2 || !b3) ++fails;
+        }
         {
             const bool cream =
                 qApp->styleSheet().contains("#FAF6EE");
@@ -40496,16 +40677,64 @@ int main(int argc, char** argv) {
         // (setTextCursor fires the click path)
         for (auto* pv : overlay->findChildren<QPlainTextEdit*>())
             if (pv->isReadOnly()) {
-                const int at =
-                    pv->toPlainText().indexOf("SHES RAB");
+                // DCT_SHOT_WORD (env, harness only): aim the demo
+                // click at another phrase so a capture can show a
+                // specific card - e.g. one with alignment evidence
+                // (Adam's stepper review, 2026-09-04). Default keeps
+                // the blessed baseline stable.
+                const QString shotWord =
+                    qEnvironmentVariable("DCT_SHOT_WORD", "SHES RAB");
+                const int at = pv->toPlainText().indexOf(shotWord);
                 if (at >= 0) {
                     QTextCursor c(pv->document());
                     c.setPosition(at + 1);
                     pv->setTextCursor(c);
+                    // DCT_SHOT_NEST (env, harness only): re-click the
+                    // same phrase N more times to step down the nest
+                    // (sems can thams cad -> sems can), as a reader
+                    // would by clicking again
+                    const int nest =
+                        qEnvironmentVariable("DCT_SHOT_NEST", "0").toInt();
+                    for (int i = 1; i <= nest && i < 6; ++i) {
+                        settle(300);
+                        QTextCursor c2(pv->document());
+                        c2.setPosition(at + 1 + i);
+                        pv->setTextCursor(c2);
+                    }
                 }
                 break;
             }
         settle(900);
+        // DCT_SHOT_CARD_HTML (env, harness only): also write the
+        // assembled Overlay card's HTML to this path, so a card can be
+        // reviewed whole - the capture shows only the visible part of
+        // the browser (Adam's stepper review, 2026-09-04).
+        {
+            const QString cardOut =
+                qEnvironmentVariable("DCT_SHOT_CARD_HTML");
+            if (!cardOut.isEmpty())
+                for (auto* tb : overlay->findChildren<QTextBrowser*>())
+                    if (tb->toPlainText().contains("HGM")) {
+                        QFile cf(cardOut);
+                        if (cf.open(QIODevice::WriteOnly |
+                                    QIODevice::Truncate))
+                            cf.write(tb->toHtml().toUtf8());
+                        // and the same document rendered whole to a
+                        // PNG beside it (<path>.png), Qt's own layout
+                        const int w = std::max(640, tb->viewport()->width());
+                        tb->document()->setTextWidth(w - 16);
+                        const QSize sz = tb->document()->size().toSize();
+                        QImage img(QSize(w, sz.height() + 16),
+                                   QImage::Format_ARGB32);
+                        img.fill(QColor("#FBF8F1"));
+                        QPainter pnt(&img);
+                        pnt.translate(8, 8);
+                        tb->document()->drawContents(&pnt);
+                        pnt.end();
+                        img.save(cardOut + ".png");
+                        break;
+                    }
+        }
         // Lookup: the classic bsod nams entry, layers and all
         if (QWidget* lk = paneByTitle("Lookup"))
             for (auto* e : lk->findChildren<QLineEdit*>())
