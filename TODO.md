@@ -2860,3 +2860,6 @@ is not a software-engineering standard and does not belong in the
 discipline table above; it is recorded as a working-process note so the
 audit trail is complete on both axes — what was found, and how the work
 was conducted while finding it.
+
+## no_supplied_span_head gate: column blindness (2026-09-05)
+The gate's PAT matches any d5/d7 span whose text begins with a function word, on EITHER side. Tibetan `the tshom` (doubt) trips it (c5p30/s88w12, allowlisted with a note; C03 instances sit inside the frozen ratchet). Fix: restrict PAT to the English column (the second `.eng` block of each pair), re-verify with tools/mutate.py, and then remove the c5p30/s88w12 allowlist entry.
