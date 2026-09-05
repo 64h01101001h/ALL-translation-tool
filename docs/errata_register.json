@@ -1834,5 +1834,101 @@
   "severity": "LOW",
   "confidence": "PROBABLE",
   "note": "filed from the alignment batch, spine-verified on merge"
+ },
+ {
+  "item_id": "E-154",
+  "course": "C05",
+  "segment": "C05:24",
+  "kind": "TIBETAN_SPELLING",
+  "found": "mtshung med",
+  "expected": "mtshungs med",
+  "evidence": "ACIP source of record reads MTSUNG MED (no final S). The epithet is standardly mtshungs med; the spine has 13 rows with 'mtshungs med' and this is the only row with 'mtshung med'. No parallel witness of this row exists (wylie 'mtshung med lcang skya' occurs only at C05:24), so the reading cannot be confirmed as published elsewhere. SKEPTIC PASS 2026-09-05 (Fable 5.1): refuted=false — verbatim in wylie and ACIP (MTSUNG MED); no parallel witness in 42,199 rows; 'mtshungs med' 13 rows vs this lone 'mtshung'; LOW/PROBABLE stand (Hopkins reference headword 'mtshung' the only reason not to raise).",
+  "severity": "LOW",
+  "confidence": "PROBABLE",
+  "note": "filed from the alignment batch, spine-verified on merge"
+ },
+ {
+  "item_id": "E-155",
+  "course": "C05",
+  "segment": "C05:38",
+  "kind": "FORMATTING",
+  "found": "stained or without stain.\" the first two of the chapters are devoted",
+  "expected": "stained or without stain.\" The first two of the chapters are devoted",
+  "evidence": "Verbatim in the C05:38 english field: a new sentence opens lower-case after a period-closed quotation. Not a registered errata class and not a converter artefact (the wylie/ACIP have no bearing on English capitalisation). PARALLEL WITNESS: C16:687 carries the same passage and reads `stain.\" The first two of the chapters` with capital T (the two rows also differ in two spacings), so the C16 ingest of the same file preserved the capital and the C05 row did not — a differing witness, which points at the C05 keying rather than at GMR's published text. Corpus-wide there are 66 fields matching '.\" [a-z]', most legitimate continuations, so this is not a systematic class. Low-stakes typography; no meaning change. (Evidence corrected 2026-09-05 after a first skeptic pass found the original wording, which called C16:687 byte-identical, factually wrong.) SKEPTIC PASS 2026-09-05 (Fable 5.1): refuted=false — lower-case 'the' verbatim; C16:687 (same file re-ingested) reads 'The' with the capital, a DIFFERING witness that points at the C05 keying; not a registered class; LOW/PROBABLE. (A first skeptic refuted an earlier wording that had called C16:687 byte-identical; evidence corrected and re-passed.)",
+  "severity": "LOW",
+  "confidence": "PROBABLE",
+  "note": "filed from the alignment batch, spine-verified on merge"
+ },
+ {
+  "item_id": "E-156",
+  "course": "C05",
+  "segment": "C05:39",
+  "kind": "TIBETAN_SPELLING",
+  "found": "ston pa bnas drug pa",
+  "expected": "ston pa gnas drug pa",
+  "evidence": "ACIP source of record reads 'STON PA BNAS DRUG PA'; the parallel units in the same segment read 'gnas bdun pa' and 'gnas brgyad pa', and the segment opens with 'gnas phyi ma gsum' (the chapters). The only other witness, C16:688, is byte-identical (same file re-ingested, not independent), so it does not establish a published reading. SKEPTIC PASS 2026-09-05 (Fable 5.1): refuted=false — verbatim in wylie and ACIP; C16:688 byte-identical re-ingest (not independent); 'bnas' an illegal syllable with zero dictionary hits, 'gnas drug pa' matches 'gnas bdun pa'/'gnas brgyad pa' in the row and GMR's 'Chapter Six'; confidence raised to CERTAIN.",
+  "severity": "MEDIUM",
+  "confidence": "CERTAIN",
+  "note": "filed from the alignment batch, spine-verified on merge"
+ },
+ {
+  "item_id": "E-157",
+  "course": "C05",
+  "segment": "C05:63",
+  "kind": "ENGLISH_FACTUAL_ERROR",
+  "found": "exist only in the desire realm and are absent from the higher two",
+  "expected": "(for GMR's ruling; English is never edited) The Tibetan reads `'dod pa dang bsam gtan dang po na yod kyi gnyis pa yan chad na med de` — exist in the desire [realm] AND the first concentration level, but not from the second [concentration level] on up. The English drops `bsam gtan dang po` and states absence from 'the higher two' (realms), whereas the Tibetan places speech-sound in part of the form realm (the first dhyana) and denies it only from the second dhyana upward.",
+  "evidence": "Own row, wylie: `'dod pa dang bsam gtan dang po na yod kyi gnyis pa yan chad na med de`; ACIP (source of record) agrees: `'DOD PA DANG BSAM GTAN DANG PO NA YOD KYI GNYIS PA YAN CHAD NA MED DE`. `bsam gtan dang po` = first concentration level; `gnyis pa yan chad` = from the second on up (the referent is the concentration levels just named, not realms). Matches the Abhidharma doctrine the cited verse states (`rnam rig dpyod dang bcas dag na`: vijnapti exists where there is vicara, i.e. desire realm + first dhyana). The next sentence's same construction (`khams 'og ma gnyis na yod kyi gzugs med na med`) is rendered correctly ('lower two realms but not the formless'), so the first is not a systematic paraphrase choice. No parallel witness: the wylie `gnyis pa yan chad na med` / `rnam rig dpyod dang bcas dag na` occurs only in C05:63 across 42,199 rows; C16 does not carry this row; 'higher two' hits elsewhere (C01:238, C05:62, Sunlight:220 etc.) are different passages. SKEPTIC PASS 2026-09-05 (Fable 5.1): refuted=false — wylie and ACIP both read 'dod pa dang bsam gtan dang po na yod kyi gnyis pa yan chad na med (desire realm + first concentration level; not from the second on up); English omits the first dhyana; no parallel witness (wylie unique); for GMR's ruling — MEDIUM/PROBABLE stand.",
+  "severity": "MEDIUM",
+  "confidence": "PROBABLE",
+  "note": "filed from the alignment batch, spine-verified on merge"
+ },
+ {
+  "item_id": "E-158",
+  "course": "C05",
+  "segment": "C05:65",
+  "kind": "INGEST_ARTEFACT",
+  "found": "Where does the word \"knowledge\" [Sanskrit: abhidharma] come from? A phenomenon [dharma] is that which possesses [dhr�] a nature. And knowledge brings to [abhi] you, or leads you to [abhi] that highest of all existing phenomena: nirvana. 7 About the Expression \"Treasure House\"",
+  "expected": "... A phenomenon [dharma] is that which possesses [dhṛ] a nature. ... (the bracketed Sanskrit root is dhṛ, 'to hold', the classical etymology of dharma; the damaged byte is U+FFFD REPLACEMENT CHARACTER standing where the IAST ṛ was)",
+  "evidence": "English field of C05:65 contains exactly one U+FFFD (hex EFBFBD) inside the bracket '[dhr�]'. The parallel C16:703 (same file re-ingested, not independent) carries the identical byte, so the loss predates the spine ingest. Class is spine-wide: 73 corpus_segments rows carry U+FFFD (e.g. C04:28 'prama��a', C08:26, C13:477, TCS02:91); docs/errata_register.json has NO entry for the mojibake/replacement-character class (searched for 'FFFD', 'mojibake', 'diacritic', 'prama', the character itself) and no record for C04:28 or C16:703, so the class is not yet registered. The corrupted text is GMR's Sanskrit apparatus, not Tibetan and not translation; the Tibetan/English pairing of the row is unaffected. Recommend a class entry (like E-107) rather than 73 per-row records. SKEPTIC PASS 2026-09-05 (Fable 5.1): refuted=false — U+FFFD verbatim in the English; C16:703 same file re-ingested with the identical damaged byte; mojibake class absent from the register; dhṛ the correct etymology; LOW/CONFIRMED stand.",
+  "severity": "LOW",
+  "confidence": "CONFIRMED",
+  "note": "filed from the alignment batch, spine-verified on merge"
+ },
+ {
+  "item_id": "E-159",
+  "course": "C05",
+  "segment": "C05:68",
+  "kind": "TIBETAN_SPELLING",
+  "found": "mngon ba sde bdun po",
+  "expected": "mngon pa sde bdun po",
+  "evidence": "ACIP (source of record): 'MNGON BA SDE BDUN PO'. The same row spells the word 'mngon pa'i mdzod' two words later, and the surrounding rows read 'mngon pa'. 'mngon ba' occurs in only 3 of 42,199 rows: C05:68, C16:706 (byte-identical re-ingest of the same file, not an independent witness), and TCS11:571 (unrelated context). No independent witness supports 'mngon ba' here. SKEPTIC PASS 2026-09-05 (Fable 5.1): refuted=false — verbatim in wylie and ACIP; C16:706 byte-identical re-ingest; independent rows GIE:510, SVN:233, C05:73/78 read 'mngon pa sde bdun'; a glossary-tier 'mngon ba' headword likely mirrors this same misspelling.",
+  "severity": "LOW",
+  "confidence": "PROBABLE",
+  "note": "filed from the alignment batch, spine-verified on merge"
+ },
+ {
+  "item_id": "E-160",
+  "course": "C05",
+  "segment": "C05:71",
+  "kind": "TIBETAN_SPELLING",
+  "found": "srid pa'i rgya mcho 'dir 'khyam",
+  "expected": "srid pa'i rgya mtsho 'dir 'khyam",
+  "evidence": "ACIP verbatim: \"NYON MONGS PAS KYANG 'JIG RTEN PA RNAMS SRID PA'I RGYA MCHO 'DIR 'KHYAM STE\". This is NOT the TS = tsha keying convention (C04 ledger, MTSAMS/MTSAN): under that convention mtsho keys as MTSO, and the corpus has 503 rows with ACIP `RGYA MTSO` and 0 with `RGYA MTSHO`; `RGYA MCHO` occurs only here and in C16:709, which is a byte-identical re-ingest of this row (not an independent witness). The other three ACIP `RGYA MCHO` hits (TCS11:216, TCS17:222, TCS18Commentary:278) are `BRGYA MCHOD`/`PHYAG RGYA MCHOD PAR`, a different word. `rgya mcho` is not a Tibetan word; GMR renders \"ocean\" (rgya mtsho), and the root verse being paraphrased, C05:70, reads `srid mtsho` correctly. No parallel witness with `srid pa rgya mtsho` exists in the corpus. SKEPTIC PASS 2026-09-05 (Fable 5.1): refuted=false — verbatim in wylie and ACIP; only other occurrence C16:709 byte-identical re-ingest; independent witnesses TCS03:417, C01:276, C07:30, P3:41, SVN:466 read 'rgya mtsho'; corpus keys mtsho as MTSO 503 rows / MTSHO 0, so MCHO is a slip not the TS=tsha convention; the glossary-tier 'rgya mcho' entry is propagated from this reading.",
+  "severity": "LOW",
+  "confidence": "CONFIRMED",
+  "note": "filed from the alignment batch, spine-verified on merge"
+ },
+ {
+  "item_id": "E-161",
+  "course": "C05",
+  "segment": "C05:73",
+  "kind": "TIBETAN_SPELLING",
+  "found": "sangs rgyas lam brten par",
+  "expected": "sangs rgyas la ma brten par",
+  "evidence": "ACIP source of record reads SANGS RGYAS LAM BRTEN PAR. GMR's English for this stretch is 'would have been unable to make the first descriptions ... had they not relied upon the Buddha': a counterfactual negation on the reliance, which requires 'la ma brten par' (without relying on). 'lam' (path) gives 'sangs rgyas lam', not a phrase; 'la brten par' alone would mean 'even relying on the Buddha, unable', contradicting both the English and the sense of Vasubandhu's argument (arhats could not have taught the definitions and divisions of dharmas without the Buddha). The idiom 'la ma brten par ... mi nus pa' is attested in the corpus (TCS17:1174 'lam gzhan la ma brten par thob par mi nus pa'; C01:388, SVN:186). Witness check: no other row in 42,199 carries this wylie (C05:73 is unique; not among the C16 re-ingests), and 'lam brten par' elsewhere occurs only in TCS15:10 with a genuine 'path' ('sngags bla med lam brten par'). Keying LA MA -> LAM is a two-character drop; the blockprint itself cannot be excluded as the source of the reading, hence PROBABLE not CONFIRMED. The two analysts filed 'la ma brten par' and 'la brten par'; the latter is rejected because it cannot carry the negation GMR translates. SKEPTIC PASS 2026-09-05 (Fable 5.1): refuted=false — verbatim in wylie and ACIP; unique in the corpus, no parallel witness; indefensible against GMR's negated 'had they not relied upon the Buddha'; 'la ma brten par' attested 13 times; MEDIUM/PROBABLE stand.",
+  "severity": "MEDIUM",
+  "confidence": "PROBABLE",
+  "note": "filed from the alignment batch, spine-verified on merge"
  }
 ]
