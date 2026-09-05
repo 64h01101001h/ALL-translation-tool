@@ -1810,5 +1810,17 @@
   "severity": "LOW",
   "confidence": "PROBABLE",
   "note": "filed from the alignment batch, spine-verified on merge"
+ },
+ {
+  "item_id": "E-152",
+  "course": "C04",
+  "segment": "C04:160",
+  "kind": "TIBETAN_SPELLING",
+  "found": "des dbang gis",
+  "expected": "de'i dbang gis",
+  "evidence": "ACIP column reads DES DBANG GIS (source-of-record keying). The idiom 'by the power of that / because of that' is de'i dbang gis; the spine has de'i dbang gis in 10+ independent rows (C03:437, C05:245-246, C11:162, C15:333, C16:821-822, C18:58, C18:1084, TCS02:42) and des dbang gis only here and in C16:633, which is byte-identical to this row (same file re-ingested, not independent). GMR's 'because of this ... then' is consistent with de'i dbang gis. SKEPTIC PASS 2026-09-04 (Fable 5.1): refuted=false — verbatim in wylie and ACIP; C16:633 byte-identical re-ingest (not independent); de'i dbang gis 28 rows vs des dbang gis 2; no pronoun-instrumental + bare dbang gis elsewhere in the corpus.",
+  "severity": "LOW",
+  "confidence": "PROBABLE",
+  "note": "filed from the alignment batch, spine-verified on merge"
  }
 ]
