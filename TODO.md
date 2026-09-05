@@ -1,3 +1,23 @@
+## 📋 2026-09-04 — C04 (The Proof of Future Lives) CLOSED: 198/198
+
+- 66 pages landed (`data/alignment/pages_c04/`), coverage gate proved with
+  `"complete": True`; full ctest 101/101 green; `pages_c04` finished at
+  0 function-word-initial d5/d7 spans (7 allowlist entries, each naming
+  its licensor). Layer now 6,395 headwords / 13,415 pairs.
+- Errata E-147–E-153 filed, every one skeptic-passed (Fable 5.1);
+  seven candidate errata dropped as registered classes or keying
+  conventions (ledger, batches 36–66).
+- Model policy held throughout: propose Opus 5, reconcile/refute Fable 5.1.
+  One wave (C04:132–143) died on a rate limit with no deliverables and
+  was relaunched whole.
+- Ledger: `data/alignment/C04_CAMPAIGN.md` (batches 8–66, conventions,
+  ruling items). Spec §1 lists C04 complete.
+
+### ❓ NEEDS ADAM'S RULING — carried from C04
+- C04:80 "The root text of Master Chandrakirti says:" where the root text
+  is Dharmakirti's (E-120 class, GMR's frame, not filed).
+- Next course to open (C05?) — C13 stays under standing order.
+
 ## 📋 2026-09-04 — the C03-stratified correctness audit landed (§5b gate precondition)
 
 - [x] **Audit run and banked.** 100 pairs, headword-level, seed 20260904;

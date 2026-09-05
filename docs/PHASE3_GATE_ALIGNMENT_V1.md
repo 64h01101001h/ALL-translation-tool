@@ -284,3 +284,13 @@ yet ratified, and a reader may hold that version.*
   corrected (368 pages); the `eng_order` pin already exists in
   `tools/test_gen_alignment_page.py` (§8 of that file) and the d=7 parent
   rule is pinned there (§15).
+
+## Addendum 2026-09-04 (evening) — C04 closed under the §5b preconditions
+
+C04 was opened only after the C03-stratified audit and the
+`no_supplied_span_head` gate landed, and was run end to end under them:
+198/198 segments, 66 pages, coverage gate proved, 17 alignment gates
+green after every wave, 0 rule-7 violations for the whole course (7
+allowlisted spans with named licensors), 7 skeptic-passed errata
+(E-147–E-153). The Phase 3 gate ratification itself remains Adam's call;
+nothing in this addendum changes the BINDING status of any artefact.
