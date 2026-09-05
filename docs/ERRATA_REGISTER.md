@@ -8,13 +8,13 @@
 
 Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source and Geshe Michael Roach's facing English &mdash; recorded as a by-product of a machine alignment campaign reading the courses segment by segment. **Every entry has been checked against the corpus database** (42,199 segments, spine `hgm_spine_v27_2.db`): the quoted strings were retrieved from the spine, not from a note, and each citation was re-derived rather than trusted.
 
-**152 entries**: **105 document errata** (6 HIGH, 64 MEDIUM, 35 LOW), **23 digitisation artefacts**, 14 observations checked and closed as *not* errata, and 1 that could not be verified.
+**153 entries**: **106 document errata** (6 HIGH, 64 MEDIUM, 36 LOW), **23 digitisation artefacts**, 14 observations checked and closed as *not* errata, and 1 that could not be verified.
 
 | Kind | n |
 |---|---|
 | Tibetan spelling | 77 |
 | Digitisation artefact | 23 |
-| English typo | 21 |
+| English typo | 22 |
 | Our banked layer | 9 |
 | English factual error | 4 |
 | Formatting | 3 |
@@ -113,7 +113,7 @@ Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source 
 | `C04:29` | yid ches pa'i rtag la brten nas | yid ches pa'i rtags la brten nas | ACIP reads 'YID CHES PA'I RTAG LA BRTEN NAS' (source, not conversion). The definition of scriptural inference rests on a logical reason (rtags), not on permanence (rtag). INTERNAL witness: the parallel definition later in the same row reads 'grags pa'i rtags y | PROBABLE |
 | `C04:57` | bcas shes kyi mtshan nyid du 'jog | bcad shes kyi mtshan nyid du 'jog | ACIP column (source of record) reads BCAS SHES here while the same row reads BCAD SHES five words earlier for the same term (both rendered 'recollection'); independent witnesses of the term spell it bcad shes: C04:48, SVN:1202. C16:533/540 are the same file re | CONFIRMED |
 
-## Low severity &mdash; 35 entries
+## Low severity &mdash; 36 entries
 
 | Citation | What it says | Should say | Evidence | Confidence |
 |---|---|---|---|---|
@@ -146,6 +146,7 @@ Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source 
 | `C04:117` | grub pa med bar 'dod | grub pa med par 'dod | ACIP source of record reads MED BAR 'DOD. The particle before 'dod after final -d is par; bar here is neither the noun bar ('interval') nor the bar du construction. Corpus: 'med par ' 1665 vs 'med bar ' 5, and of those 5 the other four are genuine bar (mnar me | PROBABLE |
 | `C04:143` | a number which it depends. | a number on which it depends. (or: which it depends on.) | This segment's own English: 'depends' is a prepositional verb and the relative clause has no 'on'; the verse's sense (brten pa 'ga' = some [thing] that depends [on the mind]) requires it. Parallel witnesses checked: C16:616 carries the identical reading but is | PROBABLE |
 | `C04:160` | des dbang gis | de'i dbang gis | ACIP column reads DES DBANG GIS (source-of-record keying). The idiom 'by the power of that / because of that' is de'i dbang gis; the spine has de'i dbang gis in 10+ independent rows (C03:437, C05:245-246, C11:162, C15:333, C16:821-822, C18:58, C18:1084, TCS02: | PROBABLE |
+| `C04:166` | because it is state of mind where attachment is present | because it is a state of mind where attachment is present | Missing article in the English column. Same segment reads 'since it is a state of mind' for the parallel first syllogism; the immediately preceding segment C04:165 reads 'it is a state of mind where attachment is present'. C16:639 carries the identical defecti | PROBABLE |
 | `C04:29` | 'dod pa tsham gyis bzhag pa | 'dod pa tsam gyis bzhag pa | ACIP reads "'DOD PA TSAM GYIS BZHAG PA"; ACIP TS converts to wylie tsh, so 'tsham' is a faithful conversion of a source mis-keying (TSAM for TZAM). INTERNAL witness: the same row keys the same word correctly earlier, 'LUNG TZAM GYIS GRUB PA' -> 'lung tsam gyis | CONFIRMED |
 | `C04:29` | yid ches rjes dpg-yid ches pa'i | yid ches rjes dpag, yid ches pa'i | ACIP reads 'YID CHES RJES DPG-YID CHES PA'I' (source). 'dpg' is not a Tibetan syllable; the heading term is rjes dpag (inference), attested across the corpus (C18:560 'yid ches kyi rjes dpag', C13:822). The hyphen fusing the heading to the definition is layout | CONFIRMED |
 | `C04:29` | grags pa'i rjes dpggrags pa'i rtags yang dag | grags pa'i rjes dpag, grags pa'i rtags yang dag | ACIP reads "GRAGS PA'I RJES DPGGRAGS PA'I RTAGS YANG DAG" (source). Second occurrence of the dpg-for-dpag spelling, here with the heading 'grags pa'i rjes dpag' run into the definition with no separator (the first heading at least has a hyphen). Term attested  | CONFIRMED |
@@ -236,7 +237,7 @@ Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source 
 
 ## Recommended actions, by owner
 
-**Document editors.** The 105 document errata above. Start with the 6 HIGH entries. Note that several errors exist at MORE THAN ONE LOCUS because passages are ingested twice &mdash; each entry's evidence names them, and a per-segment fix will leave duplicates behind.
+**Document editors.** The 106 document errata above. Start with the 6 HIGH entries. Note that several errors exist at MORE THAN ONE LOCUS because passages are ingested twice &mdash; each entry's evidence names them, and a per-segment fix will leave duplicates behind.
 
 **Data-pipeline maintainers.** The 23 digitisation artefacts, plus two reports filed separately: `docs/upstream/FOLIO_MARKER_COLLISIONS.md` (119 folio markers spliced into caption numbers) and `docs/upstream/C13_COLUMN_OFFSET.md` (**C13:63&ndash;82 pairs Tibetan with the English of a different text &mdash; C13 should not be scanned until it is fixed**).
 
