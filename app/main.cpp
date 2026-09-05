@@ -1438,19 +1438,30 @@ static QString entryHtml(const allcore::Entry& e,
                 const int cur = ((d.alignCursor % N) + N) % N;
                 const AlignStep& st = steps[cur];
                 auto esc = [](const QString& q) { return q.toHtmlEscaped(); };
-                h += QString("<br><small style='color:#8A6D1F'>"
-                             "<a href='alignprev:' style='color:#B4540A;"
-                             "text-decoration:none'>&#9664; prev</a>"
-                             " &nbsp;rendering %1 of %2 \u00b7 witness "
-                             "%3 of %4 &nbsp;<a href='alignnext:' "
-                             "style='color:#B4540A;text-decoration:none'>"
-                             "next &#9654;</a> &nbsp;<span style='color:%5'>"
-                             "(\u2325\u2190 \u2325\u2192)</span></small>")
-                         .arg(st.pairIx + 1)
-                         .arg((int)ita->second.size())
-                         .arg(st.refIx + 1)
-                         .arg(st.pair->refs.size())
-                         .arg(ux::kFaint);
+                if (N == 1)
+                    h += QString("<br><small style='color:#8A6D1F'>"
+                                 "the only attested pairing so far "
+                                 "\u2014 nothing to step through"
+                                 "</small>");
+                else
+                    h += QString("<br><small style='color:#8A6D1F'>"
+                                 "<a href='alignprev:' style='color:"
+                                 "#B4540A;text-decoration:none'>&#9664; "
+                                 "prev</a> &nbsp;rendering %1 of %2 "
+                                 "\u00b7 witness %3 of %4 &nbsp;<a "
+                                 "href='alignnext:' style='color:#B4540A;"
+                                 "text-decoration:none'>next &#9654;</a>"
+                                 " &nbsp;<span style='color:%5'>(%6 of "
+                                 "%7 \u00b7 \u2190 \u2192 on this card, "
+                                 "\u2325\u2190 \u2325\u2192 in the "
+                                 "text)</span></small>")
+                             .arg(st.pairIx + 1)
+                             .arg((int)ita->second.size())
+                             .arg(st.refIx + 1)
+                             .arg(st.pair->refs.size())
+                             .arg(ux::kFaint)
+                             .arg(cur + 1)
+                             .arg(N);
                 h += QString("<br>\u2261 <b>\u201c%1\u201d</b> "
                              "<small style='color:#8A6D1F'>(%2\u00d7)"
                              "</small>")
@@ -2045,7 +2056,8 @@ static QString lookupResultsHtml(allcore::Spine& spine,
                                  allcore::Mvp* mvp,
                                  allcore::WhitneyRoots* whitney,
                                  allcore::ColloquialPron* colloq,
-                                 const std::string& raw) {
+                                 const std::string& raw,
+                                 int alignCursor = 0) {
     auto entries = spine.lookup(raw);
     if (entries.empty()) entries = spine.headwordSearch('"' + raw + '"', 10);
     QString h;
@@ -2203,6 +2215,7 @@ static QString lookupResultsHtml(allcore::Spine& spine,
     ld.das = QSettings("ALL", "TranslationTool")
                  .value("lookup/showRefs", true)
                  .toBool();
+    ld.alignCursor = alignCursor;   // the TENTATIVE stepper's position
     for (const auto& e : entries) h += entryHtml(e, ld);
 
     if (ref && QSettings("ALL", "TranslationTool")
@@ -2603,10 +2616,21 @@ public:
         v->addWidget(view_, 1);
         connect(box_, &QLineEdit::returnPressed,
                 [this] { run(box_->text()); });
+        view_->installEventFilter(this);   // ← → step the TENTATIVE block
         connect(view_, &QTextBrowser::anchorClicked,
                 [this](const QUrl& u) {
                     const QString s = u.toString();
-                    if (s.startsWith("term:")) {
+                    if (s == "alignprev:" || s == "alignnext:" ||
+                        s.startsWith("aligncur:")) {
+                        // the TENTATIVE stepper (Adam 2026-09-04):
+                        // the card normalises any integer into range,
+                        // so the pane only counts
+                        if (s.startsWith("aligncur:"))
+                            alignCursor_ = s.mid(9).toInt();
+                        else
+                            alignCursor_ += (s == "alignnext:") ? 1 : -1;
+                        run(box_->text());
+                    } else if (s.startsWith("term:")) {
                         run(anchorPayload(s, 5));
                     } else if (s.startsWith("jae:")) {
                         showJaePage(this, s.mid(4).toInt());
@@ -2640,13 +2664,33 @@ public:
             return;
         }
         box_->setText(q);
+        if (q != alignKey_) {   // a new headword starts the stepper over
+            alignKey_ = q;
+            alignCursor_ = 0;
+        }
         view_->setHtml(lookupResultsHtml(spine_, ref_, mvp_,
                                          whitney_, colloq_,
-                                         q.toStdString()));
+                                         q.toStdString(), alignCursor_));
         show();
         raise();
     }
     QString viewText() const { return view_->toPlainText(); }
+    // ← → (plain or ⌥) on the results step the TENTATIVE block
+    bool eventFilter(QObject* w, QEvent* ev) override {
+        if (w == view_ && ev->type() == QEvent::KeyPress) {
+            auto* k = static_cast<QKeyEvent*>(ev);
+            const auto mods = k->modifiers() & ~Qt::KeypadModifier;
+            if ((mods == Qt::NoModifier || mods == Qt::AltModifier) &&
+                (k->key() == Qt::Key_Left || k->key() == Qt::Key_Right)) {
+                alignCursor_ += (k->key() == Qt::Key_Right) ? 1 : -1;
+                run(box_->text());
+                return true;
+            }
+        }
+        return QWidget::eventFilter(w, ev);
+    }
+    int alignCursor_ = 0;
+    QString alignKey_;
 
 private:
     allcore::Spine& spine_;
@@ -7312,6 +7356,15 @@ public:
         connect(context_, &QTextBrowser::anchorClicked,
                 [this](const QUrl& u) {
                     const QString s = u.toString();
+                    if (s == "alignprev:" || s == "alignnext:" ||
+                        s.startsWith("aligncur:")) {
+                        // the TENTATIVE stepper (Adam 2026-09-04)
+                        alignStep(s == "alignprev:" ? -1
+                                  : s == "alignnext:" ? +1 : 0,
+                                  s.startsWith("aligncur:")
+                                      ? s.mid(9).toInt() : -1);
+                        return;
+                    }
                     // citation-report links work pinned in the
                     // side panel too (streamline)
                     if (handleCiteAnchor(s)) return;
@@ -7329,15 +7382,6 @@ public:
                         // nest cycle
                         corpusAll_ = (s == "corpusall:");
                         refreshCard();
-                        return;
-                    }
-                    if (s == "alignprev:" || s == "alignnext:" ||
-                        s.startsWith("aligncur:")) {
-                        // the TENTATIVE stepper (Adam 2026-09-04)
-                        alignStep(s == "alignprev:" ? -1
-                                  : s == "alignnext:" ? +1 : 0,
-                                  s.startsWith("aligncur:")
-                                      ? s.mid(9).toInt() : -1);
                         return;
                     }
                     if (s.startsWith("term:")) {
@@ -8561,8 +8605,14 @@ private:
         if ((w == view_ || w == context_) &&
             ev->type() == QEvent::KeyPress) {
             auto* k = static_cast<QKeyEvent*>(ev);
-            if ((k->modifiers() & ~Qt::KeypadModifier) ==
-                    Qt::AltModifier &&
+            const auto mods = k->modifiers() & ~Qt::KeypadModifier;
+            // on the card plain arrows step (the card has no other
+            // use for them); in the text they keep walking phrases,
+            // so there the stepper takes ⌥
+            const bool stepMods =
+                mods == Qt::AltModifier ||
+                (w == context_ && mods == Qt::NoModifier);
+            if (stepMods &&
                 (k->key() == Qt::Key_Left || k->key() == Qt::Key_Right)) {
                 alignStep(k->key() == Qt::Key_Right ? +1 : -1, -1);
                 return true;
