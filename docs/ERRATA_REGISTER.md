@@ -8,11 +8,11 @@
 
 Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source and Geshe Michael Roach's facing English &mdash; recorded as a by-product of a machine alignment campaign reading the courses segment by segment. **Every entry has been checked against the corpus database** (42,199 segments, spine `hgm_spine_v27_2.db`): the quoted strings were retrieved from the spine, not from a note, and each citation was re-derived rather than trusted.
 
-**169 entries**: **121 document errata** (6 HIGH, 70 MEDIUM, 45 LOW), **24 digitisation artefacts**, 14 observations checked and closed as *not* errata, and 1 that could not be verified.
+**175 entries**: **127 document errata** (6 HIGH, 71 MEDIUM, 50 LOW), **24 digitisation artefacts**, 14 observations checked and closed as *not* errata, and 1 that could not be verified.
 
 | Kind | n |
 |---|---|
-| Tibetan spelling | 85 |
+| Tibetan spelling | 91 |
 | English typo | 24 |
 | Digitisation artefact | 24 |
 | Our banked layer | 9 |
@@ -44,7 +44,7 @@ Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source 
 | `C03:39` | acip: ,SIL SNYAN RNAMS DANG BYUNG PA GDUGS MCHOG DANG ,   \|   wylie: ,sil snyan rnams dang byung pa gdugs mchog dang , | byug pa | seg_hint 39 is CORRECT. Three independent proofs: (1) the note's own claim checks out — C03:38, the glossary segment immediately preceding, spells it right and defines it: "byug pa ni spos zhim po'i lde gu'o" (byug pa = thick fragrant unguent); (2) this segmen | CONFIRMED |
 | `C04:29` | lkog 'gyur la gsar du bslu ba'i shes pa | lkog 'gyur la gsar du mi bslu ba'i shes pa | ACIP reads 'LKOG 'GYUR LA GSAR DU BSLU BA'I SHES PA' (source). An inference is by definition a NON-deceiving (mi bslu ba) fresh awareness; as written the definition of inference by convention says 'deceiving'. INTERNAL witness: the parallel definition of scrip | PROBABLE |
 
-## Medium severity &mdash; 70 entries
+## Medium severity &mdash; 71 entries
 
 | Citation | What it says | Should say | Evidence | Confidence |
 |---|---|---|---|---|
@@ -112,6 +112,7 @@ Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source 
 | `C04:29` | sbyis pas longs spyod khrims kyis bde | sbyin pas longs spyod khrims kyis bde | ACIP (source of record) reads 'SBYIS PAS LONGS SPYOD KHRIMS KYIS BDE', so the error is in the source, not the conversion. The line is the Precious Garland verse quoted as the scriptural example; the corpus carries the published reading 'sbyin pas longs spyod k | CONFIRMED |
 | `C04:29` | yid ches pa'i rtag la brten nas | yid ches pa'i rtags la brten nas | ACIP reads 'YID CHES PA'I RTAG LA BRTEN NAS' (source, not conversion). The definition of scriptural inference rests on a logical reason (rtags), not on permanence (rtag). INTERNAL witness: the parallel definition later in the same row reads 'grags pa'i rtags y | PROBABLE |
 | `C04:57` | bcas shes kyi mtshan nyid du 'jog | bcad shes kyi mtshan nyid du 'jog | ACIP column (source of record) reads BCAS SHES here while the same row reads BCAD SHES five words earlier for the same term (both rendered 'recollection'); independent witnesses of the term spell it bcad shes: C04:48, SVN:1202. C16:533/540 are the same file re | CONFIRMED |
+| `C05:115` | gnas skabs na yo dang sa so, | gnas skabs na yod pa'i phyir (exact wording of the tail NOT settled - see evidence) | ACIP (source of record) ends `GNAS SKABS NA YO DANG SA SO, ,`. `yo`, `dang`, `sa`, `so` are each legal syllables, but the sequence is not a Tibetan clause and the English reads 'rather, it is present during periods when ... the mind is functioning', i.e. an ex | PROBABLE |
 | `C05:39` | ston pa bnas drug pa | ston pa gnas drug pa | ACIP source of record reads 'STON PA BNAS DRUG PA'; the parallel units in the same segment read 'gnas bdun pa' and 'gnas brgyad pa', and the segment opens with 'gnas phyi ma gsum' (the chapters). The only other witness, C16:688, is byte-identical (same file re | CERTAIN |
 | `C05:63` | exist only in the desire realm and are absent from the higher two | (for GMR's ruling; English is never edited) The Tibetan reads `'dod pa dang bsam gtan dang po na yod kyi gnyis | Own row, wylie: `'dod pa dang bsam gtan dang po na yod kyi gnyis pa yan chad na med de`; ACIP (source of record) agrees: `'DOD PA DANG BSAM GTAN DANG PO NA YOD KYI GNYIS PA YAN CHAD NA MED DE`. `bsam gtan dang po` = first concentration level; `gnyis pa yan cha | PROBABLE |
 | `C05:73` | sangs rgyas lam brten par | sangs rgyas la ma brten par | ACIP source of record reads SANGS RGYAS LAM BRTEN PAR. GMR's English for this stretch is 'would have been unable to make the first descriptions ... had they not relied upon the Buddha': a counterfactual negation on the reliance, which requires 'la ma brten par | PROBABLE |
@@ -119,7 +120,7 @@ Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source 
 | `C05:89` | Neither of the purpose of its ultimate purpose subsumes the other | Neither the purpose nor its ultimate purpose subsumes the other | Own row: wylie 'dgos pa dang dgos pa'i dgos pa ni ngo bo tha dad yin te' (ACIP DGOS PA DANG DGOS PA'I DGOS PA NI ...) coordinates the two terms with dang; the English 'Neither of the purpose of its ultimate purpose' is ungrammatical ('Neither of X of Y'), the  | PROBABLE |
 | `C05:92` | dug 'das | dug mdas (dug mda' + instrumental -s) | Wylie and ACIP agree on 'DAS, so this is the keyed reading, not a converter artefact. 'das (pass/beyond) yields no sense after dug (poison) before bkrongs pa (was killed); GMR's own English, 'died from a wound inflicted by a poisoned arrow', is the internal wi | PROBABLE |
 
-## Low severity &mdash; 45 entries
+## Low severity &mdash; 50 entries
 
 | Citation | What it says | Should say | Evidence | Confidence |
 |---|---|---|---|---|
@@ -159,6 +160,11 @@ Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source 
 | `C04:61` | There are two reason why | There are two reasons why | Verbatim at the head of the C04:61 english column. Witness check: the only other row carrying the string is C16:544, which is the same file re-ingested (byte-identical wylie too), so not an independent witness; no published parallel carries the singular. GK:15 | CONFIRMED |
 | `C04:73` | even it the object is unchanging | even if the object is unchanging | English column of C04:73, verbatim: 'It is true that, even it the object is unchanging, the subject mind that perceives it need not be unchanging.' Wylie 'yul rtag pa yin na'ang' is the concessive 'even if'. Filed independently by both analysts. Witness check: | CONFIRMED |
 | `C04:98` | The two phrases terms "holy great compassion" | The two terms "holy great compassion" (or: The two phrases ...) — one of the two synonymous nouns is a leftove | C04:98 english column carries two adjacent synonymous head nouns, 'phrases terms'; the wylie has no lexical source for either (the sentence is GMR's editorial frame for skabs 'dir ... gcig tu bshad). Parallel-witness check: the only other hit for 'two phrases  | CONFIRMED |
+| `C05:112` | 'byung ba chen po bzhe rnams | 'byung ba chen po bzhi rnams | ACIP (source of record) reads 'BYUNG BA CHEN PO BZHE RNAMS; bzhe is not a Tibetan syllable, the numeral bzhi 'four' (the four great elements, mahabhuta) is meant. Only other witness is C16:727, a byte-identical re-ingest of the same file (not independent). ' b | CONFIRMED |
+| `C05:115` | rnam par rig byed ma yin pa'i yi gzugs | rnam par rig byed ma yin pa'i gzugs | ACIP (source of record) reads `MA YIN PA'I YI GZUGS`: the genitive is written twice (`pa'i` + `yi`), which is not a well-formed sequence. The same segment's own second clause reads `rnam par rig byed ma yin pa'i gzugs`, as do C05:114 and C05:116 and the standa | CONFIRMED |
+| `C05:116` | rnams par rig byed | rnam par rig byed (RNAM PAR RIG BYED) | First word of the row. ACIP is the source of record and reads RNAMS PAR, so the wylie is faithful to the keyed text; the same row keys RNAM PAR RIG BYED twice more (positions 2 and 3) and the corpus has 29 rows with 'rnam par rig byed' against exactly one with | PROBABLE |
+| `C05:120` | nyes sbyad | nyes spyad | ACIP source of record reads 'NYES SBYAD' (C05:120), paired with 'LEGS SPYAD' in the same phrase. 'sbyad' is not a legal Tibetan syllable (sb- cannot take -y- subjoin in this position with -d suffix as a lexeme; no dictionary form). The same pair appears correc | PROBABLE |
+| `C05:122` | snyen par smra ba | snyan par smra ba | ACIP (source of record) reads SNYEN PAR SMRA BA, so the wylie is a faithful transcription of the input file; the idiom for pleasant speech is snyan par smra ba (TCS03:267 'chos ston pa'i snyan par smra ba'). No other row in 42,199 spells it snyen; no parallel  | PROBABLE |
 | `C05:24` | mtshung med | mtshungs med | ACIP source of record reads MTSUNG MED (no final S). The epithet is standardly mtshungs med; the spine has 13 rows with 'mtshungs med' and this is the only row with 'mtshung med'. No parallel witness of this row exists (wylie 'mtshung med lcang skya' occurs on | PROBABLE |
 | `C05:38` | stained or without stain." the first two of the chapters are devoted | stained or without stain." The first two of the chapters are devoted | Verbatim in the C05:38 english field: a new sentence opens lower-case after a period-closed quotation. Not a registered errata class and not a converter artefact (the wylie/ACIP have no bearing on English capitalisation). PARALLEL WITNESS: C16:687 carries the  | PROBABLE |
 | `C05:68` | mngon ba sde bdun po | mngon pa sde bdun po | ACIP (source of record): 'MNGON BA SDE BDUN PO'. The same row spells the word 'mngon pa'i mdzod' two words later, and the surrounding rows read 'mngon pa'. 'mngon ba' occurs in only 3 of 42,199 rows: C05:68, C16:706 (byte-identical re-ingest of the same file,  | PROBABLE |
@@ -253,7 +259,7 @@ Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source 
 
 ## Recommended actions, by owner
 
-**Document editors.** The 121 document errata above. Start with the 6 HIGH entries. Note that several errors exist at MORE THAN ONE LOCUS because passages are ingested twice &mdash; each entry's evidence names them, and a per-segment fix will leave duplicates behind.
+**Document editors.** The 127 document errata above. Start with the 6 HIGH entries. Note that several errors exist at MORE THAN ONE LOCUS because passages are ingested twice &mdash; each entry's evidence names them, and a per-segment fix will leave duplicates behind.
 
 **Data-pipeline maintainers.** The 24 digitisation artefacts, plus two reports filed separately: `docs/upstream/FOLIO_MARKER_COLLISIONS.md` (119 folio markers spliced into caption numbers) and `docs/upstream/C13_COLUMN_OFFSET.md` (**C13:63&ndash;82 pairs Tibetan with the English of a different text &mdash; C13 should not be scanned until it is fixed**).
 

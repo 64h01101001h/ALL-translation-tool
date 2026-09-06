@@ -2026,5 +2026,77 @@
   "severity": "LOW",
   "confidence": "PROBABLE",
   "note": "filed from the alignment batch, spine-verified on merge"
+ },
+ {
+  "item_id": "E-170",
+  "course": "C05",
+  "segment": "C05:112",
+  "kind": "TIBETAN_SPELLING",
+  "found": "'byung ba chen po bzhe rnams",
+  "expected": "'byung ba chen po bzhi rnams",
+  "evidence": "ACIP (source of record) reads 'BYUNG BA CHEN PO BZHE RNAMS; bzhe is not a Tibetan syllable, the numeral bzhi 'four' (the four great elements, mahabhuta) is meant. Only other witness is C16:727, a byte-identical re-ingest of the same file (not independent). ' bzhe ' occurs nowhere else in the 42,199-segment spine. SKEPTIC PASS 2026-09-05 (Fable 5.1): refuted=false — 'bzhe' verbatim in wylie and ACIP; C16:727 byte-identical; not registered; 'bzhe' no headword while 'bzhi' / ''byung ba chen po bzhi po dag' are and 'great elements' confirms four; two unrelated truncated 'khab tu bzhe[s]' hits elsewhere; LOW/CONFIRMED stand.",
+  "severity": "LOW",
+  "confidence": "CONFIRMED",
+  "note": "filed from the alignment batch, spine-verified on merge"
+ },
+ {
+  "item_id": "E-171",
+  "course": "C05",
+  "segment": "C05:115",
+  "kind": "TIBETAN_SPELLING",
+  "found": "rnam par rig byed ma yin pa'i yi gzugs",
+  "expected": "rnam par rig byed ma yin pa'i gzugs",
+  "evidence": "ACIP (source of record) reads `MA YIN PA'I YI GZUGS`: the genitive is written twice (`pa'i` + `yi`), which is not a well-formed sequence. The same segment's own second clause reads `rnam par rig byed ma yin pa'i gzugs`, as do C05:114 and C05:116 and the standard term throughout the corpus. Corpus scan: `pa'i yi gzugs` occurs only in C05:115 and C16:730, and C16 is the same file re-ingested (C05 campaign: 263 byte-identical rows, NOT independent) - so there is no independent witness for the doubled reading. The corruption is certain; the expected reading given is the one the segment itself uses. (An alternative repair `ma yin pa yi gzugs` would also be grammatical, but the ACIP's `PA'I` is the form attested everywhere else in this passage.) SKEPTIC PASS 2026-09-05 (Fable 5.1): refuted=false — verbatim in ACIP; only witness C16:730 byte-identical re-ingest; not registered; every other 'pa'i yi ' in the corpus is yi ge/yi dam/yi dvags, so the doubled genitive is indefensible.",
+  "severity": "LOW",
+  "confidence": "CONFIRMED",
+  "note": "filed from the alignment batch, spine-verified on merge"
+ },
+ {
+  "item_id": "E-172",
+  "course": "C05",
+  "segment": "C05:115",
+  "kind": "TIBETAN_SPELLING",
+  "found": "gnas skabs na yo dang sa so,",
+  "expected": "gnas skabs na yod pa'i phyir (exact wording of the tail NOT settled - see evidence)",
+  "evidence": "ACIP (source of record) ends `GNAS SKABS NA YO DANG SA SO, ,`. `yo`, `dang`, `sa`, `so` are each legal syllables, but the sequence is not a Tibetan clause and the English reads 'rather, it is present during periods when ... the mind is functioning', i.e. an existential 'yod' reason clause. The parallel construction at C05:116 reads `ma g-yengs pa dang sems dang bcas pa'i gnas skabs na yod pa'i phyir` - the same words up to `na`, then `yod pa'i phyir`. That secures `yo` -> `yod` (the reason clause needs an existential). The remaining `dang sa so` cannot be recovered from this segment or any witness: it may be a garbling of `pa'i phyir` / `pa'i phyir ro` (the double shad `, ,` marks a sentence end, so a final `ro`/`'o` is plausible), but no reading can be proven. The two analysts filed different expected readings for this tail; the reconciler records only what the evidence settles (`yod` + a `phyir`-type reason clause) and marks the rest unsettled. Witness scan: `yo dang sa so` occurs only in C05:115 and C16:730 (same-file re-ingest, not independent). No other course, P-text or TCS text carries this sentence. SKEPTIC PASS 2026-09-05 (Fable 5.1): refuted=false — verbatim in ACIP; same non-independent C16:730 witness; not registered; 'yo' has no dictionary gloss and C05:116's parallel 'gnas skabs na yod pa'i phyir' secures 'yod'; the rest of the tail left unsettled — MEDIUM/PROBABLE.",
+  "severity": "MEDIUM",
+  "confidence": "PROBABLE",
+  "note": "filed from the alignment batch, spine-verified on merge"
+ },
+ {
+  "item_id": "E-173",
+  "course": "C05",
+  "segment": "C05:116",
+  "kind": "TIBETAN_SPELLING",
+  "found": "rnams par rig byed",
+  "expected": "rnam par rig byed (RNAM PAR RIG BYED)",
+  "evidence": "First word of the row. ACIP is the source of record and reads RNAMS PAR, so the wylie is faithful to the keyed text; the same row keys RNAM PAR RIG BYED twice more (positions 2 and 3) and the corpus has 29 rows with 'rnam par rig byed' against exactly one with 'rnams par' (this row and its byte-identical re-ingest C16:731, which is the same file and not an independent witness). 'rnams par' (plural marker + par) is not a form of the term. SKEPTIC PASS 2026-09-05 (Fable 5.1): refuted=false — 'rnams par rig byed' verbatim in wylie and ACIP; C16:731 byte-identical re-ingest; not registered; the same row keys RNAM PAR twice more; LOW/PROBABLE stand.",
+  "severity": "LOW",
+  "confidence": "PROBABLE",
+  "note": "filed from the alignment batch, spine-verified on merge"
+ },
+ {
+  "item_id": "E-174",
+  "course": "C05",
+  "segment": "C05:120",
+  "kind": "TIBETAN_SPELLING",
+  "found": "nyes sbyad",
+  "expected": "nyes spyad",
+  "evidence": "ACIP source of record reads 'NYES SBYAD' (C05:120), paired with 'LEGS SPYAD' in the same phrase. 'sbyad' is not a legal Tibetan syllable (sb- cannot take -y- subjoin in this position with -d suffix as a lexeme; no dictionary form). The same pair appears correctly spelled as 'nyes spyad dang legs spyad' at C05:509 (and its byte-identical re-ingest C16:1018). 'sbyad' occurs exactly once in the 42,199-row corpus (this row); 'nyes spyad' occurs twice. No independent parallel witness for this row: the English 'very gross abbreviation' also matches C05:119 (the root verse, which lacks the phrase) and C01:258 (unrelated text). SKEPTIC PASS 2026-09-05 (Fable 5.1): refuted=false — 'NYES SBYAD' verbatim in the ACIP with no independent witness; 'nyes spyad dang legs spyad' attested at C05:509 and in the dictionary; 'sbyad' has no lexical standing (its only dictionary row is an HTG2016 glossary entry derived from this segment).",
+  "severity": "LOW",
+  "confidence": "PROBABLE",
+  "note": "filed from the alignment batch, spine-verified on merge"
+ },
+ {
+  "item_id": "E-175",
+  "course": "C05",
+  "segment": "C05:122",
+  "kind": "TIBETAN_SPELLING",
+  "found": "snyen par smra ba",
+  "expected": "snyan par smra ba",
+  "evidence": "ACIP (source of record) reads SNYEN PAR SMRA BA, so the wylie is a faithful transcription of the input file; the idiom for pleasant speech is snyan par smra ba (TCS03:267 'chos ston pa'i snyan par smra ba'). No other row in 42,199 spells it snyen; no parallel witness of this passage exists (no C16 re-ingest of 'lus kyi sbyor mjug'), so the input-file reading cannot be checked against a second copy. SKEPTIC PASS 2026-09-05 (Fable 5.1): refuted=false — 'SNYEN PAR SMRA BA' verbatim in the ACIP with no parallel witness; the idiom is 'snyan par smra ba' (Hopkins; TCS03:267); 'snyen par smra' occurs nowhere else in 42,199 rows (bare 'snyen' does occur elsewhere as a variant of bsnyen).",
+  "severity": "LOW",
+  "confidence": "PROBABLE",
+  "note": "filed from the alignment batch, spine-verified on merge"
  }
 ]
