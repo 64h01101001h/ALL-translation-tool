@@ -8,16 +8,16 @@
 
 Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source and Geshe Michael Roach's facing English &mdash; recorded as a by-product of a machine alignment campaign reading the courses segment by segment. **Every entry has been checked against the corpus database** (42,199 segments, spine `hgm_spine_v27_2.db`): the quoted strings were retrieved from the spine, not from a note, and each citation was re-derived rather than trusted.
 
-**161 entries**: **113 document errata** (6 HIGH, 67 MEDIUM, 40 LOW), **24 digitisation artefacts**, 14 observations checked and closed as *not* errata, and 1 that could not be verified.
+**169 entries**: **121 document errata** (6 HIGH, 70 MEDIUM, 45 LOW), **24 digitisation artefacts**, 14 observations checked and closed as *not* errata, and 1 that could not be verified.
 
 | Kind | n |
 |---|---|
-| Tibetan spelling | 82 |
+| Tibetan spelling | 85 |
+| English typo | 24 |
 | Digitisation artefact | 24 |
-| English typo | 22 |
 | Our banked layer | 9 |
-| English factual error | 5 |
-| Formatting | 4 |
+| English factual error | 6 |
+| Formatting | 6 |
 
 ---
 
@@ -44,7 +44,7 @@ Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source 
 | `C03:39` | acip: ,SIL SNYAN RNAMS DANG BYUNG PA GDUGS MCHOG DANG ,   \|   wylie: ,sil snyan rnams dang byung pa gdugs mchog dang , | byug pa | seg_hint 39 is CORRECT. Three independent proofs: (1) the note's own claim checks out — C03:38, the glossary segment immediately preceding, spells it right and defines it: "byug pa ni spos zhim po'i lde gu'o" (byug pa = thick fragrant unguent); (2) this segmen | CONFIRMED |
 | `C04:29` | lkog 'gyur la gsar du bslu ba'i shes pa | lkog 'gyur la gsar du mi bslu ba'i shes pa | ACIP reads 'LKOG 'GYUR LA GSAR DU BSLU BA'I SHES PA' (source). An inference is by definition a NON-deceiving (mi bslu ba) fresh awareness; as written the definition of inference by convention says 'deceiving'. INTERNAL witness: the parallel definition of scrip | PROBABLE |
 
-## Medium severity &mdash; 67 entries
+## Medium severity &mdash; 70 entries
 
 | Citation | What it says | Should say | Evidence | Confidence |
 |---|---|---|---|---|
@@ -115,8 +115,11 @@ Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source 
 | `C05:39` | ston pa bnas drug pa | ston pa gnas drug pa | ACIP source of record reads 'STON PA BNAS DRUG PA'; the parallel units in the same segment read 'gnas bdun pa' and 'gnas brgyad pa', and the segment opens with 'gnas phyi ma gsum' (the chapters). The only other witness, C16:688, is byte-identical (same file re | CERTAIN |
 | `C05:63` | exist only in the desire realm and are absent from the higher two | (for GMR's ruling; English is never edited) The Tibetan reads `'dod pa dang bsam gtan dang po na yod kyi gnyis | Own row, wylie: `'dod pa dang bsam gtan dang po na yod kyi gnyis pa yan chad na med de`; ACIP (source of record) agrees: `'DOD PA DANG BSAM GTAN DANG PO NA YOD KYI GNYIS PA YAN CHAD NA MED DE`. `bsam gtan dang po` = first concentration level; `gnyis pa yan cha | PROBABLE |
 | `C05:73` | sangs rgyas lam brten par | sangs rgyas la ma brten par | ACIP source of record reads SANGS RGYAS LAM BRTEN PAR. GMR's English for this stretch is 'would have been unable to make the first descriptions ... had they not relied upon the Buddha': a counterfactual negation on the reliance, which requires 'la ma brten par | PROBABLE |
+| `C05:83` | nying dgos dgos pa, dgos pa bstan bcos kyi brjod bya la rag las pa | nying dgos dgos pa la rag las pa dang, dgos pa bstan bcos kyi brjod bya la rag las pa | Haplography in the four-attribute formula: the first limb lacks its predicate 'la rag las pa dang'. Present in the ACIP source of record for this row (NYING DGOS DGOS PA, DGOS PA BSTAN BCOS ...), so not an ingest artefact. The INDEPENDENT witness ILL:216 (veri | PROBABLE |
+| `C05:89` | Neither of the purpose of its ultimate purpose subsumes the other | Neither the purpose nor its ultimate purpose subsumes the other | Own row: wylie 'dgos pa dang dgos pa'i dgos pa ni ngo bo tha dad yin te' (ACIP DGOS PA DANG DGOS PA'I DGOS PA NI ...) coordinates the two terms with dang; the English 'Neither of the purpose of its ultimate purpose' is ungrammatical ('Neither of X of Y'), the  | PROBABLE |
+| `C05:92` | dug 'das | dug mdas (dug mda' + instrumental -s) | Wylie and ACIP agree on 'DAS, so this is the keyed reading, not a converter artefact. 'das (pass/beyond) yields no sense after dug (poison) before bkrongs pa (was killed); GMR's own English, 'died from a wound inflicted by a poisoned arrow', is the internal wi | PROBABLE |
 
-## Low severity &mdash; 40 entries
+## Low severity &mdash; 45 entries
 
 | Citation | What it says | Should say | Evidence | Confidence |
 |---|---|---|---|---|
@@ -160,6 +163,11 @@ Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source 
 | `C05:38` | stained or without stain." the first two of the chapters are devoted | stained or without stain." The first two of the chapters are devoted | Verbatim in the C05:38 english field: a new sentence opens lower-case after a period-closed quotation. Not a registered errata class and not a converter artefact (the wylie/ACIP have no bearing on English capitalisation). PARALLEL WITNESS: C16:687 carries the  | PROBABLE |
 | `C05:68` | mngon ba sde bdun po | mngon pa sde bdun po | ACIP (source of record): 'MNGON BA SDE BDUN PO'. The same row spells the word 'mngon pa'i mdzod' two words later, and the surrounding rows read 'mngon pa'. 'mngon ba' occurs in only 3 of 42,199 rows: C05:68, C16:706 (byte-identical re-ingest of the same file,  | PROBABLE |
 | `C05:71` | srid pa'i rgya mcho 'dir 'khyam | srid pa'i rgya mtsho 'dir 'khyam | ACIP verbatim: "NYON MONGS PAS KYANG 'JIG RTEN PA RNAMS SRID PA'I RGYA MCHO 'DIR 'KHYAM STE". This is NOT the TS = tsha keying convention (C04 ledger, MTSAMS/MTSAN): under that convention mtsho keys as MTSO, and the corpus has 503 rows with ACIP `RGYA MTSO` an | CONFIRMED |
+| `C05:84` | Master Dharmottara explains that It functions to satisfy | Master Dharmottara explains that it functions to satisfy | Sentence-internal capital 'It' in the English of C05:84 itself. Checked: the wylie carries no double-shad `, ,` verse lineation and the English is running prose, so this is NOT a quoted root-verse line (the C05 course-shape verse-capital exemption does not app | PROBABLE |
+| `C05:86` | If the mere claims that the work possesses these attributes is enough to remove any doubts | subject-verb agreement: either "the mere claim ... is enough" or "the mere claims ... are enough" — for GMR's  | Verbatim from C05:86 english. Plural subject 'claims' with singular verb 'is'. Filed independently by both analysts. No parallel witness: the passage occurs only at C05:86 (searched english like '%claims that the work possesses%' and the wylie 'dgos sogs chos  | PROBABLE |
+| `C05:90` | characteristic features?" | characteristic features? | The English of C05:90 contains exactly one double-quote character, the closing mark after features?, with no opening mark anywhere in the row. Not a registered class. Parallel witness checked: no other row in 42,199 carries this English sentence (select course | CONFIRMED |
+| `C05:90` | nyid dgos | nying dgos (NYING DGOS) | The fourth attribute is spelled nying dgos in the standard orthography, and this same text spells it NYING DGOS at C05:83 (bstan nying dgos dgos pa) and C05:85 (NYING DGOS GYA NOM PA). NYID DGOS appears in the ACIP source at C05:83 (THOB PA NYID DGOS YIN) and  | PROBABLE |
+| `C05:92` | sandalwood thorn | khadira / acacia thorn (seng ldeng = Skt. khadira, Acacia catechu; sandalwood is tsan dan) | seng ldeng is khadira, not sandalwood, and GMR himself renders it 'Khadira' at C08:215 (gshol mda' 'dzin dang seng ldeng can). He renders it 'sandalwood' again at C05:95 in the same episode, so this is a consistent rendering choice within Course V rather than  | PROBABLE |
 
 ---
 
@@ -245,7 +253,7 @@ Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source 
 
 ## Recommended actions, by owner
 
-**Document editors.** The 113 document errata above. Start with the 6 HIGH entries. Note that several errors exist at MORE THAN ONE LOCUS because passages are ingested twice &mdash; each entry's evidence names them, and a per-segment fix will leave duplicates behind.
+**Document editors.** The 121 document errata above. Start with the 6 HIGH entries. Note that several errors exist at MORE THAN ONE LOCUS because passages are ingested twice &mdash; each entry's evidence names them, and a per-segment fix will leave duplicates behind.
 
 **Data-pipeline maintainers.** The 24 digitisation artefacts, plus two reports filed separately: `docs/upstream/FOLIO_MARKER_COLLISIONS.md` (119 folio markers spliced into caption numbers) and `docs/upstream/C13_COLUMN_OFFSET.md` (**C13:63&ndash;82 pairs Tibetan with the English of a different text &mdash; C13 should not be scanned until it is fixed**).
 
