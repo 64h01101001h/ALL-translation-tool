@@ -47,7 +47,7 @@ the/a/an/and/or/his/our/your/I/you unless `data/alignment/span_head_allow.json`
 lists it under `pages_c05` with the Tibetan word that licenses it.
 
 ## Progress
-c5p1–c5p7 (1–21) cloned 2026-09-05; c5p8–c5p15 (22–45) landed 2026-09-05. Coverage 45/511.
+c5p1–c5p7 (1–21) cloned 2026-09-05; c5p8–c5p49 (22–147) landed 2026-09-05. Coverage 147/511 (17 gates green at every landing; pages_c05 0 unlicensed function-word span heads).
 
 ## Queues (wylie / english), C05
 (opened empty)
@@ -74,8 +74,12 @@ Row 36's closing clause ("here first comes the obeisance of the translator.
 unwrapped, published reading per C16:685.
 
 **Rule 10 rulings (banked with notes).** 24 `gsung` → "written" (not
-"written by"); 28/27 agentive `kyis`/`gyis` → ∅ (the "by" belongs to the
-passive frame); 31 `zhes pa'o` → ∅ (not "translates as"), `ni` → ∅; 32
+"written by"); 28 agentive `kyis` → ∅ (the "by" belongs to the passive
+frame) — CORRECTION 2026-09-05: 27 (`gyis`) was in fact BANKED → "by" (checked
+in alignment_full_v1.json: s27p1 d=6 gyis→by; s28p1 kyis→∅); 146 followed 27
+(gyis/kyis → "by" ×2). The two rulings conflict; agentive "by" at d=6 is an
+OPEN ITEM FOR ADAM (d=6 particles do not enter the dictionary harvest, so no
+headword is affected either way); 31 `zhes pa'o` → ∅ (not "translates as"), `ni` → ∅; 32
 `skad` → ∅ (not "name"); 34 `tshong` → ∅ (trade, not "merchants"; both
 analysts had banked it); 35 `'di tsam` split flat, `thad log` → ∅; 36 the
 "Why" questions → ∅ (GMR recast purpose-statements as questions); 39 `gang
@@ -100,3 +104,72 @@ blockprint's own variation); WYLIE queue candidate.
 with no members (phrase-level, outside the dictionary harvest) because "the
 eight" substitutes for `gnas` rather than translating it. 51's English-first
 analyst had to abandon the flat shape ("formless" ×2) — reconciler to rule.
+
+### Batches C05-16 … C05-49 (C05:46–147) — 2026-09-05 — propose: Opus 5 · reconcile/refute: Fable 5.1
+
+**Text.** 46–147 is Gendun Drup's commentary on Abhidharmakosha IV
+(deeds: the movements of the mind, communicating/non-communicating form,
+the vows, virtue/non-virtue/neutral, the three kinds of experience),
+with root-verse lines under `[iv.NNN]` apparatus and fused
+"Reading… Subject:" headings on 96, 118, 145 (registered, not filed).
+C16 parallel rows are byte-identical re-ingests, not witnesses.
+
+**Conventions settled in this stretch.**
+- `chos can` → "Consider" only; null wherever GMR's frame is "let us take"
+  / "First take" / "Next consider" (129 banked "take" on the one row where
+  "take" is the whole exponent).
+- `sogs` / `la sogs pa` owns only the closing gesture ("and the like",
+  "and so on", "and the rest", "and the other types" at 152; "including"
+  at 149); GMR's supplied noun stays unwrapped. Every such span head is
+  allowlisted in span_head_allow.json with the `sogs` licensor
+  (s96w7, s99w17, s99w20, s112w3, s124w12, s128w6, s140w3/w6/w11; 150 and
+  152 at their landing).
+- `zhe na` → "you may ask" (s78w11) and `yang na` → "or else" (s81w7)
+  allowlisted as licensed hinge heads.
+- `yin` / `yin pa` copula nulled (14:1 across the stretch).
+- Negative affix: `mi` → "un" (unshifting) subword; `ma yin pa` / `mi` →
+  "non" inside hyphenated "non-virtuous"/"non-merit" banked as d=7 without
+  the subword flag (hyphen-delimited, so not a broken word; C01 c1p05
+  precedent; 106, 147, 149). "non" is outside the four listed forms —
+  OPEN ITEM FOR ADAM alongside the fifth form in TODO.md.
+- `rnam par rig byed` → "communicating form" as one d=5 dictionary unit;
+  `sems pa` → "movements of the mind" (HGM gloss); `nyid dgos` banked
+  verbatim with the spelling erratum (E-167).
+- Phonetic title at 30 not banked at d=5 (phonetics protocol).
+
+**Rule 10 rulings (nulled with notes).** GMR converses/restructurings:
+`rgyu` (→ "result" frame), `byung`, `gsungs`, `'jog`, `'khor du`, `ces
+bya`, `bshad` → "promised"; outline vocabulary GMR supplies (`don` →
+"explanation", `rang bzhin` → "definition", `bstan`/`bshad` →
+"introduction"/"treatment", `gnyis pa` → "two" at 150); `thogs pa med pa`
+is not "ineffable"; `seng ldeng` is not "sandalwood" (nulled; E-169
+English record for GMR's ruling); `mi 'phrod pa` is not "poisonous";
+`de dag` → "their" (151, possessive recast of the demonstrative); `byed`
+→ "helps" and `skyed pa` → "brings" (145, causative auxiliaries pinned to
+GMR's frame); `'gyur ba` → "lead to" (150, auxiliary of the vedanīya
+frame `myong bar 'gyur`) — and 149's `'gyur` → "lead to", which its
+reconciler had banked on HGM's glossary, was NULLED AT LANDING for
+consistency with 150 (landing note on the page). `tshal pa` → "thorn"
+KEPT at 92 and 95 with a caveat (OPEN ITEM FOR ADAM: if ruled false,
+re-cut 92/95).
+
+**Errata.** E-154 … E-177 filed after skeptic passes (rows 24, 38, 39, 63,
+65, 68, 71, 73, 83, 84, 86, 89, 90×2, 92×2, 112, 115×2, 116, 120, 122,
+123, 142). Refuted and dropped: 38's first wording (C16:687 carries the
+capital; re-filed corrected as E-155), 74 `rjod` (present stem of brjod),
+77 both claims (MOO = au encoding; "Wisdom's" is "is"), 114 `ma tshang pa`
+(attested variant), 144 "neither … or" (GMR's habitual construction, 26
+tight-window correlatives across eight texts — authorial, not a segment
+erratum; at most a corpus-wide style query for GMR). Not filed: E-111
+row-boundary spills at 59/60; the hyphen-space line-break class; 219's
+1,500-cap (ahead). merge_errata refused three records whose `found`
+carried analysts' parenthetical annotations — `found` must be a verbatim
+substring; the filer now strips them.
+
+**Gate note.** `no_supplied_span_head` matched Tibetan `the tshom` at
+s88w12 (column blindness; allowlisted as GATE FALSE POSITIVE; fix in
+TODO.md).
+
+**Models.** Propose Claude Opus 5 (two angles per row); reconcile and
+refute Claude Fable 5.1 throughout, including the relaunches after the
+2026-09-05 rate-limit kills (95, 99, 101) — never moved off Fable.
