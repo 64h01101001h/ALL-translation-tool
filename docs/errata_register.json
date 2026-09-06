@@ -1930,5 +1930,101 @@
   "severity": "MEDIUM",
   "confidence": "PROBABLE",
   "note": "filed from the alignment batch, spine-verified on merge"
+ },
+ {
+  "item_id": "E-162",
+  "course": "C05",
+  "segment": "C05:83",
+  "kind": "TIBETAN_SPELLING",
+  "found": "nying dgos dgos pa, dgos pa bstan bcos kyi brjod bya la rag las pa",
+  "expected": "nying dgos dgos pa la rag las pa dang, dgos pa bstan bcos kyi brjod bya la rag las pa",
+  "evidence": "Haplography in the four-attribute formula: the first limb lacks its predicate 'la rag las pa dang'. Present in the ACIP source of record for this row (NYING DGOS DGOS PA, DGOS PA BSTAN BCOS ...), so not an ingest artefact. The INDEPENDENT witness ILL:216 (verified by sqlite3) reads 'nying dgos dgos pa la rag las pa dang, dgos pa bstan bcos la rag las pa ni 'brel ba'o'. GMR's English translates the missing limb ('and the ultimate goal through this very purpose'). C16:712 is byte-identical to C05:83 (same file re-ingested), not a second witness. ILL:216 also differs in 'bstan bcos la' vs 'bstan bcos kyi brjod bya la' and 'brel ba'o vs 'brel pa'o, so it is a different recension; the omission could in principle be editorial, hence PROBABLE rather than CONFIRMED. SKEPTIC PASS 2026-09-05 (Fable 5.1): refuted=false — truncated formula verbatim in wylie and ACIP; ILL:216 (an independent, different-recension witness) reads the full 'nying dgos dgos pa la rag las pa dang, ...'; C16:712 same file re-ingested; MEDIUM/PROBABLE stand.",
+  "severity": "MEDIUM",
+  "confidence": "PROBABLE",
+  "note": "filed from the alignment batch, spine-verified on merge"
+ },
+ {
+  "item_id": "E-163",
+  "course": "C05",
+  "segment": "C05:84",
+  "kind": "FORMATTING",
+  "found": "Master Dharmottara explains that It functions to satisfy",
+  "expected": "Master Dharmottara explains that it functions to satisfy",
+  "evidence": "Sentence-internal capital 'It' in the English of C05:84 itself. Checked: the wylie carries no double-shad `, ,` verse lineation and the English is running prose, so this is NOT a quoted root-verse line (the C05 course-shape verse-capital exemption does not apply); it is not a fused 'Reading' heading either. C05:82 shows the identical habit ('because It conveys to disciples') — a recurring typographic slip in this file, not an independent witness of a deliberate reading. No parallel witness in any other course (C16 carries no copy of this row). SKEPTIC PASS 2026-09-05 (Fable 5.1): refuted=false — 'It functions to satisfy' verbatim; running prose, not a verse line; no parallel witness; C05:82 companion instance checks out; LOW/PROBABLE stand.",
+  "severity": "LOW",
+  "confidence": "PROBABLE",
+  "note": "filed from the alignment batch, spine-verified on merge"
+ },
+ {
+  "item_id": "E-164",
+  "course": "C05",
+  "segment": "C05:86",
+  "kind": "ENGLISH_TYPO",
+  "found": "If the mere claims that the work possesses these attributes is enough to remove any doubts",
+  "expected": "subject-verb agreement: either \"the mere claim ... is enough\" or \"the mere claims ... are enough\" — for GMR's ruling; the English is not edited",
+  "evidence": "Verbatim from C05:86 english. Plural subject 'claims' with singular verb 'is'. Filed independently by both analysts. No parallel witness: the passage occurs only at C05:86 (searched english like '%claims that the work possesses%' and the wylie 'dgos sogs chos bzhi ston pa'); the C16 re-ingest does not carry this row. SKEPTIC PASS 2026-09-05 (Fable 5.1): refuted=false — verbatim; no independent witness (C16:711 shares only the Tibetan phrase); genuine number disagreement, for GMR's ruling; LOW/PROBABLE stand.",
+  "severity": "LOW",
+  "confidence": "PROBABLE",
+  "note": "filed from the alignment batch, spine-verified on merge"
+ },
+ {
+  "item_id": "E-165",
+  "course": "C05",
+  "segment": "C05:89",
+  "kind": "ENGLISH_TYPO",
+  "found": "Neither of the purpose of its ultimate purpose subsumes the other",
+  "expected": "Neither the purpose nor its ultimate purpose subsumes the other",
+  "evidence": "Own row: wylie 'dgos pa dang dgos pa'i dgos pa ni ngo bo tha dad yin te' (ACIP DGOS PA DANG DGOS PA'I DGOS PA NI ...) coordinates the two terms with dang; the English 'Neither of the purpose of its ultimate purpose' is ungrammatical ('Neither of X of Y'), the second 'of' standing where 'nor' is required. Parallel-witness check: english like '%Neither of the purpose%' and wylie like '%dgos pa ni ngo bo tha dad yin te%' each return only C05:89 in 42,199 rows; no published witness either way. GMR's English is not edited; filed for his ruling. SKEPTIC PASS 2026-09-05 (Fable 5.1): refuted=false — verbatim; only C05:89 in 42,199 rows; the Tibetan coordinates exactly two terms with dang so 'Neither ... nor' is the reading; MEDIUM/PROBABLE stand.",
+  "severity": "MEDIUM",
+  "confidence": "PROBABLE",
+  "note": "filed from the alignment batch, spine-verified on merge"
+ },
+ {
+  "item_id": "E-166",
+  "course": "C05",
+  "segment": "C05:90",
+  "kind": "FORMATTING",
+  "found": "characteristic features?\"",
+  "expected": "characteristic features?",
+  "evidence": "The English of C05:90 contains exactly one double-quote character, the closing mark after features?, with no opening mark anywhere in the row. Not a registered class. Parallel witness checked: no other row in 42,199 carries this English sentence (select course,seq where english like '%Can you list each one%' returns only C05:90). SKEPTIC PASS 2026-09-05 (Fable 5.1): refuted=false — the English carries exactly one double-quote with no opening mark; the sentence is the author's own rhetorical question; no other row carries the passage; LOW/CONFIRMED stand.",
+  "severity": "LOW",
+  "confidence": "CONFIRMED",
+  "note": "filed from the alignment batch, spine-verified on merge"
+ },
+ {
+  "item_id": "E-167",
+  "course": "C05",
+  "segment": "C05:90",
+  "kind": "TIBETAN_SPELLING",
+  "found": "nyid dgos",
+  "expected": "nying dgos (NYING DGOS)",
+  "evidence": "The fourth attribute is spelled nying dgos in the standard orthography, and this same text spells it NYING DGOS at C05:83 (bstan nying dgos dgos pa) and C05:85 (NYING DGOS GYA NOM PA). NYID DGOS appears in the ACIP source at C05:83 (THOB PA NYID DGOS YIN) and C05:90, so it is the input text's own reading, not an ingest artefact; the inconsistency within one text argues for an input-side spelling error, but a source-woodblock variant cannot be excluded. Witnesses: C16:712 is the byte-identical re-ingest of C05:83 (not independent); no C16 twin of C05:90 exists; the other two nyid dgos hits (EM:575-576) are mtshan nyid dgos pa, a different phrase. SKEPTIC PASS 2026-09-05 (Fable 5.1): refuted=false — NYID DGOS verbatim in the ACIP with no independent witness; the same text writes nying dgos at C05:83/85 (as do ILL:215-216); the dictionary's 'nyid dgos' headword is an auto-aligned mining of these rows; LOW/PROBABLE stand.",
+  "severity": "LOW",
+  "confidence": "PROBABLE",
+  "note": "filed from the alignment batch, spine-verified on merge"
+ },
+ {
+  "item_id": "E-168",
+  "course": "C05",
+  "segment": "C05:92",
+  "kind": "TIBETAN_SPELLING",
+  "found": "dug 'das",
+  "expected": "dug mdas (dug mda' + instrumental -s)",
+  "evidence": "Wylie and ACIP agree on 'DAS, so this is the keyed reading, not a converter artefact. 'das (pass/beyond) yields no sense after dug (poison) before bkrongs pa (was killed); GMR's own English, 'died from a wound inflicted by a poisoned arrow', is the internal witness that his source read mda' (arrow), i.e. dug mdas bkrongs pa 'killed by a poisoned arrow'. No parallel witness: 'dug ''das', 'dug mdas' and 'dug mda''' each occur only here across the 42,199 rows (C16 has no re-ingest of this row; 'poisoned arrow' in English occurs only at C05:92). 'das left unbanked in the spec. SKEPTIC PASS 2026-09-05 (Fable 5.1): refuted=false — 'dug 'das' verbatim in wylie and ACIP, unique in 42,199 rows; 'das yields no sense before bkrongs pa while dug mdas ('by a poisoned arrow') is what GMR's English translates; MEDIUM/PROBABLE stand.",
+  "severity": "MEDIUM",
+  "confidence": "PROBABLE",
+  "note": "filed from the alignment batch, spine-verified on merge"
+ },
+ {
+  "item_id": "E-169",
+  "course": "C05",
+  "segment": "C05:92",
+  "kind": "ENGLISH_FACTUAL_ERROR",
+  "found": "sandalwood thorn",
+  "expected": "khadira / acacia thorn (seng ldeng = Skt. khadira, Acacia catechu; sandalwood is tsan dan)",
+  "evidence": "seng ldeng is khadira, not sandalwood, and GMR himself renders it 'Khadira' at C08:215 (gshol mda' 'dzin dang seng ldeng can). He renders it 'sandalwood' again at C05:95 in the same episode, so this is a consistent rendering choice within Course V rather than a slip; filed for Adam's ruling per the reconciler's Rule 10 instruction. The text keeps his wording verbatim; seng ldeng is nulled in the spec so 'sandalwood' does not enter the bank as an equivalent (the master already carries hgm_gloss ['khadira trees','sandalwood'] on seng ldeng from earlier auto-alignment — flag for review). SKEPTIC PASS 2026-09-05 (Fable 5.1): refuted=false — botanically correct as stated (seng ldeng = khadira/Acacia catechu per {LC}; sandalwood is tsan dan); GMR's own C08:215/217 'Khadira' confirms it, though P6:148 and four TITLS rows show 'sandalwood' is his consistent choice — for GMR's ruling; the seng ldeng gloss is glossary-tier (HTG2016), not auto-aligned.",
+  "severity": "LOW",
+  "confidence": "PROBABLE",
+  "note": "filed from the alignment batch, spine-verified on merge"
  }
 ]
