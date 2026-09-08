@@ -28,9 +28,18 @@ number is quoted it was measured that day.
 
 Goal: every user-reachable function in every pane has been looked at by
 a person, with a disposition: **SHIP** (works, tested, honest label) ·
-**HIDE** (remove or disable for 1.0, keep code) · **FIX** (named
-defect, fix before press) · **LABEL** (works but the UI overclaims —
-add PROVISIONAL / experimental wording).
+**HIDE** (disable for 1.0, keep code) · **CUT** (remove; it could not
+justify its existence) · **FIX** (named defect, fix before press) ·
+**LABEL** (works but the UI overclaims — add PROVISIONAL / experimental
+wording).
+
+**The steelman step (Adam, 2026-09-08, day 1 of the audit).** Before a
+component is tested it must be justified: we state together the
+strongest case for why it exists — what job it does, for whom, and
+what breaks if it is gone. The justification is written into the audit
+file beside the row (a `Why it exists` note). A component that cannot
+be justified is CUT or HIDDEN even if it works perfectly; nothing ships
+because it happens to be there.
 
 Method:
 1. Machine inventory first. `docs/release_audit/<Pane>.md` — one file
