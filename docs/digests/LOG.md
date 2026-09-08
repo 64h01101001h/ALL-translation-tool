@@ -29,3 +29,4 @@ Categories: code · decision · email · release · audit · data · question.
 - 17:46 · release · Press failed on constitution R3 (modal count 145→146: the new library-overwrite confirmation, harness-guarded); baseline bumped after review; re-pressing
 - 17:49 · decision · Companion iOS/Android 'Tibetan Reader' (reference-only, reading not writing) filed to TODO with build options A (Qt Quick) / B (native + C bridge) for Adam's decision after 1.0 · Adam
 - 17:50 · release · Re-press: 101/101 gates, installed to /Applications (dev-d173da3, byte-identical, launch-tested) and relaunched by hand; the press's own DMG verify step failed afterwards — DMG not distributable until re-verified
+- 17:52 · release · DMG dev-d173da3 verified VALID after ending an orphaned diskimages-helper (PID 38398, spawned by hdiutil create at 17:49:18) that held the file and made hdiutil return EAGAIN; the image was never corrupt. App relaunched at 17:50 on the new build (File → Save/Save As live)

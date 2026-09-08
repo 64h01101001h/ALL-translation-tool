@@ -2971,3 +2971,15 @@ data folders for a phone; (2) a spike: allcore compiled for iOS arm64 +
 Android arm64 with one query round-trip; (3) a one-screen prototype of
 "paste → tap a word → card" in whichever option Adam picks; (4) the
 questionnaire's Q13 answers tell us how much Android matters.
+
+### Press pipeline defect found 2026-09-08 (FIX before 1.0 press)
+- [ ] **`package_macos.sh` step 7 verify can fail on a healthy image.** A
+      `diskimages-helper` left over from `hdiutil create` held the DMG open
+      and `hdiutil verify` returned "Resource temporarily unavailable"; the
+      script reported "the image is corrupt" (false) and exited 9 AFTER it
+      had already quit the running app and replaced /Applications, but
+      BEFORE step 8 relaunch — leaving the user with no app open. Fix:
+      (a) retry verify up to 3× with a short wait and `lsof` the file to
+      name any holder before declaring corruption; (b) relaunch the
+      installed app in a trap on any exit after step 6c; (c) never print
+      "corrupt" for EAGAIN. Evidence: press3.log 17:49, LOG.md.
