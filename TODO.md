@@ -2884,3 +2884,33 @@ by pane; every row gets SHIP / HIDE / FIX / LABEL).
 - [ ] HIDE list behind one `kReleaseHidden`; feature guide regenerated
 - [ ] FIX list (filled from the walk) — closed by day 10
 - [ ] VERSION 1.0.0, press, CLEAN-MAC test, first GitHub releases
+
+### Carried from day 1 of the audit (2026-09-08) — pick up here
+- [ ] **Overlay walk not yet started.** First component under discussion:
+      the **Document box** — steelman given (paste path is the case for it;
+      for Library texts it duplicates the reading pane). Adam to rule:
+      SHIP as is / FIX to collapsible (expanded when pasted or empty).
+      Then Ribbon → DOCUMENT → Open ACIP file, and on through
+      docs/release_audit/OverlayPane.md in row order.
+- [ ] **GitHub main replacement** — old main parked as
+      `github-main-before-20260908`; Adam runs
+      `git push --force-with-lease=main:origin/main origin main`
+      (blocked for the assistant). Until then GitHub is 446 commits stale.
+- [ ] **Backup drive push** — the 8 TB mirror was unmounted from ~13:30;
+      `git push backup HEAD:main` when it is back.
+- [ ] **First daily digest** — draft waiting in Adam's Gmail Drafts
+      (2026-09-08, three attachments); Adam reads and sends.
+- [ ] **Rotate the Anthropic API keys** pasted into chat today and earlier
+      in the session (never used, never stored; exposed all the same).
+- [ ] **Release note:** the press prunes the 279 MB `tm_84000.db` cache from
+      the DMG; first Lookup of 84000 material rebuilds it (slow once).
+- [ ] **C05:167 ENGLISH_FACTUAL_ERROR** ("three types" vs `bzhi`) passed its
+      reconciler, needs a skeptic pass before filing (E-120 class, for GMR).
+- [ ] **Translator questionnaire** (Adam, 2026-09-08): survey the Mixed Nuts
+      translation team on workflow, blind spots and wish list before the
+      release; draft at docs/distribution/TRANSLATOR_QUESTIONNAIRE_2026-09.md.
+      Feed answers into the audit dispositions (a function nobody asked for
+      and nobody uses fails the steelman).
+- [ ] **"How would I start translating Thar lam gsal byed" walkthrough**
+      (given verbally 2026-09-08) — turn into the first chapter of the user
+      manual and into the manual test script for Draft/Review/Export.
