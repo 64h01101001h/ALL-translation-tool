@@ -26,7 +26,7 @@ exercises the control.
 | Research | [Lookup](LookupPane.md) | 18 | 12 | Browse button dies after one click; `proposeai:` untested; six external hosts on click |
 | Research | [Lookup popup ⌘D](LookupPopup.md) | 12 | 6 | ⌘D focus extraction untested; duplicated stepper handler |
 | Research | [Sanskrit](SanskritPane.md) | 17 | 6 | IPA row unlabelled as provisional; Sanskrit OCR blocks 60 s, hard-coded tessdata path |
-| Research | [Convert](ConvertPane.md) | — | — | see file |
+| Research | [Convert](ConvertPane.md) | 21 | 16 | Tibetan-year conversion proven only for 2015–2035 but shown without caveat; four Sanskrit converters cannot show the ⟨…⟩ failure marker; no selftest |
 | Research | [Analysis](AnalysisPane.md) | 10 | 10 | paid, data-sending action with no consent gate, zero coverage, plaintext key file |
 | Learn | [Trainer](TrainerPane.md) | 11 | 2 | silent wylie→unicode fallback (rule 3); "clicks join the deck" not implemented |
 | Learn | [Drills](DrillsPane.md) | 14 | 7 | modes 3/4 write progress.db untested; silent ACIP fallback |
