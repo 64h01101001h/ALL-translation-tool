@@ -2863,3 +2863,24 @@ was conducted while finding it.
 
 ## no_supplied_span_head gate: column blindness (2026-09-05)
 The gate's PAT matches any d5/d7 span whose text begins with a function word, on EITHER side. Tibetan `the tshom` (doubt) trips it (c5p30/s88w12, allowlisted with a note; C03 instances sit inside the frozen ratchet). Fix: restrict PAT to the English column (the second `.eng` block of each pair), re-verify with tools/mutate.py, and then remove the c5p30/s88w12 allowlist entry.
+
+## ★★★★★ RELEASE 1.0 — PUBLIC, TWO-WEEK TARGET (Adam, 2026-09-08)
+
+Adam paused the alignment campaign (C05 at 165/511, ledger records it)
+and redirected to shipping. The plan is `docs/RELEASE_PLAN_2026-09.md`;
+the function-by-function checklists are `docs/release_audit/<Pane>.md`
+(one per pane, generated from the code 2026-09-08, walked with Adam pane
+by pane; every row gets SHIP / HIDE / FIX / LABEL).
+
+- [ ] Walk all 22 panes + main window with Adam (week 1; order in the plan)
+- [ ] LICENSE decision from ALL (blocks a public release)
+- [ ] GitHub hosting: app repo + data-release repo + `manifest.json` at
+      `releases/latest/download/` (plan §3a); `tools/publish_data_release.sh`
+- [ ] In-app update check + desktop notification + install through the
+      existing Import-data-release pipeline (plan §3b; selftest-pinned)
+- [ ] Data-migration statement: weekly dictionary updates never touch
+      glossaries / saved searches / roster / progress.db (plan §3c)
+- [ ] Defect-intake address in About + diagnostic report
+- [ ] HIDE list behind one `kReleaseHidden`; feature guide regenerated
+- [ ] FIX list (filled from the walk) — closed by day 10
+- [ ] VERSION 1.0.0, press, CLEAN-MAC test, first GitHub releases
