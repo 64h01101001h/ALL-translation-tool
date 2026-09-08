@@ -6,8 +6,13 @@ would want from a tool — so that what ships earns its place. Answers feed
 the release audit: a function nobody asked for and nobody uses does not
 survive the steelman.*
 
-*Send as email from Adam; answers by reply (or a shared form if easier).
-Aim: 15 minutes to answer. Every question optional.*
+*Adam's decisions (2026-09-08): sent as email from Adam; answers by reply;
+reply-by Tuesday 15 September 2026; full length kept; Geshe Michael is a
+recipient because his answers weigh most. Recipients = the Mixed Nuts team
+as listed in Nick Lashaw's 2026-05-05 "Important for Mixed Nuts" thread
+(Nick Lashaw, Timothy Lowenhaupt, Alison Zhou Xiaoping, Utpala, Seiji Arao,
+Benjamin Kramer, S. Sanusi, Gibson Chang, thepositiveword, Stanley Chen)
+plus Geshe Michael. Gmail draft created 2026-09-08; Adam reviews and sends.*
 
 ---
 
@@ -24,7 +29,9 @@ weeks from a first public release.
 Before it goes out, I want to make sure it fits the way *you* work rather
 than the way I imagine you work. Would you take about fifteen minutes to
 answer the questions below? Reply to this email in any form — short
-answers, long ones, a voice memo, a photo of your desk. Skip anything
+answers, long ones, a voice memo, a photo of your desk — by Tuesday 15
+September if you can, so your answers land before the first release is
+locked. Skip anything
 that doesn't apply. Nothing you say will be quoted with your name.
 
 Thank you. What you tell me decides what gets built next and what gets
