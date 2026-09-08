@@ -28,3 +28,4 @@ Categories: code · decision · email · release · audit · data · question.
 - 17:45 · release · CORRECTION: the press FAILED at the battery (100/101 Release-build suites); no DMG, app NOT relaunched, desktop copy still 14:15 build. Investigating the failing suite.
 - 17:46 · release · Press failed on constitution R3 (modal count 145→146: the new library-overwrite confirmation, harness-guarded); baseline bumped after review; re-pressing
 - 17:49 · decision · Companion iOS/Android 'Tibetan Reader' (reference-only, reading not writing) filed to TODO with build options A (Qt Quick) / B (native + C bridge) for Adam's decision after 1.0 · Adam
+- 17:50 · release · Re-press: 101/101 gates, installed to /Applications (dev-d173da3, byte-identical, launch-tested) and relaunched by hand; the press's own DMG verify step failed afterwards — DMG not distributable until re-verified
