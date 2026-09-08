@@ -15,3 +15,17 @@ Rules for a digest:
   **Adam's decisions and actions** · **Numbers** (a short table if any
   changed) · **Open questions for leadership** · **Tomorrow**.
 - Kept short. A reader should finish it in two minutes.
+
+## Distribution (Adam, 2026-09-08)
+
+Each digest goes out by email from Adam's Gmail with three attachments —
+the `.md`, a `.txt` (pandoc plain) and a `.docx` (pandoc) — so every
+reader can open it in whatever they use. Recipients: Geshe Michael Roach
+<geshemichael@gmail.com>, John Brady <john.brady@asianlegacylibrary.org>,
+Joel Crawford <joel.crawford@asianlegacylibrary.org>. Subject line:
+`Diamond Cutter Translation Tool — daily digest, <weekday> <D Month YYYY>`.
+The assistant prepares the email as a Gmail DRAFT with the attachments and
+a short cover note; Adam reads and sends.
+
+    pandoc docs/digests/D.md -o docs/digests/D.docx
+    pandoc docs/digests/D.md -t plain --columns=78 -o docs/digests/D.txt
