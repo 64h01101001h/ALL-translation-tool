@@ -37,6 +37,7 @@
 | Report link `bib:<i>` | `insertBibEntry()` — inserts a published bibliography entry with citation | 19727; `insertBibEntry()` 21068 | NONE | — |
 | Report link `cand:<i>` | `insertCandidate()` — inserts a PENDING, not-GMR-approved note, labelled as such | 19729; `insertCandidate()` 21077 | NONE | Honesty-critical label lives only in this one string |
 | Draft editor (`QPlainTextEdit`) | The English draft; persisted per session; target of every insert action | 19613–19616 | exercised throughout selfTest | `sess::remember(draft_, "draft/english")` |
+| **File → Save / Save As** (menu, ⌘S / ⇧⌘S) — ADDED 2026-09-08 | `saveDraft()` writes the English draft as UTF-8 plain text to `draftPath_` (Save As asks, `.txt/.md`); status on the terminology line; failure says NOT SAVED via `saveOrWarn` | `saveDraft()` / `saveDraftAs()` before `selfTest()` | `"Save As writes the draft byte for byte…"`, `"Save reuses the Save As path…"`, `"a failed draft Save says NOT SAVED…"` | Draft only — the source box is not saved (it came from a file or the Overlay). No Open counterpart yet |
 
 No `setShortcut`, `addAction`, context menu, drag/drop, or double-click handlers exist anywhere in the class — the pane is entirely button- and link-driven, and has **no keyboard accelerators of its own**.
 

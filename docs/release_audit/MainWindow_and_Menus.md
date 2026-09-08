@@ -24,6 +24,7 @@ Coverage column: exact `check(...)`/`log <<` assertion string from the `--selfte
 | File → **Reload Data Layers** | `reloadApprovedLayers()` + `reloadTeachingIndices(root)`; status-bar message for 6 s | 36894–36909 | Seam proven by "G6 seam: a ruling made NOW is live NOW (and cleanly restored)" | Does **not** reload the spine — the message says so |
 | File → **Close Window** (⌘W, `QKeySequence::Close`) | `QMainWindow::close` | 36911–36916 | NONE | On macOS closing the only window quits after `lastWindowClosed` |
 | File → **Import Data Release…** | Calls the global `g_importRelease` if set | 36918–36921 | NONE | Silent no-op if the hook was never installed |
+| **File → Save** (⌘S) / **Save As…** (⇧⌘S) — ADDED 2026-09-08 (Adam's request) | Routed to the front pane: Manuscript `save()/saveAs()`, Draft `saveDraft()/saveDraftAs()`, Overlay `saveDocument()/saveDocumentAs()`; elsewhere a 6 s status-bar message naming what Save applies to | main.cpp File menu block after Open Recent (`saveRoute`) | Overlay: 4 selftest checks; Draft: 3; Manuscript: existing WP-1 checks. The routing lambda itself is untested | Front pane = focus ancestor, else `isVisible()` |
 
 ### 2.2 Edit menu (36922–37027)
 
