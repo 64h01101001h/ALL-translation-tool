@@ -6487,9 +6487,100 @@ public:
         }
         input_->clear();
         loadDoc();
+        {   // File → Save / Save As on the Document box (2026-09-08)
+            const QString keepText = input_->toPlainText();
+            const QString keepFile = docFile_;
+            const bool keepWylie = wasWylieFile_;
+            const QString outP = QDir::temp().filePath(
+                "all_selftest_doc_save.txt");
+            const QString outP2 = QDir::temp().filePath(
+                "all_selftest_doc_save2.txt");
+            QFile::remove(outP);
+            QFile::remove(outP2);
+            input_->setPlainText("@001A *, ,SEMS CAN THAMS CAD,,");
+            g_saveDialogStub = [outP](const QString&, const QString&,
+                                      const QString&) { return outP; };
+            const bool okAs = saveDocumentAs();
+            QFile pf(outP);
+            const bool round = pf.open(QIODevice::ReadOnly) &&
+                               pf.readAll() ==
+                                   input_->toPlainText().toUtf8();
+            check(okAs && round && docFile_ == outP,
+                  "Save As writes the Document box byte for byte and "
+                  "the box now belongs to that file");
+            input_->setPlainText("@001A *, ,SEMS CAN,,");
+            const bool okSave = saveDocument();
+            QFile pf2(outP);
+            const bool round2 = pf2.open(QIODevice::ReadOnly) &&
+                                pf2.readAll() ==
+                                    QByteArray("@001A *, ,SEMS CAN,,");
+            check(okSave && round2 && docFile_ == outP,
+                  "Save rewrites the opened file in place");
+            wasWylieFile_ = true;   // the box holds a CONVERSION
+            g_saveDialogStub = [outP2](const QString&, const QString&,
+                                       const QString&) { return outP2; };
+            const bool okW = saveDocument();
+            g_saveDialogStub = nullptr;
+            check(okW && docFile_ == outP2 && !wasWylieFile_ &&
+                      QFile::exists(outP2) && QFile(outP).size() > 0,
+                  "Save on a converted wylie file becomes Save As: the "
+                  "wylie source is never overwritten with ACIP");
+            docFile_ = "/nonexistent-dir-save/doc.txt";
+            check(!saveDocument(),
+                  "a failed document Save says NOT SAVED, never success");
+            QFile::remove(outP);
+            QFile::remove(outP2);
+            input_->setPlainText(keepText);
+            docFile_ = keepFile;
+            wasWylieFile_ = keepWylie;
+            refreshDocTitle();
+        }
         return fails;
     }
 
+    // File → Save / Save As on the Document box (Adam, 2026-09-08).
+    // Save writes back to the opened file. Two refusals to do that
+    // silently: a wylie file was CONVERTED to ACIP on load, so Save
+    // on it becomes Save As (never overwrite a wylie source with
+    // ACIP); a file under library/ asks first (canonical texts are
+    // not casually rewritten). The verdict comes from saveOrWarn
+    // (WP-1): "saved" is never said over a lost write.
+    bool saveDocument() {
+        if (docFile_.isEmpty() || wasWylieFile_) return saveDocumentAs();
+        if (!g_harnessRun && docFile_.contains("/library/")) {
+            if (QMessageBox::question(
+                    this, "Save over a library text?",
+                    QString("%1 is part of the library. Overwrite it "
+                            "with the Document box contents?")
+                        .arg(QFileInfo(docFile_).fileName())) !=
+                QMessageBox::Yes)
+                return false;
+        }
+        return writeDocumentTo(docFile_);
+    }
+    bool saveDocumentAs() {
+        const QString fn = safeGetSaveFileName(
+            this, "Save document",
+            docFile_.isEmpty() ? QStringLiteral("document.txt") : docFile_,
+            "Texts (*.txt *.act *.inc *.ace);;All files (*)");
+        if (fn.isEmpty()) return false;
+        if (!writeDocumentTo(fn)) return false;
+        docFile_ = fn;
+        wasWylieFile_ = false;   // what is on disk now IS the box
+        refreshDocTitle();
+        return true;
+    }
+    bool writeDocumentTo(const QString& fn) {
+        if (!saveOrWarn(this, fn, input_->toPlainText().toUtf8(),
+                        "The document")) {
+            if (hint_) hint_->setText("NOT SAVED \u2014 " + fn);
+            return false;
+        }
+        if (hint_)
+            hint_->setText(QFileInfo(fn).fileName() + " \u2014 saved " +
+                           QTime::currentTime().toString("HH:mm"));
+        return true;
+    }
     void openFile(const QString& fn) {
         QFile f(fn);
         if (!f.open(QIODevice::ReadOnly)) {
@@ -19840,6 +19931,35 @@ auto* secPub = new QLabel("<span style='color:#9A7A33;font-size:10px;letter-spac
         if (!clauses_.empty()) showAnchors(0);
     }
 
+    // File → Save / Save As (Adam, 2026-09-08): the English draft to a
+    // plain-text file. Save reuses the last path; Save As asks. The
+    // verdict comes from saveOrWarn (WP-1), never from an unchecked
+    // write. The status lands on the terminology line, which is the
+    // pane's one always-visible status surface.
+    QString draftPath() const { return draftPath_; }
+    bool saveDraft() {
+        if (draftPath_.isEmpty()) return saveDraftAs();
+        if (!saveOrWarn(this, draftPath_, draft_->toPlainText().toUtf8(),
+                        "The draft")) {
+            if (termLive_) termLive_->setText("NOT SAVED \u2014 " + draftPath_);
+            return false;
+        }
+        if (termLive_)
+            termLive_->setText(QFileInfo(draftPath_).fileName() +
+                               " \u2014 saved " +
+                               QTime::currentTime().toString("HH:mm"));
+        return true;
+    }
+    bool saveDraftAs() {
+        const QString fn = safeGetSaveFileName(
+            this, "Save draft",
+            draftPath_.isEmpty() ? QStringLiteral("draft.txt") : draftPath_,
+            "Text (*.txt *.md);;All files (*)");
+        if (fn.isEmpty()) return false;
+        draftPath_ = fn;
+        return saveDraft();
+    }
+
     int selfTest(QStringList& log) {
         int fails = 0;
         auto check = [&](bool ok, const char* what) {
@@ -19934,6 +20054,38 @@ auto* secPub = new QLabel("<span style='color:#9A7A33;font-size:10px;letter-spac
         }
         draft_->clear();
         source_->clear();
+        {   // File → Save / Save As (2026-09-08)
+            const QString keep = draft_->toPlainText();
+            const QString keepPath = draftPath_;
+            const QString outP = QDir::temp().filePath(
+                "all_selftest_draft_save.txt");
+            QFile::remove(outP);
+            draft_->setPlainText("Consider sound.\nIt is a *thing*.");
+            g_saveDialogStub = [outP](const QString&, const QString&,
+                                      const QString&) { return outP; };
+            const bool okAs = saveDraftAs();
+            g_saveDialogStub = nullptr;
+            QFile pf(outP);
+            const bool round = pf.open(QIODevice::ReadOnly) &&
+                               pf.readAll() ==
+                                   draft_->toPlainText().toUtf8();
+            check(okAs && round && draftPath_ == outP,
+                  "Save As writes the draft byte for byte to the chosen "
+                  "file");
+            draft_->setPlainText("Consider sound.");
+            const bool okSave = saveDraft();
+            QFile pf2(outP);
+            const bool round2 = pf2.open(QIODevice::ReadOnly) &&
+                                pf2.readAll() == QByteArray("Consider sound.");
+            check(okSave && round2, "Save reuses the Save As path and "
+                                    "rewrites the file");
+            draftPath_ = "/nonexistent-dir-save/draft.txt";
+            check(!saveDraft(),
+                  "a failed draft Save says NOT SAVED, never success");
+            draftPath_ = keepPath;
+            draft_->setPlainText(keep);
+            QFile::remove(outP);
+        }
         return fails;
     }
 
@@ -21399,6 +21551,7 @@ public:
     QTimer* evTimer_ = nullptr;   // Evidence Ribbon debounce
     QLabel* termLive_ = nullptr;  // terminology live-guard line
     QTimer* termTimer_ = nullptr;
+    QString draftPath_;   // File → Save target for the English draft
     QPlainTextEdit* source_ = nullptr;
     QPlainTextEdit* draft_ = nullptr;
     QTextBrowser* clauseView_ = nullptr;
@@ -36701,6 +36854,45 @@ int main(int argc, char** argv) {
                             });
                 }
             });
+        }
+        // File → Save / Save As (Adam, 2026-09-08): routed to the pane
+        // in front — Overlay (the Document box), Draft (the English
+        // draft), Manuscript (its own file). Anywhere else the status
+        // bar says what Save applies to; never a silent no-op.
+        {
+            auto active = [](QWidget* pane) {
+                for (QWidget* w = QApplication::focusWidget(); w;
+                     w = w->parentWidget())
+                    if (w == pane) return true;
+                return pane->isVisible();
+            };
+            auto saveRoute = [overlay, draftPane, manuscriptPane, &win,
+                              active](bool as) {
+                if (active(manuscriptPane)) {
+                    as ? manuscriptPane->saveAs() : manuscriptPane->save();
+                    return;
+                }
+                if (active(draftPane)) {
+                    as ? draftPane->saveDraftAs() : draftPane->saveDraft();
+                    return;
+                }
+                if (active(overlay)) {
+                    as ? overlay->saveDocumentAs() : overlay->saveDocument();
+                    return;
+                }
+                win.statusBar()->showMessage(
+                    "Save applies to the Overlay document, the Draft and "
+                    "the Manuscript \u2014 bring one of them to the front.",
+                    6000);
+            };
+            QAction* saveA = fileM->addAction("Save");
+            saveA->setShortcut(QKeySequence::Save);   // ⌘S
+            QObject::connect(saveA, &QAction::triggered,
+                             [saveRoute] { saveRoute(false); });
+            QAction* saveAsA = fileM->addAction("Save As\u2026");
+            saveAsA->setShortcut(QKeySequence::SaveAs);   // ⇧⌘S
+            QObject::connect(saveAsA, &QAction::triggered,
+                             [saveRoute] { saveRoute(true); });
         }
         fileM->addSeparator();
         // LODESTAR L6: Translation Dossiers — the desk that

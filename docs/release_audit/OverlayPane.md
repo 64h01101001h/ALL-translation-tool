@@ -53,6 +53,7 @@ Its `selfTest(QStringList&, const QString& root)` (main.cpp:4573–6492) is ~1,9
 | **shading** (combo) | Click-mode vs always-shade span highlighting | 7084, 7494 | `"nested terms tone inside the highlighted phrase"` (5001) | QSettings `overlay/shading`. |
 | **Tibetan font** (combo) | Chooses the Tibetan face for the document view | 7107, 7146 | `font_smoke` ctest (`app/CMakeLists.txt:83`) | QSettings `overlay/tibFontFamily`. |
 | **presets: reading · research · minimal** (links) | One click sets the whole card-layer toggle set | 7220 → `applyPreset()` 8360 | `"card survives display toggles instantly"` (6280) | scheme `preset:`. |
+| **File → Save / Save As** (menu, ⌘S / ⇧⌘S) — ADDED 2026-09-08 | `saveDocument()` writes the Document box back to `docFile_`; a wylie-converted file forces Save As (never overwrite wylie with ACIP); a `/library/` path asks first; Save As rebinds `docFile_` and refreshes the title strip | `saveDocument()` / `saveDocumentAs()` / `writeDocumentTo()` before `openFile()` | 4 selftest checks (byte-exact Save As, in-place Save, wylie→Save As rule, NOT SAVED on failure) | Saving over a library text is possible after confirmation — release question: should library files be read-only here? |
 
 ### 2b. Card-layer and document-mark checkboxes (`mkToggle`, main.cpp:7159–7311)
 
