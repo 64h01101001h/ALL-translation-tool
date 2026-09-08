@@ -4,8 +4,9 @@ One file per pane/class, produced by reading `app/main.cpp` (not from
 memory). Each lists every user-visible control with its code anchor,
 its automated coverage (selfTest check / ctest suite / NONE) and its
 risks, then the internal functions, dependencies and release questions.
-The walk with Adam adds a `Disposition` (SHIP / HIDE / FIX / LABEL) per
-row. Plan: `docs/RELEASE_PLAN_2026-09.md`.
+The walk with Adam adds a `Why it exists` justification (the steelman step:
+the strongest case for the component, or it goes) and a `Disposition`
+(SHIP / HIDE / CUT / FIX / LABEL) per row. Plan: `docs/RELEASE_PLAN_2026-09.md`.
 
 Counts are the auditors' own tallies; "NONE" = no automated test
 exercises the control.
