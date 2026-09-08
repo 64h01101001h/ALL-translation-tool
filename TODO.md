@@ -2898,8 +2898,10 @@ by pane; every row gets SHIP / HIDE / FIX / LABEL).
       (blocked for the assistant). Until then GitHub is 446 commits stale.
 - [ ] **Backup drive push** — the 8 TB mirror was unmounted from ~13:30;
       `git push backup HEAD:main` when it is back.
-- [ ] **First daily digest** — draft waiting in Adam's Gmail Drafts
-      (2026-09-08, three attachments); Adam reads and sends.
+- [x] **First daily digest** and the **Overlay audit email** — both sent by
+      Adam 2026-09-08 (Overlay audit attached as .md/.txt/.docx by hand).
+      Lesson: attachments above ~40 KB are attached by Adam, not through
+      the mail tool; the digest text goes inline in the body from now on.
 - [ ] **Rotate the Anthropic API keys** pasted into chat today and earlier
       in the session (never used, never stored; exposed all the same).
 - [ ] **Release note:** the press prunes the 279 MB `tm_84000.db` cache from
