@@ -47,7 +47,16 @@ the/a/an/and/or/his/our/your/I/you unless `data/alignment/span_head_allow.json`
 lists it under `pages_c05` with the Tibetan word that licenses it.
 
 ## Progress
-c5p1–c5p7 (1–21) cloned 2026-09-05; c5p8–c5p49 (22–147) landed 2026-09-05. Coverage 147/511 (17 gates green at every landing; pages_c05 0 unlicensed function-word span heads).
+c5p1–c5p7 (1–21) cloned 2026-09-05; c5p8–c5p49 (22–147) landed 2026-09-05; c5p50–c5p55 (148–165) landed 2026-09-08. Coverage 165/511 (17 gates green at every landing; pages_c05 0 unlicensed function-word span heads).
+
+**PAUSED 2026-09-08 (Adam's call): the campaign stops here while the app goes to
+a public release (two-week target). Reconciled-but-unlanded specs for 166, 167,
+168, 169 and proposals for 170–175 exist only in session scratch and are NOT
+banked; when the campaign resumes, re-propose from 166 unless that scratch is
+still present. Errata E-178–E-182 (rows 153/155/158/160) were filed before the
+pause; the C05:167 ENGLISH_FACTUAL_ERROR ("three types" vs `bzhi`) passed its
+reconciler but has NOT had a skeptic pass and is NOT filed. Open items for Adam
+(agentive "by", "non" subword, tshal pa, seng ldeng E-169, E-157) stand.**
 
 ## Queues (wylie / english), C05
 (opened empty)
