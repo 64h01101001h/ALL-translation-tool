@@ -19,7 +19,7 @@ number is quoted it was measured that day.
 | Battery | 101 ctest suites; app selftest inside suite `app_selftest` |
 | Press | `tools/package_macos.sh` — gated DMG (release gate → Release build → battery → macdeployqt fixup → ad-hoc sign → arch/floor check → data manifest → SBOM → launch test → DMG). Checklist: `docs/RELEASE_CHECKLIST.md` |
 | Distribution docs | `docs/distribution/` (white paper, technical paper, complete feature guide, install quick start, data & privacy, authority admin guide, open-source notices) |
-| Source hosting | NO GitHub remote. Only `backup` (a mirror on the 8 TB drive). `gh` is logged in. |
+| Source hosting | GitHub: `64h01101001h/ALL-translation-tool`, **PUBLIC**, shared with Joel and John on 2026-08-25, but last pushed 2026-08-26 — 13 days and ~100 commits behind this tree. The local clone has no `origin` remote (added 2026-09-08, not yet pushed); only `backup` (the 8 TB mirror) was being pushed. Joel offered an ALL GitHub account invite. |
 | Update channel | App: View → "Check for Updates…" scans a *team folder* for newer DMGs. Data: Library → Maintenance → "Import data release…" rebuilds the spine from a data package via the bundled builder. Neither touches the network for *our* releases; nothing notifies. |
 | Signing | Ad-hoc. First launch is right-click → Open. Notarisation needs an ALL Apple Developer ID. |
 | Licence | NONE for our own code (P1 in TODO). Blocks a public release lawfully. |
@@ -184,8 +184,8 @@ Estimate: 2–3 days including tests and the privacy/manual updates.
 
 ## 5. Decisions Adam owns (ask early — they gate the date)
 
-1. Licence for our code (from ALL).
-2. Public or private GitHub repos; org name.
+1. Licence for our code (from ALL). Note the source is ALREADY public on GitHub without one.
+2. Keep the repo under Adam's handle or move it to the ALL organisation (Joel's invite); and bring it up to date — the public copy is 13 days stale.
 3. Apple Developer ID for notarisation — or accept right-click → Open
    for 1.0 and say so in the install guide.
 4. Which panes are HIDDEN for 1.0 (Catalog is the obvious candidate;
