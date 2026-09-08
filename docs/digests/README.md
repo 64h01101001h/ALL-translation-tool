@@ -29,3 +29,11 @@ a short cover note; Adam reads and sends.
 
     pandoc docs/digests/D.md -o docs/digests/D.docx
     pandoc docs/digests/D.md -t plain --columns=78 -o docs/digests/D.txt
+
+## Rolling log (Adam, 2026-09-08)
+
+`docs/digests/LOG.md` is the append-only record of notable actions
+between digests, written as they happen. The digest is drafted from it;
+after the digest is committed the entries roll into
+`docs/digests/LOG_ARCHIVE.md` under the digest's date and LOG.md is
+emptied. If it isn't in the log, it doesn't reach the digest.
