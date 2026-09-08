@@ -26,3 +26,4 @@ Categories: code · decision · email · release · audit · data · question.
 - 16:45 · decision · A rolling action log (this file) is kept between digests · Adam
 - 17:43 · release · Press + install + relaunch requested by Adam to pick up File → Save/Save As · Adam
 - 17:45 · release · CORRECTION: the press FAILED at the battery (100/101 Release-build suites); no DMG, app NOT relaunched, desktop copy still 14:15 build. Investigating the failing suite.
+- 17:46 · release · Press failed on constitution R3 (modal count 145→146: the new library-overwrite confirmation, harness-guarded); baseline bumped after review; re-pressing
