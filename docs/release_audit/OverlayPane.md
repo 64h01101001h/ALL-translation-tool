@@ -2,13 +2,13 @@
 
 ## 1. What it is
 
-## Audit log — Day 1, Session 1 (2026-09-08, Adam + Claude)
+## Audit log — Day 1, Session 1 (2026-09-08)
 
 Method: for each component, (1) STEELMAN — why it exists, for whom, what
 breaks without it; (2) test it; (3) disposition SHIP / HIDE / CUT / FIX /
 LABEL. Entries below in walk order.
 
-## Shared vocabulary (agreed with Adam, 2026-09-08 — use these names in every row and every conversation)
+## Shared vocabulary (agreed 2026-09-08 — use these names in every row and every conversation)
 
 Window frame: **Title bar** · **Pin bar** (★ row) · **Group tabs** (Read … Community, **Hunt (⌘K)**) · **Ribbon** with ribbon sections **READ** (pane switchers), **DOCUMENT** (Open ACIP file, Load into overlay, Outline, Citations & quotations, Verse meter, Prose & prayer reader), **REVIEW** (Text DNA, Typography check, Glossary, Team comments, Teachings for this text), **SPELLING** (Show spelling checkbox) · **Ribbon scrollbar** · **Status bar** (release · user/role · proposals pending).
 
