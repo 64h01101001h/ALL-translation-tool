@@ -24,3 +24,5 @@ Categories: code · decision · email · release · audit · data · question.
 - 16:25 · decision · Assistant tooling is never mentioned in correspondence; attribution line removed from the audit file · Adam
 - 16:40 · code · File → Save (⌘S) and Save As… (⇧⌘S) added, routed to the front pane: Overlay Document box (wylie-converted files force Save As; library files ask first), Draft English draft (new), Manuscript (existing). Self-tests added for each path. Requested by Adam
 - 16:45 · decision · A rolling action log (this file) is kept between digests · Adam
+- 17:43 · release · Press + install + relaunch requested by Adam to pick up File → Save/Save As · Adam
+- 17:45 · release · Pressed dev-36b64ee DMG (101/101 gates), installed to /Applications and relaunched; File → Save/Save As now live on the desktop
