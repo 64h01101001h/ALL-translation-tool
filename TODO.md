@@ -2916,3 +2916,58 @@ by pane; every row gets SHIP / HIDE / FIX / LABEL).
 - [ ] **"How would I start translating Thar lam gsal byed" walkthrough**
       (given verbally 2026-09-08) — turn into the first chapter of the user
       manual and into the manual test script for Draft/Review/Export.
+
+## 📱 COMPANION APPS — "Tibetan Reader" for iOS / Android (Adam, 2026-09-08)
+
+Adam's framing: not a translation tool, a highly pared-down REFERENCE tool
+/ Tibetan Reader. Filed after the desktop 1.0 release; nothing here is in
+the two-week scope.
+
+**Why it is feasible.** `allcore` (C++20: spine access, converters,
+pronunciation, segmentation) has no Qt dependency; the desktop panes are
+a shell over it. A phone app is a second shell. The shipped spine is the
+same SQLite file the desktop reads, and the weekly dictionary release
++ manifest designed for the desktop (RELEASE_PLAN §3) serves the phone
+unchanged.
+
+**What it is (v1 — reading, not writing):**
+- Open a text: from the bundled Library (Kangyur/Tengyur/Sungbum by
+  download, per-collection), from a pasted/shared passage (iOS share
+  sheet / Android intent), from a photo later (OCR is v2).
+- Read it: Tibetan script / ACIP / Wylie / phonetics toggle, font size,
+  night mode, folio/page marks. Tap a word → the card: HGM equivalent
+  with its TIER LABEL (binding vs PROVISIONAL vs TENTATIVE exactly as on
+  desktop — rule 1 travels), corpus concordance ("how Geshe Michael
+  rendered it, N times"), pronunciation, Sanskrit where it exists.
+  Nesting cycle (tap again → the containing phrase) as on desktop.
+- Look up: a search box over headwords and English (reverse index),
+  affix-stripped.
+- Study: the Trainer/Drills content is a natural phone fit (SRS on the
+  bus) — v1.5.
+- Offline first; dictionary updates via the same manifest, notified
+  in-app.
+- NOT in v1: Draft, Manuscript, Align, Propose/Approval, Catalog,
+  Files, Export, anything that writes to shared stores or promotes text
+  toward the authority. A reader never edits the dictionary.
+
+**How to build it (decision for Adam, not yet made):**
+- Option A — Qt Quick (QML) on iOS + Android from the same repo: one
+  codebase, Tibetan shaping via bundled HarfBuzz (the reason Qt was
+  chosen), fastest path since allcore already links. Cost: Qt mobile
+  look is not native; App Store review is fine with it.
+- Option B — SwiftUI + Jetpack Compose, each calling allcore through a
+  small C bridge: native feel, two UIs to maintain, Tibetan shaping falls
+  to the platform text stack (iOS renders Tibetan well; Android varies by
+  font — ship Noto Serif Tibetan / SambhotaDege).
+- Either way: the spine (~size below) ships in the app or downloads on
+  first run; reference.db (unlicensed compilations) does NOT ship on a
+  phone under any circumstances; BDRC scans stream, not bundle.
+- Store prerequisites overlap with desktop notarisation: an ALL Apple
+  Developer account and a Google Play developer account — the same
+  question already open in RELEASE_PLAN §5.
+
+**First steps when the time comes:** (1) size the spine and the minimal
+data folders for a phone; (2) a spike: allcore compiled for iOS arm64 +
+Android arm64 with one query round-trip; (3) a one-screen prototype of
+"paste → tap a word → card" in whichever option Adam picks; (4) the
+questionnaire's Q13 answers tell us how much Android matters.
