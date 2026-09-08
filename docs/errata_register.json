@@ -2122,5 +2122,65 @@
   "severity": "LOW",
   "confidence": "CONFIRMED",
   "note": "filed from the alignment batch, spine-verified on merge"
+ },
+ {
+  "item_id": "E-178",
+  "course": "C05",
+  "segment": "C05:153",
+  "kind": "TIBETAN_SPELLING",
+  "found": "G-YO PAR BSHAD PA",
+  "expected": "G-YO BAR BSHAD PA",
+  "evidence": "ACIP source of record reads G-YO PAR at the first occurrence and G-YO BAR at the second, in the same segment and the same construction (bsam gtan gsum pa man chad g-yo bar bshad pa). After the open syllable g-yo the nominalizer is ba: the corpus has g-yo ba in 117 rows and g-yo pa in none except this row and C16:749, which is the byte-identical re-ingest of the same file, not a witness. No other parallel (C15/C18/C09/C17 searched on the wylie 'man chad g-yo' and the English 'explained as shifting types': only C05:153 and C16:749). SKEPTIC PASS 2026-09-08 (Fable 5.1): refuted=false — verbatim in ACIP; same row writes g-yo bar in the identical construction; C16:749 is a byte-identical re-ingest; g-yo ba 117 rows vs g-yo pa 0 elsewhere. LOW/PROBABLE stands.",
+  "severity": "LOW",
+  "confidence": "PROBABLE",
+  "note": "filed from the alignment batch, spine-verified on merge"
+ },
+ {
+  "item_id": "E-179",
+  "course": "C05",
+  "segment": "C05:155",
+  "kind": "TIBETAN_SPELLING",
+  "found": "glang po che gsrungs kyi bur",
+  "expected": "glang po che bsrungs kyi bur",
+  "evidence": "ACIP source of record reads GLANG PO CHE GSRUNGS KYI BUR (same in wylie). gsr- is not a legal Tibetan prefix stack (g- does not prefix sr-; the spellchecker syllable lists were checked but are not in wylie form, so they were not used as evidence). The name is bsrungs kyi bu (Son of the Protector). Corpus: bsrungs in 51 rows; gsrungs only here and in C16:751, which is the byte-identical re-ingest of this row, not an independent witness. SKEPTIC PASS 2026-09-08 (Fable 5.1): refuted=false — verbatim in ACIP; C16:751 byte-identical re-ingest; spellchecker root list has no gsr- stack; bsrungs 51 rows vs gsrungs only here. Raised to CONFIRMED.",
+  "severity": "LOW",
+  "confidence": "CONFIRMED",
+  "note": "filed from the alignment batch, spine-verified on merge"
+ },
+ {
+  "item_id": "E-180",
+  "course": "C05",
+  "segment": "C05:158",
+  "kind": "TIBETAN_SPELLING",
+  "found": "sdug bsdal",
+  "expected": "sdug bsngal",
+  "evidence": "ACIP source of record reads SDUG BSDAL (wylie sdug bsdal); the corpus reads sdug bsngal on 1,139 other rows and sdug bsdal nowhere else. The parallel witness for this passage (C05:149 shares the root-verse line, C16:745 is the byte-identical re-ingest) offers no independent reading of this word. Spanned verbatim in the spec (w31). SKEPTIC PASS 2026-09-08 (Fable 5.1): refuted=false — verbatim in ACIP; lone occurrence vs sdug bsngal 1,139 rows; no witness anywhere (the analysts' 'C16:745' is the root verse, not this row). LOW/CONFIRMED.",
+  "severity": "LOW",
+  "confidence": "CONFIRMED",
+  "note": "filed from the alignment batch, spine-verified on merge"
+ },
+ {
+  "item_id": "E-181",
+  "course": "C05",
+  "segment": "C05:160",
+  "kind": "TIBETAN_SPELLING",
+  "found": "min chad",
+  "expected": "man chad",
+  "evidence": "ACIP of this row: \"BSAM GTAN BZHI PA'I 'OG GSUM PA MIN CHAD NA'ANG\". GMR renders \"the third on down\", i.e. man chad (\"from X on down\"). Corpus over 42,199 rows: ' man chad' 62 rows; ' min chad' 3 rows -- this row plus ILL:1737 ('rtag min chad min') and ILL:1746 ('rtag min chad ma yin'), both the unrelated negated pair permanent/annihilated (min = copula negation), so no genuine attestation of min chad as 'on down' exists. Parallel witness checked: english like '%one between%: to a neutral experience%' and wylie like '%bar ma myong bar%' both return C05:160 alone; the root verse at C05:159 ('og na'ang bar ma yod do) does not carry the phrase. Banked verbatim on the page per Rule 1 (E-167 precedent). SKEPTIC PASS 2026-09-08 (Fable 5.1): refuted=false — verbatim in ACIP; man chad 62 rows vs 3 min chad rows (two are ILL's rtag min chad); no parallel row. Severity set LOW.",
+  "severity": "LOW",
+  "confidence": "PROBABLE",
+  "note": "filed from the alignment batch, spine-verified on merge"
+ },
+ {
+  "item_id": "E-182",
+  "course": "C05",
+  "segment": "C05:160",
+  "kind": "TIBETAN_SPELLING",
+  "found": "rnam par smin ba'i",
+  "expected": "rnam par smin pa'i",
+  "evidence": "ACIP of this row: \"RNAM PAR SMIN BA'I LAS YOD PA'I PHYIR\". After suffix -n the nominaliser is pa; the same row writes 'smin par' correctly nine words later. Corpus: 'smin pa' 258 rows; 'smin ba' 4 rows, but the other three (C05:463, C16:973, TCS10:265) are all 'rnam smin bar' / 'smin bar' (the particle bar, not the nominaliser), so 'smin ba'i' occurs in this row alone. No parallel witness for the segment (see previous record). Span on the page cut at 'rnam par smin' so nothing turns on the particle. SKEPTIC PASS 2026-09-08 (Fable 5.1): refuted=false — verbatim in ACIP; -n + ba'i is 11 rows corpus-wide vs 6,109 pa'i, and GIE:314 carries an in-text {%pa'i} correction of the same pattern — an error, not a variant. LOW/PROBABLE.",
+  "severity": "LOW",
+  "confidence": "PROBABLE",
+  "note": "filed from the alignment batch, spine-verified on merge"
  }
 ]
