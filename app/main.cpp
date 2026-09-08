@@ -6523,6 +6523,7 @@ public:
             }
         }
         docFile_ = fn;
+        refreshDocTitle();
         // B11: a new text in the box retires every offset an open
         // citations report captured. Recording the name too lets a
         // retired anchor say WHICH text it was measured against
@@ -7420,7 +7421,33 @@ public:
                         QDesktopServices::openUrl(u);
                     }
                 });
-        right->addWidget(view_);
+        // the document's name and folder ride along the top of the
+        // reading pane (Adam, 2026-09-08): a reader with several
+        // volumes open sees at a glance WHICH file the overlay is
+        // showing. Elided to the pane's width; the full path is the
+        // tooltip and is selectable for copying. Empty when there is
+        // no document; "pasted document (unsaved)" when the text
+        // came from the clipboard, never a stale filename (the
+        // STATIC-5 lesson in documentLabel()).
+        auto* viewBox = new QWidget;
+        auto* vbl = new QVBoxLayout(viewBox);
+        vbl->setContentsMargins(0, 0, 0, 0);
+        vbl->setSpacing(2);
+        docTitle_ = new QLabel;
+        docTitle_->setTextInteractionFlags(Qt::TextSelectableByMouse);
+        docTitle_->setStyleSheet(
+            QString("QLabel { color: %1; padding: 2px 4px; }")
+                .arg(ux::kMuted));
+        docTitle_->setSizePolicy(QSizePolicy::Ignored,
+                                 QSizePolicy::Fixed);
+        docTitle_->setAccessibleName("Document title");
+        docTitle_->hide();
+        docTitle_->installEventFilter(this);
+        vbl->addWidget(docTitle_);
+        vbl->addWidget(view_, 1);
+        connect(input_, &QPlainTextEdit::textChanged, this,
+                [this] { refreshDocTitle(); });
+        right->addWidget(viewBox);
         right->addWidget(context_);
         right->setStretchFactor(0, 3);
         right->setStretchFactor(1, 2);
@@ -8590,6 +8617,10 @@ private:
 
 
     bool eventFilter(QObject* w, QEvent* ev) override {
+        if (w == docTitle_ && ev->type() == QEvent::Resize) {
+            refreshDocTitle();   // re-elide to the new width
+            return false;
+        }
         if (view_ && w == view_->viewport() &&
             ev->type() == QEvent::MouseButtonDblClick) {
             onClick();      // count it as one more step of the chain
@@ -12632,6 +12663,34 @@ public:
         return QString("pasted document (unsaved)");
     }
 
+    // the strip over the reading pane: "<file>  —  <folder>" for an
+    // opened file, the unsaved label for pasted text, hidden when the
+    // box is empty. Middle-elided so the file name and the folder's
+    // tail both survive a narrow pane.
+    void refreshDocTitle() {
+        if (!docTitle_) return;
+        const QString lbl = documentLabel();
+        if (lbl.isEmpty()) {
+            docTitle_->clear();
+            docTitle_->setToolTip(QString());
+            docTitle_->hide();
+            return;
+        }
+        QString text = lbl, tip = lbl;
+        if (!docFile_.isEmpty()) {
+            const QFileInfo fi(docFile_);
+            text = fi.fileName() + "  \u2014  " +
+                   QDir::toNativeSeparators(fi.absolutePath());
+            tip = QDir::toNativeSeparators(fi.absoluteFilePath());
+        }
+        const int w = std::max(120, docTitle_->width() - 12);
+        docTitle_->setText(
+            docTitle_->fontMetrics().elidedText(text, Qt::ElideMiddle, w)
+                .toHtmlEscaped());
+        docTitle_->setToolTip(tip);
+        docTitle_->show();
+    }
+
     QString prepareForTranslation() {
         const std::string src = input_->toPlainText().toStdString();
         if (src.empty()) return QString();
@@ -14818,6 +14877,7 @@ private:
     allcore::Contractions contr_;
     bool contrTried_ = false;
     QString docFile_;
+    QLabel* docTitle_ = nullptr;   // path strip over the reading pane
     // BOUNTY B11: the Document box's generation, bumped every time
     // a whole new text lands in it. The citations report is
     // modeless, and its OWN links (citefile: / citeopen:) call
