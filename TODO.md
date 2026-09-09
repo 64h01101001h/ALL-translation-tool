@@ -106,6 +106,28 @@ list before this sweep. Grouped by theme; each line says where it came from.
       · a role is a starting point, never a lock: every switch stays the
         person's afterwards
 
+## A4. Themes (Adam, 2026-09-09) — IN DESIGN
+- [ ] **A variety of cohesive colour themes covering the whole interface,
+      settable and customisable in Preferences.** Adam's constraint, in his
+      words: the shading of the highlighted words in the Overlay and every
+      section, datum and component in the card layers must work with any
+      theme the user picks. Reference he gave:
+      `docs/THEME_REFERENCE_FIGMA.md` (the Figma colour-combination
+      library — harmony schemes, no hex values, no contrast figures)
+- [ ] Design in progress: `docs/THEME_SYSTEM_PLAN.md` when it lands. The
+      three constraints that make this more than a palette swap:
+      · the five phrase washes and their nesting-depth ramp are tuned for
+        cream paper and must be re-derived per theme, with the provisional
+        lean still reading as provisional
+      · the twelve semantic inks carry epistemic meaning (binding, machine,
+        evidence, reference, refusal); a theme may re-ground them but must
+        never let two tiers converge or a machine gloss wear binding gold
+      · the constitution's G1 gate freezes the green vocabulary, so themes
+        must route through named tokens rather than literal hex in main.cpp
+- [ ] Depends on the night-mode audit landing first: the hardcoded light
+      chrome that does not follow the palette is the same defect a theme
+      system has to fix once, properly
+
 ## B. Editor's-tool candidates — build only what Utpala confirms
 - [ ] Tracked-changes `.docx` export of a two-version comparison (Word
       revision marks from the compare hunks) · queries as first-class
