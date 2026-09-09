@@ -37,3 +37,14 @@ between digests, written as they happen. The digest is drafted from it;
 after the digest is committed the entries roll into
 `docs/digests/LOG_ARCHIVE.md` under the digest's date and LOG.md is
 emptied. If it isn't in the log, it doesn't reach the digest.
+
+## Cover-note rules (Adam, 2026-09-08)
+- The digest text goes **inline** in the email body; the three files are
+  attached (or Adam attaches anything over ~40 KB himself).
+- **Recommend the .docx.** Whenever a digest or a technical document goes
+  out as .md/.txt/.docx, the cover note highly recommends opening the
+  .docx: it is properly formatted and displays far better than .md or .txt.
+- No mention of the tooling used to build the project, in any outgoing
+  email or document.
+- A next-day preview may be kept at `YYYY-MM-DD.draft.md`; rerun and
+  update it when more work lands, then promote it to the dated digest.
