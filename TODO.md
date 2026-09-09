@@ -48,6 +48,16 @@ list before this sweep. Grouped by theme; each line says where it came from.
       study frequencies. Fixing it changes quotation-detection recall, so it
       needs its own unit and a re-baselined battery
 
+## A3. Feature visibility (Adam, 2026-09-09) — DONE, with two rulings to make
+- [x] Preferences ▸ Features: every pane and group can be shown or hidden;
+      the list is built from the live build; turning everything off is
+      refused (docs/release_audit/Features.md)
+- [ ] RULING: should hidden panes also drop out of the MENUS? Today they do
+      not, so a hidden feature stays usable occasionally without being
+      switched back on
+- [ ] Ribbon groups and individual buttons within a pane are not switchable
+      yet — only whole panes and groups. Worth it, or is pane-level enough?
+
 ## B. Editor's-tool candidates — build only what Utpala confirms
 - [ ] Tracked-changes `.docx` export of a two-version comparison (Word
       revision marks from the compare hunks) · queries as first-class
