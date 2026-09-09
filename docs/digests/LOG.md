@@ -46,3 +46,4 @@ Categories: code · decision · email · release · audit · data · question.
 - 19:04 · decision · Adam: interactive local map of monasteries/holy sites (seven reference pages supplied); filed with a sources note — build from BDRC/Treasury of Lives/OSM open data, not by copying the pages · Adam
 - 19:04 · code · FIX: status-bar position hook crashed at app shutdown under ctest (QLabel::setText on a destroyed label) — QPointer guards; app_selftest green under offscreen again
 - 19:05 · question · TODO: Adam to ask Geshe Michael for research-suite requests; eight assistant suggestions filed beside it
+- 19:08 · code · Goto menu (Sublime): Anything=Hunt, Heading (sa bcad), Dictionary Entry, Concordance, Line, Folio, Jump Back/Forward (caret history), Scroll, Bookmarks (gutter dots, sidecar), Matching Bracket. 14 selftest checks

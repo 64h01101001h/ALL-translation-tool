@@ -4475,6 +4475,52 @@ inline QString selectedText(QWidget* w) {
     if (auto* l = qobject_cast<QLineEdit*>(w)) return l->selectedText();
     return {};
 }
+// Caret history for Goto ▸ Jump Back / Jump Forward (Sublime ⌃- / ⌃⇧-):
+// positions are recorded when the caret moves to a different line; a
+// jump replays without recording. Per editor, capped at 100.
+struct CaretHistory {
+    struct Spot { QPointer<QWidget> w; int pos = 0; };
+    std::vector<Spot> spots; int index = -1; bool replaying = false;
+    static CaretHistory& inst() { static CaretHistory h; return h; }
+    static int posOf(QWidget* w) {
+        if (auto* e = qobject_cast<QPlainTextEdit*>(w)) return e->textCursor().position();
+        if (auto* t = qobject_cast<QTextEdit*>(w)) return t->textCursor().position();
+        return -1;
+    }
+    static int blockOf(QWidget* w, int pos) {
+        if (auto* e = qobject_cast<QPlainTextEdit*>(w)) return e->document()->findBlock(pos).blockNumber();
+        if (auto* t = qobject_cast<QTextEdit*>(w)) return t->document()->findBlock(pos).blockNumber();
+        return -1;
+    }
+    void record(QWidget* w) {
+        if (replaying || !w) return;
+        const int pos = posOf(w); if (pos < 0) return;
+        if (index >= 0 && index < (int)spots.size() && spots[index].w == w &&
+            blockOf(w, spots[index].pos) == blockOf(w, pos)) { spots[index].pos = pos; return; }
+        spots.resize(index + 1);
+        spots.push_back({w, pos});
+        if (spots.size() > 100) spots.erase(spots.begin());
+        index = (int)spots.size() - 1;
+    }
+    bool jump(int dir) {
+        int i = index + dir;
+        while (i >= 0 && i < (int)spots.size() && !spots[i].w) i += dir;
+        if (i < 0 || i >= (int)spots.size()) return false;
+        index = i;
+        replaying = true;
+        QWidget* w = spots[i].w;
+        if (auto* e = qobject_cast<QPlainTextEdit*>(w)) { QTextCursor c = e->textCursor(); c.setPosition(std::min(spots[i].pos, e->document()->characterCount() - 1)); e->setTextCursor(c); e->ensureCursorVisible(); e->setFocus(); }
+        else if (auto* t = qobject_cast<QTextEdit*>(w)) { QTextCursor c = t->textCursor(); c.setPosition(std::min(spots[i].pos, t->document()->characterCount() - 1)); t->setTextCursor(c); t->ensureCursorVisible(); t->setFocus(); }
+        replaying = false;
+        return true;
+    }
+};
+inline bool gotoLine(QWidget* w, int line) {
+    auto go = [&](auto* ed) { QTextBlock b = ed->document()->findBlockByNumber(line - 1); if (!b.isValid()) return false; QTextCursor c(b); ed->setTextCursor(c); ed->centerCursor(); return true; };
+    if (auto* e = qobject_cast<QPlainTextEdit*>(w)) return go(e);
+    if (auto* t = qobject_cast<QTextEdit*>(w)) { QTextBlock b = t->document()->findBlockByNumber(line - 1); if (!b.isValid()) return false; t->setTextCursor(QTextCursor(b)); t->ensureCursorVisible(); return true; }
+    return false;
+}
 // The Find bar. Non-modal Tool window; incremental mode selects as you
 // type and Return keeps the hit while Esc restores where you were.
 class FindDialog : public QDialog {
@@ -4766,13 +4812,17 @@ public:
         for (auto& e : all()) if (e) e->setLineWrapMode(on ? QPlainTextEdit::WidgetWidth : QPlainTextEdit::NoWrap);
     }
     bool numbersVisible() const { return numbers_; }
+    // Bookmarks (Sublime's Goto ▸ Bookmarks): 0-based block numbers,
+    // drawn as a dot in the gutter; the gutter shows when any exist.
+    void setBookmarks(const QSet<int>& b) { bookmarks_ = b; if (gutter_) gutter_->update(); if (!b.isEmpty() && !numbers_) { gutter_->setVisible(true); updateGutterWidth(); } else if (b.isEmpty() && !numbers_) { gutter_->setVisible(false); updateGutterWidth(); } }
+    const QSet<int>& bookmarks() const { return bookmarks_; }
     void setNumbersVisible(bool on) {
         numbers_ = on;
         gutter_->setVisible(on);
         updateGutterWidth();
     }
     int gutterWidth() const {
-        if (!numbers_) return 0;
+        if (!numbers_) return bookmarks_.isEmpty() ? 0 : 14;
         int digits = 1;
         for (int m = std::max(1, blockCount()); m >= 10; m /= 10) ++digits;
         return 12 + fontMetrics().horizontalAdvance(QLatin1Char('9')) * digits;
@@ -4798,8 +4848,15 @@ private:
             int bottom = top + int(ed_->blockBoundingRect(b).height());
             const int h = ed_->fontMetrics().height();
             while (b.isValid() && top <= ev->rect().bottom()) {
-                if (b.isVisible() && bottom >= ev->rect().top())
-                    p.drawText(0, top, width() - 6, h, Qt::AlignRight, QString::number(b.blockNumber() + 1));
+                if (b.isVisible() && bottom >= ev->rect().top()) {
+                    if (ed_->numbersVisible())
+                        p.drawText(0, top, width() - 6, h, Qt::AlignRight, QString::number(b.blockNumber() + 1));
+                    if (ed_->bookmarks().contains(b.blockNumber())) {
+                        p.setBrush(QColor(0xB4, 0x54, 0x0A)); p.setPen(Qt::NoPen);
+                        p.drawEllipse(QPointF(5.5, top + h / 2.0), 3.5, 3.5);
+                        p.setPen(QColor(ux::kMuted));
+                    }
+                }
                 b = b.next();
                 top = bottom;
                 bottom = top + int(ed_->blockBoundingRect(b).height());
@@ -4811,6 +4868,7 @@ private:
     void updateGutterWidth() { setViewportMargins(gutterWidth(), 0, 0, 0); }
     Gutter* gutter_ = nullptr;
     bool numbers_ = false;
+    QSet<int> bookmarks_;
 };
 
 // ---- Selection menu (Sublime, Adam 2026-09-08): expansions on the
@@ -7878,6 +7936,50 @@ public:
             savedDigest_ = docprops::digest(keepText);
             refreshDocTitle();
         }
+        {   // Goto menu (2026-09-08): line, folio, headings, bookmarks, jump back
+            const QString keepText = input_->toPlainText();
+            const QString keepFile = docFile_;
+            input_->setPlainText("@001A *, ,SEMS,,\nline two\n@001B BDE,,\nline four\n@002A LAST,,");
+            check(editops::gotoLine(input_, 4) && input_->textCursor().blockNumber() == 3, "Goto Line lands on the line");
+            check(!editops::gotoLine(input_, 99), "Goto Line refuses a line that does not exist");
+            check(gotoFolio("1b") && input_->textCursor().position() == input_->toPlainText().indexOf("@001B"), "Goto Folio accepts '1b' and lands on @001B");
+            check(gotoFolio("@002A") && input_->textCursor().position() == input_->toPlainText().indexOf("@002A"), "Goto Folio accepts '@002A'");
+            check(!gotoFolio("7a"), "Goto Folio refuses a folio that is not in the text");
+            const QString f1 = QDir::temp().filePath("all_selftest_bm.txt");
+            { QFile f(f1); f.open(QIODevice::WriteOnly); f.write("a\nb\nc\nd"); }
+            openFile(f1);
+            editops::gotoLine(input_, 2); toggleBookmark();
+            editops::gotoLine(input_, 4); toggleBookmark();
+            check(bookmarks_.contains(1) && bookmarks_.contains(3), "Toggle Bookmark records the caret's line");
+            editops::gotoLine(input_, 1);
+            check(stepBookmark(+1) && input_->textCursor().blockNumber() == 1 && stepBookmark(+1) && input_->textCursor().blockNumber() == 3 && stepBookmark(+1) && input_->textCursor().blockNumber() == 1,
+                  "Next Bookmark steps forward and wraps");
+            check(stepBookmark(-1) && input_->textCursor().blockNumber() == 3, "Previous Bookmark steps back and wraps");
+            const QSet<int> before = bookmarks_;
+            loadBookmarks();
+            check(bookmarks_ == before && bookmarks_.size() == 2, "bookmarks persist in the properties sidecar and reload");
+            auto* ne = dynamic_cast<NumberedEdit*>(input_);
+            check(ne && ne->bookmarks().size() == 2 && ne->gutterWidth() > 0, "bookmarked lines are marked in the gutter");
+            clearBookmarks();
+            check(bookmarks_.isEmpty() && docprops::load(docprops::sidecarPath(dataRoot_, docFile_)).value("bookmarks").toArray().isEmpty(), "Clear Bookmarks empties the sidecar too");
+            QFile::remove(f1); QFile::remove(docprops::sidecarPath(dataRoot_, f1));
+            // caret history
+            auto& H = editops::CaretHistory::inst();
+            H.spots.clear(); H.index = -1;
+            input_->setPlainText("one\ntwo\nthree\nfour");
+            editops::gotoLine(input_, 1); H.record(input_);
+            editops::gotoLine(input_, 3); H.record(input_);
+            editops::gotoLine(input_, 4); H.record(input_);
+            check(H.jump(-1) && input_->textCursor().blockNumber() == 2 && H.jump(-1) && input_->textCursor().blockNumber() == 0,
+                  "Jump Back walks the caret history");
+            check(H.jump(+1) && input_->textCursor().blockNumber() == 2, "Jump Forward returns along it");
+            check(!H.jump(+5), "Jump Forward refuses past the end");
+            docFile_ = keepFile;
+            input_->setPlainText(keepText);
+            savedDigest_ = docprops::digest(keepText);
+            loadBookmarks();
+            refreshDocTitle();
+        }
         return fails;
     }
 
@@ -7936,6 +8038,85 @@ public:
         editTimer_.restart();
         return true;
     }
+    // ---- Goto menu (Sublime, 2026-09-08) ----
+    // Headings = the sa bcad outline; each returns false honestly when
+    // there is nothing to go to.
+    QStringList headingLabels() const { QStringList v; for (const SaBcadNode& n : extractSaBcad()) v << QString(n.depth * 2, ' ') + n.label; return v; }
+    bool gotoHeading(int index) {
+        const auto nodes = extractSaBcad();
+        if (index < 0 || index >= (int)nodes.size()) return false;
+        QTextCursor c(input_->document()); c.setPosition(std::min(nodes[index].pos, input_->document()->characterCount() - 1));
+        input_->setTextCursor(c); input_->centerCursor(); input_->setFocus();
+        return true;
+    }
+    bool gotoHeadingDialog() {
+        if (g_harnessRun) return false;
+        const QStringList labels = headingLabels();
+        if (labels.isEmpty()) { if (hint_) hint_->setText("No sa bcad outline detected in this text."); return false; }
+        QDialog d(this); d.setWindowTitle("Goto Heading");
+        auto* v = new QVBoxLayout(&d);
+        auto* filter = new QLineEdit; filter->setPlaceholderText("type to filter");
+        auto* list = new QListWidget; list->addItems(labels);
+        v->addWidget(filter); v->addWidget(list, 1);
+        auto* bb = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel); v->addWidget(bb);
+        connect(bb, &QDialogButtonBox::accepted, &d, &QDialog::accept);
+        connect(bb, &QDialogButtonBox::rejected, &d, &QDialog::reject);
+        connect(list, &QListWidget::itemDoubleClicked, &d, &QDialog::accept);
+        connect(filter, &QLineEdit::textChanged, [list](const QString& t) { for (int i = 0; i < list->count(); ++i) list->item(i)->setHidden(!t.isEmpty() && !list->item(i)->text().contains(t, Qt::CaseInsensitive)); });
+        d.resize(520, 480);
+        if (d.exec() != QDialog::Accepted || list->currentRow() < 0) return false;
+        return gotoHeading(list->currentRow());
+    }
+    // "@001A", "001a", "1a", "1" → the marker's position in the box.
+    bool gotoFolio(const QString& spec) {
+        QString sp = spec.trimmed(); if (sp.startsWith('@')) sp.remove(0, 1);
+        static const QRegularExpression parse("^0*(\\d+)\\s*([AaBb]?)$");
+        const auto m = parse.match(sp);
+        if (!m.hasMatch()) return false;
+        const int n = m.captured(1).toInt(); const QString side = m.captured(2).toUpper();
+        static const QRegularExpression re("@(\\d{2,3})([AaBb])\\b");
+        const QString all = input_->toPlainText();
+        auto it = re.globalMatch(all);
+        while (it.hasNext()) {
+            const auto mm = it.next();
+            if (mm.captured(1).toInt() == n && (side.isEmpty() || mm.captured(2).toUpper() == side)) {
+                QTextCursor c(input_->document()); c.setPosition(mm.capturedStart());
+                input_->setTextCursor(c); input_->centerCursor(); input_->setFocus();
+                return true;
+            }
+        }
+        return false;
+    }
+    // Bookmarks live in the properties sidecar so they survive Rename.
+    void loadBookmarks() {
+        bookmarks_.clear();
+        for (const QJsonValue& v : docprops::load(docprops::sidecarPath(dataRoot_, docFile_)).value("bookmarks").toArray()) bookmarks_.insert(v.toInt());
+        if (auto* ne = dynamic_cast<NumberedEdit*>(input_)) ne->setBookmarks(bookmarks_);
+    }
+    void saveBookmarks() {
+        if (auto* ne = dynamic_cast<NumberedEdit*>(input_)) ne->setBookmarks(bookmarks_);
+        const QString sc = docprops::sidecarPath(dataRoot_, docFile_);
+        if (sc.isEmpty()) return;
+        QJsonObject o = docprops::load(sc); QJsonArray a; QList<int> sorted(bookmarks_.begin(), bookmarks_.end()); std::sort(sorted.begin(), sorted.end());
+        for (int b : sorted) a.append(b);
+        o["bookmarks"] = a; docprops::store(this, sc, o);
+    }
+    const QSet<int>& bookmarks() const { return bookmarks_; }
+    void toggleBookmark() {
+        const int line = input_->textCursor().blockNumber();
+        if (bookmarks_.contains(line)) bookmarks_.remove(line); else bookmarks_.insert(line);
+        saveBookmarks();
+    }
+    bool stepBookmark(int dir) {
+        if (bookmarks_.isEmpty()) return false;
+        QList<int> sorted(bookmarks_.begin(), bookmarks_.end()); std::sort(sorted.begin(), sorted.end());
+        const int cur = input_->textCursor().blockNumber();
+        int pick = -1;
+        if (dir > 0) { for (int b : sorted) if (b > cur) { pick = b; break; } if (pick < 0) pick = sorted.first(); }
+        else { for (int i = sorted.size() - 1; i >= 0; --i) if (sorted[i] < cur) { pick = sorted[i]; break; } if (pick < 0) pick = sorted.last(); }
+        return editops::gotoLine(input_, pick + 1);
+    }
+    void clearBookmarks() { bookmarks_.clear(); saveBookmarks(); }
     // ---- Sublime's View / Selection / Goto hooks (2026-09-08) ----
     QString lineEnding() const { return docLineEnding_; }
     void setLineEnding(const QString& le) { if (le == "LF" || le == "CRLF" || le == "CR") docLineEnding_ = le; }
@@ -8218,6 +8399,7 @@ public:
         refreshDocTitle();
         savedDigest_ = docprops::digest(input_->toPlainText());
         editTimer_.restart();
+        loadBookmarks();
         // B11: a new text in the box retires every offset an open
         // citations report captured. Recording the name too lets a
         // retired anchor say WHICH text it was measured against
@@ -16578,6 +16760,7 @@ private:
     QString pendingEncoding_;        // set by Reopen with Encoding before openFile()
     QString docLineEnding_ = "LF";  // LF / CRLF / CR as found on disk
     QWidget* controlColumn_ = nullptr; // the left column (Focus mode hides it)
+    QSet<int> bookmarks_;              // 0-based lines, per document, in the properties sidecar
     QElapsedTimer editTimer_;      // editing time since open/save (Statistics)
     // BOUNTY B11: the Document box's generation, bumped every time
     // a whole new text lands in it. The citations report is
@@ -39414,6 +39597,64 @@ int main(int argc, char** argv) {
         act("Find selected next (clipboard)\u2026", QKeySequence("Ctrl+F3"), [seeded] { seeded(QApplication::clipboard()->text(), false, "Find clipboard"); });
         act("Find selected previous (clipboard)\u2026", QKeySequence("Ctrl+Shift+F3"), [seeded] { seeded(QApplication::clipboard()->text(), true, "Find clipboard"); });
     }
+    // ---- Goto menu (Sublime's, Adam 2026-09-08) ----
+    {
+        QMenu* gm = win.menuBar()->addMenu("Goto");
+        auto ed = [] { return editops::lastEditor().data(); };
+        auto act = [&](const QString& name, const QKeySequence& ks, auto fn) {
+            QAction* a = gm->addAction(name);
+            if (!ks.isEmpty()) a->setShortcut(ks);
+            QObject::connect(a, &QAction::triggered, fn);
+            return a;
+        };
+        act("Goto Anything\u2026", QKeySequence(), [] { if (g_hunt) g_hunt->openPalette(); });
+        gm->addSeparator();
+        act("Goto Heading\u2026", QKeySequence("Ctrl+R"), [overlay] { overlay->gotoHeadingDialog(); });
+        act("Goto Dictionary Entry", QKeySequence("Ctrl+Alt+Down"), [ed, &win] {
+            const QString w = editops::wordUnderCaret(ed());
+            if (w.isEmpty()) { win.statusBar()->showMessage("Put the caret on a word first.", 3000); return; }
+            if (g_lookupQuery) g_lookupQuery(w);
+        });
+        act("Goto Concordance", QKeySequence("Ctrl+Alt+Shift+Down"), [ed, goferPane, &win] {
+            const QString w = editops::wordUnderCaret(ed());
+            if (w.isEmpty()) { win.statusBar()->showMessage("Put the caret on a word first.", 3000); return; }
+            if (g_raisePane) g_raisePane(goferPane);
+            goferPane->searchFor(w);
+        });
+        act("Goto Line\u2026", QKeySequence("Meta+G"), [ed, &win] {
+            QWidget* w = ed(); if (!w) return;
+            const QString n = docprops::askName(&win, "Goto Line", "Line number:", QString());
+            bool ok = false; const int line = n.toInt(&ok);
+            if (!ok || !editops::gotoLine(w, line)) win.statusBar()->showMessage("No such line.", 3000);
+        });
+        act("Goto Folio\u2026", QKeySequence("Meta+Shift+G"), [overlay, &win] {
+            const QString n = docprops::askName(&win, "Goto Folio", "Folio (e.g. 12a, @012B, 12):", QString());
+            if (!n.isEmpty() && !overlay->gotoFolio(n)) win.statusBar()->showMessage("No such folio marker in the Document box.", 3000);
+        });
+        gm->addSeparator();
+        act("Jump Back", QKeySequence("Meta+-"), [&win] { if (!editops::CaretHistory::inst().jump(-1)) win.statusBar()->showMessage("No earlier position.", 2000); });
+        act("Jump Forward", QKeySequence("Meta+Shift+-"), [&win] { if (!editops::CaretHistory::inst().jump(+1)) win.statusBar()->showMessage("No later position.", 2000); });
+        gm->addSeparator();
+        QMenu* scroll = gm->addMenu("Scroll");
+        QObject::connect(scroll->addAction("Scroll to Selection"), &QAction::triggered, [ed] {
+            if (auto* e = qobject_cast<QPlainTextEdit*>(ed())) e->centerCursor(); else if (auto* t = qobject_cast<QTextEdit*>(ed())) t->ensureCursorVisible();
+        });
+        QAction* lu = scroll->addAction("Line Up"); lu->setShortcut(QKeySequence("Meta+Alt+Up"));
+        QObject::connect(lu, &QAction::triggered, [ed] { if (auto* a = qobject_cast<QAbstractScrollArea*>(ed())) a->verticalScrollBar()->setValue(a->verticalScrollBar()->value() - 1); });
+        QAction* ld = scroll->addAction("Line Down"); ld->setShortcut(QKeySequence("Meta+Alt+Down"));
+        QObject::connect(ld, &QAction::triggered, [ed] { if (auto* a = qobject_cast<QAbstractScrollArea*>(ed())) a->verticalScrollBar()->setValue(a->verticalScrollBar()->value() + 1); });
+        QMenu* bm = gm->addMenu("Bookmarks");
+        QAction* tb = bm->addAction("Toggle Bookmark"); tb->setShortcut(QKeySequence("Ctrl+F2"));
+        QObject::connect(tb, &QAction::triggered, [overlay] { overlay->toggleBookmark(); });
+        QAction* nb = bm->addAction("Next Bookmark"); nb->setShortcut(QKeySequence("F2"));
+        QObject::connect(nb, &QAction::triggered, [overlay, &win] { if (!overlay->stepBookmark(+1)) win.statusBar()->showMessage("No bookmarks in this document.", 3000); });
+        QAction* pb = bm->addAction("Previous Bookmark"); pb->setShortcut(QKeySequence("Shift+F2"));
+        QObject::connect(pb, &QAction::triggered, [overlay, &win] { if (!overlay->stepBookmark(-1)) win.statusBar()->showMessage("No bookmarks in this document.", 3000); });
+        QAction* cb = bm->addAction("Clear Bookmarks"); cb->setShortcut(QKeySequence("Ctrl+Shift+F2"));
+        QObject::connect(cb, &QAction::triggered, [overlay] { overlay->clearBookmarks(); });
+        gm->addSeparator();
+        act("Jump to Matching Bracket", QKeySequence("Meta+M"), [ed, &win] { if (!selops::jumpToMatchingBracket(ed())) win.statusBar()->showMessage("No bracket at the caret.", 3000); });
+    }
         QMenu* view = win.menuBar()->addMenu("View");
         // ---- Sublime + Word View items (Adam, 2026-09-08) ----
         {
@@ -39509,6 +39750,7 @@ int main(int argc, char** argv) {
                 if (!posLbl || !ovp) return;
                 OverlayPane* overlay = ovp.data();
                 QWidget* w = editops::lastEditor();
+                editops::CaretHistory::inst().record(w);
                 QString pos;
                 if (auto* e = qobject_cast<QPlainTextEdit*>(w)) pos = QString("Line %1, Column %2").arg(e->textCursor().blockNumber() + 1).arg(e->textCursor().positionInBlock() + 1);
                 else if (auto* t = qobject_cast<QTextEdit*>(w)) pos = QString("Line %1, Column %2").arg(t->textCursor().blockNumber() + 1).arg(t->textCursor().positionInBlock() + 1);
@@ -42518,8 +42760,8 @@ int main(int argc, char** argv) {
             // 9l sits before the group menus — positional indexing
             // failed the day it landed)
             const auto menus = win.menuBar()->actions();
-            bool ok = menus.size() == tabs.count() + 6;   // File +
-                                                          // Edit + Selection + Find +
+            bool ok = menus.size() == tabs.count() + 7;   // File +
+                                                          // Edit + Selection + Find + Goto +
                                                           // groups +
                                                           // View + Help
             int overlayActions = 0;
