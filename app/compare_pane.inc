@@ -203,6 +203,9 @@ public:
         sc("F8", [this] { step(+1); }); sc("F7", [this] { step(-1); });
         sc("Alt+Right", [this] { copyCurrent(true, false); }); sc("Alt+Left", [this] { copyCurrent(false, false); });
         sc("F5", [this] { rescanFromEditors(); });
+        // default rules from Preferences ▸ Compare (2026-09-08)
+        opts_ = cmp::optionsFrom(QJsonDocument::fromJson(QSettings("ALL", "TranslationTool").value("compare/defaultOptions").toByteArray()).object());
+        syncRuleButtons();
         setLines({}, {}, "", "");
     }
 

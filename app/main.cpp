@@ -33826,9 +33826,6 @@ private:
     std::vector<QString> inserts_;
 };
 
-// ---- SettingsDialog (Adam, 2026-08-10): one place for everything the
-// app remembers, grouped and explained. Values live in QSettings —
-// this dialog only reads/writes the same keys the panes use.
 // ── Cataloging workflow (Adam, 2026-08-19: "bring files from the
 // inhouse uncataloged data into our official database/catalog...
 // begin by building out a place for it to live") ──────────────────
@@ -36611,191 +36608,269 @@ public:
     }
 };
 
-class SettingsDialog : public QDialog {
+// Preferences (Adam, 2026-09-08: Word's icon-grid Preferences window plus
+// Sublime's settings pages). Replaces SettingsDialog. Every control here
+// maps onto a QSettings key that some code actually reads; the House
+// Style page holds the ALL style sheet's rules as switches (Adam: "it
+// should be something that can be turned on and off in the preferences").
+class PreferencesDialog : public QDialog {
 public:
-    SettingsDialog(std::function<void(bool)> applyNight, QWidget* parent)
-        : QDialog(parent), applyNight_(applyNight) {
-        setWindowTitle("Settings");
-        resize(560, 520);
+    PreferencesDialog(std::function<void(bool)> applyNight, QMenuBar* menuBar, QWidget* parent)
+        : QDialog(parent), applyNight_(std::move(applyNight)), menuBar_(menuBar) {
+        setWindowTitle("Preferences");
+        resize(780, 620);
         setStyleSheet(
             "QDialog { background: #F1EBDD; }"
-            "QGroupBox { font-weight: 600; color: #8C2F2B;"
-            "  border: 1px solid #C9B992; border-radius: 8px;"
-            "  margin-top: 12px; padding-top: 8px;"
-            "  background: #FAF6EE; }"
-            "QGroupBox::title { subcontrol-origin: margin;"
-            "  left: 10px; padding: 0 4px; }"
-            "QLabel, QCheckBox { color: #2B2118; }"
-            "QLineEdit { background: #FFFFFF; color: #2B2118;"
-            "  border: 1px solid #C9B992; border-radius: 6px;"
-            "  padding: 5px 8px; }");
-        QSettings st("ALL", "TranslationTool");
+            "QGroupBox { font-weight: 600; color: #8C2F2B; border: 1px solid #C9B992; border-radius: 8px; margin-top: 12px; padding-top: 8px; background: #FAF6EE; }"
+            "QGroupBox::title { subcontrol-origin: margin; left: 10px; padding: 0 4px; }"
+            "QLabel, QCheckBox, QRadioButton { color: #2B2118; }"
+            "QLineEdit { background: #FFFFFF; color: #2B2118; border: 1px solid #C9B992; border-radius: 6px; padding: 5px 8px; }"
+            "QListWidget#prefGrid { background: transparent; border: none; }"
+            "QListWidget#prefGrid::item { padding: 6px; border-radius: 8px; }"
+            "QListWidget#prefGrid::item:hover { background: rgba(154,122,51,0.12); }"
+            "QListWidget#prefGrid::item:selected { background: rgba(154,122,51,0.22); color: #2B2118; }");
         auto* outer = new QVBoxLayout(this);
-
-        auto* appearance = new QGroupBox("Appearance");
-        auto* al = new QFormLayout(appearance);
-        night_ = new QCheckBox("Night mode (dark chrome, cream pages)");
-        night_->setChecked(st.value("app/nightMode", true).toBool());
-        al->addRow(night_);
-        outer->addWidget(appearance);
-
-        auto* reading = new QGroupBox("Reading");
-        auto* rl = new QFormLayout(reading);
-        script_ = new QComboBox;
-        script_->addItems({"Tibetan script", "ACIP", "Wylie"});
-        script_->setCurrentIndex(
-            st.value("overlay/scriptMode", 1).toInt());
-        rl->addRow("Overlay displays text as", script_);
-        outer->addWidget(reading);
-
-        auto* team = new QGroupBox("Team & proposals");
-        auto* tl = new QFormLayout(team);
-        name_ = new QLineEdit(st.value("team/name").toString());
-        tl->addRow("Your name (provenance)", name_);
-        admin_ = new QCheckBox(
-            "Authority role (Geshe Michael / Adam) \u2014 shows the "
-            "Approval pane");
-        admin_->setChecked(st.value("team/admin", false).toBool());
-        tl->addRow(admin_);
-        dir_ = new QLineEdit(st.value("team/proposalsDir").toString());
-        auto* pick = new QPushButton("Choose\u2026");
-        auto* dr = new QHBoxLayout;
-        dr->addWidget(dir_, 1);
-        dr->addWidget(pick);
-        auto* dw = new QWidget;
-        dw->setLayout(dr);
-        tl->addRow("Shared proposals folder", dw);
-        connect(pick, &QPushButton::clicked, [this] {
-            const QString d = safeGetExistingDirectory(
-                this, "Shared proposals folder (the team Dropbox)");
-            if (!d.isEmpty()) dir_->setText(d);
-        });
-        outer->addWidget(team);
-
-        // House style (Adam, 2026-09-08): the ALL style sheet's spacing
-        auto* style = new QGroupBox("House style (English)");
-        auto* sl = new QFormLayout(style);
-        hsSentence_ = new QCheckBox("Two spaces after a sentence ( . ? ! )");
-        hsColon_ = new QCheckBox("Two spaces after a colon");
-        hsSemi_ = new QCheckBox("Exactly one space after a semicolon");
-        hsSave_ = new QCheckBox("Apply when saving the Draft or Manuscript");
-        hsLive_ = new QCheckBox("Apply while typing (a space after . ? ! becomes two)");
-        hsSentence_->setChecked(st.value("style/twoSpacesSentence", false).toBool());
-        hsColon_->setChecked(st.value("style/twoSpacesColon", false).toBool());
-        hsSemi_->setChecked(st.value("style/oneSpaceSemicolon", false).toBool());
-        hsSave_->setChecked(st.value("style/applyOnSave", false).toBool());
-        hsLive_->setChecked(st.value("style/live", false).toBool());
-        for (auto* c : {hsSentence_, hsColon_, hsSemi_, hsSave_, hsLive_}) sl->addRow(c);
-        sl->addRow(new QLabel("<small>Format \u25B8 Apply House Style Spacing runs the pass on demand. English only: lines without lower-case letters (ACIP) and abbreviations before a lower-case word are left alone.</small>"));
-        outer->addWidget(style);
-
-        auto* data = new QGroupBox("Data");
-        auto* dl = new QFormLayout(data);
-        updDir_ = new QLineEdit(st.value("app/updatesDir").toString());
-        auto* updPick = new QPushButton("Choose\u2026");
-        auto* ur = new QHBoxLayout;
-        ur->addWidget(updDir_, 1);
-        ur->addWidget(updPick);
-        auto* uw = new QWidget;
-        uw->setLayout(ur);
-        dl->addRow("Team updates folder", uw);
-        connect(updPick, &QPushButton::clicked, [this] {
-            const QString d = safeGetExistingDirectory(
-                this, "Team updates folder (where new DMGs arrive)");
-            if (!d.isEmpty()) updDir_->setText(d);
-        });
-        dataRoot_ = new QLineEdit(st.value("app/dataRoot").toString());
-        dataRoot_->setPlaceholderText(
-            "auto-detected \u2014 set only to override");
-        dl->addRow("Data folder override", dataRoot_);
-        dl->addRow(new QLabel(
-            "<small style='color:#5C4F40'>Changes to the data folder "
-            "or the authority role take effect on the next "
-            "launch.</small>"));
-        outer->addWidget(data);
-        outer->addStretch();
-
-        auto* row = new QHBoxLayout;
-        row->addStretch();
-        auto* cancel = new QPushButton("Cancel");
-        auto* save = new QPushButton("Save");
-        save->setDefault(true);
-        row->addWidget(cancel);
-        row->addWidget(save);
-        outer->addLayout(row);
-        connect(cancel, &QPushButton::clicked, this, &QDialog::reject);
-        connect(save, &QPushButton::clicked, [this] {
-            QSettings s2("ALL", "TranslationTool");
-            s2.setValue("app/nightMode", night_->isChecked());
-            s2.setValue("overlay/scriptMode", script_->currentIndex());
-            s2.setValue("team/name", name_->text().trimmed());
-            s2.setValue("team/admin", admin_->isChecked());
-            s2.setValue("team/proposalsDir", dir_->text().trimmed());
-            s2.setValue("app/updatesDir", updDir_->text().trimmed());
-            s2.setValue("style/twoSpacesSentence", hsSentence_->isChecked());
-            s2.setValue("style/twoSpacesColon", hsColon_->isChecked());
-            s2.setValue("style/oneSpaceSemicolon", hsSemi_->isChecked());
-            s2.setValue("style/applyOnSave", hsSave_->isChecked());
-            s2.setValue("style/live", hsLive_->isChecked());
-            if (dataRoot_->text().trimmed().isEmpty())
-                s2.remove("app/dataRoot");
-            else
-                s2.setValue("app/dataRoot", dataRoot_->text().trimmed());
-            if (applyNight_) applyNight_(night_->isChecked());
-            accept();
-        });
+        auto* top = new QHBoxLayout;
+        back_ = new QToolButton; back_->setText("◀ Show All"); back_->setAutoRaise(true); back_->hide();
+        title_ = new QLabel("<b>Preferences</b>");
+        search_ = new QLineEdit; search_->setPlaceholderText("Search preferences"); search_->setClearButtonEnabled(true); search_->setMaximumWidth(240);
+        top->addWidget(back_); top->addWidget(title_, 1); top->addWidget(search_);
+        outer->addLayout(top);
+        stack_ = new QStackedWidget;
+        grid_ = new QListWidget; grid_->setObjectName("prefGrid");
+        grid_->setViewMode(QListView::IconMode); grid_->setIconSize(QSize(40, 40)); grid_->setGridSize(QSize(132, 96));
+        grid_->setResizeMode(QListView::Adjust); grid_->setMovement(QListView::Static); grid_->setWordWrap(true); grid_->setSpacing(6); grid_->setUniformItemSizes(true);
+        stack_->addWidget(grid_);
+        outer->addWidget(stack_, 1);
+        buildPages();
+        for (int i = 0; i < pages_.size(); ++i) {
+            auto* it = new QListWidgetItem(miniIcon(pages_[i].icon), pages_[i].title);
+            it->setData(Qt::UserRole, i); it->setToolTip(pages_[i].blurb); it->setTextAlignment(Qt::AlignHCenter);
+            grid_->addItem(it);
+            auto* scroll = new QScrollArea; scroll->setWidgetResizable(true); scroll->setFrameShape(QFrame::NoFrame); scroll->setWidget(pages_[i].w);
+            stack_->addWidget(scroll);
+        }
+        connect(grid_, &QListWidget::itemClicked, this, [this](QListWidgetItem* it) { openPage(it->data(Qt::UserRole).toInt()); });
+        connect(grid_, &QListWidget::itemActivated, this, [this](QListWidgetItem* it) { openPage(it->data(Qt::UserRole).toInt()); });
+        connect(back_, &QToolButton::clicked, this, [this] { showGrid(); });
+        connect(search_, &QLineEdit::textChanged, this, [this](const QString& q) { filter(q); });
+        auto* bb = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel | QDialogButtonBox::Apply);
+        connect(bb->button(QDialogButtonBox::Apply), &QPushButton::clicked, this, [this] { applyAll(); });
+        connect(bb, &QDialogButtonBox::accepted, this, [this] { applyAll(); accept(); });
+        connect(bb, &QDialogButtonBox::rejected, this, &QDialog::reject);
+        outer->addWidget(bb);
     }
 
-public:
-    // TEST-7: 0.0% coverage on the one dialog that writes seven user
-    // settings. The drill proves the ROUND TRIP - a planted setting
-    // reaches the widget, an edited widget reaches the store - and
-    // puts every real key back exactly as found.
+    int pageCount() const { return pages_.size(); }
+    int currentPage() const { return stack_->currentIndex() - 1; }   // -1 = grid
+    void openPage(int i) { if (i < 0 || i >= pages_.size()) return; stack_->setCurrentIndex(i + 1); back_->show(); title_->setText("<b>" + pages_[i].title + "</b> &nbsp;<span style='color:#6B5E4E'>" + pages_[i].blurb + "</span>"); }
+    void showGrid() { stack_->setCurrentIndex(0); back_->hide(); title_->setText("<b>Preferences</b>"); }
+    int visibleGridItems() const { int n = 0; for (int i = 0; i < grid_->count(); ++i) if (!grid_->item(i)->isHidden()) ++n; return n; }
+    void filter(const QString& q) {
+        showGrid();
+        const QString t = q.trimmed();
+        for (int i = 0; i < grid_->count(); ++i) {
+            const Page& p = pages_[grid_->item(i)->data(Qt::UserRole).toInt()];
+            bool hit = t.isEmpty() || p.title.contains(t, Qt::CaseInsensitive) || p.blurb.contains(t, Qt::CaseInsensitive);
+            for (const QString& k : p.keywords) if (k.contains(t, Qt::CaseInsensitive)) hit = true;
+            grid_->item(i)->setHidden(!hit);
+        }
+    }
+    void applyAll() {
+        for (auto& p : pages_) if (p.save) p.save();
+        QSettings st("ALL", "TranslationTool");
+        if (applyNight_) applyNight_(st.value("app/nightMode", true).toBool());
+        NumberedEdit::setAllNumbers(st.value("view/lineNumbers", false).toBool());
+        NumberedEdit::setAllWrap(st.value("view/wordWrap", true).toBool());
+    }
+
+    // A page's controls, as (key → widget) so the selftest can drive them
+    QCheckBox* checkBox(const QString& key) const { return checks_.value(key, nullptr); }
+    QLineEdit* lineEdit(const QString& key) const { return edits_.value(key, nullptr); }
+    QComboBox* combo(const QString& key) const { return combos_.value(key, nullptr); }
+    int keyBindingRows() const { return bindings_ ? bindings_->topLevelItemCount() : 0; }
+
     int selfTest(QStringList& log) {
         int fails = 0;
-        auto check = [&](bool ok, const char* what) {
-            log << QString("  [%1] Settings: %2")
-                       .arg(ok ? "PASS" : "FAIL")
-                       .arg(what);
-            if (!ok) ++fails;
-        };
+        auto check = [&](bool ok, const char* what) { log << QString("  [%1] Preferences: %2").arg(ok ? "PASS" : "FAIL").arg(what); if (!ok) ++fails; };
+        check(pageCount() == 11 && grid_->count() == pageCount(), "eleven pages, one grid tile each");
+        filter("style"); check(visibleGridItems() >= 1 && visibleGridItems() < pageCount(), "search narrows the grid (\"style\" finds the House Style page)");
+        filter(""); check(visibleGridItems() == pageCount(), "clearing the search shows every tile");
+        openPage(2); check(currentPage() == 2 && !back_->isHidden(), "opening a tile shows its page and the Show All button");
+        showGrid(); check(currentPage() == -1, "Show All returns to the grid");
         QSettings st("ALL", "TranslationTool");
-        const QVariant keepName = st.value("team/name");
-        const QVariant keepNight = st.value("app/nightMode");
-        st.setValue("team/name", "Selftest Probe");
-        st.setValue("app/nightMode", false);
-        {
-            SettingsDialog d(nullptr, nullptr);
-            check(d.name_->text() == "Selftest Probe" &&
-                      !d.night_->isChecked(),
-                  "stored settings reach the widgets on construction");
-            d.name_->setText("Edited Probe");
-            d.night_->setChecked(true);
-            // drive the real Save button, not the slot by hand
-            for (auto* b : d.findChildren<QPushButton*>())
-                if (b->text() == "Save") { b->click(); break; }
-        }
+        const QVariant keepName = st.value("team/name"), keepNight = st.value("app/nightMode"), keepStyle = st.value("style/twoSpacesSentence"), keepColon = st.value("style/twoSpacesColon");
+        lineEdit("team/name")->setText("Edited Probe"); checkBox("app/nightMode")->setChecked(false); checkBox("style/twoSpacesSentence")->setChecked(true); checkBox("style/twoSpacesColon")->setChecked(false);
+        applyAll();
         QSettings st2("ALL", "TranslationTool");
-        check(st2.value("team/name").toString() == "Edited Probe" &&
-                  st2.value("app/nightMode").toBool(),
-              "Save writes the edited widgets back to the store");
-        if (keepName.isValid()) st2.setValue("team/name", keepName);
-        else st2.remove("team/name");
-        if (keepNight.isValid()) st2.setValue("app/nightMode", keepNight);
-        else st2.remove("app/nightMode");
+        check(st2.value("team/name").toString() == "Edited Probe" && !st2.value("app/nightMode").toBool() && st2.value("style/twoSpacesSentence").toBool() && !st2.value("style/twoSpacesColon").toBool(),
+              "Apply writes every page's settings (team name, night mode, house-style switches)");
+        check(editops::HouseStyle::fromSettings().twoSpacesSentence && !editops::HouseStyle::fromSettings().twoSpacesColon, "the house-style engine reads the switches the page wrote");
+        if (keepName.isValid()) st2.setValue("team/name", keepName); else st2.remove("team/name");
+        if (keepNight.isValid()) st2.setValue("app/nightMode", keepNight); else st2.remove("app/nightMode");
+        if (keepStyle.isValid()) st2.setValue("style/twoSpacesSentence", keepStyle); else st2.remove("style/twoSpacesSentence");
+        if (keepColon.isValid()) st2.setValue("style/twoSpacesColon", keepColon); else st2.remove("style/twoSpacesColon");
+        check(menuBar_ == nullptr || keyBindingRows() > 40, "Key Bindings lists the menu bar's actions (when a menu bar is supplied)");
         return fails;
     }
 
 private:
+    struct Page { QString title, icon, blurb; QStringList keywords; QWidget* w = nullptr; std::function<void()> save; };
+    QVector<Page> pages_;
+    QHash<QString, QCheckBox*> checks_; QHash<QString, QLineEdit*> edits_; QHash<QString, QComboBox*> combos_;
+
+    // helpers bound to the named store unless told otherwise
+    QCheckBox* cb(QFormLayout* f, const QString& key, const QString& label, bool def, const QString& tip = QString(), bool defaultStore = false) {
+        auto* c = new QCheckBox(label); c->setToolTip(tip);
+        c->setChecked(defaultStore ? QSettings().value(key, def).toBool() : QSettings("ALL", "TranslationTool").value(key, def).toBool());
+        f->addRow(c); checks_[key] = c; return c;
+    }
+    QLineEdit* le(QFormLayout* f, const QString& key, const QString& label, const QString& placeholder = QString(), bool browseDir = false) {
+        auto* e = new QLineEdit(QSettings("ALL", "TranslationTool").value(key).toString()); e->setPlaceholderText(placeholder);
+        if (browseDir) {
+            auto* row = new QWidget; auto* h = new QHBoxLayout(row); h->setContentsMargins(0, 0, 0, 0); h->addWidget(e, 1);
+            auto* b = new QPushButton("Choose…"); connect(b, &QPushButton::clicked, this, [this, e] { const QString d = safeGetExistingDirectory(this, "Choose folder", e->text()); if (!d.isEmpty()) e->setText(d); }); h->addWidget(b);
+            f->addRow(label, row);
+        } else f->addRow(label, e);
+        edits_[key] = e; return e;
+    }
+    static void saveChecks(const QHash<QString, QCheckBox*>& m, const QStringList& keys, bool defaultStore = false) {
+        QSettings named("ALL", "TranslationTool"); QSettings def;
+        for (const QString& k : keys) if (m.contains(k)) (defaultStore ? def : named).setValue(k, m[k]->isChecked());
+    }
+    static void saveEdits(const QHash<QString, QLineEdit*>& m, const QStringList& keys) {
+        QSettings st("ALL", "TranslationTool");
+        for (const QString& k : keys) if (m.contains(k)) { const QString v = m[k]->text().trimmed(); if (v.isEmpty()) st.remove(k); else st.setValue(k, v); }
+    }
+    QWidget* pageWidget(QFormLayout*& f, const QString& intro = QString()) {
+        auto* w = new QWidget; auto* v = new QVBoxLayout(w); v->setContentsMargins(8, 8, 8, 8);
+        if (!intro.isEmpty()) { auto* l = new QLabel(intro); l->setWordWrap(true); l->setStyleSheet("color:#4A3F33;"); v->addWidget(l); }
+        auto* box = new QWidget; f = new QFormLayout(box); v->addWidget(box); v->addStretch(1);
+        return w;
+    }
+
+    void buildPages() {
+        // 1 General
+        { QFormLayout* f; Page p; p.title = "General"; p.icon = "gear"; p.blurb = "Appearance and start-up"; p.keywords = {"night", "dark", "theme", "ribbon", "labels", "welcome", "tour"};
+          p.w = pageWidget(f);
+          cb(f, "app/nightMode", "Night mode (dark chrome, cream pages)", true);
+          cb(f, "ui/ribbonLabels", "Show labels under ribbon buttons", true, "Off gives a narrower ribbon of icons only");
+          auto* tour = new QCheckBox("Show the welcome tour at the next start"); tour->setChecked(!QSettings("ALL", "TranslationTool").value("ui/welcomed", false).toBool()); f->addRow(tour); checks_["ui/welcomed:show"] = tour;
+          p.save = [this, tour] { saveChecks(checks_, {"app/nightMode", "ui/ribbonLabels"}); QSettings("ALL", "TranslationTool").setValue("ui/welcomed", !tour->isChecked()); };
+          pages_ << p; }
+        // 2 View
+        { QFormLayout* f; Page p; p.title = "View"; p.icon = "page"; p.blurb = "Document editors and the Overlay"; p.keywords = {"line numbers", "wrap", "script", "ACIP", "Wylie", "Tibetan", "shading"};
+          p.w = pageWidget(f);
+          cb(f, "view/lineNumbers", "Line numbers in the margin (Document box, Draft)", false);
+          cb(f, "view/wordWrap", "Word wrap", true);
+          auto* script = new QComboBox; script->addItems({"Tibetan script", "ACIP", "Wylie"}); script->setCurrentIndex(QSettings("ALL", "TranslationTool").value("overlay/scriptMode", 1).toInt()); f->addRow("Overlay displays text as", script); combos_["overlay/scriptMode"] = script;
+          p.save = [this, script] { saveChecks(checks_, {"view/lineNumbers", "view/wordWrap"}); QSettings("ALL", "TranslationTool").setValue("overlay/scriptMode", script->currentIndex()); };
+          pages_ << p; }
+        // 3 House Style (Adam, 2026-09-08)
+        { QFormLayout* f; Page p; p.title = "House Style"; p.icon = "book"; p.blurb = "The ALL style sheet, rule by rule, each one a switch"; p.keywords = {"style", "spacing", "double space", "period", "colon", "semicolon", "sentence", "sheet"};
+          p.w = pageWidget(f, "Rules from the ALL style sheet for English text. Each is a switch; more rules are added here as the sheet is supplied. Format ▸ Apply House Style Spacing runs the switched-on rules on demand. English only: lines with no lower-case letter (ACIP) and abbreviations before a lower-case word are left alone.");
+          cb(f, "style/twoSpacesSentence", "Two spaces after a sentence ( . ? ! )", false);
+          cb(f, "style/twoSpacesColon", "Two spaces after a colon", false, "Awaiting the sheet's ruling — off until confirmed");
+          cb(f, "style/oneSpaceSemicolon", "Exactly one space after a semicolon", false, "Awaiting the sheet's ruling — off until confirmed");
+          cb(f, "style/applyOnSave", "Apply the switched-on rules when saving the Draft or Manuscript", false);
+          cb(f, "style/live", "Apply while typing (a space after . ? ! becomes two)", false);
+          p.save = [this] { saveChecks(checks_, {"style/twoSpacesSentence", "style/twoSpacesColon", "style/oneSpaceSemicolon", "style/applyOnSave", "style/live"}); };
+          pages_ << p; }
+        // 4 Lookup & Dictionaries
+        { QFormLayout* f; Page p; p.title = "Lookup"; p.icon = "search"; p.blurb = "Dictionaries shown in Lookup"; p.keywords = {"lookup", "dictionary", "reference", "stardict", "Hopkins", "Das"};
+          p.w = pageWidget(f, "The HGM dictionary is always shown and always binding; the reference dictionaries are comparanda.");
+          cb(f, "lookup/showRefs", "Show reference dictionaries (Das, Hopkins, …) under the HGM entry", true);
+          le(f, "lookup/stardictDir", "StarDict folder", "folder of .ifo/.idx/.dict files", true);
+          p.save = [this] { saveChecks(checks_, {"lookup/showRefs"}); saveEdits(edits_, {"lookup/stardictDir"}); };
+          pages_ << p; }
+        // 5 Compare defaults
+        { QFormLayout* f; Page p; p.title = "Compare"; p.icon = "diff"; p.blurb = "Default rules for new comparisons"; p.keywords = {"compare", "diff", "merge", "ignore", "whitespace", "shad", "folio", "script"};
+          p.w = pageWidget(f, "The rules a new comparison starts with. The Compare pane's RULES group changes them for the current comparison only.");
+          const auto cur = cmp::optionsFrom(QJsonDocument::fromJson(QSettings("ALL", "TranslationTool").value("compare/defaultOptions").toByteArray()).object());
+          struct R { const char* key; const char* label; bool cmp::Options::*f; };
+          static const R rules[] = {{"cmp:ignoreCase", "Ignore case", &cmp::Options::ignoreCase}, {"cmp:ignoreWhitespaceChange", "Ignore spacing", &cmp::Options::ignoreWhitespaceChange},
+                                    {"cmp:ignoreBlankLines", "Ignore blank lines", &cmp::Options::ignoreBlankLines}, {"cmp:ignoreTibetanPunct", "Ignore shad / tsheg marks", &cmp::Options::ignoreTibetanPunct},
+                                    {"cmp:ignoreFolioMarkers", "Ignore folio markers", &cmp::Options::ignoreFolioMarkers}, {"cmp:ignoreApparatus", "Ignore [ ] { } apparatus", &cmp::Options::ignoreApparatus},
+                                    {"cmp:scriptAgnostic", "Script-agnostic (ACIP = Wylie = Tibetan script)", &cmp::Options::scriptAgnostic}, {"cmp:detectMoves", "Detect moved blocks", &cmp::Options::detectMoves}};
+          for (const auto& r : rules) { auto* c = new QCheckBox(r.label); c->setChecked(cur.*(r.f)); f->addRow(c); checks_[r.key] = c; }
+          p.save = [this] {
+              cmp::Options o;
+              for (const auto& r : rules) o.*(r.f) = checks_[r.key]->isChecked();
+              QSettings("ALL", "TranslationTool").setValue("compare/defaultOptions", QJsonDocument(cmp::optionsJson(o)).toJson(QJsonDocument::Compact));
+          };
+          pages_ << p; }
+        // 6 Team & Provenance
+        { QFormLayout* f; Page p; p.title = "Team"; p.icon = "book"; p.blurb = "Your name on proposals; the shared folders"; p.keywords = {"team", "name", "provenance", "admin", "proposals", "approval", "share"};
+          p.w = pageWidget(f, "Your name is written into every proposal, comment and saved version as provenance.");
+          le(f, "team/name", "Your name (provenance)", "e.g. Adam Andrade");
+          cb(f, "team/admin", "I approve proposals for the team (Approval pane)", false);
+          le(f, "team/proposalsDir", "Shared proposals folder", "a Dropbox or shared folder", true);
+          p.save = [this] { saveEdits(edits_, {"team/name", "team/proposalsDir"}); saveChecks(checks_, {"team/admin"}); };
+          pages_ << p; }
+        // 7 File Locations
+        { QFormLayout* f; Page p; p.title = "File Locations"; p.icon = "folder"; p.blurb = "Where the data, updates and your files live"; p.keywords = {"folder", "location", "data", "root", "updates", "templates", "snippets", "sessions", "properties"};
+          p.w = pageWidget(f, "Changes to the data folder take effect at the next start.");
+          le(f, "app/dataRoot", "Data folder override", "leave empty for the default", true);
+          le(f, "app/updatesDir", "Team updates folder (new dictionary releases)", "", true);
+          const QString root = QSettings("ALL", "TranslationTool").value("app/dataRoot").toString();
+          auto reveal = [&](const QString& label, const QString& sub) {
+              auto* b = new QPushButton("Show in Finder"); const QString path = (root.isEmpty() ? QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) : root) + "/library/" + sub;
+              connect(b, &QPushButton::clicked, this, [path] { QDir().mkpath(path); QDesktopServices::openUrl(QUrl::fromLocalFile(path)); });
+              auto* row = new QWidget; auto* h = new QHBoxLayout(row); h->setContentsMargins(0, 0, 0, 0); auto* l = new QLabel(path); l->setStyleSheet("color:#6B5E4E;"); h->addWidget(l, 1); h->addWidget(b); f->addRow(label, row);
+          };
+          reveal("Templates", "templates"); reveal("Snippets", "snippets"); reveal("Compare sessions", "compare_sessions"); reveal("Document properties", "properties");
+          p.save = [this] { saveEdits(edits_, {"app/dataRoot", "app/updatesDir"}); };
+          pages_ << p; }
+        // 8 Privacy & Logging
+        { QFormLayout* f; Page p; p.title = "Privacy"; p.icon = "gear"; p.blurb = "What the app records about your use"; p.keywords = {"privacy", "usage", "ledger", "log", "verbose", "diagnostic", "telemetry"};
+          p.w = pageWidget(f, "Nothing leaves this computer. The usage ledger counts pane visits and band-tool clicks into a local file you can read under Help ▸ Usage Ledger; verbose logging writes more detail into the local lifecycle log for troubleshooting.");
+          cb(f, "ui/usageLedger", "Keep the local usage ledger", false);
+          cb(f, "troubleshoot/verbose", "Verbose logging", false, "", true);
+          p.save = [this] { saveChecks(checks_, {"ui/usageLedger"}); saveChecks(checks_, {"troubleshoot/verbose"}, true); };
+          pages_ << p; }
+        // 9 Colour Scheme & Theme (Sublime)
+        { QFormLayout* f; Page p; p.title = "Colour Scheme"; p.icon = "image"; p.blurb = "Day or Night; the parchment palette"; p.keywords = {"colour", "color", "scheme", "theme", "night", "day", "parchment"};
+          p.w = pageWidget(f, "Two schemes ship: Day (parchment chrome, cream pages) and Night (dark chrome, cream pages). Both keep the honesty colours — provisional tier, generated data, HGM binding — identical, so a label never changes meaning with the theme. Installable third-party schemes are not offered: nothing here may recolour a provenance label.");
+          auto* day = new QRadioButton("Day"); auto* night = new QRadioButton("Night");
+          const bool n = QSettings("ALL", "TranslationTool").value("app/nightMode", true).toBool(); night->setChecked(n); day->setChecked(!n);
+          f->addRow(day); f->addRow(night);
+          connect(night, &QRadioButton::toggled, this, [this](bool on) { if (checks_.contains("app/nightMode")) checks_["app/nightMode"]->setChecked(on); });
+          p.save = nullptr;   // written by the General page's night-mode switch, kept in sync above
+          pages_ << p; }
+        // 10 Key Bindings (Sublime) — read-only list of every menu shortcut
+        { Page p; p.title = "Key Bindings"; p.icon = "clock"; p.blurb = "Every menu command and its shortcut"; p.keywords = {"key", "binding", "shortcut", "keyboard", "hotkey"};
+          auto* w = new QWidget; auto* v = new QVBoxLayout(w); v->setContentsMargins(8, 8, 8, 8);
+          auto* intro = new QLabel("Read from the menu bar as it is built, so this list is always true. Editing bindings is not offered yet; Help ▸ Keyboard Shortcuts prints the same list."); intro->setWordWrap(true); intro->setStyleSheet("color:#4A3F33;"); v->addWidget(intro);
+          auto* find = new QLineEdit; find->setPlaceholderText("Filter commands"); find->setClearButtonEnabled(true); v->addWidget(find);
+          bindings_ = new QTreeWidget; bindings_->setRootIsDecorated(false); bindings_->setHeaderLabels({"Menu", "Command", "Shortcut"}); bindings_->header()->setSectionResizeMode(1, QHeaderView::Stretch); v->addWidget(bindings_, 1);
+          if (menuBar_) {
+              std::function<void(QMenu*, const QString&)> walk = [&](QMenu* m, const QString& path) {
+                  for (QAction* a : m->actions()) {
+                      if (a->isSeparator()) continue;
+                      if (a->menu()) { walk(a->menu(), path + " ▸ " + a->text().remove('&')); continue; }
+                      auto* it = new QTreeWidgetItem({path, a->text().remove('&'), a->shortcut().toString(QKeySequence::NativeText)}); bindings_->addTopLevelItem(it);
+                  }
+              };
+              for (QAction* a : menuBar_->actions()) if (a->menu()) walk(a->menu(), a->text().remove('&'));
+          }
+          connect(find, &QLineEdit::textChanged, this, [this](const QString& q) { for (int i = 0; i < bindings_->topLevelItemCount(); ++i) { auto* it = bindings_->topLevelItem(i); it->setHidden(!q.isEmpty() && !it->text(0).contains(q, Qt::CaseInsensitive) && !it->text(1).contains(q, Qt::CaseInsensitive) && !it->text(2).contains(q, Qt::CaseInsensitive)); } });
+          auto* copy = new QPushButton("Copy as text"); connect(copy, &QPushButton::clicked, this, [this] { QStringList out; for (int i = 0; i < bindings_->topLevelItemCount(); ++i) { auto* it = bindings_->topLevelItem(i); out << it->text(0) + "\t" + it->text(1) + "\t" + it->text(2); } QApplication::clipboard()->setText(out.join('\n')); }); v->addWidget(copy, 0, Qt::AlignLeft);
+          p.w = w; p.save = nullptr;
+          pages_ << p; }
+        // 11 Ribbon & Quick Access
+        { Page p; p.title = "Quick Access"; p.icon = "gear"; p.blurb = "Pinned tools on the Quick Access strip"; p.keywords = {"quick access", "pin", "toolbar", "ribbon", "favourite"};
+          auto* w = new QWidget; auto* v = new QVBoxLayout(w); v->setContentsMargins(8, 8, 8, 8);
+          auto* intro = new QLabel("Tools you pinned to the Quick Access strip (right-click a ribbon button to pin it). Remove pins here; Apply saves."); intro->setWordWrap(true); intro->setStyleSheet("color:#4A3F33;"); v->addWidget(intro);
+          auto* list = new QListWidget; list->addItems(QSettings("ALL", "TranslationTool").value("qat/pins").toStringList()); v->addWidget(list, 1);
+          auto* rm = new QPushButton("Remove selected pin"); connect(rm, &QPushButton::clicked, this, [list] { qDeleteAll(list->selectedItems()); }); v->addWidget(rm, 0, Qt::AlignLeft);
+          p.w = w; p.save = [list] { QStringList pins; for (int i = 0; i < list->count(); ++i) pins << list->item(i)->text(); QSettings("ALL", "TranslationTool").setValue("qat/pins", pins); };
+          pages_ << p; }
+    }
+
     std::function<void(bool)> applyNight_;
-    QCheckBox* night_ = nullptr;
-    QCheckBox* hsSentence_ = nullptr; QCheckBox* hsColon_ = nullptr; QCheckBox* hsSemi_ = nullptr; QCheckBox* hsSave_ = nullptr; QCheckBox* hsLive_ = nullptr;
-    QComboBox* script_ = nullptr;
-    QLineEdit* name_ = nullptr;
-    QCheckBox* admin_ = nullptr;
-    QLineEdit* dir_ = nullptr;
-    QLineEdit* dataRoot_ = nullptr;
-    QLineEdit* updDir_ = nullptr;
+    QMenuBar* menuBar_ = nullptr;
+    QToolButton* back_ = nullptr; QLabel* title_ = nullptr; QLineEdit* search_ = nullptr;
+    QStackedWidget* stack_ = nullptr; QListWidget* grid_ = nullptr; QTreeWidget* bindings_ = nullptr;
 };
 
 class HelpWindow : public QDialog {
@@ -40791,11 +40866,12 @@ int main(int argc, char** argv) {
             }
         });
         view->addSeparator();
-        QAction* prefs = view->addAction("Settings\u2026");
+        QAction* prefs = view->addAction("Preferences\u2026");
         prefs->setMenuRole(QAction::PreferencesRole);   // macOS: app menu
         prefs->setShortcut(QKeySequence::Preferences);
         QObject::connect(prefs, &QAction::triggered, [&, applyNight] {
-            SettingsDialog dlg(applyNight, &win);
+            if (g_harnessRun) return;
+            PreferencesDialog dlg(applyNight, win.menuBar(), &win);
             dlg.exec();
         });
     }
@@ -41711,8 +41787,8 @@ int main(int argc, char** argv) {
         fails += scansPane->selfTest(log);
         fails += ocrPane->selfTest(log);
         {
-            SettingsDialog sdlg(nullptr, nullptr);
-            fails += sdlg.selfTest(log);
+            PreferencesDialog pdlg(nullptr, win.menuBar(), nullptr);
+            fails += pdlg.selfTest(log);
         }
         fails += apparatusPane->selfTest(log);
         fails += trainerPane->selfTest(log);
