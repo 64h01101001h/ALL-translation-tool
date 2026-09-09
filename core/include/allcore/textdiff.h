@@ -80,6 +80,12 @@ std::vector<std::string> renderMerge(const MergeResult& m, const std::vector<std
                                      const std::vector<std::string>& left, const std::vector<std::string>& right,
                                      const std::string& leftName = "LEFT", const std::string& rightName = "RIGHT");
 
+// Apply only the selected non-Equal hunks of r (indices into r.hunks) onto
+// a: Equal → a's lines; selected → b's lines; unselected → a's lines. The
+// hunk-selection primitive every partial merge in the app uses (F0).
+std::vector<std::string> applySelected(const std::vector<std::string>& a, const std::vector<std::string>& b,
+                                       const Result& r, const std::vector<int>& selectedHunks);
+
 // Reports.
 std::string unifiedDiff(const std::string& aName, const std::string& bName,
                         const std::vector<std::string>& a, const std::vector<std::string>& b,

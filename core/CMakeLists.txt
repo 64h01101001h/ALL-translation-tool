@@ -7,6 +7,8 @@ option(USE_SYSTEM_SQLITE "Link the system sqlite3 library" ON)
 add_library(allcore STATIC
   src/spine.cpp
   src/textdiff.cpp
+  src/textspan.cpp
+  src/filewalk.cpp
     src/stardict.cpp
   src/analysis.cpp
   src/qc.cpp
@@ -144,6 +146,10 @@ add_executable(terminology_smoke tests/terminology_smoke.cpp)
 target_link_libraries(terminology_smoke PRIVATE allcore)
 add_test(NAME terminology_smoke
          COMMAND terminology_smoke ${CMAKE_SOURCE_DIR}/build/hgm_spine_v27_2.db)
+
+add_executable(filewalk_smoke tests/filewalk_smoke.cpp)
+target_link_libraries(filewalk_smoke PRIVATE allcore)
+add_test(NAME filewalk_smoke COMMAND filewalk_smoke)
 
 add_executable(textdiff_smoke tests/textdiff_smoke.cpp)
 target_link_libraries(textdiff_smoke PRIVATE allcore)

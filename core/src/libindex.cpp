@@ -1,6 +1,7 @@
 #include "allcore/searchnorm.h"
 #include "allcore/engines.h"
 #include "allcore/libindex.h"
+#include "allcore/filewalk.h"
 
 #include <sqlite3.h>
 
@@ -37,11 +38,7 @@ void exec(sqlite3* db, const char* sql) {
 }
 
 bool eligible(const std::filesystem::path& p, uintmax_t size) {
-    if (size > 10u * 1024 * 1024) return false;
-    std::string ext = p.extension().string();
-    for (auto& c : ext) c = (char)std::tolower((unsigned char)c);
-    return ext == ".txt" || ext == ".acip" || ext == ".md" || ext == ".act" ||
-           ext == ".inc" || ext == ".ace";
+    return eligibleTextFile(p, size);   // the one eligibility rule (filewalk.h)
 }
 
 std::string ftsQuote(const std::string& term) {

@@ -41,6 +41,7 @@ static QCursor g_busyCursor();   // defined beside g_harnessRun
 #include <QButtonGroup>
 
 #include "allcore/textdiff.h"
+#include "allcore/textspan.h"
 #include <QKeyEvent>
 #include <QStringListModel>
 #include <QCompleter>
@@ -2850,6 +2851,14 @@ static QByteArray readFixture(const QString& path) {
     if (!f.open(QIODevice::ReadOnly)) return {};
     return f.readAll();
 }
+// The folio marker, defined ONCE (allcore/textspan.h) and used by every
+// site in the app — Properties statistics, Insert ▸ Folio Marker, Selection
+// ▸ Folio, Goto ▸ Folio (F0, 2026-09-09: four private regexes disagreed on
+// digit count and on whether the side letter was required).
+static const QRegularExpression& folioMarkerRe() {
+    static const QRegularExpression re(QString::fromLatin1(allcore::textspan::kFolioMarkerPattern));
+    return re;
+}
 // Menu cross-links (2026-09-08): actions created in one menu block and
 // triggered from another (Project ▸ Edit Dossiers… = File ▸ Dossiers…;
 // Tools ▸ Cheat Sheet = Help ▸ Keyboard Shortcuts…).
@@ -3997,7 +4006,7 @@ inline void noteSave(QWidget* parent, const QString& sidecar,
 inline QJsonObject textStatistics(const QString& text, bool tibetan,
                                   int tokens, int spans, int entries) {
     QJsonObject o;
-    static const QRegularExpression folioRe("@\\d{2,3}[AaBb]\\b");
+    const QRegularExpression& folioRe = folioMarkerRe();   // the one definition (F0)
     static const QRegularExpression markRe(
         "@\\S+|\\{[^}]*\\}|\\[[^\\]]*\\]");
     static const QRegularExpression sylRe("[A-Za-z']+");
@@ -4573,10 +4582,13 @@ inline bool replaceSelection(QWidget* w, const QString& with) {
 // Insert ▸ Break ▸ Folio marker: the marker that follows the last one
 // before `pos` (@001A → @001B → @002A). With none before, @001A.
 inline QString nextFolioMarker(const QString& text, int pos) {
-    static const QRegularExpression re("@(\\d{2,3})([AaBb])\\b");
     QString lastNum; QChar lastSide;
-    auto it = re.globalMatch(text.left(std::max(0, pos)));
-    while (it.hasNext()) { const auto m = it.next(); lastNum = m.captured(1); lastSide = m.captured(2).at(0).toUpper(); }
+    auto it = folioMarkerRe().globalMatch(text.left(std::max(0, pos)));
+    while (it.hasNext()) {
+        const auto m = it.next(); int n = 0, w = 0; char sd = 0;
+        // only A/B markers take part in the A→B→next sequence; a bare @0012 is passed over
+        if (allcore::textspan::folioParts(m.captured(1).toStdString(), n, sd, w) && sd) { lastNum = m.captured(1).left(w); lastSide = QChar(sd); }
+    }
     if (lastNum.isEmpty()) return "@001A";
     int n = lastNum.toInt();
     if (lastSide == 'A') return QString("@%1B").arg(n, lastNum.size(), 10, QChar('0'));
@@ -4733,6 +4745,9 @@ protected:
         return true;
     }
 };
+// The Manuscript is saved as HTML; comparing that against its plain editor
+// text is noise. One flattening, used by Compare with Saved Version (F0).
+inline QString htmlToPlain(const QString& html) { QTextDocument d; d.setHtml(html); return d.toPlainText(); }
 // Caret history for Goto ▸ Jump Back / Jump Forward (Sublime ⌃- / ⌃⇧-):
 // positions are recorded when the caret moves to a different line; a
 // jump replays without recording. Per editor, capped at 100.
@@ -5238,7 +5253,7 @@ inline bool expandToQuotes(QWidget* w) {
 // ACIP folio: from the @NNNA/B marker at or before the caret to the next.
 inline bool expandToFolio(QWidget* w) {
     return withCursor(w, [&](QTextCursor& c, QTextDocument* d) {
-        static const QRegularExpression re("@\\d{2,3}[AaBb]\\b");
+        const QRegularExpression& re = folioMarkerRe();   // the one definition (F0)
         const QString all = d->toPlainText();
         const int pos = std::min(c.anchor(), c.position());
         int start = -1, end = all.size();
@@ -8246,6 +8261,10 @@ public:
                   "Date and Time offers the Tibetan year from the calendar engine");
             check(g_busyCursor().shape() == Qt::BitmapCursor || g_busyCursor().shape() == Qt::WaitCursor,
                   "the busy cursor is the dharma wheel when a font has it, else the platform wait cursor");
+            check(editops::htmlToPlain("<p><b>KA</b> kha</p>") == "KA kha", "Compare with Saved Version flattens saved Manuscript HTML to plain text (F0)");
+            check(folioMarkerRe().match("x @12b y").hasMatch() && folioMarkerRe().match("@0012").hasMatch() && !folioMarkerRe().match("@012BX").hasMatch(),
+                  "the app's folio matcher is the core's one definition: @12b and @0012 match, @012BX does not (F0)");
+            check(editops::nextFolioMarker("@0012 x @001A y", 15) == "@001B", "Insert ▸ Folio Marker passes over a bare @0012 and sequences from @001A (F0)");
             {   // house style spacing (Adam, 2026-09-08)
                 QTextDocument d; d.setPlainText("Hello there. World: yes; no.  Done. e.g. this one?\n\"Quoted.\" Next\nSEMS CAN THAMS CAD. BDE BA");
                 editops::HouseStyle h; h.twoSpacesSentence = true;
@@ -8391,12 +8410,14 @@ public:
         const auto m = parse.match(sp);
         if (!m.hasMatch()) return false;
         const int n = m.captured(1).toInt(); const QString side = m.captured(2).toUpper();
-        static const QRegularExpression re("@(\\d{2,3})([AaBb])\\b");
+        const QRegularExpression& re = folioMarkerRe();   // the one definition (F0)
         const QString all = input_->toPlainText();
         auto it = re.globalMatch(all);
         while (it.hasNext()) {
             const auto mm = it.next();
-            if (mm.captured(1).toInt() == n && (side.isEmpty() || mm.captured(2).toUpper() == side)) {
+            int mn = 0, mw = 0; char ms = 0;
+            if (!allcore::textspan::folioParts(mm.captured(1).toStdString(), mn, ms, mw)) continue;
+            if (mn == n && (side.isEmpty() || (ms && QString(QChar(ms)) == side))) {
                 QTextCursor c(input_->document()); c.setPosition(mm.capturedStart());
                 input_->setTextCursor(c); input_->centerCursor(); input_->setFocus();
                 return true;
@@ -21718,6 +21739,7 @@ public:
     DraftPane(allcore::Spine& spine, allcore::Progress* progress,
               const QString& root = QString())
         : spine_(spine), progress_(progress), root_(root), index_(spine) {
+        dataRoot_ = root;   // F0 (2026-09-09): never assigned before — every Draft sidecar write was a silent no-op
         auto* layout = new QVBoxLayout(this);
         auto* row = new QHBoxLayout;
         auto* banner = new QLabel(
@@ -22306,6 +22328,17 @@ auto* secPub = new QLabel("<span style='color:#9A7A33;font-size:10px;letter-spac
                                 pf2.readAll() == QByteArray("Consider sound.");
             check(okSave && round2, "Save reuses the Save As path and "
                                     "rewrites the file");
+            {   // F0 (2026-09-09): dataRoot_ is assigned, so the properties sidecar is written
+                const QString keepRoot = dataRoot_;
+                dataRoot_ = QDir::temp().filePath("all_selftest_draft_root");
+                QDir(dataRoot_).removeRecursively();
+                const bool okSave3 = saveDraft();
+                const QString sc = docprops::sidecarPath(dataRoot_, draftPath_);
+                check(okSave3 && !sc.isEmpty() && QFile::exists(sc) && docprops::load(sc).value("revision").toInt() == 1,
+                      "Save writes the draft's properties sidecar under the data root (revision 1) — before F0 nothing was written");
+                QDir(dataRoot_).removeRecursively();
+                dataRoot_ = keepRoot;
+            }
             draftPath_ = "/nonexistent-dir-save/draft.txt";
             check(!saveDraft(),
                   "a failed draft Save says NOT SAVED, never success");
@@ -40420,7 +40453,8 @@ int main(int argc, char** argv) {
             if (path.isEmpty()) { msg("This text has never been saved; there is no saved version to compare with."); return; }
             const auto saved = cmp::readText(path);
             if (!saved.ok) { msg("Could not read " + path); return; }
-            if (g_compareTexts) g_compareTexts(QFileInfo(path).fileName() + " (on disk)", saved.text, QFileInfo(path).fileName() + " (editing)", text);
+            const QString savedText = name == "Manuscript" ? editops::htmlToPlain(saved.text) : saved.text;   // F0: both sides plain
+            if (g_compareTexts) g_compareTexts(QFileInfo(path).fileName() + " (on disk)", savedText, QFileInfo(path).fileName() + " (editing)", text);
         });
         QObject::connect(cmpM->addAction("Compare Left and Right in Files"), &QAction::triggered, [filesPane, msg] {
             const QString a = filesPane->selectedPath(0), b = filesPane->selectedPath(1);

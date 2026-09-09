@@ -4,6 +4,7 @@
 #include <vector>
 
 #include "allcore/textdiff.h"
+#include "allcore/textspan.h"
 
 using namespace allcore::textdiff;
 static int failures = 0;
@@ -132,6 +133,37 @@ int main() {
     const auto csv = apparatusCsv(app);
     CHECK(csv.find("cite,kind,a_line,b_line,a_reading,b_reading\n\"@001A.4\",change,4,4,\"THAMS CAD\"") == 0, "apparatus CSV header and first row");
 
+    // F0 (2026-09-09): the one folio definition and hunk selection
+    {
+        std::string f;
+        CHECK(allcore::textspan::folioMarkerEnd("@012B KA", &f) == 5 && f == "012B", "folioMarkerEnd: @012B → end 5, id 012B");
+        CHECK(allcore::textspan::folioMarkerEnd("@012BX KA", &f) == -1, "@012BX is not a marker (letter follows)");
+        CHECK(allcore::textspan::folioMarkerEnd("@1A", &f) == 3 && f == "1A", "@1A is a marker");
+        CHECK(allcore::textspan::folioMarkerEnd("@0012", &f) == 5 && f == "0012", "@0012 (no side) is a marker");
+        CHECK(allcore::textspan::folioMarkerEnd("@x", &f) == -1, "@x is not a marker");
+        CHECK(allcore::textspan::lastFolio("@001A ka @001B kha") == "001B", "lastFolio takes the last marker on the line");
+        int n = 0, w = 0; char side = 0;
+        CHECK(allcore::textspan::folioParts("012B", n, side, w) && n == 12 && side == 'B' && w == 3, "folioParts splits number, side and digit width");
+        CHECK(allcore::textspan::folioParts("0012", n, side, w) && n == 12 && side == '\0' && w == 4, "folioParts: no side letter");
+        Options fm; fm.ignoreFolioMarkers = true;
+        CHECK(normalizeLine("@12b KA", fm) == "KA", "normalizeLine strips a lower-case marker through the shared definition");
+        bool bal = true;
+        const auto sp = allcore::textspan::apparatusSpans("SEMS [CAN] THAMS {sic} CAD", &bal);
+        CHECK(bal && sp.size() == 2 && sp[0].kind == '[' && sp[1].kind == '{', "apparatusSpans finds both bracket kinds");
+        CHECK(allcore::textspan::stripApparatus("SEMS [CAN] THAMS {sic} CAD") == "SEMS THAMS CAD", "stripApparatus removes spans and collapses spacing");
+        bool bal2 = true; allcore::textspan::apparatusSpans("SEMS [CAN THAMS", &bal2);
+        CHECK(!bal2 && allcore::textspan::stripApparatus("SEMS [CAN THAMS", &bal2) == "SEMS [CAN THAMS", "an unbalanced bracket is refused: line returned unchanged, balanced=false");
+        // applySelected
+        const auto a2 = L("x\ny\nz\n"), b2 = L("x\nY\nz\nw\n");
+        const auto r2 = diffLines(a2, b2, o);
+        int chg = -1, ins = -1;
+        for (int i = 0; i < (int)r2.hunks.size(); ++i) { if (r2.hunks[i].kind == Kind::Change) chg = i; if (r2.hunks[i].kind == Kind::Insert) ins = i; }
+        CHECK(chg >= 0 && ins >= 0, "fixture: one change and one insert hunk");
+        CHECK(applySelected(a2, b2, r2, {}) == a2, "applySelected with nothing selected returns a");
+        CHECK(joinLines(applySelected(a2, b2, r2, {chg})) == "x\nY\nz\n", "selecting the change takes Y only");
+        CHECK(joinLines(applySelected(a2, b2, r2, {ins})) == "x\ny\nz\nw\n", "selecting the insert appends w only");
+        CHECK(applySelected(a2, b2, r2, {chg, ins}) == b2, "selecting every non-Equal hunk yields b");
+    }
     std::printf("textdiff_smoke: %d failure(s)\n", failures);
     return failures ? 1 : 0;
 }

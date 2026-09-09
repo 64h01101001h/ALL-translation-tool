@@ -35,3 +35,10 @@ The Compare pane is the compare-and-merge suite Adam asked for on 2026-09-08 ("b
 
 ## 4. Open items (filed in TODO)
 - Encoding choice for compared files (reuse the `enc` namespace); Compare with Backup; table compare for glossary CSV/JSON; image compare of two scans; report invalid regex filters.
+
+## 5. F0 substrate (2026-09-09)
+- The folio marker is defined once (`allcore/textspan.h`, `@([0-9]{1,4}[AaBb]?)(?![A-Za-z0-9])`) and every site uses it: `textdiff` normalisation and citations, Properties statistics, Insert ▸ Folio Marker, Selection ▸ Folio, Goto ▸ Folio. Consequence, stated: Properties' folio count now also counts `@1A` and bare `@0012` markers, which the old 2–3-digit-plus-letter regex missed; Goto ▸ Folio accepts them too.
+- `allcore/filewalk.h` is the one eligibility rule (`.txt .acip .md .act .inc .ace`, ≤ 10 MB) — Search and the library index call it; Replace in Files will.
+- `textdiff::applySelected` is the hunk-selection primitive for partial merges.
+- Compare with Saved Version flattens the Manuscript's saved HTML before comparing.
+- The constitution's modal census now reads `app/*.inc` as well; a planted `QMessageBox::warning` in `compare_pane.inc` fails the gate (checked by hand 2026-09-09).

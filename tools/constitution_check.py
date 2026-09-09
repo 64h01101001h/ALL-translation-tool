@@ -11,6 +11,7 @@ and the checker skips it — visibly, never silently.
 
 Usage: constitution_check.py <repo_root>
 """
+import glob
 import re
 import sys
 import os
@@ -27,6 +28,11 @@ def read(p):
 def main():
     root = sys.argv[1]
     main_cpp = read(os.path.join(root, "app/main.cpp"))
+    # F0 (2026-09-09): the R3 modal census covers every .inc the single TU
+    # includes, not main.cpp alone — a pane file could otherwise add modal
+    # sites the gate never sees. R2 stays main.cpp-only (the flag list lives there).
+    inc_files = sorted(glob.glob(os.path.join(root, "app/*.inc")))
+    r3_text = main_cpp + "".join(read(p) for p in inc_files)
     press = read(os.path.join(root, "tools/package_macos.sh"))
 
     core_srcs = {}
@@ -84,15 +90,15 @@ def main():
     # protects every headless mode, but the census still tracks growth
     # — a mechanism plus a count, not one or the other.
     msgbox = len(re.findall(r"QMessageBox::(warning|information|"
-                            r"question|critical)\s*\(", main_cpp))
+                            r"question|critical)\s*\(", r3_text))
     msgbox += len(re.findall(r"QInputDialog::(getText|getItem|getInt|"
                              r"getDouble|getMultiLineText)\s*\(",
-                             main_cpp))
+                             r3_text))
     # STATIC-R4: constructor-form dialogs (QMessageBox box(...);
     # ... box.exec()) were structurally invisible to the static-call
     # census - one live uncounted site existed when this landed.
     msgbox += len(re.findall(
-        r"\b(?:QMessageBox|QInputDialog)\s+\w+\s*\(", main_cpp))
+        r"\b(?:QMessageBox|QInputDialog)\s+\w+\s*\(", r3_text))
     baseline_path = os.path.join(root,
                                  "tools/constitution_baseline.txt")
     if os.path.exists(baseline_path):
