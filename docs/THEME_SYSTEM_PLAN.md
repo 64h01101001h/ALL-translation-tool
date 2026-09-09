@@ -1,3 +1,8 @@
+<!-- Proposal produced 2026-09-09 at Adam's direction: "come up with a variety of
+themes that will cover the ui/ux/gui experience... settable and/or customizable by
+the user in the preferences/settings area". Reference notes on the harmony schemes
+are in docs/THEME_REFERENCE_FIGMA.md. NOT YET IMPLEMENTED and not yet ruled on. -->
+
 # Theme System Plan — Papers
 
 Status: proposal, awaiting Adam's rulings (§11). Written 2026-09-09 against the
