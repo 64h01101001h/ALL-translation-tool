@@ -677,5 +677,119 @@ std::string summary(const Result& r) {
     return o.str();
 }
 
+std::string optionsDescription(const Options& o) {
+    std::vector<std::string> on;
+    if (o.ignoreCase) on.push_back("ignore case");
+    if (o.ignoreWhitespace) on.push_back("ignore all whitespace");
+    if (o.ignoreWhitespaceChange) on.push_back("ignore whitespace changes");
+    if (o.ignoreBlankLines) on.push_back("ignore blank lines");
+    if (o.ignoreTibetanPunct) on.push_back("ignore Tibetan punctuation");
+    if (o.ignoreFolioMarkers) on.push_back("ignore folio markers");
+    if (o.ignoreApparatus) on.push_back("ignore apparatus brackets");
+    if (o.scriptAgnostic) on.push_back("compare across scripts (EWTS)");
+    if (!o.detectMoves) on.push_back("moved blocks not detected");
+    if (!o.ignoreRegex.empty()) on.push_back(std::to_string(o.ignoreRegex.size()) + " ignore pattern(s)");
+    if (!o.substitutions.empty()) on.push_back(std::to_string(o.substitutions.size()) + " substitution(s)");
+    if (on.empty()) return "no rules (every difference counts)";
+    std::string s;
+    for (size_t i = 0; i < on.size(); ++i) { if (i) s += i + 1 == on.size() ? " and " : ", "; s += on[i]; }
+    return s;
+}
+
+// ---- F2: changed folios
+FolioReport changedFolios(const std::vector<std::string>& a, const std::vector<std::string>& b,
+                          const Result& r, bool includeMinor) {
+    FolioReport f; f.includeMinor = includeMinor;
+    // folio spans over the left text: [marker line, next marker line)
+    struct Span { std::string folio; int beg, end; bool real; };
+    std::vector<Span> spans;
+    spans.push_back({"(before first folio marker)", 0, 0, false});   // always first; empty when the text opens with a marker
+    for (int i = 0; i < (int)a.size(); ++i) {
+        const std::string last = textspan::lastFolio(a[i]);   // the last marker on a line wins, as citeFor does
+        if (last.empty()) continue;
+        spans.back().end = i;
+        spans.push_back({"@" + last, i, (int)a.size(), true});
+    }
+    for (const auto& sp : spans) if (sp.real) ++f.totalFolios;
+    f.hasMarkers = f.totalFolios > 0;
+    if (!f.hasMarkers) spans.assign(1, {"(no folio markers)", 0, (int)a.size(), false});
+    std::vector<FolioChange> per(spans.size());
+    for (size_t i = 0; i < spans.size(); ++i) {
+        per[i].folio = spans[i].folio;
+        if (spans[i].end > spans[i].beg) { per[i].aFirstLine = spans[i].beg + 1; per[i].aLastLine = spans[i].end; }   // empty pseudo-folio keeps 0,0
+    }
+    auto spanFor = [&](int aLine0, bool insertAtTop) {
+        if (insertAtTop) return 0;   // an insert before the first left line belongs before the first marker
+        for (size_t i = 0; i < spans.size(); ++i) if (aLine0 >= spans[i].beg && aLine0 < spans[i].end) return (int)i;
+        return (int)spans.size() - 1;   // past the end → the last span
+    };
+    const auto entries = apparatus(a, b, r);   // important readings, in hunk order
+    size_t ei = 0;
+    for (const auto& h : r.hunks) {
+        if (h.kind == Kind::Equal) continue;
+        const int anchor = h.kind == Kind::Insert ? std::max(0, h.aBeg - 1) : h.aBeg;
+        if (h.unimportant && !includeMinor) continue;
+        FolioChange& fc = per[spanFor(anchor, h.kind == Kind::Insert && h.aBeg == 0 && f.hasMarkers)];
+        if (h.unimportant) ++fc.minor;
+        else {
+            if (h.kind == Kind::Change) ++fc.changes; else if (h.kind == Kind::Insert) ++fc.inserts; else ++fc.deletes;
+            if (ei < entries.size()) fc.entries.push_back(entries[ei++]);
+        }
+        if (!h.rawNormalised) ++fc.unnormalised;
+        const int bFirst = h.bBeg + 1, bLast = std::max(h.bBeg + 1, h.bEnd);
+        if (fc.bFirstLine == 0 || bFirst < fc.bFirstLine) fc.bFirstLine = bFirst;
+        if (bLast > fc.bLastLine) fc.bLastLine = bLast;
+    }
+    int changedReal = 0;
+    for (size_t i = 0; i < per.size(); ++i) {
+        const auto& fc = per[i];
+        if (fc.changes + fc.inserts + fc.deletes + fc.minor == 0) continue;
+        if (spans[i].real) ++changedReal;
+        f.changed.push_back(fc);
+    }
+    f.unchangedFolios = f.totalFolios - changedReal;
+    return f;
+}
+std::string changedFoliosMarkdown(const std::string& aName, const std::string& bName,
+                                  const Options& o, const Result& r, const FolioReport& f) {
+    std::ostringstream out;
+    out << "# Changed folios: " << aName << " against " << bName << "\n\n";
+    if (!f.hasMarkers) {
+        out << "No folio markers in the left text (" << aName << ") \u2014 use the apparatus report. " << summary(r) << "\n";
+        return out.str();
+    }
+    const int nReal = f.totalFolios - f.unchangedFolios;
+    bool pseudoTouched = false; for (const auto& fc : f.changed) pseudoTouched = pseudoTouched || fc.folio == "(before first folio marker)";
+    out << "Folios are cited from the left text's `@NNNA` markers (" << aName << "; if the right text is renumbered, the cites still refer to the left). "
+        << nReal << " of " << f.totalFolios << " folio" << (f.totalFolios == 1 ? "" : "s") << " changed"
+        << (pseudoTouched ? " (plus lines before the first marker)" : "") << "; "
+        << "lines before the first marker are grouped as \"(before first folio marker)\"; a difference that spans a marker is counted once, in the folio where it starts; "
+        << "minor differences under the rules in force are " << (f.includeMinor ? "included" : "excluded") << "; "
+        << "rules in force: " << optionsDescription(o) << "; "
+        << r.unnormalised << " line" << (r.unnormalised == 1 ? "" : "s") << (r.unnormalised ? " were" : " was") << " compared raw (could not be converted).\n\n";
+    out << "| Folio | Lines (A) | Changed | Only in B | Only in A | Minor | Raw |\n|---|---|---|---|---|---|---|\n";
+    for (const auto& fc : f.changed)
+        out << "| " << fc.folio << (fc.minorOnly() ? " \u2014 minor only (under the rules in force)" : "") << " | " << (fc.aFirstLine ? std::to_string(fc.aFirstLine) + "\u2013" + std::to_string(fc.aLastLine) : std::string("\u2014"))
+            << " | " << fc.changes << " | " << fc.inserts << " | " << fc.deletes << " | " << fc.minor << " | " << fc.unnormalised << " |\n";
+    out << "\n";
+    for (const auto& fc : f.changed) {
+        out << "## " << fc.folio << "\n\n";
+        if (fc.entries.empty()) out << "_Minor differences only under the rules in force; no readings to cite._\n\n";
+        for (const auto& x : fc.entries) out << "- **" << x.cite << "** A: " << x.left << " ] B: " << x.right << "\n";
+        if (!fc.entries.empty()) out << "\n";
+    }
+    out << "Unchanged folios: " << f.unchangedFolios << "\n";
+    return out.str();
+}
+std::string changedFoliosCsv(const FolioReport& f) {
+    auto q = [](const std::string& s) { std::string o = "\""; for (char c : s) { if (c == '"') o += "\"\""; else o += c; } return o + "\""; };
+    std::ostringstream o;
+    o << "folio,a_first_line,a_last_line,b_first_line,b_last_line,changes,inserts,deletes,minor,unnormalised\n";
+    for (const auto& fc : f.changed)
+        o << q(fc.folio) << "," << fc.aFirstLine << "," << fc.aLastLine << "," << fc.bFirstLine << "," << fc.bLastLine << ","
+          << fc.changes << "," << fc.inserts << "," << fc.deletes << "," << fc.minor << "," << fc.unnormalised << "\n";
+    return o.str();
+}
+
 }  // namespace textdiff
 }  // namespace allcore
