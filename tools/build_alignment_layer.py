@@ -643,7 +643,10 @@ def main():
                   "n": len(ss),
                   "acip": (sorted(acip_forms[tn])[0]
                            if tn in acip_forms else None)}
-                 for e, ss in sorted(evs.items())]
+                 # most-attested rendering FIRST (Adam, 2026-09-08): the
+                 # card and the view show them in this order, count shown;
+                 # ties fall back to the rendering itself
+                 for e, ss in sorted(evs.items(), key=lambda kv: (-len(kv[1]), kv[0].lower(), kv[0]))]
             for tn, evs in sorted(pairs.items())
         },
         # ACIP -> wylie headword. ACIP is the source of record and the
