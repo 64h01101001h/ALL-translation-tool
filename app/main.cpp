@@ -125,6 +125,7 @@ public:
 
 #include <functional>
 #include <QDateTime>
+#include <QCryptographicHash>
 #include <QStandardPaths>
 #include <QToolTip>
 #include <QStatusBar>
@@ -3869,6 +3870,354 @@ private:
     bool complete_ = false;   // FAIL-7: message_stop seen
 };
 
+// ---- Document properties, statistics and file operations shared by the
+// panes that own a document (Overlay, Draft, Manuscript) — Adam's ask,
+// 2026-09-08, modelled on Word's File menu and its Properties window.
+// A text file cannot carry properties inside itself the way a .docx
+// does, so they live in a SIDECAR: <dataRoot>/library/properties/
+// <basename>.json — the same keying the per-text glossary uses. Every
+// write goes through saveOrWarn (WP-1). Nothing here is a modal under
+// the harness: dialogs return early when g_harnessRun is set, and the
+// pure functions are what the selftests exercise.
+namespace docprops {
+inline QByteArray digest(const QString& text) {
+    return QCryptographicHash::hash(text.toUtf8(),
+                                    QCryptographicHash::Sha1);
+}
+// QString::count(QRegularExpression) counts OVERLAPPING matches (a Qt
+// historical quirk: "SEMS" is four matches of [A-Za-z']+). Count real ones.
+inline int countMatches(const QString& text, const QRegularExpression& re) {
+    int n = 0;
+    auto it = re.globalMatch(text);
+    while (it.hasNext()) { it.next(); ++n; }
+    return n;
+}
+inline QString sidecarPath(const QString& dataRoot, const QString& docPath) {
+    if (docPath.isEmpty() || dataRoot.isEmpty()) return {};
+    return dataRoot + "/library/properties/" +
+           QFileInfo(docPath).completeBaseName() + ".json";
+}
+inline QJsonObject load(const QString& sidecar) {
+    if (sidecar.isEmpty()) return {};
+    QFile f(sidecar);
+    if (!f.open(QIODevice::ReadOnly)) return {};
+    return QJsonDocument::fromJson(f.readAll()).object();
+}
+inline bool store(QWidget* parent, const QString& sidecar,
+                  const QJsonObject& o) {
+    if (sidecar.isEmpty()) return false;
+    QDir().mkpath(QFileInfo(sidecar).absolutePath());
+    return saveOrWarn(parent, sidecar,
+                      QJsonDocument(o).toJson(QJsonDocument::Indented),
+                      "The document properties");
+}
+// Called by every successful document save: the revision counter,
+// who saved, and the accumulated editing time (Word's Statistics tab).
+inline void noteSave(QWidget* parent, const QString& sidecar,
+                     qint64 editSeconds) {
+    if (sidecar.isEmpty()) return;
+    QJsonObject o = load(sidecar);
+    o["revision"] = o.value("revision").toInt() + 1;
+    o["editingSeconds"] = o.value("editingSeconds").toInt() + int(editSeconds);
+    o["lastSavedBy"] = g_userName.isEmpty()
+                           ? qEnvironmentVariable("USER", "unknown")
+                           : g_userName;
+    o["lastSavedAt"] = QDateTime::currentDateTime().toString(Qt::ISODate);
+    store(parent, sidecar, o);
+}
+// Tibetan-aware statistics. Folios are ACIP markers (@001A / @01B),
+// syllables are the alphabetic runs once markers and {…}/[…] apparatus
+// are removed, shads are ACIP commas. Word's counts are kept too.
+inline QJsonObject textStatistics(const QString& text, bool tibetan,
+                                  int tokens, int spans, int entries) {
+    QJsonObject o;
+    static const QRegularExpression folioRe("@\\d{2,3}[AaBb]\\b");
+    static const QRegularExpression markRe(
+        "@\\S+|\\{[^}]*\\}|\\[[^\\]]*\\]");
+    static const QRegularExpression sylRe("[A-Za-z']+");
+    static const QRegularExpression wordRe("\\S+");
+    static const QRegularExpression paraRe("\\n\\s*\\n");
+    const QString body = QString(text).replace(markRe, " ");
+    o["characters"] = QString(text).remove(' ').remove('\n').remove('\t').size();
+    o["charactersWithSpaces"] = text.size();
+    o["lines"] = text.isEmpty() ? 0 : text.count('\n') + 1;
+    o["paragraphs"] = text.trimmed().isEmpty()
+                          ? 0
+                          : int(text.trimmed().split(paraRe).size());
+    if (tibetan) {
+        o["folios"] = countMatches(text, folioRe);
+        o["syllables"] = countMatches(body, sylRe);
+        o["shads"] = int(body.count(','));
+        o["words"] = tokens;             // the segmenter's word count
+        o["dictionarySpans"] = spans;
+        o["entriesResolved"] = entries;
+    } else {
+        o["words"] = countMatches(text, wordRe);
+    }
+    return o;
+}
+inline QString hms(qint64 secs) {
+    if (secs < 60) return QString("%1 s").arg(secs);
+    if (secs < 3600) return QString("%1 min").arg(secs / 60);
+    return QString("%1 h %2 min").arg(secs / 3600).arg((secs % 3600) / 60);
+}
+// File → Open Recent bookkeeping when a file moves or is renamed.
+inline void replaceRecent(const QString& oldP, const QString& newP) {
+    QSettings st("ALL", "TranslationTool");
+    QStringList rs = st.value("file/recents").toStringList();
+    for (QString& r : rs)
+        if (r == oldP) r = newP;
+    st.setValue("file/recents", rs);
+    if (st.value("overlay/lastFile").toString() == oldP)
+        st.setValue("overlay/lastFile", newP);
+}
+// Move a file into another folder, refusing to clobber. Returns the
+// new path in outNew. Never guesses: a failure is reported, not hidden.
+inline bool moveFileTo(QWidget* parent, const QString& from,
+                       const QString& toDir, QString& outNew) {
+    const QString target = QDir(toDir).filePath(QFileInfo(from).fileName());
+    if (QFileInfo(target) == QFileInfo(from)) { outNew = from; return true; }
+    if (QFile::exists(target)) {
+        if (!g_harnessRun)
+            QMessageBox::warning(parent, "Move",
+                                 QString("%1 already exists in %2 — nothing moved.")
+                                     .arg(QFileInfo(from).fileName(), toDir));
+        return false;
+    }
+    if (!QFile::rename(from, target)) {
+        if (!g_harnessRun)
+            QMessageBox::warning(parent, "Move",
+                                 QString("Could not move %1 to %2.")
+                                     .arg(from, toDir));
+        return false;
+    }
+    outNew = target;
+    replaceRecent(from, target);
+    return true;
+}
+// Rename a file in place (same folder) plus any sidecars that are keyed
+// by its base name (glossary, properties). Same refusals as move.
+inline bool renameFileTo(QWidget* parent, const QString& from,
+                         const QString& newName, QString& outNew,
+                         const QStringList& sidecarDirsAndExts) {
+    if (newName.trimmed().isEmpty() || newName.contains('/')) return false;
+    const QFileInfo fi(from);
+    QString nm = newName.trimmed();
+    if (QFileInfo(nm).suffix().isEmpty() && !fi.suffix().isEmpty())
+        nm += "." + fi.suffix();
+    const QString target = fi.dir().filePath(nm);
+    if (target == from) { outNew = from; return true; }
+    if (QFile::exists(target)) {
+        if (!g_harnessRun)
+            QMessageBox::warning(parent, "Rename",
+                                 QString("%1 already exists — nothing renamed.").arg(nm));
+        return false;
+    }
+    if (!QFile::rename(from, target)) {
+        if (!g_harnessRun)
+            QMessageBox::warning(parent, "Rename",
+                                 QString("Could not rename %1.").arg(from));
+        return false;
+    }
+    // sidecars: pairs of (dir, ext) — "<dir>/<oldBase><ext>" → newBase
+    const QString oldBase = fi.completeBaseName();
+    const QString newBase = QFileInfo(target).completeBaseName();
+    for (int i = 0; i + 1 < sidecarDirsAndExts.size(); i += 2) {
+        const QString a = sidecarDirsAndExts[i] + "/" + oldBase + sidecarDirsAndExts[i + 1];
+        const QString b = sidecarDirsAndExts[i] + "/" + newBase + sidecarDirsAndExts[i + 1];
+        if (QFile::exists(a) && !QFile::exists(b)) QFile::rename(a, b);
+    }
+    outNew = target;
+    replaceRecent(from, target);
+    return true;
+}
+struct Input {
+    QString path;        // empty for a pasted / untitled document
+    QString text;        // the document as plain text
+    bool tibetan = true;
+    int tokens = 0, spans = 0, entries = 0;
+    QString content;     // Content tab body (outline or first lines)
+    QString dataRoot;
+    qint64 sessionEditSeconds = 0;
+    QString kind = "document";
+};
+// The Properties window: General · Summary · Statistics · Content ·
+// Custom, as in Word. Summary and Custom are editable and land in the
+// sidecar on OK; the rest is read-only fact. Modal, so it never runs
+// under the harness (the selftests cover the functions above).
+inline void showDialog(QWidget* parent, const Input& in) {
+    if (g_harnessRun) return;
+    const QString sidecar = sidecarPath(in.dataRoot, in.path);
+    QJsonObject props = load(sidecar);
+    QDialog dlg(parent);
+    const QString name = in.path.isEmpty()
+                             ? QString("Untitled %1").arg(in.kind)
+                             : QFileInfo(in.path).fileName();
+    dlg.setWindowTitle(name + " Properties");
+    dlg.setMinimumSize(560, 520);
+    auto* v = new QVBoxLayout(&dlg);
+    auto* tabs = new QTabWidget;
+    v->addWidget(tabs, 1);
+
+    // General
+    {
+        auto* w = new QWidget; auto* f = new QFormLayout(w);
+        QFileInfo fi(in.path);
+        f->addRow("Name:", new QLabel(name));
+        f->addRow("Type:", new QLabel(in.tibetan ? "Tibetan text (ACIP / Wylie)"
+                                                : (in.kind == "manuscript" ? "Manuscript (HTML)" : "English draft (plain text)")));
+        f->addRow("Location:", new QLabel(in.path.isEmpty() ? "— (not saved)" : QDir::toNativeSeparators(fi.absolutePath())));
+        f->addRow("Size:", new QLabel(in.path.isEmpty() ? "—" : QString("%1 KB (%2 bytes)").arg(fi.size() / 1024.0, 0, 'f', 1).arg(fi.size())));
+        f->addRow("Created:", new QLabel(in.path.isEmpty() ? "—" : fi.birthTime().toString("dddd, d MMMM yyyy 'at' h:mm AP")));
+        f->addRow("Modified:", new QLabel(in.path.isEmpty() ? "—" : fi.lastModified().toString("dddd, d MMMM yyyy 'at' h:mm AP")));
+        auto* ro = new QCheckBox("Read-only"); ro->setChecked(!in.path.isEmpty() && !fi.isWritable()); ro->setEnabled(false);
+        f->addRow("Attributes:", ro);
+        if (!in.path.isEmpty() && sidecar.isEmpty())
+            f->addRow("", new QLabel("<i>No data root: properties cannot be stored.</i>"));
+        if (in.path.isEmpty())
+            f->addRow("", new QLabel("<i>Save the document to keep Summary and Custom properties.</i>"));
+        tabs->addTab(w, "General");
+    }
+    // Summary (editable)
+    QMap<QString, QLineEdit*> sum;
+    QTextEdit* comments = nullptr;
+    {
+        auto* w = new QWidget; auto* f = new QFormLayout(w);
+        for (const char* k : {"title", "subject", "author", "manager", "company", "category", "keywords"}) {
+            auto* e = new QLineEdit(props.value(k).toString());
+            QString lab = QString(k); lab[0] = lab[0].toUpper();
+            f->addRow(lab + ":", e); sum[k] = e;
+        }
+        if (sum["author"]->text().isEmpty())
+            sum["author"]->setText(g_userName.isEmpty() ? qEnvironmentVariable("USER") : g_userName);
+        comments = new QTextEdit; comments->setPlainText(props.value("comments").toString());
+        comments->setMaximumHeight(90);
+        f->addRow("Comments:", comments);
+        auto* hb = new QLineEdit(props.value("hyperlinkBase").toString());
+        f->addRow("Hyperlink base:", hb); sum["hyperlinkBase"] = hb;
+        f->addRow("Template:", new QLabel(props.value("template").toString().isEmpty() ? "—" : props.value("template").toString()));
+        tabs->addTab(w, "Summary");
+    }
+    // Statistics
+    {
+        auto* w = new QWidget; auto* f = new QFormLayout(w);
+        QFileInfo fi(in.path);
+        f->addRow("Created:", new QLabel(in.path.isEmpty() ? "—" : fi.birthTime().toString("dddd, d MMMM yyyy 'at' h:mm AP")));
+        f->addRow("Modified:", new QLabel(in.path.isEmpty() ? "—" : fi.lastModified().toString("dddd, d MMMM yyyy 'at' h:mm AP")));
+        f->addRow("Printed:", new QLabel(props.value("printedAt").toString().isEmpty() ? "—" : props.value("printedAt").toString()));
+        f->addRow("Last saved by:", new QLabel(props.value("lastSavedBy").toString().isEmpty() ? "—" : props.value("lastSavedBy").toString()));
+        f->addRow("Revision number:", new QLabel(QString::number(props.value("revision").toInt())));
+        f->addRow("Total editing time:", new QLabel(hms(props.value("editingSeconds").toInt() + in.sessionEditSeconds)));
+        const QJsonObject st = textStatistics(in.text, in.tibetan, in.tokens, in.spans, in.entries);
+        auto* tbl = new QTableWidget(0, 2);
+        tbl->setHorizontalHeaderLabels({"Statistic name", "Value"});
+        tbl->horizontalHeader()->setStretchLastSection(true);
+        tbl->verticalHeader()->setVisible(false);
+        tbl->setEditTriggers(QAbstractItemView::NoEditTriggers);
+        auto add = [&](const QString& k, const QString& lab) {
+            if (!st.contains(k)) return;
+            const int r = tbl->rowCount(); tbl->insertRow(r);
+            tbl->setItem(r, 0, new QTableWidgetItem(lab));
+            tbl->setItem(r, 1, new QTableWidgetItem(QString::number(st.value(k).toInt())));
+        };
+        add("folios", "Folios (ACIP markers):"); add("paragraphs", "Paragraphs:");
+        add("lines", "Lines:"); add("words", in.tibetan ? "Words (segmenter):" : "Words:");
+        add("syllables", "Syllables:"); add("shads", "Shads (,):");
+        add("dictionarySpans", "Dictionary spans:"); add("entriesResolved", "Entries resolved:");
+        add("characters", "Characters:"); add("charactersWithSpaces", "Characters (with spaces):");
+        f->addRow("Statistics:", tbl);
+        tabs->addTab(w, "Statistics");
+    }
+    // Content
+    {
+        auto* w = new QWidget; auto* l = new QVBoxLayout(w);
+        l->addWidget(new QLabel("Document contents:"));
+        auto* tb = new QTextBrowser; tb->setPlainText(in.content.isEmpty() ? "(empty)" : in.content);
+        l->addWidget(tb, 1);
+        tabs->addTab(w, "Content");
+    }
+    // Custom (editable)
+    QTableWidget* ctbl = nullptr;
+    {
+        auto* w = new QWidget; auto* g = new QVBoxLayout(w);
+        auto* row = new QHBoxLayout;
+        auto* nameC = new QComboBox; nameC->setEditable(true);
+        for (const char* n : {"Checked by", "Client", "Date completed", "Department", "Destination", "Disposition", "Division", "Document number", "Editor", "Forward to", "Group", "Language", "Mailstop", "Matter", "Office", "Owner", "Project", "Publisher", "Purpose", "Received from", "Recorded by", "Recorded date", "Reference", "Source", "Status", "Telephone number", "Typist"})
+            nameC->addItem(n);
+        nameC->setCurrentText("");
+        auto* typeC = new QComboBox; typeC->addItems({"Text", "Date", "Number", "Yes or no"});
+        auto* valE = new QLineEdit;
+        auto* addB = new QPushButton("Add");
+        row->addWidget(new QLabel("Name:")); row->addWidget(nameC, 2);
+        row->addWidget(new QLabel("Type:")); row->addWidget(typeC);
+        row->addWidget(new QLabel("Value:")); row->addWidget(valE, 2); row->addWidget(addB);
+        g->addLayout(row);
+        ctbl = new QTableWidget(0, 3);
+        ctbl->setHorizontalHeaderLabels({"Name", "Value", "Type"});
+        ctbl->horizontalHeader()->setStretchLastSection(true);
+        ctbl->verticalHeader()->setVisible(false);
+        ctbl->setSelectionBehavior(QAbstractItemView::SelectRows);
+        for (const QJsonValue& cv : props.value("custom").toArray()) {
+            const QJsonObject c = cv.toObject();
+            const int r = ctbl->rowCount(); ctbl->insertRow(r);
+            ctbl->setItem(r, 0, new QTableWidgetItem(c.value("name").toString()));
+            ctbl->setItem(r, 1, new QTableWidgetItem(c.value("value").toString()));
+            ctbl->setItem(r, 2, new QTableWidgetItem(c.value("type").toString()));
+        }
+        g->addWidget(ctbl, 1);
+        auto* delB = new QPushButton("Delete");
+        g->addWidget(delB, 0, Qt::AlignRight);
+        QObject::connect(addB, &QPushButton::clicked, [=] {
+            const QString n = nameC->currentText().trimmed();
+            if (n.isEmpty()) return;
+            for (int r = 0; r < ctbl->rowCount(); ++r)
+                if (ctbl->item(r, 0)->text() == n) {   // replace in place
+                    ctbl->item(r, 1)->setText(valE->text());
+                    ctbl->item(r, 2)->setText(typeC->currentText());
+                    return;
+                }
+            const int r = ctbl->rowCount(); ctbl->insertRow(r);
+            ctbl->setItem(r, 0, new QTableWidgetItem(n));
+            ctbl->setItem(r, 1, new QTableWidgetItem(valE->text()));
+            ctbl->setItem(r, 2, new QTableWidgetItem(typeC->currentText()));
+            valE->clear();
+        });
+        QObject::connect(delB, &QPushButton::clicked, [=] {
+            const int r = ctbl->currentRow();
+            if (r >= 0) ctbl->removeRow(r);
+        });
+        tabs->addTab(w, "Custom");
+    }
+    auto* bb = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
+    v->addWidget(bb);
+    QObject::connect(bb, &QDialogButtonBox::accepted, &dlg, &QDialog::accept);
+    QObject::connect(bb, &QDialogButtonBox::rejected, &dlg, &QDialog::reject);
+    if (dlg.exec() != QDialog::Accepted) return;
+    for (auto it = sum.begin(); it != sum.end(); ++it) props[it.key()] = it.value()->text();
+    props["comments"] = comments->toPlainText();
+    QJsonArray custom;
+    for (int r = 0; r < ctbl->rowCount(); ++r) {
+        QJsonObject c;
+        c["name"] = ctbl->item(r, 0)->text();
+        c["value"] = ctbl->item(r, 1)->text();
+        c["type"] = ctbl->item(r, 2)->text();
+        custom.append(c);
+    }
+    props["custom"] = custom;
+    if (!sidecar.isEmpty()) store(parent, sidecar, props);
+}
+// Shared name prompt for Rename / Save as Template (one QInputDialog
+// site for the whole menu; returns empty under the harness).
+inline QString askName(QWidget* parent, const QString& title,
+                       const QString& label, const QString& current) {
+    if (g_harnessRun) return {};
+    bool ok = false;
+    const QString r = QInputDialog::getText(parent, title, label,
+                                            QLineEdit::Normal, current, &ok);
+    return ok ? r.trimmed() : QString();
+}
+}  // namespace docprops
+
 // ---- Overlay pane: document view with nested depth shading -----------------
 // ---- mini icon fleet (Adam's go, 2026-08-13): hand-drawn 16pt
 // monochrome glyphs on PRIMARY action buttons only (HIG restraint:
@@ -6535,6 +6884,84 @@ public:
             wasWylieFile_ = keepWylie;
             refreshDocTitle();
         }
+        {   // File → New / Close / Templates / Move / Rename / Properties (2026-09-08)
+            const QString keepText = input_->toPlainText();
+            const QString keepFile = docFile_;
+            const bool keepWylie = wasWylieFile_;
+            const QByteArray keepDigest = savedDigest_;
+            // statistics on a known ACIP sample
+            const QJsonObject st = docprops::textStatistics(
+                "@001A *, ,SEMS CAN THAMS CAD,, {NOTE} [1]\n\n@001B BDE BA, ",
+                true, 7, 3, 2);
+            {
+                const bool okSt = st.value("folios").toInt() == 2 && st.value("syllables").toInt() == 6 &&
+                                  st.value("shads").toInt() == 5 && st.value("paragraphs").toInt() == 2 &&
+                                  st.value("words").toInt() == 7;
+                if (!okSt) log << "  stats were: " + QString::fromUtf8(QJsonDocument(st).toJson(QJsonDocument::Compact));
+                check(okSt, "Properties statistics count folios, syllables, shads and "
+                            "paragraphs on a known ACIP sample (apparatus excluded)");
+            }
+            // new document: empty, untitled, not dirty
+            check(newDocument() && input_->toPlainText().isEmpty() &&
+                      docFile_.isEmpty() && !isDirty(),
+                  "New Document leaves an empty, untitled, clean box");
+            input_->setPlainText("@001A *, ,X,,");
+            check(isDirty(), "typing into an untitled box makes it dirty");
+            // templates: built-in applies; a saved one round-trips
+            check(applyTemplate("ACIP folio skeleton") &&
+                      input_->toPlainText().startsWith("@001A"),
+                  "New from Template applies the built-in ACIP skeleton");
+            const QString tname = "all_selftest_template";
+            QFile::remove(templatesDir() + "/" + tname + ".txt");
+            input_->setPlainText("@001A *, ,TEMPLATE BODY,,");
+            check(saveTemplateNamed(tname) && templateNames().contains(tname) &&
+                      templateText(tname) == "@001A *, ,TEMPLATE BODY,,",
+                  "Save as Template writes a template the picker lists and reloads verbatim");
+            QFile::remove(templatesDir() + "/" + tname + ".txt");
+            // rename carries the glossary sidecar; move keeps the name
+            const QString tmpDir = QDir::temp().filePath("all_selftest_fileops");
+            QDir().mkpath(tmpDir);
+            QDir().mkpath(tmpDir + "/sub");
+            const QString f1 = tmpDir + "/renametest.txt";
+            QFile::remove(f1);
+            { QFile f(f1); f.open(QIODevice::WriteOnly); f.write("@001A *, ,A,,"); }
+            const QString gdir = dataRoot_ + "/library/glossaries";
+            QDir().mkpath(gdir);
+            const QString g1 = gdir + "/renametest.tsv", g2 = gdir + "/renamed_ok.tsv";
+            QFile::remove(g1); QFile::remove(g2);
+            { QFile g(g1); g.open(QIODevice::WriteOnly); g.write("sems\tmind\n"); }
+            docFile_ = f1;
+            const bool ren = renameDocumentTo("renamed_ok");
+            check(ren && docFile_ == tmpDir + "/renamed_ok.txt" && QFile::exists(docFile_) &&
+                      !QFile::exists(f1) && QFile::exists(g2) && !QFile::exists(g1),
+                  "Rename moves the file AND its glossary sidecar to the new base name");
+            const bool mv = moveDocumentTo(tmpDir + "/sub");
+            check(mv && docFile_ == tmpDir + "/sub/renamed_ok.txt" && QFile::exists(docFile_),
+                  "Move relocates the file into the chosen folder and follows it");
+            { QFile blocker(tmpDir + "/renamed_ok.txt"); blocker.open(QIODevice::WriteOnly); blocker.write("x"); }
+            check(!moveDocumentTo(tmpDir) && docFile_ == tmpDir + "/sub/renamed_ok.txt",
+                  "Move refuses to clobber an existing file and stays put");
+            // properties sidecar: save bumps revision, summary round-trips
+            const QString sc = docprops::sidecarPath(dataRoot_, docFile_);
+            QFile::remove(sc);
+            docprops::noteSave(this, sc, 65);
+            docprops::noteSave(this, sc, 5);
+            QJsonObject pr = docprops::load(sc);
+            check(pr.value("revision").toInt() == 2 && pr.value("editingSeconds").toInt() == 70 &&
+                      !pr.value("lastSavedBy").toString().isEmpty(),
+                  "each save bumps the revision and accumulates editing time in the sidecar");
+            pr["title"] = "Thar lam gsal byed";
+            check(docprops::store(this, sc, pr) &&
+                      docprops::load(sc).value("title").toString() == "Thar lam gsal byed",
+                  "Summary properties round-trip through the sidecar");
+            QFile::remove(sc); QFile::remove(g2);
+            QDir(tmpDir).removeRecursively();
+            input_->setPlainText(keepText);
+            docFile_ = keepFile;
+            wasWylieFile_ = keepWylie;
+            savedDigest_ = keepDigest;
+            refreshDocTitle();
+        }
         return fails;
     }
 
@@ -6579,8 +7006,176 @@ public:
         if (hint_)
             hint_->setText(QFileInfo(fn).fileName() + " \u2014 saved " +
                            QTime::currentTime().toString("HH:mm"));
+        savedDigest_ = docprops::digest(input_->toPlainText());
+        docprops::noteSave(this, docprops::sidecarPath(dataRoot_, fn),
+                           editTimer_.isValid() ? editTimer_.elapsed() / 1000 : 0);
+        editTimer_.restart();
         return true;
     }
+    // ---- the rest of Word's File menu, for the Document box ----
+    bool isDirty() const {
+        return docprops::digest(input_->toPlainText()) != savedDigest_ &&
+               !(input_->toPlainText().isEmpty() && docFile_.isEmpty());
+    }
+    // One confirmation for New / Close / New from Template. Under the
+    // harness it answers "discard" so the selftests can drive the flow.
+    bool confirmDiscard() {
+        if (!isDirty() || g_harnessRun) return true;
+        return QMessageBox::question(
+                   this, "Unsaved changes",
+                   QString("Discard unsaved changes to %1?")
+                       .arg(docFile_.isEmpty() ? "the pasted document"
+                                               : QFileInfo(docFile_).fileName())) ==
+               QMessageBox::Yes;
+    }
+    void resetDocument(const QString& text) {
+        input_->setPlainText(text);
+        docFile_.clear();
+        wasWylieFile_ = false;
+        savedDigest_ = docprops::digest(text);
+        editTimer_.restart();
+        refreshDocTitle();
+        loadDoc();
+    }
+    bool newDocument() {
+        if (!confirmDiscard()) return false;
+        resetDocument(QString());
+        if (hint_) hint_->setText("New document — paste ACIP or wylie, or open a file.");
+        return true;
+    }
+    bool closeDocument() {
+        if (!confirmDiscard()) return false;
+        const QString was = docFile_;
+        resetDocument(QString());
+        if (hint_) hint_->setText(was.isEmpty() ? "Document closed."
+                                                : QFileInfo(was).fileName() + " closed.");
+        return true;
+    }
+    QString templatesDir() const { return dataRoot_ + "/library/templates"; }
+    // Templates are plain ACIP/wylie skeletons; two are built in, the
+    // rest are whatever the translator saved with Save as Template.
+    QStringList templateNames() const {
+        QStringList out{"ACIP folio skeleton", "Wylie skeleton"};
+        for (const QFileInfo& fi : QDir(templatesDir()).entryInfoList({"*.txt"}, QDir::Files, QDir::Name))
+            out << fi.completeBaseName();
+        return out;
+    }
+    QString templateText(const QString& name) const {
+        if (name == "ACIP folio skeleton")
+            return "@001A *, ,TITLE HERE,,\n\n@001B ";
+        if (name == "Wylie skeleton")
+            return "@001a *, ,title here,,\n\n@001b ";
+        QFile f(templatesDir() + "/" + name + ".txt");
+        if (!f.open(QIODevice::ReadOnly)) return {};
+        return QString::fromUtf8(f.readAll());
+    }
+    bool saveTemplateNamed(const QString& name) {
+        if (name.trimmed().isEmpty() || name.contains('/')) return false;
+        QDir().mkpath(templatesDir());
+        return saveOrWarn(this, templatesDir() + "/" + name.trimmed() + ".txt",
+                          input_->toPlainText().toUtf8(), "The template");
+    }
+    bool saveAsTemplate() {
+        const QString n = docprops::askName(this, "Save as Template",
+                                            "Template name:",
+                                            docFile_.isEmpty() ? QString() : QFileInfo(docFile_).completeBaseName());
+        if (n.isEmpty()) return false;
+        if (!saveTemplateNamed(n)) return false;
+        if (hint_) hint_->setText("Template \"" + n + "\" saved — File › New from Template…");
+        return true;
+    }
+    bool applyTemplate(const QString& name) {
+        const QString t = templateText(name);
+        if (t.isEmpty() && name != "ACIP folio skeleton") return false;
+        if (!confirmDiscard()) return false;
+        resetDocument(t);
+        if (hint_) hint_->setText("New document from template \"" + name + "\".");
+        return true;
+    }
+    bool newFromTemplate() {
+        if (g_harnessRun) return false;
+        QDialog d(this);
+        d.setWindowTitle("New from Template");
+        auto* v = new QVBoxLayout(&d);
+        v->addWidget(new QLabel("Choose a template. Your own templates come from File › Save as Template…"));
+        auto* list = new QListWidget;
+        list->addItems(templateNames());
+        list->setCurrentRow(0);
+        v->addWidget(list, 1);
+        auto* bb = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
+        v->addWidget(bb);
+        connect(bb, &QDialogButtonBox::accepted, &d, &QDialog::accept);
+        connect(bb, &QDialogButtonBox::rejected, &d, &QDialog::reject);
+        connect(list, &QListWidget::itemDoubleClicked, &d, &QDialog::accept);
+        if (d.exec() != QDialog::Accepted || !list->currentItem()) return false;
+        return applyTemplate(list->currentItem()->text());
+    }
+    bool moveDocumentTo(const QString& dir) {
+        if (docFile_.isEmpty()) return false;
+        QString nw;
+        if (!docprops::moveFileTo(this, docFile_, dir, nw)) return false;
+        docFile_ = nw;
+        refreshDocTitle();
+        if (hint_) hint_->setText("Moved to " + QDir::toNativeSeparators(dir));
+        return true;
+    }
+    bool moveDocument() {
+        if (docFile_.isEmpty()) {
+            if (hint_) hint_->setText("Save the document first; Move works on a file.");
+            return false;
+        }
+        const QString dir = safeGetExistingDirectory(this, "Move to folder");
+        return !dir.isEmpty() && moveDocumentTo(dir);
+    }
+    // Rename carries the per-text glossary and the properties sidecar
+    // with it — both are keyed by the file's base name.
+    bool renameDocumentTo(const QString& newName) {
+        if (docFile_.isEmpty()) return false;
+        QString nw;
+        if (!docprops::renameFileTo(this, docFile_, newName, nw,
+                                    {dataRoot_ + "/library/glossaries", ".tsv",
+                                     dataRoot_ + "/library/properties", ".json"}))
+            return false;
+        docFile_ = nw;
+        refreshDocTitle();
+        loadGlossary();
+        if (hint_) hint_->setText("Renamed to " + QFileInfo(nw).fileName());
+        return true;
+    }
+    bool renameDocument() {
+        if (docFile_.isEmpty()) {
+            if (hint_) hint_->setText("Save the document first; Rename works on a file.");
+            return false;
+        }
+        const QString n = docprops::askName(this, "Rename", "New file name:",
+                                            QFileInfo(docFile_).fileName());
+        return !n.isEmpty() && renameDocumentTo(n);
+    }
+    QString outlineForProperties() const {
+        QString out;
+        for (const SaBcadNode& n : extractSaBcad())
+            out += QString(n.depth * 2, ' ') + n.label + "\n";
+        if (out.isEmpty()) {
+            const QStringList ls = input_->toPlainText().split('\n');
+            out = "(no sa bcad outline detected)\n\n" + ls.mid(0, 40).join('\n');
+        }
+        return out;
+    }
+    docprops::Input propertiesInput() const {
+        docprops::Input in;
+        in.path = docFile_;
+        in.text = input_->toPlainText();
+        in.tibetan = true;
+        in.tokens = int(doc_.tokens.size());
+        in.spans = int(doc_.spans.size());
+        in.entries = int(doc_.entries.size());
+        in.content = outlineForProperties();
+        in.dataRoot = dataRoot_;
+        in.sessionEditSeconds = editTimer_.isValid() ? editTimer_.elapsed() / 1000 : 0;
+        in.kind = "document";
+        return in;
+    }
+    void showProperties() { docprops::showDialog(this, propertiesInput()); }
     void openFile(const QString& fn) {
         QFile f(fn);
         if (!f.open(QIODevice::ReadOnly)) {
@@ -6615,6 +7210,8 @@ public:
         }
         docFile_ = fn;
         refreshDocTitle();
+        savedDigest_ = docprops::digest(input_->toPlainText());
+        editTimer_.restart();
         // B11: a new text in the box retires every offset an open
         // citations report captured. Recording the name too lets a
         // retired anchor say WHICH text it was measured against
@@ -14969,6 +15566,8 @@ private:
     bool contrTried_ = false;
     QString docFile_;
     QLabel* docTitle_ = nullptr;   // path strip over the reading pane
+    QByteArray savedDigest_;       // sha1 of the box as last opened/saved
+    QElapsedTimer editTimer_;      // editing time since open/save (Statistics)
     // BOUNTY B11: the Document box's generation, bumped every time
     // a whole new text lands in it. The citations report is
     // modeless, and its OWN links (citefile: / citeopen:) call
@@ -19948,7 +20547,60 @@ auto* secPub = new QLabel("<span style='color:#9A7A33;font-size:10px;letter-spac
             termLive_->setText(QFileInfo(draftPath_).fileName() +
                                " \u2014 saved " +
                                QTime::currentTime().toString("HH:mm"));
+        savedDigest_ = docprops::digest(draft_->toPlainText());
+        docprops::noteSave(this, docprops::sidecarPath(dataRoot_, draftPath_),
+                           editTimer_.isValid() ? editTimer_.elapsed() / 1000 : 0);
+        editTimer_.restart();
         return true;
+    }
+    bool draftDirty() const {
+        return docprops::digest(draft_->toPlainText()) != savedDigest_ &&
+               !(draft_->toPlainText().isEmpty() && draftPath_.isEmpty());
+    }
+    bool confirmDiscardDraft() {
+        if (!draftDirty() || g_harnessRun) return true;
+        return QMessageBox::question(this, "Unsaved changes",
+                                     "Discard unsaved changes to the draft?") ==
+               QMessageBox::Yes;
+    }
+    bool newDraft() {
+        if (!confirmDiscardDraft()) return false;
+        draft_->clear();
+        draftPath_.clear();
+        savedDigest_ = docprops::digest(QString());
+        editTimer_.restart();
+        if (termLive_) termLive_->setText("New draft.");
+        return true;
+    }
+    bool closeDraft() { return newDraft(); }
+    bool moveDraft() {
+        if (draftPath_.isEmpty()) { if (termLive_) termLive_->setText("Save the draft first; Move works on a file."); return false; }
+        const QString dir = safeGetExistingDirectory(this, "Move draft to folder");
+        QString nw;
+        if (dir.isEmpty() || !docprops::moveFileTo(this, draftPath_, dir, nw)) return false;
+        draftPath_ = nw;
+        if (termLive_) termLive_->setText("Moved to " + QDir::toNativeSeparators(dir));
+        return true;
+    }
+    bool renameDraft() {
+        if (draftPath_.isEmpty()) { if (termLive_) termLive_->setText("Save the draft first; Rename works on a file."); return false; }
+        const QString n = docprops::askName(this, "Rename draft", "New file name:", QFileInfo(draftPath_).fileName());
+        QString nw;
+        if (n.isEmpty() || !docprops::renameFileTo(this, draftPath_, n, nw, {dataRoot_ + "/library/properties", ".json"})) return false;
+        draftPath_ = nw;
+        if (termLive_) termLive_->setText("Renamed to " + QFileInfo(nw).fileName());
+        return true;
+    }
+    void showProperties() {
+        docprops::Input in;
+        in.path = draftPath_;
+        in.text = draft_->toPlainText();
+        in.tibetan = false;
+        in.content = draft_->toPlainText().split('\n').mid(0, 40).join('\n');
+        in.dataRoot = dataRoot_;
+        in.sessionEditSeconds = editTimer_.isValid() ? editTimer_.elapsed() / 1000 : 0;
+        in.kind = "draft";
+        docprops::showDialog(this, in);
     }
     bool saveDraftAs() {
         const QString fn = safeGetSaveFileName(
@@ -20085,6 +20737,24 @@ auto* secPub = new QLabel("<span style='color:#9A7A33;font-size:10px;letter-spac
             draftPath_ = keepPath;
             draft_->setPlainText(keep);
             QFile::remove(outP);
+        }
+        {   // File → New / Close on the draft (2026-09-08)
+            const QString keep = draft_->toPlainText();
+            const QString keepPath = draftPath_;
+            const QByteArray keepDigest = savedDigest_;
+            draft_->setPlainText("something");
+            draftPath_ = "/tmp/x.txt";
+            check(draftDirty(), "an edited draft is dirty");
+            check(newDraft() && draft_->toPlainText().isEmpty() && draftPath_.isEmpty() && !draftDirty(),
+                  "New draft leaves an empty, untitled, clean draft");
+            const QJsonObject st = docprops::textStatistics("Consider sound.\nIt is a thing.", false, 0, 0, 0);
+            if (!(st.value("words").toInt() == 6 && st.value("lines").toInt() == 2))
+                log << "  stats were: " + QString::fromUtf8(QJsonDocument(st).toJson(QJsonDocument::Compact));
+            check(st.value("words").toInt() == 6 && st.value("lines").toInt() == 2,
+                  "English statistics count words and lines");
+            draft_->setPlainText(keep);
+            draftPath_ = keepPath;
+            savedDigest_ = keepDigest;
         }
         return fails;
     }
@@ -21552,6 +22222,9 @@ public:
     QLabel* termLive_ = nullptr;  // terminology live-guard line
     QTimer* termTimer_ = nullptr;
     QString draftPath_;   // File → Save target for the English draft
+    QByteArray savedDigest_;
+    QElapsedTimer editTimer_;
+    QString dataRoot_;
     QPlainTextEdit* source_ = nullptr;
     QPlainTextEdit* draft_ = nullptr;
     QTextBrowser* clauseView_ = nullptr;
@@ -31308,7 +31981,60 @@ public:
         dirty_ = false;
         status_->setText(QFileInfo(path_).fileName() + " \u2014 saved " +
                          QTime::currentTime().toString("HH:mm"));
+        docprops::noteSave(this, docprops::sidecarPath(dataRoot_, path_),
+                           editTimer_.isValid() ? editTimer_.elapsed() / 1000 : 0);
+        editTimer_.restart();
         return true;
+    }
+    // ---- Word's File menu, for the manuscript (2026-09-08) ----
+    void setDataRoot(const QString& r) { dataRoot_ = r; }
+    bool confirmDiscardMss() {
+        if (!dirty_ || g_harnessRun) return true;
+        return QMessageBox::question(this, "Unsaved changes",
+                                     QString("Discard unsaved changes to %1?")
+                                         .arg(path_.isEmpty() ? "the manuscript" : QFileInfo(path_).fileName())) ==
+               QMessageBox::Yes;
+    }
+    bool newManuscript() {
+        if (!confirmDiscardMss()) return false;
+        editor_->clear();
+        path_.clear();
+        dirty_ = false;
+        editTimer_.restart();
+        status_->setText("New manuscript.");
+        return true;
+    }
+    bool closeManuscript() { return newManuscript(); }
+    bool moveManuscript() {
+        if (path_.isEmpty()) { status_->setText("Save the manuscript first; Move works on a file."); return false; }
+        const QString dir = safeGetExistingDirectory(this, "Move manuscript to folder");
+        QString nw;
+        if (dir.isEmpty() || !docprops::moveFileTo(this, path_, dir, nw)) return false;
+        path_ = nw;
+        QSettings("ALL", "TranslationTool").setValue("manuscript/lastFile", nw);
+        status_->setText("Moved to " + QDir::toNativeSeparators(dir));
+        return true;
+    }
+    bool renameManuscript() {
+        if (path_.isEmpty()) { status_->setText("Save the manuscript first; Rename works on a file."); return false; }
+        const QString n = docprops::askName(this, "Rename manuscript", "New file name:", QFileInfo(path_).fileName());
+        QString nw;
+        if (n.isEmpty() || !docprops::renameFileTo(this, path_, n, nw, {dataRoot_ + "/library/properties", ".json"})) return false;
+        path_ = nw;
+        QSettings("ALL", "TranslationTool").setValue("manuscript/lastFile", nw);
+        status_->setText("Renamed to " + QFileInfo(nw).fileName());
+        return true;
+    }
+    void showProperties() {
+        docprops::Input in;
+        in.path = path_;
+        in.text = editor_->toPlainText();
+        in.tibetan = false;
+        in.content = editor_->toPlainText().split('\n').mid(0, 40).join('\n');
+        in.dataRoot = dataRoot_;
+        in.sessionEditSeconds = editTimer_.isValid() ? editTimer_.elapsed() / 1000 : 0;
+        in.kind = "manuscript";
+        docprops::showDialog(this, in);
     }
 
     bool saveAs() {
@@ -31429,6 +32155,18 @@ public:
         dirty_ = false;
         QSettings("ALL", "TranslationTool")
             .remove("manuscript/lastFile");
+        {   // File → New on the manuscript (2026-09-08)
+            const QString keepHtml = editor_->toHtml();
+            const QString keepPath = path_;
+            const bool keepDirty = dirty_;
+            editor_->setPlainText("draft text");
+            dirty_ = true;
+            check(newManuscript() && editor_->toPlainText().isEmpty() && path_.isEmpty() && !dirty_,
+                  "New manuscript leaves an empty, untitled, clean editor");
+            editor_->setHtml(keepHtml);
+            path_ = keepPath;
+            dirty_ = keepDirty;
+        }
         return fails;
     }
 
@@ -31439,6 +32177,8 @@ private:
     QLineEdit* query_ = nullptr;
     QTextBrowser* results_ = nullptr;
     QLabel* status_ = nullptr;
+    QString dataRoot_;
+    QElapsedTimer editTimer_;
     QPushButton* boldB_ = nullptr;
     QPushButton* italB_ = nullptr;
     QPushButton* undB_ = nullptr;
@@ -36015,6 +36755,7 @@ int main(int argc, char** argv) {
     auto* draftPane = new DraftPane(spine, progress, root);
     tabs.addTab(draftPane, "Draft");
     auto* manuscriptPane = new ManuscriptPane(spine);
+    manuscriptPane->setDataRoot(root);
     // the apparatus banks MUST load before ApparatusPane exists —
     // its constructor fills the list from g_appNotes/g_appBib
     // (Adam's finding 2026-08-12: pane sat empty because the banks
@@ -36814,6 +37555,29 @@ int main(int argc, char** argv) {
         // place every desktop user reaches for first. Every action
         // routes to the SAME code the panes use; nothing forks.
         QMenu* fileM = win.menuBar()->addMenu("File");
+        // Which pane owns "the document" right now: the one holding
+        // keyboard focus, else the one visible. Used by every File item
+        // that acts on a document (Adam, 2026-09-08: Word's File menu).
+        auto active = [](QWidget* pane) {
+            for (QWidget* w = QApplication::focusWidget(); w;
+                 w = w->parentWidget())
+                if (w == pane) return true;
+            return pane->isVisible();
+        };
+        {
+            QAction* newA = fileM->addAction("New Document");
+            newA->setShortcut(QKeySequence::New);   // ⌘N
+            QObject::connect(newA, &QAction::triggered,
+                             [overlay, draftPane, manuscriptPane, active] {
+                if (active(manuscriptPane)) manuscriptPane->newManuscript();
+                else if (active(draftPane)) draftPane->newDraft();
+                else overlay->newDocument();
+            });
+            QAction* tplA = fileM->addAction("New from Template\u2026");
+            tplA->setShortcut(QKeySequence("Ctrl+Shift+P"));
+            QObject::connect(tplA, &QAction::triggered,
+                             [overlay] { overlay->newFromTemplate(); });
+        }
         {
             QAction* openA =
                 fileM->addAction("Open ACIP File\u2026");
@@ -36860,12 +37624,14 @@ int main(int argc, char** argv) {
         // draft), Manuscript (its own file). Anywhere else the status
         // bar says what Save applies to; never a silent no-op.
         {
-            auto active = [](QWidget* pane) {
-                for (QWidget* w = QApplication::focusWidget(); w;
-                     w = w->parentWidget())
-                    if (w == pane) return true;
-                return pane->isVisible();
-            };
+            QAction* closeA = fileM->addAction("Close");
+            closeA->setShortcut(QKeySequence::Close);   // ⌘W closes the document
+            QObject::connect(closeA, &QAction::triggered,
+                             [overlay, draftPane, manuscriptPane, active] {
+                if (active(manuscriptPane)) manuscriptPane->closeManuscript();
+                else if (active(draftPane)) draftPane->closeDraft();
+                else overlay->closeDocument();
+            });
             auto saveRoute = [overlay, draftPane, manuscriptPane, &win,
                               active](bool as) {
                 if (active(manuscriptPane)) {
@@ -36893,6 +37659,30 @@ int main(int argc, char** argv) {
             saveAsA->setShortcut(QKeySequence::SaveAs);   // ⇧⌘S
             QObject::connect(saveAsA, &QAction::triggered,
                              [saveRoute] { saveRoute(true); });
+            QObject::connect(fileM->addAction("Save as Template\u2026"),
+                             &QAction::triggered,
+                             [overlay] { overlay->saveAsTemplate(); });
+            QObject::connect(fileM->addAction("Move\u2026"), &QAction::triggered,
+                             [overlay, draftPane, manuscriptPane, active] {
+                if (active(manuscriptPane)) manuscriptPane->moveManuscript();
+                else if (active(draftPane)) draftPane->moveDraft();
+                else overlay->moveDocument();
+            });
+            QObject::connect(fileM->addAction("Rename\u2026"), &QAction::triggered,
+                             [overlay, draftPane, manuscriptPane, active] {
+                if (active(manuscriptPane)) manuscriptPane->renameManuscript();
+                else if (active(draftPane)) draftPane->renameDraft();
+                else overlay->renameDocument();
+            });
+            fileM->addSeparator();
+            QAction* propA = fileM->addAction("Properties\u2026");
+            propA->setShortcut(QKeySequence("Ctrl+Alt+P"));
+            QObject::connect(propA, &QAction::triggered,
+                             [overlay, draftPane, manuscriptPane, active] {
+                if (active(manuscriptPane)) manuscriptPane->showProperties();
+                else if (active(draftPane)) draftPane->showProperties();
+                else overlay->showProperties();
+            });
         }
         fileM->addSeparator();
         // LODESTAR L6: Translation Dossiers — the desk that
@@ -37103,7 +37893,7 @@ int main(int argc, char** argv) {
         // G5: ⌘W closes the window (the Mac hand expects it)
         {
             QAction* closeA = fileM->addAction("Close Window");
-            closeA->setShortcut(QKeySequence::Close);
+            closeA->setShortcut(QKeySequence("Ctrl+Shift+W"));   // ⌘W now closes the document
             QObject::connect(closeA, &QAction::triggered, &win,
                              &QMainWindow::close);
         }
