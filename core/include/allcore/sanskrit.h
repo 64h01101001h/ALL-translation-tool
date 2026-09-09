@@ -40,6 +40,14 @@ std::string iastToInputcode(const std::string& iast);
 // inputcode_to_iast: reverse of the input-code style
 std::string inputcodeToIast(const std::string& code);
 
+// ewts_to_iast: the EWTS half of the bridge on its own. A mantra in a Tibetan
+// text is Sanskrit written in Tibetan letters, so reading one aloud means
+// entering from the script (unicodeToWylie) and arriving at IAST.
+// keep_syllables preserves the syllable spacing, which is what a mantra is
+// recited by; the term-level callers join them up as before.
+std::string ewtsSanskritToIast(const std::string& ewts,
+                               bool keep_syllables = false);
+
 // acip_to_iast: ACIP Sanskrit code → IAST via the EWTS bridge
 std::string acipSanskritToIast(const std::string& acip);
 

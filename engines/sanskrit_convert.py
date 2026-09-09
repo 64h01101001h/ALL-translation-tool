@@ -189,15 +189,28 @@ def iast_to_tibetan(word):
     u, ok = wylie_to_unicode(w)
     return u if ok else None
 
+def ewts_to_iast(w, keep_syllables=False):
+    """EWTS (wylie) Sanskrit → IAST. The EWTS half of the ACIP bridge on its
+    own: a mantra in a Tibetan text is Sanskrit written in Tibetan letters, so
+    reading one aloud starts from the script (2026-09-09)."""
+    REV = {'A':'ā','I':'ī','U':'ū','M':'ṃ','H':'ḥ','T':'ṭ','Th':'ṭh','D':'ḍ','N':'ṇ','Sh':'ṣ',
+           'sh':'ś','ny':'ñ','ng':'ṅ','tsh':'ch','ts':'c','dz':'j','w':'v',':':'ḥ',
+           # EWTS stack and candrabindu marks (2026-09-09): "pad+me" and
+           # "hU~M" carried a '+' and a '~' into IAST, where the tokenizer
+           # rightly refused them and the mantra came back with no
+           # pronunciation at all.
+           '~M':'ṁ','+':''}
+    s=w
+    for k in sorted(REV,key=len,reverse=True): s=s.replace(k,REV[k])
+    # a mantra is recited syllable by syllable, and the spacing is the only
+    # guide to where the syllables fall; term-level callers still join up
+    if keep_syllables: return re.sub(r'\s+',' ',s).strip()
+    return re.sub(r'\s+','',s)
+
 def acip_to_iast(acip):
     """ACIP Sanskrit code → IAST (via EWTS bridge)."""
     if acip_to_ewts is None: return None
-    w = acip_to_ewts(acip)
-    REV = {'A':'ā','I':'ī','U':'ū','M':'ṃ','H':'ḥ','T':'ṭ','Th':'ṭh','D':'ḍ','N':'ṇ','Sh':'ṣ',
-           'sh':'ś','ny':'ñ','ng':'ṅ','tsh':'ch','ts':'c','dz':'j','w':'v',':':'ḥ'}
-    s=w
-    for k in sorted(REV,key=len,reverse=True): s=s.replace(k,REV[k])
-    return re.sub(r'\s+','',s)
+    return ewts_to_iast(acip_to_ewts(acip))
 
 def convert(word, frm='iast'):
     """One-stop: from IAST give all representations."""
