@@ -3054,6 +3054,22 @@ queries over the catalogue. Not in the two-week release.
 
 ## 🗺️ MAPS OF MONASTERIES AND HOLY SITES — interactive, local (Adam, 2026-09-08)
 
+**Status and sequencing (Adam, 2026-09-08 late):** the seven reference pages
+are being READ now (research workflow → `docs/MAPS_RESEARCH.md`: what each
+map shows, its technology and licence; the open place-data sources we may
+ship with and their verified licences; the Map pane design and its
+batches). The BUILD of our own interactive, localised, OFFLINE map comes
+**after the analysis suite (batches 4–6) is implemented** — Adam's order.
+- [ ] MAPS_RESEARCH.md written from the seven pages + open sources (in progress)
+- [ ] Map pane, batch M1: offline basemap + places layer from shippable
+      open data (BDRC / Wikidata / OSM per the verified licences), search
+      in Tibetan / Wylie / English, popups with per-field provenance
+- [ ] Map pane, batch M2: layers by tradition / role / period, links to
+      the catalogue's texts and persons, Entities → map
+- [ ] Map pane, batch M3: pilgrimage routes (own drawn lines from open
+      route data or fieldwork only), distance tools, GeoJSON export of the
+      user's own annotations, SBOM entries for every data layer
+
 Adam's ask: take the monastery / temple / pilgrimage maps on these pages
 and reproduce them as an interactive map INSIDE the app for the study of
 Tibetan culture (anthropological angle: major monasteries, holy sites,
