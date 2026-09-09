@@ -1,4 +1,10 @@
-# Menu parity with Word — what earns its place (Adam, 2026-09-08)
+# Menu parity with Word and Sublime Text — what earns its place (Adam, 2026-09-08)
+
+Second reference added by Adam the same evening: **Sublime Text** — its
+search / search-and-replace, document window (line numbers, minimap,
+line/column status, tab size, syntax label), themes and colour schemes,
+and its settings menu. Screenshots are the reference; the steelman still
+decides.
 
 Adam asked for the File, Edit, View, Insert, Format, Tools and Window menus
 to carry every function Word's do, plus a Word-style Preferences panel,
@@ -14,6 +20,25 @@ New Document ⌘N · New from Template ⇧⌘P · Open ⌘O · Open Recent · Cl
 (Close Window → ⇧⌘W) · Save ⌘S · Save As ⇧⌘S · Save as Template · Move ·
 Rename · Properties ⌥⌘P (General · Summary · Statistics · Content ·
 Custom; Tibetan statistics: folios, syllables, shads; sidecar metadata).
+
+## File additions from Sublime — batch 1b
+| Sublime | Ours | Verdict |
+|---|---|---|
+| Set File Encoding to ▸ / Reload with Encoding ▸ / Reopen with Encoding ▸ | encodings for legacy ACIP files: UTF-8 · UTF-8 with BOM · UTF-16 LE/BE · Windows-1252 · MacRoman · Latin-1; reopen the Document box with a chosen decoder; Save with Encoding ▸ | ADAPT (input-centre reality) |
+| Save All | save every dirty document across Overlay / Draft / Manuscript | BUILD |
+| Print… ⌘P | print the front pane's document (plain text) | BUILD |
+| Revert File | reload the Document box from disk, discarding edits (confirm) | BUILD |
+| Close File ⌘W · Close All Files ⌃⌥⌘W | Close (done) · close the document in all three panes | BUILD |
+| New Window · Split View | one-window app; the Overlay already splits | SKIP |
+
+## Sublime document window — batch 1c
+| Sublime | Ours | Verdict |
+|---|---|---|
+| line-number gutter | toggle (View › Line Numbers) on the Document box and the Draft; persisted | BUILD |
+| status bar "Line N, Column M" · Tab Size · syntax label | our status bar: line/column of the focused editor, and the detected script (ACIP / Wylie / Unicode) | ADAPT |
+| minimap | skip for now (Focus mode covers distraction-free) | SKIP |
+| Select Color Scheme… / Customize · Select Theme… / Customize · Font ▸ | colour schemes for the reading surfaces (several built in, plus "install from file" — a JSON of the ux tokens); theme = chrome (night mode exists); Font ▸ larger/smaller/reset (exists) | ADAPT |
+| Settings ⌘, · Settings – Syntax Specific · Distraction Free · Key Bindings | the Preferences panel (batch 7); key bindings = the Pin bar | covered |
 
 ## Edit — batch 1
 | Word | Ours | Verdict |
