@@ -66,22 +66,56 @@ namespace ux {
 //   Machine   — machine-located/derived candidates (OCR, auto-
 //               aligned, suggestions); always review material
 //   Ai        — model-composed, always labeled
+// WCAG-checked on both grounds (dark #2D2D2D · light #ECECEC).
+inline bool darkChrome() {
+    return QApplication::palette().color(QPalette::Window)
+               .lightness() < 128;
+}
+inline const char* chromeMuted() {
+    return darkChrome() ? "#A8A29A" : "#5E574D";
+}
+inline const char* chromeGold() {
+    return darkChrome() ? "#C9A55C" : "#82672A";
+}
+// The rest of the chrome vocabulary (2026-09-09). The paper inks above
+// — kWarn, kAct, kMachine, kError — are measured on manuscript cream and
+// fall to between 1.7 and 2.8 against dark chrome, which is why the sites
+// that needed them were left hardcoded when muted and gold were fixed.
+// These are chrome SIBLINGS, not replacements: the reserved binding
+// greens keep their own values, and a paper surface still asks for the
+// paper ink. Every pair here is asserted on its own ground by the
+// battery, so a wrong value fails the selftest rather than shipping.
+inline const char* chromeWarn() { return darkChrome() ? "#E0A33C" : "#935800"; }
+inline const char* chromeAct() { return darkChrome() ? "#5FBF8E" : "#1E6B4E"; }
+inline const char* chromeMachine() { return darkChrome() ? "#E8874A" : "#B4540A"; }
+inline const char* chromeError() { return darkChrome() ? "#E8897E" : "#8C2F2B"; }
+inline const char* chromeDoc() { return darkChrome() ? "#7FB2E8" : "#2E629E"; }
+// grounds and hairlines for the small plaques and dividers the panes draw
+inline const char* chromePlaque() { return darkChrome() ? "#33302B" : "#F4EFE4"; }
+inline const char* chromeRule() { return darkChrome() ? "#4A4A4A" : "#E3DDD0"; }
+
 enum class Epistemic { Binding, Evidence, Reference, Machine, Ai };
 inline QString sourceBadge(Epistemic e) {
     const char* txt = nullptr;
     const char* col = nullptr;
     bool solid = false;
+    // The tier a badge names is the whole point of it, so the ink answers
+    // for the ground it is standing on. On a reading surface (always
+    // cream) that is the paper ink; on chrome it is the chrome sibling.
+    // The five tiers stay five distinct hues in either case — a badge may
+    // change its value, never its identity.
+    const bool onChrome = darkChrome();
     switch (e) {
         case Epistemic::Binding:
-            txt = "HGM"; col = kGold; solid = true; break;
+            txt = "HGM"; col = onChrome ? chromeGold() : kGold; solid = true; break;
         case Epistemic::Evidence:
-            txt = "EVIDENCE"; col = kAct; break;
+            txt = "EVIDENCE"; col = onChrome ? chromeAct() : kAct; break;
         case Epistemic::Reference:
-            txt = "REFERENCE"; col = kDoc; break;
+            txt = "REFERENCE"; col = onChrome ? chromeDoc() : kDoc; break;
         case Epistemic::Machine:
-            txt = "MACHINE"; col = kMachine; break;
+            txt = "MACHINE"; col = onChrome ? chromeMachine() : kMachine; break;
         case Epistemic::Ai:
-            txt = "AI"; col = kError; break;
+            txt = "AI"; col = onChrome ? chromeError() : kError; break;
     }
     return QString("<span style='font-family:-apple-system,Arial,"
                    "sans-serif;font-size:9px;letter-spacing:1px;"
@@ -116,17 +150,6 @@ static QString snipStd(const std::string& t, int cap) {
 }
 // chrome-aware inks (W7): the chrome follows the system appearance,
 // so widget labels on it measure their ink at use time. Values are
-// WCAG-checked on both grounds (dark #2D2D2D · light #ECECEC).
-inline bool darkChrome() {
-    return QApplication::palette().color(QPalette::Window)
-               .lightness() < 128;
-}
-inline const char* chromeMuted() {
-    return darkChrome() ? "#A8A29A" : "#5E574D";
-}
-inline const char* chromeGold() {
-    return darkChrome() ? "#C9A55C" : "#82672A";
-}
 // Night-mode fix, 2026-08-26. A chrome ink answers for the palette of
 // the MOMENT it is asked, so baking it into a stylesheet at
 // construction freezes that moment - which is how the ribbon captions
@@ -171,6 +194,59 @@ private:
 };
 inline void themedStyle(QWidget* w, std::function<QString()> mk) {
     new ThemeReapply(w, std::move(mk));   // parented to w; dies with it
+}
+
+// Night-mode fix, 2026-09-09 — the defect behind Adam's "some panels are
+// dark and others are half shaded and others are light". Setting an
+// application stylesheet installs QStyleSheetStyle, and QStyleSheetStyle
+// BAKES each widget's palette when the widget is polished. Changing the
+// colour scheme afterwards updates the application palette but never asks
+// for a repolish, so every widget keeps the ground it was born with: half
+// the window follows the new appearance and half is a generation behind.
+// Re-applying the same sheet is what makes QStyleSheetStyle polish again.
+// It breaks in both directions and only at RUNTIME — startup is clean,
+// because the scheme is set before any widget exists — which is why a
+// screenshot taken after one toggle shows it and a fresh launch does not.
+// The re-entry guard is the same belt ThemeReapply wears, for the same
+// reason: applying a sheet can itself emit a palette change.
+class SheetRepolish : public QObject {
+public:
+    explicit SheetRepolish(QApplication* a) : QObject(a) { a->installEventFilter(this); }
+    bool eventFilter(QObject* o, QEvent* e) override {
+        if (e->type() == QEvent::ApplicationPaletteChange && !busy_) {
+            busy_ = true;
+            qApp->setStyleSheet(qApp->styleSheet());
+            busy_ = false;
+        }
+        return QObject::eventFilter(o, e);
+    }
+
+private:
+    bool busy_ = false;
+};
+inline void keepStyleSheetFresh(QApplication& a) { new SheetRepolish(&a); }
+
+// themedStyle re-applies a STYLESHEET. Two things are out of its reach: a
+// colour set on a QTreeWidgetItem, and a colour baked into a label's TEXT
+// (every sourceBadge call site). Those surfaces re-run the build they
+// already have, on the same event, with the same guard.
+class ChromeWatch : public QObject {
+public:
+    ChromeWatch(QWidget* owner, std::function<void()> rebuild)
+        : QObject(owner), rebuild_(std::move(rebuild)) { qApp->installEventFilter(this); }
+    bool eventFilter(QObject* o, QEvent* e) override {
+        if (e->type() == QEvent::ApplicationPaletteChange && !busy_) {
+            busy_ = true; rebuild_(); busy_ = false;
+        }
+        return QObject::eventFilter(o, e);
+    }
+
+private:
+    std::function<void()> rebuild_;
+    bool busy_ = false;
+};
+inline void onChromeChange(QWidget* owner, std::function<void()> rebuild) {
+    new ChromeWatch(owner, std::move(rebuild));   // parented to owner; dies with it
 }
 // WCAG 2.x relative luminance and contrast ratio. Here rather than in
 // a test so the tokens and the arithmetic that judges them live
