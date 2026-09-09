@@ -35,6 +35,19 @@ list before this sweep. Grouped by theme; each line says where it came from.
       (already filed above; repeated here so the three people-tasks sit
       together)
 
+## A2. Idioms (Adam, 2026-09-09) — DONE, with two follow-ons
+- [x] The idiom register is read, matched and proposable: bank in Draft and
+      Tools ▸ Idioms…, proposals of kind idiom for Geshe Michael's ruling,
+      rulings brought into the team register (docs/release_audit/Idioms.md)
+- [ ] Mark idioms inline in the Overlay's reading view (they are listed and
+      counted today, not highlighted in the running text)
+- [ ] Fold the idiom matcher into the Entities automaton when batch 5 F6
+      lands, so there is one multi-pattern machine, not two
+- [ ] FINDING to rule on: the promoted tokenizer reads a folio marker as a
+      syllable (@012a → "012a"), so markers would appear as word types in
+      study frequencies. Fixing it changes quotation-detection recall, so it
+      needs its own unit and a re-baselined battery
+
 ## B. Editor's-tool candidates — build only what Utpala confirms
 - [ ] Tracked-changes `.docx` export of a two-version comparison (Word
       revision marks from the compare hunks) · queries as first-class
@@ -3225,6 +3238,7 @@ Jonang sites, pilgrimage routes), and tie them to the texts and persons
 the catalogue already knows.
 
 References Adam supplied (to read, not to copy — see the sources note):
+- PAUSED 2026-09-09 (Adam: save it for next week, after the token allowance resets) — the research run was stopped before writing docs/MAPS_RESEARCH.md; restart it then, then the Map pane batches M1–M3
 - https://lingweikung.com/mapping-tibetan-monasteries/
 - https://blogs.cuit.columbia.edu/lk2627/mapping-tibetan-monasteries/
 - https://www.nyandak.com/research/temples-of-tibet

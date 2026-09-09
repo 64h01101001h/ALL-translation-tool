@@ -8,10 +8,14 @@ add_library(allcore STATIC
   src/spine.cpp
   src/textdiff.cpp
   src/textspan.cpp
+  src/provenance.cpp
   src/filewalk.cpp
   src/versions.cpp
   src/textnorm.cpp
   src/textpatch.cpp
+  src/table.cpp
+  src/tablediff.cpp
+  src/idioms.cpp
   src/zipstore.cpp
   src/docx_redline.cpp
     src/stardict.cpp
@@ -179,6 +183,22 @@ add_test(NAME docx_redline_smoke COMMAND docx_redline_smoke)
 add_executable(textdiff_smoke tests/textdiff_smoke.cpp)
 target_link_libraries(textdiff_smoke PRIVATE allcore)
 add_test(NAME textdiff_smoke COMMAND textdiff_smoke)
+
+add_executable(textspan_smoke tests/textspan_smoke.cpp)
+target_link_libraries(textspan_smoke PRIVATE allcore)
+add_test(NAME textspan_smoke COMMAND textspan_smoke)
+
+add_executable(idioms_smoke tests/idioms_smoke.cpp)
+target_link_libraries(idioms_smoke PRIVATE allcore)
+add_test(NAME idioms_smoke COMMAND idioms_smoke)
+
+add_executable(table_smoke tests/table_smoke.cpp)
+target_link_libraries(table_smoke PRIVATE allcore)
+add_test(NAME table_smoke COMMAND table_smoke)
+
+add_executable(tablediff_smoke tests/tablediff_smoke.cpp)
+target_link_libraries(tablediff_smoke PRIVATE allcore)
+add_test(NAME tablediff_smoke COMMAND tablediff_smoke)
 
 add_executable(outline_smoke tests/outline_smoke.cpp)
 target_link_libraries(outline_smoke PRIVATE allcore)

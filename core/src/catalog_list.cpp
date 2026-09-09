@@ -9,6 +9,7 @@
 #include <vector>
 
 #include "allcore/catalog_id.h"
+#include "allcore/textspan.h"
 #include "allcore/tibexport.h"
 
 namespace allcore {
@@ -21,27 +22,11 @@ std::string upperName(const std::filesystem::path& p) {
     return s;
 }
 
-// first and last "@NNN[AB]" folio marks in the body
+// first and last "@NNN[AB]" folio marks in the body — the body moved to
+// textspan::folioRange (analysis-suite F0), one folio walk for the whole
+// program; the rule and this function's results are unchanged
 std::pair<std::string, std::string> folioRange(const std::string& body) {
-    std::string first, last;
-    for (size_t at = body.find('@'); at != std::string::npos;
-         at = body.find('@', at + 1)) {
-        size_t j = at + 1;
-        while (j < body.size() && body[j] == ' ') ++j;
-        size_t d = j;
-        while (d < body.size() &&
-               std::isdigit(static_cast<unsigned char>(body[d])))
-            ++d;
-        if (d == j || d >= body.size()) continue;
-        const char side =
-            static_cast<char>(std::toupper(static_cast<unsigned char>(body[d])));
-        if (side != 'A' && side != 'B') continue;
-        std::string f = body.substr(j, d - j);
-        f.push_back(side);
-        if (first.empty()) first = f;
-        last = std::move(f);
-    }
-    return {first, last};
+    return textspan::folioRange(body);
 }
 
 }  // namespace

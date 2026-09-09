@@ -5,6 +5,7 @@
 #include <sstream>
 
 #include "allcore/catalog_audit.h"
+#include "allcore/table.h"
 
 namespace allcore {
 namespace {
@@ -15,42 +16,10 @@ std::string lower(std::string s) {
     return s;
 }
 
-// split one CSV/TSV line; handles double-quoted CSV fields
-std::vector<std::string> splitRow(const std::string& line, char delim) {
-    std::vector<std::string> out;
-    std::string cur;
-    bool quoted = false;
-    for (size_t i = 0; i < line.size(); ++i) {
-        const char c = line[i];
-        if (quoted) {
-            if (c == '"') {
-                if (i + 1 < line.size() && line[i + 1] == '"') {
-                    cur.push_back('"');
-                    ++i;
-                } else {
-                    quoted = false;
-                }
-            } else {
-                cur.push_back(c);
-            }
-        } else if (c == '"' && cur.empty()) {
-            quoted = true;
-        } else if (c == delim) {
-            out.push_back(cur);
-            cur.clear();
-        } else if (c != '\r') {
-            cur.push_back(c);
-        }
-    }
-    out.push_back(cur);
-    for (auto& f : out) {
-        const size_t a = f.find_first_not_of(" \t");
-        if (a == std::string::npos) { f.clear(); continue; }
-        const size_t b = f.find_last_not_of(" \t");
-        f = f.substr(a, b - a + 1);
-    }
-    return out;
-}
+// the quoted-field splitter used to live here; it is now
+// allcore::table::splitRow, shared with the table reader. Same code,
+// same behaviour — register_smoke is the proof.
+using table::splitRow;
 
 }  // namespace
 
