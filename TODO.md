@@ -2983,3 +2983,13 @@ questionnaire's Q13 answers tell us how much Android matters.
       name any holder before declaring corruption; (b) relaunch the
       installed app in a trap on any exit after step 6c; (c) never print
       "corrupt" for EAGAIN. Evidence: press3.log 17:49, LOG.md.
+
+## 🧭 MENU PARITY WITH WORD (Adam, 2026-09-08) — see docs/MENU_PARITY_PLAN.md
+- [x] File (New · New from Template · Close · Save as Template · Move · Rename · Properties) — 2026-09-08
+- [ ] Edit (Undo/Redo, Cut/Copy/Paste, Paste and Match Formatting, Paste Special as ACIP/Wylie/script, Clear, Select All, Find/Find Next/Previous/Replace)
+- [ ] View (Text-as layouts, Focus, Ribbon toggle, Sidebar, Markup, Zoom submenu, Full Screen)
+- [ ] Insert (Folio marker break, Tibetan & ACIP symbols palette, Footnote, Comment, Date and Time, File, Manuscript hyperlink/table/picture)
+- [ ] Format (Font, Paragraph, Bullets, Change Case incl. To ACIP/Wylie/script, Style, Document)
+- [ ] Tools (Spelling, Thesaurus→phrase memory, Translate→send to Draft, Word Count, Protect Document, Templates folder)
+- [ ] Window (Minimize, Zoom, Bring All to Front, open-window list)
+- [ ] Preferences panel (Word-style icon grid; migrates SettingsDialog; adds AI, Tibetan & Sanskrit, Updates, Privacy, File Locations pages)
