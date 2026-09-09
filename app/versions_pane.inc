@@ -130,7 +130,9 @@ public:
         v->addLayout(top);
         table_ = new QTreeWidget; table_->setRootIsDecorated(false); table_->setSelectionMode(QAbstractItemView::ExtendedSelection); table_->setAlternatingRowColors(true);
         table_->setHeaderLabels({"When", "Who", "Kind", "Name", "Rev", "Size", "Folios", "Syllables", "Shads", "Words", "Lines"});
-        table_->header()->setSectionResizeMode(3, QHeaderView::Stretch);
+        table_->header()->setSectionResizeMode(QHeaderView::ResizeToContents);   // dates, names and counts show whole
+        table_->header()->setSectionResizeMode(3, QHeaderView::Stretch);           // the version's name takes the rest
+        table_->header()->setMinimumSectionSize(48);
         v->addWidget(table_, 1);
         auto* acts = new QHBoxLayout;
         auto btn = [&](const QString& label, const QString& tip, std::function<void()> fn) { auto* b = new QPushButton(label); b->setToolTip(tip); connect(b, &QPushButton::clicked, this, std::move(fn)); acts->addWidget(b); return b; };

@@ -45051,7 +45051,11 @@ int main(int argc, char** argv) {
                 const QStringList base{"@001A", "BLA MA LA PHYAG 'TSHAL LO", "SEMS CAN THAMS CAD BDE BA DANG BDE BA'I RGYU DANG LDAN PAR GYUR CIG", "SDUG BSNGAL DANG SDUG BSNGAL GYI RGYU DANG BRAL BAR GYUR CIG", "@001B", "SDUG BSNGAL MED PA'I BDE BA DANG MI 'BRAL BAR GYUR CIG", "NYE RING CHAGS SDANG GNYIS DANG BRAL BA'I BTANG SNYOMS LA GNAS PAR GYUR CIG"};
                 QStringList v2 = base; v2[2].replace("THAMS CAD", "KUN"); QStringList v3 = v2; v3 << "BDE BA CHEN PO";
                 const QString vdoc = sd + "/S0134I.act";
-                for (const QStringList& v : {base, v2, v3}) { const QString t = v.join('\n') + "\n"; put(vdoc, t); docprops::noteVersion(nullptr, root, vdoc, t.toUtf8(), "document", "save", "", "UTF-8", "LF", false, docprops::textStatistics(t, true, 0, 0, 0)); QThread::msleep(15); }
+                for (const QStringList& v : {base, v2, v3}) {   // three saves, as the app would record them (sidecar revision, then the version)
+                    const QString t = v.join('\n') + "\n"; put(vdoc, t);
+                    docprops::noteSave(nullptr, docprops::sidecarPath(root, vdoc), 0);
+                    docprops::noteVersion(nullptr, root, vdoc, t.toUtf8(), "document", "save", "", "UTF-8", "LF", false, docprops::textStatistics(t, true, 0, 0, 0)); QThread::msleep(15);
+                }
                 {
                     VersionsWindow::Hooks vh; vh.dataRoot = root; vh.docPath = vdoc; vh.kind = "document";
                     const QString cur = v3.join('\n') + "\n"; vh.currentText = [cur] { return cur; };
@@ -45060,7 +45064,7 @@ int main(int argc, char** argv) {
                     VersionsWindow vw(vh, &win); vw.resize(980, 620); vw.selectRow(1); vw.nameVersion("Checked against the Sera Mey print", false); vw.selectRow(0);
                     vw.show(); settle(400); save(vw.grab(), "versions-window"); vw.close();
                 }
-                QDir(docprops::versionsDir(root, vdoc)).removeRecursively();
+                QDir(docprops::versionsDir(root, vdoc)).removeRecursively(); QFile::remove(docprops::sidecarPath(root, vdoc));
                 {   // Normalize on the Document box (its text is restored afterwards)
                     auto* pe = overlay->documentEditor(); const QString keep = pe->toPlainText();
                     pe->setPlainText("@001A\tBLA  MA LA PHYAG 'TSHAL LO   \nSEMS CAN  THAMS CAD ,LA\n\n\n\nSDUG BSNGAL [rnying pa: sdug] DANG BRAL BAR GYUR CIG,,\n");
@@ -45071,15 +45075,16 @@ int main(int argc, char** argv) {
                 }
                 {   // Replace in Files over a small batch
                     put(sd + "/batch7/S0134I.act", base.join("\r\n") + "\r\n"); put(sd + "/batch7/S0135I.act", "@002A\nSEMS CAN THAMS CAD LA PHAN PA\nTHAMS CAD MKHYEN PA\n"); put(sd + "/batch7/S0136I.act", "@003A\nBDE BA CHEN PO\n");
-                    replf::ReplaceFilesWindow rw(root, &win); rw.seedFolders({sd + "/batch7"}); rw.seed("THAMS CAD", "MA LUS PA"); rw.preview(); rw.expandFirst();
+                    replf::ReplaceFilesWindow rw(root, &win); rw.resize(1040, 920); rw.seedFolders({sd + "/batch7"}); rw.seed("THAMS CAD", "MA LUS PA"); rw.preview(); rw.expandFirst();
                     rw.show(); settle(400); save(rw.grab(), "replace-in-files"); rw.close();
                 }
-                {   // Apply Patch: a corrector's diff against a copy where one hunk no longer fits
+                {   // Apply Patch: a corrector's diff (three hunks) against a copy where the middle hunk's line was retyped
                     using namespace allcore::textdiff;
-                    QStringList other = base; other[2].replace("THAMS CAD", "KUN"); other[5] += " ,,"; other << "BDE BA CHEN PO";
-                    const std::string patch = unifiedDiff("S0134I.act", "S0134I.act", cmp::toStd(base), cmp::toStd(other), diffLines(cmp::toStd(base), cmp::toStd(other), Options()), 1);
+                    QStringList longBase = base; longBase << "@002A" << "GANG ZAG THAMS CAD LA PHAN PA" << "SEMS CAN GYI DON DU" << "BYANG CHUB TU SEMS BSKYED" << "@002B" << "DGE BA 'DI YIS SKYE BO KUN" << "BSOD NAMS YE SHES TSHOGS RDZOGS SHING";
+                    QStringList other = longBase; other[2].replace("THAMS CAD", "KUN"); other[8].replace("THAMS CAD", "MA LUS PA"); other << "BDE BA CHEN PO";
+                    const std::string patch = unifiedDiff("S0134I.act", "S0134I.act", cmp::toStd(longBase), cmp::toStd(other), diffLines(cmp::toStd(longBase), cmp::toStd(other), Options()), 1);
                     put(sd + "/corrector.diff", QString::fromStdString(patch));
-                    QStringList target = base; target[5] = "SDUG BSNGAL MED PA'I BDE BA (retyped) DANG MI 'BRAL BAR GYUR CIG"; put(sd + "/batch7/S0134I.act", target.join('\n') + "\n");
+                    QStringList target = longBase; target[8] = "GANG ZAG THAMS CAD LA PHAN PA (retyped)"; put(sd + "/batch7/S0134I.act", target.join('\n') + "\n");
                     patchapp::ApplyPatchDialog::Hooks h; h.dataRoot = root; h.dirtyReason = [](const QString&) { return QString(); };
                     patchapp::ApplyPatchDialog ad(h, &win); ad.resize(900, 620); ad.setTarget(sd + "/batch7/S0134I.act"); ad.setPatchFile(sd + "/corrector.diff"); ad.preview(false);
                     ad.show(); settle(400); save(ad.grab(), "apply-patch"); ad.close();
