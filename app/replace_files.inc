@@ -308,7 +308,7 @@ public:
     ReplaceFilesWindow(const QString& dataRoot, QWidget* parent = nullptr) : QDialog(parent), dataRoot_(dataRoot) {
         setWindowFlag(Qt::Window); setWindowTitle("Replace in Files"); resize(1040, 760);
         auto* v = new QVBoxLayout(this);
-        auto* banner = new QLabel("Nothing is written until you press Apply to ticked files. Counts are made in the files' text, not in the search index."); banner->setStyleSheet("color:#6B5E4E;"); banner->setWordWrap(true); v->addWidget(banner);
+        auto* banner = new QLabel("Nothing is written until you press Apply to ticked files. Counts are made in the files' text, not in the search index."); ux::themedStyle(banner, [] { return QString("color:%1;").arg(ux::chromeMuted()); }); banner->setWordWrap(true); v->addWidget(banner);
         modes_ = new QTabWidget; v->addWidget(modes_);
         {   // Find and replace
             auto* w = new QWidget; auto* f = new QFormLayout(w);
@@ -364,8 +364,10 @@ public:
         auto* tk = new QHBoxLayout; auto* tickAll = new QPushButton("Tick all"); auto* untickAll = new QPushButton("Untick all"); counts_ = new QLabel;
         tk->addWidget(tickAll); tk->addWidget(untickAll); tk->addWidget(counts_, 1); v->addLayout(tk);
         connect(tickAll, &QPushButton::clicked, this, [this] { tickEverything(true); }); connect(untickAll, &QPushButton::clicked, this, [this] { tickEverything(false); });
-        footer_ = new QLabel; footer_->setWordWrap(true); footer_->setStyleSheet("color:#6B5E4E;"); v->addWidget(footer_);
-        notice_ = new QLabel; notice_->setWordWrap(true); notice_->setStyleSheet("color:#9A2B1E;"); notice_->setVisible(false); v->addWidget(notice_);
+        footer_ = new QLabel; footer_->setWordWrap(true); ux::themedStyle(footer_, [] { return QString("color:%1;")
+            .arg(ux::chromeMuted()); }); v->addWidget(footer_);
+        notice_ = new QLabel; notice_->setWordWrap(true); ux::themedStyle(notice_, [] { return QString("color:%1;")
+            .arg(ux::chromeError()); }); notice_->setVisible(false); v->addWidget(notice_);
         auto* ap = new QHBoxLayout; updIndex_ = new QCheckBox("Update the folder's search index afterwards"); updIndex_->setEnabled(false);
         applyBtn_ = new QPushButton("Apply to ticked files"); applyBtn_->setEnabled(false); undoBtn_ = new QPushButton("Undo this run…"); undoBtn_->setEnabled(false); auto* close = new QPushButton("Close");
         ap->addWidget(updIndex_); ap->addStretch(1); ap->addWidget(applyBtn_); ap->addWidget(undoBtn_); ap->addWidget(close); v->addLayout(ap);

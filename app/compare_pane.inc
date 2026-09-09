@@ -43,6 +43,21 @@ inline QColor colMinor()  { return QColor(0xEC, 0xEC, 0xEC); }
 inline QColor colMoved()  { return QColor(0xDB, 0xE7, 0xFF); }
 inline QColor colFiller() { return QColor(0xF4, 0xF1, 0xEA); }
 inline QColor colMark()   { return QColor(0xFF, 0xD5, 0x4A); }
+// The five washes are measured on manuscript cream, and inside the diff
+// editors that is exactly where they sit. Painted behind a TREE ROW they sit
+// on chrome instead, and the row's text follows the chrome palette — near
+// white in night mode, landing on pale amber at about 1.2:1. Same five
+// meanings, in a depth the chrome can carry. Cream surfaces keep the paper
+// washes untouched.
+inline QColor onChrome(const QColor& paper) {
+    if (!ux::darkChrome()) return paper;
+    if (paper == colChange()) return QColor(0x4A, 0x3B, 0x14);
+    if (paper == colInsert()) return QColor(0x1C, 0x3E, 0x24);
+    if (paper == colDelete()) return QColor(0x4C, 0x22, 0x20);
+    if (paper == colMinor())  return QColor(0x35, 0x33, 0x2E);
+    if (paper == colMoved())  return QColor(0x1E, 0x2F, 0x4C);
+    return paper;
+}
 inline QColor colFor(const Hunk& h) {
     if (h.kind == Kind::Equal) return Qt::transparent;
     if (h.unimportant) return colMinor();
@@ -174,7 +189,8 @@ public:
         details_ = new QWidget;
         {
             auto* dv = new QVBoxLayout(details_); dv->setContentsMargins(4, 2, 4, 2); dv->setSpacing(2);
-            detailLbl_ = new QLabel("No difference selected."); detailLbl_->setStyleSheet("color:#6B5E4E; font-size:11px;");
+            detailLbl_ = new QLabel("No difference selected."); ux::themedStyle(detailLbl_, [] { return QString("color:%1; font-size:11px;")
+            .arg(ux::chromeMuted()); });
             dv->addWidget(detailLbl_);
             auto* dh = new QHBoxLayout;
             detL_ = new QPlainTextEdit; detR_ = new QPlainTextEdit;
@@ -186,7 +202,8 @@ public:
         split->addWidget(bodyW); split->addWidget(details_); split->setStretchFactor(0, 1); split->setStretchFactor(1, 0);
         tp->addWidget(split, 1);
         // ---- status
-        status_ = new QLabel("Ready."); status_->setStyleSheet("padding:2px 6px; color:#4A3F33;");
+        status_ = new QLabel("Ready."); ux::themedStyle(status_, [] { return QString("padding:2px 6px; color:%1;")
+            .arg(ux::chromeInk()); });
         outer->addWidget(status_);
 
         // scroll sync
@@ -1016,7 +1033,8 @@ public:
             if (saveOrWarn(this, out, report(QFileInfo(out).suffix().toLower() == "csv" ? "csv" : "html").toUtf8(), "folder report")) status("Report saved: " + out);
         });
         v->addLayout(acts);
-        summary_ = new QLabel("Choose two folders and press Compare."); summary_->setStyleSheet("color:#4A3F33; padding:2px;"); v->addWidget(summary_);
+        summary_ = new QLabel("Choose two folders and press Compare."); ux::themedStyle(summary_, [] { return QString("color:%1; padding:2px;")
+            .arg(ux::chromeInk()); }); v->addWidget(summary_);
     }
 
     // ---------------------------------------------------------- API
@@ -1196,6 +1214,8 @@ private:
         return QString("%1 entries: %2 identical · %3 different · %4 minor only · %5 left only · %6 right only%7").arg(entries_.size()).arg(count(Identical)).arg(count(Different)).arg(count(MinorOnly)).arg(count(LeftOnly)).arg(count(RightOnly)).arg(count(Unreadable) ? QString(" · %1 unreadable").arg(count(Unreadable)) : "");
     }
     void refreshTable() {
+        { static bool armed = false;
+          if (!armed) { armed = true; ux::onChromeChange(this, [this] { refreshTable(); }); } }
         table_->clear();
         for (int i : visibleRows()) {
             const Entry& e = entries_[i];
@@ -1203,7 +1223,7 @@ private:
                                             e.lmod.isValid() ? e.lmod.toString("yyyy-MM-dd HH:mm") : "", e.rmod.isValid() ? e.rmod.toString("yyyy-MM-dd HH:mm") : ""});
             it->setData(0, Qt::UserRole, i);
             const QColor c = e.status == Different ? cmp::colChange() : e.status == LeftOnly ? cmp::colDelete() : e.status == RightOnly ? cmp::colInsert() : e.status == MinorOnly ? cmp::colMinor() : QColor(Qt::transparent);
-            if (c.alpha()) for (int col = 0; col < 6; ++col) it->setBackground(col, c);
+            if (c.alpha()) for (int col = 0; col < 6; ++col) it->setBackground(col, cmp::onChrome(c));
             table_->addTopLevelItem(it);
         }
         summary_->setText(summaryText() + (snapMode_ ? "  (snapshot: hashes only; nothing can be copied)" : ""));
@@ -1298,7 +1318,8 @@ public:
         bh->addLayout(side, 1);
         split->addWidget(bottom);
         v->addWidget(split, 1);
-        status_ = new QLabel("Choose Left, Base and Right, then Merge."); status_->setStyleSheet("color:#4A3F33; padding:2px;"); v->addWidget(status_);
+        status_ = new QLabel("Choose Left, Base and Right, then Merge."); ux::themedStyle(status_, [] { return QString("color:%1; padding:2px;")
+            .arg(ux::chromeInk()); }); v->addWidget(status_);
     }
 
     // ---------------------------------------------------------- API

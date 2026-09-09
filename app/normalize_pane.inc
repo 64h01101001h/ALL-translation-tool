@@ -202,7 +202,8 @@ public:
         auto* v = new QVBoxLayout(this);
         auto* banner = new QLabel("Every rule is a mechanical transformation, described beside it. The GMR / input-centre formatting sheet has not been supplied; when it is, its rulings become presets here. "
                                   "Nothing is guessed: a line the rules cannot classify is left byte-identical and listed. Normalize works strictly per line and never joins or splits lines.");
-        banner->setWordWrap(true); banner->setStyleSheet("color:#6B5E4E;"); v->addWidget(banner);
+        banner->setWordWrap(true); ux::themedStyle(banner, [] { return QString("color:%1;")
+            .arg(ux::chromeMuted()); }); v->addWidget(banner);
         target_ = new QLabel(t.label); target_->setWordWrap(true); v->addWidget(target_);
         auto* scope = new QHBoxLayout; whole_ = new QRadioButton("Whole document"); sel_ = new QRadioButton("Selection"); whole_->setChecked(true);
         const bool hasSel = t.hasSelection && t.hasSelection(); sel_->setEnabled(hasSel); if (hasSel) { sel_->setChecked(true); sel_->setText("Selection (extended to whole lines — every rule is line-based)"); }
@@ -213,12 +214,16 @@ public:
         trim_ = new QCheckBox("Remove trailing spaces"); f->addRow(trim_);
         auto* bl = new QHBoxLayout; blank_ = new QCheckBox("Reduce runs of blank lines to at most"); blankN_ = new QSpinBox; blankN_->setRange(0, 5); blankN_->setValue(1); blankN_->setEnabled(false); bl->addWidget(blank_); bl->addWidget(blankN_); bl->addStretch(1); f->addRow(bl);
         auto* ds = new QHBoxLayout; dshad_ = new QCheckBox("Write the double shad as"); dshadForm_ = new QComboBox; dshadForm_->addItems({",,", ", ,", "།།", "༎"}); dshadForm_->setEnabled(false);
-        auto* dsNote = new QLabel("awaiting the house ruling (Preferences › House Style)"); dsNote->setStyleSheet("color:#6B5E4E;"); ds->addWidget(dshad_); ds->addWidget(dshadForm_); ds->addWidget(dsNote); ds->addStretch(1); f->addRow(ds);
+        auto* dsNote = new QLabel("awaiting the house ruling (Preferences › House Style)"); ux::themedStyle(dsNote, [] { return QString("color:%1;")
+            .arg(ux::chromeMuted()); }); ds->addWidget(dshad_); ds->addWidget(dshadForm_); ds->addWidget(dsNote); ds->addStretch(1); f->addRow(ds);
         auto* sb = new QHBoxLayout; sbefore_ = new QCheckBox("Space before a shad:"); sbeforeForm_ = new QComboBox; sbeforeForm_->addItems({"none (GA, / ཀ།)", "one (GA , / ཀ །)"}); sbeforeForm_->setEnabled(false);
-        auto* sbNote = new QLabel("awaiting the house ruling"); sbNote->setStyleSheet("color:#6B5E4E;"); sb->addWidget(sbefore_); sb->addWidget(sbeforeForm_); sb->addWidget(sbNote); sb->addStretch(1); f->addRow(sb);
+        auto* sbNote = new QLabel("awaiting the house ruling"); ux::themedStyle(sbNote, [] { return QString("color:%1;")
+            .arg(ux::chromeMuted()); }); sb->addWidget(sbefore_); sb->addWidget(sbeforeForm_); sb->addWidget(sbNote); sb->addStretch(1); f->addRow(sb);
         safter_ = new QCheckBox("One space after a shad"); f->addRow(safter_);
-        appar_ = new QCheckBox("Remove [ ] and { } apparatus spans — removes text; the original is kept as a version"); appar_->setStyleSheet("color:#9A2B1E;"); f->addRow(appar_);
-        folio_ = new QCheckBox("Remove folio markers — removes text; folio citations in reports depend on these markers"); folio_->setStyleSheet("color:#9A2B1E;"); f->addRow(folio_);
+        appar_ = new QCheckBox("Remove [ ] and { } apparatus spans — removes text; the original is kept as a version"); ux::themedStyle(appar_, [] { return QString("color:%1;")
+            .arg(ux::chromeError()); }); f->addRow(appar_);
+        folio_ = new QCheckBox("Remove folio markers — removes text; folio citations in reports depend on these markers"); ux::themedStyle(folio_, [] { return QString("color:%1;")
+            .arg(ux::chromeError()); }); f->addRow(folio_);
         eol_ = new QComboBox; eol_->addItems({"keep", "LF", "CRLF", "CR"}); f->addRow("Line endings:", eol_);
         final_ = new QCheckBox("Ensure the file ends with a line break"); f->addRow(final_);
         house_ = new QCheckBox("Apply house-style spacing to English lines (after the rules above)");

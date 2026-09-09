@@ -18,46 +18,53 @@ def spacing(before=None, after=None, line=None):
     if line is not None: attrs.append(f'w:line="{line}" w:lineRule="auto"')
     return f'<w:spacing {" ".join(attrs)}/>'
 
-# style id → (spacing xml, keepNext)
+# style id → (spacing xml, keepNext, alignment or None)
+# Centred elements are Adam's standing order (2026-09-09): "the section
+# headers and other similar elements ... centered", "the images/screenshots
+# should be centered as well". Body prose stays left-aligned — centring a
+# paragraph of prose makes it harder to read, not easier.
 RULES = {
     # twips: 20 per point. Adam raised spacing twice (2026-09-08/09) — these
     # are the measured house values. Compact matters MOST: pandoc styles
     # every paragraph inside a list as Compact, and a digest is mostly
     # lists, so a tight Compact is what made the page feel crowded.
-    "Normal":          (spacing(after=200, line=288), False),
-    "BodyText":        (spacing(after=200, line=288), False),
-    "FirstParagraph":  (spacing(after=200, line=288), False),
-    "Compact":         (spacing(after=140, line=276), False),
-    "ListParagraph":   (spacing(after=140, line=276), False),
-    "SourceCode":      (spacing(before=120, after=120, line=252), False),
-    "BlockText":       (spacing(before=160, after=160, line=276), False),
-    "Title":           (spacing(after=320), False),
-    "Heading1":        (spacing(before=560, after=240), True),
-    "Heading2":        (spacing(before=520, after=240), True),
-    "Heading3":        (spacing(before=400, after=160), True),
+    "Normal":          (spacing(after=200, line=288), False, None),
+    "BodyText":        (spacing(after=200, line=288), False, None),
+    "FirstParagraph":  (spacing(after=200, line=288), False, None),
+    "Compact":         (spacing(after=140, line=276), False, None),
+    "ListParagraph":   (spacing(after=140, line=276), False, None),
+    "SourceCode":      (spacing(before=120, after=120, line=252), False, None),
+    "BlockText":       (spacing(before=160, after=160, line=276), False, None),
+    "Title":           (spacing(after=320), False, "center"),
+    "Heading1":        (spacing(before=560, after=240), True, "center"),
+    "Heading2":        (spacing(before=520, after=240), True, "center"),
+    "Heading3":        (spacing(before=400, after=160), True, "center"),
     # a figure keeps generous air above it, sits tight to its own caption,
     # and the caption carries the gap to whatever follows
-    "Figure":          (spacing(before=440, after=120), True),
-    "CaptionedFigure": (spacing(before=440, after=120), True),
-    "ImageCaption":    (spacing(before=120, after=480), False),
-    "Caption":         (spacing(before=120, after=480), False),
-    "TableCaption":    (spacing(before=240, after=140), True),
+    "Figure":          (spacing(before=440, after=120), True, "center"),
+    "CaptionedFigure": (spacing(before=440, after=120), True, "center"),
+    "ImageCaption":    (spacing(before=120, after=480), False, "center"),
+    "Caption":         (spacing(before=120, after=480), False, "center"),
+    "TableCaption":    (spacing(before=240, after=140), True, "center"),
 }
 
 def patch_styles(xml):
-    for sid, (sp, keep) in RULES.items():
+    for sid, (sp, keep, jc) in RULES.items():
         # find the style block
         m = re.search(r'(<w:style\b[^>]*w:styleId="%s"[^>]*>)(.*?)(</w:style>)' % re.escape(sid), xml, re.S)
         if not m:
             continue
         head, body, tail = m.groups()
         # paragraph properties: create or amend
+        extra = sp + ('<w:keepNext/>' if keep else '') + (
+            '<w:jc w:val="%s"/>' % jc if jc else '')
         if "<w:pPr>" in body or "<w:pPr " in body:
             body = re.sub(r'<w:spacing\b[^>]*/>', '', body, count=1)
-            body = re.sub(r'(<w:pPr[^>]*>)', r'\1' + sp + ('<w:keepNext/>' if keep else ''), body, count=1)
+            if jc: body = re.sub(r'<w:jc\b[^>]*/>', '', body, count=1)
+            body = re.sub(r'(<w:pPr[^>]*>)', r'\1' + extra, body, count=1)
         else:
             body = body.replace(head[len(head):], '', 0)
-            body = '<w:pPr>' + sp + ('<w:keepNext/>' if keep else '') + '</w:pPr>' + body
+            body = '<w:pPr>' + extra + '</w:pPr>' + body
         xml = xml[:m.start()] + head + body + tail + xml[m.end():]
     # base font size 11 pt for Normal (22 half-points)
     xml = re.sub(r'(<w:style\b[^>]*w:styleId="Normal"[^>]*>.*?<w:rPr>)(.*?)(</w:rPr>)',

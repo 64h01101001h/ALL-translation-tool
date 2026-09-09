@@ -18877,6 +18877,48 @@ public:
                   "on paper is far above the floor, so a pin that "
                   "passed everything would be visible here");
         }
+        {   // The chrome siblings, measured on the chrome grounds they are
+            // for (2026-09-09). Every one of these replaced a paper ink that
+            // had been baked into a pane's stylesheet and could not follow an
+            // appearance change — Adam's "some panels are dark and others are
+            // half shaded". A value edited by eye now fails here.
+            const char* kDarkGround = "#2D2D2D";
+            const char* kLightGround = "#ECECEC";
+            struct { const char* dark; const char* light; const char* what; } pairs[] = {
+                {"#E5E0D6", "#4A3F33", "body ink on a plaque"},
+                {"#A8A29A", "#5E574D", "muted secondary text"},
+                {"#C9A55C", "#82672A", "gold eyebrow"},
+                {"#E0A33C", "#935800", "advisory"},
+                {"#5FBF8E", "#1E6B4E", "action"},
+                {"#E8874A", "#A94D08", "machine-derived"},
+                {"#E8897E", "#8C2F2B", "error or refusal"},
+                {"#7FB2E8", "#2E629E", "document link"},
+            };
+            double worstDark = 99.0, worstLight = 99.0;
+            QString offender;
+            for (const auto& pr : pairs) {
+                const double d = ux::contrastRatio(pr.dark, kDarkGround);
+                const double l = ux::contrastRatio(pr.light, kLightGround);
+                if (std::min(d, l) < std::min(worstDark, worstLight)) offender = pr.what;
+                worstDark = std::min(worstDark, d);
+                worstLight = std::min(worstLight, l);
+            }
+            check(worstDark >= 4.5 && worstLight >= 4.5,
+                  qPrintable(QString("every chrome ink clears WCAG AA on its own "
+                                     "ground (worst dark %1, worst light %2, at "
+                                     "the %3)")
+                                 .arg(worstDark, 0, 'f', 2).arg(worstLight, 0, 'f', 2)
+                                 .arg(offender)));
+            // the five row washes the Compare table paints behind a tree row,
+            // read by near-white text in night mode
+            const char* washes[] = {"#4A3B14", "#1C3E24", "#4C2220", "#35332E", "#1E2F4C"};
+            double worstWash = 99.0;
+            for (const char* w : washes)
+                worstWash = std::min(worstWash, ux::contrastRatio("#FFFFFF", w));
+            check(worstWash >= 4.5,
+                  qPrintable(QString("every night row wash carries the row's own "
+                                     "text (worst %1)").arg(worstWash, 0, 'f', 2)));
+        }
         // TEST-11: the restore rule, drilled end to end on real temp
         // files - the current file must be safety-copied BEFORE the
         // backup overwrites it, so a restore can never lose data.

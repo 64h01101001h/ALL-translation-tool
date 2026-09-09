@@ -119,6 +119,39 @@ def main():
             f.write(str(msgbox) + "\n")
         notes.append(f"R3 baseline lowered to {msgbox}")
 
+    # G3 — chrome inks come from tokens, never from a literal (2026-09-09).
+    # Adam: "the shading is funky with the night mode. some panels are dark and
+    # others are half shaded and others are light/not shaded." Every one of
+    # those panels was a stylesheet with a paper ink baked into the string: it
+    # cannot follow an appearance change, because there is nothing to follow.
+    # The pane files are at zero and stay there; app/main.cpp carries a
+    # baseline that may fall and may never rise.
+    lit = re.compile(r'setStyleSheet\("[^"]*#[0-9A-Fa-f]{6}')
+    inc_lit = sum(len(lit.findall(read(os.path.join(root, "app", f))))
+                  for f in sorted(os.listdir(os.path.join(root, "app")))
+                  if f.endswith(".inc"))
+    if inc_lit:
+        fails.append(
+            f"G3 app/*.inc: {inc_lit} stylesheet(s) hardcode a colour. A pane's "
+            f"chrome ink must come from a ux:: token through ux::themedStyle, "
+            f"so it follows Day/Night; a literal cannot")
+    main_lit = len(lit.findall(read(os.path.join(root, "app/main.cpp"))))
+    chrome_baseline_path = os.path.join(root, "tools/constitution_chrome_baseline.txt")
+    if os.path.exists(chrome_baseline_path):
+        chrome_base = int(read(chrome_baseline_path).strip())
+        if main_lit > chrome_base:
+            fails.append(
+                f"G3 app/main.cpp: hardcoded stylesheet colours grew "
+                f"{chrome_base} -> {main_lit}. Route the new one through "
+                f"ux::themedStyle with a ux:: token, or lower the baseline "
+                f"in tools/constitution_chrome_baseline.txt in the same commit")
+        elif main_lit < chrome_base:
+            notes.append(
+                f"G3 baseline has slack: {main_lit} literal(s) < baseline "
+                f"{chrome_base} - tighten tools/constitution_chrome_baseline.txt")
+    else:
+        fails.append("G3 baseline file missing (tools/constitution_chrome_baseline.txt)")
+
     # G2 — the binding gloss census (SQA DATA-3). Nothing mechanical
     # prevented the NEXT surface from printing hgm_gloss untiered - the
     # incident class behind "HGM has:" over a machine gloss, the demo
@@ -170,8 +203,21 @@ def main():
     # Pale wash tints (all channels > 0xC8) are backgrounds, not inks.
     # A NEW saturated green is a new meaning: name it here with a
     # ruling or use a token that exists.
+    #
+    # RULING 2026-09-09 (night chrome). Two greens join the vocabulary, and
+    # neither carries a new MEANING — each is an existing meaning's sibling
+    # for dark chrome, where the paper value falls below AA and stops being
+    # readable at all:
+    #   #5FBF8E  ux::chromeAct() on dark chrome — the same binding authority
+    #            as #1E6B4E, which measures 2.6 against night chrome
+    #   #1C3E24  the Compare table's "right only" row wash on dark chrome —
+    #            the same meaning as the cream wash #D9F5D3, which a
+    #            near-white row text reads at about 1.2
+    # The pale-wash exemption below covers cream washes only, by testing for
+    # light channels; a dark wash is just as much a background, and is named
+    # here rather than by widening that test into a hole.
     import re as _re
-    G1_ALLOWED = {"1E6B4E", "2E7D32", "3B7A3B"}
+    G1_ALLOWED = {"1E6B4E", "2E7D32", "3B7A3B", "5FBF8E", "1C3E24"}
     for m in _re.finditer(r"#([0-9A-Fa-f]{6})", main_cpp):
         hx = m.group(1).upper()
         r, g, b = (int(hx[i:i+2], 16) for i in (0, 2, 4))

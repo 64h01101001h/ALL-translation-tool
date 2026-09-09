@@ -85,9 +85,17 @@ inline const char* chromeGold() {
 // greens keep their own values, and a paper surface still asks for the
 // paper ink. Every pair here is asserted on its own ground by the
 // battery, so a wrong value fails the selftest rather than shipping.
+// Body text on a chrome plaque. The light value is the one the panes have
+// always used, so Day is unchanged to the pixel; the dark value is its
+// sibling, measured on chrome by the battery like every pair here.
+inline const char* chromeInk() { return darkChrome() ? "#E5E0D6" : "#4A3F33"; }
 inline const char* chromeWarn() { return darkChrome() ? "#E0A33C" : "#935800"; }
 inline const char* chromeAct() { return darkChrome() ? "#5FBF8E" : "#1E6B4E"; }
-inline const char* chromeMachine() { return darkChrome() ? "#E8874A" : "#B4540A"; }
+// The light value is NOT kMachine. Measured 2026-09-09: #B4540A clears AA on
+// manuscript paper (4.62) but only reaches 4.22 on light chrome, because
+// chrome is the brighter ground. A shade darker clears both (4.74 chrome,
+// 5.19 paper) and is the reason this is a sibling rather than an alias.
+inline const char* chromeMachine() { return darkChrome() ? "#E8874A" : "#A94D08"; }
 inline const char* chromeError() { return darkChrome() ? "#E8897E" : "#8C2F2B"; }
 inline const char* chromeDoc() { return darkChrome() ? "#7FB2E8" : "#2E629E"; }
 // grounds and hairlines for the small plaques and dividers the panes draw

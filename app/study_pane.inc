@@ -37,7 +37,8 @@ public:
         explicit Page(const QString& title, const QString& what, const QString& notYet) : title_(title) {
             auto* v = new QVBoxLayout(this); v->setContentsMargins(6, 4, 6, 4); v->setSpacing(6);
             head_ = new QLabel(ux::sourceBadge(ux::Epistemic::Machine) + "<b>" + title + "</b> — " + what); head_->setWordWrap(true); head_->setTextFormat(Qt::RichText); v->addWidget(head_);
-            body_ = new QLabel(notYet); body_->setWordWrap(true); body_->setStyleSheet("color:#6B5E4E;"); v->addWidget(body_);
+            body_ = new QLabel(notYet); body_->setWordWrap(true); ux::themedStyle(body_, [] { return QString("color:%1;")
+            .arg(ux::chromeMuted()); }); v->addWidget(body_);
             v->addStretch(1);
         }
         virtual ~Page() = default;
@@ -65,7 +66,8 @@ public:
         frontBtn_ = btn("Use the front document", "Study the text open in front (Overlay document, Draft or Manuscript), with the encoding it was opened in", [] { if (g_studyFrontDoc) g_studyFrontDoc(); });
         gStudy->addColumn({btn("Text…", "Pick a text file to study (read as UTF-8; line endings detected; binary refused)", [this] { pickText(); }), frontBtn_,
                            btn("Refresh", "Re-run the current page against the current text", [this] { rerun(); })});
-        scope_ = new QLabel("Studying: nothing yet"); scope_->setWordWrap(true); scope_->setMinimumWidth(240); scope_->setMaximumWidth(360); scope_->setStyleSheet("color:#4A4036;");
+        scope_ = new QLabel("Studying: nothing yet"); scope_->setWordWrap(true); scope_->setMinimumWidth(240); scope_->setMaximumWidth(360); ux::themedStyle(scope_, [] { return QString("color:%1;")
+            .arg(ux::chromeInk()); });
         apparatus_ = new QComboBox; apparatus_->addItems({"Strip the marked span", "Keep the letters inside the marks", "Leave the text as it stands"});
         apparatus_->setToolTip("Editorial marks: [ ] { } ⟨ ⟩ spans are stripped before counting (default); a mark inside a syllable refuses that syllable rather than truncating it. ( ) is always kept and counted.");
         auto* appRow = new QWidget; auto* al = new QHBoxLayout(appRow); al->setContentsMargins(0, 0, 0, 0); al->addWidget(new QLabel("Editorial marks:")); al->addWidget(apparatus_);
@@ -75,7 +77,8 @@ public:
         ribbon->finish(); ribbon->attachTo(this);
         // ---- banner
         auto* banner = new QLabel(ux::sourceBadge(ux::Epistemic::Machine) + "Study measures, counts and matches. It never composes English and never proposes a reading. For what a term means, send it to the Lookup pane.");
-        banner->setTextFormat(Qt::RichText); banner->setWordWrap(true); banner->setStyleSheet("padding:4px 8px; color:#4A4036; background:#F4EFE4; border-bottom:1px solid #E3DDD0;"); outer->addWidget(banner);
+        banner->setTextFormat(Qt::RichText); banner->setWordWrap(true); ux::themedStyle(banner, [] { return QString("padding:4px 8px; color:%1; background:%2; border-bottom:1px solid %3;")
+            .arg(ux::chromeInk()).arg(ux::chromePlaque()).arg(ux::chromeRule()); }); outer->addWidget(banner);
         // ---- page switcher
         auto* switcher = new QHBoxLayout; switcher->setContentsMargins(6, 3, 6, 0); switcher->setSpacing(4);
         pageBtns_ = new QButtonGroup(this);
@@ -89,8 +92,10 @@ public:
         addPage(new Page("Similarity", "which other texts share material with this one, ranked, with the shared syllables verified.", "Arrives after Passages (batch 5, F4)."));
         addPage(new Page("Entities", "the people, texts and dates this text names, as candidates for a human to confirm — never places.", "Arrives last (batch 5, F6)."));
         // ---- refusal strip + status
-        refusals_ = new QLabel; refusals_->setWordWrap(true); refusals_->setStyleSheet("color:#9A2B1E; padding:2px 8px;"); refusals_->setVisible(false); outer->addWidget(refusals_);
-        status_ = new QLabel(ux::sourceBadge(ux::Epistemic::Machine) + "Choose a text to study."); status_->setTextFormat(Qt::RichText); status_->setWordWrap(true); status_->setStyleSheet("padding:3px 8px; color:#4A4036; border-top:1px solid #E3DDD0;"); outer->addWidget(status_);
+        refusals_ = new QLabel; refusals_->setWordWrap(true); ux::themedStyle(refusals_, [] { return QString("color:%1; padding:2px 8px;")
+            .arg(ux::chromeError()); }); refusals_->setVisible(false); outer->addWidget(refusals_);
+        status_ = new QLabel(ux::sourceBadge(ux::Epistemic::Machine) + "Choose a text to study."); status_->setTextFormat(Qt::RichText); status_->setWordWrap(true); ux::themedStyle(status_, [] { return QString("padding:3px 8px; color:%1; border-top:1px solid %2;")
+            .arg(ux::chromeInk()).arg(ux::chromeRule()); }); outer->addWidget(status_);
         setFrontAvailable(false);
     }
 
