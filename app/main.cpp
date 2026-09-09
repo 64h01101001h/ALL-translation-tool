@@ -4738,6 +4738,246 @@ inline bool encode(const QString& text, const QString& name, QByteArray* out, in
 }
 }  // namespace enc
 
+// ---- Sublime's document window (Adam, 2026-09-08): a line-number gutter
+// on the plain-text editors, toggled for all of them at once and
+// persisted; word wrap likewise. The gutter is the Qt "code editor"
+// pattern: a child widget painted from the visible blocks.
+class NumberedEdit : public QPlainTextEdit {
+public:
+    explicit NumberedEdit(QWidget* parent = nullptr) : QPlainTextEdit(parent) {
+        gutter_ = new Gutter(this);
+        all() << this;
+        connect(this, &QPlainTextEdit::blockCountChanged, this, [this] { updateGutterWidth(); });
+        connect(this, &QPlainTextEdit::updateRequest, this, [this](const QRect& r, int dy) {
+            if (dy) gutter_->scroll(0, dy); else gutter_->update(0, r.y(), gutter_->width(), r.height());
+        });
+        setNumbersVisible(QSettings("ALL", "TranslationTool").value("view/lineNumbers", false).toBool());
+        setLineWrapMode(QSettings("ALL", "TranslationTool").value("view/wordWrap", true).toBool()
+                            ? QPlainTextEdit::WidgetWidth : QPlainTextEdit::NoWrap);
+    }
+    ~NumberedEdit() override { all().removeAll(this); }
+    static QList<QPointer<NumberedEdit>>& all() { static QList<QPointer<NumberedEdit>> v; return v; }
+    static void setAllNumbers(bool on) {
+        QSettings("ALL", "TranslationTool").setValue("view/lineNumbers", on);
+        for (auto& e : all()) if (e) e->setNumbersVisible(on);
+    }
+    static void setAllWrap(bool on) {
+        QSettings("ALL", "TranslationTool").setValue("view/wordWrap", on);
+        for (auto& e : all()) if (e) e->setLineWrapMode(on ? QPlainTextEdit::WidgetWidth : QPlainTextEdit::NoWrap);
+    }
+    bool numbersVisible() const { return numbers_; }
+    void setNumbersVisible(bool on) {
+        numbers_ = on;
+        gutter_->setVisible(on);
+        updateGutterWidth();
+    }
+    int gutterWidth() const {
+        if (!numbers_) return 0;
+        int digits = 1;
+        for (int m = std::max(1, blockCount()); m >= 10; m /= 10) ++digits;
+        return 12 + fontMetrics().horizontalAdvance(QLatin1Char('9')) * digits;
+    }
+protected:
+    void resizeEvent(QResizeEvent* e) override {
+        QPlainTextEdit::resizeEvent(e);
+        const QRect cr = contentsRect();
+        gutter_->setGeometry(QRect(cr.left(), cr.top(), gutterWidth(), cr.height()));
+    }
+private:
+    class Gutter : public QWidget {
+    public:
+        explicit Gutter(NumberedEdit* ed) : QWidget(ed), ed_(ed) {}
+        QSize sizeHint() const override { return QSize(ed_->gutterWidth(), 0); }
+    protected:
+        void paintEvent(QPaintEvent* ev) override {
+            QPainter p(this);
+            p.fillRect(ev->rect(), QColor(0xF3, 0xEF, 0xE6));
+            p.setPen(QColor(ux::kMuted));
+            QTextBlock b = ed_->firstVisibleBlock();
+            int top = int(ed_->blockBoundingGeometry(b).translated(ed_->contentOffset()).top());
+            int bottom = top + int(ed_->blockBoundingRect(b).height());
+            const int h = ed_->fontMetrics().height();
+            while (b.isValid() && top <= ev->rect().bottom()) {
+                if (b.isVisible() && bottom >= ev->rect().top())
+                    p.drawText(0, top, width() - 6, h, Qt::AlignRight, QString::number(b.blockNumber() + 1));
+                b = b.next();
+                top = bottom;
+                bottom = top + int(ed_->blockBoundingRect(b).height());
+            }
+        }
+    private:
+        NumberedEdit* ed_;
+    };
+    void updateGutterWidth() { setViewportMargins(gutterWidth(), 0, 0, 0); }
+    Gutter* gutter_ = nullptr;
+    bool numbers_ = false;
+};
+
+// ---- Selection menu (Sublime, Adam 2026-09-08): expansions on the
+// focused editor. Qt holds ONE selection, so the multi-caret family is
+// not offered; these are the honest single-selection ones plus two of
+// ours (Folio, Phrase — wired in the Overlay).
+namespace selops {
+template <class F> inline bool withCursor(QWidget* w, F fn) {
+    if (auto* e = qobject_cast<QPlainTextEdit*>(w)) { QTextCursor c = e->textCursor(); if (!fn(c, e->document())) return false; e->setTextCursor(c); return true; }
+    if (auto* t = qobject_cast<QTextEdit*>(w))      { QTextCursor c = t->textCursor(); if (!fn(c, t->document())) return false; t->setTextCursor(c); return true; }
+    return false;
+}
+inline bool expandToLine(QWidget* w, bool upward) {
+    return withCursor(w, [&](QTextCursor& c, QTextDocument*) {
+        int a = std::min(c.anchor(), c.position()), b = std::max(c.anchor(), c.position());
+        QTextCursor ca(c); ca.setPosition(a); ca.movePosition(QTextCursor::StartOfBlock);
+        QTextCursor cb(c); cb.setPosition(b); cb.movePosition(QTextCursor::EndOfBlock);
+        if (upward && ca.position() == a && c.hasSelection()) {   // already at line start: take the line above too
+            ca.movePosition(QTextCursor::PreviousBlock); ca.movePosition(QTextCursor::StartOfBlock);
+        }
+        c.setPosition(ca.position()); c.setPosition(cb.position(), QTextCursor::KeepAnchor);
+        if (!upward) c.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor);   // include the newline
+        return true;
+    });
+}
+inline bool expandToWord(QWidget* w) {
+    return withCursor(w, [&](QTextCursor& c, QTextDocument*) {
+        if (!c.hasSelection()) { c.select(QTextCursor::WordUnderCursor); return true; }
+        int a = std::min(c.anchor(), c.position()), b = std::max(c.anchor(), c.position());
+        QTextCursor ca(c); ca.setPosition(a); ca.movePosition(QTextCursor::StartOfWord);
+        QTextCursor cb(c); cb.setPosition(b); cb.movePosition(QTextCursor::EndOfWord);
+        c.setPosition(ca.position()); c.setPosition(cb.position(), QTextCursor::KeepAnchor);
+        return true;
+    });
+}
+// A paragraph is a run of non-blank lines.
+inline bool expandToParagraph(QWidget* w) {
+    return withCursor(w, [&](QTextCursor& c, QTextDocument*) {
+        int a = std::min(c.anchor(), c.position()), b = std::max(c.anchor(), c.position());
+        QTextCursor ca(c); ca.setPosition(a);
+        while (ca.block().previous().isValid() && !ca.block().previous().text().trimmed().isEmpty()) ca.movePosition(QTextCursor::PreviousBlock);
+        ca.movePosition(QTextCursor::StartOfBlock);
+        QTextCursor cb(c); cb.setPosition(b);
+        while (cb.block().next().isValid() && !cb.block().next().text().trimmed().isEmpty()) cb.movePosition(QTextCursor::NextBlock);
+        cb.movePosition(QTextCursor::EndOfBlock);
+        c.setPosition(ca.position()); c.setPosition(cb.position(), QTextCursor::KeepAnchor);
+        return true;
+    });
+}
+inline bool expandToWhitespace(QWidget* w) {
+    return withCursor(w, [&](QTextCursor& c, QTextDocument* d) {
+        int a = std::min(c.anchor(), c.position()), b = std::max(c.anchor(), c.position());
+        while (a > 0 && !d->characterAt(a - 1).isSpace()) --a;
+        while (b < d->characterCount() - 1 && !d->characterAt(b).isSpace()) ++b;
+        c.setPosition(a); c.setPosition(b, QTextCursor::KeepAnchor);
+        return true;
+    });
+}
+inline bool expandToIndentation(QWidget* w) {
+    return withCursor(w, [&](QTextCursor& c, QTextDocument*) {
+        auto indent = [](const QString& t) { int i = 0; while (i < t.size() && t.at(i).isSpace()) ++i; return t.trimmed().isEmpty() ? INT_MAX : i; };
+        const int level = indent(c.block().text());
+        if (level == INT_MAX) return false;
+        QTextCursor ca(c); QTextCursor cb(c);
+        while (ca.block().previous().isValid() && indent(ca.block().previous().text()) >= level) ca.movePosition(QTextCursor::PreviousBlock);
+        while (cb.block().next().isValid() && indent(cb.block().next().text()) >= level) cb.movePosition(QTextCursor::NextBlock);
+        ca.movePosition(QTextCursor::StartOfBlock); cb.movePosition(QTextCursor::EndOfBlock);
+        c.setPosition(ca.position()); c.setPosition(cb.position(), QTextCursor::KeepAnchor);
+        return true;
+    });
+}
+// Enclosing pair among () [] {} — ACIP apparatus brackets. First press
+// selects the contents, a second press (already exact) adds the brackets.
+inline bool expandToBrackets(QWidget* w) {
+    return withCursor(w, [&](QTextCursor& c, QTextDocument* d) {
+        static const QString opens = "([{", closes = ")]}";
+        const int a0 = std::min(c.anchor(), c.position()), b0 = std::max(c.anchor(), c.position());
+        int depth = 0, a = a0 - 1;
+        for (; a >= 0; --a) {
+            const QChar ch = d->characterAt(a);
+            if (closes.contains(ch)) ++depth;
+            else if (opens.contains(ch)) { if (depth == 0) break; --depth; }
+        }
+        if (a < 0) return false;
+        const QChar want = closes.at(opens.indexOf(d->characterAt(a)));
+        depth = 0; int b = b0;
+        for (; b < d->characterCount(); ++b) {
+            const QChar ch = d->characterAt(b);
+            if (opens.contains(ch)) ++depth;
+            else if (closes.contains(ch)) { if (depth == 0 && ch == want) break; if (depth > 0) --depth; }
+        }
+        if (b >= d->characterCount()) return false;
+        if (a0 == a + 1 && b0 == b) { c.setPosition(a); c.setPosition(b + 1, QTextCursor::KeepAnchor); }   // include brackets
+        else { c.setPosition(a + 1); c.setPosition(b, QTextCursor::KeepAnchor); }
+        return true;
+    });
+}
+inline bool expandToQuotes(QWidget* w) {
+    return withCursor(w, [&](QTextCursor& c, QTextDocument* d) {
+        static const QString q = "\"'“”‘’";
+        int a = std::min(c.anchor(), c.position()) - 1, b = std::max(c.anchor(), c.position());
+        while (a >= 0 && !q.contains(d->characterAt(a))) --a;
+        while (b < d->characterCount() - 1 && !q.contains(d->characterAt(b))) ++b;
+        if (a < 0 || b >= d->characterCount() - 1) return false;
+        c.setPosition(a + 1); c.setPosition(b, QTextCursor::KeepAnchor);
+        return true;
+    });
+}
+// ACIP folio: from the @NNNA/B marker at or before the caret to the next.
+inline bool expandToFolio(QWidget* w) {
+    return withCursor(w, [&](QTextCursor& c, QTextDocument* d) {
+        static const QRegularExpression re("@\\d{2,3}[AaBb]\\b");
+        const QString all = d->toPlainText();
+        const int pos = std::min(c.anchor(), c.position());
+        int start = -1, end = all.size();
+        auto it = re.globalMatch(all);
+        while (it.hasNext()) {
+            const auto m = it.next();
+            if (m.capturedStart() <= pos) start = m.capturedStart();
+            else { end = m.capturedStart(); break; }
+        }
+        if (start < 0) return false;
+        c.setPosition(start); c.setPosition(end, QTextCursor::KeepAnchor);
+        return true;
+    });
+}
+inline bool expandUntil(QWidget* w, const QString& needle) {
+    if (needle.isEmpty()) return false;
+    return withCursor(w, [&](QTextCursor& c, QTextDocument* d) {
+        const int from = std::max(c.anchor(), c.position());
+        const int at = d->toPlainText().indexOf(needle, from);
+        if (at < 0) return false;
+        const int a = std::min(c.anchor(), c.position());
+        c.setPosition(a); c.setPosition(at + needle.size(), QTextCursor::KeepAnchor);
+        return true;
+    });
+}
+inline bool reverseSelection(QWidget* w) {
+    return withCursor(w, [&](QTextCursor& c, QTextDocument*) {
+        if (!c.hasSelection()) return false;
+        const int a = c.anchor(), p = c.position();
+        c.setPosition(p); c.setPosition(a, QTextCursor::KeepAnchor);
+        return true;
+    });
+}
+// Jump to the bracket matching the one at (or before) the caret.
+inline bool jumpToMatchingBracket(QWidget* w) {
+    return withCursor(w, [&](QTextCursor& c, QTextDocument* d) {
+        static const QString opens = "([{", closes = ")]}";
+        int pos = c.position();
+        QChar ch = d->characterAt(pos);
+        if (!opens.contains(ch) && !closes.contains(ch)) { --pos; ch = d->characterAt(pos); }
+        if (pos < 0) return false;
+        const bool fwd = opens.contains(ch);
+        if (!fwd && !closes.contains(ch)) return false;
+        const QChar want = fwd ? closes.at(opens.indexOf(ch)) : opens.at(closes.indexOf(ch));
+        int depth = 0;
+        for (int i = pos + (fwd ? 1 : -1); i >= 0 && i < d->characterCount(); i += fwd ? 1 : -1) {
+            const QChar x = d->characterAt(i);
+            if (x == ch) ++depth;
+            else if (x == want) { if (depth == 0) { c.setPosition(i); return true; } --depth; }
+        }
+        return false;
+    });
+}
+}  // namespace selops
+
 // ---- Overlay pane: document view with nested depth shading -----------------
 // ---- mini icon fleet (Adam's go, 2026-08-13): hand-drawn 16pt
 // monochrome glyphs on PRIMARY action buttons only (HIG restraint:
@@ -7578,6 +7818,66 @@ public:
                   "case shaping: ALL CAPS, Capitalised, as typed");
             input_->setPlainText(keepText);
         }
+        {   // Selection menu + document window (2026-09-08)
+            const QString keepText = input_->toPlainText();
+            input_->setPlainText("@001A *, ,SEMS (CAN {NOTE} PA),,\nline two \u201Cquoted here\u201D end\n\n@001B BDE BA,,\nlast");
+            auto put = [&](int pos, int anchor = -1) { QTextCursor c = input_->textCursor(); c.setPosition(anchor < 0 ? pos : anchor); if (anchor >= 0) c.setPosition(pos, QTextCursor::KeepAnchor); input_->setTextCursor(c); };
+            const QString all = input_->toPlainText();
+            put(all.indexOf("NOTE") + 1);   // inside {NOTE}
+            check(selops::expandToBrackets(input_) && input_->textCursor().selectedText() == "NOTE", "Expand to Brackets selects the contents of the innermost pair");
+            check(selops::expandToBrackets(input_) && input_->textCursor().selectedText() == "{NOTE}", "a second press includes the brackets");
+            check(selops::expandToBrackets(input_) && input_->textCursor().selectedText() == "CAN {NOTE} PA", "a third press climbs to the enclosing ( )");
+            put(all.indexOf("NOTE") + 1);
+            check(selops::expandToWord(input_) && input_->textCursor().selectedText() == "NOTE", "Expand to Word takes the word under the caret");
+            check(selops::expandToLine(input_, false) && input_->textCursor().selectedText().startsWith("@001A") && input_->textCursor().selectedText().endsWith(QChar::ParagraphSeparator), "Expand to Line takes the whole line including its break");
+            put(all.indexOf("quoted") + 2);   // inside the quotes
+            check(selops::expandToQuotes(input_) && input_->textCursor().selectedText() == "quoted here", "Expand to Quotes selects inside the curly quotes");
+            put(all.indexOf("quoted") + 2);
+            check(selops::expandToParagraph(input_) && input_->textCursor().selectedText().startsWith("@001A") && input_->textCursor().selectedText().endsWith("end"), "Expand to Paragraph spans the non-blank run of lines");
+            put(all.indexOf("quoted") + 2);
+            check(selops::expandToFolio(input_) && input_->textCursor().selectedText().startsWith("@001A") && !input_->textCursor().selectedText().contains("@001B"), "Expand to Folio selects from the folio marker to the next one");
+            put(all.indexOf("@001B") + 2);
+            check(selops::expandToFolio(input_) && input_->textCursor().selectedText().startsWith("@001B") && input_->textCursor().selectedText().endsWith("last"), "the last folio runs to the end of the text");
+            put(2);
+            check(selops::expandUntil(input_, "PA") && input_->textCursor().selectedText().endsWith("PA"), "Expand Until extends to the end of the typed text");
+            check(selops::reverseSelection(input_) && input_->textCursor().position() == 2, "Reverse swaps anchor and caret");
+            put(10);   // on the ( at 10? find it
+            { const int at = input_->toPlainText().indexOf('('); put(at); }
+            check(selops::jumpToMatchingBracket(input_) && input_->toPlainText().at(input_->textCursor().position()) == ')', "Jump to Matching Bracket lands on the partner");
+            put(3);
+            check(selops::expandToWhitespace(input_) && input_->textCursor().selectedText() == "@001A", "Expand to Whitespace selects the run between spaces");
+            // line endings: a CRLF file opens normalised and saves back as CRLF
+            const QString f1 = QDir::temp().filePath("all_selftest_crlf.txt");
+            { QFile f(f1); f.open(QIODevice::WriteOnly); f.write("@001A *, ,SEMS,,\r\nBDE\r\n"); }
+            const QString keepFile = docFile_;
+            openFile(f1);
+            check(docLineEnding_ == "CRLF" && !input_->toPlainText().contains('\r'), "a CRLF file is detected and shown with plain line breaks");
+            input_->setPlainText("@001A *, ,SEMS,,\nBDE\n");
+            saveDocument();
+            QFile chk(f1); chk.open(QIODevice::ReadOnly);
+            check(chk.readAll() == QByteArray("@001A *, ,SEMS,,\r\nBDE\r\n"), "Save writes the file's own line ending back (CRLF)");
+            setLineEnding("LF"); saveDocument();
+            QFile chk2(f1); chk2.open(QIODevice::ReadOnly);
+            check(chk2.readAll() == QByteArray("@001A *, ,SEMS,,\nBDE\n"), "View › Line Endings › LF converts on the next save");
+            QFile::remove(f1);
+            // gutter + wrap toggles reach every editor
+            auto* ne = dynamic_cast<NumberedEdit*>(input_);
+            check(ne != nullptr, "the Document box is a NumberedEdit");
+            if (ne) {
+                const bool was = ne->numbersVisible();
+                NumberedEdit::setAllNumbers(true);
+                const bool on = ne->numbersVisible() && ne->gutterWidth() > 0;
+                NumberedEdit::setAllWrap(false);
+                const bool nowrap = ne->lineWrapMode() == QPlainTextEdit::NoWrap;
+                NumberedEdit::setAllWrap(true);
+                NumberedEdit::setAllNumbers(was);
+                check(on && nowrap, "Line Numbers and Word Wrap toggles reach the Document box");
+            }
+            docFile_ = keepFile;
+            input_->setPlainText(keepText);
+            savedDigest_ = docprops::digest(keepText);
+            refreshDocTitle();
+        }
         return fails;
     }
 
@@ -7616,7 +7916,10 @@ public:
     bool writeDocumentTo(const QString& fn) {
         QByteArray bytes;
         int unmappable = 0;
-        if (!enc::encode(input_->toPlainText(), docEncoding_, &bytes, &unmappable)) {
+        QString text = input_->toPlainText();
+        if (docLineEnding_ == "CRLF") text.replace("\n", "\r\n");
+        else if (docLineEnding_ == "CR") text.replace('\n', '\r');
+        if (!enc::encode(text, docEncoding_, &bytes, &unmappable)) {
             if (hint_) hint_->setText(QString("NOT SAVED \u2014 %1 character(s) have no %2 encoding; use Save with Encoding \u203a UTF-8").arg(unmappable).arg(docEncoding_));
             return false;
         }
@@ -7631,6 +7934,48 @@ public:
         docprops::noteSave(this, docprops::sidecarPath(dataRoot_, fn),
                            editTimer_.isValid() ? editTimer_.elapsed() / 1000 : 0);
         editTimer_.restart();
+        return true;
+    }
+    // ---- Sublime's View / Selection / Goto hooks (2026-09-08) ----
+    QString lineEnding() const { return docLineEnding_; }
+    void setLineEnding(const QString& le) { if (le == "LF" || le == "CRLF" || le == "CR") docLineEnding_ = le; }
+    QString scriptLabel() const { return docIsWylie_ ? "Wylie" : "ACIP"; }
+    QStringList scriptModes() const { QStringList v; for (int i = 0; i < scriptMode_->count(); ++i) v << scriptMode_->itemText(i); return v; }
+    int scriptModeIndex() const { return scriptMode_->currentIndex(); }
+    void setScriptModeIndex(int i) { scriptMode_->setCurrentIndex(i); }
+    void setControlColumnVisible(bool on) { if (controlColumn_) controlColumn_->setVisible(on); }
+    bool controlColumnVisible() const { return controlColumn_ && controlColumn_->isVisible(); }
+    void setCardVisible(bool on) { if (context_) context_->setVisible(on); }
+    bool cardVisible() const { return context_ && context_->isVisible(); }
+    void setSummaryVisible(bool on) { if (hint_) hint_->setVisible(on); }
+    bool summaryVisible() const { return hint_ && hint_->isVisible(); }
+    QCheckBox* spellingToggle() const { return spellToggle_; }
+    QCheckBox* grammarToggle() const { return showGrammar_; }
+    QCheckBox* segmentationToggle() const { return showSeg_; }
+    QCheckBox* attestationToggle() const { return showAttest_; }
+    void nestUp() {
+        auto at = doc_.spansAt(lastTok_);
+        if ((int)at.size() > 1) { cycle_ = (cycle_ + (int)at.size() - 2) % (int)at.size(); onClick(); }
+    }
+    void nestDown() { onClick(); }
+    // Next / previous spelling doubt from the caret (Sublime's ⌃F6 / ⌃⇧F6).
+    bool stepSpellHit(int dir) {
+        if (spellToggle_ && !spellToggle_->isChecked()) spellToggle_->setChecked(true);
+        std::vector<int> toks;
+        for (const auto& h : spellHits_) toks.insert(toks.end(), h.toks.begin(), h.toks.end());
+        std::sort(toks.begin(), toks.end());
+        toks.erase(std::unique(toks.begin(), toks.end()), toks.end());
+        if (toks.empty()) return false;
+        const int pos = view_->textCursor().selectionStart();
+        int pick = -1;
+        if (dir > 0) { for (int t : toks) if (t < (int)tokBeg_.size() && tokBeg_[t] > pos) { pick = t; break; } if (pick < 0) pick = toks.front(); }
+        else { for (int i = (int)toks.size() - 1; i >= 0; --i) if (toks[i] < (int)tokBeg_.size() && tokBeg_[toks[i]] < pos) { pick = toks[i]; break; } if (pick < 0) pick = toks.back(); }
+        if (pick < 0 || pick >= (int)tokBeg_.size()) return false;
+        QTextCursor c(view_->document());
+        c.setPosition(tokBeg_[pick]);
+        c.setPosition(tokEnd_[pick], QTextCursor::KeepAnchor);
+        view_->setTextCursor(c);
+        view_->ensureCursorVisible();
         return true;
     }
     // ---- Sublime's File items (2026-09-08) ----
@@ -7853,7 +8198,10 @@ public:
             // any failed token kept verbatim (never guessed). The
             // file on disk is never touched.
             int bad = 0;
-            QString raw = enc::decode(f.readAll(), pendingEncoding_.isEmpty() ? QStringLiteral("UTF-8") : pendingEncoding_, &bad);
+            const QByteArray bytes = f.readAll();
+            docLineEnding_ = bytes.contains("\r\n") ? "CRLF" : bytes.contains('\r') ? "CR" : "LF";
+            QString raw = enc::decode(bytes, pendingEncoding_.isEmpty() ? QStringLiteral("UTF-8") : pendingEncoding_, &bad);
+            raw.replace("\r\n", "\n").replace('\r', '\n');
             docEncoding_ = pendingEncoding_.isEmpty() ? QStringLiteral("UTF-8") : pendingEncoding_;
             pendingEncoding_.clear();
             if (bad > 0 && hint_)
@@ -7958,7 +8306,7 @@ public:
         auto* ibl = new QVBoxLayout(inputBox);
         ibl->setContentsMargins(0, 0, 0, 0);
         ibl->addWidget(new QLabel("<b>Document (ACIP)</b>"));
-        input_ = new QPlainTextEdit;
+        input_ = new NumberedEdit;
         input_->setPlaceholderText("Paste an ACIP document…");
         input_->setMinimumHeight(60);
         inputZoom_ = std::clamp(
@@ -8803,6 +9151,7 @@ public:
         // folio buttons; Adam's screenshot, 2026-08-11). Scroll
         // instead of squeeze: nothing compresses below natural size.
         auto* leftScroll = new QScrollArea;
+        controlColumn_ = leftScroll;
         leftScroll->setWidget(left);
         leftScroll->setWidgetResizable(true);
         leftScroll->setFrameShape(QFrame::NoFrame);
@@ -16227,6 +16576,8 @@ private:
     QByteArray savedDigest_;       // sha1 of the box as last opened/saved
     QString docEncoding_ = "UTF-8"; // how the file on disk is encoded
     QString pendingEncoding_;        // set by Reopen with Encoding before openFile()
+    QString docLineEnding_ = "LF";  // LF / CRLF / CR as found on disk
+    QWidget* controlColumn_ = nullptr; // the left column (Focus mode hides it)
     QElapsedTimer editTimer_;      // editing time since open/save (Statistics)
     // BOUNTY B11: the Document box's generation, bumped every time
     // a whole new text lands in it. The citations report is
@@ -20853,7 +21204,7 @@ public:
         auto* top = new QWidget;
         auto* tl = new QHBoxLayout(top);
         auto* srcCol = new QVBoxLayout;
-        source_ = new QPlainTextEdit;
+        source_ = new NumberedEdit;
         source_->setPlaceholderText("Source ACIP…");
         sess::remember(source_, "draft/source");
         srcCol->addWidget(source_);
@@ -20977,7 +21328,7 @@ auto* secEvid = new QLabel("<span style='color:#9A7A33;font-size:10px;letter-spa
         auto* bottom = new QWidget;
         auto* bl = new QHBoxLayout(bottom);
         auto* draftCol = new QVBoxLayout;
-        draft_ = new QPlainTextEdit;
+        draft_ = new NumberedEdit;
         draft_->setPlaceholderText("Your English draft…");
         sess::remember(draft_, "draft/english");
         draftCol->addWidget(draft_);
@@ -38949,6 +39300,39 @@ int main(int argc, char** argv) {
                 });
             qatPin->setMenu(pinMenu);
         }
+    // ---- Selection menu (Sublime's, Adam 2026-09-08) ----
+    {
+        QMenu* sel = win.menuBar()->addMenu("Selection");
+        auto ed = [] { return editops::lastEditor().data(); };
+        auto act = [&](const QString& name, const QKeySequence& ks, auto fn) {
+            QAction* a = sel->addAction(name);
+            if (!ks.isEmpty()) a->setShortcut(ks);
+            QObject::connect(a, &QAction::triggered, fn);
+            return a;
+        };
+        act("Select All", QKeySequence(), [ed] { if (auto* e = qobject_cast<QPlainTextEdit*>(ed())) e->selectAll(); else if (auto* t = qobject_cast<QTextEdit*>(ed())) t->selectAll(); });
+        act("Expand Selection to Line", QKeySequence("Ctrl+L"), [ed] { selops::expandToLine(ed(), false); });
+        act("Expand Selection to Line Upward", QKeySequence("Ctrl+Alt+L"), [ed] { selops::expandToLine(ed(), true); });
+        act("Expand Selection to Word", QKeySequence(), [ed] { selops::expandToWord(ed()); });
+        act("Expand Selection to Paragraph", QKeySequence(), [ed] { selops::expandToParagraph(ed()); });
+        act("Expand Selection to Folio", QKeySequence("Ctrl+Alt+Shift+L"), [ed, &win] {
+            if (!selops::expandToFolio(ed())) win.statusBar()->showMessage("No @folio marker before the caret.", 3000);
+        });
+        act("Expand Selection to Phrase", QKeySequence("Ctrl+Shift+Space"), [overlay] { overlay->nestUp(); });
+        act("Expand Selection to Brackets", QKeySequence("Ctrl+Shift+M"), [ed, &win] {
+            if (!selops::expandToBrackets(ed())) win.statusBar()->showMessage("No enclosing ( ) [ ] { } around the selection.", 3000);
+        });
+        act("Expand Selection to Quotes", QKeySequence("Meta+'"), [ed] { selops::expandToQuotes(ed()); });
+        act("Expand Selection to Whitespace", QKeySequence("Ctrl+Shift+X"), [ed] { selops::expandToWhitespace(ed()); });
+        act("Expand Selection to Indentation", QKeySequence(), [ed] { selops::expandToIndentation(ed()); });
+        sel->addSeparator();
+        act("Expand Selection Until\u2026", QKeySequence("Meta+Shift+S"), [ed, &win] {
+            QWidget* w = ed(); if (!w) return;
+            const QString n = docprops::askName(&win, "Expand Selection Until", "Extend the selection to the end of:", QString());
+            if (!n.isEmpty() && !selops::expandUntil(w, n)) win.statusBar()->showMessage("Not found after the selection.", 3000);
+        });
+        act("Reverse Current Selection", QKeySequence("Meta+Shift+R"), [ed] { selops::reverseSelection(ed()); });
+    }
     // ---- Find menu (Sublime's, Adam 2026-09-08). Hunt ⌘K stays the
     // cross-corpus search; Find in Files is the Search pane with the
     // query seeded; Quick Find All highlights (one selection in Qt).
@@ -39031,6 +39415,110 @@ int main(int argc, char** argv) {
         act("Find selected previous (clipboard)\u2026", QKeySequence("Ctrl+Shift+F3"), [seeded] { seeded(QApplication::clipboard()->text(), true, "Find clipboard"); });
     }
         QMenu* view = win.menuBar()->addMenu("View");
+        // ---- Sublime + Word View items (Adam, 2026-09-08) ----
+        {
+            QMenu* textAs = view->addMenu("Text as");
+            auto* grp = new QActionGroup(&win);
+            const QStringList modes = overlay->scriptModes();
+            for (int i = 0; i < modes.size(); ++i) {
+                QAction* a = textAs->addAction(modes[i]);
+                a->setCheckable(true); grp->addAction(a);
+                QObject::connect(a, &QAction::triggered, [overlay, i] { overlay->setScriptModeIndex(i); });
+            }
+            QObject::connect(textAs, &QMenu::aboutToShow, [textAs, overlay] {
+                const int cur = overlay->scriptModeIndex();
+                const auto acts = textAs->actions();
+                for (int i = 0; i < acts.size(); ++i) acts[i]->setChecked(i == cur);
+            });
+            QMenu* sidebar = view->addMenu("Sidebar");
+            auto tog = [&](QMenu* m, const QString& name, auto getter, auto setter) {
+                QAction* a = m->addAction(name); a->setCheckable(true);
+                QObject::connect(m, &QMenu::aboutToShow, [a, getter] { a->setChecked(getter()); });
+                QObject::connect(a, &QAction::toggled, setter);
+                return a;
+            };
+            tog(sidebar, "Control column", [overlay] { return overlay->controlColumnVisible(); }, [overlay](bool on) { overlay->setControlColumnVisible(on); });
+            tog(sidebar, "Card pane", [overlay] { return overlay->cardVisible(); }, [overlay](bool on) { overlay->setCardVisible(on); });
+            tog(sidebar, "Document summary", [overlay] { return overlay->summaryVisible(); }, [overlay](bool on) { overlay->setSummaryVisible(on); });
+            tog(sidebar, "Spelling doubts panel", [overlay] { return overlay->spellingToggle() && overlay->spellingToggle()->isChecked(); }, [overlay](bool on) { if (overlay->spellingToggle()) overlay->spellingToggle()->setChecked(on); });
+            QMenu* markup = view->addMenu("Markup");
+            tog(markup, "Grammar marks && particle notes", [overlay] { return overlay->grammarToggle() && overlay->grammarToggle()->isChecked(); }, [overlay](bool on) { if (overlay->grammarToggle()) overlay->grammarToggle()->setChecked(on); });
+            tog(markup, "Botok segmentation", [overlay] { return overlay->segmentationToggle() && overlay->segmentationToggle()->isChecked(); }, [overlay](bool on) { if (overlay->segmentationToggle()) overlay->segmentationToggle()->setChecked(on); });
+            tog(markup, "Unattested-word hints", [overlay] { return overlay->attestationToggle() && overlay->attestationToggle()->isChecked(); }, [overlay](bool on) { if (overlay->attestationToggle()) overlay->attestationToggle()->setChecked(on); });
+            view->addSeparator();
+            QAction* ln = view->addAction("Line Numbers");
+            ln->setCheckable(true); ln->setShortcut(QKeySequence("Ctrl+Alt+N"));
+            ln->setChecked(QSettings("ALL", "TranslationTool").value("view/lineNumbers", false).toBool());
+            QObject::connect(ln, &QAction::toggled, [](bool on) { NumberedEdit::setAllNumbers(on); });
+            QAction* ww = view->addAction("Word Wrap");
+            ww->setCheckable(true);
+            ww->setChecked(QSettings("ALL", "TranslationTool").value("view/wordWrap", true).toBool());
+            QObject::connect(ww, &QAction::toggled, [](bool on) { NumberedEdit::setAllWrap(on); });
+            QMenu* le = view->addMenu("Line Endings");
+            auto* leg = new QActionGroup(&win);
+            for (const char* n : {"LF", "CRLF", "CR"}) {
+                QAction* a = le->addAction(n); a->setCheckable(true); leg->addAction(a);
+                QObject::connect(a, &QAction::triggered, [overlay, n] { overlay->setLineEnding(n); });
+            }
+            QObject::connect(le, &QMenu::aboutToShow, [le, overlay] { for (QAction* a : le->actions()) a->setChecked(a->text() == overlay->lineEnding()); });
+            view->addSeparator();
+            QAction* focusA = view->addAction("Focus");
+            focusA->setCheckable(true); focusA->setShortcut(QKeySequence("Meta+Shift+Ctrl+F"));
+            QAction* ribbonA = view->addAction("Ribbon");
+            ribbonA->setCheckable(true); ribbonA->setChecked(true); ribbonA->setShortcut(QKeySequence("Ctrl+Alt+R"));
+            auto setRibbon = [&win](bool on) { for (QWidget* b : win.findChildren<QWidget*>("ribbonBand")) b->setVisible(on); };
+            QObject::connect(ribbonA, &QAction::toggled, setRibbon);
+            QAction* sbA = view->addAction("Status Bar");
+            sbA->setCheckable(true); sbA->setChecked(true);
+            QObject::connect(sbA, &QAction::toggled, [&win](bool on) { win.statusBar()->setVisible(on); });
+            QObject::connect(focusA, &QAction::toggled, [overlay, ribbonA, sbA](bool on) {
+                overlay->setControlColumnVisible(!on);
+                ribbonA->setChecked(!on);
+                sbA->setChecked(!on);
+            });
+            QAction* fsA = view->addAction("Enter Full Screen");
+            fsA->setShortcut(QKeySequence("Meta+Ctrl+F"));
+            QObject::connect(fsA, &QAction::triggered, [&win, fsA] {
+                if (win.isFullScreen()) { win.showNormal(); fsA->setText("Enter Full Screen"); }
+                else { win.showFullScreen(); fsA->setText("Exit Full Screen"); }
+            });
+            view->addSeparator();
+            QAction* spA = view->addAction("Spell Check");
+            spA->setCheckable(true); spA->setShortcut(QKeySequence("F6"));
+            QObject::connect(view, &QMenu::aboutToShow, [spA, overlay] { spA->setChecked(overlay->spellingToggle() && overlay->spellingToggle()->isChecked()); });
+            QObject::connect(spA, &QAction::toggled, [overlay](bool on) { if (overlay->spellingToggle()) overlay->spellingToggle()->setChecked(on); });
+            QAction* nsp = view->addAction("Next Misspelling");
+            nsp->setShortcut(QKeySequence("Meta+F6"));
+            QObject::connect(nsp, &QAction::triggered, [overlay, &win] { if (!overlay->stepSpellHit(+1)) win.statusBar()->showMessage("No spelling doubts in this text.", 3000); });
+            QAction* psp = view->addAction("Previous Misspelling");
+            psp->setShortcut(QKeySequence("Meta+Shift+F6"));
+            QObject::connect(psp, &QAction::triggered, [overlay, &win] { if (!overlay->stepSpellHit(-1)) win.statusBar()->showMessage("No spelling doubts in this text.", 3000); });
+            QObject::connect(view->addAction("Show Console"), &QAction::triggered, [] {
+                QDesktopServices::openUrl(QUrl::fromLocalFile(QDir::homePath() + "/Library/Logs/DiamondCutterTranslationTool-lifecycle.log"));
+            });
+            view->addSeparator();
+            // status bar: Line N, Column M of the focused editor · script · encoding · line ending
+            auto* posLbl = new QLabel; posLbl->setObjectName("statusPos");
+            win.statusBar()->addPermanentWidget(posLbl);
+            auto refreshPos = [posLbl, overlay] {
+                QWidget* w = editops::lastEditor();
+                QString pos;
+                if (auto* e = qobject_cast<QPlainTextEdit*>(w)) pos = QString("Line %1, Column %2").arg(e->textCursor().blockNumber() + 1).arg(e->textCursor().positionInBlock() + 1);
+                else if (auto* t = qobject_cast<QTextEdit*>(w)) pos = QString("Line %1, Column %2").arg(t->textCursor().blockNumber() + 1).arg(t->textCursor().positionInBlock() + 1);
+                posLbl->setText(pos + (pos.isEmpty() ? "" : "  \u00b7  ") + overlay->scriptLabel() + " \u00b7 " + overlay->documentEncoding() + " \u00b7 " + overlay->lineEnding());
+            };
+            // (Qt::UniqueConnection is not available for lambdas, so the
+            // editors already wired are remembered explicitly)
+            auto wired = std::make_shared<QSet<QObject*>>();
+            QObject::connect(qApp, &QApplication::focusChanged, [refreshPos, wired](QWidget*, QWidget* now) {
+                if (now && !wired->contains(now)) {
+                    if (auto* e = qobject_cast<QPlainTextEdit*>(now)) { wired->insert(e); QObject::connect(e, &QPlainTextEdit::cursorPositionChanged, e, refreshPos); QObject::connect(e, &QObject::destroyed, [wired, e] { wired->remove(e); }); }
+                    else if (auto* t = qobject_cast<QTextEdit*>(now)) { wired->insert(t); QObject::connect(t, &QTextEdit::cursorPositionChanged, t, refreshPos); QObject::connect(t, &QObject::destroyed, [wired, t] { wired->remove(t); }); }
+                }
+                refreshPos();
+            });
+            refreshPos();
+        }
         {   // Adam's spec: the ribbon can show icons WITH the small
             // descriptions, or icons alone
             QAction* rl = view->addAction("Ribbon: show labels");
@@ -39060,16 +39548,17 @@ int main(int argc, char** argv) {
                 else
                     overlay->zoomRouted(d);
             };
-            QAction* bigger = view->addAction("Larger Text");
+            QMenu* zoomM = view->addMenu("Zoom");
+            QAction* bigger = zoomM->addAction("Larger Text");
             bigger->setShortcuts({QKeySequence::ZoomIn,
                                   QKeySequence("Ctrl+=")});
             QObject::connect(bigger, &QAction::triggered,
                              [route] { route(+1); });
-            QAction* smaller = view->addAction("Smaller Text");
+            QAction* smaller = zoomM->addAction("Smaller Text");
             smaller->setShortcut(QKeySequence::ZoomOut);
             QObject::connect(smaller, &QAction::triggered,
                              [route] { route(-1); });
-            QAction* reset = view->addAction("Actual Text Size");
+            QAction* reset = zoomM->addAction("Actual Text Size");
             reset->setShortcut(QKeySequence("Ctrl+0"));
             QObject::connect(reset, &QAction::triggered,
                              [route] { route(0); });
@@ -42022,8 +42511,8 @@ int main(int argc, char** argv) {
             // 9l sits before the group menus — positional indexing
             // failed the day it landed)
             const auto menus = win.menuBar()->actions();
-            bool ok = menus.size() == tabs.count() + 5;   // File +
-                                                          // Edit + Find +
+            bool ok = menus.size() == tabs.count() + 6;   // File +
+                                                          // Edit + Selection + Find +
                                                           // groups +
                                                           // View + Help
             int overlayActions = 0;
