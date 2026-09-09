@@ -735,7 +735,7 @@ static QString tm84000Html(const std::string& wylie, int limit = 5) {
         "<hr><div style='color:#2E629E'><b>84000 Translation "
         "Memory</b> <small>(CC BY 4.0, 84000: Translating the Words "
         "of the Buddha - published-translation comparanda, reference "
-        "only, never HGM)</small> <small style='color:#78706A'>showing " +
+        "only, never Geshe Michael Roach)</small> <small style='color:#78706A'>showing " +
         QString::number(hits.size()) + " of " + tmTotalTxt +
         ((long long)hits.size() < tmTotal
              ? QString(" — display cap; refine the term to see more")
@@ -1307,7 +1307,7 @@ static QString entryHtml(const allcore::Entry& e,
     }
     if (d.glosses) {
         // Adam, 2026-08-22, reading a real card: "there is no space
-        // between the highlighted HGM after malupa". The badge is a
+        // between the highlighted GMR after malupa". The badge is a
         // ZONE HEADING for the glosses beneath it, but it was emitted
         // as a bare inline span after the pron div closed, and Qt rich
         // text keeps a bare span on the preceding visual line — so it
@@ -1329,7 +1329,7 @@ static QString entryHtml(const allcore::Entry& e,
         // every sentence. bstan pa has 65, of which SIXTY-FOUR are
         // short words and exactly one is a long contextual note.
         //
-        // And the repeated "[HGM (glossary)]" suffix was provably
+        // And the repeated "[GMR (glossary)]" suffix was provably
         // redundant: `tier` is a field on the ENTRY, computed inside a
         // loop over that entry's glosses, so it could never differ
         // between lines. Sixty-five identical suffixes restating one
@@ -1342,7 +1342,7 @@ static QString entryHtml(const allcore::Entry& e,
         // is capped — the count says the scale up front.
         if (!e.hgm_gloss.empty()) {
             // the zone badge immediately above already says HGM —
-            // repeating it here printed "HGM" twice within one line of
+            // repeating it here printed "GMR" twice within one line of
             // itself (Adam, 2026-08-22). Say only what the badge does
             // NOT: which tier of his English this is.
             const QString tier =
@@ -1375,7 +1375,7 @@ static QString entryHtml(const allcore::Entry& e,
                      ">≡ " + n + "</div>";
         }
         if (e.hgm_gloss.empty()) {
-            h += "<div style='margin:3px 0 0 0'><i>(no HGM "
+            h += "<div style='margin:3px 0 0 0'><i>(no Geshe Michael Roach "
                  "equivalent — " +
                  QString::fromStdString(e.status).toHtmlEscaped() +
                  ")</i></div>";
@@ -1463,7 +1463,7 @@ static QString entryHtml(const allcore::Entry& e,
                  "border-left:3px solid #B4540A;"
                  "padding:4px 9px;margin:6px 0;border-radius:4px'>"
                  "<small style='color:#B4540A;letter-spacing:1px'>"
-                 "HGM · TENTATIVE — machine-matched from "
+                 "GMR · TENTATIVE — machine-matched from "
                  "course evidence (AI, unreviewed) · not a "
                  "dictionary gloss</small>";
             // The stepper (Adam, 2026-09-04): one (rendering, witness)
@@ -2237,7 +2237,7 @@ static QString lookupResultsHtml(allcore::Spine& spine,
     }
     if (entries.empty())
         h = QString(
-                "<div style='color:#6E675D'><b>no HGM entry for "
+                "<div style='color:#6E675D'><b>no Geshe Michael Roach entry for "
                 "\u201c%1\u201d</b></div>"
                 "<div style='color:#78706A;font-size:12px;"
                 "margin-top:2px'>tried: exact headword \u00b7 "
@@ -2246,7 +2246,7 @@ static QString lookupResultsHtml(allcore::Spine& spine,
                 "colloquial register \u2014 nothing matched. "
                 "Reference layers and external sites below may "
                 "still know the form; they are comparanda, "
-                "never HGM.</div>")
+                "never Geshe Michael Roach.</div>")
                 .arg(QString::fromStdString(raw).toHtmlEscaped());
     // (honorific badges render inside entryHtml, every pane alike)
     EntryDisplay ld;
@@ -2516,12 +2516,12 @@ static QString lookupResultsHtml(allcore::Spine& spine,
         for (auto& c : eng) c = (char)std::tolower((unsigned char)c);
         auto rev = spine.reverseIndex(eng);
         if (!rev.empty()) {
-            h += "<hr><div><b>English \u2192 Tibetan</b> <small>(HGM reverse "
+            h += "<hr><div><b>English \u2192 Tibetan</b> <small>(GMR reverse "
                  "index)</small></div>";
             for (const auto& r : rev) {
                 QString tier = r.tier == "auto-aligned"
                     ? "<span style='color:#B4540A'>PROVISIONAL</span>"
-                    : QString::fromStdString("HGM (" + r.tier + ")");
+                    : QString::fromStdString("GMR (" + r.tier + ")");
                 h += "<div style='margin:5px 0'><b>" +
                      QString::fromStdString(r.wylie).toHtmlEscaped() + "</b> \u00b7 " +
                      QString::fromStdString(r.pronunciation).toHtmlEscaped() +
@@ -3622,7 +3622,7 @@ static QWidget* makeLookupPane(allcore::Spine& spine, allcore::RefDict* ref,
         "<i style='color:#6F6F6F'>The entry appears here — try "
         "<b>bsod nams</b>, <b>BSOD NAMS</b>, \"merit\", or "
         "\"sönam\". Layers you can toggle in the Overlay's card "
-        "appear here too: HGM (binding), reference dictionaries, "
+        "appear here too: Geshe Michael Roach (binding), reference dictionaries, "
         "84000, and the Working Glossary (AI-drafted, labeled).</i>");
     results->setOpenExternalLinks(true);  // link-out tier opens the browser
     QObject::connect(
@@ -6562,7 +6562,7 @@ public:
         for (const auto& e : doc_.entries)
             if (e.wylie == "sems can" && !e.hgm_gloss.empty())
                 glossed = true;
-        check(glossed, "known term carries an HGM gloss");
+        check(glossed, "known term carries a Geshe Michael Roach gloss");
         input_->setPlainText(acip.toLower());
         loadDoc();
         check(docIsWylie_, "lowercase sample detected as wylie");
@@ -9712,7 +9712,7 @@ public:
             ll->addWidget(pr);
         }
         showPhon_ = mkToggle("phonetics", "phonetics", true);
-        showGloss_ = mkToggle("glosses", "HGM definitions", true);
+        showGloss_ = mkToggle("glosses", "Geshe Michael Roach definitions", true);
         showCorpus_ = mkToggle("corpus", "corpus usage (contextual)", true);
         showSanskrit_ = mkToggle("sanskrit", "Sanskrit reference", false);
         showHopkins_ = mkToggle("hopkins", "Hopkins reference", false);
@@ -9729,7 +9729,7 @@ public:
         showNotes_ = mkToggle("notes", "footnotes && bibliography "
                                        "(published)", true);
         showAlignTent_ = mkToggle("alignTent",
-                                  "HGM tentative (machine-matched)",
+                                  "GMR tentative (machine-matched)",
                                   true);
         showAlignTent_->setToolTip(
             "The ACI alignment evidence layer: Geshe Michael's own "
@@ -9757,7 +9757,7 @@ public:
             "English.");
         showSanskrit_->setToolTip(
             "The Sanskrit reference line (comparanda only, never "
-            "an HGM equivalent).");
+            "a Geshe Michael Roach equivalent).");
         showHopkins_->setToolTip(
             "The Hopkins dictionary reference line (comparanda "
             "only).");
@@ -11299,7 +11299,7 @@ private:
                     if (!att.empty())
                         extra = QString(
                                     "<br><small style='color:#1E6B4E'>"
-                                    "not in the HGM dictionary, but "
+                                    "not in the Geshe Michael Roach dictionary, but "
                                     "attested in the %1 word list "
                                     "<i>(Apache-2.0, reference)</i>"
                                     "</small>")
@@ -17933,7 +17933,7 @@ private:
                 }
                 return counts;
             };
-            segInfo_ = QString("%1 HGM + %2 Monlam forms, built in %3s")
+            segInfo_ = QString("%1 GMR + %2 Monlam forms, built in %3s")
                            .arg(hgmWords)
                            .arg(segmenter_->wordCount() - hgmWords)
                            .arg(segBuildMs_ / 1000.0, 0, 'f', 1);
@@ -18033,7 +18033,7 @@ public:
             "font-weight:600;letter-spacing:.06em'>TIBETAN NAMED IN "
             "THIS NOTE</div><div style='font-size:12px;color:#888'>"
             "<i>machine-located &mdash; from the note's own words, "
-            "or (labeled) where HGM's own English equivalent is "
+            "or (labeled) where Geshe Michael Roach's own English equivalent is "
             "exactly this lemma &mdash; candidates, "
             "not a ruling on which term the note hangs on</i></div>";
         bool passageHdr = false;
@@ -19271,7 +19271,7 @@ public:
 
 private:
     static constexpr const char* kCorpusRow =
-        "HGM aligned corpus (all courses)";
+        "Geshe Michael Roach aligned corpus (all courses)";
     static constexpr const char* kApparatusRow =
         "Published apparatus (footnotes + bibliography)";
     static constexpr const char* kSpotlightRow =
@@ -21168,34 +21168,34 @@ static QWidget* makeConvertPane(allcore::Mvp* mvp,
     return pane;
 }
 
-// SQA DATA-2 (house rule 1). "HGM has:" is the strongest authority
+// SQA DATA-2 (house rule 1). "GMR has:" is the strongest authority
 // claim this app makes, and 3,910 of the 12,004 glossed entries
 // (32.6%) are auto-aligned MACHINE output. allcore::TermUse carries
 // the tier — core/src/terminology.cpp sets both `tier` and
 // `provisional`, and checkTerminology applies no tier filter — but
 // two surfaces threw it away: the Drills "Translate & compare" answer
-// key printed an auto-aligned gloss under the literal words "HGM
-// has:", and the Reviewer's report called it "HGM's equivalents".
+// key printed an auto-aligned gloss under the literal words "GMR
+// has:", and the Reviewer's report called it "Geshe Michael Roach's equivalents".
 // DraftPane, on the identical report, appended [PROVISIONAL].
 //
 // The label and the glosses therefore travel together in one helper,
 // so the label can never outrun the tier again.
 static QString hgmGlossPhrase(const allcore::TermUse& t,
                               const QString& glosses) {
-    if (glosses.isEmpty()) return QString("no HGM equivalent recorded");
-    if (!t.provisional) return "HGM has: " + glosses;
+    if (glosses.isEmpty()) return QString("no Geshe Michael Roach equivalent recorded");
+    if (!t.provisional) return "GMR has: " + glosses;
     return "auto-aligned <span style='color:#B4540A;font-size:11px'>"
-           "[PROVISIONAL]</span>, not HGM's own English: " + glosses;
+           "[PROVISIONAL]</span>, not Geshe Michael Roach's own English: " + glosses;
 }
 
-// The possessive form of the same discipline: "HGM's equivalents" is
+// The possessive form of the same discipline: "Geshe Michael Roach's equivalents" is
 // a claim about authorship, and it is false for the auto-aligned tier.
 static QString equivalentsOwner(const allcore::TermUse& t) {
     return t.provisional
                ? QString("the auto-aligned <span style='color:#B4540A;"
                          "font-size:11px'>[PROVISIONAL]</span> "
-                         "equivalents (not HGM's own English)")
-               : QString("HGM's equivalents");
+                         "equivalents (not Geshe Michael Roach's own English)")
+               : QString("Geshe Michael Roach's equivalents");
 }
 
 // ---- Trainer pane: progressive-reveal reading tutor (docs/TRAINER_DESIGN.md)
@@ -21211,7 +21211,7 @@ public:
         auto* trBanner = new QLabel(
             "<b>Translation Trainer</b> — paste a passage, try to read it "
             "yourself, then reveal one layer at a time. Engine guidance is "
-            "labeled guidance; only HGM corpus lines are answers.");
+            "labeled guidance; only Geshe Michael Roach corpus lines are answers.");
         trBanner->setWordWrap(true);
         layout->addWidget(trBanner);
         input_ = new QPlainTextEdit;
@@ -21242,7 +21242,7 @@ public:
             "<i style='color:#6F6F6F'>Paste a passage above and "
             "press Load. Try to read it yourself first — then "
             "reveal the layers one at a time, 1 through 6. Only "
-            "the HGM corpus lines are answers; everything else is "
+            "the Geshe Michael Roach corpus lines are answers; everything else is "
             "labeled guidance.</i>");
         QObject::connect(view_, &QTextBrowser::anchorClicked,
                          [this](const QUrl& u) { onAnchor(u); });
@@ -21450,7 +21450,7 @@ private:
                                           QString::fromUtf8(verb.cls->expects)
                                               .toHtmlEscaped());
                     } else
-                        h += "<small style='color:#B4540A'>verb: no HGM verb "
+                        h += "<small style='color:#B4540A'>verb: no Geshe Michael Roach verb "
                              "evidence in this clause — candidate unverified"
                              "</small><br>";
                     for (const auto& p : plan)
@@ -21491,7 +21491,7 @@ private:
                         doc_.entries[doc_.spans[at.front()].entry_ix];
                     if (!seen.insert(e.id).second) continue;
                     QString gl = e.hgm_gloss.empty()
-                        ? "<i>(no HGM equivalent)</i>"
+                        ? "<i>(no Geshe Michael Roach equivalent)</i>"
                         : QString::fromStdString(e.hgm_gloss.front())
                               .toHtmlEscaped();
                     QString tier = e.provisional()
@@ -21574,7 +21574,7 @@ private:
                         h += "<div style='margin-top:4px;background:#EEF6EE;"
                              "padding:4px'><small>[" +
                              QString::fromStdString(s.course) + ":" +
-                             QString::number(s.seq) + "] <b>HGM:</b> " +
+                             QString::number(s.seq) + "] <b>GMR:</b> " +
                              QString::fromStdString(s.english)
                                  .toHtmlEscaped() + "</small></div>";
                 } else {
@@ -21614,7 +21614,7 @@ public:
         auto* layout = new QVBoxLayout(this);
         auto* drBanner = new QLabel(
             "<b>Drills</b> — every exercise comes from a real corpus segment; "
-            "every answer is HGM's own text. Engine guidance is labeled "
+            "every answer is Geshe Michael Roach's own text. Engine guidance is labeled "
             "guidance.");
         drBanner->setWordWrap(true);
         layout->addWidget(drBanner);
@@ -21670,7 +21670,7 @@ public:
         layout->addWidget(answerRow_);
         transDraft_ = new QPlainTextEdit;
         transDraft_->setPlaceholderText(
-            "your translation — write it before revealing HGM's…");
+            "your translation — write it before revealing Geshe Michael Roach's…");
         transDraft_->setMaximumHeight(110);
         transDraft_->setVisible(false);
         layout->addWidget(transDraft_);
@@ -21715,7 +21715,7 @@ public:
         check(part_.has_value(), "particle drill generated");
         // DATA-2 / house rule 1. Mode 5 ("Translate & compare") built
         // its report from allcore::checkTerminology and printed every
-        // unrendered term under the literal label "HGM has:" with the
+        // unrendered term under the literal label "GMR has:" with the
         // tier discarded — a machine guess presented as the master's
         // own English, in the drill, to the user least able to tell.
         // ka ba is auto-aligned in the shipped spine (tier=
@@ -21751,12 +21751,12 @@ public:
             check(kaLine.contains("PROVISIONAL"),
                   "the auto-aligned gloss (ka ba) is tier-labeled "
                   "PROVISIONAL in the answer key");
-            check(!kaLine.contains("HGM has"),
+            check(!kaLine.contains("GMR has"),
                   "an auto-aligned gloss is NEVER printed under the "
-                  "label \"HGM has:\" (house rule 1)");
-            check(bumLine.contains("HGM has") &&
+                  "label \"GMR has:\" (house rule 1)");
+            check(bumLine.contains("GMR has") &&
                       !bumLine.contains("PROVISIONAL"),
-                  "a binding gloss (bum pa) still reads as HGM's own");
+                  "a binding gloss (bum pa) still reads as Geshe Michael Roach's own");
         }
         return fails;
     }
@@ -22003,7 +22003,7 @@ private:
                          .arg(QChar('A' + (int)i))
                          .arg(disp(order_->chunks[order_->presented[i]]));
         } else if (m == 1 && cloze_) {
-            h += "<div style='color:#555'>Which chunk fills the blank? HGM's "
+            h += "<div style='color:#555'>Which chunk fills the blank? Geshe Michael Roach's "
                  "English for the whole segment:</div>"
                  "<div style='background:#EEF6EE;padding:6px'><i>" +
                  QString::fromStdString(cloze_->segment.english).toHtmlEscaped() +
@@ -22024,13 +22024,13 @@ private:
         } else if (m == 3 && readPos_ < readSegs_.size()) {
             const auto& s = readSegs_[readPos_];
             h += "<div style='color:#555'>Read first; Check/Reveal shows "
-                 "HGM's English (and counts as a peek); New drill moves on. "
+                 "Geshe Michael Roach's English (and counts as a peek); New drill moves on. "
                  "[" + QString::fromStdString(s.course) + ":" +
                  QString::number(s.seq) + "]</div><hr>" +
                  "<div style='font-size:20px'>" + disp(s.acip) + "</div>";
         } else if (m == 5 && trans_.id) {
             h += "<div style='color:#555'>Translate this yourself below — "
-                 "then Check reveals HGM's own rendering and a terminology "
+                 "then Check reveals Geshe Michael Roach's own rendering and a terminology "
                  "diff. Nothing grades your style; the master's version "
                  "teaches. [" + QString::fromStdString(trans_.course) + ":" +
                  QString::number(trans_.seq) + "]</div><hr>" +
@@ -22085,7 +22085,7 @@ private:
                          .arg(i + 1)
                          .arg(disp(order_->chunks[i]));
             h += "<div style='background:#EEF6EE;padding:6px;margin-top:6px'>"
-                 "<b>HGM:</b> " +
+                 "<b>GMR:</b> " +
                  QString::fromStdString(order_->segment.english).toHtmlEscaped() +
                  "</div>";
             if (order_->verb.confident)
@@ -22120,19 +22120,19 @@ private:
                  QString::fromStdString(part_->explanation).toHtmlEscaped() +
                  "</small></div>";
             h += "<div style='background:#EEF6EE;padding:6px;margin-top:6px'>"
-                 "<b>HGM:</b> " +
+                 "<b>GMR:</b> " +
                  QString::fromStdString(part_->segment.english).toHtmlEscaped() +
                  "</div>";
         } else if (m == 3 && readPos_ < readSegs_.size()) {
             const auto& s = readSegs_[readPos_];
-            h += "<div style='background:#EEF6EE;padding:6px'><b>HGM:</b> " +
+            h += "<div style='background:#EEF6EE;padding:6px'><b>GMR:</b> " +
                  QString::fromStdString(s.english).toHtmlEscaped() + "</div>";
             if (progress_ && !revealed_)
                 progress_->recordSegmentRead(s.id, true,
                                              (long long)time(nullptr));
             revealed_ = true;
         } else if (m == 5 && trans_.id) {
-            h += "<div style='background:#EEF6EE;padding:6px'><b>HGM:</b> " +
+            h += "<div style='background:#EEF6EE;padding:6px'><b>GMR:</b> " +
                  QString::fromStdString(trans_.english).toHtmlEscaped() +
                  "</div>";
             const std::string draft = transDraft_->toPlainText().toStdString();
@@ -22158,7 +22158,7 @@ private:
                     }
                 }
                 h += QString("<div style='margin-top:4px'><small>terminology: "
-                             "%1 of %2 terms matched an HGM equivalent in "
+                             "%1 of %2 terms matched a Geshe Michael Roach equivalent in "
                              "your draft</small>%3</div>")
                          .arg(matched)
                          .arg(rep.terms.size())
@@ -22477,7 +22477,7 @@ public:
         auto* banner = new QLabel(
             "<b>Draft workspace</b> — paste the source, click a clause for "
             "its anchors, click a term for its corpus concordance. The "
-            "terminology check matches your draft against HGM's equivalents; "
+            "terminology check matches your draft against Geshe Michael Roach's equivalents; "
             "it never writes English for you.");
         banner->setWordWrap(true);   // clipped single-line in the audit
         row->addWidget(banner);
@@ -22600,7 +22600,7 @@ public:
         memBtn->setToolTip(
             "How has this phrase been rendered before? Select Tibetan "
             "in the source and press: every corpus segment containing "
-            "it (HGM's own renderings, binding) plus any matches from "
+            "it (Geshe Michael Roach's own renderings, binding) plus any matches from "
             "the Align pane's harvest (translator-authored, PENDING — "
             "labeled). The beginnings of a Project translation memory, "
             "built only from attested work.");
@@ -22762,7 +22762,7 @@ public:
         });
         auto* checkBtn = new QPushButton("Check terminology");
         checkBtn->setToolTip(
-            "Matches the English draft against HGM's equivalents. It "
+            "Matches the English draft against Geshe Michael Roach's equivalents. It "
             "flags what disagrees; it never writes English for you.");
         gEvid->addBig(checkBtn, "check");
         auto* toMssBtn = new QPushButton("Send to Manuscript →");
@@ -23037,7 +23037,7 @@ public:
                   a.contains("fae8d8") || a.contains("f7e3ea"),
               "anchor hue bands render");
         check(anchors_->toPlainText().contains(QString::fromUtf8("≡")),
-              "HGM glosses listed");
+              "Geshe Michael Roach glosses listed");
         showConcordance("sems can");
         {
             const QString conc = anchors_->toPlainText();
@@ -23074,7 +23074,7 @@ public:
             const QString pm = anchors_->toPlainText();
             const long phrTotal =
                 spine_.corpusCount("\"sems can thams cad\"");
-            check(pm.contains("HGM corpus"),
+            check(pm.contains("Geshe Michael Roach corpus"),
                   "phrase memory finds corpus renderings");
             // DATA-3: the 12-row fetch was printed as the count.
             check(phrTotal > 12,
@@ -24471,7 +24471,7 @@ public:
             mixed += t.matched.size() > 1;
             provisionalUsed += (!t.matched.empty() && t.provisional);
         }
-        QString h = QString("<div><b>%1 term(s)</b> · %2 without an HGM "
+        QString h = QString("<div><b>%1 term(s)</b> · %2 without an GMR "
                             "equivalent in the draft · %3 with mixed "
                             "renderings · %4 drafted from PROVISIONAL "
                             "glosses</div><hr>")
@@ -24497,7 +24497,7 @@ public:
                     gl += (shown > 1 ? " · " : "") +
                           QString::fromStdString(g).toHtmlEscaped();
                 }
-                h += "<br><small>no HGM equivalent found in the draft — HGM "
+                h += "<br><small>no Geshe Michael Roach equivalent found in the draft — GMR "
                      "has: " + gl + "</small>";
             } else {
                 QString m;
@@ -24554,10 +24554,10 @@ public:
         const long phraseTotal = spine_.corpusCount('"' + wy + '"');
         if (!segs.empty()) {
             h += (phraseTotal < 0
-                      ? QString("<div><b>HGM corpus</b> — segment count "
+                      ? QString("<div><b>Geshe Michael Roach corpus</b> — segment count "
                                 "unavailable; showing %1</div>")
                             .arg(segs.size())
-                      : QString("<div><b>HGM corpus</b> — %1 segment(s) "
+                      : QString("<div><b>Geshe Michael Roach corpus</b> — %1 segment(s) "
                                 "containing the phrase%2</div>")
                             .arg(phraseTotal)
                             .arg(phraseTotal > (long)segs.size()
@@ -26826,7 +26826,7 @@ public:
         auto* surveyBtn = new QPushButton("Survey\u2026");
         surveyBtn->setToolTip(
             "Translator's survey of the selected text: length, "
-            "vocabulary coverage against the HGM dictionary, "
+            "vocabulary coverage against the Geshe Michael Roach dictionary, "
             "difficulty signals \u2014 the sizing-up a translator "
             "does before committing.");
         connect(surveyBtn, &QPushButton::clicked,
@@ -29704,7 +29704,7 @@ public:
         check(report_->toPlainText().contains("honorific"),
               "honorific source term raises the respect advisory");
         // DATA-2 / house rule 1: the unmatched branch said "none of
-        // HGM's equivalents" for an AUTO-ALIGNED gloss, which is a
+        // Geshe Michael Roach's equivalents" for an AUTO-ALIGNED gloss, which is a
         // claim about authorship the tier does not support. ka ba is
         // auto-aligned in the shipped spine; nothing in this report
         // said so, because provHtml only fires for MATCHED terms.
@@ -29717,7 +29717,7 @@ public:
                   "unmatched auto-aligned term is surfaced");
             check(rp.contains("PROVISIONAL"),
                   "an unmatched auto-aligned gloss is tier-labeled "
-                  "PROVISIONAL, not attributed to HGM");
+                  "PROVISIONAL, not attributed to Geshe Michael Roach");
         }
         src_->clear();
         draft_->clear();
@@ -29993,7 +29993,7 @@ private:
             h += "<div><b>Possible collapsed distinctions</b></div>" +
                  sharedHtml + "<hr>";
         if (!unmHtml.isEmpty())
-            h += "<div><b>Terms without an HGM equivalent in the draft"
+            h += "<div><b>Terms without a Geshe Michael Roach equivalent in the draft"
                  "</b> <small>(first 12)</small></div>" + unmHtml +
                  "<hr>";
         if (!spreadHtml.isEmpty())
@@ -37830,8 +37830,8 @@ private:
           pages_ << p; }
         // 4 Lookup & Dictionaries
         { QFormLayout* f; Page p; p.title = "Lookup"; p.icon = "search"; p.blurb = "Dictionaries shown in Lookup"; p.keywords = {"lookup", "dictionary", "reference", "stardict", "Hopkins", "Das"};
-          p.w = pageWidget(f, "The HGM dictionary is always shown and always binding; the reference dictionaries are comparanda.");
-          cb(f, "lookup/showRefs", "Show reference dictionaries (Das, Hopkins, …) under the HGM entry", true);
+          p.w = pageWidget(f, "The Geshe Michael Roach dictionary is always shown and always binding; the reference dictionaries are comparanda.");
+          cb(f, "lookup/showRefs", "Show reference dictionaries (Das, Hopkins, …) under the Geshe Michael Roach entry", true);
           le(f, "lookup/stardictDir", "StarDict folder", "folder of .ifo/.idx/.dict files", true);
           p.save = [this] { saveChecks(checks_, {"lookup/showRefs"}); saveEdits(edits_, {"lookup/stardictDir"}); };
           pages_ << p; }
@@ -37893,7 +37893,7 @@ private:
           pages_ << p; }
         // 9 Colour Scheme & Theme (Sublime)
         { QFormLayout* f; Page p; p.title = "Colours"; p.icon = "image"; p.blurb = "Day or Night; the parchment palette"; p.keywords = {"colour", "color", "scheme", "theme", "night", "day", "parchment"};
-          p.w = pageWidget(f, "Two schemes ship: Day (parchment chrome, cream pages) and Night (dark chrome, cream pages), and Match system follows the Mac's own Light/Dark setting so night arrives on its own at sunset. Both keep the honesty colours — provisional tier, generated data, HGM binding — identical, so a label never changes meaning with the theme. Installable third-party schemes are not offered: nothing here may recolour a provenance label.");
+          p.w = pageWidget(f, "Two schemes ship: Day (parchment chrome, cream pages) and Night (dark chrome, cream pages), and Match system follows the Mac's own Light/Dark setting so night arrives on its own at sunset. Both keep the honesty colours — provisional tier, generated data, GMR binding — identical, so a label never changes meaning with the theme. Installable third-party schemes are not offered: nothing here may recolour a provenance label.");
           auto* day = new QRadioButton("Day"); auto* night = new QRadioButton("Night");
           auto* sys = new QRadioButton("Match system appearance");
           { const QString m = appearanceMode();
@@ -38677,7 +38677,7 @@ private:
                     QString::fromStdString(e.wylie) +
                     QString::fromUtf8(" — ") +
                     (e.hgm_gloss.empty()
-                         ? QString("(no HGM gloss — reference layers "
+                         ? QString("(no Geshe Michael Roach gloss — reference layers "
                                    "in Lookup)")
                          : QString::fromStdString(e.hgm_gloss.front())) +
                     (e.provisional() ? "   [PROVISIONAL]"
@@ -39195,7 +39195,7 @@ static QString translatorSurveyMarkdown(allcore::Spine& spine,
     m += "  - glossary: " + pct(glossary) + "\n";
     m += "  - PROVISIONAL (auto-aligned — amber): " + pct(prov) +
          "\n";
-    m += "  - reference-layer only (no HGM gloss): " + pct(refOnly) +
+    m += "  - reference-layer only (no Geshe Michael Roach gloss): " + pct(refOnly) +
          "\n";
     m += "- uncovered: " + pct(n - covered) + "\n\n";
     {
@@ -42169,7 +42169,7 @@ int main(int argc, char** argv) {
             add(QString("<div style='font-size:12px;color:#6E5F4B;"
                         "letter-spacing:1px'>APP %1 &nbsp;"
                         "\u00b7&nbsp; BUILT %2 &nbsp;"
-                        "\u00b7&nbsp; HGM DICTIONARY DATA v%3</div>")
+                        "\u00b7&nbsp; GMR DICTIONARY DATA v%3</div>")
                     .arg(QStringLiteral(ALL_APP_VERSION),
                          rel.isValid()
                              ? rel.toString("d MMMM yyyy")
@@ -42542,7 +42542,7 @@ int main(int argc, char** argv) {
                     "<h3>Who is speaking (the data hierarchy)</h3>"
                     "<p>Every block on a word's card wears a badge "
                     "saying whose voice it is:</p>"
-                    "<p><b style='color:#82672A'>HGM</b> — Geshe "
+                    "<p><b style='color:#82672A'>GMR</b> — Geshe "
                     "Michael's own attested English. Binding. The "
                     "point of the project."
                     "<br><b style='color:#1E6B4E'>EVIDENCE</b> — "
@@ -42556,7 +42556,7 @@ int main(int argc, char** argv) {
                     "material."
                     "<br><b style='color:#8C2F2B'>AI</b> — "
                     "model-drafted, unmistakably bannered, shown "
-                    "only where HGM is silent.</p>"
+                    "only where Geshe Michael Roach is silent.</p>"
                     "<p><i>The order never lies: a lower tier is "
                     "never dressed as a higher one. When the tool "
                     "doesn't know, it says so.</i></p>"
@@ -43307,12 +43307,12 @@ int main(int argc, char** argv) {
                                                 whitney, colloq,
                                                 "sems can");
             lk(h.contains(QString::fromUtf8("≡")),
-               "known term returns HGM equivalents");
+               "known term returns Geshe Michael Roach equivalents");
             const int hgmAt = h.indexOf(QString::fromUtf8("≡"));
             int refAt = h.indexOf("Chandra");
             if (refAt < 0) refAt = h.indexOf("Hopkins");
             lk(refAt < 0 || hgmAt < refAt,
-               "HGM binding layer precedes reference layers");
+               "GMR binding layer precedes reference layers");
             const QString hh = lookupResultsHtml(spine, refdict, mvp,
                                                  whitney, colloq,
                                                  "gzigs");
@@ -43763,6 +43763,10 @@ int main(int argc, char** argv) {
                 const ApparatusNote* r4 = nullptr;
                 for (const auto& n : *g_appNotes)
                     for (const auto& a : n.anchors)
+                        // DATA, not display: this text is written by the
+                        // release package's apparatus notes, so the match must
+                        // stay in the package's own words even though the
+                        // interface no longer uses them (2026-09-09 rename).
                         if (!r4 && a.evidence.contains(
                                        "HGM's own English equivalent"))
                             r4 = &n;
@@ -44995,7 +44999,7 @@ int main(int argc, char** argv) {
             if (spine.metaValue("release_version") == "0.27.2")
                 ok = ok && n == 105634 && hgm == 12004;
             log << QString("  [%1] F4 tier arithmetic: %2 entries "
-                           "(meta %3) · tiers sum %4 · HGM-glossed "
+                           "(meta %3) · tiers sum %4 · GMR-glossed "
                            "%5")
                        .arg(ok ? "PASS" : "FAIL")
                        .arg(n).arg(metaN).arg(sum).arg(hgm);
@@ -45018,7 +45022,7 @@ int main(int argc, char** argv) {
                 if (!e.provisional() && hasGloss &&
                     h.contains("PROVISIONAL (auto-aligned)"))
                     ++v2;   // non-provisional slandered
-                if (!hasGloss && !h.contains("no HGM equivalent"))
+                if (!hasGloss && !h.contains("no Geshe Michael Roach equivalent"))
                     ++v3;   // silent absence
                 // provenance mentions INSIDE the AI banner are
                 // labeled by the banner itself ("from hopkins ...")
@@ -45050,7 +45054,7 @@ int main(int argc, char** argv) {
                             !h.contains("PROVISIONAL (auto-aligned)"))
                             ++v1;
                         if (!hasGloss &&
-                            !h.contains("no HGM equivalent"))
+                            !h.contains("no Geshe Michael Roach equivalent"))
                             ++v3;
                     }
                 }
@@ -45060,7 +45064,7 @@ int main(int argc, char** argv) {
             log << QString("  [%1] F1 honesty sweep: %2 cards — "
                            "prov-unmarked %3 · mislabeled %4 · "
                            "silent-absence %5 · ref-unlabeled %6 · "
-                           "AI-beside-HGM %7 · weird-slice %8")
+                           "AI-beside-GMR %7 · weird-slice %8")
                        .arg(ok ? "PASS" : "FAIL")
                        .arg(rendered)
                        .arg(v1).arg(v2).arg(v3).arg(v4).arg(v5)
@@ -45905,7 +45909,7 @@ int main(int argc, char** argv) {
                 qEnvironmentVariable("DCT_SHOT_CARD_HTML");
             if (!cardOut.isEmpty())
                 for (auto* tb : overlay->findChildren<QTextBrowser*>())
-                    if (tb->toPlainText().contains("HGM")) {
+                    if (tb->toPlainText().contains("GMR")) {
                         QFile cf(cardOut);
                         if (cf.open(QIODevice::WriteOnly |
                                     QIODevice::Truncate))
