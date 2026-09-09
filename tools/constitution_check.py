@@ -127,14 +127,16 @@ def main():
     # growth fails the gate until a human confirms the new site tiers
     # its output (curated/glossary/PROVISIONAL, colour + label) and
     # bumps tools/constitution_hgm_baseline.txt in the same commit.
-    hgm_sites = main_cpp.count("hgm_gloss")
+    # Batch 5 gate fix (2026-09-09): the census reads app/main.cpp AND every
+    # app/*.inc — a gloss printed from a pane file is a consumer site too.
+    hgm_sites = r3_text.count("hgm_gloss")
     hgm_baseline_path = os.path.join(root,
                                      "tools/constitution_hgm_baseline.txt")
     if os.path.exists(hgm_baseline_path):
         hgm_base = int(read(hgm_baseline_path).strip())
         if hgm_sites > hgm_base:
             fails.append(
-                f"G2 app/main.cpp: hgm_gloss consumer sites grew "
+                f"G2 app/main.cpp + app/*.inc: hgm_gloss consumer sites grew "
                 f"{hgm_base} -> {hgm_sites}. Review each new site: the "
                 f"binding gloss may only render TIERED (curated/"
                 f"glossary/PROVISIONAL, colour and label), then bump "
