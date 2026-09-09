@@ -2891,6 +2891,18 @@ static QCursor g_busyCursor() {
     return cur;
 }
 
+// Wear the wheel for the length of a slow job. Adam, 2026-09-09: the
+// cursor was built but the operations that actually make a person wait
+// never set it, so the wheel existed and was never seen. A guard makes
+// that a one-line habit; anything that can run longer than an eyeblink
+// takes one. It is a no-op under the harness, where there is no pointer.
+struct BusyWheel {
+    BusyWheel() { if (!g_harnessRun) QApplication::setOverrideCursor(g_busyCursor()); }
+    ~BusyWheel() { if (!g_harnessRun) QApplication::restoreOverrideCursor(); }
+    BusyWheel(const BusyWheel&) = delete;
+    BusyWheel& operator=(const BusyWheel&) = delete;
+};
+
 // The Anthropic API key for the two labeled-AI features. Sources, in
 // order: the environment (terminal launch), then the key file at
 // ~/Library/Application Support/Diamond Cutter Translation Tool/
@@ -8389,6 +8401,14 @@ public:
                   "Date and Time offers the Tibetan year from the calendar engine");
             check(g_busyCursor().shape() == Qt::BitmapCursor || g_busyCursor().shape() == Qt::WaitCursor,
                   "the busy cursor is the dharma wheel when a font has it, else the platform wait cursor");
+            {   // Adam, 2026-09-09: the wheel existed but the slow jobs never wore it.
+                // A guard makes it one line, and it must be harmless under the harness
+                // (no pointer to override) — a leaked override would outlive the run.
+                const int before = QApplication::overrideCursor() ? 1 : 0;
+                { BusyWheel w; }
+                check((QApplication::overrideCursor() ? 1 : 0) == before,
+                      "the busy-wheel guard restores the cursor it took, and is a no-op under the harness");
+            }
             check(editops::htmlToPlain("<p><b>KA</b> kha</p>") == "KA kha", "Compare with Saved Version flattens saved Manuscript HTML to plain text (F0)");
             check(folioMarkerRe().match("x @12b y").hasMatch() && folioMarkerRe().match("@0012").hasMatch() && !folioMarkerRe().match("@012BX").hasMatch(),
                   "the app's folio matcher is the core's one definition: @12b and @0012 match, @012BX does not (F0)");
@@ -27048,26 +27068,37 @@ private:
     }
 
     // the same table, restricted to one person's present works
+    // The person's own texts, built straight from the file index. The index
+    // already maps a catalog work to the files that hold it, so this needs
+    // no walk of the library at all: a hundred rows instead of seven and a
+    // half thousand, and none of them created only to be destroyed.
     void fillListForPerson(const QString& pid) {
+        BusyWheel wheel;
         buildAuthorIndex();
         const QJsonObject r = personByPid_.value(pid);
-        QSet<QString> keep;
-        for (const auto& w : r.value("works").toArray())
-            keep.insert(w.toString());
-        fillList();
-        for (int i = list_->rowCount() - 1; i >= 0; --i) {
-            const QString path =
-                list_->item(i, 0)->data(Qt::UserRole).toString();
-            // key the row exactly as ensureFileIndex() keyed the
-            // file, so the two can never disagree
-            static const QRegularExpression keyRe(R"(^([A-Za-z]+)0*(\d+))");
-            const auto m = keyRe.match(QFileInfo(path).fileName());
-            const QString wk =
-                m.hasMatch() ? m.captured(1).toUpper() + m.captured(2)
-                             : QString();
-            if (wk.isEmpty() || !keep.contains(wk)) list_->removeRow(i);
+        list_->setUpdatesEnabled(false);
+        list_->setSortingEnabled(false);
+        list_->setRowCount(0);
+        QStringList shown;
+        for (const auto& w : r.value("works").toArray()) {
+            const QString wk = w.toString();
+            for (const QString& f : filesByWork_.value(wk))
+                if (QFileInfo::exists(f)) { addFileRow(f); shown << wk; }
         }
+        list_->setSortingEnabled(true);
+        list_->resizeColumnsToContents();
+        list_->setColumnWidth(0, qMin(list_->columnWidth(0), 220));
+        list_->setUpdatesEnabled(true);
+        // say what the list is showing, so a short list never reads as a failure
+        if (info_)
+            info_->setHtml(list_->rowCount()
+                ? QString("<div style='font-size:12px;color:%1'>Showing <b>%2</b> file(s) covering <b>%3</b> of this person's works held here. "
+                          "Sort by any column; double-click a row to open it in the Overlay.</div>")
+                      .arg(ux::kSoft).arg(list_->rowCount()).arg(QSet<QString>(shown.begin(), shown.end()).size())
+                : QString("<div style='font-size:12px;color:%1'>None of this person's works are held here as files. "
+                          "The list is empty for that reason, not because the search failed.</div>").arg(ux::kSoft));
     }
+    int listRowCount() const { return list_->rowCount(); }
 
     // the residual path: a catalog author NAME with no person record
     void showAuthorWorksByName(const QString& name) {
@@ -27397,7 +27428,42 @@ private:
         return titles_.value(m.captured(1).toUpper() + m.captured(2));
     }
 
-    void fillList() {
+    // One definition of a row, used by the whole-library walk and by the
+    // person view, so the two can never drift apart.
+    void addFileRow(const QString& p) {
+        const QFileInfo fi(p);
+        const auto a = allcore::decodeAcipFilename(p.toStdString());
+        const int r = list_->rowCount();
+        list_->insertRow(r);
+        auto* name = new QTableWidgetItem(fi.fileName());
+        name->setData(Qt::UserRole, p);
+        list_->setItem(r, 0, name);
+        list_->setItem(r, 1,
+                       new QTableWidgetItem(
+                           a.recognized ? QString::fromStdString(a.collection)
+                           : (p.contains("/ocr_out/") ? "ocr-derived"
+                              : p.contains("/my_materials/") ? "my materials" : "")));
+        auto* num = new QTableWidgetItem;
+        num->setData(Qt::EditRole, a.recognized ? QString::fromStdString(a.number).toInt() : -1);
+        list_->setItem(r, 2, num);
+        list_->setItem(r, 3, new QTableWidgetItem(englishTitle(fi.fileName())));
+        list_->setItem(r, 4, new QTableWidgetItem(QString::fromStdString(a.status)));
+        list_->setItem(r, 5, new QTableWidgetItem(QString::fromStdString(a.language)));
+        auto* kb = new QTableWidgetItem;
+        kb->setData(Qt::EditRole, (int)(fi.size() / 1024));
+        list_->setItem(r, 6, kb);
+    }
+
+    // onlyWorks: when given, only files whose catalog key is in the set are
+    // built at all. Before 2026-09-09 the person view called fillList() to
+    // build EVERY row in the library and then removed them one at a time
+    // until the person's own were left — nine thousand rows created and
+    // nearly nine thousand destroyed, each removal shifting the ones after
+    // it and repainting, to show a hundred. That is the wait Adam reported.
+    // Filtering at the source is the same answer in a fraction of the work.
+    void fillList(const QSet<QString>* onlyWorks = nullptr) {
+        BusyWheel wheel;   // the library walk is never instant
+        list_->setUpdatesEnabled(false);
         list_->setSortingEnabled(false);
         list_->setRowCount(0);
         QDirIterator it(libRoot_, QDir::Files,
@@ -27406,43 +27472,20 @@ private:
             const QString p = it.next();
             const QFileInfo fi(p);
             if (fi.fileName().startsWith('.')) continue;
-            const auto a = allcore::decodeAcipFilename(p.toStdString());
-            const int r = list_->rowCount();
-            list_->insertRow(r);
-            auto* name = new QTableWidgetItem(fi.fileName());
-            name->setData(Qt::UserRole, p);
-            list_->setItem(r, 0, name);
-            list_->setItem(
-                r, 1,
-                new QTableWidgetItem(
-                    a.recognized
-                        ? QString::fromStdString(a.collection)
-                        : (p.contains("/ocr_out/") ? "ocr-derived"
-                           : p.contains("/my_materials/")
-                               ? "my materials"
-                               : "")));
-            auto* num = new QTableWidgetItem;
-            num->setData(Qt::EditRole,
-                         a.recognized
-                             ? QString::fromStdString(a.number).toInt()
-                             : -1);
-            list_->setItem(r, 2, num);
-            list_->setItem(r, 3,
-                           new QTableWidgetItem(englishTitle(
-                               fi.fileName())));
-            list_->setItem(r, 4,
-                           new QTableWidgetItem(QString::fromStdString(
-                               a.status)));
-            list_->setItem(r, 5,
-                           new QTableWidgetItem(QString::fromStdString(
-                               a.language)));
-            auto* kb = new QTableWidgetItem;
-            kb->setData(Qt::EditRole, (int)(fi.size() / 1024));
-            list_->setItem(r, 6, kb);
+            if (onlyWorks) {
+                // keyed exactly as ensureFileIndex() keys a file, so the
+                // filter and the index can never disagree
+                static const QRegularExpression keyRe(R"(^([A-Za-z]+)0*(\d+))");
+                const auto km = keyRe.match(fi.fileName());
+                const QString wk = km.hasMatch() ? km.captured(1).toUpper() + km.captured(2) : QString();
+                if (wk.isEmpty() || !onlyWorks->contains(wk)) continue;
+            }
+            addFileRow(p);
         }
         list_->setSortingEnabled(true);
         list_->resizeColumnsToContents();
         list_->setColumnWidth(0, qMin(list_->columnWidth(0), 220));
+        list_->setUpdatesEnabled(true);
     }
 
     // One door for everything you might have on disk. Adam
