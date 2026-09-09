@@ -146,7 +146,7 @@ public:
         outer->setContentsMargins(0, 0, 0, 0); outer->setSpacing(0);
         buildRibbon();
         // ---- page switcher (Text · Folders · Three-Way) + stacked pages
-        auto* switcher = new QHBoxLayout; switcher->setContentsMargins(6, 3, 6, 0); switcher->setSpacing(4);
+        auto* switcher = new QHBoxLayout; switcher->setContentsMargins(6, 3, 6, 0); switcher->setSpacing(4); switcher_ = switcher;
         pageBtns_ = new QButtonGroup(this);
         auto pageBtn = [&](const QString& label, int id) { auto* b = new QToolButton; b->setText(label); b->setCheckable(true); b->setAutoRaise(true); pageBtns_->addButton(b, id); switcher->addWidget(b); return b; };
         pageBtn("Text Compare", 0)->setChecked(true); pageBtn("Folder Compare", 1); pageBtn("Three-Way Merge", 2);
@@ -224,6 +224,13 @@ public:
     }
     void showPage(int id) { if (id < pages_->count()) { pages_->setCurrentIndex(id); if (auto* b = pageBtns_->button(id)) b->setChecked(true); } }
     int currentPage() const { return pages_->currentIndex(); }
+    // batch 5 F7: a page installed from outside gets its switcher button here (before the trailing stretch)
+    QToolButton* addPageButton(const QString& label, int id) {
+        auto* b = new QToolButton; b->setText(label); b->setCheckable(true); b->setAutoRaise(true); pageBtns_->addButton(b, id);
+        switcher_->insertWidget(switcher_->count() - 1, b); return b;
+    }
+    QString sessionsDirPublic() const { return sessionsDir(); }
+    const Options& options() const { return opts_; }   // the RULES ribbon's options — Table Compare uses them, no second rule set
     QLabel* statusLabel() const { return status_; }
     const QString& root() const { return root_; }
 
@@ -926,7 +933,7 @@ private:
     };
 
     QString root_;
-    QStackedWidget* pages_ = nullptr; QWidget* textPage_ = nullptr; QButtonGroup* pageBtns_ = nullptr;
+    QStackedWidget* pages_ = nullptr; QWidget* textPage_ = nullptr; QButtonGroup* pageBtns_ = nullptr; QHBoxLayout* switcher_ = nullptr;
     std::vector<std::pair<int, int>> pins_;
     QStringList aLines_, bLines_;
     QString pathL_, pathR_, nameLText_, nameRText_, eolL_ = "\n", eolR_ = "\n";

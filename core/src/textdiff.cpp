@@ -62,16 +62,12 @@ bool looksTibetan(const std::string& s) {
 
 // ---------------------------------------------------------- normalise
 // collapseWs: src/text_util.h
+// The rule moved to textspan::toEwtsLine (analysis-suite F0) so Compare and
+// the study engines route script through one function; the body is that
+// one, unchanged, and this name is kept so the call sites below read as
+// they always did.
 static std::string toEwts(const std::string& line, bool* ok) {
-    if (hasTibetanUnicode(line)) {
-        const auto r = unicodeToWylie(line);
-        if (r.warns > 0) { if (ok) *ok = false; return line; }
-        return r.wylie;
-    }
-    bool upper = false, lower = false;
-    for (unsigned char c : line) { if (c >= 'A' && c <= 'Z') upper = true; else if (c >= 'a' && c <= 'z') lower = true; }
-    if (upper && !lower) return acipToEwts(line);
-    return line;   // Wylie or English: already the common form
+    return textspan::toEwtsLine(line, ok);
 }
 std::string normalizeLine(const std::string& in, const Options& o, bool* normalisedOk) {
     if (normalisedOk) *normalisedOk = true;
@@ -574,12 +570,11 @@ std::string sideBySideHtml(const std::string& aName, const std::string& bName,
     return o.str();
 }
 
+// The walk moved to textspan::citeAtLine (analysis-suite F0); citeAt() is
+// the same walk taking a byte offset, so a cite printed here and a cite
+// printed by a study surface are the same string.
 static std::string citeFor(const std::vector<std::string>& a, int line0) {
-    for (int i = std::min(line0, (int)a.size() - 1); i >= 0; --i) {
-        const std::string last = textspan::lastFolio(a[i]);   // the one definition (textspan.h)
-        if (!last.empty()) return "@" + last + "." + std::to_string(line0 - i + 1);
-    }
-    return "line " + std::to_string(line0 + 1);
+    return textspan::citeAtLine(a, line0);
 }
 
 std::vector<std::string> applySelected(const std::vector<std::string>& a, const std::vector<std::string>& b,

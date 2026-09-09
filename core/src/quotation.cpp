@@ -3,43 +3,19 @@
 #include <cctype>
 
 #include "allcore/engines.h"
+#include "allcore/textspan.h"
 
 namespace allcore {
 
 namespace {
 
 // syllable tokenization shared by passage and corpus sides — identical
-// normalization on both sides is what makes the comparison exact
+// normalization on both sides is what makes the comparison exact.
+// The body moved to textspan (analysis-suite F0) so the study engines
+// tokenize with THIS function rather than a fifth copy of it; nothing
+// about the tokenization changed, which is what quotation_smoke pins.
 std::vector<std::string> syllables(const std::string& wylie) {
-    std::vector<std::string> out;
-    std::string cur;
-    auto flush = [&] {
-        // strip punctuation from the edges; keep wylie-significant marks
-        // ('a-chung apostrophe, +, ., ~) inside the syllable
-        size_t b = 0, e = cur.size();
-        while (b < e && !std::isalnum((unsigned char)cur[b]) &&
-               cur[b] != '\'')
-            ++b;
-        while (e > b && !std::isalnum((unsigned char)cur[e - 1]) &&
-               cur[e - 1] != '\'')
-            --e;
-        std::string s = cur.substr(b, e - b);
-        for (auto& c : s)
-            if (c >= 'A' && c <= 'Z') c = (char)(c - 'A' + 'a');
-        // page markers (@012a) and pure numbers are not text
-        if (!s.empty() && s[0] != '@' &&
-            s.find_first_not_of("0123456789") != std::string::npos)
-            out.push_back(s);
-        cur.clear();
-    };
-    for (char c : wylie + " ") {
-        if (c == ' ' || c == '\t' || c == '\n' || c == '\r' || c == '/' ||
-            c == '|' || c == ',' || c == ';')
-            flush();
-        else
-            cur += c;
-    }
-    return out;
+    return textspan::syllablesWylie(wylie);
 }
 
 }  // namespace

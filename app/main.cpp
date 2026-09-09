@@ -47,6 +47,10 @@ static QCursor g_busyCursor();   // defined beside g_harnessRun
 #include "allcore/filewalk.h"
 #include "allcore/textpatch.h"
 #include "allcore/docx_redline.h"
+#include "allcore/provenance.h"
+#include "allcore/table.h"
+#include "allcore/idioms.h"
+#include "allcore/tablediff.h"
 #include <QKeyEvent>
 #include <QStringListModel>
 #include <QCompleter>
@@ -3216,6 +3220,10 @@ static void remember(QPlainTextEdit* w, const QString& key,
 // exists
 static std::function<void(const QString&, int)> g_openAtLine;
 static std::function<void(const QString&, const QStringList&)> g_replaceInFolders;   // F4: (needle, folders) from the Search pane
+static std::function<void(const QString&)> g_studyPassage;   // batch 5: "Where else does this passage appear?" (selection → Study ▸ Passages)
+static std::function<void(const QString&)> g_studySay;       // batch 5: a notice on the Study pane's status line (raises the pane)
+// The idiom bank, opened from wherever the translator is: (text name, whole text, the selection)
+static std::function<void(const QString&, const QString&, const QString&)> g_openIdiomBank;
 static std::function<void(const QStringList&)> g_replaceInFiles;                      // F4: from the Files pane selection
 // File menu → the Library pane's importer (T8; one code path)
 static std::function<void()> g_importRelease;
@@ -9073,6 +9081,12 @@ public:
                     auto* sep = new QAction(menu);
                     sep->setSeparator(true);
                     pre << sep;
+                if (cur.hasSelection()) {   // batch 5: hand the selection to Study ▸ Passages
+                    auto* where = new QAction("Where else does this passage appear?", menu);
+                    const QString sel = cur.selectedText();
+                    connect(where, &QAction::triggered, [sel] { if (g_studyPassage) g_studyPassage(sel); });
+                    pre << where;
+                }
                     menu->insertActions(menu->actions().value(0),
                                         pre);
                 }
@@ -21996,6 +22010,21 @@ auto* secEvid = new QLabel("<span style='color:#9A7A33;font-size:10px;letter-spa
         gEvid->addBig(memBtn, "search");
         QObject::connect(memBtn, &QPushButton::clicked,
                          [this] { phraseMemory(); });
+        {   // 2026-09-09: the idiom bank — which forms are fixed expressions,
+            // how Geshe Michael has rendered them, and how to put a new one
+            // forward for his ruling.
+            auto* idiomBtn = new QPushButton("Idioms");
+            idiomBtn->setToolTip(
+                "The idiom register: which Tibetan forms are fixed expressions, "
+                "with Geshe Michael's own renderings from his courses. Select "
+                "Tibetan in the source first to look it up, or open the bank to "
+                "propose a new idiom for his ruling.");
+            gEvid->addBig(idiomBtn, "quote");
+            QObject::connect(idiomBtn, &QPushButton::clicked, [this] {
+                QString sel = source_->textCursor().selectedText();
+                if (g_openIdiomBank) g_openIdiomBank(QFileInfo(draftPath_).fileName().isEmpty() ? QString("the source") : QFileInfo(draftPath_).fileName(), source_->toPlainText(), sel);
+            });
+        }
         QObject::connect(quoteBtn, &QPushButton::clicked,
                          [this] { detectQuotes(); });
         // same crush class as the Overlay column (fit sweep,
@@ -24066,9 +24095,11 @@ protected:
 };
 
 #include "compare_pane.inc"
+#include "table_compare.inc"     // batch 5 F7: Table Compare — the Compare pane's fourth page (allcore::table + tablediff)
 #include "normalize_pane.inc"   // F3 Normalize… with preview (needs cmp::, g_compareTexts, ComparePane)
 #include "replace_files.inc"     // F4 Replace in Files… with mandatory preview (needs normalize::, versions, filewalk)
 #include "apply_patch.inc"       // F5 Apply Patch… (needs replf::readForRewrite / bytesForWrite, textpatch)
+#include "study_pane.inc"        // batch 5 F1: the Study pane shell (textspan at the boundary; pages arrive with their engines)
 
 class FilesPane : public QWidget {
 public:
@@ -25998,6 +26029,18 @@ public:
             "Import data release…",
             [this] { importDataRelease(); });
         g_importRelease = [this] { importDataRelease(); };
+        {   // batch 5 F1: the selected text goes to Study without leaving the Library
+            auto selectedToStudy = [this](int page) {
+                const int r = list_ ? list_->currentRow() : -1;
+                const QString p = (r >= 0 && list_->item(r, 0)) ? list_->item(r, 0)->data(Qt::UserRole).toString() : QString();
+                if (p.isEmpty() || !QFileInfo(p).isFile()) { if (g_studySay) g_studySay("Select a text in the Library list first, then choose Statistics or Repeated passages from Maintenance."); return; }
+                const auto L = cmp::readText(p);
+                if (!L.ok || L.binary) { if (g_studySay) g_studySay("That Library entry is not a readable text file: " + QFileInfo(p).fileName()); return; }
+                if (g_studyText) g_studyText(QFileInfo(p).fileName(), L.text, p, page);
+            };
+            maintMenu->addAction("Statistics for the selected text…", [selectedToStudy] { selectedToStudy(0); });
+            maintMenu->addAction("Repeated passages in the selected text…", [selectedToStudy] { selectedToStudy(1); });
+        }
         // These hooks lived INSIDE loadPersons(), which is lazy —
         // so the Overlay's author area existed only after some
         // other surface had already triggered a person lookup.
@@ -32385,6 +32428,8 @@ static void fileProposal(QWidget* parent, allcore::ProposalKind kind,
         QMessageBox::warning(parent, "Could not save",
                              "The proposals folder could not be written.");
 }
+
+#include "idioms.inc"          // the idiom bank and register (needs fileProposal's neighbours: g_proposalsDir, g_userName, isoToday)
 
 static void showJaePage(QWidget* parent, int page) {
 #ifdef ALL_HAVE_QTPDF
@@ -38949,6 +38994,15 @@ int main(int argc, char** argv) {
     };
     g_applyPatchSideHook = patchapp::g_applyPatchSide;
     const ComparePages cmpPages = installComparePages(comparePane);
+    auto* tablePage = installTableComparePage(comparePane, root, &spine);   // batch 5 F7
+    auto* studyPane = new StudyPane(root, spine);   // batch 5 F1
+    tabs.addTab(studyPane, "Study");
+    g_studyText = [studyPane](const QString& n, const QString& t, const QString& p, int page) { studyPane->setText(n, t, p); studyPane->showPage(page); if (g_raisePane) g_raisePane(studyPane); };
+    g_studyPassage = [studyPane](const QString&) { studyPane->showPage(1); if (g_raisePane) g_raisePane(studyPane); };   // the selection becomes the query when the Passages page lands (F2)
+    g_openIdiomBank = [root, &spine, &win](const QString& name, const QString& text, const QString& sel) {
+        idiombank::openBank(root, root, spine, &win, name, text, sel);
+    };
+    g_studySay = [studyPane](const QString& m) { studyPane->statusLabel()->setText(ux::sourceBadge(ux::Epistemic::Machine) + m.toHtmlEscaped()); if (g_raisePane) g_raisePane(studyPane); };
     tabs.addTab(comparePane, "Compare");
     auto* goferPane = new GoferPane(spine, root);
     g_goferQuery = [goferPane](const QString& q) {
@@ -39529,7 +39583,7 @@ int main(int argc, char** argv) {
                 {"Draft", "Manuscript", "Apparatus", "Review",
                  "Align"});
         mkGroup("Research",
-                {"Search", "Lookup", "Sanskrit", "Convert", "Analysis", "Compare"});
+                {"Search", "Lookup", "Sanskrit", "Convert", "Analysis", "Study", "Compare"});
         mkGroup("Learn", {"Trainer", "Drills"});
         mkGroup("Input", {"Input", "OCR"});
         mkGroup("Catalog", {"Catalog"});
@@ -40760,6 +40814,34 @@ int main(int argc, char** argv) {
             const QString savedText = name == "Manuscript" ? editops::htmlToPlain(saved.text) : saved.text;   // F0: both sides plain
             if (g_compareTexts) g_compareTexts(QFileInfo(path).fileName() + " (on disk)", savedText, QFileInfo(path).fileName() + " (editing)", text);
         });
+        QObject::connect(cmpM->addAction("Table Compare\u2026"), &QAction::triggered, [comparePane, tablePage] {   // batch 5 F7
+            comparePane->showPage(3); tablePage->focusLeft(); if (g_raisePane) g_raisePane(comparePane);
+        });
+        QObject::connect(tm->addAction("Idioms\u2026"), &QAction::triggered, [frontDoc, msg] {
+            QString name, text, path; frontDoc(name, text, path);
+            QString sel;
+            if (auto* pe = qobject_cast<QPlainTextEdit*>(QApplication::focusWidget())) sel = pe->textCursor().selectedText();
+            else if (auto* te = qobject_cast<QTextEdit*>(QApplication::focusWidget())) sel = te->textCursor().selectedText();
+            if (!g_openIdiomBank) { msg("The idiom bank is not in this build."); return; }
+            g_openIdiomBank(path.isEmpty() ? name : QFileInfo(path).fileName(), text, sel);
+        });
+        {   // batch 5 F1: Tools ▸ Study ▸ … (four items, no accelerators — D7)
+            QMenu* stM = tm->addMenu("Study");
+            auto toStudy = [frontDoc, msg, studyPane, overlay](int page) {
+                QString name, text, path; frontDoc(name, text, path);
+                if (text.isEmpty()) { msg("No text is open in front — open a document, draft or manuscript first, or use Study ▸ Text…"); return; }
+                studyPane->setText(path.isEmpty() ? name : QFileInfo(path).fileName(), text, path, name == "Document" ? overlay->documentEncoding() : "UTF-8");
+                studyPane->showPage(page); if (g_raisePane) g_raisePane(studyPane);
+            };
+            QObject::connect(stM->addAction("Statistics for This Text\u2026"), &QAction::triggered, [toStudy] { toStudy(0); });
+            QObject::connect(stM->addAction("Repeated Passages in This Text\u2026"), &QAction::triggered, [toStudy] { toStudy(1); });
+            QObject::connect(stM->addAction("Compare This Text with Others\u2026"), &QAction::triggered, [toStudy] { toStudy(2); });
+            QObject::connect(stM->addAction("Entities in This Text\u2026"), &QAction::triggered, [toStudy] { toStudy(3); });
+            StudyPane::g_studyFrontDoc = [toStudy, studyPane] { toStudy(studyPane->currentPage()); };
+            auto frontAvail = [overlay, draftPane, manuscriptPane, studyPane] { studyPane->setFrontAvailable(!overlay->documentText().isEmpty() || !draftPane->draftText().isEmpty() || !manuscriptPane->manuscriptText().isEmpty()); };
+            QObject::connect(&tabs, &QTabWidget::currentChanged, [frontAvail](int) { frontAvail(); });
+            frontAvail();
+        }
         QObject::connect(cmpM->addAction("Compare with Version\u2026"), &QAction::triggered, [overlay, draftPane, manuscriptPane, active, msg] {   // F1
             if (active(manuscriptPane)) manuscriptPane->openVersions();
             else if (active(draftPane)) draftPane->openVersions();
@@ -42162,6 +42244,7 @@ int main(int argc, char** argv) {
     // --compare <left> <right> [report.(html|patch|md|csv)]: the engine
     // from the command line; exit 1 when the texts differ (2026-09-08)
     if (const int apIx = cliArgs.indexOf("--apply-patch"); apIx >= 0) return patchapp::cli(cliArgs, apIx);   // F5
+    if (const int tcIx = cliArgs.indexOf("--table-compare"); tcIx >= 0) return tablecmp::TableComparePage::cli(cliArgs, tcIx);   // batch 5 F7
     const int cmpIx = cliArgs.indexOf("--compare");
     if (cmpIx >= 0 && cmpIx + 2 < cliArgs.size()) {
         const auto A = cmp::readText(cliArgs[cmpIx + 1]), B = cmp::readText(cliArgs[cmpIx + 2]);
@@ -42234,6 +42317,9 @@ int main(int argc, char** argv) {
         fails += draftPane->selfTest(log);
         fails += manuscriptPane->selfTest(log);
         fails += comparePane->selfTest(log);
+        fails += studyPane->selfTest(log);   // batch 5 F1 shell
+        fails += idiombank::selfTest(log, root, root, spine);   // the idiom bank
+        fails += tablePage->selfTest(log);   // batch 5 F7
         {   // F3 Normalize (selftests 17-23) — needs the Overlay, Compare and Manuscript together
             int nf = 0;
             normalize::selfTest(overlay, comparePane, [manuscriptPane] { return manuscriptPane->manuscriptText(); }, root, [&](bool ok, const char* what) {
