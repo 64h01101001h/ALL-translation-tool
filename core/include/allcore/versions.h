@@ -113,4 +113,52 @@ std::string sha1Hex(const std::string& bytes);          // RFC 3174 / FIPS 180-4
 std::string serializeMeta(const Meta&);
 bool parseMeta(const std::string& json, Meta& out);
 
+// ------------------------------------------------------------ changesets ----
+// One batch run — Replace in Files…, Normalize in Files… — as a durable audit
+// object: <versionsRoot>/_changesets/<id>.json, schema "all-changeset/1".
+// The '_' keeps the folder out of every docKey scan (list() ignores '_' names,
+// byChangeset() skips '_' directories), so the record and the pre-replace
+// Versions it names can share one root without either seeing the other as its
+// own kind. The two find each other from either end: the record lists each
+// file's preStamp, and each banked Version carries this id in meta.changeset.
+//
+// Honesty rules this record enforces:
+//  - specJson / scopeJson are the CALLER's spec and scope objects, carried
+//    verbatim as raw JSON object text and never interpreted here — core knows
+//    nothing of needles, globs or file caps, and must not pretend to. Anything
+//    that is not a complete JSON object is written as null, never half-kept.
+//  - Every file that was read into the plan is listed with its own `status`
+//    (changed | skipped:<reason> | write-failed) — a skip is named, never
+//    dropped — plus the pre/post SHA-1s an undo needs to prove the file has
+//    not moved since the run.
+//  - `undone` is written once, by markChangesetUndone, with the counts the
+//    undo actually achieved: a run whose undo skipped a file says so forever.
+struct ChangesetFile { std::string path, docKey, preStamp, preSha1, postSha1, eol, status; int occurrences = 0, unticked = 0; bool bom = false; };
+struct Changeset {
+    std::string id, kind, ranBy, ranBySource, ranAt;      // kind: replace-in-files | normalize-in-files
+    std::string specJson, scopeJson;                      // the caller's spec/scope objects as raw JSON object text (opaque here)
+    std::vector<ChangesetFile> files;
+    int filesRead = 0, withMatches = 0, changed = 0, skipped = 0, writeFailed = 0, occurrences = 0;
+    bool undone = false; std::string undoneAt, undoneBy; int undoneRestored = 0, undoneSkipped = 0;
+};
+
+std::string changesetsDir(const std::string& versionsRoot);                 // "<root>/_changesets"
+// An id obeys the stamp rule — [A-Za-z0-9_-], never leading '_' (that prefix
+// is the store's own) — so it is a safe file stem and sorts chronologically.
+// Creates the directory; temp + rename, so a reader never sees half a record.
+bool writeChangeset(const std::string& versionsRoot, const Changeset& c);
+// Strict, exactly as parseMeta is: a missing file, a syntax error, a wrong
+// value type or a schema other than "all-changeset/1" returns false and leaves
+// `out` untouched.
+bool readChangeset(const std::string& versionsRoot, const std::string& id, Changeset& out);
+// Ascending (ids sort chronologically). Only well-formed <id>.json stems count:
+// _meta.json-style strays, dotfiles and non-.json files are not changesets.
+std::vector<std::string> listChangesetIds(const std::string& versionsRoot);
+// Reads, fills the undone block, writes back. False when the record cannot be
+// read or cannot be written — an undo that could not be recorded is not told.
+bool markChangesetUndone(const std::string& versionsRoot, const std::string& id,
+                         const std::string& at, const std::string& by, int restored, int skipped);
+std::string serializeChangeset(const Changeset&);
+bool parseChangeset(const std::string& json, Changeset& out);
+
 }  // namespace allcore::versions

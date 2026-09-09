@@ -288,3 +288,6 @@ These four are *invoked* by ExportPane's buttons (main.cpp:15900–15949) but im
 
 ## F1 Versions (2026-09-09)
 - `writeDocumentTo` keeps a version after `noteSave` (encoded bytes, encoding, line ending, BOM, statistics); `openVersions()` window; `revertDocument(encoding)` reopens a restored version in its recorded encoding; Properties ▸ Statistics shows Versions kept + a Versions… button. Evidence: app selftests 20–32c; details in `Versions.md`.
+
+## F3/F4 (2026-09-09)
+- Format ▸ Normalize Text… targets the Document box (`documentEditor()`), selection extended to whole lines, one edit block. A file normalized or rewritten from the Files pane / Replace in Files reloads here when the document is clean. Evidence: app selftests F3-17…23, F4-1…18c; `Normalize.md`, `ReplaceInFiles.md`.

@@ -113,3 +113,6 @@ No `QProcess`, no `QSaveFile`, no explicit `QSettings` access beyond the `sess::
 
 ## F1 Versions (2026-09-09)
 - `saveDraft` keeps a UTF-8/LF version after `noteSave`; `openVersions()`; Properties row. Evidence: app selftests 20–32c; details in `Versions.md`.
+
+## F3/F4 (2026-09-09)
+- Format ▸ Normalize Text… targets the Draft the same way. Evidence: app selftests F3-17…23, F4-1…18c; `Normalize.md`, `ReplaceInFiles.md`.

@@ -7,6 +7,8 @@
 static std::function<void(const QString&, const QString&)> g_compareFiles;     // (leftPath, rightPath)
 static std::function<void(const QString&, const QString&)> g_compareFolders;   // (leftDir, rightDir)
 std::function<void(const QString&, const QString&, const QString&, const QString&)> g_compareTexts;  // (aName,aText,bName,bText)
+class ComparePane;
+static std::function<void(ComparePane*, bool)> g_normalizeSide;   // F3: open Normalize… for the left (true) / right side; set in main()
 
 namespace cmp {
 using namespace allcore::textdiff;
@@ -550,6 +552,19 @@ private:
         recompute(true);
     }
     void pushUndo() { undo_.push_back({aLines_, bLines_}); redo_.clear(); if (undo_.size() > 200) undo_.erase(undo_.begin()); }
+public:
+    // F3: replace one side's lines (Normalize Left/Right) — exactly one undo snapshot; Save Left/Right writes it
+    void setSideLines(bool leftSide, const QStringList& lines) {
+        pushUndo();
+        if (leftSide) { aLines_ = lines; dirtyL_ = true; } else { bLines_ = lines; dirtyR_ = true; }
+        recompute(true);
+    }
+    QStringList sideLines(bool leftSide) const { return leftSide ? aLines_ : bLines_; }
+    QString sideName(bool leftSide) const { return leftSide ? nameLText_ : nameRText_; }
+    QString sideEol(bool leftSide) const { return leftSide ? eolL_ : eolR_; }
+    QString sidePath(bool leftSide) const { return leftSide ? pathL_ : pathR_; }
+    int undoDepth() const { return (int)undo_.size(); }
+private:
     void recompute(bool rediff) {
         if (rediff) res_ = diffWithPins();
         rows_ = cmp::buildRows(res_, show_, ctx_, minorAsDiff_);
@@ -707,6 +722,12 @@ private:
                 });
                 connect(menu->addAction("Align Caret Lines (pin)"), &QAction::triggered, this, [this] { addPinAtCursors(); });
                 connect(menu->addAction("Clear Alignment Pins"), &QAction::triggered, this, [this] { clearPins(); });
+                {   // F3: normalize one side with a preview; Undo Merge reverts, Save Left/Right writes
+                    QAction* nl = menu->addAction("Normalize Left\u2026"), *nr = menu->addAction("Normalize Right\u2026");
+                    nl->setEnabled(bool(g_normalizeSide) && !binary_); nr->setEnabled(bool(g_normalizeSide) && !binary_);
+                    connect(nl, &QAction::triggered, this, [this] { if (g_normalizeSide) g_normalizeSide(this, true); });
+                    connect(nr, &QAction::triggered, this, [this] { if (g_normalizeSide) g_normalizeSide(this, false); });
+                }
                 {   // F2
                     QAction* cf = menu->addAction("Copy Changed Folios");
                     const bool hasM = hasFolioMarkersLeft();

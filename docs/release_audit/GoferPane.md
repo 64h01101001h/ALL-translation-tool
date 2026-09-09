@@ -103,3 +103,6 @@ Counts: **22** user-visible controls/actions listed; **12** with NONE.
 - The fold filter applies only to folder hits; corpus, apparatus and Spotlight results ignore the fold setting while the combo reads as global. Is that the intended (Gofer-heritage) behaviour, and is it disclosed?
 - `Stop` cannot interrupt the corpus or apparatus phases — only folder scans and the Spotlight wait loop.
 - Add folder / Remove / Duplicate / Save / Load / Delete / Citation-web dialog have no automated coverage beyond whatever `gauntlet_walk` happens to hit at seed 1.
+
+## F3/F4 (2026-09-09)
+- Search Results tab: Replace in these folders… (F4) — enabled only for one plain term (fields 2–8 empty, no NEAR), seeding the needle and the ticked user folders. Evidence: app selftests F3-17…23, F4-1…18c; `Normalize.md`, `ReplaceInFiles.md`.

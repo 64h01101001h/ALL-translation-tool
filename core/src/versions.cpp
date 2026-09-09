@@ -98,6 +98,25 @@ public:
         }
     }
 
+    // A complete array with nothing but whitespace after it. Elements come back
+    // as JVals exactly as object() delivers values: nested objects and arrays
+    // as raw text, so one level of nesting costs no second parser.
+    bool array(std::vector<JVal>& out) {
+        ws();
+        if (!eat('[')) return false;
+        ws();
+        if (eat(']')) { ws(); return i_ == s_.size(); }
+        for (;;) {
+            JVal v;
+            if (!value(v)) return false;
+            out.push_back(std::move(v));
+            ws();
+            if (eat(',')) { ws(); continue; }
+            if (eat(']')) { ws(); return i_ == s_.size(); }
+            return false;
+        }
+    }
+
     // A single balanced object/array occupying the whole string.
     bool wholeContainer(char open) {
         ws();
@@ -262,6 +281,11 @@ bool isJsonObjectText(const std::string& s) {
 bool parseFlatObject(const std::string& json, JObj& out) {
     Reader r(json);
     return r.object(out);
+}
+
+bool parseArray(const std::string& json, std::vector<JVal>& out) {
+    Reader r(json);
+    return r.array(out);
 }
 
 const JVal* lastKey(const JObj& o, const char* key) {
@@ -653,6 +677,200 @@ std::vector<Entry> byChangeset(const std::string& versionsRoot, const std::strin
     std::stable_sort(out.begin(), out.end(),
                      [](const Entry& a, const Entry& b) { return a.meta.stamp < b.meta.stamp; });
     return out;
+}
+
+// ------------------------------------------------------------ changesets ----
+namespace {
+
+const char* kChangesetSchema = "all-changeset/1";
+const char* kChangesetsFolder = "_changesets";
+
+// Readers over any parsed object — the top-level record, one `files` element,
+// `summary`, `undone`. A missing key keeps the default (a sparse record still
+// reads); a key of the wrong type is refused, never coerced.
+bool jStr(const JObj& o, const char* k, std::string& dst) {
+    const JVal* v = lastKey(o, k);
+    if (!v) return true;
+    if (v->type == 's') { dst = v->text; return true; }
+    if (v->type == '0') { dst.clear(); return true; }
+    return false;
+}
+bool jInt(const JObj& o, const char* k, int& dst) {
+    const JVal* v = lastKey(o, k);
+    if (!v) return true;
+    if (v->type != 'n') return false;
+    dst = int(toInt(v->text));
+    return true;
+}
+bool jBool(const JObj& o, const char* k, bool& dst) {
+    const JVal* v = lastKey(o, k);
+    if (!v) return true;
+    if (v->type != 'b') return false;
+    dst = v->text == "true";
+    return true;
+}
+// The caller's object, kept as text. Absent or null → "".
+bool jRawObject(const JObj& o, const char* k, std::string& dst) {
+    const JVal* v = lastKey(o, k);
+    if (!v) return true;
+    if (v->type == 'o') { dst = v->text; return true; }
+    if (v->type == '0') { dst.clear(); return true; }
+    return false;
+}
+// A nested object read through its own flat parse. Absent or null → left alone.
+// `present` says which of the two it was, which is what `undone` turns on.
+bool jSubObject(const JObj& o, const char* k, JObj& out, bool& present) {
+    present = false;
+    const JVal* v = lastKey(o, k);
+    if (!v || v->type == '0') return true;
+    if (v->type != 'o') return false;
+    if (!parseFlatObject(v->text, out)) return false;
+    present = true;
+    return true;
+}
+
+}  // namespace
+
+std::string serializeChangeset(const Changeset& c) {
+    // spec/scope are the caller's JSON, carried verbatim; anything that is not
+    // a complete object is recorded as null so the record stays readable.
+    auto raw = [](const std::string& text) {
+        return isJsonObjectText(text) ? text : std::string("null");
+    };
+    std::string out = "{\n";
+    out += "  \"schema\": " + quote(kChangesetSchema) + ",\n";
+    out += "  \"id\": " + quote(c.id) + ",\n";
+    out += "  \"kind\": " + quote(c.kind) + ",\n";
+    out += "  \"ranBy\": " + quote(c.ranBy) + ",\n";
+    out += "  \"ranBySource\": " + quote(c.ranBySource) + ",\n";
+    out += "  \"ranAt\": " + quote(c.ranAt) + ",\n";
+    out += "  \"spec\": " + raw(c.specJson) + ",\n";
+    out += "  \"scope\": " + raw(c.scopeJson) + ",\n";
+    out += "  \"files\": [";
+    for (size_t i = 0; i < c.files.size(); ++i) {
+        const ChangesetFile& f = c.files[i];
+        out += (i == 0) ? "\n" : ",\n";
+        out += "    { \"path\": " + quote(f.path) +
+               ", \"docKey\": " + quote(f.docKey) +
+               ", \"preStamp\": " + quote(f.preStamp) +
+               ", \"preSha1\": " + quote(f.preSha1) +
+               ", \"postSha1\": " + quote(f.postSha1) +
+               ", \"occurrences\": " + std::to_string(f.occurrences) +
+               ", \"unticked\": " + std::to_string(f.unticked) +
+               ", \"eol\": " + quote(f.eol) +
+               ", \"bom\": " + (f.bom ? "true" : "false") +
+               ", \"status\": " + quote(f.status) + " }";
+    }
+    out += c.files.empty() ? "],\n" : "\n  ],\n";
+    out += "  \"summary\": { \"filesRead\": " + std::to_string(c.filesRead) +
+           ", \"withMatches\": " + std::to_string(c.withMatches) +
+           ", \"changed\": " + std::to_string(c.changed) +
+           ", \"skipped\": " + std::to_string(c.skipped) +
+           ", \"writeFailed\": " + std::to_string(c.writeFailed) +
+           ", \"occurrences\": " + std::to_string(c.occurrences) + " },\n";
+    out += "  \"undone\": ";
+    out += c.undone ? ("{ \"at\": " + quote(c.undoneAt) + ", \"by\": " + quote(c.undoneBy) +
+                       ", \"restored\": " + std::to_string(c.undoneRestored) +
+                       ", \"skipped\": " + std::to_string(c.undoneSkipped) + " }")
+                    : std::string("null");
+    out += "\n}\n";
+    return out;
+}
+
+bool parseChangeset(const std::string& json, Changeset& out) {
+    JObj o;
+    if (!parseFlatObject(json, o)) return false;
+    const JVal* schema = lastKey(o, "schema");
+    if (!schema || schema->type != 's' || schema->text != kChangesetSchema) return false;
+    Changeset c;
+    if (!jStr(o, "id", c.id) || !jStr(o, "kind", c.kind) || !jStr(o, "ranBy", c.ranBy) ||
+        !jStr(o, "ranBySource", c.ranBySource) || !jStr(o, "ranAt", c.ranAt) ||
+        !jRawObject(o, "spec", c.specJson) || !jRawObject(o, "scope", c.scopeJson))
+        return false;
+    if (const JVal* fv = lastKey(o, "files")) {
+        if (fv->type == 'a') {
+            std::vector<JVal> items;
+            if (!parseArray(fv->text, items)) return false;
+            for (const JVal& it : items) {
+                if (it.type != 'o') return false;
+                JObj fo;
+                if (!parseFlatObject(it.text, fo)) return false;
+                ChangesetFile f;
+                if (!jStr(fo, "path", f.path) || !jStr(fo, "docKey", f.docKey) ||
+                    !jStr(fo, "preStamp", f.preStamp) || !jStr(fo, "preSha1", f.preSha1) ||
+                    !jStr(fo, "postSha1", f.postSha1) || !jStr(fo, "eol", f.eol) ||
+                    !jStr(fo, "status", f.status) || !jInt(fo, "occurrences", f.occurrences) ||
+                    !jInt(fo, "unticked", f.unticked) || !jBool(fo, "bom", f.bom))
+                    return false;
+                c.files.push_back(std::move(f));
+            }
+        } else if (fv->type != '0') {
+            return false;
+        }
+    }
+    JObj sum;
+    bool have = false;
+    if (!jSubObject(o, "summary", sum, have)) return false;
+    if (have && (!jInt(sum, "filesRead", c.filesRead) || !jInt(sum, "withMatches", c.withMatches) ||
+                 !jInt(sum, "changed", c.changed) || !jInt(sum, "skipped", c.skipped) ||
+                 !jInt(sum, "writeFailed", c.writeFailed) || !jInt(sum, "occurrences", c.occurrences)))
+        return false;
+    JObj un;
+    if (!jSubObject(o, "undone", un, c.undone)) return false;
+    if (c.undone && (!jStr(un, "at", c.undoneAt) || !jStr(un, "by", c.undoneBy) ||
+                     !jInt(un, "restored", c.undoneRestored) || !jInt(un, "skipped", c.undoneSkipped)))
+        return false;
+    out = std::move(c);
+    return true;
+}
+
+std::string changesetsDir(const std::string& versionsRoot) {
+    return (fs::path(versionsRoot) / kChangesetsFolder).string();
+}
+
+bool writeChangeset(const std::string& versionsRoot, const Changeset& c) {
+    if (!validStamp(c.id)) return false;   // same rule as a version stamp: a safe stem that sorts
+    const fs::path dir = changesetsDir(versionsRoot);
+    std::error_code ec;
+    fs::create_directories(dir, ec);
+    if (!fs::is_directory(dir, ec)) return false;
+    return writeAtomic(dir / (c.id + ".json"), serializeChangeset(c));
+}
+
+bool readChangeset(const std::string& versionsRoot, const std::string& id, Changeset& out) {
+    if (!validStamp(id)) return false;
+    std::string text;
+    if (!slurp(fs::path(changesetsDir(versionsRoot)) / (id + ".json"), text)) return false;
+    return parseChangeset(text, out);   // strict; `out` untouched when it fails
+}
+
+std::vector<std::string> listChangesetIds(const std::string& versionsRoot) {
+    std::vector<std::string> out;
+    std::error_code ec;
+    const fs::path dir = changesetsDir(versionsRoot);
+    if (!fs::is_directory(dir, ec)) return out;
+    for (const auto& de : fs::directory_iterator(dir, ec)) {
+        if (!de.is_regular_file(ec)) continue;
+        const fs::path p = de.path();
+        if (p.extension().string() != ".json") continue;
+        const std::string stem = p.stem().string();
+        if (!validStamp(stem)) continue;   // _meta.json, dotfiles, .tmp leftovers: not changesets
+        out.push_back(stem);
+    }
+    std::sort(out.begin(), out.end());
+    return out;
+}
+
+bool markChangesetUndone(const std::string& versionsRoot, const std::string& id,
+                         const std::string& at, const std::string& by, int restored, int skipped) {
+    Changeset c;
+    if (!readChangeset(versionsRoot, id, c)) return false;
+    c.undone = true;
+    c.undoneAt = at;
+    c.undoneBy = by;
+    c.undoneRestored = restored;
+    c.undoneSkipped = skipped;
+    return writeChangeset(versionsRoot, c);
 }
 
 }  // namespace allcore::versions

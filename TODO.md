@@ -84,7 +84,7 @@ before 1.0)
       census, three dead controls removed before they are built) with a
       19-step build order across the three batches
 - [x] Batch 4 F0 substrate — 2026-09-09 (textspan, filewalk, applySelected, Draft sidecar fix, HTML flattening, census widened)
-- [ ] **Implement batch 4** in the critic's order (F0, F1, F2 done 2026-09-09): F3 Normalize next, then
+- [ ] **Implement batch 4** in the critic's order (F0–F4 done 2026-09-09): F5 Apply Patch next, then
       (`allcore/textspan.h` folio primitive + `eligibleTextFile` +
       `provenance.h`), then Versions, changed-folios report, Normalize,
       Replace in Files with preview, Apply Patch, tracked-changes .docx
