@@ -120,6 +120,79 @@ not honestly buildable here; the expand family is, and two are ours.
 | open-window list | our floating windows: Scan viewer, Lookup popup, reports, Properties | BUILD |
 | New Window, Arrange All, Split, Fill, Center, Move & Resize, Tile, Move to iPad | one-window app; macOS handles tiling itself | SKIP |
 
+
+## Sublime's own menus (added 2026-09-08 evening from Adam's screenshots)
+
+### Find menu — batch 1e (replaces the Edit ▸ Find submenu; Adam: "amazing, do these")
+| Sublime | Ours | Verdict |
+|---|---|---|
+| Find… ⌘F · Find Next ⌘G · Find Previous ⇧⌘G · Replace… ⌥⌘F | done (batch 1) — moves to a top-level **Find** menu | move |
+| Incremental Find ⌘I | find-as-you-type bar: the first hit is selected while typing, Return keeps it, Esc restores | BUILD |
+| Replace Next ⌥⌘E | replace the current hit and step | BUILD (exists as Replace button; add the action) |
+| Quick Find ⌥⌘G | select the word under the caret and find its next occurrence, no panel | BUILD |
+| Quick Find All ⌃⌘G | Qt has one selection → **highlight all occurrences** and count them in the status bar | ADAPT |
+| Quick Add Next ⌘D | multi-caret | SKIP (⌘D stays Look Up) |
+| Use Selection for Find ⌘E / for Replace ⇧⌘E | seed the find / replace fields from the selection | BUILD |
+| Find in Files… ⇧⌘F · Find Results ▸ · Cancel | **the Search pane (Gofer grammar) with the query prefilled** — our find-in-files already exists and is far stronger; results open in the pane | ADAPT |
+| Find selected next / previous (last search) F3 / ⇧F3 · (clipboard) ⌘F3 / ⇧⌘F3 | step through hits of the last search / of the clipboard text | BUILD |
+| the Find panel's toggles (regex · case · whole word · wrap · in selection · highlight · preserve case) | build into our Find bar; regex via QRegularExpression | BUILD |
+
+### View menu (Sublime) — merged into batch 2
+| Sublime | Ours | Verdict |
+|---|---|---|
+| Side Bar ▸ · Hide Minimap · Hide Tabs · Hide Status Bar · Show Console | Sidebar ▸ (control column, card pane, spelling panel) · minimap SKIP · hide status bar BUILD · Console → the lifecycle/diagnostic log viewer | ADAPT |
+| Enter Full Screen · Distraction Free ⌃⇧⌘F | Full Screen (Word) · Focus mode | same as Word rows |
+| Layout ▸ · Groups ▸ · Focus/Move File to Group | one document per pane; Overlay already splits | SKIP |
+| Syntax ▸ | **Text as** (script / ACIP / Wylie / phonetics) and the status-bar script label | ADAPT |
+| Indentation ▸ · Line Endings ▸ | Line Endings ▸ (LF / CRLF / CR, shown and convertible — legacy files again) BUILD; indentation SKIP | mixed |
+| Word Wrap ✓ · Word Wrap Column ▸ · Ruler ▸ | Word Wrap toggle BUILD (QPlainTextEdit line wrap); column/ruler SKIP | mixed |
+| Spell Check F6 · Next/Prev Misspelling ⌃F6 / ⌃⇧F6 · Dictionary ▸ | **Spelling doubts** on/off F6, next/previous doubt, Dictionary ▸ = the reference layers | ADAPT |
+| **line numbers** (Sublime shows them always) | View ▸ Line Numbers toggle, persisted, on Document box and Draft | BUILD |
+
+### Goto menu (Sublime) — batch 2b
+| Sublime | Ours | Verdict |
+|---|---|---|
+| Goto Anything… ⌘P | **Hunt ⌘K already is this** (⌘P is Print for us); Goto Anything's `:123` line and `@symbol` forms become Hunt syntax | ADAPT |
+| Goto Symbol… ⌘R | **Goto Heading**: the sa bcad outline as a jump list | ADAPT |
+| Goto Symbol in Project ⇧⌘R | headings across the Library — later | DEFER |
+| Goto Definition / Reference | **Goto Dictionary entry** (the word's card) / **Goto Concordance** (its corpus uses) | ADAPT |
+| Goto Line… ⌃G | goto line; plus **Goto Folio** (@NNNA) — ours | BUILD + ADAPT |
+| Next / Previous Modification | Qt tracks no edit positions; SKIP | SKIP |
+| Jump Back ⌃- / Jump Forward ⌃⇧- | caret history in the Document box | BUILD |
+| Switch File ▸ | Open Recent already; Next/Previous document across panes | SKIP |
+| Scroll ▸ (to selection, line up/down) | BUILD (small) |
+| Bookmarks ▸ (toggle ⌘F2, next F2, prev ⇧F2, clear) | line bookmarks in the Document box, persisted per file in the properties sidecar | BUILD |
+| Jump to Matching Bracket ⌃M | ACIP apparatus brackets { } [ ] ( ) | BUILD |
+
+### Tools menu (Sublime) — merged into batch 5
+| Sublime | Ours | Verdict |
+|---|---|---|
+| Command Palette… ⇧⌘P | **Hunt** (⌘K) is the palette; add "every menu action" as a Hunt lane | ADAPT |
+| Snippets… | **Templates / AutoText**: the template store + inline snippets (folio header, colophon frame) | ADAPT |
+| Build System / Build / Build With / Results / Save All on Build | **Analyze** (Overlay Load into overlay = our "build"); results = the Document summary | ADAPT (label only) |
+| Record / Playback / Save Macro · Macros ▸ | no macro engine; the Pin bar covers repeat actions | SKIP |
+| Developer ▸ | Troubleshooting menu items already exist under Help | covered |
+| Packages ▸ · Cheat Sheets ▸ · 1Self | no package system; Cheat Sheets → Help › Keyboard shortcuts | ADAPT (Help) |
+
+### Project menu (Sublime) — batch 8 (Adam: "we can add more later")
+| Sublime | Ours | Verdict |
+|---|---|---|
+| Open Project… · Switch Project… · Quick Switch ⌃⌘P · Open Recent ▸ · Save Project As… · Close Project · Edit Project | **Dossiers already are projects** (a text's working world: file, line, glossary, comments). Promote to a Project menu: Open / Switch / Recent / Save As / Close / Edit (the dossier JSON) | ADAPT |
+| New Workspace for Project · Save Workspace As… | window layout (Files pane has workspaces already) | ADAPT |
+| Add Folder to Project… · Remove all Folders · Refresh | a project's folders = the texts it spans; add/remove/refresh | BUILD |
+
+### Window menu (Sublime) — merged into batch 6
+Minimize ⌘M · Zoom · Bring All to Front · window list (ours: floating windows) — as Word. New Tab / tabs / Merge Windows / Fill / Center / Tile / Move to iPad — SKIP (one window; macOS tiles).
+
+### Help menu (Sublime) — batch 9
+| Sublime | Ours | Verdict |
+|---|---|---|
+| Search field | our Help window already searches | covered |
+| Documentation | the user manual (distribution guide) | BUILD (link the manual) |
+| Report a Bug | **Report a Bug…** → prefilled email / GitHub issue with the diagnostic report attached (the P1 defect-intake item) | BUILD |
+| Twitter · Purchase / Enter License | none | SKIP |
+| Indexing Status… | **Data status**: spine version, corpus segments, lexicon build state, update check | ADAPT |
+
 ## Preferences panel — batch 7 (replaces the four-group Settings dialog)
 Icon grid in Word's three bands, back/forward, search box; each page is a
 form bound to the settings store; every existing setting moves in.

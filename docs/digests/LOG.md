@@ -37,3 +37,4 @@ Categories: code · decision · email · release · audit · data · question.
 - 18:18 · decision · Sublime Text added as a second reference (search/replace, document window, colour schemes, settings); its File menu items folded into the plan as batch 1b/1c · Adam
 - 18:19 · decision · Sublime 'Selection' menu folded into the plan (batch 1d): expand family BUILD/ADAPT (to Folio, to Phrase), multi-caret items SKIP · Adam
 - 18:25 · code · File menu, Sublime additions: Reopen with Encoding / Save with Encoding (UTF-8/BOM/UTF-16/Windows-1252/MacRoman/Latin-1; never guesses), Save All ⌥⌘S, Print ⌘P, Revert File, Close All Files. 8 selftest checks; PrintSupport linked
+- 18:26 · decision · Sublime Find/View/Goto/Tools/Project/Window/Help menus folded into the menu plan with verdicts; Project = dossiers promoted; Goto Anything = Hunt · Adam
