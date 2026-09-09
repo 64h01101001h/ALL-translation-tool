@@ -726,6 +726,21 @@ hdiutil create -volname "$APPNAME $VERSION" -srcfolder "$STAGE" \
 # unavailable") - which is NOT corruption. Retry while the image is busy,
 # and name the two outcomes differently: corrupt = exit 9, unverifiable
 # because still busy = exit 10. Never call a busy image corrupt.
+# 2026-09-09: six retries were never going to clear it. The holder is not a
+# momentary diskimages-helper but ATTACHMENTS LEFT BEHIND BY EARLIER PRESSES -
+# four of them, from images this script itself created and never detached, one
+# of which was the image being verified. Attached-but-unmounted images are
+# invisible in Finder, so they accumulate silently until a verify blocks on
+# them. Detach every attachment whose backing file lives in this repo's dist/
+# before verifying: our own build artifacts, nothing else touched.
+while read -r dev; do
+  [[ -n "$dev" ]] || continue
+  hdiutil detach "$dev" -force >/dev/null 2>&1 \
+    && echo "   released a stale attachment from an earlier press ($dev)"
+done < <(hdiutil info | awk -v d="$ROOT/dist/" '
+  /^image-path/ { p = $3 }
+  /^\/dev\/disk[0-9]+\t/ { if (index(p, d) == 1) print $1 }' | sort -u)
+
 VERIFIED=0
 for attempt in 1 2 3 4 5 6; do
   VERR="$(hdiutil verify "$DMG" 2>&1 >/dev/null)" && { VERIFIED=1; break; }
