@@ -44028,7 +44028,16 @@ int main(int argc, char** argv) {
     // shelf…" off-screen entirely. Restore what the user left, and open
     // maximised the first time so the ribbons have room to label
     // themselves.
-    {
+    // 2026-09-09: the harness must NOT inherit the desktop's window size.
+    // The screenshot sweep sets a fixed frame for determinism, and this
+    // block was overriding it with whatever geometry the user's last
+    // session saved — so the blessed baseline depended on how large the
+    // window happened to be when the app was last quit (measured: the
+    // sweep fell from 1180x664 to 796x700 after a maximised session, and
+    // the visual-regression gate fired on all 22 panes for no code
+    // reason). Under any harness run the geometry is neither restored nor
+    // saved.
+    if (!g_harnessRun) {
         QSettings g("ALL", "TranslationTool");
         const QByteArray geo = g.value("ui/geometry").toByteArray();
         if (!geo.isEmpty() && win.restoreGeometry(geo)) {
@@ -44513,46 +44522,6 @@ int main(int argc, char** argv) {
             cp->selectFirstUncataloged();
             QCoreApplication::processEvents();
         }
-        // Compare pane at work (2026-09-08): two versions of the demo
-        // opening — a reading changed, a line dropped, a line added — so
-        // the capture shows differences, not two empty panes; the folder
-        // and three-way pages get small demo sets too.
-        {
-            QStringList base;
-            QFile df2(demo);
-            if (df2.open(QIODevice::ReadOnly)) {
-                QString ex = QString::fromUtf8(df2.read(4000));
-                ex.remove(QRegularExpression("\\[[^\\]]*\\]"));
-                ex.remove(QRegularExpression("@#*[0-9A-Za-z.]*"));
-                for (const QString& ln : ex.split('\n')) {
-                    bool ascii = !ln.trimmed().isEmpty();
-                    for (QChar ch : ln) ascii &= ch.unicode() < 128;
-                    if (ascii) base << ln.trimmed();
-                    if (base.size() >= 22) break;
-                }
-            }
-            if (base.size() < 6) base = QStringList{"@001A", "BLA MA LA PHYAG 'TSHAL LO", "SEMS CAN THAMS CAD BDE BA DANG BDE BA'I RGYU DANG LDAN PAR GYUR CIG", "SDUG BSNGAL DANG SDUG BSNGAL GYI RGYU DANG BRAL BAR GYUR CIG", "SDUG BSNGAL MED PA'I BDE BA DANG MI 'BRAL BAR GYUR CIG", "NYE RING CHAGS SDANG GNYIS DANG BRAL BA'I BTANG SNYOMS LA GNAS PAR GYUR CIG"};
-            int tc = -1; for (int i = 0; i < base.size(); ++i) if (base[i].contains("THAMS CAD")) { tc = i; break; }
-            QStringList other = base;
-            if (tc >= 0) other[tc].replace("THAMS CAD", "KUN");
-            if (other.size() > 6) other.removeAt(tc == 5 ? 6 : 5);
-            if (other.size() > 8) other.insert(8, "BDE BA CHEN PO");
-            comparePane->compareTexts("Sera Mey print", base.join('\n') + "\n", "Ganden print", other.join('\n') + "\n");
-            comparePane->first();   // Line Details shows the first difference in the capture
-            const QString cd = QDir::tempPath() + "/dct_shot_cmp";
-            QDir(cd).removeRecursively(); QDir().mkpath(cd + "/L/vol1"); QDir().mkpath(cd + "/R/vol1");
-            auto put = [](const QString& p, const QString& t) { QFile f(p); if (f.open(QIODevice::WriteOnly | QIODevice::Truncate)) f.write(t.toUtf8()); };
-            put(cd + "/L/vol1/S0134I.act", base.join('\n') + "\n"); put(cd + "/R/vol1/S0134I.act", other.join('\n') + "\n");
-            put(cd + "/L/vol1/S0135I.act", "@001A\nSEMS CAN\n"); put(cd + "/R/vol1/S0135I.act", "@001A\nSEMS CAN\n");
-            put(cd + "/L/colophon.act", "MDZAD PA PO NI TSONG KHA PA\n"); put(cd + "/R/readme.txt", "corrected batch 2026-09\n");
-            cmpPages.folders->compare(cd + "/L", cd + "/R");
-            QStringList mine = base, theirs = base;
-            if (tc >= 0) { mine[tc].replace("THAMS CAD", "KUN"); theirs[tc].replace("THAMS CAD", "MA LUS PA"); }
-            if (theirs.size() > 1) theirs[theirs.size() - 1] += " ,,";
-            if (mine.size() > 1) mine[0] += " (proofread)";
-            cmpPages.three->mergeTexts("base", base.join('\n') + "\n", "proofreader A", mine.join('\n') + "\n", "proofreader B", theirs.join('\n') + "\n");
-            comparePane->showPage(0);
-        }
         // DCT_SHOT_EXTRA (env): digest captures beyond the pane sweep —
         // compare (three pages), prefs (grid + House Style), menus (every
         // top-level menu rendered open). Off by default: the blessed
@@ -44564,6 +44533,46 @@ int main(int argc, char** argv) {
                 if (px.save(file)) printf("wrote %s\n", file.toUtf8().constData()); else fprintf(stderr, "screenshot failed: %s\n", file.toUtf8().constData());
             };
             if (extra.contains("compare")) {
+            // Compare pane at work (2026-09-08): two versions of the demo
+            // opening — a reading changed, a line dropped, a line added — so
+            // the capture shows differences, not two empty panes; the folder
+            // and three-way pages get small demo sets too.
+            {
+                QStringList base;
+                QFile df2(demo);
+                if (df2.open(QIODevice::ReadOnly)) {
+                    QString ex = QString::fromUtf8(df2.read(4000));
+                    ex.remove(QRegularExpression("\\[[^\\]]*\\]"));
+                    ex.remove(QRegularExpression("@#*[0-9A-Za-z.]*"));
+                    for (const QString& ln : ex.split('\n')) {
+                        bool ascii = !ln.trimmed().isEmpty();
+                        for (QChar ch : ln) ascii &= ch.unicode() < 128;
+                        if (ascii) base << ln.trimmed();
+                        if (base.size() >= 22) break;
+                    }
+                }
+                if (base.size() < 6) base = QStringList{"@001A", "BLA MA LA PHYAG 'TSHAL LO", "SEMS CAN THAMS CAD BDE BA DANG BDE BA'I RGYU DANG LDAN PAR GYUR CIG", "SDUG BSNGAL DANG SDUG BSNGAL GYI RGYU DANG BRAL BAR GYUR CIG", "SDUG BSNGAL MED PA'I BDE BA DANG MI 'BRAL BAR GYUR CIG", "NYE RING CHAGS SDANG GNYIS DANG BRAL BA'I BTANG SNYOMS LA GNAS PAR GYUR CIG"};
+                int tc = -1; for (int i = 0; i < base.size(); ++i) if (base[i].contains("THAMS CAD")) { tc = i; break; }
+                QStringList other = base;
+                if (tc >= 0) other[tc].replace("THAMS CAD", "KUN");
+                if (other.size() > 6) other.removeAt(tc == 5 ? 6 : 5);
+                if (other.size() > 8) other.insert(8, "BDE BA CHEN PO");
+                comparePane->compareTexts("Sera Mey print", base.join('\n') + "\n", "Ganden print", other.join('\n') + "\n");
+                comparePane->first();   // Line Details shows the first difference in the capture
+                const QString cd = QDir::tempPath() + "/dct_shot_cmp";
+                QDir(cd).removeRecursively(); QDir().mkpath(cd + "/L/vol1"); QDir().mkpath(cd + "/R/vol1");
+                auto put = [](const QString& p, const QString& t) { QFile f(p); if (f.open(QIODevice::WriteOnly | QIODevice::Truncate)) f.write(t.toUtf8()); };
+                put(cd + "/L/vol1/S0134I.act", base.join('\n') + "\n"); put(cd + "/R/vol1/S0134I.act", other.join('\n') + "\n");
+                put(cd + "/L/vol1/S0135I.act", "@001A\nSEMS CAN\n"); put(cd + "/R/vol1/S0135I.act", "@001A\nSEMS CAN\n");
+                put(cd + "/L/colophon.act", "MDZAD PA PO NI TSONG KHA PA\n"); put(cd + "/R/readme.txt", "corrected batch 2026-09\n");
+                cmpPages.folders->compare(cd + "/L", cd + "/R");
+                QStringList mine = base, theirs = base;
+                if (tc >= 0) { mine[tc].replace("THAMS CAD", "KUN"); theirs[tc].replace("THAMS CAD", "MA LUS PA"); }
+                if (theirs.size() > 1) theirs[theirs.size() - 1] += " ,,";
+                if (mine.size() > 1) mine[0] += " (proofread)";
+                cmpPages.three->mergeTexts("base", base.join('\n') + "\n", "proofreader A", mine.join('\n') + "\n", "proofreader B", theirs.join('\n') + "\n");
+                comparePane->showPage(0);
+            }
                 if (g_raisePane) g_raisePane(comparePane);
                 const char* names[3] = {"compare-text", "compare-folders", "compare-threeway"};
                 for (int pg = 0; pg < 3; ++pg) { comparePane->showPage(pg); settle(400); save(tabs.grab(), names[pg]); }
