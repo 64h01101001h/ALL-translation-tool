@@ -40,6 +40,19 @@ Custom; Tibetan statistics: folios, syllables, shads; sidecar metadata).
 | Select Color Scheme… / Customize · Select Theme… / Customize · Font ▸ | colour schemes for the reading surfaces (several built in, plus "install from file" — a JSON of the ux tokens); theme = chrome (night mode exists); Font ▸ larger/smaller/reset (exists) | ADAPT |
 | Settings ⌘, · Settings – Syntax Specific · Distraction Free · Key Bindings | the Preferences panel (batch 7); key bindings = the Pin bar | covered |
 
+## Selection menu (Sublime) — batch 1d
+Qt's text widgets hold ONE selection, so Sublime's multi-caret items are
+not honestly buildable here; the expand family is, and two are ours.
+| Sublime | Ours | Verdict |
+|---|---|---|
+| Expand Selection to Line ⌘L / Line Upward ⌥⌘L / Word / Paragraph / Whitespace / Indentation / Brackets / Quotes | QTextCursor operations on the focused editor (Word without ⌘D — that stays Look Up) | BUILD |
+| Expand Selection to Block | **to Folio**: the text between @NNNA/B markers | ADAPT |
+| Expand Selection to Scope ⇧⌘Space | **to Phrase**: the Overlay's nesting chain, one rung outward | ADAPT |
+| Expand Selection Until… ⌃⇧S | extend the selection to a typed string | BUILD |
+| Reverse Current Selection ⌃⇧R | swap anchor and caret | BUILD |
+| Select All | exists | — |
+| Split into Lines, Single Selection, Add Previous/Next Line, Add next caret position, Invert Selection, Swap Selections, Tab Selection ▸, MultiEditUtils ▸, Copy To New Files… | multi-caret / plugin items with no single-selection meaning | SKIP |
+
 ## Edit — batch 1
 | Word | Ours | Verdict |
 |---|---|---|

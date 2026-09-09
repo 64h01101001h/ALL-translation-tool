@@ -35,3 +35,4 @@ Categories: code · decision · email · release · audit · data · question.
 - 18:10 · decision · Menu-parity plan written (docs/MENU_PARITY_PLAN.md): BUILD/ADAPT/SKIP per Word item across Edit, View, Insert, Format, Tools, Window + Preferences panel; batches 1–7, File done
 - 18:17 · code · Edit menu at Word parity: Paste and Match Formatting ⌥⇧⌘V, Paste Special (as ACIP / Wylie / Tibetan script — converts, never guesses), Clear, Find ⌘F / Find Next ⌘G / Find Previous ⇧⌘G / Replace ⌥⌘F (in-document, wraps once, Replace All = one undo step). 6 selftest checks. Batch 1 of the menu plan
 - 18:18 · decision · Sublime Text added as a second reference (search/replace, document window, colour schemes, settings); its File menu items folded into the plan as batch 1b/1c · Adam
+- 18:19 · decision · Sublime 'Selection' menu folded into the plan (batch 1d): expand family BUILD/ADAPT (to Folio, to Phrase), multi-caret items SKIP · Adam
