@@ -36638,7 +36638,7 @@ public:
         outer->addLayout(top);
         stack_ = new QStackedWidget;
         grid_ = new QListWidget; grid_->setObjectName("prefGrid");
-        grid_->setViewMode(QListView::IconMode); grid_->setIconSize(QSize(40, 40)); grid_->setGridSize(QSize(132, 96));
+        grid_->setViewMode(QListView::IconMode); grid_->setIconSize(QSize(40, 40)); grid_->setGridSize(QSize(152, 100)); grid_->setTextElideMode(Qt::ElideNone);
         grid_->setResizeMode(QListView::Adjust); grid_->setMovement(QListView::Static); grid_->setWordWrap(true); grid_->setSpacing(6); grid_->setUniformItemSizes(true);
         stack_->addWidget(grid_);
         outer->addWidget(stack_, 1);
@@ -36808,7 +36808,7 @@ private:
           p.save = [this] { saveEdits(edits_, {"team/name", "team/proposalsDir"}); saveChecks(checks_, {"team/admin"}); };
           pages_ << p; }
         // 7 File Locations
-        { QFormLayout* f; Page p; p.title = "File Locations"; p.icon = "folder"; p.blurb = "Where the data, updates and your files live"; p.keywords = {"folder", "location", "data", "root", "updates", "templates", "snippets", "sessions", "properties"};
+        { QFormLayout* f; Page p; p.title = "Locations"; p.icon = "folder"; p.blurb = "Where the data, updates and your files live"; p.keywords = {"folder", "location", "data", "root", "updates", "templates", "snippets", "sessions", "properties"};
           p.w = pageWidget(f, "Changes to the data folder take effect at the next start.");
           le(f, "app/dataRoot", "Data folder override", "leave empty for the default", true);
           le(f, "app/updatesDir", "Team updates folder (new dictionary releases)", "", true);
@@ -36829,7 +36829,7 @@ private:
           p.save = [this] { saveChecks(checks_, {"ui/usageLedger"}); saveChecks(checks_, {"troubleshoot/verbose"}, true); };
           pages_ << p; }
         // 9 Colour Scheme & Theme (Sublime)
-        { QFormLayout* f; Page p; p.title = "Colour Scheme"; p.icon = "image"; p.blurb = "Day or Night; the parchment palette"; p.keywords = {"colour", "color", "scheme", "theme", "night", "day", "parchment"};
+        { QFormLayout* f; Page p; p.title = "Colours"; p.icon = "image"; p.blurb = "Day or Night; the parchment palette"; p.keywords = {"colour", "color", "scheme", "theme", "night", "day", "parchment"};
           p.w = pageWidget(f, "Two schemes ship: Day (parchment chrome, cream pages) and Night (dark chrome, cream pages). Both keep the honesty colours — provisional tier, generated data, HGM binding — identical, so a label never changes meaning with the theme. Installable third-party schemes are not offered: nothing here may recolour a provenance label.");
           auto* day = new QRadioButton("Day"); auto* night = new QRadioButton("Night");
           const bool n = QSettings("ALL", "TranslationTool").value("app/nightMode", true).toBool(); night->setChecked(n); day->setChecked(!n);
@@ -36838,7 +36838,7 @@ private:
           p.save = nullptr;   // written by the General page's night-mode switch, kept in sync above
           pages_ << p; }
         // 10 Key Bindings (Sublime) — read-only list of every menu shortcut
-        { Page p; p.title = "Key Bindings"; p.icon = "clock"; p.blurb = "Every menu command and its shortcut"; p.keywords = {"key", "binding", "shortcut", "keyboard", "hotkey"};
+        { Page p; p.title = "Shortcuts"; p.icon = "clock"; p.blurb = "Every menu command and its shortcut"; p.keywords = {"key", "binding", "shortcut", "keyboard", "hotkey"};
           auto* w = new QWidget; auto* v = new QVBoxLayout(w); v->setContentsMargins(8, 8, 8, 8);
           auto* intro = new QLabel("Read from the menu bar as it is built, so this list is always true. Editing bindings is not offered yet; Help ▸ Keyboard Shortcuts prints the same list."); intro->setWordWrap(true); intro->setStyleSheet("color:#4A3F33;"); v->addWidget(intro);
           auto* find = new QLineEdit; find->setPlaceholderText("Filter commands"); find->setClearButtonEnabled(true); v->addWidget(find);
@@ -44501,6 +44501,80 @@ int main(int argc, char** argv) {
             cp->scanFolder(wd);
             cp->selectFirstUncataloged();
             QCoreApplication::processEvents();
+        }
+        // Compare pane at work (2026-09-08): two versions of the demo
+        // opening — a reading changed, a line dropped, a line added — so
+        // the capture shows differences, not two empty panes; the folder
+        // and three-way pages get small demo sets too.
+        {
+            QStringList base;
+            QFile df2(demo);
+            if (df2.open(QIODevice::ReadOnly)) {
+                QString ex = QString::fromUtf8(df2.read(4000));
+                ex.remove(QRegularExpression("\\[[^\\]]*\\]"));
+                ex.remove(QRegularExpression("@#*[0-9A-Za-z.]*"));
+                for (const QString& ln : ex.split('\n')) {
+                    bool ascii = !ln.trimmed().isEmpty();
+                    for (QChar ch : ln) ascii &= ch.unicode() < 128;
+                    if (ascii) base << ln.trimmed();
+                    if (base.size() >= 22) break;
+                }
+            }
+            if (base.size() < 6) base = QStringList{"@001A", "BLA MA LA PHYAG 'TSHAL LO", "SEMS CAN THAMS CAD BDE BA DANG BDE BA'I RGYU DANG LDAN PAR GYUR CIG", "SDUG BSNGAL DANG SDUG BSNGAL GYI RGYU DANG BRAL BAR GYUR CIG", "SDUG BSNGAL MED PA'I BDE BA DANG MI 'BRAL BAR GYUR CIG", "NYE RING CHAGS SDANG GNYIS DANG BRAL BA'I BTANG SNYOMS LA GNAS PAR GYUR CIG"};
+            int tc = -1; for (int i = 0; i < base.size(); ++i) if (base[i].contains("THAMS CAD")) { tc = i; break; }
+            QStringList other = base;
+            if (tc >= 0) other[tc].replace("THAMS CAD", "KUN");
+            if (other.size() > 6) other.removeAt(tc == 5 ? 6 : 5);
+            if (other.size() > 8) other.insert(8, "BDE BA CHEN PO");
+            comparePane->compareTexts("Sera Mey print", base.join('\n') + "\n", "Ganden print", other.join('\n') + "\n");
+            comparePane->first();   // Line Details shows the first difference in the capture
+            const QString cd = QDir::tempPath() + "/dct_shot_cmp";
+            QDir(cd).removeRecursively(); QDir().mkpath(cd + "/L/vol1"); QDir().mkpath(cd + "/R/vol1");
+            auto put = [](const QString& p, const QString& t) { QFile f(p); if (f.open(QIODevice::WriteOnly | QIODevice::Truncate)) f.write(t.toUtf8()); };
+            put(cd + "/L/vol1/S0134I.act", base.join('\n') + "\n"); put(cd + "/R/vol1/S0134I.act", other.join('\n') + "\n");
+            put(cd + "/L/vol1/S0135I.act", "@001A\nSEMS CAN\n"); put(cd + "/R/vol1/S0135I.act", "@001A\nSEMS CAN\n");
+            put(cd + "/L/colophon.act", "MDZAD PA PO NI TSONG KHA PA\n"); put(cd + "/R/readme.txt", "corrected batch 2026-09\n");
+            cmpPages.folders->compare(cd + "/L", cd + "/R");
+            QStringList mine = base, theirs = base;
+            if (tc >= 0) { mine[tc].replace("THAMS CAD", "KUN"); theirs[tc].replace("THAMS CAD", "MA LUS PA"); }
+            if (theirs.size() > 1) theirs[theirs.size() - 1] += " ,,";
+            if (mine.size() > 1) mine[0] += " (proofread)";
+            cmpPages.three->mergeTexts("base", base.join('\n') + "\n", "proofreader A", mine.join('\n') + "\n", "proofreader B", theirs.join('\n') + "\n");
+            comparePane->showPage(0);
+        }
+        // DCT_SHOT_EXTRA (env): digest captures beyond the pane sweep —
+        // compare (three pages), prefs (grid + House Style), menus (every
+        // top-level menu rendered open). Off by default: the blessed
+        // baseline and the geometry inquisition stay as they were.
+        {
+            const QStringList extra = qEnvironmentVariable("DCT_SHOT_EXTRA").split(',', Qt::SkipEmptyParts);
+            auto save = [&](const QPixmap& px, const QString& name) {
+                const QString file = outDir + "/" + name + ".png";
+                if (px.save(file)) printf("wrote %s\n", file.toUtf8().constData()); else fprintf(stderr, "screenshot failed: %s\n", file.toUtf8().constData());
+            };
+            if (extra.contains("compare")) {
+                if (g_raisePane) g_raisePane(comparePane);
+                const char* names[3] = {"compare-text", "compare-folders", "compare-threeway"};
+                for (int pg = 0; pg < 3; ++pg) { comparePane->showPage(pg); settle(400); save(tabs.grab(), names[pg]); }
+                comparePane->showPage(0); settle(100);
+            }
+            if (extra.contains("prefs")) {
+                PreferencesDialog pd(applyNight, win.menuBar(), &win);
+                pd.resize(1040, 760);   // roomier than the default for the digest captures
+                pd.show(); settle(400); save(pd.grab(), "prefs-grid");
+                pd.openPage(2); settle(300); save(pd.grab(), "prefs-house-style");
+                pd.openPage(4); settle(300); save(pd.grab(), "prefs-compare");
+                pd.hide();
+            }
+            if (extra.contains("menus")) {
+                for (QAction* a : win.menuBar()->actions()) {
+                    QMenu* m = a->menu(); if (!m) continue;
+                    QString name = a->text().remove('&').toLower(); name.replace(QRegularExpression("[^a-z]+"), "-");
+                    m->popup(win.mapToGlobal(QPoint(60, 60))); settle(250);
+                    save(m->grab(), "menu-" + name);
+                    m->hide(); settle(50);
+                }
+            }
         }
         printf("[shot] demo open; %d tabs\n", tabs.count()); fflush(stdout);
         int inquisitTotal = 0;

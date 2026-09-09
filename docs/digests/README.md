@@ -59,3 +59,14 @@ digest happened outside his instruction. Decisions appear as "Decisions I
 made along the way", inside the narrative. Section order: Headline · What
 I did · Decisions I made along the way · Numbers · Open questions for
 leadership · Next.
+
+## Visuals (Adam, 2026-09-08 late — standing format)
+Every digest carries visuals: screenshots of every surface that changed
+that day (captured headlessly with the app's own `--screenshots` driver so
+they are reproducible), and a chart or diagram wherever it explains the
+numbers better than a table. Images live in `docs/digests/img/YYYY-MM-DD/`
+and are referenced with relative paths from the `.md`; pandoc embeds them
+in the `.docx` and the HTML render; the `.txt` carries the captions. The
+cover email attaches the `.docx` (images embedded) — inline images in the
+Gmail draft are not attempted. Build: `tools/build_digest.sh YYYY-MM-DD`
+(captures → charts → md/txt/docx/html).

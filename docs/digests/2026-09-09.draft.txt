@@ -1,0 +1,164 @@
+# Diamond Cutter Translation Tool --- daily digest, Tuesday 9 September 2026 (DRAFT --- covers everything since Monday's 13:40 digest)
+
+**Headline.** Since Monday's digest I brought the tool's menu bar to
+parity with Microsoft Word and Sublime Text --- twelve menus and a
+Word-style Preferences window, every item working and tested --- and
+built a full **Compare & Merge suite** for Tibetan texts: two editions
+side by side with the differing syllables marked, merging between them,
+folder comparison with safe synchronisation, three-way merging of two
+proofreaders' corrections, and an apparatus criticus that cites every
+variant by folio and line. Everything ran green on the full automated
+battery.
+
+## What I did
+
+- **Menus, complete.** I modelled the menu bar on Word and Sublime Text,
+  taking each of their menus in turn and keeping what has an honest use
+  on a Tibetan text file: File, Edit, Selection, Find, Insert, Format,
+  Tools, Project, Goto, View, Window and Help. Highlights: a Properties
+  window whose Statistics understand folios, syllables and shads;
+  encodings for legacy input-centre files chosen on open and on save;
+  Paste Special converting between ACIP, Wylie and Tibetan script; Find
+  and Replace with regular expressions, preserved capitalisation and
+  find-in-files; Goto a heading, a line, a folio, a dictionary entry or
+  the concordance; bookmarks in the margin; Insert a folio marker, a
+  Tibetan-symbol palette, the date with the Tibetan year; Format styles
+  and case changes including Tibetan transliteration; Tools for spelling
+  doubts, phrase memory, hand-offs to the Draft and Manuscript, document
+  protection, snippets; a Project menu built on dossiers; a Window menu;
+  Help ▸ Data Status. Items with no meaning here (multi-caret editing,
+  page layout, mail merge, build systems) were skipped and the reasons
+  recorded.
+
+![The Insert menu: folio markers, the Tibetan and ACIP symbol palette,
+footnotes to the Draft, the date with the Tibetan year, and the
+Manuscript's rich-text items.](img/2026-09-09/menu-insert.png)
+
+![The Tools menu: spelling doubts, phrase memory, hand-offs between
+panes, word count, document protection, templates, snippets and the new
+Compare submenu.](img/2026-09-09/menu-tools.png)
+
+- **Preferences.** A Word-style window of eleven pages behind an icon
+  grid with search: General, View, House Style, Lookup, Compare, Team,
+  Locations, Privacy, Colours, Shortcuts and Quick Access. Every switch
+  drives a real setting; the Shortcuts page lists every menu command and
+  key from the live menu bar.
+
+![Preferences: the icon grid. Search narrows it; one page opens at a
+time with Show All to return.](img/2026-09-09/prefs-grid.png)
+
+- **House style.** I made our style sheet's spacing rules switches on
+  the House Style page: two spaces after a sentence, applied on demand,
+  on save, or as you type --- English only, abbreviations left alone.
+  Colon and semicolon rules are there too, off until I confirm them
+  against the sheet.
+
+![Preferences ▸ House Style: each rule of the style sheet is a
+switch.](img/2026-09-09/prefs-house-style.png)
+
+- **Compare & Merge suite.** I studied Beyond Compare, WinMerge,
+  UltraCompare and Araxis Merge and built their combined functionality
+  into a new Compare pane in the Research group, adapted for our texts.
+  Compare two files, or a text against the clipboard or its saved
+  version; differences are shown line by line with the changed
+  **syllables** highlighted, in any of ACIP, Wylie or Tibetan script.
+  Rules let the tool ignore spacing, shad variants, folio markers,
+  editorial brackets, or compare **across scripts** (an ACIP file
+  against a Unicode file). Copy a reading left or right, undo without
+  limit, edit in place, pin lines that must align. Reports: a
+  side-by-side HTML page, a patch file, and an **apparatus criticus** in
+  Markdown or CSV. Folder Compare classifies two folders and copies only
+  after a preview (it never deletes); snapshots record a folder's state
+  for later comparison. Three-Way Merge combines two edited copies of
+  one text against the original, resolving conflicts one by one; a file
+  left with conflict markers opens as a two-sided comparison.
+  Command-line comparison for scripted checks.
+
+![Text Compare: two prints of the opening of the Diamond Cutter. The
+changed reading (THAMS CAD ↔ KUN) is marked at the syllable, a dropped
+line shows in red, an added line in green; the arrows between the panes
+copy a reading across; the map at the right edge shows every difference
+in the whole text.](img/2026-09-09/compare-text.png)
+
+![Folder Compare: two batches classified Identical, Different, Left only
+and Right only, with Copy and Update actions that preview before copying
+and never delete.](img/2026-09-09/compare-folders.png)
+
+![Three-Way Merge: two proofreaders' corrections of one text against the
+original. The change both agree on merged itself; the one they disagree
+on is listed as a conflict for a human to
+settle.](img/2026-09-09/compare-threeway.png)
+
+- **Dictionary ordering.** Aligned renderings now rank most-attested
+  first with counts (THAMS CAD: all ×30, every ×14, each and every ×10).
+- **Research written up.** I surveyed sixteen text-analysis tool
+  families (diff and merge tools, Word and Acrobat document compare,
+  Draftable, folder sync, version control, find-and-replace suites,
+  near-duplicate detection, TRACER text reuse, Voyant statistics, change
+  tracking, patch tools, structured-data compare) and **EndNote** and
+  Zotero as models for an in-house reference bank. Each feature has a
+  verdict and a Tibetan- translation use; three follow-on batches are
+  planned: document Versions, Replace in Files with preview, Apply
+  Patch; Repeated Passages and similarity studies, a Statistics study
+  view, Entities in a text, table compare; and a References pane with
+  Insert Citation. Design work on all three began the same evening,
+  alongside a study of the monastery and holy-site maps I collected,
+  toward a Map pane in the Research group.
+- **Small things.** A dharma-wheel busy cursor while the tool works. Two
+  defects found by the battery were fixed the same hour (a false
+  "corrupt image" verdict in packaging; a shutdown crash in a status-bar
+  hook).
+
+## Decisions I made along the way
+
+- The style sheet's rules live as switches in Preferences, so any of
+  them can be turned on or off.
+- Cover notes for these digests and for technical documents recommend
+  opening the **.docx**, which is properly formatted, over the .md and
+  .txt.
+- Every digest now carries screenshots of what changed and a chart where
+  it explains the numbers, captured by the tool itself so they are
+  reproducible.
+- New features may get their own tabs, groups or panes wherever that
+  reads most logically, rather than being crammed into existing ones.
+- The desktop build will be re-pressed once the menu work is complete,
+  not after every batch.
+- Filed for after the release: a Textual Research workflow (collections,
+  word and variant studies), companion iOS/Android reader apps, Tibetan
+  Buddhist iconography in the interface, and a list of research-suite
+  questions to put to Geshe Michael.
+
+## Numbers
+
+![Before and after, Monday 13:30 to now. Every count comes from the
+build itself: menus and pages from the running app, suites from the test
+runner.](img/2026-09-09/chart-numbers.png)
+
+                                                           Monday 13:30             Now
+  -------------------------------------------------------- ------------------------ ----------------
+  Top-level menus                                          4                        12
+  Preferences pages                                        4 groups in one dialog   11 pages
+  Panes                                                    24                       25 (Compare)
+  Automated suites                                         101, all green           102, all green
+  Compare engine battery                                   ---                      43 checks
+  New self-test checks since Monday's digest               ---                      150+
+  Headwords whose renderings were out of frequency order   763                      0
+
+## Open questions for leadership
+
+1.  Licence for the project's own code (unchanged; blocks a public
+    release).
+2.  Whether the repository moves to the ALL organisation on GitHub.
+3.  Apple Developer ID for a notarised install.
+4.  The 24 data layers with open terms.
+5.  **New:** confirmation of the style sheet's colon and semicolon
+    spacing rules, so I can set the defaults.
+6.  **New:** I will ask Geshe Michael what he wants from the research
+    suite before it is designed in detail.
+
+## Next
+
+Press a fresh build; resume the pane-by-pane audit at the Overlay's
+Document box; begin the first follow-on compare batch (document
+Versions, Replace in Files with preview, Apply Patch); finish the Map
+pane study.
