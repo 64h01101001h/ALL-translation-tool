@@ -3,7 +3,8 @@
 for every distinct IAST term in the Lokesh Chandra extract, so the C++ port can
 be diff-tested against the Python oracle (engines_battery, battery F).
 
-Output: build/sanskrit_reference.tsv with columns
+Output: build/sanskrit_reference.tsv with columns (col 10 = the ALL
+Sanskrit pronunciation standard, added 2026-09-09)
   iast  acip  devanagari  pronunciation  nextletter  inputcode  ewts  tibetan  rev_iast
 None results are stored as the marker ∅ (the C++ side must fail identically).
 
@@ -47,10 +48,12 @@ def main():
             ewts = acip_to_ewts(acip) if acip is not None else None
             tib = sk.iast_to_tibetan(t)
             rev = sk.acip_to_iast(acip) if acip is not None else None
+            allp = sk.iast_to_all_pronunciation(t)   # ALL standard, 2026-09-09
             if acip is None:
                 n_fail += 1
             row = [t] + [NONE if x is None else x
-                         for x in (acip, deva, pron, nl, ic, ewts, tib, rev)]
+                         for x in (acip, deva, pron, nl, ic, ewts, tib, rev,
+                                   allp)]
             out.write('\t'.join(row) + '\n')
     print(f'wrote {OUT}: {len(terms)} terms ({n_fail} fail tokenization — '
           f'the port must fail on exactly the same ones)')
