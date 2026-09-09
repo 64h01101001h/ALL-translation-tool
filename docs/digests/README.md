@@ -110,3 +110,20 @@ apart in a smaller face.
 **Check before sending.** Render the first page (`qlmanage -t -s 1500 -o
 <dir> <file>.docx`) and look at it. If anything is cramped, fix the style,
 not the one document.
+
+## The email itself (Adam, 2026-09-09)
+
+The digest goes in the BODY of the email, in full, formatted the same way —
+not a short description of it. The three files are still attached, and the
+cover note recommends the .docx above everything else, including the copy in
+the body, because the pictures are only in the .docx.
+
+Two practical limits, recorded so nobody re-litigates them:
+- The screenshots cannot be embedded in the body from here: sixteen figures
+  come to about five megabytes of encoded data, far past what can be written
+  into a message. Each figure's place in the body carries its caption and
+  says the picture is in the attachment.
+- The attachments have to be added by hand for the same reason. Opening the
+  .docx, selecting all and pasting into the Gmail draft is the one-minute
+  route if the pictures are wanted in the body on a given day.
+
