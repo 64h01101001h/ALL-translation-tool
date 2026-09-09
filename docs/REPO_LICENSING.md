@@ -55,6 +55,7 @@ Statuses: **own** (ALL/ACIP work, root LICENSE applies) ·
 | data/extracted/persons_bdrc.json | settled | BDRC open catalogue person records |
 | data/extracted/acip_ | own | ACIP's own catalogue, mined in-house |
 | data/extracted/sungbum_ | own | derived from ACIP's own Sungbum corpus + BDRC links |
+| data/pronunciation/ | own | derived wholly from Geshe Michael Roach's own published courses in the ALL parallel corpus — the mantra lines that print the ACIP code and his reading side by side, aligned word for word. Contains no third-party text; same terms as the corpus it is mined from. Regenerable, and the evidence behind docs/standards/ALL_SANSKRIT_PRONUNCIATION_STANDARD.md |
 | data/extracted/mixed_nuts_ | own | extractions from the team's own working documents |
 | data/extracted/mw2 | own | outlines/titles keyed by BDRC work id, mined in-house |
 | data/extracted/ | own | remaining derived working data (censuses, apparatus, author index, citation web) — produced by tools/ from sources itemized above |
