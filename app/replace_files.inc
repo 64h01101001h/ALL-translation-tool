@@ -452,6 +452,7 @@ public:
     void setOpenDirtyReason(std::function<QString(const QString&)> f) { openDirtyReason_ = std::move(f); }
     void tickEverything(bool on) { for (auto& F : plan_.files) { F.ticked = on && !(F.library && !allowLib_->isChecked()); for (auto& o : F.occs) o.ticked = on; } rebuildTree(); }
     void setLastChangeset(const QString& id) { lastChangeset_ = id; undoBtn_->setEnabled(!id.isEmpty()); }
+    void expandFirst() { if (tree_->topLevelItemCount()) tree_->topLevelItem(0)->setExpanded(true); }
 
 private:
     int fileIndexOf(QTreeWidgetItem* it) const { QTreeWidgetItem* top = it->parent() ? it->parent() : it; return top->data(0, Qt::UserRole).toInt(); }

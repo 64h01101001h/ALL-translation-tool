@@ -45,6 +45,8 @@ static QCursor g_busyCursor();   // defined beside g_harnessRun
 #include "allcore/textspan.h"
 #include "allcore/textnorm.h"
 #include "allcore/filewalk.h"
+#include "allcore/textpatch.h"
+#include "allcore/docx_redline.h"
 #include <QKeyEvent>
 #include <QStringListModel>
 #include <QCompleter>
@@ -24066,6 +24068,7 @@ protected:
 #include "compare_pane.inc"
 #include "normalize_pane.inc"   // F3 Normalize… with preview (needs cmp::, g_compareTexts, ComparePane)
 #include "replace_files.inc"     // F4 Replace in Files… with mandatory preview (needs normalize::, versions, filewalk)
+#include "apply_patch.inc"       // F5 Apply Patch… (needs replf::readForRewrite / bytesForWrite, textpatch)
 
 class FilesPane : public QWidget {
 public:
@@ -38933,6 +38936,17 @@ int main(int argc, char** argv) {
         normalize::open(t, cp, [cp](const QString& m) { cp->statusLabel()->setText(m); });
     };
     normalize::g_fileNormalized = [overlay](const QString& p) { if (overlay->documentPath() == p && !overlay->isDirty()) overlay->openFile(p); };
+    patchapp::g_applyPatchSide = [root](ComparePane* cp, bool left) {   // F5: Sessions ▾ ▸ Apply Patch to Left/Right
+        patchapp::ApplyPatchDialog::Hooks h; h.dataRoot = root; h.sideName = cp->sideName(left);
+        // the preview replaces the pane's pair with (side, patched); apply puts the original pair back
+        // first, then sets the side through ONE undo snapshot, so Undo Merge returns to the unpatched pair
+        const QString nl = cp->sideName(true), nr = cp->sideName(false), tl = cp->sideLines(true).join('\n') + "\n", trr = cp->sideLines(false).join('\n') + "\n";
+        h.sideText = [cp, left] { return cp->sideLines(left).join('\n') + "\n"; };
+        h.setSideText = [cp, left, nl, nr, tl, trr](const QString& t) { cp->compareTexts(nl, tl, nr, trr); cp->setSideLines(left, cmp::linesOf(t)); };
+        h.goToLine = [cp](int line0) { const auto& r = cp->result(); for (int i = 0; i < (int)r.hunks.size(); ++i) if (r.hunks[i].kind != allcore::textdiff::Kind::Equal && r.hunks[i].aEnd > line0) { cp->goToHunk(i); return; } };
+        patchapp::open(h, cp, QString());
+    };
+    g_applyPatchSideHook = patchapp::g_applyPatchSide;
     const ComparePages cmpPages = installComparePages(comparePane);
     tabs.addTab(comparePane, "Compare");
     auto* goferPane = new GoferPane(spine, root);
@@ -40752,6 +40766,21 @@ int main(int argc, char** argv) {
             const QString f = safeGetOpenFileName(&win, "Open a file with <<<<<<< conflict markers", QString(), "Texts (*.txt *.act *.inc *.md);;All files (*)");
             if (!f.isEmpty()) { if (g_raisePane) g_raisePane(comparePane); comparePane->openConflictFile(f); }
         });
+        {   // F5: a corrector's unified diff against the front document, previewed as a diff
+            QObject::connect(cmpM->addAction("Apply Patch\u2026"), &QAction::triggered, [frontDoc, msg, comparePane, root, &win, overlay, draftPane, manuscriptPane, active] {
+                QString name, text, path; frontDoc(name, text, path);
+                if (active(manuscriptPane)) { msg(patchapp::kManuscriptRefusal); return; }
+                patchapp::ApplyPatchDialog::Hooks h; h.dataRoot = root;
+                h.dirtyReason = [overlay, draftPane](const QString& p) -> QString {
+                    auto same = [&](const QString& q) { return !q.isEmpty() && QFileInfo(q).absoluteFilePath() == QFileInfo(p).absoluteFilePath(); };
+                    if (same(overlay->documentPath()) && overlay->isDirty()) return "open in the Overlay with unsaved edits";
+                    if (same(draftPane->draftPath()) && draftPane->draftDirty()) return "open in the Draft with unsaved edits";
+                    return {};
+                };
+                h.goToLine = [comparePane](int line0) { const auto& r = comparePane->result(); for (int i = 0; i < (int)r.hunks.size(); ++i) if (r.hunks[i].kind != allcore::textdiff::Kind::Equal && r.hunks[i].aEnd > line0) { comparePane->goToHunk(i); return; } };
+                patchapp::open(h, &win, path);
+            });
+        }
         QObject::connect(cmpM->addAction("Align Caret Lines (pin)"), &QAction::triggered, [comparePane] { comparePane->addPinAtCursors(); });
         QObject::connect(cmpM->addAction("Clear Alignment Pins"), &QAction::triggered, [comparePane] { comparePane->clearPins(); });
         cmpM->addSeparator();
@@ -42114,6 +42143,7 @@ int main(int argc, char** argv) {
     // the performance harness that guards Adam's speed finding)
     // --compare <left> <right> [report.(html|patch|md|csv)]: the engine
     // from the command line; exit 1 when the texts differ (2026-09-08)
+    if (const int apIx = cliArgs.indexOf("--apply-patch"); apIx >= 0) return patchapp::cli(cliArgs, apIx);   // F5
     const int cmpIx = cliArgs.indexOf("--compare");
     if (cmpIx >= 0 && cmpIx + 2 < cliArgs.size()) {
         const auto A = cmp::readText(cliArgs[cmpIx + 1]), B = cmp::readText(cliArgs[cmpIx + 2]);
@@ -42126,7 +42156,18 @@ int main(int argc, char** argv) {
             const QString out = cliArgs[cmpIx + 3]; const QString sfx = QFileInfo(out).suffix().toLower();
             const std::string an = cliArgs[cmpIx + 1].toStdString(), bn = cliArgs[cmpIx + 2].toStdString();
             const bool folios = QFileInfo(out).completeSuffix().toLower().contains("folios");   // F2: out.folios.md / out.folios.csv
-            std::string body = folios ? (sfx == "csv" ? changedFoliosCsv(changedFolios(a, b, r, false)) : changedFoliosMarkdown(an, bn, Options(), r, changedFolios(a, b, r, false)))
+            std::string body;
+            if (sfx == "docx") {   // F6: Word revision marks (CLI first; the Save Report filter waits for the Word verification gate)
+                allcore::docx::RedlineOptions ro; QString src; const QString who = docprops::whoSaves(&src);
+                ro.author = (who + " via Diamond Cutter compare").toStdString(); ro.dateIso = QDateTime::currentDateTimeUtc().toString("yyyy-MM-ddThh:mm:ssZ").toStdString();
+                ro.aName = QFileInfo(cliArgs[cmpIx + 1]).fileName().toStdString(); ro.bName = QFileInfo(cliArgs[cmpIx + 2]).fileName().toStdString(); ro.title = "Revision marks: " + ro.aName + " against " + ro.bName;
+                ro.provenance = QString("Revision marks computed by the Diamond Cutter Translation Tool from A = %1 and B = %2 on %3. Rules in force: %4. %5 Minor differences under those rules are included as revisions (%6 of them) — a redline is exact. %7 line(s) were compared raw (could not be converted). Where lines did not pair one to one, whole lines are marked. Moved blocks appear as a deletion and an insertion. Both drafts are compared as plain text; formatting was not compared. Tibetan runs are set in %8. Export run by %9. These marks are machine-computed; they are not an editor's edits.")
+                                    .arg(QString::fromStdString(ro.aName), QString::fromStdString(ro.bName), QDate::currentDate().toString(Qt::ISODate), QString::fromStdString(optionsDescription(Options())), QString::fromStdString(summary(r))).arg(r.unimportant).arg(r.unnormalised).arg(QString::fromStdString(ro.tibetanFont), who).toStdString();
+                allcore::docx::RedlineStats st;
+                body = allcore::docx::buildRedlineDocx(a, b, r, ro, &st);
+                printf("Word file: %d insertions, %d deletions marked, %d minor included, %d moved, %d compared raw, %d unrepresentable character(s) replaced. Open it in Word > Review to accept or reject.\n", st.insertions, st.deletions, st.minorMarked, st.moved, st.comparedRaw, st.unrepresentable);
+            } else
+            body = folios ? (sfx == "csv" ? changedFoliosCsv(changedFolios(a, b, r, false)) : changedFoliosMarkdown(an, bn, Options(), r, changedFolios(a, b, r, false)))
                              : sfx == "html" ? sideBySideHtml(an, bn, a, b, r, false, 3) : sfx == "md" ? apparatusMarkdown(an, bn, apparatus(a, b, r)) : sfx == "csv" ? apparatusCsv(apparatus(a, b, r)) : unifiedDiff(an, bn, a, b, r, 3);
             QFile f(out); if (!f.open(QIODevice::WriteOnly) || f.write(body.data(), qint64(body.size())) != qint64(body.size())) { fprintf(stderr, "compare: could not write %s\n", out.toUtf8().constData()); return 2; }
         }
@@ -42181,6 +42222,11 @@ int main(int argc, char** argv) {
                 log << QString("  [%1] Normalize: %2").arg(ok ? "PASS" : "FAIL").arg(what);
                 if (!ok) ++nf;
             });
+            fails += nf;
+        }
+        {   // F5 Apply Patch (selftests F5-16…22b)
+            int nf = 0;
+            patchapp::selfTest(overlay, comparePane, [manuscriptPane] { return manuscriptPane->manuscriptText(); }, root, [&](bool ok, const char* what) { log << QString("  [%1] Apply Patch: %2").arg(ok ? "PASS" : "FAIL").arg(what); if (!ok) ++nf; });
             fails += nf;
         }
         {   // F4 Replace in Files (selftests F4-1…18c)
@@ -44998,6 +45044,47 @@ int main(int argc, char** argv) {
                     save(m->grab(), "menu-" + name);
                     m->hide(); settle(50);
                 }
+            }
+            if (extra.contains("suite")) {   // analysis suite, batch 4 (2026-09-09): the new windows at work
+                const QString sd = QDir::tempPath() + "/dct_shot_suite"; QDir(sd).removeRecursively(); QDir().mkpath(sd + "/batch7");
+                auto put = [](const QString& p, const QString& t) { QFile f(p); if (f.open(QIODevice::WriteOnly | QIODevice::Truncate)) f.write(t.toUtf8()); };
+                const QStringList base{"@001A", "BLA MA LA PHYAG 'TSHAL LO", "SEMS CAN THAMS CAD BDE BA DANG BDE BA'I RGYU DANG LDAN PAR GYUR CIG", "SDUG BSNGAL DANG SDUG BSNGAL GYI RGYU DANG BRAL BAR GYUR CIG", "@001B", "SDUG BSNGAL MED PA'I BDE BA DANG MI 'BRAL BAR GYUR CIG", "NYE RING CHAGS SDANG GNYIS DANG BRAL BA'I BTANG SNYOMS LA GNAS PAR GYUR CIG"};
+                QStringList v2 = base; v2[2].replace("THAMS CAD", "KUN"); QStringList v3 = v2; v3 << "BDE BA CHEN PO";
+                const QString vdoc = sd + "/S0134I.act";
+                for (const QStringList& v : {base, v2, v3}) { const QString t = v.join('\n') + "\n"; put(vdoc, t); docprops::noteVersion(nullptr, root, vdoc, t.toUtf8(), "document", "save", "", "UTF-8", "LF", false, docprops::textStatistics(t, true, 0, 0, 0)); QThread::msleep(15); }
+                {
+                    VersionsWindow::Hooks vh; vh.dataRoot = root; vh.docPath = vdoc; vh.kind = "document";
+                    const QString cur = v3.join('\n') + "\n"; vh.currentText = [cur] { return cur; };
+                    vh.currentBytesOnDisk = [vdoc] { QFile f(vdoc); return f.open(QIODevice::ReadOnly) ? f.readAll() : QByteArray(); };
+                    vh.isDirty = [] { return false; }; vh.reloadWithEncoding = [](const QString&) { return true; }; vh.caretLine = [] { return 3; };
+                    VersionsWindow vw(vh, &win); vw.resize(980, 620); vw.selectRow(1); vw.nameVersion("Checked against the Sera Mey print", false); vw.selectRow(0);
+                    vw.show(); settle(400); save(vw.grab(), "versions-window"); vw.close();
+                }
+                QDir(docprops::versionsDir(root, vdoc)).removeRecursively();
+                {   // Normalize on the Document box (its text is restored afterwards)
+                    auto* pe = overlay->documentEditor(); const QString keep = pe->toPlainText();
+                    pe->setPlainText("@001A\tBLA  MA LA PHYAG 'TSHAL LO   \nSEMS CAN  THAMS CAD ,LA\n\n\n\nSDUG BSNGAL [rnying pa: sdug] DANG BRAL BAR GYUR CIG,,\n");
+                    normalize::Options o; o.collapseSpaces = true; o.trimTrailing = true; o.maxBlankLines = 1; o.spaceAfterShad = true; o.eol = normalize::Eol::LF;
+                    normalize::NormalizeDialog nd(normalize::editorTarget(pe, "Document box", vdoc), &win); nd.setOptions(o); nd.preview();
+                    nd.show(); settle(400); save(nd.grab(), "normalize-dialog"); nd.close();
+                    pe->setPlainText(keep);
+                }
+                {   // Replace in Files over a small batch
+                    put(sd + "/batch7/S0134I.act", base.join("\r\n") + "\r\n"); put(sd + "/batch7/S0135I.act", "@002A\nSEMS CAN THAMS CAD LA PHAN PA\nTHAMS CAD MKHYEN PA\n"); put(sd + "/batch7/S0136I.act", "@003A\nBDE BA CHEN PO\n");
+                    replf::ReplaceFilesWindow rw(root, &win); rw.seedFolders({sd + "/batch7"}); rw.seed("THAMS CAD", "MA LUS PA"); rw.preview(); rw.expandFirst();
+                    rw.show(); settle(400); save(rw.grab(), "replace-in-files"); rw.close();
+                }
+                {   // Apply Patch: a corrector's diff against a copy where one hunk no longer fits
+                    using namespace allcore::textdiff;
+                    QStringList other = base; other[2].replace("THAMS CAD", "KUN"); other[5] += " ,,"; other << "BDE BA CHEN PO";
+                    const std::string patch = unifiedDiff("S0134I.act", "S0134I.act", cmp::toStd(base), cmp::toStd(other), diffLines(cmp::toStd(base), cmp::toStd(other), Options()), 1);
+                    put(sd + "/corrector.diff", QString::fromStdString(patch));
+                    QStringList target = base; target[5] = "SDUG BSNGAL MED PA'I BDE BA (retyped) DANG MI 'BRAL BAR GYUR CIG"; put(sd + "/batch7/S0134I.act", target.join('\n') + "\n");
+                    patchapp::ApplyPatchDialog::Hooks h; h.dataRoot = root; h.dirtyReason = [](const QString&) { return QString(); };
+                    patchapp::ApplyPatchDialog ad(h, &win); ad.resize(900, 620); ad.setTarget(sd + "/batch7/S0134I.act"); ad.setPatchFile(sd + "/corrector.diff"); ad.preview(false);
+                    ad.show(); settle(400); save(ad.grab(), "apply-patch"); ad.close();
+                }
+                QDir(sd).removeRecursively();
             }
         }
         printf("[shot] demo open; %d tabs\n", tabs.count()); fflush(stdout);

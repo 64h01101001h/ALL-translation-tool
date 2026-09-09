@@ -9,6 +9,7 @@ static std::function<void(const QString&, const QString&)> g_compareFolders;   /
 std::function<void(const QString&, const QString&, const QString&, const QString&)> g_compareTexts;  // (aName,aText,bName,bText)
 class ComparePane;
 static std::function<void(ComparePane*, bool)> g_normalizeSide;   // F3: open Normalize… for the left (true) / right side; set in main()
+static std::function<void(ComparePane*, bool)> g_applyPatchSideHook;   // F5: Apply Patch to Left/Right; set in main()
 
 namespace cmp {
 using namespace allcore::textdiff;
@@ -727,6 +728,10 @@ private:
                     nl->setEnabled(bool(g_normalizeSide) && !binary_); nr->setEnabled(bool(g_normalizeSide) && !binary_);
                     connect(nl, &QAction::triggered, this, [this] { if (g_normalizeSide) g_normalizeSide(this, true); });
                     connect(nr, &QAction::triggered, this, [this] { if (g_normalizeSide) g_normalizeSide(this, false); });
+                    QAction* pl = menu->addAction("Apply Patch to Left\u2026"), *prr = menu->addAction("Apply Patch to Right\u2026");   // F5
+                    pl->setEnabled(bool(g_applyPatchSideHook) && !binary_); prr->setEnabled(bool(g_applyPatchSideHook) && !binary_);
+                    connect(pl, &QAction::triggered, this, [this] { if (g_applyPatchSideHook) g_applyPatchSideHook(this, true); });
+                    connect(prr, &QAction::triggered, this, [this] { if (g_applyPatchSideHook) g_applyPatchSideHook(this, false); });
                 }
                 {   // F2
                     QAction* cf = menu->addAction("Copy Changed Folios");

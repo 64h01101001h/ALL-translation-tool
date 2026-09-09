@@ -21,6 +21,7 @@ if [[ $SHOTS == 1 ]]; then
   #   compare  → compare-text/compare-folders/compare-threeway.png
   #   prefs    → prefs-grid.png, prefs-house-style.png
   #   menus    → menu-<name>.png for every top-level menu
+  #   suite    → versions-window / normalize-dialog / replace-in-files / apply-patch (batch 4)
   # Digest captures (Adam, 2026-09-08): a 1440x900 logical frame — a
   # laptop screen, so panes are not crowded — at device pixel ratio 2, so
   # text is crisp: 2880x1800 PNGs. pandoc fits them to the page; the HTML
@@ -31,7 +32,7 @@ if [[ $SHOTS == 1 ]]; then
   SIZE="${DCT_SHOT_SIZE:-1440x900}"; LW="${SIZE%x*}"; LH="${SIZE#*x}"
   CFG="$(mktemp).json"
   printf '{"screens":[{"name":"digest","x":0,"y":0,"width":%s,"height":%s,"logicalDpi":192,"logicalBaseDpi":96,"dpi":192}]}' "$((LW * 2))" "$((LH * 2))" > "$CFG"
-  QT_QPA_PLATFORM="offscreen:configfile=$CFG" DCT_SHOT_EXTRA="${DCT_SHOT_EXTRA:-compare,prefs,menus}" "$APP" --screenshots "$TMP" --shotsize "$SIZE" >/dev/null 2>&1 || true
+  QT_QPA_PLATFORM="offscreen:configfile=$CFG" DCT_SHOT_EXTRA="${DCT_SHOT_EXTRA:-compare,prefs,menus,suite}" "$APP" --screenshots "$TMP" --shotsize "$SIZE" >/dev/null 2>&1 || true
   rm -f "$CFG"
   # keep only the images the .md references (the digest decides what is
   # pertinent); everything else stays out of the repository

@@ -84,10 +84,13 @@ before 1.0)
       census, three dead controls removed before they are built) with a
       19-step build order across the three batches
 - [x] Batch 4 F0 substrate — 2026-09-09 (textspan, filewalk, applySelected, Draft sidecar fix, HTML flattening, census widened)
-- [ ] **Implement batch 4** in the critic's order (F0–F4 done 2026-09-09): F5 Apply Patch next, then
-      (`allcore/textspan.h` folio primitive + `eligibleTextFile` +
-      `provenance.h`), then Versions, changed-folios report, Normalize,
-      Replace in Files with preview, Apply Patch, tracked-changes .docx
+- [ ] **Implement batch 4** in the critic's order — F0 substrate, F1 Versions,
+      F2 changed-folios report, F3 Normalize, F4 Replace in Files DONE
+      2026-09-09 (audit pages: Versions.md, Normalize.md, ReplaceInFiles.md,
+      ComparePane.md §5–7); F5 Apply Patch and F6 Word redline DONE 2026-09-09
+      (ApplyPatch.md, WordRedline.md). BATCH 4 COMPLETE. F6's Save Report
+      filter, Tools item and Versions button wait for Adam's Word check on
+      docs/release_audit/redline_sample.docx (WordRedline.md §4)
 - [ ] **30 open questions for Adam** are collected at the end of each batch
       section of the plan; the first six matter before code: the house shad
       convention, where versions live when the data root is shared, whether
