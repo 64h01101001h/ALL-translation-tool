@@ -95,7 +95,9 @@ from any of these products is used.
    details, location pane, reports, sessions, Tools ▸ Compare, Files hooks,
    selftests — DONE 2026-09-08 (19 checks; placed in the Research group).
 3. Three-way merge page, folder compare page with sync and snapshots,
-   conflict-file opening, manual alignment pins, `--compare` CLI.
+   conflict-file opening, manual alignment pins, `--compare` CLI — DONE
+   2026-09-08 (Compare with Backup deferred: the backup module's API is
+   next; table/image/.docx compare filed for later).
 4. Audit rows, LOG, TODO, digest draft update; press when Adam asks.
 
 ## Honesty rules that apply

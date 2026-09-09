@@ -38539,6 +38539,7 @@ int main(int argc, char** argv) {
     comparePane->openInOverlay_ = [overlay](const QString& p) { overlay->openFile(p); if (g_raisePane) g_raisePane(overlay); };
     g_compareFiles = [comparePane](const QString& a, const QString& b) { comparePane->compareFiles(a, b); if (g_raisePane) g_raisePane(comparePane); };
     g_compareTexts = [comparePane](const QString& an, const QString& at, const QString& bn, const QString& bt) { comparePane->compareTexts(an, at, bn, bt); if (g_raisePane) g_raisePane(comparePane); };
+    const ComparePages cmpPages = installComparePages(comparePane);
     tabs.addTab(comparePane, "Compare");
     auto* goferPane = new GoferPane(spine, root);
     g_goferQuery = [goferPane](const QString& q) {
@@ -40295,6 +40296,13 @@ int main(int argc, char** argv) {
             else if (QFileInfo(a).isFile() && QFileInfo(b).isFile()) { if (g_compareFiles) g_compareFiles(a, b); }
             else msg("Pick two files or two folders.");
         });
+        QObject::connect(cmpM->addAction("Open Conflict File\u2026"), &QAction::triggered, [comparePane, &win] {
+            const QString f = safeGetOpenFileName(&win, "Open a file with <<<<<<< conflict markers", QString(), "Texts (*.txt *.act *.inc *.md);;All files (*)");
+            if (!f.isEmpty()) { if (g_raisePane) g_raisePane(comparePane); comparePane->openConflictFile(f); }
+        });
+        QObject::connect(cmpM->addAction("Align Caret Lines (pin)"), &QAction::triggered, [comparePane] { comparePane->addPinAtCursors(); });
+        QObject::connect(cmpM->addAction("Clear Alignment Pins"), &QAction::triggered, [comparePane] { comparePane->clearPins(); });
+        cmpM->addSeparator();
         QMenu* cmpRecent = cmpM->addMenu("Recent Comparisons");
         QObject::connect(cmpRecent, &QMenu::aboutToShow, [cmpRecent, comparePane] {
             cmpRecent->clear();
@@ -41712,6 +41720,8 @@ int main(int argc, char** argv) {
         fails += draftPane->selfTest(log);
         fails += manuscriptPane->selfTest(log);
         fails += comparePane->selfTest(log);
+        fails += cmpPages.folders->selfTest(log);
+        fails += cmpPages.three->selfTest(log);
         fails += reviewPane->selfTest(log);
         fails += alignPane->selfTest(log);
         fails += libraryPane->selfTest(log);

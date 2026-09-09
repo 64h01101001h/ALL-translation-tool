@@ -3109,9 +3109,11 @@ licensing decisions.
 ### Compare & Merge suite (Adam, 2026-09-08) — docs/COMPARE_SUITE_PLAN.md
 - [x] Batch 1 engine + battery; batch 2 Compare pane, menus, Files hooks,
       --compare CLI — 2026-09-08
-- [ ] Batch 3: folder compare page (statuses, filters, sync with preview,
+- [x] Batch 3: folder compare page (statuses, filters, sync with preview,
       snapshots), three-way merge page, conflict-file opening, manual
-      alignment pins, Compare with Backup
+      alignment pins — 2026-09-08
+- [ ] Compare with Backup (needs the backup module's listing API); encoding
+      choice for compared files; surface invalid regex filters
 - [ ] Later: table compare for glossary CSV/JSON by key; image compare of
       two scans of the same folio (Scans viewer); .docx text-extraction compare
 

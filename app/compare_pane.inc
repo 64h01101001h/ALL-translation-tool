@@ -142,13 +142,25 @@ public:
         auto* outer = new QVBoxLayout(this);
         outer->setContentsMargins(0, 0, 0, 0); outer->setSpacing(0);
         buildRibbon();
+        // ---- page switcher (Text · Folders · Three-Way) + stacked pages
+        auto* switcher = new QHBoxLayout; switcher->setContentsMargins(6, 3, 6, 0); switcher->setSpacing(4);
+        pageBtns_ = new QButtonGroup(this);
+        auto pageBtn = [&](const QString& label, int id) { auto* b = new QToolButton; b->setText(label); b->setCheckable(true); b->setAutoRaise(true); pageBtns_->addButton(b, id); switcher->addWidget(b); return b; };
+        pageBtn("Text Compare", 0)->setChecked(true); pageBtn("Folder Compare", 1); pageBtn("Three-Way Merge", 2);
+        switcher->addStretch(1);
+        outer->addLayout(switcher);
+        pages_ = new QStackedWidget;
+        textPage_ = new QWidget; auto* tp = new QVBoxLayout(textPage_); tp->setContentsMargins(0, 0, 0, 0); tp->setSpacing(0);
+        pages_->addWidget(textPage_);
+        outer->addWidget(pages_, 1);
+        connect(pageBtns_, &QButtonGroup::idClicked, this, [this](int id) { if (id < pages_->count()) pages_->setCurrentIndex(id); });
         // ---- header: the two names
         auto* head = new QHBoxLayout;
         nameL_ = new QLabel("(left) — Compare Files… or Compare with Clipboard to begin"); nameL_->setTextInteractionFlags(Qt::TextSelectableByMouse);
         nameR_ = new QLabel("(right)"); nameR_->setTextInteractionFlags(Qt::TextSelectableByMouse);
         for (auto* l : {nameL_, nameR_}) { l->setStyleSheet("font-weight:600; padding:3px 6px;"); l->setWordWrap(false); }
         head->addWidget(nameL_, 1); head->addSpacing(48); head->addWidget(nameR_, 1); head->addSpacing(16);
-        outer->addLayout(head);
+        tp->addLayout(head);
         // ---- body: left | link strip | right | location pane
         auto* body = new QHBoxLayout; body->setSpacing(0); body->setContentsMargins(0, 0, 0, 0);
         left_ = new DiffEdit; right_ = new DiffEdit;
@@ -169,7 +181,7 @@ public:
         }
         auto* split = new QSplitter(Qt::Vertical);
         split->addWidget(bodyW); split->addWidget(details_); split->setStretchFactor(0, 1); split->setStretchFactor(1, 0);
-        outer->addWidget(split, 1);
+        tp->addWidget(split, 1);
         // ---- status
         status_ = new QLabel("Ready."); status_->setStyleSheet("padding:2px 6px; color:#4A3F33;");
         outer->addWidget(status_);
@@ -194,8 +206,16 @@ public:
         setLines({}, {}, "", "");
     }
 
+    // ------------------------------------------------------------- pages
+    void addPage(QWidget* w) { pages_->addWidget(w); }
+    void showPage(int id) { if (id < pages_->count()) { pages_->setCurrentIndex(id); if (auto* b = pageBtns_->button(id)) b->setChecked(true); } }
+    int currentPage() const { return pages_->currentIndex(); }
+    QLabel* statusLabel() const { return status_; }
+    const QString& root() const { return root_; }
+
     // ------------------------------------------------------------- API
     void compareFiles(const QString& a, const QString& b) {
+        showPage(0);
         const auto A = cmp::readText(a), B = cmp::readText(b);
         if (!A.ok || !B.ok) { status_->setText("Could not read " + (A.ok ? b : a)); return; }
         pathL_ = a; pathR_ = b; eolL_ = A.eol; eolR_ = B.eol;
@@ -212,6 +232,7 @@ public:
         remember("text", a, b);
     }
     void compareTexts(const QString& aName, const QString& aText, const QString& bName, const QString& bText) {
+        showPage(0);
         pathL_.clear(); pathR_.clear(); binary_ = false; eolL_ = eolR_ = "\n";
         setLines(cmp::linesOf(aText), cmp::linesOf(bText), aName, bName);
     }
@@ -227,6 +248,46 @@ public:
         g_compareFolders(a, b);
     }
     void openThreeWay() { if (openThreeWay_) openThreeWay_(); else status_->setText("Three-way merge is not in this build yet (next batch)."); }
+    // Manual alignment (WinMerge sync points / Araxis links / BC alignment
+    // overrides): pin the left caret's line to the right caret's line; the
+    // diff then runs separately above and below every pin.
+    bool addPinAtCursors() {
+        if (show_ != cmp::Show::All) { status_->setText("Switch View to Show All to pin an alignment."); return false; }
+        const int ra = left_->textCursor().blockNumber(), rb = right_->textCursor().blockNumber();
+        if (ra < 0 || rb < 0 || ra >= (int)rows_.size() || rb >= (int)rows_.size()) return false;
+        const int a = rows_[ra].a, b = rows_[rb].b;
+        if (a < 0 || b < 0) { status_->setText("Put both carets on real lines (not filler) to pin them together."); return false; }
+        for (const auto& p : pins_) if ((p.first <= a) != (p.second <= b)) { status_->setText("That pin would cross an existing one."); return false; }
+        pins_.push_back({a, b}); std::sort(pins_.begin(), pins_.end());
+        recompute(true); status_->setText(QString("Aligned left line %1 with right line %2 (%3 pin%4).").arg(a + 1).arg(b + 1).arg(pins_.size()).arg(pins_.size() == 1 ? "" : "s"));
+        return true;
+    }
+    void clearPins() { pins_.clear(); recompute(true); status_->setText("Alignment pins cleared."); }
+    int pinCount() const { return int(pins_.size()); }
+    // A file with <<<<<<< / ======= / >>>>>>> markers (a merge that stopped)
+    // opens as a two-sided comparison: "ours" left, "theirs" right.
+    static bool splitConflictText(const QString& text, QString& ours, QString& theirs, int* conflicts = nullptr) {
+        QStringList L, R; int state = 0, n = 0;
+        for (const QString& line : cmp::linesOf(text)) {
+            if (state == 0 && line.startsWith("<<<<<<<")) { state = 1; ++n; continue; }
+            if (state == 1 && line.startsWith("=======")) { state = 2; continue; }
+            if (state == 2 && line.startsWith(">>>>>>>")) { state = 0; continue; }
+            if (state == 0) { L << line; R << line; } else if (state == 1) L << line; else R << line;
+        }
+        if (conflicts) *conflicts = n;
+        if (n == 0) return false;
+        ours = L.join('\n') + "\n"; theirs = R.join('\n') + "\n"; return true;
+    }
+    bool openConflictFile(const QString& path) {
+        const auto F = cmp::readText(path);
+        if (!F.ok || F.binary) { status_->setText("Could not read " + path); return false; }
+        QString ours, theirs; int n = 0;
+        if (!splitConflictText(F.text, ours, theirs, &n)) { status_->setText("No conflict markers (<<<<<<< ======= >>>>>>>) in " + QFileInfo(path).fileName()); return false; }
+        compareTexts(QFileInfo(path).fileName() + " (ours)", ours, QFileInfo(path).fileName() + " (theirs)", theirs);
+        pathL_ = path;   // Save Left writes the resolved file back over the conflict file
+        updateNames(); status_->setText(QString("%1 conflict%2 opened as a two-sided comparison; resolve with Copy Left/Right, then Save Left.").arg(n).arg(n == 1 ? "" : "s"));
+        return true;
+    }
     void swapSides() { std::swap(aLines_, bLines_); std::swap(pathL_, pathR_); std::swap(nameLText_, nameRText_); std::swap(eolL_, eolR_); pushUndo(); recompute(true); }
     void reload() { if (!pathL_.isEmpty() && !pathR_.isEmpty()) compareFiles(pathL_, pathR_); else recompute(true); }
 
@@ -416,6 +477,20 @@ public:
             check(binary_ && status_->text().contains("offset 4"), "binary files report the first differing byte, never a text diff");
             QDir(tmp).removeRecursively();
         }
+        // alignment pins: force left line 2 (y) to align with right line 2 (q)
+        compareTexts("A", "x\ny\nSEMS CAN\nz\n", "B", "SEMS CAN\nq\nr\ns\n");
+        check(res_.hunks.size() == 3 && res_.hunks[1].kind == Kind::Equal, "without pins the diff aligns SEMS CAN with SEMS CAN");
+        { rendering_ = true; QTextCursor ca(left_->document()->findBlockByNumber(1)); left_->setTextCursor(ca); QTextCursor cb(right_->document()->findBlockByNumber(3)); right_->setTextCursor(cb); rendering_ = false; }
+        check(rows_[1].a == 1 && rows_[3].b == 1, "the carets sit on left line 2 and right line 2 in the aligned view");
+        check(addPinAtCursors() && pinCount() == 1, "Align Caret Lines pins them together");
+        check(res_.hunks.size() == 2 && res_.hunks[0].kind == Kind::Change && res_.hunks[1].aBeg == 1 && res_.hunks[1].bBeg == 1, "the diff now runs above and below the pin: x↔SEMS CAN, then y/SEMS CAN/z ↔ q/r/s");
+        clearPins(); check(pinCount() == 0 && res_.hunks.size() == 3, "Clear Alignment Pins restores the free alignment");
+        // conflict files
+        {
+            QString ours, theirs; int n = 0;
+            check(splitConflictText("a\n<<<<<<< MINE\nX\n=======\nY\n>>>>>>> THEIRS\nb\n", ours, theirs, &n) && n == 1 && ours == "a\nX\nb\n" && theirs == "a\nY\nb\n", "a conflict file splits into ours / theirs");
+            check(!splitConflictText("plain\n", ours, theirs, &n), "a file without markers is refused as a conflict file");
+        }
         compareTexts("", "", "", "");
         return fails;
     }
@@ -429,13 +504,35 @@ private:
     }
     void pushUndo() { undo_.push_back({aLines_, bLines_}); redo_.clear(); if (undo_.size() > 200) undo_.erase(undo_.begin()); }
     void recompute(bool rediff) {
-        if (rediff) res_ = allcore::textdiff::diffLines(cmp::toStd(aLines_), cmp::toStd(bLines_), opts_);
+        if (rediff) res_ = diffWithPins();
         rows_ = cmp::buildRows(res_, show_, ctx_, minorAsDiff_);
         render();
         if (cur_ >= (int)res_.hunks.size()) cur_ = -1;
         updateNames(); showDetails();
         if (!binary_) status_->setText(QString::fromStdString(allcore::textdiff::summary(res_)));
         link_->update(); loc_->update();
+    }
+    Result diffWithPins() {
+        using namespace allcore::textdiff;
+        const auto A = cmp::toStd(aLines_), B = cmp::toStd(bLines_);
+        // drop pins that no longer fit the texts
+        std::vector<std::pair<int, int>> pins;
+        for (const auto& p : pins_) if (p.first <= (int)A.size() && p.second <= (int)B.size()) pins.push_back(p);
+        pins_ = pins;
+        if (pins.empty()) return diffLines(A, B, opts_);
+        Result R; R.aLines = int(A.size()); R.bLines = int(B.size());
+        int a0 = 0, b0 = 0;
+        auto segment = [&](int a1, int b1) {
+            std::vector<std::string> sa(A.begin() + a0, A.begin() + a1), sb(B.begin() + b0, B.begin() + b1);
+            Result r = diffLines(sa, sb, opts_);
+            const int base = int(R.hunks.size());
+            for (auto h : r.hunks) { h.aBeg += a0; h.aEnd += a0; h.bBeg += b0; h.bEnd += b0; if (h.movedPeer >= 0) h.movedPeer += base; R.hunks.push_back(h); }
+            R.changes += r.changes; R.inserts += r.inserts; R.deletes += r.deletes; R.unimportant += r.unimportant; R.moved += r.moved; R.unnormalised += r.unnormalised;
+            a0 = a1; b0 = b1;
+        };
+        for (const auto& p : pins) segment(p.first, p.second);
+        segment(int(A.size()), int(B.size()));
+        return R;
     }
     void render() {
         rendering_ = true;
@@ -550,6 +647,13 @@ private:
             auto* menu = new QMenu(sess); sess->setMenu(menu);
             connect(menu, &QMenu::aboutToShow, this, [this, menu] {
                 menu->clear();
+                connect(menu->addAction("Open Conflict File…"), &QAction::triggered, this, [this] {
+                    const QString f = safeGetOpenFileName(this, "Open a file with <<<<<<< conflict markers", QString(), "Texts (*.txt *.act *.inc *.md);;All files (*)");
+                    if (!f.isEmpty()) openConflictFile(f);
+                });
+                connect(menu->addAction("Align Caret Lines (pin)"), &QAction::triggered, this, [this] { addPinAtCursors(); });
+                connect(menu->addAction("Clear Alignment Pins"), &QAction::triggered, this, [this] { clearPins(); });
+                menu->addSeparator();
                 connect(menu->addAction("Save Session…"), &QAction::triggered, this, [this] {
                     const QString n = docprops::askName(this, "Save Session", "Session name:", QFileInfo(pathL_).completeBaseName() + " vs " + QFileInfo(pathR_).completeBaseName());
                     if (!n.isEmpty() && saveSessionAs(n)) status_->setText("Session saved: " + n);
@@ -735,6 +839,8 @@ private:
     };
 
     QString root_;
+    QStackedWidget* pages_ = nullptr; QWidget* textPage_ = nullptr; QButtonGroup* pageBtns_ = nullptr;
+    std::vector<std::pair<int, int>> pins_;
     QStringList aLines_, bLines_;
     QString pathL_, pathR_, nameLText_, nameRText_, eolL_ = "\n", eolR_ = "\n";
     bool dirtyL_ = false, dirtyR_ = false, dirtyEditors_ = false, binary_ = false;
@@ -753,3 +859,474 @@ private:
     QRadioButton* showAll_ = nullptr; QRadioButton* showDiff_ = nullptr; QRadioButton* showCtx_ = nullptr; QSpinBox* ctxSpin_ = nullptr; QCheckBox* minorT_ = nullptr;
     std::vector<std::pair<QCheckBox*, bool Options::*>> rules_;
 };
+
+// =====================================================================
+// Folder Compare page (Beyond Compare / WinMerge / Araxis folder views):
+// two trees classified Identical · Different · Minor only · Left only ·
+// Right only; criteria bytes / rules-based text / size; sync copies with
+// a preview and confirmation; snapshots (paths + sizes + SHA-1) for later
+// comparison; HTML / CSV reports. Nothing here ever deletes a file.
+class FolderComparePage : public QWidget {
+public:
+    enum Status { Identical, Different, MinorOnly, LeftOnly, RightOnly, Unreadable };
+    struct Entry { QString rel, leftAbs, rightAbs; qint64 lsize = -1, rsize = -1; QDateTime lmod, rmod; Status status = Identical; };
+
+    explicit FolderComparePage(ComparePane* owner) : QWidget(owner), owner_(owner) {
+        auto* v = new QVBoxLayout(this); v->setContentsMargins(6, 4, 6, 4); v->setSpacing(4);
+        auto* top = new QGridLayout;
+        leftEd_ = new QLineEdit; rightEd_ = new QLineEdit; leftEd_->setPlaceholderText("Left folder"); rightEd_->setPlaceholderText("Right folder");
+        auto* bl = new QPushButton("Browse…"); auto* br = new QPushButton("Browse…");
+        connect(bl, &QPushButton::clicked, this, [this] { const QString d = safeGetExistingDirectory(this, "Left folder", leftEd_->text()); if (!d.isEmpty()) leftEd_->setText(d); });
+        connect(br, &QPushButton::clicked, this, [this] { const QString d = safeGetExistingDirectory(this, "Right folder", rightEd_->text()); if (!d.isEmpty()) rightEd_->setText(d); });
+        top->addWidget(new QLabel("Left:"), 0, 0); top->addWidget(leftEd_, 0, 1); top->addWidget(bl, 0, 2);
+        top->addWidget(new QLabel("Right:"), 1, 0); top->addWidget(rightEd_, 1, 1); top->addWidget(br, 1, 2);
+        v->addLayout(top);
+        auto* opts = new QHBoxLayout;
+        filter_ = new QLineEdit("*"); filter_->setMaximumWidth(160); filter_->setToolTip("File name patterns, ; separated (e.g. *.act;*.txt)");
+        crit_ = new QComboBox; crit_->addItems({"Compare bytes (exact)", "Rules-based text (the Compare rules)", "Size only (fast)"}); crit_->setToolTip("How two files with the same name are judged");
+        recurse_ = new QCheckBox("Subfolders"); recurse_->setChecked(true);
+        hidden_ = new QCheckBox("Hidden files");
+        show_ = new QComboBox; show_->addItems({"Show all", "Differences", "Left only", "Right only", "Identical", "Minor only"});
+        connect(show_, qOverload<int>(&QComboBox::currentIndexChanged), this, [this](int) { refreshTable(); });
+        auto* go = new QPushButton("Compare"); go->setDefault(true);
+        connect(go, &QPushButton::clicked, this, [this] { compare(leftEd_->text().trimmed(), rightEd_->text().trimmed()); });
+        auto* swap = new QPushButton("Swap"); connect(swap, &QPushButton::clicked, this, [this] { const QString l = leftEd_->text(); leftEd_->setText(rightEd_->text()); rightEd_->setText(l); if (!entries_.empty()) compare(leftEd_->text(), rightEd_->text()); });
+        opts->addWidget(new QLabel("Files:")); opts->addWidget(filter_); opts->addWidget(crit_); opts->addWidget(recurse_); opts->addWidget(hidden_); opts->addStretch(1); opts->addWidget(show_); opts->addWidget(go); opts->addWidget(swap);
+        v->addLayout(opts);
+        table_ = new QTreeWidget; table_->setRootIsDecorated(false); table_->setAlternatingRowColors(true); table_->setSelectionMode(QAbstractItemView::ExtendedSelection);
+        table_->setHeaderLabels({"Name", "Status", "Left size", "Right size", "Left modified", "Right modified"});
+        table_->header()->setSectionResizeMode(0, QHeaderView::Stretch);
+        connect(table_, &QTreeWidget::itemDoubleClicked, this, [this](QTreeWidgetItem* it, int) { openEntry(it->data(0, Qt::UserRole).toInt()); });
+        v->addWidget(table_, 1);
+        auto* acts = new QHBoxLayout;
+        auto act = [&](const QString& label, const QString& tip, std::function<void()> fn) { auto* b = new QPushButton(label); b->setToolTip(tip); connect(b, &QPushButton::clicked, this, std::move(fn)); acts->addWidget(b); return b; };
+        act("Compare Files", "Open the selected pair in Text Compare (or double-click)", [this] { const auto sel = selectedRows(); if (!sel.empty()) openEntry(sel.front()); });
+        act("← Copy to Left", "Copy the selected right-side files to the left folder (preview first; replaces same-named files; deletes nothing)", [this] { copySelected(false); });
+        act("Copy to Right →", "Copy the selected left-side files to the right folder (preview first)", [this] { copySelected(true); });
+        act("← Update Left", "Copy every right-only and different file to the left (preview first)", [this] { updateSide(false); });
+        act("Update Right →", "Copy every left-only and different file to the right (preview first)", [this] { updateSide(true); });
+        acts->addStretch(1);
+        act("Save Snapshot…", "Record the LEFT folder's paths, sizes and SHA-1 hashes to a file, to compare against later", [this] {
+            if (leftEd_->text().isEmpty()) { status("Choose a left folder first."); return; }
+            const QString out = safeGetSaveFileName(this, "Save folder snapshot", QString(), "Folder snapshot (*.snapshot.json)");
+            if (!out.isEmpty() && saveSnapshot(leftEd_->text(), out)) status("Snapshot saved: " + out);
+        });
+        act("Compare with Snapshot…", "Compare the LEFT folder against a saved snapshot (hashes; nothing can be copied from a snapshot)", [this] {
+            if (leftEd_->text().isEmpty()) { status("Choose a left folder first."); return; }
+            const QString in = safeGetOpenFileName(this, "Open folder snapshot", QString(), "Folder snapshot (*.snapshot.json)");
+            if (!in.isEmpty()) compareWithSnapshot(leftEd_->text(), in);
+        });
+        act("Save Report…", "HTML or CSV listing of every entry and its status", [this] {
+            const QString out = safeGetSaveFileName(this, "Save folder report", QString(), "HTML (*.html);;CSV (*.csv)");
+            if (out.isEmpty()) return;
+            if (saveOrWarn(this, out, report(QFileInfo(out).suffix().toLower() == "csv" ? "csv" : "html").toUtf8(), "folder report")) status("Report saved: " + out);
+        });
+        v->addLayout(acts);
+        summary_ = new QLabel("Choose two folders and press Compare."); summary_->setStyleSheet("color:#4A3F33; padding:2px;"); v->addWidget(summary_);
+    }
+
+    // ---------------------------------------------------------- API
+    void compare(const QString& left, const QString& right) {
+        snapMode_ = false; leftEd_->setText(left); rightEd_->setText(right);
+        if (!QFileInfo(left).isDir() || !QFileInfo(right).isDir()) { status("Both sides must be folders."); return; }
+        QApplication::setOverrideCursor(g_busyCursor());
+        const auto L = scan(left), R = scan(right);
+        entries_.clear();
+        QSet<QString> keys; for (auto it = L.cbegin(); it != L.cend(); ++it) keys << it.key(); for (auto it = R.cbegin(); it != R.cend(); ++it) keys << it.key();
+        QStringList sorted(keys.begin(), keys.end()); sorted.sort(Qt::CaseInsensitive);
+        int n = 0;
+        for (const QString& k : sorted) {
+            Entry e; e.rel = k;
+            if (L.contains(k)) { e.leftAbs = L[k].absoluteFilePath(); e.lsize = L[k].size(); e.lmod = L[k].lastModified(); }
+            if (R.contains(k)) { e.rightAbs = R[k].absoluteFilePath(); e.rsize = R[k].size(); e.rmod = R[k].lastModified(); }
+            e.status = e.leftAbs.isEmpty() ? RightOnly : e.rightAbs.isEmpty() ? LeftOnly : classify(e);
+            entries_.push_back(e);
+            if (++n % 50 == 0) QCoreApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
+        }
+        QApplication::restoreOverrideCursor();
+        refreshTable();
+        owner_->remember("folders", left, right);
+    }
+    bool saveSnapshot(const QString& dir, const QString& outPath) {
+        if (!QFileInfo(dir).isDir()) return false;
+        QJsonArray arr;
+        const auto files = scan(dir);
+        for (auto it = files.cbegin(); it != files.cend(); ++it) {
+            QJsonObject o; o["path"] = it.key(); o["size"] = it.value().size(); o["mtime"] = it.value().lastModified().toString(Qt::ISODate); o["sha1"] = sha1Of(it.value().absoluteFilePath());
+            arr.append(o);
+        }
+        QJsonObject root; root["root"] = dir; root["taken"] = QDateTime::currentDateTime().toString(Qt::ISODate); root["entries"] = arr;
+        return saveOrWarn(this, outPath, QJsonDocument(root).toJson(), "folder snapshot");
+    }
+    bool compareWithSnapshot(const QString& left, const QString& snapshotPath) {
+        QFile f(snapshotPath); if (!f.open(QIODevice::ReadOnly)) { status("Could not read " + snapshotPath); return false; }
+        const QJsonObject root = QJsonDocument::fromJson(f.readAll()).object();
+        if (!root.contains("entries")) { status("Not a folder snapshot: " + snapshotPath); return false; }
+        snapMode_ = true; leftEd_->setText(left); rightEd_->setText("snapshot: " + QFileInfo(snapshotPath).fileName());
+        const auto L = scan(left);
+        QMap<QString, QJsonObject> S; for (const auto& v : root["entries"].toArray()) S[v.toObject()["path"].toString()] = v.toObject();
+        entries_.clear();
+        QSet<QString> keys; for (auto it = L.cbegin(); it != L.cend(); ++it) keys << it.key(); for (auto it = S.cbegin(); it != S.cend(); ++it) keys << it.key();
+        QStringList sorted(keys.begin(), keys.end()); sorted.sort(Qt::CaseInsensitive);
+        for (const QString& k : sorted) {
+            Entry e; e.rel = k;
+            if (L.contains(k)) { e.leftAbs = L[k].absoluteFilePath(); e.lsize = L[k].size(); e.lmod = L[k].lastModified(); }
+            if (S.contains(k)) { e.rightAbs = "(snapshot)"; e.rsize = qint64(S[k]["size"].toDouble()); e.rmod = QDateTime::fromString(S[k]["mtime"].toString(), Qt::ISODate); }
+            if (e.leftAbs.isEmpty()) e.status = RightOnly;
+            else if (S.contains(k)) e.status = sha1Of(e.leftAbs) == S[k]["sha1"].toString() ? Identical : Different;
+            else e.status = LeftOnly;
+            entries_.push_back(e);
+        }
+        refreshTable();
+        return true;
+    }
+    const std::vector<Entry>& entries() const { return entries_; }
+    int count(Status s) const { int n = 0; for (const auto& e : entries_) if (e.status == s) ++n; return n; }
+    std::vector<int> visibleRows() const {
+        std::vector<int> v;
+        const int mode = show_->currentIndex();
+        for (int i = 0; i < (int)entries_.size(); ++i) {
+            const Status s = entries_[i].status;
+            const bool ok = mode == 0 || (mode == 1 && s != Identical) || (mode == 2 && s == LeftOnly) || (mode == 3 && s == RightOnly) || (mode == 4 && s == Identical) || (mode == 5 && s == MinorOnly);
+            if (ok) v.push_back(i);
+        }
+        return v;
+    }
+    void setShowMode(int m) { show_->setCurrentIndex(m); }
+    void setCriteria(int c) { crit_->setCurrentIndex(c); }
+
+    // sync operations: preview, confirm, copy; never delete
+    int copySelected(bool toRight) { std::vector<int> rows = selectedRows(); return copyRows(rows, toRight); }
+    int updateSide(bool toRight) {
+        std::vector<int> rows;
+        for (int i = 0; i < (int)entries_.size(); ++i) { const Status s = entries_[i].status; if (s == Different || s == MinorOnly || (toRight ? s == LeftOnly : s == RightOnly)) rows.push_back(i); }
+        return copyRows(rows, toRight);
+    }
+    QString report(const QString& kind) const {
+        QString o;
+        if (kind == "csv") {
+            o += "path,status,left_size,right_size,left_modified,right_modified\n";
+            for (const auto& e : entries_) o += QString("\"%1\",%2,%3,%4,%5,%6\n").arg(QString(e.rel).replace('"', "\"\""), statusName(e.status)).arg(e.lsize).arg(e.rsize).arg(e.lmod.toString(Qt::ISODate), e.rmod.toString(Qt::ISODate));
+            return o;
+        }
+        o += "<!doctype html><meta charset='utf-8'><title>Folder compare</title><style>body{font-family:-apple-system,Helvetica,sans-serif;font-size:13px}table{border-collapse:collapse}td,th{padding:2px 8px;border-bottom:1px solid #eee;text-align:left}"
+             "tr.d td{background:#fff3c4}tr.l td{background:#f8d7d5}tr.r td{background:#d9f5d3}tr.m td{background:#eeeeee}</style>";
+        o += "<h2>Folder compare</h2><p>" + leftEd_->text().toHtmlEscaped() + " &nbsp;↔&nbsp; " + rightEd_->text().toHtmlEscaped() + "</p><p>" + summaryText().toHtmlEscaped() + "</p><table><tr><th>Name</th><th>Status</th><th>Left size</th><th>Right size</th><th>Left modified</th><th>Right modified</th></tr>";
+        for (const auto& e : entries_) {
+            const char* cls = e.status == Different ? "d" : e.status == LeftOnly ? "l" : e.status == RightOnly ? "r" : e.status == MinorOnly ? "m" : "";
+            o += QString("<tr class='%1'><td>%2</td><td>%3</td><td>%4</td><td>%5</td><td>%6</td><td>%7</td></tr>").arg(cls, e.rel.toHtmlEscaped(), statusName(e.status), e.lsize >= 0 ? QString::number(e.lsize) : "", e.rsize >= 0 ? QString::number(e.rsize) : "", e.lmod.isValid() ? e.lmod.toString("yyyy-MM-dd HH:mm") : "", e.rmod.isValid() ? e.rmod.toString("yyyy-MM-dd HH:mm") : "");
+        }
+        return o + "</table>";
+    }
+    static QString statusName(Status s) { switch (s) { case Identical: return "Identical"; case Different: return "Different"; case MinorOnly: return "Minor only"; case LeftOnly: return "Left only"; case RightOnly: return "Right only"; default: return "Unreadable"; } }
+    bool harnessAutoConfirm_ = false;
+
+    int selfTest(QStringList& log) {
+        int fails = 0;
+        auto check = [&](bool ok, const char* what) { log << QString("  [%1] Compare/Folders: %2").arg(ok ? "PASS" : "FAIL").arg(what); if (!ok) ++fails; };
+        const QString tmp = QDir::temp().filePath("all_fold_" + QString::number(QCoreApplication::applicationPid()));
+        QDir(tmp).removeRecursively(); QDir().mkpath(tmp + "/L/sub"); QDir().mkpath(tmp + "/R/sub");
+        auto put = [](const QString& p, const QByteArray& b) { QFile f(p); f.open(QIODevice::WriteOnly); f.write(b); f.close(); };
+        put(tmp + "/L/same.act", "@001A\nSEMS CAN\n"); put(tmp + "/R/same.act", "@001A\nSEMS CAN\n");
+        put(tmp + "/L/diff.act", "@001A\nSEMS CAN\n"); put(tmp + "/R/diff.act", "@001A\nSEMS CAN KUN\n");
+        put(tmp + "/L/onlyL.act", "x\n"); put(tmp + "/R/onlyR.act", "y\n");
+        put(tmp + "/L/minor.act", "SEMS  CAN\n"); put(tmp + "/R/minor.act", "SEMS CAN\n");
+        put(tmp + "/L/sub/nested.txt", "n\n"); put(tmp + "/R/sub/nested.txt", "n\n");
+        setCriteria(0); setShowMode(0);
+        compare(tmp + "/L", tmp + "/R");
+        check(entries_.size() == 6 && count(Identical) == 2 && count(Different) == 2 && count(LeftOnly) == 1 && count(RightOnly) == 1, "bytes criterion: 2 identical (one nested), 2 different, 1 left-only, 1 right-only");
+        setShowMode(1); check(visibleRows().size() == 4, "Show ▸ Differences hides the identical pairs");
+        setShowMode(2); check(visibleRows().size() == 1 && entries_[visibleRows()[0]].rel == "onlyL.act", "Show ▸ Left only lists onlyL.act");
+        setShowMode(0);
+        const bool keepWs = owner_->options().ignoreWhitespaceChange; owner_->options().ignoreWhitespaceChange = true;
+        setCriteria(1); compare(tmp + "/L", tmp + "/R");
+        check(count(MinorOnly) == 1 && count(Different) == 1, "rules-based criterion: the spacing-only pair is Minor only under Ignore spacing");
+        owner_->options().ignoreWhitespaceChange = keepWs; setCriteria(0);
+        check(report("csv").contains("\"onlyR.act\",Right only") && report("html").contains("diff.act"), "CSV and HTML folder reports list entries with status");
+        check(saveSnapshot(tmp + "/L", tmp + "/L.snapshot.json") && QFile(tmp + "/L.snapshot.json").exists(), "Save Snapshot writes paths, sizes and SHA-1 hashes");
+        put(tmp + "/L/diff.act", "@001A\nCHANGED\n");
+        check(compareWithSnapshot(tmp + "/L", tmp + "/L.snapshot.json") && count(Different) == 1 && count(Identical) == 4 && snapMode_, "Compare with Snapshot finds exactly the file changed since the snapshot");
+        compare(tmp + "/L", tmp + "/R");
+        harnessAutoConfirm_ = true;
+        const int copied = updateSide(true);
+        harnessAutoConfirm_ = false;
+        check(copied == 3 && QFile(tmp + "/R/onlyL.act").exists() && cmp::readText(tmp + "/R/diff.act").text == "@001A\nCHANGED\n" && QFile(tmp + "/R/onlyR.act").exists(),
+              "Update Right copies left-only and different files, replaces, and deletes nothing");
+        check(count(LeftOnly) == 0 && count(Different) == 0 && count(RightOnly) == 1, "after the update the folders differ only by the right-only file");
+        harnessAutoConfirm_ = false;
+        check(updateSide(false) == 0, "without confirmation (harness default) no file is copied");
+        QDir(tmp).removeRecursively();
+        entries_.clear(); refreshTable();
+        return fails;
+    }
+
+private:
+    QMap<QString, QFileInfo> scan(const QString& dir) const {
+        QMap<QString, QFileInfo> out;
+        const QStringList globs = filter_->text().split(';', Qt::SkipEmptyParts);
+        QDir::Filters f = QDir::Files | QDir::NoDotAndDotDot; if (hidden_->isChecked()) f |= QDir::Hidden;
+        QDirIterator it(dir, f, recurse_->isChecked() ? QDirIterator::Subdirectories : QDirIterator::NoIteratorFlags);
+        const QDir base(dir);
+        while (it.hasNext()) {
+            it.next(); const QFileInfo fi = it.fileInfo();
+            if (!globs.isEmpty() && !(globs.size() == 1 && globs[0].trimmed() == "*") && !QDir::match(globs, fi.fileName())) continue;
+            out.insert(base.relativeFilePath(fi.absoluteFilePath()), fi);
+        }
+        return out;
+    }
+    Status classify(const Entry& e) const {
+        const int crit = crit_->currentIndex();
+        if (crit == 2) return e.lsize == e.rsize ? Identical : Different;
+        if (crit == 0) {
+            if (e.lsize != e.rsize) return Different;
+            QFile a(e.leftAbs), b(e.rightAbs);
+            if (!a.open(QIODevice::ReadOnly) || !b.open(QIODevice::ReadOnly)) return Unreadable;
+            while (!a.atEnd() || !b.atEnd()) if (a.read(65536) != b.read(65536)) return Different;
+            return Identical;
+        }
+        const auto A = cmp::readText(e.leftAbs), B = cmp::readText(e.rightAbs);
+        if (!A.ok || !B.ok) return Unreadable;
+        if (A.binary || B.binary) return A.raw == B.raw ? Identical : Different;
+        const auto r = allcore::textdiff::diffLines(allcore::textdiff::splitLines(A.text.toStdString()), allcore::textdiff::splitLines(B.text.toStdString()), owner_->options());
+        if (r.differences()) return Different;
+        return r.unimportant ? MinorOnly : (A.raw == B.raw ? Identical : MinorOnly);
+    }
+    static QString sha1Of(const QString& path) {
+        QFile f(path); if (!f.open(QIODevice::ReadOnly)) return {};
+        QCryptographicHash h(QCryptographicHash::Sha1); h.addData(&f); return QString::fromLatin1(h.result().toHex());
+    }
+    QString summaryText() const {
+        if (entries_.empty()) return "No entries.";
+        return QString("%1 entries: %2 identical · %3 different · %4 minor only · %5 left only · %6 right only%7").arg(entries_.size()).arg(count(Identical)).arg(count(Different)).arg(count(MinorOnly)).arg(count(LeftOnly)).arg(count(RightOnly)).arg(count(Unreadable) ? QString(" · %1 unreadable").arg(count(Unreadable)) : "");
+    }
+    void refreshTable() {
+        table_->clear();
+        for (int i : visibleRows()) {
+            const Entry& e = entries_[i];
+            auto* it = new QTreeWidgetItem({e.rel, statusName(e.status), e.lsize >= 0 ? QString::number(e.lsize) : "", e.rsize >= 0 ? QString::number(e.rsize) : "",
+                                            e.lmod.isValid() ? e.lmod.toString("yyyy-MM-dd HH:mm") : "", e.rmod.isValid() ? e.rmod.toString("yyyy-MM-dd HH:mm") : ""});
+            it->setData(0, Qt::UserRole, i);
+            const QColor c = e.status == Different ? cmp::colChange() : e.status == LeftOnly ? cmp::colDelete() : e.status == RightOnly ? cmp::colInsert() : e.status == MinorOnly ? cmp::colMinor() : QColor(Qt::transparent);
+            if (c.alpha()) for (int col = 0; col < 6; ++col) it->setBackground(col, c);
+            table_->addTopLevelItem(it);
+        }
+        summary_->setText(summaryText() + (snapMode_ ? "  (snapshot: hashes only; nothing can be copied)" : ""));
+    }
+    std::vector<int> selectedRows() const { std::vector<int> v; for (auto* it : table_->selectedItems()) v.push_back(it->data(0, Qt::UserRole).toInt()); std::sort(v.begin(), v.end()); v.erase(std::unique(v.begin(), v.end()), v.end()); return v; }
+    void openEntry(int i) {
+        if (i < 0 || i >= (int)entries_.size()) return;
+        const Entry& e = entries_[i];
+        if (snapMode_) { status("A snapshot holds hashes, not contents; open the folder pair to compare files."); return; }
+        if (e.leftAbs.isEmpty() || e.rightAbs.isEmpty()) { status(e.rel + " exists on one side only."); return; }
+        owner_->compareFiles(e.leftAbs, e.rightAbs);
+    }
+    bool confirmOps(const QStringList& lines, int replaced, bool toRight) {
+        if (g_harnessRun) return harnessAutoConfirm_;
+        QDialog d(this); d.setWindowTitle(toRight ? "Copy to the right folder" : "Copy to the left folder");
+        auto* v = new QVBoxLayout(&d);
+        v->addWidget(new QLabel(QString("%1 file%2 will be copied; %3 existing file%4 will be replaced. Nothing is deleted.").arg(lines.size()).arg(lines.size() == 1 ? "" : "s").arg(replaced).arg(replaced == 1 ? "" : "s")));
+        auto* list = new QListWidget; list->addItems(lines); v->addWidget(list, 1);
+        auto* bb = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel); bb->button(QDialogButtonBox::Ok)->setText("Copy"); v->addWidget(bb);
+        connect(bb, &QDialogButtonBox::accepted, &d, &QDialog::accept); connect(bb, &QDialogButtonBox::rejected, &d, &QDialog::reject);
+        d.resize(560, 400);
+        return d.exec() == QDialog::Accepted;
+    }
+    int copyRows(const std::vector<int>& rows, bool toRight) {
+        if (snapMode_) { status("A snapshot holds hashes, not contents; nothing can be copied from it."); return 0; }
+        const QString srcRoot = toRight ? leftEd_->text() : rightEd_->text(), dstRoot = toRight ? rightEd_->text() : leftEd_->text();
+        QStringList lines; std::vector<std::pair<QString, QString>> ops; int replaced = 0;
+        for (int i : rows) {
+            if (i < 0 || i >= (int)entries_.size()) continue;
+            const Entry& e = entries_[i];
+            const QString src = toRight ? e.leftAbs : e.rightAbs; if (src.isEmpty()) continue;
+            const QString dst = QDir(dstRoot).filePath(e.rel);
+            const bool exists = QFile::exists(dst); if (exists) ++replaced;
+            lines << (e.rel + (exists ? "   (replaces)" : "   (new)")); ops.push_back({src, dst});
+        }
+        if (ops.empty()) { status("Nothing to copy for that selection."); return 0; }
+        if (!confirmOps(lines, replaced, toRight)) { status("Copy cancelled."); return 0; }
+        int done = 0, failed = 0;
+        for (const auto& op : ops) {
+            QDir().mkpath(QFileInfo(op.second).path());
+            if (QFile::exists(op.second) && !QFile::remove(op.second)) { ++failed; continue; }
+            if (QFile::copy(op.first, op.second)) ++done; else ++failed;
+        }
+        compare(leftEd_->text(), rightEd_->text());
+        status(QString("Copied %1 file%2%3.").arg(done).arg(done == 1 ? "" : "s").arg(failed ? QString("; %1 FAILED (check permissions)").arg(failed) : ""));
+        Q_UNUSED(srcRoot);
+        return done;
+    }
+    void status(const QString& m) { owner_->statusLabel()->setText(m); }
+
+    ComparePane* owner_;
+    QLineEdit* leftEd_ = nullptr; QLineEdit* rightEd_ = nullptr; QLineEdit* filter_ = nullptr;
+    QComboBox* crit_ = nullptr; QComboBox* show_ = nullptr; QCheckBox* recurse_ = nullptr; QCheckBox* hidden_ = nullptr;
+    QTreeWidget* table_ = nullptr; QLabel* summary_ = nullptr;
+    std::vector<Entry> entries_; bool snapMode_ = false;
+};
+
+// =====================================================================
+// Three-Way Merge page (diff3 / Meld / Araxis / WinMerge 3-way): Left ·
+// Base · Right above, the merged text below; non-conflicting changes are
+// merged automatically, conflicts are listed and resolved one by one.
+class ThreeWayPage : public QWidget {
+public:
+    using Chunk = allcore::textdiff::Chunk; using ChunkKind = allcore::textdiff::ChunkKind;
+    explicit ThreeWayPage(ComparePane* owner) : QWidget(owner), owner_(owner) {
+        auto* v = new QVBoxLayout(this); v->setContentsMargins(6, 4, 6, 4); v->setSpacing(4);
+        auto* top = new QGridLayout;
+        const char* labels[3] = {"Left (mine):", "Base (common ancestor):", "Right (theirs):"};
+        for (int i = 0; i < 3; ++i) {
+            paths_[i] = new QLineEdit; auto* b = new QPushButton("Browse…");
+            connect(b, &QPushButton::clicked, this, [this, i] { const QString f = safeGetOpenFileName(this, "Choose file", paths_[i]->text(), "Texts (*.txt *.act *.inc *.md);;All files (*)"); if (!f.isEmpty()) paths_[i]->setText(f); });
+            top->addWidget(new QLabel(labels[i]), i, 0); top->addWidget(paths_[i], i, 1); top->addWidget(b, i, 2);
+        }
+        auto* go = new QPushButton("Merge"); connect(go, &QPushButton::clicked, this, [this] { mergeFiles(paths_[1]->text().trimmed(), paths_[0]->text().trimmed(), paths_[2]->text().trimmed()); });
+        top->addWidget(go, 1, 3);
+        v->addLayout(top);
+        auto* split = new QSplitter(Qt::Vertical);
+        auto* threeW = new QWidget; auto* th = new QHBoxLayout(threeW); th->setContentsMargins(0, 0, 0, 0); th->setSpacing(2);
+        for (int i = 0; i < 3; ++i) { auto* col = new QVBoxLayout; col->setContentsMargins(0, 0, 0, 0); heads_[i] = new QLabel(labels[i]); heads_[i]->setStyleSheet("font-weight:600;"); eds_[i] = new DiffEdit; eds_[i]->setReadOnly(true); col->addWidget(heads_[i]); col->addWidget(eds_[i], 1); th->addLayout(col, 1); }
+        split->addWidget(threeW);
+        auto* bottom = new QWidget; auto* bh = new QHBoxLayout(bottom); bh->setContentsMargins(0, 0, 0, 0);
+        auto* mergedCol = new QVBoxLayout; mergedHead_ = new QLabel("Merged result"); mergedHead_->setStyleSheet("font-weight:600;"); merged_ = new DiffEdit; mergedCol->addWidget(mergedHead_); mergedCol->addWidget(merged_, 1);
+        bh->addLayout(mergedCol, 3);
+        auto* side = new QVBoxLayout; side->addWidget(new QLabel("Conflicts"));
+        list_ = new QListWidget; connect(list_, &QListWidget::currentRowChanged, this, [this](int r) { focusConflict(r); }); side->addWidget(list_, 1);
+        auto row = [&](std::initializer_list<std::pair<const char*, std::function<void()>>> items) { auto* h = new QHBoxLayout; for (auto& it : items) { auto* b = new QPushButton(it.first); connect(b, &QPushButton::clicked, this, it.second); h->addWidget(b); } side->addLayout(h); };
+        row({{"Take Left", [this] { resolveSelected(1); }}, {"Take Right", [this] { resolveSelected(2); }}});
+        row({{"Take Both", [this] { resolveSelected(3); }}, {"Take Base", [this] { resolveSelected(4); }}});
+        row({{"All Left", [this] { resolveAll(1); }}, {"All Right", [this] { resolveAll(2); }}});
+        row({{"◀ Prev", [this] { if (list_->currentRow() > 0) list_->setCurrentRow(list_->currentRow() - 1); }}, {"Next ▶", [this] { if (list_->currentRow() + 1 < list_->count()) list_->setCurrentRow(list_->currentRow() + 1); }}});
+        row({{"Save Merged As…", [this] { saveMergedAs(); }}, {"Merged vs Base", [this] { owner_->compareTexts("Base", baseText(), "Merged", mergedText()); }}});
+        bh->addLayout(side, 1);
+        split->addWidget(bottom);
+        v->addWidget(split, 1);
+        status_ = new QLabel("Choose Left, Base and Right, then Merge."); status_->setStyleSheet("color:#4A3F33; padding:2px;"); v->addWidget(status_);
+    }
+
+    // ---------------------------------------------------------- API
+    void mergeFiles(const QString& base, const QString& left, const QString& right) {
+        const auto B = cmp::readText(base), L = cmp::readText(left), R = cmp::readText(right);
+        if (!B.ok || !L.ok || !R.ok) { status_->setText("Could not read one of the three files."); return; }
+        if (B.binary || L.binary || R.binary) { status_->setText("Three-way merge works on text files; one of these is binary."); return; }
+        paths_[0]->setText(left); paths_[1]->setText(base); paths_[2]->setText(right);
+        eol_ = L.eol;
+        mergeTexts(QFileInfo(base).fileName(), B.text, QFileInfo(left).fileName(), L.text, QFileInfo(right).fileName(), R.text);
+    }
+    void mergeTexts(const QString& baseName, const QString& baseText, const QString& leftName, const QString& leftText, const QString& rightName, const QString& rightText) {
+        names_[0] = leftName; names_[1] = baseName; names_[2] = rightName;
+        lines_[0] = cmp::linesOf(leftText); lines_[1] = cmp::linesOf(baseText); lines_[2] = cmp::linesOf(rightText);
+        merge_ = allcore::textdiff::merge3(cmp::toStd(lines_[1]), cmp::toStd(lines_[0]), cmp::toStd(lines_[2]), owner_->options());
+        render();
+        list_->setCurrentRow(list_->count() ? 0 : -1);
+    }
+    QString mergedText() const { return merged_->toPlainText(); }
+    QString baseText() const { return lines_[1].join('\n') + (lines_[1].isEmpty() ? "" : "\n"); }
+    int conflicts() const { return merge_.conflicts; }
+    int unresolved() const { int n = 0; for (const auto& c : merge_.chunks) if (c.kind == ChunkKind::Conflict && c.resolution == 0) ++n; return n; }
+    bool resolve(int conflictIndex, int resolution) {
+        int k = 0;
+        for (auto& c : merge_.chunks) if (c.kind == ChunkKind::Conflict) { if (k == conflictIndex) { c.resolution = resolution; render(); list_->setCurrentRow(conflictIndex); return true; } ++k; }
+        return false;
+    }
+    void resolveAll(int resolution) { for (auto& c : merge_.chunks) if (c.kind == ChunkKind::Conflict) c.resolution = resolution; render(); }
+    bool saveMergedAs(QString path = QString()) {
+        if (path.isEmpty()) path = safeGetSaveFileName(this, "Save merged text as", paths_[0]->text(), "Texts (*.txt *.act *.inc *.md);;All files (*)");
+        if (path.isEmpty()) return false;
+        if (unresolved()) status_->setText(QString("Saved with %1 unresolved conflict%2 still marked <<<<<<< ======= >>>>>>>.").arg(unresolved()).arg(unresolved() == 1 ? "" : "s"));
+        QString text = mergedText(); if (eol_ != "\n") text.replace("\n", eol_);
+        if (!saveOrWarn(this, path, text.toUtf8(), "merged text")) return false;
+        if (!unresolved()) status_->setText("Merged text saved: " + path);
+        return true;
+    }
+    void pickFiles() { if (paths_[1]->text().isEmpty()) paths_[1]->setFocus(); }
+
+    int selfTest(QStringList& log) {
+        int fails = 0;
+        auto check = [&](bool ok, const char* what) { log << QString("  [%1] Compare/Three-way: %2").arg(ok ? "PASS" : "FAIL").arg(what); if (!ok) ++fails; };
+        mergeTexts("base", "a\nb\nc\nd\ne\n", "left", "a\nB\nc\nd\ne\n", "right", "a\nb\nc\nd\nE\n");
+        check(conflicts() == 0 && mergedText() == "a\nB\nc\nd\nE\n", "non-overlapping edits merge automatically into one text");
+        mergeTexts("base", "a\nb\nc\nd\ne\n", "left", "a\nX\nc\nd\nE\n", "right", "a\nY\nc\nd\nE\n");
+        check(conflicts() == 1 && unresolved() == 1 && list_->count() == 1 && mergedText().contains("<<<<<<< left\nX\n=======\nY\n>>>>>>> right"), "one conflict listed and marked; the shared edit E is taken once");
+        check(resolve(0, 2) && unresolved() == 0 && mergedText() == "a\nY\nc\nd\nE\n", "Take Right resolves it and re-renders the merged text");
+        resolveAll(3); check(mergedText() == "a\nX\nY\nc\nd\nE\n", "Take Both keeps both readings in order");
+        const QString tmp = QDir::temp().filePath("all_3w_" + QString::number(QCoreApplication::applicationPid()));
+        QDir().mkpath(tmp);
+        auto put = [](const QString& p, const QByteArray& b) { QFile f(p); f.open(QIODevice::WriteOnly); f.write(b); f.close(); };
+        put(tmp + "/base.act", "@001A\r\nSEMS CAN\r\nBDE BA\r\n"); put(tmp + "/mine.act", "@001A\r\nSEMS CAN THAMS CAD\r\nBDE BA\r\n"); put(tmp + "/theirs.act", "@001A\r\nSEMS CAN\r\nBDE BA CHEN PO\r\n");
+        mergeFiles(tmp + "/base.act", tmp + "/mine.act", tmp + "/theirs.act");
+        check(conflicts() == 0 && mergedText() == "@001A\nSEMS CAN THAMS CAD\nBDE BA CHEN PO\n", "three ACIP files: each side's edit lands");
+        check(saveMergedAs(tmp + "/merged.act") && cmp::readText(tmp + "/merged.act").raw == QByteArray("@001A\r\nSEMS CAN THAMS CAD\r\nBDE BA CHEN PO\r\n"), "Save Merged As writes the left file's line ending (CRLF)");
+        QDir(tmp).removeRecursively();
+        mergeTexts("", "", "", "", "", "");
+        return fails;
+    }
+
+private:
+    void render() {
+        for (int i = 0; i < 3; ++i) { eds_[i]->setPlainText(lines_[i].join('\n')); heads_[i]->setText((i == 0 ? "Left: " : i == 1 ? "Base: " : "Right: ") + names_[i]); }
+        QList<QTextEdit::ExtraSelection> sel[3]; QVector<QColor> bars[3];
+        for (int i = 0; i < 3; ++i) bars[i] = QVector<QColor>(lines_[i].size(), Qt::transparent);
+        auto paint = [&](int ed, int lo, int hi, const QColor& c) { for (int k = lo; k < hi && k < lines_[ed].size(); ++k) { QTextBlock b = eds_[ed]->document()->findBlockByNumber(k); QTextEdit::ExtraSelection s; s.cursor = QTextCursor(b); s.format.setBackground(c); s.format.setProperty(QTextFormat::FullWidthSelection, true); sel[ed] << s; bars[ed][k] = c; } };
+        for (const auto& c : merge_.chunks) {
+            switch (c.kind) {
+            case ChunkKind::Left: paint(0, c.leftBeg, c.leftEnd, cmp::colChange()); paint(1, c.baseBeg, c.baseEnd, cmp::colMinor()); break;
+            case ChunkKind::Right: paint(2, c.rightBeg, c.rightEnd, cmp::colChange()); paint(1, c.baseBeg, c.baseEnd, cmp::colMinor()); break;
+            case ChunkKind::Both: paint(0, c.leftBeg, c.leftEnd, cmp::colMoved()); paint(2, c.rightBeg, c.rightEnd, cmp::colMoved()); paint(1, c.baseBeg, c.baseEnd, cmp::colMinor()); break;
+            case ChunkKind::Conflict: paint(0, c.leftBeg, c.leftEnd, cmp::colDelete()); paint(2, c.rightBeg, c.rightEnd, cmp::colDelete()); paint(1, c.baseBeg, c.baseEnd, cmp::colDelete()); break;
+            default: break;
+            }
+        }
+        for (int i = 0; i < 3; ++i) { eds_[i]->setExtraSelections(sel[i]); eds_[i]->setRowColors(bars[i]); }
+        const auto out = allcore::textdiff::renderMerge(merge_, cmp::toStd(lines_[1]), cmp::toStd(lines_[0]), cmp::toStd(lines_[2]), names_[0].toStdString(), names_[2].toStdString());
+        merged_->setPlainText(cmp::fromStd(out).join('\n') + (out.empty() ? "" : "\n"));
+        // mark unresolved conflict blocks in the merged text
+        QList<QTextEdit::ExtraSelection> ms; QVector<QColor> mb(merged_->document()->blockCount(), Qt::transparent);
+        bool in = false;
+        for (QTextBlock b = merged_->document()->begin(); b.isValid(); b = b.next()) {
+            const QString t = b.text();
+            if (t.startsWith("<<<<<<<")) in = true;
+            if (in) { QTextEdit::ExtraSelection s; s.cursor = QTextCursor(b); s.format.setBackground(cmp::colDelete()); s.format.setProperty(QTextFormat::FullWidthSelection, true); ms << s; if (b.blockNumber() < mb.size()) mb[b.blockNumber()] = cmp::colDelete(); }
+            if (t.startsWith(">>>>>>>")) in = false;
+        }
+        merged_->setExtraSelections(ms); merged_->setRowColors(mb);
+        list_->clear(); int k = 0;
+        for (const auto& c : merge_.chunks) if (c.kind == ChunkKind::Conflict) {
+            ++k;
+            const char* res = c.resolution == 1 ? "Left" : c.resolution == 2 ? "Right" : c.resolution == 3 ? "Both" : c.resolution == 4 ? "Base" : "unresolved";
+            list_->addItem(QString("Conflict %1 — base lines %2–%3 · left %4 line%5 · right %6 line%7 · %8").arg(k).arg(c.baseBeg + 1).arg(std::max(c.baseBeg + 1, c.baseEnd)).arg(c.leftEnd - c.leftBeg).arg(c.leftEnd - c.leftBeg == 1 ? "" : "s").arg(c.rightEnd - c.rightBeg).arg(c.rightEnd - c.rightBeg == 1 ? "" : "s").arg(res));
+        }
+        mergedHead_->setText(QString("Merged result — %1 conflict%2, %3 unresolved, %4 change%5 merged automatically").arg(merge_.conflicts).arg(merge_.conflicts == 1 ? "" : "s").arg(unresolved()).arg(merge_.autoMerged).arg(merge_.autoMerged == 1 ? "" : "s"));
+        status_->setText(merge_.conflicts ? "Select a conflict and Take Left / Right / Both / Base; resolving re-renders the merged text (edit it by hand last)." : "No conflicts — the merged text is ready to save.");
+    }
+    void focusConflict(int row) {
+        if (row < 0) return;
+        int k = 0;
+        for (const auto& c : merge_.chunks) if (c.kind == ChunkKind::Conflict) {
+            if (k == row) {
+                auto centre = [](DiffEdit* e, int line) { QTextCursor cur(e->document()->findBlockByNumber(std::max(0, line))); e->setTextCursor(cur); e->centerCursor(); };
+                centre(eds_[0], c.leftBeg); centre(eds_[1], c.baseBeg); centre(eds_[2], c.rightBeg);
+                return;
+            }
+            ++k;
+        }
+    }
+    void resolveSelected(int r) { if (list_->currentRow() < 0) { status_->setText("Select a conflict first."); return; } resolve(list_->currentRow(), r); }
+
+    ComparePane* owner_;
+    QLineEdit* paths_[3] = {nullptr, nullptr, nullptr}; QLabel* heads_[3] = {nullptr, nullptr, nullptr}; DiffEdit* eds_[3] = {nullptr, nullptr, nullptr};
+    QLabel* mergedHead_ = nullptr; DiffEdit* merged_ = nullptr; QListWidget* list_ = nullptr; QLabel* status_ = nullptr;
+    QString names_[3]; QStringList lines_[3]; QString eol_ = "\n";
+    allcore::textdiff::MergeResult merge_;
+};
+
+struct ComparePages { FolderComparePage* folders = nullptr; ThreeWayPage* three = nullptr; };
+inline ComparePages installComparePages(ComparePane* p) {
+    ComparePages pg;
+    pg.folders = new FolderComparePage(p); p->addPage(pg.folders);
+    pg.three = new ThreeWayPage(p); p->addPage(pg.three);
+    g_compareFolders = [p, f = pg.folders](const QString& a, const QString& b) { p->showPage(1); f->compare(a, b); if (g_raisePane) g_raisePane(p); };
+    p->openThreeWay_ = [p, t = pg.three] { p->showPage(2); t->pickFiles(); };
+    return pg;
+}
