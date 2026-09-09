@@ -184,6 +184,32 @@ it, and that the marks are machine-computed. I will not add it to the
 Save Report menu until I have opened a sample in Word and recorded that
 Accept All gives text B and Reject All gives text A.
 
+### Release audit: eleven of twelve open items closed
+
+The pane-by-pane release audit had left twelve items on the main window
+needing a ruling. I closed eleven today: the one headless probe that ran
+outside the safety guard now runs inside it; a dead window-size call is
+gone; the Sanskrit glyph check, which used to run only by hand, is a
+test gate (109 suites now); a Quick Access pin whose command was renamed
+shows as "not in this build" instead of vanishing; the lifecycle log
+rotates at one megabyte; clearing the scan cache or the search index
+takes a second, sized click; the Edit menu shows the standard shortcuts
+the Help advertises; the menu that mirrors every pane's buttons now
+skips the destructive ones. Three were verifications, not changes: the
+press never uses the reduced-battery escape hatch, the data-import hook
+is wired in every build, and the installed build's data is release
+0.27.2 (105,634 entries, 42,199 corpus segments), read from the database
+itself. The twelfth --- whether both diagnostic reports, with their
+different privacy profiles, should ship --- is a ruling I need from
+leadership.
+
+### Pressed and running
+
+The whole batch is pressed, signed, verified and installed on my desktop
+(dev-ca74251, then a second press with the audit sweep). Every press ran
+the full battery, the constitution check and the visual-regression gate
+over the blessed panes before it was allowed to install.
+
 ## Decisions I made along the way
 
 - The style sheet's rules live as switches in Preferences, so any of
@@ -233,7 +259,7 @@ from the test runner.](img/2026-09-09/chart-numbers.png)
 
   Panes                   24                      25 (Compare)
 
-  Automated suites        101, all green          108, all green
+  Automated suites        101, all green          109, all green
 
   Core text-engine        ---                     214 checks in 7
   batteries (compare,                             batteries
