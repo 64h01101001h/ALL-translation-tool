@@ -720,8 +720,21 @@ hdiutil create -volname "$APPNAME $VERSION" -srcfolder "$STAGE" \
 # BUILD-16: the image the team will double-click gets verified by the
 # press that made it - four seconds against a corrupted download or a
 # truncated write discovered on demo day.
-hdiutil verify "$DMG" >/dev/null 2>&1 || {
-  echo "DMG VERIFY FAILED - the image is corrupt; press stopped."; exit 9; }
+# 2026-09-08 (press3.log 17:49): a diskimages-helper left over from
+# `hdiutil create` can still hold the new image for a moment, and
+# `hdiutil verify` then returns EAGAIN ("Resource temporarily
+# unavailable") - which is NOT corruption. Retry while the image is busy,
+# and name the two outcomes differently: corrupt = exit 9, unverifiable
+# because still busy = exit 10. Never call a busy image corrupt.
+VERIFIED=0
+for attempt in 1 2 3 4 5 6; do
+  VERR="$(hdiutil verify "$DMG" 2>&1 >/dev/null)" && { VERIFIED=1; break; }
+  if echo "$VERR" | grep -qi "temporarily unavailable\|resource busy\|EAGAIN"; then
+    echo "   hdiutil verify: image busy (attempt $attempt) - waiting"; sleep 3; continue
+  fi
+  echo "DMG VERIFY FAILED - the image is corrupt; press stopped."; echo "$VERR" | tail -3; exit 9
+done
+[[ $VERIFIED == 1 ]] || { echo "DMG VERIFY NOT POSSIBLE - the image stayed busy for six attempts; run 'hdiutil verify \"$DMG\"' by hand before shipping."; exit 10; }
 echo "   hdiutil verify: image checksums good"
 
 # D2: notarization — armed, dormant until the keychain profile exists.
