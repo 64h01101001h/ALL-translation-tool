@@ -78,7 +78,7 @@ not honestly buildable here; the expand family is, and two are ours.
 | Enter Full Screen ⌃⌘F | QMainWindow full screen | BUILD |
 | Ruler, Header and Footer, Footnotes, Master Document, Reveal Formatting, Gridlines, Message Bar | page-layout notions with no meaning on a text file | SKIP |
 
-## Insert — batch 3
+## Insert — batch 3 — DONE 2026-09-08 (Break ▸ Folio Marker ⌥⌘↩ / Page Break · Tibetan & ACIP Symbols palette · Footnote… / Footnote from the Bank… → Draft · Comment → team comments · Date and Time… with the Tibetan year from the calendar engine · File… · Hyperlink… / Table… / Pictures ▸ for the Manuscript)
 | Word | Ours | Verdict |
 |---|---|---|
 | Break ▸ | **Folio marker** (next @NNNA/B for the Document box) · page break (Manuscript) | ADAPT (best item in the menu) |
@@ -90,15 +90,15 @@ not honestly buildable here; the expand family is, and two are ours.
 | Hyperlink… · Table… · Pictures ▸ | Manuscript only (rich text) | BUILD (Manuscript) |
 | Bookmark…, Cross-reference…, Caption…, Index and Tables…, Text Box, AutoText, Object…, Field…, Equation, Shape, SmartArt, Chart, Audio, Movie, Icons, 3D Models, Watermark, Page Numbers | no honest use on a Tibetan text file or an English draft | SKIP |
 
-## Format — batch 4 (mostly Manuscript)
+## Format — batch 4 (mostly Manuscript) — DONE 2026-09-08 except Document… (see row)
 | Word | Ours | Verdict |
 |---|---|---|
-| Font… | font dialog for the Manuscript selection; Tibetan face picker for the Overlay | BUILD |
+| Font… | font dialog for the Manuscript selection; on the Overlay the status bar points to the Display panel's Tibetan face picker (already exists) | BUILD — done |
 | Paragraph… | alignment · spacing · indent (Manuscript) | BUILD |
 | Bullets and Numbering… | Manuscript lists | BUILD |
 | Change Case… | English: Sentence · Title · UPPER · lower. **Tibetan: To ACIP · To Wylie · To Tibetan script** (transliteration, not case) | ADAPT |
 | Style… | the Manuscript HOUSE STYLES gallery (exists) | ADAPT (wires existing) |
-| Document… | page setup for RTF/PDF output | BUILD |
+| Document… | page setup for RTF/PDF output | DEFERRED — nothing reads page margins yet (RTF/PDF export uses its own settings); a dialog that stores unused values would be a dead control. Build when the export honours it. |
 | Text Effects, Borders and Shading, Columns, Tabs, Drop Cap, Text Direction, Asian Layout, Font Substitution, Equation Options, Selection Pane | print typography that pecha export already owns, or no meaning here | SKIP |
 
 ## Tools — batch 5

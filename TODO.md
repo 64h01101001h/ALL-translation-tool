@@ -2986,17 +2986,17 @@ questionnaire's Q13 answers tell us how much Android matters.
 
 ## 🧭 MENU PARITY WITH WORD (Adam, 2026-09-08) — see docs/MENU_PARITY_PLAN.md
 - [x] File (New · New from Template · Close · Save as Template · Move · Rename · Properties) — 2026-09-08
-- [ ] Edit (Undo/Redo, Cut/Copy/Paste, Paste and Match Formatting, Paste Special as ACIP/Wylie/script, Clear, Select All, Find/Find Next/Previous/Replace)
-- [ ] View (Text-as layouts, Focus, Ribbon toggle, Sidebar, Markup, Zoom submenu, Full Screen)
-- [ ] Insert (Folio marker break, Tibetan & ACIP symbols palette, Footnote, Comment, Date and Time, File, Manuscript hyperlink/table/picture)
-- [ ] Format (Font, Paragraph, Bullets, Change Case incl. To ACIP/Wylie/script, Style, Document)
+- [x] Edit (Undo/Redo, Cut/Copy/Paste, Paste and Match Formatting, Paste Special as ACIP/Wylie/script, Clear, Select All; Find moved to its own menu) — 2026-09-08
+- [x] View (Text-as layouts, Focus, Ribbon toggle, Sidebar, Markup, Zoom submenu, Full Screen) — 2026-09-08
+- [x] Insert (Folio marker break, Tibetan & ACIP symbols palette, Footnote, Comment, Date and Time, File, Manuscript hyperlink/table/picture) — 2026-09-08
+- [x] Format (Font, Paragraph, Bullets, Change Case incl. To ACIP/Wylie/script, Style) — 2026-09-08; Document… deferred until RTF/PDF export reads page setup
 - [ ] Tools (Spelling, Thesaurus→phrase memory, Translate→send to Draft, Word Count, Protect Document, Templates folder)
 - [ ] Window (Minimize, Zoom, Bring All to Front, open-window list)
 - [x] File, Sublime additions (encodings, Save All, Print, Revert, Close All) — 2026-09-08
-- [ ] Find menu (Sublime): incremental find, replace next, quick find, highlight all, use selection for find/replace, F3 family, find bar toggles (regex/case/word/wrap/in selection), Find in Files → Search pane
-- [ ] Selection menu (Sublime): expand to line/word/paragraph/whitespace/brackets/quotes, to Folio, to Phrase, until…, reverse
-- [ ] View additions (Sublime): line numbers, word wrap, line endings, hide status bar, console, spelling F6 family
-- [ ] Goto menu (Sublime): heading, line, folio, dictionary entry, concordance, jump back/forward, bookmarks, matching bracket
+- [x] Find menu (Sublime) — 2026-09-08: incremental find, replace next, quick find, highlight all, use selection for find/replace, F3 family, find bar toggles (regex/case/word/wrap/in selection), Find in Files → Search pane
+- [x] Selection menu (Sublime) — 2026-09-08: expand to line/word/paragraph/whitespace/brackets/quotes, to Folio, to Phrase, until…, reverse
+- [x] View additions (Sublime) — 2026-09-08: line numbers, word wrap, line endings, hide status bar, console, spelling F6 family
+- [x] Goto menu (Sublime) — 2026-09-08: heading, line, folio, dictionary entry, concordance, jump back/forward, bookmarks, matching bracket
 - [ ] Tools additions (Sublime): snippets, Hunt as command palette, cheat sheet
 - [ ] Project menu (Sublime): dossiers promoted — open/switch/recent/save as/close/edit, folders
 - [ ] Help additions (Sublime): Documentation, Report a Bug (defect intake), Data status
@@ -3093,6 +3093,29 @@ from Adam's screenshots). (2) Pull BDRC place records with coordinates and
 join to the catalogue's person/place IDs. (3) Prototype a plotted layer
 over cached tiles. (4) Route and period layers. Owner: Adam for source
 licensing decisions.
+
+### Cursors and Tibetan Buddhist iconography in the UI (Adam, 2026-09-08)
+- [x] **Busy cursor** — done 2026-09-08: while the app works (index builds,
+      segmenter load) the cursor becomes a dharma wheel (U+2638) drawn from
+      the installed font; if no font carries the glyph it is the platform
+      wait cursor (checked, never assumed). Extend to every long operation
+      as they are found (file open of large texts, Gofer searches, imports).
+- [ ] **Nontraditional cursors** (Adam: "different, nontraditional cursors"):
+      candidates — a vajra or bell over the Tibetan text area, a pen nib in
+      the Draft, a hand over Overlay words. Rule: any custom cursor must keep
+      a visible hotspot and pass the accessibility audit (WCAG 2.2 target
+      size and contrast); offer a "standard cursors" switch in Preferences.
+- [ ] **The Eight Auspicious Symbols and other iconography** as pane icons,
+      empty-state art, the About box, the busy cursor set, tab icons:
+      parasol · golden fish · treasure vase · lotus · conch · endless knot ·
+      victory banner · dharma wheel. Source rule: draw our own SVGs or use
+      openly licensed (CC0/CC-BY/public-domain) artwork with attribution
+      recorded in docs/LICENSES; never copy from a website. Unicode already
+      gives ☸ U+2638, the Tibetan symbol block U+0FC4–0FCC (dril bu, rdo
+      rje, padma gdan, rdo rje rgya gram, phur pa, nor bu) and U+0FD5–0FD8
+      (svasti signs) — render from Noto Serif Tibetan where fonts have them.
+      Process per CLAUDE.md: brainstorming + design-critique before it
+      lands; keep decoration off the honesty labels (tier, provenance).
 
 ### Research suite — ask Geshe Michael (Adam, 2026-09-08)
 - [ ] **Adam to ask Geshe Michael** for his own requests and ideas for the

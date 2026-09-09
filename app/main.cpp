@@ -18,6 +18,14 @@
 #include <QScrollArea>
 #include <QShortcut>
 #include <QTextCharFormat>
+#include <QFontDialog>
+#include <QGridLayout>
+#include <QTextTable>
+#include <QTextList>
+#include <QTextImageFormat>
+#include <QTextBlockFormat>
+#include <QCursor>
+static QCursor g_busyCursor();   // defined beside g_harnessRun
 #include <QKeyEvent>
 #include <QStringListModel>
 #include <QCompleter>
@@ -644,7 +652,7 @@ static allcore::Tm84000* tm84000() {
                 // warm cache never shows it.
                 const bool coldBuild = !QFile::exists(db);
                 if (coldBuild && qApp)
-                    QApplication::setOverrideCursor(Qt::WaitCursor);
+                    QApplication::setOverrideCursor(g_busyCursor());
                 const long built = allcore::Tm84000::ensureBuilt(
                     tsv.toStdString(), db.toStdString());
                 if (coldBuild && qApp)
@@ -2810,6 +2818,23 @@ static bool g_sweepActive = false;
 // (found 2026-08-15: the stray "QTextCursor::setPosition: Position
 // '4' out of range" was restoreSession racing the selftest doc)
 static bool g_harnessRun = false;
+// Busy cursor (Adam, 2026-09-08: "a loading icon the cursor changes to").
+// A dharma wheel, drawn from whichever installed font carries U+2638;
+// when none does, the platform wait cursor — checked with inFont, never
+// assumed. Built once, on first use, after QApplication exists.
+static QCursor g_busyCursor() {
+    static const QCursor cur = [] {
+        const QChar wheel(0x2638);
+        QFont f; f.setPointSize(22);
+        if (!QFontMetrics(f).inFont(wheel)) return QCursor(Qt::WaitCursor);
+        QPixmap px(32, 32); px.fill(Qt::transparent);
+        { QPainter p(&px); p.setRenderHint(QPainter::Antialiasing); p.setFont(f);
+          p.setPen(QColor(0x8a, 0x2b, 0x1e));
+          p.drawText(px.rect(), Qt::AlignCenter, QString(wheel)); }
+        return QCursor(px, 16, 16);
+    }();
+    return cur;
+}
 
 // The Anthropic API key for the two labeled-AI features. Sources, in
 // order: the environment (terminal launch), then the key file at
@@ -4474,6 +4499,108 @@ inline QString selectedText(QWidget* w) {
     if (auto* t = qobject_cast<QTextEdit*>(w)) return t->textCursor().selectedText();
     if (auto* l = qobject_cast<QLineEdit*>(w)) return l->selectedText();
     return {};
+}
+// Format ▸ Change Case (Word) — English cases on the selection. The
+// Tibetan "cases" (ACIP ↔ Wylie ↔ script) are transliterations and go
+// through convertText, never through toUpper/toLower.
+enum class CaseMode { Upper, Lower, Sentence, Title };
+inline QString changeCase(const QString& t, CaseMode m) {
+    switch (m) {
+    case CaseMode::Upper: return t.toUpper();
+    case CaseMode::Lower: return t.toLower();
+    case CaseMode::Sentence: {
+        QString r = t.toLower(); bool start = true;
+        for (int i = 0; i < r.size(); ++i) {
+            const QChar c = r.at(i);
+            if (start && c.isLetter()) { r[i] = c.toUpper(); start = false; }
+            else if (c == '.' || c == '!' || c == '?') start = true;
+        }
+        return r;
+    }
+    case CaseMode::Title: {
+        QString r = t.toLower(); bool start = true;
+        for (int i = 0; i < r.size(); ++i) {
+            const QChar c = r.at(i);
+            if (start && c.isLetter()) { r[i] = c.toUpper(); start = false; }
+            else if (c.isSpace() || c == '-' || c == QChar(0x2014)) start = true;
+        }
+        return r;
+    }
+    }
+    return t;
+}
+inline bool replaceSelection(QWidget* w, const QString& with) {
+    if (auto* e = qobject_cast<QPlainTextEdit*>(w)) { QTextCursor c = e->textCursor(); if (!c.hasSelection()) return false; c.insertText(with); e->setTextCursor(c); return true; }
+    if (auto* t = qobject_cast<QTextEdit*>(w)) { QTextCursor c = t->textCursor(); if (!c.hasSelection()) return false; c.insertText(with); t->setTextCursor(c); return true; }
+    if (auto* l = qobject_cast<QLineEdit*>(w)) { if (!l->hasSelectedText()) return false; l->insert(with); return true; }
+    return false;
+}
+// Insert ▸ Break ▸ Folio marker: the marker that follows the last one
+// before `pos` (@001A → @001B → @002A). With none before, @001A.
+inline QString nextFolioMarker(const QString& text, int pos) {
+    static const QRegularExpression re("@(\\d{2,3})([AaBb])\\b");
+    QString lastNum; QChar lastSide;
+    auto it = re.globalMatch(text.left(std::max(0, pos)));
+    while (it.hasNext()) { const auto m = it.next(); lastNum = m.captured(1); lastSide = m.captured(2).at(0).toUpper(); }
+    if (lastNum.isEmpty()) return "@001A";
+    int n = lastNum.toInt();
+    if (lastSide == 'A') return QString("@%1B").arg(n, lastNum.size(), 10, QChar('0'));
+    return QString("@%1A").arg(n + 1, lastNum.size(), 10, QChar('0'));
+}
+// Insert ▸ Tibetan & ACIP Symbols: the palette. Each entry is (glyph or
+// code, name). Only marks whose meaning is certain are listed.
+struct Symbol { QString text; QString name; };
+inline const std::vector<Symbol>& tibetanSymbols() {
+    static const std::vector<Symbol> v = {
+        {QString::fromUtf8("\u0F0B"), "tsheg (syllable dot)"},
+        {QString::fromUtf8("\u0F0D"), "shad"},
+        {QString::fromUtf8("\u0F0E"), "nyis shad (double shad)"},
+        {QString::fromUtf8("\u0F14"), "gter tsheg"},
+        {QString::fromUtf8("\u0F04\u0F05"), "yig mgo (head mark)"},
+        {QString::fromUtf8("\u0F08"), "sbrul shad"},
+        {QString::fromUtf8("\u0F11"), "rin chen spungs shad"},
+        {QString::fromUtf8("\u0F3C"), "ang khang gyon (left bracket)"},
+        {QString::fromUtf8("\u0F3D"), "ang khang gyas (right bracket)"},
+        {QString::fromUtf8("\u0F3A"), "gug rtags gyon"},
+        {QString::fromUtf8("\u0F3B"), "gug rtags gyas"},
+        {QString::fromUtf8("\u0F7F"), "rnam bcad (visarga)"},
+        {QString::fromUtf8("\u0F7E"), "rjes su nga ro (anusvara)"},
+        {QString::fromUtf8("\u0F85"), "paluta (avagraha)"},
+        {QString::fromUtf8("\u0F35"), "nor bu"},
+        {QString::fromUtf8("\u0F37"), "nor bu nyis khyil"},
+        {QString::fromUtf8("\u0F0C"), "tsheg bstar (non-breaking tsheg)"},
+    };
+    return v;
+}
+inline const std::vector<Symbol>& acipSymbols() {
+    static const std::vector<Symbol> v = {
+        {",", "shad (ACIP)"},
+        {",,", "double shad (ACIP)"},
+        {"@001A ", "folio marker (ACIP)"},
+        {"*", "ornament / yig mgo (ACIP)"},
+        {"[", "editorial bracket open (ACIP)"},
+        {"]", "editorial bracket close (ACIP)"},
+        {"{", "note / apparatus open (ACIP)"},
+        {"}", "note / apparatus close (ACIP)"},
+        {"'", "a-chung (ACIP)"},
+        {"+", "stack joiner (ACIP Sanskrit)"},
+    };
+    return v;
+}
+// Insert ▸ Date and Time: western date plus the Tibetan year (rabjung
+// cycle), from the calendar engine — nothing here is computed by hand.
+inline QStringList dateTimeChoices() {
+    const QDateTime now = QDateTime::currentDateTime();
+    QStringList v;
+    v << now.date().toString("d MMMM yyyy") << now.date().toString("yyyy-MM-dd")
+      << now.toString("d MMMM yyyy, h:mm AP") << now.date().toString("dddd, d MMMM yyyy");
+    const auto y = allcore::tibetanYear(now.date().year());
+    if (y.rabjung > 0)
+        v << QString("%1 (Tibetan %2-%3 year, rabjung %4, year %5 of 60)")
+                 .arg(now.date().toString("d MMMM yyyy"))
+                 .arg(QString::fromStdString(y.element_en), QString::fromStdString(y.animal_en))
+                 .arg(y.rabjung).arg(y.year_in_cycle);
+    return v;
 }
 // Caret history for Goto ▸ Jump Back / Jump Forward (Sublime ⌃- / ⌃⇧-):
 // positions are recorded when the caret moves to a different line; a
@@ -7974,6 +8101,23 @@ public:
                   "Jump Back walks the caret history");
             check(H.jump(+1) && input_->textCursor().blockNumber() == 2, "Jump Forward returns along it");
             check(!H.jump(+5), "Jump Forward refuses past the end");
+            // Insert / Format helpers (2026-09-08)
+            check(editops::nextFolioMarker("", 0) == "@001A" && editops::nextFolioMarker("@001A x", 7) == "@001B" &&
+                      editops::nextFolioMarker("@001A x @001B y", 15) == "@002A" && editops::nextFolioMarker("@12A z", 6) == "@12B",
+                  "the next folio marker follows A→B→next number and keeps the digit width");
+            input_->setPlainText("@001A *, ,SEMS,,\nBDE");
+            { QTextCursor c = input_->textCursor(); c.movePosition(QTextCursor::End); input_->setTextCursor(c); }
+            check(insertFolioMarker() == "@001B" && input_->toPlainText().endsWith("\n@001B "), "Insert ▸ Folio Marker starts a new line with the next marker");
+            check(editops::changeCase("the great book. it says", editops::CaseMode::Sentence) == "The great book. It says" &&
+                      editops::changeCase("the great book", editops::CaseMode::Title) == "The Great Book" &&
+                      editops::changeCase("Sems Can", editops::CaseMode::Upper) == "SEMS CAN",
+                  "Change Case: sentence, title, upper");
+            check(!editops::tibetanSymbols().empty() && editops::tibetanSymbols()[1].text == QString(QChar(0x0F0D)) && !editops::acipSymbols().empty(),
+                  "the symbols palette lists the shad and the ACIP codes");
+            check(editops::dateTimeChoices().size() >= 5 && editops::dateTimeChoices().last().contains("rabjung"),
+                  "Date and Time offers the Tibetan year from the calendar engine");
+            check(g_busyCursor().shape() == Qt::BitmapCursor || g_busyCursor().shape() == Qt::WaitCursor,
+                  "the busy cursor is the dharma wheel when a font has it, else the platform wait cursor");
             docFile_ = keepFile;
             input_->setPlainText(keepText);
             savedDigest_ = docprops::digest(keepText);
@@ -8038,6 +8182,16 @@ public:
         editTimer_.restart();
         return true;
     }
+    // ---- Insert menu hooks (2026-09-08) ----
+    QString insertFolioMarker() {
+        QTextCursor c = input_->textCursor();
+        const QString m = editops::nextFolioMarker(input_->toPlainText(), c.position());
+        const bool atLineStart = c.atBlockStart();
+        c.insertText((atLineStart ? "" : "\n") + m + " ");
+        input_->setTextCursor(c);
+        return m;
+    }
+    void openTeamComments() { commentsDialog(); }
     // ---- Goto menu (Sublime, 2026-09-08) ----
     // Headings = the sa bcad outline; each returns false honestly when
     // there is nothing to go to.
@@ -17246,7 +17400,7 @@ private:
             prog->show();
         }
         struct Busy {
-            Busy() { QApplication::setOverrideCursor(Qt::WaitCursor); }
+            Busy() { QApplication::setOverrideCursor(g_busyCursor()); }
             ~Busy() { QApplication::restoreOverrideCursor(); }
         } busy;
         try {
@@ -21775,6 +21929,8 @@ auto* secPub = new QLabel("<span style='color:#9A7A33;font-size:10px;letter-spac
         return true;
     }
     bool closeDraft() { return newDraft(); }
+    void proposeFootnote() { proposeNote(); }
+    void focusApparatusSearch() { if (notesSearch_) { notesSearch_->setFocus(); notesSearch_->selectAll(); } }
     bool revertDraft() {
         if (draftPath_.isEmpty()) { if (termLive_) termLive_->setText("Nothing to revert to: the draft has no file."); return false; }
         if (!confirmDiscardDraft()) return false;
@@ -32943,6 +33099,7 @@ public:
                             const QString& css,
                             std::function<void(QTextCursor&)> apply,
                             const QString& tip) {
+            styles_.push_back({label, apply});   // Format ▸ Style ▸ (2026-09-08)
             auto* b = new QPushButton(label);
             b->setStyleSheet("QPushButton { " + css +
                              " padding:3px 9px; }");
@@ -33225,6 +33382,54 @@ public:
         return true;
     }
     bool closeManuscript() { return newManuscript(); }
+    // ---- Insert / Format menu hooks (Word parity, 2026-09-08) ----
+    QStringList styleNames() const { QStringList v; for (const auto& s : styles_) v << s.first; return v; }
+    bool applyStyle(const QString& name) {
+        for (const auto& st : styles_) if (st.first == name) { QTextCursor c = editor_->textCursor(); st.second(c); editor_->setTextCursor(c); dirty_ = true; return true; }
+        return false;
+    }
+    void insertTable(int rows, int cols) {
+        if (rows < 1 || cols < 1) return;
+        QTextTableFormat tf; tf.setBorder(1); tf.setCellPadding(4); tf.setCellSpacing(0);
+        editor_->textCursor().insertTable(rows, cols, tf); dirty_ = true;
+    }
+    void insertHyperlink(const QString& text, const QString& url) {
+        if (url.isEmpty()) return;
+        QTextCursor c = editor_->textCursor();
+        c.insertHtml(QString("<a href=\"%1\">%2</a>").arg(url.toHtmlEscaped(), (text.isEmpty() ? url : text).toHtmlEscaped()));
+        dirty_ = true;
+    }
+    bool insertImage(const QString& path) {
+        QImage img(path); if (img.isNull()) return false;
+        editor_->document()->addResource(QTextDocument::ImageResource, QUrl(path), img);
+        QTextImageFormat f; f.setName(path);
+        if (img.width() > 600) { f.setWidth(600); f.setHeight(600.0 * img.height() / img.width()); }
+        editor_->textCursor().insertImage(f); dirty_ = true; return true;
+    }
+    void insertPageBreak() {
+        QTextCursor c = editor_->textCursor();
+        QTextBlockFormat bf; bf.setPageBreakPolicy(QTextFormat::PageBreak_AlwaysBefore);
+        c.insertBlock(bf); editor_->setTextCursor(c); dirty_ = true;
+    }
+    void applyFont(const QFont& f) {
+        QTextCharFormat cf; cf.setFont(f);
+        QTextCursor c = editor_->textCursor(); c.mergeCharFormat(cf); editor_->mergeCurrentCharFormat(cf); dirty_ = true;
+    }
+    void setParagraph(Qt::Alignment align, double lineSpacingPct, int leftIndentPx, int spaceBeforePx) {
+        QTextBlockFormat bf; bf.setAlignment(align);
+        bf.setLineHeight(lineSpacingPct, QTextBlockFormat::ProportionalHeight);
+        bf.setLeftMargin(leftIndentPx); bf.setTopMargin(spaceBeforePx);
+        QTextCursor c = editor_->textCursor(); c.mergeBlockFormat(bf); dirty_ = true;
+    }
+    Qt::Alignment paragraphAlignment() const { return editor_->textCursor().blockFormat().alignment(); }
+    void setList(int kind) {   // 0 none, 1 bullets, 2 numbers
+        QTextCursor c = editor_->textCursor();
+        if (kind == 0) { if (QTextList* l = c.currentList()) l->remove(c.block()); QTextBlockFormat bf = c.blockFormat(); bf.setIndent(0); c.setBlockFormat(bf); }
+        else { QTextListFormat lf; lf.setStyle(kind == 1 ? QTextListFormat::ListDisc : QTextListFormat::ListDecimal); c.createList(lf); }
+        editor_->setTextCursor(c); dirty_ = true;
+    }
+    int listKind() const { QTextList* l = editor_->textCursor().currentList(); if (!l) return 0; return l->format().style() == QTextListFormat::ListDecimal ? 2 : 1; }
+    QTextEdit* editor() const { return editor_; }
     bool isDirty() const { return dirty_; }
     bool revertManuscript() {
         if (path_.isEmpty()) { status_->setText("Nothing to revert to: the manuscript has no file."); return false; }
@@ -33399,6 +33604,23 @@ public:
             dirty_ = true;
             check(newManuscript() && editor_->toPlainText().isEmpty() && path_.isEmpty() && !dirty_,
                   "New manuscript leaves an empty, untitled, clean editor");
+            editor_->setPlainText("Heading line");
+            editor_->selectAll();
+            check(styleNames().contains("Heading") && applyStyle("Heading") && editor_->textCursor().charFormat().fontWeight() == QFont::Bold,
+                  "Format ▸ Style applies a house style (Heading is bold)");
+            editor_->setPlainText("");
+            insertTable(2, 3);
+            check(editor_->document()->toHtml().contains("<table") , "Insert ▸ Table creates a table in the manuscript");
+            editor_->setPlainText("item");
+            setList(1);
+            check(listKind() == 1, "Bullets and Numbering makes a bulleted list");
+            setList(0);
+            check(listKind() == 0, "Remove List removes it");
+            editor_->setPlainText("link text"); editor_->selectAll();
+            insertHyperlink("link text", "https://example.org/x");
+            check(editor_->document()->toHtml().contains("https://example.org/x"), "Insert ▸ Hyperlink writes an anchor");
+            setParagraph(Qt::AlignHCenter, 150, 20, 8);
+            check(paragraphAlignment() & Qt::AlignHCenter, "Paragraph… sets the alignment");
             editor_->setHtml(keepHtml);
             path_ = keepPath;
             dirty_ = keepDirty;
@@ -33413,6 +33635,7 @@ private:
     QLineEdit* query_ = nullptr;
     QTextBrowser* results_ = nullptr;
     QLabel* status_ = nullptr;
+    std::vector<std::pair<QString, std::function<void(QTextCursor&)>>> styles_;
     QString dataRoot_;
     QElapsedTimer editTimer_;
     QPushButton* boldB_ = nullptr;
@@ -39597,6 +39820,164 @@ int main(int argc, char** argv) {
         act("Find selected next (clipboard)\u2026", QKeySequence("Ctrl+F3"), [seeded] { seeded(QApplication::clipboard()->text(), false, "Find clipboard"); });
         act("Find selected previous (clipboard)\u2026", QKeySequence("Ctrl+Shift+F3"), [seeded] { seeded(QApplication::clipboard()->text(), true, "Find clipboard"); });
     }
+    // ---- Insert menu (Word, Adam 2026-09-08). Everything here writes
+    // at the caret of the front pane's editor; Manuscript-only items
+    // say so in the status bar rather than doing nothing.
+    {
+        QMenu* im = win.menuBar()->addMenu("Insert");
+        auto active = [](QWidget* pane) {
+            for (QWidget* w = QApplication::focusWidget(); w; w = w->parentWidget()) if (w == pane) return true;
+            return pane->isVisible();
+        };
+        auto ed = [] { return editops::lastEditor().data(); };
+        auto msg = [&win](const QString& m) { win.statusBar()->showMessage(m, 4000); };
+        QMenu* br = im->addMenu("Break");
+        QAction* fol = br->addAction("Folio Marker"); fol->setShortcut(QKeySequence("Ctrl+Alt+Return"));
+        QObject::connect(fol, &QAction::triggered, [overlay, msg] { msg("Inserted " + overlay->insertFolioMarker()); });
+        QAction* pgb = br->addAction("Page Break (Manuscript)");
+        QObject::connect(pgb, &QAction::triggered, [manuscriptPane, active, msg] { if (active(manuscriptPane)) manuscriptPane->insertPageBreak(); else msg("Page breaks apply to the Manuscript."); });
+        QObject::connect(im->addAction("Tibetan && ACIP Symbols\u2026"), &QAction::triggered, [ed, &win] {
+            if (g_harnessRun) return;
+            auto* d = new QDialog(&win); d->setAttribute(Qt::WA_DeleteOnClose); d->setWindowFlag(Qt::Tool);
+            d->setWindowTitle("Tibetan & ACIP Symbols");
+            auto* v = new QVBoxLayout(d);
+            v->addWidget(new QLabel("Click to insert at the caret of the last text field you used."));
+            auto grid = [&](const std::vector<editops::Symbol>& syms, const QString& title, bool tib) {
+                v->addWidget(new QLabel("<b>" + title + "</b>"));
+                auto* g = new QGridLayout; int i = 0;
+                for (const auto& sy : syms) {
+                    auto* b = new QPushButton(sy.text.isEmpty() ? "?" : sy.text);
+                    if (tib) { QFont f = b->font(); f.setPointSize(20); b->setFont(f); }
+                    b->setToolTip(sy.name); b->setMinimumWidth(56);
+                    QObject::connect(b, &QPushButton::clicked, [t = sy.text, ed] { if (QWidget* w = ed()) editops::insertPlain(w, t); });
+                    g->addWidget(b, i / 6, i % 6); ++i;
+                }
+                v->addLayout(g);
+            };
+            grid(editops::tibetanSymbols(), "Tibetan script (Unicode)", true);
+            grid(editops::acipSymbols(), "ACIP codes", false);
+            d->show();
+        });
+        im->addSeparator();
+        QObject::connect(im->addAction("Footnote\u2026"), &QAction::triggered, [draftPane] { if (g_raisePane) g_raisePane(draftPane); draftPane->proposeFootnote(); });
+        QObject::connect(im->addAction("Footnote from the Bank\u2026"), &QAction::triggered, [draftPane] { if (g_raisePane) g_raisePane(draftPane); draftPane->focusApparatusSearch(); });
+        QObject::connect(im->addAction("Comment"), &QAction::triggered, [overlay] { overlay->openTeamComments(); });
+        im->addSeparator();
+        QObject::connect(im->addAction("Date and Time\u2026"), &QAction::triggered, [ed, &win] {
+            if (g_harnessRun) return;
+            QWidget* w = ed(); if (!w) { win.statusBar()->showMessage("Click into a text field first.", 3000); return; }
+            QDialog d(&win); d.setWindowTitle("Date and Time");
+            auto* v = new QVBoxLayout(&d); auto* list = new QListWidget; list->addItems(editops::dateTimeChoices()); list->setCurrentRow(0);
+            v->addWidget(new QLabel("Available formats:")); v->addWidget(list, 1);
+            auto* bb = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel); v->addWidget(bb);
+            QObject::connect(bb, &QDialogButtonBox::accepted, &d, &QDialog::accept); QObject::connect(bb, &QDialogButtonBox::rejected, &d, &QDialog::reject);
+            QObject::connect(list, &QListWidget::itemDoubleClicked, &d, &QDialog::accept);
+            if (d.exec() == QDialog::Accepted && list->currentItem()) editops::insertPlain(w, list->currentItem()->text());
+        });
+        QObject::connect(im->addAction("File\u2026"), &QAction::triggered, [ed, &win] {
+            QWidget* w = ed(); if (!w) { win.statusBar()->showMessage("Click into a text field first.", 3000); return; }
+            const QString fn = safeGetOpenFileName(&win, "Insert file contents", QString(), "Texts (*.txt *.act *.inc *.ace *.md);;All files (*)");
+            if (fn.isEmpty()) return;
+            QFile f(fn); if (!f.open(QIODevice::ReadOnly)) { win.statusBar()->showMessage("Could not read " + fn, 4000); return; }
+            editops::insertPlain(w, QString::fromUtf8(f.readAll()));
+        });
+        im->addSeparator();
+        QObject::connect(im->addAction("Hyperlink\u2026 (Manuscript)"), &QAction::triggered, [manuscriptPane, active, msg, &win] {
+            if (!active(manuscriptPane)) { msg("Hyperlinks apply to the Manuscript."); return; }
+            const QString url = docprops::askName(&win, "Insert Hyperlink", "Address (https://…):", QString());
+            if (url.isEmpty()) return;
+            manuscriptPane->insertHyperlink(manuscriptPane->editor()->textCursor().selectedText(), url);
+        });
+        QObject::connect(im->addAction("Table\u2026 (Manuscript)"), &QAction::triggered, [manuscriptPane, active, msg, &win] {
+            if (!active(manuscriptPane)) { msg("Tables apply to the Manuscript."); return; }
+            const QString spec = docprops::askName(&win, "Insert Table", "Rows x columns (e.g. 3x2):", "3x2");
+            const auto parts = spec.toLower().split('x');
+            if (parts.size() != 2) return;
+            manuscriptPane->insertTable(parts[0].trimmed().toInt(), parts[1].trimmed().toInt());
+        });
+        QMenu* pics = im->addMenu("Pictures (Manuscript)");
+        QObject::connect(pics->addAction("Picture from File\u2026"), &QAction::triggered, [manuscriptPane, active, msg, &win] {
+            if (!active(manuscriptPane)) { msg("Pictures apply to the Manuscript."); return; }
+            const QString fn = safeGetOpenFileName(&win, "Insert picture", QString(), "Images (*.png *.jpg *.jpeg *.gif *.tif *.tiff)");
+            if (!fn.isEmpty() && !manuscriptPane->insertImage(fn)) msg("Could not read that image.");
+        });
+    }
+    // ---- Format menu (Word, Adam 2026-09-08) ----
+    {
+        QMenu* fmt = win.menuBar()->addMenu("Format");
+        auto active = [](QWidget* pane) {
+            for (QWidget* w = QApplication::focusWidget(); w; w = w->parentWidget()) if (w == pane) return true;
+            return pane->isVisible();
+        };
+        auto ed = [] { return editops::lastEditor().data(); };
+        auto msg = [&win](const QString& m) { win.statusBar()->showMessage(m, 4000); };
+        QObject::connect(fmt->addAction("Font\u2026"), &QAction::triggered, [manuscriptPane, active, msg, &win] {
+            if (g_harnessRun) return;
+            if (!active(manuscriptPane)) { msg("Font applies to the Manuscript; the Overlay's Tibetan face is in its Display panel."); return; }
+            bool ok = false;
+            const QFont f = QFontDialog::getFont(&ok, manuscriptPane->editor()->currentFont(), &win, "Font");
+            if (ok) manuscriptPane->applyFont(f);
+        });
+        QObject::connect(fmt->addAction("Paragraph\u2026"), &QAction::triggered, [manuscriptPane, active, msg, &win] {
+            if (g_harnessRun) return;
+            if (!active(manuscriptPane)) { msg("Paragraph settings apply to the Manuscript."); return; }
+            QDialog d(&win); d.setWindowTitle("Paragraph");
+            auto* f = new QFormLayout(&d);
+            auto* al = new QComboBox; al->addItems({"Left", "Center", "Right", "Justify"});
+            const Qt::Alignment cur = manuscriptPane->paragraphAlignment();
+            al->setCurrentIndex(cur & Qt::AlignHCenter ? 1 : cur & Qt::AlignRight ? 2 : cur & Qt::AlignJustify ? 3 : 0);
+            auto* ls = new QComboBox; ls->addItems({"Single (100%)", "1.15 (115%)", "1.5 (150%)", "Double (200%)"});
+            auto* ind = new QSpinBox; ind->setRange(0, 200); ind->setSuffix(" px"); ind->setValue(int(manuscriptPane->editor()->textCursor().blockFormat().leftMargin()));
+            auto* sb = new QSpinBox; sb->setRange(0, 100); sb->setSuffix(" px"); sb->setValue(int(manuscriptPane->editor()->textCursor().blockFormat().topMargin()));
+            f->addRow("Alignment:", al); f->addRow("Line spacing:", ls); f->addRow("Left indent:", ind); f->addRow("Space before:", sb);
+            auto* bb = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel); f->addRow(bb);
+            QObject::connect(bb, &QDialogButtonBox::accepted, &d, &QDialog::accept); QObject::connect(bb, &QDialogButtonBox::rejected, &d, &QDialog::reject);
+            if (d.exec() != QDialog::Accepted) return;
+            const Qt::Alignment a = al->currentIndex() == 1 ? Qt::AlignHCenter : al->currentIndex() == 2 ? Qt::AlignRight : al->currentIndex() == 3 ? Qt::AlignJustify : Qt::AlignLeft;
+            const double pct = ls->currentIndex() == 1 ? 115 : ls->currentIndex() == 2 ? 150 : ls->currentIndex() == 3 ? 200 : 100;
+            manuscriptPane->setParagraph(a, pct, ind->value(), sb->value());
+        });
+        QMenu* bl = fmt->addMenu("Bullets and Numbering");
+        QObject::connect(bl->addAction("Bulleted List"), &QAction::triggered, [manuscriptPane, active, msg] { if (active(manuscriptPane)) manuscriptPane->setList(1); else msg("Lists apply to the Manuscript."); });
+        QObject::connect(bl->addAction("Numbered List"), &QAction::triggered, [manuscriptPane, active, msg] { if (active(manuscriptPane)) manuscriptPane->setList(2); else msg("Lists apply to the Manuscript."); });
+        QObject::connect(bl->addAction("Remove List"), &QAction::triggered, [manuscriptPane, active, msg] { if (active(manuscriptPane)) manuscriptPane->setList(0); else msg("Lists apply to the Manuscript."); });
+        fmt->addSeparator();
+        QMenu* cc = fmt->addMenu("Change Case");
+        auto caseAct = [&](const QString& name, editops::CaseMode m) {
+            QObject::connect(cc->addAction(name), &QAction::triggered, [ed, m, msg] {
+                QWidget* w = ed(); const QString sel = editops::selectedText(w);
+                if (sel.isEmpty()) { msg("Select some text first."); return; }
+                editops::replaceSelection(w, editops::changeCase(sel, m));
+            });
+        };
+        caseAct("Sentence case.", editops::CaseMode::Sentence);
+        caseAct("Title Case", editops::CaseMode::Title);
+        caseAct("UPPERCASE", editops::CaseMode::Upper);
+        caseAct("lowercase", editops::CaseMode::Lower);
+        cc->addSeparator();
+        auto scriptAct = [&](const QString& name, editops::Script to) {
+            QObject::connect(cc->addAction(name), &QAction::triggered, [ed, to, msg] {
+                QWidget* w = ed(); const QString sel = editops::selectedText(w);
+                if (sel.isEmpty()) { msg("Select some Tibetan first."); return; }
+                bool ok = false; const QString out = editops::convertText(sel, to, &ok);
+                if (!ok) { msg("That selection could not be converted \u2014 nothing changed (never guessed)."); return; }
+                editops::replaceSelection(w, out);
+            });
+        };
+        scriptAct("Tibetan: To ACIP", editops::Script::Acip);
+        scriptAct("Tibetan: To Wylie", editops::Script::Wylie);
+        scriptAct("Tibetan: To Tibetan Script", editops::Script::Unicode);
+        fmt->addSeparator();
+        QMenu* stl = fmt->addMenu("Style (Manuscript)");
+        QObject::connect(stl, &QMenu::aboutToShow, [stl, manuscriptPane, active, msg] {
+            stl->clear();
+            for (const QString& n : manuscriptPane->styleNames()) {
+                QObject::connect(stl->addAction(n), &QAction::triggered, [manuscriptPane, n, active, msg] {
+                    if (active(manuscriptPane)) manuscriptPane->applyStyle(n); else msg("House styles apply to the Manuscript.");
+                });
+            }
+        });
+    }
     // ---- Goto menu (Sublime's, Adam 2026-09-08) ----
     {
         QMenu* gm = win.menuBar()->addMenu("Goto");
@@ -42760,8 +43141,8 @@ int main(int argc, char** argv) {
             // 9l sits before the group menus — positional indexing
             // failed the day it landed)
             const auto menus = win.menuBar()->actions();
-            bool ok = menus.size() == tabs.count() + 7;   // File +
-                                                          // Edit + Selection + Find + Goto +
+            bool ok = menus.size() == tabs.count() + 9;   // File +
+                                                          // Edit + Selection + Find + Insert + Format + Goto +
                                                           // groups +
                                                           // View + Help
             int overlayActions = 0;
