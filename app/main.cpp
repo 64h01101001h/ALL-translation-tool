@@ -19950,6 +19950,7 @@ public:
                  {"Tibetan script", "tib"},
                  {"ACIP Sanskrit input code", "code"},
                  {"ACIP next-letter", "next"},
+                 {"Pronunciation (ALL standard \u2014 Tibetan tradition)", "allpron"},
                  {"Pronunciation (IPA)", "ipa"},
                  {"Pronunciation (simplified, PROVISIONAL)", "pron"}})
             to_->addItem(QString(label), QString(key));
@@ -20065,6 +20066,27 @@ public:
                       all.contains("ACIP input code") &&
                       all.contains("ACIP next-letter"),
                   "All notations lists every form of the line side by side");
+            check(all.contains("ALL pronunciation"),
+                  "the ALL standard has a line of its own, beside the IPA and "
+                  "the simplified line rather than replacing either");
+            {   // Adam's two founding rules, checked on the words he named
+                in_->setPlainText(QString::fromUtf8(
+                    "h\u016b\u1e41 sv\u0101h\u0101"));
+                to_->setCurrentIndex(to_->findData("allpron"));
+                from_->setCurrentIndex(from_->findData("iast"));
+                analyze();
+                check(converted_.trimmed() == "hung soha",
+                      "rule 1 h\u016b\u1e41 -> hung and rule 2 sv\u0101h\u0101 "
+                      "-> soha, Adam's founding amendments");
+                to_->setCurrentIndex(to_->findData("all"));
+                from_->setCurrentIndex(from_->findData("auto"));
+                in_->setPlainText(QString::fromUtf8(
+                    "de\u015bay\u0101m \u0101sa sa\u1e43buddhas"));
+                analyze();
+            }
+            check(all.contains("94.4%"),
+                  "and the pane quotes the measured agreement with his own "
+                  "published readings rather than asserting correctness");
             check(all.contains("PROVISIONAL"),
                   "and the simplified pronunciation is labelled provisional "
                   "while its standard is outstanding");
@@ -20085,6 +20107,14 @@ public:
             check(converted_.contains(" "),
                   "and keeps its syllable spacing, which is what it is "
                   "recited by");
+            // the mantra path in the house standard: this is the line a
+            // reciter actually reads
+            to_->setCurrentIndex(to_->findData("allpron"));
+            analyze();
+            log << "        (mani mantra, ALL standard: " + converted_ + ")";
+            check(converted_.contains("om") && converted_.contains("hung"),
+                  "the mani mantra reads back in the ALL standard as om ... "
+                  "hung");
             check(!converted_.contains("+") && !converted_.contains("~"),
                   "control: the EWTS stack and candrabindu marks do not reach "
                   "the reader");
@@ -20163,6 +20193,7 @@ private:
         if (key == "ipa") return opt(allcore::iastToIpa(u));
         if (key == "code") return QString::fromStdString(allcore::iastToInputcode(u));
         if (key == "next") return QString::fromStdString(allcore::iastToNextletter(u));
+        if (key == "allpron") return opt(allcore::iastToAllPronunciation(u));
         if (key == "pron") return QString::fromStdString(allcore::iastToPronunciation(u));
         return iast;
     }
@@ -20181,6 +20212,7 @@ private:
             {"deva", "Devanagari"},
             {"acip", "Tibetanized ACIP"},
             {"tib", "Tibetan script"},
+            {"allpron", "ALL pronunciation"},
             {"ipa", "IPA"},
             {"code", "ACIP input code"},
             {"next", "ACIP next-letter"},
@@ -20276,15 +20308,29 @@ private:
         if (toKey() != "all") converted_ = plain.join("\n");
         if (toKey() == "all")
             html += QString(
-                        "<div style='color:%1;padding-top:8px'>IPA follows the "
-                        "standard Classical-Sanskrit mapping together with FPMT "
-                        "Translation Services' guide to Sanskrit "
-                        "transliteration and pronunciation (November 2020), "
-                        "with the anusv\u0101ra and visarga context rules "
-                        "applied. The simplified line is PROVISIONAL: the "
-                        "Sanskrit pronunciation standard is still "
-                        "outstanding, and it is shown so it can be checked, "
-                        "not relied on.</div>")
+                        "<div style='color:%1;padding-top:8px'>Three "
+                        "pronunciations, and they answer different questions. "
+                        "<b>ALL pronunciation</b> is the house standard: the "
+                        "FPMT letter values as its base, readings matched from "
+                        "Geshe Michael Roach's own published courses over "
+                        "them, and Adam's own amendments on top. It agrees "
+                        "with his printed readings on 94.4% of the 5,875 "
+                        "mantra words in the corpus that carry both the code "
+                        "and his reading. Two amendments stand today: h\u016b\u1e41 "
+                        "reads \u201chung\u201d, which is his own practice "
+                        "1,073 segments to 37; and sv\u0101h\u0101 reads "
+                        "\u201csoha\u201d, which appears in <i>none</i> of his "
+                        "published courses, where it is written "
+                        "\u201csva ha\u201d 380 times. That amendment is "
+                        "recorded as interim, awaiting Geshe Michael Roach's "
+                        "own word. <b>IPA</b> is Classical Sanskrit, "
+                        "following the standard mapping together with FPMT "
+                        "Translation Services' guide (November 2020), with the "
+                        "anusv\u0101ra and visarga context rules applied \u2014 "
+                        "the scholar's line, not the reciter's. The "
+                        "<b>simplified</b> line is PROVISIONAL: it only strips "
+                        "the diacritical marks, and is shown so it can be "
+                        "checked, not relied on.</div>")
                         .arg(ux::darkChrome() ? ux::chromeMuted() : ux::kMuted);
         html += QString("<div style='padding-top:10px;color:%1'>%2 line(s) "
                         "converted \u00b7 %3 carried through \u00b7 %4 "

@@ -31,6 +31,14 @@ std::pair<std::string, bool> iastToTibetan(const std::string& iast);
 // pronunciation standard doc is still pending — provisional, as in Python)
 std::string iastToPronunciation(const std::string& iast);
 
+// iast_to_all_pronunciation: the ALL Sanskrit pronunciation standard — the
+// FPMT letter values as the base, readings matched from Geshe Michael Roach's
+// own courses over them, and Adam's amendments on top (hūṁ → "hung",
+// svāhā → "soha", 2026-09-09). An ADDITIONAL line: it replaces neither
+// iastToIpa nor iastToPronunciation. ok=false when the input does not
+// tokenize, so a refusal stays a refusal.
+std::pair<std::string, bool> iastToAllPronunciation(const std::string& iast);
+
 // iast_to_nextletter: official "next letter position" style ("prama-n.a")
 std::string iastToNextletter(const std::string& iast);
 

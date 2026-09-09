@@ -135,6 +135,20 @@ def battery_sanskrit():
     # The mantra above never tested this — every one of its words ends in a
     # vowel — and the bug it hid printed a bare म with an implied 'a' that is
     # not in the Sanskrit. Nagarjuna's dedication, 2026-09-09.
+    # The ALL Sanskrit pronunciation standard (2026-09-09): Adam's two founding
+    # rules, on the exact words he named.
+    checks.append(('ALL standard  rule 1: hūṁ',
+                   sk.iast_to_all_pronunciation('hūṁ'), 'hung'))
+    checks.append(('ALL standard  rule 2: svāhā',
+                   sk.iast_to_all_pronunciation('svāhā'), 'soha'))
+    checks.append(('ALL standard  the mani mantra',
+                   sk.iast_to_all_pronunciation('oṃ maṇi padme hūṁ'),
+                   'om mani padme hung'))
+    # a refusal must produce NOTHING, never an approximation. The harness
+    # normalises None to '' before comparing, so '' is how a refusal is
+    # expressed here.
+    checks.append(('ALL standard  an unreadable input is refused, not guessed',
+                   sk.iast_to_all_pronunciation('xyzzy!!'), ''))
     checks.append(('devanagari   word-final consonant keeps its virama',
                    sk.iast_to_devanagari('deśayām āsa saṃbuddhas taṃ vande'),
                    'देशयाम् आस संबुद्धस् तं वन्दे'))

@@ -175,6 +175,146 @@ def iast_to_devanagari(word):
     if prev_cons: out+=VIRAMA
     return out
 
+# ---------------------------------------------------------------------------
+# The ALL Sanskrit pronunciation standard (2026-09-09)
+#
+# Adam's architecture, in his words: "All other pronunciation standards founded
+# by FPMT will stand as a base for the ALL Sanskrit pronunciation standards
+# while I will then make a hybridized version by asking that we modify bits and
+# pieces of the FPMT standard to create an improved one". And: "This should be
+# a separate line/entry of the standards and isn't supposed to supplant or
+# replace any existing pronunciation schemes we've already lined out."
+#
+# So this is an ADDITIONAL line. iast_to_ipa (classical) and
+# iast_to_pronunciation (the plain-letter strip) both stand unchanged.
+#
+# THREE LAYERS, applied in order, later winning:
+#   1. FPMT_BASE   - the FPMT Translation Services letter values (Nov 2020),
+#                    the same guide the app's letter-by-letter help already
+#                    follows.
+#   2. ALL_ATTESTED - readings MATCHED from Geshe Michael Roach's own published
+#                    courses. Measured over the 681 mantra lines in the corpus
+#                    that print the ACIP code and his reading side by side;
+#                    each entry's count is in the table below and the full
+#                    evidence is banked at data/pronunciation/
+#                    gmr_mantra_evidence.csv. Matched, never composed.
+#   3. ALL_RULINGS - Adam's own amendments. Highest authority; they may
+#                    contradict both layers above, and where they do it is
+#                    recorded rather than hidden.
+#
+# Whole-syllable idioms are applied BEFORE letter rules, longest first, because
+# a seed syllable is a word in its own right: hūṁ is "hung" wherever it stands.
+
+# layer 1 — FPMT letter values
+FPMT_BASE = [
+    ('ai', 'ai'), ('au', 'au'),
+    ('ā', 'a'), ('ī', 'i'), ('ū', 'u'),
+    ('ṝ', 'ri'), ('ṛ', 'ri'),          # FPMT anchor: "vocalic r, as in cringe"
+    ('ḹ', 'li'), ('ḷ', 'li'),
+    ('ṅ', 'ng'), ('ñ', 'ny'),
+    ('ṭh', 'th'), ('ḍh', 'dh'),
+    ('ṭ', 't'), ('ḍ', 'd'), ('ṇ', 'n'),
+    ('ś', 'sh'), ('ṣ', 'sh'),
+    ('cch', 'ch'), ('ch', 'ch'), ('c', 'ch'),
+    ('ṃ', 'm'), ('ṁ', 'm'),
+    ('ḥ', 'h'),
+]
+
+# layer 2 — matched from his own courses. (count, note) is documentation only.
+ALL_ATTESTED = [
+    ('ṛ', 'ir'),      # vikṛtānana -> "vikirta-anana", 65/65 occurrences
+    ('cch', 'ch'),    # praticcha -> "praticha", 205/205
+    ('ḥ', 'h'),       # a-ḥ -> "ah" 185, hrīḥ -> "hrih" 71, jaḥ -> "jah" 39 (572/644 = 89%)
+    # The nasals assimilate to what follows, which is the FPMT rule, but he
+    # writes a plain "n" where FPMT's row-nasal would give "ng" or "ny".
+    # Longer keys win in the scan, so these beat the bare ṃ and ñ rules.
+    ('ṃk', 'nk'), ('ṃkh', 'nkh'), ('ṃg', 'ng'), ('ṃgh', 'ngh'),
+    ('ñc', 'nch'), ('ñch', 'nch'), ('ñj', 'nj'),
+    # the avagraha marks an elided a and is not pronounced: he writes
+    # ātmako'ham as "atmakoham"
+    ("'", ''), ('\u2019', ''), ('\u02bc', ''),
+]
+
+# layer 3 — Adam's amendments. Each dated. These are rulings, not evidence.
+ALL_RULINGS = [
+    # 2026-09-09, rule 1
+    ('hūṁ', 'hung'), ('hūṃ', 'hung'),
+    # 2026-09-09, rule 2. FOR THE RECORD, measured over the whole corpus:
+    # "soha" appears in 0 of 42,199 segments and "sva ha" in 380. This
+    # amendment departs from every line of his published English. It is
+    # implemented as given, and it is labelled INTERIM in
+    # docs/standards/ALL_SANSKRIT_PRONUNCIATION_STANDARD.md, awaiting Geshe
+    # Michael Roach's own word, per SOURCE_TRUST_HIERARCHY.md's le'ur
+    # precedent.
+    ('svāhā', 'soha'),
+]
+
+# whole-syllable idioms, longest first (rulings first, then attested)
+ALL_IDIOMS = [
+    ('svāhā', 'soha'), ('hūṁ', 'hung'), ('hūṃ', 'hung'),
+    ('oṃ', 'om'), ('oṁ', 'om'),
+    ('āḥ', 'ah'), ('phaṭ', 'phet'), ('hrīḥ', 'hrih'),
+]
+
+
+def _all_table():
+    """The three layers merged into one map, later layers overriding earlier.
+
+    Built once. A single left-to-right longest-match scan then applies it, so
+    no rule can ever act on another rule's OUTPUT — the bug that turned
+    "praticcha" into "pratichhchhha" when this was written as repeated
+    str.replace passes (2026-09-09).
+    """
+    if not hasattr(_all_table, "_m"):
+        m = {}
+        for src, dst in FPMT_BASE:
+            m[src] = dst
+        for src, dst in ALL_ATTESTED:
+            m[src] = dst
+        for src, dst in ALL_RULINGS:
+            m[src] = dst
+        _all_table._m = m
+        _all_table._keys = sorted(m, key=len, reverse=True)
+    return _all_table._m, _all_table._keys
+
+
+def iast_to_all_pronunciation(word):
+    """IAST -> the ALL Sanskrit pronunciation standard.
+
+    A separate line beside the classical IPA and the plain-letter strip, not a
+    replacement for either. Returns None if the input does not tokenize, so a
+    refusal stays a refusal rather than becoming an approximation.
+    """
+    if tokenize_iast(word) is None:
+        return None
+    table, keys = _all_table()
+    idioms = sorted(ALL_IDIOMS, key=lambda kv: -len(kv[0]))
+    out = []
+    for w in re.split(r'(\s+)', word):
+        if not w.strip():
+            out.append(w)
+            continue
+        lw = w.lower()
+        # a seed syllable is a word in its own right: hūṁ is "hung" wherever
+        # it stands, and no letter rule may take it apart
+        idiom = next((dst for src, dst in idioms if lw == src), None)
+        if idiom is not None:
+            out.append(idiom)
+            continue
+        i, buf = 0, []
+        while i < len(lw):
+            for k in keys:
+                if lw.startswith(k, i):
+                    buf.append(table[k])
+                    i += len(k)
+                    break
+            else:
+                buf.append(lw[i])
+                i += 1
+        out.append(''.join(buf))
+    return ''.join(out)
+
+
 def iast_to_pronunciation(word):
     s=word.lower()
     for k,v in PRON.items(): s=s.replace(k,v)
@@ -245,9 +385,24 @@ def iast_to_nextletter(word):
 def iast_to_inputcode(word):
     return _apply_table(word.lower(), INPUTCODE)
 
+# Forms that appear in real ACIP Sanskrit but that the FORWARD table does not
+# emit, so they only ever need reading, never writing. Found 2026-09-09 by
+# running Geshe Michael Roach's own mantra lines back through this function:
+# 644 occurrences of the visarga written ":" and 309 of ś written "s*" were
+# refused outright, which is 20% of his mantra corpus.
+INPUTCODE_READ_ONLY = {
+    ':': 'ḥ',      # visarga, as the ACIP Sanskrit code writes it
+    's*': 'ś',     # palatal sha, following the same "*" modifier as n* for ṅ
+    'sh*': 'ś',
+    's#': 'ś',     # a third spelling of ś in his courses (vais#ravan%a), 18x
+}
+
+
 def inputcode_to_iast(code):
     rev = sorted(INPUTCODE.items(), key=lambda kv: len(kv[1]), reverse=True)
     s = code.lower()
     for k, v in rev:
+        s = s.replace(v, k)
+    for v, k in sorted(INPUTCODE_READ_ONLY.items(), key=lambda kv: -len(kv[0])):
         s = s.replace(v, k)
     return s

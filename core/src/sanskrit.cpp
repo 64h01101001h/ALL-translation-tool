@@ -430,6 +430,100 @@ std::pair<std::string, bool> iastToDevanagari(const std::string& iast) {
     return {fromU32(out), true};
 }
 
+// ---------------------------------------------------------------------------
+// The ALL Sanskrit pronunciation standard — ported from
+// engines/sanskrit_convert.py::iast_to_all_pronunciation (2026-09-09).
+//
+// Adam's architecture: the FPMT Translation Services values are the BASE, his
+// own amendments sit on top, and the whole thing is an ADDITIONAL line that
+// replaces neither iastToIpa (classical) nor iastToPronunciation (the plain
+// letter strip).
+//
+// Three layers merged into one map, later layers winning, then applied by a
+// single left-to-right longest-match scan so no rule can act on another
+// rule's output. Whole-syllable idioms are tried first: a seed syllable is a
+// word in its own right and no letter rule may take it apart.
+//
+// Measured against Geshe Michael Roach's own published readings — the 681
+// mantra lines in the corpus that print the ACIP code and his reading side by
+// side — at 94.4% weighted agreement. The evidence is banked at
+// data/pronunciation/gmr_mantra_evidence.csv and the remaining disagreements
+// are listed in docs/standards/ALL_SANSKRIT_PRONUNCIATION_STANDARD.md as open
+// questions rather than papered over.
+static const std::vector<std::pair<std::u32string, std::u32string>>& allTable() {
+    static const std::vector<std::pair<std::u32string, std::u32string>> T = [] {
+        std::vector<std::pair<std::u32string, std::u32string>> v = {
+            // layer 1 — FPMT letter values
+            {U"ai", U"ai"}, {U"au", U"au"},
+            {U"ā", U"a"}, {U"ī", U"i"}, {U"ū", U"u"},
+            {U"ṝ", U"ri"}, {U"ḹ", U"li"}, {U"ḷ", U"li"},
+            {U"ṅ", U"ng"}, {U"ñ", U"ny"},
+            {U"ṭh", U"th"}, {U"ḍh", U"dh"},
+            {U"ṭ", U"t"}, {U"ḍ", U"d"}, {U"ṇ", U"n"},
+            {U"ś", U"sh"}, {U"ṣ", U"sh"},
+            {U"ch", U"ch"}, {U"c", U"ch"},
+            {U"ṃ", U"m"}, {U"ṁ", U"m"},
+            // layer 2 — matched from his own courses
+            {U"ṛ", U"ir"},        // vikṛtānana → "vikirta-anana", 65/65
+            {U"cch", U"ch"},      // praticcha → "praticha", 205/205
+            {U"ḥ", U"h"},         // āḥ → "ah" 185, hrīḥ → "hrih" 71 (572/644)
+            {U"ṃk", U"nk"}, {U"ṃkh", U"nkh"}, {U"ṃg", U"ng"}, {U"ṃgh", U"ngh"},
+            {U"ñc", U"nch"}, {U"ñch", U"nch"}, {U"ñj", U"nj"},
+            {U"'", U""}, {U"\u2019", U""}, {U"\u02bc", U""},   // avagraha, not pronounced
+            // layer 3 — Adam's amendments, 2026-09-09
+            {U"hūṁ", U"hung"}, {U"hūṃ", U"hung"},
+            {U"svāhā", U"soha"},
+        };
+        std::stable_sort(v.begin(), v.end(),
+                         [](const auto& a, const auto& b) {
+                             return a.first.size() > b.first.size();
+                         });
+        return v;
+    }();
+    return T;
+}
+
+static const std::vector<std::pair<std::u32string, std::u32string>>& allIdioms() {
+    static const std::vector<std::pair<std::u32string, std::u32string>> T = {
+        {U"svāhā", U"soha"}, {U"hūṁ", U"hung"}, {U"hūṃ", U"hung"},
+        {U"oṃ", U"om"}, {U"oṁ", U"om"},
+        {U"āḥ", U"ah"}, {U"phaṭ", U"phet"}, {U"hrīḥ", U"hrih"},
+    };
+    return T;
+}
+
+std::pair<std::string, bool> iastToAllPronunciation(const std::string& iast) {
+    if (!tokenizeIast(iast)) return {"", false};
+    const std::u32string w = lowered(toU32(iast));
+    std::u32string out;
+    size_t i = 0;
+    while (i < w.size()) {
+        if (isSpace(w[i])) { out += w[i]; ++i; continue; }
+        size_t end = i;
+        while (end < w.size() && !isSpace(w[end])) ++end;
+        const std::u32string word = w.substr(i, end - i);
+        bool idiom = false;
+        for (const auto& [src, dst] : allIdioms())
+            if (word == src) { out += dst; idiom = true; break; }
+        if (!idiom) {
+            size_t k = 0;
+            while (k < word.size()) {
+                bool hit = false;
+                for (const auto& [src, dst] : allTable())
+                    if (!src.empty() && word.compare(k, src.size(), src) == 0) {
+                        out += dst;
+                        k += src.size();
+                        hit = true;
+                        break;
+                    }
+                if (!hit) { out += word[k]; ++k; }
+            }
+        }
+        i = end;
+    }
+    return {fromU32(out), true};
+}
+
 std::string iastToPronunciation(const std::string& iast) {
     // sequential str.replace in the PRON dict's insertion order
     std::u32string s = lowered(toU32(iast));
@@ -511,6 +605,15 @@ std::string inputcodeToIast(const std::string& code) {
         return a.second.size() > b.second.size();
     });
     for (const auto& [k, v] : items) replaceAll(s, v, k);
+    // Forms that appear in real ACIP Sanskrit but that the FORWARD table never
+    // emits, so they only ever need reading. Found 2026-09-09 by running Geshe
+    // Michael Roach's own mantra lines back through this function: 644
+    // occurrences of the visarga written ":" and 327 of ś written "s*" or "s#"
+    // were refused outright, which is a fifth of his mantra corpus.
+    static const std::vector<std::pair<std::u32string, std::u32string>> READ_ONLY = {
+        {U"sh*", U"ś"}, {U"s*", U"ś"}, {U"s#", U"ś"}, {U":", U"ḥ"},
+    };
+    for (const auto& [v, k] : READ_ONLY) replaceAll(s, v, k);
     return fromU32(s);
 }
 

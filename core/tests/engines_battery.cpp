@@ -333,14 +333,14 @@ int main(int argc, char** argv) {
                         col.push_back(l.substr(start, p - start));
                         start = p + 1;
                     }
-                if (col.size() != 9) continue;
+                if (col.size() != 10) continue;
                 const std::string& t = col[0];
                 ++total;
                 auto opt = [&NONE](const std::pair<std::string, bool>& r) {
                     return r.second ? r.first : NONE;
                 };
                 auto acip = allcore::iastToAcip(t);
-                const std::string got[8] = {
+                const std::string got[9] = {
                     opt(acip),
                     opt(allcore::iastToDevanagari(t)),
                     allcore::iastToPronunciation(t),
@@ -349,13 +349,14 @@ int main(int argc, char** argv) {
                     acip.second ? allcore::acipToEwts(acip.first) : NONE,
                     opt(allcore::iastToTibetan(t)),
                     acip.second ? allcore::acipSanskritToIast(acip.first) : NONE,
+                    opt(allcore::iastToAllPronunciation(t)),
                 };
                 bool ok = true;
-                for (int k = 0; k < 8; ++k) ok &= (got[k] == col[k + 1]);
+                for (int k = 0; k < 9; ++k) ok &= (got[k] == col[k + 1]);
                 if (ok) ++match;
                 else if (misses.size() < 6) {
                     std::string d;
-                    for (int k = 0; k < 8; ++k)
+                    for (int k = 0; k < 9; ++k)
                         if (got[k] != col[k + 1])
                             d += " [" + std::to_string(k) + "] " + got[k] +
                                  " != " + col[k + 1];
@@ -433,7 +434,7 @@ int main(int argc, char** argv) {
                         col.push_back(l.substr(start, p - start));
                         start = p + 1;
                     }
-                if (col.size() != 9 || col[2] == NONE) continue;
+                if (col.size() != 10 || col[2] == NONE) continue;
                 ++total;
                 // whitespace runs are presentational (break characters like
                 // "-" and "…" all render as spaces) — compare letters
@@ -460,6 +461,65 @@ int main(int argc, char** argv) {
             for (auto& m : misses) std::printf("     miss: %.90s\n", m.c_str());
             CHECK(total > 70000, "battery G2 covers the LC devanagari set");
             CHECK(match == total, "devanagari round-trip is exact");
+        }
+    }
+
+    // ---- Battery I: the ALL Sanskrit pronunciation standard vs his own text --
+    // The standard is judged the only way this project accepts: against Geshe
+    // Michael Roach's own published readings. data/pronunciation/
+    // gmr_mantra_evidence.csv is mined from the 681 mantra lines in the corpus
+    // that print the ACIP input code and his reading side by side, aligned
+    // word for word. The floor is a ratchet: it may be raised, never lowered.
+    {
+        const char* path = argc > 4 ? argv[4] : nullptr;
+        std::FILE* f = path ? std::fopen(path, "rb") : nullptr;
+        if (!f) {
+            std::printf("  I: evidence file missing — SKIPPED\n");
+            CHECK(false, "battery I: his mantra evidence is present");
+        } else {
+            char line[4096];
+            long total = 0, agree = 0;
+            std::vector<std::string> misses;
+            bool first = true;
+            while (std::fgets(line, sizeof line, f)) {
+                if (first) { first = false; continue; }   // header
+                std::string L(line);
+                while (!L.empty() && (L.back() == '\n' || L.back() == '\r'))
+                    L.pop_back();
+                std::vector<std::string> col;
+                std::string cur;
+                bool q = false;
+                for (char c : L) {
+                    if (c == '"') { q = !q; continue; }
+                    if (c == ',' && !q) { col.push_back(cur); cur.clear(); }
+                    else cur += c;
+                }
+                col.push_back(cur);
+                if (col.size() < 3) continue;
+                // strip a UTF-8 BOM on the very first field
+                if (col[0].size() > 3 && (unsigned char)col[0][0] == 0xEF)
+                    col[0] = col[0].substr(3);
+                const long n = std::atol(col[2].c_str());
+                if (n <= 0) continue;
+                const std::string iast = allcore::inputcodeToIast(col[0]);
+                auto [got, ok] = allcore::iastToAllPronunciation(iast);
+                total += n;
+                std::string want = col[1];
+                for (auto& c : want) c = (char)std::tolower((unsigned char)c);
+                if (ok && got == want) agree += n;
+                else if (misses.size() < 6)
+                    misses.push_back(col[0] + " -> he writes \"" + want +
+                                     "\", we produce \"" + got + "\"");
+            }
+            std::fclose(f);
+            const double rate = total ? 100.0 * agree / total : 0;
+            std::printf("  I: ALL pronunciation vs his own readings: %ld/%ld "
+                        "(%.1f%%)\n", agree, total, rate);
+            for (auto& m : misses) std::printf("     %.110s\n", m.c_str());
+            CHECK(total > 5000, "battery I covers his mantra corpus");
+            CHECK(rate >= 94.0,
+                  "the ALL standard agrees with Geshe Michael Roach's own "
+                  "published readings (floor 94%, ratchet upward only)");
         }
     }
 
