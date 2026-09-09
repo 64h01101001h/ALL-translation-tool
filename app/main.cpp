@@ -5750,6 +5750,53 @@ static QList<QToolButton*>& ribbonProxies() {
     static QList<QToolButton*> l;
     return l;
 }
+// What each pane is, in one line, for the tooltip a person gets by resting
+// on its button (Adam, 2026-09-09: "the name and a basic description should
+// be displayed when the cursor is hovered over it"). Where the user manual
+// introduces a pane, these are ITS words, so the tooltip and the manual can
+// never say different things; the rest are written from what the pane does.
+// A pane with no line here fails the selftest, so a new pane cannot ship
+// without saying what it is.
+static QString paneBlurb(const QString& title) {
+    static const QHash<QString, QString> kBlurbs = {
+        // the manual's own sentences (data/help/USER_MANUAL.md)
+        {"Overlay", "The flagship reader: a Tibetan text with the dictionary underneath."},
+        {"Library", "The preserved canon on your own disk — the public Kangyur, Tengyur and Sungbum releases, plus your own materials."},
+        {"Files", "A dual-pane file browser built into the app: browse your disk side by side, and anything you open routes into the tool."},
+        {"Manuscript", "The writing surface — the manuscript itself, with the corpus one keystroke away."},
+        {"Draft", "The working translator's bench: source above, your English below, evidence tools on both."},
+        {"Review", "The overseer's bench — a senior translator checking someone else's finished draft."},
+        {"Align", "Building tomorrow's dictionary: aligning Tibetan with its English, segment by segment."},
+        {"Search", "Geshe Michael's daily search tool for thirty years, rebuilt with the same algorithms and its original layout."},
+        {"Lookup", "The stacked multi-dictionary: his entry first and binding, every other layer labelled reference."},
+        {"Sanskrit", "The whole Sanskrit stack in one workbench: every notation, Whitney's roots, and the Mahavyutpatti bridge to classical Tibetan."},
+        {"Convert", "Every writing system, and time itself."},
+        {"Analysis", "The full grammatical analysis of a passage. Key-gated, and labelled as machine work."},
+        {"Trainer", "Learning to read, layer by layer. Engine guidance is labelled guidance; only corpus lines are answers."},
+        {"Drills", "Exercises that write themselves from the corpus, so every answer is Geshe Michael's own text."},
+        // written from what the pane does
+        {"Scans", "The woodblock scans beside the text you are reading."},
+        {"Export", "Sending a text out in another form."},
+        {"Apparatus", "The published footnote and apparatus bank."},
+        {"Study", "Measuring a text: what it counts, what it repeats, which texts share its material, and who it names."},
+        {"Compare", "Two texts side by side with the differing syllables marked, plus folders, three-way merge and tables."},
+        {"Input", "Typing new pages in and correcting them."},
+        {"OCR", "Reading scanned pages into text."},
+        {"Catalog", "Naming and shelving every text."},
+        {"Propose", "Putting a reading forward for the authority to rule on."},
+        {"Approval", "Ruling on what has been proposed."},
+    };
+    QString key = title;
+    const int par = key.indexOf(" (");
+    if (par > 0) key.truncate(par);
+    return kBlurbs.value(key.trimmed());
+}
+// One shape for every hover: the name in bold, then what it is for. Qt wraps
+// a rich-text tooltip on its own, so no width has to be guessed.
+static QString hoverText(const QString& name, const QString& what) {
+    if (what.trimmed().isEmpty()) return name;
+    return "<b>" + name.toHtmlEscaped() + "</b><br>" + what.toHtmlEscaped();
+}
 static bool ribbonLabelsOn() {
     return QSettings("ALL", "TranslationTool")
         .value("ui/ribbonLabels", true)
@@ -5781,8 +5828,8 @@ public:
         QString label = src->text();
         label.remove(QString::fromUtf8("…"));
         setText(label);
-        setToolTip(src->toolTip().isEmpty() ? src->text()
-                                            : src->toolTip());
+        // name first, then what it does — the same shape every hover has
+        setToolTip(hoverText(label, src->toolTip()));
         setAutoRaise(true);
         setToolButtonStyle(ribbonLabelsOn()
                                ? Qt::ToolButtonTextUnderIcon
@@ -5822,6 +5869,11 @@ public:
     bool eventFilter(QObject* o, QEvent* ev) override {
         if (o == src_ && ev->type() == QEvent::EnabledChange)
             setEnabled(src_->isEnabled());
+        // A description written AFTER the button joined the ribbon used to be
+        // lost: the proxy copied the tooltip once, at construction. Following
+        // the source removes the ordering trap entirely.
+        if (o == src_ && ev->type() == QEvent::ToolTipChange)
+            setToolTip(hoverText(text(), src_->toolTip()));
         return QToolButton::eventFilter(o, ev);
     }
 
@@ -9155,7 +9207,13 @@ public:
         auto* open = new QPushButton("Open ACIP file…");
         open->setIcon(miniIcon("page"));
         gDoc->addBig(open, "page");
+        open->setToolTip(
+            "Open an ACIP text file from the library or from disk and "
+            "read it in this pane.");
         auto* load = new QPushButton("Load into overlay");
+        load->setToolTip(
+            "Read the text above with the overlay: click any word to "
+            "see its dictionary entries in context.");
         load->setIcon(miniIcon("book"));
         gDoc->addBig(load, "book");
 
@@ -21973,12 +22031,39 @@ public:
         source_->setPlaceholderText("Source ACIP…");
         sess::remember(source_, "draft/source");
         srcCol->addWidget(source_);
+        auto* startRow = new QHBoxLayout;
+        auto* startBtn = new QPushButton("Load source");
+        startBtn->setToolTip(
+            "Turns the ACIP above into numbered, clickable clauses. "
+            "Same action as Load source on the ribbon.");
+        ux::themedStyle(startBtn, [] {
+            return QString("QPushButton { font-weight:600; padding:5px 14px; "
+                           "border:1px solid %1; border-radius:5px; color:%1; }"
+                           "QPushButton:hover { background:rgba(30,107,78,0.10); }")
+                .arg(ux::darkChrome() ? ux::chromeAct() : QString(ux::kAct));
+        });
+        startRow->addWidget(startBtn);
+        auto* startHint = new QLabel;
+        startHint->setWordWrap(true);
+        ux::themedStyle(startHint, [] {
+            return QString("QLabel { color:%1; font-size:11px; }")
+                .arg(ux::darkChrome() ? ux::chromeMuted() : QString(ux::kMuted));
+        });
+        startHint->setText(
+            "Start here. Everything else for this pane \u2014 outline, verse, "
+            "quotations, terminology, export \u2014 is on the ribbon above, "
+            "under WORKBENCH, STRUCTURE, EVIDENCE and PUBLISH.");
+        startRow->addWidget(startHint, 1);
+        srcCol->addLayout(startRow);
         auto* ribbon = new RibbonBar;
         auto* gWork = ribbon->group("WORKBENCH");
         auto* gStruct = ribbon->group("STRUCTURE");
         auto* gEvid = ribbon->group("EVIDENCE");
         auto* gPub = ribbon->group("PUBLISH");
         auto* loadBtn = new QPushButton("Load source");
+        loadBtn->setToolTip(
+            "Turns the ACIP in the source box into numbered, clickable "
+            "clauses, ready for anchors and evidence.");
         gWork->addBig(loadBtn, "page");
         // the Evidence Ribbon (Adam's wow round, 2026-08-12): once a
         // source is loaded, the evidence FOLLOWS THE CURSOR — click
@@ -22007,10 +22092,10 @@ public:
         });
         connect(source_, &QPlainTextEdit::cursorPositionChanged,
                 [this] { evTimer_->start(); });
-auto* secStruct = new QLabel("<span style='color:#9A7A33;font-size:10px;letter-spacing:2px;font-weight:600'>STRUCTURE</span>");
-        secStruct->setContentsMargins(0, 8, 0, 0);
-        srcCol->addWidget(secStruct);
                 auto* outlineBtn = new QPushButton("Extract outline (sa bcad)");
+        outlineBtn->setToolTip(
+            "Pulls out the text's own topical outline — the sa bcad "
+            "headings the author wrote — as a navigable tree.");
         gStruct->addBig(outlineBtn, "tree");
                 auto* structBtn = new QPushButton("Structural units (bam po / le'u)");
         structBtn->setToolTip(
@@ -22019,6 +22104,9 @@ auto* secStruct = new QLabel("<span style='color:#9A7A33;font-size:10px;letter-s
             "(30-syllable prose shloka, 300-shloka bampo).");
         gStruct->addBig(structBtn, "ledger");
         auto* verseBtn = new QPushButton("Verse meter");
+        verseBtn->setToolTip(
+            "Counts the syllables in each line and reports the metre, "
+            "so verse can be read as verse.");
         gStruct->addBig(verseBtn, "count");
         auto* styleBtn = new QPushButton("House style check\u2026");
         styleBtn->setToolTip(
@@ -22041,9 +22129,6 @@ auto* secStruct = new QLabel("<span style='color:#9A7A33;font-size:10px;letter-s
         gStruct->addBig(verseReadBtn, "book");
         QObject::connect(verseReadBtn, &QPushButton::clicked,
                          [this] { verseReading(); });
-auto* secEvid = new QLabel("<span style='color:#9A7A33;font-size:10px;letter-spacing:2px;font-weight:600'>EVIDENCE</span>");
-        secEvid->setContentsMargins(0, 8, 0, 0);
-        srcCol->addWidget(secEvid);
                 auto* quoteBtn = new QPushButton("Detect quotations");
         quoteBtn->setToolTip(
             "Finds passages that exactly match corpus segments (7+ "
@@ -22095,16 +22180,19 @@ auto* secEvid = new QLabel("<span style='color:#9A7A33;font-size:10px;letter-spa
         clauseView_ = new QTextBrowser;
         clauseView_->setOpenLinks(false);
         clauseView_->setHtml(
-            "<i style='color:#6F6F6F'>The source appears here as "
-            "clickable clauses once you press Load source.</i>");
+            "<i style='color:#6F6F6F'>The source appears here as numbered, "
+            "clickable clauses once you press <b>Load source</b> \u2014 the "
+            "button under the source box on the left, or WORKBENCH on the "
+            "ribbon above. Click any clause to see its evidence on the "
+            "right.</i>");
         tl->addWidget(clauseView_, 1);
         anchors_ = new QTextBrowser;
         anchors_->setOpenLinks(false);
         anchors_->setHtml(
-            "<i style='color:#6F6F6F'>The Evidence Ribbon — click "
-            "or arrow into any clause and its anchors, scaffold, "
-            "exact parallels, and quotation status appear here on "
-            "their own.</i>");
+            "<i style='color:#6F6F6F'>The Evidence Ribbon \u2014 load a source, "
+            "then click or arrow into any clause. Its anchors, scaffold, "
+            "exact parallels and quotation status appear here on their "
+            "own, with no further clicks.</i>");
         tl->addWidget(anchors_, 1);
         split->addWidget(top);
 
@@ -22206,6 +22294,9 @@ auto* secEvid = new QLabel("<span style='color:#9A7A33;font-size:10px;letter-spa
             }
         });
         auto* checkBtn = new QPushButton("Check terminology");
+        checkBtn->setToolTip(
+            "Matches the English draft against HGM's equivalents. It "
+            "flags what disagrees; it never writes English for you.");
         gEvid->addBig(checkBtn, "check");
         auto* toMssBtn = new QPushButton("Send to Manuscript →");
         toMssBtn->setToolTip(
@@ -22225,9 +22316,6 @@ auto* secEvid = new QLabel("<span style='color:#9A7A33;font-size:10px;letter-spa
         draftCol->addWidget(notesSearch_);
         QObject::connect(notesSearch_, &QLineEdit::returnPressed,
                          [this] { searchNotesBank(); });
-auto* secPub = new QLabel("<span style='color:#9A7A33;font-size:10px;letter-spacing:2px;font-weight:600'>PUBLISH</span>");
-        secPub->setContentsMargins(0, 8, 0, 0);
-        draftCol->addWidget(secPub);
                 auto* rtfBtn = new QPushButton("Export draft (RTF, *italics*)…");
         rtfBtn->setToolTip(
             "Writes the draft as RTF for the publishing workflow. Text "
@@ -22281,6 +22369,7 @@ auto* secPub = new QLabel("<span style='color:#9A7A33;font-size:10px;letter-spac
         layout->addWidget(split, 1);
 
         QObject::connect(loadBtn, &QPushButton::clicked, [this] { load(); });
+        QObject::connect(startBtn, &QPushButton::clicked, [this] { load(); });
         QObject::connect(outlineBtn, &QPushButton::clicked,
                          [this] { outline(); });
         QObject::connect(structBtn, &QPushButton::clicked,
@@ -26042,7 +26131,13 @@ public:
             "straight into the library — no browser, no manual "
             "unzipping.");
         auto* installBtn = new QPushButton("Install…");
+        installBtn->setToolTip(
+            "Install collection archives (.zip) and loose texts from "
+            "disk into the library, in one mixed selection.");
         auto* importBtn = new QPushButton("Import…");
+        importBtn->setToolTip(
+            "Bring loose documents — Word, text, ACIP, Markdown, RTF — "
+            "into the library.");
         auto* ocrBtn = new QPushButton("Send to OCR…");
         auto* utfcBtn = new QPushButton("Legacy font rescue (UTFC)…");
         utfcBtn->setToolTip(
@@ -29039,8 +29134,16 @@ public:
         auto* ribbon = new RibbonBar;
         auto* gRv = ribbon->group("REVIEW");
         auto* openSrc = new QPushButton("Open source…");
+        openSrc->setToolTip(
+            "Open the Tibetan source file that the draft is to be "
+            "reviewed against.");
         auto* openDraft = new QPushButton("Open draft…");
+        openDraft->setToolTip(
+            "Open the English draft file to be reviewed.");
         auto* runB = new QPushButton("Run review");
+        runB->setToolTip(
+            "Compares the source against the draft and lists what needs "
+            "a human eye.");
         gRv->addBig(openSrc, "page");
         gRv->addBig(openDraft, "page");
         gRv->addBig(runB, "check");
@@ -29460,6 +29563,8 @@ public:
         auto* open = new QPushButton("Open ACIP file…");
         open->setIcon(miniIcon("page"));
         gTexts->addBig(open, "page");
+        open->setToolTip(
+            "Open an ACIP text file as one side of the alignment.");
         auto* hypBtn = new QPushButton("Import .hyp…");
         hypBtn->setToolTip(
             "Import a legacy Hypercontext hypertexted file: both texts "
@@ -29469,13 +29574,25 @@ public:
         gTexts->addBig(hypBtn, "out");
         connect(hypBtn, &QPushButton::clicked, [this] { importHyp(); });
         auto* load = new QPushButton("Load pasted texts");
+        load->setToolTip(
+            "Takes the two texts pasted above and loads them as the "
+            "pair to be aligned.");
         gTexts->addBig(load, "book");
         linkBtn_ = new QPushButton("Link (space)");
+        linkBtn_->setToolTip(
+            "Links the stretch selected on each side as one aligned "
+            "pair. The space bar does the same.");
         linkBtn_->setEnabled(false);
         gLink->addBig(linkBtn_, "diff");
         auto* unlink = new QPushButton("Delete last link");
+        unlink->setToolTip(
+            "Removes the most recent link, for when the pairing was "
+            "wrong.");
         gLink->addBig(unlink, "scissors");
         auto* exportBtn = new QPushButton("Export aligned pairs (PENDING)…");
+        exportBtn->setToolTip(
+            "Writes the aligned pairs out as PENDING — proposed "
+            "alignments awaiting approval, never shipped corpus.");
         gHarvest->addBig(exportBtn, "out");
         auto* collateBtn = new QPushButton("Compare editions…");
         collateBtn->setToolTip(
@@ -30087,6 +30204,9 @@ public:
         auto* gPartner = ribbon->group("PARTNER");
         auto* gExport = ribbon->group("EXPORT");
         auto* openScanB = new QPushButton("Open scan…");
+        openScanB->setToolTip(
+            "Open a single page scan to type from, with the image "
+            "beside your typing.");
         openScanB->setIcon(miniIcon("image"));
         gPages->addBig(openScanB, "image");
         auto* openFolderB = new QPushButton("Open scan folder…");
@@ -30290,6 +30410,9 @@ public:
         gTyping->addBig(folioB, "tag");
         connect(folioB, &QPushButton::clicked, [this] { nextFolio(); });
         auto* partnerB = new QPushButton("Compare with partner file…");
+        partnerB->setToolTip(
+            "Double keying: compare this typing against a second "
+            "typist's file and step through every discrepancy.");
         diffPrevB_ = new QPushButton("◀ disc");
         diffNextB_ = new QPushButton("disc ▶");
         diffPrevB_->setToolTip(
@@ -30307,6 +30430,8 @@ public:
         gPartner->add(diffPrevB_);
         gPartner->add(diffNextB_);
         auto* saveB = new QPushButton("Save…");
+        saveB->setToolTip(
+            "Save this page's typing to its own file in the library.");
         saveB->setIcon(miniIcon("save"));
         gExport->addBig(saveB, "out");
         ribbon->finish();
@@ -31729,6 +31854,8 @@ public:
         auto* gVolume = ribbon->group("VOLUME");
         auto* gModels = ribbon->group("MODELS");
         auto* open = new QPushButton("Open scan image…");
+        open->setToolTip(
+            "Open a page image to run OCR on.");
         gPage->addBig(open, "image");
         // MEASURED 2026-08-23 over 40 real BDRC folios from Adam's own
         // scans: at the previous default (deskew ON) 18 of 40 pages
@@ -31747,6 +31874,9 @@ public:
             "straight pages. Leave off for tilted scans.");
         gView->add(deskewOverride_);
         run_ = new QPushButton("Run OCR");
+        run_->setToolTip(
+            "Reads the Tibetan on the open page image. The result is "
+            "always marked OCR-DERIVED, never presented as typed truth.");
         run_->setEnabled(false);
         gPage->addBig(run_, "play");
         illusToggle_ = new QCheckBox("mark illustration candidates");
@@ -31779,6 +31909,9 @@ public:
             if (!pl_.lines.empty()) drawPage(-1, -1);
         });
         save_ = new QPushButton("Save to ocr_out…");
+        save_->setToolTip(
+            "Writes the OCR text into library/ocr_out, headered "
+            "OCR-DERIVED.");
         save_->setEnabled(false);
         gPage->addBig(save_, "save");
         auto* batchBtn = new QPushButton("Batch folder…");
@@ -32910,8 +33043,14 @@ public:
         auto* gRule = ribbon->group("RULINGS");
         auto* gRel = ribbon->group("RELEASE");
         auto* refresh = new QPushButton("Refresh queue");
+        refresh->setToolTip(
+            "Reloads the pending proposals from the shared folder, so "
+            "the queue shows everything the team has filed.");
         auto* exportB = new QPushButton("Export approved dictionary "
                                         "candidates…");
+        exportB->setToolTip(
+            "Writes out only the proposals Geshe Michael has approved, "
+            "as candidates for the dictionary.");
         auto* archiveB = new QPushButton("Rulings archive");
         archiveB->setToolTip(
             "The read-only record of every decision — who proposed, who "
@@ -33610,6 +33749,8 @@ public:
         saveB->setToolTip("Save the manuscript. Autosaves every "
                           "minute once a file exists.");
         auto* saveAsB = new QPushButton("Save as\u2026");
+        saveAsB->setToolTip(
+            "Save the manuscript under a new name.");
         auto* rtfB = new QPushButton("Export RTF\u2026");
         rtfB->setToolTip("Export the manuscript as RTF for Word or "
                          "Pages (via the Mac's own converter).");
@@ -34586,6 +34727,9 @@ public:
             "to the whole team.");
         gAccess->addBig(offB, "folder");
         auto* loginB = new QPushButton("Sign in…");
+        loginB->setToolTip(
+            "Sign in so that every cataloging action you take is "
+            "recorded under your name.");
         gAccess->addBig(loginB, "key");
         pendB_ = new QPushButton("Approvals…");
         pendB_->setToolTip(
@@ -39718,6 +39862,7 @@ int main(int argc, char** argv) {
                 tb->setText(label);
                 tb->setIcon(miniIcon(paneIcon(g->tabText(j))));
                 tb->setIconSize(QSize(20, 20));
+                tb->setToolTip(hoverText(label, paneBlurb(g->tabText(j))));
                 tb->setCheckable(true);
                 tb->setAutoRaise(true);
                 tb->setToolButtonStyle(
@@ -44508,6 +44653,30 @@ int main(int argc, char** argv) {
             for (auto* rb : win.findChildren<QWidget*>()) {
                 if (rb->objectName() != "ribbonBar") continue;
                 const int need = rb->minimumSizeHint().width();
+            {   // Adam, 2026-09-09: "a description of each component displayed when
+                // the cursor is over any button or icon". Every pane's switcher
+                // button must name itself and say what it is for, and every pane
+                // in the build must have a line — a new pane cannot ship silent.
+                QStringList silent, unblurbed;
+                for (const auto& f : flatPanes) {
+                    if (paneBlurb(f.title).isEmpty()) unblurbed << f.title;
+                    if (f.btn && f.btn->toolTip().trimmed().isEmpty()) silent << f.title;
+                }
+                log << QString("  [%1] Hover: every pane says what it is (%2 pane(s)%3)")
+                           .arg(unblurbed.isEmpty() && silent.isEmpty() ? "PASS" : "FAIL")
+                           .arg(flatPanes.size())
+                           .arg(unblurbed.isEmpty() && silent.isEmpty() ? QString()
+                                : QString("; no description: %1; no tooltip: %2").arg(unblurbed.join(", "), silent.join(", ")));
+                if (!unblurbed.isEmpty() || !silent.isEmpty()) ++fails;
+                QStringList mute;
+                for (QToolButton* t : ribbonProxies())
+                    if (!t->toolTip().contains("<b>")) mute << t->text();
+                log << QString("  [%1] Hover: every ribbon button says what it does (%2 of %3)%4")
+                           .arg(mute.isEmpty() ? "PASS" : "FAIL")
+                           .arg(ribbonProxies().size() - mute.size()).arg(ribbonProxies().size())
+                           .arg(mute.isEmpty() ? QString() : QString("; silent: ") + mute.join(" | "));
+                if (!mute.isEmpty()) ++fails;
+            }
                 if (need > worstW) {
                     worstW = need;
                     QStringList labels;
