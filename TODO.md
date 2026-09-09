@@ -2992,4 +2992,12 @@ questionnaire's Q13 answers tell us how much Android matters.
 - [ ] Format (Font, Paragraph, Bullets, Change Case incl. To ACIP/Wylie/script, Style, Document)
 - [ ] Tools (Spelling, Thesaurus→phrase memory, Translate→send to Draft, Word Count, Protect Document, Templates folder)
 - [ ] Window (Minimize, Zoom, Bring All to Front, open-window list)
-- [ ] Preferences panel (Word-style icon grid; migrates SettingsDialog; adds AI, Tibetan & Sanskrit, Updates, Privacy, File Locations pages)
+- [x] File, Sublime additions (encodings, Save All, Print, Revert, Close All) — 2026-09-08
+- [ ] Find menu (Sublime): incremental find, replace next, quick find, highlight all, use selection for find/replace, F3 family, find bar toggles (regex/case/word/wrap/in selection), Find in Files → Search pane
+- [ ] Selection menu (Sublime): expand to line/word/paragraph/whitespace/brackets/quotes, to Folio, to Phrase, until…, reverse
+- [ ] View additions (Sublime): line numbers, word wrap, line endings, hide status bar, console, spelling F6 family
+- [ ] Goto menu (Sublime): heading, line, folio, dictionary entry, concordance, jump back/forward, bookmarks, matching bracket
+- [ ] Tools additions (Sublime): snippets, Hunt as command palette, cheat sheet
+- [ ] Project menu (Sublime): dossiers promoted — open/switch/recent/save as/close/edit, folders
+- [ ] Help additions (Sublime): Documentation, Report a Bug (defect intake), Data status
+- [ ] Preferences panel (Word-style icon grid + Sublime settings ideas: colour schemes, themes, key bindings view; migrates SettingsDialog; adds AI, Tibetan & Sanskrit, Updates, Privacy, File Locations pages)
