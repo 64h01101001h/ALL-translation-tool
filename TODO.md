@@ -3245,9 +3245,34 @@ licensing decisions.
       typing; Format ▸ Apply House Style Spacing on demand. English-only
       (a line with no lower-case letter is ACIP and is left alone; a period
       before a lower-case word is an abbreviation). 2026-09-08
-- [ ] **Ask Adam for the ALL style sheet itself** so every rule becomes a
-      switch on Preferences ▸ House Style (colon / semicolon spacing are
-      there already, default off, awaiting the sheet's ruling).
+- [x] ~~Ask Adam for the style sheet~~ — it was already in the repository:
+      `docs/standards/DCC_Style_Guide_2023-08-25.docx` (banked 2026-08-14,
+      distilled to `data/help/STYLE.md`, with a Draft "House style check"
+      shipped then). Found again 2026-09-09 by searching mail, Dropbox and
+      disk; the full lineage (Geshe Michael's 2017 sheet → Utpala's 2021
+      Mixed Nuts guide → the 2022/2023 DCC guide) is in
+      `docs/standards/DCC_STYLE_GUIDE_RULES.md`. **The guide answers the
+      open question:** two spaces after ending punctuation, ONE after a
+      colon, comma or semicolon — so the "two spaces after a colon" switch
+      was wrong and is removed.
+- [x] Style sheet integration, 2026-09-09: every rule inventoried
+      (mechanical / judgement / workflow) with its status; the checker
+      gained the guide's remaining mechanical rules (sentence spacing,
+      punctuation spacing, indentation characters, spaced en dash,
+      quote-punctuation placement, Independent/Consequence branch,
+      Enlightened Being); every check is a switch on Preferences ▸ House
+      Style; Tools ▸ House Style Check…
+- [ ] Style-sheet gaps still to build (from the inventory's build list):
+      US-spelling check; lone single digits in prose; stray `%` / `%?` /
+      `%%` markers; title case on heading lines; serial-comma "check";
+      Manuscript "DCC body" style (Palatino 12 justified), footnote-lead
+      emission, roman-brackets-in-italics and italic-footnote-marker
+      checks, small-caps era; Save As name pattern for the editing hand-off;
+      the two citation forms and bibliography templates go to Insert
+      Citation (analysis-suite batch 6)
+- [ ] Ask Utpala (at her session) which of Geshe Michael's 2017 rules not
+      restated in 2023 still hold (footnote format, `{%DGAS}` corrections,
+      section letters S/B/C/E, final-`O, ,` shad handling)
 
 ### Compare & Merge suite (Adam, 2026-09-08) — docs/COMPARE_SUITE_PLAN.md
 - [x] Batch 1 engine + battery; batch 2 Compare pane, menus, Files hooks,

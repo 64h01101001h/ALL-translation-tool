@@ -10,6 +10,14 @@ stays your judgment. Chicago Manual of Style + Merriam-Webster
 
 ## Style: Mechanics
 
+*In the tool: every rule below is a switch on **Preferences ▸ House
+Style**. The two spacing rules can be applied (on demand with Format ▸
+Apply House Style Spacing, on save, or while typing — English text only).
+Everything else is checked by the Draft's **House style check** (also under
+Tools), which flags and never rewrites. The engineering inventory of every
+rule in the guide, with its status, is `docs/standards/DCC_STYLE_GUIDE_RULES.md`.*
+
+
 - **Curly quotes, never straight** — and never fix them with a
   global Find/Replace All (it introduces wrong-direction marks;
   change individual marks only).
