@@ -1,7 +1,10 @@
 // versions_smoke — the document version store battery (F1): store, dedupe,
 // the rolling autosave slot, prune caps (pinned and newest never), the path
 // filter, FIPS 180-4 SHA-1 vectors, docKey collisions, orphans, damaged
-// blobs, malformed records, exact label round-trip, renameKey, byChangeset.
+// blobs, malformed records, exact label round-trip, renameKey, byChangeset —
+// and (F4) the changeset record: write/read round-trip, the id listing, the
+// undone block, strict refusals, reserved ids, and the _changesets folder
+// staying invisible to every docKey scan.
 // Fixture-free; deterministic stamps; the temp dir is cleaned at entry and
 // exit (the twice-run rule).
 #include <cstdio>
@@ -331,6 +334,187 @@ int main() {
         CHECK(put(dx, "z\n", noSha, lim).result == PutResult::Failed && put(dx, "z\n", badStamp, lim).result == PutResult::Failed &&
               put(dx, "z\n", reserved, lim).result == PutResult::Failed && list(dx).size() == 3 && countSuffix(dx, ".tmp") == 0,
               "19. a put without a sha1, with a path-like stamp, or with a reserved stamp is refused and writes nothing");
+    }
+
+    // 20. changeset write → read round-trip, every field, spec/scope kept as text
+    {
+        const std::string vroot = (root / "vroot20").string();
+        Changeset c;
+        c.id = "rif-20260908-214512";
+        c.kind = "replace-in-files";
+        c.ranBy = "Adam"; c.ranBySource = "team-name"; c.ranAt = "2026-09-08T21:45:12";
+        c.specJson = "{\"mode\":\"regex\",\"find\":\"KHY\\tB \\\"x\\\"\",\"replace\":\"KHYAB\","
+                     "\"regex\":false,\"caseSensitive\":true,\"wholeWord\":false,\"preserveCase\":false}";
+        c.scopeJson = "{\"folders\":[\"/u/batch 7\"],\"include\":[\"*.act\"],\"exclude\":[\"*META.TXT\"],"
+                      "\"recurse\":true,\"hidden\":false,\"fileCap\":4000}";
+        ChangesetFile f1;
+        f1.path = "/u/batch 7/KL0032.ACT"; f1.docKey = "KL0032"; f1.preStamp = "20260908-214512-001";
+        f1.preSha1 = sha1Hex("before\n"); f1.postSha1 = sha1Hex("after\n");
+        f1.occurrences = 14; f1.unticked = 1; f1.eol = "CRLF"; f1.bom = true; f1.status = "changed";
+        ChangesetFile f2;
+        f2.path = "/u/batch 7/KL0033.ACT"; f2.docKey = "KL0033"; f2.preSha1 = sha1Hex("b2\n");
+        f2.occurrences = 3; f2.unticked = 3; f2.eol = "LF"; f2.bom = false;
+        f2.status = "skipped:changed on disk since the preview";
+        c.files.push_back(f1); c.files.push_back(f2);
+        c.filesRead = 1204; c.withMatches = 38; c.changed = 17; c.skipped = 3; c.writeFailed = 0;
+        c.occurrences = 233;
+        const bool wrote = writeChangeset(vroot, c);
+        const fs::path onDisk = fs::path(changesetsDir(vroot)) / (c.id + ".json");
+        const std::string text = slurp(onDisk);
+        Changeset b;
+        const bool read = readChangeset(vroot, c.id, b);
+        CHECK(wrote && read && changesetsDir(vroot) == (fs::path(vroot) / "_changesets").string() &&
+              fs::exists(onDisk) && countSuffix(changesetsDir(vroot), ".tmp") == 0 &&
+              b.id == c.id && b.kind == c.kind && b.ranBy == c.ranBy && b.ranBySource == c.ranBySource &&
+              b.ranAt == c.ranAt && b.filesRead == 1204 && b.withMatches == 38 && b.changed == 17 &&
+              b.skipped == 3 && b.writeFailed == 0 && b.occurrences == 233 && !b.undone &&
+              b.undoneAt.empty() && b.undoneBy.empty() && b.undoneRestored == 0 && b.undoneSkipped == 0 &&
+              text.find("\"schema\": \"all-changeset/1\"") != std::string::npos &&
+              text.find("\"undone\": null") != std::string::npos,
+              "20. writeChangeset → readChangeset round-trips the header, the summary and undone == null");
+        CHECK(b.files.size() == 2 && b.files[0].path == f1.path && b.files[0].docKey == "KL0032" &&
+              b.files[0].preStamp == f1.preStamp && b.files[0].preSha1 == f1.preSha1 &&
+              b.files[0].postSha1 == f1.postSha1 && b.files[0].occurrences == 14 && b.files[0].unticked == 1 &&
+              b.files[0].eol == "CRLF" && b.files[0].bom && b.files[0].status == "changed" &&
+              b.files[1].path == f2.path && b.files[1].docKey == "KL0033" && b.files[1].preStamp.empty() &&
+              b.files[1].postSha1.empty() && b.files[1].occurrences == 3 && b.files[1].unticked == 3 &&
+              b.files[1].eol == "LF" && !b.files[1].bom && b.files[1].status == f2.status,
+              "20b. both file rows survive whole, including an empty postSha1 and a skipped:<reason> status");
+        Changeset again;
+        CHECK(b.specJson == c.specJson && b.scopeJson == c.scopeJson &&
+              text.find(c.specJson) != std::string::npos && text.find(c.scopeJson) != std::string::npos &&
+              parseChangeset(serializeChangeset(b), again) && serializeChangeset(again) == serializeChangeset(c) &&
+              again.specJson == c.specJson && again.scopeJson == c.scopeJson,
+              "20c. spec/scope (a tab, quotes, a space in a path, a nested array) are carried verbatim as text; re-serializing is byte-identical");
+        Changeset empty;
+        empty.id = "rif-empty"; empty.kind = "normalize-in-files"; empty.specJson = "not an object";
+        Changeset emptyBack;
+        const std::string js = serializeChangeset(empty);
+        CHECK(writeChangeset(vroot, empty) && readChangeset(vroot, "rif-empty", emptyBack) &&
+              emptyBack.files.empty() && emptyBack.specJson.empty() && emptyBack.scopeJson.empty() &&
+              emptyBack.kind == "normalize-in-files" && js.find("\"files\": [],") != std::string::npos &&
+              js.find("\"spec\": null") != std::string::npos,
+              "20d. no files and a spec that is not an object → \"files\": [] and \"spec\": null, read back empty");
+    }
+    // 21. listChangesetIds
+    {
+        const std::string vroot = (root / "vroot21").string();
+        for (const char* id : {"rif-20260908-214512", "rif-20260907-101010", "nrm-20260909-090000"}) {
+            Changeset c; c.id = id; c.kind = "replace-in-files";
+            writeChangeset(vroot, c);
+        }
+        const fs::path cdir = changesetsDir(vroot);
+        writeFile(cdir / "_meta.json", "{\"schema\":\"all-versions-folder/1\",\"pruned\":0}");
+        writeFile(cdir / "notes.txt", "not a changeset\n");
+        writeFile(cdir / "rif-half.json.tmp", "an interrupted write\n");
+        writeFile(cdir / ".DS_Store", "\n");
+        auto ids = listChangesetIds(vroot);
+        CHECK(ids.size() == 3 && ids[0] == "nrm-20260909-090000" && ids[1] == "rif-20260907-101010" &&
+              ids[2] == "rif-20260908-214512" &&
+              listChangesetIds((root / "no-such-root").string()).empty() &&
+              listChangesetIds((root / "doc").string()).empty(),
+              "21. listChangesetIds → ascending ids only; _meta.json, a dotfile, a .txt and a .tmp are ignored; a root without the folder is empty");
+    }
+    // 22. markChangesetUndone
+    {
+        const std::string vroot = (root / "vroot22").string();
+        Changeset c;
+        c.id = "rif-20260908-214512"; c.kind = "replace-in-files"; c.ranBy = "Adam"; c.changed = 17;
+        ChangesetFile f; f.path = "/u/a.act"; f.docKey = "a"; f.status = "changed"; f.occurrences = 4;
+        c.files.push_back(f);
+        writeChangeset(vroot, c);
+        Changeset before;
+        const bool readBefore = readChangeset(vroot, c.id, before);
+        const bool marked = markChangesetUndone(vroot, c.id, "2026-09-09T08:00:00", "Adam", 16, 1);
+        Changeset after;
+        const bool reread = readChangeset(vroot, c.id, after);
+        const std::string text = slurp(fs::path(changesetsDir(vroot)) / (c.id + ".json"));
+        CHECK(readBefore && !before.undone && marked && reread && after.undone &&
+              after.undoneAt == "2026-09-09T08:00:00" && after.undoneBy == "Adam" &&
+              after.undoneRestored == 16 && after.undoneSkipped == 1 && after.changed == 17 &&
+              after.ranBy == "Adam" && after.files.size() == 1 && after.files[0].status == "changed" &&
+              after.files[0].occurrences == 4 && text.find("\"restored\": 16") != std::string::npos &&
+              text.find("\"undone\": null") == std::string::npos && listChangesetIds(vroot).size() == 1,
+              "22. markChangesetUndone fills the block in place; a re-read shows it and the rest of the record is unchanged");
+        CHECK(!markChangesetUndone(vroot, "rif-nope", "2026-09-09T08:00:00", "Adam", 0, 0) &&
+              !markChangesetUndone(vroot, "_meta", "2026-09-09T08:00:00", "Adam", 0, 0),
+              "22b. an undo of a record that is not there (or of a reserved id) is refused, not invented");
+    }
+    // 23. strict reader
+    {
+        const std::string vroot = (root / "vroot23").string();
+        Changeset good;
+        good.id = "rif-1"; good.kind = "replace-in-files"; good.ranBy = "Adam"; good.changed = 5;
+        writeChangeset(vroot, good);
+        const fs::path cdir = changesetsDir(vroot);
+        writeFile(cdir / "garbage.json", "not json at all");
+        writeFile(cdir / "future.json", "{\"schema\":\"all-changeset/2\",\"id\":\"future\"}");
+        writeFile(cdir / "version.json", "{\"schema\":\"all-version/1\",\"stamp\":\"0001\"}");
+        writeFile(cdir / "wrongtype.json", "{\"schema\":\"all-changeset/1\",\"id\":\"wrongtype\",\"summary\":{\"changed\":\"17\"}}");
+        writeFile(cdir / "badfiles.json", "{\"schema\":\"all-changeset/1\",\"id\":\"badfiles\",\"files\":[1,2]}");
+        Changeset probe;
+        const bool seeded = readChangeset(vroot, "rif-1", probe);
+        const bool g = readChangeset(vroot, "garbage", probe);
+        const bool fu = readChangeset(vroot, "future", probe);
+        const bool ve = readChangeset(vroot, "version", probe);
+        const bool wt = readChangeset(vroot, "wrongtype", probe);
+        const bool bf = readChangeset(vroot, "badfiles", probe);
+        const bool missing = readChangeset(vroot, "rif-nope", probe);
+        CHECK(seeded && !g && !fu && !ve && !wt && !bf && !missing &&
+              probe.id == "rif-1" && probe.ranBy == "Adam" && probe.changed == 5,
+              "23. garbage, a future schema, a version record, a wrong value type, a bad files element and a missing id all → false with `out` untouched");
+        Changeset d;
+        CHECK(!parseChangeset("{}", d) && !parseChangeset("", d) &&
+              !parseChangeset("{\"schema\":\"all-changeset/1\"} trailing", d) &&
+              !parseChangeset("{\"schema\":\"all-changeset/1\",\"undone\":7}", d) &&
+              parseChangeset("{\"schema\":\"all-changeset/1\",\"id\":\"sparse\"}", d) &&
+              d.id == "sparse" && d.files.empty() && !d.undone && d.filesRead == 0,
+              "23b. parseChangeset: no schema, empty text, trailing junk and a non-object undone are refused; a sparse record keeps defaults");
+    }
+    // 24. reserved and path-like ids
+    {
+        const std::string vroot = (root / "vroot24").string();
+        Changeset c;
+        c.kind = "replace-in-files";
+        c.id = "_secret";    const bool r1 = writeChangeset(vroot, c);
+        c.id = "../escape";  const bool r2 = writeChangeset(vroot, c);
+        c.id = "rif/2026";   const bool r3 = writeChangeset(vroot, c);
+        c.id = "";           const bool r4 = writeChangeset(vroot, c);
+        c.id = "rif.2026";   const bool r5 = writeChangeset(vroot, c);
+        c.id = "rif-ok";     const bool r6 = writeChangeset(vroot, c);
+        auto ids = listChangesetIds(vroot);
+        CHECK(!r1 && !r2 && !r3 && !r4 && !r5 && r6 && ids.size() == 1 && ids[0] == "rif-ok" &&
+              !fs::exists(fs::path(changesetsDir(vroot)) / "_secret.json") &&
+              !fs::exists(fs::path(vroot) / "escape.json") &&
+              !readChangeset(vroot, "_secret", c) && !readChangeset(vroot, "../escape", c),
+              "24. an id starting with '_', containing '/' or '.', or empty is refused and writes nothing; only rif-ok lands");
+    }
+    // 25. _changesets is never a docKey
+    {
+        const std::string vroot = (root / "vroot25").string();
+        const std::string id = "rif-20260908-214512";
+        Meta a1 = M("20260908-214512-001", "/u/batch7/KL0032.ACT", "pre-replace", "before1\n"); a1.changeset = id;
+        put(vroot + "/KL0032", "before1\n", a1, lim);
+        Meta a2 = M("20260908-214512-002", "/u/batch7/KL0033.ACT", "pre-replace", "before2\n"); a2.changeset = id;
+        put(vroot + "/KL0033", "before2\n", a2, lim);
+        putText(vroot + "/KL0034", "20260908-214512-003", "unrelated\n");   // no changeset id
+        Changeset c;
+        c.id = id; c.kind = "replace-in-files"; c.changed = 2;
+        ChangesetFile f1; f1.path = "/u/batch7/KL0032.ACT"; f1.docKey = "KL0032";
+        f1.preStamp = "20260908-214512-001"; f1.status = "changed";
+        ChangesetFile f2; f2.path = "/u/batch7/KL0033.ACT"; f2.docKey = "KL0033";
+        f2.preStamp = "20260908-214512-002"; f2.status = "changed";
+        c.files.push_back(f1); c.files.push_back(f2);
+        const bool wrote = writeChangeset(vroot, c);
+        auto entries = byChangeset(vroot, id);
+        bool onlyVersions = entries.size() == 2;
+        for (const auto& e : entries)
+            if (!e.meta.metaOk || e.meta.reason != "pre-replace" || e.meta.changeset != id) onlyVersions = false;
+        CHECK(wrote && fs::is_directory(fs::path(vroot) / "_changesets") && onlyVersions &&
+              entries[0].meta.stamp == "20260908-214512-001" && entries[1].meta.stamp == "20260908-214512-002" &&
+              entries[0].meta.path == "/u/batch7/KL0032.ACT" && entries[1].meta.path == "/u/batch7/KL0033.ACT" &&
+              list(vroot).empty() && listChangesetIds(vroot).size() == 1,
+              "25. with a record beside the versions, byChangeset returns only the two pre-replace entries — _changesets is never scanned as a docKey");
     }
 
     fs::remove_all(root, ec);

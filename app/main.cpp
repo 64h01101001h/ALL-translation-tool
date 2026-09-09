@@ -43,6 +43,8 @@ static QCursor g_busyCursor();   // defined beside g_harnessRun
 #include "allcore/textdiff.h"
 #include "allcore/versions.h"
 #include "allcore/textspan.h"
+#include "allcore/textnorm.h"
+#include "allcore/filewalk.h"
 #include <QKeyEvent>
 #include <QStringListModel>
 #include <QCompleter>
@@ -3211,6 +3213,8 @@ static void remember(QPlainTextEdit* w, const QString& key,
 // TibetDoc search-locations jump; set in main() once the Overlay
 // exists
 static std::function<void(const QString&, int)> g_openAtLine;
+static std::function<void(const QString&, const QStringList&)> g_replaceInFolders;   // F4: (needle, folders) from the Search pane
+static std::function<void(const QStringList&)> g_replaceInFiles;                      // F4: from the Files pane selection
 // File menu → the Library pane's importer (T8; one code path)
 static std::function<void()> g_importRelease;
 // the in-house identity (provenance, not a login) — defined here so
@@ -4974,6 +4978,7 @@ public:
     QString needle() const { return find_->currentText(); }
     void setNeedle(const QString& n) { find_->setCurrentText(n); }
     void setReplacement(const QString& r) { replace_->setCurrentText(r); }
+    QString replacement() const { return replace_->currentText(); }   // F4: seeds Replace in Files…
     QString lastNeedle() const { return lastNeedle_; }
     QPointer<QWidget> editor_;
 private:
@@ -8479,6 +8484,7 @@ public:
     // ---- Tools / Project menu hooks (2026-09-08) ----
     QString documentPath() const { return docFile_; }   // alias of docFile(); currentLine() already exists below
     QString documentText() const { return input_->toPlainText(); }
+    QPlainTextEdit* documentEditor() const { return input_; }   // F3: Normalize targets the Document box directly (edit block + undo)
     void setProtected(bool on) { input_->setReadOnly(on); }
     bool isProtected() const { return input_->isReadOnly(); }
     QString dataRootPath() const { return dataRoot_; }
@@ -18497,7 +18503,21 @@ public:
         // ---- Search Results tab
         results_ = new QTextBrowser;
         results_->setOpenLinks(false);
-        inner_->addTab(results_, "Search Results");
+        {   // F4: Replace in these folders… — only for ONE plain term (OR / NEAR queries cannot be replaced)
+            auto* rpage = new QWidget; auto* rl = new QVBoxLayout(rpage); rl->setContentsMargins(0, 0, 0, 0); rl->setSpacing(4);
+            rl->addWidget(results_, 1);
+            replaceBtn_ = new QPushButton("Replace in these folders\u2026"); replaceBtn_->setEnabled(false);
+            rl->addWidget(replaceBtn_, 0, Qt::AlignLeft);
+            connect(replaceBtn_, &QPushButton::clicked, this, [this] {
+                QStringList folders; for (int i = kFirstDirRow; i < dirs_->count(); ++i) if (dirs_->item(i)->checkState() == Qt::Checked) folders << dirs_->item(i)->text();
+                if (folders.isEmpty()) { results_->setHtml("<i>Tick at least one of your own folders in the list first; the corpus and apparatus rows are read-only sources.</i>"); return; }
+                if (g_replaceInFolders) g_replaceInFolders(fields_[0]->text().trimmed(), folders);
+            });
+            for (int i = 0; i < 8; ++i) if (fields_[i]) connect(fields_[i], &QLineEdit::textChanged, this, [this](const QString&) { updateReplaceGate(); });
+            connect(combiner_, qOverload<int>(&QComboBox::currentIndexChanged), this, [this](int) { updateReplaceGate(); });
+            updateReplaceGate();
+            inner_->addTab(rpage, "Search Results");
+        }
 
         connect(addB, &QPushButton::clicked, [this] {
             const QString d = safeGetExistingDirectory(
@@ -19056,6 +19076,19 @@ private:
     static constexpr const char* kSpotlightRow =
         "This Mac (Spotlight — files open in their own app)";
 
+    // F4: Replace needs one plain term — fields_[0] set, fields_[1..7] empty, no NEAR
+    bool replaceGateOpen() const {
+        if (!fields_[0] || fields_[0]->text().trimmed().isEmpty()) return false;
+        for (int i = 1; i < 8; ++i) if (fields_[i] && !fields_[i]->text().trimmed().isEmpty()) return false;
+        return !combiner_ || combiner_->currentIndex() != 2;
+    }
+    void updateReplaceGate() {
+        if (!replaceBtn_) return;
+        const bool open = replaceGateOpen();
+        replaceBtn_->setEnabled(open);
+        replaceBtn_->setToolTip(open ? "Replace this term across the ticked folders — every occurrence previewed and ticked before anything is written" : "Replace needs one plain term; OR / NEAR queries cannot be replaced.");
+    }
+    QPushButton* replaceButton() const { return replaceBtn_; }
     void addDirRow(const QString& text, bool checked) {
         auto* it = new QListWidgetItem(text);
         it->setFlags(it->flags() | Qt::ItemIsUserCheckable);
@@ -19633,6 +19666,7 @@ private:
     allcore::Spine& spine_;
     QString root_;
     QTabWidget* inner_ = nullptr;
+    QPushButton* replaceBtn_ = nullptr;   // F4
     QLineEdit* fields_[8] = {};
     QStringList lastTerms_;   // W3-01: raw terms of the last query
     QComboBox* combiner_ = nullptr;
@@ -24030,6 +24064,8 @@ protected:
 };
 
 #include "compare_pane.inc"
+#include "normalize_pane.inc"   // F3 Normalize… with preview (needs cmp::, g_compareTexts, ComparePane)
+#include "replace_files.inc"     // F4 Replace in Files… with mandatory preview (needs normalize::, versions, filewalk)
 
 class FilesPane : public QWidget {
 public:
@@ -24152,6 +24188,8 @@ public:
                             openPath(it->data(Qt::UserRole)
                                          .toString());
                         });
+                        if (QFileInfo(it->data(Qt::UserRole).toString()).isFile())   // F3
+                            m.addAction("Normalize\u2026", [this, it] { normalize::open(normalize::fileTarget(it->data(Qt::UserRole).toString(), root_), this, [](const QString&) {}); });
                         m.addAction("Remove from stack",
                                     [this, it] {
                                         delete it;
@@ -24300,6 +24338,12 @@ private:
                                 [this, p] { addToStack(p); });
                     m.addAction("Open", [this, p] {
                         openPath(p);
+                    });
+                    if (QFileInfo(p).isFile())   // F3
+                        m.addAction("Normalize\u2026", [this, p] { normalize::open(normalize::fileTarget(p, root_), this, [](const QString&) {}); });
+                    m.addAction("Replace in these files\u2026", [this, ix, p] {   // F4: the selection (folders expand under the eligibility filter)
+                        QStringList sel = selectedPathsIn(ix); if (sel.isEmpty()) sel << p;
+                        if (g_replaceInFiles) g_replaceInFiles(sel);
                     });
                     // Compare & Merge hooks (2026-09-08)
                     m.addAction(ix == 0 ? "Compare with the right side's selection" : "Compare with the left side's selection", [this, ix, p] {
@@ -38880,6 +38924,15 @@ int main(int argc, char** argv) {
     comparePane->openInOverlay_ = [overlay](const QString& p) { overlay->openFile(p); if (g_raisePane) g_raisePane(overlay); };
     g_compareFiles = [comparePane](const QString& a, const QString& b) { comparePane->compareFiles(a, b); if (g_raisePane) g_raisePane(comparePane); };
     g_compareTexts = [comparePane](const QString& an, const QString& at, const QString& bn, const QString& bt) { comparePane->compareTexts(an, at, bn, bt); if (g_raisePane) g_raisePane(comparePane); };
+    // F3 Normalize hooks: one side of a comparison; and the Overlay reloads a file it holds clean after a file normalize
+    g_normalizeSide = [](ComparePane* cp, bool left) {
+        normalize::Target t; t.kind = "compare"; t.label = (left ? "Left \u2014 " : "Right \u2014 ") + cp->sideName(left);
+        t.text = [cp, left] { return cp->sideLines(left).join('\n') + "\n"; };
+        t.hasSelection = [] { return false; }; t.selectionText = [] { return QString(); };
+        t.apply = [cp, left](const QString& s, bool) { cp->setSideLines(left, cmp::linesOf(s)); return true; };
+        normalize::open(t, cp, [cp](const QString& m) { cp->statusLabel()->setText(m); });
+    };
+    normalize::g_fileNormalized = [overlay](const QString& p) { if (overlay->documentPath() == p && !overlay->isDirty()) overlay->openFile(p); };
     const ComparePages cmpPages = installComparePages(comparePane);
     tabs.addTab(comparePane, "Compare");
     auto* goferPane = new GoferPane(spine, root);
@@ -40369,6 +40422,34 @@ int main(int argc, char** argv) {
             goferPane->searchFor(q);
         });
         act("Find Results", QKeySequence(), [goferPane] { if (g_raisePane) g_raisePane(goferPane); });
+        // F4: one systematic fix across a folder, every occurrence previewed and ticked before anything is written
+        auto openDirtyReason = [overlay, draftPane, manuscriptPane](const QString& p) -> QString {
+            auto same = [&](const QString& q) { return !q.isEmpty() && QFileInfo(q).absoluteFilePath() == QFileInfo(p).absoluteFilePath(); };
+            if (same(overlay->documentPath()) && overlay->isDirty()) return "open in the Overlay with unsaved edits";
+            if (same(draftPane->draftPath()) && draftPane->draftDirty()) return "open in the Draft with unsaved edits";
+            if (same(manuscriptPane->manuscriptPath()) && manuscriptPane->isDirty()) return "open in the Manuscript with unsaved edits";
+            return {};
+        };
+        act("Replace in Files\u2026", QKeySequence("Ctrl+Alt+Shift+F"), [findDlg, root, &win, openDirtyReason] {
+            auto* w = replf::window(root, &win, openDirtyReason);
+            w->seed(findDlg->needle(), findDlg->replacement());
+        });
+        act("Undo Last Replace in Files\u2026", QKeySequence(), [root, &win, openDirtyReason] {
+            const QString id = QSettings("ALL", "TranslationTool").value("replacefiles/lastChangeset").toString();
+            if (id.isEmpty()) { win.statusBar()->showMessage("No Replace in Files run to undo.", 4000); return; }
+            auto* w = replf::window(root, &win, openDirtyReason); w->setLastChangeset(id); w->undoStep();
+        });
+        g_replaceInFolders = [root, &win, openDirtyReason, findDlg](const QString& needle, const QStringList& folders) {
+            auto* w = replf::window(root, &win, openDirtyReason); w->seedFolders(folders); w->seed(needle, findDlg->replacement());
+        };
+        g_replaceInFiles = [root, &win, openDirtyReason, findDlg](const QStringList& files) {
+            auto* w = replf::window(root, &win, openDirtyReason); w->seedFiles(files); w->seed(findDlg->needle(), findDlg->replacement());
+        };
+        replf::g_updateFolderIndex = [](const QString& d) {
+            allcore::LibraryIndex li((d + "/.index.db").toStdString());
+            const auto st = li.update(d.toStdString());
+            return QString("Search index for %1 updated: %2 added, %3 updated, %4 removed%5").arg(d).arg(st.added).arg(st.updated).arg(st.removed).arg(st.write_failures ? QString(", %1 write failure(s) (disclosed)").arg(st.write_failures) : QString());
+        };
         fmenu->addSeparator();
         auto seeded = [findDlg, ed, &win](const QString& pat, bool backward, const char* what) {
             QWidget* w = ed(); if (!w || pat.isEmpty()) { win.statusBar()->showMessage(QString("%1: nothing to search for").arg(what), 3000); return; }
@@ -40537,6 +40618,18 @@ int main(int argc, char** argv) {
             const int n = editops::applyHouseStyleSpacing(doc, h);
             msg(n ? QString("House style spacing: %1 place%2 adjusted.").arg(n).arg(n == 1 ? "" : "s") : "House style spacing: nothing to adjust.");
         });
+        {   // F3: the compare rules as transformations, previewed as a diff before anything is applied
+            QAction* normA = fmt->addAction("Normalize Text\u2026");
+            normA->setToolTip("Collapse spacing, shad spelling, apparatus, folio markers, line endings — preview in Compare, then apply (plain text only)");
+            QObject::connect(normA, &QAction::triggered, [ed, msg, overlay, draftPane, manuscriptPane, active, &win] {
+                QWidget* w = ed();
+                if (active(manuscriptPane) || qobject_cast<QTextEdit*>(w)) { normalize::Target m; m.isManuscript = true; normalize::open(m, &win, msg); return; }
+                auto* pe = qobject_cast<QPlainTextEdit*>(w);
+                if (!pe) { msg("Click into the Document box or the Draft first."); return; }
+                const bool isOv = pe == overlay->documentEditor();
+                normalize::open(normalize::editorTarget(pe, isOv ? "Document box" : "Draft", isOv ? overlay->documentPath() : draftPane->draftPath()), &win, msg);
+            });
+        }
         fmt->addSeparator();
         QMenu* stl = fmt->addMenu("Style (Manuscript)");
         QObject::connect(stl, &QMenu::aboutToShow, [stl, manuscriptPane, active, msg] {
@@ -42082,6 +42175,19 @@ int main(int argc, char** argv) {
         fails += draftPane->selfTest(log);
         fails += manuscriptPane->selfTest(log);
         fails += comparePane->selfTest(log);
+        {   // F3 Normalize (selftests 17-23) — needs the Overlay, Compare and Manuscript together
+            int nf = 0;
+            normalize::selfTest(overlay, comparePane, [manuscriptPane] { return manuscriptPane->manuscriptText(); }, root, [&](bool ok, const char* what) {
+                log << QString("  [%1] Normalize: %2").arg(ok ? "PASS" : "FAIL").arg(what);
+                if (!ok) ++nf;
+            });
+            fails += nf;
+        }
+        {   // F4 Replace in Files (selftests F4-1…18c)
+            int nf = 0;
+            replf::selfTest(root, [&](bool ok, const char* what) { log << QString("  [%1] Replace in Files: %2").arg(ok ? "PASS" : "FAIL").arg(what); if (!ok) ++nf; });
+            fails += nf;
+        }
         fails += cmpPages.folders->selfTest(log);
         fails += cmpPages.three->selfTest(log);
         fails += reviewPane->selfTest(log);
@@ -44302,6 +44408,10 @@ int main(int argc, char** argv) {
                        .arg(memOk ? "PASS" : "FAIL")
                        .arg(peakGB, 0, 'f', 2);
             if (!memOk) ++fails;
+        }
+        {   // F1: the pane selftests save fixture files, so they leave version histories — take them with us
+            for (const QFileInfo& fi : QDir(root + "/library/versions").entryInfoList(QDir::Dirs | QDir::NoDotAndDotDot))
+                if (fi.fileName().contains("selftest")) QDir(fi.filePath()).removeRecursively();
         }
         for (const QString& l : log)
             printf("%s\n", l.toUtf8().constData());

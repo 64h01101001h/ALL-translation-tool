@@ -147,3 +147,6 @@
 - Fixed extraction scratch dir `$TMPDIR/all_zip_view` is shared, `unzip -o` overwrites inside it, and it is never cleaned up.
 - Drop Stack visibility is not persisted, so it reappears every launch regardless of the user's last choice.
 - No drop target: the pane advertises a shelf but accepts no drags from Finder or from itself. Is that acceptable for the release, or should it be labelled?
+
+## F3/F4 (2026-09-09)
+- Right-click ▸ Normalize… on a file (strict UTF-8, BOM kept, pre-normalize version banked first) and ▸ Replace in these files… (F4, seeds the selection). Evidence: app selftests F3-17…23, F4-1…18c; `Normalize.md`, `ReplaceInFiles.md`.

@@ -13,9 +13,19 @@
 #include "allcore/engines.h"
 #include "allcore/textspan.h"
 #include "allcore/unicode_wylie.h"
+#include "text_util.h"
 
 namespace allcore {
 namespace textdiff {
+
+// The codepoint walker and the whitespace helpers used to live here as file
+// statics; textnorm needs the same ones, so they moved to src/text_util.h
+// unchanged (analysis-suite F3). Named here so every call site below reads
+// exactly as it did.
+using textutil::codepoints;
+using textutil::collapseWs;
+using textutil::hasTibetanUnicode;
+using textutil::isTibetanPunctCp;
 
 // ---------------------------------------------------------------- lines
 std::vector<std::string> splitLines(const std::string& t) {
@@ -40,28 +50,7 @@ std::string joinLines(const std::vector<std::string>& lines, const std::string& 
 }
 
 // ---------------------------------------------------------------- utf-8
-static std::vector<std::pair<int, unsigned>> codepoints(const std::string& s) {
-    // (byte offset, code point) per character; malformed bytes pass as-is
-    std::vector<std::pair<int, unsigned>> v;
-    for (size_t i = 0; i < s.size();) {
-        const unsigned char c = (unsigned char)s[i];
-        unsigned cp = c; size_t len = 1;
-        if (c >= 0xF0 && i + 3 < s.size() + 0) { cp = ((c & 7u) << 18) | (((unsigned char)s[i+1] & 0x3Fu) << 12) | (((unsigned char)s[i+2] & 0x3Fu) << 6) | ((unsigned char)s[i+3] & 0x3Fu); len = 4; }
-        else if (c >= 0xE0 && i + 2 < s.size()) { cp = ((c & 0xFu) << 12) | (((unsigned char)s[i+1] & 0x3Fu) << 6) | ((unsigned char)s[i+2] & 0x3Fu); len = 3; }
-        else if (c >= 0xC0 && i + 1 < s.size()) { cp = ((c & 0x1Fu) << 6) | ((unsigned char)s[i+1] & 0x3Fu); len = 2; }
-        v.push_back({(int)i, cp});
-        i += len;
-    }
-    return v;
-}
-static bool isTibetanPunctCp(unsigned cp) {
-    return (cp >= 0x0F01 && cp <= 0x0F14) || (cp >= 0x0F3A && cp <= 0x0F3D) || cp == 0x0F85 || (cp >= 0x0FD0 && cp <= 0x0FD4);
-}
-static bool hasTibetanUnicode(const std::string& s) {
-    for (size_t i = 0; i + 2 < s.size(); ++i)
-        if ((unsigned char)s[i] == 0xE0 && ((unsigned char)s[i+1] & 0xFC) == 0xBC) return true;
-    return false;
-}
+// codepoints / isTibetanPunctCp / hasTibetanUnicode: src/text_util.h
 bool looksTibetan(const std::string& s) {
     if (hasTibetanUnicode(s)) return true;
     // ACIP: mostly uppercase ASCII letters; Wylie: the engine's judgement
@@ -72,15 +61,7 @@ bool looksTibetan(const std::string& s) {
 }
 
 // ---------------------------------------------------------- normalise
-static std::string collapseWs(const std::string& s) {
-    std::string o; bool ws = false;
-    for (unsigned char c : s) {
-        if (std::isspace(c)) { ws = true; continue; }
-        if (ws && !o.empty()) o += ' ';
-        ws = false; o += (char)c;
-    }
-    return o;
-}
+// collapseWs: src/text_util.h
 static std::string toEwts(const std::string& line, bool* ok) {
     if (hasTibetanUnicode(line)) {
         const auto r = unicodeToWylie(line);

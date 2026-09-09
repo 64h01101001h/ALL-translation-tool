@@ -53,3 +53,6 @@ The Compare pane is the compare-and-merge suite Adam asked for on 2026-09-08 ("b
 | Sessions ▾ ▸ Copy Changed Folios | pane menu | Markdown to the clipboard; disabled with the tooltip "The left text has no @NNNA folio markers" when there are none | selftests F2-12, F2-12b |
 | CLI `--compare A B out.folios.md|out.folios.csv` | `app/main.cpp` `--compare` block | Routed by the double suffix; exit 1 when differences exist | manual run 2026-09-09: header line + `"@001A",1,3,3,3,1,0,0,0,0` |
 
+## 7. F3 — Sessions ▾ ▸ Normalize Left… / Normalize Right… (2026-09-09)
+- One side's lines replaced through `setSideLines` (exactly one undo snapshot; Save Left/Right writes). Details in `Normalize.md` (selftests F3-22, 22b).
+
