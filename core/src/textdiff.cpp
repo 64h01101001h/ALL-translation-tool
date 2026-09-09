@@ -11,6 +11,7 @@
 #include <unordered_map>
 
 #include "allcore/engines.h"
+#include "allcore/textspan.h"
 #include "allcore/unicode_wylie.h"
 
 namespace allcore {
@@ -103,7 +104,7 @@ std::string normalizeLine(const std::string& in, const Options& o, bool* normali
         s = std::regex_replace(s, ap, "");
     }
     if (o.ignoreFolioMarkers) {
-        static const std::regex fol("@[0-9]{1,4}[AaBb]?(?![A-Za-z0-9])");
+        static const std::regex fol(textspan::kFolioMarkerPattern);   // the one definition (textspan.h)
         s = std::regex_replace(s, fol, "");
     }
     if (o.ignoreApparatus || o.ignoreFolioMarkers) s = collapseWs(s);   // removals leave doubled spaces
@@ -566,17 +567,25 @@ std::string sideBySideHtml(const std::string& aName, const std::string& bName,
 }
 
 static std::string citeFor(const std::vector<std::string>& a, int line0) {
-    static const std::regex fol("@([0-9]{1,4}[AaBb]?)");
     for (int i = std::min(line0, (int)a.size() - 1); i >= 0; --i) {
-        std::smatch m;
-        std::string last; auto it = std::sregex_iterator(a[i].begin(), a[i].end(), fol);
-        for (; it != std::sregex_iterator(); ++it) last = (*it)[1].str();
-        if (!last.empty()) {
-            std::string up = last; for (auto& c : up) c = (char)std::toupper((unsigned char)c);
-            return "@" + up + "." + std::to_string(line0 - i + 1);
-        }
+        const std::string last = textspan::lastFolio(a[i]);   // the one definition (textspan.h)
+        if (!last.empty()) return "@" + last + "." + std::to_string(line0 - i + 1);
     }
     return "line " + std::to_string(line0 + 1);
+}
+
+std::vector<std::string> applySelected(const std::vector<std::string>& a, const std::vector<std::string>& b,
+                                       const Result& r, const std::vector<int>& selectedHunks) {
+    std::vector<std::string> out;
+    std::vector<char> sel(r.hunks.size(), 0);
+    for (int i : selectedHunks) if (i >= 0 && i < (int)sel.size()) sel[i] = 1;
+    for (size_t i = 0; i < r.hunks.size(); ++i) {
+        const Hunk& h = r.hunks[i];
+        const bool takeB = h.kind != Kind::Equal && sel[i];
+        if (takeB) { for (int k = h.bBeg; k < h.bEnd && k < (int)b.size(); ++k) out.push_back(b[k]); }
+        else { for (int k = h.aBeg; k < h.aEnd && k < (int)a.size(); ++k) out.push_back(a[k]); }
+    }
+    return out;
 }
 static std::string differingTokens(const std::string& a, const std::string& b, bool leftSide) {
     std::string o;

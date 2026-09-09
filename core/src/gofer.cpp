@@ -1,4 +1,5 @@
 #include "allcore/gofer.h"
+#include "allcore/filewalk.h"
 
 #include "gofer_ast.h"
 
@@ -86,11 +87,8 @@ std::vector<FileGoferHit> goferSearchFiles(const std::string& root_dir,
              root, fs::directory_options::skip_permission_denied);
          it != fs::recursive_directory_iterator(); ++it) {
         if (!it->is_regular_file()) continue;
-        std::string ext = it->path().extension().string();
-        for (auto& c : ext) c = (char)std::tolower((unsigned char)c);
-        if (ext != ".txt" && ext != ".acip" && ext != ".md" &&
-            ext != ".act" && ext != ".inc" && ext != ".ace") continue;
-        if (it->file_size() > 10u * 1024 * 1024) continue;
+        // the one eligibility rule (filewalk.h) — shared with the library index
+        if (!eligibleTextFile(it->path(), it->file_size())) continue;
         // PERF-1: eligible but past the cap - COUNT it and keep
         // walking. Breaking here is what made 4,988 files vanish
         // without the pane ever being able to say so.
