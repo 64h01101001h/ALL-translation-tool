@@ -19895,26 +19895,70 @@ public:
         : mvp_(mvp), whitney_(whitney) {
         auto* l = new QVBoxLayout(this);
         auto* skBanner = new QLabel(
-            "<b>Sanskrit workbench</b> — IAST, Devanagari, or ACIP "
-            "input-code (a#/n%) auto-detected. Every notation, "
-            "Whitney's roots, and the Mah\u0101vyutpatti bridge.");
+            "<b>Sanskrit workbench</b> — one term or a whole passage. "
+            "Choose what it is written in and what you want it in; "
+            "Auto-detect reads Devanagari by its script and the ACIP input "
+            "code by its # and % marks. Every notation gives the full "
+            "analysis of a single term, with Whitney's roots and the "
+            "Mah\u0101vyutpatti bridge.");
         skBanner->setWordWrap(true);
         l->addWidget(skBanner);
-        auto* row = new QHBoxLayout;
-        in_ = new QLineEdit;
+        // Adam, 2026-09-09: "THE INPUT FIELD HERE SHOULD BE MULTI LINED AND
+        // ABLE TO ACCEPT MULTILINED COPY PASTED MATERIAL THAT SPANS MULTIPLE
+        // LINES AND ALSO RECOGNIZES THE DIFFERENCE BETWEEN REGULAR ENGLISH
+        // HEADERS AND SUCH", and "THERE SHOULD BE DROPDOWN MENUS FOR WHAT YOU
+        // WANT TO CONVERT FROM AND WHAT YOU WANT TO CONVERT TO."
+        in_ = new QPlainTextEdit;
         in_->setPlaceholderText(
+            "One term, or paste a whole passage \u2014 rules, headings and "
+            "[labels] are carried through untouched.\n\n"
             "prama\u0304n\u0323a \u00b7 \u0928\u092e\u0903 \u00b7 "
             "prama#n%a \u00b7 root: bh\u016b");
+        in_->setMinimumHeight(96);
+        in_->setMaximumHeight(220);
         sess::remember(in_, "sanskrit/query");
-        row->addWidget(in_, 1);
-        auto* go = new QPushButton("Analyze");
+        l->addWidget(in_);
+        auto* row = new QHBoxLayout;
+        from_ = new QComboBox;
+        from_->addItems({"Auto-detect", "IAST", "Devanagari",
+                         "ACIP Sanskrit input code", "Tibetanized ACIP"});
+        from_->setToolTip(
+            "What the text above is written in. Auto-detect reads Devanagari "
+            "by its script and the input code by its # and % marks, and takes "
+            "anything else as IAST.");
+        to_ = new QComboBox;
+        to_->addItems({"Every notation", "Devanagari", "IAST",
+                       "Tibetanized ACIP", "Tibetan script",
+                       "ACIP Sanskrit input code", "ACIP next-letter",
+                       "Pronunciation (IPA)"});
+        to_->setToolTip(
+            "What to convert it into. Every notation gives the full analysis "
+            "of a single term, with Whitney's roots and the Mah\u0101vyutpatti "
+            "bridge; the others convert a whole passage line by line.");
+        sess::remember(from_, "sanskrit/from");
+        sess::remember(to_, "sanskrit/to");
+        row->addWidget(new QLabel("From"));
+        row->addWidget(from_);
+        row->addWidget(new QLabel("to"));
+        row->addWidget(to_);
+        auto* go = new QPushButton("Convert");
+        go->setToolTip("Convert the text above. A term on its own gets the "
+                       "full analysis; a passage is converted line by line.");
         row->addWidget(go);
+        auto* copyB = new QPushButton("Copy result");
+        copyB->setToolTip("Copy the converted passage to the clipboard, its "
+                          "line structure intact.");
+        row->addWidget(copyB);
+        row->addStretch(1);
         auto* ocr = new QPushButton("Sanskrit OCR\u2026");
         ocr->setToolTip("Recognize a Devanagari image (tesseract + san "
                         "model, optional install) \u2014 review "
                         "material, never trusted text");
         row->addWidget(ocr);
         l->addLayout(row);
+        connect(copyB, &QPushButton::clicked, [this] {
+            QGuiApplication::clipboard()->setText(converted_);
+        });
         out_ = new QTextBrowser;
         out_->setOpenExternalLinks(true);
         out_->setHtml(
@@ -19922,10 +19966,13 @@ public:
             "appears here — IAST, the ACIP Sanskrit input codes, "
             "EWTS, Tibetan script, Devanagari, pronunciation — "
             "with Whitney's roots and the Mahāvyutpatti bridge "
-            "where they answer. Type above and press Analyze.</i>");
+            "where they answer. Paste a passage and pick a single "
+            "notation to convert it line by line instead. Press "
+            "Convert.</i>");
         l->addWidget(out_, 1);
         connect(go, &QPushButton::clicked, [this] { analyze(); });
-        connect(in_, &QLineEdit::returnPressed, [this] { analyze(); });
+        connect(to_, &QComboBox::currentIndexChanged, [this] { analyze(); });
+        connect(from_, &QComboBox::currentIndexChanged, [this] { analyze(); });
         connect(ocr, &QPushButton::clicked, [this] { runOcr(); });
     }
 
@@ -19936,7 +19983,7 @@ public:
                        .arg(ok ? "PASS" : "FAIL").arg(what);
             if (!ok) ++fails;
         };
-        in_->setText(QString::fromUtf8("pram\u0101\u1e47a"));
+        in_->setPlainText(QString::fromUtf8("pram\u0101\u1e47a"));
         analyze();
         const QString t = out_->toPlainText();
         check(t.contains("prama#n%a"), "input-code style renders");
@@ -19944,18 +19991,193 @@ public:
                   t.contains(QString::fromUtf8("\u092A")),
               "Devanagari renders");
         if (whitney_) {
-            in_->setText(QString::fromUtf8("bh\u016b"));
+            in_->setPlainText(QString::fromUtf8("bh\u016b"));
             analyze();
             check(out_->toPlainText().contains("Whitney"),
                   "Whitney roots reachable");
+        }
+        {   // Adam's own test document, 2026-09-09: a rule of equals signs, a
+            // bare heading, a [label], and two verse lines. The structure must
+            // come through untouched and the verse must convert.
+            to_->setCurrentIndex(1);            // Devanagari
+            from_->setCurrentIndex(0);          // auto
+            in_->setPlainText(QString::fromUtf8(
+                "========================\n"
+                "IAST\n"
+                "========================\n"
+                "\n"
+                "[Dedication 2]\n"
+                "de\u015bay\u0101m \u0101sa sa\u1e43buddhas ta\u1e43 vande"));
+            analyze();
+            const QString got = converted_;
+            check(got.contains("========================") &&
+                      got.contains("IAST") && got.contains("[Dedication 2]"),
+                  "a pasted passage keeps its rules, headings and labels");
+            check(got.contains(QString::fromUtf8(
+                      "\u0926\u0947\u0936\u092f\u093e\u092e\u094d")),
+                  "and converts the verse line beneath them");
+            check(!got.contains(QString::fromUtf8("\u0906\u0908\u090f\u0938")),
+                  "control: the heading is not itself run through the converter");
+            // a word-final consonant keeps its virama through the pane too
+            check(got.contains(QString::fromUtf8("\u092e\u094d \u0906")),
+                  "word-final virama survives into the pane's output");
+            to_->setCurrentIndex(0);
         }
         in_->clear();
         return fails;
     }
 
 private:
+    // A pasted document is not all Sanskrit. Adam's own test file carries
+    // rules of equals signs, a bare heading word, and [labels] over the
+    // verses. Four objective tests, no language guessing: a line with no
+    // letters at all, a line wholly inside brackets, a line whose words are
+    // all capitals, and a line the engine itself refuses. Everything else is
+    // converted, and a refusal says which character stopped it.
+    enum class LineKind { Rule, Label, Heading, Sanskrit };
+    static LineKind classify(const QString& t) {
+        bool anyLetter = false;
+        for (QChar c : t) anyLetter |= c.isLetter();
+        if (!anyLetter) return LineKind::Rule;
+        if ((t.startsWith('[') && t.endsWith(']')) ||
+            (t.startsWith('(') && t.endsWith(')')))
+            return LineKind::Label;
+        bool anyLower = false, anyUpper = false;
+        for (QChar c : t) {
+            if (c.isLower()) anyLower = true;
+            if (c.isUpper()) anyUpper = true;
+        }
+        if (anyUpper && !anyLower) return LineKind::Heading;
+        return LineKind::Sanskrit;
+    }
+    QString toIast(const QString& line) const {
+        const std::string u = line.toStdString();
+        const int f = from_ ? from_->currentIndex() : 0;
+        bool hasDeva = false;
+        for (QChar c : line)
+            hasDeva |= (c.unicode() >= 0x0900 && c.unicode() <= 0x097F);
+        if (f == 2 || (f == 0 && hasDeva))
+            return QString::fromStdString(allcore::devanagariToIast(u).first);
+        if (f == 3 || (f == 0 && (line.contains('#') || line.contains('%') ||
+                                  line.contains('~'))))
+            return QString::fromStdString(allcore::inputcodeToIast(u));
+        if (f == 4) return QString::fromStdString(allcore::acipSanskritToIast(u));
+        return line;
+    }
+    // returns the converted line, or an empty optional when the engine refuses
+    std::optional<QString> convertLine(const QString& iast) const {
+        const std::string u = iast.toStdString();
+        switch (to_ ? to_->currentIndex() : 0) {
+            case 2: return iast;                                  // IAST
+            case 1: { auto [v, ok] = allcore::iastToDevanagari(u);
+                      return ok ? std::optional<QString>(QString::fromStdString(v))
+                                : std::nullopt; }
+            case 3: { auto [v, ok] = allcore::iastToAcip(u);
+                      return ok ? std::optional<QString>(QString::fromStdString(v))
+                                : std::nullopt; }
+            case 4: { auto [v, ok] = allcore::iastToTibetan(u);
+                      return ok ? std::optional<QString>(QString::fromStdString(v))
+                                : std::nullopt; }
+            case 5: return QString::fromStdString(allcore::iastToInputcode(u));
+            case 6: return QString::fromStdString(allcore::iastToNextletter(u));
+            case 7: { auto [v, ok] = allcore::iastToIpa(u);
+                      return ok ? std::optional<QString>(QString::fromStdString(v))
+                                : std::nullopt; }
+        }
+        return iast;
+    }
+    void convertPassage() {
+        const QStringList lines = in_->toPlainText().split('\n');
+        QString html =
+            "<div style='padding-bottom:6px'><b>" +
+            to_->currentText().toHtmlEscaped() +
+            "</b> \u2014 line for line. Headings, rules and [labels] are "
+            "carried through untouched; a line the engine will not read is "
+            "left as it was and named below.</div>"
+            "<div style='white-space:pre-wrap;font-size:15px'>";
+        if (from_ && from_->currentIndex() == 4)
+            html = "<div style='color:" +
+                   QString(ux::darkChrome() ? ux::chromeWarn() : ux::kWarn) +
+                   ";padding-bottom:6px'>Tibetanized ACIP separates "
+                   "SYLLABLES, not words, so where one word ends and the next "
+                   "begins cannot be recovered from it. Reading a passage back "
+                   "from ACIP gives you the right letters run together. That "
+                   "is a limit of the notation, not a fault in the "
+                   "text.</div>" + html;
+        QStringList plain;
+        int done = 0, passed = 0, refused = 0;
+        QStringList problems;
+        for (int i = 0; i < lines.size(); ++i) {
+            const QString line = lines[i];
+            const QString t = line.trimmed();
+            if (t.isEmpty()) { html += "<br>"; plain << ""; continue; }
+            const LineKind k = classify(t);
+            if (k != LineKind::Sanskrit) {
+                ++passed;
+                html += "<span style='color:" +
+                        QString(ux::darkChrome() ? ux::chromeMuted()
+                                                 : ux::kMuted) +
+                        "'>" + line.toHtmlEscaped() + "</span><br>";
+                plain << line;
+                continue;
+            }
+            const QString iast = toIast(t);
+            const auto got = convertLine(iast);
+            if (!got) {
+                ++refused;
+                html += "<span style='color:" +
+                        QString(ux::darkChrome() ? ux::chromeError()
+                                                 : ux::kError) +
+                        "'>" + line.toHtmlEscaped() + "</span><br>";
+                plain << line;
+                problems << QString("line %1: %2")
+                                .arg(i + 1)
+                                .arg(refusalReason(iast));
+                continue;
+            }
+            ++done;
+            html += (*got).toHtmlEscaped() + "<br>";
+            plain << *got;
+        }
+        html += "</div>";
+        converted_ = plain.join("\n");
+        html += QString("<div style='padding-top:10px;color:%1'>%2 line(s) "
+                        "converted \u00b7 %3 carried through \u00b7 %4 "
+                        "refused</div>")
+                    .arg(ux::darkChrome() ? ux::chromeMuted() : ux::kMuted)
+                    .arg(done).arg(passed).arg(refused);
+        if (!problems.isEmpty())
+            html += "<div style='color:" +
+                    QString(ux::darkChrome() ? ux::chromeError() : ux::kError) +
+                    "'>" + problems.join("<br>").toHtmlEscaped() +
+                    "<br>Nothing above is guessed.</div>";
+        out_->setHtml(html);
+    }
+    static QString refusalReason(const QString& iast) {
+        for (int i = 0; i < iast.size(); ++i)
+            if (!allcore::iastToAcip(iast.left(i + 1).toStdString()).second) {
+                const QChar bad = iast.at(i);
+                return QString("stopped at character %1, %2 (U+%3)")
+                    .arg(i + 1)
+                    .arg(bad.isSpace() || !bad.isPrint()
+                             ? QString("an invisible character")
+                             : QString("\u201c") + bad + QString("\u201d"))
+                    .arg(static_cast<int>(bad.unicode()), 4, 16, QChar('0'));
+            }
+        return QString("the engine would not read this line");
+    }
     void analyze() {
-        const QString raw = in_->text().trimmed();
+        const QString whole = in_->toPlainText();
+        // Every notation is the single-term analysis: Whitney's roots and the
+        // Mahavyutpatti bridge only answer for one term. Anything else, or
+        // more than one line, is a passage.
+        const bool multi = whole.trimmed().contains('\n');
+        if (to_ && (to_->currentIndex() != 0 || multi)) {
+            if (whole.trimmed().isEmpty()) return;
+            convertPassage();
+            return;
+        }
+        const QString raw = whole.trimmed();
         if (raw.isEmpty()) return;
         std::string iast = raw.toStdString();
         bool hasDeva = false;
@@ -20087,7 +20309,7 @@ private:
                           "recognized</div>");
             return;
         }
-        in_->setText(deva);
+        in_->setPlainText(deva);
         analyze();
         out_->setHtml("<div style='background:#FDEEDC;padding:6px'>"
                       "\u26A0 OCR-DERIVED \u2014 review material</div>" +
@@ -20096,7 +20318,10 @@ private:
 
     allcore::Mvp* mvp_;
     allcore::WhitneyRoots* whitney_;
-    QLineEdit* in_ = nullptr;
+    QPlainTextEdit* in_ = nullptr;
+    QComboBox* from_ = nullptr;
+    QComboBox* to_ = nullptr;
+    QString converted_;   // what Copy result hands over
     QTextBrowser* out_ = nullptr;
 };
 

@@ -23,7 +23,7 @@ Artefacts:
 | pages (both sides wrapped in place from the spine) | `data/alignment/pages/` (C02), `pages_c01/`, `pages_c03/`, `pages_c04/` | `tools/gen_alignment_page.py` + `tools/wrap_alignment_page.py` |
 | evidence sidecar (depth-5 word pairs, ACIP-keyed, cited) | `data/alignment/alignment_evidence_v1.json` | `tools/build_alignment_layer.py` |
 | full bank (every span at every depth, notes, trees) | `data/alignment/alignment_full_v1.json` | same |
-| dictionary view | `docs/michael_dictionary.html` | `tools/build_dictionary_view.py` |
+| dictionary view | `docs/geshe_michael_roach_dictionary.html` | `tools/build_dictionary_view.py` |
 | errata register | `docs/errata_register.json` → `docs/ERRATA_REGISTER.md` | `tools/merge_errata.py`, `tools/build_errata_register.py` |
 | campaign ledgers | `data/alignment/C0N_CAMPAIGN.md` | by hand, one entry per batch |
 
