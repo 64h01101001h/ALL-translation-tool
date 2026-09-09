@@ -214,6 +214,12 @@ def main():
     data = json.dumps(payload, ensure_ascii=False, separators=(",", ":"))
     html = shell.replace("/*PAYLOAD*/", "const PAYLOAD = " + data + ";", 1)
     io.open(OUT, "w", encoding="utf-8").write(html)
+    # Adam, 2026-09-09: the CSV is regenerated every time the dictionary is,
+    # from the SAME assembled entries the page renders, so the two cannot
+    # drift apart.
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    import build_dictionary_exports
+    build_dictionary_exports.write_exports(depths, pents, meta, acip)
     sys.stderr.write("\n  trimmed %d spans where a following section's "
                      "heading was glued on\n" % n_glued)
     sys.stderr.write("  skipped %d links with no English exponent\n" % skipped)
