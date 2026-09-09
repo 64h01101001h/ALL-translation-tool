@@ -5802,6 +5802,40 @@ static bool ribbonLabelsOn() {
         .value("ui/ribbonLabels", true)
         .toBool();
 }
+// Appearance is three-state. Adam, 2026-09-09: "don't we have a setting where
+// the user can turn on night mode automatically." He had Day selected and dark
+// chrome on screen, and both were working as written: the old boolean toggle
+// only ever SET a colour scheme when night was ON. With it off the app left the
+// scheme Unknown, which in Qt means "follow the system" — so a Mac in dark mode
+// overrode a preference that plainly said Day. Day now means Day, Night means
+// Night, and following the system is a choice you make rather than a default
+// you fall into.
+static QString appearanceMode() {
+    QSettings s("ALL", "TranslationTool");
+    const QString m = s.value("app/appearance").toString();
+    if (m == "day" || m == "night" || m == "system") return m;
+    // migrate the old boolean once, so nobody's existing choice is lost
+    const QString from = s.value("app/nightMode", true).toBool() ? "night" : "day";
+    s.setValue("app/appearance", from);
+    return from;
+}
+static void setAppearanceMode(const QString& m) {
+    QSettings s("ALL", "TranslationTool");
+    s.setValue("app/appearance", m);
+    s.setValue("app/nightMode", m == "night");   // kept in step for older readers
+}
+static Qt::ColorScheme schemeFor(const QString& m) {
+    if (m == "night") return Qt::ColorScheme::Dark;
+    if (m == "day") return Qt::ColorScheme::Light;
+    return Qt::ColorScheme::Unknown;             // follow the Mac, and keep following it
+}
+static void applyAppearance(const QString& m) {
+    if (m == "system") QGuiApplication::styleHints()->unsetColorScheme();
+    else QGuiApplication::styleHints()->setColorScheme(schemeFor(m));
+}
+static QString appearanceLabel(const QString& m) {
+    return m == "night" ? "Night" : m == "day" ? "Day" : "Match system";
+}
 static void applyRibbonLabelStyle() {
     const bool on = ribbonLabelsOn();
     for (QToolButton* t : ribbonProxies())
@@ -22050,11 +22084,12 @@ public:
                 .arg(ux::darkChrome() ? ux::chromeMuted() : QString(ux::kMuted));
         });
         startHint->setText(
-            "Start here. Everything else for this pane \u2014 outline, verse, "
-            "quotations, terminology, export \u2014 is on the ribbon above, "
+            "Start here. This pane's other tools are on the ribbon above.");
+        startHint->setToolTip(
+            "Outline, verse metre, quotation detection, terminology check, "
+            "phrase memory and export all live on the ribbon above, grouped "
             "under WORKBENCH, STRUCTURE, EVIDENCE and PUBLISH.");
         startRow->addWidget(startHint, 1);
-        srcCol->addLayout(startRow);
         auto* ribbon = new RibbonBar;
         auto* gWork = ribbon->group("WORKBENCH");
         auto* gStruct = ribbon->group("STRUCTURE");
@@ -22176,7 +22211,13 @@ public:
         srcScroll->setWidgetResizable(true);
         srcScroll->setFrameShape(QFrame::NoFrame);
         srcScroll->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-        tl->addWidget(srcScroll, 1);
+        auto* srcHost = new QWidget;
+        auto* srcHostV = new QVBoxLayout(srcHost);
+        srcHostV->setContentsMargins(0, 0, 0, 0);
+        srcHostV->setSpacing(4);
+        srcHostV->addWidget(srcScroll, 1);
+        srcHostV->addLayout(startRow);   // always on screen, never below the fold
+        tl->addWidget(srcHost, 1);
         clauseView_ = new QTextBrowser;
         clauseView_->setOpenLinks(false);
         clauseView_->setHtml(
@@ -37169,8 +37210,9 @@ public:
 // should be something that can be turned on and off in the preferences").
 class PreferencesDialog : public QDialog {
 public:
-    PreferencesDialog(std::function<void(bool)> applyNight, QMenuBar* menuBar, QWidget* parent)
-        : QDialog(parent), applyNight_(std::move(applyNight)), menuBar_(menuBar) {
+    PreferencesDialog(std::function<void(const QString&)> applyAppearance,
+                      QMenuBar* menuBar, QWidget* parent)
+        : QDialog(parent), applyAppearance_(std::move(applyAppearance)), menuBar_(menuBar) {
         setWindowTitle("Preferences");
         resize(780, 620);
         setStyleSheet(
@@ -37233,7 +37275,7 @@ public:
     void applyAll() {
         for (auto& p : pages_) if (p.save) p.save();
         QSettings st("ALL", "TranslationTool");
-        if (applyNight_) applyNight_(st.value("app/nightMode", true).toBool());
+        if (applyAppearance_) applyAppearance_(appearanceMode());
         NumberedEdit::setAllNumbers(st.value("view/lineNumbers", false).toBool());
         NumberedEdit::setAllWrap(st.value("view/wordWrap", true).toBool());
     }
@@ -37254,14 +37296,18 @@ public:
         showGrid(); check(currentPage() == -1, "Show All returns to the grid");
         QSettings st("ALL", "TranslationTool");
         const QVariant keepName = st.value("team/name"), keepNight = st.value("app/nightMode"), keepStyle = st.value("style/twoSpacesSentence"), keepColon = st.value("style/oneSpacePunct");
-        lineEdit("team/name")->setText("Edited Probe"); checkBox("app/nightMode")->setChecked(false); checkBox("style/twoSpacesSentence")->setChecked(true); checkBox("style/oneSpacePunct")->setChecked(false);
+        const QVariant keepAppear = st.value("app/appearance");
+        lineEdit("team/name")->setText("Edited Probe"); combo("app/appearance")->setCurrentIndex(0); checkBox("style/twoSpacesSentence")->setChecked(true); checkBox("style/oneSpacePunct")->setChecked(false);
         applyAll();
         QSettings st2("ALL", "TranslationTool");
-        check(st2.value("team/name").toString() == "Edited Probe" && !st2.value("app/nightMode").toBool() && st2.value("style/twoSpacesSentence").toBool() && !st2.value("style/oneSpacePunct").toBool(),
-              "Apply writes every page's settings (team name, night mode, house-style switches)");
+        check(st2.value("team/name").toString() == "Edited Probe" && st2.value("app/appearance").toString() == "day" && !st2.value("app/nightMode").toBool() && st2.value("style/twoSpacesSentence").toBool() && !st2.value("style/oneSpacePunct").toBool(),
+              "Apply writes every page's settings (team name, appearance, house-style switches)");
+        check(schemeFor("day") == Qt::ColorScheme::Light && schemeFor("night") == Qt::ColorScheme::Dark && schemeFor("system") == Qt::ColorScheme::Unknown,
+              "Day means Light and Night means Dark; only Match system defers to the Mac");
         check(editops::HouseStyle::fromSettings().twoSpacesSentence && !editops::HouseStyle::fromSettings().oneSpacePunct, "the house-style engine reads the switches the page wrote");
         if (keepName.isValid()) st2.setValue("team/name", keepName); else st2.remove("team/name");
         if (keepNight.isValid()) st2.setValue("app/nightMode", keepNight); else st2.remove("app/nightMode");
+        if (keepAppear.isValid()) st2.setValue("app/appearance", keepAppear); else st2.remove("app/appearance");
         if (keepStyle.isValid()) st2.setValue("style/twoSpacesSentence", keepStyle); else st2.remove("style/twoSpacesSentence");
         if (keepColon.isValid()) st2.setValue("style/oneSpacePunct", keepColon); else st2.remove("style/oneSpacePunct");
         check(menuBar_ == nullptr || keyBindingRows() > 40, "Key Bindings lists the menu bar's actions (when a menu bar is supplied)");
@@ -37307,10 +37353,22 @@ private:
         // 1 General
         { QFormLayout* f; Page p; p.title = "General"; p.icon = "gear"; p.blurb = "Appearance and start-up"; p.keywords = {"night", "dark", "theme", "ribbon", "labels", "welcome", "tour"};
           p.w = pageWidget(f);
-          cb(f, "app/nightMode", "Night mode (dark chrome, cream pages)", true);
+          auto* appear = new QComboBox;
+          appear->addItems({"Day (parchment chrome)", "Night (dark chrome)", "Match system appearance"});
+          appear->setToolTip(
+              "Match system appearance follows the Mac's own Light/Dark setting, "
+              "including its automatic sunset switch. Day and Night hold regardless "
+              "of what the Mac is doing. Pages stay manuscript cream either way.");
+          { const QString m = appearanceMode();
+            appear->setCurrentIndex(m == "day" ? 0 : m == "night" ? 1 : 2); }
+          f->addRow("Appearance", appear); combos_["app/appearance"] = appear;
           cb(f, "ui/ribbonLabels", "Show labels under ribbon buttons", true, "Off gives a narrower ribbon of icons only");
           auto* tour = new QCheckBox("Show the welcome tour at the next start"); tour->setChecked(!QSettings("ALL", "TranslationTool").value("ui/welcomed", false).toBool()); f->addRow(tour); checks_["ui/welcomed:show"] = tour;
-          p.save = [this, tour] { saveChecks(checks_, {"app/nightMode", "ui/ribbonLabels"}); QSettings("ALL", "TranslationTool").setValue("ui/welcomed", !tour->isChecked()); };
+          p.save = [this, tour, appear] {
+              setAppearanceMode(appear->currentIndex() == 0 ? "day"
+                                : appear->currentIndex() == 1 ? "night" : "system");
+              saveChecks(checks_, {"ui/ribbonLabels"});
+              QSettings("ALL", "TranslationTool").setValue("ui/welcomed", !tour->isChecked()); };
           pages_ << p; }
         // 2 View
         { QFormLayout* f; Page p; p.title = "View"; p.icon = "page"; p.blurb = "Document editors and the Overlay"; p.keywords = {"line numbers", "wrap", "script", "ACIP", "Wylie", "Tibetan", "shading"};
@@ -37409,12 +37467,17 @@ private:
           pages_ << p; }
         // 9 Colour Scheme & Theme (Sublime)
         { QFormLayout* f; Page p; p.title = "Colours"; p.icon = "image"; p.blurb = "Day or Night; the parchment palette"; p.keywords = {"colour", "color", "scheme", "theme", "night", "day", "parchment"};
-          p.w = pageWidget(f, "Two schemes ship: Day (parchment chrome, cream pages) and Night (dark chrome, cream pages). Both keep the honesty colours — provisional tier, generated data, HGM binding — identical, so a label never changes meaning with the theme. Installable third-party schemes are not offered: nothing here may recolour a provenance label.");
+          p.w = pageWidget(f, "Two schemes ship: Day (parchment chrome, cream pages) and Night (dark chrome, cream pages), and Match system follows the Mac's own Light/Dark setting so night arrives on its own at sunset. Both keep the honesty colours — provisional tier, generated data, HGM binding — identical, so a label never changes meaning with the theme. Installable third-party schemes are not offered: nothing here may recolour a provenance label.");
           auto* day = new QRadioButton("Day"); auto* night = new QRadioButton("Night");
-          const bool n = QSettings("ALL", "TranslationTool").value("app/nightMode", true).toBool(); night->setChecked(n); day->setChecked(!n);
-          f->addRow(day); f->addRow(night);
-          connect(night, &QRadioButton::toggled, this, [this](bool on) { if (checks_.contains("app/nightMode")) checks_["app/nightMode"]->setChecked(on); });
-          p.save = nullptr;   // written by the General page's night-mode switch, kept in sync above
+          auto* sys = new QRadioButton("Match system appearance");
+          { const QString m = appearanceMode();
+            day->setChecked(m == "day"); night->setChecked(m == "night"); sys->setChecked(m == "system"); }
+          f->addRow(day); f->addRow(night); f->addRow(sys);
+          auto mirror = [this](int ix) { if (auto* c = combos_.value("app/appearance", nullptr)) c->setCurrentIndex(ix); };
+          connect(day, &QRadioButton::toggled, this, [mirror](bool on) { if (on) mirror(0); });
+          connect(night, &QRadioButton::toggled, this, [mirror](bool on) { if (on) mirror(1); });
+          connect(sys, &QRadioButton::toggled, this, [mirror](bool on) { if (on) mirror(2); });
+          p.save = nullptr;   // one owner: the General page writes it, these mirror into it
           pages_ << p; }
         // 10 Key Bindings (Sublime) — read-only list of every menu shortcut
         { Page p; p.title = "Shortcuts"; p.icon = "clock"; p.blurb = "Every menu command and its shortcut"; p.keywords = {"key", "binding", "shortcut", "keyboard", "hotkey"};
@@ -37571,7 +37634,7 @@ private:
           pages_ << p; }
     }
 
-    std::function<void(bool)> applyNight_;
+    std::function<void(const QString&)> applyAppearance_;
     QMenuBar* menuBar_ = nullptr;
     QToolButton* back_ = nullptr; QLabel* title_ = nullptr; QLineEdit* search_ = nullptr;
     QStackedWidget* stack_ = nullptr; QListWidget* grid_ = nullptr; QTreeWidget* bindings_ = nullptr;
@@ -39096,8 +39159,8 @@ int main(int argc, char** argv) {
     // shading and every card color read exactly as designed —
     // night chrome, paper page.
     QSettings nightSettings("ALL", "TranslationTool");
-    const bool nightOn =
-        nightSettings.value("app/nightMode", true).toBool();
+    (void)nightSettings;
+    const QString startAppearance = appearanceMode();
     // Reading surfaces are manuscript-cream ALWAYS — day, night, and
     // regardless of the macOS system appearance. Previously the cream
     // rule applied only when the app's own night toggle was on, so a
@@ -39118,13 +39181,18 @@ int main(int argc, char** argv) {
         // M4/accessibility: keyboard focus must be visible
         "QPushButton:focus, QToolButton:focus { "
         "outline: none; border: 1px solid #9A7A33; }");
-    auto applyNight = [&app](bool on) {
-        // native macOS dark appearance — no style swap, so window
-        // resize/decorations stay untouched
-        app.styleHints()->setColorScheme(on ? Qt::ColorScheme::Dark
-                                            : Qt::ColorScheme::Light);
-    };
-    if (nightOn) applyNight(true);
+    // An application stylesheet makes Qt bake each widget's palette at polish
+    // time. Switching appearance changes the palette but never repolishes, so
+    // half the window kept its old colours and ribbon labels stayed light-on-
+    // light — invisible, which reads as "no labels at all" (Adam, 2026-09-09).
+    // Re-applying the sheet on a palette change repolishes everything at once.
+    ux::keepStyleSheetFresh(app);
+    // native macOS appearance — no style swap, so window resize and
+    // decorations stay untouched. Applied unconditionally: the old code
+    // ran only when night was on, which left Day meaning "whatever the
+    // Mac says" and produced Adam's dark chrome under a Day setting.
+    auto applyMode = [](const QString& m) { applyAppearance(m); };
+    applyMode(appearanceMode());
 
     QMainWindow win;
     g_hunt = new HuntPalette(spine, root, &win);
@@ -41579,13 +41647,33 @@ int main(int argc, char** argv) {
                              [route] { route(0); });
             view->addSeparator();
         }
-        QAction* night = view->addAction("Night mode");
-        night->setCheckable(true);
-        night->setChecked(nightOn);
-        QObject::connect(night, &QAction::toggled, [&, applyNight](bool on) {
-            applyNight(on);
-            QSettings s("ALL", "TranslationTool");
-            s.setValue("app/nightMode", on);
+        QMenu* appearM = view->addMenu("Appearance");
+        auto* appearGrp = new QActionGroup(appearM);
+        appearGrp->setExclusive(true);
+        struct { const char* label; const char* mode; const char* tip; } kModes[] = {
+            {"Day", "day", "Parchment chrome, whatever the Mac is set to."},
+            {"Night", "night", "Dark chrome, whatever the Mac is set to. Pages stay cream."},
+            {"Match System Appearance", "system",
+             "Follow the Mac's own Light/Dark setting, including its automatic "
+             "switch at sunset."},
+        };
+        for (const auto& m : kModes) {
+            QAction* a = appearM->addAction(m.label);
+            a->setCheckable(true);
+            a->setToolTip(m.tip);
+            a->setChecked(startAppearance == QLatin1String(m.mode));
+            appearGrp->addAction(a);
+            const QString mode = QString::fromLatin1(m.mode);
+            QObject::connect(a, &QAction::triggered, [mode, applyMode] {
+                setAppearanceMode(mode);
+                applyMode(mode);
+            });
+        }
+        QObject::connect(appearM, &QMenu::aboutToShow, [appearM] {
+            const QString m = appearanceMode();
+            for (QAction* a : appearM->actions())
+                a->setChecked(a->text() == appearanceLabel(m)
+                              || (m == "system" && a->text().startsWith("Match")));
         });
         // Hunt everywhere (⌘K): one query across the dictionary,
         // reverse index, phonetics, corpus, and teachings
@@ -41764,9 +41852,9 @@ int main(int argc, char** argv) {
         QAction* prefs = view->addAction("Preferences\u2026");
         prefs->setMenuRole(QAction::PreferencesRole);   // macOS: app menu
         prefs->setShortcut(QKeySequence::Preferences);
-        QObject::connect(prefs, &QAction::triggered, [&, applyNight] {
+        QObject::connect(prefs, &QAction::triggered, [&, applyMode] {
             if (g_harnessRun) return;
-            PreferencesDialog dlg(applyNight, win.menuBar(), &win);
+            PreferencesDialog dlg(applyMode, win.menuBar(), &win);
             dlg.exec();
         });
     }
@@ -45603,7 +45691,7 @@ int main(int argc, char** argv) {
                 comparePane->showPage(0); settle(100);
             }
             if (extra.contains("prefs")) {
-                PreferencesDialog pd(applyNight, win.menuBar(), &win);
+                PreferencesDialog pd(applyMode, win.menuBar(), &win);
                 pd.resize(1040, 760);   // roomier than the default for the digest captures
                 pd.show(); settle(400); save(pd.grab(), "prefs-grid");
                 pd.openPage(2); settle(300); save(pd.grab(), "prefs-house-style");
