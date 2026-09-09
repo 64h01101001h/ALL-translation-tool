@@ -20,6 +20,22 @@ list before this sweep. Grouped by theme; each line says where it came from.
       2026-09-09. Adam reviews and sends; the draft to
       thepositiveword@gmail.com needs the first name filled in (the
       account shows only "Word Smith Wisdom")
+- [ ] **Beginner power users — invite the keen ones from the weekly Mixed
+      Nuts lectures** (Adam, 2026-09-09). He named Oscar Leon (surname to
+      confirm) and Duo Duo, and "others who show interest". Notes:
+      · this is a DIFFERENT cohort from the translators and the editor, and
+        that is the point: a beginner who uses the tool heavily is the only
+        person who can tell us what the first hour is like. The experts have
+        long since routed around whatever is confusing
+      · what to ask them about specifically: the first-run experience, the
+        workflow presets that shipped 2026-09-09 (are the six the right six,
+        and is "Learning Tibetan" what a learner actually needs on screen),
+        the Learn group (Trainer, Drills), and Help
+      · contacts come from Adam — the Mixed Nuts lecture attendee list is
+        the source; the names above are as he said them and the surname is
+        unconfirmed, so nothing is guessed at here
+      · same rule as every other session: holds and drafts only, nothing
+        sent from his account without him
 - [ ] **Editors beyond Utpala — contact Anatole and any other editor**
       (Adam, 2026-09-09, back burner). Same purpose as the Utpala session:
       their workflow start to finish, in their words, and what would make
