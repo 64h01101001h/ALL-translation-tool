@@ -4660,34 +4660,38 @@ inline QStringList dateTimeChoices() {
 // lower-case letter (ACIP) is left alone, and a period followed by a
 // lower-case word ("e.g. this") is treated as an abbreviation. Colon and
 // semicolon rules are separate switches — Adam to confirm the sheet.
+// The rules come from the Diamond Cutter Classics Style Guide (25 Aug 2023,
+// docs/standards/DCC_Style_Guide_2023-08-25.docx; inventory in
+// docs/standards/DCC_STYLE_GUIDE_RULES.md): "ending punctuation followed by
+// two spaces (a colon, comma, or semi-colon followed by one space)".
 struct HouseStyle {
     bool twoSpacesSentence = false;   // . ? !  → two spaces before the next sentence
-    bool twoSpacesColon = false;      // :      → two spaces
-    bool oneSpaceSemicolon = false;   // ;      → exactly one space
+    bool oneSpacePunct = false;       // : , ;  → exactly one space
     bool applyOnSave = false;         // Draft / Manuscript save runs the pass
     bool live = false;                // typing a space after . ? ! inserts two
     static HouseStyle fromSettings() {
         QSettings st("ALL", "TranslationTool"); HouseStyle h;
         h.twoSpacesSentence = st.value("style/twoSpacesSentence", false).toBool();
-        h.twoSpacesColon = st.value("style/twoSpacesColon", false).toBool();
-        h.oneSpaceSemicolon = st.value("style/oneSpaceSemicolon", false).toBool();
+        h.oneSpacePunct = st.value("style/oneSpacePunct", false).toBool();
         h.applyOnSave = st.value("style/applyOnSave", false).toBool();
         h.live = st.value("style/live", false).toBool();
         return h;
     }
-    bool any() const { return twoSpacesSentence || twoSpacesColon || oneSpaceSemicolon; }
+    bool any() const { return twoSpacesSentence || oneSpacePunct; }
 };
+// Which of the guide's mechanical rules the Draft's House style check
+// reports — each a switch on Preferences ▸ House Style, all on by default.
+inline bool styleRuleOn(const char* key) { return QSettings("ALL", "TranslationTool").value(QString("style/check/") + key, true).toBool(); }
 inline bool blockLooksEnglish(const QString& t) { for (const QChar c : t) if (c.isLower()) return true; return false; }
 // Returns the number of places changed. Works on any QTextDocument (plain
 // or rich) and keeps formatting: only spaces are inserted or removed.
 inline int applyHouseStyleSpacing(QTextDocument* doc, const HouseStyle& h) {
     if (!doc || !h.any()) return 0;
     int n = 0;
-    struct Rule { QRegularExpression re; int mode; };   // mode 1: add one space at match end; mode 2: collapse the matched spaces to one
+    struct Rule { QRegularExpression re; int mode; };   // mode 1: add one space at match end; mode 2: collapse the matched run to "<mark> "
     std::vector<Rule> rules;
     if (h.twoSpacesSentence) rules.push_back({QRegularExpression(R"re([.?!]["'”’)\]]* (?=[A-Z"“(\[]))re"), 1});
-    if (h.twoSpacesColon) rules.push_back({QRegularExpression(R"re(: (?=\S))re"), 1});
-    if (h.oneSpaceSemicolon) rules.push_back({QRegularExpression(";  +"), 2});
+    if (h.oneSpacePunct) rules.push_back({QRegularExpression(R"re([:,;]  +)re"), 2});
     QTextCursor all(doc); all.beginEditBlock();
     for (const auto& r : rules) {
         QTextCursor c(doc);
@@ -4696,7 +4700,7 @@ inline int applyHouseStyleSpacing(QTextDocument* doc, const HouseStyle& h) {
             if (c.isNull()) break;
             if (!blockLooksEnglish(c.block().text())) { c.setPosition(c.selectionEnd()); continue; }
             if (r.mode == 1) { const int end = c.selectionEnd(); c.setPosition(end); c.insertText(" "); ++n; }
-            else { const int start = c.selectionStart(); c.insertText("; "); c.setPosition(start + 2); ++n; }
+            else { const int start = c.selectionStart(); const QString mark = c.selectedText().left(1); c.insertText(mark + " "); c.setPosition(start + 2); ++n; }
         }
     }
     all.endEditBlock();
@@ -4723,8 +4727,7 @@ protected:
         while (i >= 0 && QString("\"'\u201D\u2019)]").contains(before[i])) --i;
         if (i < 0) return false; last = before[i];
         const bool sentence = h.twoSpacesSentence && (last == '.' || last == '?' || last == '!');
-        const bool colon = h.twoSpacesColon && last == ':';
-        if (!sentence && !colon) return false;
+        if (!sentence) return false;
         c.insertText("  ");
         if (auto* pe = qobject_cast<QPlainTextEdit*>(o)) pe->setTextCursor(c); else if (auto* te = qobject_cast<QTextEdit*>(o)) te->setTextCursor(c);
         return true;
@@ -8250,9 +8253,9 @@ public:
                 check(n == 2 && d.toPlainText().startsWith("Hello there.  World: yes; no.  Done. e.g. this one?\n\"Quoted.\"  Next"),
                       "two spaces after sentences; abbreviations, existing double spaces and ACIP lines untouched");
                 check(d.toPlainText().endsWith("SEMS CAN THAMS CAD. BDE BA"), "an ACIP line (no lower-case) is left alone");
-                editops::HouseStyle h2; h2.twoSpacesColon = true; h2.oneSpaceSemicolon = true;
-                QTextDocument d2; d2.setPlainText("Note: this;  that");
-                check(editops::applyHouseStyleSpacing(&d2, h2) == 2 && d2.toPlainText() == "Note:  this; that", "colon and semicolon rules apply when switched on");
+                editops::HouseStyle h2; h2.oneSpacePunct = true;
+                QTextDocument d2; d2.setPlainText("Note:  this;  that,  now.  Done.");
+                check(editops::applyHouseStyleSpacing(&d2, h2) == 3 && d2.toPlainText() == "Note: this; that, now.  Done.", "one space after colon, comma and semicolon (the guide's rule); the sentence's two spaces are untouched");
             }
             // Tools / Project hooks (2026-09-08)
             {
@@ -21562,10 +21565,11 @@ public:
                 ++n;
             }
         };
+        if (editops::styleRuleOn("quotes"))
         scan(QRegularExpression("\""),
              "straight double quote — the house uses curly "
              "quotes (fix individually, never Replace All)");
-        {   // straight apostrophes: one aggregate finding, not
+        if (editops::styleRuleOn("quotes")) {   // straight apostrophes: one aggregate finding, not
             // a flood — every typed ' is technically one
             const int n = (int)t.count(QChar('\''));
             if (n > 0)
@@ -21577,16 +21581,40 @@ public:
                              "flagged for awareness)")
                          .arg(n)});
         }
-        scan(QRegularExpression("--"),
-             "double hyphen — use the em dash \u2014");
-        scan(QRegularExpression("\\d-\\d"),
+        if (editops::styleRuleOn("dashes")) {
+            scan(QRegularExpression("--"),
+                 "double hyphen — use the em dash \u2014");
+            scan(QRegularExpression(R"re( – )re"),
+                 "en dash between words — the house uses the em dash \u2014 in text; the en dash is for number ranges");
+        }
+        if (editops::styleRuleOn("ranges"))
+        scan(QRegularExpression(R"re(\d-\d)re"),
              "hyphen in a number range — use the en dash "
              "\u2013 (ff. 25a\u201327b)");
-        scan(QRegularExpression(",\\s*&"),
+        if (editops::styleRuleOn("ampersand"))
+        scan(QRegularExpression(R"re(,\s*&)re"),
              "ampersand in a serial list — & is for pairs only");
-        scan(QRegularExpression("\\d\\s+(BC|AD|CE)\\b"),
+        if (editops::styleRuleOn("era"))
+        scan(QRegularExpression(R"re(\d\s+(BC|AD|CE)\b)re"),
              "spaced era — the house sets 500bc / 650ad "
              "(small caps, no space)");
+        // 2026-09-09: the guide's remaining mechanical rules, added after the
+        // sheet was re-read in full (docs/standards/DCC_STYLE_GUIDE_RULES.md)
+        if (editops::styleRuleOn("sentenceSpacing"))
+        scan(QRegularExpression(R"re([.?!]["'”’)\]]* (?=[A-Z"“(\[]))re"),
+             "one space after a sentence — the house sets two");
+        if (editops::styleRuleOn("punctSpacing"))
+        scan(QRegularExpression(R"re([:,;]  +)re"),
+             "two spaces after a colon, comma or semicolon — the house sets one");
+        if (editops::styleRuleOn("indentation"))
+        scan(QRegularExpression(R"re(^(\t+| {2,})(?=\S))re", QRegularExpression::MultilineOption),
+             "tab or spaces used to indent — the house indents with paragraph formatting, never characters");
+        if (editops::styleRuleOn("quotePunct")) {
+            scan(QRegularExpression(R"re(”[.,])re"),
+                 "period or comma outside the closing quotation mark — the house puts them inside");
+            scan(QRegularExpression(R"re([;:]”)re"),
+                 "semicolon or colon inside the closing quotation mark — the house puts them outside");
+        }
         static const std::vector<QPair<QString, QString>> WORDS =
             {{"valid perception", "accurate perception"},
              {"auto-commentary", "autocommentary"},
@@ -21602,7 +21630,11 @@ public:
               "'the' (ruling 6/28/23)"},
              {"Middle-Way School", "Middle Way School"},
              {"Mind-Only School", "Mind Only School"},
+             {"Independent group", "Independent branch"},
+             {"Consequence group", "Consequence branch"},
+             {"enlightened being", "Enlightened Being (ruling 11/22)"},
              {"a.k.a.", "aka"}};
+        if (editops::styleRuleOn("wordUse"))
         for (const auto& [bad, good] : WORDS) {
             int from = 0;
             int n = 0;
@@ -21627,7 +21659,7 @@ public:
         return out;
     }
 
-private:
+public:
     void showStyleCheck() {
         const QString t = draft_->toPlainText();
         if (t.trimmed().isEmpty()) {
@@ -36710,17 +36742,17 @@ public:
         openPage(2); check(currentPage() == 2 && !back_->isHidden(), "opening a tile shows its page and the Show All button");
         showGrid(); check(currentPage() == -1, "Show All returns to the grid");
         QSettings st("ALL", "TranslationTool");
-        const QVariant keepName = st.value("team/name"), keepNight = st.value("app/nightMode"), keepStyle = st.value("style/twoSpacesSentence"), keepColon = st.value("style/twoSpacesColon");
-        lineEdit("team/name")->setText("Edited Probe"); checkBox("app/nightMode")->setChecked(false); checkBox("style/twoSpacesSentence")->setChecked(true); checkBox("style/twoSpacesColon")->setChecked(false);
+        const QVariant keepName = st.value("team/name"), keepNight = st.value("app/nightMode"), keepStyle = st.value("style/twoSpacesSentence"), keepColon = st.value("style/oneSpacePunct");
+        lineEdit("team/name")->setText("Edited Probe"); checkBox("app/nightMode")->setChecked(false); checkBox("style/twoSpacesSentence")->setChecked(true); checkBox("style/oneSpacePunct")->setChecked(false);
         applyAll();
         QSettings st2("ALL", "TranslationTool");
-        check(st2.value("team/name").toString() == "Edited Probe" && !st2.value("app/nightMode").toBool() && st2.value("style/twoSpacesSentence").toBool() && !st2.value("style/twoSpacesColon").toBool(),
+        check(st2.value("team/name").toString() == "Edited Probe" && !st2.value("app/nightMode").toBool() && st2.value("style/twoSpacesSentence").toBool() && !st2.value("style/oneSpacePunct").toBool(),
               "Apply writes every page's settings (team name, night mode, house-style switches)");
-        check(editops::HouseStyle::fromSettings().twoSpacesSentence && !editops::HouseStyle::fromSettings().twoSpacesColon, "the house-style engine reads the switches the page wrote");
+        check(editops::HouseStyle::fromSettings().twoSpacesSentence && !editops::HouseStyle::fromSettings().oneSpacePunct, "the house-style engine reads the switches the page wrote");
         if (keepName.isValid()) st2.setValue("team/name", keepName); else st2.remove("team/name");
         if (keepNight.isValid()) st2.setValue("app/nightMode", keepNight); else st2.remove("app/nightMode");
         if (keepStyle.isValid()) st2.setValue("style/twoSpacesSentence", keepStyle); else st2.remove("style/twoSpacesSentence");
-        if (keepColon.isValid()) st2.setValue("style/twoSpacesColon", keepColon); else st2.remove("style/twoSpacesColon");
+        if (keepColon.isValid()) st2.setValue("style/oneSpacePunct", keepColon); else st2.remove("style/oneSpacePunct");
         check(menuBar_ == nullptr || keyBindingRows() > 40, "Key Bindings lists the menu bar's actions (when a menu bar is supplied)");
         return fails;
     }
@@ -36779,13 +36811,27 @@ private:
           pages_ << p; }
         // 3 House Style (Adam, 2026-09-08)
         { QFormLayout* f; Page p; p.title = "House Style"; p.icon = "book"; p.blurb = "The ALL style sheet, rule by rule, each one a switch"; p.keywords = {"style", "spacing", "double space", "period", "colon", "semicolon", "sentence", "sheet"};
-          p.w = pageWidget(f, "Rules from the ALL style sheet for English text. Each is a switch; more rules are added here as the sheet is supplied. Format ▸ Apply House Style Spacing runs the switched-on rules on demand. English only: lines with no lower-case letter (ACIP) and abbreviations before a lower-case word are left alone.");
+          p.w = pageWidget(f, "The Diamond Cutter Classics Style Guide (25 August 2023), rule by rule. Spacing rules can be APPLIED — on demand (Format ▸ Apply House Style Spacing), on save, or while typing; English only, ACIP lines and abbreviations left alone. Every other mechanical rule is CHECKED by the Draft's House style check, which flags and never rewrites — the guide itself forbids blind Replace All. The full guide is in Help under Style.");
+          f->addRow(new QLabel("<b>Applied (spacing)</b>"));
           cb(f, "style/twoSpacesSentence", "Two spaces after a sentence ( . ? ! )", false);
-          cb(f, "style/twoSpacesColon", "Two spaces after a colon", false, "Awaiting the sheet's ruling — off until confirmed");
-          cb(f, "style/oneSpaceSemicolon", "Exactly one space after a semicolon", false, "Awaiting the sheet's ruling — off until confirmed");
-          cb(f, "style/applyOnSave", "Apply the switched-on rules when saving the Draft or Manuscript", false);
+          cb(f, "style/oneSpacePunct", "One space after a colon, comma or semicolon", false, "The guide: \"a colon, comma, or semi-colon followed by one space\"");
+          cb(f, "style/applyOnSave", "Apply the switched-on spacing rules when saving the Draft or Manuscript", false);
           cb(f, "style/live", "Apply while typing (a space after . ? ! becomes two)", false);
-          p.save = [this] { saveChecks(checks_, {"style/twoSpacesSentence", "style/twoSpacesColon", "style/oneSpaceSemicolon", "style/applyOnSave", "style/live"}); };
+          f->addRow(new QLabel("<b>Checked (flagged, never rewritten)</b>"));
+          cb(f, "style/check/quotes", "Curly quotes, never straight", true);
+          cb(f, "style/check/dashes", "Em dash in text, never -- or a spaced en dash", true);
+          cb(f, "style/check/ranges", "En dash in number ranges, never a hyphen", true);
+          cb(f, "style/check/ampersand", "Ampersand for pairs only, never in a serial list", true);
+          cb(f, "style/check/era", "ad / bc / ce in small caps with no space (500bc)", true);
+          cb(f, "style/check/sentenceSpacing", "Two spaces after a sentence", true);
+          cb(f, "style/check/punctSpacing", "One space after a colon, comma or semicolon", true);
+          cb(f, "style/check/indentation", "No tabs or spaces used to indent", true);
+          cb(f, "style/check/quotePunct", "Periods and commas inside closing quotes; semicolons and colons outside", true);
+          cb(f, "style/check/wordUse", "The word-use list (accurate perception, mindstream, the Jewel of Realizations …)", true);
+          f->addRow(new QLabel("<small>Judgement rules — italics in root-text quotations, capitalisation after a colon, when to gloss a foreign word — are documented in Help ▸ Style and left to the editor.</small>"));
+          p.save = [this] { saveChecks(checks_, {"style/twoSpacesSentence", "style/oneSpacePunct", "style/applyOnSave", "style/live",
+                                                  "style/check/quotes", "style/check/dashes", "style/check/ranges", "style/check/ampersand", "style/check/era",
+                                                  "style/check/sentenceSpacing", "style/check/punctSpacing", "style/check/indentation", "style/check/quotePunct", "style/check/wordUse"}); };
           pages_ << p; }
         // 4 Lookup & Dictionaries
         { QFormLayout* f; Page p; p.title = "Lookup"; p.icon = "search"; p.blurb = "Dictionaries shown in Lookup"; p.keywords = {"lookup", "dictionary", "reference", "stardict", "Hopkins", "Das"};
@@ -40309,6 +40355,7 @@ int main(int argc, char** argv) {
         });
         QObject::connect(tr->addAction("Send Draft to Manuscript"), &QAction::triggered, [draftPane, manuscriptPane] { draftPane->sendDraftToManuscript(); if (g_raisePane) g_raisePane(manuscriptPane); });
         tm->addSeparator();
+        QObject::connect(tm->addAction("House Style Check\u2026"), &QAction::triggered, [draftPane] { if (g_raisePane) g_raisePane(draftPane); draftPane->showStyleCheck(); });
         QObject::connect(tm->addAction("Word Count\u2026"), &QAction::triggered, [overlay, draftPane, manuscriptPane, active] {
             if (active(manuscriptPane)) manuscriptPane->showProperties(2);
             else if (active(draftPane)) draftPane->showProperties(2);
@@ -43809,6 +43856,25 @@ int main(int argc, char** argv) {
                            "era, and the word-use list")
                        .arg(ok ? "PASS" : "FAIL");
             if (!ok) ++fails;
+            // 2026-09-09: the guide's remaining mechanical rules
+            const auto g = DraftPane::styleCheck(
+                QString::fromUtf8("One space. Two here.  Then:  two spaces, and;  more.\n\tIndented line\n"
+                                  "He said \u201Cyes\u201D. She said \u201Cno;\u201D twice \u2013 or more. "
+                                  "The Independent group and an enlightened being."));
+            int sent = 0, punct = 0, indent = 0, qp = 0, endash = 0, wu = 0;
+            for (const auto& f : g) {
+                if (f.rule.startsWith("one space after a sentence")) ++sent;
+                if (f.rule.startsWith("two spaces after a colon")) ++punct;
+                if (f.rule.startsWith("tab or spaces")) ++indent;
+                if (f.rule.contains("closing quotation mark")) ++qp;
+                if (f.rule.startsWith("en dash between words")) ++endash;
+                if (f.rule.contains("Independent branch") || f.rule.contains("Enlightened Being")) ++wu;
+            }
+            const bool ok2 = sent == 3 && punct == 2 && indent == 1 && qp == 2 && endash == 1 && wu == 2;   // three single-spaced sentence breaks in the sample
+            if (!ok2) log << QString("  [info] style rules: sent=%1 punct=%2 indent=%3 qp=%4 endash=%5 wu=%6").arg(sent).arg(punct).arg(indent).arg(qp).arg(endash).arg(wu);
+            log << QString("  [%1] Draft: house-style check flags sentence spacing, punctuation spacing, indentation characters, quote punctuation, spaced en dash and the added word-use rows")
+                       .arg(ok2 ? "PASS" : "FAIL");
+            if (!ok2) ++fails;
         }
         // Convert: TISE keys — '*' joins with the non-breaking
         // tsheg, '_' with NBSP; plain input passes through the
