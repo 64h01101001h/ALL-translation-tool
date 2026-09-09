@@ -45,3 +45,4 @@ Categories: code · decision · email · release · audit · data · question.
 - 19:01 · decision · Adam: a Textual Research workflow (new tab group) — user collections, word studies across an author's works, edition/variant studies across monastery prints, place/lineage queries over the catalogue; filed to TODO with a plan, to be fleshed out with Adam and implemented after 1.0 · Adam
 - 19:04 · decision · Adam: interactive local map of monasteries/holy sites (seven reference pages supplied); filed with a sources note — build from BDRC/Treasury of Lives/OSM open data, not by copying the pages · Adam
 - 19:04 · code · FIX: status-bar position hook crashed at app shutdown under ctest (QLabel::setText on a destroyed label) — QPointer guards; app_selftest green under offscreen again
+- 19:05 · question · TODO: Adam to ask Geshe Michael for research-suite requests; eight assistant suggestions filed beside it

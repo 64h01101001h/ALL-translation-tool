@@ -3093,3 +3093,29 @@ from Adam's screenshots). (2) Pull BDRC place records with coordinates and
 join to the catalogue's person/place IDs. (3) Prototype a plotted layer
 over cached tiles. (4) Route and period layers. Owner: Adam for source
 licensing decisions.
+
+### Research suite — ask Geshe Michael (Adam, 2026-09-08)
+- [ ] **Adam to ask Geshe Michael** for his own requests and ideas for the
+      Textual Research workflow before it is designed in detail (he is its
+      first and most important user); record the answers under the
+      research-workflow entry above.
+- Suggestions to put in front of him (assistant, 2026-09-08):
+  1. **Term history across his own courses** — first use, every use, how the
+     rendering settled (the alignment layer already has the data).
+  2. **Root-text ↔ commentary linkage** — for any verse, every commentary
+     passage in the collection that quotes or glosses it (quotation
+     detection exists; make it a study view).
+  3. **Parallel-passage finder** — the same quotation across authors and
+     centuries, with the variants side by side (the Abhidharmakosha
+     citations in C05 are a ready test case).
+  4. **Author vocabulary fingerprints** — which words distinguish
+     Tsongkapa from Gyaltsab Je from Khedrup Je; useful for attribution
+     questions and for teaching register.
+  5. **Debate-format extraction** — pull the syllogisms (chos can / thal /
+     phyir) out of a text as a structured list, for logic courses.
+  6. **Reading-order and difficulty profiles** per text, for building
+     course sequences.
+  7. **Export as a citable study** — every number with its folio/line
+     citations, in DOCX/Markdown, so a scholar can drop it into a paper.
+  8. **Collections as teaching sets** — a collection shared with a class,
+     with the Trainer/Drills generated from it.
