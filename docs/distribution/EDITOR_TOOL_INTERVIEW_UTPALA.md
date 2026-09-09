@@ -134,6 +134,17 @@ decides. Ask "would you use this, and when?" — not "do you like it?".
 
 ---
 
+## 3b. Two questions the style guide itself leaves open
+
+- Geshe Michael's ruling of 15 August 2026 in the Diamond Way Translator
+  Course (remove semicolons, add spaces) against the guide's line "commas
+  and semi-colons: mainly preserve as written, unless obvious consistency
+  issue" — which governs, and does the guide need a new line?
+- Which of his 2017 style-sheet rules not restated in the 2023 guide still
+  hold: footnote format, the `{%DGAS}` correction convention, bibliography
+  section letters S/B/C/E, the final-`O, ,` shad handling. (List in
+  `docs/standards/DCC_STYLE_GUIDE_RULES.md`.)
+
 ## 4. What I want to leave the session with
 
 - Her workflow written down as steps, with the format at each boundary.
