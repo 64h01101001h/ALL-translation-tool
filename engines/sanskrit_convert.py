@@ -52,7 +52,12 @@ def tokenize_iast(word):
     while i < len(w):
         ch = w[i]
         if ch in FINAL: out.append(('F', ch)); i += 1; continue
-        if ch in " -–'’·.": out.append(('B', ' ')); i += 1; continue
+        # Every kind of whitespace is a word break, not an unreadable
+        # character. Real pasted text carries newlines, tabs and the
+        # non-breaking space that word processors and web pages emit —
+        # Adam pasted a verse on 2026-09-09 and the whole passage was
+        # refused over a U+00A0 he could not see.
+        if ch in " -–'’·." or ch.isspace(): out.append(('B', ' ')); i += 1; continue
         v = next((v for v in VK if w.startswith(v, i)), None)
         c = next((c for c in CK if w.startswith(c, i)), None)
         # 'a' vs 'ai/au' priority already by length sort; consonant priority when both (e.g. 'y')
@@ -147,7 +152,16 @@ def iast_to_devanagari(word):
     out=''; prev_cons=False
     i=0
     for k,v in toks:
-        if k=='B': out+=' '; prev_cons=False; continue
+        # A word ending in a consonant needs its virama at the word
+        # BOUNDARY, not only at the end of the string. Without this,
+        # 'deśayām āsa' printed देशयाम आस — a bare म with an implied 'a'
+        # that is not there — while the last word of the line came out
+        # right. Found 2026-09-09 on Nagarjuna's dedicatory verses; the
+        # only Devanagari case in the battery was the mani mantra, whose
+        # every word ends in a vowel, so nothing ever exercised it.
+        if k=='B':
+            if prev_cons: out+=VIRAMA
+            out+=' '; prev_cons=False; continue
         if k=='C':
             if prev_cons: out+=VIRAMA
             out+=C_DEVA[v]; prev_cons=True
