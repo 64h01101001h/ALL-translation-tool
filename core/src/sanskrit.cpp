@@ -483,6 +483,19 @@ static const std::vector<std::pair<std::u32string, std::u32string>>& allTable() 
     return T;
 }
 
+// Matched across word boundaries BEFORE anything else. In Tibetan script svāhā
+// is written as two syllables with a tsheg between them (སྭཱ་ཧཱ), so it arrives
+// as "svā hā" and a whole-WORD rule never fires on it — which is the commonest
+// written form of the very syllable Adam's rule 2 names. Found on the Tara
+// mantra, 2026-09-09.
+static const std::vector<std::pair<std::u32string, std::u32string>>& allPhrases() {
+    static const std::vector<std::pair<std::u32string, std::u32string>> T = {
+        {U"svā hā", U"soha"}, {U"sva ha", U"soha"},
+        {U"hū ṁ", U"hung"}, {U"hū ṃ", U"hung"},
+    };
+    return T;
+}
+
 static const std::vector<std::pair<std::u32string, std::u32string>>& allIdioms() {
     static const std::vector<std::pair<std::u32string, std::u32string>> T = {
         {U"svāhā", U"soha"}, {U"hūṁ", U"hung"}, {U"hūṃ", U"hung"},
@@ -494,7 +507,8 @@ static const std::vector<std::pair<std::u32string, std::u32string>>& allIdioms()
 
 std::pair<std::string, bool> iastToAllPronunciation(const std::string& iast) {
     if (!tokenizeIast(iast)) return {"", false};
-    const std::u32string w = lowered(toU32(iast));
+    std::u32string w = lowered(toU32(iast));
+    for (const auto& [a, b] : allPhrases()) replaceAll(w, a, b);
     std::u32string out;
     size_t i = 0;
     while (i < w.size()) {

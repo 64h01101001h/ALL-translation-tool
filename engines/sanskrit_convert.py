@@ -249,6 +249,16 @@ ALL_RULINGS = [
     ('svāhā', 'soha'),
 ]
 
+# Multi-syllable idioms, matched across word boundaries BEFORE anything else.
+# In Tibetan script svāhā is written as two syllables with a tsheg between them
+# (སྭཱ་ཧཱ), so it arrives as "svā hā" and a whole-WORD rule never fires on it —
+# which is the commonest written form of the very syllable Adam's rule 2 names
+# ("the sva-ha equivalent"). Found on the Tara mantra, 2026-09-09.
+ALL_PHRASES = [
+    ('svā hā', 'soha'), ('sva ha', 'soha'), ('svā hā́', 'soha'),
+    ('hū ṁ', 'hung'), ('hū ṃ', 'hung'),
+]
+
 # whole-syllable idioms, longest first (rulings first, then attested)
 ALL_IDIOMS = [
     ('svāhā', 'soha'), ('hūṁ', 'hung'), ('hūṃ', 'hung'),
@@ -289,8 +299,13 @@ def iast_to_all_pronunciation(word):
         return None
     table, keys = _all_table()
     idioms = sorted(ALL_IDIOMS, key=lambda kv: -len(kv[0]))
+    # the phrase pass runs first, so a syllable split across a tsheg is still
+    # recognised as the one syllable it is
+    src = word
+    for a, b in sorted(ALL_PHRASES, key=lambda kv: -len(kv[0])):
+        src = re.sub(re.escape(a), b, src, flags=re.I)
     out = []
-    for w in re.split(r'(\s+)', word):
+    for w in re.split(r'(\s+)', src):
         if not w.strip():
             out.append(w)
             continue

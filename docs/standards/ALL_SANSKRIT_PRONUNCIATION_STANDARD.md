@@ -52,10 +52,25 @@ rule, because a seed syllable is a word in its own right.
 | Rule 1 | hūṁ → "hung" | **"hung" in 1,073 segments, "hum" in 37.** The rule is his own overwhelming practice. Word-aligned, `hu#m%` reads "hung" 476 times. |
 | Rule 2 | svāhā → "soha" | **"soha" in 0 segments. "sva ha" in 380.** The rule appears nowhere in his published English. |
 
-Rule 2 therefore changes what his own courses print. That is Adam's to decide
-and the ruling is implemented as given — but it is recorded here, in the code
-comment beside the rule, and in the workbench itself, rather than quietly
-shipped.
+Rule 2 therefore changes what his own courses print. Measured exactly, on the
+662 mantra lines that align cleanly:
+
+- **186 lines (28.1%)** come out word for word as he printed them.
+- **301 lines (45.5%)** differ *only* because svāhā now reads "soha" where he
+  wrote "sva ha". Nothing else on those lines differs.
+- The remaining **175 lines (26.4%)** differ for the reasons in §6 — his own
+  hyphen, the `-o'ham` ending, the optional visarga.
+
+So: **without rule 2, whole-line agreement would be 73.6%. With it, 28.1%.**
+That is the size of the amendment, and it is Adam's to make. It is implemented
+as given, and it is recorded here, in the code beside the rule, and in the
+workbench itself, rather than quietly shipped.
+
+One further consequence, found on the Tara mantra: in Tibetan script svāhā is
+written as two syllables with a tsheg between them (སྭཱ་ཧཱ), so it arrives as
+"svā hā" and a whole-word rule never fires on it. Since that is the commonest
+written form of the very syllable rule 2 names, the standard matches phrases
+across word boundaries before anything else.
 
 **Provenance is owed.** `docs/standards/HGM_TRANSLATION_STANDARDS.md` binds:
 *"Nothing here is invented: every entry must be sourced — who said it, when,
@@ -161,7 +176,8 @@ syllable by syllable, which is what a reciter reads.
 ## 6. How well it does
 
 **94.4% weighted agreement with his own published readings** — 5,546 of 5,875
-aligned mantra words. Held by battery I in `core/tests/engines_battery.cpp`,
+aligned mantra words. That figure measures the LETTER TABLE, word by word,
+where rule 2 cannot fire. For what the amendments do to running text, see §2. Held by battery I in `core/tests/engines_battery.cpp`,
 with the floor set at 94% and marked ratchet-upward-only.
 
 The Python oracle and the C++ port agree exactly: 79,452 of 79,452 Lokesh
