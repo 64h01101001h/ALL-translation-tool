@@ -101,7 +101,7 @@ not honestly buildable here; the expand family is, and two are ours.
 | Document… | page setup for RTF/PDF output | DEFERRED — nothing reads page margins yet (RTF/PDF export uses its own settings); a dialog that stores unused values would be a dead control. Build when the export honours it. |
 | Text Effects, Borders and Shading, Columns, Tabs, Drop Cap, Text Direction, Asian Layout, Font Substitution, Equation Options, Selection Pane | print typography that pecha export already owns, or no meaning here | SKIP |
 
-## Tools — batch 5
+## Tools — batch 5 — DONE 2026-09-08 (Spelling ▸ Check/Next/Previous Doubt · Phrase Memory (Thesaurus) · Translate ▸ Send Selection to Draft / Send Draft to Manuscript · Word Count → Properties ▸ Statistics · Protect Document (read-only toggle) · Templates ▸ Show Folder · Snippets ▸ Insert / Save Selection / Show Folder · Command Palette = Hunt · Cheat Sheet = Keyboard Shortcuts)
 | Word | Ours | Verdict |
 |---|---|---|
 | Spelling and Grammar ▸ | Overlay spelling doubts (show / check all / file for ruling) · Draft house-style check | ADAPT (wires existing) |
@@ -113,7 +113,7 @@ not honestly buildable here; the expand family is, and two are ours.
 | Track Changes ▸ | not for 1.0; the Review pane is the oversight surface. Noted for later | DEFER |
 | Language…, Hyphenation, AutoCorrect, Check Accessibility, Combine Documents, Block Authors, Envelopes, Labels, Macro, Add-ins, Customize Keyboard | no honest use, or the Pin bar already covers it | SKIP |
 
-## Window — batch 6
+## Window — batch 6 — DONE 2026-09-08 (Minimize ⌘M · Zoom · Next/Previous Pane Group ⌥⌘→/← · Bring All to Front · live list of open windows)
 | Word | Ours | Verdict |
 |---|---|---|
 | Minimize ⌘M · Zoom · Bring All to Front | standard | BUILD |
@@ -174,7 +174,7 @@ not honestly buildable here; the expand family is, and two are ours.
 | Developer ▸ | Troubleshooting menu items already exist under Help | covered |
 | Packages ▸ · Cheat Sheets ▸ · 1Self | no package system; Cheat Sheets → Help › Keyboard shortcuts | ADAPT (Help) |
 
-### Project menu (Sublime) — batch 8 (Adam: "we can add more later")
+### Project menu (Sublime) — batch 8 — DONE 2026-09-08 as dossiers (current dossier · Open Dossier… · Recent Dossiers ▸ · New Dossier from Current Text… · Save Reading Position · Close Dossier · Edit Dossiers… · Files Workspaces…)
 | Sublime | Ours | Verdict |
 |---|---|---|
 | Open Project… · Switch Project… · Quick Switch ⌃⌘P · Open Recent ▸ · Save Project As… · Close Project · Edit Project | **Dossiers already are projects** (a text's working world: file, line, glossary, comments). Promote to a Project menu: Open / Switch / Recent / Save As / Close / Edit (the dossier JSON) | ADAPT |
@@ -184,7 +184,7 @@ not honestly buildable here; the expand family is, and two are ours.
 ### Window menu (Sublime) — merged into batch 6
 Minimize ⌘M · Zoom · Bring All to Front · window list (ours: floating windows) — as Word. New Tab / tabs / Merge Windows / Fill / Center / Tile / Move to iPad — SKIP (one window; macOS tiles).
 
-### Help menu (Sublime) — batch 9
+### Help menu (Sublime) — batch 9 — DONE 2026-09-08: Data Status… added (data folder, release, entries, corpus segments, index, dossiers, templates, snippets). Documentation = User Manual, Report a Bug = Report a Problem (both existed). Changelog SKIPPED: no changelog is bundled with a build; the daily digests are the changelog. Twitter/Forum/Purchase/License SKIPPED.
 | Sublime | Ours | Verdict |
 |---|---|---|
 | Search field | our Help window already searches | covered |
