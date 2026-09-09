@@ -3268,6 +3268,17 @@ Jonang sites, pilgrimage routes), and tie them to the texts and persons
 the catalogue already knows.
 
 References Adam supplied (to read, not to copy — see the sources note):
+- PARTIAL FINDINGS ALREADY IN HAND (2026-09-09): the reference-page reads
+      finished before the run was stopped — six of the seven pages read and
+      verified, ~113 KB of notes, including that the Columbia/Academia Sinica
+      monastery map (2,777 monasteries from BDRC, sect-coloured, with a
+      700–2013 founding timeline and a 1950s Amdo livestock layer) is now
+      DEAD: its maps were hosted on a CARTO account that no longer exists,
+      so every embed 404s. Its only stated terms are a bare copyright line,
+      no licence. Start next week from those notes rather than re-reading:
+      463f1ae3-…/tasks/w3cto5zi2.output in the session scratch. The licence
+      checks for BDRC Places, THL, Treasury of Lives, Wikidata and OSM did
+      NOT complete, and neither did the synthesis — those are the work
 - PAUSED 2026-09-09 (Adam: save it for next week, after the token allowance resets) — the research run was stopped before writing docs/MAPS_RESEARCH.md; restart it then, then the Map pane batches M1–M3
 - https://lingweikung.com/mapping-tibetan-monasteries/
 - https://blogs.cuit.columbia.edu/lk2627/mapping-tibetan-monasteries/
