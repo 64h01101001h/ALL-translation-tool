@@ -193,7 +193,7 @@ Minimize ⌘M · Zoom · Bring All to Front · window list (ours: floating windo
 | Twitter · Purchase / Enter License | none | SKIP |
 | Indexing Status… | **Data status**: spine version, corpus segments, lexicon build state, update check | ADAPT |
 
-## Preferences panel — batch 7 (replaces the four-group Settings dialog)
+## Preferences panel — batch 7 (replaces the four-group Settings dialog) — DONE 2026-09-08: PreferencesDialog, 11 pages (General · View · House Style · Lookup · Compare · Team · File Locations · Privacy · Colour Scheme · Key Bindings · Quick Access), search, Show All, Apply. Key-binding EDITING and third-party colour schemes deliberately not offered (honesty labels must keep their colours).
 Icon grid in Word's three bands, back/forward, search box; each page is a
 form bound to the settings store; every existing setting moves in.
 - **Authoring and Proofing:** General (night mode, startup pane, recents) ·

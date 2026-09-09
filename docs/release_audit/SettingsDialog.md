@@ -1,5 +1,7 @@
 # Release audit — `SettingsDialog`
 
+> **SUPERSEDED 2026-09-08** by `PreferencesDialog` (see `PreferencesDialog.md`): the class was removed; View ▸ Preferences… (⌘,) opens the icon-grid window. The rows below are kept for the record.
+
 Source: `/Users/adamderickandrade/ALL-translation-tool/app/main.cpp`, class body lines **34083–34246**.
 
 ## 1. Purpose and reach

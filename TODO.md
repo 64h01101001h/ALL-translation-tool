@@ -2999,7 +2999,7 @@ questionnaire's Q13 answers tell us how much Android matters.
 - [x] Goto menu (Sublime) — 2026-09-08: heading, line, folio, dictionary entry, concordance, jump back/forward, bookmarks, matching bracket
 - [x] Tools additions (Sublime): snippets, Hunt as command palette, cheat sheet — 2026-09-08
 - [x] Project menu (Sublime) as dossiers; Help ▸ Data Status… — 2026-09-08
-- [ ] Preferences panel (Word icon grid + Sublime colour schemes/themes/key bindings) — batch 7, next
+- [x] Preferences panel (Word icon grid + Sublime colour schemes/key bindings; House Style page) — 2026-09-08
 - [ ] Project menu (Sublime): dossiers promoted — open/switch/recent/save as/close/edit, folders
 - [ ] Help additions (Sublime): Documentation, Report a Bug (defect intake), Data status
 - [ ] Preferences panel (Word-style icon grid + Sublime settings ideas: colour schemes, themes, key bindings view; migrates SettingsDialog; adds AI, Tibetan & Sanskrit, Updates, Privacy, File Locations pages)
@@ -3102,9 +3102,9 @@ licensing decisions.
       typing; Format ▸ Apply House Style Spacing on demand. English-only
       (a line with no lower-case letter is ACIP and is left alone; a period
       before a lower-case word is an abbreviation). 2026-09-08
-- [ ] **Ask Adam:** does the sheet want two spaces after a colon? one after
-      a semicolon? (both built as switches, default off). Then set the
-      defaults and move the switches into the Preferences panel (batch 7).
+- [ ] **Ask Adam for the ALL style sheet itself** so every rule becomes a
+      switch on Preferences ▸ House Style (colon / semicolon spacing are
+      there already, default off, awaiting the sheet's ruling).
 
 ### Compare & Merge suite (Adam, 2026-09-08) — docs/COMPARE_SUITE_PLAN.md
 - [x] Batch 1 engine + battery; batch 2 Compare pane, menus, Files hooks,
