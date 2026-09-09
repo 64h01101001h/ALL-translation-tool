@@ -448,8 +448,12 @@ std::pair<std::string, bool> iastToTibetan(const std::string& iast) {
     return {u, true};
 }
 
-std::string acipSanskritToIast(const std::string& acip) {
-    std::u32string s = toU32(acipToEwts(acip));
+// The EWTS half of the ACIP bridge, on its own. A mantra in a Tibetan text is
+// Sanskrit written in Tibetan letters, so reading it aloud means coming in
+// from the script or from Tibetanized ACIP and arriving at IAST, from which
+// every pronunciation follows (Adam, 2026-09-09). One table, two entry points.
+std::string ewtsSanskritToIast(const std::string& ewts, bool keep_syllables) {
+    std::u32string s = toU32(ewts);
     // REV in Python insertion order; applied sorted by key length desc, stable
     static const Table REV = {
         {U"A", U"ā"}, {U"I", U"ī"}, {U"U", U"ū"}, {U"M", U"ṃ"},
@@ -457,12 +461,37 @@ std::string acipSanskritToIast(const std::string& acip) {
         {U"N", U"ṇ"}, {U"Sh", U"ṣ"}, {U"sh", U"ś"}, {U"ny", U"ñ"},
         {U"ng", U"ṅ"}, {U"tsh", U"ch"}, {U"ts", U"c"}, {U"dz", U"j"},
         {U"w", U"v"}, {U":", U"ḥ"},
+        // EWTS stack and candrabindu marks, found 2026-09-09 on the mani and
+        // Tara mantras: "pad+me" and "hU~M" carried a "+" and a "~" through to
+        // IAST, where the tokenizer rightly refused them and the whole mantra
+        // came back with no pronunciation at all. "+" only says the letters
+        // are stacked, which IAST shows by writing them together; "~M" is the
+        // anusvara with its crescent.
+        {U"~M", U"ṁ"}, {U"+", U""},
     };
     for (const auto& k : keysByLenDesc(REV)) replaceAll(s, k, *tableGet(REV, k));
+    // Word boundaries are not recoverable from a notation that separates
+    // SYLLABLES, so the term-level function joins them up as it always has.
+    // A mantra is the exception: it is recited syllable by syllable, and the
+    // spacing is the only guide a reader has to where the syllables fall.
+    if (keep_syllables) {
+        std::u32string out;
+        bool sp = false;
+        for (char32_t c : s) {
+            if (isSpace(c)) { sp = !out.empty(); continue; }
+            if (sp) { out += U' '; sp = false; }
+            out += c;
+        }
+        return fromU32(out);
+    }
     std::u32string out;   // re.sub(r'\s+', '', s)
     for (char32_t c : s)
         if (!isSpace(c)) out += c;
     return fromU32(out);
+}
+
+std::string acipSanskritToIast(const std::string& acip) {
+    return ewtsSanskritToIast(acipToEwts(acip), false);
 }
 
 std::string iastToNextletter(const std::string& iast) {

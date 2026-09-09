@@ -661,7 +661,7 @@ if(Python3_FOUND)
   add_test(NAME view_matches_layer
            COMMAND ${Python3_EXECUTABLE}
                    ${CMAKE_SOURCE_DIR}/tools/test_view_matches_layer.py
-                   ${CMAKE_SOURCE_DIR}/docs/michael_dictionary.html
+                   ${CMAKE_SOURCE_DIR}/docs/geshe_michael_roach_dictionary.html
                    ${CMAKE_SOURCE_DIR}/data/alignment/alignment_full_v1.json
                    ${CMAKE_SOURCE_DIR}/data/alignment/alignment_evidence_v1.json)
 

@@ -19920,21 +19920,44 @@ public:
         l->addWidget(in_);
         auto* row = new QHBoxLayout;
         from_ = new QComboBox;
-        from_->addItems({"Auto-detect", "IAST", "Devanagari",
-                         "ACIP Sanskrit input code", "Tibetanized ACIP"});
+        for (auto&& [label, key] : std::initializer_list<
+                 std::pair<const char*, const char*>>{
+                 {"Auto-detect", "auto"},
+                 {"IAST", "iast"},
+                 {"Devanagari", "deva"},
+                 {"ACIP Sanskrit input code", "code"},
+                 {"Tibetanized ACIP", "acip"},
+                 {"Tibetan script (Sanskrit in Tibetan letters)", "tib"}})
+            from_->addItem(QString(label), QString(key));
         from_->setToolTip(
             "What the text above is written in. Auto-detect reads Devanagari "
-            "by its script and the input code by its # and % marks, and takes "
-            "anything else as IAST.");
+            "by its script, Tibetan by its script, and the input code by its "
+            "# and % marks, taking anything else as IAST. Tibetan script and "
+            "Tibetanized ACIP are how a mantra is written inside a Tibetan "
+            "text \u2014 Sanskrit in Tibetan letters \u2014 and both keep "
+            "their syllable spacing, because that is what a mantra is "
+            "recited by.");
         to_ = new QComboBox;
-        to_->addItems({"Every notation", "Devanagari", "IAST",
-                       "Tibetanized ACIP", "Tibetan script",
-                       "ACIP Sanskrit input code", "ACIP next-letter",
-                       "Pronunciation (IPA)"});
+        // keyed, not positional: adding a notation must never silently
+        // renumber the others
+        for (auto&& [label, key] : std::initializer_list<
+                 std::pair<const char*, const char*>>{
+                 {"Every notation (one term, in full)", "full"},
+                 {"All notations, side by side", "all"},
+                 {"Devanagari", "deva"},
+                 {"IAST", "iast"},
+                 {"Tibetanized ACIP", "acip"},
+                 {"Tibetan script", "tib"},
+                 {"ACIP Sanskrit input code", "code"},
+                 {"ACIP next-letter", "next"},
+                 {"Pronunciation (IPA)", "ipa"},
+                 {"Pronunciation (simplified, PROVISIONAL)", "pron"}})
+            to_->addItem(QString(label), QString(key));
         to_->setToolTip(
             "What to convert it into. Every notation gives the full analysis "
             "of a single term, with Whitney's roots and the Mah\u0101vyutpatti "
-            "bridge; the others convert a whole passage line by line.");
+            "bridge; All notations gives every form of each line at once; "
+            "the rest convert a whole passage line by line.");
         sess::remember(from_, "sanskrit/from");
         sess::remember(to_, "sanskrit/to");
         row->addWidget(new QLabel("From"));
@@ -19999,8 +20022,8 @@ public:
         {   // Adam's own test document, 2026-09-09: a rule of equals signs, a
             // bare heading, a [label], and two verse lines. The structure must
             // come through untouched and the verse must convert.
-            to_->setCurrentIndex(1);            // Devanagari
-            from_->setCurrentIndex(0);          // auto
+            to_->setCurrentIndex(to_->findData("deva"));
+            from_->setCurrentIndex(from_->findData("auto"));
             in_->setPlainText(QString::fromUtf8(
                 "========================\n"
                 "IAST\n"
@@ -20021,7 +20044,43 @@ public:
             // a word-final consonant keeps its virama through the pane too
             check(got.contains(QString::fromUtf8("\u092e\u094d \u0906")),
                   "word-final virama survives into the pane's output");
-            to_->setCurrentIndex(0);
+            // and the side-by-side mode Adam asked for: one line in, every
+            // notation out, each row saying whether it converted
+            to_->setCurrentIndex(to_->findData("all"));
+            in_->setPlainText(QString::fromUtf8(
+                "de\u015bay\u0101m \u0101sa sa\u1e43buddhas"));
+            analyze();
+            const QString all = out_->toPlainText();
+            check(all.contains("Devanagari") && all.contains("Tibetanized ACIP") &&
+                      all.contains("Tibetan script") && all.contains("IPA") &&
+                      all.contains("ACIP input code") &&
+                      all.contains("ACIP next-letter"),
+                  "All notations lists every form of the line side by side");
+            check(all.contains("PROVISIONAL"),
+                  "and the simplified pronunciation is labelled provisional "
+                  "while its standard is outstanding");
+            check(all.contains("FPMT"),
+                  "while the IPA line names the authority it follows");
+            // the mantra path, which is why Adam wanted this: Sanskrit
+            // written in Tibetan letters, read back as it is recited
+            from_->setCurrentIndex(from_->findData("tib"));
+            to_->setCurrentIndex(to_->findData("ipa"));
+            in_->setPlainText(QString::fromUtf8(
+                "\u0f68\u0f7c\u0f7e\u0f0b\u0f58\u0f0b\u0f4e\u0f72\u0f0b"
+                "\u0f54\u0f51\u0fa8\u0f7a\u0f0b\u0f67\u0f71\u0f74\u0f83"));
+            analyze();
+            log << "        (mantra read back as: " + converted_ + ")";
+            check(converted_.contains(QString::fromUtf8(
+                      "\u0271\u0250")) || converted_.contains("mɐ"),
+                  "a mantra in Tibetan script is read back as Sanskrit");
+            check(converted_.contains(" "),
+                  "and keeps its syllable spacing, which is what it is "
+                  "recited by");
+            check(!converted_.contains("+") && !converted_.contains("~"),
+                  "control: the EWTS stack and candrabindu marks do not reach "
+                  "the reader");
+            from_->setCurrentIndex(from_->findData("auto"));
+            to_->setCurrentIndex(to_->findData("full"));
         }
         in_->clear();
         return fails;
@@ -20052,39 +20111,94 @@ private:
     }
     QString toIast(const QString& line) const {
         const std::string u = line.toStdString();
-        const int f = from_ ? from_->currentIndex() : 0;
-        bool hasDeva = false;
-        for (QChar c : line)
+        const QString f = from_ ? from_->currentData().toString()
+                                : QString("auto");
+        bool hasDeva = false, hasTib = false;
+        for (QChar c : line) {
             hasDeva |= (c.unicode() >= 0x0900 && c.unicode() <= 0x097F);
-        if (f == 2 || (f == 0 && hasDeva))
+            hasTib |= (c.unicode() >= 0x0F00 && c.unicode() <= 0x0FFF);
+        }
+        // A mantra in a Tibetan text is Sanskrit written in Tibetan letters.
+        // Coming in from the script gives the reciter the pronunciation of
+        // what is actually on the page (Adam, 2026-09-09).
+        if (f == "tib" || (f == "auto" && hasTib)) {
+            auto w = allcore::unicodeToWylie(u);
+            return QString::fromStdString(
+                allcore::ewtsSanskritToIast(w.wylie, /*keep_syllables=*/true));
+        }
+        if (f == "deva" || (f == "auto" && hasDeva))
             return QString::fromStdString(allcore::devanagariToIast(u).first);
-        if (f == 3 || (f == 0 && (line.contains('#') || line.contains('%') ||
-                                  line.contains('~'))))
+        if (f == "code" || (f == "auto" && (line.contains('#') ||
+                                            line.contains('%') ||
+                                            line.contains('~'))))
             return QString::fromStdString(allcore::inputcodeToIast(u));
-        if (f == 4) return QString::fromStdString(allcore::acipSanskritToIast(u));
+        if (f == "acip")
+            return QString::fromStdString(allcore::ewtsSanskritToIast(
+                allcore::acipToEwts(u), /*keep_syllables=*/true));
         return line;
     }
     // returns the converted line, or an empty optional when the engine refuses
-    std::optional<QString> convertLine(const QString& iast) const {
+    static std::optional<QString> renderAs(const QString& key,
+                                           const QString& iast) {
         const std::string u = iast.toStdString();
-        switch (to_ ? to_->currentIndex() : 0) {
-            case 2: return iast;                                  // IAST
-            case 1: { auto [v, ok] = allcore::iastToDevanagari(u);
-                      return ok ? std::optional<QString>(QString::fromStdString(v))
-                                : std::nullopt; }
-            case 3: { auto [v, ok] = allcore::iastToAcip(u);
-                      return ok ? std::optional<QString>(QString::fromStdString(v))
-                                : std::nullopt; }
-            case 4: { auto [v, ok] = allcore::iastToTibetan(u);
-                      return ok ? std::optional<QString>(QString::fromStdString(v))
-                                : std::nullopt; }
-            case 5: return QString::fromStdString(allcore::iastToInputcode(u));
-            case 6: return QString::fromStdString(allcore::iastToNextletter(u));
-            case 7: { auto [v, ok] = allcore::iastToIpa(u);
-                      return ok ? std::optional<QString>(QString::fromStdString(v))
-                                : std::nullopt; }
-        }
+        auto opt = [](const std::pair<std::string, bool>& r)
+            -> std::optional<QString> {
+            return r.second ? std::optional<QString>(
+                                  QString::fromStdString(r.first))
+                            : std::nullopt;
+        };
+        if (key == "iast") return iast;
+        if (key == "deva") return opt(allcore::iastToDevanagari(u));
+        if (key == "acip") return opt(allcore::iastToAcip(u));
+        if (key == "tib") return opt(allcore::iastToTibetan(u));
+        if (key == "ipa") return opt(allcore::iastToIpa(u));
+        if (key == "code") return QString::fromStdString(allcore::iastToInputcode(u));
+        if (key == "next") return QString::fromStdString(allcore::iastToNextletter(u));
+        if (key == "pron") return QString::fromStdString(allcore::iastToPronunciation(u));
         return iast;
+    }
+    QString toKey() const {
+        return to_ ? to_->currentData().toString() : QString("full");
+    }
+    std::optional<QString> convertLine(const QString& iast) const {
+        return renderAs(toKey(), iast);
+    }
+    // Every notation of one line at once, the way Adam asked for it: the
+    // label, whether it converted, and the result. Each row says what it is
+    // and, for the two pronunciations, on whose authority.
+    QString allNotations(const QString& iast) {
+        struct Row { const char* key; const char* label; };
+        static const Row kRows[] = {
+            {"deva", "Devanagari"},
+            {"acip", "Tibetanized ACIP"},
+            {"tib", "Tibetan script"},
+            {"ipa", "IPA"},
+            {"code", "ACIP input code"},
+            {"next", "ACIP next-letter"},
+            {"pron", "Simplified pronunciation"},
+        };
+        const QString muted = ux::darkChrome() ? ux::chromeMuted() : ux::kMuted;
+        const QString bad = ux::darkChrome() ? ux::chromeError() : ux::kError;
+        QString h = "<table style='margin-bottom:10px'>";
+        QStringList plain;
+        for (const Row& r : kRows) {
+            const auto got = renderAs(r.key, iast);
+            const QString big = (QString(r.key) == "tib" || QString(r.key) == "deva")
+                                    ? "font-size:19px"
+                                    : "";
+            h += "<tr><td style='color:" + muted +
+                 ";padding-right:14px;vertical-align:top'>" +
+                 QString(r.label) + "</td><td style='" + big + "'>" +
+                 (got ? (*got).toHtmlEscaped()
+                      : "<span style='color:" + bad + "'>refused \u2014 " +
+                            refusalReason(iast).toHtmlEscaped() + "</span>") +
+                 "</td></tr>";
+            plain << QString("%1%2").arg(QString(r.label), -26)
+                         .arg(got ? *got : QString("(refused)"));
+        }
+        h += "</table>";
+        converted_ += (converted_.isEmpty() ? "" : "\n") + plain.join("\n");
+        return h;
     }
     void convertPassage() {
         const QStringList lines = in_->toPlainText().split('\n');
@@ -20095,16 +20209,18 @@ private:
             "carried through untouched; a line the engine will not read is "
             "left as it was and named below.</div>"
             "<div style='white-space:pre-wrap;font-size:15px'>";
-        if (from_ && from_->currentIndex() == 4)
+        if (from_ && from_->currentData().toString() == "acip")
             html = "<div style='color:" +
                    QString(ux::darkChrome() ? ux::chromeWarn() : ux::kWarn) +
                    ";padding-bottom:6px'>Tibetanized ACIP separates "
-                   "SYLLABLES, not words, so where one word ends and the next "
-                   "begins cannot be recovered from it. Reading a passage back "
-                   "from ACIP gives you the right letters run together. That "
-                   "is a limit of the notation, not a fault in the "
-                   "text.</div>" + html;
+                   "SYLLABLES, not words, so the syllable spacing is kept and "
+                   "where one WORD ends cannot be recovered from it. For a "
+                   "mantra that is exactly right, since a mantra is recited "
+                   "syllable by syllable. For running prose it means the "
+                   "words arrive unjoined. A limit of the notation, not a "
+                   "fault in the text.</div>" + html;
         QStringList plain;
+        converted_.clear();
         int done = 0, passed = 0, refused = 0;
         QStringList problems;
         for (int i = 0; i < lines.size(); ++i) {
@@ -20136,11 +20252,31 @@ private:
                 continue;
             }
             ++done;
-            html += (*got).toHtmlEscaped() + "<br>";
-            plain << *got;
+            if (toKey() == "all") {
+                html += "<div style='color:" +
+                        QString(ux::darkChrome() ? ux::chromeGold()
+                                                 : ux::kGold) +
+                        ";padding-top:8px'>" + iast.toHtmlEscaped() +
+                        "</div>" + allNotations(iast);
+            } else {
+                html += (*got).toHtmlEscaped() + "<br>";
+                plain << *got;
+            }
         }
         html += "</div>";
-        converted_ = plain.join("\n");
+        if (toKey() != "all") converted_ = plain.join("\n");
+        if (toKey() == "all")
+            html += QString(
+                        "<div style='color:%1;padding-top:8px'>IPA follows the "
+                        "standard Classical-Sanskrit mapping together with FPMT "
+                        "Translation Services' guide to Sanskrit "
+                        "transliteration and pronunciation (November 2020), "
+                        "with the anusv\u0101ra and visarga context rules "
+                        "applied. The simplified line is PROVISIONAL: the "
+                        "Sanskrit pronunciation standard is still "
+                        "outstanding, and it is shown so it can be checked, "
+                        "not relied on.</div>")
+                        .arg(ux::darkChrome() ? ux::chromeMuted() : ux::kMuted);
         html += QString("<div style='padding-top:10px;color:%1'>%2 line(s) "
                         "converted \u00b7 %3 carried through \u00b7 %4 "
                         "refused</div>")
@@ -20172,7 +20308,7 @@ private:
         // Mahavyutpatti bridge only answer for one term. Anything else, or
         // more than one line, is a passage.
         const bool multi = whole.trimmed().contains('\n');
-        if (to_ && (to_->currentIndex() != 0 || multi)) {
+        if (to_ && (toKey() != "full" || multi)) {
             if (whole.trimmed().isEmpty()) return;
             convertPassage();
             return;

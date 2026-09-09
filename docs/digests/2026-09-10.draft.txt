@@ -1,0 +1,224 @@
+# Diamond Cutter Translation Tool --- daily digest, Wednesday 9 September 2026 (afternoon, continuing)
+
+**Headline.** This afternoon was almost entirely made of things I found
+by using the tool rather than by planning to build them. I hovered over
+a button and got nothing, so every button in the application now says
+its own name and what it does. I opened the Draft workspace and could
+not find the way in, so the way in is now on the screen. I pasted a
+verse of Nagarjuna into the Sanskrit workbench and it refused the whole
+passage over a character I could not see. And the dictionary drawn from
+Geshe Michael Roach's courses now comes out as a spreadsheet with all of
+its metadata, every time it is rebuilt, ready to send.
+
+Everything below is finished and tested. The self-test is green at 0
+failures, the constitution gate holds, and the engine batteries pass.
+
+## Hovering over anything now tells you what it is
+
+I hovered over the Library button and nothing appeared. It turned out
+the pane switcher buttons carried no description at all, and twenty-six
+of the buttons on the ribbon carried only their own name.
+
+Both answer the same way now: the name in bold, then a sentence saying
+what the thing is for. Fourteen of the pane descriptions are lifted word
+for word from the user manual, so the tooltip and the manual cannot
+drift apart over time.
+
+A quieter problem sat underneath it. A ribbon button copied its
+description once, at the moment it joined the ribbon, so a description
+written any later was silently thrown away. That is the sort of thing
+that makes a fix look like it did not work. It follows the source now,
+and two tests hold the line: twenty-four panes and one hundred and
+twenty-one buttons, none of them silent.
+
+## Day now means Day
+
+I had Day selected in Preferences and dark chrome on my screen. Both
+were behaving exactly as written. The old switch only ever *set* an
+appearance when Night was on; with it off, the application left the
+decision to the Mac, so my Mac overrode a preference that plainly said
+Day.
+
+Appearance is three ways now: Day, Night, and Match system appearance.
+It is applied at startup whatever it says, it is in Preferences and
+under the View menu, and the old setting was migrated once so nobody's
+choice was lost. Match system is the answer to the other half of my
+question, whether night can arrive on its own: it follows the Mac,
+sunset switch included.
+
+![The appearance setting, three ways.](img/2026-09-10/prefs-grid.png)
+
+## The missing labels under the icons were never missing
+
+They were invisible. An application-wide stylesheet makes the toolkit
+freeze each panel's colours the first time it draws them. Switching
+appearance changed the colours but redrew nothing, so the labels kept
+their daylight ink on a dark band. The fix had been written days ago and
+never actually switched on.
+
+The same defect is what made the shading look, in my own words, funky:
+some panels dark, some half shaded, some not shaded at all. Twenty-five
+places across eight panes had a manuscript colour written into the text
+of the style itself, and a written-in colour cannot follow anything.
+They are all computed from the palette now. Day is unchanged to the
+pixel. Night is legible for the first time.
+
+The worst of it was the Compare table. Its five row colours are measured
+against cream paper, but behind a table row they sit on the window,
+where the row's own text is nearly white --- a contrast of about 1.2 to
+1, which is to say invisible. They keep their five meanings at a depth
+the dark window can carry.
+
+Two things fell out of that work. A damaged autosave in the Versions
+list was painted warning red and then quiet grey one line later, so the
+row that most needed to stand out was the only one that lost its colour.
+And one of our colours clears the accessibility floor on paper at 4.62
+but only reaches 4.22 on a light window, so its window sibling is a
+shade darker. Three new tests hold all of it, including one that fails
+the build outright if anyone writes a colour into a pane by hand again.
+
+## The Draft workspace now shows you the way in
+
+I opened it and said, plainly, that I did not understand how to use it.
+There was no Load source button anywhere on the screen, and three gold
+headings --- STRUCTURE, EVIDENCE, PUBLISH --- introduced nothing at all.
+
+Both complaints were fair. Every verb had migrated to the ribbon over
+time, leaving those headings labelling empty space. They are gone. The
+pane now carries its own way in: a Load source button pinned under the
+source box, outside the scrolling area so it cannot slip below the fold,
+next to one line saying where the rest of the tools live. The two empty
+panels beside it now name that route instead of citing a button the
+reader cannot find.
+
+![The Draft workspace, with its way in.](img/2026-09-10/06-draft.png)
+
+## The Sanskrit workbench
+
+I pasted a verse from Nagarjuna and four of the six rows showed a
+warning triangle with nothing beside it.
+
+The refusal was correct in principle --- this engine never guesses ---
+but it would not say what it could not read. It does now: the character,
+its position, its code point, a plain statement that nothing was
+guessed, and what to do next.
+
+The cause was worse than the symptom. The converter knew only the five
+ordinary whitespace characters, so a non-breaking space, which is
+exactly what a word processor or a web page puts on the clipboard, made
+it refuse an entire passage. A newline did the same. It reads every kind
+of whitespace now, in both the reference engine and its working port
+together.
+
+A third fault surfaced while I was testing. Devanagari put its final
+mark on the last word of a line and no other, so every word ending in a
+consonant printed bare, with an implied vowel that is not in the
+Sanskrit. The only Devanagari case in our test battery was the mani
+mantra, and every word in it ends in a vowel --- which is precisely why
+this survived. Both batteries now carry a word ending in a consonant.
+
+Then I asked for more, and got it. The input is a paste area rather than
+a single line. There are dropdowns for what you are converting from and
+what you want it in. Every notation still gives the full analysis of a
+single term, with Whitney's roots and the Mahavyutpatti bridge; choosing
+one notation converts a whole passage line by line.
+
+Pasted documents are not all Sanskrit, so rules, headings and bracketed
+labels are carried through untouched --- on four objective tests, not on
+a guess about language: a line with no letters at all, a line wholly
+inside brackets, a line whose words are all capitals, and a line the
+engine itself refuses. My own test document is now the test, with a
+control asserting the heading is not itself run through the converter.
+
+One limit is stated rather than hidden. Reading a passage back *from*
+Tibetanized ACIP gives the right letters run together, because that
+notation separates syllables and not words, so word boundaries cannot be
+recovered. The pane says so.
+
+![The Sanskrit workbench: a passage, and a choice of
+notations.](img/2026-09-10/13-sanskrit.png)
+
+## The Geshe Michael Roach Dictionary, as a spreadsheet
+
+The dictionary drawn from the alignment of Geshe Michael Roach's courses
+now exports as CSV every time it is rebuilt, from the same assembled
+entries the web page renders, so the file and the page cannot disagree
+about what the dictionary says.
+
+Four files, each answering a different question.
+
+- **The full export.** 20,933 rows over 10,758 headwords, courses one
+  through five. One row per rendering, with wylie, ACIP, Tibetan script,
+  pronunciation, the English, the depth, the number of occurrences, the
+  courses, and the exact course and segment reference for every one.
+  Each row also carries its own provenance --- the tier, the rule the
+  English was gathered under, the corpus, the date --- because a
+  spreadsheet gets forwarded and separated from its covering note, and
+  this one will still say what it is.
+- **English to Tibetan.** Whether Geshe Michael has rendered a given
+  word before, and as what. That is the question an editor actually
+  asks, and the web page cannot answer it.
+- **Each course's own glossary,** ranked by how often each term occurs
+  in that course.
+- **A change report** against the previous export. Nobody re-reads six
+  thousand headwords. Everyone will read the delta.
+
+Two findings came out of building it. The ACIP column has been empty for
+every entry of the published page, because the index is stored
+ACIP-to-wylie and was being read the other way round. And the layer
+holds about fifteen headwords that are English course front matter
+rather than Tibetan --- harmless as text, and fabrication the moment a
+Tibetan script column is computed from them. So the two computed columns
+are named for what they are, every row carries a note saying what
+produced them, and a further column says whether the layer holds that
+headword at all.
+
+## Decisions I made along the way
+
+**Geshe Michael Roach's title goes with his name.** Everywhere: prose,
+the interface, email, document titles and file names. It is the same
+courtesy owed a doctor, and dropping it is not a shorthand. The
+dictionary is the Geshe Michael Roach Dictionary; its four spreadsheets,
+the web page, the page's own title and every reference in the tooling
+were renamed this afternoon.
+
+**Digests are centred from now on.** Section headers and every
+screenshot with its caption. Body prose stays left-aligned, because a
+centred paragraph is harder to read, not easier.
+
+**The ribbon's width promise held.** The idiom bank wanted a ribbon
+button and would have pushed the ribbon past the width we promised
+ourselves it would never exceed. It went to a right-click and a menu
+instead.
+
+## Numbers
+
+  --------------------------------------------- -------------
+  Automated suites, all green                   113
+  Application self-test failures                0
+  Panes that now describe themselves            24
+  Ribbon buttons that now describe themselves   121
+  Hand-written colours removed from the panes   25
+  Dictionary rows exported                      20,933
+  Dictionary headwords                          10,758
+  Courses covered                               1 through 5
+  --------------------------------------------- -------------
+
+## Open questions for leadership
+
+The dictionary export is ready for Joel and is waiting in my drafts.
+Everything in it is TENTATIVE: Geshe Michael Roach's own English,
+matched to the Tibetan by machine and never composed, and none of it
+enters his binding dictionary until he rules on it. What I would like to
+know is the shape he wants for ruling on it --- a review queue with a
+column for his decisions is easy to produce, and would turn the export
+into something he can work through rather than only read.
+
+## Next
+
+Press and install this afternoon's work. Then the theme system, which is
+designed and waiting on my rulings: eight coordinated colour schemes
+computed from a small set of seeds, with the honesty colours frozen in
+meaning across every one of them, so a theme can say what surface you
+are reading on and is structurally unable to say whose English you are
+reading.
