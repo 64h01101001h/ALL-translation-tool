@@ -132,7 +132,8 @@ public:
         setWindowFlag(Qt::Window); setWindowTitle(h.sideText ? "Apply Patch to " + h.sideName : "Apply Patch"); resize(900, 620);
         auto* v = new QVBoxLayout(this);
         header_ = new QLabel("The patched text is a proposal computed from the patch against the target as read; nothing is written until you apply. Every hunk in the patch is applied as written; the compare rules do not filter a patch.");
-        header_->setWordWrap(true); header_->setStyleSheet("color:#6B5E4E;"); v->addWidget(header_);
+        header_->setWordWrap(true); ux::themedStyle(header_, [] { return QString("color:%1;")
+            .arg(ux::chromeMuted()); }); v->addWidget(header_);
         auto* f = new QFormLayout;
         if (!h.sideText) {
             auto* tr = new QHBoxLayout; target_ = new QLineEdit; auto* tb = new QPushButton("Browse…"); tr->addWidget(target_, 1); tr->addWidget(tb); f->addRow("Target:", tr);

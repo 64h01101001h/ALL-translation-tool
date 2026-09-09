@@ -144,11 +144,13 @@ public:
         btn("Line Origins…", "Which version first introduced the line under the caret, walked with the diff engine", [this] { lineOrigins(); });
         acts->addStretch(1);
         v->addLayout(acts);
-        notice_ = new QLabel; notice_->setWordWrap(true); notice_->setStyleSheet("color:#6B5E4E;"); v->addWidget(notice_);
+        notice_ = new QLabel; notice_->setWordWrap(true); ux::themedStyle(notice_, [] { return QString("color:%1;")
+            .arg(ux::chromeMuted()); }); v->addWidget(notice_);
         auto* footer = new QLabel("Versions exist only for saves made in this app; edits made in other programs, and saves from before this feature existed, left no version. "
                                   "There is no Track Changes toggle for texts: to accept or reject a change, compare a version with what you are editing and use MERGE ▸ Copy Left / Copy Right, then Save."
                                   + QString(h.kind == "manuscript" ? " Manuscript versions are compared as text; formatting is not compared." : ""));
-        footer->setWordWrap(true); footer->setStyleSheet("color:#6B5E4E; font-size:11px;"); v->addWidget(footer);
+        footer->setWordWrap(true); ux::themedStyle(footer, [] { return QString("color:%1; font-size:11px;")
+            .arg(ux::chromeMuted()); }); v->addWidget(footer);
         connect(filter_, qOverload<int>(&QComboBox::currentIndexChanged), this, [this](int) { refresh(); });
         connect(showAuto_, &QCheckBox::toggled, this, [this](bool) { refresh(); });
         connect(showElse_, &QCheckBox::toggled, this, [this](bool) { refresh(); });
@@ -164,7 +166,14 @@ public:
     bool harnessAutoConfirm_ = false;
     QString lastMessage() const { return notice_->text(); }
 
+    void watchChrome() {
+        static bool armed = false;
+        if (armed) return;
+        armed = true;
+        ux::onChromeChange(this, [this] { refresh(); });
+    }
     void refresh() {
+        watchChrome();
         entries_.clear(); table_->clear();
         int other = 0, orphans = 0;
         const std::string only = QFileInfo(h_.docPath).absoluteFilePath().toStdString();
@@ -194,8 +203,12 @@ public:
                                             num("folios"), num("syllables"), num("shads"), num("words"), num("lines")});
             it->setToolTip(0, QString("stamp %1 · %2 · %3 · %4").arg(QString::fromStdString(e.meta.stamp), QString::fromStdString(e.meta.encoding), QString::fromStdString(e.meta.lineEnding), QString::fromStdString(e.meta.path)));
             QByteArray probe; const bool okBytes = e.meta.metaOk && docprops::versionBytes(dir(), e, probe);
-            if (!okBytes) { ++damaged; it->setText(2, e.meta.metaOk ? "damaged — cannot be restored" : ("unreadable record: " + QString::fromStdString(e.meta.problem))); for (int c = 0; c < 11; ++c) it->setForeground(c, QColor(0x9A, 0x2B, 0x1E)); }
-            if (isAuto) for (int c = 0; c < 11; ++c) it->setForeground(c, QColor(0x8A, 0x80, 0x74));
+            if (!okBytes) { ++damaged; it->setText(2, e.meta.metaOk ? "damaged — cannot be restored" : ("unreadable record: " + QString::fromStdString(e.meta.problem))); for (int c = 0; c < 11; ++c) it->setForeground(c, QColor(ux::chromeError())); }
+            // ORDER MATTERS: this used to run unconditionally, so a damaged
+            // AUTOSAVE was painted quiet grey a line after being painted
+            // warning red — the one row that most needed to stand out was the
+            // one row that lost its colour. Damage outranks de-emphasis.
+            if (isAuto && okBytes) for (int c = 0; c < 11; ++c) it->setForeground(c, QColor(ux::chromeMuted()));
             if (e.meta.path != only) it->setText(3, name + "  (elsewhere)");
             table_->addTopLevelItem(it);
         }

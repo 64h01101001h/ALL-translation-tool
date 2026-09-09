@@ -110,7 +110,7 @@ class TableComparePage : public QWidget {
 public:
     TableComparePage(ComparePane* owner, const QString& root, allcore::Spine* spine) : QWidget(owner), owner_(owner), root_(root), spine_(spine) {
         auto* v = new QVBoxLayout(this); v->setContentsMargins(6, 4, 6, 4); v->setSpacing(4);
-        auto* banner = new QLabel(ux::sourceBadge(ux::Epistemic::Machine) + "Table Compare pairs records by a key you choose and lists the fields that differ. Nothing is written. This page compares; it does not merge."); banner->setTextFormat(Qt::RichText); banner->setWordWrap(true); banner->setStyleSheet("color:#4A4036;"); v->addWidget(banner);
+        auto* banner = new QLabel(ux::sourceBadge(ux::Epistemic::Machine) + "Table Compare pairs records by a key you choose and lists the fields that differ. Nothing is written. This page compares; it does not merge."); banner->setTextFormat(Qt::RichText); banner->setWordWrap(true); ux::themedStyle(banner, [] { return QString("color:%1;").arg(ux::chromeInk()); }); v->addWidget(banner);
         auto* top = new QGridLayout;
         leftEd_ = new QLineEdit; rightEd_ = new QLineEdit; leftEd_->setPlaceholderText("Left table (TSV, CSV or JSON)"); rightEd_->setPlaceholderText("Right table");
         auto* bl = new QPushButton("Browse…"); auto* br = new QPushButton("Browse…");
@@ -137,8 +137,10 @@ public:
         v->addLayout(row3);
         colsList_ = new QListWidget; colsList_->setMaximumHeight(110); colsList_->setVisible(false); v->addWidget(colsList_);
         connect(presetBox_, qOverload<int>(&QComboBox::currentIndexChanged), this, [this](int) { applyPreset(); });
-        banners_ = new QLabel; banners_->setWordWrap(true); banners_->setTextFormat(Qt::RichText); banners_->setStyleSheet("color:#9A2B1E;"); banners_->setVisible(false); v->addWidget(banners_);
-        ident_ = new QLabel; ident_->setWordWrap(true); ident_->setStyleSheet("color:#6B5E4E; font-size:11px;"); ident_->setTextInteractionFlags(Qt::TextSelectableByMouse); v->addWidget(ident_);
+        banners_ = new QLabel; banners_->setWordWrap(true); banners_->setTextFormat(Qt::RichText); ux::themedStyle(banners_, [] { return QString("color:%1;")
+            .arg(ux::chromeError()); }); banners_->setVisible(false); v->addWidget(banners_);
+        ident_ = new QLabel; ident_->setWordWrap(true); ux::themedStyle(ident_, [] { return QString("color:%1; font-size:11px;")
+            .arg(ux::chromeMuted()); }); ident_->setTextInteractionFlags(Qt::TextSelectableByMouse); v->addWidget(ident_);
         tree_ = new QTreeWidget; tree_->setHeaderLabels({"Status", "Key", "Column", "Left", "Right"}); tree_->header()->setSectionResizeMode(QHeaderView::ResizeToContents); tree_->header()->setStretchLastSection(true); tree_->setRootIsDecorated(true); tree_->setContextMenuPolicy(Qt::CustomContextMenu); v->addWidget(tree_, 1);
         connect(tree_, &QTreeWidget::customContextMenuRequested, this, [this](const QPoint& p) {
             auto* it = tree_->itemAt(p); if (!it) return; QTreeWidgetItem* top = it->parent() ? it->parent() : it; const QString key = top->text(1);

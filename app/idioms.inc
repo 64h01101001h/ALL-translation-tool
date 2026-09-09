@@ -172,7 +172,8 @@ public:
             "The register marks which Tibetan forms are idioms — fixed expressions not to be read word by word. "
             "It holds no English of its own: the renderings below are Geshe Michael's, fetched from his own courses and counted. "
             "A new form is a proposal until he rules on it.");
-        banner->setTextFormat(Qt::RichText); banner->setWordWrap(true); banner->setStyleSheet("color:#4A4036; background:#F4EFE4; border:1px solid #E3DDD0; padding:5px 8px;");
+        banner->setTextFormat(Qt::RichText); banner->setWordWrap(true); ux::themedStyle(banner, [] { return QString("color:%1; background:%2; border:1px solid %3; padding:5px 8px;")
+            .arg(ux::chromeInk()).arg(ux::chromePlaque()).arg(ux::chromeRule()); });
         v->addWidget(banner);
         auto* row = new QHBoxLayout;
         filter_ = new QLineEdit; filter_->setPlaceholderText("Filter the forms (wylie)");
@@ -201,7 +202,8 @@ public:
         acts->addStretch(1);
         auto* close = new QPushButton("Close"); connect(close, &QPushButton::clicked, this, [this] { accept(); }); acts->addWidget(close);
         v->addLayout(acts);
-        status_ = new QLabel; status_->setWordWrap(true); status_->setTextFormat(Qt::RichText); status_->setStyleSheet("color:#4A4036;");
+        status_ = new QLabel; status_->setWordWrap(true); status_->setTextFormat(Qt::RichText); ux::themedStyle(status_, [] { return QString("color:%1;")
+            .arg(ux::chromeInk()); });
         v->addWidget(status_);
         reload();
     }

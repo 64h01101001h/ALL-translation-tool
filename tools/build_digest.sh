@@ -53,6 +53,10 @@ python3 tools/digest_image_dpi.py "$IMG"
 # tools/digest_reference.docx (regenerate with tools/make_digest_reference.py).
 CSS="$(mktemp).css"; cat > "$CSS" <<'CSSEOF'
 body{max-width:62em;margin:2.5em auto;padding:0 1.5em;font-family:-apple-system,Helvetica,Arial,sans-serif;font-size:1.05em;line-height:1.55;color:#222}
+/* Adam's standing order (2026-09-09): section headers and images centred,
+   in the HTML and the .docx alike, so both read the same. Prose stays
+   left-aligned — a centred paragraph is harder to read, not easier. */
+h1,h2,h3,h4{text-align:center}
 h1{font-size:1.7em;line-height:1.25;margin:0 0 1.2em}
 h2{font-size:1.3em;margin:2.4em 0 0.9em;padding-top:0.6em;border-top:1px solid #e3ddd0}
 p{margin:0 0 1em}
@@ -61,7 +65,7 @@ li{margin:0.45em 0}
 li>p{margin:0.3em 0}
 figure{margin:2em 0 2.2em;text-align:center}
 img{max-width:100%;height:auto;border:1px solid #ddd;box-shadow:0 1px 4px rgba(0,0,0,.08)}
-figcaption{color:#555;font-size:0.92em;line-height:1.45;margin:0.7em auto 0;max-width:52em;text-align:left}
+figcaption{color:#555;font-size:0.92em;line-height:1.45;margin:0.7em auto 0;max-width:52em;text-align:center}
 table{border-collapse:collapse;margin:1.4em 0 2em}
 th,td{padding:0.45em 0.9em;border-bottom:1px solid #e3ddd0;text-align:left;vertical-align:top}
 th{background:#f4efe4}
