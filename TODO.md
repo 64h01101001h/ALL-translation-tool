@@ -57,6 +57,26 @@ list before this sweep. Grouped by theme; each line says where it came from.
       switched back on
 - [ ] Ribbon groups and individual buttons within a pane are not switchable
       yet — only whole panes and groups. Worth it, or is pane-level enough?
+- [ ] **BACK BURNER (Adam, 2026-09-09): ask on first run how the person will
+      mainly use the tool, and let the answer set the starting layout.**
+      One question at first start — translating · reading and study ·
+      cataloguing · input and proofreading · everything — and the answer
+      writes the same `features/pane/*` and `features/group/*` switches the
+      Features page owns, so there is ONE mechanism and no second scheme to
+      keep in step. Notes for when it is built:
+      · the roles should be the real roles in the group (translator, editor,
+        cataloguer, input-centre operator, reader), and the Utpala session
+        and the translator one-on-ones are exactly where we learn what each
+        one actually needs on screen — so build it AFTER those, not before,
+        or the presets are guesses
+      · honesty: the question must say it is only a starting point, that
+        nothing is removed, and where to change it (Preferences ▸ Features);
+        a person who skips the question gets everything, as now
+      · it must never hide a pane that has unsaved work or is in front
+      · hook: the welcome tour already runs once off `ui/welcomed`, so the
+        question belongs in that same first-run moment
+      · a role is a starting point, never a lock: every switch stays the
+        person's afterwards
 
 ## B. Editor's-tool candidates — build only what Utpala confirms
 - [ ] Tracked-changes `.docx` export of a two-version comparison (Word
