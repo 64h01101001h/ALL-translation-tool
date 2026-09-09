@@ -11,6 +11,9 @@ add_library(allcore STATIC
   src/filewalk.cpp
   src/versions.cpp
   src/textnorm.cpp
+  src/textpatch.cpp
+  src/zipstore.cpp
+  src/docx_redline.cpp
     src/stardict.cpp
   src/analysis.cpp
   src/qc.cpp
@@ -160,6 +163,18 @@ add_test(NAME versions_smoke COMMAND versions_smoke)
 add_executable(textnorm_smoke tests/textnorm_smoke.cpp)
 target_link_libraries(textnorm_smoke PRIVATE allcore)
 add_test(NAME textnorm_smoke COMMAND textnorm_smoke)
+
+add_executable(textpatch_smoke tests/textpatch_smoke.cpp)
+target_link_libraries(textpatch_smoke PRIVATE allcore)
+add_test(NAME textpatch_smoke COMMAND textpatch_smoke)
+
+add_executable(zipstore_smoke tests/zipstore_smoke.cpp)
+target_link_libraries(zipstore_smoke PRIVATE allcore)
+add_test(NAME zipstore_smoke COMMAND zipstore_smoke)
+
+add_executable(docx_redline_smoke tests/docx_redline_smoke.cpp)
+target_link_libraries(docx_redline_smoke PRIVATE allcore)
+add_test(NAME docx_redline_smoke COMMAND docx_redline_smoke)
 
 add_executable(textdiff_smoke tests/textdiff_smoke.cpp)
 target_link_libraries(textdiff_smoke PRIVATE allcore)

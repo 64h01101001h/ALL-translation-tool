@@ -56,3 +56,9 @@ The Compare pane is the compare-and-merge suite Adam asked for on 2026-09-08 ("b
 ## 7. F3 — Sessions ▾ ▸ Normalize Left… / Normalize Right… (2026-09-09)
 - One side's lines replaced through `setSideLines` (exactly one undo snapshot; Save Left/Right writes). Details in `Normalize.md` (selftests F3-22, 22b).
 
+## 8. F5 — Sessions ▾ ▸ Apply Patch to Left… / to Right… (2026-09-09)
+- One side patched (original pair restored first, then one undo snapshot). Details in `ApplyPatch.md` (selftests F5-20, 20b).
+
+## 9. F6 — Word redline (2026-09-09)
+- CLI-first: `--compare A B out.docx`. The research premise ("the Manuscript already exports .docx") was false and is corrected in `WordRedline.md` §0. The Save Report filter waits for the Word verification recorded there (§4).
+
