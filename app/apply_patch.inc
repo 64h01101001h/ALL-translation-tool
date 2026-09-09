@@ -154,7 +154,7 @@ public:
         auto* acts = new QHBoxLayout; previewBtn_ = new QPushButton("Preview"); reBtn_ = new QPushButton("Re-preview with ticked hunks"); reBtn_->setEnabled(false); rejBtn_ = new QPushButton("Save rejected hunks as .rej…"); rejBtn_->setEnabled(false);
         applyBtn_ = new QPushButton(h.sideText ? "Apply to this side" : "Apply to file"); applyBtn_->setEnabled(false); auto* close = new QPushButton("Close");
         acts->addWidget(previewBtn_); acts->addWidget(reBtn_); acts->addWidget(rejBtn_); acts->addStretch(1); acts->addWidget(applyBtn_); acts->addWidget(close); v->addLayout(acts);
-        table_ = new QTreeWidget; table_->setRootIsDecorated(false); table_->setHeaderLabels({"Include", "#", "@@ header", "Placement", "A-lines", "B-lines"}); table_->header()->setSectionResizeMode(3, QHeaderView::Stretch); v->addWidget(table_, 1);
+        table_ = new QTreeWidget; table_->setRootIsDecorated(false); table_->setHeaderLabels({"Include", "#", "@@ header", "Placement", "A-lines", "B-lines"}); table_->header()->setSectionResizeMode(QHeaderView::ResizeToContents); table_->header()->setSectionResizeMode(3, QHeaderView::Stretch); v->addWidget(table_, 1);
         connect(table_, &QTreeWidget::itemDoubleClicked, this, [this](QTreeWidgetItem* it, int) { const int line0 = it->data(0, Qt::UserRole).toInt(); if (line0 >= 0 && h_.goToLine) h_.goToLine(line0); });
         status_ = new QLabel; status_->setWordWrap(true); v->addWidget(status_);
         connect(previewBtn_, &QPushButton::clicked, this, [this] { preview(false); });

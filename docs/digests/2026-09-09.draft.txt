@@ -109,6 +109,81 @@ settle.](img/2026-09-09/compare-threeway.png)
   "corrupt image" verdict in packaging; a shutdown crash in a status-bar
   hook).
 
+### The analysis suite, batch 4 --- the editing tools the compare engine made possible
+
+With the compare engine in place I built the first batch of the analysis
+suite in the order the plan's critic set, one feature at a time, each
+with its own test battery before I moved to the next.
+
+**Versions.** Every save of a document, draft or manuscript now keeps a
+compressed copy with who saved it, when, in which encoding, the revision
+number and the text statistics of that moment. File ▸ Versions... lists
+them; a version can be compared with what I am editing or with another
+version, restored (the text on disk is kept first, even if another
+program changed it), named and pinned so it is never pruned, or asked
+which version first introduced a given line. Damaged records are shown
+red and excluded. Preferences ▸ Versions holds the switch, the caps and
+the rolling autosave slot. Renaming a file carries its history with it.
+
+![Versions: three saves of one text, the middle one named and pinned.
+Compare with Current, Compare Two, Restore (two-step), Save Version As,
+Name, Line Origins.](img/2026-09-09/versions-window.png)
+
+**Changed-folios report.** "7 of 143 folios changed": the apparatus
+grouped by the left text's folio markers, as a Markdown table with the
+readings under each folio, or as CSV. It is a Save Report filter, a Copy
+Changed Folios action, a fragment on the Compare status line, and a
+command-line output. The header states every grouping rule, so a reader
+can reproduce it.
+
+**Normalize.** The compare rules offered as transformations: collapse
+spacing, trailing blanks, blank-line runs, the double-shad spelling,
+spacing around the shad, apparatus spans, folio markers, line endings, a
+final line break, house-style spacing. Every run previews as a diff in
+the Compare pane, lists the lines the rules refused and why, and only
+then applies --- the Apply button is dead until a preview exists for
+exactly these settings and this text. The double-shad form has no
+default: that is the house's ruling to make, not mine.
+
+![Normalize: the rules as switches, the lossy ones in red, the preview
+counted from the diff, the refused lines
+listed.](img/2026-09-09/normalize-dialog.png)
+
+**Replace in Files.** One systematic fix across a whole folder, every
+occurrence listed with its line before and after, tick or untick, then a
+two-step apply to the ticked files only. Every skipped file is named
+with its reason (binary, not UTF-8, over the size cap, past the file
+cap, open with unsaved edits, changed since the preview, a library text
+without permission). A search text in the wrong script gets a notice, so
+a count of zero never reads as a clean bill of health. Each run leaves a
+changeset record and an undo that restores the files from their
+pre-replace versions and skips any file edited since. Counts come from
+the files themselves, never from the search index --- the footer says
+so.
+
+![Replace in Files: three occurrences in two files of a small batch, one
+file expanded to its lines, the honest footer
+beneath.](img/2026-09-09/replace-in-files.png)
+
+**Apply Patch** (in progress at the time of this draft). A corrector's
+unified diff loaded against my copy: each hunk placed exactly, with an
+offset, with loosened context, already applied, or rejected --- five
+distinct verdicts, never folded into one. The result is a diff in the
+Compare pane, the rejected hunks go to a .rej file for the corrector,
+and the previous text is kept as a version before anything is written.
+
+![Apply Patch: a corrector's diff with three hunks against a copy where
+one line was retyped --- two placed exactly, one rejected and named,
+nothing written until Apply.](img/2026-09-09/apply-patch.png)
+
+**Tracked changes for Word** (engine in progress). The differences
+between two drafts written as a Word document with real revision marks,
+so Geshe Michael can accept or reject each change in Word itself. The
+first paragraph says what the file compares, under what rules, who ran
+it, and that the marks are machine-computed. I will not add it to the
+Save Report menu until I have opened a sample in Word and recorded that
+Accept All gives text B and Reject All gives text A.
+
 ## Decisions I made along the way
 
 - The style sheet's rules live as switches in Preferences, so any of
@@ -127,22 +202,54 @@ settle.](img/2026-09-09/compare-threeway.png)
   word and variant studies), companion iOS/Android reader apps, Tibetan
   Buddhist iconography in the interface, and a list of research-suite
   questions to put to Geshe Michael.
+- Versions are deduplicated by content: saving an unchanged text keeps
+  nothing new and says so, and restoring a version does not re-bank a
+  copy that is already kept. Identical bytes are one version.
+- The double-shad spelling and the space before a shad have no default
+  in Normalize. Shipping a wrong default would silently re-spell every
+  shad in a volume; the house ruling decides.
+- Replace in Files refuses to run when Versions are switched off:
+  without the pre-replace copies there would be no undo, and a batch
+  rewrite without an undo is not something I will offer.
+- A search text in one script against files in another gets a notice
+  instead of a zero. A zero must never read as "the text is clean".
+- The Word redline ships command-line first. The menu filter appears
+  only after I have opened a sample in Word and recorded that Accept All
+  gives text B and Reject All gives text A. No dead control in the
+  meantime.
 
 ## Numbers
 
 ![Before and after, Monday 13:30 to now. Every count comes from the
-build itself: menus and pages from the running app, suites from the test
-runner.](img/2026-09-09/chart-numbers.png)
+build itself: menus and pages from the running app, suites and checks
+from the test runner.](img/2026-09-09/chart-numbers.png)
 
-                                                           Monday 13:30             Now
-  -------------------------------------------------------- ------------------------ ----------------
-  Top-level menus                                          4                        12
-  Preferences pages                                        4 groups in one dialog   11 pages
-  Panes                                                    24                       25 (Compare)
-  Automated suites                                         101, all green           102, all green
-  Compare engine battery                                   ---                      43 checks
-  New self-test checks since Monday's digest               ---                      150+
-  Headwords whose renderings were out of frequency order   763                      0
+  -----------------------------------------------------------------------
+                          Monday 13:30            Now
+  ----------------------- ----------------------- -----------------------
+  Top-level menus         4                       12
+
+  Preferences pages       4 groups in one dialog  12 pages
+
+  Panes                   24                      25 (Compare)
+
+  Automated suites        101, all green          108, all green
+
+  Core text-engine        ---                     214 checks in 7
+  batteries (compare,                             batteries
+  versions, normalize,                            
+  patch, Word redline,                            
+  zip, file walk)                                 
+
+  App self-test checks    ---                     670
+
+  Analysis-suite features 0                       6 of batch 4 (all)
+  shipped                                         
+
+  Headwords whose         763                     0
+  renderings were out of                          
+  frequency order                                 
+  -----------------------------------------------------------------------
 
 ## Open questions for leadership
 
@@ -155,10 +262,20 @@ runner.](img/2026-09-09/chart-numbers.png)
     spacing rules, so I can set the defaults.
 6.  **New:** I will ask Geshe Michael what he wants from the research
     suite before it is designed in detail.
+7.  **New:** the house convention for the double shad (`,,` or `, ,` in
+    ACIP; `།།` or `༎` in Tibetan script) and the space before a shad ---
+    until ruled, Normalize leaves both alone.
+8.  **New:** whether canonical library texts may be rewritten in bulk by
+    Replace in Files (today: only with an explicit switch, and every
+    such file is badged and counted).
+9.  **New:** a Word verification of the tracked-changes export --- ten
+    minutes with a sample in Microsoft Word --- before it appears in the
+    menus.
 
 ## Next
 
-Press a fresh build; resume the pane-by-pane audit at the Overlay's
-Document box; begin the first follow-on compare batch (document
-Versions, Replace in Files with preview, Apply Patch); finish the Map
-pane study.
+Finish Apply Patch and the Word redline (engines under test); press a
+fresh build with the whole batch and relaunch it on the desktop; clear
+the twelve release-audit items that still need a ruling; then the Map
+pane study and the second analysis batch (repeated passages, collation
+of many witnesses, the citation and reference bank).
