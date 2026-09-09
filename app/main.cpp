@@ -17,6 +17,7 @@
 #include <QListView>
 #include <QScrollArea>
 #include <QShortcut>
+#include <QTextCharFormat>
 #include <QKeyEvent>
 #include <QStringListModel>
 #include <QCompleter>
@@ -4271,146 +4272,380 @@ inline void insertPlain(QWidget* w, const QString& text) {
     else if (auto* t = qobject_cast<QTextEdit*>(w)) t->insertPlainText(text);
     else if (auto* l = qobject_cast<QLineEdit*>(w)) l->insert(text);
 }
-// Find in the editor, wrapping around once. Returns whether it landed.
-inline bool findIn(QWidget* w, const QString& needle, bool backward, bool caseSensitive) {
-    if (needle.isEmpty()) return false;
+// ---- Search (Sublime semantics, Adam 2026-09-08): one pattern, one
+// editor, options regex · case · whole word · wrap · in selection;
+// Find All highlights and counts; replace can preserve case. Every
+// function here is pure with respect to the UI so the selftests drive
+// them directly; the bar below is a thin skin.
+struct FindOpts {
+    bool regex = false, caseSensitive = false, wholeWord = false, wrap = true;
+    bool inSelection = false;
+    int selStart = -1, selEnd = -1;   // the range when inSelection
+    bool preserveCase = false;
+};
+inline QRegularExpression patternFor(const QString& needle, const FindOpts& o) {
+    QString pat = o.regex ? needle : QRegularExpression::escape(needle);
+    if (o.wholeWord) pat = "\\b(?:" + pat + ")\\b";
+    QRegularExpression re(pat, o.caseSensitive ? QRegularExpression::NoPatternOption
+                                               : QRegularExpression::CaseInsensitiveOption);
+    return re;
+}
+template <class Ed>
+inline bool findInEditor(Ed* ed, const QString& needle, bool backward, const FindOpts& o) {
+    const QRegularExpression re = patternFor(needle, o);
+    if (!re.isValid() || needle.isEmpty()) return false;
+    QTextDocument* d = ed->document();
     QTextDocument::FindFlags fl;
     if (backward) fl |= QTextDocument::FindBackward;
-    if (caseSensitive) fl |= QTextDocument::FindCaseSensitively;
-    auto tryFind = [&](auto* ed) {
-        if (ed->find(needle, fl)) return true;
-        QTextCursor c = ed->textCursor();
-        c.movePosition(backward ? QTextCursor::End : QTextCursor::Start);
-        ed->setTextCursor(c);
-        return ed->find(needle, fl);
-    };
-    if (auto* e = qobject_cast<QPlainTextEdit*>(w)) return tryFind(e);
-    if (auto* t = qobject_cast<QTextEdit*>(w)) return tryFind(t);
+    const int lo = o.inSelection ? o.selStart : 0;
+    const int hi = o.inSelection ? o.selEnd : d->characterCount();
+    QTextCursor cur = ed->textCursor();
+    int from = backward ? std::min(cur.selectionStart(), hi) : std::max(cur.selectionEnd(), lo);
+    auto within = [&](const QTextCursor& c) { return !c.isNull() && c.selectionStart() >= lo && c.selectionEnd() <= hi; };
+    QTextCursor hit = d->find(re, from, fl);
+    if (!within(hit) && o.wrap) {
+        hit = d->find(re, backward ? hi : lo, fl);
+    }
+    if (!within(hit)) return false;
+    ed->setTextCursor(hit);
+    return true;
+}
+inline bool findIn(QWidget* w, const QString& needle, bool backward, const FindOpts& o) {
+    if (auto* e = qobject_cast<QPlainTextEdit*>(w)) return findInEditor(e, needle, backward, o);
+    if (auto* t = qobject_cast<QTextEdit*>(w)) return findInEditor(t, needle, backward, o);
     if (auto* l = qobject_cast<QLineEdit*>(w)) {
-        const int from = backward ? l->cursorPosition() - 1 : l->cursorPosition();
-        int at = backward ? l->text().lastIndexOf(needle, from < 0 ? -1 : from, caseSensitive ? Qt::CaseSensitive : Qt::CaseInsensitive)
-                          : l->text().indexOf(needle, from, caseSensitive ? Qt::CaseSensitive : Qt::CaseInsensitive);
-        if (at < 0) at = backward ? l->text().lastIndexOf(needle, -1, caseSensitive ? Qt::CaseSensitive : Qt::CaseInsensitive)
-                                  : l->text().indexOf(needle, 0, caseSensitive ? Qt::CaseSensitive : Qt::CaseInsensitive);
+        const QRegularExpression re = patternFor(needle, o);
+        if (!re.isValid() || needle.isEmpty()) return false;
+        const QString t = l->text();
+        int at = -1, len = 0;
+        if (!backward) {
+            auto m = re.match(t, l->cursorPosition());
+            if (!m.hasMatch() && o.wrap) m = re.match(t, 0);
+            if (m.hasMatch()) { at = m.capturedStart(); len = m.capturedLength(); }
+        } else {
+            auto it = re.globalMatch(t);
+            const int before = l->hasSelectedText() ? l->selectionStart() : l->cursorPosition();
+            int last = -1, lastLen = 0, any = -1, anyLen = 0;
+            while (it.hasNext()) { auto m = it.next(); any = m.capturedStart(); anyLen = m.capturedLength();
+                                    if (m.capturedStart() < before) { last = m.capturedStart(); lastLen = m.capturedLength(); } }
+            if (last >= 0) { at = last; len = lastLen; } else if (o.wrap) { at = any; len = anyLen; }
+        }
         if (at < 0) return false;
-        l->setSelection(at, needle.size());
+        l->setSelection(at, len);
         return true;
     }
     return false;
 }
-// Replace the current selection if it IS the needle, then find the next.
-inline bool replaceOne(QWidget* w, const QString& needle, const QString& with, bool caseSensitive) {
-    auto sel = [&](auto* ed) -> bool {
-        QTextCursor c = ed->textCursor();
-        if (c.hasSelection() && QString::compare(c.selectedText(), needle,
-                                                 caseSensitive ? Qt::CaseSensitive : Qt::CaseInsensitive) == 0) {
-            c.insertText(with);
-            ed->setTextCursor(c);
-            return true;
-        }
-        return false;
+// Backwards-compatible convenience (the older menu wiring used it).
+inline bool findIn(QWidget* w, const QString& needle, bool backward, bool caseSensitive) {
+    FindOpts o; o.caseSensitive = caseSensitive; return findIn(w, needle, backward, o);
+}
+// Every match, as cursors — the basis of Find All / Quick Find All.
+inline QList<QTextCursor> allMatches(QTextDocument* d, const QString& needle, const FindOpts& o) {
+    QList<QTextCursor> out;
+    const QRegularExpression re = patternFor(needle, o);
+    if (!re.isValid() || needle.isEmpty()) return out;
+    const int lo = o.inSelection ? o.selStart : 0;
+    const int hi = o.inSelection ? o.selEnd : d->characterCount();
+    QTextCursor c = d->find(re, lo);
+    while (!c.isNull() && c.selectionEnd() <= hi) {
+        out << c;
+        if (c.selectionEnd() == c.selectionStart()) break;   // zero-width: stop
+        c = d->find(re, c.selectionEnd());
+    }
+    return out;
+}
+inline int highlightAll(QWidget* w, const QString& needle, const FindOpts& o) {
+    QTextCharFormat fmt;
+    fmt.setBackground(QColor(0xFF, 0xE0, 0x80, 0xA0));
+    auto apply = [&](auto* ed) -> int {
+        const auto ms = allMatches(ed->document(), needle, o);
+        QList<QTextEdit::ExtraSelection> xs;
+        for (const QTextCursor& c : ms) { QTextEdit::ExtraSelection x; x.cursor = c; x.format = fmt; xs << x; }
+        ed->setExtraSelections(xs);
+        return int(ms.size());
     };
+    if (auto* e = qobject_cast<QPlainTextEdit*>(w)) return apply(e);
+    if (auto* t = qobject_cast<QTextEdit*>(w)) return apply(t);
+    return 0;
+}
+inline void clearHighlight(QWidget* w) {
+    if (auto* e = qobject_cast<QPlainTextEdit*>(w)) e->setExtraSelections({});
+    else if (auto* t = qobject_cast<QTextEdit*>(w)) t->setExtraSelections({});
+}
+// Preserve case: shape the replacement after the matched text —
+// ALL CAPS → ALL CAPS, Capitalised → Capitalised, else as typed.
+inline QString shapeCase(const QString& matched, const QString& with) {
+    if (matched.isEmpty() || with.isEmpty()) return with;
+    bool anyLetter = false, allUpper = true;
+    for (QChar c : matched) if (c.isLetter()) { anyLetter = true; if (!c.isUpper()) allUpper = false; }
+    if (anyLetter && allUpper && matched.size() > 1) return with.toUpper();
+    if (matched.at(0).isUpper()) { QString r = with; r[0] = r.at(0).toUpper(); return r; }
+    return with;
+}
+inline QString expandReplacement(const QRegularExpressionMatch& m, const QString& with, bool regex) {
+    if (!regex) return with;
+    QString out; out.reserve(with.size());
+    for (int i = 0; i < with.size(); ++i) {
+        if (with.at(i) == '$' && i + 1 < with.size() && with.at(i + 1).isDigit()) {
+            int j = i + 1, n = 0;
+            while (j < with.size() && with.at(j).isDigit()) { n = n * 10 + with.at(j).digitValue(); ++j; }
+            out += m.captured(n); i = j - 1;
+        } else if (with.at(i) == '\\' && i + 1 < with.size()) {
+            const QChar e = with.at(i + 1);
+            out += e == 'n' ? QString("\n") : e == 't' ? QString("\t") : QString(e);
+            ++i;
+        } else out += with.at(i);
+    }
+    return out;
+}
+template <class Ed>
+inline bool replaceCurrentIn(Ed* ed, const QString& needle, const QString& with, const FindOpts& o) {
+    QTextCursor c = ed->textCursor();
+    if (!c.hasSelection()) return false;
+    const QRegularExpression re = patternFor(needle, o);
+    auto m = re.match(c.selectedText());
+    if (!m.hasMatch() || m.capturedStart() != 0 || m.capturedLength() != c.selectedText().size()) return false;
+    QString r = expandReplacement(m, with, o.regex);
+    if (o.preserveCase) r = shapeCase(c.selectedText(), r);
+    c.insertText(r);
+    ed->setTextCursor(c);
+    return true;
+}
+// Replace Next: replace the current hit (if it is one) then find next.
+inline bool replaceOne(QWidget* w, const QString& needle, const QString& with, const FindOpts& o) {
     bool did = false;
-    if (auto* e = qobject_cast<QPlainTextEdit*>(w)) did = sel(e);
-    else if (auto* t = qobject_cast<QTextEdit*>(w)) did = sel(t);
-    findIn(w, needle, false, caseSensitive);
+    if (auto* e = qobject_cast<QPlainTextEdit*>(w)) did = replaceCurrentIn(e, needle, with, o);
+    else if (auto* t = qobject_cast<QTextEdit*>(w)) did = replaceCurrentIn(t, needle, with, o);
+    findIn(w, needle, false, o);
     return did;
 }
-// Replace every occurrence; returns the count. One undo step.
-inline int replaceAll(QWidget* w, const QString& needle, const QString& with, bool caseSensitive) {
-    if (needle.isEmpty()) return 0;
+inline bool replaceOne(QWidget* w, const QString& needle, const QString& with, bool caseSensitive) {
+    FindOpts o; o.caseSensitive = caseSensitive; return replaceOne(w, needle, with, o);
+}
+// Replace All in one undo step; returns the count.
+inline int replaceAll(QWidget* w, const QString& needle, const QString& with, const FindOpts& o) {
     auto run = [&](auto* ed) -> int {
-        QTextDocument* d = ed->document();
-        QTextDocument::FindFlags fl;
-        if (caseSensitive) fl |= QTextDocument::FindCaseSensitively;
-        int n = 0;
-        QTextCursor c(d);
-        c.beginEditBlock();
-        QTextCursor hit = d->find(needle, 0, fl);
-        while (!hit.isNull()) {
-            hit.insertText(with);
-            ++n;
-            hit = d->find(needle, hit.position(), fl);
+        const auto ms = allMatches(ed->document(), needle, o);
+        if (ms.isEmpty()) return 0;
+        const QRegularExpression re = patternFor(needle, o);
+        QTextCursor edit(ed->document());
+        edit.beginEditBlock();
+        for (int i = ms.size() - 1; i >= 0; --i) {   // back to front keeps positions valid
+            QTextCursor c = ms[i];
+            auto m = re.match(c.selectedText());
+            QString r = expandReplacement(m, with, o.regex);
+            if (o.preserveCase) r = shapeCase(c.selectedText(), r);
+            c.insertText(r);
         }
-        c.endEditBlock();
-        return n;
+        edit.endEditBlock();
+        return int(ms.size());
     };
     if (auto* e = qobject_cast<QPlainTextEdit*>(w)) return run(e);
     if (auto* t = qobject_cast<QTextEdit*>(w)) return run(t);
     if (auto* l = qobject_cast<QLineEdit*>(w)) {
-        const int n = l->text().count(needle, caseSensitive ? Qt::CaseSensitive : Qt::CaseInsensitive);
-        l->setText(QString(l->text()).replace(needle, with, caseSensitive ? Qt::CaseSensitive : Qt::CaseInsensitive));
+        const QRegularExpression re = patternFor(needle, o);
+        if (!re.isValid()) return 0;
+        const int n = int(l->text().count(re));
+        l->setText(QString(l->text()).replace(re, o.regex ? QString(with).replace(QRegularExpression("\\$(\\d)"), "\\\\1") : with));
         return n;
     }
     return 0;
 }
-// The Find & Replace bar: non-modal, one per window, bound to the
-// editor that had focus when it was opened (shown in its title).
+inline int replaceAll(QWidget* w, const QString& needle, const QString& with, bool caseSensitive) {
+    FindOpts o; o.caseSensitive = caseSensitive; return replaceAll(w, needle, with, o);
+}
+// Word under the caret (for Quick Find), or the selection if any.
+inline QString wordUnderCaret(QWidget* w) {
+    auto grab = [](auto* ed) -> QString {
+        QTextCursor c = ed->textCursor();
+        if (c.hasSelection()) return c.selectedText();
+        c.select(QTextCursor::WordUnderCursor);
+        ed->setTextCursor(c);
+        return c.selectedText();
+    };
+    if (auto* e = qobject_cast<QPlainTextEdit*>(w)) return grab(e);
+    if (auto* t = qobject_cast<QTextEdit*>(w)) return grab(t);
+    if (auto* l = qobject_cast<QLineEdit*>(w)) return l->hasSelectedText() ? l->selectedText() : QString();
+    return {};
+}
+inline QString selectedText(QWidget* w) {
+    if (auto* e = qobject_cast<QPlainTextEdit*>(w)) return e->textCursor().selectedText();
+    if (auto* t = qobject_cast<QTextEdit*>(w)) return t->textCursor().selectedText();
+    if (auto* l = qobject_cast<QLineEdit*>(w)) return l->selectedText();
+    return {};
+}
+// The Find bar. Non-modal Tool window; incremental mode selects as you
+// type and Return keeps the hit while Esc restores where you were.
 class FindDialog : public QDialog {
 public:
     explicit FindDialog(QWidget* parent) : QDialog(parent) {
         setWindowTitle("Find");
         setWindowFlag(Qt::Tool);
-        auto* f = new QFormLayout(this);
-        find_ = new QLineEdit;
-        replace_ = new QLineEdit;
-        case_ = new QCheckBox("Match case");
+        auto* v = new QVBoxLayout(this);
+        auto* f = new QFormLayout;
+        find_ = new QComboBox; find_->setEditable(true); find_->setInsertPolicy(QComboBox::NoInsert);
+        replace_ = new QComboBox; replace_->setEditable(true); replace_->setInsertPolicy(QComboBox::NoInsert);
+        find_->lineEdit()->setPlaceholderText("pattern");
+        replace_->lineEdit()->setPlaceholderText("replacement ($1 with regex)");
         target_ = new QLabel;
         f->addRow("Find:", find_);
-        f->addRow("Replace with:", replace_);
-        f->addRow("", case_);
+        f->addRow("Replace:", replace_);
         f->addRow("In:", target_);
+        v->addLayout(f);
+        auto* tg = new QHBoxLayout;
+        regex_ = new QCheckBox(".* regex");  case_ = new QCheckBox("Aa case");
+        word_ = new QCheckBox("“ab” whole word"); wrap_ = new QCheckBox("wrap"); wrap_->setChecked(true);
+        insel_ = new QCheckBox("in selection"); hl_ = new QCheckBox("highlight all"); hl_->setChecked(true);
+        pc_ = new QCheckBox("preserve case");
+        for (QCheckBox* c : {regex_, case_, word_, wrap_, insel_, hl_, pc_}) tg->addWidget(c);
+        v->addLayout(tg);
         auto* row = new QHBoxLayout;
-        auto* prev = new QPushButton("Previous");
-        auto* next = new QPushButton("Next");
+        auto* prev = new QPushButton("Find Previous");
+        auto* next = new QPushButton("Find Next");
+        auto* all = new QPushButton("Find All");
         auto* rep = new QPushButton("Replace");
-        auto* all = new QPushButton("Replace All");
+        auto* repAll = new QPushButton("Replace All");
         next->setDefault(true);
-        row->addWidget(prev); row->addWidget(next); row->addStretch(1);
-        row->addWidget(rep); row->addWidget(all);
-        f->addRow(row);
+        for (QPushButton* b : {prev, next, all}) row->addWidget(b);
+        row->addStretch(1);
+        row->addWidget(rep); row->addWidget(repAll);
+        v->addLayout(row);
         status_ = new QLabel;
-        f->addRow(status_);
+        v->addWidget(status_);
         connect(next, &QPushButton::clicked, this, [this] { step(false); });
         connect(prev, &QPushButton::clicked, this, [this] { step(true); });
-        connect(find_, &QLineEdit::returnPressed, this, [this] { step(false); });
-        connect(rep, &QPushButton::clicked, this, [this] {
-            if (!editor_) return;
-            replaceOne(editor_, find_->text(), replace_->text(), case_->isChecked());
+        connect(all, &QPushButton::clicked, this, [this] { findAll(); });
+        connect(rep, &QPushButton::clicked, this, [this] { replaceNext(); });
+        connect(repAll, &QPushButton::clicked, this, [this] { replaceAllNow(); });
+        connect(find_->lineEdit(), &QLineEdit::returnPressed, this, [this] {
+            if (incremental_) { remember(); hide(); return; }
+            step(false);
         });
-        connect(all, &QPushButton::clicked, this, [this] {
+        connect(find_->lineEdit(), &QLineEdit::textEdited, this, [this] {
             if (!editor_) return;
-            const int n = replaceAll(editor_, find_->text(), replace_->text(), case_->isChecked());
-            status_->setText(QString("%1 replaced").arg(n));
+            if (incremental_) {
+                restoreOrigin();
+                findIn(editor_, needle(), false, opts());
+            }
+            if (hl_->isChecked()) refreshHighlight();
         });
+        connect(hl_, &QCheckBox::toggled, this, [this](bool on) { if (on) refreshHighlight(); else if (editor_) clearHighlight(editor_); });
+        for (QCheckBox* c : {regex_, case_, word_, insel_}) connect(c, &QCheckBox::toggled, this, [this] { refreshHighlight(); });
+        QSettings st("ALL", "TranslationTool");
+        find_->addItems(st.value("find/history").toStringList());
+        replace_->addItems(st.value("find/replaceHistory").toStringList());
+        find_->setCurrentText("");
+        replace_->setCurrentText("");
     }
-    void bind(QWidget* editor, bool replaceMode) {
+    FindOpts opts() const {
+        FindOpts o;
+        o.regex = regex_->isChecked(); o.caseSensitive = case_->isChecked();
+        o.wholeWord = word_->isChecked(); o.wrap = wrap_->isChecked();
+        o.inSelection = insel_->isChecked() && selStart_ >= 0;
+        o.selStart = selStart_; o.selEnd = selEnd_;
+        o.preserveCase = pc_->isChecked();
+        return o;
+    }
+    void bind(QWidget* editor, int mode /*0 find, 1 replace, 2 incremental*/) {
         editor_ = editor;
+        incremental_ = mode == 2;
         target_->setText(editor ? (editor->accessibleName().isEmpty() ? editor->metaObject()->className() : editor->accessibleName())
                                 : "(no text field has focus)");
-        setWindowTitle(replaceMode ? "Find and Replace" : "Find");
+        setWindowTitle(mode == 1 ? "Find and Replace" : mode == 2 ? "Incremental Find" : "Find");
+        selStart_ = selEnd_ = -1;
         if (editor) {
-            if (auto* e = qobject_cast<QPlainTextEdit*>(editor)) { if (e->textCursor().hasSelection()) find_->setText(e->textCursor().selectedText()); }
-            else if (auto* t = qobject_cast<QTextEdit*>(editor)) { if (t->textCursor().hasSelection()) find_->setText(t->textCursor().selectedText()); }
+            const QString sel = selectedText(editor);
+            if (!sel.isEmpty() && !sel.contains(QChar::ParagraphSeparator)) find_->setCurrentText(sel);
+            if (sel.contains(QChar::ParagraphSeparator)) {   // a multi-line selection → search inside it
+                if (auto* e = qobject_cast<QPlainTextEdit*>(editor)) { selStart_ = e->textCursor().selectionStart(); selEnd_ = e->textCursor().selectionEnd(); }
+                else if (auto* t = qobject_cast<QTextEdit*>(editor)) { selStart_ = t->textCursor().selectionStart(); selEnd_ = t->textCursor().selectionEnd(); }
+                insel_->setChecked(true);
+            }
+            if (auto* e = qobject_cast<QPlainTextEdit*>(editor)) originPos_ = e->textCursor().position();
+            else if (auto* t = qobject_cast<QTextEdit*>(editor)) originPos_ = t->textCursor().position();
         }
         show(); raise(); activateWindow();
-        (replaceMode ? replace_ : find_)->setFocus();
-        find_->selectAll();
+        (mode == 1 ? replace_ : find_)->setFocus();
+        find_->lineEdit()->selectAll();
+        if (hl_->isChecked()) refreshHighlight();
     }
     void step(bool backward) {
         if (!editor_) { status_->setText("Click into a text field first."); return; }
-        const bool hit = findIn(editor_, find_->text(), backward, case_->isChecked());
+        remember();
+        const bool hit = findIn(editor_, needle(), backward, opts());
         status_->setText(hit ? QString() : "Not found");
+        if (hl_->isChecked()) refreshHighlight();
     }
-    QString needle() const { return find_->text(); }
-    bool caseSensitive() const { return case_->isChecked(); }
+    void findAll() {
+        if (!editor_) return;
+        remember();
+        hl_->setChecked(true);
+        const int n = highlightAll(editor_, needle(), opts());
+        status_->setText(QString("%1 match(es)").arg(n));
+    }
+    void replaceNext() {
+        if (!editor_) return;
+        remember();
+        const bool did = replaceOne(editor_, needle(), replace_->currentText(), opts());
+        status_->setText(did ? "Replaced 1" : "Current selection is not a match");
+        refreshHighlight();
+    }
+    void replaceAllNow() {
+        if (!editor_) return;
+        remember();
+        const int n = replaceAll(editor_, needle(), replace_->currentText(), opts());
+        status_->setText(QString("%1 replaced").arg(n));
+        refreshHighlight();
+    }
+    void refreshHighlight() {
+        if (!editor_) return;
+        if (hl_->isChecked()) status_->setText(QString("%1 match(es)").arg(highlightAll(editor_, needle(), opts())));
+    }
+    void restoreOrigin() {
+        if (!editor_ || originPos_ < 0) return;
+        if (auto* e = qobject_cast<QPlainTextEdit*>(editor_)) { QTextCursor c = e->textCursor(); c.setPosition(originPos_); e->setTextCursor(c); }
+        else if (auto* t = qobject_cast<QTextEdit*>(editor_)) { QTextCursor c = t->textCursor(); c.setPosition(originPos_); t->setTextCursor(c); }
+    }
+    void keyPressEvent(QKeyEvent* ev) override {
+        if (ev->key() == Qt::Key_Escape) {
+            if (incremental_) restoreOrigin();
+            if (editor_) clearHighlight(editor_);
+            hide();
+            return;
+        }
+        QDialog::keyPressEvent(ev);
+    }
+    void remember() {
+        QSettings st("ALL", "TranslationTool");
+        auto push = [&](QComboBox* cb, const char* key) {
+            const QString v = cb->currentText();
+            if (v.isEmpty()) return;
+            QStringList h = st.value(key).toStringList();
+            h.removeAll(v); h.prepend(v);
+            while (h.size() > 20) h.removeLast();
+            st.setValue(key, h);
+            cb->clear(); cb->addItems(h); cb->setCurrentText(v);
+        };
+        push(find_, "find/history");
+        push(replace_, "find/replaceHistory");
+        lastNeedle_ = needle();
+    }
+    QString needle() const { return find_->currentText(); }
+    void setNeedle(const QString& n) { find_->setCurrentText(n); }
+    void setReplacement(const QString& r) { replace_->setCurrentText(r); }
+    QString lastNeedle() const { return lastNeedle_; }
     QPointer<QWidget> editor_;
 private:
-    QLineEdit* find_ = nullptr;
-    QLineEdit* replace_ = nullptr;
-    QCheckBox* case_ = nullptr;
+    QComboBox* find_ = nullptr;
+    QComboBox* replace_ = nullptr;
+    QCheckBox *regex_ = nullptr, *case_ = nullptr, *word_ = nullptr, *wrap_ = nullptr, *insel_ = nullptr, *hl_ = nullptr, *pc_ = nullptr;
     QLabel* target_ = nullptr;
     QLabel* status_ = nullptr;
+    bool incremental_ = false;
+    int originPos_ = -1;
+    int selStart_ = -1, selEnd_ = -1;
+    QString lastNeedle_;
 };
 }  // namespace editops
 
@@ -7306,6 +7541,41 @@ public:
                   "Paste Special converts clipboard text between ACIP, Wylie and Tibetan script");
             const QString back = editops::convertText(u, editops::Script::Acip, &ok);
             check(ok && back.trimmed() == "SEMS CAN", "Paste Special recognises Tibetan script by its Unicode block and round-trips to ACIP");
+            // Sublime semantics: regex, whole word, case, in-selection, Find All, preserve case
+            input_->setPlainText("@001A *, ,SEMS CAN,, ,SEMS PA,, CANDA sems");
+            editops::FindOpts o;
+            QTextCursor c1 = input_->textCursor(); c1.movePosition(QTextCursor::Start); input_->setTextCursor(c1);
+            o.regex = true; o.caseSensitive = true;
+            check(editops::findIn(input_, "S.MS", false, o) && input_->textCursor().selectedText() == "SEMS",
+                  "regex find matches S.MS");
+            o = editops::FindOpts(); o.wholeWord = true; o.caseSensitive = true;
+            check(editops::allMatches(input_->document(), "CAN", o).size() == 1,
+                  "whole-word find skips CANDA");
+            o = editops::FindOpts(); o.caseSensitive = false;
+            check(editops::allMatches(input_->document(), "sems", o).size() == 3,
+                  "case-insensitive find counts SEMS and sems");
+            o = editops::FindOpts(); o.caseSensitive = true; o.inSelection = true; o.selStart = 0; o.selEnd = 20;
+            check(editops::allMatches(input_->document(), "SEMS", o).size() == 1,
+                  "in-selection find stays inside the range");
+            o = editops::FindOpts(); o.caseSensitive = false;
+            check(editops::highlightAll(input_, "sems", o) == 3 && input_->extraSelections().size() == 3,
+                  "Find All highlights every match and reports the count");
+            editops::clearHighlight(input_);
+            check(input_->extraSelections().isEmpty(), "Esc clears the highlights");
+            o = editops::FindOpts(); o.caseSensitive = false; o.preserveCase = true;
+            const int nrep = editops::replaceAll(input_, "sems", "mind", o);
+            check(nrep == 3 && input_->toPlainText() == "@001A *, ,MIND CAN,, ,MIND PA,, CANDA mind",
+                  "preserve-case replace shapes MIND / mind after the match");
+            input_->undo();
+            o = editops::FindOpts(); o.regex = true; o.caseSensitive = true;
+            check(editops::replaceAll(input_, "(SEMS) (CAN|PA)", "$2-$1", o) == 2 &&
+                      input_->toPlainText().contains("CAN-SEMS") && input_->toPlainText().contains("PA-SEMS"),
+                  "regex replace expands $1/$2 groups");
+            input_->undo();
+            QTextCursor c2 = input_->textCursor(); c2.setPosition(11); input_->setTextCursor(c2);   // inside SEMS
+            check(editops::wordUnderCaret(input_) == "SEMS", "Quick Find takes the word under the caret");
+            check(editops::shapeCase("SEMS", "mind") == "MIND" && editops::shapeCase("Sems", "mind") == "Mind" && editops::shapeCase("sems", "Mind") == "Mind",
+                  "case shaping: ALL CAPS, Capitalised, as typed");
             input_->setPlainText(keepText);
         }
         return fails;
@@ -17101,6 +17371,14 @@ private:
 
 class GoferPane : public QWidget {
 public:
+    // Find in Files (Sublime's ⇧⌘F, 2026-09-08): the Search pane IS our
+    // find-in-files — seed the first term box and run.
+    void searchFor(const QString& q) {
+        if (!fields_[0]) return;
+        fields_[0]->setText(q);
+        find();
+    }
+
     GoferPane(allcore::Spine& spine, const QString& root)
         : spine_(spine), root_(root) {
         auto* outer = new QVBoxLayout(this);
@@ -38437,35 +38715,11 @@ int main(int argc, char** argv) {
         add("Select All", QKeySequence(),
             [](auto* w) { w->selectAll(); });
         edit->addSeparator();
-        // Find ▸ — an in-document find for the focused text; Hunt (⌘K)
-        // remains the cross-corpus search. Focus is remembered because
-        // the menu itself takes focus before the action fires.
-        {
-            QObject::connect(qApp, &QApplication::focusChanged, [](QWidget*, QWidget* now) {
-                if (now && editops::isEditor(now)) editops::lastEditor() = now;
-            });
-            auto* findDlg = new editops::FindDialog(&win);
-            QMenu* fm = edit->addMenu("Find");
-            QAction* fa = fm->addAction("Find\u2026");
-            fa->setShortcut(QKeySequence::Find);   // ⌘F
-            QObject::connect(fa, &QAction::triggered, [findDlg] { findDlg->bind(editops::lastEditor(), false); });
-            QAction* fn = fm->addAction("Find Next");
-            fn->setShortcut(QKeySequence::FindNext);   // ⌘G
-            QObject::connect(fn, &QAction::triggered, [findDlg] {
-                if (findDlg->needle().isEmpty()) { findDlg->bind(editops::lastEditor(), false); return; }
-                if (!findDlg->editor_) findDlg->editor_ = editops::lastEditor();
-                findDlg->step(false);
-            });
-            QAction* fp = fm->addAction("Find Previous");
-            fp->setShortcut(QKeySequence::FindPrevious);   // ⇧⌘G
-            QObject::connect(fp, &QAction::triggered, [findDlg] {
-                if (!findDlg->editor_) findDlg->editor_ = editops::lastEditor();
-                findDlg->step(true);
-            });
-            QAction* ra = fm->addAction("Replace\u2026");
-            ra->setShortcut(QKeySequence("Ctrl+Alt+F"));
-            QObject::connect(ra, &QAction::triggered, [findDlg] { findDlg->bind(editops::lastEditor(), true); });
-        }
+        // (focus tracking for the Find menu — the menu takes focus before
+        // its action fires, so the last text editor is remembered)
+        QObject::connect(qApp, &QApplication::focusChanged, [](QWidget*, QWidget* now) {
+            if (now && editops::isEditor(now)) editops::lastEditor() = now;
+        });
     }
     // UX audit M5: keyboard-first — group switching and in-group
     // pane stepping without the mouse
@@ -38695,6 +38949,87 @@ int main(int argc, char** argv) {
                 });
             qatPin->setMenu(pinMenu);
         }
+    // ---- Find menu (Sublime's, Adam 2026-09-08). Hunt ⌘K stays the
+    // cross-corpus search; Find in Files is the Search pane with the
+    // query seeded; Quick Find All highlights (one selection in Qt).
+    {
+        QMenu* fmenu = win.menuBar()->addMenu("Find");
+        auto* findDlg = new editops::FindDialog(&win);
+        auto ed = [] { return editops::lastEditor().data(); };
+        auto act = [&](const QString& name, const QKeySequence& ks, auto fn) {
+            QAction* a = fmenu->addAction(name);
+            if (!ks.isEmpty()) a->setShortcut(ks);
+            QObject::connect(a, &QAction::triggered, fn);
+            return a;
+        };
+        act("Find\u2026", QKeySequence::Find, [findDlg, ed] { findDlg->bind(ed(), 0); });
+        act("Find Next", QKeySequence::FindNext, [findDlg, ed] {
+            if (!findDlg->editor_) findDlg->editor_ = ed();
+            if (findDlg->needle().isEmpty()) { findDlg->bind(ed(), 0); return; }
+            findDlg->step(false);
+        });
+        act("Find Previous", QKeySequence::FindPrevious, [findDlg, ed] {
+            if (!findDlg->editor_) findDlg->editor_ = ed();
+            findDlg->step(true);
+        });
+        act("Incremental Find", QKeySequence("Ctrl+I"), [findDlg, ed] { findDlg->bind(ed(), 2); });
+        fmenu->addSeparator();
+        act("Replace\u2026", QKeySequence("Ctrl+Alt+F"), [findDlg, ed] { findDlg->bind(ed(), 1); });
+        act("Replace Next", QKeySequence("Ctrl+Alt+E"), [findDlg, ed] {
+            if (!findDlg->editor_) findDlg->editor_ = ed();
+            findDlg->replaceNext();
+        });
+        fmenu->addSeparator();
+        act("Quick Find", QKeySequence("Ctrl+Alt+G"), [findDlg, ed, &win] {
+            QWidget* w = ed(); if (!w) return;
+            const QString word = editops::wordUnderCaret(w);
+            if (word.isEmpty()) return;
+            findDlg->editor_ = w; findDlg->setNeedle(word);
+            editops::FindOpts o = findDlg->opts(); o.wholeWord = true;
+            const bool hit = editops::findIn(w, word, false, o);
+            win.statusBar()->showMessage(hit ? QString("Quick Find: %1").arg(word) : "Quick Find: no other occurrence", 3000);
+        });
+        act("Quick Find All", QKeySequence("Ctrl+Meta+G"), [findDlg, ed, &win] {
+            QWidget* w = ed(); if (!w) return;
+            const QString word = editops::wordUnderCaret(w);
+            if (word.isEmpty()) return;
+            findDlg->editor_ = w; findDlg->setNeedle(word);
+            editops::FindOpts o = findDlg->opts(); o.wholeWord = true;
+            const int n = editops::highlightAll(w, word, o);
+            win.statusBar()->showMessage(QString("%1 occurrence(s) of \u201C%2\u201D highlighted \u2014 Esc in Find clears").arg(n).arg(word), 6000);
+        });
+        fmenu->addSeparator();
+        act("Use Selection for Find", QKeySequence("Ctrl+E"), [findDlg, ed] {
+            QWidget* w = ed(); if (!w) return;
+            const QString sel = editops::selectedText(w);
+            if (!sel.isEmpty()) { findDlg->editor_ = w; findDlg->setNeedle(sel); }
+        });
+        act("Use Selection for Replace", QKeySequence("Ctrl+Shift+E"), [findDlg, ed] {
+            QWidget* w = ed(); if (!w) return;
+            const QString sel = editops::selectedText(w);
+            if (!sel.isEmpty()) findDlg->setReplacement(sel);
+        });
+        fmenu->addSeparator();
+        act("Find in Files\u2026", QKeySequence("Ctrl+Shift+F"), [findDlg, ed, goferPane] {
+            QWidget* w = ed();
+            QString q = w ? editops::selectedText(w) : QString();
+            if (q.isEmpty()) q = findDlg->needle();
+            if (g_raisePane) g_raisePane(goferPane);
+            goferPane->searchFor(q);
+        });
+        act("Find Results", QKeySequence(), [goferPane] { if (g_raisePane) g_raisePane(goferPane); });
+        fmenu->addSeparator();
+        auto seeded = [findDlg, ed, &win](const QString& pat, bool backward, const char* what) {
+            QWidget* w = ed(); if (!w || pat.isEmpty()) { win.statusBar()->showMessage(QString("%1: nothing to search for").arg(what), 3000); return; }
+            findDlg->editor_ = w; findDlg->setNeedle(pat);
+            const bool hit = editops::findIn(w, pat, backward, findDlg->opts());
+            win.statusBar()->showMessage(hit ? QString("%1: %2").arg(what, pat) : QString("%1: not found").arg(what), 3000);
+        };
+        act("Find selected next (last search)\u2026", QKeySequence("F3"), [findDlg, seeded] { seeded(findDlg->lastNeedle().isEmpty() ? findDlg->needle() : findDlg->lastNeedle(), false, "Find next"); });
+        act("Find selected previous (last search)\u2026", QKeySequence("Shift+F3"), [findDlg, seeded] { seeded(findDlg->lastNeedle().isEmpty() ? findDlg->needle() : findDlg->lastNeedle(), true, "Find previous"); });
+        act("Find selected next (clipboard)\u2026", QKeySequence("Ctrl+F3"), [seeded] { seeded(QApplication::clipboard()->text(), false, "Find clipboard"); });
+        act("Find selected previous (clipboard)\u2026", QKeySequence("Ctrl+Shift+F3"), [seeded] { seeded(QApplication::clipboard()->text(), true, "Find clipboard"); });
+    }
         QMenu* view = win.menuBar()->addMenu("View");
         {   // Adam's spec: the ribbon can show icons WITH the small
             // descriptions, or icons alone
@@ -41687,8 +42022,8 @@ int main(int argc, char** argv) {
             // 9l sits before the group menus — positional indexing
             // failed the day it landed)
             const auto menus = win.menuBar()->actions();
-            bool ok = menus.size() == tabs.count() + 4;   // File +
-                                                          // Edit +
+            bool ok = menus.size() == tabs.count() + 5;   // File +
+                                                          // Edit + Find +
                                                           // groups +
                                                           // View + Help
             int overlayActions = 0;

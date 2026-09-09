@@ -38,3 +38,5 @@ Categories: code · decision · email · release · audit · data · question.
 - 18:19 · decision · Sublime 'Selection' menu folded into the plan (batch 1d): expand family BUILD/ADAPT (to Folio, to Phrase), multi-caret items SKIP · Adam
 - 18:25 · code · File menu, Sublime additions: Reopen with Encoding / Save with Encoding (UTF-8/BOM/UTF-16/Windows-1252/MacRoman/Latin-1; never guesses), Save All ⌥⌘S, Print ⌘P, Revert File, Close All Files. 8 selftest checks; PrintSupport linked
 - 18:26 · decision · Sublime Find/View/Goto/Tools/Project/Window/Help menus folded into the menu plan with verdicts; Project = dossiers promoted; Goto Anything = Hunt · Adam
+- 18:33 · decision · Adam: order the TENTATIVE aligned equivalents on the card by attestation frequency, highest first, with counts shown (most-attested ≠ 'most probable' — label honestly) · Adam
+- 18:37 · code · Find menu (Sublime): Find/Next/Previous, Incremental ⌘I, Replace/Replace Next, Quick Find ⌥⌘G, Quick Find All ⌃⌘G (highlight+count), Use Selection for Find ⌘E / Replace ⇧⌘E, Find in Files ⇧⌘F → Search pane, F3 family; bar toggles regex/case/word/wrap/in-selection/highlight/preserve-case; 13 selftest checks
