@@ -70,3 +70,15 @@ in the `.docx` and the HTML render; the `.txt` carries the captions. The
 cover email attaches the `.docx` (images embedded) — inline images in the
 Gmail draft are not attempted. Build: `tools/build_digest.sh YYYY-MM-DD`
 (captures → charts → md/txt/docx/html).
+
+## Readability (Adam, 2026-09-08 late — standing format)
+Be hypercritical of readability. Every heading, paragraph, list and
+figure has air around it: nothing touches. In Word this comes from
+`tools/digest_reference.docx` (body 11 pt at 1.15 with 8 pt after each
+paragraph, list items 4 pt apart, headings with space before and after,
+figures and captions with 14 pt above and below; regenerate with
+`tools/make_digest_reference.py`); in the HTML from the stylesheet in
+`tools/build_digest.sh`. A figure always stands in its own paragraph with
+a blank line before and after it in the `.md`, and always has a caption
+that says what the reader is looking at. Check the built `.docx` before
+sending; if anything is cramped, fix the style, not the one document.

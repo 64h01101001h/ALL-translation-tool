@@ -53,7 +53,6 @@ static std::vector<std::pair<int, unsigned>> codepoints(const std::string& s) {
     }
     return v;
 }
-static bool isTibetanCp(unsigned cp) { return cp >= 0x0F00 && cp <= 0x0FFF; }
 static bool isTibetanPunctCp(unsigned cp) {
     return (cp >= 0x0F01 && cp <= 0x0F14) || (cp >= 0x0F3A && cp <= 0x0F3D) || cp == 0x0F85 || (cp >= 0x0FD0 && cp <= 0x0FD4);
 }
