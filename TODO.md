@@ -20,6 +20,34 @@ list before this sweep. Grouped by theme; each line says where it came from.
       2026-09-09. Adam reviews and sends; the draft to
       thepositiveword@gmail.com needs the first name filled in (the
       account shows only "Word Smith Wisdom")
+- [ ] **Editors beyond Utpala — contact Anatole and any other editor**
+      (Adam, 2026-09-09, back burner). Same purpose as the Utpala session:
+      their workflow start to finish, in their words, and what would make
+      the working day shorter. Notes:
+      · I could not find a contact address for Anatole in the mail I can
+        see, so Adam supplies it (spelling taken from him)
+      · reuse `docs/distribution/EDITOR_TOOL_INTERVIEW_UTPALA.md` as the
+        question set — it is already written for an editor and asks for
+        the workflow before it shows any feature
+      · this is also what corrects the shipped **Editing** workflow preset,
+        which today is a coarse guess at what an editor needs on screen
+      · nothing is sent from Adam's account without him: holds and drafts
+        only, as with Utpala and the translators
+- [ ] **The cataloguers — a session on their workflow**
+      (Adam, 2026-09-09, back burner). Same shape again: how a text moves
+      from arrival to catalogued, where the time actually goes, and what
+      the tool could take off their hands. Notes:
+      · there is already a standing "Thursday Database-Cataloging" meeting
+        (referenced in CLAUDE.md); that is the natural venue rather than a
+        new invitation, and Adam knows who attends
+      · the Catalog pane, the registrar and the catalogue-identity proposal
+        channel are the surfaces to walk them through, and the identity
+        proposals are the part where their judgement is already the
+        authority
+      · this corrects the shipped **Cataloguing** workflow preset the same
+        way the editor session corrects Editing
+      · write it up as `docs/CATALOGUER_WORKFLOW.md`, in their words, the
+        way the editor's session will produce `docs/EDITOR_WORKFLOW.md`
 - [ ] **One-on-one sessions with each Mixed Nuts translator** (Adam,
       2026-09-09: "a more intimate look at how they translate… more
       personal in sourcing the information"). Roster from Nick Lashaw's
