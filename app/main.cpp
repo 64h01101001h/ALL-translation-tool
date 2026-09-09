@@ -112,6 +112,9 @@ public:
 #include <QSpinBox>
 #include <QTime>
 #include <QStringDecoder>
+#include <QStringEncoder>
+#include <QPrinter>
+#include <QPrintDialog>
 #include <QTextBlock>
 #include <QDirIterator>
 #include <QActionGroup>
@@ -4411,6 +4414,95 @@ private:
 };
 }  // namespace editops
 
+// ---- Text encodings for legacy ACIP files (Sublime's File ▸ encodings,
+// Adam 2026-09-08). Qt 6 ships UTF-8/16/32 and Latin-1 only; Windows-1252
+// and MacRoman — the two an input centre actually hands us — are tables
+// here. Decoding never guesses: an undecodable byte becomes U+FFFD and is
+// COUNTED, and the count is shown; encoding refuses when a character has
+// no byte in the target (rule 3).
+namespace enc {
+inline QStringList names() {
+    return {"UTF-8", "UTF-8 with BOM", "UTF-16 LE", "UTF-16 BE", "Windows-1252", "MacRoman", "Latin-1"};
+}
+inline const char16_t* cp1252High() {   // 0x80–0x9F; 0 = undefined
+    static const char16_t t[32] = {0x20AC,0,0x201A,0x0192,0x201E,0x2026,0x2020,0x2021,0x02C6,0x2030,0x0160,0x2039,0x0152,0,0x017D,0,
+                                   0,0x2018,0x2019,0x201C,0x201D,0x2022,0x2013,0x2014,0x02DC,0x2122,0x0161,0x203A,0x0153,0,0x017E,0x0178};
+    return t;
+}
+inline const char16_t* macRomanHigh() {   // 0x80–0xFF
+    static const char16_t t[128] = {
+        0x00C4,0x00C5,0x00C7,0x00C9,0x00D1,0x00D6,0x00DC,0x00E1,0x00E0,0x00E2,0x00E4,0x00E3,0x00E5,0x00E7,0x00E9,0x00E8,
+        0x00EA,0x00EB,0x00ED,0x00EC,0x00EE,0x00EF,0x00F1,0x00F3,0x00F2,0x00F4,0x00F6,0x00F5,0x00FA,0x00F9,0x00FB,0x00FC,
+        0x2020,0x00B0,0x00A2,0x00A3,0x00A7,0x2022,0x00B6,0x00DF,0x00AE,0x00A9,0x2122,0x00B4,0x00A8,0x2260,0x00C6,0x00D8,
+        0x221E,0x00B1,0x2264,0x2265,0x00A5,0x00B5,0x2202,0x2211,0x220F,0x03C0,0x222B,0x00AA,0x00BA,0x03A9,0x00E6,0x00F8,
+        0x00BF,0x00A1,0x00AC,0x221A,0x0192,0x2248,0x2206,0x00AB,0x00BB,0x2026,0x00A0,0x00C0,0x00C3,0x00D5,0x0152,0x0153,
+        0x2013,0x2014,0x201C,0x201D,0x2018,0x2019,0x00F7,0x25CA,0x00FF,0x0178,0x2044,0x20AC,0x2039,0x203A,0xFB01,0xFB02,
+        0x2021,0x00B7,0x201A,0x201E,0x2030,0x00C2,0x00CA,0x00C1,0x00CB,0x00C8,0x00CD,0x00CE,0x00CF,0x00CC,0x00D3,0x00D4,
+        0xF8FF,0x00D2,0x00DA,0x00DB,0x00D9,0x0131,0x02C6,0x02DC,0x00AF,0x02D8,0x02D9,0x02DA,0x00B8,0x02DD,0x02DB,0x02C7};
+    return t;
+}
+inline QString decode(const QByteArray& bytes, const QString& name, int* bad) {
+    *bad = 0;
+    if (name == "Windows-1252" || name == "MacRoman") {
+        QString out; out.reserve(bytes.size());
+        for (unsigned char b : bytes) {
+            if (b < 0x80) { out.append(QChar(b)); continue; }
+            char16_t u = 0;
+            if (name == "MacRoman") u = macRomanHigh()[b - 0x80];
+            else u = (b < 0xA0) ? cp1252High()[b - 0x80] : char16_t(b);
+            if (!u) { u = 0xFFFD; ++*bad; }
+            out.append(QChar(u));
+        }
+        return out;
+    }
+    QStringConverter::Encoding e = QStringConverter::Utf8;
+    if (name == "UTF-16 LE") e = QStringConverter::Utf16LE;
+    else if (name == "UTF-16 BE") e = QStringConverter::Utf16BE;
+    else if (name == "Latin-1") e = QStringConverter::Latin1;
+    QStringDecoder dec(e);
+    QString out = dec.decode(bytes);
+    if (!out.isEmpty() && out.at(0) == QChar(0xFEFF)) out.remove(0, 1);
+    if (name == "UTF-8" || name == "UTF-8 with BOM")
+        *bad = int(out.count(QChar(0xFFFD)));
+    else if (dec.hasError())
+        *bad = 1;   // Qt reports failure, not a count
+    return out;
+}
+inline bool encode(const QString& text, const QString& name, QByteArray* out, int* unmappable) {
+    *unmappable = 0;
+    if (name == "Windows-1252" || name == "MacRoman") {
+        QByteArray b; b.reserve(text.size());
+        const char16_t* hi = name == "MacRoman" ? macRomanHigh() : cp1252High();
+        for (QChar c : text) {
+            const ushort u = c.unicode();
+            if (u < 0x80) { b.append(char(u)); continue; }
+            int found = -1;
+            if (name == "Windows-1252") {
+                if (u >= 0xA0 && u <= 0xFF) found = u;
+                else for (int i = 0; i < 32; ++i) if (hi[i] == u) { found = 0x80 + i; break; }
+            } else {
+                for (int i = 0; i < 128; ++i) if (hi[i] == u) { found = 0x80 + i; break; }
+            }
+            if (found < 0) { ++*unmappable; continue; }
+            b.append(char(found));
+        }
+        if (*unmappable) return false;
+        *out = b;
+        return true;
+    }
+    QStringConverter::Encoding e = QStringConverter::Utf8;
+    if (name == "UTF-16 LE") e = QStringConverter::Utf16LE;
+    else if (name == "UTF-16 BE") e = QStringConverter::Utf16BE;
+    else if (name == "Latin-1") e = QStringConverter::Latin1;
+    if (name == "Latin-1")
+        for (QChar c : text) if (c.unicode() > 0xFF) ++*unmappable;
+    if (*unmappable) return false;
+    QStringEncoder en(e, name == "UTF-8 with BOM" ? QStringConverter::Flag::WriteBom : QStringConverter::Flag::Default);
+    *out = en.encode(text);
+    return !en.hasError();
+}
+}  // namespace enc
+
 // ---- Overlay pane: document view with nested depth shading -----------------
 // ---- mini icon fleet (Adam's go, 2026-08-13): hand-drawn 16pt
 // monochrome glyphs on PRIMARY action buttons only (HIG restraint:
@@ -7155,6 +7247,43 @@ public:
             savedDigest_ = keepDigest;
             refreshDocTitle();
         }
+        {   // File ▸ encodings (2026-09-08): decode tables, refusal, round-trip
+            int bad = 0;
+            const QString cp = enc::decode(QByteArray("\x93SEMS\x94 \x96 CAN"), "Windows-1252", &bad);
+            check(bad == 0 && cp == QString::fromUtf8("\u201CSEMS\u201D \u2013 CAN"),
+                  "Windows-1252 smart quotes and en dash decode to their Unicode");
+            const QString mac = enc::decode(QByteArray("\xD2SEMS\xD3 \xD0 CAN"), "MacRoman", &bad);
+            check(bad == 0 && mac == QString::fromUtf8("\u201CSEMS\u201D \u2013 CAN"),
+                  "MacRoman smart quotes and en dash decode to their Unicode");
+            enc::decode(QByteArray("A\x81" "B"), "Windows-1252", &bad);
+            check(bad == 1, "an undefined Windows-1252 byte is counted, not guessed");
+            QByteArray out; int un = 0;
+            check(enc::encode(QString::fromUtf8("\u201CSEMS\u201D"), "Windows-1252", &out, &un) && out == QByteArray("\x93SEMS\x94"),
+                  "encoding to Windows-1252 round-trips the quotes");
+            check(!enc::encode(QString::fromUtf8("\u0F66"), "Windows-1252", &out, &un) && un == 1,
+                  "a Tibetan letter has no Windows-1252 byte: encode REFUSES and counts it");
+            check(enc::encode("SEMS", "UTF-8 with BOM", &out, &un) && out.startsWith("\xEF\xBB\xBF"),
+                  "UTF-8 with BOM writes the byte-order mark");
+            const QString keepText = input_->toPlainText();
+            const QString keepFile = docFile_;
+            const QString keepEnc = docEncoding_;
+            const QString f1 = QDir::temp().filePath("all_selftest_enc.txt");
+            { QFile f(f1); f.open(QIODevice::WriteOnly); f.write("@001A *, ,\x93SEMS\x94,,"); }
+            docFile_ = f1;
+            const bool re = reopenWithEncoding("Windows-1252");
+            check(re && input_->toPlainText().contains(QString::fromUtf8("\u201CSEMS\u201D")) && docEncoding_ == "Windows-1252",
+                  "Reopen with Encoding decodes the file with the chosen table and remembers it for Save");
+            const bool sv = saveWithEncoding("UTF-8");
+            QFile chk(f1); chk.open(QIODevice::ReadOnly);
+            check(sv && docEncoding_ == "UTF-8" && chk.readAll().contains("\xE2\x80\x9CSEMS\xE2\x80\x9D"),
+                  "Save with Encoding re-encodes the file as UTF-8");
+            QFile::remove(f1);
+            input_->setPlainText(keepText);
+            docFile_ = keepFile;
+            docEncoding_ = keepEnc;
+            savedDigest_ = docprops::digest(keepText);
+            refreshDocTitle();
+        }
         {   // Edit ▸ Find / Replace / Paste Special (2026-09-08)
             const QString keepText = input_->toPlainText();
             input_->setPlainText("@001A *, ,SEMS CAN,, ,SEMS PA,,");
@@ -7215,8 +7344,13 @@ public:
         return true;
     }
     bool writeDocumentTo(const QString& fn) {
-        if (!saveOrWarn(this, fn, input_->toPlainText().toUtf8(),
-                        "The document")) {
+        QByteArray bytes;
+        int unmappable = 0;
+        if (!enc::encode(input_->toPlainText(), docEncoding_, &bytes, &unmappable)) {
+            if (hint_) hint_->setText(QString("NOT SAVED \u2014 %1 character(s) have no %2 encoding; use Save with Encoding \u203a UTF-8").arg(unmappable).arg(docEncoding_));
+            return false;
+        }
+        if (!saveOrWarn(this, fn, bytes, "The document")) {
             if (hint_) hint_->setText("NOT SAVED \u2014 " + fn);
             return false;
         }
@@ -7228,6 +7362,38 @@ public:
                            editTimer_.isValid() ? editTimer_.elapsed() / 1000 : 0);
         editTimer_.restart();
         return true;
+    }
+    // ---- Sublime's File items (2026-09-08) ----
+    QString documentEncoding() const { return docEncoding_; }
+    bool reopenWithEncoding(const QString& name) {
+        if (docFile_.isEmpty()) { if (hint_) hint_->setText("Open a file first; encodings apply to files."); return false; }
+        if (!confirmDiscard()) return false;
+        pendingEncoding_ = name;
+        openFile(docFile_);
+        return docEncoding_ == name;
+    }
+    bool saveWithEncoding(const QString& name) {
+        const QString was = docEncoding_;
+        docEncoding_ = name;
+        const bool ok = saveDocument();
+        if (!ok) docEncoding_ = was;
+        return ok;
+    }
+    bool revertDocument() {
+        if (docFile_.isEmpty()) { if (hint_) hint_->setText("Nothing to revert to: the document has no file."); return false; }
+        if (!confirmDiscard()) return false;
+        pendingEncoding_ = docEncoding_;
+        openFile(docFile_);
+        if (hint_) hint_->setText("Reverted to the saved " + QFileInfo(docFile_).fileName());
+        return true;
+    }
+    void printDocument() {
+        if (g_harnessRun) return;
+        QPrinter printer(QPrinter::HighResolution);
+        QPrintDialog dlg(&printer, this);
+        dlg.setWindowTitle("Print document");
+        if (dlg.exec() != QDialog::Accepted) return;
+        input_->document()->print(&printer);
     }
     // ---- the rest of Word's File menu, for the Document box ----
     bool isDirty() const {
@@ -7416,7 +7582,12 @@ public:
             // engine — token-wise, markers and comments preserved,
             // any failed token kept verbatim (never guessed). The
             // file on disk is never touched.
-            QString raw = QString::fromUtf8(f.readAll());
+            int bad = 0;
+            QString raw = enc::decode(f.readAll(), pendingEncoding_.isEmpty() ? QStringLiteral("UTF-8") : pendingEncoding_, &bad);
+            docEncoding_ = pendingEncoding_.isEmpty() ? QStringLiteral("UTF-8") : pendingEncoding_;
+            pendingEncoding_.clear();
+            if (bad > 0 && hint_)
+                hint_->setText(QString("%1 undecodable byte(s) shown as \uFFFD \u2014 try File \u203a Reopen with Encoding").arg(bad));
             if (allcore::looksLikeWylie(raw.toStdString())) {
                 input_->setPlainText(wylieDocToAcip(raw));
                 wasWylieFile_ = true;
@@ -15784,6 +15955,8 @@ private:
     QString docFile_;
     QLabel* docTitle_ = nullptr;   // path strip over the reading pane
     QByteArray savedDigest_;       // sha1 of the box as last opened/saved
+    QString docEncoding_ = "UTF-8"; // how the file on disk is encoded
+    QString pendingEncoding_;        // set by Reopen with Encoding before openFile()
     QElapsedTimer editTimer_;      // editing time since open/save (Statistics)
     // BOUNTY B11: the Document box's generation, bumped every time
     // a whole new text lands in it. The citations report is
@@ -20790,6 +20963,24 @@ auto* secPub = new QLabel("<span style='color:#9A7A33;font-size:10px;letter-spac
         return true;
     }
     bool closeDraft() { return newDraft(); }
+    bool revertDraft() {
+        if (draftPath_.isEmpty()) { if (termLive_) termLive_->setText("Nothing to revert to: the draft has no file."); return false; }
+        if (!confirmDiscardDraft()) return false;
+        QFile f(draftPath_);
+        if (!f.open(QIODevice::ReadOnly)) return false;
+        draft_->setPlainText(QString::fromUtf8(f.readAll()));
+        savedDigest_ = docprops::digest(draft_->toPlainText());
+        if (termLive_) termLive_->setText("Reverted to the saved " + QFileInfo(draftPath_).fileName());
+        return true;
+    }
+    void printDraft() {
+        if (g_harnessRun) return;
+        QPrinter printer(QPrinter::HighResolution);
+        QPrintDialog dlg(&printer, this);
+        dlg.setWindowTitle("Print draft");
+        if (dlg.exec() != QDialog::Accepted) return;
+        draft_->document()->print(&printer);
+    }
     bool moveDraft() {
         if (draftPath_.isEmpty()) { if (termLive_) termLive_->setText("Save the draft first; Move works on a file."); return false; }
         const QString dir = safeGetExistingDirectory(this, "Move draft to folder");
@@ -32222,6 +32413,22 @@ public:
         return true;
     }
     bool closeManuscript() { return newManuscript(); }
+    bool isDirty() const { return dirty_; }
+    bool revertManuscript() {
+        if (path_.isEmpty()) { status_->setText("Nothing to revert to: the manuscript has no file."); return false; }
+        if (!confirmDiscardMss()) return false;
+        openFile(path_);
+        status_->setText("Reverted to the saved " + QFileInfo(path_).fileName());
+        return true;
+    }
+    void printManuscript() {
+        if (g_harnessRun) return;
+        QPrinter printer(QPrinter::HighResolution);
+        QPrintDialog dlg(&printer, this);
+        dlg.setWindowTitle("Print manuscript");
+        if (dlg.exec() != QDialog::Accepted) return;
+        editor_->document()->print(&printer);
+    }
     bool moveManuscript() {
         if (path_.isEmpty()) { status_->setText("Save the manuscript first; Move works on a file."); return false; }
         const QString dir = safeGetExistingDirectory(this, "Move manuscript to folder");
@@ -37836,6 +38043,21 @@ int main(int argc, char** argv) {
                 }
             });
         }
+        // Sublime's encodings (2026-09-08): reopen the Document box with a
+        // chosen decoder; the choice becomes the file's encoding for Save.
+        {
+            QMenu* re = fileM->addMenu("Reopen with Encoding");
+            for (const QString& n : enc::names()) {
+                QAction* a = re->addAction(n);
+                a->setCheckable(true);
+                QObject::connect(a, &QAction::triggered, [overlay, n] { overlay->reopenWithEncoding(n); });
+            }
+            QObject::connect(re, &QMenu::aboutToShow, [re, overlay] {
+                for (QAction* a : re->actions())
+                    a->setChecked(a->text() == overlay->documentEncoding());
+            });
+        }
+        fileM->addSeparator();
         // File → Save / Save As (Adam, 2026-09-08): routed to the pane
         // in front — Overlay (the Document box), Draft (the English
         // draft), Manuscript (its own file). Anywhere else the status
@@ -37876,9 +38098,45 @@ int main(int argc, char** argv) {
             saveAsA->setShortcut(QKeySequence::SaveAs);   // ⇧⌘S
             QObject::connect(saveAsA, &QAction::triggered,
                              [saveRoute] { saveRoute(true); });
+            {
+                QMenu* se = fileM->addMenu("Save with Encoding");
+                for (const QString& n : enc::names()) {
+                    QAction* a = se->addAction(n);
+                    QObject::connect(a, &QAction::triggered, [overlay, n] { overlay->saveWithEncoding(n); });
+                }
+            }
+            QAction* saveAllA = fileM->addAction("Save All");
+            saveAllA->setShortcut(QKeySequence("Ctrl+Alt+S"));
+            QObject::connect(saveAllA, &QAction::triggered, [overlay, draftPane, manuscriptPane, &win] {
+                int n = 0;
+                if (overlay->isDirty() && overlay->saveDocument()) ++n;
+                if (draftPane->draftDirty() && draftPane->saveDraft()) ++n;
+                if (manuscriptPane->isDirty() && manuscriptPane->save()) ++n;
+                win.statusBar()->showMessage(n ? QString("Saved %1 document(s).").arg(n) : "Nothing unsaved.", 4000);
+            });
             QObject::connect(fileM->addAction("Save as Template\u2026"),
                              &QAction::triggered,
                              [overlay] { overlay->saveAsTemplate(); });
+            QAction* printA = fileM->addAction("Print\u2026");
+            printA->setShortcut(QKeySequence::Print);   // ⌘P
+            QObject::connect(printA, &QAction::triggered, [overlay, draftPane, manuscriptPane, active] {
+                if (active(manuscriptPane)) manuscriptPane->printManuscript();
+                else if (active(draftPane)) draftPane->printDraft();
+                else overlay->printDocument();
+            });
+            QObject::connect(fileM->addAction("Revert File"), &QAction::triggered,
+                             [overlay, draftPane, manuscriptPane, active] {
+                if (active(manuscriptPane)) manuscriptPane->revertManuscript();
+                else if (active(draftPane)) draftPane->revertDraft();
+                else overlay->revertDocument();
+            });
+            QAction* closeAllA = fileM->addAction("Close All Files");
+            closeAllA->setShortcut(QKeySequence("Ctrl+Alt+Shift+W"));
+            QObject::connect(closeAllA, &QAction::triggered, [overlay, draftPane, manuscriptPane] {
+                overlay->closeDocument();
+                draftPane->closeDraft();
+                manuscriptPane->closeManuscript();
+            });
             QObject::connect(fileM->addAction("Move\u2026"), &QAction::triggered,
                              [overlay, draftPane, manuscriptPane, active] {
                 if (active(manuscriptPane)) manuscriptPane->moveManuscript();
