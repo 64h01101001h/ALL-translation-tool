@@ -3117,6 +3117,33 @@ licensing decisions.
 - [ ] Later: table compare for glossary CSV/JSON by key; image compare of
       two scans of the same folio (Scans viewer); .docx text-extraction compare
 
+### Text-analysis families + EndNote — docs/TEXT_ANALYSIS_SUITE_RESEARCH.md (Adam, 2026-09-08)
+- [x] Research and verdicts written (16 families + EndNote/Zotero mapping) — 2026-09-08
+- [ ] Compare batch 4: **Versions** per document (compressed copies on save,
+      File ▸ Versions…, Compare with Version, Restore with confirm, "who"
+      from Team name); **Replace in Files** with mandatory preview diff and
+      undo set; **Apply Patch…** (exact → offset → fuzz, preview, never
+      forced); **Normalize…** with preview; tracked-changes `.docx` export
+      of a two-draft comparison; "changed folios only" report
+- [ ] Batch 5 (Research): **Repeated Passages** (syllable shingles →
+      MinHash → LSH; within a text and across the library, folio-cited);
+      **similarity studies** between texts (verbatim/near-verbatim only;
+      paraphrase LATER + labelled provisional; TRACER results import rather
+      than a from-memory rewrite); **Statistics study view** (frequency
+      tables, type/token, hapax, sentence-length by shad, particle density,
+      Trends, Collocates via Gofer NEAR, Phrases); **Entities in this text**
+      (names/places/texts/dates from existing matchers, folio-cited;
+      "distinctive terms" by TF-IDF; co-occurrence); **Table compare** for
+      glossary JSON/CSV and release-to-release dictionary diffs
+- [ ] Batch 6: **References pane** (Research group): records over the
+      catalogue with attachments, collections / smart collections / colour
+      tags, read state; **Insert Citation…** in Draft/Manuscript with
+      house/Chicago/MLA JSON styles and a regenerating bibliography;
+      duplicates finder with side-by-side keep/merge; **refresh from BDRC**
+      shown as ours-vs-theirs (update all / empty / chosen); BibTeX/RIS
+      import. SKIPPED: journal matcher, AI research assistant (rule 1),
+      sentiment, readability formulas for Tibetan, word clouds
+
 ### Cursors and Tibetan Buddhist iconography in the UI (Adam, 2026-09-08)
 - [x] **Busy cursor** — done 2026-09-08: while the app works (index builds,
       segmenter load) the cursor becomes a dharma wheel (U+2638) drawn from
