@@ -43,6 +43,10 @@ if [[ $SHOTS == 1 ]]; then
   rm -rf "$TMP"
   echo "captures kept in $IMG:"; ls "$IMG"
 fi
+# Density: the captures are 2x, and a document converter reads the density
+# from the PNG, not from a flag. Stamp it, capping wide images to the text
+# column (Adam, 2026-09-09: a small menu was filling a whole page).
+python3 tools/digest_image_dpi.py "$IMG"
 # Readability (Adam, 2026-09-08): air around every heading, paragraph,
 # list and figure — nothing touches. Same rules in Word via
 # tools/digest_reference.docx (regenerate with tools/make_digest_reference.py).
@@ -64,9 +68,14 @@ strong{color:#111}
 CSSEOF
 BASE="${MD%.md}"
 TITLE="$(head -1 "$MD" | sed 's/^# //')"
+# The captures are taken at device pixel ratio 2, so their pixel
+# dimensions are twice their intended size on the page; --dpi=192 tells
+# the converter that, and a small menu capture stops filling a whole page
+# (Adam, 2026-09-09: the spacing complaint was mostly oversized images).
+DPI="${DCT_DIGEST_DPI:-192}"
 pandoc "$MD" --resource-path=docs/digests -o "$BASE.txt"
 REF="tools/digest_reference.docx"; [[ -f "$REF" ]] || python3 tools/make_digest_reference.py >/dev/null
-pandoc "$MD" --resource-path=docs/digests --reference-doc="$REF" -o "$BASE.docx"
-pandoc "$MD" --resource-path=docs/digests -s --embed-resources --standalone --css "$CSS" --metadata title="$TITLE" -o "$BASE.html" 2>/dev/null || pandoc "$MD" --resource-path=docs/digests -s --self-contained --css "$CSS" --metadata title="$TITLE" -o "$BASE.html"
+pandoc "$MD" --resource-path=docs/digests --reference-doc="$REF" --dpi="$DPI" -o "$BASE.docx"
+pandoc "$MD" --resource-path=docs/digests -s --embed-resources --standalone --css "$CSS" --dpi="$DPI" --metadata title="$TITLE" -o "$BASE.html" 2>/dev/null || pandoc "$MD" --resource-path=docs/digests -s --self-contained --css "$CSS" --dpi="$DPI" --metadata title="$TITLE" -o "$BASE.html"
 rm -f "$CSS"
 echo "built: $BASE.txt $BASE.docx $BASE.html"

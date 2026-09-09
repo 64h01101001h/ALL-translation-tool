@@ -20,19 +20,28 @@ def spacing(before=None, after=None, line=None):
 
 # style id → (spacing xml, keepNext)
 RULES = {
-    "Normal":          (spacing(after=160, line=276), False),
-    "BodyText":        (spacing(after=160, line=276), False),
-    "FirstParagraph":  (spacing(after=160, line=276), False),
-    "Compact":         (spacing(after=80, line=264), False),
-    "Heading1":        (spacing(before=480, after=200), True),
-    "Heading2":        (spacing(before=420, after=160), True),
-    "Heading3":        (spacing(before=320, after=120), True),
-    "Title":           (spacing(after=240), False),
-    "Figure":          (spacing(before=280, after=80), True),
-    "CaptionedFigure": (spacing(before=280, after=80), True),
-    "ImageCaption":    (spacing(before=60, after=320), False),
-    "Caption":         (spacing(before=60, after=320), False),
-    "TableCaption":    (spacing(before=200, after=120), False),
+    # twips: 20 per point. Adam raised spacing twice (2026-09-08/09) — these
+    # are the measured house values. Compact matters MOST: pandoc styles
+    # every paragraph inside a list as Compact, and a digest is mostly
+    # lists, so a tight Compact is what made the page feel crowded.
+    "Normal":          (spacing(after=200, line=288), False),
+    "BodyText":        (spacing(after=200, line=288), False),
+    "FirstParagraph":  (spacing(after=200, line=288), False),
+    "Compact":         (spacing(after=140, line=276), False),
+    "ListParagraph":   (spacing(after=140, line=276), False),
+    "SourceCode":      (spacing(before=120, after=120, line=252), False),
+    "BlockText":       (spacing(before=160, after=160, line=276), False),
+    "Title":           (spacing(after=320), False),
+    "Heading1":        (spacing(before=560, after=240), True),
+    "Heading2":        (spacing(before=520, after=240), True),
+    "Heading3":        (spacing(before=400, after=160), True),
+    # a figure keeps generous air above it, sits tight to its own caption,
+    # and the caption carries the gap to whatever follows
+    "Figure":          (spacing(before=440, after=120), True),
+    "CaptionedFigure": (spacing(before=440, after=120), True),
+    "ImageCaption":    (spacing(before=120, after=480), False),
+    "Caption":         (spacing(before=120, after=480), False),
+    "TableCaption":    (spacing(before=240, after=140), True),
 }
 
 def patch_styles(xml):
