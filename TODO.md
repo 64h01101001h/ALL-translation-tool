@@ -15,6 +15,11 @@ list before this sweep. Grouped by theme; each line says where it came from.
       in her words), an editor's-tool plan with batches in the shape of the
       compare-suite plan, and put her style-sheet rules into
       Preferences ▸ House Style as switches
+- [x] Nine 45-minute slots held (14–23 Sep, mornings and late afternoons
+      for Asia) and a personal invitation drafted for each of the nine —
+      2026-09-09. Adam reviews and sends; the draft to
+      thepositiveword@gmail.com needs the first name filled in (the
+      account shows only "Word Smith Wisdom")
 - [ ] **One-on-one sessions with each Mixed Nuts translator** (Adam,
       2026-09-09: "a more intimate look at how they translate… more
       personal in sourcing the information"). Roster from Nick Lashaw's
@@ -72,9 +77,22 @@ before 1.0)
       box's exact pin stays live rather than falling through its gate
 
 ## D. Work started and not finished
-- [ ] **`docs/ANALYSIS_SUITE_PLAN.md`** — write it from the design work
-      (subsystem maps + judged designs for batches 4/5/6 + the completeness
-      critic) as soon as that finishes; then implement batch 4
+- [x] **`docs/ANALYSIS_SUITE_PLAN.md`** written 2026-09-09: nine subsystem
+      maps, three judged batch specifications, and the critic's binding
+      reconciliation (one folio primitive not two, one CSV writer not six,
+      one provenance idiom not three, one widening of the constitution
+      census, three dead controls removed before they are built) with a
+      19-step build order across the three batches
+- [ ] **Implement batch 4** in the critic's order: F0 the shared substrate
+      (`allcore/textspan.h` folio primitive + `eligibleTextFile` +
+      `provenance.h`), then Versions, changed-folios report, Normalize,
+      Replace in Files with preview, Apply Patch, tracked-changes .docx
+- [ ] **30 open questions for Adam** are collected at the end of each batch
+      section of the plan; the first six matter before code: the house shad
+      convention, where versions live when the data root is shared, whether
+      canonical library texts may be replaced in bulk, the tracked-changes
+      author string, Word verification for the .docx writer, and whether
+      the Manuscript also gets a plain .docx export
 - [ ] **`docs/MAPS_RESEARCH.md`** — the maps study stopped at the session
       limit with 6 of 16 readings done; resume it, then the Map pane
       batches M1–M3 already filed below
