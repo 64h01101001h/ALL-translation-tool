@@ -39498,9 +39498,16 @@ int main(int argc, char** argv) {
             });
             view->addSeparator();
             // status bar: Line N, Column M of the focused editor · script · encoding · line ending
-            auto* posLbl = new QLabel; posLbl->setObjectName("statusPos");
-            win.statusBar()->addPermanentWidget(posLbl);
-            auto refreshPos = [posLbl, overlay] {
+            auto* posLblRaw = new QLabel; posLblRaw->setObjectName("statusPos");
+            win.statusBar()->addPermanentWidget(posLblRaw);
+            // QPointer guards: focusChanged still fires during QApplication
+            // teardown, after the status bar and the panes are gone
+            // (SIGSEGV in QLabel::setText, found by ctest 2026-09-08).
+            QPointer<QLabel> posLbl(posLblRaw);
+            QPointer<OverlayPane> ovp(overlay);
+            auto refreshPos = [posLbl, ovp] {
+                if (!posLbl || !ovp) return;
+                OverlayPane* overlay = ovp.data();
                 QWidget* w = editops::lastEditor();
                 QString pos;
                 if (auto* e = qobject_cast<QPlainTextEdit*>(w)) pos = QString("Line %1, Column %2").arg(e->textCursor().blockNumber() + 1).arg(e->textCursor().positionInBlock() + 1);

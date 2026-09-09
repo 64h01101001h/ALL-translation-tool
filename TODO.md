@@ -3049,3 +3049,47 @@ with the steelman per function. (3) A first slice after 1.0: user
 collections + word frequency/KWIC over a collection, reusing the Search
 pane's engine. (4) Variant alignment across editions. (5) Place/lineage
 queries over the catalogue. Not in the two-week release.
+
+## 🗺️ MAPS OF MONASTERIES AND HOLY SITES — interactive, local (Adam, 2026-09-08)
+
+Adam's ask: take the monastery / temple / pilgrimage maps on these pages
+and reproduce them as an interactive map INSIDE the app for the study of
+Tibetan culture (anthropological angle: major monasteries, holy sites,
+Jonang sites, pilgrimage routes), and tie them to the texts and persons
+the catalogue already knows.
+
+References Adam supplied (to read, not to copy — see the sources note):
+- https://lingweikung.com/mapping-tibetan-monasteries/
+- https://blogs.cuit.columbia.edu/lk2627/mapping-tibetan-monasteries/
+- https://www.nyandak.com/research/temples-of-tibet
+- https://jonangfoundation.org/jonangpa_blog/jonang-sites-interactive-map/
+- https://treasuryoflives.org/aboutmaps
+- https://www.namobudha.org/pilgrimage-map/
+- https://huemaps.com/en/show/buddhist-sites
+
+**Sources note (honesty rule).** Those pages are other scholars' work:
+their coordinates, names and notes are theirs and most carry no licence
+we could ship under. The map WE ship should be built from openly licensed
+place data — **BDRC Places** (thousands of geolocated monasteries with
+IDs the catalogue already links to, open data), **Treasury of Lives** place
+records (CC BY-NC-SA, attribution), **OpenStreetMap** for basemap and
+coordinates (ODbL), and Adam's own or ALL's fieldwork. The reference pages
+tell us WHAT to show (which sites, routes, groupings); the data comes from
+sources we may redistribute, with every layer's licence recorded in the
+SBOM like the text layers.
+
+**What it becomes.** A Map pane (Research group): sites plotted on an
+offline basemap; layers by tradition (Gelug, Jonang, Sakya, Kagyu,
+Nyingma), by role (monastery, hermitage, pilgrimage site, printing house),
+by period; click a site → its persons and texts from the catalogue
+(authors who studied/taught there, works printed there — the same graph
+the Textual Research workflow needs); a pilgrimage-route layer; distance
+and travel notes. Rendering: Qt Location/QML with cached OSM tiles, or an
+SVG projection for fully offline use.
+
+**Plan.** After 1.0. (1) Read the seven pages for scope (fetching is
+blocked from the assistant's sandbox; read them in the in-app browser or
+from Adam's screenshots). (2) Pull BDRC place records with coordinates and
+join to the catalogue's person/place IDs. (3) Prototype a plotted layer
+over cached tiles. (4) Route and period layers. Owner: Adam for source
+licensing decisions.
