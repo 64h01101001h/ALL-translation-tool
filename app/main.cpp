@@ -45266,6 +45266,18 @@ int main(int argc, char** argv) {
                 if (g_raisePane) g_raisePane(comparePane);
                 const char* names[3] = {"compare-text", "compare-folders", "compare-threeway"};
                 for (int pg = 0; pg < 3; ++pg) { comparePane->showPage(pg); settle(400); save(tabs.grab(), names[pg]); }
+                {   // page 3: Table Compare over two small glossaries (2026-09-09)
+                    const QString cd = QDir::tempPath() + "/dct_shot_table"; QDir(cd).removeRecursively(); QDir().mkpath(cd);
+                    auto put = [](const QString& p2, const QString& t) { QFile f(p2); if (f.open(QIODevice::WriteOnly | QIODevice::Truncate)) f.write(t.toUtf8()); };
+                    // the real per-text glossary format: headerless, two columns, # comments
+                    put(cd + "/mine.tsv", "# my glossary for S0134I\nsems\tmind\nbyang chub\tenlightenment\nbsod nams\tmerit\nthams cad\tall\nrgyal\tking\nrgyal\tvictor\n");
+                    put(cd + "/team.tsv", "# the team's glossary\nsems\tmind\nbyang chub\ttotal enlightenment\nbsod nams\tgoodness\nthams cad\tall\nsnying rje\tcompassion\n");
+                    comparePane->showPage(3);
+                    tablePage->setPreset("Per-text glossary (TSV, key wylie)");
+                    tablePage->setPaths(cd + "/mine.tsv", cd + "/team.tsv"); tablePage->setKey("wylie");
+                    tablePage->compare(); settle(400); save(tabs.grab(), "compare-table");
+                    QDir(cd).removeRecursively();
+                }
                 comparePane->showPage(0); settle(100);
             }
             if (extra.contains("prefs")) {
