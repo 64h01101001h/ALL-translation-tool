@@ -210,7 +210,15 @@ public:
     }
 
     // ------------------------------------------------------------- pages
-    void addPage(QWidget* w) { pages_->addWidget(w); }
+    // Pages go in behind a scroll area so that a wide page (the folder
+    // table's action row, the three-way merge's three editors) cannot
+    // force the WINDOW wider: an oversized window minimum gets clamped to
+    // the screen and shrinks every pane (measured 2026-09-09 — the
+    // blessed sweep fell from 1180 to 796 px wide).
+    void addPage(QWidget* w) {
+        auto* sc = new QScrollArea; sc->setWidgetResizable(true); sc->setFrameShape(QFrame::NoFrame); sc->setWidget(w);
+        pages_->addWidget(sc);
+    }
     void showPage(int id) { if (id < pages_->count()) { pages_->setCurrentIndex(id); if (auto* b = pageBtns_->button(id)) b->setChecked(true); } }
     int currentPage() const { return pages_->currentIndex(); }
     QLabel* statusLabel() const { return status_; }
