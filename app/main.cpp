@@ -3229,6 +3229,27 @@ static std::function<void(const QString&)> g_studySay;       // batch 5: a notic
 // list that could drift.
 static std::function<void()> g_applyFeatures;                 // re-read the switches and show/hide
 static std::function<QList<QPair<QString, QString>>()> g_featureList;   // (group, pane) for every pane that exists
+// Workflow presets (Adam, 2026-09-09: "presets for different workflows, the
+// way the card layout chooses what a term card shows"). A workflow is only a
+// named set of the same switches — choosing one moves the ticks and nothing
+// else, so there is one mechanism and no second scheme to keep in step.
+// These shipped ones are COARSE, by whole group, and they are a starting
+// point rather than a claim about how anyone works: the editor's session and
+// the translators' one-on-ones are what will correct them.
+struct Workflow { const char* name; const char* groups; };   // the groups this way of working needs
+inline const std::vector<Workflow>& shippedWorkflows() {
+    // Tick as many as apply: the tool turns on everything they need between
+    // them, and every switch stays yours to change afterwards.
+    static const std::vector<Workflow> W = {
+        {"Translating", "Read|Translate|Research"},
+        {"Editing", "Read|Translate|Research|Community"},
+        {"Reading and study", "Read|Research"},
+        {"Cataloguing", "Read|Catalog|Research|Community"},
+        {"Input and proofreading", "Input|Read|Research|Community"},
+        {"Learning Tibetan", "Learn|Read|Research"},
+    };
+    return W;
+}
 inline bool featureOn(const QString& kind, const QString& name) {
     return QSettings("ALL", "TranslationTool").value("features/" + kind + "/" + name, true).toBool();
 }
@@ -37239,10 +37260,33 @@ private:
         // 12 Features (Adam, 2026-09-09: "turn off any features they don't use
         // often so their GUI won't be crowded"). The list is built from the
         // panes that actually exist, so it can never drift from the build.
-        { Page p; p.title = "Features"; p.icon = "gear"; p.blurb = "Show or hide panes and whole groups"; p.keywords = {"features", "hide", "show", "panes", "groups", "clutter", "simplify", "tabs", "turn off"};
+        { Page p; p.title = "Features"; p.icon = "gear"; p.blurb = "Show or hide panes and groups, or start from a workflow"; p.keywords = {"features", "hide", "show", "panes", "groups", "clutter", "simplify", "tabs", "turn off", "workflow", "preset", "role", "translating", "cataloguing"};
           auto* w = new QWidget; auto* v = new QVBoxLayout(w); v->setContentsMargins(8, 8, 8, 8);
           auto* intro = new QLabel("Turn off what you do not use, and it leaves the ribbon and the pane bar. Nothing is deleted and nothing is lost: a hidden feature keeps working, its files are untouched, and it is still one menu away — so you can use it occasionally without turning it back on. Come back here to show it again.");
           intro->setWordWrap(true); intro->setStyleSheet("color:#4A3F33;"); v->addWidget(intro);
+          auto* wfLabel = new QLabel("<b>Workflows.</b> Tick the ways you work. Ticking more than one turns on everything they need between them, and every switch below stays yours to change afterwards.");
+          wfLabel->setWordWrap(true); wfLabel->setTextFormat(Qt::RichText); wfLabel->setStyleSheet("color:#4A3F33;"); v->addWidget(wfLabel);
+          auto* wfList = new QListWidget; wfList->setFlow(QListView::LeftToRight); wfList->setWrapping(true); wfList->setResizeMode(QListView::Adjust); wfList->setMaximumHeight(64); wfList->setFrameShape(QFrame::NoFrame);
+          {
+              QSet<QString> on;
+              for (const QString& n : QSettings("ALL", "TranslationTool").value("features/activeWorkflows").toStringList()) on.insert(n);
+              for (const auto& wf : shippedWorkflows()) {
+                  auto* it = new QListWidgetItem(wf.name, wfList);
+                  it->setFlags(it->flags() | Qt::ItemIsUserCheckable);
+                  it->setCheckState(on.contains(wf.name) ? Qt::Checked : Qt::Unchecked);
+                  it->setToolTip(QString("Turns on: %1").arg(QString(wf.groups).replace('|', ", ")));
+              }
+              const QJsonObject saved = QJsonDocument::fromJson(QSettings("ALL", "TranslationTool").value("features/workflows").toByteArray()).object();
+              for (auto sit = saved.begin(); sit != saved.end(); ++sit) {
+                  auto* it = new QListWidgetItem(sit.key(), wfList);
+                  it->setFlags(it->flags() | Qt::ItemIsUserCheckable);
+                  it->setCheckState(on.contains(sit.key()) ? Qt::Checked : Qt::Unchecked);
+                  it->setToolTip("A workflow you saved");
+              }
+          }
+          v->addWidget(wfList);
+          auto* wfSave = new QPushButton("Save these choices as a workflow…");
+          v->addWidget(wfSave, 0, Qt::AlignLeft);
           auto* tree = new QTreeWidget; tree->setHeaderLabels({"Group and pane"}); tree->setRootIsDecorated(true);
           QMap<QString, QTreeWidgetItem*> groups;
           const auto listed = g_featureList ? g_featureList() : QList<QPair<QString, QString>>();
@@ -37261,7 +37305,57 @@ private:
           }
           if (listed.isEmpty()) { auto* none = new QTreeWidgetItem(tree, {"The pane list is not available in this window."}); none->setDisabled(true); }
           v->addWidget(tree, 1);
-          auto* note = new QLabel("Turning a group off hides the group's tab and every pane in it. If you turn everything off, the window would have nothing in it, so that one setting is refused and everything stays shown.");
+          // Ticking workflows turns on the union of what they need. It writes
+          // nothing until Apply, and it never turns anything OFF that a
+          // person ticked by hand — a workflow adds, it does not overrule.
+          auto applyWorkflows = [tree, wfList] {
+              QSet<QString> groups, panes; bool any = false;
+              const QJsonObject saved = QJsonDocument::fromJson(QSettings("ALL", "TranslationTool").value("features/workflows").toByteArray()).object();
+              for (int i2 = 0; i2 < wfList->count(); ++i2) {
+                  if (wfList->item(i2)->checkState() != Qt::Checked) continue;
+                  any = true;
+                  const QString name = wfList->item(i2)->text();
+                  bool shipped = false;
+                  for (const auto& wf : shippedWorkflows())
+                      if (name == wf.name) { shipped = true; for (const QString& g : QString(wf.groups).split('|', Qt::SkipEmptyParts)) groups.insert(g); }
+                  if (shipped) continue;
+                  const QJsonObject o = saved.value(name).toObject();
+                  for (const auto& x : o.value("groups").toArray()) groups.insert(x.toString());
+                  for (const auto& x : o.value("panes").toArray()) panes.insert(x.toString());
+              }
+              if (!any) return;   // nothing ticked: leave the person's own choices alone
+              for (int gi = 0; gi < tree->topLevelItemCount(); ++gi) {
+                  auto* g = tree->topLevelItem(gi);
+                  const QString gname = g->data(0, Qt::UserRole + 1).toString();
+                  const bool gon = groups.contains(gname);
+                  g->setCheckState(0, gon ? Qt::Checked : Qt::Unchecked);
+                  for (int pi = 0; pi < g->childCount(); ++pi) {
+                      auto* c = g->child(pi);
+                      const bool named = panes.contains(c->data(0, Qt::UserRole + 1).toString());
+                      c->setCheckState(0, (gon && panes.isEmpty()) || named ? Qt::Checked : (gon ? Qt::Unchecked : Qt::Unchecked));
+                  }
+              }
+          };
+          connect(wfList, &QListWidget::itemChanged, this, [applyWorkflows](QListWidgetItem*) { applyWorkflows(); });
+          connect(wfSave, &QPushButton::clicked, this, [this, tree, wfList] {
+              const QString name = docprops::askName(this, "Save a workflow", "Name for this way of working:", QString());
+              if (name.isEmpty()) return;
+              QJsonArray groups, panes;
+              for (int gi = 0; gi < tree->topLevelItemCount(); ++gi) {
+                  auto* g = tree->topLevelItem(gi);
+                  if (g->checkState(0) == Qt::Checked) groups.push_back(g->data(0, Qt::UserRole + 1).toString());
+                  for (int pi = 0; pi < g->childCount(); ++pi)
+                      if (g->child(pi)->checkState(0) == Qt::Checked) panes.push_back(g->child(pi)->data(0, Qt::UserRole + 1).toString());
+              }
+              QSettings st("ALL", "TranslationTool");
+              QJsonObject all = QJsonDocument::fromJson(st.value("features/workflows").toByteArray()).object();
+              QJsonObject one; one["groups"] = groups; one["panes"] = panes; all[name] = one;
+              st.setValue("features/workflows", QJsonDocument(all).toJson(QJsonDocument::Compact));
+              bool have = false;
+              for (int i2 = 0; i2 < wfList->count(); ++i2) if (wfList->item(i2)->text() == name) have = true;
+              if (!have) { auto* it = new QListWidgetItem(name, wfList); it->setFlags(it->flags() | Qt::ItemIsUserCheckable); it->setCheckState(Qt::Unchecked); it->setToolTip("A workflow you saved"); }
+          });
+          auto* note = new QLabel("Turning a group off hides the group's tab and every pane in it. If you turn everything off, the window would have nothing in it, so that one setting is refused and everything stays shown. The workflows above are a starting point, not a rule about how anyone works: ticking them only moves the switches below, and every one of those stays yours to change afterwards.");
           note->setWordWrap(true); note->setStyleSheet("color:#6B5E4E; font-size:11px;"); v->addWidget(note);
           auto* all = new QPushButton("Show everything again");
           connect(all, &QPushButton::clicked, this, [tree] {
@@ -37272,8 +37366,11 @@ private:
           });
           v->addWidget(all, 0, Qt::AlignLeft);
           p.w = w;
-          p.save = [tree] {
+          p.save = [tree, wfList] {
               QSettings st("ALL", "TranslationTool");
+              QStringList active;
+              for (int i2 = 0; i2 < wfList->count(); ++i2) if (wfList->item(i2)->checkState() == Qt::Checked) active << wfList->item(i2)->text();
+              st.setValue("features/activeWorkflows", active);
               for (int i = 0; i < tree->topLevelItemCount(); ++i) {
                   auto* gi = tree->topLevelItem(i);
                   st.setValue("features/group/" + gi->data(0, Qt::UserRole + 1).toString(), gi->checkState(0) == Qt::Checked);
@@ -42452,6 +42549,19 @@ int main(int argc, char** argv) {
             bool anyVisible = false;
             for (const auto& f : flatPanes) if (f.btn && !f.btn->isHidden()) anyVisible = true;
             fcheck(anyVisible, "turning everything off is refused: the window is never left with nothing in it");
+            {   // workflows are named sets of the same switches, and every shipped one keeps a group to work in
+                bool everyWorkflowUsable = true; QStringList known;
+                for (const auto& gp : groupPages) known << gp.name;
+                for (const auto& wf : shippedWorkflows()) {
+                    const QString g = wf.groups;
+                    if (g.isEmpty()) continue;               // "Everything"
+                    bool anyKnown = false;
+                    for (const QString& one : g.split('|', Qt::SkipEmptyParts)) if (known.contains(one)) anyKnown = true;
+                    if (!anyKnown) everyWorkflowUsable = false;
+                }
+                fcheck(everyWorkflowUsable && shippedWorkflows().size() >= 5,
+                       "every shipped workflow names groups this build actually has, so none of them can empty the window");
+            }
             for (const auto& f : flatPanes) { st.remove("features/pane/" + f.title); st.remove("features/group/" + f.group); }
             g_applyFeatures();
         }
