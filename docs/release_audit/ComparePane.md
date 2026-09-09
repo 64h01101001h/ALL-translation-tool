@@ -42,3 +42,14 @@ The Compare pane is the compare-and-merge suite Adam asked for on 2026-09-08 ("b
 - `textdiff::applySelected` is the hunk-selection primitive for partial merges.
 - Compare with Saved Version flattens the Manuscript's saved HTML before comparing.
 - The constitution's modal census now reads `app/*.inc` as well; a planted `QMessageBox::warning` in `compare_pane.inc` fails the gate (checked by hand 2026-09-09).
+
+## 6. F2 — Changed-folios report (2026-09-09)
+
+| Function | Where | Behaviour | Evidence |
+|---|---|---|---|
+| `textdiff::changedFolios` / `changedFoliosMarkdown` / `changedFoliosCsv` / `optionsDescription` | core | Groups the existing apparatus by the LEFT text's `@NNNA` markers (the one definition, `textspan::lastFolio`); lines before the first marker form a pseudo-folio; a hunk spanning a marker is counted once where it starts; minor hunks only when asked and then marked "minor only"; raw (unconvertible) lines counted per folio; header restates the rules in force and both names; no markers → says so instead of a table | textdiff_smoke F2-1…F2-8 |
+| REPORT ▸ Save Report… filters "Changed folios, Markdown (*.folios.md)" / "Changed folios, CSV (*.folios.csv)" | pane `saveReport` | The dialog's **selected filter** decides first (`safeGetSaveFileName` gained the out-parameter; the harness stub supplies `g_saveDialogStubFilter`), the double suffix is the fallback; a bare `report.md` with the folios filter selected gets the folios report and never the apparatus | selftests F2-11a/b/c |
+| Status fragment `· changed folios: N of M` | `recompute` | Only when the left text has markers (never `0 of 0`); N counts real folios, minor rule follows VIEW ▸ Minor = differences | selftests F2-9, F2-12b |
+| Sessions ▾ ▸ Copy Changed Folios | pane menu | Markdown to the clipboard; disabled with the tooltip "The left text has no @NNNA folio markers" when there are none | selftests F2-12, F2-12b |
+| CLI `--compare A B out.folios.md|out.folios.csv` | `app/main.cpp` `--compare` block | Routed by the double suffix; exit 1 when differences exist | manual run 2026-09-09: header line + `"@001A",1,3,3,3,1,0,0,0,0` |
+

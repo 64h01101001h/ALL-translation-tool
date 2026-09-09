@@ -104,6 +104,33 @@ std::vector<ApparatusEntry> apparatus(const std::vector<std::string>& a, const s
 std::string apparatusMarkdown(const std::string& aName, const std::string& bName, const std::vector<ApparatusEntry>& e);
 std::string apparatusCsv(const std::vector<ApparatusEntry>& e);
 std::string summary(const Result& r);
+// The rules in force, as one sentence ("no rules" when none) — for report headers.
+std::string optionsDescription(const Options& o);
+
+// ---- F2: changed-folios report (2026-09-09) — a grouping of the apparatus by
+// the LEFT text's @NNNA folio markers (textspan::lastFolio is the one
+// definition). No new diff work: every hunk is attributed to the folio span
+// containing its first left line (Insert: the line before, as apparatus()
+// cites); lines before the first marker form the pseudo-folio
+// "(before first folio marker)". A difference spanning a marker is counted
+// once, where it starts.
+struct FolioChange {
+    std::string folio;              // "@012B", "(before first folio marker)", "(no folio markers)"
+    int aFirstLine = 0, aLastLine = 0, bFirstLine = 0, bLastLine = 0;   // 1-based; b = the right lines touched
+    int changes = 0, inserts = 0, deletes = 0, minor = 0, unnormalised = 0;
+    std::vector<ApparatusEntry> entries;
+    bool minorOnly() const { return changes + inserts + deletes == 0 && minor > 0; }
+};
+struct FolioReport {
+    std::vector<FolioChange> changed;   // in left-text order
+    int totalFolios = 0, unchangedFolios = 0;
+    bool hasMarkers = false, includeMinor = false;
+};
+FolioReport changedFolios(const std::vector<std::string>& a, const std::vector<std::string>& b,
+                          const Result& r, bool includeMinor);
+std::string changedFoliosMarkdown(const std::string& aName, const std::string& bName,
+                                  const Options& o, const Result& r, const FolioReport& f);
+std::string changedFoliosCsv(const FolioReport& f);
 
 // Line origins ("blame", F1 Versions): for every line of `current`, the
 // index into versionsOldestFirst of the version that first introduced it

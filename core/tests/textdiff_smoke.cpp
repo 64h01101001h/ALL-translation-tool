@@ -173,6 +173,51 @@ int main() {
         CHECK(lineOrigins({L("a\n")}, {}).empty(), "empty current: empty result, no crash");
         CHECK(lineOrigins({L("a\nb\n")}, L("a\nb\n")) == std::vector<int>({0, 0}), "unchanged since the only version: all 0");
     }
+    {   // ---- F2: changed folios (2026-09-09)
+        const std::vector<std::string> fa = {"@001A", "ka", "kha", "@001B", "ga", "nga", "@002A", "ca", "cha"};
+        std::vector<std::string> fb = fa; fb[2] = "khA"; fb[8] = "chA";
+        const Result fr = diffLines(fa, fb, Options());
+        const auto F = changedFolios(fa, fb, fr, false);
+        CHECK(F.changed.size() == 2 && F.changed[0].folio == "@001A" && F.changed[0].changes == 1 && F.changed[1].folio == "@002A" && F.changed[1].changes == 1 && F.totalFolios == 3 && F.unchangedFolios == 1,
+              "F2-1 two changed folios of three, one unchanged");
+        const auto fmd = changedFoliosMarkdown("A", "B", Options(), fr, F);
+        CHECK(fmd.find("2 of 3 folios changed") != std::string::npos && fmd.find("## @001A") != std::string::npos && fmd.find("## @002A") != std::string::npos && fmd.find("Unchanged folios: 1") != std::string::npos && fmd.find("@001B") == std::string::npos,
+              "F2-1b Markdown names the changed folios, the count and the unchanged count; the unchanged folio is absent");
+        std::vector<std::string> fb2 = fa; fb2.insert(fb2.begin(), "x");
+        const auto F2 = changedFolios(fa, fb2, diffLines(fa, fb2, Options()), false);
+        CHECK(F2.changed.size() == 1 && F2.changed[0].folio == "(before first folio marker)" && F2.changed[0].inserts == 1 && F2.totalFolios == 3,
+              "F2-2 an insert before the first marker lands in the pseudo-folio; the folio count is unchanged");
+        std::vector<std::string> fb3 = fa; fb3.push_back("ja");
+        const auto F3 = changedFolios(fa, fb3, diffLines(fa, fb3, Options()), false);
+        CHECK(F3.changed.size() == 1 && F3.changed[0].folio == "@002A" && F3.changed[0].inserts == 1, "F2-3 an insert past the end is attributed to the last folio");
+        Options ow; ow.ignoreWhitespaceChange = true;
+        std::vector<std::string> fb4 = fa; fb4[4] = "ga  ";   // inside @001B, whitespace only
+        const Result r4 = diffLines(fa, fb4, ow);
+        const auto F4x = changedFolios(fa, fb4, r4, false), F4i = changedFolios(fa, fb4, r4, true);
+        CHECK(F4x.changed.empty() && F4x.unchangedFolios == 3 && F4i.changed.size() == 1 && F4i.changed[0].folio == "@001B" && F4i.changed[0].minor == 1 && F4i.changed[0].minorOnly(),
+              "F2-4 minor differences are excluded unless asked; when included the folio is marked minor only");
+        CHECK(changedFoliosMarkdown("A", "B", ow, r4, F4i).find("minor only (under the rules in force)") != std::string::npos && changedFoliosMarkdown("A", "B", ow, r4, F4i).find("ignore whitespace changes") != std::string::npos,
+              "F2-4b the Markdown marks minor-only folios and restates the rule in force");
+        Options osa; osa.scriptAgnostic = true;
+        std::vector<std::string> fa5 = fa, fb5 = fa; fa5[4] = "\u0F40\u0FDB\u0F71"; fb5[4] = "ga";   // Tibetan Unicode the converter cannot map (unassigned U+0FDB, a bare vowel sign) inside @001B
+        const Result r5 = diffLines(fa5, fb5, osa);
+        const auto F5 = changedFolios(fa5, fb5, r5, false);
+        CHECK(r5.unnormalised >= 1 && F5.changed.size() == 1 && F5.changed[0].folio == "@001B" && F5.changed[0].unnormalised >= 1 && changedFoliosMarkdown("A", "B", osa, r5, F5).find("compared raw") != std::string::npos,
+              "F2-5 an unconvertible line counts as raw in its folio and the header says so");
+        const auto fcsv = changedFoliosCsv(F);
+        CHECK(fcsv.rfind("folio,a_first_line,a_last_line,b_first_line,b_last_line,changes,inserts,deletes,minor,unnormalised\n", 0) == 0 && fcsv.find("\n\"@001A\",1,3,") != std::string::npos,
+              "F2-6 CSV header is exact and the @001A row starts with its left line span");
+        const std::vector<std::string> nm = {"ka", "kha"}, nm2 = {"ka", "khA"};
+        const Result rn = diffLines(nm, nm2, Options());
+        const auto FN = changedFolios(nm, nm2, rn, false);
+        CHECK(!FN.hasMarkers && changedFoliosMarkdown("A", "B", Options(), rn, FN).find("No folio markers in the left text") != std::string::npos, "F2-7 no markers → the report says so instead of a one-row table");
+        std::vector<std::string> fb8 = fa; fb8[2] = "khA"; fb8[3] = "@001B x"; fb8[4] = "gA";   // one change hunk spanning the @001B marker
+        const Result r8 = diffLines(fa, fb8, Options());
+        const auto F8 = changedFolios(fa, fb8, r8, false);
+        int total8 = 0; for (const auto& fc : F8.changed) total8 += fc.changes + fc.inserts + fc.deletes;
+        CHECK(total8 == r8.differences() && F8.changed[0].folio == "@001A" && changedFoliosMarkdown("A", "B", Options(), r8, F8).find("counted once, in the folio where it starts") != std::string::npos,
+              "F2-8 a hunk spanning a marker is counted once, where it starts, and the header states the rule");
+    }
     std::printf("textdiff_smoke: %d failure(s)\n", failures);
     return failures ? 1 : 0;
 }

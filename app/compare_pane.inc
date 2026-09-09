@@ -383,16 +383,29 @@ public:
         if (kind == "patch") return QString::fromStdString(unifiedDiff(an, bn, a, b, res_, 3));
         if (kind == "md") return QString::fromStdString(apparatusMarkdown(an, bn, apparatus(a, b, res_)));
         if (kind == "csv") return QString::fromStdString(apparatusCsv(apparatus(a, b, res_)));
+        if (kind == "folios-md") return QString::fromStdString(changedFoliosMarkdown(an, bn, opts_, res_, changedFolios(a, b, res_, minorAsDiff_)));   // F2
+        if (kind == "folios-csv") return QString::fromStdString(changedFoliosCsv(changedFolios(a, b, res_, minorAsDiff_)));
         return QString::fromStdString(summary(res_));
     }
     bool saveReport() {
+        QString selFilter;
         const QString fn = safeGetSaveFileName(this, "Save comparison report", QString(),
-            "HTML side-by-side (*.html);;Unified patch (*.patch);;Apparatus criticus, Markdown (*.md);;Apparatus criticus, CSV (*.csv);;Summary (*.txt)");
+            "HTML side-by-side (*.html);;Unified patch (*.patch);;Apparatus criticus, Markdown (*.md);;Apparatus criticus, CSV (*.csv);;Changed folios, Markdown (*.folios.md);;Changed folios, CSV (*.folios.csv);;Summary (*.txt)", &selFilter);
         if (fn.isEmpty()) return false;
         const QString sfx = QFileInfo(fn).suffix().toLower();
-        const QString kind = sfx == "html" ? "html" : sfx == "patch" || sfx == "diff" ? "patch" : sfx == "md" ? "md" : sfx == "csv" ? "csv" : "txt";
+        QString kind = sfx == "html" ? "html" : sfx == "patch" || sfx == "diff" ? "patch" : sfx == "md" ? "md" : sfx == "csv" ? "csv" : "txt";
+        // F2: the selected filter decides first (two Markdown kinds share ".md"); the double suffix is the fallback
+        if (selFilter.contains("Changed folios") || QFileInfo(fn).completeSuffix().toLower().contains("folios"))
+            kind = (selFilter.contains("CSV") || (!selFilter.contains("Changed folios") && sfx == "csv")) ? "folios-csv" : "folios-md";
         if (!saveOrWarn(this, fn, report(kind).toUtf8(), "report")) return false;
         status_->setText("Report saved: " + fn); return true;
+    }
+    // F2: the changed-folios report to the clipboard (Sessions ▾ ▸ Copy Changed Folios)
+    bool hasFolioMarkersLeft() const { for (const QString& l : aLines_) if (!allcore::textspan::lastFolio(l.toStdString()).empty()) return true; return false; }
+    bool copyChangedFolios() {
+        if (!hasFolioMarkersLeft()) { status_->setText("The left text has no @NNNA folio markers \u2014 use Save Report for the apparatus."); return false; }
+        QApplication::clipboard()->setText(report("folios-md"));
+        status_->setText("Changed folios copied as Markdown."); return true;
     }
 
     // sessions
@@ -454,6 +467,29 @@ public:
         // reports
         compareTexts("A.act", "@001A\nSEMS CAN THAMS CAD\n", "B.act", "@001A\nSEMS CAN KUN\n");
         check(report("patch").startsWith("--- A.act\n+++ B.act\n") && report("html").contains("<mark>KUN</mark>") && report("md").contains("**@001A.2** A: THAMS CAD ] B: KUN") && report("csv").startsWith("cite,kind"), "patch, HTML, apparatus Markdown and CSV reports render");
+        {   // ---- F2 changed folios (selftests 9-12)
+            compareTexts("A.act", "@001A\nka\nkha\n@001B\nga\n@002A\nca\ncha\n", "B.act", "@001A\nka\nkhA\n@001B\nga\n@002A\nca\nchA\n");
+            check(status_->text().contains("changed folios: 2 of 3"), "F2-9 the status line says how many folios changed");
+            check(report("folios-md").contains("## @001A") && report("folios-md").contains("2 of 3 folios changed") && report("folios-csv").split('\n', Qt::SkipEmptyParts).size() == 3,
+                  "F2-10 the changed-folios Markdown and CSV render (header + 2 rows)");
+            const QString td = QDir::tempPath() + "/dct_f2_" + QString::number(QCoreApplication::applicationPid()); QDir().mkpath(td);
+            auto oldStub = g_saveDialogStub; g_saveDialogStubFilter.clear();
+            g_saveDialogStub = [td](const QString&, const QString&, const QString&) { return td + "/r.folios.csv"; };
+            QFile fcsv(td + "/r.folios.csv"); bool okCsv = saveReport() && fcsv.open(QIODevice::ReadOnly) && QString::fromUtf8(fcsv.readLine()).trimmed() == "folio,a_first_line,a_last_line,b_first_line,b_last_line,changes,inserts,deletes,minor,unnormalised";
+            check(okCsv, "F2-11a Save Report with a *.folios.csv name writes the changed-folios CSV");
+            g_saveDialogStub = [td](const QString&, const QString&, const QString&) { return td + "/report.md"; };
+            g_saveDialogStubFilter = "Changed folios, Markdown (*.folios.md)";
+            QFile fmd(td + "/report.md"); bool okMd = saveReport() && fmd.open(QIODevice::ReadOnly) && QString::fromUtf8(fmd.readAll()).startsWith("# Changed folios");
+            check(okMd, "F2-11b with the folios filter selected, a bare report.md gets the changed-folios report, not the apparatus");
+            g_saveDialogStubFilter.clear(); g_saveDialogStub = [td](const QString&, const QString&, const QString&) { return td + "/report2.md"; };
+            QFile fmd2(td + "/report2.md"); bool okApp = saveReport() && fmd2.open(QIODevice::ReadOnly) && QString::fromUtf8(fmd2.readAll()).startsWith("# Apparatus");
+            check(okApp, "F2-11c without that filter, report.md is still the apparatus");
+            g_saveDialogStub = oldStub; QDir(td).removeRecursively();
+            check(copyChangedFolios() && QApplication::clipboard()->text().startsWith("# Changed folios"), "F2-12 Copy Changed Folios puts the Markdown on the clipboard");
+            compareTexts("x", "ka\nkha\n", "y", "ka\nkhA\n");
+            check(!hasFolioMarkersLeft() && !copyChangedFolios() && !status_->text().contains("changed folios"), "F2-12b with no markers on the left: the copy is refused and the status carries no folio fragment");
+            compareTexts("A.act", "@001A\nSEMS CAN THAMS CAD\n", "B.act", "@001A\nSEMS CAN KUN\n");   // the checks below continue from this comparison
+        }
         // editing in place → rescan
         {
             rendering_ = true; QTextCursor c(right_->document()->findBlockByNumber(1)); c.select(QTextCursor::LineUnderCursor); c.insertText("SEMS CAN THAMS CAD"); rendering_ = false;
@@ -520,7 +556,14 @@ private:
         render();
         if (cur_ >= (int)res_.hunks.size()) cur_ = -1;
         updateNames(); showDetails();
-        if (!binary_) status_->setText(QString::fromStdString(allcore::textdiff::summary(res_)));
+        if (!binary_) {
+            QString st = QString::fromStdString(allcore::textdiff::summary(res_));
+            if (hasFolioMarkersLeft()) {   // F2: never "0 of 0" — the fragment appears only when the left text has markers
+                const auto F = allcore::textdiff::changedFolios(cmp::toStd(aLines_), cmp::toStd(bLines_), res_, minorAsDiff_);
+                st += QString(" \u00b7 changed folios: %1 of %2").arg(F.totalFolios - F.unchangedFolios).arg(F.totalFolios);
+            }
+            status_->setText(st);
+        }
         link_->update(); loc_->update();
     }
     Result diffWithPins() {
@@ -664,6 +707,13 @@ private:
                 });
                 connect(menu->addAction("Align Caret Lines (pin)"), &QAction::triggered, this, [this] { addPinAtCursors(); });
                 connect(menu->addAction("Clear Alignment Pins"), &QAction::triggered, this, [this] { clearPins(); });
+                {   // F2
+                    QAction* cf = menu->addAction("Copy Changed Folios");
+                    const bool hasM = hasFolioMarkersLeft();
+                    cf->setEnabled(hasM);
+                    cf->setToolTip(hasM ? "The changed-folios report (Markdown) to the clipboard" : "The left text has no @NNNA folio markers");
+                    connect(cf, &QAction::triggered, this, [this] { copyChangedFolios(); });
+                }
                 menu->addSeparator();
                 connect(menu->addAction("Save Session…"), &QAction::triggered, this, [this] {
                     const QString n = docprops::askName(this, "Save Session", "Session name:", QFileInfo(pathL_).completeBaseName() + " vs " + QFileInfo(pathR_).completeBaseName());

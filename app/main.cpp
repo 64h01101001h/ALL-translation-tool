@@ -3458,16 +3458,20 @@ static QStringList safeGetOpenFileNames(
     if (!r.isEmpty()) dlgRemember(caption, r.front());
     return r;
 }
+static QString g_saveDialogStubFilter;   // F2: what the harness "chose" in the filter box
 static QString safeGetSaveFileName(
     QWidget* parent, const QString& caption = QString(),
     const QString& dir = QString(),
-    const QString& filter = QString()) {
-    if (g_harnessRun)   // GAUNTLET G1 first blood: a sweep-only guard
+    const QString& filter = QString(),
+    QString* selectedFilter = nullptr) {   // F2: the filter the user picked (two kinds can share a suffix)
+    if (g_harnessRun) {  // GAUNTLET G1 first blood: a sweep-only guard
         // let native panels open under every OTHER harness mode
+        if (selectedFilter) *selectedFilter = g_saveDialogStubFilter;
         return g_saveDialogStub ? g_saveDialogStub(caption, dir, filter)
                                 : QString();
+    }
     const QString r = QFileDialog::getSaveFileName(
-        parent, caption, dlgStartDir(caption, dir), filter);
+        parent, caption, dlgStartDir(caption, dir), filter, selectedFilter);
     dlgRemember(caption, r);
     return r;
 }
@@ -42028,7 +42032,9 @@ int main(int argc, char** argv) {
         if (cmpIx + 3 < cliArgs.size()) {
             const QString out = cliArgs[cmpIx + 3]; const QString sfx = QFileInfo(out).suffix().toLower();
             const std::string an = cliArgs[cmpIx + 1].toStdString(), bn = cliArgs[cmpIx + 2].toStdString();
-            std::string body = sfx == "html" ? sideBySideHtml(an, bn, a, b, r, false, 3) : sfx == "md" ? apparatusMarkdown(an, bn, apparatus(a, b, r)) : sfx == "csv" ? apparatusCsv(apparatus(a, b, r)) : unifiedDiff(an, bn, a, b, r, 3);
+            const bool folios = QFileInfo(out).completeSuffix().toLower().contains("folios");   // F2: out.folios.md / out.folios.csv
+            std::string body = folios ? (sfx == "csv" ? changedFoliosCsv(changedFolios(a, b, r, false)) : changedFoliosMarkdown(an, bn, Options(), r, changedFolios(a, b, r, false)))
+                             : sfx == "html" ? sideBySideHtml(an, bn, a, b, r, false, 3) : sfx == "md" ? apparatusMarkdown(an, bn, apparatus(a, b, r)) : sfx == "csv" ? apparatusCsv(apparatus(a, b, r)) : unifiedDiff(an, bn, a, b, r, 3);
             QFile f(out); if (!f.open(QIODevice::WriteOnly) || f.write(body.data(), qint64(body.size())) != qint64(body.size())) { fprintf(stderr, "compare: could not write %s\n", out.toUtf8().constData()); return 2; }
         }
         return r.differences() ? 1 : 0;
