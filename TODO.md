@@ -3096,6 +3096,25 @@ join to the catalogue's person/place IDs. (3) Prototype a plotted layer
 over cached tiles. (4) Route and period layers. Owner: Adam for source
 licensing decisions.
 
+### House style spacing (Adam, 2026-09-08)
+- [x] Two spaces after sentence ends — Settings ▸ House style (English):
+      sentence / colon / semicolon switches, apply on save, apply while
+      typing; Format ▸ Apply House Style Spacing on demand. English-only
+      (a line with no lower-case letter is ACIP and is left alone; a period
+      before a lower-case word is an abbreviation). 2026-09-08
+- [ ] **Ask Adam:** does the sheet want two spaces after a colon? one after
+      a semicolon? (both built as switches, default off). Then set the
+      defaults and move the switches into the Preferences panel (batch 7).
+
+### Compare & Merge suite (Adam, 2026-09-08) — docs/COMPARE_SUITE_PLAN.md
+- [x] Batch 1 engine + battery; batch 2 Compare pane, menus, Files hooks,
+      --compare CLI — 2026-09-08
+- [ ] Batch 3: folder compare page (statuses, filters, sync with preview,
+      snapshots), three-way merge page, conflict-file opening, manual
+      alignment pins, Compare with Backup
+- [ ] Later: table compare for glossary CSV/JSON by key; image compare of
+      two scans of the same folio (Scans viewer); .docx text-extraction compare
+
 ### Cursors and Tibetan Buddhist iconography in the UI (Adam, 2026-09-08)
 - [x] **Busy cursor** — done 2026-09-08: while the app works (index builds,
       segmenter load) the cursor becomes a dharma wheel (U+2638) drawn from

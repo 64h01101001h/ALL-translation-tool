@@ -90,10 +90,10 @@ from any of these products is used.
   right); Overlay/Draft/Manuscript "Compare with Saved / Clipboard".
 
 ## Batches
-1. Core engine + battery (this evening).
+1. Core engine + battery — DONE 2026-09-08 (textdiff_smoke 43/43).
 2. Compare pane: text compare, navigation, merge, undo, rules, line
    details, location pane, reports, sessions, Tools ▸ Compare, Files hooks,
-   selftests.
+   selftests — DONE 2026-09-08 (19 checks; placed in the Research group).
 3. Three-way merge page, folder compare page with sync and snapshots,
    conflict-file opening, manual alignment pins, `--compare` CLI.
 4. Audit rows, LOG, TODO, digest draft update; press when Adam asks.

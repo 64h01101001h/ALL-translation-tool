@@ -26,6 +26,21 @@
 #include <QTextBlockFormat>
 #include <QCursor>
 static QCursor g_busyCursor();   // defined beside g_harnessRun
+#include <QStackedWidget>
+#include <QSplitter>
+#include <QTreeWidget>
+#include <QRadioButton>
+#include <QScrollBar>
+#include <QClipboard>
+#include <QCryptographicHash>
+#include <QDirIterator>
+#include <QJsonDocument>
+#include <QJsonArray>
+#include <QToolButton>
+#include <QShortcut>
+#include <QButtonGroup>
+
+#include "allcore/textdiff.h"
 #include <QKeyEvent>
 #include <QStringListModel>
 #include <QCompleter>
@@ -4626,6 +4641,81 @@ inline QStringList dateTimeChoices() {
                  .arg(y.rabjung).arg(y.year_in_cycle);
     return v;
 }
+// House style spacing (Adam, 2026-09-08): the ALL style sheet wants two
+// spaces after a sentence ends. Applied to English only: a block with no
+// lower-case letter (ACIP) is left alone, and a period followed by a
+// lower-case word ("e.g. this") is treated as an abbreviation. Colon and
+// semicolon rules are separate switches — Adam to confirm the sheet.
+struct HouseStyle {
+    bool twoSpacesSentence = false;   // . ? !  → two spaces before the next sentence
+    bool twoSpacesColon = false;      // :      → two spaces
+    bool oneSpaceSemicolon = false;   // ;      → exactly one space
+    bool applyOnSave = false;         // Draft / Manuscript save runs the pass
+    bool live = false;                // typing a space after . ? ! inserts two
+    static HouseStyle fromSettings() {
+        QSettings st("ALL", "TranslationTool"); HouseStyle h;
+        h.twoSpacesSentence = st.value("style/twoSpacesSentence", false).toBool();
+        h.twoSpacesColon = st.value("style/twoSpacesColon", false).toBool();
+        h.oneSpaceSemicolon = st.value("style/oneSpaceSemicolon", false).toBool();
+        h.applyOnSave = st.value("style/applyOnSave", false).toBool();
+        h.live = st.value("style/live", false).toBool();
+        return h;
+    }
+    bool any() const { return twoSpacesSentence || twoSpacesColon || oneSpaceSemicolon; }
+};
+inline bool blockLooksEnglish(const QString& t) { for (const QChar c : t) if (c.isLower()) return true; return false; }
+// Returns the number of places changed. Works on any QTextDocument (plain
+// or rich) and keeps formatting: only spaces are inserted or removed.
+inline int applyHouseStyleSpacing(QTextDocument* doc, const HouseStyle& h) {
+    if (!doc || !h.any()) return 0;
+    int n = 0;
+    struct Rule { QRegularExpression re; int mode; };   // mode 1: add one space at match end; mode 2: collapse the matched spaces to one
+    std::vector<Rule> rules;
+    if (h.twoSpacesSentence) rules.push_back({QRegularExpression(R"re([.?!]["'”’)\]]* (?=[A-Z"“(\[]))re"), 1});
+    if (h.twoSpacesColon) rules.push_back({QRegularExpression(R"re(: (?=\S))re"), 1});
+    if (h.oneSpaceSemicolon) rules.push_back({QRegularExpression(";  +"), 2});
+    QTextCursor all(doc); all.beginEditBlock();
+    for (const auto& r : rules) {
+        QTextCursor c(doc);
+        while (true) {
+            c = doc->find(r.re, c, QTextDocument::FindCaseSensitively);   // Qt's default for regex finds is case-INsensitive
+            if (c.isNull()) break;
+            if (!blockLooksEnglish(c.block().text())) { c.setPosition(c.selectionEnd()); continue; }
+            if (r.mode == 1) { const int end = c.selectionEnd(); c.setPosition(end); c.insertText(" "); ++n; }
+            else { const int start = c.selectionStart(); c.insertText("; "); c.setPosition(start + 2); ++n; }
+        }
+    }
+    all.endEditBlock();
+    return n;
+}
+// Live typing: a space typed after . ? ! (or : when that rule is on)
+// becomes two. Installed on the Draft and Manuscript editors.
+class HouseStyleTyping : public QObject {
+public:
+    explicit HouseStyleTyping(QObject* parent) : QObject(parent) {}
+protected:
+    bool eventFilter(QObject* o, QEvent* e) override {
+        if (e->type() != QEvent::KeyPress) return false;
+        auto* k = static_cast<QKeyEvent*>(e);
+        if (k->key() != Qt::Key_Space || k->modifiers() != Qt::NoModifier) return false;
+        const HouseStyle h = HouseStyle::fromSettings();
+        if (!h.live) return false;
+        QTextCursor c;
+        if (auto* pe = qobject_cast<QPlainTextEdit*>(o)) c = pe->textCursor(); else if (auto* te = qobject_cast<QTextEdit*>(o)) c = te->textCursor(); else return false;
+        if (c.hasSelection() || c.atBlockStart()) return false;
+        const QString before = c.block().text().left(c.positionInBlock());
+        if (before.isEmpty() || !blockLooksEnglish(before)) return false;
+        QChar last = before.back(); int i = before.size() - 1;
+        while (i >= 0 && QString("\"'\u201D\u2019)]").contains(before[i])) --i;
+        if (i < 0) return false; last = before[i];
+        const bool sentence = h.twoSpacesSentence && (last == '.' || last == '?' || last == '!');
+        const bool colon = h.twoSpacesColon && last == ':';
+        if (!sentence && !colon) return false;
+        c.insertText("  ");
+        if (auto* pe = qobject_cast<QPlainTextEdit*>(o)) pe->setTextCursor(c); else if (auto* te = qobject_cast<QTextEdit*>(o)) te->setTextCursor(c);
+        return true;
+    }
+};
 // Caret history for Goto ▸ Jump Back / Jump Forward (Sublime ⌃- / ⌃⇧-):
 // positions are recorded when the caret moves to a different line; a
 // jump replays without recording. Per editor, capped at 100.
@@ -8142,6 +8232,17 @@ public:
                   "Date and Time offers the Tibetan year from the calendar engine");
             check(g_busyCursor().shape() == Qt::BitmapCursor || g_busyCursor().shape() == Qt::WaitCursor,
                   "the busy cursor is the dharma wheel when a font has it, else the platform wait cursor");
+            {   // house style spacing (Adam, 2026-09-08)
+                QTextDocument d; d.setPlainText("Hello there. World: yes; no.  Done. e.g. this one?\n\"Quoted.\" Next\nSEMS CAN THAMS CAD. BDE BA");
+                editops::HouseStyle h; h.twoSpacesSentence = true;
+                const int n = editops::applyHouseStyleSpacing(&d, h);
+                check(n == 2 && d.toPlainText().startsWith("Hello there.  World: yes; no.  Done. e.g. this one?\n\"Quoted.\"  Next"),
+                      "two spaces after sentences; abbreviations, existing double spaces and ACIP lines untouched");
+                check(d.toPlainText().endsWith("SEMS CAN THAMS CAD. BDE BA"), "an ACIP line (no lower-case) is left alone");
+                editops::HouseStyle h2; h2.twoSpacesColon = true; h2.oneSpaceSemicolon = true;
+                QTextDocument d2; d2.setPlainText("Note: this;  that");
+                check(editops::applyHouseStyleSpacing(&d2, h2) == 2 && d2.toPlainText() == "Note:  this; that", "colon and semicolon rules apply when switched on");
+            }
             // Tools / Project hooks (2026-09-08)
             {
                 const QString tmpRoot = QDir::temp().filePath("all_snip_" + QString::number(QCoreApplication::applicationPid()));
@@ -8236,6 +8337,7 @@ public:
     void openTeamComments() { commentsDialog(); }
     // ---- Tools / Project menu hooks (2026-09-08) ----
     QString documentPath() const { return docFile_; }   // alias of docFile(); currentLine() already exists below
+    QString documentText() const { return input_->toPlainText(); }
     void setProtected(bool on) { input_->setReadOnly(on); }
     bool isProtected() const { return input_->isReadOnly(); }
     QString dataRootPath() const { return dataRoot_; }
@@ -21713,6 +21815,7 @@ auto* secEvid = new QLabel("<span style='color:#9A7A33;font-size:10px;letter-spa
         auto* bl = new QHBoxLayout(bottom);
         auto* draftCol = new QVBoxLayout;
         draft_ = new NumberedEdit;
+        draft_->installEventFilter(new editops::HouseStyleTyping(this));   // house-style spacing while typing (pref)
         draft_->setPlaceholderText("Your English draft…");
         sess::remember(draft_, "draft/english");
         draftCol->addWidget(draft_);
@@ -21941,6 +22044,7 @@ auto* secPub = new QLabel("<span style='color:#9A7A33;font-size:10px;letter-spac
     QString draftPath() const { return draftPath_; }
     bool saveDraft() {
         if (draftPath_.isEmpty()) return saveDraftAs();
+        { const auto hs = editops::HouseStyle::fromSettings(); if (hs.applyOnSave) editops::applyHouseStyleSpacing(draft_->document(), hs); }
         if (!saveOrWarn(this, draftPath_, draft_->toPlainText().toUtf8(),
                         "The draft")) {
             if (termLive_) termLive_->setText("NOT SAVED \u2014 " + draftPath_);
@@ -21981,6 +22085,7 @@ auto* secPub = new QLabel("<span style='color:#9A7A33;font-size:10px;letter-spac
     void setSourceText(const QString& t) { source_->setPlainText(t); source_->setFocus(); }
     void sendDraftToManuscript() { if (g_sendToManuscript) g_sendToManuscript(draft_->toPlainText()); }
     void setProtected(bool on) { draft_->setReadOnly(on); source_->setReadOnly(on); }
+    QString draftText() const { return draft_->toPlainText(); }
     bool isProtected() const { return draft_->isReadOnly(); }
     bool revertDraft() {
         if (draftPath_.isEmpty()) { if (termLive_) termLive_->setText("Nothing to revert to: the draft has no file."); return false; }
@@ -23710,6 +23815,8 @@ protected:
     }
 };
 
+#include "compare_pane.inc"
+
 class FilesPane : public QWidget {
 public:
     FilesPane(const QString& root,
@@ -23980,6 +24087,21 @@ private:
                     m.addAction("Open", [this, p] {
                         openPath(p);
                     });
+                    // Compare & Merge hooks (2026-09-08)
+                    m.addAction(ix == 0 ? "Compare with the right side's selection" : "Compare with the left side's selection", [this, ix, p] {
+                        const QString q = selectedPath(1 - ix);
+                        if (q.isEmpty()) return;
+                        const QString L = ix == 0 ? p : q, R = ix == 0 ? q : p;
+                        if (QFileInfo(L).isDir() && QFileInfo(R).isDir()) { if (g_compareFolders) g_compareFolders(L, R); }
+                        else if (QFileInfo(L).isFile() && QFileInfo(R).isFile()) { if (g_compareFiles) g_compareFiles(L, R); }
+                    });
+                    if (selectedPathsIn(ix).size() == 2) {
+                        const QStringList two = selectedPathsIn(ix);
+                        m.addAction("Compare the two selected", [two] {
+                            if (QFileInfo(two[0]).isDir() && QFileInfo(two[1]).isDir()) { if (g_compareFolders) g_compareFolders(two[0], two[1]); }
+                            else if (g_compareFiles) g_compareFiles(two[0], two[1]);
+                        });
+                    }
                     m.addAction("Reveal in Finder", [p] {
                         QDesktopServices::openUrl(
                             QUrl::fromLocalFile(
@@ -24125,6 +24247,7 @@ private:
         crumbs_[ix]->addStretch(1);
     }
 
+public:
     QString selectedPath(int ix) const {
         const auto pix = views_[ix]->currentIndex();
         if (!pix.isValid()) return {};
@@ -33275,6 +33398,7 @@ public:
 
         auto* split = new QSplitter;
         editor_ = new QTextEdit;
+        editor_->installEventFilter(new editops::HouseStyleTyping(this));   // house-style spacing while typing (pref)
         editor_->setAcceptRichText(true);
         {
             QFont f = editor_->font();
@@ -33397,6 +33521,7 @@ public:
 
     bool save() {
         if (path_.isEmpty()) return saveAs();
+        { const auto hs = editops::HouseStyle::fromSettings(); if (hs.applyOnSave) editops::applyHouseStyleSpacing(editor_->document(), hs); }
         // WP-1: the verdict comes from the flushed, byte-counted
         // predicate (saveOrWarn), never from an unchecked write.
         // Failure keeps dirty_ TRUE - the close-prompt is the last
@@ -33482,6 +33607,7 @@ public:
     int listKind() const { QTextList* l = editor_->textCursor().currentList(); if (!l) return 0; return l->format().style() == QTextListFormat::ListDecimal ? 2 : 1; }
     QTextEdit* editor() const { return editor_; }
     void setProtected(bool on) { editor_->setReadOnly(on); }
+    QString manuscriptPath() const { return path_; }
     bool isProtected() const { return editor_->isReadOnly(); }
     bool isDirty() const { return dirty_; }
     bool revertManuscript() {
@@ -36546,6 +36672,23 @@ public:
         });
         outer->addWidget(team);
 
+        // House style (Adam, 2026-09-08): the ALL style sheet's spacing
+        auto* style = new QGroupBox("House style (English)");
+        auto* sl = new QFormLayout(style);
+        hsSentence_ = new QCheckBox("Two spaces after a sentence ( . ? ! )");
+        hsColon_ = new QCheckBox("Two spaces after a colon");
+        hsSemi_ = new QCheckBox("Exactly one space after a semicolon");
+        hsSave_ = new QCheckBox("Apply when saving the Draft or Manuscript");
+        hsLive_ = new QCheckBox("Apply while typing (a space after . ? ! becomes two)");
+        hsSentence_->setChecked(st.value("style/twoSpacesSentence", false).toBool());
+        hsColon_->setChecked(st.value("style/twoSpacesColon", false).toBool());
+        hsSemi_->setChecked(st.value("style/oneSpaceSemicolon", false).toBool());
+        hsSave_->setChecked(st.value("style/applyOnSave", false).toBool());
+        hsLive_->setChecked(st.value("style/live", false).toBool());
+        for (auto* c : {hsSentence_, hsColon_, hsSemi_, hsSave_, hsLive_}) sl->addRow(c);
+        sl->addRow(new QLabel("<small>Format \u25B8 Apply House Style Spacing runs the pass on demand. English only: lines without lower-case letters (ACIP) and abbreviations before a lower-case word are left alone.</small>"));
+        outer->addWidget(style);
+
         auto* data = new QGroupBox("Data");
         auto* dl = new QFormLayout(data);
         updDir_ = new QLineEdit(st.value("app/updatesDir").toString());
@@ -36589,6 +36732,11 @@ public:
             s2.setValue("team/admin", admin_->isChecked());
             s2.setValue("team/proposalsDir", dir_->text().trimmed());
             s2.setValue("app/updatesDir", updDir_->text().trimmed());
+            s2.setValue("style/twoSpacesSentence", hsSentence_->isChecked());
+            s2.setValue("style/twoSpacesColon", hsColon_->isChecked());
+            s2.setValue("style/oneSpaceSemicolon", hsSemi_->isChecked());
+            s2.setValue("style/applyOnSave", hsSave_->isChecked());
+            s2.setValue("style/live", hsLive_->isChecked());
             if (dataRoot_->text().trimmed().isEmpty())
                 s2.remove("app/dataRoot");
             else
@@ -36641,6 +36789,7 @@ public:
 private:
     std::function<void(bool)> applyNight_;
     QCheckBox* night_ = nullptr;
+    QCheckBox* hsSentence_ = nullptr; QCheckBox* hsColon_ = nullptr; QCheckBox* hsSemi_ = nullptr; QCheckBox* hsSave_ = nullptr; QCheckBox* hsLive_ = nullptr;
     QComboBox* script_ = nullptr;
     QLineEdit* name_ = nullptr;
     QCheckBox* admin_ = nullptr;
@@ -38384,6 +38533,13 @@ int main(int argc, char** argv) {
                                             g_raisePane(overlay);
                                     });
     tabs.addTab(filesPane, "Files");
+    // Compare & Merge (Adam, 2026-09-08): lives in the Research group —
+    // editions, proof passes and drafts are interrogated here.
+    auto* comparePane = new ComparePane(root);
+    comparePane->openInOverlay_ = [overlay](const QString& p) { overlay->openFile(p); if (g_raisePane) g_raisePane(overlay); };
+    g_compareFiles = [comparePane](const QString& a, const QString& b) { comparePane->compareFiles(a, b); if (g_raisePane) g_raisePane(comparePane); };
+    g_compareTexts = [comparePane](const QString& an, const QString& at, const QString& bn, const QString& bt) { comparePane->compareTexts(an, at, bn, bt); if (g_raisePane) g_raisePane(comparePane); };
+    tabs.addTab(comparePane, "Compare");
     auto* goferPane = new GoferPane(spine, root);
     g_goferQuery = [goferPane](const QString& q) {
         goferPane->runQuery(q);
@@ -38963,7 +39119,7 @@ int main(int argc, char** argv) {
                 {"Draft", "Manuscript", "Apparatus", "Review",
                  "Align"});
         mkGroup("Research",
-                {"Search", "Lookup", "Sanskrit", "Convert", "Analysis"});
+                {"Search", "Lookup", "Sanskrit", "Convert", "Analysis", "Compare"});
         mkGroup("Learn", {"Trainer", "Drills"});
         mkGroup("Input", {"Input", "OCR"});
         mkGroup("Catalog", {"Catalog"});
@@ -40020,6 +40176,15 @@ int main(int argc, char** argv) {
         scriptAct("Tibetan: To ACIP", editops::Script::Acip);
         scriptAct("Tibetan: To Wylie", editops::Script::Wylie);
         scriptAct("Tibetan: To Tibetan Script", editops::Script::Unicode);
+        QObject::connect(fmt->addAction("Apply House Style Spacing"), &QAction::triggered, [ed, msg] {
+            QWidget* w = ed(); QTextDocument* doc = nullptr;
+            if (auto* pe = qobject_cast<QPlainTextEdit*>(w)) doc = pe->document(); else if (auto* te = qobject_cast<QTextEdit*>(w)) doc = te->document();
+            if (!doc) { msg("Click into the Draft or Manuscript first."); return; }
+            editops::HouseStyle h = editops::HouseStyle::fromSettings();
+            if (!h.any()) { h.twoSpacesSentence = true; }   // with nothing switched on in Settings, the sheet's core rule
+            const int n = editops::applyHouseStyleSpacing(doc, h);
+            msg(n ? QString("House style spacing: %1 place%2 adjusted.").arg(n).arg(n == 1 ? "" : "s") : "House style spacing: nothing to adjust.");
+        });
         fmt->addSeparator();
         QMenu* stl = fmt->addMenu("Style (Manuscript)");
         QObject::connect(stl, &QMenu::aboutToShow, [stl, manuscriptPane, active, msg] {
@@ -40098,6 +40263,47 @@ int main(int argc, char** argv) {
         });
         QObject::connect(sn->addAction("Show Snippets Folder"), &QAction::triggered, [root] {
             QDir().mkpath(editops::snippetsDir(root)); QDesktopServices::openUrl(QUrl::fromLocalFile(editops::snippetsDir(root)));
+        });
+        tm->addSeparator();
+        QMenu* cmpM = tm->addMenu("Compare");
+        QObject::connect(cmpM->addAction("Compare Files\u2026"), &QAction::triggered, [comparePane] { if (g_raisePane) g_raisePane(comparePane); comparePane->pickAndCompareFiles(); });
+        QObject::connect(cmpM->addAction("Compare Folders\u2026"), &QAction::triggered, [comparePane] { if (g_raisePane) g_raisePane(comparePane); comparePane->pickAndCompareFolders(); });
+        QObject::connect(cmpM->addAction("Three-Way Merge\u2026"), &QAction::triggered, [comparePane] { if (g_raisePane) g_raisePane(comparePane); comparePane->openThreeWay(); });
+        cmpM->addSeparator();
+        auto frontDoc = [overlay, draftPane, manuscriptPane, active](QString& name, QString& text, QString& path) {
+            if (active(manuscriptPane)) { name = "Manuscript"; text = manuscriptPane->manuscriptText(); path = manuscriptPane->manuscriptPath(); }
+            else if (active(draftPane)) { name = "Draft"; text = draftPane->draftText(); path = draftPane->draftPath(); }
+            else { name = "Document"; text = overlay->documentText(); path = overlay->documentPath(); }
+        };
+        QObject::connect(cmpM->addAction("Compare with Clipboard"), &QAction::triggered, [frontDoc, msg] {
+            QString name, text, path; frontDoc(name, text, path);
+            const QString clip = QApplication::clipboard()->text();
+            if (clip.isEmpty()) { msg("The clipboard holds no text."); return; }
+            if (g_compareTexts) g_compareTexts(path.isEmpty() ? name : QFileInfo(path).fileName(), text, "Clipboard", clip);
+        });
+        QObject::connect(cmpM->addAction("Compare with Saved Version"), &QAction::triggered, [frontDoc, msg] {
+            QString name, text, path; frontDoc(name, text, path);
+            if (path.isEmpty()) { msg("This text has never been saved; there is no saved version to compare with."); return; }
+            const auto saved = cmp::readText(path);
+            if (!saved.ok) { msg("Could not read " + path); return; }
+            if (g_compareTexts) g_compareTexts(QFileInfo(path).fileName() + " (on disk)", saved.text, QFileInfo(path).fileName() + " (editing)", text);
+        });
+        QObject::connect(cmpM->addAction("Compare Left and Right in Files"), &QAction::triggered, [filesPane, msg] {
+            const QString a = filesPane->selectedPath(0), b = filesPane->selectedPath(1);
+            if (a.isEmpty() || b.isEmpty()) { msg("Select one item on each side of the Files pane first."); return; }
+            if (QFileInfo(a).isDir() && QFileInfo(b).isDir()) { if (g_compareFolders) g_compareFolders(a, b); else msg("Folder compare is not in this build yet."); }
+            else if (QFileInfo(a).isFile() && QFileInfo(b).isFile()) { if (g_compareFiles) g_compareFiles(a, b); }
+            else msg("Pick two files or two folders.");
+        });
+        QMenu* cmpRecent = cmpM->addMenu("Recent Comparisons");
+        QObject::connect(cmpRecent, &QMenu::aboutToShow, [cmpRecent, comparePane] {
+            cmpRecent->clear();
+            for (const QString& sj : ComparePane::recent()) {
+                const QJsonObject j = QJsonDocument::fromJson(sj.toUtf8()).object();
+                QObject::connect(cmpRecent->addAction(QFileInfo(j["left"].toString()).fileName() + "  \u2194  " + QFileInfo(j["right"].toString()).fileName()), &QAction::triggered,
+                                 [j, comparePane] { if (j["mode"].toString() == "folders") { if (g_compareFolders) g_compareFolders(j["left"].toString(), j["right"].toString()); } else if (g_compareFiles) g_compareFiles(j["left"].toString(), j["right"].toString()); });
+            }
+            if (ComparePane::recent().isEmpty()) cmpRecent->addAction("(none yet)")->setEnabled(false);
         });
         tm->addSeparator();
         QObject::connect(tm->addAction("Command Palette\u2026 (Hunt \u2318K)"), &QAction::triggered, [] { if (g_hunt) g_hunt->openPalette(); });
@@ -41445,6 +41651,24 @@ int main(int argc, char** argv) {
 
     // --survey <file>: the Translator's Survey, scriptable (also
     // the performance harness that guards Adam's speed finding)
+    // --compare <left> <right> [report.(html|patch|md|csv)]: the engine
+    // from the command line; exit 1 when the texts differ (2026-09-08)
+    const int cmpIx = cliArgs.indexOf("--compare");
+    if (cmpIx >= 0 && cmpIx + 2 < cliArgs.size()) {
+        const auto A = cmp::readText(cliArgs[cmpIx + 1]), B = cmp::readText(cliArgs[cmpIx + 2]);
+        if (!A.ok || !B.ok) { fprintf(stderr, "compare: could not read %s\n", (A.ok ? cliArgs[cmpIx + 2] : cliArgs[cmpIx + 1]).toUtf8().constData()); return 2; }
+        using namespace allcore::textdiff;
+        const auto a = splitLines(A.text.toStdString()), b = splitLines(B.text.toStdString());
+        const Result r = diffLines(a, b, Options());
+        printf("%s\n", summary(r).c_str());
+        if (cmpIx + 3 < cliArgs.size()) {
+            const QString out = cliArgs[cmpIx + 3]; const QString sfx = QFileInfo(out).suffix().toLower();
+            const std::string an = cliArgs[cmpIx + 1].toStdString(), bn = cliArgs[cmpIx + 2].toStdString();
+            std::string body = sfx == "html" ? sideBySideHtml(an, bn, a, b, r, false, 3) : sfx == "md" ? apparatusMarkdown(an, bn, apparatus(a, b, r)) : sfx == "csv" ? apparatusCsv(apparatus(a, b, r)) : unifiedDiff(an, bn, a, b, r, 3);
+            QFile f(out); if (!f.open(QIODevice::WriteOnly) || f.write(body.data(), qint64(body.size())) != qint64(body.size())) { fprintf(stderr, "compare: could not write %s\n", out.toUtf8().constData()); return 2; }
+        }
+        return r.differences() ? 1 : 0;
+    }
     const int surveyIx = cliArgs.indexOf("--survey");
     if (surveyIx >= 0 && surveyIx + 1 < cliArgs.size()) {
         QElapsedTimer et;
@@ -41487,6 +41711,7 @@ int main(int argc, char** argv) {
         fails += drillsPane->selfTest(log);
         fails += draftPane->selfTest(log);
         fails += manuscriptPane->selfTest(log);
+        fails += comparePane->selfTest(log);
         fails += reviewPane->selfTest(log);
         fails += alignPane->selfTest(log);
         fails += libraryPane->selfTest(log);
