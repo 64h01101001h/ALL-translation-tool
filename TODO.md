@@ -84,7 +84,7 @@ before 1.0)
       census, three dead controls removed before they are built) with a
       19-step build order across the three batches
 - [x] Batch 4 F0 substrate — 2026-09-09 (textspan, filewalk, applySelected, Draft sidecar fix, HTML flattening, census widened)
-- [ ] **Implement batch 4** in the critic's order (F0 done): F1 Versions next, then
+- [ ] **Implement batch 4** in the critic's order (F0, F1 done 2026-09-09): F2 changed-folios report next, then
       (`allcore/textspan.h` folio primitive + `eligibleTextFile` +
       `provenance.h`), then Versions, changed-folios report, Normalize,
       Replace in Files with preview, Apply Patch, tracked-changes .docx
@@ -3288,7 +3288,7 @@ licensing decisions.
 
 ### Text-analysis families + EndNote — docs/TEXT_ANALYSIS_SUITE_RESEARCH.md (Adam, 2026-09-08)
 - [x] Research and verdicts written (16 families + EndNote/Zotero mapping) — 2026-09-08
-- [ ] Compare batch 4: **Versions** per document (compressed copies on save,
+- [x] Compare batch 4 (DONE 2026-09-09, see docs/release_audit/Versions.md): **Versions** per document (compressed copies on save,
       File ▸ Versions…, Compare with Version, Restore with confirm, "who"
       from Team name); **Replace in Files** with mandatory preview diff and
       undo set; **Apply Patch…** (exact → offset → fuzz, preview, never

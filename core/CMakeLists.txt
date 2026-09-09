@@ -9,6 +9,7 @@ add_library(allcore STATIC
   src/textdiff.cpp
   src/textspan.cpp
   src/filewalk.cpp
+  src/versions.cpp
     src/stardict.cpp
   src/analysis.cpp
   src/qc.cpp
@@ -150,6 +151,10 @@ add_test(NAME terminology_smoke
 add_executable(filewalk_smoke tests/filewalk_smoke.cpp)
 target_link_libraries(filewalk_smoke PRIVATE allcore)
 add_test(NAME filewalk_smoke COMMAND filewalk_smoke)
+
+add_executable(versions_smoke tests/versions_smoke.cpp)
+target_link_libraries(versions_smoke PRIVATE allcore)
+add_test(NAME versions_smoke COMMAND versions_smoke)
 
 add_executable(textdiff_smoke tests/textdiff_smoke.cpp)
 target_link_libraries(textdiff_smoke PRIVATE allcore)

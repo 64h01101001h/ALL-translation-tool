@@ -105,5 +105,15 @@ std::string apparatusMarkdown(const std::string& aName, const std::string& bName
 std::string apparatusCsv(const std::vector<ApparatusEntry>& e);
 std::string summary(const Result& r);
 
+// Line origins ("blame", F1 Versions): for every line of `current`, the
+// index into versionsOldestFirst of the version that first introduced it
+// and carried it unchanged since; versionsOldestFirst.size() means
+// "introduced after the newest version" (unsaved edits). Exact diffs only,
+// so the answer is defensible line for line. The successive-diff
+// attribution used by version-control blame tools.
+std::vector<int> lineOrigins(const std::vector<std::vector<std::string>>& versionsOldestFirst,
+                             const std::vector<std::string>& current,
+                             const Options& o = {});
+
 }  // namespace textdiff
 }  // namespace allcore
