@@ -41,6 +41,7 @@ static QCursor g_busyCursor();   // defined beside g_harnessRun
 #include <QButtonGroup>
 
 #include "allcore/textdiff.h"
+#include "allcore/versions.h"
 #include "allcore/textspan.h"
 #include <QKeyEvent>
 #include <QStringListModel>
@@ -4094,10 +4095,17 @@ inline bool renameFileTo(QWidget* parent, const QString& from,
                                  QString("Could not rename %1.").arg(from));
         return false;
     }
-    // sidecars: pairs of (dir, ext) — "<dir>/<oldBase><ext>" → newBase
+    // sidecars: pairs of (dir, ext) — "<dir>/<oldBase><ext>" → newBase.
+    // F1 (2026-09-09): an ext of "/" names a DIRECTORY sidecar,
+    // "<dir>/<oldBase>/" → "<dir>/<newBase>/" (a document's version history).
     const QString oldBase = fi.completeBaseName();
     const QString newBase = QFileInfo(target).completeBaseName();
     for (int i = 0; i + 1 < sidecarDirsAndExts.size(); i += 2) {
+        if (sidecarDirsAndExts[i + 1] == "/") {
+            const QString a = sidecarDirsAndExts[i] + "/" + oldBase, b = sidecarDirsAndExts[i] + "/" + newBase;
+            if (QFileInfo(a).isDir() && !QFileInfo(b).exists()) QDir().rename(a, b);
+            continue;
+        }
         const QString a = sidecarDirsAndExts[i] + "/" + oldBase + sidecarDirsAndExts[i + 1];
         const QString b = sidecarDirsAndExts[i] + "/" + newBase + sidecarDirsAndExts[i + 1];
         if (QFile::exists(a) && !QFile::exists(b)) QFile::rename(a, b);
@@ -4115,6 +4123,8 @@ struct Input {
     QString dataRoot;
     qint64 sessionEditSeconds = 0;
     QString kind = "document";
+    int versionCount = -1;                 // F1: versions kept for this file (-1 = unknown / no file)
+    std::function<void()> openVersions;    // F1: opens the Versions window (set by the pane)
 };
 // The Properties window: General · Summary · Statistics · Content ·
 // Custom, as in Word. Summary and Custom are editable and land in the
@@ -4184,6 +4194,13 @@ inline void showDialog(QWidget* parent, const Input& in, int tab = 0) {
         f->addRow("Last saved by:", new QLabel(props.value("lastSavedBy").toString().isEmpty() ? "—" : props.value("lastSavedBy").toString()));
         f->addRow("Revision number:", new QLabel(QString::number(props.value("revision").toInt())));
         f->addRow("Total editing time:", new QLabel(hms(props.value("editingSeconds").toInt() + in.sessionEditSeconds)));
+        {   // F1: how many versions this app has kept, and the door to them
+            auto* row = new QWidget; auto* rl = new QHBoxLayout(row); rl->setContentsMargins(0, 0, 0, 0);
+            rl->addWidget(new QLabel(in.versionCount < 0 ? QString("\u2014") : QString::number(in.versionCount)));
+            if (in.openVersions) { auto* b = new QPushButton("Versions\u2026"); b->setToolTip("Every save this app made of this file, comparable and restorable"); rl->addWidget(b); auto open = in.openVersions; QObject::connect(b, &QPushButton::clicked, &dlg, [&dlg, open] { dlg.accept(); open(); }); }
+            rl->addStretch(1);
+            f->addRow("Versions kept:", row);
+        }
         const QJsonObject st = textStatistics(in.text, in.tibetan, in.tokens, in.spans, in.entries);
         auto* tbl = new QTableWidget(0, 2);
         tbl->setHorizontalHeaderLabels({"Statistic name", "Value"});
@@ -6005,6 +6022,9 @@ private:
     QPoint lastGlobal_, pressGlobal_;
     bool moved_ = false;
 };
+
+extern std::function<void(const QString&, const QString&, const QString&, const QString&)> g_compareTexts;   // defined in compare_pane.inc (included later); the Versions window sends its pairs there
+#include "versions_pane.inc"   // F1 Versions: docprops::noteVersion + VersionsWindow (needs enc/editops/docprops above; used by the panes below)
 
 class OverlayPane : public QWidget {
 public:
@@ -8021,11 +8041,19 @@ public:
             const QString g1 = gdir + "/renametest.tsv", g2 = gdir + "/renamed_ok.tsv";
             QFile::remove(g1); QFile::remove(g2);
             check(writeFixture(g1, "sems\tmind\n"), "fixture: the probe glossary was written");
+            // F1: a version-history DIRECTORY sidecar travels with the text too
+            const QString vdir = dataRoot_ + "/library/versions";
+            QDir(vdir + "/renametest").removeRecursively(); QDir(vdir + "/renamed_ok").removeRecursively();
+            QDir().mkpath(vdir + "/renametest");
+            check(writeFixture(vdir + "/renametest/0001.ver", "v"), "fixture: a version-history folder for the probe was written");
             docFile_ = f1;
             const bool ren = renameDocumentTo("renamed_ok");
             check(ren && docFile_ == tmpDir + "/renamed_ok.txt" && QFile::exists(docFile_) &&
                       !QFile::exists(f1) && QFile::exists(g2) && !QFile::exists(g1),
                   "Rename moves the file AND its glossary sidecar to the new base name");
+            check(QFileInfo(vdir + "/renamed_ok").isDir() && QFile::exists(vdir + "/renamed_ok/0001.ver") && !QFileInfo(vdir + "/renametest").exists(),
+                  "Rename carries the version-history folder to the new base name (F1)");
+            QDir(vdir + "/renamed_ok").removeRecursively();
             const bool mv = moveDocumentTo(tmpDir + "/sub");
             check(mv && docFile_ == tmpDir + "/sub/renamed_ok.txt" && QFile::exists(docFile_),
                   "Move relocates the file into the chosen folder and follows it");
@@ -8046,6 +8074,56 @@ public:
                       docprops::load(sc).value("title").toString() == "Thar lam gsal byed",
                   "Summary properties round-trip through the sidecar");
             QFile::remove(sc); QFile::remove(g2);
+            {   // ---- F1 Versions (selftests 20-32)
+                const QString vf = tmpDir + "/versions_probe.txt"; QFile::remove(vf);
+                const QString vdir2 = docprops::versionsDir(dataRoot_, vf); QDir(vdir2).removeRecursively();
+                QSettings vst("ALL", "TranslationTool");
+                const QVariant enabledWas = vst.value("versions/enabled");
+                vst.setValue("versions/enabled", true);
+                docFile_ = vf; docEncoding_ = "UTF-8"; docLineEnding_ = "LF";
+                input_->setPlainText("@001A KA KHA GA ,\nNGA CA CHA ,\n");
+                check(writeDocumentTo(vf) && allcore::versions::list(vdir2.toStdString()).size() == 1, "20 a save keeps one version");
+                check(lastVersionNotice().startsWith("Version kept"), "20b the hint says the version was kept");
+                check(writeDocumentTo(vf) && allcore::versions::list(vdir2.toStdString()).size() == 1 && lastVersionNotice().startsWith("Unchanged"), "21 an identical save is deduplicated and says so");
+                input_->setPlainText("@001A KA KHA GA ,\nNGA CA CHA JA ,\nNYA TA ,\n");
+                check(writeDocumentTo(vf) && allcore::versions::list(vdir2.toStdString()).size() == 2, "22 a changed save keeps a second version");
+                auto ents = allcore::versions::list(vdir2.toStdString());
+                QString t0; int bad = 0;
+                check(docprops::versionText(vdir2, ents[0], t0, &bad) && bad == 0 && t0 == "@001A KA KHA GA ,\nNGA CA CHA ,\n", "23 a version decodes back to the exact text that was saved");
+                check(ents[1].meta.revision == 3 && ents[1].meta.kind == "document" && ents[1].meta.reason == "save" && !ents[1].meta.savedBy.empty() && ents[1].meta.encoding == "UTF-8" && ents[1].meta.codec == "qz",
+                      "24 the record carries revision, kind, reason, who, encoding and codec");
+                check(!ents[1].meta.statisticsJson.empty() && QJsonDocument::fromJson(QByteArray::fromStdString(ents[1].meta.statisticsJson)).object().value("folios").toInt() == 1, "25 statistics travel with the version (folios=1)");
+                openVersions();
+                auto* vw = versionsWindow();
+                check(vw && vw->rowCount() == 2, "26 the Versions window lists both versions");
+                auto oldCmp = g_compareTexts; QString gotA, gotB; g_compareTexts = [&](const QString&, const QString& a, const QString&, const QString& b) { gotA = a; gotB = b; };
+                vw->selectRow(1);   // newest-first: row 1 = the older version
+                check(vw->compareWithCurrent() && gotA == t0 && gotB == input_->toPlainText(), "27 Compare with Current sends the version (left) and the editing text (right) to Compare");
+                g_compareTexts = oldCmp;
+                check(!vw->restoreStep() && vw->lastMessage().contains("refused"), "28 Restore without confirmation is refused under the harness");
+                vw->harnessAutoConfirm_ = true;
+                check(writeFixture(vf, "edited outside the app\n"), "fixture: the file on disk was changed by another program");
+                check(vw->restoreStep() && input_->toPlainText() == t0, "29 Restore replaces the file with the version and reloads it");
+                ents = allcore::versions::list(vdir2.toStdString());
+                QString bankedText; bool banked = false;
+                for (const auto& e : ents) if (e.meta.reason == "pre-restore") { banked = true; int b2 = 0; docprops::versionText(vdir2, e, bankedText, &b2); }
+                check(ents.size() == 3 && banked && bankedText == "edited outside the app\n", "30 the file as it was on disk (even an outside edit) was kept as a version BEFORE the restore");
+                check(vw->lastMessage().contains("kept as a version first"), "30b the notice says the on-disk text was kept first");
+                vw->selectRow(0); check(vw->nameVersion("milestone one", false) && vw->entries()[0].meta.pinned && vw->entries()[0].meta.label == "milestone one", "31 Name this Version pins it with its name");
+                check(vw->lineOriginsFor(1).contains("first appears"), "32a Line Origins names the version that introduced a line");
+                {   // damaged version: excluded from Compare and Restore
+                    QFile dv(QString::fromStdString(ents[1].verPath)); if (dv.open(QIODevice::WriteOnly | QIODevice::Truncate)) { dv.write("garbage"); dv.close(); }
+                    vw->refresh(); int row = -1; for (int i = 0; i < (int)vw->entries().size(); ++i) if (vw->entries()[i].verPath == ents[1].verPath) row = i;
+                    check(row >= 0 && !vw->compareWithCurrent(row) && vw->lastMessage().contains("damaged"), "32b a version whose bytes do not match its record is refused, not guessed");
+                }
+                vst.setValue("versions/enabled", false);
+                input_->setPlainText("changed while versions are off\n");
+                const size_t before = allcore::versions::list(vdir2.toStdString()).size();
+                check(writeDocumentTo(vf) && allcore::versions::list(vdir2.toStdString()).size() == before && lastVersionNotice().isEmpty(), "32c with Versions off, a save keeps nothing and says nothing");
+                if (enabledWas.isValid()) vst.setValue("versions/enabled", enabledWas); else vst.remove("versions/enabled");
+                if (versionsWin_) { versionsWin_->deleteLater(); versionsWin_ = nullptr; }
+                QDir(vdir2).removeRecursively(); QFile::remove(vf); QFile::remove(docprops::sidecarPath(dataRoot_, vf));
+            }
             QDir(tmpDir).removeRecursively();
             input_->setPlainText(keepText);
             docFile_ = keepFile;
@@ -8355,9 +8433,35 @@ public:
         savedDigest_ = docprops::digest(input_->toPlainText());
         docprops::noteSave(this, docprops::sidecarPath(dataRoot_, fn),
                            editTimer_.isValid() ? editTimer_.elapsed() / 1000 : 0);
+        {   // F1: keep this save as a version (after noteSave, so the revision recorded is this save's)
+            const QString vn = docprops::noteVersion(this, dataRoot_, fn, bytes, "document", "save", "", docEncoding_, docLineEnding_,
+                                                     bytes.startsWith("\xEF\xBB\xBF"),
+                                                     docprops::textStatistics(input_->toPlainText(), true, int(doc_.tokens.size()), int(doc_.spans.size()), int(doc_.entries.size())));
+            lastVersionNotice_ = vn;
+            if (hint_ && !vn.isEmpty()) hint_->setText(hint_->text() + " \u00b7 " + vn);
+            if (versionsWin_) versionsWin_->refresh();
+        }
         editTimer_.restart();
         return true;
     }
+    // F1: the Versions window for this document (one per pane, modeless)
+    void openVersions() {
+        if (docFile_.isEmpty()) { if (hint_) hint_->setText("Save the document first: versions are kept per file."); return; }
+        if (!versionsWin_ || versionsWin_->windowTitle() != "Versions \u2014 " + QFileInfo(docFile_).fileName()) {
+            if (versionsWin_) versionsWin_->deleteLater();
+            VersionsWindow::Hooks h; h.dataRoot = dataRoot_; h.docPath = docFile_; h.kind = "document";
+            h.currentText = [this] { return input_->toPlainText(); };
+            h.currentBytesOnDisk = [this] { QFile f(docFile_); return f.open(QIODevice::ReadOnly) ? f.readAll() : QByteArray(); };
+            h.isDirty = [this] { return isDirty(); };
+            h.reloadWithEncoding = [this](const QString& e) { return revertDocument(e); };
+            h.caretLine = [this] { return input_->textCursor().blockNumber() + 1; };
+            versionsWin_ = new VersionsWindow(h, this);
+        }
+        versionsWin_->refresh();
+        if (!g_harnessRun) { versionsWin_->show(); versionsWin_->raise(); versionsWin_->activateWindow(); }
+    }
+    VersionsWindow* versionsWindow() const { return versionsWin_; }
+    QString lastVersionNotice() const { return lastVersionNotice_; }
     // ---- Insert menu hooks (2026-09-08) ----
     QString insertFolioMarker() {
         QTextCursor c = input_->textCursor();
@@ -8513,10 +8617,10 @@ public:
         if (!ok) docEncoding_ = was;
         return ok;
     }
-    bool revertDocument() {
+    bool revertDocument(const QString& encoding = QString()) {   // F1: a restored version reopens in ITS recorded encoding
         if (docFile_.isEmpty()) { if (hint_) hint_->setText("Nothing to revert to: the document has no file."); return false; }
         if (!confirmDiscard()) return false;
-        pendingEncoding_ = docEncoding_;
+        pendingEncoding_ = encoding.isEmpty() ? docEncoding_ : encoding;
         openFile(docFile_);
         if (hint_) hint_->setText("Reverted to the saved " + QFileInfo(docFile_).fileName());
         return true;
@@ -8651,7 +8755,8 @@ public:
         QString nw;
         if (!docprops::renameFileTo(this, docFile_, newName, nw,
                                     {dataRoot_ + "/library/glossaries", ".tsv",
-                                     dataRoot_ + "/library/properties", ".json"}))
+                                     dataRoot_ + "/library/properties", ".json",
+                                     dataRoot_ + "/library/versions", "/"}))   // F1: the history moves with the text
             return false;
         docFile_ = nw;
         refreshDocTitle();
@@ -8689,6 +8794,8 @@ public:
         in.content = outlineForProperties();
         in.dataRoot = dataRoot_;
         in.sessionEditSeconds = editTimer_.isValid() ? editTimer_.elapsed() / 1000 : 0;
+        in.versionCount = docprops::versionCount(dataRoot_, docFile_);
+        in.openVersions = [this] { const_cast<OverlayPane*>(this)->openVersions(); };
         in.kind = "document";
         return in;
     }
@@ -17096,6 +17203,8 @@ private:
     QByteArray savedDigest_;       // sha1 of the box as last opened/saved
     QString docEncoding_ = "UTF-8"; // how the file on disk is encoded
     QString pendingEncoding_;        // set by Reopen with Encoding before openFile()
+    QPointer<VersionsWindow> versionsWin_;   // F1
+    QString lastVersionNotice_;              // F1: what the last save said about its version
     QString docLineEnding_ = "LF";  // LF / CRLF / CR as found on disk
     QWidget* controlColumn_ = nullptr; // the left column (Focus mode hides it)
     QSet<int> bookmarks_;              // 0-based lines, per document, in the properties sidecar
@@ -22122,9 +22231,31 @@ auto* secPub = new QLabel("<span style='color:#9A7A33;font-size:10px;letter-spac
         savedDigest_ = docprops::digest(draft_->toPlainText());
         docprops::noteSave(this, docprops::sidecarPath(dataRoot_, draftPath_),
                            editTimer_.isValid() ? editTimer_.elapsed() / 1000 : 0);
+        {   // F1
+            const QString vn = docprops::noteVersion(this, dataRoot_, draftPath_, draft_->toPlainText().toUtf8(), "draft", "save", "", "UTF-8", "LF", false,
+                                                     docprops::textStatistics(draft_->toPlainText(), false, 0, 0, 0));
+            if (termLive_ && !vn.isEmpty()) termLive_->setText(termLive_->text() + " \u00b7 " + vn);
+            if (versionsWin_) versionsWin_->refresh();
+        }
         editTimer_.restart();
         return true;
     }
+    void openVersions() {   // F1
+        if (draftPath_.isEmpty()) { if (termLive_) termLive_->setText("Save the draft first: versions are kept per file."); return; }
+        if (!versionsWin_ || versionsWin_->windowTitle() != "Versions \u2014 " + QFileInfo(draftPath_).fileName()) {
+            if (versionsWin_) versionsWin_->deleteLater();
+            VersionsWindow::Hooks h; h.dataRoot = dataRoot_; h.docPath = draftPath_; h.kind = "draft";
+            h.currentText = [this] { return draft_->toPlainText(); };
+            h.currentBytesOnDisk = [this] { QFile f(draftPath_); return f.open(QIODevice::ReadOnly) ? f.readAll() : QByteArray(); };
+            h.isDirty = [this] { return draftDirty(); };
+            h.reloadWithEncoding = [this](const QString&) { return revertDraft(); };
+            h.caretLine = [this] { return draft_->textCursor().blockNumber() + 1; };
+            versionsWin_ = new VersionsWindow(h, this);
+        }
+        versionsWin_->refresh();
+        if (!g_harnessRun) { versionsWin_->show(); versionsWin_->raise(); versionsWin_->activateWindow(); }
+    }
+    VersionsWindow* versionsWindow() const { return versionsWin_; }
     bool draftDirty() const {
         return docprops::digest(draft_->toPlainText()) != savedDigest_ &&
                !(draft_->toPlainText().isEmpty() && draftPath_.isEmpty());
@@ -22183,7 +22314,7 @@ auto* secPub = new QLabel("<span style='color:#9A7A33;font-size:10px;letter-spac
         if (draftPath_.isEmpty()) { if (termLive_) termLive_->setText("Save the draft first; Rename works on a file."); return false; }
         const QString n = docprops::askName(this, "Rename draft", "New file name:", QFileInfo(draftPath_).fileName());
         QString nw;
-        if (n.isEmpty() || !docprops::renameFileTo(this, draftPath_, n, nw, {dataRoot_ + "/library/properties", ".json"})) return false;
+        if (n.isEmpty() || !docprops::renameFileTo(this, draftPath_, n, nw, {dataRoot_ + "/library/properties", ".json", dataRoot_ + "/library/versions", "/"})) return false;
         draftPath_ = nw;
         if (termLive_) termLive_->setText("Renamed to " + QFileInfo(nw).fileName());
         return true;
@@ -22197,6 +22328,8 @@ auto* secPub = new QLabel("<span style='color:#9A7A33;font-size:10px;letter-spac
         in.dataRoot = dataRoot_;
         in.sessionEditSeconds = editTimer_.isValid() ? editTimer_.elapsed() / 1000 : 0;
         in.kind = "draft";
+        in.versionCount = docprops::versionCount(dataRoot_, draftPath_);
+        in.openVersions = [this] { openVersions(); };
         docprops::showDialog(this, in, tab);
     }
     bool saveDraftAs() {
@@ -23833,6 +23966,7 @@ public:
     QByteArray savedDigest_;
     QElapsedTimer editTimer_;
     QString dataRoot_;
+    QPointer<VersionsWindow> versionsWin_;   // F1
     QPlainTextEdit* source_ = nullptr;
     QPlainTextEdit* draft_ = nullptr;
     QTextBrowser* clauseView_ = nullptr;
@@ -33574,7 +33708,7 @@ public:
         auto* t = new QTimer(this);
         t->setInterval(60 * 1000);
         connect(t, &QTimer::timeout, [this] {
-            if (dirty_ && !path_.isEmpty()) save();
+            if (dirty_ && !path_.isEmpty()) save(/*autosave=*/true);
         });
         t->start();
         // reopen last manuscript
@@ -33595,8 +33729,9 @@ public:
         status_->setText(QFileInfo(fn).fileName());
     }
 
-    bool save() {
+    bool save(bool autosave = false) {
         if (path_.isEmpty()) return saveAs();
+        lastSaveWasAutosave_ = autosave;   // F1: the version record's reason (save vs the one rolling autosave slot)
         { const auto hs = editops::HouseStyle::fromSettings(); if (hs.applyOnSave) editops::applyHouseStyleSpacing(editor_->document(), hs); }
         // WP-1: the verdict comes from the flushed, byte-counted
         // predicate (saveOrWarn), never from an unchecked write.
@@ -33612,9 +33747,31 @@ public:
                          QTime::currentTime().toString("HH:mm"));
         docprops::noteSave(this, docprops::sidecarPath(dataRoot_, path_),
                            editTimer_.isValid() ? editTimer_.elapsed() / 1000 : 0);
+        {   // F1: the HTML as written; compared as text later (formatting is not compared)
+            const QString vn = docprops::noteVersion(this, dataRoot_, path_, editor_->toHtml().toUtf8(), "manuscript", lastSaveWasAutosave_ ? "autosave" : "save", "",
+                                                     "UTF-8", "HTML", false, docprops::textStatistics(editor_->toPlainText(), false, 0, 0, 0));
+            if (!vn.isEmpty()) status_->setText(status_->text() + " \u00b7 " + vn);
+            if (versionsWin_) versionsWin_->refresh();
+        }
         editTimer_.restart();
         return true;
     }
+    void openVersions() {   // F1
+        if (path_.isEmpty()) { status_->setText("Save the manuscript first: versions are kept per file."); return; }
+        if (!versionsWin_ || versionsWin_->windowTitle() != "Versions \u2014 " + QFileInfo(path_).fileName()) {
+            if (versionsWin_) versionsWin_->deleteLater();
+            VersionsWindow::Hooks h; h.dataRoot = dataRoot_; h.docPath = path_; h.kind = "manuscript";
+            h.currentText = [this] { return editor_->toPlainText(); };
+            h.currentBytesOnDisk = [this] { QFile f(path_); return f.open(QIODevice::ReadOnly) ? f.readAll() : QByteArray(); };
+            h.isDirty = [this] { return dirty_; };
+            h.reloadWithEncoding = [this](const QString&) { return revertManuscript(); };
+            h.caretLine = [this] { return editor_->textCursor().blockNumber() + 1; };
+            versionsWin_ = new VersionsWindow(h, this);
+        }
+        versionsWin_->refresh();
+        if (!g_harnessRun) { versionsWin_->show(); versionsWin_->raise(); versionsWin_->activateWindow(); }
+    }
+    VersionsWindow* versionsWindow() const { return versionsWin_; }
     // ---- Word's File menu, for the manuscript (2026-09-08) ----
     void setDataRoot(const QString& r) { dataRoot_ = r; }
     bool confirmDiscardMss() {
@@ -33715,7 +33872,7 @@ public:
         if (path_.isEmpty()) { status_->setText("Save the manuscript first; Rename works on a file."); return false; }
         const QString n = docprops::askName(this, "Rename manuscript", "New file name:", QFileInfo(path_).fileName());
         QString nw;
-        if (n.isEmpty() || !docprops::renameFileTo(this, path_, n, nw, {dataRoot_ + "/library/properties", ".json"})) return false;
+        if (n.isEmpty() || !docprops::renameFileTo(this, path_, n, nw, {dataRoot_ + "/library/properties", ".json", dataRoot_ + "/library/versions", "/"})) return false;
         path_ = nw;
         QSettings("ALL", "TranslationTool").setValue("manuscript/lastFile", nw);
         status_->setText("Renamed to " + QFileInfo(nw).fileName());
@@ -33730,6 +33887,8 @@ public:
         in.dataRoot = dataRoot_;
         in.sessionEditSeconds = editTimer_.isValid() ? editTimer_.elapsed() / 1000 : 0;
         in.kind = "manuscript";
+        in.versionCount = docprops::versionCount(dataRoot_, path_);
+        in.openVersions = [this] { openVersions(); };
         docprops::showDialog(this, in, tab);
     }
 
@@ -33892,6 +34051,8 @@ private:
     QLabel* status_ = nullptr;
     std::vector<std::pair<QString, std::function<void(QTextCursor&)>>> styles_;
     QString dataRoot_;
+    bool lastSaveWasAutosave_ = false;
+    QPointer<VersionsWindow> versionsWin_;   // F1
     QElapsedTimer editTimer_;
     QPushButton* boldB_ = nullptr;
     QPushButton* italB_ = nullptr;
@@ -36769,7 +36930,7 @@ public:
     int selfTest(QStringList& log) {
         int fails = 0;
         auto check = [&](bool ok, const char* what) { log << QString("  [%1] Preferences: %2").arg(ok ? "PASS" : "FAIL").arg(what); if (!ok) ++fails; };
-        check(pageCount() == 11 && grid_->count() == pageCount(), "eleven pages, one grid tile each");
+        check(pageCount() == 12 && grid_->count() == pageCount(), "twelve pages, one grid tile each");
         filter("style"); check(visibleGridItems() >= 1 && visibleGridItems() < pageCount(), "search narrows the grid (\"style\" finds the House Style page)");
         filter(""); check(visibleGridItems() == pageCount(), "clearing the search shows every tile");
         openPage(2); check(currentPage() == 2 && !back_->isHidden(), "opening a tile shows its page and the Show All button");
@@ -36888,6 +37049,17 @@ private:
               for (const auto& r : rules) o.*(r.f) = checks_[r.key]->isChecked();
               QSettings("ALL", "TranslationTool").setValue("compare/defaultOptions", QJsonDocument(cmp::optionsJson(o)).toJson(QJsonDocument::Compact));
           };
+          pages_ << p; }
+        // 5b Versions (F1, 2026-09-09)
+        { QFormLayout* f; Page p; p.title = "Versions"; p.icon = "clock"; p.blurb = "Every save kept, listed, comparable, restorable"; p.keywords = {"versions", "history", "save", "restore", "autosave", "backup", "undo", "blame"};
+          p.w = pageWidget(f, "Every save of a document, draft or manuscript is kept under library/versions beside the text, with who saved it and when. File ▸ Versions… lists them; any version can be compared with what you are editing, named so it is never pruned, saved elsewhere, or restored — a restore banks the current file first. Versions exist only for saves made in this app.");
+          QSettings st("ALL", "TranslationTool");
+          cb(f, "versions/enabled", "Keep a version on every save", true);
+          auto* capN = new QSpinBox; capN->setRange(10, 5000); capN->setValue(st.value("versions/capCount", 200).toInt()); f->addRow("Maximum versions per document:", capN);
+          auto* capMB = new QSpinBox; capMB->setRange(5, 2000); capMB->setSuffix(" MB"); capMB->setValue(st.value("versions/capMB", 64).toInt()); f->addRow("Space per document:", capMB);
+          cb(f, "versions/autosaveSlot", "Also keep one rolling autosave version (Manuscript)", true, "The Manuscript autosaves once a minute while edited; one slot, replaced each time, cleared by a real save");
+          f->addRow(new QLabel("<small>There is no Track Changes toggle for texts. To accept or reject a change, compare a version with what you are editing and use MERGE ▸ Copy Left / Copy Right in the Compare pane, then Save.</small>"));
+          p.save = [this, capN, capMB] { saveChecks(checks_, {"versions/enabled", "versions/autosaveSlot"}); QSettings s2("ALL", "TranslationTool"); s2.setValue("versions/capCount", capN->value()); s2.setValue("versions/capMB", capMB->value()); };
           pages_ << p; }
         // 6 Team & Provenance
         { QFormLayout* f; Page p; p.title = "Team"; p.icon = "book"; p.blurb = "Your name on proposals; the shared folders"; p.keywords = {"team", "name", "provenance", "admin", "proposals", "approval", "share"};
@@ -39540,6 +39712,16 @@ int main(int argc, char** argv) {
                 else if (active(draftPane)) draftPane->revertDraft();
                 else overlay->revertDocument();
             });
+            {   // F1: every save kept, comparable and restorable
+                QAction* versA = fileM->addAction("Versions\u2026");
+                versA->setShortcut(QKeySequence("Alt+Ctrl+V"));
+                versA->setToolTip("Every save this app made of the front text: compare, restore, name, line origins");
+                QObject::connect(versA, &QAction::triggered, [overlay, draftPane, manuscriptPane, active] {
+                    if (active(manuscriptPane)) manuscriptPane->openVersions();
+                    else if (active(draftPane)) draftPane->openVersions();
+                    else overlay->openVersions();
+                });
+            }
             QAction* closeAllA = fileM->addAction("Close All Files");
             closeAllA->setShortcut(QKeySequence("Ctrl+Alt+Shift+W"));
             QObject::connect(closeAllA, &QAction::triggered, [overlay, draftPane, manuscriptPane] {
@@ -40455,6 +40637,12 @@ int main(int argc, char** argv) {
             if (!saved.ok) { msg("Could not read " + path); return; }
             const QString savedText = name == "Manuscript" ? editops::htmlToPlain(saved.text) : saved.text;   // F0: both sides plain
             if (g_compareTexts) g_compareTexts(QFileInfo(path).fileName() + " (on disk)", savedText, QFileInfo(path).fileName() + " (editing)", text);
+        });
+        QObject::connect(cmpM->addAction("Compare with Version\u2026"), &QAction::triggered, [overlay, draftPane, manuscriptPane, active, msg] {   // F1
+            if (active(manuscriptPane)) manuscriptPane->openVersions();
+            else if (active(draftPane)) draftPane->openVersions();
+            else overlay->openVersions();
+            msg("Pick a version in the Versions window and press Compare with Current.");
         });
         QObject::connect(cmpM->addAction("Compare Left and Right in Files"), &QAction::triggered, [filesPane, msg] {
             const QString a = filesPane->selectedPath(0), b = filesPane->selectedPath(1);

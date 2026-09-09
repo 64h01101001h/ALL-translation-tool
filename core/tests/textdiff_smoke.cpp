@@ -164,6 +164,15 @@ int main() {
         CHECK(joinLines(applySelected(a2, b2, r2, {ins})) == "x\ny\nz\nw\n", "selecting the insert appends w only");
         CHECK(applySelected(a2, b2, r2, {chg, ins}) == b2, "selecting every non-Equal hunk yields b");
     }
+    // F1 (2026-09-09): line origins (blame) over successive versions
+    {
+        const std::vector<std::vector<std::string>> vs = {L("a\nb\n"), L("a\nb\nc\n"), L("a\nX\nc\n")};
+        const auto orig = lineOrigins(vs, L("a\nX\nc\nnew\n"));
+        CHECK(orig == std::vector<int>({0, 2, 1, 3}), "lineOrigins: a from v0, X from v2, c from v1, 'new' after the newest (3)");
+        CHECK(lineOrigins({}, L("a\n")) == std::vector<int>({0}), "no versions: every current line is origin 0");
+        CHECK(lineOrigins({L("a\n")}, {}).empty(), "empty current: empty result, no crash");
+        CHECK(lineOrigins({L("a\nb\n")}, L("a\nb\n")) == std::vector<int>({0, 0}), "unchanged since the only version: all 0");
+    }
     std::printf("textdiff_smoke: %d failure(s)\n", failures);
     return failures ? 1 : 0;
 }

@@ -19,7 +19,8 @@
 | Colour Scheme | Day / Night radio mirrored onto the General page's night-mode switch | via General | — | Installable schemes deliberately not offered: no theme may recolour a provenance label |
 | Key Bindings | read-only table built from the live menu bar; filter; Copy as text | — | selftest: > 40 rows when a menu bar is supplied | Editing bindings not offered yet (says so) |
 | Quick Access | pins list `qat/pins` with Remove | next start / QAT rebuild | — | — |
+| Versions (2026-09-09, F1) | `versions/enabled`, `versions/capCount` (10–5000, 200), `versions/capMB` (5–2000, 64), `versions/autosaveSlot` | next save (read by `docprops::noteVersion` / `versionLimits`) | selftest pageCount 12; app selftest 32c (off → nothing kept) | — |
 
 ## 3. Honesty
 - Nothing decorative: each control writes a key with a reader.
-- The old `SettingsDialog` selftest (write path) is superseded by `PreferencesDialog::selfTest` (10 checks: page count, search, navigation, writes, engine read-back, key bindings).
+- The old `SettingsDialog` selftest (write path) is superseded by `PreferencesDialog::selfTest` (page count 12 since the Versions page; 10 checks: page count, search, navigation, writes, engine read-back, key bindings).

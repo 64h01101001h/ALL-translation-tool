@@ -92,3 +92,6 @@ Private state: `spine_`, `editor_`, `side_`, `query_`, `results_`, `status_`, `b
 - **No ⌘S / keyboard shortcuts** in this pane. Confirm this is covered by a global menu action elsewhere, or add one.
 - **Silently inert PUBLISH buttons** if the DraftPane hooks are ever unset (e.g. a pane-construction reorder). Consider disabling the buttons instead of no-oping.
 - **Startup auto-reopen** of the last manuscript happens without asking. Confirm this is the desired behaviour for shared/input-centre machines.
+
+## F1 Versions (2026-09-09)
+- `save(bool autosave)` keeps the HTML as a version (`autosave` → the one rolling slot); the 60 s timer passes true; `openVersions()`; Properties row. Versions compared as text (formatting not compared — the window says so). Evidence: app selftests 20–32c; details in `Versions.md`.

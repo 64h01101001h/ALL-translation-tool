@@ -6,7 +6,7 @@
 
 static std::function<void(const QString&, const QString&)> g_compareFiles;     // (leftPath, rightPath)
 static std::function<void(const QString&, const QString&)> g_compareFolders;   // (leftDir, rightDir)
-static std::function<void(const QString&, const QString&, const QString&, const QString&)> g_compareTexts;  // (aName,aText,bName,bText)
+std::function<void(const QString&, const QString&, const QString&, const QString&)> g_compareTexts;  // (aName,aText,bName,bText)
 
 namespace cmp {
 using namespace allcore::textdiff;

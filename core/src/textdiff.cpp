@@ -470,6 +470,33 @@ std::vector<std::string> renderMerge(const MergeResult& m, const std::vector<std
     return out;
 }
 
+// ------------------------------------------------------------ origins
+std::vector<int> lineOrigins(const std::vector<std::vector<std::string>>& versions,
+                             const std::vector<std::string>& current, const Options& o) {
+    // attribution per line of the version being walked
+    std::vector<int> attr;
+    if (!versions.empty()) attr.assign(versions[0].size(), 0);
+    auto carry = [&](const std::vector<std::string>& from, const std::vector<std::string>& to, int newIdx) {
+        const Result r = diffLines(from, to, o);
+        std::vector<int> next(to.size(), newIdx);
+        for (const auto& h : r.hunks) {
+            if (h.kind == Kind::Equal || h.unimportant) {
+                // same lines, same origin — carried by position
+                for (int k = 0; k < h.bEnd - h.bBeg; ++k) {
+                    const int fromIdx = h.aBeg + k, toIdx = h.bBeg + k;
+                    if (fromIdx < (int)attr.size() && toIdx < (int)next.size()) next[toIdx] = attr[fromIdx];
+                }
+            }
+            // Insert / Change: the new lines keep newIdx
+        }
+        attr = std::move(next);
+    };
+    for (size_t k = 1; k < versions.size(); ++k) carry(versions[k - 1], versions[k], (int)k);
+    if (versions.empty()) { return std::vector<int>(current.size(), 0); }
+    carry(versions.back(), current, (int)versions.size());
+    return attr;
+}
+
 // ------------------------------------------------------------ reports
 std::string unifiedDiff(const std::string& aName, const std::string& bName,
                         const std::vector<std::string>& a, const std::vector<std::string>& b,

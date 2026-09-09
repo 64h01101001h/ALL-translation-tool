@@ -285,3 +285,6 @@ These four are *invoked* by ExportPane's buttons (main.cpp:15900–15949) but im
 - **Card layer defaults**: `glosses` is force-re-armed at launch by design; confirm no *other* persisted preference can hide a binding layer.
 - **First use of the attestation hints builds a 548k-form lexicon** (measured at 4.8 s in Release, 35.6 s unoptimised). Confirm the shipped build is Release and that the cancel path leaves an honest "hints off, and here is why" state.
 - **Half-built / heuristic surfaces to judge**: sa bcad outline detection, Text DNA, and the meter census all present machine inference without an explicit confidence label — decide whether each is ship, hide, or label.
+
+## F1 Versions (2026-09-09)
+- `writeDocumentTo` keeps a version after `noteSave` (encoded bytes, encoding, line ending, BOM, statistics); `openVersions()` window; `revertDocument(encoding)` reopens a restored version in its recorded encoding; Properties ▸ Statistics shows Versions kept + a Versions… button. Evidence: app selftests 20–32c; details in `Versions.md`.

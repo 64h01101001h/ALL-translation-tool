@@ -110,3 +110,6 @@ No `QProcess`, no `QSaveFile`, no explicit `QSettings` access beyond the `sess::
 - The Manuscript seams (`g_mssComposeBib`, `g_mssProposeNote`) call into DraftPane from another tab; confirm the composer dialog's parent/modality behaves correctly when raised from the Manuscript.
 - `showAnchors` swallows FTS syntax exceptions on exotic clause text (20554-ish, `catch (const std::exception&)` with a "stay silent rather than wrong" comment). Confirm silence is the intended behaviour rather than a visible "could not search this clause" note.
 - The pane defines no keyboard shortcuts and no context menus; confirm this is acceptable for the accessibility pass.
+
+## F1 Versions (2026-09-09)
+- `saveDraft` keeps a UTF-8/LF version after `noteSave`; `openVersions()`; Properties row. Evidence: app selftests 20–32c; details in `Versions.md`.
