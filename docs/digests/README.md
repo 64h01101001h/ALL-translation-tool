@@ -48,3 +48,14 @@ emptied. If it isn't in the log, it doesn't reach the digest.
   email or document.
 - A next-day preview may be kept at `YYYY-MM-DD.draft.md`; rerun and
   update it when more work lands, then promote it to the dated digest.
+
+## Voice (Adam and Jane, 2026-09-08 evening)
+The digest is **Adam's report of Adam's work**, sent from his account.
+Write it in the first person, with Adam as the actor of every item ("I
+brought the menus to parity…", "I built…"). There is no separate
+"Adam's decisions" section — that framing made the rest of the work read
+as if it happened outside his direction, which is false: nothing in a
+digest happened outside his instruction. Decisions appear as "Decisions I
+made along the way", inside the narrative. Section order: Headline · What
+I did · Decisions I made along the way · Numbers · Open questions for
+leadership · Next.
