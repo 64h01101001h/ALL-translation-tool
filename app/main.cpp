@@ -2833,6 +2833,23 @@ static bool g_sweepActive = false;
 // (found 2026-08-15: the stray "QTextCursor::setPosition: Position
 // '4' out of range" was restoreSession racing the selftest doc)
 static bool g_harnessRun = false;
+// Selftest fixtures (2026-09-08): a fixture written without checking the
+// write makes every assertion below it vacuous — the standing rule this
+// project already applies to its proposal stores. These are the checked
+// one-liners the selftests use; they also keep the press's STATIC-R1
+// warnings gate clean (QFile::open/write are [[nodiscard]]).
+static bool writeFixture(const QString& path, const QByteArray& body) {
+    QFile f(path);
+    if (!f.open(QIODevice::WriteOnly | QIODevice::Truncate)) return false;
+    if (f.write(body) != qint64(body.size())) return false;
+    f.flush();
+    return f.error() == QFile::NoError;
+}
+static QByteArray readFixture(const QString& path) {
+    QFile f(path);
+    if (!f.open(QIODevice::ReadOnly)) return {};
+    return f.readAll();
+}
 // Menu cross-links (2026-09-08): actions created in one menu block and
 // triggered from another (Project ▸ Edit Dossiers… = File ▸ Dossiers…;
 // Tools ▸ Cheat Sheet = Help ▸ Keyboard Shortcuts…).
@@ -4465,9 +4482,6 @@ inline bool replaceOne(QWidget* w, const QString& needle, const QString& with, c
     else if (auto* t = qobject_cast<QTextEdit*>(w)) did = replaceCurrentIn(t, needle, with, o);
     findIn(w, needle, false, o);
     return did;
-}
-inline bool replaceOne(QWidget* w, const QString& needle, const QString& with, bool caseSensitive) {
-    FindOpts o; o.caseSensitive = caseSensitive; return replaceOne(w, needle, with, o);
 }
 // Replace All in one undo step; returns the count.
 inline int replaceAll(QWidget* w, const QString& needle, const QString& with, const FindOpts& o) {
@@ -7983,12 +7997,12 @@ public:
             QDir().mkpath(tmpDir + "/sub");
             const QString f1 = tmpDir + "/renametest.txt";
             QFile::remove(f1);
-            { QFile f(f1); f.open(QIODevice::WriteOnly); f.write("@001A *, ,A,,"); }
+            check(writeFixture(f1, "@001A *, ,A,,"), "fixture: the rename probe text was written");
             const QString gdir = dataRoot_ + "/library/glossaries";
             QDir().mkpath(gdir);
             const QString g1 = gdir + "/renametest.tsv", g2 = gdir + "/renamed_ok.tsv";
             QFile::remove(g1); QFile::remove(g2);
-            { QFile g(g1); g.open(QIODevice::WriteOnly); g.write("sems\tmind\n"); }
+            check(writeFixture(g1, "sems\tmind\n"), "fixture: the probe glossary was written");
             docFile_ = f1;
             const bool ren = renameDocumentTo("renamed_ok");
             check(ren && docFile_ == tmpDir + "/renamed_ok.txt" && QFile::exists(docFile_) &&
@@ -7997,7 +8011,7 @@ public:
             const bool mv = moveDocumentTo(tmpDir + "/sub");
             check(mv && docFile_ == tmpDir + "/sub/renamed_ok.txt" && QFile::exists(docFile_),
                   "Move relocates the file into the chosen folder and follows it");
-            { QFile blocker(tmpDir + "/renamed_ok.txt"); blocker.open(QIODevice::WriteOnly); blocker.write("x"); }
+            check(writeFixture(tmpDir + "/renamed_ok.txt", "x"), "fixture: the name-collision blocker was written");
             check(!moveDocumentTo(tmpDir) && docFile_ == tmpDir + "/sub/renamed_ok.txt",
                   "Move refuses to clobber an existing file and stays put");
             // properties sidecar: save bumps revision, summary round-trips
@@ -8042,14 +8056,13 @@ public:
             const QString keepFile = docFile_;
             const QString keepEnc = docEncoding_;
             const QString f1 = QDir::temp().filePath("all_selftest_enc.txt");
-            { QFile f(f1); f.open(QIODevice::WriteOnly); f.write("@001A *, ,\x93SEMS\x94,,"); }
+            check(writeFixture(f1, "@001A *, ,\x93SEMS\x94,,"), "fixture: the Windows-1252 probe was written");
             docFile_ = f1;
             const bool re = reopenWithEncoding("Windows-1252");
             check(re && input_->toPlainText().contains(QString::fromUtf8("\u201CSEMS\u201D")) && docEncoding_ == "Windows-1252",
                   "Reopen with Encoding decodes the file with the chosen table and remembers it for Save");
             const bool sv = saveWithEncoding("UTF-8");
-            QFile chk(f1); chk.open(QIODevice::ReadOnly);
-            check(sv && docEncoding_ == "UTF-8" && chk.readAll().contains("\xE2\x80\x9CSEMS\xE2\x80\x9D"),
+            check(sv && docEncoding_ == "UTF-8" && readFixture(f1).contains("\xE2\x80\x9CSEMS\xE2\x80\x9D"),
                   "Save with Encoding re-encodes the file as UTF-8");
             QFile::remove(f1);
             input_->setPlainText(keepText);
@@ -8147,17 +8160,15 @@ public:
             check(selops::expandToWhitespace(input_) && input_->textCursor().selectedText() == "@001A", "Expand to Whitespace selects the run between spaces");
             // line endings: a CRLF file opens normalised and saves back as CRLF
             const QString f1 = QDir::temp().filePath("all_selftest_crlf.txt");
-            { QFile f(f1); f.open(QIODevice::WriteOnly); f.write("@001A *, ,SEMS,,\r\nBDE\r\n"); }
+            check(writeFixture(f1, "@001A *, ,SEMS,,\r\nBDE\r\n"), "fixture: the CRLF probe was written");
             const QString keepFile = docFile_;
             openFile(f1);
             check(docLineEnding_ == "CRLF" && !input_->toPlainText().contains('\r'), "a CRLF file is detected and shown with plain line breaks");
             input_->setPlainText("@001A *, ,SEMS,,\nBDE\n");
             saveDocument();
-            QFile chk(f1); chk.open(QIODevice::ReadOnly);
-            check(chk.readAll() == QByteArray("@001A *, ,SEMS,,\r\nBDE\r\n"), "Save writes the file's own line ending back (CRLF)");
+            check(readFixture(f1) == QByteArray("@001A *, ,SEMS,,\r\nBDE\r\n"), "Save writes the file's own line ending back (CRLF)");
             setLineEnding("LF"); saveDocument();
-            QFile chk2(f1); chk2.open(QIODevice::ReadOnly);
-            check(chk2.readAll() == QByteArray("@001A *, ,SEMS,,\nBDE\n"), "View › Line Endings › LF converts on the next save");
+            check(readFixture(f1) == QByteArray("@001A *, ,SEMS,,\nBDE\n"), "View › Line Endings › LF converts on the next save");
             QFile::remove(f1);
             // gutter + wrap toggles reach every editor
             auto* ne = dynamic_cast<NumberedEdit*>(input_);
@@ -8187,7 +8198,7 @@ public:
             check(gotoFolio("@002A") && input_->textCursor().position() == input_->toPlainText().indexOf("@002A"), "Goto Folio accepts '@002A'");
             check(!gotoFolio("7a"), "Goto Folio refuses a folio that is not in the text");
             const QString f1 = QDir::temp().filePath("all_selftest_bm.txt");
-            { QFile f(f1); f.open(QIODevice::WriteOnly); f.write("a\nb\nc\nd"); }
+            check(writeFixture(f1, "a\nb\nc\nd"), "fixture: the bookmark probe was written");
             openFile(f1);
             editops::gotoLine(input_, 2); toggleBookmark();
             editops::gotoLine(input_, 4); toggleBookmark();
@@ -40379,12 +40390,12 @@ int main(int argc, char** argv) {
         QObject::connect(cmpM->addAction("Clear Alignment Pins"), &QAction::triggered, [comparePane] { comparePane->clearPins(); });
         cmpM->addSeparator();
         QMenu* cmpRecent = cmpM->addMenu("Recent Comparisons");
-        QObject::connect(cmpRecent, &QMenu::aboutToShow, [cmpRecent, comparePane] {
+        QObject::connect(cmpRecent, &QMenu::aboutToShow, [cmpRecent] {
             cmpRecent->clear();
             for (const QString& sj : ComparePane::recent()) {
                 const QJsonObject j = QJsonDocument::fromJson(sj.toUtf8()).object();
                 QObject::connect(cmpRecent->addAction(QFileInfo(j["left"].toString()).fileName() + "  \u2194  " + QFileInfo(j["right"].toString()).fileName()), &QAction::triggered,
-                                 [j, comparePane] { if (j["mode"].toString() == "folders") { if (g_compareFolders) g_compareFolders(j["left"].toString(), j["right"].toString()); } else if (g_compareFiles) g_compareFiles(j["left"].toString(), j["right"].toString()); });
+                                 [j] { if (j["mode"].toString() == "folders") { if (g_compareFolders) g_compareFolders(j["left"].toString(), j["right"].toString()); } else if (g_compareFiles) g_compareFiles(j["left"].toString(), j["right"].toString()); });
             }
             if (ComparePane::recent().isEmpty()) cmpRecent->addAction("(none yet)")->setEnabled(false);
         });

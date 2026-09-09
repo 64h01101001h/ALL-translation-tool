@@ -457,8 +457,8 @@ public:
             const QString tmp = QDir::temp().filePath("all_cmp_" + QString::number(QCoreApplication::applicationPid()));
             QDir().mkpath(tmp);
             const QString fa = tmp + "/a.act", fb = tmp + "/b.act";
-            QFile f(fa); f.open(QIODevice::WriteOnly); f.write("@001A\nSEMS CAN\n"); f.close();
-            QFile g(fb); g.open(QIODevice::WriteOnly); g.write("@001A\r\nSEMS CAN KUN\r\n"); g.close();
+            check(writeFixture(fa, "@001A\nSEMS CAN\n") && writeFixture(fb, "@001A\r\nSEMS CAN KUN\r\n"),
+                  "fixture: the two probe files were written (LF and CRLF)");
             compareFiles(fa, fb);
             check(res_.differences() == 1 && eolR_ == "\r\n" && eolL_ == "\n", "Compare Files reads both, detecting each side's line ending");
             check(recent().size() >= 1 && recent().first().contains("a.act"), "the comparison is remembered as recent");
@@ -474,8 +474,8 @@ public:
         {
             const QString tmp = QDir::temp().filePath("all_cmpb_" + QString::number(QCoreApplication::applicationPid()));
             QDir().mkpath(tmp);
-            QFile f(tmp + "/x.bin"); f.open(QIODevice::WriteOnly); f.write(QByteArray("ab\0cd", 5)); f.close();
-            QFile g(tmp + "/y.bin"); g.open(QIODevice::WriteOnly); g.write(QByteArray("ab\0ce", 5)); g.close();
+            check(writeFixture(tmp + "/x.bin", QByteArray("ab\0cd", 5)) && writeFixture(tmp + "/y.bin", QByteArray("ab\0ce", 5)),
+                  "fixture: the two binary probes were written");
             compareFiles(tmp + "/x.bin", tmp + "/y.bin");
             check(binary_ && status_->text().contains("offset 4"), "binary files report the first differing byte, never a text diff");
             QDir(tmp).removeRecursively();
@@ -1029,12 +1029,14 @@ public:
         auto check = [&](bool ok, const char* what) { log << QString("  [%1] Compare/Folders: %2").arg(ok ? "PASS" : "FAIL").arg(what); if (!ok) ++fails; };
         const QString tmp = QDir::temp().filePath("all_fold_" + QString::number(QCoreApplication::applicationPid()));
         QDir(tmp).removeRecursively(); QDir().mkpath(tmp + "/L/sub"); QDir().mkpath(tmp + "/R/sub");
-        auto put = [](const QString& p, const QByteArray& b) { QFile f(p); f.open(QIODevice::WriteOnly); f.write(b); f.close(); };
+        bool fixturesOk = true;
+        auto put = [&fixturesOk](const QString& p, const QByteArray& b) { fixturesOk = writeFixture(p, b) && fixturesOk; };
         put(tmp + "/L/same.act", "@001A\nSEMS CAN\n"); put(tmp + "/R/same.act", "@001A\nSEMS CAN\n");
         put(tmp + "/L/diff.act", "@001A\nSEMS CAN\n"); put(tmp + "/R/diff.act", "@001A\nSEMS CAN KUN\n");
         put(tmp + "/L/onlyL.act", "x\n"); put(tmp + "/R/onlyR.act", "y\n");
         put(tmp + "/L/minor.act", "SEMS  CAN\n"); put(tmp + "/R/minor.act", "SEMS CAN\n");
         put(tmp + "/L/sub/nested.txt", "n\n"); put(tmp + "/R/sub/nested.txt", "n\n");
+        check(fixturesOk, "fixture: the two probe folders were written");
         setCriteria(0); setShowMode(0);
         compare(tmp + "/L", tmp + "/R");
         check(entries_.size() == 6 && count(Identical) == 2 && count(Different) == 2 && count(LeftOnly) == 1 && count(RightOnly) == 1, "bytes criterion: 2 identical (one nested), 2 different, 1 left-only, 1 right-only");
@@ -1256,8 +1258,10 @@ public:
         resolveAll(3); check(mergedText() == "a\nX\nY\nc\nd\nE\n", "Take Both keeps both readings in order");
         const QString tmp = QDir::temp().filePath("all_3w_" + QString::number(QCoreApplication::applicationPid()));
         QDir().mkpath(tmp);
-        auto put = [](const QString& p, const QByteArray& b) { QFile f(p); f.open(QIODevice::WriteOnly); f.write(b); f.close(); };
+        bool fixturesOk = true;
+        auto put = [&fixturesOk](const QString& p, const QByteArray& b) { fixturesOk = writeFixture(p, b) && fixturesOk; };
         put(tmp + "/base.act", "@001A\r\nSEMS CAN\r\nBDE BA\r\n"); put(tmp + "/mine.act", "@001A\r\nSEMS CAN THAMS CAD\r\nBDE BA\r\n"); put(tmp + "/theirs.act", "@001A\r\nSEMS CAN\r\nBDE BA CHEN PO\r\n");
+        check(fixturesOk, "fixture: the three probe files were written");
         mergeFiles(tmp + "/base.act", tmp + "/mine.act", tmp + "/theirs.act");
         check(conflicts() == 0 && mergedText() == "@001A\nSEMS CAN THAMS CAD\nBDE BA CHEN PO\n", "three ACIP files: each side's edit lands");
         check(saveMergedAs(tmp + "/merged.act") && cmp::readText(tmp + "/merged.act").raw == QByteArray("@001A\r\nSEMS CAN THAMS CAD\r\nBDE BA CHEN PO\r\n"), "Save Merged As writes the left file's line ending (CRLF)");
