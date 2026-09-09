@@ -3001,3 +3001,51 @@ questionnaire's Q13 answers tell us how much Android matters.
 - [ ] Project menu (Sublime): dossiers promoted — open/switch/recent/save as/close/edit, folders
 - [ ] Help additions (Sublime): Documentation, Report a Bug (defect intake), Data status
 - [ ] Preferences panel (Word-style icon grid + Sublime settings ideas: colour schemes, themes, key bindings view; migrates SettingsDialog; adds AI, Tibetan & Sanskrit, Updates, Privacy, File Locations pages)
+
+## 🔬 TEXTUAL RESEARCH WORKFLOW — a new tab group (Adam, 2026-09-08, "popcorn thought"; to be fleshed out with Adam, then IMPLEMENTED)
+
+**Adam's idea, made coherent.** A workflow for textual study rather than
+translation: the scholar builds their OWN collections (upload folders of
+ACIP/Wylie/Unicode texts, or pick texts out of the Library), the tool
+indexes them, and then answers corpus questions across that collection:
+- **Word study.** How many times, and where, does Je Tsongkapa use a given
+  word across everything he wrote on the Mind Only school? Frequency,
+  every occurrence in context (KWIC), by text, by chapter, over the
+  author's life where dates are known.
+- **Transmission / variant study.** How did a text change from one
+  monastery's printing to another — Ganden, Sera, Drepung, Tashi Lhunpo,
+  Derge, Narthang, Lhasa? Align two or more editions of the same text and
+  show the differences (the eKangyur compare in the Overlay is the seed of
+  this), with a variant table and per-edition statistics.
+- **Place and lineage study.** Every text written by authors who studied
+  at Nalanda; every author of a monastery; texts by place of origin —
+  driven by the catalogue's person/place metadata (BDRC persons, Treasury
+  of Lives links already in the app).
+- **Author study.** Vocabulary fingerprints per author (the Text DNA idea
+  at corpus scale); shared vocabulary between authors; first attestation
+  of a term across the collection.
+- **User collections.** Named, saved, shareable (a collection is a
+  manifest of texts + notes); several collections open at once; a
+  collection can be the scope of the Search pane's Gofer grammar.
+- **Outputs.** Frequency tables, KWIC concordances, variant tables,
+  exportable to CSV/Markdown/DOCX with citations that resolve to folio
+  and line — the deliverable a Buddhist-studies programme or a
+  translation group would actually cite.
+
+**Why it fits.** The spine + FTS5 already index 42k aligned segments and
+the Library; the Gofer grammar already does proximity search; the
+catalogue already carries persons and places; the Overlay already
+compares editions. The new pane is an aggregation surface over what
+exists, plus user-owned collections.
+
+**Audience Adam named:** research organisations, universities with
+Buddhist-studies programmes, translation groups.
+
+**Plan.** (1) Adam extrapolates (questions to ask him: which editions
+matter first; which metadata he trusts for place/lineage; whether
+collections live in the Library folder or anywhere on disk; what a
+"study" should export). (2) Design doc `docs/RESEARCH_WORKFLOW.md`
+with the steelman per function. (3) A first slice after 1.0: user
+collections + word frequency/KWIC over a collection, reusing the Search
+pane's engine. (4) Variant alignment across editions. (5) Place/lineage
+queries over the catalogue. Not in the two-week release.
