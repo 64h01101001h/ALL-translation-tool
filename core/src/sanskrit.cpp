@@ -85,9 +85,16 @@ std::u32string lowered(const std::u32string& s) {
     return out;
 }
 
+// Every kind of whitespace, not just the ASCII five. Real pasted text carries
+// the non-breaking space that word processors and web pages emit, and a
+// character the reader cannot see must never decide whether a passage
+// converts (2026-09-09).
 bool isSpace(char32_t c) {
     return c == U' ' || c == U'\t' || c == U'\n' || c == U'\r' || c == U'\f' ||
-           c == U'\v';
+           c == U'\v' || c == U'\u00A0' || c == U'\u1680' ||
+           (c >= U'\u2000' && c <= U'\u200A') || c == U'\u2028' ||
+           c == U'\u2029' || c == U'\u202F' || c == U'\u205F' ||
+           c == U'\u3000';
 }
 
 std::u32string stripped(const std::u32string& s) {
@@ -221,9 +228,12 @@ const Table& INPUTCODE() {
 // FINAL = {'ṃ':'m','ḥ':':','ṁ':'m'}
 bool isFinal(char32_t c) { return c == U'ṃ' || c == U'ḥ' || c == U'ṁ'; }
 
-// break characters: " -–'’·."
+// break characters: " -–'’·." plus every kind of whitespace. Real pasted text
+// carries newlines, tabs and the non-breaking space that word processors and
+// web pages emit; refusing a whole passage over a character the reader cannot
+// see is a dead end, not an honest refusal (2026-09-09).
 bool isBreak(char32_t c) {
-    return c == U' ' || c == U'-' || c == U'–' || c == U'\'' || c == U'’' ||
+    return isSpace(c) || c == U'-' || c == U'–' || c == U'\'' || c == U'’' ||
            c == U'·' || c == U'.';
 }
 
@@ -397,7 +407,12 @@ std::pair<std::string, bool> iastToDevanagari(const std::string& iast) {
     std::u32string out;
     bool prev_cons = false;
     for (const auto& [k, v] : *toks) {
-        if (k == 'B') { out += U' '; prev_cons = false; continue; }
+        // the virama belongs at the WORD boundary too, not only at the
+        // end of the string (ported with the fix, 2026-09-09)
+        if (k == 'B') {
+            if (prev_cons) out += VIRAMA;
+            out += U' '; prev_cons = false; continue;
+        }
         if (k == 'C') {
             if (prev_cons) out += VIRAMA;
             out += *tableGet(C_DEVA(), v);

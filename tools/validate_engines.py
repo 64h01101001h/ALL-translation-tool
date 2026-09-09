@@ -131,6 +131,13 @@ def battery_sanskrit():
                    sk.iast_to_tibetan(mani), 'ཨོཾ་མ་ཎི་པད་མེ་ཧཱུཾ'))
     checks.append(('devanagari   oṃ maṇi padme hūṃ',
                    sk.iast_to_devanagari(mani), 'ओं मणि पद्मे हूं'))
+    # A word ending in a consonant takes its virama at the word boundary.
+    # The mantra above never tested this — every one of its words ends in a
+    # vowel — and the bug it hid printed a bare म with an implied 'a' that is
+    # not in the Sanskrit. Nagarjuna's dedication, 2026-09-09.
+    checks.append(('devanagari   word-final consonant keeps its virama',
+                   sk.iast_to_devanagari('deśayām āsa saṃbuddhas taṃ vande'),
+                   'देशयाम् आस संबुद्धस् तं वन्दे'))
     # round trip
     checks.append(('roundtrip    inputcode→iast', sk.inputcode_to_iast('prama#n%a'),
                    'pramāṇa'))

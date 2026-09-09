@@ -300,6 +300,13 @@ int main(int argc, char** argv) {
         CHECK(allcore::iastToDevanagari("oṃ maṇi padme hūṃ") ==
                   std::make_pair(std::string("ओं मणि पद्मे हूं"), true),
               "E: devanagari mani mantra");
+        {   // the boundary virama, which the mantra above cannot test:
+            // every word in it ends in a vowel (2026-09-09)
+            auto [d, ok] = allcore::iastToDevanagari(
+                "deśayām āsa saṃbuddhas taṃ vande");
+            CHECK(ok && d == "देशयाम् आस संबुद्धस् तं वन्दे",
+                  "E: devanagari word-final consonant keeps its virama");
+        }
         CHECK(allcore::inputcodeToIast("prama#n%a") == "pramāṇa",
               "E: roundtrip inputcode -> iast");
     }

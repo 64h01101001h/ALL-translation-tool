@@ -19975,6 +19975,27 @@ private:
             return "<tr><td style='color:#777;padding-right:12px'>" + k +
                    "</td><td>" + v + "</td></tr>";
         };
+        // Adam, 2026-09-09: he pasted a verse and four rows showed a bare
+        // warning triangle with nothing beside it. The refusal was right —
+        // the engine never guesses — but a refusal that will not say what it
+        // could not read is a dead end. Name the character and where it is.
+        auto refusalNote = [](const QString& text) -> QString {
+            for (int i = 0; i < text.size(); ++i)
+                if (!allcore::iastToAcip(text.left(i + 1).toStdString()).second) {
+                    const QChar bad = text.at(i);
+                    const QString shown = bad.isSpace() || !bad.isPrint()
+                                              ? QString("(invisible character)")
+                                              : QString("\u201c") + bad + QString("\u201d");
+                    return QString("<div style='color:%1;padding-top:6px'>"
+                                   "Stopped at character %2: %3, U+%4. Nothing "
+                                   "below it is guessed \u2014 correct that "
+                                   "character and press Analyze again.</div>")
+                        .arg(ux::darkChrome() ? ux::chromeError() : QString(ux::kError))
+                        .arg(i + 1).arg(shown.toHtmlEscaped())
+                        .arg(static_cast<int>(bad.unicode()), 4, 16, QChar('0'));
+                }
+            return QString();
+        };
         auto [acip, aok] = allcore::iastToAcip(iast);
         auto [tib, tok2] = allcore::iastToTibetan(iast);
         auto [deva, dok] = allcore::iastToDevanagari(iast);
@@ -20002,6 +20023,8 @@ private:
         h += row("IPA", QString::fromStdString(ipa).toHtmlEscaped() +
                             (iok ? "" : " \u26a0"));
         h += "</table>";
+        if (!aok || !tok2 || !dok || !iok)
+            h += refusalNote(QString::fromStdString(iast));
         // Whitney: exact root, then PPP reverse, then meaning search
         if (whitney_) {
             auto roots = whitney_->byRoot(iast);
