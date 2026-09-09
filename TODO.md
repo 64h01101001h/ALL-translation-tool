@@ -49,32 +49,49 @@ list before this sweep. Grouped by theme; each line says where it came from.
 ## C. Release-audit open items not previously on this list
 (from `docs/release_audit/MainWindow_and_Menus.md`; each needs a ruling
 before 1.0)
-- [ ] `--openprobe` does not set `g_harnessRun`, unlike every other probe
-      flag — confirm deliberate or fix
-- [ ] `win.setMinimumSize` is called twice (640×480 then 820×560); drop the
-      dead first call
-- [ ] Ten of the twelve CLI modes have no ctest suite; register the
-      geometry inquisition and the Sanskrit glyph check if they are gates
-- [ ] Quick Access pins are matched by display text — renaming a button
-      orphans a user's pins silently; give pins stable identifiers
-- [ ] The lifecycle log grows unbounded and is quoted (60 lines) into the
-      Desktop diagnostic — decide on rotation
+- [x] `--openprobe` does not set `g_harnessRun` — FIXED 2026-09-09: it joins
+      the guarded probe list (it was the one probe outside the guard)
+- [x] `win.setMinimumSize` called twice — FIXED 2026-09-09: dead 640×480
+      call dropped; the proven-clean 820×560 floor stands alone
+- [x] CLI modes without ctest — DONE 2026-09-09: `sanskrit_glyph_check`
+      registered (exit 1 on any missing glyph; 109 suites). The geometry
+      sweep (`--sweep <pane>`) is not a gate by itself — the press's
+      visual-regression gate over the 23 blessed panes is; the probes
+      (`--openprobe`, `--pasteprobe`, `--survey`, `--teachbench`) are
+      timing/diagnostic tools with no pass/fail verdict
+- [x] Quick Access pins matched by display text — 2026-09-09: pins stay
+      keyed by label (the only stable name a mirrored control has), but an
+      orphaned pin is no longer silent: it shows as a disabled
+      "<name> (not in this build)" button with a tooltip pointing at
+      Preferences ▸ Quick Access to remove it
+- [x] Lifecycle log unbounded — FIXED 2026-09-09: rotates at 1 MB, one
+      previous generation kept (`…-lifecycle.log.1`)
 - [ ] Two diagnostic reports with very different privacy profiles; confirm
       both are intended to ship and that the verbose one's contents are
-      acceptable to hand to a tester
-- [ ] Troubleshooting ▸ Storage… clears the scan cache and the search index
-      from a plain button with no second confirmation
-- [ ] Every Edit-menu action is registered with an empty shortcut while
-      Help advertises the standard ones — verify by hand on a real build
-- [ ] Menu mirroring is generic and unfiltered: every pane button becomes a
-      menu item, including destructive ones, with no deny-list (the
-      gauntlet has `kDeny`) — decide whether the mirror needs the same list
-- [ ] The About box quotes `ALL_TEST_BATTERIES`; confirm no release build
-      uses the `-DALL_ALLOW_REDUCED_BATTERY=ON` escape hatch
-- [ ] File ▸ Import Data Release… is a silent no-op if `g_importRelease`
-      was never installed — verify the hook is wired in a shipped build
-- [ ] Confirm the shipped DMG's data folder carries v0.27.2 so the About
-      box's exact pin stays live rather than falling through its gate
+      acceptable to hand to a tester — STILL OPEN (Adam's ruling; the
+      other eleven items of this section were closed 2026-09-09)
+- [x] Storage… cleared from a plain button — FIXED 2026-09-09: the first
+      click arms and relabels the button with the size ("Confirm: clear scan
+      cache (N MB)"); the second clears
+- [x] Edit-menu actions with empty shortcuts — FIXED 2026-09-09: Undo /
+      Redo / Cut / Copy / Paste now show the standard keys (widget-context,
+      so the editors' own bindings still do the work); Help and menu agree
+- [x] Menu mirroring unfiltered — DECIDED 2026-09-09: the mirror now skips
+      destructive / outward controls (Trash, Delete, Quit, Terminal, the
+      two Storage clears); everything else stays mirrored because a bare
+      menu item for a reversible action is harmless
+- [x] About box and the reduced-battery escape hatch — VERIFIED 2026-09-09:
+      `tools/package_macos.sh` configures with `-DCMAKE_BUILD_TYPE=Release`
+      only; the press log says "no suite skipped: the battery the press
+      gates on ran in full"
+- [x] Import Data Release… hook — VERIFIED 2026-09-09: `g_importRelease` is
+      installed in the Library pane's constructor and the Library pane is
+      built unconditionally in main() (it is in the selftest driver too)
+- [x] Shipped data version — VERIFIED 2026-09-09 on the installed build
+      (dev-ca74251): the About box and the title bar read `release_version`
+      from the spine's meta table; the shipped
+      `build/hgm_spine_v27_2.db` says 0.27.2, 105,634 entries, 42,199
+      corpus segments (full_parallel_corpus_v32)
 
 ## D. Work started and not finished
 - [x] **`docs/ANALYSIS_SUITE_PLAN.md`** written 2026-09-09: nine subsystem

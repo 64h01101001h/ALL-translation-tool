@@ -96,6 +96,13 @@ set_tests_properties(gauntlet_walk PROPERTIES
   ENVIRONMENT "QT_QPA_PLATFORM=offscreen" TIMEOUT 420)
 set_tests_properties(app_selftest PROPERTIES
   ENVIRONMENT "QT_QPA_PLATFORM=offscreen" TIMEOUT 300)
+# release audit 2026-09-09 (MainWindow C-3): the Sanskrit glyph check is a
+# gate — every stacked Sanskrit-in-Tibetan case must have a glyph in the
+# bundled font (exit 1 on any missing glyph). It ran only by hand before.
+add_test(NAME sanskrit_glyph_check
+         COMMAND DiamondCutterTranslationTool --sanskritcheck)
+set_tests_properties(sanskrit_glyph_check PROPERTIES
+  ENVIRONMENT "QT_QPA_PLATFORM=offscreen" TIMEOUT 120)
 
 # BUS FACTOR / BUILD-7, found 2026-08-25 by actually following
 # docs/DEVELOPER_ONBOARDING.md on a clean clone. The doc calls
