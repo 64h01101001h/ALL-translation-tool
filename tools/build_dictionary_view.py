@@ -2,12 +2,12 @@
 """Rebuild the browsable dictionary view from the current alignment layer.
 
 Adam asked to see the new dictionary as it grows batch to batch, with a
-slider for the depth layers. This regenerates docs/michael_dictionary.html
+slider for the depth layers. This regenerates docs/geshe_michael_roach_dictionary.html
 from whatever the layer currently holds, so republishing after a batch
 shows the batch.
 
     python3 tools/build_dictionary_view.py
-    # then: Artifact(file_path="docs/michael_dictionary.html", url=<same URL>)
+    # then: Artifact(file_path="docs/geshe_michael_roach_dictionary.html", url=<same URL>)
 
 Publishing to the SAME url keeps one link that updates in place. Passing a
 new path, or omitting the url from a different conversation, creates a
@@ -112,7 +112,7 @@ def trim_glued(eng):
 FULL = os.path.join(ROOT, "data", "alignment", "alignment_full_v1.json")
 EVID = os.path.join(ROOT, "data", "alignment", "alignment_evidence_v1.json")
 SHELL = os.path.join(ROOT, "tools", "dictionary_view_shell.html")
-OUT = os.path.join(ROOT, "docs", "michael_dictionary.html")
+OUT = os.path.join(ROOT, "docs", "geshe_michael_roach_dictionary.html")
 
 
 def main():

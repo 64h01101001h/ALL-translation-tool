@@ -19,7 +19,7 @@ new epic?
 | alignment pages, seven Wilson depths, both sides wrapped in place from the spine | `data/alignment/pages/` (C02), `pages_c01/`, `pages_c03/` | 23 + 167 + 132 HTML files; 166/22/132 registered in `COURSES` |
 | evidence sidecar (depth-5 word pairs, ACIP-keyed, cited) | `data/alignment/alignment_evidence_v1.json` | 5,248 headwords, 10,025 pairs, `acip_index` 5,247 |
 | full bank (every span at every depth, notes, trees) | `data/alignment/alignment_full_v1.json` | 25,464 links (d1 983 / d2 1,940 / d3 581 / d4 378 / d5 14,490 / d6 4,779 / d7 2,313), 319 notes |
-| dictionary view (depth slider, PROVISIONAL banner from layer meta) | `docs/michael_dictionary.html`, built by `tools/build_dictionary_view.py` | regenerated each batch (commit 15f5127) |
+| dictionary view (depth slider, PROVISIONAL banner from layer meta) | `docs/geshe_michael_roach_dictionary.html`, built by `tools/build_dictionary_view.py` | regenerated each batch (commit 15f5127) |
 | errata register (generated from sidecar) | `docs/ERRATA_REGISTER.md` from `docs/errata_register.json` | 101 entries: 60 document errata (5 HIGH, 40 MEDIUM, 15 LOW), 17 digitisation artefacts, 14 not-errata, 9 layer artefacts, 1 unverifiable |
 | campaign ledgers | `data/alignment/C01_CAMPAIGN.md`, `C02_CAMPAIGN.md`, `C03_CAMPAIGN.md` | C03 ledger's last entry is 406-411 (408/620); commits are at 417/620 |
 

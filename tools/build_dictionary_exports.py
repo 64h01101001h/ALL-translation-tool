@@ -13,19 +13,19 @@ rebuilds the page too, for the same reason.
 
 Four files, each answering a different question:
 
-  michael_dictionary.csv          one row per rendering. The deliverable:
+  geshe_michael_roach_dictionary.csv          one row per rendering. The deliverable:
                                   everything the layer knows about an entry,
                                   provenance included, so a lone CSV on
                                   someone else's desk still says what tier it
                                   is and where its English came from.
-  michael_dictionary_reverse.csv  English -> Tibetan. "Has he rendered this
+  geshe_michael_roach_dictionary_reverse.csv  English -> Tibetan. "Has he rendered this
                                   word before, and as what?" is the question
                                   an editor actually asks, and the page
                                   cannot answer it.
-  michael_dictionary_by_course.csv  the glossary of one course, ranked by how
+  geshe_michael_roach_dictionary_by_course.csv  the glossary of one course, ranked by how
                                   often each term occurs in it. What a
                                   student of C01 needs and no one has.
-  michael_dictionary_changes.csv  what is new since the previous export.
+  geshe_michael_roach_dictionary_changes.csv  what is new since the previous export.
                                   Written only when a previous CSV exists.
                                   Nobody re-reads six thousand headwords; a
                                   reviewer reads the delta.
@@ -149,7 +149,7 @@ def write_exports(depths, phonetics, meta, acip_index=None):
     by_wylie = {v: k for k, v in (acip_index or {}).items()}
     rows = list(_rows(depths, phonetics, meta, by_wylie))
 
-    main_path = os.path.join(OUTDIR, "michael_dictionary.csv")
+    main_path = os.path.join(OUTDIR, "geshe_michael_roach_dictionary.csv")
     prev = {}
     if os.path.exists(main_path):
         with io.open(main_path, encoding="utf-8-sig", newline="") as f:
@@ -174,7 +174,7 @@ def write_exports(depths, phonetics, meta, acip_index=None):
                              "occurrences": r["occurrences"],
                              "courses": r["courses"], "refs": r["refs"],
                              "tier": r["tier"]})
-    n_rev = _write(os.path.join(OUTDIR, "michael_dictionary_reverse.csv"),
+    n_rev = _write(os.path.join(OUTDIR, "geshe_michael_roach_dictionary_reverse.csv"),
                    ["english", "wylie", "acip", "tibetan_generated",
                     "pronunciation_generated", "depth", "occurrences",
                     "courses", "refs", "tier"],
@@ -200,7 +200,7 @@ def write_exports(depths, phonetics, meta, acip_index=None):
                                 "pronunciation_generated": r["pronunciation_generated"],
                                 "english": e, "occurrences_in_course": n,
                                 "depth": r["depth"], "tier": r["tier"]})
-    n_course = _write(os.path.join(OUTDIR, "michael_dictionary_by_course.csv"),
+    n_course = _write(os.path.join(OUTDIR, "geshe_michael_roach_dictionary_by_course.csv"),
                       ["course", "wylie", "acip", "tibetan_generated",
                        "pronunciation_generated", "english",
                        "occurrences_in_course", "depth", "tier"],
@@ -233,15 +233,15 @@ def write_exports(depths, phonetics, meta, acip_index=None):
                             "occurrences": r.get("occurrences", ""),
                             "courses": r.get("courses", ""),
                             "refs": r.get("refs", "")})
-        n_chg = _write(os.path.join(OUTDIR, "michael_dictionary_changes.csv"),
+        n_chg = _write(os.path.join(OUTDIR, "geshe_michael_roach_dictionary_changes.csv"),
                        ["change", "wylie", "acip", "tibetan_generated", "english", "kind",
                         "depth", "occurrences", "courses", "refs"], chg)
 
-    sys.stderr.write("  csv  %6d rows  docs/michael_dictionary.csv\n" % n_main)
-    sys.stderr.write("  csv  %6d rows  docs/michael_dictionary_reverse.csv\n" % n_rev)
-    sys.stderr.write("  csv  %6d rows  docs/michael_dictionary_by_course.csv\n" % n_course)
+    sys.stderr.write("  csv  %6d rows  docs/geshe_michael_roach_dictionary.csv\n" % n_main)
+    sys.stderr.write("  csv  %6d rows  docs/geshe_michael_roach_dictionary_reverse.csv\n" % n_rev)
+    sys.stderr.write("  csv  %6d rows  docs/geshe_michael_roach_dictionary_by_course.csv\n" % n_course)
     if n_chg is not None:
-        sys.stderr.write("  csv  %6d rows  docs/michael_dictionary_changes.csv "
+        sys.stderr.write("  csv  %6d rows  docs/geshe_michael_roach_dictionary_changes.csv "
                          "(vs the previous export)\n" % n_chg)
     else:
         sys.stderr.write("  csv         no previous export, so no change report "
