@@ -3222,6 +3222,16 @@ static std::function<void(const QString&, int)> g_openAtLine;
 static std::function<void(const QString&, const QStringList&)> g_replaceInFolders;   // F4: (needle, folders) from the Search pane
 static std::function<void(const QString&)> g_studyPassage;   // batch 5: "Where else does this passage appear?" (selection → Study ▸ Passages)
 static std::function<void(const QString&)> g_studySay;       // batch 5: a notice on the Study pane's status line (raises the pane)
+// Features (2026-09-09, Adam: "turn off any features they don't use often so
+// their GUI won't be crowded"). Hiding is a view: nothing is deleted, every
+// hidden feature stays reachable from the menus, and the list of what can be
+// hidden is built from the panes that actually exist, never from a hard-coded
+// list that could drift.
+static std::function<void()> g_applyFeatures;                 // re-read the switches and show/hide
+static std::function<QList<QPair<QString, QString>>()> g_featureList;   // (group, pane) for every pane that exists
+inline bool featureOn(const QString& kind, const QString& name) {
+    return QSettings("ALL", "TranslationTool").value("features/" + kind + "/" + name, true).toBool();
+}
 // The idiom bank, opened from wherever the translator is: (text name, whole text, the selection)
 static std::function<void(const QString&, const QString&, const QString&)> g_openIdiomBank;
 static std::function<void(const QStringList&)> g_replaceInFiles;                      // F4: from the Files pane selection
@@ -22010,19 +22020,22 @@ auto* secEvid = new QLabel("<span style='color:#9A7A33;font-size:10px;letter-spa
         gEvid->addBig(memBtn, "search");
         QObject::connect(memBtn, &QPushButton::clicked,
                          [this] { phraseMemory(); });
-        {   // 2026-09-09: the idiom bank — which forms are fixed expressions,
-            // how Geshe Michael has rendered them, and how to put a new one
-            // forward for his ruling.
-            auto* idiomBtn = new QPushButton("Idioms");
-            idiomBtn->setToolTip(
-                "The idiom register: which Tibetan forms are fixed expressions, "
-                "with Geshe Michael's own renderings from his courses. Select "
-                "Tibetan in the source first to look it up, or open the bank to "
-                "propose a new idiom for his ruling.");
-            gEvid->addBig(idiomBtn, "quote");
-            QObject::connect(idiomBtn, &QPushButton::clicked, [this] {
-                QString sel = source_->textCursor().selectedText();
-                if (g_openIdiomBank) g_openIdiomBank(QFileInfo(draftPath_).fileName().isEmpty() ? QString("the source") : QFileInfo(draftPath_).fileName(), source_->toPlainText(), sel);
+        {   // 2026-09-09: the idiom bank — reached by right-clicking the source
+            // and from Tools ▸ Idioms…. It is deliberately NOT a ribbon button:
+            // the ribbon has a width ratchet, and a bank that is one right-click
+            // from the Tibetan you are reading is where a translator wants it.
+            source_->setContextMenuPolicy(Qt::CustomContextMenu);
+            connect(source_, &QPlainTextEdit::customContextMenuRequested, this, [this](const QPoint& pt) {
+                QMenu* m = source_->createStandardContextMenu();
+                m->setAttribute(Qt::WA_DeleteOnClose);
+                const QString sel = source_->textCursor().selectedText().simplified();
+                m->addSeparator();
+                QAction* a = m->addAction(sel.isEmpty() ? QString("Idioms\u2026") : QString("Idioms: look up “%1”\u2026").arg(sel.left(28)));
+                a->setToolTip("The idiom register: is this a fixed expression, and how has Geshe Michael rendered it?");
+                connect(a, &QAction::triggered, this, [this, sel] {
+                    if (g_openIdiomBank) g_openIdiomBank(QFileInfo(draftPath_).fileName().isEmpty() ? QString("the source") : QFileInfo(draftPath_).fileName(), source_->toPlainText(), sel);
+                });
+                m->popup(source_->viewport()->mapToGlobal(pt));
             });
         }
         QObject::connect(quoteBtn, &QPushButton::clicked,
@@ -37026,7 +37039,7 @@ public:
     int selfTest(QStringList& log) {
         int fails = 0;
         auto check = [&](bool ok, const char* what) { log << QString("  [%1] Preferences: %2").arg(ok ? "PASS" : "FAIL").arg(what); if (!ok) ++fails; };
-        check(pageCount() == 12 && grid_->count() == pageCount(), "twelve pages, one grid tile each");
+        check(pageCount() == 13 && grid_->count() == pageCount(), "thirteen pages, one grid tile each");
         filter("style"); check(visibleGridItems() >= 1 && visibleGridItems() < pageCount(), "search narrows the grid (\"style\" finds the House Style page)");
         filter(""); check(visibleGridItems() == pageCount(), "clearing the search shows every tile");
         openPage(2); check(currentPage() == 2 && !back_->isHidden(), "opening a tile shows its page and the Show All button");
@@ -37222,6 +37235,55 @@ private:
           auto* list = new QListWidget; list->addItems(QSettings("ALL", "TranslationTool").value("qat/pins").toStringList()); v->addWidget(list, 1);
           auto* rm = new QPushButton("Remove selected pin"); connect(rm, &QPushButton::clicked, this, [list] { qDeleteAll(list->selectedItems()); }); v->addWidget(rm, 0, Qt::AlignLeft);
           p.w = w; p.save = [list] { QStringList pins; for (int i = 0; i < list->count(); ++i) pins << list->item(i)->text(); QSettings("ALL", "TranslationTool").setValue("qat/pins", pins); };
+          pages_ << p; }
+        // 12 Features (Adam, 2026-09-09: "turn off any features they don't use
+        // often so their GUI won't be crowded"). The list is built from the
+        // panes that actually exist, so it can never drift from the build.
+        { Page p; p.title = "Features"; p.icon = "gear"; p.blurb = "Show or hide panes and whole groups"; p.keywords = {"features", "hide", "show", "panes", "groups", "clutter", "simplify", "tabs", "turn off"};
+          auto* w = new QWidget; auto* v = new QVBoxLayout(w); v->setContentsMargins(8, 8, 8, 8);
+          auto* intro = new QLabel("Turn off what you do not use, and it leaves the ribbon and the pane bar. Nothing is deleted and nothing is lost: a hidden feature keeps working, its files are untouched, and it is still one menu away — so you can use it occasionally without turning it back on. Come back here to show it again.");
+          intro->setWordWrap(true); intro->setStyleSheet("color:#4A3F33;"); v->addWidget(intro);
+          auto* tree = new QTreeWidget; tree->setHeaderLabels({"Group and pane"}); tree->setRootIsDecorated(true);
+          QMap<QString, QTreeWidgetItem*> groups;
+          const auto listed = g_featureList ? g_featureList() : QList<QPair<QString, QString>>();
+          for (const auto& gp : listed) {
+              if (!groups.contains(gp.first)) {
+                  auto* gi = new QTreeWidgetItem(tree, {gp.first});
+                  gi->setFlags(gi->flags() | Qt::ItemIsUserCheckable);
+                  gi->setCheckState(0, featureOn("group", gp.first) ? Qt::Checked : Qt::Unchecked);
+                  gi->setData(0, Qt::UserRole, "group"); gi->setData(0, Qt::UserRole + 1, gp.first);
+                  gi->setExpanded(true); groups.insert(gp.first, gi);
+              }
+              auto* pi = new QTreeWidgetItem(groups[gp.first], {gp.second});
+              pi->setFlags(pi->flags() | Qt::ItemIsUserCheckable);
+              pi->setCheckState(0, featureOn("pane", gp.second) ? Qt::Checked : Qt::Unchecked);
+              pi->setData(0, Qt::UserRole, "pane"); pi->setData(0, Qt::UserRole + 1, gp.second);
+          }
+          if (listed.isEmpty()) { auto* none = new QTreeWidgetItem(tree, {"The pane list is not available in this window."}); none->setDisabled(true); }
+          v->addWidget(tree, 1);
+          auto* note = new QLabel("Turning a group off hides the group's tab and every pane in it. If you turn everything off, the window would have nothing in it, so that one setting is refused and everything stays shown.");
+          note->setWordWrap(true); note->setStyleSheet("color:#6B5E4E; font-size:11px;"); v->addWidget(note);
+          auto* all = new QPushButton("Show everything again");
+          connect(all, &QPushButton::clicked, this, [tree] {
+              for (int i = 0; i < tree->topLevelItemCount(); ++i) {
+                  auto* gi = tree->topLevelItem(i); gi->setCheckState(0, Qt::Checked);
+                  for (int j = 0; j < gi->childCount(); ++j) gi->child(j)->setCheckState(0, Qt::Checked);
+              }
+          });
+          v->addWidget(all, 0, Qt::AlignLeft);
+          p.w = w;
+          p.save = [tree] {
+              QSettings st("ALL", "TranslationTool");
+              for (int i = 0; i < tree->topLevelItemCount(); ++i) {
+                  auto* gi = tree->topLevelItem(i);
+                  st.setValue("features/group/" + gi->data(0, Qt::UserRole + 1).toString(), gi->checkState(0) == Qt::Checked);
+                  for (int j = 0; j < gi->childCount(); ++j) {
+                      auto* pi = gi->child(j);
+                      st.setValue("features/pane/" + pi->data(0, Qt::UserRole + 1).toString(), pi->checkState(0) == Qt::Checked);
+                  }
+              }
+              if (g_applyFeatures) g_applyFeatures();
+          };
           pages_ << p; }
     }
 
@@ -39443,8 +39505,11 @@ int main(int argc, char** argv) {
     }
     // ---- two-level navigation (Adam, 2026-08-10): six workflow
     // groups, each an inner tab row; panes reparented untouched
-    struct FlatPane { QWidget* w; QString title; QTabWidget* inner; QWidget* page = nullptr; };
+    struct FlatPane { QWidget* w; QString title; QTabWidget* inner; QWidget* page = nullptr;
+                      QToolButton* btn = nullptr; QString group; };   // btn/group: the Features page (2026-09-09)
     static std::vector<FlatPane> flatPanes;
+    struct GroupPage { QString name; QWidget* page; };
+    static std::vector<GroupPage> groupPages;
     {
         std::vector<std::pair<QWidget*, QString>> all;
         for (int i = 0; i < tabs.count(); ++i)
@@ -39525,6 +39590,9 @@ int main(int argc, char** argv) {
                 surf->add(tb);
                 surfBtns.append(tb);
             }
+            for (int j = 0; j < g->count() && j < surfBtns.size(); ++j)
+                for (auto& f : flatPanes)
+                    if (f.w == g->widget(j)) { f.btn = surfBtns[j]; f.group = gname; }
             bandRow->addWidget(surf);
             auto* sep = new QFrame;
             sep->setFrameShape(QFrame::VLine);
@@ -39576,6 +39644,7 @@ int main(int argc, char** argv) {
             for (auto& f : flatPanes)
                 if (f.inner == g) f.page = page;
             tabs.addTab(page, gname);
+            groupPages.push_back({gname, page});
         };
         mkGroup("Read", {"Overlay", "Library", "Files", "Scans",
                          "Export"});
@@ -39588,6 +39657,48 @@ int main(int argc, char** argv) {
         mkGroup("Input", {"Input", "OCR"});
         mkGroup("Catalog", {"Catalog"});
         mkGroup("Community", {"Propose", "Approval"});
+        {   // Features (2026-09-09): show or hide panes and whole groups, from
+            // the panes that actually exist. Two refusals keep it honest — the
+            // last visible pane cannot be hidden (there would be nothing to
+            // work in), and hiding never removes a menu item, so a hidden
+            // feature is still one menu away.
+            g_featureList = [] {
+                QList<QPair<QString, QString>> out;
+                for (const auto& f : flatPanes) out.append({f.group, f.title});
+                return out;
+            };
+            g_applyFeatures = [&tabs] {
+                int wanted = 0;
+                for (const auto& f : flatPanes) if (featureOn("pane", f.title) && featureOn("group", f.group)) ++wanted;
+                const bool refuse = wanted == 0;   // never leave the window with nothing in it
+                for (const auto& f : flatPanes) {
+                    const bool on = refuse || (featureOn("pane", f.title) && featureOn("group", f.group));
+                    if (f.btn) f.btn->setVisible(on);
+                }
+                // a pane that has just been hidden must not stay the one on screen
+                for (const auto& f : flatPanes) {
+                    if (!f.inner) continue;
+                    const int cur = f.inner->currentIndex();
+                    if (cur < 0) continue;
+                    QWidget* curW = f.inner->widget(cur);
+                    bool curOn = true;
+                    for (const auto& q : flatPanes) if (q.w == curW) curOn = refuse || (featureOn("pane", q.title) && featureOn("group", q.group));
+                    if (curOn) continue;
+                    for (int j = 0; j < f.inner->count(); ++j)
+                        for (const auto& q : flatPanes)
+                            if (q.w == f.inner->widget(j) && (refuse || (featureOn("pane", q.title) && featureOn("group", q.group)))) { f.inner->setCurrentIndex(j); j = f.inner->count(); break; }
+                }
+                for (const auto& gp : groupPages) {
+                    bool any = false;
+                    for (const auto& f : flatPanes) if (f.group == gp.name && (refuse || (featureOn("pane", f.title) && featureOn("group", f.group)))) any = true;
+                    const int ix = tabs.indexOf(gp.page);
+                    if (ix >= 0) tabs.setTabVisible(ix, any);
+                }
+                if (tabs.currentIndex() >= 0 && !tabs.isTabVisible(tabs.currentIndex()))
+                    for (int i = 0; i < tabs.count(); ++i) if (tabs.isTabVisible(i)) { tabs.setCurrentIndex(i); break; }
+            };
+            g_applyFeatures();
+        }
         // L-tier: every group tab teaches its own shortcut (M5's
         // \u2318 1..7), plus the pane-stepping pair, on hover
         {
@@ -42318,6 +42429,32 @@ int main(int argc, char** argv) {
         fails += manuscriptPane->selfTest(log);
         fails += comparePane->selfTest(log);
         fails += studyPane->selfTest(log);   // batch 5 F1 shell
+        {   // Features: hiding is a view, and it refuses to empty the window
+            auto fcheck = [&](bool ok, const char* what) { log << QString("  [%1] Features: %2").arg(ok ? "PASS" : "FAIL").arg(what); if (!ok) ++fails; };
+            QSettings st("ALL", "TranslationTool");
+            const QList<QPair<QString, QString>> listed = g_featureList ? g_featureList() : QList<QPair<QString, QString>>();
+            fcheck(listed.size() == (int)flatPanes.size() && !listed.isEmpty(), "every pane that exists is offered, so the list cannot drift from the build");
+            QString probe, probeGroup; QToolButton* probeBtn = nullptr;
+            for (const auto& f : flatPanes) if (f.btn && f.group == "Learn") { probe = f.title; probeGroup = f.group; probeBtn = f.btn; break; }
+            if (!probe.isEmpty()) {
+                st.setValue("features/pane/" + probe, false); g_applyFeatures();
+                fcheck(probeBtn && probeBtn->isHidden(), "a pane turned off leaves the ribbon's pane bar");
+                st.setValue("features/pane/" + probe, true); g_applyFeatures();
+                fcheck(probeBtn && !probeBtn->isHidden(), "…and comes back when it is turned on again");
+                st.setValue("features/group/" + probeGroup, false); g_applyFeatures();
+                bool groupHidden = false;
+                for (const auto& gp : groupPages) if (gp.name == probeGroup) { const int ix = tabs.indexOf(gp.page); groupHidden = ix >= 0 && !tabs.isTabVisible(ix); }
+                fcheck(groupHidden, "a whole group turned off hides its tab");
+                st.setValue("features/group/" + probeGroup, true); g_applyFeatures();
+            }
+            for (const auto& f : flatPanes) st.setValue("features/pane/" + f.title, false);
+            g_applyFeatures();
+            bool anyVisible = false;
+            for (const auto& f : flatPanes) if (f.btn && !f.btn->isHidden()) anyVisible = true;
+            fcheck(anyVisible, "turning everything off is refused: the window is never left with nothing in it");
+            for (const auto& f : flatPanes) { st.remove("features/pane/" + f.title); st.remove("features/group/" + f.group); }
+            g_applyFeatures();
+        }
         fails += idiombank::selfTest(log, root, root, spine);   // the idiom bank
         fails += tablePage->selfTest(log);   // batch 5 F7
         {   // F3 Normalize (selftests 17-23) — needs the Overlay, Compare and Manuscript together
@@ -45137,6 +45274,7 @@ int main(int argc, char** argv) {
                 pd.show(); settle(400); save(pd.grab(), "prefs-grid");
                 pd.openPage(2); settle(300); save(pd.grab(), "prefs-house-style");
                 pd.openPage(4); settle(300); save(pd.grab(), "prefs-compare");
+                pd.openPage(12); settle(300); save(pd.grab(), "prefs-features");   // 2026-09-09
                 pd.hide();
             }
             if (extra.contains("menus")) {
@@ -45147,6 +45285,11 @@ int main(int argc, char** argv) {
                     save(m->grab(), "menu-" + name);
                     m->hide(); settle(50);
                 }
+            }
+            if (extra.contains("idioms")) {   // 2026-09-09: the idiom bank at work
+                auto* bank = idiombank::openBank(root, root, spine, &win, "S0134I.act",
+                    "@001A BLA MA LA PHYAG 'TSHAL LO ,\nSEMS CAN THAMS CAD BLA NA MED PA'I BYANG CHUB TU ,\n@001B DPER NA NAM MKHA' BZHIN DU ,\nDES NA CHOS THAMS CAD STONG PA NYID DO ,\n", "");
+                bank->resize(940, 620); bank->show(); settle(500); save(bank->grab(), "idiom-bank"); bank->hide();
             }
             if (extra.contains("suite")) {   // analysis suite, batch 4 (2026-09-09): the new windows at work
                 const QString sd = QDir::tempPath() + "/dct_shot_suite"; QDir(sd).removeRecursively(); QDir().mkpath(sd + "/batch7");
