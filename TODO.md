@@ -1,3 +1,112 @@
+# ★★★★★ UNFILED SWEEP — 2026-09-09 (Adam: "anything that hasn't been
+# filed until now goes on the backlog")
+
+Everything below was raised, decided, found or started and was NOT on this
+list before this sweep. Grouped by theme; each line says where it came from.
+
+## A. People — the sessions that decide what gets built
+- [x] **Ven. Utpala, Diamond Cutter Classics editor** — hold on the
+      calendar Fri 11 Sep 15:30–17:00; invitation waiting in Gmail drafts;
+      question set + inventory at
+      `docs/distribution/EDITOR_TOOL_INTERVIEW_UTPALA.md` (2026-09-09)
+- [ ] Add her to the calendar invite once she picks a slot (Adam's call —
+      nothing is sent from his account without him)
+- [ ] **After her session:** write `docs/EDITOR_WORKFLOW.md` (her process
+      in her words), an editor's-tool plan with batches in the shape of the
+      compare-suite plan, and put her style-sheet rules into
+      Preferences ▸ House Style as switches
+- [ ] **One-on-one sessions with each Mixed Nuts translator** (Adam,
+      2026-09-09: "a more intimate look at how they translate… more
+      personal in sourcing the information"). Roster from Nick Lashaw's
+      2026-05-05 "Important for Mixed Nuts" thread, cross-checked against
+      the DWTC class list: Nick Lashaw, Timothy Lowenhaupt, Alison Zhou
+      Xiaoping, Seiji Arao, Benjamin Kramer, S. Sanusi, Gibson Chang,
+      Stanley Chen, thepositiveword (Utpala is covered by the editor
+      session; Geshe Michael is asked separately). Guide:
+      `docs/distribution/TRANSLATOR_ONE_ON_ONE_GUIDE.md`. Then: write up
+      each session, fold the findings into the release audit's steelman,
+      and let them decide what survives
+- [ ] Ask Geshe Michael for his own requests for the research suite
+      (already filed above; repeated here so the three people-tasks sit
+      together)
+
+## B. Editor's-tool candidates — build only what Utpala confirms
+- [ ] Tracked-changes `.docx` export of a two-version comparison (Word
+      revision marks from the compare hunks) · queries as first-class
+      objects (asked / answered / resolved) · the style sheet as switches
+      with a report of what changed and what it refused · consistency
+      report per text (one term rendered many ways, with counts and line
+      references) · register warnings surfaced where she edits · document
+      Versions · replace across a volume with a preview · a sign-off
+      checklist per text · citation checking against the catalogue and
+      corpus · an editor's pane holding her queue
+
+## C. Release-audit open items not previously on this list
+(from `docs/release_audit/MainWindow_and_Menus.md`; each needs a ruling
+before 1.0)
+- [ ] `--openprobe` does not set `g_harnessRun`, unlike every other probe
+      flag — confirm deliberate or fix
+- [ ] `win.setMinimumSize` is called twice (640×480 then 820×560); drop the
+      dead first call
+- [ ] Ten of the twelve CLI modes have no ctest suite; register the
+      geometry inquisition and the Sanskrit glyph check if they are gates
+- [ ] Quick Access pins are matched by display text — renaming a button
+      orphans a user's pins silently; give pins stable identifiers
+- [ ] The lifecycle log grows unbounded and is quoted (60 lines) into the
+      Desktop diagnostic — decide on rotation
+- [ ] Two diagnostic reports with very different privacy profiles; confirm
+      both are intended to ship and that the verbose one's contents are
+      acceptable to hand to a tester
+- [ ] Troubleshooting ▸ Storage… clears the scan cache and the search index
+      from a plain button with no second confirmation
+- [ ] Every Edit-menu action is registered with an empty shortcut while
+      Help advertises the standard ones — verify by hand on a real build
+- [ ] Menu mirroring is generic and unfiltered: every pane button becomes a
+      menu item, including destructive ones, with no deny-list (the
+      gauntlet has `kDeny`) — decide whether the mirror needs the same list
+- [ ] The About box quotes `ALL_TEST_BATTERIES`; confirm no release build
+      uses the `-DALL_ALLOW_REDUCED_BATTERY=ON` escape hatch
+- [ ] File ▸ Import Data Release… is a silent no-op if `g_importRelease`
+      was never installed — verify the hook is wired in a shipped build
+- [ ] Confirm the shipped DMG's data folder carries v0.27.2 so the About
+      box's exact pin stays live rather than falling through its gate
+
+## D. Work started and not finished
+- [ ] **`docs/ANALYSIS_SUITE_PLAN.md`** — write it from the design work
+      (subsystem maps + judged designs for batches 4/5/6 + the completeness
+      critic) as soon as that finishes; then implement batch 4
+- [ ] **`docs/MAPS_RESEARCH.md`** — the maps study stopped at the session
+      limit with 6 of 16 readings done; resume it, then the Map pane
+      batches M1–M3 already filed below
+- [ ] Preferences ▸ Shortcuts is read-only; key-binding EDITING is
+      deliberately not offered yet — decide whether 1.0 needs it
+- [ ] Compare: encoding choice for compared files (reuse the `enc` tables),
+      Compare with Backup (needs the backup module's listing API), and
+      surfacing an invalid regex in the line filters instead of skipping it
+
+## E. Standing process, so it is not carried in anyone's head
+- [ ] After each digest goes out, roll `docs/digests/LOG.md` into
+      `docs/digests/LOG_ARCHIVE.md` under that date and empty the log
+- [ ] `tools/digest_reference.docx` is generated by
+      `tools/make_digest_reference.py`; regenerate it if the document
+      converter is upgraded, and check the built `.docx` before sending
+- [ ] The digest carries screenshots and a chart every day; captures come
+      from the app's own headless sweep at 1440×900 double density
+      (`tools/build_digest.sh`), so they stay reproducible
+
+## F. Fixed today — recorded so nothing here looks open
+- [x] Press: `hdiutil verify` reported a BUSY image as corrupt; it now
+      retries and reports busy (exit 10) and corrupt (exit 9) distinctly
+- [x] Press STATIC-R1: 17 compiler warnings, mostly selftest fixtures
+      writing files without checking the write; fixed with checked
+      `writeFixture`/`readFixture` helpers
+- [x] The screenshot sweep inherited the desktop session's window
+      geometry, so the visual baseline depended on the user's window size;
+      harness runs no longer restore or save it. Baseline re-blessed at 24
+      panes (Compare added at 16)
+- [x] `press*.log` and a stray pandoc output file were tracked in the
+      repository; untracked and ignored (the licensing gate caught them)
+
 ## 📋 2026-09-04 — Overlay card: the HGM · TENTATIVE block is now a stepper (Adam's ask)
 
 - One (rendering, witness) at a time, shown INSIDE the spine segment it
