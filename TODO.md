@@ -2990,14 +2990,16 @@ questionnaire's Q13 answers tell us how much Android matters.
 - [x] View (Text-as layouts, Focus, Ribbon toggle, Sidebar, Markup, Zoom submenu, Full Screen) — 2026-09-08
 - [x] Insert (Folio marker break, Tibetan & ACIP symbols palette, Footnote, Comment, Date and Time, File, Manuscript hyperlink/table/picture) — 2026-09-08
 - [x] Format (Font, Paragraph, Bullets, Change Case incl. To ACIP/Wylie/script, Style) — 2026-09-08; Document… deferred until RTF/PDF export reads page setup
-- [ ] Tools (Spelling, Thesaurus→phrase memory, Translate→send to Draft, Word Count, Protect Document, Templates folder)
-- [ ] Window (Minimize, Zoom, Bring All to Front, open-window list)
+- [x] Tools (Spelling, Thesaurus→phrase memory, Translate→send to Draft, Word Count, Protect Document, Templates folder) — 2026-09-08
+- [x] Window (Minimize, Zoom, Bring All to Front, open-window list) — 2026-09-08
 - [x] File, Sublime additions (encodings, Save All, Print, Revert, Close All) — 2026-09-08
 - [x] Find menu (Sublime) — 2026-09-08: incremental find, replace next, quick find, highlight all, use selection for find/replace, F3 family, find bar toggles (regex/case/word/wrap/in selection), Find in Files → Search pane
 - [x] Selection menu (Sublime) — 2026-09-08: expand to line/word/paragraph/whitespace/brackets/quotes, to Folio, to Phrase, until…, reverse
 - [x] View additions (Sublime) — 2026-09-08: line numbers, word wrap, line endings, hide status bar, console, spelling F6 family
 - [x] Goto menu (Sublime) — 2026-09-08: heading, line, folio, dictionary entry, concordance, jump back/forward, bookmarks, matching bracket
-- [ ] Tools additions (Sublime): snippets, Hunt as command palette, cheat sheet
+- [x] Tools additions (Sublime): snippets, Hunt as command palette, cheat sheet — 2026-09-08
+- [x] Project menu (Sublime) as dossiers; Help ▸ Data Status… — 2026-09-08
+- [ ] Preferences panel (Word icon grid + Sublime colour schemes/themes/key bindings) — batch 7, next
 - [ ] Project menu (Sublime): dossiers promoted — open/switch/recent/save as/close/edit, folders
 - [ ] Help additions (Sublime): Documentation, Report a Bug (defect intake), Data status
 - [ ] Preferences panel (Word-style icon grid + Sublime settings ideas: colour schemes, themes, key bindings view; migrates SettingsDialog; adds AI, Tibetan & Sanskrit, Updates, Privacy, File Locations pages)

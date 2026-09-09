@@ -2818,6 +2818,11 @@ static bool g_sweepActive = false;
 // (found 2026-08-15: the stray "QTextCursor::setPosition: Position
 // '4' out of range" was restoreSession racing the selftest doc)
 static bool g_harnessRun = false;
+// Menu cross-links (2026-09-08): actions created in one menu block and
+// triggered from another (Project ▸ Edit Dossiers… = File ▸ Dossiers…;
+// Tools ▸ Cheat Sheet = Help ▸ Keyboard Shortcuts…).
+static QAction* g_dossiersAct = nullptr;
+static QAction* g_kbAct = nullptr;
 // Busy cursor (Adam, 2026-09-08: "a loading icon the cursor changes to").
 // A dharma wheel, drawn from whichever installed font carries U+2638;
 // when none does, the platform wait cursor — checked with inFont, never
@@ -4074,7 +4079,7 @@ struct Input {
 // Custom, as in Word. Summary and Custom are editable and land in the
 // sidecar on OK; the rest is read-only fact. Modal, so it never runs
 // under the harness (the selftests cover the functions above).
-inline void showDialog(QWidget* parent, const Input& in) {
+inline void showDialog(QWidget* parent, const Input& in, int tab = 0) {
     if (g_harnessRun) return;
     const QString sidecar = sidecarPath(in.dataRoot, in.path);
     QJsonObject props = load(sidecar);
@@ -4087,6 +4092,7 @@ inline void showDialog(QWidget* parent, const Input& in) {
     auto* v = new QVBoxLayout(&dlg);
     auto* tabs = new QTabWidget;
     v->addWidget(tabs, 1);
+    QTimer::singleShot(0, tabs, [tabs, tab] { if (tab > 0 && tab < tabs->count()) tabs->setCurrentIndex(tab); });   // Tools ▸ Word Count opens Statistics
 
     // General
     {
@@ -4586,6 +4592,24 @@ inline const std::vector<Symbol>& acipSymbols() {
         {"+", "stack joiner (ACIP Sanskrit)"},
     };
     return v;
+}
+// Tools ▸ Snippets (Sublime): plain-text snippets in library/snippets/.
+inline QString snippetsDir(const QString& root) { return root + "/library/snippets"; }
+inline QStringList snippetNames(const QString& root) {
+    QStringList v;
+    for (const auto& fi : QDir(snippetsDir(root)).entryInfoList({"*.txt"}, QDir::Files, QDir::Name)) v << fi.completeBaseName();
+    return v;
+}
+inline QString snippetText(const QString& root, const QString& name) {
+    QFile f(snippetsDir(root) + "/" + name + ".txt");
+    if (!f.open(QIODevice::ReadOnly)) return {};
+    return QString::fromUtf8(f.readAll());
+}
+inline bool saveSnippet(QWidget* parent, const QString& root, const QString& name, const QString& text) {
+    QDir().mkpath(snippetsDir(root));
+    QString safe = name.trimmed(); safe.replace(QRegularExpression("[/\\\\:]"), "-");
+    if (safe.isEmpty()) return false;
+    return saveOrWarn(parent, snippetsDir(root) + "/" + safe + ".txt", text.toUtf8(), "snippet");
 }
 // Insert ▸ Date and Time: western date plus the Tibetan year (rabjung
 // cycle), from the calendar engine — nothing here is computed by hand.
@@ -8118,6 +8142,24 @@ public:
                   "Date and Time offers the Tibetan year from the calendar engine");
             check(g_busyCursor().shape() == Qt::BitmapCursor || g_busyCursor().shape() == Qt::WaitCursor,
                   "the busy cursor is the dharma wheel when a font has it, else the platform wait cursor");
+            // Tools / Project hooks (2026-09-08)
+            {
+                const QString tmpRoot = QDir::temp().filePath("all_snip_" + QString::number(QCoreApplication::applicationPid()));
+                QDir().mkpath(tmpRoot);
+                check(editops::snippetNames(tmpRoot).isEmpty(), "an empty snippets folder lists nothing");
+                check(editops::saveSnippet(this, tmpRoot, "Homage/line", "bla ma la phyag 'tshal lo") && editops::snippetNames(tmpRoot) == QStringList{"Homage-line"},
+                      "Save Selection as Snippet writes library/snippets/<safe name>.txt");
+                check(editops::snippetText(tmpRoot, "Homage-line") == "bla ma la phyag 'tshal lo", "Insert Snippet reads it back verbatim");
+                check(!editops::saveSnippet(this, tmpRoot, "   ", "x"), "a blank snippet name is refused");
+                QDir(tmpRoot).removeRecursively();
+            }
+            input_->setPlainText("line one\nline two\nline three");
+            { QTextCursor c = input_->textCursor(); c.movePosition(QTextCursor::End); input_->setTextCursor(c); }
+            check(currentLine() == 3, "currentLine reports the caret's 1-based line for dossiers");
+            setProtected(true);
+            check(isProtected() && input_->isReadOnly(), "Protect Document makes the Document box read-only");
+            setProtected(false);
+            check(!isProtected(), "and unprotecting restores editing");
             docFile_ = keepFile;
             input_->setPlainText(keepText);
             savedDigest_ = docprops::digest(keepText);
@@ -8192,6 +8234,11 @@ public:
         return m;
     }
     void openTeamComments() { commentsDialog(); }
+    // ---- Tools / Project menu hooks (2026-09-08) ----
+    QString documentPath() const { return docFile_; }   // alias of docFile(); currentLine() already exists below
+    void setProtected(bool on) { input_->setReadOnly(on); }
+    bool isProtected() const { return input_->isReadOnly(); }
+    QString dataRootPath() const { return dataRoot_; }
     // ---- Goto menu (Sublime, 2026-09-08) ----
     // Headings = the sa bcad outline; each returns false honestly when
     // there is nothing to go to.
@@ -8508,7 +8555,7 @@ public:
         in.kind = "document";
         return in;
     }
-    void showProperties() { docprops::showDialog(this, propertiesInput()); }
+    void showProperties(int tab = 0) { docprops::showDialog(this, propertiesInput(), tab); }
     void openFile(const QString& fn) {
         QFile f(fn);
         if (!f.open(QIODevice::ReadOnly)) {
@@ -21931,6 +21978,10 @@ auto* secPub = new QLabel("<span style='color:#9A7A33;font-size:10px;letter-spac
     bool closeDraft() { return newDraft(); }
     void proposeFootnote() { proposeNote(); }
     void focusApparatusSearch() { if (notesSearch_) { notesSearch_->setFocus(); notesSearch_->selectAll(); } }
+    void setSourceText(const QString& t) { source_->setPlainText(t); source_->setFocus(); }
+    void sendDraftToManuscript() { if (g_sendToManuscript) g_sendToManuscript(draft_->toPlainText()); }
+    void setProtected(bool on) { draft_->setReadOnly(on); source_->setReadOnly(on); }
+    bool isProtected() const { return draft_->isReadOnly(); }
     bool revertDraft() {
         if (draftPath_.isEmpty()) { if (termLive_) termLive_->setText("Nothing to revert to: the draft has no file."); return false; }
         if (!confirmDiscardDraft()) return false;
@@ -21967,7 +22018,7 @@ auto* secPub = new QLabel("<span style='color:#9A7A33;font-size:10px;letter-spac
         if (termLive_) termLive_->setText("Renamed to " + QFileInfo(nw).fileName());
         return true;
     }
-    void showProperties() {
+    void showProperties(int tab = 0) {
         docprops::Input in;
         in.path = draftPath_;
         in.text = draft_->toPlainText();
@@ -21976,7 +22027,7 @@ auto* secPub = new QLabel("<span style='color:#9A7A33;font-size:10px;letter-spac
         in.dataRoot = dataRoot_;
         in.sessionEditSeconds = editTimer_.isValid() ? editTimer_.elapsed() / 1000 : 0;
         in.kind = "draft";
-        docprops::showDialog(this, in);
+        docprops::showDialog(this, in, tab);
     }
     bool saveDraftAs() {
         const QString fn = safeGetSaveFileName(
@@ -33430,6 +33481,8 @@ public:
     }
     int listKind() const { QTextList* l = editor_->textCursor().currentList(); if (!l) return 0; return l->format().style() == QTextListFormat::ListDecimal ? 2 : 1; }
     QTextEdit* editor() const { return editor_; }
+    void setProtected(bool on) { editor_->setReadOnly(on); }
+    bool isProtected() const { return editor_->isReadOnly(); }
     bool isDirty() const { return dirty_; }
     bool revertManuscript() {
         if (path_.isEmpty()) { status_->setText("Nothing to revert to: the manuscript has no file."); return false; }
@@ -33466,7 +33519,7 @@ public:
         status_->setText("Renamed to " + QFileInfo(nw).fileName());
         return true;
     }
-    void showProperties() {
+    void showProperties(int tab = 0) {
         docprops::Input in;
         in.path = path_;
         in.text = editor_->toPlainText();
@@ -33475,7 +33528,7 @@ public:
         in.dataRoot = dataRoot_;
         in.sessionEditSeconds = editTimer_.isValid() ? editTimer_.elapsed() / 1000 : 0;
         in.kind = "manuscript";
-        docprops::showDialog(this, in);
+        docprops::showDialog(this, in, tab);
     }
 
     bool saveAs() {
@@ -39198,7 +39251,7 @@ int main(int argc, char** argv) {
         // LODESTAR L6: Translation Dossiers — the desk that
         // reassembles a text's working world in one act
         QObject::connect(
-            fileM->addAction("Dossiers\u2026"),
+            (g_dossiersAct = fileM->addAction("Dossiers\u2026")),
             &QAction::triggered, [&win, overlay, root] {
                 allcore::DossierStore ds(
                     (root + "/library").toStdString());
@@ -39978,6 +40031,154 @@ int main(int argc, char** argv) {
             }
         });
     }
+    // ---- Tools menu (Word + Sublime, Adam 2026-09-08) ----
+    {
+        QMenu* tm = win.menuBar()->addMenu("Tools");
+        auto active = [](QWidget* pane) {
+            for (QWidget* w = QApplication::focusWidget(); w; w = w->parentWidget()) if (w == pane) return true;
+            return pane->isVisible();
+        };
+        auto ed = [] { return editops::lastEditor().data(); };
+        auto msg = [&win](const QString& m) { win.statusBar()->showMessage(m, 4000); };
+        QMenu* sp = tm->addMenu("Spelling");
+        QObject::connect(sp->addAction("Check Document"), &QAction::triggered, [overlay] {
+            if (g_raisePane) g_raisePane(overlay);
+            if (overlay->spellingToggle()) overlay->spellingToggle()->setChecked(true);
+            overlay->stepSpellHit(+1);
+        });
+        QObject::connect(sp->addAction("Next Doubt"), &QAction::triggered, [overlay] { overlay->stepSpellHit(+1); });
+        QObject::connect(sp->addAction("Previous Doubt"), &QAction::triggered, [overlay] { overlay->stepSpellHit(-1); });
+        QObject::connect(tm->addAction("Phrase Memory\u2026 (Thesaurus)"), &QAction::triggered, [draftPane] { if (g_raisePane) g_raisePane(draftPane); draftPane->phraseMemory(); });
+        QMenu* tr = tm->addMenu("Translate");
+        QObject::connect(tr->addAction("Send Selection to Draft"), &QAction::triggered, [ed, draftPane, msg] {
+            const QString sel = editops::selectedText(ed());
+            if (sel.trimmed().isEmpty()) { msg("Select the Tibetan you want to draft first."); return; }
+            if (g_raisePane) g_raisePane(draftPane); draftPane->setSourceText(sel);
+        });
+        QObject::connect(tr->addAction("Send Draft to Manuscript"), &QAction::triggered, [draftPane, manuscriptPane] { draftPane->sendDraftToManuscript(); if (g_raisePane) g_raisePane(manuscriptPane); });
+        tm->addSeparator();
+        QObject::connect(tm->addAction("Word Count\u2026"), &QAction::triggered, [overlay, draftPane, manuscriptPane, active] {
+            if (active(manuscriptPane)) manuscriptPane->showProperties(2);
+            else if (active(draftPane)) draftPane->showProperties(2);
+            else overlay->showProperties(2);
+        });
+        QAction* prot = tm->addAction("Protect Document"); prot->setCheckable(true);
+        QObject::connect(tm, &QMenu::aboutToShow, [prot, overlay, draftPane, manuscriptPane, active] {
+            prot->setChecked(active(manuscriptPane) ? manuscriptPane->isProtected() : active(draftPane) ? draftPane->isProtected() : overlay->isProtected());
+        });
+        QObject::connect(prot, &QAction::toggled, [overlay, draftPane, manuscriptPane, active, msg](bool on) {
+            if (active(manuscriptPane)) manuscriptPane->setProtected(on);
+            else if (active(draftPane)) draftPane->setProtected(on);
+            else overlay->setProtected(on);
+            msg(on ? "Document protected: read-only until you turn this off." : "Document unprotected.");
+        });
+        tm->addSeparator();
+        QMenu* tpl = tm->addMenu("Templates");
+        QObject::connect(tpl->addAction("Show Templates Folder"), &QAction::triggered, [overlay] {
+            QDir().mkpath(overlay->templatesDir()); QDesktopServices::openUrl(QUrl::fromLocalFile(overlay->templatesDir()));
+        });
+        QMenu* sn = tm->addMenu("Snippets");
+        QMenu* snIns = sn->addMenu("Insert Snippet");
+        QObject::connect(snIns, &QMenu::aboutToShow, [snIns, root, ed, msg] {
+            snIns->clear();
+            const QStringList names = editops::snippetNames(root);
+            if (names.isEmpty()) { snIns->addAction("(no snippets yet \u2014 Save Selection as Snippet\u2026)")->setEnabled(false); return; }
+            for (const QString& n : names)
+                QObject::connect(snIns->addAction(n), &QAction::triggered, [n, root, ed, msg] {
+                    QWidget* w = ed(); if (!w) { msg("Click into a text field first."); return; }
+                    editops::insertPlain(w, editops::snippetText(root, n));
+                });
+        });
+        QObject::connect(sn->addAction("Save Selection as Snippet\u2026"), &QAction::triggered, [ed, root, msg, &win] {
+            const QString sel = editops::selectedText(ed());
+            if (sel.isEmpty()) { msg("Select the text to keep as a snippet first."); return; }
+            const QString name = docprops::askName(&win, "Save Snippet", "Snippet name:", sel.simplified().left(24));
+            if (name.isEmpty()) return;
+            if (editops::saveSnippet(&win, root, name, sel)) msg("Snippet saved: " + name);
+        });
+        QObject::connect(sn->addAction("Show Snippets Folder"), &QAction::triggered, [root] {
+            QDir().mkpath(editops::snippetsDir(root)); QDesktopServices::openUrl(QUrl::fromLocalFile(editops::snippetsDir(root)));
+        });
+        tm->addSeparator();
+        QObject::connect(tm->addAction("Command Palette\u2026 (Hunt \u2318K)"), &QAction::triggered, [] { if (g_hunt) g_hunt->openPalette(); });
+        QObject::connect(tm->addAction("Cheat Sheet: Keyboard Shortcuts\u2026"), &QAction::triggered, [] { if (g_kbAct) g_kbAct->trigger(); });
+    }
+    // ---- Project menu (Sublime, Adam 2026-09-08): a "project" here is a
+    // dossier — one text, its reading position, glossary and comments.
+    {
+        QMenu* pm = win.menuBar()->addMenu("Project");
+        auto msg = [&win](const QString& m) { win.statusBar()->showMessage(m, 4000); };
+        auto current = std::make_shared<QString>();   // slug of the open dossier
+        auto stamp = [] { return QDateTime::currentDateTime().toString(Qt::ISODate).toStdString(); };
+        auto openSlug = [overlay, root, current, msg, stamp](const std::string& slug) {
+            allcore::DossierStore ds((root + "/library").toStdString()); ds.load();
+            for (const auto& x : ds.all()) if (x.slug == slug) {
+                if (g_raisePane) g_raisePane(overlay);
+                overlay->openFile(QString::fromStdString(x.textPath));
+                overlay->scrollToLine(x.line);
+                ds.touch(slug, x.line, stamp());
+                if (!ds.save()) msg("The dossier's position could not be written (data folder not writable).");
+                *current = QString::fromStdString(slug);
+                msg("Dossier: " + QString::fromStdString(x.title));
+                return;
+            }
+            msg("That dossier no longer exists.");
+        };
+        QAction* cur = pm->addAction("No dossier open"); cur->setEnabled(false);
+        pm->addSeparator();
+        QObject::connect(pm->addAction("Open Dossier\u2026"), &QAction::triggered, [&win, root, openSlug] {
+            if (g_harnessRun) return;
+            allcore::DossierStore ds((root + "/library").toStdString()); ds.load();
+            QDialog d(&win); d.setWindowTitle("Open Dossier"); d.resize(520, 360);
+            auto* v = new QVBoxLayout(&d); auto* list = new QListWidget; v->addWidget(list, 1);
+            for (const auto& x : ds.all()) {
+                auto* it = new QListWidgetItem(QString("%1  \u2014  %2, line %3").arg(QString::fromStdString(x.title), QFileInfo(QString::fromStdString(x.textPath)).fileName()).arg(x.line));
+                it->setData(Qt::UserRole, QString::fromStdString(x.slug)); list->addItem(it);
+            }
+            if (list->count() == 0) { list->addItem("No dossiers yet \u2014 use New Dossier from Current Text\u2026"); list->setEnabled(false); }
+            auto* bb = new QDialogButtonBox(QDialogButtonBox::Open | QDialogButtonBox::Cancel); v->addWidget(bb);
+            QObject::connect(bb, &QDialogButtonBox::accepted, &d, &QDialog::accept); QObject::connect(bb, &QDialogButtonBox::rejected, &d, &QDialog::reject);
+            QObject::connect(list, &QListWidget::itemDoubleClicked, &d, &QDialog::accept);
+            list->setCurrentRow(0);
+            if (d.exec() == QDialog::Accepted && list->isEnabled() && list->currentItem()) openSlug(list->currentItem()->data(Qt::UserRole).toString().toStdString());
+        });
+        QMenu* recent = pm->addMenu("Recent Dossiers");
+        QObject::connect(recent, &QMenu::aboutToShow, [recent, root, openSlug] {
+            recent->clear();
+            allcore::DossierStore ds((root + "/library").toStdString()); ds.load();
+            int n = 0;
+            for (const auto& x : ds.all()) {
+                if (++n > 10) break;
+                QObject::connect(recent->addAction(QString::fromStdString(x.title)), &QAction::triggered, [slug = x.slug, openSlug] { openSlug(slug); });
+            }
+            if (n == 0) recent->addAction("(none yet)")->setEnabled(false);
+        });
+        QObject::connect(pm->addAction("New Dossier from Current Text\u2026"), &QAction::triggered, [&win, overlay, root, current, msg, stamp] {
+            if (overlay->documentPath().isEmpty()) { msg("Open a text in the Overlay first; a dossier is a desk for one text."); return; }
+            const QString title = docprops::askName(&win, "New Dossier", "Dossier title:", QFileInfo(overlay->documentPath()).completeBaseName());
+            if (title.isEmpty()) return;
+            allcore::DossierStore ds((root + "/library").toStdString()); ds.load();
+            const std::string slug = ds.create(title.toStdString(), overlay->documentPath().toStdString(), overlay->currentLine(), stamp());
+            if (slug.empty() || !ds.save()) { msg("The dossier could not be written."); return; }
+            *current = QString::fromStdString(slug); msg("Dossier created: " + title);
+        });
+        QObject::connect(pm->addAction("Save Reading Position"), &QAction::triggered, [overlay, root, current, msg, stamp] {
+            if (current->isEmpty()) { msg("Open a dossier first."); return; }
+            allcore::DossierStore ds((root + "/library").toStdString()); ds.load();
+            if (!ds.touch(current->toStdString(), overlay->currentLine(), stamp()) || !ds.save()) { msg("The position could not be written."); return; }
+            msg(QString("Position saved: line %1").arg(overlay->currentLine()));
+        });
+        QObject::connect(pm->addAction("Close Dossier"), &QAction::triggered, [current, msg] { if (current->isEmpty()) { msg("No dossier is open."); return; } current->clear(); msg("Dossier closed (the text stays open)."); });
+        pm->addSeparator();
+        QObject::connect(pm->addAction("Edit Dossiers\u2026"), &QAction::triggered, [] { if (g_dossiersAct) g_dossiersAct->trigger(); });
+        QObject::connect(pm->addAction("Files Workspaces\u2026"), &QAction::triggered, [filesPane] { if (g_raisePane) g_raisePane(filesPane); });
+        QObject::connect(pm, &QMenu::aboutToShow, [cur, current, root] {
+            if (current->isEmpty()) { cur->setText("No dossier open"); return; }
+            allcore::DossierStore ds((root + "/library").toStdString()); ds.load();
+            for (const auto& x : ds.all()) if (x.slug == current->toStdString()) { cur->setText("Dossier: " + QString::fromStdString(x.title)); return; }
+            cur->setText("No dossier open");
+        });
+    }
     // ---- Goto menu (Sublime's, Adam 2026-09-08) ----
     {
         QMenu* gm = win.menuBar()->addMenu("Goto");
@@ -40385,12 +40586,67 @@ int main(int argc, char** argv) {
         });
     }
 
+    // ---- Window menu (Word + Sublime, Adam 2026-09-08) ----
+    {
+        QMenu* wm = win.menuBar()->addMenu("Window");
+        QAction* mini = wm->addAction("Minimize"); mini->setShortcut(QKeySequence("Ctrl+M"));
+        QObject::connect(mini, &QAction::triggered, [&win] { win.showMinimized(); });
+        QObject::connect(wm->addAction("Zoom"), &QAction::triggered, [&win] { if (win.isMaximized()) win.showNormal(); else win.showMaximized(); });
+        wm->addSeparator();
+        QAction* nxt = wm->addAction("Next Pane Group"); nxt->setShortcut(QKeySequence("Ctrl+Alt+Right"));
+        QAction* prv = wm->addAction("Previous Pane Group"); prv->setShortcut(QKeySequence("Ctrl+Alt+Left"));
+        QObject::connect(nxt, &QAction::triggered, [&tabs] { if (tabs.count()) tabs.setCurrentIndex((tabs.currentIndex() + 1) % tabs.count()); });
+        QObject::connect(prv, &QAction::triggered, [&tabs] { if (tabs.count()) tabs.setCurrentIndex((tabs.currentIndex() + tabs.count() - 1) % tabs.count()); });
+        wm->addSeparator();
+        QObject::connect(wm->addAction("Bring All to Front"), &QAction::triggered, [&win] {
+            for (QWidget* w : QApplication::topLevelWidgets()) if (w->isWindow() && w->isVisible() && w != &win) w->raise();
+            win.raise(); win.activateWindow();
+        });
+        wm->addSeparator();
+        QAction* marker = wm->addAction("Open Windows"); marker->setEnabled(false);
+        auto dyn = std::make_shared<QList<QAction*>>();
+        QObject::connect(wm, &QMenu::aboutToShow, [wm, dyn, &win] {
+            for (QAction* a : *dyn) { wm->removeAction(a); a->deleteLater(); }
+            dyn->clear();
+            for (QWidget* w : QApplication::topLevelWidgets()) {
+                if (!w->isWindow() || !w->isVisible() || w->windowTitle().isEmpty()) continue;
+                if (qobject_cast<QMenu*>(w)) continue;
+                QAction* a = wm->addAction(w->windowTitle()); a->setCheckable(true); a->setChecked(w->isActiveWindow());
+                QPointer<QWidget> wp(w);
+                QObject::connect(a, &QAction::triggered, [wp] { if (wp) { wp->raise(); wp->activateWindow(); } });
+                dyn->append(a);
+            }
+            Q_UNUSED(win);
+        });
+    }
     // Help menu: searchable help + tutorials (and macOS's own
     // Help-search finds every derived menu item)
     HelpWindow* helpWin = nullptr;
     {
         QMenu* helpMenu = win.menuBar()->addMenu("Help");
         QAction* h = helpMenu->addAction("Diamond Cutter Help && Tutorials\u2026");
+        // Help ▸ Data Status… (Sublime/Word parity batch, 2026-09-08): what
+        // data this copy runs on, read from the spine's own provenance.
+        QObject::connect(helpMenu->addAction("Data Status\u2026"), &QAction::triggered, [&win, &spine, root] {
+            if (g_harnessRun) return;
+            auto val = [&spine](const char* k) { const QString v = QString::fromStdString(spine.metaValue(k)); return v.isEmpty() ? QString("\u2014 (not recorded)") : v; };
+            const QFileInfo idx(root + "/library/.index.db");
+            allcore::DossierStore ds((root + "/library").toStdString()); ds.load();
+            QDialog d(&win); d.setWindowTitle("Data Status");
+            auto* f = new QFormLayout(&d);
+            f->addRow("Data folder:", new QLabel(root));
+            f->addRow("Dictionary release:", new QLabel(val("release_version")));
+            f->addRow("Entries:", new QLabel(val("n_entries")));
+            f->addRow("Corpus segments:", new QLabel(val("n_corpus_segments")));
+            f->addRow("Corpus file:", new QLabel(val("source_corpus")));
+            f->addRow("Search index:", new QLabel(idx.exists() ? QString("%1 MB, built %2").arg(idx.size() / 1048576.0, 0, 'f', 1).arg(idx.lastModified().toString("d MMM yyyy h:mm AP")) : "not built yet (built on first search)"));
+            f->addRow("Dossiers:", new QLabel(QString::number(ds.all().size())));
+            f->addRow("Templates:", new QLabel(QString::number(QDir(root + "/library/templates").entryList({"*.txt"}, QDir::Files).size())));
+            f->addRow("Snippets:", new QLabel(QString::number(editops::snippetNames(root).size())));
+            auto* bb = new QDialogButtonBox(QDialogButtonBox::Close); f->addRow(bb);
+            QObject::connect(bb, &QDialogButtonBox::rejected, &d, &QDialog::reject); QObject::connect(bb, &QDialogButtonBox::clicked, &d, &QDialog::accept);
+            d.exec();
+        });
         h->setShortcut(QKeySequence::HelpContents);
         QObject::connect(h, &QAction::triggered, [&] {
             if (!helpWin) helpWin = new HelpWindow(&tabs, root, &win);
@@ -40657,7 +40913,7 @@ int main(int argc, char** argv) {
         // ---- W4: the shortcut map — what the keyboard can do,
         // in one sheet (tooltips teach piecemeal; this teaches whole)
         QObject::connect(
-            helpMenu->addAction("Keyboard Shortcuts\u2026"),
+            (g_kbAct = helpMenu->addAction("Keyboard Shortcuts\u2026")),
             &QAction::triggered, [&win] {
                 QDialog d(&win);
                 d.setWindowTitle("Keyboard shortcuts");
@@ -43141,8 +43397,8 @@ int main(int argc, char** argv) {
             // 9l sits before the group menus — positional indexing
             // failed the day it landed)
             const auto menus = win.menuBar()->actions();
-            bool ok = menus.size() == tabs.count() + 9;   // File +
-                                                          // Edit + Selection + Find + Insert + Format + Goto +
+            bool ok = menus.size() == tabs.count() + 12;  // File +
+                                                          // Edit + Selection + Find + Insert + Format + Tools + Project + Goto + Window +
                                                           // groups +
                                                           // View + Help
             int overlayActions = 0;
