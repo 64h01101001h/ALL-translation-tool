@@ -380,3 +380,21 @@ Organisation **default (empty `QSettings()`)** — a *second, separate* domain:
 - **The About box quotes `ALL_TEST_BATTERIES`** as "automated test batteries". The BUILD-19 gate at `CMakeLists.txt:117–160` protects it, but a build configured with `-DALL_ALLOW_REDUCED_BATTERY=ON` would let the About pane overstate. Confirm no release build uses that escape hatch.
 - **Menu mirroring is generic and unfiltered** — every `QPushButton` on every pane becomes a menu item, including destructive ones, with no deny-list (unlike the gauntlet, which has `kDeny`). Decide whether the mirror needs the same list.
 - The **status bar and About box both quote the spine's `release_version`**; confirm the shipped DMG's data folder carries v0.27.2 so the F4 exact pin (`n == 105634 && hgm == 12004`) stays live rather than falling through its version gate.
+
+## Release-audit sweep, 2026-09-09 (the twelve open items)
+
+| Item | Disposition |
+|---|---|
+| `--openprobe` outside the harness guard | Fixed: joins the guarded probe list |
+| Dead `setMinimumSize(640, 480)` | Fixed: dropped; 820×560 stands alone |
+| CLI modes without ctest | `sanskrit_glyph_check` registered (exit 1 on a missing glyph); the sweep is covered by the press's visual gate; probes have no verdict |
+| Quick Access pins by label | An orphaned pin shows as a disabled "(not in this build)" button with a tooltip — never dropped silently |
+| Lifecycle log unbounded | Rotates at 1 MB, one generation kept |
+| Two diagnostic reports, privacy | **Open — Adam's ruling** |
+| Storage… clears without confirmation | Two-step: first click arms and shows the size, second clears |
+| Edit menu shortcuts empty | Standard keys shown (widget context; editors keep their bindings) |
+| Menu mirror unfiltered | Destructive / outward controls skipped (Trash, Delete, Quit, Terminal, the Storage clears) |
+| Reduced-battery escape hatch | Verified: the press configures plain Release; "no suite skipped" in the press log |
+| Import Data Release hook | Verified: installed in the Library pane's constructor, built unconditionally |
+| Shipped data version | Verified on the installed build: spine meta `release_version` = 0.27.2 |
+

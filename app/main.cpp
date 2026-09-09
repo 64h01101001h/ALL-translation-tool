@@ -38496,7 +38496,8 @@ int main(int argc, char** argv) {
                        early.contains("--sanskritcheck") ||
                        early.contains("--survey") ||
                        early.contains("--teachbench") ||
-                       early.contains("--gauntlet");
+                       early.contains("--gauntlet") ||
+                       early.contains("--openprobe")   /* release audit 2026-09-09: was the one probe outside the guard */;
         g_sweepActive = early.contains("--sweep");
     }
     // GLOBAL DIALOG REAPER for every headless mode. The sweep has had
@@ -40057,12 +40058,12 @@ int main(int argc, char** argv) {
             // the menu action is a second path, not a replacement
             a->setShortcutContext(Qt::WidgetShortcut);
         };
-        add("Undo", QKeySequence(), [](auto* w) { w->undo(); });
-        add("Redo", QKeySequence(), [](auto* w) { w->redo(); });
-        edit->addSeparator();
-        add("Cut", QKeySequence(), [](auto* w) { w->cut(); });
-        add("Copy", QKeySequence(), [](auto* w) { w->copy(); });
-        add("Paste", QKeySequence(), [](auto* w) { w->paste(); });
+        add("Undo", QKeySequence(QKeySequence::Undo), [](auto* w) { w->undo(); });      // release audit 2026-09-09: the menu now shows the
+        add("Redo", QKeySequence(QKeySequence::Redo), [](auto* w) { w->redo(); });      // standard keys Help advertises; WidgetShortcut context
+        edit->addSeparator();                                                            // means the editors' own bindings still do the work
+        add("Cut", QKeySequence(QKeySequence::Cut), [](auto* w) { w->cut(); });
+        add("Copy", QKeySequence(QKeySequence::Copy), [](auto* w) { w->copy(); });
+        add("Paste", QKeySequence(QKeySequence::Paste), [](auto* w) { w->paste(); });
         // Word parity (Adam, 2026-09-08): plain-text paste, and Paste
         // Special as a SCRIPT conversion — clipboard text detected as
         // ACIP / Wylie / Tibetan Unicode and re-expressed on insert.
@@ -40149,11 +40150,15 @@ int main(int argc, char** argv) {
             QObject::connect(go, &QAction::triggered, [pane] {
                 if (g_raisePane) g_raisePane(pane);
             });
+            // release audit 2026-09-09: the mirror lists every pane control, so a destructive or
+            // outward one would become a bare menu item with no context — those stay on the pane
+            static const QStringList kMirrorDeny = {"Trash", "Delete", "Quit", "Terminal", "Clear scan cache", "Clear search index"};
+            auto mirrorDenied = [](const QString& t) { for (const auto& d : kMirrorDeny) if (t.contains(d, Qt::CaseInsensitive)) return true; return false; };
             const auto btns = pane->findChildren<QPushButton*>();
             bool sep = false;
             for (QPushButton* b : btns) {
                 const QString label = b->text().trimmed();
-                if (label.isEmpty()) continue;
+                if (label.isEmpty() || mirrorDenied(label)) continue;
                 if (!sep) { menu->addSeparator(); sep = true; }
                 QAction* a = menu->addAction(label);
                 if (!b->toolTip().isEmpty())
@@ -40172,7 +40177,7 @@ int main(int argc, char** argv) {
             bool tsep = false;
             for (QToolButton* tb : tools) {
                 const QString label = tb->text().trimmed();
-                if (label.isEmpty()) continue;
+                if (label.isEmpty() || mirrorDenied(label)) continue;
                 if (!tsep) { menu->addSeparator(); tsep = true; }
                 if (tb->menu()) {
                     menu->addMenu(tb->menu())->setText(label);
@@ -40275,7 +40280,13 @@ int main(int argc, char** argv) {
                 qatHint->setVisible(pins.isEmpty());
                 for (const QString& p : pins) {
                     QAction* a = qatFind(p);
-                    if (!a) continue;
+                    if (!a) {   // release audit 2026-09-09: never drop a pin silently — say it is gone
+                        auto* gone = new QPushButton(p + " (not in this build)");
+                        gone->setEnabled(false);
+                        gone->setToolTip("This pinned command is no longer in the menus (renamed or removed). Remove the pin in Preferences \u203a Quick Access.");
+                        qatStrip->addWidget(gone);
+                        continue;
+                    }
                     auto* b = new QPushButton(a->text());
                     b->setToolTip("Quick Access — " + p);
                     QObject::connect(b, &QPushButton::clicked, a,
@@ -41924,7 +41935,14 @@ int main(int argc, char** argv) {
                 auto* clearIx = box.addButton(
                     "Clear search index", QMessageBox::ActionRole);
                 box.addButton(QMessageBox::Close);
-                box.exec();
+                // release audit 2026-09-09: two-step — the first click arms and relabels, the second clears
+                bool armedScan = false, armedIx = false;
+                for (;;) {
+                    box.exec();
+                    if (box.clickedButton() == clearScan && !armedScan) { armedScan = true; clearScan->setText(QString("Confirm: clear scan cache (%1 MB)").arg(scanB / 1048576)); continue; }
+                    if (box.clickedButton() == clearIx && !armedIx) { armedIx = true; clearIx->setText(QString("Confirm: clear search index (%1 MB)").arg(ixB / 1048576)); continue; }
+                    break;
+                }
                 if (box.clickedButton() == clearScan) {
                     QDir(scanDir).removeRecursively();
                     QMessageBox::information(
@@ -44470,7 +44488,6 @@ int main(int argc, char** argv) {
     tabs.tabBar()->setUsesScrollButtons(true);
     tabs.tabBar()->setElideMode(Qt::ElideRight);
     tabs.setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
-    win.setMinimumSize(640, 480);
     // Demo-readiness, 2026-08-23: this hard-resized to 1180x760 on
     // EVERY launch with no geometry persistence anywhere, so the window
     // reset itself each time and the ribbons collapsed to unlabelled
@@ -45232,6 +45249,8 @@ int main(int argc, char** argv) {
             QDir::home().filePath(
                 "Library/Logs/DiamondCutterTranslationTool-lifecycle.log");
         auto lifeLog = [](const QString& msg) {
+            // release audit 2026-09-09: rotate at 1 MB (one previous generation kept) so the log never grows unbounded
+            if (QFileInfo(lifePath).size() > (1 << 20)) { QFile::remove(lifePath + ".1"); QFile::rename(lifePath, lifePath + ".1"); }
             QFile f(lifePath);
             if (f.open(QIODevice::Append)) {
                 f.write((QDateTime::currentDateTime()
