@@ -115,7 +115,7 @@ inline QString sourceBadge(Epistemic e) {
     const bool onChrome = darkChrome();
     switch (e) {
         case Epistemic::Binding:
-            txt = "HGM"; col = onChrome ? chromeGold() : kGold; solid = true; break;
+            txt = "GMR"; col = onChrome ? chromeGold() : kGold; solid = true; break;
         case Epistemic::Evidence:
             txt = "EVIDENCE"; col = onChrome ? chromeAct() : kAct; break;
         case Epistemic::Reference:

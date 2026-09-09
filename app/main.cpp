@@ -19999,6 +19999,15 @@ public:
         connect(ocr, &QPushButton::clicked, [this] { runOcr(); });
     }
 
+    // the digest driver's way in: put a real passage on the bench and convert
+    // it, so a capture shows the tool in use rather than empty
+    void demo(const QString& text, const QString& fromKey, const QString& toKey) {
+        from_->setCurrentIndex(from_->findData(fromKey));
+        to_->setCurrentIndex(to_->findData(toKey));
+        in_->setPlainText(text);
+        analyze();
+    }
+
     int selfTest(QStringList& log) {
         int fails = 0;
         auto check = [&](bool ok, const char* what) {
@@ -46128,6 +46137,33 @@ int main(int argc, char** argv) {
                 pd.openPage(4); settle(300); save(pd.grab(), "prefs-compare");
                 pd.openPage(12); settle(300); save(pd.grab(), "prefs-features");   // 2026-09-09
                 pd.hide();
+            }
+            if (extra.contains("sanskrit")) {
+                // Adam asked for the workbench in use, on the first verse of
+                // Nagarjuna's Root Verses on the Middle Way (2026-09-09)
+                sanskritPane->resize(1400, 860);
+                const QString mmk = QString::fromUtf8(
+                    "[1.1]\n"
+                    "na svato n\u0101pi parato na dv\u0101bhy\u0101\u1e43 "
+                    "n\u0101py ahetuta\u1e25\n"
+                    "utpann\u0101 j\u0101tu vidyante bh\u0101v\u0101\u1e25 "
+                    "kva cana ke cana");
+                sanskritPane->demo(mmk, "iast", "deva");
+                settle(350); save(sanskritPane->grab(), "sanskrit-devanagari");
+                sanskritPane->demo(mmk, "iast", "all");
+                settle(350); save(sanskritPane->grab(), "sanskrit-all-notations");
+                sanskritPane->demo(
+                    QString::fromUtf8(
+                        "\u0f68\u0f7c\u0f7e\u0f0b\u0f58\u0f0b\u0f4e\u0f72"
+                        "\u0f0b\u0f54\u0f51\u0fa8\u0f7a\u0f0b\u0f67\u0f71"
+                        "\u0f74\u0f83\n"
+                        "\u0f68\u0f7c\u0f7e\u0f0b\u0f4f\u0f71\u0f0b\u0f62"
+                        "\u0f7a\u0f0b\u0f4f\u0f74\u0f4f\u0f9f\u0f71\u0f0b"
+                        "\u0f62\u0f7a\u0f0b\u0f4f\u0f74\u0f0b\u0f62\u0f7a"
+                        "\u0f0b\u0f66\u0fad\u0f71\u0f0b\u0f67\u0f71"),
+                    "tib", "all");
+                settle(350); save(sanskritPane->grab(), "sanskrit-mantra");
+                sanskritPane->demo(QString(), "auto", "full");
             }
             if (extra.contains("menus")) {
                 for (QAction* a : win.menuBar()->actions()) {

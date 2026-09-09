@@ -123,6 +123,13 @@ what you want it in. Every notation still gives the full analysis of a
 single term, with Whitney's roots and the Mahavyutpatti bridge; choosing
 one notation converts a whole passage line by line.
 
+Here is the first verse of Nagarjuna's Root Verses on the Middle Way
+going into Devanagari.
+
+![The first verse of Nagarjuna's Root Verses on the Middle Way, IAST
+into Devanagari. The bracketed label is carried through
+untouched.](img/2026-09-10/sanskrit-devanagari.png)
+
 Pasted documents are not all Sanskrit, so rules, headings and bracketed
 labels are carried through untouched --- on four objective tests, not on
 a guess about language: a line with no letters at all, a line wholly
@@ -130,13 +137,52 @@ inside brackets, a line whose words are all capitals, and a line the
 engine itself refuses. My own test document is now the test, with a
 control asserting the heading is not itself run through the converter.
 
-One limit is stated rather than hidden. Reading a passage back *from*
-Tibetanized ACIP gives the right letters run together, because that
-notation separates syllables and not words, so word boundaries cannot be
-recovered. The pane says so.
+I also asked for everything at once, and that is now a mode of its own.
 
-![The Sanskrit workbench: a passage, and a choice of
-notations.](img/2026-09-10/13-sanskrit.png)
+![The same verse in every notation at once: Devanagari, Tibetanized
+ACIP, Tibetan script, IPA, both ACIP input styles, and the simplified
+pronunciation.](img/2026-09-10/sanskrit-all-notations.png)
+
+## Mantras, read back from the Tibetan letters they are written in
+
+This is the part I am most pleased with today, and it came from a single
+observation: the mantras in the more esoteric texts are not Tibetan at
+all. They are Sanskrit, written in Tibetan letters. So the tool should
+take that script, or the Tibetanized ACIP of it, and give back an
+accurate phonetic line for reciting.
+
+That path existed only halfway, and every step of it was broken. Three
+real faults, all found on actual mantras:
+
+- The stack marker and the crescent mark of our Tibetan transliteration
+  reached the Sanskrit intact, so the mani mantra met a converter that
+  rightly refused them and came back with no pronunciation at all.
+- The syllable spacing was being thrown away. For a single term that is
+  right, because these notations separate syllables and not words. For a
+  mantra it is exactly wrong: a mantra is recited syllable by syllable,
+  and the spacing is the only guide to where they fall.
+- Tibetan script was not an input option at all.
+
+All three are fixed, in the reference engine and its working port
+together. The mani mantra now reads back as **oːm mɐ ɳɪ pɐdmeː ɦuːm**,
+syllable by syllable, and it is now one of our tests, with a control
+asserting that no stack or crescent mark ever reaches the reader.
+
+![Two mantras in Tibetan script, read back in every notation. The
+pronunciation line names the authority it follows, and the simplified
+line is labelled provisional.](img/2026-09-10/sanskrit-mantra.png)
+
+On pronunciation I want to be exact about what we are standing on. The
+IPA line follows the standard Classical Sanskrit mapping together with
+FPMT Translation Services' guide to Sanskrit transliteration and
+pronunciation of November 2020, with the rules for the nasal and the
+final breath applied in context. That line is trustworthy. The
+simplified line beneath it is not yet: it is an eighteen-rule table that
+strips the diacritical marks, which gives a serviceable plain-letter
+spelling and is not a pronunciation guide. It is labelled PROVISIONAL in
+the interface for exactly that reason. Building a trustworthy simplified
+respelling is a real piece of work and I would rather do it properly
+than quietly.
 
 ## The Geshe Michael Roach Dictionary, as a spreadsheet
 
@@ -155,9 +201,9 @@ Four files, each answering a different question.
   English was gathered under, the corpus, the date --- because a
   spreadsheet gets forwarded and separated from its covering note, and
   this one will still say what it is.
-- **English to Tibetan.** Whether Geshe Michael has rendered a given
-  word before, and as what. That is the question an editor actually
-  asks, and the web page cannot answer it.
+- **English to Tibetan.** Whether Geshe Michael Roach has rendered a
+  given word before, and as what. That is the question an editor
+  actually asks, and the web page cannot answer it.
 - **Each course's own glossary,** ranked by how often each term occurs
   in that course.
 - **A change report** against the previous export. Nobody re-reads six
@@ -173,6 +219,8 @@ are named for what they are, every row carries a note saying what
 produced them, and a further column says whether the layer holds that
 headword at all.
 
+It is ready for Joel and waiting in my drafts.
+
 ## Decisions I made along the way
 
 **Geshe Michael Roach's title goes with his name.** Everywhere: prose,
@@ -185,6 +233,15 @@ were renamed this afternoon.
 **Digests are centred from now on.** Section headers and every
 screenshot with its caption. Body prose stays left-aligned, because a
 centred paragraph is harder to read, not easier.
+
+**His title goes with his name.** Everywhere --- prose, the interface,
+email, document titles and file names. I also retired the internal
+abbreviation we had been using for him, which stands for a form of
+address only his close students use and is not how he should be referred
+to publicly. Sixty-seven places in the application now say his name or a
+plain three-letter label instead. What I deliberately did not rename are
+the column names inside the data release itself; those belong to the
+data project, and changing them here would break reading it.
 
 **The ribbon's width promise held.** The idiom bank wanted a ribbon
 button and would have pushed the ribbon past the width we promised
@@ -202,6 +259,7 @@ instead.
   Dictionary rows exported                      20,933
   Dictionary headwords                          10,758
   Courses covered                               1 through 5
+  Places his title was restored                 67
   --------------------------------------------- -------------
 
 ## Open questions for leadership
@@ -216,7 +274,8 @@ into something he can work through rather than only read.
 
 ## Next
 
-Press and install this afternoon's work. Then the theme system, which is
+Pressed and installed twice this afternoon; the latest build is on my
+desktop and the Sanskrit work is in it. Then the theme system, which is
 designed and waiting on my rulings: eight coordinated colour schemes
 computed from a small set of seeds, with the honesty colours frozen in
 meaning across every one of them, so a theme can say what surface you
