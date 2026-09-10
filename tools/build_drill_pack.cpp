@@ -61,10 +61,15 @@ bool isTitle(const std::string& course) {
 int main(int argc, char** argv) {
     if (argc < 3) {
         std::fprintf(stderr,
-                     "usage: build_drill_pack <spine.db> <out.json> [count]\n");
+                     "usage: build_drill_pack <spine.db> <out.json> "
+                     "[count] [stamp]\n");
         return 2;
     }
     const int want = argc > 3 ? std::atoi(argv[3]) : 4000;
+    // A stamp naming the commit and moment this pack was built. Without
+    // one a STALE pack is indistinguishable from a fresh one, and the
+    // phone will happily show yesterday's drills after a fix landed.
+    const char* stamp = argc > 4 ? argv[4] : "unstamped";
     allcore::Spine spine(argv[1]);
     allcore::HeadwordIndex index(spine);
     allcore::DrillFactory f(spine, index);
@@ -76,6 +81,7 @@ int main(int argc, char** argv) {
     field(out, "tier",
           "Every English line is Geshe Michael Roach's own text from his "
           "courses. Engine guidance is labeled guidance.");
+    field(out, "built_from", stamp);
     out += "\"schema\":1},\"cloze\":[";
 
     int n = 0, titles = 0;
@@ -171,6 +177,30 @@ int main(int argc, char** argv) {
         // the verb, which frames the clause — layer 6's anchor
         out += "{";
         out.pop_back();
+        // How much of the passage on screen the layers below actually
+        // describe. The passage is the WHOLE segment; the chunks, roles and
+        // plan come from ONE clause of it (drills.cpp picks 3-7 chunks), so
+        // the median is about a third. The surface must say so rather than
+        // let the layers read as an account of everything above them.
+        {
+            auto sylCount = [](const std::string& t) {
+                int n = 0; bool in = false;
+                for (size_t i = 0; i < t.size(); ++i) {
+                    const unsigned char ch = (unsigned char)t[i];
+                    const bool sep = (ch == ' ') ||
+                        (i + 2 < t.size() && ch == 0xE0 &&
+                         (unsigned char)t[i+1] == 0xBC &&
+                         (unsigned char)t[i+2] == 0x8B);   // U+0F0B tsheg
+                    if (sep) { in = false; if (ch != ' ') i += 2; }
+                    else if (!in) { in = true; ++n; }
+                }
+                return n;
+            };
+            int whole = sylCount(tib(o->segment.acip)), part = 0;
+            for (const auto& c : o->chunks) part += sylCount(tib(c));
+            const int share = whole ? (part * 100 / whole) : 100;
+            out += "\"clause_share\":" + std::to_string(share) + ",";
+        }
         field(out, "verb", o->verb.wylie);
         field(out, "verb_evidence", o->verb.evidence);
         out += std::string("\"verb_confident\":") +
