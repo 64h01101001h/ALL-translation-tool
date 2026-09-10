@@ -21702,6 +21702,25 @@ public:
             "awaiting his ruling.");
         connect(fillB, &QPushButton::clicked, [this] { fillDeckFromLayer(); });
         layout->addWidget(fillB);
+        // ⌘+ / ⌘− / ⌘0, the shortcuts every reader already knows. Qt needs both
+        // Plus and Equal bound, because ⌘+ arrives as ⌘= on most keyboards.
+        for (auto&& [seq, step] : std::initializer_list<std::pair<QKeySequence, double>>{
+                 {QKeySequence::ZoomIn, 1.15},
+                 {QKeySequence(QString("Ctrl+=")), 1.15},
+                 {QKeySequence(QString("Ctrl+Shift+=")), 1.15},
+                 {QKeySequence::ZoomOut, 1.0 / 1.15},
+                 {QKeySequence(QString("Ctrl+-")), 1.0 / 1.15}}) {
+            auto* sc = new QShortcut(seq, this);
+            sc->setContext(Qt::WidgetWithChildrenShortcut);
+            const double f = step;
+            connect(sc, &QShortcut::activated, this,
+                    [this, f] { setZoom(zoom_ * f); });
+        }
+        {   // and back to the default
+            auto* sc = new QShortcut(QKeySequence(QString("Ctrl+0")), this);
+            sc->setContext(Qt::WidgetWithChildrenShortcut);
+            connect(sc, &QShortcut::activated, this, [this] { setZoom(1.0); });
+        }
         layout->addWidget(stats_);
         auto* row = new QHBoxLayout;
         mode_ = new QComboBox;
@@ -21786,9 +21805,11 @@ public:
             const QString withParen = disp("(GNAS BRTAN) RNAMS");
             check(!withParen.contains("(GNAS BRTAN) RNAMS"),
                   "editorial markup is not passed off as Tibetan script");
-            check(dispPlain("(GNAS BRTAN)").contains("(") ||
-                      dispPlain("(GNAS BRTAN)").contains("\u27e8"),
-                  "and the option label still shows what was there, plainly");
+            check(!dispPlain("(GNAS BRTAN)").contains("(") &&
+                      !dispPlain("(GNAS BRTAN)").contains(")"),
+                  "and markup is gone from the option entirely \u2014 an option "
+                  "opening \"(\" against a segment closing \")\" told the "
+                  "learner the answer (Adam, 2026-09-09)");
             const QString bad = disp("XQVF");
             check(bad.contains("\u27e8") || bad.contains("XQVF"),
                   "a token that will not convert is flagged in \u27e8 \u27e9, "
@@ -21890,8 +21911,13 @@ private:
     // sees. This wraps it for Qt.
     struct Piece { enum Kind { Script, Markup, Failed } kind; QString text; };
     std::vector<Piece> pieces(const std::string& acipText) const {
+        // Editorial markup is stripped before conversion. In a drill it is not
+        // merely noise: an option beginning "(" against a segment ending ")"
+        // tells the learner the answer before they read any Tibetan (Adam,
+        // 2026-09-09). It is not part of the answer, so it does not appear.
         std::vector<Piece> out;
-        for (const auto& p : allcore::acipDisplayPieces(acipText))
+        for (const auto& p :
+             allcore::acipDisplayPieces(allcore::acipStripMarkup(acipText)))
             out.push_back({p.kind == allcore::DisplayPiece::Script  ? Piece::Script
                            : p.kind == allcore::DisplayPiece::Markup ? Piece::Markup
                                                                      : Piece::Failed,
@@ -21942,6 +21968,9 @@ private:
         for (const auto& o : options) {
             auto* rb = new QRadioButton(
                 asAcip ? dispPlain(o) : QString::fromStdString(o));
+            QFont rf = rb->font();
+            rf.setPointSizeF(std::max(9.0, 15.0 * zoom_));
+            rb->setFont(rf);
             radios_.push_back(rb);
             answerRow_->layout()->addWidget(rb);
         }
@@ -22168,6 +22197,45 @@ private:
     // English was printed above it. The English is the WHOLE segment's, so the
     // Tibetan is now the whole segment's too, with the answer blanked where it
     // stands and the drilled clause marked inside it.
+    // Material in [square brackets] is supplied by the translator — a debate
+    // restatement of the previous move, a gloss, a page number — and has no
+    // Tibetan in this segment. Adam, 2026-09-09: "it seems like the english
+    // equivalent for this tibetan segment is too long to be the equivalent."
+    // He was right, and this is why: his C15 example runs 4.3 English words
+    // per ACIP word counting the brackets and 1.4 without, and 1.4 is the
+    // corpus median exactly. So the supplied part is shown as supplied rather
+    // than passed off as the parallel.
+    QString englishWithSupplied(const std::string& eng) const {
+        const QString muted =
+            ux::darkChrome() ? ux::chromeMuted() : QString(ux::kMuted);
+        const QString src = QString::fromStdString(eng);
+        QString out;
+        int depth = 0;
+        bool any = false;
+        for (QChar c : src) {
+            if (c == '[') {
+                if (!depth) { out += "<span style='color:" + muted + "'>"; any = true; }
+                ++depth;
+                out += "[";
+                continue;
+            }
+            if (c == ']') {
+                out += "]";
+                if (depth && --depth == 0) out += "</span>";
+                continue;
+            }
+            out += QString(c).toHtmlEscaped();
+        }
+        while (depth-- > 0) out += "</span>";
+        if (any)
+            out += "<div style='color:" + muted +
+                   ";font-size:11px;padding-top:4px'>The greyed text in "
+                   "brackets is supplied by the translator \u2014 a restatement "
+                   "of the previous move, a gloss, a page number. It has no "
+                   "Tibetan in this segment.</div>";
+        return out;
+    }
+
     QString clozeBody() const {
         const QString blank =
             "<b style='color:" +
@@ -22260,6 +22328,27 @@ private:
                     .arg(added));
     }
 
+    // Adam, 2026-09-09: "we will also need to increase the default display font
+    // size in all areas of this feature, and also make the pane adjustable
+    // zoom font size by using command + or command -". The base sizes below
+    // are the new defaults; zoom_ multiplies every one of them, is persisted,
+    // and is driven by the usual shortcuts.
+    int px(int base) const {
+        return std::max(9, (int)std::lround(base * zoom_));
+    }
+    void setZoom(double z) {
+        zoom_ = std::clamp(z, 0.7, 3.0);
+        QSettings("ALL", "TranslationTool").setValue("drills/zoom", zoom_);
+        // the radio options are widgets, not HTML, so they are sized directly
+        for (QRadioButton* rb : radios_) {
+            QFont f = rb->font();
+            f.setPointSizeF(std::max(9.0, 15.0 * zoom_));
+            rb->setFont(f);
+        }
+        renderQuestion();
+    }
+    double zoom() const { return zoom_; }
+
     void renderQuestion() {
         const int m = mode_->currentIndex();
         QString h;
@@ -22270,7 +22359,7 @@ private:
                  QString::fromStdString(order_->segment.course) + ":" +
                  QString::number(order_->segment.seq) + "]</div><hr>";
             for (size_t i = 0; i < order_->presented.size(); ++i)
-                h += QString("<div style='font-size:18px'><b>%1)</b> %2</div>")
+                h += QString("<div style='font-size:%1px'><b>%2)</b> %3</div>").arg(px(21))
                          .arg(QChar('A' + (int)i))
                          .arg(disp(order_->chunks[order_->presented[i]]));
         } else if (m == 1 && cloze_) {
@@ -22278,13 +22367,14 @@ private:
             h += "<div style='color:#555'>Which chunk fills the blank? Geshe Michael Roach's "
                  "English for the whole segment:</div>"
                  "<div style='background:#EEF6EE;padding:6px'><i>" +
-                 QString::fromStdString(cloze_->segment.english).toHtmlEscaped() +
-                 "</i></div><hr><div style='font-size:18px'>" + clozeBody() +
+                 englishWithSupplied(cloze_->segment.english) +
+                 "</i></div><hr><div style='font-size:" +
+                 QString::number(px(22)) + "px'>" + clozeBody() +
                  "</div>";
         } else if (m == 2 && part_) {
             h += kindBadge(part_->segment);
             h += "<div style='color:#555'>Which particle belongs in the blank?"
-                 "</div><hr><div style='font-size:18px'>";
+                 "</div><hr><div style='font-size:" + QString::number(px(22)) + "px'>";
             for (size_t i = 0; i < part_->tokens.size(); ++i) {
                 const auto& t = part_->tokens[i];
                 h += (t == "▢" ? "<b style='color:#B4540A'>▢</b> "
@@ -22298,14 +22388,14 @@ private:
                  "Geshe Michael Roach's English (and counts as a peek); New drill moves on. "
                  "[" + QString::fromStdString(s.course) + ":" +
                  QString::number(s.seq) + "]</div><hr>" +
-                 "<div style='font-size:20px'>" + disp(s.acip) + "</div>";
+                 "<div style='font-size:" + QString::number(px(23)) + "px'>" + disp(s.acip) + "</div>";
         } else if (m == 5 && trans_.id) {
             h += "<div style='color:#555'>Translate this yourself below — "
                  "then Check reveals Geshe Michael Roach's own rendering and a terminology "
                  "diff. Nothing grades your style; the master's version "
                  "teaches. [" + QString::fromStdString(trans_.course) + ":" +
                  QString::number(trans_.seq) + "]</div><hr>" +
-                 "<div style='font-size:20px'>" + disp(trans_.acip) +
+                 "<div style='font-size:" + QString::number(px(23)) + "px'>" + disp(trans_.acip) +
                  "</div>";
         } else if (m == 4) {
             if (vocab_.empty()) {
@@ -22319,8 +22409,8 @@ private:
                     acip = es.front().acip;
                 h += "<div style='color:#555'>Do you know this word? Grade "
                      "yourself, then Check reveals the entry.</div><hr>"
-                     "<div style='font-size:24px'>" + disp(acip) + "</div>" +
-                     "<div style='font-size:14px;color:#777'>" +
+                     "<div style='font-size:" + QString::number(px(27)) + "px'>" + disp(acip) + "</div>" +
+                     "<div style='font-size:" + QString::number(px(15)) + "px;color:#777'>" +
                      QString::fromStdString(vocab_).toHtmlEscaped() + "</div>";
             }
         } else {
@@ -22557,6 +22647,8 @@ private:
     QWidget* answerRow_ = nullptr;
     std::vector<QRadioButton*> radios_;
     QLineEdit* input_ = nullptr;
+    double zoom_ = QSettings("ALL", "TranslationTool")
+                       .value("drills/zoom", 1.0).toDouble();
     QPushButton* check_ = nullptr;
     QTextBrowser* result_ = nullptr;
 };

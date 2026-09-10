@@ -48,6 +48,15 @@ std::string acipToEwts(const std::string& acip) {
         s = o;
     }
 
+    // Three ACIP forms this function never learned to read — ported with the
+    // Python oracle, 2026-09-09. Adam saw all three sitting untranslated among
+    // Tibetan drill options: G-YAS, G-YON and DVAGS. Not display bugs: the
+    // engine was handing wylieToUnicode something it correctly refused.
+    //   G-Y  the ACIP disambiguator for ག་ཡ; EWTS writes g.y, not g-y
+    //   V    wa-zur; EWTS writes w (iastToTibetan already patched this at the
+    //        call site, the usual sign that the engine is wrong)
+    //   :    visarga; EWTS writes H
+    // Protected, so the lowercasing pass below leaves them alone.
     replaceAll(s, "sh", prot("Sh"));
     replaceAll(s, "th", prot("Th"));
     replaceAll(s, "t", prot("T"));

@@ -33,4 +33,11 @@ std::vector<DisplayPiece> acipDisplayPieces(const std::string& acip);
 // for Tibetan.
 std::string acipToTibetanPlain(const std::string& acip);
 
+// Editorial markup removed entirely. For a DRILL this is not cosmetic: Adam
+// noticed on 2026-09-09 that an option beginning "(" against a segment ending
+// ")" tells the learner which option is the answer before they have read a
+// word of Tibetan. Markup is not Tibetan, it is not part of the answer, and in
+// a drill it is a tell. Strip it from both sides and the tell is gone.
+std::string acipStripMarkup(const std::string& acip);
+
 }  // namespace allcore
