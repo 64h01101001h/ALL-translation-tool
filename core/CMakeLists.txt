@@ -752,3 +752,8 @@ if(Python3_FOUND)
                    ${CMAKE_SOURCE_DIR}/tools/manifest_check.py
                    --selftest ${CMAKE_SOURCE_DIR})
 endif()
+
+# the iOS drill pack (path A): every drill generated on the Mac by the same
+# allcore the desktop uses, so the phone inherits its fixes and its refusals
+add_executable(build_drill_pack ${CMAKE_SOURCE_DIR}/tools/build_drill_pack.cpp)
+target_link_libraries(build_drill_pack PRIVATE allcore)
