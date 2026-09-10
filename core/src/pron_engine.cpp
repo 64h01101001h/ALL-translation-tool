@@ -410,6 +410,14 @@ std::string pronounce(const std::string& wylie) {
     return out;
 }
 
+// The per-syllable reading, exposed because the Kawachen audio bank is keyed
+// on it: a recording is chosen by how a syllable SOUNDS, and this is the same
+// function pronounce() has always used, so the audio path cannot drift from
+// the printed phonetics. Battery-covered through pronounce().
+std::string pronSyllableReading(const std::string& syl) {
+    return pronSyllable(syl, false, true);
+}
+
 std::vector<PronSegWord> pronounceSegmented(const std::string& wylie) {
     std::vector<PronSegWord> out;
     int consumed = 0;

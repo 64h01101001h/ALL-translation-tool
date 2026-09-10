@@ -55,6 +55,7 @@ add_library(allcore STATIC
   src/gofer.cpp
   src/acip_ewts.cpp
   src/pron_engine.cpp
+  src/speak.cpp
   src/thl_phonetics.cpp
   src/ewts_unicode.cpp
   src/spellcheck.cpp
@@ -121,6 +122,17 @@ add_test(NAME engines_battery
                  ${CMAKE_SOURCE_DIR}/build/pron_reference.tsv
                  ${CMAKE_SOURCE_DIR}/build/sanskrit_reference.tsv
                  ${CMAKE_SOURCE_DIR}/data/pronunciation/gmr_mantra_evidence.csv)
+
+# The Kawachen audio bank: a C++ resolver must agree with the Python
+# prototype it was ported from, syllable for syllable, over the whole corpus.
+# Skips cleanly (77) where the audio is absent - it is a gitignored local
+# asset, so a fresh clone has none and that is not a failure.
+add_executable(speak_battery tests/speak_battery.cpp)
+target_link_libraries(speak_battery PRIVATE allcore)
+add_test(NAME speak_battery
+         COMMAND speak_battery ${CMAKE_SOURCE_DIR}/data/audio/kawachen
+                 ${CMAKE_SOURCE_DIR}/build/speak_reference.tsv)
+set_tests_properties(speak_battery PROPERTIES SKIP_RETURN_CODE 77)
 
 add_executable(spellcheck_smoke tests/spellcheck_smoke.cpp)
 target_link_libraries(spellcheck_smoke PRIVATE allcore)
@@ -751,6 +763,15 @@ if(Python3_FOUND)
            COMMAND ${Python3_EXECUTABLE}
                    ${CMAKE_SOURCE_DIR}/tools/manifest_check.py
                    --selftest ${CMAKE_SOURCE_DIR})
+  # 2026-09-10: the Kawachen audio store has two views of the same 3,002
+  # recordings - files named by site key plus spelling, and a by-sound
+  # symlink tree - and both are derived from one manifest. This catches
+  # either drifting from it. Skipped cleanly when the audio is absent,
+  # since it is a gitignored local asset, not part of a checkout.
+  add_test(NAME kawachen_index
+           COMMAND ${Python3_EXECUTABLE}
+                   ${CMAKE_SOURCE_DIR}/tools/kawachen_index.py --check)
+  set_tests_properties(kawachen_index PROPERTIES SKIP_RETURN_CODE 77)
 endif()
 
 # the iOS drill pack (path A): every drill generated on the Mac by the same

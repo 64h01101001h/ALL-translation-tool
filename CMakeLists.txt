@@ -79,6 +79,30 @@ endif()
 #     cmake -S . -B cmake-build-asan -DALL_SANITIZE=ON     # by hand
 #
 # Leak detection is left off: macOS/arm64 has no usable LSan.
+# ---------------------------------------------------------------------------
+# THE TWO BUILDS (2026-09-10). One codebase, two products.
+#
+#   PRIVATE  Adam's own machine. Includes the Kawachen read-aloud features,
+#            which depend on 3,002 recordings held under Kawachen's permission
+#            for IN-HOUSE USE ONLY.
+#   PUBLIC   Everything else. Built with -DALL_AUDIO=OFF, which compiles the
+#            audio code paths out entirely, so a public binary provably cannot
+#            reach a recording even if one were placed beside it.
+#
+# This is deliberately belt AND braces. ALL_AUDIO=OFF is the licensing
+# guarantee: not "the files are absent", but "the code is absent". Within a
+# build that HAS the flag on, allcore::SpeakBank::available() then decides at
+# runtime, so a private build with the assets not yet harvested degrades
+# quietly instead of failing. Never fork the tree to make a public release;
+# flip the flag.
+option(ALL_AUDIO "Include the in-house Kawachen read-aloud features" ON)
+if(ALL_AUDIO)
+  add_compile_definitions(ALL_HAS_AUDIO=1)
+  message(STATUS "ALL_AUDIO=ON  - PRIVATE build: read-aloud features included")
+else()
+  message(STATUS "ALL_AUDIO=OFF - PUBLIC build: read-aloud features compiled out")
+endif()
+
 option(ALL_SANITIZE "Build with AddressSanitizer + UndefinedBehaviorSanitizer" OFF)
 if(ALL_SANITIZE)
   if(MSVC)

@@ -16,6 +16,41 @@ NEEDS-INFO(question back to the filer).
 ## Inbox
 <!-- newest first; the app's File a Finding appends a template here -->
 
+### 2026-09-10 · external cross-check · pron_engine.py vs the Kawachen reader
+The Kawachen Tibetan Reader (itibet.org) indexes its recordings by SOUND,
+not by spelling — every spelling that reads alike is served the same file.
+Decoding that index (`docs/KAWACHEN_READER_FORMAT.md`) gives us equivalence
+classes built by Tibetan teachers with no connection to ACIP convention: the
+first independent second opinion we have had on `pron_engine.py`'s stacks.
+Run it with `python3 tools/kawachen_crosscheck.py`.
+
+**Result: 11 of 12 merge classes agree, 3 of 3 folds agree, and all 9
+tone-only splits behave as designed.** The reader gives རྒ its own index
+because a superscript raises the tone; GMR's convention does not mark tone,
+so we merge, as intended. No change warranted. DISPOSITION: RULED (the
+agreement is evidence the engine's stack handling is sound).
+
+**The single disagreement, and it is ours to keep.** The reader makes
+ཁྲ ཐྲ ཕྲ one sound; our engine reads ཁྲ and ཕྲ as *tra* but ཐྲ as *thra*.
+The spine settles which convention is right for us — attested first-syllable
+readings, from Geshe Michael Roach's own published pronunciations:
+
+| onset | attested | reading |
+|---|---|---|
+| khr | 400+ | *tr* — khro bo → trowo, khrag → trak, khri → tri |
+| phr | 229 | *tr* — phrag dog → trakdok, phrin las → trin |
+| kr / pr | 59 / 104 | *tr* |
+| gr / dr / br | 388 / 398 / 60 | *dr* |
+| **thr** | **0** | — |
+
+So our convention flattens aspiration on purpose, and the engine follows it
+correctly on every onset that actually occurs. ཐྲ → *thra* is inconsistent
+with its own neighbours, but ཐྲ appears **zero** times as a first syllable in
+105,634 entries, so the inconsistency has never fired and cannot affect any
+shipped reading. DISPOSITION: DEFERRED — recorded, not fixed; changing an
+engine to satisfy a case with no attestation is exactly the kind of edit the
+batteries exist to prevent.
+
 ### 2026-08-21 · design-wing heuristic pass · Team comments dialog
 (first combined act of the installed skills: design-critique/Nielsen
 lenses on the newest surface, findings → engineering flow → verify)
