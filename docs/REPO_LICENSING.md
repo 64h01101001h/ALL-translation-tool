@@ -55,6 +55,7 @@ Statuses: **own** (ALL/ACIP work, root LICENSE applies) ·
 | data/extracted/persons_bdrc.json | settled | BDRC open catalogue person records |
 | data/extracted/acip_ | own | ACIP's own catalogue, mined in-house |
 | data/extracted/sungbum_ | own | derived from ACIP's own Sungbum corpus + BDRC links |
+| ios/ | own | ALL/ACIP, root LICENSE. The SwiftUI app and the TestFlight scripts are ours. The app icon is a rendering of the Tibetan syllable ཆོས drawn with Jomolhari (Chris Fynn, OFL 1.0, banked at data/fonts/Jomolhari-OFL.txt) — OFL expressly permits documents and images produced WITH a font, and no font file is redistributed in the icon or the bundle. The drill pack the app ships is generated from the release package and carries its terms, which is why it is gitignored rather than committed |
 | data/pronunciation/ | own | derived wholly from Geshe Michael Roach's own published courses in the ALL parallel corpus — the mantra lines that print the ACIP code and his reading side by side, aligned word for word. Contains no third-party text; same terms as the corpus it is mined from. Regenerable, and the evidence behind docs/standards/ALL_SANSKRIT_PRONUNCIATION_STANDARD.md |
 | data/extracted/mixed_nuts_ | own | extractions from the team's own working documents |
 | data/extracted/mw2 | own | outlines/titles keyed by BDRC work id, mined in-house |
