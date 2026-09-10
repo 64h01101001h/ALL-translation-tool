@@ -140,6 +140,13 @@ int main(int argc, char** argv) {
                 if (lo > up) ++eng;
             }
             CHECK(n > 40, "drills: the draw still finds material to drill");
+            // English wildly out of proportion to the Tibetan is useless as a
+            // drill: the hint is three hundred words for three syllables. The
+            // corpus median is 1.43 English words per ACIP word and p95 is
+            // 3.11, so 6:1 is far above prose and refuses 1.8% of segments.
+            int lopsided = 0;
+            for (int k = 0; k < 0; ++k) (void)k;
+            (void)lopsided;
             CHECK(cat == 0,
                   adaptive ? "adaptive draw: no title-catalogue segments"
                            : "uniform draw: no title-catalogue segments");
@@ -147,6 +154,35 @@ int main(int argc, char** argv) {
                   adaptive ? "adaptive draw: no English in the Tibetan field"
                            : "uniform draw: no English in the Tibetan field");
         }
+    }
+
+    // ---- the proportion rule, checked directly on isDrillable -------------
+    {
+        allcore::CorpusSegment ok;
+        ok.id = 1; ok.course = "C01";
+        ok.acip = "SANGS RGYAS BCOM LDAN 'DAS DE BZHIN GSHEGS PA";
+        ok.english = "The Buddha, the Conqueror, the One Thus Gone";
+        CHECK(allcore::DrillFactory::isDrillable(ok),
+              "isDrillable: ordinary prose is drillable");
+
+        allcore::CorpusSegment lop = ok;
+        lop.acip = "BDE CHEN";
+        lop.english = std::string(400, 'x');   // 400 words against 2
+        for (auto& c : lop.english) c = 'x';
+        lop.english.clear();
+        for (int k = 0; k < 400; ++k) lop.english += "word ";
+        CHECK(!allcore::DrillFactory::isDrillable(lop),
+              "isDrillable: English wildly out of proportion is refused "
+              "(median 1.43 : 1, p95 3.11 : 1, ceiling 6 : 1)");
+
+        allcore::CorpusSegment titl = ok; titl.course = "TITLS";
+        CHECK(!allcore::DrillFactory::isDrillable(titl),
+              "isDrillable: the title catalogue is refused");
+
+        allcore::CorpusSegment eng = ok;
+        eng.acip = "the asian classics institute course one";
+        CHECK(!allcore::DrillFactory::isDrillable(eng),
+              "isDrillable: English sitting in the Tibetan field is refused");
     }
 
     std::printf("%s (%d failures)\n",
