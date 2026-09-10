@@ -46,6 +46,11 @@ struct Passage: Codable {
     let verb: String
     let verb_evidence: String
     let verb_confident: Bool
+    /// How much of `tibetan` the chunks/roles/plan actually describe.
+    /// The passage is the whole segment; the layers come from ONE
+    /// clause of it, a median of about a third. Optional so a pack
+    /// built before this field still decodes.
+    let clause_share: Int?
 }
 
 struct PackMeta: Codable { let built_by: String; let source: String; let tier: String }
@@ -130,6 +135,18 @@ struct TrainerView: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.vertical, 6)
 
+                // The layers below describe ONE clause of the passage above —
+                // a median of about a third of it. Without saying so they read
+                // as an account of everything on screen. The desktop already
+                // discloses the same mismatch on its chunk-order drills
+                // (app/main.cpp:22683); this is that disclosure, carried over.
+                if let share = passage.clause_share, share < 90 {
+                    Text("The layers below cover one clause of this passage — about \(share)% of it.")
+                        .font(.system(size: 12))
+                        .foregroundColor(c.machine)
+                        .padding(.top, 2)
+                }
+
                 FlowChips(labels: layers, on: shown, ink: c) { i in
                     if shown.contains(i) { shown.remove(i) } else { shown.insert(i) }
                 }
@@ -164,17 +181,21 @@ struct TrainerView: View {
                 }
                 if shown.contains(3) {
                     Layer("The verb — it frames the clause", ink: c) {
-                        if passage.verb.isEmpty {
-                            Text("No verb identified in this passage.")
+                        // The desktop WITHHOLDS a verb it cannot attest rather
+                        // than printing the guess with a caveat under it
+                        // (app/main.cpp:21498). A guess in the answer position is
+                        // still a guess, and this is the surface with the least
+                        // room for a caveat. 253 of the 1,000 packed passages are
+                        // in this state, so the difference is not academic.
+                        if passage.verb.isEmpty || !passage.verb_confident {
+                            Text("No verb the dictionary can confirm in this clause.")
                                 .font(.system(size: 16)).foregroundColor(c.muted)
+                            Text("A candidate was found but is unverified, so it is not shown.")
+                                .font(.system(size: 12)).foregroundColor(c.machine).padding(.top, 2)
                         } else {
                             Text(passage.verb).font(.system(size: 21)).foregroundColor(c.ink)
                             if !passage.verb_evidence.isEmpty {
                                 Text(passage.verb_evidence).font(.system(size: 14)).foregroundColor(c.muted)
-                            }
-                            if !passage.verb_confident {
-                                Text("unverified — the dictionary does not mark this a verb")
-                                    .font(.system(size: 12)).foregroundColor(c.machine)
                             }
                         }
                     }
