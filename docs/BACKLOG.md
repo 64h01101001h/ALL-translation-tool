@@ -135,3 +135,62 @@ not satisfied with any. Deferred to him.
 temptation to ship everything translators have. Every tool in this tab has to
 justify itself against an operator's actual day — typing from a scan, keeping
 pace, catching their own errors, and delivering a clean file — or it is cut.
+
+## DECIDE: attestation, the segmenter ladder, or both permanently (Adam, 2026-09-10)
+
+Adam's ruling for now is **ship both as two views** — attestation on by default
+because it is a fact, the Botok vocabulary ladder as a labelled opt-in because
+it is a judgment. He asked that the *ultimate* choice be filed rather than left
+to drift: do we keep both forever, or does one win?
+
+**This entry exists so the question can be CLOSED, not merely remembered.**
+
+### What we already know (measured 2026-09-10, not assumed)
+
+- **The segmenter exists.** Botok is ported to C++, battery-proven
+  (`botok_smoke`), Apache-2.0, already a user toggle in the Overlay, stocked
+  with 98,449 GMR + 449,444 Monlam forms, and builds in 4.7 s. `segment()`
+  returns a flat word sequence, so it *does* decide.
+- **The 2.5× instability was not Botok.** That spread (199 vs 380 items for 50%
+  coverage) came from two improvised tokenizations. Botok returns one
+  consistent answer. The instability objection is dead; the "it makes choices
+  the corpus does not force" objection is not, and is handled by labelling it
+  reference-only, exactly as the Overlay already does.
+- **Attestation is already in the spine.** `entries.corpus_n_segments`,
+  populated for 29,512 entries, referenced by **zero** lines of C++. It needs no
+  segmentation decision because it counts segments containing a form, not
+  tokens.
+- **Attestation alone produces a sane ladder:** thams cad 3,128 · sangs rgyas
+  2,007 · rang gi 1,878 · de ltar 1,824 · byang chub 1,663.
+
+### They answer different questions, which is why "both" may be the right end state
+
+- Attestation: **how central is this to his teaching?**
+- Frequency: **how often does this token occur?**
+
+For a corpus that is one teacher's course material rather than a language
+sample, the first is arguably the more useful question. That asymmetry is the
+strongest argument that this is not a contest at all.
+
+### What would SETTLE it — the point of this entry
+
+1. **Do the two orderings actually differ where it matters?** Compute both
+   rankings over the same headwords and measure the rank correlation. If the
+   top 500 are largely the same words in a similar order, the ladder adds
+   little and attestation wins on honesty alone. **This is cheap and should be
+   run first — it may close the question outright.**
+2. **Does Botok's segmentation survive inspection on OUR text?** Sample 200
+   segments, have a qualified reader mark each segmentation sound or wrong.
+   A high error rate kills the ladder regardless of its usefulness.
+3. **Does anyone turn it on?** Once both ship, the usage ledger answers it. If
+   the ladder toggle sits unused for a term, cut it under the steelman rule.
+4. **Does a learner ordered by one outperform a learner ordered by the other?**
+   The honest answer is that we will never have the sample size for this, and
+   nobody should wait for it.
+
+### Trigger
+
+Revisit when **either** (1) has been run — it is a day's work and may end the
+question — **or** the ladder has been shipped and toggled by real users for one
+course cycle. Do not revisit before one of those; there would be nothing new to
+reason about.
