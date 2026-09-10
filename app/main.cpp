@@ -5844,6 +5844,47 @@ static void applyRibbonLabelStyle() {
                                  : Qt::ToolButtonIconOnly);
 }
 
+// Set by the Quick Access strip when it is built; called by anything that
+// edits the pins so the strip redraws immediately rather than at next launch.
+// A free function rather than a signal because the pins are edited from
+// RibbonProxy, which is defined long before the window that owns the strip.
+inline std::function<void()>& qatRebuildHook() {
+    static std::function<void()> f;
+    return f;
+}
+inline void qatPinsChanged() {
+    if (qatRebuildHook()) qatRebuildHook()();
+}
+
+// The Quick Access strip stores pins as menu paths ("Group>Pane>Action"),
+// because a pin has to survive a restart and a pane's button pointer does not.
+// A ribbon button is a proxy for a pane's button, not for a QAction, so
+// pinning one means finding the menu entry that does the same job. Matching is
+// by label, which is exact when the ribbon mirrors the menu and simply fails
+// when it does not — and a failure says so rather than writing a pin that
+// would resolve to nothing on the next launch.
+static QString qatPathForLabel(const QString& label) {
+    const QString want = QString(label).remove(QString::fromUtf8("…")).trimmed();
+    if (want.isEmpty()) return QString();
+    for (QWidget* w : QApplication::topLevelWidgets()) {
+        auto* mw = qobject_cast<QMainWindow*>(w);
+        if (!mw || !mw->menuBar()) continue;
+        for (QAction* m : mw->menuBar()->actions()) {
+            if (!m->menu()) continue;
+            for (QAction* sub : m->menu()->actions()) {
+                if (!sub->menu()) continue;
+                for (QAction* a : sub->menu()->actions()) {
+                    const QString t =
+                        QString(a->text()).remove(QString::fromUtf8("…")).trimmed();
+                    if (!t.isEmpty() && t.compare(want, Qt::CaseInsensitive) == 0)
+                        return m->text() + ">" + sub->text() + ">" + a->text();
+                }
+            }
+        }
+    }
+    return QString();
+}
+
 class RibbonProxy : public QToolButton {
 public:
     // A ribbon button states its natural width as its MINIMUM. Without
@@ -5865,6 +5906,45 @@ public:
         setText(label);
         // name first, then what it does — the same shape every hover has
         setToolTip(hoverText(label, src->toolTip()));
+        // Adam, 2026-09-10: the Preferences page has always said "right-click
+        // a ribbon button to pin it" and that was never wired — the star menu
+        // was the only way in. This is the claim made true.
+        setContextMenuPolicy(Qt::CustomContextMenu);
+        connect(this, &QToolButton::customContextMenuRequested,
+                [this, label](const QPoint& pos) {
+                    auto* m = new QMenu(this);
+                    m->setAttribute(Qt::WA_DeleteOnClose);
+                    const QString path = qatPathForLabel(label);
+                    QSettings st("ALL", "TranslationTool");
+                    QStringList pins = st.value("qat/pins").toStringList();
+                    if (path.isEmpty()) {
+                        QAction* no = m->addAction("Cannot pin this one");
+                        no->setEnabled(false);
+                        m->addAction(QString::fromUtf8("“%1” has no matching "
+                                                       "menu entry to pin")
+                                         .arg(label))
+                            ->setEnabled(false);
+                    } else if (pins.contains(path)) {
+                        QAction* un = m->addAction("Unpin from Quick Access");
+                        connect(un, &QAction::triggered, [path] {
+                            QSettings s2("ALL", "TranslationTool");
+                            QStringList v = s2.value("qat/pins").toStringList();
+                            v.removeAll(path);
+                            s2.setValue("qat/pins", v);
+                            qatPinsChanged();
+                        });
+                    } else {
+                        QAction* pin = m->addAction("Pin to Quick Access");
+                        connect(pin, &QAction::triggered, [path] {
+                            QSettings s2("ALL", "TranslationTool");
+                            QStringList v = s2.value("qat/pins").toStringList();
+                            if (!v.contains(path)) v << path;
+                            s2.setValue("qat/pins", v);
+                            qatPinsChanged();
+                        });
+                    }
+                    m->popup(mapToGlobal(pos));
+                });
         setAutoRaise(true);
         setToolButtonStyle(ribbonLabelsOn()
                                ? Qt::ToolButtonTextUnderIcon
@@ -38548,7 +38628,7 @@ private:
         // 11 Ribbon & Quick Access
         { Page p; p.title = "Quick Access"; p.icon = "gear"; p.blurb = "Pinned tools on the Quick Access strip"; p.keywords = {"quick access", "pin", "toolbar", "ribbon", "favourite"};
           auto* w = new QWidget; auto* v = new QVBoxLayout(w); v->setContentsMargins(8, 8, 8, 8);
-          auto* intro = new QLabel("Tools you pinned to the Quick Access strip (right-click a ribbon button to pin it). Remove pins here; Apply saves."); intro->setWordWrap(true); intro->setStyleSheet("color:#4A3F33;"); v->addWidget(intro);
+          auto* intro = new QLabel("Tools you pinned to the Quick Access strip. Right-click a ribbon button to pin it, or right-click a pin itself to unpin or reorder it. You can also remove pins here; Apply saves."); intro->setWordWrap(true); intro->setStyleSheet("color:#4A3F33;"); v->addWidget(intro);
           auto* list = new QListWidget; list->addItems(QSettings("ALL", "TranslationTool").value("qat/pins").toStringList()); v->addWidget(list, 1);
           auto* rm = new QPushButton("Remove selected pin"); connect(rm, &QPushButton::clicked, this, [list] { qDeleteAll(list->selectedItems()); }); v->addWidget(rm, 0, Qt::AlignLeft);
           p.w = w; p.save = [list] { QStringList pins; for (int i = 0; i < list->count(); ++i) pins << list->item(i)->text(); QSettings("ALL", "TranslationTool").setValue("qat/pins", pins); };
@@ -41832,7 +41912,53 @@ int main(int argc, char** argv) {
             };
             auto rebuild =
                 std::make_shared<std::function<void()>>();
-            *rebuild = [qatStrip, qatFind, qatHint] {
+            // Adam, 2026-09-10: a pin could be added by right-clicking a
+            // ribbon button but only removed through Preferences, which is a
+            // long walk for a thing you are looking straight at. Right-click
+            // the pin itself: unpin, and move it, since order is otherwise
+            // unchangeable once pinned. popup() rather than exec() keeps this
+            // off the modal census — a context menu is not a dialog.
+            auto qatMenuFor = [rebuild](QPushButton* b, const QString& path) {
+                b->setContextMenuPolicy(Qt::CustomContextMenu);
+                QObject::connect(
+                    b, &QPushButton::customContextMenuRequested,
+                    [b, path, rebuild](const QPoint& pos) {
+                        auto* m = new QMenu(b);
+                        m->setAttribute(Qt::WA_DeleteOnClose);
+                        QSettings st("ALL", "TranslationTool");
+                        QStringList pins =
+                            st.value("qat/pins").toStringList();
+                        const int i = pins.indexOf(path);
+                        auto save = [rebuild](QStringList v) {
+                            QSettings("ALL", "TranslationTool")
+                                .setValue("qat/pins", v);
+                            (*rebuild)();
+                        };
+                        QAction* un = m->addAction("Unpin");
+                        QObject::connect(un, &QAction::triggered,
+                                         [pins, i, save]() mutable {
+                                             if (i >= 0) pins.removeAt(i);
+                                             save(pins);
+                                         });
+                        m->addSeparator();
+                        QAction* lf = m->addAction("Move left");
+                        lf->setEnabled(i > 0);
+                        QObject::connect(lf, &QAction::triggered,
+                                         [pins, i, save]() mutable {
+                                             pins.move(i, i - 1);
+                                             save(pins);
+                                         });
+                        QAction* rt = m->addAction("Move right");
+                        rt->setEnabled(i >= 0 && i < pins.size() - 1);
+                        QObject::connect(rt, &QAction::triggered,
+                                         [pins, i, save]() mutable {
+                                             pins.move(i, i + 1);
+                                             save(pins);
+                                         });
+                        m->popup(b->mapToGlobal(pos));
+                    });
+            };
+            *rebuild = [qatStrip, qatFind, qatHint, qatMenuFor] {
                 while (QLayoutItem* it = qatStrip->takeAt(0)) {
                     delete it->widget();
                     delete it;
@@ -41846,19 +41972,36 @@ int main(int argc, char** argv) {
                     QAction* a = qatFind(p);
                     if (!a) {   // release audit 2026-09-09: never drop a pin silently — say it is gone
                         auto* gone = new QPushButton(p + " (not in this build)");
-                        gone->setEnabled(false);
-                        gone->setToolTip("This pinned command is no longer in the menus (renamed or removed). Remove the pin in Preferences \u203a Quick Access.");
+                        // NOT setEnabled(false): a disabled widget receives no
+                        // mouse events, so the context menu would never open —
+                        // and this is the pin you most want to remove. It is
+                        // greyed by style instead, and EITHER button opens the
+                        // menu, because a dead pin has nothing else to do.
+                        gone->setToolTip("This pinned command is no longer in the menus (renamed or removed). Click or right-click to unpin.");
+                        ux::themedStyle(gone, [] {
+                                return QString("color:%1").arg(ux::chromeMuted());
+                            });
+                        qatMenuFor(gone, p);
+                        QObject::connect(gone, &QPushButton::clicked, [gone] {
+                            Q_EMIT gone->customContextMenuRequested(
+                                QPoint(0, gone->height()));
+                        });
                         qatStrip->addWidget(gone);
                         continue;
                     }
                     auto* b = new QPushButton(a->text());
-                    b->setToolTip("Quick Access — " + p);
+                    b->setToolTip("Quick Access — " + p +
+                                  "\nRight-click to unpin or reorder.");
                     QObject::connect(b, &QPushButton::clicked, a,
                                      &QAction::trigger);
+                    qatMenuFor(b, p);
                     qatStrip->addWidget(b);
                 }
             };
             (*rebuild)();
+            // so a pin made from a ribbon button's context menu shows up at
+            // once (RibbonProxy calls qatPinsChanged)
+            qatRebuildHook() = [rebuild] { (*rebuild)(); };
             auto* pinMenu = new QMenu(qatPin);
             QObject::connect(
                 pinMenu, &QMenu::aboutToShow,
