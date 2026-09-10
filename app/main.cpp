@@ -21823,6 +21823,28 @@ public:
             check(kindBadge(p2).isEmpty(),
                   "control: running prose carries no badge");
             // 3. the deck can be filled from the dictionary layer
+            // The chunk-order reveal must say WHICH text its English covers:
+            // you reorder one clause but the English is the whole segment's.
+            // Measured 45% (uniform) / 59% (adaptive) of the segment.
+            {
+                const int wasMode = mode_->currentIndex();
+                mode_->setCurrentIndex(0);
+                newDrill();
+                if (order_) {
+                    checkDrill();
+                    const QString rev = result_->toPlainText();
+                    size_t nclause = 0;
+                    for (const auto& ch : order_->chunks) nclause += ch.size();
+                    const bool partial =
+                        !order_->segment.acip.empty() &&
+                        nclause * 100 < order_->segment.acip.size() * 90;
+                    check(!partial || rev.contains("WHOLE segment"),
+                          "chunk order: the reveal says its English covers the "
+                          "whole segment, not the clause you reordered");
+                }
+                mode_->setCurrentIndex(wasMode);
+                newDrill();
+            }
             check(g_alignEvidence == nullptr || g_alignEvidence->empty() ||
                       (int)g_alignEvidence->size() > 1000,
                   "the dictionary layer the deck fills from is the whole "
@@ -22445,10 +22467,34 @@ private:
                 h += QString("<div><b>%1.</b> %2</div>")
                          .arg(i + 1)
                          .arg(disp(order_->chunks[i]));
-            h += "<div style='background:#EEF6EE;padding:6px;margin-top:6px'>"
-                 "<b>GMR:</b> " +
-                 QString::fromStdString(order_->segment.english).toHtmlEscaped() +
-                 "</div>";
+            // The same disproportion the cloze had, found by the audit on
+            // 2026-09-09: you reorder ONE CLAUSE but the reveal printed the
+            // English of the WHOLE segment. Measured over 1,000 drills, the
+            // clause is 45% of the segment on a uniform draw and 59% with
+            // adaptive on, and under half the segment in two drills of three.
+            // The English is not wrong, it is just not the answer to what was
+            // asked, so it now says which it is.
+            {
+                const size_t nseg =
+                    allcore::DrillFactory::isDrillable(order_->segment)
+                        ? order_->segment.acip.size() : 0;
+                size_t nclause = 0;
+                for (const auto& c : order_->chunks) nclause += c.size();
+                const bool partial = nseg > 0 && nclause * 100 < nseg * 90;
+                h += "<div style='background:#EEF6EE;padding:6px;margin-top:6px'>"
+                     "<b>GMR:</b> " +
+                     englishWithSupplied(order_->segment.english) +
+                     (partial
+                          ? "<div style='color:" +
+                                QString(ux::darkChrome() ? ux::chromeMuted()
+                                                         : ux::kMuted) +
+                                ";font-size:11px;padding-top:4px'>This is his "
+                                "English for the WHOLE segment. You reordered "
+                                "one clause of it \u2014 the rest of the "
+                                "English belongs to the clauses around it.</div>"
+                          : QString()) +
+                     "</div>";
+            }
             if (order_->verb.confident)
                 h += "<small style='color:#3B7A3B'>verb: " +
                      QString::fromStdString(order_->verb.wylie) + " (" +
