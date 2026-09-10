@@ -71,6 +71,14 @@ public:
     // stratified whole-dictionary sample (F1 honesty sweep)
     std::vector<Entry> sampleEntries(int stride, int cap = 5000) const;
 
+    // The beginner's rung: entries whose Tibetan is source-attested AND whose
+    // pronunciation comes from Geshe Michael Roach's own course cards. 1,308
+    // qualify. Generated material is excluded rather than labelled, because a
+    // beginner cannot evaluate a tier badge. Pass a course ("C05") to narrow.
+    std::vector<Entry> scriptCards(const std::string& course = "",
+                                   int cap = 5000) const;
+    std::vector<std::string> scriptCardCourses() const;
+
     // FTS5 match over wylie/variants/tibetan/acip/pronunciation.
     std::vector<Entry> headwordSearch(const std::string& fts_query,
                                       int limit = 20) const;
