@@ -73,6 +73,28 @@ bool DrillFactory::isDrillable(const CorpusSegment& seg) {
         else if (ch >= 'A' && ch <= 'Z') ++upper;
     }
     if (lower > upper) return false;
+    //  3. ENGLISH WILDLY OUT OF PROPORTION TO THE TIBETAN. Some segments carry
+    //     a whole explanatory passage against a line or two of Tibetan — one
+    //     pairs 5,180 English words with 5 ACIP words. As a drill that is
+    //     useless: the learner is given three hundred words of English as the
+    //     "hint" for three syllables. Measured over all 42,199 segments, the
+    //     median is 1.43 English words per ACIP word and the 95th percentile
+    //     is 3.11, so a ceiling of 6:1 sits far above normal prose and refuses
+    //     only 774 segments (1.8%). Found on the iPhone build, 2026-09-09,
+    //     where the disproportion is impossible to miss on a small screen.
+    auto words = [](const std::string& t) {
+        size_t n = 0;
+        bool in = false;
+        for (char ch : t) {
+            const bool sp = (ch == ' ' || ch == '\t' || ch == '\n');
+            if (!sp && !in) { ++n; in = true; }
+            else if (sp) in = false;
+        }
+        return n;
+    };
+    const size_t wa = words(seg.acip), we = words(seg.english);
+    if (wa == 0 || we == 0) return false;
+    if (we > wa * 6) return false;
     return true;
 }
 
