@@ -5,6 +5,7 @@
 option(USE_SYSTEM_SQLITE "Link the system sqlite3 library" ON)
 
 add_library(allcore STATIC
+  src/tibdisplay.cpp
   src/spine.cpp
   src/textdiff.cpp
   src/textspan.cpp

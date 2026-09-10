@@ -95,3 +95,43 @@ PROVISIONAL colour, "engine guidance is labeled guidance", and the title badge.
 3. On the iPhone: Settings ▸ Privacy & Security ▸ Developer Mode, then trust
    the Mac when plugged in.
 4. Tell me the iPhone model and iOS version so the deployment target is right.
+
+## An input-centre suite of its own (Adam, 2026-09-09)
+
+> "create the application that could be installed on our machines overseas at
+> our input centers that our input operators use to type in our text ... to
+> deliver us our ACIP files, our a, b, c, d, and e files, and the raw files ...
+> it will be used by a different class of user."
+
+A tab, a workflow and a preset for the operators, not for translators.
+
+**What already exists and must be surveyed before anything new is designed:**
+the app already has an **Input** pane (page-scan typing, double keying against
+a partner file, per-page files under `library/input_work/`) and an **OCR** pane
+(page image → OCR-DERIVED text, batch folder). Roadmap item A is already "the
+input-center formatter". So this is consolidation and extension, not a green
+field — the first task is an honest inventory of what those two panes already
+do.
+
+**Research Adam asked for, none of it done yet:**
+- Asian Legacy Library's own pages on how input is actually run.
+- The **ACIP Catalog Release IV** PDF on his Mac — `~/Desktop/Thursday
+  Database-Cataloging 6 4 26 Meeting/ACIP Catalog Release IV.pdf`. Note the
+  known defect: its Tibetan Input Code chart, manual pp. 153–160, is EMPTY
+  image placeholders in that copy, so an intact copy may be needed.
+- Anything else public on the ACIP input scheme.
+- **Still owed by Adam** (already on the list from earlier): input-centre raw
+  data samples, and the GMR/publishing-team formatting guidelines.
+
+**The a/b/c/d/e file question** is the centre of it and is not yet understood
+here: what each letter means, who produces which, what the handoff looks like,
+and what a finished delivery is. That has to be answered from the manual and
+from Adam before a single pane is drawn.
+
+**Naming.** Adam floated "input center tab", "ACIP input", "ALL input" and was
+not satisfied with any. Deferred to him.
+
+**The steelman rule applies with force.** A different class of user means the
+temptation to ship everything translators have. Every tool in this tab has to
+justify itself against an operator's actual day — typing from a scan, keeping
+pace, catching their own errors, and delivering a clean file — or it is cut.

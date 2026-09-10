@@ -42,6 +42,7 @@ static QCursor g_busyCursor();   // defined beside g_harnessRun
 
 #include "allcore/textdiff.h"
 #include "allcore/versions.h"
+#include "allcore/tibdisplay.h"
 #include "allcore/textspan.h"
 #include "allcore/textnorm.h"
 #include "allcore/filewalk.h"
@@ -21884,36 +21885,17 @@ private:
         return c == '{' || c == '}' || c == '(' || c == ')' || c == '[' ||
                c == ']' || c == '@' || c == '*' || c == '%' || c == '#';
     }
+    // The decomposition lives in allcore (allcore/tibdisplay.h) so this pane
+    // and the drill-pack generator can never disagree about what a reader
+    // sees. This wraps it for Qt.
     struct Piece { enum Kind { Script, Markup, Failed } kind; QString text; };
-    // One decomposition, two renderers: the question view can colour the
-    // pieces, the radio buttons cannot render HTML at all.
     std::vector<Piece> pieces(const std::string& acipText) const {
         std::vector<Piece> out;
-        QString cur, mark;
-        auto flushMark = [&] {
-            if (mark.isEmpty()) return;
-            out.push_back({Piece::Markup, mark});
-            mark.clear();
-        };
-        auto flush = [&] {
-            if (cur.isEmpty()) return;
-            auto [u, ok] =
-                allcore::wylieToUnicode(allcore::acipToEwts(cur.toStdString()));
-            if (ok && !u.empty())
-                out.push_back({Piece::Script,
-                               QString::fromStdString(u) +
-                                   QString::fromUtf8("་")});
-            else
-                out.push_back({Piece::Failed, cur});
-            cur.clear();
-        };
-        for (QChar c : QString::fromStdString(acipText)) {
-            if (isMarkupChar(c)) { flush(); mark += c; }
-            else if (c == ' ') { flush(); flushMark(); }
-            else { flushMark(); cur += c; }
-        }
-        flush();
-        flushMark();
+        for (const auto& p : allcore::acipDisplayPieces(acipText))
+            out.push_back({p.kind == allcore::DisplayPiece::Script  ? Piece::Script
+                           : p.kind == allcore::DisplayPiece::Markup ? Piece::Markup
+                                                                     : Piece::Failed,
+                           QString::fromStdString(p.text)});
         return out;
     }
     QString disp(const std::string& acipText) const {
