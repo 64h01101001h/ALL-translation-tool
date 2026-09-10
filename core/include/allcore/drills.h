@@ -65,6 +65,10 @@ public:
                  const Progress* progress = nullptr)
         : spine_(spine), index_(index), progress_(progress) {}
 
+    // A drill must come from teaching material: not the title catalogue
+    // (TITL*, AUTH, SUBJ) and not a segment whose Tibetan field holds English.
+    static bool isDrillable(const CorpusSegment& seg);
+
     void setAdaptive(bool on) { adaptive_ = on; }
 
     // Each returns nullopt only if no suitable segment was found within the

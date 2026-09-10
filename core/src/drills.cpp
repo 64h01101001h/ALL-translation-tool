@@ -40,12 +40,48 @@ std::optional<PickedClause> pickClause(const OverlayDoc& doc,
 
 }  // namespace
 
+// A drill must come from teaching material. Two classes of corpus segment are
+// not that, and both were reaching learners (audit, 2026-09-09):
+//
+//  1. THE TITLE CATALOGUE. 4,010 of the 42,199 segments (9.5%) live in the
+//     courses TITLK, TITLR, TITLS, TITLT, plus AUTH and SUBJ — they are a
+//     catalogue of work titles, author names and subject headings, not prose.
+//     They are also the SHORTEST things in the corpus (10-15 ACIP words
+//     against a corpus mean near 36), and randomSegment's adaptive branch
+//     prefers short segments, so it selected them at 2-3x their share:
+//     measured at 20.8-25.0% of adaptive draws, with TITLS the single
+//     most-drawn course of all 75. Roughly a quarter of Adam's drills were
+//     title lines, which is exactly what he kept screenshotting.
+//
+//  2. ENGLISH SITTING IN THE ACIP FIELD. 254 segments (0.60%) carry English
+//     prose where the Tibetan should be — front matter that was never
+//     translated. Fed to the script converter it renders as plausible-looking
+//     nonsense (the Asian Classics Institute becomes ཐེ་ཨསིན་ཅླསྶིཅས་…), which
+//     is fabrication, not a display bug. 13 of the 75 courses OPEN on one.
+//
+// Both are refused here, at the draw, so every mode is covered at once.
+bool DrillFactory::isDrillable(const CorpusSegment& seg) {
+    if (!seg.id || seg.acip.empty() || seg.english.empty()) return false;
+    std::string c = seg.course;
+    for (auto& ch : c) ch = (char)std::toupper((unsigned char)ch);
+    if (c.rfind("TITL", 0) == 0 || c == "AUTH" || c == "SUBJ") return false;
+    // ACIP is written in capitals. A run of lower-case letters in the Tibetan
+    // field means the field holds English, not transliteration.
+    int lower = 0, upper = 0;
+    for (unsigned char ch : seg.acip) {
+        if (ch >= 'a' && ch <= 'z') ++lower;
+        else if (ch >= 'A' && ch <= 'Z') ++upper;
+    }
+    if (lower > upper) return false;
+    return true;
+}
+
 CorpusSegment DrillFactory::uniformSegment(std::mt19937& rng) const {
     const long long maxId = spine_.corpusMaxId();
-    for (int i = 0; i < 8; ++i) {
+    for (int i = 0; i < 16; ++i) {
         const long long id = 1 + (long long)(rng() % (unsigned long)maxId);
         auto seg = spine_.corpusSegmentById(id);
-        if (seg.id && !seg.acip.empty() && !seg.english.empty()) return seg;
+        if (isDrillable(seg)) return seg;
     }
     return {};
 }
@@ -58,8 +94,7 @@ CorpusSegment DrillFactory::randomSegment(std::mt19937& rng) const {
         if (!peeked.empty()) {
             auto seg =
                 spine_.corpusSegmentById(peeked[rng() % peeked.size()]);
-            if (seg.id && !seg.acip.empty() && !seg.english.empty())
-                return seg;
+            if (isDrillable(seg)) return seg;
         }
     }
     // level targeting: sample a few candidates, keep the one whose
