@@ -21685,6 +21685,22 @@ public:
         connect(weakB, &QPushButton::clicked,
                 [this] { showMissReport(); });
         layout->addWidget(weakB);
+        // Adam, 2026-09-09: "why does the deck have 266 words ... can't we
+        // create a much bigger bank of data to pull decks and drills from. you
+        // should access any and all data that's been aligned from ... the new
+        // Geshe Michael Roach dictionary". The drills already draw from the
+        // whole corpus; the DECK was small because it only ever held words he
+        // had clicked in the Overlay one at a time. It can be filled from the
+        // alignment layer, which is his own English on his own headwords.
+        auto* fillB = new QPushButton("Fill my deck from the dictionary\u2026");
+        fillB->setToolTip(
+            "Adds headwords from the Geshe Michael Roach Dictionary \u2014 the "
+            "layer aligned from his own courses \u2014 into your review deck, "
+            "so you are not clicking words one at a time. Everything it adds "
+            "is TENTATIVE: matched from his English, never composed, and "
+            "awaiting his ruling.");
+        connect(fillB, &QPushButton::clicked, [this] { fillDeckFromLayer(); });
+        layout->addWidget(fillB);
         layout->addWidget(stats_);
         auto* row = new QHBoxLayout;
         mode_ = new QComboBox;
@@ -21756,6 +21772,41 @@ public:
 
     int selfTest(QStringList& log) {
         int fails = 0;
+        {   // Adam, 2026-09-09, on the Drills pane.
+            auto check = [&](bool ok, const char* what) {
+                log << QString("  [%1] Drills: %2").arg(ok ? "PASS" : "FAIL").arg(what);
+                if (!ok) ++fails;
+            };
+            // 1. source markup never reaches the reader as bare ACIP. He saw
+            //    "(RNAMS", "(GNAS BRTAN)" and "(ZHES" among Tibetan options.
+            //    These assertions are about the SCRIPT path, so turn it on.
+            const bool wasScript = script_->isChecked();
+            script_->setChecked(true);
+            const QString withParen = disp("(GNAS BRTAN) RNAMS");
+            check(!withParen.contains("(GNAS BRTAN) RNAMS"),
+                  "editorial markup is not passed off as Tibetan script");
+            check(dispPlain("(GNAS BRTAN)").contains("(") ||
+                      dispPlain("(GNAS BRTAN)").contains("\u27e8"),
+                  "and the option label still shows what was there, plainly");
+            const QString bad = disp("XQVF");
+            check(bad.contains("\u27e8") || bad.contains("XQVF"),
+                  "a token that will not convert is flagged in \u27e8 \u27e9, "
+                  "never printed as if it were script");
+            // 2. a title line says it is a title
+            allcore::CorpusSegment t; t.course = "TITLS";
+            allcore::CorpusSegment p2; p2.course = "C01";
+            check(!kindBadge(t).isEmpty() && kindBadge(t).contains("TITLE"),
+                  "a title line is labelled as one (4,010 corpus segments "
+                  "are titles, 9.5% of the whole)");
+            check(kindBadge(p2).isEmpty(),
+                  "control: running prose carries no badge");
+            // 3. the deck can be filled from the dictionary layer
+            check(g_alignEvidence == nullptr || g_alignEvidence->empty() ||
+                      (int)g_alignEvidence->size() > 1000,
+                  "the dictionary layer the deck fills from is the whole "
+                  "layer, not a sample");
+            script_->setChecked(wasScript);
+        }
         auto check = [&](bool ok, const char* what) {
             log << QString("  [%1] Drills: %2")
                        .arg(ok ? "PASS" : "FAIL").arg(what);
@@ -21820,26 +21871,80 @@ public:
     }
 
 private:
-    QString disp(const std::string& acipText) const {
-        if (!script_->isChecked())
-            return QString::fromStdString(acipText).toHtmlEscaped();
-        // per-token ACIP → script via the battery-proven chain
-        QString out;
-        QString cur;
+    // ACIP source carries editorial markup that is not Tibetan and must never
+    // be handed to the script converter: correction braces {%NGUR},
+    // parentheses (GNAS BRTAN), brackets, page marks. Adam, 2026-09-09, saw
+    // "(RNAMS" and "(GNAS BRTAN)" rendered mid-script among Tibetan options,
+    // because disp() fed the whole token to the converter and, when it
+    // failed, printed the RAW ACIP inline with a tsheg after it. Editorial
+    // marks are now separated out and shown as what they are, and a token
+    // that genuinely will not convert is flagged in the project's ⟨ ⟩
+    // convention rather than passed off as script.
+    static bool isMarkupChar(QChar c) {
+        return c == '{' || c == '}' || c == '(' || c == ')' || c == '[' ||
+               c == ']' || c == '@' || c == '*' || c == '%' || c == '#';
+    }
+    struct Piece { enum Kind { Script, Markup, Failed } kind; QString text; };
+    // One decomposition, two renderers: the question view can colour the
+    // pieces, the radio buttons cannot render HTML at all.
+    std::vector<Piece> pieces(const std::string& acipText) const {
+        std::vector<Piece> out;
+        QString cur, mark;
+        auto flushMark = [&] {
+            if (mark.isEmpty()) return;
+            out.push_back({Piece::Markup, mark});
+            mark.clear();
+        };
         auto flush = [&] {
             if (cur.isEmpty()) return;
             auto [u, ok] =
                 allcore::wylieToUnicode(allcore::acipToEwts(cur.toStdString()));
-            out += ok && !u.empty() ? QString::fromStdString(u) : cur;
-            out += QString::fromUtf8("་");
+            if (ok && !u.empty())
+                out.push_back({Piece::Script,
+                               QString::fromStdString(u) +
+                                   QString::fromUtf8("་")});
+            else
+                out.push_back({Piece::Failed, cur});
             cur.clear();
         };
         for (QChar c : QString::fromStdString(acipText)) {
-            if (c == ' ') flush();
-            else cur += c;
+            if (isMarkupChar(c)) { flush(); mark += c; }
+            else if (c == ' ') { flush(); flushMark(); }
+            else { flushMark(); cur += c; }
         }
         flush();
-        return out.toHtmlEscaped();
+        flushMark();
+        return out;
+    }
+    QString disp(const std::string& acipText) const {
+        if (!script_->isChecked())
+            return QString::fromStdString(acipText).toHtmlEscaped();
+        const QString muted =
+            ux::darkChrome() ? ux::chromeMuted() : QString(ux::kMuted);
+        const QString flag =
+            ux::darkChrome() ? ux::chromeMachine() : QString(ux::kMachine);
+        QString out;
+        for (const Piece& p : pieces(acipText)) {
+            if (p.kind == Piece::Script) out += p.text.toHtmlEscaped();
+            else if (p.kind == Piece::Markup)
+                out += "<span style='color:" + muted + ";font-size:11px'>" +
+                       p.text.toHtmlEscaped() + "</span>";
+            else
+                out += "<span style='color:" + flag + "'>\u27e8" +
+                       p.text.toHtmlEscaped() + "\u27e9</span>";
+        }
+        return out;
+    }
+    // plain text for a QRadioButton, which cannot render markup
+    QString dispPlain(const std::string& acipText) const {
+        if (!script_->isChecked()) return QString::fromStdString(acipText);
+        QString out;
+        for (const Piece& p : pieces(acipText))
+            out += p.kind == Piece::Failed
+                       ? QString::fromUtf8("\u27e8") + p.text +
+                             QString::fromUtf8("\u27e9")
+                       : p.text;
+        return out;
     }
 
     void clearAnswers() {
@@ -21854,7 +21959,7 @@ private:
     void addRadios(const std::vector<std::string>& options, bool asAcip) {
         for (const auto& o : options) {
             auto* rb = new QRadioButton(
-                asAcip ? disp(o) : QString::fromStdString(o));
+                asAcip ? dispPlain(o) : QString::fromStdString(o));
             radios_.push_back(rb);
             answerRow_->layout()->addWidget(rb);
         }
@@ -22048,10 +22153,136 @@ private:
         refreshStats();
     }
 
+    // 4,010 of the corpus's 42,199 segments (9.5%) are TITLE lines, and they
+    // live in their own courses: TITLK, TITLR, TITLS, TITLT — every one of the
+    // 796 segments whose English carries an "_AUTHOR" suffix is in one of
+    // them. Adam, 2026-09-09: "we should specify whether the tibetan
+    // phrase/sentence in question is a title or subject heading. this could
+    // provide useful context and would dispell any ambiguity". So the badge is
+    // structural, read off the course code, not guessed from the prose.
+    static QString segmentKind(const std::string& course) {
+        const QString c = QString::fromStdString(course).toUpper();
+        if (c.startsWith("TITL")) return "TITLE LINE";
+        if (c == "AUTH") return "AUTHOR NAME";
+        return QString();
+    }
+    QString kindBadge(const allcore::CorpusSegment& seg) const {
+        const QString k = segmentKind(seg.course);
+        if (k.isEmpty()) return QString();
+        return "<div style='display:inline-block;background:" +
+               QString(ux::darkChrome() ? ux::chromePlaque() : "#F4EFE4") +
+               ";color:" +
+               QString(ux::darkChrome() ? ux::chromeGold() : ux::kGold) +
+               ";padding:1px 6px;font-size:10px;letter-spacing:1px;"
+               "font-weight:600'>" + k +
+               "</div> <span style='color:" +
+               QString(ux::darkChrome() ? ux::chromeMuted() : ux::kMuted) +
+               ";font-size:11px'>this is the title of a work, not running "
+               "prose \u2014 it reads as a heading</span><br>";
+    }
+    // Adam, 2026-09-09: "the english in most cases is much longer than the
+    // accompanying Tibetan phrases that are in question." Measured over 200
+    // real cloze drills: the clause shown averaged 27.2% of the segment whose
+    // English was printed above it. The English is the WHOLE segment's, so the
+    // Tibetan is now the whole segment's too, with the answer blanked where it
+    // stands and the drilled clause marked inside it.
+    QString clozeBody() const {
+        const QString blank =
+            "<b style='color:" +
+            QString(ux::darkChrome() ? ux::chromeMachine() : ux::kMachine) +
+            "'>[ \u2026 ]</b>";
+        auto clauseOnly = [&](const char* why) {
+            QString h;
+            for (const auto& c : cloze_->chunks)
+                h += (c == "[ ... ]" ? blank + "  " : disp(c) + "  ");
+            h += "<div style='color:" +
+                 QString(ux::darkChrome() ? ux::chromeMuted() : ux::kMuted) +
+                 ";font-size:11px;padding-top:4px'>" + QString(why) + "</div>";
+            return h;
+        };
+        if (cloze_->correct < 0 ||
+            cloze_->correct >= (int)cloze_->options.size())
+            return clauseOnly("showing the clause only");
+        const std::string& seg = cloze_->segment.acip;
+        const std::string ans = cloze_->options[cloze_->correct];
+        if (ans.empty() || seg.empty())
+            return clauseOnly("showing the clause only");
+        // search from the clause's own position, so a phrase that repeats
+        // earlier in the segment cannot capture the blank
+        std::string prefix;
+        for (const auto& c : cloze_->chunks) {
+            if (c == "[ ... ]") break;
+            if (!prefix.empty()) prefix += " ";
+            prefix += c;
+        }
+        size_t from = 0;
+        if (!prefix.empty()) {
+            const size_t p = seg.find(prefix);
+            if (p != std::string::npos) from = p;
+        }
+        size_t at = seg.find(ans, from);
+        if (at == std::string::npos) at = seg.find(ans);
+        if (at == std::string::npos)
+            return clauseOnly("showing the clause only \u2014 the answer does "
+                              "not appear in the segment verbatim");
+        return disp(seg.substr(0, at)) + " " + blank + " " +
+               disp(seg.substr(at + ans.size()));
+    }
+
+    void fillDeckFromLayer() {
+        if (!progress_) {
+            if (!g_harnessRun)
+                QMessageBox::information(this, "Fill deck",
+                                         "No progress file is open, so there "
+                                         "is no deck to fill.");
+            return;
+        }
+        if (!g_alignEvidence || g_alignEvidence->empty()) {
+            if (!g_harnessRun)
+                QMessageBox::information(
+                    this, "Fill deck",
+                    "The Geshe Michael Roach Dictionary layer is not installed "
+                    "with this build, so there is nothing to fill from. It "
+                    "lives at data/alignment/alignment_evidence_v1.json.");
+            return;
+        }
+        const int have = (int)g_alignEvidence->size();
+        if (!g_harnessRun) {
+            const auto go = QMessageBox::question(
+                this, "Fill deck from the dictionary",
+                QString("Add up to %1 headwords from the Geshe Michael Roach "
+                        "Dictionary to your review deck?\n\nEvery one is "
+                        "TENTATIVE \u2014 his own English, matched from his "
+                        "courses, never composed, and awaiting his ruling. "
+                        "Words already in your deck keep the schedule they "
+                        "have.")
+                    .arg(have),
+                QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+            if (go != QMessageBox::Yes) return;
+        }
+        BusyWheel wheel;
+        const long long now = (long long)time(nullptr);
+        int added = 0;
+        for (const auto& [wylie, pairs] : *g_alignEvidence) {
+            if (wylie.empty() || pairs.isEmpty()) continue;
+            progress_->touchWord(wylie, now);
+            ++added;
+        }
+        refreshStats();
+        if (!g_harnessRun)
+            QMessageBox::information(
+                this, "Deck filled",
+                QString("%1 headword(s) from the dictionary are now in your "
+                        "deck. They are drilled tier-labelled: TENTATIVE "
+                        "material never wears the binding colour.")
+                    .arg(added));
+    }
+
     void renderQuestion() {
         const int m = mode_->currentIndex();
         QString h;
         if (m == 0 && order_) {
+            h += kindBadge(order_->segment);
             h += "<div style='color:#555'>Restore the original order of these "
                  "chunks (enter letters, e.g. <b>C A B</b>). From [" +
                  QString::fromStdString(order_->segment.course) + ":" +
@@ -22061,16 +22292,15 @@ private:
                          .arg(QChar('A' + (int)i))
                          .arg(disp(order_->chunks[order_->presented[i]]));
         } else if (m == 1 && cloze_) {
+            h += kindBadge(cloze_->segment);
             h += "<div style='color:#555'>Which chunk fills the blank? Geshe Michael Roach's "
                  "English for the whole segment:</div>"
                  "<div style='background:#EEF6EE;padding:6px'><i>" +
                  QString::fromStdString(cloze_->segment.english).toHtmlEscaped() +
-                 "</i></div><hr><div style='font-size:18px'>";
-            for (const auto& c : cloze_->chunks)
-                h += (c == "[ ... ]" ? "<b style='color:#B4540A'>[ … ]</b>  "
-                                     : disp(c) + "  ");
-            h += "</div>";
+                 "</i></div><hr><div style='font-size:18px'>" + clozeBody() +
+                 "</div>";
         } else if (m == 2 && part_) {
+            h += kindBadge(part_->segment);
             h += "<div style='color:#555'>Which particle belongs in the blank?"
                  "</div><hr><div style='font-size:18px'>";
             for (size_t i = 0; i < part_->tokens.size(); ++i) {
@@ -22081,6 +22311,7 @@ private:
             h += "</div>";
         } else if (m == 3 && readPos_ < readSegs_.size()) {
             const auto& s = readSegs_[readPos_];
+            h += kindBadge(s);
             h += "<div style='color:#555'>Read first; Check/Reveal shows "
                  "Geshe Michael Roach's English (and counts as a peek); New drill moves on. "
                  "[" + QString::fromStdString(s.course) + ":" +
