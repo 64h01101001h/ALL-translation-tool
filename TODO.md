@@ -3502,3 +3502,27 @@ licensing decisions.
      citations, in DOCX/Markdown, so a scholar can drop it into a paper.
   8. **Collections as teaching sets** — a collection shared with a class,
      with the Trainer/Drills generated from it.
+
+## Z. Backlog added 2026-09-10 — audio and speech
+
+- [ ] **A colloquial ("spoken") Tibetan trainer** — Adam, 2026-09-10, filed to
+      the back burner. Distinct from everything built so far: the corpus, the
+      dictionary and the Kawachen bank are all LITERARY/classical. Spoken
+      Tibetan differs in vocabulary, in honorific register, and in
+      pronunciation (the very sandhi Kawachen's own reader documents it cannot
+      do — zla ba read as "da wa"). Note the constraint before anyone starts:
+      **none of the audio we now hold is colloquial speech.** It is isolated
+      literary syllables. A spoken trainer needs its own recordings by a
+      speaker of the modern language, and there is no shortcut from what we
+      have. `core/include/allcore/colloquial.h` already exists and is the
+      natural home. Ask Geshe Michael Roach whose voice, and in which dialect.
+- [ ] **Read-aloud gaps that are fixable** — 2.2% of corpus syllables have no
+      recording. The residue is: Sanskrit mantra syllables (aoM, a'a, aa),
+      double particles Kawachen also declines (`'di'i`, `la'ang`, `pa'am`),
+      and the spya/spyi/spyod family, which needs the pya→ca fold recorded as
+      an extra spelling in `data/kawachen_labels.json`. The last of those is a
+      data addition we already have decoded, worth ~0.3%; it renames files, so
+      batch it with any other label change.
+- [ ] **Sequenced reading is one surface used twice** — the beginner's
+      enormous-glyph reader and Adam's own proofreading readback are the same
+      machinery at different speeds. Build once.

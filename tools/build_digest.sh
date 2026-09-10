@@ -1,5 +1,7 @@
 #!/bin/zsh
 # Build a daily digest's deliverables: screenshots, charts, md → txt/docx/html.
+# The .docx lands as 'Translation Tool - Daily Digest - YYYYMMDD.docx' — it is
+# the only file sent, so it carries the name a recipient will read.
 # Usage: tools/build_digest.sh YYYY-MM-DD [--draft] [--no-shots]
 #   --draft     build docs/digests/D.draft.md instead of D.md
 #   --no-shots  skip the headless screenshot pass (reuse existing images)
@@ -80,7 +82,15 @@ TITLE="$(head -1 "$MD" | sed 's/^# //')"
 DPI="${DCT_DIGEST_DPI:-192}"
 pandoc "$MD" --resource-path=docs/digests -o "$BASE.txt"
 REF="tools/digest_reference.docx"; [[ -f "$REF" ]] || python3 tools/make_digest_reference.py >/dev/null
-pandoc "$MD" --resource-path=docs/digests --reference-doc="$REF" --dpi="$DPI" -o "$BASE.docx"
+# The .docx is the ONLY file that goes out (Adam, 2026-09-10), so it is the
+# only one named for a human rather than for the repository: recipients see
+# "Translation Tool - Daily Digest - 20260910.docx" in their mail client and
+# in their downloads folder, where "2026-09-10.docx" would be meaningless
+# among everything else they are sent. The .md/.txt/.html keep the ISO name
+# because they are working files that sort by date in this directory.
+DOCX="docs/digests/Translation Tool - Daily Digest - ${D//-/}.docx"
+pandoc "$MD" --resource-path=docs/digests --reference-doc="$REF" --dpi="$DPI" -o "$DOCX"
 pandoc "$MD" --resource-path=docs/digests -s --embed-resources --standalone --css "$CSS" --dpi="$DPI" --metadata title="$TITLE" -o "$BASE.html" 2>/dev/null || pandoc "$MD" --resource-path=docs/digests -s --self-contained --css "$CSS" --dpi="$DPI" --metadata title="$TITLE" -o "$BASE.html"
 rm -f "$CSS"
-echo "built: $BASE.txt $BASE.docx $BASE.html"
+echo "built: $BASE.txt $BASE.html"
+echo "  -> $DOCX   (the one that goes out)"

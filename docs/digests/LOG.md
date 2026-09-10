@@ -149,3 +149,253 @@ Categories: code · decision · email · release · audit · data · question.
 - 01:20 · fix · The audit's finding on the chunk-order drill: you reorder ONE CLAUSE but the reveal printed Geshe Michael Roach's English for the WHOLE segment. Measured over a thousand drills the clause is 45% of the segment on a uniform draw and 59% with adaptive on, and under half in two drills of three. The reveal now says which text its English covers, and the bracketed supplied material is greyed the same way the cloze greys it
 - 01:40 · research · The Learn tab vision: 117 agents, 108 tools proposed, 20 kept to build now, 23 for later, 65 CUT. Banked at docs/LEARN_TAB_VISION.md, nothing built, nothing ruled on. Its two load-bearing figures were re-measured independently before banking because claimed numbers in this project have been wrong before: the alignment layer covers 1,547 of 42,199 segments (3.7%) and 11,777 links carry no English exponent (28.2%) — both confirmed exactly. The plan flags its OWN frequency figures as unreliable (two passes differed 2.5x) and forbids printing them as fact until a disambiguating segmenter exists
 - 01:45 · decision · The progression system the research recommends, for Adam's ruling: make the game layer a MEASUREMENT rather than a reward. XP proportional to measured difficulty with a receipt on every award; provisional-tier glosses pay less than curated ones, so the tier discipline reaches into the scoreboard; ranks gated on demonstrated reading and revocable when the evidence stops supporting them; and no streak on the main surface, because streaks have the weakest link to outcome and the strongest link to practising to protect a number. The distinctive mechanic is scored REFUSAL — "this is ambiguous" and "this cannot be verified" as first-class answerable options, worth marks when right and penalised when used to dodge. No language tool does it, and it turns the project's four inviolable rules into the curriculum
+
+## 2026-09-10 · Kawachen Tibetan Reader harvested
+- Decoded the reader at itibet.org by driving its own state machine rather
+  than guessing from filenames: the site indexes recordings by SOUND, not
+  spelling. Scheme written up in docs/KAWACHEN_READER_FORMAT.md.
+- Harvested in full: **3,002 files, all distinct, 22.3 MB** — the complete
+  54 x 5 x 11 syllable grid plus the 32 spelling-term recordings. Manifest
+  labels 2,891 with the syllable they say; 111 kept unlabelled rather than
+  guessed. tools/kawachen_harvest.py, output gitignored per Adam's ruling
+  that the permission is in-house use, not redistribution.
+- Recovered audio their own site cannot play: the reader requests a
+  four-number filename for syllables ending in sa, which 404s. The
+  recordings exist at suffix slot 10 and we fetch them directly.
+- **First independent cross-check of pron_engine.py**: the reader's
+  equivalence classes agree with our engine on 11 of 12 merges, 3 of 3
+  folds, and all 9 tone-only splits behave as designed
+  (tools/kawachen_crosscheck.py). The one disagreement is ours to keep —
+  the spine's 400+ attested khr- and 229 phr- readings confirm GMR's
+  convention flattens aspiration. Filed in docs/FINDINGS.md.
+- OPEN: the audio must NOT go into the TestFlight build without asking
+  Kawachen again — shipping to students is distribution, not in-house use.
+
+## 2026-09-10 · Kawachen audio renamed descriptively
+- Adam asked for filenames that say what they contain. Put the scheme through
+  a four-way design panel with adversarial critique; the panel caught a fault
+  in the obvious answer.
+- **The dot is a live EWTS operator.** Adam's proposed `49_2_3.klud.glud.mp3`
+  would have produced filenames that parse as valid but WRONG Tibetan:
+  our own ewts_unicode.py turns `klud.glud` into ཀླུདྒླུད with success=True
+  and no flag (`g.ya` is གཡ where `gya` is གྱ). `+` and `,` fail the same way.
+  `-` fails loudly as ⟨klud-glud⟩ — the behaviour inviolable rule 3 wants —
+  so `-` joins co-spellings and `--` separates key from sound. Same test
+  chose the sentinel: `unknown` parses to ཨུནྐྣོཝན, so it is `UNKNOWN`.
+- Renamed all 3,002: `syllable_mp3/49_2_3--klud-glud-blud-rlud-slud.mp3`.
+  Site key first, so files sort in TIBETAN alphabet order, the harvester still
+  resumes by key (zero re-downloads), and provenance leads the name.
+- Added `by-sound/`: 3,936 relative symlinks named sound-first over 2,891
+  recordings, so `ls by-sound/kla*` works. Unidentified files get no link —
+  a link named for a spelling would assert the guess we refuse to make.
+- **Three defects of my own, found and fixed en route:**
+  1. `kawachen_harvest.py --verify` rewrote manifest.csv unconditionally, so a
+     half-finished rename would have destroyed the only record of what each
+     recording says. Now atomic, and refuses to shrink without `--force`.
+  2. That manifest was gitignored with no copy anywhere. Now tracked (it holds
+     no audio and no third-party prose), with ledger rows.
+  3. The label tables lived in three places and had already drifted — the doc
+     said the 111th unlabelled file was `zk_3`; it is `add_5`. Now one source,
+     data/kawachen_labels.json, read by all three tools.
+- New gate `kawachen_index` (ctest) fails on any drift between the two views
+  and the manifest; skips cleanly (77) where the audio is absent.
+- Batteries unchanged: ewts 99.03%, sanskrit 12/12, crosscheck 11/12+3/3+0/9.
+
+## 2026-09-10 · The audio becomes a feature: two builds, and a C++ read-aloud core
+- Adam's ruling: this splits into TWO PRODUCTS from one codebase. A PRIVATE
+  build on his laptop with the Kawachen read-aloud features, and a PUBLIC
+  release without them. Implemented as `-DALL_AUDIO=ON/OFF`: with OFF the
+  audio code is not merely disabled, it is not compiled, so a public binary
+  cannot reach a recording even if one were placed beside it. Proven both
+  ways — the same battery passes in the private build and reports SKIP (77)
+  in the public one. Never fork the tree for a release; flip the flag.
+- **Measured what the audio can actually do, before designing anything on it.**
+  Bridging both sides through pron_engine (so no second phonology exists):
+  the bank covers **99.3% of the syllables in the 42,199-segment corpus**
+  (94.7% one recording + 4.5% base-plus-ending) and 98.6% of 40,000
+  dictionary headwords. The residue is almost all -bs finals and Sanskrit
+  letters.
+- Built `allcore::SpeakBank` — resolve a syllable to the recordings that say
+  it, with an honest tier on every hit: exact / exact-with-a-silent-letter-
+  dropped / two-recordings / APPROXIMATE. A miss is flagged, never
+  approximated further.
+- Exposed `allcore::pronSyllableReading()` — the same per-syllable function
+  `pronounce()` has always used — so the audio path is selected by the
+  authority that prints the phonetics and cannot drift from it.
+- New `speak_battery`: the C++ resolver reproduces the Python prototype
+  **exactly across all 11,939 syllables** of the corpus and dictionary, 0 tier
+  and 0 file disagreements. Founding rule 2 satisfied.
+- The battery caught a bug in my own oracle: the Python stripped a LEADING
+  `v` as wa-zur, but wa-zur is subjoined and cannot open an onset, so stray
+  Latin tokens in the corpus (`va`, `valid`) were being read aloud as Tibetan.
+  263 syllables affected. The C++ was right; the oracle was corrected.
+- The fixture gate then caught the new reference file as undocumented and
+  failed the press until it was written into docs/FIXTURES.md. Working as
+  designed.
+- **The honest constraint, stated up front:** these are isolated syllables of
+  0.29-0.65s. Playing them in sequence is syllable-accurate reading aloud in a
+  real human voice — which is exactly how Tibetan is taught (sbyor klog) — but
+  it is NOT a native speaker reading a sentence, and no surface may imply it
+  is. Ideas that need natural prosody are dead on arrival.
+- Read Kawachen's own English documentation of their iPhone app
+  (kawachen.org/app/tibetanreader_en.html): four screens — Alphabet builder,
+  Syllable display, History roster with replay, and a listen-and-identify
+  Quiz. They document five limitations, and our engines already beat one of
+  them: they cannot do the zla ba -> "da wa" particle sandhi; pron_engine can.
+- Suites now 116, all green.
+
+## 2026-09-10 · Xcode project for the iPhone app
+- There was no Xcode project at all — `ios/testflight/build.sh` hand-compiled
+  with swiftc and signed by hand, which can produce a simulator build but
+  cannot install on a real device (no embedded provisioning profile).
+- Generated `ios/TibetanTrainer.xcodeproj` from `tools/make_ios_project.py`:
+  generated rather than committed by hand, because a .pbxproj is merge-hostile
+  and Xcode rewrites it on any incidental click. Uses Xcode 16+ synchronized
+  folders, so adding a Swift file or an asset needs no project edit.
+- Signing left Automatic with an EMPTY team on purpose: Adam signs in once and
+  Xcode mints the certificate itself. No credential ever passes through here.
+- **Bundle id changed `org.asianlegacylibrary.DiamondDrills` ->
+  `...TibetanTrainer`** while it is still free to change. Nothing is registered
+  with Apple yet; after the first TestFlight upload it would be permanent.
+- Two blockers found, both Adam's to clear and both needing his Apple ID:
+  1. **Xcode's iOS 26.5 platform is not installed.** His phone runs 26.5; the
+     SDK is present but the platform support is not, and without it Xcode
+     offers NO destinations at all — not the phone, not even a simulator.
+     Xcode ▸ Settings ▸ Components. Several GB.
+  2. **No signing identity in the keychain** (`security find-identity` finds
+     0). Xcode ▸ Settings ▸ Accounts.
+- Isolated blocker 1 from our own code by compiling DiamondDrills.swift
+  directly against the simulator SDK: exit 0, 698 KB binary. The source and
+  the project are sound; the missing component is Xcode's.
+- His iPhone (བདེ་མཆོག་, iPhone 16 Pro Max) is already connected and paired.
+- Moved 14 loose icon PNGs out of the app folder to `ios/icon-sources/` — with
+  a synchronized folder they would have been bundled into the app as stray
+  resources. The asset catalog carries its own 1024 icon.
+- Fresh drill pack generated: 4,000 cloze drills + 1,000 trainer passages,
+  5.7 MB, 0 title-catalogue drills.
+- Setup written for Adam at `ios/SETUP.md`, including the free-vs-paid
+  distinction: a free Personal Team puts it on his phone today with a 7-day
+  rebuild cycle; TestFlight to students needs the $99/yr programme.
+
+## 2026-09-10 · Apple Developer Program confirmed paid — TestFlight unblocked
+- Adam is enrolled in the **paid Apple Developer Program** as an Individual,
+  from 10 Sep 2026, renewing 2027. This settles the morning's open question:
+  TestFlight to the team and to students is available, and a build on his own
+  phone lasts a year rather than the free tier's 7 days.
+- Team ID stored at `ios/DeveloperTeam.txt` (gitignored — not a secret, but the
+  repo is public) and written into the generated project, so it survives every
+  regeneration and the archive step has it.
+- Caught before it shipped: a blank team emitted `DEVELOPMENT_TEAM = ;`, which
+  is a .pbxproj parse error — the project handed over an hour earlier would not
+  have opened. Both the blank and populated paths are now verified to parse.
+- TWO THINGS FOR LEADERSHIP, neither blocking:
+  1. **Enrolled as an Individual, not an Organization.** TestFlight is
+     identical either way; what differs is the publisher name a tester sees —
+     Adam's, not Asian Legacy Library's. Moving to an Organization needs a
+     D-U-N-S number for ALL and gets more awkward the longer an app has been
+     published under a personal name. Worth putting to John Brady.
+  2. **The registered-device list resets 10 Sep 2027** and only then. Free now,
+     matters once a hundred students have come and gone.
+- Still blocking a device build: Xcode's iOS 26.5 platform component
+  (Xcode ▸ Settings ▸ Components) and signing in to Xcode. Both Adam's, both
+  needing his Apple ID.
+
+## 2026-09-10 · The iPhone app builds and runs through a real Xcode project
+- Adam installed Xcode's iOS 26.5 platform; his phone (བདེ་མཆོག་) is now an
+  available destination rather than an ineligible one.
+- **`xcodebuild ... BUILD SUCCEEDED`** — the generated project compiles and
+  links the app. Installed it on the simulator and verified both modes: the
+  Trainer shows a passage with six reveal layers, the Drills view shows the
+  whole segment with English in proportion, clean Tibetan options, no raw
+  source code and no parenthesis tell. The drill pack (5.7 MB) is bundled.
+- The device build now fails on exactly two things, both of which Xcode's
+  automatic signing resolves once an Apple ID is configured: the phone is not
+  yet registered to the account, and there is no provisioning profile for
+  org.asianlegacylibrary.TibetanTrainer.
+- Remaining: Xcode ▸ Settings ▸ Accounts. A certificate in the ACCOUNT is not
+  a certificate in this Mac's KEYCHAIN, and it is the keychain that signs.
+- Investigated `[EM:414]` in the corner of the Trainer, suspecting debug cruft
+  left in a shipping build. It is not: it is the course code and segment
+  number the passage came from — provenance, which this project keeps on
+  purpose. No change made.
+
+## 2026-09-10 · The app is on the phone, and one command keeps it there
+- Device build succeeded and the app is INSTALLED AND RUNNING on བདེ་མཆོག་.
+  The missing piece was `-allowProvisioningDeviceRegistration`:
+  `-allowProvisioningUpdates` lets xcodebuild talk to Apple but explicitly
+  refuses to register a NEW device without the second flag. With both, one
+  command minted the certificate (keychain 0 -> 1 valid identity), registered
+  the phone, created the profile, built and installed. The GUI hunt I sent
+  Adam on was unnecessary — the manual had the answer.
+- Answered "does a desktop Trainer change reach the phone?" by reading the
+  code rather than asserting: allcore is genuinely shared (drills.cpp,
+  tibdisplay) and reaches the phone THROUGH THE PACK; app/study_pane.inc (the
+  desktop Trainer UI, 209 lines) and DiamondDrills.swift (the iOS UI, 459
+  lines) are separate implementations and share nothing.
+- **Found a real hazard: nothing regenerated the pack automatically.** A fix
+  in allcore needed four manual steps to reach the phone, and a stale pack
+  was indistinguishable from a fresh one. Two fixes:
+  1. `tools/build_drill_pack` now stamps the pack with the commit and the UTC
+     moment it was built (`built_from`), so staleness is visible.
+  2. `tools/ios_deploy.sh` does all four steps in one command — rebuild
+     allcore, regenerate the pack, build the signed app, install and launch.
+     Verified end to end; the phone now reports what it is running.
+- Audit running on where desktop and iOS behaviour is implemented twice, since
+  silent divergence between two implementations is this project's
+  characteristic failure mode (it bit us this morning with the audio keying).
+
+## 2026-09-10 · Two honesty defects found on the phone, fixed and deployed
+- The divergence audit confirmed two live rule violations on iOS, both verified
+  by me against the shipped pack rather than taken on trust:
+  1. **253 of 1,000 trainer passages carried a verb the engine could NOT
+     attest, and the phone printed it at 21pt as the layer's answer** with a
+     caveat underneath. The desktop withholds it entirely (main.cpp:21498).
+     A guess in the answer position is still a guess. The phone now matches
+     the desktop: "No verb the dictionary can confirm in this clause."
+  2. **The Trainer layers describe a median 32% of the passage on screen** —
+     933 of 1,000 under 90%, 737 under half — with nothing saying so, while
+     the desktop already ships that disclosure for the same mismatch. The
+     pack now emits `clause_share` (computed in C++, not re-derived in Swift)
+     and the phone states it.
+- A third claimed defect — nested brackets mislabelled as his English — is
+  real code but has ZERO instances in the shipped pack. Latent, not live;
+  recorded, not fixed.
+- **The finding of the day, from Adam asking how one is meant to deduce the
+  answer: 72.2% of cloze drills can be solved by the case particle alone.**
+  Only 22.6% force a reader to engage the meaning. Distractors are drawn as
+  "marked chunks from other random segments" without matching the answer's
+  marker, so in three drills out of four exactly one option fits the slot
+  grammatically. Length is not a tell (22.9%/21.6% against 25% chance).
+  This explains his own report exactly — answering correctly while still not
+  knowing what the chunk meant. His confusion was a symptom of a design flaw,
+  not of him missing something.
+- app_selftest timed out under -j4 but passes in 270s run alone. Fragile
+  rather than broken; the default timeout is too tight for it.
+
+## 2026-09-10 · The Quick Access strip, made to work as it claimed
+- Adam: "I should be able to right-click a pin and unpin it." Two findings.
+  1. Pinned buttons had NO context menu — unpinning meant a trip to
+     Preferences for a thing you are looking straight at. They now carry
+     Unpin, Move left and Move right (order was previously unchangeable once
+     pinned). popup() not exec(), so this stays off the modal census.
+  2. **The Preferences page has always said "right-click a ribbon button to
+     pin it" — and that was never wired.** No ribbon button had a context
+     menu anywhere in the app; the star menu was the only way in. Adam found
+     it by trying the documented gesture. RibbonProxy now offers Pin/Unpin.
+- The bridge that was missing: pins persist as MENU PATHS ("Group>Pane>Action")
+  because a pane's button pointer does not survive a restart, while a ribbon
+  button proxies a pane's button, not a QAction. `qatPathForLabel()` finds the
+  matching menu entry by label; when there is none it says "cannot pin this
+  one" rather than writing a pin that would resolve to nothing next launch.
+- Dead pins ("not in this build") are now removable in place. They are greyed
+  by STYLE rather than setEnabled(false) — a disabled widget receives no mouse
+  events, so a context menu on it would never have opened, which is precisely
+  the pin you most want to remove.
+- Preferences text corrected to describe what the app now actually does.
+- Selftest green (270s).
+- Menu-bar regrouping under design: the bar carries NINETEEN top-level menus —
+  twelve hand-written plus SEVEN generated one-per-pane-group at main.cpp:41789,
+  which duplicate a ribbon and a tab bar that already do that job. macOS
+  expects 6-9. Constraint found before touching it: saved pins resolve by
+  walking the menu bar three levels deep, so any restructuring that changes
+  depth or a top-level name breaks every saved pin.
