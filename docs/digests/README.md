@@ -18,9 +18,15 @@ Rules for a digest:
 
 ## Distribution (Adam, 2026-09-08)
 
-Each digest goes out by email from Adam's Gmail with three attachments —
-the `.md`, a `.txt` (pandoc plain) and a `.docx` (pandoc) — so every
-reader can open it in whatever they use. Recipients: Geshe Michael Roach
+Each digest goes out by email from Adam's Gmail with **one attachment,
+the `.docx`** (Adam, 2026-09-10 — the .md and .txt are working files and
+are not sent). Because it is the only file a recipient ever sees, it is
+named for a human rather than for this directory:
+
+    Translation Tool - Daily Digest - YYYYMMDD.docx
+
+`tools/build_digest.sh` emits that name; the `.md`, `.txt` and `.html`
+keep the ISO `YYYY-MM-DD` name so they sort by date here. Recipients: Geshe Michael Roach
 <geshemichael@gmail.com>, John Brady <john.brady@asianlegacylibrary.org>,
 Joel Crawford <joel.crawford@asianlegacylibrary.org>. Subject line:
 `Diamond Cutter Translation Tool — daily digest, <weekday> <D Month YYYY>`.
