@@ -21790,6 +21790,14 @@ public:
         refreshStats();
     }
 
+    // the digest driver's way in: put a real cloze on the bench
+    void demoForShot() {
+        resize(1400, 900);
+        script_->setChecked(true);
+        mode_->setCurrentIndex(1);
+        for (int i = 0; i < 12 && !cloze_; ++i) newDrill();
+    }
+
     int selfTest(QStringList& log) {
         int fails = 0;
         {   // Adam, 2026-09-09, on the Drills pane.
@@ -46537,6 +46545,13 @@ int main(int argc, char** argv) {
                 pd.openPage(4); settle(300); save(pd.grab(), "prefs-compare");
                 pd.openPage(12); settle(300); save(pd.grab(), "prefs-features");   // 2026-09-09
                 pd.hide();
+            }
+            if (extra.contains("drills")) {
+                // a real drill on the bench, so the digest shows the tool in
+                // use rather than an empty pane (2026-09-10)
+                drillsPane->demoForShot();
+                settle(400);
+                save(drillsPane->grab(), "drills-cloze");
             }
             if (extra.contains("sanskrit")) {
                 // Adam asked for the workbench in use, on the first verse of
