@@ -41,8 +41,12 @@ void field(std::string& o, const char* k, const std::string& v, bool comma = tru
     esc(o, v);
     o += comma ? "\"," : "\"";
 }
+// Markup is stripped before conversion, on both the segment and the options.
+// Adam, 2026-09-09: an option beginning "(" against a segment ending ")" gives
+// the answer away before a word of Tibetan is read. It is a tell, and markup is
+// not part of the answer.
 std::string tib(const std::string& acip) {
-    return allcore::acipToTibetanPlain(acip);
+    return allcore::acipToTibetanPlain(allcore::acipStripMarkup(acip));
 }
 // A title line still gets badged on the phone, for the rare one that is a
 // legitimate heading rather than catalogue.
@@ -118,6 +122,62 @@ int main(int argc, char** argv) {
         out += "]}";
         ++n;
     }
+    out += "],\"trainer\":[";
+
+    // The Trainer: a passage to read yourself, then six layers revealed one at
+    // a time — chunks, particle roles, reading order, vocabulary, the answer
+    // key, and the full parse. makeOrder already computes all of it, so the
+    // phone reveals what the Mac worked out. Adam, 2026-09-09: the iOS app is
+    // "a Tibetan Translation Trainer that has both the drills functionality
+    // and the Trainer tool".
+    int t = 0;
+    for (int i = 0; i < want * 8 && t < want / 4; ++i) {
+        auto o = f.makeOrder(rng);
+        if (!o) continue;
+        if (o->chunks.size() < 2) continue;
+        if (t) out += ",";
+        out += "{";
+        field(out, "tibetan", tib(o->segment.acip));
+        field(out, "english", o->segment.english);
+        field(out, "course", o->segment.course);
+        out += "\"seq\":" + std::to_string(o->segment.seq) + ",";
+        // layer 1 — the chunks, in their true order
+        out += "\"chunks\":[";
+        for (size_t k = 0; k < o->chunks.size(); ++k) {
+            if (k) out += ",";
+            out += "\""; esc(out, tib(o->chunks[k])); out += "\"";
+        }
+        out += "],";
+        // layer 2 — what each chunk is doing
+        out += "\"roles\":[";
+        for (size_t k = 0; k < o->chunks.size(); ++k) {
+            if (k) out += ",";
+            out += "\"";
+            esc(out, k < o->markers.size() ? o->markers[k] : std::string());
+            out += "\"";
+        }
+        out += "],";
+        // layer 3 — the reading order, with the guidance for each step
+        out += "\"plan\":[";
+        for (size_t k = 0; k < o->plan.size(); ++k) {
+            if (k) out += ",";
+            const auto& st = o->plan[k];
+            out += "{\"chunk\":" + std::to_string(st.chunk) +
+                   ",\"order\":" + std::to_string(st.order) + ",";
+            field(out, "how", st.how ? st.how : "", false);
+            out += "}";
+        }
+        out += "],";
+        // the verb, which frames the clause — layer 6's anchor
+        out += "{";
+        out.pop_back();
+        field(out, "verb", o->verb.wylie);
+        field(out, "verb_evidence", o->verb.evidence);
+        out += std::string("\"verb_confident\":") +
+               (o->verb.confident ? "true" : "false");
+        out += "}";
+        ++t;
+    }
     out += "]}";
 
     FILE* fp = std::fopen(argv[2], "wb");
@@ -127,6 +187,7 @@ int main(int argc, char** argv) {
     std::printf("wrote %s: %d cloze drills, %.2f MB (%zu bytes each)\n",
                 argv[2], n, out.size() / 1048576.0,
                 n ? out.size() / (size_t)n : 0);
+    std::printf("  trainer passages: %d\n", t);
     std::printf("  title-catalogue drills in the pack: %d (the draw refuses "
                 "them; this should read 0)\n", titles);
     return n > 0 ? 0 : 1;

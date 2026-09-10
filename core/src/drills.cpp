@@ -92,7 +92,25 @@ bool DrillFactory::isDrillable(const CorpusSegment& seg) {
         }
         return n;
     };
-    const size_t wa = words(seg.acip), we = words(seg.english);
+    //     The ratio is measured on the English that actually PARALLELS the
+    //     Tibetan. Material in [square brackets] is supplied by the translator
+    //     — a debate restatement of the previous move, a gloss, a page number —
+    //     and has no Tibetan in this segment at all. 3,045 segments (7.2%)
+    //     carry some. Counting it makes an ordinary segment look lopsided:
+    //     Adam's C15 example measures 4.3 English words per ACIP word with the
+    //     brackets and 1.4 without, and 1.4 is the corpus median exactly. So
+    //     the brackets are stripped before the ratio is taken, and a good
+    //     segment is not refused for carrying honest supplied context.
+    std::string parallel;
+    {
+        int depth = 0;
+        for (char ch : seg.english) {
+            if (ch == '[') { ++depth; parallel += ' '; continue; }
+            if (ch == ']') { if (depth) --depth; parallel += ' '; continue; }
+            if (!depth) parallel += ch;
+        }
+    }
+    const size_t wa = words(seg.acip), we = words(parallel);
     if (wa == 0 || we == 0) return false;
     if (we > wa * 6) return false;
     return true;
