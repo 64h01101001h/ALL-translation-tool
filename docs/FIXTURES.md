@@ -56,6 +56,7 @@ root.
 | `build/weird_top.tsv` | weird_battery | `python3 tools/weirdness_rank.py` |
 | `build/botok_syls_reference.tsv` | botok_smoke | `python3 tools/build_botok_reference.py build/hgm_spine_v27_2.db build/botok_syls_reference.tsv` |
 | `build/botok_tok_scenarios.txt`, `build/botok_tok_corpus.tsv` | botok_tok_smoke | `python3 tools/build_botok_tok_reference.py build/botok_tok_scenarios.txt build/botok_tok_corpus.tsv` |
+| `build/speak_reference.tsv` | speak_battery | `python3 tools/dump_speak_reference.py` — the Python resolver's answer for all 11,940 distinct syllables in the corpus and dictionary; the C++ port in `allcore::SpeakBank` must reproduce it exactly. Needs the Kawachen audio present (in-house asset, gitignored), and the suite SKIPs without it |
 | `build/ocr_ref` | ocr_smoke | `python3 tools/build_ocr_reference.py <path-to-tibetan-ocr-app-clone>` |
 
 The four **no generator in this repo** rows are the honest state of

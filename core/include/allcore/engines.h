@@ -60,6 +60,13 @@ struct PronSegWord {
 };
 std::vector<PronSegWord> pronounceSegmented(const std::string& wylie);
 
+// The reading of ONE syllable in isolation — what pronounce() computes per
+// syllable before word-level context applies. The Kawachen audio bank is keyed
+// on this, so a recording is selected by the same authority that prints the
+// phonetics, never by a second implementation.
+std::string pronSyllableReading(const std::string& syl);
+
+
 // THL Simplified Phonetic Transcription (Germano & Tournadre 2003,
 // THL) — implemented rule-for-rule from the captured standard
 // (docs/research/THL/language_tools.md §2); proven by
