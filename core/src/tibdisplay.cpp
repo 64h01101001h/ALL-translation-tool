@@ -26,6 +26,17 @@ std::string fixForDisplay(const std::string& acip) {
     auto isLo = [](char c) { return c >= 'a' && c <= 'z'; };
     std::string o;
     for (size_t i = 0; i < acip.size();) {
+        // G-Y and GA-Y are the same ACIP disambiguator for ག་ཡ, the second
+        // spelling the inherent vowel out. Established from the corpus rather
+        // than guessed (2026-09-10): the banked wylie reads "lag ga-yon zhags
+        // pas" (left hand, གཡོན), "ga-yas pas gzungs thag" (right, གཡས),
+        // "'thor ga-yab" (fan, གཡབ) and "rlung ga-yos" (the wind stirred,
+        // གཡོས) — four independent glosses, all the g.y form. 382 segments
+        // carry it. EWTS writes both g.y.
+        if (acip.compare(i, 4, "GA-Y") == 0 &&
+            (i == 0 || !(isUp(acip[i - 1]) || isLo(acip[i - 1])))) {
+            o += "G.Y"; i += 4; continue;
+        }
         if (acip.compare(i, 3, "G-Y") == 0 &&
             (i == 0 || !(isUp(acip[i - 1]) || isLo(acip[i - 1])))) {
             o += "G.Y"; i += 3; continue;
@@ -71,6 +82,24 @@ std::vector<DisplayPiece> acipDisplayPieces(const std::string& acip) {
         size_t e = cur.find_last_not_of(' ');
         if (b == std::string::npos) { cur.clear(); return; }
         const std::string run = cur.substr(b, e - b + 1);
+        // A run that is nothing but shads. acip_to_ewts strips leading and
+        // trailing commas before it does anything else, so a lone "," reaches
+        // wylieToUnicode as the empty string and is refused — 235 of the 1,051
+        // remaining flags in the drill pack. Inside a longer run the same shad
+        // converts perfectly; it fails only alone, which happens wherever a
+        // blank or a markup boundary cuts a run down to punctuation.
+        {
+            bool onlyShad = !run.empty();
+            for (char ch : run)
+                if (ch != ',' && ch != ' ') { onlyShad = false; break; }
+            if (onlyShad) {
+                std::string sh;
+                for (char ch : run) sh += (ch == ',') ? "།" : " ";
+                out.push_back({DisplayPiece::Script, sh});
+                cur.clear();
+                return;
+            }
+        }
         auto [u, ok] = wylieToUnicode(acipToEwts(fixForDisplay(run)));
         if (ok && !u.empty())
             out.push_back({DisplayPiece::Script, u});
