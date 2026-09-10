@@ -111,6 +111,44 @@ int main(int argc, char** argv) {
         CHECK(made >= 3, "adaptive factory produces valid drills");
     }
 
+    // ---- a drill only ever comes from teaching material -------------------
+    // Before this gate, the adaptive draw preferred SHORT segments and the
+    // title catalogue is the shortest thing in the corpus, so 20.8-25.0% of
+    // adaptive draws were title lines and TITLS was the single most-drawn
+    // course of all 75. A further 254 segments (0.60%) hold English where the
+    // Tibetan should be and rendered as plausible-looking nonsense.
+    // Measured after the fix: zero of 400 on both paths (2026-09-09).
+    {
+        for (int adaptive = 0; adaptive < 2; ++adaptive) {
+            allcore::Progress prog(":memory:");
+            allcore::DrillFactory f(spine, index, adaptive ? &prog : nullptr);
+            f.setAdaptive(adaptive != 0);
+            std::mt19937 rng(20260909);
+            int n = 0, cat = 0, eng = 0;
+            for (int i = 0; i < 300 && n < 120; ++i) {
+                auto c = f.makeCloze(rng);
+                if (!c) continue;
+                ++n;
+                std::string u = c->segment.course;
+                for (auto& ch : u) ch = (char)std::toupper((unsigned char)ch);
+                if (u.rfind("TITL", 0) == 0 || u == "AUTH" || u == "SUBJ") ++cat;
+                int lo = 0, up = 0;
+                for (unsigned char ch : c->segment.acip) {
+                    if (ch >= 'a' && ch <= 'z') ++lo;
+                    else if (ch >= 'A' && ch <= 'Z') ++up;
+                }
+                if (lo > up) ++eng;
+            }
+            CHECK(n > 40, "drills: the draw still finds material to drill");
+            CHECK(cat == 0,
+                  adaptive ? "adaptive draw: no title-catalogue segments"
+                           : "uniform draw: no title-catalogue segments");
+            CHECK(eng == 0,
+                  adaptive ? "adaptive draw: no English in the Tibetan field"
+                           : "uniform draw: no English in the Tibetan field");
+        }
+    }
+
     std::printf("%s (%d failures)\n",
                 failures ? "DRILLS SMOKE FAILED" : "DRILLS SMOKE OK", failures);
     return failures ? 1 : 0;
