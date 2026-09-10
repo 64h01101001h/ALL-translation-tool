@@ -21727,8 +21727,26 @@ public:
         mode_->addItems({"Chunk order", "Cloze (fill the blank)",
                          "Particle choice", "Parallel reading",
                          "Vocabulary review (SRS)",
-                         "Translate & compare"});
+                         "Translate & compare",
+                         "Script \u2014 his own cards (start here)"});
         row->addWidget(mode_);
+        scriptCourse_ = new QComboBox;
+        scriptCourse_->setToolTip(
+            "Which course's Language Study Guide to drill. Every card is a "
+            "word Geshe Michael Roach put on that course's card, with his own "
+            "pronunciation and his own English.");
+        scriptCourse_->addItem("all courses", QString());
+        for (const auto& c : spine_.scriptCardCourses())
+            scriptCourse_->addItem(QString::fromStdString(c),
+                                   QString::fromStdString(c));
+        scriptCourse_->setVisible(false);
+        row->addWidget(scriptCourse_);
+        connect(scriptCourse_, &QComboBox::currentIndexChanged, [this] {
+            if (mode_->currentIndex() == 6) newDrill();
+        });
+        connect(mode_, &QComboBox::currentIndexChanged, [this](int m) {
+            scriptCourse_->setVisible(m == 6);
+        });
         auto* newBtn = new QPushButton("New drill");
         row->addWidget(newBtn);
         script_ = new QCheckBox("Tibetan script");
@@ -21791,11 +21809,14 @@ public:
     }
 
     // the digest driver's way in: put a real cloze on the bench
-    void demoForShot() {
+    void demoForShot(int mode = 1) {
         resize(1400, 900);
         script_->setChecked(true);
-        mode_->setCurrentIndex(1);
-        for (int i = 0; i < 12 && !cloze_; ++i) newDrill();
+        mode_->setCurrentIndex(mode);
+        for (int i = 0; i < 12; ++i) {
+            newDrill();
+            if (mode == 1 ? cloze_.has_value() : card_.has_value()) break;
+        }
     }
 
     int selfTest(QStringList& log) {
@@ -21850,6 +21871,79 @@ public:
                           "chunk order: the reveal says its English covers the "
                           "whole segment, not the clause you reordered");
                 }
+                mode_->setCurrentIndex(wasMode);
+                newDrill();
+            }
+            {   // Zero to script — the beginner's rung (Learn plan build 1).
+                // The guarantee that matters here is EXCLUSION: a beginner
+                // cannot evaluate a tier badge, so nothing generated may reach
+                // one of these cards at all.
+                const int wasMode = mode_->currentIndex();
+                mode_->setCurrentIndex(6);
+                newDrill();
+                check(card_.has_value(),
+                      "script cards: a beginner drill is available at all "
+                      "(1,308 cards over 17 of his course guides)");
+                if (card_) {
+                    check(card_->entry.tibetan_source.empty(),
+                          "script cards: the Tibetan is source-attested \u2014 "
+                          "never one of the 79,316 generated forms");
+                    check(card_->entry.pronunciation_card_attested,
+                          "script cards: the pronunciation is his own, from a "
+                          "course Language Study Guide");
+                    check(card_->options.size() == 4 &&
+                              card_->correct >= 0 && card_->correct < 4 &&
+                              card_->options[card_->correct] ==
+                                  card_->entry.pronunciation,
+                          "script cards: four options and the key is among "
+                          "them");
+                    std::set<std::string> uniq(card_->options.begin(),
+                                               card_->options.end());
+                    check(uniq.size() == 4,
+                          "script cards: the distractors are distinct, and each "
+                          "is a real reading from a real card");
+                }
+                // and the whole pool, not just this draw
+                int gen = 0, unatt = 0, pool = 0;
+                for (const auto& e : spine_.scriptCards()) {
+                    ++pool;
+                    if (!e.tibetan_source.empty()) ++gen;
+                    if (!e.pronunciation_card_attested) ++unatt;
+                }
+                // A quarter of the glossed beginner cards (207 of 833) carry
+                // an AUTO-ALIGNED gloss. A beginner is the last reader who
+                // could tell that from a curated one, so the card must never
+                // print it under "GMR:". House rule 1, on the newest surface.
+                {
+                    int prov = 0;
+                    allcore::Entry probe;
+                    for (const auto& e : spine_.scriptCards())
+                        if (e.tier == "auto-aligned" && !e.hgm_gloss.empty()) {
+                            ++prov;
+                            if (probe.wylie.empty()) probe = e;
+                        }
+                    if (!probe.wylie.empty()) {
+                        ScriptCard sc;
+                        sc.entry = probe;
+                        sc.options = {probe.pronunciation, "x", "y", "z"};
+                        sc.correct = 0;
+                        auto keep = card_;
+                        card_ = sc;
+                        checkScriptCard();
+                        const QString r = result_->toPlainText();
+                        card_ = keep;
+                        check(r.contains("PROVISIONAL") && !r.contains("GMR:"),
+                              qPrintable(QString("script cards: an auto-aligned "
+                                                 "gloss is labelled PROVISIONAL, "
+                                                 "never printed as his own (%1 "
+                                                 "of the cards are)").arg(prov)));
+                    }
+                }
+                check(pool > 1000 && gen == 0 && unatt == 0,
+                      qPrintable(QString("script cards: nothing generated "
+                                         "reaches the beginner rung (%1 cards, "
+                                         "%2 generated, %3 unattested)")
+                                     .arg(pool).arg(gen).arg(unatt)));
                 mode_->setCurrentIndex(wasMode);
                 newDrill();
             }
@@ -22190,6 +22284,35 @@ private:
             if (!vocab_.empty())
                 addRadios({"I knew it", "I did not know it"}, false);
         }
+        if (m == 6) {
+            card_.reset();
+            const QString c = scriptCourse_ ? scriptCourse_->currentData().toString()
+                                            : QString();
+            auto pool = spine_.scriptCards(c.toStdString());
+            if (pool.size() >= 4) {
+                ScriptCard sc;
+                sc.entry = pool[rng_() % pool.size()];
+                // the three distractors are REAL pronunciations from real
+                // cards, so a wrong answer is a plausible reading and not a
+                // machine's invention
+                std::vector<std::string> opts{sc.entry.pronunciation};
+                for (int t = 0; t < 60 && opts.size() < 4; ++t) {
+                    const auto& o = pool[rng_() % pool.size()];
+                    if (o.pronunciation.empty()) continue;
+                    bool dup = false;
+                    for (const auto& x : opts) dup |= (x == o.pronunciation);
+                    if (!dup) opts.push_back(o.pronunciation);
+                }
+                if (opts.size() == 4) {
+                    std::shuffle(opts.begin(), opts.end(), rng_);
+                    for (size_t k = 0; k < opts.size(); ++k)
+                        if (opts[k] == sc.entry.pronunciation) sc.correct = (int)k;
+                    sc.options = opts;
+                    card_ = std::move(sc);
+                }
+            }
+            if (card_) addRadios(card_->options, false);
+        }
         renderQuestion();
         refreshStats();
     }
@@ -22443,10 +22566,77 @@ private:
                      "<div style='font-size:" + QString::number(px(15)) + "px;color:#777'>" +
                      QString::fromStdString(vocab_).toHtmlEscaped() + "</div>";
             }
+        } else if (m == 6) {
+            if (!card_) {
+                h += "<div style='color:" +
+                     QString(ux::darkChrome() ? ux::chromeMuted() : ux::kMuted) +
+                     "'>No cards for that course. Every card here is one Geshe "
+                     "Michael Roach put on a Language Study Guide, so a course "
+                     "without a guide has none \u2014 nothing is invented to "
+                     "fill the gap.</div>";
+            } else {
+                h += "<div style='color:#555'>How is this read aloud? Every "
+                     "card here is Geshe Michael Roach's own \u2014 his "
+                     "Tibetan, his pronunciation, his English.</div><hr>";
+                h += "<div style='font-size:" + QString::number(px(46)) +
+                     "px;padding:10px 0'>" +
+                     QString::fromStdString(card_->entry.tibetan).toHtmlEscaped() +
+                     "</div>";
+                h += "<div style='color:" +
+                     QString(ux::darkChrome() ? ux::chromeMuted() : ux::kMuted) +
+                     ";font-size:" + QString::number(px(14)) + "px'>" +
+                     QString::fromStdString(card_->entry.wylie).toHtmlEscaped() +
+                     "</div>";
+            }
         } else {
             h = "<i>no drill available — press New drill</i>";
         }
         question_->setHtml(h);
+    }
+
+    void checkScriptCard() {
+        if (!card_) return;
+        const int p = pickedRadio();
+        const bool right = (p == card_->correct);
+        const QString act = ux::darkChrome() ? ux::chromeAct() : QString(ux::kAct);
+        const QString warn = ux::darkChrome() ? ux::chromeMachine()
+                                              : QString(ux::kMachine);
+        QString h = right ? "<b style='color:" + act + "'>Correct.</b>"
+                          : "<b style='color:" + warn + "'>Not yet \u2014 he "
+                            "reads it <b>" +
+                                QString::fromStdString(card_->entry.pronunciation)
+                                    .toHtmlEscaped() + "</b>.</b>";
+        h += "<div style='font-size:" + QString::number(px(17)) +
+             "px;padding-top:6px'>" +
+             QString::fromStdString(card_->entry.tibetan).toHtmlEscaped() +
+             "  \u00b7  " +
+             QString::fromStdString(card_->entry.wylie).toHtmlEscaped() +
+             "  \u00b7  " +
+             QString::fromStdString(card_->entry.pronunciation).toHtmlEscaped() +
+             "</div>";
+        // The gloss travels with its tier or it does not travel. A beginner is
+        // the LAST reader who can tell a curated equivalent from an
+        // auto-aligned one, so the card must not print "GMR:" over machine
+        // output — house rule 1, and the constitution's G2 census caught this
+        // the moment it was written (2026-09-10).
+        if (!card_->entry.hgm_gloss.empty()) {
+            QStringList g;
+            for (const auto& x : card_->entry.hgm_gloss)
+                g << QString::fromStdString(x).toHtmlEscaped();
+            const QString joined = g.mid(0, 4).join(" \u00b7 ");
+            const bool provisional = card_->entry.tier == "auto-aligned";
+            h += "<div style='padding-top:4px'>" +
+                 (provisional
+                      ? QString("auto-aligned <span style='color:") + warn +
+                            ";font-size:11px'>[PROVISIONAL]</span>, not Geshe "
+                            "Michael Roach's own English: " + joined
+                      : QString("<b>GMR:</b> ") + joined) +
+                 "</div>";
+        }
+        if (progress_)
+            progress_->recordDrill("script", card_->entry.wylie, right,
+                                   (long long)time(nullptr));
+        result_->setHtml(h);
     }
 
     int pickedRadio() const {
@@ -22458,6 +22648,7 @@ private:
     void checkDrill() {
         QString h;
         const int m = mode_->currentIndex();
+        if (m == 6) { checkScriptCard(); return; }
         if (m == 0 && order_) {
             // parse letters like "C A B"
             std::vector<int> given;
@@ -22694,6 +22885,18 @@ private:
     std::string readCourse_;
     size_t readPos_ = 0;
     QComboBox* mode_ = nullptr;
+    QComboBox* scriptCourse_ = nullptr;
+    // Zero to script — the beginner's rung. Every field on the card is Geshe
+    // Michael Roach's own: source-attested Tibetan, his pronunciation from his
+    // own course Language Study Guides, his gloss. 1,308 cards over 17 courses.
+    // Generated material is EXCLUDED rather than labelled, because a beginner
+    // cannot evaluate a tier badge (Learn plan, build order 1, 2026-09-10).
+    struct ScriptCard {
+        allcore::Entry entry;
+        std::vector<std::string> options;   // four pronunciations, all attested
+        int correct = 0;
+    };
+    std::optional<ScriptCard> card_;
     QComboBox* course_ = nullptr;
     QCheckBox* script_ = nullptr;
     QCheckBox* adaptive_ = nullptr;
@@ -46549,9 +46752,12 @@ int main(int argc, char** argv) {
             if (extra.contains("drills")) {
                 // a real drill on the bench, so the digest shows the tool in
                 // use rather than an empty pane (2026-09-10)
-                drillsPane->demoForShot();
+                drillsPane->demoForShot(1);
                 settle(400);
                 save(drillsPane->grab(), "drills-cloze");
+                drillsPane->demoForShot(6);
+                settle(400);
+                save(drillsPane->grab(), "drills-script");
             }
             if (extra.contains("sanskrit")) {
                 // Adam asked for the workbench in use, on the first verse of

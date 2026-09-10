@@ -203,6 +203,61 @@ std::vector<Entry> Spine::sampleEntries(int stride, int cap) const {
     }
 }
 
+// The beginner's rung. Everything on one of these cards is Geshe Michael
+// Roach's own: the Tibetan is source-attested (tibetan_source empty — never one
+// of the 79,316 generated-ewts forms), the pronunciation comes from his own
+// course Language Study Guides, and the gloss is his. 1,308 entries qualify,
+// spread across C01–C18, so a student can drill the card for the course they
+// are actually sitting in.
+//
+// A beginner cannot evaluate a tier badge, so generated material is EXCLUDED
+// here rather than labelled. That is the one place in the tool where exclusion
+// beats disclosure, and it is because of who is reading (2026-09-10).
+std::vector<Entry> Spine::scriptCards(const std::string& course, int cap) const {
+    try {
+        std::vector<Entry> out;
+        std::string q = std::string("SELECT ") + kEntryCols +
+                        " FROM entries WHERE tibetan_source IS NULL"
+                        " AND tibetan IS NOT NULL AND tibetan != ''"
+                        " AND pronunciation IS NOT NULL AND pronunciation != ''"
+                        " AND pronunciation_source LIKE 'GMR card%'";
+        if (!course.empty()) q += " AND pronunciation_source LIKE ?";
+        q += " LIMIT ?";
+        Stmt s(db_, q.c_str());
+        int a = 1;
+        std::string like;
+        if (!course.empty()) {
+            like = "GMR card (" + course + " %";
+            sqlite3_bind_text(s.p, a++, like.c_str(), -1, SQLITE_TRANSIENT);
+        }
+        sqlite3_bind_int(s.p, a, cap > 0 ? cap : 5000);
+        while (sqlite3_step(s.p) == SQLITE_ROW) out.push_back(entryFromRow(s.p));
+        return out;
+    } catch (const std::exception& e) {
+        fprintf(stderr, "[spine] scriptCards suppressed: %s\n", e.what());
+        return {};
+    }
+}
+
+// Which courses actually have cards, so the picker offers only real choices.
+std::vector<std::string> Spine::scriptCardCourses() const {
+    try {
+        std::vector<std::string> out;
+        Stmt s(db_,
+               "SELECT DISTINCT replace(replace(pronunciation_source,"
+               "'GMR card (',''),' Language Study Guide)','') AS c "
+               "FROM entries WHERE pronunciation_source LIKE 'GMR card%' "
+               "AND tibetan_source IS NULL ORDER BY c");
+        while (sqlite3_step(s.p) == SQLITE_ROW)
+            if (const unsigned char* t = sqlite3_column_text(s.p, 0))
+                out.emplace_back(reinterpret_cast<const char*>(t));
+        return out;
+    } catch (const std::exception& e) {
+        fprintf(stderr, "[spine] scriptCardCourses suppressed: %s\n", e.what());
+        return {};
+    }
+}
+
 std::vector<Entry> Spine::lookup(const std::string& headword) const {
     try {
     std::vector<Entry> out;
