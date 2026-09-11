@@ -1491,10 +1491,11 @@ implementation is sidelined HERE from this date. What this means:
       **Approvals/money:** git filter-repo (~20GB; disk at 3.4GB
       free — operational risk) · API credits (glossary stalled at
       1,395/93,630) · ElevenLabs pilot <$20 · MITRA 18GB download ·
-      API key rotation (pasted in chat twice) · **get an Apple
-      Developer ID** (2026-08-14 — unlocks notarized builds;
-      $99/yr, developer.apple.com/programs; enroll as ALL if
-      possible) · Windows/Linux build machines or CI when wanted.
+      API key rotation (pasted in chat twice) · ~~get an Apple
+      Developer ID~~ (2026-08-14 — **DONE**: the programme is paid and
+      active, the app is signed and running on Adam's phone as of
+      2026-09-10. Notarisation still needs an ALL_NOTARY profile set up
+      on the press machine, which is a separate, smaller task) · Windows/Linux build machines or CI when wanted.
       **Rulings:** catalog-titles tier · prenasal queue (225
       pending; Approval pane bulk-approve ready) · Sungbum workbook
       (963 yellow cells) · Sanskrit render-sheet eyeball rows ·
@@ -2305,8 +2306,12 @@ implementation is sidelined HERE from this date. What this means:
       SOLR index host NXDOMAIN). Remaining: WTS Munich, Dharmamitra
       (optional labeled AI aid at most), RY/Waldo/Valby (permission
       via Tsadra first).
-- [ ] Red-flag list (no license / restrictive): see survey doc — never
-      ship any of it without resolution.
+- [—] Red-flag list (no license / restrictive): see survey doc — never
+      ship any of it without resolution. **Not a task: a standing fence.**
+      Marked [—] rather than [ ] so it stops appearing on the punchlist as
+      work to be done — ticking it would read as "the prohibition is
+      finished", which is the opposite of what it means. Filed the same
+      way at line 1648 under POLICY FENCES.
 - [ ] Survey's negative findings = our opportunities: no Tibetan
       verse-meter tool, no honorific-register data (beyond Monlam
       markings), no sum-cu-pa rule engines exist anywhere — our verse
@@ -3054,7 +3059,16 @@ SQA doc explicitly scopes out.
       insurance against re-litigating settled decisions, and the first
       thing a second engineer reads.
 
-- [ ] **No data-migration / schema-versioning plan.** The spine is
+- [x] **No data-migration / schema-versioning plan.** DONE 2026-09-11:
+      progress.db — the only file holding work a user cannot get back —
+      now carries `PRAGMA user_version` and a numbered migration list.
+      An older record upgrades in place with every existing row intact;
+      a record from a NEWER release is refused with a message rather
+      than written to, because an older build cannot know what a newer
+      one's columns mean. Eight gates in `core/tests/progress_smoke.cpp`,
+      including that a deck written in the original format keeps its ease
+      factors and counts across the upgrade. The user-facing promise is
+      `docs/DATA_MIGRATION.md`. (was: The spine is
       v27.2 and the app "should IMPORT a release, never own the data"
       — but what happens to a user's local work, saved searches,
       glossaries and roster when v28 lands? Write the upgrade path
@@ -3135,8 +3149,13 @@ by pane; every row gets SHIP / HIDE / FIX / LABEL).
       `releases/latest/download/` (plan §3a); `tools/publish_data_release.sh`
 - [ ] In-app update check + desktop notification + install through the
       existing Import-data-release pipeline (plan §3b; selftest-pinned)
-- [ ] Data-migration statement: weekly dictionary updates never touch
-      glossaries / saved searches / roster / progress.db (plan §3c)
+- [x] Data-migration statement — DONE 2026-09-11: `docs/DATA_MIGRATION.md`.
+      States what an update does and does not touch, names where each kind
+      of work lives, and is explicit about the four things it does NOT
+      promise (the dictionary's contents do change; nothing here is a
+      backup; settings can still be reset; downgrading is unsupported once
+      a newer record format is written). A guarantee with an unstated edge
+      is worse than none.
 - [ ] Defect-intake address in About + diagnostic report
 - [ ] HIDE list behind one `kReleaseHidden`; feature guide regenerated
 - [ ] FIX list (filled from the walk) — closed by day 10

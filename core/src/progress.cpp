@@ -72,40 +72,86 @@ Progress::Progress(const std::string& db_path) {
          "  peeks INTEGER NOT NULL DEFAULT 0,"
          "  last_ts INTEGER NOT NULL);"
          "CREATE INDEX IF NOT EXISTS vocab_due ON vocab(due);");
-    // "Known here / known anywhere" (docs/LEARN_TAB_VISION.md). A word is not
-    // known because it was recognised where it was met — that is the weakest
-    // form of knowing, and the one a bare flashcard measures. So the deck
-    // remembers WHERE a word was first met, and whether it has since been
-    // recognised somewhere else.
+    // ---- schema version, and the promise it protects ---------------------
+    //
+    // progress.db is the ONLY file in the product that holds work the user
+    // cannot get back: which words they have met, what they got right, what
+    // they have read. A dictionary release can be re-downloaded; a year of
+    // someone's study cannot. So the shape of this file is versioned, and
+    // every change to it is a numbered step that runs once and is recorded.
+    //
+    // Before this, the columns below were added by a guarded ALTER with no
+    // version at all. That worked, but it could only ever answer "does this
+    // column exist" — it could not answer "what generation is this file", so
+    // a future release had no way to tell an old deck from a new one except
+    // by inspecting every table it might care about. Migrations that cannot
+    // name their own starting point are how user data gets lost.
+    //
+    // Rules for adding one:
+    //   * append a step, never renumber or edit a shipped one;
+    //   * steps must be safe to run on a database that already has the
+    //     change (a user may have run a dev build), so each one checks;
+    //   * never DROP or rewrite a column carrying user work. Add, backfill,
+    //     and leave the old one until a release that says why it is going.
+    constexpr int kSchema = 1;
+    int have_version = 0;
+    {
+        Stmt v(db_, "PRAGMA user_version");
+        if (sqlite3_step(v.p) == SQLITE_ROW)
+            have_version = sqlite3_column_int(v.p, 0);
+    }
+    // Existing columns are read once and shared by the steps: a step must be
+    // able to ask "is this already here" without re-querying per column.
+    std::set<std::string> vocab_cols;
+    {
+        Stmt cols(db_, "PRAGMA table_info(vocab)");
+        while (sqlite3_step(cols.p) == SQLITE_ROW) {
+            const auto* n = sqlite3_column_text(cols.p, 1);
+            if (n) vocab_cols.insert(reinterpret_cast<const char*>(n));
+        }
+    }
+    auto addColumn = [&](const char* name, const char* decl) {
+        // Guarded by an existence check, NOT attempted-and-ignored. exec()
+        // throws, so the naive version crashed the app on the SECOND open of
+        // any deck: "duplicate column name: first_segment", uncaught, abort.
+        // The press caught it on 2026-09-11; every suite had passed on a
+        // machine whose test databases happened to be fresh.
+        if (vocab_cols.count(name)) return;
+        exec(db_, (std::string("ALTER TABLE vocab ADD COLUMN ") + name + " " +
+                   decl + ";").c_str());
+        vocab_cols.insert(name);
+    };
+
+    // step 1 — "Known here / known anywhere" (docs/LEARN_TAB_VISION.md).
+    // A word is not known because it was recognised where it was met: that
+    // is the weakest form of knowing, and the one a bare flashcard measures.
+    // So the deck remembers WHERE a word was first met, and whether it has
+    // since been recognised somewhere else.
     //
     // Added by ALTER rather than folded into the CREATE above, because decks
     // already exist on disk and a CREATE TABLE IF NOT EXISTS silently skips a
     // changed definition — the columns would never appear and every read
     // would fail on a live deck.
-    //
-    // Each ALTER is guarded by an existence check, NOT attempted-and-ignored.
-    // exec() throws, so the naive version crashed the app on the SECOND open
-    // of any deck: "duplicate column name: first_segment", uncaught, abort.
-    // The press caught it on 2026-09-11; every suite had passed on a machine
-    // whose test databases happened to be fresh.
     {
-        std::set<std::string> have;
-        Stmt cols(db_, "PRAGMA table_info(vocab)");
-        while (sqlite3_step(cols.p) == SQLITE_ROW) {
-            const auto* n = sqlite3_column_text(cols.p, 1);
-            if (n) have.insert(reinterpret_cast<const char*>(n));
-        }
-        auto addColumn = [&](const char* name, const char* decl) {
-            if (have.count(name)) return;
-            exec(db_, (std::string("ALTER TABLE vocab ADD COLUMN ") + name +
-                       " " + decl + ";").c_str());
-        };
         addColumn("first_segment", "INTEGER DEFAULT 0");
         addColumn("transfer_segment", "INTEGER DEFAULT 0");
         // 0 = met, not yet reviewed · 1 = known HERE (in its own segment)
         // 2 = known ANYWHERE (recognised in a different segment)
         addColumn("stage", "INTEGER DEFAULT 0");
     }
+
+    // A database from the future is not opened hopefully. If a newer release
+    // wrote this deck, this build does not know what its columns mean, and
+    // writing to it could destroy work that the newer build can still read.
+    if (have_version > kSchema)
+        throw std::runtime_error(
+            "this study record was written by a newer version of the "
+            "Translation Tool (record format " +
+            std::to_string(have_version) + ", this build understands " +
+            std::to_string(kSchema) +
+            "). Update the app rather than let an older one write to it.");
+    if (have_version != kSchema)
+        exec(db_, ("PRAGMA user_version=" + std::to_string(kSchema)).c_str());
 }
 
 Progress::~Progress() { sqlite3_close(db_); }
