@@ -15,6 +15,7 @@
 #include "allcore/spine.h"
 #include "allcore/terminology.h"
 #include "allcore/tibdisplay.h"
+#include "allcore/tibdisplay.h"
 
 #include <algorithm>
 #include <cstdio>
@@ -210,7 +211,149 @@ int main(int argc, char** argv) {
         out += "}";
         ++n;
     }
-    out += "],\"trainer\":[";
+    out += "],";
+
+    // ---- The other drill kinds (Adam, 2026-09-11: "the iOS version just has
+    // the cloze option"). He was right, and it was a parity failure against
+    // his own standing order. The phone generates nothing — the pack is built
+    // here — so every kind it can offer has to be baked, and that is what the
+    // rest of this file does now.
+    //
+    // Three desktop modes are NOT baked, each for a reason:
+    //   Parallel reading    — it is corpus segments to read, which the trainer
+    //                         array already carries.
+    //   Vocabulary (SRS)    — the deck is the LEARNER's, built from what they
+    //                         clicked on the desktop, and the two have no way
+    //                         to sync. A second unconnected deck on the phone
+    //                         would quietly compete with the real one.
+    //   Translate & compare — needs checkTerminology run against the whole
+    //                         105,634-entry spine, over a draft typed at the
+    //                         moment. Not bakeable; genuinely desktop-only.
+    {
+        std::mt19937 r2(20260911);
+        out += "\"order\":[";
+        int no = 0;
+        for (int i = 0; i < want * 4 && no < want / 4; ++i) {
+            auto o = f.makeOrder(r2);
+            if (!o) continue;
+            bool bad = false;
+            for (const auto& ch : o->chunks)
+                if (tib(ch).find("\u27e8") != std::string::npos) bad = true;
+            if (bad) continue;               // same refusal as the cloze
+            if (no) out += ",";
+            out += "{";
+            field(out, "english", o->segment.english);
+            field(out, "course", o->segment.course);
+            out += "\"seq\":" + std::to_string(o->segment.seq) + ",";
+            out += "\"chunks\":[";
+            for (size_t k = 0; k < o->chunks.size(); ++k) {
+                if (k) out += ",";
+                out += "\""; esc(out, tib(o->chunks[k])); out += "\"";
+            }
+            out += "],\"presented\":[";
+            for (size_t k = 0; k < o->presented.size(); ++k) {
+                if (k) out += ",";
+                out += std::to_string(o->presented[k]);
+            }
+            out += "],\"verb\":";
+            out += std::string("{") ;
+            {
+                std::string vb;
+                field(vb, "wylie", o->verb.confident ? o->verb.wylie : "");
+                field(vb, "evidence", o->verb.evidence);
+                vb += std::string("\"confident\":") +
+                      (o->verb.confident ? "true" : "false");
+                out += vb;
+            }
+            out += "}}";
+            ++no;
+        }
+        out += "],\"particle\":[";
+        int np = 0;
+        for (int i = 0; i < want * 4 && np < want / 4; ++i) {
+            auto pd = f.makeParticle(r2);
+            if (!pd) continue;
+            if (np) out += ",";
+            out += "{";
+            field(out, "english", pd->segment.english);
+            field(out, "course", pd->segment.course);
+            out += "\"seq\":" + std::to_string(pd->segment.seq) + ",";
+            field(out, "explanation", pd->explanation);
+            out += "\"correct\":" + std::to_string(pd->correct) + ",";
+            out += "\"options\":[";
+            for (size_t k = 0; k < pd->options.size(); ++k) {
+                if (k) out += ",";
+                out += "\""; esc(out, pd->options[k]); out += "\"";
+            }
+            out += "],\"tokens\":[";
+            for (size_t k = 0; k < pd->tokens.size(); ++k) {
+                if (k) out += ",";
+                out += "\""; esc(out, tib(pd->tokens[k])); out += "\"";
+            }
+            out += "]}";
+            ++np;
+        }
+        out += "],";
+
+        // Script cards: his own Language Study Guide cards. Everything on one
+        // is his — source-attested Tibetan, his pronunciation, his gloss — so
+        // it is the beginner's rung and the phone should have it.
+        out += "\"script\":[";
+        int ns = 0;
+        for (const auto& e : spine.scriptCards("", 1200)) {
+            if (e.tibetan.empty() || e.pronunciation.empty()) continue;
+            if (ns) out += ",";
+            out += "{";
+            field(out, "tibetan", e.tibetan);
+            field(out, "wylie", e.wylie);
+            field(out, "pron", e.pronunciation);
+            field(out, "tier", e.tier);
+            out += std::string("\"provisional\":") +
+                   (e.provisional() ? "true" : "false") + ",";
+            out += "\"gloss\":[";
+            for (size_t k = 0; k < e.hgm_gloss.size() && k < 4; ++k) {
+                if (k) out += ",";
+                out += "\""; esc(out, e.hgm_gloss[k]); out += "\"";
+            }
+            out += "]}";
+            ++ns;
+        }
+        out += "],";
+
+        // The Debate Dojo: statements carrying the full template, split into
+        // their three elements here so the phone does no parsing.
+        out += "\"debate\":[";
+        int nd = 0;
+        for (const auto& sg : spine.corpusSearch("\"CHOS CAN\" AND \"THAL\"",
+                                                 "", 400)) {
+            if (nd >= 200) break;
+            // the documented C13 window is refused, as on the desktop
+            if (sg.course == "C13" && sg.seq >= 63 && sg.seq <= 82) continue;
+            const auto db = allcore::parseDebate(sg.acip);
+            if (!db.ok) continue;
+            const std::string sub = tib(db.subject), con = tib(db.consequence),
+                              rea = tib(db.reason);
+            if (sub.find("\u27e8") != std::string::npos ||
+                con.find("\u27e8") != std::string::npos ||
+                rea.find("\u27e8") != std::string::npos) continue;
+            if (nd) out += ",";
+            out += "{";
+            field(out, "preamble", tib(db.preamble));
+            field(out, "subject", sub);
+            field(out, "consequence", con);
+            field(out, "reason", rea);
+            field(out, "english", sg.english);
+            field(out, "course", sg.course);
+            out += "\"seq\":" + std::to_string(sg.seq);
+            out += "}";
+            ++nd;
+        }
+        out += "],";
+        std::printf("  order %d · particle %d · script %d · debate %d\n",
+                    no, np, ns, nd);
+    }
+
+    out += "\"trainer\":[";
 
     // The Trainer: a passage to read yourself, then six layers revealed one at
     // a time — chunks, particle roles, reading order, vocabulary, the answer
