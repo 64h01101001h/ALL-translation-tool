@@ -148,7 +148,9 @@ Each entry states what the learner sees, what data drives it, how the tool knows
 
 **In-session accuracy is deliberately not the headline** — interleaving depresses it by design. The replacement is computable today with no schema change: the miss taxonomy stores timestamped per-skill outcomes, so the headline becomes *delayed* accuracy on categories last met N days ago.
 
-**Why later.** Grading logic for modes 0–4 is untested end-to-end; only mode 5's tier labelling is proven by test. A session runner means driving the drill state from a queue instead of from `mode_->currentIndex()` — refactoring the least-covered grading code in a ~1,700-line pane. Land selftests on modes 0–4 first. This is the first thing to build after 1.0 ships.
+**BLOCKER CLEARED 2026-09-11.** Grading is now tested end to end: the correct option grades correct and a wrong one does not, on both cloze and particle; the answer is proven to be among the options offered; abstaining on the Silent Particle scores neither right nor wrong; and the second-thought key is proven to be one of his own attested renderings. A seventh check pins the distractor fix — every option must carry the answer's own role marker — so the 72%→0% guessability repair cannot silently regress.
+
+**Why it was later.** Grading logic for modes 0–4 was untested end-to-end; only mode 5's tier labelling was proven by test. A session runner means driving the drill state from a queue instead of from `mode_->currentIndex()` — refactoring the least-covered grading code in a ~1,700-line pane. Land selftests on modes 0–4 first. This is the first thing to build after 1.0 ships.
 
 ---
 
