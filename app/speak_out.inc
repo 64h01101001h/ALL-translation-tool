@@ -27,19 +27,21 @@ namespace speak {
 
 // The bank, opened once. Absent is the normal state of a machine that has not
 // harvested the recordings, and is not an error.
+// Resolved ONCE, to a pointer. The first version returned the developer
+// fallback only while a `tried` flag was still false, so the very first call
+// got the working bank and every call after it got the empty bundled one —
+// audio played once per launch and then silently stopped. A one-shot branch
+// that decides which of two objects to return has to store the decision, not
+// the fact that it was made.
 inline allcore::SpeakBank& bank() {
-    static allcore::SpeakBank b(QDir(QCoreApplication::applicationDirPath())
-                                    .absoluteFilePath("../Resources/kawachen")
-                                    .toStdString());
-    static bool tried = false;
-    if (!tried) {
-        tried = true;
-        if (!b.available()) {   // developer tree: the repo copy
-            static allcore::SpeakBank dev("data/audio/kawachen");
-            if (dev.available()) return dev;
-        }
-    }
-    return b;
+    static allcore::SpeakBank bundled(
+        QDir(QCoreApplication::applicationDirPath())
+            .absoluteFilePath("../Resources/kawachen")
+            .toStdString());
+    static allcore::SpeakBank dev("data/audio/kawachen");   // developer tree
+    static allcore::SpeakBank* chosen =
+        bundled.available() ? &bundled : &dev;
+    return *chosen;
 }
 
 inline bool available() { return bank().available(); }
@@ -148,6 +150,103 @@ inline QString honestyLine(const std::vector<allcore::SpokenSyllable>& seq) {
 
 inline bool available() { return false; }
 
+#endif
+
+// ---- the one way in, from anywhere ---------------------------------------
+// Adam, 2026-09-10: "highlight any string of tibetan text ... right click and
+// have an option to pronounce". Written once and called from every surface
+// that shows Tibetan, so the honesty line, the refusals and the wording
+// cannot drift between panes.
+//
+// Three refusals, all silent by design — a menu that offers Pronounce and
+// then cannot is worse than one that does not offer it:
+//   * no audio in this build, or no recordings harvested → no entry at all;
+//   * the selection holds no Tibetan → no entry;
+//   * the bank cannot say a single syllable of it → the entry appears
+//     DISABLED, with the reason in its tooltip, because "nothing happened"
+//     is the one outcome a reader must never be left to interpret.
+// TWO input shapes are accepted, and lowercase wylie is deliberately NOT one
+// of them. The first attempt took "letters, spaces and an apostrophe" as
+// wylie, and the selftest caught it offering to pronounce "hello world this
+// is english prose" — every one of those letters is wylie-legal, so the
+// inventory cannot tell the two apart and only real syllable parsing could.
+// Rather than half-parse, the rule is a shape the reader can see:
+//   * Tibetan script — what Adam actually asked for;
+//   * ACIP, which is written UPPERCASE by convention and is what the Input
+//     pane and the Draft source column hold.
+// A lowercase Latin selection is refused. The cost is that someone who types
+// wylie by hand gets no entry; the alternative was offering to pronounce
+// English, which is the kind of confident wrongness this project exists to
+// avoid.
+inline bool isTibetanScript(const QString& sel) {
+    for (QChar c : sel)
+        if (c.unicode() >= 0x0F00 && c.unicode() <= 0x0FFF) return true;
+    return false;
+}
+
+inline bool isAcip(const QString& sel) {
+    bool anyLetter = false;
+    for (QChar c : sel) {
+        if (c.isLetter()) {
+            if (!c.isUpper()) return false;   // one lowercase letter and it is not ACIP
+            anyLetter = true;
+        } else if (!c.isSpace() && !QString("'.,-()[]/*@\u2026").contains(c) &&
+                   !c.isDigit()) {
+            return false;
+        }
+    }
+    return anyLetter;
+}
+
+inline QString wylieOf(const QString& sel) {
+    if (isTibetanScript(sel))
+        return QString::fromStdString(
+            allcore::unicodeToWylie(sel.toStdString()).wylie);
+    if (isAcip(sel))
+        return QString::fromStdString(
+            allcore::acipToEwts(sel.toStdString()));
+    return QString();
+}
+
+inline bool looksTibetan(const QString& sel) {
+    return isTibetanScript(sel) || isAcip(sel);
+}
+
+#if defined(ALL_HAVE_AUDIO_OUT)
+inline QAction* addPronounce(QMenu* m, const QString& selRaw, QWidget* owner,
+                             const std::function<void(const QString&)>& say = {}) {
+    if (!m || !available()) return nullptr;
+    const QString sel = selRaw.simplified();
+    if (sel.isEmpty() || sel.size() > 400 || !looksTibetan(sel)) return nullptr;
+    const QString wylie = wylieOf(sel);
+    if (wylie.trimmed().isEmpty()) return nullptr;
+    auto seq = bank().readAloud(wylie.toStdString());
+    int sayable = 0;
+    for (const auto& x : seq)
+        if (x.tier != allcore::SpeakTier::None) ++sayable;
+    m->addSeparator();
+    QAction* a = m->addAction(QString("Pronounce \u201c%1\u201d")
+                                  .arg(sel.left(24) +
+                                       (sel.size() > 24 ? QString("\u2026")
+                                                        : QString())));
+    if (sayable == 0) {
+        a->setEnabled(false);
+        a->setToolTip("No recording is held for any syllable of this "
+                      "selection. Nothing is approximated.");
+        return a;
+    }
+    a->setToolTip(honestyLine(seq));
+    QObject::connect(a, &QAction::triggered, owner, [seq, say] {
+        play(seq);
+        if (say) say(honestyLine(seq));
+    });
+    return a;
+}
+#else
+inline QAction* addPronounce(QMenu*, const QString&, QWidget*,
+                             const std::function<void(const QString&)>& = {}) {
+    return nullptr;   // public build: the menu never mentions audio
+}
 #endif
 
 }  // namespace speak
