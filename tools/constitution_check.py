@@ -446,6 +446,36 @@ def main():
         # reach the terminal even when it was produced.
         fails.append("L3 reconcile could not run: %s" % e)
 
+    # R9 — a fixed light ground must carry fixed dark ink.
+    # Incident (2026-09-11): his English sits on a pale-green plaque whose
+    # background was written by hand at eight sites with no colour beside it.
+    # The plaque does not follow the theme — it always means the same thing —
+    # so in Night mode the inherited near-white text landed on a near-white
+    # green and the answer key vanished. A background without a colour on a
+    # theme-independent surface is the defect, not the shade.
+    for name, src in {"app/main.cpp": main_cpp, **{
+            os.path.basename(p2): read(p2) for p2 in inc_files}}.items():
+        # (?![0-9A-Fa-f]) — an 8-digit #AARRGGBB is a translucent WASH over
+        # whatever is beneath it, not a ground of its own, so the text it
+        # carries is still the theme's and must stay that way.
+        for m in re.finditer(r"background:(#[0-9A-Fa-f]{6})(?![0-9A-Fa-f])",
+                             src):
+            # A stylesheet sets the colour in a neighbouring selector rather
+            # than beside the background, so the window is the block, not the
+            # declaration: 300 chars either side covers every real case here
+            # and still catches a background written entirely alone.
+            tail = src[m.end():m.end() + 300]
+            head = src[max(0, m.start() - 300):m.start()]
+            if "color:" in tail or "color:" in head:
+                continue
+            line = src[:m.start()].count("\n") + 1
+            fails.append(
+                f"R9 {name}:{line}: a hand-written background "
+                f"({m.group(1)}) with no text colour beside it — on a "
+                f"theme-independent ground the ink must be fixed too, or "
+                f"Night mode inherits light text onto a light plaque "
+                f"(incident: his English vanished on the GMR plaque)")
+
     for x in notes:
         print("  note:", x)
     if fails:

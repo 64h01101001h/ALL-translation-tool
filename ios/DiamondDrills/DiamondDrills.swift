@@ -1157,7 +1157,15 @@ struct TrainerView: View {
                 }
                 if shown.contains(2), !(passage.verb_confident && gateOn && gateAnswer == nil) {
                     Layer("Reading order", ink: c) {
-                        ForEach(passage.plan.sorted { $0.order < $1.order }, id: \.chunk) { st in
+                        // NOT re-sorted. The Mac computes this plan and hands
+                        // it over in CHUNK order, with each step carrying the
+                        // place it is read at; the desktop renders it that way,
+                        // so a reader sees the chunks as they lie on the page
+                        // and the numbers tell them where to jump. Sorting by
+                        // `order` here silently turned it into a different
+                        // reading — same data, different lesson — and the two
+                        // apps disagreed about what the plan said.
+                        ForEach(passage.plan, id: \.chunk) { st in
                             Text(st.order == 0
                                  ? "•  reads with the next chunk — \(st.how)"
                                  : "\(st.order).  \(st.how)")
@@ -1496,10 +1504,29 @@ struct EnglishHint: View {
             out = out + Text(buf).foregroundColor(supplied ? ink.muted : ink.ink)
             buf = ""
         }
+        // The flush at an OPENING bracket must carry the depth it is
+        // leaving, not `false`. With `false`, a nested bracket — "[a [b] c]",
+        // which is how a debate restatement inside a gloss is written —
+        // flushed "[a " as ordinary ink, and ordinary ink here means "this is
+        // Geshe Michael Roach's own English". Supplied text was being passed
+        // off as his. Latent rather than live when it was found: no segment
+        // in the shipped pack nests, which is exactly why it survived.
+        // The closing bracket only flushes when it returns to depth 0, so an
+        // inner "]" no longer ends the greying early. This now matches
+        // englishWithSupplied() on the desktop (app/main.cpp) character for
+        // character.
         for ch in text {
-            if ch == "[" { flush(false); depth += 1; buf.append(ch) }
-            else if ch == "]" { buf.append(ch); flush(true); depth = max(0, depth - 1) }
-            else { buf.append(ch) }
+            if ch == "[" {
+                flush(depth > 0)
+                depth += 1
+                buf.append(ch)
+            } else if ch == "]" {
+                buf.append(ch)
+                depth = max(0, depth - 1)
+                if depth == 0 { flush(true) }
+            } else {
+                buf.append(ch)
+            }
         }
         flush(depth > 0)
         return out
