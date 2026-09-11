@@ -460,3 +460,26 @@ Categories: code · decision · email · release · audit · data · question.
   deck-fill comes from the dictionary rather than from meeting a word in a
   sentence. Claiming an origin there would put a learner in a segment they
   have never read.
+
+## 2026-09-10 · Mantras were being drilled as Tibetan grammar
+- Adam photographed his phone showing a Trainer passage reading
+  `ཨོཾ⟨hrI:⟩⟨ShTrI:⟩ཕྲེ་ཊི་ཧཱུ་ན་ན⟨hUM^⟩་ཐན` — a mantra from a Kali Wang
+  empowerment text, with three syllables the converter had refused.
+- The ⟨...⟩ flags were CORRECT: those are Sanskrit written in Tibetan letters,
+  which the Tibetan converter will not render and so flags rather than guesses
+  (rule 3). The defect was upstream of that — the passage should never have
+  been drawn. A mantra has no verb, no particles and no reading order, so the
+  Trainer's six layers have nothing true to say about it.
+- Measured before fixing: **9.8% of trainer passages and 9.6% of cloze drills**
+  carried an unconverted syllable, concentrated exactly where you would expect
+  — GIE, TCS16KaliWang, TCS04Initiation, TCS04PrayerBook.
+- `isDrillable` now refuses any segment the display converter cannot render,
+  the same class of refusal as a title line. In allcore, so both apps inherit
+  it. Trainer 9.8% -> 0.0%.
+- One drill in 800 still leaked, for a DIFFERENT reason: the segment converts
+  whole, but splitting it at the blank can leave a fragment that will not
+  convert alone (`⟨s⟩`). The two halves are what the reader sees, so the pack
+  builder now checks those too. Now 0 of 4,000.
+- The mantras are not being dismissed — the Sanskrit workbench reads them
+  properly. They are simply the wrong material for a drill about Tibetan
+  grammar.

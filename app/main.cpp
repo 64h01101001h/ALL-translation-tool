@@ -22535,6 +22535,33 @@ private:
                 .arg(skill));
     }
 
+    // Choose the sentence this review is presented in.
+    //
+    // Two honesty gates, both from the plan and both disqualifying if skipped.
+    //
+    // GATE 2, no second attestation: a deep span often recurs nowhere else in
+    // the corpus. When that is so, the review says so and the word stays at
+    // "known here". It is NEVER re-served in its own segment and counted as
+    // transfer, which would be measuring familiarity with a sentence and
+    // calling it knowledge of a word.
+    void pickVocabContext() {
+        vocabNoSecond_ = false;
+        const long long origin = vocabItem_.first_segment;
+        // stage 0 -> present it where it was met, if that is known
+        if (vocabItem_.stage == 0 && origin != 0) {
+            for (const auto& seg :
+                 spine_.corpusSearch("\"" + vocab_ + "\"", "", 40))
+                if (seg.id == origin) { vocabSeg_ = seg; return; }
+        }
+        // stage 1 -> somewhere ELSE; the origin is explicitly skipped
+        auto hits = spine_.corpusSearch("\"" + vocab_ + "\"", "", 40);
+        for (const auto& seg : hits)
+            if (seg.id != origin) { vocabSeg_ = seg; return; }
+        // nowhere else, and for stage 1 that is the whole answer
+        if (vocabItem_.stage >= 1) vocabNoSecond_ = true;
+        if (!hits.empty() && vocabItem_.stage == 0) vocabSeg_ = hits.front();
+    }
+
     void newDrill() {
         clearAnswers();
         result_->clear();
@@ -22586,10 +22613,25 @@ private:
             trans_ = factory_.pickSegment(rng_);
             transDraft_->clear();
         } else if (m == 4) {
-            // SRS review: next due word from the learner's own deck
+            // SRS review, in CONTEXT (docs/LEARN_TAB_VISION.md, "Known here
+            // / known anywhere"). A bare word with "grade yourself" is exactly
+            // where a generic flashcard app is our equal; the corpus is what
+            // we have that it does not. So a word due for its first review is
+            // shown inside the sentence it was met in, and its second review
+            // in a DIFFERENT sentence — because being right in the same one
+            // proves the sentence is familiar, not the word.
             if (progress_) {
-                auto due = progress_->dueWords(1, (long long)time(nullptr));
-                if (!due.empty()) vocab_ = due.front();
+                vocabItem_ = allcore::Progress::VocabItem{};
+                vocabSeg_ = allcore::CorpusSegment{};
+                vocabNoSecond_ = false;
+                auto due = progress_->dueVocab((long long)time(nullptr), 1);
+                if (!due.empty()) {
+                    vocabItem_ = due.front();
+                    vocab_ = vocabItem_.wylie;
+                    pickVocabContext();
+                } else {
+                    vocab_.clear();
+                }
             }
             if (!vocab_.empty())
                 addRadios({"I knew it", "I did not know it"}, false);
@@ -23290,6 +23332,9 @@ private:
     QPushButton* aimLabel_ = nullptr;     // shows the skill being trained
     // the skill the next draw should exercise, if any
     allcore::DrillTarget target_;
+    allcore::Progress::VocabItem vocabItem_;   // the word under review
+    allcore::CorpusSegment vocabSeg_;          // the sentence it is shown in
+    bool vocabNoSecond_ = false;               // gate 2 fired
     // below this many attempts a per-skill score is a number,
     // not a trend, and the report must say so
     static constexpr int kTrendFloor = 8;
