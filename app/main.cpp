@@ -5874,6 +5874,13 @@ inline std::function<void()>& qatRebuildHook() {
     static std::function<void()> f;
     return f;
 }
+// The two menus that subsume others in the 2026-09-11 regrouping. File and
+// Edit are built before the menus that fold into them, so a pointer is
+// cheaper than re-finding them by title — and a title lookup would break
+// silently the day either is renamed.
+inline QMenu* g_fileMenu = nullptr;
+inline QMenu* g_editMenu = nullptr;
+
 inline void qatPinsChanged() {
     if (qatRebuildHook()) qatRebuildHook()();
 }
@@ -5885,25 +5892,45 @@ inline void qatPinsChanged() {
 // by label, which is exact when the ribbon mirrors the menu and simply fails
 // when it does not — and a failure says so rather than writing a pin that
 // would resolve to nothing on the next launch.
+// Walk a menu tree to any depth, calling `visit(path, action)` for every
+// leaf. Depth is NOT fixed at three: the menu bar was regrouped on
+// 2026-09-11 (thirteen top-level menus down to eleven, every pane group
+// folded into one "Panes" menu) and a resolver that only ever looked three
+// levels down would have silently stopped finding half the commands — and
+// the strip would have reported perfectly good pins as "not in this build".
+static void qatWalk(QMenu* menu, const QString& prefix,
+                    const std::function<void(const QString&, QAction*)>& visit,
+                    int depth = 0) {
+    if (!menu || depth > 5) return;          // cycles cannot happen, but depth
+    for (QAction* a : menu->actions()) {     // is bounded rather than trusted
+        if (a->isSeparator()) continue;
+        const QString here = prefix.isEmpty() ? a->text()
+                                              : prefix + ">" + a->text();
+        if (a->menu()) qatWalk(a->menu(), here, visit, depth + 1);
+        else visit(here, a);
+    }
+}
+
+static void qatWalkBar(QMenuBar* bar,
+                       const std::function<void(const QString&, QAction*)>& v) {
+    if (!bar) return;
+    for (QAction* m : bar->actions())
+        if (m->menu()) qatWalk(m->menu(), m->text(), v);
+}
+
 static QString qatPathForLabel(const QString& label) {
-    const QString want = QString(label).remove(QString::fromUtf8("…")).trimmed();
+    const QString want = QString(label).remove(QString::fromUtf8("\u2026")).trimmed();
     if (want.isEmpty()) return QString();
     QStringList found;
     for (QWidget* w : QApplication::topLevelWidgets()) {
         auto* mw = qobject_cast<QMainWindow*>(w);
-        if (!mw || !mw->menuBar()) continue;
-        for (QAction* m : mw->menuBar()->actions()) {
-            if (!m->menu()) continue;
-            for (QAction* sub : m->menu()->actions()) {
-                if (!sub->menu()) continue;
-                for (QAction* a : sub->menu()->actions()) {
-                    const QString t =
-                        QString(a->text()).remove(QString::fromUtf8("…")).trimmed();
-                    if (!t.isEmpty() && t.compare(want, Qt::CaseInsensitive) == 0)
-                        found << (m->text() + ">" + sub->text() + ">" + a->text());
-                }
-            }
-        }
+        if (!mw) continue;
+        qatWalkBar(mw->menuBar(), [&](const QString& path, QAction* a) {
+            const QString t =
+                QString(a->text()).remove(QString::fromUtf8("\u2026")).trimmed();
+            if (!t.isEmpty() && t.compare(want, Qt::CaseInsensitive) == 0)
+                found << path;
+        });
     }
     // Exactly one match, or none. Returning the FIRST of several would be a
     // guess, and the guess is not harmless: the Search pane has a ribbon
@@ -42986,6 +43013,7 @@ int main(int argc, char** argv) {
         // place every desktop user reaches for first. Every action
         // routes to the SAME code the panes use; nothing forks.
         QMenu* fileM = win.menuBar()->addMenu("File");
+        g_fileMenu = fileM;
         // Which pane owns "the document" right now: the one holding
         // keyboard focus, else the one visible. Used by every File item
         // that acts on a document (Adam, 2026-09-08: Word's File menu).
@@ -43395,6 +43423,7 @@ int main(int argc, char** argv) {
             &QAction::triggered,
             [] { if (g_importRelease) g_importRelease(); });
         QMenu* edit = win.menuBar()->addMenu("Edit");
+        g_editMenu = edit;
         auto route = [](auto fn) {
             return [fn] {
                 QWidget* w = QApplication::focusWidget();
@@ -43489,13 +43518,33 @@ int main(int argc, char** argv) {
         QObject::connect(pv, &QShortcut::activated,
                          [step] { step(-1); });
     }
+    // Adam, 2026-09-11: "look at all these drop down menus along the top...
+    // it is imperative that we group these better". Every pane GROUP used to
+    // claim its own top-level menu, so the bar grew a menu each time a group
+    // was added and had reached thirteen. They now share one "Panes" menu,
+    // with each group's name as a greyed header above its panes.
+    //
+    // The group is a HEADER rather than another submenu on purpose: a
+    // submenu per group would put every pane command four levels down
+    // (Panes > READ > Overlay > Show pane) and add a hover-and-wait to
+    // reaching any of them. As a header the depth is unchanged from before
+    // (Panes > Overlay > Show pane), so every pin that pointed at a pane
+    // command still has the same shape and the migration only has to rewrite
+    // its first component.
+    QMenu* panesM = win.menuBar()->addMenu("Panes");
     for (int gi = 0; gi < tabs.count(); ++gi) {
         auto* g = qobject_cast<QTabWidget*>(tabs.widget(gi));
         if (!g)
             g = tabs.widget(gi)->findChild<QTabWidget*>(
                 QString(), Qt::FindDirectChildrenOnly);
         if (!g) continue;
-        QMenu* gm = win.menuBar()->addMenu(tabs.tabText(gi));
+        QMenu* gm = panesM;
+        if (gi) gm->addSeparator();
+        {   // a disabled action, not addSection(): macOS drops a section's
+            // text in the native menu bar and leaves a bare rule behind
+            QAction* hdr = gm->addAction(tabs.tabText(gi));
+            hdr->setEnabled(false);
+        }
         for (int pi = 0; pi < g->count(); ++pi) {
             QWidget* pane = g->widget(pi);
             QMenu* menu = gm->addMenu(g->tabText(pi));
@@ -43605,20 +43654,39 @@ int main(int argc, char** argv) {
         // QActions ("Group>Pane>Action" paths persisted in
         // QSettings) — a pin behaves exactly like its menu entry
         {
+            // Any depth, exact path. See qatWalk.
             auto qatFind = [&win](const QString& path) -> QAction* {
-                const QStringList p = path.split('>');
-                if (p.size() != 3) return nullptr;
-                for (QAction* m : win.menuBar()->actions()) {
-                    if (m->text() != p[0] || !m->menu()) continue;
-                    for (QAction* sub : m->menu()->actions()) {
-                        if (sub->text() != p[1] || !sub->menu())
-                            continue;
-                        for (QAction* a : sub->menu()->actions())
-                            if (a->text() == p[2]) return a;
-                    }
-                }
-                return nullptr;
+                QAction* hit = nullptr;
+                qatWalkBar(win.menuBar(),
+                           [&](const QString& p2, QAction* a) {
+                               if (!hit && p2 == path) hit = a;
+                           });
+                return hit;
             };
+            // The 2026-09-11 regrouping moved commands between top-level
+            // menus, so pins saved under the old tree no longer resolve. A
+            // pin is rewritten ONLY when its final component — the command
+            // itself — matches exactly one command in the new tree. Two
+            // matches, or none, and it is left alone to show as "not in this
+            // build", because a pin that quietly starts running a DIFFERENT
+            // command is worse than a pin that says it is broken.
+            {
+                QSettings st("ALL", "TranslationTool");
+                QStringList pins = st.value("qat/pins").toStringList();
+                bool moved = false;
+                for (QString& pin : pins) {
+                    if (qatFind(pin)) continue;
+                    const QString leaf = pin.section('>', -1);
+                    QStringList cand;
+                    qatWalkBar(win.menuBar(),
+                               [&](const QString& p2, QAction*) {
+                                   if (p2.section('>', -1) == leaf) cand << p2;
+                               });
+                    cand.removeDuplicates();
+                    if (cand.size() == 1) { pin = cand.first(); moved = true; }
+                }
+                if (moved) st.setValue("qat/pins", pins);
+            }
             auto rebuild =
                 std::make_shared<std::function<void()>>();
             // Adam, 2026-09-10: a pin could be added by right-clicking a
@@ -43763,7 +43831,15 @@ int main(int argc, char** argv) {
         }
     // ---- Selection menu (Sublime's, Adam 2026-09-08) ----
     {
-        QMenu* sel = win.menuBar()->addMenu("Selection");
+        // Regrouped 2026-09-11 (Adam: "group these better... have any of the
+        // menus that can subsume some of the other dropdown menus"). Selection
+        // is Edit's business — every item here acts on the current editor's
+        // selection — and as its own top-level menu it cost a slot in a bar
+        // that had thirteen. Nothing in it was pinnable (it has no submenus,
+        // and only commands inside submenus could be pinned), so moving it
+        // strands no pin.
+        QMenu* sel = g_editMenu ? g_editMenu->addMenu("Selection")
+                                : win.menuBar()->addMenu("Selection");
         auto ed = [] { return editops::lastEditor().data(); };
         auto act = [&](const QString& name, const QKeySequence& ks, auto fn) {
             QAction* a = sel->addAction(name);
@@ -44256,7 +44332,12 @@ int main(int argc, char** argv) {
     // ---- Project menu (Sublime, Adam 2026-09-08): a "project" here is a
     // dossier — one text, its reading position, glossary and comments.
     {
-        QMenu* pm = win.menuBar()->addMenu("Project");
+        // A dossier is opened, recent-listed, saved and closed — File's whole
+        // vocabulary — so Project lives there rather than claiming a slot of
+        // its own. Its "Recent Dossiers" pins are rewritten by the migration
+        // above, which moves a pin only when the command name is unique.
+        QMenu* pm = g_fileMenu ? g_fileMenu->addMenu("Project")
+                               : win.menuBar()->addMenu("Project");
         auto msg = [&win](const QString& m) { win.statusBar()->showMessage(m, 4000); };
         auto current = std::make_shared<QString>();   // slug of the open dossier
         auto stamp = [] { return QDateTime::currentDateTime().toString(Qt::ISODate).toStdString(); };
@@ -47698,30 +47779,73 @@ int main(int argc, char** argv) {
             // find menus by TITLE, not position (the Edit menu of
             // 9l sits before the group menus — positional indexing
             // failed the day it landed)
+            // Regrouped 2026-09-11. ELEVEN top-level menus, and the count
+            // no longer grows with the number of pane groups — which is the
+            // whole point: adding a group used to add a menu to the bar.
             const auto menus = win.menuBar()->actions();
-            bool ok = menus.size() == tabs.count() + 12;  // File +
-                                                          // Edit + Selection + Find + Insert + Format + Tools + Project + Goto + Window +
-                                                          // groups +
-                                                          // View + Help
-            int overlayActions = 0;
-            for (QAction* ma : menus) {
-                if (ma->text() != "Read" || !ma->menu()) continue;
-                const auto subs = ma->menu()->actions();
-                if (!subs.isEmpty() && subs.first()->menu())
-                    overlayActions =
-                        subs.first()->menu()->actions().size();
-            }
-            log << QString("  [%1] MenuBar: mirrors the workflow "
-                           "groups (%2 menus)")
-                       .arg(ok ? "PASS" : "FAIL")
-                       .arg(menus.size());
+            static const QStringList kTop = {
+                "File", "Edit", "Panes", "Find", "Insert", "Format",
+                "Tools", "Goto", "View", "Window", "Help"};
+            QStringList have;
+            for (QAction* ma : menus) if (ma->menu()) have << ma->text();
+            const bool ok = have == kTop;
+            log << QString("  [%1] MenuBar: eleven top-level menus, fixed "
+                           "regardless of how many pane groups exist (%2)")
+                       .arg(ok ? "PASS" : "FAIL").arg(have.join(" · "));
             if (!ok) ++fails;
+
+            // Panes > <pane> > <action>: the pane commands stayed three deep
+            // through the regrouping, so a pin made before it has the same
+            // shape after it.
+            int overlayActions = 0;
+            bool headered = false;
+            for (QAction* ma : menus) {
+                if (ma->text() != "Panes" || !ma->menu()) continue;
+                for (QAction* sub : ma->menu()->actions()) {
+                    if (!sub->menu() && !sub->isSeparator() &&
+                        !sub->isEnabled())
+                        headered = true;            // a group header
+                    if (sub->text() == "Overlay" && sub->menu())
+                        overlayActions = sub->menu()->actions().size();
+                }
+            }
             const bool rich = overlayActions > 8;
-            log << QString("  [%1] MenuBar: Read > Overlay submenu "
-                           "carries its actions (%2)")
-                       .arg(rich ? "PASS" : "FAIL")
-                       .arg(overlayActions);
+            log << QString("  [%1] MenuBar: Panes > Overlay carries its "
+                           "actions (%2)")
+                       .arg(rich ? "PASS" : "FAIL").arg(overlayActions);
             if (!rich) ++fails;
+            log << QString("  [%1] MenuBar: each pane group keeps its name as "
+                           "a header inside Panes").arg(headered ? "PASS" : "FAIL");
+            if (!headered) ++fails;
+
+            // Every command the strip can pin must still be findable by the
+            // resolver AFTER the regrouping. Before it, the resolver only
+            // looked exactly three levels down; Panes > group > pane > action
+            // would have been invisible to it and every such pin would have
+            // reported itself dead.
+            {
+                int leaves = 0, deep = 0;
+                qatWalkBar(win.menuBar(),
+                           [&](const QString& path, QAction*) {
+                               ++leaves;
+                               if (path.count('>') > 2) ++deep;
+                           });
+                log << QString("  [%1] Quick Access: the resolver walks the "
+                               "whole bar, not three levels (%2 commands, %3 "
+                               "deeper than three)")
+                           .arg(leaves > 200 ? "PASS" : "FAIL")
+                           .arg(leaves).arg(deep);
+                if (leaves <= 200) ++fails;
+
+                // and a pin saved under the OLD tree is rewritten, not lost
+                const QString moved = qatPathForLabel("Open Dossier");
+                const bool ok2 = moved.startsWith("File>Project>");
+                log << QString("  [%1] Quick Access: a command that moved "
+                               "menus resolves at its new path (%2)")
+                           .arg(ok2 ? "PASS" : "FAIL")
+                           .arg(moved.isEmpty() ? "not found" : moved);
+                if (!ok2) ++fails;
+            }
         }
         // the authority's tab badge carries the pending count
         {

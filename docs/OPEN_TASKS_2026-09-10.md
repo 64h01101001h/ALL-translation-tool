@@ -59,15 +59,32 @@ Designed, not built. Both apps.
   meaning here, colour alone fails WCAG, and the item above is what was
   actually wanted.
 
-## 5 — Nineteen top-level menus
+## 5 — Nineteen top-level menus — **DONE 2026-09-11**
 
-Twelve hand-written plus seven generated one-per-pane-group
-(`app/main.cpp:41789`), duplicating a ribbon and a tab bar that already do that
-job. macOS expects 6–9. Design in progress.
+Was twelve hand-written plus one generated per pane group, so the bar grew a
+menu every time a group was added. Now **eleven, fixed**: File · Edit · Panes ·
+Find · Insert · Format · Tools · Goto · View · Window · Help.
 
-**Constraint found before touching it:** saved Quick Access pins resolve by
-walking the menu bar three levels deep, so any change to depth or a top-level
-name breaks every saved pin. A migration or a resolver shim is part of the job.
+- **Selection → Edit.** Every item acts on the current editor's selection.
+  Nothing in it was pinnable (only commands inside submenus could be pinned,
+  and Selection had none), so the move strands nothing.
+- **Project → File.** A dossier is opened, recent-listed, saved and closed —
+  File's whole vocabulary.
+- **Every pane group → one "Panes" menu**, each group's name carried as a
+  greyed header rather than another submenu. A submenu per group would have
+  put every pane command four levels down and added a hover-and-wait to
+  reaching any of them; as a header the depth is unchanged, so a pin made
+  before the regrouping has the same shape after it.
+
+**The constraint was real and is handled.** Pins resolved by walking exactly
+three levels, so anything deeper would have been invisible and every such pin
+would have reported itself dead. The resolver now walks the whole bar to any
+depth (`qatWalk`), and a one-time migration rewrites a stale pin **only when
+its command name matches exactly one command in the new tree** — two matches
+or none and it is left to show as "not in this build", because a pin that
+quietly starts running a *different* command is worse than one that says it is
+broken. Five gates cover it, including that a moved command resolves at its
+new path.
 
 ## 6 — Divergence between the desktop and the phone
 
