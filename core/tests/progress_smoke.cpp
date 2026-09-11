@@ -145,6 +145,27 @@ int main() {
         std::remove(fp.c_str());
         std::remove((fp + "2").c_str());
     }
+    {   // 2026-09-11: the schema migration crashed the app on the SECOND
+        // open of any deck. ALTER TABLE throws on "duplicate column name",
+        // exec() propagates, and nothing caught it — so every learner would
+        // have lost the app on their next launch. Every suite passed anyway,
+        // because test databases happen to be fresh. This is the check that
+        // would have caught it.
+        const std::string fp = "/tmp/all_progress_reopen.db";
+        std::remove(fp.c_str());
+        { allcore::Progress a(fp); a.touchWord("bden pa", 7, 100); }
+        bool reopened = true;
+        try {
+            allcore::Progress b(fp);
+            b.touchWord("chos", 8, 200);
+        } catch (...) {
+            reopened = false;
+        }
+        CHECK(reopened,
+              "a deck opens a SECOND time without throwing (the migration is "
+              "idempotent)");
+        std::remove(fp.c_str());
+    }
     std::printf("%s (%d failures)\n",
                 failures ? "PROGRESS SMOKE FAILED" : "PROGRESS SMOKE OK",
                 failures);

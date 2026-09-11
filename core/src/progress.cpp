@@ -4,6 +4,7 @@
 
 #include <cstdlib>
 
+#include <set>
 #include <stdexcept>
 
 namespace allcore {
@@ -80,13 +81,31 @@ Progress::Progress(const std::string& db_path) {
     // Added by ALTER rather than folded into the CREATE above, because decks
     // already exist on disk and a CREATE TABLE IF NOT EXISTS silently skips a
     // changed definition — the columns would never appear and every read
-    // would fail on a live deck. Errors are ignored deliberately: the second
-    // run of this line is expected to fail with "duplicate column".
-    exec(db_, "ALTER TABLE vocab ADD COLUMN first_segment INTEGER DEFAULT 0;");
-    exec(db_, "ALTER TABLE vocab ADD COLUMN transfer_segment INTEGER DEFAULT 0;");
-    // 0 = met, not yet reviewed · 1 = known HERE (in its own segment)
-    // 2 = known ANYWHERE (recognised in a different segment)
-    exec(db_, "ALTER TABLE vocab ADD COLUMN stage INTEGER DEFAULT 0;");
+    // would fail on a live deck.
+    //
+    // Each ALTER is guarded by an existence check, NOT attempted-and-ignored.
+    // exec() throws, so the naive version crashed the app on the SECOND open
+    // of any deck: "duplicate column name: first_segment", uncaught, abort.
+    // The press caught it on 2026-09-11; every suite had passed on a machine
+    // whose test databases happened to be fresh.
+    {
+        std::set<std::string> have;
+        Stmt cols(db_, "PRAGMA table_info(vocab)");
+        while (sqlite3_step(cols.p) == SQLITE_ROW) {
+            const auto* n = sqlite3_column_text(cols.p, 1);
+            if (n) have.insert(reinterpret_cast<const char*>(n));
+        }
+        auto addColumn = [&](const char* name, const char* decl) {
+            if (have.count(name)) return;
+            exec(db_, (std::string("ALTER TABLE vocab ADD COLUMN ") + name +
+                       " " + decl + ";").c_str());
+        };
+        addColumn("first_segment", "INTEGER DEFAULT 0");
+        addColumn("transfer_segment", "INTEGER DEFAULT 0");
+        // 0 = met, not yet reviewed · 1 = known HERE (in its own segment)
+        // 2 = known ANYWHERE (recognised in a different segment)
+        addColumn("stage", "INTEGER DEFAULT 0");
+    }
 }
 
 Progress::~Progress() { sqlite3_close(db_); }
