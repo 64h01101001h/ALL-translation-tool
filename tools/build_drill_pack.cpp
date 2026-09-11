@@ -19,6 +19,9 @@
 
 #include <algorithm>
 #include <cstdio>
+#include <fstream>
+#include <map>
+#include <sstream>
 #include <random>
 #include <string>
 #include <vector>
@@ -349,8 +352,146 @@ int main(int argc, char** argv) {
             ++nd;
         }
         out += "],";
-        std::printf("  order %d · particle %d · script %d · debate %d\n",
-                    no, np, ns, nd);
+
+        // The Silent Particle and His second thought both read the alignment
+        // layer, which the packer does not otherwise open. Read it here so
+        // the phone gets these two as well — they were left out of the first
+        // parity pass, which is the same omission twice.
+        out += "\"silent\":[";
+        int nsp = 0;
+        {
+            std::ifstream af("data/alignment/alignment_full_v1.json");
+            std::string j((std::istreambuf_iterator<char>(af)),
+                          std::istreambuf_iterator<char>());
+            size_t at = 0;
+            while (nsp < 300 && (at = j.find("\"case\":true", at)) !=
+                                    std::string::npos) {
+                // walk back to this record's start and pull its fields
+                const size_t rec = j.rfind('{', at);
+                if (rec == std::string::npos) { at += 11; continue; }
+                auto sfield = [&](const char* k) {
+                    const std::string key = std::string("\"") + k + "\":\"";
+                    const size_t p2 = j.find(key, rec);
+                    if (p2 == std::string::npos || p2 > at + 400) return std::string();
+                    const size_t b = p2 + key.size();
+                    const size_t e = j.find('"', b);
+                    return e == std::string::npos ? std::string()
+                                                  : j.substr(b, e - b);
+                };
+                const std::string tibw = sfield("tib");
+                const std::string course = sfield("course");
+                // the record runs from rec to the next '}'; "eng":null
+                // inside it means he rendered this span with no English word
+                const size_t recEnd = j.find('}', at);
+                const size_t nullAt = j.find("\"eng\":null", rec);
+                const bool rendered =
+                    !(nullAt != std::string::npos && recEnd != std::string::npos &&
+                      nullAt < recEnd);
+                const std::string tibGlyph = tib(tibw);
+                if (!tibw.empty() && !course.empty() &&
+                    tibGlyph.find("\u27e8") == std::string::npos) {
+                    if (nsp) out += ",";
+                    out += "{";
+                    field(out, "tib", tibGlyph);
+                    field(out, "wylie", tibw);
+                    field(out, "course", course);
+                    out += std::string("\"rendered\":") +
+                           (rendered ? "true" : "false");
+                    out += "}";
+                    ++nsp;
+                }
+                at += 11;
+            }
+        }
+        out += "],\"second\":[";
+        int nse = 0;
+        {
+            // alignment_evidence_v1.json: {"pairs": {wylie: [{eng, refs, n}]}}
+            // Scanned rather than fully parsed — the packer has no JSON
+            // library, and every field taken is a plain string or integer.
+            std::ifstream ef("data/alignment/alignment_evidence_v1.json");
+            std::string j((std::istreambuf_iterator<char>(ef)),
+                          std::istreambuf_iterator<char>());
+            const size_t pairsAt = j.find("\"pairs\"");
+            size_t at = pairsAt == std::string::npos ? j.size() : pairsAt;
+            while (nse < 300) {
+                // a headword key: "\n  "wylie": ["
+                const size_t k = j.find("\": [", at);
+                if (k == std::string::npos) break;
+                {   // headword keys are indented two spaces;
+                    // "refs" sits deeper and must be skipped
+                    const size_t ls = j.rfind('\n', k);
+                    if (ls == std::string::npos ||
+                        j.compare(ls, 4, "\n  \"") != 0) {
+                        at = k + 4;
+                        continue;
+                    }
+                }
+                const size_t qs = j.rfind('"', k);
+                if (qs == std::string::npos) break;
+                const size_t qb = j.rfind('"', qs - 1);
+                if (qb == std::string::npos) break;
+                const std::string w = j.substr(qb + 1, qs - qb - 1);
+                // Find the MATCHING bracket. The first ']' after the key
+                // closes the nested "refs" array, not the headword's, and
+                // stopping there made every word look like it had a single
+                // rendering — so none ever qualified.
+                size_t arrEnd = std::string::npos;
+                {
+                    int depth = 0;
+                    // start AFTER the opening bracket: starting on it
+                    // counted it as a nesting level, so the matching
+                    // close never registered and nothing ever parsed
+                    for (size_t z = k + 4; z < j.size(); ++z) {
+                        if (j[z] == '[') ++depth;
+                        else if (j[z] == ']') {
+                            if (depth == 0) { arrEnd = z; break; }
+                            --depth;
+                        }
+                    }
+                }
+                if (arrEnd == std::string::npos) break;
+                const std::string arr = j.substr(k, arrEnd - k);
+                // collect this headword's renderings
+                std::vector<std::pair<std::string, int>> rs;
+                size_t e = 0;
+                while ((e = arr.find("\"eng\": \"", e)) != std::string::npos) {
+                    const size_t b = e + 8;
+                    const size_t q = arr.find('"', b);
+                    if (q == std::string::npos) break;
+                    std::string eng = arr.substr(b, q - b);
+                    int n = 1;
+                    const size_t np2 = arr.find("\"n\": ", q);
+                    if (np2 != std::string::npos && np2 < q + 300)
+                        n = std::atoi(arr.c_str() + np2 + 5);
+                    if (!eng.empty()) rs.emplace_back(std::move(eng), n);
+                    e = q;
+                }
+                at = arrEnd + 1;
+                if (rs.size() < 2 || w.empty() || w.size() > 40) continue;
+                std::sort(rs.begin(), rs.end(),
+                          [](const auto& a, const auto& b) {
+                              return a.second > b.second;
+                          });
+                if (nse) out += ",";
+                out += "{";
+                field(out, "tib", tib(w));
+                field(out, "wylie", w);
+                out += "\"renderings\":[";
+                for (size_t z = 0; z < rs.size() && z < 12; ++z) {
+                    if (z) out += ",";
+                    out += "{";
+                    field(out, "eng", rs[z].first);
+                    out += "\"n\":" + std::to_string(rs[z].second);
+                    out += "}";
+                }
+                out += "]}";
+                ++nse;
+            }
+        }
+        out += "],";
+        std::printf("  order %d · particle %d · script %d · debate %d · "
+                    "silent %d · second %d\n", no, np, ns, nd, nsp, nse);
     }
 
     out += "\"trainer\":[";

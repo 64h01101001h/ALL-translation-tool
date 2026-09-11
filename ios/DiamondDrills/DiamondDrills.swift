@@ -107,6 +107,21 @@ struct ScriptCard: Codable {
     let gloss: [String]
 }
 /// One formal debate statement, already split into its elements.
+/// One case particle in a real aligned segment, and whether he rendered it.
+struct SilentSpan: Codable {
+    let tib: String
+    let wylie: String
+    let course: String
+    let rendered: Bool
+}
+/// One headword and every rendering he is recorded using for it.
+struct SecondThought: Codable {
+    let tib: String
+    let wylie: String
+    let renderings: [Rendering]
+}
+struct Rendering: Codable { let eng: String; let n: Int }
+
 struct DebateStatement: Codable {
     let preamble: String
     let subject: String
@@ -127,6 +142,8 @@ struct Pack: Codable {
     let particle: [ParticleDrill]?
     let script: [ScriptCard]?
     let debate: [DebateStatement]?
+    let silent: [SilentSpan]?
+    let second: [SecondThought]?
 }
 
 enum PackLoader {
@@ -282,6 +299,8 @@ enum DrillKind: String, CaseIterable, Identifiable {
     case particle = "Particle choice"
     case script = "Script — his own cards"
     case debate = "Debate — what does the reply attack?"
+    case silent = "Silent particle — did he render it?"
+    case second = "His second thought"
     var id: String { rawValue }
 }
 
@@ -530,6 +549,138 @@ struct DebateView: View {
             Text(label).font(.system(size: 11)).tracking(1).foregroundColor(c.muted)
             Text(t).font(.system(size: 19)).foregroundColor(c.ink)
         }
+    }
+}
+
+
+/// Did he render this particle in English here? The base rate is the lesson:
+/// 1,595 of the 1,698 case markers in the layer have no English exponent, and
+/// no reader predicts that at first.
+struct SilentView: View {
+    let span: SilentSpan
+    let next: () -> Void
+    @Environment(\.colorScheme) private var scheme
+    @State private var picked: Int? = nil
+    @State private var checked = false
+    @AppStorage("silent.right") private var right = 0
+    @AppStorage("silent.wrong") private var wrong = 0
+    @AppStorage("silent.abstain") private var abstain = 0
+
+    var body: some View {
+        let c = Ink.of(scheme)
+        ScrollView {
+            VStack(alignment: .leading, spacing: 14) {
+                Text("Tibetan marks this relation with a particle. Did Geshe Michael Roach render it with a word of English here?")
+                    .font(.system(size: 15)).foregroundColor(c.muted)
+                Text(span.tib).font(.system(size: 44)).foregroundColor(c.ink)
+                Text("\(span.wylie) · \(span.course) · the alignment layer is TENTATIVE")
+                    .font(.system(size: 12)).foregroundColor(c.muted)
+                Divider()
+                ForEach(Array(["He rendered it in English",
+                               "He did not render it",
+                               "I cannot tell from this alone"].enumerated()),
+                        id: \.offset) { i, t in
+                    Button { if !checked { picked = i } } label: {
+                        HStack(spacing: 11) {
+                            Image(systemName: picked == i ? "largecircle.fill.circle" : "circle")
+                                .foregroundColor(picked == i ? c.act : c.muted)
+                            Text(t).font(.system(size: 16)).foregroundColor(c.ink)
+                            Spacer()
+                        }.padding(.vertical, 6)
+                    }.buttonStyle(.plain)
+                }
+                if checked {
+                    Text(verdict).font(.system(size: 17, weight: .semibold))
+                        .foregroundColor(picked == 2 ? c.muted
+                                         : (said == span.rendered ? c.act : c.machine))
+                    Text(span.rendered
+                         ? "He rendered it with a word of English."
+                         : "He rendered it with no English word at all — the relation is carried by the shape of his sentence.")
+                        .font(.system(size: 14)).foregroundColor(c.ink)
+                    Text("In the aligned layer he leaves case particles unrendered 93.9% of the time. Your run: \(right) right · \(wrong) wrong · \(abstain) abstained.")
+                        .font(.system(size: 12)).foregroundColor(c.muted)
+                }
+            }.padding(20)
+        }
+        VStack(spacing: 0) {
+            Divider()
+            HStack(spacing: 14) {
+                Button(checked ? "Next" : "Check") {
+                    if checked { next(); picked = nil; checked = false }
+                    else if let p = picked {
+                        checked = true
+                        // Abstaining is neither right nor wrong. Scoring it
+                        // correct would make it the only sensible answer,
+                        // since the particle varies 91.3% of the time;
+                        // scoring it wrong would punish honesty.
+                        if p == 2 { abstain += 1 }
+                        else if (p == 0) == span.rendered { right += 1 }
+                        else { wrong += 1 }
+                    }
+                }
+                .font(.system(size: 17, weight: .semibold)).foregroundColor(.white)
+                .lineLimit(1).fixedSize(horizontal: true, vertical: false)
+                .padding(.horizontal, 20).padding(.vertical, 11)
+                .background(picked == nil && !checked ? c.muted : c.act).cornerRadius(9)
+                .disabled(picked == nil && !checked)
+                Spacer()
+            }.padding(.horizontal, 20).padding(.top, 10).padding(.bottom, 26)
+        }.background(c.paper)
+    }
+    private var said: Bool { picked == 0 }
+    private var verdict: String {
+        if picked == 2 { return "Abstained — neither right nor wrong." }
+        return said == span.rendered ? "Correct." : "Not here."
+    }
+}
+
+/// One term, every rendering he is recorded using. The ambiguity is the
+/// lesson and is deliberately not resolved.
+struct SecondThoughtView: View {
+    let item: SecondThought
+    let next: () -> Void
+    @Environment(\.colorScheme) private var scheme
+    @State private var shown = false
+
+    var body: some View {
+        let c = Ink.of(scheme)
+        ScrollView {
+            VStack(alignment: .leading, spacing: 14) {
+                Text("He renders this term more than one way. How many can you name before you look?")
+                    .font(.system(size: 15)).foregroundColor(c.muted)
+                Text(item.tib).font(.system(size: 44)).foregroundColor(c.ink)
+                Text(item.wylie).font(.system(size: 14)).foregroundColor(c.muted)
+                if shown {
+                    Divider()
+                    Text("Everything he has been recorded writing for it, most used first:")
+                        .font(.system(size: 13)).foregroundColor(c.muted)
+                    ForEach(Array(item.renderings.enumerated()), id: \.offset) { _, r in
+                        HStack {
+                            Text(r.eng).font(.system(size: 18)).foregroundColor(c.ink)
+                            Text("×\(r.n)").font(.system(size: 12)).foregroundColor(c.muted)
+                            Spacer()
+                        }
+                    }
+                    Text("None of these is the right translation of the term. They are all his, and which one fits depends on the passage — that is the lesson, and this drill does not resolve it.")
+                        .font(.system(size: 12)).foregroundColor(c.muted)
+                    Text("TENTATIVE — machine-aligned from his courses, awaiting his ruling.")
+                        .font(.system(size: 11)).foregroundColor(c.machine)
+                }
+            }.padding(20)
+        }
+        VStack(spacing: 0) {
+            Divider()
+            HStack(spacing: 14) {
+                Button(shown ? "Next term" : "Reveal") {
+                    if shown { next(); shown = false } else { shown = true }
+                }
+                .font(.system(size: 17, weight: .semibold)).foregroundColor(.white)
+                .lineLimit(1).fixedSize(horizontal: true, vertical: false)
+                .padding(.horizontal, 20).padding(.vertical, 11)
+                .background(c.act).cornerRadius(9)
+                Spacer()
+            }.padding(.horizontal, 20).padding(.top, 10).padding(.bottom, 26)
+        }.background(c.paper)
     }
 }
 
@@ -957,6 +1108,8 @@ struct RootView: View {
     @State private var pAt = 0
     @State private var sAt = 0
     @State private var bAt = 0
+    @State private var siAt = 0
+    @State private var seAt = 0
 
     /// Shown when a pack predates a drill kind. Never a blank screen and
     /// never an invented drill — it says which pack is in the app.
@@ -1044,6 +1197,18 @@ struct RootView: View {
                                     bAt = (bAt + 1) % a.count
                                 }
                             } else { missing("debate statements", c) }
+                        case .silent:
+                            if let a = pack.silent, !a.isEmpty {
+                                SilentView(span: a[siAt % a.count]) {
+                                    siAt = (siAt + 1) % a.count
+                                }
+                            } else { missing("aligned particles", c) }
+                        case .second:
+                            if let a = pack.second, !a.isEmpty {
+                                SecondThoughtView(item: a[seAt % a.count]) {
+                                    seAt = (seAt + 1) % a.count
+                                }
+                            } else { missing("multi-rendering terms", c) }
                         }
                     } else { Spacer() }
                 } else {
