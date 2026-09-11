@@ -546,6 +546,31 @@ std::vector<Entry> Spine::lookupByPronunciation(const std::string& query,
     return out;
 }
 
+std::vector<std::string> Spine::courseVocabulary(
+    const std::string& course) const {
+    std::vector<std::string> out;
+    if (course.empty()) return out;
+    // corpus_courses is a JSON array of course codes. Matching on the quoted
+    // code keeps "C01" from matching "C010" or "TCS01", which a bare LIKE
+    // would do and which would silently inflate every count downstream.
+    Stmt s(db_,
+           "SELECT wylie FROM entries WHERE hgm_gloss IS NOT NULL "
+           "AND hgm_gloss<>'' AND corpus_courses LIKE ?");
+    const std::string pat = "%\"" + course + "\"%";
+    sqlite3_bind_text(s.p, 1, pat.c_str(), -1, SQLITE_TRANSIENT);
+    while (sqlite3_step(s.p) == SQLITE_ROW) {
+        const auto* w = sqlite3_column_text(s.p, 0);
+        if (w) out.emplace_back(reinterpret_cast<const char*>(w));
+    }
+    return out;
+}
+
+int Spine::courseSegmentCount(const std::string& course) const {
+    Stmt s(db_, "SELECT COUNT(*) FROM corpus_segments WHERE course=?");
+    sqlite3_bind_text(s.p, 1, course.c_str(), -1, SQLITE_TRANSIENT);
+    return sqlite3_step(s.p) == SQLITE_ROW ? sqlite3_column_int(s.p, 0) : 0;
+}
+
 std::vector<std::string> Spine::corpusCourses() const {
     try {
     std::vector<std::string> out;

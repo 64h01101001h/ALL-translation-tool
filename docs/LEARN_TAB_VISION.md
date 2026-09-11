@@ -154,7 +154,7 @@ Each entry states what the learner sees, what data drives it, how the tool knows
 
 ### 3.3 For advanced readers — someone translating for real
 
-#### What you can read next (formerly "Ascend through the texts") — **BUILD NOW**
+#### What you can read next (formerly "Ascend through the texts") — **BUILT 2026-09-11**
 
 **Sees.** A shelf of the corpus's works, each with a readiness card printing the actual numbers: your coverage of its vocabulary, its clause count, what stands between you and it — *41 unknown headwords, three verb classes not yet met*. "Next" recommends the shallowest unread work above your current position.
 

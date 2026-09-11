@@ -120,6 +120,18 @@ public:
     // Distinct course ids, sorted.
     std::vector<std::string> corpusCourses() const;
 
+    // ---- "What you can read next" (docs/LEARN_TAB_VISION.md) ----
+    //
+    // Every headword one course uses that Geshe Michael Roach has glossed —
+    // the vocabulary a reader would need to read that work. Read from
+    // entries.corpus_courses, so it costs one query rather than a pass over
+    // 42,199 segments.
+    std::vector<std::string> courseVocabulary(const std::string& course) const;
+
+    // How many segments a course has, which is the honest measure of its
+    // length; a "work" in this corpus is a course's worth of segments.
+    int courseSegmentCount(const std::string& course) const;
+
     // pronunciation search (GMR convention): the query is folded to
     // lowercase letters and matched exactly, then by prefix —
     // "jangchub" or "jang chub" finds byang chub. Deterministic fold,
