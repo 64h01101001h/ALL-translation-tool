@@ -21368,6 +21368,40 @@ static QString equivalentsOwner(const allcore::TermUse& t) {
                : QString("Geshe Michael Roach's equivalents");
 }
 
+// The key / no-key badge (docs/LEARN_TAB_VISION.md). Every passage in the
+// Trainer, the Drills and the reader says, BEFORE any effort is invested,
+// whether there is an answer key for it — Geshe Michael Roach's own English
+// for that segment — or only engine guidance.
+//
+// This is the thing a working translator values most: knowing exactly when
+// they are on their own. The Trainer's sixth layer already degrades correctly
+// when there is no key; what was missing is that the reader could not see the
+// degradation coming until they had already done the work.
+static QString keyBadge(bool inCorpus, const QString& course = QString(),
+                        int seq = 0) {
+    const QString gold = ux::darkChrome() ? ux::chromeGold() : QString(ux::kGold);
+    const QString mach =
+        ux::darkChrome() ? ux::chromeMachine() : QString(ux::kMachine);
+    if (inCorpus) {
+        return QString(
+                   "<div style='border-left:3px solid %1;padding:4px 8px;"
+                   "margin-bottom:6px'><b style='color:%1'>KEY</b> "
+                   "<span style='font-size:12px'>Geshe Michael Roach's own "
+                   "English for this passage is the answer key%2.</span></div>")
+            .arg(gold,
+                 course.isEmpty() ? QString()
+                                  : QString(" \u2014 %1:%2").arg(course).arg(seq));
+    }
+    return QString(
+        "<div style='border-left:3px solid %1;padding:4px 8px;"
+        "margin-bottom:6px'><b style='color:%1'>NO KEY</b> "
+        "<span style='font-size:12px'>This passage is not in the corpus, so "
+        "there is no answer to check against \u2014 only engine guidance. The "
+        "engine can see particles, chunk boundaries and a verb; it cannot see "
+        "what the passage MEANS, and it is not his English.</span></div>")
+        .arg(mach);
+}
+
 // ---- Trainer pane: progressive-reveal reading tutor (docs/TRAINER_DESIGN.md)
 class TrainerPane : public QWidget {
 public:
@@ -21481,6 +21515,28 @@ private:
         clauses_ = allcore::refineClauses(
             doc_, allcore::splitClauses(doc_.tokens, doc_.barrier_after));
         selClause_ = selChunk_ = -1;
+        // Is this passage in the corpus? If it is, his own English for it is
+        // the answer key; if not, the sixth layer degrades to engine guidance
+        // and the reader deserves to know that BEFORE investing the effort.
+        //
+        // Matched on the longest run of the pasted text rather than the whole
+        // of it, because a reader typically pastes a fragment. A hit must
+        // still contain the fragment: a search that merely ranks it first is
+        // not evidence that this is the same passage.
+        corpusSeg_ = allcore::CorpusSegment{};
+        {
+            const std::string raw = input_->toPlainText().toStdString();
+            std::string probe = raw.substr(0, std::min<size_t>(raw.size(), 120));
+            while (!probe.empty() && probe.back() != ' ') probe.pop_back();
+            if (probe.size() > 12) {
+                for (const auto& seg :
+                     spine_.corpusSearch("\"" + probe + "\"", "", 5))
+                    if (seg.acip.find(probe) != std::string::npos) {
+                        corpusSeg_ = seg;
+                        break;
+                    }
+            }
+        }
         // "readable for you": how much of this text's dictionary vocabulary
         // the learner's own deck already covers (local progress data)
         coverageNote_.clear();
@@ -21543,7 +21599,10 @@ private:
         const bool glossOn = reveal_[3]->isChecked();
         const bool answerOn = reveal_[4]->isChecked();
         const bool parseOn = reveal_[5]->isChecked();
-        QString h = coverageNote_;
+        // Stated once, at the top, before any layer is opened.
+        QString h = keyBadge(corpusSeg_.id != 0,
+                             QString::fromStdString(corpusSeg_.course),
+                             corpusSeg_.seq) + coverageNote_;
         int cn = 0;
         for (const auto& cl : clauses_) {
             ++cn;
@@ -21781,6 +21840,9 @@ private:
     allcore::PosLexicon* pos_ = nullptr;
     allcore::Contractions* contractions_ = nullptr;
     allcore::HeadwordIndex index_;
+    // the corpus segment this passage IS, if it is one at all —
+    // decides the KEY / NO KEY badge
+    allcore::CorpusSegment corpusSeg_;
     allcore::OverlayDoc doc_;
     bool docIsWylie_ = false;
     std::vector<allcore::Clause> clauses_;
@@ -22874,6 +22936,10 @@ private:
         QString h;
         if (m == 0 && order_) {
             h += kindBadge(order_->segment);
+            // drawn from the corpus, so his English IS the key
+            h += keyBadge(true,
+                          QString::fromStdString(order_->segment.course),
+                          order_->segment.seq);
             h += "<div style='color:#555'>Restore the original order of these "
                  "chunks (enter letters, e.g. <b>C A B</b>). From [" +
                  QString::fromStdString(order_->segment.course) + ":" +
@@ -22884,6 +22950,10 @@ private:
                          .arg(disp(order_->chunks[order_->presented[i]]));
         } else if (m == 1 && cloze_) {
             h += kindBadge(cloze_->segment);
+            // drawn from the corpus, so his English IS the key
+            h += keyBadge(true,
+                          QString::fromStdString(cloze_->segment.course),
+                          cloze_->segment.seq);
             h += "<div style='color:#555'>Which chunk fills the blank? Geshe Michael Roach's "
                  "English for the whole segment:</div>"
                  "<div style='background:#EEF6EE;padding:6px'><i>" +
@@ -22893,6 +22963,10 @@ private:
                  "</div>";
         } else if (m == 2 && part_) {
             h += kindBadge(part_->segment);
+            // drawn from the corpus, so his English IS the key
+            h += keyBadge(true,
+                          QString::fromStdString(part_->segment.course),
+                          part_->segment.seq);
             h += "<div style='color:#555'>Which particle belongs in the blank?"
                  "</div><hr><div style='font-size:" + QString::number(px(22)) + "px'>";
             for (size_t i = 0; i < part_->tokens.size(); ++i) {

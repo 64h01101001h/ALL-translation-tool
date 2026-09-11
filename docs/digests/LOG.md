@@ -509,3 +509,21 @@ Categories: code · decision · email · release · audit · data · question.
   that rather than implying one.
 - Both readouts are shown after every review: met / known here / known
   anywhere.
+
+## 2026-09-10 · The key / no-key badge
+- Every passage now says, BEFORE any effort is invested, whether there is an
+  answer key for it. The Trainer's sixth layer already degraded correctly when
+  there was none; what was missing was that a reader could not see the
+  degradation coming until the work was done.
+- Two states, each with its own frame. KEY: "Geshe Michael Roach's own English
+  for this passage is the answer key — COURSE:SEQ". NO KEY: "not in the
+  corpus, so there is no answer to check against — only engine guidance. The
+  engine can see particles, chunk boundaries and a verb; it cannot see what
+  the passage MEANS, and it is not his English."
+- The Trainer works on PASTED text, so it now looks the passage up: matched on
+  the longest leading run rather than the whole, because a reader pastes a
+  fragment, and a hit must actually CONTAIN that fragment — a search that
+  merely ranks it first is not evidence it is the same passage.
+- The three corpus drills carry the KEY badge by construction, with citation.
+- Learn tab now 5 of 12 built: Zero to script, Boundary Hunt, Train this,
+  Known here / known anywhere, the key / no-key badge.
