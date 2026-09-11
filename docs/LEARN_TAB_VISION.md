@@ -166,7 +166,7 @@ Each entry states what the learner sees, what data drives it, how the tool knows
 
 **What was amputated.** The composite difficulty score and the climb framing are cut (§6). What remains is a shelf ordered by measured coverage, which is honest, and which is the part that actually helps.
 
-#### The Silent Particle — **BUILD NOW**
+#### The Silent Particle — **BUILT 2026-09-10**
 
 **Sees.** A particle highlighted in its real segment. First: "did Geshe Michael Roach render this in English here?" Then, if yes: "with which word?" The reveal shows his actual sentence, the particle's role name, and the citation. **"I cannot tell from this alone" is a scoreable answer, marked correct wherever the data genuinely does not determine it.**
 
@@ -175,6 +175,8 @@ Each entry states what the learner sees, what data drives it, how the tool knows
 **Success.** Accuracy on the "did he render it" question, which for case particles is "no" 93.9% of the time — a distribution no learner predicts correctly at first.
 
 **Honesty.** Every item labelled TENTATIVE from the layer meta. The refusal answer is not a dodge; it is scored, and it is the mechanism by which rule 3 becomes the scoring rule itself.
+
+**DEPARTURE, 2026-09-10.** The rule above — mark the refusal CORRECT wherever the data does not determine the answer — was measured before it was built, and it does not survive the measurement: 1,550 of the 1,698 case spans belong to a particle he renders *sometimes*, so "I cannot tell" would be correct **91.3%** of the time. A drill nobody can fail teaches nothing. As built, the refusal is an **abstention**: never punished, because punishing honesty teaches guessing, and never rewarded, because rewarding it makes it the only sensible answer. It is tracked in its own column, and the lesson the plan actually wants — the 93.9% base rate — is delivered by the running tally instead of by the mark.
 
 **Why.** Every other tool teaches particles as if they always surface in English, which is measurably false. 1,595 of 1,698 case markers in the layer are unrendered.
 
