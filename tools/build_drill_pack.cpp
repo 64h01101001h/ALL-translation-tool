@@ -109,10 +109,21 @@ int main(int argc, char** argv) {
         if (at == std::string::npos) at = seg.find(ans);
         if (at == std::string::npos) continue;   // refuse rather than approximate
 
+        // The segment converts as a whole — isDrillable already refuses one
+        // that does not — but SPLITTING it at the blank can leave a fragment
+        // that will not convert on its own, e.g. a bare "s". The two halves
+        // are what the reader actually sees, so they are what must be
+        // checked. Cheap, and it closes the last 0.1%.
+        const std::string beforeT = tib(seg.substr(0, at));
+        const std::string afterT = tib(seg.substr(at + ans.size()));
+        if (beforeT.find("\u27e8") != std::string::npos ||
+            afterT.find("\u27e8") != std::string::npos)
+            continue;
+
         if (n) out += ",";
         out += "{";
-        field(out, "before", tib(seg.substr(0, at)));
-        field(out, "after", tib(seg.substr(at + ans.size())));
+        field(out, "before", beforeT);
+        field(out, "after", afterT);
         field(out, "english", c->segment.english);
         field(out, "role", c->role);
         // The skill this drill exercises, in the SAME vocabulary the desktop

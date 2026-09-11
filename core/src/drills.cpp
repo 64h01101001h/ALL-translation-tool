@@ -1,5 +1,7 @@
 #include "allcore/drills.h"
 
+#include "allcore/tibdisplay.h"
+
 #include <algorithm>
 
 #include "allcore/particles.h"
@@ -102,6 +104,23 @@ bool DrillFactory::isDrillable(const CorpusSegment& seg) {
         else if (ch >= 'A' && ch <= 'Z') ++upper;
     }
     if (lower > upper) return false;
+    //  2b. SYLLABLES THE CONVERTER REFUSES. Ritual texts carry Sanskrit
+    //      mantras written in Tibetan letters — hrI:, ShTrI:, hUM^ — which the
+    //      Tibetan converter will not render, and which it therefore flags as
+    //      ⟨wylie⟩ rather than guess at (rule 3). That flag is correct, and
+    //      a passage full of them is still not a reading exercise: it has no
+    //      verb, no particles and no reading order, so the Trainer's own
+    //      layers have nothing true to say about it. Found by Adam on the
+    //      phone, 2026-09-10, on a Kali Wang empowerment text; measured at
+    //      9.8% of trainer passages and 9.6% of cloze drills.
+    //
+    //      The mantras themselves are not the problem and are not being
+    //      dismissed — the Sanskrit workbench reads them properly. They are
+    //      simply the wrong material for a drill about Tibetan grammar.
+    {
+        const std::string t = acipToTibetanPlain(acipStripMarkup(seg.acip));
+        if (t.find("\u27e8") != std::string::npos) return false;
+    }
     //  3. ENGLISH WILDLY OUT OF PROPORTION TO THE TIBETAN. Some segments carry
     //     a whole explanatory passage against a line or two of Tibetan — one
     //     pairs 5,180 English words with 5 ACIP words. As a drill that is
