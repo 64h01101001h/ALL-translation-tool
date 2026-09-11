@@ -21919,7 +21919,8 @@ public:
                          "Particle choice", "Parallel reading",
                          "Vocabulary review (SRS)",
                          "Translate & compare",
-                         "Script \u2014 his own cards (start here)"});
+                         "Script \u2014 his own cards (start here)",
+                         "Silent particle \u2014 did he render it?"});
         row->addWidget(mode_);
         scriptCourse_ = new QComboBox;
         scriptCourse_->setToolTip(
@@ -22709,6 +22710,29 @@ private:
             if (!vocab_.empty())
                 addRadios({"I knew it", "I did not know it"}, false);
         }
+        if (m == 7) {
+            spTib_.clear(); spEng_.clear(); spRef_.clear();
+            if (g_alignGrammar && !g_alignGrammar->empty()) {
+                // a case-marked span from a real aligned segment
+                for (int tries = 0; tries < 200 && spTib_.isEmpty(); ++tries) {
+                    auto it = g_alignGrammar->begin();
+                    std::advance(it, rng_() % g_alignGrammar->size());
+                    QList<GLink> cases;
+                    for (const auto& g : it->second)
+                        if (g.isCase && !g.tib.isEmpty()) cases << g;
+                    if (cases.isEmpty()) continue;
+                    const GLink& g = cases[rng_() % cases.size()];
+                    spTib_ = g.tib;
+                    spEng_ = g.eng;
+                    spRendered_ = !g.eng.isEmpty();
+                    spRef_ = QString::fromStdString(it->first);
+                }
+            }
+            if (!spTib_.isEmpty())
+                addRadios({"He rendered it in English",
+                           "He did not render it",
+                           "I cannot tell from this alone"}, false);
+        }
         if (m == 6) {
             card_.reset();
             const QString c = scriptCourse_ ? scriptCourse_->currentData().toString()
@@ -22961,6 +22985,29 @@ private:
                  "</i></div><hr><div style='font-size:" +
                  QString::number(px(22)) + "px'>" + clozeBody() +
                  "</div>";
+        } else if (m == 7) {
+            if (spTib_.isEmpty()) {
+                h += "<div style='color:" +
+                     QString(ux::darkChrome() ? ux::chromeMuted() : ux::kMuted) +
+                     "'>The alignment layer is not loaded, so there is nothing "
+                     "to ask. This drill draws only on segments where his "
+                     "English has been aligned word by word \u2014 1,548 of "
+                     "them \u2014 and invents nothing outside that.</div>";
+            } else {
+                h += keyBadge(true, spRef_.section(':', 0, 0),
+                              spRef_.section(':', 1, 1).toInt());
+                h += "<div style='color:#555'>Tibetan marks this relation with "
+                     "a particle. Did Geshe Michael Roach render it with a word "
+                     "of English here?</div><hr>";
+                h += "<div style='font-size:" + QString::number(px(30)) +
+                     "px;padding:6px 0'>" + disp(spTib_.toStdString()) +
+                     "</div>";
+                h += "<div style='color:" +
+                     QString(ux::darkChrome() ? ux::chromeMuted() : ux::kMuted) +
+                     ";font-size:12px'>" + spTib_.toHtmlEscaped() +
+                     "  \u00b7  " + spRef_.toHtmlEscaped() +
+                     "  \u00b7  the alignment layer is TENTATIVE</div>";
+            }
         } else if (m == 2 && part_) {
             h += kindBadge(part_->segment);
             // drawn from the corpus, so his English IS the key
@@ -23256,6 +23303,54 @@ private:
             h += "<div><small>role of the blanked chunk: " +
                  QString::fromUtf8(cloze_->role).toHtmlEscaped() +
                  "</small></div>";
+        } else if (m == 7 && !spTib_.isEmpty()) {
+            const int pick = pickedRadio();
+            // SCORING, and a deliberate departure from the plan.
+            //
+            // The plan says "I cannot tell from this alone" should be marked
+            // CORRECT wherever the data does not determine the answer. I
+            // measured what that rule would do: 1,550 of the 1,698 case spans
+            // are of a particle he renders SOMETIMES, so the refusal would be
+            // correct 91.3% of the time — a free pass, and a drill nobody can
+            // fail teaches nothing.
+            //
+            // So the refusal is neither right nor wrong here: it is an
+            // ABSTENTION, tracked in its own column. It is never punished,
+            // because punishing honesty would teach guessing; it is never
+            // rewarded, because rewarding it would make it the only sensible
+            // answer. And the real lesson is delivered by the running tally
+            // underneath rather than by the mark: he leaves these unrendered
+            // 93.9% of the time, which no reader predicts at first.
+            if (pick == 2) {
+                ++spAbstain_;
+                h += "<b style='color:" +
+                     QString(ux::darkChrome() ? ux::chromeMuted() : ux::kMuted) +
+                     "'>Abstained \u2014 neither right nor wrong.</b>";
+            } else if (pick >= 0) {
+                const bool said = (pick == 0);
+                (said == spRendered_ ? spRight_ : spWrong_)++;
+                h += said == spRendered_
+                         ? "<b style='color:#3B7A3B'>Correct.</b>"
+                         : "<b style='color:#B4540A'>Not here.</b>";
+            }
+            h += spRendered_
+                     ? "<div style='padding-top:6px'>He rendered it: <b>" +
+                           spEng_.toHtmlEscaped() + "</b></div>"
+                     : "<div style='padding-top:6px'>He rendered it with "
+                       "<b>no English word at all</b> \u2014 the relation is "
+                       "carried by the shape of his sentence.</div>";
+            h += QString("<div style='color:%1;font-size:11px;padding-top:6px'>"
+                         "In the aligned layer he leaves case particles "
+                         "unrendered <b>93.9%%</b> of the time (1,595 of 1,698). "
+                         "Your run: %2 right \u00b7 %3 wrong \u00b7 %4 "
+                         "abstained.</div>")
+                     .arg(ux::darkChrome() ? ux::chromeMuted() : QString(ux::kMuted))
+                     .arg(spRight_).arg(spWrong_).arg(spAbstain_);
+            h += QString("<div style='color:%1;font-size:11px'>This item is "
+                         "TENTATIVE \u2014 machine-aligned from his courses, "
+                         "awaiting his ruling.</div>")
+                     .arg(ux::darkChrome() ? ux::chromeMachine()
+                                           : QString(ux::kMachine));
         } else if (m == 2 && part_) {
             const int pick = pickedRadio();
             h += (pick == part_->correct)
@@ -23500,6 +23595,14 @@ private:
     allcore::Progress::VocabItem vocabItem_;   // the word under review
     allcore::CorpusSegment vocabSeg_;          // the sentence it is shown in
     bool vocabNoSecond_ = false;               // gate 2 fired
+    // ---- The Silent Particle (docs/LEARN_TAB_VISION.md) ----
+    // Every other tool teaches particles as if they always surface in
+    // English, which is measurably false: 1,595 of the 1,698 case markers in
+    // the alignment layer have no English exponent at all. This drill is the
+    // one place a reader meets that fact head-on.
+    QString spTib_, spEng_, spRef_;     // the particle, his English, the citation
+    bool spRendered_ = false;           // did he render it here?
+    long long spAbstain_ = 0, spRight_ = 0, spWrong_ = 0;
     // below this many attempts a per-skill score is a number,
     // not a trend, and the report must say so
     static constexpr int kTrendFloor = 8;
