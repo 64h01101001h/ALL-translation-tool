@@ -36,6 +36,25 @@ echo "== 2/4  the drill pack, from the spine =="
 ./build/core/build_drill_pack build/hgm_spine_v27_2.db \
     ios/DiamondDrills/drills.json 4000 "$STAMP"
 
+# Is the phone actually there? Without this the build fails with "unable to
+# find a destination matching the provided destination specifier", which reads
+# like a broken project rather than an unplugged cable.
+if ! xcrun devicectl list devices 2>/dev/null | grep -q "$DEVICE\|connected"; then
+  :
+fi
+STATE="$(xcrun devicectl list devices 2>/dev/null | grep -c 'connected' || true)"
+if [ "${STATE:-0}" = "0" ]; then
+  echo
+  echo "THE PHONE IS NOT REACHABLE."
+  echo "  The pack above is rebuilt and current; only the install is blocked."
+  echo "  Plug it in over USB-C, or bring it onto this network with the screen"
+  echo "  unlocked, then run this script again."
+  echo
+  echo "  (Wireless needs the device awake and on the same network. As of"
+  echo "   2026-09-10 it has only ever been reached over the cable.)"
+  exit 3
+fi
+
 echo "== 3/4  the iOS app =="
 xcodebuild -project ios/TibetanTrainer.xcodeproj -scheme TibetanTrainer \
   -destination "id=$DEVICE" -derivedDataPath "$DD" \

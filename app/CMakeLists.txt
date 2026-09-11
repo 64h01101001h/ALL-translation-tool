@@ -43,6 +43,21 @@ if(Qt6Pdf_FOUND)
   target_link_libraries(DiamondCutterTranslationTool PRIVATE Qt6::Pdf Qt6::PdfWidgets)
   target_compile_definitions(DiamondCutterTranslationTool PRIVATE ALL_HAVE_QTPDF)
 endif()
+
+# Reading aloud from the Kawachen recordings. Linked ONLY in a private build
+# (-DALL_AUDIO=ON, the default): the public release compiles the audio paths
+# out entirely, so it must not carry the dependency either. QUIET because a
+# machine without the module should still build the public product.
+if(ALL_AUDIO)
+  find_package(Qt6 COMPONENTS Multimedia QUIET)
+  if(Qt6Multimedia_FOUND)
+    target_link_libraries(DiamondCutterTranslationTool PRIVATE Qt6::Multimedia)
+    target_compile_definitions(DiamondCutterTranslationTool PRIVATE ALL_HAVE_AUDIO_OUT)
+    message(STATUS "Qt6::Multimedia found - read-aloud will be built")
+  else()
+    message(STATUS "Qt6::Multimedia NOT found - read-aloud compiled out")
+  endif()
+endif()
 # the Scan pane needs allocr (onnxruntime + OpenCV); optional — the app
 # builds without it and simply omits the pane
 if(TARGET allocr)

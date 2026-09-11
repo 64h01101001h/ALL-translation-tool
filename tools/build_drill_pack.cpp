@@ -13,8 +13,10 @@
 #include "allcore/drills.h"
 #include "allcore/lattice.h"
 #include "allcore/spine.h"
+#include "allcore/terminology.h"
 #include "allcore/tibdisplay.h"
 
+#include <algorithm>
 #include <cstdio>
 #include <random>
 #include <string>
@@ -113,6 +115,13 @@ int main(int argc, char** argv) {
         field(out, "after", tib(seg.substr(at + ans.size())));
         field(out, "english", c->segment.english);
         field(out, "role", c->role);
+        // The skill this drill exercises, in the SAME vocabulary the desktop
+        // files misses under (allcore::clozeSkill). The phone cannot generate
+        // a targeted drill — the pack is built here — but with every drill
+        // tagged it can FILTER, which is the same feature reached the other
+        // way round. One vocabulary, so a weak spot named on the desktop
+        // means the same thing on the phone.
+        field(out, "skill", allcore::clozeSkill(*c));
         field(out, "course", c->segment.course);
         out += "\"seq\":" + std::to_string(c->segment.seq) + ",";
         out += std::string("\"title\":") + (isTitle(c->segment.course) ? "true" : "false") + ",";
@@ -125,7 +134,69 @@ int main(int argc, char** argv) {
             esc(out, tib(c->options[k]));
             out += "\"";
         }
-        out += "]}";
+        out += "],";
+        // What the blanked word means — Adam, 2026-09-10: "I have answered
+        // correctly a couple of times and STILL wondered what the English
+        // equivalent was." Rule 1 forbids composing English, so this is
+        // strictly a MATCH: allcore::checkTerminology takes the blanked chunk
+        // and his own English for this segment, and reports which of his
+        // recorded equivalents actually occur in it. Evidence that the match
+        // is real rather than coincidence: against his English for THIS
+        // segment one or more equivalents occur 50.3% of the time; against a
+        // random other segment, 14.6%. A lift of 35.7 points.
+        //
+        // Never "the answer means X" — the median glossed headword has four
+        // attested equivalents and the worst has 137, so naming one would be
+        // picking a sense, which is a guess. The card shows his recorded range
+        // and marks which of them he used here.
+        {
+            const allcore::TermReport tr = allcore::checkTerminology(
+                spine, index, ans, c->segment.english);
+            // checkTerminology orders unmatched first, because it was built
+            // to flag gaps in a translator's draft. A learner's card wants the
+            // opposite: the word he actually used here is the answer to the
+            // question being asked, and a content word teaches more than a
+            // nominaliser. So: matched first, then the longer headword.
+            std::vector<allcore::TermUse> terms = tr.terms;
+            std::stable_sort(terms.begin(), terms.end(),
+                             [](const allcore::TermUse& a,
+                                const allcore::TermUse& b) {
+                                 if (a.matched.empty() != b.matched.empty())
+                                     return !a.matched.empty();
+                                 return a.wylie.size() > b.wylie.size();
+                             });
+            out += "\"means\":[";
+            int emitted = 0;
+            for (const auto& t : terms) {
+                if (emitted >= 2) break;       // two headwords is a card, not a wall
+                if (t.glosses.empty()) continue;
+                if (emitted) out += ",";
+                out += "{";
+                field(out, "wylie", t.wylie);
+                field(out, "tier", t.tier);
+                out += std::string("\"provisional\":") +
+                       (t.provisional ? "true" : "false") + ",";
+                out += "\"glosses\":[";
+                // twenty carried, eight shown until Look up is pressed — the
+                // button must have something real to reveal
+                for (size_t k = 0; k < t.glosses.size() && k < 20; ++k) {
+                    if (k) out += ",";
+                    out += "\""; esc(out, t.glosses[k]); out += "\"";
+                }
+                out += "],\"more\":" +
+                       std::to_string(t.glosses.size() > 20
+                                          ? t.glosses.size() - 20 : 0) + ",";
+                out += "\"used\":[";
+                for (size_t k = 0; k < t.matched.size() && k < 4; ++k) {
+                    if (k) out += ",";
+                    out += "\""; esc(out, t.matched[k]); out += "\"";
+                }
+                out += "]}";
+                ++emitted;
+            }
+            out += "]";
+        }
+        out += "}";
         ++n;
     }
     out += "],\"trainer\":[";

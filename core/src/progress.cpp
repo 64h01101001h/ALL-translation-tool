@@ -71,22 +71,49 @@ Progress::Progress(const std::string& db_path) {
          "  peeks INTEGER NOT NULL DEFAULT 0,"
          "  last_ts INTEGER NOT NULL);"
          "CREATE INDEX IF NOT EXISTS vocab_due ON vocab(due);");
+    // "Known here / known anywhere" (docs/LEARN_TAB_VISION.md). A word is not
+    // known because it was recognised where it was met — that is the weakest
+    // form of knowing, and the one a bare flashcard measures. So the deck
+    // remembers WHERE a word was first met, and whether it has since been
+    // recognised somewhere else.
+    //
+    // Added by ALTER rather than folded into the CREATE above, because decks
+    // already exist on disk and a CREATE TABLE IF NOT EXISTS silently skips a
+    // changed definition — the columns would never appear and every read
+    // would fail on a live deck. Errors are ignored deliberately: the second
+    // run of this line is expected to fail with "duplicate column".
+    exec(db_, "ALTER TABLE vocab ADD COLUMN first_segment INTEGER DEFAULT 0;");
+    exec(db_, "ALTER TABLE vocab ADD COLUMN transfer_segment INTEGER DEFAULT 0;");
+    // 0 = met, not yet reviewed · 1 = known HERE (in its own segment)
+    // 2 = known ANYWHERE (recognised in a different segment)
+    exec(db_, "ALTER TABLE vocab ADD COLUMN stage INTEGER DEFAULT 0;");
 }
 
 Progress::~Progress() { sqlite3_close(db_); }
 
 void Progress::touchWord(const std::string& wylie, long long now) {
+    touchWord(wylie, 0, now);
+}
+
+void Progress::touchWord(const std::string& wylie, long long segment_id,
+                         long long now) {
     if (wylie.empty()) return;
     Stmt s(db_,
            "INSERT INTO vocab (wylie, first_seen, last_seen, views, ease, "
-           "interval_days, due) VALUES (?,?,?,1,?,0,?) "
-           "ON CONFLICT(wylie) DO UPDATE SET views=views+1, last_seen=?");
+           "interval_days, due, first_segment) VALUES (?,?,?,1,?,0,?,?) "
+           "ON CONFLICT(wylie) DO UPDATE SET views=views+1, last_seen=?, "
+           // only ever fills a BLANK origin: the segment a word was first met
+           // in is a fact about the past and must not be overwritten by the
+           // next place it happens to appear
+           "first_segment=CASE WHEN first_segment IS NULL OR first_segment=0 "
+           "THEN excluded.first_segment ELSE first_segment END");
     sqlite3_bind_text(s.p, 1, wylie.c_str(), -1, SQLITE_TRANSIENT);
     sqlite3_bind_int64(s.p, 2, now);
     sqlite3_bind_int64(s.p, 3, now);
     sqlite3_bind_double(s.p, 4, kEaseStart);
     sqlite3_bind_int64(s.p, 5, now);   // new words are due immediately
-    sqlite3_bind_int64(s.p, 6, now);
+    sqlite3_bind_int64(s.p, 6, segment_id);
+    sqlite3_bind_int64(s.p, 7, now);
     if (sqlite3_step(s.p) != SQLITE_DONE) ++write_failures_;   // WP-15
 }
 
@@ -204,6 +231,98 @@ Progress::Stats Progress::stats(long long now) const {
         }
     }
     return st;
+}
+
+std::vector<Progress::VocabItem> Progress::dueVocab(long long now,
+                                                    int limit) const {
+    std::vector<VocabItem> out;
+    Stmt s(db_,
+           "SELECT wylie, COALESCE(first_segment,0), "
+           "COALESCE(transfer_segment,0), COALESCE(stage,0), views "
+           "FROM vocab WHERE due<=? ORDER BY due ASC LIMIT ?");
+    sqlite3_bind_int64(s.p, 1, now);
+    sqlite3_bind_int(s.p, 2, limit);
+    while (sqlite3_step(s.p) == SQLITE_ROW) {
+        const auto* w = sqlite3_column_text(s.p, 0);
+        if (!w) continue;
+        VocabItem v;
+        v.wylie = reinterpret_cast<const char*>(w);
+        v.first_segment = sqlite3_column_int64(s.p, 1);
+        v.transfer_segment = sqlite3_column_int64(s.p, 2);
+        v.stage = sqlite3_column_int(s.p, 3);
+        v.views = sqlite3_column_int64(s.p, 4);
+        out.push_back(std::move(v));
+    }
+    return out;
+}
+
+void Progress::reviewWordInContext(const std::string& wylie, bool knew_it,
+                                   long long in_segment, long long now) {
+    // the spacing maths is unchanged and stays in one place
+    reviewWord(wylie, knew_it, now);
+    if (!knew_it) return;
+    long long origin = 0;
+    int stage = 0;
+    {
+        Stmt g(db_,
+               "SELECT COALESCE(first_segment,0), COALESCE(stage,0) "
+               "FROM vocab WHERE wylie=?");
+        sqlite3_bind_text(g.p, 1, wylie.c_str(), -1, SQLITE_TRANSIENT);
+        if (sqlite3_step(g.p) != SQLITE_ROW) return;
+        origin = sqlite3_column_int64(g.p, 0);
+        stage = sqlite3_column_int(g.p, 1);
+    }
+    // Being right in the SAME segment proves the sentence is familiar, not
+    // the word. Only a different segment promotes to "known anywhere".
+    const bool elsewhere =
+        in_segment != 0 && origin != 0 && in_segment != origin;
+    const int want = elsewhere ? 2 : std::max(stage, 1);
+    if (want <= stage) return;
+    Stmt u(db_,
+           "UPDATE vocab SET stage=?, transfer_segment=CASE WHEN ?=2 THEN ? "
+           "ELSE transfer_segment END WHERE wylie=?");
+    sqlite3_bind_int(u.p, 1, want);
+    sqlite3_bind_int(u.p, 2, want);
+    sqlite3_bind_int64(u.p, 3, in_segment);
+    sqlite3_bind_text(u.p, 4, wylie.c_str(), -1, SQLITE_TRANSIENT);
+    if (sqlite3_step(u.p) != SQLITE_DONE) ++write_failures_;
+}
+
+Progress::VocabStanding Progress::vocabStanding() const {
+    VocabStanding v;
+    Stmt s(db_,
+           "SELECT COALESCE(stage,0), COUNT(*) FROM vocab GROUP BY "
+           "COALESCE(stage,0)");
+    while (sqlite3_step(s.p) == SQLITE_ROW) {
+        const long long n = sqlite3_column_int64(s.p, 1);
+        switch (sqlite3_column_int(s.p, 0)) {
+            case 0: v.met = n; break;
+            case 1: v.here = n; break;
+            default: v.anywhere = n; break;
+        }
+    }
+    return v;
+}
+
+std::vector<Progress::SkillScore> Progress::skillScores(
+    int min_attempts) const {
+    std::vector<SkillScore> out;
+    Stmt s(db_,
+           "SELECT kind, COUNT(*), SUM(correct) FROM events "
+           "WHERE kind LIKE 'skill:%' GROUP BY kind "
+           "ORDER BY COUNT(*) DESC");
+    while (sqlite3_step(s.p) == SQLITE_ROW) {
+        const auto* txt = sqlite3_column_text(s.p, 0);
+        if (!txt) continue;
+        SkillScore k;
+        k.skill = reinterpret_cast<const char*>(txt);
+        if (k.skill.rfind("skill:", 0) == 0) k.skill.erase(0, 6);
+        k.attempts = sqlite3_column_int64(s.p, 1);
+        k.right = sqlite3_column_int64(s.p, 2);
+        k.enough = k.attempts >= min_attempts;
+        out.push_back(std::move(k));
+    }
+    return out;
 }
 
 std::vector<std::pair<std::string, long long>> Progress::topMisses(

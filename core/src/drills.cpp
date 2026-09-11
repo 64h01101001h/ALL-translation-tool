@@ -6,6 +6,35 @@
 
 namespace allcore {
 
+bool targetRefused(const DrillTarget& t, std::string* why) {
+    if (t.kind != DrillTarget::Kind::ClozeRole) return false;
+    const std::string head = t.skill.substr(0, t.skill.find(' '));
+    if (head == "unmarked" || head == "predicate") {
+        if (why)
+            *why = "The cloze drill blanks a chunk that carries a role "
+                   "marker, because the marker is what makes the question "
+                   "fairly answerable from the English. Training on \"" +
+                   head +
+                   "\" would force questions this generator already treats as "
+                   "unfair, so a weakness measured there would say more about "
+                   "the generator than about the reader.";
+        return true;
+    }
+    return false;
+}
+
+std::string clozeSkill(const ClozeDrill& d) {
+    // the same string the miss taxonomy files under, so the two cannot drift
+    const std::string r = d.role;
+    return r.substr(0, r.find(' '));
+}
+
+std::string particleSkill(const ParticleDrill& d) {
+    return d.options.empty() ? std::string() : d.options[0] + "-family";
+}
+
+
+
 namespace {
 
 constexpr int kAttempts = 60;   // segment draws before giving up
@@ -190,7 +219,12 @@ std::optional<OrderDrill> DrillFactory::makeOrder(std::mt19937& rng) const {
     return std::nullopt;
 }
 
-std::optional<ClozeDrill> DrillFactory::makeCloze(std::mt19937& rng) const {
+std::optional<ClozeDrill> DrillFactory::makeCloze(
+    std::mt19937& rng, const DrillTarget& target) const {
+    // A refused target never becomes a silent off-target draw.
+    if (targetRefused(target)) return std::nullopt;
+    const bool aiming =
+        target.kind == DrillTarget::Kind::ClozeRole && !target.skill.empty();
     for (int attempt = 0; attempt < kAttempts; ++attempt) {
         auto seg = randomSegment(rng);
         if (!seg.id) continue;
@@ -208,10 +242,33 @@ std::optional<ClozeDrill> DrillFactory::makeCloze(std::mt19937& rng) const {
             !marked.empty()
                 ? marked[rng() % marked.size()]
                 : (int)(rng() % picked->chunks.size());
+        // A targeted draw keeps looking until the blanked chunk exercises the
+        // skill asked for. The loop's own attempt budget bounds this, and
+        // running out returns nullopt so the caller can say so.
+        if (aiming) {
+            const std::string& r = picked->chunks[blank].role;
+            if (r.substr(0, r.find(' ')) != target.skill) continue;
+        }
         const std::string answer = chunkText(doc, picked->chunks[blank]);
-        // distractors: marked chunks from other random segments
+        // Distractors must carry THE SAME role marker as the answer.
+        //
+        // They used to be any marked chunk from any other segment, and the
+        // consequence was measured over a shipped 4,000-drill pack: in 72.2%
+        // of drills exactly one option's case particle fitted the slot, so the
+        // answer could be picked without reading the Tibetan or the English at
+        // all. Only 22.6% required meaning. The drill was training particle
+        // recognition while appearing to test reading — which is exactly what
+        // Adam reported: answering correctly and still not knowing what the
+        // chunk meant.
+        //
+        // Matching the marker removes the grammatical give-away, so the four
+        // options are all syntactically possible and only sense decides. A
+        // drill that cannot be filled this way is REJECTED rather than filled
+        // with an easier distractor: fewer honest drills beat more guessable
+        // ones, and the pack builder draws until it has its count.
+        const std::string wantMarker = picked->chunks[blank].marker;
         std::vector<std::string> distractors;
-        for (int tries = 0; tries < 30 && distractors.size() < 3; ++tries) {
+        for (int tries = 0; tries < 120 && distractors.size() < 3; ++tries) {
             auto other = randomSegment(rng);
             if (!other.id || other.id == seg.id) continue;
             auto odoc = buildOverlay(spine_, index_, other.acip);
@@ -221,6 +278,7 @@ std::optional<ClozeDrill> DrillFactory::makeCloze(std::mt19937& rng) const {
             if (!opick) continue;
             for (const auto& c : opick->chunks) {
                 if (c.marker.empty()) continue;
+                if (c.marker != wantMarker) continue;   // same slot, or no use
                 std::string t = chunkText(odoc, c);
                 if (t == answer) continue;
                 bool dup = false;
@@ -250,7 +308,9 @@ std::optional<ClozeDrill> DrillFactory::makeCloze(std::mt19937& rng) const {
 }
 
 std::optional<ParticleDrill> DrillFactory::makeParticle(
-    std::mt19937& rng) const {
+    std::mt19937& rng, const DrillTarget& target) const {
+    const bool aiming =
+        target.kind == DrillTarget::Kind::ParticleFamily && !target.skill.empty();
     // families whose members a learner must choose between
     static const std::vector<std::vector<std::string>> kFamilies = {
         {"gi", "kyi", "gyi", "yi"},
@@ -297,6 +357,10 @@ std::optional<ParticleDrill> DrillFactory::makeParticle(
         for (auto& ch : actual)
             if (ch >= 'A' && ch <= 'Z') ch = (char)(ch - 'A' + 'a');
         d.tokens[pick.tok] = "▢";
+        // targeted: only serve the family the learner is weak in
+        if (aiming && !kFamilies[pick.family].empty() &&
+            kFamilies[pick.family][0] + "-family" != target.skill)
+            continue;
         d.options = kFamilies[pick.family];
         for (size_t i = 0; i < d.options.size(); ++i)
             if (d.options[i] == actual) d.correct = (int)i;
