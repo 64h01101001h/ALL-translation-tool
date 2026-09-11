@@ -88,7 +88,27 @@ REF="tools/digest_reference.docx"; [[ -f "$REF" ]] || python3 tools/make_digest_
 # in their downloads folder, where "2026-09-10.docx" would be meaningless
 # among everything else they are sent. The .md/.txt/.html keep the ISO name
 # because they are working files that sort by date in this directory.
-DOCX="docs/digests/Translation Tool - Daily Digest - ${D//-/}.docx"
+# The running number (Adam, 2026-09-11). Derived from docs/digests/NUMBERS.tsv
+# by tools/digest_number.py, never typed: it is the one figure in a digest that
+# cannot be recomputed from the day's work, and it goes out in a subject line.
+N="$(python3 tools/digest_number.py "$D" --assign)"
+# The title the subject line and the .docx must both carry, built from the date
+# so the weekday cannot be wrong.
+WANT="$(python3 -c "
+import datetime,sys
+d=datetime.date.fromisoformat(sys.argv[1])
+print(f'Diamond Cutter Translation Tool Daily Digest #{sys.argv[2]} \u2014 {d:%A}, {d:%B} {d.day} {d.year}')
+" "$D" "$N")"
+GOT="$(head -1 "$MD" | sed 's/^# //')"
+if [[ "$GOT" != "$WANT" ]]; then
+  echo "the digest's first line does not match its number and date." >&2
+  echo "  expected: # $WANT" >&2
+  echo "  found:    # $GOT" >&2
+  echo "Refusing to build: the number in the title is what recipients file the" >&2
+  echo "series by, and a wrong one is worse than a late digest." >&2
+  exit 3
+fi
+DOCX="docs/digests/Translation Tool - Daily Digest #${N} - ${D//-/}.docx"
 pandoc "$MD" --resource-path=docs/digests --reference-doc="$REF" --dpi="$DPI" -o "$DOCX"
 pandoc "$MD" --resource-path=docs/digests -s --embed-resources --standalone --css "$CSS" --dpi="$DPI" --metadata title="$TITLE" -o "$BASE.html" 2>/dev/null || pandoc "$MD" --resource-path=docs/digests -s --self-contained --css "$CSS" --dpi="$DPI" --metadata title="$TITLE" -o "$BASE.html"
 rm -f "$CSS"
