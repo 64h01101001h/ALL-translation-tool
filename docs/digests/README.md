@@ -20,21 +20,50 @@ Rules for a digest:
 
 Each digest goes out by email from Adam's Gmail with **one attachment,
 the `.docx`** (Adam, 2026-09-10 — the .md and .txt are working files and
-are not sent). Because it is the only file a recipient ever sees, it is
-named for a human rather than for this directory:
+are not sent).
 
-    Translation Tool - Daily Digest - YYYYMMDD.docx
+### Numbering — STANDING ORDER (Adam, 2026-09-11)
 
-`tools/build_digest.sh` emits that name; the `.md`, `.txt` and `.html`
-keep the ISO `YYYY-MM-DD` name so they sort by date here. Recipients: Geshe Michael Roach
+Digests carry a **running number**, in the subject line and in the `.docx`
+filename. The numbering counts every digest in the series: 8 September 2026
+was **#1**, and 12 September 2026 is **#5**.
+
+    Subject:  Diamond Cutter Translation Tool Daily Digest #5 — Saturday, September 12 2026
+    Filename: Translation Tool - Daily Digest #5 - 20260912.docx
+
+The `.md`, `.txt` and `.html` keep the ISO `YYYY-MM-DD` name so they sort by
+date in this directory, and the `.docx` keeps its `YYYYMMDD` stamp for the
+same reason — a recipient's downloads folder sorts the series chronologically,
+which "Saturday, September 12 2026" would not.
+
+**The number is derived, never typed.** `docs/digests/NUMBERS.tsv` is the
+ledger and `tools/digest_number.py` reads it. The number is the one figure in
+a digest that cannot be recomputed from the day's work — it is a running
+count, and a running count kept in someone's head is wrong eventually.
+`tools/build_digest.sh` assigns it, builds the title the subject line must
+carry (weekday included, so the weekday cannot be wrong either), and
+**refuses to build at all** when the digest's own first line disagrees,
+printing the line it expected. Two further refusals: a date already in the
+ledger keeps its number forever, because those subject lines are in other
+people's mailboxes; and a date earlier than the last one is refused rather
+than inserted, because inserting it would shift every number after it.
+
+The first four went out before the numbering existed. They are numbered
+retroactively in the ledger so that #5 lands where Adam said it should; their
+sent subject lines are **not** rewritten, because they are already delivered.
+
+### Recipients and cover note
+
+Recipients: Geshe Michael Roach
 <geshemichael@gmail.com>, John Brady <john.brady@asianlegacylibrary.org>,
-Joel Crawford <joel.crawford@asianlegacylibrary.org>. Subject line:
-`Diamond Cutter Translation Tool — daily digest, <weekday> <D Month YYYY>`.
+Joel Crawford <joel.crawford@asianlegacylibrary.org>.
 The assistant prepares the email as a Gmail DRAFT with the attachments and
 a short cover note; Adam reads and sends.
 
-    pandoc docs/digests/D.md -o docs/digests/D.docx
-    pandoc docs/digests/D.md -t plain --columns=78 -o docs/digests/D.txt
+Build everything with `tools/build_digest.sh YYYY-MM-DD` rather than calling
+pandoc directly — it is what assigns the number, enforces the title and names
+the `.docx`. A bare pandoc run produces an unnumbered file that will not match
+its subject line.
 
 ## Rolling log (Adam, 2026-09-08)
 
