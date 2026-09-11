@@ -33086,6 +33086,65 @@ private:
     int lastTok_ = -1, cycle_ = 0, selBeg_ = -1, selEnd_ = -1;
 };
 
+// ---- the pecha's own edges ------------------------------------------------
+// A folio scan is mostly margin. The canvases in Adam's Tharlam blocks are
+// 2372x421 while the written folio inside them is about 86% of the width and
+// 60% of the height, so a viewer that fits the CANVAS shows a small pecha in a
+// white field, and one that shows the canvas at 100% shows two lines of a
+// six-line folio. Fitting the INK is what a reader actually wants.
+//
+// Not a plain non-white bounding box. Measured over the 872-folio block, a
+// naive box is defeated by a single speck of dirt: folio 338 reports 98% of
+// the canvas height where its neighbours report 60%, because one dark pixel
+// sits near the edge. So a row or column must carry ink over more than
+// `kInkFrac` of its length to count as part of the folio — one speck cannot
+// hold a margin open, and a real line of Tibetan clears the bar easily.
+//
+// Returns a rect in the image's own pixel coordinates, padded slightly so the
+// folio does not sit flush against the frame. A null rect means "no ink
+// found" and the caller should fall back to the whole image rather than
+// invent a crop.
+inline QRect pechaContentRect(const QImage& src) {
+    if (src.isNull() || src.width() < 8 || src.height() < 8) return QRect();
+    // Work on a downsample: the profile is a coarse measurement and a
+    // full-resolution scan of a 2372x421 page per load is waste. The
+    // threshold is a FRACTION of the length, so it survives the rescale.
+    const int kWork = 600;
+    const double sc = src.width() > kWork ? double(kWork) / src.width() : 1.0;
+    const QImage im = (sc < 1.0
+                           ? src.scaled(int(src.width() * sc),
+                                        std::max(1, int(src.height() * sc)),
+                                        Qt::IgnoreAspectRatio,
+                                        Qt::SmoothTransformation)
+                           : src)
+                          .convertToFormat(QImage::Format_Grayscale8);
+    const int w = im.width(), h = im.height();
+    if (w < 4 || h < 4) return QRect();
+    constexpr double kInkFrac = 0.004;   // 0.4% of the row/column
+    const int rowThr = std::max(1, int(kInkFrac * w));
+    const int colThr = std::max(1, int(kInkFrac * h));
+    std::vector<int> rows(h, 0), cols(w, 0);
+    for (int y = 0; y < h; ++y) {
+        const uchar* line = im.constScanLine(y);
+        for (int x = 0; x < w; ++x)
+            if (line[x] < 128) { ++rows[y]; ++cols[x]; }
+    }
+    int y0 = 0, y1 = h - 1, x0 = 0, x1 = w - 1;
+    while (y0 <= y1 && rows[y0] < rowThr) ++y0;
+    while (y1 >= y0 && rows[y1] < rowThr) --y1;
+    while (x0 <= x1 && cols[x0] < colThr) ++x0;
+    while (x1 >= x0 && cols[x1] < colThr) --x1;
+    if (y1 < y0 || x1 < x0) return QRect();          // no ink: say so
+    // back to full-resolution coordinates, with a small breathing margin
+    const double inv = sc < 1.0 ? 1.0 / sc : 1.0;
+    QRect r(int(x0 * inv), int(y0 * inv),
+            int((x1 - x0 + 1) * inv), int((y1 - y0 + 1) * inv));
+    const int padX = std::max(2, r.width() / 50);
+    const int padY = std::max(2, r.height() / 50);
+    r.adjust(-padX, -padY, padX, padY);
+    return r.intersected(QRect(0, 0, src.width(), src.height()));
+}
+
 // ---- Input pane: the input-center workflow — ACE reborn -------------------
 // Aaron Cram's ACIP input-center module (acip-support, Apache-2.0;
 // docs/ACE_RECOVERY.md) rebuilt on our stack: scan above, ACIP editor
@@ -33289,16 +33348,24 @@ public:
         zoomPct_ = new QComboBox;
         zoomPct_->setEditable(true);
         zoomPct_->addItems({"50%", "65%", "100%", "150%", "200%",
-                            "300%", "Fit width", "Fit page"});
+                            "300%", "Fit width", "Fit page", "Fit folio"});
         zoomPct_->setCurrentText("100%");
         zoomPct_->setFixedWidth(96);
         zoomPct_->setToolTip(
-            "Zoom percentage — type a value, pick a preset, or "
-            "choose Fit width / Fit page.");
+            "Zoom percentage \u2014 type a value, pick a preset, or choose a "
+            "fit. Fit folio frames the written folio rather than the scan's "
+            "canvas, which on a pecha is mostly margin, and keeps framing it "
+            "as the window changes until you zoom by hand.");
         gView2->add(zoomPct_);
         connect(zoomPct_, &QComboBox::activated, [this](int) {
             const QString t = zoomPct_->currentText().trimmed();
-            if (t.startsWith("Fit"))
+            if (t.compare("Fit folio", Qt::CaseInsensitive) == 0) {
+                // back to the framing the pane opens with, and back into the
+                // mode — this is how a reader undoes their own zooming
+                zoomAuto_ = true;
+                splitAuto_ = true;
+                fitToPecha();
+            } else if (t.startsWith("Fit"))
                 fitZoom(t.contains("page", Qt::CaseInsensitive));
             else
                 setZoomAnchored(t.left(t.indexOf('%') > 0
@@ -33354,6 +33421,7 @@ public:
         ribbon->attachTo(this);
 
         auto* split = new QSplitter(Qt::Vertical);
+        split_ = split;
         scroll_ = new QScrollArea;
         scanImg_ = new QLabel("open a page scan (PNG/JPG/TIFF)");
         scanImg_->setAlignment(Qt::AlignCenter);
@@ -33468,6 +33536,9 @@ public:
                                    QTextCursor::KeepAnchor, n);
                     c.insertText(full + " ");
                 });
+        // A reader who sets the split themselves owns it from then on.
+        connect(split, &QSplitter::splitterMoved,
+                [this](int, int) { splitAuto_ = false; });
         split->setStretchFactor(0, 7);
         split->setStretchFactor(1, 3);
         outer->addWidget(split, 1);
@@ -33562,6 +33633,63 @@ public:
                        .arg(ok ? "PASS" : "FAIL").arg(what);
             if (!ok) ++fails;
         };
+        // ---- the folio's edges, and framing them (Adam, 2026-09-11) ----
+        {
+            // A synthetic pecha: a wide white canvas with a band of ink
+            // across the middle, and ONE speck of dirt near the top-left
+            // corner. The speck is the whole point — the folios in Adam's
+            // Tharlam block carry them, and a plain non-white bounding box
+            // reports 98% of the canvas height on folio 338 where its
+            // neighbours report 60%.
+            QImage im(2372, 421, QImage::Format_RGB32);
+            im.fill(Qt::white);
+            {
+                QPainter p(&im);
+                p.fillRect(QRect(200, 150, 1900, 120), Qt::black);
+                p.fillRect(QRect(40, 12, 2, 2), Qt::black);   // the speck
+            }
+            const QRect c = pechaContentRect(im);
+            check(c.isValid(), "folio edges: ink is found at all");
+            check(c.top() > 100 && c.bottom() < 330,
+                  "folio edges: one speck of dirt cannot hold a margin open");
+            check(c.left() > 150 && c.right() < 2160,
+                  "folio edges: the side margins are trimmed to the ink");
+            check(c.height() < im.height() * 2 / 3,
+                  "folio edges: the folio is a fraction of its canvas");
+
+            // an image with no ink at all refuses rather than inventing a crop
+            QImage blank(400, 200, QImage::Format_RGB32);
+            blank.fill(Qt::white);
+            check(!pechaContentRect(blank).isValid(),
+                  "folio edges: a blank page yields no rect, never a guess");
+
+            // and the fit frames THAT, not the canvas
+            base_ = QPixmap::fromImage(im);
+            recomputeContentRect();
+            scroll_->resize(1200, 420);
+            scroll_->viewport()->resize(1180, 400);
+            zoomAuto_ = true;
+            splitAuto_ = false;          // do not move the splitter in a test
+            fitToPecha();
+            const int z = zoom_->value();
+            // fitting the CANVAS height (421) into 400 would sit near 94%;
+            // fitting the ink (about 150 tall) must go considerably higher,
+            // and the width is what actually binds here
+            check(z > 25 && z < 100,
+                  "fit folio: the zoom is bounded by the folio, not the canvas");
+            const double zz = z / 100.0;
+            check(int(contentRect_.width() * zz) <= 1180 + 2 &&
+                      int(contentRect_.height() * zz) <= 400 + 2,
+                  "fit folio: the whole folio fits inside the viewport");
+            // and a hand zoom takes the mode back
+            setZoomAnchored(200, QPoint(-1, -1));
+            check(!zoomAuto_,
+                  "fit folio: zooming by hand ends the automatic framing");
+            base_ = QPixmap();
+            contentRect_ = QRect();
+            zoomAuto_ = true; splitAuto_ = true;
+        }
+
         editor_->setPlainText("SEMS CAN THAMS CAD BDE BA DANG,");
         compareWith("SEMS CAN THAMS CAD BDE BA DANG,");
         check(status_->text().contains("match exactly"),
@@ -33698,6 +33826,10 @@ public:
         locRects_.clear();
 #endif
         curBand_ = -1;
+        recomputeContentRect();
+        // A newly opened scan is framed, whatever the slider was left at.
+        zoomAuto_ = true;
+        fitToPecha();
         render();
         status_->setText(QString("%1 · %2×%3 — type below; the scan "
                                  "follows your cursor (%4)")
@@ -33995,9 +34127,10 @@ public:
         render();
         if (!locRects_.isEmpty()) {
             const double z = zoom_->value() / 100.0;
+            const QPoint o = pixOrigin();
             scroll_->ensureVisible(
-                int(locRects_.first().center().x() * z),
-                int(locRects_.first().center().y() * z), 200,
+                o.x() + int(locRects_.first().center().x() * z),
+                o.y() + int(locRects_.first().center().y() * z), 200,
                 120);
         }
         QString msg =
@@ -34030,17 +34163,26 @@ public:
             const auto& b = bands_[size_t(i)];
             const int lineLen =
                 std::max(int(c.block().text().size()), 1);
-            const int x = int((b.x + b.w * std::min(1.0,
+            const QPoint o = pixOrigin();   // AlignCenter slack, see pixOrigin
+            const int x = o.x() + int((b.x + b.w * std::min(1.0,
                               double(col) / lineLen)) * z);
-            scroll_->ensureVisible(x, int((b.y + b.h / 2) * z), 160, 120);
+            scroll_->ensureVisible(x, o.y() + int((b.y + b.h / 2) * z),
+                                   160, 120);
             return;
         }
 #endif
         // ACE's proportional mode (acip-support ScanPanel CARET mode) —
         // approximate by design, labeled in the banner
-        const int y = int(base_.height() * z * line / total);
-        const int x = int(base_.width() * z *
-                          std::min(1.0, col / 80.0));
+        // Proportional within the FOLIO, not the canvas: the canvas carries
+        // margin above and below the written area, so a caret two thirds down
+        // the typing pointed two thirds down the paper rather than two thirds
+        // down the text.
+        const QRect ink = inkRect();
+        const QPoint o = pixOrigin();
+        const int y = o.y() + int((ink.y() + ink.height() * double(line) /
+                                   std::max(1, total)) * z);
+        const int x = o.x() + int((ink.x() + ink.width() *
+                                   std::min(1.0, col / 80.0)) * z);
         scroll_->ensureVisible(x, y, 160, 120);
     }
 
@@ -34297,12 +34439,18 @@ public:
         pageIx_ = ix;
         sess::put("input/page", ix);
         base_ = QPixmap(pages_[ix]);
+        recomputeContentRect();
         scanFile_ = pages_[ix];
 #ifdef ALL_HAVE_OCR
         bands_.clear();
         locRects_.clear();
 #endif
         curBand_ = -1;
+        // Page turns keep the reader's zoom if they set one — folios in a
+        // block are the same size, so re-fitting every turn would undo a
+        // deliberate choice. While the fit is automatic it re-frames, because
+        // the ink sits in a different place on each folio.
+        if (zoomAuto_) fitToPecha();
         render();
         // load this page's typing, if any
         QFile f(pageTextFile(ix));
@@ -34429,6 +34577,19 @@ public:
     QPixmap base_;
     QLabel* scanImg_ = nullptr;
     QScrollArea* scroll_ = nullptr;
+    QSplitter* split_ = nullptr;
+    // The folio's own edges within the canvas, in base_ pixel coordinates.
+    QRect contentRect_;
+    // The fit is a MODE, not a one-shot: it survives a window or splitter
+    // resize and a page turn, and switches off the moment the reader zooms
+    // by hand. Before this, "Fit page" was a value that the next resize
+    // silently invalidated.
+    bool zoomAuto_ = true;
+    bool splitAuto_ = true;
+    // Set when a fit was asked for before the pane had ever been laid out
+    // (the Input tab is not the current tab at launch), and honoured on the
+    // first real show.
+    bool fitPending_ = false;
     QPlainTextEdit* editor_ = nullptr;
     QCheckBox* followBox_ = nullptr;
     QSlider* zoom_ = nullptr;
@@ -34437,6 +34598,127 @@ public:
 public:
     // anchored zoom (Adam's request 2026-08-13): buttons and keys
     // keep the viewport CENTER in place; ⌘-scroll keeps the POINT
+    // ---- fitting the folio, not the canvas ------------------------------
+    // Adam, 2026-09-11: opening the Input tab should frame the pecha, not
+    // drop you at 100% looking at two lines of it. Three parts, and all
+    // three are needed or it only half works:
+    //   * the ZOOM fits the ink (pechaContentRect), not the canvas;
+    //   * the SCROLL centres on the ink, which on a folio sits well right of
+    //     the canvas origin;
+    //   * the SPLITTER gives the scan the height that folio actually needs,
+    //     because a 2372x421 pecha in a square box is mostly empty box.
+    // It stays out of the way once touched: any manual zoom or splitter drag
+    // turns the corresponding automatic behaviour off for the session, so the
+    // tool never argues with a reader who has set things how they want them.
+
+    // Where the pixmap's top-left sits inside the label. With
+    // setWidgetResizable(true) the label is stretched to at least the
+    // viewport and AlignCenter centres a smaller pixmap inside it, and that
+    // slack appears in NO scrollbar. Every coordinate below — and the caret
+    // follow and the OCR locate — is in label space, so it has to be added.
+    // Before fitting existed this was invisible, because the scan was almost
+    // always larger than the viewport and the slack was zero.
+    QPoint pixOrigin() const {
+        if (!scanImg_ || scanImg_->pixmap().isNull()) return QPoint();
+        const QSize ps = scanImg_->pixmap().size();
+        return QPoint(std::max(0, (scanImg_->width() - ps.width()) / 2),
+                      std::max(0, (scanImg_->height() - ps.height()) / 2));
+    }
+
+    QRect inkRect() const {
+        return contentRect_.isValid() ? contentRect_ : base_.rect();
+    }
+
+    void recomputeContentRect() {
+        contentRect_ = base_.isNull() ? QRect()
+                                      : pechaContentRect(base_.toImage());
+    }
+
+    // Give the scan the height its folio needs at fit-to-width, so a long
+    // thin pecha does not sit in a tall empty box and a tall folio is not
+    // crammed. Skipped once the reader has dragged the splitter themselves.
+    // Returns the viewport HEIGHT it granted the scan, or -1 when it left
+    // the splitter alone. The caller needs the number rather than re-reading
+    // the viewport, because setSizes() does not re-lay-out synchronously: the
+    // first version read the stale height back, fitted to it, and produced a
+    // scan a few pixels too tall for the box it had just asked for — which
+    // showed up as both scrollbars appearing on a scan that was supposed to
+    // fit exactly.
+    int sizeScanPaneToFolio() {
+        if (!splitAuto_ || !split_ || base_.isNull()) return -1;
+        const int total = split_->height();
+        const int vw = usableViewport().width();
+        if (total < 120 || vw < 40) return -1;
+        const QRect c = inkRect();
+        if (c.width() <= 0) return -1;
+        const double zw = double(vw) / c.width();
+        // chrome: the scroll area's frame and whatever the viewport lacks
+        const int chrome = scroll_->height() - scroll_->viewport()->height();
+        int want = int(c.height() * zw) + chrome + 12;
+        want = qBound(int(total * 0.22), want, int(total * 0.62));
+        QSignalBlocker block(split_);     // our own move is not the reader's
+        split_->setSizes({want, std::max(80, total - want)});
+        return want - chrome - scrollbarExtent().height();
+    }
+
+    // A fit that exactly fills the viewport is one rounding error away from
+    // raising a scrollbar, and a scrollbar on one axis steals space from the
+    // other and raises its partner. Reserving both up front costs a few
+    // pixels and removes the whole interaction.
+    QSize scrollbarExtent() const {
+        if (!scroll_) return QSize();
+        return QSize(scroll_->verticalScrollBar()->sizeHint().width() + 2,
+                     scroll_->horizontalScrollBar()->sizeHint().height() + 2);
+    }
+    QSize usableViewport() const {
+        if (!scroll_) return QSize();
+        const QSize sb = scrollbarExtent();
+        return QSize(scroll_->viewport()->width() - sb.width(),
+                     scroll_->viewport()->height() - sb.height());
+    }
+
+    void fitToPecha() {
+        if (base_.isNull() || !scroll_) return;
+        const int vw = scroll_->viewport()->width();
+        const int vh = scroll_->viewport()->height();
+        // The Input tab is not the current tab at launch, so its scroll area
+        // has never been laid out and the viewport is a placeholder. Fitting
+        // against it would divide by nonsense, so the fit waits for the first
+        // real show instead of producing a wrong number confidently.
+        if (vw < 40 || vh < 40) { fitPending_ = true; return; }
+        const int granted = sizeScanPaneToFolio();
+        const QSize use = usableViewport();
+        const int vw2 = use.width();
+        // the height the splitter is ABOUT to give us, not the stale one
+        const int vh2 = granted > 0 ? granted : use.height();
+        const QRect c = inkRect();
+        if (c.width() <= 0 || c.height() <= 0 || vw2 < 20 || vh2 < 20) return;
+        const double zw = double(vw2) * 100.0 / c.width();
+        const double zh = double(vh2) * 100.0 / c.height();
+        int z = int(std::floor(std::min(zw, zh))) - 1;
+        z = qBound(zoom_->minimum(), z, zoom_->maximum());
+        fitPending_ = false;
+        // setZoomAnchored refuses a no-op and anchors on the viewport centre;
+        // neither is wanted here, and the no-op refusal would leave the
+        // scroll position wherever the previous page left it.
+        if (z != zoom_->value()) zoom_->setValue(z);   // re-renders
+        else render();
+        centreOnInk();
+    }
+
+    void centreOnInk() {
+        if (base_.isNull() || !scroll_) return;
+        const double z = zoom_->value() / 100.0;
+        const QRect c = inkRect();
+        const QPoint o = pixOrigin();
+        auto* h = scroll_->horizontalScrollBar();
+        auto* v = scroll_->verticalScrollBar();
+        h->setValue(o.x() + int((c.x() + c.width() / 2.0) * z) -
+                    scroll_->viewport()->width() / 2);
+        v->setValue(o.y() + int((c.y() + c.height() / 2.0) * z) -
+                    scroll_->viewport()->height() / 2);
+    }
+
     // UNDER THE POINTER in place — zooming in on a specific part
     // of the scan without losing it
     void zoomStep(int delta) {
@@ -34453,7 +34735,10 @@ public:
         const int z = int(wholePage ? qMin(zw, zh) : zw) - 1;
         setZoomAnchored(z, QPoint(-1, -1));
     }
+    // Every hand-driven zoom path lands here, so this is where the mode is
+    // surrendered — one place rather than five.
     void setZoomAnchored(int z, QPoint viewportPos) {
+        zoomAuto_ = false;
         z = qBound(zoom_->minimum(), z, zoom_->maximum());
         const int oldZ = zoom_->value();
         if (z == oldZ || oldZ <= 0) return;
@@ -34472,6 +34757,20 @@ public:
     }
 
 protected:
+    // The fit needs a laid-out viewport, and at launch the Input tab is not
+    // the current tab, so the first honest chance to measure one is the
+    // first show. A fit computed before this would divide by a placeholder.
+    void showEvent(QShowEvent* e) override {
+        QWidget::showEvent(e);
+        if (fitPending_ || (zoomAuto_ && !base_.isNull()))
+            QTimer::singleShot(0, this, [this] { fitToPecha(); });
+    }
+    // A fit that a window resize silently invalidates is a value, not a mode.
+    void resizeEvent(QResizeEvent* e) override {
+        QWidget::resizeEvent(e);
+        if (zoomAuto_ && !base_.isNull())
+            QTimer::singleShot(0, this, [this] { fitToPecha(); });
+    }
     bool eventFilter(QObject* o, QEvent* e) override {
         if (scroll_ && o == scroll_->viewport() &&
             e->type() == QEvent::Wheel) {
@@ -48779,6 +49078,19 @@ int main(int argc, char** argv) {
                     "tib", "all");
                 settle(350); save(sanskritPane->grab(), "sanskrit-mantra");
                 sanskritPane->demo(QString(), "auto", "full");
+            }
+            if (extra.contains("input")) {
+                // the Input pane framing a real folio (Adam, 2026-09-11).
+                // DCT_SHOT_SCAN names the scan; without it the capture is
+                // skipped rather than faked with a placeholder.
+                const QString sp = qEnvironmentVariable("DCT_SHOT_SCAN");
+                if (!sp.isEmpty() && QFileInfo::exists(sp)) {
+                    if (g_raisePane) g_raisePane(inputPane);
+                    settle(200);
+                    inputPane->openScanPath(sp);
+                    settle(400);
+                    save(inputPane->grab(), "input-fit-folio");
+                }
             }
             if (extra.contains("menus")) {
                 for (QAction* a : win.menuBar()->actions()) {
