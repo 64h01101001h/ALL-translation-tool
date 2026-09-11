@@ -122,6 +122,53 @@ struct SecondThought: Codable {
 }
 struct Rendering: Codable { let eng: String; let n: Int }
 
+/// One segment with its punctuation stripped: where do the clauses end?
+struct BoundaryItem: Codable {
+    let tokens: [String]
+    let ends: [Int]
+    /// Parallel to `ends`. True when the scribe marked that boundary himself
+    /// and the key is attested; false when the splitter ruled from the
+    /// particle and the key is ENGINE GUIDANCE, which the reveal says.
+    let attested: [Bool]
+    /// Positions where an ambiguous `na` split was dropped for want of verb
+    /// evidence. Absence of evidence is not evidence of a noun, so a mark
+    /// here is not counted against the learner.
+    let unscored: [Int]
+    let functions: [String]
+    let course: String
+    let seq: Int
+    /// The source carried no punctuation at all — the real skill.
+    let hard: Bool
+    let english: String
+}
+
+/// A word with TWO attestations: the segment it was met in, and a different
+/// one. "You know it here" and "you know it anywhere" are different claims.
+struct VocabItem: Codable {
+    let tib: String
+    let wylie: String
+    /// The alignment layer's most-attested English for the word — machine
+    /// matched, TENTATIVE. NOT his dictionary gloss, and never shown as one.
+    let aligned_eng: String
+    let here: VocabContext
+    let anywhere: VocabContext
+}
+
+struct VocabContext: Codable {
+    let tib: String
+    let course: String
+    let seq: Int
+    let english: String
+}
+
+/// A span and the pieces it contains, from the alignment layer's own nesting.
+struct PeelSpan: Codable {
+    let parent: String
+    let course: String
+    let seq: Int
+    let pieces: [String]
+}
+
 struct DebateStatement: Codable {
     let preamble: String
     let subject: String
@@ -144,6 +191,9 @@ struct Pack: Codable {
     let debate: [DebateStatement]?
     let silent: [SilentSpan]?
     let second: [SecondThought]?
+    let peel: [PeelSpan]?
+    let boundary: [BoundaryItem]?
+    let vocab: [VocabItem]?
 }
 
 enum PackLoader {
@@ -242,6 +292,7 @@ struct WeakSpotsSheet: View {
     @Environment(\.colorScheme) private var scheme
     @Environment(\.dismiss) private var dismiss
 
+
     var body: some View {
         let c = Ink.of(scheme)
         NavigationStack {
@@ -301,6 +352,10 @@ enum DrillKind: String, CaseIterable, Identifiable {
     case debate = "Debate — what does the reply attack?"
     case silent = "Silent particle — did he render it?"
     case second = "His second thought"
+    case peel = "Peel — how many pieces?"
+    case boundary = "Boundary hunt — where do the clauses end?"
+    case vocab = "Known here / known anywhere"
+    case mixed = "Mixed set — the category is not given away"
     var id: String { rawValue }
 }
 
@@ -684,6 +739,304 @@ struct SecondThoughtView: View {
     }
 }
 
+
+/// How many pieces does this span split into? The SPLIT is scored, not the
+/// translation — which is what makes it a reading skill rather than a
+/// vocabulary test.
+struct PeelView: View {
+    let span: PeelSpan
+    @ObservedObject var deck: Deck
+    let next: () -> Void
+    @Environment(\.colorScheme) private var scheme
+    @State private var picked: Int? = nil
+    @State private var checked = false
+    private var options: [Int] { Array(max(2, span.pieces.count - 1)...(max(2, span.pieces.count - 1) + 3)) }
+    private var answer: Int { options.firstIndex(of: span.pieces.count) ?? 0 }
+
+    var body: some View {
+        let c = Ink.of(scheme)
+        ScrollView {
+            VStack(alignment: .leading, spacing: 14) {
+                Text("Read this span. How many pieces does it split into at the next level down? Decide before you check — the split is what is scored, not the translation.")
+                    .font(.system(size: 15)).foregroundColor(c.muted)
+                Text(span.parent).font(.system(size: 26)).foregroundColor(c.ink)
+                Text("[\(span.course):\(span.seq)]")
+                    .font(.system(size: 12)).foregroundColor(c.muted)
+                Divider()
+                ForEach(Array(options.enumerated()), id: \.offset) { i, n in
+                    Button { if !checked { picked = i } } label: {
+                        HStack(spacing: 11) {
+                            Image(systemName: picked == i ? "largecircle.fill.circle" : "circle")
+                                .foregroundColor(picked == i ? c.act : c.muted)
+                            Text("\(n) pieces").font(.system(size: 17))
+                                .foregroundColor(checked && i == answer ? c.act : c.ink)
+                            Spacer()
+                        }.padding(.vertical, 6)
+                    }.buttonStyle(.plain)
+                }
+                if checked {
+                    Text(picked == answer ? "Correct."
+                         : "Not quite — it splits into \(span.pieces.count).")
+                        .font(.system(size: 17, weight: .semibold))
+                        .foregroundColor(picked == answer ? c.act : c.machine)
+                    ForEach(Array(span.pieces.enumerated()), id: \.offset) { i, p in
+                        Text("\(i + 1)  \(p)").font(.system(size: 20))
+                            .foregroundColor(c.ink)
+                    }
+                    Text("The nesting is the alignment layer's own, TENTATIVE throughout — machine-matched from his courses and awaiting his ruling.")
+                        .font(.system(size: 11)).foregroundColor(c.machine)
+                }
+            }.padding(20)
+        }
+        VStack(spacing: 0) {
+            Divider()
+            HStack(spacing: 14) {
+                Button(checked ? "Next span" : "Check") {
+                    if checked { next(); picked = nil; checked = false }
+                    else if picked != nil { checked = true; deck.record(correct: picked == answer) }
+                }
+                .font(.system(size: 17, weight: .semibold)).foregroundColor(.white)
+                .lineLimit(1).fixedSize(horizontal: true, vertical: false)
+                .padding(.horizontal, 20).padding(.vertical, 11)
+                .background(picked == nil && !checked ? c.muted : c.act).cornerRadius(9)
+                .disabled(picked == nil && !checked)
+                Spacer()
+            }.padding(.horizontal, 20).padding(.top, 10).padding(.bottom, 26)
+        }.background(c.paper)
+    }
+}
+
+
+/// Boundary hunt. Tap the word each clause ends ON. The punctuation is gone
+/// from what is shown, so in the hard pool nothing on the page marks the
+/// boundary — only the particle does.
+struct BoundaryView: View {
+    let item: BoundaryItem
+    @ObservedObject var deck: Deck
+    let next: () -> Void
+    @Environment(\.colorScheme) private var scheme
+    @State private var marks: Set<Int> = []
+    @State private var checked = false
+
+    private var key: Set<Int> { Set(item.ends) }
+    private var waived: Set<Int> { Set(item.unscored) }
+    private var perfect: Bool {
+        key.isSubset(of: marks) &&
+        marks.subtracting(key).subtracting(waived).isEmpty
+    }
+
+    private func colour(_ i: Int, _ c: Ink) -> Color {
+        guard checked else { return marks.contains(i) ? c.act : c.ink }
+        if key.contains(i) { return marks.contains(i) ? c.act : c.machine }
+        if marks.contains(i) { return waived.contains(i) ? c.gold : c.machine }
+        return c.ink
+    }
+
+    var body: some View {
+        let c = Ink.of(scheme)
+        ScrollView {
+            VStack(alignment: .leading, spacing: 13) {
+                Text("The punctuation has been stripped. Tap the word each clause ends ON.")
+                    .font(.system(size: 15)).foregroundColor(c.muted)
+                Text(item.hard
+                     ? "Hard pool: this segment carried no punctuation at all. Nothing on the page marks the boundary — only the particle does."
+                     : "Warm-up pool: the scribe marked these boundaries himself, so the key is attested.")
+                    .font(.system(size: 12))
+                    .foregroundColor(item.hard ? c.machine : c.muted)
+                Text("[\(item.course):\(item.seq)] — there is a key: his own English for this segment.")
+                    .font(.system(size: 11)).foregroundColor(c.muted)
+                Divider()
+                FlowTokens(tokens: item.tokens, ink: c,
+                           colour: { colour($0, c) },
+                           marked: { checked ? key.contains($0) : marks.contains($0) }) { i in
+                    if !checked {
+                        if marks.contains(i) { marks.remove(i) } else { marks.insert(i) }
+                    }
+                }
+                if checked {
+                    let found = key.filter { marks.contains($0) }.count
+                    let spurious = marks.subtracting(key).subtracting(waived).count
+                    Text(perfect ? "Every boundary found."
+                         : "\(found) of \(key.count) found\(spurious > 0 ? ", \(spurious) where no clause ends" : "").")
+                        .font(.system(size: 17, weight: .semibold))
+                        .foregroundColor(perfect ? c.act : c.machine)
+                    ForEach(Array(item.ends.enumerated()), id: \.offset) { i, e in
+                        Text("after word \(e + 1) — \(item.functions[i])  (\(item.attested[i] ? "the scribe marked this one" : "engine ruling, not his own mark"))")
+                            .font(.system(size: 12)).foregroundColor(c.muted)
+                    }
+                    let hit = marks.intersection(waived).count
+                    if hit > 0 {
+                        Text("\(hit) of your marks sat on an ambiguous na. The splitter dropped that split because the word before it carries no verb evidence — which is not the same as knowing it is a noun. Those are not scored against you.")
+                            .font(.system(size: 12)).foregroundColor(c.gold)
+                    }
+                    EnglishHint(text: item.english, ink: c)
+                }
+            }.padding(20)
+        }
+        VStack(spacing: 0) {
+            Divider()
+            HStack(spacing: 14) {
+                Button(checked ? "Next segment" : "Check") {
+                    if checked { next(); marks = []; checked = false }
+                    else { checked = true; deck.record(correct: perfect) }
+                }
+                .font(.system(size: 17, weight: .semibold)).foregroundColor(.white)
+                .lineLimit(1).fixedSize(horizontal: true, vertical: false)
+                .padding(.horizontal, 20).padding(.vertical, 11)
+                .background(marks.isEmpty && !checked ? c.muted : c.act)
+                .cornerRadius(9)
+                .disabled(marks.isEmpty && !checked)
+                Spacer()
+            }.padding(.horizontal, 20).padding(.top, 10).padding(.bottom, 26)
+        }.background(c.paper)
+    }
+}
+
+/// Tibetan laid out as tappable words that wrap. Each carries its 1-based
+/// number, because the reveal refers to words by number.
+struct FlowTokens: View {
+    let tokens: [String]
+    let ink: Ink
+    let colour: (Int) -> Color
+    let marked: (Int) -> Bool
+    let tap: (Int) -> Void
+
+    var body: some View {
+        FlowLayout(spacing: 6) {
+            ForEach(Array(tokens.enumerated()), id: \.offset) { i, t in
+                Button { tap(i) } label: {
+                    HStack(spacing: 2) {
+                        Text("\(i + 1)").font(.system(size: 10))
+                            .foregroundColor(ink.muted)
+                        Text(t).font(.system(size: 21))
+                            .foregroundColor(colour(i))
+                        if marked(i) {
+                            Text("|").font(.system(size: 19, weight: .bold))
+                                .foregroundColor(colour(i))
+                        }
+                    }
+                    .padding(.horizontal, 4).padding(.vertical, 3)
+                }.buttonStyle(.plain)
+            }
+        }
+    }
+}
+
+/// Wraps its children onto as many rows as they need. Tibetan words differ
+/// too much in width for a fixed column count — a grid either clips the long
+/// ones or wastes half the row on the short ones, and this drill is read as
+/// running text.
+struct FlowLayout: Layout {
+    var spacing: CGFloat = 6
+
+    func sizeThatFits(proposal: ProposedViewSize,
+                      subviews: Subviews, cache: inout ()) -> CGSize {
+        let maxW = proposal.width ?? .infinity
+        var x: CGFloat = 0, y: CGFloat = 0, rowH: CGFloat = 0
+        for v in subviews {
+            let sz = v.sizeThatFits(.unspecified)
+            if x > 0 && x + sz.width > maxW { x = 0; y += rowH + spacing; rowH = 0 }
+            x += sz.width + spacing
+            rowH = max(rowH, sz.height)
+        }
+        return CGSize(width: maxW == .infinity ? x : maxW, height: y + rowH)
+    }
+
+    func placeSubviews(in bounds: CGRect, proposal: ProposedViewSize,
+                       subviews: Subviews, cache: inout ()) {
+        var x = bounds.minX, y = bounds.minY, rowH: CGFloat = 0
+        for v in subviews {
+            let sz = v.sizeThatFits(.unspecified)
+            if x > bounds.minX && x + sz.width > bounds.maxX {
+                x = bounds.minX; y += rowH + spacing; rowH = 0
+            }
+            v.place(at: CGPoint(x: x, y: y), proposal: ProposedViewSize(sz))
+            x += sz.width + spacing
+            rowH = max(rowH, sz.height)
+        }
+    }
+}
+
+/// Known here / known anywhere. Stage 0 presents the word inside the segment
+/// it was met in; stage 1 presents it somewhere else entirely. The two are
+/// tracked apart because they are different claims — and a deck that merged
+/// them would report "known" for a word recognised only by its neighbours.
+struct VocabView: View {
+    let item: VocabItem
+    @ObservedObject var deck: Deck
+    let next: () -> Void
+    @Environment(\.colorScheme) private var scheme
+    @State private var stage = 0
+    @State private var revealed = false
+
+    private var ctx: VocabContext { stage == 0 ? item.here : item.anywhere }
+
+    var body: some View {
+        let c = Ink.of(scheme)
+        ScrollView {
+            VStack(alignment: .leading, spacing: 14) {
+                Text(stage == 0 ? "KNOWN HERE" : "KNOWN ANYWHERE")
+                    .font(.system(size: 11, weight: .semibold)).tracking(2)
+                    .foregroundColor(c.gold)
+                Text(stage == 0
+                     ? "The segment you met it in. Do you know this word?"
+                     : "A different segment entirely. Same word — do you still know it?")
+                    .font(.system(size: 15)).foregroundColor(c.muted)
+                Text(item.tib).font(.system(size: 30)).foregroundColor(c.ink)
+                Divider()
+                Text(ctx.tib).font(.system(size: 22)).foregroundColor(c.ink)
+                Text("[\(ctx.course):\(ctx.seq)]")
+                    .font(.system(size: 11)).foregroundColor(c.muted)
+                if revealed {
+                    EnglishHint(text: ctx.english, ink: c)
+                    Text("aligned evidence, TENTATIVE — \(item.aligned_eng)")
+                        .font(.system(size: 12)).foregroundColor(c.machine)
+                    Text("Machine-matched from his courses, not his dictionary gloss. His English above is the attested part.")
+                        .font(.system(size: 11)).foregroundColor(c.muted)
+                }
+            }.padding(20)
+        }
+        VStack(spacing: 0) {
+            Divider()
+            HStack(spacing: 12) {
+                if !revealed {
+                    Button("Reveal") { revealed = true }
+                        .font(.system(size: 17, weight: .semibold))
+                        .foregroundColor(.white).lineLimit(1)
+                        .fixedSize(horizontal: true, vertical: false)
+                        .padding(.horizontal, 20).padding(.vertical, 11)
+                        .background(c.act).cornerRadius(9)
+                } else {
+                    Button("I knew it") { advance(true) }
+                        .font(.system(size: 16, weight: .semibold))
+                        .foregroundColor(.white).lineLimit(1)
+                        .fixedSize(horizontal: true, vertical: false)
+                        .padding(.horizontal, 16).padding(.vertical, 11)
+                        .background(c.act).cornerRadius(9)
+                    Button("I did not") { advance(false) }
+                        .font(.system(size: 16)).foregroundColor(c.ink)
+                        .lineLimit(1)
+                        .fixedSize(horizontal: true, vertical: false)
+                        .padding(.horizontal, 16).padding(.vertical, 11)
+                        .overlay(RoundedRectangle(cornerRadius: 9)
+                            .stroke(c.muted, lineWidth: 1))
+                }
+                Spacer()
+            }.padding(.horizontal, 20).padding(.top, 10).padding(.bottom, 26)
+        }.background(c.paper)
+    }
+
+    /// Knowing it HERE promotes to the transfer question; knowing it ANYWHERE
+    /// finishes the word. Not knowing it at either stage sends it back to the
+    /// segment it was met in — the context is the scaffold, so the repair
+    /// belongs where the scaffold is.
+    private func advance(_ knew: Bool) {
+        deck.record(correct: knew)
+        revealed = false
+        if knew && stage == 0 { stage = 1 } else { stage = 0; next() }
+    }
+}
+
 // MARK: - Trainer
 
 struct TrainerView: View {
@@ -692,6 +1045,10 @@ struct TrainerView: View {
     let next: () -> Void
     @Environment(\.colorScheme) private var scheme
     @State private var shown: Set<Int> = []
+    /// The ungraded reading-order gate. Default OFF — it is an extra step,
+    /// and a learner who does not want it should never meet it.
+    @AppStorage("trainer.gate") private var gateOn = false
+    @State private var gateAnswer: Int? = nil
 
     private let layers = ["1 · chunks", "2 · particle roles", "3 · reading order",
                           "4 · the verb", "5 · answer key", "6 · full parse"]
@@ -702,6 +1059,23 @@ struct TrainerView: View {
             VStack(alignment: .leading, spacing: 16) {
                 Text("Read it yourself first, then reveal one layer at a time.")
                     .font(.system(size: 15)).foregroundColor(c.muted)
+
+                // The key / no-key badge. Every pack passage is drawn from
+                // the corpus, so on the phone this state is always "there is
+                // a key" — the phone has no out-of-corpus surface to reach
+                // the other state from. It is still said rather than assumed:
+                // knowing the guidance is checked against his own English is
+                // the thing a working translator most wants to know, and a
+                // learner should never have to infer it from silence.
+                HStack(spacing: 6) {
+                    Image(systemName: "checkmark.seal.fill")
+                        .font(.system(size: 12)).foregroundColor(c.act)
+                    Text("THERE IS A KEY — his own English for this segment · [\(passage.course):\(passage.seq)]")
+                        .font(.system(size: 10, weight: .semibold)).tracking(0.6)
+                        .foregroundColor(c.act)
+                }
+                .padding(.horizontal, 9).padding(.vertical, 5)
+                .background(c.act.opacity(0.10)).cornerRadius(6)
 
                 Text(passage.tibetan)
                     .font(.system(size: 26))
@@ -725,6 +1099,15 @@ struct TrainerView: View {
                     if shown.contains(i) { shown.remove(i) } else { shown.insert(i) }
                 }
 
+                if passage.verb_confident {
+                    Toggle(isOn: $gateOn) {
+                        Text("Ask me which chunk I read first, before layer 3 opens")
+                            .font(.system(size: 12)).foregroundColor(c.muted)
+                    }
+                    .toggleStyle(.switch)
+                    .tint(c.act)
+                }
+
                 if shown.contains(0) {
                     Layer("Chunks", ink: c) {
                         ForEach(Array(passage.chunks.enumerated()), id: \.offset) { i, ch in
@@ -741,7 +1124,38 @@ struct TrainerView: View {
                         }
                     }
                 }
-                if shown.contains(2) {
+                // One ungraded gate before the reading-order layer opens:
+                // which chunk did you read first? UNGRADED and default off.
+                // The attempt is recorded with NO correct bit — the
+                // retrieval-practice gain comes from attempting and then
+                // seeing, not from being scored, so the ungraded form keeps
+                // the documented benefit without scoring a learner against
+                // engine guidance. Offered only where the verb is attested,
+                // because the plan is only worth predicting when the engine
+                // itself is confident.
+                if shown.contains(2), passage.verb_confident,
+                   gateOn, gateAnswer == nil, passage.chunks.count >= 2 {
+                    Layer("Before it opens — which chunk did you read first?",
+                          ink: c) {
+                        Text("Ungraded. Nothing is scored and no counter moves.")
+                            .font(.system(size: 12)).foregroundColor(c.muted)
+                        ForEach(Array(passage.chunks.enumerated()), id: \.offset) { i, ch in
+                            Button { gateAnswer = i } label: {
+                                HStack {
+                                    Text("\(i + 1).  \(ch)")
+                                        .font(.system(size: 19))
+                                        .foregroundColor(c.ink)
+                                    Spacer()
+                                }.padding(.vertical, 4)
+                            }.buttonStyle(.plain)
+                        }
+                    }
+                }
+                if shown.contains(2), let g = gateAnswer, passage.verb_confident, gateOn {
+                    Text("You read chunk \(g + 1) first. The engine's plan is below — guidance, not a mark.")
+                        .font(.system(size: 13)).foregroundColor(c.gold)
+                }
+                if shown.contains(2), !(passage.verb_confident && gateOn && gateAnswer == nil) {
                     Layer("Reading order", ink: c) {
                         ForEach(passage.plan.sorted { $0.order < $1.order }, id: \.chunk) { st in
                             Text(st.order == 0
@@ -1110,6 +1524,101 @@ struct RootView: View {
     @State private var bAt = 0
     @State private var siAt = 0
     @State private var seAt = 0
+    @State private var plAt = 0
+    @State private var bdAt = 0
+    @State private var vcAt = 0
+    /// The mixed set's queue of kinds, and where we are in it. The picker
+    /// keeps saying "Mixed set" — naming the kind is exactly the leak the
+    /// mode exists to close — so only this queue knows what is being asked.
+    @State private var mixQueue: [DrillKind] = []
+    @State private var mixAt = 0
+
+    /// The grammar kinds interleave; the vocabulary is blocked at the end.
+    /// Interleaving is what makes the learner decide WHICH rule applies
+    /// before applying it, which is the whole point — so no kind may be
+    /// asked twice in a row. A shuffle with a repair pass does not guarantee
+    /// that (the desktop's own gate caught it), so the queue is BUILT with
+    /// the property: at each step take the kind with the most remaining,
+    /// never the one just asked.
+    static func buildMix(_ pack: Pack) -> [DrillKind] {
+        var pool: [DrillKind: Int] = [:]
+        let grammar: [(DrillKind, Bool)] = [
+            (.cloze, !pack.cloze.isEmpty),
+            (.order, !(pack.order ?? []).isEmpty),
+            (.particle, !(pack.particle ?? []).isEmpty),
+            (.boundary, !(pack.boundary ?? []).isEmpty),
+        ]
+        for (k, have) in grammar where have { pool[k] = 3 }
+        guard pool.count >= 2 else { return pool.keys.map { $0 } }
+        var out: [DrillKind] = []
+        var prev: DrillKind? = nil
+        while true {
+            let avail = pool.filter { $0.value > 0 && $0.key != prev }
+            guard let top = avail.values.max() else { break }
+            let tied = avail.filter { $0.value == top }.keys.sorted {
+                $0.rawValue < $1.rawValue
+            }
+            let pick = tied[Int.random(in: 0..<tied.count)]
+            out.append(pick)
+            pool[pick]! -= 1
+            prev = pick
+        }
+        // vocabulary blocked at the end: spacing helps rules, massing helps
+        // word forms, and the two want opposite treatment
+        if !(pack.vocab ?? []).isEmpty { out += [.vocab, .vocab, .vocab] }
+        return out
+    }
+
+    @ViewBuilder private func mixedBody(_ pack: Pack, _ c: Ink) -> some View {
+        let q = mixQueue.isEmpty ? RootView.buildMix(pack) : mixQueue
+        if q.isEmpty {
+            missing("drills to mix", c)
+        } else {
+            let k = q[min(mixAt, q.count - 1)]
+            VStack(spacing: 0) {
+                Text("MIXED SET — the category is not given away")
+                    .font(.system(size: 10, weight: .semibold)).tracking(1.5)
+                    .foregroundColor(c.gold)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.horizontal, 20).padding(.top, 6)
+                mixedItem(k, pack, c) {
+                    if mixQueue.isEmpty { mixQueue = q }
+                    mixAt += 1
+                    if mixAt >= q.count { mixQueue = RootView.buildMix(pack); mixAt = 0 }
+                }
+            }
+        }
+    }
+
+    @ViewBuilder private func mixedItem(_ k: DrillKind, _ pack: Pack,
+                                        _ c: Ink,
+                                        _ advance: @escaping () -> Void)
+        -> some View {
+        switch k {
+        case .order:
+            if let a = pack.order, !a.isEmpty {
+                OrderView(drill: a[oAt % a.count]) { oAt = (oAt + 1) % a.count; advance() }
+            }
+        case .particle:
+            if let a = pack.particle, !a.isEmpty {
+                ParticleView(drill: a[pAt % a.count], deck: deck) { pAt = (pAt + 1) % a.count; advance() }
+            }
+        case .boundary:
+            if let a = pack.boundary, !a.isEmpty {
+                BoundaryView(item: a[bdAt % a.count], deck: deck) { bdAt = (bdAt + 1) % a.count; advance() }
+            }
+        case .vocab:
+            if let a = pack.vocab, !a.isEmpty {
+                VocabView(item: a[vcAt % a.count], deck: deck) { vcAt = (vcAt + 1) % a.count; advance() }
+            }
+        default:
+            if !pack.cloze.isEmpty, dAt < dOrder.count {
+                DrillView(drill: pack.cloze[dOrder[dAt]], deck: deck, aim: $aim) {
+                    dAt = (dAt + 1) % max(dOrder.count, 1); advance()
+                }
+            }
+        }
+    }
 
     /// Shown when a pack predates a drill kind. Never a blank screen and
     /// never an invented drill — it says which pack is in the app.
@@ -1153,6 +1662,10 @@ struct RootView: View {
                         TrainerView(passage: pack.trainer[tOrder[tAt]], deck: deck) {
                             tAt = (tAt + 1) % max(tOrder.count, 1)
                         }
+                        // A new passage is a new question: carrying the last
+                        // answer over would show "you read chunk 3 first"
+                        // above a passage that was never asked about.
+                        .id(tAt)
                     } else if mode == 1 {
                         // The kind picker. Until 2026-09-11 the phone offered
                         // only the cloze, while the desktop had eleven modes —
@@ -1209,6 +1722,26 @@ struct RootView: View {
                                     seAt = (seAt + 1) % a.count
                                 }
                             } else { missing("multi-rendering terms", c) }
+                        case .peel:
+                            if let a = pack.peel, !a.isEmpty {
+                                PeelView(span: a[plAt % a.count], deck: deck) {
+                                    plAt = (plAt + 1) % a.count
+                                }
+                            } else { missing("nested spans", c) }
+                        case .boundary:
+                            if let a = pack.boundary, !a.isEmpty {
+                                BoundaryView(item: a[bdAt % a.count], deck: deck) {
+                                    bdAt = (bdAt + 1) % a.count
+                                }
+                            } else { missing("boundary-hunt segments", c) }
+                        case .vocab:
+                            if let a = pack.vocab, !a.isEmpty {
+                                VocabView(item: a[vcAt % a.count], deck: deck) {
+                                    vcAt = (vcAt + 1) % a.count
+                                }
+                            } else { missing("twice-attested words", c) }
+                        case .mixed:
+                            mixedBody(pack, c)
                         }
                     } else { Spacer() }
                 } else {

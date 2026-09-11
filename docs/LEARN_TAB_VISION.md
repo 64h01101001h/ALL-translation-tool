@@ -3,7 +3,9 @@
      gamification; research language acquisition and what other tools do.
      Ideas proposed 108, kept to build now 20, kept for later 23, CUT 65.
 
-     NOT YET RULED ON and nothing here is built except where marked SHIPPED.
+     STATUS 2026-09-11: all twelve build-now tools are BUILT, on both the
+     desktop trainer and the phone. Four plan figures were corrected by
+     measurement during the build and are marked where they appear.
 
      Two load-bearing figures were re-measured independently before this was
      banked, because several claimed numbers in this project have been wrong:
@@ -17,8 +19,24 @@
 # The Learn Tab
 
 **A vision and build plan for the Diamond Cutter Translation Tool**
-Status: proposal. Nothing here is built except where marked SHIPPED.
-Written 2026-09-10. Supersedes nothing; feeds `docs/PEDAGOGY_ROADMAP.md`.
+Written 2026-09-10. Feeds `docs/PEDAGOGY_ROADMAP.md`.
+
+**Status 2026-09-11 — complete.** All twelve tools in §3 are built, gated and
+shipped on the desktop trainer. Each carries its build date. Eleven of the
+twelve reach the phone; the twelfth is named in §3.5 along with the reason it
+cannot be made honest there.
+
+Four figures in this plan were **wrong** and were corrected by
+measurement during the build rather than quietly carried forward — the debate
+segment count (1,052 → **1,099**), `sogs` renderings (84 → **59**), the
+Silent Particle scoring rule (the proposed rule gave a free pass **91.3%** of
+the time and was replaced), and the Peel nesting count (43,325 → **39,945**).
+Corrections are recorded beside the figures they replace, not in place of them.
+
+One entry — Boundary Hunt — **claimed BUILT for a tool that did not exist**. It
+is built now, and the false mark is recorded in its own section rather than
+painted over, because a plan that marks itself complete is worth less than one
+that can be checked.
 
 ---
 
@@ -86,17 +104,23 @@ Each entry states what the learner sees, what data drives it, how the tool knows
 
 **Why first.** Adam asked for a tab where a beginner finds something that moves them forward. Today every mode takes ACIP or wylie as input, so a true beginner cannot start at all. Largest audience gain for the least work in the plan.
 
-#### Boundary Hunt — **BUILT** (in the Drills pane)
+#### Boundary Hunt — **BUILT 2026-09-11** (Drills ▸ "Boundary hunt")
 
-**Sees.** A real segment with its punctuation stripped. Mark where the clauses end.
+**This entry said BUILT for a day and was not.** It was marked built when the Drills pane had no such mode — the mark appears to have been made on the strength of "Chunk order", which reorders chunks inside a clause and never asks where a clause *ends*. Nothing in `allcore` produced a boundary drill and nothing in the pane rendered one. Found on 2026-09-11 while auditing the plan's own claims, and built the same day. Recorded here rather than quietly corrected, because a plan that marks itself complete is worth less than one that can be checked.
 
-**Data.** `splitClauses` + `refineClauses` in `core/src/reader.cpp`, plus the shad and clause-particle positions actually present in the text. Two pools: punctuated segments (confidence-building) and the 11.1% with no punctuation (the real skill).
+**Sees.** A real segment with its punctuation stripped. Tap the word each clause ends on.
 
-**Success.** Boundary precision and recall against the text's own punctuation, tracked separately for the two pools.
+**Data.** `splitClauses` + `refineClauses`, now reached through `DrillFactory::makeBoundary`. Two pools, kept apart: segments whose scribe marked a boundary inside them (confidence-building — the key is **attested**), and segments carrying no punctuation at all (the real skill — the key is the splitter's **engine ruling**, and the reveal says so on every line). The desktop promotes from the first pool to the second after three perfect answers, and **announces the promotion** rather than letting the ground move silently.
 
-**Honesty.** `refineClauses` already makes a dictionary-anchored ruling on each ambiguous `na` and already declines where it cannot rule. Where it declines, the item is not scored — it is shown as a genuine ambiguity.
+**Success.** Recorded as two separate skills, `boundary-marked` and `boundary-unpunctuated`. Merging them would let progress in the warm-up pool stand in for progress in the one that matters.
 
-**Why.** We measured that clause order survives translation: adjacent clause pairs are reversed in his English only 4.8% of the time, against 49.0% for adjacent word pairs. Find the clause boundaries and most of the corpus becomes readable left-to-right at clause granularity. Highest payoff per hour in the language, and the generator already exists.
+**Honesty — the plan had this backwards.** The plan said `refineClauses` "declines where it cannot rule". It does not decline: it always rules. What it actually does is *split* on positive evidence (the preceding word carries HGM verb evidence, or is the nominalizer pa/ba) and *merge* on the **absence** of that evidence — and absence of verb evidence is not knowledge that the word is a noun. Those merge positions are now reported (`refineClauses` gained an out-parameter), and a learner who marks one is **not counted wrong**, because we do not know that they are.
+
+**Why.** We measured that clause order survives translation: adjacent clause pairs are reversed in his English only 4.8% of the time, against 49.0% for adjacent word pairs. Find the clause boundaries and most of the corpus becomes readable left-to-right at clause granularity.
+
+**Gates.** Six in `drills_smoke` (ends real, ascending and non-final; no position both key and unscored; every end labelled; both pools reachable; nothing in the hard pool ended by punctuation) and five in the app selftest (including that marking exactly the key scores perfect and marking nothing does not).
+
+**On the phone.** `BoundaryView`, pack section `boundary` (144 items, 64 from the hard pool).
 
 ---
 
@@ -208,15 +232,21 @@ Each entry states what the learner sees, what data drives it, how the tool knows
 
 **Why later.** The annotation pass is real work and the payoff is narrow but deep. Highest-value item for the expert audience once it exists.
 
-#### Peel — **BUILD LATER**
+#### Peel — **BUILT 2026-09-11**
 
-**Sees.** A segment as one bar. Peel it down clause → phrase → word → compound member, predicting each split before it opens. Scores the *split prediction*, not the translation.
+**Sees.** A span as one bar. How many pieces does it split into at the next level down? Predict the count, then the split opens. Scores the *split prediction*, not the translation — which is what makes it a reading skill rather than a vocabulary test.
 
-**Data.** 43,325 measured parent→child nestings, including 3,191 compound decompositions; 1,330 segments peel three or more levels.
+**Data.** **39,945** measured parent→child nestings. *(The plan said 43,325. That figure came from counting HTML elements; this one comes from the nesting actually derived and stored, and is the one the app can demonstrate. Lower, and correct.)*
 
-**Prerequisite.** The nesting is currently expressed in the page HTML. It must be lifted into `allcore` as a spans-with-parent table before a widget can consume it — do not parse HTML at runtime.
+**Prerequisite — met, and not the way the plan expected.** The plan called for lifting the nesting out of the page HTML into a spans-with-parent table. No HTML parsing was needed: the alignment layer's own `id` scheme already encodes depth — `S` segment (1), `c` clause (2), `p`/`q` phrase (3/4), `w` word (5), `m` member (6), `y` chunk (7). Parents are derived by text containment within a segment. Nothing is parsed at runtime; the packer and `allcore` both read the layer directly.
 
-**Honesty.** TENTATIVE throughout; refuses outside the aligned courses.
+**One defect worth recording.** Both implementations first fed the layer's `tib` field — which is **wylie** — into an ACIP converter, so `dal 'byor` rendered as ཌལ་འབྱོར with a retroflex ཌ instead of dental ད. ACIP lowercase `d` is ཌ; wylie `d` is ད. The layer carries `tib_acip` alongside `tib` for exactly this reason. Fixed on both sides (`GLink::acip`, and `sf("tib_acip")` in the packer); spans with no ACIP are now **refused rather than garbled**.
+
+**Honesty.** TENTATIVE throughout — the nesting is machine-derived from his courses and awaits his ruling. Refuses outside the aligned courses.
+
+**Gates.** Four, all passing: a splitting span offers at least two pieces · the true count is among the options · every piece is contained in the span it came from · the span and every piece render as script.
+
+**On the phone.** `PeelView`, same pack (`peel`, 250 spans).
 
 ---
 
@@ -229,6 +259,18 @@ Every passage in Trainer, Drills and the reader carries an explicit state: *in-c
 #### One ungraded reading-order gate in the Trainer — **BUILT 2026-09-11**
 
 The full commit-before-reveal proposal was cut (§6). What survives is one gate: before the reading-order layer opens, ask which chunk you read first. **Ungraded.** Default off. Offered only where `spotVerb` reports `confident == true`. The attempt is recorded with **no correct bit**, and the reveal appears beside it under its existing guidance label. Verb-first reading order in a case-marked SOV language is the skill translators need and a flashcard app cannot touch. The retrieval-practice gain comes from the attempt plus feedback, not from a score, so the ungraded form keeps the documented benefit and drops the breach. Build after the redundancy with drill mode 5 is settled.
+
+---
+
+### 3.5 Desktop and phone — what reaches which, and why
+
+Adam's standing order (2026-09-11): the desktop trainer is the primary surface, every update lands there first and on the phone before moving on, and any update deliberately *not* carried to the phone must be named along with the reason.
+
+**Eleven of the twelve reach the phone.** Drill kinds on iOS: cloze, chunk order, particle, script cards, debate, silent particle, his second thought, Peel, **boundary hunt**, **known here / known anywhere**, and **mixed set**. In the Trainer: the **key / no-key badge** and the **ungraded reading-order gate** (default off, offered only where the verb is attested). The weak-spot loop is the `WeakSpotsSheet`.
+
+**One does not: "What you can read next".** Not an oversight — it cannot be made honest on the phone. The shelf measures *the learner's word deck* against *each work's full vocabulary*: 66 works, 153,177 glossed headwords, 1.7 MB of lists. The denominator is the whole course; the numerator is however much of it the learner knows. On the desktop the deck grows from the Overlay, from Trainer reveals and from the concordance — surfaces that see the whole corpus. The phone has none of them: its deck can only ever grow over what the pack ships. Shipping the shelf there would compute a real denominator against a numerator capped at a few hundred words and report that every text in the library is roughly 0.4% readable. That is not a smaller version of the feature, it is a false number wearing the feature's clothes. It stays on the desktop until the phone has a surface that can grow a word deck across the corpus.
+
+**A defect found on the way.** The Mixed set hid the answer box for its own chunk-order items. Visibility was keyed to the *combo box* — which in a mixed set deliberately says "Mixed set" and never names the kind — so when the queue picked chunk order, the box stayed hidden and Check scored the empty string as wrong. One item in four was unanswerable, on a mode that shipped 2026-09-11. Fixed by keying visibility to the kind **being asked**, with a gate that drives a full mixed queue and asserts the box is present for every kind answered by typing.
 
 ---
 

@@ -185,6 +185,71 @@ int main(int argc, char** argv) {
               "isDrillable: English sitting in the Tibetan field is refused");
     }
 
+    // ---- Boundary Hunt ---------------------------------------------------
+    {
+        std::mt19937 rng(1729);
+        int made = 0, valid = 0, keyed = 0, unpunct = 0;
+        for (int i = 0; i < 20; ++i) {
+            auto d = factory.makeBoundary(rng);
+            if (!d) continue;
+            ++made;
+            bool ok = !d->ends.empty() &&
+                      d->ends.size() == d->functions.size() &&
+                      d->ends.size() == d->attested.size() &&
+                      d->tokens.size() >= 6;
+            // every marked end is a real token position, strictly ascending,
+            // and never the last token (the segment's own end is not a find)
+            int prev = -1;
+            for (int e : d->ends) {
+                ok &= e > prev && e >= 0 && e < (int)d->tokens.size() - 1;
+                prev = e;
+            }
+            // an unscored position is never also in the key — a position
+            // cannot be both the answer and unknowable
+            for (int u : d->unscored)
+                ok &= std::find(d->ends.begin(), d->ends.end(), u) ==
+                      d->ends.end();
+            // no function label is blank: the learner is always told what
+            // ended the clause
+            for (const auto& f : d->functions) ok &= !f.empty();
+            valid += ok;
+            keyed += !d->segment.english.empty();
+            unpunct += !d->punctuated;
+        }
+        CHECK(made >= 10, "boundary: the factory produces them reliably");
+        CHECK(valid == made,
+              "boundary: every end is a real, ascending, non-final position "
+              "and no unscored position is also in the key");
+        CHECK(keyed == made, "boundary: every drill carries his English");
+        CHECK(unpunct == 0,
+              "boundary: the default draw is the punctuated pool only");
+    }
+    {
+        // The hard pool: no punctuation anywhere inside the segment. This is
+        // the pool the plan calls the real skill, and it must be reachable
+        // on demand rather than by luck.
+        std::mt19937 rng(31337);
+        int made = 0, clean = 0;
+        for (int i = 0; i < 20; ++i) {
+            auto d = factory.makeBoundary(rng, /*want_unpunctuated=*/true);
+            if (!d) continue;
+            ++made;
+            bool ok = !d->punctuated && !d->ends.empty();
+            // In the hard pool NO end is scribe-attested. If one ever were,
+            // the key would be sitting on the page and the pool would be a
+            // lie about its own difficulty.
+            for (size_t k = 0; k < d->attested.size(); ++k)
+                ok &= !d->attested[k];
+            // and no boundary in this pool may be scored as "punctuation" —
+            // that would mean the strip failed and the answer is on the page
+            for (const auto& f : d->functions) ok &= f != "punctuation";
+            clean += ok;
+        }
+        CHECK(made >= 5, "boundary: the unpunctuated pool is reachable");
+        CHECK(clean == made,
+              "boundary: nothing in the hard pool is ended by punctuation");
+    }
+
     std::printf("%s (%d failures)\n",
                 failures ? "DRILLS SMOKE FAILED" : "DRILLS SMOKE OK", failures);
     return failures ? 1 : 0;

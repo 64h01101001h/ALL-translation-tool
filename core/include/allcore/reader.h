@@ -57,8 +57,14 @@ std::vector<Clause> splitClauses(const std::vector<std::string>& tokens,
 // word before na carries HGM verb evidence (tenses or a "to …" gloss);
 // otherwise merge with the following clause so the chunker can mark na as the
 // locative it is. Data-anchored disambiguation, no guessing.
+// When `merged_na` is given, it receives the token index of each `na` whose
+// split was dropped. That drop is a ruling made on the ABSENCE of verb
+// evidence, not on positive evidence of a noun, so a caller that scores
+// boundaries must be able to tell those positions apart from the ones the
+// function ruled on positively — and decline to score them.
 std::vector<Clause> refineClauses(const OverlayDoc& doc,
-                                  std::vector<Clause> clauses);
+                                  std::vector<Clause> clauses,
+                                  std::vector<int>* merged_na = nullptr);
 
 // ---- increment 2: phrase chunks, verb, reading order -----------------------
 

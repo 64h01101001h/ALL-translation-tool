@@ -611,6 +611,17 @@ struct GLink {
     int d = 0;
     QString tib, eng;   // eng empty = no English exponent (real data)
     bool isCase = false;
+    // The span's own id ("s2c1", "s2y3"). Its letter encodes the level —
+    // S segment, c clause, p/q phrase, w word, m member, y chunk — and it is
+    // what makes a spans-with-PARENT table possible, which is Peel's stated
+    // prerequisite (docs/LEARN_TAB_VISION.md). Dropping it, as this loader
+    // used to, left the nesting only in the page HTML.
+    QString id;
+    // The SAME span in ACIP. `tib` is wylie, and disp() converts ACIP — so
+    // rendering `tib` through it turns every wylie d into a retroflex ཌ.
+    // Where the layer has no ACIP (Sanskrit spans), the span is refused
+    // rather than garbled.
+    QString acip;
 };
 using AlignGrammarMap = std::map<std::string, QList<GLink>>;   // "C01:23"
 static const AlignGrammarMap* g_alignGrammar = nullptr;
@@ -22035,7 +22046,9 @@ public:
                          "Silent particle \u2014 did he render it?",
                          "His second thought \u2014 which did he use here?",
                          "Mixed set \u2014 the category is not given away",
-                         "Debate \u2014 which element does the reply attack?"});
+                         "Debate \u2014 which element does the reply attack?",
+                         "Peel \u2014 how many pieces does it split into?",
+                         "Boundary hunt \u2014 where do the clauses end?"});
         row->addWidget(mode_);
         scriptCourse_ = new QComboBox;
         scriptCourse_->setToolTip(
@@ -22149,7 +22162,6 @@ public:
         QObject::connect(check_, &QPushButton::clicked, [this] { checkDrill(); });
         QObject::connect(mode_, &QComboBox::currentIndexChanged, [this](int m) {
             course_->setVisible(m == 3);
-            input_->setVisible(m == 0);
             transDraft_->setVisible(m == 5);
             newDrill();
         });
@@ -22438,6 +22450,85 @@ public:
                 check(before == after,
                       "reading-order gate: records no correct bit and moves no "
                       "counter");
+            }
+
+            // ---- Peel ----
+            mode_->setCurrentIndex(11);
+            newDrill();
+            if (!peelKids_.isEmpty()) {
+                check(peelKids_.size() >= 2,
+                      "peel: a span that splits offers at least two pieces");
+                check(peelCorrect_ >= 0 && peelCorrect_ < (int)radios_.size(),
+                      "peel: the true count is among the options");
+                // every piece must be CONTAINED in the parent, or the nesting
+                // is not a nesting
+                bool contained = true;
+                for (const QString& k2 : peelKids_)
+                    if (!peelParent_.contains(k2)) contained = false;
+                check(contained,
+                      "peel: every piece is contained in the span it came from");
+                // and the card must be readable end to end
+                bool readable = !disp(peelParent_.toStdString())
+                                     .contains(QChar(0x27E8));
+                for (const QString& k2 : peelKids_)
+                    if (disp(k2.toStdString()).contains(QChar(0x27E8)))
+                        readable = false;
+                check(readable,
+                      "peel: the span and every piece render as script");
+            }
+
+            // ---- Boundary hunt ----
+            mode_->setCurrentIndex(12);
+            newDrill();
+            if (bound_) {
+                check(input_->isVisibleTo(this),
+                      "boundary: the answer box is present for a mode that is "
+                      "answered by typing");
+                check(!bound_->ends.empty() &&
+                          bound_->ends.size() == bound_->attested.size(),
+                      "boundary: every end carries whether the scribe marked it");
+                // the stripped display must not contain the answer
+                bool clean = true;
+                for (const auto& t : bound_->tokens)
+                    if (t.find('|') != std::string::npos ||
+                        t.find(',') != std::string::npos)
+                        clean = false;
+                check(clean,
+                      "boundary: the punctuation really is stripped from what "
+                      "the learner sees");
+                // scoring: the exact key scores perfect, and a key position
+                // left unmarked does not
+                QStringList exact;
+                for (int e : bound_->ends) exact << QString::number(e + 1);
+                input_->setText(exact.join(' '));
+                checkDrill();
+                check(result_->toPlainText().contains("Every boundary found"),
+                      "boundary: marking exactly the key scores perfect");
+                if (bound_->ends.size() >= 1) {
+                    // re-draw the same drill state and answer with nothing
+                    input_->setText("");
+                    checkDrill();
+                    check(!result_->toPlainText().contains("Every boundary found"),
+                          "boundary: marking nothing does not score perfect");
+                }
+            }
+
+            // A Mixed set hides the combo's own kind, so the ANSWER BOX must
+            // follow the kind being asked rather than the combo index. It did
+            // not: chunk-order items came up in mixed sets with no box to
+            // answer in, and scored the empty string as wrong.
+            {
+                mode_->setCurrentIndex(9);
+                bool boxWhenNeeded = true;
+                for (int n = 0; n < 12; ++n) {
+                    newDrill();
+                    const int k = effectiveMode();
+                    if ((k == 0 || k == 12) && !input_->isVisibleTo(this))
+                        boxWhenNeeded = false;
+                }
+                check(boxWhenNeeded,
+                      "mixed set: every kind that is answered by typing gets "
+                      "the answer box");
             }
 
             // ---- The Debate Dojo ----
@@ -23123,6 +23214,75 @@ private:
             if (!vocab_.empty())
                 addRadios({"I knew it", "I did not know it"}, false);
         }
+        if (m == 11) {
+            peelParent_.clear(); peelKids_.clear(); peelRef_.clear();
+            peelCorrect_ = -1;
+            if (g_alignGrammar && !g_alignGrammar->empty()) {
+                for (int tries = 0; tries < 120 && peelKids_.isEmpty(); ++tries) {
+                    auto it = g_alignGrammar->begin();
+                    std::advance(it, rng_() % g_alignGrammar->size());
+                    const QList<GLink>& v = it->second;
+                    if (v.size() < 3) continue;
+                    // pick a parent, then the children it contains at the
+                    // nearest deeper level
+                    for (const GLink& p2 : v) {
+                        if (p2.tib.isEmpty()) continue;
+                        QList<GLink> kids;
+                        int kidDepth = 99;
+                        for (const GLink& c2 : v) {
+                            if (c2.d <= p2.d || c2.tib == p2.tib) continue;
+                            if (!p2.tib.contains(c2.tib)) continue;
+                            if (c2.d < kidDepth) { kidDepth = c2.d; kids.clear(); }
+                            if (c2.d == kidDepth) kids << c2;
+                        }
+                        if (kids.size() < 2) continue;
+                        // ACIP, not wylie: disp() converts ACIP, and feeding
+                        // it the wylie field renders every d as retroflex.
+                        if (p2.acip.isEmpty()) continue;
+                        bool ok = !disp(p2.acip.toStdString())
+                                       .contains(QChar(0x27E8));
+                        for (const GLink& k2 : kids)
+                            if (k2.acip.isEmpty() ||
+                                disp(k2.acip.toStdString()).contains(QChar(0x27E8)))
+                                ok = false;
+                        if (!ok) continue;
+                        peelParent_ = p2.acip;
+                        for (const GLink& k2 : kids) peelKids_ << k2.acip;
+                        peelRef_ = QString::fromStdString(it->first);
+                        break;
+                    }
+                }
+            }
+            if (!peelKids_.isEmpty()) {
+                // options around the true count, never below two
+                const int truth = peelKids_.size();
+                std::vector<std::string> opts;
+                std::vector<int> vals;
+                for (int n = std::max(2, truth - 1); (int)vals.size() < 4; ++n) {
+                    vals.push_back(n);
+                }
+                bool has = false;
+                for (int v2 : vals) if (v2 == truth) has = true;
+                if (!has) vals[0] = truth;
+                for (size_t z = 0; z < vals.size(); ++z) {
+                    opts.push_back(std::to_string(vals[z]) + " pieces");
+                    if (vals[z] == truth) peelCorrect_ = (int)z;
+                }
+                addRadios(opts, false);
+            }
+        }
+        if (m == 12) {
+            bound_.reset();
+            boundHard_ = boundStreak_ >= 3;
+            bound_ = factory_.makeBoundary(rng_, boundHard_);
+            // The hard pool can come up empty within the attempt budget.
+            // Falling back to the easy pool silently would tell the learner
+            // they are drilling the real skill when they are not.
+            if (!bound_ && boundHard_) {
+                boundHard_ = false;
+                bound_ = factory_.makeBoundary(rng_, false);
+            }
+        }
         if (m == 10) {
             dbg_ = allcore::DebateStatement{};
             dbgSeg_ = allcore::CorpusSegment{};
@@ -23520,6 +23680,16 @@ private:
 
     void renderQuestion() {
         const int m = effectiveMode();   // the queue's kind in a mixed set
+        // The answer box follows the kind BEING ASKED, not the combo box.
+        // Keying it to the combo box meant that in a Mixed set — where the
+        // box says "Mixed set" and the queue silently picks the kind — a
+        // chunk-order item appeared with no box to answer it in, and checking
+        // scored the empty string as wrong. The mixed set was shipped with
+        // one item in four unanswerable.
+        input_->setVisible(m == 0 || m == 12);
+        input_->setPlaceholderText(
+            m == 12 ? "words each clause ends ON, e.g.  4 9"
+                    : "your order, e.g.  C A B  (chunk-order drills)");
         QString h;
         if (m == 0 && order_) {
             h += kindBadge(order_->segment);
@@ -23548,6 +23718,66 @@ private:
                  "</i></div><hr><div style='font-size:" +
                  QString::number(px(22)) + "px'>" + clozeBody() +
                  "</div>";
+        } else if (m == 12) {
+            if (!bound_) {
+                h += "<div style='color:" +
+                     QString(ux::darkChrome() ? ux::chromeMuted() : ux::kMuted) +
+                     "'>No segment drawn.</div>";
+            } else {
+                const QString muted =
+                    ux::darkChrome() ? ux::chromeMuted() : QString(ux::kMuted);
+                h += kindBadge(bound_->segment);
+                h += keyBadge(true,
+                              QString::fromStdString(bound_->segment.course),
+                              bound_->segment.seq);
+                h += "<div style='color:#555'>The punctuation has been "
+                     "stripped. <b>Where do the clauses end?</b> Enter the "
+                     "numbers of the words each clause ends ON \u2014 e.g. "
+                     "<b>4 9</b>.</div>";
+                h += QString("<div style='color:%1;font-size:12px;"
+                             "padding:4px 0'>%2</div>")
+                         .arg(boundHard_ ? QString("#B4540A") : muted)
+                         .arg(boundHard_
+                                  ? "Hard pool: this segment carried <b>no "
+                                    "punctuation at all</b>. Nothing on the "
+                                    "page marks the boundary \u2014 only the "
+                                    "particle does."
+                                  : "Warm-up pool: the scribe marked these "
+                                    "boundaries himself, so the key is "
+                                    "attested. Three in a row moves you to "
+                                    "segments with no punctuation.");
+                h += "<hr><div style='font-size:" + QString::number(px(21)) +
+                     "px;line-height:1.9'>";
+                for (size_t t = 0; t < bound_->tokens.size(); ++t) {
+                    h += QString("<span style='color:%1;font-size:11px'>%2</span>"
+                                 "&nbsp;%3&nbsp;&nbsp;")
+                             .arg(muted).arg(t + 1)
+                             .arg(disp(bound_->tokens[t]));
+                }
+                h += "</div>";
+            }
+        } else if (m == 11) {
+            if (peelKids_.isEmpty()) {
+                h += "<div style='color:" +
+                     QString(ux::darkChrome() ? ux::chromeMuted() : ux::kMuted) +
+                     "'>No span drawn. Peel reads the alignment layer's own "
+                     "nesting \u2014 a span, and the pieces it contains \u2014 "
+                     "and builds nothing that is not measured there.</div>";
+            } else {
+                h += keyBadge(true, peelRef_.section(':', 0, 0),
+                              peelRef_.section(':', 1, 1).toInt());
+                h += "<div style='color:#555'>Read this span. How many pieces "
+                     "does it split into at the next level down? Decide before "
+                     "you check \u2014 the SPLIT is what is scored, not the "
+                     "translation.</div><hr>";
+                h += "<div style='font-size:" + QString::number(px(24)) +
+                     "px;padding:8px 0'>" + disp(peelParent_.toStdString()) +
+                     "</div>";
+                h += QString("<div style='color:%1;font-size:12px'>%2</div>")
+                         .arg(ux::darkChrome() ? ux::chromeMuted()
+                                               : QString(ux::kMuted))
+                         .arg(peelRef_.toHtmlEscaped());
+            }
         } else if (m == 10) {
             if (!dbg_.ok) {
                 h += "<div style='color:" +
@@ -23944,6 +24174,106 @@ private:
             h += "<div><small>role of the blanked chunk: " +
                  QString::fromUtf8(cloze_->role).toHtmlEscaped() +
                  "</small></div>";
+        } else if (m == 12 && bound_) {
+            const QString muted =
+                ux::darkChrome() ? ux::chromeMuted() : QString(ux::kMuted);
+            // 1-based on screen, 0-based in the key
+            std::set<int> given;
+            for (const QString& piece :
+                 input_->text().split(QRegularExpression("[^0-9]+"),
+                                      Qt::SkipEmptyParts)) {
+                const int v = piece.toInt() - 1;
+                if (v >= 0 && v < (int)bound_->tokens.size()) given.insert(v);
+            }
+            std::set<int> key(bound_->ends.begin(), bound_->ends.end());
+            std::set<int> uns(bound_->unscored.begin(), bound_->unscored.end());
+            int hit = 0, miss = 0, spurious = 0, waived = 0;
+            for (int k : key) (given.count(k) ? hit : miss) += 1;
+            for (int g : given)
+                if (!key.count(g)) (uns.count(g) ? waived : spurious) += 1;
+            const bool perfect = miss == 0 && spurious == 0;
+            h += perfect ? "<b style='color:#3B7A3B'>Every boundary found.</b>"
+                         : QString("<b style='color:#B4540A'>%1 of %2 found"
+                                   "%3.</b>")
+                               .arg(hit).arg((int)key.size())
+                               .arg(spurious ? QString(", %1 mark%2 where no "
+                                                       "clause ends")
+                                                   .arg(spurious)
+                                                   .arg(spurious == 1 ? ""
+                                                                      : "s")
+                                             : QString());
+            h += "<div style='padding-top:8px;font-size:" +
+                 QString::number(px(21)) + "px;line-height:1.9'>";
+            for (size_t t = 0; t < bound_->tokens.size(); ++t) {
+                const bool isKey = key.count((int)t) > 0;
+                const bool got = given.count((int)t) > 0;
+                QString col = "inherit";
+                if (isKey) col = got ? "#3B7A3B" : "#B4540A";
+                else if (got && uns.count((int)t)) col = "#7A5A00";
+                else if (got) col = "#B4540A";
+                h += QString("<span style='color:%1;font-size:11px'>%2</span>"
+                             "&nbsp;<span style='color:%3'>%4</span>")
+                         .arg(muted).arg(t + 1).arg(col)
+                         .arg(disp(bound_->tokens[t]));
+                if (isKey) h += QString("<b style='color:%1'>&nbsp;|</b>")
+                                    .arg(got ? "#3B7A3B" : "#B4540A");
+                h += "&nbsp;&nbsp;";
+            }
+            h += "</div>";
+            for (size_t e = 0; e < bound_->ends.size(); ++e)
+                h += QString("<div style='font-size:12px;color:%1'>after word "
+                             "%2 &mdash; %3 <i>(%4)</i></div>")
+                         .arg(muted)
+                         .arg(bound_->ends[e] + 1)
+                         .arg(QString::fromStdString(bound_->functions[e])
+                                  .toHtmlEscaped())
+                         .arg(bound_->attested[e]
+                                  ? "the scribe marked this one"
+                                  : "engine ruling, not his own mark");
+            if (waived)
+                h += QString("<div style='color:#7A5A00;font-size:12px;"
+                             "padding-top:6px'>%1 of your marks sat on an "
+                             "ambiguous <i>na</i>. The splitter dropped that "
+                             "split because the word before it carries no verb "
+                             "evidence \u2014 which is not the same as knowing "
+                             "it is a noun. Those are <b>not scored against "
+                             "you</b>.</div>").arg(waived);
+            h += "<div style='background:#EEF6EE;padding:6px;margin-top:6px'>"
+                 "<b>GMR:</b> " +
+                 englishWithSupplied(bound_->segment.english) + "</div>";
+            boundStreak_ = perfect ? boundStreak_ + 1 : 0;
+            if (progress_) {
+                const long long now = (long long)time(nullptr);
+                const std::string key =
+                    std::to_string(bound_->segment.id);
+                // The two pools are recorded as two skills. Merging them
+                // would let progress in the warm-up pool disguise no
+                // progress at all in the one that matters.
+                const std::string pool =
+                    boundHard_ ? "boundary-unpunctuated" : "boundary-marked";
+                progress_->recordDrill("boundary", key, perfect, now);
+                progress_->recordDrill("skill:" + pool, key, perfect, now);
+                if (!perfect)
+                    progress_->recordDrill("miss:" + pool, key, false, now);
+            }
+        } else if (m == 11 && !peelKids_.isEmpty()) {
+            const int pick = pickedRadio();
+            h += (pick == peelCorrect_)
+                     ? "<b style='color:#3B7A3B'>Correct.</b>"
+                     : QString("<b style='color:#B4540A'>Not quite \u2014 it "
+                               "splits into %1.</b>").arg(peelKids_.size());
+            h += "<div style='padding-top:6px'>";
+            for (int z = 0; z < peelKids_.size(); ++z)
+                h += QString("<div style='font-size:%1px'>%2&nbsp;&nbsp;%3</div>")
+                         .arg(px(20)).arg(z + 1)
+                         .arg(disp(peelKids_[z].toStdString()));
+            h += "</div>";
+            h += QString("<div style='color:%1;font-size:11px;padding-top:6px'>"
+                         "The nesting is the alignment layer's own, TENTATIVE "
+                         "throughout \u2014 machine-matched from his courses "
+                         "and awaiting his ruling.</div>")
+                     .arg(ux::darkChrome() ? ux::chromeMachine()
+                                           : QString(ux::kMachine));
         } else if (m == 10 && dbg_.ok) {
             const int pick = pickedRadio();
             h += (pick == dbgCorrect_)
@@ -24337,6 +24667,25 @@ private:
     allcore::CorpusSegment dbgSeg_;
     QString dbgReply_;          // the reply whose target is being asked
     int dbgCorrect_ = -1;
+    // ---- Peel (docs/LEARN_TAB_VISION.md) ----
+    //
+    // A span, and the question is how many pieces it splits into — the SPLIT
+    // is what is scored, not the translation. The nesting comes from the
+    // alignment layer's own span ids: the letter encodes the level, and a
+    // child is the nearest shallower span whose text contains it. 39,945
+    // parent-child nestings derive that way, with no HTML parsed at runtime,
+    // which is the prerequisite the plan sets.
+    QString peelParent_, peelRef_;
+    QStringList peelKids_;
+    int peelCorrect_ = -1;
+    std::optional<allcore::BoundaryDrill> bound_;
+    // The punctuated pool is the confidence-building one: the learner is
+    // recovering a boundary the scribe already marked. Three in a row and the
+    // mode moves to the pool with no punctuation at all, which is the real
+    // skill. The promotion is announced, not silent — a learner who suddenly
+    // starts getting them wrong should be told the ground moved.
+    int boundStreak_ = 0;
+    bool boundHard_ = false;
     // below this many attempts a per-skill score is a number,
     // not a trend, and the report must say so
     static constexpr int kTrendFloor = 8;
@@ -42158,6 +42507,8 @@ int main(int argc, char** argv) {
                 g.tib = o.value("tib").toString();
                 g.eng = o.value("eng").toString();   // null -> empty
                 g.isCase = o.value("case").toBool();
+                g.id = o.value("id").toString();
+                g.acip = o.value("tib_acip").toString();
                 if (g.tib.isEmpty()) continue;
                 alignGrammar[ref] << g;
                 if (g.d == 5) {
