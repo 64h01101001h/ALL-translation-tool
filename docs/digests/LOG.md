@@ -527,3 +527,73 @@ Categories: code · decision · email · release · audit · data · question.
 - The three corpus drills carry the KEY badge by construction, with citation.
 - Learn tab now 5 of 12 built: Zero to script, Boundary Hunt, Train this,
   Known here / known anywhere, the key / no-key badge.
+
+## 2026-09-11 · The Learn tab plan, finished — and one entry that lied
+
+- **All twelve tools in the Learn tab plan are built.** The last three landed
+  today: the Debate Dojo (the reply-target half), Peel, and Boundary Hunt.
+- **Boundary Hunt was marked BUILT and was not.** The plan carried that mark
+  since 2026-09-10; the Drills pane had no such mode, and nothing in the shared
+  core produced one. The mark appears to have been made on the strength of
+  "Chunk order", which reorders chunks inside a clause and never asks where a
+  clause ends. Found while auditing the plan's own claims, built the same day,
+  and the false mark recorded in its own section rather than painted over.
+- Boundary Hunt strips a real segment's punctuation and asks where the clauses
+  end. Two pools, kept apart: where the scribe marked a boundary the key is
+  ATTESTED; where he did not, the key is the engine's ruling and every line of
+  the reveal says so. Three perfect answers in the first pool promote you to
+  the second, and the promotion is announced rather than silent.
+- **The plan had the honesty backwards, and the data settled it.** The plan
+  said the clause splitter "declines where it cannot rule". It never declines:
+  it splits on positive verb evidence and merges on the ABSENCE of it — which
+  is not knowledge that the word is a noun. Those positions are now reported,
+  and a reader who marks one is not counted wrong, because we do not know that
+  they are.
+- Peel: a span, and how many pieces it splits into at the next level down. The
+  split is scored, not the translation. 39,945 measured nestings — the plan
+  said 43,325, which counted page elements rather than nestings actually
+  derived.
+- A defect found while doing the above: **the Mixed set hid its own answer
+  box.** Visibility was keyed to the mode box, which in a mixed set
+  deliberately never names the kind — so when the queue picked chunk order the
+  box stayed hidden and Check scored the empty string as wrong. One item in
+  four was unanswerable on a mode that shipped the same day.
+
+## 2026-09-11 · The phone catches up, and one thing deliberately left behind
+
+- The phone had one drill kind where the desktop had eleven. It now has
+  eleven of its own: cloze, chunk order, particle, script cards, debate,
+  silent particle, his second thought, Peel, boundary hunt, known here /
+  known anywhere, and the mixed set. In the Trainer it gained the key badge
+  and the ungraded reading-order gate.
+- **"What you can read next" stays on the desktop, on purpose.** It measures a
+  reader's word deck against each work's full vocabulary — 66 works, 153,177
+  glossed headwords. On the desktop that deck grows from reading, from Trainer
+  reveals and from the concordance. The phone has none of those surfaces: its
+  deck can only grow over what ships in the drill pack. Putting the shelf there
+  would divide a real denominator by a numerator capped at a few hundred words
+  and report that every text in the library is about 0.4% readable. That is not
+  a smaller version of the feature; it is a false number wearing its clothes.
+- One crash caught by the press rather than by any test: a database migration
+  added columns without checking whether they already existed, so the app ran
+  correctly the first time and aborted on the second launch. Every suite passed
+  because test databases are always new. It would have met everyone on their
+  next start.
+
+## 2026-09-11 · Nineteen menus down to eleven
+
+- The menu bar had twelve hand-written menus plus one generated for every pane
+  group, so it grew a menu each time a group was added and had reached
+  nineteen. It is now eleven, and fixed: File, Edit, Panes, Find, Insert,
+  Format, Tools, Goto, View, Window, Help.
+- Selection folded into Edit; Project folded into File; every pane group folded
+  into one Panes menu, with the group's name kept as a header rather than
+  becoming another submenu — a submenu per group would have put every pane
+  command four levels down and added a hover-and-wait to reaching any of them.
+- **The known risk was real.** Pinned commands on the Quick Access strip were
+  found by walking the menus exactly three levels deep; 135 of the 510 commands
+  now sit deeper than that, and every pin pointing at one would have reported
+  itself dead. The finder now walks the whole bar, and a stale pin is rewritten
+  only when its command name matches exactly one command in the new layout.
+  Otherwise it is left saying "not in this build" — a pin that quietly starts
+  running a different command is worse than one that admits it is broken.
