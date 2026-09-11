@@ -6312,6 +6312,10 @@ private:
 };
 
 extern std::function<void(const QString&, const QString&, const QString&, const QString&)> g_compareTexts;   // defined in compare_pane.inc (included later); the Versions window sends its pairs there
+#include "speak_out.inc"       // reading aloud (private build only).
+                               // Early, with the utilities: every pane
+                               // that offers Pronounce is built below
+                               // this line and needs to see it.
 #include "versions_pane.inc"   // F1 Versions: docprops::noteVersion + VersionsWindow (needs enc/editops/docprops above; used by the panes below)
 
 class OverlayPane : public QWidget {
@@ -9246,6 +9250,9 @@ public:
             [this](const QPoint& pt) {
                 QMenu* menu = input_->createStandardContextMenu();
                 menu->setAttribute(Qt::WA_DeleteOnClose);
+                // Adam, 2026-09-10: highlight Tibetan, right-click, hear it.
+                speak::addPronounce(menu,
+                                    input_->textCursor().selectedText(), this);
                 const auto cur = input_->textCursor();
                 const auto loc = resolveFolioAt(
                     cur.hasSelection() ? cur.selectionStart()
@@ -25123,6 +25130,7 @@ public:
                 QMenu* m = source_->createStandardContextMenu();
                 m->setAttribute(Qt::WA_DeleteOnClose);
                 const QString sel = source_->textCursor().selectedText().simplified();
+                speak::addPronounce(m, sel, this);
                 m->addSeparator();
                 QAction* a = m->addAction(sel.isEmpty() ? QString("Idioms\u2026") : QString("Idioms: look up “%1”\u2026").arg(sel.left(28)));
                 a->setToolTip("The idiom register: is this a fixed expression, and how has Geshe Michael rendered it?");
@@ -27217,7 +27225,6 @@ protected:
 #include "normalize_pane.inc"   // F3 Normalize… with preview (needs cmp::, g_compareTexts, ComparePane)
 #include "replace_files.inc"     // F4 Replace in Files… with mandatory preview (needs normalize::, versions, filewalk)
 #include "apply_patch.inc"       // F5 Apply Patch… (needs replf::readForRewrite / bytesForWrite, textpatch)
-#include "speak_out.inc"        // reading aloud (private build only)
 #include "study_pane.inc"        // batch 5 F1: the Study pane shell (textspan at the boundary; pages arrive with their engines)
 
 class FilesPane : public QWidget {
@@ -33502,6 +33509,11 @@ public:
             editor_, &QPlainTextEdit::customContextMenuRequested,
             [this](const QPoint& pt) {
                 QMenu* menu = editor_->createStandardContextMenu();
+                speak::addPronounce(menu,
+                                    editor_->textCursor().selectedText(), this,
+                                    [this](const QString& note) {
+                                        if (status_) status_->setText(note);
+                                    });
                 menu->setAttribute(Qt::WA_DeleteOnClose);
                 const QString all = editor_->toPlainText();
                 const int pos = editor_->textCursor().position();
@@ -33694,6 +33706,60 @@ public:
                        .arg(ok ? "PASS" : "FAIL").arg(what);
             if (!ok) ++fails;
         };
+        // ---- Pronounce: the refusals, which are the whole design ----------
+        // Adam asked to highlight Tibetan and hear it. What must be gated is
+        // not that sound comes out — that needs a sound card — but that the
+        // entry NEVER appears where it cannot deliver, and never quietly does
+        // nothing. speak::available() is false on a public build and on any
+        // machine without the recordings, so these run everywhere.
+        {
+            QMenu probe;
+            const int before = probe.actions().size();
+            check(speak::addPronounce(&probe, "", nullptr) == nullptr &&
+                      probe.actions().size() == before,
+                  "pronounce: an empty selection adds nothing to the menu");
+            check(speak::addPronounce(&probe, "the quick brown fox jumped",
+                                      nullptr) == nullptr,
+                  "pronounce: ordinary English prose is not offered as Tibetan");
+            check(!speak::looksTibetan("hello world this is english prose."),
+                  "pronounce: English prose is not mistaken for Tibetan");
+            check(!speak::looksTibetan("bden pa bzhi"),
+                  "pronounce: lowercase wylie is refused too — its letters are "
+                  "indistinguishable from English without real syllable "
+                  "parsing, and guessing is the defect");
+            check(speak::looksTibetan("BDEN PA BZHI"),
+                  "pronounce: ACIP, which is uppercase by convention, is "
+                  "accepted");
+            check(speak::wylieOf("BDEN PA BZHI").contains("bden"),
+                  "pronounce: ACIP converts through the ported engine");
+            check(speak::looksTibetan(QString::fromUtf8(
+                      "\u0f66\u0f7a\u0f58\u0f66\u0f0b\u0f45\u0f53")),
+                  "pronounce: Tibetan script is recognised");
+            // the converter is the ported engine, not a guess
+            const QString w = speak::wylieOf(QString::fromUtf8(
+                "\u0f66\u0f7a\u0f58\u0f66\u0f0b\u0f45\u0f53"));
+            check(w.contains("sems") && w.contains("can"),
+                  QString("pronounce: the script converts through the ported "
+                          "engine (got \"%1\")").arg(w).toUtf8().constData());
+            // The bank must answer the SAME way every time it is asked. It
+            // did not: the developer fallback was returned only on the first
+            // call, so audio worked once per launch and then went quiet.
+            check(speak::available() == speak::available() &&
+                      speak::bank().available() == speak::bank().available(),
+                  "pronounce: the bank answers the same on every call");
+            if (speak::available())
+                check(speak::bank().recordings() > 0 &&
+                          !speak::bank().readAloud("sems can").empty(),
+                      "pronounce: with recordings present, a real passage "
+                      "resolves to real files");
+            if (!speak::available())
+                check(speak::addPronounce(&probe, QString::fromUtf8(
+                          "\u0f66\u0f7a\u0f58\u0f66\u0f0b\u0f45\u0f53"),
+                          nullptr) == nullptr,
+                      "pronounce: with no recordings held, the menu never "
+                      "mentions audio at all");
+        }
+
         // ---- the folio's edges, and framing them (Adam, 2026-09-11) ----
         {
             // A synthetic pecha: a wide white canvas with a band of ink
