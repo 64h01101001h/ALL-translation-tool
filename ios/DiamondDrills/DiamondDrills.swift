@@ -530,7 +530,13 @@ struct DrillView: View {
                             ruledOut = wrong.randomElement()
                         }
                         .font(.system(size: 15)).foregroundColor(c.muted)
+                            .lineLimit(1)
                     }
+                    Spacer()
+                }.padding(.top, 6)
+                // A second row: four controls on one line squeezed the primary
+                // button until its label broke mid-word.
+                HStack(spacing: 14) {
                     Button(checked ? "New drill" : "Check") {
                         if checked { next(); picked = nil; checked = false; ruledOut = nil; expanded = false }
                         else if picked != nil {
@@ -540,6 +546,8 @@ struct DrillView: View {
                         }
                     }
                     .font(.system(size: 17, weight: .semibold)).foregroundColor(.white)
+                    .lineLimit(1)
+                    .fixedSize(horizontal: true, vertical: false)
                     .padding(.horizontal, 20).padding(.vertical, 11)
                     .background(picked == nil && !checked ? c.muted : c.act)
                     .cornerRadius(9)
@@ -671,9 +679,15 @@ struct RootView: View {
             .navigationTitle("Tibetan Translation Trainer")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                ToolbarItem(placement: .bottomBar) {
-                    Text("\(deck.read) read · \(deck.done) drills, \(deck.right) right")
+                // In the bottom bar this floated OVER the action row and
+                // crowded Skip. It belongs beside the title, where it is
+                // always visible and never on top of a control.
+                ToolbarItem(placement: .topBarTrailing) {
+                    Text("\(deck.done)/\(deck.right)")
                         .font(.system(size: 12)).foregroundColor(c.muted)
+                        .accessibilityLabel(
+                            "\(deck.done) drills done, \(deck.right) right, "
+                            + "\(deck.read) passages read")
                 }
             }
         }

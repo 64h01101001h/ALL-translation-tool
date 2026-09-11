@@ -69,6 +69,13 @@ APP="$DD/Build/Products/Debug-iphoneos/TibetanTrainer.app"
 echo "   $(du -h "$APP/drills.json" | cut -f1) pack inside the bundle"
 
 echo "== 4/4  onto the phone =="
+# Terminate FIRST. A running app keeps its old bundle: installing over it
+# succeeds, the launch re-attaches to the live process, and the phone goes on
+# serving the previous pack while every step here reports success. Adam caught
+# this on 2026-09-11 — his phone showed a passage that had been refused from
+# the pack hours earlier.
+xcrun devicectl device process terminate --device "$DEVICE" \
+    --bundle-identifier "$BUNDLE" >/dev/null 2>&1 || true
 xcrun devicectl device install app --device "$DEVICE" "$APP" >/dev/null
 [ "$LAUNCH" = "1" ] && xcrun devicectl device process launch \
     --device "$DEVICE" "$BUNDLE" >/dev/null && echo "   launched"
