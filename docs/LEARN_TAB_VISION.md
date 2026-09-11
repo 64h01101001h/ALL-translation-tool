@@ -136,7 +136,7 @@ Each entry states what the learner sees, what data drives it, how the tool knows
 
 **Why.** Anki can schedule a card. It cannot diagnose which grammar skill a wrong chunk-order reveals, generate a fresh question exercising exactly that skill from a different real segment, and measure whether the weakness closed. Strongest "only our data" case in the tab, and the expensive half is already shipped.
 
-#### Mixed sets — interleave the grammar, block the vocabulary — **BUILD LATER**
+#### Mixed sets — interleave the grammar, block the vocabulary — **BUILT 2026-09-11**
 
 **Sees.** A "Mixed set" option alongside the existing modes: N items assembled by a scheduler, grammar categories interleaved, vocabulary items blocked and kept semantically apart.
 
