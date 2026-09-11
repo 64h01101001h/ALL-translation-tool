@@ -21929,7 +21929,8 @@ public:
                          "Translate & compare",
                          "Script \u2014 his own cards (start here)",
                          "Silent particle \u2014 did he render it?",
-                         "His second thought \u2014 which did he use here?"});
+                         "His second thought \u2014 which did he use here?",
+                         "Mixed set \u2014 the category is not given away"});
         row->addWidget(mode_);
         scriptCourse_ = new QComboBox;
         scriptCourse_->setToolTip(
@@ -22315,7 +22316,56 @@ public:
                       "renderings");
             }
 
+            // ---- Mixed sets: the two properties that justify the mode ----
+            //
+            // 1. The category must NOT be given away. The combo box has to go
+            //    on saying "Mixed set" while the kind underneath changes, and
+            //    no kind may repeat back-to-back, since a run re-leaks what
+            //    the mode exists to withhold.
+            mode_->setCurrentIndex(9);
+            {
+                std::vector<int> seen;
+                bool boxStayed = true, noRun = true;
+                for (int i = 0; i < 9; ++i) {
+                    newDrill();
+                    seen.push_back(mixKind_);
+                    if (mode_->currentIndex() != 9) boxStayed = false;
+                }
+                for (size_t i = 1; i < seen.size(); ++i)
+                    if (seen[i] == seen[i - 1] && seen[i] != 4) noRun = false;
+                std::set<int> kinds(seen.begin(), seen.end());
+                check(boxStayed,
+                      "mixed set: the mode box never names the kind being asked");
+                check(kinds.size() >= 2,
+                      "mixed set: the grammar kinds actually interleave");
+                check(noRun,
+                      "mixed set: no grammar kind is asked twice in a row");
+            }
+            // 2. The plan's REQUIRED gate: a TENTATIVE vocabulary item inside a
+            //    mixed set still renders TENTATIVE. A learner three items deep
+            //    cannot tell which item is binding, so the badge has to be per
+            //    item and cannot be a session banner.
+            {
+                progress_ = savedProgress;      // dueVocab needs a real deck
+                mixQueue_.assign(1, 4);
+                mixAt_ = 0;
+                newDrill();
+                if (!vocab_.empty()) {
+                    auto es3 = spine_.lookup(vocab_);
+                    const bool prov = !es3.empty() && es3.front().provisional();
+                    renderQuestion();
+                    const QString shown = question_->toPlainText();
+                    check(!prov || shown.contains("PROVISIONAL") ||
+                              result_->toPlainText().contains("PROVISIONAL"),
+                          "mixed set: a provisional vocabulary item still says "
+                          "PROVISIONAL inside the set");
+                }
+                progress_ = nullptr;
+            }
+
             progress_ = savedProgress;
+            mixQueue_.clear();
+            mixAt_ = 0;
             mode_->setCurrentIndex(0);
             newDrill();
         }
@@ -22927,6 +22977,75 @@ private:
             if (!vocab_.empty())
                 addRadios({"I knew it", "I did not know it"}, false);
         }
+        if (m == 9) {
+            // Build the queue once, then walk it. Grammar kinds (order,
+            // cloze, particle) INTERLEAVE so the category is never given
+            // away; vocabulary is BLOCKED, because spacing vocabulary and
+            // interleaving grammar are different problems and the plan is
+            // explicit that they must not be conflated.
+            if (mixQueue_.empty() || mixAt_ >= (int)mixQueue_.size()) {
+                mixQueue_.clear();
+                mixAt_ = 0;
+                // No kind twice in a row — a run re-leaks the very category
+                // this mode exists to withhold. A shuffle followed by a
+                // single repair pass does NOT guarantee that (my own selftest
+                // caught it), so the queue is BUILT with the property instead
+                // of patched into it: at each step take the kind with the most
+                // remaining, never the one just asked. With three kinds of
+                // three that always succeeds.
+                int left[3] = {3, 3, 3};
+                std::vector<int> grammar;
+                int prev = -1;
+                for (int n = 0; n < 9; ++n) {
+                    int best = -1;
+                    for (int k = 0; k < 3; ++k) {
+                        if (k == prev || left[k] == 0) continue;
+                        if (best < 0 || left[k] > left[best]) best = k;
+                    }
+                    if (best < 0) break;          // cannot happen at 3/3/3
+                    // break ties randomly so the order is not the same set
+                    // every session
+                    std::vector<int> tied;
+                    for (int k = 0; k < 3; ++k)
+                        if (k != prev && left[k] == left[best]) tied.push_back(k);
+                    best = tied[rng_() % tied.size()];
+                    grammar.push_back(best);
+                    --left[best];
+                    prev = best;
+                }
+                mixQueue_ = grammar;
+                mixQueue_.push_back(4);        // vocabulary, blocked at the end
+                mixQueue_.push_back(4);
+                mixQueue_.push_back(4);
+            }
+            mixKind_ = mixQueue_[mixAt_++];
+            // draw the underlying drill WITHOUT touching mode_, so the combo
+            // box keeps saying "Mixed set" and never names the kind
+            if (mixKind_ == 0) {
+                order_ = factory_.makeOrder(rng_);
+            } else if (mixKind_ == 1) {
+                cloze_ = factory_.makeCloze(rng_, target_);
+                if (cloze_) addRadios(cloze_->options, true);
+            } else if (mixKind_ == 2) {
+                part_ = factory_.makeParticle(rng_, target_);
+                if (part_) addRadios(part_->options, false);
+            } else if (mixKind_ == 4) {
+                if (progress_) {
+                    vocabItem_ = allcore::Progress::VocabItem{};
+                    vocabSeg_ = allcore::CorpusSegment{};
+                    vocabNoSecond_ = false;
+                    auto due = progress_->dueVocab((long long)time(nullptr), 1);
+                    if (!due.empty()) {
+                        vocabItem_ = due.front();
+                        vocab_ = vocabItem_.wylie;
+                        pickVocabContext();
+                        addRadios({"I knew it", "I did not know it"}, false);
+                    } else {
+                        vocab_.clear();
+                    }
+                }
+            }
+        }
         if (m == 8) {
             stWylie_.clear(); stRef_.clear(); stAll_.clear(); stCorrect_ = -1;
             if (g_alignEvidence && !g_alignEvidence->empty()) {
@@ -23214,7 +23333,7 @@ private:
     double zoom() const { return zoom_; }
 
     void renderQuestion() {
-        const int m = mode_->currentIndex();
+        const int m = effectiveMode();   // the queue's kind in a mixed set
         QString h;
         if (m == 0 && order_) {
             h += kindBadge(order_->segment);
@@ -23456,9 +23575,17 @@ private:
         return -1;
     }
 
+    // In a mixed set the combo box must keep saying "Mixed set": naming the
+    // kind is exactly the leak the mode exists to close. So every surface
+    // below asks effectiveMode() instead of the box, and only the QUEUE knows
+    // what is being asked.
+    int effectiveMode() const {
+        return mode_->currentIndex() == 9 ? mixKind_ : mode_->currentIndex();
+    }
+
     void checkDrill() {
         QString h;
-        const int m = mode_->currentIndex();
+        const int m = effectiveMode();   // the queue's kind in a mixed set
         if (m == 6) { checkScriptCard(); return; }
         if (m == 0 && order_) {
             // parse letters like "C A B"
@@ -23931,6 +24058,22 @@ private:
     QString stWylie_, stRef_;
     QList<QPair<QString, int>> stAll_;   // every rendering, with its frequency
     int stCorrect_ = -1;
+    // ---- Mixed sets (docs/LEARN_TAB_VISION.md) ----
+    //
+    // Justified by a DEFECT, not only by the literature: the mode combo box
+    // leaks the category. In "Particle choice" the reader already knows the
+    // answer is a particle, so the one judgement a Tibetan reader actually
+    // makes at a fresh clause — is this a case question, a role question or
+    // an order question — is pre-answered by a dropdown before any Tibetan is
+    // read. Every session until now was 100% blocked practice with the
+    // category handed over.
+    //
+    // The queue holds which drill KIND comes next. Grammar kinds interleave;
+    // vocabulary is blocked, because the literature and the data agree that
+    // spacing vocabulary and interleaving grammar are different problems.
+    std::vector<int> mixQueue_;
+    int mixAt_ = 0;
+    int mixKind_ = -1;          // the kind actually being asked right now
     // below this many attempts a per-skill score is a number,
     // not a trend, and the report must say so
     static constexpr int kTrendFloor = 8;
