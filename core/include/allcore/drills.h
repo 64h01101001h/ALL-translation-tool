@@ -79,6 +79,46 @@ struct ParticleDrill {
     std::string explanation;            // agreement-table explanation
 };
 
+// ---- Boundary Hunt (docs/LEARN_TAB_VISION.md) ----
+//
+// The segment with its punctuation stripped: mark where the clauses end.
+//
+// Why it is worth a mode of its own: we measured that clause ORDER survives
+// translation — adjacent clause pairs are reversed in his English only 4.8%
+// of the time, against 49.0% for adjacent word pairs. Find the clause
+// boundaries and most of the corpus becomes readable left-to-right at clause
+// granularity. The generator is `refineClauses`, which already exists.
+//
+// Two pools, kept apart because they are different skills. A segment whose
+// source carried a shad or a comma is the confidence-building pool: the
+// learner is recovering a boundary the scribe already marked. A segment with
+// no punctuation at all is the real skill — nothing on the page tells you
+// where the clause ends except the particle.
+//
+// UNSCORED POSITIONS. `refineClauses` rules on every ambiguous `na`:
+// conditional ("if/when") after a verb, locative ("in/at") after a noun. When
+// it splits, it does so on POSITIVE evidence — the preceding word carries HGM
+// verb evidence, or is the nominalizer pa/ba. When it merges, it does so on
+// the ABSENCE of that evidence, which is a much weaker thing and is not the
+// same as knowing the word is a noun. Those merge positions are reported in
+// `unscored` and are neither right nor wrong: a learner who marks one is not
+// told they are wrong, because we do not know that they are.
+struct BoundaryDrill {
+    CorpusSegment segment;
+    std::vector<std::string> tokens;     // ACIP tokens, punctuation stripped
+    std::vector<int> ends;               // mark AFTER token i — the answer key
+    std::vector<std::string> functions;  // parallel to `ends`: what ended it
+    // Parallel to `ends`. TRUE when the scribe marked that boundary himself
+    // (a shad or comma stood there before stripping) — the key is attested.
+    // FALSE when the splitter ruled from the particle — the key is ENGINE
+    // GUIDANCE and must be labelled as such wherever it is shown. In the
+    // unpunctuated pool every end is false by construction, which is the
+    // honest price of that pool being the real skill.
+    std::vector<bool> attested;
+    std::vector<int> unscored;           // merged-na positions; see above
+    bool punctuated = false;             // which pool this came from
+};
+
 // The skill a drill exercises, in the same vocabulary as the target. Used to
 // tag HITS as well as misses: until now only misses carried a skill, so
 // per-skill accuracy had no denominator and no trend could honestly be drawn.
@@ -154,6 +194,12 @@ public:
     std::optional<ParticleDrill> makeParticle(
         std::mt19937& rng,
         const DrillTarget& target = DrillTarget{}) const;
+    // `want_unpunctuated` draws from the harder pool. Returns nullopt rather
+    // than silently handing back a punctuated segment when the harder pool
+    // has nothing in the attempt budget — the caller must be able to say
+    // which pool the learner actually drilled.
+    std::optional<BoundaryDrill> makeBoundary(
+        std::mt19937& rng, bool want_unpunctuated = false) const;
 
     // A level-appropriate segment for free-form exercises (the
     // translate-and-compare workbench draws these directly).

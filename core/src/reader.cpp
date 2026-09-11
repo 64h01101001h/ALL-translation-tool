@@ -175,7 +175,8 @@ bool verbEvidenceAt(const allcore::OverlayDoc& doc, int tok) {
 }  // namespace
 
 std::vector<Clause> refineClauses(const OverlayDoc& doc,
-                                  std::vector<Clause> clauses) {
+                                  std::vector<Clause> clauses,
+                                  std::vector<int>* merged_na) {
     std::vector<Clause> out;
     for (size_t i = 0; i < clauses.size(); ++i) {
         Clause c = clauses[i];
@@ -187,6 +188,7 @@ std::vector<Clause> refineClauses(const OverlayDoc& doc,
                 (verbEvidenceAt(doc, pre) || doc.tokens[pre] == "PA" ||
                  doc.tokens[pre] == "BA"))
                 break;
+            if (merged_na) merged_na->push_back(c.end - 1);       // the na
             const Clause& nxt = clauses[++i];                     // locative
             c.end = nxt.end;
             c.boundary = nxt.boundary;

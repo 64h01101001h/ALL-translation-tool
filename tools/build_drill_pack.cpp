@@ -490,6 +490,247 @@ int main(int argc, char** argv) {
             }
         }
         out += "],";
+
+        // Peel: a span and the pieces it contains. The nesting is derived
+        // from the layer's own span ids and text containment — 39,945
+        // parent-child pairs — so the phone consumes a table rather than
+        // parsing anything, which is the plan's prerequisite.
+        out += "\"peel\":[";
+        int npl = 0;
+        {
+            std::ifstream pf("data/alignment/alignment_full_v1.json");
+            std::string j((std::istreambuf_iterator<char>(pf)),
+                          std::istreambuf_iterator<char>());
+            struct Sp { std::string tib, course; int d = 0; int seg = 0; };
+            std::vector<Sp> all;
+            size_t at = 0;
+            while ((at = j.find("{\"course\":\"", at)) != std::string::npos) {
+                auto sf = [&](const char* k) {
+                    const std::string key = std::string("\"") + k + "\":\"";
+                    const size_t p2 = j.find(key, at);
+                    const size_t stop = j.find('}', at);
+                    if (p2 == std::string::npos || (stop != std::string::npos && p2 > stop))
+                        return std::string();
+                    const size_t b = p2 + key.size();
+                    const size_t e = j.find('"', b);
+                    return e == std::string::npos ? std::string() : j.substr(b, e - b);
+                };
+                Sp sp;
+                sp.course = sf("course");
+                // tib_acip, not tib: tib is WYLIE and tib() converts ACIP,
+                // so the wylie field renders every d as a retroflex.
+                sp.tib = sf("tib_acip");
+                const size_t dp = j.find("\"d\":", at);
+                const size_t sg = j.find("\"seg\":", at);
+                const size_t stop = j.find('}', at);
+                if (dp != std::string::npos && dp < stop) sp.d = std::atoi(j.c_str() + dp + 4);
+                if (sg != std::string::npos && sg < stop) sp.seg = std::atoi(j.c_str() + sg + 6);
+                if (!sp.tib.empty() && sp.d) all.push_back(sp);
+                at = stop == std::string::npos ? j.size() : stop + 1;
+            }
+            // group by segment, then find a parent that splits
+            std::map<std::pair<std::string,int>, std::vector<Sp>> bySeg;
+            for (const auto& sp : all) bySeg[{sp.course, sp.seg}].push_back(sp);
+            for (const auto& [key, v] : bySeg) {
+                if (npl >= 250) break;
+                for (const auto& par : v) {
+                    std::vector<std::string> kids;
+                    int kd = 99;
+                    for (const auto& ch : v) {
+                        if (ch.d <= par.d || ch.tib == par.tib) continue;
+                        if (par.tib.find(ch.tib) == std::string::npos) continue;
+                        if (ch.d < kd) { kd = ch.d; kids.clear(); }
+                        if (ch.d == kd) kids.push_back(ch.tib);
+                    }
+                    if (kids.size() < 2) continue;
+                    const std::string pg = tib(par.tib);
+                    if (pg.find("\u27e8") != std::string::npos) continue;
+                    bool ok = true;
+                    for (const auto& k2 : kids)
+                        if (tib(k2).find("\u27e8") != std::string::npos) ok = false;
+                    if (!ok) continue;
+                    if (npl) out += ",";
+                    out += "{";
+                    field(out, "parent", pg);
+                    field(out, "course", key.first);
+                    out += "\"seq\":" + std::to_string(key.second) + ",";
+                    out += "\"pieces\":[";
+                    for (size_t z = 0; z < kids.size(); ++z) {
+                        if (z) out += ",";
+                        out += "\""; esc(out, tib(kids[z])); out += "\"";
+                    }
+                    out += "]}";
+                    ++npl;
+                    break;
+                }
+            }
+        }
+        out += "],";
+        std::printf("  peel %d\n", npl);
+
+        // Boundary hunt: the segment with its punctuation stripped. Both
+        // pools are packed and each item says which it came from, because
+        // they are different skills and a phone that merged them would let
+        // progress in the warm-up pool stand in for the real one.
+        out += "\"boundary\":[";
+        int nbd = 0;
+        {
+            std::mt19937 brng(9182);
+            for (int pool = 0; pool < 2; ++pool) {
+                const int want = pool ? 120 : 80;
+                for (int made = 0; made < want; ) {
+                    auto d = f.makeBoundary(brng, pool == 1);
+                    if (!d) break;
+                    // A piece that will not render is refused outright rather
+                    // than shipped with ⟨ ⟩ sitting in the middle of a word
+                    // the learner is being asked to count across.
+                    bool ok = true;
+                    for (const auto& t : d->tokens)
+                        if (tib(t).find("\u27e8") != std::string::npos) ok = false;
+                    if (!ok) continue;
+                    if (nbd) out += ",";
+                    out += "{";
+                    out += "\"tokens\":[";
+                    for (size_t z = 0; z < d->tokens.size(); ++z) {
+                        if (z) out += ",";
+                        out += "\""; esc(out, tib(d->tokens[z])); out += "\"";
+                    }
+                    out += "],\"ends\":[";
+                    for (size_t z = 0; z < d->ends.size(); ++z)
+                        out += (z ? "," : "") + std::to_string(d->ends[z]);
+                    out += "],\"attested\":[";
+                    for (size_t z = 0; z < d->attested.size(); ++z)
+                        out += std::string(z ? "," : "") +
+                               (d->attested[z] ? "true" : "false");
+                    out += "],\"unscored\":[";
+                    for (size_t z = 0; z < d->unscored.size(); ++z)
+                        out += (z ? "," : "") + std::to_string(d->unscored[z]);
+                    out += "],\"functions\":[";
+                    for (size_t z = 0; z < d->functions.size(); ++z) {
+                        if (z) out += ",";
+                        out += "\""; esc(out, d->functions[z]); out += "\"";
+                    }
+                    out += "],";
+                    field(out, "course", d->segment.course);
+                    out += "\"seq\":" + std::to_string(d->segment.seq) + ",";
+                    out += std::string("\"hard\":") +
+                           (d->punctuated ? "false" : "true") + ",";
+                    field(out, "english", d->segment.english, false);
+                    out += "}";
+                    ++nbd; ++made;
+                }
+            }
+        }
+        out += "],";
+        std::printf("  boundary %d\n", nbd);
+
+        // Known here / known anywhere. A word is packed only when it has TWO
+        // distinct attestations, because the whole exercise is the difference
+        // between the two: "you know it here" is the segment you met it in,
+        // "you know it anywhere" is a different one. A word with a single
+        // attestation cannot answer the second question and is left out
+        // rather than shipped with the second stage quietly unreachable.
+        out += "\"vocab\":[";
+        int nvc = 0;
+        {
+            std::ifstream ef("data/alignment/alignment_evidence_v1.json");
+            std::string j((std::istreambuf_iterator<char>(ef)),
+                          std::istreambuf_iterator<char>());
+            const size_t pairsAt = j.find("\"pairs\"");
+            size_t at = pairsAt == std::string::npos ? j.size() : pairsAt;
+            while (nvc < 400) {
+                const size_t k = j.find("\": [", at);
+                if (k == std::string::npos) break;
+                {
+                    const size_t ls = j.rfind('\n', k);
+                    if (ls == std::string::npos ||
+                        j.compare(ls, 4, "\n  \"") != 0) { at = k + 4; continue; }
+                }
+                const size_t qs = j.rfind('"', k);
+                if (qs == std::string::npos) break;
+                const size_t qb = j.rfind('"', qs - 1);
+                if (qb == std::string::npos) break;
+                const std::string w = j.substr(qb + 1, qs - qb - 1);
+                size_t arrEnd = std::string::npos;
+                {
+                    int depth = 0;
+                    for (size_t z = k + 4; z < j.size(); ++z) {
+                        if (j[z] == '[') ++depth;
+                        else if (j[z] == ']') {
+                            if (depth == 0) { arrEnd = z; break; }
+                            --depth;
+                        }
+                    }
+                }
+                if (arrEnd == std::string::npos) break;
+                const std::string arr = j.substr(k, arrEnd - k);
+                at = arrEnd + 1;
+                if (w.empty() || w.size() > 40) continue;
+                // Multi-syllable only. The single-syllable entries here are
+                // overwhelmingly grammatical particles ('am, ni, kyi), which
+                // the Particle mode already drills properly and which nobody
+                // learns as vocabulary — "do you know 'am?" is not a question
+                // about knowing a word. Content vocabulary in Tibetan is
+                // overwhelmingly multi-syllable, so requiring a space is a
+                // cheap filter that costs almost no real words.
+                if (w.find(' ') == std::string::npos) continue;
+                // his most-attested English for it
+                std::string gloss; int best = -1;
+                size_t e = 0;
+                while ((e = arr.find("\"eng\": \"", e)) != std::string::npos) {
+                    const size_t b = e + 8;
+                    const size_t q = arr.find('"', b);
+                    if (q == std::string::npos) break;
+                    int n = 1;
+                    const size_t np2 = arr.find("\"n\": ", q);
+                    if (np2 != std::string::npos && np2 < q + 300)
+                        n = std::atoi(arr.c_str() + np2 + 5);
+                    if (n > best) { best = n; gloss = arr.substr(b, q - b); }
+                    e = q;
+                }
+                if (gloss.empty()) continue;
+                const std::string wd = tib(w);
+                if (wd.find("\u27e8") != std::string::npos) continue;
+                auto hits = spine.corpusSearch("\"" + w + "\"", "", 8);
+                // two DISTINCT segments, each carrying his English
+                const allcore::CorpusSegment* a = nullptr;
+                const allcore::CorpusSegment* b2 = nullptr;
+                for (const auto& h : hits) {
+                    if (h.english.empty()) continue;
+                    if (!allcore::DrillFactory::isDrillable(h)) continue;
+                    const std::string t = tib(h.acip);
+                    if (t.empty() || t.find("\u27e8") != std::string::npos) continue;
+                    if (!a) a = &h;
+                    else if (h.id != a->id) { b2 = &h; break; }
+                }
+                if (!a || !b2) continue;
+                if (nvc) out += ",";
+                out += "{";
+                field(out, "tib", wd);
+                field(out, "wylie", w);
+                // NOT "eng". This is the alignment layer's most-attested
+                // English for the word — machine-matched, TENTATIVE — and a
+                // field called "eng" next to a segment's attested english
+                // invites a UI author to render the two the same way. The
+                // name says what it is.
+                field(out, "aligned_eng", gloss);
+                auto seg = [&](const char* nm, const allcore::CorpusSegment* g) {
+                    out += "\""; out += nm; out += "\":{";
+                    field(out, "tib", tib(g->acip));
+                    field(out, "course", g->course);
+                    out += "\"seq\":" + std::to_string(g->seq) + ",";
+                    field(out, "english", g->english, false);
+                    out += "},";
+                };
+                seg("here", a);
+                seg("anywhere", b2);
+                out.pop_back();
+                out += "}";
+                ++nvc;
+            }
+        }
+        out += "],";
+        std::printf("  vocab %d\n", nvc);
         std::printf("  order %d · particle %d · script %d · debate %d · "
                     "silent %d · second %d\n", no, np, ns, nd, nsp, nse);
     }

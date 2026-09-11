@@ -455,4 +455,54 @@ std::optional<ParticleDrill> DrillFactory::makeParticle(
     return std::nullopt;
 }
 
+std::optional<BoundaryDrill> DrillFactory::makeBoundary(
+    std::mt19937& rng, bool want_unpunctuated) const {
+    for (int attempt = 0; attempt < kAttempts; ++attempt) {
+        auto seg = randomSegment(rng);
+        if (!seg.id) continue;
+        auto doc = buildOverlay(spine_, index_, seg.acip);
+        if (doc.tokens.size() < 6 || doc.tokens.size() > 40) continue;
+
+        // The pool is a property of the SOURCE, so it is read before any
+        // stripping: a barrier anywhere but the very end means the scribe
+        // marked a boundary inside this segment.
+        bool punctuated = false;
+        for (size_t i = 0; i + 1 < doc.barrier_after.size(); ++i)
+            if (doc.barrier_after[i]) { punctuated = true; break; }
+        if (punctuated != !want_unpunctuated) continue;
+
+        std::vector<int> merged;
+        auto clauses = refineClauses(
+            doc, splitClauses(doc.tokens, doc.barrier_after), &merged);
+        // One clause means there is nothing to find. Every token a boundary
+        // means the question is not a question either.
+        if (clauses.size() < 2 || clauses.size() > doc.tokens.size() / 2)
+            continue;
+
+        BoundaryDrill d;
+        d.segment = std::move(seg);
+        d.tokens = doc.tokens;
+        d.punctuated = punctuated;
+        for (size_t i = 0; i + 1 < clauses.size(); ++i) {   // not the final end
+            d.ends.push_back(clauses[i].end - 1);
+            d.attested.push_back(clauses[i].boundary == "barrier");
+            const std::string fn = clauses[i].boundary_function
+                                       ? clauses[i].boundary_function : "";
+            d.functions.push_back(
+                clauses[i].boundary == "barrier"
+                    ? "punctuation"
+                    : (fn.empty() ? clauses[i].boundary
+                                  : clauses[i].boundary + " \u2014 " + fn));
+        }
+        if (d.ends.empty()) continue;
+        // A merged na that coincides with a real end is scored; only the ones
+        // that are NOT in the key are the unknowable ones.
+        for (int m : merged)
+            if (std::find(d.ends.begin(), d.ends.end(), m) == d.ends.end())
+                d.unscored.push_back(m);
+        return d;
+    }
+    return std::nullopt;
+}
+
 }  // namespace allcore
