@@ -3,6 +3,9 @@
 
 #include <sqlite3.h>
 
+#include <cstdio>
+#include <string>
+
 #include "allcore/progress.h"
 
 static int failures = 0;
@@ -166,6 +169,118 @@ int main() {
               "idempotent)");
         std::remove(fp.c_str());
     }
+    // ---- schema versioning, and the work it protects ----------------------
+    // progress.db is the only file in the product holding something a user
+    // cannot get back. These are the three ways a migration loses it.
+    {
+        auto userVersion = [](const std::string& path) {
+            sqlite3* db = nullptr;
+            int v = -1;
+            if (sqlite3_open(path.c_str(), &db) == SQLITE_OK) {
+                sqlite3_stmt* st = nullptr;
+                if (sqlite3_prepare_v2(db, "PRAGMA user_version", -1, &st,
+                                       nullptr) == SQLITE_OK &&
+                    sqlite3_step(st) == SQLITE_ROW)
+                    v = sqlite3_column_int(st, 0);
+                sqlite3_finalize(st);
+            }
+            sqlite3_close(db);
+            return v;
+        };
+
+        const std::string fp = "/tmp/all_progress_schema.db";
+        std::remove(fp.c_str());
+        { allcore::Progress a(fp); a.touchWord("bden pa", 7, 100); }
+        CHECK(userVersion(fp) == 1,
+              "schema: a new deck records which format it is in");
+
+        // 1. AN OLD DECK UPGRADES WITHOUT LOSING WORK. This is the case that
+        //    matters on the day v28 ships: a deck written before the columns
+        //    existed, carrying a year of study.
+        const std::string old_ = "/tmp/all_progress_v0.db";
+        std::remove(old_.c_str());
+        {
+            sqlite3* db = nullptr;
+            sqlite3_open(old_.c_str(), &db);
+            // the ORIGINAL shape: no first_segment/transfer_segment/stage,
+            // no user_version
+            sqlite3_exec(db,
+                         "CREATE TABLE vocab (wylie TEXT PRIMARY KEY,"
+                         " first_seen INTEGER NOT NULL,"
+                         " last_seen INTEGER NOT NULL,"
+                         " views INTEGER NOT NULL DEFAULT 1,"
+                         " ease REAL NOT NULL,"
+                         " interval_days REAL NOT NULL DEFAULT 0,"
+                         " due INTEGER NOT NULL);"
+                         "CREATE TABLE events (id INTEGER PRIMARY KEY,"
+                         " ts INTEGER NOT NULL, kind TEXT NOT NULL,"
+                         " key TEXT, correct INTEGER);"
+                         "CREATE TABLE segments (segment_id INTEGER PRIMARY "
+                         "KEY, reads INTEGER NOT NULL DEFAULT 0,"
+                         " peeks INTEGER NOT NULL DEFAULT 0,"
+                         " last_ts INTEGER NOT NULL);"
+                         "INSERT INTO vocab VALUES ('sems can', 10, 20, 9,"
+                         " 2.5, 4.0, 999);",
+                         nullptr, nullptr, nullptr);
+            sqlite3_close(db);
+        }
+        CHECK(userVersion(old_) == 0, "schema: the old deck starts unversioned");
+        bool upgraded = true;
+        try { allcore::Progress up(old_); } catch (...) { upgraded = false; }
+        CHECK(upgraded, "schema: an unversioned deck opens and upgrades");
+        CHECK(userVersion(old_) == 1,
+              "schema: the upgraded deck records its new format");
+        {   // the row that was already there is STILL there, unchanged
+            sqlite3* db = nullptr;
+            sqlite3_open(old_.c_str(), &db);
+            sqlite3_stmt* st = nullptr;
+            int views = -1;
+            double ease = -1;
+            if (sqlite3_prepare_v2(db,
+                                   "SELECT views, ease FROM vocab WHERE "
+                                   "wylie='sems can'",
+                                   -1, &st, nullptr) == SQLITE_OK &&
+                sqlite3_step(st) == SQLITE_ROW) {
+                views = sqlite3_column_int(st, 0);
+                ease = sqlite3_column_double(st, 1);
+            }
+            sqlite3_finalize(st);
+            sqlite3_close(db);
+            CHECK(views == 9 && ease > 2.4 && ease < 2.6,
+                  "schema: the upgrade carries the learner's existing work "
+                  "across untouched");
+        }
+
+        // 2. A DECK FROM THE FUTURE IS REFUSED, NOT WRITTEN TO. An older
+        //    build cannot know what a newer one's columns mean, and writing
+        //    anyway can destroy work the newer build could still read.
+        const std::string fut = "/tmp/all_progress_future.db";
+        std::remove(fut.c_str());
+        { allcore::Progress a(fut); a.touchWord("chos", 1, 100); }
+        {
+            sqlite3* db = nullptr;
+            sqlite3_open(fut.c_str(), &db);
+            sqlite3_exec(db, "PRAGMA user_version=99", nullptr, nullptr,
+                         nullptr);
+            sqlite3_close(db);
+        }
+        bool refused = false;
+        std::string why;
+        try {
+            allcore::Progress f(fut);
+        } catch (const std::exception& e) {
+            refused = true;
+            why = e.what();
+        }
+        CHECK(refused, "schema: a deck from a NEWER release is refused");
+        CHECK(why.find("newer version") != std::string::npos,
+              "schema: and the refusal says so in words a person can act on");
+
+        std::remove(fp.c_str());
+        std::remove(old_.c_str());
+        std::remove(fut.c_str());
+    }
+
     std::printf("%s (%d failures)\n",
                 failures ? "PROGRESS SMOKE FAILED" : "PROGRESS SMOKE OK",
                 failures);
