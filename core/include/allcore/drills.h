@@ -85,6 +85,46 @@ struct ParticleDrill {
 std::string clozeSkill(const ClozeDrill& d);
 std::string particleSkill(const ParticleDrill& d);
 
+
+// ---- The Debate Dojo (docs/LEARN_TAB_VISION.md) ----
+//
+// A formal Tibetan debate statement has three parts, and they are marked:
+//
+//   <subject> CHOS CAN,  <consequence> THAL,  <reason> PHYIR
+//   "take <subject>:     it follows that <consequence>,  because <reason>"
+//
+// and the reply is drawn from a CLOSED set, each answer attacking a
+// different element:
+//
+//   MA GRUB NA        the subject is not established
+//   RTAGS MA GRUB     the reason is not established
+//   MA KHYAB NA       the reason does not entail the consequence
+//   RTZA BAR 'DOD NA  accept it, and the root claim with it
+//
+// That closed set is what makes debate drillable at all: the answer space is
+// fixed by the tradition rather than invented here.
+struct DebateStatement {
+    bool ok = false;            // the full template was found
+    // Anything before the subject: a conditional, a citation, a scene-setter.
+    // Kept rather than swallowed into the subject, because "if X is not a
+    // valid perception, then take Y" has a subject of Y, not of the whole
+    // sentence — and a drill that highlighted the whole sentence as the
+    // subject would teach the template wrong.
+    std::string preamble;
+    std::string subject;        // the clause immediately before CHOS CAN
+    std::string consequence;    // between CHOS CAN and THAL
+    std::string reason;         // between THAL and PHYIR
+};
+
+// Split a real ACIP statement into its three elements. Returns ok=false and
+// nothing else when the template is absent — never a partial guess at which
+// span is which.
+DebateStatement parseDebate(const std::string& acip);
+
+// Which element a legal reply attacks: "subject", "reason", "entailment",
+// "accept", or empty when the reply is not one of the four.
+std::string debateReplyTarget(const std::string& reply);
+
 class DrillFactory {
 public:
     // With a Progress and adaptive on, segment draws prefer material at the

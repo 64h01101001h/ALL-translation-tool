@@ -8,6 +8,47 @@
 
 namespace allcore {
 
+DebateStatement parseDebate(const std::string& acip) {
+    DebateStatement d;
+    const size_t cc = acip.find("CHOS CAN");
+    if (cc == std::string::npos) return d;
+    const size_t th = acip.find("THAL", cc);
+    if (th == std::string::npos) return d;
+    const size_t ph = acip.find("PHYIR", th);
+    if (ph == std::string::npos) return d;
+    auto trim = [](std::string v) {
+        while (!v.empty() && (v.front() == ' ' || v.front() == ',')) v.erase(0, 1);
+        while (!v.empty() && (v.back() == ' ' || v.back() == ',')) v.pop_back();
+        return v;
+    };
+    // The subject is the clause immediately before CHOS CAN, not everything
+    // before it: these statements often open with a conditional or a citation.
+    {
+        const std::string head = acip.substr(0, cc);
+        const size_t comma = head.find_last_of(',');
+        if (comma != std::string::npos) {
+            d.preamble = trim(head.substr(0, comma));
+            d.subject = trim(head.substr(comma + 1));
+        } else {
+            d.subject = trim(head);
+        }
+    }
+    d.consequence = trim(acip.substr(cc + 8, th - (cc + 8)));
+    d.reason = trim(acip.substr(th + 4, ph - (th + 4)));
+    // A template whose elements are empty is not a statement; refuse rather
+    // than hand back blanks that would render as an unanswerable card.
+    d.ok = !d.subject.empty() && !d.consequence.empty() && !d.reason.empty();
+    return d;
+}
+
+std::string debateReplyTarget(const std::string& reply) {
+    if (reply == "MA GRUB NA") return "subject";
+    if (reply == "RTAGS MA GRUB") return "reason";
+    if (reply == "MA KHYAB NA") return "entailment";
+    if (reply == "RTZA BAR 'DOD NA") return "accept";
+    return std::string();
+}
+
 bool targetRefused(const DrillTarget& t, std::string* why) {
     if (t.kind != DrillTarget::Kind::ClozeRole) return false;
     const std::string head = t.skill.substr(0, t.skill.find(' '));

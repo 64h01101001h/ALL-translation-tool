@@ -21930,7 +21930,8 @@ public:
                          "Script \u2014 his own cards (start here)",
                          "Silent particle \u2014 did he render it?",
                          "His second thought \u2014 which did he use here?",
-                         "Mixed set \u2014 the category is not given away"});
+                         "Mixed set \u2014 the category is not given away",
+                         "Debate \u2014 which element does the reply attack?"});
         row->addWidget(mode_);
         scriptCourse_ = new QComboBox;
         scriptCourse_->setToolTip(
@@ -22314,6 +22315,28 @@ public:
                 check(keyIsHis,
                       "second thought: the answer is one of his own attested "
                       "renderings");
+            }
+
+            // ---- The Debate Dojo ----
+            mode_->setCurrentIndex(10);
+            newDrill();
+            if (dbg_.ok) {
+                check(!dbg_.subject.empty() && !dbg_.consequence.empty() &&
+                          !dbg_.reason.empty(),
+                      "debate: the statement splits into all three elements");
+                check(dbgCorrect_ >= 0 && dbgCorrect_ < (int)radios_.size(),
+                      "debate: the reply's target is among the options");
+                // the closed set is the whole basis of the drill
+                check(allcore::debateReplyTarget("MA GRUB NA") == "subject" &&
+                          allcore::debateReplyTarget("RTAGS MA GRUB") == "reason" &&
+                          allcore::debateReplyTarget("MA KHYAB NA") == "entailment" &&
+                          allcore::debateReplyTarget("XX").empty(),
+                      "debate: each legal reply attacks its own element, and an "
+                      "illegal one attacks nothing");
+                // the subject must not swallow a preceding conditional
+                check(dbg_.subject.find("CHOS CAN") == std::string::npos,
+                      "debate: the subject is its own clause, not the whole "
+                      "sentence before CHOS CAN");
             }
 
             // ---- Mixed sets: the two properties that justify the mode ----
@@ -22977,6 +23000,46 @@ private:
             if (!vocab_.empty())
                 addRadios({"I knew it", "I did not know it"}, false);
         }
+        if (m == 10) {
+            dbg_ = allcore::DebateStatement{};
+            dbgSeg_ = allcore::CorpusSegment{};
+            dbgReply_.clear(); dbgCorrect_ = -1;
+            static const char* kReplies[] = {"MA GRUB NA", "RTAGS MA GRUB",
+                                             "MA KHYAB NA", "RTZA BAR 'DOD NA"};
+            for (int tries = 0; tries < 60 && !dbg_.ok; ++tries) {
+                auto segs = spine_.corpusSearch("\"CHOS CAN\" AND \"THAL\"",
+                                                "", 60);
+                if (segs.empty()) break;
+                const auto& sg = segs[rng_() % segs.size()];
+                // The documented C13 column offset is bounded at 63-82 and no
+                // debate segment falls inside it, but the class is known to be
+                // undetectable automatically, so the window is refused rather
+                // than trusted.
+                if (sg.course == "C13" && sg.seq >= 63 && sg.seq <= 82) continue;
+                auto d = allcore::parseDebate(sg.acip);
+                if (!d.ok) continue;
+                dbg_ = d;
+                dbgSeg_ = sg;
+            }
+            if (dbg_.ok) {
+                const int pick = (int)(rng_() % 4);
+                dbgReply_ = kReplies[pick];
+                const std::string want =
+                    allcore::debateReplyTarget(dbgReply_.toStdString());
+                const std::vector<std::string> opts = {
+                    "the subject \u2014 it is not established",
+                    "the reason \u2014 it is not established",
+                    "the entailment \u2014 the reason does not force the "
+                    "consequence",
+                    "nothing \u2014 it accepts the consequence, and the root "
+                    "claim with it"};
+                dbgCorrect_ = want == "subject"  ? 0
+                              : want == "reason" ? 1
+                              : want == "entailment" ? 2
+                                                     : 3;
+                addRadios(opts, false);
+            }
+        }
         if (m == 9) {
             // Build the queue once, then walk it. Grammar kinds (order,
             // cloze, particle) INTERLEAVE so the category is never given
@@ -23362,6 +23425,53 @@ private:
                  "</i></div><hr><div style='font-size:" +
                  QString::number(px(22)) + "px'>" + clozeBody() +
                  "</div>";
+        } else if (m == 10) {
+            if (!dbg_.ok) {
+                h += "<div style='color:" +
+                     QString(ux::darkChrome() ? ux::chromeMuted() : ux::kMuted) +
+                     "'>No formal statement drawn. This drill reads only real "
+                     "statements carrying the full CHOS CAN / THAL / PHYIR "
+                     "template \u2014 1,089 of them parse \u2014 and builds "
+                     "nothing that is not there.</div>";
+            } else {
+                const QString muted =
+                    ux::darkChrome() ? ux::chromeMuted() : QString(ux::kMuted);
+                h += keyBadge(true, QString::fromStdString(dbgSeg_.course),
+                              dbgSeg_.seq);
+                if (dbgSeg_.course == "C13")
+                    h += QString("<div style='color:%1;font-size:11px'>C13 "
+                                 "carries a known upstream column offset at "
+                                 "seq 63\u201382; this statement is outside "
+                                 "that window, and the window is refused "
+                                 "outright.</div>").arg(muted);
+                h += "<div style='color:#555'>A formal statement, in its three "
+                     "parts. If your opponent answers <b>" +
+                     dbgReply_.toHtmlEscaped() +
+                     "</b>, which element are they attacking?</div><hr>";
+                auto part = [&](const char* label, const std::string& t) {
+                    if (t.empty()) return;
+                    h += QString("<div style='margin-top:6px'><span "
+                                 "style='color:%1;font-size:11px;"
+                                 "letter-spacing:1px'>%2</span><div "
+                                 "style='font-size:%3px'>%4</div></div>")
+                             .arg(muted).arg(label).arg(px(19))
+                             .arg(disp(t));
+                };
+                part("PREAMBLE", dbg_.preamble);
+                part("SUBJECT \u00b7 CHOS CAN", dbg_.subject);
+                part("CONSEQUENCE \u00b7 THAL", dbg_.consequence);
+                part("REASON \u00b7 PHYIR", dbg_.reason);
+                // The plan REFUSES word-level work inside this mode: his
+                // English for these segments is an expansion with the
+                // interlocutor's turns supplied, not a word-to-word
+                // rendering, so a word drill here would actively mis-teach.
+                h += QString("<div style='color:%1;font-size:11px;"
+                             "padding-top:8px'>Word-level drills are refused in "
+                             "this mode on purpose: his English for a debate "
+                             "segment is an expansion with the opponent's turns "
+                             "supplied, not a word-for-word rendering.</div>")
+                         .arg(muted);
+            }
         } else if (m == 8) {
             if (stWylie_.isEmpty()) {
                 h += "<div style='color:" +
@@ -23711,6 +23821,31 @@ private:
             h += "<div><small>role of the blanked chunk: " +
                  QString::fromUtf8(cloze_->role).toHtmlEscaped() +
                  "</small></div>";
+        } else if (m == 10 && dbg_.ok) {
+            const int pick = pickedRadio();
+            h += (pick == dbgCorrect_)
+                     ? "<b style='color:#3B7A3B'>Correct.</b>"
+                     : "<b style='color:#B4540A'>Not that one.</b>";
+            h += "<div style='padding-top:6px'><b>" +
+                 dbgReply_.toHtmlEscaped() + "</b> \u2014 " +
+                 QString(dbgCorrect_ == 0
+                             ? "\u201cit is not established\u201d: the "
+                               "SUBJECT does not exist or is misdescribed."
+                         : dbgCorrect_ == 1
+                             ? "\u201cthe reason is not established\u201d: "
+                               "the REASON is false of this subject."
+                         : dbgCorrect_ == 2
+                             ? "\u201cit does not follow\u201d: the reason "
+                               "may hold, but it does not force the "
+                               "CONSEQUENCE."
+                             : "\u201cI accept it\u201d: the consequence is "
+                               "granted \u2014 and with it whatever root "
+                               "claim it was built to overturn.") +
+                 "</div>";
+            h += "<div style='background:#EEF6EE;padding:6px;margin-top:6px'>"
+                 "<b>GMR:</b> " +
+                 englishWithSupplied(dbgSeg_.english) +
+                 "</div>";
         } else if (m == 8 && !stWylie_.isEmpty()) {
             const int pick = pickedRadio();
             h += (pick == stCorrect_)
@@ -24074,6 +24209,11 @@ private:
     std::vector<int> mixQueue_;
     int mixAt_ = 0;
     int mixKind_ = -1;          // the kind actually being asked right now
+    // ---- The Debate Dojo (docs/LEARN_TAB_VISION.md) ----
+    allcore::DebateStatement dbg_;
+    allcore::CorpusSegment dbgSeg_;
+    QString dbgReply_;          // the reply whose target is being asked
+    int dbgCorrect_ = -1;
     // below this many attempts a per-skill score is a number,
     // not a trend, and the report must say so
     static constexpr int kTrendFloor = 8;
