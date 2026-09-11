@@ -194,11 +194,11 @@ Each entry states what the learner sees, what data drives it, how the tool knows
 
 **Why.** This is the *bsod nams* problem turned from a warning into an exercise, and it is unbuildable from a merged dictionary — it needs one translator's complete aligned output.
 
-#### The Debate Dojo — **BUILD LATER**
+#### The Debate Dojo — **BUILT 2026-09-11** (the reply-target half; the move-by-move exchange still wants an annotation pass)
 
 **Sees.** Split a real formal statement into subject / consequence / reason. Then choose the legal reply from the closed set (`MA GRUB NA`, `MA KHYAB NA`, `RTAGS MA GRUB`, `RTZA BAR 'DOD NA`) and name which element it attacks. Then follow a real exchange move by move with the English hidden.
 
-**Data.** 1,052 segments carry the full `CHOS CAN` / `THAL` / `PHYIR` template. Needs a template parser and a move-type annotation pass over C15.
+**Data.** 1,099 segments carry the full `CHOS CAN` / `THAL` / `PHYIR` template (measured 2026-09-11; the 1,052 recorded here was low), of which 1,089 parse into all three elements. Needs a template parser and a move-type annotation pass over C15.
 
 **Success.** Move-type accuracy on unseen exchanges.
 
