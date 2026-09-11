@@ -21339,6 +21339,17 @@ static QWidget* makeConvertPane(allcore::Mvp* mvp,
 //
 // The label and the glosses therefore travel together in one helper,
 // so the label can never outrun the tier again.
+// The same claim, for callers that have the provisional flag but not a
+// TermUse. One wording, two entry points — not a second house phrase.
+static QString hgmGlossPhraseRaw(bool provisional, const QString& glosses) {
+    if (glosses.isEmpty())
+        return QString("no Geshe Michael Roach equivalent recorded");
+    if (!provisional) return "GMR has: " + glosses;
+    return "auto-aligned <span style='color:#B4540A;font-size:11px'>"
+           "[PROVISIONAL]</span>, not Geshe Michael Roach's own English: " +
+           glosses;
+}
+
 static QString hgmGlossPhrase(const allcore::TermUse& t,
                               const QString& glosses) {
     if (glosses.isEmpty()) return QString("no Geshe Michael Roach equivalent recorded");
@@ -22916,11 +22927,53 @@ private:
                 auto es = spine_.lookup(vocab_);
                 if (!es.empty() && !es.front().acip.empty())
                     acip = es.front().acip;
-                h += "<div style='color:#555'>Do you know this word? Grade "
-                     "yourself, then Check reveals the entry.</div><hr>"
-                     "<div style='font-size:" + QString::number(px(27)) + "px'>" + disp(acip) + "</div>" +
-                     "<div style='font-size:" + QString::number(px(15)) + "px;color:#777'>" +
-                     QString::fromStdString(vocab_).toHtmlEscaped() + "</div>";
+                const QString muted =
+                    ux::darkChrome() ? ux::chromeMuted() : QString(ux::kMuted);
+                // Which of the two questions is being asked. A bare word with
+                // "grade yourself" is where a generic flashcard app is our
+                // equal; the corpus is what we have that it does not.
+                h += QString("<div style='color:%1'>%2</div>")
+                         .arg(muted,
+                              vocabItem_.stage == 0
+                                  ? "Do you know this word <b>here</b> — in "
+                                    "the sentence you met it in?"
+                                  : "You knew it where you met it. Do you "
+                                    "know it <b>anywhere</b> — in a sentence "
+                                    "you have not seen?");
+                h += "<hr>";
+                if (vocabSeg_.id) {
+                    // the word IN its sentence, the sentence unglossed
+                    h += "<div style='font-size:" +
+                         QString::number(px(20)) + "px;line-height:1.6'>" +
+                         disp(vocabSeg_.acip) + "</div>";
+                    h += QString("<div style='color:%1;font-size:%2px;"
+                                 "padding-top:4px'>[%3:%4]</div>")
+                             .arg(muted)
+                             .arg(px(11))
+                             .arg(QString::fromStdString(vocabSeg_.course))
+                             .arg(vocabSeg_.seq);
+                } else {
+                    // GATE 2, and the honest version of it: no sentence to
+                    // show. Never invent one, and never re-serve the origin
+                    // and call it transfer.
+                    h += "<div style='font-size:" +
+                         QString::number(px(27)) + "px'>" + disp(acip) +
+                         "</div>";
+                    h += QString("<div style='color:%1;font-size:%2px'>%3</div>")
+                             .arg(muted).arg(px(12))
+                             .arg(vocabNoSecond_
+                                      ? "No second attestation in the corpus "
+                                        "\u2014 this word occurs nowhere else, "
+                                        "so it stays at \u201cknown here\u201d. "
+                                        "Nothing is invented to test transfer."
+                                      : "No sentence recorded for this word "
+                                        "\u2014 it came from the dictionary "
+                                        "rather than from reading.");
+                }
+                h += "<div style='font-size:" + QString::number(px(15)) +
+                     "px;color:" + muted + ";padding-top:6px'>" +
+                     QString::fromStdString(vocab_).toHtmlEscaped() +
+                     "</div>";
             }
         } else if (m == 6) {
             if (!card_) {
@@ -23199,12 +23252,50 @@ private:
             auto es = spine_.lookup(vocab_);
             if (!es.empty()) h += entryHtml(es.front());
             if (progress_ && pick >= 0) {
-                progress_->reviewWord(vocab_, pick == 0,
-                                      (long long)time(nullptr));
+                // Graded IN CONTEXT: being right in the sentence the word was
+                // met in only proves that sentence is familiar, so it promotes
+                // to "known here". Being right in a DIFFERENT one is what
+                // promotes to "known anywhere".
+                progress_->reviewWordInContext(vocab_, pick == 0,
+                                               vocabSeg_.id,
+                                               (long long)time(nullptr));
                 if (pick != 0)
                     progress_->recordDrill(
                         "miss:vocab:" + vocab_, vocab_, false,
                         (long long)time(nullptr));
+                {
+                    // GATE 1, register divergence. A word he renders more than
+                    // one way is not a word with one English, and marking a
+                    // reader wrong for producing the sense they learned would
+                    // teach the opposite of this project's central lesson.
+                    // So every attested rendering is shown, with its tier, and
+                    // where they diverge the pane says so. 3,299 of the 12,004
+                    // glossed headwords carry more than one.
+                    auto es2 = spine_.lookup(vocab_);
+                    if (!es2.empty() && es2.front().hgm_gloss.size() > 1) {
+                        QStringList all;
+                        for (const auto& g : es2.front().hgm_gloss)
+                            all << QString::fromStdString(g).toHtmlEscaped();
+                        h += "<div style='padding-top:6px'><small>" +
+                             hgmGlossPhraseRaw(es2.front().provisional(),
+                                               all.join(" \u00b7 ")) +
+                             "</small><div style='color:" +
+                             QString(ux::darkChrome() ? ux::chromeMachine()
+                                                      : ux::kMachine) +
+                             ";font-size:11px'>He renders this word more than "
+                             "one way. Grade yourself on the SENSE here, not "
+                             "on matching one of them \u2014 that difference "
+                             "is the lesson.</div></div>";
+                    }
+                    const auto st = progress_->vocabStanding();
+                    h += QString("<div style='color:%1;font-size:11px;"
+                                 "padding-top:6px'>your deck: %2 met \u00b7 "
+                                 "%3 known here \u00b7 <b>%4 known anywhere"
+                                 "</b></div>")
+                             .arg(ux::darkChrome() ? ux::chromeMuted()
+                                                   : QString(ux::kMuted))
+                             .arg(st.met).arg(st.here).arg(st.anywhere);
+                }
                 h += pick == 0 ? "<small style='color:#3B7A3B'>scheduled "
                                  "further out</small>"
                                : "<small style='color:#B4540A'>will retry "

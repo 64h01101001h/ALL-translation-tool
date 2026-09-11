@@ -483,3 +483,29 @@ Categories: code · decision · email · release · audit · data · question.
 - The mantras are not being dismissed — the Sanskrit workbench reads them
   properly. They are simply the wrong material for a drill about Tibetan
   grammar.
+
+## 2026-09-10 · Known here / known anywhere, finished
+- The review surface replaces the weakest thing in the Learn tab — a bare
+  ACIP word with "Do you know this word? Grade yourself", which is precisely
+  where a generic flashcard app is our equal. A word is now presented IN the
+  sentence it was met in, and its second review in a sentence the reader has
+  not seen.
+- The question itself now says which is being asked: "do you know it HERE, in
+  the sentence you met it in?" then "do you know it ANYWHERE?"
+- **Gate 1, register divergence, implemented and measured rather than
+  assumed.** 3,299 of the 12,004 glossed headwords carry more than one
+  attested English — bsod nams literally holds "goodness (prayer register)"
+  beside "merit" and "good deeds". Where a word has several, ALL are shown
+  with their tier and the pane says: grade yourself on the sense here, not on
+  matching one of them, because that difference is the lesson. Marking a
+  reader wrong for producing the sense they learned would teach that one
+  Tibetan word has one English, which inverts the project's central claim.
+- **Gate 2, no second attestation.** When a word occurs nowhere else in the
+  corpus the pane says so and the word stays at "known here". It is never
+  re-served in its own segment and counted as transfer — that would measure
+  familiarity with a sentence and call it knowledge of a word.
+- A third case the plan did not name but the data forces: words that came from
+  the bulk dictionary fill have no origin sentence at all, and the pane says
+  that rather than implying one.
+- Both readouts are shown after every review: met / known here / known
+  anywhere.
