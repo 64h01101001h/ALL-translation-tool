@@ -22203,8 +22203,23 @@ public:
         mode_->setCurrentIndex(mode);
         for (int i = 0; i < 12; ++i) {
             newDrill();
-            if (mode == 1 ? cloze_.has_value() : card_.has_value()) break;
+            const bool got = mode == 1    ? cloze_.has_value()
+                             : mode == 12 ? bound_.has_value()
+                                          : card_.has_value();
+            if (got) break;
         }
+    }
+
+    // The digest shows Boundary hunt mid-answer rather than blank: marks
+    // laid on the key, then checked, so the capture carries the reveal —
+    // which is where the attested / engine-ruling distinction is visible.
+    void demoBoundaryForShot() {
+        demoForShot(12);
+        if (!bound_) return;
+        QStringList ans;
+        for (int e : bound_->ends) ans << QString::number(e + 1);
+        input_->setText(ans.join(' '));
+        checkDrill();
     }
 
     int selfTest(QStringList& log) {
@@ -48734,6 +48749,9 @@ int main(int argc, char** argv) {
                 drillsPane->demoForShot(6);
                 settle(400);
                 save(drillsPane->grab(), "drills-script");
+                drillsPane->demoBoundaryForShot();
+                settle(400);
+                save(drillsPane->grab(), "drills-boundary");
             }
             if (extra.contains("sanskrit")) {
                 // Adam asked for the workbench in use, on the first verse of
