@@ -399,3 +399,64 @@ Categories: code · decision · email · release · audit · data · question.
   expects 6-9. Constraint found before touching it: saved pins resolve by
   walking the menu bar three levels deep, so any restructuring that changes
   depth or a top-level name breaks every saved pin.
+
+## 2026-09-10 · The three Trainer changes, and where each one lands
+- **The distractor fix.** Distractors must now carry the same role marker as
+  the answer. Measured: guessable-by-particle 72.2% -> 0.0%, and 95.4% of
+  drills now require reading (the residue carries no case particle at all).
+  A drill that cannot be filled honestly is REJECTED rather than padded with
+  an easier option; a full 4,000-drill pack still builds, in 1:42. This is in
+  core/src/drills.cpp, so BOTH apps get it.
+- **What the blanked word means.** allcore::checkTerminology already existed
+  and already had a battery, so this was a call site rather than new engine
+  code. 94% of drills carry a card; 63% lead with a word he actually used in
+  that passage. Never "the answer means X" — the median glossed headword has
+  four attested equivalents and the worst 137, so naming one would be picking
+  a sense. Shown identically right or wrong, because being right is exactly
+  when Adam reported learning nothing.
+  The report orders unmatched first, which is right for a translator hunting
+  gaps in a draft and backwards for a learner's card; re-sorted at both call
+  sites.
+- **Hint and lookup.** "Rule out one" strikes a single wrong option —
+  deliberately weak, because revealing the ROLE instead leaves one option
+  standing in roughly half of all drills, which is the answer and not a hint.
+  "Look up" is reachable only after answering; before it, it would replace the
+  retrieval effort that makes a drill work. The pack carries twenty
+  equivalents so the button reveals something real rather than promising more
+  and showing nothing.
+- Two defects fixed on sight: the phone said "the answer is in green",
+  pointing at a colour alone, and now names it; and the floating read/drills
+  counter was sitting on top of the new meaning text.
+- Wording, Adam: "the text has", not "his text has" — the Tibetan source is
+  the classical work, not his writing. The English attributions stay. The
+  desktop's particle mode already used that phrasing, so this was house style
+  the phone had drifted from.
+- **Asked whether these reach the desktop: only the first did.** The meaning
+  card, the verdict wording and the counter fix were iOS-only, which is the
+  divergence the audit warned about and which I had just widened. The meaning
+  card is now on the desktop cloze too, reusing hgmGlossPhrase so the
+  provenance claim is worded once in the app rather than a fourth time.
+  Hint and lookup remain iOS-only and are listed as such.
+
+## 2026-09-10 · Known here / known anywhere — the core, and a leak closed
+- The deck now separates the two kinds of knowing. A word recognised only in
+  the sentence it was met in is the weakest form of knowing and the one a bare
+  flashcard measures; `vocab` gained `first_segment`, `transfer_segment` and
+  `stage`, and being right in a DIFFERENT segment is what promotes a word from
+  "known here" to "known anywhere".
+- Proven on a scratch deck: met 2 -> right in its own segment -> here 1 ->
+  right elsewhere -> anywhere 1; a WRONG answer elsewhere does not promote;
+  and the origin segment survives meeting the word again somewhere else
+  (222 stays 222 after a later sighting in 777).
+- Migrated by ALTER rather than by editing the CREATE: decks already exist on
+  disk and `CREATE TABLE IF NOT EXISTS` silently skips a changed definition,
+  so the columns would never have appeared on a live deck and every read would
+  have failed.
+- **The leak the spec predicted is real and is closed.** The Trainer's six
+  reveal layers touched the deck NOWHERE — a word could be shown, understood,
+  and never come back. Revealed glosses now enter the deck.
+- Three places record an origin of 0 ON PURPOSE, and each says why: the
+  desktop Trainer analyses PASTED text with no corpus segment; the bulk
+  deck-fill comes from the dictionary rather than from meeting a word in a
+  sentence. Claiming an origin there would put a learner in a segment they
+  have never read.

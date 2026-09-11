@@ -34,6 +34,17 @@ static QCursor g_busyCursor();   // defined beside g_harnessRun
 #include <QClipboard>
 #include <QCryptographicHash>
 #include <QDirIterator>
+#if defined(ALL_HAVE_AUDIO_OUT)
+// Reading aloud. At global scope because Q_DECLARE_METATYPE inside
+// qaudioformat.h must be, and every .inc below lives in an anonymous
+// namespace.
+#include <QAudioDecoder>
+#include <QAudioFormat>
+#include <QAudioSink>
+#include <QBuffer>
+#include <QEventLoop>
+#endif
+#include "allcore/speak.h"
 #include <QJsonDocument>
 #include <QJsonArray>
 #include <QToolButton>
@@ -5866,6 +5877,7 @@ inline void qatPinsChanged() {
 static QString qatPathForLabel(const QString& label) {
     const QString want = QString(label).remove(QString::fromUtf8("…")).trimmed();
     if (want.isEmpty()) return QString();
+    QStringList found;
     for (QWidget* w : QApplication::topLevelWidgets()) {
         auto* mw = qobject_cast<QMainWindow*>(w);
         if (!mw || !mw->menuBar()) continue;
@@ -5877,12 +5889,19 @@ static QString qatPathForLabel(const QString& label) {
                     const QString t =
                         QString(a->text()).remove(QString::fromUtf8("…")).trimmed();
                     if (!t.isEmpty() && t.compare(want, Qt::CaseInsensitive) == 0)
-                        return m->text() + ">" + sub->text() + ">" + a->text();
+                        found << (m->text() + ">" + sub->text() + ">" + a->text());
                 }
             }
         }
     }
-    return QString();
+    // Exactly one match, or none. Returning the FIRST of several would be a
+    // guess, and the guess is not harmless: the Search pane has a ribbon
+    // button labelled "Find" (main.cpp:18721), and a menu tree where two
+    // different commands are both called "Find" would silently pin whichever
+    // sorts first and then run the wrong one from the strip. A pin that runs
+    // something other than the button it was made from is worse than no pin.
+    found.removeDuplicates();
+    return found.size() == 1 ? found.first() : QString();
 }
 
 class RibbonProxy : public QToolButton {
@@ -5920,8 +5939,9 @@ public:
                     if (path.isEmpty()) {
                         QAction* no = m->addAction("Cannot pin this one");
                         no->setEnabled(false);
-                        m->addAction(QString::fromUtf8("“%1” has no matching "
-                                                       "menu entry to pin")
+                        m->addAction(QString::fromUtf8("“%1” matches no single "
+                                                       "menu entry — nothing to "
+                                                       "pin it to")
                                          .arg(label))
                             ->setEnabled(false);
                     } else if (pins.contains(path)) {
@@ -21629,6 +21649,24 @@ private:
                     const auto& e =
                         doc_.entries[doc_.spans[at.front()].entry_ix];
                     if (!seen.insert(e.id).second) continue;
+                    // A revealed gloss enters the deck, WITH the segment it
+                    // was met in. Until now the Trainer's six reveal layers
+                    // touched the deck nowhere, so everything learned here
+                    // leaked: the word was shown, understood, and never came
+                    // back. The segment is what lets its first review
+                    // re-present it in the sentence it came from rather than
+                    // bare (docs/LEARN_TAB_VISION.md, "Known here / known
+                    // anywhere").
+                    // Segment 0, deliberately: this pane analyses text the
+                    // reader PASTED, which has no corpus segment id. The word
+                    // still enters the deck — that is the leak closed — but it
+                    // has no origin sentence, so its first review cannot be
+                    // presented in context and the deck must not pretend
+                    // otherwise. Words met in the Overlay and the Drills do
+                    // carry their segment.
+                    if (progress_ && !e.hgm_gloss.empty())
+                        progress_->touchWord(e.wylie, 0,
+                                             (long long)time(nullptr));
                     QString gl = e.hgm_gloss.empty()
                         ? "<i>(no Geshe Michael Roach equivalent)</i>"
                         : QString::fromStdString(e.hgm_gloss.front())
@@ -21829,6 +21867,48 @@ public:
         });
         auto* newBtn = new QPushButton("New drill");
         row->addWidget(newBtn);
+        // The hint, deliberately weak. Revealing the grammatical ROLE instead
+        // would leave exactly one option standing in roughly half of all
+        // drills — that is the answer, not a hint. Removing one wrong option
+        // leaves three and the reader still has to read. Cloze only, once per
+        // drill, and it disappears once the answer is shown.
+        ruleOutBtn_ = new QPushButton("Rule out one");
+        ruleOutBtn_->setToolTip(
+            hoverText("Rule out one",
+                      "Strike out one wrong option. It leaves three, so the "
+                      "drill still has to be read."));
+        ruleOutBtn_->setVisible(false);
+        row->addWidget(ruleOutBtn_);
+        // Targeting must be VISIBLE. A learner who cannot see that the draw
+        // is aimed cannot tell an easy run from a narrow one, and cannot get
+        // back to a general session.
+        aimLabel_ = new QPushButton;
+        aimLabel_->setFlat(true);
+        aimLabel_->setVisible(false);
+        aimLabel_->setToolTip(
+            hoverText("Training one skill",
+                      "Every drill is aimed at this weak spot. Click to stop "
+                      "aiming and return to a general draw."));
+        row->addWidget(aimLabel_);
+        connect(aimLabel_, &QPushButton::clicked, [this] {
+            target_ = allcore::DrillTarget{};
+            aimLabel_->setVisible(false);
+            newDrill();
+        });
+        connect(ruleOutBtn_, &QPushButton::clicked, [this] {
+            if (!cloze_) return;
+            for (size_t i = 0; i < radios_.size(); ++i) {
+                if ((int)i == cloze_->correct) continue;
+                if (!radios_[i]->isEnabled()) continue;
+                if (radios_[i]->isChecked()) continue;
+                radios_[i]->setEnabled(false);
+                QFont f = radios_[i]->font();
+                f.setStrikeOut(true);
+                radios_[i]->setFont(f);
+                break;
+            }
+            ruleOutBtn_->setVisible(false);   // once per drill
+        });
         script_ = new QCheckBox("Tibetan script");
         row->addWidget(script_);
         adaptive_ = new QCheckBox("adapt to my level");
@@ -22186,10 +22266,52 @@ public:
     // drill answer is already recorded WITH the skill it
     // reveals; this names the weak spots in plain language and
     // says which drill trains each one. ----
+    // A grammar note per skill, so a named weakness comes with the thing
+    // that fixes it rather than only a count. Kept short on purpose: the
+    // manual carries the full treatment and this is a nudge at the moment of
+    // failure, not a lesson.
+    static QString skillNote(const QString& key) {
+        static const QHash<QString, QString> kNotes = {
+            {"cloze-role:agent/instrument",
+             "The agent marker (gis/kyis/gyis/yis/s) says WHO did it or WHAT "
+             "it was done with. It attaches to the doer, not the thing done."},
+            {"cloze-role:connector",
+             "A connector particle (gi/kyi/gyi/'i) joins two nouns — it reads "
+             "with the word that FOLLOWS it, not the one before."},
+            {"cloze-role:la",
+             "La-don marks where, to whom, or for what. One marker, several "
+             "jobs — the surrounding words decide which."},
+            {"cloze-role:source",
+             "nas/las mark where something comes FROM, in place, time or "
+             "comparison."},
+            {"cloze-role:topic",
+             "ni raises a topic: \"as for X\". It marks what the sentence is "
+             "about, not what it does."},
+            {"cloze-role:conjunctive",
+             "dang joins items, and also marks accompaniment — \"with\"."},
+            {"order:chunk-order",
+             "Tibetan puts the verb last and its arguments before it. When a "
+             "chunk lands wrong, the question is usually which argument it is."},
+            {"order:verb-position",
+             "The verb closes the clause. If it is not last, the clause has "
+             "not ended."},
+            {"order:genitive-attach",
+             "A genitive chunk attaches FORWARD, to the noun after it."},
+            {"order:agent-chunk",
+             "The agent chunk precedes what it acts on, and both precede the "
+             "verb."},
+            {"order:ladon-chunk",
+             "A la-don chunk sits before the verb it modifies."},
+        };
+        auto it = kNotes.find(key);
+        return it == kNotes.end() ? QString() : it.value();
+    }
+
     static QString missReportHtml(
         const std::vector<std::pair<std::string, long long>>&
             misses,
-        long long drillsDone) {
+        long long drillsDone,
+        const std::vector<allcore::Progress::SkillScore>& scores = {}) {
         struct Fam {
             QString title, drill;
             long long total = 0;
@@ -22228,11 +22350,40 @@ public:
                 label = key;
             }
             fams[fi].total += n;
-            fams[fi].rows << QString(
-                                 "<div style='margin-left:14px'>"
-                                 "%1 — missed ×%2</div>")
-                                 .arg(label.toHtmlEscaped())
-                                 .arg(n);
+            // accuracy, where there is a denominator to state
+            QString acc;
+            for (const auto& sc : scores) {
+                if (QString::fromStdString(sc.skill) != key) continue;
+                acc = sc.enough
+                          ? QString(" — right %1 of %2")
+                                .arg(sc.right).arg(sc.attempts)
+                          // the fourth binding condition: below the floor we
+                          // say the count is too small, never draw a trend
+                          : QString(" — %1 attempt(s), too few to call a trend")
+                                .arg(sc.attempts);
+                break;
+            }
+            const QString note = skillNote(key);
+            // "train this" is a link the dialog handles, not a bare count.
+            // Vocabulary is excluded: the deck already resurfaces those, so a
+            // targeted draw would duplicate the SRS rather than add to it.
+            const bool trainable = fi != 3;
+            fams[fi].rows
+                << QString("<div style='margin-left:14px;margin-top:6px'>"
+                           "<b>%1</b> — missed \u00d7%2%3%4%5</div>")
+                       .arg(label.toHtmlEscaped())
+                       .arg(n)
+                       .arg(acc)
+                       .arg(note.isEmpty()
+                                ? QString()
+                                : "<div style='color:#78706A;font-size:11px;"
+                                  "margin-top:2px'>" + note.toHtmlEscaped() +
+                                      "</div>")
+                       .arg(trainable
+                                ? QString("<div style='margin-top:2px'>"
+                                          "<a href='train:%1'>train this</a>"
+                                          "</div>").arg(key)
+                                : QString());
         }
         QString h;
         h += "<div style='color:#9A7A33;font-size:11px;"
@@ -22288,7 +22439,58 @@ private:
         browser->setHtml(missReportHtml(
             progress_->topMisses(100),
             progress_->stats((long long)time(nullptr))
-                .drills_done));
+                .drills_done,
+            progress_->skillScores(kTrendFloor)));
+        // The report stops being a terminal dialog (LEARN_TAB_VISION.md,
+        // "Train this"): a named weakness now has a button that generates a
+        // drill set aimed at exactly that skill. A targeted draw that cannot
+        // be met says so rather than handing back an off-target drill.
+        browser->setOpenLinks(false);
+        connect(browser, &QTextBrowser::anchorClicked,
+                [this, dlg](const QUrl& u) {
+                    const QString s2 = u.toString();
+                    if (!s2.startsWith("train:")) return;
+                    const QString key = s2.mid(6);
+                    allcore::DrillTarget t;
+                    if (key.startsWith("cloze-role:")) {
+                        t.kind = allcore::DrillTarget::Kind::ClozeRole;
+                        t.skill = key.mid(11).toStdString();
+                        mode_->setCurrentIndex(1);
+                    } else if (key.startsWith("particle:")) {
+                        t.kind = allcore::DrillTarget::Kind::ParticleFamily;
+                        t.skill = key.mid(9).toStdString();
+                        mode_->setCurrentIndex(2);
+                    } else {
+                        // order sub-skills have no targeted draw yet; say so
+                        // rather than open an untargeted drill and call it
+                        // training that skill
+                        QMessageBox::information(
+                            this, "Not yet targetable",
+                            "Reading-order misses are attributed by the first "
+                            "position that diverged, and one transposition "
+                            "shifts everything after it. That is a fair "
+                            "aggregate signal but not precise enough to aim a "
+                            "drill at, so these are not trainable yet — the "
+                            "Chunk-order drill practises all of them.");
+                        return;
+                    }
+                    std::string why;
+                    if (allcore::targetRefused(t, &why)) {
+                        QMessageBox::information(
+                            this, "Not trained on purpose",
+                            QString::fromStdString(why));
+                        return;
+                    }
+                    target_ = t;
+                    if (aimLabel_) {
+                        aimLabel_->setText(
+                            QString("training: %1  \u00d7")
+                                .arg(QString::fromStdString(t.skill)));
+                        aimLabel_->setVisible(true);
+                    }
+                    dlg->close();
+                    newDrill();
+                });
         v->addWidget(browser, 1);
         dlg->show();
     }
@@ -22317,6 +22519,22 @@ private:
                 .arg(weak));
     }
 
+    // Said out loud when a targeted draw comes back empty. The aim is
+    // dropped at the same moment, so the next drill is honestly untargeted
+    // rather than silently pretending to still be training the skill.
+    void targetMissed() {
+        const QString skill = QString::fromStdString(target_.skill);
+        target_ = allcore::DrillTarget{};
+        if (aimLabel_) aimLabel_->setVisible(false);
+        QMessageBox::information(
+            this, "No drill for that skill right now",
+            QString("The corpus did not yield a drill exercising \u201c%1\u201d "
+                    "in the attempts allowed, so this one is an ordinary "
+                    "draw and is NOT counted as training that skill. Try "
+                    "again — the draw is random — or pick another weak spot.")
+                .arg(skill));
+    }
+
     void newDrill() {
         clearAnswers();
         result_->clear();
@@ -22329,10 +22547,22 @@ private:
         if (m == 0) {
             order_ = factory_.makeOrder(rng_);
         } else if (m == 1) {
-            cloze_ = factory_.makeCloze(rng_);
+            cloze_ = factory_.makeCloze(rng_, target_);
+            // Binding condition 1: a targeted draw that cannot be met is
+            // reported, never quietly replaced by an off-target drill that
+            // would then be counted as training that skill.
+            if (!cloze_ && target_.kind != allcore::DrillTarget::Kind::None) {
+                targetMissed();
+                cloze_ = factory_.makeCloze(rng_);
+            }
             if (cloze_) addRadios(cloze_->options, true);
+            if (ruleOutBtn_) ruleOutBtn_->setVisible(cloze_.has_value());
         } else if (m == 2) {
-            part_ = factory_.makeParticle(rng_);
+            part_ = factory_.makeParticle(rng_, target_);
+            if (!part_ && target_.kind != allcore::DrillTarget::Kind::None) {
+                targetMissed();
+                part_ = factory_.makeParticle(rng_);
+            }
             if (part_) addRadios(part_->options, false);
         } else if (m == 3) {
             // parallel reading: load the course lazily; moving on without a
@@ -22548,7 +22778,11 @@ private:
         int added = 0;
         for (const auto& [wylie, pairs] : *g_alignEvidence) {
             if (wylie.empty() || pairs.isEmpty()) continue;
-            progress_->touchWord(wylie, now);
+            // Segment 0: these come from the dictionary in bulk, not from
+            // meeting the word in a sentence, so there is no origin to
+            // re-present. Claiming one would put the learner in a segment
+            // they have never read.
+            progress_->touchWord(wylie, 0, now);
             ++added;
         }
         refreshStats();
@@ -22791,6 +23025,65 @@ private:
                      : QString("<b style='color:#B4540A'>Not yet — the answer "
                                "is %1.</b>")
                            .arg(disp(cloze_->options[cloze_->correct]));
+            // What the blanked word means — Adam, 2026-09-10: answering
+            // correctly and still not knowing. Rule 1 forbids composing
+            // English, so this is strictly a MATCH: checkTerminology reports
+            // which of his recorded equivalents actually occur in his own
+            // English for THIS segment. Never "the answer means X" — the
+            // median glossed headword has four attested equivalents and the
+            // worst has 137, so naming one would be picking a sense.
+            // Shown identically right or wrong: being right is exactly when
+            // nothing was learned.
+            {
+                const auto rep = allcore::checkTerminology(
+                    spine_, index_, cloze_->options[cloze_->correct],
+                    cloze_->segment.english);
+                std::vector<allcore::TermUse> terms = rep.terms;
+                // the report puts unmatched first, for a translator hunting
+                // gaps; a learner wants the word actually used here
+                std::stable_sort(terms.begin(), terms.end(),
+                                 [](const allcore::TermUse& a,
+                                    const allcore::TermUse& b) {
+                                     if (a.matched.empty() != b.matched.empty())
+                                         return !a.matched.empty();
+                                     return a.wylie.size() > b.wylie.size();
+                                 });
+                int shown = 0;
+                for (const auto& t : terms) {
+                    if (shown >= 2 || t.glosses.empty()) break;
+                    QStringList gl;
+                    for (size_t k = 0; k < t.glosses.size() && k < 8; ++k)
+                        gl << QString::fromStdString(t.glosses[k]).toHtmlEscaped();
+                    // the existing house phrase, so the provenance claim is
+                    // worded once in the app rather than a fourth time here
+                    const QString phrase = hgmGlossPhrase(
+                        t, gl.join(" \u00b7 ") +
+                               (t.glosses.size() > 8
+                                    ? QString(" <i>(+%1 more)</i>")
+                                          .arg(t.glosses.size() - 8)
+                                    : QString()));
+                    h += "<div style='padding-top:6px'><b>" +
+                         QString::fromStdString(t.wylie).toHtmlEscaped() +
+                         "</b><br><small>" + phrase + "</small>";
+                    if (!t.matched.empty()) {
+                        QStringList mt;
+                        for (const auto& x : t.matched)
+                            mt << QString::fromStdString(x).toHtmlEscaped();
+                        h += "<br><small style='color:" +
+                             QString(ux::darkChrome() ? ux::chromeAct()
+                                                      : ux::kAct) + "'>" +
+                             mt.join(", ") + " \u2014 his word here, above.</small>";
+                    } else {
+                        h += "<br><small style='color:" +
+                             QString(ux::darkChrome() ? ux::chromeMuted()
+                                                      : ux::kMuted) +
+                             "'>None of these appears verbatim in his English "
+                             "above.</small>";
+                    }
+                    h += "</div>";
+                    ++shown;
+                }
+            }
             h += "<div><small>role of the blanked chunk: " +
                  QString::fromUtf8(cloze_->role).toHtmlEscaped() +
                  "</small></div>";
@@ -22888,22 +23181,32 @@ private:
                 progress_->recordDrill("cloze",
                                        std::to_string(cloze_->segment.id),
                                        right, now);
-                if (!right) {
-                    std::string role = cloze_->role;
-                    role = role.substr(0, role.find(' '));
+                // Skill-tagged HIT as well as miss. Until now only misses
+                // carried a skill, so per-skill accuracy had no denominator
+                // and no honest trend could be drawn — a learner could only
+                // ever watch a miss counter grow. "skill:" records both
+                // outcomes, so "you were right 7 of 9 times" becomes sayable.
+                const std::string role = allcore::clozeSkill(*cloze_);
+                progress_->recordDrill("skill:cloze-role:" + role,
+                                       std::to_string(cloze_->segment.id),
+                                       right, now);
+                if (!right)
                     progress_->recordDrill("miss:cloze-role:" + role,
                                            std::to_string(cloze_->segment.id),
                                            false, now);
-                }
             } else if (m == 2 && part_) {
                 const bool right = pickedRadio() == part_->correct;
                 progress_->recordDrill("particle",
                                        std::to_string(part_->segment.id),
                                        right, now);
+                const std::string fam = allcore::particleSkill(*part_);
+                progress_->recordDrill("skill:particle:" + fam,
+                                       std::to_string(part_->segment.id),
+                                       right, now);
                 if (!right)
-                    progress_->recordDrill(
-                        "miss:particle:" + part_->options[0] + "-family",
-                        std::to_string(part_->segment.id), false, now);
+                    progress_->recordDrill("miss:particle:" + fam,
+                                           std::to_string(part_->segment.id),
+                                           false, now);
             }
         }
         if (progress_ && m == 0 && order_ && !input_->text().isEmpty()) {
@@ -22983,6 +23286,13 @@ private:
     QTextBrowser* question_ = nullptr;
     QWidget* answerRow_ = nullptr;
     std::vector<QRadioButton*> radios_;
+    QPushButton* ruleOutBtn_ = nullptr;   // the hint
+    QPushButton* aimLabel_ = nullptr;     // shows the skill being trained
+    // the skill the next draw should exercise, if any
+    allcore::DrillTarget target_;
+    // below this many attempts a per-skill score is a number,
+    // not a trend, and the report must say so
+    static constexpr int kTrendFloor = 8;
     QLineEdit* input_ = nullptr;
     double zoom_ = QSettings("ALL", "TranslationTool")
                        .value("drills/zoom", 1.0).toDouble();
@@ -25409,6 +25719,7 @@ protected:
 #include "normalize_pane.inc"   // F3 Normalize… with preview (needs cmp::, g_compareTexts, ComparePane)
 #include "replace_files.inc"     // F4 Replace in Files… with mandatory preview (needs normalize::, versions, filewalk)
 #include "apply_patch.inc"       // F5 Apply Patch… (needs replf::readForRewrite / bytesForWrite, textpatch)
+#include "speak_out.inc"        // reading aloud (private build only)
 #include "study_pane.inc"        // batch 5 F1: the Study pane shell (textspan at the boundary; pages arrive with their engines)
 
 class FilesPane : public QWidget {

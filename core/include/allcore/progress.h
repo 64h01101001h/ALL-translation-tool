@@ -34,6 +34,10 @@ public:
     // words enter the deck due immediately; known words just bump the view
     // count.
     void touchWord(const std::string& wylie, long long now);
+    // The same, remembering WHERE the word was met, so its first review
+    // can re-present it in that segment rather than bare.
+    void touchWord(const std::string& wylie, long long segment_id,
+                   long long now);
     // SRS review result. knew_it=true grows the interval (ease-weighted);
     // false resets it to a short retry.
     void reviewWord(const std::string& wylie, bool knew_it, long long now);
@@ -67,6 +71,55 @@ public:
     // Miss taxonomy: skills logged as kind "miss:<skill>", most frequent
     // first — the learner's weak spots, named.
     std::vector<std::pair<std::string, long long>> topMisses(int limit) const;
+
+    // ---- Known here / known anywhere (docs/LEARN_TAB_VISION.md) ----
+    //
+    // A word recognised only where it was met is the weakest form of knowing,
+    // and the one a bare flashcard measures. These two readouts separate it
+    // from the real thing.
+    struct VocabItem {
+        std::string wylie;
+        long long first_segment = 0;    // where it was met, 0 if unrecorded
+        long long transfer_segment = 0; // where it was recognised again
+        int stage = 0;                  // 0 met · 1 known here · 2 anywhere
+        long long views = 0;
+    };
+
+    // Words due for review, oldest due first. `stage` says which kind of
+    // review is owed: in its own segment, or in a different one.
+    std::vector<VocabItem> dueVocab(long long now, int limit) const;
+
+    // Record a review. `in_segment` is where the learner just saw it, so a
+    // correct answer in a DIFFERENT segment from the origin is what promotes
+    // a word to "known anywhere" — being right in the same sentence again
+    // proves only that the sentence is familiar.
+    void reviewWordInContext(const std::string& wylie, bool knew_it,
+                             long long in_segment, long long now);
+
+    struct VocabStanding {
+        long long met = 0;        // in the deck, not yet reviewed
+        long long here = 0;       // recognised in its own segment
+        long long anywhere = 0;   // recognised somewhere else
+    };
+    VocabStanding vocabStanding() const;
+
+    // Per-skill accuracy, from events logged as kind "skill:<skill>" with
+    // their correct flag. Misses alone can only ever grow a counter; a
+    // denominator is what lets the tab say "right 7 of 9" and, later,
+    // whether a weakness actually closed.
+    //
+    // `min_attempts` is a FLOOR, not a filter for tidiness: below it the
+    // caller must say "too few to call a trend" rather than draw one. The
+    // Learn tab's fourth binding condition (docs/LEARN_TAB_VISION.md,
+    // "Train this") turns on this being enforced here rather than remembered
+    // at each call site.
+    struct SkillScore {
+        std::string skill;      // e.g. "cloze-role:agent/instrument"
+        long long attempts = 0;
+        long long right = 0;
+        bool enough = false;    // attempts >= min_attempts
+    };
+    std::vector<SkillScore> skillScores(int min_attempts) const;
 
     // Most recent distinct event keys of one kind (newest first) — powers
     // e.g. the Library pane's recently-opened list (kind "openfile").

@@ -22,11 +22,30 @@ struct Drill: Codable {
     let after: String
     let english: String
     let role: String
+    /// The skill this drill exercises, in the same vocabulary the
+    /// desktop files misses under. Optional so an older pack decodes.
+    let skill: String?
     let course: String
     let seq: Int
     let title: Bool
     let answer: Int
     let options: [String]
+    /// What the blanked word means, MATCHED from his own English for this
+    /// segment — never composed. Optional so an older pack still decodes.
+    let means: [TermMeans]?
+}
+
+/// One glossed headword inside the blanked chunk.
+struct TermMeans: Codable {
+    let wylie: String
+    let tier: String
+    let provisional: Bool
+    /// His recorded equivalents for this headword, capped at eight.
+    let glosses: [String]
+    /// How many more were recorded beyond those eight.
+    let more: Int
+    /// Which of them actually occur in his English for THIS segment.
+    let used: [String]
 }
 
 struct PlanStep: Codable {
@@ -107,7 +126,88 @@ final class Deck: ObservableObject {
         done += 1; if correct { right += 1 }
         d.set(done, forKey: "drills.done"); d.set(right, forKey: "drills.right")
     }
+
+    /// Per-skill attempts and hits, so the phone can name a weak spot rather
+    /// than only count total wrongs. Stored as two small dictionaries in
+    /// UserDefaults — the phone has no progress database, and this is the
+    /// same taxonomy the desktop uses so the two mean the same thing.
+    func record(skill: String?, correct: Bool) {
+        guard let k = skill, !k.isEmpty else { return }
+        var att = d.dictionary(forKey: "skill.attempts") as? [String: Int] ?? [:]
+        var hit = d.dictionary(forKey: "skill.right") as? [String: Int] ?? [:]
+        att[k, default: 0] += 1
+        if correct { hit[k, default: 0] += 1 }
+        d.set(att, forKey: "skill.attempts")
+        d.set(hit, forKey: "skill.right")
+        objectWillChange.send()
+    }
+
+    /// (skill, attempts, right), weakest first. `enough` marks whether there
+    /// are enough attempts to call a trend — below the floor the surface must
+    /// say so rather than draw one, exactly as the desktop does.
+    func weakSpots(floor: Int = 8) -> [(String, Int, Int, Bool)] {
+        let att = d.dictionary(forKey: "skill.attempts") as? [String: Int] ?? [:]
+        let hit = d.dictionary(forKey: "skill.right") as? [String: Int] ?? [:]
+        return att.map { ($0.key, $0.value, hit[$0.key] ?? 0, $0.value >= floor) }
+            .filter { $0.1 > $0.2 }                     // has at least one miss
+            .sorted { Double($0.2) / Double($0.1) < Double($1.2) / Double($1.1) }
+    }
     func recordRead() { read += 1; d.set(read, forKey: "trainer.read") }
+}
+
+
+/// The weak-spots sheet: the phone's half of "Train this".
+///
+/// It names each skill with its accuracy, and offers to aim the draw at it.
+/// Below a floor of attempts it says the count is too small rather than
+/// drawing a trend — the same rule the desktop enforces, because a learner
+/// reading "40% right" off four attempts is being misled by arithmetic.
+///
+/// Aiming FILTERS the pre-tagged pack rather than generating, since the pack
+/// is built on the Mac and the phone generates nothing.
+struct WeakSpotsSheet: View {
+    @ObservedObject var deck: Deck
+    let train: (String) -> Void
+    @Environment(\.colorScheme) private var scheme
+    @Environment(\.dismiss) private var dismiss
+
+    var body: some View {
+        let c = Ink.of(scheme)
+        NavigationStack {
+            ScrollView {
+                VStack(alignment: .leading, spacing: 14) {
+                    Text("Every wrong answer is filed under the skill it reveals. Nothing leaves this phone.")
+                        .font(.system(size: 13)).foregroundColor(c.muted)
+                    ForEach(deck.weakSpots(), id: \.0) { spot in
+                        VStack(alignment: .leading, spacing: 4) {
+                            Text(spot.0).font(.system(size: 16, weight: .semibold))
+                                .foregroundColor(c.ink)
+                            Text(Self.score(spot))
+                                .font(.system(size: 13)).foregroundColor(c.muted)
+                            Button("train this") { train(spot.0) }
+                                .font(.system(size: 14)).foregroundColor(c.act)
+                        }
+                        Divider()
+                    }
+                }.padding(20)
+            }
+            .background(c.paper.ignoresSafeArea())
+            .navigationTitle("My weak spots")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .confirmationAction) {
+                    Button("Done") { dismiss() }
+                }
+            }
+        }
+    }
+
+    /// Kept out of the body: Swift's type-checker will not solve a string
+    /// this shape inline.
+    static func score(_ s: (String, Int, Int, Bool)) -> String {
+        if !s.3 { return "\(s.1) attempt(s) — too few to call a trend" }
+        return "right \(s.2) of \(s.1)"
+    }
 }
 
 // MARK: - Trainer
@@ -230,6 +330,9 @@ struct TrainerView: View {
                 .padding(.top, 10)
             }
             .padding(20)
+            // the read/drills counter floats in a bottomBar over this
+            // scroll view, so the last line needs room to clear it
+            .padding(.bottom, 72)
         }
         .background(c.paper.ignoresSafeArea())
     }
@@ -290,10 +393,23 @@ struct FlowChips: View {
 struct DrillView: View {
     let drill: Drill
     @ObservedObject var deck: Deck
+    /// The skill the draw is aimed at, if any. The phone cannot GENERATE
+    /// a targeted drill — the pack is built on the Mac — so it filters the
+    /// pre-tagged pack instead, reaching the same place by the other road.
+    @Binding var aim: String?
     let next: () -> Void
     @Environment(\.colorScheme) private var scheme
     @State private var picked: Int? = nil
     @State private var checked = false
+    /// One option struck out by the hint, if it was used on this drill.
+    @State private var ruledOut: Int? = nil
+    /// The skill the draw is aimed at, if any. The phone cannot GENERATE a
+    /// targeted drill — the pack is built on the Mac — so it filters the
+    /// pre-tagged pack instead, which reaches the same place by the other
+    /// road. When no drill in the pack carries the skill, it says so.
+    @State private var showWeak = false
+    /// Whether the learner asked for the full recorded gloss list.
+    @State private var expanded = false
     private var isRight: Bool { picked == drill.answer }
 
     var body: some View {
@@ -325,7 +441,8 @@ struct DrillView: View {
                             Image(systemName: picked == i ? "largecircle.fill.circle" : "circle")
                                 .foregroundColor(picked == i ? c.act : c.muted)
                             Text(opt).font(.system(size: 22))
-                                .foregroundColor(colorFor(i, c))
+                                .foregroundColor(ruledOut == i ? c.muted : colorFor(i, c))
+                                .strikethrough(ruledOut == i)
                                 .multilineTextAlignment(.leading)
                             Spacer()
                         }.padding(.vertical, 6)
@@ -334,9 +451,55 @@ struct DrillView: View {
 
                 if checked {
                     VStack(alignment: .leading, spacing: 5) {
-                        Text(isRight ? "Correct." : "Not yet — the answer is in green.")
+                        // "the text", not "his text": the Tibetan source is the
+                            // classical work, not Geshe Michael Roach's writing.
+                            // The English below IS his, and stays attributed.
+                            Text(isRight ? "Correct." : "Not yet — the text has \(drill.options[drill.answer]).")
                             .font(.system(size: 17, weight: .semibold))
                             .foregroundColor(isRight ? c.act : c.machine)
+                        // Shown the SAME whether the answer was right or
+                        // wrong. Being right is exactly when Adam reported
+                        // learning nothing, so withholding it from a correct
+                        // answer would miss the point of the request.
+                        if let ms = drill.means, !ms.isEmpty {
+                            ForEach(Array(ms.enumerated()), id: \.offset) { _, m in
+                                VStack(alignment: .leading, spacing: 3) {
+                                    Text(m.wylie).font(.system(size: 15, weight: .semibold))
+                                        .foregroundColor(c.ink)
+                                    Text("Geshe Michael Roach has: "
+                                         + (expanded ? m.glosses
+                                            : Array(m.glosses.prefix(8)))
+                                           .joined(separator: " · ")
+                                         + (expanded && m.more > 0
+                                            ? " (+\(m.more) more not carried)" : ""))
+                                        .font(.system(size: 14)).foregroundColor(c.muted)
+                                    if !m.used.isEmpty {
+                                        Text("\(m.used.joined(separator: ", ")) — his word here, above.")
+                                            .font(.system(size: 13)).foregroundColor(c.act)
+                                    } else {
+                                        Text("None of these appears verbatim in his English above.")
+                                            .font(.system(size: 13)).foregroundColor(c.muted)
+                                    }
+                                    if m.provisional {
+                                        Text("\(m.tier) [PROVISIONAL] — not his own English")
+                                            .font(.system(size: 12)).foregroundColor(c.machine)
+                                    }
+                                    // "Look up" is reachable only here, after
+                                    // answering. Before answering it would
+                                    // replace the retrieval effort that makes a
+                                    // drill work at all. It expands what this
+                                    // pack holds; the phone ships no dictionary
+                                    // and does not pretend to one.
+                                    if m.glosses.count > 8 && !expanded {
+                                        Button("Look up — \(m.glosses.count - 8) more of his equivalents") {
+                                            expanded = true
+                                        }
+                                        .font(.system(size: 13)).foregroundColor(c.act)
+                                    }
+                                }
+                                .padding(.vertical, 4)
+                            }
+                        }
                         if !drill.role.isEmpty {
                             Text("role of the blanked chunk: \(drill.role)")
                                 .font(.system(size: 14)).foregroundColor(c.muted)
@@ -347,9 +510,34 @@ struct DrillView: View {
                 }
 
                 HStack(spacing: 14) {
+                    // The hint deliberately reveals almost nothing. Showing the
+                    // grammatical role instead would leave exactly one option
+                    // standing in roughly half of all drills, which is not a
+                    // hint but the answer. Removing one wrong option leaves
+                    // three, and the learner still has to read.
+                    if let a = aim {
+                        Button("training: \(a)  ×") { aim = nil }
+                            .font(.system(size: 13)).foregroundColor(c.machine)
+                    } else if !deck.weakSpots().isEmpty {
+                        Button("My weak spots") { showWeak = true }
+                            .font(.system(size: 13)).foregroundColor(c.muted)
+                    }
+                    if !checked && ruledOut == nil {
+                        Button("Rule out one") {
+                            let wrong = (0..<drill.options.count).filter {
+                                $0 != drill.answer && $0 != picked
+                            }
+                            ruledOut = wrong.randomElement()
+                        }
+                        .font(.system(size: 15)).foregroundColor(c.muted)
+                    }
                     Button(checked ? "New drill" : "Check") {
-                        if checked { next(); picked = nil; checked = false }
-                        else if picked != nil { checked = true; deck.record(correct: isRight) }
+                        if checked { next(); picked = nil; checked = false; ruledOut = nil; expanded = false }
+                        else if picked != nil {
+                            checked = true
+                            deck.record(correct: isRight)
+                            deck.record(skill: drill.skill, correct: isRight)
+                        }
                     }
                     .font(.system(size: 17, weight: .semibold)).foregroundColor(.white)
                     .padding(.horizontal, 20).padding(.vertical, 11)
@@ -364,6 +552,15 @@ struct DrillView: View {
                 }.padding(.top, 8)
             }
             .padding(20)
+            // the read/drills counter floats in a bottomBar over this
+            // scroll view, so the last line needs room to clear it
+            .padding(.bottom, 72)
+        }
+        .sheet(isPresented: $showWeak) {
+            WeakSpotsSheet(deck: deck) { skill in
+                aim = skill
+                showWeak = false
+            }
         }
         .background(c.paper.ignoresSafeArea())
     }
@@ -420,6 +617,19 @@ struct RootView: View {
     @State private var pack: Pack? = PackLoader.load()
     @State private var mode = 0
     @State private var dOrder: [Int] = []
+    /// The skill the drill draw is aimed at, if any.
+    @State private var aim: String? = nil
+    /// Set when an aim found nothing, so the reason can be shown.
+    @State private var aimEmpty: String? = nil
+
+    /// Kept out of the view body: a concatenation this long inside an
+    /// alert defeats Swift's type-checker.
+    static func aimEmptyMessage(_ skill: String?) -> String {
+        let s = skill ?? "that skill"
+        return "This pack holds no drill exercising \(s), so the draw is "
+            + "an ordinary one and is NOT counted as training it. The pack "
+            + "is rebuilt on the Mac; a later one may hold some."
+    }
     @State private var tOrder: [Int] = []
     @State private var dAt = 0
     @State private var tAt = 0
@@ -442,7 +652,8 @@ struct RootView: View {
                             tAt = (tAt + 1) % max(tOrder.count, 1)
                         }
                     } else if mode == 1, !pack.cloze.isEmpty, dAt < dOrder.count {
-                        DrillView(drill: pack.cloze[dOrder[dAt]], deck: deck) {
+                        DrillView(drill: pack.cloze[dOrder[dAt]], deck: deck,
+                                  aim: $aim) {
                             dAt = (dAt + 1) % max(dOrder.count, 1)
                         }
                     } else { Spacer() }
@@ -470,6 +681,30 @@ struct RootView: View {
             guard let p = pack else { return }
             if dOrder.isEmpty { dOrder = Array(0..<p.cloze.count).shuffled() }
             if tOrder.isEmpty { tOrder = Array(0..<p.trainer.count).shuffled() }
+        }
+        // Aiming filters the pre-tagged pack rather than generating, because
+        // the phone generates nothing. If the pack holds no drill for that
+        // skill, the aim is dropped and said out loud — never silently
+        // replaced by an ordinary draw that then counts as training it.
+        .onChange(of: aim) { _, want in
+            guard let p = pack else { return }
+            guard let want, !want.isEmpty else {
+                dOrder = Array(0..<p.cloze.count).shuffled(); dAt = 0; return
+            }
+            let hits = (0..<p.cloze.count).filter { p.cloze[$0].skill == want }
+            if hits.isEmpty {
+                aimEmpty = want
+                aim = nil
+            } else {
+                dOrder = hits.shuffled(); dAt = 0
+            }
+        }
+        .alert("No drill for that skill in this pack",
+               isPresented: Binding(get: { aimEmpty != nil },
+                                    set: { if !$0 { aimEmpty = nil } })) {
+            Button("OK", role: .cancel) { aimEmpty = nil }
+        } message: {
+            Text(Self.aimEmptyMessage(aimEmpty))
         }
     }
 }
