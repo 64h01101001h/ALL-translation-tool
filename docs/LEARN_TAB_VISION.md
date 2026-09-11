@@ -226,7 +226,7 @@ Each entry states what the learner sees, what data drives it, how the tool knows
 
 Every passage in Trainer, Drills and the reader carries an explicit state: *in-corpus* ("there is a key — his own English for this segment", with citation) or *out-of-corpus* ("no key: engine guidance only"), with a distinct frame and one line on what the guidance can and cannot see. The Trainer's sixth layer already degrades correctly; this makes the degradation visible *before* the learner invests effort. Costs almost nothing and is the thing a working translator will value most: knowing exactly when they are on their own.
 
-#### One ungraded reading-order gate in the Trainer — **BUILD LATER**
+#### One ungraded reading-order gate in the Trainer — **BUILT 2026-09-11**
 
 The full commit-before-reveal proposal was cut (§6). What survives is one gate: before the reading-order layer opens, ask which chunk you read first. **Ungraded.** Default off. Offered only where `spotVerb` reports `confident == true`. The attempt is recorded with **no correct bit**, and the reveal appears beside it under its existing guidance label. Verb-first reading order in a case-marked SOV language is the skill translators need and a flashcard app cannot touch. The retrieval-practice gain comes from the attempt plus feedback, not from a score, so the ungraded form keeps the documented benefit and drops the breach. Build after the redundancy with drill mode 5 is settled.
 

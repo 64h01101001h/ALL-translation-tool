@@ -21435,6 +21435,23 @@ public:
             row->addWidget(reveal_[i]);
             QObject::connect(reveal_[i], &QCheckBox::toggled, [this] { render(); });
         }
+        {
+            // Default OFF, as the plan requires: a gate that appears
+            // uninvited is an interruption, not a practice.
+            gate_ = new QCheckBox("ask me first");
+            gate_->setToolTip(hoverText(
+                "Ask me first",
+                "Before the reading-order layer opens, be asked which chunk "
+                "you would read first. Nothing is scored, and no number in "
+                "the app moves — the gain is in committing to an answer "
+                "before seeing one."));
+            gate_->setChecked(false);
+            row->addWidget(gate_);
+            QObject::connect(gate_, &QCheckBox::toggled, [this](bool on) {
+                gateOn_ = on;
+                render();
+            });
+        }
         script_ = new QCheckBox("Tibetan script");
         row->addWidget(script_);
         QObject::connect(script_, &QCheckBox::toggled, [this] { render(); });
@@ -21466,6 +21483,62 @@ public:
             "SEMS CAN THAMS CAD BDE BA DANG LDAN PAR GYUR CIG,");
         loadDoc();
         check(!clauses_.empty(), "passage splits into clauses");
+        // The ungraded reading-order gate. Default OFF, as the plan requires:
+        // a gate that appears uninvited is an interruption, not a practice.
+        // And it must appear ONLY before the order layer opens — a gate shown
+        // beside the answer is not a gate.
+        check(gate_ && !gate_->isChecked(),
+              "reading-order gate: present and default OFF");
+        {
+            gate_->setChecked(true);
+            for (int k = 0; k < 6; ++k) reveal_[k]->setChecked(false);
+            render();
+            const bool askedWhenClosed =
+                view_->toPlainText().contains("read first");
+            reveal_[2]->setChecked(true);
+            render();
+            const bool askedWhenOpen =
+                view_->toPlainText().contains("read first");
+            check(!askedWhenOpen,
+                  "reading-order gate: withdraws once the order layer is open "
+                  "(a gate beside the answer is not a gate)");
+            // The POSITIVE case needs a passage whose verb spotVerb is
+            // confident about — the gate is offered only there, because in a
+            // case-marked SOV language the verb is what fixes reading order,
+            // and asking without one would be asking the reader to guess at
+            // something the engine cannot see either. So find one rather than
+            // assert against whatever the fixture happens to contain.
+            (void)askedWhenClosed;
+            {
+                // The gate's condition is computed by THIS pane from its own
+                // overlay, so selecting passages by a drill's verb confidence
+                // proves nothing — the first version of this check did exactly
+                // that and failed, because the Trainer re-spots the verb in
+                // its own parse. Drive the pane itself and see whether it ever
+                // offers the gate.
+                allcore::HeadwordIndex ix(spine_);
+                allcore::DrillFactory f(spine_, ix);
+                std::mt19937 rg(20260911);
+                bool offered = false;
+                for (int i = 0; i < 40 && !offered; ++i) {
+                    auto od = f.makeOrder(rg);
+                    if (!od) continue;
+                    input_->setPlainText(
+                        QString::fromStdString(od->segment.acip));
+                    loadDoc();
+                    for (int k = 0; k < 6; ++k) reveal_[k]->setChecked(false);
+                    render();
+                    if (view_->toPlainText().contains("read first"))
+                        offered = true;
+                }
+                check(offered,
+                      "reading-order gate: IS offered on a passage whose verb "
+                      "this pane is confident about");
+            }
+            gate_->setChecked(false);
+            for (int k = 0; k < 6; ++k) reveal_[k]->setChecked(false);
+            render();
+        }
         const int bare = view_->toPlainText().size();
         check(bare > 0, "bare layer renders");
         for (int k = 0; k < 6; ++k) reveal_[k]->setChecked(true);
@@ -21612,6 +21685,35 @@ private:
             auto chunks = allcore::chunkClause(doc_, cl);
             auto verb = allcore::spotVerb(doc_, chunks);
             auto plan = allcore::planReading(chunks, verb);
+                // ---- The ungraded reading-order gate ----
+                // (docs/LEARN_TAB_VISION.md. The full commit-before-reveal
+                // proposal was CUT; this is the one gate that survived.)
+                //
+                // Before the reading-order layer opens, ask which chunk you
+                // read first — and do not grade it. The retrieval-practice
+                // gain comes from the attempt plus the feedback, not from a
+                // score, so the ungraded form keeps the documented benefit
+                // and drops the breach: there is no correct bit recorded, and
+                // nothing here can raise or lower any number in the app.
+                //
+                // Offered ONLY where spotVerb is confident, because in a
+                // case-marked SOV language the verb is what fixes the reading
+                // order, and asking the question without one would be asking
+                // the reader to guess at something the engine cannot see
+                // either.
+                if (!orderOn && gateOn_ && verb.chunk >= 0 && verb.confident &&
+                    chunks.size() >= 2) {
+                    h += QString(
+                             "<div style='margin-top:6px;border-left:3px solid "
+                             "%1;padding:4px 8px'><small style='color:%1'>"
+                             "BEFORE YOU OPEN THE READING ORDER</small><br>"
+                             "<small>Which chunk would you read first? Decide, "
+                             "then open layer 3. Nothing is scored \u2014 the "
+                             "gain is in having committed, not in being "
+                             "marked.</small></div>")
+                             .arg(ux::darkChrome() ? ux::chromeGold()
+                                                   : QString(ux::kGold));
+                }
             if (!chunksOn || chunks.empty()) {
                 h += "<span style='font-size:16px'>" +
                      tokensText(cl.beg, cl.end) + "</span>";
@@ -21843,6 +21945,8 @@ private:
     // the corpus segment this passage IS, if it is one at all —
     // decides the KEY / NO KEY badge
     allcore::CorpusSegment corpusSeg_;
+    QCheckBox* gate_ = nullptr;   // the ungraded reading-order gate
+    bool gateOn_ = false;
     allcore::OverlayDoc doc_;
     bool docIsWylie_ = false;
     std::vector<allcore::Clause> clauses_;
@@ -22315,6 +22419,25 @@ public:
                 check(keyIsHis,
                       "second thought: the answer is one of his own attested "
                       "renderings");
+            }
+
+            // ---- The ungraded reading-order gate ----
+            // Two properties, and the second is the whole reason the full
+            // commit-before-reveal proposal was cut: nothing here may be
+            // scored. If this gate ever moved a number, it would be grading
+            // a prediction the reader was told was ungraded.
+            {
+                const long long before =
+                    savedProgress
+                        ? savedProgress->stats((long long)time(nullptr)).drills_done
+                        : 0;
+                const long long after =
+                    savedProgress
+                        ? savedProgress->stats((long long)time(nullptr)).drills_done
+                        : 0;
+                check(before == after,
+                      "reading-order gate: records no correct bit and moves no "
+                      "counter");
             }
 
             // ---- The Debate Dojo ----
