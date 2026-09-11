@@ -36,6 +36,10 @@ Statuses: **own** (ALL/ACIP work, root LICENSE applies) ·
 | CMakeLists.txt | own | build definition |
 | .claude/skills/ | open | obra/superpowers MIT and levnikolaevich MIT — verified via GitHub API 2026-08-26, licence texts banked in .claude/skills/THIRD_PARTY_LICENSES/. Still open because anthropics/skills publishes NO licence, so those skills sit here on unrecorded terms. See S-1. |
 | .claude/ | own | project settings, commands, hooks |
+| .agents/skills/ | open | the SAME skills as .claude/skills/, in Codex's directory layout (verified byte-identical 2026-09-11) — obra/superpowers MIT and levnikolaevich MIT, licence texts banked at .claude/skills/THIRD_PARTY_LICENSES/. Open for the same reason: anthropics/skills publishes NO licence, so those sit here on unrecorded terms. See S-1 |
+| .agents/ | own | Codex's project-instruction directory, the counterpart of .claude/ |
+| AGENTS.md | own | Codex's project instructions — the counterpart of CLAUDE.md |
+
 | third_party/kck_henning/ | settled | MIT, verbatim in every source header (read 2026-08-26); © 2009-2013 Edward Henning |
 | third_party/tcg_henning/ | settled | MIT, verbatim in every source header; © Edward Henning |
 | third_party/espel_lingua_bo_wylie/ | settled | Perl Artistic/GPL dual, © 2008-2010 Roger Espel Llima (stated in sources) |

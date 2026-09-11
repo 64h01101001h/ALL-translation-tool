@@ -22644,6 +22644,7 @@ private:
                         // order sub-skills have no targeted draw yet; say so
                         // rather than open an untargeted drill and call it
                         // training that skill
+                        if (!g_harnessRun)
                         QMessageBox::information(
                             this, "Not yet targetable",
                             "Reading-order misses are attributed by the first "
@@ -22656,6 +22657,7 @@ private:
                     }
                     std::string why;
                     if (allcore::targetRefused(t, &why)) {
+                        if (!g_harnessRun)
                         QMessageBox::information(
                             this, "Not trained on purpose",
                             QString::fromStdString(why));
@@ -22706,6 +22708,7 @@ private:
         const QString skill = QString::fromStdString(target_.skill);
         target_ = allcore::DrillTarget{};
         if (aimLabel_) aimLabel_->setVisible(false);
+        if (g_harnessRun) return;   // a modal here hangs the headless walk
         QMessageBox::information(
             this, "No drill for that skill right now",
             QString("The corpus did not yield a drill exercising \u201c%1\u201d "
