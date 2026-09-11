@@ -73,7 +73,61 @@ struct Passage: Codable {
 }
 
 struct PackMeta: Codable { let built_by: String; let source: String; let tier: String }
-struct Pack: Codable { let meta: PackMeta; let cloze: [Drill]; let trainer: [Passage] }
+/// One chunk-order drill, pre-built on the Mac.
+struct OrderDrill: Codable {
+    let english: String
+    let course: String
+    let seq: Int
+    let chunks: [String]
+    let presented: [Int]
+    let verb: VerbGuess
+}
+struct VerbGuess: Codable {
+    let wylie: String
+    let evidence: String
+    let confident: Bool
+}
+/// One particle-choice drill.
+struct ParticleDrill: Codable {
+    let english: String
+    let course: String
+    let seq: Int
+    let explanation: String
+    let correct: Int
+    let options: [String]
+    let tokens: [String]
+}
+/// One of his own Language Study Guide cards.
+struct ScriptCard: Codable {
+    let tibetan: String
+    let wylie: String
+    let pron: String
+    let tier: String
+    let provisional: Bool
+    let gloss: [String]
+}
+/// One formal debate statement, already split into its elements.
+struct DebateStatement: Codable {
+    let preamble: String
+    let subject: String
+    let consequence: String
+    let reason: String
+    let english: String
+    let course: String
+    let seq: Int
+}
+
+struct Pack: Codable {
+    let meta: PackMeta
+    let cloze: [Drill]
+    let trainer: [Passage]
+    // Optional so a pack built before 2026-09-11 still decodes rather than
+    // leaving the app with nothing at all.
+    let order: [OrderDrill]?
+    let particle: [ParticleDrill]?
+    let script: [ScriptCard]?
+    let debate: [DebateStatement]?
+}
 
 enum PackLoader {
     static func load() -> Pack? {
@@ -207,6 +261,275 @@ struct WeakSpotsSheet: View {
     static func score(_ s: (String, Int, Int, Bool)) -> String {
         if !s.3 { return "\(s.1) attempt(s) — too few to call a trend" }
         return "right \(s.2) of \(s.1)"
+    }
+}
+
+
+// MARK: - the modes the phone can offer
+
+/// What the phone can ask. Three desktop modes are deliberately absent and
+/// each has a reason the user can be told:
+///   Parallel reading    — the Trainer tab already is corpus reading.
+///   Vocabulary (SRS)    — the deck is built from what you click on the
+///                         desktop, and the two cannot sync; a second
+///                         unconnected deck here would compete with the real
+///                         one.
+///   Translate & compare — needs the whole 105,634-entry dictionary run
+///                         against a draft as you type it. Not bakeable.
+enum DrillKind: String, CaseIterable, Identifiable {
+    case cloze = "Fill the blank"
+    case order = "Chunk order"
+    case particle = "Particle choice"
+    case script = "Script — his own cards"
+    case debate = "Debate — what does the reply attack?"
+    var id: String { rawValue }
+}
+
+/// Restore a clause to the order it was written in.
+struct OrderView: View {
+    let drill: OrderDrill
+    let next: () -> Void
+    @Environment(\.colorScheme) private var scheme
+    @State private var revealed = false
+
+    var body: some View {
+        let c = Ink.of(scheme)
+        ScrollView {
+            VStack(alignment: .leading, spacing: 14) {
+                Text("These chunks are out of order. Read them, decide the order they were written in, then reveal.")
+                    .font(.system(size: 15)).foregroundColor(c.muted)
+                EnglishHint(text: drill.english, ink: c)
+                ForEach(Array(drill.presented.enumerated()), id: \.offset) { i, ix in
+                    HStack(alignment: .top, spacing: 10) {
+                        Text(String(UnicodeScalar(65 + i)!))
+                            .font(.system(size: 15, weight: .semibold))
+                            .foregroundColor(c.gold)
+                        Text(drill.chunks[ix]).font(.system(size: 22))
+                            .foregroundColor(c.ink)
+                        Spacer()
+                    }
+                }
+                if revealed {
+                    Divider()
+                    Text("As written:").font(.system(size: 14)).foregroundColor(c.muted)
+                    ForEach(Array(drill.chunks.enumerated()), id: \.offset) { i, ch in
+                        Text("\(i + 1).  \(ch)").font(.system(size: 20))
+                            .foregroundColor(c.act)
+                    }
+                    if drill.verb.confident && !drill.verb.wylie.isEmpty {
+                        Text("verb: \(drill.verb.wylie) — \(drill.verb.evidence)")
+                            .font(.system(size: 13)).foregroundColor(c.act)
+                    } else {
+                        Text("No verb the dictionary can confirm in this clause.")
+                            .font(.system(size: 13)).foregroundColor(c.machine)
+                    }
+                    Text("[\(drill.course):\(drill.seq)]")
+                        .font(.system(size: 12)).foregroundColor(c.muted)
+                }
+            }.padding(20)
+        }
+        VStack(spacing: 0) {
+            Divider()
+            HStack(spacing: 14) {
+                Button(revealed ? "New drill" : "Reveal") {
+                    if revealed { next(); revealed = false } else { revealed = true }
+                }
+                .font(.system(size: 17, weight: .semibold)).foregroundColor(.white)
+                .lineLimit(1).fixedSize(horizontal: true, vertical: false)
+                .padding(.horizontal, 20).padding(.vertical, 11)
+                .background(c.act).cornerRadius(9)
+                Spacer()
+            }.padding(.horizontal, 20).padding(.top, 10).padding(.bottom, 26)
+        }.background(c.paper)
+    }
+}
+
+/// Which particle of the family belongs in the blank.
+struct ParticleView: View {
+    let drill: ParticleDrill
+    @ObservedObject var deck: Deck
+    let next: () -> Void
+    @Environment(\.colorScheme) private var scheme
+    @State private var picked: Int? = nil
+    @State private var checked = false
+    private var isRight: Bool { picked == drill.correct }
+
+    var body: some View {
+        let c = Ink.of(scheme)
+        ScrollView {
+            VStack(alignment: .leading, spacing: 14) {
+                Text("Which particle belongs in the blank?")
+                    .font(.system(size: 15)).foregroundColor(c.muted)
+                EnglishHint(text: drill.english, ink: c)
+                Text(drill.tokens.joined(separator: " "))
+                    .font(.system(size: 22)).foregroundColor(c.ink)
+                Divider()
+                ForEach(Array(drill.options.enumerated()), id: \.offset) { i, o in
+                    Button { if !checked { picked = i } } label: {
+                        HStack(spacing: 11) {
+                            Image(systemName: picked == i ? "largecircle.fill.circle" : "circle")
+                                .foregroundColor(picked == i ? c.act : c.muted)
+                            Text(o).font(.system(size: 20))
+                                .foregroundColor(checked && i == drill.correct ? c.act : c.ink)
+                            Spacer()
+                        }.padding(.vertical, 6)
+                    }.buttonStyle(.plain)
+                }
+                if checked {
+                    Text(isRight ? "Correct." : "Not yet — the text has \(drill.options[drill.correct]).")
+                        .font(.system(size: 17, weight: .semibold))
+                        .foregroundColor(isRight ? c.act : c.machine)
+                    if !drill.explanation.isEmpty {
+                        Text(drill.explanation).font(.system(size: 14))
+                            .foregroundColor(c.muted)
+                    }
+                    Text("[\(drill.course):\(drill.seq)]")
+                        .font(.system(size: 12)).foregroundColor(c.muted)
+                }
+            }.padding(20)
+        }
+        VStack(spacing: 0) {
+            Divider()
+            HStack(spacing: 14) {
+                Button(checked ? "New drill" : "Check") {
+                    if checked { next(); picked = nil; checked = false }
+                    else if picked != nil { checked = true; deck.record(correct: isRight) }
+                }
+                .font(.system(size: 17, weight: .semibold)).foregroundColor(.white)
+                .lineLimit(1).fixedSize(horizontal: true, vertical: false)
+                .padding(.horizontal, 20).padding(.vertical, 11)
+                .background(picked == nil && !checked ? c.muted : c.act).cornerRadius(9)
+                .disabled(picked == nil && !checked)
+                if !checked {
+                    Button("Skip") { next(); picked = nil; checked = false }
+                        .font(.system(size: 16)).foregroundColor(c.muted)
+                }
+                Spacer()
+            }.padding(.horizontal, 20).padding(.top, 10).padding(.bottom, 26)
+        }.background(c.paper)
+    }
+}
+
+/// His own card: the Tibetan large, and how he reads it.
+struct ScriptView: View {
+    let card: ScriptCard
+    let next: () -> Void
+    @Environment(\.colorScheme) private var scheme
+    @State private var shown = false
+
+    var body: some View {
+        let c = Ink.of(scheme)
+        ScrollView {
+            VStack(alignment: .leading, spacing: 16) {
+                Text("How is this read aloud? Say it, then reveal.")
+                    .font(.system(size: 15)).foregroundColor(c.muted)
+                Text(card.tibetan).font(.system(size: 56)).foregroundColor(c.ink)
+                if shown {
+                    Text(card.pron).font(.system(size: 28, weight: .semibold))
+                        .foregroundColor(c.act)
+                    Text(card.wylie).font(.system(size: 15)).foregroundColor(c.muted)
+                    if !card.gloss.isEmpty {
+                        Text(card.provisional
+                             ? "auto-aligned [PROVISIONAL] — not his own English: "
+                               + card.gloss.joined(separator: " · ")
+                             : "Geshe Michael Roach has: " + card.gloss.joined(separator: " · "))
+                            .font(.system(size: 14))
+                            .foregroundColor(card.provisional ? c.machine : c.muted)
+                    }
+                }
+            }.padding(20)
+        }
+        VStack(spacing: 0) {
+            Divider()
+            HStack(spacing: 14) {
+                Button(shown ? "New card" : "Reveal") {
+                    if shown { next(); shown = false } else { shown = true }
+                }
+                .font(.system(size: 17, weight: .semibold)).foregroundColor(.white)
+                .lineLimit(1).fixedSize(horizontal: true, vertical: false)
+                .padding(.horizontal, 20).padding(.vertical, 11)
+                .background(c.act).cornerRadius(9)
+                Spacer()
+            }.padding(.horizontal, 20).padding(.top, 10).padding(.bottom, 26)
+        }.background(c.paper)
+    }
+}
+
+/// A formal statement in three parts, and which element a reply attacks.
+struct DebateView: View {
+    let st: DebateStatement
+    @ObservedObject var deck: Deck
+    let next: () -> Void
+    @Environment(\.colorScheme) private var scheme
+    @State private var picked: Int? = nil
+    @State private var checked = false
+
+    private static let replies = ["MA GRUB NA", "RTAGS MA GRUB",
+                                  "MA KHYAB NA", "RTZA BAR 'DOD NA"]
+    private var replyIx: Int { abs(st.seq) % 4 }
+    private var answer: Int { replyIx }
+    private static let targets = [
+        "the subject — it is not established",
+        "the reason — it is not established",
+        "the entailment — the reason does not force the consequence",
+        "nothing — it accepts the consequence, and the root claim with it"]
+
+    var body: some View {
+        let c = Ink.of(scheme)
+        ScrollView {
+            VStack(alignment: .leading, spacing: 12) {
+                Text("If your opponent answers \(Self.replies[replyIx]), which element are they attacking?")
+                    .font(.system(size: 15)).foregroundColor(c.muted)
+                if !st.preamble.isEmpty { part("PREAMBLE", st.preamble, c) }
+                part("SUBJECT · CHOS CAN", st.subject, c)
+                part("CONSEQUENCE · THAL", st.consequence, c)
+                part("REASON · PHYIR", st.reason, c)
+                Divider()
+                ForEach(Array(Self.targets.enumerated()), id: \.offset) { i, t in
+                    Button { if !checked { picked = i } } label: {
+                        HStack(alignment: .top, spacing: 11) {
+                            Image(systemName: picked == i ? "largecircle.fill.circle" : "circle")
+                                .foregroundColor(picked == i ? c.act : c.muted)
+                            Text(t).font(.system(size: 16))
+                                .foregroundColor(checked && i == answer ? c.act : c.ink)
+                                .multilineTextAlignment(.leading)
+                            Spacer()
+                        }.padding(.vertical, 6)
+                    }.buttonStyle(.plain)
+                }
+                if checked {
+                    Text(picked == answer ? "Correct." : "Not that one.")
+                        .font(.system(size: 17, weight: .semibold))
+                        .foregroundColor(picked == answer ? c.act : c.machine)
+                    Text("Word-level drills are refused in this mode: his English for a debate segment is an expansion with the opponent's turns supplied, not a word-for-word rendering.")
+                        .font(.system(size: 12)).foregroundColor(c.muted)
+                    Text("[\(st.course):\(st.seq)]")
+                        .font(.system(size: 12)).foregroundColor(c.muted)
+                }
+            }.padding(20)
+        }
+        VStack(spacing: 0) {
+            Divider()
+            HStack(spacing: 14) {
+                Button(checked ? "New statement" : "Check") {
+                    if checked { next(); picked = nil; checked = false }
+                    else if picked != nil { checked = true; deck.record(correct: picked == answer) }
+                }
+                .font(.system(size: 17, weight: .semibold)).foregroundColor(.white)
+                .lineLimit(1).fixedSize(horizontal: true, vertical: false)
+                .padding(.horizontal, 20).padding(.vertical, 11)
+                .background(picked == nil && !checked ? c.muted : c.act).cornerRadius(9)
+                .disabled(picked == nil && !checked)
+                Spacer()
+            }.padding(.horizontal, 20).padding(.top, 10).padding(.bottom, 26)
+        }.background(c.paper)
+    }
+
+    @ViewBuilder private func part(_ label: String, _ t: String, _ c: Ink) -> some View {
+        VStack(alignment: .leading, spacing: 2) {
+            Text(label).font(.system(size: 11)).tracking(1).foregroundColor(c.muted)
+            Text(t).font(.system(size: 19)).foregroundColor(c.ink)
+        }
     }
 }
 
@@ -629,6 +952,24 @@ struct RootView: View {
     @State private var aim: String? = nil
     /// Set when an aim found nothing, so the reason can be shown.
     @State private var aimEmpty: String? = nil
+    @State private var kind: DrillKind = .cloze
+    @State private var oAt = 0
+    @State private var pAt = 0
+    @State private var sAt = 0
+    @State private var bAt = 0
+
+    /// Shown when a pack predates a drill kind. Never a blank screen and
+    /// never an invented drill — it says which pack is in the app.
+    @ViewBuilder private func missing(_ what: String, _ c: Ink) -> some View {
+        VStack(spacing: 8) {
+            Text("This pack has no \(what).")
+                .font(.system(size: 16, weight: .semibold))
+            Text("The pack is built on the Mac; a newer one will carry them. Nothing is invented to fill the gap.")
+                .font(.system(size: 13)).foregroundColor(c.muted)
+                .multilineTextAlignment(.center)
+        }.padding(30)
+        Spacer()
+    }
 
     /// Kept out of the view body: a concatenation this long inside an
     /// alert defeats Swift's type-checker.
@@ -659,10 +1000,50 @@ struct RootView: View {
                         TrainerView(passage: pack.trainer[tOrder[tAt]], deck: deck) {
                             tAt = (tAt + 1) % max(tOrder.count, 1)
                         }
-                    } else if mode == 1, !pack.cloze.isEmpty, dAt < dOrder.count {
-                        DrillView(drill: pack.cloze[dOrder[dAt]], deck: deck,
-                                  aim: $aim) {
-                            dAt = (dAt + 1) % max(dOrder.count, 1)
+                    } else if mode == 1 {
+                        // The kind picker. Until 2026-09-11 the phone offered
+                        // only the cloze, while the desktop had eleven modes —
+                        // Adam caught it. The phone generates nothing, so each
+                        // kind here is one the Mac bakes into the pack.
+                        Picker("", selection: $kind) {
+                            ForEach(DrillKind.allCases) { k in
+                                Text(k.rawValue).tag(k)
+                            }
+                        }
+                        .pickerStyle(.menu)
+                        .padding(.horizontal, 20)
+                        switch kind {
+                        case .cloze:
+                            if !pack.cloze.isEmpty, dAt < dOrder.count {
+                                DrillView(drill: pack.cloze[dOrder[dAt]],
+                                          deck: deck, aim: $aim) {
+                                    dAt = (dAt + 1) % max(dOrder.count, 1)
+                                }
+                            } else { missing("fill-the-blank drills", c) }
+                        case .order:
+                            if let a = pack.order, !a.isEmpty {
+                                OrderView(drill: a[oAt % a.count]) {
+                                    oAt = (oAt + 1) % a.count
+                                }
+                            } else { missing("chunk-order drills", c) }
+                        case .particle:
+                            if let a = pack.particle, !a.isEmpty {
+                                ParticleView(drill: a[pAt % a.count], deck: deck) {
+                                    pAt = (pAt + 1) % a.count
+                                }
+                            } else { missing("particle drills", c) }
+                        case .script:
+                            if let a = pack.script, !a.isEmpty {
+                                ScriptView(card: a[sAt % a.count]) {
+                                    sAt = (sAt + 1) % a.count
+                                }
+                            } else { missing("his own cards", c) }
+                        case .debate:
+                            if let a = pack.debate, !a.isEmpty {
+                                DebateView(st: a[bAt % a.count], deck: deck) {
+                                    bAt = (bAt + 1) % a.count
+                                }
+                            } else { missing("debate statements", c) }
                         }
                     } else { Spacer() }
                 } else {
