@@ -22211,6 +22211,114 @@ public:
         mode_->setCurrentIndex(2);
         newDrill();
         check(part_.has_value(), "particle drill generated");
+
+        // ---- GRADING, which until now was untested end to end.
+        //
+        // docs/LEARN_TAB_VISION.md names this as the blocker for Mixed sets:
+        // "grading logic for modes 0-4 is untested end-to-end; only mode 5's
+        // tier labelling is proven by test". Generation was covered above and
+        // grading was not, so a drill could have scored every answer wrong —
+        // or every answer right — and every suite would still have passed.
+        // These drive the real checkDrill() through a real radio selection.
+        {
+            auto* savedProgress = progress_;
+            progress_ = nullptr;   // a battery never writes the learner's log
+
+            // mode 1, cloze: the right radio reads Correct, a wrong one does not
+            mode_->setCurrentIndex(1);
+            newDrill();
+            if (cloze_ && (int)radios_.size() > cloze_->correct) {
+                radios_[cloze_->correct]->setChecked(true);
+                checkDrill();
+                check(result_->toPlainText().contains("Correct"),
+                      "cloze: the correct option grades as correct");
+                const int wrong = cloze_->correct == 0 ? 1 : 0;
+                if ((int)radios_.size() > wrong) {
+                    newDrill();
+                    if (cloze_ && (int)radios_.size() > cloze_->correct) {
+                        const int w2 = cloze_->correct == 0 ? 1 : 0;
+                        radios_[w2]->setChecked(true);
+                        checkDrill();
+                        check(!result_->toPlainText().contains("Correct."),
+                              "cloze: a wrong option does NOT grade as correct");
+                    }
+                }
+            }
+
+            // mode 2, particle: same both ways
+            mode_->setCurrentIndex(2);
+            newDrill();
+            if (part_ && (int)radios_.size() > part_->correct) {
+                radios_[part_->correct]->setChecked(true);
+                checkDrill();
+                check(result_->toPlainText().contains("Correct"),
+                      "particle: the correct option grades as correct");
+            }
+
+            // the answer key must be one of the options offered, or the drill
+            // is unanswerable however well it grades
+            mode_->setCurrentIndex(1);
+            newDrill();
+            check(cloze_ && cloze_->correct >= 0 &&
+                      cloze_->correct < (int)cloze_->options.size(),
+                  "cloze: the answer is among the options offered");
+
+            // the distractor fix, pinned: every option must carry the SAME
+            // role marker, or the drill is solvable by particle alone
+            if (cloze_ && cloze_->options.size() > 1) {
+                auto tail = [](const std::string& o) {
+                    static const char* kP[] = {"gis", "kyis", "gyis", "yis",
+                                               "gi", "kyi", "gyi", "yi", "'i",
+                                               "la", "nas", "las", "du", "tu",
+                                               "ni", "dang", "s", "r", nullptr};
+                    for (int i = 0; kP[i]; ++i) {
+                        const std::string p2 = kP[i];
+                        if (o.size() >= p2.size() &&
+                            o.compare(o.size() - p2.size(), p2.size(), p2) == 0)
+                            return p2;
+                    }
+                    return std::string();
+                };
+                const std::string want = tail(cloze_->options[cloze_->correct]);
+                bool allSame = true;
+                for (const auto& o : cloze_->options)
+                    if (tail(o) != want) allSame = false;
+                check(allSame || want.empty(),
+                      "cloze: every option carries the answer's own marker "
+                      "(not solvable by particle alone)");
+            }
+
+            // The Silent Particle: abstaining is neither right nor wrong.
+            mode_->setCurrentIndex(7);
+            newDrill();
+            if (!spTib_.isEmpty() && radios_.size() >= 3) {
+                const long long r0 = spRight_, w0 = spWrong_, a0 = spAbstain_;
+                radios_[2]->setChecked(true);       // "I cannot tell"
+                checkDrill();
+                check(spAbstain_ == a0 + 1 && spRight_ == r0 && spWrong_ == w0,
+                      "silent particle: abstaining scores neither right nor "
+                      "wrong");
+            }
+
+            // His second thought: the key is one of his own renderings.
+            mode_->setCurrentIndex(8);
+            newDrill();
+            if (!stWylie_.isEmpty()) {
+                bool keyIsHis = false;
+                if (stCorrect_ >= 0 && stCorrect_ < (int)radios_.size()) {
+                    const QString key = radios_[stCorrect_]->text();
+                    for (const auto& pr : stAll_)
+                        if (pr.first == key) keyIsHis = true;
+                }
+                check(keyIsHis,
+                      "second thought: the answer is one of his own attested "
+                      "renderings");
+            }
+
+            progress_ = savedProgress;
+            mode_->setCurrentIndex(0);
+            newDrill();
+        }
         // DATA-2 / house rule 1. Mode 5 ("Translate & compare") built
         // its report from allcore::checkTerminology and printed every
         // unrendered term under the literal label "GMR has:" with the
