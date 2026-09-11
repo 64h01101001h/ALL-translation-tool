@@ -74,7 +74,7 @@ Each entry states what the learner sees, what data drives it, how the tool knows
 
 ### 3.1 For beginners — someone who cannot yet read the script
 
-#### Zero to script — **BUILD NOW**
+#### Zero to script — **BUILT 2026-09-09** (Drills ▸ "Script — his own cards")
 
 **Sees.** Tibetan letter and syllable recognition, then pronunciation cards, selectable by course so a C05 student drills the C05 card.
 
@@ -86,7 +86,7 @@ Each entry states what the learner sees, what data drives it, how the tool knows
 
 **Why first.** Adam asked for a tab where a beginner finds something that moves them forward. Today every mode takes ACIP or wylie as input, so a true beginner cannot start at all. Largest audience gain for the least work in the plan.
 
-#### Boundary Hunt — **BUILD NOW**
+#### Boundary Hunt — **BUILT** (in the Drills pane)
 
 **Sees.** A real segment with its punctuation stripped. Mark where the clauses end.
 
@@ -102,7 +102,7 @@ Each entry states what the learner sees, what data drives it, how the tool knows
 
 ### 3.2 For intermediates — someone who reads slowly and guesses
 
-#### Known here / known anywhere (formerly "glosses as debts") — **BUILD NOW**
+#### Known here / known anywhere (formerly "glosses as debts") — **BUILT 2026-09-10**
 
 **Sees.** Any word or span revealed — in the Overlay, a Trainer reveal, the concordance — enters the deck. Its first review re-presents it **inside the segment it came from**, next day or later, gloss hidden. Its second presents it in a *different* corpus segment. Two separate readouts: "you know it here" and "you know it anywhere".
 
@@ -118,7 +118,7 @@ Each entry states what the learner sees, what data drives it, how the tool knows
 
 **Pilot condition.** If the "here" score shows no variance across learners, cut the scoreboard and keep only the context-in-review change, which stands on its own.
 
-#### Train this — the weak-spot loop — **BUILD NOW**
+#### Train this — the weak-spot loop — **BUILT 2026-09-10**
 
 **Sees.** The weak-spots report stops being a terminal dialog. Each named skill gets a grammar note, a **"train this"** button that generates a drill set targeting that skill, and a scheduled re-test. The learner watches a weakness close instead of a counter grow.
 
@@ -218,7 +218,7 @@ Each entry states what the learner sees, what data drives it, how the tool knows
 
 ### 3.4 Cross-cutting — every audience
 
-#### The key / no-key badge — **BUILD NOW**
+#### The key / no-key badge — **BUILT 2026-09-10**
 
 Every passage in Trainer, Drills and the reader carries an explicit state: *in-corpus* ("there is a key — his own English for this segment", with citation) or *out-of-corpus* ("no key: engine guidance only"), with a distinct frame and one line on what the guidance can and cannot see. The Trainer's sixth layer already degrades correctly; this makes the degradation visible *before* the learner invests effort. Costs almost nothing and is the thing a working translator will value most: knowing exactly when they are on their own.
 
