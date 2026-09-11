@@ -21920,7 +21920,8 @@ public:
                          "Vocabulary review (SRS)",
                          "Translate & compare",
                          "Script \u2014 his own cards (start here)",
-                         "Silent particle \u2014 did he render it?"});
+                         "Silent particle \u2014 did he render it?",
+                         "His second thought \u2014 which did he use here?"});
         row->addWidget(mode_);
         scriptCourse_ = new QComboBox;
         scriptCourse_->setToolTip(
@@ -22710,6 +22711,47 @@ private:
             if (!vocab_.empty())
                 addRadios({"I knew it", "I did not know it"}, false);
         }
+        if (m == 8) {
+            stWylie_.clear(); stRef_.clear(); stAll_.clear(); stCorrect_ = -1;
+            if (g_alignEvidence && !g_alignEvidence->empty()) {
+                for (int tries = 0; tries < 200 && stWylie_.isEmpty(); ++tries) {
+                    auto it = g_alignEvidence->begin();
+                    std::advance(it, rng_() % g_alignEvidence->size());
+                    if (it->second.size() < 2) continue;     // needs a choice
+                    // Difficulty IS the rendering count, so the tail is
+                    // sampled rather than dumped: four options on a card,
+                    // never fifty-nine.
+                    QList<QPair<QString, int>> all;
+                    for (const auto& ap : it->second)
+                        all << qMakePair(ap.eng, (int)ap.refs.size());
+                    std::sort(all.begin(), all.end(),
+                              [](const auto& a, const auto& b) {
+                                  return a.second > b.second;
+                              });
+                    // the one he used at a REAL citation
+                    const auto& chosen =
+                        it->second[(int)(rng_() % it->second.size())];
+                    if (chosen.refs.isEmpty()) continue;
+                    stWylie_ = QString::fromStdString(it->first);
+                    stRef_ = chosen.refs[(int)(rng_() % chosen.refs.size())];
+                    stAll_ = all;
+                    QStringList opts;
+                    opts << chosen.eng;
+                    for (const auto& p : all) {
+                        if (opts.size() >= 4) break;
+                        if (p.first != chosen.eng) opts << p.first;
+                    }
+                    if (opts.size() < 2) { stWylie_.clear(); continue; }
+                    // shuffle, then find where the answer landed
+                    for (int i = opts.size() - 1; i > 0; --i)
+                        opts.swapItemsAt(i, (int)(rng_() % (i + 1)));
+                    stCorrect_ = (int)opts.indexOf(chosen.eng);
+                    std::vector<std::string> vs;
+                    for (const auto& o : opts) vs.push_back(o.toStdString());
+                    addRadios(vs, false);
+                }
+            }
+        }
         if (m == 7) {
             spTib_.clear(); spEng_.clear(); spRef_.clear();
             if (g_alignGrammar && !g_alignGrammar->empty()) {
@@ -22985,6 +23027,29 @@ private:
                  "</i></div><hr><div style='font-size:" +
                  QString::number(px(22)) + "px'>" + clozeBody() +
                  "</div>";
+        } else if (m == 8) {
+            if (stWylie_.isEmpty()) {
+                h += "<div style='color:" +
+                     QString(ux::darkChrome() ? ux::chromeMuted() : ux::kMuted) +
+                     "'>The alignment evidence is not loaded, so there is "
+                     "nothing to ask. Every option in this drill is a rendering "
+                     "he actually wrote; none is invented, so without the "
+                     "evidence there is no drill.</div>";
+            } else {
+                h += keyBadge(true, stRef_.section(':', 0, 0),
+                              stRef_.section(':', 1, 1).toInt());
+                h += "<div style='color:#555'>He renders this term more than "
+                     "one way. Which did he use <b>here</b>?</div><hr>";
+                h += "<div style='font-size:" + QString::number(px(30)) +
+                     "px;padding:6px 0'>" + disp(stWylie_.toStdString()) +
+                     "</div>";
+                h += "<div style='color:" +
+                     QString(ux::darkChrome() ? ux::chromeMuted() : ux::kMuted) +
+                     ";font-size:12px'>" + stWylie_.toHtmlEscaped() +
+                     "  \u00b7  " + stRef_.toHtmlEscaped() +
+                     QString("  \u00b7  %1 attested renderings")
+                         .arg(stAll_.size()) + "</div>";
+            }
         } else if (m == 7) {
             if (spTib_.isEmpty()) {
                 h += "<div style='color:" +
@@ -23303,6 +23368,44 @@ private:
             h += "<div><small>role of the blanked chunk: " +
                  QString::fromUtf8(cloze_->role).toHtmlEscaped() +
                  "</small></div>";
+        } else if (m == 8 && !stWylie_.isEmpty()) {
+            const int pick = pickedRadio();
+            h += (pick == stCorrect_)
+                     ? "<b style='color:#3B7A3B'>Correct.</b>"
+                     : "<b style='color:#B4540A'>Not here.</b>";
+            // Every rendering, ordered by how often he used it — and the
+            // ambiguity is NOT resolved. The point of the exercise is that a
+            // Tibetan term does not have one English; saying which is "right"
+            // in general would teach the opposite.
+            h += "<div style='padding-top:6px'><small>Everything he has been "
+                 "recorded writing for this term, most used first:</small>"
+                 "<div style='padding-top:2px'>";
+            for (int i = 0; i < stAll_.size() && i < 12; ++i)
+                h += QString("<div><b>%1</b> <span style='color:%2;font-size:"
+                             "11px'>\u00d7%3</span></div>")
+                         .arg(stAll_[i].first.toHtmlEscaped())
+                         .arg(ux::darkChrome() ? ux::chromeMuted()
+                                               : QString(ux::kMuted))
+                         .arg(stAll_[i].second);
+            if (stAll_.size() > 12)
+                h += QString("<div style='color:%1;font-size:11px'>\u2026 and "
+                             "%2 more</div>")
+                         .arg(ux::darkChrome() ? ux::chromeMuted()
+                                               : QString(ux::kMuted))
+                         .arg(stAll_.size() - 12);
+            h += "</div></div>";
+            h += QString("<div style='color:%1;font-size:11px;padding-top:6px'>"
+                         "None of these is the \u201cright\u201d translation "
+                         "of the term. They are all his, and which one fits "
+                         "depends on the passage \u2014 that is the lesson, "
+                         "and this drill does not resolve it.</div>")
+                     .arg(ux::darkChrome() ? ux::chromeMuted()
+                                           : QString(ux::kMuted));
+            h += QString("<div style='color:%1;font-size:11px'>TENTATIVE "
+                         "\u2014 machine-aligned from his courses, awaiting "
+                         "his ruling.</div>")
+                     .arg(ux::darkChrome() ? ux::chromeMachine()
+                                           : QString(ux::kMachine));
         } else if (m == 7 && !spTib_.isEmpty()) {
             const int pick = pickedRadio();
             // SCORING, and a deliberate departure from the plan.
@@ -23603,6 +23706,15 @@ private:
     QString spTib_, spEng_, spRef_;     // the particle, his English, the citation
     bool spRendered_ = false;           // did he render it here?
     long long spAbstain_ = 0, spRight_ = 0, spWrong_ = 0;
+    // ---- His second thought (docs/LEARN_TAB_VISION.md) ----
+    // The bsod nams problem turned from a warning into an exercise. One
+    // Tibetan term, several of HIS OWN competing renderings as the options, so
+    // every distractor is something he actually wrote and nothing is composed.
+    // Unbuildable from a merged dictionary: it needs one translator's complete
+    // aligned output.
+    QString stWylie_, stRef_;
+    QList<QPair<QString, int>> stAll_;   // every rendering, with its frequency
+    int stCorrect_ = -1;
     // below this many attempts a per-skill score is a number,
     // not a trend, and the report must say so
     static constexpr int kTrendFloor = 8;
