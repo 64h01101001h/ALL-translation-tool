@@ -180,11 +180,11 @@ Each entry states what the learner sees, what data drives it, how the tool knows
 
 **Why.** Every other tool teaches particles as if they always surface in English, which is measurably false. 1,595 of 1,698 case markers in the layer are unrendered.
 
-#### His second thought — attested variation — **BUILD NOW**
+#### His second thought — attested variation — **BUILT 2026-09-10**
 
 **Sees.** One Tibetan term, several of his own competing renderings as the options. Which one did he use *here*? The reveal shows all of them with citations, ordered by frequency, and does not resolve the ambiguity.
 
-**Data.** `data/alignment/alignment_evidence_v1.json` already stores multiple `{eng, refs, n}` entries per key with citations — 2,244 multi-rendering headwords across C01–C05. Difficulty is the rendering count, so `sogs` (84) is an expert item and a two-rendering word is a beginner item.
+**Data.** `data/alignment/alignment_evidence_v1.json` already stores multiple `{eng, refs, n}` entries per key with citations — 2,244 multi-rendering headwords across C01–C05 (verified 2026-09-10; `sogs` measures 59 renderings in the shipped file, not the 84 recorded here). Difficulty is the rendering count, so `sogs` is an expert item and a two-rendering word is a beginner item.
 
 **Success.** Accuracy against his attested choice for that citation.
 
