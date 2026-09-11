@@ -45,16 +45,21 @@ report — answering correctly and still not knowing what the chunk meant.
 
 Designed, not built. Both apps.
 
-- **The blanked word's meaning after answering**, via `allcore::checkTerminology`
+- **The blanked word's meaning after answering** — **BUILT, both apps** — via `allcore::checkTerminology`
   — which already exists and already has a battery, so this is a call site, not
   new engine code. Shown identically whether the answer was right or wrong.
   Evidence check passed: his equivalents hit his English for THIS segment 50.3%
   of the time against 14.6% for a random other segment — +35.7 points over
   chance, so the match is real and not coincidence.
-- **A hint button** — "Rule out one". Revealing the grammatical role instead
+- **A hint button** — "Rule out one". **BUILT, both apps.** Revealing the grammatical role instead
   would solve 48–65% of drills outright, so the weak hint is the right one.
-- **A lookup button, reachable only after answering.** Before answering it
-  removes the retrieval effort that makes a drill work.
+- **A lookup button, reachable only after answering** — **BUILT 2026-09-11,
+  both apps.** The phone expands the equivalents its pack carries; the desktop
+  opens the floating dictionary on the blanked word, so the drill is not
+  navigated away from mid-session. Five gates hold the *sequence*, which is the
+  whole design: out of reach before the answer, offered after it, the hint
+  withdrawn once there is nothing left to hint at, and out of reach again on
+  the next drill.
 - **Red/green on the English: recommend against.** Colour already carries tier
   meaning here, colour alone fails WCAG, and the item above is what was
   actually wanted.
@@ -94,19 +99,30 @@ open, from the audit:
 - **Blank placement is implemented twice** — `app/main.cpp:22415` and
   `tools/build_drill_pack.cpp:95` — and is not in `allcore`. They already
   differ on failure: the desktop explains, the packer drops the drill silently.
-- **The phone re-sorts the reading plan** the Mac computed; the desktop renders
-  it in chunk order.
-- **A nested-bracket bug in the Swift** would show translator-supplied text as
-  Geshe Michael Roach's own English. Real code, zero instances in the shipped
-  pack — latent, not live.
+- ~~The phone re-sorts the reading plan~~ — **FIXED 2026-09-11.** The Mac hands
+  the plan over in chunk order with each step carrying where it is read; the
+  phone sorted by that number and silently turned it into a different reading.
+  Same data, different lesson.
+- ~~A nested-bracket bug in the Swift~~ — **FIXED 2026-09-11.** The flush at an
+  opening bracket carried `false` instead of the depth it was leaving, so in
+  "[a [b] c]" the text "[a " rendered in ordinary ink — and ordinary ink here
+  means *this is his own English*. Proved against the desktop's
+  `englishWithSupplied` on eight cases, including that an unterminated bracket
+  errs toward "supplied" rather than claiming it as his. The old code was run
+  against the same cases to confirm it genuinely failed them.
 - The desktop Trainer and the iOS Trainer are **different programs sharing no
   code**. Worth deciding whether that is intended.
 
 ## 7 — Smaller, real
 
-- **His English plaque is `background:#EEF6EE` with no text colour**, in four
-  places. In Night mode the default light text may land on a near-white ground.
-  Unverified — check before assuming.
+- ~~His English plaque sets a background with no text colour~~ — **FIXED
+  2026-09-11**, and it was worse than four places. Eight plaques, plus eight
+  more grounds found by the new rule: a white breadcrumb strip, a near-black
+  overview panel (the same defect pointing the other way — dark text on
+  near-black in Day mode), two legend swatches, a gloss highlight, a footnote
+  chip, an AI-diff banner and a library warning. Constitution rule **R9** now
+  refuses any hand-written background that has no text colour in its block,
+  because on a theme-independent ground the ink must be fixed too.
 - **`app_selftest` times out under `ctest -j4`** but passes alone in 270s. The
   default timeout is too tight; the suite reports a failure that is not one.
 - **TestFlight upload** — the paid programme is active and the app is signed

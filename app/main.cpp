@@ -1609,7 +1609,8 @@ static QString entryHtml(const allcore::Entry& e,
             if (!hit) continue;
             ++totalNotes;
             if (shownNotes < 2) {
-                h += "<div style='background:#F3EDDF;padding:3px 7px;"
+                h += "<div style='background:#F3EDDF;color:#2B2118;"
+                     "padding:3px 7px;"
                      "border-radius:4px;margin:7px 0 2px 0;"
                      "font-size:11px'>"
                      "\U0001F4CE <b>published footnote " +
@@ -2843,8 +2844,8 @@ static QString editionDiffHtml(const QString& a, const QString& b,
     const QString head =
         QString("<div style='margin-bottom:8px'><b>Edition "
                 "collation</b> — %1 variant site(s). <span "
-                "style='background:#F5D5CE'>&nbsp;A only&nbsp;"
-                "</span> · <span style='background:#D5E8D2'>"
+                "style='background:#F5D5CE;color:#7A1F14'>&nbsp;A only&nbsp;"
+                "</span> · <span style='background:#D5E8D2;color:#2B2118'>"
                 "&nbsp;B only&nbsp;</span>; every reading shown, "
                 "nothing resolved — the editor rules.</div>")
             .arg(site);
@@ -12895,7 +12896,7 @@ private:
         // ---- breadcrumb (BUDA's hierarchy): work ▸ folio; clicking
         // the work climbs to the whole-work scroll view ----
         auto* crumb = new QWidget;
-        crumb->setStyleSheet("background:#ffffff;");
+        crumb->setStyleSheet("background:#ffffff;color:#1A1A1A;");
         auto* cl = new QHBoxLayout(crumb);
         cl->setContentsMargins(12, 6, 12, 6);
         st->crumbWork = new QToolButton;
@@ -13179,7 +13180,7 @@ private:
         auto ensureOverview = [this, st] {
             if (st->overview) return;
             st->overview = new QWidget;
-            st->overview->setStyleSheet("background:#17181c;");
+            st->overview->setStyleSheet("background:#17181c;color:#E8E4DA;");
             auto* ov = new QVBoxLayout(st->overview);
             ov->setContentsMargins(24, 16, 24, 16);
             ov->setSpacing(6);
@@ -21958,7 +21959,7 @@ private:
                 auto segs = spine_.corpusSearch('"' + wylie + '"', "", 2);
                 if (!segs.empty()) {
                     for (const auto& s : segs)
-                        h += "<div style='margin-top:4px;background:#EEF6EE;"
+                        h += "<div style='margin-top:4px;background:#EEF6EE;color:#2B2118;"
                              "padding:4px'><small>[" +
                              QString::fromStdString(s.course) + ":" +
                              QString::number(s.seq) + "] <b>GMR:</b> " +
@@ -22108,6 +22109,24 @@ public:
                       "drill still has to be read."));
         ruleOutBtn_->setVisible(false);
         row->addWidget(ruleOutBtn_);
+        // Look up, reachable ONLY after answering. Before answering it
+        // replaces the retrieval effort that makes a drill work at all — the
+        // phone follows the same rule (DiamondDrills.swift, "Look up"), but
+        // where the phone can only expand the list its pack carries, the
+        // desktop has the whole dictionary and opens it. The floating window
+        // rather than the Lookup pane, so the drill is not navigated away
+        // from mid-session.
+        lookupBtn_ = new QPushButton("Look up");
+        lookupBtn_->setToolTip(
+            hoverText("Look up",
+                      "Open the dictionary on the word that was blanked. "
+                      "Available only after you have answered."));
+        lookupBtn_->setVisible(false);
+        row->addWidget(lookupBtn_);
+        connect(lookupBtn_, &QPushButton::clicked, [this] {
+            if (lookupWord_.isEmpty() || !g_lookupPopup) return;
+            g_lookupPopup->run(lookupWord_);
+        });
         // Targeting must be VISIBLE. A learner who cannot see that the draw
         // is aimed cannot tell an easy run from a narrow one, and cannot get
         // back to a general session.
@@ -22517,6 +22536,34 @@ public:
                         readable = false;
                 check(readable,
                       "peel: the span and every piece render as script");
+            }
+
+            // ---- Look up, and WHEN (Adam's 4c) ----
+            // The rule this drill lives by: retrieval effort is what makes a
+            // drill work, so the dictionary must be out of reach until the
+            // answer is given. A button that is merely "usually hidden" would
+            // satisfy nobody — this asserts the sequence.
+            {
+                mode_->setCurrentIndex(1);
+                for (int i = 0; i < 12 && !cloze_; ++i) newDrill();
+                if (cloze_) {
+                    check(lookupBtn_ && !lookupBtn_->isVisibleTo(this),
+                          "look up: out of reach before the answer is given");
+                    check(lookupWord_.isEmpty(),
+                          "look up: nothing is even resolved before answering");
+                    if (!radios_.empty()) radios_[0]->setChecked(true);
+                    checkDrill();
+                    check(lookupWord_.isEmpty() ||
+                              lookupBtn_->isVisibleTo(this),
+                          "look up: offered once the answer is out, whenever a "
+                          "word was actually resolved");
+                    check(!ruleOutBtn_->isVisibleTo(this),
+                          "look up: and the hint is withdrawn — there is "
+                          "nothing left to hint at");
+                    newDrill();
+                    check(!lookupBtn_->isVisibleTo(this),
+                          "look up: out of reach again on the next drill");
+                }
             }
 
             // ---- Boundary hunt ----
@@ -23204,6 +23251,8 @@ private:
             }
             if (cloze_) addRadios(cloze_->options, true);
             if (ruleOutBtn_) ruleOutBtn_->setVisible(cloze_.has_value());
+            lookupWord_.clear();
+            if (lookupBtn_) lookupBtn_->setVisible(false);
         } else if (m == 2) {
             part_ = factory_.makeParticle(rng_, target_);
             if (!part_ && target_.kind != allcore::DrillTarget::Kind::None) {
@@ -23755,7 +23804,7 @@ private:
                           cloze_->segment.seq);
             h += "<div style='color:#555'>Which chunk fills the blank? Geshe Michael Roach's "
                  "English for the whole segment:</div>"
-                 "<div style='background:#EEF6EE;padding:6px'><i>" +
+                 "<div style='background:#EEF6EE;color:#2B2118;padding:6px'><i>" +
                  englishWithSupplied(cloze_->segment.english) +
                  "</i></div><hr><div style='font-size:" +
                  QString::number(px(22)) + "px'>" + clozeBody() +
@@ -24123,7 +24172,7 @@ private:
                 size_t nclause = 0;
                 for (const auto& c : order_->chunks) nclause += c.size();
                 const bool partial = nseg > 0 && nclause * 100 < nseg * 90;
-                h += "<div style='background:#EEF6EE;padding:6px;margin-top:6px'>"
+                h += "<div style='background:#EEF6EE;color:#2B2118;padding:6px;margin-top:6px'>"
                      "<b>GMR:</b> " +
                      englishWithSupplied(order_->segment.english) +
                      (partial
@@ -24191,6 +24240,9 @@ private:
                                     ? QString(" <i>(+%1 more)</i>")
                                           .arg(t.glosses.size() - 8)
                                     : QString()));
+                    // the first term shown is what Look up will open
+                    if (lookupWord_.isEmpty())
+                        lookupWord_ = QString::fromStdString(t.wylie);
                     h += "<div style='padding-top:6px'><b>" +
                          QString::fromStdString(t.wylie).toHtmlEscaped() +
                          "</b><br><small>" + phrase + "</small>";
@@ -24280,7 +24332,7 @@ private:
                              "evidence \u2014 which is not the same as knowing "
                              "it is a noun. Those are <b>not scored against "
                              "you</b>.</div>").arg(waived);
-            h += "<div style='background:#EEF6EE;padding:6px;margin-top:6px'>"
+            h += "<div style='background:#EEF6EE;color:#2B2118;padding:6px;margin-top:6px'>"
                  "<b>GMR:</b> " +
                  englishWithSupplied(bound_->segment.english) + "</div>";
             boundStreak_ = perfect ? boundStreak_ + 1 : 0;
@@ -24337,7 +24389,7 @@ private:
                                "granted \u2014 and with it whatever root "
                                "claim it was built to overturn.") +
                  "</div>";
-            h += "<div style='background:#EEF6EE;padding:6px;margin-top:6px'>"
+            h += "<div style='background:#EEF6EE;color:#2B2118;padding:6px;margin-top:6px'>"
                  "<b>GMR:</b> " +
                  englishWithSupplied(dbgSeg_.english) +
                  "</div>";
@@ -24438,20 +24490,20 @@ private:
             h += "<div><small>" +
                  QString::fromStdString(part_->explanation).toHtmlEscaped() +
                  "</small></div>";
-            h += "<div style='background:#EEF6EE;padding:6px;margin-top:6px'>"
+            h += "<div style='background:#EEF6EE;color:#2B2118;padding:6px;margin-top:6px'>"
                  "<b>GMR:</b> " +
                  QString::fromStdString(part_->segment.english).toHtmlEscaped() +
                  "</div>";
         } else if (m == 3 && readPos_ < readSegs_.size()) {
             const auto& s = readSegs_[readPos_];
-            h += "<div style='background:#EEF6EE;padding:6px'><b>GMR:</b> " +
+            h += "<div style='background:#EEF6EE;color:#2B2118;padding:6px'><b>GMR:</b> " +
                  QString::fromStdString(s.english).toHtmlEscaped() + "</div>";
             if (progress_ && !revealed_)
                 progress_->recordSegmentRead(s.id, true,
                                              (long long)time(nullptr));
             revealed_ = true;
         } else if (m == 5 && trans_.id) {
-            h += "<div style='background:#EEF6EE;padding:6px'><b>GMR:</b> " +
+            h += "<div style='background:#EEF6EE;color:#2B2118;padding:6px'><b>GMR:</b> " +
                  QString::fromStdString(trans_.english).toHtmlEscaped() +
                  "</div>";
             const std::string draft = transDraft_->toPlainText().toStdString();
@@ -24626,6 +24678,11 @@ private:
             }
         }
         refreshStats();
+        // The dictionary becomes reachable only now — and only when a word
+        // was actually resolved, so the button never opens on nothing.
+        if (lookupBtn_)
+            lookupBtn_->setVisible(!lookupWord_.isEmpty() && g_lookupPopup);
+        if (ruleOutBtn_) ruleOutBtn_->setVisible(false);   // the answer is out
         result_->setHtml(h);
     }
 
@@ -24665,6 +24722,8 @@ private:
     QWidget* answerRow_ = nullptr;
     std::vector<QRadioButton*> radios_;
     QPushButton* ruleOutBtn_ = nullptr;   // the hint
+    QPushButton* lookupBtn_ = nullptr;    // the dictionary, after answering
+    QString lookupWord_;                  // what it will look up
     QPushButton* aimLabel_ = nullptr;     // shows the skill being trained
     // the skill the next draw should exercise, if any
     allcore::DrillTarget target_;
@@ -25795,7 +25854,7 @@ private:
                 if (best >= 0) {
                     const auto& e =
                         doc_.entries[doc_.spans[best].entry_ix];
-                    return QString("<span style='background:#EFE7D2;"
+                    return QString("<span style='background:#EFE7D2;color:#2B2118;"
                                    "padding:1px 5px;border-radius:3px'>") +
                            QString::fromStdString(e.hgm_gloss.front())
                                .toHtmlEscaped() +
@@ -26887,7 +26946,8 @@ public:
                 QString::fromStdString(aiAccum_));
         });
         QObject::connect(aiReply_, &QNetworkReply::finished, [this] {
-            QString h = "<div style='background:#FBEFEF;padding:4px'><b>AI "
+            QString h = "<div style='background:#FBEFEF;color:#2A1A1A;"
+                        "padding:4px'><b>AI "
                         "coverage diff</b> — model output, labeled AI; the "
                         "term anchors it cites are engine-verified.</div><hr>"
                         "<pre style='white-space:pre-wrap'>" +
@@ -29004,7 +29064,8 @@ public:
                 if (!richer.isEmpty()) {
                     auto* warn = new QLabel(
                         QString(
-                            "<div style='background:#FBF1E6;border:1px "
+                            "<div style='background:#FBF1E6;"
+                            "color:#2B2118;border:1px "
                             "solid %1;border-radius:4px;padding:6px 9px'>"
                             "%2<b>This Library is nearly empty, but a "
                             "fuller one exists.</b><br>This copy holds "

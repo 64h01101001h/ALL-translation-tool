@@ -1121,7 +1121,7 @@ public:
             for (const auto& e : entries_) o += QString("\"%1\",%2,%3,%4,%5,%6\n").arg(QString(e.rel).replace('"', "\"\""), statusName(e.status)).arg(e.lsize).arg(e.rsize).arg(e.lmod.toString(Qt::ISODate), e.rmod.toString(Qt::ISODate));
             return o;
         }
-        o += "<!doctype html><meta charset='utf-8'><title>Folder compare</title><style>body{font-family:-apple-system,Helvetica,sans-serif;font-size:13px}table{border-collapse:collapse}td,th{padding:2px 8px;border-bottom:1px solid #eee;text-align:left}"
+        o += "<!doctype html><meta charset='utf-8'><title>Folder compare</title><style>body{font-family:-apple-system,Helvetica,sans-serif;font-size:13px;background:#fff;color:#1a1a1a}table{border-collapse:collapse}td,th{padding:2px 8px;border-bottom:1px solid #eee;text-align:left}"
              "tr.d td{background:#fff3c4}tr.l td{background:#f8d7d5}tr.r td{background:#d9f5d3}tr.m td{background:#eeeeee}</style>";
         o += "<h2>Folder compare</h2><p>" + leftEd_->text().toHtmlEscaped() + " &nbsp;↔&nbsp; " + rightEd_->text().toHtmlEscaped() + "</p><p>" + summaryText().toHtmlEscaped() + "</p><table><tr><th>Name</th><th>Status</th><th>Left size</th><th>Right size</th><th>Left modified</th><th>Right modified</th></tr>";
         for (const auto& e : entries_) {

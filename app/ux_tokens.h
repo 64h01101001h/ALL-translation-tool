@@ -44,6 +44,25 @@ namespace ux {
 [[maybe_unused]] constexpr const char* kError = "#8C2F2B";   // errors / refusals
 [[maybe_unused]] constexpr const char* kDoc = "#2E629E";     // documents / links-int
 [[maybe_unused]] constexpr const char* kPeople = "#6E3E8E";  // people / access
+// His English sits on a fixed pale-green plaque. The plaque does NOT follow
+// the theme: it is the one surface in the product that always means the same
+// thing — this is Geshe Michael Roach's own English — and a reader should be
+// able to find it by eye without reading a word. Because the ground is fixed
+// light, the INK on it must be fixed dark: eight sites set the background and
+// left the colour to the theme, so in Night mode the inherited near-white
+// text landed on a near-white green and vanished. Use kPlaque() rather than
+// writing the background by hand; constitution_check enforces it.
+[[maybe_unused]] constexpr const char* kPlaqueBg = "#EEF6EE";
+[[maybe_unused]] constexpr const char* kPlaqueFg = "#2B2118";   // warm near-black, NOT a
+                                               // green: the green vocabulary
+                                               // is frozen at three meanings
+                                               // (constitution G1), and the
+                                               // ink on the plaque carries no
+                                               // meaning of its own
+inline QString kPlaque(const QString& pad = "6px") {
+    return QString("background:%1;color:%2;padding:%3")
+        .arg(kPlaqueBg, kPlaqueFg, pad);
+}
 // type roles (px, in rendered HTML)
 [[maybe_unused]] constexpr int kFsMeta = 11;     // metadata, badges, eyebrows
 [[maybe_unused]] constexpr int kFsBody = 12;     // supporting prose
