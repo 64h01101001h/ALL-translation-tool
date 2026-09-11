@@ -21869,6 +21869,14 @@ public:
         drBanner->setWordWrap(true);
         layout->addWidget(drBanner);
         stats_ = new QLabel;
+        auto* nextB = new QPushButton("What I can read next\u2026");
+        nextB->setToolTip(
+            hoverText("What I can read next",
+                      "Your deck measured against each work in the corpus: "
+                      "how much of its vocabulary you already know, and how "
+                      "many headwords stand between you and it."));
+        layout->addWidget(nextB);
+        connect(nextB, &QPushButton::clicked, [this] { showReadingShelf(); });
         auto* weakB = new QPushButton("My weak spots\u2026");
         weakB->setToolTip(
             "The full miss taxonomy: every wrong answer, filed "
@@ -22501,6 +22509,103 @@ public:
     }
 
 private:
+    // ---- What you can read next (docs/LEARN_TAB_VISION.md) ----
+    //
+    // A shelf of the corpus's works, each printing the ACTUAL numbers:
+    // your coverage of its vocabulary, how long it is, and what stands
+    // between you and it. Ordered by measured coverage.
+    //
+    // WHAT THIS DELIBERATELY IS NOT. There is no composite difficulty score,
+    // no level, no lock, and no climb. Coverage is a continuous percentage
+    // with the research marks drawn ON it and cited as what they are — the
+    // best-powered study of the vocabulary-coverage question found NO
+    // threshold, so inventing one here would be dressing a guess as a
+    // measurement. A reader may open anything at any time; the shelf tells
+    // them what it will cost, and nothing else.
+    void showReadingShelf() {
+        if (!progress_) return;
+        struct Row {
+            QString course;
+            int segments = 0;
+            size_t vocab = 0;
+            double cov = 0.0;
+            size_t unknown = 0;
+        };
+        std::vector<Row> rows;
+        {
+            BusyWheel wheel;
+            for (const auto& c : spine_.corpusCourses()) {
+                Row r;
+                r.course = QString::fromStdString(c);
+                r.segments = spine_.courseSegmentCount(c);
+                if (r.segments == 0) continue;
+                auto v = spine_.courseVocabulary(c);
+                if (v.empty()) continue;      // no glossed vocabulary to measure
+                r.vocab = v.size();
+                r.cov = progress_->coverage(v);
+                r.unknown = (size_t)((1.0 - r.cov) * (double)v.size() + 0.5);
+                rows.push_back(std::move(r));
+            }
+        }
+        std::sort(rows.begin(), rows.end(),
+                  [](const Row& a, const Row& b) { return a.cov > b.cov; });
+
+        const QString muted =
+            ux::darkChrome() ? ux::chromeMuted() : QString(ux::kMuted);
+        const QString act = ux::darkChrome() ? ux::chromeAct() : QString(ux::kAct);
+        QString h =
+            "<div style='color:#9A7A33;font-size:11px;letter-spacing:2px;"
+            "font-weight:600'>WHAT YOU CAN READ NEXT</div>";
+        h += QString("<div style='margin:6px 0 10px 0;color:%1;font-size:12px'>"
+                     "Your deck against each work's vocabulary. The 95%% and "
+                     "98%% marks are a research-derived heuristic for "
+                     "comfortable reading, drawn here for reference \u2014 "
+                     "they are not a level and not a lock, and the "
+                     "best-powered study of the question found no threshold at "
+                     "all. Open anything you like; this only says what it will "
+                     "cost.</div>").arg(muted);
+        if (rows.empty()) {
+            h += "<div>Nothing to measure yet \u2014 your deck is empty. Read "
+                 "in the Overlay, or reveal vocabulary in the Trainer, and "
+                 "words will join it.</div>";
+        }
+        for (const auto& r : rows) {
+            const int pct = (int)(r.cov * 100.0 + 0.5);
+            // the bar, with the two marks drawn ON it rather than as a verdict
+            h += QString(
+                     "<div style='margin-top:10px'><b>%1</b> "
+                     "<span style='color:%2;font-size:11px'>%3 segments "
+                     "\u00b7 %4 glossed headwords</span>")
+                     .arg(r.course).arg(muted)
+                     .arg(r.segments).arg(r.vocab);
+            h += QString(
+                     "<div style='position:relative;height:10px;background:%1;"
+                     "margin:3px 0'><div style='height:10px;width:%2%%;"
+                     "background:%3'></div></div>")
+                     .arg(ux::darkChrome() ? ux::chromePlaque()
+                                           : QString("#E7E1D6"))
+                     .arg(pct).arg(act);
+            h += QString("<div style='color:%1;font-size:12px'>you know "
+                         "<b>%2%%</b> of its vocabulary \u00b7 <b>%3</b> "
+                         "headwords you have not met%4</div></div>")
+                     .arg(muted).arg(pct).arg(r.unknown)
+                     .arg(pct >= 98
+                              ? QString(" \u00b7 past the 98%% mark")
+                              : pct >= 95 ? QString(" \u00b7 past the 95%% mark")
+                                          : QString());
+        }
+        auto* dlg = new QDialog(this);
+        dlg->setAttribute(Qt::WA_DeleteOnClose);
+        dlg->setWindowFlag(Qt::Window);
+        dlg->setWindowTitle("What you can read next");
+        dlg->resize(560, 620);
+        auto* v = new QVBoxLayout(dlg);
+        auto* br = new QTextBrowser;
+        br->setHtml(h);
+        v->addWidget(br, 1);
+        dlg->show();
+    }
+
     void showMissReport() {
         if (!progress_) return;
         auto* dlg = new QDialog(this);
