@@ -108,9 +108,25 @@ add_test(NAME app_selftest COMMAND DiamondCutterTranslationTool --selftest)
 add_test(NAME gauntlet_walk
          COMMAND DiamondCutterTranslationTool --gauntlet auto 300)
 set_tests_properties(gauntlet_walk PROPERTIES
-  ENVIRONMENT "QT_QPA_PLATFORM=offscreen" TIMEOUT 420)
+  ENVIRONMENT "QT_QPA_PLATFORM=offscreen" TIMEOUT 900 RUN_SERIAL TRUE)
+# The timeout was 300s, and the suite takes about 270s ALONE on an idle
+# machine — a 10% margin for a wall-clock measurement on a laptop that is also
+# running the user's own applications. Under `ctest -j` it exceeded it
+# routinely and reported a TIMEOUT, which reads as a broken build and, in the
+# press, unwinds a commit. The failure was never in the app.
+#
+# 1200s is chosen as four times the observed run rather than "a bit more":
+# the point of this ceiling is to catch a HANG, not to police performance.
+# The things that must stay tight are the individual wall-clock gates INSIDE
+# the suite (T4a/T4b and the PERF ceilings), which measure one operation each
+# and are derated for load; a process-level timeout measures the machine's
+# mood. Raising this does not weaken any of them.
+#
+# RUN_SERIAL, because the suite opens the real 2.36 GB library index and
+# measures queries against it. Sharing the disk with other suites is exactly
+# the contention that produced the spurious failures.
 set_tests_properties(app_selftest PROPERTIES
-  ENVIRONMENT "QT_QPA_PLATFORM=offscreen" TIMEOUT 300)
+  ENVIRONMENT "QT_QPA_PLATFORM=offscreen" TIMEOUT 1200 RUN_SERIAL TRUE)
 # release audit 2026-09-09 (MainWindow C-3): the Sanskrit glyph check is a
 # gate — every stacked Sanskrit-in-Tibetan case must have a glyph in the
 # bundled font (exit 1 on any missing glyph). It ran only by hand before.

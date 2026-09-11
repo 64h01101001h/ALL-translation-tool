@@ -123,8 +123,16 @@ open, from the audit:
   chip, an AI-diff banner and a library warning. Constitution rule **R9** now
   refuses any hand-written background that has no text colour in its block,
   because on a theme-independent ground the ink must be fixed too.
-- **`app_selftest` times out under `ctest -j4`** but passes alone in 270s. The
-  default timeout is too tight; the suite reports a failure that is not one.
+- ~~`app_selftest` times out under `ctest -j4`~~ — **FIXED 2026-09-11.** The
+  ceiling was 300s against a ~270s run: a 10% margin for a wall-clock
+  measurement on a laptop also running the user's own applications. It is
+  1200s now — four times the observed run, because a process-level timeout
+  exists to catch a HANG, not to police performance. The gates that police
+  performance are the wall-clock checks INSIDE the suite, which measure one
+  operation each and are load-derated; none of them is weakened. Also
+  `RUN_SERIAL`, because the suite queries the real 2.36 GB library index and
+  sharing the disk was the contention producing the spurious failures. It had
+  been failing the press, which unwinds a commit.
 - **TestFlight upload** — the paid programme is active and the app is signed
   and installed on Adam's phone, but nothing has been uploaded for testers.
 
