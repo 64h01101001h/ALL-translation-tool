@@ -8,11 +8,11 @@
 
 Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source and Geshe Michael Roach's facing English &mdash; recorded as a by-product of a machine alignment campaign reading the courses segment by segment. **Every entry has been checked against the corpus database** (42,199 segments, spine `hgm_spine_v27_2.db`): the quoted strings were retrieved from the spine, not from a note, and each citation was re-derived rather than trusted.
 
-**186 entries**: **138 document errata** (6 HIGH, 71 MEDIUM, 61 LOW), **24 digitisation artefacts**, 14 observations checked and closed as *not* errata, and 1 that could not be verified.
+**187 entries**: **139 document errata** (6 HIGH, 71 MEDIUM, 62 LOW), **24 digitisation artefacts**, 14 observations checked and closed as *not* errata, and 1 that could not be verified.
 
 | Kind | n |
 |---|---|
-| Tibetan spelling | 100 |
+| Tibetan spelling | 101 |
 | English typo | 25 |
 | Digitisation artefact | 24 |
 | Our banked layer | 9 |
@@ -120,7 +120,7 @@ Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source 
 | `C05:89` | Neither of the purpose of its ultimate purpose subsumes the other | Neither the purpose nor its ultimate purpose subsumes the other | Own row: wylie 'dgos pa dang dgos pa'i dgos pa ni ngo bo tha dad yin te' (ACIP DGOS PA DANG DGOS PA'I DGOS PA NI ...) coordinates the two terms with dang; the English 'Neither of the purpose of its ultimate purpose' is ungrammatical ('Neither of X of Y'), the  | PROBABLE |
 | `C05:92` | dug 'das | dug mdas (dug mda' + instrumental -s) | Wylie and ACIP agree on 'DAS, so this is the keyed reading, not a converter artefact. 'das (pass/beyond) yields no sense after dug (poison) before bkrongs pa (was killed); GMR's own English, 'died from a wound inflicted by a poisoned arrow', is the internal wi | PROBABLE |
 
-## Low severity &mdash; 61 entries
+## Low severity &mdash; 62 entries
 
 | Citation | What it says | Should say | Evidence | Confidence |
 |---|---|---|---|---|
@@ -176,6 +176,7 @@ Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source 
 | `C05:172` | In the hells through there are only three projections | In the hells though there are only three projections | Source English at C05:172 contains the quoted found text verbatim. The local C05ReadingASCII.txt also reads 'In the hells through' on line 1553, so this is present in the source reading, not introduced by corpus ingestion; that file is the same source, not an  | PROBABLE |
 | `C05:180` | MYON MONGS PA | NYON MONGS PA | ACIP C05:180 contains MYON MONGS PA verbatim and its Wylie agrees, myon mongs pa. The preceding root C05:179 has NYON MONGS and English Mental affliction; the commentary 180 translates the same first condition as mental affliction. The live glossary-tier entry | PROBABLE |
 | `C05:187` | 'BRAL DU | 'PHRAL DU | C05:187 ACIP has 'BRAL DU once; English says quick result. C16:766 is byte-identical in Wylie, English and ACIP and is common-source evidence, not demonstrated independent publication. Full-spine searches find 'bral du in those 2 rows only; 'bras bu 'phral du  | PROBABLE |
+| `C05:210` | NUS PA'I SKAD CIG PAR MED PA RTEN DU GYUR PA | NUS PA'I SKAD CIG BAR MED PA RTEN DU GYUR PA | Codex independent skeptical review: LOW/PROBABLE spelling candidate, not a source correction. (a) The exact ACIP found quote occurs once in C05:210. Wylie uses lower case, and raw contains the original ACIP plus Wylie. The first temporal expression has BAR, th | PROBABLE |
 | `C05:24` | mtshung med | mtshungs med | ACIP source of record reads MTSUNG MED (no final S). The epithet is standardly mtshungs med; the spine has 13 rows with 'mtshungs med' and this is the only row with 'mtshung med'. No parallel witness of this row exists (wylie 'mtshung med lcang skya' occurs on | PROBABLE |
 | `C05:38` | stained or without stain." the first two of the chapters are devoted | stained or without stain." The first two of the chapters are devoted | Verbatim in the C05:38 english field: a new sentence opens lower-case after a period-closed quotation. Not a registered errata class and not a converter artefact (the wylie/ACIP have no bearing on English capitalisation). PARALLEL WITNESS: C16:687 carries the  | PROBABLE |
 | `C05:68` | mngon ba sde bdun po | mngon pa sde bdun po | ACIP (source of record): 'MNGON BA SDE BDUN PO'. The same row spells the word 'mngon pa'i mdzod' two words later, and the surrounding rows read 'mngon pa'. 'mngon ba' occurs in only 3 of 42,199 rows: C05:68, C16:706 (byte-identical re-ingest of the same file,  | PROBABLE |
@@ -270,7 +271,7 @@ Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source 
 
 ## Recommended actions, by owner
 
-**Document editors.** The 138 document errata above. Start with the 6 HIGH entries. Note that several errors exist at MORE THAN ONE LOCUS because passages are ingested twice &mdash; each entry's evidence names them, and a per-segment fix will leave duplicates behind.
+**Document editors.** The 139 document errata above. Start with the 6 HIGH entries. Note that several errors exist at MORE THAN ONE LOCUS because passages are ingested twice &mdash; each entry's evidence names them, and a per-segment fix will leave duplicates behind.
 
 **Data-pipeline maintainers.** The 24 digitisation artefacts, plus two reports filed separately: `docs/upstream/FOLIO_MARKER_COLLISIONS.md` (119 folio markers spliced into caption numbers) and `docs/upstream/C13_COLUMN_OFFSET.md` (**C13:63&ndash;82 pairs Tibetan with the English of a different text &mdash; C13 should not be scanned until it is fixed**).
 

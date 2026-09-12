@@ -1,0 +1,12 @@
+# C05:208 English-first proposal
+- Producer: Codex; status: PROVISIONAL machine alignment; 8/8 required local reference paths rechecked readable.
+- Source: six fields plus raw verified against SQLite URI mode=ro; shared source/context snapshots match all six fields.
+- Counts: 24 spans; 19 d5; 3 d6; 2 d7; 0 nulls; 0 errata.
+- The first challenge is `'dod don` → “belief”: binding HGM has “position,” while this row’s GMR English distinguishes the outline positions from the later “primary belief.”
+- `slar yang` → “come back” is source-specific but supported by 13 corpus co-occurrences; `smras pa` → “presenting” is binding-HGM attested.
+- Supplied participants/articles/auxiliaries remain unwrapped; the later `brjod pa` and the `byas pa/'grub par` frame are omitted rather than forced onto “reflects.”
+- Repeats resolved: `lugs` selects Tibetan offsets 29/50/141 and English “position” offsets 62/114, then “system” 331; exact contexts are in offsets-and-ranges.json.
+- Exact digital match: C16:785 matches ACIP/Wylie/English, but field identity does not prove its ingestion history or independent publication.
+- Errata check: the leading ellipsis is quoted as published continuation punctuation; no unregistered source defect found.
+- Final generator output: `3828 body.html`
+- `EXIT=0`; stderr 0 bytes; body SHA-256 `cb25706bf12d200b4129d94374b6a31c74085e40f80b7f5859059229254ba1b0`; spec SHA-256 `9328750d468786763a679914e541700cc5343ad1664a14517edfd7325f428245`.

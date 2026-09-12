@@ -2230,5 +2230,17 @@
   "severity": "LOW",
   "confidence": "PROBABLE",
   "note": "filed from the alignment batch, spine-verified on merge"
+ },
+ {
+  "item_id": "E-187",
+  "course": "C05",
+  "segment": "C05:210",
+  "kind": "TIBETAN_SPELLING",
+  "found": "NUS PA'I SKAD CIG PAR MED PA RTEN DU GYUR PA",
+  "expected": "NUS PA'I SKAD CIG BAR MED PA RTEN DU GYUR PA",
+  "evidence": "Codex independent skeptical review: LOW/PROBABLE spelling candidate, not a source correction. (a) The exact ACIP found quote occurs once in C05:210. Wylie uses lower case, and raw contains the original ACIP plus Wylie. The first temporal expression has BAR, the second PAR. The quote is from this segment. (b) Fresh all-corpus searches explicitly inspect C16/P1/TCS. C16:787 has identical ACIP, Wylie and English but a raw course-field difference. P7:3 retains first BAR/second PAR with punctuation differences and English truncated after physical (458 versus 469 characters). ILL:2242 has literal PAR {%BAR}, an editorial alternative, not an unmarked BAR witness. All three raw files retain first BAR/second PAR, verified from complete originals copied here. No same-passage P1/TCS row was found. None establishes an independent publication; this absence does not prove reingestion either. No independently published same-reading refutation is established. (c) Fresh register has 186 records, zero C05:210 or disputed-string matches. Converter, heading, footnote, folio and cap classes were inspected; PAR versus BAR is outside them. (d) The first no-intervening-moment relation and explicit ILL {%BAR} support BAR for the second interval expression. A terminative PAR after skad cig was considered: followed by med pa it would negate existence in/for a moment rather than express an uninterrupted preceding/support relation; no contextual reading explains the intended immediate basis as well. The explicit editorial alternative is positive evidence, so retention is PROBABLE rather than based on dictionary absence. Exact full headwords are absent; HGM bar includes between/in between, while interval/uninterrupted senses in comparanda are reference only. HGM bar med=doubt is not repurposed. Uncertainty about publication authority rules out CONFIRMED, not this narrowly labelled candidate. (e) All 46 proposal query count claims match independent reruns. BAR=4 rows/4 literal occurrences; PAR=3/3; annotated PAR {%BAR}=1/1 in Wylie and 1/1 in ACIP. Original raw files match 789988, 787931, 787262 bytes and all quoted SHA-256 values. Fresh full-field comparisons confirm every identity/difference claim. Counts measure digital rows/strings, never publications. Complete C05/C16/P7/ILL source fields are retained in source-evidence.json, full-witness-differences.json and errata-refutations.json; the three complete original raw witnesses are copied under raw-witnesses/, with original paths, byte contexts and hashes in raw-original-witnesses.json. All alignment tuples retain verbatim source spelling. The disputed second skad cig par med pa is entirely omitted, so no accepted span depends on the proposed change. Machine approval is not human acceptance.",
+  "severity": "LOW",
+  "confidence": "PROBABLE",
+  "note": "filed from the alignment batch, spine-verified on merge"
  }
 ]

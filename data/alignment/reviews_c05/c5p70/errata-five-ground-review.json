@@ -1,0 +1,61 @@
+{
+  "producer": "Codex independent skeptical semantic reviewer",
+  "claim": {
+    "seq": 210,
+    "kind": "TIBETAN_SPELLING",
+    "found": "NUS PA'I SKAD CIG PAR MED PA RTEN DU GYUR PA",
+    "expected": "NUS PA'I SKAD CIG BAR MED PA RTEN DU GYUR PA",
+    "severity": "LOW",
+    "confidence": "PROBABLE",
+    "evidence": "Codex reconciler, provisional spelling candidate. (a) Exact found quote occurs once in C05:210 ACIP; Wylie and raw preserve the second PAR, while the first temporal expression has BAR. (b) Fresh full-field comparison: C16:787 matches C05:210 ACIP/Wylie/English; P7:3 differs and has truncated English yet retains first BAR/second PAR. ILL:2242 explicitly has SKAD CIG PAR {%BAR} MED PA, which records an editorial alternative rather than an unmarked BAR reading. Original SK05408E (789988 bytes; SHA256 4383880518e5dd26ee0822f03cf9342d455edf699ad3b2d06bc9aa2ffc85c2b0), ST05408E (787931; d4461b441b0b035d3ff9de8bfd2c2450ba85b727be8f52e05f5d8e679cb9b755) and SA05408E (787262; ec96a6cdbfda570956a91fe48ed3feac8abd0d9f9b0f1fc14573d8a582c92d25) were independently reopened by this reconciler; all retain first BAR/second PAR. Exact paths, bytes and contexts are in raw-original-witnesses-reopened.json. Digital identities and differences prove neither independent publication nor an ingestion genealogy; no blockprint was examined. Searches explicitly included C16/P1/TCS; no P1/TCS same-passage witness was found. (c) Fresh scan of 186 register records gives zero C05:210/disputed-string entries. This is not an existing heading, footnote, folio, converter or cap class. (d) The same-row first BAR and ILL’s explicit {%BAR} support the interval expression. Parsing PAR as a terminative after skad cig would express a different relation, and MED would then not straightforwardly yield the immediate/no-intervening-moment basis relation; no workable contextual reading was found. Absence of an exact par headword is not itself proof of a spelling error. Exact skad cig bar med pa/skad cig par med pa entries are absent; HGM skad cig includes moment/immediately and bar has interval/between renderings. HGM bar med=['doubt'] is not borrowed to mean immediate, and comparative Hopkins interval senses are not promoted to HGM equivalents. (e) Fresh corpus queries: skad cig bar med = 4 rows/4 literal occurrences (C05:210,C16:787,ILL:2242,P7:3); skad cig par med = 3/3 (C05:210,C16:787,P7:3); skad cig par {%bar} med = 1/1 (ILL:2242), corresponding ACIP markup = 1/1. These count digital segments and strings, not independent publications. All 46 proposal count claims were independently rerun and match. Confidence remains PROBABLE/LOW because publication evidence and source editorial authority are unresolved. The alignment does not silently correct the source or depend on the correction: the disputed second phrase is entirely unpaired. Separate semantic and skeptical approval precedes landing."
+  },
+  "grounds": {
+    "a": {
+      "refuted": false,
+      "measured_found_counts": {
+        "acip": 1,
+        "wylie": 0,
+        "english": 0,
+        "raw": 1
+      },
+      "reason": "The exact ACIP found quote occurs once in C05:210. Wylie uses lower case, and raw contains the original ACIP plus Wylie. The first temporal expression has BAR, the second PAR. The quote is from this segment."
+    },
+    "b": {
+      "refuted": false,
+      "reason": "Fresh all-corpus searches explicitly inspect C16/P1/TCS. C16:787 has identical ACIP, Wylie and English but a raw course-field difference. P7:3 retains first BAR/second PAR with punctuation differences and English truncated after physical (458 versus 469 characters). ILL:2242 has literal PAR {%BAR}, an editorial alternative, not an unmarked BAR witness. All three raw files retain first BAR/second PAR, verified from complete originals copied here. No same-passage P1/TCS row was found. None establishes an independent publication; this absence does not prove reingestion either. No independently published same-reading refutation is established."
+    },
+    "c": {
+      "refuted": false,
+      "reason": "Fresh register has 186 records, zero C05:210 or disputed-string matches. Converter, heading, footnote, folio and cap classes were inspected; PAR versus BAR is outside them."
+    },
+    "d": {
+      "refuted": false,
+      "reason": "The first no-intervening-moment relation and explicit ILL {%BAR} support BAR for the second interval expression. A terminative PAR after skad cig was considered: followed by med pa it would negate existence in/for a moment rather than express an uninterrupted preceding/support relation; no contextual reading explains the intended immediate basis as well. The explicit editorial alternative is positive evidence, so retention is PROBABLE rather than based on dictionary absence. Exact full headwords are absent; HGM bar includes between/in between, while interval/uninterrupted senses in comparanda are reference only. HGM bar med=doubt is not repurposed. Uncertainty about publication authority rules out CONFIRMED, not this narrowly labelled candidate."
+    },
+    "e": {
+      "refuted": false,
+      "reason": "All 46 proposal query count claims match independent reruns. BAR=4 rows/4 literal occurrences; PAR=3/3; annotated PAR {%BAR}=1/1 in Wylie and 1/1 in ACIP. Original raw files match 789988, 787931, 787262 bytes and all quoted SHA-256 values. Fresh full-field comparisons confirm every identity/difference claim. Counts measure digital rows/strings, never publications."
+    }
+  },
+  "refuted": false,
+  "suggested_severity": "LOW",
+  "suggested_confidence": "PROBABLE",
+  "counts_rechecked": {
+    "proposal_claims": 46,
+    "proposal_claims_matching": 46,
+    "BAR_rows": 4,
+    "BAR_literal_occurrences": 4,
+    "PAR_rows": 3,
+    "PAR_literal_occurrences": 3,
+    "annotated_PAR_Wylie_rows": 1,
+    "annotated_PAR_Wylie_literal_occurrences": 1,
+    "annotated_PAR_ACIP_rows": 1,
+    "annotated_PAR_ACIP_literal_occurrences": 1,
+    "register_records": 186,
+    "register_segment_or_quote_hits": 0,
+    "SK05408E_bytes": 789988,
+    "ST05408E_bytes": 787931,
+    "SA05408E_bytes": 787262
+  },
+  "publication_limit": "No independent publication or blockprint examined; digital witnesses do not establish publication or ingestion history."
+}

@@ -47,7 +47,7 @@ the/a/an/and/or/his/our/your/I/you unless `data/alignment/span_head_allow.json`
 lists it under `pages_c05` with the Tibetan word that licenses it.
 
 ## Progress
-c5p1–c5p7 (1–21) cloned 2026-09-05; c5p8–c5p49 (22–147) landed 2026-09-05; c5p50–c5p55 (148–165) landed 2026-09-08. c5p56 (166–168) landed 2026-09-12 after fresh independent proposals, reconciliation and skeptical review. c5p57 (169–171) landed after independent review. c5p58 (172–174) landed after independent review. c5p59 (175–177) landed after independent review. c5p60 (178–180) landed after independent review. c5p61 (181–183) landed after independent review. c5p62 (184–186) landed after independent review. c5p63 (187–189) landed after independent review. c5p64 (190–192) landed after independent review. c5p65 (193–195) landed after independent review. c5p66 (196–198) landed after independent review. c5p67 (199–201) landed after independent review. c5p68 (202–204) landed after independent review. c5p69 (205–207) landed after independent review. Coverage 207/511; current verification is recorded in the latest batch entry below.
+c5p1–c5p7 (1–21) cloned 2026-09-05; c5p8–c5p49 (22–147) landed 2026-09-05; c5p50–c5p55 (148–165) landed 2026-09-08. c5p56 (166–168) landed 2026-09-12 after fresh independent proposals, reconciliation and skeptical review. c5p57 (169–171) landed after independent review. c5p58 (172–174) landed after independent review. c5p59 (175–177) landed after independent review. c5p60 (178–180) landed after independent review. c5p61 (181–183) landed after independent review. c5p62 (184–186) landed after independent review. c5p63 (187–189) landed after independent review. c5p64 (190–192) landed after independent review. c5p65 (193–195) landed after independent review. c5p66 (196–198) landed after independent review. c5p67 (199–201) landed after independent review. c5p68 (202–204) landed after independent review. c5p69 (205–207) landed after independent review. c5p70 (208–210) landed after independent review. Coverage 210/511; current verification is recorded in the latest batch entry below.
 
 **Historical pause, superseded by Adam’s 2026-09-11 continuation request. PAUSED 2026-09-08 (Adam's call): the campaign stops here while the app goes to
 a public release (two-week target). Reconciled-but-unlanded specs for 166, 167,
@@ -780,3 +780,44 @@ only the documented repair. Master/corpus hashes are unchanged. All 17 suites,
 including the ten new literal trimming tests, pass in 10.57 seconds. Rendering
 and newer native/device execution remain unverified; no main integration occurred.
 Next: c5p70, 208–210, independently approved for landing.
+
+
+### c5p70 · C05:208–210 — 2026-09-12 — Codex reconciliation/review
+
+Independent semantic SPEC/QUALITY APPROVE covers 86 analyst spans (26/27/33),
+zero nulls, 51 d5 pairs, 17 d7 members, 11 particles and seven d3 phrases. All
+six proposals and three final canonical bodies reproduce exactly. All 46 query
+count claims match fresh original-spine searches. The 93 copied evidence files
+include all three complete original raw witnesses and failed attempts. Accepted
+spec, source ranges and assembled body agree. These remain PROVISIONAL machine
+attestations, never new binding glossary entries or human acceptance.
+
+208 keeps the doctrinal 'dod don/belief attestation without replacing binding
+position or absorbing reflects. First rang gi owns their with system; the second
+is not reused. Whole discourse/manner and emphatic recasts stay d3; unresolved
+argument framing is omitted. 209 retains all six unique eye-mind/consciousness
+members, including of at [70,72) and [346,348). Whole planting and progressive
+constructions are d3. The final arises/produces voice reversal is omitted. The
+passing wrong-of proposal and separate canonical ordering refusals remain in
+the review history; a successful generator is not proof of semantic correctness.
+210 keeps the complete temporal-relative construction, including its source
+relation, as immediately before producing. The second disputed temporal phrase
+is wholly omitted. Faculty compounds, their useful members, the full conceiving
+predicate and final whole-word exist select the reviewed source occurrences.
+
+E-187 is the sole addition: LOW/PROBABLE PAR→BAR in the exact C05:210 quote.
+All five skeptical grounds were independently applied. ILL:2242 literally marks
+PAR {%BAR}; C16 matches the three source text fields, while P7 differs in
+punctuation and truncation. All three full digital originals retain PAR. None
+establishes publication independence, blockprint authority or ingestion history.
+The candidate changes no source or accepted alignment. All 186 older errata and
+all span-head allowances remain unchanged; printed-source verification is open.
+
+Coverage 210/511. Bank: 42,925 links (+89 including three sentence anchors),
+11,871 null exponents. Evidence: 6,903 headwords / 14,871 pairs. All 42,836 prior
+links, notes/trees/evidence/ACIP and 21,447 previous CSV lexical keys and citations
+survive. Main CSV: 21,494; reverse: 21,154; changes: 47 versus cc7d690. All 22,848
+course/depth groups match actual main CSV references, retaining all 22,788 old
+groups. Source/master hashes are unchanged. All 17 fidelity/export/constitution
+suites pass. Rendering and newer native/device execution remain unverified;
+no main integration occurred. Next: c5p71, 211–213, independently approved.
