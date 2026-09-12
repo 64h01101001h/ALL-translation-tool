@@ -27587,9 +27587,22 @@ public:
             "technical-spelling hyphens and capitals are yours to "
             "apply.");
         form->addRow(fillBtn);
+        // A status line INSIDE the dialog. Auto-fill's two failure paths were
+        // both effectively silent: a blank or malformed ACIP number hit a
+        // bare `return`, and "no catalog record" was written to a TOOLTIP on
+        // a field nobody hovers. The pane's own status line is behind the
+        // modal, so it cannot be the place a modal reports to.
+        // (Draft workspace audit, 2026-09-11.)
+        auto* fillStatus = new QLabel;
+        fillStatus->setWordWrap(true);
+        fillStatus->setStyleSheet(
+            QString("QLabel{color:%1;font-size:11px}")
+                .arg(ux::darkChrome() ? ux::chromeMuted()
+                                      : QString(ux::kMuted)));
+        form->addRow(fillStatus);
         QObject::connect(fillBtn, &QPushButton::clicked,
-                         [this, ep, au, dt, et, tt, ac] {
-                             autoFillBib(ep, au, dt, et, tt, ac);
+                         [this, ep, au, dt, et, tt, ac, fillStatus] {
+                             autoFillBib(ep, au, dt, et, tt, ac, fillStatus);
                          });
         auto* hyBtn = new QPushButton(
             "Pair-hyphenate author (STD-002 helper — review result)");
@@ -27772,11 +27785,23 @@ public:
     }
 
     void autoFillBib(QLineEdit* ep, QLineEdit* au, QLineEdit* dt,
-                     QLineEdit* et, QLineEdit* tt, QLineEdit* ac) {
+                     QLineEdit* et, QLineEdit* tt, QLineEdit* ac,
+                     QLabel* status = nullptr) {
+        auto say = [status](const QString& m) {
+            if (status) status->setText(m);
+        };
         loadCatalogWorks();
         QRegularExpression re("^([A-Za-z]+)0*(\\d+)");
         const auto m = re.match(ac->text().trimmed());
-        if (!m.hasMatch()) return;
+        if (!m.hasMatch()) {
+            say(ac->text().trimmed().isEmpty()
+                    ? "Nothing to look up \u2014 type an ACIP number first "
+                      "(letters then digits, e.g. S0005)."
+                    : "\u201c" + ac->text().trimmed() +
+                          "\u201d is not an ACIP number this can look up. "
+                          "It expects letters then digits, e.g. S0005.");
+            return;
+        }
         const QString core =
             m.captured(1).toUpper() + m.captured(2);
         const auto w = worksDoc_[core].toObject();
@@ -27799,14 +27824,21 @@ public:
             }
         }
         if (w.isEmpty()) {
-            if (et->text().isEmpty() &&
-                catTitles.contains(core))
+            if (et->text().isEmpty() && catTitles.contains(core)) {
                 et->setText(catTitles.value(core));
-            else
-                ac->setToolTip(
-                    "no catalog record for this number");
+                say("No catalog record for " + core +
+                    ", but a published English title was found and filled in. "
+                    "Everything else is yours to enter.");
+            } else {
+                say("No catalog record for " + core +
+                    " \u2014 nothing was filled in. Check the number, or "
+                    "enter the fields by hand.");
+            }
             return;
         }
+        say("Filled from the catalog record for " + core +
+            " \u2014 review every field: wylie arrives in plain lowercase "
+            "and the house technical spelling is yours to apply.");
         (void)ep;
         auto toWylie = [](const QJsonValue& v) {
             return QString::fromStdString(
