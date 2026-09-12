@@ -250,6 +250,47 @@ int main(int argc, char** argv) {
               "boundary: nothing in the hard pool is ended by punctuation");
     }
 
+    // ---- where the blank goes (one implementation, not two) --------------
+    {
+        const std::vector<std::string> chunks = {"SEMS CAN", "[ ... ]",
+                                                 "BDE BA"};
+        // the ordinary case
+        auto r = allcore::placeBlank("SEMS CAN THAMS CAD BDE BA", chunks,
+                                     "THAMS CAD");
+        CHECK(r.ok && r.before == "SEMS CAN " && r.after == " BDE BA",
+              "blank: the segment splits either side of the answer");
+
+        // THE CASE THE TWO COPIES EXISTED FOR. A phrase that repeats earlier
+        // in the segment must not capture the blank: the search starts at the
+        // clause's own position.
+        auto rep = allcore::placeBlank(
+            "BDE BA SEMS CAN BDE BA DANG", {"SEMS CAN", "[ ... ]"}, "BDE BA");
+        CHECK(rep.ok && rep.before == "BDE BA SEMS CAN ",
+              "blank: an earlier repeat of the answer does not capture the "
+              "blank — the clause's own position wins");
+
+        // and with no clause to anchor on, the first occurrence is used
+        // rather than nothing
+        auto bare = allcore::placeBlank("BDE BA SEMS CAN", {}, "SEMS CAN");
+        CHECK(bare.ok && bare.before == "BDE BA ",
+              "blank: with no clause prefix it falls back to the first "
+              "occurrence");
+
+        // the refusal, which is the half that had drifted
+        auto no = allcore::placeBlank("SEMS CAN BDE BA", chunks, "CHOS NYID");
+        CHECK(!no.ok, "blank: an answer not in the segment is REFUSED");
+        CHECK(no.why.find("verbatim") != std::string::npos,
+              "blank: and the refusal says why, so a caller can show it or "
+              "count it rather than dropping the drill silently");
+        CHECK(no.before.empty() && no.after.empty(),
+              "blank: a refusal hands back no position at all — a blank in "
+              "the wrong place teaches the wrong sentence");
+
+        auto empty = allcore::placeBlank("", chunks, "X");
+        CHECK(!empty.ok && !empty.why.empty(),
+              "blank: an empty segment is refused with a reason");
+    }
+
     std::printf("%s (%d failures)\n",
                 failures ? "DRILLS SMOKE FAILED" : "DRILLS SMOKE OK", failures);
     return failures ? 1 : 0;

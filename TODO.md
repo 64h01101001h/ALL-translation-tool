@@ -3180,8 +3180,11 @@ by pane; every row gets SHIP / HIDE / FIX / LABEL).
       the mail tool; the digest text goes inline in the body from now on.
 - [ ] **Rotate the Anthropic API keys** pasted into chat today and earlier
       in the session (never used, never stored; exposed all the same).
-- [ ] **Release note:** the press prunes the 279 MB `tm_84000.db` cache from
-      the DMG; first Lookup of 84000 material rebuilds it (slow once).
+- [x] **Release note** — DONE 2026-09-11: `docs/RELEASE_NOTES.md`, written for
+      the person installing rather than the people who build. Re-measured
+      rather than repeated: 400,745 rows in **5.65 s** producing **279 MB**
+      from a 27 MB source. The code comment beside the rebuild claimed a
+      "590 MB FTS cache", which was never the size on disk, and is corrected.
 - [ ] **C05:167 ENGLISH_FACTUAL_ERROR** ("three types" vs `bzhi`) passed its
       reconciler, needs a skeptic pass before filing (E-120 class, for GMR).
 - [ ] **Translator questionnaire** (Adam, 2026-09-08): survey the Mixed Nuts
