@@ -8,6 +8,23 @@ Format and rules: `05_CROSS_CHECK_PROTOCOL.md`.
 
 ---
 
+## 2026-09-12 — Codex — continuation checkpoint, C05 through 183
+
+### Done and verified
+
+- Added C05:178–180 in `2f16dee` and 181–183 in `f30209b`: six source segments, 205 independently reviewed analyst spans, and six sentence anchors. C05 is now **183/511**, pages c5p1–c5p61. All source specs, review decisions, witness evidence and generation/test records are preserved.
+- Each batch passed all **16 targeted fidelity and constitution suites**, in 10.45 and 10.22 seconds. Exact review tuples, source ranges, prior links/notes/trees/evidence/index mappings and earlier CSV content/citations were checked. One previous phonetic row gains its previously empty ACIP spelling from the new cited C05:182 word; that enrichment has an exact source witness.
+- Bank: **42,340 links, 11,857 null exponents, 1,519 note blocks, 11 trees**. Evidence: **6,799 headwords / 14,646 pairs**. Since the handover at 165, the campaign has added 18 segments, 563 reviewed analyst spans and 18 sentence anchors. The master dictionary and original corpus hashes still match the earlier checkpoint; no source wording or hgm_gloss changed.
+- The semantic review tightened 182 bsdums to agreement, leaving supplied participant wording outside the span. Both proposed 183 spelling corrections were refuted: the glossary supports snying rdze/compassion, and dod has a defensible wanting sense. Driving and the unresolved rescue construction remain unpaired.
+- E-185 records MYON MONGS PA → NYON MONGS PA at 180 as LOW/PROBABLE. All five skeptical checks passed; the distinct digital reading is not claimed to be an independent publication or a checked blockprint. Its evidence now cites the exact committed witness file. The earlier two probable candidates remain provisional.
+
+### Continuation and limits
+
+- Next is **c5p62, C05:184–186**. Source/context snapshots are prepared; proposals have not started. All six new pages remain provisional machine attestations. C13 is still blocked; no additional source files are needed.
+- No new native or phone execution occurred in this continuation. The earlier native/installed-phone checkpoint remains through 171, with phone launch unverified after the locked-device refusal. Browser rendering remains unverified under the existing URL-policy block; no bypass was attempted.
+- Work remains in the isolated campaign branch; main integration has not occurred. Preserve the other session's main-checkout work and recheck its live state before integration. Bounded independent reproduction/integration evidence for this continuation is saved in the sibling `campaign-artifacts/integration/` directory.
+- The hourly heartbeat remains scheduled through 2026-09-15 at 07:00 America/Denver. Read the sibling `CAMPAIGN_CONTINUATION.md` for the exact next action. This is a checkpoint in an unfinished campaign.
+
 ## 2026-09-12 — Codex — first continuation checkpoint, C05 through 177
 
 ### Done

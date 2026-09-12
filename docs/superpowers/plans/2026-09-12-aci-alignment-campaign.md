@@ -85,3 +85,13 @@ structure, bank and export checks passed; the unchecked box is intentional.
 Task 4’s native test and signed phone install are verified through C05:171,
 but the locked device prevented launch. Main integration and further campaign
 work remain open. See the durable continuation record for current commits.
+
+## Second continuation checkpoint — 2026-09-12
+
+Accepted data now reaches C05:183 in `2f16dee` and `f30209b`. Both batches
+passed all 16 targeted suites and separate semantic reviews; 205 analyst spans
+were accepted after one overcapture correction. Two proposed spelling corrections
+were refuted, and one new LOW/PROBABLE candidate was recorded without changing
+the source. Previous data and citations are retained. Next is 184–186, with
+source snapshots only. Rendered inspection, newer native/device execution and
+main integration remain open; the earlier consumer checkpoint is still 171.
