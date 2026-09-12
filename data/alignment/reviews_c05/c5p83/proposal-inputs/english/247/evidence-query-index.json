@@ -1,0 +1,34 @@
+{
+  "initial_context": {
+    "sql": "select * from corpus_segments where course=? and seq between ? and ?",
+    "params": [
+      "C05",
+      244,
+      252
+    ],
+    "count": 9,
+    "file": "original-context-full.json"
+  },
+  "continued_context": {
+    "sql": "select * from corpus_segments where course='C05' and seq between 253 and 260",
+    "count": 8,
+    "file": "continued-context-full.json"
+  },
+  "registered_checks": {
+    "source": "originals/errata_register.json",
+    "terms": [
+      "Chandrakirti",
+      "venered",
+      "C05:247",
+      "following section",
+      "heading glued",
+      "E-107"
+    ],
+    "file": "registered-check.json"
+  },
+  "original_roles": {
+    "spine": "Original full source/context/parallel rows with raw field, SQLite URI mode=ro. C05 ACIP source of record. English never edited.",
+    "master": "Full original current v27_2 selected unified entries, including all source/tier/evidence fields. HGM gloss binding; comparative fields never provide GMR English.",
+    "course_shape": "Course metadata only; its re-ingested wording does not establish lineage."
+  }
+}

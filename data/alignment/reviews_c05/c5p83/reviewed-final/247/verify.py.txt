@@ -1,0 +1,66 @@
+import pathlib,json,hashlib,subprocess,sys,os,collections,re,html,datetime
+B=pathlib.Path(__file__).resolve().parents[2];R=B/'reconciled';W=B.parents[1]/'campaign-worktree';sys.path.insert(0,str(W/'tools'));import gen_alignment_page as G
+src={r['seq']:r for r in json.loads((R/'247/evidence/source-context-full.json').read_text())}
+def read(p):return json.loads(p.read_text())
+def dump(p,x):p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
+def ranges(s,seq):
+ sp=s['spans'];tr=G.resolve(src[seq]['wylie'],sp,'tib',seq);by={x['id']:x for x in sp};eng=G.with_members(sp,[by[i] for i in s['eng_order']],src[seq]['english']);er=G.resolve(src[seq]['english'],eng,'eng',seq)
+ return [{**x,'tib_range':list(tr[x['id']]),'eng_range':list(er[x['id']]) if x['id'] in er else None} for x in sp]
+original=read(R/'247/original-replay-proof.json')
+for seq in [247,248,249]:
+ d=R/str(seq);spec=read(d/'spec.json');s=spec['segments'][0];reason=read(d/'final-reasons.json');attempt=d/'attempts'/'01-final';assert not attempt.exists();attempt.mkdir(parents=True)
+ (attempt/'spec.json').write_bytes((d/'spec.json').read_bytes());r=subprocess.run([sys.executable,str(R/'247/canonical_ro.py')],input=(d/'spec.json').read_bytes(),capture_output=True,env={**os.environ,'PYTHONDONTWRITEBYTECODE':'1'})
+ for name,b in [('stdout.html',r.stdout),('stderr.txt',r.stderr),('exit.txt',(str(r.returncode)+'\n').encode())]:(attempt/name).write_bytes(b)
+ assert r.returncode==0,r.stderr
+ (d/'body.html').write_bytes(r.stdout);(d/'generator.stdout.html').write_bytes(r.stdout);(d/'generator.stderr.txt').write_bytes(r.stderr);(d/'generator.exit.txt').write_text(str(r.returncode)+'\n')
+ final=ranges(s,seq)
+ for x in final:
+  x['reason']=reason['reasons_by_final_id'][x['id']]
+  x['canonical_id']=f's{seq}'+x['id']
+  x['tib_exact']=src[seq]['wylie'][slice(*x['tib_range'])]==x['tib']
+  x['eng_exact']=x['eng'] is None or src[seq]['english'][slice(*x['eng_range'])]==x['eng']
+  if x['eng'] is not None:
+   hits=[];i=0
+   while True:
+    i=G.find_word(src[seq]['english'],x['eng'],i)
+    if i<0:break
+    hits.append([i,i+len(x['eng'])]);i+=1
+   x['all_english_word_ranges']=hits;x['english_occurrence']=hits.index(x['eng_range'])+1 if x['eng_range'] in hits else 'compound member'
+ dump(d/'final-ordered-tuples.json',{'range_convention':'zero-based half-open Python character offsets in original Wylie/English','tibetan_order':final,'english_flat_order':s['eng_order']})
+ dispositions=[]
+ for old in [x for x in original if x['seq']==seq]:
+  for a in old['positions']:
+   a=copydict=dict(a);a['tib_range']=list(a['tib_range']);a['eng_range']=list(a['eng_range']) if a.get('eng_range') is not None else None
+   exact=[x for x in final if all(x.get(k)==a.get(k) for k in ['d','tib','eng','tib_range','eng_range'])]
+   overlap=[x for x in final if max(x['tib_range'][0],a['tib_range'][0])<min(x['tib_range'][1],a['tib_range'][1])]
+   if exact:status='retained';chosen=exact
+   elif overlap:status='recast_or_range_changed';chosen=overlap
+   else:status='omitted';chosen=[]
+   why=' '.join(x['reason'] for x in chosen)
+   if not chosen:
+    if seq==247 and a['tib']=='snang ba':why='Third snang ba/imagine is distributed through the meditative construction, which supplies an imagining agent absent from the isolated appearance term. Retain gsal snang/visualize separately; omit rather than null.'
+    elif seq==247 and a['tib']=='mi mtshungs':why='Negative equivalence alternative is distributed in the English yes/no question. The original null would turn distributed lexical/alternative content into an absence assertion. Omit; yod med is the separate existence contrast.'
+    elif seq==248 and a['tib']=='ni':why='Topic minds differ is recast as beings have differing perceptions. Since have participates in the recast, no-separate-exponent ni is not established; omit rather than guessing a ni/have correspondence or null.'
+    elif seq==248 and a['tib']=='las':why='Citation-source las is jointly recast with later zhes in English says; the isolated ablative does not independently supply a saying event. Leave says and this las unwrapped.'
+    else:raise RuntimeError(('missing reason',seq,a))
+   if seq==247 and a['tib']=='yul' and not exact:why='Original introductory objects occurrence is replaced by final objects. The main question is where source yul sits after enumeration; the first English objects anticipates that referent. '+why
+   if seq==248 and a['tib'] in ['ji ltar','rigs rigs su'] and not exact:why='Recast both proposed partial phrases as one complete distributive phrase; rigs rigs su/class omitted each and their and is inadequate even at d3. '+why
+   dispositions.append({'angle':old['angle'],'original':a,'disposition':status,'final_ids':[x['id'] for x in chosen],'final_tuples':[{k:x[k] for k in ['id','d','tib','eng','tib_range','eng_range']} for x in chosen],'reason':why})
+ assert len(dispositions)==sum(len(x['positions']) for x in original if x['seq']==seq)
+ dump(d/'proposal-dispositions.json',dispositions)
+ # Original third snang ba range, rather than any remembered offset.
+ if seq==247:
+  omit=next(x for x in reason['omissions'] if x.get('english')=='imagine');orig=next(x for x in original if x['angle']=='english' and x['seq']==247);om=next(x for x in orig['positions'] if x['eng']=='imagine');omit['tib']='snang ba';omit['tib_range']=om['tib_range'];dump(d/'final-reasons.json',reason)
+ full={}
+ for cl,field in [('tib','wylie'),('eng','english')]:
+  block=r.stdout.decode().split(f'<div class="{cl}"><div class="lab">')[1].split('</div>\n')[1];block=re.sub(r'<span class="nul">.*?</span>','',block,flags=re.S);plain=html.unescape(re.sub('<[^>]*>','',block)).strip();full[field]=plain==src[seq][field]
+ assert all(full.values())
+ counts={'spans':len(final),'nulls':sum(x['eng'] is None for x in final),'depths':dict(collections.Counter(x['d'] for x in final)),'errata':0,'original_dispositions':len(dispositions)}
+ proof={'producer':'Codex reconciliation','canonical_command':[sys.executable,str(R/'247/canonical_ro.py')],'canonical_generator':str(W/'tools/gen_alignment_page.py'),'canonical_generator_sha256':sha(W/'tools/gen_alignment_page.py'),'canonical_builder_sha256_at_run':sha(W/'tools/build_alignment_layer.py'),'sqlite':'URI mode=ro','PYTHONDONTWRITEBYTECODE':'1','exit':r.returncode,'body_bytes':len(r.stdout),'stderr_bytes':len(r.stderr),'saved_body_equals_stdout':(d/'body.html').read_bytes()==r.stdout,'plain_source_preserved':full,'counts':counts,'spec_sha256':sha(d/'spec.json'),'body_sha256':sha(d/'body.html'),'spec_bytes':(d/'spec.json').stat().st_size,'limits':'Canonical mechanical fidelity does not establish semantic approval. Separate skeptical review required before root landing.'};dump(d/'proof.json',proof)
+ allowance=[]
+ for x in final:
+  if x['d'] in [5,7] and x['eng'] and x['eng'].split()[0].lower() in ['the','a','an','and','or','his','our','your','i','you']:
+   assert seq==249 and x['id']=='w12';allowance.append({'directory':'pages_c05','page':'c5p83','span_id':x['canonical_id'],'d':x['d'],'tib':x['tib'],'eng':x['eng'],'licensor':'la sogs pas: sogs supplies the list-closing and the like gesture, with preceding la and inseparable -s retained; HGM la sogs pa and sogs both attest and the like. No participant/article outside that gesture is included.','status':'exact proposed allowance only; allowance file untouched'})
+ dump(d/'proposed-head-allowances.json',allowance)
+ print(seq,counts,proof['spec_sha256'],proof['body_sha256'],len(r.stdout))

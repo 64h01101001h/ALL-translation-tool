@@ -1,0 +1,113 @@
+import json,pathlib
+B=pathlib.Path(__file__).resolve().parent.parent
+rows=json.loads((B/'247/original-context-full.json').read_text()); src={r['seq']:r for r in rows}
+def write(seq,title,triples,order,note,decisions):
+ s=[dict(id=f'w{i}',d=d,tib=t,eng=e,**extra) for i,(d,t,e,extra) in enumerate(triples,1)]
+ spec={'course':'C05','segments':[{'seq':seq,'title':title,'spans':s,'eng_order':[f'w{i}' for i in order],'note':'PROVISIONAL machine alignment by Codex (English-first independent proposal); unreviewed by a human. '+note}]}
+ p=B/str(seq);(p/'spec.json').write_text(json.dumps(spec,ensure_ascii=False,indent=2)+'\n');(p/'errata.json').write_text('[]\n');(p/'decisions.json').write_text(json.dumps(decisions,ensure_ascii=False,indent=2)+'\n')
+def sp(t,e,d=5,**kw):return(d,t,e,kw)
+write(247,'three appearances and their objects',[
+sp("chu 'bab klung",'stream of water'), #1
+sp('yi dvags','craving spirit'),#2
+sp('rnag','pus'),#3
+sp('blo','mind'),#4
+sp('yang','as well',6),#5
+sp('zhes','says',6),#6
+sp("mtha' dpyad pa",'analyze'),#7
+sp('chu klung','river of water'),#8
+sp('rnag khrag','pus and blood'),#9
+sp('snang ba','looks like'),#10
+sp('yi dvags','craving spirit'),#11
+sp('mig shes','visual consciousness'),#12
+sp('bse ru','porcelain basin'),#13
+sp('skra shad','hair'),#14
+sp("'dzag",'fallen'),#15
+sp('snang ba','looks like'),#16
+sp('rab rib','cataract'),#17
+sp('mig shes','visual consciousness'),#18
+sp('sa gzhi','surface of the earth'),#19
+sp('keng rus','bones of corpses'),#20
+sp('kyis','with',6),#21
+sp('khyab','covered'),#22
+sp('snang ba','imagine'),#23
+sp('keng rus','skeletons'),#24
+sp('gsal snang','visualize'),#25
+sp("ting nge 'dzin",'meditation'),#26
+sp('yul','objects'),#27
+sp('yod med',"exists or doesn't exist",3),#28
+sp('rnam pa kun du','completely',3),#29
+sp('mtshungs','equivalent'),#30
+sp('mi mtshungs',None,3,nul='The negative alternative has no separate exponent: GMR asks only the positive English question Are ... equivalent?'),#31
+],[7,6,4,2,5,1,3,12,11,8,10,9,18,17,13,16,14,15,26,25,24,23,19,22,21,20,27,29,30,28],
+'Quotation, bibliographic brackets and full source are preserved verbatim. The two visual-consciousness and craving-spirit occurrences resolve in source order; skeleton/bone nouns cross and eng_order specifies that reversal. The single yul is linked to final objects, its earlier anticipatory English occurrence remains unwrapped. The negative alternative mi mtshungs has no separate English exponent in the positive question. See decisions.json for distributed omissions and the unresolved bracketed attribution discrepancy.',{
+'angle':'English-first','lexical_basis':'Original master entries and full spine lexical rows are preserved in 247; glossary supports basin, cataract, hair, visualize and both skeleton expressions. mtha\' dpyad is auto-aligned provisional, independently supported by this source clause.',
+'contentious':[
+{'span':'w1','decision':'KEEP d5 chu \'bab klung as nominal river/stream compound; English stream of water, excluding supplied a and which sees.'},
+{'span':'w13','decision':'KEEP only porcelain basin; clean white is supplied descriptive expansion, with no separate selected Tibetan exponent.'},
+{'span':'w19','decision':'KEEP surface of the earth as sa gzhi nominal expression; entire is the English expansion of coverage context, not independently assigned.'},
+{'span':'w23','decision':'KEEP snang ba→imagine as local active recast of appearing; gsal snang separately owns visualize. Challenge this local verb recast first.'},
+{'span':'w28','decision':'KEEP positive/negative existential contrast as complete d3 phrase exists or doesn\'t exist; avoid false med→negation-only atom.'},
+{'span':'w31','decision':'NULL affirmative no-separate-exponent judgment: mi mtshungs is the unspoken negative branch of Tibetan equivalent-or-not question.'}],
+'positions':'w2/w11 craving spirit correspond to quote and first visual-consciousness example. w12/w18 visual consciousness correspond to spirit and cataract. w10/w16 looks like correspond to water and basin. w20 first Tibetan keng rus→later bones of corpses; w24 second→earlier skeletons. w27 yul→second/final objects, anchored after bones; first objects is anticipatory repetition.',
+'omissions':'sogs/skabs su and zhe na are distributed framing; nang du is reflected in into it but its English includes supplied it, so omitted. can constructions person with / where you are distributed, omitted. dang bcas pa rnams is distributed across enumeration and states of mind, omitted. der and de dang are distributed anaphoric framing. Unlisted genitives/conjunctions have no independently proposed atom; no unresolved item is falsely nulled.',
+'errata':'No new erratum. Exact bracket [from Entering the Middle Way, by Master Chandrakirti (650 AD)] contrasts with C05:306 [Master Dharmakirti\'s] for the shared short quotation. Parallel identity alone cannot settle attribution; no corrected source title or author asserted. C15:393/C16:823/C18:1116 share full text fields; no independent-publication or ingestion-lineage claim.'})
+write(248,'the quoted passage and commentator',[
+sp('de la','In reply',3),#1
+sp('lung','passage'),#2
+sp("'god pa",'set forth'),#3
+sp('dang','and',6),#4
+sp('lung','passage'),#5
+sp('bshad pa','explicate'),#6
+sp('dang po','first'),#7
+sp('theg bsdus','Abbreviation of the Greater Way'),#8
+sp('las','says',6),#9
+sp('yi dvags','craving spirits'),#10
+sp("dud 'gro",'animals'),#11
+sp('mi','Humans'),#12
+sp('dang','and',6),#13
+sp('lha','pleasure beings'),#14
+sp('ji ltar','according To',3),#15
+sp('rigs rigs su','class',3),#16
+sp('dngos','thing'),#17
+sp('gcig','single'),#18
+sp('yid','perceptions'),#19
+sp('tha dad','differing'),#20
+sp('phyir','Insofar as',6),#21
+sp('don ma grub par','has no reality',3),#22
+sp("'dod pa",'say'),#23
+sp('dge bsnyen','layman with lifetime vows'),#24
+sp('btsun pa','venered'),#25
+sp('ngo bo nyid med pas','Asvabhava'),#26
+],[1,3,2,4,6,5,7,8,9,21,10,11,12,13,14,15,16,20,19,18,17,23,22,26,25,24],
+'The title and personal name are whole nominal units. GMR’s venered is preserved and supported by the current HGM glossary and repeated corpus usage. don ma grub par is aligned as a complete negative predicate, excluding supplied it. The first dang po resolves to Here is the first., after both introductory passage occurrences. Distributed commentary/authorship wording remains unwrapped; see decisions.json.',{
+'angle':'English-first','contentious':[
+{'span':'w7','decision':'dang po owns second English first (Here is the first.), not introductory first supplied to expand gnyis; eng_order anchors it after second passage.'},
+{'span':'w16','decision':'KEEP d3 rigs rigs su→class as minimal head correspondence; each/their distributive relation is not separately atomized. Repetition and case do not make a dictionary compound here. Challenge adequacy of this minimal phrase first.'},
+{'span':'w22','decision':'KEEP d3 whole don ma grub par→has no reality, a predicate recast. Exclude supplied it, and do not equate grub alone with has or ma alone with the entire negative-existence phrase.'},
+{'span':'w26','decision':'KEEP whole ngo bo nyid med pas→Asvabhava, a personal-name use established by local authorship and cited parallel rows. Final instrumental -s cannot be detached; no dictionary gloss Asvabhava is composed.'}],
+'omissions':'bshad bya\'i relevant is an interpretive relation to material to explain, omitted. gnyis is distributed first/then enumeration, omitted rather than null. don in lung gi don bshad pa is fused/distributed into explicate rather than separate meaning noun; omitted. rnams and ni not claimed. each and their in distributive phrase remain unwrapped. bshad sbyar and mdzad pa jointly give explained/authorship but discontinuous source makes separate lexical ownership uncertain, so omitted, not null. Passage after explained is anaphoric expansion, unwrapped.',
+'errata':'Empty. venered occurs in 13 corpus rows and is current btsun pa HGM glossary wording; no typo established. C16:824 matches C05 ACIP/Wylie/English; C15:394/C18:1117 use explain/holy and include a following English paragraph not present in their Tibetan row. P5:123 differs in Tibetan punctuation/spelling. No ingestion-lineage or independent-publication inference. No 1500-character cap or glued heading here.'})
+write(249,'karma and the appearance of a stream',[
+sp('chu klung','stream of water'),#1
+sp('dngos po','thing'),#2
+sp('gcig','single'),#3
+sp('rang rang','each one'),#4
+sp('las','karma'),#5
+sp('rnam smin','ripening'),#6
+sp('dbang','forces'),#7
+sp('yi dvags','craving spirit'),#8
+sp('kyis',None,6,cls='case',nul='Agentive marks the craving spirit as subject of sees; English active subject position has no separate word for this case marker.'),#9
+sp('rnag khrag','pus and blood'),#10
+sp('la sogs pas','and the like',3),#11
+sp('gang','full'),#12
+sp('mthong ba','sees'),#13
+sp('dang',None,6,nul='List continues with the animal in the next source row; this English row ends with a period and has no separate exponent for final dang.'),#14
+],[3,2,1,4,6,5,7,8,13,12,10,11],
+'Karmic ripening forces each appearance in this quotation; no independent truth-status claim is added. The single mthong ba is linked once to sees after craving spirit; English look, sees what and to see are explanatory repetitions. Final dang continues the examples in the next row and has no separate English exponent here. Source text and its repeated river remain verbatim.',{
+'angle':'English-first','contentious':[
+{'span':'w4','decision':'KEEP rang rang→each one; his particular further distributes the same relation but is not separately banked.'},
+{'span':'w7','decision':'KEEP dbang→forces; current HGM glossary supports forces and local karmic agency confirms it; gis unclaimed.'},
+{'span':'w13','decision':'KEEP mthong ba→second exact sees after craving spirit, pinned by eng_order. Earlier sees what, look and to see are distributed explanatory repetitions, not additional Tibetan occurrences.'}],
+'omissions':'Genitives and locative la are distributed through English relation words; no independent uncertain pairing. English river repeats chu klung, banked only at stream of water. his particular and him stay unwrapped; no participants/auxiliaries added to spans.',
+'nulls':'kyis has grammatical agency through subject placement but no separate lexical exponent. Final dang has no exponent within this English row; animal continuation is C05:250.',
+'errata':'Empty. C16:825 shares ACIP/Wylie/English with C05:249; P5:124 parallels the paragraph with orthographic differences. C15:394/C18:1117 contain this English as a following paragraph, supporting only that quoted extent; no inference about ingestion lineage or independence. No source correction.'})

@@ -1,0 +1,54 @@
+import pathlib,json,hashlib,shutil,difflib,datetime
+R=pathlib.Path(__file__).resolve().parents[1]
+def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
+def read(p):return json.loads(p.read_text())
+def dump(p,x):p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+def tuple_content(p):
+ o=read(p)
+ for x in o['tibetan_order']:x.pop('reason',None)
+ return o
+def disposition_content(p):
+ o=read(p)
+ for x in o:x.pop('reason',None)
+ return o
+unchanged_names=['spec.json','body.html','errata.json','generator.stdout.html','generator.stderr.txt','generator.exit.txt','proof.json','proposed-head-allowances.json']
+before={str(seq):{name:{'sha256':sha(R/str(seq)/name),'bytes':(R/str(seq)/name).stat().st_size} for name in unchanged_names} for seq in [247,248,249]}
+tuples_before={seq:tuple_content(R/str(seq)/'final-ordered-tuples.json') for seq in [247,248,249]}
+dispositions_before={seq:disposition_content(R/str(seq)/'proposal-dispositions.json') for seq in [247,248,249]}
+changes={247:['final-reasons.json','final-ordered-tuples.json','proposal-dispositions.json'],248:['final-reasons.json']}
+all_changed=[]
+for seq,names in changes.items():
+ d=R/str(seq);v=d/'versions/02-root-evidence-correction';assert not v.exists();v.mkdir(parents=True)
+ for name in names+['report.md','freeze-manifest.json']:shutil.copyfile(d/name,v/name)
+ if seq==247:
+  replacements={'Established analytical verb; HGM mtha dpyad glossary supports analyze.':"Established analytical verb; HGM mtha' dpyad glossary supports analyze.",'Passive auxiliary is and with remain unwrapped.':'Passive auxiliary is remains unwrapped; with is separately paired to kyis as p32.'}
+  for name in names:
+   p=d/name;t=p.read_text()
+   for old,new in replacements.items():assert old in t;t=t.replace(old,new)
+   p.write_text(t)
+ else:
+  p=d/'final-reasons.json';o=read(p);assert o['reasons_by_final_id'].pop('p16')=='Topic marker has no separate English exponent.';dump(p,o)
+ # Only explanatory metadata changes. Confirm all final reason ids are now current.
+ finalids={x['id'] for x in read(d/'spec.json')['segments'][0]['spans']}
+ assert set(read(d/'final-reasons.json')['reasons_by_final_id'])==finalids
+ report=d/'report.md';t=report.read_text();t+='Root evidence-record correction: '+("Current w6 reasons now spell mtha' dpyad with its source apostrophe. Current w23 reasons distinguish unwrapped is from with, independently paired as p32. All repeated current reason fields were updated." if seq==247 else 'Removed stale p16/ni from reasons_by_final_id; ni remains omitted with its existing reason, and all original proposals/dispositions remain preserved.')+' Prior affected files and freeze survive in versions/02-root-evidence-correction/. Exact scoped diff is root-evidence-correction.diff. Specs, bodies, ordered tuples/ranges and semantic dispositions are unchanged; no generator rerun was needed.\n';report.write_text(t)
+ diffs=[]
+ for name in names+['report.md']:
+  diffs.extend(difflib.unified_diff((v/name).read_text().splitlines(keepends=True),(d/name).read_text().splitlines(keepends=True),fromfile='before/'+name,tofile='after/'+name))
+ (d/'root-evidence-correction.diff').write_text(''.join(diffs))
+ changed=[{'path':str(d/name),'before_sha256':sha(v/name),'after_sha256':sha(d/name)} for name in names+['report.md']]
+ all_changed.extend(changed)
+ dump(d/'root-evidence-correction.json',{'producer':'Codex reconciliation','request':'Root evidence-record consistency corrections only','changed_files':changed,'previous_freeze_sha256':sha(v/'freeze-manifest.json'),'diff_sha256':sha(d/'root-evidence-correction.diff'),'no_generator_rerun':'All canonical inputs and outputs are unchanged; only evidence reasons/report changed.'})
+for seq in [247,248,249]:
+ assert tuple_content(R/str(seq)/'final-ordered-tuples.json')==tuples_before[seq]
+ assert disposition_content(R/str(seq)/'proposal-dispositions.json')==dispositions_before[seq]
+for seq,files in before.items():
+ for name,m in files.items():assert sha(R/seq/name)==m['sha256']
+proof={'producer':'Codex reconciliation','canonical_inputs_outputs_unchanged':before,'all_3_final_ordered_tuple_objects_unchanged_except_reason':True,'all_141_original_span_dispositions_unchanged_except_reason':True,'retained_omitted_null_and_errata_decisions_unchanged':True,'no_generator_rerun':True,'changed_current_evidence_and_reports':all_changed,'prior_versions':'247 and 248 versions/02-root-evidence-correction preserve exact old affected files, reports and freezes','scope':'Correct 247 w6 apostrophe and w23 is/with explanatory reasons; remove stale omitted 248 p16 from current final-id reason map.'}
+dump(R/'247/root-evidence-unchanged-input-proof.json',proof)
+for seq in [247,248]:
+ d=R/str(seq)
+ dump(d/'freeze-manifest.json',{'producer':'Codex reconciliation','frozen_at_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'status':'Reconciled final after root evidence-record corrections; separate skeptical semantic review required before landing','supersedes':'versions/02-root-evidence-correction/freeze-manifest.json','files':{str(p.relative_to(d)):{'bytes':p.stat().st_size,'sha256':sha(p)} for p in sorted(d.rglob('*')) if p.is_file() and p!=d/'freeze-manifest.json'}})
+for seq in [247,248,249]:
+ d=R/str(seq);m=read(d/'freeze-manifest.json');assert all(sha(d/n)==x['sha256'] for n,x in m['files'].items());print(seq,'freeze',sha(d/'freeze-manifest.json'))
+print(json.dumps(proof,indent=2))

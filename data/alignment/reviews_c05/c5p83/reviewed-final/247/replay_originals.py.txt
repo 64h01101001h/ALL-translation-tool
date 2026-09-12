@@ -1,0 +1,16 @@
+import pathlib,subprocess,os,json,hashlib,sys
+B=pathlib.Path(__file__).resolve().parents[2];R=B/'reconciled';W=B.parents[1]/'campaign-worktree';sys.path.insert(0,str(W/'tools'));import gen_alignment_page as G
+src={r['seq']:r for r in json.loads((R/'247/evidence/source-context-full.json').read_text())}
+def sha(b):return hashlib.sha256(b).hexdigest()
+def positions(spec,seq):
+ s=spec['segments'][0];sp=s['spans'];tr=G.resolve(src[seq]['wylie'],sp,'tib',seq);by={x['id']:x for x in sp};er=G.resolve(src[seq]['english'],G.with_members(sp,[by[i] for i in s['eng_order']],src[seq]['english']),'eng',seq)
+ return [{**x,'tib_range':tr[x['id']],'eng_range':er.get(x['id'])} for x in sp]
+proof=[]
+for angle in ['tibetan','english']:
+ for seq in [247,248,249]:
+  p=B/angle/str(seq);d=R/str(seq)/'original-replay'/angle;d.mkdir(parents=True,exist_ok=True)
+  r=subprocess.run([sys.executable,str(R/'247/canonical_ro.py')],input=(p/'spec.json').read_bytes(),capture_output=True,env={**os.environ,'PYTHONDONTWRITEBYTECODE':'1'})
+  (d/'stdout.html').write_bytes(r.stdout);(d/'stderr.txt').write_bytes(r.stderr);(d/'exit.txt').write_text(str(r.returncode)+'\n')
+  z={'angle':angle,'seq':seq,'exit':r.returncode,'body_bytes':len(r.stdout),'stderr_bytes':len(r.stderr),'body_sha256':sha(r.stdout),'spec_sha256':sha((p/'spec.json').read_bytes()),'matches_original_body':r.stdout==(p/'body.html').read_bytes(),'positions':positions(json.loads((p/'spec.json').read_text()),seq)}
+  (d/'proof.json').write_text(json.dumps(z,indent=2)+'\n');proof.append(z);assert r.returncode==0 and z['matches_original_body']
+(R/'247/original-replay-proof.json').write_text(json.dumps(proof,indent=2)+'\n');print([(z['angle'],z['seq'],z['exit'],len(z['positions'])) for z in proof])

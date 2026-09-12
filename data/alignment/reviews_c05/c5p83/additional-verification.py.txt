@@ -1,0 +1,36 @@
+from pathlib import Path
+import json,subprocess,sys,os,hashlib,re
+R=Path(__file__).resolve().parent; B=R.parent;W=B.parents[1]/'campaign-worktree'
+def dump(p,o):p.parent.mkdir(parents=True,exist_ok=True);p.write_text(json.dumps(o,ensure_ascii=False,indent=2)+'\n')
+def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
+sys.path.insert(0,str(W/'tools'));import gen_alignment_page as G
+source={x['seq']:x for x in json.loads((R/'independent-evidence/original-source-context-full.json').read_text())};proof=[]
+for angle in ['tibetan','english']:
+ for seq in [247,248,249]:
+  p=B/angle/str(seq);d=R/'original-canonical-replay'/angle/str(seq);d.mkdir(parents=True,exist_ok=True);sp=json.loads((p/'spec.json').read_text())['segments'][0];rs=subprocess.run([sys.executable,str(R/'canonical-readonly.py.txt')],input=(p/'spec.json').read_bytes(),capture_output=True,cwd=W,env={**os.environ,'PYTHONDONTWRITEBYTECODE':'1'});assert rs.returncode==0 and rs.stdout==(p/'body.html').read_bytes();(d/'stdout.html').write_bytes(rs.stdout);(d/'stderr.txt').write_bytes(rs.stderr);(d/'exit.txt').write_text(str(rs.returncode)+'\n')
+  spans=sp['spans'];by={x['id']:x for x in spans};tr=G.resolve(source[seq]['wylie'],spans,'tib',seq);er=G.resolve(source[seq]['english'],G.with_members(spans,[by[i] for i in sp['eng_order']],source[seq]['english']),'eng',seq);disps=json.loads((B/'reconciled'/str(seq)/'proposal-dispositions.json').read_text())
+  for x in spans:
+   found=next(z['original'] for z in disps if z['angle']==angle and z['original']['id']==x['id']);assert all(found[k]==v for k,v in x.items());assert found['tib_range']==list(tr[x['id']]);assert found['eng_range']==(list(er[x['id']]) if x['eng'] is not None else None)
+  proof.append({'angle':angle,'seq':seq,'exit':rs.returncode,'spans':len(spans),'body_bytes':len(rs.stdout),'body_equals_saved':True,'all_original_fields_and_ranges_match_dispositions':True})
+dump(R/'original-canonical-replay/proof.json',proof)
+# Re-check every package file/hash reference and every final reason ID.
+packages=[]
+for fn,label in [('semantic-input-review-package.txt','PACKAGE INPUT HASHES'),('semantic-structured-evidence-supplement.txt','EXACT INPUT HASHES')]:
+ text=(B/fn).read_text();recs=json.loads(text.split('===== '+label+' =====')[1]);
+ for x in recs:assert sha(B/x['path'])==x['sha256'] and (B/x['path']).stat().st_size==x['bytes']
+ packages.append({'file':fn,'sha256':sha(B/fn),'bytes':(B/fn).stat().st_size,'references_verified':len(recs)})
+dump(R/'package-reference-verification.json',packages)
+regpath=B/'reconciled/247/evidence/errata_register.json'; register=json.loads(regpath.read_text()); items=register if isinstance(register,list) else register.get('items',register.get('entries',[]))
+assert isinstance(items,list) and items
+terms=['Chandrakirti','venered','C05:247','C05:248','C05:249'];results=[{'term':t,'matches':[x for x in items if t.casefold() in json.dumps(x,ensure_ascii=False).casefold()]} for t in terms];classes=[x for x in items if x.get('item_id') in ['E-044','E-071','E-076','E-121','E-111','E-107']];dump(R/'independent-evidence/register-review.json',{'source':str(regpath),'sha256':sha(regpath),'searches':results,'registered_classes':classes,'no_target_row_or_suspicion_duplicate':all(not x['matches'] for x in results)})
+for seq in [247,248,249]:
+ p=B/'reconciled'/str(seq); sp=json.loads((p/'spec.json').read_text())['segments'][0];rs=json.loads((p/'final-reasons.json').read_text());assert set(rs['reasons_by_final_id'])=={x['id'] for x in sp['spans']}
+# Complete physical witnesses: check full quoted fields, recording failures honestly rather than inferring lineage.
+queries=json.loads((R/'independent-evidence/queries-replayed-full.json').read_text());rows={ (x['course'],x['seq']):x for q in queries for x in q['rows']}; physical=[]
+for course,seqs in [('C15',[393,394]),('C16',[823,824,825]),('C18',[1116,1117])]:
+ norm=b' '.join((R/'independent-evidence'/f'{course}ReadingASCII.txt').read_bytes().split())
+ for seq in seqs:
+  for field in ['english','acip']:
+   value=b' '.join(rows[(course,seq)][field].encode('ascii').split());physical.append({'course':course,'seq':seq,'field':field,'complete_field_found':value in norm,'offset':norm.find(value)})
+dump(R/'independent-evidence/physical-parallel-verification.json',physical)
+print(json.dumps({'original_replays':proof,'package_references':packages,'register_searches':[(x['term'],len(x['matches'])) for x in results],'physical_field_matches':sum(x['complete_field_found'] for x in physical),'physical_fields':len(physical)}))

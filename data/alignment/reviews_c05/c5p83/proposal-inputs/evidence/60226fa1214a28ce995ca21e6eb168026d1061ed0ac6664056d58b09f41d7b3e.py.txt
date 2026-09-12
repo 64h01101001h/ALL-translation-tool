@@ -1,0 +1,10 @@
+"""Run the unchanged canonical file; force sqlite connections through URI mode=ro."""
+import pathlib,sqlite3,runpy,sys
+canonical=pathlib.Path(__file__).resolve().parents[4]/'campaign-worktree/tools/gen_alignment_page.py'
+original_connect=sqlite3.connect
+def connect_ro(database,*args,**kwargs):
+ p=pathlib.Path(database).resolve(); kwargs['uri']=True
+ return original_connect(p.as_uri()+'?mode=ro',*args,**kwargs)
+sqlite3.connect=connect_ro
+sys.argv=[str(canonical)]
+runpy.run_path(str(canonical),run_name='__main__')

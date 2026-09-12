@@ -1,0 +1,108 @@
+import json,pathlib,re
+P=pathlib.Path(__file__).resolve().parent; B=P.parent
+rows={r['seq']:r for r in json.loads((P/'evidence/original-spine-context.json').read_text())}
+def build(seq,title,defs,note,omissions):
+ spans=[]; anchors=[]; tc=0; parent=None
+ for i,(d,t,e,why,*option) in enumerate(defs,1):
+  opts=option[0] if option else {}; sid=('m' if d==7 else 'p' if d==6 else 'w')+str(i)
+  s={'id':sid,'d':d,'tib':t,'eng':e}; s.update({k:v for k,v in opts.items() if k in ['subword','cls','nul']})
+  if e is None: s.update(cls=opts.get('cls','grammar'),nul=why)
+  spans.append(s)
+  start=rows[seq]['wylie'].index(t,parent[0] if d==7 else tc)
+  if d!=7: tc=start+len(t)
+  if d==5: parent=(start,tc)
+  if e is not None:
+   hits=[m.start() for m in re.finditer(re.escape(e),rows[seq]['english']) if (m.start()==0 or not rows[seq]['english'][m.start()-1].isalnum() or not e[0].isalnum()) and (m.end()==len(rows[seq]['english']) or not rows[seq]['english'][m.end()].isalnum() or not e[-1].isalnum())]
+   ep=hits[opts.get('occ',1)-1]
+  else: hits=[];ep=None
+  anchors.append({'id':sid,'tib_range':[start,start+len(t)],'english_range':None if e is None else [ep,ep+len(e)],'english_occurrence':None if e is None else opts.get('occ',1),'english_exact_whole_word_count':len(hits),'decision':why})
+ order=[a['id'] for a in sorted(anchors,key=lambda a:-1 if a['english_range'] is None else a['english_range'][0]) if a['english_range'] is not None and next(s['d'] for s in spans if s['id']==a['id'])!=7]
+ obj={'course':'C05','segments':[{'seq':seq,'title':title,'spans':spans,'eng_order':order,'note':note}]}
+ out=B/str(seq); (out/'spec.json').write_text(json.dumps(obj,ensure_ascii=False,indent=2)+'\n'); (out/'errata.json').write_text('[]\n')
+ (out/'decisions.json').write_text(json.dumps({'producer':'Codex, Tibetan-first independent proposal','source':str(P/'evidence/original-spine-context.json'),'spans':anchors,'omissions':omissions,'errata_decisions':([] if seq==249 else ['No new erratum. All exact source fields retained.','247: bse ru porcelain basin supported by original HGM glossary; Hopkins rhinoceros is comparison only, not reason to correct the source.' if seq==247 else '248: venered is source wording, present in HGM gloss for btsun pa and 13 corpus rows. C16:824 and P5:123 share English; C15:394 and C18:1117 instead read holy and append 249 English. Textual identity establishes neither independent publication nor ingestion lineage.'])},ensure_ascii=False,indent=2)+'\n')
+build(247,'three perceptual examples',[
+(5,"chu 'bab klung",'stream of water','Quoted verse compound; no supplied article.'),
+(5,'yi dvags','craving spirit','First occurrence belongs to the verse.',{'occ':1}),
+(5,'rnag','pus','First occurrence belongs to the verse.',{'occ':1}),
+(5,'blo','mind','Verse mind, not supplied states of mind.',{'occ':1}),
+(6,'yang','as well','Additive particle.'),
+(5,"mtha' dpyad pa",'analyze','Established analytical verb; HGM mtha dpyad glossary supports analyze.'),
+(5,'chu klung','river of water','Prose river distinct from verse stream.'),
+(5,'rnag khrag','pus and blood','Established coordinated substance compound; conjunction licensed internally.'),
+(7,'rnag','pus','Unique pus member inside compound.',{'occ':2}),
+(7,'khrag','blood','Unique blood member inside compound.'),
+(5,'snang','looks like','First prose appearance.',{'occ':1}),
+(5,'yi dvags','craving spirit','Second occurrence is the prose perceiver.',{'occ':2}),
+(5,'mig shes','visual consciousness','First visual consciousness, the spirit.',{'occ':1}),
+(5,'bse ru','porcelain basin','HGM corpus and current glossary support porcelain basin; clean white remains supplied.'),
+(5,'skra shad','hair','Established compound, glossary hair.'),
+(5,"'dzag",'fallen','Finite auxiliary has stays unwrapped.'),
+(5,'snang','looks like','Second appearance; cataract example.',{'occ':2}),
+(5,'rab rib can','person with a kind of cataract','Established bearer compound; exact current HGM gloss, not merely rab rib.'),
+(7,'rab rib','cataract','Unique lexical member within the bearer compound.'),
+(5,'mig shes','visual consciousness','Second visual consciousness belongs to cataract example.',{'occ':2}),
+(5,'sa gzhi','surface of the earth','Established earth/ground compound; entire stays unwrapped.'),
+(5,'keng rus','bones of corpses','First Tibetan skeleton compound occurs later in English than second Tibetan occurrence.'),
+(5,'khyab','covered','Passive auxiliary is and with remain unwrapped.'),
+(5,'keng rus','skeletons','Second Tibetan occurrence specifies meditation subject; English precedes bones of corpses.'),
+(5,'gsal snang','visualize','HGM lexical equivalent; English supplied you excluded.'),
+(5,"ting nge 'dzin",'meditation','Meditative concentration term.'),
+(5,'yul','objects','First objects in question introduction, not resumed all these objects.',{'occ':1}),
+(3,'yod med',"exists or doesn't exist",'Complete existence/nonexistence phrase; no false negative atom.'),
+(3,'rnam pa kun du','completely','Complete adverbial phrase, not a dictionary compound.'),
+(5,'mtshungs','equivalent','First Tibetan alternative; second negative alternative is collapsed in English yes/no question.')
+],"PROVISIONAL machine alignment by Codex (Tibetan-first independent proposal); no semantic approval implied. The verse and each of the three examples remain distinct. The two keng rus occurrences cross in English: first = bones of corpses; second = skeletons. bse ru = porcelain basin and rab rib can = person with a kind of cataract follow this source and current HGM lexical evidence; clean white is supplied. yod med and rnam pa kun du are phrase alignments. Omitted: distributed quotation/question framing, interior-location recast, the third snang ba'i visualization frame, and the collapsed second mi mtshungs alternative; omission is not a null judgment. Full original source text is retained.",[
+{'tib':'la; zhes sogs kyi skabs su; la','reason':'Quotation and introductory frame distributed across Here, statement, where it says, etc.; no forced lexical mapping.'},
+{'tib':"bse ru'i nang du",'reason':'bse ru retained; interior relation distributed into English fallen into it. The pronoun it is supplied; nang/du not separately claimed.'},
+{'tib':"sa gzhi ... snang ba'i",'reason':'sa gzhi, keng rus and khyab retained; third snang expression is recast as you imagine, not made equivalent to an isolated appearance verb.'},
+{'tib':'can; dang bcas pa rnams kyi; de dang; der; sam mi mtshungs; zhe na','reason':'Possession, collective frame and question alternatives are reorganized. Uncertain/distributed correspondence omitted rather than null.'},
+{'english':'bracketed author/work/date attribution; which sees; clean white; entire; states of mind; all these objects','reason':'Supplied attribution, explanatory expansions, or resumed referents remain unwrapped.'}])
+build(248,'scriptural passage and commentator',[
+(5,'lung','passage','First passage in introductory citation frame.',{'occ':1}),
+(5,"'god pa",'set forth','Citation/presentation verb.'),
+(5,'lung','passage','Second passage, object of explicate.',{'occ':2}),
+(5,'bshad pa','explicate','Explaining verb with don meaning folded into English verb.'),
+(5,'dang po','first','Here is the first; earlier first is supplied expansion of two-part outline.',{'occ':2}),
+(5,'theg bsdus','Abbreviation of the Greater Way','Conventional abbreviated title; initial The unwrapped.'),
+(5,'yi dvags','craving spirits','Verse beings.'),
+(5,"dud 'gro",'animals','Verse beings.'),
+(5,'mi','Humans','Capitalization is verse lineation.'),
+(6,'dang','and','Conjoins verse being list, English after Humans.',{'occ':2}),
+(5,'lha','pleasure beings','HGM rendering of gods.'),
+(3,'ji ltar rigs rigs su','each according To their class','Full distributive manner phrase; not a d5 compound.'),
+(5,'dngos','thing','Single object under different perceptions.'),
+(5,'gcig','single','Numerical unity.'),
+(5,'yid','perceptions','Mind rendered perceptions in this verse.'),
+(6,'ni',None,'Topic marker has no separate English exponent.'),
+(5,'tha dad','differing','Established difference compound.'),
+(6,'phyir','Insofar as','Causal qualification displaced to the beginning of the verse.'),
+(3,'don ma grub par','no reality','Complete unreality phrase; supplied has remains outside, no promotion of grub to reality.'),
+(5,"'dod pa",'say','Assertive acceptance rendered say; supplied we unwrapped.'),
+(6,'yin',None,'Copula has no separate English exponent following we say.'),
+(5,'bshad sbyar','explained','HGM explained; commentary noun recast verbally in English.'),
+(5,'dge bsnyen','layman with lifetime vows','Established vow-holder term; exact current HGM equivalent.'),
+(5,'btsun pa','venered','Source spelling retained; current glossary and corpus attest venered.'),
+(5,'ngo bo nyid med pas','Asvabhava','Proper name ngo bo nyid med pa with inseparable agentive -s retained; no sound-spelling members.')
+],"PROVISIONAL machine alignment by Codex (Tibetan-first independent proposal); no semantic approval implied. The first part is an outline, followed by a verse and introduction of its commentator. ji ltar rigs rigs su and don ma grub par are complete phrase alignments. The repeated first and passage occurrences are explicitly ordered. The proper name ngo bo nyid med pas retains its inseparable agentive -s. Source venered is retained and supported by current HGM btsun pa evidence; no correction is proposed. Unresolved outline, reference and authorship framing is omitted rather than nulled. ni and yin have no separate English exponents here.",[
+{'tib':"de la bshad bya'i; dang; gi don; gnyis; la; las; rnams; zhes dang; de'i; mdzad pa las",'reason':'Outline count two becomes first/then; relevant, source/quotation and authorship wording are distributed. Inseparable agentive retained in proper name. No uncertain nulls.'},
+{'english':'In reply we will first; relevant; and then we will; Here is the; The text called The; has; we; His words include the following','reason':'Supplied outline/quotation frame, participants and auxiliaries remain unwrapped; bshad sbyar maps only explained.'}])
+build(249,'karma and a craving spirit',[
+(5,'chu klung','stream of water','Original water-course object; later river is English repetition.'),
+(5,'dngos po','thing','Nominal object, article excluded.'),
+(5,'gcig','single','Unity of object.'),
+(5,'rang rang','each one','Distributive compound; later particular is explanatory repetition.'),
+(5,'las','karma','Karma, personal pronoun unwrapped.'),
+(5,'rnam smin','ripening','Karmic fruition; exact HGM glossary.'),
+(5,'dbang','forces','Nominal power recast verbally; HGM forces supported. him to see remains unwrapped.'),
+(5,'yi dvags','craving spirit','Actual perceiver; article excluded.'),
+(5,'rnag khrag','pus and blood','Substance compound; internally licensed conjunction.'),
+(7,'rnag','pus','Unique tighter substance member.'),
+(7,'khrag','blood','Unique tighter substance member.'),
+(5,'la sogs pas','and the like','Established closing gesture, inseparable -s retained. Hinge head licensed by sogs.'),
+(5,'gang','full','Fullness predicate; of belongs to English frame.'),
+(5,'mthong ba','sees','Second sees is concrete spirit perception, following craving spirit.',{'occ':2}),
+(6,'dang',None,'Concluding coordination to the next being has no separate English exponent within this row.')
+],"PROVISIONAL machine alignment by Codex (Tibetan-first independent proposal); no semantic approval implied. This is the beginning of the quoted explanation, continued by the animal/human/god examples in following rows. rang rang maps to each one, rnam smin to ripening and dbang to forces. mthong ba is banked once at the second sees, the concrete craving-spirit predicate; the English opening and later river reprise are supplied expansions. la sogs pas owns only and the like, with inseparable agentive -s intact; its hinge is licensed by sogs. The final dang has no separate English exponent in this row.",[
+{'tib':'gi; la; gi; kyi; gyi; gis; kyis; bar','reason':'Routine case and predicate particles omitted; grammatical relationships remain visible in full source.'},
+{'english':'When they look at; first sees; what; his particular; him to see; the river','reason':'Expanded introductory perception, participants, and repeated object retained verbatim but not falsely assigned extra Tibetan occurrences.'}])
+print('Wrote independent drafts')

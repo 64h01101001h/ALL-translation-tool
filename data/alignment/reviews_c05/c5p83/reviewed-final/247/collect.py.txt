@@ -1,0 +1,36 @@
+import pathlib,json,gzip,sqlite3,hashlib,shutil,os,subprocess
+B=pathlib.Path(__file__).resolve().parents[2];R=B/'reconciled';W=B.parents[1]/'campaign-worktree';D=R/'247';E=D/'evidence';E.mkdir(exist_ok=True)
+def dump(p,x):p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
+access=[pathlib.Path.home()/p for p in ['Desktop/HGM DICTIONARY - TRANSLATION APP','ACIP Software Developmeent/Gofer Developmetn Files',"ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/ACIPHypercontext Tool","ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/LokeshChandraDictionary","ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/CreateLokeshChandraDIctionary","ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/FixLokeshChandra",'ACIP Software Developmeent/tibetan-spellchecker','Tibetan Translation Tool']];dump(E/'access.json',[{'path':str(p),'readable':os.access(p,os.R_OK)} for p in access]);assert all(os.access(p,os.R_OK) for p in access)
+manifest=[]
+for angle in ['tibetan','english']:
+ for s in [247,248,249]:
+  for f in (B/angle/str(s)).rglob('*'):
+   if f.is_file():
+    dest=R/str(s)/'original-proposals'/angle/f.relative_to(B/angle/str(s));dest.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(f,dest);manifest.append({'original':str(f),'copy':str(dest),'bytes':f.stat().st_size,'sha256':sha(f)})
+for p in [W/'AGENTS.md',W/'docs/ALIGNMENT_LAYER_SPEC.md',W/'docs/alignment_briefs/RECONCILE_BRIEF.md',W/'docs/alignment_briefs/REFUTE_BRIEF.md',W/'data/alignment/C05_CAMPAIGN.md',W/'docs/errata_register.json',W/'data/alignment/span_head_allow.json',W/'tools/gen_alignment_page.py',W/'tools/build_alignment_layer.py',B/'source.json',B/'context.json',B/'root-review-targets.md',B/'root-physical-source-check.json',B/'reconciliation-brief.md']:
+ dest=E/p.name;shutil.copyfile(p,dest);manifest.append({'original':str(p),'copy':str(dest),'bytes':p.stat().st_size,'sha256':sha(p)})
+c=sqlite3.connect((W/'build/hgm_spine_v27_2.db').as_uri()+'?mode=ro',uri=True);c.row_factory=sqlite3.Row
+rows=[dict(r) for r in c.execute("select * from corpus_segments where course='C05' and seq between 244 and 315 order by seq")];dump(E/'source-context-full.json',rows)
+for n in ['source','context']:
+ snap=json.loads((B/(n+'.json')).read_text());assert all(all(next(z for z in rows if z['seq']==r['seq'])[k]==v for k,v in r.items()) for r in snap)
+queries=[]
+for p in [B/'root-focused-parallel-check.json',B/'root-attribution-suspicion-query.json',B/'english/247/parallel-queries-full.json']:
+ for q in json.loads(p.read_text()):
+  rs=[dict(r) for r in c.execute(q['sql'],q['params'])];queries.append({'origin':str(p),'sql':q['sql'],'params':q['params'],'claimed':q['count'],'count':len(rs),'equal_saved_rows':rs==q['rows'],'rows':rs})
+dump(E/'reopened-queries.json',queries)
+terms=set()
+for angle,file,key in [('english','master-lexical-full.json','entries'),('english','additional-master-full.json','entries')]:
+ obj=json.loads((B/angle/'247'/file).read_text());terms.update(x['wylie'] for x in obj[key])
+terms.update(['rab rib can','sogs','la sogs pa','bshad sbyar','rigs','yin','ni','mtshungs'])
+m=pathlib.Path.home()/'Desktop/HGM DICTIONARY - TRANSLATION APP/Handoff/release/hgm_dictionary_v27_2.json.gz';master=json.load(gzip.open(m,'rt'));selected=[x for x in master['unified_entries'] if x.get('wylie') in terms];dump(E/'master-selected-full.json',{'original':str(m),'sha256':sha(m),'meta':master['meta'],'terms':sorted(terms),'entries':selected})
+lex=[{'term':t,'rows':[dict(r) for r in c.execute('select * from entries where wylie=?',(t,))]} for t in sorted(terms)];dump(E/'spine-lexical-full.json',lex)
+p=pathlib.Path.home()/'Desktop/HGM DICTIONARY - TRANSLATION APP/To DO/Formal Courses/ACI Readings In Roman ASCII/C05ReadingASCII.txt';dest=E/p.name;shutil.copyfile(p,dest);manifest.append({'original':str(p),'copy':str(dest),'bytes':p.stat().st_size,'sha256':sha(p)});norm=b' '.join(p.read_bytes().split());checks=[]
+for r in rows:
+ if r['seq'] in [247,248,249,305,306,307]:
+  for f in ['acip','english']:
+   b=b' '.join(r[f].encode('ascii').split());checks.append({'seq':r['seq'],'field':f,'normalized_byte_offset':norm.find(b),'bytes':len(b),'complete_field_found':b in norm})
+dump(E/'physical-proof.json',checks);dump(E/'original-manifest.json',manifest)
+print('access',len(access),'original copies',len(manifest),'queries',[(q['params'],q['count'],q['equal_saved_rows']) for q in queries])
+print('LEXICAL',[(x.get('id'),x['wylie'],x.get('hgm_gloss'),x.get('tier')) for x in selected])

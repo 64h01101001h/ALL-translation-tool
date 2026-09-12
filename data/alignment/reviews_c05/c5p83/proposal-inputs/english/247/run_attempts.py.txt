@@ -1,0 +1,9 @@
+import pathlib,subprocess,os,json,shutil,hashlib
+B=pathlib.Path(__file__).resolve().parent.parent
+for seq in (247,248,249):
+ p=B/str(seq);ad=p/'attempt-02';ad.mkdir(exist_ok=False);shutil.copyfile(p/'spec.json',ad/'spec.json')
+ r=subprocess.run(['python3',str(B/'247/canonical_ro.py')],input=(p/'spec.json').read_bytes(),capture_output=True,env={**os.environ,'PYTHONDONTWRITEBYTECODE':'1'},cwd=B.parents[2]/'campaign-worktree')
+ (ad/'stdout.html').write_bytes(r.stdout);(ad/'stderr.txt').write_bytes(r.stderr);(ad/'exit.txt').write_text(str(r.returncode)+'\n')
+ if not r.returncode:
+  (p/'body.html').write_bytes(r.stdout);(p/'generator.stdout.html').write_bytes(r.stdout);(p/'generator.stderr.txt').write_bytes(r.stderr);(p/'generator.exit.txt').write_text(str(r.returncode)+'\n')
+ print(seq,'EXIT',r.returncode,'bytes',len(r.stdout),r.stderr.decode())

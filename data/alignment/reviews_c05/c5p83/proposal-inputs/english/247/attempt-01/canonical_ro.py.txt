@@ -1,0 +1,10 @@
+import pathlib,sqlite3,runpy,sys
+root=pathlib.Path(__file__).resolve().parents[4]/'campaign-worktree'
+original_connect=sqlite3.connect
+def connect_ro(database,*a,**kw):
+    p=pathlib.Path(database).resolve()
+    if p!=root/'build/hgm_spine_v27_2.db':raise RuntimeError('Unexpected database')
+    kw['uri']=True
+    return original_connect(p.as_uri()+'?mode=ro',*a,**kw)
+sqlite3.connect=connect_ro
+runpy.run_path(str(root/'tools/gen_alignment_page.py'),run_name='__main__')

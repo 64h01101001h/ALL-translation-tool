@@ -1,0 +1,40 @@
+import pathlib,sqlite3,runpy,sys,os,json,hashlib,gzip,subprocess,re,html
+R=pathlib.Path(__file__).resolve().parent; B=R.parent; W=B.parents[1]/'campaign-worktree'; E=R/'independent-evidence'; E.mkdir(exist_ok=True)
+def dump(p,o): p.parent.mkdir(parents=True,exist_ok=True);p.write_text(json.dumps(o,ensure_ascii=False,indent=2)+'\n')
+def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
+db=W/'build/hgm_spine_v27_2.db'; c=sqlite3.connect(db.resolve().as_uri()+'?mode=ro',uri=True);c.row_factory=sqlite3.Row
+refs=['Desktop/HGM DICTIONARY - TRANSLATION APP','ACIP Software Developmeent/Gofer Developmetn Files',"ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/ACIPHypercontext Tool","ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/LokeshChandraDictionary","ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/CreateLokeshChandraDIctionary","ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/FixLokeshChandra",'ACIP Software Developmeent/tibetan-spellchecker','Tibetan Translation Tool']
+access=[{'path':str(pathlib.Path.home()/p),'readable':os.access(pathlib.Path.home()/p,os.R_OK)} for p in refs]; assert all(x['readable'] for x in access); dump(E/'access.json',access)
+rows=[dict(x) for x in c.execute("SELECT * FROM corpus_segments WHERE course='C05' AND seq BETWEEN 244 AND 315 ORDER BY seq")];dump(E/'original-source-context-full.json',rows);src={x['seq']:x for x in rows}
+assert rows==json.loads((B/'reconciled/247/evidence/source-context-full.json').read_text())
+queries=[]
+for p in [B/'root-focused-parallel-check.json',B/'root-attribution-suspicion-query.json',B/'english/247/parallel-queries-full.json']:
+ for q in json.loads(p.read_text()):
+  actual=[dict(x) for x in c.execute(q['sql'],q['params'])];assert actual==q['rows'] and len(actual)==q['count'];queries.append({'source_record':str(p),'sql':q['sql'],'params':q['params'],'count':len(actual),'rows':actual,'equals_original_evidence':True})
+dump(E/'queries-replayed-full.json',queries)
+masterpath=pathlib.Path.home()/'Desktop/HGM DICTIONARY - TRANSLATION APP/Handoff/release/hgm_dictionary_v27_2.json.gz'; master=json.load(gzip.open(masterpath,'rt'))
+orig=json.loads((B/'reconciled/247/evidence/master-selected-full.json').read_text());terms=orig['terms']; actual=[x for x in master['unified_entries'] if x.get('wylie') in terms];assert actual==orig['entries'];dump(E/'original-master-selected-full.json',{'source':str(masterpath),'sha256':sha(masterpath),'meta':master['meta'],'terms':terms,'entries':actual})
+lex=[{'term':t,'rows':[dict(x) for x in c.execute('select * from entries where wylie=?',(t,))]} for t in terms];assert lex==json.loads((B/'reconciled/247/evidence/spine-lexical-full.json').read_text());dump(E/'original-spine-lexical-full.json',lex)
+asva=[dict(x) for x in c.execute('select * from entries where hgm_gloss LIKE ?',('%Asvabhava%',))];dump(E/'asvabhava-entries-full.json',asva)
+masterasva=[x for x in master['unified_entries'] if 'asvabhava' in str(x.get('hgm_gloss','')).lower()];dump(E/'asvabhava-master-full.json',masterasva)
+physical=pathlib.Path.home()/'Desktop/HGM DICTIONARY - TRANSLATION APP/To DO/Formal Courses/ACI Readings In Roman ASCII/C05ReadingASCII.txt';raw=physical.read_bytes();(E/'C05ReadingASCII.txt').write_bytes(raw);norm=b' '.join(raw.split());physicalproof=[]
+for seq in [247,248,249,305,306,307]:
+ for fld in ['acip','english']:
+  value=b' '.join(src[seq][fld].encode('ascii').split());offset=norm.find(value);assert offset>=0;physicalproof.append({'seq':seq,'field':fld,'normalized_byte_offset':offset,'normalized_bytes':len(value),'complete_field_found':True})
+dump(E/'physical-proof.json',{'source':str(physical),'sha256':sha(physical),'bytes':len(raw),'normalization':'ASCII whitespace collapsed only for field lookup; physical copy exact bytes','checks':physicalproof})
+dump(E/'source-hash-pins.json',[{'original':str(db),'resolved_original':str(db.resolve()),'sha256':sha(db),'bytes':db.stat().st_size,'preservation':'Material SQL extracts, not a full database copy','material':['original-source-context-full.json','queries-replayed-full.json','original-spine-lexical-full.json','asvabhava-entries-full.json']},{'original':str(masterpath),'sha256':sha(masterpath),'bytes':masterpath.stat().st_size,'preservation':'Selected full original records; original Tibetan proposal also includes a complete gzip copy, separately mapped','material':['original-master-selected-full.json','asvabhava-master-full.json']}])
+# Execute the real generator through a read-only connection guard; no implementation reconstruction.
+launcher=R/'canonical-readonly.py.txt';launcher.write_text('import pathlib,sqlite3,runpy,sys\nW=pathlib.Path('+repr(str(W))+')\noriginal=sqlite3.connect\ndef ro(database,*a,**kw):\n p=pathlib.Path(database).resolve();assert p==(W/"build/hgm_spine_v27_2.db").resolve();kw["uri"]=True\n return original(p.as_uri()+"?mode=ro",*a,**kw)\nsqlite3.connect=ro\nrunpy.run_path(str(W/"tools/gen_alignment_page.py"),run_name="__main__")\n')
+sys.path.insert(0,str(W/'tools'));import gen_alignment_page as G
+resolved=[]; proofs=[]
+for seq in [247,248,249]:
+ d=B/'reconciled'/str(seq);spec=json.loads((d/'spec.json').read_text());s=spec['segments'][0];p=R/'canonical-replay'/str(seq);p.mkdir(parents=True,exist_ok=True)
+ result=subprocess.run([sys.executable,str(launcher)],input=(d/'spec.json').read_bytes(),capture_output=True,cwd=W,env={**os.environ,'PYTHONDONTWRITEBYTECODE':'1'})
+ (p/'stdout.html').write_bytes(result.stdout);(p/'stderr.txt').write_bytes(result.stderr);(p/'exit.txt').write_text(str(result.returncode)+'\n');assert result.returncode==0 and result.stdout==(d/'body.html').read_bytes()
+ spans=s['spans'];tr=G.resolve(src[seq]['wylie'],spans,'tib',seq);by={x['id']:x for x in spans};er=G.resolve(src[seq]['english'],G.with_members(spans,[by[i] for i in s['eng_order']],src[seq]['english']),'eng',seq)
+ for x in spans:resolved.append({'seq':seq,'id':x['id'],'d':x['d'],'tib':x['tib'],'eng':x['eng'],'tib_range':list(tr[x['id']]),'eng_range':list(er[x['id']]) if x['eng'] is not None else None})
+ for cl,field in [('tib','wylie'),('eng','english')]:
+  block=result.stdout.decode().split(f'<div class="{cl}"><div class="lab">')[1].split('</div>\n')[1];block=re.sub(r'<span class="nul">.*?</span>','',block,flags=re.S);plain=html.unescape(re.sub('<[^>]*>','',block)).strip();assert plain==src[seq][field]
+ proofs.append({'seq':seq,'span_count':len(spans),'null_count':sum(x['eng'] is None for x in spans),'word_pair_count':sum(x['d']==5 and x['eng'] is not None for x in spans),'spec_sha256':sha(d/'spec.json'),'spec_bytes':(d/'spec.json').stat().st_size,'body_sha256':sha(d/'body.html'),'body_bytes':(d/'body.html').stat().st_size,'generator_exit':result.returncode,'exact_saved_body':True,'full_original_wylie_and_english_retained':True})
+dump(R/'resolved-spans.json',resolved);dump(R/'generator-proof.json',{'segments':proofs,'canonical_generator':str(W/'tools/gen_alignment_page.py'),'generator_sha256':sha(W/'tools/gen_alignment_page.py'),'builder_sha256_at_run':sha(W/'tools/build_alignment_layer.py'),'sqlite':'URI mode=ro','PYTHONDONTWRITEBYTECODE':'1','mechanical_fidelity_only':True})
+print(json.dumps({'segments':proofs,'queries':[(q['params'],q['count']) for q in queries],'master_entries':len(actual),'lexical_terms':len(terms)},ensure_ascii=False))

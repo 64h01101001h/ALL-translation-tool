@@ -1,0 +1,80 @@
+from pathlib import Path
+import json,hashlib,subprocess
+R=Path(__file__).resolve().parent; B=R.parent;W=B.parents[1]/'campaign-worktree';commit=subprocess.check_output(['git','rev-parse','72fe719'],cwd=W,text=True).strip()
+def digest(b):return hashlib.sha256(b).hexdigest()
+def dump(p,o):p.parent.mkdir(parents=True,exist_ok=True);p.write_text(json.dumps(o,ensure_ascii=False,indent=2)+'\n')
+files=sorted(p for p in B.rglob('*') if p.is_file() and not p.is_relative_to(R) and '__pycache__' not in p.parts and p.suffix!='.pyc')
+extra=[B.parent/'semantic-review-protocol.md',B.parent/'proposal-protocol.md',B.parent/'policy-history/proposal-protocol-before-throughput-refinement.md',B.parent/'policy-history/proposal-protocol-history.json']
+files+=extra
+# Identify all repository historical snapshots via their original manifests; each snapshot is compared to immutable Git bytes.
+repo_proofs={};source_links=[];extractions=[];historical=[]
+for p in files:
+ if 'manifest' not in p.name or p.suffix!='.json':continue
+ try:obj=json.loads(p.read_text())
+ except:continue
+ if not isinstance(obj,list):continue
+ for rec in obj:
+  if not isinstance(rec,dict):continue
+  orig=rec.get('original',rec.get('original_path')); copied=rec.get('copy',rec.get('preserved_copy'))
+  if not orig or not copied:continue
+  op=Path(orig); cp=Path(copied); cp=cp if cp.is_absolute() else p.parent/cp
+  if not cp.exists():continue
+  raw=cp.read_bytes()
+  if 'sha256' in rec:assert digest(raw)==rec['sha256'],(p,cp)
+  if op.is_relative_to(W):
+   rel=str(op.relative_to(W)); gitbytes=subprocess.check_output(['git','show',f'{commit}:{rel}'],cwd=W)
+   assert raw==gitbytes,(rel,p)
+   repo_proofs[digest(raw)]=(commit,rel)
+  elif not op.is_relative_to(B) and op!=B.parent/'proposal-protocol.md':
+   if op.exists():assert raw==op.read_bytes(),op
+  if not op.is_relative_to(B):source_links.append((op,cp))
+manifest=[]; by_hash={}; by_original_hash={};git_proofs=[]
+allowed={'.json','.md','.html','.stderr','.stdout','.log','.txt','.bin','.exit'}
+def preserve(p,relative=None,raw=None):
+ raw=p.read_bytes() if raw is None else raw; h=digest(raw)
+ if (str(p),h) in by_original_hash:return by_original_hash[(str(p),h)]
+ suffix=p.suffix.lower(); suffix=suffix if suffix in allowed else (suffix+'.txt' if suffix in {'.py','.sql','.sh','.diff'} else '.bin')
+ if relative is None:relative=by_hash.get(h,'proposal-inputs/evidence/'+h+suffix)
+ dest=R/relative;dest.parent.mkdir(parents=True,exist_ok=True)
+ if dest.exists():assert dest.read_bytes()==raw,dest
+ else:dest.write_bytes(raw)
+ assert dest.read_bytes()==raw
+ rec={'original':str(p),'copy':relative,'sha256':h,'bytes':len(raw)}
+ if h in repo_proofs:
+  pin,rel=repo_proofs[h];rec.update(original_git_commit=pin,repository_relative_path=rel)
+  assert subprocess.check_output(['git','show',f'{pin}:{rel}'],cwd=W)==dest.read_bytes()
+  git_proofs.append({'original':str(p),'copy':relative,'original_git_commit':pin,'repository_relative_path':rel,'sha256':h,'bytes':len(raw),'git_object_bytes_equal':True})
+ manifest.append(rec);by_hash.setdefault(h,relative);by_original_hash[(str(p),h)]=rec;return rec
+for p in files:
+ rel=None
+ if p.is_relative_to(B):
+  parts=p.relative_to(B).parts
+  if parts[0] in ['english','tibetan'] and not any(v in parts for v in ['evidence','originals']):rel='proposal-inputs/'+str(p.relative_to(B))
+  elif parts[0]=='reconciled' and not any(v in parts for v in ['evidence','original-proposals','original-replay']):rel='reviewed-final/'+str(Path(*parts[1:]))
+ if rel and p.suffix not in allowed:rel+='.txt' if p.suffix in {'.py','.sql','.sh','.diff'} else '.bin'
+ preserve(p,rel)
+for op,cp in source_links:
+ # Historical protocol paths are mapped separately from the current protocol, with their exact prior physical archive.
+ if op==B.parent/'proposal-protocol.md':continue
+ preserve(op,raw=cp.read_bytes())
+# Independent physical witness copies, with exact originals; evidence does not imply publication independence.
+phys=Path.home()/'Desktop/HGM DICTIONARY - TRANSLATION APP/To DO/Formal Courses/ACI Readings In Roman ASCII'
+for name in ['C05ReadingASCII.txt','C15ReadingASCII.txt','C16ReadingASCII.txt','C18ReadingASCII.txt']:preserve(phys/name,'independent-evidence/'+name)
+# Preserve the exact runtime generator and builder as the immutable objects from the run; current source might now change, so pin snapshot.
+for name in ['gen_alignment_page.py','build_alignment_layer.py']:
+ op=W/'tools'/name;raw=op.read_bytes();rel='tools/'+name
+ pin=subprocess.check_output(['git','rev-parse','HEAD'],cwd=W,text=True).strip()
+ gitbytes=subprocess.check_output(['git','show',f'{pin}:{rel}'],cwd=W)
+ assert raw==gitbytes,('runtime-file-uncommitted',name)
+ repo_proofs[digest(raw)]=(pin,rel);preserve(op,'independent-evidence/runtime/'+name+'.txt',raw)
+dump(R/'original-to-copy-manifest.json',manifest);dump(R/'immutable-git-proofs.json',git_proofs)
+# Verify every source/copy mapping by exact bytes (Git objects for historical snapshots, physical original otherwise).
+verified=[]
+for rec in manifest:
+ copied=(R/rec['copy']).read_bytes()
+ if 'original_git_commit' in rec:original=subprocess.check_output(['git','show',rec['original_git_commit']+':'+rec['repository_relative_path']],cwd=W)
+ else:original=Path(rec['original']).read_bytes()
+ assert original==copied and digest(copied)==rec['sha256'] and len(copied)==rec['bytes'],rec
+ verified.append({'original':rec['original'],'copy':rec['copy'],'equal':True,'basis':'immutable Git object' if 'original_git_commit' in rec else 'original file bytes'})
+dump(R/'manifest-verification.json',{'verified_records':len(verified),'distinct_copies':len({x['copy'] for x in manifest}),'all_equal':True,'records':verified})
+print('preserved',len(manifest),'records',len({x['copy'] for x in manifest}),'copies',len(git_proofs),'Git proofs')

@@ -1,0 +1,9 @@
+import pathlib,sqlite3,runpy,sys
+W=pathlib.Path(__file__).resolve().parents[4]/'campaign-worktree'
+original=sqlite3.connect
+def ro(database,*a,**kw):
+ p=pathlib.Path(database).resolve();assert p==(W/'build/hgm_spine_v27_2.db').resolve();kw['uri']=True
+ return original(p.as_uri()+'?mode=ro',*a,**kw)
+sqlite3.connect=ro
+sys.argv=[str(W/'tools/gen_alignment_page.py')]
+runpy.run_path(sys.argv[0],run_name='__main__')

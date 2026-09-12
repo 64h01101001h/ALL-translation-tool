@@ -1,0 +1,41 @@
+import pathlib,json,hashlib,importlib.util,html.parser,datetime
+P=pathlib.Path(__file__).resolve().parent; B=P.parent; W=P.parents[3]/'campaign-worktree'
+spec=importlib.util.spec_from_file_location('canonical_alignment',W/'tools/gen_alignment_page.py'); G=importlib.util.module_from_spec(spec);spec.loader.exec_module(G)
+rows={r['seq']:r for r in json.loads((P/'evidence/original-spine-context.json').read_text())}
+class SourceParser(html.parser.HTMLParser):
+ def __init__(self,seq): super().__init__(); self.stack=[];self.seq=f's{seq}S';self.texts=[];self.active=None
+ def handle_starttag(self,tag,attrs):
+  a=dict(attrs); self.stack.append((tag,a))
+  if tag=='span' and a.get('data-l')==self.seq: self.active=[]
+ def handle_endtag(self,tag):
+  if self.stack and self.stack[-1][0]==tag:
+   t,a=self.stack.pop()
+   if tag=='span' and a.get('data-l')==self.seq: self.texts.append(''.join(self.active));self.active=None
+ def handle_data(self,data):
+  if self.active is not None and not any('nul' in a.get('class','').split() for _,a in self.stack):self.active.append(data)
+reg=json.loads((W/'docs/errata_register.json').read_text())
+register_hits=[]
+for entry in reg:
+ if any(x in json.dumps(entry,ensure_ascii=False).lower() for x in ['venered','bse ru','heading','e-107','e-071']):register_hits.append(entry)
+(P/'evidence/registered-class-check.json').write_text(json.dumps({'source':str(W/'docs/errata_register.json'),'query_terms':['venered','bse ru','heading','E-107','E-071'],'register_count':len(reg),'matches':register_hits,'disposition':'No new candidate from selected rows. No following heading or 1500-character cap in 247–249. 314 next-heading apparatus occurs only in broader context and remains unchanged.'},indent=2)+'\n')
+sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+for seq in [247,248,249]:
+ d=B/str(seq); sg=json.loads((d/'spec.json').read_text())['segments'][0]; spans=sg['spans'];source=rows[seq]
+ tr=G.resolve(source['wylie'],spans,'tib',seq); by={s['id']:s for s in spans}; es=G.with_members(spans,[by[i] for i in sg['eng_order']],source['english']);er=G.resolve(source['english'],es,'eng',seq)
+ intended=json.loads((d/'decisions.json').read_text())['spans']; comparisons=[]
+ for x in intended:
+  comparisons.append({'id':x['id'],'tib_actual':tr.get(x['id']),'tib_intended':x['tib_range'],'tib_equal':list(tr[x['id']])==x['tib_range'],'english_actual':er.get(x['id']),'english_intended':x['english_range'],'english_equal':None if x['english_range'] is None else list(er[x['id']])==x['english_range']})
+ p=SourceParser(seq);p.feed((d/'body.html').read_text()); assert p.texts==[source['wylie'],source['english']],p.texts
+ assert all(x['tib_equal'] and x['english_equal'] is not False for x in comparisons)
+ checks={'canonical_ranges_equal_intended':True,'ranges':comparisons,'body_plaintext_exact':{'wylie':True,'english':True},'source_field_lengths':{k:len(source[k]) for k in ['acip','wylie','english']},'source_snapshot_verified_fields':['id','course','seq','acip','wylie','english'],'shared_evidence':str(P/'evidence'),'shared_originals_manifest_sha256':sha(P/'evidence/originals-manifest.json'),'semantic_approval':False}
+ (d/'fidelity.json').write_text(json.dumps(checks,indent=2)+'\n')
+ proof=json.loads((d/'proof.json').read_text()); counts=proof['counts']; challenge={247:'Challenge first: the breadth of rab rib can → person with a kind of cataract, although it is an exact current HGM equivalent; clean white remains unwrapped. The two keng rus instances deliberately cross.',248:'Challenge first: don ma grub par → no reality is retained only as a complete d3 phrase. The proper name includes inseparable -s; bshad sbyar → explained uses the verbal recast.',249:'Challenge first: dbang → forces is a nominal-to-verbal recast supported by the current HGM glossary. mthong ba attaches to the second sees, after craving spirit.'}[seq]
+ omission={247:'Omitted distributed quotation/question framing, nang du, the third snang visualization frame and the second mi mtshungs alternative. No nulls disguise uncertainty.',248:'Omitted outline two/first/then, relevant, don in the explicate frame and distributed authorship/reference wording. Only ni and yin are affirmative no-separate-exponent nulls.',249:'Opening When they look at / first sees and later river are expanded/repeated English; not assigned extra Tibetan. Only final dang is null. la sogs pas → and the like requires the normal sogs span-head licensor at landing.'}[seq]
+ err={247:'Errata []: bse ru is source-attested porcelain basin in HGM; Hopkins rhinoceros cannot displace it. C15:393, C16:823 and C18:1116 match ACIP, Wylie and English exactly.',248:'Errata []: venered is preserved, appears in the HGM btsun pa entry and 13 corpus rows. C16:824 matches all three text fields; P5:123 English only; C15:394/C18:1117 Tibetan fields only, with holy plus appended continuation in English.',249:'Errata []: C16:825 matches ACIP, Wylie and English; P5:124 matches English with differing Tibetan fields. Registered apparatus classes checked; no candidate.'}[seq]
+ lines=[f'C05:{seq} — Tibetan-first independent proposal by Codex; PROVISIONAL, machine-matched, no semantic approval.',challenge,omission,err,'Textual matches do not establish independent publication or ingestion lineage; course/id/seq are not claimed identical.','Read original C05:244–315 source context, including the complete Stream argument (247–314); snapshots were checked against all six selected original fields.','Full original evidence, master entries, queries and exact original copies: ../247/evidence/; path/hash mapping: originals-manifest.json (SHA-256 '+sha(P/'evidence/originals-manifest.json')+').','Decisions and intended repeated occurrences: decisions.json; canonical resolved ranges and full verbatim body check: fidelity.json.',f"Canonical generator via run_canonical_ro.py, SQLite URI mode=ro, PYTHONDONTWRITEBYTECODE=1: EXIT={proof['exit']}; stdout/body={proof['body_bytes']} bytes; stderr=0 bytes; saved stdout equals body bytes exactly.",f"Counts: {counts['spans']} spans; {counts['d5']} d5; {counts['d7']} d7; {counts['d3']} d3; {counts['d6']} d6; {counts['null']} null; 0 errata.",f"spec.json SHA-256 {proof['sha256']['spec.json']}; body.html SHA-256 {proof['sha256']['body.html']}.",'First canonical attempt passed. Original draft/input/stdout/stderr/exit preserved in attempts/01-initial; no failed or superseded generator attempts.','Frozen boundary and all file hashes: freeze-manifest.json. Any later correction must preserve this boundary and explicitly supersede it.']
+ (d/'report.md').write_text('\n'.join(lines)+'\n')
+ print(seq,counts,'bytes',proof['body_bytes'],'fidelity passed')
+for seq in [247,248,249]:
+ d=B/str(seq)
+ manifest={'status':'FROZEN','frozen_at_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'producer':'Codex; independent Tibetan-first proposal','files':{str(f.relative_to(d)):{'bytes':f.stat().st_size,'sha256':sha(f)} for f in sorted(d.rglob('*')) if f.is_file() and f.name!='freeze-manifest.json'},'shared_evidence':str(P/'evidence'),'shared_evidence_manifest':str(P/'freeze-manifest.json')}
+ (d/'freeze-manifest.json').write_text(json.dumps(manifest,indent=2)+'\n')

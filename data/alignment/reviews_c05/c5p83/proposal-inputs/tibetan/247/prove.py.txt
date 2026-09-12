@@ -1,0 +1,15 @@
+import pathlib,subprocess,os,json,hashlib,shutil,datetime,sys
+P=pathlib.Path(__file__).resolve().parent; B=P.parent; W=P.parents[3]/'campaign-worktree'; env=dict(os.environ,PYTHONDONTWRITEBYTECODE='1')
+for seq in [247,248,249]:
+ d=B/str(seq); attempt=d/'attempts'/'01-initial'; attempt.mkdir(parents=True,exist_ok=True)
+ shutil.copyfile(d/'spec.json',attempt/'spec.json')
+ cmd=[sys.executable,str(P/'run_canonical_ro.py')]
+ r=subprocess.run(cmd,input=(d/'spec.json').read_bytes(),stdout=subprocess.PIPE,stderr=subprocess.PIPE,cwd=W,env=env)
+ for name,data in [('canonical.stdout',r.stdout),('canonical.stderr',r.stderr),('canonical.exit',(str(r.returncode)+'\n').encode())]: (attempt/name).write_bytes(data)
+ if r.returncode==0:
+  (d/'body.html').write_bytes(r.stdout)
+  for name in ['canonical.stdout','canonical.stderr','canonical.exit']: shutil.copyfile(attempt/name,d/name)
+  s=json.loads((d/'spec.json').read_text())['segments'][0]['spans']; sha=lambda f:hashlib.sha256((d/f).read_bytes()).hexdigest()
+  proof={'command':cmd,'cwd':str(W),'environment_override':{'PYTHONDONTWRITEBYTECODE':'1'},'sqlite_connection':'unchanged canonical generator via runpy, wrapper forces original SQLite connection URI mode=ro','canonical_generator':str(W/'tools/gen_alignment_page.py'),'canonical_generator_sha256':hashlib.sha256((W/'tools/gen_alignment_page.py').read_bytes()).hexdigest(),'exit':r.returncode,'stderr_bytes':len(r.stderr),'body_bytes':len(r.stdout),'stdout_equals_body':r.stdout==(d/'body.html').read_bytes(),'counts':{'spans':len(s),'null':sum(x['eng'] is None for x in s),'d5':sum(x['d']==5 for x in s),'d7':sum(x['d']==7 for x in s),'d3':sum(x['d']==3 for x in s),'d6':sum(x['d']==6 for x in s)},'sha256':{f:sha(f) for f in ['spec.json','body.html','errata.json','canonical.stdout','canonical.stderr','canonical.exit','decisions.json']},'attempt':'attempts/01-initial'}
+  (d/'proof.json').write_text(json.dumps(proof,indent=2)+'\n')
+ print(seq,'exit',r.returncode,'bytes',len(r.stdout),'stderr',r.stderr.decode())

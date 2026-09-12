@@ -1,0 +1,32 @@
+{
+  "original_spans_verified": 141,
+  "original_optional_fields_verified": true,
+  "final_ordered_tuples_verified": 74,
+  "current_reason_ids_exact": true,
+  "freeze_entries_verified": 299,
+  "original_copy_records_verified": 176,
+  "original_source_hash_pins_verified": [
+    {
+      "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/build/hgm_spine_v27_2.db",
+      "resolved_original": "/Users/adamderickandrade/ALL-translation-tool/build/hgm_spine_v27_2.db",
+      "sha256": "5e69b42905428f10b20462e57cd0f07a4e5aa0568aa6cdd5c619456c4ce9c6dc",
+      "material": "source-context-full.json (all fields/raw, SELECT * FROM corpus_segments WHERE course=C05 AND seq BETWEEN 244 AND 315 ORDER BY seq); reopened-queries.json (exact SQL, parameters, counts, full original rows); spine-lexical-full.json (SELECT * FROM entries WHERE wylie=? for each recorded term); asvabhava-original-entries.json (SELECT * FROM entries WHERE hgm_gloss LIKE %Asvabhava%)"
+    },
+    {
+      "original": "/Users/adamderickandrade/Desktop/HGM DICTIONARY - TRANSLATION APP/Handoff/release/hgm_dictionary_v27_2.json.gz",
+      "sha256": "3a99603cd9428f0d04e67c7d2790cc093f272162e7bf6278906a4b635f962253",
+      "material": "master-selected-full.json and asvabhava-original-master.json: full original selected records, no glossary rewriting"
+    }
+  ],
+  "changed_live_governing_files_resolved_to_exact_Git_objects": [
+    {
+      "original": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/tools/build_alignment_layer.py",
+      "copy": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-247-249/reconciled/247/evidence/build_alignment_layer.py",
+      "original_git_commit": "72fe7190021de6488a155af8331b414a0e4ac270",
+      "repository_relative_path": "tools/build_alignment_layer.py"
+    }
+  ],
+  "root_full_specs_reports_dispositions_and_corrected_reason_diffs_read": true,
+  "semantic_approval": false,
+  "prior_attempt": "Assumed every original-manifest record was a full-file copy; two are source hash/material pins. Corrected adapter verifies these original hashes separately and does not count them as copies."
+}

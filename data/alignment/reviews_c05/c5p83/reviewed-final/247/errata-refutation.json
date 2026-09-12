@@ -1,0 +1,36 @@
+{
+  "producer": "Codex reconciliation",
+  "five_grounds": "a verbatim quote; b independent parallel; c registered class/duplicate; d defensible reading or incorrect correction; e rechecked counts",
+  "suspicions": [
+    {
+      "seq": 247,
+      "found": "porcelain basin",
+      "expected": "No correction justified; comparative rhinoceros was challenged",
+      "refuted": true,
+      "grounds": {
+        "a": "porcelain basin is present at English 472..487; original ACIP BSE RU occurs in BSE RU'I and original Wylie bse ru in bse ru'i. All fields are preserved in source-context-full.json.",
+        "b": "C15:393, C16:823 and C18:1116 match ACIP/Wylie/English; P5:122 supports the passage with different Tibetan forms. Four matching full-prefix rows were re-counted. No evidence establishes independent publication or ingestion lineage, so equality is not used as automatic refutation.",
+        "c": "Register searched for exact target segments and suspicion terms: no existing C05:247–249 record, Chandrakirti or venered hit. Existing E-044 converter, E-071 marker, E-076/E-121 footnote, E-111 row spill, E-107 cap and heading records are preserved in register-check.json. These target rows have complete English lengths 778/448/195, and full ACIP/English fields occur in physical C05 after ASCII whitespace normalization. No such registered apparatus defect applies to the present lexical/internal-attribution suspicions.",
+        "d": "Original HGM bse ru glossary explicitly has basin, porcelain sink, porcelain basin. The local interior/hair/cataract scenario supports a vessel. Hopkins rhinoceros is comparative homonym evidence and cannot displace this attested local sense. Clean white has no selected source licensor and remains unwrapped. This positive source/gloss evidence defeats a basin-to-rhinoceros correction.",
+        "e": "Reopened bse ru substring query returns 14 rows; full 247 prefix query returns 4 including C05; all saved query rows/counts equal originals. Master corpus metadata n_segments=7 is preserved provenance metadata, not presented as a fresh substring-query count."
+      },
+      "confidence": "refuted; no filing"
+    },
+    {
+      "seq": 247,
+      "found": "[from Entering the Middle Way, by Master Chandrakirti (650 AD)]",
+      "expected": "No replacement author/title/date established",
+      "refuted": true,
+      "grounds": {
+        "a": "The entire found bracket occurs verbatim at C05:247. C05:306 instead has [Master Dharmakirti's] and repeats the shared short verse within a longer quotation. Original complete 305–307 rows and physical C05 bytes are saved.",
+        "b": "The reopened non-C13 chu 'bab klung query has 8 rows; corresponding 247 copies carry the Chandrakirti bracket and corresponding 306 copies carry the Dharmakirti bracket. These digital matches establish neither publication independence nor source lineage. The shared short quotation does not prove authorship of either longer textual extent.",
+        "c": "Register searched for exact target segments and suspicion terms: no existing C05:247–249 record, Chandrakirti or venered hit. Existing E-044 converter, E-071 marker, E-076/E-121 footnote, E-111 row spill, E-107 cap and heading records are preserved in register-check.json. These target rows have complete English lengths 778/448/195, and full ACIP/English fields occur in physical C05 after ASCII whitespace normalization. No such registered apparatus defect applies to the present lexical/internal-attribution suspicions. This bracket is an internal citation, not following-heading glue; refutation is not based on that registered class.",
+        "d": "The local Tibetan opening quotes a line without naming its author; 306 likewise does not supply an explicit author in the quoted line. Reuse or quotation of a verse within another work, or differing supplied apparatus, remains possible. Broader 275–280 explicitly discusses Dharmakirti, but does not establish the origin of the shorter 247 citation. Neither an alternate title, author nor date is proven for 247. Default to refuted under uncertainty; leave the whole bracket unaligned and unchanged.",
+        "e": "The source-context query for 305–307 returns 3 full rows; the non-C13 shared-Wylie query returns 8. The English shared-line query also returns 8. All exact original query parameters and rows reproduced saved originals. No unstated publication count is inferred."
+      },
+      "confidence": "unresolved attribution concern; refuted for filing"
+    }
+  ],
+  "retained_errata": [],
+  "routine_source_check": "Register searched for exact target segments and suspicion terms: no existing C05:247–249 record, Chandrakirti or venered hit. Existing E-044 converter, E-071 marker, E-076/E-121 footnote, E-111 row spill, E-107 cap and heading records are preserved in register-check.json. These target rows have complete English lengths 778/448/195, and full ACIP/English fields occur in physical C05 after ASCII whitespace normalization. No such registered apparatus defect applies to the present lexical/internal-attribution suspicions."
+}

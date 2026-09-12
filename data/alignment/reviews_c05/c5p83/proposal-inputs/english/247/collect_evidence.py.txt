@@ -1,0 +1,27 @@
+import sqlite3,json,gzip,pathlib,hashlib,shutil
+B=pathlib.Path(__file__).resolve().parent; W=B.parents[3]/'campaign-worktree'; db=W/'build/hgm_spine_v27_2.db'
+def dump(n,d):(B/n).write_text(json.dumps(d,ensure_ascii=False,indent=2)+'\n')
+def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
+c=sqlite3.connect(db.as_uri()+'?mode=ro',uri=True);c.row_factory=sqlite3.Row
+rows=[dict(r) for r in c.execute("select * from corpus_segments where course=? and seq between ? and ?",('C05',244,252))];dump('original-context-full.json',rows)
+snap=json.loads((B.parents[1]/'source.json').read_text()); ctx=json.loads((B.parents[1]/'context.json').read_text());dump('snapshot-verification.json',[{'seq':r['seq'],'fields':{k:r[k]==next(x for x in rows if x['seq']==r['seq'])[k] for k in r}} for r in snap+ctx])
+terms=['chu klung','bse ru','rab rib','skra shad','keng rus','gsal snang','mig shes','mtha\' dpyad','yi dvags','theg bsdus','dge bsnyen','btsun pa','ngo bo nyid med','rnam smin','dbang','don','grub','rang rang','rnag khrag']
+queries=[]
+for term in terms:
+ rs=[dict(r) for r in c.execute('select * from entries where wylie=?',(term,))];queries.append({'sql':'select * from entries where wylie=?','params':[term],'count':len(rs),'rows':rs})
+dump('spine-lexical-full.json',queries)
+m=pathlib.Path('/Users/adamderickandrade/Desktop/HGM DICTIONARY - TRANSLATION APP/Handoff/release/hgm_dictionary_v27_2.json.gz'); master=json.load(gzip.open(m,'rt'))
+full=[e for e in master['unified_entries'] if e.get('wylie') in terms];dump('master-lexical-full.json',{'original':str(m),'sha256':sha(m),'meta':master['meta'],'terms':terms,'count':len(full),'entries':full})
+qs=[('wylie',"bse ru"),('wylie','rab rib'),('english','venered'),('english','venerated'),('wylie','ngo bo nyid med pas'),('wylie','chu klung gi dngos po gcig'),('english','The mind of a craving spirit as well'),('english','we say it has no reality')]
+parallel=[]
+for field,term in qs:
+ sql=f'select * from corpus_segments where {field} like ?'; rs=[dict(r) for r in c.execute(sql,('%'+term+'%',))];parallel.append({'sql':sql,'params':['%'+term+'%'],'count':len(rs),'rows':rs})
+dump('parallel-queries-full.json',parallel)
+paths=[W/'AGENTS.md',W/'DIAMOND_CUTTER_TRANSLATION_TOOL_ROADMAP.md',W/'docs/ALIGNMENT_LAYER_SPEC.md',W/'docs/alignment_briefs/PROPOSE_BRIEF.md',W/'data/alignment/C05_CAMPAIGN.md',W/'docs/errata_register.json',W/'tools/gen_alignment_page.py',W/'tools/build_alignment_layer.py',B.parents[1]/'english-brief.md',B.parents[2]/'proposal-protocol.md',B.parents[1]/'source.json',B.parents[1]/'context.json']
+orig=B/'originals';orig.mkdir(exist_ok=True);manifest=[]
+for p in paths:
+ target=orig/(p.name if p.name!='source.json' else 'source-snapshot.json');shutil.copyfile(p,target);manifest.append({'original_path':str(p),'copy':str(target.relative_to(B)),'bytes':p.stat().st_size,'sha256':sha(p)})
+manifest.extend([{'original_path':str(db),'sha256':sha(db),'preserved_material':'original-context-full.json, spine-lexical-full.json, parallel-queries-full.json; full original rows and queries'},{'original_path':str(m),'sha256':sha(m),'preserved_material':'master-lexical-full.json; full original selected entries and metadata'}]);dump('original-manifest.json',manifest)
+for q in queries:
+ print(q['params'][0],[(r['hgm_gloss'],r['tier']) for r in q['rows']])
+for q in parallel:print(q['params'],q['count'],[(r['course'],r['seq']) for r in q['rows']])

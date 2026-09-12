@@ -1,0 +1,85 @@
+--- before/final-reasons.json
++++ after/final-reasons.json
+@@ -6,7 +6,7 @@
+     "w3": "First occurrence belongs to the verse.",
+     "w4": "Verse mind, not supplied states of mind.",
+     "p5": "Additive particle.",
+-    "w6": "Established analytical verb; HGM mtha dpyad glossary supports analyze.",
++    "w6": "Established analytical verb; HGM mtha' dpyad glossary supports analyze.",
+     "w7": "Prose river distinct from verse stream.",
+     "w8": "Established coordinated substance compound; conjunction licensed internally.",
+     "m9": "Unique pus member inside compound.",
+@@ -23,7 +23,7 @@
+     "w20": "Second visual consciousness belongs to cataract example.",
+     "w21": "Established earth/ground compound; entire stays unwrapped.",
+     "w22": "First Tibetan skeleton compound occurs later in English than second Tibetan occurrence.",
+-    "w23": "Passive auxiliary is and with remain unwrapped.",
++    "w23": "Passive auxiliary is remains unwrapped; with is separately paired to kyis as p32.",
+     "w24": "Second Tibetan occurrence specifies meditation subject; English precedes bones of corpses.",
+     "w25": "gsal snang owns visualize, an exact HGM glossary equivalent in the skeleton meditation; can and you are excluded. The earlier third snang ba is not thereby licensed to own imagine.",
+     "w26": "Meditative concentration term.",
+--- before/final-ordered-tuples.json
++++ after/final-ordered-tuples.json
+@@ -176,7 +176,7 @@
+         13,
+         20
+       ],
+-      "reason": "Established analytical verb; HGM mtha dpyad glossary supports analyze.",
++      "reason": "Established analytical verb; HGM mtha' dpyad glossary supports analyze.",
+       "canonical_id": "s247w6",
+       "tib_exact": true,
+       "eng_exact": true,
+@@ -658,7 +658,7 @@
+         643,
+         650
+       ],
+-      "reason": "Passive auxiliary is and with remain unwrapped.",
++      "reason": "Passive auxiliary is remains unwrapped; with is separately paired to kyis as p32.",
+       "canonical_id": "s247w23",
+       "tib_exact": true,
+       "eng_exact": true,
+--- before/proposal-dispositions.json
++++ after/proposal-dispositions.json
+@@ -225,7 +225,7 @@
+         ]
+       }
+     ],
+-    "reason": "Established analytical verb; HGM mtha dpyad glossary supports analyze."
++    "reason": "Established analytical verb; HGM mtha' dpyad glossary supports analyze."
+   },
+   {
+     "angle": "tibetan",
+@@ -871,7 +871,7 @@
+         ]
+       }
+     ],
+-    "reason": "Passive auxiliary is and with remain unwrapped."
++    "reason": "Passive auxiliary is remains unwrapped; with is separately paired to kyis as p32."
+   },
+   {
+     "angle": "tibetan",
+@@ -1403,7 +1403,7 @@
+         ]
+       }
+     ],
+-    "reason": "Established analytical verb; HGM mtha dpyad glossary supports analyze."
++    "reason": "Established analytical verb; HGM mtha' dpyad glossary supports analyze."
+   },
+   {
+     "angle": "english",
+@@ -1988,7 +1988,7 @@
+         ]
+       }
+     ],
+-    "reason": "Passive auxiliary is and with remain unwrapped."
++    "reason": "Passive auxiliary is remains unwrapped; with is separately paired to kyis as p32."
+   },
+   {
+     "angle": "english",
+--- before/report.md
++++ after/report.md
+@@ -17,3 +17,4 @@
+ Final canonical attempt 01 passed; exact spec/stdout/stderr/exit preserved in attempts/01-final. No final spec/note changed after this run. Generator, full source retention and exact range checks prove fidelity, not correspondence.
+ Review concern: the imagined-agent omission, final-object choice and unresolved internal attribution remain explicit for the skeptical reader.
+ Freeze-manifest.json records this final boundary. Original-copy hashes are pinned in ../247/evidence/original-manifest.json; original semantic input hashes remain under original-proposals/.
++Root evidence-record correction: Current w6 reasons now spell mtha' dpyad with its source apostrophe. Current w23 reasons distinguish unwrapped is from with, independently paired as p32. All repeated current reason fields were updated. Prior affected files and freeze survive in versions/02-root-evidence-correction/. Exact scoped diff is root-evidence-correction.diff. Specs, bodies, ordered tuples/ranges and semantic dispositions are unchanged; no generator rerun was needed.

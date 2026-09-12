@@ -1,0 +1,38 @@
+import sqlite3,json,gzip,hashlib,pathlib,shutil
+P=pathlib.Path(__file__).resolve().parent; E=P/'evidence'; W=P.parents[3]/'campaign-worktree'; B=P.parents[1]
+def save(name,obj): (E/name).write_text(json.dumps(obj,ensure_ascii=False,indent=2)+'\n')
+def sha(p): return hashlib.sha256(pathlib.Path(p).read_bytes()).hexdigest()
+db=W/'build/hgm_spine_v27_2.db'; c=sqlite3.connect(db.resolve().as_uri()+'?mode=ro',uri=True); c.row_factory=sqlite3.Row
+rows=[dict(r) for r in c.execute("select * from corpus_segments where course='C05' and seq between 244 and 315 order by seq")]; save('original-spine-context.json',rows)
+checks=[]
+for name in ['source.json','context.json']:
+ data=json.loads((B/name).read_text())
+ for r in data:
+  orig=next(x for x in rows if x['seq']==r['seq']); checks.append({'snapshot':name,'seq':r['seq'],'fields':{k:r[k]==orig[k] for k in ['id','course','seq','acip','wylie','english']}})
+save('snapshot-verification.json',checks)
+terms=['chu \'bab klung','chu klung','yi dvags','rnag','rnag khrag','blo',"mtha' dpyad",'mig shes','bse ru','skra shad',"'dzag",'rab rib','rab rib can','sa gzhi','keng rus','khyab','gsal snang',"ting nge 'dzin",'yul','mtshungs','lung',"'god pa",'don','bshad pa','theg bsdus',"dud 'gro",'mi','lha','rigs','dngos','yid','tha dad',"'dod pa",'dge bsnyen','btsun pa','ngo bo nyid med','ngo bo nyid med pa',"bshad sbyar",'rang rang','las','rnam smin','dbang','gang ba','mthong ba']
+q='select * from entries where wylie=?'; er=[]
+for term in terms: er.append({'query':q,'params':[term],'count':len(rr:=[dict(r) for r in c.execute(q,(term,))]),'rows':rr})
+save('spine-lexical-query.json',er)
+master=pathlib.Path('/Users/adamderickandrade/Desktop/HGM DICTIONARY - TRANSLATION APP/Handoff/release/hgm_dictionary_v27_2.json.gz')
+data=json.load(gzip.open(master,'rt')); chosen=[]
+for i,e in enumerate(data['unified_entries']):
+ if e.get('wylie') in terms: chosen.append({'original_array':'unified_entries','index':i,'entry':e})
+save('original-master-entries.json',{'source':str(master),'sha256':sha(master),'meta':data['meta'],'selection':terms,'count':len(chosen),'entries':chosen})
+queries=[]
+for field,pattern in [('english','%porcelain%'),('english','%venered%'),('english','%Asvabhava%'),('wylie','%bse ru%'),('wylie','%ngo bo nyid med pas%'),('english','%single thing%reality%'),('english','%stream of water%pus%'),('wylie',"%skra shad%"),('wylie',"%rnam smin gyi dbang%")]:
+ q=f'select * from corpus_segments where {field} like ? order by course,seq'; rr=[dict(r) for r in c.execute(q,(pattern,))]; queries.append({'query':q,'params':[pattern],'count':len(rr),'rows':rr})
+for seq in [247,248,249]:
+ r=next(x for x in rows if x['seq']==seq); q='select * from corpus_segments where acip=? or wylie=? or english=? order by course,seq'; rr=[dict(x) for x in c.execute(q,(r['acip'],r['wylie'],r['english']))]; queries.append({'query':q,'params':[r['acip'],r['wylie'],r['english']],'count':len(rr),'rows':rr,'field_comparisons':[{'course':x['course'],'seq':x['seq'],**{k:x[k]==r[k] for k in ['acip','wylie','english']}} for x in rr]})
+save('original-corpus-queries.json',queries)
+paths=[W/'AGENTS.md',W/'docs/ALIGNMENT_LAYER_SPEC.md',W/'docs/alignment_briefs/PROPOSE_BRIEF.md',W/'data/alignment/C05_CAMPAIGN.md',W/'DIAMOND_CUTTER_TRANSLATION_TOOL_ROADMAP.md',W/'docs/errata_register.json',W/'tools/gen_alignment_page.py',W/'tools/build_alignment_layer.py',B/'source.json',B/'context.json',B/'tibetan-brief.md',B.parent/'proposal-protocol.md',master]
+paths.extend(pathlib.Path('/Users/adamderickandrade/Desktop/HGM DICTIONARY - TRANSLATION APP/Handoff')/p for p in ['HANDOFF.md','README.md'])
+manifest=[]; seen={}
+for p in paths:
+ h=sha(p)
+ if h not in seen:
+  name=f'original-{len(seen):02d}-{p.name}'; shutil.copyfile(p,E/name); seen[h]=name
+ manifest.append({'original_path':str(p),'resolved_path':str(p.resolve()),'bytes':p.stat().st_size,'sha256':h,'preserved_copy':seen[h]})
+manifest.append({'original_path':str(db),'resolved_path':str(db.resolve()),'bytes':db.stat().st_size,'sha256':sha(db),'preserved_evidence':'Full selected rows including raw in original-spine-context.json and original-corpus-queries.json; complete selected entries including raw in spine-lexical-query.json','sqlite_mode':'ro'})
+save('originals-manifest.json',manifest)
+print('Verified',len(checks),'snapshot rows',all(all(x['fields'].values()) for x in checks)); print('Master matches',len(chosen)); print([(x['params'][0][:50],x['count']) for x in queries])

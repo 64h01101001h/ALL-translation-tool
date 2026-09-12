@@ -47,7 +47,7 @@ the/a/an/and/or/his/our/your/I/you unless `data/alignment/span_head_allow.json`
 lists it under `pages_c05` with the Tibetan word that licenses it.
 
 ## Progress
-c5p1–c5p7 (1–21) cloned 2026-09-05; c5p8–c5p49 (22–147) landed 2026-09-05; c5p50–c5p55 (148–165) landed 2026-09-08. c5p56 (166–168) landed 2026-09-12 after fresh independent proposals, reconciliation and skeptical review. c5p57 (169–171) landed after independent review. c5p58 (172–174) landed after independent review. c5p59 (175–177) landed after independent review. c5p60 (178–180) landed after independent review. c5p61 (181–183) landed after independent review. c5p62 (184–186) landed after independent review. c5p63 (187–189) landed after independent review. c5p64 (190–192) landed after independent review. c5p65 (193–195) landed after independent review. c5p66 (196–198) landed after independent review. c5p67 (199–201) landed after independent review. c5p68 (202–204) landed after independent review. c5p69 (205–207) landed after independent review. c5p70 (208–210) landed after independent review. c5p71 (211–213) landed after independent review. c5p72 (214–216) landed after independent review. c5p73 (217–219) landed after independent review. c5p74 (220–222) landed after independent review. c5p75 (223–225) landed after independent review. c5p76 (226–228) landed after independent review. c5p77 (229–231) landed after independent review. c5p78 (232–234) landed after independent review. c5p79 (235–237) landed after independent review. c5p80 (238–240) landed after independent review. c5p81 (241–243) landed after independent review. c5p82 (244–246) landed after independent review. Coverage 246/511; current verification is recorded in the latest batch entry below.
+c5p1–c5p7 (1–21) cloned 2026-09-05; c5p8–c5p49 (22–147) landed 2026-09-05; c5p50–c5p55 (148–165) landed 2026-09-08. c5p56 (166–168) landed 2026-09-12 after fresh independent proposals, reconciliation and skeptical review. c5p57 (169–171) landed after independent review. c5p58 (172–174) landed after independent review. c5p59 (175–177) landed after independent review. c5p60 (178–180) landed after independent review. c5p61 (181–183) landed after independent review. c5p62 (184–186) landed after independent review. c5p63 (187–189) landed after independent review. c5p64 (190–192) landed after independent review. c5p65 (193–195) landed after independent review. c5p66 (196–198) landed after independent review. c5p67 (199–201) landed after independent review. c5p68 (202–204) landed after independent review. c5p69 (205–207) landed after independent review. c5p70 (208–210) landed after independent review. c5p71 (211–213) landed after independent review. c5p72 (214–216) landed after independent review. c5p73 (217–219) landed after independent review. c5p74 (220–222) landed after independent review. c5p75 (223–225) landed after independent review. c5p76 (226–228) landed after independent review. c5p77 (229–231) landed after independent review. c5p78 (232–234) landed after independent review. c5p79 (235–237) landed after independent review. c5p80 (238–240) landed after independent review. c5p81 (241–243) landed after independent review. c5p82 (244–246) landed after independent review. c5p83 (247–249) landed after independent review. Coverage 249/511; current verification is recorded in the latest batch entry below.
 
 **Historical pause, superseded by Adam’s 2026-09-11 continuation request. PAUSED 2026-09-08 (Adam's call): the campaign stops here while the app goes to
 a public release (two-week target). Reconciled-but-unlanded specs for 166, 167,
@@ -1369,3 +1369,46 @@ whitespace are audited byte-safely before commit without normalization.
 Rendered inspection remains unverified following browser-policy refusal. Native
 and installed-phone proof remains through171; locked launch and main integration
 remain open. A fresh integration reviewer is checking the saved data commits.
+
+
+### c5p83 · C05:247–249 — 2026-09-12 — Codex reconciliation/review
+
+Fresh independent proposals, reconciliation and semantic SPEC APPROVE / QUALITY
+APPROVE yield 74 spans (32/26/16), three nulls (0/1/2), 55 non-null d5 pairs and
+five d7 members. Source English/Tibetan stay verbatim and provisional; machine
+review is not human acceptance. The cataract bearer and tighter condition member
+have exact HGM support. Hair/basin and reversed skeleton occurrences retain their
+own objects. The class-distribution and negative-reality predicates are complete
+d3 phrases; supplied participants stay outside. The commentary/explained recast
+preserves authorship and explanatory content. Copular yin fuses into finite say;
+kyis is realized as active agency and final dang has no row-local exponent while
+continuing the next example. Nulls do not assert uncertainty as lexical absence.
+
+No errata added; all 192 prior records survive. Basin/rhinoceros and venered
+suspicions were challenged against full fields and witnesses. The internal
+Chandrakirti/Dharmakirti attribution remains unresolved: shared verse and differing
+quotation extents do not establish a unique correction or independent publication.
+One exact c5p83/s249w12 allowance records la sogs pas/and the like with actual
+sogs licensor. Source/raw metadata, comparative fields, weaker auto-aligned lexical
+evidence and limits on P5 physical verification remain explicit in the review.
+
+Root read all 141 original dispositions and 74 final rationales, verified 544
+original mappings with 53 immutable Git pins, and copied 370 semantic files
+exactly. Six original and three final canonical bodies replayed exactly. Complete
+originals, failed/superseded attempts, unsupported-extension byte copies and source
+hash-pin/extract distinctions survive. The corrected 248 note was regenerated;
+later evidence-only mtha' spelling, covered/with and stale ni-ID reasons retain
+prior versions and diffs. Their candidate alignment tuples remain unchanged.
+
+Coverage 249/511. Bank 44,261 links (+77 with three anchors), 11,880 nulls,
+1,585 notes and 11 trees; evidence 7,042 heads / 15,323 pairs. Main/reverse/
+course/changes CSV rows 22,156 / 21,816 / 23,652 / 48, seeded from885c766.
+Every course/depth group independently matches actual main CSV references.
+Prior links, notes, trees, evidence, lexical keys and citations survive without
+ACIP enrichment. Source/master hashes unchanged. All 17 targeted suites passed
+(12.95s); exact body/range/copy, retention and navigation proofs pass. Staged
+whitespace is audited byte-safely against complete sources and canonical CSV CRLF.
+
+Rendered inspection, newer native/device execution and main integration remain
+open under the existing limitations. The fresh whole-checkpoint reviewer is
+checking all saved commits before final integration approval.

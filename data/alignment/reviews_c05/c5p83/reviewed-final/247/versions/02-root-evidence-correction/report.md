@@ -1,0 +1,19 @@
+C05:247 reconciliation — Codex; PROVISIONAL, human-unreviewed.
+Final: 32 spans, 0 nulls, depths {'5': 24, '6': 3, '7': 3, '3': 2}; zero errata.
+Retain whole rab rib can/person with a kind of cataract and its tighter cataract member: can licenses the bearer and the exact HGM glossary supports the whole expression. bse ru owns porcelain basin; clean white remains outside.
+Retain zhes/says and the first skeleton kyis/with. The two snang/looks like mappings keep the tighter verb roots. Omit third snang ba/imagine because imagining agency is distributed through the meditation construction.
+One yul now owns final objects; the original Tibetan-first introductory occurrence is replaced. The two keng rus occurrences reverse in English: bones of corpses follows skeletons. All exact selected and unselected occurrences are recorded.
+Retain complete yod med/exists or doesn't exist; omit the negative equivalence alternative as distributed in the interrogative, replacing the English-first null. The full comparison relation is not separately endorsed.
+No errata retained. Basin-homonym and internal-attribution suspicions each have all five grounds in errata-refutation.json; 306's longer quote does not establish a correction of 247's supplied citation.
+Every original proposal span has its original id/depth/text/null fields and exact canonical ranges, disposition, final counterpart and independent reason in proposal-dispositions.json. Final ordered tuples and every retained reason are in final-ordered-tuples.json; omitted/distributed content is in final-reasons.json.
+All six original proposals independently replayed with the actual canonical generator, EXIT=0 and exact saved-body bytes (141 spans total); complete earlier attempts, specs, reports, evidence and freezes remain in original-proposals/. Current original replays are in original-replay/.
+Original C05:244–315 rows were reopened read-only, including the entire Stream argument. Full original selected master fields, query results/raw fields, exact SQL/counts, physical C05 bytes and field comparisons are shared at ../247/evidence/. Snapshot source/context fields match the originals.
+Digital identity/difference is not publication or ingestion-lineage proof. Comparative dictionary fields supply no replacement GMR English. The HGM metadata and current query counts retain their distinct meanings.
+No paid APIs, subagents, source/repository edits, native/device/browser actions, commits or hgm_gloss promotion. All eight reference directories readable. Separate skeptical semantic approval is required before root lands the files.
+Canonical generator: /Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/tools/gen_alignment_page.py; SHA-256 7c1c22345e18949e1aa34bb99115c32903527643b5a2c171e1a88f06d2a4cb8e.
+Actual stdout proof: EXIT=0; body=5690 bytes; stderr=0 bytes; saved stdout equals body exactly. Full unwrapped Wylie and English equal the original spine strings.
+spec.json: 5312 bytes; SHA-256 1c7a9d872cd666c0d0d14bc20cd95f2934afcb1084d04885ddad9a83ade12d0e.
+body.html: 5690 bytes; SHA-256 fbe4e54b759a24d822804a63c4a7997c71de423a6fe90726e651c17649fc177d.
+Final canonical attempt 01 passed; exact spec/stdout/stderr/exit preserved in attempts/01-final. No final spec/note changed after this run. Generator, full source retention and exact range checks prove fidelity, not correspondence.
+Review concern: the imagined-agent omission, final-object choice and unresolved internal attribution remain explicit for the skeptical reader.
+Freeze-manifest.json records this final boundary. Original-copy hashes are pinned in ../247/evidence/original-manifest.json; original semantic input hashes remain under original-proposals/.

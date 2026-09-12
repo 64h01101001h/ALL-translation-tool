@@ -1,0 +1,149 @@
+from pathlib import Path
+import json,hashlib
+R=Path(__file__).resolve().parent;B=R.parent
+def dump(p,o):p.write_text(json.dumps(o,ensure_ascii=False,indent=2)+'\n')
+reasons={247:{
+'w1':'The quoted watercourse is the nominal chu \'bab klung; stream of water excludes both the supplied article and the relative seeing clause.',
+'w2':'First craving spirit belongs to the short quotation and agrees with the first yi dvags, not the later prose perceiver.',
+'w3':'The quotation contrasts stream and pus; first rnag owns first pus, not the substance compound in the prose.',
+'w4':'blo denotes the mind in the quotation. The later states of mind is an enumerative English recast and cannot consume this occurrence.',
+'p5':'yang adds the craving-spirit example; as well has that additive scope.',
+'p31':'zhes marks quoted speech. says realizes reporting locally without the supplied where it or author/title bracket.',
+'w6':"mtha' dpyad pa is the act of analyzing the issue. analyze is directly licensed by this source; the master mtha' dpyad entry is auto-aligned, medium-confidence, not a curated guarantee.",
+'w7':'The prose watercourse is separate from the opening verse. river of water matches chu klung in the first perceptual example.',
+'w8':'rnag khrag is the coordinated substance compound, with an attested pus and blood equivalent. Its internal and joins the actual two substance members.',
+'m9':'rnag is uniquely contained in rnag khrag and pus uniquely inside its English parent; this is the second pus in the complete English.',
+'m10':'khrag is the blood member of the same contiguous d5 compound group; it is strictly tighter on both sides.',
+'w11':'The first prose snang predicates how the water appears, so looks like is an appearance predicate with unchanged object and experiencer.',
+'w12':'Second yi dvags is the possessor of the first visual consciousness, so the second craving spirit is required.',
+'w13':'mig shes names the spirit’s visual consciousness; the first of the two identical English phrases is correct.',
+'w14':'The basin’s interior, hair appearance, and cataract context select the vessel sense. Original HGM bse ru attests porcelain basin; clean white is unlicensed descriptive expansion.',
+'w15':'skra shad is the strand/hair unit here. hair carries the object of the false falling appearance; no comb sense is imposed.',
+'w16':"'dzag gives falling; fallen is its lexical realization. The perfect auxiliary has and locative into it do not belong in this atom.",
+'w17':'Second snang is the basin’s hair appearance, and owns second looks like. The root is a sufficient lexical boundary.',
+'w18':'rab rib can names the bearer of the eye condition, here the possessor of visual consciousness. can licenses person with, and the exact HGM unit licenses the kind-of-cataract description. Initial a remains outside.',
+'m19':'rab rib supplies the eye condition within the bearer compound. cataract is a unique, strictly smaller member on each side.',
+'w20':'Second mig shes is the cataract bearer’s visual consciousness and takes the second English occurrence.',
+'w21':'sa gzhi is the ground/earth surface, an attested nominal compound. surface of the earth is sound; entire is outside the lexical unit.',
+'w22':'First keng rus is the covering substance on the ground and therefore later bones of corpses, not the preceding meditation-topic skeletons.',
+'p32':'kyis relates the covering material to khyab. Third exact with, after covered, realizes it; earlier question-with and person-with are unrelated.',
+'w23':'khyab describes the ground as covered. covered is the lexical exponent; is stays outside and with is separately p32.',
+'w24':'Second keng rus specifies the skeleton meditation. English skeletons precedes bones of corpses, requiring the recorded crossing.',
+'w25':'gsal snang is the vivid visualization unit inside this meditation. HGM visualize and the local meditation construction support this verbal recast; you is excluded.',
+'w26':"ting nge 'dzin is the meditative concentration being enumerated. meditation is sufficient; that kind of and where you are not claimed.",
+'w27':'The only yul is in the post-enumeration question. Final objects follows that structure; introductory objects is anticipatory repetition and remains unwrapped.',
+'w28':"yod med supplies the complete existence/nonexistence contrast. exists or doesn't exist preserves both poles without confusing them with equivalent/not equivalent.",
+'w29':'rnam pa kun du is the full adverbial of completeness. d3 prevents treating its case-bearing phrase as an ordinary lexical compound.',
+'w30':'The positive mtshungs owns equivalent. This lexical correspondence does not assert that every comparison argument or interrogative alternative is separately translated.'},248:{
+'p26':'de la takes up the preceding question; In reply is a defensible complete discourse phrase without the English speaker and future auxiliary.',
+'w1':'First lung is the passage to be set forth, owning first passage at 44..51.',
+'w2':"'god pa is citation/presentation, realized by set forth. we will and relevant are excluded.",
+'p27':'The first dang joins presentation and explication, hence the first and at 53..56.',
+'w3':'Second lung supplies the passage whose meaning will be explicated; second passage is correct, not the repeated commentary passage near the end.',
+'w4':'bshad pa is the act of explaining. explicate is a sound local lexical recast; don’s meaning/content function is distributed into that construction, not nulled.',
+'w5':'dang po begins the first of the two announced divisions and owns Here is the first at 105..110. The earlier first belongs to the expanded gnyis outline.',
+'w6':'theg bsdus is the conventional abbreviated work title; HGM title attestation supports the complete nominal unit. The initial The is excluded.',
+'w7':'yi dvags denotes the first category of beings and has the attested craving spirits rendering.',
+'w8':"dud 'gro denotes animals in the verse list, not an action-of-going fragment.",
+'w9':'mi is humans in this coordinated being list, not negation; uppercase Humans is verse lineation.',
+'p10':'This dang joins humans and pleasure beings and owns the verse and at 215..218, distinct from introductory coordination.',
+'w11':'lha is the pleasure-beings category in GMR’s usage; the source context rules out a supplied participant.',
+'w12':'ji ltar gives the manner relation and repeated rigs with su distributes according to class. The complete phrase licenses each according To their class, including class-relative their. class alone discards the repeated distribution.',
+'w13':'dngos identifies the single object of the different perceptions; thing is a sound nominal match.',
+'w14':'gcig specifies numerical unity and owns single, without the preceding article.',
+'w15':'yid names the minds/perceptions that differ. perceptions is its noun exponent in the beings-have-perceptions recast.',
+'w17':'tha dad predicates difference and is realized as differing in the English nominal phrase.',
+'p18':'phyir gives the reason/qualification for denying reality. Insofar as fronts that causal relation at the start of the verse.',
+'w19':'don ma grub par is a complete negative object/reality predicate. has no reality retains its predicative force; has is the lexical possession-form recast, not a detachable supplied perfect auxiliary. it stays outside.',
+'w20':"'dod pa is assertive acceptance in this statement and owns say, not wish or desire. we is not included.",
+'p21':"yin closes the nominalized assertion 'dod pa yin. Finite say expresses that outer predication; no separate English copula occurs. has belongs to the embedded reality predicate. The explicit fusion-null is sound.",
+'w22':'bshad sbyar is the explanatory commentary authored by Asvabhava. GMR expresses the same author explaining the same text; explained preserves explanatory content and does not switch agents. HGM has this exact unit. mdzad pa contributes distributed authorship and is not independently equivalent to explained.',
+'w23':'dge bsnyen denotes the lay vow-holder; layman with lifetime vows is the exact established HGM equivalent, not an inferred new definition.',
+'w24':'btsun pa supplies the honorific and venered is the actual source spelling and HGM attestation. Its unusual spelling does not authorize silent correction.',
+'w25':'The author construction identifies ngo bo nyid med pa as Asvabhava, supported by original HGM proper-name attestation. pas retains the inseparable agentive -s; no generic natureless or phonetic member is imposed.'},249:{
+'w1':'chu klung is the watercourse introduced as stream of water. Later river repeats it; no second Tibetan occurrence exists.',
+'w2':'dngos po identifies the object as a thing, excluding the supplied article.',
+'w3':'gcig gives single, the numerical unity of the perceived object.',
+'w4':'rang rang distributes the observers/karma, realized once as each one. his particular further recasts this relation and is not a second occurrence.',
+'w5':'las is karma in the causal genitive chain, not the homophonous ablative particle.',
+'w6':'rnam smin is karmic maturation and owns ripening, with the outer English article excluded.',
+'w7':'dbang supplies causal force in the karmic chain; forces is the local nominal-to-verb recast with the ripening still causing perception. him to see is not captured.',
+'w8':'yi dvags names the perceiving craving spirit and owns the article-free subject phrase.',
+'p16':'kyis marks that spirit as agent/experiencer of seeing. Active subject position realizes the case syntactically; there is no separately alignable by. The null does not deny agency.',
+'w9':'The established rnag khrag compound owns pus and blood in the stream’s contents. Its two substance members license the internal coordination.',
+'m10':'rnag/pus is uniquely and strictly contained within w9 on both sides.',
+'m11':'khrag/blood is the other unique tighter member in the same compound member group, with both ranges inside w9.',
+'w12':'la sogs pas closes the list of contents. The attested la sogs pa/sogs list gesture owns and the like as a d5 unit with inseparable -s. The exact head allowance is licensed by this gesture.',
+'w13':'gang is fullness of the river here; full is the lexical predicate, while of marks its complement relation.',
+'w14':'mthong ba belongs to the concrete craving-spirit predicate, hence second sees at 145..149. Opening look, first sees, and to see are expanded/repeated framing.',
+'p15':'Final dang continues the enumeration into the animal example at 250. Row 249 English ends with a period; earlier and is inside list closure and cannot be reassigned. This null is explicitly row-local.'}}
+resolved=json.loads((R/'resolved-spans.json').read_text());assessments=[]
+for x in resolved: assessments.append({**x,'verdict':'SOUND','reason':reasons[x['seq']][x['id']]})
+assert len(assessments)==sum(len(x) for x in reasons.values())==74
+dump(R/'span-assessments.json',assessments)
+segments=json.loads((R/'generator-proof.json').read_text())['segments']
+review={'verdict':'APPROVE','spec_verdict':'APPROVE','quality_verdict':'APPROVE','open_findings':[],'segments':segments,'total_spans':74,'total_nulls':3,'total_word_pairs':55,'total_d7_members':5,'errata_count':0,'head_allowance_count':1,'producer':'Codex independent semantic reviewer','human_editorial_acceptance':False,'provisional':True}
+dump(R/'review.json',review)
+dump(R/'span-head-allow-needed.json',{'pages_c05':{'c5p83/s249w12':'la sogs pas: sogs, within the established la sogs pa list-closing expression, licenses the complete and the like gesture after pus and blood. The preceding la and inseparable agentive -s are preserved. Original HGM la sogs pa and sogs attest and the like; no supplied noun or participant is captured.'}})
+dump(R/'bank-ready-errata.json',[])
+errata=[{'seq':247,'found':'porcelain basin','refuted':True,'grounds':{'a':'Verified exact English 472..487 and bse ru in Wylie / BSE RU in ACIP; physical C05 full fields found.','b':'C15:393, C16:823, C18:1116 share all three text fields; physical full fields verified. P5:122 has Tibetan and dash differences. These are textual observations, not independent-publication proofs.','c':'No exact target or lexical suspicion record found; preserved E-044/E-071/E-076/E-121/E-111/E-107 classes do not justify treating this vessel sense as a defect.','d':'HGM bse ru expressly attests basin/porcelain sink/porcelain basin; interior and fallen-hair context positively selects a vessel. Comparative rhinoceros cannot replace the attested GMR sense.','e':'Re-executed unrestricted bse ru LIKE:14 rows; non-C13 full prefix:4 rows. HGM metadata 7 is not this query’s count.'},'decision':'No correction or erratum.'},{'seq':247,'found':'[from Entering the Middle Way, by Master Chandrakirti (650 AD)]','refuted':True,'grounds':{'a':'Whole bracket present in C05:247 English; C05:306 has [Master Dharmakirti\'s] with the shared verse inside a longer quotation. Physical C05 complete fields verified for 305–307.','b':'Eight non-C13 Wylie shared-phrase rows and eight English shared-line rows reopened. Parallel copies repeat the respective apparatus; neither digital identity nor alternate wording establishes independent publication or lineage.','c':'No target or Chandrakirti register match. This is an internal citation, not an instance of following-heading glue.','d':'The Tibetan short line itself does not supply either author. Reuse/quotation across works remains possible; 275–280 discusses Dharmakirti in another argument. The larger shared context still does not establish a unique replacement author, title, or date for 247. Default to refuted for filing under uncertainty.','e':'305–307 yields 3 full rows; Wylie shared phrase 8 and English shared line 8 rechecked, with all actual SQL/parameters/results preserved.'},'decision':'Unresolved source apparatus concern, not an open alignment defect; preserve it verbatim and unaligned.'},{'seq':248,'found':'venered','refuted':True,'grounds':{'a':'Exact venered at 354..361 opposite btsun pa 270..278 and ACIP BTZUN PA; full C05 physical fields match.','b':'C16:824 agrees in all fields. P5:123 agrees in English with Tibetan spelling/punctuation differences. C15:394/C18:1117 have explain/holy and appended 249 English. Full physical C15/C16/C18 fields verified; no independence inferred.','c':'No target or venered register entry; no registered apparatus class demonstrates a defect in this honorific spelling.','d':'The honorific function is intelligible and HGM btsun pa retains venered alongside venerable/revered/holy. This does not make frequency a proof of standard spelling, but no unique correction or local defect is established. Preserve actual attestation, default refuted under uncertainty.','e':'Re-executed LIKE venered:13; venerated:2; non-C13 248 prefix:4; we say it has no reality:9. These are digital corpus-row counts.'},'decision':'No filing and no source spelling change.'}]
+dump(R/'independent-errata-refutations.json',errata)
+intro='''# C05:247–249 / c5p83 — independent semantic review
+
+**SPEC: APPROVE. QUALITY: APPROVE.** Open alignment findings: **0**. This is Codex machine review of the actual final files, not human editorial acceptance. All source text and PROVISIONAL labels remain authoritative; no HGM glossary promotion is authorized.
+
+The reviewed candidate has **74 spans / 3 nulls / 55 non-null d5 word pairs / 5 d7 members**. The canonical generator exited 0 on all three final inputs and reproduced complete saved bodies byte for byte. Counts by segment are 247: 32/0/24; 248: 26/1/19; 249: 16/2/12 (spans/nulls/word pairs). Bodies are respectively 5,690, 4,808 and 3,345 bytes. Exact current spec/body hashes and counts are in `review.json`; generator command/source hashes are in `generator-proof.json`. `resolved-spans.json` contains exactly the required seven keys for every span, in spec order.
+
+## Independent evidence and method
+
+Read the entire source/spec/proposal review package and structured supplement, including all 141 original dispositions, final reasons and omission alternatives, complete proposal-to-final diffs, correction diffs and hash references. The review reading copies only compress JSON whitespace and reference identical repeated long strings; the original complete packages are preserved byte-exact with manifest mappings. Both 37 and 18 package input references were independently hash/size-verified. Original Tibetan-first and English-first proposals were produced by Codex; historical Claude labels in briefs are not their producer identity.
+
+Reopened the original spine via SQLite URI mode=ro, read all full original rows C05:244–315, including the entire Stream argument, and compared every saved source/context field to the original. Reopened the compressed master, all 37 selected full records and lexical queries, and the distinct Asvabhava name record. All raw fields and original metadata are retained. The original source extracts are in `independent-evidence/`; SQL, parameters, counts and full original rows are in `queries-replayed-full.json`. Thirteen material saved queries were actually re-executed, not accepted from the reconciler’s proof. Comparative fields were read as comparanda, never used to compose GMR English.
+
+Executed the actual `tools/gen_alignment_page.py` through a read-only connection guard and its actual `resolve`/`with_members` functions for every final span. Independently replayed all six original proposals as well: each exited 0 with exact saved body bytes, and all 141 original optional fields and canonical ranges match the preserved dispositions. Full Wylie and English remain equal after stripping only generated wrappers/null annotations. No generator or source implementation was reconstructed. All Python ran with PYTHONDONTWRITEBYTECODE=1.
+
+The complete physical C05, C15, C16 and C18 ASCII files were independently opened and preserved byte-exact. Full relevant ACIP/English fields match after whitespace normalization (12 C05 fields; 14 parallel fields); normalization is only a lookup aid and does not alter the preserved bytes. P5 comparisons are explicitly spine-row comparisons including raw, not a claim of physical-publication verification or lineage. No retained erratum depends on an unavailable physical witness.
+
+## Material semantic challenges and dispositions
+
+**247.** The complete cataract bearer is licensed: can supplies the bearer, rab rib the condition, and the exact HGM compound supports person with a kind of cataract. Its cataract member is legitimate. This does not license clean white for bse ru or an initial article. The first and second keng rus occurrences remain distinct despite the reversed English order. The one yul is best attached to final objects in the actual question; introductory objects is anticipatory repetition. First two snang/looks like mappings preserve appearance predicates; the third snang ba/imagine would isolate an active imagining recast from the enclosing meditative construction, so the conservative omission is sound. gsal snang/visualize has its own established lexical and local support. yod med and the equivalent/not-equivalent alternatives have different scopes: retain the complete existence contrast and positive lexical equivalent, omit the distributed negative-question alternative rather than asserting lexical absence with a null. No full comparative relation is banked.
+
+**248.** Repeated rigs distributes by class; the complete manner phrase each according To their class is justified at d3, including the class-relative anaphoric relation. The prior class-only phrase undercaptures that relation; no independent possessive atom is invented. don ma grub par is a complete negative reality predicate, and has is the lexical possession recast in has no reality, unlike the perfect auxiliary before explained. The supplied it remains outside. In bshad sbyar … [author] … mdzad pa, the commentary’s explanatory content and named author persist in GMR’s verbal recast. explained is independently supported by the original HGM unit and does not capture has/the passage or duplicate authorship on mdzad pa. This is a defensible local lexical nominal-to-verbal recast, not a general authorization to convert every commentary noun into any predicate.
+
+The distinction between ni omission and yin null is defensible. ni belongs to the minds-differ topic construction that becomes beings-have-differing-perceptions: no unique ni/have or absence claim is warranted. In contrast, 'dod pa yin is the outer finite assertion expressed as say. The embedded has no reality is not an exponent of this outer copula. The explicit predication-fusion null preserves yin’s contribution. Keep source venered and the author’s inseparable -s; no correction or generic natureless reading is substituted. The second first and the first two passage occurrences are independently confirmed.
+
+**249.** The stream remains the perceived object and the karmic ripening remains the causal force in dbang/forces; the nominal-to-verbal recast does not transfer agency to the wrong participant. rang rang owns each one once, and the second sees is the concrete spirit predicate. Earlier look/sees/to see and later river are explanatory repetitions, not extra Tibetan occurrences. kyis is syntactically realized by active subject position without a separate case word; final dang has no row-local lexical exponent, though its wider enumeration continues at 250. Neither null is a placeholder for uncertainty. The two substance members are sound. la sogs pas/and the like is an established list-closing d5 unit and requires the single exact allowance in `span-head-allow-needed.json`.
+
+Other omitted material was explicitly challenged. 247 quotation/context framing, location/reference into it, collective possession, demonstratives and interrogative framing remain distributed. 248 relevant, outline gnyis/first-then, don within explication, plural/case particles, las/zhes citation and final authorship/reference framing are not falsely nulled. Isolated las/says is weaker than the reporting function of 247 zhes/says, so omitting 248 las is consistent. 249 genitives/locative and complement of remain distributed. Coverage is useful without requiring every routine particle to acquire an English atom. None of these omissions conceals a false retained correspondence.
+
+The mtha' dpyad master record is explicitly **auto-aligned / medium confidence**, not curated; analyze is accepted here from the source clause, with that weaker lexical evidence kept provisional. A generic use of “glossary” in earlier reasons is not promoted to a stronger evidence tier by this review.
+
+## Source suspicions and errata
+
+**Bank-ready errata: `[]`.** The three suspicions (basin/rhinoceros, internal Chandrakirti/Dharmakirti citation, and venered) were independently challenged under all five grounds in `independent-errata-refutations.json`. Basin is positively supported by source context and HGM sense. Citation attribution remains unresolved because shared/reused verse and different quotation extents do not prove a unique correction; this is internal apparatus, not registered heading glue. Venered is the exact intelligible honorific attestation; recurrence alone would not prove correctness, and this review asserts no standard-modern-spelling ruling. No publication independence or ingestion lineage is inferred from digital identity, difference, or source metadata.
+
+Rechecked row counts: bse ru 14; rab rib 90; venered 13; venerated 2; ngo bo nyid med pas 10; chu klung gi dngos po gcig 3; short English verse 8; we say it has no reality 9. Focused non-C13 prefixes yield 4/4/2 for 247/248/249; shared Wylie verse yields 8; 305–307 yields 3. Full HGM metadata counts are preserved as metadata, not substituted for these actual query counts. Register searches found no C05:247–249, Chandrakirti or venered entry. Existing source-format classes remain preserved and were not re-filed.
+
+## Preservation and correction history
+
+`original-to-copy-manifest.json` is the exact original-to-copy LIST with SHA-256 and byte counts. It maps every file from both original proposal trees and the full reconciler tree, including failed attempts, frozen versions and helpers. Readable core proposals are under `proposal-inputs/<angle>/<seq>/`; complete final per-segment interfaces and correction histories are under `reviewed-final/<seq>/`. Identical evidence is stored once by content with all original paths explicitly mapped. Unsupported helper/diff extensions are exact-byte .txt copies; gzip evidence is an exact .bin copy. There are no Python caches.
+
+The two reconciler original-manifest records for the spine and master are whole-source hash pins with material extracts, not claims of full-file copies. That meaning is retained in the original manifest and independently verified in `source-hash-pins.json`. Separately, the Tibetan proposal really did preserve a complete master gzip; its complete bytes are mapped as binary. SQL extracts retain every selected original/raw field and their queries, without falsely identifying them as full database bytes.
+
+Every historical governing snapshot was compared against the exact immutable repository object pinned in the manifest; the incoming snapshot commit is 72fe7190021de6488a155af8331b414a0e4ac270. `immutable-git-proofs.json` and `manifest-verification.json` record byte equality, not comparison to changing live files. The runtime generator/builder have their own immutable pin where applicable. Both the frozen proposal protocol and later append-only throughput revision are preserved; this review does not imply the original proposers saw the later revision.
+
+The preserved 248 versions/01-before-apostrophe-correction history includes the actual note/body regeneration; current final hashes identify the corrected note. The later versions/02-root-evidence-correction history preserves the stale ni reason and 247 is/with and mtha' spelling reasons before their evidence-only correction. Independent replays and disposition checks confirm the current files, rather than treating the root’s unchanged-input assertion as semantic approval.
+
+## Per-span independent decisions
+
+All rows below are SOUND for the current reviewed spec. Canonical offsets, exact strings and detailed independent reasons are also in `span-assessments.json`.
+
+'''
+lines=[intro]
+for seq in [247,248,249]:
+ lines.append(f'### C05:{seq}\n\n| ID | Depth | Tibetan → English | Independent decision |\n|---|---:|---|---|\n')
+ for x in assessments:
+  if x['seq']==seq:lines.append('| '+x['id']+' | '+str(x['d'])+' | '+x['tib']+' → '+(x['eng'] if x['eng'] is not None else 'NULL')+' | '+x['reason'].replace('|','/')+' |\n')
+ lines.append('\n')
+(R/'review.md').write_text(''.join(lines))
+print('APPROVE',len(assessments),'spans')
