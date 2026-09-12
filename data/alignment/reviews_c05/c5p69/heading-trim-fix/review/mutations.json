@@ -1,0 +1,54 @@
+[
+  {
+    "name": "shared numbered recognizer removed",
+    "failures": 3,
+    "errors": 0,
+    "output": ".F.F.F....\n======================================================================\nFAIL: test_exact_numbered_trim_accepted_with_source_provenance (test_dictionary_view_trimming.HeadingTrimmingTests.test_exact_numbered_trim_accepted_with_source_provenance)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/tools/test_dictionary_view_trimming.py\", line 52, in test_exact_numbered_trim_accepted_with_source_provenance\n    self.assertEqual(case(BODY)['trimmed (trim_glued)'], 1)\n    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: 0 != 1\n\n======================================================================\nFAIL: test_growth_accepts_only_verified_trims (test_dictionary_view_trimming.HeadingTrimmingTests.test_growth_accepts_only_verified_trims)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/tools/test_dictionary_view_trimming.py\", line 87, in test_growth_accepts_only_verified_trims\n    self.assertEqual(counts['trimmed (trim_glued)'], 41)\n    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: 0 != 41\n\n======================================================================\nFAIL: test_numbered_course_heading_removed_from_sentence_boundary (test_dictionary_view_trimming.HeadingTrimmingTests.test_numbered_course_heading_removed_from_sentence_boundary)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/tools/test_dictionary_view_trimming.py\", line 26, in test_numbered_course_heading_removed_from_sentence_boundary\n    self.assertEqual(trim_glued(BODY + HEADING), (BODY, True))\n    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: Tuples differ: ('The[56 chars] you. 73 The Asian Classics Institute Course V[20 chars]True) != ('The[56 chars] you.', True)\n\nFirst differing element 0:\n'Ther[55 chars] you. 73 The Asian Classics Institute Course V[13 chars]orks'\n'Ther[55 chars] you.'\n\n- ('There is no place to go, no one to help, nothing to protect you. 73 The '\n?                                                                   ^^^  ^ ^^\n\n+ ('There is no place to go, no one to help, nothing to protect you.', True)\n?                                                                   ^^  ^^ ^\n\n-  'Asian Classics Institute Course V: How Karma Works',\n-  True)\n\n----------------------------------------------------------------------\nRan 10 tests in 0.002s\n\nFAILED (failures=3)\n"
+  },
+  {
+    "name": "shared phonetic function arbitrary first word",
+    "failures": 1,
+    "errors": 0,
+    "output": "........F.\n======================================================================\nFAIL: test_phonetic_trim_is_exact_and_held_in_its_band (test_dictionary_view_trimming.HeadingTrimmingTests.test_phonetic_trim_is_exact_and_held_in_its_band)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/tools/test_dictionary_view_trimming.py\", line 75, in test_phonetic_trim_is_exact_and_held_in_its_band\n    self.assertEqual(counts(short, 'phon')['trimmed (trim_glued)'], 1)\n    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: 0 != 1\n\n----------------------------------------------------------------------\nRan 10 tests in 0.001s\n\nFAILED (failures=1)\n"
+  },
+  {
+    "name": "empty",
+    "rejected": true
+  },
+  {
+    "name": "arbitrary",
+    "rejected": true
+  },
+  {
+    "name": "shorter",
+    "rejected": true
+  },
+  {
+    "name": "extended",
+    "rejected": true
+  },
+  {
+    "name": "invented",
+    "rejected": true
+  },
+  {
+    "name": "wrong reference",
+    "rejected": true
+  },
+  {
+    "name": "extra wrong reference",
+    "rejected": true
+  },
+  {
+    "name": "no refs",
+    "rejected": true
+  },
+  {
+    "name": "wrong depth",
+    "rejected": true
+  },
+  {
+    "name": "translation in phonetics",
+    "rejected": true
+  }
+]

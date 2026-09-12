@@ -1,0 +1,142 @@
+[
+  {
+    "seq": 205,
+    "found": "leopards",
+    "expected": "tigers",
+    "kind": "ENGLISH_FACTUAL_ERROR",
+    "original_claim": {
+      "seq": 205,
+      "kind": "ENGLISH_FACTUAL_ERROR",
+      "found": "leopards",
+      "expected": "tigers",
+      "evidence": "PROBABLE editorial candidate, not a source correction. C05:205 English reads leopards; its ACIP animal-list member is STAG, Wylie stag. C09:162, C16:783 and C17:509 preserve the same STAG/leopards pairing; C09/C17 have minor surrounding English differences. These demonstrate recurrence, not publication independence or a proved ingestion history. Two locally read S05392L Lamrim digital files preserve SENG GE DANG STAG in the complete matching malice-results list; full paths, file hashes and original line contexts are saved in local-source-witnesses.json. Matching digital files are not independent witnesses. Current hgm_gloss for stag is [leopards] (glossary, HTG2016), explicitly counterevidence; it is not changed. Nonetheless GMR C11:257 pairs the enumerated seng ge dang stag dang with lions, or tigers, and MB2:59,61,378,443,653,710 separately use tiger(s) for stag in animal lists. The current raw dictionary Hopkins comparison is tiger (reference only, never promoted into HGM). Thus an animal-identification slip is probable, but the standing published leopards reading is not an ingestion typo proved by this evidence. Current errata_register.json search found no leopards or srin gyi me candidate; registered heading, converter, footnote, folio, spill and cap classes do not explain this animal word. No independent blockprint or English publication was inspected. A skeptic should review lexical sense, deliberate translation choice, publication recurrence, exact quotation and registered-class duplication before filing. The disputed alignment is omitted, not falsely nulled.",
+      "severity": "LOW",
+      "confidence": "PROBABLE"
+    },
+    "refuted": true,
+    "reason": "REFUTED: applicable HGM leopards attestation and uncertain source-specific zoological correction defeat the proposed LOW/PROBABLE factual-error claim; recurrence does not establish independent publication.",
+    "grounds": {
+      "a": {
+        "refutes": false,
+        "finding": "Found leopards is verbatim once in target English; STAG/stag occupies the exact Tibetan animal-list position. All three source fields were reopened, not quoted from another segment.",
+        "counts": {
+          "wylie": 0,
+          "english": 1,
+          "acip": 0
+        }
+      },
+      "b": {
+        "refutes": false,
+        "finding": "Four rows carry stag/leopards: C05:205, C09:162, C16:783, C17:509. C16 equals all three target source fields; C09/C17 omit the late you live only in English. These are recurring digital witnesses, not established independent publications. Two reopened S05392L digital files retain SENG GE DANG STAG; matching content/hashes establish neither publication independence nor ingestion lineage. No P1/TCS same-passage witness in this exact phrase search.",
+        "witnesses": [
+          "C05:205",
+          "C09:162",
+          "C16:783",
+          "C17:509"
+        ]
+      },
+      "c": {
+        "refutes": false,
+        "finding": "All 186 register entries checked; no leopards, srin gyi me or C05:205 duplicate. Animal lexeme is outside registered heading/folio/footnote/converter classes."
+      },
+      "d": {
+        "refutes": true,
+        "finding": "The correction is not established with sufficient certainty. HGM glossary entry 6910, tier glossary, HTG2016 explicitly gives leopards, and this source uses that exact rendering. C11:257 and MB2:59,61,378,443,653,710 use tiger(s) in different animal passages. They establish a competing animal rendering and a concern, but not an independently proven mandatory replacement of this stable HGM usage. Hopkins tiger is reference only. Rule 10 is tested rather than bypassed: no same-referent factual contradiction sufficient to override the applicable HGM entry is established here. Default refuted under uncertainty; no universal zoological equivalence is approved."
+      },
+      "e": {
+        "refutes": false,
+        "finding": "All numerical/source leads rechecked: 4 exact paragraph rows (3 beyond C05), 6 cited MB2 passages plus 1 C11 passage, 2 local digital files with matching claimed SHA-256 values. Broad stag+tiger substring query yields 21 rows, which are not 21 independent publications or 21 separately aligned animal witnesses.",
+        "counts": {
+          "same_paragraph_rows": 4,
+          "parallels_beyond_C05": 3,
+          "named_MB2_rows": 6,
+          "named_C11_rows": 1,
+          "local_files": 2,
+          "broad_stag_tiger_rows": 21,
+          "register_records": 186
+        }
+      }
+    },
+    "parallel_witness": "C09:162, C16:783 and C17:509 all read “lions or leopards or other dangerous animals”; complete ACIP/Wylie/English and exact differences are retained in corpus-evidence.json and parallel-differences.json. No independent publication established.",
+    "counts_rechecked": {
+      "same_paragraph_rows": 4,
+      "parallels_beyond_C05": 3,
+      "named_MB2_rows": 6,
+      "named_C11_rows": 1,
+      "local_files": 2,
+      "broad_stag_tiger_rows": 21,
+      "register_records": 186
+    },
+    "suggested_severity": null,
+    "suggested_confidence": null
+  },
+  {
+    "seq": 206,
+    "found": "actually nice, and happiness",
+    "expected": "actually nice, and happy",
+    "kind": "ENGLISH_TYPO",
+    "original_claim": {
+      "seq": 206,
+      "kind": "ENGLISH_TYPO",
+      "found": "actually nice, and happiness",
+      "expected": "actually nice, and happy",
+      "evidence": "C05:206 has the quoted wording verbatim. C09:163 and C17:510 carry the same Tibetan clause and read ‘actually nice, and happy’; C16:784 repeats ‘happiness’ but also shares C05's punctuation and a related glued heading, so textual identity cannot prove an independent publication or ingestion history. HGM glossary evidence gives gtsang ba→‘nice’ and bde ba→both ‘happiness’ and ‘happy’; the adjectival English syntax favors ‘happy’ but does not by itself prove the source correction. This is distinct from the registered following-heading glue after ‘protect you.’",
+      "severity": "LOW",
+      "confidence": "PROBABLE"
+    },
+    "refuted": true,
+    "reason": "REFUTED: nominal happiness is HGM-attested and defensible here despite smoother happy variants; the correction remains uncertain, outside but distinct from registered heading glue.",
+    "grounds": {
+      "a": {
+        "refutes": false,
+        "finding": "Found actually nice, and happiness occurs once verbatim in target English; the second happiness belongs to bde bar. The earlier source of happiness is a separate occurrence. Original ACIP contains BDE BAR.",
+        "counts": {
+          "wylie": 0,
+          "english": 1,
+          "acip": 0
+        }
+      },
+      "b": {
+        "refutes": false,
+        "finding": "Exactly four same-clause rows: C05:206 and C16:784 have actually nice, and happiness; C09:163 and C17:510 have actually nice, and happy. No P1/TCS row in this same-clause search. C16 shares target ACIP/Wylie but its complete English heading tail differs; C09/C17 differ in final Tibetan punctuation and heading text. No independent-publication status inferred.",
+        "witnesses": [
+          "C05:206",
+          "C09:163",
+          "C16:784",
+          "C17:510"
+        ]
+      },
+      "c": {
+        "refutes": false,
+        "finding": "All 186 entries checked. No actually nice or C05:206 duplicate. The sole broad happiness register hit is E-138, C04:29 sbyis/sbyin spelling, unrelated. Candidate precedes protect you. and lies outside heading glue. The following 73 heading is an explicitly registered C05:206 course-shape artifact and is not refiled."
+      },
+      "d": {
+        "refutes": true,
+        "finding": "HGM entry 9247 bde ba attests both happiness and happy. The mixed predicate is awkward, but treating suffering things as happiness is a defensible philosophical nominal complement; changing it to happy is not proven to repair an error. Two digital happy variants alone do not decide publication wording. Default refuted under uncertainty; the quoted happiness is preserved."
+      },
+      "e": {
+        "refutes": false,
+        "finding": "Independent OR query on the English clause/Tibetan clause gives 4 rows: 2 happiness and 2 happy. Target has happiness twice, at [95,104) and [255,264); only second is disputed. Exact complete-field differences are saved, not a claim of English identity.",
+        "counts": {
+          "same_clause_rows": 4,
+          "happiness_rows": 2,
+          "happy_rows": 2,
+          "target_happiness_occurrences": 2,
+          "P1_TCS_same_clause_rows": 0,
+          "register_records": 186
+        }
+      }
+    },
+    "parallel_witness": "C16:784 reads “actually nice, and happiness”; C09:163 and C17:510 read “actually nice, and happy”. Complete originals and all field differences retained. No independent publication established.",
+    "counts_rechecked": {
+      "same_clause_rows": 4,
+      "happiness_rows": 2,
+      "happy_rows": 2,
+      "target_happiness_occurrences": 2,
+      "P1_TCS_same_clause_rows": 0,
+      "register_records": 186
+    },
+    "suggested_severity": null,
+    "suggested_confidence": null
+  }
+]

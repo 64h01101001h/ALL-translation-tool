@@ -1,0 +1,80 @@
+[
+  {
+    "mutation": "arbitrary-prefix",
+    "counts": {
+      "trimmed (trim_glued)": 40,
+      "exact": 21406,
+      "INVENTED-BY-THE-VIEW": 1,
+      "phonetics-leaked-into-depth-5": 0
+    },
+    "bad": [
+      [
+        "1",
+        "log lta'i ni, snod kyi 'jig rten na 'byung khungs mchog dang",
+        "Because"
+      ]
+    ],
+    "rejected": true
+  },
+  {
+    "mutation": "extended-heading",
+    "counts": {
+      "trimmed (trim_glued)": 40,
+      "exact": 21406,
+      "INVENTED-BY-THE-VIEW": 1,
+      "phonetics-leaked-into-depth-5": 0
+    },
+    "bad": [
+      [
+        "1",
+        "log lta'i ni, snod kyi 'jig rten na 'byung khungs mchog dang",
+        "Because you have held wrong views, then you live in a world where the single highest sourc"
+      ]
+    ],
+    "rejected": true
+  },
+  {
+    "mutation": "invented",
+    "counts": {
+      "trimmed (trim_glued)": 40,
+      "exact": 21406,
+      "INVENTED-BY-THE-VIEW": 1,
+      "phonetics-leaked-into-depth-5": 0
+    },
+    "bad": [
+      [
+        "1",
+        "log lta'i ni, snod kyi 'jig rten na 'byung khungs mchog dang",
+        "invented English"
+      ]
+    ],
+    "rejected": true
+  },
+  {
+    "mutation": "wrong-reference",
+    "counts": {
+      "trimmed (trim_glued)": 40,
+      "exact": 21406,
+      "INVENTED-BY-THE-VIEW": 1,
+      "phonetics-leaked-into-depth-5": 0
+    },
+    "bad": [
+      [
+        "1",
+        "log lta'i ni, snod kyi 'jig rten na 'byung khungs mchog dang",
+        "Because you have held wrong views, then you live in a world where the single highest sourc"
+      ]
+    ],
+    "rejected": true
+  },
+  {
+    "mutation": "remove-numbered-heading-recognition",
+    "rejected": true,
+    "output": ".F.F.F....\n======================================================================\nFAIL: test_exact_numbered_trim_accepted_with_source_provenance (test_dictionary_view_trimming.HeadingTrimmingTests.test_exact_numbered_trim_accepted_with_source_provenance)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/tools/test_dictionary_view_trimming.py\", line 52, in test_exact_numbered_trim_accepted_with_source_provenance\n    self.assertEqual(case(BODY)['trimmed (trim_glued)'], 1)\n    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: 0 != 1\n\n======================================================================\nFAIL: test_growth_accepts_only_verified_trims (test_dictionary_view_trimming.HeadingTrimmingTests.test_growth_accepts_only_verified_trims)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/tools/test_dictionary_view_trimming.py\", line 87, in test_growth_accepts_only_verified_trims\n    self.assertEqual(counts['trimmed (trim_glued)'], 41)\n    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: 0 != 41\n\n======================================================================\nFAIL: test_numbered_course_heading_removed_from_sentence_boundary (test_dictionary_view_trimming.HeadingTrimmingTests.test_numbered_course_heading_removed_from_sentence_boundary)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/tools/test_dictionary_view_trimming.py\", line 26, in test_numbered_course_heading_removed_from_sentence_boundary\n    self.assertEqual(trim_glued(BODY + HEADING), (BODY, True))\n    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: Tuples differ: ('The[56 chars] you. 73 The Asian Classics Institute Course V[20 chars]True) != ('The[56 chars] you.', True)\n\nFirst differing element 0:\n'Ther[55 chars] you. 73 The Asian Classics Institute Course V[13 chars]orks'\n'Ther[55 chars] you.'\n\n- ('There is no place to go, no one to help, nothing to protect you. 73 The '\n?                                                                   ^^^  ^ ^^\n\n+ ('There is no place to go, no one to help, nothing to protect you.', True)\n?                                                                   ^^  ^^ ^\n\n-  'Asian Classics Institute Course V: How Karma Works',\n-  True)\n\n----------------------------------------------------------------------\nRan 10 tests in 0.002s\n\nFAILED (failures=3)\n"
+  },
+  {
+    "mutation": "arbitrary-phonetic-first-word",
+    "rejected": true,
+    "output": "........F.\n======================================================================\nFAIL: test_phonetic_trim_is_exact_and_held_in_its_band (test_dictionary_view_trimming.HeadingTrimmingTests.test_phonetic_trim_is_exact_and_held_in_its_band)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/tools/test_dictionary_view_trimming.py\", line 75, in test_phonetic_trim_is_exact_and_held_in_its_band\n    self.assertEqual(counts(short, 'phon')['trimmed (trim_glued)'], 1)\n    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: 0 != 1\n\n----------------------------------------------------------------------\nRan 10 tests in 0.001s\n\nFAILED (failures=1)\n"
+  }
+]

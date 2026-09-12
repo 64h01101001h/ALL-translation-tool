@@ -47,7 +47,7 @@ the/a/an/and/or/his/our/your/I/you unless `data/alignment/span_head_allow.json`
 lists it under `pages_c05` with the Tibetan word that licenses it.
 
 ## Progress
-c5p1–c5p7 (1–21) cloned 2026-09-05; c5p8–c5p49 (22–147) landed 2026-09-05; c5p50–c5p55 (148–165) landed 2026-09-08. c5p56 (166–168) landed 2026-09-12 after fresh independent proposals, reconciliation and skeptical review. c5p57 (169–171) landed after independent review. c5p58 (172–174) landed after independent review. c5p59 (175–177) landed after independent review. c5p60 (178–180) landed after independent review. c5p61 (181–183) landed after independent review. c5p62 (184–186) landed after independent review. c5p63 (187–189) landed after independent review. c5p64 (190–192) landed after independent review. c5p65 (193–195) landed after independent review. c5p66 (196–198) landed after independent review. c5p67 (199–201) landed after independent review. c5p68 (202–204) landed after independent review. Coverage 204/511; current verification is recorded in the latest batch entry below.
+c5p1–c5p7 (1–21) cloned 2026-09-05; c5p8–c5p49 (22–147) landed 2026-09-05; c5p50–c5p55 (148–165) landed 2026-09-08. c5p56 (166–168) landed 2026-09-12 after fresh independent proposals, reconciliation and skeptical review. c5p57 (169–171) landed after independent review. c5p58 (172–174) landed after independent review. c5p59 (175–177) landed after independent review. c5p60 (178–180) landed after independent review. c5p61 (181–183) landed after independent review. c5p62 (184–186) landed after independent review. c5p63 (187–189) landed after independent review. c5p64 (190–192) landed after independent review. c5p65 (193–195) landed after independent review. c5p66 (196–198) landed after independent review. c5p67 (199–201) landed after independent review. c5p68 (202–204) landed after independent review. c5p69 (205–207) landed after independent review. Coverage 207/511; current verification is recorded in the latest batch entry below.
 
 **Historical pause, superseded by Adam’s 2026-09-11 continuation request. PAUSED 2026-09-08 (Adam's call): the campaign stops here while the app goes to
 a public release (two-week target). Reconciled-but-unlanded specs for 166, 167,
@@ -728,3 +728,55 @@ references, retaining all 22,697 old groups. Source hashes are unchanged.
 All 17 targeted fidelity/export/constitution suites passed in 10.52 seconds.
 Actual rendering and newer native/device execution remain unverified; no main
 integration occurred. Next: c5p69, 205–207, with source/context snapshots only.
+
+
+### c5p69 · C05:205–207 — 2026-09-12 — Codex reconciliation/review
+
+Fresh independent proposals, reconciliation and skeptical semantic review APPROVE
+45 analyst spans (21/16/8), three explicitly explained nulls and 30 nonnull d5
+pairs. All six proposals and three final bodies reproduce exactly; accepted
+ranges and the assembled canonical body match. Evidence and reconciliation
+records are preserved in `reviews_c05/c5p69/`, with the accepted spec alongside.
+All alignments remain PROVISIONAL; machine approval is not human acceptance.
+
+205 keeps binding chaos and the contextual leopards attestation, while preserving
+plague/tiger counterevidence without promoting either to a source correction.
+The firefly/biting-worm mismatch and distributed abundance remain omitted. The
+second Tibetan mang ba maps to the second everywhere, with both ranges recorded.
+206 distinguishes topic ni from inchoative 'gyur ba: the latter has no separate
+English exponent because disappearing carries the change, not because is is a
+copula equivalent. Protective help/protect and repeated happiness/world/things
+select their reviewed occurrences. 207 retains the established title and author
+members; the honorific/agentive chen pos remains omitted, not falsely nulled.
+All proposed English corrections were refuted as uncertain; no new errata or
+allowances were added. All 186 earlier register records remain unchanged.
+
+The first landing exposed a real gate failure: 41 shortened rows exceeded the
+legacy cap of 40. C05:206 retained page 73 and its numbered ACI course heading.
+The bounded repair recognizes that documented following-heading boundary and
+requires exact canonical shortening with a valid source/depth at every citation.
+It preserves the original phonetic extraction. Ten older depth-1 display rows
+receive the same repair (C03:131,199; C04:37,49,117,133,168; C05:96,118,145), plus
+new C05:206. These are derived-display cuts, never edits to full banked source.
+The visible disclosure now explains heading and phonetic-line shortening.
+
+Separate engineering SPEC/QUALITY review APPROVE records all four code hashes,
+11 exact cut ranges, meaningful RED/GREEN and mutation evidence. Actual generated
+HTML/main/reverse/course outputs independently differ from their preserved
+pre-fix copies by exactly those 11 rows; all other fields and phonetics are
+identical. The original broader 16-row attempt and failing gate remain preserved.
+See `reviews_c05/c5p69/heading-trim-fix/` for the complete repair and review proof.
+
+Coverage 207/511. Full bank: 42,836 links (+48 with three sentence anchors),
+11,871 null exponents. Evidence: 6,891 headwords / 14,846 pairs. All 42,788 prior
+links, notes, trees, evidence and ACIP mappings survive exactly. All 21,413 prior
+main CSV records are accounted for: 21,403 identical lexical keys and the ten
+explicit reviewed sentence-heading repairs, with citations retained. The old
+nub/western d7 row gains NUB from the newly banked C05:206 d5 witness; its lexical
+content is unchanged. Main CSV: 21,447; reverse: 21,107; course: 22,788. Changes:
+54 versus 4aa4aa6 (44 newly displayed keys, ten withdrawn partial-heading keys).
+All course/depth groups match actual source references; ten prior keys receive
+only the documented repair. Master/corpus hashes are unchanged. All 17 suites,
+including the ten new literal trimming tests, pass in 10.57 seconds. Rendering
+and newer native/device execution remain unverified; no main integration occurred.
+Next: c5p70, 208–210, independently approved for landing.

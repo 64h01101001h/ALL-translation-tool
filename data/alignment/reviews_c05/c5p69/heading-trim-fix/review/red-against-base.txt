@@ -1,0 +1,117 @@
+FFFF..F.F..FFFFF
+======================================================================
+FAIL: test_arbitrary_empty_shorter_extended_and_invented_outputs_rejected (test_dictionary_view_trimming.HeadingTrimmingTests.test_arbitrary_empty_shorter_extended_and_invented_outputs_rejected) (eng='')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/tools/test_dictionary_view_trimming.py", line 57, in test_arbitrary_empty_shorter_extended_and_invented_outputs_rejected
+    self.assertEqual(case(eng)['INVENTED-BY-THE-VIEW'], 1)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 0 != 1
+
+======================================================================
+FAIL: test_arbitrary_empty_shorter_extended_and_invented_outputs_rejected (test_dictionary_view_trimming.HeadingTrimmingTests.test_arbitrary_empty_shorter_extended_and_invented_outputs_rejected) (eng='There')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/tools/test_dictionary_view_trimming.py", line 57, in test_arbitrary_empty_shorter_extended_and_invented_outputs_rejected
+    self.assertEqual(case(eng)['INVENTED-BY-THE-VIEW'], 1)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 0 != 1
+
+======================================================================
+FAIL: test_arbitrary_empty_shorter_extended_and_invented_outputs_rejected (test_dictionary_view_trimming.HeadingTrimmingTests.test_arbitrary_empty_shorter_extended_and_invented_outputs_rejected) (eng='There is no place to go, no one to help, nothing to protect you')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/tools/test_dictionary_view_trimming.py", line 57, in test_arbitrary_empty_shorter_extended_and_invented_outputs_rejected
+    self.assertEqual(case(eng)['INVENTED-BY-THE-VIEW'], 1)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 0 != 1
+
+======================================================================
+FAIL: test_arbitrary_empty_shorter_extended_and_invented_outputs_rejected (test_dictionary_view_trimming.HeadingTrimmingTests.test_arbitrary_empty_shorter_extended_and_invented_outputs_rejected) (eng='There is no place to go, no one to help, nothing to protect you. 73')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/tools/test_dictionary_view_trimming.py", line 57, in test_arbitrary_empty_shorter_extended_and_invented_outputs_rejected
+    self.assertEqual(case(eng)['INVENTED-BY-THE-VIEW'], 1)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 0 != 1
+
+======================================================================
+FAIL: test_growth_accepts_only_verified_trims (test_dictionary_view_trimming.HeadingTrimmingTests.test_growth_accepts_only_verified_trims)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/tools/test_dictionary_view_trimming.py", line 88, in test_growth_accepts_only_verified_trims
+    self.assertFalse(any(counts[k] > cap for k, cap in CEILING.items()))
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: True is not false
+
+======================================================================
+FAIL: test_numbered_course_heading_removed_from_sentence_boundary (test_dictionary_view_trimming.HeadingTrimmingTests.test_numbered_course_heading_removed_from_sentence_boundary)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/tools/test_dictionary_view_trimming.py", line 26, in test_numbered_course_heading_removed_from_sentence_boundary
+    self.assertEqual(trim_glued(BODY + HEADING), (BODY, True))
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Tuples differ: ('The[56 chars] you. 73 The Asian Classics Institute Course V[20 chars]True) != ('The[56 chars] you.', True)
+
+First differing element 0:
+'Ther[55 chars] you. 73 The Asian Classics Institute Course V[13 chars]orks'
+'Ther[55 chars] you.'
+
+- ('There is no place to go, no one to help, nothing to protect you. 73 The '
+?                                                                   ^^^  ^ ^^
+
++ ('There is no place to go, no one to help, nothing to protect you.', True)
+?                                                                   ^^  ^^ ^
+
+-  'Asian Classics Institute Course V: How Karma Works',
+-  True)
+
+======================================================================
+FAIL: test_phonetic_trim_is_exact_and_held_in_its_band (test_dictionary_view_trimming.HeadingTrimmingTests.test_phonetic_trim_is_exact_and_held_in_its_band)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/tools/test_dictionary_view_trimming.py", line 76, in test_phonetic_trim_is_exact_and_held_in_its_band
+    self.assertEqual(counts('drola', 'phon')['INVENTED-BY-THE-VIEW'], 1)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 0 != 1
+
+======================================================================
+FAIL: test_trim_requires_every_citation_and_matching_depth (test_dictionary_view_trimming.HeadingTrimmingTests.test_trim_requires_every_citation_and_matching_depth) (refs=[])
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/tools/test_dictionary_view_trimming.py", line 62, in test_trim_requires_every_citation_and_matching_depth
+    self.assertEqual(case(BODY, refs=refs)['INVENTED-BY-THE-VIEW'], 1)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 0 != 1
+
+======================================================================
+FAIL: test_trim_requires_every_citation_and_matching_depth (test_dictionary_view_trimming.HeadingTrimmingTests.test_trim_requires_every_citation_and_matching_depth) (refs=['C05:999'])
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/tools/test_dictionary_view_trimming.py", line 62, in test_trim_requires_every_citation_and_matching_depth
+    self.assertEqual(case(BODY, refs=refs)['INVENTED-BY-THE-VIEW'], 1)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 0 != 1
+
+======================================================================
+FAIL: test_trim_requires_every_citation_and_matching_depth (test_dictionary_view_trimming.HeadingTrimmingTests.test_trim_requires_every_citation_and_matching_depth) (refs=['C05:206', 'C05:999'])
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/tools/test_dictionary_view_trimming.py", line 62, in test_trim_requires_every_citation_and_matching_depth
+    self.assertEqual(case(BODY, refs=refs)['INVENTED-BY-THE-VIEW'], 1)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 0 != 1
+
+======================================================================
+FAIL: test_trim_requires_every_citation_and_matching_depth (test_dictionary_view_trimming.HeadingTrimmingTests.test_trim_requires_every_citation_and_matching_depth)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/tools/test_dictionary_view_trimming.py", line 63, in test_trim_requires_every_citation_and_matching_depth
+    self.assertEqual(case(BODY, band='2')['INVENTED-BY-THE-VIEW'], 1)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 0 != 1
+
+----------------------------------------------------------------------
+Ran 10 tests in 0.002s
+
+FAILED (failures=11)

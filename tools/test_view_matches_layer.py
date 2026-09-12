@@ -11,13 +11,14 @@ something else, because nothing compared the two.
 The invariant is deliberately narrow, because a loose one would be worthless:
 
     every published (headword, English) pair is EITHER exactly a banked pair,
-    OR a prefix of one produced by trim_glued() — and nothing else, ever.
+    OR exactly the permitted display shortening of its cited banked sources.
 
-trim_glued cuts a following section's heading back off the English (a
-registered digitisation artefact, E-037/E-038 class). Truncation can only ever
-remove text, so a prefix cannot introduce a claim the layer did not make.
-Anything that is neither exact nor a prefix is the display layer inventing,
-and that is a hard zero.
+Heading trims must equal trim_glued(), at the same depth, at EVERY citation.
+Phonetic-line extractions must equal trim_phonetic() on a phonetic source and
+stay in the phonetics band. An arbitrary prefix is never sufficient evidence.
+There is no count allowance for unverified shortening: its ceiling is zero.
+The independent literal regression cases run with this gate to check the
+shared transformations, including growth past the former 40-row allowance.
 
 The phonetics band is checked too, and separately: it must stay disjoint from
 depth 5 PAIRWISE. The same Tibetan word legitimately has a transcription in
@@ -27,6 +28,7 @@ the real failure, and there are none.
 """
 import io, json, os, sys
 from collections import Counter
+from build_dictionary_view import is_phonetic, trim_glued, trim_phonetic
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 VIEW = sys.argv[1] if len(sys.argv) > 1 else os.path.join(
@@ -39,7 +41,6 @@ EVID = sys.argv[3] if len(sys.argv) > 3 else os.path.join(
 CEILING = {
     'INVENTED-BY-THE-VIEW': 0,        # neither banked nor a trim of a banked
     'phonetics-leaked-into-depth-5': 0,
-    'trimmed (trim_glued)': 40,       # 27 measured 2026-08-28
 }
 
 def payload(html):
@@ -53,11 +54,28 @@ def rows(band):
         for eng, refs in senses:
             yield hw, eng, refs
 
+def permitted_trim(link, eng, band):
+    """Authorize only the builder's exact transformation of this source link."""
+    source = link['eng'].strip()
+    if not eng or eng == source or not source.startswith(eng):
+        return False
+    phonetic = is_phonetic(link['tib'].strip(), source) and not source[:1].isupper()
+    if band == 'phon':
+        return phonetic and trim_phonetic(link['tib'].strip(), source) == eng
+    if phonetic or str(link.get('d')) != str(band):
+        return False
+    trimmed, changed = trim_glued(source)
+    return changed and trimmed == eng
+
+
 def classify(P, full, ev):
     byTib = {}
+    cited = {}
     for l in full['links']:
         if l.get('tib') and l.get('eng'):
             byTib.setdefault(l['tib'], set()).add(l['eng'])
+            ref = '%s:%s' % (l.get('course'), l.get('seg'))
+            cited.setdefault((l['tib'], ref), []).append(l)
     for hw, senses in ev['pairs'].items():
         for s in senses:
             if s.get('eng'):
@@ -70,7 +88,9 @@ def classify(P, full, ev):
             banked = byTib.get(hw, ())
             if eng in banked:
                 t['exact'] += 1
-            elif any(b.startswith(eng) for b in banked):
+            elif refs and all(any(
+                    permitted_trim(l, eng, d)
+                    for l in cited.get((hw, ref), ())) for ref in refs):
                 t['trimmed (trim_glued)'] += 1
             else:
                 t['INVENTED-BY-THE-VIEW'] += 1
@@ -99,9 +119,15 @@ def main():
         return 1
     total = t['exact'] + t['trimmed (trim_glued)']
     print('view matches layer: %d published rows, %d exactly as banked, '
-          '%d trimmed of a glued heading, 0 invented; phonetics band and '
+          '%d shortened by verified display rules, 0 invented; phonetics band and '
           'depth 5 share no pair' % (total, t['exact'], t['trimmed (trim_glued)']))
     return 0
 
 if __name__ == '__main__':
-    sys.exit(main())
+    # This existing CTest gate also protects the shared transformation against
+    # permissive mutations; no second CMake registration is needed.
+    import unittest
+    from test_dictionary_view_trimming import HeadingTrimmingTests
+    result = unittest.TextTestRunner().run(
+        unittest.defaultTestLoader.loadTestsFromTestCase(HeadingTrimmingTests))
+    sys.exit(main() if result.wasSuccessful() else 1)

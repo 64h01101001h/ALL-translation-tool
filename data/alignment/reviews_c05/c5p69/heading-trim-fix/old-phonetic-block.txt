@@ -1,0 +1,11 @@
+            trimmed = e
+            try:
+                say = _P.pronounce(t)
+                cut = len(say) + 2
+                if len(e) > cut * 1.6:
+                    m = re.match(r"^.{%d,%d}?[\.\,]" % (max(0, cut - 12), cut + 14), e)
+                    if m:
+                        trimmed = m.group(0)
+            except Exception:
+                pass
+            e = trimmed

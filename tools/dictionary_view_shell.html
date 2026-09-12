@@ -256,9 +256,9 @@ document.getElementById('foot').innerHTML =
    one: the range is the point.
    ${META.n_glued ? `<br><span class="disclose">This page shows
      ${META.n_glued.toLocaleString()} entries with less text than the layer holds:
-     a following section&rsquo;s heading had run on into the English at
-     digitisation, and it is cut back here. Nothing is added or reworded &mdash;
-     a trim can only remove. ${(META.n_phon||0).toLocaleString()} phonetic
+     following section headings or translations appended to phonetic lines
+     are cut back here. The full source text remains in the layer;
+     nothing is composed, added or reworded. ${(META.n_phon||0).toLocaleString()} phonetic
      transcriptions are held out of the dictionary entirely, in band 0.</span>`
      : ''}`;
 render();

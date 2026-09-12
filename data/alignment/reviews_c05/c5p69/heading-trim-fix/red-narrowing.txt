@@ -1,0 +1,27 @@
+......F...
+======================================================================
+FAIL: test_numbered_course_without_reading_witness_preserves_legacy_text (__main__.HeadingTrimmingTests.test_numbered_course_without_reading_witness_preserves_legacy_text)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/tools/test_dictionary_view_trimming.py", line 36, in test_numbered_course_without_reading_witness_preserves_legacy_text
+    self.assertEqual(trim_glued(source), (source, False))
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Tuples differ: ('The[56 chars] you.', True) != ('The[56 chars] you. 73 The Asian Classics Institute Course V[21 chars]alse)
+
+First differing element 0:
+'Ther[55 chars] you.'
+'Ther[55 chars] you. 73 The Asian Classics Institute Course V[13 chars]orks'
+
+- ('There is no place to go, no one to help, nothing to protect you.', True)
+?                                                                    -------
+
++ ('There is no place to go, no one to help, nothing to protect you. 73 The '
+?                                                                   ++++++++
+
++  'Asian Classics Institute Course V: How Karma Works',
++  False)
+
+----------------------------------------------------------------------
+Ran 10 tests in 0.002s
+
+FAILED (failures=1)

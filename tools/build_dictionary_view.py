@@ -81,6 +81,24 @@ def is_phonetic(tib, eng):
     return False
 
 
+def trim_phonetic(tib, eng):
+    """Keep the existing phonetic-line extraction, shared with the view gate.
+
+    Call only after is_phonetic() and the lowercase-source check. The
+    pronunciation-length/punctuation rule is unchanged from the builder.
+    """
+    try:
+        say = _P.pronounce(tib)
+        cut = len(say) + 2
+        if len(eng) > cut * 1.6:
+            m = re.match(r"^.{%d,%d}?[\.\,]" % (max(0, cut - 12), cut + 14), eng)
+            if m:
+                return m.group(0)
+    except Exception:
+        pass
+    return eng
+
+
 # A new section's heading glued onto the previous segment's English. 511
 # segments across 59 courses carry one (Adam, 2026-08-28). Only
 # high-confidence forms are trimmed -- numbered readings and contemplations,
@@ -98,12 +116,26 @@ GLUED = re.compile(
     r")\b")
 
 
+# Numbered running heads were missed by GLUED's immediate letter/space
+# boundary, leaving "73 The Asian Classics Institute Course V: ..." visible.
+# Require sentence punctuation, a page number, the full course heading and
+# a Reading heading already recognized by GLUED. This repairs the partial
+# trim without newly shortening legacy Readings/Reading 5A-style variants.
+NUMBERED_COURSE_HEAD = re.compile(
+    r"(?<=[.!?])\s+\d+\s+The Asian Classics Institute Course [IVXLCDM]+:\s+"
+    r"[^.!?\n]+? Reading (?:One|Two|Three|Four|Five|Six|Seven|Eight|Nine|Ten|\d+)\b")
+
+
 def trim_glued(eng):
     """Cut the English where a following section's heading was glued on."""
     m = GLUED.search(eng or "")
-    if not m:
+    numbered = NUMBERED_COURSE_HEAD.search(eng or "")
+    boundaries = ([m.start() + 1] if m else [])
+    if numbered:
+        boundaries.append(numbered.start())
+    if not boundaries:
         return eng, False
-    cut = eng[:m.start() + 1].rstrip()
+    cut = eng[:min(boundaries)].rstrip()
     # only trim if something substantial survives; otherwise the span IS the
     # heading and belongs to whatever follows, not here
     return (cut, True) if len(cut) >= 12 else (eng, False)
@@ -139,17 +171,7 @@ def main():
         if is_phonetic(t, e) and not e[:1].isupper():
             # show only the transcription; the appended translation belongs
             # to the prayer, not to this Tibetan line
-            trimmed = e
-            try:
-                say = _P.pronounce(t)
-                cut = len(say) + 2
-                if len(e) > cut * 1.6:
-                    m = re.match(r"^.{%d,%d}?[\.\,]" % (max(0, cut - 12), cut + 14), e)
-                    if m:
-                        trimmed = m.group(0)
-            except Exception:
-                pass
-            e = trimmed
+            e = trim_phonetic(t, e)
             phon[t][e].append("%s:%s" % (co, seg))
             n_phon += 1
             continue
@@ -180,17 +202,12 @@ def main():
                      "(held apart, not dictionary content)\n"
                      % (len(pents), sum(len(x[2]) for x in pents)))
 
-    # The page must SAY what it did to the text, not just do it. trim_glued
-    # cuts a following section's heading off the English, so a trimmed entry
-    # shows less than the layer banked - defensible, but not something to do
-    # silently to a reader who is told the text is verbatim.
-    #
-    # Count the ROWS a reader can actually see differing from the layer, not
-    # the trim CALLS. They are not the same number: 11 calls produce 27
-    # visible rows, because a headword can bank a longer English at one
-    # segment and show a trimmed one here. The page must not quote the
-    # smaller figure - a disclosure that understates is worse than none - so
-    # it is measured the same way test_view_matches_layer.py measures it.
+    # Disclose every visible shortening: following-section headings trimmed
+    # from English and appended translations removed from phonetic lines.
+    # The layer retains the full source; the view must say what it removed.
+    # Count published ROWS, not calls: repeated sources can coalesce into one
+    # row, and a shortened value may itself be banked elsewhere. The fidelity
+    # gate separately verifies each shortened value and its cited sources.
     banked = collections.defaultdict(set)
     for l in links:
         if l.get("tib") and l.get("eng"):

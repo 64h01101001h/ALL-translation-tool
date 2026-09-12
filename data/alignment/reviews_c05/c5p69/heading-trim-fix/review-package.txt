@@ -1,0 +1,427 @@
+Base: 4aa4aa6cce64fe2b5129ad666e8753a2947ea64e
+Target: completed uncommitted four-file heading-trim repair; alignment data reviewed separately.
+
+
+ tools/build_dictionary_view.py   | 65 +++++++++++++++++++++++++---------------
+ tools/dictionary_view_shell.html |  6 ++--
+ tools/test_view_matches_layer.py | 46 +++++++++++++++++++++-------
+ 3 files changed, 80 insertions(+), 37 deletions(-)
+
+diff --git a/tools/build_dictionary_view.py b/tools/build_dictionary_view.py
+index a765743..73f4cfa 100644
+--- a/tools/build_dictionary_view.py
++++ b/tools/build_dictionary_view.py
+@@ -74,43 +74,75 @@ def is_phonetic(tib, eng):
+     # misses those, so compare the head of the English against the engine's
+     # output by similarity. 0.75 is deliberately high -- a real translation
+     # scores far below it against a transliteration.
+     if len(ph) >= 12:
+         head = ne[:len(ph)]
+         if difflib.SequenceMatcher(None, ph, head).ratio() >= 0.75:
+             return True
+     return False
+ 
+ 
++def trim_phonetic(tib, eng):
++    """Keep the existing phonetic-line extraction, shared with the view gate.
++
++    Call only after is_phonetic() and the lowercase-source check. The
++    pronunciation-length/punctuation rule is unchanged from the builder.
++    """
++    try:
++        say = _P.pronounce(tib)
++        cut = len(say) + 2
++        if len(eng) > cut * 1.6:
++            m = re.match(r"^.{%d,%d}?[\.\,]" % (max(0, cut - 12), cut + 14), eng)
++            if m:
++                return m.group(0)
++    except Exception:
++        pass
++    return eng
++
++
+ # A new section's heading glued onto the previous segment's English. 511
+ # segments across 59 courses carry one (Adam, 2026-08-28). Only
+ # high-confidence forms are trimmed -- numbered readings and contemplations,
+ # cantos, and the course front matter -- because a general Title Case rule
+ # also matches ordinary mid-sentence capitals like "As Master Shantideva".
+ GLUED = re.compile(
+     r"[a-z\.\,\!\?][\.\s]\s*("
+     r"Reading (?:One|Two|Three|Four|Five|Six|Seven|Eight|Nine|Ten|\d+)"
+     r"|Contemplation (?:One|Two|Three|Four|Five|Six|Seven|Eight|Nine|Ten|"
+     r"Eleven|Twelve|Thirteen|Fourteen|Fifteen|Sixteen|Seventeen|Eighteen|"
+     r"Nineteen|Twenty|Twenty-\w+|Thirty|Thirty-\w+|\d+)"
+     r"|(?:First|Second|Third|Fourth|Fifth) Canto"
+     r"|The Asian Classics Institute"
+     r"|Refuge and The Wish|A Buddhist Grace|Offering the Mandala"
+     r")\b")
+ 
+ 
++# Numbered running heads were missed by GLUED's immediate letter/space
++# boundary, leaving "73 The Asian Classics Institute Course V: ..." visible.
++# Require sentence punctuation, a page number, the full course heading and
++# a Reading heading already recognized by GLUED. This repairs the partial
++# trim without newly shortening legacy Readings/Reading 5A-style variants.
++NUMBERED_COURSE_HEAD = re.compile(
++    r"(?<=[.!?])\s+\d+\s+The Asian Classics Institute Course [IVXLCDM]+:\s+"
++    r"[^.!?\n]+? Reading (?:One|Two|Three|Four|Five|Six|Seven|Eight|Nine|Ten|\d+)\b")
++
++
+ def trim_glued(eng):
+     """Cut the English where a following section's heading was glued on."""
+     m = GLUED.search(eng or "")
+-    if not m:
++    numbered = NUMBERED_COURSE_HEAD.search(eng or "")
++    boundaries = ([m.start() + 1] if m else [])
++    if numbered:
++        boundaries.append(numbered.start())
++    if not boundaries:
+         return eng, False
+-    cut = eng[:m.start() + 1].rstrip()
++    cut = eng[:min(boundaries)].rstrip()
+     # only trim if something substantial survives; otherwise the span IS the
+     # heading and belongs to whatever follows, not here
+     return (cut, True) if len(cut) >= 12 else (eng, False)
+ 
+ 
+ FULL = os.path.join(ROOT, "data", "alignment", "alignment_full_v1.json")
+ EVID = os.path.join(ROOT, "data", "alignment", "alignment_evidence_v1.json")
+ SHELL = os.path.join(ROOT, "tools", "dictionary_view_shell.html")
+ OUT = os.path.join(ROOT, "docs", "geshe_michael_roach_dictionary.html")
+ 
+@@ -132,31 +164,21 @@ def main():
+         if not d or not t or not e or seg is None or not co:
+             skipped += 1
+             continue
+         # A proper name is not a phonetic pair even though it matches the
+         # test: `tsong kha pa` -> "Tsongkapa" IS the English. Names are
+         # capitalised in GMR's text and phonetic lines are not, which
+         # separates them without a hand-kept list.
+         if is_phonetic(t, e) and not e[:1].isupper():
+             # show only the transcription; the appended translation belongs
+             # to the prayer, not to this Tibetan line
+-            trimmed = e
+-            try:
+-                say = _P.pronounce(t)
+-                cut = len(say) + 2
+-                if len(e) > cut * 1.6:
+-                    m = re.match(r"^.{%d,%d}?[\.\,]" % (max(0, cut - 12), cut + 14), e)
+-                    if m:
+-                        trimmed = m.group(0)
+-            except Exception:
+-                pass
+-            e = trimmed
++            e = trim_phonetic(t, e)
+             phon[t][e].append("%s:%s" % (co, seg))
+             n_phon += 1
+             continue
+         e, was_glued = trim_glued(e)
+         if was_glued:
+             n_glued += 1
+         byd[d][t][e].append("%s:%s" % (co, seg))
+ 
+     depths = {}
+     for d in sorted(byd):
+@@ -173,31 +195,26 @@ def main():
+     pents = []
+     for t, rend in phon.items():
+         rl = sorted(([e, sorted(set(rs))] for e, rs in rend.items()),
+                     key=lambda x: -len(x[1]))
+         pents.append([t, acip.get(t) or "", rl])
+     pents.sort(key=lambda x: (-len(x[2]), x[0].lower()))
+     sys.stderr.write("  phonetics %5d headwords  %6d transcriptions "
+                      "(held apart, not dictionary content)\n"
+                      % (len(pents), sum(len(x[2]) for x in pents)))
+ 
+-    # The page must SAY what it did to the text, not just do it. trim_glued
+-    # cuts a following section's heading off the English, so a trimmed entry
+-    # shows less than the layer banked - defensible, but not something to do
+-    # silently to a reader who is told the text is verbatim.
+-    #
+-    # Count the ROWS a reader can actually see differing from the layer, not
+-    # the trim CALLS. They are not the same number: 11 calls produce 27
+-    # visible rows, because a headword can bank a longer English at one
+-    # segment and show a trimmed one here. The page must not quote the
+-    # smaller figure - a disclosure that understates is worse than none - so
+-    # it is measured the same way test_view_matches_layer.py measures it.
++    # Disclose every visible shortening: following-section headings trimmed
++    # from English and appended translations removed from phonetic lines.
++    # The layer retains the full source; the view must say what it removed.
++    # Count published ROWS, not calls: repeated sources can coalesce into one
++    # row, and a shortened value may itself be banked elsewhere. The fidelity
++    # gate separately verifies each shortened value and its cited sources.
+     banked = collections.defaultdict(set)
+     for l in links:
+         if l.get("tib") and l.get("eng"):
+             banked[l["tib"]].add(l["eng"])
+     n_short = 0
+     for ents in list(depths.values()) + [pents]:
+         for t, _a, rl in ents:
+             for e, _rs in rl:
+                 if e not in banked[t] and any(b.startswith(e) for b in banked[t]):
+                     n_short += 1
+diff --git a/tools/dictionary_view_shell.html b/tools/dictionary_view_shell.html
+index 464fc2c..5f22b2b 100644
+--- a/tools/dictionary_view_shell.html
++++ b/tools/dictionary_view_shell.html
+@@ -249,17 +249,17 @@ document.getElementById('strata').addEventListener('click', ev => {
+ 
+ const total = Object.keys(D).reduce((a,d) => a + D[d].reduce((x,e)=>x+e[2].length,0), 0);
+ document.getElementById('foot').innerHTML =
+   `${total.toLocaleString()} attested renderings across seven depths, drawn from
+    ${esc(META.corpus || '')}. Layer built ${esc(META.date || '')}. Tier:
+    ${esc(META.tier || '')}. &mdash; Citations are course and segment number in the
+    corpus spine. A term shows every rendering it has been given, never a chosen
+    one: the range is the point.
+    ${META.n_glued ? `<br><span class="disclose">This page shows
+      ${META.n_glued.toLocaleString()} entries with less text than the layer holds:
+-     a following section&rsquo;s heading had run on into the English at
+-     digitisation, and it is cut back here. Nothing is added or reworded &mdash;
+-     a trim can only remove. ${(META.n_phon||0).toLocaleString()} phonetic
++     following section headings or translations appended to phonetic lines
++     are cut back here. The full source text remains in the layer;
++     nothing is composed, added or reworded. ${(META.n_phon||0).toLocaleString()} phonetic
+      transcriptions are held out of the dictionary entirely, in band 0.</span>`
+      : ''}`;
+ render();
+ </script>
+diff --git a/tools/test_view_matches_layer.py b/tools/test_view_matches_layer.py
+index 00dca26..aa280a3 100644
+--- a/tools/test_view_matches_layer.py
++++ b/tools/test_view_matches_layer.py
+@@ -4,80 +4,100 @@
+ docs/geshe_michael_roach_dictionary.html is the artifact Adam actually looks at, and it
+ is generated by a second code path (build_dictionary_view.py) that reads the
+ layer and reshapes it. Every gate before this one stopped at the layer. That
+ left a hole big enough to drive a falsehood through: the layer could be
+ provably verbatim and the page in front of the reader could still say
+ something else, because nothing compared the two.
+ 
+ The invariant is deliberately narrow, because a loose one would be worthless:
+ 
+     every published (headword, English) pair is EITHER exactly a banked pair,
+-    OR a prefix of one produced by trim_glued() — and nothing else, ever.
++    OR exactly the permitted display shortening of its cited banked sources.
+ 
+-trim_glued cuts a following section's heading back off the English (a
+-registered digitisation artefact, E-037/E-038 class). Truncation can only ever
+-remove text, so a prefix cannot introduce a claim the layer did not make.
+-Anything that is neither exact nor a prefix is the display layer inventing,
+-and that is a hard zero.
++Heading trims must equal trim_glued(), at the same depth, at EVERY citation.
++Phonetic-line extractions must equal trim_phonetic() on a phonetic source and
++stay in the phonetics band. An arbitrary prefix is never sufficient evidence.
++There is no count allowance for unverified shortening: its ceiling is zero.
++The independent literal regression cases run with this gate to check the
++shared transformations, including growth past the former 40-row allowance.
+ 
+ The phonetics band is checked too, and separately: it must stay disjoint from
+ depth 5 PAIRWISE. The same Tibetan word legitimately has a transcription in
+ one band and a translation in the other — 116 headwords do — so a headword
+ test would be a false alarm. An identical (headword, English) pair in both is
+ the real failure, and there are none.
+ """
+ import io, json, os, sys
+ from collections import Counter
++from build_dictionary_view import is_phonetic, trim_glued, trim_phonetic
+ 
+ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+ VIEW = sys.argv[1] if len(sys.argv) > 1 else os.path.join(
+     ROOT, 'docs/geshe_michael_roach_dictionary.html')
+ FULL = sys.argv[2] if len(sys.argv) > 2 else os.path.join(
+     ROOT, 'data/alignment/alignment_full_v1.json')
+ EVID = sys.argv[3] if len(sys.argv) > 3 else os.path.join(
+     ROOT, 'data/alignment/alignment_evidence_v1.json')
+ 
+ CEILING = {
+     'INVENTED-BY-THE-VIEW': 0,        # neither banked nor a trim of a banked
+     'phonetics-leaked-into-depth-5': 0,
+-    'trimmed (trim_glued)': 40,       # 27 measured 2026-08-28
+ }
+ 
+ def payload(html):
+     key = 'const PAYLOAD = '
+     i = html.index(key) + len(key)
+     # raw_decode, not brace counting - the JSON is full of braces inside strings
+     return json.JSONDecoder().raw_decode(html, i)[0]
+ 
+ def rows(band):
+     for hw, _x, senses in band:
+         for eng, refs in senses:
+             yield hw, eng, refs
+ 
++def permitted_trim(link, eng, band):
++    """Authorize only the builder's exact transformation of this source link."""
++    source = link['eng'].strip()
++    if not eng or eng == source or not source.startswith(eng):
++        return False
++    phonetic = is_phonetic(link['tib'].strip(), source) and not source[:1].isupper()
++    if band == 'phon':
++        return phonetic and trim_phonetic(link['tib'].strip(), source) == eng
++    if phonetic or str(link.get('d')) != str(band):
++        return False
++    trimmed, changed = trim_glued(source)
++    return changed and trimmed == eng
++
++
+ def classify(P, full, ev):
+     byTib = {}
++    cited = {}
+     for l in full['links']:
+         if l.get('tib') and l.get('eng'):
+             byTib.setdefault(l['tib'], set()).add(l['eng'])
++            ref = '%s:%s' % (l.get('course'), l.get('seg'))
++            cited.setdefault((l['tib'], ref), []).append(l)
+     for hw, senses in ev['pairs'].items():
+         for s in senses:
+             if s.get('eng'):
+                 byTib.setdefault(hw, set()).add(s['eng'])
+ 
+     t, bad = Counter(), []
+     bands = list(P['depths'].items()) + [('phon', P['phonetics'])]
+     for d, band in bands:
+         for hw, eng, refs in rows(band):
+             banked = byTib.get(hw, ())
+             if eng in banked:
+                 t['exact'] += 1
+-            elif any(b.startswith(eng) for b in banked):
++            elif refs and all(any(
++                    permitted_trim(l, eng, d)
++                    for l in cited.get((hw, ref), ())) for ref in refs):
+                 t['trimmed (trim_glued)'] += 1
+             else:
+                 t['INVENTED-BY-THE-VIEW'] += 1
+                 bad.append((d, hw[:60], eng[:90]))
+ 
+     php = {(hw, e) for hw, e, _ in rows(P['phonetics'])}
+     d5p = {(hw, e) for hw, e, _ in rows(P['depths'].get('5', []))}
+     both = php & d5p
+     t['phonetics-leaked-into-depth-5'] = len(both)
+     return t, bad, sorted(both)[:6]
+@@ -92,16 +112,22 @@ def main():
+         n = t.get(cls, 0)
+         if n > cap:
+             fail = True
+             print('FAIL %s: %d > ceiling %d' % (cls, n, cap))
+             for r in (bad if cls == 'INVENTED-BY-THE-VIEW' else both)[:10]:
+                 print('     ', r)
+     if fail:
+         return 1
+     total = t['exact'] + t['trimmed (trim_glued)']
+     print('view matches layer: %d published rows, %d exactly as banked, '
+-          '%d trimmed of a glued heading, 0 invented; phonetics band and '
++          '%d shortened by verified display rules, 0 invented; phonetics band and '
+           'depth 5 share no pair' % (total, t['exact'], t['trimmed (trim_glued)']))
+     return 0
+ 
+ if __name__ == '__main__':
+-    sys.exit(main())
++    # This existing CTest gate also protects the shared transformation against
++    # permissive mutations; no second CMake registration is needed.
++    import unittest
++    from test_dictionary_view_trimming import HeadingTrimmingTests
++    result = unittest.TextTestRunner().run(
++        unittest.defaultTestLoader.loadTestsFromTestCase(HeadingTrimmingTests))
++    sys.exit(main() if result.wasSuccessful() else 1)
+
+diff --git a/tools/test_dictionary_view_trimming.py b/tools/test_dictionary_view_trimming.py
+new file mode 100644
+index 0000000..32f8623
+--- /dev/null
++++ b/tools/test_dictionary_view_trimming.py
+@@ -0,0 +1,95 @@
++#!/usr/bin/env python3
++"""Regression tests for source-justified display shortening (no generated files)."""
++import unittest
++
++from build_dictionary_view import trim_glued
++from test_view_matches_layer import CEILING, classify
++
++
++BODY = 'There is no place to go, no one to help, nothing to protect you.'
++HEADING = (' 73 The Asian Classics Institute Course V: How Karma Works'
++           ' Reading Five: How Karma is Carried')
++
++
++def case(eng, source=BODY + HEADING, refs=None, source_depth=1, band='1'):
++    refs = ['C05:206'] if refs is None else refs
++    full = {'links': [{'tib': 'log lta', 'eng': source, 'course': 'C05',
++                       'seg': 206, 'd': source_depth}]}
++    row = ['log lta', '', [[eng, refs]]]
++    view = {'depths': {} if band == 'phon' else {band: [row]},
++            'phonetics': [row] if band == 'phon' else []}
++    return classify(view, full, {'pairs': {}})[0]
++
++
++class HeadingTrimmingTests(unittest.TestCase):
++    def test_numbered_course_heading_removed_from_sentence_boundary(self):
++        self.assertEqual(trim_glued(BODY + HEADING), (BODY, True))
++
++    def test_ordinary_mid_sentence_title_case_preserved(self):
++        for source in ['We learn from As Master Shantideva explains the path.',
++                       'We examined 73 The Asian Classics Institute Course V: How Karma Works references.']:
++            with self.subTest(source=source):
++                self.assertEqual(trim_glued(source), (source, False))
++
++    def test_numbered_course_without_reading_witness_preserves_legacy_text(self):
++        for suffix in ['', ' Readings Five and Six: Meditation',
++                       ' Reading 5A: Omniscience', ' Reading 1B: Introduction']:
++            source = BODY + ' 73 The Asian Classics Institute Course V: How Karma Works' + suffix
++            with self.subTest(suffix=suffix):
++                self.assertEqual(trim_glued(source), (source, False))
++
++    def test_heading_only_is_not_emptied(self):
++        source = '73 The Asian Classics Institute Course V: How Karma Works'
++        self.assertEqual(trim_glued(source), (source, False))
++
++    def test_existing_reading_trim_still_permitted(self):
++        source = BODY + ' Reading Five: A heading'
++        # Preserve the existing Reading-rule boundary, including its punctuation.
++        self.assertEqual(trim_glued(source), (BODY[:-1], True))
++        self.assertEqual(case(BODY[:-1], source)['trimmed (trim_glued)'], 1)
++
++    def test_exact_numbered_trim_accepted_with_source_provenance(self):
++        self.assertEqual(case(BODY)['trimmed (trim_glued)'], 1)
++
++    def test_arbitrary_empty_shorter_extended_and_invented_outputs_rejected(self):
++        for eng in ['', 'There', BODY[:-1], BODY + ' 73', BODY + ' invented']:
++            with self.subTest(eng=eng):
++                self.assertEqual(case(eng)['INVENTED-BY-THE-VIEW'], 1)
++
++    def test_trim_requires_every_citation_and_matching_depth(self):
++        for refs in [[], ['C05:999'], ['C05:206', 'C05:999']]:
++            with self.subTest(refs=refs):
++                self.assertEqual(case(BODY, refs=refs)['INVENTED-BY-THE-VIEW'], 1)
++        self.assertEqual(case(BODY, band='2')['INVENTED-BY-THE-VIEW'], 1)
++
++    def test_phonetic_trim_is_exact_and_held_in_its_band(self):
++        tib = "'gro la phan phyir sangs rgyas 'grub par shog,"
++        short = 'drola penchir sangye druppar shok.'
++        source = short + ' Refuge and The Wish I go for refuge To the Buddha, Dharma, and Sangha Until I achieve enlightenment.'
++        full = {'links': [{'tib': tib, 'eng': source, 'course': 'C01', 'seg': 11, 'd': 1}]}
++        def counts(eng, band):
++            row = [tib, '', [[eng, ['C01:11']]]]
++            view = {'depths': {} if band == 'phon' else {band: [row]},
++                    'phonetics': [row] if band == 'phon' else []}
++            return classify(view, full, {'pairs': {}})[0]
++        self.assertEqual(counts(short, 'phon')['trimmed (trim_glued)'], 1)
++        self.assertEqual(counts('drola', 'phon')['INVENTED-BY-THE-VIEW'], 1)
++        self.assertEqual(counts(short, '1')['INVENTED-BY-THE-VIEW'], 1)
++
++    def test_growth_accepts_only_verified_trims(self):
++        links, rows = [], []
++        for seq in range(41):
++            links.append({'tib': str(seq), 'eng': BODY + HEADING,
++                          'course': 'C05', 'seg': seq, 'd': 1})
++            rows.append([str(seq), '', [[BODY, ['C05:%d' % seq]]]])
++        p = {'depths': {'1': rows}, 'phonetics': []}
++        counts = classify(p, {'links': links}, {'pairs': {}})[0]
++        self.assertEqual(counts['trimmed (trim_glued)'], 41)
++        self.assertFalse(any(counts[k] > cap for k, cap in CEILING.items()))
++        rows[-1][2][0][0] = 'There'
++        counts = classify(p, {'links': links}, {'pairs': {}})[0]
++        self.assertTrue(any(counts[k] > cap for k, cap in CEILING.items()))
++
++
++if __name__ == '__main__':
++    unittest.main()
