@@ -2194,5 +2194,17 @@
   "severity": "LOW",
   "confidence": "PROBABLE",
   "note": "filed from the alignment batch, spine-verified on merge"
+ },
+ {
+  "item_id": "E-184",
+  "course": "C05",
+  "segment": "C05:172",
+  "kind": "ENGLISH_TYPO",
+  "found": "In the hells through there are only three projections",
+  "expected": "In the hells though there are only three projections",
+  "evidence": "Source English at C05:172 contains the quoted found text verbatim. The local C05ReadingASCII.txt also reads 'In the hells through' on line 1553, so this is present in the source reading, not introduced by corpus ingestion; that file is the same source, not an independent witness. The source Tibetan adversative is 'on kyang (ACIP 'ON KYANG). Its HGM glossary-tier HTG2016 entry includes though, nonetheless, however and but. In this sentence through has no complement and cannot function as that adversative, whereas though supplies the contrast between four projections generally and only three virtuous projections in the hells. The one-letter removal is therefore a probable source-English typo; the displayed text is not corrected. Parallel-witness queries across the whole spine found only C05:172 for each of 'In the hells through', 'three projections of virtuous types of deeds', and the Tibetan 'dmyal ba na ni dge ba'i las kyi 'phen pa gsum yod'. No independent C16/P1/TCS witness to this passage was found. Rechecked historical counts: ' through there ' occurs in two segments (C05:172 and unrelated OSE:285, whose 'Can pass through there Unimpeded' is grammatical); ' through there are' occurs in one; 'hells though' in zero; case-insensitive LIKE '%In the hells%' matches 52 segments, not 52 occurrences. The register and TODO contain no duplicate claim for C05:172 or the through clause; registered converter/heading/footnote classes do not apply. No blockprint or independent English publication was consulted; confidence remains PROBABLE for editorial review.",
+  "severity": "LOW",
+  "confidence": "PROBABLE",
+  "note": "filed from the alignment batch, spine-verified on merge"
  }
 ]

@@ -47,7 +47,7 @@ the/a/an/and/or/his/our/your/I/you unless `data/alignment/span_head_allow.json`
 lists it under `pages_c05` with the Tibetan word that licenses it.
 
 ## Progress
-c5p1–c5p7 (1–21) cloned 2026-09-05; c5p8–c5p49 (22–147) landed 2026-09-05; c5p50–c5p55 (148–165) landed 2026-09-08. c5p56 (166–168) landed 2026-09-12 after fresh independent proposals, reconciliation and skeptical review. c5p57 (169–171) landed after independent review. Coverage 171/511; current verification is recorded in the latest batch entry below.
+c5p1–c5p7 (1–21) cloned 2026-09-05; c5p8–c5p49 (22–147) landed 2026-09-05; c5p50–c5p55 (148–165) landed 2026-09-08. c5p56 (166–168) landed 2026-09-12 after fresh independent proposals, reconciliation and skeptical review. c5p57 (169–171) landed after independent review. c5p58 (172–174) landed after independent review. Coverage 174/511; current verification is recorded in the latest batch entry below.
 
 **Historical pause, superseded by Adam’s 2026-09-11 continuation request. PAUSED 2026-09-08 (Adam's call): the campaign stops here while the app goes to
 a public release (two-week target). Reconciled-but-unlanded specs for 166, 167,
@@ -249,3 +249,39 @@ actual bank records contain the expected 27/30/33 links for 169/170/171.
 All 16 targeted CTest fidelity/constitution suites passed (11.13 seconds);
 results are preserved in this batch’s durable landing directory.
 Browser rendering remains unverified under the recorded URL-policy block.
+
+
+### c5p58 · C05:172–174 — 2026-09-12 — Codex reconciliation/review
+
+The six recovered historical independent proposals all reran successfully.
+Fresh reconciliation and a separate skeptical reviewer examined all 89 final
+spans (78 linked, 11 grammatical nulls). Parent reruns and the assembled page
+also exit 0 with empty stderr and exact bodies. Reproducible spec and portable
+review evidence: `specs_c05/c5p58.json`, `reviews_c05/c5p58/`. No additional
+function-head allowlist entries are needed.
+
+Restored overt locatives, genitives and negatives that earlier proposals had
+called absent or ambiguous. Ordinary numeral/noun and locative phrases remain
+outside dictionary depth. 173’s whole-word “no” and sentence-initial “For”
+have unambiguous intended occurrences. At 174, `gtan nas mi` jointly owns
+“never” at phrase depth; the emphatic component is not falsely labelled null.
+Distributed or unresolved material stays unwrapped with a reason.
+
+Filed E-184, the C05:172 “In the hells through…” → probable “though…” typo,
+LOW/PROBABLE after all five independent refutation checks. The original ASCII
+reading at line 1553 confirms the source spelling; it is not an independent
+witness. Searches found no independent parallel to this commentary. The source
+is unchanged and the broken adversative remains unpaired.
+
+Coverage 174/511. Bank: 42,029 links (+92, including three sentence links),
+11,815 null English exponents; evidence 6,770 headwords / 14,580 pair records.
+Generated dictionary and errata documents rebuilt. Structural checks found no
+broken new-page/index navigation and confirmed bank counts 35/28/29 for the
+three new segments. All16 targeted CTest fidelity/constitution suites passed
+(10.93 seconds). Browser inspection remains unverified.
+
+Consumer checkpoint: native app selftest passed with the bank through171,
+after private-library setup and the Catalog routing test’s temporary-store
+fix (929f012). Signed iPhone pack through171 was built, verified, and installed;
+launch is pending because the phone was locked. Newer alignment bank rows
+are not claimed present in that installed pack.

@@ -4,7 +4,7 @@
   "tier": "TENTATIVE (machine-matched, unreviewed)",
   "generator": "build_alignment_layer.py; source analyses credited on pages and in campaign ledgers",
   "date": "2026-09-11",
-  "source_pages": "banked pages, 5 course(s) (sha256 c63096d5cfb2ce33)",
+  "source_pages": "banked pages, 5 course(s) (sha256 45b32a6a44ed1715)",
   "source_corpus": "hgm_spine_v27_2 corpus_segments C01+C02+C03+C04+C05",
   "rule": "English is HGM's corpus text verbatim, machine-MATCHED never composed; never enters hgm_gloss",
   "transliteration": "ACIP is the source of record and the join key (acip / acip_index); wylie is the derived display form, proven equal to acip_to_ewts(acip) on 8961/8961 segments of C01-C18 (Adam 2026-08-28)",
@@ -3693,9 +3693,11 @@
      "C04:167",
      "C04:176",
      "C04:178",
-     "C05:171"
+     "C05:171",
+     "C05:173",
+     "C05:174"
     ],
-    "n": 4,
+    "n": 6,
     "acip": "'DOD CHAGS"
    },
    {
@@ -6379,9 +6381,10 @@
      "C05:38",
      "C05:123",
      "C05:155",
-     "C05:165"
+     "C05:165",
+     "C05:172"
     ],
-    "n": 4,
+    "n": 5,
     "acip": "'GRO BA"
    },
    {
@@ -10253,6 +10256,16 @@
     "acip": "'PHAGS PA'I YUL"
    }
   ],
+  "'phags pas": [
+   {
+    "eng": "realized being",
+    "refs": [
+     "C05:174"
+    ],
+    "n": 1,
+    "acip": "'PHAGS PAS"
+   }
+  ],
   "'phags yul": [
    {
     "eng": "Land of the Realized",
@@ -10380,6 +10393,14 @@
     "acip": "'PHEN"
    },
    {
+    "eng": "projection",
+    "refs": [
+     "C05:172"
+    ],
+    "n": 1,
+    "acip": "'PHEN"
+   },
+   {
     "eng": "throw you into",
     "refs": [
      "C01:214"
@@ -10420,17 +10441,19 @@
    {
     "eng": "projected",
     "refs": [
-     "C05:165"
+     "C05:165",
+     "C05:172"
     ],
-    "n": 1,
+    "n": 2,
     "acip": "'PHEN PA"
    },
    {
     "eng": "projections",
     "refs": [
-     "C05:171"
+     "C05:171",
+     "C05:172"
     ],
-    "n": 1,
+    "n": 2,
     "acip": "'PHEN PA"
    },
    {
@@ -11843,6 +11866,16 @@
     ],
     "n": 1,
     "acip": "BAR MTSAMS MED PAR"
+   }
+  ],
+  "bar pa": [
+   {
+    "eng": "between",
+    "refs": [
+     "C05:174"
+    ],
+    "n": 1,
+    "acip": "BAR PA"
    }
   ],
   "bar pa lnga'i skabs": [
@@ -14140,9 +14173,10 @@
      "C03:536",
      "C03:537",
      "C03:578",
-     "C05:123"
+     "C05:123",
+     "C05:174"
     ],
-    "n": 4,
+    "n": 5,
     "acip": "BDUN"
    },
    {
@@ -17088,6 +17122,15 @@
     "acip": "BRAL BA"
    },
    {
+    "eng": "overcome",
+    "refs": [
+     "C05:173",
+     "C05:174"
+    ],
+    "n": 2,
+    "acip": "BRAL BA"
+   },
+   {
     "eng": "freed",
     "refs": [
      "C01:301"
@@ -17123,6 +17166,14 @@
     "eng": "left behind",
     "refs": [
      "C03:191"
+    ],
+    "n": 1,
+    "acip": "BRAL BA"
+   },
+   {
+    "eng": "lost",
+    "refs": [
+     "C05:173"
     ],
     "n": 1,
     "acip": "BRAL BA"
@@ -17568,9 +17619,10 @@
    {
     "eng": "eight",
     "refs": [
-     "C01:167"
+     "C01:167",
+     "C05:173"
     ],
-    "n": 1,
+    "n": 2,
     "acip": "BRGYAD PO"
    }
   ],
@@ -18159,9 +18211,11 @@
    {
     "eng": "stable",
     "refs": [
-     "C05:171"
+     "C05:171",
+     "C05:173",
+     "C05:174"
     ],
-    "n": 1,
+    "n": 3,
     "acip": "BRTAN PA"
    },
    {
@@ -27829,6 +27883,14 @@
     "acip": "BYED"
    },
    {
+    "eng": "does",
+    "refs": [
+     "C05:173"
+    ],
+    "n": 1,
+    "acip": "BYED"
+   },
+   {
     "eng": "function",
     "refs": [
      "C05:138"
@@ -27856,6 +27918,14 @@
     "eng": "look",
     "refs": [
      "C03:420"
+    ],
+    "n": 1,
+    "acip": "BYED"
+   },
+   {
+    "eng": "perform",
+    "refs": [
+     "C05:174"
     ],
     "n": 1,
     "acip": "BYED"
@@ -28606,17 +28676,18 @@
   ],
   "byis pa": [
    {
-    "eng": "a child",
+    "eng": "child",
     "refs": [
-     "C01:473"
+     "C05:171",
+     "C05:173"
     ],
-    "n": 1,
+    "n": 2,
     "acip": "BYIS PA"
    },
    {
-    "eng": "child",
+    "eng": "a child",
     "refs": [
-     "C05:171"
+     "C01:473"
     ],
     "n": 1,
     "acip": "BYIS PA"
@@ -29478,9 +29549,10 @@
      "C05:125",
      "C05:166",
      "C05:169",
-     "C05:171"
+     "C05:171",
+     "C05:172"
     ],
-    "n": 26,
+    "n": 27,
     "acip": "BZHI"
    },
    {
@@ -36854,6 +36926,14 @@
     "acip": "DE"
    },
    {
+    "eng": "he",
+    "refs": [
+     "C05:174"
+    ],
+    "n": 1,
+    "acip": "DE"
+   },
+   {
     "eng": "its",
     "refs": [
      "C05:66"
@@ -39333,6 +39413,14 @@
     "acip": "DES"
    },
    {
+    "eng": "he",
+    "refs": [
+     "C05:174"
+    ],
+    "n": 1,
+    "acip": "DES"
+   },
+   {
     "eng": "It",
     "refs": [
      "C03:207"
@@ -40081,9 +40169,10 @@
     "eng": "virtuous",
     "refs": [
      "C03:426",
-     "C05:152"
+     "C05:152",
+     "C05:172"
     ],
-    "n": 2,
+    "n": 3,
     "acip": "DGE BA'I"
    },
    {
@@ -42355,19 +42444,20 @@
   ],
   "dmyal ba": [
    {
+    "eng": "hells",
+    "refs": [
+     "C01:97",
+     "C05:171",
+     "C05:172"
+    ],
+    "n": 3,
+    "acip": "DMYAL BA"
+   },
+   {
     "eng": "hell",
     "refs": [
      "C01:95",
      "C01:232"
-    ],
-    "n": 2,
-    "acip": "DMYAL BA"
-   },
-   {
-    "eng": "hells",
-    "refs": [
-     "C01:97",
-     "C05:171"
     ],
     "n": 2,
     "acip": "DMYAL BA"
@@ -54689,9 +54779,10 @@
      "C05:160",
      "C05:166",
      "C05:167",
-     "C05:171"
+     "C05:171",
+     "C05:172"
     ],
-    "n": 80,
+    "n": 81,
     "acip": "GSUM"
    },
    {
@@ -60302,9 +60393,10 @@
      "C05:61",
      "C05:63",
      "C05:123",
-     "C05:165"
+     "C05:165",
+     "C05:172"
     ],
-    "n": 7,
+    "n": 8,
     "acip": "KHAMS"
    },
    {
@@ -65019,9 +65111,11 @@
      "C05:166",
      "C05:167",
      "C05:168",
-     "C05:170"
+     "C05:170",
+     "C05:172",
+     "C05:173"
     ],
-    "n": 33,
+    "n": 35,
     "acip": "LAS"
    },
    {
@@ -65059,9 +65153,11 @@
      "C05:102",
      "C05:104",
      "C05:105",
-     "C05:170"
+     "C05:170",
+     "C05:172",
+     "C05:174"
     ],
-    "n": 4,
+    "n": 6,
     "acip": "LAS"
    },
    {
@@ -67926,9 +68022,10 @@
    {
     "eng": "five",
     "refs": [
-     "C03:209"
+     "C03:209",
+     "C05:172"
     ],
-    "n": 1,
+    "n": 2,
     "acip": "LNGA PO"
    }
   ],
@@ -74033,9 +74130,10 @@
      "C04:141",
      "C04:157",
      "C05:56",
-     "C05:70"
+     "C05:70",
+     "C05:172"
     ],
-    "n": 17,
+    "n": 18,
     "acip": "MED"
    },
    {
@@ -74158,6 +74256,14 @@
     "eng": "hasn't",
     "refs": [
      "C04:25"
+    ],
+    "n": 1,
+    "acip": "MED"
+   },
+   {
+    "eng": "impossible",
+    "refs": [
+     "C05:172"
     ],
     "n": 1,
     "acip": "MED"
@@ -81594,9 +81700,11 @@
      "C05:161",
      "C05:162",
      "C05:165",
-     "C05:167"
+     "C05:167",
+     "C05:173",
+     "C05:174"
     ],
-    "n": 8,
+    "n": 10,
     "acip": "MYONG"
    },
    {
@@ -100678,9 +100786,10 @@
      "C05:153",
      "C05:159",
      "C05:168",
-     "C05:169"
+     "C05:169",
+     "C05:172"
     ],
-    "n": 4,
+    "n": 5,
     "acip": "RNAM SMIN"
    },
    {
@@ -103658,6 +103767,19 @@
   ],
   "sa": [
    {
+    "eng": "levels",
+    "refs": [
+     "C05:49",
+     "C05:52",
+     "C05:54",
+     "C05:151",
+     "C05:173",
+     "C05:174"
+    ],
+    "n": 6,
+    "acip": "SA"
+   },
+   {
     "eng": "level",
     "refs": [
      "C01:116",
@@ -103667,17 +103789,6 @@
      "C05:61"
     ],
     "n": 5,
-    "acip": "SA"
-   },
-   {
-    "eng": "levels",
-    "refs": [
-     "C05:49",
-     "C05:52",
-     "C05:54",
-     "C05:151"
-    ],
-    "n": 4,
     "acip": "SA"
    },
    {
@@ -112463,9 +112574,10 @@
      "C04:138",
      "C04:146",
      "C04:197",
-     "C04:198"
+     "C04:198",
+     "C05:174"
     ],
-    "n": 8,
+    "n": 9,
     "acip": "SKYE BA"
    },
    {
@@ -112652,6 +112764,14 @@
     "eng": "one's births",
     "refs": [
      "C01:216"
+    ],
+    "n": 1,
+    "acip": "SKYE BA"
+   },
+   {
+    "eng": "rebirth",
+    "refs": [
+     "C05:173"
     ],
     "n": 1,
     "acip": "SKYE BA"
@@ -113280,6 +113400,15 @@
     "refs": [
      "C03:343",
      "C03:486"
+    ],
+    "n": 2,
+    "acip": "SKYES"
+   },
+   {
+    "eng": "reborn",
+    "refs": [
+     "C05:173",
+     "C05:174"
     ],
     "n": 2,
     "acip": "SKYES"
@@ -122596,6 +122725,15 @@
     "acip": "THAMS CAD"
    },
    {
+    "eng": "Every one",
+    "refs": [
+     "C05:171",
+     "C05:172"
+    ],
+    "n": 2,
+    "acip": "THAMS CAD"
+   },
+   {
     "eng": "every one",
     "refs": [
      "C01:78",
@@ -122673,14 +122811,6 @@
     "eng": "Every",
     "refs": [
      "C03:241"
-    ],
-    "n": 1,
-    "acip": "THAMS CAD"
-   },
-   {
-    "eng": "Every one",
-    "refs": [
-     "C05:171"
     ],
     "n": 1,
     "acip": "THAMS CAD"
@@ -130745,6 +130875,14 @@
     ],
     "n": 1,
     "acip": "YID DU 'ONG BA"
+   },
+   {
+    "eng": "pleasant",
+    "refs": [
+     "C05:172"
+    ],
+    "n": 1,
+    "acip": "YID DU 'ONG BA"
    }
   ],
   "yid du 'ong ba'i": [
@@ -131301,6 +131439,18 @@
   ],
   "yod": [
    {
+    "eng": "has",
+    "refs": [
+     "C05:35",
+     "C05:71",
+     "C05:82",
+     "C05:84",
+     "C05:172"
+    ],
+    "n": 5,
+    "acip": "YOD"
+   },
+   {
     "eng": "have",
     "refs": [
      "C03:416",
@@ -131322,17 +131472,6 @@
      "C04:179"
     ],
     "n": 5,
-    "acip": "YOD"
-   },
-   {
-    "eng": "has",
-    "refs": [
-     "C05:35",
-     "C05:71",
-     "C05:82",
-     "C05:84"
-    ],
-    "n": 4,
     "acip": "YOD"
    },
    {
@@ -131363,6 +131502,16 @@
      "C04:55",
      "C04:67",
      "C05:61"
+    ],
+    "n": 3,
+    "acip": "YOD"
+   },
+   {
+    "eng": "there are",
+    "refs": [
+     "C03:561",
+     "C05:125",
+     "C05:172"
     ],
     "n": 3,
     "acip": "YOD"
@@ -131399,15 +131548,6 @@
     "refs": [
      "C04:110",
      "C04:179"
-    ],
-    "n": 2,
-    "acip": "YOD"
-   },
-   {
-    "eng": "there are",
-    "refs": [
-     "C03:561",
-     "C05:125"
     ],
     "n": 2,
     "acip": "YOD"
@@ -136236,6 +136376,7 @@
   "'PHAGS PA LHA": "'phags pa lha",
   "'PHAGS PA LHAS": "'phags pa lhas",
   "'PHAGS PA'I YUL": "'phags pa'i yul",
+  "'PHAGS PAS": "'phags pas",
   "'PHAGS YUL": "'phags yul",
   "'PHAN": "'phan",
   "'PHEL": "'phel",
@@ -136337,6 +136478,7 @@
   "BAR GYI": "bar gyi",
   "BAR MA": "bar ma",
   "BAR MTSAMS MED PAR": "bar mtshams med par",
+  "BAR PA": "bar pa",
   "BAR PA LNGA'I SKABS": "bar pa lnga'i skabs",
   "BCAD": "bcad",
   "BCAD PA": "bcad pa",

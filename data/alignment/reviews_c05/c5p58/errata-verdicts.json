@@ -1,0 +1,51 @@
+[
+  {
+    "seq": 172,
+    "found": "In the hells through there are only three projections",
+    "refuted": false,
+    "reason": "All five attempted refutations fail: the quote is exact, no independent parallel passage was found, there is no duplicate/class match, though supplies the Tibetan adversative while through is syntactically and semantically indefensible here, and every claimed count/source-line reference reproduces. Preserve source text and file only a LOW/PROBABLE editorial candidate.",
+    "parallel_witness": "None found for this commentary passage in C16, P1, TCS or other spine texts under exact and broadened Tibetan/English queries. C05:171 is the preceding root verse, not an independent witness. Original C05ReadingASCII.txt line 1553 repeats through but is the same source, not an independent publication. OSE:285 has unrelated grammatical \"Can pass through there Unimpeded\" and does not refute this claim.",
+    "counts_rechecked": {
+      "english LIKE '%In the hells through%'": 1,
+      "english LIKE '%three projections of virtuous types of deeds%'": 1,
+      "wylie LIKE '%dmyal ba na ni dge ba'i las kyi 'phen pa gsum yod%'": 1,
+      "english LIKE '% through there %'": 2,
+      "english LIKE '% through there are%'": 1,
+      "english LIKE '%hells though%'": 0,
+      "english LIKE '%In the hells%' (matching segments, not occurrences)": 52,
+      "original ASCII line containing In the hells through": 1553
+    },
+    "suggested_severity": "LOW",
+    "suggested_confidence": "PROBABLE",
+    "checks": {
+      "a_verbatim_found": {
+        "refutes": false,
+        "outcome": "Exact found quote is in source English at [191,244). Wylie and ACIP were independently read; they carry the adversative 'on kyang / 'ON KYANG. The English quote is not expected to occur in Tibetan fields."
+      },
+      "b_independent_parallel": {
+        "refutes": false,
+        "outcome": "Exact characteristic English and Tibetan queries match C05:172 only. Broader dmyal ba na ni dge ba matches C05:171 and 172; the former is the root verse. Other broad outline-word matches are C05:123/165, not the commentary passage. No independent witness found; this is a search result limit, not proof that no witness exists."
+      },
+      "c_duplicate_or_registered_class": {
+        "refutes": false,
+        "outcome": "No C05:172 or In the hells through match in the current errata JSON or TODO. Converter, footnote, folio and following-heading records were searched and inspected; an internal English adversative misspelling is none of these classes."
+      },
+      "d_reading_or_correction_defensible": {
+        "refutes": false,
+        "outcome": "HGM glossary HTG2016 entry 17066 'on kyang lists though, nonetheless, now, however, but. The row contrasts four projections generally with only three virtuous projections in hells. Through cannot introduce this adversative clause; there is existential in there are, not a spatial complement of through. Though is a minimal grammatical one-letter correction. General through and though glossary searches were also retained; mere existence of through elsewhere does not license it here."
+      },
+      "e_counts_and_citations": {
+        "refutes": false,
+        "outcome": "All seven stated SQL segment counts and ASCII line 1553 independently reproduced. The two through there segments are exactly C05:172 and OSE:285. The 52 In the hells value is explicitly a count of matching segments, not occurrences."
+      }
+    },
+    "evidence_files": [
+      "source-review.json",
+      "witness-and-count-evidence.json",
+      "broader-witness-evidence.json",
+      "dictionary-evidence.json",
+      "register-and-ascii-evidence.json"
+    ],
+    "limits": "No blockprint or independent English publication consulted. The source ASCII check corroborates the location of the typo in the supplied source, not an independent authorial correction. Human editorial ruling remains required."
+  }
+]
