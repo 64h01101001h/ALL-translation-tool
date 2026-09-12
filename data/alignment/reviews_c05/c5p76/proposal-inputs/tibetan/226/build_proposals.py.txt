@@ -1,0 +1,60 @@
+import json,re,subprocess,hashlib,os
+from pathlib import Path
+BASE=Path(__file__).resolve().parents[1]
+REPO=BASE.parents[2]/'campaign-worktree'
+def make(seq,title,items,note):
+ p=BASE/str(seq);src=json.loads((p/'source-evidence.json').read_text())['source'];spans=[];positions=[];tc=0
+ for i,item in enumerate(items,1):
+  d,t,e,*rest=item;occ=rest[0] if rest else 1
+  # author records intended English occurrence; generator proof independently resolves it.
+  tid='w'+str(i);sp={'id':tid,'d':d,'tib':t,'eng':e}
+  matches=[m.start() for m in re.finditer(re.escape(t),src['wylie']) if m.start()>=tc and (m.start()==0 or src['wylie'][m.start()-1] in ' ,') and (m.end()==len(src['wylie']) or not src['wylie'][m.end()].isalnum())]
+  assert matches,(seq,t,tc);tp=matches[0];tc=tp+len(t)
+  if e is None:sp.update(cls='particle',nul=('List-extending sogs has no separately rendered closing gesture here.' if t=='sogs' else 'Topic ni has no separately alignable English exponent.'));ep=None
+  else:
+   matches=[m.start() for m in re.finditer(re.escape(e),src['english']) if (m.start()==0 or not src['english'][m.start()-1].isalnum()) and (m.end()==len(src['english']) or not src['english'][m.end()].isalnum())]
+   assert len(matches)>=occ,(seq,e,occ,matches);ep=matches[occ-1]
+  spans.append(sp);positions.append({'id':tid,'tib_start':tp,'tib_end':tc,'eng_start':ep,'eng_end':None if ep is None else ep+len(e),'eng_occurrence':occ if e else None})
+ order=[r['id'] for r in sorted([r for r in positions if r['eng_start'] is not None],key=lambda r:r['eng_start'])]
+ spec={'course':'C05','segments':[{'seq':seq,'title':title,'spans':spans,'eng_order':order,'note':'Provisional machine alignment by Codex, Tibetan-first independent proposal. '+note}]}
+ (p/'spec.json').write_text(json.dumps(spec,ensure_ascii=False,indent=2)+'\n');(p/'intended-occurrences.json').write_text(json.dumps(positions,indent=2)+'\n');(p/'errata.json').write_text('[]\n')
+ env=dict(os.environ,PYTHONDONTWRITEBYTECODE='1')
+ n=len(list(p.glob('attempt-*.exit.txt')))+1
+ result=subprocess.run(['python3',str(BASE.parents[1]/'run_generator_readonly.py')],cwd=REPO,input=(p/'spec.json').read_bytes(),capture_output=True,env=env)
+ stem=f'attempt-{n:02}'
+ (p/(stem+'.spec.json')).write_bytes((p/'spec.json').read_bytes());(p/(stem+'.stdout.html')).write_bytes(result.stdout);(p/(stem+'.stderr.txt')).write_bytes(result.stderr);(p/(stem+'.exit.txt')).write_text(str(result.returncode)+'\n')
+ if result.returncode==0:(p/'body.html').write_bytes(result.stdout)
+ print(seq,result.returncode,len(spans),len(result.stdout),result.stderr.decode())
+make(226,'karma without intrinsic arising',[
+(5,'kha che bas','Kashmiris'),(5,'thob pa','hold',1),(5,'khas len','accept',1),(6,'kyang','Although'),
+(3,'las gnyis','two types of karma'),(5,'thob pa','hold',2),(5,'skyed par','produced'),(6,'mi','not',1),(5,"'dod",'assert',1),
+(5,"'dir",'here'),(6,'ni',None),(5,'de ltar','this',1),(5,"'dod pa",'assert',2),(5,'cig','someone',1),
+(3,'gang gi ltar na','according to someone'),(5,'don','point'),(5,"dbu ma thal 'gyur ba",'Madhyamika Consequence school'),(3,'gang gi ltar na','According to someone'),
+(5,'las','deed or karma'),(3,'rang gi bdag nyid kyis','in and of itself'),(6,'ma','not',2),(5,'skyes pa','arises'),
+(5,'rang bzhin','nature of its own',1),(6,'mi','neither'),(5,"'gag pa",'finishes',1),(5,'rang bzhin','nature of its own',2),(6,'ma','never',1),(5,"'gags pa",'finishes',2),
+(5,"'bras bu",'consequence',1),(5,"'byung ba",'produce',1),(3,"mi 'gal ba",'no contradiction'),
+(5,'kun gzhi','foundation consciousness'),(5,'sogs','like'),(3,'khas ma blangs','never accept'),(6,'kyang','even if'),
+(5,'las','deed',2),(5,"'bras bu",'consequence',2),(5,"'byung bar",'come'),(5,'nus pa','can',2),
+(5,'sems can','sentient being'),(5,'rgyud','mental continuum'),(5,'la lar','any given'),(3,'las gnyis','two kinds of karma'),(5,"'gags",'finished'),
+(5,'yun ring po','long time'),(5,'bskal pa','millions of years'),(5,'mang po','many'),(5,'lon pa','passing'),(6,'kyang','still',2),
+(5,'las','deeds',1),(5,"'bras bu",'consequences',1),(5,'yang dag pa','perfectly'),(3,"mi 'khrul bar",'without any confusion'),(5,"'byung bar",'produce',2),(3,'rig par gyis shig','must understand'),
+(3,'de ltar na','Given all this'),(5,'phyogs','school',2),(5,'las','deeds',6),(6,'dang','and',8),(5,"'bras bu",'consequences',2),(5,"'brel pa",'connection'),(3,'ches shin tu','purely and totally'),(5,"'thad par",'correct')
+],"The retained-object recast thob bya'i chos and several causal links are omitted where attribution is distributed. rang bzhin owns nature of its own, excluding any. bskal pa owns millions of years (current HGM glossary), with mang po separately many. The long bracketed good/bad-deed explanation is supplied English. Declined kha che bas is a whole lexical form. Null ni marks unrendered topic grammar; other omitted material is not asserted absent.")
+make(227,'four replies presume intrinsic existence',[
+(5,'de rnams','all this'),(5,'don','point'),(5,'sngar bzhin','above',1),(5,'brtsad pa','problem',1),(3,'bzhi gas','all four'),
+(5,'las','deed',1),(5,'skye ba','beginning',1),(6,'dang','and',1),(5,"'gag pa",'ending',1),(3,'rang gi mtshan nyid kyis grub pa','exists by definition',1),(5,'khas len','accepting'),
+(5,'las','deed',2),(5,"'og tu",'later'),(5,"'gags pa",'ended',1),(3,'rang bzhin gyis grub par','exists by definition',3),(5,"'dod",'agreeing'),
+(5,'slob dpon','Master'),(3,"de 'dra ba'i",'that way'),(5,"'gags pa",'ending',2),(3,'yin kyang','Even though'),(5,'kun gzhi','foundation consciousness'),(5,'sogs',None),(5,'khas len','believe'),(3,'skyon med','no problem'),
+(5,"lan 'debs pa",'answer',2),(5,'mi rigs','improper'),(3,"rang bzhin gyis grub pa'i tshul gyis",'through any nature of its own'),
+(5,'las','deed',4),(5,'skye ba','beginning',2),(6,'dang','or'),(5,"'gags pa",'ending',3),(5,'med pa',"doesn't even exist"),(5,"'gog pa",'denying')
+],"The one Tibetan intrinsic-existence qualification of beginning and ending is rendered twice; rang gi mtshan nyid kyis grub pa is banked once against the first exists by definition. Later rang bzhin gyis grub par maps to the third occurrence. sogs has no separately rendered closing gesture here. bzhi gas owns all four; the recast answer-speakers to positions is omitted as distributed. The bracketed Chandrakirti and supplied English subjects remain unwrapped.")
+make(228,'nagarjuna on karma and loss',[
+(5,"lan 'debs",'answering'),(5,'tshul','way'),(5,'de','this'),(6,'nyid','exactly'),(5,"'phags pa",'Arya'),(5,'bzhed pa','position'),(5,'ston pa','demonstrate'),
+(3,'gang phyir','Because',1),(5,'las','karma',1),(5,'skye ba','begins'),(5,'med','never',1),
+(5,'rang bzhin','nature of its own',1),(5,'med','no',1),(3,"de'i phyir",'Because',2),(3,'gang phyir','since'),(6,'ma','never',2),(5,'skyes pa','begun'),
+(3,"de phyir chud zar mi 'gyur",'Neither then can it simply go away'),
+(5,'rtsa sher','Root Text on Wisdom'),(5,'gsungs pa','statement'),(5,'drangs','quotes'),
+(5,'las','karma',2),(5,'rang bzhin','its own nature'),(5,'grub pa','exists'),(5,'med pa','no',2),(3,'rang gi bdag nyid kyis','in and of itself'),(5,'skye ba','beginning'),(5,'med','no',3),
+(3,"de'i phyir",'Because of this'),(5,'las','karma',4),(5,'rang bzhin','nature of its own',2),(5,"'gag pa",'end'),(5,'mi srid pa','impossible'),
+(5,'las','deed'),(5,"'og tu",'subsequent'),(5,"'gags pa",'ended'),(3,'chud mi za bar','never just go away'),(5,'rtog pa','invent'),(3,'rigs pa min','illogical'),(3,"zhes pa'i don no",'The lines are saying that')
+],"The closing claim rang bzhin gyis grub par bzung nas is not given a secure independent English exponent in the final paraphrase and is omitted, not nulled. The following Selection Four heading is registered heading glue, outside this Tibetan. bzhed pa to position is a local provisional corpus match; its auto-aligned glossary string is not relied on or changed. chud zar mi 'gyur is a complete verbal recast; the closing zhes pa'i don no formula maps to The lines are saying that at phrase depth. The intensifier completely remains unwrapped. Source text and differing C16:805 heading are preserved in evidence; shared text does not establish independent publication or ingestion history.")

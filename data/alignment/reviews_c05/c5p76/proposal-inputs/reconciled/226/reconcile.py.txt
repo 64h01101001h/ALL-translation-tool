@@ -1,0 +1,106 @@
+import os,sys,json,sqlite3,subprocess,hashlib,copy,gzip,re
+from pathlib import Path
+assert os.environ.get('PYTHONDONTWRITEBYTECODE') == '1'
+BASE=Path(__file__).resolve().parents[2]
+REPO=BASE.parents[1]/'campaign-worktree'
+OUT=BASE/'reconciled'
+DB=REPO/'build/hgm_spine_v27_2.db'
+con=sqlite3.connect(DB.as_uri()+'?mode=ro',uri=True);con.row_factory=sqlite3.Row
+def dump(p,o): p.write_text(json.dumps(o,ensure_ascii=False,indent=2)+'\n')
+def sha(b): return hashlib.sha256(b).hexdigest()
+def rows(sql,args=()): return [dict(x) for x in con.execute(sql,args)]
+runner="import sqlite3,runpy,sys; from pathlib import Path; original=sqlite3.connect; sqlite3.connect=lambda p,*a,**k: original(Path(p).resolve().as_uri()+'?mode=ro',*a,uri=True,**k); runpy.run_path(sys.argv[1],run_name='__main__')"
+def run(spec): return subprocess.run([sys.executable,'-c',runner,str(REPO/'tools/gen_alignment_page.py')],input=spec,stdout=subprocess.PIPE,stderr=subprocess.PIPE,cwd=REPO,env={**os.environ,'PYTHONDONTWRITEBYTECODE':'1'})
+sys.path.insert(0,str(REPO/'tools'));import gen_alignment_page as G
+def resolved(seg,row):
+ sp=copy.deepcopy(seg['spans']);by={x['id']:x for x in sp}
+ for x in sp: x['_lab']='s'+str(seg['seq'])+x['id']
+ t=G.resolve(row['wylie'],sp,'tib',seg['seq'])
+ e=G.resolve(row['english'],G.with_members(sp,[by[i] for i in seg['eng_order']],row['english']),'eng',seg['seq'])
+ return t,e
+sources={s:rows('SELECT * FROM corpus_segments WHERE course=? AND seq=?',('C05',s))[0] for s in (226,227,228)}
+masterpath=Path.home()/'Desktop/HGM DICTIONARY - TRANSLATION APP/Handoff/release/hgm_dictionary_v27_2.json.gz'
+master=json.load(gzip.open(masterpath))
+rootlex=set()
+for f in ('root-lexical-originals.json','root-English-proposal-lexical-check.json'):
+ rootlex.update(json.loads((BASE/f).read_text()))
+for s in sources:
+ out=OUT/str(s);out.mkdir(exist_ok=True)
+ proof=[];proposals={};lex=set(rootlex)|{'rtog pa','bzung','bzung ba','las gnyis','sogs','med','med pa','rigs pa min'}
+ for angle in ('tibetan','english'):
+  p=BASE/angle/str(s);b=(p/'spec.json').read_bytes();d=json.loads(b);proposals[angle]=d
+  r=run(b);assert r.returncode==0 and not r.stderr and r.stdout==(p/'body.html').read_bytes()
+  (out/(angle+'-replay.stdout.html')).write_bytes(r.stdout);(out/(angle+'-replay.stderr.txt')).write_bytes(r.stderr)
+  (out/(angle+'-replay.exit.txt')).write_text(str(r.returncode)+'\n')
+  proof.append({'angle':angle,'spec_sha256':sha(b),'body_sha256':sha(r.stdout),'body_bytes':len(r.stdout),'exit':r.returncode,'stderr_bytes':len(r.stderr),'exact_saved_body':True})
+  lex.update(x['tib'] for x in d['segments'][0]['spans'])
+ dump(out/'proposal-replay-proof.json',proof)
+ dump(out/'source-original.json',sources[s]);dump(out/'context-originals.json',rows('SELECT * FROM corpus_segments WHERE course=? AND seq BETWEEN 224 AND 230',('C05',)))
+ glossary={w:rows('SELECT * FROM entries WHERE wylie=?',(w,)) for w in sorted(lex)}
+ dump(out/'glossary-originals.json',{'database':str(DB),'query':'SELECT * FROM entries WHERE wylie=?','entries':glossary})
+ dump(out/'master-originals.json',{'path':str(masterpath),'sha256':sha(masterpath.read_bytes()),'meta':master['meta'],'entries':[x for x in master['unified_entries'] if x.get('wylie') in lex]})
+ queries=[]
+ for field,pattern in [('wylie',sources[s]['wylie'][:65]),('english',sources[s]['english'][:80]),('wylie',sources[s]['wylie'][-100:])]:
+  sql=f'SELECT * FROM corpus_segments WHERE instr({field},?)>0 ORDER BY course,seq';rr=rows(sql,(pattern,));queries.append({'sql':sql,'params':[pattern],'count':len(rr),'rows':rr})
+ extras=rows("SELECT * FROM corpus_segments WHERE (course='ILL' AND seq BETWEEN 1884 AND 1891) OR (course='P7' AND seq=8) OR (course='C16' AND seq BETWEEN 803 AND 805) OR (course='C10' AND seq IN (26,27))")
+ dump(out/'parallel-originals.json',{'queries':queries,'explicit_context_query':"SELECT * FROM corpus_segments WHERE (course='ILL' AND seq BETWEEN 1884 AND 1891) OR (course='P7' AND seq=8) OR (course='C16' AND seq BETWEEN 803 AND 805) OR (course='C10' AND seq IN (26,27))",'explicit_context_rows':extras})
+ (out/'errata-register-original.json').write_bytes((REPO/'docs/errata_register.json').read_bytes())
+ (out/'span-head-allow-original.json').write_bytes((REPO/'data/alignment/span_head_allow.json').read_bytes())
+ # The Tibetan angle gives flat lexical anchors. Changes below are independently judged.
+ seg=copy.deepcopy(proposals['tibetan']['segments'][0]);sp=seg['spans'];order=seg['eng_order']
+ def remove(ids):
+  sp[:]=[x for x in sp if x['id'] not in ids];order[:]=[i for i in order if i not in ids]
+ def get(i): return next(x for x in sp if x['id']==i)
+ def add_after(parent,new): sp.insert(sp.index(get(parent))+1,new)
+ def eng_after(parent,id): order.insert(order.index(parent)+1,id)
+ if s==226:
+  remove({'w30','w54'})
+  add_after('w4',{'id':'w64','d':5,'tib':'thob bya','eng':'retained by the hold'});eng_after('w5','w64')
+  for parent,n in [('w5',1),('w43',3)]:
+   get(parent)['d']=5
+   idx=sp.index(get(parent))+1
+   sp[idx:idx]=[{'id':f'm{n}','d':7,'tib':'las','eng':'karma'},{'id':f'm{n+1}','d':7,'tib':'gnyis','eng':'two'}]
+  idx=sp.index(get('w17'))+1
+  sp[idx:idx]=[{'id':'m5','d':7,'tib':'dbu ma','eng':'Madhyamika'},{'id':'m6','d':7,'tib':"thal 'gyur ba",'eng':'Consequence'}]
+  get('w33')['eng']='or the like'
+  get('w20').update(d=5,tib='rang gi bdag nyid')
+  seg['note']="PROVISIONAL machine alignment produced by Codex reconciliation. GMR English remains verbatim. thob bya owns the established HGM rendering retained by the hold; no thob/hold member is claimed, since the final hold is the explanatory retaining agent. las gnyis is an attested compound with karma and two members. The two intransitive arising forms behind English produce are omitted as distributed causal recasts, not nulled. The separate come occurrence retains its result-as-subject role. rang bzhin excludes supplied any. la lar/any given is a local contextual match, not an HGM glossary attestation. sogs owns the complete attested closing gesture or the like. Topic ni has no separate English exponent. The bracketed good/bad-deed explanation and other supplied participants and auxiliaries remain unwrapped."
+ if s==227:
+  add_after('w4',{'id':'w34','d':5,'tib':'smra ba po','eng':'positions'});eng_after('w5','w34')
+  get('w24')['d']=5
+  add_after('w32',{'id':'w35','d':6,'tib':'phyir','eng':'reason'});order.insert(order.index('w32'),'w35')
+  seg['note']="PROVISIONAL machine alignment produced by Codex reconciliation. GMR English remains verbatim. smra ba po/positions is explicitly attested in the HGM glossary and locally names the four presented answers. One Tibetan intrinsic-existence qualification scopes over beginning and ending; it is linked once to the first exists by definition, leaving GMR's repeated second qualification unwrapped. The later rang bzhin gyis grub par owns the third occurrence. The final intrinsic-existence construction stays at phrase depth within the denial. sogs has no separately rendered list-ending gesture and is nulled on that basis. Supplied articles, subjects and the bracketed Chandrakirti remain unwrapped."
+ if s==228:
+  get('w26').update(d=5,tib='rang gi bdag nyid')
+  get('w39')['d']=5
+  # The last formula expresses the explanation; avoid claiming its supplied subject.
+  get('w40')['eng']='saying that'
+  seg['note']="PROVISIONAL machine alignment produced by Codex reconciliation. GMR English remains verbatim. The second prose med owns the third English no, in no such karma could ever have a beginning: the negative is moved into the subject phrase, while the repeated karma is left unwrapped. It is not an absence null. rtog pa/invent is a local contextual match: the conceptualized object is non-loss, whereas think of introduces the previously ended deed. The source's assumption of intrinsic existence, rang bzhin gyis grub par bzung nas, is not independently recoverable in that English paraphrase and is omitted, not repaired or nulled. The closing explanatory formula owns saying that; its supplied English subject The lines are remains unwrapped. The full Selection Four heading is preserved as registered following-heading apparatus and is unwrapped. bzhed pa/position and verbal ston pa/demonstrate are local matches; unreliable auto-aligned or nominal-homograph glossary readings are not promoted."
+ spec={'course':'C05','segments':[seg]};b=(json.dumps(spec,ensure_ascii=False,indent=2)+'\n').encode()
+ (out/'attempt-01.spec.json').write_bytes(b);r=run(b)
+ (out/'attempt-01.stdout.html').write_bytes(r.stdout);(out/'attempt-01.stderr.txt').write_bytes(r.stderr);(out/'attempt-01.exit.txt').write_text(str(r.returncode)+'\n')
+ if r.returncode: print(s,r.returncode,r.stderr.decode());continue
+ (out/'spec.json').write_bytes(b);(out/'body.html').write_bytes(r.stdout);dump(out/'errata.json',[])
+ t,e=resolved(seg,sources[s]);occ=[]
+ for x in seg['spans']:
+  z=copy.deepcopy(x);z['tib_range']=t[x['id']];z['eng_range']=e.get(x['id'])
+  for side,field,rr in [('tib','wylie',t.get(x['id'])),('eng','english',e.get(x['id']))]:
+   if rr is None: continue
+   assert sources[s][field][rr[0]:rr[1]]==x[side]
+   hits=[];start=0
+   while True:
+    p=G.find_word(sources[s][field],x[side],start,subword=x['d']==7 or x.get('subword',False))
+    if p<0:break
+    hits.append([p,p+len(x[side])]);start=p+1
+   z[side+'_all_occurrences']=hits;z[side+'_selected_ordinal']=hits.index(list(rr))+1
+  occ.append(z)
+ dump(out/'occurrence-proof.json',{'coordinate_system':'zero-based half-open Unicode character offsets; canonical resolver, no cursor overrides','eng_order':seg['eng_order'],'spans':occ})
+ gated=[x for x in sp if x['d'] in (5,7) and x['eng'] and re.match(r'^(the|a|an|and|or|his|our|your|I|you)\b',x['eng'],re.I)]
+ allowances={}
+ for x in gated:
+  assert x['tib']=='sogs' and x['eng']=='or the like'
+  allowances['c5p76/s226'+x['id']]="sogs itself licenses the complete HGM-attested list-closing gesture or the like, including or; no supplied noun or participant is claimed. Codex reconciliation C05:226."
+ dump(out/'proposed-span-head-allowance.json',{'pages_c05':allowances,'applied':False})
+ counts={str(d):sum(x['d']==d for x in sp) for d in range(1,8)}
+ proof={'producer':'Codex reconciler','exit':r.returncode,'stderr_bytes':len(r.stderr),'spec_bytes':len(b),'body_bytes':len(r.stdout),'spec_sha256':sha(b),'body_sha256':sha(r.stdout),'spans':len(sp),'depth_counts':counts,'nulls':sum(x['eng'] is None for x in sp),'errata':0,'generator_path':str(REPO/'tools/gen_alignment_page.py'),'generator_sha256':sha((REPO/'tools/gen_alignment_page.py').read_bytes()),'sqlite_access':'mode=ro URI through transparent connection wrapper','canonical_function_modifications':False}
+ dump(out/'generator-proof.json',proof);print(s,proof)

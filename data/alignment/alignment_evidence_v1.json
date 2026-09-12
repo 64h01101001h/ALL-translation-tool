@@ -4,7 +4,7 @@
   "tier": "TENTATIVE (machine-matched, unreviewed)",
   "generator": "build_alignment_layer.py; source analyses credited on pages and in campaign ledgers",
   "date": "2026-09-12",
-  "source_pages": "banked pages, 5 course(s) (sha256 711a5025a3193053)",
+  "source_pages": "banked pages, 5 course(s) (sha256 75d3aa58fc68e345)",
   "source_corpus": "hgm_spine_v27_2 corpus_segments C01+C02+C03+C04+C05",
   "rule": "English is HGM's corpus text verbatim, machine-MATCHED never composed; never enters hgm_gloss",
   "transliteration": "ACIP is the source of record and the join key (acip / acip_index); wylie is the derived display form, proven equal to acip_to_ewts(acip) on 8961/8961 segments of C01-C18 (Adam 2026-08-28)",
@@ -621,9 +621,10 @@
      "C05:194",
      "C05:195",
      "C05:215",
-     "C05:221"
+     "C05:221",
+     "C05:226"
     ],
-    "n": 8,
+    "n": 9,
     "acip": "'BRAS BU"
    },
    {
@@ -645,9 +646,10 @@
     "eng": "consequence",
     "refs": [
      "C05:221",
-     "C05:224"
+     "C05:224",
+     "C05:226"
     ],
-    "n": 2,
+    "n": 3,
     "acip": "'BRAS BU"
    },
    {
@@ -970,6 +972,14 @@
      "C05:89"
     ],
     "n": 2,
+    "acip": "'BREL PA"
+   },
+   {
+    "eng": "connection",
+    "refs": [
+     "C05:226"
+    ],
+    "n": 1,
     "acip": "'BREL PA"
    }
   ],
@@ -1700,6 +1710,14 @@
     "eng": "arise",
     "refs": [
      "C05:215"
+    ],
+    "n": 1,
+    "acip": "'BYUNG BAR"
+   },
+   {
+    "eng": "come",
+    "refs": [
+     "C05:226"
     ],
     "n": 1,
     "acip": "'BYUNG BAR"
@@ -3547,9 +3565,10 @@
      "C05:66",
      "C05:67",
      "C05:70",
-     "C05:71"
+     "C05:71",
+     "C05:226"
     ],
-    "n": 8,
+    "n": 9,
     "acip": "'DIR"
    },
    {
@@ -3692,6 +3711,16 @@
     "acip": "'DOD"
    },
    {
+    "eng": "assert",
+    "refs": [
+     "C01:348",
+     "C04:136",
+     "C05:226"
+    ],
+    "n": 3,
+    "acip": "'DOD"
+   },
+   {
     "eng": "desire",
     "refs": [
      "C01:65",
@@ -3699,15 +3728,6 @@
      "C05:171"
     ],
     "n": 3,
-    "acip": "'DOD"
-   },
-   {
-    "eng": "assert",
-    "refs": [
-     "C01:348",
-     "C04:136"
-    ],
-    "n": 2,
     "acip": "'DOD"
    },
    {
@@ -3750,6 +3770,14 @@
     "eng": "accepted",
     "refs": [
      "C05:159"
+    ],
+    "n": 1,
+    "acip": "'DOD"
+   },
+   {
+    "eng": "agreeing",
+    "refs": [
+     "C05:227"
     ],
     "n": 1,
     "acip": "'DOD"
@@ -4078,6 +4106,15 @@
     "acip": "'DOD PA"
    },
    {
+    "eng": "assert",
+    "refs": [
+     "C04:191",
+     "C05:226"
+    ],
+    "n": 2,
+    "acip": "'DOD PA"
+   },
+   {
     "eng": "belief",
     "refs": [
      "C04:54",
@@ -4111,14 +4148,6 @@
      "C02:50"
     ],
     "n": 2,
-    "acip": "'DOD PA"
-   },
-   {
-    "eng": "assert",
-    "refs": [
-     "C04:191"
-    ],
-    "n": 1,
     "acip": "'DOD PA"
    },
    {
@@ -5989,7 +6018,24 @@
    {
     "eng": "end",
     "refs": [
-     "C05:223"
+     "C05:223",
+     "C05:228"
+    ],
+    "n": 2,
+    "acip": "'GAG PA"
+   },
+   {
+    "eng": "ending",
+    "refs": [
+     "C05:227"
+    ],
+    "n": 1,
+    "acip": "'GAG PA"
+   },
+   {
+    "eng": "finishes",
+    "refs": [
+     "C05:226"
     ],
     "n": 1,
     "acip": "'GAG PA"
@@ -6011,9 +6057,42 @@
     ],
     "n": 1,
     "acip": "'GAGS"
+   },
+   {
+    "eng": "finished",
+    "refs": [
+     "C05:226"
+    ],
+    "n": 1,
+    "acip": "'GAGS"
    }
   ],
   "'gags pa": [
+   {
+    "eng": "ended",
+    "refs": [
+     "C05:227",
+     "C05:228"
+    ],
+    "n": 2,
+    "acip": "'GAGS PA"
+   },
+   {
+    "eng": "ending",
+    "refs": [
+     "C05:227"
+    ],
+    "n": 1,
+    "acip": "'GAGS PA"
+   },
+   {
+    "eng": "finishes",
+    "refs": [
+     "C05:226"
+    ],
+    "n": 1,
+    "acip": "'GAGS PA"
+   },
    {
     "eng": "stopped",
     "refs": [
@@ -6324,6 +6403,14 @@
     "eng": "cessations",
     "refs": [
      "C05:133"
+    ],
+    "n": 1,
+    "acip": "'GOG PA"
+   },
+   {
+    "eng": "denying",
+    "refs": [
+     "C05:227"
     ],
     "n": 1,
     "acip": "'GOG PA"
@@ -10256,9 +10343,25 @@
     "acip": "'OG TU"
    },
    {
+    "eng": "later",
+    "refs": [
+     "C05:227"
+    ],
+    "n": 1,
+    "acip": "'OG TU"
+   },
+   {
     "eng": "later on",
     "refs": [
      "C05:36"
+    ],
+    "n": 1,
+    "acip": "'OG TU"
+   },
+   {
+    "eng": "subsequent",
+    "refs": [
+     "C05:228"
     ],
     "n": 1,
     "acip": "'OG TU"
@@ -10618,9 +10721,10 @@
     "refs": [
      "C05:26",
      "C05:75",
-     "C05:92"
+     "C05:92",
+     "C05:228"
     ],
-    "n": 3,
+    "n": 4,
     "acip": "'PHAGS PA"
    },
    {
@@ -11413,9 +11517,10 @@
    {
     "eng": "correct",
     "refs": [
-     "C04:110"
+     "C04:110",
+     "C05:226"
     ],
-    "n": 1,
+    "n": 2,
     "acip": "'THAD PAR"
    },
    {
@@ -19357,9 +19462,10 @@
    {
     "eng": "problem",
     "refs": [
-     "C05:222"
+     "C05:222",
+     "C05:227"
     ],
-    "n": 1,
+    "n": 2,
     "acip": "BRTZAD PA"
    }
   ],
@@ -22639,6 +22745,15 @@
     "acip": "BSKAL PA"
    },
    {
+    "eng": "millions of years",
+    "refs": [
+     "C03:400",
+     "C05:226"
+    ],
+    "n": 2,
+    "acip": "BSKAL PA"
+   },
+   {
     "eng": "an eon",
     "refs": [
      "C01:56"
@@ -22650,14 +22765,6 @@
     "eng": "for eons",
     "refs": [
      "C03:50"
-    ],
-    "n": 1,
-    "acip": "BSKAL PA"
-   },
-   {
-    "eng": "millions of years",
-    "refs": [
-     "C03:400"
     ],
     "n": 1,
     "acip": "BSKAL PA"
@@ -30491,6 +30598,14 @@
     ],
     "n": 1,
     "acip": "BZHED PA"
+   },
+   {
+    "eng": "position",
+    "refs": [
+     "C05:228"
+    ],
+    "n": 1,
+    "acip": "BZHED PA"
    }
   ],
   "bzhed srol": [
@@ -34309,6 +34424,16 @@
     "acip": "CHUD PA"
    }
   ],
+  "chud zar": [
+   {
+    "eng": "go away",
+    "refs": [
+     "C05:228"
+    ],
+    "n": 1,
+    "acip": "CHUD ZAR"
+   }
+  ],
   "chung": [
    {
     "eng": "lesser",
@@ -34669,6 +34794,16 @@
     ],
     "n": 1,
     "acip": "CI'I PHYIR"
+   }
+  ],
+  "cig": [
+   {
+    "eng": "someone",
+    "refs": [
+     "C05:226"
+    ],
+    "n": 1,
+    "acip": "CIG"
    }
   ],
   "cig car": [
@@ -37537,6 +37672,16 @@
     "acip": "DBU MA SNYING PO"
    }
   ],
+  "dbu ma thal 'gyur ba": [
+   {
+    "eng": "Madhyamika Consequence school",
+    "refs": [
+     "C05:226"
+    ],
+    "n": 1,
+    "acip": "DBU MA THAL 'GYUR BA"
+   }
+  ],
   "dbu ma'i": [
    {
     "eng": "middle way",
@@ -37958,9 +38103,10 @@
      "C05:208",
      "C05:209",
      "C05:210",
-     "C05:215"
+     "C05:215",
+     "C05:228"
     ],
-    "n": 25,
+    "n": 26,
     "acip": "DE"
    },
    {
@@ -37996,6 +38142,18 @@
     "acip": "DE"
    },
    {
+    "eng": "it",
+    "refs": [
+     "C02:64",
+     "C04:96",
+     "C05:57",
+     "C05:178",
+     "C05:228"
+    ],
+    "n": 5,
+    "acip": "DE"
+   },
+   {
     "eng": "them",
     "refs": [
      "C03:201",
@@ -38014,17 +38172,6 @@
      "C04:67",
      "C05:83",
      "C05:176"
-    ],
-    "n": 4,
-    "acip": "DE"
-   },
-   {
-    "eng": "it",
-    "refs": [
-     "C02:64",
-     "C04:96",
-     "C05:57",
-     "C05:178"
     ],
     "n": 4,
     "acip": "DE"
@@ -39286,6 +39433,16 @@
     "acip": "DE LTAR"
    },
    {
+    "eng": "this",
+    "refs": [
+     "C01:89",
+     "C03:324",
+     "C05:226"
+    ],
+    "n": 3,
+    "acip": "DE LTAR"
+   },
+   {
     "eng": "And so",
     "refs": [
      "C03:404",
@@ -39308,15 +39465,6 @@
     "refs": [
      "C01:90",
      "C01:159"
-    ],
-    "n": 2,
-    "acip": "DE LTAR"
-   },
-   {
-    "eng": "this",
-    "refs": [
-     "C01:89",
-     "C03:324"
     ],
     "n": 2,
     "acip": "DE LTAR"
@@ -39952,6 +40100,14 @@
    }
   ],
   "de rnams": [
+   {
+    "eng": "all this",
+    "refs": [
+     "C05:227"
+    ],
+    "n": 1,
+    "acip": "DE RNAMS"
+   },
    {
     "eng": "different varieties",
     "refs": [
@@ -44490,6 +44646,16 @@
     "acip": "DON"
    },
    {
+    "eng": "point",
+    "refs": [
+     "C01:403",
+     "C05:226",
+     "C05:227"
+    ],
+    "n": 3,
+    "acip": "DON"
+   },
+   {
     "eng": "goal",
     "refs": [
      "C04:82",
@@ -44627,14 +44793,6 @@
     "eng": "objects",
     "refs": [
      "C05:213"
-    ],
-    "n": 1,
-    "acip": "DON"
-   },
-   {
-    "eng": "point",
-    "refs": [
-     "C01:403"
     ],
     "n": 1,
     "acip": "DON"
@@ -46946,9 +47104,10 @@
     "eng": "quotes",
     "refs": [
      "C03:420",
-     "C04:99"
+     "C04:99",
+     "C05:228"
     ],
-    "n": 2,
+    "n": 3,
     "acip": "DRANGS"
    },
    {
@@ -55036,21 +55195,22 @@
   ],
   "grub pa": [
    {
+    "eng": "exists",
+    "refs": [
+     "C01:348",
+     "C01:349",
+     "C01:350",
+     "C05:228"
+    ],
+    "n": 4,
+    "acip": "GRUB PA"
+   },
+   {
     "eng": "exist",
     "refs": [
      "C01:374",
      "C01:402",
      "C04:96"
-    ],
-    "n": 3,
-    "acip": "GRUB PA"
-   },
-   {
-    "eng": "exists",
-    "refs": [
-     "C01:348",
-     "C01:349",
-     "C01:350"
     ],
     "n": 3,
     "acip": "GRUB PA"
@@ -57823,6 +57983,14 @@
     "eng": "spoke",
     "refs": [
      "C01:47"
+    ],
+    "n": 1,
+    "acip": "GSUNGS PA"
+   },
+   {
+    "eng": "statement",
+    "refs": [
+     "C05:228"
     ],
     "n": 1,
     "acip": "GSUNGS PA"
@@ -62038,6 +62206,16 @@
     "acip": "KHA CHE BA"
    }
   ],
+  "kha che bas": [
+   {
+    "eng": "Kashmiris",
+    "refs": [
+     "C05:226"
+    ],
+    "n": 1,
+    "acip": "KHA CHE BAS"
+   }
+  ],
   "kha che bye brag tu smra ba": [
    {
     "eng": "Kashmiri Detailists",
@@ -62672,7 +62850,16 @@
    {
     "eng": "accept",
     "refs": [
-     "C01:417"
+     "C01:417",
+     "C05:226"
+    ],
+    "n": 2,
+    "acip": "KHAS LEN"
+   },
+   {
+    "eng": "accepting",
+    "refs": [
+     "C05:227"
     ],
     "n": 1,
     "acip": "KHAS LEN"
@@ -62689,6 +62876,14 @@
     "eng": "agree",
     "refs": [
      "C04:70"
+    ],
+    "n": 1,
+    "acip": "KHAS LEN"
+   },
+   {
+    "eng": "believe",
+    "refs": [
+     "C05:227"
     ],
     "n": 1,
     "acip": "KHAS LEN"
@@ -65089,9 +65284,11 @@
      "C05:214",
      "C05:219",
      "C05:220",
-     "C05:224"
+     "C05:224",
+     "C05:226",
+     "C05:227"
     ],
-    "n": 6,
+    "n": 8,
     "acip": "KUN GZHI"
    }
   ],
@@ -65691,6 +65888,16 @@
     ],
     "n": 1,
     "acip": "LA LA DAG"
+   }
+  ],
+  "la lar": [
+   {
+    "eng": "any given",
+    "refs": [
+     "C05:226"
+    ],
+    "n": 1,
+    "acip": "LA LAR"
    }
   ],
   "la nye ba": [
@@ -66941,9 +67148,10 @@
    {
     "eng": "answer",
     "refs": [
-     "C04:184"
+     "C04:184",
+     "C05:227"
     ],
-    "n": 1,
+    "n": 2,
     "acip": "LAN"
    },
    {
@@ -66961,6 +67169,26 @@
     ],
     "n": 1,
     "acip": "LAN"
+   }
+  ],
+  "lan 'debs": [
+   {
+    "eng": "answering",
+    "refs": [
+     "C05:228"
+    ],
+    "n": 1,
+    "acip": "LAN 'DEBS"
+   }
+  ],
+  "lan 'debs pa": [
+   {
+    "eng": "answer",
+    "refs": [
+     "C05:227"
+    ],
+    "n": 1,
+    "acip": "LAN 'DEBS PA"
    }
   ],
   "lan byed": [
@@ -67231,9 +67459,10 @@
      "C05:173",
      "C05:177",
      "C05:178",
-     "C05:180"
+     "C05:180",
+     "C05:226"
     ],
-    "n": 38,
+    "n": 39,
     "acip": "LAS"
    },
    {
@@ -67251,9 +67480,12 @@
      "C05:184",
      "C05:222",
      "C05:223",
-     "C05:224"
+     "C05:224",
+     "C05:226",
+     "C05:227",
+     "C05:228"
     ],
-    "n": 13,
+    "n": 16,
     "acip": "LAS"
    },
    {
@@ -67268,9 +67500,10 @@
      "C04:173",
      "C05:145",
      "C05:221",
-     "C05:224"
+     "C05:224",
+     "C05:228"
     ],
-    "n": 10,
+    "n": 11,
     "acip": "LAS"
    },
    {
@@ -67717,9 +67950,25 @@
     "acip": "LAS GNYIS"
    },
    {
+    "eng": "two kinds of karma",
+    "refs": [
+     "C05:226"
+    ],
+    "n": 1,
+    "acip": "LAS GNYIS"
+   },
+   {
     "eng": "two types of deeds [virtue and non-virtue]",
     "refs": [
      "C05:223"
+    ],
+    "n": 1,
+    "acip": "LAS GNYIS"
+   },
+   {
+    "eng": "two types of karma",
+    "refs": [
+     "C05:226"
     ],
     "n": 1,
     "acip": "LAS GNYIS"
@@ -70777,6 +71026,14 @@
     "eng": "gotten",
     "refs": [
      "C01:140"
+    ],
+    "n": 1,
+    "acip": "LON PA"
+   },
+   {
+    "eng": "passing",
+    "refs": [
+     "C05:226"
     ],
     "n": 1,
     "acip": "LON PA"
@@ -74779,9 +75036,10 @@
      "C05:200",
      "C05:201",
      "C05:202",
-     "C05:203"
+     "C05:203",
+     "C05:226"
     ],
-    "n": 9,
+    "n": 10,
     "acip": "MANG PO"
    },
    {
@@ -76567,9 +76825,10 @@
      "C05:214",
      "C05:215",
      "C05:219",
-     "C05:220"
+     "C05:220",
+     "C05:228"
     ],
-    "n": 22,
+    "n": 23,
     "acip": "MED"
    },
    {
@@ -76600,9 +76859,10 @@
      "C03:567",
      "C03:574",
      "C04:140",
-     "C05:62"
+     "C05:62",
+     "C05:228"
     ],
-    "n": 6,
+    "n": 7,
     "acip": "MED"
    },
    {
@@ -76964,9 +77224,10 @@
     "eng": "no",
     "refs": [
      "C05:62",
-     "C05:202"
+     "C05:202",
+     "C05:228"
     ],
-    "n": 2,
+    "n": 3,
     "acip": "MED PA"
    },
    {
@@ -76982,6 +77243,14 @@
     "eng": "doesn't",
     "refs": [
      "C04:149"
+    ],
+    "n": 1,
+    "acip": "MED PA"
+   },
+   {
+    "eng": "doesn't even exist",
+    "refs": [
+     "C05:227"
     ],
     "n": 1,
     "acip": "MED PA"
@@ -79416,9 +79685,10 @@
    {
     "eng": "improper",
     "refs": [
-     "C05:219"
+     "C05:219",
+     "C05:227"
     ],
-    "n": 1,
+    "n": 2,
     "acip": "MI RIGS"
    }
   ],
@@ -79834,9 +80104,10 @@
    {
     "eng": "impossible",
     "refs": [
-     "C05:175"
+     "C05:175",
+     "C05:228"
     ],
-    "n": 1,
+    "n": 2,
     "acip": "MI SRID PA"
    },
    {
@@ -88249,6 +88520,15 @@
     "acip": "NUS PA"
    },
    {
+    "eng": "can",
+    "refs": [
+     "C02:60",
+     "C05:226"
+    ],
+    "n": 2,
+    "acip": "NUS PA"
+   },
+   {
     "eng": "power",
     "refs": [
      "C02:41",
@@ -88277,14 +88557,6 @@
     "eng": "being able",
     "refs": [
      "C03:376"
-    ],
-    "n": 1,
-    "acip": "NUS PA"
-   },
-   {
-    "eng": "can",
-    "refs": [
-     "C02:60"
     ],
     "n": 1,
     "acip": "NUS PA"
@@ -93671,6 +93943,14 @@
     ],
     "n": 1,
     "acip": "PHYOGS"
+   },
+   {
+    "eng": "school",
+    "refs": [
+     "C05:226"
+    ],
+    "n": 1,
+    "acip": "PHYOGS"
    }
   ],
   "phyogs bcu": [
@@ -94706,6 +94986,16 @@
     "acip": "RANG BZHIN"
    },
    {
+    "eng": "nature of its own",
+    "refs": [
+     "C05:226",
+     "C05:227",
+     "C05:228"
+    ],
+    "n": 3,
+    "acip": "RANG BZHIN"
+   },
+   {
     "eng": "by nature",
     "refs": [
      "C01:149"
@@ -94717,6 +95007,14 @@
     "eng": "essence",
     "refs": [
      "C03:459"
+    ],
+    "n": 1,
+    "acip": "RANG BZHIN"
+   },
+   {
+    "eng": "its own nature",
+    "refs": [
+     "C05:228"
     ],
     "n": 1,
     "acip": "RANG BZHIN"
@@ -95455,6 +95753,17 @@
     ],
     "n": 1,
     "acip": "RANG GI"
+   }
+  ],
+  "rang gi bdag nyid": [
+   {
+    "eng": "in and of itself",
+    "refs": [
+     "C05:226",
+     "C05:228"
+    ],
+    "n": 2,
+    "acip": "RANG GI BDAG NYID"
    }
   ],
   "rang gi cha shas": [
@@ -99960,6 +100269,14 @@
     "acip": "RGYUD"
    },
    {
+    "eng": "mental continuum",
+    "refs": [
+     "C05:226"
+    ],
+    "n": 1,
+    "acip": "RGYUD"
+   },
+   {
     "eng": "Mind",
     "refs": [
      "C03:289"
@@ -101136,6 +101453,16 @@
     ],
     "n": 1,
     "acip": "RIGS PA"
+   }
+  ],
+  "rigs pa min": [
+   {
+    "eng": "illogical",
+    "refs": [
+     "C05:228"
+    ],
+    "n": 1,
+    "acip": "RIGS PA MIN"
    }
   ],
   "rigs pa'i dbang phyug": [
@@ -105822,6 +106149,14 @@
     "acip": "RTOG PA"
    },
    {
+    "eng": "invent",
+    "refs": [
+     "C05:228"
+    ],
+    "n": 1,
+    "acip": "RTOG PA"
+   },
+   {
     "eng": "the concept",
     "refs": [
      "C01:377"
@@ -106661,6 +106996,16 @@
     ],
     "n": 2,
     "acip": "RTZA SHE"
+   }
+  ],
+  "rtsa sher": [
+   {
+    "eng": "Root Text on Wisdom",
+    "refs": [
+     "C05:228"
+    ],
+    "n": 1,
+    "acip": "RTZA SHER"
    }
   ],
   "rtsa tshig": [
@@ -110866,6 +111211,15 @@
     "acip": "SEMS CAN"
    },
    {
+    "eng": "sentient being",
+    "refs": [
+     "C03:501",
+     "C05:226"
+    ],
+    "n": 2,
+    "acip": "SEMS CAN"
+   },
+   {
     "eng": "sentient beings",
     "refs": [
      "C01:307",
@@ -110990,14 +111344,6 @@
     "eng": "person",
     "refs": [
      "C05:213"
-    ],
-    "n": 1,
-    "acip": "SEMS CAN"
-   },
-   {
-    "eng": "sentient being",
-    "refs": [
-     "C03:501"
     ],
     "n": 1,
     "acip": "SEMS CAN"
@@ -116364,6 +116710,15 @@
     "acip": "SKYE BA"
    },
    {
+    "eng": "beginning",
+    "refs": [
+     "C05:227",
+     "C05:228"
+    ],
+    "n": 2,
+    "acip": "SKYE BA"
+   },
+   {
     "eng": "born",
     "refs": [
      "C03:437",
@@ -116444,6 +116799,14 @@
     "eng": "as you come from the womb",
     "refs": [
      "C01:235"
+    ],
+    "n": 1,
+    "acip": "SKYE BA"
+   },
+   {
+    "eng": "begins",
+    "refs": [
+     "C05:228"
     ],
     "n": 1,
     "acip": "SKYE BA"
@@ -117100,6 +117463,14 @@
     ],
     "n": 1,
     "acip": "SKYED PAR"
+   },
+   {
+    "eng": "produced",
+    "refs": [
+     "C05:226"
+    ],
+    "n": 1,
+    "acip": "SKYED PAR"
    }
   ],
   "skyel": [
@@ -117564,6 +117935,22 @@
     "eng": "arise",
     "refs": [
      "C05:118"
+    ],
+    "n": 1,
+    "acip": "SKYES PA"
+   },
+   {
+    "eng": "arises",
+    "refs": [
+     "C05:226"
+    ],
+    "n": 1,
+    "acip": "SKYES PA"
+   },
+   {
+    "eng": "begun",
+    "refs": [
+     "C05:228"
     ],
     "n": 1,
     "acip": "SKYES PA"
@@ -118158,9 +118545,10 @@
    {
     "eng": "no problem",
     "refs": [
-     "C04:161"
+     "C04:161",
+     "C05:227"
     ],
-    "n": 1,
+    "n": 2,
     "acip": "SKYON MED"
    },
    {
@@ -118446,9 +118834,10 @@
      "C05:85",
      "C05:96",
      "C05:146",
-     "C05:213"
+     "C05:213",
+     "C05:227"
     ],
-    "n": 21,
+    "n": 22,
     "acip": "SLOB DPON"
    },
    {
@@ -119188,6 +119577,16 @@
     ],
     "n": 1,
     "acip": "SMRA BA"
+   }
+  ],
+  "smra ba po": [
+   {
+    "eng": "positions",
+    "refs": [
+     "C05:227"
+    ],
+    "n": 1,
+    "acip": "SMRA BA PO"
    }
   ],
   "smra bar": [
@@ -120231,6 +120630,16 @@
     ],
     "n": 1,
     "acip": "SNGAR BSHAD PA'I"
+   }
+  ],
+  "sngar bzhin": [
+   {
+    "eng": "above",
+    "refs": [
+     "C05:227"
+    ],
+    "n": 1,
+    "acip": "SNGAR BZHIN"
    }
   ],
   "sngar gyi": [
@@ -122056,6 +122465,18 @@
     "acip": "SOGS"
    },
    {
+    "eng": "or the like",
+    "refs": [
+     "C03:339",
+     "C03:570",
+     "C04:152",
+     "C05:99",
+     "C05:226"
+    ],
+    "n": 5,
+    "acip": "SOGS"
+   },
+   {
     "eng": "things like",
     "refs": [
      "C03:405",
@@ -122074,17 +122495,6 @@
      "C03:441",
      "C03:485",
      "C04:189"
-    ],
-    "n": 4,
-    "acip": "SOGS"
-   },
-   {
-    "eng": "or the like",
-    "refs": [
-     "C03:339",
-     "C03:570",
-     "C04:152",
-     "C05:99"
     ],
     "n": 4,
     "acip": "SOGS"
@@ -125156,6 +125566,14 @@
     "eng": "deal with",
     "refs": [
      "C05:40"
+    ],
+    "n": 1,
+    "acip": "STON PA"
+   },
+   {
+    "eng": "demonstrate",
+    "refs": [
+     "C05:228"
     ],
     "n": 1,
     "acip": "STON PA"
@@ -128250,6 +128668,14 @@
     ],
     "n": 3,
     "acip": "THOB BYA"
+   },
+   {
+    "eng": "retained by the hold",
+    "refs": [
+     "C05:226"
+    ],
+    "n": 1,
+    "acip": "THOB BYA"
    }
   ],
   "thob dka'": [
@@ -128338,6 +128764,15 @@
     "acip": "THOB PA"
    },
    {
+    "eng": "hold",
+    "refs": [
+     "C05:223",
+     "C05:226"
+    ],
+    "n": 2,
+    "acip": "THOB PA"
+   },
+   {
     "eng": "reach",
     "refs": [
      "C01:150",
@@ -128398,14 +128833,6 @@
     "eng": "have",
     "refs": [
      "C04:49"
-    ],
-    "n": 1,
-    "acip": "THOB PA"
-   },
-   {
-    "eng": "hold",
-    "refs": [
-     "C05:223"
     ],
     "n": 1,
     "acip": "THOB PA"
@@ -132930,23 +133357,24 @@
     "acip": "TSUL"
    },
    {
+    "eng": "way",
+    "refs": [
+     "C01:102",
+     "C03:421",
+     "C03:468",
+     "C05:41",
+     "C05:228"
+    ],
+    "n": 5,
+    "acip": "TSUL"
+   },
+   {
     "eng": "How to",
     "refs": [
      "C03:273",
      "C03:276",
      "C03:279",
      "C03:282"
-    ],
-    "n": 4,
-    "acip": "TSUL"
-   },
-   {
-    "eng": "way",
-    "refs": [
-     "C01:102",
-     "C03:421",
-     "C03:468",
-     "C05:41"
     ],
     "n": 4,
     "acip": "TSUL"
@@ -134168,6 +134596,14 @@
     "eng": "perfect",
     "refs": [
      "C03:575"
+    ],
+    "n": 1,
+    "acip": "YANG DAG PA"
+   },
+   {
+    "eng": "perfectly",
+    "refs": [
+     "C05:226"
     ],
     "n": 1,
     "acip": "YANG DAG PA"
@@ -137269,9 +137705,10 @@
    {
     "eng": "long time",
     "refs": [
-     "C05:224"
+     "C05:224",
+     "C05:226"
     ],
-    "n": 1,
+    "n": 2,
     "acip": "YUN RING PO"
    }
   ],
@@ -141985,6 +142422,7 @@
   "CHUD": "chud",
   "CHUD MI ZA BA": "chud mi za ba",
   "CHUD PA": "chud pa",
+  "CHUD ZAR": "chud zar",
   "CHUNG": "chung",
   "CHUNG 'BRING": "chung 'bring",
   "CHUNG BA": "chung ba",
@@ -142010,6 +142448,7 @@
   "CI YI PHYIR": "ci yi phyir",
   "CI ZHIG KYANG": "ci zhig kyang",
   "CI'I PHYIR": "ci'i phyir",
+  "CIG": "cig",
   "CIG CAR": "cig car",
   "CIG CAR DU": "cig car du",
   "CIS KYANG NAS": "cis kyang nas",
@@ -142151,6 +142590,7 @@
   "DBU MA PA": "dbu ma pa",
   "DBU MA RIGS TSOGS": "dbu ma rigs tshogs",
   "DBU MA SNYING PO": "dbu ma snying po",
+  "DBU MA THAL 'GYUR BA": "dbu ma thal 'gyur ba",
   "DBU MA'I": "dbu ma'i",
   "DBU MA'I LTA BA": "dbu ma'i lta ba",
   "DBU MDZAD": "dbu mdzad",
@@ -143367,6 +143807,7 @@
   "KHA BYANG": "kha byang",
   "KHA CHE": "kha che",
   "KHA CHE BA": "kha che ba",
+  "KHA CHE BAS": "kha che bas",
   "KHA CHE BYE BRAG TU SMRA BA": "kha che bye brag tu smra ba",
   "KHA CHE'I YUL": "kha che'i yul",
   "KHA CIG": "kha cig",
@@ -143575,6 +144016,7 @@
   "LA GNYIS LAS": "la gnyis las",
   "LA GSUM": "la gsum",
   "LA LA DAG": "la la dag",
+  "LA LAR": "la lar",
   "LA NYE BA": "la nye ba",
   "LA SOGS": "la sogs",
   "LA SOGS PA": "la sogs pa",
@@ -143623,6 +144065,8 @@
   "LAM THUN MONG BAR": "lam thun mong bar",
   "LAM YONGS RDZOGS": "lam yongs rdzogs",
   "LAN": "lan",
+  "LAN 'DEBS": "lan 'debs",
+  "LAN 'DEBS PA": "lan 'debs pa",
   "LAN BYED": "lan byed",
   "LAN CIG": "lan cig",
   "LAN CIG TZAM": "lan cig tsam",
@@ -145098,6 +145542,7 @@
   "RANG GAR": "rang gar",
   "RANG GCIG PU": "rang gcig pu",
   "RANG GI": "rang gi",
+  "RANG GI BDAG NYID": "rang gi bdag nyid",
   "RANG GI CHA SHAS": "rang gi cha shas",
   "RANG GI DON DU": "rang gi don du",
   "RANG GI DON KHO NA LAS": "rang gi don kho na las",
@@ -145392,6 +145837,7 @@
   "RIGS LNGA": "rigs lnga",
   "RIGS MTHUN": "rigs mthun",
   "RIGS PA": "rigs pa",
+  "RIGS PA MIN": "rigs pa min",
   "RIGS PA'I DBANG PHYUG": "rigs pa'i dbang phyug",
   "RIGS PA'I RGYA MTSO": "rigs pa'i rgya mtsho",
   "RIGS PA'I RGYAL PO": "rigs pa'i rgyal po",
@@ -145666,6 +146112,7 @@
   "RTZA RGYUS": "rtsa rgyus",
   "RTZA RLUNG THIG LE": "rtsa rlung thig le",
   "RTZA SHE": "rtsa she",
+  "RTZA SHER": "rtsa sher",
   "RTZA TSIG": "rtsa tshig",
   "RTZAL": "rtsal",
   "RTZAM PA": "rtsam pa",
@@ -146273,6 +146720,7 @@
   "SMOS PA'I": "smos pa'i",
   "SMRA": "smra",
   "SMRA BA": "smra ba",
+  "SMRA BA PO": "smra ba po",
   "SMRA BAR": "smra bar",
   "SMRAS PA": "smras pa",
   "SMRAS PA NA": "smras pa na",
@@ -146320,6 +146768,7 @@
   "SNGAR": "sngar",
   "SNGAR BSHAD PA": "sngar bshad pa",
   "SNGAR BSHAD PA'I": "sngar bshad pa'i",
+  "SNGAR BZHIN": "sngar bzhin",
   "SNGAR GYI": "sngar gyi",
   "SNGO": "sngo",
   "SNGON": "sngon",

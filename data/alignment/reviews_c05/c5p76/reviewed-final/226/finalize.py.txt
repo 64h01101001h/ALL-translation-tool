@@ -1,0 +1,79 @@
+import os,sys,json,copy,sqlite3,subprocess,hashlib,gzip,re
+from pathlib import Path
+from html.parser import HTMLParser
+assert os.environ.get('PYTHONDONTWRITEBYTECODE')=='1'
+B=Path(__file__).resolve().parents[2];R=B.parents[1]/'campaign-worktree';O=B/'reconciled'
+sys.path.insert(0,str(R/'tools'));import gen_alignment_page as G
+def dump(p,o):p.write_text(json.dumps(o,ensure_ascii=False,indent=2)+'\n')
+def sha(b):return hashlib.sha256(b).hexdigest()
+c=sqlite3.connect((R/'build/hgm_spine_v27_2.db').as_uri()+'?mode=ro',uri=True);c.row_factory=sqlite3.Row
+runner="import sqlite3,runpy,sys; from pathlib import Path; original=sqlite3.connect; sqlite3.connect=lambda p,*a,**k: original(Path(p).resolve().as_uri()+'?mode=ro',*a,uri=True,**k); runpy.run_path(sys.argv[1],run_name='__main__')"
+mp=Path.home()/'Desktop/HGM DICTIONARY - TRANSLATION APP/Handoff/release/hgm_dictionary_v27_2.json.gz';master=json.load(gzip.open(mp))
+class Plain(HTMLParser):
+ def __init__(self,s):super().__init__();self.label='s'+str(s)+'S';self.depth=0;self.parts=[];self.cur=[];self.skip=0
+ def handle_starttag(self,t,a):
+  a=dict(a)
+  if t=='span':
+   if self.skip:self.skip+=1
+   elif 'nul' in a.get('class','').split():self.skip=1
+   if self.depth:self.depth+=1
+   elif a.get('data-l')==self.label:self.depth=1;self.cur=[]
+ def handle_endtag(self,t):
+  if t=='span' and self.skip:self.skip-=1
+  if t=='span' and self.depth:
+   self.depth-=1
+   if not self.depth:self.parts.append(''.join(self.cur))
+ def handle_data(self,t):
+  if self.depth and not self.skip:self.cur.append(t)
+for s in (226,227,228):
+ p=O/str(s);d=json.load(open(p/'spec.json'));seg=d['segments'][0];sp=seg['spans'];order=seg['eng_order'];source=json.load(open(p/'source-original.json'))
+ def get(id):return next(x for x in sp if x['id']==id)
+ if s in (227,228):
+  for f in ('spec.json','body.html','generator-proof.json','occurrence-proof.json'):(p/('pre-coverage-review.'+f)).write_bytes((p/f).read_bytes())
+ if s==227:
+  i=sp.index(get('w34'));sp.insert(i,{'id':'w36','d':5,'tib':'lan','eng':'answer'});order.insert(order.index('w4'),'w36')
+  seg['note']+=" The first lan owns answer in the answering recast, distinct from the later lan 'debs pa/answer occurrence."
+ if s==228:
+  i=sp.index(get('w15'))+1;sp.insert(i,{'id':'w43','d':5,'tib':'de','eng':'it'});order.insert(order.index('w16'),'w43')
+  seg['note']+=' The third verse line has its own de/it correspondence, kept separate from the unwrapped subject in the fourth line.'
+ b=(json.dumps(d,ensure_ascii=False,indent=2)+'\n').encode();attempt='attempt-03' if s in (227,228) else 'final'
+ (p/(attempt+'.spec.json')).write_bytes(b)
+ r=subprocess.run([sys.executable,'-c',runner,str(R/'tools/gen_alignment_page.py')],input=b,stdout=subprocess.PIPE,stderr=subprocess.PIPE,cwd=R,env={**os.environ,'PYTHONDONTWRITEBYTECODE':'1'})
+ (p/(attempt+'.stdout.html')).write_bytes(r.stdout);(p/(attempt+'.stderr.txt')).write_bytes(r.stderr);(p/(attempt+'.exit.txt')).write_text(str(r.returncode)+'\n')
+ assert r.returncode==0 and not r.stderr,(s,r.stderr)
+ (p/'spec.json').write_bytes(b);(p/'body.html').write_bytes(r.stdout)
+ plain=Plain(s);plain.feed(r.stdout.decode());assert plain.parts==[source['wylie'],source['english']],(s,plain.parts)
+ for x in sp:x['_lab']='s'+str(s)+x['id']
+ by={x['id']:x for x in sp};tr=G.resolve(source['wylie'],sp,'tib',s);er=G.resolve(source['english'],G.with_members(sp,[by[i] for i in order],source['english']),'eng',s)
+ occ=[]
+ for x in sp:
+  z={k:v for k,v in x.items() if not k.startswith('_')};z['tib_range']=tr[x['id']];z['eng_range']=er.get(x['id'])
+  for side,field,rr in [('tib','wylie',tr.get(x['id'])),('eng','english',er.get(x['id']))]:
+   if rr is None:continue
+   assert source[field][rr[0]:rr[1]]==x[side]
+   hits=[];start=0
+   while True:
+    j=G.find_word(source[field],x[side],start,subword=x['d']==7 or x.get('subword',False))
+    if j<0:break
+    hits.append([j,j+len(x[side])]);start=j+1
+   z[side+'_all_occurrences']=hits;z[side+'_selected_ordinal']=hits.index(list(rr))+1
+  occ.append(z)
+ dump(p/'occurrence-proof.json',{'coordinate_system':'zero-based half-open Unicode character offsets; canonical resolver, no cursor overrides','eng_order':order,'spans':occ})
+ gl=json.load(open(p/'glossary-originals.json'))
+ for w in set(x['tib'] for x in sp):gl['entries'][w]=[dict(row) for row in c.execute('SELECT * FROM entries WHERE wylie=?',(w,))]
+ dump(p/'glossary-originals.json',gl)
+ m=json.load(open(p/'master-originals.json'));m['entries']=[x for x in master['unified_entries'] if x.get('wylie') in gl['entries']];dump(p/'master-originals.json',m)
+ audit=[]
+ for x in sp:
+  if x['d'] not in (5,7):continue
+  rr=gl['entries'].get(x['tib'],[])
+  audit.append({'id':x['id'],'tib':x['tib'],'eng':x['eng'],'exact_dictionary_ids':[row['id'] for row in rr],'hgm_fields':[{'id':row['id'],'tier':row['tier'],'hgm_gloss':row['hgm_gloss']} for row in rr],'exact_curated_or_glossary_english':any(row['tier'] in ('curated','glossary') and x['eng'] in (json.loads(row['hgm_gloss']) if row['hgm_gloss'] else []) for row in rr),'interpretation':'Exact entry presence is not HGM attestation; nonexact English is local contextual matching or inflection/capitalization, described in decisions.md. No comparanda promoted.'})
+ dump(p/'lexical-audit.json',audit)
+ pr=json.load(open(p/'generator-proof.json'));pr.update(exit=r.returncode,stderr_bytes=len(r.stderr),spec_bytes=len(b),body_bytes=len(r.stdout),spec_sha256=sha(b),body_sha256=sha(r.stdout),spans=len(sp),depth_counts={str(i):sum(x['d']==i for x in sp) for i in range(1,8)},nulls=sum(x['eng'] is None for x in sp),self_review_completed=True,final_attempt=attempt,plain_tibetan_and_english_exact=True)
+ dump(p/'generator-proof.json',pr)
+ register=json.load(open(p/'errata-register-original.json'))
+ parallel=json.load(open(p/'parallel-originals.json'));c16=next(row for row in parallel['explicit_context_rows'] if row['course']=='C16' and row['seq']==s+577)
+ regmatches=[row for row in register if 'C05:'+str(s) in json.dumps(row)]
+ err={'retained_errata':[],'source_field_lengths':{k:len(source[k]) for k in ('acip','wylie','english')},'registered_record_count':len(register),'segment_register_matches':regmatches,'c16_comparison':{k:source[k]==c16[k] for k in ('acip','wylie','english')},'five_grounds':{'a':'Both proposals contain empty errata lists; source originals and raw payload independently reopened and all material quotes verified.','b':'Queries and all full rows are saved in parallel-originals.json. C16 equality or difference proves no independent publication or ingestion lineage; ILL parallels support only their quoted shared extent. P7:8 loses the final can-never-just-go-away wording and cannot attest that tail.','c':'No new segment-specific register entry found. Following-heading glue is already an excluded class in RECONCILE_BRIEF and is explicitly distinguished from glued section bodies in E-106, preserved in errata-register-original.json.','d':'No unique source correction is demonstrated. Lexical recasts such as bskal pa/millions of years are HGM-attested. The omitted intrinsic-existence assumption in 228 remains a translation concern, with no correction silently inserted.','e':'All locally asserted query counts are freshly executed and stored with SQL and parameters. Register count and source lengths freshly measured. No global corpus-witness completeness claim is made.'},'heading_if_present':source['english'][source['english'].find('*********'):] if '*********' in source['english'] else None,'disposition':'No claim survives all five grounds as a new editorial erratum; errata.json is empty.'}
+ dump(p/'errata-check.json',err)
+ print(s,pr)

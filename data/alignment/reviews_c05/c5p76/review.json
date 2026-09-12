@@ -1,0 +1,60 @@
+{
+  "producer": "Codex independent semantic reviewer",
+  "status": "PROVISIONAL machine review; not human editorial acceptance",
+  "verdict": "APPROVE",
+  "spec_verdict": "APPROVE",
+  "quality_verdict": "APPROVE",
+  "open_findings": [],
+  "total_spans": 147,
+  "total_nulls": 2,
+  "total_word_pairs": 105,
+  "segments": [
+    {
+      "seq": 226,
+      "span_count": 68,
+      "null_count": 1,
+      "word_pair_count": 45,
+      "spec_sha256": "41e1e24141bcc40758aaa93a0c6ecc585e12dc2ab841c18fc17aa54efc41edaf",
+      "spec_bytes": 10256,
+      "body_sha256": "d19df36b90b4fffdf929c38dc9db88360da02c1744b5ccbc907905f222771075",
+      "body_bytes": 10613,
+      "generator_exit": 0,
+      "stderr_bytes": 0,
+      "exact_body": true
+    },
+    {
+      "seq": 227,
+      "span_count": 36,
+      "null_count": 1,
+      "word_pair_count": 27,
+      "spec_sha256": "cccdd388d580de98dbf78e9eb69b72fd926d06eea2f7697c3f64782cf4e65ae9",
+      "spec_bytes": 6040,
+      "body_sha256": "1f5a5f39c136587448e3b16b76ca1ea742e6a3cbe60bce9a2db6945e95bc0351",
+      "body_bytes": 6352,
+      "generator_exit": 0,
+      "stderr_bytes": 0,
+      "exact_body": true
+    },
+    {
+      "seq": 228,
+      "span_count": 43,
+      "null_count": 0,
+      "word_pair_count": 33,
+      "spec_sha256": "8aac00b3f2cb45340a55a1e3b662ea206603654101901f45c332e138c9520994",
+      "spec_bytes": 7195,
+      "body_sha256": "bbcf23fb6550d9e7c6855fb190d3811908225ab89e48c14a089c0b241b7b130f",
+      "body_bytes": 7470,
+      "generator_exit": 0,
+      "stderr_bytes": 0,
+      "exact_body": true
+    }
+  ],
+  "required_head_allowances": {
+    "pages_c05": {
+      "c5p76/s226w33": "sogs at C05:226 Wylie [396,400) licenses the complete list-closing gesture or the like at English [767,778), including or. Original HGM entry 20919 explicitly attests or the like; this claims no supplied noun or participant. Independently reviewed by Codex, PROVISIONAL."
+    }
+  },
+  "bank_ready_errata": 0,
+  "generator_proof": "Untouched canonical gen_alignment_page.py replayed through read-only SQLite URI connection policy; all three exit 0, zero stderr, byte-exact saved bodies. Canonical resolve/with_members independently produced every seven-key tuple.",
+  "review_limits": "Local source-based matches are attestation only; dictionary HGM fields remain unchanged. Repeated digital text does not establish publication independence. No human semantic acceptance is asserted."
+}

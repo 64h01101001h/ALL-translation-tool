@@ -1,0 +1,84 @@
+from pathlib import Path
+import os,sys,json,hashlib,sqlite3,subprocess,importlib.util,gzip
+ROOT=Path('/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment')
+WT=ROOT/'campaign-worktree'; B=ROOT/'campaign-artifacts/C05-226-228'; R=B/'semantic-review'
+def sha(x): return hashlib.sha256(x).hexdigest()
+def dump(p,x): p.parent.mkdir(parents=True,exist_ok=True); p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+manifest=[]
+def preserve(p,dest):
+ data=p.read_bytes()
+ if dest.suffix not in {'.json','.md','.html','.stderr','.stdout','.log','.txt','.bin','.exit'}: dest=Path(str(dest)+'.txt')
+ dest.parent.mkdir(parents=True,exist_ok=True)
+ if dest.exists(): assert dest.read_bytes()==data,(p,dest)
+ else: dest.write_bytes(data)
+ manifest.append({'original':str(p),'copy':str(dest.relative_to(R)),'sha256':sha(data),'bytes':len(data)})
+for p in sorted(B.rglob('*')):
+ if not p.is_file() or R in p.parents or '__pycache__' in p.parts: continue
+ rel=p.relative_to(B)
+ dest=R/'proposal-inputs'/rel
+ preserve(p,dest)
+ if rel.parts[0]=='reconciled': preserve(p,R/'reviewed-final'/Path(*rel.parts[1:]))
+for rel in ['AGENTS.md','docs/ALIGNMENT_LAYER_SPEC.md','docs/alignment_briefs/RECONCILE_BRIEF.md','docs/alignment_briefs/REFUTE_BRIEF.md','data/alignment/C05_CAMPAIGN.md','docs/errata_register.json','tools/gen_alignment_page.py','tools/build_alignment_layer.py']:
+ preserve(WT/rel,R/'governing-originals'/Path(rel).name)
+preserve(ROOT/'campaign-artifacts/semantic-review-protocol.md',R/'governing-originals/semantic-review-protocol.md')
+access=[]
+for rel in ['Desktop/HGM DICTIONARY - TRANSLATION APP','ACIP Software Developmeent/Gofer Developmetn Files',"ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/ACIPHypercontext Tool","ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/LokeshChandraDictionary","ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/CreateLokeshChandraDIctionary","ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/FixLokeshChandra",'ACIP Software Developmeent/tibetan-spellchecker','Tibetan Translation Tool']:
+ p=Path('/Users/adamderickandrade')/rel; access.append({'path':str(p),'readable':os.access(p,os.R_OK)})
+assert all(x['readable'] for x in access)
+dump(R/'access-proof.json',access)
+db=sqlite3.connect((WT/'build/hgm_spine_v27_2.db').as_uri()+'?mode=ro',uri=True); db.row_factory=sqlite3.Row
+rows=[dict(r) for r in db.execute("SELECT * FROM corpus_segments WHERE course='C05' AND seq BETWEEN 224 AND 230 ORDER BY seq")]
+dump(R/'source-originals.json',rows)
+for row in rows:
+ if 226<=row['seq']<=228:
+  saved=json.loads((B/f'reconciled/{row["seq"]}/source-original.json').read_text()); assert row==saved
+queries=[]
+for seq in [226,227,228]:
+ x=json.loads((B/f'reconciled/{seq}/parallel-originals.json').read_text())
+ for q in x['queries']:
+  actual=[dict(r) for r in db.execute(q['sql'],q['params'])]; assert len(actual)==q['count']; assert actual==q['rows']
+  queries.append({'seq':seq,'sql':q['sql'],'params':q['params'],'count':len(actual),'rows':actual})
+ actual=[dict(r) for r in db.execute(x['explicit_context_query'])]; assert actual==x['explicit_context_rows']
+dump(R/'independent-query-proof.json',queries); dump(R/'parallel-context-originals.json',actual)
+terms=set()
+for seq in [226,227,228]: terms.update(json.loads((B/f'reconciled/{seq}/glossary-originals.json').read_text())['entries'])
+lex={t:[dict(r) for r in db.execute('SELECT * FROM entries WHERE wylie=?',(t,))] for t in sorted(terms)}
+for seq in [226,227,228]:
+ x=json.loads((B/f'reconciled/{seq}/glossary-originals.json').read_text())
+ assert all(lex[t]==v for t,v in x['entries'].items())
+dump(R/'independent-glossary-originals.json',{'sql':'SELECT * FROM entries WHERE wylie=?','entries':lex})
+masterpath=Path(json.loads((B/'reconciled/228/master-originals.json').read_text())['path']); mb=masterpath.read_bytes(); master=json.loads(gzip.decompress(mb)); me=[e for e in master['entries'] if e['wylie'] in terms]
+dump(R/'independent-master-originals.json',{'path':str(masterpath),'sha256':sha(mb),'bytes':len(mb),'meta':master['meta'],'entries':me})
+for seq in [226,227,228]:
+ old=json.loads((B/f'reconciled/{seq}/master-originals.json').read_text()); assert old['sha256']==sha(mb); assert all(e in me for e in old['entries'])
+# Invoke the actual generator unchanged. Only SQLite connection policy is adapted to URI read-only.
+wrapper="import sqlite3,runpy,pathlib; c=sqlite3.connect; sqlite3.connect=lambda p,*a,**k:c(pathlib.Path(p).resolve().as_uri()+'?mode=ro',*a,uri=True,**k); runpy.run_path("+repr(str(WT/'tools/gen_alignment_page.py'))+",run_name='__main__')"
+specmod=importlib.util.spec_from_file_location('canonical',WT/'tools/gen_alignment_page.py'); gen=importlib.util.module_from_spec(specmod);specmod.loader.exec_module(gen)
+records=[]; metrics=[]; audit=[]
+for seq in [226,227,228]:
+ p=B/f'reconciled/{seq}'; specbytes=(p/'spec.json').read_bytes(); bodybytes=(p/'body.html').read_bytes(); s=json.loads(specbytes)['segments'][0]
+ cp=subprocess.run([sys.executable,'-c',wrapper],input=specbytes,capture_output=True,env={**os.environ,'PYTHONDONTWRITEBYTECODE':'1'},cwd=WT)
+ (R/f'{seq}.stdout').write_bytes(cp.stdout);(R/f'{seq}.stderr').write_bytes(cp.stderr);(R/f'{seq}.exit').write_text(str(cp.returncode)+'\n')
+ assert cp.returncode==0 and cp.stdout==bodybytes and not cp.stderr
+ metrics.append({'seq':seq,'span_count':len(s['spans']),'null_count':sum(x['eng'] is None for x in s['spans']),'word_pair_count':sum(x['d']==5 and x['eng'] is not None for x in s['spans']),'spec_sha256':sha(specbytes),'spec_bytes':len(specbytes),'body_sha256':sha(bodybytes),'body_bytes':len(bodybytes),'generator_exit':cp.returncode,'stderr_bytes':len(cp.stderr),'exact_body':True})
+ row=next(r for r in rows if r['seq']==seq); spans=s['spans']; byid={x['id']:x for x in spans};tr=gen.resolve(row['wylie'],spans,'tib',seq); er=gen.resolve(row['english'],gen.with_members(spans,[byid[i] for i in s['eng_order']],row['english']),'eng',seq)
+ for sp in spans:
+  rec={'seq':seq,'id':sp['id'],'d':sp['d'],'tib':sp['tib'],'eng':sp['eng'],'tib_range':list(tr[sp['id']]),'eng_range':list(er[sp['id']]) if sp['eng'] is not None else None};records.append(rec)
+  hits={}
+  for side,field in [('tib','wylie'),('eng','english')]:
+   arr=[];st=0;piece=sp[side]
+   if piece:
+    while True:
+     at=gen.find_word(row[field],piece,st)
+     if at<0:break
+     arr.append([at,at+len(piece)]);st=at+1
+   hits[side+'_all_ranges']=arr
+   hits[side+'_selected_ordinal']=arr.index(rec[side+'_range'])+1 if rec[side+'_range'] in arr else None
+  audit.append({**rec,**hits})
+  if sp['d']==7:
+   for side,field in [('tib','wylie'),('eng','english')]:
+    pr=(tr if side=='tib' else er)[parent['id']]; rr=rec[side+'_range']; assert pr[0]<=rr[0]<rr[1]<=pr[1] and rr!=list(pr) and row[field][pr[0]:pr[1]].count(sp[side])==1
+  else:parent=sp
+ dump(R/f'{seq}-lexical-screen.json',[{'id':sp['id'],'d':sp['d'],'tib':sp['tib'],'eng':sp['eng'],'entries':[{'id':e['id'],'tier':e['tier'],'hgm_gloss':json.loads(e['hgm_gloss']) if e['hgm_gloss'] else None} for e in lex.get(sp['tib'],[])]} for sp in spans])
+dump(R/'resolved-spans.json',records);dump(R/'occurrence-audit.json',audit);dump(R/'measured-segments.json',metrics);dump(R/'preservation-manifest.json',manifest)
+print(json.dumps(metrics,indent=2));print('Preserved files',len(manifest),'lexical terms',len(terms),'master entries',len(me),'query checks',len(queries))

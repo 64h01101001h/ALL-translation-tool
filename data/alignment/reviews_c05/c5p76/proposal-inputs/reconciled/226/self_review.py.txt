@@ -1,0 +1,63 @@
+import os,sys,json,copy,sqlite3,subprocess,hashlib,gzip,re,html
+from pathlib import Path
+assert os.environ.get('PYTHONDONTWRITEBYTECODE')=='1'
+B=Path(__file__).resolve().parents[2];R=B.parents[1]/'campaign-worktree';O=B/'reconciled'
+sys.path.insert(0,str(R/'tools'));import gen_alignment_page as G
+def dump(p,o):p.write_text(json.dumps(o,ensure_ascii=False,indent=2)+'\n')
+def sha(b):return hashlib.sha256(b).hexdigest()
+c=sqlite3.connect((R/'build/hgm_spine_v27_2.db').as_uri()+'?mode=ro',uri=True);c.row_factory=sqlite3.Row
+runner="import sqlite3,runpy,sys; from pathlib import Path; original=sqlite3.connect; sqlite3.connect=lambda p,*a,**k: original(Path(p).resolve().as_uri()+'?mode=ro',*a,uri=True,**k); runpy.run_path(sys.argv[1],run_name='__main__')"
+lemmas=['kha che ba','skyed pa',"'thad", "'byung ba", 'chud za','mi',"'gyur",'tshul gyis']
+mp=Path.home()/'Desktop/HGM DICTIONARY - TRANSLATION APP/Handoff/release/hgm_dictionary_v27_2.json.gz';master=json.load(gzip.open(mp))
+for s in (226,227,228):
+ p=O/str(s);d=json.load(open(p/'spec.json'));seg=d['segments'][0];sp=seg['spans'];order=seg['eng_order'];source=json.load(open(p/'source-original.json'))
+ # Preserve the complete first mechanically passing state before semantic review changes.
+ for f in ['spec.json','body.html','generator-proof.json','occurrence-proof.json']:(p/('pre-self-review.'+f)).write_bytes((p/f).read_bytes())
+ def get(id):return next(x for x in sp if x['id']==id)
+ changes=[]
+ if s==226:
+  get('w19')['eng']='deed';changes.append('w19 tightened deed or karma to deed: one Tibetan las is banked once; the synonymous or karma re-expression stays unwrapped.')
+  seg['note']+=' The synonymous or karma re-expression after deed is left unwrapped, banking las once.'
+ if s==227:
+  get('w27').update(d=5,tib='rang bzhin',eng='nature of its own');changes.append('w27 tightened to the lexical rang bzhin/nature of its own; through any had distributed licensing outside the proposed Tibetan phrase, and the intrinsic-existence/manner qualification does not receive a separate atom.')
+  seg['note']=seg['note'].replace('The final intrinsic-existence construction stays at phrase depth within the denial.','In the final denial, rang bzhin owns nature of its own; the surrounding intrinsic-existence and manner grammar is distributed in English and omitted, not nulled. Supplied any remains unwrapped.')
+ if s==228:
+  get('w18').update(tib='de phyir',eng='then')
+  i=sp.index(get('w18'))+1;sp[i:i]=[{'id':'w41','d':5,'tib':'chud zar','eng':'go away'},{'id':'w42','d':6,'tib':'mi','eng':'Neither'}]
+  i=order.index('w18');order[i:i+1]=['w42','w18','w41']
+  changes.append('The fourth verse line is split into de phyir/then, chud zar/go away, and mi/Neither. Supplied can it simply stays unwrapped; gyur contributes the resulting predicate without a secure separate English atom and is omitted.')
+  seg['note']+=' In the fourth verse line, mi owns Neither, de phyir owns then, and chud zar owns go away. The supplied can it simply stays unwrapped; gyur has no secure separate atom in the recast and is omitted.'
+ dump(p/'self-review-changes.json',changes)
+ b=(json.dumps(d,ensure_ascii=False,indent=2)+'\n').encode();(p/'attempt-02.spec.json').write_bytes(b)
+ r=subprocess.run([sys.executable,'-c',runner,str(R/'tools/gen_alignment_page.py')],input=b,stdout=subprocess.PIPE,stderr=subprocess.PIPE,cwd=R,env={**os.environ,'PYTHONDONTWRITEBYTECODE':'1'})
+ (p/'attempt-02.stdout.html').write_bytes(r.stdout);(p/'attempt-02.stderr.txt').write_bytes(r.stderr);(p/'attempt-02.exit.txt').write_text(str(r.returncode)+'\n')
+ if r.returncode:print(s,r.stderr.decode());continue
+ (p/'spec.json').write_bytes(b);(p/'body.html').write_bytes(r.stdout)
+ for x in sp:x['_lab']='s'+str(s)+x['id']
+ by={x['id']:x for x in sp};tr=G.resolve(source['wylie'],sp,'tib',s);er=G.resolve(source['english'],G.with_members(sp,[by[i] for i in order],source['english']),'eng',s)
+ occ=[]
+ for x in sp:
+  z={k:v for k,v in x.items() if not k.startswith('_')};z['tib_range']=tr[x['id']];z['eng_range']=er.get(x['id'])
+  for side,field,rr in [('tib','wylie',tr.get(x['id'])),('eng','english',er.get(x['id']))]:
+   if rr is None:continue
+   assert source[field][rr[0]:rr[1]]==x[side]
+   hits=[];start=0
+   while True:
+    j=G.find_word(source[field],x[side],start,subword=x['d']==7 or x.get('subword',False))
+    if j<0:break
+    hits.append([j,j+len(x[side])]);start=j+1
+   z[side+'_all_occurrences']=hits;z[side+'_selected_ordinal']=hits.index(list(rr))+1
+  occ.append(z)
+ dump(p/'occurrence-proof.json',{'coordinate_system':'zero-based half-open Unicode character offsets; canonical resolver, no cursor overrides','eng_order':order,'spans':occ})
+ gl=json.load(open(p/'glossary-originals.json'))
+ for w in lemmas:gl['entries'][w]=[dict(r) for r in c.execute('SELECT * FROM entries WHERE wylie=?',(w,))]
+ dump(p/'glossary-originals.json',gl)
+ m=json.load(open(p/'master-originals.json'));m['entries']=[x for x in master['unified_entries'] if x.get('wylie') in gl['entries']];dump(p/'master-originals.json',m)
+ audit=[]
+ for x in sp:
+  if x['d'] not in (5,7):continue
+  rr=gl['entries'].get(x['tib'],[])
+  audit.append({'id':x['id'],'tib':x['tib'],'eng':x['eng'],'exact_dictionary_ids':[r['id'] for r in rr],'hgm_fields':[{'id':r['id'],'tier':r['tier'],'hgm_gloss':r['hgm_gloss']} for r in rr],'exact_curated_or_glossary_english':any(r['tier'] in ('curated','glossary') and x['eng'] in (json.loads(r['hgm_gloss']) if r['hgm_gloss'] else []) for r in rr),'interpretation':'Exact entry presence is not HGM attestation; nonexact English is local contextual matching or inflection/capitalization, described in decisions.md. No comparanda promoted.'})
+ dump(p/'lexical-audit.json',audit)
+ pr=json.load(open(p/'generator-proof.json'));pr.update(exit=r.returncode,stderr_bytes=len(r.stderr),spec_bytes=len(b),body_bytes=len(r.stdout),spec_sha256=sha(b),body_sha256=sha(r.stdout),spans=len(sp),depth_counts={str(i):sum(x['d']==i for x in sp) for i in range(1,8)},nulls=sum(x['eng'] is None for x in sp),self_review_completed=True,final_attempt='attempt-02')
+ dump(p/'generator-proof.json',pr);print(s,pr)
