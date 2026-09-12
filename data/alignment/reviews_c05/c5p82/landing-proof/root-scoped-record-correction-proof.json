@@ -1,0 +1,83 @@
+{
+  "checked_at": "2026-09-12T14:49:17.186152+00:00",
+  "actual_changed_reason_keys": [
+    [
+      244,
+      "w20"
+    ],
+    [
+      245,
+      "w1"
+    ],
+    [
+      245,
+      "w14"
+    ],
+    [
+      245,
+      "w23"
+    ],
+    [
+      245,
+      "w25"
+    ],
+    [
+      245,
+      "w30"
+    ],
+    [
+      245,
+      "w31"
+    ],
+    [
+      246,
+      "w2"
+    ],
+    [
+      246,
+      "m2b"
+    ],
+    [
+      246,
+      "w7"
+    ],
+    [
+      246,
+      "p25"
+    ],
+    [
+      246,
+      "w26"
+    ],
+    [
+      246,
+      "w31"
+    ],
+    [
+      246,
+      "w34"
+    ],
+    [
+      246,
+      "w40"
+    ],
+    [
+      246,
+      "w41"
+    ],
+    [
+      246,
+      "w42"
+    ]
+  ],
+  "all_117_other_fields_unchanged": true,
+  "report_exact_reason_replacements_only": true,
+  "helper_exact_python_repr_reason_replacements_only": true,
+  "unchanged_files_verified": 19,
+  "candidate_identity_gate_sha256": "6df9601a2cb31ac1cbb83582c6e038f33a97862290e33f927209137bc473d10e",
+  "correction_record_sha256": "81bacc346816fd157e41a0c1ffff2e3c256a8ef1be86f34e29e5ed4ec6a538e5",
+  "verification_history": [
+    "Initial scope checker compared raw strings inside Python helper, so failed at helper quote delimiters. Actual 17-line diff read; corrected checker uses repr for Python literals. All 117 record fields and report had already matched.",
+    "Page82 materialization ran after that checker failure because root shell lacked set -e; no registry/build/commit had run. Candidate semantic acceptance was already independently passed before materialization. Full scoped check completed here before registration."
+  ]
+}

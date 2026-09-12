@@ -1,0 +1,8 @@
+import pathlib,sys,sqlite3,runpy
+root=pathlib.Path(__file__).resolve().parents[4]/'campaign-worktree'
+original=sqlite3.connect
+def readonly(database,*args,**kwargs):
+ p=pathlib.Path(database).resolve();kwargs['uri']=True
+ return original(p.as_uri()+'?mode=ro',*args,**kwargs)
+sqlite3.connect=readonly
+runpy.run_path(str(root/'tools/gen_alignment_page.py'),run_name='__main__')

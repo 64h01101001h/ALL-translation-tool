@@ -1,0 +1,39 @@
+import pathlib,sqlite3,json,gzip,hashlib,shutil
+BASE=pathlib.Path(__file__).resolve().parent
+ROOT=BASE.parents[4]/'campaign-worktree'
+DATA=pathlib.Path('/Users/adamderickandrade/Desktop/HGM DICTIONARY - TRANSLATION APP')
+def dump(n,x): (BASE/n).write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+def sha(p): return hashlib.sha256(p.read_bytes()).hexdigest()
+spine=ROOT/'build/hgm_spine_v27_2.db'; db=sqlite3.connect(spine.resolve().as_uri()+'?mode=ro',uri=True); db.row_factory=sqlite3.Row
+rows=[dict(r) for r in db.execute("select * from corpus_segments where course=? and seq between ? and ?",('C05',241,249))]; dump('source-context-full-rows.json',rows)
+snap=BASE.parents[2]/'source.json'; snapshot=json.loads(snap.read_text()); checks=[]
+for s in snapshot:
+ r=next(x for x in rows if x['seq']==s['seq']); checks.append({'seq':s['seq'],'fields':{k:r[k]==s[k] for k in s}})
+dump('snapshot-verification.json',checks)
+terms=['chos can','bdag med','rdzogs par','mngon sum','gdags gzhi','phung po','rang ngos nas grub pa',"'dzin pa",'zhen yul',"sun 'byin",'sun phyung','nus','phyin ci log','bcings pa','yongs su shes pa','bral ba',"thal 'gyur",'snga ma','khyab pa','btags chos','gang zag','dbang','las','bsog','rgyud bla ma',"rtsa 'grel",'dgongs pa','mthar thug',"bdag 'dzin",'bag chags',"yid 'ong", "yid mi 'ong",'tshul min yid byed','rnam rtog',"'dod chags",'zhe sdang',"de bzhin gshegs pa'i snying po",'snying po',"'khor ba"]
+entries=[]
+for t in terms:
+ result=[dict(r) for r in db.execute('select * from entries where wylie=?',(t,))]; entries.append({'query':'select * from entries where wylie=?','parameters':[t],'count':len(result),'rows':result})
+dump('glossary-originals.json',entries)
+master=DATA/'Handoff/release/hgm_dictionary_v27_2.json.gz'; m=json.load(gzip.open(master,'rt')); result={}
+for key,val in m.items():
+ if isinstance(val,list): result[key]=[e for e in val if isinstance(e,dict) and e.get('wylie') in terms]
+dump('master-originals.json',{'source':str(master),'sha256':sha(master),'terms':terms,'entries':result})
+queries=[]
+for seq in [244,245,246]:
+ r=next(r for r in rows if r['seq']==seq)
+ for field in ['acip','wylie','english']:
+  sql=f'select * from corpus_segments where {field}=?'; out=[dict(x) for x in db.execute(sql,(r[field],))]; queries.append({'seq':seq,'query':sql,'parameters':[r[field]],'count':len(out),'rows':out})
+for pat in ['%sun phyung mi nus%','%tshul min yid byed%','%de bzhin gshegs pa% snying po%','%root out the object%']:
+ field='english' if 'root out' in pat else 'wylie'; sql=f'select * from corpus_segments where {field} like ?'; out=[dict(r) for r in db.execute(sql,(pat,))]; queries.append({'query':sql,'parameters':[pat],'count':len(out),'rows':out})
+dump('corpus-parallels.json',queries)
+paths=[ROOT/'AGENTS.md',ROOT/'docs/ALIGNMENT_LAYER_SPEC.md',ROOT/'docs/alignment_briefs/PROPOSE_BRIEF.md',ROOT/'data/alignment/C05_CAMPAIGN.md',ROOT/'docs/errata_register.json',ROOT/'tools/gen_alignment_page.py',ROOT/'tools/build_alignment_layer.py',DATA/'To DO/Formal Courses/ACI Readings In Roman ASCII/C05ReadingASCII.txt',DATA/'Handoff/HANDOFF.md',DATA/'Handoff/README.md',BASE.parents[3]/'proposal-protocol.md',BASE.parents[2]/'tibetan-brief.md']
+manifest=[]
+for p in paths:
+ dest=BASE/'originals'/p.name; dest.parent.mkdir(exist_ok=True); shutil.copyfile(p,dest); manifest.append({'original':str(p),'realpath':str(p.resolve()),'copy':str(dest.relative_to(BASE)),'sha256':sha(p),'bytes':p.stat().st_size})
+manifest.append({'original':str(spine),'realpath':str(spine.resolve()),'sha256':sha(spine),'bytes':spine.stat().st_size,'material_extracted':'source-context-full-rows.json, glossary-originals.json, corpus-parallels.json'})
+dump('originals-manifest.json',manifest)
+for e in entries:
+ print(e['parameters'][0],[(r['hgm_gloss'],r['tier']) for r in e['rows']])
+print('Snapshot',checks)
+print('Parallels',[(x.get('seq'),x['parameters'][0][:35],x['count']) for x in queries])

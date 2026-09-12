@@ -47,7 +47,7 @@ the/a/an/and/or/his/our/your/I/you unless `data/alignment/span_head_allow.json`
 lists it under `pages_c05` with the Tibetan word that licenses it.
 
 ## Progress
-c5p1–c5p7 (1–21) cloned 2026-09-05; c5p8–c5p49 (22–147) landed 2026-09-05; c5p50–c5p55 (148–165) landed 2026-09-08. c5p56 (166–168) landed 2026-09-12 after fresh independent proposals, reconciliation and skeptical review. c5p57 (169–171) landed after independent review. c5p58 (172–174) landed after independent review. c5p59 (175–177) landed after independent review. c5p60 (178–180) landed after independent review. c5p61 (181–183) landed after independent review. c5p62 (184–186) landed after independent review. c5p63 (187–189) landed after independent review. c5p64 (190–192) landed after independent review. c5p65 (193–195) landed after independent review. c5p66 (196–198) landed after independent review. c5p67 (199–201) landed after independent review. c5p68 (202–204) landed after independent review. c5p69 (205–207) landed after independent review. c5p70 (208–210) landed after independent review. c5p71 (211–213) landed after independent review. c5p72 (214–216) landed after independent review. c5p73 (217–219) landed after independent review. c5p74 (220–222) landed after independent review. c5p75 (223–225) landed after independent review. c5p76 (226–228) landed after independent review. c5p77 (229–231) landed after independent review. c5p78 (232–234) landed after independent review. c5p79 (235–237) landed after independent review. c5p80 (238–240) landed after independent review. c5p81 (241–243) landed after independent review. Coverage 243/511; current verification is recorded in the latest batch entry below.
+c5p1–c5p7 (1–21) cloned 2026-09-05; c5p8–c5p49 (22–147) landed 2026-09-05; c5p50–c5p55 (148–165) landed 2026-09-08. c5p56 (166–168) landed 2026-09-12 after fresh independent proposals, reconciliation and skeptical review. c5p57 (169–171) landed after independent review. c5p58 (172–174) landed after independent review. c5p59 (175–177) landed after independent review. c5p60 (178–180) landed after independent review. c5p61 (181–183) landed after independent review. c5p62 (184–186) landed after independent review. c5p63 (187–189) landed after independent review. c5p64 (190–192) landed after independent review. c5p65 (193–195) landed after independent review. c5p66 (196–198) landed after independent review. c5p67 (199–201) landed after independent review. c5p68 (202–204) landed after independent review. c5p69 (205–207) landed after independent review. c5p70 (208–210) landed after independent review. c5p71 (211–213) landed after independent review. c5p72 (214–216) landed after independent review. c5p73 (217–219) landed after independent review. c5p74 (220–222) landed after independent review. c5p75 (223–225) landed after independent review. c5p76 (226–228) landed after independent review. c5p77 (229–231) landed after independent review. c5p78 (232–234) landed after independent review. c5p79 (235–237) landed after independent review. c5p80 (238–240) landed after independent review. c5p81 (241–243) landed after independent review. c5p82 (244–246) landed after independent review. Coverage 246/511; current verification is recorded in the latest batch entry below.
 
 **Historical pause, superseded by Adam’s 2026-09-11 continuation request. PAUSED 2026-09-08 (Adam's call): the campaign stops here while the app goes to
 a public release (two-week target). Reconciled-but-unlanded specs for 166, 167,
@@ -1331,3 +1331,41 @@ The completed byte-safe audit records all 69,289 warnings across six exact
 source copies and four intentional CRLF CSVs. Each file equals the committed
 Git object; every CSV warning line is verified CRLF. Failed audit attempts are
 recorded in the proof. This supplement changes no source or generated data.
+
+
+### c5p82 · C05:244–246 — 2026-09-12 — Codex reconciliation/review
+
+Fresh independent proposals, reconciliation and semantic SPEC APPROVE / QUALITY
+APPROVE yield 117 spans (36/30/51), zero nulls, 91 non-null d5 pairs and eight
+d7 members. No source wording changes or HGM-gloss promotion; all work remains
+PROVISIONAL machine review. Complete direct-perception and comprehensive-knowledge
+units survive. The person/self-nature apposition and two collect-karma occurrences
+retain exact owners. The paired root-text/commentary and Tathagata-essence units
+have tighter members. Coordinated emotion predicates use their actual occurrences;
+distributed perception/agency and English repetitions remain unpaired.
+
+No errata or allowances added; all 192 prior records survive. All 217 original
+proposal dispositions and 117 final tuples were read and checked. The independent
+reviewer reopened full source/master fields and 109 lexical/corpus queries, with
+five complete errata refutations. Seventeen reviewer-reason apostrophe spellings
+were corrected, with exact old files/diffs retained. Root checked the 17 actual
+reason changes, all 117 unchanged verdicts, 19 unchanged files and exact Python
+literal quoting in the reviewer helper. The initial scope checker expected raw
+strings within Python literals and failed on quote delimiters; page materialization
+ran before that ancillary scope check was repaired. Completed scope proof preceded
+registration/build/commit. Candidate acceptance and source tuples were unchanged.
+Root verified 590 original mappings, 19 immutable Git pins and 487 exact semantic
+file copies. Full original sources, proposals and correction histories survive.
+
+Coverage 246/511. Bank 44,184 links (+120 with three anchors), 11,877 nulls,
+1,582 notes and 11 trees; evidence 7,027 heads / 15,287 pairs. Main/reverse/
+course/changes CSV rows 22,108 / 21,768 / 23,596 / 59, seeded from 81dbbe4.
+Every course/depth group independently matches main CSV references. Prior links,
+notes, trees, evidence, citations and lexical keys survive; no ACIP enrichment.
+Source/master hashes remain unchanged. All 17 targeted suites passed (11.78s);
+complete body/range/copy, retention and navigation checks passed. Source and CSV
+whitespace are audited byte-safely before commit without normalization.
+
+Rendered inspection remains unverified following browser-policy refusal. Native
+and installed-phone proof remains through171; locked launch and main integration
+remain open. A fresh integration reviewer is checking the saved data commits.

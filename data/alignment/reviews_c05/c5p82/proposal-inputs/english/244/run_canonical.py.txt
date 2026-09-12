@@ -1,0 +1,19 @@
+import pathlib, subprocess, os, json, hashlib
+base=pathlib.Path(__file__).resolve().parent
+repo=base.parents[3]/'campaign-worktree'
+sha=lambda b:hashlib.sha256(b).hexdigest()
+for seq in ([int(x) for x in os.sys.argv[1:]] or [244,245,246]):
+ p=base.parent/str(seq)
+ old=list((p/'attempts').glob('canonical-*')) if (p/'attempts').exists() else []
+ a=p/'attempts'/f'canonical-{len(old)+1:02d}';a.mkdir(parents=True)
+ spec=(p/'spec.json').read_bytes();(a/'spec.json').write_bytes(spec)
+ cmd=[os.sys.executable,str(base/'canonical_ro.py'),str(repo/'tools/gen_alignment_page.py')]
+ env=dict(os.environ,PYTHONDONTWRITEBYTECODE='1')
+ r=subprocess.run(cmd,input=spec,capture_output=True,cwd=repo,env=env)
+ for name,data in [('stdout.html',r.stdout),('stderr.txt',r.stderr),('exit.txt',f'{r.returncode}\n'.encode())]:
+  (a/name).write_bytes(data)
+  (p/('generator.'+name)).write_bytes(data)
+ if r.returncode==0:(p/'body.html').write_bytes(r.stdout)
+ proof={'command':cmd,'cwd':str(repo),'environment_override':{'PYTHONDONTWRITEBYTECODE':'1'},'sqlite':'All connections enforced URI mode=ro by saved launcher; canonical generator unchanged','exit':r.returncode,'stdout_bytes':len(r.stdout),'stderr_bytes':len(r.stderr),'stdout_sha256':sha(r.stdout),'spec_sha256':sha(spec),'generator_sha256':sha((repo/'tools/gen_alignment_page.py').read_bytes()),'launcher_sha256':sha((base/'canonical_ro.py').read_bytes()),'attempt':str(a.relative_to(p))}
+ (a/'proof.json').write_text(json.dumps(proof,indent=2)+'\n');(p/'canonical-proof.json').write_text(json.dumps(proof,indent=2)+'\n')
+ print(seq,r.returncode,len(r.stdout),r.stderr.decode())

@@ -1,0 +1,26 @@
+import pathlib,json,hashlib,datetime
+b=pathlib.Path(__file__).resolve().parent
+sha=lambda x:hashlib.sha256(x).hexdigest()
+man=json.loads((b/'originals-manifest.json').read_text())
+for i,name in enumerate(['HANDOFF.md','README.md'],12):
+ p=pathlib.Path('/Users/adamderickandrade/Desktop/HGM DICTIONARY - TRANSLATION APP/Handoff')/name
+ dst=f'originals/{i:02d}-{name}';(b/dst).write_bytes(p.read_bytes())
+ man.append({'original_path':str(p),'resolved_path':str(p.resolve()),'saved_path':dst,'bytes':p.stat().st_size,'sha256':sha(p.read_bytes())})
+(b/'originals-manifest.json').write_text(json.dumps(man,indent=2)+'\n')
+source=json.loads((b/'source-evidence.json').read_text());queries=json.loads((b/'corpus-evidence.json').read_text())['queries']
+comparisons=[]
+for n in [244,245,246]:
+ row=next(x for x in source['rows'] if x['seq']==n)
+ other=next(x for q in queries for x in q['rows'] if x['course']=='C16' and x['seq']==n+576)
+ prefix=0
+ for a,z in zip(row['english'],other['english']):
+  if a!=z:break
+  prefix+=1
+ comparisons.append({'source':[row['course'],row['seq']],'compared':[other['course'],other['seq']],'six_field_equality':{k:row[k]==other[k] for k in ['id','course','seq','acip','wylie','english']},'common_english_prefix_chars':prefix,'source_english_remainder':row['english'][prefix:],'compared_english_remainder':other['english'][prefix:],'claim_limit':'Textual fields compared only; no independent-publication or ingestion-lineage inference.'})
+(b/'parallel-comparisons.json').write_text(json.dumps(comparisons,ensure_ascii=False,indent=2)+'\n')
+fail=b/'attempts/evidence-01'
+(fail/'stdout.txt').write_text("master type dict ['meta', 'unified_entries', 'curated_entries', 'glossary_entries']\n")
+(fail/'stderr.txt').write_text('Traceback (most recent call last):\n  File "'+str(b/'collect_evidence.py')+'", line 22, in <module>\n    entries=master_data[\'entries\'] if isinstance(master_data,dict) else master_data\n            ~~~~~~~~~~~^^^^^^^^^^^\nKeyError: \'entries\'\n')
+(fail/'exit.txt').write_text('1\n')
+(b/'discovery-diagnostics.json').write_text(json.dumps({'failures':[{'command':'cat campaign-artifacts/C05-244-246/proposal-protocol.md','exit':1,'stderr':'cat: campaign-artifacts/C05-244-246/proposal-protocol.md: No such file or directory\n','resolution':'The brief links ../proposal-protocol.md; subsequently read campaign-artifacts/proposal-protocol.md in full.'},{'command':'rg --files docs | rg C05|course.shape','exit':1,'meaning':'No matching file names; course shape subsequently found and read at data/alignment/C05_CAMPAIGN.md.'},{'command':'collect_evidence.py initial invocation','exit':1,'preserved':'attempts/evidence-01','resolution':'Dictionary top-level unified_entries key inspected and collector corrected; next execution succeeded.'}],'canonical_failures':0,'superseded_successes':['../245/attempts/canonical-01'],'material_semantic_revision':'Dropped rtog pa/thinks twice from245 due unresolved distribution, even though mechanical pass succeeded.'},indent=2)+'\n')
+print(json.dumps(comparisons,ensure_ascii=False,indent=2))

@@ -1,0 +1,55 @@
+import pathlib,json,hashlib,html.parser,datetime,shutil
+BASE=pathlib.Path(__file__).resolve().parent.parent
+ROOT=BASE.parents[2]/'campaign-worktree'
+def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
+def dump(p,x):p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+rows=json.loads((BASE/'244/evidence/source-context-full-rows.json').read_text())
+class Parse(html.parser.HTMLParser):
+ def __init__(self):super().__init__(convert_charrefs=True);self.side=None;self.stack=[];self.full={'tib':'','eng':''};self.spans={'tib':{},'eng':{}}
+ def handle_starttag(self,tag,attrs):
+  a=dict(attrs)
+  if tag=='div' and a.get('class') in self.full:self.side=a['class']
+  if tag=='span':
+   lab=a.get('data-l');self.stack.append((lab,len(self.full[self.side]) if self.side else None))
+ def handle_endtag(self,tag):
+  if tag=='span':
+   lab,start=self.stack.pop()
+   if lab and self.side:self.spans[self.side][lab]={'start':start,'end':len(self.full[self.side]),'text':self.full[self.side][start:]}
+ def handle_data(self,data):
+  if self.side and self.stack:self.full[self.side]+=data
+notes={244:'Challenge zhen/yul first: only yul→object is banked; the conceived-object qualification remains distributed. The second ma is omitted because have yet to perceive does not offer a separate negative atom.',245:'Challenge gang zag→second me and final las→second karma first; exact occurrence positions are verified. The first me is gdags gzhi explanation; the third karma is duplicated English and remains unwrapped.',246:'Challenge the coordinated skyes first: the single Tibetan verb links to disliking’s later springs up. The adjective qualifiers distribute across two English clauses and remain omitted.'}
+for seq in [244,245,246]:
+ p=BASE/str(seq);s=json.loads((p/'spec.json').read_text())['segments'][0];r=next(r for r in rows if r['seq']==seq);d=json.loads((p/'decisions.json').read_text());parser=Parse();parser.feed((p/'body.html').read_text());checks={}
+ for side,field in [('tib','wylie'),('eng','english')]:
+  checks[field+'_full_verbatim']=parser.full[side]==r[field]
+  assert checks[field+'_full_verbatim'],(seq,side)
+  for decision in d['retained']:
+   lab=f"s{seq}{decision['id']}";actual=parser.spans[side][lab]
+   assert actual['start']==decision[side+'_start'] and actual['end']==decision[side+'_end'],(seq,side,lab,actual,decision)
+ checks['all_span_occurrences_match_recorded_intent']=True
+ checks['body_bytes_equal_saved_stdout']=(p/'body.html').read_bytes()==(p/'generator.stdout.html').read_bytes();assert checks['body_bytes_equal_saved_stdout']
+ assert (p/'generator.exit.txt').read_text()=='EXIT=0\n' and (p/'generator.stderr.txt').stat().st_size==0
+ counts={'spans':len(s['spans']),'null':sum(x['eng'] is None for x in s['spans']),'d5':sum(x['d']==5 for x in s['spans']),'by_depth':{str(i):sum(x['d']==i for x in s['spans']) for i in range(1,8)},'errata':0}
+ proof={'producer':'Codex','angle':'Tibetan-first','course':'C05','seq':seq,'checks':checks,'counts':counts,'generator':{'canonical_path':str(ROOT/'tools/gen_alignment_page.py'),'sha256':sha(ROOT/'tools/gen_alignment_page.py'),'launcher':str(BASE/'244/run_canonical.py'),'launcher_sha256':sha(BASE/'244/run_canonical.py'),'invocation':'PYTHONDONTWRITEBYTECODE=1 python3 ../244/run_canonical.py < spec.json > generator.stdout.html 2> generator.stderr.txt','sqlite':'Original sqlite3.connect is wrapped only to enforce resolved file URI + mode=ro; generator source and gates are unchanged.','exit':0,'stderr_bytes':0,'stdout_bytes':(p/'body.html').stat().st_size},'source_evidence':'../244/evidence/ (shared exact originals with original paths/hashes in originals-manifest.json)','hashes':{n:sha(p/n) for n in ['spec.json','body.html','errata.json','generator.stdout.html','generator.stderr.txt','generator.exit.txt','decisions.json']},'rendered_occurrences':parser.spans}
+ dump(p/'proof.json',proof)
+ changes={'01':'Canonical exit 0, empty stderr. Initial complete proposal preserved.','02':'Canonical exit 0, empty stderr. 244 and 246 unchanged. 245 replaces the broad rang bzhin gyis grub par predicate with rang bzhin/nature and grub par/existing to exclude supplied some; note and ids/positions regenerated. No failed canonical attempts.'}
+ dump(p/'attempt-log.json',changes)
+ for n in ['decisions.json','errata.json']:shutil.copyfile(p/n,p/'attempts/02'/n)
+ sourcehash=sha(BASE/'244/evidence/source-context-full-rows.json')
+ para=[f'C05:{seq} — Tibetan-first proposal by Codex; provisional machine correspondence only.',notes[seq],f"Counts: {counts['spans']} spans; {counts['d5']} d5; {counts['null']} null; 0 errata. Omission reasons and every retained occurrence are in decisions.json.",
+ 'Original evidence is shared at ../244/evidence/: full spine rows, full glossary/master entries, exact corpus queries/results, complete C05 ASCII source, governing originals and original-path/hash manifest.',
+ f'Source-context-full-rows SHA-256: {sourcehash}. Six selected snapshot fields independently match each reopened original spine row; neighboring C05:241–249 was read.',
+ 'HGM evidence was read as provenance-bearing lexical evidence. Automatic sun phyung and zhen yul entries were not allowed to override this passage; comparative dictionary wording supplied no English.',
+ 'Errata: none proposed. Full original ACIP/English, current register, and corpus parallels checked. C16:820 matches all three text fields of 244; C16:821–822 match ACIP/Wylie of 245–246, while English has different trailing apparatus. Identity proves neither independent publication nor ingestion history.',
+ 'P7:12/14 provide only their preserved shared extents, with differences in wording/boundaries. Source self- nature spacing and terminal asterisks stay verbatim; no registered heading/cap class is newly filed.',
+ f"Canonical final output: EXIT=0; stderr=0 bytes; body={proof['generator']['stdout_bytes']} bytes. body.html is byte-identical to saved generator.stdout.html.",
+ f"Spec SHA-256: {proof['hashes']['spec.json']}; body SHA-256: {proof['hashes']['body.html']}.",
+ 'proof.json records the real generator hash, read-only launcher, counts, full-text fidelity and every exact occurrence. Both canonical passes and superseded inputs remain under attempts/. No failed generator run occurred.',
+ 'Freeze boundary: final-manifest.json records all final files and preserved attempts after this report. Mechanical fidelity is not semantic approval.']
+ (p/'report.md').write_text('\n'.join(para)+'\n')
+for seq in [244,245,246]:
+ p=BASE/str(seq);files=[]
+ for f in sorted(p.rglob('*')):
+  if f.is_file() and f.name!='final-manifest.json':files.append({'path':str(f.relative_to(p)),'bytes':f.stat().st_size,'sha256':sha(f)})
+ dump(p/'final-manifest.json',{'frozen_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'status':'DONE','producer':'Codex','files':files,'shared_evidence':'../244/evidence/; exact source originals and mapped paths/hashes; frozen with 244 final-manifest.json'})
+ print(seq,json.loads((p/'proof.json').read_text())['counts'],sha(p/'body.html'))

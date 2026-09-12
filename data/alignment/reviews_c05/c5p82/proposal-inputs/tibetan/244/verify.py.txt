@@ -1,0 +1,9 @@
+import pathlib,sys,subprocess,os,json,hashlib,shutil
+BASE=pathlib.Path(__file__).resolve().parent.parent
+for seq in [244,245,246]:
+ p=BASE/str(seq);a=p/'attempts'/sys.argv[1];a.mkdir(parents=True,exist_ok=False)
+ shutil.copyfile(p/'spec.json',a/'spec.json')
+ proc=subprocess.run([sys.executable,str(BASE/'244/run_canonical.py')],input=(p/'spec.json').read_bytes(),stdout=subprocess.PIPE,stderr=subprocess.PIPE,env={**os.environ,'PYTHONDONTWRITEBYTECODE':'1'})
+ for n,b in [('stdout.html',proc.stdout),('stderr.txt',proc.stderr),('exit.txt',f'EXIT={proc.returncode}\n'.encode())]:(a/n).write_bytes(b)
+ shutil.copyfile(a/'stdout.html',p/'body.html');shutil.copyfile(a/'stderr.txt',p/'generator.stderr.txt');shutil.copyfile(a/'exit.txt',p/'generator.exit.txt');shutil.copyfile(a/'stdout.html',p/'generator.stdout.html')
+ print(seq,proc.returncode,len(proc.stdout),proc.stderr.decode())

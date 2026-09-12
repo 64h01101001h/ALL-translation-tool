@@ -1,0 +1,14 @@
+import pathlib,json
+p=pathlib.Path(__file__).resolve().parent
+for f in ['decisions.json','errata.json']:(p/'attempts/canonical-01'/f).write_bytes((p/f).read_bytes())
+spec=json.loads((p/'spec.json').read_text());s=spec['segments'][0]
+removed=[x for x in s['spans'] if x['id'] in ['w9','w19']]
+s['spans']=[x for x in s['spans'] if x['id'] not in ['w9','w19']]
+s['eng_order']=[x for x in s['eng_order'] if x not in ['w9','w19']]
+s['note']=s['note'].replace('holds/thinks/object/root out/unable','holds/object/root out/unable').replace('rtog pa to thinks is a provisional noun-to-verb correspondence.','rtog pa and zhen have distributed contributions within thinks he sees; both are omitted, not nulled.')
+(p/'spec.json').write_text(json.dumps(spec,ensure_ascii=False,indent=2)+'\n')
+d=json.loads((p/'decisions.json').read_text());d['spans']=[x for x in d['spans'] if x['id'] not in ['w9','w19']]
+for i in ['w9','w19']:d['intended_english_offsets'].pop(i)
+d['omissions'].append({'tib':'rtog pa (twice)','reason':'Removed initial thinks correspondence after self-review: division of cognitive contribution among rtog pa and zhen is not independently established; shared thinks he sees remains unwrapped.'})
+d['superseded_decision']={'canonical_attempt':'attempts/canonical-01','removed_spans':removed,'reason':'Mechanical pass did not resolve semantic distribution. Preserve sound object and holds atoms while omitting unresolved rtog pa/thinks.'}
+(p/'decisions.json').write_text(json.dumps(d,ensure_ascii=False,indent=2)+'\n')

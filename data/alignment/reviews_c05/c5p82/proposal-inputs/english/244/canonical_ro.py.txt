@@ -1,0 +1,12 @@
+"""Execute the unchanged canonical generator, enforcing read-only SQLite connections."""
+import pathlib, runpy, sqlite3, sys
+original_connect=sqlite3.connect
+def ro_connect(database,*args,**kwargs):
+ if not str(database).startswith('file:'):
+  database=pathlib.Path(database).resolve().as_uri()+'?mode=ro'
+ elif 'mode=ro' not in str(database):
+  raise RuntimeError('Only SQLite mode=ro accepted')
+ kwargs['uri']=True
+ return original_connect(database,*args,**kwargs)
+sqlite3.connect=ro_connect
+runpy.run_path(sys.argv[1],run_name='__main__')

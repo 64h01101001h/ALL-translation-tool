@@ -1,0 +1,51 @@
+import json, sqlite3, pathlib, hashlib, gzip
+base=pathlib.Path(__file__).resolve().parent
+workspace=base.parents[3]
+repo=workspace/'campaign-worktree'
+spine=repo/'build/hgm_spine_v27_2.db'
+master=pathlib.Path('/Users/adamderickandrade/Desktop/HGM DICTIONARY - TRANSLATION APP/Handoff/release/hgm_dictionary_v27_2.json.gz')
+def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
+def save(name,obj): (base/name).write_text(json.dumps(obj,ensure_ascii=False,indent=2)+'\n')
+c=sqlite3.connect(spine.resolve().as_uri()+'?mode=ro',uri=True); c.row_factory=sqlite3.Row
+rows=[dict(x) for x in c.execute('select * from corpus_segments where course=? and seq between ? and ? order by seq',('C05',241,249))]
+checks=[]
+for filename in ['source.json','context.json']:
+ snap=json.loads((base.parents[1]/filename).read_text())
+ for s in snap:
+  orig=next(x for x in rows if x['seq']==s['seq'])
+  checks.append({'snapshot':filename,'seq':s['seq'],'fields':{k:s[k]==orig[k] for k in ['id','course','seq','acip','wylie','english']}})
+assert all(all(x['fields'].values()) for x in checks)
+save('source-evidence.json',{'spine_path':str(spine),'resolved_spine_path':str(spine.resolve()),'spine_sha256':sha(spine),'query':'select * from corpus_segments where course=? and seq between ? and ? order by seq','parameters':['C05',241,249],'count':len(rows),'rows':rows,'snapshot_checks':checks,'meta':[dict(x) for x in c.execute('select * from meta')]})
+terms=['bdag med','rdzogs par','mngon sum','gdags gzhi','phung po','rang ngos nas','zhen yul',"sun 'byin",'sun phyung','phyin ci log','bcings pa','yongs su shes pa','thal \'gyur','khyab pa','btags chos',"'khor ba",'rgyud bla ma',"rtsa 'grel",'dgongs pa','mthar thug',"bdag 'dzin",'bag chags',"yid 'ong", "yid mi 'ong",'tshul min yid byed','rnam rtog',"'dod chags",'zhe sdang',"de bzhin gshegs pa'i snying po"]
+master_data=json.loads(gzip.decompress(master.read_bytes()))
+print('master type',type(master_data).__name__, list(master_data)[:8] if isinstance(master_data,dict) else len(master_data))
+entries=master_data['unified_entries'] if isinstance(master_data,dict) else master_data
+lex=[]
+for t in terms:
+ matches=[dict(x) for x in c.execute('select * from entries where wylie=?',(t,))]
+ m=[x for x in entries if x.get('wylie')==t]
+ lex.append({'query':'select * from entries where wylie=?','parameters':[t],'count':len(matches),'rows':matches,'master_exact_wylie_matches':m})
+ print(t,[(x['hgm_gloss'],x['tier']) for x in matches])
+save('lexical-evidence.json',{'master_path':str(master),'master_sha256':sha(master),'master_entry_count':len(entries),'queries':lex})
+queries=[]
+for seq in [244,245,246]:
+ row=next(x for x in rows if x['seq']==seq)
+ for col in ['wylie','english','acip']:
+  sql=f'select * from corpus_segments where {col}=? order by course,seq'
+  hits=[dict(x) for x in c.execute(sql,(row[col],))]
+  queries.append({'query':sql,'parameters':[row[col]],'count':len(hits),'rows':hits})
+for term in ['%zhen yul sun%','%tshul min yid byed%','%self- nature%','%Higher Line%']:
+ col='english' if term in ['%self- nature%','%Higher Line%'] else 'wylie'
+ sql=f'select * from corpus_segments where {col} like ? order by course,seq'
+ hits=[dict(x) for x in c.execute(sql,(term,))]
+ queries.append({'query':sql,'parameters':[term],'count':len(hits),'rows':hits})
+ print('corpus',term,len(hits))
+save('corpus-evidence.json',{'queries':queries})
+originals=[repo/'AGENTS.md',repo/'DIAMOND_CUTTER_TRANSLATION_TOOL_ROADMAP.md',repo/'docs/ALIGNMENT_LAYER_SPEC.md',repo/'docs/alignment_briefs/PROPOSE_BRIEF.md',repo/'data/alignment/C05_CAMPAIGN.md',repo/'docs/errata_register.json',repo/'tools/gen_alignment_page.py',repo/'tools/build_alignment_layer.py',base.parents[2]/'proposal-protocol.md',base.parents[1]/'english-brief.md',base.parents[1]/'source.json',base.parents[1]/'context.json']
+records=[]
+for i,p in enumerate(originals):
+ name=f'originals/{i:02d}-{p.name}'
+ (base/'originals').mkdir(exist_ok=True)
+ (base/name).write_bytes(p.read_bytes())
+ records.append({'original_path':str(p),'resolved_path':str(p.resolve()),'saved_path':name,'bytes':p.stat().st_size,'sha256':sha(p)})
+save('originals-manifest.json',records)

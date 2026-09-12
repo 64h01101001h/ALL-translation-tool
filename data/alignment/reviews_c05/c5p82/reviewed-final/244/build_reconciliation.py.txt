@@ -1,0 +1,104 @@
+import pathlib,json,sys,os,copy,subprocess,hashlib,re
+P=pathlib.Path(__file__).resolve().parent;B=P.parents[1];R=B.parents[1]/'campaign-worktree';sys.path.insert(0,str(R/'tools'))
+import gen_alignment_page as G
+src={x['seq']:x for x in json.loads((P/'evidence/source.json').read_text())['rows']}
+def load(a,s):return json.loads((B/a/str(s)/'spec.json').read_text())['segments'][0]
+def resolve(seg):
+ s=seg['seq'];sp=seg['spans'];by={x['id']:x for x in sp};return G.resolve(src[s]['wylie'],sp,'tib',s),G.resolve(src[s]['english'],G.with_members(sp,[by[i] for i in seg['eng_order']],src[s]['english']),'eng',s)
+def dump(p,o):p.write_text(json.dumps(o,ensure_ascii=False,indent=2)+'\n')
+def sha(b):return hashlib.sha256(b).hexdigest()
+notes={
+244:"PROVISIONAL machine alignment by Codex (reconciliation); no human acceptance or hgm_gloss promotion. Source wording is verbatim. de owns these; enemy destroyers is contextual expansion from C05:243. The established mngon sum du adverb owns directly as a whole: du has no separate atom, and no redundant null is banked. The second ma is distributed in have yet to perceive and is omitted, not nulled. Only yul owns object; zhen is distributed in think they see. nus owns able, excluding the English be/to frame. The three causal phyir occurrences own because/for/for in their respective clauses. The two no-nature predicates and parts occurrences remain distinct. Comprehensive knowledge is banked once with its legitimate members; the explanatory realize is unpaired. Supplied articles, logical truth frames and other distributed grammar remain unwrapped.",
+245:"PROVISIONAL machine alignment by Codex (reconciliation); no human acceptance or hgm_gloss promotion. Source wording is verbatim. Each repeated hold, object, root out and inability has its own source occurrence. rtog pa names the conception whose conceived object is zhen yul; it is not securely isolated as thinks within the English object-that-he-thinks-he-sees recast. Both rtog pa and zhen are omitted, not nulled; yul owns only object. The second quoted me is the appositional person designated by gang zag after btags chos; the first me explains gdags gzhi and is unpaired. Complete mi nus pa/par owns unable at phrase depth. The two source ji srid intervals own As long as/as long as; the extra final English interval recasts karma-dependent causation and is omitted. The two source las occurrences own the two English karma words. No third karma word exists here: collects is not collect. Final causal dbang gis remains distributed and unpaired. Original asterisks remain apparatus.",
+246:"PROVISIONAL machine alignment by Codex (reconciliation); no human acceptance or hgm_gloss promotion. Source wording is verbatim, including self- nature and asterisks. Whole root-text/commentary and Tathagata-essence compounds retain tighter literal members, excluding editorial authors and emptiness brackets. bdag and 'dzin own self- nature and grasp; expanded tendencies remains unwrapped. Shared rang ngos nas and snang each own the first of two English realizations only. The final coordinated skyes owns disliking's later springs up; liking's repeated verb is unpaired. The earlier skye owns the impression's own springs up. la brten nas owns each Due to relation without its expanded participants. The first two dbang/forces occurrences retain their distinct causes, emotions then karma. Final dbang gis owns because: not directly realizing the essence is the cause of the stated suffering life; forced on us is additional distributed causal wording and is not given a second lexical owner. The complete mngon sum du adverb owns directly, with no separate du null. Supplied subjects, auxiliaries, articles and distributed grammar remain unwrapped."
+}
+# Exact explicit original-to-final id maps; no substring-derived lineage.
+tmaps={244:['w0','w1','w2','w3','w4','p5','w6','w7','w8','w9','w10','w12','p13','w14','w15',['w16','w17'],'w18','w19','w20','p21','w22','w23','w24','w25','w27','w28','w29','w30','w31'],245:['w1','w2','w3','w4','w5','w6','w7','w8',[],'w10','w11','w12','w13','w14','w15','w15a',['w16','w17'],'w18',[],'w20','w21','w22','w23','w24','w25','w26','w27','w28','w29','w30','w31'],246:['w1','w2','w4','w5','w6','w7','w8','w9','w10','w11','w12','w13','w14','w16','w17','w18','w19','w20','w21','w22','w23','w24','p25','w26','w27','w28','w29','w30','w31','w32','w33','w34','w35','w36','w37','w38','w39','w40','w41','w42','w43','w45','p47','w48','w49','w50']}
+common_reasons={
+'chos can':'Debate subject marker is locally rendered as Consider; no supplied subject is included.',
+'gang zag':'Person is the explicit participant in this predicate; range fixes this occurrence.',
+'bdag med':'Established no-self compound (HGM9156); its two lexical members are identifiable within the phrase.',
+'rdzogs par':'Completeness modifier owns entirely (HGM16041), excluding surrounding punctuation.',
+'mngon sum du':'Established complete adverb (HGM3955 directly/in a direct manner); preserve du within the whole rather than split a redundant null. No member equals the whole English.',
+'gdags gzhi':'HGM8969 attests the expanded designation-basis equivalent; initial article and explanatory of me are excluded.',
+'btags chos':'HGM6486 attests thing which gets the label; distinct from designation basis.',
+'phung po':'HGM11734 attests parts to the person as one aggregate equivalent; this is the selected repeated occurrence.',
+'rang ngos nas':'Reflexive ablative own-side phrase; whole relation at d3, with the predicate separately aligned where there is a lexical existing exponent.',
+'grub':'Existence predicate owns existing; auxiliary/as frames excluded.',
+"'dzin":'Apprehending verb owns hold/holds/grasp in this clause; English participants are excluded.',
+'yul':'Object head alone is secure; conceived-object qualification zhen and the think/see expansion remain unpaired.',
+"sun 'byin":'Refutation verb realized locally as root out; C12:182 and ILL:378 support only their shared refutation sense, not a whole-passage identity.',
+'sun phyung':'Local paired refutation verb root out. HGM20460 is auto-aligned and its unrelated extraction is not binding evidence for this instance; complete original C12:182 and ILL:378 support the refutation reading.',
+'nus':'Ability head owns able; supplied be and infinitival to are excluded.',
+'phyir':'Causal particle owns the explicit causal connective of its own reason clause, not an arbitrary earlier for.',
+'yongs su shes pa':'HGM18045 establishes comprehensive knowledge; yongs su supplies completeness and shes pa supplies knowledge. The later explanatory realize remains unpaired.',
+'mi nus pa':'Complete negative ability predicate owns unable as a d3 recast; no arbitrary split of its inflected English.',
+'mi nus par':'Complete negative ability predicate owns unable as a d3 recast; no arbitrary split of its inflected English.',
+'ji srid':'Temporal extent owns the exact as-long-as phrase; excludes he and surrounding entailment discourse.',
+'las':'Karma/deed head at this source occurrence; paired English karma belongs to the same causal role.',
+"'khor bar":'Inflected cyclic-existence noun owns wheel of suffering life; English in/article are excluded and this is distinct from the following circling verb.',
+"rtsa 'grel":'HGM15022 directly attests root text and the commentary as an established paired compound; rtsa and grel have legitimate tighter members.',
+"de bzhin gshegs pa'i snying po":'HGM8522 attests the complete essence-of-Tathagata compound. The source genitive licenses the relation; the parenthetical emptiness is editorial and excluded. Both lexical members fit inside.',
+'la brten nas':'Complete dependence relation (HGM19197 due to) owns Due to; expanded referential event clauses stay unpaired.',
+'dmigs':'Focus verb retained as focus only; the preceding la contributes the object relation, so on is excluded from the bare verb span.',
+'dbang gis':'Final causal phrase owns because: the cause is failure to realize the essence, and the effect is this suffering life. English forced on us elaborates that same relation and has no additional selected source exponent.',
+}
+for seq in [244,245,246]:
+ seg=copy.deepcopy(load('english',seq));orig=load('english',seq);otr,oer=resolve(orig);out=[];intent={i:list(r) for i,r in oer.items()}
+ for x in seg['spans']:
+  k=x['id']
+  if (seq==244 and k=='p11') or (seq==246 and k in ['w3','w44','p46']):continue
+  if (seq==244 and k=='w10') or (seq==246 and k=='w45'):x['tib']='mngon sum du'
+  if seq==246 and k in ['w10','w14','w22']:x['tib']='la brten nas'
+  if seq==246 and k=='w2':
+   x['tib']="rtsa 'grel";x['eng']='root text and the commentary';intent[k]=[42,70]
+  if seq==246 and k=='w43':
+   x['tib']="de bzhin gshegs pa'i snying po";x['eng']='essence of the Ones Gone Thus';intent[k]=[src[seq]['english'].index('essence'),src[seq]['english'].index('Ones Gone Thus')+len('Ones Gone Thus')]
+  out.append(x)
+  if seq==244 and k=='w3':out.extend([{'id':'m3a','d':7,'tib':'bdag','eng':'self nature'},{'id':'m3b','d':7,'tib':'med','eng':'no'}])
+  if seq==244 and k=='w30':out.extend([{'id':'m30a','d':7,'tib':'yongs su','eng':'comprehensive'},{'id':'m30b','d':7,'tib':'shes pa','eng':'knowledge'}])
+  if seq==245 and k=='w15':out.append({'id':'w15a','d':5,'tib':'gang zag','eng':'me'});intent['w15a']=[443,445]
+  if seq==246 and k=='w2':out.extend([{'id':'m2a','d':7,'tib':'rtsa','eng':'root text'},{'id':'m2b','d':7,'tib':"'grel",'eng':'commentary'}])
+  if seq==246 and k=='w43':out.extend([{'id':'m43a','d':7,'tib':'de bzhin gshegs pa','eng':'Ones Gone Thus'},{'id':'m43b','d':7,'tib':'snying po','eng':'essence'}])
+ if seq==244:out.insert(0,{'id':'w0','d':5,'tib':'de','eng':'these'});intent['w0']=[9,14]
+ seg['spans']=out;seg['note']=notes[seq];seg['eng_order']=[x['id'] for x in sorted([x for x in out if x['eng'] is not None and x['d']!=7],key=lambda x:intent[x['id']][0])]
+ tr,er=resolve(seg)
+ for x in out:
+  if x['d']!=7:assert list(er[x['id']])==intent[x['id']],(seq,x,er[x['id']],intent[x['id']])
+ d=P.parent/str(seq);spec={'course':'C05','segments':[seg]};dump(d/'spec.json',spec);dump(d/'errata.json',[])
+ # Explicit member intentions independently fixed inside semantic parent; canonical range/containment checks repeated later.
+ def ref(k):
+  x=next(x for x in out if x['id']==k);return dict(x,tib_range=list(tr[k]),eng_range=list(er[k]) if k in er else None,label=f's{seq}{k}')
+ finals=[]
+ for x in out:
+  reason=common_reasons.get(x['tib'],'Local lexical/grammatical match preserves the named source role and the exact selected occurrence, excluding supplied surrounding words.')
+  if seq==245 and x['id']=='w15a':reason='gang zag is the thing designated, appositionally rendered as the second quoted me at 443..445. This is the person under the label, not a free first-person participant. The first me (220..222) is an explanation of gdags gzhi and remains unpaired.'
+  if seq==246 and x['id']=='w34':reason='Single skyes governs coordinated liking/disliking. Select the later disliking springs up at 683..693, after the named subject; omit the earlier liking repetition. This is English occurrence 3 of springs up, not occurrence 2.'
+  if seq==246 and x['id'] in ['w35','w39']:reason='HGM13087 attests forces; local power noun is rendered causatively with the same source cause: emotions at first occurrence, karma at second. No subject pronoun is captured.'
+  if seq==246 and x['id']=='w15':reason='Shared source own-side modifier applies to the coordinated pleasant/unpleasant appearance. Retain first from their own side only; no second source qualifier is invented.'
+  if seq==246 and x['id']=='w18':reason='One shared appearance verb snang owns first seem; repeated second English realization remains unpaired.'
+  if x['d']==7:reason='Tighter unique lexical member immediately in the parent member group; Tibetan and English both lie inside the established compound. It does not claim the parent relational framing.'
+  finals.append(dict(ref(x['id']),reason=reason))
+ decisions=[]
+ for angle in ['tibetan','english']:
+  old=load(angle,seq);ot,oe=resolve(old)
+  mapping={x['id']:tmaps[seq][i] for i,x in enumerate(old['spans'])} if angle=='tibetan' else {x['id']:x['id'] for x in old['spans']}
+  if angle=='english' and seq==244:mapping['p11']='w10'
+  if angle=='english' and seq==246:mapping.update({'w2':'m2a','w3':'m2b','w43':'m43a','w44':'m43b','p46':'w45'})
+  for x in old['spans']:
+   k=x['id'];ks=mapping[k];ks=[ks] if isinstance(ks,str) else ks;refs=[ref(i) for i in ks]
+   same=len(ks)==1 and all(x.get(z)==refs[0].get(z) for z in ['d','tib','eng','cls','nul','subword']) and list(ot[k])==refs[0]['tib_range'] and (list(oe[k]) if k in oe else None)==refs[0]['eng_range']
+   disposition='unchanged' if same else 'recast_or_tightened'
+   why='; '.join(next(f['reason'] for f in finals if f['id']==i) for i in ks)
+   if not ks:disposition='rejected_omitted';why="rtog pa is the nominal conception whose zhen yul is the conceived object. English thinks he sees realizes that object-belief qualification and occurs at C05:244 without rtog pa. HGM6686 thinks is contrary general lexical evidence, not a local owner proof. Neither rtog pa nor zhen has an independently defensible atom here; omission is not null."
+   if x['eng'] is None:disposition='absorbed_into_complete_adverb';why='The proposed fused-grammar null is plausible in isolation, but full mngon sum du/directly is positively established by HGM3955. du is preserved in that whole; referenced English belongs to the whole and is NOT a new separate du exponent.'
+   if angle=='tibetan' and seq==246 and k=='w45':disposition='replaced_causal_selection';why='Reject dbang/forced as the selected isolated final exponent. The whole dbang gis phrase links failure to realize the essence to suffering life, explicitly because. Forced on us is an additional distributed realization of that one causal relation and stays unpaired; the final reference changes both English position and source extent.'
+   decisions.append({'angle':angle,'original_spec':str(B/angle/str(seq)/'spec.json'),'original':dict(x,tib_range=list(ot[k]),eng_range=list(oe[k]) if k in oe else None),'disposition':disposition,'final_spans':refs,'reason':why})
+ dump(d/'decisions.json',{'producer':'Codex reconciliation','range_convention':'zero-based half-open characters in original spine fields; original and final references are resolved by unchanged canonical resolver','original_count':len(decisions),'original_decisions':decisions,'final_ordered_tuples':finals,'final_eng_order':seg['eng_order']})
+ # Actual unchanged generator; preserve all attempts.
+ a=d/'attempts'/f'canonical-{len(list((d/"attempts").glob("canonical-*")))+1:02d}';a.mkdir(parents=True)
+ sb=(d/'spec.json').read_bytes();(a/'spec.json').write_bytes(sb);cmd=[sys.executable,str(B/'english/244/canonical_ro.py'),str(R/'tools/gen_alignment_page.py')];r=subprocess.run(cmd,input=sb,capture_output=True,cwd=R,env=dict(os.environ,PYTHONDONTWRITEBYTECODE='1'))
+ for n,v in [('stdout.html',r.stdout),('stderr.txt',r.stderr),('exit.txt',f'{r.returncode}\n'.encode())]:(a/n).write_bytes(v)
+ proof={'command':cmd,'cwd':str(R),'PYTHONDONTWRITEBYTECODE':'1','sqlite':'URI mode=ro enforced by original launcher','exit':r.returncode,'body_bytes':len(r.stdout),'stderr_bytes':len(r.stderr),'spec_bytes':len(sb),'spec_sha256':sha(sb),'body_sha256':sha(r.stdout),'generator_sha256':sha((R/'tools/gen_alignment_page.py').read_bytes()),'attempt':str(a.relative_to(d))};dump(a/'proof.json',proof);dump(d/'proof.json',proof)
+ assert r.returncode==0,r.stderr;(d/'body.html').write_bytes(r.stdout)
+ print(seq,'EXIT',r.returncode,'spans',len(out),'body',len(r.stdout),'decisions',len(decisions))

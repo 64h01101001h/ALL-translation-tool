@@ -1,0 +1,9 @@
+import sqlite3,runpy,sys
+from pathlib import Path
+orig=sqlite3.connect
+def ro(database,*a,**kw):
+ database=Path(database).resolve().as_uri()+"?mode=ro"
+ kw["uri"]=True
+ return orig(database,*a,**kw)
+sqlite3.connect=ro
+runpy.run_path(sys.argv[1],run_name="__main__")

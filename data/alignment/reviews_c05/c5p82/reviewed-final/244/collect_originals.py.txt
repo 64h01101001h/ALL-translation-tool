@@ -1,0 +1,61 @@
+import json,pathlib,sqlite3,hashlib,gzip,shutil,os,subprocess,sys,difflib
+P=pathlib.Path(__file__).resolve().parent; B=P.parents[1]; R=B.parents[1]/'campaign-worktree'
+def save(n,o):p=P/n;p.parent.mkdir(parents=True,exist_ok=True);p.write_text(json.dumps(o,ensure_ascii=False,indent=2)+'\n')
+def sha(b):return hashlib.sha256(b).hexdigest()
+c=sqlite3.connect((R/'build/hgm_spine_v27_2.db').resolve().as_uri()+'?mode=ro',uri=True);c.row_factory=sqlite3.Row
+rows=[dict(x) for x in c.execute('SELECT * FROM corpus_segments WHERE course=? AND seq BETWEEN ? AND ? ORDER BY seq',('C05',241,249))];src={r['seq']:r for r in rows}
+checks=[]
+for name in ['source.json','context.json']:
+ for x in json.loads((B/name).read_text()):
+  fields={k:v==src[x['seq']][k] for k,v in x.items()};assert all(fields.values());checks.append({'snapshot':name,'seq':x['seq'],'fields':fields})
+save('evidence/source.json',{'sql':'SELECT * FROM corpus_segments WHERE course=? AND seq BETWEEN ? AND ? ORDER BY seq','params':['C05',241,249],'rows':rows,'snapshot_checks':checks,'sqlite':'URI mode=ro','spine':str((R/'build/hgm_spine_v27_2.db').resolve())})
+# Reopen and preserve every proposal input/history byte without altering originals.
+manifest=[]
+for angle in ['tibetan','english']:
+ for seq in [244,245,246]:
+  for f in sorted((B/angle/str(seq)).rglob('*')):
+   if not f.is_file():continue
+   rel=pathlib.Path('originals/proposals')/angle/str(seq)/f.relative_to(B/angle/str(seq));out=P/rel;out.parent.mkdir(parents=True,exist_ok=True);data=f.read_bytes();out.write_bytes(data);manifest.append({'original':str(f),'saved':str(rel),'bytes':len(data),'sha256':sha(data)})
+for f in [R/'AGENTS.md',R/'docs/ALIGNMENT_LAYER_SPEC.md',R/'docs/alignment_briefs/RECONCILE_BRIEF.md',R/'docs/alignment_briefs/REFUTE_BRIEF.md',R/'data/alignment/C05_CAMPAIGN.md',R/'docs/errata_register.json',R/'data/alignment/span_head_allow.json',R/'tools/gen_alignment_page.py',R/'tools/build_alignment_layer.py',R/'DIAMOND_CUTTER_TRANSLATION_TOOL_ROADMAP.md',B/'reconciliation-brief.md',B/'root-review-targets.md',B/'root-focused-parallel-check.json',B/'root-physical-source-check.json',B/'root-lexical-preparation.json',B/'source.json',B/'context.json']:
+ rel=pathlib.Path('originals/governing')/f.name;out=P/rel;out.parent.mkdir(parents=True,exist_ok=True);data=f.read_bytes();out.write_bytes(data);manifest.append({'original':str(f),'saved':str(rel),'bytes':len(data),'sha256':sha(data)})
+physical=pathlib.Path('/Users/adamderickandrade/Desktop/HGM DICTIONARY - TRANSLATION APP/To DO/Formal Courses/ACI Readings In Roman ASCII/C05ReadingASCII.txt');data=physical.read_bytes();(P/'originals/C05ReadingASCII.txt').write_bytes(data);norm=b' '.join(data.split());pc=[]
+for seq in [244,245,246]:
+ for field in ['acip','english']:
+  target=b' '.join(src[seq][field].encode('ascii').split());ix=norm.find(target);assert ix>=0;pc.append({'seq':seq,'field':field,'normalized_byte_offset':ix,'bytes':len(target),'exact':True,'full_quote':src[seq][field]})
+save('evidence/physical.json',{'original':str(physical),'bytes':len(data),'sha256':sha(data),'method':'ASCII target bytes and original byte-whitespace split/join; no decoding of physical file','checks':pc});manifest.append({'original':str(physical),'saved':'originals/C05ReadingASCII.txt','bytes':len(data),'sha256':sha(data)})
+terms=set()
+for angle in ['tibetan','english']:
+ for seq in [244,245,246]:
+  terms.update(x['tib'] for x in json.loads((B/angle/str(seq)/'spec.json').read_text())['segments'][0]['spans'])
+terms.update(['mngon sum du','rtog pa','zhen','bdag',"rtsa 'grel",'yongs su','shes pa',"de bzhin gshegs pa'i snying po",'dbang gis','nus pa'])
+master=pathlib.Path('/Users/adamderickandrade/Desktop/HGM DICTIONARY - TRANSLATION APP/Handoff/release/hgm_dictionary_v27_2.json.gz');md=json.loads(gzip.decompress(master.read_bytes()));me=md['unified_entries'];lex=[]
+for t in sorted(terms):
+ rr=[dict(x) for x in c.execute('SELECT * FROM entries WHERE wylie=? ORDER BY id',(t,))];mm=[x for x in me if x.get('wylie')==t];lex.append({'sql':'SELECT * FROM entries WHERE wylie=? ORDER BY id','params':[t],'count':len(rr),'rows':rr,'original_master_entries':mm})
+save('evidence/lexicon.json',{'master_path':str(master),'master_sha256':sha(master.read_bytes()),'master_entry_count':len(me),'queries':lex})
+queries=[]
+def query(sql,params):
+ rr=[dict(x) for x in c.execute(sql,params)];queries.append({'sql':sql,'params':params,'count':len(rr),'rows':rr});return rr
+for seq in [244,245,246]:
+ for field in ['wylie','acip','english']:query(f'SELECT * FROM corpus_segments WHERE {field}=? ORDER BY course,seq',[src[seq][field]])
+for pat in ['%zhen yul sun%','%mngon sum du%','%tshul min yid byed%']:
+ query('SELECT * FROM corpus_segments WHERE course != ? AND wylie LIKE ? ORDER BY course,seq',['C13',pat])
+for course,seq in [('C16',820),('C16',821),('C16',822),('P7',12),('P7',13),('P7',14),('C12',182),('ILL',378)]:query('SELECT * FROM corpus_segments WHERE course=? AND seq=?',[course,seq])
+for lead in json.loads((B/'root-focused-parallel-check.json').read_text()):
+ rr=query(lead['sql'],lead['params']);assert len(rr)==lead['count'];assert rr==lead['rows']
+save('evidence/corpus.json',queries)
+comparisons=[]
+for seq in [244,245,246]:
+ r=query('SELECT * FROM corpus_segments WHERE course=? AND seq=?',['C16',seq+576])[0]
+ comparisons.append({'source':['C05',seq],'witness':['C16',seq+576],'equal':{k:src[seq][k]==r[k] for k in ['acip','wylie','english']},'english_diff':list(difflib.ndiff(src[seq]['english'].splitlines(),r['english'].splitlines())),'lineage':'Digital agreement/difference establishes no independent publication or ingestion lineage.'})
+save('evidence/comparisons.json',comparisons);save('evidence/corpus.json',queries);save('originals-manifest.json',manifest)
+# Replay all six unchanged generators under original read-only launcher; preserve exact spec/body/proof.
+for angle in ['tibetan','english']:
+ for seq in [244,245,246]:
+  dest=P.parent/str(seq)/'proposal-replays'/angle;dest.mkdir(parents=True,exist_ok=True)
+  spec=(B/angle/str(seq)/'spec.json').read_bytes();cmd=[sys.executable,str(B/'english/244/canonical_ro.py'),str(R/'tools/gen_alignment_page.py')];run=subprocess.run(cmd,input=spec,capture_output=True,cwd=R,env=dict(os.environ,PYTHONDONTWRITEBYTECODE='1'))
+  for name,v in [('spec.json',spec),('stdout.html',run.stdout),('stderr.txt',run.stderr),('exit.txt',f'{run.returncode}\n'.encode())]:(dest/name).write_bytes(v)
+  proof={'command':cmd,'cwd':str(R),'sqlite':'mode=ro via unchanged saved launcher','PYTHONDONTWRITEBYTECODE':'1','exit':run.returncode,'body_bytes':len(run.stdout),'stderr_bytes':len(run.stderr),'exact_original_body':run.stdout==(B/angle/str(seq)/'body.html').read_bytes(),'spec_sha256':sha(spec),'body_sha256':sha(run.stdout),'generator_sha256':sha((R/'tools/gen_alignment_page.py').read_bytes())};(dest/'proof.json').write_text(json.dumps(proof,indent=2)+'\n');assert run.returncode==0 and proof['exact_original_body'];print('REPLAY',angle,seq,len(run.stdout),'exact')
+for q in lex:
+ if q['params'][0] in ['mngon sum','mngon sum du','rtog pa','zhen','bdag',"rtsa 'grel",'yongs su','shes pa',"de bzhin gshegs pa'i snying po",'dbang','dbang gis','nus pa']:
+  print('LEX',q['params'][0],[(x['id'],x['tier'],x['hgm_gloss'],x['hopkins_english']) for x in q['rows']])
+print('EVIDENCE',len(manifest),'original files,',len(lex),'lexical queries,',len(queries),'corpus queries')

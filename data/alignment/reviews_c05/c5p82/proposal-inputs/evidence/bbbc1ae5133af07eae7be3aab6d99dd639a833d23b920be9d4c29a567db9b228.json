@@ -1,0 +1,26 @@
+{
+  "failures": [
+    {
+      "command": "cat campaign-artifacts/C05-244-246/proposal-protocol.md",
+      "exit": 1,
+      "stderr": "cat: campaign-artifacts/C05-244-246/proposal-protocol.md: No such file or directory\n",
+      "resolution": "The brief links ../proposal-protocol.md; subsequently read campaign-artifacts/proposal-protocol.md in full."
+    },
+    {
+      "command": "rg --files docs | rg C05|course.shape",
+      "exit": 1,
+      "meaning": "No matching file names; course shape subsequently found and read at data/alignment/C05_CAMPAIGN.md."
+    },
+    {
+      "command": "collect_evidence.py initial invocation",
+      "exit": 1,
+      "preserved": "attempts/evidence-01",
+      "resolution": "Dictionary top-level unified_entries key inspected and collector corrected; next execution succeeded."
+    }
+  ],
+  "canonical_failures": 0,
+  "superseded_successes": [
+    "../245/attempts/canonical-01"
+  ],
+  "material_semantic_revision": "Dropped rtog pa/thinks twice from245 due unresolved distribution, even though mechanical pass succeeded."
+}

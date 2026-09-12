@@ -1,0 +1,61 @@
+import pathlib,json,hashlib,sys,re
+from html.parser import HTMLParser
+base=pathlib.Path(__file__).resolve().parent
+repo=base.parents[3]/'campaign-worktree'
+sys.path.insert(0,str(repo/'tools'))
+import gen_alignment_page as G
+sha=lambda b:hashlib.sha256(b).hexdigest()
+source=json.loads((base/'source-evidence.json').read_text());rows={r['seq']:r for r in source['rows']}
+class Extract(HTMLParser):
+ def __init__(self,seq):super().__init__(convert_charrefs=True);self.seq=seq;self.stack=[];self.side=None;self.out={'tib':'','eng':''};self.active=0;self.skip=0
+ def handle_starttag(self,tag,attrs):
+  a=dict(attrs); old=(self.side,self.active,self.skip)
+  if tag=='div' and a.get('class') in ['tib','eng']:self.side=a['class']
+  if tag=='span' and a.get('data-l')==f's{self.seq}S':self.active+=1
+  if a.get('class')=='nul':self.skip+=1
+  self.stack.append((tag,old))
+ def handle_endtag(self,tag):
+  last,old=self.stack.pop();assert last==tag,(last,tag);self.side,self.active,self.skip=old
+ def handle_data(self,data):
+  if self.active and not self.skip:self.out[self.side]+=data
+for seq in [244,245,246]:
+ p=base.parent/str(seq);spec=json.loads((p/'spec.json').read_text())['segments'][0];sp=spec['spans'];dec=json.loads((p/'decisions.json').read_text());body=(p/'body.html').read_bytes()
+ by={x['id']:x for x in sp};es=G.with_members(sp,[by[i] for i in spec['eng_order']],rows[seq]['english'])
+ er=G.resolve(rows[seq]['english'],es,'eng',seq);tr=G.resolve(rows[seq]['wylie'],sp,'tib',seq)
+ expected=dec['intended_english_offsets'];assert all(er[k][0]==v for k,v in expected.items())
+ ex=Extract(seq);ex.feed(body.decode());assert ex.out['tib']==rows[seq]['wylie'];assert ex.out['eng']==rows[seq]['english']
+ assert body==(p/'generator.stdout.html').read_bytes();assert (p/'generator.stderr.txt').read_bytes()==b'';assert (p/'generator.exit.txt').read_text()=='0\n'
+ # Independent boundary inspection, accepting only the stated negative-affix subword convention.
+ boundaries=[]
+ for item in sp:
+  for side,ranges,field in [('tib',tr,'wylie'),('eng',er,'english')]:
+   if item['id'] not in ranges:continue
+   lo,hi=ranges[item['id']];text=rows[seq][field];piece=item[side]
+   assert text[lo:hi]==piece
+   if item.get('subword'):assert item['eng'] in ["n't",'un','im','less']
+   else:
+    assert not (piece[0].isalnum() and lo and text[lo-1].isalnum()),(seq,item,side,'left')
+    assert not (piece[-1].isalnum() and hi<len(text) and text[hi].isalnum()),(seq,item,side,'right')
+   boundaries.append({'id':item['id'],'side':side,'range':[lo,hi],'exact_source_slice':piece})
+ counts={'spans':len(sp),'nulls':sum(x['eng'] is None for x in sp),'d5':sum(x['d']==5 for x in sp),'by_depth':{str(d):sum(x['d']==d for x in sp) for d in range(1,8)},'errata':0,'body_bytes':len(body),'english_characters':len(rows[seq]['english']),'wylie_characters':len(rows[seq]['wylie'])}
+ omitted={}
+ for side,ranges,field in [('tib',tr,'wylie'),('eng',er,'english')]:
+  text=rows[seq][field];intervals=sorted(ranges.values());cur=0;out=[]
+  for lo,hi in intervals:
+   if lo>cur:out.append({'range':[cur,lo],'verbatim':text[cur:lo]})
+   cur=max(cur,hi)
+  if cur<len(text):out.append({'range':[cur,len(text)],'verbatim':text[cur:]})
+  omitted[side]=out
+ proof={'counts':counts,'checks':{'canonical_exit_zero':True,'stderr_empty':True,'body_exact_stdout':True,'full_wylie_reconstruction':True,'full_english_reconstruction':True,'exact_occurrences_equal_intended':True,'whole_word_and_syllable_boundaries_except_confirmed_negative_affix':True,'no_d7_members_to_validate':True},'resolved_spans':boundaries,'unwrapped_source_fragments':omitted,'semantic_limit':'These checks establish fidelity and occurrence placement, not semantic correspondence.'}
+ (p/'verification.json').write_text(json.dumps(proof,ensure_ascii=False,indent=2)+'\n')
+ common=[base/'source-evidence.json',base/'lexical-evidence.json',base/'corpus-evidence.json',base/'originals-manifest.json']
+ refs=[{'path':str(f),'sha256':sha(f.read_bytes())} for f in common]
+ (p/'evidence-references.json').write_text(json.dumps(refs,indent=2)+'\n')
+ cp=json.loads((p/'canonical-proof.json').read_text())
+ texts={
+ 244:["Challenge first: mi → never is GMR's stronger modal negation; yul → object is retained while distributed zhen/think/see is omitted.","ma in have yet to is omitted as a distributed negative. The one du null asserts adverbial fusion in directly, not absent meaning. Logical thal/true frames are omitted.","HGM master supports bdag med/no self-nature, phung po/parts to the person, and yongs su shes pa/comprehensive knowledge. zhen yul's auto-aligned grasp does not settle this local recast.","C16:820 matches all three ACIP/Wylie/English fields; id/course/seq differ. No independent-publication or ingestion-lineage inference. No cap, heading spill, or new erratum found."],
+ 245:["Challenge first: mi nus pa/par → unable is a whole negative-modal recast at d3; the last karma-dependent cause is distributed across the added temporal clause and omitted.","Self-review removed both tentative rtog pa → thinks mappings after canonical attempt 01 passed: rtog pa/zhen contributions are unresolved within thinks he sees. Prior spec/body/proof and decisions are preserved and explicitly superseded by attempt 02.","HGM supports gdags gzhi and btags chos as thing which gets the label. sun phyung's auto-aligned misperception he will continue is not usable here; original local syntax and C12:182/ILL:378 refutation parallels support root out. No master change.","C16:821 matches ACIP/Wylie; English differs at the ending (following heading versus C05 stars). P7:12 is a close parallel with hold/holds and punctuation differences. No independent-publication/lineage claim. Stars remain apparatus; no new erratum."],
+ 246:["Challenge first: shared rang ngos nas and snang are each translated twice but banked only at the first English occurrence; shared skyes for the paired emotions is banked at disliking, leaving the liking repetition unwrapped.","HGM supports Higher Line, mental seeds, pleasant/unpleasant, wrong way of looking at things, and emotion of liking. dbang → forces is the local noun-to-causative-verb recast. Supplied authors, Buddhas and bracketed emptiness remain outside spans.","The du null marks grammatical fusion into directly. The negative n't in don't uses the established subword exception; self- nature remains byte-exact under the registered E-025/E-045 hyphen-space class.","C16:822 matches ACIP/Wylie; English ending differs (following heading versus C05 stars). P7:13 has only the opening English, P7:14 the later portion with a split Tibetan start. Neither proves an unquoted continuation or ingestion lineage. No new erratum."]}
+ lines=[f'C05:{seq} — English-first, Codex, PROVISIONAL; final files frozen by freeze-manifest.json.',*texts[seq],f"Counts: {counts['spans']} spans; {counts['d5']} d5; {counts['nulls']} nulls; 0 errata. Exact per-span decisions and all omitted fragments: decisions.json / verification.json.",'Complete original rows including raw, all six snapshot-field checks, master records and full corpus query results are preserved once in ../244; evidence-references.json gives exact paths and SHA-256 values.',f"Canonical proof: EXIT=0; body byte count={len(body)}; stderr byte count=0; body is exact saved stdout. Invocation, unchanged generator SHA and enforced SQLite URI mode=ro launcher are in canonical-proof.json.",f"spec.json SHA-256: {sha((p/'spec.json').read_bytes())}",f"body.html SHA-256: {sha(body)}",'verification.json proves full Wylie/English reconstruction, exact intended occurrences, boundaries and counts. This mechanical pass does not establish semantic approval.']
+ (p/'report.md').write_text('\n'.join(lines)+'\n')
+ print(seq,counts,'body_sha256',sha(body))

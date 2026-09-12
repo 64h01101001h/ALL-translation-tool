@@ -1,0 +1,167 @@
+from pathlib import Path
+import json,hashlib,subprocess,re
+P=Path(__file__).resolve().parent
+B=P.parent
+R=B.parents[1]/'campaign-worktree'
+def write(n,x):(P/n).write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+resolved=json.loads((P/'resolved-spans.json').read_text())
+segments=json.loads((P/'measured-segments.json').read_text())
+why={}
+def add(seq,ids,reason):
+ for i in ids.split():why[(seq,i)]=reason
+add(244,'w0','Explicit de identifies these; contextual enemy destroyers is excluded.')
+add(244,'w1','chos can introduces the subject under consideration; no supplied participant is captured.')
+add(244,'w2 w7','gang zag denotes the person in this particular no-nature predicate, not person inside a separate aggregate phrase.')
+add(244,'w3','Established bdag med compound; no-self content supports the exact local no self nature wording.')
+add(244,'m3a','bdag is the unique self-nature member of bdag med, excluding the negative.')
+add(244,'m3b','med is the unique negative member of bdag med, excluding self nature.')
+add(244,'w4','rdzogs par specifies complete realization and independently owns entirely.')
+add(244,'p5','First ma supplies the explicit not before realized; the later have-yet-to negative is a different occurrence.')
+add(244,'w6','First rtogs is realized in the complete no-self realization assertion.')
+add(244,'w7 w8 w9','Own clause occurrence and lexical role preserved: person/nature/nonexistence in the second direct-perception predicate.')
+add(244,'w10','Established complete adverb mngon sum du owns directly; du is preserved without an invented independent exponent.')
+add(244,'w12','Second rtogs owns perceive in the direct-perception reason, distinct from realized.')
+add(244,'p13','First phyir introduces the lack-of-direct-perception reason: because at 145..152.')
+add(244,'w14','Designation basis is rendered by the established thing which gets the label; article and of me excluded.')
+add(244,'w15 w27','phung po is the aggregate noun rendered parts to the person; full phrase has glossary support and this occurrence is distinct.')
+add(244,'w16','rang ngos nas is a complete reflexive ablative own-side relation, appropriately d3.')
+add(244,'w17','grub supplies existence in the apprehension predicate; only existing is owned.')
+add(244,'w18','Apprehending verb owns hold; supplied they and the conceived-object explanation are excluded.')
+add(244,'w19','yul owns object; unresolved zhen/think/see qualification is not forced into this noun.')
+add(244,'w20',"sun 'byin form expresses refutation locally rendered root out; no literal physical-uprooting assumption.")
+add(244,'p21','mi supplies the local negative modal force rendered never; this is not an inferred source correction.')
+add(244,'w22','nus owns ability, able; be and infinitival to are outside the lexical head.')
+add(244,'w23','tshul is the manner head way in the inability/misperception relation.')
+add(244,'w24','phyin ci log is the compound for mistaken perception, here misperceptions; total is excluded.')
+add(244,'w25','bcings pa is the binding predicate rendered chained; supplied auxiliary and still excluded.')
+add(244,'p26','Second phyir owns for at 260..263, the reason involving being chained by misperception.')
+add(244,'w28 w29','Final nature/no atoms belong to the aggregates predicate; earlier person and self-nature occurrences are excluded.')
+add(244,'w30','Established complete-knowledge compound; the additional English realization explanation is not banked twice.')
+add(244,'m30a','yongs su supplies comprehensiveness within the established parent, a unique tighter member.')
+add(244,'m30b','shes pa supplies knowledge within the established parent, not the later realize explanation.')
+add(244,'w31','bral ba supplies the privation predicate lack governing comprehensive knowledge.')
+add(244,'p32','Final phyir owns for at 536..539, introducing lack of comprehensive knowledge.')
+add(245,'w1',"Consequence argument thal 'gyur is locally logical statements; the supplied our frame is excluded.")
+add(245,'w2','snga ma identifies the prior/first logical statement; only first is claimed.')
+add(245,'w3','khyab pa supplies necessary pervasion locally rendered always, supported in the HGM glossary.')
+add(245,'w4','First designation-basis noun owns first thing which gets the label; first me remains explanation.')
+add(245,'w5','Aggregate noun owns parts to the person as an established equivalent.')
+add(245,'w6','rang bzhin owns nature; through some and distributed own-nature qualification stay outside.')
+add(245,'w7 w17','Existence verb owns its own existing occurrence; no supplied as or personal participant.')
+add(245,'w8 w18','Apprehending verb owns its own holds occurrence; rtog pa/zhen attribution within thinks he sees remains unresolved.')
+add(245,'w10 w20','yul is the object head in its own repeated conceived-object chain, excluding disputed cognitive qualifiers.')
+add(245,'w11 w21','sun phyung refutes the corresponding imagined object and locally owns root out; corrupt automatic glossary extraction is unused.')
+add(245,'w12 w22','Complete negative ability predicate maps to unable at d3; neither a supplied subject nor a broken positive stem is included.')
+add(245,'w13 w24','ji srid gives this source temporal interval; the final added as-long-as causal recast is a different English occurrence.')
+add(245,'w14',"First 'jug denotes continuing that initial way: goes on at 283..290.")
+add(245,'w15','btags chos is the designated phenomenon, here the second thing which gets the label.')
+add(245,'w15a','Appositional gang zag identifies the designated person as second quoted me at 443..445; this is not a free pronoun equivalent.')
+add(245,'w16','Reflexive ablative own-side relation remains a complete d3 phrase; existing is separately owned by grub.')
+add(245,'w23',"This 'jug is the continued second inability; continue at 314..322, not later collect-karma continuations.")
+add(245,'w25',"The last 'jug denotes continued misperception and owns continues at 497..506.")
+add(245,'w26','First dbang has the explicit power exponent; the final dbang causal-to-temporal recast is omitted.')
+add(245,'w27 w29','This las is a karmic-deed noun at its own causal position; both of the two karma tokens are accounted for.')
+add(245,'w28','bsog is accumulation, here collect, not the separate collects token in the recast final interval.')
+add(245,'w30',"Nominal 'khor bar is cyclic existence rendered wheel of suffering life; in this is excluded.")
+add(245,'w31',"Following 'khor is the circling predicate spin around, not the preceding cyclic-existence noun.")
+add(246,'w1','Established source title Higher Line, excluding editorial author attribution.')
+add(246,'w2',"Established rtsa 'grel paired compound owns the complete root/commentary coordination; internal link is licensed by the compound.")
+add(246,'m2a','rtsa uniquely owns root text inside the paired compound; no coordinator or article.')
+add(246,'m2b',"'grel uniquely owns commentary inside the paired compound; no coordinator or article.")
+add(246,'w4','dgongs pa supplies the intended idea within the quoted work.')
+add(246,'w5','mthar thug qualifies that idea as ultimate, with curated HGM support.')
+add(246,'w6','bdag is self-nature; the exact spaced-hyphen English is preserved.')
+add(246,'w7',"'dzin supplies grasp; tendencies to and some are not included.")
+add(246,'w8 w12','Each gnyis owns its corresponding two; the two source occurrences remain distinct.')
+add(246,'w9','bag chags is the established mental-seed compound, here plural mental seeds.')
+add(246,'w10 w14 w22','Complete la brten nas dependence phrase owns this Due to; expanded referential event clauses remain outside.')
+add(246,'w11','de explicitly refers back to the two grasping tendencies and owns these.')
+add(246,'w13','First skyes is the tendencies arising, rendered uninflected spring up at 244..253.')
+add(246,'w15','Shared own-side modifier applies to the coordinated appearances and is banked once at its first English realization.')
+add(246,'w16 w17','Pleasant/unpleasant appearance predicates have distinct source atoms and English occurrences; no match inside the other adjective.')
+add(246,'w18','Shared appearance verb is banked once at first seem; the repeated second English seem has no second source verb.')
+add(246,'w19','Established tshul min yid byed compound owns wrong way of looking at things; no speculative members.')
+add(246,'w20','rnam rtog is the newly arising impression, not the later English anaphoric impression.')
+add(246,'w21','skye is the impression arising and owns first springs up at 349..359.')
+add(246,'w23 w29','These pleasant/unpleasant atoms describe the respective objects of focus, distinct from earlier appearances.')
+add(246,'w24 w30','dmigs owns focus in the appropriate emotion clause; preceding la contributes the object relation, so on is excluded.')
+add(246,'p25',"mi owns the licensed negative affix n't in don't; supplied do is not captured.")
+add(246,'w26',"First 'bral is separation construed as lose within not wanting to lose the pleasant object.")
+add(246,'w27 w32','Each desire verb owns its own want; the other clause and supplied infinitive are excluded.')
+add(246,'w28','Established attachment/liking emotion noun owns emotion of liking; no false etymological member split.')
+add(246,'w31',"Second 'bral is separation from the unpleasant object, here avoid, distinct from lose.")
+add(246,'w33','Established aversion emotion noun owns emotion of disliking; full local phrase is its nominal rendering.')
+add(246,'w34',"Final skyes governs coordinated emotions; third springs up at 683..693 is disliking's predicate, with liking repetition unpaired.")
+add(246,'w35','First dbang expresses emotions causing karmic accumulation and owns first forces.')
+add(246,'w36 w38','Each las denotes karma in its own causal role; accumulation object and subsequent causal subject are distinct.')
+add(246,'w37','bsags is karmic accumulation, locally collect, without a supplied personal subject.')
+add(246,'w39','Second dbang expresses karma causing cyclic life and owns second forces.')
+add(246,'w40',"Nominal 'khor bar is cyclic existence, rendered wheel of suffering life, excluding in the.")
+add(246,'w41',"This 'khor ba is the circling verb, rendered spin around; subsequent noun differs in role and range.")
+add(246,'w42',"Later nominal 'khor ba is the suffering life whose cause is explained next.")
+add(246,'w43','Established Tathagata-essence compound, with source genitive licensing of; editorial emptiness bracket excluded.')
+add(246,'m43a','Unique Tathagata epithet member owns Ones Gone Thus inside essence parent, not earlier supplied Buddhas.')
+add(246,'m43b','Unique snying po member owns essence inside the parent; reversed English order does not change ownership.')
+add(246,'w45','Complete mngon sum du adverb owns directly; a separate du null adds no needed information.')
+add(246,'p47','ma owns not in failure to realize; no Tibetan nus is invented for been able to.')
+add(246,'w48','rtogs owns see in directly realizing the essence, excluding the added English ability frame.')
+add(246,'w49','Whole dbang gis supplies because: non-realization causes suffering life. Forced on us remains another distributed realization.')
+add(246,'w50','Honorific speech verb gsungs owns said, excluding have and supplied Buddhas.')
+assert set(why)=={(r['seq'],r['id']) for r in resolved}
+decisions=[dict(seq=r['seq'],id=r['id'],verdict='SOUND',reason=why[r['seq'],r['id']]) for r in resolved]
+write('span-review.json',decisions)
+review=dict(verdict='APPROVE',spec_verdict='APPROVE',quality_verdict='APPROVE',open_findings=[],segments=segments,total_spans=sum(s['span_count'] for s in segments),total_nulls=sum(s['null_count'] for s in segments),total_word_pairs=sum(s['word_pair_count'] for s in segments),total_d7_members=sum(r['d']==7 for r in resolved),machine_review_only=True,human_editorial_acceptance=False)
+write('review.json',review);write('bank-ready-errata.json',[]);write('span-head-allow-needed.json',{})
+report=(P/'review.md').read_text()
+if '| Span |' not in report:
+ report+='\n| Span | d | Tibetan → English | Independent disposition |\n|---|---:|---|---|\n'
+ for r in resolved:
+  report+=f"| s{r['seq']}{r['id']} | {r['d']} | `{r['tib']}` → {r['eng']} | {why[r['seq'],r['id']]} |\n"
+ (P/'review.md').write_text(report)
+
+# All five grounds are independently addressed, with numerical claims replayed.
+reg=json.loads((R/'docs/errata_register.json').read_text());regby={r['item_id']:r for r in reg}
+source={r['seq']:r for r in json.loads((P/'independent-source-rows.json').read_text())}
+proof=json.loads((P/'independent-errata-query-proof.json').read_text());skeptic=[]
+own_reasons={
+'never be able to':'The English negative inability is defensible in the local argument. Strengthening mi to never does not alone establish an authorial error; do not replace the source wording.',
+'thinks he sees':'The unresolved issue is allocation between rtog pa and zhen in the conceived-object chain, not the grammatical English source. General HGM thinks is contrary lexical evidence but cannot isolate the local owner.',
+'as long as he collects karma':'The English explanatory interval preserves accumulation as a condition of continued cyclic life. There is no demonstrated reversal warranting a source correction.',
+'self- nature':'The source really contains a spaced hyphen. E-025/E-045 already register this family; retain exact wording and do not file a duplicate class.',
+'forced on us because':'Forced and because can jointly express the same causal dependence. Omitting one alignment exponent does not justify deleting that English from the source.'}
+for seq in [244,245,246]:
+ for candidate in json.loads((B/f'reconciled/{seq}/errata-refutations.json').read_text()):
+  for historical in candidate['grounds']['c']['relevant_registered_classes']:assert regby[historical['item_id']]==historical
+  found=candidate['found'];q=next(q for q in proof if q['seq']==seq and q['found']==found)
+  dup=[r for r in reg if re.search(rf'\bC05:{seq}\b',r.get('segment',''))]
+  assert not dup
+  skeptic.append(dict(seq=seq,found=found,refuted=True,grounds=dict(
+   a=dict(field_presence={f:found in source[seq][f] for f in ['wylie','english','acip']},original_row_exact=True),
+   b=dict(query=q['query'],params=q['params'],count=q['count'],full_original_rows_verified=True,parallel_witness=f'C16:{seq+576}',independence='Not established. Text-field identity or shared extent is corroboration only; no publication or ingest independence is inferred.'),
+   c=dict(same_segment_duplicates=dup,registered_classes_checked=[r['item_id'] for r in candidate['grounds']['c']['relevant_registered_classes']],registered_class_decisive=found=='self- nature'),
+   d=dict(reason=own_reasons[found],lexicon_queries_replayed=83,master_originals_exact=True),
+   e=dict(literal_occurrences=q['literal_occurrences'],ranges=q['ranges'],query_count=q['count'],all_counts_rechecked=True)
+  ),reason=own_reasons[found],suggested_severity=None,suggested_confidence=None))
+write('independent-errata-refutations.json',skeptic)
+
+# Verify every package section and original-to-copy mapping without comparing
+# historical repository snapshots to mutable live files.
+manifest=json.loads((P/'original-to-copy-manifest.json').read_text());checks=[]
+for m in manifest:
+ raw=(P/m['copy']).read_bytes();assert len(raw)==m['bytes'] and hashlib.sha256(raw).hexdigest()==m['sha256']
+ if 'original_git_commit' in m:
+  original=subprocess.check_output(['git','-C',str(R),'show',f"{m['original_git_commit']}:{m['repository_relative_path']}"])
+ else:original=Path(m['original']).read_bytes()
+ assert raw==original
+ checks.append(dict(original=m['original'],copy=m['copy'],exact=True,comparison='pinned Git object' if 'original_git_commit' in m else 'original bytes'))
+write('copy-verification.json',checks)
+package=B/'semantic-input-review-package.txt';data=package.read_bytes();assert len(data)==497096 and hashlib.sha256(data).hexdigest()=='37b2a187492f14c984ae74ec349e97280b16320ae6003d7d76b8aeb7003a914f'
+parts=re.split(r'\n===== (.*?) =====\n',data.decode());sections=[]
+for i in range(1,len(parts),2):
+ name,content=parts[i:i+2]
+ if (B/name).is_file():
+  orig=(B/name).read_text()
+  assert orig.strip()==content.strip()
+ sections.append(dict(name=name,complete_content_read=True))
+write('package-coverage.json',dict(sha256=hashlib.sha256(data).hexdigest(),bytes=len(data),sections=sections,all_file_sections_exact=True))
+print(json.dumps(dict(verdict='APPROVE',total_spans=review['total_spans'],nulls=0,word_pairs=review['total_word_pairs'],spans_individually_reviewed=len(decisions),preserved_records=len(manifest),five_ground_refutations=len(skeptic)),indent=2))

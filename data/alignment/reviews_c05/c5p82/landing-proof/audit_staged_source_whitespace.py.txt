@@ -1,0 +1,80 @@
+"""Audit every staged whitespace warning without decoding legacy source bytes.
+
+Preserve canonical source and CRLF CSV bytes. Unexpected warnings fail closed.
+Run after staging a reviewed page; stage this proof before committing.
+"""
+from collections import defaultdict
+import datetime
+import hashlib
+import json
+from pathlib import Path
+import re
+import subprocess
+import sys
+
+art = Path(__file__).resolve().parent
+wt = art.parent / 'campaign-worktree'
+page, first = map(int, sys.argv[1:])
+batch = art / f'C05-{first}-{first+2}'
+out = batch / 'landing'
+target = out / 'source-whitespace-proof.json'
+assert not target.exists(), 'Preserve earlier proof before another audit'
+run = subprocess.run(['git', 'diff', '--cached', '--check'], cwd=wt, capture_output=True)
+(out / 'staged-diff-check.stdout').write_bytes(run.stdout)
+(out / 'staged-diff-check.stderr').write_bytes(run.stderr)
+(out / 'staged-diff-check.exit').write_text(str(run.returncode) + '\n')
+assert run.returncode in (0, 2) and not run.stderr
+manifest = json.loads((batch / 'semantic-review/original-to-copy-manifest.json').read_text())
+physical = defaultdict(list)
+for record in manifest:
+    if record['original'].endswith('ReadingASCII.txt'):
+        raw = Path(record['original']).read_bytes()
+        assert len(raw) == record['bytes'] and hashlib.sha256(raw).hexdigest() == record['sha256']
+        physical[(len(raw), record['sha256'])].append(record['original'])
+csv_paths = {
+    'docs/geshe_michael_roach_dictionary.csv',
+    'docs/geshe_michael_roach_dictionary_reverse.csv',
+    'docs/geshe_michael_roach_dictionary_by_course.csv',
+    'docs/geshe_michael_roach_dictionary_changes.csv',
+}
+issues = defaultdict(lambda: defaultdict(list))
+header = re.compile(rb'^([^+\n]+):([0-9]+): (.+)$')
+for line in run.stdout.split(b'\n'):
+    match = header.match(line)
+    if match:
+        path, number, warning = match.groups()
+        issues[path.decode('utf-8')][warning.decode('ascii')].append(int(number))
+    else:
+        assert not line.strip() or line.startswith(b'+'), repr(line[:160])
+files = {}
+for path, grouped in issues.items():
+    raw = (wt / path).read_bytes()
+    staged = subprocess.check_output(['git', 'show', ':' + path], cwd=wt)
+    assert staged == raw, path
+    digest = hashlib.sha256(raw).hexdigest()
+    if path in csv_paths:
+        assert set(grouped) == {'trailing whitespace.'}, (path, grouped.keys())
+        lines = raw.split(b'\n')
+        assert all(lines[n-1].endswith(b'\r') for n in grouped['trailing whitespace.']), path
+        reason = 'Canonical CSV CRLF; every warning line verified to end in CR before LF'
+        originals = []
+    else:
+        assert path.startswith(f'data/alignment/reviews_c05/c5p{page}/'), path
+        originals = physical[(len(raw), digest)]
+        assert originals, ('Unclassified source warning', path, len(raw), digest)
+        assert raw == Path(originals[0]).read_bytes(), path
+        reason = 'Complete original physical source bytes retained exactly'
+    files[path] = dict(bytes=len(raw), sha256=digest, reason=reason,
+                       original_paths=sorted(set(originals)), issues=dict(grouped))
+assert bool(issues) == (run.returncode == 2)
+proof = dict(checked_at=datetime.datetime.now(datetime.timezone.utc).isoformat(),
+             baseline_head=subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=wt).decode().strip(),
+             git_diff_check_exit=run.returncode,
+             warning_count=sum(len(lines) for groups in issues.values() for lines in groups.values()),
+             all_warnings_accounted_for=True, files=files,
+             raw_log_kept_external=str(out / 'staged-diff-check.stdout'),
+             raw_log_bytes=len(run.stdout), raw_log_sha256=hashlib.sha256(run.stdout).hexdigest(),
+             method='Parse all ASCII diagnostic headers from byte output; compare each cited file once to the index; verify complete source identity or each CSV CRLF line. No normalization or source mutation.')
+target.write_text(json.dumps(proof, indent=2) + '\n')
+print(json.dumps({k: v for k, v in proof.items() if k != 'files'}, indent=2))
+print(json.dumps({p: sum(map(len, r['issues'].values())) for p, r in files.items()}, indent=2))

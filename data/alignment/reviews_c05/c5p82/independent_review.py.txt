@@ -1,0 +1,133 @@
+from pathlib import Path
+import hashlib,json,sqlite3,subprocess,sys,os,importlib.util,gzip,re
+
+HERE=Path(__file__).resolve().parent
+BATCH=HERE.parent
+ROOT=BATCH.parents[1]/'campaign-worktree'
+def sha(b):return hashlib.sha256(b).hexdigest()
+def write(name,obj):
+ p=HERE/name;p.parent.mkdir(parents=True,exist_ok=True);p.write_text(json.dumps(obj,ensure_ascii=False,indent=2)+'\n')
+def git(*args):return subprocess.check_output(['git','-C',str(ROOT),*args])
+def preserve(original,relative,raw=None,**extra):
+ raw=Path(original).read_bytes() if raw is None else raw
+ p=HERE/relative;p.parent.mkdir(parents=True,exist_ok=True)
+ if p.exists():assert p.read_bytes()==raw
+ else:p.write_bytes(raw)
+ record=dict(original=str(Path(original).absolute()),copy=relative,sha256=sha(raw),bytes=len(raw),**extra)
+ if record not in manifest:manifest.append(record)
+ assert p.read_bytes()==raw
+ return record
+supported={'.json','.md','.html','.stderr','.stdout','.log','.txt','.bin','.exit'}
+def safe(p):return str(p) if p.suffix in supported else str(p)+('.txt' if p.suffix in {'.py','.sh','.sql'} else '.bin')
+manifest=[];orig_files=[p for p in BATCH.rglob('*') if p.is_file() and HERE not in p.parents and '__pycache__' not in p.parts]
+for p in orig_files:
+ rel=p.relative_to(BATCH)
+ if rel.parts[0]=='reconciled' and 'originals' not in rel.parts:
+  dest=Path('reviewed-final')/Path(*rel.parts[1:])
+ elif rel.parts[0] in {'english','tibetan'} and 'evidence' not in rel.parts and 'originals' not in rel.parts:
+  dest=Path('proposal-inputs')/rel
+ else:
+  # Evidence snapshots can have identical bytes at many historical paths.
+  raw=p.read_bytes();suffix=p.suffix if p.suffix in supported else p.suffix+'.txt' if p.suffix in {'.py','.sql','.sh'} else '.bin'
+  dest=Path('proposal-inputs/evidence')/(sha(raw)+suffix)
+ preserve(p,safe(dest))
+
+# Original external files and all versions of mutable governing snapshots.
+pin_proof=[]
+for mp in [BATCH/'tibetan/244/evidence/originals-manifest.json',BATCH/'english/244/originals-manifest.json',BATCH/'reconciled/244/originals-manifest.json']:
+ for r in json.loads(mp.read_text()):
+  original=r.get('original',r.get('original_path'));saved=r.get('saved',r.get('saved_path',r.get('copy')))
+  if not saved:continue
+  snapshot=mp.parent/saved
+  if not snapshot.is_file():continue
+  raw=snapshot.read_bytes();assert sha(raw)==r['sha256'] and len(raw)==r['bytes']
+  op=Path(original)
+  if op.is_relative_to(ROOT):
+   rel=op.relative_to(ROOT).as_posix();commits=git('log','-60','--format=%H','--',rel).decode().splitlines()
+   match=None
+   for c in commits:
+    if git('show',f'{c}:{rel}')==raw:match=c;break
+   assert match,(rel,sha(raw))
+   dest=safe(Path('governing-originals')/match/rel)
+   preserve(op,dest,raw,original_git_commit=match,repository_relative_path=rel)
+   pin_proof.append(dict(original=str(op),snapshot=str(snapshot),commit=match,path=rel,sha256=sha(raw),git_object_exact=True))
+  elif not op.is_relative_to(BATCH):
+   assert op.read_bytes()==raw
+   preserve(op,safe(Path('proposal-inputs/external')/(sha(raw)+op.suffix)),raw)
+
+for p in [BATCH.parent/'semantic-review-protocol.md',BATCH.parent/'proposal-protocol.md',*list((BATCH.parent/'policy-history').glob('*'))]:
+ if p.is_file():preserve(p,safe(Path('governing-protocols')/p.name))
+for rel in ['AGENTS.md','docs/ALIGNMENT_LAYER_SPEC.md','docs/alignment_briefs/RECONCILE_BRIEF.md','docs/alignment_briefs/REFUTE_BRIEF.md','tools/gen_alignment_page.py','tools/build_alignment_layer.py','docs/errata_register.json','data/alignment/span_head_allow.json']:
+ p=ROOT/rel;raw=p.read_bytes();head=git('rev-parse','HEAD').decode().strip();assert git('show',f'{head}:{rel}')==raw
+ preserve(p,safe(Path('governing-current')/head/rel),raw,original_git_commit=head,repository_relative_path=rel)
+write('original-to-copy-manifest.json',manifest);write('git-object-proofs.json',pin_proof)
+
+spine=ROOT/'build/hgm_spine_v27_2.db'
+db=sqlite3.connect(spine.resolve().as_uri()+'?mode=ro',uri=True);db.row_factory=sqlite3.Row
+source=[dict(r) for r in db.execute('SELECT * FROM corpus_segments WHERE course=? AND seq BETWEEN ? AND ? ORDER BY seq',('C05',241,249))]
+write('independent-source-rows.json',source)
+src={r['seq']:r for r in source}
+assert json.loads((BATCH/'source.json').read_text())==[{k:r[k] for k in ['id','course','seq','acip','wylie','english']} for r in source if r['seq'] in [244,245,246]]
+
+# Execute the original generator unchanged; only force its database open read-only.
+launcher='''import sqlite3,runpy,sys\nfrom pathlib import Path\norig=sqlite3.connect\ndef ro(database,*a,**kw):\n database=Path(database).resolve().as_uri()+"?mode=ro"\n kw["uri"]=True\n return orig(database,*a,**kw)\nsqlite3.connect=ro\nrunpy.run_path(sys.argv[1],run_name="__main__")\n'''
+(HERE/'canonical_readonly_launcher.py.txt').write_text(launcher)
+sys.path.insert(0,str(ROOT/'tools'))
+import gen_alignment_page as G
+segments=[];resolved=[];proofs=[]
+for seq in [244,245,246]:
+ p=BATCH/'reconciled'/str(seq)/'spec.json';raw=p.read_bytes();spec=json.loads(raw);s=spec['segments'][0]
+ result=subprocess.run([sys.executable,str(HERE/'canonical_readonly_launcher.py.txt'),str(ROOT/'tools/gen_alignment_page.py')],input=raw,capture_output=True,cwd=ROOT,env={**os.environ,'PYTHONDONTWRITEBYTECODE':'1'})
+ out=HERE/'generator-replays'/str(seq);out.mkdir(parents=True,exist_ok=True)
+ (out/'stdout.html').write_bytes(result.stdout);(out/'stderr.txt').write_bytes(result.stderr);(out/'exit.txt').write_text(str(result.returncode)+'\n')
+ body=(p.parent/'body.html').read_bytes();assert result.returncode==0 and result.stdout==body
+ tr=G.resolve(src[seq]['wylie'],s['spans'],'tib',seq)
+ by_id={x['id']:x for x in s['spans']}
+ es=G.with_members(s['spans'],[by_id[i] for i in s['eng_order']],src[seq]['english'])
+ er=G.resolve(src[seq]['english'],es,'eng',seq)
+ for x in s['spans']:
+  resolved.append(dict(seq=seq,id=x['id'],d=x['d'],tib=x['tib'],eng=x['eng'],tib_range=list(tr[x['id']]),eng_range=list(er[x['id']]) if x['eng'] is not None else None))
+ segments.append(dict(seq=seq,span_count=len(s['spans']),null_count=sum(x['eng'] is None for x in s['spans']),word_pair_count=sum(x['d']==5 and x['eng'] is not None for x in s['spans']),spec_sha256=sha(raw),spec_bytes=len(raw),body_sha256=sha(body),body_bytes=len(body),generator_exit=result.returncode))
+ proofs.append(dict(seq=seq,stdout_bytes=len(result.stdout),stderr_bytes=len(result.stderr),exact_body=True))
+write('resolved-spans.json',resolved);write('measured-segments.json',segments)
+write('canonical-generator-proof.json',dict(generator=str(ROOT/'tools/gen_alignment_page.py'),generator_sha256=sha((ROOT/'tools/gen_alignment_page.py').read_bytes()),mode='SQLite URI mode=ro; PYTHONDONTWRITEBYTECODE=1',segments=proofs))
+
+# Re-run every stored lexical and corpus evidence query, comparing full rows.
+lex=json.loads((BATCH/'reconciled/244/evidence/lexicon.json').read_text())
+query_proof=[]
+for kind,queries in [('lexicon',lex['queries']),('corpus',json.loads((BATCH/'reconciled/244/evidence/corpus.json').read_text()))]:
+ for q in queries:
+  rows=[dict(r) for r in db.execute(q['sql'],q['params'])];assert rows==q['rows'] and len(rows)==q['count']
+  query_proof.append(dict(kind=kind,sql=q['sql'],params=q['params'],count=len(rows),all_original_fields_exact=True))
+master_raw=Path(lex['master_path']).read_bytes();assert sha(master_raw)==lex['master_sha256']
+master=json.loads(gzip.decompress(master_raw));entries=master['unified_entries'] if isinstance(master,dict) else master
+assert len(entries)==lex['master_entry_count']
+for q in lex['queries']:
+ assert [r for r in entries if r.get('wylie')==q['params'][0]]==q['original_master_entries']
+write('independent-query-proof.json',query_proof)
+write('independent-master-proof.json',dict(original=lex['master_path'],sha256=sha(master_raw),entry_count=len(entries),all_queried_original_entries_exact=True))
+
+errata=[]
+register=json.loads((ROOT/'docs/errata_register.json').read_text())
+for seq in [244,245,246]:
+ for x in json.loads((BATCH/'reconciled'/str(seq)/'errata-refutations.json').read_text()):
+  g=x['grounds'];rows=[dict(r) for r in db.execute(g['b']['sql'],g['b']['params'])];assert rows==g['b']['all_phrase_witnesses']
+  assert len(rows)==g['e']['query_row_count']
+  assert src[seq]==g['a']['complete_original_row']
+  cr=dict(db.execute('SELECT * FROM corpus_segments WHERE course=? AND seq=?',('C16',seq+576)).fetchone());assert cr==g['b']['full_C16_witness']
+  for f,v in g['a']['field_presence'].items():assert (x['found'] in src[seq][f])==v
+  assert src[seq]['english'].count(x['found'])==g['e']['literal_occurrences_in_target']
+  hits=[];pos=0
+  while True:
+   pos=G.find_word(src[seq]['english'],x['found'],pos)
+   if pos<0:break
+   hits.append([pos,pos+len(x['found'])]);pos+=1
+  assert hits==g['e']['whole_word_ranges_in_target']
+  errata.append(dict(seq=seq,found=x['found'],query=g['b']['sql'],params=g['b']['params'],count=len(rows),full_rows_exact=True,literal_occurrences=len(hits),ranges=hits,refuted=True))
+write('independent-errata-query-proof.json',errata)
+
+phy=json.loads((BATCH/'reconciled/244/evidence/physical.json').read_text());raw=Path(phy['original']).read_bytes();assert sha(raw)==phy['sha256'] and len(raw)==phy['bytes'];norm=b' '.join(raw.split())
+for x in phy['checks']:
+ text=src[x['seq']][x['field']].encode('ascii');assert text==x['full_quote'].encode('ascii');assert norm.find(text)==x['normalized_byte_offset']
+write('independent-physical-proof.json',dict(original=phy['original'],sha256=sha(raw),bytes=len(raw),normalization='byte whitespace split/join only',all_six_target_fields_exact=True))
+print(json.dumps(dict(segments=segments,resolved_spans=len(resolved),preserved_original_records=len(manifest),verified_queries=len(query_proof),errata_queries=len(errata)),indent=2))
