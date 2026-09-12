@@ -91,35 +91,28 @@ int main(int argc, char** argv) {
     out += "\"schema\":1},\"cloze\":[";
 
     int n = 0, titles = 0;
+    // Dropped for want of a place to put the blank. The builder used to drop
+    // these silently; a refusal that leaves no trace looks exactly like
+    // "there were none".
+    int unplaceable = 0;
     for (int i = 0; i < want * 8 && n < want; ++i) {
         auto c = f.makeCloze(rng);
         if (!c) continue;
         if (c->correct < 0 || c->correct >= (int)c->options.size()) continue;
         const std::string& seg = c->segment.acip;
         const std::string ans = c->options[c->correct];
-        // the whole segment, with the answer blanked where it stands
-        std::string prefix;
-        for (const auto& ch : c->chunks) {
-            if (ch == "[ ... ]") break;
-            if (!prefix.empty()) prefix += " ";
-            prefix += ch;
-        }
-        size_t from = 0;
-        if (!prefix.empty()) {
-            const size_t p = seg.find(prefix);
-            if (p != std::string::npos) from = p;
-        }
-        size_t at = seg.find(ans, from);
-        if (at == std::string::npos) at = seg.find(ans);
-        if (at == std::string::npos) continue;   // refuse rather than approximate
+        // the whole segment, with the answer blanked where it stands —
+        // allcore::placeBlank, the same call the desktop makes
+        const auto sp = allcore::placeBlank(seg, c->chunks, ans);
+        if (!sp.ok) { ++unplaceable; continue; }   // refuse, and COUNT it
 
         // The segment converts as a whole — isDrillable already refuses one
         // that does not — but SPLITTING it at the blank can leave a fragment
         // that will not convert on its own, e.g. a bare "s". The two halves
         // are what the reader actually sees, so they are what must be
         // checked. Cheap, and it closes the last 0.1%.
-        const std::string beforeT = tib(seg.substr(0, at));
-        const std::string afterT = tib(seg.substr(at + ans.size()));
+        const std::string beforeT = tib(sp.before);
+        const std::string afterT = tib(sp.after);
         if (beforeT.find("\u27e8") != std::string::npos ||
             afterT.find("\u27e8") != std::string::npos)
             continue;
@@ -825,6 +818,9 @@ int main(int argc, char** argv) {
                 argv[2], n, out.size() / 1048576.0,
                 n ? out.size() / (size_t)n : 0);
     std::printf("  trainer passages: %d\n", t);
+    std::printf("  cloze drills dropped for want of a blank position: %d "
+                "(the answer did not appear verbatim in its segment)\n",
+                unplaceable);
     std::printf("  title-catalogue drills in the pack: %d (the draw refuses "
                 "them; this should read 0)\n", titles);
     return n > 0 ? 0 : 1;

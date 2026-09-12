@@ -96,9 +96,15 @@ new path.
 Two fixed today (the unattested verb, the clause-coverage disclosure). Still
 open, from the audit:
 
-- **Blank placement is implemented twice** — `app/main.cpp:22415` and
-  `tools/build_drill_pack.cpp:95` — and is not in `allcore`. They already
-  differ on failure: the desktop explains, the packer drops the drill silently.
+- ~~Blank placement is implemented twice~~ — **FIXED 2026-09-11.** One
+  `allcore::placeBlank`, called by both. The desktop still explains and the
+  packer still refuses, but the packer now **counts** what it refuses instead
+  of dropping it silently — a refusal that leaves no trace looks exactly like
+  "there were none". Measured after the change: **zero** drills are actually
+  unplaceable, so the divergence was latent rather than live. Seven gates,
+  including the case the two copies existed for (an earlier repeat of the
+  answer must not capture the blank) and that a refusal hands back no position
+  at all, because a blank in the wrong place teaches the wrong sentence.
 - ~~The phone re-sorts the reading plan~~ — **FIXED 2026-09-11.** The Mac hands
   the plan over in chunk order with each step carrying where it is read; the
   phone sorted by that number and silently turned it into a different reading.

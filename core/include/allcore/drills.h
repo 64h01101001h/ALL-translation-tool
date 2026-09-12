@@ -119,6 +119,34 @@ struct BoundaryDrill {
     bool punctuated = false;             // which pool this came from
 };
 
+// ---- where the blank goes -------------------------------------------------
+//
+// A cloze shows the WHOLE segment with one chunk blanked, which means finding
+// that chunk's position in the segment's own ACIP. It is not a plain find:
+// a short phrase often repeats earlier in the same segment, so the search
+// starts at the clause's own position and only falls back to the first
+// occurrence.
+//
+// Lifted here on 2026-09-11 because it was written twice — once in the app and
+// once in the pack builder — and the two had already drifted apart on the case
+// that matters. The app explained itself and fell back to showing the clause;
+// the builder dropped the drill with no record. Two copies of a rule cannot
+// stay honest about their own failures, and this one's failure IS the
+// interesting part: the answer not appearing verbatim in the segment means
+// the chunker and the segment disagree, and that is worth counting.
+struct BlankSplit {
+    bool ok = false;
+    std::string before;   // segment ACIP before the blank
+    std::string after;    // segment ACIP after it
+    // Why not, in words a surface can show. Never a guessed position: a blank
+    // placed in the wrong place teaches the wrong sentence.
+    std::string why;
+};
+
+BlankSplit placeBlank(const std::string& segment_acip,
+                      const std::vector<std::string>& chunks,
+                      const std::string& answer);
+
 // The skill a drill exercises, in the same vocabulary as the target. Used to
 // tag HITS as well as misses: until now only misses carried a skill, so
 // per-skill accuracy had no denominator and no trend could honestly be drawn.

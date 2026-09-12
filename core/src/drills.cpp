@@ -505,4 +505,37 @@ std::optional<BoundaryDrill> DrillFactory::makeBoundary(
     return std::nullopt;
 }
 
+BlankSplit placeBlank(const std::string& seg,
+                      const std::vector<std::string>& chunks,
+                      const std::string& answer) {
+    BlankSplit r;
+    if (seg.empty() || answer.empty()) {
+        r.why = "the segment or the answer is empty";
+        return r;
+    }
+    // Start from the clause's own position, so a phrase that repeats earlier
+    // in the segment cannot capture the blank.
+    std::string prefix;
+    for (const auto& c : chunks) {
+        if (c == "[ ... ]") break;
+        if (!prefix.empty()) prefix += " ";
+        prefix += c;
+    }
+    size_t from = 0;
+    if (!prefix.empty()) {
+        const size_t p = seg.find(prefix);
+        if (p != std::string::npos) from = p;
+    }
+    size_t at = seg.find(answer, from);
+    if (at == std::string::npos) at = seg.find(answer);
+    if (at == std::string::npos) {
+        r.why = "the answer does not appear in the segment verbatim";
+        return r;
+    }
+    r.ok = true;
+    r.before = seg.substr(0, at);
+    r.after = seg.substr(at + answer.size());
+    return r;
+}
+
 }  // namespace allcore

@@ -691,8 +691,10 @@ static allcore::Tm84000* tm84000() {
                 g_tm84000Root + "/data/extracted/tm_84000.db";
             if (QFile::exists(tsv)) {
                 QDir().mkpath(g_tm84000Root + "/data/extracted");
-                // PERF-5: the first touch may rebuild the 590 MB FTS
-                // cache from the tsv.gz - 5.6 s measured - and it lands
+                // PERF-5: the first touch may rebuild the 279 MB FTS
+                // cache from the 27 MB tsv.gz - 400,745 rows in 5.65 s,
+                // re-measured 2026-09-11; the "590 MB" this comment used
+                // to carry was never the size on disk - and it lands
                 // inside a card render. The rebuild-on-first-use is a
                 // deliberate press decision (the db is dead weight in
                 // the DMG); the GUI freezing with NO acknowledgement was
@@ -948,6 +950,13 @@ static std::string teachingKey(std::string g) {
 // flag means "this form is fine") — the Overlay legality check treats
 // them as legal. Loaded from the proposal store once per launch.
 static const std::set<std::string>* g_spellingValid = nullptr;
+// Where a defect goes. ONE constant, because it appears in the About box, in
+// the Help menu and inside the diagnostic report itself, and three copies of
+// an address is three chances to change two of them. It is Adam's own address
+// today; when the project has an intake address of its own this is the single
+// line that changes.
+inline const char* kDefectIntake = "adam.derick.andrade@gmail.com";
+
 // spine pointer for the About box's data-release line
 static const allcore::Spine* g_spineForAbout = nullptr;
 
@@ -19252,6 +19261,32 @@ public:
         // and on this project a text's title can be the sensitive
         // part.
         {
+            // The intake path: one address, and it must be the SAME one in
+            // the About box, the Help action and the report. Three copies of
+            // an address is three chances to change two of them.
+            {
+                // no `win` in this scope — walk the application's own
+                // top-level windows, the way the Quick Access resolver does
+                bool inHelp = false;
+                for (QWidget* w : QApplication::topLevelWidgets()) {
+                    auto* mw = qobject_cast<QMainWindow*>(w);
+                    if (!mw || !mw->menuBar()) continue;
+                    for (QAction* m : mw->menuBar()->actions()) {
+                        if (!m->menu()) continue;
+                        for (QAction* a : m->menu()->actions())
+                            if (a->text().startsWith("Report a Problem"))
+                                inHelp = true;
+                    }
+                }
+                const bool inAbout = QString(kDefectIntake).contains('@');
+                check(inHelp,
+                      "defect intake: Help carries 'Report a Problem…' — "
+                      "saving a report was possible before, but nothing said "
+                      "what to do with it");
+                check(inAbout && QString(kDefectIntake).contains('.'),
+                      "defect intake: the address is one constant, so About "
+                      "and the Help action cannot disagree");
+            }
             const QString rep = buildDiagnosticReport(
                 "1.0.0-rc.1", "abc1234", "macOS 26.1", "arm64", 85,
                 {"/Users/adamderickandrade/Secret Retreat Notes.txt",
@@ -23664,7 +23699,7 @@ private:
             "<b style='color:" +
             QString(ux::darkChrome() ? ux::chromeMachine() : ux::kMachine) +
             "'>[ \u2026 ]</b>";
-        auto clauseOnly = [&](const char* why) {
+        auto clauseOnly = [&](const QString& why) {
             QString h;
             for (const auto& c : cloze_->chunks)
                 h += (c == "[ ... ]" ? blank + "  " : disp(c) + "  ");
@@ -23680,26 +23715,14 @@ private:
         const std::string ans = cloze_->options[cloze_->correct];
         if (ans.empty() || seg.empty())
             return clauseOnly("showing the clause only");
-        // search from the clause's own position, so a phrase that repeats
-        // earlier in the segment cannot capture the blank
-        std::string prefix;
-        for (const auto& c : cloze_->chunks) {
-            if (c == "[ ... ]") break;
-            if (!prefix.empty()) prefix += " ";
-            prefix += c;
-        }
-        size_t from = 0;
-        if (!prefix.empty()) {
-            const size_t p = seg.find(prefix);
-            if (p != std::string::npos) from = p;
-        }
-        size_t at = seg.find(ans, from);
-        if (at == std::string::npos) at = seg.find(ans);
-        if (at == std::string::npos)
-            return clauseOnly("showing the clause only \u2014 the answer does "
-                              "not appear in the segment verbatim");
-        return disp(seg.substr(0, at)) + " " + blank + " " +
-               disp(seg.substr(at + ans.size()));
+        // One implementation, in allcore. This was written here and again in
+        // the pack builder, and the two had already drifted on what to do
+        // when the answer is not in the segment verbatim.
+        const auto sp = allcore::placeBlank(seg, cloze_->chunks, ans);
+        if (!sp.ok)
+            return clauseOnly("showing the clause only \u2014 " +
+                              QString::fromStdString(sp.why));
+        return disp(sp.before) + " " + blank + " " + disp(sp.after);
     }
 
     void fillDeckFromLayer() {
@@ -45205,10 +45228,13 @@ int main(int argc, char** argv) {
                         "Qt %1 \u00b7 " ALL_TEST_BATTERIES " automated test batteries "
                         "\u00b7 runs fully offline</div>")
                     .arg(QString::fromLatin1(qVersion())));
-            add("<div style='font-size:12px;margin-top:8px'>"
-                "Contact: <a style='color:#7C2D26' href='mailto:"
-                "adam.derick.andrade@gmail.com'>"
-                "adam.derick.andrade@gmail.com</a></div>");
+            add(QString("<div style='font-size:12px;margin-top:8px'>"
+                        "Contact, and where to report a problem: "
+                        "<a style='color:#7C2D26' href='mailto:%1'>%1</a>"
+                        "<br><span style='font-size:11px;color:#6E5F4B'>"
+                        "Help \u25b8 Report a Problem\u2026 opens a message "
+                        "with the build already filled in.</span></div>")
+                    .arg(kDefectIntake));
             add("<div style='font-size:10px;color:#8A7A62;"
                 "margin-top:6px'>Third-party components and data "
                 "sources are credited in OPEN_SOURCE_NOTICES, "
@@ -45418,6 +45444,42 @@ int main(int argc, char** argv) {
                    : "The restore FAILED and nothing was changed - "
                      "check permissions on the store and the backup "
                      "folder.");
+        });
+        // The intake path (release audit: "no defect intake path for
+        // users"). Saving a report was already possible; what was missing was
+        // the sentence telling someone what to DO with it. This does both and
+        // then opens a draft in the user's OWN mail client — nothing is sent
+        // by the application, and the user sees and sends the message.
+        QAction* report = helpMenu->addAction("Report a Problem\u2026");
+        QObject::connect(report, &QAction::triggered, [&win] {
+            const QString body =
+                QString(
+                    "What went wrong:\n\n\n"
+                    "What I was doing when it happened:\n\n\n"
+                    "---\n"
+                    "Please attach the diagnostic report if you saved one "
+                    "(Help \u25b8 Save Diagnostic Report\u2026). It carries "
+                    "the build and the machine, and deliberately carries no "
+                    "file titles, no file contents and no user name.\n"
+                    "Build: %1 (%2)\n")
+                    .arg(QString(ALL_APP_VERSION),
+#ifdef ALL_GIT_COMMIT
+                         QString(ALL_GIT_COMMIT));
+#else
+                         QString("unknown"));
+#endif
+            QUrl u("mailto:" + QString(kDefectIntake));
+            QUrlQuery q;
+            q.addQueryItem("subject",
+                           "Diamond Cutter Translation Tool \u2014 problem "
+                           "report");
+            q.addQueryItem("body", body);
+            u.setQuery(q);
+            QDesktopServices::openUrl(u);
+            win.statusBar()->showMessage(
+                QString("A message to %1 has been opened in your mail "
+                        "application. Nothing has been sent \u2014 you send "
+                        "it.").arg(kDefectIntake), 12000);
         });
         QAction* diag = helpMenu->addAction(
             "Save Diagnostic Report\u2026");
