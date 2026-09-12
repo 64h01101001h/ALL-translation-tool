@@ -1,0 +1,50 @@
+import json,pathlib,hashlib,sys,html,re,runpy,subprocess,datetime
+from html.parser import HTMLParser
+root=pathlib.Path(__file__).resolve().parents[4]
+base=root/'campaign-artifacts/C05-262-264/tibetan';repo=root/'campaign-worktree'
+def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
+def write(p,data):p.write_text(json.dumps(data,ensure_ascii=False,indent=2)+'\n')
+g=runpy.run_path(str(repo/'tools/gen_alignment_page.py'),run_name='canonical_for_read_only_verification')
+evidence=base/'262/original-evidence.json';data=json.loads(evidence.read_text());rows={r['seq']:r for r in data['context_rows']}
+class TextParser(HTMLParser):
+ def __init__(self):super().__init__(convert_charrefs=True);self.parts=[];self.stack=[]
+ def handle_starttag(self,t,a):
+  if t=='span':self.stack.append('nul' in dict(a).get('class','').split() or (self.stack[-1] if self.stack else False))
+ def handle_endtag(self,t):
+  if t=='span' and self.stack:self.stack.pop()
+ def handle_data(self,s):
+  if not any(self.stack):self.parts.append(s)
+head=subprocess.check_output(['git','rev-parse','HEAD'],cwd=repo,text=True).strip();assert head=='f955740d862a449ee18ca93e473fffc07372d9ec'
+shared={str(p.resolve()):sha(p) for p in [evidence,base/'262/supplemental-evidence.json',base.parent/'source.json',base.parent/'context.json',base.parent/'baseline.json',root/'campaign-artifacts/proposal-protocol.md',base.parent/'tibetan-brief.md',repo/'AGENTS.md',repo/'docs/ALIGNMENT_LAYER_SPEC.md',repo/'docs/alignment_briefs/PROPOSE_BRIEF.md',repo/'data/alignment/C05_CAMPAIGN.md',repo/'tools/gen_alignment_page.py',repo/'tools/build_alignment_layer.py',repo/'data/hgm_dictionary_v27_2.json.gz',repo/'data/full_parallel_corpus_v32.json.gz']}
+for seq in [262,263,264]:
+ p=base/str(seq);s=json.loads((p/'spec.json').read_text())['segments'][0];sp=s['spans'];by={x['id']:x for x in sp}
+ tr=g['resolve'](rows[seq]['wylie'],sp,'tib',seq);ordered=g['with_members'](sp,[by[x] for x in s['eng_order']],rows[seq]['english']);er=g['resolve'](rows[seq]['english'],ordered,'eng',seq)
+ intents=json.loads((p/'intended-occurrences.json').read_text());assert all(er[x['id']][0]==x['english_offset'] for x in intents)
+ body=(p/'body.html').read_text();matches=re.findall(r'<span class="u" data-d="1" data-l="s'+str(seq)+r'S">(.*?)</div>',body,re.S);assert len(matches)==2
+ recovered=[]
+ for m in matches:
+  h=TextParser();h.feed(m);recovered.append(''.join(h.parts))
+ assert recovered==[rows[seq]['wylie'],rows[seq]['english']]
+ a=p/'generation-attempt-001';assert (p/'body.html').read_bytes()==(a/'stdout.html').read_bytes();assert (a/'stderr.txt').read_bytes()==b'';assert (a/'exit.txt').read_text()=='0\n';assert (p/'spec.json').read_bytes()==(a/'spec.json').read_bytes()
+ for x in sp:
+  lo,hi=tr[x['id']];assert rows[seq]['wylie'][lo:hi]==x['tib']
+  assert hi==len(rows[seq]['wylie']) or rows[seq]['wylie'][hi] in ' ,',('split Tibetan syllable',seq,x)
+ counts={'explicit_spans':len(sp),'nulls':sum(x['eng'] is None for x in sp),'nonnull_links':sum(x['eng'] is not None for x in sp),'d5':sum(x['d']==5 for x in sp),'d6':sum(x['d']==6 for x in sp),'d7':sum(x['d']==7 for x in sp),'implicit_d1_sentence_links':1,'new_errata':0}
+ resolved=[{**x,'tibetan_range':tr[x['id']],'english_range':er.get(x['id'])} for x in sp]
+ write(p/'resolved-spans.json',resolved)
+ proof={'producer':'Codex','angle':'Tibetan-first','status':'PROVISIONAL machine alignment; no human semantic approval','governing_HEAD':head,'clean_data_baseline_commit':json.loads((base.parent/'baseline.json').read_text())['commit'],'source_snapshot_verified_against_full_readonly_spine_rows':True,'original_rows_include_raw':True,'counts':counts,'canonical_exit':0,'canonical_stderr_bytes':0,'body_bytes':len((p/'body.html').read_bytes()),'body_sha256':sha(p/'body.html'),'spec_sha256':sha(p/'spec.json'),'generator_sha256':sha(repo/'tools/gen_alignment_page.py'),'generator_attempt':str(a),'exact_stdout_equals_body':True,'recovered_source_fields_exact':{'wylie':True,'english':True},'intended_repeated_occurrence_offsets_match_canonical_resolution':True,'no_split_syllables':True,'evidence_sources_sha256':shared,'limitations':['Mechanical verification does not prove semantic correspondence.','No claim that textual identity proves independent publication or ingestion lineage.','C15/C18:262 parallels carry added translator notes; exact shared target extent only.','P7:20 has equal English with Tibetan punctuation/spelling differences; full original fields are preserved.','Repository integration/fidelity suites belong to landing; no repository or master edits were made by this role.']}
+ write(p/'proof.json',proof)
+ write(p/'source.json',rows[seq])
+ write(p/'evidence-reference.json',{'original_evidence':str(evidence),'sha256':sha(evidence),'supplemental_evidence':str(base/'262/supplemental-evidence.json'),'supplemental_sha256':sha(base/'262/supplemental-evidence.json'),'selected_segment':seq,'full_fields_not_truncated':True})
+ brief={262:'Challenge first: the omitted common-locus relation gzhi mthun pa could be retained only as a complete phrase recast; the lexical atoms objects and three are preserved without falsely nulling the relation.',263:'Challenge first: temporal ma ... bar du is rendered until ... ends, so that ma is null with an explicit grammatical-fusion reason; matrix ma separately owns not.',264:'Challenge first: mi\'i → human and chur → water retain intact inflected syllables while their relational grammar is expressed elsewhere; no misleading bound-member null is added.'}[seq]
+ lines=[f'C05:{seq} — independent Tibetan-first proposal by Codex; PROVISIONAL, no semantic approval.',brief,s['note'],f'Lexical evidence: full original entries and raw provenance in {evidence}; SHA-256 {sha(evidence)}.',f'Source: independently reopened C05:256–270 (15 complete rows); all six selected fields match source/context snapshots.',f'Parallel check: original ACIP/Wylie/English retained in evidence; C15/C16/C18 text comparisons do not establish independent publication or ingestion lineage.',f'Errata: [] (0 new); no target heading glue or 1,500-character cap. Registered classes checked in supplemental-evidence.json.',f'Counts: {counts["explicit_spans"]} explicit spans, {counts["nonnull_links"]} nonnull, {counts["nulls"]} null, {counts["d5"]} d5, {counts["d6"]} d6, 0 d7; generated full-source d1 link additional.',f'FINAL GENERATOR: EXIT=0; STDERR_BYTES=0; BODY_BYTES={proof["body_bytes"]}. Exact stdout is generation-attempt-001/stdout.html and equals body.html.',f'body.html SHA-256 {proof["body_sha256"]}; spec.json SHA-256 {proof["spec_sha256"]}.',f'Canonical source reconstruction and every intended occurrence offset verified; full proof in proof.json and resolved-spans.json.',f'All attempts preserved. Authoring attempt 001 failed before writing specs (bad requested occurrence count); corrected authoring is recorded. Each canonical generation passed on attempt 001.',f'Governing HEAD {head}; data baseline {proof["clean_data_baseline_commit"]}.',f'Frozen manifest freeze.json covers every final artifact and retained attempt; no later edit is authorized to overwrite this proof boundary.']
+ (p/'report.md').write_text('\n'.join(lines)+'\n')
+ print(seq,counts,proof['body_bytes'],proof['body_sha256'],proof['spec_sha256'])
+# Freeze only after all shared records/reports are final.
+for seq in [262,263,264]:
+ p=base/str(seq);files={str(f.relative_to(p)):{'bytes':f.stat().st_size,'sha256':sha(f)} for f in sorted(p.rglob('*')) if f.is_file() and f.name!='freeze.json'}
+ manifest={'frozen_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'scope':str(p),'producer':'Codex; independent Tibetan-first','immutable_boundary':'Do not overwrite; preserve and explicitly supersede any later correction.','files':files,'shared_evidence_sha256':shared}
+ write(p/'freeze.json',manifest)
+ for f in p.rglob('*'):
+  if f.is_file():f.chmod(0o444)
+ print('FREEZE',seq,sha(p/'freeze.json'))

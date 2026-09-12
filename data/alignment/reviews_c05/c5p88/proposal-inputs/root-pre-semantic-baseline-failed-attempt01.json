@@ -1,0 +1,7 @@
+{
+  "timestamp": "2026-09-12T20:13:28.975417+00:00",
+  "status": "FAILED root verification assumption, not baseline discrepancy",
+  "failure": "git show baseline:data/hgm_dictionary_v27_2.json.gz exit128; immutable input archives are untracked fixtures, only seven generated outputs have Git pins",
+  "previous_read_failure": "sed assumed reconciled/262/batch-proof.json exit1; file absent; no files mutated",
+  "correction": "verify all9 physical hashes and only the7 actual tracked generated output Git objects; inspect actual names before reading evidence"
+}

@@ -1,0 +1,83 @@
+{
+  "retained_errata": [],
+  "suspicions_all_five_grounds": [
+    {
+      "suspicion": "Leading backtick is stray source damage",
+      "found": "`",
+      "expected": "remove leading backtick",
+      "refuted": true,
+      "grounds": {
+        "a": "Present at start of ACIP and Wylie, absent from English; exact physical ACIP match independently verified.",
+        "b": "C15:407/C16:838/C18:1121 preserve the source marker; independent publication lineage is not established, so this is corroboration only.",
+        "c": "Already registered E-040 NOT_AN_ERRATUM structural section-opening marker. Full original registered record preserved; do not file again.",
+        "d": "It opens the new second/own-position section, a defensible structural use. Removal is not a necessary source correction.",
+        "e": "Target ACIP and Wylie each have one leading marker; four exact ACIP query rows include target. Historical E-040 cross-corpus111 count is retained only as historical quoted record, not adopted or reported as a newly measured premise."
+      },
+      "current_counts": {
+        "target_acip_backticks": 1,
+        "target_wylie_backticks": 1
+      },
+      "registered_records": [
+        {
+          "item_id": "E-040",
+          "course": "C01",
+          "segment": "C01:484",
+          "kind": "NOT_AN_ERRATUM",
+          "found": "`lam gtso'i zin bris gsang ba'i lde mig ni   (ACIP: `LAM GTZO'I ZIN BRIS GSANG BA'I LDE MIG NI,)",
+          "expected": "",
+          "evidence": "Hint C01:484 verified - the backtick is present, verbatim, at the head of both the ACIP and the Wylie. But it is not stray. The same leading backtick opens 111 segments across at least 15 courses (C09 x23, C13 x19, C18 x12, C17 x9, C08 x7, C07 x6, C01 x2, and more), and in every sampled case it introduces a new text, chapter, or titled section: C02:27 '`, , gnyis pa rang gi lugs la' = 'Here is the second section'; C06:24 '`, na mo ma{u2} o ShA ya' = 'I bow down to Manjughosha'; C09:142 '`, gnyis pa ni' under the heading 'the colophon'. Here it opens the Gungtang appendix, and the English confirms a fresh text begins: 'Here is a \"Secret Key to the Three Principal Paths\"'.",
+          "severity": "LOW",
+          "confidence": "CONFIRMED",
+          "note": "This is a structural marker in the ACIP e-text, functioning as a section/text-opening delimiter, not digitisation damage. The campaign was right to keep it verbatim and it should stay. Recommend the register carry it as a resolved non-issue so the same character is not re-flagged on later courses - C09 alone will raise it 23 more times. The trailing 'Layer: 3,747 headwords / 7,014 pairs' in the note is campaign bookkeeping and carries no claim about the text."
+        }
+      ]
+    },
+    {
+      "suspicion": "TSAD MTSUNGS lacks MA and needs source correction",
+      "found": "TSAD MTSUNGS",
+      "expected": "TSAD MA MTSUNGS",
+      "refuted": true,
+      "grounds": {
+        "a": "TSAD MTSUNGS and tshad mtshungs are present exactly in ACIP/Wylie, with valid perceptions in English. Physical original ACIP confirms current reading.",
+        "b": "Parallel original rows carry the same phrase; later C05:286/312/313 confirm the distinction between identical perceptions and their necessity. No independent publication lineage asserted.",
+        "c": "No newly filed class/duplicate is required; this is refuted on defensibility, not a manufactured registered defect.",
+        "d": "HGM15282 tshad glossary includes valid perceptions and HGM15769 mtshungs includes identical. Empty compound queries do not erase constituent support. Adding ma is unnecessary and unauthorized.",
+        "e": "Original exact tshad mtshungs and broad tshad%mtshungs% entry selections independently remain empty; each constituent entry query returns1. Whole corpus wylie LIKE %tshad mtshungs% reruns15 complete rows."
+      },
+      "counts_rechecked": {
+        "tshad_mtshungs_corpus": 15,
+        "exact_compound_entries": 0,
+        "broader_compound_entries": 0,
+        "tshad_entries": 1,
+        "mtshungs_entries": 1
+      }
+    },
+    {
+      "suspicion": "C05 English should receive the translator note found in C15/C18",
+      "found": "Here secondly is the section where we establish our own position. Now suppose three different types of beings--a pleasure being, a human, and a craving spirit, each with their own karma--sit down together and look upon a glass filled with water, the thing we define as \"wet and flowing.\" The glass of water is not at this point one thing which is simultaneously three different objects. Neither is it necessary in this situation for there to be three identical valid perceptions. And when the glass full of wet and flowing water occurs, it occurs with three different, distinct parts to it.",
+      "expected": "append the236-character translator note",
+      "refuted": true,
+      "grounds": {
+        "a": "The590-character C05 English is present exactly, including in the physical C05 original. The note is not part of this selected field.",
+        "b": "C15:407 and C18:1121 physically preserve826-character English; all590 target characters match then236 are appended. C16:838 matches the590-character field. Different extents do not establish publication or ingestion lineage.",
+        "c": "The1500 cap and following-heading classes were checked, but target length590 and a complete ending provide no such signature. No duplicate/source defect is inferred from witness length alone.",
+        "d": "The selected English forms a complete explanation. Variation in translator-note inclusion is not sufficient to declare the C05 source defective or to authorize importing text.",
+        "e": "Lengths590/826 and the exact236-character suffix were independently recomputed from full original rows and matched physically; exact prefix identity is asserted only for those590 characters."
+      },
+      "counts_rechecked": {
+        "C05": 590,
+        "C15": 826,
+        "C18": 826,
+        "shared_prefix": 590,
+        "additional_suffix": 236
+      }
+    }
+  ],
+  "scan": {
+    "english_characters": 590,
+    "cap1500": false,
+    "following_heading": false,
+    "no_source_or_master_change": true
+  },
+  "evidence_wording_correction": null
+}

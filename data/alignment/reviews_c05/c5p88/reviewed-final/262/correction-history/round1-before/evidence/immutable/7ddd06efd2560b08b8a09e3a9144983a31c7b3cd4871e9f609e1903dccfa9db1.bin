@@ -1,0 +1,11 @@
+import json,pathlib,subprocess,sys,os,hashlib,shutil
+BASE=pathlib.Path(__file__).resolve().parent.parent
+root=BASE.parents[2]/'campaign-worktree';runner=BASE/'262/canonical_readonly.py';wrapper=BASE.parents[1]/'run_generator_readonly.py'
+for seq in [262,263,264]:
+ out=BASE/str(seq); attempts=out/'attempts';attempts.mkdir(exist_ok=True);n=len(list(attempts.iterdir()))+1;a=attempts/f'{n:02d}';a.mkdir();shutil.copyfile(out/'spec.json',a/'spec.json')
+ env=dict(os.environ,PYTHONDONTWRITEBYTECODE='1');argv=[sys.executable,str(runner)];p=subprocess.run(argv,input=(out/'spec.json').read_bytes(),stdout=subprocess.PIPE,stderr=subprocess.PIPE,cwd=root,env=env)
+ (a/'stdout.html').write_bytes(p.stdout);(a/'stderr.txt').write_bytes(p.stderr);(a/'exit.txt').write_text(str(p.returncode)+'\n')
+ meta={'argv':argv,'cwd':str(root),'env_overrides':{'PYTHONDONTWRITEBYTECODE':'1'},'exit':p.returncode,'stdout_bytes':len(p.stdout),'stderr_bytes':len(p.stderr),'files':{str(f):hashlib.sha256(f.read_bytes()).hexdigest() for f in [runner,wrapper,root/'tools/gen_alignment_page.py',root/'tools/build_alignment_layer.py',a/'spec.json',a/'stdout.html',a/'stderr.txt']},'wrapper_behavior':'Supplied wrapper forces URI mode=ro only; local runner additionally sets PRAGMA query_only=ON. Canonical generator untouched.'}
+ (a/'invocation.json').write_text(json.dumps(meta,indent=2)+'\n')
+ if p.returncode==0:shutil.copyfile(a/'stdout.html',out/'body.html')
+ print(seq,p.returncode,len(p.stdout),p.stderr.decode())

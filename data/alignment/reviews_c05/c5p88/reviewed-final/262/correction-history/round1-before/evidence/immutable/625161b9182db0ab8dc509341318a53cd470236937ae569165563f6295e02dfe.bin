@@ -1,0 +1,9 @@
+{
+  "at": "2026-09-12T19:27:33.223616+00:00",
+  "attempt": "root Tibetan SQL/material lexical print 001",
+  "exit": 1,
+  "exception": "TypeError: the JSON object must be str, bytes or bytearray, not NoneType",
+  "cause": "Assumed every entries.hgm_gloss was a JSON string. chur has SQL NULL. All SQL comparisons completed before printing reached chur; no proof was written.",
+  "correction": "Preserve SQL NULL as None; do not treat unglossed as no source correspondence.",
+  "truncated_prior_print": "First full-row console print exceeded tool output budget; subsequent compact material-field read replaces only console inspection, no source evidence edited."
+}

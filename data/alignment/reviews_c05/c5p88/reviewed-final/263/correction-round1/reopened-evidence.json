@@ -1,0 +1,263 @@
+{
+  "source_spine": "/Users/adamderickandrade/ALL-translation-tool/build/hgm_spine_v27_2.db",
+  "sqlite_mode": "URI mode=ro; query_only ON",
+  "queries": [
+    {
+      "sql": "select * from corpus_segments where course=? and seq=?",
+      "parameters": [
+        "C05",
+        263
+      ],
+      "count": 1,
+      "full_rows": [
+        {
+          "id": 1645,
+          "course": "C05",
+          "seq": 263,
+          "acip": "DE YANG DANG POR GRUB TZAM NAS CHA SHAS GSUM LDAN DU GRUB CING , MTHAR MA ZHIG GI BAR DU CHA SHAS GSUM LDAN DU GNAS PA MA YIN TE, BRLAN ZHING GSHER BA CHU PHOR PA GANG PO DE'I CHA SHAS GCIG GIS NYER LEN DANG , YI DVAGS KYI LAS KYIS LHAN CIG BYED RKYEN BYAS PA LA BRTEN NAS DE'I CHA SHAS GCIG GI RIGS 'DRA PHYI MA RNAG KHRAG TU SKYE BA DANG ,",
+          "wylie": "de yang dang por grub tsam nas cha shas gsum ldan du grub cing , mthar ma zhig gi bar du cha shas gsum ldan du gnas pa ma yin te, brlan zhing gsher ba chu phor pa gang po de'i cha shas gcig gis nyer len dang , yi dvags kyi las kyis lhan cig byed rkyen byas pa la brten nas de'i cha shas gcig gi rigs 'dra phyi ma rnag khrag tu skye ba dang",
+          "english": "It is not though the case that, from the time it first started, the glass of water came with the three different parts, or that they stay with the glass of water until it eventually ends. What happens is that one of the parts of the glass filled with wet and flowing water provides a material cause, and the karma of the craving spirit provides a contributing factor; and then based on both of these the later continuation of one part of the glass of water starts being blood and pus.",
+          "raw": "{\"course\": \"C05\", \"acip\": \"DE YANG DANG POR GRUB TZAM NAS CHA SHAS GSUM LDAN DU GRUB CING , MTHAR MA ZHIG GI BAR DU CHA SHAS GSUM LDAN DU GNAS PA MA YIN TE, BRLAN ZHING GSHER BA CHU PHOR PA GANG PO DE'I CHA SHAS GCIG GIS NYER LEN DANG , YI DVAGS KYI LAS KYIS LHAN CIG BYED RKYEN BYAS PA LA BRTEN NAS DE'I CHA SHAS GCIG GI RIGS 'DRA PHYI MA RNAG KHRAG TU SKYE BA DANG ,\", \"wylie\": \"de yang dang por grub tsam nas cha shas gsum ldan du grub cing , mthar ma zhig gi bar du cha shas gsum ldan du gnas pa ma yin te, brlan zhing gsher ba chu phor pa gang po de'i cha shas gcig gis nyer len dang , yi dvags kyi las kyis lhan cig byed rkyen byas pa la brten nas de'i cha shas gcig gi rigs 'dra phyi ma rnag khrag tu skye ba dang\", \"english\": \"It is not though the case that, from the time it first started, the glass of water came with the three different parts, or that they stay with the glass of water until it eventually ends. What happens is that one of the parts of the glass filled with wet and flowing water provides a material cause, and the karma of the craving spirit provides a contributing factor; and then based on both of these the later continuation of one part of the glass of water starts being blood and pus.\"}"
+        }
+      ]
+    },
+    {
+      "sql": "select * from entries where id in (?,?,?) order by id",
+      "parameters": [
+        1368,
+        10448,
+        23908
+      ],
+      "count": 3,
+      "full_rows": [
+        {
+          "id": 1368,
+          "wylie": "khrag",
+          "tibetan": "ཁྲག",
+          "tibetan_source": null,
+          "acip": "KHRAG",
+          "pronunciation": "trak",
+          "pronunciation_source": null,
+          "sanskrit": "{LCh,C}rudhira; {LC}aṅgaja; {LC}asra; {LC}kīlāla; {LC}rakta; {LC}lohita; {LC}śoṇita; {LC}asṛk; {LC}ārttava; {LC}kṣataja; {LC}rattka??",
+          "hopkins_english": "blood",
+          "hgm_gloss": "[\"blood\", \"pus\"]",
+          "tier": "glossary",
+          "hgm_source": "HTG2016",
+          "status": "hgm-attested",
+          "tenses": null,
+          "flags": null,
+          "corpus_courses": "[\"AK\", \"C01\", \"C05\", \"C07\", \"C08\", \"C11\", \"C12\", \"C13\", \"C15\", \"C16\", \"C17\", \"C18\", \"EM\", \"GIE\", \"ILL\", \"MB2\", \"P5\", \"P7\", \"P9\", \"SOS\", \"SPF\", \"Sunlight\", \"TCS02\", \"TCS03\", \"TCS04Initiation\", \"TCS04Mantras\", \"TCS04PrayerBook\", \"TCS05\", \"TCS06\", \"TCS07\", \"TCS08NaropaTrials1_12\", \"TCS08PabongkaSadhana\", \"TCS09\", \"TCS10\", \"TCS11\", \"TCS13\", \"TCS14\", \"TCS15\", \"TCS16KaliWang\", \"TCS16Reading\", \"TCS17\", \"TCS18Commentary\"]",
+          "corpus_n_segments": 257,
+          "raw": "{\"tibetan\": \"ཁྲག\", \"wylie\": \"khrag\", \"wylie_variants\": [\"khrag\"], \"tenses\": null, \"sanskrit\": \"{LCh,C}rudhira; {LC}aṅgaja; {LC}asra; {LC}kīlāla; {LC}rakta; {LC}lohita; {LC}śoṇita; {LC}asṛk; {LC}ārttava; {LC}kṣataja; {LC}rattka??\", \"hopkins_english\": \"blood\", \"hgm_gloss\": [\"blood\", \"pus\"], \"hgm_evidence\": {\"tier\": \"glossary\", \"source\": \"HTG2016\"}, \"status\": \"hgm-attested\", \"pronunciation\": \"trak\", \"acip\": \"KHRAG\", \"corpus_occurrences\": {\"courses\": [\"AK\", \"C01\", \"C05\", \"C07\", \"C08\", \"C11\", \"C12\", \"C13\", \"C15\", \"C16\", \"C17\", \"C18\", \"EM\", \"GIE\", \"ILL\", \"MB2\", \"P5\", \"P7\", \"P9\", \"SOS\", \"SPF\", \"Sunlight\", \"TCS02\", \"TCS03\", \"TCS04Initiation\", \"TCS04Mantras\", \"TCS04PrayerBook\", \"TCS05\", \"TCS06\", \"TCS07\", \"TCS08NaropaTrials1_12\", \"TCS08PabongkaSadhana\", \"TCS09\", \"TCS10\", \"TCS11\", \"TCS13\", \"TCS14\", \"TCS15\", \"TCS16KaliWang\", \"TCS16Reading\", \"TCS17\", \"TCS18Commentary\"], \"n_segments\": 257}, \"lc_merged\": \"lc-v27\"}"
+        },
+        {
+          "id": 10448,
+          "wylie": "rnag",
+          "tibetan": "རྣག",
+          "tibetan_source": null,
+          "acip": "RNAG",
+          "pronunciation": "nak",
+          "pronunciation_source": null,
+          "sanskrit": "pūya; {LC}pūti; {LC}kāla; {LC}dhyāma; {LC}pūra",
+          "hopkins_english": "pus",
+          "hgm_gloss": "[\"blood and pus\", \"pus\", \"blood\", \"pus?\"]",
+          "tier": "glossary",
+          "hgm_source": "HTG2016",
+          "status": "hgm-attested",
+          "tenses": null,
+          "flags": null,
+          "corpus_courses": "[\"AK\", \"C05\", \"C08\", \"C12\", \"C15\", \"C16\", \"C17\", \"C18\", \"EM\", \"ILL\", \"P5\", \"P7\", \"P9\", \"TCS02\", \"TCS09\"]",
+          "corpus_n_segments": 111,
+          "raw": "{\"tibetan\": \"རྣག\", \"wylie\": \"rnag\", \"wylie_variants\": [\"rnag\"], \"tenses\": null, \"sanskrit\": \"pūya; {LC}pūti; {LC}kāla; {LC}dhyāma; {LC}pūra\", \"hopkins_english\": \"pus\", \"hgm_gloss\": [\"blood and pus\", \"pus\", \"blood\", \"pus?\"], \"hgm_evidence\": {\"tier\": \"glossary\", \"source\": \"HTG2016\"}, \"status\": \"hgm-attested\", \"pronunciation\": \"nak\", \"acip\": \"RNAG\", \"corpus_occurrences\": {\"courses\": [\"AK\", \"C05\", \"C08\", \"C12\", \"C15\", \"C16\", \"C17\", \"C18\", \"EM\", \"ILL\", \"P5\", \"P7\", \"P9\", \"TCS02\", \"TCS09\"], \"n_segments\": 111}, \"hopkins_realigned\": \"uma-v26\", \"lc_merged\": \"lc-v27\"}"
+        },
+        {
+          "id": 23908,
+          "wylie": "rnag khrag",
+          "tibetan": "རྣག་ཁྲག",
+          "tibetan_source": null,
+          "acip": "RNAG KHRAG",
+          "pronunciation": "naktrak",
+          "pronunciation_source": null,
+          "sanskrit": "{LC}pūyaśoṇita",
+          "hopkins_english": null,
+          "hgm_gloss": "[\"pus and blood\", \"blood and pus\"]",
+          "tier": "glossary",
+          "hgm_source": "HTG2016",
+          "status": "hgm-attested (not in Great Dictionary)",
+          "tenses": null,
+          "flags": null,
+          "corpus_courses": "[\"AK\", \"C05\", \"C15\", \"C16\", \"C18\", \"EM\", \"ILL\", \"P5\", \"P7\", \"P9\", \"TCS02\", \"TCS09\"]",
+          "corpus_n_segments": 91,
+          "raw": "{\"tibetan\": \"རྣག་ཁྲག\", \"wylie\": \"rnag khrag\", \"wylie_variants\": [\"rnag khrag\"], \"tenses\": null, \"sanskrit\": \"{LC}pūyaśoṇita\", \"hopkins_english\": null, \"hgm_gloss\": [\"pus and blood\", \"blood and pus\"], \"hgm_evidence\": {\"tier\": \"glossary\", \"source\": \"HTG2016\"}, \"status\": \"hgm-attested (not in Great Dictionary)\", \"pronunciation\": \"naktrak\", \"acip\": \"RNAG KHRAG\", \"corpus_occurrences\": {\"courses\": [\"AK\", \"C05\", \"C15\", \"C16\", \"C18\", \"EM\", \"ILL\", \"P5\", \"P7\", \"P9\", \"TCS02\", \"TCS09\"], \"n_segments\": 91}, \"lc_merged\": \"lc-v27\"}"
+        }
+      ]
+    }
+  ],
+  "master": {
+    "path": "/Users/adamderickandrade/Desktop/HGM DICTIONARY - TRANSLATION APP/Handoff/release/hgm_dictionary_v27_2.json.gz",
+    "bytes": 13393560,
+    "sha256": "3a99603cd9428f0d04e67c7d2790cc093f272162e7bf6278906a4b635f962253",
+    "full_exact_records": [
+      {
+        "tibetan": "ཁྲག",
+        "wylie": "khrag",
+        "wylie_variants": [
+          "khrag"
+        ],
+        "tenses": null,
+        "sanskrit": "{LCh,C}rudhira; {LC}aṅgaja; {LC}asra; {LC}kīlāla; {LC}rakta; {LC}lohita; {LC}śoṇita; {LC}asṛk; {LC}ārttava; {LC}kṣataja; {LC}rattka??",
+        "hopkins_english": "blood",
+        "hgm_gloss": [
+          "blood",
+          "pus"
+        ],
+        "hgm_evidence": {
+          "tier": "glossary",
+          "source": "HTG2016"
+        },
+        "status": "hgm-attested",
+        "pronunciation": "trak",
+        "acip": "KHRAG",
+        "corpus_occurrences": {
+          "courses": [
+            "AK",
+            "C01",
+            "C05",
+            "C07",
+            "C08",
+            "C11",
+            "C12",
+            "C13",
+            "C15",
+            "C16",
+            "C17",
+            "C18",
+            "EM",
+            "GIE",
+            "ILL",
+            "MB2",
+            "P5",
+            "P7",
+            "P9",
+            "SOS",
+            "SPF",
+            "Sunlight",
+            "TCS02",
+            "TCS03",
+            "TCS04Initiation",
+            "TCS04Mantras",
+            "TCS04PrayerBook",
+            "TCS05",
+            "TCS06",
+            "TCS07",
+            "TCS08NaropaTrials1_12",
+            "TCS08PabongkaSadhana",
+            "TCS09",
+            "TCS10",
+            "TCS11",
+            "TCS13",
+            "TCS14",
+            "TCS15",
+            "TCS16KaliWang",
+            "TCS16Reading",
+            "TCS17",
+            "TCS18Commentary"
+          ],
+          "n_segments": 257
+        },
+        "lc_merged": "lc-v27"
+      },
+      {
+        "tibetan": "རྣག",
+        "wylie": "rnag",
+        "wylie_variants": [
+          "rnag"
+        ],
+        "tenses": null,
+        "sanskrit": "pūya; {LC}pūti; {LC}kāla; {LC}dhyāma; {LC}pūra",
+        "hopkins_english": "pus",
+        "hgm_gloss": [
+          "blood and pus",
+          "pus",
+          "blood",
+          "pus?"
+        ],
+        "hgm_evidence": {
+          "tier": "glossary",
+          "source": "HTG2016"
+        },
+        "status": "hgm-attested",
+        "pronunciation": "nak",
+        "acip": "RNAG",
+        "corpus_occurrences": {
+          "courses": [
+            "AK",
+            "C05",
+            "C08",
+            "C12",
+            "C15",
+            "C16",
+            "C17",
+            "C18",
+            "EM",
+            "ILL",
+            "P5",
+            "P7",
+            "P9",
+            "TCS02",
+            "TCS09"
+          ],
+          "n_segments": 111
+        },
+        "hopkins_realigned": "uma-v26",
+        "lc_merged": "lc-v27"
+      },
+      {
+        "tibetan": "རྣག་ཁྲག",
+        "wylie": "rnag khrag",
+        "wylie_variants": [
+          "rnag khrag"
+        ],
+        "tenses": null,
+        "sanskrit": "{LC}pūyaśoṇita",
+        "hopkins_english": null,
+        "hgm_gloss": [
+          "pus and blood",
+          "blood and pus"
+        ],
+        "hgm_evidence": {
+          "tier": "glossary",
+          "source": "HTG2016"
+        },
+        "status": "hgm-attested (not in Great Dictionary)",
+        "pronunciation": "naktrak",
+        "acip": "RNAG KHRAG",
+        "corpus_occurrences": {
+          "courses": [
+            "AK",
+            "C05",
+            "C15",
+            "C16",
+            "C18",
+            "EM",
+            "ILL",
+            "P5",
+            "P7",
+            "P9",
+            "TCS02",
+            "TCS09"
+          ],
+          "n_segments": 91
+        },
+        "lc_merged": "lc-v27"
+      }
+    ]
+  },
+  "ruling": {
+    "original_path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-262-264/root-member-block-ruling.md",
+    "saved_path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-262-264/reconciled/263/correction-round1/root-member-block-ruling.md",
+    "bytes": 2038,
+    "sha256": "084487edc9c2b4795a85cdf60f6a16331ca02cb1f19a0164cfecabd74002d451"
+  },
+  "semantic_judgment": "rnag is pus and khrag is blood in this locally reversed English compound. Both are unique tighter constituents inside the shared parent; restore both as contiguous d7 siblings. Positive HTG2016 records corroborate actual source judgment, not automatic approval."
+}

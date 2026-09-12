@@ -1,0 +1,12 @@
+"""Layer query_only onto the unchanged supplied read-only canonical wrapper."""
+import pathlib,runpy,sqlite3
+original_connect=sqlite3.connect
+
+def query_only_connect(*args,**kwargs):
+    connection=original_connect(*args,**kwargs)
+    connection.execute('PRAGMA query_only=ON')
+    assert connection.execute('PRAGMA query_only').fetchone()[0]==1
+    return connection
+sqlite3.connect=query_only_connect
+wrapper=pathlib.Path(__file__).resolve().parents[3]/'run_generator_readonly.py'
+runpy.run_path(str(wrapper),run_name='__main__')

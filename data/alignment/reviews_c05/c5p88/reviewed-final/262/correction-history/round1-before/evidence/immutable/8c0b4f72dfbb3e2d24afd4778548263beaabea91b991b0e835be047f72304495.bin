@@ -1,0 +1,31 @@
+import json,pathlib,re
+BASE=pathlib.Path(__file__).resolve().parent.parent
+E=json.loads((BASE/'262/original-evidence.json').read_text())
+# Records are tib, eng, depth, explicitly intended English occurrence (1-based).
+DATA={262:[
+('gnyis pa','secondly',5,1),('rang lugs','own position',5,1),('bzhag pa','establish',5,1),
+('brlan','wet',5,1),('zhing','and',6,3),('gsher ba','flowing',5,1),('chu','water',5,1),('phor pa','glass',5,1),('gang','filled with',5,1),
+('las can','with their own karma',5,1),('lha','pleasure being',5,1),('mi','human',5,1),('yi dvags','craving spirit',5,1),('gsum','three',5,1),('cig car du','together',5,1),('bltas pa','look upon',5,1),
+("de'i tshe",'at this point',3,1),('chu','water',5,2),('phor pa','glass',5,2),('dngos po gsum gyi gzhi mthun pa','one thing which is simultaneously three different objects',3,1),('ma','not',6,1),
+("de'i tshe",'in this situation',3,1),('tshad','valid perceptions',5,1),('mtshungs','identical',5,1),('gsum','three',5,3),('mi','Neither',6,1),('dgos','necessary',5,1),
+('brlan','wet',5,2),('zhing','and',6,4),('gsher ba','flowing',5,2),('chu','water',5,3),('phor pa','glass',5,3),('gang po','full',5,1),('cha shas','distinct parts',5,1),('gsum','three',5,4),('ldan','with',5,3),('skye ba','occurs',5,1)],
+263:[
+('yang','though',6,1),('dang por','first',5,1),('grub','started',5,1),('nas','from',6,1),('cha shas','parts',5,1),('gsum','three',5,1),('ldan','with',5,1),('grub','came',5,1),
+('mthar ma zhig gi bar du','until it eventually ends',3,1),('gnas pa','stay',5,1),('ma','not',6,1),
+('brlan','wet',5,1),('zhing','and',6,1),('gsher ba','flowing',5,1),('chu','water',5,3),('phor pa','glass',5,3),('gang po','filled with',5,1),('cha shas','parts',5,2),('gcig','one',5,1),('nyer len','material cause',5,1),
+('yi dvags','craving spirit',5,1),('las','karma',5,1),('lhan cig byed rkyen','contributing factor',5,1),('byas pa','provides',5,2),('brten nas','based on',3,1),('cha shas','part',5,1),('gcig','one',5,2),("rigs 'dra",'continuation',5,1),('phyi ma','later',5,1),('rnag khrag','blood and pus',5,1),('rnag','pus',7,1),('khrag','blood',7,1),('skye ba','starts being',5,1)],
+264:[
+('cha shas','part',5,1),('gcig','Another',5,1),('nyer len','material cause',5,1),("mi'i",'human',5,1),('las','karma',5,1),('lhan cig byed rkyen','contributing factor',5,1),('byas pa','provides',5,2),('brten nas','based on',3,1),('cha shas','part',5,2),('gcig','one',5,1),("rigs 'dra",'continuation',5,1),('phyi ma','later',5,1),('chur','water',5,3),('skye ba','starts being',5,1)]}
+NOTES={262:"Provisional machine alignment by Codex, English-first proposal; no human or semantic approval. The common-locus expression is a complete phrase recast, not a dictionary equivalent for gzhi mthun pa. rang licenses own in own position; our remains unwrapped. cig car du owns together; supplied sit down stays unwrapped despite broader glossary attestations. The single skye ba is placed on the first occurs, as determined by the forward cursor; the second occurs is an English reprise and remains unwrapped. The second gang po lacks a separate fullness word and is omitted; nges par is distributed in the necessity construction and is omitted, not nulled. Unselected case, copular and linking material is omitted rather than asserted absent.",263:"Provisional machine alignment by Codex, English-first proposal; no human or semantic approval. The first three-part clause supplies lexical parts, three, with and came; the second cha shas gsum ldan du is distributed in they stay with the glass of water and is omitted, not nulled. mthar ma zhig gi bar du is a complete temporal phrase whose negative boundary is recast as until it eventually ends. chu/phor pa select the third water/glass, the wet-and-flowing material, not earlier supplied referents. The one byas pa selects the second provides, after craving spirit, while its shared predication also licenses the earlier English provides. rnag khrag is blood and pus with reversed, strictly smaller lexical members. Other pronominal, case and connective contributions remain omitted where distributed.",264:"Provisional machine alignment by Codex, English-first proposal; no human or semantic approval. Initial gcig is the contrastive Another within the continuing list of three parts; the later gcig is one. mi'i owns human with its genitive construction distributed in of the human; no detachable suffix is claimed. chur is the inflected water predicate at the third English water, after starts being; the first two glass of water references are translator expansions of de'i and remain unwrapped. The single byas pa selects the second provides following human, with shared predication also supplying the first provides. Other pronominal, case and connective contributions are omitted, not falsely nulled."}
+for seq,rows in DATA.items():
+ out=BASE/str(seq);out.mkdir(exist_ok=True);src=next(x for x in E['rows'] if x['seq']==seq);spans=[];occ=[];tc=0;parent=None
+ for n,(t,en,d,num) in enumerate(rows,1):
+  s={'id':f'w{n}','d':d,'tib':t,'eng':en};spans.append(s)
+  ep=[m.start() for m in re.finditer(re.escape(en),src['english']) if (m.start()==0 or not src['english'][m.start()-1].isalnum()) and (m.end()==len(src['english']) or not src['english'][m.end()].isalnum())]
+  a=ep[num-1]
+  if d==7: b=src['wylie'].index(t,*parent)
+  else:b=src['wylie'].index(t,tc);tc=b+len(t);parent=(b,tc)
+  occ.append({'id':s['id'],'tib':[b,b+len(t)],'eng':[a,a+len(en)],'intended_english_occurrence':num,'english_occurrences':ep})
+ order=[r['id'] for r in sorted([o for o in occ if next(s for s in spans if s['id']==o['id'])['d']!=7],key=lambda x:x['eng'][0])]
+ spec={'course':'C05','segments':[{'seq':seq,'title':{262:'our position on three perceptions',263:'causes of blood and pus',264:'causes of water'}[seq],'spans':spans,'eng_order':order,'note':NOTES[seq]}]}
+ (out/'spec.json').write_text(json.dumps(spec,ensure_ascii=False,indent=2)+'\n');(out/'occurrences.json').write_text(json.dumps({'offset_unit':'Unicode code points; half-open','source':src,'spans':occ},ensure_ascii=False,indent=2)+'\n');(out/'errata.json').write_text('[]\n')

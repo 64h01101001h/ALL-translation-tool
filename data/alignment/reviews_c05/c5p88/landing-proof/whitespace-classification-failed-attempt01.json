@@ -1,0 +1,11 @@
+{
+  "timestamp": "2026-09-12T20:39:18.232332+00:00",
+  "status": "FAILED procedural evidence classification, not source discrepancy",
+  "finding": "New root helper diff had one empty context line with trailing whitespace, outside semantic-review freeze; strict classifier rejected it instead of granting a broad allowance.",
+  "raw_log": {
+    "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-262-264/landing/whitespace-classification-preflight.stdout",
+    "bytes": 40716758,
+    "sha256": "bbcac25dea39cbc4e3be82a1fe458618ac7b2469e593af6d48876c70d4a41d3a"
+  },
+  "resolution": "Complete original diff stays external and is hash-pinned; both full helper files remain banked. Only redundant newly created uncommitted copy removed. Earlier copy manifest and interface proof preserved externally. No semantic/source/test changes."
+}

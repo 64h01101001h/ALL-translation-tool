@@ -1,0 +1,145 @@
+from pathlib import Path
+import json,hashlib,sqlite3,sys,os,io,contextlib,importlib.util,subprocess,gzip,re,html,difflib,datetime
+R=Path(__file__).resolve().parent; B=R.parent; WT=B.parent.parent/'campaign-worktree'
+HEAD='f955740d862a449ee18ca93e473fffc07372d9ec'
+BASE='235bd2ebabc2278a91a8c06c95f8371f2e5a77fe'
+H=lambda b:hashlib.sha256(b).hexdigest()
+def save(n,d):
+ p=R/n;p.parent.mkdir(parents=True,exist_ok=True);p.write_text(json.dumps(d,ensure_ascii=False,indent=2)+'\n')
+def stamp(p):
+ p=Path(p);b=p.read_bytes();return dict(path=str(p),bytes=len(b),sha256=H(b))
+def git(p,head=HEAD):return subprocess.check_output(['git','show',head+':'+p],cwd=WT)
+# Guard all SQLite connects used by this reader and actual canonical generator.
+connect=sqlite3.connect
+connections=[]
+def readonly(database,*args,**kw):
+ p=str(database)
+ if not p.startswith('file:'):p=Path(p).resolve().as_uri()+'?mode=ro'
+ assert 'mode=ro' in p
+ kw['uri']=True;c=connect(p,*args,**kw);c.execute('PRAGMA query_only=ON')
+ assert c.execute('PRAGMA query_only').fetchone()[0]==1
+ connections.append(p);return c
+sqlite3.connect=readonly
+spine=WT/'build/hgm_spine_v27_2.db'
+db=readonly(spine);db.row_factory=sqlite3.Row
+sources=[spine,WT/'tools/gen_alignment_page.py',WT/'tools/build_alignment_layer.py']
+reopen=json.loads((B/'reconciled/262/evidence/reopened-originals.json').read_text())
+sources += [Path(x['path']) for x in reopen['source_files']]
+sources += [Path(x['source']['source_path']) for x in reopen['physical_original_matches']]
+sources=list(dict.fromkeys(sources));before=[stamp(p) for p in sources]
+for p in ['tools/gen_alignment_page.py','tools/build_alignment_layer.py']:
+ assert (WT/p).read_bytes()==git(p)
+specmod=importlib.util.spec_from_file_location('independent_c05_generator',WT/'tools/gen_alignment_page.py');G=importlib.util.module_from_spec(specmod);specmod.loader.exec_module(G)
+rows={r['seq']:dict(r) for r in db.execute("select * from corpus_segments where course='C05' and seq between 242 and 313 order by seq")}
+save('evidence/current-context-242-313.json',list(rows.values()))
+queryproof=[]
+for n,q in enumerate(reopen['queries']):
+ assert q['sql'].lstrip().lower().startswith('select')
+ actual=[dict(r) for r in db.execute(q['sql'],q['parameters'])]
+ assert actual==q['full_rows'],(n,q['origin'])
+ assert len(actual)==q['count']
+ queryproof.append(dict(index=n,origin=q['origin'],sql=q['sql'],parameters=q['parameters'],count=len(actual),full_rows=actual))
+save('evidence/reopened-query-results.json',queryproof)
+masterpath=Path(reopen['source_files'][1]['path']);master=json.loads(gzip.decompress(masterpath.read_bytes()))
+entries=master['entries'] if isinstance(master,dict) else master
+masterproof=[]
+for q in reopen['master_checks']:
+ actual=[e for e in entries if e.get('wylie')==q['wylie']]
+ assert actual==q['full_original_master_records'],q['wylie']
+ raw=[json.loads(r['raw']) for r in db.execute('select * from entries where wylie=?',(q['wylie'],))]
+ assert actual==raw,q['wylie']
+ masterproof.append(dict(wylie=q['wylie'],records=actual))
+save('evidence/master-reopened.json',masterproof)
+physical=[]
+for x in reopen['physical_original_matches']:
+ p=Path(x['source']['source_path']);raw=p.read_bytes();assert H(raw)==x['source']['sha256'];lo,hi=x['original_byte_range'];part=raw[lo:hi]
+ assert H(part)==x['original_excerpt_sha256']
+ assert part.decode('utf8')==x['complete_original_excerpt_utf8']
+ norm=re.sub(rb'\s+',b' ',raw).strip();needle=re.sub(rb'\s+',b' ',x['full_selected_text'].encode()).strip()
+ assert norm.count(needle)==x['normalized_occurrence_count'] and norm.find(needle)==x['normalized_offset']
+ assert re.sub(rb'\s+',b' ',part).strip()==needle
+ physical.append(dict(source=stamp(p),course=x['course'],seq=x['seq'],field=x['field'],original_byte_range=[lo,hi],original_excerpt_utf8=part.decode('utf8'),normalized_count=norm.count(needle),normalized_offset=norm.find(needle)))
+save('evidence/physical-reopened.json',physical)
+allres=[];originalres={};generation=[];occurrences=[]
+def hits(text,piece,sub=False):
+ if piece is None:return []
+ o=[];at=0
+ while True:
+  at=G.find_word(text,piece,at,subword=sub)
+  if at<0:return o
+  o.append([at,at+len(piece)]);at+=1
+def reproduce(p,tag):
+ spec=json.loads(p.read_text());s=spec['segments'][0];seq=s['seq'];source=rows[seq]
+ out=io.StringIO();err=io.StringIO();stdin=sys.stdin
+ try:
+  sys.stdin=io.StringIO(p.read_text())
+  with contextlib.redirect_stdout(out),contextlib.redirect_stderr(err):G.main()
+  code=0
+ except SystemExit as e:code=e.code
+ finally:sys.stdin=stdin
+ outb=out.getvalue().encode();errb=err.getvalue().encode();directory=R/'reproduction'/tag;directory.mkdir(parents=True,exist_ok=True)
+ (directory/'generator.stdout').write_bytes(outb);(directory/'generator.stderr').write_bytes(errb);(directory/'generator.exit').write_text(str(code)+'\n')
+ assert code==0 and not errb,(p,code,errb)
+ assert outb==(p.parent/'body.html').read_bytes(),p
+ spans=s['spans'];t=G.resolve(source['wylie'],spans,'tib',seq)
+ byid={x['id']:x for x in spans};order=G.with_members(spans,[byid[i] for i in s['eng_order']],source['english'])
+ e=G.resolve(source['english'],order,'eng',seq)
+ resolved=[];parent=None;cur=0
+ for sp in spans:
+  sid=sp['id'];tr=list(t[sid]);er=list(e[sid]) if sid in e else None
+  assert source['wylie'][slice(*tr)]==sp['tib']
+  assert (source['english'][slice(*er)] if er else None)==sp['eng']
+  if sp['d']==7:
+   assert parent and parent['d']==5
+   ptr=t[parent['id']];per=e[parent['id']]
+   assert ptr[0]<=tr[0]<tr[1]<=ptr[1] and tr!=list(ptr)
+   assert er and per[0]<=er[0]<er[1]<=per[1] and er!=list(per)
+   assert source['wylie'][slice(*ptr)].count(sp['tib'])==1
+   assert source['english'][slice(*per)].count(sp['eng'])==1
+  else:
+   assert tr[0]>=cur;cur=tr[1];parent=sp
+  r=dict(seq=seq,id=sid,d=sp['d'],tib=sp['tib'],eng=sp['eng'],tib_range=tr,eng_range=er);resolved.append(r)
+  occurrences.append(dict(tag=tag,**r,tib_hits=hits(source['wylie'],sp['tib'],sp.get('subword',False) or sp['d']==7),eng_hits=hits(source['english'],sp['eng'],sp.get('subword',False) or sp['d']==7)))
+ # Recover each full column, excluding only generator lab/container separators and null annotation.
+ for side,field in [('tib','wylie'),('eng','english')]:
+  block=out.getvalue().split('<div class="'+side+'"><div class="lab">',1)[1].split('</div>',1)[1].split('\n</div>',1)[0]
+  block=re.sub(r'<span class="nul">.*?</span>','',block,flags=re.S)
+  plain=html.unescape(re.sub(r'<[^>]*>','',block)).removeprefix('\n')
+  assert plain==source[field],(tag,side,repr(plain[:20]))
+ record=dict(tag=tag,seq=seq,span_count=len(spans),null_count=sum(x['eng'] is None for x in spans),word_pair_count=sum(x['d']==5 and x['eng'] is not None for x in spans),spec_sha256=H(p.read_bytes()),spec_bytes=p.stat().st_size,body_sha256=H(outb),body_bytes=len(outb),generator_exit=code,stderr_bytes=len(errb),source_roundtrip=True)
+ generation.append(record);return resolved
+for angle in ['tibetan','english','reconciled']:
+ for seq in [262,263,264]:
+  r=reproduce(B/f'{angle}/{seq}/spec.json',f'{angle}-{seq}')
+  if angle=='reconciled':allres+=r
+  else:originalres[angle,seq]=r
+for seq in [262,263,264]:
+ d=json.loads((B/f'reconciled/{seq}/decisions.json').read_text())
+ assert d['source']==rows[seq]
+ final=[r for r in allres if r['seq']==seq]
+ assert len(final)==len(d['final_ordered_tuples'])
+ spec=json.loads((B/f'reconciled/{seq}/spec.json').read_text())['segments'][0]
+ for sp,r,x in zip(spec['spans'],final,d['final_ordered_tuples']):
+  assert sp==x['span'] and list(sp)==x['field_presence']
+  assert r['tib_range']==x['tib_range'] and r['eng_range']==x['eng_range']
+  assert hits(rows[seq]['wylie'],sp['tib'])==x['all_tib_word_occurrences']
+  assert hits(rows[seq]['english'],sp['eng'])==x['all_eng_word_occurrences']
+ for angle in ['tibetan','english']:
+  old=json.loads((B/f'{angle}/{seq}/spec.json').read_text())['segments'][0]['spans']
+  disp=[x for x in d['original_dispositions'] if x['angle']==angle]
+  assert len(old)==len(disp)
+  for sp,r,x in zip(old,originalres[angle,seq],disp):
+   assert sp==x['original_span'] and list(sp)==x['field_presence'] and r['tib_range']==x['tib_range'] and r['eng_range']==x['eng_range']
+ # gaps independently recomputed
+ for side,field in [('tib','wylie'),('eng','english')]:
+  ranges=sorted(r[side+'_range'] for r in final if r[side+'_range'] is not None and r['d']!=7);cur=0;gaps=[]
+  for lo,hi in ranges:
+   if lo>cur:gaps.append(dict(range=[cur,lo],text=rows[seq][field][cur:lo]))
+   cur=hi
+  if cur<len(rows[seq][field]):gaps.append(dict(range=[cur,len(rows[seq][field])],text=rows[seq][field][cur:]))
+  assert gaps==d['unwrapped_'+('tibetan' if side=='tib' else 'english')]
+save('resolved-spans.json',allres);save('evidence/all-original-resolved-spans.json',[r for v in originalres.values() for r in v]);save('evidence/all-occurrences.json',occurrences);save('generation-proof.json',generation)
+after=[stamp(p) for p in sources];assert before==after
+save('source-state-proof.json',dict(before=before,after=after,identical=True,connections=connections,SQLite='URI mode=ro; query_only=ON',governing_head=HEAD,generated_baseline=BASE))
+save('independent-check-summary.json',dict(status='PASS',queries=len(queryproof),master_records=len(masterproof),physical_extents=len(physical),generations=len(generation),final_spans=len(allres),original_spans=sum(map(len,originalres.values())),nulls=sum(r['eng'] is None for r in allres),word_pairs=sum(r['d']==5 and r['eng'] is not None for r in allres),original_dispositions_exact=True,all_occurrence_lists_exact=True,full_source_columns_exact=True))
+print((R/'independent-check-summary.json').read_text())

@@ -1,0 +1,48 @@
+from pathlib import Path
+import json,hashlib,subprocess,sqlite3,datetime,os
+R=Path(__file__).resolve().parent;B=R.parent;WT=B.parent.parent/'campaign-worktree';HEAD='f955740d862a449ee18ca93e473fffc07372d9ec'
+H=lambda b:hashlib.sha256(b).hexdigest()
+def save(n,d):(R/n).write_text(json.dumps(d,ensure_ascii=False,indent=2)+'\n')
+manifest=json.loads((R/'original-to-copy-manifest.json').read_text())
+p=B/'root-semantic-additional-evidence-verification.json'
+if not any(m['original']==str(p) for m in manifest):
+ raw=p.read_bytes();dest=R/'proposal-inputs'/p.name;dest.write_bytes(raw);manifest.append(dict(original=str(p),copy=str(dest.relative_to(R)),sha256=H(raw),bytes=len(raw)))
+save('original-to-copy-manifest.json',manifest)
+generation=json.loads((R/'generation-proof.json').read_text());fields=['seq','span_count','null_count','word_pair_count','spec_sha256','spec_bytes','body_sha256','body_bytes','generator_exit']
+segments=[{k:r[k] for k in fields} for r in generation if r['tag'].startswith('reconciled-')]
+save('review.json',dict(verdict='APPROVE',open_findings=[],segments=segments,total_spans=sum(x['span_count'] for x in segments),total_nulls=sum(x['null_count'] for x in segments),total_word_pairs=sum(x['word_pair_count'] for x in segments)))
+save('span-head-allow-needed.json',{});save('bank-ready-errata.json',[])
+# Counts/quotes for all five refutation grounds are sourced independently here.
+db=sqlite3.connect((WT/'build/hgm_spine_v27_2.db').resolve().as_uri()+'?mode=ro',uri=True);db.execute('PRAGMA query_only=ON');db.row_factory=sqlite3.Row
+row=dict(db.execute("select * from corpus_segments where course='C05' and seq=262").fetchone())
+register=json.loads(subprocess.check_output(['git','show',HEAD+':docs/errata_register.json'],cwd=WT))
+records=register if isinstance(register,list) else register['items']
+e40=[r for r in records if r.get('item_id')=='E-040'];assert len(e40)==1
+old=json.loads((B/'root-registered-backtick-class.json').read_text());assert old['original_records']==e40
+counts={}
+for name,sql,params in [('tshad_mtshungs_corpus','select count(*) from corpus_segments where wylie like ?',['%tshad mtshungs%']),('exact_compound_entries','select count(*) from entries where wylie=?',['tshad mtshungs']),('broader_compound_entries','select count(*) from entries where wylie like ?',['tshad%mtshungs%']),('tshad_entries','select count(*) from entries where wylie=?',['tshad']),('mtshungs_entries','select count(*) from entries where wylie=?',['mtshungs'])]:counts[name]=db.execute(sql,params).fetchone()[0]
+assert list(counts.values())==[15,0,0,1,1]
+witness=[dict(db.execute('select * from corpus_segments where course=? and seq=?',x).fetchone()) for x in [('C15',407),('C16',838),('C18',1121)]]
+assert [len(x['english']) for x in witness]==[826,590,826]
+assert all(x['english'].startswith(row['english']) for x in witness)
+refutations=[dict(seq=262,found='`',refuted=True,grounds=dict(a='Literal leading backtick in target ACIP and Wylie; exact physical original extent confirms it.',b='C15:407/C16:838/C18:1121 preserve the marker; no publication independence established.',c='E-040 is already a resolved NOT_AN_ERRATUM structural-opening class, exact original record verified.',d='A new own-position section begins here; marker removal is not a justified correction.',e='One target ACIP marker, one target Wylie marker; original broad111 count remains historical and is not a newly adopted premise.'),counts_rechecked={'target_acip':row['acip'].count('`'),'target_wylie':row['wylie'].count('`')},registered_record=e40[0]),dict(seq=262,found='TSAD MTSUNGS',refuted=True,grounds=dict(a='Exact target ACIP TSAD MTSUNGS and Wylie tshad mtshungs are physically preserved.',b='Current parallels preserve the phrase; C05:286/312/313 support the modal distinction; no independence inference.',c='No registered spelling defect is asserted; existing classes do not require filing this.',d='Both constituents have positive glossary support. Adding MA is not needed to make the source defensible.',e='All exact/broad/constituent query counts independently repeated.'),counts_rechecked=counts),dict(seq=262,found=row['english'],refuted=True,grounds=dict(a='The complete target English is590 characters; the translator-note suffix is not in this field.',b='C15/C18 share all590 characters then236 more; C16 has the590-character field. Full physical extents verify these differences.',c='A complete590-character target has no1500 cap or following-heading signature; witness length alone does not establish such a class.',d='The C05 explanation is complete and defensible without importing the other versions\' translator note.',e='Original lengths590/826/826 and the236-character suffix independently measured.'),counts_rechecked={'C05':len(row['english']),'C15':len(witness[0]['english']),'C16':len(witness[1]['english']),'C18':len(witness[2]['english']),'additional_suffix':len(witness[0]['english'][len(row['english']):])},exact_witness_suffix=witness[0]['english'][len(row['english']):])]
+save('errata-refutations.json',refutations)
+# All108 decisions explicitly inherit the bounded independent judgments in review.md, not a fidelity-derived verdict.
+spans=json.loads((R/'resolved-spans.json').read_text())
+save('independent-adjudications.json',[dict(seq=r['seq'],id=r['id'],verdict='SOUND',scope='This source occurrence only; PROVISIONAL machine correspondence judgment',basis='Whole-source, lexical, grammatical, repeated-occurrence and omission analysis in review.md; ordered canonical identity is separately in resolved-spans.json') for r in spans])
+save('reviewer-invocation.json',dict(independent_helper=str(R/'independent-check.py.txt'),argv=['python3',str(R/'independent-check.py.txt')],cwd=str(B.parent.parent),env={'PYTHONDONTWRITEBYTECODE':'1'},canonical_execution='Imports exact governing gen_alignment_page.py bytes, calls its actual main separately with each original spec on stdin and captures stdout/stderr; normal return records exit0. SQLite connect guard enforces mode=ro and query_only.',generator_sha256=H((WT/'tools/gen_alignment_page.py').read_bytes()),historical_replays='Two additional subprocess runs use the unchanged original English query_only wrapper, documented in historical-replay-proof.json'))
+allowed={'.json','.md','.html','.stderr','.stdout','.log','.txt','.bin','.exit'}
+for m in manifest:
+ p=R/m['copy'];raw=p.read_bytes();assert len(raw)==m['bytes'] and H(raw)==m['sha256'];assert p.suffix.lower() in allowed
+ if 'original_git_commit' in m:assert raw==subprocess.check_output(['git','show',m['original_git_commit']+':'+m['repository_relative_path']],cwd=WT)
+ else:assert raw==Path(m['original']).read_bytes()
+for r in segments:
+ for kind in ['spec','body']:
+  p=B/f'reconciled/{r["seq"]}/{"spec.json" if kind=="spec" else "body.html"}';raw=p.read_bytes();assert len(raw)==r[kind+'_bytes'] and H(raw)==r[kind+'_sha256']
+assert len(spans)==108 and all(list(s)==['seq','id','d','tib','eng','tib_range','eng_range'] for s in spans)
+files=[p for p in R.rglob('*') if p.is_file() and p!=R/'freeze.json'];assert all(p.suffix.lower() in allowed for p in files)
+save('final-preflight.json',dict(status='PASS',utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),manifest_records=len(manifest),historical_git_pins=sum('original_git_commit' in x for x in manifest),all_manifest_bytes_hashes_and_git_objects_exact=True,all_manifest_extensions_landing_supported=True,current_final_spec_body_hashes_exact=True,ordered_seven_key_tuples=108,open_findings=0,top_level_freeze_exclusion_only=True))
+files=[p for p in R.rglob('*') if p.is_file() and p!=R/'freeze.json']
+# Do not redirect this helper's still-open stdout/stderr into this tree: freeze hashes only completed files.
+save('freeze.json',dict(status='FROZEN independent review; SPEC APPROVE / QUALITY APPROVE',utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),excluded_only=str(R/'freeze.json'),files=[dict(path=str(p.relative_to(R)),bytes=p.stat().st_size,sha256=H(p.read_bytes())) for p in sorted(files)]))
+print(json.dumps(dict(verdict='APPROVE',spans=108,nulls=11,word_pairs=75,manifest_records=len(manifest),freeze_files=len(files),report_sha256=H((R/'review.md').read_bytes()),review_sha256=H((R/'review.json').read_bytes())),indent=2))

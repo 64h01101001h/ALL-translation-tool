@@ -1,0 +1,515 @@
+--- /Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-262-264/reconciled/262/correction-history/round1-before/author.py
++++ /Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-262-264/reconciled/262/author.py
+@@ -3,7 +3,7 @@
+ def dump(p,x):p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+ notes={
+ 262:"PROVISIONAL machine alignment by Codex, reconciliation. This reader reused unrelated-batch context, independently reopened the current evidence, and did not author either original angle. rang lugs owns the narrower own position; HTG2016 explicitly also attests our own position and establish our own position. The boundary choice leaves contextual our outside and does not deny that positive evidence. bzhag pa/establish follows the actual establishment clause, not its unrelated auto-aligned nothing but gloss. las/karma and can/with retain separate exponents; the original las can glossary phrase with their own karma is acknowledged without capturing their own. cig car du owns together; broader sit down together is attested but the narrow temporal/grouping force is selected here. dngos po gsum gyi gzhi mthun pa owns the complete d3 one thing which is simultaneously three different objects; outer ma/not and yin pa/is preserve its negation. Both de'i tshe expressions are d3 temporal noun phrases. tshad/valid perceptions, mtshungs/identical and gsum/three remain distinct; no ma is inserted into TSAD MTSUNGS. nges par is distributed with dgos in necessary and omitted, not nulled. The second gang po has no separate fullness exponent; the first gang owns filled and the third fullness occurrence owns full. Case nulls name the absence of a separate case word. The one skye ba owns the first occurs, selected for the event of the glass arising; the second occurs is an English reprise. Source backtick and all original wording remain intact.",
+-263:"PROVISIONAL machine alignment by Codex, reconciliation. The two grub occurrences own started and came separately. In the temporal ma zhig ... bar du construction, ma has no separate negative word: its not-yet boundary force is fused into until ... ends. This explicit grammatical-fusion null is distinct from matrix ma/not and yin/is. mthar/eventually, zhig/ends and bar du/until retain the useful temporal atoms, excluding the supplied subject it; zhig's unrelated auto-aligned three principal paths gloss is not used. The second cha shas gsum is resumed pronominally in they and omitted as distributed content; second ldan/with retains the possession relation despite reversal of English subject orientation. cing/or coordinates the alternatives under negation. The full source chu/phor pa selects the third English water/glass in the wet-and-flowing material description. The lone byas pa owns the second provides beside contributing factor; the first provides restates the shared causal predication. brten nas is the established based on unit; both of these is explanatory expansion of the two causes. rnag khrag owns blood and pus with its immediately following unique tighter rnag/pus member. A second khrag/blood d7 is omitted under the immediate-parent rule, though its meaning is covered by the compound and positively attested. Both member entries are glossary HTG2016; the original English evidence's corpus-mined characterization is incorrect and remains preserved only as original wording. Resultative tu has no separate particle beyond starts being. All source forms remain exact.",
++263:"PROVISIONAL machine alignment by Codex, reconciliation. The two grub occurrences own started and came separately. In the temporal ma zhig ... bar du construction, ma has no separate negative word: its not-yet boundary force is fused into until ... ends. This explicit grammatical-fusion null is distinct from matrix ma/not and yin/is. mthar/eventually, zhig/ends and bar du/until retain the useful temporal atoms, excluding the supplied subject it; zhig's unrelated auto-aligned three principal paths gloss is not used. The second cha shas gsum is resumed pronominally in they and omitted as distributed content; second ldan/with retains the possession relation despite reversal of English subject orientation. cing/or coordinates the alternatives under negation. The full source chu/phor pa selects the third English water/glass in the wet-and-flowing material description. The lone byas pa owns the second provides beside contributing factor; the first provides restates the shared causal predication. brten nas is the established based on unit; both of these is explanatory expansion of the two causes. rnag khrag owns blood and pus with a contiguous d7 member block: rnag/pus followed by khrag/blood in Tibetan order. Both are unique and strictly tighter inside that same parent; the canonical generator resolves their reversed English order. Correction round1 restores the second member after rejecting the earlier erroneous one-member interpretation. Both member entries are glossary HTG2016; the original English evidence's corpus-mined characterization is incorrect and remains preserved only as original wording. Resultative tu has no separate particle beyond starts being. All source forms remain exact.",
+ 264:"PROVISIONAL machine alignment by Codex, reconciliation. First gcig owns Another in the continuing three-part list; second gcig owns one. The sole byas pa owns the second provides beside the contributing factor, while the first provides repeats the shared predication and stays unwrapped. Whole inflected mi'i owns human, with its genitive relation expressed outside that lexical English word; no false genitive null or detached member is added. Whole chur owns the final water after starts being; its resultative grammar is carried by that predicate. The exact chur dictionary entry has no HGM gloss, which is not a claim of no English exponent; the actual source and water context license this provisional inflected occurrence. de'i references are expanded into the first two glass-of-water descriptions and omitted as distributed content. brten nas owns based on; both of these remains explanatory restatement of the preceding causes. Agent-case nulls assert no separate case word in the active syntax. Final gi owns of in continuation of one part; other English of words remain outside it. No source or master is changed."
+ }
+ for n in [262,263,264]:
+@@ -14,7 +14,7 @@
+   i=next(i for i,x in enumerate(s['spans']) if x['id']=='w23');s['spans'][i:i+2]=[{'id':'q1','d':3,'tib':'dngos po gsum gyi gzhi mthun pa','eng':'one thing which is simultaneously three different objects'}]
+   i=s['eng_order'].index('w24');assert s['eng_order'][i+1]=='w23';s['eng_order'][i:i+2]=['q1']
+  if n==263:
+-  i=next(i for i,x in enumerate(s['spans']) if x['id']=='w43');s['spans'].insert(i+1,{'id':'m1','d':7,'tib':'rnag','eng':'pus'})
++  i=next(i for i,x in enumerate(s['spans']) if x['id']=='w43');s['spans'][i+1:i+1]=[{'id':'m1','d':7,'tib':'rnag','eng':'pus'},{'id':'m2','d':7,'tib':'khrag','eng':'blood'}]
+  s['note']=notes[n];dump(D/str(n)/'spec.json',spec);dump(D/str(n)/'errata.json',[])
+ dump(D/'262/notes.json',notes)
+ print([(n,len(json.loads((D/str(n)/'spec.json').read_text())['segments'][0]['spans'])) for n in [262,263,264]])
+--- /Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-262-264/reconciled/262/correction-history/round1-before/batch-counts.json
++++ /Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-262-264/reconciled/262/batch-counts.json
+@@ -12,12 +12,12 @@
+   },
+   {
+     "seq": 263,
+-    "spans": 46,
++    "spans": 47,
+     "nulls": 6,
+     "d3": 0,
+     "d5": 30,
+     "d6": 15,
+-    "d7": 1,
++    "d7": 2,
+     "errata": 0,
+     "original_dispositions": 78
+   },
+--- /Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-262-264/reconciled/262/correction-history/round1-before/finalize.py
++++ /Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-262-264/reconciled/262/finalize.py
+@@ -62,7 +62,8 @@
+  'gi':'Of owns continuation of one part: the genitive after gcig relates that part to its continuation. Other of occurrences within English expanded referents are excluded.',
+  "rigs 'dra":'Continuation is the continuing series/type expression HGM18898. HGM25288 rigs \'dra phyi ma explicitly attests later continuation; retaining constituent continuation and later provides two defensible lexical exponents without inventing their English.',
+  'phyi ma':'Later is the temporal qualifier HGM11877, paired with continuation. Both source constituents are independently explicit, so the larger attested later-continuation unit need not replace them.',
+- 'rnag khrag':'Blood and pus is the exact reversed English rendering of the established compound HGM23908. The whole parent preserves and. Its one selected immediately following d7 member rnag/pus is unique and strictly tighter on both sides.',
++ 'rnag khrag':'Blood and pus is the exact reversed English rendering of the established compound HGM23908. The whole parent preserves and. Its contiguous d7 block contains rnag/pus and khrag/blood, each unique and strictly tighter on both sides. Tibetan child order is rnag then khrag; English child order is blood then pus, correctly reordered within this parent by the unchanged canonical generator.',
++ 'khrag':'Blood is the source-exact lexical member in blood and pus, supported by HGM1368 glossary HTG2016 blood/pus variants and the actual source compound. It follows rnag/pus in the same contiguous d7 block under rnag khrag. No flat span intervenes; both members are unique, strictly tighter and canonically resolved in crossing English order. The earlier structural rejection was false and is preserved only in correction history.',
+  'rnag':'Pus is the correctly selected lexical member in the reversed blood and pus compound. HGM10448 is glossary tier HTG2016 with blood and pus/pus/blood/pus? variants; this selected pus is supported. It is not corpus-mined, and reciprocal variants are not silently removed.',
+  "mi'i":'Human is the whole inflected source word, HGM24635 glossary human. Genitive grammar is expressed externally in of the human; a member \'i/of would lie outside this parent English range and is not added or falsely nulled.',
+  'chur':'Water is the final English water after starts being, owning the whole inflected resultative syllable. Earlier water mentions are expanded de\'i referents. Exact entry75845 has SQL NULL hgm_gloss/awaiting status, not proof of no English exponent; local source plus chu/water supports this provisional inflected match. Resultative r is not detached.'
+@@ -74,7 +75,7 @@
+  return reasons[t]
+ omissions={
+ 262:[('rang lugs; las can','our; their own','Wider our own position/with their own karma are real HTG2016 variants. Narrower boundaries isolate ownership/karma/possession without making contextual participants separate lexical exponents.'),('cig car du','sit down','Broader sit down together is positively attested; choose together for the simultaneous/grouping force in this occurrence.'),('nges par','necessity emphasis','Distributed with dgos in necessary; omitted with a reason rather than uncertainty-nulled.'),('repeated source descriptions','different types of beings; distinct; different; supplied framing','Numerals, named beings and parts are explicit; the surrounding typological expansions and some wider attested variants are left outside the narrower lexical atoms.'),('one skye ba','second occurs','Repeated English realization of the same event; first occurs is the semantic selection.'),('la; gyi; de; unselected copular/linking material','Here; Now suppose; the thing we define as; And when; extra articles/auxiliaries','Structural and resumptive functions are distributed in expanded prose; do not force atomic matches.')],
+-263:[('second cha shas gsum','they in they stay','The three parts are resumed pronominally; no separate parts/three tokens occur for that source occurrence. Omit distributed content rather than nulling it.'),('tsam; de/de\'i; unselected quotation-like/explanatory framing','time; the case that; What happens is that; expanded glass of water; both of these','Expansions and resumptions distribute their meaning; no invented full lexical descriptions or uncertainty nulls.'),('one byas pa','first provides','Single causal predicate repeated in English; select the second occurrence beside contributing factor.'),('temporal clause subject','it in until it eventually ends','No explicit Tibetan subject in selected temporal span. Flat atoms retain until/eventually/ends and a proven fused ma null without claiming this supplied subject.'),('khrag','blood within compound','Positive HGM1368 glossary HTG2016 blood/pus supports blood. The whole compound already owns it. Original English second d7 member would not immediately follow its d5 parent under the explicit requirement; omit that extra member while retaining the compound, rather than bank a structurally invalid member.'),('final dang; other unselected case/linking morphology','remaining connectives/tense framing','No independent separate atom justified in this selected row.')],
++263:[('second cha shas gsum','they in they stay','The three parts are resumed pronominally; no separate parts/three tokens occur for that source occurrence. Omit distributed content rather than nulling it.'),('tsam; de/de\'i; unselected quotation-like/explanatory framing','time; the case that; What happens is that; expanded glass of water; both of these','Expansions and resumptions distribute their meaning; no invented full lexical descriptions or uncertainty nulls.'),('one byas pa','first provides','Single causal predicate repeated in English; select the second occurrence beside contributing factor.'),('temporal clause subject','it in until it eventually ends','No explicit Tibetan subject in selected temporal span. Flat atoms retain until/eventually/ends and a proven fused ma null without claiming this supplied subject.'),('final dang; other unselected case/linking morphology','remaining connectives/tense framing','No independent separate atom justified in this selected row.')],
+ 264:[('de\'i twice','first and second glass of water descriptions','Expanded pronominal referents are not extra chu/phor pa occurrences. All these words remain verbatim but unwrapped.'),('one byas pa','first provides; again','Predication repeats in English; the second provides is selected. Again is additional list framing.'),('mi\'i; chur','of the human; resultative starts being relation','Keep inflected syllables whole; their grammar lies outside the English lexical parent or is fused in predicate syntax, so no external-English d7 or false bound-member null.'),('brten nas; surrounding explanation','and then; both of these','Based on retains the established unit; expanded resumption of the coordinated causes stays outside.'),('final dang; unselected particles','remaining English clause framing','Omitted where no separate defensible atom is selected.')]
+ }
+ class Parser(HTMLParser):
+@@ -118,7 +119,14 @@
+  for i,s in enumerate(sp):
+   t={'order':i+1,'span':s,'field_presence':list(s),'tib_range':list(tr[s['id']]),'eng_range':list(er[s['id']]) if s['id'] in er else None,'rationale':reason(n,s),'all_tib_word_occurrences':occurrences(src['wylie'],s['tib']),'all_eng_word_occurrences':occurrences(src['english'],s['eng'])}
+   if s['d']==7:
+-   parent=sp[i-1];assert parent['d']==5;t['immediate_parent_id']=parent['id']
++   parent_index=i-1
++   while parent_index>=0 and sp[parent_index]['d']==7:parent_index-=1
++   assert parent_index>=0;parent=sp[parent_index];assert parent['d']==5
++   assert all(child['d']==7 for child in sp[parent_index+1:i+1]);t['contiguous_block_parent_id']=parent['id']
++   block=[];j=parent_index+1
++   while j<len(sp) and sp[j]['d']==7:block.append(sp[j]);j+=1
++   t['tibetan_member_block']=[child['id'] for child in block]
++   t['english_member_order']=[child['id'] for child in sorted(block,key=lambda child:er[child['id']][0])]
+    for side,rr in [('tib',tr),('eng',er)]:assert parent[side].count(s[side])==1 and parent[side]!=s[side] and rr[parent['id']][0]<=rr[s['id']][0]<rr[s['id']][1]<=rr[parent['id']][1]
+   final.append(t)
+  dispositions=[]
+@@ -127,7 +135,6 @@
+   if same:status='retained';targets=same;why=same[0]['rationale']
+   else:
+    start,end=o['tib_range'];targets=[t for t in final if start<t['tib_range'][1] and end>t['tib_range'][0]];status='recast';why=' '.join(t['rationale'] for t in targets)
+-   if s['d']==7 and s['tib']=='khrag':status='rejected-member-covered-by-parent';why=omissions[263][4][2]
+    if not targets:status='rejected-omitted';why='No separate final exponent; see material omission ledger.'
+   dispositions.append({**o,'disposition':status,'final_ids':[t['span']['id'] for t in targets],'rationale':why})
+  allowances={}
+@@ -153,10 +160,12 @@
+  dump(p/'errata-analysis.json',{'retained_errata':[],'suspicions_all_five_grounds':claims,'scan':{'english_characters':len(src['english']),'cap1500':len(src['english'])==1500,'following_heading':False,'no_source_or_master_change':True},'evidence_wording_correction':{'original_path':str(B/'english/262/original-evidence.json'),'original_field':'evidence_interpretation.lexical_limits','original_text':json.loads((B/'english/262/original-evidence.json').read_text())['evidence_interpretation']['lexical_limits'],'correction':'rnag10448 and khrag1368 are glossary tier HTG2016, not corpus-mined. The original full records and wording remain unchanged. Their reciprocal variants remain visible; local rnag/pus and khrag/blood are judged against the actual reversed compound.','complete_original_entries':[entries['rnag'],entries['khrag']]} if n==263 else None})
+  count={'seq':n,'spans':len(sp),'nulls':sum(s['eng'] is None for s in sp),'d3':sum(s['d']==3 for s in sp),'d5':sum(s['d']==5 for s in sp),'d6':sum(s['d']==6 for s in sp),'d7':sum(s['d']==7 for s in sp),'errata':0,'original_dispositions':len(dispositions)};counts.append(count)
+  proof={'status':'FROZEN mechanical proof, PROVISIONAL semantics','producer':'Codex reconciliation; capacity reuse disclosed','governing_head':HEAD,'generated_baseline':BASE,'generator_invocation':invocation,'actual_exit':proc.returncode,'stderr_bytes':len(proc.stderr),'exact_stdout_body':True,'source_text_roundtrip':{'wylie':True,'english':True},'counts':count,'files':{f:meta(p/f) for f in ['spec.json','body.html','errata.json','decisions.json','allowances-proposed.json','witness-extents.json','errata-analysis.json','stdout.html','stderr.txt','exit.txt']},'shared_evidence':{f:meta(E/f) for f in ['reopened-originals.json','source-path-map.json','original-191-spans.json','original-replays.json']},'proof_limit':'Mechanical replay and fidelity do not prove semantic correspondence. No gate or allowance changed.'}
++ proof['correction_round1']={'ruling':meta(D/'263/correction-round1/root-member-block-ruling.md'),'reopened_semantic_evidence':meta(D/'263/correction-round1/reopened-evidence.json'),'prior_freeze_preserved':meta(p/'correction-history/round1-before/freeze.json'),'preservation_map':meta(p/'correction-history/round1-before-map.json'),'decision':'Restore the defensible khrag/blood sibling in263; contiguous multiple-member blocks and crossing English order are supported by unchanged canonical code. No canonical or gate change.'}
+  dump(p/'proof.json',proof)
+  report=[f'C05:{n} — Codex reconciliation, PROVISIONAL.',f"{count['spans']} spans; d3={count['d3']}, d5={count['d5']}, d6={count['d6']}, d7={count['d7']}; nulls={count['nulls']}; errata=0.",f"Reused unrelated-batch context under the capacity ruling; did not author either current original angle. Current source evidence was independently reopened.",seg['note'],f"All {len(dispositions)} original spans have individual dispositions preserving exact IDs, optional fields/presence and canonical ranges; final ordered tuples and per-tuple rationales: {p/'decisions.json'}.",f"Material omissions, every repeated occurrence and complete unwrapped source ranges are in decisions.json. The canonical note contains no stale pending-review statement.",f"Full digital and physical witness extents: {p/'witness-extents.json'}; the590/826/236-character262 distinction is explicit.",f"Errata[] and all five grounds for each suspected262 issue; English glossary-tier correction in263: {p/'errata-analysis.json'}.",f"Current evidence:143 independently reopened full-row SQL results,51 exact master records,24/24 physical source matches; full immutable bytes and195 source-path/hash/byte mappings: {E/'source-path-map.json'}.",f"All191 original ranges and six byte-identical canonical outputs independently reproduced: {E/'original-replays.json'}.",f"EXIT={proc.returncode}",f"BODY_BYTES={len(proc.stdout)}; STDERR_BYTES={len(proc.stderr)}; saved body equals exact actual stdout.",f"SPEC_BYTES={len((p/'spec.json').read_bytes())}; SPEC_SHA256={sha((p/'spec.json').read_bytes())}",f"BODY_SHA256={sha(proc.stdout)}",f"Exact argv, cwd, wrapper/canonical hashes, every final file hash and source roundtrip proof: {p/'proof.json'}.",f"Governing Git head{HEAD}; generated baseline{BASE}. Original earlier preparation identities remain preserved independently.",f"No final gated d5/d7 head allowances needed; {p/'allowances-proposed.json'} records the empty proposal. No allowance, gate, source, master or repository changed.","Matching remains provisional. Separate non-author semantic review is required before acceptance; mechanical freeze is not semantic approval."]
++ report.append(f"Correction round1 restores263 khrag/blood as the second contiguous d7 sibling. The prior one-member structural explanation was false; current source judgment and unchanged canonical multi-child behavior support both members. Ruling/evidence: {D/'263/correction-round1'}; complete prior freeze: {p/'correction-history/round1-before'}.")
+  (p/'report.md').write_text('\n'.join(report)+'\n')
+ dump(D/'262/batch-counts.json',counts);assert sum(x['original_dispositions'] for x in counts)==191
+ for n in [262,263,264]:
+- p=D/str(n);files=[meta(f) for f in sorted(p.rglob('*')) if f.is_file() and f.name!='freeze.json'];dump(p/'freeze.json',{'status':'FROZEN','producer':'Codex reconciliation','utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'files':files})
++ p=D/str(n);files=[meta(f) for f in sorted(p.rglob('*')) if f.is_file() and f!=p/'freeze.json'];dump(p/'freeze.json',{'status':'FROZEN','producer':'Codex reconciliation','utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'files':files})
+ print(json.dumps(counts));print('All three canonical generators exit0; exact source roundtrips;191 dispositions; final hashes frozen.')
+--- /Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-262-264/reconciled/262/correction-history/round1-before/notes.json
++++ /Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-262-264/reconciled/262/notes.json
+@@ -1,5 +1,5 @@
+ {
+   "262": "PROVISIONAL machine alignment by Codex, reconciliation. This reader reused unrelated-batch context, independently reopened the current evidence, and did not author either original angle. rang lugs owns the narrower own position; HTG2016 explicitly also attests our own position and establish our own position. The boundary choice leaves contextual our outside and does not deny that positive evidence. bzhag pa/establish follows the actual establishment clause, not its unrelated auto-aligned nothing but gloss. las/karma and can/with retain separate exponents; the original las can glossary phrase with their own karma is acknowledged without capturing their own. cig car du owns together; broader sit down together is attested but the narrow temporal/grouping force is selected here. dngos po gsum gyi gzhi mthun pa owns the complete d3 one thing which is simultaneously three different objects; outer ma/not and yin pa/is preserve its negation. Both de'i tshe expressions are d3 temporal noun phrases. tshad/valid perceptions, mtshungs/identical and gsum/three remain distinct; no ma is inserted into TSAD MTSUNGS. nges par is distributed with dgos in necessary and omitted, not nulled. The second gang po has no separate fullness exponent; the first gang owns filled and the third fullness occurrence owns full. Case nulls name the absence of a separate case word. The one skye ba owns the first occurs, selected for the event of the glass arising; the second occurs is an English reprise. Source backtick and all original wording remain intact.",
+-  "263": "PROVISIONAL machine alignment by Codex, reconciliation. The two grub occurrences own started and came separately. In the temporal ma zhig ... bar du construction, ma has no separate negative word: its not-yet boundary force is fused into until ... ends. This explicit grammatical-fusion null is distinct from matrix ma/not and yin/is. mthar/eventually, zhig/ends and bar du/until retain the useful temporal atoms, excluding the supplied subject it; zhig's unrelated auto-aligned three principal paths gloss is not used. The second cha shas gsum is resumed pronominally in they and omitted as distributed content; second ldan/with retains the possession relation despite reversal of English subject orientation. cing/or coordinates the alternatives under negation. The full source chu/phor pa selects the third English water/glass in the wet-and-flowing material description. The lone byas pa owns the second provides beside contributing factor; the first provides restates the shared causal predication. brten nas is the established based on unit; both of these is explanatory expansion of the two causes. rnag khrag owns blood and pus with its immediately following unique tighter rnag/pus member. A second khrag/blood d7 is omitted under the immediate-parent rule, though its meaning is covered by the compound and positively attested. Both member entries are glossary HTG2016; the original English evidence's corpus-mined characterization is incorrect and remains preserved only as original wording. Resultative tu has no separate particle beyond starts being. All source forms remain exact.",
++  "263": "PROVISIONAL machine alignment by Codex, reconciliation. The two grub occurrences own started and came separately. In the temporal ma zhig ... bar du construction, ma has no separate negative word: its not-yet boundary force is fused into until ... ends. This explicit grammatical-fusion null is distinct from matrix ma/not and yin/is. mthar/eventually, zhig/ends and bar du/until retain the useful temporal atoms, excluding the supplied subject it; zhig's unrelated auto-aligned three principal paths gloss is not used. The second cha shas gsum is resumed pronominally in they and omitted as distributed content; second ldan/with retains the possession relation despite reversal of English subject orientation. cing/or coordinates the alternatives under negation. The full source chu/phor pa selects the third English water/glass in the wet-and-flowing material description. The lone byas pa owns the second provides beside contributing factor; the first provides restates the shared causal predication. brten nas is the established based on unit; both of these is explanatory expansion of the two causes. rnag khrag owns blood and pus with a contiguous d7 member block: rnag/pus followed by khrag/blood in Tibetan order. Both are unique and strictly tighter inside that same parent; the canonical generator resolves their reversed English order. Correction round1 restores the second member after rejecting the earlier erroneous one-member interpretation. Both member entries are glossary HTG2016; the original English evidence's corpus-mined characterization is incorrect and remains preserved only as original wording. Resultative tu has no separate particle beyond starts being. All source forms remain exact.",
+   "264": "PROVISIONAL machine alignment by Codex, reconciliation. First gcig owns Another in the continuing three-part list; second gcig owns one. The sole byas pa owns the second provides beside the contributing factor, while the first provides repeats the shared predication and stays unwrapped. Whole inflected mi'i owns human, with its genitive relation expressed outside that lexical English word; no false genitive null or detached member is added. Whole chur owns the final water after starts being; its resultative grammar is carried by that predicate. The exact chur dictionary entry has no HGM gloss, which is not a claim of no English exponent; the actual source and water context license this provisional inflected occurrence. de'i references are expanded into the first two glass-of-water descriptions and omitted as distributed content. brten nas owns based on; both of these remains explanatory restatement of the preceding causes. Agent-case nulls assert no separate case word in the active syntax. Final gi owns of in continuation of one part; other English of words remain outside it. No source or master is changed."
+ }
+--- /Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-262-264/reconciled/262/correction-history/round1-before/proof.json
++++ /Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-262-264/reconciled/262/proof.json
+@@ -14,7 +14,7 @@
+       "PYTHONDONTWRITEBYTECODE": "1"
+     },
+     "stdin": {
+-      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-262-264/reconciled/262/attempts/01/spec.json",
++      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-262-264/reconciled/262/attempts/02/spec.json",
+       "bytes": 7700,
+       "sha256": "331017887f209161f4b904bb77f230426b3a4583140013067e8a6d730845b800"
+     },
+@@ -123,5 +123,28 @@
+       "sha256": "673b7d84a9b04e6fbb6766308533d3459eca27ff58f8fa4e363c47cb877ee4b1"
+     }
+   },
+-  "proof_limit": "Mechanical replay and fidelity do not prove semantic correspondence. No gate or allowance changed."
++  "proof_limit": "Mechanical replay and fidelity do not prove semantic correspondence. No gate or allowance changed.",
++  "correction_round1": {
++    "ruling": {
++      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-262-264/reconciled/263/correction-round1/root-member-block-ruling.md",
++      "bytes": 2038,
++      "sha256": "084487edc9c2b4795a85cdf60f6a16331ca02cb1f19a0164cfecabd74002d451"
++    },
++    "reopened_semantic_evidence": {
++      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-262-264/reconciled/263/correction-round1/reopened-evidence.json",
++      "bytes": 13002,
++      "sha256": "516b33721a6f6076be0964be99cc9abc58af911f23828af5df9eee6f55891e82"
++    },
++    "prior_freeze_preserved": {
++      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-262-264/reconciled/262/correction-history/round1-before/freeze.json",
++      "bytes": 58943,
++      "sha256": "1c27337956674ef3aa442fc41339ecdfb259e507ae8caa08cf8dd96fb21c7c5a"
++    },
++    "preservation_map": {
++      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-262-264/reconciled/262/correction-history/round1-before-map.json",
++      "bytes": 104523,
++      "sha256": "046622a7a59bb9846269cd5d2bea89ce610ade39c8d54a04c2d7784121a6ff71"
++    },
++    "decision": "Restore the defensible khrag/blood sibling in263; contiguous multiple-member blocks and crossing English order are supported by unchanged canonical code. No canonical or gate change."
++  }
+ }
+--- /Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-262-264/reconciled/262/correction-history/round1-before/report.md
++++ /Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-262-264/reconciled/262/report.md
+@@ -16,3 +16,4 @@
+ Governing Git headf955740d862a449ee18ca93e473fffc07372d9ec; generated baseline235bd2ebabc2278a91a8c06c95f8371f2e5a77fe. Original earlier preparation identities remain preserved independently.
+ No final gated d5/d7 head allowances needed; /Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-262-264/reconciled/262/allowances-proposed.json records the empty proposal. No allowance, gate, source, master or repository changed.
+ Matching remains provisional. Separate non-author semantic review is required before acceptance; mechanical freeze is not semantic approval.
++Correction round1 restores263 khrag/blood as the second contiguous d7 sibling. The prior one-member structural explanation was false; current source judgment and unchanged canonical multi-child behavior support both members. Ruling/evidence: /Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-262-264/reconciled/263/correction-round1; complete prior freeze: /Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-262-264/reconciled/262/correction-history/round1-before.
+--- /Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-262-264/reconciled/263/correction-history/round1-before/body.html
++++ /Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-262-264/reconciled/263/body.html
+@@ -1,10 +1,10 @@
+ <h2>Segment 263 &mdash; the arising of blood and pus</h2>
+ <div class="pair">
+ <div class="tib"><div class="lab">TIBETAN (WYLIE)</div>
+-<span class="u" data-d="1" data-l="s263S">de <span class="u" data-d="6" data-l="s263w1">yang</span> <span class="u" data-d="5" data-l="s263w2">dang por</span> <span class="u" data-d="5" data-l="s263w3">grub</span> tsam <span class="u" data-d="6" data-l="s263w4">nas</span> <span class="u" data-d="5" data-l="s263w5">cha shas</span> <span class="u" data-d="5" data-l="s263w6">gsum</span> <span class="u" data-d="5" data-l="s263w7">ldan</span> <span class="u case" data-d="6" data-l="s263w8">du</span> <span class="u" data-d="5" data-l="s263w9">grub</span> <span class="u" data-d="6" data-l="s263w10">cing</span> , <span class="u" data-d="5" data-l="s263w11">mthar</span> <span class="u" data-d="6" data-l="s263w12">ma</span> <span class="u" data-d="5" data-l="s263w13">zhig</span> gi <span class="u" data-d="6" data-l="s263w14">bar du</span> cha shas gsum <span class="u" data-d="5" data-l="s263w15">ldan</span> <span class="u case" data-d="6" data-l="s263w16">du</span> <span class="u" data-d="5" data-l="s263w17">gnas pa</span> <span class="u" data-d="6" data-l="s263w18">ma</span> <span class="u" data-d="5" data-l="s263w19">yin</span> te, <span class="u" data-d="5" data-l="s263w20">brlan</span> <span class="u" data-d="6" data-l="s263w21">zhing</span> <span class="u" data-d="5" data-l="s263w22">gsher ba</span> <span class="u" data-d="5" data-l="s263w23">chu</span> <span class="u" data-d="5" data-l="s263w24">phor pa</span> <span class="u" data-d="5" data-l="s263w25">gang po</span> de&#x27;i <span class="u" data-d="5" data-l="s263w26">cha shas</span> <span class="u" data-d="5" data-l="s263w27">gcig</span> <span class="u case" data-d="6" data-l="s263w28">gis</span> <span class="u" data-d="5" data-l="s263w29">nyer len</span> <span class="u" data-d="6" data-l="s263w30">dang</span> , <span class="u" data-d="5" data-l="s263w31">yi dvags</span> <span class="u" data-d="6" data-l="s263w32">kyi</span> <span class="u" data-d="5" data-l="s263w33">las</span> <span class="u case" data-d="6" data-l="s263w34">kyis</span> <span class="u" data-d="5" data-l="s263w35">lhan cig byed rkyen</span> <span class="u" data-d="5" data-l="s263w36">byas pa</span> la <span class="u" data-d="5" data-l="s263w37">brten nas</span> de&#x27;i <span class="u" data-d="5" data-l="s263w38">cha shas</span> <span class="u" data-d="5" data-l="s263w39">gcig</span> <span class="u" data-d="6" data-l="s263w40">gi</span> <span class="u" data-d="5" data-l="s263w41">rigs &#x27;dra</span> <span class="u" data-d="5" data-l="s263w42">phyi ma</span> <span class="u" data-d="5" data-l="s263w43"><span class="u" data-d="7" data-l="s263m1">rnag</span> khrag</span> <span class="u case" data-d="6" data-l="s263w44">tu</span> <span class="u" data-d="5" data-l="s263w45">skye ba</span> dang</span>
++<span class="u" data-d="1" data-l="s263S">de <span class="u" data-d="6" data-l="s263w1">yang</span> <span class="u" data-d="5" data-l="s263w2">dang por</span> <span class="u" data-d="5" data-l="s263w3">grub</span> tsam <span class="u" data-d="6" data-l="s263w4">nas</span> <span class="u" data-d="5" data-l="s263w5">cha shas</span> <span class="u" data-d="5" data-l="s263w6">gsum</span> <span class="u" data-d="5" data-l="s263w7">ldan</span> <span class="u case" data-d="6" data-l="s263w8">du</span> <span class="u" data-d="5" data-l="s263w9">grub</span> <span class="u" data-d="6" data-l="s263w10">cing</span> , <span class="u" data-d="5" data-l="s263w11">mthar</span> <span class="u" data-d="6" data-l="s263w12">ma</span> <span class="u" data-d="5" data-l="s263w13">zhig</span> gi <span class="u" data-d="6" data-l="s263w14">bar du</span> cha shas gsum <span class="u" data-d="5" data-l="s263w15">ldan</span> <span class="u case" data-d="6" data-l="s263w16">du</span> <span class="u" data-d="5" data-l="s263w17">gnas pa</span> <span class="u" data-d="6" data-l="s263w18">ma</span> <span class="u" data-d="5" data-l="s263w19">yin</span> te, <span class="u" data-d="5" data-l="s263w20">brlan</span> <span class="u" data-d="6" data-l="s263w21">zhing</span> <span class="u" data-d="5" data-l="s263w22">gsher ba</span> <span class="u" data-d="5" data-l="s263w23">chu</span> <span class="u" data-d="5" data-l="s263w24">phor pa</span> <span class="u" data-d="5" data-l="s263w25">gang po</span> de&#x27;i <span class="u" data-d="5" data-l="s263w26">cha shas</span> <span class="u" data-d="5" data-l="s263w27">gcig</span> <span class="u case" data-d="6" data-l="s263w28">gis</span> <span class="u" data-d="5" data-l="s263w29">nyer len</span> <span class="u" data-d="6" data-l="s263w30">dang</span> , <span class="u" data-d="5" data-l="s263w31">yi dvags</span> <span class="u" data-d="6" data-l="s263w32">kyi</span> <span class="u" data-d="5" data-l="s263w33">las</span> <span class="u case" data-d="6" data-l="s263w34">kyis</span> <span class="u" data-d="5" data-l="s263w35">lhan cig byed rkyen</span> <span class="u" data-d="5" data-l="s263w36">byas pa</span> la <span class="u" data-d="5" data-l="s263w37">brten nas</span> de&#x27;i <span class="u" data-d="5" data-l="s263w38">cha shas</span> <span class="u" data-d="5" data-l="s263w39">gcig</span> <span class="u" data-d="6" data-l="s263w40">gi</span> <span class="u" data-d="5" data-l="s263w41">rigs &#x27;dra</span> <span class="u" data-d="5" data-l="s263w42">phyi ma</span> <span class="u" data-d="5" data-l="s263w43"><span class="u" data-d="7" data-l="s263m1">rnag</span> <span class="u" data-d="7" data-l="s263m2">khrag</span></span> <span class="u case" data-d="6" data-l="s263w44">tu</span> <span class="u" data-d="5" data-l="s263w45">skye ba</span> dang</span>
+ </div>
+ <div class="eng"><div class="lab">GESHE MICHAEL'S ENGLISH (VERBATIM)</div>
+-<span class="u" data-d="1" data-l="s263S">It <span class="u" data-d="5" data-l="s263w19">is</span> <span class="u" data-d="6" data-l="s263w18">not</span> <span class="u" data-d="6" data-l="s263w1">though</span> the case that, <span class="u" data-d="6" data-l="s263w4">from</span> the time it <span class="u" data-d="5" data-l="s263w2">first</span> <span class="u" data-d="5" data-l="s263w3">started</span>, the glass of water <span class="u" data-d="5" data-l="s263w9">came</span> <span class="u" data-d="5" data-l="s263w7">with</span> the <span class="u" data-d="5" data-l="s263w6">three</span> different <span class="u" data-d="5" data-l="s263w5">parts</span>, <span class="u" data-d="6" data-l="s263w10">or</span> that they <span class="u" data-d="5" data-l="s263w17">stay</span> <span class="u" data-d="5" data-l="s263w15">with</span> the glass of water <span class="u" data-d="6" data-l="s263w14">until</span> it <span class="u" data-d="5" data-l="s263w11">eventually</span> <span class="u" data-d="5" data-l="s263w13">ends</span>. What happens is that <span class="u" data-d="5" data-l="s263w27">one</span> of the <span class="u" data-d="5" data-l="s263w26">parts</span> of the <span class="u" data-d="5" data-l="s263w24">glass</span> <span class="u" data-d="5" data-l="s263w25">filled</span> with <span class="u" data-d="5" data-l="s263w20">wet</span> <span class="u" data-d="6" data-l="s263w21">and</span> <span class="u" data-d="5" data-l="s263w22">flowing</span> <span class="u" data-d="5" data-l="s263w23">water</span> provides a <span class="u" data-d="5" data-l="s263w29">material cause</span>, <span class="u" data-d="6" data-l="s263w30">and</span> the <span class="u" data-d="5" data-l="s263w33">karma</span> <span class="u" data-d="6" data-l="s263w32">of</span> the <span class="u" data-d="5" data-l="s263w31">craving spirit</span> <span class="u" data-d="5" data-l="s263w36">provides</span> a <span class="u" data-d="5" data-l="s263w35">contributing factor</span>; and then <span class="u" data-d="5" data-l="s263w37">based on</span> both of these the <span class="u" data-d="5" data-l="s263w42">later</span> <span class="u" data-d="5" data-l="s263w41">continuation</span> <span class="u" data-d="6" data-l="s263w40">of</span> <span class="u" data-d="5" data-l="s263w39">one</span> <span class="u" data-d="5" data-l="s263w38">part</span> of the glass of water <span class="u" data-d="5" data-l="s263w45">starts being</span> <span class="u" data-d="5" data-l="s263w43">blood and <span class="u" data-d="7" data-l="s263m1">pus</span></span>.<span class="u" data-d="6" data-l="s263w8"><span class="nul">Adverbial ldan du construction; no separate English exponent.</span></span><span class="u" data-d="6" data-l="s263w12"><span class="nul">Temporal ma ... bar du is recast as until ... ends; no separate English negation belongs to this ma.</span></span><span class="u" data-d="6" data-l="s263w16"><span class="nul">Adverbial ldan du construction; no separate English exponent.</span></span><span class="u" data-d="6" data-l="s263w28"><span class="nul">Agent marking realized by active subject syntax, without a separate case word.</span></span><span class="u" data-d="6" data-l="s263w34"><span class="nul">Agent marking realized by active subject syntax, without a separate case word.</span></span><span class="u" data-d="6" data-l="s263w44"><span class="nul">Resultative relation is carried by the predicate complement after starts being, with no separate English particle.</span></span></span>
++<span class="u" data-d="1" data-l="s263S">It <span class="u" data-d="5" data-l="s263w19">is</span> <span class="u" data-d="6" data-l="s263w18">not</span> <span class="u" data-d="6" data-l="s263w1">though</span> the case that, <span class="u" data-d="6" data-l="s263w4">from</span> the time it <span class="u" data-d="5" data-l="s263w2">first</span> <span class="u" data-d="5" data-l="s263w3">started</span>, the glass of water <span class="u" data-d="5" data-l="s263w9">came</span> <span class="u" data-d="5" data-l="s263w7">with</span> the <span class="u" data-d="5" data-l="s263w6">three</span> different <span class="u" data-d="5" data-l="s263w5">parts</span>, <span class="u" data-d="6" data-l="s263w10">or</span> that they <span class="u" data-d="5" data-l="s263w17">stay</span> <span class="u" data-d="5" data-l="s263w15">with</span> the glass of water <span class="u" data-d="6" data-l="s263w14">until</span> it <span class="u" data-d="5" data-l="s263w11">eventually</span> <span class="u" data-d="5" data-l="s263w13">ends</span>. What happens is that <span class="u" data-d="5" data-l="s263w27">one</span> of the <span class="u" data-d="5" data-l="s263w26">parts</span> of the <span class="u" data-d="5" data-l="s263w24">glass</span> <span class="u" data-d="5" data-l="s263w25">filled</span> with <span class="u" data-d="5" data-l="s263w20">wet</span> <span class="u" data-d="6" data-l="s263w21">and</span> <span class="u" data-d="5" data-l="s263w22">flowing</span> <span class="u" data-d="5" data-l="s263w23">water</span> provides a <span class="u" data-d="5" data-l="s263w29">material cause</span>, <span class="u" data-d="6" data-l="s263w30">and</span> the <span class="u" data-d="5" data-l="s263w33">karma</span> <span class="u" data-d="6" data-l="s263w32">of</span> the <span class="u" data-d="5" data-l="s263w31">craving spirit</span> <span class="u" data-d="5" data-l="s263w36">provides</span> a <span class="u" data-d="5" data-l="s263w35">contributing factor</span>; and then <span class="u" data-d="5" data-l="s263w37">based on</span> both of these the <span class="u" data-d="5" data-l="s263w42">later</span> <span class="u" data-d="5" data-l="s263w41">continuation</span> <span class="u" data-d="6" data-l="s263w40">of</span> <span class="u" data-d="5" data-l="s263w39">one</span> <span class="u" data-d="5" data-l="s263w38">part</span> of the glass of water <span class="u" data-d="5" data-l="s263w45">starts being</span> <span class="u" data-d="5" data-l="s263w43"><span class="u" data-d="7" data-l="s263m2">blood</span> and <span class="u" data-d="7" data-l="s263m1">pus</span></span>.<span class="u" data-d="6" data-l="s263w8"><span class="nul">Adverbial ldan du construction; no separate English exponent.</span></span><span class="u" data-d="6" data-l="s263w12"><span class="nul">Temporal ma ... bar du is recast as until ... ends; no separate English negation belongs to this ma.</span></span><span class="u" data-d="6" data-l="s263w16"><span class="nul">Adverbial ldan du construction; no separate English exponent.</span></span><span class="u" data-d="6" data-l="s263w28"><span class="nul">Agent marking realized by active subject syntax, without a separate case word.</span></span><span class="u" data-d="6" data-l="s263w34"><span class="nul">Agent marking realized by active subject syntax, without a separate case word.</span></span><span class="u" data-d="6" data-l="s263w44"><span class="nul">Resultative relation is carried by the predicate complement after starts being, with no separate English particle.</span></span></span>
+ </div>
+ </div>
+-<div class="note"><b>AI NOTE</b> &mdash; PROVISIONAL machine alignment by Codex, reconciliation. The two grub occurrences own started and came separately. In the temporal ma zhig ... bar du construction, ma has no separate negative word: its not-yet boundary force is fused into until ... ends. This explicit grammatical-fusion null is distinct from matrix ma/not and yin/is. mthar/eventually, zhig/ends and bar du/until retain the useful temporal atoms, excluding the supplied subject it; zhig's unrelated auto-aligned three principal paths gloss is not used. The second cha shas gsum is resumed pronominally in they and omitted as distributed content; second ldan/with retains the possession relation despite reversal of English subject orientation. cing/or coordinates the alternatives under negation. The full source chu/phor pa selects the third English water/glass in the wet-and-flowing material description. The lone byas pa owns the second provides beside contributing factor; the first provides restates the shared causal predication. brten nas is the established based on unit; both of these is explanatory expansion of the two causes. rnag khrag owns blood and pus with its immediately following unique tighter rnag/pus member. A second khrag/blood d7 is omitted under the immediate-parent rule, though its meaning is covered by the compound and positively attested. Both member entries are glossary HTG2016; the original English evidence's corpus-mined characterization is incorrect and remains preserved only as original wording. Resultative tu has no separate particle beyond starts being. All source forms remain exact.</div>
++<div class="note"><b>AI NOTE</b> &mdash; PROVISIONAL machine alignment by Codex, reconciliation. The two grub occurrences own started and came separately. In the temporal ma zhig ... bar du construction, ma has no separate negative word: its not-yet boundary force is fused into until ... ends. This explicit grammatical-fusion null is distinct from matrix ma/not and yin/is. mthar/eventually, zhig/ends and bar du/until retain the useful temporal atoms, excluding the supplied subject it; zhig's unrelated auto-aligned three principal paths gloss is not used. The second cha shas gsum is resumed pronominally in they and omitted as distributed content; second ldan/with retains the possession relation despite reversal of English subject orientation. cing/or coordinates the alternatives under negation. The full source chu/phor pa selects the third English water/glass in the wet-and-flowing material description. The lone byas pa owns the second provides beside contributing factor; the first provides restates the shared causal predication. brten nas is the established based on unit; both of these is explanatory expansion of the two causes. rnag khrag owns blood and pus with a contiguous d7 member block: rnag/pus followed by khrag/blood in Tibetan order. Both are unique and strictly tighter inside that same parent; the canonical generator resolves their reversed English order. Correction round1 restores the second member after rejecting the earlier erroneous one-member interpretation. Both member entries are glossary HTG2016; the original English evidence's corpus-mined characterization is incorrect and remains preserved only as original wording. Resultative tu has no separate particle beyond starts being. All source forms remain exact.</div>
+--- /Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-262-264/reconciled/263/correction-history/round1-before/decisions.json
++++ /Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-262-264/reconciled/263/decisions.json
+@@ -1259,7 +1259,7 @@
+       "final_ids": [
+         "w43"
+       ],
+-      "rationale": "Blood and pus is the exact reversed English rendering of the established compound HGM23908. The whole parent preserves and. Its one selected immediately following d7 member rnag/pus is unique and strictly tighter on both sides."
++      "rationale": "Blood and pus is the exact reversed English rendering of the established compound HGM23908. The whole parent preserves and. Its contiguous d7 block contains rnag/pus and khrag/blood, each unique and strictly tighter on both sides. Tibetan child order is rnag then khrag; English child order is blood then pus, correctly reordered within this parent by the unchanged canonical generator."
+     },
+     {
+       "angle": "tibetan",
+@@ -2191,7 +2191,7 @@
+       "final_ids": [
+         "w43"
+       ],
+-      "rationale": "Blood and pus is the exact reversed English rendering of the established compound HGM23908. The whole parent preserves and. Its one selected immediately following d7 member rnag/pus is unique and strictly tighter on both sides."
++      "rationale": "Blood and pus is the exact reversed English rendering of the established compound HGM23908. The whole parent preserves and. Its contiguous d7 block contains rnag/pus and khrag/blood, each unique and strictly tighter on both sides. Tibetan child order is rnag then khrag; English child order is blood then pus, correctly reordered within this parent by the unchanged canonical generator."
+     },
+     {
+       "angle": "english",
+@@ -2245,11 +2245,11 @@
+         470,
+         475
+       ],
+-      "disposition": "rejected-member-covered-by-parent",
+-      "final_ids": [
+-        "w43"
+-      ],
+-      "rationale": "Positive HGM1368 glossary HTG2016 blood/pus supports blood. The whole compound already owns it. Original English second d7 member would not immediately follow its d5 parent under the explicit requirement; omit that extra member while retaining the compound, rather than bank a structurally invalid member."
++      "disposition": "retained",
++      "final_ids": [
++        "m2"
++      ],
++      "rationale": "Blood is the source-exact lexical member in blood and pus, supported by HGM1368 glossary HTG2016 blood/pus variants and the actual source compound. It follows rnag/pus in the same contiguous d7 block under rnag khrag. No flat span intervenes; both members are unique, strictly tighter and canonically resolved in crossing English order. The earlier structural rejection was false and is preserved only in correction history."
+     },
+     {
+       "angle": "english",
+@@ -4058,7 +4058,7 @@
+         470,
+         483
+       ],
+-      "rationale": "Blood and pus is the exact reversed English rendering of the established compound HGM23908. The whole parent preserves and. Its one selected immediately following d7 member rnag/pus is unique and strictly tighter on both sides.",
++      "rationale": "Blood and pus is the exact reversed English rendering of the established compound HGM23908. The whole parent preserves and. Its contiguous d7 block contains rnag/pus and khrag/blood, each unique and strictly tighter on both sides. Tibetan child order is rnag then khrag; English child order is blood then pus, correctly reordered within this parent by the unchanged canonical generator.",
+       "all_tib_word_occurrences": [
+         [
+           313,
+@@ -4107,10 +4107,63 @@
+           483
+         ]
+       ],
+-      "immediate_parent_id": "w43"
++      "contiguous_block_parent_id": "w43",
++      "tibetan_member_block": [
++        "m1",
++        "m2"
++      ],
++      "english_member_order": [
++        "m2",
++        "m1"
++      ]
+     },
+     {
+       "order": 45,
++      "span": {
++        "id": "m2",
++        "d": 7,
++        "tib": "khrag",
++        "eng": "blood"
++      },
++      "field_presence": [
++        "id",
++        "d",
++        "tib",
++        "eng"
++      ],
++      "tib_range": [
++        318,
++        323
++      ],
++      "eng_range": [
++        470,
++        475
++      ],
++      "rationale": "Blood is the source-exact lexical member in blood and pus, supported by HGM1368 glossary HTG2016 blood/pus variants and the actual source compound. It follows rnag/pus in the same contiguous d7 block under rnag khrag. No flat span intervenes; both members are unique, strictly tighter and canonically resolved in crossing English order. The earlier structural rejection was false and is preserved only in correction history.",
++      "all_tib_word_occurrences": [
++        [
++          318,
++          323
++        ]
++      ],
++      "all_eng_word_occurrences": [
++        [
++          470,
++          475
++        ]
++      ],
++      "contiguous_block_parent_id": "w43",
++      "tibetan_member_block": [
++        "m1",
++        "m2"
++      ],
++      "english_member_order": [
++        "m2",
++        "m1"
++      ]
++    },
++    {
++      "order": 46,
+       "span": {
+         "id": "w44",
+         "d": 6,
+@@ -4142,7 +4195,7 @@
+       "all_eng_word_occurrences": []
+     },
+     {
+-      "order": 46,
++      "order": 47,
+       "span": {
+         "id": "w45",
+         "d": 5,
+@@ -4241,11 +4294,6 @@
+       "reason": "No explicit Tibetan subject in selected temporal span. Flat atoms retain until/eventually/ends and a proven fused ma null without claiming this supplied subject."
+     },
+     {
+-      "source": "khrag",
+-      "english": "blood within compound",
+-      "reason": "Positive HGM1368 glossary HTG2016 blood/pus supports blood. The whole compound already owns it. Original English second d7 member would not immediately follow its d5 parent under the explicit requirement; omit that extra member while retaining the compound, rather than bank a structurally invalid member."
+-    },
+-    {
+       "source": "final dang; other unselected case/linking morphology",
+       "english": "remaining connectives/tense framing",
+       "reason": "No independent separate atom justified in this selected row."
+--- /Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-262-264/reconciled/263/correction-history/round1-before/proof.json
++++ /Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-262-264/reconciled/263/proof.json
+@@ -14,9 +14,9 @@
+       "PYTHONDONTWRITEBYTECODE": "1"
+     },
+     "stdin": {
+-      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-262-264/reconciled/263/attempts/01/spec.json",
+-      "bytes": 8331,
+-      "sha256": "152edb103d149b33911ac7af45b8e0eea19b83d7b179834e6841e72f8503900d"
++      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-262-264/reconciled/263/attempts/02/spec.json",
++      "bytes": 8562,
++      "sha256": "dafe1950342e489d999e319eec542191f93e8b5fd55b1d6fa764202e03a60a89"
+     },
+     "wrapper": {
+       "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/run_generator_readonly.py",
+@@ -40,25 +40,25 @@
+   },
+   "counts": {
+     "seq": 263,
+-    "spans": 46,
++    "spans": 47,
+     "nulls": 6,
+     "d3": 0,
+     "d5": 30,
+     "d6": 15,
+-    "d7": 1,
++    "d7": 2,
+     "errata": 0,
+     "original_dispositions": 78
+   },
+   "files": {
+     "spec.json": {
+       "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-262-264/reconciled/263/spec.json",
+-      "bytes": 8331,
+-      "sha256": "152edb103d149b33911ac7af45b8e0eea19b83d7b179834e6841e72f8503900d"
++      "bytes": 8562,
++      "sha256": "dafe1950342e489d999e319eec542191f93e8b5fd55b1d6fa764202e03a60a89"
+     },
+     "body.html": {
+       "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-262-264/reconciled/263/body.html",
+-      "bytes": 8148,
+-      "sha256": "ada55d67abea9d68a8c762e253c482358fac2fb47c1903ac0c1e1fcd4265b5b5"
++      "bytes": 8367,
++      "sha256": "50e44a11278209ab364976d735b7859408204613713116cad62bbfa27ae50688"
+     },
+     "errata.json": {
+       "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-262-264/reconciled/263/errata.json",
+@@ -67,8 +67,8 @@
+     },
+     "decisions.json": {
+       "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-262-264/reconciled/263/decisions.json",
+-      "bytes": 105653,
+-      "sha256": "a275bbbe8e6a1e360f064c086f985c198f04fad8b207d0724b8c369b7986d26f"
++      "bytes": 107116,
++      "sha256": "4523cd2b6a87c1c67dec7e80d389dfedfd7cead00534377aeeed848c3d5282ad"
+     },
+     "allowances-proposed.json": {
+       "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-262-264/reconciled/263/allowances-proposed.json",
+@@ -87,8 +87,8 @@
+     },
+     "stdout.html": {
+       "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-262-264/reconciled/263/stdout.html",
+-      "bytes": 8148,
+-      "sha256": "ada55d67abea9d68a8c762e253c482358fac2fb47c1903ac0c1e1fcd4265b5b5"
++      "bytes": 8367,
++      "sha256": "50e44a11278209ab364976d735b7859408204613713116cad62bbfa27ae50688"
+     },
+     "stderr.txt": {
+       "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-262-264/reconciled/263/stderr.txt",
+@@ -123,5 +123,28 @@
+       "sha256": "673b7d84a9b04e6fbb6766308533d3459eca27ff58f8fa4e363c47cb877ee4b1"
+     }
+   },
+-  "proof_limit": "Mechanical replay and fidelity do not prove semantic correspondence. No gate or allowance changed."
++  "proof_limit": "Mechanical replay and fidelity do not prove semantic correspondence. No gate or allowance changed.",
++  "correction_round1": {
++    "ruling": {
++      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-262-264/reconciled/263/correction-round1/root-member-block-ruling.md",
++      "bytes": 2038,
++      "sha256": "084487edc9c2b4795a85cdf60f6a16331ca02cb1f19a0164cfecabd74002d451"
++    },
++    "reopened_semantic_evidence": {
++      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-262-264/reconciled/263/correction-round1/reopened-evidence.json",
++      "bytes": 13002,
++      "sha256": "516b33721a6f6076be0964be99cc9abc58af911f23828af5df9eee6f55891e82"
++    },
++    "prior_freeze_preserved": {
++      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-262-264/reconciled/263/correction-history/round1-before/freeze.json",
++      "bytes": 4868,
++      "sha256": "c6f0a863f8741c6ed3009b024ad9a89bc0ef5c26f47178ab8654ebb4cdcc796e"
++    },
++    "preservation_map": {
++      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-262-264/reconciled/263/correction-history/round1-before-map.json",
++      "bytes": 8666,
++      "sha256": "6ec221223f81ee79c1d576641fc60c32860abb25980ac8dff191af4f19765a4d"
++    },
++    "decision": "Restore the defensible khrag/blood sibling in263; contiguous multiple-member blocks and crossing English order are supported by unchanged canonical code. No canonical or gate change."
++  }
+ }
+--- /Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-262-264/reconciled/263/correction-history/round1-before/report.md
++++ /Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-262-264/reconciled/263/report.md
+@@ -1,7 +1,7 @@
+ C05:263 — Codex reconciliation, PROVISIONAL.
+-46 spans; d3=0, d5=30, d6=15, d7=1; nulls=6; errata=0.
++47 spans; d3=0, d5=30, d6=15, d7=2; nulls=6; errata=0.
+ Reused unrelated-batch context under the capacity ruling; did not author either current original angle. Current source evidence was independently reopened.
+-PROVISIONAL machine alignment by Codex, reconciliation. The two grub occurrences own started and came separately. In the temporal ma zhig ... bar du construction, ma has no separate negative word: its not-yet boundary force is fused into until ... ends. This explicit grammatical-fusion null is distinct from matrix ma/not and yin/is. mthar/eventually, zhig/ends and bar du/until retain the useful temporal atoms, excluding the supplied subject it; zhig's unrelated auto-aligned three principal paths gloss is not used. The second cha shas gsum is resumed pronominally in they and omitted as distributed content; second ldan/with retains the possession relation despite reversal of English subject orientation. cing/or coordinates the alternatives under negation. The full source chu/phor pa selects the third English water/glass in the wet-and-flowing material description. The lone byas pa owns the second provides beside contributing factor; the first provides restates the shared causal predication. brten nas is the established based on unit; both of these is explanatory expansion of the two causes. rnag khrag owns blood and pus with its immediately following unique tighter rnag/pus member. A second khrag/blood d7 is omitted under the immediate-parent rule, though its meaning is covered by the compound and positively attested. Both member entries are glossary HTG2016; the original English evidence's corpus-mined characterization is incorrect and remains preserved only as original wording. Resultative tu has no separate particle beyond starts being. All source forms remain exact.
++PROVISIONAL machine alignment by Codex, reconciliation. The two grub occurrences own started and came separately. In the temporal ma zhig ... bar du construction, ma has no separate negative word: its not-yet boundary force is fused into until ... ends. This explicit grammatical-fusion null is distinct from matrix ma/not and yin/is. mthar/eventually, zhig/ends and bar du/until retain the useful temporal atoms, excluding the supplied subject it; zhig's unrelated auto-aligned three principal paths gloss is not used. The second cha shas gsum is resumed pronominally in they and omitted as distributed content; second ldan/with retains the possession relation despite reversal of English subject orientation. cing/or coordinates the alternatives under negation. The full source chu/phor pa selects the third English water/glass in the wet-and-flowing material description. The lone byas pa owns the second provides beside contributing factor; the first provides restates the shared causal predication. brten nas is the established based on unit; both of these is explanatory expansion of the two causes. rnag khrag owns blood and pus with a contiguous d7 member block: rnag/pus followed by khrag/blood in Tibetan order. Both are unique and strictly tighter inside that same parent; the canonical generator resolves their reversed English order. Correction round1 restores the second member after rejecting the earlier erroneous one-member interpretation. Both member entries are glossary HTG2016; the original English evidence's corpus-mined characterization is incorrect and remains preserved only as original wording. Resultative tu has no separate particle beyond starts being. All source forms remain exact.
+ All 78 original spans have individual dispositions preserving exact IDs, optional fields/presence and canonical ranges; final ordered tuples and per-tuple rationales: /Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-262-264/reconciled/263/decisions.json.
+ Material omissions, every repeated occurrence and complete unwrapped source ranges are in decisions.json. The canonical note contains no stale pending-review statement.
+ Full digital and physical witness extents: /Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-262-264/reconciled/263/witness-extents.json; the590/826/236-character262 distinction is explicit.
+@@ -9,10 +9,11 @@
+ Current evidence:143 independently reopened full-row SQL results,51 exact master records,24/24 physical source matches; full immutable bytes and195 source-path/hash/byte mappings: /Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-262-264/reconciled/262/evidence/source-path-map.json.
+ All191 original ranges and six byte-identical canonical outputs independently reproduced: /Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-262-264/reconciled/262/evidence/original-replays.json.
+ EXIT=0
+-BODY_BYTES=8148; STDERR_BYTES=0; saved body equals exact actual stdout.
+-SPEC_BYTES=8331; SPEC_SHA256=152edb103d149b33911ac7af45b8e0eea19b83d7b179834e6841e72f8503900d
+-BODY_SHA256=ada55d67abea9d68a8c762e253c482358fac2fb47c1903ac0c1e1fcd4265b5b5
++BODY_BYTES=8367; STDERR_BYTES=0; saved body equals exact actual stdout.
++SPEC_BYTES=8562; SPEC_SHA256=dafe1950342e489d999e319eec542191f93e8b5fd55b1d6fa764202e03a60a89
++BODY_SHA256=50e44a11278209ab364976d735b7859408204613713116cad62bbfa27ae50688
+ Exact argv, cwd, wrapper/canonical hashes, every final file hash and source roundtrip proof: /Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-262-264/reconciled/263/proof.json.
+ Governing Git headf955740d862a449ee18ca93e473fffc07372d9ec; generated baseline235bd2ebabc2278a91a8c06c95f8371f2e5a77fe. Original earlier preparation identities remain preserved independently.
+ No final gated d5/d7 head allowances needed; /Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-262-264/reconciled/263/allowances-proposed.json records the empty proposal. No allowance, gate, source, master or repository changed.
+ Matching remains provisional. Separate non-author semantic review is required before acceptance; mechanical freeze is not semantic approval.
++Correction round1 restores263 khrag/blood as the second contiguous d7 sibling. The prior one-member structural explanation was false; current source judgment and unchanged canonical multi-child behavior support both members. Ruling/evidence: /Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-262-264/reconciled/263/correction-round1; complete prior freeze: /Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-262-264/reconciled/263/correction-history/round1-before.
+--- /Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-262-264/reconciled/263/correction-history/round1-before/spec.json
++++ /Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-262-264/reconciled/263/spec.json
+@@ -277,6 +277,12 @@
+           "d": 7,
+           "tib": "rnag",
+           "eng": "pus"
++        },
++        {
++          "id": "m2",
++          "d": 7,
++          "tib": "khrag",
++          "eng": "blood"
+         },
+         {
+           "id": "w44",
+@@ -334,7 +340,7 @@
+         "w45",
+         "w43"
+       ],
+-      "note": "PROVISIONAL machine alignment by Codex, reconciliation. The two grub occurrences own started and came separately. In the temporal ma zhig ... bar du construction, ma has no separate negative word: its not-yet boundary force is fused into until ... ends. This explicit grammatical-fusion null is distinct from matrix ma/not and yin/is. mthar/eventually, zhig/ends and bar du/until retain the useful temporal atoms, excluding the supplied subject it; zhig's unrelated auto-aligned three principal paths gloss is not used. The second cha shas gsum is resumed pronominally in they and omitted as distributed content; second ldan/with retains the possession relation despite reversal of English subject orientation. cing/or coordinates the alternatives under negation. The full source chu/phor pa selects the third English water/glass in the wet-and-flowing material description. The lone byas pa owns the second provides beside contributing factor; the first provides restates the shared causal predication. brten nas is the established based on unit; both of these is explanatory expansion of the two causes. rnag khrag owns blood and pus with its immediately following unique tighter rnag/pus member. A second khrag/blood d7 is omitted under the immediate-parent rule, though its meaning is covered by the compound and positively attested. Both member entries are glossary HTG2016; the original English evidence's corpus-mined characterization is incorrect and remains preserved only as original wording. Resultative tu has no separate particle beyond starts being. All source forms remain exact."
++      "note": "PROVISIONAL machine alignment by Codex, reconciliation. The two grub occurrences own started and came separately. In the temporal ma zhig ... bar du construction, ma has no separate negative word: its not-yet boundary force is fused into until ... ends. This explicit grammatical-fusion null is distinct from matrix ma/not and yin/is. mthar/eventually, zhig/ends and bar du/until retain the useful temporal atoms, excluding the supplied subject it; zhig's unrelated auto-aligned three principal paths gloss is not used. The second cha shas gsum is resumed pronominally in they and omitted as distributed content; second ldan/with retains the possession relation despite reversal of English subject orientation. cing/or coordinates the alternatives under negation. The full source chu/phor pa selects the third English water/glass in the wet-and-flowing material description. The lone byas pa owns the second provides beside contributing factor; the first provides restates the shared causal predication. brten nas is the established based on unit; both of these is explanatory expansion of the two causes. rnag khrag owns blood and pus with a contiguous d7 member block: rnag/pus followed by khrag/blood in Tibetan order. Both are unique and strictly tighter inside that same parent; the canonical generator resolves their reversed English order. Correction round1 restores the second member after rejecting the earlier erroneous one-member interpretation. Both member entries are glossary HTG2016; the original English evidence's corpus-mined characterization is incorrect and remains preserved only as original wording. Resultative tu has no separate particle beyond starts being. All source forms remain exact."
+     }
+   ]
+ }
+--- /Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-262-264/reconciled/263/correction-history/round1-before/stdout.html
++++ /Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-262-264/reconciled/263/stdout.html
+@@ -1,10 +1,10 @@
+ <h2>Segment 263 &mdash; the arising of blood and pus</h2>
+ <div class="pair">
+ <div class="tib"><div class="lab">TIBETAN (WYLIE)</div>
+-<span class="u" data-d="1" data-l="s263S">de <span class="u" data-d="6" data-l="s263w1">yang</span> <span class="u" data-d="5" data-l="s263w2">dang por</span> <span class="u" data-d="5" data-l="s263w3">grub</span> tsam <span class="u" data-d="6" data-l="s263w4">nas</span> <span class="u" data-d="5" data-l="s263w5">cha shas</span> <span class="u" data-d="5" data-l="s263w6">gsum</span> <span class="u" data-d="5" data-l="s263w7">ldan</span> <span class="u case" data-d="6" data-l="s263w8">du</span> <span class="u" data-d="5" data-l="s263w9">grub</span> <span class="u" data-d="6" data-l="s263w10">cing</span> , <span class="u" data-d="5" data-l="s263w11">mthar</span> <span class="u" data-d="6" data-l="s263w12">ma</span> <span class="u" data-d="5" data-l="s263w13">zhig</span> gi <span class="u" data-d="6" data-l="s263w14">bar du</span> cha shas gsum <span class="u" data-d="5" data-l="s263w15">ldan</span> <span class="u case" data-d="6" data-l="s263w16">du</span> <span class="u" data-d="5" data-l="s263w17">gnas pa</span> <span class="u" data-d="6" data-l="s263w18">ma</span> <span class="u" data-d="5" data-l="s263w19">yin</span> te, <span class="u" data-d="5" data-l="s263w20">brlan</span> <span class="u" data-d="6" data-l="s263w21">zhing</span> <span class="u" data-d="5" data-l="s263w22">gsher ba</span> <span class="u" data-d="5" data-l="s263w23">chu</span> <span class="u" data-d="5" data-l="s263w24">phor pa</span> <span class="u" data-d="5" data-l="s263w25">gang po</span> de&#x27;i <span class="u" data-d="5" data-l="s263w26">cha shas</span> <span class="u" data-d="5" data-l="s263w27">gcig</span> <span class="u case" data-d="6" data-l="s263w28">gis</span> <span class="u" data-d="5" data-l="s263w29">nyer len</span> <span class="u" data-d="6" data-l="s263w30">dang</span> , <span class="u" data-d="5" data-l="s263w31">yi dvags</span> <span class="u" data-d="6" data-l="s263w32">kyi</span> <span class="u" data-d="5" data-l="s263w33">las</span> <span class="u case" data-d="6" data-l="s263w34">kyis</span> <span class="u" data-d="5" data-l="s263w35">lhan cig byed rkyen</span> <span class="u" data-d="5" data-l="s263w36">byas pa</span> la <span class="u" data-d="5" data-l="s263w37">brten nas</span> de&#x27;i <span class="u" data-d="5" data-l="s263w38">cha shas</span> <span class="u" data-d="5" data-l="s263w39">gcig</span> <span class="u" data-d="6" data-l="s263w40">gi</span> <span class="u" data-d="5" data-l="s263w41">rigs &#x27;dra</span> <span class="u" data-d="5" data-l="s263w42">phyi ma</span> <span class="u" data-d="5" data-l="s263w43"><span class="u" data-d="7" data-l="s263m1">rnag</span> khrag</span> <span class="u case" data-d="6" data-l="s263w44">tu</span> <span class="u" data-d="5" data-l="s263w45">skye ba</span> dang</span>
++<span class="u" data-d="1" data-l="s263S">de <span class="u" data-d="6" data-l="s263w1">yang</span> <span class="u" data-d="5" data-l="s263w2">dang por</span> <span class="u" data-d="5" data-l="s263w3">grub</span> tsam <span class="u" data-d="6" data-l="s263w4">nas</span> <span class="u" data-d="5" data-l="s263w5">cha shas</span> <span class="u" data-d="5" data-l="s263w6">gsum</span> <span class="u" data-d="5" data-l="s263w7">ldan</span> <span class="u case" data-d="6" data-l="s263w8">du</span> <span class="u" data-d="5" data-l="s263w9">grub</span> <span class="u" data-d="6" data-l="s263w10">cing</span> , <span class="u" data-d="5" data-l="s263w11">mthar</span> <span class="u" data-d="6" data-l="s263w12">ma</span> <span class="u" data-d="5" data-l="s263w13">zhig</span> gi <span class="u" data-d="6" data-l="s263w14">bar du</span> cha shas gsum <span class="u" data-d="5" data-l="s263w15">ldan</span> <span class="u case" data-d="6" data-l="s263w16">du</span> <span class="u" data-d="5" data-l="s263w17">gnas pa</span> <span class="u" data-d="6" data-l="s263w18">ma</span> <span class="u" data-d="5" data-l="s263w19">yin</span> te, <span class="u" data-d="5" data-l="s263w20">brlan</span> <span class="u" data-d="6" data-l="s263w21">zhing</span> <span class="u" data-d="5" data-l="s263w22">gsher ba</span> <span class="u" data-d="5" data-l="s263w23">chu</span> <span class="u" data-d="5" data-l="s263w24">phor pa</span> <span class="u" data-d="5" data-l="s263w25">gang po</span> de&#x27;i <span class="u" data-d="5" data-l="s263w26">cha shas</span> <span class="u" data-d="5" data-l="s263w27">gcig</span> <span class="u case" data-d="6" data-l="s263w28">gis</span> <span class="u" data-d="5" data-l="s263w29">nyer len</span> <span class="u" data-d="6" data-l="s263w30">dang</span> , <span class="u" data-d="5" data-l="s263w31">yi dvags</span> <span class="u" data-d="6" data-l="s263w32">kyi</span> <span class="u" data-d="5" data-l="s263w33">las</span> <span class="u case" data-d="6" data-l="s263w34">kyis</span> <span class="u" data-d="5" data-l="s263w35">lhan cig byed rkyen</span> <span class="u" data-d="5" data-l="s263w36">byas pa</span> la <span class="u" data-d="5" data-l="s263w37">brten nas</span> de&#x27;i <span class="u" data-d="5" data-l="s263w38">cha shas</span> <span class="u" data-d="5" data-l="s263w39">gcig</span> <span class="u" data-d="6" data-l="s263w40">gi</span> <span class="u" data-d="5" data-l="s263w41">rigs &#x27;dra</span> <span class="u" data-d="5" data-l="s263w42">phyi ma</span> <span class="u" data-d="5" data-l="s263w43"><span class="u" data-d="7" data-l="s263m1">rnag</span> <span class="u" data-d="7" data-l="s263m2">khrag</span></span> <span class="u case" data-d="6" data-l="s263w44">tu</span> <span class="u" data-d="5" data-l="s263w45">skye ba</span> dang</span>
+ </div>
+ <div class="eng"><div class="lab">GESHE MICHAEL'S ENGLISH (VERBATIM)</div>
+-<span class="u" data-d="1" data-l="s263S">It <span class="u" data-d="5" data-l="s263w19">is</span> <span class="u" data-d="6" data-l="s263w18">not</span> <span class="u" data-d="6" data-l="s263w1">though</span> the case that, <span class="u" data-d="6" data-l="s263w4">from</span> the time it <span class="u" data-d="5" data-l="s263w2">first</span> <span class="u" data-d="5" data-l="s263w3">started</span>, the glass of water <span class="u" data-d="5" data-l="s263w9">came</span> <span class="u" data-d="5" data-l="s263w7">with</span> the <span class="u" data-d="5" data-l="s263w6">three</span> different <span class="u" data-d="5" data-l="s263w5">parts</span>, <span class="u" data-d="6" data-l="s263w10">or</span> that they <span class="u" data-d="5" data-l="s263w17">stay</span> <span class="u" data-d="5" data-l="s263w15">with</span> the glass of water <span class="u" data-d="6" data-l="s263w14">until</span> it <span class="u" data-d="5" data-l="s263w11">eventually</span> <span class="u" data-d="5" data-l="s263w13">ends</span>. What happens is that <span class="u" data-d="5" data-l="s263w27">one</span> of the <span class="u" data-d="5" data-l="s263w26">parts</span> of the <span class="u" data-d="5" data-l="s263w24">glass</span> <span class="u" data-d="5" data-l="s263w25">filled</span> with <span class="u" data-d="5" data-l="s263w20">wet</span> <span class="u" data-d="6" data-l="s263w21">and</span> <span class="u" data-d="5" data-l="s263w22">flowing</span> <span class="u" data-d="5" data-l="s263w23">water</span> provides a <span class="u" data-d="5" data-l="s263w29">material cause</span>, <span class="u" data-d="6" data-l="s263w30">and</span> the <span class="u" data-d="5" data-l="s263w33">karma</span> <span class="u" data-d="6" data-l="s263w32">of</span> the <span class="u" data-d="5" data-l="s263w31">craving spirit</span> <span class="u" data-d="5" data-l="s263w36">provides</span> a <span class="u" data-d="5" data-l="s263w35">contributing factor</span>; and then <span class="u" data-d="5" data-l="s263w37">based on</span> both of these the <span class="u" data-d="5" data-l="s263w42">later</span> <span class="u" data-d="5" data-l="s263w41">continuation</span> <span class="u" data-d="6" data-l="s263w40">of</span> <span class="u" data-d="5" data-l="s263w39">one</span> <span class="u" data-d="5" data-l="s263w38">part</span> of the glass of water <span class="u" data-d="5" data-l="s263w45">starts being</span> <span class="u" data-d="5" data-l="s263w43">blood and <span class="u" data-d="7" data-l="s263m1">pus</span></span>.<span class="u" data-d="6" data-l="s263w8"><span class="nul">Adverbial ldan du construction; no separate English exponent.</span></span><span class="u" data-d="6" data-l="s263w12"><span class="nul">Temporal ma ... bar du is recast as until ... ends; no separate English negation belongs to this ma.</span></span><span class="u" data-d="6" data-l="s263w16"><span class="nul">Adverbial ldan du construction; no separate English exponent.</span></span><span class="u" data-d="6" data-l="s263w28"><span class="nul">Agent marking realized by active subject syntax, without a separate case word.</span></span><span class="u" data-d="6" data-l="s263w34"><span class="nul">Agent marking realized by active subject syntax, without a separate case word.</span></span><span class="u" data-d="6" data-l="s263w44"><span class="nul">Resultative relation is carried by the predicate complement after starts being, with no separate English particle.</span></span></span>
++<span class="u" data-d="1" data-l="s263S">It <span class="u" data-d="5" data-l="s263w19">is</span> <span class="u" data-d="6" data-l="s263w18">not</span> <span class="u" data-d="6" data-l="s263w1">though</span> the case that, <span class="u" data-d="6" data-l="s263w4">from</span> the time it <span class="u" data-d="5" data-l="s263w2">first</span> <span class="u" data-d="5" data-l="s263w3">started</span>, the glass of water <span class="u" data-d="5" data-l="s263w9">came</span> <span class="u" data-d="5" data-l="s263w7">with</span> the <span class="u" data-d="5" data-l="s263w6">three</span> different <span class="u" data-d="5" data-l="s263w5">parts</span>, <span class="u" data-d="6" data-l="s263w10">or</span> that they <span class="u" data-d="5" data-l="s263w17">stay</span> <span class="u" data-d="5" data-l="s263w15">with</span> the glass of water <span class="u" data-d="6" data-l="s263w14">until</span> it <span class="u" data-d="5" data-l="s263w11">eventually</span> <span class="u" data-d="5" data-l="s263w13">ends</span>. What happens is that <span class="u" data-d="5" data-l="s263w27">one</span> of the <span class="u" data-d="5" data-l="s263w26">parts</span> of the <span class="u" data-d="5" data-l="s263w24">glass</span> <span class="u" data-d="5" data-l="s263w25">filled</span> with <span class="u" data-d="5" data-l="s263w20">wet</span> <span class="u" data-d="6" data-l="s263w21">and</span> <span class="u" data-d="5" data-l="s263w22">flowing</span> <span class="u" data-d="5" data-l="s263w23">water</span> provides a <span class="u" data-d="5" data-l="s263w29">material cause</span>, <span class="u" data-d="6" data-l="s263w30">and</span> the <span class="u" data-d="5" data-l="s263w33">karma</span> <span class="u" data-d="6" data-l="s263w32">of</span> the <span class="u" data-d="5" data-l="s263w31">craving spirit</span> <span class="u" data-d="5" data-l="s263w36">provides</span> a <span class="u" data-d="5" data-l="s263w35">contributing factor</span>; and then <span class="u" data-d="5" data-l="s263w37">based on</span> both of these the <span class="u" data-d="5" data-l="s263w42">later</span> <span class="u" data-d="5" data-l="s263w41">continuation</span> <span class="u" data-d="6" data-l="s263w40">of</span> <span class="u" data-d="5" data-l="s263w39">one</span> <span class="u" data-d="5" data-l="s263w38">part</span> of the glass of water <span class="u" data-d="5" data-l="s263w45">starts being</span> <span class="u" data-d="5" data-l="s263w43"><span class="u" data-d="7" data-l="s263m2">blood</span> and <span class="u" data-d="7" data-l="s263m1">pus</span></span>.<span class="u" data-d="6" data-l="s263w8"><span class="nul">Adverbial ldan du construction; no separate English exponent.</span></span><span class="u" data-d="6" data-l="s263w12"><span class="nul">Temporal ma ... bar du is recast as until ... ends; no separate English negation belongs to this ma.</span></span><span class="u" data-d="6" data-l="s263w16"><span class="nul">Adverbial ldan du construction; no separate English exponent.</span></span><span class="u" data-d="6" data-l="s263w28"><span class="nul">Agent marking realized by active subject syntax, without a separate case word.</span></span><span class="u" data-d="6" data-l="s263w34"><span class="nul">Agent marking realized by active subject syntax, without a separate case word.</span></span><span class="u" data-d="6" data-l="s263w44"><span class="nul">Resultative relation is carried by the predicate complement after starts being, with no separate English particle.</span></span></span>
+ </div>
+ </div>
+-<div class="note"><b>AI NOTE</b> &mdash; PROVISIONAL machine alignment by Codex, reconciliation. The two grub occurrences own started and came separately. In the temporal ma zhig ... bar du construction, ma has no separate negative word: its not-yet boundary force is fused into until ... ends. This explicit grammatical-fusion null is distinct from matrix ma/not and yin/is. mthar/eventually, zhig/ends and bar du/until retain the useful temporal atoms, excluding the supplied subject it; zhig's unrelated auto-aligned three principal paths gloss is not used. The second cha shas gsum is resumed pronominally in they and omitted as distributed content; second ldan/with retains the possession relation despite reversal of English subject orientation. cing/or coordinates the alternatives under negation. The full source chu/phor pa selects the third English water/glass in the wet-and-flowing material description. The lone byas pa owns the second provides beside contributing factor; the first provides restates the shared causal predication. brten nas is the established based on unit; both of these is explanatory expansion of the two causes. rnag khrag owns blood and pus with its immediately following unique tighter rnag/pus member. A second khrag/blood d7 is omitted under the immediate-parent rule, though its meaning is covered by the compound and positively attested. Both member entries are glossary HTG2016; the original English evidence's corpus-mined characterization is incorrect and remains preserved only as original wording. Resultative tu has no separate particle beyond starts being. All source forms remain exact.</div>
++<div class="note"><b>AI NOTE</b> &mdash; PROVISIONAL machine alignment by Codex, reconciliation. The two grub occurrences own started and came separately. In the temporal ma zhig ... bar du construction, ma has no separate negative word: its not-yet boundary force is fused into until ... ends. This explicit grammatical-fusion null is distinct from matrix ma/not and yin/is. mthar/eventually, zhig/ends and bar du/until retain the useful temporal atoms, excluding the supplied subject it; zhig's unrelated auto-aligned three principal paths gloss is not used. The second cha shas gsum is resumed pronominally in they and omitted as distributed content; second ldan/with retains the possession relation despite reversal of English subject orientation. cing/or coordinates the alternatives under negation. The full source chu/phor pa selects the third English water/glass in the wet-and-flowing material description. The lone byas pa owns the second provides beside contributing factor; the first provides restates the shared causal predication. brten nas is the established based on unit; both of these is explanatory expansion of the two causes. rnag khrag owns blood and pus with a contiguous d7 member block: rnag/pus followed by khrag/blood in Tibetan order. Both are unique and strictly tighter inside that same parent; the canonical generator resolves their reversed English order. Correction round1 restores the second member after rejecting the earlier erroneous one-member interpretation. Both member entries are glossary HTG2016; the original English evidence's corpus-mined characterization is incorrect and remains preserved only as original wording. Resultative tu has no separate particle beyond starts being. All source forms remain exact.</div>
+--- /Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-262-264/reconciled/264/correction-history/round1-before/proof.json
++++ /Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-262-264/reconciled/264/proof.json
+@@ -14,7 +14,7 @@
+       "PYTHONDONTWRITEBYTECODE": "1"
+     },
+     "stdin": {
+-      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-262-264/reconciled/264/attempts/01/spec.json",
++      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-262-264/reconciled/264/attempts/02/spec.json",
+       "bytes": 3867,
+       "sha256": "fe0515970906ac1f0971e0aa23ec2204979aca5539654bd5a951afa57108af13"
+     },
+@@ -123,5 +123,28 @@
+       "sha256": "673b7d84a9b04e6fbb6766308533d3459eca27ff58f8fa4e363c47cb877ee4b1"
+     }
+   },
+-  "proof_limit": "Mechanical replay and fidelity do not prove semantic correspondence. No gate or allowance changed."
++  "proof_limit": "Mechanical replay and fidelity do not prove semantic correspondence. No gate or allowance changed.",
++  "correction_round1": {
++    "ruling": {
++      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-262-264/reconciled/263/correction-round1/root-member-block-ruling.md",
++      "bytes": 2038,
++      "sha256": "084487edc9c2b4795a85cdf60f6a16331ca02cb1f19a0164cfecabd74002d451"
++    },
++    "reopened_semantic_evidence": {
++      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-262-264/reconciled/263/correction-round1/reopened-evidence.json",
++      "bytes": 13002,
++      "sha256": "516b33721a6f6076be0964be99cc9abc58af911f23828af5df9eee6f55891e82"
++    },
++    "prior_freeze_preserved": {
++      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-262-264/reconciled/264/correction-history/round1-before/freeze.json",
++      "bytes": 4866,
++      "sha256": "49b96cb21c73d4795fdb08052dd2dad3b47c1ae0fe39be403ed9e7a67983fa88"
++    },
++    "preservation_map": {
++      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-262-264/reconciled/264/correction-history/round1-before-map.json",
++      "bytes": 8664,
++      "sha256": "6786a8dc45b3a96fa5932c64191077c5beab4252884eff9fc12768826266ada2"
++    },
++    "decision": "Restore the defensible khrag/blood sibling in263; contiguous multiple-member blocks and crossing English order are supported by unchanged canonical code. No canonical or gate change."
++  }
+ }
+--- /Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-262-264/reconciled/264/correction-history/round1-before/report.md
++++ /Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-262-264/reconciled/264/report.md
+@@ -16,3 +16,4 @@
+ Governing Git headf955740d862a449ee18ca93e473fffc07372d9ec; generated baseline235bd2ebabc2278a91a8c06c95f8371f2e5a77fe. Original earlier preparation identities remain preserved independently.
+ No final gated d5/d7 head allowances needed; /Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-262-264/reconciled/264/allowances-proposed.json records the empty proposal. No allowance, gate, source, master or repository changed.
+ Matching remains provisional. Separate non-author semantic review is required before acceptance; mechanical freeze is not semantic approval.
++Correction round1 restores263 khrag/blood as the second contiguous d7 sibling. The prior one-member structural explanation was false; current source judgment and unchanged canonical multi-child behavior support both members. Ruling/evidence: /Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-262-264/reconciled/263/correction-round1; complete prior freeze: /Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-262-264/reconciled/264/correction-history/round1-before.

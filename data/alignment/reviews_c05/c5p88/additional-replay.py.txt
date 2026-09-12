@@ -1,0 +1,14 @@
+from pathlib import Path
+import json,os,subprocess,hashlib
+R=Path(__file__).resolve().parent;B=R.parent;WT=B.parent.parent/'campaign-worktree'
+cases=[('english262-attempt01',B/'english/262/attempts/01/spec.json',B/'english/262/attempts/01/stdout.html'),('reconciled263-before-correction1',B/'reconciled/263/correction-history/round1-before/spec.json',B/'reconciled/263/correction-history/round1-before/body.html')]
+proof=[]
+for name,p,body in cases:
+ argv=['python3','-B',str(B/'english/262/canonical_readonly.py')]
+ run=subprocess.run(argv,cwd=WT,env=dict(os.environ,PYTHONDONTWRITEBYTECODE='1'),input=p.read_bytes(),capture_output=True)
+ out=R/'reproduction'/name;out.mkdir(parents=True,exist_ok=True)
+ (out/'generator.stdout').write_bytes(run.stdout);(out/'generator.stderr').write_bytes(run.stderr);(out/'generator.exit').write_text(str(run.returncode)+'\n')
+ assert run.returncode==0 and not run.stderr and run.stdout==body.read_bytes()
+ proof.append(dict(name=name,argv=argv,cwd=str(WT),env={'PYTHONDONTWRITEBYTECODE':'1'},spec=str(p),body=str(body),generator_exit=run.returncode,body_bytes=len(run.stdout),body_sha256=hashlib.sha256(run.stdout).hexdigest(),byte_exact=True))
+(R/'historical-replay-proof.json').write_text(json.dumps(proof,indent=2)+'\n')
+print(json.dumps(proof,indent=2))

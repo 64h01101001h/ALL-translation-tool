@@ -1,0 +1,5 @@
+# Reviewer capacity ruling
+
+2026-09-12T19:37:10.035461+00:00
+
+Ruling: Reuse the completed, unrelated-batch reconciler /root/c05_253_255_reconcile for C05:262–264 because all three available child task records occupy the platform limit and a new independent instance cannot be created. This is an explicit departure from the SDD skill's fresh-instance-per-task preference, using its instruction to resolve workflow/cap constraints and continue. This reader did not author either262–264 original angle and has received none of their judgments before both froze. It must reopen current original sources and all191 dispositions; a different non-author must conduct semantic review before acceptance. Neither original author may review its own proposal. Cost if wrong: prior-batch context could bias choices; mitigate with actual current evidence, explicit decisions, and the separate semantic review. Do not claim a fresh context or remove any source/generator/fidelity/semantic gate. No original, source, master, or accepted repository bytes change for this dispatch.

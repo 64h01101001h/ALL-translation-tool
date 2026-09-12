@@ -1,0 +1,244 @@
+{
+  "status": "CORRECTED; PROVISIONAL",
+  "finding": "The prior one-member maximum interpretation was false. Consecutive d7 children form a contiguous group under one d5 parent, and canonical code supports crossing member order.",
+  "scope": "Only263 gains one span;262/264 specs and bodies remain byte-identical. All191 original dispositions are refreshed; English263 w32 is now retained as final m2.",
+  "counts": {
+    "262": {
+      "spans": 43,
+      "nulls": 3
+    },
+    "263": {
+      "spans": 47,
+      "nulls": 6,
+      "d7": 2
+    },
+    "264": {
+      "spans": 18,
+      "nulls": 2
+    },
+    "total_spans": 108,
+    "total_nulls": 11,
+    "total_original_dispositions": 191
+  },
+  "member_ranges": [
+    {
+      "order": 44,
+      "span": {
+        "id": "m1",
+        "d": 7,
+        "tib": "rnag",
+        "eng": "pus"
+      },
+      "field_presence": [
+        "id",
+        "d",
+        "tib",
+        "eng"
+      ],
+      "tib_range": [
+        313,
+        317
+      ],
+      "eng_range": [
+        480,
+        483
+      ],
+      "rationale": "Pus is the correctly selected lexical member in the reversed blood and pus compound. HGM10448 is glossary tier HTG2016 with blood and pus/pus/blood/pus? variants; this selected pus is supported. It is not corpus-mined, and reciprocal variants are not silently removed.",
+      "all_tib_word_occurrences": [
+        [
+          313,
+          317
+        ]
+      ],
+      "all_eng_word_occurrences": [
+        [
+          480,
+          483
+        ]
+      ],
+      "contiguous_block_parent_id": "w43",
+      "tibetan_member_block": [
+        "m1",
+        "m2"
+      ],
+      "english_member_order": [
+        "m2",
+        "m1"
+      ]
+    },
+    {
+      "order": 45,
+      "span": {
+        "id": "m2",
+        "d": 7,
+        "tib": "khrag",
+        "eng": "blood"
+      },
+      "field_presence": [
+        "id",
+        "d",
+        "tib",
+        "eng"
+      ],
+      "tib_range": [
+        318,
+        323
+      ],
+      "eng_range": [
+        470,
+        475
+      ],
+      "rationale": "Blood is the source-exact lexical member in blood and pus, supported by HGM1368 glossary HTG2016 blood/pus variants and the actual source compound. It follows rnag/pus in the same contiguous d7 block under rnag khrag. No flat span intervenes; both members are unique, strictly tighter and canonically resolved in crossing English order. The earlier structural rejection was false and is preserved only in correction history.",
+      "all_tib_word_occurrences": [
+        [
+          318,
+          323
+        ]
+      ],
+      "all_eng_word_occurrences": [
+        [
+          470,
+          475
+        ]
+      ],
+      "contiguous_block_parent_id": "w43",
+      "tibetan_member_block": [
+        "m1",
+        "m2"
+      ],
+      "english_member_order": [
+        "m2",
+        "m1"
+      ]
+    }
+  ],
+  "preservation": {
+    "262": {
+      "complete_before_directory": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-262-264/reconciled/262/correction-history/round1-before",
+      "before_map": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-262-264/reconciled/262/correction-history/round1-before-map.json",
+      "old_freeze_sha256": "1c27337956674ef3aa442fc41339ecdfb259e507ae8caa08cf8dd96fb21c7c5a"
+    },
+    "263": {
+      "complete_before_directory": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-262-264/reconciled/263/correction-history/round1-before",
+      "before_map": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-262-264/reconciled/263/correction-history/round1-before-map.json",
+      "old_freeze_sha256": "c6f0a863f8741c6ed3009b024ad9a89bc0ef5c26f47178ab8654ebb4cdcc796e"
+    },
+    "264": {
+      "complete_before_directory": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-262-264/reconciled/264/correction-history/round1-before",
+      "before_map": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-262-264/reconciled/264/correction-history/round1-before-map.json",
+      "old_freeze_sha256": "49b96cb21c73d4795fdb08052dd2dad3b47c1ae0fe39be403ed9e7a67983fa88"
+    }
+  },
+  "actual_generator_proofs": {
+    "262": {
+      "argv": [
+        "python3",
+        "-B",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/run_generator_readonly.py"
+      ],
+      "cwd": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree",
+      "env": {
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "stdin": {
+        "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-262-264/reconciled/262/attempts/02/spec.json",
+        "bytes": 7700,
+        "sha256": "331017887f209161f4b904bb77f230426b3a4583140013067e8a6d730845b800"
+      },
+      "wrapper": {
+        "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/run_generator_readonly.py",
+        "bytes": 666,
+        "sha256": "584e87317a295d3bfb0e2bbd96d7c69a2497286c728f75d64f01dc0aa4ba2747"
+      },
+      "canonical": {
+        "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/tools/gen_alignment_page.py",
+        "bytes": 21175,
+        "sha256": "7c1c22345e18949e1aa34bb99115c32903527643b5a2c171e1a88f06d2a4cb8e"
+      },
+      "behavior": "supplied wrapper enforces URI mode=ro only; no PRAGMA query_only claim",
+      "governing_head": "f955740d862a449ee18ca93e473fffc07372d9ec"
+    },
+    "263": {
+      "argv": [
+        "python3",
+        "-B",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/run_generator_readonly.py"
+      ],
+      "cwd": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree",
+      "env": {
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "stdin": {
+        "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-262-264/reconciled/263/attempts/02/spec.json",
+        "bytes": 8562,
+        "sha256": "dafe1950342e489d999e319eec542191f93e8b5fd55b1d6fa764202e03a60a89"
+      },
+      "wrapper": {
+        "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/run_generator_readonly.py",
+        "bytes": 666,
+        "sha256": "584e87317a295d3bfb0e2bbd96d7c69a2497286c728f75d64f01dc0aa4ba2747"
+      },
+      "canonical": {
+        "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/tools/gen_alignment_page.py",
+        "bytes": 21175,
+        "sha256": "7c1c22345e18949e1aa34bb99115c32903527643b5a2c171e1a88f06d2a4cb8e"
+      },
+      "behavior": "supplied wrapper enforces URI mode=ro only; no PRAGMA query_only claim",
+      "governing_head": "f955740d862a449ee18ca93e473fffc07372d9ec"
+    },
+    "264": {
+      "argv": [
+        "python3",
+        "-B",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/run_generator_readonly.py"
+      ],
+      "cwd": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree",
+      "env": {
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "stdin": {
+        "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-262-264/reconciled/264/attempts/02/spec.json",
+        "bytes": 3867,
+        "sha256": "fe0515970906ac1f0971e0aa23ec2204979aca5539654bd5a951afa57108af13"
+      },
+      "wrapper": {
+        "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/run_generator_readonly.py",
+        "bytes": 666,
+        "sha256": "584e87317a295d3bfb0e2bbd96d7c69a2497286c728f75d64f01dc0aa4ba2747"
+      },
+      "canonical": {
+        "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/tools/gen_alignment_page.py",
+        "bytes": 21175,
+        "sha256": "7c1c22345e18949e1aa34bb99115c32903527643b5a2c171e1a88f06d2a4cb8e"
+      },
+      "behavior": "supplied wrapper enforces URI mode=ro only; no PRAGMA query_only claim",
+      "governing_head": "f955740d862a449ee18ca93e473fffc07372d9ec"
+    }
+  },
+  "results": {
+    "262": {
+      "exit": 0,
+      "stderr_bytes": 0,
+      "body_bytes": 7583,
+      "spec_sha256": "331017887f209161f4b904bb77f230426b3a4583140013067e8a6d730845b800",
+      "body_sha256": "58d0db4da39ce8ac35f5b43c9d0450d88bab7ea9759657796877574f65168108"
+    },
+    "263": {
+      "exit": 0,
+      "stderr_bytes": 0,
+      "body_bytes": 8367,
+      "spec_sha256": "dafe1950342e489d999e319eec542191f93e8b5fd55b1d6fa764202e03a60a89",
+      "body_sha256": "50e44a11278209ab364976d735b7859408204613713116cad62bbfa27ae50688"
+    },
+    "264": {
+      "exit": 0,
+      "stderr_bytes": 0,
+      "body_bytes": 3933,
+      "spec_sha256": "fe0515970906ac1f0971e0aa23ec2204979aca5539654bd5a951afa57108af13",
+      "body_sha256": "bc8e9d11de96375fc5c965058fc0220d4ad599ab37463231a461c12518ea4866"
+    }
+  },
+  "diff": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-262-264/reconciled/263/correction-round1/exact-fix.diff",
+  "changed_files": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-262-264/reconciled/263/correction-round1/changed-files.json",
+  "no_changes": "No canonical generator, source, master, accepted repository, allowance or gate was changed. The private extra validation now accurately checks the full contiguous member block while preserving uniqueness, strict containment and source/English order checks."
+}

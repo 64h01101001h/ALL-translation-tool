@@ -1,0 +1,43 @@
+--- semantic-review-brief.md
++++ semantic-review-brief-v2.md
+@@ -30,7 +30,7 @@
+ protocol's exact seven-key resolved-spans.json in spec order. review.json must
+ contain verdict, open_findings, and a segments LIST for the current reviewed
+ files. For each segment record seq, span_count, null_count, word_pair_count
+-(non-null d5), spec_sha262, spec_bytes, body_sha262, body_bytes and generator_exit.
++(non-null d5), spec_sha256, spec_bytes, body_sha256, body_bytes and generator_exit.
+ Use distinct SPEC and QUALITY verdicts in review.md. Approval is machine review,
+ not human editorial acceptance. If correction is needed, name exact span IDs and
+ minimal changes; do not edit the reconciler's files.
+@@ -55,7 +55,7 @@
+ Include total_spans, total_nulls and total_word_pairs as well as per-segment data.
+ 
+ Use original-to-copy-manifest.json as a LIST of records with exact keys
+-original (absolute path), copy (relative to semantic-review), sha262 and bytes.
++original (absolute path), copy (relative to semantic-review), sha256 and bytes.
+ For historical repository snapshots additionally include original_git_commit
+ and repository_relative_path; copied bytes must equal that immutable Git object.
+ Preserve helpers with unsupported extensions as exact-byte .txt copies.
+@@ -64,7 +64,7 @@
+ 
+ For identical immutable evidence, preserve one exact-byte copy and map every
+ original path to it in original-to-copy-manifest.json. A content-addressed copy
+-may live at proposal-inputs/evidence/<sha262>.<ext>. The helper
++may live at proposal-inputs/evidence/<sha256>.<ext>. The helper
+ ../copy_evidence_once.py (in campaign-artifacts, resolve from the batch parent)
+ implements this and has a real-file byte/hash verification record beside it.
+ Inspect it before use. It only copies evidence: you still choose all required
+@@ -81,3 +81,13 @@
+ protocol version each reader consumed; earlier policy history is reference only.
+ Do not imply that a reader consumed a version it did not actually read.
+ 
++
++## Evidence packaging preflight before freezing
++
++Before issuing the final review, verify every original-to-copy manifest target
++exists, exactly matches its original bytes/hash/size or immutable Git object,
++and has an extension included by land_reviewed_page.py. Inspect the actual
++helper's whitelist. Required .py evidence must have an exact-byte supported
++copy such as .py.txt. Validate all manifest targets before freezing, preserving
++failed attempts and earlier interfaces if a correction is necessary. Source
++bytes, accepted semantic content and existing review gates are unchanged.

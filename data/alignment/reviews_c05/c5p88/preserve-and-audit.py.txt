@@ -1,0 +1,144 @@
+from pathlib import Path
+import json,hashlib,subprocess,re,difflib,sqlite3,datetime
+R=Path(__file__).resolve().parent;B=R.parent;WT=B.parent.parent/'campaign-worktree';HEAD='f955740d862a449ee18ca93e473fffc07372d9ec';BASE='235bd2ebabc2278a91a8c06c95f8371f2e5a77fe'
+H=lambda b:hashlib.sha256(b).hexdigest()
+def save(n,d):(R/n).write_text(json.dumps(d,ensure_ascii=False,indent=2)+'\n')
+def check(p,d):
+ raw=Path(p).read_bytes();assert len(raw)==d['bytes'] and H(raw)==d['sha256'],str(p);return raw
+def git(p,h=HEAD):return subprocess.check_output(['git','show',h+':'+p],cwd=WT)
+allowed=('.json','.md','.html','.stderr','.stdout','.log','.txt','.bin','.exit')
+landing=(B.parent/'land_reviewed_page.py').read_text();assert all('"'+s+'"' in landing for s in allowed)
+manifest=[];byorig={}
+def copy(p,relative=None,gitcommit=None,gitpath=None):
+ p=Path(p).absolute();raw=p.read_bytes()
+ if str(p) in byorig:return byorig[str(p)]
+ if relative is None:relative='proposal-inputs/external/'+H(raw)+p.suffix
+ dest=Path(relative)
+ if dest.suffix.lower() not in allowed:dest=Path(str(dest)+('.txt' if dest.suffix in ('.py','.diff','.sql','.sh') else '.bin'))
+ target=R/dest;target.parent.mkdir(parents=True,exist_ok=True)
+ if target.exists():assert target.read_bytes()==raw
+ else:target.write_bytes(raw)
+ rec=dict(original=str(p),copy=str(dest),sha256=H(raw),bytes=len(raw))
+ if gitcommit:
+  assert git(gitpath,gitcommit)==raw;rec.update(original_git_commit=gitcommit,repository_relative_path=gitpath)
+ manifest.append(rec);byorig[str(p)]=rec;return rec
+# Full trees, including every attempt, original and nested freeze. No filename-only exclusions.
+originals=[p for p in B.rglob('*') if p.is_file() and not p.is_relative_to(R)]
+for p in sorted(originals):
+ rel=p.relative_to(B)
+ target='reviewed-final/'+str(Path(*rel.parts[1:])) if rel.parts[0]=='reconciled' else 'proposal-inputs/'+str(rel)
+ copy(p,target)
+# Every material source and original mapping in reconciliation evidence.
+mapping=json.loads((B/'reconciled/262/evidence/source-path-map.json').read_text());gitrecords=[]
+for m in mapping:
+ p=Path(m['source_path']);raw=check(m['immutable_copy'],m)
+ assert p.read_bytes()==raw
+ h=m.get('git_commit');rp=str(p.relative_to(WT)) if h else None
+ record=copy(p,'governing-originals/'+h+'/'+rp if h else None,h,rp)
+ if h:
+  gitrecords.append(record)
+  # Every preserved copy of this historical snapshot receives its own explicit pin.
+  for rec in manifest:
+   if rec['sha256']==m['sha256'] and rec['bytes']==m['bytes']:
+    rec.update(original_git_commit=h,repository_relative_path=rp)
+for name in ['semantic-review-protocol.md','copy_evidence_once.py','land_reviewed_page.py','run_generator_readonly.py']:
+ copy(B.parent/name,'governing-campaign/'+name)
+# Actual protocols/governing/source versions consumed by original readers, verified against their own pins.
+sharedpins=[]
+for proof,key in [('tibetan/262/proof.json','evidence_sources_sha256'),('english/262/original-evidence.json','read_sources_sha256')]:
+ for name,digest in json.loads((B/proof).read_text())[key].items():
+  p=Path(name);raw=p.read_bytes();assert H(raw)==digest
+  if p.is_relative_to(WT):
+   rp=str(p.relative_to(WT));rec=copy(p,'governing-originals/'+HEAD+'/'+rp,HEAD,rp)
+  else:rec=copy(p)
+  sharedpins.append(dict(reader_proof=proof,path=name,sha256=digest,copy=rec['copy']))
+save('original-reader-protocol-and-shared-pins.json',sharedpins)
+# Preserve historical register used at preparation head separately with original Git identity.
+historical='ed3cac8f691bee44dd09a03fe2712785901acc03';rp='docs/errata_register.json';raw=git(rp,historical)
+p=R/'governing-originals'/historical/rp;p.parent.mkdir(parents=True,exist_ok=True);p.write_bytes(raw)
+manifest.append(dict(original=str(WT/rp),copy=str(p.relative_to(R)),sha256=H(raw),bytes=len(raw),original_git_commit=historical,repository_relative_path=rp))
+# Dispatch inventory, complete package files + all unified diff lines independently regenerate.
+inv=json.loads((B/'semantic-dispatch-inputs.json').read_text());inventory=[]
+for m in inv['required_inputs']+inv['supplement_sources']:check(m['path'],m);inventory.append(m)
+packages=[]
+for name in ['semantic-input-review-package.txt','semantic-input-review-supplement.txt']:
+ raw=(B/name).read_bytes();parts=re.split(r'^===== (.*?) =====\n',raw.decode(),flags=re.M);sections=[]
+ for i in range(1,len(parts),2):
+  n,t=parts[i:i+2];p=B/n
+  if p.is_file():assert t==p.read_text()+'\n',(name,n);kind='exact entire current original plus one package separator newline'
+  elif n.startswith('COMPLETE '):
+   match=re.fullmatch(r'COMPLETE (tibetan|english) TO RECONCILED DIFF (\d+)',n);angle,seq=match.groups();left=f'{angle}/{seq}/spec.json';right=f'reconciled/{seq}/spec.json'
+   expected=''.join(difflib.unified_diff((B/left).read_text().splitlines(True),(B/right).read_text().splitlines(True),fromfile=left,tofile=right,n=10))
+   assert t==expected+'\n',(name,n);kind='complete independently regenerated U10 diff'
+  else:
+   indexes=json.loads(t)
+   assert isinstance(indexes,list)
+   for m in indexes:check(B/m['path'],m)
+   kind='all indexed bytes/hashes verified'
+  sections.append(dict(name=n,bytes=len(t.encode()),sha256=H(t.encode()),check=kind))
+ packages.append(dict(name=name,bytes=len(raw),sha256=H(raw),sections=sections))
+save('package-content-proof.json',packages)
+# Frozen current records, original records and complete prior maps.
+freezes=[]
+for angle in ['tibetan','english','reconciled']:
+ for seq in [262,263,264]:
+  p=B/f'{angle}/{seq}/freeze.json';d=json.loads(p.read_text());fs=d['files'];n=0
+  if isinstance(fs,dict):
+   for rel,m in fs.items():check(p.parent/rel,m);n+=1
+  else:
+   for m in fs:check(m['path'],m);n+=1
+   expected={str(q) for q in p.parent.rglob('*') if q.is_file() and q!=p}
+   assert expected=={m['path'] for m in fs}
+  freezes.append(dict(path=str(p),sha256=H(p.read_bytes()),files=n))
+history=[]
+for seq in [262,263,264]:
+ p=B/f'reconciled/{seq}/correction-history/round1-before-map.json';records=json.loads(p.read_text())
+ for m in records:check(m['preserved_path'],m)
+ root=B/f'reconciled/{seq}/correction-history/round1-before'
+ assert {str(q) for q in root.rglob('*') if q.is_file()}=={m['preserved_path'] for m in records}
+ old=json.loads((root/'spec.json').read_text());new=json.loads((B/f'reconciled/{seq}/spec.json').read_text())
+ if seq==263:
+  new['segments'][0]['spans']=[x for x in new['segments'][0]['spans'] if x['id']!='m2'];new['segments'][0]['note']=old['segments'][0]['note'];assert new==old
+ else:
+  assert new==old
+  assert (root/'body.html').read_bytes()==(B/f'reconciled/{seq}/body.html').read_bytes()
+ history.append(dict(seq=seq,files=len(records),all_prior_hashes=True,only_semantic_span_change='263 m2 khrag/blood' if seq==263 else 'none'))
+# Complete correction diff compared against all14 original/current file pairs.
+changed=json.loads((B/'reconciled/263/correction-round1/changed-files.json').read_text());diff=''
+for m in changed:
+ a=Path(m['before_path']);p=Path(m['path']);check(a,dict(bytes=m['before_bytes'],sha256=m['before_sha256']));check(p,dict(bytes=m['after_bytes'],sha256=m['after_sha256']))
+ diff+=''.join(difflib.unified_diff(a.read_text().splitlines(True),p.read_text().splitlines(True),fromfile=str(a),tofile=str(p),n=5))
+actual=(B/'reconciled/263/correction-round1/exact-fix.diff').read_text()
+# Context width is inferred only by exact equality, never by ignoring hunks.
+width=None
+for n in [3,5,10]:
+ expected=''.join(''.join(difflib.unified_diff(Path(m['before_path']).read_text().splitlines(True),Path(m['path']).read_text().splitlines(True),fromfile=m['before_path'],tofile=m['path'],n=n)) for m in changed)
+ if expected==actual:width=n
+assert width is not None,'complete correction diff differs from actual sources'
+# Actual baseline fixtures and7 immutable Git outputs, no rebuild.
+baseline=json.loads((B/'root-pre-semantic-baseline-verification.json').read_text());baseproof=[]
+for m in baseline['files']:
+ raw=check(WT/m['path'],m)
+ if m['exact_git']:assert raw==git(m['path'],BASE)
+ baseproof.append(m)
+# Every current witness full row/field/hash/shared block, including P7 differences.
+db=sqlite3.connect((WT/'build/hgm_spine_v27_2.db').resolve().as_uri()+'?mode=ro',uri=True);db.execute('pragma query_only=ON');db.row_factory=sqlite3.Row
+wproof=[]
+for seq in [262,263,264]:
+ w=json.loads((B/f'reconciled/{seq}/witness-extents.json').read_text());target=dict(db.execute("select * from corpus_segments where course='C05' and seq=?",(seq,)).fetchone());assert w['target']==target
+ for witness in w['witnesses']:
+  row=dict(db.execute('select * from corpus_segments where course=? and seq=?',(witness['course'],witness['seq'])).fetchone());assert row==witness['complete_original_row']
+  for field,m in witness['fields'].items():
+   text=row[field];assert m['full_text']==text and m['characters']==len(text) and m['utf8_bytes']==len(text.encode()) and m['sha256']==H(text.encode())
+   assert m['equal_to_target']==(text==target[field])
+   for block in m.get('complete_shared_blocks',[]):assert target[field][slice(*block['target_range'])]==text[slice(*block['witness_range'])]==block['text']
+  wproof.append(dict(target=seq,course=row['course'],seq=row['seq'],english_characters=len(row['english']),whole_row_exact=True,all_field_extents_exact=True))
+# Manifest hashes/extensions and historical Git identities are checked at the end.
+for m in manifest:
+ assert Path(m['copy']).suffix.lower() in allowed
+ raw=check(R/m['copy'],m)
+ if 'original_git_commit' in m:assert raw==git(m['repository_relative_path'],m['original_git_commit'])
+ else:assert raw==Path(m['original']).read_bytes()
+save('original-to-copy-manifest.json',manifest)
+save('preservation-proof.json',dict(status='PASS',dispatch_inventory=len(inventory),package_sections=sum(len(p['sections']) for p in packages),full_correction_diff_context=width,current_freezes=freezes,history=history,baseline=baseproof,witnesses=wproof,original_files=len(originals),manifest_records=len(manifest),unique_copies=len({x['copy'] for x in manifest}),historical_git_pins=sum('original_git_commit' in x for x in manifest),all_manifest_targets_landing_supported=True,nested_freezes_preserved=True))
+print(json.dumps(dict(status='PASS',manifest_records=len(manifest),history_files=sum(x['files'] for x in history),current_reconciled_frozen_files=sum(x['files'] for x in freezes if '/reconciled/' in x['path']),witnesses=len(wproof)),indent=2))
