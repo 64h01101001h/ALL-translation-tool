@@ -9179,9 +9179,16 @@ public:
             docprops::carryDocHistory(dataRoot_, docFile_, nw, &whyR);
         docFile_ = nw;
         refreshDocTitle();
-        if (!carriedR && hint_) hint_->setText("Renamed \u2014 but " + whyR);
         loadGlossary();
-        if (hint_) hint_->setText("Renamed to " + QFileInfo(nw).fileName());
+        // The failure notice used to be set here and then overwritten two
+        // lines later by the unconditional success line, so a rename that
+        // could NOT carry its history reported success anyway. Mine, from
+        // wiring carryDocHistory into this pane earlier tonight.
+        if (hint_)
+            hint_->setText(carriedR
+                               ? "Renamed to " + QFileInfo(nw).fileName()
+                               : "Renamed to " + QFileInfo(nw).fileName() +
+                                     " \u2014 but " + whyR);
         return true;
     }
     bool renameDocument() {
@@ -25965,6 +25972,18 @@ public:
                "<div style='color:#6F6F6F;font-size:11px'>Nothing has been "
                "run yet, so there is nothing to show. This pane never "
                "invents content.</div>";
+    }
+
+    // The digest capture: a real passage loaded and a clause chosen, so the
+    // Evidence Ribbon and the apparatus pane show their content rather than
+    // their (now non-empty) idle text.
+    void demoForShot() {
+        demo("/ /blo sbyong snyan brgyud chen mo'i 'khrid yig "
+             "/sems can thams cad bde ba dang ldan par gyur cig /");
+        draft_->setPlainText(
+            "The great oral lineage of the teachings on developing the good "
+            "heart. May every living being come to have happiness.");
+        updateTermChip();
     }
 
     int selfTest(QStringList& log) {
@@ -50775,6 +50794,16 @@ int main(int argc, char** argv) {
                     "tib", "all");
                 settle(350); save(sanskritPane->grab(), "sanskrit-mantra");
                 sanskritPane->demo(QString(), "auto", "full");
+            }
+            if (extra.contains("draft")) {
+                // The Draft workspace with a real passage on the bench and a
+                // clause chosen, so the two right-hand panes show what they
+                // are for rather than the empty boxes Adam found there.
+                if (g_raisePane) g_raisePane(draftPane);
+                settle(200);
+                draftPane->demoForShot();
+                settle(500);
+                save(draftPane->grab(), "draft-workspace");
             }
             if (extra.contains("input")) {
                 // the Input pane framing a real folio (Adam, 2026-09-11).
