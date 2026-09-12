@@ -47,7 +47,7 @@ the/a/an/and/or/his/our/your/I/you unless `data/alignment/span_head_allow.json`
 lists it under `pages_c05` with the Tibetan word that licenses it.
 
 ## Progress
-c5p1–c5p7 (1–21) cloned 2026-09-05; c5p8–c5p49 (22–147) landed 2026-09-05; c5p50–c5p55 (148–165) landed 2026-09-08. c5p56 (166–168) landed 2026-09-12 after fresh independent proposals, reconciliation and skeptical review. c5p57 (169–171) landed after independent review. c5p58 (172–174) landed after independent review. c5p59 (175–177) landed after independent review. c5p60 (178–180) landed after independent review. c5p61 (181–183) landed after independent review. c5p62 (184–186) landed after independent review. c5p63 (187–189) landed after independent review. Coverage 189/511; current verification is recorded in the latest batch entry below.
+c5p1–c5p7 (1–21) cloned 2026-09-05; c5p8–c5p49 (22–147) landed 2026-09-05; c5p50–c5p55 (148–165) landed 2026-09-08. c5p56 (166–168) landed 2026-09-12 after fresh independent proposals, reconciliation and skeptical review. c5p57 (169–171) landed after independent review. c5p58 (172–174) landed after independent review. c5p59 (175–177) landed after independent review. c5p60 (178–180) landed after independent review. c5p61 (181–183) landed after independent review. c5p62 (184–186) landed after independent review. c5p63 (187–189) landed after independent review. c5p64 (190–192) landed after independent review. Coverage 192/511; current verification is recorded in the latest batch entry below.
 
 **Historical pause, superseded by Adam’s 2026-09-11 continuation request. PAUSED 2026-09-08 (Adam's call): the campaign stops here while the app goes to
 a public release (two-week target). Reconciled-but-unlanded specs for 166, 167,
@@ -495,3 +495,44 @@ Independent fixed-commit reproduction and full-campaign read-only main preflight
 are pending the checkpoint review. No main integration or new native/device
 execution occurred; actual rendering remains unverified after the browser policy
 block. Next 190–192 has source/context snapshots only, no accepted proposals yet.
+
+
+### c5p64 · C05:190–192 — 2026-09-12 — Codex reconciliation/review
+
+Two fresh independent proposal angles, separate reconciliation and skeptical
+semantic review approved 44 analyst spans (42 linked, two grammatical/fusion
+nulls), including 30 d5 word pairs and six d7 members. All six proposal bodies
+and three final individual bodies reproduce exactly. All accepted tuples and
+source ranges agree with the landed spec. Accepted spec: `specs_c05/c5p64.json`;
+review, source, glossary and generator evidence: `reviews_c05/c5p64/`.
+
+This passage begins a Lamrim Chenmo excerpt, explicitly introduced at 190;
+the older broad course-shape description above does not identify this section.
+The RJES/rjes introduction candidate was refuted as underdetermined: rje+s
+inflection remains possible. The original ASCII reading has the same spelling;
+a second local copy is byte-identical, not an independent publication. The
+located Tibetan PDF is a language study guide, not this reading. No correction
+or Lord pairing is banked, and uncertain rjes is omitted rather than nulled.
+The title's chen mo/Great Book member is explicitly glossary-supported. The
+191 consequences occurrences are distinct; gyi and ni have reviewed fusion
+and topic nulls. The 192 repeated counts and final born were checked against
+actual resolver ranges. Three kinds remains a classification phrase at d3.
+Only `c5p64/s192w10` is added to the head allowance: sogs owns the complete
+closing gesture and the rest, supported by glossary 20919 and independent
+review. All older allowance entries survive unchanged. No new erratum.
+
+Coverage 192/511; full bank 42,561 links (+47, including three sentence anchors),
+11,866 null exponents, 1,528 note blocks, 11 trees. Evidence: 6,816 headwords /
+14,708 pairs. All 42,514 previous links, notes/trees, evidence citations and ACIP
+mappings survive; all 21,229 prior main CSV lexical rows and citations survive
+without ACIP enrichment. Both banks, dictionary HTML and all four CSVs rebuilt.
+Main CSV: 21,249 rows; reverse: 20,909; changes: 20 new rows versus d21deed.
+All 22,568 course CSV rows match actual course/depth refs and metadata; all
+22,539 prior groups and counts survive. The 22 semantic evidence files were
+copied byte-for-byte. Master, corpus and errata register remain unchanged.
+
+All 17 targeted fidelity, export and constitution suites passed in 10.62 seconds.
+The registered 118 suites were not all run. Navigation and source hashes check.
+Alignment-page rendering remains unverified; no new native/device action or
+main integration occurred. Next: 193–195, independently semantically approved
+but not banked at this entry.

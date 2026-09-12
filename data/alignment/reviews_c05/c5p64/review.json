@@ -1,0 +1,90 @@
+{
+  "producer": "Codex",
+  "verdict": "APPROVE",
+  "status": "PROVISIONAL machine alignment; not human acceptance",
+  "page": "c5p64",
+  "total_spans": 44,
+  "total_nulls": 2,
+  "total_word_pairs": 30,
+  "segments": [
+    {
+      "seq": 190,
+      "span_count": 6,
+      "null_count": 0,
+      "word_pair_count": 3,
+      "depth_counts": {
+        "5": 3,
+        "6": 1,
+        "7": 2
+      },
+      "generator_exit": 0,
+      "stderr_bytes": 0,
+      "body_matches_stdout": true,
+      "spec_sha256": "7c3cd93fbfd391c68958d57f74ef3ba5ad9779b0641609fd099dc650e043961d",
+      "spec_bytes": 1547,
+      "body_sha256": "9b70e5b1ec2ad95ba4dfdbea55db3500470537b2c51cb3fd1dca0b529107532e",
+      "body_bytes": 1707,
+      "argv": [
+        "python3",
+        "-c",
+        "import runpy,sqlite3; original=sqlite3.connect; sqlite3.connect=lambda path,*a,**k: original('file:'+str(path)+'?mode=ro',*a,uri=True,**k); runpy.run_path('tools/gen_alignment_page.py',run_name='__main__')"
+      ],
+      "cwd": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree"
+    },
+    {
+      "seq": 191,
+      "span_count": 9,
+      "null_count": 2,
+      "word_pair_count": 5,
+      "depth_counts": {
+        "5": 5,
+        "6": 4
+      },
+      "generator_exit": 0,
+      "stderr_bytes": 0,
+      "body_matches_stdout": true,
+      "spec_sha256": "79b5047dfc9e9b5ee697aac825f9f9dadf14f004afd6c5c8ed602c08fa75465b",
+      "spec_bytes": 2111,
+      "body_sha256": "be9fe84674fd23d923e70eedd456ec68c37149e53adc61f31696617d7b54b032",
+      "body_bytes": 2322,
+      "argv": [
+        "python3",
+        "-c",
+        "import runpy,sqlite3; original=sqlite3.connect; sqlite3.connect=lambda path,*a,**k: original('file:'+str(path)+'?mode=ro',*a,uri=True,**k); runpy.run_path('tools/gen_alignment_page.py',run_name='__main__')"
+      ],
+      "cwd": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree"
+    },
+    {
+      "seq": 192,
+      "span_count": 29,
+      "null_count": 0,
+      "word_pair_count": 22,
+      "depth_counts": {
+        "3": 2,
+        "5": 22,
+        "6": 1,
+        "7": 4
+      },
+      "generator_exit": 0,
+      "stderr_bytes": 0,
+      "body_matches_stdout": true,
+      "spec_sha256": "c4e73de6763e56acda02f28c00bf03d82a936b661b50067659bd89a38b75b9e8",
+      "spec_bytes": 4784,
+      "body_sha256": "90ec6df9ba62a09e1b0602ed484d1a847bd2a3793cf3b151c17d2c6f20257d31",
+      "body_bytes": 4860,
+      "argv": [
+        "python3",
+        "-c",
+        "import runpy,sqlite3; original=sqlite3.connect; sqlite3.connect=lambda path,*a,**k: original('file:'+str(path)+'?mode=ro',*a,uri=True,**k); runpy.run_path('tools/gen_alignment_page.py',run_name='__main__')"
+      ],
+      "cwd": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree"
+    }
+  ],
+  "open_findings": [],
+  "required_span_head_allowance": {
+    "pages_c05": {
+      "c5p64/s192w10": "sogs licenses and the rest (HGM 20919)"
+    }
+  },
+  "bank_ready_errata_count": 0
+}
