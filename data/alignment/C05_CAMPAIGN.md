@@ -47,7 +47,7 @@ the/a/an/and/or/his/our/your/I/you unless `data/alignment/span_head_allow.json`
 lists it under `pages_c05` with the Tibetan word that licenses it.
 
 ## Progress
-c5p1–c5p7 (1–21) cloned 2026-09-05; c5p8–c5p49 (22–147) landed 2026-09-05; c5p50–c5p55 (148–165) landed 2026-09-08. c5p56 (166–168) landed 2026-09-12 after fresh independent proposals, reconciliation and skeptical review. c5p57 (169–171) landed after independent review. c5p58 (172–174) landed after independent review. c5p59 (175–177) landed after independent review. c5p60 (178–180) landed after independent review. c5p61 (181–183) landed after independent review. c5p62 (184–186) landed after independent review. c5p63 (187–189) landed after independent review. c5p64 (190–192) landed after independent review. c5p65 (193–195) landed after independent review. c5p66 (196–198) landed after independent review. c5p67 (199–201) landed after independent review. c5p68 (202–204) landed after independent review. c5p69 (205–207) landed after independent review. c5p70 (208–210) landed after independent review. Coverage 210/511; current verification is recorded in the latest batch entry below.
+c5p1–c5p7 (1–21) cloned 2026-09-05; c5p8–c5p49 (22–147) landed 2026-09-05; c5p50–c5p55 (148–165) landed 2026-09-08. c5p56 (166–168) landed 2026-09-12 after fresh independent proposals, reconciliation and skeptical review. c5p57 (169–171) landed after independent review. c5p58 (172–174) landed after independent review. c5p59 (175–177) landed after independent review. c5p60 (178–180) landed after independent review. c5p61 (181–183) landed after independent review. c5p62 (184–186) landed after independent review. c5p63 (187–189) landed after independent review. c5p64 (190–192) landed after independent review. c5p65 (193–195) landed after independent review. c5p66 (196–198) landed after independent review. c5p67 (199–201) landed after independent review. c5p68 (202–204) landed after independent review. c5p69 (205–207) landed after independent review. c5p70 (208–210) landed after independent review. c5p71 (211–213) landed after independent review. Coverage 213/511; current verification is recorded in the latest batch entry below.
 
 **Historical pause, superseded by Adam’s 2026-09-11 continuation request. PAUSED 2026-09-08 (Adam's call): the campaign stops here while the app goes to
 a public release (two-week target). Reconciled-but-unlanded specs for 166, 167,
@@ -821,3 +821,58 @@ course/depth groups match actual main CSV references, retaining all 22,788 old
 groups. Source/master hashes are unchanged. All 17 fidelity/export/constitution
 suites pass. Rendering and newer native/device execution remain unverified;
 no main integration occurred. Next: c5p71, 211–213, independently approved.
+
+
+### ERRATA to c5p70 historical reconciliation gloss description — 2026-09-12
+
+Independent integration review found that the preserved 210 reconciliation
+report says HGM bar has “interval/between renderings.” Root reopened original
+entry 12330: hgm_gloss includes between, in between and intermediate, but not
+interval. Interval belongs to the Hopkins/comparative field. The final semantic
+review, five-ground decision and E-187 already distinguish this correctly.
+This appended correction supersedes the historical reconciler's attribution;
+all original evidence bytes remain intact. No source, accepted spec, dictionary
+entry or errata-bank record changes. Full reopened entry is preserved in
+`reviews_c05/c5p71/landing-proof/HGM-bar-description-correction.json`.
+
+### c5p71 · C05:211–213 — 2026-09-12 — Codex reconciliation/review
+
+Independent semantic SPEC/QUALITY APPROVE covers 79 analyst spans (16/19/44),
+zero nulls, 44 d5 pairs, 28 d7 members, four d3 phrases and three particles.
+All six proposals and three final individual bodies reproduce exactly. All
+accepted tuples and ranges match the assembled spec/body. The 36 copied semantic
+evidence files include all three complete raw witnesses. Source-specific
+attestations remain PROVISIONAL; machine approval does not confer human acceptance.
+
+211 keeps inflected de'i/behind it with a unique de/it member; it does not claim
+'i alone means behind. Technical factor and contributing retain their evidence.
+212 uses the complete seed-producing-eye-consciousness relative phrase at d3,
+preserving causal roles rather than calling a bare arising verb produces. The
+unresolved thinking frame remains omitted. 213 rejects the whole-verse d1 phrase
+and the earlier ces-null cursor workaround. The disputed object and citation
+closure remain omitted with their distributed-expression note. Four foundation
+consciousness occurrences and the reversed of/member inside kun gzhi'i retain
+exact source offsets. Master and Stiramati are separate supported spans.
+
+Only two reviewed supplied-head allowances are added: c5p71/s213w7 for sogs/and
+the rest and c5p71/s213w33 for sogs/and so on. Original HGM 20919 explicitly
+attests both complete closing gestures; no extra lexical noun is absorbed.
+E-188 is the sole new erratum, LOW/PROBABLE SKYE BO→SKYE'O at 213. Independent
+five-ground review preserves all three raw SKYE BO readings, ILL's explicit
+editorial alternative and GK:358's shorter line ending SKYE'O; GK does not
+witness DE DON MED. No publication independence or blockprint reconstruction
+is claimed. The proposed English verse rewrite is refuted as uncertain, and
+both original languages remain untouched. All 187 earlier errata and prior
+allowances are retained exactly as structured records.
+
+Coverage 213/511. Bank: 43,007 links (+82 including three sentence anchors),
+11,871 null exponents, 1,549 note blocks and 11 trees. Evidence: 6,914 headwords /
+14,893 pairs. All 42,925 prior links, notes/trees/evidence/ACIP and 21,494 earlier
+main CSV lexical keys and citations survive. The old lngar/into five d7 row gains
+LNGAR from a newly accepted C05:213 d5 source witness; lexical content is unchanged.
+Main CSV: 21,532; reverse: 21,192; changes: 38 versus 5aeb6e9. All 22,896 course/
+depth groups match actual main CSV references, retaining 22,848 earlier groups.
+Master/corpus hashes are unchanged. All 17 fidelity/export/constitution suites
+pass in 10.81 seconds. Rendering and newer native/device execution remain
+unverified; no main integration occurred. Next: c5p72, 214–216, source/context
+snapshots and focused original-parallel checks only; no proposals yet.
