@@ -8,6 +8,16 @@ Format and rules: `05_CROSS_CHECK_PROTOCOL.md`.
 
 ---
 
+## 2026-09-12 — Codex — continuation checkpoint, C05 through 189
+
+- Added 184–186 in `bb77f01` and 187–189 in `883a4ee`: six segments, 168 independently reviewed analyst spans and six sentence anchors. C05 reaches **189/511**, pages c5p1–c5p63. All eight pages since 165 add 731 analyst spans and 24 anchors. Separate proposals, reconciliation, semantic review, accepted specs and exact generator proofs remain preserved.
+- Both new batches passed all **17 targeted fidelity, export and constitution suites** (10.46s and 10.51s). Exact reviewed tuples/ranges, prior links/notes/trees/evidence/ACIP mappings, previous main CSV content/citations, and all course/depth groups/counts/metadata were verified. The course export regression is now part of the recurring check set; 118 is a registered suite count, not a full-suite claim.
+- Current bank: **42,514 links, 11,864 null exponents, 1,525 notes, 11 trees**. Evidence: **6,812 headwords/14,696 pairs**. CSV rows: main 21,229; reverse 20,889; course/depth 22,539; changes 31 versus bb77f01. Master and original corpus hashes remain unchanged; no source text or hgm_gloss edits.
+- Upheld semantic review narrowed 185q1 to la/to; de remains omitted with a distributed-reference note. Its initial proposal/review and corrected spec/body are preserved, and scoped re-review approved the final files. Occurrence-level 'gyur/lead(s) approvals in 187–189 and conservative omissions in 185–186 were independently adjudicated with the same glossary counterevidence. No automatic cross-batch semantic substitution was made.
+- E-186 records 'BRAL DU→'PHRAL DU at 187 as LOW/PROBABLE. The skeptical reviewer re-read the source and local raw commentary witnesses, verified all five grounds and checked 185 prior register records. Two byte-identical SE files read BRAL; SL reads PHRAL. Publication independence is unproved. Exact contexts, hashes and folio are committed in `data/alignment/reviews_c05/c5p63/commentary-local-witnesses.json`. The disputed text stays unpaired and unchanged.
+- A fresh independent reviewer reproduced both banks, HTML and all four CSVs exactly at both fixed data commits (changes seeded from 70804c9 for bb77f01 and from bb77f01 for 883a4ee). All 168 tuples match canonical generator ranges and all six individual bodies/two page manifests agree. The committed 189 reproduction records 183,321 checks with zero failures. Final documentation review and read-only full-patch applicability evidence belong in sibling `campaign-artifacts/integration/continuation-through189-review.md`; no main integration is inferred.
+- Next is **c5p64, C05:190–192**, with source/context snapshots only. The native/installed-phone checkpoint remains 171, locked-device launch remains unverified, and browser-policy rendering limits persist. No new device execution or main integration occurred. No additional source files are needed. Hourly continuation remains ACTIVE through 2026-09-15 at 07:00 America/Denver; this is an unfinished campaign.
+
 ## 2026-09-12 — Codex — ERRATA: course CSV depth provenance repaired
 
 The continuation review found a defect beyond the earlier CSV retention checks:

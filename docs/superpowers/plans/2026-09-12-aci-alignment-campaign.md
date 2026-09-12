@@ -107,3 +107,17 @@ HTML, banks, and master/source files are unchanged. The changes report remains
 the 55-row delta against `2f16dee`. Private CMake registration is now 118 suites;
 this is not a full-suite execution claim. See the append-only handoff ERRATA entry
 and sibling integration evidence before continuing at C05:184.
+
+## Third continuation checkpoint — 2026-09-12
+
+Accepted C05 now reaches 189 in `bb77f01` and `883a4ee`: 168 reviewed analyst
+spans plus six anchors. Every new page passed all 17 targeted suites, including
+the course-export regression; every course/depth row and count matches actual
+main CSV references. Previous links, citations, lexical fields and source hashes
+are retained. The 185 la/to correction passed a separate scoped re-review, and
+E-186 remains LOW/PROBABLE with exact committed digital witness evidence.
+Independent fixed-commit reproduction passes for both banks, HTML and all four
+CSVs, with 168 exact reviewed tuples. Read-only main preflight is recorded in the
+final independent report; no main integration is inferred. Next 190–192 has source/context snapshots only. Task 3's visual limit and
+Task 4's unfinished integration/campaign work remain explicit; no newer native or
+phone execution is inferred. Resume from the latest sibling continuation record.
