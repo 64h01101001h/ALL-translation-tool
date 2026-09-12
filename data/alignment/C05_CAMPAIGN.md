@@ -47,7 +47,7 @@ the/a/an/and/or/his/our/your/I/you unless `data/alignment/span_head_allow.json`
 lists it under `pages_c05` with the Tibetan word that licenses it.
 
 ## Progress
-c5p1–c5p7 (1–21) cloned 2026-09-05; c5p8–c5p49 (22–147) landed 2026-09-05; c5p50–c5p55 (148–165) landed 2026-09-08. c5p56 (166–168) landed 2026-09-12 after fresh independent proposals, reconciliation and skeptical review. c5p57 (169–171) landed after independent review. c5p58 (172–174) landed after independent review. c5p59 (175–177) landed after independent review. c5p60 (178–180) landed after independent review. c5p61 (181–183) landed after independent review. c5p62 (184–186) landed after independent review. c5p63 (187–189) landed after independent review. c5p64 (190–192) landed after independent review. c5p65 (193–195) landed after independent review. c5p66 (196–198) landed after independent review. c5p67 (199–201) landed after independent review. c5p68 (202–204) landed after independent review. c5p69 (205–207) landed after independent review. c5p70 (208–210) landed after independent review. c5p71 (211–213) landed after independent review. c5p72 (214–216) landed after independent review. c5p73 (217–219) landed after independent review. c5p74 (220–222) landed after independent review. c5p75 (223–225) landed after independent review. c5p76 (226–228) landed after independent review. c5p77 (229–231) landed after independent review. c5p78 (232–234) landed after independent review. c5p79 (235–237) landed after independent review. c5p80 (238–240) landed after independent review. c5p81 (241–243) landed after independent review. c5p82 (244–246) landed after independent review. c5p83 (247–249) landed after independent review. c5p84 (250–252) landed after independent review. c5p85 (253–255) landed after independent review. c5p86 (256–258) landed after independent review. c5p87 (259–261) landed after independent review. c5p88 (262–264) landed after independent review. Coverage 264/511; current verification is recorded in the latest batch entry below.
+c5p1–c5p7 (1–21) cloned 2026-09-05; c5p8–c5p49 (22–147) landed 2026-09-05; c5p50–c5p55 (148–165) landed 2026-09-08. c5p56 (166–168) landed 2026-09-12 after fresh independent proposals, reconciliation and skeptical review. c5p57 (169–171) landed after independent review. c5p58 (172–174) landed after independent review. c5p59 (175–177) landed after independent review. c5p60 (178–180) landed after independent review. c5p61 (181–183) landed after independent review. c5p62 (184–186) landed after independent review. c5p63 (187–189) landed after independent review. c5p64 (190–192) landed after independent review. c5p65 (193–195) landed after independent review. c5p66 (196–198) landed after independent review. c5p67 (199–201) landed after independent review. c5p68 (202–204) landed after independent review. c5p69 (205–207) landed after independent review. c5p70 (208–210) landed after independent review. c5p71 (211–213) landed after independent review. c5p72 (214–216) landed after independent review. c5p73 (217–219) landed after independent review. c5p74 (220–222) landed after independent review. c5p75 (223–225) landed after independent review. c5p76 (226–228) landed after independent review. c5p77 (229–231) landed after independent review. c5p78 (232–234) landed after independent review. c5p79 (235–237) landed after independent review. c5p80 (238–240) landed after independent review. c5p81 (241–243) landed after independent review. c5p82 (244–246) landed after independent review. c5p83 (247–249) landed after independent review. c5p84 (250–252) landed after independent review. c5p85 (253–255) landed after independent review. c5p86 (256–258) landed after independent review. c5p87 (259–261) landed after independent review. c5p88 (262–264) landed after independent review. c5p89 (265–267) landed after independent review. Coverage 267/511; current verification is recorded in the latest batch entry below.
 
 **Historical pause, superseded by Adam’s 2026-09-11 continuation request. PAUSED 2026-09-08 (Adam's call): the campaign stops here while the app goes to
 a public release (two-week target). Reconciled-but-unlanded specs for 166, 167,
@@ -1701,3 +1701,82 @@ all classification/index/source checks are unchanged. A first classification
 refused one redundant root-helper diff copy outside the semantic freeze. Its
 complete original stays external with a SHA pin; both full helper sources and
 failed/superseded manifests are banked. No source whitespace was normalized.
+
+## 2026-09-12 — Codex private continuation through C05:267
+
+Private data commit f3c1ca804a933d53f84214d6968a84e7e0193c6e lands C05:265–267
+as page89: 92 analyst spans (19/38/35), four explicit nulls (2/0/2), 61 non-null
+d5 pairs and three sentence anchors. C05 reaches267/511 across89 pages. Since
+segment165,34 new pages contain2920 analyst spans and102 anchors. All remain
+PROVISIONAL machine attestations; source/master bytes and hgm_gloss are unchanged.
+
+The primary Codex reader authored the Tibetan original, disclosing its prior
+source preparation, and froze all three drafts before opening English proposals.
+A separate reader authored English; two distinct non-authors reconciled and
+semantically reviewed the result. The explicit capacity ruling preserves these
+four roles while reusing existing child records. No fresh-context claim is made,
+and the primary's mechanical verification is not independent semantic approval.
+
+The independent semantic report approves SPEC and QUALITY with zero findings.
+Root read its complete29641 bytes and all92 adjudications; report SHA-256
+16d8c1b797e7920e566b2f696d2932b4fabef8caee44cc6fdde383b14e6b94f8.
+All171 original span identities survive with dispositions. Reviewers reopened
+186 primary and five supplemental SQL sets,65 full master records,75 raw corpus
+records and24 complete physical extents. All nine original/final canonical bodies
+reproduce exactly. The current freeze lists525 files;526 including the freeze
+were copied exactly, with527 original-copy mappings and19 historical Git pins.
+
+Material decisions preserve265's second provides occurrence, active agentive
+nulls and lexical sogs/and so on;266's collected root, three, matrix is/not,
+contracted n't and two blood/pus members;267's whole rigs 'dra phyi ma/continuation,
+look root, no/fullness/agentive distinctions, causal Since, experiencing root and
+two blood/pus members. Positive glossary variants were considered alongside full
+source syntax. One exact allowance, pages_c05/c5p89/s265w15, licenses the internal
+and in sogs/and so on using HTG2016 HGM20919 and the local enumeration. No new
+errata were accepted; all192 previous entries and previous allowances survive.
+
+Both actual canonical builders ran once and exited0, using the real previous
+main CSV from2c1e0768629aff301b9f80a510d7ccbcf53d6ba7. All17 targeted suites passed
+in10.77seconds. Prior links, notes, trees, lexical rows, evidence references and
+ACIP metadata were retained without enrichment. Bank44781 links/11910 nulls/
+1603 notes/11 trees; evidence7067 heads/15430 pairs. CSV rows:22341 main,
+22001 reverse,23875 course-depth and30 changes. Every course-depth group matches
+actual references and metadata. ACIP forms are proven for7064 of7067 headwords;
+the builder's rounded100.0% display does not mean every headword has a proven form.
+
+Root verification errors are preserved. The CTest process passed, but its wrapper
+then asserted a different footer and failed; root verified every numbered Passed
+record and the actual footer without rerunning tests. Parent python -B did not
+disable bytecode in CTest children: three tracked engine caches changed. Their
+changed bytes were preserved before restoring only those caches to exact HEAD
+bytes in the private checkout. Future subprocesses must explicitly inherit
+PYTHONDONTWRITEBYTECODE=1. No source or engine code changed.
+
+The first whitespace classifier refused three original physical lines inside a
+frozen English collection log. Root mistakenly launched the dependent v5 audit
+after that failure; it also failed because the pins file had not been written.
+Both failures and full raw diagnostics survive. Strict v6 adds exact original
+physical-line witnesses: frozen log hash, indexed/live equality, warning line
+set, full original-file hash, byte ranges and actual line boundaries must agree.
+No source whitespace was normalized and no general exception was introduced.
+All59823 warnings are accounted for:37076 whole physical-source warnings,
+22731 canonical CSV CRLF,three exact physical-source log lines,nine empty diff
+contexts and four blank EOF warnings. The complete25478080-byte raw log has SHA
+f870c2d24362d44014be0ae88ea1ef24b8a5b8529073223bd050599434a34a10;
+its full bytes stayed identical after final proof staging. Both whole helper
+versions and all failure history are retained; the complete helper diff is
+external with a SHA pin. The private data commit contains597 scoped files.
+
+The fully closed preceding checkpoint is7d3d232, through264. Fixed through267
+data/documentation review is still required, including all seven exact output
+reproductions, all1912 fixtures per checkout and a fresh read-only complete
+original-base MAIN patch preflight. This entry does not claim those future checks
+passed. No changes have been applied to MAIN. Native/installed-phone verification
+remains through171; rendered inspection, locked launch and MAIN integration
+remain open. C13 remains blocked pending its upstream correction.
+
+Next268–270 baseline was captured from clean dataf3c1ca8 with all nine current
+hashes and eight required references checked. No next original proposals exist
+at this entry. Source preparation is complete through294;295–297 is partially
+prepared and explicitly unfinished. The authorized five-minute continuation
+remains active until2026-09-15 at07:00 America/Denver. No additional files needed.
