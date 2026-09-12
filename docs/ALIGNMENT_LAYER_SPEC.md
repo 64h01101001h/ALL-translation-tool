@@ -20,7 +20,8 @@ Artefacts:
 
 | artefact | path | built by |
 |---|---|---|
-| pages (both sides wrapped in place from the spine) | `data/alignment/pages/` (C02), `pages_c01/`, `pages_c03/`, `pages_c04/` | `tools/gen_alignment_page.py` + `tools/wrap_alignment_page.py` |
+| pages (both sides wrapped in place from the spine) | `data/alignment/pages/` (C02), `pages_c01/`, `pages_c03/`, `pages_c04/`, `pages_c05/` | `tools/gen_alignment_page.py` + `tools/wrap_alignment_page.py` |
+| accepted specs and independent review evidence (resumed C05 campaign) | `data/alignment/specs_c05/`, `reviews_c05/` | preserved per accepted page, beginning c5p56 |
 | evidence sidecar (depth-5 word pairs, ACIP-keyed, cited) | `data/alignment/alignment_evidence_v1.json` | `tools/build_alignment_layer.py` |
 | full bank (every span at every depth, notes, trees) | `data/alignment/alignment_full_v1.json` | same |
 | dictionary view | `docs/geshe_michael_roach_dictionary.html` | `tools/build_dictionary_view.py` |
@@ -28,7 +29,9 @@ Artefacts:
 | campaign ledgers | `data/alignment/C0N_CAMPAIGN.md` | by hand, one entry per batch |
 
 Courses locked complete (coverage-gate proved): C01 496/496, C02 68/68,
-C03 620/620 (2026-09-03), C04 198/198 (2026-09-04). C05–C18 unscanned. C13 is under standing order not
+C03 620/620 (2026-09-03), C04 198/198 (2026-09-04). C05 is in progress;
+its registry in `build_alignment_layer.py` and `C05_CAMPAIGN.md` give the current
+boundary. C06–C18 remain unscanned. C13 is under standing order not
 to be scanned until the upstream column offset is resolved
 (`docs/upstream/C13_COLUMN_OFFSET.md`).
 
@@ -94,6 +97,16 @@ Verbatim from `docs/alignment_briefs/RECONCILE_BRIEF.md`, condensed:
     A span that passes every mechanical check can still be false; it is
     nulled with a note. Rule 10 outranks coverage.
 
+**Resumed-campaign clarification (2026-09-12):** `eng: null` asserts that
+the selected Tibetan has no separately alignable English exponent. A proven
+grammatical contribution fused into another English word can receive a null
+with an explicit fusion note; this does not assert that its meaning is absent.
+Null must not stand for an unresolved or contradictory correspondence.
+Distributed content without a defensible separate atom is omitted with a note,
+or retained as a defensible complete phrase at the appropriate depth. A higher
+depth does not excuse a false correspondence. Existing historical nulls are
+not silently reclassified by this clarification.
+
 Campaign conventions settled during C03 (ledger entries name the rows):
 `sogs` owns only the closing gesture, never GMR's supplied noun; `byin gyis
 rlobs` → "Grant me" on majority precedent; a Tibetan word rendered twice by
@@ -158,6 +171,11 @@ Claude Fable 5.1, writes a spec that exits 0) → Refute (every kept erratum to
 a skeptic, Fable 5.1) → Land (assemble three specs, generate, wrap, register
 in `COURSES`, rebuild layer and view, run the gates) → Ledger → Commit.
 Briefs: `docs/alignment_briefs/`. Model policy: Adam, 2026-09-01.
+
+Adam's 2026-09-11 Codex handover resumes C05 with Codex agents in the same
+independent proposal, reconciliation and skeptical-review roles. Historical
+model names above describe the earlier campaign. New work records its
+actual producer; recovered historical inputs retain their provenance.
 
 ## 8. Honesty labels
 

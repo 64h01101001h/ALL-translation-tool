@@ -8,6 +8,32 @@ Format and rules: `05_CROSS_CHECK_PROTOCOL.md`.
 
 ---
 
+## 2026-09-12 — Codex — first continuation checkpoint, C05 through 177
+
+### Done
+
+- Advanced C05 from 165/511 to **177/511**, adding c5p56–c5p59: 358 independently reviewed analyst spans plus 12 sentence anchors. Accepted specs, semantic reviews, and landing manifests are committed. Original proposals and reconciliations are preserved in the sibling workspace's `campaign-artifacts/`.
+- Commits: `947cf88` (166–168), `8a73874` (169–171), `bb2394f` (172–174), and `0c26f97` (175–177). Earlier `71d03b7` corrected four gates that omitted C05. `929f012` isolates the Catalog routing self-test's proposal store; `072a61f` fixes exact-PID iOS termination and deployment failure propagation.
+- Recorded E-183 and E-184 as LOW/PROBABLE source-spelling/editorial candidates. Original Tibetan and English remain unchanged. C05:167's numeral discrepancy remains unpaired; C05:177's phrase retains its explicit ellipsis ambiguity note. No machine evidence was promoted to `hgm_gloss`.
+- Updated the alignment spec to distinguish a proven grammatical contribution with no separately alignable English exponent from an unresolved or contradictory mapping. Historical nulls were not silently reclassified.
+
+### Verified
+
+- Each of the four batches passed all **16 targeted fidelity and constitution suites**. Final independent review reproduced all 97 c5p59 analyst spans, its body, both banks, dictionary HTML, and four CSV exports, and proved retention of prior bank links, notes, trees, evidence, and view citations. No unresolved review findings remain.
+- Final bank: **42,129 links, 11,829 null-English records, 1,513 note blocks, 11 trees**. Evidence: **6,774 headwords / 14,593 pairs**. C01–C04 coverage remains 496/496, 68/68, 620/620, and 198/198 respectively.
+- Master dictionary and corpus hashes still match the starting values: `hgm_dictionary_v27_2.json.gz` SHA-256 `3a99603cd9428f0d04e67c7d2790cc093f272162e7bf6278906a4b635f962253`; `full_parallel_corpus_v32.json.gz` SHA-256 `1a1d8764a960c119d227c3cb7a7b0cb03073f9dc54116a3ec4e585c40323ddf8`.
+- Native build succeeded. The initial 116-suite run passed 115 and crashed in `app_selftest` on a read-only library fixture. A private worktree library clone removed that fixture failure; the subsequent Catalog proposal-store failure was fixed in `929f012`. Rebuilt `app_selftest` then passed in 307.52 seconds with the bank through 171. Other Preferences self-test settings remain shared: the entire harness is not hermetic.
+- CMake now registers 117 tests. The new iOS regression suite passed its six methods / 21 scenarios, including failure cases; its registered CTest and both test-census checks passed. This is not a claim that all 117 tests ran together against the bank through 177.
+- A signed Trainer build containing a 4,000-cloze sampled pack from the bank through 171 installed on Adam's iPhone. Pack generation reported zero unplaceable answers. Bundle-pack SHA-256: `ffd7ec4bafdacf1feae5d86416fa30173bb448c39d4423ade75cae0f3c187510`.
+
+### Unverified and next
+
+- iOS refused launch because the phone was locked. Adam was asked once to unlock; no response has arrived. Runtime/display and the new termination helper on hardware remain unverified. The installed pack predates rows 172–177 and its bounded samples do not prove complete C05 alignment coverage.
+- Browser URL policy refused local HTML preview. Rendered-page inspection remains unverified; do not bypass the refusal with another delivery or rendering route. Source and structural checks passed.
+- Work remains on isolated branch `codex/aci-alignment-20260915`; no main-checkout integration occurred. Another session is changing the main app. Earlier read-only apply checks passed against main `5240fbc`; recheck its live state before future integration.
+- Next page is **c5p60, C05:178–180**. Its source snapshot is ready; independent proposals have not begun. No additional source files are needed. C13 stays blocked for alignment.
+- Hourly continuation remains scheduled through Tuesday, 2026-09-15, 07:00 America/Denver. The campaign is unfinished. Read the sibling workspace's `CAMPAIGN_CONTINUATION.md` and `CAMPAIGN_STATUS.md`; final review evidence is in `campaign-artifacts/integration/final-checkpoint-review.md`.
+
 ## 2026-09-12 — Codex — campaign resumed; incoming claims checked
 
 ### Done

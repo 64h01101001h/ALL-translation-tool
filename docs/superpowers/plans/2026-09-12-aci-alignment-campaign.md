@@ -25,10 +25,10 @@
 
 **Files:** campaign continuation record; durable baseline and handoff-check reports; `docs/handoff/HANDOFF_LOG.md` in this checkout.
 
-- [ ] Verify incoming handoff claims with command evidence, clearly distinguishing checked, corrected, and uncheckable claims.
-- [ ] Run relevant alignment suites against this checkout before landing any data.
-- [ ] Check raw course sources and source bank, record starting hashes and counts.
-- [ ] Record the independent-reader model substitution and the newer authorization to resume.
+- [x] Verify incoming handoff claims with command evidence, clearly distinguishing checked, corrected, and uncheckable claims.
+- [x] Run relevant alignment suites against this checkout before landing any data.
+- [x] Check raw course sources and source bank, record starting hashes and counts.
+- [x] Record the independent-reader model substitution and the newer authorization to resume.
 
 ### Task 2: Produce and review the next three-segment batch
 
@@ -36,22 +36,22 @@
 
 **Interfaces:** Each angle produces one `spec.json`, `body.html`, `errata.json`, and `report.md` per segment. The reconciler consumes both angles and the source independently, returning the same four files. No analyst changes landed project files.
 
-- [ ] Snapshot the next three original source rows and context.
-- [ ] Dispatch independent Tibetan-first and English-first analyses; require actual generator exit 0 and source evidence.
-- [ ] Reconcile each disagreement with the smallest supportable mapping. Explicitly record omissions and disputed numerals; do not turn uncertainty into an asserted no-exponent fact.
-- [ ] Have a separate reader challenge semantic correspondence, depth-5 dictionary units, over-capture, d=7 membership, and any proposed errata.
-- [ ] Correct upheld findings and re-run the generator. Preserve all original proposals and review decisions.
+- [x] Snapshot the next three original source rows and context.
+- [x] Dispatch independent Tibetan-first and English-first analyses; require actual generator exit 0 and source evidence.
+- [x] Reconcile each disagreement with the smallest supportable mapping. Explicitly record omissions and disputed numerals; do not turn uncertainty into an asserted no-exponent fact.
+- [x] Have a separate reader challenge semantic correspondence, depth-5 dictionary units, over-capture, d=7 membership, and any proposed errata.
+- [x] Correct upheld findings and re-run the generator. Preserve all original proposals and review decisions.
 
 ### Task 3: Land and prove the accepted page
 
 **Files:** `data/alignment/pages_c05/c5p56.html` and navigation; `tools/build_alignment_layer.py` course registry; both generated alignment JSON files; `docs/geshe_michael_roach_dictionary.html`; course ledger; accepted specs and review reports.
 
-- [ ] Assemble exactly three reconciled segments; run `python3 tools/gen_alignment_page.py` with the assembled spec on stdin and save its body and exit status.
-- [ ] Wrap with the existing page wrapper; correct new-page producer attribution to the actual producer, preserving the provisional banner.
-- [ ] Register the page only after semantic review. Rebuild with `python3 tools/build_alignment_layer.py` and `python3 tools/build_dictionary_view.py`.
-- [ ] Run the existing alignment fidelity tests, generated-doc sync checks, and constitution check; inspect full outputs and reject incomplete or vacuous checks.
+- [x] Assemble exactly three reconciled segments; run `python3 tools/gen_alignment_page.py` with the assembled spec on stdin and save its body and exit status.
+- [x] Wrap with the existing page wrapper; correct new-page producer attribution to the actual producer, preserving the provisional banner.
+- [x] Register the page only after semantic review. Rebuild with `python3 tools/build_alignment_layer.py` and `python3 tools/build_dictionary_view.py`.
+- [x] Run the existing alignment fidelity tests, generated-doc sync checks, and constitution check; inspect full outputs and reject incomplete or vacuous checks.
 - [ ] Verify banked links for the new source rows and review the final rendered page. Append measured counts and decision records to the campaign ledger.
-- [ ] Commit only this campaign's reviewed files to the campaign branch. Do not modify the main checkout's unrelated files.
+- [x] Commit only this campaign's reviewed files to the campaign branch. Do not modify the main checkout's unrelated files.
 
 ### Task 4: Verify consumption and continue through the deadline
 
@@ -75,3 +75,13 @@
 | 2 | Source defects | C05:167's numeral discrepancy is preserved and reviewed, not silently fixed. |
 | 3 | Producer label | Wrapper currently names Claude; new pages must identify the actual producer honestly. |
 | 4 | Deadline vs completion | Deadline stops new work; unfinished work stays explicitly unfinished. |
+
+## First continuation checkpoint — 2026-09-12
+
+Tasks 1–2 and the non-visual Task 3 checks are complete for the accepted pages
+through C05:177. The next batch starts at 178. Task 3’s rendered-page inspection remains
+unverified because the browser URL policy refused local HTML preview. Source,
+structure, bank and export checks passed; the unchecked box is intentional.
+Task 4’s native test and signed phone install are verified through C05:171,
+but the locked device prevented launch. Main integration and further campaign
+work remain open. See the durable continuation record for current commits.
