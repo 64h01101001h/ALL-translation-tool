@@ -1,0 +1,68 @@
+{
+  "verdict": "APPROVE",
+  "scope": "Correct English occurrence description only; final specs and omission unchanged",
+  "producer": "Codex",
+  "source_access": "SQLite URI mode=ro",
+  "complete_tibetan_occurrences": [
+    {
+      "range": [
+        564,
+        571
+      ],
+      "context": "zhing chog mi shes pa dang mi phan pa tshol ba'am phan pa mi tshol "
+    },
+    {
+      "range": [
+        584,
+        591
+      ],
+      "context": "a dang mi phan pa tshol ba'am phan pa mi tshol ba dang gzhan la gno"
+    }
+  ],
+  "complete_english_occurrences": [
+    {
+      "range": [
+        1083,
+        1087
+      ],
+      "context": "ways finding yourself without help, or never find the help you n"
+    },
+    {
+      "range": [
+        1107,
+        1111
+      ],
+      "context": "thout help, or never find the help you need; and you are always "
+    }
+  ],
+  "rejected_span": {
+    "seq": 195,
+    "id": "w37",
+    "tib_range": [
+      564,
+      571
+    ],
+    "eng_range": [
+      1083,
+      1087
+    ]
+  },
+  "rejected_generator_exit": 0,
+  "rejected_body_exact": true,
+  "unchanged_final_specs_approved": [
+    193,
+    194,
+    195
+  ],
+  "before_after_sha256": {
+    "review.md": {
+      "before": "e09c34ed8ad10e62ddea493c596bc2853ec8289ce5d0c471b87461c6f456f247",
+      "after": "ed7380ed2b7d04c6a61655732285035961a76490720732e6c187cd5f7adcb318"
+    },
+    "finalize.py": {
+      "before": "7532dc49869987290724023f4665e0fd22d2e2424688779b01d55ff32cc9d83a",
+      "after": "506ed20ffd36b68e25b0513c28616146f6b1a2f69585c84edef8faeaefb584ca"
+    }
+  },
+  "open_findings": []
+}

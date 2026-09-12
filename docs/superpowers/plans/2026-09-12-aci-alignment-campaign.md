@@ -121,3 +121,26 @@ CSVs, with 168 exact reviewed tuples. Read-only main preflight is recorded in th
 final independent report; no main integration is inferred. Next 190–192 has source/context snapshots only. Task 3's visual limit and
 Task 4's unfinished integration/campaign work remain explicit; no newer native or
 phone execution is inferred. Resume from the latest sibling continuation record.
+
+## Fourth continuation checkpoint — 2026-09-12
+
+Accepted C05 now reaches 195 in `827fd9b` and `8cc5820`: 115 independently
+reviewed analyst spans plus six sentence anchors. Both pages passed all 17
+targeted suites, and all 22,622 course/depth rows match actual source refs and
+counts. Previous data and source hashes survive; two old empty ACIP export
+fields acquire spellings from new source-attested d5 links. No new errata.
+The RJES candidate was refuted as underdetermined inflection, and the ambiguous
+help construction stays omitted with the rejected passing attempt preserved.
+Final integration review caught an evidence-description error in the semantic
+review: the rejected attempt paired first Tibetan phan pa with first English help,
+as reconciliation had correctly stated. The original and corrected review states
+and scoped factual re-review are preserved; accepted specs remain unchanged.
+
+Both data commits independently reproduce both banks, HTML and all four CSVs;
+227,513 checks pass at the second commit, including all115 exact tuples and six
+individual bodies. Scoped factual re-review approved the corrected help account.
+The final report and companion evidence record final documentation review and
+read-only main applicability. No main integration
+or newer native/device/rendering verification is inferred. Next is196–198,
+source/context snapshots only. Tasks 3 and 4 retain their stated limits;
+the hourly campaign remains active through the user-authorized deadline.

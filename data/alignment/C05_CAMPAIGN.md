@@ -586,3 +586,18 @@ proved identical. The export, view/layer and generated-doc suites passed again.
 No new canonical exporter change was needed. Navigation and source hashes check.
 Rendering remains unverified; no newer native/device execution or main integration
 occurred. Next: c5p66, C05:196–198, with source/context snapshots only.
+
+
+### ERRATA to c5p65 review description — 2026-09-12
+
+The c5p65 entry above and its initial semantic review incorrectly describe the
+rejected attempt's English help as the second occurrence. Fresh source offsets
+and the actual resolver prove FIRST Tibetan phan pa [564,571) paired with FIRST
+English help [1083,1087), inside without help. The second occurrences are Tibetan
+[584,591) and English [1107,1111). Reconciliation's first-English description was
+correct. Independent integration review identified this evidence-description
+error; the original and corrected semantic reviews and scoped factual re-review
+are preserved under reviews_c05/c5p65. No accepted span, source range, null,
+bank, dictionary output or errata-register record changes. The final omission of
+the disputed help pairing remains approved. This correction concerns the machine
+review account, not an error in GMR's source.

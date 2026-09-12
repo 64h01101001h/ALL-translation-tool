@@ -8,6 +8,36 @@ Format and rules: `05_CROSS_CHECK_PROTOCOL.md`.
 
 ---
 
+## 2026-09-12 — Codex — continuation checkpoint, C05 through 195
+
+### Done
+
+- Added 190–192 in `827fd9b` and 193–195 in `8cc5820`: six segments, 115 independently reviewed analyst spans and six source sentence anchors. C05 reaches **195/511**, pages c5p1–c5p65. Ten pages since 165 add 846 analyst spans and 30 anchors. Separate proposals, reconciliation, semantic reviews, exact source ranges and generator evidence are preserved.
+- Both new pages have independent semantic approval. The 190 RJES candidate was refuted because rje+s inflection remains possible; original text stays unpaired. Only `c5p64/s192w10` is added to the head allowance, for glossary-supported sogs/and the rest. No new erratum; all 186 prior records and older allowances survive unchanged.
+- The rejected 195 help attempt is preserved although it passed the generator. It selects the FIRST Tibetan phan pa [564,571) and FIRST English help [1083,1087), inside without help. The second occurrences are [584,591) and [1107,1111). Final integration review caught the semantic review's incorrect second-English description; reconciliation had correctly described first English. The original and corrected review evidence are preserved with scoped factual re-review. Final specs omit the disputed pairing and agency recast without a false null. Original Tibetan, English and hgm_gloss remain unchanged; alignments are PROVISIONAL.
+
+### Verified
+
+- Each new page passed all **17 targeted fidelity, export and constitution suites**, in 10.62s and 10.53s. Exact reviewed tuples/ranges, previous links/notes/trees/evidence/ACIP mappings, prior main CSV lexical content/citations and source hashes were checked. The two batches' 22 and 23 semantic evidence files were copied byte-for-byte.
+- Current bank: **42,635 links, 11,866 null exponents, 1,531 note blocks, 11 trees**. Evidence: **6,832 headwords / 14,741 pairs**. CSV rows: main 21,297; reverse 20,957; course/depth 22,622; changes 48 versus 827fd9b. Every course/depth row matches actual main CSV source refs, metadata and counts; all previous groups survive.
+- Two previous empty ACIP export fields gain GNYIS GNYIS from C05:195 and RMONGS from C05:194, proven against new d5 source links. Old translations and depths are retained. A second direct export invocation reset the changes delta; regenerating once with 827fd9b's main CSV restored the 48-row delta while both banks, HTML and other CSV bytes stayed identical. The three focused export/view suites passed again in 0.34s. No canonical exporter code changed.
+- Both fixed data commits independently reproduce both banks, dictionary HTML and all four CSVs exactly. The first reproduction has 183,671 passing checks; the second has 227,513, including all 115 tuples, six individual bodies and two assembled hashes. Changes were seeded from d21deed and 827fd9b respectively. The help-occurrence description correction passed scoped independent re-review; the original committed review is preserved exactly and 26 final evidence files were copied byte-for-byte. Accepted page/spec/banks/exports remain byte-identical to 8cc5820. Final documentation and read-only applicability evidence belong in sibling `campaign-artifacts/integration/continuation-through195-review.md` and its companion JSON files.
+
+### Claims to verify
+
+- Final checkpoint approval requires the independent report to name the final committed HEAD after reviewing both data commits and documentation. Read-only applicability is not main integration. No rendering verification or newer native/device execution is inferred from these data checks.
+- The raw ASCII introduction has RJES; another local copy has identical bytes and is not an independent publication. The located C5Tibetan.pdf is a language guide, not this reading. Equal English in C09:152/C17:499 does not imply equal Tibetan/ACIP. No checked printed-reading witness is claimed.
+
+### In flight
+
+- Next is **c5p66, C05:196–198**, source/context snapshots only; proposals have not begun. Hourly continuation remains ACTIVE through Tuesday, September 15, 2026, at 07:00 America/Denver. No additional source files are needed. This is an unfinished campaign.
+- Native and installed-phone verification remains through C05:171; locked-device launch and actual alignment-page rendering remain unverified. C13 remains blocked under the earlier source constraint. Main-checkout integration remains open while unrelated work continues there.
+
+### Do not
+
+- Do not change original source wording or promote machine matches to hgm_gloss; do not recover the rejected help span through a false null or broader phrase. Preserve all private and committed evidence, including superseded attempts.
+- Do not bypass the browser policy, infer phone unlock, invoke paid generation, or alter the other session's main-checkout work. Do not run the standalone export entry point after the view builder: it reruns the view and resets the previous-export delta. Resume from the current sibling continuation record and live committed boundary.
+
 ## 2026-09-12 — Codex — continuation checkpoint, C05 through 189
 
 - Added 184–186 in `bb77f01` and 187–189 in `883a4ee`: six segments, 168 independently reviewed analyst spans and six sentence anchors. C05 reaches **189/511**, pages c5p1–c5p63. All eight pages since 165 add 731 analyst spans and 24 anchors. Separate proposals, reconciliation, semantic review, accepted specs and exact generator proofs remain preserved.
