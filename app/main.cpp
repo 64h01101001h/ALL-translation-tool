@@ -25112,8 +25112,9 @@ public:
         auto* banner = new QLabel(
             "<b>Draft workspace</b> — paste the source, click a clause for "
             "its anchors, click a term for its corpus concordance. The "
-            "terminology check matches your draft against Geshe Michael Roach's equivalents; "
-            "it never writes English for you.");
+            "terminology check looks for Geshe Michael Roach's equivalents "
+            "ANYWHERE in your draft \u2014 it never writes English for you, "
+            "and it cannot tell which term you used one for.");
         banner->setWordWrap(true);   // clipped single-line in the audit
         row->addWidget(banner);
         layout->addLayout(row);
@@ -25326,8 +25327,11 @@ public:
 
         auto* checkBtn = new QPushButton("Check terminology");
         checkBtn->setToolTip(
-            "Matches the English draft against Geshe Michael Roach's equivalents. It "
-            "flags what disagrees; it never writes English for you.");
+            "For each term in the source, asks whether any of Geshe Michael "
+            "Roach's recorded equivalents for it appears as a WORD somewhere "
+            "in your draft.\n\nWhat it cannot see: WHERE. A match anywhere in "
+            "the draft counts, so it finds a missing equivalent reliably and "
+            "a misplaced one not at all. It never writes English for you.");
         gEvid->addBig(checkBtn, "check");
         auto* toMssBtn = new QPushButton("Send to Manuscript →");
         toMssBtn->setToolTip(
