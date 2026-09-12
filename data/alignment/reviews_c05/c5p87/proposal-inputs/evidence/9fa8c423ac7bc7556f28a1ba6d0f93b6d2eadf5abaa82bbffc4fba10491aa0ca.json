@@ -1,0 +1,14 @@
+{
+  "stage": "initial original-evidence collection, before any file written",
+  "exit": 1,
+  "failing_child_argv": [
+    "git",
+    "show",
+    "48bd9d4587352461bc609fde85b5bfe374a05212:data/hgm_dictionary_v27_2.json.gz"
+  ],
+  "child_exit": 128,
+  "child_stderr": "fatal: path 'data/hgm_dictionary_v27_2.json.gz' exists on disk, but not in '48bd9d4587352461bc609fde85b5bfe374a05212'\n",
+  "failure": "subprocess.CalledProcessError; evidence collector terminated in historical hash dictionary comprehension. No evidence output was produced.",
+  "superseded_by": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/english/259/collect-evidence.py",
+  "correction": "Hash original untracked dictionary/corpus bytes directly and compare to supplied baseline; retain historical Git hashing for tracked generated files. Historical Git pins do not prove an untracked file existed at that commit."
+}

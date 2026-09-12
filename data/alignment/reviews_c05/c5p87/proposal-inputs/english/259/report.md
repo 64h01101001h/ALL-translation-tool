@@ -1,0 +1,11 @@
+C05:259 — Codex, independent English-first; PROVISIONAL, no semantic approval.
+Challenge sogs → something like first: it is attested as a full HGM variant and locally supplies the indefinite example gesture. Full variants also establish las → karma despite the curated deeds display.
+32 spans retain both consciousness/valid-perception occurrences, both two expressions and the force/karma argument. Genitives and reporting expansion remain omitted; no null asserts uncertain absence.
+Counts: spans=32; d5=20; nulls=0; errata=0; depths={3: 1, 5: 20, 7: 4, 6: 7}.
+Canonical final: EXIT=0; stderr=0 bytes; body=5071 bytes; body equals saved generator.stdout exactly.
+spec SHA256 5be7ca8273b31ce1b2b9aae97e1ac4881b546a97ae8b775ae187b906a4aa55a5; body SHA256 23cfc641c2a3c466922372e2f50d3ef8c6a3243f9d4badb9ccb6ac234c85d65e.
+Source/context: all six selected fields independently match full original mode=ro rows C05:253–267; eight reference paths readable; baseline hashes and counts independently verified.
+Full original evidence: /Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/english/259/original-evidence.json (SHA256 be14c74916552e1860af06c85beabcbb01d71cdecf060c46d4e81ba6bb6f912e).
+All full master variants and source roles: /Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/english/259/master-variants.json and /Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/english/259/additional-proof.json; exact sibling paths/hashes in proof.json.
+Errata: all selected rows checked against complete C15/C16 parallel fields and original register; no new defect filed. C16:837 appends a registered following heading; no source-heading contamination is imported into C05:261. Identity of fields proves neither independent publication nor ingestion lineage.
+Mechanics and every exact occurrence: /Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/english/259/proof.json and /Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/english/259/occurrence-proof.json; failed/superseded attempts preserved. Final freeze boundary: freeze.json (report hash included).

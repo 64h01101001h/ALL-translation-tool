@@ -1,0 +1,6 @@
+{
+  "status": "FAILED_REVIEW_PACKAGE_ENUMERATION",
+  "cause": "Initial review freeze excluded every basename freeze.json, thereby omitting nested exact original freeze manifests from the review freeze list. Original copies themselves existed and all649 manifest records passed. Final file-set equality assertion rejected the attempt.",
+  "remedy": "Preserve this failed attempt and its interface; emit review-freeze.json with only its own root path excluded. Every nested input freeze.json is included.",
+  "repository_or_candidate_changed": false
+}

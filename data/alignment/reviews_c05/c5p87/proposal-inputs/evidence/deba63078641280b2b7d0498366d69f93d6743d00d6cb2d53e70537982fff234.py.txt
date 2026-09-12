@@ -1,0 +1,82 @@
+from pathlib import Path
+import datetime,hashlib,json,re,sqlite3,subprocess,traceback
+b=Path(__file__).resolve().parent
+wt=b.parent.parent/'campaign-worktree'
+out=b/'root-reconciliation-identity-proof.json'
+assert not out.exists()
+sha=lambda raw:hashlib.sha256(raw).hexdigest()
+load=lambda p:json.loads(p.read_text())
+record={'utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'semantic_approval':False}
+checks=[]
+def check(value,label):
+    checks.append({'check':label,'pass':bool(value)})
+    assert value,label
+try:
+    originals=load(b/'proposal-verification/root-resolved-spans.json')
+    finals=load(b/'root-reconciliation-verification/resolved-spans.json')
+    read=load(b/'root-candidate-full-read.json')['spec_sha256']
+    db=sqlite3.connect((wt/'build/hgm_spine_v27_2.db').as_uri()+'?mode=ro',uri=True)
+    db.row_factory=sqlite3.Row;db.execute('PRAGMA query_only=ON')
+    total_dispositions=0;frozen=0;omissions=0;suspicions=0
+    for seq in (259,260,261):
+        d=b/'reconciled'/str(seq);source=dict(db.execute('SELECT * FROM corpus_segments WHERE course=? AND seq=?',('C05',seq)).fetchone())
+        check(sha((d/'spec.json').read_bytes())==read[str(seq)],f'{seq} full-read candidate equals frozen final')
+        for pin in load(d/'freeze.json')['files']:
+            raw=Path(pin['path']).read_bytes();check(len(raw)==pin['bytes'] and sha(raw)==pin['sha256'],pin['path']);frozen+=1
+        tuples=load(d/'final-ordered-tuples.json')
+        projected=[dict(seq=seq,**{k:r['span'][k]for k in ('id','d','tib','eng')},tib_range=r['tib_range'],eng_range=r['eng_range'])for r in tuples['spans_in_tibetan_order']]
+        final_spec=load(d/'spec.json')['segments'][0]
+        check(projected==[r for r in finals if r['seq']==seq] and [r['span']for r in tuples['spans_in_tibetan_order']]==final_spec['spans'] and tuples['eng_order']==final_spec['eng_order'],f'{seq} exact final oracle tuples and complete optional keys')
+        dispositions=load(d/'original-span-dispositions.json');seen=set()
+        for row in dispositions['dispositions']:
+            orig=row['original_span'];key=(row['angle'],seq,orig['id']);check(key not in seen,str(key)+' unique');seen.add(key)
+            spec=load(b/row['angle']/str(seq)/'spec.json')['segments'][0]
+            actual=next(s for s in spec['spans']if s['id']==orig['id']);check(actual==orig,str(key)+' complete original object')
+            ranges=next(r for r in originals if (r['angle'],r['seq'],r['id'])==key)
+            check(all(row[k]==ranges[k]for k in ('tib_range','eng_range')),str(key)+' original ranges')
+            for related in row['final_related_spans']:
+                actual=next(s for s in load(d/'spec.json')['segments'][0]['spans']if s['id']==related['span']['id'])
+                ranges=next(r for r in finals if r['seq']==seq and r['id']==actual['id'])
+                check(actual==related['span'] and all(related[k]==ranges[k]for k in ('tib_range','eng_range')),str(key)+' final relation '+actual['id'])
+            check(bool(row['reason']) and bool(row['semantic_evidence_files']),str(key)+' reason and evidence')
+        check(seen=={(r['angle'],r['seq'],r['id'])for r in originals if r['seq']==seq},f'{seq} exhaustive disposition coverage')
+        total_dispositions+=len(seen)
+        for omission in load(d/'omissions.json')['material']:
+            text=source['wylie'if omission['side']=='tib'else'english']
+            check(text[slice(*omission['range'])]==omission['source_text'],f'{seq} omission '+omission['source_text']);omissions+=1
+        counts={t:source['wylie'].count(t)for t in ('tshad ma','med','thal',"'dod pa'i phyir")}
+        counts.update(english_valid_tokens=len(re.findall(r'\bvalid\b',source['english'])),english_chars=len(source['english']))
+        for suspicion in load(d/'five-ground-refutations.json'):
+            grounds=suspicion['grounds'];check(set(grounds)=={'a_quote','b_parallel','c_registered','d_defensible','e_counts'},f'{seq} all five grounds')
+            check(grounds['a_quote']['full_source']==source,f'{seq} full original source')
+            check(grounds['a_quote']['presence']=={k:suspicion['found']in source[k]for k in ('acip','wylie','english')},f'{seq} exact suspicion quote')
+            check(grounds['e_counts']['remeasured']==counts,f'{seq} measured counts')
+            for q in grounds['b_parallel']['queries']:
+                rows=[dict(r)for r in db.execute(q['sql'],q['parameters'])]
+                check(rows==q['complete_rows'] and len(rows)==q['count'],f'{seq} original parallel query '+q['sql'])
+            suspicions+=1
+    d=b/'reconciled/259'
+    identities=load(d/'original-evidence-identity.json')
+    for pin in identities:
+        raw=Path(pin['copy_path']).read_bytes();check(raw==Path(pin['original_path']).read_bytes() and len(raw)==pin['bytes']and sha(raw)==pin['sha256'],pin['copy_path']+' identity')
+    pins=load(d/'original-pins.json')
+    for pin in pins['files']:
+        rel=Path(pin['path']).relative_to(wt)
+        raw=subprocess.check_output(['git','show',pin['git_commit']+':'+str(rel)],cwd=wt)
+        blob=subprocess.check_output(['git','rev-parse',pin['git_commit']+':'+str(rel)],cwd=wt).decode().strip()
+        check(blob==pin['git_blob'] and raw==Path(pin['copy_path']).read_bytes() and sha(raw)==pin['sha256'],str(rel)+' Git identity')
+    for rel,digest in pins['data_assets'].items():check(sha((wt/rel).read_bytes())==digest,rel+' external asset SHA')
+    queries=load(d/'reopened-sql-evidence.json')
+    for q in queries:
+        rows=[dict(r)for r in db.execute(q['sql'],q['parameters'])]
+        check(rows==q['rows'] and len(rows)==q['count']==q['claimed_count']and q['same_rows'],q['origin']+' SQL replay')
+    db.close()
+    record.update(status='PASS',summary={'frozen_files':frozen,'original_copy_mappings':len(identities),'governing_git_files':len(pins['files']),'original_dispositions':total_dispositions,'final_spans':len(finals),'material_omissions':omissions,'suspicions_checked_all_five_grounds':suspicions,'original_queries_replayed':len(queries)},checks=checks)
+    out.write_text(json.dumps(record,ensure_ascii=False,indent=2)+'\n')
+    print(json.dumps(record['summary']))
+except Exception:
+    attempt=len(list(b.glob('root-reconciliation-identity-attempt*.json')))+1
+    failed=b/f'root-reconciliation-identity-attempt{attempt:02d}.json';assert not failed.exists()
+    record.update(status='FAILED',traceback=traceback.format_exc(),checks=checks)
+    failed.write_text(json.dumps(record,ensure_ascii=False,indent=2)+'\n')
+    raise

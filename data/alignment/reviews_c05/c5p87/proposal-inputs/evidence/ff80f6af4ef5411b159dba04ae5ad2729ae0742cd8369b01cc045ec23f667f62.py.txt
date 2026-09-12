@@ -1,0 +1,32 @@
+import json,pathlib
+root=pathlib.Path(__file__).resolve().parent.parent
+src={r['seq']:r for r in json.loads((root/'259/source.json').read_text())}
+# Each tuple pins the intended English occurrence explicitly; eng_order is then measured.
+sets={259:[
+(5,'de','mentioned',1),(5,'kho','Someone',1),(5,'na re','claim',1),(5,'mi','human',1),(5,'mig shes','visual consciousness',1),(5,'tshad ma','valid perception',1),(5,'yin','is',1),(6,'gyi','but',1),(5,"'gro ba",'beings',1),(5,'gzhan','other',1),(5,'gnyis','two',1),(5,'mig shes','visual consciousnesses',1),(5,'tshad ma','valid perception',2),(6,'ma','not',1),(5,'yin','are',1),(5,'de','These',1),(5,'gnyis','two',2),(5,'las','karma',1),(5,'bzang','good',1),(5,'ngan','bad',1),(5,'dbang','forces',1),(5,'rnag khrag','pus and blood',1),(6,'dang','and',2),(5,'bdud rtsi','ambrosia',1),(6,'sogs','like',1),(5,'mthong ba','see',1),(6,'tsam','only',1),(6,'phyir','because',1)],
+260:[
+(3,"'o na",'Well then',1),(5,'mi','human',1),(5,'mig shes','visual consciousness',1),(5,'tshad ma','valid perception',1),(6,'ma',"n't",1),(5,'yin','be',1),(5,'mi','human',2),(5,'las','karma',1),(5,"'bring po",'halfway',1),(5,'dbang','forces',1),(5,'chur','water',1),(5,'mthong ba','sees',1),(6,'tsam','only',1),(6,'phyir','Because',1),(3,'gzhan yang','Moreover',1),(5,'mi','human',3),(6,'ma','not',1),(5,'yin','is',3),(5,"'gro ba",'being',1),(5,'rgyud','mental stream',1),(5,'lus shes','tactile consciousness',1),(5,'tshad ma','valid',2),(6,'dang','or',1),(5,'nyan shes','auditory consciousness',1),(5,'tshad ma','valid',3),(5,'med','no',1),(6,'thal','implying',1),(5,'rgyud','mental stream',2),(5,'mig shes','visual consciousness',2),(5,'tshad ma','valid',4),(5,'med','no',2),(6,'phyir','Because',2),(5,'khyod','your',1),(5,"rtsa ba'i dam bca'",'original position',1),(5,"'thad pa",'correct',1),(6,'phyir','for',1),(5,"'dod",'agree',1),(6,'na','suppose',1)],
+261:[
+(5,"'gro ba",'beings',1),(5,'de dag','these',1),(5,'nges shes','definite conclusion',1),(5,'drongs pa','reach',1),(6,'dang','or',1),(5,'chod pa','analyze',1),(5,'med','never',1),(6,'thal','implying',1),(3,"'dod na",'if so',1),(5,'de dag','these',2),(5,'gcig','one',1),(5,'gcig','another',1),(5,'ngo shes pa','recognize',1),(5,'med','never',2),(6,'thal','implying',2),(5,"'dod pa",'position',1),(6,'phyir','given',1)]}
+notes={
+259:"Codex Tibetan-first PROVISIONAL machine alignment; not human-approved. The opponent grants human perception validity but attributes the other two perceptions to karma. The same two visual-consciousness and valid-perception occurrences are individually pinned. las owns karma, supported in the preserved original glossary although the curated unified equivalent is deeds. dbang owns forces; objects/participants in forces them to stay unwrapped. sogs owns like, not the supplied something. de owns mentioned and the later These; latter and types of remain supplied. The closing zer na and opening answer frame are distributed reporting, omitted rather than falsely nulled. Unaligned case particles and the second yin pa are omitted; no separate-exponent judgment is claimed. All source wording remains unchanged.",
+260:"Codex Tibetan-first PROVISIONAL machine alignment; not human-approved. The three mi occurrences are humans: first subject, the human who sees water, and the nonhuman contrast. All four tshad ma occurrences and both mental streams are individually pinned; the final repeated valid consciousnesses is explanatory English attached to 'dod na and is left unwrapped. 'bring po owns halfway, while the good/bad explanation is supplied from the preceding context. chur is the inflected water word, retained whole; no bare chu split is attempted. dbang owns forces, excluding him to. rtsa ba'i dam bca' is the attested original position compound. The first and final thal formulations, de'i, yang, and the auxiliary/causal recasts are omitted where correspondence is distributed. The final 'dod owns agree and na owns suppose; no supplied participants or auxiliary expansion is claimed. No null asserts an uncertain exponent.",
+261:"Codex Tibetan-first PROVISIONAL machine alignment; not human-approved. nges shes and drongs pa separately own definite conclusion and reach, both positive HGM glossary equivalents. chod pa owns analyze, positively attested in HGM; sgro 'dogs is omitted because its nominal contribution is recast in the analysis idiom, not separately identifiable as object. Its HGM gloss implying is not used: both English implying occurrences belong to the two thal consequence frames. The supplied an object and about something stay unwrapped. The two de dag occurrences own these; the first 'gro ba owns the first beings, and later beings is an English antecedent expansion. gcig ... gcig owns one ... another; phan tshun is distributed through that reciprocal construction and is omitted, not nulled. First 'dod pa'i phyir lacks a separately identified English reason frame and is omitted. Last 'dod pa owns position and phyir given. 'dod na owns the complete conditional if so. Full source wording is preserved."}
+for seq,items in sets.items():
+ eng=src[seq]['english'];spans=[];expected=[]
+ for i,(depth,tib,e,n) in enumerate(items,1):
+  sub=e=="n't"; hits=[];start=0
+  while True:
+   j=eng.find(e,start)
+   if j<0:break
+   if sub or ((j==0 or not eng[j-1].isalnum() or not e[0].isalnum())and(j+len(e)==len(eng)or not eng[j+len(e)].isalnum()or not e[-1].isalnum())):hits.append(j)
+   start=j+1
+  assert len(hits)>=n,(seq,e,n,hits)
+  s={'id':f'w{i}','d':depth,'tib':tib,'eng':e}
+  if sub:s['subword']=True
+  spans.append(s);expected.append({'id':s['id'],'english_occurrence':n,'all_english_offsets':hits,'expected_english_range':[hits[n-1],hits[n-1]+len(e)]})
+ order=[x['id']for x in sorted(expected,key=lambda x:x['expected_english_range'][0])]
+ spec={'course':'C05','segments':[{'seq':seq,'title':{259:'validity and the force of karma',260:'consequences for human perception',261:'conclusions and recognition'}[seq],'spans':spans,'eng_order':order,'note':notes[seq]}]}
+ (root/str(seq)/'spec.json').write_text(json.dumps(spec,ensure_ascii=False,indent=2)+'\n')
+ (root/str(seq)/'intended-occurrences.json').write_text(json.dumps(expected,indent=2)+'\n')
+ (root/str(seq)/'errata.json').write_text('[]\n')

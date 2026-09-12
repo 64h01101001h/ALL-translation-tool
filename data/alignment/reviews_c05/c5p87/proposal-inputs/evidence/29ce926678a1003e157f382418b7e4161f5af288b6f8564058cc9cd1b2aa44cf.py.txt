@@ -1,0 +1,63 @@
+from pathlib import Path
+import datetime, hashlib, json, sqlite3, subprocess
+
+batch = Path(__file__).resolve().parent
+wt = batch.parent.parent / 'campaign-worktree'
+target = batch / 'root-english-freeze-check.json'
+assert not target.exists()
+sha = lambda raw: hashlib.sha256(raw).hexdigest()
+frozen, slices, shared, git_checks, queries = [], [], {}, [], []
+resolved = json.loads((batch/'proposal-verification/root-resolved-spans.json').read_text())
+expected = {259:'2111b704d7e45b9202a7588992c0c0f75b632c266587d407290f74b88f7087ae',260:'643284c4e096573ad4c3e30093dbce184967eefdcc23823f83335287655231c1',261:'a5762b3e23dbddafd1fb25e0ef345555987f37f92a42f2c16dae0c830c3f0bcf'}
+for seq in expected:
+    directory = batch/'english'/str(seq)
+    raw = (directory/'freeze.json').read_bytes()
+    assert sha(raw) == expected[seq]
+    freeze = json.loads(raw)
+    for name, pin in freeze['files'].items():
+        data = Path(name).read_bytes()
+        assert len(data)==pin['bytes'] and sha(data)==pin['sha256'], name
+        frozen.append(dict(path=name, **pin))
+    for name, digest in freeze['shared_evidence'].items():
+        assert sha(Path(name).read_bytes())==digest, name
+        shared[name]=digest
+    for commit, identity in freeze['historical_git_pins'].items():
+        run=subprocess.run(['git','show','-s','--format=%H %T %P %s',commit],cwd=wt,capture_output=True,check=True)
+        assert run.stdout.decode().strip()==identity
+    proof=json.loads((directory/'proof.json').read_text())
+    assert all(proof['checks'].values()) and proof['semantic_approval'] is False
+    for name,pin in proof['files'].items():
+        data=(directory/name).read_bytes()
+        assert len(data)==pin['bytes'] and sha(data)==pin['sha256']
+    occurrence=json.loads((directory/'occurrence-proof.json').read_text())
+    for span in occurrence['spans']:
+        canon=next(r for r in resolved if r['angle']=='english' and r['seq']==seq and r['id']==span['id'])
+        for key in ('id','d','tib','eng','tib_range','eng_range'):
+            assert canon[key]==span[key], (seq,key,span['id'])
+        assert occurrence['source']['wylie'][slice(*span['tib_range'])]==span['tib']
+        assert occurrence['source']['english'][slice(*span['eng_range'])]==span['eng']
+        slices.append(dict(canon))
+ev=json.loads((batch/'english/259/original-evidence.json').read_text())
+db=sqlite3.connect((wt/'build/hgm_spine_v27_2.db').as_uri()+'?mode=ro',uri=True)
+db.row_factory=sqlite3.Row
+db.execute('PRAGMA query_only=ON')
+for q in [ev['source_query']]+ev['lexical_queries']+ev['corpus_queries']+ev['parallel_queries']:
+    rows=[dict(r) for r in db.execute(q['sql'],q['parameters'])]
+    assert rows==q['rows'] and len(rows)==q['count'], q['parameters']
+    queries.append(dict(sql=q['sql'],parameters=q['parameters'],count=len(rows),exact=True))
+db.close()
+governing=json.loads((batch/'english/259/additional-proof.json').read_text())['governing_files']
+for name,pin in governing.items():
+    data=subprocess.run(['git','show',freeze['governing_commit']+':'+name],cwd=wt,capture_output=True,check=True).stdout
+    assert len(data)==pin['bytes'] and sha(data)==pin['sha256'] and data==Path(pin['path']).read_bytes(),name
+    git_checks.append(dict(repository_relative_path=name,commit=freeze['governing_commit'],**pin))
+for name,digest in ev['verified_baseline_hashes'].items():
+    if ev['hash_methods'][name]=='historical Git blob':
+        data=subprocess.run(['git','show',freeze['baseline_commit']+':'+name],cwd=wt,capture_output=True,check=True).stdout
+    else:
+        assert ev['hash_methods'][name]['git_exit']==128
+        data=(wt/name).read_bytes()
+    assert sha(data)==digest,name
+result=dict(status='PASS',utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),semantic_approval=False,manifests=expected,frozen_files=frozen,shared_evidence=shared,governing_git=git_checks,baseline_hashes=ev['verified_baseline_hashes'],original_queries=queries,resolved_slices=slices,summary=dict(frozen_files=len(frozen),governing_files=len(git_checks),queries=len(queries),spans=len(slices),d5=sum(s['d']==5 for s in slices),nulls=0))
+target.write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n')
+print(json.dumps(result['summary']))

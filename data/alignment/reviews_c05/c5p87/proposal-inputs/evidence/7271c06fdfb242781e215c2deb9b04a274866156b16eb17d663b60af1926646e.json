@@ -1,0 +1,8 @@
+{
+  "status": "FAILED BEFORE PROOF WRITE",
+  "exit": 1,
+  "script_sha256": "f67cf7b3dfa67addce125ee223eca6f4d00334387af7e554120d0365f87446b6",
+  "error": "TypeError at line39: dict() got multiple values for keyword argument seq",
+  "cause": "Root proof helper duplicated seq already present in canonical record; original frozen inputs unchanged.",
+  "correction": "Copy the complete canonical dictionary without adding its existing seq key."
+}

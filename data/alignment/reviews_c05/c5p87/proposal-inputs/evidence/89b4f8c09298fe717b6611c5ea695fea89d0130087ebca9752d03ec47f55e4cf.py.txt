@@ -1,0 +1,67 @@
+import os,sys,json,pathlib,hashlib,sqlite3,subprocess,gzip,shutil,runpy
+sys.dont_write_bytecode=True
+B=pathlib.Path(__file__).resolve().parents[2]; W=B.parents[1]/'campaign-worktree'; O=B/'reconciled/259'
+G='1448ea89eb6db880fa8c4c6e1506ed2c03582ad8'; A='48bd9d4587352461bc609fde85b5bfe374a05212'
+def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
+def save(n,d): (O/n).write_text(json.dumps(d,ensure_ascii=False,indent=2)+'\n')
+def git(*a):return subprocess.run(['git','-C',str(W),*a],capture_output=True)
+db=sqlite3.connect((W/'build/hgm_spine_v27_2.db').as_uri()+'?mode=ro',uri=True);db.execute('pragma query_only=ON');db.row_factory=sqlite3.Row
+evidence=[]
+for p in sorted(B.rglob('*')):
+ if p.is_file() and 'reconciled' not in p.relative_to(B).parts:
+  raw=p.read_bytes(); dest=O/'original-evidence'/p.relative_to(B);dest.parent.mkdir(parents=True,exist_ok=True);dest.write_bytes(raw)
+  if p.suffix=='.json':json.loads(raw)
+  evidence.append({'original_path':str(p),'copy_path':str(dest),'bytes':len(raw),'sha256':sha(p)})
+save('original-evidence-identity.json',evidence)
+freeze=[]
+for angle in ['tibetan','english']:
+ for seq in [259,260,261]:
+  f=B/angle/str(seq)/('freeze-manifest.json' if angle=='tibetan' else 'freeze.json'); d=json.loads(f.read_text());rows=d['files']
+  if isinstance(rows,dict):rows=[dict(path=k,**v) for k,v in rows.items()]
+  for r in rows:
+   p=pathlib.Path(r['path']);assert sha(p)==r['sha256'];assert p.stat().st_size==r['bytes'];freeze.append({'freeze':str(f),**r,'verified':True})
+save('freeze-recheck.json',freeze)
+queries=[]
+def visit(d,origin):
+ if isinstance(d,dict):
+  if isinstance(d.get('sql'),str) and d['sql'].strip().lower().startswith('select'):
+   params=d.get('params',d.get('parameters',[]));rows=[dict(r) for r in db.execute(d['sql'],params)];expected=d.get('rows',d.get('entries',d.get('full_rows')))
+   q={'origin':origin,'sql':d['sql'],'parameters':params,'count':len(rows),'rows':rows,'claimed_count':d.get('count')}
+   if d.get('count') is not None:assert len(rows)==d['count'],(origin,d['sql'],len(rows),d['count'])
+   if expected is not None:q['same_rows']=rows==expected;assert rows==expected,(origin,d['sql'])
+   queries.append(q)
+  for k,v in d.items():
+   if k not in ['rows','entries','full_rows','raw']:visit(v,origin+'/'+k)
+ elif isinstance(d,list):
+  for i,v in enumerate(d):visit(v,origin+'/'+str(i))
+for f in ['root-lexical-preparation.json','root-parallel-preparation.json','root-broader-lexical-context.json','english/259/original-evidence.json','tibetan/259/corpus-originals.json']:
+ visit(json.loads((B/f).read_text()),f)
+save('reopened-sql-evidence.json',queries)
+rows=[dict(r) for r in db.execute('select * from corpus_segments where course=? and seq between ? and ? order by seq',('C05',253,267))]
+for name in ['source.json','context.json']:
+ for r in json.loads((B/name).read_text()): assert all(next(x for x in rows if x['seq']==r['seq'])[k]==v for k,v in r.items())
+save('reopened-source-context.json',rows)
+masterpath=W/'data/hgm_dictionary_v27_2.json.gz';master=json.loads(gzip.decompress(masterpath.read_bytes()))
+terms=set()
+for f in ['english/259/master-variants.json','tibetan/259/lexical-originals.json']:
+ d=json.loads((B/f).read_text())
+ for q in d['queries']:terms.add(q.get('term',q.get('query',{}).get('headword_or_variant_exact')))
+terms.update(['bzang ngan',"sgro 'dogs chod pa",'ngo shes pa','nges','shes','lus','nyan'])
+alltiers=[]
+for section in ['curated_entries','glossary_entries','unified_entries']:
+ for term in sorted(terms):
+  found=[r for r in master[section] if r.get('wylie')==term or term in (r.get('wylie_variants') or [])]
+  alltiers.append({'section':section,'term':term,'count':len(found),'complete_entries':found})
+save('reopened-master-all-tiers.json',{'path':str(masterpath),'sha256':sha(masterpath),'queries':alltiers})
+pins=[]
+for f in ['AGENTS.md','docs/ALIGNMENT_LAYER_SPEC.md','docs/alignment_briefs/RECONCILE_BRIEF.md','docs/alignment_briefs/REFUTE_BRIEF.md','docs/errata_register.json','data/alignment/span_head_allow.json','tools/gen_alignment_page.py','tools/build_alignment_layer.py','data/alignment/C05_CAMPAIGN.md','DIAMOND_CUTTER_TRANSLATION_TOOL_ROADMAP.md']:
+ p=W/f;res=git('show',G+':'+f); assert res.returncode==0 and res.stdout==p.read_bytes();blob=git('rev-parse',G+':'+f).stdout.decode().strip()
+ dest=O/'governing-originals'/f;dest.parent.mkdir(parents=True,exist_ok=True);dest.write_bytes(p.read_bytes());pins.append({'path':str(p),'sha256':sha(p),'git_commit':G,'git_blob':blob,'copy_path':str(dest),'bytes_equal_git':True})
+for f,h in json.loads((B/'baseline.json').read_text())['sha256'].items(): assert sha(W/f)==h
+phys=json.loads((B/'root-preparation-proof.json').read_text())['physical_original'];p=pathlib.Path(phys['path']);assert sha(p)==phys['sha256'];raw=p.read_bytes();(O/'physical-C05-original.txt').write_bytes(raw);normalized=b' '.join(raw.split());matches=[]
+for row in rows:
+ if row['seq'] in [259,260,261]:
+  for side in ['acip','english']:
+   n=' '.join(row[side].split()).encode();assert n in normalized;matches.append({'seq':row['seq'],'field':side,'normalized_offset':normalized.index(n),'count':normalized.count(n)})
+save('original-pins.json',{'governing':G,'accepted_baseline':A,'git_identities':{c:git('show','-s','--format=%H %T %P %s',c).stdout.decode().strip() for c in [G,A]},'files':pins,'data_assets':{f:sha(W/f) for f in ['data/hgm_dictionary_v27_2.json.gz','data/full_parallel_corpus_v32.json.gz','build/hgm_spine_v27_2.db']},'physical_original':phys,'physical_normalized_lookup':matches,'sql_readonly':True,'original_frozen_files_verified':len(freeze),'replayed_queries':len(queries)})
+print('COLLECTED',len(evidence),'original files;',len(freeze),'frozen files;',len(queries),'queries;',len(alltiers),'all-tier selections')

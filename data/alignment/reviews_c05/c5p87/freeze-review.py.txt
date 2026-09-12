@@ -1,0 +1,38 @@
+from pathlib import Path
+import ast,hashlib,json,subprocess
+O=Path(__file__).resolve().parent;B=O.parent;W=B.parent.parent/'campaign-worktree'
+sha=lambda b:hashlib.sha256(b).hexdigest()
+helper=B.parent/'land_reviewed_page.py';allowed=None
+for n in ast.walk(ast.parse(helper.read_text())):
+ if isinstance(n,ast.Compare) and isinstance(n.ops[0],ast.In) and isinstance(n.comparators[0],ast.Tuple):
+  vals=[x.value for x in n.comparators[0].elts if isinstance(x,ast.Constant)]
+  if '.json' in vals and '.bin' in vals and ast.unparse(n.left)=='file.suffix.lower()':allowed=set(vals)
+assert allowed,'Actual landing extension whitelist not found'
+manifest=json.loads((O/'original-to-copy-manifest.json').read_text());assert isinstance(manifest,list) and len(manifest)==649
+for r in manifest:
+ p=O/r['copy'];data=p.read_bytes();assert p.suffix.lower() in allowed;assert len(data)==r['bytes'] and sha(data)==r['sha256'],r['copy']
+ orig=subprocess.check_output(['git','show',r['original_git_commit']+':'+r['repository_relative_path']],cwd=W) if 'original_git_commit' in r else Path(r['original']).read_bytes()
+ assert data==orig,(r['original'],r['copy'])
+resolved=json.loads((O/'resolved-spans.json').read_text());assess=json.loads((O/'semantic-span-assessments.json').read_text());review=json.loads((O/'review.json').read_text())
+assert len(resolved)==len(assess)==96
+keys={'seq','id','d','tib','eng','tib_range','eng_range'}
+assert all(set(r)==keys for r in resolved),'Seven-key schema'
+assert all({k:a[k] for k in keys}==r and a['spec']=='PASS' and a['quality']=='SOUND' and a['reason'] for r,a in zip(resolved,assess)),'Assessments'
+assert sum(r['d']==5 for r in resolved)==55 and sum(r['d']==7 for r in resolved)==15
+assert json.loads((O/'bank-ready-errata.json').read_text())==[]
+assert json.loads((O/'span-head-allow-needed.json').read_text())=={}
+for s in review['segments']:
+ for name,suffix in [('spec','json'),('body','html')]:
+  raw=(B/'reconciled'/str(s['seq'])/(name+'.'+suffix)).read_bytes();assert sha(raw)==s[name+'_sha256'] and len(raw)==s[name+'_bytes'],(s['seq'],name)
+ p=O/'generator-replay'/'reconciled'/str(s['seq']);assert (p/'generator.exit').read_text().strip()=='0';assert (p/'generator.stderr').read_bytes()==b'';assert (p/'generator.stdout').read_bytes()==(B/'reconciled'/str(s['seq'])/'body.html').read_bytes()
+pre=json.loads((O/'packaging-preflight.json').read_text());assert pre['helper_sha256']==sha(helper.read_bytes()) and set(pre['actual_landing_extension_whitelist'])==allowed
+fp=O/'review-freeze.json'
+allfiles=sorted(p for p in O.rglob('*') if p.is_file() and p!=fp)
+assert all(p.suffix.lower() in allowed for p in allfiles),[str(p) for p in allfiles if p.suffix.lower() not in allowed]
+entries=[{'path':str(p.relative_to(O)),'sha256':sha(p.read_bytes()),'bytes':p.stat().st_size} for p in allfiles]
+freeze={'status':'FROZEN','candidate':'c5p87','scope':'Independent SPEC and QUALITY review only; no acceptance or landing','producer':'Codex independent skeptical semantic reviewer','spec_verdict':'APPROVE','quality_verdict':'APPROVE','files':entries,'file_count':len(entries),'total_bytes':sum(e['bytes'] for e in entries),'excludes':['review-freeze.json'],'self_exclusion':'Only this root review-freeze.json; all nested original freeze.json files are included. No current alias exists.','original_manifest_records':len(manifest),'all_manifest_copies_reverified_before_freeze':True,'actual_landing_whitelist_verified':True}
+fp.write_text(json.dumps(freeze,ensure_ascii=False,indent=2)+'\n')
+for r in json.loads(fp.read_text())['files']:
+ raw=(O/r['path']).read_bytes();assert sha(raw)==r['sha256'] and len(raw)==r['bytes'],r['path']
+assert {str(p.relative_to(O)) for p in O.rglob('*') if p.is_file()}=={r['path'] for r in entries}|{'review-freeze.json'},'Complete exact file set'
+print(json.dumps({'status':'PASS','manifest_records':len(manifest),'frozen_files':len(entries),'frozen_bytes':freeze['total_bytes'],'freeze_sha256':sha(fp.read_bytes()),'freeze_bytes':fp.stat().st_size,'spec':'APPROVE','quality':'APPROVE','all_generator_replays':'PASS'},indent=2))

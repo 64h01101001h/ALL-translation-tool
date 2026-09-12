@@ -1,0 +1,33 @@
+import pathlib,sqlite3,json,hashlib,subprocess,os
+root=pathlib.Path('campaign-worktree').resolve(); out=pathlib.Path('campaign-artifacts/C05-259-261/english/259'); db=root/'build/hgm_spine_v27_2.db';c=sqlite3.connect(db.as_uri()+'?mode=ro',uri=True);c.row_factory=sqlite3.Row
+fields='id,course,seq,acip,wylie,english'; rows=[dict(r) for r in c.execute('select '+fields+' from corpus_segments where course=? and seq between ? and ? order by seq',('C05',253,267))]
+checks={n:json.load(open('campaign-artifacts/C05-259-261/'+n+'.json'))==[r for r in rows if n=='context' or 259<=r['seq']<=261] for n in ('source','context')}
+terms=['mi','mig shes','tshad ma',"'gro ba",'gzhan','gnyis','las','bzang','ngan','dbang','dbang gis','rnag khrag','rnag','khrag','bdud rtsi','sogs','mthong ba','tsam',"'bring po",'chu','rgyud','lus shes','nyan shes',"rtsa ba'i dam bca'",'rtsa ba',"dam bca'","'thad pa","'dod",'nges shes','drongs pa',"sgro 'dogs","sgro 'dogs chod pa",'chod pa','phan tshun','ngo shes','ngo shes pa']
+queries=[]
+for term in terms:
+ sql='select * from entries where wylie=? or id in (select entry_id from entry_variants where wylie=?)'
+ found=[dict(r) for r in c.execute(sql,(term,term))];queries.append({'sql':sql,'parameters':[term,term],'count':len(found),'rows':found})
+patterns=[('wylie','%nges shes drongs%'),('wylie',"%sgro 'dogs chod%"),('wylie','%ngo shes%'),('wylie','%dbang gis%'),('english','%halfway between the good%'),('english','%analyze an object%'),('english','%visual consciousness of the human%')]
+corpus=[]
+for field,pat in patterns:
+ sql=f'select {fields} from corpus_segments where {field} like ? order by course,seq';r=[dict(x) for x in c.execute(sql,(pat,))];corpus.append({'sql':sql,'parameters':[pat],'count':len(r),'rows':r})
+parallel=[]
+for src in rows[6:9]:
+ sql=f'select {fields} from corpus_segments where acip=? or wylie=? or english=? order by course,seq';r=[dict(x) for x in c.execute(sql,(src['acip'],src['wylie'],src['english']))];parallel.append({'sql':sql,'parameters':[src['acip'],src['wylie'],src['english']],'count':len(r),'rows':r})
+baseline=json.load(open('campaign-artifacts/C05-259-261/baseline.json'));pins={}
+for pin in ['1448ea89eb6db880fa8c4c6e1506ed2c03582ad8',baseline['commit']]:pins[pin]=subprocess.check_output(['git','show','-s','--format=%H %T %P %s',pin],cwd=root,text=True).strip()
+hashes={};hash_methods={}
+for f in baseline['sha256']:
+ proc=subprocess.run(['git','show',baseline['commit']+':'+f],cwd=root,capture_output=True)
+ if proc.returncode==0:raw=proc.stdout;hash_methods[f]='historical Git blob'
+ else:raw=(root/f).read_bytes();hash_methods[f]={'method':'current original untracked data file; compared to supplied baseline hash','git_exit':proc.returncode,'git_stderr':proc.stderr.decode()}
+ hashes[f]=hashlib.sha256(raw).hexdigest()
+checks['baseline_hashes_match']=hashes==baseline['sha256']
+refs=['Desktop/HGM DICTIONARY - TRANSLATION APP','ACIP Software Developmeent/Gofer Developmetn Files',"ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/ACIPHypercontext Tool","ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/LokeshChandraDictionary","ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/CreateLokeshChandraDIctionary","ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/FixLokeshChandra",'ACIP Software Developmeent/tibetan-spellchecker','Tibetan Translation Tool']
+refs={str(pathlib.Path.home()/p):os.access(pathlib.Path.home()/p,os.R_OK) for p in refs}
+evidence={'producer':'Codex; independent English-first','sqlite_uri':db.as_uri()+'?mode=ro','source_query':{'sql':f'select {fields} from corpus_segments where course=? and seq between ? and ? order by seq','parameters':['C05',253,267],'count':len(rows),'rows':rows},'snapshot_checks':checks,'reference_readability':refs,'baseline_snapshot':baseline,'historical_git_pins':pins,'verified_baseline_hashes':hashes,'hash_methods':hash_methods,'lexical_queries':queries,'corpus_queries':corpus,'parallel_queries':parallel}
+(out/'original-evidence.json').write_text(json.dumps(evidence,ensure_ascii=False,indent=2)+'\n')
+print('checks',checks,'refs',all(refs.values()))
+for q in queries: print(q['parameters'][0],[(r['wylie'],r['hgm_gloss'],r['tier']) for r in q['rows']])
+for q in corpus:print(q['parameters'],q['count'])
+print('PARALLELS',[(p['count'],[(r['course'],r['seq']) for r in p['rows']]) for p in parallel])

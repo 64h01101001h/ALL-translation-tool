@@ -1,0 +1,25 @@
+import pathlib,json,subprocess,sys,hashlib,os,importlib.util,html,re
+sys.dont_write_bytecode=True
+root=pathlib.Path(__file__).resolve().parent.parent;wt=root.parents[2]/'campaign-worktree'
+# Worktree is explicitly resolved rather than inferred from any other angle.
+wt=pathlib.Path('/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree')
+sys.path.insert(0,str(wt/'tools'));import gen_alignment_page as G
+sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+sources={r['seq']:r for r in json.loads((root/'259/source.json').read_text())}
+for seq in [259,260,261]:
+ p=root/str(seq); attempts=p/'attempts';attempts.mkdir(exist_ok=True);n=len(list(attempts.iterdir()))+1;a=attempts/f'{n:02}';a.mkdir()
+ for f in ['spec.json','intended-occurrences.json','errata.json']:(a/f).write_bytes((p/f).read_bytes())
+ cmd=[sys.executable,'-B',str(root/'259/run-canonical.py')]
+ r=subprocess.run(cmd,cwd=wt,input=(p/'spec.json').read_bytes(),stdout=subprocess.PIPE,stderr=subprocess.PIPE,env={**os.environ,'PYTHONDONTWRITEBYTECODE':'1'})
+ for dest in [p,a]:
+  (dest/'generator.stdout').write_bytes(r.stdout);(dest/'generator.stderr').write_bytes(r.stderr);(dest/'generator.exit').write_text(str(r.returncode)+'\n');(dest/'body.html').write_bytes(r.stdout)
+ print(seq,'EXIT',r.returncode,'bytes',len(r.stdout),'stderr',r.stderr.decode())
+ if r.returncode:continue
+ s=json.loads((p/'spec.json').read_text())['segments'][0];sp=s['spans'];ordered=[next(x for x in sp if x['id']==i)for i in s['eng_order']]
+ tr=G.resolve(sources[seq]['wylie'],sp,'tib',seq);er=G.resolve(sources[seq]['english'],G.with_members(sp,ordered,sources[seq]['english']),'eng',seq)
+ expect=json.loads((p/'intended-occurrences.json').read_text());assert all(er[e['id']]==tuple(e['expected_english_range']) for e in expect),(seq,er,expect)
+ occ=[]
+ for x in sp:
+  occ.append({**x,'resolved_tibetan_range':tr[x['id']],'resolved_english_range':er.get(x['id']),'tibetan_quote':sources[seq]['wylie'][slice(*tr[x['id']])],'english_quote':sources[seq]['english'][slice(*er[x['id']])] if x['eng']else None})
+ proof={'command':cmd,'cwd':str(wt),'exit':r.returncode,'stderr_bytes':len(r.stderr),'stdout_bytes':len(r.stdout),'stdout_equals_body':True,'body_sha256':sha(p/'body.html'),'spec_sha256':sha(p/'spec.json'),'spans':len(sp),'d5':sum(x['d']==5 for x in sp),'nulls':sum(x['eng']is None for x in sp),'occurrence_check':'all intended exact offsets equal canonical resolve','sqlite':'every connect forced URI mode=ro by saved launcher; unmodified real generator executed via runpy','source':sources[seq],'resolved':occ}
+ (p/'mechanical-proof.json').write_text(json.dumps(proof,ensure_ascii=False,indent=2)+'\n')

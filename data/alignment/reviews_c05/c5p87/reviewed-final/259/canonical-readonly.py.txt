@@ -1,0 +1,10 @@
+import pathlib,sqlite3,runpy,sys
+sys.dont_write_bytecode=True
+original=sqlite3.connect
+def ro(db,*a,**kw):
+ kw['uri']=True
+ c=original(pathlib.Path(db).resolve().as_uri()+'?mode=ro',*a,**kw)
+ c.execute('pragma query_only=ON')
+ return c
+sqlite3.connect=ro
+runpy.run_path(sys.argv[1],run_name='__main__')

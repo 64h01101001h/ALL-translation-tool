@@ -1,0 +1,46 @@
+import os,sys,json,gzip,sqlite3,pathlib,hashlib,subprocess
+sys.dont_write_bytecode=True
+root=pathlib.Path.cwd();wt=root/'campaign-worktree';out=root/'campaign-artifacts/C05-259-261/tibetan/259'; batch=out.parent.parent
+save=lambda n,x:(out/n).write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+pin='1448ea89eb6db880fa8c4c6e1506ed2c03582ad8'
+files=['AGENTS.md','docs/ALIGNMENT_LAYER_SPEC.md','docs/alignment_briefs/PROPOSE_BRIEF.md','DIAMOND_CUTTER_TRANSLATION_TOOL_ROADMAP.md','docs/NEVER_BANK_A_FALSEHOOD.md','docs/errata_register.json','tools/gen_alignment_page.py','tools/build_alignment_layer.py']
+(out/'originals').mkdir(exist_ok=True)
+proof=[]
+for f in files:
+ p=wt/f;data=p.read_bytes();dest=out/'originals'/f.replace('/','__');dest.write_bytes(data)
+ historical=subprocess.check_output(['git','show',f'{pin}:{f}'],cwd=wt)
+ proof.append({'path':str(p),'saved':str(dest),'sha256':sha(p),'git_commit':pin,'git_blob':subprocess.check_output(['git','rev-parse',f'{pin}:{f}'],cwd=wt,text=True).strip(),'same_as_pinned':data==historical})
+cs=(wt/'data/alignment/C05_CAMPAIGN.md').read_text();(out/'originals/course-shape.md').write_text(cs.split('## Gates')[0])
+for name in ['HANDOFF.md','README.md']:
+ p=pathlib.Path('/Users/adamderickandrade/Desktop/HGM DICTIONARY - TRANSLATION APP/Handoff')/name
+ dest=out/'originals'/('Handoff-'+name);dest.write_bytes(p.read_bytes());proof.append({'path':str(p),'saved':str(dest),'sha256':sha(p)})
+for n in ['source.json','context.json','baseline.json']:
+ save(n,json.loads((batch/n).read_text()))
+con=sqlite3.connect((wt/'build/hgm_spine_v27_2.db').resolve().as_uri()+'?mode=ro',uri=True);con.row_factory=sqlite3.Row
+rows=[dict(r) for r in con.execute("select * from corpus_segments where course=? and seq between ? and ?",('C05',253,267))]
+save('spine-original-rows.json',rows)
+checks=[]
+for n in ['source.json','context.json']:
+ snap=json.loads((batch/n).read_text());checks.append({'snapshot':n,'count':len(snap),'all_six_fields_equal':all(all(r[k]==next(a for a in rows if a['seq']==r['seq'])[k] for k in ['id','course','seq','acip','wylie','english'])for r in snap)})
+terms=['de','kho','na re','mi','mig shes','tshad ma','yin','gyi',"'gro ba",'gzhan','gnyis','ma','las','bzang','ngan','dbang','rnag khrag','bdud rtsi','sogs','mthong ba','tsam','phyir','zer',"'o na","'bring po",'chu','gzhan yang','rgyud','lus shes','nyan shes','med','thal','khyod',"rtsa ba'i dam bca'",'rtsa ba',"dam bca'","'thad pa","'dod",'nges shes','drongs pa',"sgro 'dogs",'chod pa','phan tshun','gcig','ngo shes']
+master=wt/'data/hgm_dictionary_v27_2.json.gz';d=json.load(gzip.open(master,'rt'));entries=d['unified_entries']
+lex=[]
+for t in terms:
+ matches=[e for e in entries if e.get('wylie')==t or t in (e.get('wylie_variants') or [])]
+ lex.append({'query':{'headword_or_variant_exact':t},'count':len(matches),'complete_original_entries':matches})
+save('lexical-originals.json',{'master_path':str(master),'master_sha256':sha(master),'queries':lex})
+queries=[]
+patterns=['%nges shes drongs%','%sgro \'dogs chod%','%ngo shes%','%las \'bring%','%dbang gis%','%rnag khrag%','%nyan shes%','%lus shes%']
+for p in patterns:
+ q="select * from corpus_segments where wylie like ?"; rr=[dict(r) for r in con.execute(q,(p,))];queries.append({'sql':q,'parameters':[p],'count':len(rr),'rows':rr})
+for seq in [259,260,261]:
+ r=next(r for r in rows if r['seq']==seq)
+ for field in ['wylie','english','acip']:
+  q=f'select * from corpus_segments where {field}=?'; rr=[dict(a)for a in con.execute(q,(r[field],))];queries.append({'sql':q,'parameters':[r[field]],'count':len(rr),'rows':rr})
+save('corpus-originals.json',queries)
+save('original-proof.json',{'governing_git':pin,'accepted_baseline':'48bd9d4587352461bc609fde85b5bfe374a05212','source_verification':checks,'originals':proof,'spine_path':str(wt/'build/hgm_spine_v27_2.db'),'spine_sha256':sha(wt/'build/hgm_spine_v27_2.db'),'python_bytecode':False,'sqlite_mode':'ro'})
+print(json.dumps(checks))
+for a in lex:
+ print(a['query']['headword_or_variant_exact'],[(e['wylie'],e.get('hgm_gloss'),e.get('hgm_evidence'))for e in a['complete_original_entries']])
+print('corpus queries',[(q['parameters'][0][:40],q['count']) for q in queries])

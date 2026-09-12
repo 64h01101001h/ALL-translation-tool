@@ -1,0 +1,24 @@
+import json,pathlib,subprocess,sys,hashlib,os,shutil
+root=pathlib.Path('campaign-worktree').resolve();base=pathlib.Path('campaign-artifacts/C05-259-261/english').resolve();env=dict(os.environ,PYTHONDONTWRITEBYTECODE='1');sys.path.insert(0,str(root/'tools'));import gen_alignment_page as G
+rows={r['seq']:r for r in json.load(open(base/'259/original-evidence.json'))['source_query']['rows']}
+for seq in ([int(x) for x in sys.argv[1:]] or (259,260,261)):
+ p=base/str(seq);attempt=1
+ while (p/f'attempt-{attempt:02d}').exists():attempt+=1
+ a=p/f'attempt-{attempt:02d}';a.mkdir();shutil.copyfile(p/'spec.json',a/'spec.json')
+ cmd=[sys.executable,'-B',str(base/'259/canonical-readonly.py'),str(root/'tools/gen_alignment_page.py')]
+ run=subprocess.run(cmd,cwd=root,input=(p/'spec.json').read_bytes(),capture_output=True,env=env)
+ for dest in (p,a):
+  (dest/'generator.stdout').write_bytes(run.stdout);(dest/'generator.stderr').write_bytes(run.stderr);(dest/'generator.exit').write_text(str(run.returncode)+'\n');(dest/'command.json').write_text(json.dumps({'argv':cmd,'cwd':str(root),'environment_override':{'PYTHONDONTWRITEBYTECODE':'1'},'stdin_sha256':hashlib.sha256((p/'spec.json').read_bytes()).hexdigest(),'canonical_sha256':hashlib.sha256((root/'tools/gen_alignment_page.py').read_bytes()).hexdigest()},indent=2)+'\n')
+ print(seq,run.returncode,len(run.stdout),run.stderr.decode())
+ if run.returncode:continue
+ (p/'body.html').write_bytes(run.stdout);sp=json.load(open(p/'spec.json'))['segments'][0];by={s['id']:s for s in sp['spans']};tib=G.resolve(rows[seq]['wylie'],sp['spans'],'tib',seq);eng=G.resolve(rows[seq]['english'],G.with_members(sp['spans'],[by[i] for i in sp['eng_order']],rows[seq]['english']),'eng',seq)
+ intended=json.load(open(p/'intended-occurrences.json'));assert intended=={k:list(v) for k,v in eng.items()},(seq,intended,eng)
+ proof=[]
+ for s in sp['spans']:
+  q=dict(s);q['tib_range']=tib[s['id']];q['eng_range']=eng.get(s['id']);q['exact_english_matches']=[];q['exact_wylie_matches']=[]
+  for side,key in [('eng','english'),('tib','wylie')]:
+   cur=0
+   while (at:=G.find_word(rows[seq][key],s[side],cur,subword=s.get('subword')))>=0:
+    q['exact_english_matches' if side=='eng' else 'exact_wylie_matches'].append([at,at+len(s[side])]);cur=at+1
+  proof.append(q)
+ (p/'occurrence-proof.json').write_text(json.dumps({'basis':'Canonical resolver output independently equals manually intended English offsets; all repeated whole-word hit ranges listed. Member ranges resolve inside parent.','source':rows[seq],'spans':proof},ensure_ascii=False,indent=2)+'\n')

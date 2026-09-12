@@ -1,0 +1,112 @@
+import pathlib,json,hashlib,subprocess,datetime,collections,gzip,sqlite3
+R=pathlib.Path.cwd();B=R/'campaign-artifacts/C05-259-261';O=B/'semantic-review';W=R/'campaign-worktree';G='1448ea89eb6db880fa8c4c6e1506ed2c03582ad8'
+def sh(b):return hashlib.sha256(b).hexdigest()
+def save(n,x):(O/n).write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+# Exact immutable input freezes, including failures/superseded attempts.
+freeze=[]
+for angle,name in [('tibetan','freeze-manifest.json'),('english','freeze.json'),('reconciled','freeze.json')]:
+ for seq in [259,260,261]:
+  p=B/angle/str(seq)/name;x=json.loads(p.read_text());files=x['files'];files=[dict(path=k,**v) for k,v in files.items()] if isinstance(files,dict) else files
+  for f in files:
+   raw=pathlib.Path(f['path']).read_bytes();assert len(raw)==f['bytes'] and sh(raw)==f['sha256']
+  freeze.append({'angle':angle,'seq':seq,'path':str(p),'sha256':sh(p.read_bytes()),'bytes':p.stat().st_size,'entries_verified':len(files)})
+save('independent-input-freezes.json',freeze)
+# Ensure all top-level final interfaces are available by segment, with supported exact helper copies.
+manifest=json.loads((O/'original-to-copy-manifest.json').read_text());byorig={r['original']:r for r in manifest};allowed={'.json','.md','.html','.stderr','.stdout','.log','.txt','.bin','.exit'}
+for seq in [259,260,261]:
+ for p in (B/f'reconciled/{seq}').iterdir():
+  if not p.is_file():continue
+  dest=f'reviewed-final/{seq}/'+p.name+('.txt' if p.suffix.lower() not in allowed else '');copy=O/dest;copy.parent.mkdir(parents=True,exist_ok=True);raw=p.read_bytes()
+  if copy.exists():assert copy.read_bytes()==raw
+  else:copy.write_bytes(raw)
+  byorig[str(p)]['copy']=dest
+# Pin all copied historical repository snapshots too, even when their immediate original is an immutable batch path.
+pins=json.loads((B/'reconciled/259/original-pins.json').read_text())['files'];known={p['sha256']:p for p in pins}
+for r in manifest:
+ if r['sha256'] in known and ('governing-originals' in r['original'] or str(W) in r['original']):
+  q=known[r['sha256']];repo=str(pathlib.Path(q['path']).relative_to(W));raw=subprocess.check_output(['git','show',q['git_commit']+':'+repo],cwd=W);assert raw==(O/r['copy']).read_bytes();r.update(original_git_commit=q['git_commit'],repository_relative_path=repo)
+# Include the explicitly consulted Rule 10 and actual consumed protocol version.
+for p,repo in [(W/'docs/NEVER_BANK_A_FALSEHOOD.md','docs/NEVER_BANK_A_FALSEHOOD.md')]:
+ raw=subprocess.check_output(['git','show',G+':'+repo],cwd=W);dest='governing-originals/'+repo;(O/dest).parent.mkdir(parents=True,exist_ok=True);(O/dest).write_bytes(raw);manifest.append({'original':str(p),'copy':dest,'sha256':sh(raw),'bytes':len(raw),'original_git_commit':G,'repository_relative_path':repo})
+save('original-to-copy-manifest.json',manifest)
+# Reopen remaining final lexical forms in all master tiers; full original rows remain full.
+m=json.loads(gzip.decompress((W/'data/hgm_dictionary_v27_2.json.gz').read_bytes()));extra=[]
+for term in ["'dod pa",'de dag','gcig gis gcig']:
+ for section in ['curated_entries','glossary_entries','unified_entries']:
+  rows=[r for r in m[section] if r.get('wylie')==term or term in (r.get('wylie_variants') or [])];extra.append({'term':term,'section':section,'count':len(rows),'complete_entries':rows})
+save('additional-full-master-fields.json',extra)
+resolved=json.loads((O/'resolved-spans.json').read_text());reasons={
+'de la':'de refers to the just-described scenario; la frames that scenario as the current case. The complete phrase licenses the in-the-case-mentioned recast, without minting a case noun.',
+'kho na re':'The opponent/reporting formula supplies Someone may answer as a single hypothetical reply. Whole HGM evidence supports it; the modal is part of that formula, while the separate with-the-following-claim expansion is not assigned again.',
+'mi':'The selected occurrence denotes the human perceiver. In the nonhuman construction the following ma supplies negation; mi itself remains the human noun.',
+'mig shes':'The sensory cognition is visual; the technical compound owns exactly the local singular/plural consciousness wording. Articles and possessors remain outside.',
+'shes':'The knowledge/consciousness member owns consciousness, including its plural inflection, within the actual sensory parent. It is not a leftover-word assignment or sound spelling.',
+'tshad ma':'This is epistemic validity. The first formulation uses valid perception; adjectival valid modifies the following named sense in later 260 occurrences. The final concession repeats valid without a fifth source tshad ma.',
+'yin':'The selected standalone copula predicates validity or nonhuman status. Its attested is/are/be is a word at d5, distinct from the adversative/case particles and from omitted final restrictive copulas.',
+'gyi':'After the first yin this is the contrast between human and other perceptions, hence but; it is not the later genitive in the karma phrase.',
+"'gro ba":'The source noun names a being or beings. At 261 only its first English occurrence is owned; later beings restates the demonstrative antecedent.',
+'gzhan':'This contrasts the two nonhuman perceivers with the human. The unrelated provisional master a-bodhisattva candidate is not the evidence for local other.',
+'gnyis':'Both two and two types occur in the complete HGM variants. Locally gnyis counts the two previously identified perceivers, while types classifies the beings. The tighter two preserves the numeral without claiming the contextual classifier; this is not glossary absence or denial that HGM attests two types.',
+'ma':'The negative belongs to the selected predicate, not the ma syllable within tshad ma. The 260 first contraction is precisely the first n\'t in wouldn\'t, with subword=true; rhetorical later contractions are not borrowed.',
+'de':'The later demonstrative resumes the nonhuman pair as These; latter is a discourse elaboration and gnyis separately supplies two.',
+'las':'The karma causes the constrained appearance. The original glossary and local GMR English attest karma; the curated deeds/deed remains unchanged and is not silently replaced.',
+'bzang ngan':'The established paired-quality compound contrasts the two karmas, one good and the other bad. Its exact full HGM variant gives the distributive extent. This is the compound’s contrast, with the supplied which is excluded; the two adjective members retain their own narrow exponents.',
+'bzang':'Within the paired quality, this is the positive good pole only. No case bearer is assigned to this member.',
+'ngan':'Within the paired quality, this is the negative bad pole only. No case bearer is assigned to this member.',
+'dbang gis':'The force expression in its instrumental form makes karma determine seeing; the inflected expression licenses forces. Retain gis whole, and exclude the supplied him/them to.',
+'rnag khrag':'The paired substances are pus and blood, an established compound. Its internal and differs from the following conjunction before ambrosia.',
+'rnag':'The source pus member aligns only pus within the paired-substance compound; the reversed blood alternative in the glossary does not override the local order and meaning.',
+'khrag':'The source blood member aligns only blood within the paired-substance compound; it is not the earlier pus.',
+'dang':'This joins the local listed items: and between pus/blood and ambrosia, or between the sense/conclusion alternatives under shared negation. Supplied sentence-opening And is not selected.',
+'bdud rtsi':'The compound refers to ambrosia as the pleasure being’s perceived substance; the article is outside and no demon/juice decomposition is invented.',
+'sogs':'The enumeration/example particle is recast by the complete indefinite gesture something like. Something here is part of that gesture, not a newly supplied concrete example noun; pus, blood and ambrosia keep independent owners. d6 reflects its local grammatical function.',
+'mthong ba':'Seeing is predicated of the indicated human or pair. The see/sees exponent agrees with the local subject; auxiliary and participant expansion is outside.',
+ 'tsam':'The restrictive particle is only; it limits karma-driven seeing without claiming the entire causal explanation.',
+ 'phyir':'The selected causal connective belongs to its own source reason. Capitalized Because occurrences in 260 are the first/second reason clauses, for is the final reason, and 261 given is the final accepted-position reason.',
+ "'o na":'The inferential transition opens the reductio as Well then. The complete formula merits phrase depth and does not capture according to you.',
+ "'bring po":'The human karma is middling, locally halfway; the comparison to the good and bad just mentioned supplies its contextual standard and stays unwrapped.',
+ 'chur':'The whole source chu+r syllable identifies water as the perceived substance. The fused case is retained in the inflected form; no partial chu or unsupported r member is created.',
+ 'gzhan yang':'The whole additive discourse phrase introduces the further consequence, Moreover. The source function supports it; the unrelated provisional mined master wording does not.',
+ 'rgyud':'The mental continuum contains the sensory cognition. The two mental-stream occurrences belong to the tactile/auditory consequence and the visual reason, respectively.',
+ 'lus shes':'The technical body-sense compound gives tactile consciousness; its two components independently support the contained tactile and consciousness members.',
+ 'lus':'The bodily sense member gives tactile in this compound, corroborated by the actual lus HGM variant. The separate pags pa alias/skin entry is not its licensor.',
+ 'nyan shes':'The hearing-sense compound gives auditory consciousness. The two members are semantic components of that immediate parent.',
+ 'nyan':'The hearing member gives auditory in the compound, not the unrelated person/listener sense.',
+ 'med':'The negative existential has the local no/never exponent. Repeated instances retain separate scopes; the surrounding auxiliary/no-such-thing frame is not captured whole.',
+ 'thal':'The consequence marker gives the implication force expressed as implying. Full HGM rhetorical-question variants exist, but their address and auxiliary wording is not independently supplied by this particle; the narrow d6 exponent is sound.',
+ 'khyod kyi':'The pronoun plus genitive is the complete possessive relation your. Phrase depth reflects that construction; it is not a depth change to evade an unlicensed head. Both the possessive and the following original-position compound retain their boundaries.',
+ "rtsa ba'i dam bca'":'The original thesis/position is an established compound in the HGM evidence. Its internal root/original and thesis/position members are both licensed, while your belongs to the separate possessive phrase.',
+ 'rtsa ba':'The root/baseline of the thesis licenses original inside original position; the bound genitive remains within the parent.',
+ "dam bca'":'The asserted thesis licenses position inside the immediate original-position parent.',
+ "'thad pa":'The opponent’s thesis is deemed correct. The admissibility predicate gives correct; the supplied you believe/to be frame is outside.',
+ "'dod":'The acceptance verb owns agree in the hypothetical concession. The following restatement of valid consciousnesses is explanatory English, not extra source nouns.',
+ 'na':'The conditional marker gives suppose in the final acceptance branch. It is not an independent act of thinking divorced from the adjacent agree.',
+ 'de dag':'The plural demonstrative gives these at each actual occurrence. The later English beings repeats an antecedent; full glossary these beings exists but the tighter demonstrative is locally sufficient.',
+ 'nges shes':'The certainty cognition gives definite conclusion, with reaching separately expressed by drongs pa. The indefinite article and about something are supplied complements.',
+ 'nges':'The certainty/definiteness member owns definite; shes is not assigned conclusion merely because it is left over.',
+ 'drongs pa':'The attainment predicate gives reach in reaching a definite conclusion. The subject and ability frame stay unwrapped.',
+ "sgro 'dogs chod pa":'The complete source construction is resolving/cutting superimpositions, recast here as analysis. Local analyze denotes that whole analytical activity; a positive isolated chod pa/analyze glossary variant does not establish that the nominal complement is absent. The full phrase is defensible at d3, with generic an object outside; neither object nor the two thal/implying occurrences is stolen for sgro \'dogs. EM:918 corroborates the idiom, without supplying English for this row.',
+ "'dod na":'The complete acceptance conditional gives if so; so refers to the preceding concession. The sentence-opening And remains outside.',
+ 'gcig':'In gcig gis gcig the first one is the recognizing agent and the second another is its object. Exact first/second source and English occurrences preserve those roles; phan tshun reinforces the distributed reciprocity rather than licensing a duplicate atom.',
+ 'ngo shes pa':'The entire recognition verb directly gives recognize in the reciprocal clause. The positive full-form HGM entry matters; an earlier empty ngo shes lookup is not evidence of absent recognition.',
+ "'dod pa":'The final accepted/asserted position is the nominal position, with its own phyir/given. The first repeated reason has no separately defended English atom and is omitted instead of reassigned.'
+}
+assert set(r['tib'] for r in resolved)<=set(reasons)
+save('semantic-span-assessments.json',[{**r,'spec':'PASS','quality':'SOUND','reason':reasons[r['tib']]} for r in resolved])
+omissions=[]
+for seq in [259,260,261]:
+ x=json.loads((B/f'reconciled/{seq}/omissions.json').read_text());source=next(s for s in json.loads((B/'source.json').read_text()) if s['seq']==seq)
+ for item in x['material']:
+  field='wylie' if item['side']=='tib' else 'english';a,z=item['range'];assert source[field][a:z]==item['source_text'];omissions.append({'seq':seq,**item,'review':'SOUND as omitted/distributed or contextual expansion; not a null assertion.','review_limit':'The positive gnyis/two types variant is acknowledged; supplied describes the local classifier boundary, not its absence from HGM.' if item['source_text']=='types of' else None})
+ for side,gaps in x['all_unwrapped_gaps'].items():
+  field='wylie' if side=='tib' else 'english'
+  for gap in gaps:assert source[field][gap['range'][0]:gap['range'][1]]==gap['text']
+save('independent-omission-assessments.json',omissions)
+proof=json.loads((O/'independent-generator-proof.json').read_text());segments=proof['segments'];save('bank-ready-errata.json',[]);save('span-head-allow-needed.json',{})
+save('review.json',{'verdict':'APPROVE','spec_verdict':'APPROVE','quality_verdict':'APPROVE','producer':'Codex independent skeptical semantic reviewer','candidate':'c5p87','course':'C05','reviewed_sequences':[259,260,261],'governing_git_commit':G,'accepted_baseline_commit':'48bd9d4587352461bc609fde85b5bfe374a05212','status':'PROVISIONAL machine review; no human acceptance or landing authorization','open_findings':[],'segments':segments,'total_spans':sum(s['span_count'] for s in segments),'total_nulls':sum(s['null_count'] for s in segments),'total_word_pairs':sum(s['word_pair_count'] for s in segments),'total_members':15,'errata_count':0,'allowances_needed':0})
+# Final complete manifest preflight; no unsupported .py can be the only required copy.
+for r in manifest:
+ p=O/r['copy'];raw=p.read_bytes();assert p.suffix.lower() in allowed and sh(raw)==r['sha256'] and len(raw)==r['bytes']
+ expected=subprocess.check_output(['git','show',r['original_git_commit']+':'+r['repository_relative_path']],cwd=W) if 'original_git_commit' in r else pathlib.Path(r['original']).read_bytes();assert raw==expected
+save('packaging-preflight.json',{'status':'PASS','all_manifest_targets_verified':len(manifest),'distinct_copies':len({r['copy'] for r in manifest}),'actual_landing_helper':str(B.parent/'land_reviewed_page.py'),'helper_sha256':sh((B.parent/'land_reviewed_page.py').read_bytes()),'actual_landing_extension_whitelist':sorted(allowed),'unsupported_targets':[],'historical_git_objects_verified':sum('original_git_commit' in r for r in manifest),'every_copy_exists_and_matches_bytes_hash_size':True})
+print('Review interfaces and manifest verified',len(manifest),'records;',sum(f['entries_verified'] for f in freeze),'input freeze entries;',len(omissions),'omissions.')

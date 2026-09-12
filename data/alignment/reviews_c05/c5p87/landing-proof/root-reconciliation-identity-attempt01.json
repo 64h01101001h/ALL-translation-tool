@@ -1,0 +1,1204 @@
+{
+  "utc": "2026-09-12T18:19:45.268686+00:00",
+  "semantic_approval": false,
+  "status": "FAILED",
+  "traceback": "Traceback (most recent call last):\n  File \"/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/root-check-reconciliation.py\", line 26, in <module>\n    check(load(d/'final-ordered-tuples.json')==[r for r in finals if r['seq']==seq],f'{seq} exact final oracle tuples')\n    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/root-check-reconciliation.py\", line 13, in check\n    assert value,label\n           ^^^^^\nAssertionError: 259 exact final oracle tuples\n",
+  "checks": [
+    {
+      "check": "259 full-read candidate equals frozen final",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/additional-master-originals.json",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/asset-identity-clarification.json",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/attempts/01/command.json",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/attempts/01/generator.exit",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/attempts/01/generator.stderr",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/attempts/01/generator.stdout",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/attempts/01/spec.json",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/attempts/02/command.json",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/attempts/02/generator.exit",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/attempts/02/generator.stderr",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/attempts/02/generator.stdout",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/attempts/02/spec.json",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/body.html",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/canonical-readonly.py",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/collect.py",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/collect.stderr",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/collect.stdout",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/command.json",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/document-decisions.py",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/document-decisions.stderr",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/document-decisions.stdout",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/errata.json",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/final-ordered-tuples.json",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/finalize.py",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/five-ground-refutations.json",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/freeze-recheck.json",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/generator.exit",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/generator.stderr",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/generator.stdout",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/governing-originals/AGENTS.md",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/governing-originals/DIAMOND_CUTTER_TRANSLATION_TOOL_ROADMAP.md",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/governing-originals/data/alignment/C05_CAMPAIGN.md",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/governing-originals/data/alignment/span_head_allow.json",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/governing-originals/docs/ALIGNMENT_LAYER_SPEC.md",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/governing-originals/docs/alignment_briefs/RECONCILE_BRIEF.md",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/governing-originals/docs/alignment_briefs/REFUTE_BRIEF.md",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/governing-originals/docs/errata_register.json",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/governing-originals/tools/build_alignment_layer.py",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/governing-originals/tools/gen_alignment_page.py",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/head-allowance-review.json",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/occurrence-member-review.json",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/omissions.json",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/baseline.json",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/context.json",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/continuation-preflight-20260912T1739.json",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/english/259/additional-proof.json",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/english/259/attempt-01/command.json",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/english/259/attempt-01/generator.exit",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/english/259/attempt-01/generator.stderr",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/english/259/attempt-01/generator.stdout",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/english/259/attempt-01/spec.json",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/english/259/body.html",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/english/259/canonical-readonly.py",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/english/259/collect-evidence.py",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/english/259/command.json",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/english/259/errata.json",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/english/259/failed-evidence-attempt.json",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/english/259/finalize-proof.py",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/english/259/freeze.json",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/english/259/generator.exit",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/english/259/generator.stderr",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/english/259/generator.stdout",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/english/259/intended-occurrences.json",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/english/259/make-proposals.py",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/english/259/master-variants.json",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/english/259/occurrence-proof.json",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/english/259/original-evidence.json",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/english/259/proof.json",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/english/259/report.md",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/english/259/run-proposals.py",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/english/259/spec.json",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/english/260/attempt-01/command.json",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/english/260/attempt-01/generator.exit",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/english/260/attempt-01/generator.stderr",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/english/260/attempt-01/generator.stdout",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/english/260/attempt-01/spec.json",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/english/260/body.html",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/english/260/command.json",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/english/260/errata.json",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/english/260/freeze.json",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/english/260/generator.exit",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/english/260/generator.stderr",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/english/260/generator.stdout",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/english/260/intended-occurrences.json",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/english/260/occurrence-proof.json",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/english/260/proof.json",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/english/260/report.md",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/english/260/spec.json",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/english/261/attempt-01/command.json",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/english/261/attempt-01/generator.exit",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/english/261/attempt-01/generator.stderr",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/english/261/attempt-01/generator.stdout",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/english/261/attempt-01/intended-occurrences.json",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/english/261/attempt-01/spec.json",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/english/261/attempt-01/superseded-reason.txt",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/english/261/attempt-02/command.json",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/english/261/attempt-02/generator.exit",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/english/261/attempt-02/generator.stderr",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/english/261/attempt-02/generator.stdout",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/english/261/attempt-02/spec.json",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/english/261/body.html",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/english/261/command.json",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/english/261/dod-pa-evidence.json",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/english/261/errata.json",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/english/261/freeze.json",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/english/261/generator.exit",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/english/261/generator.stderr",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/english/261/generator.stdout",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/english/261/intended-occurrences.json",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/english/261/occurrence-proof.json",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/english/261/proof.json",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/english/261/report.md",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/english/261/spec.json",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/english-brief.md",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/proposal-verification/english-259.exit",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/proposal-verification/english-259.stderr",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/proposal-verification/english-259.stdout",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/proposal-verification/english-260.exit",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/proposal-verification/english-260.stderr",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/proposal-verification/english-260.stdout",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/proposal-verification/english-261.exit",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/proposal-verification/english-261.stderr",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/proposal-verification/english-261.stdout",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/proposal-verification/report.json",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/proposal-verification/root-resolved-spans.json",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/proposal-verification/tibetan-259.exit",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/proposal-verification/tibetan-259.stderr",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/proposal-verification/tibetan-259.stdout",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/proposal-verification/tibetan-260.exit",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/proposal-verification/tibetan-260.stderr",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/proposal-verification/tibetan-260.stdout",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/proposal-verification/tibetan-261.exit",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/proposal-verification/tibetan-261.stderr",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/proposal-verification/tibetan-261.stdout",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/reconciliation-brief.md",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/root-broader-lexical-context.json",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/root-check-english-freeze-attempt01.py.txt",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/root-check-english-freeze.py",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/root-english-freeze-check-attempt01.json",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/root-english-freeze-check.json",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/root-lexical-preparation.json",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/root-original-angle-observations.md",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/root-parallel-preparation.json",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/root-preparation-original-rows.json",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/root-preparation-proof.json",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/root-review-targets-addendum.md",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/root-review-targets.md",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/root-tibetan-freeze-check-attempt01.json",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/root-tibetan-freeze-check.json",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/semantic-brief-schema-correction.diff",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/semantic-brief-schema-correction.json",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/semantic-review-brief-v2.md",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/semantic-review-brief.md",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/source.json",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/tibetan/259/attempts/01/body.html",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/tibetan/259/attempts/01/errata.json",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/tibetan/259/attempts/01/generator.exit",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/tibetan/259/attempts/01/generator.stderr",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/tibetan/259/attempts/01/generator.stdout",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/tibetan/259/attempts/01/intended-occurrences.json",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/tibetan/259/attempts/01/spec.json",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/tibetan/259/attempts/02/body.html",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/tibetan/259/attempts/02/errata.json",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/tibetan/259/attempts/02/generator.exit",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/tibetan/259/attempts/02/generator.stderr",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/tibetan/259/attempts/02/generator.stdout",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/tibetan/259/attempts/02/intended-occurrences.json",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/tibetan/259/attempts/02/spec.json",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/tibetan/259/baseline.json",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/tibetan/259/body.html",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/tibetan/259/collect.py",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/tibetan/259/context.json",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/tibetan/259/corpus-originals.json",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/tibetan/259/data-historical-pins.json",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/tibetan/259/decisions.json",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/tibetan/259/draft.py",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/tibetan/259/errata-check.json",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/tibetan/259/errata.json",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/tibetan/259/finalize-attempt01-error.txt",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/tibetan/259/finalize-attempt01.py",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/tibetan/259/finalize.py",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/tibetan/259/freeze-manifest.json",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/tibetan/259/generator.exit",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/tibetan/259/generator.stderr",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/tibetan/259/generator.stdout",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/tibetan/259/intended-occurrences.json",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/tibetan/259/lexical-all-tiers.json",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/tibetan/259/lexical-contested-extra.json",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/tibetan/259/lexical-originals.json",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/tibetan/259/mechanical-proof.json",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/tibetan/259/original-proof.json",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/tibetan/259/originals/AGENTS.md",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/tibetan/259/originals/DIAMOND_CUTTER_TRANSLATION_TOOL_ROADMAP.md",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/tibetan/259/originals/Handoff-HANDOFF.md",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/tibetan/259/originals/Handoff-README.md",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/tibetan/259/originals/course-shape.md",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/tibetan/259/originals/docs__ALIGNMENT_LAYER_SPEC.md",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/tibetan/259/originals/docs__NEVER_BANK_A_FALSEHOOD.md",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/tibetan/259/originals/docs__alignment_briefs__PROPOSE_BRIEF.md",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/tibetan/259/originals/docs__errata_register.json",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/tibetan/259/originals/tools__build_alignment_layer.py",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/tibetan/259/originals/tools__gen_alignment_page.py",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/tibetan/259/registered-class-originals.json",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/tibetan/259/report.md",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/tibetan/259/revision-history.json",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/tibetan/259/run-canonical.py",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/tibetan/259/shared-evidence-pins.json",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/tibetan/259/source-reconstruction.json",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/tibetan/259/source.json",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/tibetan/259/spec.json",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/tibetan/259/spine-original-rows.json",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/tibetan/259/verify.py",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/tibetan/260/attempts/01/body.html",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/tibetan/260/attempts/01/errata.json",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/tibetan/260/attempts/01/generator.exit",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/tibetan/260/attempts/01/generator.stderr",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/tibetan/260/attempts/01/generator.stdout",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/tibetan/260/attempts/01/intended-occurrences.json",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/tibetan/260/attempts/01/spec.json",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/tibetan/260/attempts/02/body.html",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/tibetan/260/attempts/02/errata.json",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/tibetan/260/attempts/02/generator.exit",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/tibetan/260/attempts/02/generator.stderr",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/tibetan/260/attempts/02/generator.stdout",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/tibetan/260/attempts/02/intended-occurrences.json",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/tibetan/260/attempts/02/spec.json",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/tibetan/260/body.html",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/tibetan/260/decisions.json",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/tibetan/260/errata-check.json",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/tibetan/260/errata.json",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/tibetan/260/freeze-manifest.json",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/tibetan/260/generator.exit",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/tibetan/260/generator.stderr",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/tibetan/260/generator.stdout",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/tibetan/260/intended-occurrences.json",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/tibetan/260/mechanical-proof.json",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/tibetan/260/report.md",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/tibetan/260/shared-evidence-pins.json",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/tibetan/260/source-reconstruction.json",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/tibetan/260/spec.json",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/tibetan/261/attempts/01/body.html",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/tibetan/261/attempts/01/errata.json",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/tibetan/261/attempts/01/generator.exit",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/tibetan/261/attempts/01/generator.stderr",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/tibetan/261/attempts/01/generator.stdout",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/tibetan/261/attempts/01/intended-occurrences.json",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/tibetan/261/attempts/01/spec.json",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/tibetan/261/attempts/02/body.html",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/tibetan/261/attempts/02/errata.json",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/tibetan/261/attempts/02/generator.exit",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/tibetan/261/attempts/02/generator.stderr",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/tibetan/261/attempts/02/generator.stdout",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/tibetan/261/attempts/02/intended-occurrences.json",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/tibetan/261/attempts/02/spec.json",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/tibetan/261/body.html",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/tibetan/261/decisions.json",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/tibetan/261/errata-check.json",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/tibetan/261/errata.json",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/tibetan/261/freeze-manifest.json",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/tibetan/261/generator.exit",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/tibetan/261/generator.stderr",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/tibetan/261/generator.stdout",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/tibetan/261/intended-occurrences.json",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/tibetan/261/mechanical-proof.json",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/tibetan/261/report.md",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/tibetan/261/shared-evidence-pins.json",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/tibetan/261/source-reconstruction.json",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/tibetan/261/spec.json",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence/tibetan-brief.md",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-evidence-identity.json",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-pins.json",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-replay/english/command.json",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-replay/english/generator.exit",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-replay/english/generator.stderr",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-replay/english/generator.stdout",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-replay/english/spec.json",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-replay/tibetan/command.json",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-replay/tibetan/generator.exit",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-replay/tibetan/generator.stderr",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-replay/tibetan/generator.stdout",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-replay/tibetan/spec.json",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-replay-proof.json",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/original-span-dispositions.json",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/parallel-originals-and-counts.json",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/physical-C05-original.txt",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/proof.json",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/reconcile.py",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/reconcile.stderr",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/reconcile.stdout",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/reference-access-original.json",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/reference-access-recheck.json",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/registered-class-evidence.json",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/reopened-master-all-tiers.json",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/reopened-source-context.json",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/reopened-sql-evidence.json",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/report.md",
+      "pass": true
+    },
+    {
+      "check": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-259-261/reconciled/259/spec.json",
+      "pass": true
+    },
+    {
+      "check": "259 exact final oracle tuples",
+      "pass": false
+    }
+  ]
+}

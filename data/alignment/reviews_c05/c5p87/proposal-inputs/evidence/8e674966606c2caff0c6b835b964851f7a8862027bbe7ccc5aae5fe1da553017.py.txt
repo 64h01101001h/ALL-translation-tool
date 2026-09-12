@@ -1,0 +1,54 @@
+import pathlib,json,hashlib,subprocess,re,html
+root=pathlib.Path(__file__).resolve().parent.parent;wt=pathlib.Path('/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree');sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest();pin='1448ea89eb6db880fa8c4c6e1506ed2c03582ad8'
+save=lambda p,o:p.write_text(json.dumps(o,ensure_ascii=False,indent=2)+'\n')
+shared=root/'259';extra=[]
+for f in ['data/hgm_dictionary_v27_2.json.gz','data/full_parallel_corpus_v32.json.gz','data/alignment/C05_CAMPAIGN.md']:
+ r=subprocess.run(['git','show',f'{pin}:{f}'],cwd=wt,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
+ if r.returncode==0:
+  extra.append({'original_path':str(wt/f),'sha256':sha(wt/f),'git_commit':pin,'git_blob':subprocess.check_output(['git','rev-parse',f'{pin}:{f}'],cwd=wt,text=True).strip(),'bytes_equal_historical':r.stdout==(wt/f).read_bytes()})
+ else:
+  extra.append({'original_path':str(wt/f),'sha256':sha(wt/f),'git_commit_attempted':pin,'git_exit':r.returncode,'git_stderr':r.stderr.decode(),'historical_blob_unavailable':'Data asset is not tracked in the governing Git tree; exact content hash matches baseline snapshot instead.','matches_accepted_baseline_sha256':sha(wt/f)==json.loads((shared/'baseline.json').read_text())['sha256'][f]})
+save(shared/'data-historical-pins.json',extra)
+explanations={259:[
+'Argument: the objector accepts the human visual perception as valid but denies the other two because their good/bad karma forces the appearances. This continues C05:256–258 and sets up the reductio in 260–261; the response begins in 262.',
+'Positive original glossary de la = in the case mentioned and kho na re = someone may answer support complete phrase recasts at d3. Version 01 used smaller atoms; version 02 supersedes it to preserve their supported wording.',
+'las unified hgm_gloss is curated deeds/deed; the preserved original glossary_entries includes karma. Direct source karma and neighboring C05:263–266 license this attestation without updating hgm_gloss. The same tier distinction holds for living being(s) versus glossary beings.',
+'gzhan has provisional auto-aligned hgm_gloss a bodhisattva (Sunlight quote-pattern), auto_candidate problems, and attestation_contexts from C01: the full actual entry is preserved. None licenses this segment. other is supported by the explicit gzhan gnyis reference to the two nonhuman perceivers in C05:256–259. No glossary correction is proposed.',
+'dbang has positive forces; dbang gis also has forces, forced by, by the power of among its full variants. Keeping the lexical dbang = forces leaves grammatical gis and supplied them to unwrapped. sogs positive like is kept without supplied something. gnyis owns two, leaving types of and latter.',
+'Potential ambiguities are explicitly pinned: two mig shes, two tshad ma, two gnyis, and two de. dang is English and occurrence 2 (the conjunction after pus and blood); the compound owns internal and occurrence 1.'
+],260:[
+'Argument: the reductio applies the objector’s karma criterion to the human, then to tactile/auditory consciousness in nonhumans. ' + "The final 'dod na opens the acceptance branch completed in 261.",
+"Positive glossary 'bring po = halfway supports the narrow adjective. The parenthetical good/bad explanation comes from preceding 259 and is left unwrapped. dbang = forces excludes him to; chur is the entire inflected water syllable (chu+r), with no split-syllable or invented null.",
+'gzhan yang has actual provisional auto-aligned hgm_gloss appearance prevents the existence with method intersection/support 2/of_segments 6. This is not licensing Moreover. The independent source context gives an additive further consequence, so d3 gzhan yang = Moreover is retained as a local phrase attestation. No master change.',
+"rtsa ba'i dam bca' = original position is a positive established glossary compound; 'thad pa = correct and 'dod = agree are also positive. No composed English is used.",
+'All three mi/human occurrences are source humans, including the head of mi ma yin pa. Both rgyud/mental stream occurrences and all four tshad ma/valid( perception) occurrences are pinned. Extra final valid consciousnesses remains unwrapped. ma owns the first n’t in wouldn’t, using the authorized negative-affix flag, not later rhetorical negatives.',
+'First thal, der thal, de’i, yang and the expanded believe/according-to frames are omitted where atomization is distributed. This does not assert their meaning absent. Final na = suppose and ’dod = agree preserve supported conditional and acceptance functions.'
+],261:[
+'Argument: acceptance of no valid nonhuman senses entails inability to reach definite conclusions or analyze, then inability to recognize one another. No corruption is established by this rhetorical translation.',
+"Full positive HGM nges shes variants include realization, certainty, definite conclusion, deep-felt certainty; drongs pa = reach. Both narrow lexical spans retained. chod pa includes separated and analyze: analyze is retained, not hidden by a null or forced larger phrase.",
+"sgro 'dogs has HGM concocting things, the act of concocting things, concocting, attributes a quality which is not in actuality there, implying. These are preserved with full original fields. The implying gloss is not used here: both English implying occurrences are consequence frames from thal. sgro 'dogs remains omitted as a distributed nominal contribution in the analysis idiom, not falsely mapped to object or nulled.",
+"Full ngo shes pa glossary recognize and 'dod pa glossary position positively support those retained atoms; the full source English, including Of course you are and supplied your, remains verbatim and unwrapped outside given/position.",
+'First ’gro ba = first beings; de dag = these twice. gcig ... gcig = one ... another, with phan tshun distributed in the reciprocal construction and omitted. Both med = never and thal = implying occurrences are pinned. First ’dod pa’i phyir remains omitted; final reason owns given/position.',
+"C15:406 shares ACIP/Wylie/English. C16:837 shares ACIP/Wylie and the complete C05 English prefix, then adds 32 The Truth of the Glass of Liquid: registered following-heading apparatus in that witness, not present in this C05 source. Text identity does not establish independent publication or ingestion lineage."
+]}
+alltiers=json.loads((shared/'lexical-all-tiers.json').read_text())
+for seq in [259,260,261]:
+ p=root/str(seq);m=json.loads((p/'mechanical-proof.json').read_text());src=m['source'];body=(p/'body.html').read_text()
+ rec={}
+ for side,field in [('tib','wylie'),('eng','english')]:
+  chunk=body.split(f'<div class="{side}"><div class="lab">')[1].split('</div>\n',1)[1].split('\n</div>',1)[0]
+  plain=html.unescape(re.sub('<[^>]+>','',chunk));rec[field]={'matches_complete_original':plain==src[field],'characters':len(plain),'utf8_bytes':len(plain.encode()),'sha256':hashlib.sha256(plain.encode()).hexdigest()};assert plain==src[field]
+ save(p/'source-reconstruction.json',rec)
+ q=json.loads((shared/'corpus-originals.json').read_text());par=[a for a in q if a['sql'].endswith('=?') and a['parameters'][0] in [src['acip'],src['wylie'],src['english']]]
+ save(p/'errata-check.json',{'seq':seq,'filed':0,'exact_row':src,'all_five_grounds':{'exact_source_quote':'complete ACIP, Wylie, English in exact_row; no correction proposed','registered_classes':'Full original register and selected material entries preserved under ../259/originals and registered-class-originals.json; no new class filing','parallel_witnesses':par,'lexical_evidence':'Full all-tier original entries in ../259/lexical-all-tiers.json and lexical-contested-extra.json; positive renderings analyzed in decisions.json','limits':'No verified defect in this source. Identical text fields do not prove independent publication or a particular ingestion lineage. A mechanical pass is not semantic approval.'},'english_character_length':len(src['english']),'at_1500_cap':len(src['english'])==1500,'following_heading_in_this_row':False})
+ save(p/'decisions.json',{'producer':'Codex','angle':'Tibetan-first','status':'PROVISIONAL machine proposal','context_read':'C05:253–267 full original rows; all six snapshot fields independently verified','decisions':explanations[seq],'null_policy':'Zero nulls; omitted material does not acquire an affirmative no-separate-exponent judgment','source_correction':False,'semantic_approval':False})
+ sharedfiles=['source.json','context.json','baseline.json','spine-original-rows.json','original-proof.json','data-historical-pins.json','lexical-originals.json','lexical-all-tiers.json','lexical-contested-extra.json','corpus-originals.json','registered-class-originals.json']
+ refs=[{'path':str(shared/f),'bytes':(shared/f).stat().st_size,'sha256':sha(shared/f)}for f in sharedfiles]
+ save(p/'shared-evidence-pins.json',refs)
+ lines=[f'C05:{seq} — Codex Tibetan-first PROVISIONAL proposal; no semantic approval or source correction.',f"Final: EXIT={m['exit']}; stdout/body={m['stdout_bytes']} bytes; stderr=0 bytes; {m['spans']} spans, {m['d5']} d5, {m['nulls']} nulls; errata=0.",f"spec SHA256 `{m['spec_sha256']}`; body SHA256 `{m['body_sha256']}`.",f"Canonical output is saved verbatim in generator.stdout (= body.html), generator.stderr, generator.exit; mechanical-proof.json pins exact occurrences. Source-reconstruction.json proves both full source fields survive."]
+ lines+=explanations[seq][:5]
+ lines += ['Full material originals, query parameters/counts, raw rows, actual lexical evidence fields and source verification are pinned in shared-evidence-pins.json (shared files housed in ../259).','Governing Git 1448ea89eb6db880fa8c4c6e1506ed2c03582ad8; accepted data baseline 48bd9d4587352461bc609fde85b5bfe374a05212; original-proof.json/data-historical-pins.json preserve historical blob pins.','All generator attempts retained under attempts/01 and attempts/02. No failed canonical attempt; 259/01 is superseded as explained in revision-history.json. Freeze manifest pins this final boundary.']
+ (p/'report.md').write_text('\n\n'.join(lines)+'\n')
+# Freeze all exact bytes, including reports and shared evidence, but excluding the manifest itself.
+for seq in [259,260,261]:
+ p=root/str(seq);fs=[f for f in p.rglob('*')if f.is_file() and f.name!='freeze-manifest.json'];manifest={'status':'FROZEN independent proposal','producer':'Codex','angle':'Tibetan-first','seq':seq,'governing_git':pin,'accepted_baseline':'48bd9d4587352461bc609fde85b5bfe374a05212','self_hash':'Manifest deliberately excluded from its own file set; its hash is handoff proof','files':[{'path':str(f),'bytes':f.stat().st_size,'sha256':sha(f)}for f in sorted(fs)]};save(p/'freeze-manifest.json',manifest);print(seq,'manifest',sha(p/'freeze-manifest.json'),'files',len(fs))

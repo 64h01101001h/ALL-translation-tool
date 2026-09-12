@@ -1,0 +1,8 @@
+import pathlib,sqlite3,sys,runpy
+sys.dont_write_bytecode=True
+original_connect=sqlite3.connect
+def ro_connect(database,*args,**kwargs):
+    kwargs['uri']=True
+    return original_connect(pathlib.Path(database).resolve().as_uri()+'?mode=ro',*args,**kwargs)
+sqlite3.connect=ro_connect
+runpy.run_path(str(pathlib.Path.cwd()/'tools/gen_alignment_page.py'),run_name='__main__')

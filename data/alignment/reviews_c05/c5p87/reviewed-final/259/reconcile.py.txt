@@ -1,0 +1,80 @@
+import os,sys,json,pathlib,hashlib,sqlite3,subprocess,runpy,copy,re,gzip,html
+sys.dont_write_bytecode=True
+B=pathlib.Path(__file__).resolve().parents[2];W=B.parents[1]/'campaign-worktree';O=B/'reconciled'
+def load(p):return json.loads(p.read_text())
+def save(p,d):p.write_text(json.dumps(d,ensure_ascii=False,indent=2)+'\n')
+def pin(p):return {'path':str(p),'bytes':p.stat().st_size,'sha256':hashlib.sha256(p.read_bytes()).hexdigest()}
+oldconnect=sqlite3.connect
+def ro(database,*a,**kw):
+ kw['uri']=True;c=oldconnect(pathlib.Path(database).resolve().as_uri()+'?mode=ro',*a,**kw);c.execute('pragma query_only=ON');return c
+sqlite3.connect=ro
+g=runpy.run_path(str(W/'tools/gen_alignment_page.py'),run_name='canonical_oracle')
+db=ro(W/'build/hgm_spine_v27_2.db');db.row_factory=sqlite3.Row
+sources={n:dict(db.execute('select * from corpus_segments where course=? and seq=?',('C05',n)).fetchone()) for n in [259,260,261]}
+def ranges(seg):
+ row=sources[seg['seq']];sp=seg['spans'];by={x['id']:x for x in sp};engsp=g['with_members'](sp,[by[k] for k in seg['eng_order']],row['english'])
+ t=g['resolve'](row['wylie'],sp,'tib',seg['seq']);e=g['resolve'](row['english'],engsp,'eng',seg['seq'])
+ return {x['id']:{'tib_range':list(t[x['id']]),'eng_range':list(e[x['id']]) if x['id'] in e else None} for x in sp}
+wrapper=O/'259/canonical-readonly.py'
+wrapper.write_text("import pathlib,sqlite3,runpy,sys\nsys.dont_write_bytecode=True\noriginal=sqlite3.connect\ndef ro(db,*a,**kw):\n kw['uri']=True\n c=original(pathlib.Path(db).resolve().as_uri()+'?mode=ro',*a,**kw)\n c.execute('pragma query_only=ON')\n return c\nsqlite3.connect=ro\nrunpy.run_path(sys.argv[1],run_name='__main__')\n")
+def run(spec,out):
+ out.mkdir(parents=True,exist_ok=True);(out/'spec.json').write_bytes(spec.read_bytes());cmd=[sys.executable,'-B',str(wrapper),str(W/'tools/gen_alignment_page.py')]
+ p=subprocess.run(cmd,input=spec.read_bytes(),cwd=W,capture_output=True,env={**os.environ,'PYTHONDONTWRITEBYTECODE':'1'})
+ (out/'generator.stdout').write_bytes(p.stdout);(out/'generator.stderr').write_bytes(p.stderr);(out/'generator.exit').write_text(str(p.returncode)+'\n')
+ save(out/'command.json',{'argv':cmd,'cwd':str(W),'stdin':pin(spec),'exit':p.returncode,'stdout_bytes':len(p.stdout),'stderr_bytes':len(p.stderr),'sqlite':'mode=ro; query_only=ON','bytecode':False})
+ return p
+originals={};orig_resolved=[];replay=[]
+root_ranges={(r['angle'],r['seq'],r['id']):r for r in load(B/'proposal-verification/root-resolved-spans.json')}
+for angle in ['tibetan','english']:
+ for n in [259,260,261]:
+  p=B/angle/str(n)/'spec.json';s=load(p)['segments'][0];originals[angle,n]=s;out=O/str(n)/'original-replay'/angle
+  r=run(p,out);assert r.returncode==0 and not r.stderr and r.stdout==(p.parent/'body.html').read_bytes()
+  rr=ranges(s)
+  for sp in s['spans']:
+   row={'angle':angle,'seq':n,'original_spec':pin(p),'original_span':copy.deepcopy(sp),**rr[sp['id']]};ref=root_ranges[angle,n,sp['id']]
+   assert row['tib_range']==ref['tib_range'] and row['eng_range']==ref['eng_range'];orig_resolved.append(row)
+  replay.append({'angle':angle,'seq':n,'exit':0,'stderr_bytes':0,'same_body':True,'body':pin(out/'generator.stdout'),'range_count':len(rr)})
+save(O/'259/original-replay-proof.json',{'runs':replay,'complete_original_spans':orig_resolved})
+master=load(O/'259/reopened-master-all-tiers.json')
+rawmaster=json.loads(gzip.decompress((W/'data/hgm_dictionary_v27_2.json.gz').read_bytes()))
+extra=[]
+for term in ['de la','kho na re',"khyod kyi","sgro 'dogs chod pa"]:
+ for section in ['curated_entries','glossary_entries','unified_entries']:
+  entries=[r for r in rawmaster[section] if r.get('wylie')==term or term in (r.get('wylie_variants') or [])]
+  extra.append({'term':term,'section':section,'count':len(entries),'complete_entries':entries})
+save(O/'259/additional-master-originals.json',extra)
+
+notes={
+259:"PROVISIONAL machine alignment by Codex, reconciled from independent Tibetan-first and English-first proposals; not human-approved. The opponent grants validity to human visual perception but denies it to the other two beings on the basis of karma. Both visual-consciousness and valid-perception occurrences retain their distinct owners. The complete reporting phrase kho na re owns Someone may answer at d3; the expanded with the following claim and closing zer na are distributed reporting and remain unwrapped. gnyis owns two, leaving types of and latter supplied. bzang ngan is the established paired-quality compound, with the exact HGM variant good in one case, and bad in the other; bzang/good and ngan/bad are tighter members. The two contrasted karmas license this distributive rendering; which is remains supplied. dbang gis owns forces as the established inflected force expression; them to remains supplied. sogs owns the complete indefinite exemplifying gesture something like at particle depth, without claiming either example noun. yin is treated as the copular word at d5. las/karma is direct GMR attestation supported by the original glossary; the curated deeds/deed entry is unchanged. Unselected cases and copular/reporting expansions are omitted without an uncertain null. All original source wording is preserved.",
+260:"PROVISIONAL machine alignment by Codex, reconciled from independent Tibetan-first and English-first proposals; not human-approved. Four tshad ma occurrences are retained: valid perception first, then valid for tactile, auditory and visual consciousness. The English-first original note's three count is superseded here; the frozen original is preserved. All three mi/human and both rgyud/mental stream occurrences have separate ranges. The first ma owns only the n't in wouldn't, with subword true; later rhetorical isn't/aren't are not additional source negatives. The copular yin words own be and the is in who is not a human at d5. 'bring po owns halfway; the comparison to good and bad is supplied from context. dbang gis owns forces, leaving him to supplied. chur/water keeps the entire inflected syllable. The second thal owns only implying; supplied address, auxiliaries and rhetorical framing stay unwrapped. Initial thal, der thal, de'i, yang and unselected case/reason framing are omitted where their English realization is distributed. khyod kyi owns your as a possessive phrase at d3; rtsa ba'i dam bca' is the established original position compound with tighter original/position members. The final 'dod/agree and na/suppose retain the acceptance branch; the expanded final valid consciousnesses is unwrapped. No null substitutes for unresolved distribution, and all original source wording is preserved.",
+261:"PROVISIONAL machine alignment by Codex, reconciled from independent Tibetan-first and English-first proposals; not human-approved. nges shes/definite conclusion and drongs pa/reach retain separate positive HGM exponents; nges/definite is a tighter member. The complete sgro 'dogs chod pa idiom owns analyze at d3: removing imputations is recast as analytical activity. The positive chod pa/analyze variant alone does not decide this idiom's local scope; both original isolated-word proposals are superseded. The nominal contribution of sgro 'dogs is included in the complete phrase, not assigned to object or to rhetorical implying. Supplied an object and about something remain unwrapped. The EM comparator supports only the shared analytical idiom, not an imported translation. Both thal occurrences own only implying, leaving supplied address and auxiliaries outside. Both med/never, de dag/these and gcig/one/another occurrences have distinct owners; the later beings is an antecedent expansion. phan tshun is distributed in the reciprocal one/another construction and is omitted, not nulled. The first 'dod pa'i phyir is distributed without a separate defended English atom; the final 'dod pa/position and phyir/given are retained. 'dod na owns if so at d3. All original source wording is preserved."
+}
+finals={}
+for n in [259,260,261]:
+ s=copy.deepcopy(originals['english',n]);s['note']=notes[n];sp=s['spans'];e=s['eng_order']
+ if n==259:
+  sp[1:3]=[{'id':'r1','d':3,'tib':'kho na re','eng':'Someone may answer'}]
+  idx=next(i for i,x in enumerate(sp) if x['id']=='w21');sp[idx:idx+2]=[
+   {'id':'r2','d':5,'tib':'bzang ngan','eng':'good in one case, and bad in the other'},
+   {'id':'r3','d':7,'tib':'bzang','eng':'good'}, {'id':'r4','d':7,'tib':'ngan','eng':'bad'}]
+  for x in sp:
+   if x['id']=='w12':x['eng']='two'
+   if x['tib']=='yin':x['d']=5
+   if x['tib']=='sogs':x['d']=6
+  e[:2]=['r1'];i=e.index('w21');e[i:i+2]=['r2']
+ elif n==260:
+  i=next(i for i,x in enumerate(sp) if x['id']=='w18');sp.insert(i+1,{'id':'r1','d':5,'tib':'yin','eng':'is'})
+  i=e.index('w18');e.insert(i,'r1')
+  for x in sp:
+   if x['tib']=='yin':x['d']=5
+   if x['tib']=='thal':x['d']=6;x['eng']='implying'
+ else:
+  for x in sp:
+   if x['tib']=='chod pa':x['tib']="sgro 'dogs chod pa";x['d']=3
+   if x['tib']=='thal':x['d']=6;x['eng']='implying'
+ finals[n]=s;out=O/str(n);save(out/'spec.json',{'course':'C05','segments':[s]});save(out/'errata.json',[])
+ r=run(out/'spec.json',out/'attempts/01');assert r.returncode==0 and not r.stderr
+ for f in ['generator.stdout','generator.stderr','generator.exit','command.json']:(out/f).write_bytes((out/'attempts/01'/f).read_bytes())
+ (out/'body.html').write_bytes(r.stdout)
+ rr=ranges(s);save(out/'final-ordered-tuples.json',{'seq':n,'spans_in_tibetan_order':[{'span':x,**rr[x['id']]} for x in sp],'eng_order':e,'english_order_with_members':[x['id'] for x in g['with_members'](sp,[next(y for y in sp if y['id']==i) for i in e],sources[n]['english'])]})
+ print(n,'EXIT=0',len(sp),'spans',len(r.stdout),'body bytes')

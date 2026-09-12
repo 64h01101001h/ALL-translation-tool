@@ -1,0 +1,89 @@
+import json,pathlib,hashlib,sqlite3,subprocess,os,sys,collections,datetime,re
+from html.parser import HTMLParser
+sys.dont_write_bytecode=True
+B=pathlib.Path(__file__).resolve().parents[2];W=B.parents[1]/'campaign-worktree';O=B/'reconciled'
+def load(p):return json.loads(p.read_text())
+def save(p,d):p.write_text(json.dumps(d,ensure_ascii=False,indent=2)+'\n')
+def pin(p):return {'path':str(p),'bytes':p.stat().st_size,'sha256':hashlib.sha256(p.read_bytes()).hexdigest()}
+db=sqlite3.connect((W/'build/hgm_spine_v27_2.db').as_uri()+'?mode=ro',uri=True);db.execute('pragma query_only=ON');db.row_factory=sqlite3.Row
+reference=load(B/'english/259/original-evidence.json')['reference_readability']
+save(O/'259/reference-access-original.json',reference)
+refs=[pathlib.Path('/Users/adamderickandrade')/p for p in ['Desktop/HGM DICTIONARY - TRANSLATION APP','ACIP Software Developmeent/Gofer Developmetn Files',"ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/ACIPHypercontext Tool","ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/LokeshChandraDictionary","ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/CreateLokeshChandraDIctionary","ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/FixLokeshChandra",'ACIP Software Developmeent/tibetan-spellchecker','Tibetan Translation Tool']]
+refproof=[]
+for p in refs:
+ assert p.is_dir() and os.access(p,os.R_OK);list(p.iterdir());refproof.append({'path':str(p),'readable':True})
+save(O/'259/reference-access-recheck.json',refproof)
+ext=[]
+for r in load(B/'tibetan/259/original-proof.json')['originals']:
+ if '/Desktop/' in r['path']:
+  p=pathlib.Path(r['path']);assert pin(p)['sha256']==r['sha256'];assert p.read_bytes()==pathlib.Path(r['saved']).read_bytes();ext.append({**pin(p),'copy_path':r['saved'],'git_identity':'No Git commit asserted for this external source.'})
+save(O/'259/asset-identity-clarification.json',{'gzip_assets':'Untracked original files; baseline SHA256 identities verified, no Git blobs invented. Original attempted exit 128/stderr preserved in original-evidence/tibetan/259/data-historical-pins.json.','external_handoff_files':ext,'tracked_campaign_pin':'data/alignment/C05_CAMPAIGN.md verified at governing 1448ea89eb6db880fa8c4c6e1506ed2c03582ad8; separate from untracked assets.'})
+register=load(W/'docs/errata_register.json')
+regtext=(W/'docs/errata_register.json').read_text()
+def visit(d):
+ if isinstance(d,dict):
+  if 'found' in d or ('id'in d and any(k in d for k in ['kind','title','description'])):yield d
+  for v in d.values():yield from visit(v)
+ elif isinstance(d,list):
+  for v in d:yield from visit(v)
+reg_entries=list(visit(register));regselected=[r for r in reg_entries if any(t in json.dumps(r).lower() for t in ['{shl}','footnote','folio','heading','1,500','1500','row-boundary'])]
+save(O/'259/registered-class-evidence.json',{'original':pin(W/'docs/errata_register.json'),'selected_full_entries':regselected,'search_terms':['{SHl}','footnote','folio','heading','1,500','1500','row-boundary'],'all_original_in':'governing-originals/docs/errata_register.json'})
+class Parser(HTMLParser):
+ def __init__(self):super().__init__(convert_charrefs=True);self.active=0;self.current='';self.fields=[]
+ def handle_starttag(self,t,a):
+  a=dict(a)
+  if t=='span':
+   if self.active:self.active+=1
+   elif re.fullmatch(r's\d+S',a.get('data-l','')):self.active=1;self.current=''
+ def handle_data(self,d):
+  if self.active:self.current+=d
+ def handle_endtag(self,t):
+  if t=='span' and self.active:
+   self.active-=1
+   if not self.active:self.fields.append(self.current)
+summaries={
+259:['Restore the positive whole bzang ngan contrast at d5, with good/bad d7 members; which is stays outside.','Prefer whole kho na re/Someone may answer (d3); reject two types overcapture, retain two.','Use dbang gis/forces and complete indefinite sogs/something like (d6); keep copular yin at d5.'],
+260:['Four tshad ma source occurrences, three mi/human, two mental streams and exact first n\'t are retained.','Restore the explicit yin/is in nonhuman status; use khyod kyi/your (d3), with no head allowance needed.','Tighten the broad thal question to implying; preserve established original-position compound and all eight sound members.'],
+261:['Replace both original chod pa/analyze atoms with the complete sgro \'dogs chod pa/analyze idiom at d3.','The generic an object remains supplied; neither object nor rhetorical implying belongs to a standalone sgro \'dogs.','Keep both consequence particles at narrow implying, and preserve exact reciprocal agent/object and final reason ranges.']}
+suspicions={
+259:[('visual consciousnesses of the other two types of beings are not valid perception','Plural consciousnesses with singular perception might be a grammar defect.','The mass/technical category valid perception is defensible as a predicate despite plural subjects; preserve verbatim.'),('good in one case, and bad in the other','Distributive English might represent corruption or unrelated content.','The paired-quality compound and de gnyis explicitly concern two contrasting karmas; expansion is defensible GMR explanation.'),('something like','The indefinite gesture might be an unsupported interpolation.','Positive sogs variants and local example construction license the gesture without introducing a new substantive noun.')],
+260:[('halfway between the good and the bad just mentioned','Expanded karma comparison might be extraneous or corrupted.','It explains the human\'s middling karma by reference to the immediately preceding good/bad contrast; no source defect established.'),('valid consciousnesses','The final repeated valid might show an extra or missing source term.','English restates the concession under \'dod na. Four source tshad ma occurrences coexist with five English valid tokens; discourse repetition is defensible, and no fifth lexical link is minted.')],
+261:[('analyze an object','The analytical English might be a false translation or chod spelling defect.','The full sgro \'dogs chod pa idiom is recast as analysis; full HGM chod pa variants include analyze. EM:918 corroborates analytical treatment at the shared idiom only. No correction to object, implying, gcod or chod is justified.'),("'dod pa'i phyir",'The first reason phrase has no separately identified English reason; it might indicate dropped source content.','The reason is integrated into the argumentative recast; absent atom-level correspondence is not proof of an omission in publication or ingestion.')]
+}
+for n in [259,260,261]:
+ out=O/str(n);s=load(out/'spec.json')['segments'][0];row=dict(db.execute('select * from corpus_segments where course=? and seq=?',('C05',n)).fetchone())
+ qs=[]
+ for field in ['acip','wylie','english']:
+  sql=f'select * from corpus_segments where {field}=? order by course,seq';params=[row[field]];rs=[dict(r) for r in db.execute(sql,params)];qs.append({'sql':sql,'parameters':params,'count':len(rs),'complete_rows':rs})
+ for phrase in ([row['wylie'][:55],row['english'][:55]]):
+  field='wylie' if phrase==row['wylie'][:55] else 'english';sql=f'select * from corpus_segments where {field} like ? order by course,seq';params=['%'+phrase+'%'];rs=[dict(r) for r in db.execute(sql,params)];qs.append({'sql':sql,'parameters':params,'count':len(rs),'complete_rows':rs})
+ source_terms=['tshad ma','med','thal',"'dod pa'i phyir"]
+ counts={t:row['wylie'].count(t) for t in source_terms};counts['english_valid_tokens']=len(re.findall(r'\bvalid\b',row['english']));counts['english_chars']=len(row['english'])
+ checks=[]
+ for found,claim,reason in suspicions[n]:
+  presence={f:found in row[f] for f in ['acip','wylie','english']};assert any(presence.values())
+  matches=[r for r in reg_entries if f'C05:{n}' in json.dumps(r) or found in json.dumps(r)]
+  checks.append({'seq':n,'found':found,'suspicion':claim,'refuted':True,'grounds':{'a_quote':{'presence':presence,'full_source':row},'b_parallel':{'queries':qs,'assessment':'C15/C16 digitally repeat the shared passage; this does not prove independent publication or ingestion lineage. C16:837 has the complete 310-character C05 English prefix and a following heading; only that shared extent is compared. No matching P1/TCS passage found by the recorded full-prefix queries.'},'c_registered':{'matches':matches,'classes_checked':['{SHl} converter','fused footnote','folio caption','following heading','row spill','1500 cap'],'assessment':'No new class in these C05 rows. C16:837 following-heading material is a registered type in that witness and is not imported into C05:261.'},'d_defensible':{'reason':reason,'dictionary_source':'../259/reopened-master-all-tiers.json and additional-master-originals.json; all reference fields kept separate from HGM'},'e_counts':{'remeasured':counts,'query_counts':[q['count'] for q in qs],'limit':'No corpus metadata occurrence count is used as a new quantitative claim. English260 original note\'s three formulations is a proposal-note miscount; source has four tshad ma, and that correction is in the final note, not a source erratum.'}},'decisive_ground':'d: the existing reading is defensible; none survives all five grounds.','retained_erratum':False})
+ save(out/'five-ground-refutations.json',checks);save(out/'parallel-originals-and-counts.json',{'exact_source':row,'queries':qs,'counts':counts})
+ # Final actual-oracle replay after the final spec and AI note were written.
+ attempt=out/'attempts/02';attempt.mkdir(parents=True,exist_ok=True);(attempt/'spec.json').write_bytes((out/'spec.json').read_bytes())
+ cmd=[sys.executable,'-B',str(O/'259/canonical-readonly.py'),str(W/'tools/gen_alignment_page.py')]
+ p=subprocess.run(cmd,input=(out/'spec.json').read_bytes(),capture_output=True,cwd=W,env={**os.environ,'PYTHONDONTWRITEBYTECODE':'1'})
+ for d in [attempt,out]:
+  (d/'generator.stdout').write_bytes(p.stdout);(d/'generator.stderr').write_bytes(p.stderr);(d/'generator.exit').write_text(str(p.returncode)+'\n');save(d/'command.json',{'argv':cmd,'cwd':str(W),'stdin':pin(out/'spec.json'),'exit':p.returncode,'stdout_bytes':len(p.stdout),'stderr_bytes':len(p.stderr),'sqlite':'URI mode=ro and query_only=ON','bytecode':False})
+ assert p.returncode==0 and not p.stderr and p.stdout==(out/'body.html').read_bytes()
+ parser=Parser();parser.feed(p.stdout.decode());assert parser.fields==[row['wylie'],row['english']]
+ depths=dict(collections.Counter(x['d'] for x in s['spans']));disp=load(out/'original-span-dispositions.json');assert disp['original_span_count']==len(disp['dispositions'])
+ proof={'producer':'Codex reconciler','status':'PROVISIONAL; reconciler complete, independent semantic landing review is a separate role','seq':n,'final_generator':{'exit':0,'stderr_bytes':0,'body_bytes':len(p.stdout),'body_exact_replay':True,'wylie_english_reconstructed_exact':True},'counts':{'spans':len(s['spans']),'depths':depths,'nulls':0,'errata':0,'original_dispositions':len(disp['dispositions'])},'current_files':{f:pin(out/f) for f in ['spec.json','body.html','errata.json','generator.stdout','generator.stderr','generator.exit','command.json','final-ordered-tuples.json','original-span-dispositions.json','omissions.json','head-allowance-review.json','occurrence-member-review.json','five-ground-refutations.json','parallel-originals-and-counts.json']},'limits':'Generator and identity checks do not prove correspondence. No source correction, master promotion, allowance change or gate removal.','shared_original_identity':pin(O/'259/original-evidence-identity.json')}
+ save(out/'proof.json',proof)
+ lines=[f'C05:{n} — Codex reconciliation, PROVISIONAL machine alignment; no human approval.','Both independent original angles were usable, immutable and independently replayed.',*summaries[n],f'Exhaustive dispositions: {len(disp["dispositions"])} original span objects, all optional keys and exact canonical ranges preserved.',f'Final counts: {len(s["spans"])} spans; depths {depths}; 0 nulls; 0 errata.','All final ordered tuples, member containment, supplied heads and material omissions are recorded beside this report.','The original English260 note miscount remains in its frozen original; the final260 note states four source occurrences.','Full source/spine/master/glossary variants and corpus contexts were reopened; 104 original SQL queries matched exactly.','All 176 original frozen file entries and six canonical bodies were verified; original failed/superseded attempts remain intact.','C15/C16 comparisons establish digital shared extents only; no independence or ingestion-lineage inference is asserted.','All five refutation grounds were checked per suspicion; defensible wording is preserved and no new erratum survives.',f'FINAL CANONICAL: EXIT={p.returncode}',f'BODY_BYTES={len(p.stdout)}; STDERR_BYTES={len(p.stderr)}',f'SPEC_SHA256={pin(out/"spec.json")["sha256"]}',f'BODY_SHA256={pin(out/"body.html")["sha256"]}','Governing Git 1448ea89eb6db880fa8c4c6e1506ed2c03582ad8; accepted baseline 48bd9d4587352461bc609fde85b5bfe374a05212.','Untracked gzip assets use exact baseline SHA256 identities; no unavailable Git blob is invented.','Shared complete evidence: ../259/original-evidence-identity.json, reopened-sql-evidence.json, reopened-master-all-tiers.json, original-pins.json.','This freeze ends the reconciliation role; root must obtain a fresh semantic reader before landing.']
+ (out/'report.md').write_text('\n'.join(lines)+'\n')
+ print(n,proof['counts'],len(p.stdout),'bytes')
+# Pin reports, current proofs, all old attempts and exact original evidence. No mutable pending-note exclusions.
+assert sum(load(O/str(n)/'proof.json')['counts']['original_dispositions'] for n in [259,260,261])==177
+for n in [259,260,261]:
+ out=O/str(n);files=[pin(p) for p in sorted(out.rglob('*')) if p.is_file() and p!=out/'freeze.json']
+ manifest={'status':'DONE / FROZEN reconciled proposal','producer':'Codex','seq':n,'utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'governing_git':'1448ea89eb6db880fa8c4c6e1506ed2c03582ad8','accepted_baseline':'48bd9d4587352461bc609fde85b5bfe374a05212','files':files,'self_hash':'The manifest alone is excluded from its own recursive hash set.','source_original_identity':pin(O/'259/original-evidence-identity.json'),'scope':'Reconciliation complete; fresh independent semantic review required before landing.'}
+ if n!=259:manifest['shared_evidence_freeze']=pin(O/'259/freeze.json')
+ save(out/'freeze.json',manifest)
+ print(n,'FREEZE_SHA256',pin(out/'freeze.json')['sha256'])

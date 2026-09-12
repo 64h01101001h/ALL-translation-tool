@@ -1,0 +1,6 @@
+{
+  "status": "FAILED ROOT PROOF BEFORE OUTPUT WRITE",
+  "error": "KeyError: data/alignment/C05_CAMPAIGN.md",
+  "cause": "Root proof assumed every data-historical pin was an untracked archive in baseline.sha256. Actual third record is the tracked course ledger with immutable Git pin.",
+  "correction": "Verify tracked record against its Git object; archive records against actual baseline. No original proposal or source changed."
+}

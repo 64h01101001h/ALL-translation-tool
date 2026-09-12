@@ -1,0 +1,474 @@
+[
+  {
+    "seq": 261,
+    "found": "analyze an object",
+    "suspicion": "The analytical English might be a false translation or chod spelling defect.",
+    "refuted": true,
+    "grounds": {
+      "a_quote": {
+        "presence": {
+          "acip": false,
+          "wylie": false,
+          "english": true
+        },
+        "full_source": {
+          "id": 1643,
+          "course": "C05",
+          "seq": 261,
+          "acip": "'GRO BA DE DAG GIS NGES SHES DRONGS PA DANG , SGRO 'DOGS CHOD PA YANG MED PAR THAL, 'DOD PA'I PHYIR, 'DOD NA, DE DAG PHAN TSUN GCIG GIS GCIG NGO SHES PA YANG MED PAR THAL, 'DOD PA'I PHYIR,",
+          "wylie": "'gro ba de dag gis nges shes drongs pa dang , sgro 'dogs chod pa yang med par thal, 'dod pa'i phyir, 'dod na, de dag phan tshun gcig gis gcig ngo shes pa yang med par thal, 'dod pa'i phyir",
+          "english": "Aren't you then implying that these beings never have any case where they are able to reach a definite conclusion about something, or to analyze an object? And if so, aren't you implying that there could never be a case where one of these beings could recognize another? Of course you are, given your position.",
+          "raw": "{\"course\": \"C05\", \"acip\": \"'GRO BA DE DAG GIS NGES SHES DRONGS PA DANG , SGRO 'DOGS CHOD PA YANG MED PAR THAL, 'DOD PA'I PHYIR, 'DOD NA, DE DAG PHAN TSUN GCIG GIS GCIG NGO SHES PA YANG MED PAR THAL, 'DOD PA'I PHYIR,\", \"wylie\": \"'gro ba de dag gis nges shes drongs pa dang , sgro 'dogs chod pa yang med par thal, 'dod pa'i phyir, 'dod na, de dag phan tshun gcig gis gcig ngo shes pa yang med par thal, 'dod pa'i phyir\", \"english\": \"Aren't you then implying that these beings never have any case where they are able to reach a definite conclusion about something, or to analyze an object? And if so, aren't you implying that there could never be a case where one of these beings could recognize another? Of course you are, given your position.\"}"
+        }
+      },
+      "b_parallel": {
+        "queries": [
+          {
+            "sql": "select * from corpus_segments where acip=? order by course,seq",
+            "parameters": [
+              "'GRO BA DE DAG GIS NGES SHES DRONGS PA DANG , SGRO 'DOGS CHOD PA YANG MED PAR THAL, 'DOD PA'I PHYIR, 'DOD NA, DE DAG PHAN TSUN GCIG GIS GCIG NGO SHES PA YANG MED PAR THAL, 'DOD PA'I PHYIR,"
+            ],
+            "count": 3,
+            "complete_rows": [
+              {
+                "id": 1643,
+                "course": "C05",
+                "seq": 261,
+                "acip": "'GRO BA DE DAG GIS NGES SHES DRONGS PA DANG , SGRO 'DOGS CHOD PA YANG MED PAR THAL, 'DOD PA'I PHYIR, 'DOD NA, DE DAG PHAN TSUN GCIG GIS GCIG NGO SHES PA YANG MED PAR THAL, 'DOD PA'I PHYIR,",
+                "wylie": "'gro ba de dag gis nges shes drongs pa dang , sgro 'dogs chod pa yang med par thal, 'dod pa'i phyir, 'dod na, de dag phan tshun gcig gis gcig ngo shes pa yang med par thal, 'dod pa'i phyir",
+                "english": "Aren't you then implying that these beings never have any case where they are able to reach a definite conclusion about something, or to analyze an object? And if so, aren't you implying that there could never be a case where one of these beings could recognize another? Of course you are, given your position.",
+                "raw": "{\"course\": \"C05\", \"acip\": \"'GRO BA DE DAG GIS NGES SHES DRONGS PA DANG , SGRO 'DOGS CHOD PA YANG MED PAR THAL, 'DOD PA'I PHYIR, 'DOD NA, DE DAG PHAN TSUN GCIG GIS GCIG NGO SHES PA YANG MED PAR THAL, 'DOD PA'I PHYIR,\", \"wylie\": \"'gro ba de dag gis nges shes drongs pa dang , sgro 'dogs chod pa yang med par thal, 'dod pa'i phyir, 'dod na, de dag phan tshun gcig gis gcig ngo shes pa yang med par thal, 'dod pa'i phyir\", \"english\": \"Aren't you then implying that these beings never have any case where they are able to reach a definite conclusion about something, or to analyze an object? And if so, aren't you implying that there could never be a case where one of these beings could recognize another? Of course you are, given your position.\"}"
+              },
+              {
+                "id": 5957,
+                "course": "C15",
+                "seq": 406,
+                "acip": "'GRO BA DE DAG GIS NGES SHES DRONGS PA DANG , SGRO 'DOGS CHOD PA YANG MED PAR THAL, 'DOD PA'I PHYIR, 'DOD NA, DE DAG PHAN TSUN GCIG GIS GCIG NGO SHES PA YANG MED PAR THAL, 'DOD PA'I PHYIR,",
+                "wylie": "'gro ba de dag gis nges shes drongs pa dang , sgro 'dogs chod pa yang med par thal, 'dod pa'i phyir, 'dod na, de dag phan tshun gcig gis gcig ngo shes pa yang med par thal, 'dod pa'i phyir",
+                "english": "Aren't you then implying that these beings never have any case where they are able to reach a definite conclusion about something, or to analyze an object? And if so, aren't you implying that there could never be a case where one of these beings could recognize another? Of course you are, given your position.",
+                "raw": "{\"course\": \"C15\", \"acip\": \"'GRO BA DE DAG GIS NGES SHES DRONGS PA DANG , SGRO 'DOGS CHOD PA YANG MED PAR THAL, 'DOD PA'I PHYIR, 'DOD NA, DE DAG PHAN TSUN GCIG GIS GCIG NGO SHES PA YANG MED PAR THAL, 'DOD PA'I PHYIR,\", \"wylie\": \"'gro ba de dag gis nges shes drongs pa dang , sgro 'dogs chod pa yang med par thal, 'dod pa'i phyir, 'dod na, de dag phan tshun gcig gis gcig ngo shes pa yang med par thal, 'dod pa'i phyir\", \"english\": \"Aren't you then implying that these beings never have any case where they are able to reach a definite conclusion about something, or to analyze an object? And if so, aren't you implying that there could never be a case where one of these beings could recognize another? Of course you are, given your position.\"}"
+              },
+              {
+                "id": 6855,
+                "course": "C16",
+                "seq": 837,
+                "acip": "'GRO BA DE DAG GIS NGES SHES DRONGS PA DANG , SGRO 'DOGS CHOD PA YANG MED PAR THAL, 'DOD PA'I PHYIR, 'DOD NA, DE DAG PHAN TSUN GCIG GIS GCIG NGO SHES PA YANG MED PAR THAL, 'DOD PA'I PHYIR,",
+                "wylie": "'gro ba de dag gis nges shes drongs pa dang , sgro 'dogs chod pa yang med par thal, 'dod pa'i phyir, 'dod na, de dag phan tshun gcig gis gcig ngo shes pa yang med par thal, 'dod pa'i phyir",
+                "english": "Aren't you then implying that these beings never have any case where they are able to reach a definite conclusion about something, or to analyze an object? And if so, aren't you implying that there could never be a case where one of these beings could recognize another? Of course you are, given your position. 32 The Truth of the Glass of Liquid",
+                "raw": "{\"course\": \"C16\", \"acip\": \"'GRO BA DE DAG GIS NGES SHES DRONGS PA DANG , SGRO 'DOGS CHOD PA YANG MED PAR THAL, 'DOD PA'I PHYIR, 'DOD NA, DE DAG PHAN TSUN GCIG GIS GCIG NGO SHES PA YANG MED PAR THAL, 'DOD PA'I PHYIR,\", \"wylie\": \"'gro ba de dag gis nges shes drongs pa dang , sgro 'dogs chod pa yang med par thal, 'dod pa'i phyir, 'dod na, de dag phan tshun gcig gis gcig ngo shes pa yang med par thal, 'dod pa'i phyir\", \"english\": \"Aren't you then implying that these beings never have any case where they are able to reach a definite conclusion about something, or to analyze an object? And if so, aren't you implying that there could never be a case where one of these beings could recognize another? Of course you are, given your position. 32 The Truth of the Glass of Liquid\"}"
+              }
+            ]
+          },
+          {
+            "sql": "select * from corpus_segments where wylie=? order by course,seq",
+            "parameters": [
+              "'gro ba de dag gis nges shes drongs pa dang , sgro 'dogs chod pa yang med par thal, 'dod pa'i phyir, 'dod na, de dag phan tshun gcig gis gcig ngo shes pa yang med par thal, 'dod pa'i phyir"
+            ],
+            "count": 3,
+            "complete_rows": [
+              {
+                "id": 1643,
+                "course": "C05",
+                "seq": 261,
+                "acip": "'GRO BA DE DAG GIS NGES SHES DRONGS PA DANG , SGRO 'DOGS CHOD PA YANG MED PAR THAL, 'DOD PA'I PHYIR, 'DOD NA, DE DAG PHAN TSUN GCIG GIS GCIG NGO SHES PA YANG MED PAR THAL, 'DOD PA'I PHYIR,",
+                "wylie": "'gro ba de dag gis nges shes drongs pa dang , sgro 'dogs chod pa yang med par thal, 'dod pa'i phyir, 'dod na, de dag phan tshun gcig gis gcig ngo shes pa yang med par thal, 'dod pa'i phyir",
+                "english": "Aren't you then implying that these beings never have any case where they are able to reach a definite conclusion about something, or to analyze an object? And if so, aren't you implying that there could never be a case where one of these beings could recognize another? Of course you are, given your position.",
+                "raw": "{\"course\": \"C05\", \"acip\": \"'GRO BA DE DAG GIS NGES SHES DRONGS PA DANG , SGRO 'DOGS CHOD PA YANG MED PAR THAL, 'DOD PA'I PHYIR, 'DOD NA, DE DAG PHAN TSUN GCIG GIS GCIG NGO SHES PA YANG MED PAR THAL, 'DOD PA'I PHYIR,\", \"wylie\": \"'gro ba de dag gis nges shes drongs pa dang , sgro 'dogs chod pa yang med par thal, 'dod pa'i phyir, 'dod na, de dag phan tshun gcig gis gcig ngo shes pa yang med par thal, 'dod pa'i phyir\", \"english\": \"Aren't you then implying that these beings never have any case where they are able to reach a definite conclusion about something, or to analyze an object? And if so, aren't you implying that there could never be a case where one of these beings could recognize another? Of course you are, given your position.\"}"
+              },
+              {
+                "id": 5957,
+                "course": "C15",
+                "seq": 406,
+                "acip": "'GRO BA DE DAG GIS NGES SHES DRONGS PA DANG , SGRO 'DOGS CHOD PA YANG MED PAR THAL, 'DOD PA'I PHYIR, 'DOD NA, DE DAG PHAN TSUN GCIG GIS GCIG NGO SHES PA YANG MED PAR THAL, 'DOD PA'I PHYIR,",
+                "wylie": "'gro ba de dag gis nges shes drongs pa dang , sgro 'dogs chod pa yang med par thal, 'dod pa'i phyir, 'dod na, de dag phan tshun gcig gis gcig ngo shes pa yang med par thal, 'dod pa'i phyir",
+                "english": "Aren't you then implying that these beings never have any case where they are able to reach a definite conclusion about something, or to analyze an object? And if so, aren't you implying that there could never be a case where one of these beings could recognize another? Of course you are, given your position.",
+                "raw": "{\"course\": \"C15\", \"acip\": \"'GRO BA DE DAG GIS NGES SHES DRONGS PA DANG , SGRO 'DOGS CHOD PA YANG MED PAR THAL, 'DOD PA'I PHYIR, 'DOD NA, DE DAG PHAN TSUN GCIG GIS GCIG NGO SHES PA YANG MED PAR THAL, 'DOD PA'I PHYIR,\", \"wylie\": \"'gro ba de dag gis nges shes drongs pa dang , sgro 'dogs chod pa yang med par thal, 'dod pa'i phyir, 'dod na, de dag phan tshun gcig gis gcig ngo shes pa yang med par thal, 'dod pa'i phyir\", \"english\": \"Aren't you then implying that these beings never have any case where they are able to reach a definite conclusion about something, or to analyze an object? And if so, aren't you implying that there could never be a case where one of these beings could recognize another? Of course you are, given your position.\"}"
+              },
+              {
+                "id": 6855,
+                "course": "C16",
+                "seq": 837,
+                "acip": "'GRO BA DE DAG GIS NGES SHES DRONGS PA DANG , SGRO 'DOGS CHOD PA YANG MED PAR THAL, 'DOD PA'I PHYIR, 'DOD NA, DE DAG PHAN TSUN GCIG GIS GCIG NGO SHES PA YANG MED PAR THAL, 'DOD PA'I PHYIR,",
+                "wylie": "'gro ba de dag gis nges shes drongs pa dang , sgro 'dogs chod pa yang med par thal, 'dod pa'i phyir, 'dod na, de dag phan tshun gcig gis gcig ngo shes pa yang med par thal, 'dod pa'i phyir",
+                "english": "Aren't you then implying that these beings never have any case where they are able to reach a definite conclusion about something, or to analyze an object? And if so, aren't you implying that there could never be a case where one of these beings could recognize another? Of course you are, given your position. 32 The Truth of the Glass of Liquid",
+                "raw": "{\"course\": \"C16\", \"acip\": \"'GRO BA DE DAG GIS NGES SHES DRONGS PA DANG , SGRO 'DOGS CHOD PA YANG MED PAR THAL, 'DOD PA'I PHYIR, 'DOD NA, DE DAG PHAN TSUN GCIG GIS GCIG NGO SHES PA YANG MED PAR THAL, 'DOD PA'I PHYIR,\", \"wylie\": \"'gro ba de dag gis nges shes drongs pa dang , sgro 'dogs chod pa yang med par thal, 'dod pa'i phyir, 'dod na, de dag phan tshun gcig gis gcig ngo shes pa yang med par thal, 'dod pa'i phyir\", \"english\": \"Aren't you then implying that these beings never have any case where they are able to reach a definite conclusion about something, or to analyze an object? And if so, aren't you implying that there could never be a case where one of these beings could recognize another? Of course you are, given your position. 32 The Truth of the Glass of Liquid\"}"
+              }
+            ]
+          },
+          {
+            "sql": "select * from corpus_segments where english=? order by course,seq",
+            "parameters": [
+              "Aren't you then implying that these beings never have any case where they are able to reach a definite conclusion about something, or to analyze an object? And if so, aren't you implying that there could never be a case where one of these beings could recognize another? Of course you are, given your position."
+            ],
+            "count": 2,
+            "complete_rows": [
+              {
+                "id": 1643,
+                "course": "C05",
+                "seq": 261,
+                "acip": "'GRO BA DE DAG GIS NGES SHES DRONGS PA DANG , SGRO 'DOGS CHOD PA YANG MED PAR THAL, 'DOD PA'I PHYIR, 'DOD NA, DE DAG PHAN TSUN GCIG GIS GCIG NGO SHES PA YANG MED PAR THAL, 'DOD PA'I PHYIR,",
+                "wylie": "'gro ba de dag gis nges shes drongs pa dang , sgro 'dogs chod pa yang med par thal, 'dod pa'i phyir, 'dod na, de dag phan tshun gcig gis gcig ngo shes pa yang med par thal, 'dod pa'i phyir",
+                "english": "Aren't you then implying that these beings never have any case where they are able to reach a definite conclusion about something, or to analyze an object? And if so, aren't you implying that there could never be a case where one of these beings could recognize another? Of course you are, given your position.",
+                "raw": "{\"course\": \"C05\", \"acip\": \"'GRO BA DE DAG GIS NGES SHES DRONGS PA DANG , SGRO 'DOGS CHOD PA YANG MED PAR THAL, 'DOD PA'I PHYIR, 'DOD NA, DE DAG PHAN TSUN GCIG GIS GCIG NGO SHES PA YANG MED PAR THAL, 'DOD PA'I PHYIR,\", \"wylie\": \"'gro ba de dag gis nges shes drongs pa dang , sgro 'dogs chod pa yang med par thal, 'dod pa'i phyir, 'dod na, de dag phan tshun gcig gis gcig ngo shes pa yang med par thal, 'dod pa'i phyir\", \"english\": \"Aren't you then implying that these beings never have any case where they are able to reach a definite conclusion about something, or to analyze an object? And if so, aren't you implying that there could never be a case where one of these beings could recognize another? Of course you are, given your position.\"}"
+              },
+              {
+                "id": 5957,
+                "course": "C15",
+                "seq": 406,
+                "acip": "'GRO BA DE DAG GIS NGES SHES DRONGS PA DANG , SGRO 'DOGS CHOD PA YANG MED PAR THAL, 'DOD PA'I PHYIR, 'DOD NA, DE DAG PHAN TSUN GCIG GIS GCIG NGO SHES PA YANG MED PAR THAL, 'DOD PA'I PHYIR,",
+                "wylie": "'gro ba de dag gis nges shes drongs pa dang , sgro 'dogs chod pa yang med par thal, 'dod pa'i phyir, 'dod na, de dag phan tshun gcig gis gcig ngo shes pa yang med par thal, 'dod pa'i phyir",
+                "english": "Aren't you then implying that these beings never have any case where they are able to reach a definite conclusion about something, or to analyze an object? And if so, aren't you implying that there could never be a case where one of these beings could recognize another? Of course you are, given your position.",
+                "raw": "{\"course\": \"C15\", \"acip\": \"'GRO BA DE DAG GIS NGES SHES DRONGS PA DANG , SGRO 'DOGS CHOD PA YANG MED PAR THAL, 'DOD PA'I PHYIR, 'DOD NA, DE DAG PHAN TSUN GCIG GIS GCIG NGO SHES PA YANG MED PAR THAL, 'DOD PA'I PHYIR,\", \"wylie\": \"'gro ba de dag gis nges shes drongs pa dang , sgro 'dogs chod pa yang med par thal, 'dod pa'i phyir, 'dod na, de dag phan tshun gcig gis gcig ngo shes pa yang med par thal, 'dod pa'i phyir\", \"english\": \"Aren't you then implying that these beings never have any case where they are able to reach a definite conclusion about something, or to analyze an object? And if so, aren't you implying that there could never be a case where one of these beings could recognize another? Of course you are, given your position.\"}"
+              }
+            ]
+          },
+          {
+            "sql": "select * from corpus_segments where wylie like ? order by course,seq",
+            "parameters": [
+              "%'gro ba de dag gis nges shes drongs pa dang , sgro 'dog%"
+            ],
+            "count": 3,
+            "complete_rows": [
+              {
+                "id": 1643,
+                "course": "C05",
+                "seq": 261,
+                "acip": "'GRO BA DE DAG GIS NGES SHES DRONGS PA DANG , SGRO 'DOGS CHOD PA YANG MED PAR THAL, 'DOD PA'I PHYIR, 'DOD NA, DE DAG PHAN TSUN GCIG GIS GCIG NGO SHES PA YANG MED PAR THAL, 'DOD PA'I PHYIR,",
+                "wylie": "'gro ba de dag gis nges shes drongs pa dang , sgro 'dogs chod pa yang med par thal, 'dod pa'i phyir, 'dod na, de dag phan tshun gcig gis gcig ngo shes pa yang med par thal, 'dod pa'i phyir",
+                "english": "Aren't you then implying that these beings never have any case where they are able to reach a definite conclusion about something, or to analyze an object? And if so, aren't you implying that there could never be a case where one of these beings could recognize another? Of course you are, given your position.",
+                "raw": "{\"course\": \"C05\", \"acip\": \"'GRO BA DE DAG GIS NGES SHES DRONGS PA DANG , SGRO 'DOGS CHOD PA YANG MED PAR THAL, 'DOD PA'I PHYIR, 'DOD NA, DE DAG PHAN TSUN GCIG GIS GCIG NGO SHES PA YANG MED PAR THAL, 'DOD PA'I PHYIR,\", \"wylie\": \"'gro ba de dag gis nges shes drongs pa dang , sgro 'dogs chod pa yang med par thal, 'dod pa'i phyir, 'dod na, de dag phan tshun gcig gis gcig ngo shes pa yang med par thal, 'dod pa'i phyir\", \"english\": \"Aren't you then implying that these beings never have any case where they are able to reach a definite conclusion about something, or to analyze an object? And if so, aren't you implying that there could never be a case where one of these beings could recognize another? Of course you are, given your position.\"}"
+              },
+              {
+                "id": 5957,
+                "course": "C15",
+                "seq": 406,
+                "acip": "'GRO BA DE DAG GIS NGES SHES DRONGS PA DANG , SGRO 'DOGS CHOD PA YANG MED PAR THAL, 'DOD PA'I PHYIR, 'DOD NA, DE DAG PHAN TSUN GCIG GIS GCIG NGO SHES PA YANG MED PAR THAL, 'DOD PA'I PHYIR,",
+                "wylie": "'gro ba de dag gis nges shes drongs pa dang , sgro 'dogs chod pa yang med par thal, 'dod pa'i phyir, 'dod na, de dag phan tshun gcig gis gcig ngo shes pa yang med par thal, 'dod pa'i phyir",
+                "english": "Aren't you then implying that these beings never have any case where they are able to reach a definite conclusion about something, or to analyze an object? And if so, aren't you implying that there could never be a case where one of these beings could recognize another? Of course you are, given your position.",
+                "raw": "{\"course\": \"C15\", \"acip\": \"'GRO BA DE DAG GIS NGES SHES DRONGS PA DANG , SGRO 'DOGS CHOD PA YANG MED PAR THAL, 'DOD PA'I PHYIR, 'DOD NA, DE DAG PHAN TSUN GCIG GIS GCIG NGO SHES PA YANG MED PAR THAL, 'DOD PA'I PHYIR,\", \"wylie\": \"'gro ba de dag gis nges shes drongs pa dang , sgro 'dogs chod pa yang med par thal, 'dod pa'i phyir, 'dod na, de dag phan tshun gcig gis gcig ngo shes pa yang med par thal, 'dod pa'i phyir\", \"english\": \"Aren't you then implying that these beings never have any case where they are able to reach a definite conclusion about something, or to analyze an object? And if so, aren't you implying that there could never be a case where one of these beings could recognize another? Of course you are, given your position.\"}"
+              },
+              {
+                "id": 6855,
+                "course": "C16",
+                "seq": 837,
+                "acip": "'GRO BA DE DAG GIS NGES SHES DRONGS PA DANG , SGRO 'DOGS CHOD PA YANG MED PAR THAL, 'DOD PA'I PHYIR, 'DOD NA, DE DAG PHAN TSUN GCIG GIS GCIG NGO SHES PA YANG MED PAR THAL, 'DOD PA'I PHYIR,",
+                "wylie": "'gro ba de dag gis nges shes drongs pa dang , sgro 'dogs chod pa yang med par thal, 'dod pa'i phyir, 'dod na, de dag phan tshun gcig gis gcig ngo shes pa yang med par thal, 'dod pa'i phyir",
+                "english": "Aren't you then implying that these beings never have any case where they are able to reach a definite conclusion about something, or to analyze an object? And if so, aren't you implying that there could never be a case where one of these beings could recognize another? Of course you are, given your position. 32 The Truth of the Glass of Liquid",
+                "raw": "{\"course\": \"C16\", \"acip\": \"'GRO BA DE DAG GIS NGES SHES DRONGS PA DANG , SGRO 'DOGS CHOD PA YANG MED PAR THAL, 'DOD PA'I PHYIR, 'DOD NA, DE DAG PHAN TSUN GCIG GIS GCIG NGO SHES PA YANG MED PAR THAL, 'DOD PA'I PHYIR,\", \"wylie\": \"'gro ba de dag gis nges shes drongs pa dang , sgro 'dogs chod pa yang med par thal, 'dod pa'i phyir, 'dod na, de dag phan tshun gcig gis gcig ngo shes pa yang med par thal, 'dod pa'i phyir\", \"english\": \"Aren't you then implying that these beings never have any case where they are able to reach a definite conclusion about something, or to analyze an object? And if so, aren't you implying that there could never be a case where one of these beings could recognize another? Of course you are, given your position. 32 The Truth of the Glass of Liquid\"}"
+              }
+            ]
+          },
+          {
+            "sql": "select * from corpus_segments where english like ? order by course,seq",
+            "parameters": [
+              "%Aren't you then implying that these beings never have a%"
+            ],
+            "count": 3,
+            "complete_rows": [
+              {
+                "id": 1643,
+                "course": "C05",
+                "seq": 261,
+                "acip": "'GRO BA DE DAG GIS NGES SHES DRONGS PA DANG , SGRO 'DOGS CHOD PA YANG MED PAR THAL, 'DOD PA'I PHYIR, 'DOD NA, DE DAG PHAN TSUN GCIG GIS GCIG NGO SHES PA YANG MED PAR THAL, 'DOD PA'I PHYIR,",
+                "wylie": "'gro ba de dag gis nges shes drongs pa dang , sgro 'dogs chod pa yang med par thal, 'dod pa'i phyir, 'dod na, de dag phan tshun gcig gis gcig ngo shes pa yang med par thal, 'dod pa'i phyir",
+                "english": "Aren't you then implying that these beings never have any case where they are able to reach a definite conclusion about something, or to analyze an object? And if so, aren't you implying that there could never be a case where one of these beings could recognize another? Of course you are, given your position.",
+                "raw": "{\"course\": \"C05\", \"acip\": \"'GRO BA DE DAG GIS NGES SHES DRONGS PA DANG , SGRO 'DOGS CHOD PA YANG MED PAR THAL, 'DOD PA'I PHYIR, 'DOD NA, DE DAG PHAN TSUN GCIG GIS GCIG NGO SHES PA YANG MED PAR THAL, 'DOD PA'I PHYIR,\", \"wylie\": \"'gro ba de dag gis nges shes drongs pa dang , sgro 'dogs chod pa yang med par thal, 'dod pa'i phyir, 'dod na, de dag phan tshun gcig gis gcig ngo shes pa yang med par thal, 'dod pa'i phyir\", \"english\": \"Aren't you then implying that these beings never have any case where they are able to reach a definite conclusion about something, or to analyze an object? And if so, aren't you implying that there could never be a case where one of these beings could recognize another? Of course you are, given your position.\"}"
+              },
+              {
+                "id": 5957,
+                "course": "C15",
+                "seq": 406,
+                "acip": "'GRO BA DE DAG GIS NGES SHES DRONGS PA DANG , SGRO 'DOGS CHOD PA YANG MED PAR THAL, 'DOD PA'I PHYIR, 'DOD NA, DE DAG PHAN TSUN GCIG GIS GCIG NGO SHES PA YANG MED PAR THAL, 'DOD PA'I PHYIR,",
+                "wylie": "'gro ba de dag gis nges shes drongs pa dang , sgro 'dogs chod pa yang med par thal, 'dod pa'i phyir, 'dod na, de dag phan tshun gcig gis gcig ngo shes pa yang med par thal, 'dod pa'i phyir",
+                "english": "Aren't you then implying that these beings never have any case where they are able to reach a definite conclusion about something, or to analyze an object? And if so, aren't you implying that there could never be a case where one of these beings could recognize another? Of course you are, given your position.",
+                "raw": "{\"course\": \"C15\", \"acip\": \"'GRO BA DE DAG GIS NGES SHES DRONGS PA DANG , SGRO 'DOGS CHOD PA YANG MED PAR THAL, 'DOD PA'I PHYIR, 'DOD NA, DE DAG PHAN TSUN GCIG GIS GCIG NGO SHES PA YANG MED PAR THAL, 'DOD PA'I PHYIR,\", \"wylie\": \"'gro ba de dag gis nges shes drongs pa dang , sgro 'dogs chod pa yang med par thal, 'dod pa'i phyir, 'dod na, de dag phan tshun gcig gis gcig ngo shes pa yang med par thal, 'dod pa'i phyir\", \"english\": \"Aren't you then implying that these beings never have any case where they are able to reach a definite conclusion about something, or to analyze an object? And if so, aren't you implying that there could never be a case where one of these beings could recognize another? Of course you are, given your position.\"}"
+              },
+              {
+                "id": 6855,
+                "course": "C16",
+                "seq": 837,
+                "acip": "'GRO BA DE DAG GIS NGES SHES DRONGS PA DANG , SGRO 'DOGS CHOD PA YANG MED PAR THAL, 'DOD PA'I PHYIR, 'DOD NA, DE DAG PHAN TSUN GCIG GIS GCIG NGO SHES PA YANG MED PAR THAL, 'DOD PA'I PHYIR,",
+                "wylie": "'gro ba de dag gis nges shes drongs pa dang , sgro 'dogs chod pa yang med par thal, 'dod pa'i phyir, 'dod na, de dag phan tshun gcig gis gcig ngo shes pa yang med par thal, 'dod pa'i phyir",
+                "english": "Aren't you then implying that these beings never have any case where they are able to reach a definite conclusion about something, or to analyze an object? And if so, aren't you implying that there could never be a case where one of these beings could recognize another? Of course you are, given your position. 32 The Truth of the Glass of Liquid",
+                "raw": "{\"course\": \"C16\", \"acip\": \"'GRO BA DE DAG GIS NGES SHES DRONGS PA DANG , SGRO 'DOGS CHOD PA YANG MED PAR THAL, 'DOD PA'I PHYIR, 'DOD NA, DE DAG PHAN TSUN GCIG GIS GCIG NGO SHES PA YANG MED PAR THAL, 'DOD PA'I PHYIR,\", \"wylie\": \"'gro ba de dag gis nges shes drongs pa dang , sgro 'dogs chod pa yang med par thal, 'dod pa'i phyir, 'dod na, de dag phan tshun gcig gis gcig ngo shes pa yang med par thal, 'dod pa'i phyir\", \"english\": \"Aren't you then implying that these beings never have any case where they are able to reach a definite conclusion about something, or to analyze an object? And if so, aren't you implying that there could never be a case where one of these beings could recognize another? Of course you are, given your position. 32 The Truth of the Glass of Liquid\"}"
+              }
+            ]
+          }
+        ],
+        "assessment": "C15/C16 digitally repeat the shared passage; this does not prove independent publication or ingestion lineage. C16:837 has the complete 310-character C05 English prefix and a following heading; only that shared extent is compared. No matching P1/TCS passage found by the recorded full-prefix queries."
+      },
+      "c_registered": {
+        "matches": [],
+        "classes_checked": [
+          "{SHl} converter",
+          "fused footnote",
+          "folio caption",
+          "following heading",
+          "row spill",
+          "1500 cap"
+        ],
+        "assessment": "No new class in these C05 rows. C16:837 following-heading material is a registered type in that witness and is not imported into C05:261."
+      },
+      "d_defensible": {
+        "reason": "The full sgro 'dogs chod pa idiom is recast as analysis; full HGM chod pa variants include analyze. EM:918 corroborates analytical treatment at the shared idiom only. No correction to object, implying, gcod or chod is justified.",
+        "dictionary_source": "../259/reopened-master-all-tiers.json and additional-master-originals.json; all reference fields kept separate from HGM"
+      },
+      "e_counts": {
+        "remeasured": {
+          "tshad ma": 0,
+          "med": 2,
+          "thal": 2,
+          "'dod pa'i phyir": 2,
+          "english_valid_tokens": 0,
+          "english_chars": 310
+        },
+        "query_counts": [
+          3,
+          3,
+          2,
+          3,
+          3
+        ],
+        "limit": "No corpus metadata occurrence count is used as a new quantitative claim. English260 original note's three formulations is a proposal-note miscount; source has four tshad ma, and that correction is in the final note, not a source erratum."
+      }
+    },
+    "decisive_ground": "d: the existing reading is defensible; none survives all five grounds.",
+    "retained_erratum": false
+  },
+  {
+    "seq": 261,
+    "found": "'dod pa'i phyir",
+    "suspicion": "The first reason phrase has no separately identified English reason; it might indicate dropped source content.",
+    "refuted": true,
+    "grounds": {
+      "a_quote": {
+        "presence": {
+          "acip": false,
+          "wylie": true,
+          "english": false
+        },
+        "full_source": {
+          "id": 1643,
+          "course": "C05",
+          "seq": 261,
+          "acip": "'GRO BA DE DAG GIS NGES SHES DRONGS PA DANG , SGRO 'DOGS CHOD PA YANG MED PAR THAL, 'DOD PA'I PHYIR, 'DOD NA, DE DAG PHAN TSUN GCIG GIS GCIG NGO SHES PA YANG MED PAR THAL, 'DOD PA'I PHYIR,",
+          "wylie": "'gro ba de dag gis nges shes drongs pa dang , sgro 'dogs chod pa yang med par thal, 'dod pa'i phyir, 'dod na, de dag phan tshun gcig gis gcig ngo shes pa yang med par thal, 'dod pa'i phyir",
+          "english": "Aren't you then implying that these beings never have any case where they are able to reach a definite conclusion about something, or to analyze an object? And if so, aren't you implying that there could never be a case where one of these beings could recognize another? Of course you are, given your position.",
+          "raw": "{\"course\": \"C05\", \"acip\": \"'GRO BA DE DAG GIS NGES SHES DRONGS PA DANG , SGRO 'DOGS CHOD PA YANG MED PAR THAL, 'DOD PA'I PHYIR, 'DOD NA, DE DAG PHAN TSUN GCIG GIS GCIG NGO SHES PA YANG MED PAR THAL, 'DOD PA'I PHYIR,\", \"wylie\": \"'gro ba de dag gis nges shes drongs pa dang , sgro 'dogs chod pa yang med par thal, 'dod pa'i phyir, 'dod na, de dag phan tshun gcig gis gcig ngo shes pa yang med par thal, 'dod pa'i phyir\", \"english\": \"Aren't you then implying that these beings never have any case where they are able to reach a definite conclusion about something, or to analyze an object? And if so, aren't you implying that there could never be a case where one of these beings could recognize another? Of course you are, given your position.\"}"
+        }
+      },
+      "b_parallel": {
+        "queries": [
+          {
+            "sql": "select * from corpus_segments where acip=? order by course,seq",
+            "parameters": [
+              "'GRO BA DE DAG GIS NGES SHES DRONGS PA DANG , SGRO 'DOGS CHOD PA YANG MED PAR THAL, 'DOD PA'I PHYIR, 'DOD NA, DE DAG PHAN TSUN GCIG GIS GCIG NGO SHES PA YANG MED PAR THAL, 'DOD PA'I PHYIR,"
+            ],
+            "count": 3,
+            "complete_rows": [
+              {
+                "id": 1643,
+                "course": "C05",
+                "seq": 261,
+                "acip": "'GRO BA DE DAG GIS NGES SHES DRONGS PA DANG , SGRO 'DOGS CHOD PA YANG MED PAR THAL, 'DOD PA'I PHYIR, 'DOD NA, DE DAG PHAN TSUN GCIG GIS GCIG NGO SHES PA YANG MED PAR THAL, 'DOD PA'I PHYIR,",
+                "wylie": "'gro ba de dag gis nges shes drongs pa dang , sgro 'dogs chod pa yang med par thal, 'dod pa'i phyir, 'dod na, de dag phan tshun gcig gis gcig ngo shes pa yang med par thal, 'dod pa'i phyir",
+                "english": "Aren't you then implying that these beings never have any case where they are able to reach a definite conclusion about something, or to analyze an object? And if so, aren't you implying that there could never be a case where one of these beings could recognize another? Of course you are, given your position.",
+                "raw": "{\"course\": \"C05\", \"acip\": \"'GRO BA DE DAG GIS NGES SHES DRONGS PA DANG , SGRO 'DOGS CHOD PA YANG MED PAR THAL, 'DOD PA'I PHYIR, 'DOD NA, DE DAG PHAN TSUN GCIG GIS GCIG NGO SHES PA YANG MED PAR THAL, 'DOD PA'I PHYIR,\", \"wylie\": \"'gro ba de dag gis nges shes drongs pa dang , sgro 'dogs chod pa yang med par thal, 'dod pa'i phyir, 'dod na, de dag phan tshun gcig gis gcig ngo shes pa yang med par thal, 'dod pa'i phyir\", \"english\": \"Aren't you then implying that these beings never have any case where they are able to reach a definite conclusion about something, or to analyze an object? And if so, aren't you implying that there could never be a case where one of these beings could recognize another? Of course you are, given your position.\"}"
+              },
+              {
+                "id": 5957,
+                "course": "C15",
+                "seq": 406,
+                "acip": "'GRO BA DE DAG GIS NGES SHES DRONGS PA DANG , SGRO 'DOGS CHOD PA YANG MED PAR THAL, 'DOD PA'I PHYIR, 'DOD NA, DE DAG PHAN TSUN GCIG GIS GCIG NGO SHES PA YANG MED PAR THAL, 'DOD PA'I PHYIR,",
+                "wylie": "'gro ba de dag gis nges shes drongs pa dang , sgro 'dogs chod pa yang med par thal, 'dod pa'i phyir, 'dod na, de dag phan tshun gcig gis gcig ngo shes pa yang med par thal, 'dod pa'i phyir",
+                "english": "Aren't you then implying that these beings never have any case where they are able to reach a definite conclusion about something, or to analyze an object? And if so, aren't you implying that there could never be a case where one of these beings could recognize another? Of course you are, given your position.",
+                "raw": "{\"course\": \"C15\", \"acip\": \"'GRO BA DE DAG GIS NGES SHES DRONGS PA DANG , SGRO 'DOGS CHOD PA YANG MED PAR THAL, 'DOD PA'I PHYIR, 'DOD NA, DE DAG PHAN TSUN GCIG GIS GCIG NGO SHES PA YANG MED PAR THAL, 'DOD PA'I PHYIR,\", \"wylie\": \"'gro ba de dag gis nges shes drongs pa dang , sgro 'dogs chod pa yang med par thal, 'dod pa'i phyir, 'dod na, de dag phan tshun gcig gis gcig ngo shes pa yang med par thal, 'dod pa'i phyir\", \"english\": \"Aren't you then implying that these beings never have any case where they are able to reach a definite conclusion about something, or to analyze an object? And if so, aren't you implying that there could never be a case where one of these beings could recognize another? Of course you are, given your position.\"}"
+              },
+              {
+                "id": 6855,
+                "course": "C16",
+                "seq": 837,
+                "acip": "'GRO BA DE DAG GIS NGES SHES DRONGS PA DANG , SGRO 'DOGS CHOD PA YANG MED PAR THAL, 'DOD PA'I PHYIR, 'DOD NA, DE DAG PHAN TSUN GCIG GIS GCIG NGO SHES PA YANG MED PAR THAL, 'DOD PA'I PHYIR,",
+                "wylie": "'gro ba de dag gis nges shes drongs pa dang , sgro 'dogs chod pa yang med par thal, 'dod pa'i phyir, 'dod na, de dag phan tshun gcig gis gcig ngo shes pa yang med par thal, 'dod pa'i phyir",
+                "english": "Aren't you then implying that these beings never have any case where they are able to reach a definite conclusion about something, or to analyze an object? And if so, aren't you implying that there could never be a case where one of these beings could recognize another? Of course you are, given your position. 32 The Truth of the Glass of Liquid",
+                "raw": "{\"course\": \"C16\", \"acip\": \"'GRO BA DE DAG GIS NGES SHES DRONGS PA DANG , SGRO 'DOGS CHOD PA YANG MED PAR THAL, 'DOD PA'I PHYIR, 'DOD NA, DE DAG PHAN TSUN GCIG GIS GCIG NGO SHES PA YANG MED PAR THAL, 'DOD PA'I PHYIR,\", \"wylie\": \"'gro ba de dag gis nges shes drongs pa dang , sgro 'dogs chod pa yang med par thal, 'dod pa'i phyir, 'dod na, de dag phan tshun gcig gis gcig ngo shes pa yang med par thal, 'dod pa'i phyir\", \"english\": \"Aren't you then implying that these beings never have any case where they are able to reach a definite conclusion about something, or to analyze an object? And if so, aren't you implying that there could never be a case where one of these beings could recognize another? Of course you are, given your position. 32 The Truth of the Glass of Liquid\"}"
+              }
+            ]
+          },
+          {
+            "sql": "select * from corpus_segments where wylie=? order by course,seq",
+            "parameters": [
+              "'gro ba de dag gis nges shes drongs pa dang , sgro 'dogs chod pa yang med par thal, 'dod pa'i phyir, 'dod na, de dag phan tshun gcig gis gcig ngo shes pa yang med par thal, 'dod pa'i phyir"
+            ],
+            "count": 3,
+            "complete_rows": [
+              {
+                "id": 1643,
+                "course": "C05",
+                "seq": 261,
+                "acip": "'GRO BA DE DAG GIS NGES SHES DRONGS PA DANG , SGRO 'DOGS CHOD PA YANG MED PAR THAL, 'DOD PA'I PHYIR, 'DOD NA, DE DAG PHAN TSUN GCIG GIS GCIG NGO SHES PA YANG MED PAR THAL, 'DOD PA'I PHYIR,",
+                "wylie": "'gro ba de dag gis nges shes drongs pa dang , sgro 'dogs chod pa yang med par thal, 'dod pa'i phyir, 'dod na, de dag phan tshun gcig gis gcig ngo shes pa yang med par thal, 'dod pa'i phyir",
+                "english": "Aren't you then implying that these beings never have any case where they are able to reach a definite conclusion about something, or to analyze an object? And if so, aren't you implying that there could never be a case where one of these beings could recognize another? Of course you are, given your position.",
+                "raw": "{\"course\": \"C05\", \"acip\": \"'GRO BA DE DAG GIS NGES SHES DRONGS PA DANG , SGRO 'DOGS CHOD PA YANG MED PAR THAL, 'DOD PA'I PHYIR, 'DOD NA, DE DAG PHAN TSUN GCIG GIS GCIG NGO SHES PA YANG MED PAR THAL, 'DOD PA'I PHYIR,\", \"wylie\": \"'gro ba de dag gis nges shes drongs pa dang , sgro 'dogs chod pa yang med par thal, 'dod pa'i phyir, 'dod na, de dag phan tshun gcig gis gcig ngo shes pa yang med par thal, 'dod pa'i phyir\", \"english\": \"Aren't you then implying that these beings never have any case where they are able to reach a definite conclusion about something, or to analyze an object? And if so, aren't you implying that there could never be a case where one of these beings could recognize another? Of course you are, given your position.\"}"
+              },
+              {
+                "id": 5957,
+                "course": "C15",
+                "seq": 406,
+                "acip": "'GRO BA DE DAG GIS NGES SHES DRONGS PA DANG , SGRO 'DOGS CHOD PA YANG MED PAR THAL, 'DOD PA'I PHYIR, 'DOD NA, DE DAG PHAN TSUN GCIG GIS GCIG NGO SHES PA YANG MED PAR THAL, 'DOD PA'I PHYIR,",
+                "wylie": "'gro ba de dag gis nges shes drongs pa dang , sgro 'dogs chod pa yang med par thal, 'dod pa'i phyir, 'dod na, de dag phan tshun gcig gis gcig ngo shes pa yang med par thal, 'dod pa'i phyir",
+                "english": "Aren't you then implying that these beings never have any case where they are able to reach a definite conclusion about something, or to analyze an object? And if so, aren't you implying that there could never be a case where one of these beings could recognize another? Of course you are, given your position.",
+                "raw": "{\"course\": \"C15\", \"acip\": \"'GRO BA DE DAG GIS NGES SHES DRONGS PA DANG , SGRO 'DOGS CHOD PA YANG MED PAR THAL, 'DOD PA'I PHYIR, 'DOD NA, DE DAG PHAN TSUN GCIG GIS GCIG NGO SHES PA YANG MED PAR THAL, 'DOD PA'I PHYIR,\", \"wylie\": \"'gro ba de dag gis nges shes drongs pa dang , sgro 'dogs chod pa yang med par thal, 'dod pa'i phyir, 'dod na, de dag phan tshun gcig gis gcig ngo shes pa yang med par thal, 'dod pa'i phyir\", \"english\": \"Aren't you then implying that these beings never have any case where they are able to reach a definite conclusion about something, or to analyze an object? And if so, aren't you implying that there could never be a case where one of these beings could recognize another? Of course you are, given your position.\"}"
+              },
+              {
+                "id": 6855,
+                "course": "C16",
+                "seq": 837,
+                "acip": "'GRO BA DE DAG GIS NGES SHES DRONGS PA DANG , SGRO 'DOGS CHOD PA YANG MED PAR THAL, 'DOD PA'I PHYIR, 'DOD NA, DE DAG PHAN TSUN GCIG GIS GCIG NGO SHES PA YANG MED PAR THAL, 'DOD PA'I PHYIR,",
+                "wylie": "'gro ba de dag gis nges shes drongs pa dang , sgro 'dogs chod pa yang med par thal, 'dod pa'i phyir, 'dod na, de dag phan tshun gcig gis gcig ngo shes pa yang med par thal, 'dod pa'i phyir",
+                "english": "Aren't you then implying that these beings never have any case where they are able to reach a definite conclusion about something, or to analyze an object? And if so, aren't you implying that there could never be a case where one of these beings could recognize another? Of course you are, given your position. 32 The Truth of the Glass of Liquid",
+                "raw": "{\"course\": \"C16\", \"acip\": \"'GRO BA DE DAG GIS NGES SHES DRONGS PA DANG , SGRO 'DOGS CHOD PA YANG MED PAR THAL, 'DOD PA'I PHYIR, 'DOD NA, DE DAG PHAN TSUN GCIG GIS GCIG NGO SHES PA YANG MED PAR THAL, 'DOD PA'I PHYIR,\", \"wylie\": \"'gro ba de dag gis nges shes drongs pa dang , sgro 'dogs chod pa yang med par thal, 'dod pa'i phyir, 'dod na, de dag phan tshun gcig gis gcig ngo shes pa yang med par thal, 'dod pa'i phyir\", \"english\": \"Aren't you then implying that these beings never have any case where they are able to reach a definite conclusion about something, or to analyze an object? And if so, aren't you implying that there could never be a case where one of these beings could recognize another? Of course you are, given your position. 32 The Truth of the Glass of Liquid\"}"
+              }
+            ]
+          },
+          {
+            "sql": "select * from corpus_segments where english=? order by course,seq",
+            "parameters": [
+              "Aren't you then implying that these beings never have any case where they are able to reach a definite conclusion about something, or to analyze an object? And if so, aren't you implying that there could never be a case where one of these beings could recognize another? Of course you are, given your position."
+            ],
+            "count": 2,
+            "complete_rows": [
+              {
+                "id": 1643,
+                "course": "C05",
+                "seq": 261,
+                "acip": "'GRO BA DE DAG GIS NGES SHES DRONGS PA DANG , SGRO 'DOGS CHOD PA YANG MED PAR THAL, 'DOD PA'I PHYIR, 'DOD NA, DE DAG PHAN TSUN GCIG GIS GCIG NGO SHES PA YANG MED PAR THAL, 'DOD PA'I PHYIR,",
+                "wylie": "'gro ba de dag gis nges shes drongs pa dang , sgro 'dogs chod pa yang med par thal, 'dod pa'i phyir, 'dod na, de dag phan tshun gcig gis gcig ngo shes pa yang med par thal, 'dod pa'i phyir",
+                "english": "Aren't you then implying that these beings never have any case where they are able to reach a definite conclusion about something, or to analyze an object? And if so, aren't you implying that there could never be a case where one of these beings could recognize another? Of course you are, given your position.",
+                "raw": "{\"course\": \"C05\", \"acip\": \"'GRO BA DE DAG GIS NGES SHES DRONGS PA DANG , SGRO 'DOGS CHOD PA YANG MED PAR THAL, 'DOD PA'I PHYIR, 'DOD NA, DE DAG PHAN TSUN GCIG GIS GCIG NGO SHES PA YANG MED PAR THAL, 'DOD PA'I PHYIR,\", \"wylie\": \"'gro ba de dag gis nges shes drongs pa dang , sgro 'dogs chod pa yang med par thal, 'dod pa'i phyir, 'dod na, de dag phan tshun gcig gis gcig ngo shes pa yang med par thal, 'dod pa'i phyir\", \"english\": \"Aren't you then implying that these beings never have any case where they are able to reach a definite conclusion about something, or to analyze an object? And if so, aren't you implying that there could never be a case where one of these beings could recognize another? Of course you are, given your position.\"}"
+              },
+              {
+                "id": 5957,
+                "course": "C15",
+                "seq": 406,
+                "acip": "'GRO BA DE DAG GIS NGES SHES DRONGS PA DANG , SGRO 'DOGS CHOD PA YANG MED PAR THAL, 'DOD PA'I PHYIR, 'DOD NA, DE DAG PHAN TSUN GCIG GIS GCIG NGO SHES PA YANG MED PAR THAL, 'DOD PA'I PHYIR,",
+                "wylie": "'gro ba de dag gis nges shes drongs pa dang , sgro 'dogs chod pa yang med par thal, 'dod pa'i phyir, 'dod na, de dag phan tshun gcig gis gcig ngo shes pa yang med par thal, 'dod pa'i phyir",
+                "english": "Aren't you then implying that these beings never have any case where they are able to reach a definite conclusion about something, or to analyze an object? And if so, aren't you implying that there could never be a case where one of these beings could recognize another? Of course you are, given your position.",
+                "raw": "{\"course\": \"C15\", \"acip\": \"'GRO BA DE DAG GIS NGES SHES DRONGS PA DANG , SGRO 'DOGS CHOD PA YANG MED PAR THAL, 'DOD PA'I PHYIR, 'DOD NA, DE DAG PHAN TSUN GCIG GIS GCIG NGO SHES PA YANG MED PAR THAL, 'DOD PA'I PHYIR,\", \"wylie\": \"'gro ba de dag gis nges shes drongs pa dang , sgro 'dogs chod pa yang med par thal, 'dod pa'i phyir, 'dod na, de dag phan tshun gcig gis gcig ngo shes pa yang med par thal, 'dod pa'i phyir\", \"english\": \"Aren't you then implying that these beings never have any case where they are able to reach a definite conclusion about something, or to analyze an object? And if so, aren't you implying that there could never be a case where one of these beings could recognize another? Of course you are, given your position.\"}"
+              }
+            ]
+          },
+          {
+            "sql": "select * from corpus_segments where wylie like ? order by course,seq",
+            "parameters": [
+              "%'gro ba de dag gis nges shes drongs pa dang , sgro 'dog%"
+            ],
+            "count": 3,
+            "complete_rows": [
+              {
+                "id": 1643,
+                "course": "C05",
+                "seq": 261,
+                "acip": "'GRO BA DE DAG GIS NGES SHES DRONGS PA DANG , SGRO 'DOGS CHOD PA YANG MED PAR THAL, 'DOD PA'I PHYIR, 'DOD NA, DE DAG PHAN TSUN GCIG GIS GCIG NGO SHES PA YANG MED PAR THAL, 'DOD PA'I PHYIR,",
+                "wylie": "'gro ba de dag gis nges shes drongs pa dang , sgro 'dogs chod pa yang med par thal, 'dod pa'i phyir, 'dod na, de dag phan tshun gcig gis gcig ngo shes pa yang med par thal, 'dod pa'i phyir",
+                "english": "Aren't you then implying that these beings never have any case where they are able to reach a definite conclusion about something, or to analyze an object? And if so, aren't you implying that there could never be a case where one of these beings could recognize another? Of course you are, given your position.",
+                "raw": "{\"course\": \"C05\", \"acip\": \"'GRO BA DE DAG GIS NGES SHES DRONGS PA DANG , SGRO 'DOGS CHOD PA YANG MED PAR THAL, 'DOD PA'I PHYIR, 'DOD NA, DE DAG PHAN TSUN GCIG GIS GCIG NGO SHES PA YANG MED PAR THAL, 'DOD PA'I PHYIR,\", \"wylie\": \"'gro ba de dag gis nges shes drongs pa dang , sgro 'dogs chod pa yang med par thal, 'dod pa'i phyir, 'dod na, de dag phan tshun gcig gis gcig ngo shes pa yang med par thal, 'dod pa'i phyir\", \"english\": \"Aren't you then implying that these beings never have any case where they are able to reach a definite conclusion about something, or to analyze an object? And if so, aren't you implying that there could never be a case where one of these beings could recognize another? Of course you are, given your position.\"}"
+              },
+              {
+                "id": 5957,
+                "course": "C15",
+                "seq": 406,
+                "acip": "'GRO BA DE DAG GIS NGES SHES DRONGS PA DANG , SGRO 'DOGS CHOD PA YANG MED PAR THAL, 'DOD PA'I PHYIR, 'DOD NA, DE DAG PHAN TSUN GCIG GIS GCIG NGO SHES PA YANG MED PAR THAL, 'DOD PA'I PHYIR,",
+                "wylie": "'gro ba de dag gis nges shes drongs pa dang , sgro 'dogs chod pa yang med par thal, 'dod pa'i phyir, 'dod na, de dag phan tshun gcig gis gcig ngo shes pa yang med par thal, 'dod pa'i phyir",
+                "english": "Aren't you then implying that these beings never have any case where they are able to reach a definite conclusion about something, or to analyze an object? And if so, aren't you implying that there could never be a case where one of these beings could recognize another? Of course you are, given your position.",
+                "raw": "{\"course\": \"C15\", \"acip\": \"'GRO BA DE DAG GIS NGES SHES DRONGS PA DANG , SGRO 'DOGS CHOD PA YANG MED PAR THAL, 'DOD PA'I PHYIR, 'DOD NA, DE DAG PHAN TSUN GCIG GIS GCIG NGO SHES PA YANG MED PAR THAL, 'DOD PA'I PHYIR,\", \"wylie\": \"'gro ba de dag gis nges shes drongs pa dang , sgro 'dogs chod pa yang med par thal, 'dod pa'i phyir, 'dod na, de dag phan tshun gcig gis gcig ngo shes pa yang med par thal, 'dod pa'i phyir\", \"english\": \"Aren't you then implying that these beings never have any case where they are able to reach a definite conclusion about something, or to analyze an object? And if so, aren't you implying that there could never be a case where one of these beings could recognize another? Of course you are, given your position.\"}"
+              },
+              {
+                "id": 6855,
+                "course": "C16",
+                "seq": 837,
+                "acip": "'GRO BA DE DAG GIS NGES SHES DRONGS PA DANG , SGRO 'DOGS CHOD PA YANG MED PAR THAL, 'DOD PA'I PHYIR, 'DOD NA, DE DAG PHAN TSUN GCIG GIS GCIG NGO SHES PA YANG MED PAR THAL, 'DOD PA'I PHYIR,",
+                "wylie": "'gro ba de dag gis nges shes drongs pa dang , sgro 'dogs chod pa yang med par thal, 'dod pa'i phyir, 'dod na, de dag phan tshun gcig gis gcig ngo shes pa yang med par thal, 'dod pa'i phyir",
+                "english": "Aren't you then implying that these beings never have any case where they are able to reach a definite conclusion about something, or to analyze an object? And if so, aren't you implying that there could never be a case where one of these beings could recognize another? Of course you are, given your position. 32 The Truth of the Glass of Liquid",
+                "raw": "{\"course\": \"C16\", \"acip\": \"'GRO BA DE DAG GIS NGES SHES DRONGS PA DANG , SGRO 'DOGS CHOD PA YANG MED PAR THAL, 'DOD PA'I PHYIR, 'DOD NA, DE DAG PHAN TSUN GCIG GIS GCIG NGO SHES PA YANG MED PAR THAL, 'DOD PA'I PHYIR,\", \"wylie\": \"'gro ba de dag gis nges shes drongs pa dang , sgro 'dogs chod pa yang med par thal, 'dod pa'i phyir, 'dod na, de dag phan tshun gcig gis gcig ngo shes pa yang med par thal, 'dod pa'i phyir\", \"english\": \"Aren't you then implying that these beings never have any case where they are able to reach a definite conclusion about something, or to analyze an object? And if so, aren't you implying that there could never be a case where one of these beings could recognize another? Of course you are, given your position. 32 The Truth of the Glass of Liquid\"}"
+              }
+            ]
+          },
+          {
+            "sql": "select * from corpus_segments where english like ? order by course,seq",
+            "parameters": [
+              "%Aren't you then implying that these beings never have a%"
+            ],
+            "count": 3,
+            "complete_rows": [
+              {
+                "id": 1643,
+                "course": "C05",
+                "seq": 261,
+                "acip": "'GRO BA DE DAG GIS NGES SHES DRONGS PA DANG , SGRO 'DOGS CHOD PA YANG MED PAR THAL, 'DOD PA'I PHYIR, 'DOD NA, DE DAG PHAN TSUN GCIG GIS GCIG NGO SHES PA YANG MED PAR THAL, 'DOD PA'I PHYIR,",
+                "wylie": "'gro ba de dag gis nges shes drongs pa dang , sgro 'dogs chod pa yang med par thal, 'dod pa'i phyir, 'dod na, de dag phan tshun gcig gis gcig ngo shes pa yang med par thal, 'dod pa'i phyir",
+                "english": "Aren't you then implying that these beings never have any case where they are able to reach a definite conclusion about something, or to analyze an object? And if so, aren't you implying that there could never be a case where one of these beings could recognize another? Of course you are, given your position.",
+                "raw": "{\"course\": \"C05\", \"acip\": \"'GRO BA DE DAG GIS NGES SHES DRONGS PA DANG , SGRO 'DOGS CHOD PA YANG MED PAR THAL, 'DOD PA'I PHYIR, 'DOD NA, DE DAG PHAN TSUN GCIG GIS GCIG NGO SHES PA YANG MED PAR THAL, 'DOD PA'I PHYIR,\", \"wylie\": \"'gro ba de dag gis nges shes drongs pa dang , sgro 'dogs chod pa yang med par thal, 'dod pa'i phyir, 'dod na, de dag phan tshun gcig gis gcig ngo shes pa yang med par thal, 'dod pa'i phyir\", \"english\": \"Aren't you then implying that these beings never have any case where they are able to reach a definite conclusion about something, or to analyze an object? And if so, aren't you implying that there could never be a case where one of these beings could recognize another? Of course you are, given your position.\"}"
+              },
+              {
+                "id": 5957,
+                "course": "C15",
+                "seq": 406,
+                "acip": "'GRO BA DE DAG GIS NGES SHES DRONGS PA DANG , SGRO 'DOGS CHOD PA YANG MED PAR THAL, 'DOD PA'I PHYIR, 'DOD NA, DE DAG PHAN TSUN GCIG GIS GCIG NGO SHES PA YANG MED PAR THAL, 'DOD PA'I PHYIR,",
+                "wylie": "'gro ba de dag gis nges shes drongs pa dang , sgro 'dogs chod pa yang med par thal, 'dod pa'i phyir, 'dod na, de dag phan tshun gcig gis gcig ngo shes pa yang med par thal, 'dod pa'i phyir",
+                "english": "Aren't you then implying that these beings never have any case where they are able to reach a definite conclusion about something, or to analyze an object? And if so, aren't you implying that there could never be a case where one of these beings could recognize another? Of course you are, given your position.",
+                "raw": "{\"course\": \"C15\", \"acip\": \"'GRO BA DE DAG GIS NGES SHES DRONGS PA DANG , SGRO 'DOGS CHOD PA YANG MED PAR THAL, 'DOD PA'I PHYIR, 'DOD NA, DE DAG PHAN TSUN GCIG GIS GCIG NGO SHES PA YANG MED PAR THAL, 'DOD PA'I PHYIR,\", \"wylie\": \"'gro ba de dag gis nges shes drongs pa dang , sgro 'dogs chod pa yang med par thal, 'dod pa'i phyir, 'dod na, de dag phan tshun gcig gis gcig ngo shes pa yang med par thal, 'dod pa'i phyir\", \"english\": \"Aren't you then implying that these beings never have any case where they are able to reach a definite conclusion about something, or to analyze an object? And if so, aren't you implying that there could never be a case where one of these beings could recognize another? Of course you are, given your position.\"}"
+              },
+              {
+                "id": 6855,
+                "course": "C16",
+                "seq": 837,
+                "acip": "'GRO BA DE DAG GIS NGES SHES DRONGS PA DANG , SGRO 'DOGS CHOD PA YANG MED PAR THAL, 'DOD PA'I PHYIR, 'DOD NA, DE DAG PHAN TSUN GCIG GIS GCIG NGO SHES PA YANG MED PAR THAL, 'DOD PA'I PHYIR,",
+                "wylie": "'gro ba de dag gis nges shes drongs pa dang , sgro 'dogs chod pa yang med par thal, 'dod pa'i phyir, 'dod na, de dag phan tshun gcig gis gcig ngo shes pa yang med par thal, 'dod pa'i phyir",
+                "english": "Aren't you then implying that these beings never have any case where they are able to reach a definite conclusion about something, or to analyze an object? And if so, aren't you implying that there could never be a case where one of these beings could recognize another? Of course you are, given your position. 32 The Truth of the Glass of Liquid",
+                "raw": "{\"course\": \"C16\", \"acip\": \"'GRO BA DE DAG GIS NGES SHES DRONGS PA DANG , SGRO 'DOGS CHOD PA YANG MED PAR THAL, 'DOD PA'I PHYIR, 'DOD NA, DE DAG PHAN TSUN GCIG GIS GCIG NGO SHES PA YANG MED PAR THAL, 'DOD PA'I PHYIR,\", \"wylie\": \"'gro ba de dag gis nges shes drongs pa dang , sgro 'dogs chod pa yang med par thal, 'dod pa'i phyir, 'dod na, de dag phan tshun gcig gis gcig ngo shes pa yang med par thal, 'dod pa'i phyir\", \"english\": \"Aren't you then implying that these beings never have any case where they are able to reach a definite conclusion about something, or to analyze an object? And if so, aren't you implying that there could never be a case where one of these beings could recognize another? Of course you are, given your position. 32 The Truth of the Glass of Liquid\"}"
+              }
+            ]
+          }
+        ],
+        "assessment": "C15/C16 digitally repeat the shared passage; this does not prove independent publication or ingestion lineage. C16:837 has the complete 310-character C05 English prefix and a following heading; only that shared extent is compared. No matching P1/TCS passage found by the recorded full-prefix queries."
+      },
+      "c_registered": {
+        "matches": [],
+        "classes_checked": [
+          "{SHl} converter",
+          "fused footnote",
+          "folio caption",
+          "following heading",
+          "row spill",
+          "1500 cap"
+        ],
+        "assessment": "No new class in these C05 rows. C16:837 following-heading material is a registered type in that witness and is not imported into C05:261."
+      },
+      "d_defensible": {
+        "reason": "The reason is integrated into the argumentative recast; absent atom-level correspondence is not proof of an omission in publication or ingestion.",
+        "dictionary_source": "../259/reopened-master-all-tiers.json and additional-master-originals.json; all reference fields kept separate from HGM"
+      },
+      "e_counts": {
+        "remeasured": {
+          "tshad ma": 0,
+          "med": 2,
+          "thal": 2,
+          "'dod pa'i phyir": 2,
+          "english_valid_tokens": 0,
+          "english_chars": 310
+        },
+        "query_counts": [
+          3,
+          3,
+          2,
+          3,
+          3
+        ],
+        "limit": "No corpus metadata occurrence count is used as a new quantitative claim. English260 original note's three formulations is a proposal-note miscount; source has four tshad ma, and that correction is in the final note, not a source erratum."
+      }
+    },
+    "decisive_ground": "d: the existing reading is defensible; none survives all five grounds.",
+    "retained_erratum": false
+  }
+]

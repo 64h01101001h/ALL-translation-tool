@@ -1,0 +1,9 @@
+"""Run the original canonical generator with SQLite connections forced to mode=ro."""
+import pathlib,runpy,sqlite3,sys
+connect_original=sqlite3.connect
+def connect_readonly(database,*args,**kwargs):
+    database=pathlib.Path(database).resolve().as_uri()+'?mode=ro'
+    kwargs['uri']=True
+    return connect_original(database,*args,**kwargs)
+sqlite3.connect=connect_readonly
+runpy.run_path(sys.argv[1],run_name='__main__')
