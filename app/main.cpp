@@ -3603,6 +3603,10 @@ static std::function<void(const QString&)> g_surveyFile;
 // the Translate ladder (UX P3): Workbench → Manuscript hand-off +
 // the apparatus reachable at composition time
 static std::function<void(const QString&)> g_sendToManuscript;
+// The setter, for tests only: the ladder ADDS to the Manuscript, so a test
+// that wants a known starting state needs a way to establish one without
+// going through the hand-off it is testing.
+static std::function<void(const QString&)> g_setManuscriptText;
 // MEM-1: the ladder's regression pin used to assert a literal true
 // after invoking the hand-off. Receipt is only checkable if the
 // Manuscript can be read back, so it can be.
@@ -8367,6 +8371,16 @@ public:
             dataRoot_ = QDir::temp().filePath("all_selftest_ops_root");
             QDir(dataRoot_).removeRecursively();
             const QString tmpDir = QDir::temp().filePath("all_selftest_fileops");
+            // Clean at the START as well as the end. The block only tidied up
+            // afterwards, so a run that was interrupted — a timeout, a kill,
+            // a failure earlier in the sweep — left renamed_ok.txt sitting in
+            // this folder, and the NEXT run's rename refused with "already
+            // exists" and failed five gates that had nothing wrong with them.
+            // Observed on 2026-09-11: five Overlay failures that did not
+            // reproduce on a second run of the same binary. A flaky gate is
+            // worse than a missing one, because it teaches you to discount a
+            // red result.
+            QDir(tmpDir).removeRecursively();
             QDir().mkpath(tmpDir);
             QDir().mkpath(tmpDir + "/sub");
             const QString f1 = tmpDir + "/renametest.txt";
@@ -25962,16 +25976,36 @@ public:
         // receives the draft") — it invoked the hand-off and
         // asserted nothing whatever about receipt. It now reads the
         // Manuscript back and compares.
-        check((bool)g_sendToManuscript && (bool)g_manuscriptText,
+        check((bool)g_sendToManuscript && (bool)g_manuscriptText &&
+                  (bool)g_setManuscriptText,
               "the ladder is wired: a hand-off out of the bench, and "
               "a way to read the Manuscript back");
         if (g_sendToManuscript && g_manuscriptText) {
+            // The gate used to assert the Manuscript holds EXACTLY the draft
+            // — which is the defect stated as a requirement. Replacing the
+            // document destroyed whatever a translator had written there,
+            // its formatting, and the undo history that would have recovered
+            // it. What matters is the stronger property: the draft ARRIVES,
+            // and what was already there SURVIVES. (Audit 2026-09-11.)
             const QString carried = "the ladder carries this text";
+
+            // 1. into an empty Manuscript: it simply arrives
+            g_setManuscriptText("");
             draft_->setPlainText(carried);
             g_sendToManuscript(draft_->toPlainText());
-            check(g_manuscriptText() == carried,
-                  "ladder hand-off: the Manuscript now holds exactly "
-                  "the draft that was sent (receipt, not invocation)");
+            check(g_manuscriptText().contains(carried),
+                  "ladder hand-off: the draft reaches the Manuscript "
+                  "(receipt, not invocation)");
+
+            // 2. into a Manuscript someone was working in: BOTH survive
+            const QString existing = "work already written here";
+            g_setManuscriptText(existing);
+            g_sendToManuscript(carried);
+            const QString after = g_manuscriptText();
+            check(after.contains(existing) && after.contains(carried),
+                  "ladder hand-off: sending into a Manuscript that already "
+                  "has work in it keeps BOTH — it adds, never replaces");
+            g_setManuscriptText("");
         }
         draft_->clear();
         source_->clear();
@@ -38091,6 +38125,38 @@ public:
         editor_->setPlainText(t);
     }
 
+    // The ladder's receiving end. It used to call setManuscriptText, which
+    // REPLACES the document: a translator who had been writing here lost the
+    // lot — the prose, the bold and italics (this is a rich-text editor and
+    // setPlainText discards formatting), and the undo history that would have
+    // let them get it back. No warning, no confirmation. Found by the Draft
+    // workspace audit, 2026-09-11.
+    //
+    // Inserting is also the truer reading of the button: "carry this draft
+    // into the Manuscript to write and publish" is an arrival, not an
+    // overwrite. Sending twice now produces two copies — visible, and
+    // undoable, which silent destruction was not.
+    void receiveDraft(const QString& t) {
+        if (t.isEmpty()) return;
+        QTextCursor c = editor_->textCursor();
+        const bool hadContent =
+            !editor_->document()->toPlainText().trimmed().isEmpty();
+        c.beginEditBlock();          // one undo step for the whole arrival
+        if (hadContent) {
+            c.movePosition(QTextCursor::End);
+            c.insertText("\n\n");
+        }
+        c.insertText(t);
+        c.endEditBlock();
+        editor_->setTextCursor(c);
+        if (status_)
+            status_->setText(hadContent
+                                 ? "The draft was added at the end \u2014 what "
+                                   "was already here is untouched, and "
+                                   "\u2318Z undoes the arrival."
+                                 : "The draft arrived in the Manuscript.");
+    }
+
     // MEM-1: the ladder pin asserts receipt, which needs a reader.
     QString manuscriptText() const { return editor_->toPlainText(); }
 
@@ -43126,11 +43192,14 @@ int main(int argc, char** argv) {
     };
     tabs.addTab(apparatusPane, "Apparatus");
     g_sendToManuscript = [manuscriptPane](const QString& t) {
-        manuscriptPane->setManuscriptText(t);
+        manuscriptPane->receiveDraft(t);   // adds; never replaces
         if (g_raisePane) g_raisePane(manuscriptPane);
     };
     g_manuscriptText = [manuscriptPane] {
         return manuscriptPane->manuscriptText();
+    };
+    g_setManuscriptText = [manuscriptPane](const QString& t) {
+        manuscriptPane->setManuscriptText(t);
     };
     g_mssComposeBib = [draftPane] { draftPane->composeBibDialog(); };
     g_mssProposeNote = [draftPane](const QString& sel) {
