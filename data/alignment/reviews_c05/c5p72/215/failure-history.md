@@ -1,0 +1,6 @@
+Both proposals remain untouched. Their prior files are copied under proposal-attempt-history/ and SHA-256 indexed in proposal-attempt-history.json.
+Tibetan shared setup attempt01 failed in the authoring helper before the canonical generator (assertion); it is not a generator refusal. Subsequent Tibetan generators passed. The shared raw UTF-8 decoding failed before using a documented byte-preserving decoder; this was not a source correction.
+English initial glossary SQL failed on literal escape syntax before querying. The first shared shell harness also attempted to assign zsh's reserved status variable and failed after generator execution; distinguish this from canonical status.
+English canonical attempt01 genuinely refused: uninflected 'byung ba selected a later occurrence and left downstream spans out of order. Final attempt02 and independent rerun pass.
+Reconciliation attempt01 passes.
+Final verification helper attempt01 failed only because Python range tuples were compared directly with JSON lists. Canonical outputs were unchanged. The helper normalizes serialization before equality in attempt02, which passes. The failed helper input/stdout/stderr/exit and corrected rerun logs are preserved under reconciled/214/finish-checks-attempt-01/02.*; this was not a canonical generator failure.

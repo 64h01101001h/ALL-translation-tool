@@ -1,0 +1,84 @@
+{
+  "verdict": "APPROVE",
+  "spec_verdict": "APPROVE",
+  "quality_verdict": "APPROVE",
+  "producer": "Codex independent semantic reviewer; historical Claude role labels not used",
+  "course": "C05",
+  "page": "c5p72",
+  "segments": [
+    {
+      "seq": 214,
+      "spans": 56,
+      "nulls": 0,
+      "word_pairs": 39,
+      "depths": {
+        "5": 39,
+        "6": 9,
+        "7": 8
+      },
+      "generator_exit": 0,
+      "stderr_bytes": 0,
+      "spec_bytes": 9715,
+      "spec_sha256": "9ede0a5705f17b98dbac8e43096eb094fcdc471c0a9a18e39a9032eaf9d0fbb3",
+      "body_bytes": 9675,
+      "body_sha256": "86ed19292e96485d968b6ea0b0f001507cc6baf7c9317f050a66f59be2823074",
+      "exact_body_match": true
+    },
+    {
+      "seq": 215,
+      "spans": 49,
+      "nulls": 0,
+      "word_pairs": 33,
+      "depths": {
+        "5": 33,
+        "7": 9,
+        "6": 6,
+        "3": 1
+      },
+      "generator_exit": 0,
+      "stderr_bytes": 0,
+      "spec_bytes": 8525,
+      "spec_sha256": "8b0845592f96240bd395f5fd0d267625c2c3a776bb35e861e6790d49d6499175",
+      "body_bytes": 8726,
+      "body_sha256": "0f72c6a7e034c794ef001207d032810b2326569bf2dce97abb18b4d8f551075f",
+      "exact_body_match": true
+    },
+    {
+      "seq": 216,
+      "spans": 31,
+      "nulls": 0,
+      "word_pairs": 21,
+      "depths": {
+        "5": 21,
+        "7": 8,
+        "3": 1,
+        "6": 1
+      },
+      "generator_exit": 0,
+      "stderr_bytes": 0,
+      "spec_bytes": 6289,
+      "spec_sha256": "bc0c6c1a02b2ab700894711d45b36a8d18177a154a6bc4f98a2ec31b21054fac",
+      "body_bytes": 6411,
+      "body_sha256": "df276154972c5b08db734545b5e9048efd99eb3e28c6bd389d5a1e28e61355b8",
+      "exact_body_match": true
+    }
+  ],
+  "totals": {
+    "spans": 136,
+    "nulls": 0,
+    "word_pairs": 93,
+    "errata": 0
+  },
+  "open_findings": [],
+  "required_span_head_allowlist": "span-head-allow-needed.json",
+  "source_access": "SQLite URI mode=ro; original corpus/master and raw local witnesses read independently",
+  "generator_proof": "3 final and 6 proposal generators independently exit 0 and reproduce exact body bytes; canonical implementation with read-only SQLite connection wrapper",
+  "resolved_span_file": "resolved-spans.json",
+  "resolved_span_sha256": "cc1149167c0c09eae394b4162546c858e787f66ab510e571fbd6c78087709c0f",
+  "limits": [
+    "PROVISIONAL machine attestation; not human acceptance or dictionary definition",
+    "No blockprint/manuscript or independent publication pedigree established",
+    "No repository/source/master edits or commits"
+  ],
+  "review_helper_failure": "Attempt 01 assumed original corpus had seq key; original release sequences are course-relative order. Corrected helper preserves failed version. Canonical generators did not fail."
+}

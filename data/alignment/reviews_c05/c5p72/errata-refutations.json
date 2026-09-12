@@ -1,0 +1,52 @@
+[
+  {
+    "seq": 216,
+    "found": "SGO BA'I",
+    "conjecture": "Change SGO to BGO",
+    "refuted": true,
+    "grounds": {
+      "a": "SGO BA'I and sgo ba are present in this segment ACIP and Wylie; raw C05 line 1983 independently matches.",
+      "b": "C16:793 equals all three text fields; ILL:1920 has equal Wylie, final ACIP comma difference and different English. Raw C16 and ILL preserve SGO. Publication independence is unproven, so this ground alone does not refute.",
+      "c": "Register has 188 records; no C05:216 duplicate or applicable systematic spelling class.",
+      "d": "Original master HGM 3027 sgo ba explicitly stain/stained, matching this context. BGO conjecture is unnecessary. TCS06:525 uses a different BGO GZHI construction and does not correct this passage.",
+      "e": "All independent query counts match: opening/full Wylie 3 rows; bag chags sgo 8; bag chags bgo 1; bag chags bgos 0. Original C05/C16/ILL raw byte counts and hashes match. Counts are digital rows, not independent publications."
+    },
+    "decisive_ground": "d",
+    "evidence": [
+      "dictionary-original.json",
+      "master-original.json",
+      "witness-originals.json",
+      "witness-queries-independent.json",
+      "raw-witness-originals.json",
+      "register-original.json"
+    ]
+  },
+  {
+    "seq": 214,
+    "found": "Selection Two: How the Middle-Way School says the mental seeds of karma work",
+    "conjecture": "New heading-glue erratum",
+    "refuted": true,
+    "grounds": {
+      "a": "Exact heading present in source English; no Tibetan counterpart in this row.",
+      "b": "C16:791 has identical ACIP/Wylie and different English heading; P7:5 changes Tibetan punctuation/SMRSA and has truncated heading. Independence unproven.",
+      "c": "Following-section-heading glue is explicitly already registered as a class in ALIGNMENT_LAYER_SPEC and RECONCILE_BRIEF; do not refile.",
+      "d": "The heading is valid English apparatus; deleting source wording from alignment would be wrong.",
+      "e": "Fresh queries reproduce all four 214 counts (9,4,5,2 rows for recorded exact queries); no independent publication count inferred."
+    },
+    "decisive_ground": "c"
+  },
+  {
+    "seq": 214,
+    "found": "de'i phyir rnam shes las don gzhan pa'i phyi rol med do",
+    "conjecture": "Treat unmatched conclusion as a new source-English omission defect",
+    "refuted": true,
+    "grounds": {
+      "a": "Conclusion is in this source Wylie/ACIP; source English ends translated argument at outer objects then heading.",
+      "b": "C16 preserves the same source conclusion without separate closing English; P7 does similarly. ILL:2250 ends earlier and is not a witness to the conclusion; independence not proven.",
+      "c": "No segment duplicate found; heading-glue class applies to apparatus, not automatically to missing translation.",
+      "d": "Translation already explicitly states form is nothing other than consciousness and denies outer grasped objects. A separate last-sentence translation cannot be required from the evidence here; possible compression is defensible. Omit alignment for the unallocated conclusion with a note, not a null or composed English.",
+      "e": "All relevant source quotes and four witness queries reproduced; no unsupported count or external editorial judgment used."
+    },
+    "decisive_ground": "d / uncertainty"
+  }
+]

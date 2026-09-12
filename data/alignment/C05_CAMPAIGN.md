@@ -47,7 +47,7 @@ the/a/an/and/or/his/our/your/I/you unless `data/alignment/span_head_allow.json`
 lists it under `pages_c05` with the Tibetan word that licenses it.
 
 ## Progress
-c5p1–c5p7 (1–21) cloned 2026-09-05; c5p8–c5p49 (22–147) landed 2026-09-05; c5p50–c5p55 (148–165) landed 2026-09-08. c5p56 (166–168) landed 2026-09-12 after fresh independent proposals, reconciliation and skeptical review. c5p57 (169–171) landed after independent review. c5p58 (172–174) landed after independent review. c5p59 (175–177) landed after independent review. c5p60 (178–180) landed after independent review. c5p61 (181–183) landed after independent review. c5p62 (184–186) landed after independent review. c5p63 (187–189) landed after independent review. c5p64 (190–192) landed after independent review. c5p65 (193–195) landed after independent review. c5p66 (196–198) landed after independent review. c5p67 (199–201) landed after independent review. c5p68 (202–204) landed after independent review. c5p69 (205–207) landed after independent review. c5p70 (208–210) landed after independent review. c5p71 (211–213) landed after independent review. Coverage 213/511; current verification is recorded in the latest batch entry below.
+c5p1–c5p7 (1–21) cloned 2026-09-05; c5p8–c5p49 (22–147) landed 2026-09-05; c5p50–c5p55 (148–165) landed 2026-09-08. c5p56 (166–168) landed 2026-09-12 after fresh independent proposals, reconciliation and skeptical review. c5p57 (169–171) landed after independent review. c5p58 (172–174) landed after independent review. c5p59 (175–177) landed after independent review. c5p60 (178–180) landed after independent review. c5p61 (181–183) landed after independent review. c5p62 (184–186) landed after independent review. c5p63 (187–189) landed after independent review. c5p64 (190–192) landed after independent review. c5p65 (193–195) landed after independent review. c5p66 (196–198) landed after independent review. c5p67 (199–201) landed after independent review. c5p68 (202–204) landed after independent review. c5p69 (205–207) landed after independent review. c5p70 (208–210) landed after independent review. c5p71 (211–213) landed after independent review. c5p72 (214–216) landed after independent review. Coverage 216/511; current verification is recorded in the latest batch entry below.
 
 **Historical pause, superseded by Adam’s 2026-09-11 continuation request. PAUSED 2026-09-08 (Adam's call): the campaign stops here while the app goes to
 a public release (two-week target). Reconciled-but-unlanded specs for 166, 167,
@@ -876,3 +876,42 @@ Master/corpus hashes are unchanged. All 17 fidelity/export/constitution suites
 pass in 10.81 seconds. Rendering and newer native/device execution remain
 unverified; no main integration occurred. Next: c5p72, 214–216, source/context
 snapshots and focused original-parallel checks only; no proposals yet.
+
+
+### c5p72 · C05:214–216 — 2026-09-12 — Codex reconciliation/review
+
+Independent semantic SPEC/QUALITY APPROVE covers 136 analyst spans (56/49/31),
+zero nulls, 93 d5 pairs, 25 d7 members, 16 particles and two d3 phrases.
+All six proposals and three final bodies reproduce through the actual canonical
+generator. All accepted tuples and source offsets agree with the assembled page.
+The 165 copied semantic evidence files and three reconciliation reports preserve
+original witnesses, rejected alternatives and genuine failed attempts. These are
+PROVISIONAL machine attestations; human acceptance remains separate.
+
+214 aligns medial rnam shes with consciousness in the seed-relative clause,
+leaving the earlier supplied grasper occurrence unpaired. The causal las/byung
+ba'i construction is split at d6/d5. Faculty and consciousness compounds retain
+useful members; uncertain possession and the final source conclusion remain
+unwrapped. Selection Two apparatus remains verbatim. Four independently approved
+sogs closing gestures receive narrowly named head allowances, with full original
+HGM entry 20919 supporting the exact English ranges.
+
+215 retains the established negative predicate, nonvirtue and beginningless
+compounds and exact basis occurrences. Supplied bracketed English and dummy it
+are unpaired; the genuine conditional and yang/And remain. 216 treats ltar na/
+According to as a d3 phrase, keeps the final me occurrence with the natural-self
+expression, and uses the first two foundation-consciousness occurrences. The
+SGO/stained spelling concern is refuted after all five grounds; no erratum is
+filed. The alternative whole natural-self phrase remains review evidence.
+
+Coverage 216/511. Bank: 43,146 links (+139 including three sentence anchors),
+11,871 null exponents, 1,552 note blocks and 11 trees. Evidence: 6,928 headwords /
+14,932 pairs. All 43,007 prior links, notes/trees/evidence/ACIP and 21,532 prior
+main CSV lexical keys and citations survive exactly. No old ACIP field changes.
+Main CSV: 21,585; reverse: 21,245; changes: 53 versus a143082. All 22,971 course/
+depth groups match actual main CSV references, retaining all 22,896 earlier groups.
+All 188 prior errata remain unchanged; only four reviewed c5p72 head allowances
+are added. Master/corpus hashes are unchanged. All 17 fidelity/export/constitution
+suites pass in 10.62 seconds. Rendering and newer native/device execution remain
+unverified; no main integration occurred. Next: c5p73, 217–219, correction round1
+completed and awaiting scoped independent re-review before landing.
