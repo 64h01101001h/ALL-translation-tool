@@ -3,8 +3,8 @@
   "layer": "alignment-evidence",
   "tier": "TENTATIVE (machine-matched, unreviewed)",
   "generator": "build_alignment_layer.py; source analyses credited on pages and in campaign ledgers",
-  "date": "2026-09-11",
-  "source_pages": "banked pages, 5 course(s) (sha256 c4135f12da3fa810)",
+  "date": "2026-09-12",
+  "source_pages": "banked pages, 5 course(s) (sha256 7201230de44b8d6d)",
   "source_corpus": "hgm_spine_v27_2 corpus_segments C01+C02+C03+C04+C05",
   "rule": "English is HGM's corpus text verbatim, machine-MATCHED never composed; never enters hgm_gloss",
   "transliteration": "ACIP is the source of record and the join key (acip / acip_index); wylie is the derived display form, proven equal to acip_to_ewts(acip) on 8961/8961 segments of C01-C18 (Adam 2026-08-28)",
@@ -526,6 +526,15 @@
     "acip": "'BRAS"
    },
    {
+    "eng": "result",
+    "refs": [
+     "C04:117",
+     "C05:185"
+    ],
+    "n": 2,
+    "acip": "'BRAS"
+   },
+   {
     "eng": "consequences",
     "refs": [
      "C03:531"
@@ -537,14 +546,6 @@
     "eng": "fruits",
     "refs": [
      "C03:440"
-    ],
-    "n": 1,
-    "acip": "'BRAS"
-   },
-   {
-    "eng": "result",
-    "refs": [
-     "C04:117"
     ],
     "n": 1,
     "acip": "'BRAS"
@@ -578,9 +579,12 @@
      "C04:121",
      "C05:40",
      "C05:156",
-     "C05:175"
+     "C05:175",
+     "C05:184",
+     "C05:185",
+     "C05:186"
     ],
-    "n": 9,
+    "n": 12,
     "acip": "'BRAS BU"
    },
    {
@@ -851,6 +855,14 @@
     "eng": "interrelation",
     "refs": [
      "C05:37"
+    ],
+    "n": 1,
+    "acip": "'BREL"
+   },
+   {
+    "eng": "involved",
+    "refs": [
+     "C05:186"
     ],
     "n": 1,
     "acip": "'BREL"
@@ -3711,9 +3723,10 @@
      "C05:173",
      "C05:174",
      "C05:175",
-     "C05:179"
+     "C05:179",
+     "C05:184"
     ],
-    "n": 8,
+    "n": 9,
     "acip": "'DOD CHAGS"
    },
    {
@@ -6006,9 +6019,10 @@
    {
     "eng": "cessation",
     "refs": [
-     "C02:33"
+     "C02:33",
+     "C05:185"
     ],
-    "n": 1,
+    "n": 2,
     "acip": "'GOG"
    },
    {
@@ -6070,9 +6084,10 @@
     "refs": [
      "C02:29",
      "C05:91",
-     "C05:94"
+     "C05:94",
+     "C05:186"
     ],
-    "n": 3,
+    "n": 4,
     "acip": "'GOG PA"
    },
    {
@@ -10671,9 +10686,26 @@
   ],
   "'phral du": [
    {
+    "eng": "quick",
+    "refs": [
+     "C05:185",
+     "C05:186"
+    ],
+    "n": 2,
+    "acip": "'PHRAL DU"
+   },
+   {
     "eng": "in the short term",
     "refs": [
      "C03:590"
+    ],
+    "n": 1,
+    "acip": "'PHRAL DU"
+   },
+   {
+    "eng": "speedy",
+    "refs": [
+     "C05:186"
     ],
     "n": 1,
     "acip": "'PHRAL DU"
@@ -17353,6 +17385,16 @@
     "acip": "BRAL NA"
    }
   ],
+  "bral pa'i": [
+   {
+    "eng": "free",
+    "refs": [
+     "C05:184"
+    ],
+    "n": 1,
+    "acip": "BRAL PA'I"
+   }
+  ],
   "bral yang": [
    {
     "eng": "may never win",
@@ -20822,6 +20864,16 @@
     "acip": "BSGOMS PAS"
    }
   ],
+  "bsgos pa'i": [
+   {
+    "eng": "imbued",
+    "refs": [
+     "C05:186"
+    ],
+    "n": 1,
+    "acip": "BSGOS PA'I"
+   }
+  ],
   "bsgral": [
    {
     "eng": "free",
@@ -23277,9 +23329,10 @@
      "C04:99",
      "C04:172",
      "C05:150",
-     "C05:152"
+     "C05:152",
+     "C05:186"
     ],
-    "n": 14,
+    "n": 15,
     "acip": "BSOD NAMS"
    },
    {
@@ -26537,9 +26590,10 @@
    {
     "eng": "love",
     "refs": [
-     "C01:160"
+     "C01:160",
+     "C05:185"
     ],
-    "n": 1,
+    "n": 2,
     "acip": "BYAMS"
    }
   ],
@@ -26550,9 +26604,10 @@
      "C01:152",
      "C03:322",
      "C03:493",
-     "C04:111"
+     "C04:111",
+     "C05:186"
     ],
-    "n": 4,
+    "n": 5,
     "acip": "BYAMS PA"
    },
    {
@@ -27755,6 +27810,14 @@
     "eng": "devoted to",
     "refs": [
      "C01:106"
+    ],
+    "n": 1,
+    "acip": "BYAS PAS"
+   },
+   {
+    "eng": "perform",
+    "refs": [
+     "C05:186"
     ],
     "n": 1,
     "acip": "BYAS PAS"
@@ -30397,6 +30460,14 @@
    }
   ],
   "can": [
+   {
+    "eng": "gives",
+    "refs": [
+     "C05:184"
+    ],
+    "n": 1,
+    "acip": "CAN"
+   },
    {
     "eng": "has",
     "refs": [
@@ -37054,6 +37125,15 @@
     "acip": "DE"
    },
    {
+    "eng": "such",
+    "refs": [
+     "C03:395",
+     "C05:186"
+    ],
+    "n": 2,
+    "acip": "DE"
+   },
+   {
     "eng": "That",
     "refs": [
      "C04:186",
@@ -37133,14 +37213,6 @@
     "eng": "same",
     "refs": [
      "C04:90"
-    ],
-    "n": 1,
-    "acip": "DE"
-   },
-   {
-    "eng": "such",
-    "refs": [
-     "C03:395"
     ],
     "n": 1,
     "acip": "DE"
@@ -41663,6 +41735,16 @@
     ],
     "n": 1,
     "acip": "DGRA 'DIS"
+   }
+  ],
+  "dgra bcom": [
+   {
+    "eng": "destroying",
+    "refs": [
+     "C05:185"
+    ],
+    "n": 1,
+    "acip": "DGRA BCOM"
    }
   ],
   "dgra bcom pa": [
@@ -47806,6 +47888,14 @@
     "acip": "GANG"
    },
    {
+    "eng": "anything",
+    "refs": [
+     "C05:184"
+    ],
+    "n": 1,
+    "acip": "GANG"
+   },
+   {
     "eng": "every",
     "refs": [
      "C03:429"
@@ -48056,6 +48146,22 @@
      "C01:136"
     ],
     "n": 2,
+    "acip": "GANG DAG"
+   },
+   {
+    "eng": "Anyone",
+    "refs": [
+     "C05:185"
+    ],
+    "n": 1,
+    "acip": "GANG DAG"
+   },
+   {
+    "eng": "anyone",
+    "refs": [
+     "C05:186"
+    ],
+    "n": 1,
     "acip": "GANG DAG"
    },
    {
@@ -51364,6 +51470,15 @@
     "acip": "GNOD"
    },
    {
+    "eng": "harm",
+    "refs": [
+     "C05:185",
+     "C05:186"
+    ],
+    "n": 2,
+    "acip": "GNOD"
+   },
+   {
     "eng": "might hurt",
     "refs": [
      "C01:290"
@@ -53917,6 +54032,16 @@
     ],
     "n": 1,
     "acip": "GSAL BA"
+   }
+  ],
+  "gsal ba'i": [
+   {
+    "eng": "clear",
+    "refs": [
+     "C05:186"
+    ],
+    "n": 1,
+    "acip": "GSAL BA'I"
    }
   ],
   "gsal bar": [
@@ -56624,6 +56749,14 @@
    }
   ],
   "gtan du": [
+   {
+    "eng": "completely",
+    "refs": [
+     "C05:184"
+    ],
+    "n": 1,
+    "acip": "GTAN DU"
+   },
    {
     "eng": "forever",
     "refs": [
@@ -62378,6 +62511,16 @@
     "acip": "KHYAD PAR"
    },
    {
+    "eng": "features",
+    "refs": [
+     "C05:105",
+     "C05:179",
+     "C05:186"
+    ],
+    "n": 3,
+    "acip": "KHYAD PAR"
+   },
+   {
     "eng": "special features",
     "refs": [
      "C05:181",
@@ -62410,15 +62553,6 @@
     "refs": [
      "C03:342",
      "C03:608"
-    ],
-    "n": 2,
-    "acip": "KHYAD PAR"
-   },
-   {
-    "eng": "features",
-    "refs": [
-     "C05:105",
-     "C05:179"
     ],
     "n": 2,
     "acip": "KHYAD PAR"
@@ -65362,6 +65496,16 @@
     "acip": "LAN RE"
    }
   ],
+  "langs": [
+   {
+    "eng": "come out",
+    "refs": [
+     "C05:186"
+    ],
+    "n": 1,
+    "acip": "LANGS"
+   }
+  ],
   "langs ma thub par": [
    {
     "eng": "unable to rise",
@@ -65370,6 +65514,16 @@
     ],
     "n": 1,
     "acip": "LANGS MA THUB PAR"
+   }
+  ],
+  "langs pa": [
+   {
+    "eng": "coming out",
+    "refs": [
+     "C05:185"
+    ],
+    "n": 1,
+    "acip": "LANGS PA"
    }
   ],
   "lar nas": [
@@ -65439,9 +65593,10 @@
      "C05:174",
      "C05:175",
      "C05:182",
-     "C05:183"
+     "C05:183",
+     "C05:184"
     ],
-    "n": 9,
+    "n": 10,
     "acip": "LAS"
    },
    {
@@ -67651,6 +67806,14 @@
     "eng": "extraordinary form of personal responsibility",
     "refs": [
      "C01:306"
+    ],
+    "n": 1,
+    "acip": "LHAG PA'I BSAM PA"
+   },
+   {
+    "eng": "willingness to accept the ultimate personal responsibility",
+    "refs": [
+     "C05:186"
     ],
     "n": 1,
     "acip": "LHAG PA'I BSAM PA"
@@ -72042,9 +72205,10 @@
    {
     "eng": "just",
     "refs": [
-     "C04:164"
+     "C04:164",
+     "C05:186"
     ],
-    "n": 1,
+    "n": 2,
     "acip": "MA THAG PA"
    },
    {
@@ -80631,6 +80795,16 @@
     "acip": "MTHONG"
    },
    {
+    "eng": "seeing",
+    "refs": [
+     "C05:47",
+     "C05:137",
+     "C05:185"
+    ],
+    "n": 3,
+    "acip": "MTHONG"
+   },
+   {
     "eng": "sees",
     "refs": [
      "C01:33",
@@ -80638,15 +80812,6 @@
      "C04:185"
     ],
     "n": 3,
-    "acip": "MTHONG"
-   },
-   {
-    "eng": "seeing",
-    "refs": [
-     "C05:47",
-     "C05:137"
-    ],
-    "n": 2,
     "acip": "MTHONG"
    },
    {
@@ -80905,6 +81070,14 @@
     "eng": "see in the same life",
     "refs": [
      "C05:178"
+    ],
+    "n": 1,
+    "acip": "MTHONG CHOS"
+   },
+   {
+    "eng": "see in the very same life",
+    "refs": [
+     "C05:184"
     ],
     "n": 1,
     "acip": "MTHONG CHOS"
@@ -82018,9 +82191,10 @@
     "eng": "nirvana",
     "refs": [
      "C04:192",
-     "C05:65"
+     "C05:65",
+     "C05:186"
     ],
-    "n": 2,
+    "n": 3,
     "acip": "MYA NGAN LAS 'DAS PA"
    }
   ],
@@ -82085,9 +82259,11 @@
      "C05:165",
      "C05:167",
      "C05:173",
-     "C05:174"
+     "C05:174",
+     "C05:185",
+     "C05:186"
     ],
-    "n": 10,
+    "n": 12,
     "acip": "MYONG"
    },
    {
@@ -84489,6 +84665,17 @@
   ],
   "nges pa": [
    {
+    "eng": "certain",
+    "refs": [
+     "C03:305",
+     "C03:418",
+     "C05:179",
+     "C05:184"
+    ],
+    "n": 4,
+    "acip": "NGES PA"
+   },
+   {
     "eng": "definite",
     "refs": [
      "C05:167",
@@ -84497,16 +84684,6 @@
      "C05:178"
     ],
     "n": 4,
-    "acip": "NGES PA"
-   },
-   {
-    "eng": "certain",
-    "refs": [
-     "C03:305",
-     "C03:418",
-     "C05:179"
-    ],
-    "n": 3,
     "acip": "NGES PA"
    },
    {
@@ -87575,6 +87752,26 @@
     "acip": "NYON MONGS"
    }
   ],
+  "nyon mongs med": [
+   {
+    "eng": "No affliction",
+    "refs": [
+     "C05:185"
+    ],
+    "n": 1,
+    "acip": "NYON MONGS MED"
+   }
+  ],
+  "nyon mongs med pa'i": [
+   {
+    "eng": "no affliction",
+    "refs": [
+     "C05:186"
+    ],
+    "n": 1,
+    "acip": "NYON MONGS MED PA'I"
+   }
+  ],
   "nyon mongs pa": [
    {
     "eng": "mental afflictions",
@@ -87594,6 +87791,14 @@
     "eng": "Affliction",
     "refs": [
      "C05:39"
+    ],
+    "n": 1,
+    "acip": "NYON MONGS PA"
+   },
+   {
+    "eng": "affliction",
+    "refs": [
+     "C05:186"
     ],
     "n": 1,
     "acip": "NYON MONGS PA"
@@ -88213,6 +88418,15 @@
     "acip": "PHAN"
    },
    {
+    "eng": "Help",
+    "refs": [
+     "C05:185",
+     "C05:186"
+    ],
+    "n": 2,
+    "acip": "PHAN"
+   },
+   {
     "eng": "helps",
     "refs": [
      "C04:36",
@@ -88408,6 +88622,14 @@
     "eng": "help",
     "refs": [
      "C04:27"
+    ],
+    "n": 1,
+    "acip": "PHAN PA"
+   },
+   {
+    "eng": "helping",
+    "refs": [
+     "C05:186"
     ],
     "n": 1,
     "acip": "PHAN PA"
@@ -101305,9 +101527,10 @@
      "C05:169",
      "C05:172",
      "C05:179",
-     "C05:180"
+     "C05:180",
+     "C05:184"
     ],
-    "n": 7,
+    "n": 8,
     "acip": "RNAM SMIN"
    },
    {
@@ -101447,6 +101670,14 @@
     "eng": "sharp",
     "refs": [
      "C04:156"
+    ],
+    "n": 1,
+    "acip": "RNO"
+   },
+   {
+    "eng": "very sharp",
+    "refs": [
+     "C05:186"
     ],
     "n": 1,
     "acip": "RNO"
@@ -107821,9 +108052,10 @@
      "C02:68",
      "C03:321",
      "C03:496",
-     "C04:89"
+     "C04:89",
+     "C05:186"
     ],
-    "n": 6,
+    "n": 7,
     "acip": "SEMS CAN"
    },
    {
@@ -123307,9 +123539,10 @@
      "C04:68",
      "C04:82",
      "C05:89",
-     "C05:95"
+     "C05:95",
+     "C05:186"
     ],
-    "n": 14,
+    "n": 15,
     "acip": "THAMS CAD"
    },
    {
@@ -126659,6 +126892,15 @@
     "acip": "TING NGE 'DZIN"
    },
    {
+    "eng": "one-pointed concentration",
+    "refs": [
+     "C05:62",
+     "C05:186"
+    ],
+    "n": 2,
+    "acip": "TING NGE 'DZIN"
+   },
+   {
     "eng": "a deep, single-pointed state of meditation",
     "refs": [
      "C01:331"
@@ -126678,14 +126920,6 @@
     "eng": "Meditative Concentration",
     "refs": [
      "C03:270"
-    ],
-    "n": 1,
-    "acip": "TING NGE 'DZIN"
-   },
-   {
-    "eng": "one-pointed concentration",
-    "refs": [
-     "C05:62"
     ],
     "n": 1,
     "acip": "TING NGE 'DZIN"
@@ -127656,6 +127890,14 @@
    }
   ],
   "tshad med": [
+   {
+    "eng": "immeasurable",
+    "refs": [
+     "C05:186"
+    ],
+    "n": 1,
+    "acip": "TSAD MED"
+   },
    {
     "eng": "no correct perception",
     "refs": [
@@ -131829,6 +132071,14 @@
     "acip": "YIN"
    },
    {
+    "eng": "constitute",
+    "refs": [
+     "C05:184"
+    ],
+    "n": 1,
+    "acip": "YIN"
+   },
+   {
     "eng": "has been",
     "refs": [
      "C03:583"
@@ -131840,6 +132090,14 @@
     "eng": "Is",
     "refs": [
      "C04:121"
+    ],
+    "n": 1,
+    "acip": "YIN"
+   },
+   {
+    "eng": "was",
+    "refs": [
+     "C05:184"
     ],
     "n": 1,
     "acip": "YIN"
@@ -133198,9 +133456,10 @@
     "refs": [
      "C01:67",
      "C03:211",
-     "C03:493"
+     "C03:493",
+     "C05:186"
     ],
-    "n": 3,
+    "n": 4,
     "acip": "YONGS SU"
    },
    {
@@ -135638,9 +135897,10 @@
      "C05:179",
      "C05:180",
      "C05:181",
-     "C05:182"
+     "C05:182",
+     "C05:186"
     ],
-    "n": 4,
+    "n": 5,
     "acip": "ZHING"
    },
    {
@@ -137423,6 +137683,7 @@
   "BRAL BAR": "bral bar",
   "BRAL BAR GYUR CIG": "bral bar gyur cig",
   "BRAL NA": "bral na",
+  "BRAL PA'I": "bral pa'i",
   "BRAL YANG": "bral yang",
   "BRAM ZE": "bram ze",
   "BRAN": "bran",
@@ -137595,6 +137856,7 @@
   "BSGOMS BYAS KYANG": "bsgoms byas kyang",
   "BSGOMS PA": "bsgoms pa",
   "BSGOMS PAS": "bsgoms pas",
+  "BSGOS PA'I": "bsgos pa'i",
   "BSGRAL": "bsgral",
   "BSGRAL BAR": "bsgral bar",
   "BSGRIBS": "bsgribs",
@@ -138550,6 +138812,7 @@
   "DGOS SOGS CHOS BZHI": "dgos sogs chos bzhi",
   "DGRA": "dgra",
   "DGRA 'DIS": "dgra 'dis",
+  "DGRA BCOM": "dgra bcom",
   "DGRA BCOM PA": "dgra bcom pa",
   "DGRA BCOM PA'I": "dgra bcom pa'i",
   "DGRA BCOM PAS": "dgra bcom pas",
@@ -139192,6 +139455,7 @@
   "GSAL 'DEBS": "gsal 'debs",
   "GSAL 'DEBS DGOS": "gsal 'debs dgos",
   "GSAL BA": "gsal ba",
+  "GSAL BA'I": "gsal ba'i",
   "GSAL BAR": "gsal bar",
   "GSAL BAR BYAS NAS": "gsal bar byas nas",
   "GSAL BAR MDZAD": "gsal bar mdzad",
@@ -139783,7 +140047,9 @@
   "LAN PA": "lan pa",
   "LAN PA YIN": "lan pa yin",
   "LAN RE": "lan re",
+  "LANGS": "langs",
   "LANGS MA THUB PAR": "langs ma thub par",
+  "LANGS PA": "langs pa",
   "LAR NAS": "lar nas",
   "LAS": "las",
   "LAS 'BRAS": "las 'bras",
@@ -140933,6 +141199,8 @@
   "NYON": "nyon",
   "NYON MONG": "nyon mong",
   "NYON MONGS": "nyon mongs",
+  "NYON MONGS MED": "nyon mongs med",
+  "NYON MONGS MED PA'I": "nyon mongs med pa'i",
   "NYON MONGS PA": "nyon mongs pa",
   "NYON MONGS PAS": "nyon mongs pas",
   "NYON SGRIB": "nyon sgrib",

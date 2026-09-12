@@ -1,0 +1,119 @@
+{
+  "final": [
+    {
+      "seq": 184,
+      "role": "reconciled",
+      "exit": 0,
+      "body_bytes": 4149,
+      "exact_body_match": true,
+      "stderr_bytes": 0,
+      "spec_bytes": 4096,
+      "spec_sha256": "5aee926bd4ab5d17b12b1eb3a7ccb55fb09849e72af21cb9e7a9a7b9268ed74a",
+      "body_sha256": "7d4d5e70f4aaadbfcf2e8e8ab49044353f269aff0259fbc42e8b4faffefdf0bf",
+      "spans": 20,
+      "nulls": 2,
+      "word_pairs": 12
+    },
+    {
+      "seq": 185,
+      "role": "reconciled",
+      "exit": 0,
+      "body_bytes": 3589,
+      "exact_body_match": true,
+      "stderr_bytes": 0,
+      "spec_bytes": 3568,
+      "spec_sha256": "f28807acbee4ebd34f847cf7243630d747d71db8788bc6134f980f539d1f1349",
+      "body_sha256": "f4a34a054e6ae1aa0bf9a8b895d0c2b9fad79881173d164cf12c5d06657286f7",
+      "spans": 17,
+      "nulls": 1,
+      "word_pairs": 13
+    },
+    {
+      "seq": 186,
+      "role": "reconciled",
+      "exit": 0,
+      "body_bytes": 9818,
+      "exact_body_match": true,
+      "stderr_bytes": 0,
+      "spec_bytes": 10044,
+      "spec_sha256": "5eba1c98bf694da0cec84acecf72a5a2a9619edf294be6ccce4fe9f5d3cfedbc",
+      "body_sha256": "c4d5fa3e94b83ac5cbbaee0d1c87a978489ebbf68103cf6a7cefeaf83a1f2737",
+      "spans": 58,
+      "nulls": 4,
+      "word_pairs": 37
+    }
+  ],
+  "proposals": [
+    {
+      "seq": 184,
+      "role": "tibetan-first",
+      "exit": 0,
+      "body_bytes": 3402,
+      "exact_body_match": true,
+      "stderr_bytes": 0,
+      "spec_bytes": 3228,
+      "spec_sha256": "991084f3b2b1aa5b773ed24926fe3ed75ba8cf8a035402f46b81c0c0d42431c0",
+      "body_sha256": "4f7e1940d1c1938ad9ba2c7265a3f455f0f61520896a84357d02f5254191d94d"
+    },
+    {
+      "seq": 184,
+      "role": "english-first",
+      "exit": 0,
+      "body_bytes": 3837,
+      "exact_body_match": true,
+      "stderr_bytes": 0,
+      "spec_bytes": 3722,
+      "spec_sha256": "c9f7d95f76cfb9635e02855843e124cdae32f8cd2cf05d27b556509cd4243870",
+      "body_sha256": "de6016dbe1661e27ad919333e983b12a818c16d677eb01c113dff0920b11a0d2"
+    },
+    {
+      "seq": 185,
+      "role": "tibetan-first",
+      "exit": 0,
+      "body_bytes": 3567,
+      "exact_body_match": true,
+      "stderr_bytes": 0,
+      "spec_bytes": 3546,
+      "spec_sha256": "f829832d198729cc4c6acfe140d7a2a7bcd9656caf2bac499a583fe27cfc54d3",
+      "body_sha256": "5df9bdfd528a70b7f7bbd20bd40a8f7ee724118481ec9d81bf9440faa99f3b9e"
+    },
+    {
+      "seq": 185,
+      "role": "english-first",
+      "exit": 0,
+      "body_bytes": 4035,
+      "exact_body_match": true,
+      "stderr_bytes": 0,
+      "spec_bytes": 4016,
+      "spec_sha256": "b343c0bfe45343bec5be51cf0ffc2fc9cee9138c8da47176f49a3defdd84b8ed",
+      "body_sha256": "91e8d161f40358a5decb745e5711307d969c4597bba176aa4b8b2cf310ee6c41"
+    },
+    {
+      "seq": 186,
+      "role": "tibetan-first",
+      "exit": 0,
+      "body_bytes": 8483,
+      "exact_body_match": true,
+      "stderr_bytes": 0,
+      "spec_bytes": 8551,
+      "spec_sha256": "130cc99e038bee61070c9f227b331ce9e3e65ecb9b2f12669b30f0fe40e41f3f",
+      "body_sha256": "caa6800a97f8ee1271e1a6f2e65dac2f8841ac26169e51a88796f293889d7a93"
+    },
+    {
+      "seq": 186,
+      "role": "english-first",
+      "exit": 0,
+      "body_bytes": 10388,
+      "exact_body_match": true,
+      "stderr_bytes": 0,
+      "spec_bytes": 10614,
+      "spec_sha256": "172cd2cfe09d260023a12ebef52b90ae5b7d9df906369f9365cccb8e9bfbd04e",
+      "body_sha256": "b3cf3653bd906d7b9e070606ca482a3f7a78b7dbac1d785ad9c963a707ed024f"
+    }
+  ],
+  "command": [
+    "/opt/homebrew/opt/python@3.14/bin/python3.14",
+    "-c",
+    "import sqlite3,pathlib,runpy; original=sqlite3.connect; sqlite3.connect=lambda database,*a,**k: original(pathlib.Path(database).resolve().as_uri()+'?mode=ro',*a,**dict(k,uri=True)); runpy.run_path('tools/gen_alignment_page.py',run_name='__main__')"
+  ]
+}

@@ -25,6 +25,7 @@ Artefacts:
 | evidence sidecar (depth-5 word pairs, ACIP-keyed, cited) | `data/alignment/alignment_evidence_v1.json` | `tools/build_alignment_layer.py` |
 | full bank (every span at every depth, notes, trees) | `data/alignment/alignment_full_v1.json` | same |
 | dictionary view | `docs/geshe_michael_roach_dictionary.html` | `tools/build_dictionary_view.py` |
+| dictionary CSV exports (main, reverse, course/depth, changes) | `docs/geshe_michael_roach_dictionary*.csv` | `tools/build_dictionary_exports.py`, called by the view builder |
 | errata register | `docs/errata_register.json` → `docs/ERRATA_REGISTER.md` | `tools/merge_errata.py`, `tools/build_errata_register.py` |
 | campaign ledgers | `data/alignment/C0N_CAMPAIGN.md` | by hand, one entry per batch |
 
@@ -138,6 +139,7 @@ verbatim, never corrected, and not re-filed.
 | `no_phonetics_in_layer` | d=7 sound-spelling pairs never enter the evidence layer | — |
 | `layer_matches_spine`, `evidence_matches_spine` | every banked field occurs at every cited segment (NOT-IN-CORPUS hard zero) | correspondence |
 | `view_matches_layer` | the dictionary view shows only what the layer banked | — |
+| `dictionary_exports` | course CSV rows preserve their own course/depth counts and metadata, exclude phonetics, and retain the CSV schema/encoding | source correspondence; full-bank export reproduction |
 | `builder_sees_every_span` | the builder parses every span the pages carry (closes the 2.7% silent drop) | — |
 | `errata_quotes_hold`, `errata_name_their_witnesses` | every erratum's `found` still holds against the spine; entries with a witness name it; register prose matches sidecar | that a filed erratum is a real defect (that is the skeptic pass) |
 | `generated_docs_in_sync` | committed generated docs match a fresh build | — |

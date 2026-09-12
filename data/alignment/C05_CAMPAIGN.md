@@ -47,7 +47,7 @@ the/a/an/and/or/his/our/your/I/you unless `data/alignment/span_head_allow.json`
 lists it under `pages_c05` with the Tibetan word that licenses it.
 
 ## Progress
-c5p1–c5p7 (1–21) cloned 2026-09-05; c5p8–c5p49 (22–147) landed 2026-09-05; c5p50–c5p55 (148–165) landed 2026-09-08. c5p56 (166–168) landed 2026-09-12 after fresh independent proposals, reconciliation and skeptical review. c5p57 (169–171) landed after independent review. c5p58 (172–174) landed after independent review. c5p59 (175–177) landed after independent review. c5p60 (178–180) landed after independent review. c5p61 (181–183) landed after independent review. Coverage 183/511; current verification is recorded in the latest batch entry below.
+c5p1–c5p7 (1–21) cloned 2026-09-05; c5p8–c5p49 (22–147) landed 2026-09-05; c5p50–c5p55 (148–165) landed 2026-09-08. c5p56 (166–168) landed 2026-09-12 after fresh independent proposals, reconciliation and skeptical review. c5p57 (169–171) landed after independent review. c5p58 (172–174) landed after independent review. c5p59 (175–177) landed after independent review. c5p60 (178–180) landed after independent review. c5p61 (181–183) landed after independent review. c5p62 (184–186) landed after independent review. Coverage 186/511; current verification is recorded in the latest batch entry below.
 
 **Historical pause, superseded by Adam’s 2026-09-11 continuation request. PAUSED 2026-09-08 (Adam's call): the campaign stops here while the app goes to
 a public release (two-week target). Reconciled-but-unlanded specs for 166, 167,
@@ -397,3 +397,50 @@ four CSVs were regenerated. All 16 targeted CTest fidelity/constitution suites
 passed in 10.22 seconds; master/corpus hashes and navigation targets check.
 Rendering and native consumption of the newer bank remain unverified; the earlier
 native/installed-phone checkpoint remains 171. Next: 184–186, source snapshot only.
+
+
+### c5p62 · C05:184–186 — 2026-09-12 — Codex reconciliation/review
+
+Two fresh independent proposal angles, reconciliation and skeptical semantic
+review approved 95 analyst spans (88 linked, 7 grammatical/fusion nulls), with
+62 linked d5 word pairs and five tighter compound members. All twelve source-side
+proposal inputs for this and the following batch were separately preserved;
+this page's six proposals and three final specs reproduce exact generator bodies.
+Accepted spec: `specs_c05/c5p62.json`; source/range/glossary evidence and the
+preserved initial review: `reviews_c05/c5p62/`.
+
+The upheld 185 q1 correction narrows de la/to any of the following at d3 to
+la/to at d6. de remains unpaired as distributed list-reference, not nulled.
+The broader glossary counterevidence was weighed explicitly; no universal claim
+about de/following is made. Root applied only the selected span and its note;
+scoped independent re-review approved final spec SHA-256
+f46b79414e7fc076b23a9bc4dac093eddaf6f58f008c770abc69561f5c941fec and
+body SHA-256 ffeaa66088c1f0c98c0f770873efe4f059329e994816d21f1fef1139acd92603.
+
+184 retains both copulas, additive also, the result-bearing can/gives, and the
+established present-life compound with a tighter seeing member. 185 keeps the
+abbreviated technical list and distinct result occurrences. 186 recovers
+langs/come out plus las/of at both emergence clauses; first and third just are
+selected. Its complete personal-responsibility term is directly glossary-attested.
+The privative free-of phrase stays d3, and very sharp excludes separately rendered
+clear. Prospective/cause constructions are conservatively omitted with distributed
+notes, never falsely nulled. No new erratum or allowlist addition. Source heading
+glue and verse capitalization are preserved; C16 parallels do not establish
+independent publication or prove an ingestion history solely through text identity.
+
+Coverage 186/511; full bank 42,438 links (+98, including three sentence anchors),
+11,864 null exponents, 1,522 note blocks, 11 trees. Evidence: 6,807 headwords /
+14,673 pairs. All 42,340 prior links, notes/trees, evidence citations and ACIP
+mappings survive; all 21,156 prior main CSV lexical rows and citations survive
+without a new ACIP enrichment. Both banks, dictionary HTML and all four CSVs
+were rebuilt. The main CSV has 21,198 rows; changes are 42 new rows versus70804c9.
+The course CSV's 22,506 rows each match actual course/depth refs and metadata;
+all 22,451 previous groups and their occurrence counts survive.
+
+All 17 targeted fidelity, export and constitution suites passed in 10.46 seconds.
+The extra suite is the repaired course-export regression; 118 remains a registered
+suite count, not a full-suite execution claim. Original master/corpus hashes and
+navigation targets check. The alignment spec now names the CSV artifacts and
+this regression. Rendered/native/device limits remain at the earlier checkpoint;
+no new device action or main integration occurred. Next: 187–189, already through
+independent semantic review but not yet banked at this entry.
