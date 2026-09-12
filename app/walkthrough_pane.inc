@@ -269,6 +269,39 @@ public:
             check(t.contains("do not shuffle them"),
                   "the reader is told to leave the clause order alone");
         }
+        {   // Preston's eight elements. Checked against HIS OWN example
+            // sentence, xvii: "Buddha taught the doctrine in India" — agent in
+            // the 3rd, qualifier of place in the la don, object in the 1st,
+            // transitive verb ending the clause.
+            src_->setPlainText("sangs rgyas kyis rgya gar la chos bstan");
+            walk();
+            const QString t = out_->toPlainText();
+            check(t.contains("third case") && t.contains("AGENT"),
+                  "cases: kyis is named as the third case marking the agent");
+            check(t.contains("first case") &&
+                      t.contains("object of the transitive verb"),
+                  "cases: the bare object is named as the FIRST case, not as "
+                  "a missing particle");
+            // The la-family gate. Preston reads this one as 2nd from the
+            // relationship; the particle alone cannot, and the pane must not
+            // pretend it can.
+            check(t.contains("2/4/7") && t.contains("cannot tell you which"),
+                  "cases: a la don particle reports 2nd/4th/7th and says the "
+                  "particle cannot choose between them");
+            check(t.contains("transitive verb, ending the clause"),
+                  "cases: the verb is split out of the predicate chunk, as "
+                  "Preston separates it from its object");
+            check(t.contains("an agent, not a subject"),
+                  "cases: a transitive verb is said to take an agent, in "
+                  "Preston's exclusive sense of the word");
+            // and the caution, on a transitive clause with the agent removed
+            src_->setPlainText("chos bstan");
+            walk();
+            check(out_->toPlainText().contains("agent is UNSTATED"),
+                  "cases: a transitive verb with no third-case chunk warns "
+                  "that the agent is unstated — absence of an agent is not "
+                  "evidence of an intransitive construction");
+        }
         {   // Rule 3: a word the glossary does not have is flagged, never
             // guessed; and step 6 never calls itself a translation.
             src_->setPlainText("sangs rgyas kyis chos bstan");
@@ -504,30 +537,119 @@ private:
                 e += " <span style='color:#B4540A'>UNVERIFIED</span> — the last "
                      "dictionary word in the final chunk. Nothing in the "
                      "glossary says it is a verb; it is a candidate, not a finding.";
-            if (verb.cls)
+            if (verb.cls) {
                 e += "<br>Wilson class: <b>" +
                      QString::fromUtf8(verb.cls->label).toHtmlEscaped() +
                      "</b> — " + QString::fromUtf8(verb.cls->expects).toHtmlEscaped();
+                // Preston uses "subject" only of intransitive constructions
+                // and "agent" only of transitive ones, against ordinary
+                // English usage, because it makes the transitivity visible in
+                // the label itself. Wilson's class names already carry the
+                // split (agentive- against nominative-), so this reads it off
+                // the class rather than deciding anything.
+                const bool tr = allcore::isTransitive(verb.cls->cls);
+                e += QString("<br>This is a <b>%1</b> verb, so the clause has "
+                             "an <b>%2</b>, not a %3. (Preston keeps the two "
+                             "words apart on purpose: %2 belongs to %1 "
+                             "constructions only.)")
+                         .arg(tr ? "transitive" : "intransitive")
+                         .arg(allcore::actorWord(verb.cls->cls))
+                         .arg(tr ? "subject" : "agent");
+            }
             h += body(e);
         }
 
         // ---- step 3 ----
         h += step(3, "The chunks, and what each one is doing");
+        // Preston's eight basic syntactic elements (How to Read Classical
+        // Tibetan I, p. xv and the grammar review p. 59, in the Hopkins /
+        // Napper / Wilson line). The pane used to print the particle and a
+        // role phrase; his students are drilled to say which of eight
+        // FUNCTIONS the chunk fills and which CASE it is declined into, and
+        // that is a strictly more useful thing to be told.
         h += "<table cellspacing='0' cellpadding='4' style='margin:2px 0'>";
+        bool sawThird = false;
         for (size_t i = 0; i < chunks.size(); ++i) {
+            const auto cr = allcore::caseOf(chunks[i].marker);
+            for (int c : cr.cases) if (c == 3) sawThird = true;
+            QString caseCell;
+            if (!cr.known()) {
+                caseCell = "<span style='color:#888'>—</span>";
+            } else if (cr.ambiguous()) {
+                QString nums;
+                for (size_t z = 0; z < cr.cases.size(); ++z)
+                    nums += (z ? "/" : "") + QString::number(cr.cases[z]);
+                // The la-family declines into the 2nd, 4th or 7th and nothing
+                // in the particle chooses between them. Printing one would be
+                // a guess (rule 3); printing all three with the reason is
+                // what the grammar actually supports.
+                caseCell = "<b>" + nums + "</b> <span style='color:#B4540A'>"
+                           "(the <i>" + QString(cr.family) + "</i> particles "
+                           "decline into any of these three — the particle "
+                           "cannot tell you which, the relationship does)"
+                           "</span>";
+            } else {
+                caseCell = "<b>" + QString::number(cr.cases.front()) +
+                           "</b> <span style='color:#666'>" +
+                           QString(cr.gloss).toHtmlEscaped() + "</span>";
+            }
+            // Preston separates the object of a transitive verb from the
+            // verb itself; our chunker does not, because it closes a chunk at
+            // each case particle and the last chunk therefore swallows both.
+            // On his own example sentence that produced one row reading
+            // "CHOS BSTAN — predicate slot", where his analysis has two: the
+            // object chos in the first case, and the transitive verb bstan.
+            //
+            // spotVerb already knows where the verb starts, so the row can be
+            // split for display without touching chunkClause. Nothing in the
+            // engine changes — the split is a rendering, and the deferred
+            // engine correction is recorded in
+            // docs/READING_ORDER_MEASUREMENT.md rather than attempted here.
+            const bool isPredicate =
+                chunks[i].marker.empty() && (int)i == (int)chunks.size() - 1;
+            const bool splittable =
+                isPredicate && verb.chunk == (int)i && verb.tok > chunks[i].beg &&
+                verb.tok < chunks[i].end;
+            const QString row1Text =
+                splittable ? walk::slice(doc, chunks[i].beg, verb.tok)
+                           : walk::slice(doc, chunks[i].beg, chunks[i].end);
+            const QString row1Role =
+                splittable
+                    ? QString(verb.cls && allcore::isTransitive(verb.cls->cls)
+                                  ? "object of the transitive verb"
+                                  : "complement / subject material")
+                    : QString(chunks[i].role).toHtmlEscaped();
             h += "<tr><td style='color:#888'>[" + QString::number(i + 1) +
-                 "]</td><td style='font-family:monospace'>" +
-                 walk::slice(doc, chunks[i].beg, chunks[i].end) + "</td><td>" +
+                 "]</td><td style='font-family:monospace'>" + row1Text +
+                 "</td><td>" +
                  (chunks[i].marker.empty()
                       ? QString("<span style='color:#888'>no particle</span>")
                       : "<b>" + walk::esc(chunks[i].marker) + "</b>" +
                             (chunks[i].marker_fused ? " <span style='color:#888'>"
                                                       "(fused)</span>"
                                                     : QString())) +
-                 "</td><td>" + QString(chunks[i].role).toHtmlEscaped() +
-                 "</td></tr>";
+                 "</td><td>" + caseCell + "</td><td>" + row1Role + "</td></tr>";
+            if (splittable)
+                h += "<tr><td style='color:#888'>[" + QString::number(i + 1) +
+                     "b]</td><td style='font-family:monospace'>" +
+                     walk::slice(doc, verb.tok, chunks[i].end) +
+                     "</td><td><span style='color:#888'>—</span></td>"
+                     "<td><span style='color:#888'>—</span></td><td>" +
+                     QString(verb.cls && allcore::isTransitive(verb.cls->cls)
+                                 ? "the transitive verb, ending the clause"
+                                 : "the intransitive verb, ending the clause") +
+                     "</td></tr>";
         }
         h += "</table>";
+        // Preston's warning, and the one a machine most needs to hear: an
+        // absent agent is not evidence of an intransitive construction.
+        if (verb.cls) {
+            const char* caution =
+                allcore::unstatedAgentCaution(verb.cls->cls, sawThird);
+            if (caution[0])
+                h += "<div style='color:#B4540A;padding:4px 0 0 12px'>" +
+                     QString(caution).toHtmlEscaped() + ".</div>";
+        }
 
         // ---- step 4 ----
         h += step(4, "What order to read them in");

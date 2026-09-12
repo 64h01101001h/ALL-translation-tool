@@ -230,6 +230,7 @@ public:
 #include "allcore/particles.h"
 #include "allcore/progress.h"
 #include "allcore/qc.h"
+#include "allcore/cases.h"
 #include "allcore/reader.h"
 #include "allcore/refdict.h"
 #include "allcore/sanskrit.h"
@@ -28666,10 +28667,14 @@ public:
             mixed += t.matched.size() > 1;
             provisionalUsed += (!t.matched.empty() && t.provisional);
         }
-        QString h = QString("<div><b>%1 term(s)</b> · %2 without an GMR "
-                            "equivalent in the draft · %3 with mixed "
-                            "renderings · %4 drafted from PROVISIONAL "
-                            "glosses</div><hr>")
+        // Absence is the only thing this check establishes. "%2 with no
+        // equivalent" is therefore sound; "mixed renderings" and "drafted
+        // from" were not — both claim a correspondence between a term and
+        // a stretch of English that nothing here measures.
+        QString h = QString("<div><b>%1 term(s)</b> · %2 with no GMR "
+                            "equivalent anywhere in the draft · %3 with "
+                            "more than one equivalent present · %4 whose "
+                            "only match is a PROVISIONAL gloss</div><hr>")
                         .arg(rep.terms.size())
                         .arg(unmatched)
                         .arg(mixed)
@@ -28699,10 +28704,26 @@ public:
                 for (size_t i = 0; i < t.matched.size(); ++i)
                     m += (i ? " · " : "") +
                          QString::fromStdString(t.matched[i]).toHtmlEscaped();
-                h += "<br><small>draft uses: " + m +
+                // "draft uses: X" asserts that the draft renders THIS term
+                // with X. The check cannot know that. It knows only that X
+                // occurs somewhere in the draft as a whole word — the
+                // banner three inches above says exactly that ("it cannot
+                // tell which term you used one for") and this line was
+                // quietly contradicting it on every row.
+                //
+                // A gloss can appear in an unrelated sentence, or as the
+                // rendering of a different term entirely, and the row would
+                // still have read "draft uses". Same for the mixed warning:
+                // finding two of a term's equivalents somewhere in the draft
+                // is not evidence that this term was rendered two ways.
+                // (Draft workspace audit 2026-09-11, closed 2026-09-12.)
+                h += "<br><small>found in your draft: " + m +
                      (t.matched.size() > 1
-                          ? " <span style='color:#B4540A'>(mixed — is the "
-                            "variation intended?)</span>"
+                          ? " <span style='color:#B4540A'>(two of its "
+                            "equivalents appear — worth checking whether "
+                            "the variation is deliberate, though the check "
+                            "cannot tell whether either one renders THIS "
+                            "term)</span>"
                           : "") + "</small>";
             }
             h += "</div>";
@@ -33889,9 +33910,23 @@ public:
                       rr.contains("person"),
                   "the spread lists GMR's attested renderings with "
                   "their counts (item 2)");
-            check(rr.contains("draft uses", Qt::CaseInsensitive),
-                  "the report says which attested rendering the "
-                  "draft chose (item 2)");
+            check(rr.contains("appears in your draft", Qt::CaseInsensitive) ||
+                      rr.contains("uses NONE"),
+                  "the report names which attested rendering is present, or "
+                  "says none is (item 2)");
+            // This gate used to read: "the report says which attested
+            // rendering the draft CHOSE". That is a claim about
+            // correspondence between a term and a stretch of English, and
+            // nothing in the terminology check measures it — the check knows
+            // only that a string occurs somewhere in the draft as a whole
+            // word. So the gate was asserting the defect as a requirement,
+            // and would have failed the fix. It is the second time an audit
+            // has turned up a gate written to hold a bug in place.
+            check(!rr.contains("draft uses \u201c") &&
+                      !rr.contains("draft uses:"),
+                  "and nowhere claims the draft USES a gloss for a term \u2014 "
+                  "the banner says it cannot tell, and no row may say "
+                  "otherwise");
             check(!rr.contains("auto-resolve") ||
                       rr.contains("never auto-resolve"),
                   "spreads are flags, never verdicts (item 2)");
@@ -34133,11 +34168,14 @@ private:
                                    "attested renderings \u2014 the "
                                    "reviewer decides whether that is "
                                    "a finding")
-                         : "the draft uses \u201c" +
-                               used.toHtmlEscaped() +
-                               "\u201d \u2014 attested; whether it "
-                               "is the right register HERE is the "
-                               "reviewer's call") +
+                         : "\u201c" + used.toHtmlEscaped() +
+                               "\u201d appears in your draft \u2014 "
+                               "attested as one of his renderings for "
+                               "this term. Whether it is the right "
+                               "register HERE, and whether it is even "
+                               "the word rendering THIS term, is the "
+                               "reviewer's call: the check only knows "
+                               "it occurs somewhere") +
                     " \u00b7 spreads are never auto-resolved"
                     "</small></div>";
             }
