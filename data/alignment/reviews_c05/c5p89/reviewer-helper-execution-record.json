@@ -1,0 +1,49 @@
+{
+  "renamed_helpers": [
+    {
+      "executed_path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-265-267/semantic-review/independent-check.py",
+      "preserved_path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-265-267/semantic-review/independent-check.py.txt",
+      "bytes": 8049,
+      "sha256": "22e92fdaa514ac34b33a2147b6ccea62963977145ea1916cd2323bab70577827",
+      "operation": "exact-byte rename solely to supported evidence suffix; code unchanged"
+    },
+    {
+      "executed_path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-265-267/semantic-review/preserve-and-audit.py",
+      "preserved_path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-265-267/semantic-review/preserve-and-audit.py.txt",
+      "bytes": 6625,
+      "sha256": "926665ccbcfde4dac308be90799467f22c21677554560190d0b132a03757cfc8",
+      "operation": "exact-byte rename solely to supported evidence suffix; code unchanged"
+    }
+  ],
+  "independent_check": {
+    "exit": 0,
+    "stdout": "independent-check.stdout",
+    "stderr": "independent-check.stderr",
+    "actual_generator_calls": 9,
+    "environment": {
+      "PYTHONDONTWRITEBYTECODE": "1"
+    },
+    "sqlite": "URI mode=ro; PRAGMA query_only=ON"
+  },
+  "preservation": {
+    "exit": 0,
+    "stdout": "preserve-and-audit.stdout",
+    "stderr": "preserve-and-audit.stderr"
+  },
+  "completion_attempts": [
+    {
+      "exit": 1,
+      "path": "reviewer-attempt-history/completion01"
+    },
+    {
+      "exit": 0,
+      "helper": "completion-audit.py.txt",
+      "stdout": "completion-audit.stdout.txt",
+      "stderr": "completion-audit.stderr.txt"
+    }
+  ],
+  "review_writer": {
+    "exit": 0,
+    "helper": "write-review.py.txt"
+  }
+}

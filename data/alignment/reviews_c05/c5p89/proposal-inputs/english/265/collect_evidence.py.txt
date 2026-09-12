@@ -1,0 +1,23 @@
+import pathlib,json,sqlite3,hashlib,subprocess
+r=pathlib.Path.cwd();b=r.parent/'campaign-artifacts/C05-265-267';o=b/'english/265';o.mkdir(parents=True,exist_ok=True);db=r/'build/hgm_spine_v27_2.db';c=sqlite3.connect(db.as_uri()+'?mode=ro',uri=True);c.row_factory=sqlite3.Row;c.execute('pragma query_only=on');rows=[dict(x) for x in c.execute('select * from corpus_segments where course=? and seq between ? and ? order by seq',('C05',242,280))]
+for name in ['source.json','context.json']:
+ for s in json.loads((b/name).read_text()):assert all(next(x for x in rows if x['seq']==s['seq'])[k]==s[k] for k in ['id','course','seq','acip','wylie','english'])
+phys=pathlib.Path('/Users/adamderickandrade/Desktop/HGM DICTIONARY - TRANSLATION APP/To DO/Formal Courses/ACI Readings In Roman ASCII/C05ReadingASCII.txt');raw=phys.read_bytes();(o/'C05ReadingASCII.original.txt').write_bytes(raw)
+try:txt=raw.decode('utf-8-sig')
+except UnicodeDecodeError as ex:
+ (o/'physical-decode-failed-attempt.json').write_text(json.dumps({'operation':"raw.decode('utf-8-sig')",'exception':str(ex),'first_collection_exit':1,'raw_bytes_preserved':True,'resolution':'Lossless Latin-1 byte presentation; not an assertion of original character encoding.'},indent=2)+'\n');txt=raw.decode('latin-1')
+ls=txt.splitlines();match=[]
+for i,line in enumerate(ls):
+ if "YANG DE'I CHA SHAS GCIG GIS NYER LEN" in line or "DE'I TSE NA BRLAN ZHING GSHER" in line or "DE LTAR 'BYUNG BA" in line:
+  match.append({'line':i+1,'context_start':max(1,i-2),'lines':ls[max(0,i-3):i+22]});print('\n'.join(ls[max(0,i-1):i+18]))
+e={'producer':'Codex reused English-first reader /root/c05_262_264_english; independent of current primary Tibetan original; not a fresh context','governing_head':subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),'immutable_generated_baseline':'2c1e0768629aff301b9f80a510d7ccbcf53d6ba7','db':str(db),'db_sha256':hashlib.sha256(db.read_bytes()).hexdigest(),'sqlite_uri':db.as_uri()+'?mode=ro','query_only':1,'source_query':{'sql':'select * from corpus_segments where course=? and seq between ? and ? order by seq','params':['C05',242,280],'count':len(rows)},'rows':rows,'snapshot_verification':{'all_equal':True,'fields':['id','course','seq','acip','wylie','english'],'source_count':3,'context_count':15},'physical_original':{'path':str(phys),'sha256':hashlib.sha256(raw).hexdigest(),'preserved':'C05ReadingASCII.original.txt','bytes':len(raw),'presentation_encoding':'latin-1 lossless byte display; actual original encoding not established','matches':match},'lexical_queries':[],'corpus_queries':[]}
+terms=['yang','cha shas','gcig','nyer len',"lha'i",'lha','las','lhan cig byed rkyen','byas pa','brten nas',"rigs 'dra",'phyi ma','bdud rtsir','bdud rtsi','skye ba','sogs','brlan','gsher ba','chu','phor pa','gang po','gsum','ldan','yod','kyang','gsum gas','gsum ga','mthong ba','yi dvags','ngan pa','bsags',"bsags pa'i",'dbang gis','rnag khrag','rnag','khrag','mthong','dngos po','gzhan','gnyis','de bzhin du',"'gro ba","'og ma",'shes par bya ba',"'byung ba",'blta bya','thun mong ba',"dbang du byas pa",'lag','blangs','longs spyod par','longs spyod','brtsams pa','khyad chos','thun mong ma yin pa',"thun mong ma yin pa'i",'longs spyod bya']
+for t in terms:
+ q='select * from entries where wylie=? or id in (select entry_id from entry_variants where wylie=?)';rr=[dict(x) for x in c.execute(q,(t,t))];e['lexical_queries'].append({'sql':q,'params':[t,t],'count':len(rr),'rows':rr});print(t,[(x['wylie'],x['hgm_gloss']) for x in rr])
+for seq in [265,266,267]:
+ s=next(x for x in rows if x['seq']==seq)
+ for f in ['acip','wylie','english']:
+  q=f'select * from corpus_segments where {f}=? order by course,seq';rr=[dict(x) for x in c.execute(q,(s[f],))];e['corpus_queries'].append({'sql':q,'params':[s[f]],'count':len(rr),'rows':rr});print(seq,f,[(x['course'],x['seq']) for x in rr])
+for pat in ['%longs spyod bya%','%khyad chos gsum%','%gsum gas gsum ga%','%blta bya thun mong%']:
+ q='select * from corpus_segments where wylie like ? order by course,seq';rr=[dict(x) for x in c.execute(q,(pat,))];e['corpus_queries'].append({'sql':q,'params':[pat],'count':len(rr),'rows':rr});print(pat,len(rr))
+(o/'original-evidence.json').write_text(json.dumps(e,ensure_ascii=False,indent=2)+'\n')

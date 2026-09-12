@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-265-267/semantic-review/completion-audit.py.txt", line 42, in <module>
+    actual=dict(db.execute('select * from corpus_segments where id=?',(p['complete_row']['id'],)).fetchone()); assert actual==p['complete_row'];assert {k:actual[k]==rows[n][k] for k in ['acip','wylie','english']}==p['field_equalities'];fullpar.append(dict(seq=n,**p))
+                                                                                                                                                                                                                                                           ~~~~^^^^^^^^^^^
+TypeError: dict() got multiple values for keyword argument 'seq'

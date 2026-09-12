@@ -1,0 +1,11 @@
+{
+  "stage": "physical evidence first inline capture",
+  "exit_code": 1,
+  "stderr": "Traceback (most recent call last):\n  File \"<stdin>\", line 16, in <module>\nAssertionError: (265, 'english')\n",
+  "assertion": "start=raw.find(val); assert start>=0,(r[\"seq\"],field)",
+  "cause": "Original physical English is line-wrapped with CRLF; the spine English collapses whitespace.",
+  "writes_before_failure": "Only author directories created; no evidence or proposals existed.",
+  "recovery": "capture-evidence.py uses ASCII-whitespace-separated byte tokens to locate a unique original extent, saves exact extent and full original file, and proves only whitespace-collapse equality. Source bytes never edited.",
+  "exact_inline_script_file_retained": false,
+  "tool_invocation_history_retained": true
+}

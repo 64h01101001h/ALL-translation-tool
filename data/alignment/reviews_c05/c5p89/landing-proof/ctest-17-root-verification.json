@@ -1,0 +1,117 @@
+{
+  "utc": "2026-09-12T21:54:13.081418+00:00",
+  "status": "PASS actual17 tests; no rerun",
+  "ctest_exit": 0,
+  "tests": [
+    {
+      "index": 1,
+      "name": "constitution",
+      "seconds": 0.29,
+      "status": "Passed"
+    },
+    {
+      "index": 2,
+      "name": "gen_alignment_page",
+      "seconds": 1.06,
+      "status": "Passed"
+    },
+    {
+      "index": 3,
+      "name": "alignment_gate_coverage",
+      "seconds": 0.09,
+      "status": "Passed"
+    },
+    {
+      "index": 4,
+      "name": "alignment_builder",
+      "seconds": 0.03,
+      "status": "Passed"
+    },
+    {
+      "index": 5,
+      "name": "dictionary_exports",
+      "seconds": 0.13,
+      "status": "Passed"
+    },
+    {
+      "index": 6,
+      "name": "no_broken_words",
+      "seconds": 0.11,
+      "status": "Passed"
+    },
+    {
+      "index": 7,
+      "name": "no_split_syllables",
+      "seconds": 0.08,
+      "status": "Passed"
+    },
+    {
+      "index": 8,
+      "name": "no_phonetics_in_layer",
+      "seconds": 0.23,
+      "status": "Passed"
+    },
+    {
+      "index": 9,
+      "name": "no_degenerate_members",
+      "seconds": 0.07,
+      "status": "Passed"
+    },
+    {
+      "index": 10,
+      "name": "no_supplied_span_head",
+      "seconds": 0.08,
+      "status": "Passed"
+    },
+    {
+      "index": 11,
+      "name": "layer_matches_spine",
+      "seconds": 3.13,
+      "status": "Passed"
+    },
+    {
+      "index": 12,
+      "name": "evidence_matches_spine",
+      "seconds": 0.16,
+      "status": "Passed"
+    },
+    {
+      "index": 13,
+      "name": "errata_quotes_hold",
+      "seconds": 0.14,
+      "status": "Passed"
+    },
+    {
+      "index": 14,
+      "name": "view_matches_layer",
+      "seconds": 0.26,
+      "status": "Passed"
+    },
+    {
+      "index": 15,
+      "name": "generated_docs_in_sync",
+      "seconds": 0.04,
+      "status": "Passed"
+    },
+    {
+      "index": 16,
+      "name": "builder_sees_every_span",
+      "seconds": 0.16,
+      "status": "Passed"
+    },
+    {
+      "index": 17,
+      "name": "errata_name_their_witnesses",
+      "seconds": 4.68,
+      "status": "Passed"
+    }
+  ],
+  "elapsed_seconds": 10.77,
+  "stdout_sha256": "d225be1fdff1d3e985e2591986c74f8cd261d7c2392224e8fa9be86777c1a418",
+  "initial_wrapper_exit": 1,
+  "initial_wrapper_failure": "After recording actual ctest EXIT0 and17PASS, wrapper asserted an absent conventional footer: 100% tests passed, 0 tests failed out of17 (with normal spaces in actual script). Actual CTest footer is 100% tests passed out of17, with spaces. This repeats a known adapter assumption from prior checkpoint; it is a root verification error, not a test failure.",
+  "exact_failed_wrapper": "ctest-17-wrapper-attempt01.py.txt",
+  "exact_exception": "Traceback (most recent call last):\n  File \"<stdin>\", line 5, in <module>\nAssertionError\n",
+  "correction": "Verified all17 individual numbered Passed records in order, actual exact footer, saved exit0 and empty stderr. Tests and builders were not rerun.",
+  "other_probe_failure": "Read attempted nonexistent C05-262-264/landing/root-proof-copy-manifest.json. Locate actual repository copy by rg before reuse; no file change."
+}

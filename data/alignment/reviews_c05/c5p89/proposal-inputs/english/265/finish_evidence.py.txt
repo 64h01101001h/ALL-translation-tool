@@ -1,0 +1,23 @@
+import pathlib,json,gzip,hashlib,sqlite3
+r=pathlib.Path.cwd();b=r.parent/'campaign-artifacts/C05-265-267';o=b/'english/265';p=o/'original-evidence.json';e=json.loads(p.read_text());sha=lambda f:hashlib.sha256(f.read_bytes()).hexdigest();norm=' '.join((o/'C05ReadingASCII.original.txt').read_bytes().decode('latin-1').split());checks=[]
+for seq in [265,266,267]:
+ row=next(x for x in e['rows'] if x['seq']==seq)
+ for f in ['acip','english']:
+  value=' '.join(row[f].split());assert value in norm;(checks.append({'seq':seq,'field':f,'whole_field_whitespace_normalized_found':True,'normalized_offset':norm.index(value),'value':row[f]}))
+e['physical_original']['whole_field_checks']=checks
+dictp=r/'data/hgm_dictionary_v27_2.json.gz';cp=r/'data/full_parallel_corpus_v32.json.gz';d=json.loads(gzip.decompress(dictp.read_bytes()));u=d['unified_entries'];byw={}
+for x in u:byw.setdefault(x['wylie'],[]).append(x)
+selected=[]
+for q in e['lexical_queries']:
+ for x in q['rows']:
+  raw=json.loads(x['raw']);assert raw in byw[x['wylie']];selected.append({'entry_id':x['id'],'wylie':x['wylie'],'physical_master_object_equals_spine_raw':True,'raw':raw})
+corp=json.loads(gzip.decompress(cp.read_bytes()));physical_rows=[]
+for x in e['rows']:
+ if 259<=x['seq']<=273:
+  raw=json.loads(x['raw']);assert raw in corp;physical_rows.append({'spine_id':x['id'],'seq':x['seq'],'physical_corpus_object_equals_spine_raw':True,'raw':raw})
+e['physical_release']={'master_path':str(dictp),'master_sha256':sha(dictp),'master_meta':d['meta'],'master_entries_count':len(u),'material_entries':selected,'corpus_path':str(cp),'corpus_sha256':sha(cp),'corpus_count':len(corp),'material_rows':physical_rows}
+regp=r/'docs/errata_register.json';reg=json.loads(regp.read_text());e['registered_classes']={'path':str(regp),'sha256':sha(regp),'register':reg}
+paths=[r/'AGENTS.md',r/'docs/ALIGNMENT_LAYER_SPEC.md',r/'docs/alignment_briefs/PROPOSE_BRIEF.md',r/'data/alignment/C05_CAMPAIGN.md',b/'english-brief.md',b/'source.json',b/'context.json',b/'baseline.json',b/'proposal-role-capacity-ruling.md',b.parent/'proposal-protocol.md']
+e['instruction_source_hashes']={str(x):sha(x) for x in paths}
+e['judgments']={'original_source_role':'C05:242 attribution gives Kedrup Tenpa Dargye\'s Overview of the Middle Way; C05:247 sets the Chandrakirti quotation question, C05:253 divides the explanation and C05:262 begins the author\'s position. C05:265 completes third causal example; 266 contrasts three parts with limited perception; 267 distinguishes shared looking from exclusive use. These are commentary prose.','parallel_scope':'ACIP/Wylie/English equal-field query results are saved separately. C15/C16/C18 share all three selected fields at the listed rows. P7:21 and P7:22 share English for 266/267 but their Tibetan differs. This does not establish independent publication or actual ingestion lineage.','errata':'No new erratum proposed: each full source field has physical ASCII support after declared whitespace comparison, and source corpus matches spine raw objects. No English 1500-character cap, following heading, or converter escape appears in selected rows. No source text altered. Registered classes are not refiled.','lexical_limits':'Only hgm_gloss and original paired readings support GMR wording; other dictionary fields retained as original provenance, not promoted. las→karma and gzhan→other come from clear original source context despite narrow/noisy headword glosses. blta bya is omitted rather than allowed to steal shared or a separated object/looking phrase.'}
+p.write_text(json.dumps(e,ensure_ascii=False,indent=2)+'\n');print('Physical original comparisons',len(checks),'master objects',len(selected),'corpus rows',len(physical_rows),'evidence bytes',p.stat().st_size)

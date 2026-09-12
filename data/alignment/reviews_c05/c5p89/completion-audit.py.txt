@@ -1,0 +1,52 @@
+from pathlib import Path
+import json,sqlite3,subprocess,re,hashlib
+R=Path(__file__).resolve().parent; B=R.parent; W=B.parent.parent/'campaign-worktree'; H='7d3d2324c1b0414e695a2adbe7df4740ce82dd09'
+def get(p):return json.loads(p.read_text())
+def save(n,x):(R/n).write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+occ=get(R/'evidence/all-occurrences.json'); original_checks=[]; gapchecks=[]; fullpar=[]
+rows={x['seq']:x for x in get(R/'evidence/source-full-rows.json')}
+for n in [265,266,267]:
+ for a in ['tibetan','english']:
+  actual=[x for x in occ if x['angle']==a and x['seq']==n]
+  declared=get(B/f'{a}/{n}/'+Path('intended-spans.json')) if False else get(B/a/str(n)/('intended-spans.json' if a=='tibetan' else 'occurrences.json'))
+  if a=='english': assert declared['source']==rows[n];declared=declared['spans']
+  assert len(actual)==len(declared)
+  for x,d in zip(actual,declared):
+   assert x['id']==d['id']
+   if a=='tibetan':
+    assert all(x[k]==d[k] for k in ['d','tib','eng','tib_range','eng_range'])
+    assert d['english_occurrence_zero_based']==(x['all_eng_occurrences'].index(x['eng_range']) if x['eng'] is not None else None)
+   else:
+    assert x['tib_range']==d['tib'] and x['eng_range']==d['eng']
+    assert [z[0] for z in x['all_eng_occurrences']]==d['all_english_occurrences']
+    assert x['all_eng_occurrences'].index(x['eng_range'])+1==d['intended_english_occurrence']
+   original_checks.append(dict(angle=a,seq=n,id=x['id'],exact=True))
+ rr=[x for x in occ if x['angle']=='reconciled' and x['seq']==n];gaps={}
+ for field,rangefield in [('wylie','tib_range'),('english','eng_range')]:
+  cover=[False]*len(rows[n][field])
+  for x in rr:
+   if x[rangefield] is not None:
+    i,j=x[rangefield];cover[i:j]=[True]*(j-i)
+  ranges=[];i=0
+  while i<len(cover):
+   if cover[i]:i+=1;continue
+   j=i+1
+   while j<len(cover) and not cover[j]:j+=1
+   ranges.append(dict(range=[i,j],text=rows[n][field][i:j]));i=j
+  gaps[field]=ranges
+ assert gaps==get(B/f'reconciled/{n}/unwrapped-extents.json');gapchecks.append(dict(seq=n,exact_complete_gaps=gaps))
+cp=get(B/'reconciled/265/collection-proof.json');db=sqlite3.connect(Path(cp['database']['path']).as_uri()+'?mode=ro',uri=True);db.execute('PRAGMA query_only=ON');db.row_factory=sqlite3.Row
+for n in [265,266,267]:
+ comparisons=get(B/f'reconciled/{n}/parallel-comparisons-full.json')
+ for p in comparisons:
+  actual=dict(db.execute('select * from corpus_segments where id=?',(p['complete_row']['id'],)).fetchone()); assert actual==p['complete_row'];assert {k:actual[k]==rows[n][k] for k in ['acip','wylie','english']}==p['field_equalities'];fullpar.append(dict(current_seq=n,**p))
+ qs=[]
+ for where,pars in [('acip=? AND wylie=? AND english=?',[rows[n][k] for k in ['acip','wylie','english']]),('english=?',[rows[n]['english']])]:
+  sql='select * from corpus_segments where course != ? AND '+where+' order by id'; vals=['C05']+pars; hits=[dict(x) for x in db.execute(sql,vals)];qs.append(dict(sql=sql,params=vals,rows=hits,count=len(hits)))
+ assert [q['count'] for q in qs]==([3,3] if n==265 else [3,4]);save(f'evidence/independent-parallel-counts-{n}.json',qs)
+reg=json.loads(subprocess.check_output(['git','show',H+':docs/errata_register.json'],cwd=W)); stored=get(B/'reconciled/265/registered-class-check.json')
+records=reg if isinstance(reg,list) else reg['items']
+current=[x for x in records if any('C05:'+str(n) in json.dumps(x,ensure_ascii=False) for n in [265,266,267])];assert current==stored['current_segment_hits']==[]
+assert all(x in records for x in stored['class_query_hits'])
+save('completion-audit.json',dict(status='PASS',original_occurrence_records=original_checks,complete_gap_checks=gapchecks,complete_parallel_records=fullpar,registered_current_segment_hits=current,registered_class_records_exact=True,database_query_only=db.execute('PRAGMA query_only').fetchone()[0]))
+print('PASS:171 original occurrence records; all6 gap complements;11 complete parallel records; current register references0; full independent count queries3/3,3/4,3/4.')

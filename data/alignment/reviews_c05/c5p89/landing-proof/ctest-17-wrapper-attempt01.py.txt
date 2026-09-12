@@ -1,0 +1,5 @@
+from pathlib import Path
+import subprocess,json,datetime,hashlib
+b=Path('campaign-artifacts/C05-265-267/landing');prior=Path('campaign-artifacts/C05-262-264/landing/ctest-17.command.json');o=json.loads(prior.read_text());o['started_at']=datetime.datetime.now(datetime.timezone.utc).isoformat();assert not (b/'ctest-17.command.json').exists();(b/'ctest-17.command.json').write_text(json.dumps(o,indent=2)+'\n');r=subprocess.run(o['argv'],cwd=o['cwd'],capture_output=True)
+for ext,raw in [('stdout',r.stdout),('stderr',r.stderr),('exit',(str(r.returncode)+'\n').encode())]:(b/('ctest-17.'+ext)).write_bytes(raw)
+print(r.stdout.decode());print('EXIT',r.returncode,'STDERR',r.stderr.decode());assert r.returncode==0 and not r.stderr;assert b'100% tests passed, 0 tests failed out of 17' in r.stdout

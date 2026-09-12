@@ -1,0 +1,104 @@
+import pathlib,json,hashlib,subprocess,datetime,re,os
+R=pathlib.Path(__file__).resolve().parent;B=R.parents[1];W=B.parent.parent/'campaign-worktree'
+def put(p,x):p.parent.mkdir(parents=True,exist_ok=True);p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+def meta(p):b=p.read_bytes();return {'path':str(p),'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()}
+source={r['seq']:r for r in json.loads((R/'source-full-rows.json').read_text())};q=json.loads((R/'query-reruns-full.json').read_text());counts=json.loads((R/'batch-counts.json').read_text())
+register=json.loads(subprocess.check_output(['git','show','7d3d2324c1b0414e695a2adbe7df4740ce82dd09:docs/errata_register.json'],cwd=W))
+classes=[x for x in register if any(s in json.dumps(x) for s in ['{SHl}','footnote number fused','folio marker','section heading'])]
+put(R/'registered-class-check.json',{'historical_commit':'7d3d2324c1b0414e695a2adbe7df4740ce82dd09','repository_relative_path':'docs/errata_register.json','method':'All records checked for current C05:265–267 references and the four registered artifact classes. Substring class hits are preserved as full records, not all asserted to be the class-defining record. Complete register preserved in source manifest.','current_segment_hits':[x for x in register if any('C05:'+str(s) in json.dumps(x) for s in source)],'class_query_hits':classes,'classes':['SHl converter drop','footnote numbers fused to preceding period','folio markers in caption numbers','following section heading glued to English']})
+for seq in [265,266,267]:
+ D=R.parent/str(seq);row=source[seq]
+ parallels=[]
+ for query in q:
+  for x in query['rows']:
+   if x.get('english')==row['english'] and x.get('course')!='C05' and x not in parallels:parallels.append(x)
+ comparisons=[{'course':x['course'],'seq':x['seq'],'complete_row':x,'field_equalities':{k:x[k]==row[k] for k in ['acip','wylie','english']}} for x in parallels]
+ put(D/'parallel-comparisons-full.json',comparisons)
+ exact=sum(all(x['field_equalities'].values()) for x in comparisons)
+ assert exact==3 and len(comparisons)==(3 if seq==265 else 4)
+ scan={'seq':seq,'original_errata_lists':{a:json.loads((B/a/str(seq)/'errata.json').read_text()) for a in ['tibetan','english']},'retained_errata':[],'complete_source':row,'registered_classes':'../265/registered-class-check.json','parallel_comparisons':'parallel-comparisons-full.json','physical_extents':'../265/physical-extents.json','five_ground_general_check':{
+ 'a_verbatim':'Full current source rows independently fetched; ACIP is the source of record. Every discussed reading appears in its specified field, with full physical source extents retained. No absent quote is treated as a defect.',
+ 'b_parallel':'Three complete other-course rows match all three text fields; physical C05/C15/C16/C18 extents match the compared ACIP and English under declared ASCII-whitespace collapse. Identity supports the reading, not independent publication/ingestion lineage. P7, where present, matches full English but differs in Tibetan punctuation/spelling and remains digital evidence only.',
+ 'c_registered':'Complete pinned register checked for current segment references and the four known classes; current segment hits are zero. No listed class is refiled. Substring class hits and complete register are preserved.',
+ 'd_defensible':'Current Tibetan and GMR English form coherent karma-conditioned perception commentary. Lexical/grammatical recasts and omissions are not defects. All positive and discordant glossary alternatives are preserved without rewriting locked hgm_gloss.',
+ 'e_counts':{'exact_other_course_three_field_rows':exact,'exact_other_course_english_rows':len(comparisons),'physical_full_extents_for_current_source':8,'original_span_identities':next(c['original_dispositions'] for c in counts if c['seq']==seq),'all_query_reruns_complete':'../265/query-reruns-full.json'}},'suspicions':[]}
+ if seq in [266,267]:
+  scan['suspicions'].append({'found':'YI DVAGS','field':'acip','proposed_alternative':'YI DWAGS','refuted':True,'reason':'P7 spelling variation does not establish corruption of defensible C05 spelling. No spelling change proposed.','five_grounds':{'a':{'source_literal_count':row['acip'].count('YI DVAGS'),'wylie_literal_count':row['wylie'].count('yi dvags'),'english_craving_spirit_count':row['english'].count('craving spirit'),'source_exact':row['acip']},'b':{'complete_witnesses':'parallel-comparisons-full.json','lineage_limit':'C15/C16/C18 exact three-field matches and physical readings corroborate this reading; P7 English identity plus Tibetan variation supplies no independent-lineage proof.'},'c':'No current segment register hit; this spelling variation is not one of the four registered ingestion classes.','d':'HGM25069 yi dvags has HTG2016 glossary craving spirit; HGM17418 yi dwags has auto-aligned craving spirit. Both complete records are preserved. Proposed normalization is not compelled by source semantics.','e':{'full_exact_three_field_other_rows':3,'full_equal_english_other_rows':4,'complete_queries_reexecuted':186,'master_records_reopened':65}}})
+ if seq==267:
+  scan['suspicions'].append({'found':'gang po','field':'wylie','proposed_alternative':'Insert full into GMR English','refuted':True,'reason':'No separately stated fullness word does not establish an English source error; preserve the published wording and positive null for this absent lexical exponent.','five_grounds':{'a':{'gang_po_count':row['wylie'].count('gang po'),'english_full_word_count':len(re.findall(r'\bfull\b',row['english'])),'source':row},'b':'All three other complete three-field witnesses and the four physical files have the same English omission; P7 also shares the entire English. Publication independence remains unestablished.','c':'No current segment entry and no registered artifact class here.','d':'HGM22118 supports full/full of/filled. Its lexical content has no discrete exponent in glass of something wet and flowing, but English may leave fullness implicit. That is a null alignment judgment, not authority to edit GMR.','e':{'other_complete_english_matches':4,'other_three_field_matches':3,'physical_extents_for_source':8}}})
+ put(D/'errata-analysis.json',scan)
+ proof=json.loads((D/'generator-proof.json').read_text());c=next(c for c in counts if c['seq']==seq)
+ lines=[f'C05:{seq} — PROVISIONAL reconciliation by reused Codex non-author c05_253_255_reconcile.',
+ 'Original producers: primary/root Codex Tibetan with prior preparation; reused peer c05_262_264_english. Original role ruling and all bytes remain preserved.',
+ f"Final: {c['span_count']} spans; {c['null_count']} nulls; {c['word_pair_count']} non-null d5 word pairs; 0 errata.",
+ f"All {c['original_dispositions']} original eight-key identities have individual dispositions: {c['original_retained']} retained, {c['original_recast']} recast. Original IDs, optional fields and field presence survive unchanged in original-dispositions.json."]
+ if seq==265:lines += [
+ 'Brten nas/based on is d3 for the whole dependency converb; positive HTG7086 does not force compound status.',
+ 'Sogs/and so on remains a d5 lexical list closure. Proposed allowance: pages_c05 c5p89/s265w15, with sogs as the initial-and licensor; allowance file untouched.',
+ 'Retain the two positive agentive nulls over English omission: gis/kyis are active-subject relations without separate agentive words. Dang owns the actual first coordinating and.',
+ 'Byas pa selects the SECOND provides [102,110]; the first parallel predicate is unwrapped. Yang/Yet and first gcig/another keep separate additive roles.',
+ "Both de'i references and final causal framing remain omitted as expanded/distributed wording; lha'i and bdud rtsir stay intact. HGM21671 lha'i is auto-aligned, while HGM21537 lha is HTG2016 glossary."]
+ elif seq==266:lines += [
+ "Tighten gsum to three and bsags pa'i to bsags/collected; acknowledge wider positive glossary variants and preserve their exact original proposals.",
+ 'Dbang gis/forced by and de bzhin du/similar are complete d3 grammatical relations. The mistyped root preparation bde bzhin du zero is not negative evidence for source de bzhin du.',
+ 'Retain matrix yin/is and dang/and omitted by English; yod/is is the first copula, yin/is the second. Retain full shes par bya ba/should understand without One.',
+ 'Both all-three roles, all three see occurrences, two gnyis occurrences, final beings and negative-affix ma/n't are range-resolved individually.',
+ 'Rnag/pus and khrag/blood remain two valid contiguous d7 siblings; reciprocal alternatives are HTG2016 glossary evidence, not corpus-mined assertions.']
+ else:lines += [
+ 'Tighten blta bya/look to blta/look with positive HGM7103 and HGM7111; nominal bya is distributed. Retain positive gang po and kyis nulls over English omissions.',
+ 'Dbang du byas pa/with reference to is d3. Retain gyi/though, tu/in, nas/and, par/to and whole causal yin pas/Since; no supplied glass, his or auxiliary is captured.',
+ 'Ma owns no; longer is temporal content distributed across changing conditions. Second longs spyod owns experiencing; HGM19727 attests the full original, while bya supplies distributed nominal force.',
+ "Expand rigs 'dra to attested rigs 'dra phyi ma/continuation (HTG25288), superseding both original phyi ma omissions without inventing later or a degenerate member.",
+ "First/second de'i tshe na map When/at this point; skye ba maps exists/starts being; gsum selects the SECOND three; both terminal d7 siblings retained."]
+ lines += [
+ 'Every final ordered seven-key tuple and its rationale: resolved-spans.json and final-decisions.json. Full material omissions and exhaustive unwrapped ranges: omissions.json and unwrapped-extents.json.',
+ 'Original bodies: six independent actual canonical replays PASS. Shared evidence: ../265/original-to-copy-manifest.json, query-reruns-full.json, master-entries-full.json, corpus-objects-full.json, physical-extents.json.',
+ 'Reopened186 SQL queries,65 full master entries and75 corpus raw objects;24 full physical extents across C05/C15/C16/C18. Full originals and failed/superseded attempts retained.',
+ 'No retained errata. All five grounds for considered spelling/fullness suspicions and general defect scan are recorded in errata-analysis.json; no independent-publication inference from identity.',
+ 'Governing source snapshot7d3d2324c1b0414e695a2adbe7df4740ce82dd09; generated data baseline2c1e0768629aff301b9f80a510d7ccbcf53d6ba7. No source/master/repository mutation.',
+ f"Actual unchanged canonical generator: EXIT={proof['exit']}; stdout/body byte count={proof['body']['bytes']}; stderr bytes={proof['stderr']['bytes']}. Exact argv/code hashes: generator-proof.json and attempts/01/invocation.json.",
+ f"spec.json SHA256={proof['spec']['sha256']} bytes={proof['spec']['bytes']}",
+ f"body.html SHA256={proof['body']['sha256']} bytes={proof['body']['bytes']}",
+ 'Remaining limits: provisional semantic judgments, especially nominal recasts and phrase depth; canonical success proves structural fidelity, not translation correctness. No gate relaxed.'
+ ]
+ (D/'report.md').write_text('\n'.join(lines)+'\n')
+# Provenance of independent helper failures: preserve exact helper snapshot and all existing outputs.
+put(R/'attempt-history.json',[
+ {'attempt':'collection01','argv':['python3','-B',str(R/'collect.py')],'cwd':str(B.parent.parent),'environment':{'PYTHONDONTWRITEBYTECODE':'1'},'helper_at_execution':meta(R/'collection-attempt01.py.txt'),'stdout':meta(R/'collection-attempt01.stdout.txt'),'stderr':meta(R/'collection-attempt01.stderr.txt'),'exit':1,'failure':'Wrong master top-level key entries; corrected to actual unified_entries and row index. No source/evidence bytes altered.'},
+ {'attempt':'collection02','argv':['python3','-B',str(R/'collect.py')],'cwd':str(B.parent.parent),'environment':{'PYTHONDONTWRITEBYTECODE':'1'},'helper_at_execution':meta(R/'collect.py'),'stdout':meta(R/'collection-attempt02.stdout.txt'),'stderr':meta(R/'collection-attempt02.stderr.txt'),'exit':0},
+ {'attempt':'author01','argv':['python3','-B',str(R/'author.py')],'cwd':str(B.parent.parent),'environment':{'PYTHONDONTWRITEBYTECODE':'1'},'helper_at_execution':meta(R/'author-failure01-history/265/author.py'),'stdout':meta(R/'author-attempt01.stdout.txt'),'stderr':meta(R/'author-attempt01.stderr.txt'),'exit':1,'failure':'Original-to-final matcher confused d5 parent and first d7 sharing its start; no canonical refusal. Corrected matching to preserve d7 membership class; complete then-current annotations/specs/body/proofs preserved in author-failure01-history.'},
+ {'attempt':'author02','argv':['python3','-B',str(R/'author.py')],'cwd':str(B.parent.parent),'environment':{'PYTHONDONTWRITEBYTECODE':'1'},'helper_at_execution':meta(R/'author.py'),'stdout':meta(R/'author-attempt02.stdout.txt'),'stderr':meta(R/'author-attempt02.stderr.txt'),'exit':0}])
+# All helper bytes receive supported-extension copies for downstream evidence packaging.
+helpers=[]
+for p in list(R.parent.rglob('*.py')):
+ target=p.with_suffix('.py.txt');target.write_bytes(p.read_bytes());helpers.append({'original':str(p),'copy':str(target.relative_to(R.parent)),**{k:v for k,v in meta(target).items() if k!='path'}})
+put(R/'helper-copy-manifest.json',helpers)
+manifest=json.loads((R/'original-to-copy-manifest.json').read_text());checked=[]
+allowed=['.json','.md','.html','.stderr','.stdout','.log','.txt','.bin','.exit']
+for m in manifest:
+ p=R/m['copy'];b=p.read_bytes();assert p.suffix.lower() in allowed;assert len(b)==m['bytes'] and hashlib.sha256(b).hexdigest()==m['sha256']
+ if 'original_git_commit' in m: original=subprocess.check_output(['git','show',m['original_git_commit']+':'+m['repository_relative_path']],cwd=W)
+ else:original=pathlib.Path(m['original']).read_bytes()
+ assert b==original,m['original'];checked.append({'original':m['original'],'copy':m['copy'],'exact_bytes':True,'supported_extension':True})
+assert sum(c['original_dispositions'] for c in counts)==171
+allids=[]
+for seq in [265,266,267]:
+ D=R.parent/str(seq);spec=json.loads((D/'spec.json').read_text());tuples=json.loads((D/'resolved-spans.json').read_text());dispositions=json.loads((D/'original-dispositions.json').read_text())
+ assert len(tuples)==len(spec['segments'][0]['spans'])
+ for t in tuples:
+  assert set(t)=={'seq','id','d','tib','eng','tib_range','eng_range'}
+  for field,key in [('wylie','tib_range'),('english','eng_range')]:
+   if t[key] is not None: assert source[seq][field][slice(*t[key])]==t['tib' if field=='wylie' else 'eng']
+ for d in dispositions:
+  assert set(d['original_identity'])=={'angle','seq','id','d','tib','eng','tib_range','eng_range'};assert list(d['original_span'])==d['original_span_keys'];allids.append(d['original_identity'])
+ p=json.loads((D/'generator-proof.json').read_text());assert meta(D/'spec.json')==p['spec'] and meta(D/'body.html')==p['body'];assert (D/'body.html').read_bytes()==(D/'attempts/01/stdout.html').read_bytes()
+ assert 'PROVISIONAL' in spec['segments'][0]['note'] and 'pending' not in spec['segments'][0]['note'].lower()
+original_ids=json.loads((R/'original-identities.json').read_text());key=lambda x:(x['angle'],x['seq'],x['id']);assert sorted(allids,key=key)==sorted(original_ids,key=key)
+collection=json.loads((R/'collection-proof.json').read_text())
+for name in ['database','source_master','original_master','corpus']:
+ m=collection[name];assert meta(pathlib.Path(m['path']))==m
+put(R/'pre-freeze-verification.json',{'original_copy_checks':checked,'original_copies':len(checked),'all171_identity_dispositions_exact':True,'all92_final_tuples_seven_keys_and_exact_source_slices':True,'spec_body_proof_hashes_current':True,'source_master_database_unchanged':True,'counts':counts,'total_spans':sum(x['span_count'] for x in counts),'total_nulls':sum(x['null_count'] for x in counts),'total_word_pairs':sum(x['word_pair_count'] for x in counts),'supported_helper_copies':len(helpers),'gate_allowance_proposed_only':'c5p89/s265w15; actual no_supplied_span_head repository gate remains unchanged','producer':'Codex reused current-batch non-author; no fresh-context claim'})
+for seq in [266,267,265]:
+ D=R.parent/str(seq);paths=sorted(p for p in D.rglob('*') if p.is_file() and p!=D/'freeze.json')
+ put(D/'freeze.json',{'status':'FROZEN PROVISIONAL','producer':'Codex c05_253_255_reconcile, reused non-author of current originals','utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'shared_evidence':str(R),'files':[meta(p) for p in paths]})
+print(json.dumps({'status':'FROZEN','segments':counts,'evidence_mappings':len(checked),'helper_copies':len(helpers)}))

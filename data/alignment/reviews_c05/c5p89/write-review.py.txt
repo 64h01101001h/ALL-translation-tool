@@ -1,0 +1,166 @@
+from pathlib import Path
+import json,hashlib,datetime
+R=Path(__file__).resolve().parent; B=R.parent
+get=lambda p:json.loads(p.read_text())
+def put(n,x):(R/n).write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+reasons={265:'''p1|Additive Yet resumes the preceding causal alternatives; gcig separately owns another.
+w1|The first part is the material-cause subject, not the later continuation part.
+w2|Another identifies the additional one in the enumeration; it does not absorb the separate additive yang.
+p2|Gis marks the active subject part; English syntax has no separate agentive word. The first provides is a predicate, not an agentive exponent.
+w3|Material cause is the established nyer len technical unit; the article is outside.
+p3|Dang coordinates the two causes and owns the first and, before the pleasure-being karma.
+w4|The full inflected deity noun owns pleasure being. Singular lha is HTG2016; plural lha'i is auto-aligned evidence, with neither tier silently changed.
+w5|Karma belongs to the pleasure being and conditions this result; the local attestation does not change curated deeds/deed.
+p4|Kyis marks karma as active causal subject; there is no separate by in this clause.
+w6|Contributing factor is the established causal compound and excludes the article.
+w7|Byas pa is in the karma/contributing-factor predicate and selects provides at [102,110], not the supplied parallel provides at [39,47].
+w8|Brten plus nas expresses the dependent converb relation based on; full phrase d3 is appropriate despite a positive glossary entry. Both of these is not part of that lexical claim.
+w9|This second part occurs inside the later-continuation relation, at English [196,200].
+w10|The second gcig identifies one part of that continuation, not another in the first clause.
+w11|Rigs 'dra denotes the continuing series; the separately explicit later is left to phyi ma in this sentence.
+w12|Phyi ma is separately rendered later here; no duplicate member is necessary.
+w13|Bdud rtsir retains the terminative inflection intact while identifying ambrosia; starts being carries the resultative construction.
+w14|Skye ba owns the whole onset predicate starts being, supported by the source and HTG703.
+w15|Sogs is the lexical list-completion gesture and owns and so on including its conventional initial and. No following noun is captured; the sole exact allowance is justified.''',266:'''q1|The complete temporal expression includes na and supplies At this point before the description.
+w1|Wet is the first physical quality of the described glass contents.
+p1|Zhing connects wet and flowing; the unrelated glossary noun paradise does not apply.
+w2|Flowing is the second physical quality, with exact gsher ba support.
+w3|The source water belongs to the first description, not the later supplied glass-of-water reprise.
+w4|The explicit glass is the first English glass in the descriptive subject.
+w5|Full of is an explicit fullness exponent here, unlike267; it is supported by the full gang po entry.
+w6|Cha shas owns parts in the first assertion of three-part existence.
+w7|The numeral directly owns three. The wider HTG2016 three different variant is positive, but different elaborates distinct parts rather than adding cardinal content.
+w8|Ldan owns with as the possession of three parts; it does not borrow the later comparison with.
+w9|Yod is positive existence in the first clause and owns is at [55,57].
+p2|Kyang supplies the concession Nonetheless between existence and universal perception.
+w10|Gsum gas is the inflected subject all three beings; its agentive s stays attached and the supplied beings remains outside.
+w11|Gsum ga is the object all three parts at the second occurrence, not the preceding subject.
+w12|The first mthong ba is the universal seeing predicate at English [160,163].
+p3|This ma is matrix not in is not the case; it does not own the later contracted negation.
+w13|Yin owns the second is at [112,114], the copula of the matrix denied claim.
+w14|The explicit craving spirit is the perceiver forced by its karma; the spelling is preserved.
+w15|Las is the karma described as bad and collected here, with no glossary promotion.
+w16|Ngan pa directly qualifies that karma as bad. A positive whole bad-karma entry does not prevent these honest separate words.
+w17|Bsags owns collected; the positive bsags pa alternatives are acknowledged. The nominal/genitive remainder is distributed through the relative clause and causal dependency.
+w18|Dbang gis jointly supplies forced by as a causal instrumental phrase. The passive auxiliary is remains outside and gis alone cannot own the phrase.
+w19|The paired object rnag khrag owns the full pus and blood compound, with two smaller members available.
+m1|Rnag owns pus within this parent. Full HTG2016 reciprocal blood/pus variants are retained; local compound order and ordinary senses support this narrower pairing.
+m2|Khrag owns blood in the same parent's contiguous child block, strictly smaller and unique on both sides.
+p4|Tu gives the predicative as: the spirit sees the object as pus and blood.
+w20|The bare mthong is the second see at [247,250], under karmic force.
+w21|Dngos po identifies the other two things that the spirit does not see.
+w22|Gzhan contrasts those other objects with pus and blood; the auto-aligned bodhisattva gloss is inapplicable here.
+w23|The first gnyis counts the two unseen things, not the two later types of beings.
+p5|The second ma owns only n't within doesn't at [299,302], using the explicitly permitted subword convention.
+w24|The last mthong ba owns the third see at [303,306], the negated perception of the other objects.
+p6|The later dang owns and after the pus-and-blood clause at [288,291], not either earlier and.
+w25|De bzhin du supplies the complete comparative relation similar at d3. Positive HTG8502 variants remain evidence; the erroneous bde spelling query is irrelevant.
+w26|The final 'gro ba owns the final beings at [406,412]; the earlier subject's beings is an English contextual expansion.
+w27|'Og ma selects the latter two perceiver types in the comparison.
+w28|The second gnyis counts those two perceiver types at [393,396].
+q2|Shes par bya ba supplies the complete obligatory should understand relation; supplied One is excluded despite positive wider glossary wording.''',267:'''w1|'Byung ba owns happening in the retrospective opening; de ltar's larger narrative expansion remains reasoned omission.
+w2|Brlan owns wet in the shared object's description.
+p1|Zhing connects wet and flowing at the first and.
+w3|Gsher ba owns flowing in that description.
+w4|Phor pa owns the first glass at [70,75], not either later supplied reprise.
+w5|Gang po has no separately alignable fullness exponent. Glass of something states contents but not fullness; this positive absence supports null without editing the English.
+w6|Blta owns look. Both root HGM7103 and nominal HGM7111 are positive; the source object-to-look-at construction is recast as object ... as they look, leaving bya distributed.
+w7|Thun mong ba owns shared; together repeats the common-viewing relation and receives no second ownership.
+w8|Dbang du byas pa is the complete viewpoint phrase with reference to at d3. Only and where belong to the larger restriction, not a dictionary word.
+p2|Gyi gives the contrast though between common viewing and private taking, although English places though in the following condition.
+w9|The first yi dvags is the spirit who picks up the glass; himself is not part of the noun.
+p3|Kyis marks that spirit as active agent; himself is emphatic and not a distinct English agentive exponent.
+w10|Lag owns hand. The positive longer lag tu blangs entry is discontinuous in English and cannot absorb the intervening glass/his.
+p4|Tu owns in of in his hand, while his remains outside.
+w11|Blangs owns picks up at [224,232], the action preceding partaking.
+p5|Nas connects taking with beginning to partake and owns the second and at [255,258].
+w12|The first longs spyod owns partake; of its contents is supplied explanatory content.
+p6|Par owns the complement to before partake, not the earlier reference to.
+w13|Brtsams pa owns begins as the onset of partaking.
+q1|The first complete de'i tshe na owns When and scopes over picking up and beginning to partake.
+w14|Khyad chos owns different parts as the qualities/components unit; the numeral remains separate. Complete corpus examples corroborate the qualities sense without forcing every variant here.
+w15|The sole source gsum owns the second English three at [354,359], in the denied three-part condition. Earlier three beings is contextual expansion.
+w16|Ldan owns with at [349,353], possession of the parts, not with reference to.
+w17|The first skye ba owns exists in the condition that no longer holds; the later onset predicate remains separate.
+p7|Ma owns no. Its wider HTG2016 temporal variants are positive, but longer expresses the transition between shared and exclusive conditions rather than the isolated negative particle.
+q2|The second de'i tshe na owns at this point in the exclusive-experience reason, not the earlier When.
+w18|The second yi dvags names the exclusive experiencer at [422,436].
+w19|The full inflected exclusive/unshared compound owns exclusively. No nonexistent English un/non member or separate ma pairing is invented.
+w20|The second longs spyod owns experiencing in the object-relative recast. HGM19727 attests the full nominal form, while root HGM19711 does not list this exact variant; source syntax supports the root and leaves bya distributed.
+q3|Whole yin pas supplies causal Since for exclusive experience as the reason the continuation becomes pus and blood. Bound pas is not split into a flat particle.
+w21|Rigs 'dra phyi ma denotes the subsequent instance of the continuing series as an established technical nominal unit. Full HTG25288 includes continuation; source succession supports the whole compound, superseding both shorter originals without inventing later.
+w22|Terminal rnag khrag owns pus and blood as a paired compound with two contained members.
+m1|Rnag owns terminal pus, uniquely and strictly inside the parent; reciprocal glossary variants do not reverse this local member.
+m2|Khrag owns terminal blood as the second contiguous sibling inside the same parent.
+w23|The second skye ba owns starts being at [483,495], the onset of the continuation's pus-and-blood state.'''}
+rr=get(R/'resolved-spans.json'); decisions=[]
+for seq,text in reasons.items():
+ mapping=dict(line.split('|',1) for line in text.splitlines());subset=[x for x in rr if x['seq']==seq];assert set(mapping)=={x['id'] for x in subset}
+ for x in subset:decisions.append(dict(tuple=x,judgment='SOUND',independent_reason=mapping[x['id']]))
+put('independent-span-adjudications.json',decisions)
+orig=[]
+for n in [265,266,267]:
+ for x in get(B/f'reconciled/{n}/original-dispositions.json'):
+  assert x['final_identity'] in rr
+  orig.append(dict(original_identity=x['original_identity'],original_span=x['original_span'],original_span_keys=x['original_span_keys'],reconciled_disposition=x['disposition'],changes=x['changes'],final_identity=x['final_identity'],independent_disposition='ACCEPT',independent_reason=next(d['independent_reason'] for d in decisions if d['tuple']==x['final_identity'])))
+assert len(orig)==171;put('independent-original-adjudications.json',orig)
+put('bank-ready-errata.json',[])
+put('span-head-allow-needed.json',{'pages_c05':{'c5p89/s265w15':'sogs at C05:265 Wylie [160,164] licenses the complete lexical enumeration closure and so on at English [246,255], including its conventional initial and; full HTG2016 HGM20919 and the local causal list support this exact gesture. No supplied noun or unrelated connective is captured.'}})
+gen=[{k:v for k,v in x.items() if k!='angle'} for x in get(R/'generator-proof.json') if x['angle']=='reconciled'];assert [x['span_count'] for x in gen]==[19,38,35]
+review=dict(verdict='APPROVE',open_findings=[],segments=gen,total_spans=92,total_nulls=4,total_word_pairs=61,spec_verdict='APPROVE',quality_verdict='APPROVE',governing_git_commit='7d3d2324c1b0414e695a2adbe7df4740ce82dd09',generated_baseline_git_commit='2c1e0768629aff301b9f80a510d7ccbcf53d6ba7',reviewer='Codex c05_through249_final_review; reused non-author of both current original angles and reconciliation; no fresh-context claim',machine_review_only=True,errata_count=0,head_allowance_count=1,original_identity_count=171,original_retained=159,original_recast=12)
+put('review.json',review)
+report='''SPEC: APPROVE. QUALITY: APPROVE. No open findings. This approval covers the exact three frozen C05:265–267 candidate specs and bodies listed in review.json, not a landed page, generated bank, rendered application or human editorial acceptance. Counts are 19/38/35 spans, 2/0/2 nulls and 14/26/21 non-null d5 pairs: 92 / 4 / 61 total. No errata; one source-specific head allowance, c5p89/s265w15.
+
+I am the reused Codex reviewer c05_through249_final_review. I authored neither current original proposal nor this reconciliation. My context is reused, not fresh. The primary/root authored the Tibetan originals under the recorded capacity ruling using its earlier preparation; those three were frozen before it read the English originals. The English reader was reused c05_262_264_english; the reconciler was reused non-author c05_253_255_reconcile. These role claims and the pre-dispatch schema correction are preserved explicitly. The root's mechanical checks do not supply independent approval of its own originals.
+
+The governing Git snapshot is 7d3d2324c1b0414e695a2adbe7df4740ce82dd09; generated baseline is separately 2c1e0768629aff301b9f80a510d7ccbcf53d6ba7. Actual generator and builder bytes equal the governing Git objects. All required project/protocol inputs were read; historical model names are historical, and the actual capacity/role ruling governs this batch. MATCH, never COMPOSE; no hgm_gloss promotion; seven depths; forward-only cursors; contained contiguous d7 members; source defects and PROVISIONAL labels remain intact.
+
+Evidence and execution
+
+Both complete dispatch packages were consumed and verified against original section bytes, including all six complete U10 diffs and complete tail manifests: 139,574 bytes SHA256 571cfbea8e785e0c98e6bc82152d496a3168b4cf243a920fb4bdfdf1807006ec; 1,103,584 bytes SHA256 fa86eedec5ced0b21e43e428e2f9d981b6938a9529dcd8c447ea21aa524f0159. Package-content-proof.json records every one of 148 sections. Semantic material was read in bounded full records, with exact repeated source/record content compared as duplicates rather than abbreviated evidence. All 500 inventoried current/historical files are preserved, together with the later dispatch input, supplement-generation record/helper and governing sources. Read the full originals through the manifest; a summary is not a replacement for them.
+
+I independently opened the actual SQLite database using URI mode=ro and PRAGMA query_only=ON, reexecuted all 186 primary and 5 supplemental SQL statements with full-row equality, reopened all 65 complete master entries against both master gzip and SQLite raw, and all 75 full corpus raw objects against SQLite and the original gzip. Full glossary variants and provenance tiers survive, including positive wider forms and discordant reciprocal senses. Additional independent full-row equality queries reproduced other-course exact counts 3/3, 3/4 and 3/4 (three-field/English-only) for265/266/267. Counts are query results, not independent-publication counts.
+
+All 24 complete physical ACIP/English extents were read directly from the four original C05/C15/C16/C18 files; whole files and exact offsets/bytes/hashes are preserved. Comparison with the spine collapses ASCII whitespace only. C05:266 has an ACIP physical line break; C16:267 has a physical extra blank line in the English. Both survive unchanged. Latin-1 is a reversible byte presentation, not a claim about legacy encoding. The exact C15:410–412, C16:841–843 and C18:1124–1126 three-field parallels and P7:21/22 English-only matches were reopened in full. P7 retains DVAGS/DWAGS and punctuation variation. Text identity does not establish independent publication or ingestion lineage.
+
+The actual unchanged canonical generator was called for all six original and three current specs, with read-only database interception only. Nine EXIT=0 bodies match saved bodies byte for byte; all stderr is empty. The three final bodies are 4,200 / 6,240 / 6,494 bytes. Complete generated columns round-trip to exact source text. Canonical resolution independently reproduces every final seven-key tuple in spec order and all171 original eight-key identities, original optional fields and original field presence. All original occurrence declarations also match actual resolver ranges and all English occurrence lists. The exact6 source/English uncovered complements were independently recomputed. These checks prove mechanics and fidelity, not correspondence; the individual judgments below supply the semantic review.
+
+Semantic decisions and original alternatives
+
+Every final mapping has its own independent reason in independent-span-adjudications.json and the table below. All171 original identities are individually adjudicated in independent-original-adjudications.json:159 retained and12 recast, with exact old fields/ranges and final identity. Agreement was challenged as well as disagreement. Original English omissions restored by reconciliation include265's two agentive nulls and coordinating dang;266's matrix yin and later dang;267's root look, positive nulls, contrast/location/complement particles and full causal Since. No original was silently discarded or rewritten.
+
+The grammatical d3 decisions are source relations:265 brten nas/based on;266 dbang gis/forced by and de bzhin du/similar;267 dbang du byas pa/with reference to. Their full positive HTG2016 entries do not automatically make them lexical compounds. Conversely267 rigs 'dra phyi ma is accepted as the established technical nominal term for a succeeding instance of the continuum, not merely because a glossary row exists. HGM25288 explicitly contains continuation as well as later continuation and later states of a similar type; this source's transition to pus and blood instantiates that succession. Its whole nominal content can be compressed into the one English noun. That distinguishes it from blta bya and longs spyod bya, whose object nominalization is expanded into object/relative-clause frames while the roots own look/experiencing. Neither narrower root decision denies the full HGM7111 or HGM19727 positive variant. HGM19711 does not itself list experiencing. The fuller HGM19727 entry and actual local object-relative syntax support that root pairing. In265, later is separately explicit, so rigs 'dra and phyi ma can remain two honest lexical spans. Both original267 phyi ma omissions are superseded by the final compound; neither is relabeled as absence of evidence.
+
+The gsum/three tightening acknowledges the positive three different variant. Different in266 elaborates the distinct parts, while the numeral supplies cardinality. Bsags/collected retains the verbal exponent and omits distributed pa'i rather than declaring it meaningless. Ma/no in267 keeps explicit matrix negation; longer expresses the change from common viewing to private experience. HGM13694's wider no longer had any, not yet and until variants remain positive evidence, but do not assign all temporal content to this particular ma. This is not the temporal ma...bar du construction and no fusion-null is asserted here. The two times, the two skye ba predicates and all repeated perceiver/part/object words were checked in their complete propositions.
+
+Sogs at265 is the conventional lexical list closure, not the verb gather/accumulate. HTG2016 HGM20919's full and so on variant matches the terminal gesture after ambrosia. The initial and is internal to that equivalent and licensed by sogs; no supplied noun is included. This justifies d5 and the single exact c5p89/s265w15 allowance, not a general exemption or head trimming. The source's standalone dang owns the earlier coordination separately. No other allowance is needed.
+
+Rnag/pus and khrag/blood in266 and267 are two contiguous d7 siblings under each d5 rnag khrag parent. The original generator supports the whole child block. Each member is unique and strictly tighter on both sides, and local compound ordering supports its ordinary sense. HGM10448 and HGM1368 contain reciprocal HTG2016 variants; these were read and retained, not misclassified as mined noise or edited away. No flat cursor is rewound and no member borrows an English word outside its parent.
+
+Null and omission review
+
+The three agentive nulls (265p2/p4,267p3) state absence of a separate English case exponent in active-subject constructions. They do not erase the syntactic relation or misappropriate himself/provides as case words. The fourth null267w5 records the absent separate fullness exponent: glass of something wet and flowing states contents without saying full. That differs from266's explicit full of. None is an uncertainty placeholder.
+
+All exact uncovered ranges are in completion-audit.json, checked against all6 author gap lists. In265, de'i's anaphoric glass-of-water expansions and genitive/la dependencies are distributed; the first English provides is the repeated parallel predicate, not a second source byas pa. Articles, and then and both of these remain unwrapped. In266, de, du, te, kyi, pa'i and la yang contribute to larger predication/comparison frames; the supplied beings and parts after all three, the second glass of water, he/has/does/One and case holds with/types of do not receive invented lexical owners. In267, de ltar positively has what we just described as in HGM8435, but this expanded retrospective narration is reasonably omitted rather than promoted to a lexical atom; a defensible larger phrase would be possible, not mandatory. The remaining de/yang/copulas participate in restrictive/reference frames. Bya after look and experiencing is distributed through object/something-that constructions, not falsely nulled. Together repeats shared viewing; the earlier three beings and subsequent glass/his/contents/liquid are contextual English expansions. Tu after the terminal compound participates in starts being rather than having a separate as here. Final yin pa'i phyir in each segment is explanatory closure without a separate terminal causal conjunction;267's distinct preceding yin pas/Since is retained. These are reasoned omissions, not source corrections or declarations that grammatical content does not exist.
+
+Errata review
+
+Bank-ready-errata.json is []. All six original errata lists were empty. I independently checked the three current exact ACIP/Wylie/English fields and the five refutation grounds for the actual considered spelling/fullness issues: literal source presence, complete parallels, current register/classes, defensible reading, and actual query counts. The current register has no references to265–267; historical class records and their complete register are preserved. No SHl converter loss, fused footnote, folio-caption splice or glued heading appears in these three passages. DVAGS occurs once in266 and twice in267; full positive HGM25069 and the source support it, while the P7 DWAGS variant does not compel normalization. Gang po occurs once in267 with no separate English full. Positive HGM22118 plus consistent complete physical readings supports an alignment null, not permission to insert full into GMR's wording. Identical digital readings were not promoted to independent manuscript witnesses. No erratum or dictionary promotion follows from a zero inflected-form lookup.
+
+Preservation and limits
+
+Original-to-copy-manifest.json is a LIST with every original mapping retained, including content-deduplicated exact copies. There are527 mappings,19 immutable Git pins and447 distinct mapped copies before reviewer-owned proof artifacts. All299 current reconciliation freeze entries (261/19/19) were verified including nested historical freezes. Current core specs/bodies/reports remain readable under reviewed-final/<seq>; original core files remain under proposal-inputs. The exact source master, original master, corpus gzip and full physical files are retained with supported suffixes. Historical repository snapshots name their actual commit and repository-relative path and were compared to those Git objects, not a later live file.
+
+Failure history remains evidence: root and English whole-file UTF-8 assumptions failed; root Tibetan's first literal physical-English search failed on CRLF line wrapping; reconciliation collection first used the wrong master key; author01 confused a d5 parent's start with its first d7 child's start; finalizer01 had an unterminated string; its complete failure replay and the previous reports/freezes survive. The original inline Tibetan capture script was not retained as a standalone file, as its failure record explicitly discloses; the tool-history/error record is retained and no missing script is invented. The pre-dispatch SHA265 schema typo and exact v2 correction survive. The final audit added five supplemental queries with prior frozen versions preserved. One reviewer proof adapter failed on duplicate current/parallel seq keys after171 original occurrence and six gap checks; its exact helper/logs survive under reviewer-attempt-history/completion01, and the corrected adapter passed without candidate changes.
+
+Final preservation preflight verifies every original/copy byte/hash/size and Git pin, supported suffix, source-state stability, current core hashes, seven-key order and nested freeze preservation. Reviewer helpers are retained as exact .py.txt files; .diff inputs as .diff.txt. The final freeze excludes only its actual top-level freeze.json path, not nested files with that basename. Source/database/master fingerprints were unchanged around independent generator/evidence execution. No repository, source, index, master or MAIN file was edited; no paid API, delegate, native, browser or device operation occurred. This is machine semantic/spec/quality review only: it does not claim human correctness certification, publication independence, rendered inspection, native/phone validation, generated bank integration or MAIN integration.
+
+All92 final judgments (ranges are half-open Unicode code points and byte-identical ASCII source slices)
+
+| Segment/id | Depth | Tibetan | GMR English | Tibetan range | English range | Independent reason |
+|---|---:|---|---|---|---|---|
+'''
+for d in decisions:
+ x=d['tuple'];vals=[str(x['seq'])+'/'+x['id'],str(x['d']),x['tib'],x['eng'] if x['eng'] is not None else 'NULL',str(x['tib_range']),str(x['eng_range']),d['independent_reason']];report+='| '+' | '.join(v.replace('|','\\|') for v in vals)+' |\n'
+(R/'review.md').write_text(report)
+print('WROTE review interfaces and92 individual semantic judgments;171 original dispositions.')

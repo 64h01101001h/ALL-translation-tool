@@ -1,0 +1,62 @@
+{
+  "seq": 266,
+  "original_errata_lists": {
+    "tibetan": [],
+    "english": []
+  },
+  "retained_errata": [],
+  "complete_source": {
+    "id": 1648,
+    "course": "C05",
+    "seq": 266,
+    "acip": "DE'I TSE NA BRLAN ZHING GSHER BA CHU PHOR PA GANG PO DE CHA SHAS GSUM LDAN DU YOD KYANG , GSUM GAS GSUM GA MTHONG BA MA YIN TE, YI DVAGS KYI LAS NGAN PA BSAGS PA'I DBANG GIS RNAG KHRAG TU MTHONG , DNGOS PO GZHAN GNYIS MA MTHONG BA DANG , DE BZHIN DU 'GRO BA 'OG MA GNYIS LA YANG SHES PAR BYA BA YIN PA'I PHYIR,",
+    "wylie": "de'i tshe na brlan zhing gsher ba chu phor pa gang po de cha shas gsum ldan du yod kyang , gsum gas gsum ga mthong ba ma yin te, yi dvags kyi las ngan pa bsags pa'i dbang gis rnag khrag tu mthong , dngos po gzhan gnyis ma mthong ba dang , de bzhin du 'gro ba 'og ma gnyis la yang shes par bya ba yin pa'i phyir",
+    "english": "At this point, the glass full of wet and flowing water is something with three different parts. Nonetheless, it is not the case that all three different beings see all three parts. The craving spirit is forced by the bad karma he has collected to see the glass of water as pus and blood; and he doesn't see the other two things. One should understand that a similar case holds with the latter two types of beings.",
+    "raw": "{\"course\": \"C05\", \"acip\": \"DE'I TSE NA BRLAN ZHING GSHER BA CHU PHOR PA GANG PO DE CHA SHAS GSUM LDAN DU YOD KYANG , GSUM GAS GSUM GA MTHONG BA MA YIN TE, YI DVAGS KYI LAS NGAN PA BSAGS PA'I DBANG GIS RNAG KHRAG TU MTHONG , DNGOS PO GZHAN GNYIS MA MTHONG BA DANG , DE BZHIN DU 'GRO BA 'OG MA GNYIS LA YANG SHES PAR BYA BA YIN PA'I PHYIR,\", \"wylie\": \"de'i tshe na brlan zhing gsher ba chu phor pa gang po de cha shas gsum ldan du yod kyang , gsum gas gsum ga mthong ba ma yin te, yi dvags kyi las ngan pa bsags pa'i dbang gis rnag khrag tu mthong , dngos po gzhan gnyis ma mthong ba dang , de bzhin du 'gro ba 'og ma gnyis la yang shes par bya ba yin pa'i phyir\", \"english\": \"At this point, the glass full of wet and flowing water is something with three different parts. Nonetheless, it is not the case that all three different beings see all three parts. The craving spirit is forced by the bad karma he has collected to see the glass of water as pus and blood; and he doesn't see the other two things. One should understand that a similar case holds with the latter two types of beings.\"}"
+  },
+  "registered_classes": "../265/registered-class-check.json",
+  "parallel_comparisons": "parallel-comparisons-full.json",
+  "physical_extents": "../265/physical-extents.json",
+  "five_ground_general_check": {
+    "a_verbatim": "Full current source rows independently fetched; ACIP is the source of record. Every discussed reading appears in its specified field, with full physical source extents retained. No absent quote is treated as a defect.",
+    "b_parallel": "Three complete other-course rows match all three text fields; physical C05/C15/C16/C18 extents match the compared ACIP and English under declared ASCII-whitespace collapse. Identity supports the reading, not independent publication/ingestion lineage. P7, where present, matches full English but differs in Tibetan punctuation/spelling and remains digital evidence only.",
+    "c_registered": "Complete pinned register checked for current segment references and the four known classes; current segment hits are zero. No listed class is refiled. Substring class hits and complete register are preserved.",
+    "d_defensible": "Current Tibetan and GMR English form coherent karma-conditioned perception commentary. Lexical/grammatical recasts and omissions are not defects. All positive and discordant glossary alternatives are preserved without rewriting locked hgm_gloss.",
+    "e_counts": {
+      "exact_other_course_three_field_rows": 3,
+      "exact_other_course_english_rows": 4,
+      "physical_full_extents_for_current_source": 8,
+      "original_span_identities": 74,
+      "all_query_reruns_complete": "../265/query-reruns-full.json"
+    }
+  },
+  "suspicions": [
+    {
+      "found": "YI DVAGS",
+      "field": "acip",
+      "proposed_alternative": "YI DWAGS",
+      "refuted": true,
+      "reason": "P7 spelling variation does not establish corruption of defensible C05 spelling. No spelling change proposed.",
+      "five_grounds": {
+        "a": {
+          "source_literal_count": 1,
+          "wylie_literal_count": 1,
+          "english_craving_spirit_count": 1,
+          "source_exact": "DE'I TSE NA BRLAN ZHING GSHER BA CHU PHOR PA GANG PO DE CHA SHAS GSUM LDAN DU YOD KYANG , GSUM GAS GSUM GA MTHONG BA MA YIN TE, YI DVAGS KYI LAS NGAN PA BSAGS PA'I DBANG GIS RNAG KHRAG TU MTHONG , DNGOS PO GZHAN GNYIS MA MTHONG BA DANG , DE BZHIN DU 'GRO BA 'OG MA GNYIS LA YANG SHES PAR BYA BA YIN PA'I PHYIR,"
+        },
+        "b": {
+          "complete_witnesses": "parallel-comparisons-full.json",
+          "lineage_limit": "C15/C16/C18 exact three-field matches and physical readings corroborate this reading; P7 English identity plus Tibetan variation supplies no independent-lineage proof."
+        },
+        "c": "No current segment register hit; this spelling variation is not one of the four registered ingestion classes.",
+        "d": "HGM25069 yi dvags has HTG2016 glossary craving spirit; HGM17418 yi dwags has auto-aligned craving spirit. Both complete records are preserved. Proposed normalization is not compelled by source semantics.",
+        "e": {
+          "full_exact_three_field_other_rows": 3,
+          "full_equal_english_other_rows": 4,
+          "complete_queries_reexecuted": 186,
+          "master_records_reopened": 65
+        }
+      }
+    }
+  ]
+}

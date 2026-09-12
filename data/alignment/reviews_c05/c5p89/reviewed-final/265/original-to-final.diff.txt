@@ -1,0 +1,196 @@
+--- /Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-265-267/tibetan/265/spec.json
++++ /Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-265-267/reconciled/265/spec.json
+@@ -77,7 +77,7 @@
+         },
+         {
+           "id": "w8",
+-          "d": 5,
++          "d": 3,
+           "tib": "brten nas",
+           "eng": "based on"
+         },
+@@ -143,7 +143,7 @@
+         "w13",
+         "w15"
+       ],
+-      "note": "PROVISIONAL machine alignment by Codex, Tibetan-first original. The primary reader used its own prior source/glossary preparation; the English-first proposal was not read. The single byas pa owns the second provides, for karma as contributing factor; the first provides is a parallel English predicate and remains unwrapped. Initial yang/Yet and gcig/another divide the additive expression; both de'i anaphors expand into the repeated glass-of-water references and are left unaligned rather than falsely nulled. The full lha'i and bdud rtsir inflections stay intact; their external relations are not separately invented. Sogs owns the licensed closing gesture and so on. Remaining genitive/dependence/cause-frame particles are omitted; no explicit English causal conjunction represents the final yin pa'i phyir. Exact C15:410, C16:841 and C18:1124 field matches establish text identity only, not independent publication or ingestion lineage. No source or dictionary gloss is changed."
++      "note": "PROVISIONAL machine alignment by Codex c05_253_255_reconcile, a reused non-author of these original proposals. Tibetan original: primary Codex with prior preparation; English original: reused peer c05_262_264_english. This is machine reconciliation, not human editorial acceptance. The single byas pa owns the second provides, the karma/contributing-factor predicate; the first is an English parallel predicate. Yang/Yet and gcig/another divide the additive wording. Brten nas/based on is the complete dependency converb at d3. Sogs owns the whole lexical list closure and so on at d5, with its specific head allowance proposed in the evidence. Gis and kyis have no separate agentive words in the active English constructions. Both de'i anaphors expand into repeated glass-of-water references and stay unaligned. The inflected lha'i and bdud rtsir are kept whole; their relations are not assigned invented separate words. The final explanatory frame has no discrete causal conjunction. GMR source wording and dictionary entries remain unchanged. Exact digital and physical parallel extents establish readings, not independent publication or ingestion lineage."
+     }
+   ]
+ }
+--- /Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-265-267/english/265/spec.json
++++ /Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-265-267/reconciled/265/spec.json
+@@ -3,124 +3,147 @@
+   "segments": [
+     {
+       "seq": 265,
+-      "title": "causes of ambrosia",
++      "title": "the pleasure being and ambrosia",
+       "spans": [
+         {
+-          "id": "w1",
++          "id": "p1",
+           "d": 6,
+           "tib": "yang",
+           "eng": "Yet"
+         },
+         {
+-          "id": "w2",
++          "id": "w1",
+           "d": 5,
+           "tib": "cha shas",
+           "eng": "part"
+         },
+         {
+-          "id": "w3",
++          "id": "w2",
+           "d": 5,
+           "tib": "gcig",
+           "eng": "another"
+         },
+         {
+-          "id": "w4",
++          "id": "p2",
++          "d": 6,
++          "tib": "gis",
++          "eng": null,
++          "cls": "case",
++          "nul": "Agentive case on the material-cause part has no separate English exponent; its active-subject relation is syntactic."
++        },
++        {
++          "id": "w3",
+           "d": 5,
+           "tib": "nyer len",
+           "eng": "material cause"
+         },
+         {
+-          "id": "w5",
++          "id": "p3",
++          "d": 6,
++          "tib": "dang",
++          "eng": "and"
++        },
++        {
++          "id": "w4",
+           "d": 5,
+           "tib": "lha'i",
+           "eng": "pleasure being"
+         },
+         {
+-          "id": "w6",
++          "id": "w5",
+           "d": 5,
+           "tib": "las",
+           "eng": "karma"
+         },
+         {
+-          "id": "w7",
++          "id": "p4",
++          "d": 6,
++          "tib": "kyis",
++          "eng": null,
++          "cls": "case",
++          "nul": "Instrumental/agentive on karma has no separate English exponent; active-subject construction, not an invented by."
++        },
++        {
++          "id": "w6",
+           "d": 5,
+           "tib": "lhan cig byed rkyen",
+           "eng": "contributing factor"
+         },
+         {
+-          "id": "w8",
++          "id": "w7",
+           "d": 5,
+           "tib": "byas pa",
+           "eng": "provides"
+         },
+         {
+-          "id": "w9",
++          "id": "w8",
+           "d": 3,
+           "tib": "brten nas",
+           "eng": "based on"
+         },
+         {
+-          "id": "w10",
++          "id": "w9",
+           "d": 5,
+           "tib": "cha shas",
+           "eng": "part"
+         },
+         {
+-          "id": "w11",
++          "id": "w10",
+           "d": 5,
+           "tib": "gcig",
+           "eng": "one"
+         },
+         {
+-          "id": "w12",
++          "id": "w11",
+           "d": 5,
+           "tib": "rigs 'dra",
+           "eng": "continuation"
+         },
+         {
+-          "id": "w13",
++          "id": "w12",
+           "d": 5,
+           "tib": "phyi ma",
+           "eng": "later"
+         },
+         {
+-          "id": "w14",
++          "id": "w13",
+           "d": 5,
+           "tib": "bdud rtsir",
+           "eng": "ambrosia"
+         },
+         {
+-          "id": "w15",
++          "id": "w14",
+           "d": 5,
+           "tib": "skye ba",
+           "eng": "starts being"
+         },
+         {
+-          "id": "w16",
+-          "d": 6,
++          "id": "w15",
++          "d": 5,
+           "tib": "sogs",
+           "eng": "and so on"
+         }
+       ],
+       "eng_order": [
++        "p1",
++        "w2",
+         "w1",
+         "w3",
+-        "w2",
++        "p3",
++        "w5",
+         "w4",
++        "w7",
+         "w6",
+-        "w5",
+         "w8",
+-        "w7",
+-        "w9",
+-        "w13",
+         "w12",
+         "w11",
+         "w10",
+-        "w15",
++        "w9",
+         "w14",
+-        "w16"
++        "w13",
++        "w15"
+       ],
+-      "note": "Provisional machine alignment by Codex, reused English-first reader; not a fresh context and not human or semantic approval. The first gcig is contrastive another, the second one. byas pa selects the second provides, following pleasure being; its shared predication also supports the first English provides, which remains unwrapped. lha'i and bdud rtsir stay whole as inflected lexical forms; no false detached suffix is added. Expanded glass of water referents and both of these are not separately assigned to short demonstratives. sogs owns only the enumerative closing gesture. Other copular, causal, pronominal and case material is omitted where its contribution is distributed."
++      "note": "PROVISIONAL machine alignment by Codex c05_253_255_reconcile, a reused non-author of these original proposals. Tibetan original: primary Codex with prior preparation; English original: reused peer c05_262_264_english. This is machine reconciliation, not human editorial acceptance. The single byas pa owns the second provides, the karma/contributing-factor predicate; the first is an English parallel predicate. Yang/Yet and gcig/another divide the additive wording. Brten nas/based on is the complete dependency converb at d3. Sogs owns the whole lexical list closure and so on at d5, with its specific head allowance proposed in the evidence. Gis and kyis have no separate agentive words in the active English constructions. Both de'i anaphors expand into repeated glass-of-water references and stay unaligned. The inflected lha'i and bdud rtsir are kept whole; their relations are not assigned invented separate words. The final explanatory frame has no discrete causal conjunction. GMR source wording and dictionary entries remain unchanged. Exact digital and physical parallel extents establish readings, not independent publication or ingestion lineage."
+     }
+   ]
+ }

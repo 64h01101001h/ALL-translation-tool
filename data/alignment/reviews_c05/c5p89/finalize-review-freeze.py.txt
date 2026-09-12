@@ -1,0 +1,54 @@
+from pathlib import Path
+import json,hashlib,subprocess,ast,datetime
+R=Path(__file__).resolve().parent; B=R.parent; W=B.parent.parent/'campaign-worktree'
+H=lambda b:hashlib.sha256(b).hexdigest()
+get=lambda p:json.loads(p.read_text())
+def pin(p):b=p.read_bytes();return dict(path=str(p.relative_to(R)),bytes=len(b),sha256=H(b))
+def put(n,x):(R/n).write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+assert not (R/'freeze.json').exists()
+# Read the actual landing consumer's whitelist without importing its mutating module.
+landing=B.parent/'land_reviewed_page.py';tree=ast.parse(landing.read_text());matches=[]
+for node in ast.walk(tree):
+ if isinstance(node,ast.Compare) and isinstance(node.left,ast.Call) and ast.unparse(node.left)=='file.suffix.lower()':
+  for n in node.comparators:
+   if isinstance(n,(ast.Tuple,ast.List)):matches.append(ast.literal_eval(n))
+assert len(matches)==1;allowed=set(matches[0]);assert allowed=={'.json','.md','.html','.stderr','.stdout','.log','.txt','.bin','.exit'}
+manifest=get(R/'original-to-copy-manifest.json');assert isinstance(manifest,list);verified=[]
+for m in manifest:
+ assert set(m) in [{'original','copy','sha256','bytes'},{'original','copy','sha256','bytes','original_git_commit','repository_relative_path'}]
+ p=R/m['copy'];assert p.resolve().is_relative_to(R) and p.suffix.lower() in allowed
+ raw=p.read_bytes();assert len(raw)==m['bytes'] and H(raw)==m['sha256']
+ original=subprocess.check_output(['git','show',m['original_git_commit']+':'+m['repository_relative_path']],cwd=W) if 'original_git_commit' in m else Path(m['original']).read_bytes()
+ assert raw==original;verified.append(dict(**m,verified_exact=True,supported_suffix=True))
+assert len(verified)==527 and sum('original_git_commit' in m for m in manifest)==19
+sources=get(R/'source-state-proof.json')['before'];source_after=[]
+for x in sources:
+ p=Path(x['path']);b=p.read_bytes();now=dict(path=str(p),bytes=len(b),sha256=H(b));assert now==x;source_after.append(now)
+review=get(R/'review.json'); assert review['verdict']=='APPROVE' and not review['open_findings']; assert isinstance(review['segments'],list)
+required={'seq','span_count','null_count','word_pair_count','spec_sha256','spec_bytes','body_sha256','body_bytes','generator_exit'}
+rr=get(R/'resolved-spans.json'); core=[]; full=[]
+for x in review['segments']:
+ assert set(x)==required and x['generator_exit']==0
+ seq=x['seq'];ss=get(B/f'reconciled/{seq}/spec.json')['segments'][0]['spans'];trs=[t for t in rr if t['seq']==seq];assert len(ss)==len(trs)==x['span_count']
+ for s,t in zip(ss,trs):assert set(t)=={'seq','id','d','tib','eng','tib_range','eng_range'} and all(s[k]==t[k] for k in ['id','d','tib','eng'])
+ assert sum(s['eng'] is None for s in ss)==x['null_count'];assert sum(s['d']==5 and s['eng'] is not None for s in ss)==x['word_pair_count']
+ for fname,prefix in [('spec.json','spec'),('body.html','body')]:
+  b=(B/f'reconciled/{seq}'/fname).read_bytes();assert b==(R/f'reviewed-final/{seq}'/fname).read_bytes();assert H(b)==x[prefix+'_sha256'] and len(b)==x[prefix+'_bytes']
+ core.append(x)
+ frozen=get(B/f'reconciled/{seq}/freeze.json');files=frozen['files'];actual={str(p.resolve()) for p in (B/f'reconciled/{seq}').rglob('*') if p.is_file() and p!=B/f'reconciled/{seq}/freeze.json'};assert actual=={z['path'] for z in files}
+ for z in files:
+  p=Path(z['path']);b=p.read_bytes();assert H(b)==z['sha256'] and len(b)==z['bytes']; assert any(m['original']==str(p) and m['sha256']==z['sha256'] for m in manifest);full.append(z)
+assert len(full)==299
+assert [sum(x[k] for x in core) for k in ['span_count','null_count','word_pair_count']]==[92,4,61]
+assert get(R/'bank-ready-errata.json')==[];assert list(get(R/'span-head-allow-needed.json')['pages_c05'])==['c5p89/s265w15']
+assert len(get(R/'independent-span-adjudications.json'))==92;assert len(get(R/'independent-original-adjudications.json'))==171
+for f in ['independent-check-summary.json','preservation-proof.json','completion-audit.json']:assert get(R/f)['status']=='PASS'
+for f in ['independent-check.stderr','preserve-and-audit.stderr','completion-audit.stderr.txt']:assert not (R/f).read_bytes()
+paths=sorted(p for p in R.rglob('*') if p.is_file());assert all(p.suffix.lower() in allowed for p in paths);assert not any('__pycache__' in p.parts for p in paths)
+put('final-preflight.json',dict(status='PASS',manifest_records=len(manifest),distinct_manifest_copies=len({m['copy'] for m in manifest}),git_pins=19,all_original_copy_checks=verified,all299_frozen_input_files_exact=True,nested_freezes_retained=True,source_final=source_after,sources_unchanged=True,core=core,landing_helper=dict(path=str(landing),bytes=landing.stat().st_size,sha256=H(landing.read_bytes()),allowed_extensions=sorted(allowed)),all_review_files_supported=True,freeze_exclusion='Only the exact top-level semantic-review/freeze.json path; nested freeze.json files are included.',head_allowances=1,errata=0,review_limits='Machine semantic/spec/quality only. No human editorial, native/device/render, generated bank or MAIN integration claim.'))
+paths=sorted(p for p in R.rglob('*') if p.is_file() and p!=R/'freeze.json')
+freeze=dict(status='FROZEN PROVISIONAL; SPEC APPROVE; QUALITY APPROVE',reviewer='Codex c05_through249_final_review; reused current-batch non-author',utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),files=[pin(p) for p in paths]);put('freeze.json',freeze)
+assert {x['path'] for x in freeze['files']}=={str(p.relative_to(R)) for p in R.rglob('*') if p.is_file() and p!=R/'freeze.json'}
+for x in freeze['files']:
+ b=(R/x['path']).read_bytes();assert H(b)==x['sha256'] and len(b)==x['bytes']
+print(json.dumps(dict(status='APPROVE',spans=92,nulls=4,word_pairs=61,open_findings=0,manifest_mappings=527,git_pins=19,review_files=len(paths),freeze_sha256=H((R/'freeze.json').read_bytes()),report=str(R/'review.md'))))

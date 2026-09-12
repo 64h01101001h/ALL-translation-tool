@@ -1,0 +1,36 @@
+{
+  "utc": "2026-09-12T21:55:11.376603+00:00",
+  "status": "Recovered exact preexisting tracked bytecode; sources/tests unchanged",
+  "cause": "Root used python -B for the CTest wrapper but omitted PYTHONDONTWRITEBYTECODE from its child subprocess environment. CTest children rewrote these3 tracked cache files in the isolated checkout. This violated the campaign bytecode-disable convention; changed bytes are preserved, exact HEAD bytes restored.",
+  "files": [
+    {
+      "repository_relative_path": "engines/__pycache__/ewts_unicode.cpython-314.pyc",
+      "changed_bytes": 14379,
+      "changed_sha256": "2f6629d86ca0140124dd1a4407d29296ea85f557fb9a7248797764d8aa220fcf",
+      "preserved_changed_copy": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-265-267/landing/test-bytecode-side-effects/ewts_unicode.cpython-314.pyc.bin",
+      "modified_at_before_restore": 1789249994.8301578,
+      "restored_HEAD_bytes": 14324,
+      "restored_HEAD_sha256": "a3f0209f9afd807b76baafee9914828da5f85b490edb99ad0f67176de06baa90"
+    },
+    {
+      "repository_relative_path": "engines/__pycache__/hgm_tools.cpython-314.pyc",
+      "changed_bytes": 5656,
+      "changed_sha256": "23dce4242f8ef90750e7421cb6f98cefbae4031ae09bfdfe1dc77d06d27753f6",
+      "preserved_changed_copy": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-265-267/landing/test-bytecode-side-effects/hgm_tools.cpython-314.pyc.bin",
+      "modified_at_before_restore": 1789249993.6209004,
+      "restored_HEAD_bytes": 5601,
+      "restored_HEAD_sha256": "2b4a05e2dc980380c914105dc3ef688be9fbadf50de2e3da97d493c4ad848f4a"
+    },
+    {
+      "repository_relative_path": "engines/__pycache__/pron_engine.cpython-314.pyc",
+      "changed_bytes": 16248,
+      "changed_sha256": "02f93ef698a9c6359ab04d35274ba0d8adbe9c1e5c61b0853f971832a9553a2c",
+      "preserved_changed_copy": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-265-267/landing/test-bytecode-side-effects/pron_engine.cpython-314.pyc.bin",
+      "modified_at_before_restore": 1789249994.8273566,
+      "restored_HEAD_bytes": 16193,
+      "restored_HEAD_sha256": "d493996fa1b5aec32f8e698af6906fe7d5505c660ed273ed71cff830cc2bb177"
+    }
+  ],
+  "test_result": "Actual17 tests passed; no test rerun, no canonical source change",
+  "future_requirement": "Explicitly set PYTHONDONTWRITEBYTECODE=1 in environment inherited by CTest, not only parent python -B."
+}

@@ -1,0 +1,11 @@
+import pathlib,runpy,sqlite3,sys
+sys.dont_write_bytecode=True
+_connect=sqlite3.connect
+def ro(database,*args,**kwargs):
+    target=pathlib.Path(database).resolve(); assert target.is_file()
+    kwargs["uri"]=True
+    con=_connect(target.as_uri()+"?mode=ro",*args,**kwargs)
+    con.execute("PRAGMA query_only=ON"); assert con.execute("PRAGMA query_only").fetchone()[0]==1
+    return con
+sqlite3.connect=ro
+runpy.run_path('/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/tools/gen_alignment_page.py',run_name="__main__")

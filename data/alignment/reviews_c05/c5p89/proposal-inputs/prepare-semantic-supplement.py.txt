@@ -1,0 +1,41 @@
+"""Preserve complete material decisions and enumerate every raw input for review."""
+from pathlib import Path
+import hashlib
+import json
+
+b = Path(__file__).resolve().parent
+target = b / 'semantic-input-supplement.txt'
+assert not target.exists()
+selected = set(p for p in b.iterdir() if p.is_file() and p.suffix in {'.md', '.json', '.diff', '.py'})
+for folder in ('proposal-verification', 'root-reconciliation-verification'):
+    selected.update(p for p in (b / folder).rglob('*') if p.is_file())
+names = {
+    'original-dispositions.json', 'final-decisions.json', 'errata-analysis.json',
+    'unwrapped-extents.json', 'intended-spans.json', 'occurrences.json',
+    'evidence-references.json', 'attempt-history.json', 'final-audit-addendum.json',
+    'finalizer-execution-records.json', 'collection-proof.json',
+    'proposed-span-head-allowances.json', 'pre-freeze-verification.json',
+    'failed-source-capture-attempt01.json', 'physical-decode-failed-attempt.json',
+    'input-proof.json', 'completion-input-proof.json', 'registered-class-check.json',
+    'root-additional-query-reruns-full.json', 'original-replay-proof.json',
+}
+for angle in ('tibetan', 'english', 'reconciled'):
+    for seq in (265, 266, 267):
+        selected.update(p for p in (b / angle / str(seq)).iterdir() if p.is_file() and p.name in names)
+chunks = ['This supplement contains full material decisions and provenance. Root authored the Tibetan originals; its checks are mechanical, not independent semantic approval. The separate reviewer must independently read all original raw evidence enumerated in semantic-all-inputs.json, including historical versions and failed attempts. No final output is accepted yet.\n']
+manifest = []
+for p in sorted(selected):
+    raw = p.read_bytes()
+    chunks.extend(['\n===== '+str(p.relative_to(b))+' =====\n', raw.decode('utf-8')])
+    manifest.append({'path': str(p.relative_to(b)), 'bytes': len(raw), 'sha256': hashlib.sha256(raw).hexdigest()})
+chunks.extend(['\n===== COMPLETE SUPPLEMENT MANIFEST =====\n', json.dumps(manifest, indent=2), '\n'])
+target.write_text(''.join(chunks))
+all_inputs = []
+for p in sorted(b.rglob('*')):
+    if p.is_file() and '__pycache__' not in p.parts and 'semantic-review' not in p.parts:
+        raw = p.read_bytes()
+        all_inputs.append({'path': str(p), 'relative_path': str(p.relative_to(b)), 'bytes': len(raw), 'sha256': hashlib.sha256(raw).hexdigest()})
+(b / 'semantic-all-inputs.json').write_text(json.dumps(all_inputs, indent=2)+'\n')
+result = {'supplement_bytes': target.stat().st_size, 'supplement_sha256': hashlib.sha256(target.read_bytes()).hexdigest(), 'complete_material_files': len(manifest), 'all_raw_input_files': len(all_inputs)}
+(b / 'semantic-supplement-generation.json').write_text(json.dumps(result, indent=2)+'\n')
+print(json.dumps(result))

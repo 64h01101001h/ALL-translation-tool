@@ -1,0 +1,24 @@
+{
+  "utc": "2026-09-12T21:58:44.563094+00:00",
+  "status": "Strict physical-source-line extension; no source/semantic/generator/test changes",
+  "old_helper": {
+    "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/audit_staged_source_whitespace_v5.py",
+    "sha256": "99bcfdb8e749d586b8254468047d5ad8dae475af5df00b60966afe7a7c4483f4"
+  },
+  "new_helper": {
+    "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/audit_staged_source_whitespace_v6.py",
+    "sha256": "71cdab993b7929ad1b8b564938bb4f10fbca2c94820f00e069b0e4d18452d108"
+  },
+  "complete_diff": {
+    "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-265-267/landing/whitespace-helper-v5-to-v6.diff",
+    "bytes": 3484,
+    "sha256": "5117f3a03e6a3de65edd6de6bd375d8f031ab34308fe38896958d18c7d1b2a4c"
+  },
+  "reason": "An independently frozen English collection log contains three complete original physical ACIP lines with trailing spaces. Whole-file physical matching is inapplicable because this is a log containing multiple excerpts. v6 verifies each exact warned line against a pinned complete original physical file, byte range and physical line boundaries, as well as frozen full-log bytes, staged/live equality and all prior strict checks.",
+  "initial_failures": [
+    "Preflight01 stopped on3 collection.stdout.txt source-line warnings. Full initial inline preflight code is only in tool history; exact query/probe traceback is recorded, no separate original script is claimed.",
+    "Root mistakenly launched dependent v5 audit despite preflight failure; it failed on independent-check.stdout blank EOF because no pins file existed. No audit proof or acceptance was issued. Both raw diagnostic outputs/exits/stderr preserved as attempt01."
+  ],
+  "complete_v5_v6_sources_will_be_banked": true,
+  "raw_diff_kept_external": "Do not add redundant root-helper diff with unreviewed blank-context warnings; both complete source versions and exact diff hash/path remain reviewable."
+}

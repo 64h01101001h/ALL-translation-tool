@@ -1,0 +1,14 @@
+{
+  "status": "FAILED before physical lookup or SQL lexical/parallel queries",
+  "error": "UnicodeDecodeError: utf-8 cannot decode byte0xb8 at position32644 of full physical ASCII-named original",
+  "completed_files": [
+    "source.json",
+    "context.json",
+    "root-preparation-original-rows.json",
+    "tibetan-brief.md",
+    "english-brief.md",
+    "reconciliation-brief.md",
+    "semantic-review-brief.md"
+  ],
+  "correction": "Match literal ASCII source fields against whitespace-normalized raw bytes; do not decode or normalize the entire physical original. Prior source/brief files preserved unchanged."
+}

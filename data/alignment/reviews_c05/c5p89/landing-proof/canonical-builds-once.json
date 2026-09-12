@@ -1,0 +1,58 @@
+{
+  "started_at": "2026-09-12T21:52:24.416227+00:00",
+  "baseline_commit": "2c1e0768629aff301b9f80a510d7ccbcf53d6ba7",
+  "page": 89,
+  "first_segment": 265,
+  "previous_main_csv_seed": {
+    "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-265-267/landing/previous-main-csv-seed.bin",
+    "bytes": 16069136,
+    "sha256": "e45bba7f4d6a13a242a168ed47786947bd0e196e841a5591ea802f33ffacbc24"
+  },
+  "status": "PASS",
+  "runs": [
+    {
+      "argv": [
+        "/opt/homebrew/opt/python@3.14/bin/python3.14",
+        "-B",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/run_tool_readonly_sqlite.py",
+        "tools/build_alignment_layer.py"
+      ],
+      "cwd": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree",
+      "started_at": "2026-09-12T21:52:24.423163+00:00",
+      "exit": 0,
+      "stdout_bytes": 344,
+      "stdout_sha256": "b0d880c457d7f3af7352c9b579c523d61604270c4c51fef177fd36d531ca210b",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "finished_at": "2026-09-12T21:52:32.823414+00:00"
+    },
+    {
+      "argv": [
+        "/opt/homebrew/opt/python@3.14/bin/python3.14",
+        "-B",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/run_tool_readonly_sqlite.py",
+        "tools/build_dictionary_view.py"
+      ],
+      "cwd": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree",
+      "started_at": "2026-09-12T21:52:32.823459+00:00",
+      "exit": 0,
+      "stdout_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_bytes": 1022,
+      "stderr_sha256": "afd010959a33db80b57225931190c2b04464542a3c0eba496518e5ae2036f6c1",
+      "finished_at": "2026-09-12T21:52:37.820726+00:00"
+    }
+  ],
+  "output_sha256": {
+    "data/hgm_dictionary_v27_2.json.gz": "3a99603cd9428f0d04e67c7d2790cc093f272162e7bf6278906a4b635f962253",
+    "data/full_parallel_corpus_v32.json.gz": "1a1d8764a960c119d227c3cb7a7b0cb03073f9dc54116a3ec4e585c40323ddf8",
+    "data/alignment/alignment_full_v1.json": "6ab17bb252aac59ed019d42d816fb0ba1431997b3cfc7b947c0bd77047581abc",
+    "data/alignment/alignment_evidence_v1.json": "c43eeeb594df2b6149f76279468c6ab031838e7d91ccdc870155f31a11db5622",
+    "docs/geshe_michael_roach_dictionary.html": "c70b3053ade0540c14784c25888562eafcef5ef0da5a93278dd1306ddb5000f4",
+    "docs/geshe_michael_roach_dictionary.csv": "24091cb11e605c250da8310312cd1cc7ed9416e8fb8c1f325f5db6d692eaf7c3",
+    "docs/geshe_michael_roach_dictionary_reverse.csv": "16a2a5d56f1ef92e80741c041fe6da3c82cea8240d34e05502f783bbbe873cbc",
+    "docs/geshe_michael_roach_dictionary_by_course.csv": "276e11831718b89bcf75754509bae3291bbe2dfec7112123030b06090df83a05",
+    "docs/geshe_michael_roach_dictionary_changes.csv": "e00189e715797d1fce078c1d384202c8279a27f1bd33ab4ec87e58804bfd1ea8"
+  },
+  "finished_at": "2026-09-12T21:52:37.857792+00:00"
+}

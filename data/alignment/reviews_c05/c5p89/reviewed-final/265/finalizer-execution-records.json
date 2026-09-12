@@ -1,0 +1,72 @@
+{
+  "first_attempt": {
+    "argv": [
+      "python3",
+      "-B",
+      "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-265-267/reconciled/265/finalize.py"
+    ],
+    "cwd": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment",
+    "code_snapshot": {
+      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-265-267/reconciled/265/finalize-attempt01.py.txt",
+      "bytes": 16612,
+      "sha256": "06d88f0766744e7f9438df090ab87d8d3ca8e6647e083704b39d145814776982"
+    },
+    "exit": 1,
+    "stdout": "",
+    "stderr_observed": "SyntaxError: unterminated string literal (detected at line 45)",
+    "full_failure_replay": "finalizer-attempt01-replay/invocation.json"
+  },
+  "corrected_attempt": {
+    "argv": [
+      "python3",
+      "-B",
+      "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-265-267/reconciled/265/finalize.py"
+    ],
+    "cwd": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment",
+    "code": {
+      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-265-267/reconciled/265/finalize.py",
+      "bytes": 16612,
+      "sha256": "6ea3c1af7afa8ea1e6ba060625e5e42befe47228365bc32f8a26194376fc5847"
+    },
+    "exit": 0,
+    "stderr": "",
+    "stdout_observed": {
+      "status": "FROZEN",
+      "segments": [
+        {
+          "seq": 265,
+          "span_count": 19,
+          "null_count": 2,
+          "word_pair_count": 14,
+          "original_dispositions": 35,
+          "original_retained": 33,
+          "original_recast": 2,
+          "exit": 0
+        },
+        {
+          "seq": 266,
+          "span_count": 38,
+          "null_count": 0,
+          "word_pair_count": 26,
+          "original_dispositions": 74,
+          "original_retained": 70,
+          "original_recast": 4,
+          "exit": 0
+        },
+        {
+          "seq": 267,
+          "span_count": 35,
+          "null_count": 2,
+          "word_pair_count": 21,
+          "original_dispositions": 62,
+          "original_retained": 56,
+          "original_recast": 6,
+          "exit": 0
+        }
+      ],
+      "evidence_mappings": 189,
+      "helper_copies": 7
+    }
+  },
+  "final_audit_addition": "Five supplemental root lexical queries reexecuted exactly. Original186 primary queries and all semantic artifacts remain exact. Reports updated only for query count and evidence link; prior frozen versions preserved."
+}

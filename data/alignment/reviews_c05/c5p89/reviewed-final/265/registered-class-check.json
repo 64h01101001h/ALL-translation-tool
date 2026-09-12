@@ -1,0 +1,134 @@
+{
+  "historical_commit": "7d3d2324c1b0414e695a2adbe7df4740ce82dd09",
+  "repository_relative_path": "docs/errata_register.json",
+  "method": "All records checked for current C05:265–267 references and the four registered artifact classes. Substring class hits are preserved as full records, not all asserted to be the class-defining record. Complete register preserved in source manifest.",
+  "current_segment_hits": [],
+  "class_query_hits": [
+    {
+      "item_id": "E-055",
+      "course": "C03",
+      "segment": "UNVERIFIED",
+      "kind": "UNVERIFIABLE",
+      "found": "",
+      "expected": "",
+      "evidence": "The log excerpt does not contain the item it refers to. It opens mid-sentence ('unparsed rather than guessed at') and the flag reads 'WYLIE QUEUE: both', where 'both' points back to two items named in a sentence that is not in the excerpt. The remainder of the excerpt — that C03:167 reproduces the wording of C03:157 verbatim as 'setting the mind on the object' — I verified as true (C03:157 English 'setting the mind on the object'; C03:167 English '[1] 1) Setting the mind on the object'), but that is a consistency observation, not a defect.",
+      "severity": "LOW",
+      "confidence": "UNCERTAIN",
+      "note": "I checked the hinted segment and its neighbours and found nothing wrong at C03:161 itself; its Tibetan and English correspond cleanly. There is real ingest damage a little further on — C03:165 has 'tshe 'das aa song gizhbs 'jug byed po', C03:166 has 'spyi lo 19a67 lor' (a folio marker 'a' spliced into the year 1967) and opens 'shogces pa'i', a word split across the C03:165/166 boundary and then run together — any of which could be the 'both' the log meant. I am deliberately not registering those as this item, because linking them would be a guess and the register should not carry an invented antecedent. Recommend retrieving the two preceding sentences of the source log at line 1102; the item is almost certainly recoverable from them, and the C03:165/166 damage is worth an editor's eyes on its own account."
+    },
+    {
+      "item_id": "E-063",
+      "course": "C03",
+      "segment": "C03:187",
+      "kind": "FORMATTING",
+      "found": "[17]",
+      "expected": "[21]",
+      "evidence": "the Tibetan folio marker reads 2a1/ which repairs to 21, and the segment sits between captions numbered [20] and [22]. The TIBETAN is right and GMR's bracket is the slip.",
+      "severity": "MEDIUM",
+      "confidence": "CONFIRMED",
+      "note": "filed from the alignment batch, spine-verified on merge"
+    },
+    {
+      "item_id": "E-068",
+      "course": "C03",
+      "segment": "C03:300",
+      "kind": "INGEST_ARTEFACT",
+      "found": "rnams ooo ka re lhan du gsungs",
+      "expected": "rnams shlooo ka re lhan du gsungs",
+      "evidence": "The wylie conversion drops the ACIP Sanskrit brace code {SHl} (sh with subjoined la), leaving the orphan `ooo ka`, which cannot be a Tibetan syllable sequence - no consonant, and a tripled vowel letter. The acip field of this same row preserves the source: \"SKYE BA KUN TU RNAMS {SHl}OOO KA RE LHAN DU GSUNGS,\". Measured over the whole spine: 23 rows carry a {SHl} brace code and all 23 lose the `shl` in their wylie (count of rows where acip matches '%{SHl}OO%' and wylie matches '%oo ka%' but not '%shl%' = 23 of 23); by contrast 9 rows spell the word without the brace code as SHLOO KA and all 9 keep it, wylie `shloo ka` (e.g. TITLS:1252 acip \"...POD SO SOR SHLOO KA RE\" -> wylie \"...pod so sor shloo ka re\"; also C03:349 and C07:80). Two of the damaged rows are in this same document: C03:302 acip \"LHA YI SKAD DANG SOGS {SHl}OO KA RE RE\" -> wylie \"lha yi skad dang sogs oo ka re re\"; C03:378 acip \"ZHES PA'I {SHl}OO KA GCIG STE\" -> wylie \"zhes pa'i oo ka gcig ste\". The word is Sanskrit shloka, \"verse\", which is what the English of this segment renders (\"the various verses\"). `expected` above is the converter-faithful output for this row's source as keyed; the residual tripled vowel is a separate source defect, filed below, after which the reading is `shloo ka`. Effect: the word is unsearchable and unreadable in the wylie layer in all 23 rows.",
+      "severity": "MEDIUM",
+      "confidence": "CONFIRMED",
+      "note": "filed from the alignment batch, spine-verified on merge"
+    },
+    {
+      "item_id": "E-069",
+      "course": "C03",
+      "segment": "C03:300",
+      "kind": "TIBETAN_SPELLING",
+      "found": "SKYE BA KUN TU RNAMS {SHl}OOO KA RE LHAN DU GSUNGS,",
+      "expected": "SKYE BA KUN TU RNAMS {SHl}OO KA RE LHAN DU GSUNGS,",
+      "evidence": "Counted over corpus_segments: acip matching '%{SHl}OO KA%' = 22 rows, acip matching '%{SHl}OOO KA%' = 1 row, that one being C03:300. The 9 rows that spell the word without the brace code all write SHLOO KA, and acip matching '%SHLOOO%' = 0 rows - nothing in the corpus writes the vowel three times. Two of the 22 are in this same document: C03:302 \"{SHl}OO KA RE RE\" and C03:378 \"ZHES PA'I {SHl}OO KA GCIG STE\". The extra O is therefore a keying slip in the source ACIP rather than an orthographic variant. Marked PROBABLE because the claim about the keyer's intent rests on the corpus distribution rather than on the source document itself.",
+      "severity": "LOW",
+      "confidence": "PROBABLE",
+      "note": "filed from the alignment batch, spine-verified on merge"
+    },
+    {
+      "item_id": "E-079",
+      "course": "C03",
+      "segment": "C03:333",
+      "kind": "TIBETAN_SPELLING",
+      "found": "'jug bar 'dod pa",
+      "expected": "'jug par 'dod pa",
+      "evidence": "After a final -g the nominalizer takes the pa/par form, not ba/bar (standard 'jug pa, 'jug par). The sense here is unambiguously 'wishing to enter the door', so the alternative reading of bar as the separate noun 'interval / up to' is excluded. Spine check, span-level: exactly five segments contain the string 'jug bar, and I inspected all five — three (C03:367, C16:431, TCS11:199) are zung 'jug bar gyi, where bar IS the noun 'up to', and the remaining two are this sentence, duplicated verbatim at C16:412. So the nominalizer reading of bar after -g occurs nowhere else in the spine. The same orthographic rule holds elsewhere: all twelve thob bar segments are ma ... thob bar du ('until'), the noun again. By contrast 'jug par appears in 151 segments (a segment count, i.e. an upper bound on distinct spans, not a span-level tally). The ACIP column of this segment reads 'JUG BAR as well, so the deviation sits in the transcription source, not in spine ingest. Not an instance of any registered systematic class (no footnote fusion, folio marker, or glued-on heading). No span keys to the defect: bar is nulled on independent grounds.",
+      "severity": "LOW",
+      "confidence": "PROBABLE",
+      "note": "filed from the alignment batch, spine-verified on merge"
+    },
+    {
+      "item_id": "E-092",
+      "course": "C03",
+      "segment": "C03:403",
+      "kind": "INGEST_ARTEFACT",
+      "found": "zhes pa'i oo ka gnyis kyis bstan te",
+      "expected": "zhes pa'i shloo ka gnyis kyis bstan te",
+      "evidence": "\"oo ka\" is not a word in Tibetan or Sanskrit; the sense required is shloka (verse) — \"this is taught by these two verses\". This segment's own ACIP reads \",ZHES PA'I {SHl}OO KA GNYIS KYIS BSTAN TE,\": the braced Sanskrit-letter token {SHl} was dropped wholesale by the ACIP-to-Wylie converter. The defect tracks the BRACE NOTATION, not the reading — where the same word is keyed without braces the Wylie survives intact, verified in-spine at C03:349 (ACIP \"ZHES PA'I SHLOO KA GCIG GIS BSTAN,\" -> Wylie \"zhes pa'i shloo ka gcig gis bstan\"), C07:80 (ACIP \",ZHES PA'I SHLOO KA GCIG STE,\" -> Wylie \"zhes pa'i shloo ka gcig ste\"), and TITLS:847, 1252, 1282, 1289, 2514, 2570. Measured over the whole spine by this reconciler: 23 segments carry {SHl} in ACIP; 0 of the 23 retain \"shl\" anywhere in Wylie; exactly 22 segments have a bare \" oo ka\" in Wylie and all 22 are {SHl}OO KA segments; the 23rd is C03:300, whose ACIP \"{SHl}OOO KA\" became Wylie \"ooo ka\" — a complete 23/23 correspondence, so this is a systematic converter defect, not a local corruption. The 23 are C03:300, 302, 378, 403, 432, 463, 478, 495, 505, 515, 524, 546, 560, 574 and C16:414, 450, 463, 479, 482, 484, 492, 499, 507. PARALLEL-WITNESS CHECK PERFORMED: C16:450 carries the identical \"zhes pa'i oo ka gnyis kyis bstan te\", but its ACIP is also \"{SHl}OO KA\", so it is the same artefact propagated through the same converter, not an independent published reading. Consequence: the citation-count colophon does not match the dictionary and \"oo ka\" is unsearchable as a word.",
+      "severity": "MEDIUM",
+      "confidence": "CONFIRMED",
+      "note": "filed from the alignment batch, spine-verified on merge"
+    },
+    {
+      "item_id": "E-105",
+      "course": "C03",
+      "segment": "C03:432",
+      "kind": "TIBETAN_SPELLING",
+      "found": "nyes dmigs ri gnas thar pa'i bde ba la",
+      "expected": "nyes dmigs rig nas thar pa'i bde ba la",
+      "evidence": "Misplaced syllable boundary in the ACIP of record (C03:432 reads 'NYES DMIGS RI GNAS'): 'ri gnas' (mountain abode) is not a possible reading after 'nyes dmigs', while 'rig nas' (having realized) is what the syntax requires and what GMR translates ('Bless me to perceive'). Parallel witnesses checked in the spine: C16:463 carries the identical string 'ri gnas', but it is the same ACI course transcription of this verse, so it is a shared inheritance rather than an independent witness. The independent witness is the root text, TCS08SourceOfAllMyGood:6, whose wylie reads 'nyes dmigs rig nas thar pa'i bde ba la', whose ACIP reads 'NYES DMIGS RIG NAS', and whose phonetic line reads 'nyemik rikne tarpay dewa la' (rikne = rig nas). 'rig nas' is also the form C03 itself uses elsewhere (C03:153 'rig nas dang po'i gnyen por', C03:459 'mthong zhing rig nas'); 'ri gnas' occurs nowhere in the spine except these two course segments. Not filed: the same TCS08 line reads 'don gnyer chen por skye bar' against 'chen po skye bar' here; that is a legitimate grammatical variant. The 'oo ka' for '{SHl}OO KA' is the registered converter-drop class and is not re-filed.",
+      "severity": "MEDIUM",
+      "confidence": "CONFIRMED",
+      "note": "filed from the alignment batch, spine-verified on merge"
+    },
+    {
+      "item_id": "E-113",
+      "course": "C03",
+      "segment": "C03:445",
+      "kind": "TIBETAN_SPELLING",
+      "found": "THAMS CAD MKHYEN PA'I GO 'PANG BSGRUB PA",
+      "expected": "THAMS CAD MKHYEN PA'I GO 'PHANG BSGRUB PA",
+      "evidence": "Confirmed from this segment's own text. ACIP (source of record) reads GO 'PANG; the wylie field carries the same reading, go 'pang, so this is in the source, not the converter. The word is go 'phang (rank, station, state), which is what GMR translates: 'the state of All-Knowing'. Re-derived corpus counts: acip LIKE '%GO ''PANG%' returns exactly one row, C03:445; acip LIKE '%GO ''PHANG%' returns 219; the wylie field splits identically, 1 vs 219. Stronger still, the syllable 'pang occurs NOWHERE else in the corpus wylie: a-chung ('a) prefixes only voiced or aspirated radicals in Tibetan orthography ('g 'j 'd 'b 'dz 'kh 'ch 'th 'ph 'tsh), so 'p- is not a spellable syllable onset and 'pang cannot be a variant. Parallel-witness check: no other segment carries this passage (english LIKE '%habit of hoping for the%', english LIKE '%up to the final end%', wylie LIKE '%tshe ''di snang gi zhen pa%', wylie LIKE '%rang res ngan ''gro%' each return C03:445 alone). The exact collocation mkhyen pa'i go 'p… appears in seven other rows, every one of them 'phang: C01:84, C16:32, TCS02:315, TCS09:37, Sunlight:595, Sunlight:707, SPF:461. The nearest relative for the surrounding idiom, ILL:126 (thog mtha' bar gsum du gal che), shares only that closing idiom and says nothing about go 'phang. Registered classes checked and not applicable: no {SHl} drop, no fused footnote number, no folio marker, no glued heading; the ACIP trailing shad ',' absent from the wylie is the normal strip, and ACIP TSE for wylie tshe is the ACIP convention (TS = tsh), not an error. A dropped aspiration H in one row against 219 correct ones, yielding an impossible syllable, is a keystroke error.",
+      "severity": "MEDIUM",
+      "confidence": "CONFIRMED",
+      "note": "filed from the alignment batch, spine-verified on merge"
+    },
+    {
+      "item_id": "E-177",
+      "course": "C05",
+      "segment": "C05:142",
+      "kind": "FORMATTING",
+      "found": "MNYAM PAR BZHAG,GLANG CHEN MNAL",
+      "expected": "MNYAM PAR BZHAG, GLANG CHEN MNAL",
+      "evidence": "ACIP (source of record) omits the space after the shad-comma between the second and third verse lines; the wylie inherits it as 'bzhag,glang'. Every other line break in the same verse has ', '. No parallel witness: the verse (wylie like '%glang chen gshegs na%', english like '%Even as he stays, the elephant%') occurs only at C05:142 in all 42,199 rows; C16 does not carry this row. Not in any registered class ({SHl} drop, fused footnote, folio splice, glued heading). SKEPTIC PASS 2026-09-05 (Fable 5.1): refuted=false — verbatim in ACIP and wylie; only occurrence (no witness); comma-without-space is not the general convention (271 vs 29,996 spaced rows) and the verse's other breaks are spaced; same class as E-037/E-038 (per-segment INGEST_ARTEFACT); cross-reference class fix.",
+      "severity": "LOW",
+      "confidence": "CONFIRMED",
+      "note": "filed from the alignment batch, spine-verified on merge"
+    },
+    {
+      "item_id": "E-185",
+      "course": "C05",
+      "segment": "C05:180",
+      "kind": "TIBETAN_SPELLING",
+      "found": "MYON MONGS PA",
+      "expected": "NYON MONGS PA",
+      "evidence": "ACIP C05:180 contains MYON MONGS PA verbatim and its Wylie agrees, myon mongs pa. The preceding root C05:179 has NYON MONGS and English Mental affliction; the commentary 180 translates the same first condition as mental affliction. The live glossary-tier entry nyon mongs pa attests mental affliction, and an exact myon mongs pa entry is absent. A targeted query excluding the unscanned C13 returns exactly two myon mongs rows, C05:180 and C16:759; the latter matches all three source fields byte for byte and is the same source re-ingested. The corrected prose search nyon mongs pa dang rab has zero non-C13 spine rows. Local digital text witnesses were read and hashed independently at folio marker @124B: SE5525M and SE05525M (SHA256 933d04e506d356a0deb8da05996778e1ef58a313255df981d45d224834c8f913) both read 'ZHEN, MYON MONGS PA'; the distinct SL05525N file (SHA256 12aca4d3a071d600b704761aa82568b7a09175cef62d25e2d3caf9d6b25c179f) reads 'ZHEN, NYON MONGS PA'. All are local digital copies titled DAM PA'I CHOS MNGON PA'I MDZOD KYI RNAM PAR BSHAD PA THAR LAM GSAL BYED, attributed to Rgyal ba Dge 'dun grub, under the campaign-worktree library/sungbum/Sungbum collection; exact paths, original line breaks and full passage quotes are preserved in data/alignment/reviews_c05/c5p60/commentary-local-witnesses.json. The two SE filenames are identical bytes and not two independent witnesses. SL is a distinct digital reading, but publication independence has not been established and no manuscript or blockprint was inspected. The source spelling is therefore a LOW/PROBABLE editorial candidate, not a proven correction; the corpus remains untouched. The current errata register has no C05:178–180/MYON duplicate, and this is not a registered converter, heading, folio, footnote, row-spill or English-cap class.",
+      "severity": "LOW",
+      "confidence": "PROBABLE",
+      "note": "filed from the alignment batch, spine-verified on merge"
+    }
+  ],
+  "classes": [
+    "SHl converter drop",
+    "footnote numbers fused to preceding period",
+    "folio markers in caption numbers",
+    "following section heading glued to English"
+  ]
+}

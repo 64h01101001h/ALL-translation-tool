@@ -1,0 +1,10 @@
+"""Add query_only while invoking the unchanged supplied URI mode=ro wrapper."""
+import pathlib,runpy,sqlite3
+_connect=sqlite3.connect
+def connect(*args,**kwargs):
+    con=_connect(*args,**kwargs)
+    con.execute('PRAGMA query_only=ON')
+    assert con.execute('PRAGMA query_only').fetchone()[0]==1
+    return con
+sqlite3.connect=connect
+runpy.run_path(str(pathlib.Path(__file__).resolve().parents[3]/'run_generator_readonly.py'),run_name='__main__')
