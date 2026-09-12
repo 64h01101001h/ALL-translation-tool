@@ -22243,7 +22243,9 @@ public:
                          "Mixed set \u2014 the category is not given away",
                          "Debate \u2014 which element does the reply attack?",
                          "Peel \u2014 how many pieces does it split into?",
-                         "Boundary hunt \u2014 where do the clauses end?"});
+                         "Boundary hunt \u2014 where do the clauses end?",
+                         "Reading order \u2014 which chunk does his English "
+                         "take first?"});
         row->addWidget(mode_);
         scriptCourse_ = new QComboBox;
         scriptCourse_->setToolTip(
@@ -22730,6 +22732,63 @@ public:
                     newDrill();
                     check(!lookupBtn_->isVisibleTo(this),
                           "look up: out of reach again on the next drill");
+                }
+            }
+
+            // ---- Reading order ----
+            mode_->setCurrentIndex(13);
+            for (int i = 0; i < 30 && readKids_.isEmpty(); ++i) newDrill();
+            if (!readKids_.isEmpty()) {
+                check(input_->isVisibleTo(this),
+                      "reading order: the answer box is present for a mode "
+                      "answered by typing (the Mixed-set lesson)");
+                check(readKids_.size() >= 2 &&
+                          readAnswer_.size() == (size_t)readKids_.size(),
+                      "reading order: the key covers every chunk exactly once");
+                std::set<int> seen(readAnswer_.begin(), readAnswer_.end());
+                check(seen.size() == readAnswer_.size(),
+                      "reading order: the key is a permutation, not a list "
+                      "with a repeat in it");
+                bool contained = true;
+                for (const QString& k2 : readKids_)
+                    if (!readParent_.contains(k2)) contained = false;
+                check(contained,
+                      "reading order: every chunk really is part of the span "
+                      "it came from");
+                // The key is HIS. Each piece's English must sit inside the
+                // span's English, or the order was inferred rather than read
+                // off his translation.
+                bool fromHim = !readParentEng_.isEmpty();
+                for (const QString& e2 : readKidsEng_)
+                    if (!readParentEng_.contains(e2)) fromHim = false;
+                check(fromHim,
+                      "reading order: the key is read off Geshe Michael's own "
+                      "English, not inferred by the engine");
+                // exact key scores perfect
+                QStringList exact;
+                for (int a : readAnswer_) exact << QString::number(a + 1);
+                input_->setText(exact.join(' '));
+                checkDrill();
+                check(result_->toPlainText().contains("That is his order"),
+                      "reading order: his own order scores perfect");
+                // THE gate. If the answer happens to differ from the written
+                // order, then typing the written order must NOT score perfect
+                // — otherwise the drill is scoring "1 2 3" and teaching
+                // nothing, which is exactly the failure mode of the Chunk
+                // order drill this one exists to complement.
+                bool identity = true;
+                for (size_t z = 0; z < readAnswer_.size(); ++z)
+                    if (readAnswer_[z] != (int)z) identity = false;
+                if (!identity) {
+                    QStringList written;
+                    for (int z = 0; z < readKids_.size(); ++z)
+                        written << QString::number(z + 1);
+                    input_->setText(written.join(' '));
+                    checkDrill();
+                    check(!result_->toPlainText().contains("That is his order"),
+                          "reading order: typing the WRITTEN order is marked "
+                          "wrong when his order differs \u2014 the drill is "
+                          "not quietly scoring 1 2 3");
                 }
             }
 
@@ -23529,6 +23588,81 @@ private:
                 addRadios(opts, false);
             }
         }
+        if (m == 13) {
+            // Present the chunks as WRITTEN; the answer is the order his
+            // English takes them. Everything comes from the alignment bank,
+            // so the key is his and the drill composes nothing.
+            readParent_.clear(); readRef_.clear(); readParentEng_.clear();
+            readKids_.clear(); readKidsEng_.clear();
+            readAnswer_.clear(); readEngine_.clear();
+            if (g_alignGrammar && !g_alignGrammar->empty()) {
+                for (int tries = 0; tries < 200 && readKids_.isEmpty(); ++tries) {
+                    auto it = g_alignGrammar->begin();
+                    std::advance(it, rng_() % g_alignGrammar->size());
+                    const QList<GLink>& v = it->second;
+                    if (v.size() < 3) continue;
+                    for (const GLink& p2 : v) {
+                        if (p2.tib.isEmpty() || p2.eng.isEmpty()) continue;
+                        QList<GLink> kids;
+                        int kidDepth = 99;
+                        for (const GLink& c2 : v) {
+                            if (c2.d <= p2.d || c2.tib == p2.tib) continue;
+                            if (c2.eng.isEmpty()) continue;
+                            if (!p2.tib.contains(c2.tib)) continue;
+                            if (c2.d < kidDepth) { kidDepth = c2.d; kids.clear(); }
+                            if (c2.d == kidDepth) kids << c2;
+                        }
+                        if (kids.size() < 2 || kids.size() > 5) continue;
+                        // order them as WRITTEN, by position in the parent
+                        std::sort(kids.begin(), kids.end(),
+                                  [&](const GLink& a, const GLink& b) {
+                                      return p2.tib.indexOf(a.tib) <
+                                             p2.tib.indexOf(b.tib);
+                                  });
+                        // his English order: where each child's English sits
+                        // inside the parent's. Distinct positions or the
+                        // question has no single answer and is dropped.
+                        std::vector<int> pos;
+                        bool ok = true;
+                        for (const GLink& k2 : kids) {
+                            const int at = p2.eng.indexOf(k2.eng);
+                            if (at < 0) { ok = false; break; }
+                            for (int q : pos) if (q == at) ok = false;
+                            pos.push_back(at);
+                        }
+                        if (!ok) continue;
+                        // and it must render as script, like every other card
+                        if (p2.acip.isEmpty()) continue;
+                        for (const GLink& k2 : kids)
+                            if (k2.acip.isEmpty() ||
+                                disp(k2.acip.toStdString()).contains(QChar(0x27E8)))
+                                ok = false;
+                        if (!ok) continue;
+                        // A card whose answer is 1 2 3 teaches the learner to
+                        // type 1 2 3. The pool is the spans that actually
+                        // reorder — which is the 40% the measurement found,
+                        // and the whole reason the drill exists.
+                        std::vector<int> rank(pos.size());
+                        for (size_t z = 0; z < pos.size(); ++z) rank[z] = (int)z;
+                        std::sort(rank.begin(), rank.end(),
+                                  [&](int a, int b) { return pos[a] < pos[b]; });
+                        bool identity = true;
+                        for (size_t z = 0; z < rank.size(); ++z)
+                            if (rank[z] != (int)z) identity = false;
+                        if (identity && (rng_() % 4)) continue;   // keep some
+                        readParent_ = p2.acip;
+                        readParentEng_ = p2.eng;
+                        for (const GLink& k2 : kids) {
+                            readKids_ << k2.acip;
+                            readKidsEng_ << k2.eng;
+                        }
+                        readAnswer_ = rank;
+                        readRef_ = QString::fromStdString(it->first);
+                        break;
+                    }
+                }
+            }
+        }
         if (m == 12) {
             bound_.reset();
             boundHard_ = boundStreak_ >= 3;
@@ -23932,10 +24066,11 @@ private:
         // chunk-order item appeared with no box to answer it in, and checking
         // scored the empty string as wrong. The mixed set was shipped with
         // one item in four unanswerable.
-        input_->setVisible(m == 0 || m == 12);
+        input_->setVisible(m == 0 || m == 12 || m == 13);
         input_->setPlaceholderText(
-            m == 12 ? "words each clause ends ON, e.g.  4 9"
-                    : "your order, e.g.  C A B  (chunk-order drills)");
+            m == 12   ? "words each clause ends ON, e.g.  4 9"
+            : m == 13 ? "his reading order, e.g.  2 1 3"
+                      : "your order, e.g.  C A B  (chunk-order drills)");
         QString h;
         if (m == 0 && order_) {
             h += kindBadge(order_->segment);
@@ -23951,6 +24086,22 @@ private:
                 h += QString("<div style='font-size:%1px'><b>%2)</b> %3</div>").arg(px(21))
                          .arg(QChar('A' + (int)i))
                          .arg(disp(order_->chunks[order_->presented[i]]));
+        } else if (m == 13 && !readKids_.isEmpty()) {
+            h += "<div style='color:#3B7A3B'><b>ATTESTED</b> \u00b7 the key is "
+                 "Geshe Michael\u2019s own English for this very span, not the "
+                 "engine\u2019s ruling</div>";
+            h += "<div style='color:#555'>These chunks are shown in the order "
+                 "they are <b>written</b>. In what order does his English take "
+                 "them? Type the numbers, e.g. <b>2 1 3</b>. From [" +
+                 readRef_.toHtmlEscaped() + "]</div><hr>";
+            for (int i = 0; i < readKids_.size(); ++i)
+                h += QString("<div style='font-size:%1px'><b>%2)</b> %3</div>")
+                         .arg(px(21)).arg(i + 1)
+                         .arg(disp(readKids_[i].toStdString()));
+            h += "<div style='color:#888;padding-top:6px;font-size:11px'>"
+                 "Clause order is almost never inverted \u2014 5% of 972 "
+                 "measured pairs. Inside a clause it is a different story, "
+                 "which is what this drills.</div>";
         } else if (m == 1 && cloze_) {
             h += kindBadge(cloze_->segment);
             // drawn from the corpus, so his English IS the key
@@ -24423,6 +24574,58 @@ private:
             h += "<div><small>role of the blanked chunk: " +
                  QString::fromUtf8(cloze_->role).toHtmlEscaped() +
                  "</small></div>";
+        } else if (m == 13 && !readKids_.isEmpty()) {
+            const QString muted =
+                ux::darkChrome() ? ux::chromeMuted() : QString(ux::kMuted);
+            std::vector<int> given;
+            for (const QString& piece :
+                 input_->text().split(QRegularExpression("[^0-9]+"),
+                                      Qt::SkipEmptyParts)) {
+                const int v = piece.toInt() - 1;
+                if (v >= 0 && v < readKids_.size()) given.push_back(v);
+            }
+            const bool perfect = given == readAnswer_;
+            // Partial credit that means something: how many chunks the learner
+            // put in the right PLACE. Scoring only all-or-nothing would tell
+            // someone who got three of four right exactly what it tells
+            // someone who got none.
+            int inPlace = 0;
+            for (size_t z = 0; z < readAnswer_.size() && z < given.size(); ++z)
+                if (given[z] == readAnswer_[z]) ++inPlace;
+            h += perfect
+                     ? "<b style='color:#3B7A3B'>That is his order.</b>"
+                     : QString("<b style='color:#B4540A'>%1 of %2 in the right "
+                               "place.</b>")
+                           .arg(inPlace).arg((int)readAnswer_.size());
+            h += "<div style='padding-top:8px'><b>His order, and his English "
+                 "for each piece:</b></div>";
+            for (size_t z = 0; z < readAnswer_.size(); ++z) {
+                const int k = readAnswer_[z];
+                const bool got = z < given.size() && given[z] == k;
+                h += QString("<div style='padding:2px 0'><b style='color:%1'>"
+                             "%2.</b> <span style='font-size:%3px'>%4</span> "
+                             "<span style='color:%5'>&mdash; %6</span></div>")
+                         .arg(got ? "#3B7A3B" : "#B4540A")
+                         .arg(z + 1).arg(px(19))
+                         .arg(disp(readKids_[k].toStdString()))
+                         .arg(muted)
+                         .arg(readKidsEng_[k].toHtmlEscaped());
+            }
+            h += "<div style='padding-top:6px;color:" + muted +
+                 "'><i>" + readParentEng_.toHtmlEscaped() + "</i></div>";
+            // written order, for the contrast that is the whole lesson
+            bool identity = true;
+            for (size_t z = 0; z < readAnswer_.size(); ++z)
+                if (readAnswer_[z] != (int)z) identity = false;
+            h += QString("<div style='padding-top:8px;font-size:12px;color:%1'>"
+                         "%2</div>")
+                     .arg(muted)
+                     .arg(identity
+                              ? "Written order and reading order are the same "
+                                "here \u2014 which is the common case at the "
+                                "clause level and the uncommon one below it."
+                              : "Written order would have given you a different "
+                                "answer. That gap is the skill.");
         } else if (m == 12 && bound_) {
             const QString muted =
                 ux::darkChrome() ? ux::chromeMuted() : QString(ux::kMuted);
@@ -24934,6 +25137,26 @@ private:
     QString peelParent_, peelRef_;
     QStringList peelKids_;
     int peelCorrect_ = -1;
+    // ---- Reading order (Adam, 2026-09-12) ----
+    // "my main problem in reading/translating Tibetan is understanding in what
+    // order to read the chunks and which direction to read the chunks."
+    //
+    // The Chunk order drill next to this one scrambles the TIBETAN and asks
+    // for the TIBETAN order back. That trains Tibetan word order and teaches
+    // nothing at all about the mapping into English, which is the difficulty.
+    // This one presents the chunks in the order they are WRITTEN and asks in
+    // what order his English takes them.
+    //
+    // The key is his own translation, recovered from the alignment bank, so
+    // it is ATTESTED — not planReading's ruling, which the measurement puts at
+    // 51% against 59% for doing nothing at exactly this level
+    // (docs/READING_ORDER_MEASUREMENT.md). The engine's guess is shown in the
+    // reveal BESIDE his answer, because where a rule and the master disagree
+    // is the most instructive thing on the card.
+    QString readParent_, readRef_, readParentEng_;
+    QStringList readKids_, readKidsEng_;
+    std::vector<int> readAnswer_;    // indices into readKids_, in English order
+    std::vector<int> readEngine_;    // the engine's order, for the reveal
     std::optional<allcore::BoundaryDrill> bound_;
     // The punctuated pool is the confidence-building one: the learner is
     // recovering a boundary the scribe already marked. Three in a row and the
