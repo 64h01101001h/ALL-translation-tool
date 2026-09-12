@@ -698,3 +698,55 @@ cannot blank them again.
 
 **Smallest fix.** Give each of the four a distinct kind from miniIcon's existing vocabulary — for example "out" stays with Export RTF, "stack" or "shelf" for Send to Manuscript; "book" stays with Compose bibliography, "strip" or "pecha" for Verse reading order (25127, 25307).
 
+
+---
+
+## Status, 2026-09-12
+
+**All 18 HIGH findings are closed.** Roughly 22 of the 31 MEDIUM are closed;
+the LOW tier is untouched. Twenty-two commits, each with its own gates. The
+suite stayed green throughout: 114/114 on the core batteries, app selftest ALL
+PASS, constitution holding.
+
+Three findings were **examined and deliberately not fixed**, which is recorded
+rather than left as a silent gap:
+
+- **The properties sidecar's key** — two same-named files in different folders
+  share one revision counter. Re-keying needs an adoption step that cannot live
+  where it naturally goes, and would start orphaning properties on every move
+  until every pane carried history. `docs/SIDECAR_KEYING_DECISION.md` carries
+  the full reasoning and the design a later attempt needs. The check's urgent
+  finding — the Manuscript carrying no history at all — was fixed the same day.
+- **`C01_CAMPAIGN.md`'s stale header table** — a campaign ledger is an
+  append-only work record, and rewriting one falsifies the history it exists to
+  hold.
+- **The red-flag licence list** — a standing prohibition, not a task. Marked
+  `[—]` so it stops appearing as work to be done.
+
+### What the audit was actually about
+
+Almost none of these were crashes. The recurring defect in this pane is **a
+control that cannot act failing to say why before it is pressed, rather than
+after** — and its sibling, **a result reported over nothing at all**. A check
+that examined nothing printed a clean zero. Four structure tools answered
+confidently about an empty box. An insertion landed off-screen so a working
+control looked broken. A save reported to a pane behind its own modal.
+
+The one that mattered most was not in the original 60. Probing the terminology
+matcher rather than reading it showed `"mind"` matching `"reminded"`, `"art"`
+matching `"departure"`, `"one"` matching `"honest"` — a bare substring search
+under the pane's headline verdict, reporting terms as *rendered* when the
+equivalent never appeared as a word. That number is what a translator trusts,
+and it was flattering their draft.
+
+### Three lessons about the gates themselves
+
+1. **A gate that only checks its own block agrees with the bug.** The first
+   library-pollution gate passed cleanly while five other panes were still
+   writing phantom records.
+2. **A gate can encode the defect as a requirement.** The ladder gate asserted
+   that the Manuscript holds *exactly* the draft that was sent — which is the
+   data loss, written down as a specification.
+3. **A flaky gate is worse than a missing one**, because it teaches you to
+   discount a red result. Five Overlay gates went red from debris left by an
+   interrupted run; the same binary passed them on a re-run.
