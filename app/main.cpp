@@ -25259,83 +25259,9 @@ public:
         termTimer_->setInterval(1500);
         connect(draft_, &QPlainTextEdit::textChanged,
                 [this] { termTimer_->start(); });
-        connect(termTimer_, &QTimer::timeout, [this] {
-            const std::string src =
-                source_->toPlainText().toStdString();
-            const std::string dr =
-                draft_->toPlainText().toStdString();
-            if (src.empty() || dr.size() < 20) {
-                termLive_->clear();
-                return;
-            }
-            auto rep =
-                allcore::checkTerminology(spine_, index_, src, dr);
-            int unmatched = 0;
-            QString first;
-            for (const auto& t : rep.terms)
-                if (t.matched.empty()) {
-                    if (!unmatched)
-                        first = QString::fromStdString(t.wylie);
-                    ++unmatched;
-                }
-            // 9n-8 (2026-08-20): the health chip also counts
-            // honorific-register terms in the source — the Review
-            // pane's respect advisory, surfaced while you type
-            int honor = 0;
-            if (g_honorifics) {
-                std::vector<std::string> toks;
-                std::vector<bool> bars;
-                allcore::tokenizeDocument(src, toks, bars);
-                std::set<std::string> seenH;
-                for (size_t i = 0; i < toks.size(); ++i) {
-                    const std::string a =
-                        allcore::tokenToEwts(toks[i]);
-                    if (g_honorifics->count(a) && seenH.insert(a).second)
-                        ++honor;
-                    if (i + 1 < toks.size() && !bars[i]) {
-                        const std::string b =
-                            a + " " +
-                            allcore::tokenToEwts(toks[i + 1]);
-                        if (g_honorifics->count(b) &&
-                            seenH.insert(b).second)
-                            ++honor;
-                    }
-                }
-            }
-            if (!unmatched && rep.shared.empty()) {
-                termLive_->setStyleSheet(
-                    "font-size:11px;color:#3B7A3B");
-                termLive_->setText(
-                    QString("✓ every established term is rendered; "
-                            "no shared-English collapses%1")
-                        .arg(honor
-                                 ? QString(" · %1 honorific term(s) "
-                                           "— mind the register")
-                                       .arg(honor)
-                                 : QString()));
-            } else {
-                termLive_->setStyleSheet(
-                    "font-size:11px;color:#935800");
-                QString t;
-                if (unmatched)
-                    t += QString("⚠ %1 established term(s) not yet "
-                                 "rendered (first: %2)")
-                             .arg(unmatched)
-                             .arg(first);
-                if (!rep.shared.empty())
-                    t += QString("%1⚠ %2 shared-English "
-                                 "collapse(s)")
-                             .arg(t.isEmpty() ? "" : " · ")
-                             .arg(rep.shared.size());
-                if (honor)
-                    t += QString("%1%2 honorific term(s) — mind "
-                                 "the register")
-                             .arg(t.isEmpty() ? "" : " · ")
-                             .arg(honor);
-                t += " — press Check terminology for the detail";
-                termLive_->setText(t);
-            }
-        });
+        connect(termTimer_, &QTimer::timeout, this,
+                &DraftPane::updateTermChip);
+
         auto* checkBtn = new QPushButton("Check terminology");
         checkBtn->setToolTip(
             "Matches the English draft against Geshe Michael Roach's equivalents. It "
@@ -25627,6 +25553,108 @@ public:
         return saveDraft();
     }
 
+    // The live terminology chip, named rather than buried in a timer lambda
+    // so the selftest can drive it directly — a Qt signal cannot be emitted
+    // from outside its own object, and a behaviour no test can reach is a
+    // behaviour that drifts.
+    void updateTermChip() {
+            const std::string src =
+                source_->toPlainText().toStdString();
+            const std::string dr =
+                draft_->toPlainText().toStdString();
+            if (src.empty() || dr.size() < 20) {
+                // Not blank. A status line that empties itself tells a reader
+                // nothing about whether it is thinking, broken, or waiting.
+                termLive_->setStyleSheet(
+                    QString("font-size:11px;color:%1")
+                        .arg(ux::darkChrome() ? ux::chromeMuted()
+                                              : QString(ux::kMuted)));
+                termLive_->setText(
+                    src.empty()
+                        ? "terminology check: waiting for a source"
+                        : "terminology check: waiting for a little more draft");
+                return;
+            }
+            auto rep =
+                allcore::checkTerminology(spine_, index_, src, dr);
+            int unmatched = 0;
+            QString first;
+            for (const auto& t : rep.terms)
+                if (t.matched.empty()) {
+                    if (!unmatched)
+                        first = QString::fromStdString(t.wylie);
+                    ++unmatched;
+                }
+            // 9n-8 (2026-08-20): the health chip also counts
+            // honorific-register terms in the source — the Review
+            // pane's respect advisory, surfaced while you type
+            int honor = 0;
+            if (g_honorifics) {
+                std::vector<std::string> toks;
+                std::vector<bool> bars;
+                allcore::tokenizeDocument(src, toks, bars);
+                std::set<std::string> seenH;
+                for (size_t i = 0; i < toks.size(); ++i) {
+                    const std::string a =
+                        allcore::tokenToEwts(toks[i]);
+                    if (g_honorifics->count(a) && seenH.insert(a).second)
+                        ++honor;
+                    if (i + 1 < toks.size() && !bars[i]) {
+                        const std::string b =
+                            a + " " +
+                            allcore::tokenToEwts(toks[i + 1]);
+                        if (g_honorifics->count(b) &&
+                            seenH.insert(b).second)
+                            ++honor;
+                    }
+                }
+            }
+            if (rep.terms.empty()) {
+                // Zero terms examined is NOT an all-clear. The green line
+                // below used to print over an empty report, certifying a
+                // draft nobody had compared against anything.
+                termLive_->setStyleSheet(
+                    QString("font-size:11px;color:%1")
+                        .arg(ux::darkChrome() ? ux::chromeMuted()
+                                              : QString(ux::kMuted)));
+                termLive_->setText(
+                    "no established terms in this source \u2014 nothing to "
+                    "check against");
+            } else if (!unmatched && rep.shared.empty()) {
+                termLive_->setStyleSheet(
+                    "font-size:11px;color:#3B7A3B");
+                termLive_->setText(
+                    QString("✓ every established term is rendered; "
+                            "no shared-English collapses%1")
+                        .arg(honor
+                                 ? QString(" · %1 honorific term(s) "
+                                           "— mind the register")
+                                       .arg(honor)
+                                 : QString()));
+            } else {
+                termLive_->setStyleSheet(
+                    "font-size:11px;color:#935800");
+                QString t;
+                if (unmatched)
+                    t += QString("⚠ %1 established term(s) not yet "
+                                 "rendered (first: %2)")
+                             .arg(unmatched)
+                             .arg(first);
+                if (!rep.shared.empty())
+                    t += QString("%1⚠ %2 shared-English "
+                                 "collapse(s)")
+                             .arg(t.isEmpty() ? "" : " · ")
+                             .arg(rep.shared.size());
+                if (honor)
+                    t += QString("%1%2 honorific term(s) — mind "
+                                 "the register")
+                             .arg(t.isEmpty() ? "" : " · ")
+                             .arg(honor);
+                t += " — press Check terminology for the detail";
+                termLive_->setText(t);
+            }
+            }
+
     // The right-hand panes are EMPTY most of the time, and empty is a state
     // that has to speak. Adam, 2026-09-11, on finding both blank with a source
     // loaded: "it doesn't make any sense." He was right — one had its
@@ -25785,6 +25813,44 @@ public:
                       "instruction");
             }
         }
+        // ---- a check that examined nothing is not a clean check ----------
+        // ORDER MATTERS: this block WRITES into report_, so it must run after
+        // the pristine-state checks above. Placed before them, it clobbered
+        // the idle text they assert and failed a gate that was working.
+        // With no source loaded, "Check terminology" printed "0 term(s) · 0
+        // without a GMR equivalent · 0 with mixed renderings" — which a
+        // translator reads as "my draft is clean". A false all-clear over a
+        // draft nobody checked is the worst output this pane can produce.
+        {
+            source_->setPlainText("");
+            draft_->setPlainText("Some English that was never compared.");
+            check_();
+            const QString r = report_->toPlainText();
+            check(r.contains("Nothing was checked"),
+                  "terminology: with no source, the check REFUSES rather than "
+                  "reporting a clean zero");
+            check(!r.contains("0 term(s)"),
+                  "terminology: and does not print a zero tally that reads as "
+                  "an all-clear");
+
+            source_->setPlainText("/ /sems can thams cad /");
+            draft_->setPlainText("");
+            check_();
+            check(report_->toPlainText().contains("Nothing was checked"),
+                  "terminology: with no draft, the same refusal");
+
+            // the live chip must never go green over zero terms, and must
+            // never simply blank
+            draft_->setPlainText("");
+            source_->setPlainText("");
+            updateTermChip();
+            check(!termLive_->text().trimmed().isEmpty(),
+                  "terminology: the live chip says what it is waiting for "
+                  "instead of going blank");
+            check(!termLive_->styleSheet().contains("#3B7A3B"),
+                  "terminology: and is never green while it is waiting");
+        }
+
         const QString a = anchors_->toHtml().toLower();
         check(a.contains("d9efda") || a.contains("d8e9f7") ||
                   a.contains("fae8d8") || a.contains("f7e3ea"),
@@ -27260,10 +27326,50 @@ public:
         });
     }
 
+    void check_() { check(); }   // unshadowed name for the selftest
     void check() {
+        // A check that examined nothing must not report a clean result.
+        // With no source loaded this printed "0 term(s) · 0 without a GMR
+        // equivalent · 0 with mixed renderings", which a translator reads as
+        // "my draft is clean" — a false all-clear over a draft nobody checked.
+        // Found by the Draft workspace audit, 2026-09-11.
+        const QString srcQ = source_->toPlainText().trimmed();
+        const QString drfQ = draft_->toPlainText().trimmed();
+        if (srcQ.isEmpty() || drfQ.isEmpty()) {
+            report_->setHtml(
+                QString("<div style='color:%1'><b>Nothing was checked.</b>"
+                        "</div><div style='padding-top:6px'>The terminology "
+                        "check compares your English against Geshe Michael "
+                        "Roach's equivalents for <i>this source</i>, so it "
+                        "needs both. %2</div>")
+                    .arg(ux::darkChrome() ? ux::chromeMachine()
+                                          : QString(ux::kMachine),
+                         srcQ.isEmpty()
+                             ? (drfQ.isEmpty()
+                                    ? "The source box and the draft are both "
+                                      "empty."
+                                    : "The source box is empty \u2014 paste "
+                                      "the Tibetan and press Load source.")
+                             : "The draft is empty \u2014 there is no English "
+                               "to check yet."));
+            return;
+        }
         auto rep = allcore::checkTerminology(
             spine_, index_, source_->toPlainText().toStdString(),
             draft_->toPlainText().toStdString());
+        if (rep.terms.empty()) {
+            report_->setHtml(
+                QString("<div style='color:%1'><b>No established terms found "
+                        "in this source.</b></div><div style='padding-top:6px'>"
+                        "Nothing was compared, so this is not a clean result "
+                        "\u2014 it is an empty one. The check only knows terms "
+                        "that carry one of Geshe Michael Roach's equivalents; "
+                        "a passage built entirely from words he has not "
+                        "glossed gives it nothing to work with.</div>")
+                    .arg(ux::darkChrome() ? ux::chromeMachine()
+                                          : QString(ux::kMachine)));
+            return;
+        }
         int unmatched = 0, mixed = 0, provisionalUsed = 0;
         for (const auto& t : rep.terms) {
             unmatched += t.matched.empty();
