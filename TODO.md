@@ -1,3 +1,57 @@
+# ★★★★★ ADAM 2026-09-11 (on a hike): FREQUENCY-ORDERED VOCABULARY —
+# "the first step for people trying to learn how to translate Tibetan"
+
+His reasoning, in his order, because it is the specification:
+
+  "When you can look at any given paragraph, sentence, phrase, or clause,
+   and you can tell the individual words, well, then you can start to
+   decipher connecting particles and reading order in chunks and all of
+   these different ideas."
+
+Word IDENTIFICATION comes first. Everything the Learn tab already does —
+particles, chunk order, boundary hunting, peeling — assumes you can already
+see where one word stops and the next starts. That assumption is unearned for
+a beginner, and this is the item that earns it.
+
+## The work, in stages
+
+- [ ] **1. Process ALL of Geshe Michael Roach's known Tibetan→English
+      translations.** Not the 42,199 aligned segments alone — the whole known
+      body of his translation work, gathered and normalised. The corpus we
+      hold is a subset; the first task is to establish what "all" actually
+      means and what is missing from it.
+- [ ] **2. Word frequency across that whole body**, counted honestly. The
+      counting trap is already on record (memory: gmr-translation-style-findings
+      — a frequency figure was invalidated by its own counting method once)
+      and §2 of docs/LEARN_TAB_VISION.md flags that two passes differed by
+      2.5x. A frequency list is worthless if its denominator is wrong, so the
+      segmenter question has to be settled BEFORE any number is published.
+- [ ] **3. Frequency AT EACH LAYER DEPTH.** Adam's own framing: the alignment
+      layer records seven depths (segment, clause, phrase, word, member,
+      chunk), so "frequency" is not one number per word but a profile — how
+      often a form appears as a word, as a member of a compound, as part of a
+      larger phrase. A word that is common only inside compounds is a
+      different learning problem from one that is common standing alone.
+- [ ] **4. Per-translation presence**, so a word's spread is visible and not
+      just its total. A term used 400 times in one text is not the same
+      learning priority as one used 400 times across forty texts.
+- [ ] **5. The learner's list.** Order by frequency and recommend a memorised
+      core: the top 2,000, then the top 4,000. Adam's numbers.
+- [ ] **6. Eventually: textual-analysis tools** that answer the general
+      question — the most frequent words in Buddhist philosophy ACROSS all
+      authors and all genres, not only across his translations. That is a
+      research instrument, and it is what makes the frequency list defensible
+      rather than an artefact of one translator's reading.
+
+## What must not be assumed
+
+- **The list is a recommendation, not a syllabus.** It says what is common,
+  which is not the same as what is worth learning first, and the app must not
+  present the two as identical.
+- **Frequency is measured, never estimated.** See stage 2.
+- **hgm_gloss stays binding.** A frequency list orders existing entries; it
+  does not create or promote an equivalent.
+
 # ★★★★★ UNFILED SWEEP — 2026-09-09 (Adam: "anything that hasn't been
 # filed until now goes on the backlog")
 

@@ -24,8 +24,12 @@ nothing Python runs at app runtime.
 
 ## Clone, build, run
 
-    cmake -B cmake-build -DCMAKE_PREFIX_PATH="$(brew --prefix qt)"
-    cmake --build cmake-build -j
+    # cmake-build-release is the tree tools/verify.sh and
+    # tools/package_macos.sh actually use. An older version of this
+    # page said "cmake-build", which left newcomers running a stale
+    # tree that still had 93 tests registered (corrected 2026-09-11).
+    cmake -B cmake-build-release -DCMAKE_PREFIX_PATH="$(brew --prefix qt)"
+    cmake --build cmake-build-release -j
 
 The spine database must exist before the tests or the app will find
 nothing: `python3 tools/build_spine.py` (release package + corpus →
@@ -33,7 +37,7 @@ nothing: `python3 tools/build_spine.py` (release package + corpus →
 
 ## Prove the build
 
-    ctest --test-dir cmake-build             # 86 suites (2026-08-26)
+    ctest --test-dir cmake-build-release     # 115 suites (re-counted 2026-09-11)
     ./cmake-build/app/DiamondCutterTranslationTool.app/Contents/MacOS/\
 DiamondCutterTranslationTool --selftest                # 225 checks
 
