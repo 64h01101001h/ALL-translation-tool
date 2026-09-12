@@ -8,6 +8,37 @@ Format and rules: `05_CROSS_CHECK_PROTOCOL.md`.
 
 ---
 
+## 2026-09-12 — Codex — continuation checkpoint, C05 through 222
+
+### Done
+
+- Added C05:214–216 in `f242fdc`, 217–219 in `12b77ec`, and 220–222 in `21964bb`: nine segments, 329 independently reviewed analyst spans and nine sentence anchors. C05 reaches **222/511**, pages c5p1–c5p74. Nineteen pages since 165 contain 1,529 analyst spans and 57 anchors. Separate proposal angles, reconciliation, skeptical review, exact specs, original witnesses and rejected attempts are preserved. All matches remain PROVISIONAL machine attestations; human acceptance is not implied.
+- Corrected the proposed 220 ni null to the explicit English topic presentation Here is, supported by the original HGM field and this source context. Its exact Tibetan/English ranges are [9,11)/[0,7). The distinct 222 ni null remains justified by its own context. Complete causal and temporal recasts preserve cause/result roles; bare converse verbs are not equated. Supplied or distributed material is omitted with reasons.
+- Added only E-189, the 218 English polarity concern, and E-190, the 222 affect/effect copyedit, both LOW/PROBABLE after independent five-ground review. Original wording is unchanged. The proposed 218 spelling defect was refuted because recorded 'gag/stop is defensible; ILL's competing BAG/BAGS evidence remains visible. The imagined nominal-affect defense was rejected for lack of contextual support. Both correction rounds passed scoped independent re-review.
+- Seven narrowly named sogs allowances preserve complete HGM-attested closing gestures. All older allowances and 188 earlier errata remain intact. The canonical page generator, exporter, heading-trimming rule, source corpus and hgm_gloss are unchanged. Only three page registrations were added to the layer builder.
+
+### Verified
+
+- Each new page passed **all 17 targeted fidelity, export and constitution suites**, in 10.62s, 10.61s and 10.56s. All 18 original proposal bodies and nine final individual bodies independently reproduce. Every accepted tuple and source range matches its assembled page. The 165, 422 and 427 semantic evidence files, plus three reconciliation reports per page, were copied exactly; the last page includes 217 separately verified frozen input files.
+- Bank: **43,345 links, 11,872 null exponents, 1,558 note blocks, 11 trees**. Evidence: **6,945 headwords / 14,997 pairs**. CSV rows: main 21,685; reverse 21,345; course/depth 23,090; changes 43 versus 12b77ec. Every course/depth group matches actual source references and counts. All prior links, notes, trees, evidence, lexical keys, citations and ACIP mappings survive; no old ACIP field was enriched in these three pages. Source/master hashes match the campaign baseline.
+- Complete physical C05/C16/ILL originals are preserved for both retained errata, separately from SQLite raw-field JSON. For E-190, the original affect phrase is at C05 line 2085 and C16 line 8753. The alternative ILL passage is physical section [1873], Tibetan line 18445 / English line 18449, corresponding to spine ILL:1878; the next physical section starts LAN DU. Textual equality or distinct filenames do not establish publication independence or ingestion history.
+- The final independent integration record belongs in sibling `campaign-artifacts/integration/continuation-through222-review.md` and its companion proofs. It covers exact reproduction of both banks, dictionary HTML and all four CSVs at the three fixed data heads, original-evidence checks, final committed documentation and full-campaign read-only main applicability. The changes seeds are fb2af5d (identical to captured a143082), f242fdc and 12b77ec respectively.
+
+### Claims to verify
+
+- Do not treat this checkpoint as finally approved unless the independent report names the final committed documentation HEAD and has completed all three data reproductions, evidence checks and the read-only main preflight. Read-only applicability is not main integration.
+- No printed-source correction, human editorial acceptance, rendered-page inspection or newer native/device execution is established. The 219 English cap falls inside appended heading text after the complete main paragraph. Starred Selection apparatus remains verbatim; the previously reviewed numbered-heading transformation is unchanged.
+
+### In flight
+
+- Next: **c5p75, C05:223–225**, with source/context snapshots, focused original-parallel and lexical checks, and a clean baseline at 21964bb. No proposals or approvals yet. Keep root preparation notes separate from independent proposal angles. Hourly continuation was rechecked ACTIVE through Tuesday, September 15, 2026, 07:00 America/Denver. No additional source files are needed. The campaign remains unfinished; C13 retains its upstream-source constraint.
+- Native and installed-phone verification remains through 171. Locked-device launch and alignment-page rendering remain unverified. Main-project integration remains open; preserve concurrent work there.
+
+### Do not
+
+- Do not compose GMR English, change original wording or promote provisional matches into hgm_gloss. Preserve complete proposals, rejected attempts, physical witnesses, reports and explicit corrections. An uncertain correspondence is neither an absence null nor a license to hide a false mapping inside a broad phrase.
+- Do not bypass browser policy, infer phone unlock, invoke paid generation or alter unrelated main-project work. Build the layer, then the view once; the standalone export entry point reruns the view and resets the previous-export delta. Resume from the live committed boundary and sibling continuation record.
+
 ## 2026-09-12 — Codex — continuation checkpoint, C05 through 213
 
 ### Done

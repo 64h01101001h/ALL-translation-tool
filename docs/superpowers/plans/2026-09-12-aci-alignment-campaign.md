@@ -198,3 +198,31 @@ integration or newer native/device/rendering verification is inferred. Next
 214–216 has source/context snapshots, focused original-parallel checks and a
 verified baseline at a143082, with no proposals yet. Tasks3/4 retain their
 stated limits; hourly continuation remains ACTIVE through Tuesday morning.
+
+
+## Seventh continuation checkpoint — 2026-09-12
+
+Accepted C05 reaches 222 in f242fdc, 12b77ec and 21964bb: 329 independently
+reviewed analyst spans plus nine sentence anchors. All three pages passed all
+17 targeted suites. Every one of 23,090 course/depth export groups matches its
+actual source references. All previous links, notes, trees, evidence, lexical
+keys, citations and ACIP mappings survive. No old ACIP field changes. Original
+source/master and the existing heading-trimming code remain unchanged.
+
+Scoped correction rounds closed the 218 note/errata/narrative findings and the
+220 topic-marker absence claim plus 222 copyedit disposition. The explicit ni/
+Here is exponent is now aligned; the distinct 222 ni null remains justified.
+Complete causal recasts preserve cause/result roles without equating converse
+verbs atomically. E-189 polarity and E-190 affect/effect are the only new errata,
+both LOW/PROBABLE with all five grounds checked and complete physical originals.
+The 218 BAG/BAGS alternatives remain reviewed, unfiled variants. Seven precise
+sogs allowances are added; prior errata/allowances and failed attempts survive.
+
+Final fixed-head reproduction of both banks, HTML and all four CSVs, original
+evidence checks, committed documentation and read-only main applicability are
+covered by sibling integration/continuation-through222-review.md. Final checkpoint
+approval requires that report to name the committed final HEAD and close all
+required checks. No main integration or newer native/device/rendering verification
+is inferred. Next 223–225 has a clean baseline at 21964bb, source/context and root
+lexical preparation only; no proposals. Tasks 3 and 4 retain their stated limits.
+Hourly continuation remains ACTIVE through the authorized Tuesday morning deadline.
