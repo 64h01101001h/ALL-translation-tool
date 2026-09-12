@@ -38570,19 +38570,41 @@ public:
         const QString dir = safeGetExistingDirectory(this, "Move manuscript to folder");
         QString nw;
         if (dir.isEmpty() || !docprops::moveFileTo(this, path_, dir, nw)) return false;
+        // The Manuscript was the one document-owning pane never converted
+        // when Draft and Overlay were (2026-09-11). Its Move carried no
+        // history at all, so a manuscript filed into a project folder lost
+        // its version history — outside the data root the key hashes the
+        // PATH, so a move changes it even though the name does not.
+        QString why;
+        const bool carried =
+            docprops::carryDocHistory(dataRoot_, path_, nw, &why);
         path_ = nw;
         QSettings("ALL", "TranslationTool").setValue("manuscript/lastFile", nw);
-        status_->setText("Moved to " + QDir::toNativeSeparators(dir));
+        status_->setText(carried
+                             ? "Moved to " + QDir::toNativeSeparators(dir)
+                             : "Moved to " + QDir::toNativeSeparators(dir) +
+                                   " \u2014 but " + why);
         return true;
     }
     bool renameManuscript() {
         if (path_.isEmpty()) { status_->setText("Save the manuscript first; Rename works on a file."); return false; }
         const QString n = docprops::askName(this, "Rename manuscript", "New file name:", QFileInfo(path_).fileName());
         QString nw;
-        if (n.isEmpty() || !docprops::renameFileTo(this, path_, n, nw, {dataRoot_ + "/library/properties", ".json", dataRoot_ + "/library/versions", "/"})) return false;
+        // The pair list is gone: it assumed BOTH sidecars are keyed by the
+        // bare base name, which is true of the properties record and false of
+        // the versions directory outside the data root — so renaming a
+        // manuscript there silently orphaned its history while reporting
+        // success. carryDocHistory asks each scheme its own question.
+        if (n.isEmpty() || !docprops::renameFileTo(this, path_, n, nw, {})) return false;
+        QString whyR;
+        const bool carriedR =
+            docprops::carryDocHistory(dataRoot_, path_, nw, &whyR);
         path_ = nw;
         QSettings("ALL", "TranslationTool").setValue("manuscript/lastFile", nw);
-        status_->setText("Renamed to " + QFileInfo(nw).fileName());
+        status_->setText(carriedR
+                             ? "Renamed to " + QFileInfo(nw).fileName()
+                             : "Renamed to " + QFileInfo(nw).fileName() +
+                                   " \u2014 but " + whyR);
         return true;
     }
     void showProperties(int tab = 0) {
@@ -38705,6 +38727,67 @@ public:
                        .arg(what);
             if (!ok) ++fails;
         };
+        // ---- the Manuscript carries its history too (audit 2026-09-11) ----
+        // Draft and Overlay were converted to carryDocHistory; the Manuscript
+        // was missed. Its Move carried nothing at all, and its Rename passed
+        // a bare-base-name pair list that is WRONG for the versions directory
+        // outside the data root — so it reported success while orphaning the
+        // history. Runs against a temp data root, never the translator's.
+        {
+            const QString keepRoot = dataRoot_, keepPath = path_;
+            const QString tmp = QDir::temp().filePath("all_mss_hist");
+            QDir(tmp).removeRecursively();
+            const QString docs = tmp + "/docs";
+            QDir().mkpath(docs);
+            dataRoot_ = tmp;
+
+            const QString a = docs + "/alpha.html";
+            {
+                QFile f(a);
+                check(f.open(QIODevice::WriteOnly) && f.write("x") == 1,
+                      "history: the manuscript probe file was written");
+            }
+            const QString vd = docprops::versionsDir(tmp, a);
+            QDir().mkpath(vd);
+            {
+                QFile v(vd + "/0001.ver");
+                check(v.open(QIODevice::WriteOnly) && v.write("v") == 1,
+                      "history: a manuscript version was planted");
+            }
+
+            path_ = a;
+            g_saveDialogStub = nullptr;
+            {   // RENAME
+                QString nw;
+                docprops::renameFileTo(this, path_, "beta.html", nw, {});
+                QString why;
+                const bool ok =
+                    docprops::carryDocHistory(tmp, path_, nw, &why);
+                check(ok, "history: a manuscript rename carries cleanly");
+                check(QFile::exists(docprops::versionsDir(tmp, nw) +
+                                    "/0001.ver"),
+                      "history: the manuscript's versions survive a RENAME "
+                      "outside the data root");
+                path_ = nw;
+            }
+            {   // MOVE — the name does not change, but the key does
+                const QString other = tmp + "/elsewhere";
+                QDir().mkpath(other);
+                const QString to = other + "/beta.html";
+                QFile::rename(path_, to);
+                QString why;
+                const bool ok = docprops::carryDocHistory(tmp, path_, to, &why);
+                check(ok, "history: a manuscript move carries cleanly");
+                check(QFile::exists(docprops::versionsDir(tmp, to) +
+                                    "/0001.ver"),
+                      "history: and survives a MOVE, which carried NOTHING "
+                      "before");
+            }
+            QDir(tmp).removeRecursively();
+            dataRoot_ = keepRoot;
+            path_ = keepPath;
+        }
+
         editor_->clear();
         editor_->insertPlainText("the four truths");
         editor_->selectAll();
