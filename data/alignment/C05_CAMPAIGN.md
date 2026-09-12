@@ -47,7 +47,7 @@ the/a/an/and/or/his/our/your/I/you unless `data/alignment/span_head_allow.json`
 lists it under `pages_c05` with the Tibetan word that licenses it.
 
 ## Progress
-c5p1–c5p7 (1–21) cloned 2026-09-05; c5p8–c5p49 (22–147) landed 2026-09-05; c5p50–c5p55 (148–165) landed 2026-09-08. c5p56 (166–168) landed 2026-09-12 after fresh independent proposals, reconciliation and skeptical review. Coverage 168/511; current verification is recorded in the latest batch entry below.
+c5p1–c5p7 (1–21) cloned 2026-09-05; c5p8–c5p49 (22–147) landed 2026-09-05; c5p50–c5p55 (148–165) landed 2026-09-08. c5p56 (166–168) landed 2026-09-12 after fresh independent proposals, reconciliation and skeptical review. c5p57 (169–171) landed after independent review. Coverage 171/511; current verification is recorded in the latest batch entry below.
 
 **Historical pause, superseded by Adam’s 2026-09-11 continuation request. PAUSED 2026-09-08 (Adam's call): the campaign stops here while the app goes to
 a public release (two-week target). Reconciled-but-unlanded specs for 166, 167,
@@ -215,3 +215,37 @@ unverified: the in-app browser’s URL policy blocked local HTML; no workaround
 was used. This limitation does not change the source-verification evidence or
 turn machine semantic review into human acceptance. Desktop/iOS integration is
 being checked separately; no deployment claim is made for this batch yet.
+
+
+### c5p57 · C05:169–171 — 2026-09-12 — Codex reconciliation/review
+
+Recovered historical Tibetan-first/English-first proposals were preserved and
+all six rerun through the current generator (exit 0). A fresh Codex reconciliation
+and a separate Codex skeptic reviewed every one of the 87 retained spans.
+The three individual specs and assembled page exit 0 with no stderr. Accepted
+spec: `specs_c05/c5p57.json`; complete review and source evidence:
+`reviews_c05/c5p57/`. No new function-head allowlist entries were required.
+
+The four-way classification at 169 preserves each correct repeated English
+occurrence. Distributed negatives and the experienced-in-this-life category
+stay phrase-level; they are not false dictionary atoms or absence claims.
+170 `gnyis pa` → “Next” is restored. The proposed correction of `'phan` was
+rejected after the current HGM glossary and other source uses corroborated it.
+171 retains genuine compositional members for `dge ba'i`, `der`, and
+`mi brtan pa` without confusing separate “stable” occurrences.
+
+Filed E-183, C05:171 `skyes myod mi byed` → probable `skyes myong mi byed`,
+LOW/PROBABLE after all five independent refutation checks. ACIP and Wylie
+agree on the observed spelling; internal verse and commentary support the
+restoration. No independent witness or blockprint was found, and TCS10:338
+disproves an old uniqueness claim. Source text remains unchanged.
+
+Coverage 171/511; full bank 41,937 links (+90, including three sentence links),
+11,804 null English exponents; evidence 6,768 headwords / 14,567 pair records.
+Dictionary HTML/CSV and both errata-register forms were rebuilt. The master
+dictionary and original corpus SHA-256 values match the campaign baseline.
+Structural checks verify the new/previous page navigation and C05 index;
+actual bank records contain the expected 27/30/33 links for 169/170/171.
+All 16 targeted CTest fidelity/constitution suites passed (11.13 seconds);
+results are preserved in this batch’s durable landing directory.
+Browser rendering remains unverified under the recorded URL-policy block.

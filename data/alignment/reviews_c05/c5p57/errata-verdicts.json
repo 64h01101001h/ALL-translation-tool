@@ -1,0 +1,75 @@
+[
+  {
+    "seq": 171,
+    "found": "skyes myod mi byed",
+    "refuted": false,
+    "reason": "All five refutation checks survive. Source Wylie and ACIP both contain the claimed reading; the same verse has myong mi byed and C05:173 explains skyes nas myong gyur (with apostrophe) as experience after rebirth. No independent parallel of this verse, duplicate record, registered conversion class, dictionary-supported myod variant, or failed count was found. TCS10:338 is an unrelated passage alternating myod yul and myong yul, not evidence that this verse was independently published with MYOD. Retain LOW/PROBABLE because no blockprint or independent witness to this verse was checked.",
+    "parallel_witness": "No independent witness to this verse found in C16, P1 or the TCS corpus. C16:758 reads 'nyon mongs rab dang drag po dang' / 'Those are definite which involve fierce', identical to the different C05:179 verse; it does not contain the 171 line. TCS10:338 reads 'yang myod yul bde ba de gas chog cing, myong yul bde ba zhes pa' and English 'the object that you experience'; this is the separate Lama-practice/death-as-path passage. C16:756 repeats C05:169 exactly, and C16:757 repeats C05:170 Tibetan and prose with a different appended heading: '19 Deeds that Definitely Ripen' versus '55 Deeds Projected for Different Realms and Beings'. These are same-source course-packet reuses, not independent publications of 171.",
+    "counts_rechecked": {
+      "wylie_contains_myod": 2,
+      "wylie_byis_pa_der_skyes": 1,
+      "wylie_myod_mi_byed": 1,
+      "wylie_myong_mi_byed": 1,
+      "english_A_stable_child_does_none": 1,
+      "exact_myod_entry": 0,
+      "exact_myod_variant": 0,
+      "exact_myong_entry": 1
+    },
+    "suggested_severity": "LOW",
+    "suggested_confidence": "PROBABLE",
+    "checks": {
+      "a_verbatim": {
+        "passed": true,
+        "wylie_quote": "skyes myod mi byed",
+        "acip_quote": "SKYES MYOD MI BYED",
+        "english_context": "A stable child does none to experience born"
+      },
+      "b_parallel": {
+        "passed": true,
+        "independent_same_passage_witness": "none found",
+        "TCS10_338": "Different passage; MYOD YUL and MYONG YUL appear in the same row. This prevents any uniqueness claim, but does not establish an independent reading of this verse.",
+        "C16_758": "Different verse, matched to C05:179. The course changes extracts after C16:757."
+      },
+      "c_registered_class_duplicate": {
+        "passed": true,
+        "files_searched": [
+          "docs/errata_register.json",
+          "docs/ERRATA_REGISTER.md",
+          "docs/BACKLOG.md",
+          "TODO.md"
+        ],
+        "locus_or_myod_matches": 0,
+        "classes_checked": [
+          "Sanskrit-brace converter drop (E-044 class)",
+          "period/word-fused footnote (E-076/E-121)",
+          "folio-caption collision",
+          "following-heading splice",
+          "row-boundary spill (E-111)",
+          "1500-character cap (E-107)"
+        ],
+        "reason": "MYOD is an ordinary fully preserved ACIP token and none of these registered mechanisms explains it."
+      },
+      "d_correction_defensibility": {
+        "passed": true,
+        "dictionary_myod_entries": 0,
+        "dictionary_myod_variants": 0,
+        "dictionary_myong_entry_id": 14665,
+        "myong_hgm_gloss": "experience",
+        "myong_tenses": "myong / myong / myangs/ myongs",
+        "internal_parallel": "myong mi byed",
+        "commentary_wylie": "skyes nas myong 'gyur gyi las mi byed",
+        "commentary_english": "does no deeds of the type that will lead to an experience there after being reborn",
+        "limit": "Absence from a dictionary is not proof of impossible Tibetan. The contextual parallel and commentary make the restoration probable; no independent blockprint was consulted."
+      },
+      "e_counts_quotes": {
+        "passed": true,
+        "all_claimed_counts_reproduced": true,
+        "myod_rows": [
+          "C05:171",
+          "TCS10:338"
+        ],
+        "note": "Broad substring phen pa bzhi with initial apostrophe also hits bzhin in ILL:2169 and P3:125; direct inspection excludes both unrelated passages. They are not witnesses to the verse."
+      }
+    }
+  }
+]
