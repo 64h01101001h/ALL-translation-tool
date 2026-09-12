@@ -325,3 +325,36 @@ file once and retain all diagnostics. No semantic stage or required check is
 removed, and no numerical overall speedup is claimed. Tasks3/4 retain their
 explicit limits; hourly continuation remains ACTIVE to the authorized Tuesday
 07:00 America/Denver cutoff.
+
+
+## Eleventh continuation checkpoint — 2026-09-12
+
+C05 reaches 255 in 0561829 and d428993: 115 independently reviewed analyst spans
+plus six sentence anchors. Both pages pass all 17 required suites; all 23,719
+course/depth groups match actual references and metadata. Prior links, notes,
+trees, evidence, lexical keys, citations and ACIP metadata remain intact, without
+new enrichment. Source/master, hgm_gloss and canonical generation/export logic
+remain unchanged; the builder gains only two page registrations.
+
+All 207 original dispositions and 115 final correspondences retain exact source
+roles, repeated occurrences, full supported recasts and tighter compound members.
+Fifteen affirmative nulls are explicitly justified; uncertain/distributed wording
+is omitted with reasons. No errata added; 192 retained. Five precise source head
+allowances are added. Six narrative apostrophe corrections and matching helper
+literals preserve unchanged accepted data and complete pre-fix history. Root
+helper failures and byte-safe whitespace classifier/schema repairs are recorded;
+every warning was accounted for before the two private commits.
+
+Final independent fixed-head output reproduction, original evidence/correction
+review, committed documentation and read-only full-campaign main applicability
+belong in sibling campaign-artifacts/integration/continuation-through255-review.md.
+Final approval requires that report to name the final committed documentation
+HEAD and close all required checks; it is not inferred from this entry. Main
+integration and newer native/device/rendering verification remain open. Next
+256–258 has clean baseline d428993, exact source/context, independent briefs and
+root lexical/parallel preparation only; capacity-limited dispatches created no
+readers or proposals. Resume durable state without contaminating original angles.
+
+Preparation and independent review overlap while all gates remain in place.
+No numerical overall speedup is claimed. Tasks 3/4 retain their existing limits;
+the hourly heartbeat remains ACTIVE through Tuesday 07:00 America/Denver.

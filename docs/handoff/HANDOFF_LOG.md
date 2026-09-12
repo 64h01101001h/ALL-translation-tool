@@ -8,6 +8,38 @@ Format and rules: `05_CROSS_CHECK_PROTOCOL.md`.
 
 ---
 
+## 2026-09-12 — Codex — continuation checkpoint, C05 through 255
+
+### Done
+
+- Added 250–252 in `0561829` and 253–255 in `d428993`: six passages, 115 independently reviewed analyst spans and six sentence anchors. C05 reaches **255/511**, pages 1–85. Thirty new pages since 165 contain 2,533 analyst spans and 90 anchors. Separate independent proposal angles, reconciliation and fresh semantic review approve exact frozen files. All matches remain PROVISIONAL machine attestations, without human acceptance.
+- Preserved residence and light-verb roles, whole inflections and tighter members, the complete conceptualization noun, causal/alternative phrases and exact repeated negative/consequence occurrences. The refuge expression retains a tighter mchi/go member. Fifteen nulls have explicit grammatical justifications; uncertainty and distributed comparison remain omitted with reasons. Actual wider and contrary lexical records are retained. Source/master and hgm_gloss remain unchanged.
+- No new errata; all 192 earlier records survive. Eight suspicions were challenged under all five grounds. Digital equality and short quotation extents do not establish publication independence or support unquoted text. Five exact allowances name one sogs licensor and four explicit pronouns.
+- Preserved all original proposals, full source/master evidence, failures and immutable governing bytes. Page84 corrected six explanatory apostrophes and six matching helper literals through the original reconciler and scoped independent review. All 123 pre-fix files survive; accepted specs, notes, bodies and canonical proofs are unchanged. Root and reviewer helper assumption failures are recorded with historical copies.
+
+### Verified
+
+- Both pages passed all **17 targeted fidelity/export/constitution suites** (11.44s and 11.60s). Twelve original and six final individual canonical bodies replay exactly. Root read all 207 original dispositions and 115 final rationales plus the complete semantic reviews. Exact original mappings number 720/462, including 69/11 immutable Git pins; exact semantic copies number 1,227/323. All final ordered tuples and source ranges match.
+- Bank: **44,382 links, 11,895 nulls, 1,591 notes, 11 trees**. Evidence: **7,048 heads / 15,360 pairs**. CSV rows: main 22,212; reverse 21,872; course/depth 23,719; changes 31 against 0561829. Every course/depth group matches actual source references and metadata. Prior links, notes, trees, evidence, lexical keys, citations and ACIP metadata survive without enrichment.
+- Byte-safe whitespace audits passed before both commits. Closed classifiers initially rejected frozen review whitespace. Scoped helpers verify exact independent freeze pins and every empty report field, EOF and unified-diff context line, plus physical source bytes and canonical CSV CRLF. Page85 additionally required resolving the reviewer's absolute freeze paths. All failed attempts are preserved; all 56,274 and 22,564 warnings are accounted for. Final staged diagnostic hashes remained identical after proof staging. Nothing was normalized.
+- Independent whole-checkpoint proof belongs in sibling `campaign-artifacts/integration/continuation-through255-review.md` and companion records. It covers seven exact outputs at both immutable data heads, original evidence and corrections, the full course CSV oracle, final committed documentation and the complete original-base-to-final read-only applicability check against live main. The real changes seeds are 87a5296 (same CSV as baseline 9aa617e) and 0561829.
+
+### Claims to verify
+
+- Final approval requires the independent report to name the committed documentation HEAD and close every required check. Root must read the entire report and verify current hashes, preserved dirty-main bytes and all fixtures. This entry is prepared before that final verdict; it does not assert it.
+- Source identity, glossary support and machine agreement do not establish a unique philosophical interpretation or human editorial acceptance. Preserve lexical tiers, supported scope and witness extent limits.
+
+### In flight
+
+- Next **c5p86, C05:256–258** has clean baseline d428993, exact source/context, role briefs and withheld root lexical/parallel preparation. Reader dispatches have hit the agent capacity limit; no original proposals exist yet. Resume this precise state. C13 remains blocked; no additional source files are needed.
+- Preparation, independent reading, reconciliation, review and ordered integration overlap where capacity permits. All semantic stages, canonical generators and required tests remain. No numerical overall speedup is claimed.
+- Hourly continuation remains ACTIVE through 2026-09-15T13:00Z, Tuesday 07:00 America/Denver. Native/installed-phone proof remains through 171; locked launch and rendered-page inspection remain unverified. Main integration remains open. This is a bounded checkpoint within the ongoing campaign.
+
+### Do not
+
+- Do not compose GMR English, alter sources, promote machine matches, turn uncertainty into no exponent, or reuse an informed context as a fresh independent reader. Retain all original versions and actual producer identities.
+- Do not bypass browser policy, infer a phone unlock, invoke paid generation, send external messages or overwrite concurrent main work. Build layer then view once with the actual previous CSV seed. Check each failed command before dependent work.
+
 ## 2026-09-12 — Codex — continuation checkpoint, C05 through 249
 
 ### Done
