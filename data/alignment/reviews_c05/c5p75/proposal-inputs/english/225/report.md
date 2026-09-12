@@ -1,0 +1,12 @@
+# C05:225 — independent English-first proposal
+- Source: C05:225 was re-read from `file:build/hgm_spine_v27_2.db?mode=ro`; `source-evidence.json` preserves the original ACIP/Wylie/English and the sole all-field-identical corpus row.
+- HGM evidence: curated/glossary rows directly support `sems tsam pa`, `bye brag tu smra ba`, `spyan ras gzigs brtul zhugs`, `kha che bye brag tu smra ba`, `las gzhan pa`, `gsal kha`, `ma byung`, `dang bstun`, `mdo sde pa`, and `'dod pa`; Hopkins remains separate comparandum evidence.
+- Comparative corpus: C16:802 is all-field-identical but does not prove independent provenance; ILL:1883 has related Tibetan, different English, and a different rendering of the master's name, none of which supplied C05 wording.
+- Counts: 30 spans = 21 d5, 4 d7, 1 d3, 4 d6, 0 null; each Kashmiri-Detailist parent has unique `kha che`/`bye brag tu smra ba` members.
+- Occurrences: four Detailist references resolve separately: the second-position school, the first Kashmiri compound, the third-position d3 recast, and the final Kashmiri compound.
+- First challenge: agentive `kyis`→“by” is explicit in the passive English and kept only at d6, but the campaign records conflicting prior treatment of agentive “by,” so reconciliation should decide it.
+- `mdzod 'grel` owns the exact proper-name title “autocommentary to the Treasure House of Knowledge (Abhidharmakosha)” at d5 under the proper-title convention; no exact dictionary row exists, so this deserves a second look.
+- Rule-10 omissions: supplied “positions/within the,” the alternate force of the final `yang`, and copular/modal scaffolding remain unwrapped; only `nang tshan gcig`→“specific group” stays at d3, and final `'dra'o` owns “appear” alone.
+- The earlier root replay/unchanged-hash checkpoint applies to preserved attempt 1 (`737a07…`) and is superseded by the final over-capture correction and hash below.
+- Generator proof: `EXIT=0`; stdout saved byte-exact as `body.html` (4781 bytes, SHA-256 `0f5ddb97ef6dc3a7d7cdefb5deb1658ff52a6f494a9c63ec67680afd9e602ca9`); stderr is empty; clean rerun `cmp` exit 0.
+- Errata: 0. “Avalokitavrata” matches the current HGM glossary and C05 source; the differently spaced ILL rendering is comparative evidence, not grounds to alter this row.

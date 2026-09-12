@@ -1,0 +1,37 @@
+import json,pathlib,subprocess,os,hashlib,sys,collections,re
+P=pathlib.Path(__file__).resolve().parents[2]; ROOT=P.parents[1];sys.path.insert(0,str(ROOT/'campaign-worktree/tools'));import gen_alignment_page as G
+for n in (223,224,225):
+ d=P/'reconciled'/str(n);spec=(d/'spec.json').read_bytes();s=json.loads(spec)['segments'][0]
+ env={**os.environ,'PYTHONDONTWRITEBYTECODE':'1'};cmd=['python3',str(ROOT/'campaign-artifacts/run_generator_readonly.py')]
+ proc=subprocess.run(cmd,input=spec,capture_output=True,env=env);assert proc.returncode==0,proc.stderr
+ if n==225:
+  (d/'spec.attempt-02.json').write_bytes(spec);(d/'body.attempt-02.html').write_bytes(proc.stdout);(d/'generator.attempt-02.stderr').write_bytes(proc.stderr);(d/'generator.attempt-02.exit').write_text(str(proc.returncode)+'\n')
+ (d/'body.html').write_bytes(proc.stdout);(d/'generator.stderr').write_bytes(proc.stderr);(d/'generator.exit').write_text(str(proc.returncode)+'\n')
+ src=json.loads((P/'source.json').read_text())[n-223];sp=s['spans'];engflat=[next(x for x in sp if x['id']==i) for i in s['eng_order']]
+ tr=G.resolve(src['wylie'],sp,'tib',n);er=G.resolve(src['english'],G.with_members(sp,engflat,src['english']),'eng',n)
+ intended=json.loads((d/'intended-english-ranges.json').read_text()); assert all(list(er[k])==v for k,v in intended.items())
+ rows=[];parent=None
+ for x in sp:
+  if x['d']==7:
+   assert parent and parent['d']==5
+   assert all(x[k] and parent[k].count(x[k])==1 and len(x[k])<len(parent[k]) for k in ('tib','eng'))
+  else:parent=x
+  row=dict(x,tib_range=tr[x['id']],eng_range=er.get(x['id']))
+  for side,txt,ranges in [('tib',src['wylie'],tr),('eng',src['english'],er)]:
+   if x[side] is None:continue
+   positions=[];cur=0
+   while True:
+    q=G.find_word(txt,x[side],cur)
+    if q<0:break
+    positions.append(q);cur=q+1
+   selected=ranges[x['id']][0]
+   row[side+'_all_word_starts']=positions;row[side+'_selected_ordinal']=positions.index(selected)+1 if selected in positions else 'compound member'
+  rows.append(row)
+ (d/'resolved-occurrences.json').write_text(json.dumps(rows,ensure_ascii=False,indent=2)+'\n')
+ repeat=subprocess.run(cmd,input=spec,capture_output=True,env=env)
+ assert repeat.returncode==0 and repeat.stdout==proc.stdout and not repeat.stderr
+ proof={'producer':'Codex','command':'PYTHONDONTWRITEBYTECODE=1 python3 campaign-artifacts/run_generator_readonly.py < spec.json > body.html','canonical_generator':'campaign-worktree/tools/gen_alignment_page.py','readonly_sqlite':True,'exit':proc.returncode,'stderr_bytes':len(proc.stderr),'spec_bytes':len(spec),'body_bytes':len(proc.stdout),'spec_sha256':hashlib.sha256(spec).hexdigest(),'body_sha256':hashlib.sha256(proc.stdout).hexdigest(),'generator_sha256':hashlib.sha256((ROOT/'campaign-worktree/tools/gen_alignment_page.py').read_bytes()).hexdigest(),'helper_sha256':hashlib.sha256((ROOT/'campaign-artifacts/run_generator_readonly.py').read_bytes()).hexdigest(),'clean_repeat_exit':repeat.returncode,'clean_repeat_identical':True,'intended_english_ranges_match':True,'members_unique_strict_tighter_inside_d5':True,'spans':len(sp),'depth_counts':dict(collections.Counter(x['d'] for x in sp)),'nulls':sum(x['eng'] is None for x in sp),'errata':0}
+ (d/'generator-proof.json').write_text(json.dumps(proof,indent=2)+'\n')
+ gated=[x for x in sp if x['d'] in [5,7] and x['eng'] and re.match(r'^(the|a|an|and|or|his|our|your|I|you)\b',x['eng'],re.I)]
+ (d/'proposed-span-head-allowances.json').write_text(json.dumps(gated,indent=2)+'\n');assert not gated
+ print(n,'EXIT='+str(proc.returncode),'BODY_BYTES='+str(len(proc.stdout)),'STDERR_BYTES='+str(len(proc.stderr)),proof['spec_sha256'],proof['body_sha256'])

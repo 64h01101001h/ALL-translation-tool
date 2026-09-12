@@ -1,0 +1,14 @@
+# C05:223 — independent Tibetan-first proposal by Codex
+Main challenge: `bu lon` → “loan that has to be repaid” is a debt compound whose repayment content licenses this descriptive equivalent; HGM entry 12409 corroborates the exact wording. Tighten to “loan” if the reviewer finds the relative clause too expansive.
+Opening: retain only `las/byas/skad cig/las/'gag pa/mngon du phyogs pa`; omit second-moment/ceased/prior-time wording as a distributed temporal recast, not as null. The repeated English deed inside the completion clause is deliberately unwrapped.
+`dpang rgya ste de'i yi ge` is explanatory/appositional; bank only `yi ge` → “document”, leaving `dpang rgya` and “written up” unaligned rather than duplicating ownership.
+Current HGM entries 3814/10227/249/4512/9863/9862/7754 directly corroborate approaches/energy/foundation consciousness/nonwastage technical wording/ldan-min contrast/hold; evidence is in `lexical-originals.json`. Hopkins is saved separately and supplies no GMR English.
+`gzhag` → “stored” is a contextual match in this row; entry 16306 has an unrelated auto-aligned “three times” and is not used as evidence. `rtog par byed` and `zhes pa` are d3 predicates, not dictionary units.
+Technical d5 `chud mi za ba` and `ldan min 'du byed` have coherent senses in this passage; the latter permits the unique tighter d7 `'du byed` → “changing”. Final `ldan min` owns only “neither mental nor physical”.
+Exact occurrences: first `las` owns “deed or karma”; following aligned singulars are English deed #3/#4; plural deeds #1/#2, two #1/#2, invented #1/#2 and call #1/#2 are explicitly ordered. `resolved-occurrences.json` matches all intended English offsets.
+Original spine rows 221–227 were read with SQLite URI mode=ro and exactly checked against the snapshot; `source-original.json` preserves them. C16:800 has identical ACIP/Wylie/English, but identity proves neither independent publication nor ingestion lineage.
+Errata: [] after inspecting this row, identical C16:800, relevant lexical evidence and registered E-044/E-071/E-076/E-107/E-111/E-121 classes. The temporal paraphrase does not establish a factual error; no source correction is proposed.
+Counts: 34 spans; d5=27 (including any null d5), null=0; errata=0. Two d7 members only in 223; none in 224/225.
+Final generator proof (verbatim numeric outputs): EXIT=0; BODY_BYTES=6297; STDERR_BYTES=0. Real unchanged generator via read-only helper; attempt-01 stdout bytes exactly equal body.html; no failed attempts.
+Body SHA-256: `8cae1ae11b3b803c325d5cf72dd1034e40f6fdbc7ceeb09a9855466c4b269a36`. Spec SHA-256: `4c115f8e1fefb599d42a1fc60fa60f49140c675db67eac383f90959ae8b67f6d`. Full command, generator/helper hashes and assertions: `generator-proof.json`.
+All notes identify provisional Codex machine alignment. Generator fidelity and occurrence checks do not prove correspondence; this independent proposal is for reconciliation.

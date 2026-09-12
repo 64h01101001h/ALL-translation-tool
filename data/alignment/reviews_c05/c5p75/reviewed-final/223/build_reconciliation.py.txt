@@ -1,0 +1,78 @@
+import json,pathlib,subprocess,os,hashlib,importlib.util,re,collections
+P=pathlib.Path(__file__).resolve().parents[2]; ROOT=P.parents[1]; W=ROOT/'campaign-worktree'
+def span(i,d,t,e,**kw):return dict(id=i,d=d,tib=t,eng=e,**kw)
+def get(n): return json.loads((P/'tibetan'/str(n)/'spec.json').read_text())['segments'][0]
+notes={
+223:"PROVISIONAL machine alignment reconciled by Codex from two independent Codex proposals and reopened source/glossary evidence. The opening time construction is freely recast; only deed/completed/moment/end/approaches atoms are aligned, and second-moment/cessation/prior-time content is omitted as distributed rather than nulled. The first las owns deed or karma once; the repeated English deed in the completion clause stays unwrapped. Source-specific HGM glossary entries support some thinkers, document written, loan that has to be repaid, the two kinds of deeds, and exists separately as whole lexical equivalents. dpang rgya is appositional to yi ge and is omitted to avoid duplicate ownership; up is unwrapped. gzhag owns stored contextually, not its unrelated auto-aligned glossary gloss. rtog par byed and zhes pa are phrase predicates at depth 3. Established technical compounds retain only unique defensible members; supplied articles, participants and repeated explanation remain unwrapped. C16:800 matches ACIP/Wylie/English, which establishes no independent publication or ingestion history. Fidelity checks do not establish semantic correctness or human approval.",
+224:"PROVISIONAL machine alignment reconciled by Codex from two independent Codex proposals and reopened source/glossary evidence. las kyi bag chags and rnam shes kyi rgyun are attested lexical compounds with unique tighter members. The first ceased-karma las is omitted because the English deed belongs to the later agentive las. The cessation predicate 'gags has no separately alignable English exponent and is nulled; the later timing phrase does not mean ceased. kyang retains the concessive even despite the temporal recast. de'i phyir owns the complete This then is why phrase at depth 3, corroborated by its HGM field; the field does not independently attest standalone why. brgyud owns continues on contextually; later brgyud pa owns indirectly. in a stream and via a medium remain distributed explanations. The final instruction is recast as application: same/other/three have recoverable atoms; applies, supplied idea/positions expressed and the remaining instruction are omitted rather than mapped as false lexical equivalents or nulls. C16:801 matches ACIP/Wylie/English; ILL:1881 stops before the final instruction, which is separately in ILL:1882. No publication or ingestion lineage is inferred. Fidelity checks do not establish semantic correctness or human approval.",
+225:"PROVISIONAL machine alignment reconciled by Codex from two independent Codex proposals and reopened source/glossary evidence. Master Avalokitavrata is banked whole under the standing proper-name convention and exact HGM name entry; Master is not rejected as an unsupported addition. The passive agentive kyis owns by at particle depth. Both Kashmiri Detailist compounds retain unique tighter members. The indefinite 'ga' zhig owns certain; the first group remains supplied in this local modifier construction despite a broader glossary equivalent. nang tshan owns the second group; gcig and the distributed specific/within wording remain unwrapped. ma owns not; byung is omitted as recast grammatical material, not asserted to be absent. mdzod and 'grel separately own the contextual title and autocommentary, leaving the parenthetical Sanskrit alternative unwrapped to avoid duplicate title ownership. gnas/dgu pa separately own chapter/ninth; dang bstun owns consistent as an attested compound. The closing predicate yin pa 'dra'o owns would appear to be at depth 3. Closing yang is omitted: alternate may be a contextual construal of the additive relation, but its isolated correspondence is uncertain; no false null or factual erratum is asserted. C16:802 matches ACIP/Wylie/English; ILL:1883 instead renders the closing school relation with in addition to. Neither equality nor difference establishes independent publication or ingestion history. Fidelity checks do not establish semantic correctness or human approval."
+}
+for n in (223,224,225):
+ s=get(n); orig=s['spans']; out=[]
+ for x in orig:
+  x=dict(x); i=x['id']
+  if n==223:
+   if i=='w11':x['eng']='some thinkers'
+   if i=='w17':x['eng']='document written'
+   if i in ('w19','w28'):
+    x.update(tib='las gnyis',eng='two types of deeds [virtue and non-virtue]' if i=='w19' else 'two kinds of deeds')
+   if i in ('w20','w29'):continue
+   if i=='w21':x.update(tib='don gzhan pa',eng='exists separately')
+   out.append(x)
+   if i=='w12':out.append(span('add_foundation',7,'kun gzhi','foundation'))
+   if i=='w24':out.append(span('add_ldan',7,'ldan min','neither mental nor physical'))
+   if i in ('w19','w28'):
+    out += [span(i+'_deed',7,'las','deeds'),span(i+'_two',7,'gnyis','two')]
+  elif n==224:
+   if i=='w2':
+    out += [span(i,5,'las kyi bag chags','mental seed of the deed'),span('add_deed',7,'las','deed'),span('add_seed',7,'bag chags','mental seed')];continue
+   if i=='w3':continue
+   if i=='w5':
+    out += [span(i,5,'rnam shes kyi rgyun','stream of consciousness'),span('add_consciousness',7,'rnam shes','consciousness'),span('add_stream',7,'rgyun','stream')];continue
+   if i=='w6':continue
+   out.append(x)
+   if i=='w9':out.append(span('add_even',6,'kyang','even',cls='particle'))
+  else:
+   if i=='w3':x['eng']='certain'
+   if i=='w6':x['eng']='Master Avalokitavrata'
+   if i in ('w8','w27'):
+    x.update(tib='kha che bye brag tu smra ba',eng='Kashmiri Detailists')
+   if i in ('w9','w28','w11'):continue
+   if i=='w10':x.update(d=5,tib='las gzhan pa',eng='other than')
+   if i=='w24':x['tib']='dang bstun'
+   out.append(x)
+   if i=='w6':out.append(span('add_by',6,'kyis','by',cls='case'))
+   if i in ('w8','w27'):
+    out += [span(i+'_kashmiri',7,'kha che','Kashmiri'),span(i+'_detailists',7,'bye brag tu smra ba','Detailists')]
+ # Preserve source-derived intended English positions before renumbering.
+ source=json.loads((P/'source.json').read_text())[n-223]
+ # Existing Tibetan proposal's resolved English is canonical; adapt replacement boundaries.
+ import sys
+ sys.path.insert(0,str(W/'tools'))
+ import gen_alignment_page as G
+ oldorder=[next(x for x in orig if x['id']==i) for i in s['eng_order']]
+ oldr=G.resolve(source['english'],G.with_members(orig,oldorder,source['english']),'eng',n)
+ expected={}
+ for x in out:
+  if x['eng'] is None or x['d']==7:continue
+  i=x['id']
+  if i=='add_even':off=source['english'].index('even')
+  elif i=='add_by':off=source['english'].index('by Master')
+  elif n==223 and i in ('w19','w28'):off=oldr['w20' if i=='w19' else 'w29'][0]
+  elif n==223 and i=='w21':off=source['english'].rfind('exists',0,oldr[i][0])
+  elif n==224 and i=='w2':off=oldr['w3'][0]
+  elif n==224 and i=='w5':off=oldr['w6'][0]
+  elif n==225 and i=='w6':off=source['english'].index('Master Avalokitavrata')
+  elif n==225 and i=='w10':off=oldr['w11'][0]
+  else:off=oldr[i][0]
+  assert source['english'][off:off+len(x['eng'])]==x['eng'],(n,x,off)
+  expected[i]=[off,off+len(x['eng'])]
+ order=sorted(expected,key=lambda i:expected[i][0])
+ rename={x['id']:'w'+str(j+1) for j,x in enumerate(out)}
+ for x in out:x['id']=rename[x['id']]
+ s.update(spans=out,eng_order=[rename[i] for i in order],note=notes[n])
+ d=P/'reconciled'/str(n);spec={'course':'C05','segments':[s]}
+ (d/'spec.json').write_text(json.dumps(spec,ensure_ascii=False,indent=2)+'\n')
+ (d/'errata.json').write_text('[]\n')
+ (d/'intended-english-ranges.json').write_text(json.dumps({rename[i]:v for i,v in expected.items()},indent=2)+'\n')
+ print(n,len(out),collections.Counter(x['d'] for x in out))

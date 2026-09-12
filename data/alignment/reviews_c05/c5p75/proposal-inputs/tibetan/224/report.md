@@ -1,0 +1,14 @@
+# C05:224 — independent Tibetan-first proposal by Codex
+Main challenge: `'gags` → null asserts specifically that this row has no separately alignable cessation exponent. The English “even after a very long time” renders timing/concession without “ceased”; the preceding `las` and `kyang` are omitted, not assigned to later repeated words.
+`rtog par byed` → “invented” and `de'i phyir` → “This then is why” are d3 phrase mappings. The final `shes par bya'o` → applies recast is omitted because knowing and applying are not a safe lexical equivalence.
+Current HGM entries 12290/10922/2961/17629/13429/248/18898/7851/3322 corroborate mental seed/consciousness/stream/long time/consequence/foundation consciousness/similar forms/eventually/indirectly. Hopkins stays comparandum only.
+`bsgos` → “stained” and `'byin` → produce/produces are contextual readings of this source; no exact atom is claimed from glossary entries giving imbued or unrelated devastate/rip. `'jog` → “plants” also has a clear same-context C05:209 parallel.
+First `brgyud` is the continuation verb → “continues on”; later `brgyud pa` → “indirectly” is supported by HGM entry 3322. “in a stream” and “via a medium” remain explanatory expansions unwrapped.
+Exact occurrences: mental seed #1/#2/#3 aligned; the later English “This mental seed” is a supplied referent. consequence #1/#2/#3, say #1/#2, deed #1/#2/#4, deed-or-karma, and final karma #2 resolve to saved explicit offsets.
+Original spine 221–227 matches snapshots (`source-original.json`). C16:801 matches all ACIP/Wylie/English fields. ILL:1881 shares only through `'dod pa'o`, with different English; ILL:1882 separately carries the final instruction.
+ILL:1881 expressly renders stopped and gives continuation language; it supports interpretation only within its quoted extent. DDA:42 search hit distributes stain with `dri ma` and is not used to prove a bsgos atom. Text equality entails no publication/ingestion provenance.
+Errata: [] after comparing current source, C16/ILL, current lexical evidence, and registered classes E-044/E-071/E-076/E-107/E-111/E-121. Translation condensation is noted without filing a speculative error.
+Counts: 40 spans; d5=35 (including any null d5), null=1; errata=0. Two d7 members only in 223; none in 224/225.
+Final generator proof (verbatim numeric outputs): EXIT=0; BODY_BYTES=6810; STDERR_BYTES=0. Real unchanged generator via read-only helper; attempt-01 stdout bytes exactly equal body.html; no failed attempts.
+Body SHA-256: `063eec481f4b86f48845d7aff45b701719dc4a8b4dc0cff80167b5bde6f03dbe`. Spec SHA-256: `603538de037038f49bee994b9a988fbc27bebb96f76d8c97f3549b8bdd11e158`. Full command, generator/helper hashes and assertions: `generator-proof.json`.
+All notes identify provisional Codex machine alignment. Generator fidelity and occurrence checks do not prove correspondence; this independent proposal is for reconciliation.

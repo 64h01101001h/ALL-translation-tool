@@ -47,7 +47,7 @@ the/a/an/and/or/his/our/your/I/you unless `data/alignment/span_head_allow.json`
 lists it under `pages_c05` with the Tibetan word that licenses it.
 
 ## Progress
-c5p1–c5p7 (1–21) cloned 2026-09-05; c5p8–c5p49 (22–147) landed 2026-09-05; c5p50–c5p55 (148–165) landed 2026-09-08. c5p56 (166–168) landed 2026-09-12 after fresh independent proposals, reconciliation and skeptical review. c5p57 (169–171) landed after independent review. c5p58 (172–174) landed after independent review. c5p59 (175–177) landed after independent review. c5p60 (178–180) landed after independent review. c5p61 (181–183) landed after independent review. c5p62 (184–186) landed after independent review. c5p63 (187–189) landed after independent review. c5p64 (190–192) landed after independent review. c5p65 (193–195) landed after independent review. c5p66 (196–198) landed after independent review. c5p67 (199–201) landed after independent review. c5p68 (202–204) landed after independent review. c5p69 (205–207) landed after independent review. c5p70 (208–210) landed after independent review. c5p71 (211–213) landed after independent review. c5p72 (214–216) landed after independent review. c5p73 (217–219) landed after independent review. c5p74 (220–222) landed after independent review. Coverage 222/511; current verification is recorded in the latest batch entry below.
+c5p1–c5p7 (1–21) cloned 2026-09-05; c5p8–c5p49 (22–147) landed 2026-09-05; c5p50–c5p55 (148–165) landed 2026-09-08. c5p56 (166–168) landed 2026-09-12 after fresh independent proposals, reconciliation and skeptical review. c5p57 (169–171) landed after independent review. c5p58 (172–174) landed after independent review. c5p59 (175–177) landed after independent review. c5p60 (178–180) landed after independent review. c5p61 (181–183) landed after independent review. c5p62 (184–186) landed after independent review. c5p63 (187–189) landed after independent review. c5p64 (190–192) landed after independent review. c5p65 (193–195) landed after independent review. c5p66 (196–198) landed after independent review. c5p67 (199–201) landed after independent review. c5p68 (202–204) landed after independent review. c5p69 (205–207) landed after independent review. c5p70 (208–210) landed after independent review. c5p71 (211–213) landed after independent review. c5p72 (214–216) landed after independent review. c5p73 (217–219) landed after independent review. c5p74 (220–222) landed after independent review. c5p75 (223–225) landed after independent review. Coverage 225/511; current verification is recorded in the latest batch entry below.
 
 **Historical pause, superseded by Adam’s 2026-09-11 continuation request. PAUSED 2026-09-08 (Adam's call): the campaign stops here while the app goes to
 a public release (two-week target). Reconciled-but-unlanded specs for 166, 167,
@@ -1020,3 +1020,41 @@ Master/corpus hashes are unchanged. All 17 fidelity/export/constitution suites
 pass in 10.56 seconds. Rendering and newer native/device execution remain
 unverified; no main integration occurred. Next: c5p75, C05:223–225, source/context
 snapshots and root lexical preparation only; no proposals or approval yet.
+
+
+### c5p75 · C05:223–225 — 2026-09-12 — Codex reconciliation/review
+
+Independent SPEC and QUALITY approval cover 113 analyst spans (38/43/32), one
+null, 79 non-null d5 pairs, 16 d7 members, 7 d3 phrases and 10 d6 particles. Root
+read all final specs/reports/decisions and the separate review, replayed all
+canonical bodies and verified exact ordered tuples/ranges and final hashes.
+All six current proposals independently reproduce; earlier English drafts and
+superseded proof boundaries remain explicitly preserved. All 262 manifest inputs
+match their originals, review copies and landed bytes. The 284 copied semantic
+files and three reconciliation reports preserve full evidence and decisions.
+All alignments remain PROVISIONAL machine attestations, not human acceptance.
+
+223 retains the attested document/debt, two-deed, foundation-consciousness and
+non-associated-factor units with legitimate tighter members. The whole written
+document equivalent is supported by the original HGM field; final up remains
+unpaired. Repeated deeds and others have exact reviewed occurrences. Distributed
+temporal framing is omitted without false nulls.224 preserves three distinct
+seed occurrences and the causal subjects of production. Its sole cessation null
+at Wylie 98..103 reflects no separately alignable English ceased exponent; the
+concessive even is separately retained at 221..225. The knowing/application
+recast stays unpaired while same/other/three survive.225 retains whole proper
+names and the full synonymous title, including parenthetical Abhidharmakosha,
+on positive HGM evidence. Distinct group references, school members and final
+qualified predicate keep their source roles; final yang/alternate is omitted
+as uncertain, never nulled or silently corrected.
+
+No new errata or head allowances. All 190 earlier errata and all allowances remain
+unchanged. Coverage 225/511. Bank 43,461 links (+116 including three anchors),
+11,873 null exponents, 1,561 note blocks, 11 trees; evidence 6,961 headwords/15,042
+pairs. All 43,345 prior links, notes, trees, evidence, ACIP and 21,685 CSV lexical
+keys/citations survive. No old ACIP metadata changes. Main CSV 21,745; reverse 21,405;
+changes 60 versus 21964bb; all 23,158 course/depth groups match actual main CSV
+references and preserve 23,090 prior groups. Source/master hashes unchanged.
+All 17 targeted fidelity/export/constitution suites pass in 11.45 seconds.
+Rendering and newer native/device execution remain unverified; no main integration.
+Next 226–228 has frozen reconciliation and an independent semantic reviewer active.

@@ -1,0 +1,12 @@
+# C05:224 — independent English-first proposal
+- Source: C05:224 was re-read from `file:build/hgm_spine_v27_2.db?mode=ro`; `source-evidence.json` preserves the original fields and the sole all-field-identical corpus row.
+- HGM evidence: binding rows directly support `las kyi bag chags`→“mental seed of the deed,” `bsgos pa`→“stained,” `rnam shes kyi rgyun`→“stream of consciousness,” `de'i phyir`→“why,” `kyang`→“even,” `phyis`→“later,” `mi 'gal ba`, `rigs 'dra`, `brgyud pa`, and the result/production vocabulary; Hopkins remains a labeled comparandum only.
+- Comparative corpus: C16:801 is all-field-identical without proving independent provenance; ILL:1881 carries the related Tibetan argument with different English and did not supply C05 wording.
+- Counts: 37 spans = 30 d5, 4 d7, 1 d3, 2 d6, 0 null; both d5 compounds have unique, strictly tighter d7 members.
+- Occurrences: three Tibetan `bag chags` instances map the first three English “mental seed” occurrences; the fourth English “This mental seed” realizes Tibetan `de'i` diffusely and stays unwrapped.
+- First challenge: inflected `brgyud pas`→“continues on” is defensible from this sentence and the HGM `rgyun` continuation family, but it is less secure than the separate binding `brgyud pa`→“indirectly.”
+- Rule-10 omissions: the first ceased-karma `las` is not made to share the one English “deed” with the later agentive `las`; reporting frames (“they say”) and fused genitives/case particles are unwrapped.
+- In the final sentence only `de bzhin du`→“same” and d3 `gzhan gsum`→“other three” remain; “applies … positions expressed” is distributed and unwrapped. The supplied article in “after a very long time” was likewise removed by separating `nas`→“after.”
+- The earlier root replay/unchanged-hash checkpoint applies to preserved attempt 1 (`6426b8…`) and is superseded by the final over-capture correction and hash below.
+- Generator proof: `EXIT=0`; stdout saved byte-exact as `body.html` (5559 bytes, SHA-256 `a445f51d8da8843d0c5cc0341269839cf69874c07a3f76629ebff54992a9e3be`); stderr is empty; clean rerun `cmp` exit 0.
+- Errata: 0. No 1,500-character cap or registered artefact is present; the checked related rows do not establish a defect in C05:224.

@@ -1,0 +1,12 @@
+# C05:223 — independent English-first proposal
+- Source: C05:223 was re-read from `file:build/hgm_spine_v27_2.db?mode=ro`; `source-evidence.json` preserves ACIP, Wylie, English, and the sole all-field-identical corpus row.
+- HGM evidence: binding rows directly support `las`→“deed,” `nus pa`→“energy,” `kha cig`→“some thinkers”/“Others,” `kun gzhi rnam par shes pa`→“foundation consciousness,” `las gnyis`, `chud mi za ba`, `ldan min 'du byed`, `bu lon`, `yi ge`, `don gzhan`, and `thob pa`; Hopkins is retained only as a labeled comparandum in `lexical-evidence.json`.
+- Comparative corpus: C16:800 is textually identical in ACIP/Wylie/English but that identity does not establish independent publication or ingestion; ILL:1879 has a related Tibetan passage and different English and did not supply any C05 English.
+- Counts: 28 spans = 26 d5, 2 d7, 0 null; the d7 members uniquely partition “foundation consciousness.”
+- Occurrences: the three `kha cig` tokens resolve to “some thinkers,” “Others,” and “Still others”; the two `las gnyis` and two `rtog par byed` tokens resolve in their stated English order.
+- First challenge: both `rtog par byed`→“invented” links come from the immediate source context because the dictionary row has no HGM gloss; ILL:1879 instead uses “imagine.”
+- Rule-10 omissions: quote markers, copular/scaffolding material, supplied “something”/“they call” frames, and English framing/articles in the opening recast are unwrapped; only directly defensible atoms are retained.
+- Superseded passing drafts are preserved with bodies/proofs: attempt 1 overclaimed `don gzhan` as “different from,” and attempt 2 retained supplied framing in two d3 opening phrases.
+- The earlier root replay/unchanged-hash checkpoint applies to attempt 2 (`336754…`) and is superseded by the final over-capture correction and hash below.
+- Generator proof: `EXIT=0`; stdout saved byte-exact as `body.html` (4818 bytes, SHA-256 `d12e5eee26fb3aaaac05208da524786d1d1367bfa566c10af316b091ba260a45`); stderr is empty; clean rerun `cmp` exit 0.
+- Errata: 0. C05/C16 read `DPANG RGYA`; ILL:1879 has `DBANG RGYA`, but the differing comparandum and lack of independent provenance do not justify correcting this source row.

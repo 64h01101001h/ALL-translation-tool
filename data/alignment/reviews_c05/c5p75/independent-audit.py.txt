@@ -1,0 +1,85 @@
+import os,json,sqlite3,sys,hashlib,subprocess,shutil,importlib.util
+from pathlib import Path
+ROOT=Path.cwd(); WT=ROOT/'campaign-worktree'; B=ROOT/'campaign-artifacts/C05-223-225'; O=B/'semantic-review'
+assert os.environ.get('PYTHONDONTWRITEBYTECODE')=='1'
+def dump(p,x): p.parent.mkdir(parents=True,exist_ok=True);p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+def sha(x): return hashlib.sha256(x).hexdigest()
+manifest=[]
+def preserve(p,d):
+ if p.suffix not in {'.json','.md','.html','.stderr','.stdout','.log','.txt','.bin','.exit'}: d=d.with_name(d.name+'.txt')
+ d.parent.mkdir(parents=True,exist_ok=True)
+ if d.exists(): assert d.read_bytes()==p.read_bytes(), (p,d)
+ else: shutil.copyfile(p,d)
+ b=p.read_bytes();manifest.append({'original':str(p),'copy':str(d.relative_to(O)),'sha256':sha(b),'bytes':len(b)})
+for branch in ['tibetan','english','proposal-verification','proposal-verification-history']:
+ for p in sorted((B/branch).rglob('*')):
+  if p.is_file() and '__pycache__' not in p.parts: preserve(p,O/'proposal-inputs'/p.relative_to(B))
+for p in sorted(B.glob('*')):
+ if p.is_file(): preserve(p,O/'proposal-inputs'/'batch-context'/p.name)
+for p in sorted((B/'reconciled').rglob('*')):
+ if p.is_file() and '__pycache__' not in p.parts:preserve(p,O/'reviewed-final'/p.relative_to(B/'reconciled'))
+for p in [WT/'tools/gen_alignment_page.py',ROOT/'campaign-artifacts/run_generator_readonly.py',WT/'AGENTS.md',WT/'docs/ALIGNMENT_LAYER_SPEC.md',WT/'docs/alignment_briefs/RECONCILE_BRIEF.md',WT/'docs/alignment_briefs/REFUTE_BRIEF.md',WT/'docs/errata_register.json',ROOT/'campaign-artifacts/semantic-review-protocol.md']:
+ preserve(p,O/'governing-originals'/p.name)
+dump(O/'preserved-input-manifest.json',manifest)
+db=sqlite3.connect((WT/'build/hgm_spine_v27_2.db').as_uri()+'?mode=ro',uri=True);db.row_factory=sqlite3.Row
+src=[dict(r) for r in db.execute("select * from corpus_segments where course='C05' and seq between 221 and 227 order by seq")];dump(O/'independent-source-originals.json',src)
+for p in [B/'source.json',B/'context.json']:
+ for r in json.loads(p.read_text()):
+  actual=next(s for s in src if s['seq']==r['seq']);assert all(actual[k]==v for k,v in r.items()),p
+checks=[]; failures=[]; witnesses={}; lexical={}
+def walk(x,origin):
+ if isinstance(x,list):
+  for v in x:walk(v,origin)
+ elif isinstance(x,dict):
+  table=None
+  if {'course','seq','wylie','english'}.issubset(x):table='corpus_segments'
+  elif {'id','wylie','hgm_gloss'}.issubset(x):table='entries'
+  if table:
+   if table=='corpus_segments':a=db.execute('select * from corpus_segments where course=? and seq=?',(x['course'],x['seq'])).fetchone()
+   else:a=db.execute('select * from entries where id=?',(x['id'],)).fetchone()
+   assert a is not None,(origin,x.get('id'))
+   a=dict(a); cols=[k for k in x if k in a]
+   bad=[k for k in cols if x[k]!=a[k]]
+   if bad:failures.append({'file':origin,'table':table,'id':x.get('id'),'fields':bad})
+   checks.append({'file':origin,'table':table,'id':a['id'],'fields':cols,'exact':not bad})
+   (witnesses if table=='corpus_segments' else lexical)[a['id']]=a
+  for v in x.values():walk(v,origin)
+for role in ['tibetan','english','reconciled']:
+ for p in sorted((B/role).rglob('*.json')):
+  if any(t in p.name for t in ['original','evidence','comparanda']):walk(json.loads(p.read_text()),str(p.relative_to(B)))
+dump(O/'independent-original-field-checks.json',{'checks':checks,'failures':failures})
+dump(O/'independent-corpus-originals.json',list(witnesses.values()))
+# Independently rerun the reconciler's explicit query/count claims.
+querychecks=[]
+for s in (223,224,225):
+ x=json.loads((B/'reconciled'/str(s)/'corpus-originals.json').read_text())
+ for label,z in x['searches'].items():
+  col,needle=label.split(':',1);assert col in ('english','wylie','acip')
+  rows=[dict(r) for r in db.execute('select * from corpus_segments where '+col+' like ? order by course,seq',('%'+needle+'%',))]
+  # Saved source searches use initial 150-char Wylie query, inspect count/row identity.
+  querychecks.append({'seq':s,'column':col,'needle':needle,'count':len(rows),'claimed':z['count'],'exact_count':len(rows)==z['count'],'rows':rows})
+dump(O/'independent-query-counts.json',querychecks)
+loader=importlib.util.spec_from_file_location('canonical_gen',WT/'tools/gen_alignment_page.py');g=importlib.util.module_from_spec(loader);loader.loader.exec_module(g)
+resolved=[]; summaries=[]
+for seq in (223,224,225):
+ sd=B/'reconciled'/str(seq);specb=(sd/'spec.json').read_bytes();bodyb=(sd/'body.html').read_bytes();sp=json.loads(specb)['segments'][0]
+ proc=subprocess.run([sys.executable,str(ROOT/'campaign-artifacts/run_generator_readonly.py')],input=specb,capture_output=True,env={**os.environ,'PYTHONDONTWRITEBYTECODE':'1'},cwd=ROOT)
+ for suffix,data in [('stdout',proc.stdout),('stderr',proc.stderr),('exit',(str(proc.returncode)+'\n').encode())]:(O/f'{seq}.{suffix}').write_bytes(data)
+ assert proc.returncode==0 and proc.stdout==bodyb,(seq,proc.stderr)
+ r=next(s for s in src if s['seq']==seq);tr=g.resolve(r['wylie'],sp['spans'],'tib',seq);byid={s['id']:s for s in sp['spans']};eo=g.with_members(sp['spans'],[byid[i] for i in sp['eng_order']],r['english']);er=g.resolve(r['english'],eo,'eng',seq)
+ parent=None
+ for s in sp['spans']:
+  if s['d']!=7:parent=s
+  else:
+   assert parent['d']==5
+   for col,ran in [('tib',tr),('eng',er)]:
+    assert len(s[col])<len(parent[col]) and parent[col].count(s[col])==1
+    assert ran[parent['id']][0]<=ran[s['id']][0]<ran[s['id']][1]<=ran[parent['id']][1]
+  rec={'seq':seq,'id':s['id'],'d':s['d'],'tib':s['tib'],'eng':s['eng'],'tib_range':list(tr[s['id']]),'eng_range':list(er[s['id']]) if s['eng'] is not None else None}
+  assert r['wylie'][slice(*rec['tib_range'])]==s['tib']
+  if s['eng'] is not None:assert r['english'][slice(*rec['eng_range'])]==s['eng']
+  resolved.append(rec)
+ summaries.append({'seq':seq,'span_count':len(sp['spans']),'null_count':sum(s['eng'] is None for s in sp['spans']),'word_pair_count':sum(s['d']==5 and s['eng'] is not None for s in sp['spans']),'spec_sha256':sha(specb),'spec_bytes':len(specb),'body_sha256':sha(bodyb),'body_bytes':len(bodyb),'generator_exit':proc.returncode,'exact_body':proc.stdout==bodyb})
+dump(O/'resolved-spans.json',resolved);dump(O/'mechanical-proof.json',{'segments':summaries,'source_field_checks':len(checks),'original_field_failures':failures,'generator_sha256':sha((WT/'tools/gen_alignment_page.py').read_bytes()),'helper_sha256':sha((ROOT/'campaign-artifacts/run_generator_readonly.py').read_bytes())})
+print(json.dumps({'segments':summaries,'field_checks':len(checks),'field_failures':failures,'query_counts':[(x['seq'],x['column'],x['count'],x['claimed']) for x in querychecks],'preserved':len(manifest)},indent=2))
+for r in resolved:print(r['seq'],r['id'],r['d'],r['tib'],r['tib_range'],'=>',r['eng'],r['eng_range'])
