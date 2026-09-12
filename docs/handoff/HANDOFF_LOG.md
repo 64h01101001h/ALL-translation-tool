@@ -8,6 +8,37 @@ Format and rules: `05_CROSS_CHECK_PROTOCOL.md`.
 
 ---
 
+## 2026-09-12 — Codex — continuation checkpoint, C05 through 204
+
+### Done
+
+- Added 196–198 in `ef8c0e4`, 199–201 in `59de591`, and 202–204 in `6665c77`: nine segments, 144 independently reviewed analyst spans and nine sentence anchors. C05 reaches **204/511**, pages c5p1–c5p68. Thirteen pages since 165 contain 990 analyst spans and 39 anchors. Separate proposal angles, reconciliation, skeptical semantic review, exact specs and source evidence are preserved.
+- All three pages have independent semantic APPROVE and remain PROVISIONAL. The result-category and GRU SPYOD spelling conjectures were refuted. No errata or allowances were added; all 186 existing register records and prior allowances remain unchanged. Original Tibetan, English and hgm_gloss are untouched.
+- Recovered supported vocabulary includes inferior, no power, everywhere, poisoned, right times and causal make, with source-specific boundaries reviewed. Unproved crop non-emergence, cooperation, speech/division expansion, leisure negative-many and annual recurrence stay omitted with reasons; none becomes a false null.
+- The c5p66 ledger's description of both nulls as fusion is corrected by appended ERRATA: rnams is plurality fused into lamas, while do marks assertion closure without a distinct exponent. The accepted spec/review were already correct. Digital witness descriptions are qualified: matching text does not establish publication independence or ingestion history. The two raw S05392L files first differ in body formatting, not headers, and remain unequal after whitespace removal. Historical reports and corrected dispositions are preserved.
+
+### Verified
+
+- Each page passed all **17 targeted fidelity, export and constitution suites**, in 10.50s, 10.46s and 10.52s. All 18 proposal bodies and nine final individual bodies reproduce exactly; all 144 reviewed tuples and original source ranges match the landed specs. Eligible semantic-review evidence was copied byte-for-byte. Source/master hashes still match the campaign baseline.
+- Bank: **42,788 links, 11,868 null exponents, 1,540 note blocks, 11 trees**. Evidence: **6,879 headwords / 14,822 pairs**. CSV rows: main 21,413; reverse 21,073; course/depth 22,751; changes 49 versus 59de591. Every course/depth group matches actual main CSV reference metadata and counts; all previous groups and citations survive.
+- Prior links, notes, trees, evidence and ACIP mappings are retained. One old phonetic CSV row ring du/ringdu gains its formerly empty ACIP as RING DU from a newly accepted C05:203 d5 source link; its lexical content and depth are unchanged. No old translation was revised.
+- Independent reproduction at all three fixed data heads exactly matches both banks, HTML and all four CSVs (228,097, 228,196 and 228,348 checks), including all 144 tuples, nine individual bodies and three assembled page hashes. The final supplementary source/evidence audit has 9,751 passing checks. Final documentation and full-campaign read-only applicability proof are recorded in sibling `campaign-artifacts/integration/continuation-through204-review.md` and its companion evidence. Changes seeds are 5c4d784, ef8c0e4 and 59de591 respectively.
+
+### Claims to verify
+
+- Final checkpoint approval requires the independent report to name the final committed HEAD after all three data reproductions and documentation checks. Read-only main applicability is not main integration. No rendered-page inspection or newer native/device execution follows from data tests.
+- Local digital witnesses and repeated corpus passages do not establish independent publication. No checked printed-reading witness is claimed. Root's mistaken dispatch ordinal for 202 rtsub was explicitly corrected to the first occurrence; accepted ranges/specs were already correct.
+
+### In flight
+
+- Next: **c5p69, C05:205–207**, with source/context snapshots only. Hourly continuation was rechecked ACTIVE through Tuesday, September 15, 2026, 07:00 America/Denver. No additional source files are needed. The campaign remains unfinished; C13 stays blocked under its upstream-source constraint.
+- Native and installed-phone verification remains through 171. Locked-device launch and actual alignment-page rendering remain unverified. Main-checkout integration remains open; preserve concurrent work there.
+
+### Do not
+
+- Do not modify original wording or promote machine matches into hgm_gloss. Preserve full proposals, rejected attempts, reports and corrections. Do not substitute a false null or broader phrase for uncertain correspondence.
+- Do not bypass browser policy, infer phone unlock, invoke paid generation, or alter the main checkout's unrelated work. Run the layer builder followed by the view builder once; the standalone export entry point reruns the view and resets its previous-export delta. Resume from the live committed boundary and sibling continuation record.
+
 ## 2026-09-12 — Codex — continuation checkpoint, C05 through 195
 
 ### Done

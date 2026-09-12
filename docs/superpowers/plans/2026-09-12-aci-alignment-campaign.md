@@ -144,3 +144,23 @@ read-only main applicability. No main integration
 or newer native/device/rendering verification is inferred. Next is196–198,
 source/context snapshots only. Tasks 3 and 4 retain their stated limits;
 the hourly campaign remains active through the user-authorized deadline.
+
+
+## Fifth continuation checkpoint — 2026-09-12
+
+Accepted C05 reaches 204 in ef8c0e4, 59de591 and 6665c77: 144 independently reviewed
+analyst spans plus nine sentence anchors. Each of the three pages passed all 17
+targeted suites, and all 22,751 course/depth groups match actual source references.
+Prior data/citations and master/source hashes survive. One old phonetic export
+row gains source-attested RING DU from 203; no old lexical content or depth changes.
+No errata or allowances were added. The two 196 nulls remain distinct: fused
+plurality and assertion closure; an appended ledger ERRATA corrects the earlier
+fusion-only description without changing accepted specs or review evidence.
+
+Independent fixed-head reproduction and the final report cover both banks,
+HTML, all four CSVs, 144 reviewed tuples and nine individual bodies. Final committed
+documentation and read-only main applicability are recorded in sibling
+integration/continuation-through204-review.md. No main integration or newer
+native/device/rendering verification is inferred. Next 205–207 has source/context
+snapshots only. Tasks 3 and 4 retain their stated limits; the hourly campaign remains
+active through the authorized Tuesday morning deadline.
