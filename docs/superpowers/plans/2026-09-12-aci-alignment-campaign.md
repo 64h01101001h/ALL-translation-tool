@@ -395,3 +395,40 @@ leads are withheld.262–264 and265–267 are source preparation only with no
 baseline or proposals. Reuse preserved state without exposing one angle's
 judgments to another. The larger campaign and hourly heartbeat remain ACTIVE
 to Tuesday,September15,2026 at07:00 America/Denver. No speed multiplier claimed.
+
+## Thirteenth continuation checkpoint — 2026-09-12
+
+Data235bd2ebabc2278a91a8c06c95f8371f2e5a77fe reaches C05:261/511 and87pages.
+Since165,32 new pages contain2,720 independently reviewed analyst spans and
+96 sentence anchors. This batch adds96 spans and3 anchors, no nulls, errata
+or allowances. All remain PROVISIONAL; source/master and hgm_gloss unchanged.
+All17 required suites passed12.08seconds; all23,810 course/depth groups match
+actual main refs and metadata. Prior links, notes, trees, lexical content,
+citations and ACIP metadata survive without enrichment. The real previous
+CSV seed is48bd9d4; both canonical builders ran once and exited0.
+
+Root read177 original dispositions,96 final assessments,27 material omissions
+and7 five-ground checks. All649 original mappings/21 historical Git records
+and448 semantic copies verify. The corrected447-file freeze includes every
+nested original freeze.json and preserves the failed enumeration attempt.
+Root's original tuple-schema audit failure and corrected complete-object proof
+also survive. No semantic or source bytes changed during these corrections.
+The full HGM two types variant is preserved; the accepted two boundary is a
+local judgment. All52,622 staged diagnostics are accounted for using original
+physical source, canonical CSV CRLF and exact frozen review pins.
+
+A fresh fixed-head reviewer must close this complete checkpoint, reproduce
+all seven outputs from Git with the actual previous CSV, verify evidence,
+retention and final documentation, and perform the read-only full original
+campaign patch preflight against current MAIN and all1912 fixtures in each
+checkout. Report: campaign-artifacts/integration/continuation-through261-review.md.
+This entry does not establish final approval. Prior1448ea8 remains the closed
+through258 checkpoint. MAIN integration remains open; native/phone proof is
+through171; locked launch and rendered inspection remain unverified.
+
+Next262–264 has clean baseline235bd2e and separate original-angle briefs;
+265–273 are source/context preparation only. No new original readers have
+started. Root leads remain withheld until both angles freeze. Use the corrected
+semantic-review-brief-v2.md interfaces. Continue the preserved campaign under
+the existing ACTIVE heartbeat, now every five minutes through Tuesday,
+September15,2026 at07:00 America/Denver. No speed multiplier is asserted.

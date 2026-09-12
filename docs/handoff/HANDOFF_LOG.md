@@ -1,3 +1,48 @@
+## 2026-09-12 — Codex private continuation through C05:261
+
+Adam's continuation authorization remains active through Tuesday, September15,
+2026 at07:00 America/Denver. The existing heartbeat now runs every five minutes,
+superseding the earlier hourly and ten-minute cadence. No additional source
+files are needed; work remains private on codex/aci-alignment-20260915.
+
+Data235bd2ebabc2278a91a8c06c95f8371f2e5a77fe adds96 independently reconciled
+and skeptically approved spans plus three anchors for259–261. C05 reaches
+261/511 source segments and87 pages. Since165,32 new pages contain2,720 analyst
+spans and96 anchors. All remain PROVISIONAL machine attestations. Original
+source/master wording and hgm_gloss remain unchanged. No new errata or head
+allowances; all192 earlier errata survive. All17 fidelity/export suites passed
+(12.08s); all23,810 course/depth groups match actual main CSV refs and metadata.
+Prior links, notes, trees, evidence, ACIP metadata, lexical rows and citations
+survive without enrichment. Main/reverse/course/changes rows are
+22,288/21,948/23,810/33, with changes seeded from the actual48bd9d4 CSV.
+
+Root accepted every final decision and checked649 original mappings including
+21 historical Git records,447 frozen files and448 exact semantic copies.
+All177 original dispositions,27 material omissions, seven five-ground checks,
+full source/master evidence and failed/superseded attempts remain preserved.
+The corrected semantic freeze includes nested original freeze.json files;
+only enumeration changed. The gnyis/two judgment is local: the full HGM
+inventory also contains two types. Both real builders ran once and exited0.
+The whitespace audit accounted for52,622 diagnostics against exact physical
+source, CSV CRLF and frozen review bytes, with no normalization.
+
+UNVERIFIED at this documentation commit: fresh complete-checkpoint approval
+for this final HEAD, fixed-head reproduction of all seven outputs and the new
+read-only full campaign patch/fixture preflight against live MAIN. The fresh
+reviewer must close these in campaign-artifacts/integration/continuation-through261-review.md.
+The prior closed1448ea8 checkpoint remains valid for its own scope, including
+its through258 root proof. This entry does not pre-assert final approval.
+MAIN integration and newer native/device/rendering verification remain open;
+native/installed-phone proof remains through171, locked launch unverified,
+and rendering unverified after browser-policy refusal. C13 remains blocked.
+
+Next262–264 has clean data baseline235bd2e, exact source/context and separate
+original-angle briefs. No original readers have started. Preparation covers
+265–273 without baselines or proposals. Keep root review leads withheld until
+both original angles freeze. Use each batch's semantic-review-brief-v2.md.
+Preparation overlaps independent review without removing any fidelity gate;
+no numerical overall speedup is claimed. Preserve the campaign workspace.
+
 ## 2026-09-12 — Codex private continuation through C05:258
 
 New user authorization to continue through Tuesday07:00 America/Denver remains
