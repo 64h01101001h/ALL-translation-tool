@@ -1,3 +1,13 @@
+- [ ] **The properties sidecar shares one record between same-named files.**
+      Two drafts called draft.txt in different folders share one revision
+      counter, editing time and "last saved by". EXAMINED 2026-09-11 and
+      deliberately NOT changed — re-keying it needs an adoption step that
+      cannot live where it naturally goes, and would start orphaning
+      properties on every move until every pane carried history. The full
+      reasoning and the design a later attempt needs is
+      `docs/SIDECAR_KEYING_DECISION.md`. The check's urgent finding (the
+      Manuscript carrying no history at all) was fixed the same day.
+
 # ★★★★★ ADAM 2026-09-11 (on a hike): FREQUENCY-ORDERED VOCABULARY —
 # "the first step for people trying to learn how to translate Tibetan"
 
