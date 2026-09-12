@@ -25358,12 +25358,13 @@ public:
         tl->addWidget(srcHost, 1);
         clauseView_ = new QTextBrowser;
         clauseView_->setOpenLinks(false);
-        clauseView_->setHtml(
-            "<i style='color:#6F6F6F'>The source appears here as numbered, "
-            "clickable clauses once you press <b>Load source</b> \u2014 the "
-            "button under the source box on the left, or WORKBENCH on the "
-            "ribbon above. Click any clause to see its evidence on the "
-            "right.</i>");
+        clauseView_->setHtml(clauseViewIdleHtml());
+        // The backstop its two neighbours already had. This pane's only
+        // instruction used to be destroyed by an empty load with nothing put
+        // in its place; a placeholder cannot be destroyed by a setHtml.
+        clauseView_->setPlaceholderText(
+            "The source appears here as numbered, clickable clauses once you "
+            "press Load source.");
         tl->addWidget(clauseView_, 1);
         anchors_ = new QTextBrowser;
         anchors_->setOpenLinks(false);
@@ -25913,6 +25914,16 @@ public:
     // loaded: "it doesn't make any sense." He was right — one had its
     // explanation deleted the moment he loaded a source, and the other never
     // had one.
+    // Named, so the load path can put it BACK rather than overwriting it
+    // with a bare "no clauses" — which is what it used to do.
+    static QString clauseViewIdleHtml() {
+        return "<i style='color:#6F6F6F'>The source appears here as numbered, "
+               "clickable clauses once you press <b>Load source</b> \u2014 the "
+               "button under the source box on the left, or WORKBENCH on the "
+               "ribbon above. Click any clause to see its evidence on the "
+               "right.</i>";
+    }
+
     static QString anchorsIdleHtml(bool sourceLoaded,
                                    bool haveClauses = true) {
         const QString head =
@@ -26113,6 +26124,38 @@ public:
                       "instruction");
             }
         }
+        // ---- the middle column distinguishes its two failures (09-12) -----
+        // A verification pass found this finding recorded as fixed when it
+        // had never been touched: what I had actually changed was termLive_,
+        // a different widget in a different column whose message expires
+        // after six seconds. These assertions inspect clauseView_ itself.
+        {
+            source_->setPlainText("");
+            load();
+            const QString blank = clauseView_->toPlainText();
+            check(blank.contains("Load source"),
+                  "clauses: an EMPTY source restores the instruction rather "
+                  "than replacing it with a bare \"no clauses\"");
+
+            // Measured, not assumed: the tokenizer finds a syllable in
+            // almost anything, so a box with content always yields clauses.
+            // This is the assertion that keeps the simplification honest — if
+            // it ever fails, the untokenizable case has become reachable and
+            // the branch removed above needs writing after all.
+            source_->setPlainText("this is english prose, not a source");
+            load();
+            check(!clauses_.empty(),
+                  "clauses: any content at all yields at least one clause, so "
+                  "there is no reachable \"untokenizable\" state to diagnose");
+
+            source_->setPlainText("/ /sems can thams cad /");
+            load();
+            check(!clauseView_->toPlainText().contains("Load source") &&
+                      !clauses_.empty(),
+                  "clauses: a real source still lists its clauses");
+            source_->setPlainText("");
+        }
+
         // ---- a load that split nothing does not ask for a click (09-11) ---
         {
             source_->setPlainText("this is english prose, not a source");
@@ -26727,7 +26770,27 @@ private:
                      .arg(i + 1)
                      .arg(text.toHtmlEscaped());
         }
-        clauseView_->setHtml(h.isEmpty() ? "<i>no clauses</i>" : h);
+        // "no clauses" told the reader nothing: not whether they had pasted
+        // nothing, not whether the text failed to parse, and it destroyed the
+        // pane's only middle-column instruction to say it.
+        //
+        // I recorded this finding as fixed once already and it was not — what
+        // I had actually changed was termLive_, a different widget in a
+        // different column, whose message self-expires after six seconds.
+        //
+        // The audit described two cases, "an empty or untokenizable source".
+        // MEASURED, rather than assumed: only whitespace yields zero clauses.
+        // English prose gives 2, "12345" gives 1, ".,;:!?" gives 2, "@@@"
+        // gives 1 — the tokenizer finds a syllable in almost anything, so a
+        // source box with ANY content produces at least one clause. The
+        // "untokenizable" case is therefore not reachable from the box, and a
+        // branch written for it would be dead code dressed as a diagnosis,
+        // which is the defect this audit has spent all night removing.
+        //
+        // So there are two states, and both are real: nothing pasted, and
+        // clauses found. (Draft workspace audit 2026-09-11; closure verified
+        // and this branch measured 2026-09-12.)
+        clauseView_->setHtml(h.isEmpty() ? clauseViewIdleHtml() : h);
         // Load source is this pane's primary button and it used to produce no
         // confirmation of any kind — no count, no next step, and on a source
         // it could not parse, an undiagnosed "no clauses" with nothing said
