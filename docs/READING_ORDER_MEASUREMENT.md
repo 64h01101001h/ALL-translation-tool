@@ -53,16 +53,34 @@ them left to right and change nothing):
 
 | level | spans | engine | left-to-right |
 |---|---:|---:|---:|
-| segment → clauses | 16 | 69% | **100%** |
-| clause → phrases | 57 | 40% | **60%** |
-| phrase → sub-phrases | 14 | **57%** | 36% |
-| sub-phrase → words | 120 | **50%** | 31% |
-| **all** | **207** | **49%** | **44%** |
+| segment → clauses | 425 | 83% | **90%** |
+| clause → phrases | 112 | 51% | **59%** |
+| phrase → sub-phrases | 18 | **61%** | 44% |
+| sub-phrase → words | 169 | **36%** | 23% |
+| **all** | **724** | 67% | 68% |
+
+### Correction, same day
+
+The first pass of this table read 16 / 57 / 14 / 120 spans and 49% against
+44% overall, and it was wrong — not in shape, in size. The probe walked only
+the FIRST clause of each span, so any child sitting in a second clause had no
+chunk to map onto and the comparison silently dropped it: **523 of 730 spans
+were unmappable**. Fixing the probe to walk every clause brings that to 6, and
+the sample from 207 to 724.
+
+What survived: the engine is worse than doing nothing at the top two levels
+and better at the bottom two. What did not: the claim that it beats the
+baseline overall. At 67% against 68% it does not — that 5-point lead was an
+artefact of which spans happened to map.
+
+The lesson is the one this file is about. A measurement that has never been
+checked is not evidence, and mine had not been. The `unmappable` count is
+printed first in the script's output for that reason.
 
 The engine's verb-first/genitive-rightward rules are earned at the bottom two
 levels and actively harmful at the top two. At the clause level, reordering can
-only break what was already right, and it does so 31% of the time. Finding 1
-corroborates independently and with far more data: 5% of 972 clause pairs.
+only break what was already right. Finding 1 corroborates independently and
+without going near the probe: 5% of 972 clause pairs come out backwards.
 
 ## What is NOT claimed
 
@@ -70,9 +88,9 @@ corroborates independently and with far more data: 5% of 972 clause pairs.
   idiomatically. He renders a title appositive as "Pabongka Rinpoche, the
   Holder of the Diamond" because that is English word order, not because the
   Tibetan reverses. An unknown share of the gap is idiom.
-- **The middle rows are thin.** 57 spans at clause → phrases, 14 at phrase →
-  sub-phrases. The headline "engine worse than baseline in the middle" rests on
-  the 57. Finding 1's clause row and the word row are solid; the middle is not.
+- **One row is still thin.** 18 spans at phrase → sub-phrases. Everything else
+  now rests on 112 to 425 spans. The 18 is the only figure in the table that
+  should not be quoted on its own.
 - **3.7% of the corpus.** 1,550 aligned segments of 42,199.
 
 ## What was done about it
@@ -91,7 +109,8 @@ entire corpus aligned.")
 
 ## Recalibrating after more alignment
 
-1. Re-run the two measurements against the grown `alignment_full_v1.json`.
+1. Re-run the two measurements — `tools/reading_order/`, one command each, and
+   check the `unmappable` count before believing the rest.
 2. Update the constants in `namespace walk` — `kOrderSpans`, `kOrderAgree`,
    `kOrderPlain`, `kClauseSpans`, `kClauseEngine`, `kClausePlain`,
    `kClausePairs`, `kClauseBackPct`. The pane's prose reads from them.

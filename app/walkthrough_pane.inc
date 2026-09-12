@@ -22,16 +22,17 @@
 // against the only baseline that matters -- just reading left to right:
 //
 //     level                 spans   engine   left-to-right
-//     segment -> clauses       16      69%       100%
-//     clause  -> phrases       57      40%        60%
-//     phrase  -> sub-phrases   14      57%        36%
-//     sub     -> words        120      50%        31%
+//     segment -> clauses      425      83%        90%
+//     clause  -> phrases      112      51%        59%
+//     phrase  -> sub-phrases   18      61%        44%
+//     sub     -> words        169      36%        23%
+//     ALL                     724      67%        68%
 //
 // The engine is WORSE THAN DOING NOTHING at the top two levels and clearly
-// better at the bottom two. Clause order is essentially never inverted -- a
-// second, independent measurement over 972 clause pairs puts it at 5%
-// backwards -- so reordering clauses can only break what was already right,
-// and that is precisely what the engine does 31% of the time.
+// better at the bottom two, and over everything it is a tie. Clause order is
+// essentially never inverted -- a second, independent measurement over 972
+// clause pairs puts it at 5% backwards -- so reordering clauses can only break
+// what was already right.
 //
 // This pane's step 4 operates at clause -> phrases: the level where the
 // engine scores 40% and doing nothing scores 60%. Shipping that ruling as
@@ -50,13 +51,21 @@ namespace walk {
 // Recovered from the alignment bank; see docs/READING_ORDER_MEASUREMENT.md.
 // Named constants so the pane, the doc and the gate all quote one number and
 // a change to the measurement cannot leave stale text behind.
-inline constexpr int kOrderSpans = 207;   // spans where GMR's order was recoverable
-inline constexpr int kOrderAgree = 102;   // ... and the engine matched it
-inline constexpr int kOrderPlain = 92;    // ... and plain left-to-right matched it
+// Re-measured 2026-09-12 after the probe was fixed to walk EVERY clause
+// instead of only the first. The first pass left 523 of 730 spans unmappable
+// -- any child sitting in a second clause had no chunk to map onto -- so its
+// figures were an artefact of my harness, not of the data. 724 of 730 map now.
+// The shape of the finding survived the correction; the magnitudes did not.
+inline constexpr int kOrderSpans = 724;   // spans where GMR's order was recoverable
+inline constexpr int kOrderAgree = 482;   // ... and the engine matched it
+inline constexpr int kOrderPlain = 495;   // ... and plain left-to-right matched it
 // The level this pane's step 4 works at: clause -> phrases.
-inline constexpr int kClauseSpans = 57;
-inline constexpr int kClauseEngine = 40;  // per cent
-inline constexpr int kClausePlain = 60;   // per cent
+inline constexpr int kClauseSpans = 112;
+inline constexpr int kClauseEngine = 51;  // per cent
+inline constexpr int kClausePlain = 59;   // per cent
+// The bottom level, where the ruling earns its keep.
+inline constexpr int kWordEngine = 36;    // per cent
+inline constexpr int kWordPlain = 23;     // per cent
 // Clause order itself, from the independent pair measurement.
 inline constexpr int kClausePairs = 972;
 inline constexpr int kClauseBackPct = 5;
@@ -419,8 +428,10 @@ private:
              "%</b>. At this level the engine is the weaker of the two, so step "
              "4 shows you both and you should lean on the written order unless "
              "the engine gives you a reason you can check. Deeper down — inside "
-             "a phrase, among the words — the ruling wins handily (50% against "
-             "31%), which is where its verb-first and genitive-rightward rules "
+             "a phrase, among the words — the ruling does win, " +
+             QString::number(walk::kWordEngine) + "% against " +
+             QString::number(walk::kWordPlain) +
+             "%, which is where its verb-first and genitive-rightward rules "
              "were earned. Fixing the middle level is on the punchlist; "
              "reporting it as better than it is, is not an option.</div>";
         if (!merged_na.empty())
