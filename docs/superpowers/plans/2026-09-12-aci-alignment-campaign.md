@@ -226,3 +226,32 @@ required checks. No main integration or newer native/device/rendering verificati
 is inferred. Next 223–225 has a clean baseline at 21964bb, source/context and root
 lexical preparation only; no proposals. Tasks 3 and 4 retain their stated limits.
 Hourly continuation remains ACTIVE through the authorized Tuesday morning deadline.
+
+
+## Eighth continuation checkpoint — 2026-09-12
+
+Accepted C05 reaches 231 in 11a388a, 9f9edc6 and 1809556: 367 independently reviewed
+analyst spans plus nine sentence anchors. All three pages passed all 17 targeted
+suites, and every one of 23,325 course/depth groups matches actual source-reference
+counts and metadata. Previous links, notes, trees, evidence, lexical keys and
+citations survive. Three previously empty cig ACIP export fields gain CIG from
+the newly accepted 226 d5 witness without changed wording, depth or citations.
+
+The reviews retained positively attested whole units while rejecting reversed
+causal roles, a false compound member, supplied apparatus and incomplete phrase
+recasts. Five explicit nulls are independently justified; distributed/unresolved
+content is omitted with reasons. No new erratum survives; the 230 punctuation
+candidate is refuted under the five-ground protocol. Two exact sogs allowances
+are added; all 190 older errata and previous allowances remain unchanged.
+Original source/master, hgm_gloss and canonical generation/export code are intact.
+
+Complete proposals, historical attempts and immutable builder versions preserve
+the concurrent page-registration history. Final independent fixed-head output
+reproduction, original-evidence audit, committed documentation and live-main
+read-only patch applicability are recorded in
+`campaign-artifacts/integration/continuation-through231-review.md`. Final approval requires that report to name the committed
+final HEAD and close all required checks. No main integration or newer native,
+device or rendered-page verification is inferred. Next 232–234 has source/context,
+focused original-parallel checks, independent-role briefs and a clean baseline
+at 1809556; no proposals. Tasks 3/4 retain their stated limits; hourly continuation
+remains ACTIVE through the authorized Tuesday morning deadline.

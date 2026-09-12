@@ -8,6 +8,37 @@ Format and rules: `05_CROSS_CHECK_PROTOCOL.md`.
 
 ---
 
+## 2026-09-12 — Codex — continuation checkpoint, C05 through 231
+
+### Done
+
+- Added C05:223–225 in `11a388a`, 226–228 in `9f9edc6`, and 229–231 in `1809556`: nine segments, 367 independently reviewed analyst spans and nine sentence anchors. C05 reaches **231/511**, pages c5p1–c5p77. Twenty-two pages since 165 contain 1,896 analyst spans and 66 anchors. Separate proposal angles, reconciliation and independent semantic review approve the exact frozen specs. All matches remain PROVISIONAL machine attestations, without human editorial acceptance.
+- Preserved attested whole technical equivalents, titles, flower-opening and essence expressions with legitimate tighter members. Rejected causal arising/produce atoms that reversed participant roles, a false retained-object/retaining-agent member, incomplete conceptual-establishment phrases and supplied apparatus. Distributed or unresolved content remains unpaired with explicit reasons. Five new nulls assert only independently checked no-separate-exponent or plural-fusion cases.
+- No new errata. All 190 earlier records remain unchanged. The English punctuation candidate at 230 was refuted after all five grounds; differing digital punctuation does not establish a publication defect. Two precise sogs allowances retain complete or the like / and such gestures. Original source wording and hgm_gloss are unchanged.
+- Only three page registrations changed the canonical builder. Generator, resolver, exporter and heading-trimming code remain unchanged. The c5p76 registration occurred during the last review; both builder versions are preserved and pinned to immutable 11a388a/9f9edc6, and final generator output was replayed afterwards.
+
+### Verified
+
+- Every page passed **all 17 targeted fidelity, export and constitution suites**, in 11.45s, 11.57s and 11.40s. All 18 current original proposal bodies and nine final individual bodies reproduce exactly. Every reviewed tuple and source range matches its assembled page. Semantic evidence copies number 284, 495 and 415, plus three reconciliation reports per page. All 262, 459 and 317 preserved input manifest records were checked against originals or explicit immutable Git versions and landed copies; rejected drafts and failed attempts survive.
+- Bank: **43,721 links, 11,877 null exponents, 1,567 note blocks, 11 trees**. Evidence: **6,988 headwords / 15,129 pairs**. CSV rows: main 21,883; reverse 21,543; course/depth 23,325; changes 62 versus 9f9edc6. Every course/depth group matches actual source-reference counts and metadata. All prior links, notes, trees, evidence, lexical keys, citations and ACIP mappings survive.
+- New C05:226 d5 cig proves ACIP CIG and fills three previously empty export metadata fields: d6 May, d7 A and phonetic chik. Their English, depth and citations remain unchanged. No other prior ACIP field is enriched by these pages. Source/master archive hashes match the campaign baseline. The last review independently compared 95 complete dictionary raw records and 261 complete corpus witness raw records with their physical source archives; no publication lineage is inferred.
+- Final independent integration evidence belongs in sibling `campaign-artifacts/integration/continuation-through231-review.md` and companion proofs. It covers both banks, dictionary HTML and all four CSVs at each fixed data head, complete original-evidence checks, committed documentation and full-campaign read-only applicability against live main. Changes seeds are e3b361c (same seven generated outputs as captured 21964bb), 11a388a and 9f9edc6. The two trailing spaces in preserved difflib headers are documented as an exact-original evidence exception; every other staged path passed whitespace checks.
+
+### Claims to verify
+
+- Final checkpoint approval requires the independent report to name the committed documentation HEAD and finish all three fixed-head reproductions, evidence audits and live-main preflight. Read-only applicability does not mean main integration. Preserve main's concurrent work and the fixture inventory.
+- Neither missing words, a freer translation nor a differing digital witness proves an editorial correction. The final 231 definition has a subject/dependence mismatch that is explicitly not endorsed by its local Conception/occur atoms. No printed-source verification, glossary promotion or human acceptance is claimed.
+
+### In flight
+
+- Next: **c5p78, C05:232–234**, with verified source/context snapshots, focused original-parallel checks, independent-role briefs and a clean baseline at 1809556. No proposals or semantic approvals yet. Keep root preparation separate from independent proposal angles. Hourly continuation was rechecked ACTIVE at 12:13 UTC through Tuesday, September 15, 2026 at 07:00 America/Denver. No additional source files are needed. C13 remains blocked by its upstream source issue.
+- Native and installed-phone verification remains through 171. Locked-device launch and actual alignment-page rendering remain unverified. Main-project integration remains open. This checkpoint closes a bounded continuation, not the larger campaign.
+
+### Do not
+
+- Do not compose GMR English, change original source wording or promote machine matches into hgm_gloss. Preserve full proposals, rejected attempts, original witnesses, immutable governing versions and review decisions. Do not turn uncertainty into a null or hide a false relation in a broad phrase.
+- Do not bypass browser policy, infer phone unlock, use paid generation or overwrite unrelated main work. Build the layer and then the view once; the separate export entry point reruns the view and resets its changes-report seed. Resume from the live committed boundary and sibling continuation record.
+
 ## 2026-09-12 — Codex — continuation checkpoint, C05 through 222
 
 ### Done
