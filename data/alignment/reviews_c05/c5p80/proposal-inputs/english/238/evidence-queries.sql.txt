@@ -1,0 +1,9 @@
+-- All commands were executed against build/hgm_spine_v27_2.db through a SQLite URI with mode=ro.
+-- Source: SELECT course,seq,id,acip,wylie,english,raw FROM corpus_segments WHERE course='C05' AND seq=238;
+-- Context: SELECT course,seq,id,acip,wylie,english,raw FROM corpus_segments WHERE course='C05' AND seq BETWEEN 236 AND 242 ORDER BY seq;
+-- Glossary originals: exact entries for de la, rma bya, mdongs, la sogs pa, sems can,
+-- thun mong ma yin pa, skyed pa, pad ma, 'dab ma, kha dog, sna tshogs,
+-- thun mong gi las, bskyed pa, de bzhin du, gzhan, shes par bya.
+-- Semantic corpus witnesses explicitly exclude C13. The query checks the byte-identical
+-- Wylie row and focused co-occurrence of mdongs/intricate patterns and
+-- thun mong ma yin/personal; output is preserved in corpus-queries-original.json.

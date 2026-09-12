@@ -1,0 +1,53 @@
+from pathlib import Path
+import sqlite3,json,hashlib,gzip,os,subprocess,shutil,sys,importlib.util,re
+BASE=Path(__file__).resolve().parents[2]; OUT=BASE/'reconciled'; WORK=BASE.parents[1]/'campaign-worktree'
+def save(p,x): p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+def sha(b): return hashlib.sha256(b).hexdigest()
+E=OUT/'238'/'shared-evidence';E.mkdir(exist_ok=True)
+refs=['Desktop/HGM DICTIONARY - TRANSLATION APP','ACIP Software Developmeent/Gofer Developmetn Files',"ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/ACIPHypercontext Tool", "ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/LokeshChandraDictionary", "ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/CreateLokeshChandraDIctionary", "ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/FixLokeshChandra",'ACIP Software Developmeent/tibetan-spellchecker','Tibetan Translation Tool']
+access=[{'path':str(Path.home()/p),'readable':os.access(Path.home()/p,os.R_OK)} for p in refs];assert all(x['readable'] for x in access);save(E/'access.json',access)
+c=sqlite3.connect((WORK/'build/hgm_spine_v27_2.db').as_uri()+'?mode=ro',uri=True);c.row_factory=sqlite3.Row
+queries=[]
+def query(sql,args=()):
+ rows=[dict(r) for r in c.execute(sql,args)];queries.append({'sql':sql,'parameters':args,'count':len(rows),'rows':rows});return rows
+context=query("select * from corpus_segments where course='C05' and seq between 225 and 242 order by seq")
+sources={r['seq']:r for r in context};snap=json.loads((BASE/'source.json').read_text());assert all(all(sources[r['seq']][k]==v for k,v in r.items()) for r in snap)
+for course,lo,hi in [('C16',815,817),('ILL',2680,2689)]:query('select * from corpus_segments where course=? and seq between ? and ? order by seq',(course,lo,hi))
+terms=set(['sogs','la sogs pa','mdongs','sna tshogs','sna tshogs pa','sems tsam','thun mong','thun mong gi las','yin min','min','sems dang bcas pa','dang bcas pa','bcas pa','sa bcu pa','sa bcu','byed pa po','tshor ba po','snod kyi \'jig rten','shes par bya','de bzhin du','dper','bzhin','rin chen shing'])
+for angle in ['tibetan','english']:
+ for n in [238,239,240]:
+  for sp in json.loads((BASE/angle/str(n)/'spec.json').read_text())['segments'][0]['spans']:terms.add(sp['tib'])
+entries=[]
+for t in sorted(terms):entries.extend(query('select * from entries where wylie=?',(t,)))
+master=Path.home()/'Desktop/HGM DICTIONARY - TRANSLATION APP/Handoff/release/hgm_dictionary_v27_2.json.gz'
+data=json.loads(gzip.decompress(master.read_bytes()));items=data['unified_entries'] if isinstance(data,dict) else data
+original=[]
+for e in entries:
+ matches=[x for x in items if x.get('wylie')==e['wylie']];assert len(matches)==1 and matches[0]==json.loads(e['raw']);original.append({'entry_id':e['id'],'object':matches[0]})
+save(E/'master-original.json',{'path':str(master),'sha256':sha(master.read_bytes()),'selected':original})
+for pattern in ['%mdongs la sogs pa%','%rin chen shing%','%sems dang bcas pa%','%sa bcu par byed pa po%','%thun mong gi las%']:
+ query("select * from corpus_segments where course != 'C13' and wylie like ? order by course,seq",(pattern,))
+# Focused mandatory parallel scopes, complete results and actual counts.
+for pattern in ['%rma bya la sogs%','%rin chen shing%','%sems dang bcas pa kho nas%']:
+ query("select * from corpus_segments where course != 'C13' and (course='C16' or course='P1' or course like 'TCS%') and wylie like ? order by course,seq",(pattern,))
+save(E/'queries-original.json',queries)
+prov=json.loads((BASE/'tibetan/240/original-file-provenance.json').read_text());files=[]
+for f in prov:
+ p=Path(f['path']);b=p.read_bytes();assert sha(b)==f['sha256'];(E/p.name).write_bytes(b);files.append({'path':str(p),'bytes':len(b),'sha256':sha(b)})
+save(E/'files-original.json',files)
+ill=Path(prov[2]['path']).read_text().splitlines();save(E/'ILL-material-lines.json',{'start_line':25718,'end_line':25794,'text':'\n'.join(ill[25717:25794])})
+for f in ['docs/errata_register.json','data/alignment/span_head_allow.json']:
+ b=(WORK/f).read_bytes();(E/Path(f).name).write_bytes(b)
+# Reopen raw C05 and C16 passage windows, retaining every original line in each selected window.
+for f in prov[:2]:
+ lines=Path(f['path']).read_text().splitlines();hits=[i for i,l in enumerate(lines) if 'RMA BYA LA SOGS' in l];save(E/(Path(f['path']).stem+'-material.json'),[{'start_line':max(0,i-3)+1,'end_line':min(len(lines),i+120),'text':'\n'.join(lines[max(0,i-3):i+120])} for i in hits])
+wrapper="import runpy,sqlite3,sys; real=sqlite3.connect; sqlite3.connect=lambda db,*a,**k: real('file:'+str(db)+'?mode=ro',uri=True); runpy.run_path(sys.argv[1],run_name='__main__')"
+env=dict(os.environ,PYTHONDONTWRITEBYTECODE='1')
+replays=[]
+for angle in ['tibetan','english']:
+ for n in [238,239,240]:
+  p=BASE/angle/str(n);b=(p/'spec.json').read_bytes();r=subprocess.run([sys.executable,'-c',wrapper,str(WORK/'tools/gen_alignment_page.py')],input=b,capture_output=True,cwd=WORK,env=env)
+  prefix=E/f'{angle}-{n}';Path(str(prefix)+'.stdout').write_bytes(r.stdout);Path(str(prefix)+'.stderr').write_bytes(r.stderr)
+  replays.append({'angle':angle,'seq':n,'exit':r.returncode,'stderr_bytes':len(r.stderr),'exact_body':r.stdout==(p/'body.html').read_bytes(),'input_sha256':sha(b),'body_sha256':sha(r.stdout),'body_bytes':len(r.stdout)})
+assert all(r['exit']==0 and r['exact_body'] and r['stderr_bytes']==0 for r in replays);save(E/'six-proposal-replays.json',{'command':'PYTHONDONTWRITEBYTECODE=1 python3 -c <read-only SQLite wrapper> tools/gen_alignment_page.py < spec.json','wrapper':wrapper,'results':replays})
+print('Evidence:',len(entries),'original HGM entries;',len(queries),'queries; six exact generator replays.')

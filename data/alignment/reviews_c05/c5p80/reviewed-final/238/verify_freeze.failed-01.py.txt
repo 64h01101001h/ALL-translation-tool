@@ -1,0 +1,71 @@
+from pathlib import Path
+from html.parser import HTMLParser
+import json,sys,hashlib,sqlite3,re,subprocess,os,collections
+BASE=Path(__file__).resolve().parents[2];OUT=BASE/'reconciled';WORK=BASE.parents[1]/'campaign-worktree';E=OUT/'238'/'shared-evidence'
+def save(p,x):p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+def sha(b):return hashlib.sha256(b).hexdigest()
+sys.path.insert(0,str(WORK/'tools'));import gen_alignment_page as G
+c=sqlite3.connect((WORK/'build/hgm_spine_v27_2.db').as_uri()+'?mode=ro',uri=True);c.row_factory=sqlite3.Row
+class Extract(HTMLParser):
+ def __init__(self,n):super().__init__();self.label=f's{n}S';self.depth=0;self.parts=[];self.texts=[];self.labels=[]
+ def handle_starttag(self,tag,attrs):
+  a=dict(attrs)
+  if tag=='span':
+   if a.get('data-l'):self.labels.append(a['data-l'])
+   if self.depth:self.depth+=1
+   elif a.get('data-l')==self.label:self.depth=1;self.parts=[]
+ def handle_endtag(self,tag):
+  if tag=='span' and self.depth:
+   self.depth-=1
+   if not self.depth:self.texts.append(''.join(self.parts))
+ def handle_data(self,data):
+  if self.depth:self.parts.append(data)
+allow={238:{'w2':"sogs at C05:238 Wylie [17,21) licenses the complete closing gesture 'and other such', including and; HGM entry 20919 explicitly attests this wording. Objects stays unwrapped.",'w9':"sogs at C05:238 Wylie [139,143) licenses the complete closing gesture 'and other such', including and; HGM entry 20919 explicitly attests this wording. Things stays unwrapped."},239:{'w19':"yin min at C05:239 Wylie [204,211) licenses 'or not' as the established binary copular expression, including or; original HGM entry 25112 explicitly attests 'or not'."},240:{'q1':"de ltar na at C05:240 Wylie [0,10) licenses the complete established discourse expression 'And so', including And; original HGM entry 8440 explicitly attests 'and so'."}}
+concerns={238:'The first sna tshogs pa remains distributed; mdongs owns the complete HGM intricate patterns. Only the first and third sogs claim the two English closures, excluding objects/things. Final expanded instruction remains unwrapped except other.',239:'Bracketed two-world apparatus is excluded. Dark/jewels/trees remain lexical attestations without endorsing changed modifier/coordination relations; the final double-negation predicates stay omitted. Complete school names have Mind members.',240:'Possession/accompaniment remains unresolved, so only sems/mind is retained. Full HGM work title plus Ten Levels member is retained; maker/master crossing and the quoted only occurrence are exact. Final explanatory participants stay unwrapped.'}
+queries=json.loads((E/'queries-original.json').read_text());register=json.loads((E/'errata_register.json').read_text());wrapper=json.loads((E/'six-proposal-replays.json').read_text())['wrapper']
+master=json.loads((E/'master-original.json').read_text())['selected'];extra=json.loads((E/'supplemental-original-entries.json').read_text());unique=len(set([e['entry_id'] for e in master]+[e['id'] for e in extra]));assert unique==65
+for n in [238,239,240]:
+ p=OUT/str(n);spec=json.loads((p/'spec.json').read_text());seg=spec['segments'][0];spans=seg['spans'];src=dict(c.execute("select * from corpus_segments where course='C05' and seq=?",(n,)).fetchone());save(p/'source-original.json',src)
+ other=dict(c.execute("select * from corpus_segments where course='C16' and seq=?",(n+577,)).fetchone());eq={k:src[k]==other[k] for k in ['acip','wylie','english']};assert all(eq.values());save(p/'parallel-comparison.json',{'C05':src,'C16':other,'fields_equal':eq,'lineage':'Text equality establishes neither independent publication nor re-ingestion. Original files are retained in shared evidence.'})
+ r=subprocess.run([sys.executable,'-c',wrapper,str(WORK/'tools/gen_alignment_page.py')],input=(p/'spec.json').read_bytes(),capture_output=True,cwd=WORK,env=dict(os.environ,PYTHONDONTWRITEBYTECODE='1'));assert r.returncode==0 and r.stdout==(p/'body.html').read_bytes() and not r.stderr
+ (p/'final-replay.stdout').write_bytes(r.stdout);(p/'final-replay.stderr').write_bytes(r.stderr);(p/'final-replay.exit').write_text('0\n')
+ parser=Extract(n);parser.feed(r.stdout.decode());assert parser.texts==[src['wylie'],src['english']];assert all(parser.labels.count(f"s{n}"+s['id'])==2 for s in spans)
+ resolved=json.loads((p/'resolved-spans.json').read_text());members=[]
+ for i,s in enumerate(spans):
+  if s['d']==7:
+   par=spans[i-1];assert par['d']==5
+   for side in ['tib','eng']:assert par[side].count(s[side])==1 and s[side]!=par[side]
+   members.append({'member':s['id'],'parent':par['id'],'immediate_d5':True,'unique_both_sides':True,'strictly_tighter_both_sides':True})
+ heads=[s['id'] for s in spans if s['d'] in [5,7] and re.match(r'^(the|a|an|and|or|his|our|your|I|you)\b',s['eng'],re.I)];assert set(heads)==set(allow[n]);save(p/'proposed-allowances.json',{'pages_c05':{f'c5p80/s{n}{k}':v for k,v in allow[n].items()},'applied':False,'instruction':'Exact proposed key/value entries only; no allowance file was edited.'})
+ occurrences={}
+ for side,key in [('tib','wylie'),('eng','english')]:
+  terms=set(s[side] for s in spans)
+  terms.update({238:{'tib':['sogs','sna tshogs pa','sems can','las'],'eng':['and other such','other','produced','karma']},239:{'tib':["'jig rten",'gnyis','sems tsam','min'],'eng':['world','worlds','not','Mind','karma']},240:{'tib':['las','sems','de ltar na','byed pa po','gsungs'],'eng':['karma','mind','minds','only','no','other','all']}}[n][side])
+  for term in sorted(terms):
+   positions=[];cur=0
+   while True:
+    start=G.find_word(src[key],term,cur)
+    if start<0:break
+    positions.append([start,start+len(term)]);cur=start+len(term)
+   if len(positions)>1:
+    occurrences[side+':'+term]={'all_word_boundary_occurrences':positions,'exact_retained_spans':[x['id'] for x in resolved if x[side]==term],'retained_ranges':[x[side+'_range'] for x in resolved if x[side]==term],'judgment':'Resolved occurrences are explicit in resolved-spans.json and eng_order. Omitted or compound-contained occurrences are addressed in the canonical note and complete decisions; occurrence counts alone are not correspondence evidence.'}
+ save(p/'occurrence-audit.json',occurrences)
+ registered=[x for x in register if any('C05:'+str(a) in json.dumps(x) for a in [n])];classes=[x for x in register if x.get('item_id') in ['E-044','E-071','E-076','E-107','E-111','E-120','E-121']]
+ suspicion={238:['objects','things','You can apply these principles to all other cases as well.'],239:['great dark mountains','jewels, and trees','[of beings and the place they live]'],240:['mind and what comes along with it','master','than the mind itself']}[n]
+ five=[]
+ for found in suspicion:
+  assert found in src['english']
+  five.append({'examined_reading':found,'disposition':'No erratum retained; unproved correction defaults to refuted.','a_quote':{'verbatim':True,'field':'english','start':src['english'].index(found),'acip_and_wylie':'Full original columns reopened and saved; quoted English is preserved, never corrected.'},'b_witness':'C16:'+str(n+577)+' has identical full fields; independence/ingestion lineage unproved. ILL material is preserved completely, and supports only its shared extent. Focused C16/P1/TCS query returned one C16 row and zero P1/TCS rows.','c_registered':{'same_segment_records':len(registered),'classes_examined':[x['item_id'] for x in classes],'result':'No new instance of converter, footnote, heading, cap or boundary class is established at this row; later heading at 241 is contextual apparatus.'},'d_defensible_reading':{238:'Explanatory list nouns and instruction are plausible translation expansions; no proposed typographic correction is established. HGM mdongs explicitly supports intricate patterns.',239:'ILL differs in modifier and coordination roles; C05 overt lexical terms remain attestable. This identifies a translation concern, not a demonstrated source/ingestion typo. Bracket is explicit explanatory apparatus.',240:'HGM dang bcas pa supports both possession and accompaniment; context favors possessors in ILL but does not warrant silently correcting C05. HGM tshor ba po explicitly attests master. Final explanation is transparent expansion.'}[n],'e_counts':{'English_length':len(src['english']),'at_1500_cap':len(src['english'])==1500,'C16_equal_fields':sum(eq.values()),'focused_scope_rows':1,'P1_TCS_rows':0,'corpus_query_counts':'Full recorded SQL, parameters and measured counts: shared-evidence/queries-original.json. Retrieval counts are not independent publication counts.'}})
+ save(p/'errata-five-ground-checks.json',{'retained_errata':0,'suspicions_checked':five,'registered_original_records':registered,'registered_classes':classes})
+ proof={'producer':'Codex','provisional':True,'seq':n,'spans':len(spans),'depth_counts':dict(collections.Counter(s['d'] for s in spans)),'nulls':0,'errata':0,'generator_exit':r.returncode,'stderr_bytes':len(r.stderr),'body_bytes':len(r.stdout),'spec_bytes':(p/'spec.json').stat().st_size,'spec_sha256':sha((p/'spec.json').read_bytes()),'body_sha256':sha(r.stdout),'errata_sha256':sha((p/'errata.json').read_bytes()),'final_replay_exact':True,'plain_source_columns_equal':True,'all_span_labels_emitted_on_both_sides':True,'members':members,'gated_heads':heads,'input_decisions':len(json.loads((p/'complete-decisions.json').read_text())['all_input_spans']),'independent_semantic_approval':False}
+ save(p/'proof.json',proof)
+ lines=[f'C05:{n} — Codex reconciliation — PROVISIONAL.',concerns[n],f'Both complete frozen angles read; all six actual canonical generators replayed EXIT=0 with empty stderr and byte-exact proposal bodies (shared-evidence/six-proposal-replays.json).',f'Original C05 spine, complete ACIP/Wylie/English, raw C05/C16 files and material ILL originals reopened. Shared evidence records 65 distinct original-master entries, 92 queries plus the supplemental exact lookup.',f'All {proof["input_decisions"]} input-span decisions are in complete-decisions.json; all {len(spans)} final canonical ranges are in resolved-spans.json. Repeated selections and omissions are enumerated in occurrence-audit.json.',f'Final counts: spans={len(spans)}; depths={proof["depth_counts"]}; nulls=0; errata=0.',f'Every d7 immediately follows a d5, is unique and strictly tighter in both languages. English order resolves every flat span; full unwrapped source columns equal the originals.',f'Gated English heads={len(heads)}. proposed-allowances.json contains exact c5p80 keys and Tibetan licensors; no gate or allowance file was changed.',f'Errata: every examined concern received all five grounds in errata-five-ground-checks.json. C16:{n+577} matches all three text fields; lineage is unproved. Focused P1/TCS searches returned zero; ILL supports only shared extents.',f'FINAL GENERATOR: EXIT=0; BODY_BYTES={len(r.stdout)}; STDERR_BYTES=0; final-replay.stdout is byte-identical to body.html.',f'SPEC_BYTES={proof["spec_bytes"]}; SPEC_SHA256={proof["spec_sha256"]}',f'BODY_BYTES={proof["body_bytes"]}; BODY_SHA256={proof["body_sha256"]}','Failed helper master-key and decoding attempts are preserved in 238; superseded 239 compound rendering is preserved with its passing output and complete decisions. No canonical generator failure occurred.','Frozen final files are listed in FROZEN.sha256; the separate skeptical reader must approve before landing. Mechanical acceptance is not semantic or human approval.']
+ (p/'report.md').write_text('\n'.join(lines)+'\n')
+# Freeze last, excluding only the manifest itself.
+for n in [238,239,240]:
+ p=OUT/str(n);files=sorted(f for f in p.rglob('*') if f.is_file() and f.name!='FROZEN.sha256');(p/'FROZEN.sha256').write_text(''.join(sha(f.read_bytes())+'  '+str(f.relative_to(p))+'\n' for f in files))
+for n in [238,239,240]:
+ p=OUT/str(n)
+ for line in (p/'FROZEN.sha256').read_text().splitlines():
+  h,path=line.split('  ',1);assert sha((p/path).read_bytes())==h
+ print(n,json.loads((p/'proof.json').read_text())['spans'],'EXIT=0 FROZEN')

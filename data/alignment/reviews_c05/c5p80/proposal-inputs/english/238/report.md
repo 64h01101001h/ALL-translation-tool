@@ -1,0 +1,12 @@
+# C05:238 — English-first proposal
+- Producer: Codex; independent English-first reading; PROVISIONAL machine alignment.
+- Source: full read-only spine row C05:238 (id 1620) matches the supplied snapshot exactly for id/course/seq/ACIP/Wylie/English; C05:236–242 context is preserved locally.
+- Evidence: original HGM rows directly support `rma bya` → “peacock,” `mdongs` → “intricate patterns,” `thun mong ma yin pa` → “personal,” `skyed pa`/`bskyed pa` → “produced,” `'dab ma` → “petals,” and `kha dog` → “colors”; Hopkins fields are comparanda only.
+- Corpus: C16:815 is byte-identical in ACIP/Wylie/English; it is recorded as a comparative text field and does not prove independent publication or ingestion lineage. Semantic witness queries explicitly excluded C13.
+- Contentious: challenge w8 (`sna tshogs` → “intricacies”) first because the source translation is contextually defensible but the HGM glossary lists “various/variety,” not this exact noun.
+- Rule 10: the two `la sogs pa` constructions and the closing instruction are complete d3 recasts; articles, conjunctions, particles, and uncertain subatoms remain unwrapped, with no false null.
+- Occurrences: the cursor resolves the second `la sogs pa'i`, `sna tshogs`, and `sems can`; the two produced forms resolve against the two English “produced” occurrences through explicit English order.
+- Counts: 15 spans; d3=5; d5=10; d7=0; null=0; `eng_order` covers all 15 English-bearing spans.
+- Errata: 0; the full row, neighbors, focused parallels, and registered classes were checked.
+- FINAL GENERATOR: EXIT=0; STDERR_BYTES=0; BODY_BYTES=2929; `body.html` exactly equals saved `generator.stdout.html` (cmp=0).
+- Frozen core SHA-256: spec `14651e66ac3bbcc11d551943fbf5d1195d709b181a471b1f6c5def89e0505167`; body `bc25c78f6fce1f8dc3385dd572d445cd4449cbb2c10ba4346d801473a7f1c819`; errata `37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570`.

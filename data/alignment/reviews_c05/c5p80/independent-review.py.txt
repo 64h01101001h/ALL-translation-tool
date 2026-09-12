@@ -1,0 +1,72 @@
+from pathlib import Path
+import json,sqlite3,hashlib,subprocess,os,importlib.util,gzip,re
+B=Path(__file__).resolve().parent.parent; R=B/'semantic-review'; W=B.parents[1]/'campaign-worktree'; E=R/'independent-evidence';E.mkdir(exist_ok=True)
+def save(p,x): p.parent.mkdir(parents=True,exist_ok=True);p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+def sha(b):return hashlib.sha256(b).hexdigest()
+manifest=[]
+def copy(p,rel,git=None,rp=None,raw=None):
+ p=p.absolute();b=p.read_bytes() if raw is None else raw;out=R/rel;out.parent.mkdir(parents=True,exist_ok=True)
+ if out.exists():assert out.read_bytes()==b
+ else:out.write_bytes(b)
+ m={'original':str(p),'copy':rel,'sha256':sha(b),'bytes':len(b)}
+ if git:m.update(original_git_commit=git,repository_relative_path=rp)
+ manifest.append(m)
+# Keep all core and historical attempts readable; deduplicate repeated evidence only.
+evidence=[]
+for p in sorted(B.rglob('*')):
+ if not p.is_file() or R in p.parents or '__pycache__' in p.parts:continue
+ rel=p.relative_to(B);ext='' if p.suffix.lower() in ('.json','.md','.html','.stderr','.stdout','.log','.txt','.bin','.exit') else ('.txt' if p.suffix in ('.py','.sha256','.sql','.sh') else '.bin')
+ if any(v in str(rel) for v in ['shared-evidence/','evidence/','originals/']):evidence.append(p);continue
+ if rel.parts[0]=='reconciled':dest=Path('reviewed-final')/Path(*rel.parts[1:])
+ else:dest=Path('proposal-inputs')/rel
+ copy(p,str(dest)+ext)
+for p in B.parent.glob('semantic-review-protocol.md'):evidence.append(p)
+for p in B.parent.glob('proposal-protocol.md'):evidence.append(p)
+for p in (B.parent/'policy-history').rglob('*'):
+ if p.is_file():evidence.append(p)
+for p in [B.parent/'copy_evidence_once.py',B.parent/'copy-evidence-once-verification.json']:evidence.append(p)
+files=json.loads((B/'reconciled/238/shared-evidence/files-original.json').read_text())
+for f in files:
+ p=Path(f['path']);assert len(p.read_bytes())==f['bytes'] and sha(p.read_bytes())==f['sha256'];evidence.append(p)
+# Pin canonical governing objects before further work.
+commit=subprocess.check_output(['git','rev-parse','HEAD'],cwd=W,text=True).strip()
+for rp in ['AGENTS.md','docs/ALIGNMENT_LAYER_SPEC.md','docs/alignment_briefs/RECONCILE_BRIEF.md','docs/alignment_briefs/REFUTE_BRIEF.md','docs/NEVER_BANK_A_FALSEHOOD.md','data/alignment/C05_CAMPAIGN.md','docs/errata_register.json','data/alignment/span_head_allow.json','tools/gen_alignment_page.py','tools/build_alignment_layer.py']:
+ raw=subprocess.check_output(['git','show',commit+':'+rp],cwd=W);assert raw==(W/rp).read_bytes();copy(W/rp,'governing-originals/'+rp+('.txt' if rp.endswith('.py') else ''),commit,rp,raw)
+save(R/'original-to-copy-manifest.json',manifest)
+spec=importlib.util.spec_from_file_location('copy_once',B.parent/'copy_evidence_once.py');mod=importlib.util.module_from_spec(spec);spec.loader.exec_module(mod)
+print('Preserve',mod.preserve(R,R/'original-to-copy-manifest.json',evidence))
+c=sqlite3.connect((W/'build/hgm_spine_v27_2.db').as_uri()+'?mode=ro',uri=True);c.row_factory=sqlite3.Row
+queries=json.loads((B/'reconciled/238/shared-evidence/queries-original.json').read_text());out=[]
+for q in queries:
+ rows=[dict(x) for x in c.execute(q['sql'],q['parameters'])];assert len(rows)==q['count'] and rows==q['rows'];out.append(q)
+save(E/'replayed-queries.json',out)
+extra=[]
+for pattern in ['%rin chen shing%','%nag po% dus%','%sems dang bcas pa%']:
+ sql="select * from corpus_segments where course != 'C13' and wylie like ? order by course,seq";rows=[dict(x) for x in c.execute(sql,(pattern,))];extra.append(dict(sql=sql,parameters=[pattern],count=len(rows),rows=rows))
+save(E/'additional-semantic-queries.json',extra)
+master=Path(json.loads((B/'reconciled/238/shared-evidence/master-original.json').read_text())['path']);data=json.loads(gzip.decompress(master.read_bytes()))['unified_entries'];index={x['wylie']:x for x in data};sel=[]
+for q in out:
+ if 'from entries' in q['sql']:
+  for row in q['rows']:
+   assert index[row['wylie']]==json.loads(row['raw']);sel.append({'entry_id':row['id'],'object':index[row['wylie']]})
+save(E/'independent-master-object-checks.json',{'original':str(master),'sha256':sha(master.read_bytes()),'selected':sel,'verified':True})
+sources=[dict(x) for x in c.execute("select * from corpus_segments where course='C05' and seq between 225 and 242 order by seq")];save(E/'source-context-original.json',sources)
+for f in files:
+ p=Path(f['path']);txt=p.read_text(encoding='utf-8' if p.name=='ILL.txt' else 'latin-1');lines=txt.splitlines()
+ if p.name=='ILL.txt':windows=[dict(start_line=25718,end_line=25794,text='\n'.join(lines[25717:25794]))]
+ else:windows=[dict(start_line=max(0,i-3)+1,end_line=min(len(lines),i+120),text='\n'.join(lines[max(0,i-3):i+120])) for i,l in enumerate(lines) if 'RMA BYA LA SOGS' in l]
+ save(E/(p.stem+'-material.json'),windows)
+spec=importlib.util.spec_from_file_location('canonical',W/'tools/gen_alignment_page.py');g=importlib.util.module_from_spec(spec);spec.loader.exec_module(g)
+wrapper="import runpy,sqlite3,sys; real=sqlite3.connect; sqlite3.connect=lambda db,*a,**k: real('file:'+str(db)+'?mode=ro',uri=True); runpy.run_path(sys.argv[1],run_name='__main__')"
+results=[];tuples=[];allreplay=[]
+for angle in ['tibetan','english','reconciled']:
+ for n in [238,239,240]:
+  p=B/angle/str(n);s=(p/'spec.json').read_bytes();saved=(p/'body.html').read_bytes();r=subprocess.run(['python3','-c',wrapper,str(W/'tools/gen_alignment_page.py')],cwd=W,input=s,capture_output=True,env=dict(os.environ,PYTHONDONTWRITEBYTECODE='1'))
+  pre=E/f'{angle}-{n}';pre.with_suffix('.stdout').write_bytes(r.stdout);pre.with_suffix('.stderr').write_bytes(r.stderr);pre.with_suffix('.exit').write_text(str(r.returncode)+'\n');assert r.returncode==0 and r.stdout==saved and not r.stderr
+  allreplay.append(dict(angle=angle,seq=n,generator_exit=r.returncode,exact_body=True,stderr_bytes=len(r.stderr),body_bytes=len(saved),body_sha256=sha(saved),spec_sha256=sha(s)))
+  if angle!='reconciled':continue
+  seg=json.loads(s)['segments'][0];sp=seg['spans'];src=next(x for x in sources if x['seq']==n);tr=g.resolve(src['wylie'],sp,'tib',n);by={v['id']:v for v in sp};er=g.resolve(src['english'],g.with_members(sp,[by[i] for i in seg['eng_order']],src['english']),'eng',n)
+  for v in sp:tuples.append(dict(seq=n,id=v['id'],d=v['d'],tib=v['tib'],eng=v.get('eng'),tib_range=tr[v['id']],eng_range=er.get(v['id'])))
+  results.append(dict(seq=n,span_count=len(sp),null_count=sum(v.get('eng') is None for v in sp),word_pair_count=sum(v['d']==5 and v.get('eng') is not None for v in sp),spec_sha256=sha(s),spec_bytes=len(s),body_sha256=sha(saved),body_bytes=len(saved),generator_exit=r.returncode))
+save(E/'nine-canonical-replays.json',{'wrapper':wrapper,'results':allreplay});save(R/'resolved-spans.json',tuples);save(R/'review.json',dict(verdict='REVIEW_IN_PROGRESS',open_findings=[],segments=results,total_spans=sum(x['span_count'] for x in results),total_nulls=sum(x['null_count'] for x in results),total_word_pairs=sum(x['word_pair_count'] for x in results)))
+print('Queries',len(out),'master objects',len(sel),'replays',len(allreplay),'spans',len(tuples),'commit',commit)

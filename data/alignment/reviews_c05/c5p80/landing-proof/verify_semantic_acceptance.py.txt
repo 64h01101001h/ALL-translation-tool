@@ -1,0 +1,80 @@
+"""Pin the exact files of a separately approved semantic review.
+
+Use only after root reads the entire review and reconciled deliverables.
+This verifies proof identity; it never supplies a semantic judgment itself.
+Usage: python3 verify_semantic_acceptance.py PAGE FIRST [--landed]
+"""
+from pathlib import Path
+import datetime
+import hashlib
+import json
+import subprocess
+import sys
+
+art = Path(__file__).resolve().parent
+wt = art.parent / 'campaign-worktree'
+page, first = map(int, sys.argv[1:3])
+landed = sys.argv[3:] == ['--landed']
+assert not sys.argv[3:] or landed
+batch = art / f'C05-{first}-{first+2}'
+review = batch / 'semantic-review'
+destination = wt / f'data/alignment/reviews_c05/c5p{page}'
+meta = json.loads((review / 'review.json').read_text())
+assert meta['verdict'] == 'APPROVE' and meta['open_findings'] == []
+assert isinstance(meta['segments'], list)
+assert [r['seq'] for r in meta['segments']] == list(range(first, first+3))
+totals = dict(spans=0, nulls=0, word_pairs=0)
+for row in meta['segments']:
+    directory = batch / 'reconciled' / str(row['seq'])
+    for name in ('spec', 'body'):
+        path = directory / ('spec.json' if name == 'spec' else 'body.html')
+        raw = path.read_bytes()
+        assert len(raw) == row[name + '_bytes'], path
+        assert hashlib.sha256(raw).hexdigest() == row[name + '_sha256'], path
+        assert (review / 'reviewed-final' / str(row['seq']) / path.name).read_bytes() == raw
+    segment = json.loads((directory / 'spec.json').read_text())['segments'][0]
+    spans = segment['spans']
+    counts = dict(spans=len(spans), nulls=sum(s['eng'] is None for s in spans),
+                  word_pairs=sum(s['d'] == 5 and s['eng'] is not None for s in spans))
+    assert counts == dict(spans=row['span_count'], nulls=row['null_count'], word_pairs=row['word_pair_count'])
+    assert row['generator_exit'] == 0
+    for key, value in counts.items():
+        totals[key] += value
+for key, value in totals.items():
+    assert meta['total_' + key] == value
+resolved = json.loads((review / 'resolved-spans.json').read_text())
+assert resolved == json.loads((batch / 'root-reconciliation-verification/resolved-spans.json').read_text())
+assert len(resolved) == totals['spans']
+for row in resolved:
+    assert list(row) == ['seq', 'id', 'd', 'tib', 'eng', 'tib_range', 'eng_range']
+manifest = json.loads((review / 'original-to-copy-manifest.json').read_text())
+assert isinstance(manifest, list) and manifest
+historical = 0
+for record in manifest:
+    copy = review / record['copy']
+    assert copy.resolve().is_relative_to(review.resolve())
+    raw = copy.read_bytes()
+    assert len(raw) == record['bytes'] and hashlib.sha256(raw).hexdigest() == record['sha256'], copy
+    if record.get('original_git_commit'):
+        original = subprocess.check_output(['git', 'show', record['original_git_commit'] + ':' + record['repository_relative_path']], cwd=wt)
+        historical += 1
+    else:
+        original = Path(record['original']).read_bytes()
+    assert raw == original, record
+    if landed:
+        assert (destination / record['copy']).read_bytes() == raw, record
+head = subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=wt).decode().strip()
+out = dict(checked_at=datetime.datetime.now(datetime.timezone.utc).isoformat(),
+           head=head, page=page, segments=list(range(first, first+3)),
+           totals=totals, exact_final_hashes_counts_and_ranges=True,
+           manifest_records=len(manifest), historical_git_records=historical,
+           original_review_bytes_identical=True, landed_bytes_checked=landed,
+           review_sha256=hashlib.sha256((review / 'review.md').read_bytes()).hexdigest(),
+           review_json_sha256=hashlib.sha256((review / 'review.json').read_bytes()).hexdigest(),
+           manifest=manifest)
+folder = batch / 'landing'
+folder.mkdir(exist_ok=True)
+target = folder / ('root-frozen-input-copy-check.json' if landed else 'root-semantic-acceptance-proof.json')
+assert not target.exists(), 'Preserve superseded proof before rerunning'
+target.write_text(json.dumps(out, ensure_ascii=False, indent=2) + '\n')
+print(json.dumps({k:v for k,v in out.items() if k != 'manifest'}, indent=2))

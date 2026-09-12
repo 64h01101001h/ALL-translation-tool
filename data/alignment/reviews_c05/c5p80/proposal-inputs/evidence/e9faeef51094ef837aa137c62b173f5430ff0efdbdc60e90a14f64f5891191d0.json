@@ -1,0 +1,66 @@
+{
+  "command": "PYTHONDONTWRITEBYTECODE=1 python3 -c <read-only SQLite wrapper> tools/gen_alignment_page.py < spec.json",
+  "wrapper": "import runpy,sqlite3,sys; real=sqlite3.connect; sqlite3.connect=lambda db,*a,**k: real('file:'+str(db)+'?mode=ro',uri=True); runpy.run_path(sys.argv[1],run_name='__main__')",
+  "results": [
+    {
+      "angle": "tibetan",
+      "seq": 238,
+      "exit": 0,
+      "stderr_bytes": 0,
+      "exact_body": true,
+      "input_sha256": "742457a441d6e6772bbe11b6c231bc485679499bce2f693ce1475410505e6ab4",
+      "body_sha256": "84407dfb090f56d76789e3cefd52313cb26d0a4bafc38e3bd95486595ef635f3",
+      "body_bytes": 3636
+    },
+    {
+      "angle": "tibetan",
+      "seq": 239,
+      "exit": 0,
+      "stderr_bytes": 0,
+      "exact_body": true,
+      "input_sha256": "e6078f21d3afbe1b93a42527dbf68d3e12e3585696e09b1b793547970f0dff06",
+      "body_sha256": "eee7325a54d598ac1775f3496acf24a2504ce422d11b34cfaf0f8dafe0be7b0b",
+      "body_bytes": 4861
+    },
+    {
+      "angle": "tibetan",
+      "seq": 240,
+      "exit": 0,
+      "stderr_bytes": 0,
+      "exact_body": true,
+      "input_sha256": "01b37ca1c70c8c03d15e84a18090ac292b33912203965882587bcfc697dcf69c",
+      "body_sha256": "b3f37f4f80092d1a0a8e3562730cc2b02033eafc190be2162a786b7897b70eb4",
+      "body_bytes": 5000
+    },
+    {
+      "angle": "english",
+      "seq": 238,
+      "exit": 0,
+      "stderr_bytes": 0,
+      "exact_body": true,
+      "input_sha256": "14651e66ac3bbcc11d551943fbf5d1195d709b181a471b1f6c5def89e0505167",
+      "body_sha256": "bc25c78f6fce1f8dc3385dd572d445cd4449cbb2c10ba4346d801473a7f1c819",
+      "body_bytes": 2929
+    },
+    {
+      "angle": "english",
+      "seq": 239,
+      "exit": 0,
+      "stderr_bytes": 0,
+      "exact_body": true,
+      "input_sha256": "847c12bb9514b95b964a81c4441c2d4ca8005e90b05325d50b2734ac584002b6",
+      "body_sha256": "77e62a5536b6bd75eafa064053eefb22996f914eda2fcd4c7a0713bc95dd02a5",
+      "body_bytes": 3597
+    },
+    {
+      "angle": "english",
+      "seq": 240,
+      "exit": 0,
+      "stderr_bytes": 0,
+      "exact_body": true,
+      "input_sha256": "d68362bba4c912f393771476af61dc0f19dc16acdf1ec9cfd2aa9db3145a1a4b",
+      "body_sha256": "195371d82caecbecf94eec369775ecd0ba64108abf6eaf5174034878d9c62be7",
+      "body_bytes": 3599
+    }
+  ]
+}

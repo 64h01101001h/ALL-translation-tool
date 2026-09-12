@@ -1,0 +1,9 @@
+-- All commands were executed against build/hgm_spine_v27_2.db through a SQLite URI with mode=ro.
+-- Source: SELECT course,seq,id,acip,wylie,english,raw FROM corpus_segments WHERE course='C05' AND seq=240;
+-- Context: SELECT course,seq,id,acip,wylie,english,raw FROM corpus_segments WHERE course='C05' AND seq BETWEEN 236 AND 242 ORDER BY seq;
+-- Glossary originals: exact entries for de ltar na, 'gro ba, ma lus pa, las,
+-- skyes, gsungs, spangs pa, yod pa ma yin, sems dang bcas pa, gsog pa,
+-- brten pa, sa bcu pa, byed pa po, tshor ba po, med pa, tsam, sgra,
+-- gzhan, 'gog pa, bstan pa.
+-- Semantic corpus witnesses explicitly exclude C13. The query checks the byte-identical
+-- Wylie row, ILL:2687's shorter parallel rendering, and creator/only parallels.

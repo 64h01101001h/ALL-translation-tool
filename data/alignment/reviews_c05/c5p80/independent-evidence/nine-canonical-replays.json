@@ -1,0 +1,95 @@
+{
+  "wrapper": "import runpy,sqlite3,sys; real=sqlite3.connect; sqlite3.connect=lambda db,*a,**k: real('file:'+str(db)+'?mode=ro',uri=True); runpy.run_path(sys.argv[1],run_name='__main__')",
+  "results": [
+    {
+      "angle": "tibetan",
+      "seq": 238,
+      "generator_exit": 0,
+      "exact_body": true,
+      "stderr_bytes": 0,
+      "body_bytes": 3636,
+      "body_sha256": "84407dfb090f56d76789e3cefd52313cb26d0a4bafc38e3bd95486595ef635f3",
+      "spec_sha256": "742457a441d6e6772bbe11b6c231bc485679499bce2f693ce1475410505e6ab4"
+    },
+    {
+      "angle": "tibetan",
+      "seq": 239,
+      "generator_exit": 0,
+      "exact_body": true,
+      "stderr_bytes": 0,
+      "body_bytes": 4861,
+      "body_sha256": "eee7325a54d598ac1775f3496acf24a2504ce422d11b34cfaf0f8dafe0be7b0b",
+      "spec_sha256": "e6078f21d3afbe1b93a42527dbf68d3e12e3585696e09b1b793547970f0dff06"
+    },
+    {
+      "angle": "tibetan",
+      "seq": 240,
+      "generator_exit": 0,
+      "exact_body": true,
+      "stderr_bytes": 0,
+      "body_bytes": 5000,
+      "body_sha256": "b3f37f4f80092d1a0a8e3562730cc2b02033eafc190be2162a786b7897b70eb4",
+      "spec_sha256": "01b37ca1c70c8c03d15e84a18090ac292b33912203965882587bcfc697dcf69c"
+    },
+    {
+      "angle": "english",
+      "seq": 238,
+      "generator_exit": 0,
+      "exact_body": true,
+      "stderr_bytes": 0,
+      "body_bytes": 2929,
+      "body_sha256": "bc25c78f6fce1f8dc3385dd572d445cd4449cbb2c10ba4346d801473a7f1c819",
+      "spec_sha256": "14651e66ac3bbcc11d551943fbf5d1195d709b181a471b1f6c5def89e0505167"
+    },
+    {
+      "angle": "english",
+      "seq": 239,
+      "generator_exit": 0,
+      "exact_body": true,
+      "stderr_bytes": 0,
+      "body_bytes": 3597,
+      "body_sha256": "77e62a5536b6bd75eafa064053eefb22996f914eda2fcd4c7a0713bc95dd02a5",
+      "spec_sha256": "847c12bb9514b95b964a81c4441c2d4ca8005e90b05325d50b2734ac584002b6"
+    },
+    {
+      "angle": "english",
+      "seq": 240,
+      "generator_exit": 0,
+      "exact_body": true,
+      "stderr_bytes": 0,
+      "body_bytes": 3599,
+      "body_sha256": "195371d82caecbecf94eec369775ecd0ba64108abf6eaf5174034878d9c62be7",
+      "spec_sha256": "d68362bba4c912f393771476af61dc0f19dc16acdf1ec9cfd2aa9db3145a1a4b"
+    },
+    {
+      "angle": "reconciled",
+      "seq": 238,
+      "generator_exit": 0,
+      "exact_body": true,
+      "stderr_bytes": 0,
+      "body_bytes": 3909,
+      "body_sha256": "9a3dcd1ae8ad876d6825d7d0f8177e79c0f91df7c41456828b71ccf95089fa32",
+      "spec_sha256": "4521bd609d51cfb70fc89b23c1093d256e54de3fd07254d517146d52fa81fc1f"
+    },
+    {
+      "angle": "reconciled",
+      "seq": 239,
+      "generator_exit": 0,
+      "exact_body": true,
+      "stderr_bytes": 0,
+      "body_bytes": 5580,
+      "body_sha256": "64e76d5d9284da3b33ce00329488705ad369037b4781cc5de4cca98d298a78ef",
+      "spec_sha256": "4a872dd6108acb5b6e31901e08a8d5817aa895279e59da5a326ec9dd3ea24893"
+    },
+    {
+      "angle": "reconciled",
+      "seq": 240,
+      "generator_exit": 0,
+      "exact_body": true,
+      "stderr_bytes": 0,
+      "body_bytes": 5476,
+      "body_sha256": "d430f62ce516d104045aabb5fa86cd1699225ef718b7a70849ce4a86d20c7123",
+      "spec_sha256": "02f6794c270e083e76839ce7593a42c97fba909da6b660996c159e8dbba941de"
+    }
+  ]
+}

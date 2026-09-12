@@ -1,0 +1,12 @@
+# C05:239 — English-first proposal
+- Producer: Codex; independent English-first reading; PROVISIONAL machine alignment.
+- Source: full read-only spine row C05:239 (id 1621) matches the supplied snapshot exactly for id/course/seq/ACIP/Wylie/English; C05:236–242 context is preserved locally.
+- Evidence: original HGM rows directly support `ri` → “mountains,” `nag po` → “dark,” `skyes` → “arise,” `sems dmyal` → “hells,” `mtho ris` → “heavens above,” `mtshon` → “swords,” `rin chen` → “jewels,” `shing` → “trees,” and `yin min` → “or not.”
+- Corpus: C16:816 is byte-identical in ACIP/Wylie/English; it is comparative text-field evidence only. All semantic witness queries explicitly excluded C13.
+- Contentious: challenge p3 (`'jig rten gnyis` → “the two worlds [of beings and the place they live]”) first because the bracket is GMR's explicit expansion, retained only as a complete d3 phrase.
+- Rule 10: the final Mind-Only clause remains whole at d3 because its negation and “denies the existence” wording do not yield honest separate atoms; verse-introduction and closing citation particles remain unwrapped.
+- Occurrences: explicit English order resolves `ri` before later substring matches in `mtho ris`/`rin chen`, the third literal `'jig rten`, and the reordered “produced … karma … or not” clause.
+- Counts: 20 spans; d3=5; d5=15; d7=0; null=0; `eng_order` covers all 20 English-bearing spans.
+- Errata: 0; the full row, neighbors, focused parallels, and registered classes were checked.
+- FINAL GENERATOR: EXIT=0; STDERR_BYTES=0; BODY_BYTES=3597; `body.html` exactly equals saved `generator.stdout.html` (cmp=0).
+- Frozen core SHA-256: spec `847c12bb9514b95b964a81c4441c2d4ca8005e90b05325d50b2734ac584002b6`; body `77e62a5536b6bd75eafa064053eefb22996f914eda2fcd4c7a0713bc95dd02a5`; errata `37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570`.

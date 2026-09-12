@@ -1,0 +1,53 @@
+from pathlib import Path
+import json,sqlite3,hashlib,subprocess,gzip,importlib.util,os,re,html
+R=Path(__file__).resolve().parent;B=R.parent;W=B.parents[1]/'campaign-worktree';E=R/'independent-evidence'
+def save(p,x):p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+def sha(b):return hashlib.sha256(b).hexdigest()
+c=sqlite3.connect((W/'build/hgm_spine_v27_2.db').as_uri()+'?mode=ro',uri=True);c.row_factory=sqlite3.Row
+# Supplemental original objects and the original proposals' query/count proofs.
+master=Path(json.loads((B/'reconciled/238/shared-evidence/master-original.json').read_text())['path']);items=json.loads(gzip.decompress(master.read_bytes()))['unified_entries'];ix={x['wylie']:x for x in items};supp=[]
+for r in json.loads((B/'reconciled/238/shared-evidence/supplemental-original-entries.json').read_text()):
+ got=dict(c.execute('select * from entries where id=?',(r['id'],)).fetchone());assert got==r and json.loads(got['raw'])==ix[got['wylie']];supp.append(got)
+save(E/'supplemental-entries-reopened.json',supp)
+prop=[]
+for name in ['original-corpus-evidence.json','original-lexical-evidence.json']:
+ for q in json.loads((B/'tibetan/238'/name).read_text()):
+  rows=[dict(x) for x in c.execute(q['sql'],q['params'])];assert len(rows)==q['count'] and rows==q['rows'];prop.append(q)
+save(E/'proposal-queries-replayed.json',prop)
+# Exact original physical master bytes are preserved as .bin by the evidence helper.
+sp=importlib.util.spec_from_file_location('copy_once',B.parent/'copy_evidence_once.py');m=importlib.util.module_from_spec(sp);sp.loader.exec_module(m);m.preserve(R,R/'original-to-copy-manifest.json',[master])
+manifest=json.loads((R/'original-to-copy-manifest.json').read_text())
+# Pin every preserved historical errata/allowance snapshot to a Git object, including artifact originals.
+for record in manifest:
+ name=Path(record['original']).name
+ rp={'errata_register.json':'docs/errata_register.json','span_head_allow.json':'data/alignment/span_head_allow.json'}.get(name)
+ if not rp or 'original_git_commit' in record:continue
+ raw=(R/record['copy']).read_bytes();commits=subprocess.check_output(['git','log','--format=%H','--',rp],cwd=W,text=True).splitlines()
+ for commit in commits:
+  blob=subprocess.check_output(['git','show',commit+':'+rp],cwd=W)
+  if blob==raw:record.update(original_git_commit=commit,repository_relative_path=rp);break
+ else:raise AssertionError('No Git snapshot for '+record['original'])
+save(R/'original-to-copy-manifest.json',manifest)
+access=json.loads((B/'reconciled/238/shared-evidence/access.json').read_text());assert all(os.access(x['path'],os.R_OK) for x in access);save(E/'reference-access-rechecked.json',access)
+src={n:dict(c.execute("select * from corpus_segments where course='C05' and seq=?",(n,)).fetchone()) for n in [238,239,240]}
+plain=[]
+for n in src:
+ body=(B/'reconciled'/str(n)/'body.html').read_text()
+ for side,field in [('tib','wylie'),('eng','english')]:
+  block=body.split('<div class="'+side+'"><div class="lab">',1)[1].split('</div>',1)[1].split('\n</div>',1)[0].strip();decoded=html.unescape(re.sub('<[^>]+>','',block));assert decoded==src[n][field];plain.append({'seq':n,'side':side,'exact':True,'characters':len(decoded)})
+save(E/'full-body-source-fidelity.json',plain)
+registry=json.loads((R/'governing-originals/docs/errata_register.json').read_text());registry=registry if isinstance(registry,list) else registry.get('items',registry.get('errata',[]))
+# Independent five-ground challenge: each claim is actually tested as a translation/factual concern, not merely a typo.
+readings={238:[('objects','Omit objects','The list-closing English noun supplies a category for peacock-like objects. This is an intelligible explanatory expansion of la sogs; a lexical span must not capture it, but explanatory expansion is not itself a factual error.'),('things','Omit things','The generic list noun supplies an English category after lotus; it adds no inconsistent referent. The warranted alignment is the closing gesture only.'),("You can apply these principles to all other cases as well.",'Understand the others similarly','de bzhin du gzhan la ang shes par bya instructs the reader to understand other cases similarly. Application of the foregoing personal/collective-karma examples is a defensible pedagogical paraphrase; principles/cases/all and the reader are not separately lexicalized.')],239:[('great dark mountains','mountains arise in the days of darkness',"The ILL rendering explicitly groups nag po with dus. However, the verse boundary after ri is metrical, not a syntactic sentence boundary; ri nag po can form a black/dark-mountain noun phrase whose genitive -i connects it with dus, allowing the time associated with those mountains. Thus the English dark mountains / their time is grammatically defensible without declaring it the uniquely correct reading. Great is unbanked intensification. A preferred ILL parse alone does not establish a factual correction."),('jewels, and trees','trees made of jewel',"The closest ILL witness and reference-only LC ratnamayasca vrksah favor jeweled trees; C10:98 and C17:572 also render rin chen shing as a tree of precious substances in another passage. This is substantive evidence for a compound relation, not evidence of a local ingest typo. Against filing: Tibetan poetic catalogues can juxtapose nouns with an omitted repeated conjunction, and C05 may enumerate the material and bearer in a loose catalogue of karma-produced objects. The surrounding claim is not contradicted; this evidence does not establish the intended referential scope uniquely enough for an editorial factual correction. Refuted under uncertainty, not because the wording is merely published. Individual rin chen/jewels and shing/trees remain true lexical exponents; no span asserts their coordination."),('[of beings and the place they live]','Omit bracketed explanation','C05:237 explicitly develops the two worlds as beings and their container; the bracket states this established antecedent. It is marked explanatory apparatus, not a factual mistranslation or source corruption.')],240:[('mind and what comes along with it','those who possess a mind',"sems dang bcas pa kho nas is naturally read as only those endowed with mind, as ILL:2686 does. HGM dang bcas pa has possessing and along with/come with senses. C05 changes the perspective to mind and its accompaniments as the necessary means for collecting karma. That is a defensible contextual explanation of dependence on mind, but it does not settle the syntactic possessor/accompaniment identity. The whole relation stays omitted. This uncertainty refutes an editorial correction and does not license a phrase alignment."),('master','one who has feelings','HGM glossary 15642 explicitly attests tshor ba po/master. The paired maker and experiencer are being denied as autonomous agents; master is defensible in this register. ILL one who has feelings is a different rendering, not an instruction to replace the HGM word. byed pa po owns maker and later creator; the English order crosses.'),('than the mind itself','Omit than the mind itself','The preceding explanation makes karma dependent on mind and the next source argument states mind is the principal cause and denies another creator. Supplying the implicit contrast in gzhan/other is defensible exposition. Its words remain unwrapped because this final clause supplies no new sems token.') ]}
+checks=[]
+for n,claims in readings.items():
+ parallel=dict(c.execute("select * from corpus_segments where course='C16' and seq=?",(n+577,)).fetchone());assert all(src[n][k]==parallel[k] for k in ['acip','wylie','english'])
+ pattern={238:'%rma bya la sogs%',239:'%rin chen shing%',240:'%sems dang bcas pa kho nas%'}[n];sql="select * from corpus_segments where course != 'C13' and (course='C16' or course='P1' or course like 'TCS%') and wylie like ? order by course,seq";rows=[dict(x) for x in c.execute(sql,(pattern,))];same=[x for x in registry if str(x.get('segment',''))==f'C05:{n}'];assert not same
+ for found,expected,reason in claims:
+  checks.append(dict(seq=n,found=found,expected_considered=expected,refuted=True,kind_considered='ENGLISH_FACTUAL_ERROR',five_grounds={'a':{'present':found in src[n]['english'],'field':'english','offset':src[n]['english'].find(found),'all_original_fields':'independent-evidence/source-context-original.json'},'b':{'C16':f'C16:{n+577}','equal_fields':['acip','wylie','english'],'independent_publication_proved':False,'ingestion_lineage_proved':False,'sql':sql,'parameters':[pattern],'count':len(rows),'rows':rows,'ILL_limit':'Full physical ILL original preserved; 2681–2683 cover238,2684–2685 cover239,2686–2687 cover240, each only its shared extent.'},'c':{'same_segment_records':len(same),'registered_classes_checked':['E-044','E-071','E-076','E-107','E-111','E-120','E-121'],'result':'No duplicate for this segment and no demonstrated class instance in these claims.'},'d':{'decisive_refutation':reason},'e':{'english_characters':len(src[n]['english']),'at_1500_cap':len(src[n]['english'])==1500,'C16_equal_fields':3,'focused_scope_rows':len(rows),'P1_TCS_rows':sum(x['course']=='P1' or x['course'].startswith('TCS') for x in rows),'replayed_reconciliation_queries':92,'replayed_proposal_queries':len(prop)}},suggested_severity=None,suggested_confidence=None))
+assert all(x['five_grounds']['a']['present'] for x in checks);save(R/'errata-five-ground-independent.json',checks);save(R/'bank-ready-errata.json',[])
+allow={'pages_c05':{}}
+for n in src:allow['pages_c05'].update(json.loads((B/'reconciled'/str(n)/'proposed-allowances.json').read_text())['pages_c05'])
+assert len(allow['pages_c05'])==4;save(R/'span-head-allow-needed.json',allow)
+review=json.loads((R/'review.json').read_text());review.update(verdict='APPROVE',spec_verdict='APPROVE',quality_verdict='APPROVE',open_findings=[],producer='Codex independent semantic reviewer',provisional=True,retained_errata=0,head_allowance_count=4);save(R/'review.json',review)
+print('All five grounds:',len(checks),'proposal queries',len(prop),'supplemental rows',len(supp),'manifest',len(manifest))

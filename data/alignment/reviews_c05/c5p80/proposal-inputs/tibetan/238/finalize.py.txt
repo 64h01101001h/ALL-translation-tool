@@ -1,0 +1,41 @@
+from pathlib import Path
+import json,hashlib,subprocess,os,shutil,sqlite3
+from html.parser import HTMLParser
+b=Path(__file__).resolve().parents[1];work=b.parents[2]/'campaign-worktree';env=dict(os.environ,PYTHONDONTWRITEBYTECODE='1')
+# Preserve the actual helper-assertion failure separately; this was before generator invocation.
+f=subprocess.run(['python3',str(b/'238/build_proposals.failed-01.py')],capture_output=True,env=env)
+for name,data in [('helper-failed-01.stdout',f.stdout),('helper-failed-01.stderr',f.stderr),('helper-failed-01.exit',(str(f.returncode)+'\n').encode())]:(b/'238'/name).write_bytes(data)
+class P(HTMLParser):
+ def __init__(self):super().__init__();self.side=None;self.stack=[];self.texts={'tib':'','eng':''};self.ranges={'tib':{},'eng':{}}
+ def handle_starttag(self,t,attrs):
+  a=dict(attrs)
+  if t=='div' and a.get('class') in ['tib','eng']:self.side=a['class']
+  if t=='span' and self.side:
+   if self.stack or a.get('data-d')=='1':self.stack.append((a.get('data-l'),len(self.texts[self.side])))
+ def handle_data(self,d):
+  if self.stack:self.texts[self.side]+=d
+ def handle_endtag(self,t):
+  if t=='span' and self.stack:
+   lab,start=self.stack.pop();self.ranges[self.side][lab]=[start,len(self.texts[self.side])]
+con=sqlite3.connect((work/'build/hgm_spine_v27_2.db').as_uri()+'?mode=ro');con.row_factory=sqlite3.Row
+q="select * from corpus_segments where course != 'C13' and course=? and seq=?"
+for n in [238,239,240]:
+ d=b/str(n);spec=json.loads((d/'spec.json').read_text());spans=spec['segments'][0]['spans'];orig=dict(con.execute(q,('C05',n)).fetchone());parallel=dict(con.execute(q,('C16',n+577)).fetchone())
+ comparison={'sql':q,'params':[['C05',n],['C16',n+577]],'rows':[orig,parallel],'field_equal':{k:orig[k]==parallel[k] for k in ['acip','wylie','english']},'interpretation':'Text-field identity only; no publication independence or ingestion lineage established.'}
+ (d/'parallel-full-comparison.json').write_text(json.dumps(comparison,ensure_ascii=False,indent=2)+'\n')
+ for fn in ['spec.json','body.html','generator.stdout','generator.stderr','generator.exit']:shutil.copy2(d/fn,d/('passing-first-'+fn))
+ r=subprocess.run(['python3',str(b.parents[1]/'run_generator_readonly.py')],input=(d/'spec.json').read_bytes(),capture_output=True,env=env,cwd=work)
+ assert r.returncode==0 and not r.stderr
+ for fn,data in [('body.html',r.stdout),('generator.stdout',r.stdout),('generator.stderr',r.stderr),('generator.exit',b'0\n')]:(d/fn).write_bytes(data)
+ parser=P();parser.feed(r.stdout.decode());assert parser.texts['tib']==orig['wylie'];assert parser.texts['eng']==orig['english']
+ intended=json.loads((d/'intended-english-positions.json').read_text());measure=[]
+ for s in spans:
+  lab=f"s{n}{s['id']}";rr=parser.ranges['eng'][lab];assert rr[0]==intended[s['id']],(n,s,rr,intended[s['id']]);measure.append({'id':s['id'],'tib':s['tib'],'eng':s['eng'],'tib_range':parser.ranges['tib'][lab],'eng_range':rr})
+ proof={'producer':'Codex','status':'PROVISIONAL','exit':0,'stderr_bytes':0,'body_bytes':len(r.stdout),'stdout_equals_body':True,'source_plaintext_exact':True,'all_intended_occurrences_exact':True,'spans':len(spans),'d5':sum(s['d']==5 for s in spans),'d6':sum(s['d']==6 for s in spans),'d3':sum(s['d']==3 for s in spans),'nulls':0,'errata':0,'spec_sha256':hashlib.sha256((d/'spec.json').read_bytes()).hexdigest(),'body_sha256':hashlib.sha256(r.stdout).hexdigest(),'canonical_generator_sha256':hashlib.sha256((work/'tools/gen_alignment_page.py').read_bytes()).hexdigest(),'wrapper_sha256':hashlib.sha256((b.parents[1]/'run_generator_readonly.py').read_bytes()).hexdigest(),'resolved_spans':measure}
+ (d/'proof.json').write_text(json.dumps(proof,ensure_ascii=False,indent=2)+'\n')
+ concerns={238:'Challenge sna tshogs pa/intricate first: mdongs also has intricate patterns in HTG2016, but the separate adjective is assigned to the explicit diversity modifier here. First participant phrase, extra sogs and final distributed knowing/applying instruction are omitted.',239:'Challenge rin chen/jewels and shing/trees relationship first: ILL:2684 (printed [2678]) has trees made of jewel; this proposal retains only the overt lexical atoms and omits the coordination claim. Final double negation is distributed and omitted.',240:'Challenge sems dang bcas pa first: ILL:2686 (printed [2680]) has possessors of mind; accompaniment relation remains omitted. tshor ba po/master is supported by binding HTG2016 despite ILL:2687 feeler wording; maker/master crossing verified.'}[n]
+ report=[f'C05:{n} — Tibetan-first — Codex — PROVISIONAL.',concerns,'Read original C05:225–242 argument/context; six snapshot fields verified individually against full read-only spine rows; original raw retained.', '27 exact glossary queries returned 26 complete entries; all 26 selected original master objects equal spine raw. HGM fields alone supply lexical authority; comparative glosses are reference only.', 'Saved six non-C13 corpus queries returned respectively 17, 251, 2, 3, 4, 3 rows; broad results are retrieval evidence, not all independently inspected witnesses.',f'C16:{n+577} equals the complete ACIP, Wylie and English of this row; ids/course/seq differ. Text identity establishes neither independent publication nor re-ingestion.', 'Original C05/C16/ILL files, exact hashes, full material excerpts and full row evidence retained; ILL shorter sections support their shared extent only.', 'Errata: [] after source/registered-class check. No heading or 1,500-character cap in this row; following heading at 241 is registered apparatus. Translation differences remain concerns, not established typographic corrections.',f"Final canonical output: EXIT=0; BODY_BYTES={len(r.stdout)}; STDERR_BYTES=0; generator.stdout is verbatim body.html.",f"Measured spans={proof['spans']}; d5={proof['d5']}; d6={proof['d6']}; d3={proof['d3']}; nulls=0; errata=0. Every intended English occurrence and full plain source text verified.",f"spec SHA256 {proof['spec_sha256']}",f"body SHA256 {proof['body_sha256']}",'Saved first passing output; helper failure and empty master extraction are explicitly superseded, preserved, and excluded from final proof. Canonical generator never failed.','Final proof boundary is frozen by FROZEN.sha256; mechanical pass is not semantic or human approval. No baseline comparison to an unlanded future page is claimed.']
+ (d/'report.md').write_text('\n'.join(report)+'\n');print(n,{k:proof[k] for k in ['spans','d5','body_bytes','spec_sha256','body_sha256']})
+# Freeze all files after final outputs; no later mutation is permitted without superseding this boundary.
+for n in [238,239,240]:
+ d=b/str(n);fs=sorted(p for p in d.rglob('*') if p.is_file() and p.name!='FROZEN.sha256');(d/'FROZEN.sha256').write_text(''.join(hashlib.sha256(p.read_bytes()).hexdigest()+'  '+str(p.relative_to(d))+'\n' for p in fs))

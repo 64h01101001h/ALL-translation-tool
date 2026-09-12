@@ -1,0 +1,36 @@
+import pathlib,json,subprocess,os,hashlib,shutil,re
+base=pathlib.Path(__file__).resolve().parents[1]
+rows=json.loads((base/'238/original-source-context.json').read_text())
+def make(n,title,items,note):
+ spans=[]
+ for i,item in enumerate(items,1):
+  t,e,d,*occ=item;spans.append({'id':f'w{i}','d':d,'tib':t,'eng':e,'_occ':occ[0] if occ else 1})
+ eng=next(r['english'] for r in rows if r['seq']==n)
+ positions={}
+ for s in spans:
+  starts=[m.start() for m in re.finditer(re.escape(s['eng']),eng)]
+  assert len(starts)>=s['_occ'],s
+  positions[s['id']]=starts[s.pop('_occ')-1]
+ order=sorted(spans,key=lambda s:positions[s['id']])
+ spec={'course':'C05','segments':[{'seq':n,'title':title,'spans':spans,'eng_order':[s['id'] for s in order],'note':note}]}
+ d=base/str(n);(d/'spec.json').write_text(json.dumps(spec,ensure_ascii=False,indent=2)+'\n');(d/'errata.json').write_text('[]\n')
+ (d/'intended-english-positions.json').write_text(json.dumps(positions,indent=2)+'\n')
+make(238,'personal and collective karma',[
+('rma bya','peacock',5),('la sogs pa','and other such',3,1),('mdongs','patterns',5),('sna tshogs pa','intricate',5),
+('las','karma',5,1),('thun mong ma yin pas','personal',5),('skyed pa','produced',5,1),
+('pad ma','lotus flower',5),('la sogs pa','and other such',3,2),("'dab ma",'petals',5),('dang','and',6,2),('kha dog','colors',5),('sna tshogs pa','intricacies',5),('sems can','living beings',5),('thun mong','collective',5),('las','karma',5,2),('bskyed pa','produced',5,2),('gzhan','other',5,3)
+],"PROVISIONAL machine alignment by Codex, Tibetan-first proposal. The two productive events have separate karma/produced occurrences. The first sems can de rnams kho na'i is distributed across each one's and personal and is omitted, not nulled. The second la sogs pa after mdongs has no confidently separate closing gesture and is omitted; the first and third la sogs pa own only and other such, excluding supplied objects/things. mdongs owns patterns and sna tshogs pa owns intricate; the later sna tshogs pa owns intricacies. The case-bearing compound thun mong ma yin pas remains whole; its instrumental ending is not split off. The final knowing/applying instruction is a distributed recast: only gzhan/other is retained. No claim is made for supplied all, cases, principles, or the passive auxiliaries.")
+make(239,'karma and the two worlds',[
+('sems can','living beings',5),('las','karma',5,1),('dbang gis','through',3),('ri','mountains',5),('nag po','dark',5),('dus','time',5),('skyes','arise',5),('sems dmyal','hells',5),('mtho ris','heavens above',5),("'jig rten",'world',5,1),('mtshon','swords',5),('rin chen','jewels',5),('shing','trees',5),('bzhin','like',5),
+("'jig rten",'worlds',5),('gnyis','two',5),('thun mong','collective',5),('las','karma',5,2),('min','not',5,1),('bskyed pa','produced',5),('sems tsam','Mind-Only School',5),('gzhung','books',5),('yang','also',6),('bshad','discuss',5),('sems tsam','Mind Only',5),('lugs','system',5),("snod kyi 'jig rten",'world where beings live',5)
+],"PROVISIONAL machine alignment by Codex, Tibetan-first proposal. The quoted verse is translation, not phonetics. ri/mountains and nag po/dark follow the English recast without adding great or their. rin chen/jewels and shing/trees preserve the overt lexical exponents; ILL:2684 instead renders trees made of jewel, so no claim is made that the English coordination reproduces the Tibetan compound relation. The first world is the verse occurrence, worlds the prose occurrence; the final world where beings live is a complete established compound. min owns the first not after collective. The later med pa min no double negative is distributed across not as though and denies the existence and is omitted, not nulled; so are the binary gnyis and the citation frame. Mind-Only School and Mind Only are two distinct school-name occurrences. Bracketed expansion of the two worlds remains supplied explanatory text.")
+make(240,'karma depends on mind',[
+("'gro ba",'living beings',5),('ma lus pa','all',5,1),('las','karma',5,1),('skyes','produced',5),('gsungs','spoken',5),('sems','minds',5),('spangs','stop',5),('las','karma',5,2),('yod pa ma yin','cease to be',3),('sems','mind',5,2),('kho nas','only',5,1),('las','karma',5,3),('gsog pa','collected',5),('las','karma',5,4),('sems','mind',5,3),('brten pa','depends',5),('sa bcu','Ten Levels',5),('byed pa po','maker',5),('dang','and',6,2),('tshor ba po','master',5),('gsungs pa','says',5),('tsam','only',5,2),('sgras','word',5),('byed pa po','creator',5),('gzhan','other',5)
+],"PROVISIONAL machine alignment by Codex, Tibetan-first proposal. Four lexical las/karma occurrences are retained; the adjacent second las at the opening is an ablative particle and remains omitted. The three sems tokens own minds, mind after through, and mind after depends, respectively; final mind itself is supplied explanation. sems dang bcas pa is contentious: ILL:2686 reads those who possess a mind, while this row distributes it over mind and what comes along with it. Only sems/mind is retained; the accompaniment/possessor relation stays omitted rather than nulled or assigned to gsog pa. gsog pa owns collected. yod pa ma yin is a phrase-level negative existence predicate rendered cease to be; auxiliaries stay outside. byed pa po/maker and tshor ba po/master cross in English, with master supported by the binding HTG2016 glossary despite ILL's one who has feelings. Supplied great/of all things and Sutra of the are excluded. The single med pa cannot be assigned uniquely to the two English no tokens and remains omitted. The later negation/expository frame and brten nas remain distributed and omitted. No source correction is proposed.")
+for n in [238,239,240]:
+ d=base/str(n);env=dict(os.environ,PYTHONDONTWRITEBYTECODE='1')
+ run=subprocess.run(['python3',str(base.parents[1]/'run_generator_readonly.py')],input=(d/'spec.json').read_bytes(),capture_output=True,env=env,cwd=base.parents[2]/'campaign-worktree')
+ (d/'generator.stdout').write_bytes(run.stdout);(d/'generator.stderr').write_bytes(run.stderr);(d/'generator.exit').write_text(str(run.returncode)+'\n');(d/'body.html').write_bytes(run.stdout)
+ print(n,'EXIT',run.returncode,'bytes',len(run.stdout),run.stderr.decode())
+ if run.returncode:
+  for f in ['spec.json','generator.stdout','generator.stderr','generator.exit','body.html','intended-english-positions.json']:shutil.copy2(d/f,d/('attempt-01-'+f))

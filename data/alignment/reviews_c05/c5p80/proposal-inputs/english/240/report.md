@@ -1,0 +1,12 @@
+# C05:240 — English-first proposal
+- Producer: Codex; independent English-first reading; PROVISIONAL machine alignment.
+- Source: full read-only spine row C05:240 (id 1622) matches the supplied snapshot exactly for id/course/seq/ACIP/Wylie/English; C05:236–242 context is preserved locally.
+- Evidence: original HGM rows directly support `gsungs` → “spoken,” `yod pa ma yin` → “cease to be,” `byed pa po` → “maker/creator,” `tshor ba po` → “master,” `tsam` → “only,” `'gog pa` → “deny/no,” and `brten pa` → “depends.”
+- Corpus: C16:817 is byte-identical; ILL:2687 gives a shorter rendering of the shared closing extent. These are comparative text fields and cannot establish independent publication or ingestion lineage; semantic queries explicitly excluded C13.
+- Contentious: challenge p9 (`sa bcu par` → “Sutra of the Ten Levels”) first because GMR supplies the genre word while the phrase identifies the cited title in context.
+- Rule 10: `med pa` is omitted, not nulled, because one Tibetan negation is distributed across two English “no” phrases; modal auxiliaries around “stop” and “collected” remain unwrapped.
+- Occurrences: the cursor resolves the two `de ltar na`, the first `gsungs`, the relevant second `las kyang`, and the first `byed pa po`; explicit English order places “master” before “maker.”
+- Counts: 18 spans; d3=11; d5=7; d7=0; null=0; `eng_order` covers all 18 English-bearing spans.
+- Errata: 0; the full row, neighbors, focused parallels, and registered classes were checked.
+- FINAL GENERATOR: EXIT=0; STDERR_BYTES=0; BODY_BYTES=3599; `body.html` exactly equals saved `generator.stdout.html` (cmp=0).
+- Frozen core SHA-256: spec `d68362bba4c912f393771476af61dc0f19dc16acdf1ec9cfd2aa9db3145a1a4b`; body `195371d82caecbecf94eec369775ecd0ba64108abf6eaf5174034878d9c62be7`; errata `37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570`.

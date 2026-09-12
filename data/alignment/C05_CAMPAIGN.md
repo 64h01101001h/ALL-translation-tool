@@ -47,7 +47,7 @@ the/a/an/and/or/his/our/your/I/you unless `data/alignment/span_head_allow.json`
 lists it under `pages_c05` with the Tibetan word that licenses it.
 
 ## Progress
-c5p1–c5p7 (1–21) cloned 2026-09-05; c5p8–c5p49 (22–147) landed 2026-09-05; c5p50–c5p55 (148–165) landed 2026-09-08. c5p56 (166–168) landed 2026-09-12 after fresh independent proposals, reconciliation and skeptical review. c5p57 (169–171) landed after independent review. c5p58 (172–174) landed after independent review. c5p59 (175–177) landed after independent review. c5p60 (178–180) landed after independent review. c5p61 (181–183) landed after independent review. c5p62 (184–186) landed after independent review. c5p63 (187–189) landed after independent review. c5p64 (190–192) landed after independent review. c5p65 (193–195) landed after independent review. c5p66 (196–198) landed after independent review. c5p67 (199–201) landed after independent review. c5p68 (202–204) landed after independent review. c5p69 (205–207) landed after independent review. c5p70 (208–210) landed after independent review. c5p71 (211–213) landed after independent review. c5p72 (214–216) landed after independent review. c5p73 (217–219) landed after independent review. c5p74 (220–222) landed after independent review. c5p75 (223–225) landed after independent review. c5p76 (226–228) landed after independent review. c5p77 (229–231) landed after independent review. c5p78 (232–234) landed after independent review. c5p79 (235–237) landed after independent review. Coverage 237/511; current verification is recorded in the latest batch entry below.
+c5p1–c5p7 (1–21) cloned 2026-09-05; c5p8–c5p49 (22–147) landed 2026-09-05; c5p50–c5p55 (148–165) landed 2026-09-08. c5p56 (166–168) landed 2026-09-12 after fresh independent proposals, reconciliation and skeptical review. c5p57 (169–171) landed after independent review. c5p58 (172–174) landed after independent review. c5p59 (175–177) landed after independent review. c5p60 (178–180) landed after independent review. c5p61 (181–183) landed after independent review. c5p62 (184–186) landed after independent review. c5p63 (187–189) landed after independent review. c5p64 (190–192) landed after independent review. c5p65 (193–195) landed after independent review. c5p66 (196–198) landed after independent review. c5p67 (199–201) landed after independent review. c5p68 (202–204) landed after independent review. c5p69 (205–207) landed after independent review. c5p70 (208–210) landed after independent review. c5p71 (211–213) landed after independent review. c5p72 (214–216) landed after independent review. c5p73 (217–219) landed after independent review. c5p74 (220–222) landed after independent review. c5p75 (223–225) landed after independent review. c5p76 (226–228) landed after independent review. c5p77 (229–231) landed after independent review. c5p78 (232–234) landed after independent review. c5p79 (235–237) landed after independent review. c5p80 (238–240) landed after independent review. Coverage 240/511; current verification is recorded in the latest batch entry below.
 
 **Historical pause, superseded by Adam’s 2026-09-11 continuation request. PAUSED 2026-09-08 (Adam's call): the campaign stops here while the app goes to
 a public release (two-week target). Reconciled-but-unlanded specs for 166, 167,
@@ -1241,3 +1241,46 @@ All17 targeted suites passed (10.99s). Exact body/range/copy, source-retention,
 export and navigation checks passed. Rendering remains unverified after browser
 policy refusal; native/installed-phone execution remains through171, locked
 launch unverified. Main integration remains open.
+
+
+### c5p80 · C05:238–240 — 2026-09-12 — Codex reconciliation/review
+
+Fresh independent proposals, reconciliation and semantic SPEC/QUALITY APPROVE
+yield77 spans (18/31/28), zero nulls,66 non-null d5 pairs and five members.
+Original wording and PROVISIONAL labels remain; no human editorial acceptance
+or hgm_gloss promotion is implied. Complete mdongs/intricate patterns excludes
+a duplicate variety attribution. The first/third sogs own the two list closures;
+objects/things and the expanded final instruction remain unwrapped. Compact
+collective karma has a member; the relative-clause recast at239 stays in atoms.
+
+The verse's mountains/dark/time and jewels/trees remain lexical attestations
+only; changed modifier/coordination relationships are expressly not endorsed.
+Independent five-ground review considers defensible readings and does not
+refute factual concerns merely because they are not typos. The possession/
+accompaniment relation at240 stays unresolved, with sems/mind alone retained.
+The complete work title and both school names retain tighter members. Maker/
+master English reversal, all four karma tokens and quoted-only ownership are
+explicit. Distributed double negations and explanatory participants are omitted.
+
+No new errata survive; all192 previous records remain. Four exact allowances
+cover two sogs/and other such gestures, yin min/or not and de ltar na/And so.
+Root verified336 original-copy mappings including12 immutable Git snapshots,
+358 copied semantic files and all123 proposal decisions. All original and
+superseded attempts, physical sources, dictionary fields and queries survive.
+All nine original/final individual generator replays are byte-exact.
+
+Coverage240/511. Bank43,966 links (+80 with three anchors),11,877 nulls,
+1,576 notes,11 trees; evidence7,015 heads/15,221 pairs. Main/reverse/course/changes
+CSV rows22,007/21,667/23,471/46, seeded againstaa580e8. Every course-depth group
+matches actual references. The previously empty d7 sems tsam/Mind-Only ACIP
+field gains SEMS TZAM from new239d5 witnesses; its wording/depth/citations
+remain unchanged. Prior links, notes, trees, evidence, lexical keys and source/
+master hashes survive. All17 targeted suites passed (11.03s), with exact copy,
+source/range/body retention, export and navigation checks.
+
+Rendering remains unverified after browser-policy refusal; native and installed
+phone verification remains through171, locked launch unverified. Main
+integration remains open. Next241–243 independent proposals are preparation
+only until separate reconciliation and semantic review. The throughput refinement
+uses two Astra/high proposal readers and shared identical evidence with full
+provenance; no semantic, generator or fidelity check is removed.
