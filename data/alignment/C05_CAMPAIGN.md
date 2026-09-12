@@ -1324,3 +1324,10 @@ checks passed.
 Rendering remains unverified after browser-policy refusal. Native/installed
 phone verification remains through171; locked launch and main integration
 remain open. The campaign continues through the authorized Tuesday deadline.
+
+Post-commit audit supplement: the first whitespace-log parser failed on a
+legacy source byte before writing its JSON; data commit 3a88d13 already existed.
+The completed byte-safe audit records all 69,289 warnings across six exact
+source copies and four intentional CRLF CSVs. Each file equals the committed
+Git object; every CSV warning line is verified CRLF. Failed audit attempts are
+recorded in the proof. This supplement changes no source or generated data.
