@@ -66,6 +66,10 @@ inline constexpr int kClausePlain = 59;   // per cent
 // The bottom level, where the ruling earns its keep.
 inline constexpr int kWordEngine = 36;    // per cent
 inline constexpr int kWordPlain = 23;     // per cent
+// McNemar on the paired comparison -- only spans where the two orders DISAGREE
+// carry information, and at this level there are 21 of them. The 51-vs-59 gap
+// is a trend, not a finding, and the pane must not spend it as one.
+inline constexpr int kClauseDiscordant = 21;   // 6 engine-only, 15 written-only
 // Clause order itself, from the independent pair measurement.
 inline constexpr int kClausePairs = 972;
 inline constexpr int kClauseBackPct = 5;
@@ -235,7 +239,7 @@ public:
         }
         {   // THE gate. Step 4 must show the written order beside the
             // engine's, because at this level the measurement says the
-            // written order is the better bet (60% against 40%). A later
+            // written order came out ahead, though not decisively. A later
             // edit that "simplifies" step 4 down to the engine's ruling
             // alone would be presenting the weaker of two measured options
             // as the answer, and this fails if it happens.
@@ -244,8 +248,21 @@ public:
             const QString t = out_->toPlainText();
             check(t.contains("the engine says") && t.contains("as written"),
                   "step 4 shows BOTH orders — the engine's and the written one");
-            check(t.contains("the better bet"),
-                  "step 4 says which of the two the measurement favours");
+            check(t.contains("the simpler bet"),
+                  "step 4 names which column to try first");
+            // Rule 10, applied to my own hedging as well as my own claims.
+            // The pane said the written order was "the better bet" on a
+            // 51-vs-59 split. McNemar on the 21 spans that actually separate
+            // the two gives p=0.08 — a trend, not a finding. Overstating in
+            // the direction of humility is still overstating, so the pane now
+            // says the difference does not hold up and this gate keeps it
+            // saying so.
+            check(t.contains("does not hold up"),
+                  "step 4 admits the middle-level gap is not statistically "
+                  "established rather than spending a trend as a finding");
+            check(t.contains("p&lt;0.0001") || t.contains("p<0.0001"),
+                  "and it cites what IS established \u2014 the clause-level "
+                  "result, which is decisive");
             check(t.contains(QString::number(kEngineHere) + "%") &&
                       t.contains(QString::number(kPlainHere) + "%"),
                   "step 4 quotes the measured figures for its own level");
@@ -425,15 +442,21 @@ private:
              "his order <b>" + QString::number(walk::kClauseEngine) +
              "%</b> of the time and simply reading the phrases left to right "
              "matched it <b>" + QString::number(walk::kClausePlain) +
-             "%</b>. At this level the engine is the weaker of the two, so step "
-             "4 shows you both and you should lean on the written order unless "
-             "the engine gives you a reason you can check. Deeper down — inside "
-             "a phrase, among the words — the ruling does win, " +
+             "%</b> — but only " + QString::number(walk::kClauseDiscordant) +
+             " spans separate them, and at that count the difference does not "
+             "hold up (McNemar p=0.08). So step 4 shows you both and neither "
+             "is established here; the honest posture is to try the written "
+             "order first because it is simpler, not because it is proven. "
+             "What IS established sits either side of this level: at the "
+             "clause level the written order wins decisively (p&lt;0.0001, and "
+             "reordering clauses is the one thing you should not do), and "
+             "deeper down — inside "
+             "a phrase, among the words — the ruling wins decisively, " +
              QString::number(walk::kWordEngine) + "% against " +
              QString::number(walk::kWordPlain) +
-             "%, which is where its verb-first and genitive-rightward rules "
-             "were earned. Fixing the middle level is on the punchlist; "
-             "reporting it as better than it is, is not an option.</div>";
+             "% (p=0.003). Fixing the middle level is on the punchlist, and "
+             "so is measuring it properly; reporting either as better than it "
+             "is, is not an option.</div>";
         if (!merged_na.empty())
             h += "<div style='color:#B4540A;padding:4px 0'>" +
                  QString::number(merged_na.size()) +
@@ -512,14 +535,16 @@ private:
              "the engine's ruling. At this level it matched Geshe Michael " +
              QString::number(walk::kClauseEngine) + "% of the time and the "
              "written order matched him " + QString::number(walk::kClausePlain) +
-             "% — so the column on the right is the better bet until you have a "
-             "reason to prefer the left.</div>";
+             "% — a gap of " + QString::number(walk::kClauseDiscordant) +
+             " spans that does not hold up statistically (p=0.08). Neither "
+             "column is established at this level; try the simpler one "
+             "first.</div>";
         // Both orders, side by side. Showing only the engine's would be
         // presenting the weaker of two measured options as the answer.
         h += "<table cellspacing='0' cellpadding='4' style='margin:2px 0'>"
              "<tr><td style='color:#888;font-size:11px'><b>the engine says</b>"
              "</td><td style='color:#888;font-size:11px'><b>as written "
-             "(the better bet here)</b></td></tr><tr><td valign='top'>";
+             "(the simpler bet)</b></td></tr><tr><td valign='top'>";
         std::vector<std::pair<int, int>> ordered;   // (order, chunk)
         for (size_t i = 0; i < plan.size(); ++i)
             if (plan[i].order > 0) ordered.push_back({plan[i].order, (int)i});

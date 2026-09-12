@@ -82,6 +82,64 @@ levels and actively harmful at the top two. At the clause level, reordering can
 only break what was already right. Finding 1 corroborates independently and
 without going near the probe: 5% of 972 clause pairs come out backwards.
 
+## Finding 3 — which of these gaps are real
+
+Whole-permutation percentages hide how few spans actually separate two
+orderings. McNemar on the paired comparison — only the spans where the engine
+and the written order *disagree* carry any information:
+
+| level | n | engine right, written wrong | written right, engine wrong | p (two-sided) |
+|---|---:|---:|---:|---:|
+| segment → clauses | 425 | 1 | 30 | **<0.0001** |
+| clause → phrases | 112 | 6 | 15 | 0.078 |
+| phrase → sub-phrases | 18 | 3 | 0 | 0.25 |
+| sub-phrase → words | 169 | 37 | 15 | **0.0032** |
+| **all** | **724** | 47 | 60 | 0.25 |
+
+Two results are established and two are not:
+
+- **Established: do not reorder clauses.** 30 spans where the written order is
+  right and the engine wrong, against 1 the other way. This is as clean as
+  this data gets.
+- **Established: the ruling earns its keep at the word level.** 37 against 15,
+  p=0.003.
+- **NOT established: the middle level**, which is exactly where the Walkthrough
+  pane's step 4 operates. Only 21 spans separate the two orderings and p=0.078.
+  The 51-vs-59 split is a trend. The pane said "the better bet" and has been
+  corrected to say the difference does not hold up — overstating in the
+  direction of humility is still overstating.
+- **NOT established: overall.** 47 against 60, p=0.25. A tie, as the
+  percentages suggested.
+
+**What would settle the middle level.** Significance turns on the discordant
+count, which is currently 21. At the same 6:15 ratio it would take roughly 40
+discordant spans to reach p<0.05 — about **200 aligned spans at clause →
+phrases**, against today's 112. Slightly under double the present coverage at
+that depth.
+
+## Finding 4 — the verb-first hypothesis is false
+
+The obvious explanation for the engine's deficit above the word level was that
+`planReading` fronts the clause-final verb and Geshe Michael often does not.
+Tested by scoring a variant that keeps every other rule and leaves the verb in
+its written position — no change to the engine, the probe simply reports which
+chunk it fronted:
+
+| level | engine | engine without verb-fronting | written |
+|---|---:|---:|---:|
+| segment → clauses | 83% | 83% | 90% |
+| clause → phrases | 51% | 50% | 59% |
+| phrase → sub-phrases | 61% | 61% | 44% |
+| sub-phrase → words | 36% | 35% | 23% |
+| **all** | **67%** | **66%** | **68%** |
+
+Verb-fronting costs one point overall and nothing at any single level. It is
+not the problem. What remains is the *role* reordering — topic, agent, unmarked
+object, la don, source — since the written order is what you get when the
+genitive rule is applied and no role reordering happens at all. That is the
+hypothesis to test next, and it needs the sample above before it can be acted
+on.
+
 ## What is NOT claimed
 
 - **Not every disagreement is the engine's error.** GMR translates

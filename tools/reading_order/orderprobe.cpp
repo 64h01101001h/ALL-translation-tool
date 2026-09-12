@@ -34,13 +34,19 @@ int main(int argc, char** argv) {
         if (cls.empty()) { std::printf("\tNOCLAUSE\n"); continue; }
         for (size_t ci = 0; ci < cls.size(); ++ci) {
             auto chunks = allcore::chunkClause(doc, cls[ci]);
-            auto plan = allcore::planReading(chunks, allcore::spotVerb(doc, chunks));
+            const auto verb = allcore::spotVerb(doc, chunks);
+            auto plan = allcore::planReading(chunks, verb);
             for (size_t i = 0; i < chunks.size() && i < plan.size(); ++i) {
                 std::string txt;
                 for (int t = chunks[i].beg; t < chunks[i].end && t < (int)doc.tokens.size(); ++t)
                     txt += (txt.empty() ? "" : " ") + doc.tokens[t];
                 if (txt.empty()) continue;
-                std::printf("\tc%zu:%d|%s", ci, plan[i].order, txt.c_str());
+                // v flag: is this the chunk planReading fronted as the verb?
+                // Emitted so a variant ordering can be scored WITHOUT touching
+                // the engine -- the hypothesis under test is that verb-first
+                // is over-applied above the word level.
+                std::printf("\tc%zu:%d:%d|%s", ci, plan[i].order,
+                            (verb.chunk == (int)i) ? 1 : 0, txt.c_str());
             }
         }
         std::printf("\n");
