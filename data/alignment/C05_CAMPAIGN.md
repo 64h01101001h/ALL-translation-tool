@@ -47,7 +47,7 @@ the/a/an/and/or/his/our/your/I/you unless `data/alignment/span_head_allow.json`
 lists it under `pages_c05` with the Tibetan word that licenses it.
 
 ## Progress
-c5p1–c5p7 (1–21) cloned 2026-09-05; c5p8–c5p49 (22–147) landed 2026-09-05; c5p50–c5p55 (148–165) landed 2026-09-08. c5p56 (166–168) landed 2026-09-12 after fresh independent proposals, reconciliation and skeptical review. c5p57 (169–171) landed after independent review. c5p58 (172–174) landed after independent review. c5p59 (175–177) landed after independent review. c5p60 (178–180) landed after independent review. c5p61 (181–183) landed after independent review. c5p62 (184–186) landed after independent review. c5p63 (187–189) landed after independent review. c5p64 (190–192) landed after independent review. Coverage 192/511; current verification is recorded in the latest batch entry below.
+c5p1–c5p7 (1–21) cloned 2026-09-05; c5p8–c5p49 (22–147) landed 2026-09-05; c5p50–c5p55 (148–165) landed 2026-09-08. c5p56 (166–168) landed 2026-09-12 after fresh independent proposals, reconciliation and skeptical review. c5p57 (169–171) landed after independent review. c5p58 (172–174) landed after independent review. c5p59 (175–177) landed after independent review. c5p60 (178–180) landed after independent review. c5p61 (181–183) landed after independent review. c5p62 (184–186) landed after independent review. c5p63 (187–189) landed after independent review. c5p64 (190–192) landed after independent review. c5p65 (193–195) landed after independent review. Coverage 195/511; current verification is recorded in the latest batch entry below.
 
 **Historical pause, superseded by Adam’s 2026-09-11 continuation request. PAUSED 2026-09-08 (Adam's call): the campaign stops here while the app goes to
 a public release (two-week target). Reconciled-but-unlanded specs for 166, 167,
@@ -536,3 +536,53 @@ The registered 118 suites were not all run. Navigation and source hashes check.
 Alignment-page rendering remains unverified; no new native/device action or
 main integration occurred. Next: 193–195, independently semantically approved
 but not banked at this entry.
+
+
+### c5p65 · C05:193–195 — 2026-09-12 — Codex reconciliation/review
+
+Two fresh independent proposal angles, separate reconciliation and skeptical
+semantic review approved 71 analyst spans, all linked, including 56 d5 word
+pairs; no nulls or d7 members. All six proposal bodies and three final individual
+bodies reproduce exactly. Accepted tuples and actual generator source ranges
+agree. Accepted spec: `specs_c05/c5p65.json`; complete independent review and
+rejected-attempt evidence: `reviews_c05/c5p65/`.
+
+The 193 contrastive ni/however and tight ldog/reverse preserve their source
+contribution. 194 keeps livelihood deprivation and problems keeping at phrase
+depth; skur pa/don't believe is glossary-attested. The broader listening clause
+was rejected because it captured supplied you; nyan pa/listens alone is secure.
+195 retains the complete worker-group, trustworthiness, negative concord and
+lack-of-confidence constructions at phrase depth. mi bsrun pa/inconsistent is
+explicitly glossary-attested without normalization. Reduplicated gnyis gnyis/two
+is a reviewed numerical exponent in already distributive scope, not a universal
+non-distributive definition. Both harm predicates were checked with their
+respective object and agent; supplied English passive auxiliaries stay outside.
+
+The first 195 help attempt passed the generator but selected the first Tibetan
+phan pa inside mi phan pa tshol ba'am and the second English help. The reviewer
+independently reproduced that mismatch. The final spec omits this uncertain
+pair; the broader seeking-unhelpfulness versus finding-oneself-without-help
+agency recast remains unpaired. No null or broader phrase hides the uncertainty.
+Exact attempted specs, ranges and output are preserved. Equal-English C09:152
+and C17:499 have differing Tibetan/ACIP fields; C16:773 matches all three fields.
+Digital duplicates are not claimed as independent publications. No new erratum
+or head allowance; master, corpus and errata register remain unchanged.
+
+Coverage 195/511; full bank 42,635 links (+74, including three sentence anchors),
+11,866 null exponents, 1,531 note blocks, 11 trees. Evidence: 6,832 headwords /
+14,741 pairs. All 42,561 prior links, notes/trees, evidence citations and ACIP
+mappings survive. All 21,249 prior main CSV lexical rows and citations survive;
+two formerly empty ACIP export fields gain source-attested forms: GNYIS GNYIS
+from C05:195 and RMONGS from C05:194. These are spelling enrichments, not changes
+to old translations or depth. Both banks, dictionary HTML and four CSVs rebuilt.
+Main CSV: 21,297 rows; reverse: 20,957; changes: 48 new rows versus 827fd9b.
+All 22,622 course CSV rows match actual course/depth refs and metadata; all
+22,568 previous groups and occurrence counts survive.
+
+All 17 targeted fidelity, export and constitution suites passed in 10.53 seconds.
+An accidental second export invocation reset the changes delta; it was rebuilt
+once from 827fd9b's previous main CSV, with both banks, HTML and other CSV bytes
+proved identical. The export, view/layer and generated-doc suites passed again.
+No new canonical exporter change was needed. Navigation and source hashes check.
+Rendering remains unverified; no newer native/device execution or main integration
+occurred. Next: c5p66, C05:196–198, with source/context snapshots only.
