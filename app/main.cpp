@@ -25048,6 +25048,23 @@ public:
     }
 
 public:
+    // Which house-style rules the reader has switched off. "No mechanical
+    // findings" is a very different sentence depending on whether the rules
+    // that would have found something were RUNNING — and a translator who
+    // turned a few off weeks ago has no reason to remember. The check
+    // silently skipped them and reported a clean result over a partial run.
+    // (Draft workspace audit, 2026-09-11.)
+    static QStringList styleRulesOff() {
+        static const char* kAll[] = {
+            "quotes",      "dashes",      "ranges",         "ampersand",
+            "era",         "indentation", "sentenceSpacing", "punctSpacing",
+            "quotePunct",  "wordUse"};
+        QStringList off;
+        for (const char* k : kAll)
+            if (!editops::styleRuleOn(k)) off << QString(k);
+        return off;
+    }
+
     void showStyleCheck() {
         const QString t = draft_->toPlainText();
         if (t.trimmed().isEmpty()) {
@@ -25061,11 +25078,15 @@ public:
         auto* dlg = new QDialog(this);
         dlg->setAttribute(Qt::WA_DeleteOnClose);
         dlg->setWindowFlag(Qt::Window);
+        const QStringList off = styleRulesOff();
         dlg->setWindowTitle(
             QString("House style check \u2014 %1 finding(s) "
                     "(Diamond Cutter Classics guide, mechanical "
-                    "rules only)")
-                .arg(fs.size()));
+                    "rules only)%2")
+                .arg(fs.size())
+                .arg(off.isEmpty()
+                         ? QString()
+                         : QString(" \u2014 %1 rule(s) OFF").arg(off.size())));
         dlg->resize(640, 520);
         auto* v = new QVBoxLayout(dlg);
         auto* list = new QListWidget;
@@ -25076,12 +25097,27 @@ public:
             it->setData(Qt::UserRole, f.pos);
             list->addItem(it);
         }
+        if (!off.isEmpty()) {
+            // Said FIRST, and said whether or not anything was found: a
+            // clean result over a partial run is the misleading case.
+            auto* note = new QListWidgetItem(
+                QString("\u26a0 %1 rule(s) are switched off in Preferences "
+                        "and were NOT checked: %2")
+                    .arg(off.size(), 0, 10)
+                    .arg(off.join(", ")));
+            note->setForeground(QColor(ux::kMachine));
+            list->addItem(note);
+        }
         if (fs.empty())
             list->addItem(
-                "No mechanical findings \u2014 the subtler "
-                "rules (italics, quotation placement, "
-                "capitalization) remain yours to check; the "
-                "full guide lives in Help under Style.");
+                off.isEmpty()
+                    ? "No mechanical findings \u2014 the subtler "
+                      "rules (italics, quotation placement, "
+                      "capitalization) remain yours to check; the "
+                      "full guide lives in Help under Style."
+                    : "No findings from the rules that RAN. That is not the "
+                      "same as a clean draft \u2014 see the switched-off "
+                      "rules above.");
         connect(list, &QListWidget::itemClicked,
                 [this](QListWidgetItem* it) {
                     if (it->data(Qt::UserRole).isNull()) return;
@@ -25932,6 +25968,31 @@ public:
                       "instruction");
             }
         }
+        // ---- a partial style check is not a clean one (audit 2026-09-11) --
+        // Every rule is gated on a Preferences switch, and the check silently
+        // skipped the ones turned off while still reporting "No mechanical
+        // findings". A translator who turned a few off weeks ago has no
+        // reason to remember, and a clean result over a partial run is the
+        // misleading case.
+        {
+            QSettings st("ALL", "TranslationTool");
+            const QVariant keep = st.value("style/check/dashes");
+            check(styleRulesOff().isEmpty(),
+                  "style: with nothing switched off, nothing is reported off");
+            st.setValue("style/check/dashes", false);
+            const QStringList off = styleRulesOff();
+            check(off.contains("dashes"),
+                  "style: a rule switched off in Preferences is detected as "
+                  "off");
+            check(off.size() == 1,
+                  "style: and only that one \u2014 the others are untouched");
+            // restore exactly: absent stays absent
+            if (keep.isValid()) st.setValue("style/check/dashes", keep);
+            else st.remove("style/check/dashes");
+            check(styleRulesOff().isEmpty(),
+                  "style: and the probe put the reader's own setting back");
+        }
+
         // ---- controls that fail quietly (audit 2026-09-11) ----------------
         {
             // an empty apparatus search used to `return` in silence
