@@ -25780,18 +25780,27 @@ public:
                 const QString vd = docprops::versionsDir(tmp, path);
                 QDir().mkpath(vd);
                 QFile v(vd + "/v1.txt");
-                if (v.open(QIODevice::WriteOnly)) v.write("old version");
+                bool wrote = v.open(QIODevice::WriteOnly) &&
+                             v.write("old version") > 0;
+                v.close();
                 const QString sc = docprops::sidecarPath(tmp, path);
                 QDir().mkpath(QFileInfo(sc).path());
                 QFile p2(sc);
-                if (p2.open(QIODevice::WriteOnly)) p2.write("{\"revision\":7}");
+                wrote = wrote && p2.open(QIODevice::WriteOnly) &&
+                        p2.write("{\"revision\":7}") > 0;
+                check(wrote, "history: the planted history was written");
             };
 
             // 1. RENAME, outside the data root — the normal case, because
             //    Save As offers a bare "draft.txt" that lands in Documents.
             const QString a = docs + "/alpha.txt";
             const QString b = docs + "/beta.txt";
-            { QFile f(a); f.open(QIODevice::WriteOnly); f.write("x"); }
+            {   // a fixture that failed to write must fail the test, not
+                // pass it quietly — and QIODevice::open is [[nodiscard]]
+                QFile f(a);
+                check(f.open(QIODevice::WriteOnly) && f.write("x") == 1,
+                      "history: the rename probe file was written");
+            }
             plant(a);
             QFile::rename(a, b);
             QString why;
@@ -25822,7 +25831,11 @@ public:
             //    exists at the destination, nothing is overwritten and the
             //    caller is told where the old one still is.
             const QString d = other + "/gamma.txt";
-            { QFile f(d); f.open(QIODevice::WriteOnly); f.write("y"); }
+            {
+                QFile f(d);
+                check(f.open(QIODevice::WriteOnly) && f.write("y") == 1,
+                      "history: the collision probe file was written");
+            }
             plant(d);
             plant(c);
             why.clear();
