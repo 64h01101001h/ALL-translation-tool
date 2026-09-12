@@ -1,0 +1,318 @@
+{
+  "claim": {
+    "seq": 180,
+    "kind": "TIBETAN_SPELLING",
+    "found": "MYON MONGS PA",
+    "expected": "NYON MONGS PA",
+    "evidence": "ACIP C05:180 contains MYON MONGS PA verbatim and its Wylie agrees, myon mongs pa. The preceding root C05:179 has NYON MONGS and English Mental affliction; the commentary 180 translates the same first condition as mental affliction. The live glossary-tier entry nyon mongs pa attests mental affliction, and an exact myon mongs pa entry is absent. A targeted query excluding the unscanned C13 returns exactly two myon mongs rows, C05:180 and C16:759; the latter matches all three source fields byte for byte and is the same source re-ingested. The corrected prose search nyon mongs pa dang rab has zero non-C13 spine rows. Local digital text witnesses were read and hashed independently at folio marker @124B: SE5525M and SE05525M (SHA256 933d04e506d356a0deb8da05996778e1ef58a313255df981d45d224834c8f913) both read 'ZHEN, MYON MONGS PA'; the distinct SL05525N file (SHA256 12aca4d3a071d600b704761aa82568b7a09175cef62d25e2d3caf9d6b25c179f) reads 'ZHEN, NYON MONGS PA'. All are local digital copies titled DAM PA'I CHOS MNGON PA'I MDZOD KYI RNAM PAR BSHAD PA THAR LAM GSAL BYED, attributed to Rgyal ba Dge 'dun grub, under the campaign-worktree library/sungbum/Sungbum collection; exact paths, original line breaks and full passage quotes are preserved in local-witness-verification.json. The two SE filenames are identical bytes and not two independent witnesses. SL is a distinct digital reading, but publication independence has not been established and no manuscript or blockprint was inspected. The source spelling is therefore a LOW/PROBABLE editorial candidate, not a proven correction; the corpus remains untouched. The current errata register has no C05:178–180/MYON duplicate, and this is not a registered converter, heading, folio, footnote, row-spill or English-cap class.",
+    "severity": "LOW",
+    "confidence": "PROBABLE"
+  },
+  "claim_file_sha256": "ada820b8dfa68f185f320e271775162031b80f5f807461a80280dc1c63c09198",
+  "checks": {
+    "a_verbatim": {
+      "passed": true,
+      "counts": {
+        "acip": 1,
+        "wylie": 0,
+        "english": 0
+      },
+      "wylie_agrees": true
+    },
+    "b_parallel": {
+      "passed": true,
+      "queries": {
+        "myon_rows": {
+          "column": "wylie",
+          "needle": "myon mongs",
+          "excluded_courses": [
+            "C13"
+          ],
+          "row_count": 2,
+          "rows": [
+            {
+              "course": "C05",
+              "seq": 180,
+              "acip": "[IV.213-20] RNAM SMIN MYONG NGES KYI LAS DE GANG ZHEN, MYON MONGS PA DANG RAB TU DANG BA SHUGS DRAG PO DANG YON TAN GYI ZHING DKON MCHOG LA BRTEN PA DANG , RGYUN CHAGS SU BYAS PA GANG ZHIG YIN PA DANG , BSOD NAMS KYI BLOS KYANG RUNG BA PHA MA GSOD PA'I LAS GANG YIN PA DE RNAM SMIN MYONG BAR NGES PA'O,",
+              "wylie": "[iv.213-20] rnam smin myong nges kyi las de gang zhen, myon mongs pa dang rab tu dang ba shugs drag po dang yon tan gyi zhing dkon mchog la brten pa dang , rgyun chags su byas pa gang zhig yin pa dang , bsod nams kyi blos kyang rung ba pha ma gsod pa'i las gang yin pa de rnam smin myong bar nges pa'o",
+              "english": "\"Just what,\" one may ask, \"do you mean when you mention types of deeds that are certain to ripen?\" Those deeds are definite (will definitely ripen into a future experience) which involve any of the following: 1) fierce emotions, of either mental affliction or faith; 2) an object of special qualities--that is, deeds performed with respect to the Gems; 3) anything done on a continual basis; and 4) killing one's father or mother, even when this is done with meritorious intent."
+            },
+            {
+              "course": "C16",
+              "seq": 759,
+              "acip": "[IV.213-20] RNAM SMIN MYONG NGES KYI LAS DE GANG ZHEN, MYON MONGS PA DANG RAB TU DANG BA SHUGS DRAG PO DANG YON TAN GYI ZHING DKON MCHOG LA BRTEN PA DANG , RGYUN CHAGS SU BYAS PA GANG ZHIG YIN PA DANG , BSOD NAMS KYI BLOS KYANG RUNG BA PHA MA GSOD PA'I LAS GANG YIN PA DE RNAM SMIN MYONG BAR NGES PA'O,",
+              "wylie": "[iv.213-20] rnam smin myong nges kyi las de gang zhen, myon mongs pa dang rab tu dang ba shugs drag po dang yon tan gyi zhing dkon mchog la brten pa dang , rgyun chags su byas pa gang zhig yin pa dang , bsod nams kyi blos kyang rung ba pha ma gsod pa'i las gang yin pa de rnam smin myong bar nges pa'o",
+              "english": "\"Just what,\" one may ask, \"do you mean when you mention types of deeds that are certain to ripen?\" Those deeds are definite (will definitely ripen into a future experience) which involve any of the following: 1) fierce emotions, of either mental affliction or faith; 2) an object of special qualities--that is, deeds performed with respect to the Gems; 3) anything done on a continual basis; and 4) killing one's father or mother, even when this is done with meritorious intent."
+            }
+          ]
+        },
+        "corrected_prose_rows": {
+          "column": "wylie",
+          "needle": "nyon mongs pa dang rab",
+          "excluded_courses": [
+            "C13"
+          ],
+          "row_count": 0,
+          "rows": []
+        },
+        "same_question_prose": {
+          "column": "wylie",
+          "needle": "rnam smin myong nges kyi las de gang",
+          "excluded_courses": [
+            "C13"
+          ],
+          "row_count": 2,
+          "rows": [
+            {
+              "course": "C05",
+              "seq": 180,
+              "acip": "[IV.213-20] RNAM SMIN MYONG NGES KYI LAS DE GANG ZHEN, MYON MONGS PA DANG RAB TU DANG BA SHUGS DRAG PO DANG YON TAN GYI ZHING DKON MCHOG LA BRTEN PA DANG , RGYUN CHAGS SU BYAS PA GANG ZHIG YIN PA DANG , BSOD NAMS KYI BLOS KYANG RUNG BA PHA MA GSOD PA'I LAS GANG YIN PA DE RNAM SMIN MYONG BAR NGES PA'O,",
+              "wylie": "[iv.213-20] rnam smin myong nges kyi las de gang zhen, myon mongs pa dang rab tu dang ba shugs drag po dang yon tan gyi zhing dkon mchog la brten pa dang , rgyun chags su byas pa gang zhig yin pa dang , bsod nams kyi blos kyang rung ba pha ma gsod pa'i las gang yin pa de rnam smin myong bar nges pa'o",
+              "english": "\"Just what,\" one may ask, \"do you mean when you mention types of deeds that are certain to ripen?\" Those deeds are definite (will definitely ripen into a future experience) which involve any of the following: 1) fierce emotions, of either mental affliction or faith; 2) an object of special qualities--that is, deeds performed with respect to the Gems; 3) anything done on a continual basis; and 4) killing one's father or mother, even when this is done with meritorious intent."
+            },
+            {
+              "course": "C16",
+              "seq": 759,
+              "acip": "[IV.213-20] RNAM SMIN MYONG NGES KYI LAS DE GANG ZHEN, MYON MONGS PA DANG RAB TU DANG BA SHUGS DRAG PO DANG YON TAN GYI ZHING DKON MCHOG LA BRTEN PA DANG , RGYUN CHAGS SU BYAS PA GANG ZHIG YIN PA DANG , BSOD NAMS KYI BLOS KYANG RUNG BA PHA MA GSOD PA'I LAS GANG YIN PA DE RNAM SMIN MYONG BAR NGES PA'O,",
+              "wylie": "[iv.213-20] rnam smin myong nges kyi las de gang zhen, myon mongs pa dang rab tu dang ba shugs drag po dang yon tan gyi zhing dkon mchog la brten pa dang , rgyun chags su byas pa gang zhig yin pa dang , bsod nams kyi blos kyang rung ba pha ma gsod pa'i las gang yin pa de rnam smin myong bar nges pa'o",
+              "english": "\"Just what,\" one may ask, \"do you mean when you mention types of deeds that are certain to ripen?\" Those deeds are definite (will definitely ripen into a future experience) which involve any of the following: 1) fierce emotions, of either mental affliction or faith; 2) an object of special qualities--that is, deeds performed with respect to the Gems; 3) anything done on a continual basis; and 4) killing one's father or mother, even when this is done with meritorious intent."
+            }
+          ]
+        },
+        "same_list": {
+          "column": "wylie",
+          "needle": "rab tu dang ba shugs drag po dang yon tan",
+          "excluded_courses": [
+            "C13"
+          ],
+          "row_count": 2,
+          "rows": [
+            {
+              "course": "C05",
+              "seq": 180,
+              "acip": "[IV.213-20] RNAM SMIN MYONG NGES KYI LAS DE GANG ZHEN, MYON MONGS PA DANG RAB TU DANG BA SHUGS DRAG PO DANG YON TAN GYI ZHING DKON MCHOG LA BRTEN PA DANG , RGYUN CHAGS SU BYAS PA GANG ZHIG YIN PA DANG , BSOD NAMS KYI BLOS KYANG RUNG BA PHA MA GSOD PA'I LAS GANG YIN PA DE RNAM SMIN MYONG BAR NGES PA'O,",
+              "wylie": "[iv.213-20] rnam smin myong nges kyi las de gang zhen, myon mongs pa dang rab tu dang ba shugs drag po dang yon tan gyi zhing dkon mchog la brten pa dang , rgyun chags su byas pa gang zhig yin pa dang , bsod nams kyi blos kyang rung ba pha ma gsod pa'i las gang yin pa de rnam smin myong bar nges pa'o",
+              "english": "\"Just what,\" one may ask, \"do you mean when you mention types of deeds that are certain to ripen?\" Those deeds are definite (will definitely ripen into a future experience) which involve any of the following: 1) fierce emotions, of either mental affliction or faith; 2) an object of special qualities--that is, deeds performed with respect to the Gems; 3) anything done on a continual basis; and 4) killing one's father or mother, even when this is done with meritorious intent."
+            },
+            {
+              "course": "C16",
+              "seq": 759,
+              "acip": "[IV.213-20] RNAM SMIN MYONG NGES KYI LAS DE GANG ZHEN, MYON MONGS PA DANG RAB TU DANG BA SHUGS DRAG PO DANG YON TAN GYI ZHING DKON MCHOG LA BRTEN PA DANG , RGYUN CHAGS SU BYAS PA GANG ZHIG YIN PA DANG , BSOD NAMS KYI BLOS KYANG RUNG BA PHA MA GSOD PA'I LAS GANG YIN PA DE RNAM SMIN MYONG BAR NGES PA'O,",
+              "wylie": "[iv.213-20] rnam smin myong nges kyi las de gang zhen, myon mongs pa dang rab tu dang ba shugs drag po dang yon tan gyi zhing dkon mchog la brten pa dang , rgyun chags su byas pa gang zhig yin pa dang , bsod nams kyi blos kyang rung ba pha ma gsod pa'i las gang yin pa de rnam smin myong bar nges pa'o",
+              "english": "\"Just what,\" one may ask, \"do you mean when you mention types of deeds that are certain to ripen?\" Those deeds are definite (will definitely ripen into a future experience) which involve any of the following: 1) fierce emotions, of either mental affliction or faith; 2) an object of special qualities--that is, deeds performed with respect to the Gems; 3) anything done on a continual basis; and 4) killing one's father or mother, even when this is done with meritorious intent."
+            }
+          ]
+        },
+        "same_english_condition": {
+          "column": "english",
+          "needle": "fierce emotions, of either mental affliction or faith",
+          "excluded_courses": [
+            "C13"
+          ],
+          "row_count": 2,
+          "rows": [
+            {
+              "course": "C05",
+              "seq": 180,
+              "acip": "[IV.213-20] RNAM SMIN MYONG NGES KYI LAS DE GANG ZHEN, MYON MONGS PA DANG RAB TU DANG BA SHUGS DRAG PO DANG YON TAN GYI ZHING DKON MCHOG LA BRTEN PA DANG , RGYUN CHAGS SU BYAS PA GANG ZHIG YIN PA DANG , BSOD NAMS KYI BLOS KYANG RUNG BA PHA MA GSOD PA'I LAS GANG YIN PA DE RNAM SMIN MYONG BAR NGES PA'O,",
+              "wylie": "[iv.213-20] rnam smin myong nges kyi las de gang zhen, myon mongs pa dang rab tu dang ba shugs drag po dang yon tan gyi zhing dkon mchog la brten pa dang , rgyun chags su byas pa gang zhig yin pa dang , bsod nams kyi blos kyang rung ba pha ma gsod pa'i las gang yin pa de rnam smin myong bar nges pa'o",
+              "english": "\"Just what,\" one may ask, \"do you mean when you mention types of deeds that are certain to ripen?\" Those deeds are definite (will definitely ripen into a future experience) which involve any of the following: 1) fierce emotions, of either mental affliction or faith; 2) an object of special qualities--that is, deeds performed with respect to the Gems; 3) anything done on a continual basis; and 4) killing one's father or mother, even when this is done with meritorious intent."
+            },
+            {
+              "course": "C16",
+              "seq": 759,
+              "acip": "[IV.213-20] RNAM SMIN MYONG NGES KYI LAS DE GANG ZHEN, MYON MONGS PA DANG RAB TU DANG BA SHUGS DRAG PO DANG YON TAN GYI ZHING DKON MCHOG LA BRTEN PA DANG , RGYUN CHAGS SU BYAS PA GANG ZHIG YIN PA DANG , BSOD NAMS KYI BLOS KYANG RUNG BA PHA MA GSOD PA'I LAS GANG YIN PA DE RNAM SMIN MYONG BAR NGES PA'O,",
+              "wylie": "[iv.213-20] rnam smin myong nges kyi las de gang zhen, myon mongs pa dang rab tu dang ba shugs drag po dang yon tan gyi zhing dkon mchog la brten pa dang , rgyun chags su byas pa gang zhig yin pa dang , bsod nams kyi blos kyang rung ba pha ma gsod pa'i las gang yin pa de rnam smin myong bar nges pa'o",
+              "english": "\"Just what,\" one may ask, \"do you mean when you mention types of deeds that are certain to ripen?\" Those deeds are definite (will definitely ripen into a future experience) which involve any of the following: 1) fierce emotions, of either mental affliction or faith; 2) an object of special qualities--that is, deeds performed with respect to the Gems; 3) anything done on a continual basis; and 4) killing one's father or mother, even when this is done with meritorious intent."
+            }
+          ]
+        }
+      },
+      "C16_759_comparison": {
+        "acip": {
+          "identical": true,
+          "C05_sha256": "65719fb68a4edd38d8f181e43152eb6bcc192ab132a6091088bd5f549f985d78",
+          "C16_sha256": "65719fb68a4edd38d8f181e43152eb6bcc192ab132a6091088bd5f549f985d78",
+          "differences": []
+        },
+        "wylie": {
+          "identical": true,
+          "C05_sha256": "b0acb370d39b61de99f1a7e56cc1535d978aa55a2fb3de83743e57bcea89bbd1",
+          "C16_sha256": "b0acb370d39b61de99f1a7e56cc1535d978aa55a2fb3de83743e57bcea89bbd1",
+          "differences": []
+        },
+        "english": {
+          "identical": true,
+          "C05_sha256": "35ac5e3da538c6c07e719fce4be2e131a639e681262d9959dea8075bf62d3d27",
+          "C16_sha256": "35ac5e3da538c6c07e719fce4be2e131a639e681262d9959dea8075bf62d3d27",
+          "differences": []
+        }
+      },
+      "P1_TCS_same_passage_found": false,
+      "digital_witnesses": [
+        {
+          "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/library/sungbum/Sungbum/MNGON PA_HIGHER KNOWLEDGE (ABHIDHARMA) (VAIBHASHIKA SCHOOL)/RGYAL BA DGE 'DUN GRUB_GYALWA GENDUN DRUP (1391-1474)/SE5525M_DAM PA'I CHOS MNGON PA'I MDZOD KYI RNAM PAR BSHAD PA THAR LAM GSAL BYED_ 'Illumination of the Path to Freedom,' being an Explanation of the Holy Treasure House of Higher Knowledge_RGYAL BA DGE 'DUN GRUB (1391-1474).TXT",
+          "sha256": "933d04e506d356a0deb8da05996778e1ef58a313255df981d45d224834c8f913",
+          "independence_proven": false,
+          "line": 8551,
+          "char_offset": 388005,
+          "header": "@01A *, ,DAM PA'I CHOS MNGON PA'I MDZOD KYI RNAM PAR BSHAD PA\r\nTHAR LAM GSAL BYED CES BYA BA BZHUGS SO, ,\r\n\r\n@01B [DD] *, ,RJE BTZUN DAM PA THUGS RJE CHEN PO DANG LDAN PA\r\nRNAMS KYI [DD] ZHABS LA GUS PAS PHYAG 'TSAL LO, ,BYI RU'I\r\nMDANGS DANG 'DRES PA'I GSER [DD]\r\n\r\nBZANG MDOG ,MDOG LEGS SHES BYA MA LUS LHANG NGER MKHYEN,\r\n,MKHYEN RAB DBANG PHYUG 'JAM DBYANGS 'GRO BA'I SKYABS, ,SKYABS\r\nMCHOG KHYED KYIS RAB\r\n\r\n'BYAMS SHES RAB STZOL, ,RNAM BKRA'I GZUGS LA MIG GIS LTA BA\r\nBZHIN, RNAM MANG RGYAL BA'I GSUNG RAB MTHA' DAG LA, ,RNAM DAG\r\nMKHYEN PA THOGS PA MED\r\n\r\n'JUG PA, ,THOGS MED SKU MCHED ZHABS LA PHYAG 'TSAL LO, ,RGYAL\r\nBA THAMS CAD GCIG BSDUS RDO RJE 'CHANG, ,GDUL BYA'I DON DU BSHES\r\nGNYEN TSUL 'DZIN PA,,\r\n\r\nBLO BZANG GRAGS PA'I DPAL ZHES SA GSUM GYI, ,SKYE DGU'I 'DREN\r\nPA MCHOG LA PHYAG 'TSAL LO, ,LEGS BSHAD DAR BA'I MKHYEN PA\r\nMKHA' LTAR YANGS, ,'GRO\r\n\r\n@02A [DD] *, ,LA MA LTAR BRTZE BA RGYUN DU GOMS, ,THUB BSTAN\r\nRIN CHEN RGYAS PA'I 'PHRIN LAS CAN, ,RGYAL TSAB CHOS RJE'I\r\nZHABS LA PHYAG 'TSAL LO, ,DON GNYIS SGRUB LA RAB DKAR [DD]\r\n\r\nDGE TSOGS KUN, ,RNAM DAG SMON PA'I 'DUN PA BTANG TZAM GYIS,\r\n,'PHRIN LAS LHUN GYIS GRUB PA'I DPAL MNGA' BA'I, ,BDAG GI\r\nYONGS 'DZIN DE LA GUS BTUD NA",
+          "context": " YOD DAM ZHE NA, SRID\r\nPA BAR MA 'DOD KHAMS SU BAR DO DE NYID DANG, MNGAL ? GYI GNAS\r\nSKABS LNGA, BTZAS BA'I GNAS\r\n\r\nSKABS LNGA STE BCU GCIG MYONG BAR NGES MA NGES GNYIS GNYIS TE\r\n'PHEN PA RNAM PA NYI SHU RTZA GNYIS YOD LA, NGES PA BCU GCIG NI\r\nMTHONG CHOS LA 'BRAS BU CAN GYI LAS BYED PA YIN TE, DE NI LAS\r\nSOG PA'I GNAS SKABS KYI PHUNG BO DANG\r\n\r\n@124B RNAM SMIN MYONG BA'I GNAS SKABS KYI PHUNG PO GNYIS 'PHEN\r\nBYED KYI LAS GCIG GIS 'PHANGS PA'I RIS MTHUN GCIG KHO NA YIN\r\nPA'I PHYIR, GNYIS PA NI, RNAM SMIN MYONG NGES KYI LAS DE GANG\r\nZHEN, MYON MONGS PA\r\n\r\nDANG RAB TU DANG BA SHUGS DRAG BO DANG YON TAN GYI ZHING DKON\r\nMCHOG LA BRTEN PA DANG, RGYUN CHAGS SU BYAS PA GANG ZHIG YIN PA\r\nDANG, BSOD NAMS KYI BLOS KYANG RUNG BA PHA MA GSOD PA'I LAS GANG\r\nYIN PA DE RNAM SMIN\r\n\r\nMYONG BAR NGES PA'O, ,DE NI MTHONG CHOS 'BRAS BU YIN, ,ZHES\r\nBSHAD NA DE GANG ZHE NA, MTHONG CHOS 'BRAS BU CAN GYI LAS ZHING\r\nDANG BSAM BA'I KHYAD PAR LAS 'GYUR PA YIN TE, ZHING GI KHYAD PAR\r\nLAS MTHONG CHOS 'BRAS BU CAN\r\n\r\nGYI LAS SU 'GYUR PA NI, SDON BDAG CAG GI STON PA DGE SLONG SDE\r\nSNOD GSUM PAR GYUR PA NA, DGE 'DUN GYIS RTZOD PA 'PHEL BAR BYAS\r\nPA DGE SLOD SDE SLO"
+        },
+        {
+          "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/library/sungbum/Sungbum/MNGON PA_HIGHER KNOWLEDGE (ABHIDHARMA) (VAIBHASHIKA SCHOOL)/RGYAL BA DGE 'DUN GRUB_GYALWA GENDUN DRUP (1391-1474)/SE05525M_DAM PA'I CHOS MNGON PA'I MDZOD KYI RNAM PAR BSHAD PA THAR LAM GSAL BYED_'Illumination of the Path to Freedom,' being an Explanation of the Holy Treasure House of Higher Knowledge_RGYAL BA DGE 'DUN GRUB (1391-1474).TXT",
+          "sha256": "933d04e506d356a0deb8da05996778e1ef58a313255df981d45d224834c8f913",
+          "independence_proven": false,
+          "line": 8551,
+          "char_offset": 388005,
+          "header": "@01A *, ,DAM PA'I CHOS MNGON PA'I MDZOD KYI RNAM PAR BSHAD PA\r\nTHAR LAM GSAL BYED CES BYA BA BZHUGS SO, ,\r\n\r\n@01B [DD] *, ,RJE BTZUN DAM PA THUGS RJE CHEN PO DANG LDAN PA\r\nRNAMS KYI [DD] ZHABS LA GUS PAS PHYAG 'TSAL LO, ,BYI RU'I\r\nMDANGS DANG 'DRES PA'I GSER [DD]\r\n\r\nBZANG MDOG ,MDOG LEGS SHES BYA MA LUS LHANG NGER MKHYEN,\r\n,MKHYEN RAB DBANG PHYUG 'JAM DBYANGS 'GRO BA'I SKYABS, ,SKYABS\r\nMCHOG KHYED KYIS RAB\r\n\r\n'BYAMS SHES RAB STZOL, ,RNAM BKRA'I GZUGS LA MIG GIS LTA BA\r\nBZHIN, RNAM MANG RGYAL BA'I GSUNG RAB MTHA' DAG LA, ,RNAM DAG\r\nMKHYEN PA THOGS PA MED\r\n\r\n'JUG PA, ,THOGS MED SKU MCHED ZHABS LA PHYAG 'TSAL LO, ,RGYAL\r\nBA THAMS CAD GCIG BSDUS RDO RJE 'CHANG, ,GDUL BYA'I DON DU BSHES\r\nGNYEN TSUL 'DZIN PA,,\r\n\r\nBLO BZANG GRAGS PA'I DPAL ZHES SA GSUM GYI, ,SKYE DGU'I 'DREN\r\nPA MCHOG LA PHYAG 'TSAL LO, ,LEGS BSHAD DAR BA'I MKHYEN PA\r\nMKHA' LTAR YANGS, ,'GRO\r\n\r\n@02A [DD] *, ,LA MA LTAR BRTZE BA RGYUN DU GOMS, ,THUB BSTAN\r\nRIN CHEN RGYAS PA'I 'PHRIN LAS CAN, ,RGYAL TSAB CHOS RJE'I\r\nZHABS LA PHYAG 'TSAL LO, ,DON GNYIS SGRUB LA RAB DKAR [DD]\r\n\r\nDGE TSOGS KUN, ,RNAM DAG SMON PA'I 'DUN PA BTANG TZAM GYIS,\r\n,'PHRIN LAS LHUN GYIS GRUB PA'I DPAL MNGA' BA'I, ,BDAG GI\r\nYONGS 'DZIN DE LA GUS BTUD NA",
+          "context": " YOD DAM ZHE NA, SRID\r\nPA BAR MA 'DOD KHAMS SU BAR DO DE NYID DANG, MNGAL ? GYI GNAS\r\nSKABS LNGA, BTZAS BA'I GNAS\r\n\r\nSKABS LNGA STE BCU GCIG MYONG BAR NGES MA NGES GNYIS GNYIS TE\r\n'PHEN PA RNAM PA NYI SHU RTZA GNYIS YOD LA, NGES PA BCU GCIG NI\r\nMTHONG CHOS LA 'BRAS BU CAN GYI LAS BYED PA YIN TE, DE NI LAS\r\nSOG PA'I GNAS SKABS KYI PHUNG BO DANG\r\n\r\n@124B RNAM SMIN MYONG BA'I GNAS SKABS KYI PHUNG PO GNYIS 'PHEN\r\nBYED KYI LAS GCIG GIS 'PHANGS PA'I RIS MTHUN GCIG KHO NA YIN\r\nPA'I PHYIR, GNYIS PA NI, RNAM SMIN MYONG NGES KYI LAS DE GANG\r\nZHEN, MYON MONGS PA\r\n\r\nDANG RAB TU DANG BA SHUGS DRAG BO DANG YON TAN GYI ZHING DKON\r\nMCHOG LA BRTEN PA DANG, RGYUN CHAGS SU BYAS PA GANG ZHIG YIN PA\r\nDANG, BSOD NAMS KYI BLOS KYANG RUNG BA PHA MA GSOD PA'I LAS GANG\r\nYIN PA DE RNAM SMIN\r\n\r\nMYONG BAR NGES PA'O, ,DE NI MTHONG CHOS 'BRAS BU YIN, ,ZHES\r\nBSHAD NA DE GANG ZHE NA, MTHONG CHOS 'BRAS BU CAN GYI LAS ZHING\r\nDANG BSAM BA'I KHYAD PAR LAS 'GYUR PA YIN TE, ZHING GI KHYAD PAR\r\nLAS MTHONG CHOS 'BRAS BU CAN\r\n\r\nGYI LAS SU 'GYUR PA NI, SDON BDAG CAG GI STON PA DGE SLONG SDE\r\nSNOD GSUM PAR GYUR PA NA, DGE 'DUN GYIS RTZOD PA 'PHEL BAR BYAS\r\nPA DGE SLOD SDE SLO"
+        },
+        {
+          "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/library/sungbum/Sungbum/MNGON PA_HIGHER KNOWLEDGE (ABHIDHARMA) (VAIBHASHIKA SCHOOL)/RGYAL BA DGE 'DUN GRUB_GYALWA GENDUN DRUP (1391-1474)/SL05525N_DAM PA'I CHOS MNGON PA'I MDZOD KYI RNAM PAR BSHAD PA THAR LAM GSAL BYED_'Illumination of the Path to Freedom,' being an Explanation of the Holy Treasure House of Higher Knowledge_RGYAL BA DGE 'DUN GRUB (1391-1474).TXT",
+          "sha256": "12aca4d3a071d600b704761aa82568b7a09175cef62d25e2d3caf9d6b25c179f",
+          "independence_proven": false,
+          "line": 8509,
+          "char_offset": 387763,
+          "header": "@01A *, ,DAM PA'I CHOS MNGON PA'I MDZOD KYI RNAM PAR BSHAD PA\r\nTHAR LAM GSAL BYED CES BYA BA BZHUGS SO, ,\r\n\r\n@01B {DD} *, ,RJE BTZUN DAM PA THUGS RJE CHEN PO DANG LDAN PA\r\nRNAMS KYI {DD} ZHABS LA GUS PAS PHYAG 'TSAL LO, ,BYI RU'I MDANGS\r\nDANG 'DRES PA'I GSER {DD}\r\n\r\nBZANG MDOG ,MDOG LEGS SHES BYA MA LUS LHANG NGER MKHYEN, ,MKHYEN\r\nRAB DBANG PHYUG 'JAM DBYANGS 'GRO BA'I SKYABS, ,SKYABS MCHOG\r\nKHYED KYIS RAB\r\n\r\n'BYAMS SHES RAB STZOL, ,RNAM BKRA'I GZUGS LA MIG GIS LTA BA\r\nBZHIN, RNAM MANG RGYAL BA'I GSUNG RAB MTHA' DAG LA, ,RNAM DAG\r\nMKHYEN PA THOGS PA MED\r\n\r\n'JUG PA, ,THOGS MED SKU MCHED ZHABS LA PHYAG 'TSAL LO, ,RGYAL BA\r\nTHAMS CAD GCIG BSDUS RDO RJE 'CHANG, ,GDUL BYA'I DON DU BSHES\r\nGNYEN TSUL 'DZIN PA,,\r\n\r\nBLO BZANG GRAGS PA'I DPAL ZHES SA GSUM GYI, ,SKYE DGU'I 'DREN PA\r\nMCHOG LA PHYAG 'TSAL LO, ,LEGS BSHAD DAR BA'I MKHYEN PA MKHA'\r\nLTAR YANGS, ,'GRO\r\n\r\n@02A {DD} *, ,LA MA LTAR BRTZE BA RGYUN DU GOMS, ,THUB BSTAN RIN\r\nCHEN RGYAS PA'I 'PHRIN LAS CAN, ,RGYAL TSAB CHOS RJE'I ZHABS LA\r\nPHYAG 'TSAL LO, ,DON GNYIS SGRUB LA RAB DKAR {DD}\r\n\r\nDGE TSOGS KUN, ,RNAM DAG SMON PA'I 'DUN PA BTANG TZAM GYIS,\r\n,'PHRIN LAS LHUN GYIS GRUB PA'I DPAL MNGA' BA'I, ,BDAG GI YONGS\r\n'DZIN DE LA GUS BTUD NA",
+          "context": "PA YOD DAM ZHE NA, SRID\r\nPA BAR MA 'DOD KHAMS SU BAR DO DE NYID DANG, MNGAL GYI GNAS\r\nSKABS LNGA, BTZAS PA'I GNAS\r\n\r\nSKABS LNGA STE BCU GCIG MYONG BAR NGES MA NGES GNYIS GNYIS TE\r\n'PHEN PA RNAM PA NYI SHU RTZA GNYIS YOD LA, NGES PA BCU GCIG NI\r\nMTHONG CHOS LA 'BRAS BU CAN GYI LAS BYED PA YIN TE, DE NI LAS\r\nSOG PA'I GNAS SKABS KYI PHUNG PO DANG\r\n\r\n@124B RNAM SMIN MYONG BA'I GNAS SKABS KYI PHUNG PO GNYIS 'PHEN\r\nBYED KYI LAS GCIG GIS 'PHANGS PA'I RIS MTHUN GCIG KHO NA YIN\r\nPA'I PHYIR, GNYIS PA NI, RNAM SMIN MYONG NGES KYI LAS DE GANG\r\nZHEN, NYON MONGS PA\r\n\r\nDANG RAB TU DANG BA SHUGS DRAG PO DANG YON TAN GYI ZHING DKON\r\nMCHOG LA BRTEN PA DANG, RGYUN CHAGS SU BYAS PA GANG ZHIG YIN PA\r\nDANG, BSOD NAMS KYI BLOS KYANG RUNG BA PHA MA GSOD PA'I LAS GANG\r\nYIN PA DE RNAM SMIN\r\n\r\nMYONG BAR NGES PA'O, ,DE NI MTHONG CHOS 'BRAS BU YIN, ,ZHES\r\nBSHAD NA DE GANG ZHE NA, MTHONG CHOS 'BRAS BU CAN GYI LAS ZHING\r\nDANG BSAM PA'I KHYAD PAR LAS 'GYUR BA YIN TE, ZHING GI KHYAD PAR\r\nLAS MTHONG CHOS 'BRAS BU CAN\r\n\r\nGYI LAS SU 'GYUR BA NI, SDON BDAG CAG GI STON PA DGE SLONG SDE\r\nSNOD GSUM PAR GYUR PA NA, DGE 'DUN GYIS RTZOD PA 'PHEL BAR BYAS\r\nPA DGE SLOD SDE SNO"
+        }
+      ],
+      "interpretation": "C16:759 is identical in all three fields; the course ledger identifies shared C05/C16 material as same-source reingestion. SE aliases have identical bytes and preserve MYON; SL has distinct bytes and NYON at the corresponding @124B passage. Digital difference does not establish independent publication. No independent same-reading publication was established; no blockprint was inspected."
+    },
+    "c_registered": {
+      "passed": true,
+      "duplicate_matches": [],
+      "registered_classes_inspected": [
+        {
+          "item_id": "E-044",
+          "course": "C01",
+          "segment": "C01:6",
+          "kind": "INGEST_ARTEFACT",
+          "found": "acip: ,AI Dm GU RU RA{tn} MAnd LA Km NI{ry}'A TA YA MI, ,   |   wylie: ai dM gu ru ra maND la kM ni'a ta ya mi,",
+          "expected": "The Wylie should carry the braced Sanskrit stacks the ACIP encodes: \"ratna\" (from RA{tn}) and \"nirya\" (from NI{ry}). Cf. the same mantra at TCS07:82, which is intact: \"ai daM gu ru ratna maNDa la kaM niryA ta yA mi\".",
+          "evidence": "The seg_hint of 40 is WRONG: C01:40 is the Pabongka title colophon (\"rdo rje 'chang pha bong kha pa...\"). The described strings (dM/kM/ND capitals, ni'a ta ya mi, ra maND la kM) occur at C01:6, verified verbatim. The ACIP source is CORRECT — {tn} and {ry} are the ACIP escapes for Sanskrit stacks, as at C01:344 (BU{ddh} P'A LI TA = Buddhapalita). The derived Wylie column silently drops the braced content: C01:6 \"ra maND la\" loses tn, \"ni'a\" loses ry. The parallel English in the same segment prints the correct \"Idam guru ratna mandalakam niryatayami\" twice, and TCS07:82 carries the undamaged Wylie.",
+          "severity": "MEDIUM",
+          "confidence": "CONFIRMED",
+          "note": "Systematic, not local: the same converter loss produces \"bu pA li ta\" for Buddhapalita at C01:344 (HIGH severity there — a reader is taught a wrong author name with no adjacent correction), and leaks raw braces at C03:351 (\"a{u2} Ta'i\" from Sm {bh}A{u2} tA'I). Scored MEDIUM here only because C01:6's own English line supplies the correct reading inches away. The fix belongs in the ACIP-to-Wylie conversion, not in the source text. The trailing \"COVERAGE GATE: C01 474->477; 19 open\" in the note is campaign bookkeeping and carries no erratum."
+        },
+        {
+          "item_id": "E-046",
+          "course": "C03",
+          "segment": "C03:6",
+          "kind": "NOT_AN_ERRATUM",
+          "found": "acip: ,AI Dm GU RU RA{tn} MAnd LA Km NI{ry}'A TA YA MI, ,   |   wylie: ai dM gu ru ra maND la kM ni'a ta ya mi,",
+          "expected": "The Wylie should carry the braced Sanskrit stacks the ACIP encodes: \"ratna\" (from RA{tn}) and \"nirya\" (from NI{ry}). Cf. TCS07:82, intact: \"ai daM gu ru ratna maNDa la kaM niryA ta yA mi\".",
+          "evidence": "seg_hint 6 is CORRECT and verifies verbatim. This is the same mandala-offering segment as E-044, repeated identically at seq 6 in all eighteen courses C01-C18 (verified: 18 identical rows). The ACIP is correct; the derived Wylie drops the {tn} and {ry} stacks. TCS07:82 and TCS07:334/406/454 carry the undamaged Wylie of the same mantra.",
+          "severity": "MEDIUM",
+          "confidence": "CONFIRMED",
+          "note": "DUPLICATE OF E-044 in substance — same defect, same shared segment, different course. The editor should treat E-044/E-046 as one converter fix that will clear all 18 courses at once; do not open eighteen tickets. The note's closing remark \"Verse capitalization flattened, kept verbatim\" describes a deliberate campaign handling decision and is not an erratum. [reclassified: self-declared duplicate, kept as a record so a later pass does not re-raise it]"
+        },
+        {
+          "item_id": "E-071",
+          "course": "C03",
+          "segment": "C03:303",
+          "kind": "INGEST_ARTEFACT",
+          "found": "the preliminaries",
+          "expected": "",
+          "evidence": "Verified in build/hgm_spine_v27_2.db, row id=867. C03:303 stores wylie='the preliminaries' (17 chars, confirmed with length(wylie)) and english='I. Why the Steps?' (17 chars); the acip column holds 'THE PRELIMINARIES' — English sitting in the transliteration column — and raw carries the same. The wylie is not Wylie: 'preliminaries' has no legal syllable analysis ('prel' is not a possible stack, 'aries' has no root-letter reading). Three courses carry the IDENTICAL wylie against unrelated English, which proves the string is a repeated editorial running head rather than any segment's text: C01:43 'the preliminaries' / 'I. The Lama and the Word'; C09:171 'the preliminaries' / 'The preliminary division of my text has two parts of its own: the offering of praise, and an identification of that which is to be to be explained.'; C03:303 / 'I. Why the Steps?'. The mechanism is visible where the same header stream was concatenated in front of real Tibetan instead of being stranded alone: C03:298 wylie = \"how the teaching was given ,de la 'dir khyab bdag 'khor lo'i mgon po rdo rje 'chang...\" and C09:54 wylie = \"i. the preliminaries de la 'dir rje btsun chos kyi rgyal po shar tsong kha pa chen po blo...\". Sibling header rows of the same class in this course: C03:22 'the asian classics institute'; C03:294 'foreword'; C03:295 'about the authors'; C03:401 'steps shared with those of lesser capacity'; C03:430 'steps shared with those of medium capacity'; C03:476 'open steps for those of greater capacity'; C03:513 'secret steps for those of greater capacity'; C03:558 'the conclusion'. Class boundary, to prevent over-broad remediation: C03:263 wylie='the tshom' / english='Destructive Doubts vi.' IS genuine Wylie (the tshom = doubt) and is NOT part of this class. Effect: the segment carries no Tibetan, so it cannot be aligned, and wylie-side FTS or concordance queries return English strings as though they were Tibetan. No textual correction is possible — the remedy is reclassification as an editorial section header rather than a Tibetan-English parallel segment.",
+          "severity": "MEDIUM",
+          "confidence": "CONFIRMED",
+          "note": "filed from the alignment batch, spine-verified on merge"
+        },
+        {
+          "item_id": "E-076",
+          "course": "C03",
+          "segment": "C03:296",
+          "kind": "INGEST_ARTEFACT",
+          "found": "You Should Give Up.1",
+          "expected": "You Should Give Up.  [footnote 1]",
+          "evidence": "CLASS ENTRY, not a single instance. Printed footnote reference numbers have been flattened into the running English at ingest, fused to the sentence-final period with no separator. Measured across the whole spine: 307 occurrences in 281 segments across 5 courses - C01 161, C03 95, C16 38, TCS13 7, TCS15 6. Counted on the signature 'sentence-final punctuation + 1-3 digits + space + capital', which excludes thousands separators ('25,000'), section labels ('(S1)') and verse citations ('[I.1b]'); two looser patterns were tried first and gave 1,054 and 867 before those contaminants were excluded. Every instance breaks exact-match search on the final word of its sentence.",
+          "severity": "MEDIUM",
+          "confidence": "CONFIRMED",
+          "note": "filed from the alignment batch, spine-verified on merge"
+        },
+        {
+          "item_id": "E-107",
+          "course": "corpus-wide",
+          "segment": "class entry (186 segments end at exactly 1,500 characters)",
+          "kind": "INGEST_ARTEFACT",
+          "found": "' '.join(eng)[:1500] in engines/hgm_tools.py - the spine ingest silently caps every segment's English at 1,500 characters",
+          "expected": "the whole English of the segment; a segment whose translation runs past 1,500 characters loses its tail with no marker, no count and no log line",
+          "evidence": "Found by the skeptic pass on C03:429 (E-106), which asked why that field ends mid-sentence at 'there are five ' and measured length(english) = 1500 exactly. Census 2026-09-01 on build/hgm_spine_v27_2.db: 186 segments have length(english) = 1500 (DDA 28, C18 15, C12 14, C13 12, C11 11, Sunlight 11, C17 10, C03 9 - including C03:376, 429, 620, the Reading Eight/Nine/Ten note blocks - MB2 8, C16 7, and 25 further courses); 34 segments EXCEED 1,500, so at least one ingest path does not apply the cap and its reach is not uniform. What is lost is not always apparatus: wherever the cap falls inside a translation, the corpus has no English for the rest of the Tibetan and nothing can align it. The 186 are a floor for the affected rows (a row cut at exactly the cap is certain; a row that happened to be shorter is unaffected).",
+          "severity": "HIGH",
+          "confidence": "CONFIRMED",
+          "note": "OURS, NOT FIXED. The cap lives in the canonical ingest (engines/hgm_tools.py), so removing it changes the spine itself and must be re-proved against the full batteries (inviolable rule 2) before any layer is rebuilt on it; the C03:376/429/620 note blocks and any truncated translation would need re-scanning afterwards. Opened in TODO.md 2026-09-01 for Adam's ruling and the data project. No document edit is asked of ALL for this entry - it is a pipeline defect on our side."
+        },
+        {
+          "item_id": "E-111",
+          "course": "C03",
+          "segment": "C03:440",
+          "kind": "INGEST_ARTEFACT",
+          "found": "phyi ma'i snang shas",
+          "expected": "the row's Tibetan should close the verse line: \"...YANG YANG BSAMS PAS PHYI MA'I SNANG SHAS LDOG,\"",
+          "evidence": "QUOTED AS FILED BY THE RECONCILER: wylie/ACIP of C03:440 end at \"YANG YANG BSAMS PAS PHYI MA'I SNANG SHAS\" (no closing shad) while the row's English ends \"...And the cycle's suffering: stop desire for the future.\" || Confirmed from this row's own text. (1) The quoted verse is in nine-syllable metre: line 1 of the citation, las 'bras mi slu 'khor ba'i sdug bsngal rnams, has nine syllables; line 2, yang yang bsams pas phyi ma'i snang shas, has eight, so the row ends one syllable short of the line. (2) Every other verse line in the row closes with a shad (\", ,\"); the row ends at snang shas with none. (3) The row's English renders the complete line including its verb (\"stop desire for the future\"), and \"stop\" has no Tibetan anywhere in the row. The missing syllable is ldog: C03:441's wylie begins \"ldog,ces pa ltar thog mar 'khor ba'i phun tshogs...\" while its English begins \"Suppose at first we are able to find...\", so the 440/441 boundary is offset by one word. The undivided line is witnessed at C01:207 and C16:98 (\"...PHYI MA'I SNANG SHAS LDOG,CES PAS BSTAN TE\") and at P1:83 (\"...phyi ma'i snang shas ldog\", same source re-ingested, corroborative only). The same split recurs two rows later: C03:443 ends \"...yid la goms pas tshe 'di'i snang shas\" with English \"...Think it constantly, stop desire for this life.\" and C03:444 opens \"ldogs pa ltar...\". Effect: \"stop\" in this row is necessarily left unwrapped, and ldog in C03:441 has no English on its row. Nothing is lost across the pair, hence LOW. SKEPTIC PASS 2026-09-01 (two independent skeptics, one on each side of the boundary, both survived): C03:440's wylie, ACIP and raw ingest record stop at 'snang shas' and 'ldog,ces' opens 441; the independent witnesses C01:207 and C16:98 carry the undivided line '...phyi ma'i snang shas ldog,ces pas bstan te'. The mirror claim filed from 441 ('ldog,' as the tail of 440's verse) is the same defect and is folded into this record rather than billed twice. THE SAME CUT RECURS at eight C03 row boundaries: 36/37, 163/164, 165/166 (filed as E-062), 440/441, 443/444, 472/473, 594/595, 610/611 - a verse line's final syllable spilling into the next row is a class, not a one-off; recorded here as a list rather than as a class entry so every citation stays checkable.",
+          "severity": "LOW",
+          "confidence": "CONFIRMED",
+          "note": "filed from the alignment batch, spine-verified on merge"
+        },
+        {
+          "item_id": "E-121",
+          "course": "C03",
+          "segment": "C03:497",
+          "kind": "INGEST_ARTEFACT",
+          "found": "all six perfections77 are covered",
+          "expected": "all six perfections are covered",
+          "evidence": "Footnote marker 77 fused to the preceding word (not to a period, so outside the registered period-fusion class). Re-checked by the reconciler: parallel witness C07:81 carries the identical English sentence and identical wylie but reads 'all six perfections are covered' with no digits; the ACIP field of C03:497 has no numeral. Published reading confirmed; local C03 ingest artefact. SKEPTIC PASS 2026-09-03 (survived, LOW/CONFIRMED): the ACIP and wylie carry no numeral; the independent witness C07:81 has identical wylie and English minus the '77'; the register's footnote class E-076 covers period-fusion only, so this word-fused marker is a distinct, unregistered artefact.",
+          "severity": "LOW",
+          "confidence": "CONFIRMED",
+          "note": "filed from the alignment batch, spine-verified on merge"
+        }
+      ],
+      "reason": "MYON/NYON is internal lexical spelling, present in ACIP and Wylie, with no converter escape, heading glue, folio token, footnote fusion, row spill or field-cap mechanism."
+    },
+    "d_defensible_reading": {
+      "passed": true,
+      "dictionary_entries": {
+        "myon mongs pa": [],
+        "nyon mongs pa": [
+          {
+            "id": 5900,
+            "wylie": "nyon mongs pa",
+            "acip": "NYON MONGS PA",
+            "hgm_gloss": "[\"mental affliction\", \"mental afflictions\", \"mental-affliction\", \"bad thoughts\", \"mentally afflicted things\", \"mentally afflicted\", \"affliction\", \"afflicted\", \"bad thought\"]",
+            "tier": "glossary"
+          }
+        ],
+        "myon": [],
+        "nyon mongs": [
+          {
+            "id": 5882,
+            "wylie": "nyon mongs",
+            "acip": "NYON MONGS",
+            "hgm_gloss": "[\"mental afflictions\", \"the mental afflictions\", \"bad thoughts\", \"negative\", \"affliction\", \"mental affliction\", \"afflictions\", \"mentally-afflicted\", \"mentally afflicted\", \"afflicted\", \"bad thought\"]",
+            "tier": "glossary"
+          }
+        ]
+      },
+      "myon_variants": [],
+      "library_myon_files": [
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/library/sungbum/Sungbum/MNGON PA_HIGHER KNOWLEDGE (ABHIDHARMA) (VAIBHASHIKA SCHOOL)/RGYAL BA DGE 'DUN GRUB_GYALWA GENDUN DRUP (1391-1474)/SE5525M_DAM PA'I CHOS MNGON PA'I MDZOD KYI RNAM PAR BSHAD PA THAR LAM GSAL BYED_ 'Illumination of the Path to Freedom,' being an Explanation of the Holy Treasure House of Higher Knowledge_RGYAL BA DGE 'DUN GRUB (1391-1474).TXT",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/library/sungbum/Sungbum/MNGON PA_HIGHER KNOWLEDGE (ABHIDHARMA) (VAIBHASHIKA SCHOOL)/RGYAL BA DGE 'DUN GRUB_GYALWA GENDUN DRUP (1391-1474)/SE05525M_DAM PA'I CHOS MNGON PA'I MDZOD KYI RNAM PAR BSHAD PA THAR LAM GSAL BYED_'Illumination of the Path to Freedom,' being an Explanation of the Holy Treasure House of Higher Knowledge_RGYAL BA DGE 'DUN GRUB (1391-1474).TXT"
+      ],
+      "reason": "The exact disputed expression and its myon head are absent from entries and variants; nyon mongs pa has the HGM mental-affliction equivalent. The immediately preceding root verse C05:179 names the same mental-affliction condition with NYON MONGS, and SL05525N independently checked digital content supplies NYON MONGS PA at the same commentary passage. The only MYON MONGS library hits are the two byte-identical SE aliases. No local evidence was found for a defensible intentional MYON variant here. This supports probable, not confirmed, restoration."
+    },
+    "e_evidence_rechecked": {
+      "passed": true,
+      "counts": {
+        "non_C13_myon_mongs_rows": 2,
+        "non_C13_corrected_prose_rows": 0,
+        "exact_myon_mongs_pa_entries": 0,
+        "exact_nyon_mongs_pa_entries": 1,
+        "duplicates_for_C05_178_180_or_MYON": 0,
+        "byte_identical_source_fields_C05_180_C16_759": 3
+      },
+      "local_hashes_rechecked": true
+    }
+  }
+}

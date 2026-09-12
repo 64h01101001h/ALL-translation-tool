@@ -47,7 +47,7 @@ the/a/an/and/or/his/our/your/I/you unless `data/alignment/span_head_allow.json`
 lists it under `pages_c05` with the Tibetan word that licenses it.
 
 ## Progress
-c5p1–c5p7 (1–21) cloned 2026-09-05; c5p8–c5p49 (22–147) landed 2026-09-05; c5p50–c5p55 (148–165) landed 2026-09-08. c5p56 (166–168) landed 2026-09-12 after fresh independent proposals, reconciliation and skeptical review. c5p57 (169–171) landed after independent review. c5p58 (172–174) landed after independent review. c5p59 (175–177) landed after independent review. Coverage 177/511; current verification is recorded in the latest batch entry below.
+c5p1–c5p7 (1–21) cloned 2026-09-05; c5p8–c5p49 (22–147) landed 2026-09-05; c5p50–c5p55 (148–165) landed 2026-09-08. c5p56 (166–168) landed 2026-09-12 after fresh independent proposals, reconciliation and skeptical review. c5p57 (169–171) landed after independent review. c5p58 (172–174) landed after independent review. c5p59 (175–177) landed after independent review. c5p60 (178–180) landed after independent review. Coverage 180/511; current verification is recorded in the latest batch entry below.
 
 **Historical pause, superseded by Adam’s 2026-09-11 continuation request. PAUSED 2026-09-08 (Adam's call): the campaign stops here while the app goes to
 a public release (two-week target). Reconciled-but-unlanded specs for 166, 167,
@@ -319,3 +319,39 @@ passed in 11.08 seconds. Master dictionary and original corpus SHA-256
 values still match the starting snapshot. Browser rendering and native
 consumption of this newest bank remain separately unverified; the tested
 desktop/installed-phone checkpoint is through 171.
+
+
+### c5p60 · C05:178–180 — 2026-09-12 — Codex reconciliation/review
+
+Two fresh independent proposal angles, separate reconciliation and an independent
+skeptical reviewer approved 104 analyst spans (92 linked, 12 grammatical nulls),
+including 69 d5 dictionary pairs. All six proposals and all final reconciliations
+reran with exit 0, empty stderr and exact bodies. Accepted spec, exhaustive
+per-span judgments, omissions, source positions and evidence are preserved in
+`specs_c05/c5p60.json` and `reviews_c05/c5p60/`. No function-head exception is needed.
+
+Restored both temporal `gnas skabs kyi`/when phrases and distinct copulas at 178,
+the full-list relative and final copula at 179, and the concluding relative at
+180. The technical `mthong chos` unit stays lexical; ordinary temporal/genitive
+recasts remain phrases. `shugs drag po` retains the complete fierce-emotions
+phrase with direct glossary support. Initial 180 `myong` stays omitted as
+distributed meaning, without a false absence claim. The agentive `gis`/by
+mapping at d6 follows an existing precedent and leaves the older policy question
+open. A temporary awaiting-review note prefix was removed before final review;
+all final hashes and generator reruns reflect that correction.
+
+E-185 records 180 MYON MONGS PA → NYON MONGS PA as LOW/PROBABLE after all five
+independent refutation checks. The root verse, glossary and distinct SL05525N
+digital reading support the candidate; the identical SE aliases and C16 re-ingest
+preserve MYON. Digital publication independence is unestablished; no blockprint
+was inspected. PHUNG BO is attested and was not filed. All source spellings remain
+unchanged and no hgm_gloss was edited or promoted.
+
+Coverage 180/511; full bank 42,236 links (+107, including three sentence anchors),
+11,841 null exponents; evidence 6,784 headwords / 14,618 pair records. All 42,129
+prior links, previous notes/trees, evidence references and ACIP mappings remain
+intact. Reviewed tuples and source ranges exactly match the landed spec; source
+hashes and navigation targets check. Both banks, the dictionary view, four CSV
+exports and the errata document were rebuilt. All 16 targeted CTest fidelity and
+constitution suites passed in 10.45 seconds. Rendering remains unverified;
+native/installed-phone verification remains at the earlier 171 checkpoint.
